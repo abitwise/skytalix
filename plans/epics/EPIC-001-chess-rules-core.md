@@ -4,11 +4,18 @@ title: Chess rules core
 status: backlog
 column: Backlog
 priority: P0
-size: L
+size: XL
 owner: BA/PM
+tickets: ABC-001, ABC-002, ABC-003, ABC-004, ABC-005, ABC-006, ABC-007
 ---
 
 # EPIC-001 — Chess rules core
+
+> **Size corrected `L` → `XL` on 2026-07-22.** The indicative `L` set at idea-to-epics time
+> was wrong: decomposition came to 7 tickets totalling 22 points. Recording the correction
+> rather than leaving a stale estimate. The Orchestrator's no-XL-into-dev rule applies to
+> **tickets**, not epics — and this epic is already split into ABC-001..ABC-007, none of
+> which is XL, so the rule is satisfied.
 
 ## User value
 

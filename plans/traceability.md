@@ -35,7 +35,13 @@ _Updated: 2026-07-22_
 
 | Ticket | Title | Epic | Feature | NFRs | Code (PR/files) | Tests | UAT | Release | Status |
 |--------|-------|------|---------|------|-----------------|-------|-----|---------|--------|
-| pending | Chess rules core | EPIC-001 | pending | NFR-001 | | | | | Backlog |
+| ABC-001 | Position state and FEN round-trip | EPIC-001 | — | NFR-001 | | | | | Ready |
+| ABC-002 | Pseudo-legal move generation for all piece types | EPIC-001 | — | NFR-001 | | | | | Ready |
+| ABC-003 | Apply and undo a move with full state restoration | EPIC-001 | — | NFR-001 | | | | | Ready |
+| ABC-004 | Special moves — castling, en passant, promotion | EPIC-001 | — | NFR-001 | | | | | Backlog |
+| ABC-005 | Legal move filtering and attack detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
+| ABC-006 | Perft verification harness | EPIC-001 | — | NFR-001 | | | | | Backlog |
+| ABC-007 | Game-end detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | pending | Terminal board and game loop | EPIC-002 | pending | NFR-002 | | | | | Backlog |
 | pending | Move input and controls | EPIC-003 | pending | NFR-003 | | | | | Backlog |
 | pending | Engine and AI opponent | EPIC-004 | pending | NFR-004, NFR-005 | | | | | Backlog |
@@ -43,10 +49,16 @@ _Updated: 2026-07-22_
 | pending | Game session and packaging | EPIC-006 | pending | NFR-007 | | | | | Backlog |
 
 <!--
-  Ticket and Feature cells read `pending` because no tickets exist yet: Workflow 02 lands
-  epics in Backlog only. `/grugops:plan` epic-to-tickets (Workflow 03) cuts the tickets and
-  replaces each `pending` with the real ABC-xxx / FEAT-xxx id. Every NFR id above is a BA/PM
-  trigger with a measurable target stated in its epic; Architect/Design seeds the matching
-  rows in plans/nfr-catalog.md at design time.
+  EPIC-001 is decomposed: its seven ABC-xxx ticket rows are live. EPIC-002..EPIC-006 still
+  read `pending` — Workflow 02 landed them as epics only, and `/grugops:plan` epic-to-tickets
+  (Workflow 03) replaces each `pending` with real ticket ids as each epic is decomposed.
+
+  The Feature cell reads `—` for the EPIC-001 tickets, not `pending`: that epic maps directly
+  to tickets with no intermediate feature. A single FEAT-xxx wrapping all seven would be a
+  one-use grouping that adds a hop to the trace and explains nothing (AGENTS.md coding rule 6).
+  Later epics may genuinely need features; this one does not.
+
+  Every NFR id above is a BA/PM trigger with a measurable target stated in its epic;
+  Architect/Design seeds the matching rows in plans/nfr-catalog.md at design time.
 -->
 

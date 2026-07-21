@@ -14,7 +14,7 @@ _Updated: 2026-07-22_
 
 | Metric | Meaning | Value | Period |
 |--------|---------|-------|--------|
-| Throughput | tickets reaching Done per period | 0 | 2026-07-22 (6 epics entered Backlog; no tickets cut yet) |
+| Throughput | tickets reaching Done per period | 0 | 2026-07-22 (7 tickets created from EPIC-001; 0 reached Done) |
 | Cycle time | Ready for Dev -> Done, median | | |
 | Lead time | Backlog -> Done, median | no data — clock starts 2026-07-22 | 2026-07-22 |
 | WIP | average tickets in flight | | |

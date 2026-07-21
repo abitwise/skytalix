@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-22 by BA/PM_
+_Updated: 2026-07-22 by BA/PM (EPIC-001 decomposed into ABC-001..ABC-007)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -75,14 +75,36 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Backlog (WIP unlimited)
 
-- [EPIC-001] Chess rules core  (owner: BA/PM, size: L, priority: P0, since: 2026-07-22)
+- [EPIC-001] Chess rules core  (owner: BA/PM, size: XL, priority: P0, since: 2026-07-22, decomposed: ABC-001..ABC-007)
 - [EPIC-002] Terminal board and game loop  (owner: BA/PM, size: M, priority: P0, since: 2026-07-22)
 - [EPIC-003] Move input and controls  (owner: BA/PM, size: M, priority: P0, since: 2026-07-22)
 - [EPIC-004] Engine and AI opponent  (owner: BA/PM, size: L, priority: P0, since: 2026-07-22)
 - [EPIC-005] Opening book  (owner: BA/PM, size: S, priority: P1, since: 2026-07-22)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, size: M, priority: P2, since: 2026-07-22)
+- [ABC-004] Special moves — castling, en passant, promotion  (size: L, P0, epic: EPIC-001, blocked-until: ABC-003)
+- [ABC-005] Legal move filtering and attack detection  (size: M, P0, epic: EPIC-001, blocked-until: ABC-004)
+- [ABC-006] Perft verification harness  (size: S, P0, epic: EPIC-001, blocked-until: ABC-005)
+- [ABC-007] Game-end detection  (size: M, P0, epic: EPIC-001, blocked-until: ABC-005)
 
-## Ready (WIP 0/8)
+<!--
+  ABC-004..007 meet the Definition of Ready in full — they are held in Backlog rather than
+  Ready only to keep Ready a real buffer (see the Ready column note). BA/PM promotes each to
+  Ready as its `blocked-until` predecessor reaches Done. They are NOT blocked in the
+  Blocked-column sense: no decision or external input is missing.
+-->
+
+## Ready (WIP 3/8)
+
+- [ABC-001] Position state and FEN round-trip  (size: M, P0, epic: EPIC-001, deps: none)
+- [ABC-002] Pseudo-legal move generation for all piece types  (size: M, P0, epic: EPIC-001, deps: ABC-001)
+- [ABC-003] Apply and undo a move with full state restoration  (size: M, P0, epic: EPIC-001, deps: ABC-001, ABC-002)
+
+<!--
+  Ready holds 3 of a permitted 8 on purpose. The limit is a ceiling, not a target: Ready is a
+  buffer feeding In Development (WIP 3), and flooding it to 7/8 would just move the queue
+  rather than shorten it. ABC-001 is pullable now; 002 and 003 unblock as 001 lands.
+-->
+
 
 ## In Analysis (WIP 0/2)
 
