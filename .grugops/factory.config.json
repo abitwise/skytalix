@@ -1,0 +1,66 @@
+{
+  "version": "0.1.0",
+  "mode": "lean",
+  "cadence": "kanban",
+  "autonomy": "pr",
+  "bdd": "lean",
+  "id_prefix": "ABC",
+  "repo_strategy": "mono",
+  "default_stack": {
+    "language": "typescript",
+    "backend": "node-fastify",
+    "frontend": "vue",
+    "db": "postgresql",
+    "e2e": "playwright",
+    "container": "docker",
+    "deploy": "kubernetes-ready"
+  },
+  "wip_limits": {
+    "Ready": 8,
+    "In Analysis": 2,
+    "In Design": 2,
+    "Ready for Dev": 6,
+    "In Development": 3,
+    "In Review": 3,
+    "In Security/NFR": 2,
+    "Ready for UAT": 4,
+    "In UAT": 4,
+    "Ready to Release": 4
+  },
+  "sprint_length_days": 10,
+  "sizing": "tshirt",
+  "priority_scheme": "P0-P3",
+  "quality": {
+    "coverage_threshold": 0.8,
+    "self_fix_attempts": 2,
+    "mandatory_gates": ["lint", "typecheck", "unit", "build"],
+    "ui_e2e": "ui-or-critical-path",
+    "tdd": "encouraged",
+    "lint": { "strict": false, "autofix": true },
+    "test_integrity": "warn",
+    "gate_enforcement": "blocking"
+  },
+  "nfr": {
+    "a11y_target": "WCAG-2.2-AA",
+    "perf_p95_ms": 300,
+    "availability": "99.9%"
+  },
+  "security": {
+    "asvs_level": "L1",
+    "block_on": "high"
+  },
+  "context": {
+    "compaction": "aggressive",
+    "human_admission": "off",
+    "audit_retention": "git"
+  },
+  "queue": {
+    "wip_limit": 3,
+    "claim_cap": 2,
+    "stale_ttl_minutes": 30
+  },
+  "compliance_regime": [],
+  "environments": ["dev", "staging", "prod"],
+  "production_requires_human_confirmation": true,
+  "blocked_escalation_days": 2
+}
