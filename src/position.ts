@@ -48,8 +48,11 @@ export const rankOf = (square: number): number => square >> 4;
 
 export const squareAt = (file: number, rank: number): number => rank * 16 + file;
 
-// Note: piece-type and colour accessors are deliberately NOT defined here yet. They are
-// move-generation concerns and belong to ABC-002, which is where they will first be used.
+/** Strips the colour flag: `ROOK | BLACK` -> `ROOK`. Returns EMPTY for an empty square. */
+export const pieceType = (piece: number): number => piece & 7;
+
+/** True when the piece is black. Only meaningful for a non-EMPTY piece. */
+export const isBlack = (piece: number): boolean => (piece & BLACK) !== 0;
 
 const FILE_LETTERS = "abcdefgh";
 

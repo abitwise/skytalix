@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-22 by BA/PM (EPIC-001 decomposed into ABC-001..ABC-007)_
+_Updated: 2026-07-22 by Orchestrator (ABC-002 Ready → In Development → In Review)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -93,15 +93,15 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   Blocked-column sense: no decision or external input is missing.
 -->
 
-## Ready (WIP 2/8)
+## Ready (WIP 1/8)
 
-- [ABC-002] Pseudo-legal move generation for all piece types  (size: M, P0, epic: EPIC-001, deps: ABC-001)
 - [ABC-003] Apply and undo a move with full state restoration  (size: M, P0, epic: EPIC-001, deps: ABC-001, ABC-002)
 
 <!--
-  Ready holds 3 of a permitted 8 on purpose. The limit is a ceiling, not a target: Ready is a
+  Ready holds 1 of a permitted 8 on purpose. The limit is a ceiling, not a target: Ready is a
   buffer feeding In Development (WIP 3), and flooding it to 7/8 would just move the queue
-  rather than shorten it. ABC-001 is pullable now; 002 and 003 unblock as 001 lands.
+  rather than shorten it. ABC-003 unblocks as ABC-002 lands; BA/PM promotes ABC-004 from
+  Backlog behind it.
 -->
 
 
@@ -113,16 +113,31 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## In Development (WIP 0/3)
 
+<!--
+  ABC-002 was pulled straight from Ready, not via Ready for Dev. In lean mode that column is
+  a handoff buffer for tickets that needed analysis or design first; ABC-002 needed neither —
+  it arrived from BA/PM already meeting the Definition of Ready in full. Parking it in an
+  intermediate column to look procedural would add a hop and explain nothing.
+-->
 
-## In Review (WIP 2/3)
+
+## In Review (WIP 3/3)
 
 - [ABC-008] SPIKE — Node search throughput  (branch: grugops/ticket-to-pr-ABC-008, outcome: GO WITH CONSTRAINT, awaiting human merge)
 - [ABC-001] Position state and FEN round-trip  (branch: grugops/ticket-to-pr-ABC-001, gate: all mandatory PASS, 27 tests, coverage 100%, awaiting human merge)
+- [ABC-002] Pseudo-legal move generation for all piece types  (branch: grugops/ticket-to-pr-ABC-002, gate: all mandatory PASS, 49 tests, QE PASS no defects, awaiting human merge)
 
 <!--
   ABC-008 sits in In Review, NOT Done. autonomy=pr means the work is on a branch waiting for
   a human to merge; Done means merged. Moving a spike to Done because "the question is
   answered" would claim a merge that has not happened.
+
+  In Review is now AT its WIP limit of 3, and this is the backpressure signal working as
+  designed, not a problem to route around. Three branches are stacked and unmerged: ABC-008,
+  then ABC-001 on top of it, then ABC-002 on top of that. Nothing else may be pulled into
+  development until a human merges. The Orchestrator will NOT overfill this column — the next
+  ticket (ABC-003) stays in Ready even though its dependencies are technically satisfied on
+  the branch, because a fourth stacked branch deepens a rebase a human has not yet asked for.
 -->
 
 

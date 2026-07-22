@@ -14,12 +14,12 @@ _Updated: 2026-07-22_
 
 | Metric | Meaning | Value | Period |
 |--------|---------|-------|--------|
-| Throughput | tickets reaching Done per period | 0 | 2026-07-22 (8 tickets exist; 2 reached In Review, 0 reached Done — humans hold merge) |
-| Cycle time | Ready for Dev -> Done, median | | |
+| Throughput | tickets reaching Done per period | 0 | 2026-07-22 (8 tickets exist; 3 reached In Review, 0 reached Done — humans hold merge) |
+| Cycle time | Ready for Dev -> Done, median | no data — 0 tickets have reached Done | 2026-07-22 |
 | Lead time | Backlog -> Done, median | no data — clock starts 2026-07-22 | 2026-07-22 |
-| WIP | average tickets in flight | | |
+| WIP | average tickets in flight | 3 in In Review (at the limit of 3), 0 in In Development | 2026-07-22 |
 | Blocked time | total/median time in Blocked | | |
 | Rework rate | tickets bounced back a column (e.g. Review -> Development) | | |
-| Gate pass rate | first-pass PASS at quality + security gates | 0/2 first-pass; 2/2 after 1 lint autofix each | 2026-07-22 (ABC-008, ABC-001 — both failed lint on formatting only) |
+| Gate pass rate | first-pass PASS at quality + security gates | 0/3 first-pass; 3/3 after 1 lint autofix each | 2026-07-22 (ABC-008, ABC-001, ABC-002 — all three failed lint on formatting/import order only) |
 | Escaped defects | bugs found in UAT or prod that tests missed | | |
 | Velocity | (scrum) size points per sprint | | |
