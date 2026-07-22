@@ -112,7 +112,16 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Ready for Dev (WIP 0/6)
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-008] SPIKE — measure Node search throughput ceiling  (owner: Software Engineer, since: 2026-07-22, epic: EPIC-004, timebox: one session)
+
+<!--
+  ABC-008 was pulled Backlog -> Ready -> In Development in one step: it needs no analysis
+  (no ambiguous behavior) and no design (its output is a decision, not a structure), so the
+  In Analysis and In Design columns are correctly skipped rather than walked through empty.
+-->
+
 
 ## In Review (WIP 0/3)
 
