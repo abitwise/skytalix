@@ -41,16 +41,17 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 ### Install
 
-- Install / bootstrap: `UNKNOWN - verify`
+- Install / bootstrap: `npm install`
 
 ### Development
 
-- Dev / run: `UNKNOWN - verify`
+- Dev / run: `UNKNOWN - verify` <!-- no CLI entry point until EPIC-006 -->
+- Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
 
 ### Test
 
-- Test (all): `UNKNOWN - verify`
-- Test (single file): `UNKNOWN - verify`
+- Test (all): `npm test` <!-- vitest run -->
+- Test (single file): `npx vitest run <path>`
 
 ### Acceptance
 
@@ -58,27 +59,43 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 ### Test integrity
 
-- Skip-count capture: `UNKNOWN - verify` <!-- the host runner's reported skipped-test COUNT (an integer) for the gate's test-integrity step. Examples by runner — verify against yours, never fabricate: vitest `vitest run --reporter=json | jq '.numPendingTests + .numTodoTests'`; jest `jest --json | jq '.numPendingTests'`; pytest `pytest --json-report --json-report-file=- | jq '.summary.skipped'`; go `go test -json ./... | jq -s '[.[]|select(.Action=="skip")]|length'` — examples only, never a hard command. If the count cannot be determined, record `UNKNOWN - verify`, never a silent 0. -->
+- Skip-count capture: `npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified 2026-07-22: returns an integer (0 with no tests). Requires jq, confirmed present. --> <!-- the host runner's reported skipped-test COUNT (an integer) for the gate's test-integrity step. Examples by runner — verify against yours, never fabricate: vitest `vitest run --reporter=json | jq '.numPendingTests + .numTodoTests'`; jest `jest --json | jq '.numPendingTests'`; pytest `pytest --json-report --json-report-file=- | jq '.summary.skipped'`; go `go test -json ./... | jq -s '[.[]|select(.Action=="skip")]|length'` — examples only, never a hard command. If the count cannot be determined, record `UNKNOWN - verify`, never a silent 0. -->
 
 ### Lint
 
-- Lint (all): `UNKNOWN - verify`
-- Lint (single file, autofix): `UNKNOWN - verify`
-- Format (single file): `UNKNOWN - verify`
+- Lint (all): `npm run lint` <!-- biome check . -->
+- Lint (single file, autofix): `npx biome check --write <path>`
+- Format (single file): `npx biome format --write <path>`
 
 ### Typecheck
 
-- Typecheck (single file): `UNKNOWN - verify`
+- Typecheck (single file): `UNKNOWN - verify` <!-- tsc is project-wide; there is no
+  single-file mode. Use the project-wide command below. -->
+- Typecheck (project): `npm run typecheck` <!-- tsc --noEmit -->
 
 ### Build
 
-- Build (use sparingly): `UNKNOWN - verify`
+- Build (use sparingly): `npm run build` <!-- currently `tsc --noEmit`: the project is
+  type-checked but emits nothing, because nothing is published until EPIC-006 packaging.
+  Honest naming — this is a typecheck wearing the build slot's name, not a real bundle. -->
 - Docs build / link-check: `UNKNOWN - verify`
 - Clean / reset: `UNKNOWN - verify`
 
 ### E2E
 
-- E2E: `UNKNOWN - verify`
+- E2E: `UNKNOWN - verify` <!-- no runnable game until EPIC-006; `quality.ui_e2e` is
+  `ui-or-critical-path` and this project has no UI surface yet -->
+
+<!--
+  Command slots filled 2026-07-22 during ABC-008. Every command above was RUN before being
+  recorded here. Slots that are still `UNKNOWN - verify` are genuinely unknown — nothing was
+  guessed to make the table look complete.
+-->
+
+### Stack
+
+TypeScript on Node (>= 22), ESM. Vitest for tests, Biome for lint + format. Node runs `.ts`
+files directly via built-in type stripping, so there is no bundler or transpile step in dev.
 
 ## Delivery
 

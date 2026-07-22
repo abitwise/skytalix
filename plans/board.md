@@ -112,18 +112,19 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Ready for Dev (WIP 0/6)
 
-## In Development (WIP 1/3)
+## In Development (WIP 0/3)
 
-- [ABC-008] SPIKE — measure Node search throughput ceiling  (owner: Software Engineer, since: 2026-07-22, epic: EPIC-004, timebox: one session)
+
+## In Review (WIP 1/3)
+
+- [ABC-008] SPIKE — Node search throughput  (branch: grugops/ticket-to-pr-ABC-008, outcome: GO WITH CONSTRAINT, awaiting human merge)
 
 <!--
-  ABC-008 was pulled Backlog -> Ready -> In Development in one step: it needs no analysis
-  (no ambiguous behavior) and no design (its output is a decision, not a structure), so the
-  In Analysis and In Design columns are correctly skipped rather than walked through empty.
+  ABC-008 sits in In Review, NOT Done. autonomy=pr means the work is on a branch waiting for
+  a human to merge; Done means merged. Moving a spike to Done because "the question is
+  answered" would claim a merge that has not happened.
 -->
 
-
-## In Review (WIP 0/3)
 
 ## In Security/NFR (WIP 0/2)
 

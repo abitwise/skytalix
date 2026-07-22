@@ -1,9 +1,10 @@
 ---
 id: ABC-008
 title: SPIKE — measure Node search throughput ceiling
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
+outcome: GO WITH CONSTRAINT — time-based per-move budget is mandatory for EPIC-004
 priority: P0
 epic: EPIC-004
 feature: —

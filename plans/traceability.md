@@ -42,6 +42,7 @@ _Updated: 2026-07-22_
 | ABC-005 | Legal move filtering and attack detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | ABC-006 | Perft verification harness | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | ABC-007 | Game-end detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
+| ABC-008 | SPIKE — Node search throughput | EPIC-004 | — | NFR-001, NFR-005 | spike/perft-bench.ts, package.json, tsconfig.json, biome.json | n/a — spike (see note) | | | In Review |
 | pending | Terminal board and game loop | EPIC-002 | pending | NFR-002 | | | | | Backlog |
 | pending | Move input and controls | EPIC-003 | pending | NFR-003 | | | | | Backlog |
 | pending | Engine and AI opponent | EPIC-004 | pending | NFR-004, NFR-005 | | | | | Backlog |

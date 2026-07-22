@@ -1,0 +1,26 @@
+{
+  "name": "cli-chess",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Command-line chess against a club-strength engine.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write",
+    "build": "tsc --noEmit",
+    "spike:perft": "node spike/perft-bench.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.0",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
