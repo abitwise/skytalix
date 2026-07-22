@@ -1,8 +1,8 @@
 ---
 id: ABC-001
 title: Position state and FEN round-trip
-status: in-review
-column: In Review
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-001

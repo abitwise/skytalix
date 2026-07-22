@@ -1,8 +1,8 @@
 ---
 id: ABC-002
 title: Pseudo-legal move generation for all piece types
-status: in-review
-column: In Review
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-001

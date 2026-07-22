@@ -1,5 +1,5 @@
 # Metrics
-_Updated: 2026-07-22_
+_Updated: 2026-07-23_
 
 <!--
   FORMAT — read before you fill values. (clear voice; this is a technical file, not a role prompt.)
@@ -14,10 +14,10 @@ _Updated: 2026-07-22_
 
 | Metric | Meaning | Value | Period |
 |--------|---------|-------|--------|
-| Throughput | tickets reaching Done per period | 0 | 2026-07-22 (8 tickets exist; 3 reached In Review, 0 reached Done — humans hold merge) |
-| Cycle time | Ready for Dev -> Done, median | no data — 0 tickets have reached Done | 2026-07-22 |
+| Throughput | tickets reaching Done per period | 3 | 2026-07-23 (ABC-008, ABC-001, ABC-002 merged to main; 8 tickets exist) |
+| Cycle time | Ready for Dev -> Done, median | ~1 day — all 3 were cut, built, and merged across 2026-07-22..23 | 2026-07-23 |
 | Lead time | Backlog -> Done, median | no data — clock starts 2026-07-22 | 2026-07-22 |
-| WIP | average tickets in flight | 3 in In Review (at the limit of 3), 0 in In Development | 2026-07-22 |
+| WIP | average tickets in flight | 0 — In Review emptied at merge; 1 in Ready (ABC-003) | 2026-07-23 |
 | Blocked time | total/median time in Blocked | | |
 | Rework rate | tickets bounced back a column (e.g. Review -> Development) | | |
 | Gate pass rate | first-pass PASS at quality + security gates | 0/3 first-pass; 3/3 after 1 lint autofix each | 2026-07-22 (ABC-008, ABC-001, ABC-002 — all three failed lint on formatting/import order only) |

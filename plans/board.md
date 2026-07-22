@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-22 by Orchestrator (ABC-002 Ready → In Development → In Review)_
+_Updated: 2026-07-23 by Orchestrator (ABC-008, ABC-001, ABC-002 merged to main → Done)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -121,23 +121,11 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 3/3)
-
-- [ABC-008] SPIKE — Node search throughput  (branch: grugops/ticket-to-pr-ABC-008, outcome: GO WITH CONSTRAINT, awaiting human merge)
-- [ABC-001] Position state and FEN round-trip  (branch: grugops/ticket-to-pr-ABC-001, gate: all mandatory PASS, 27 tests, coverage 100%, awaiting human merge)
-- [ABC-002] Pseudo-legal move generation for all piece types  (branch: grugops/ticket-to-pr-ABC-002, gate: all mandatory PASS, 49 tests, QE PASS no defects, awaiting human merge)
+## In Review (WIP 0/3)
 
 <!--
-  ABC-008 sits in In Review, NOT Done. autonomy=pr means the work is on a branch waiting for
-  a human to merge; Done means merged. Moving a spike to Done because "the question is
-  answered" would claim a merge that has not happened.
-
-  In Review is now AT its WIP limit of 3, and this is the backpressure signal working as
-  designed, not a problem to route around. Three branches are stacked and unmerged: ABC-008,
-  then ABC-001 on top of it, then ABC-002 on top of that. Nothing else may be pulled into
-  development until a human merges. The Orchestrator will NOT overfill this column — the next
-  ticket (ABC-003) stays in Ready even though its dependencies are technically satisfied on
-  the branch, because a fourth stacked branch deepens a rebase a human has not yet asked for.
+  Emptied 2026-07-23: all three stacked branches were merged to main on human instruction.
+  The WIP-limit backpressure that had this column at 3/3 is released, and ABC-003 is pullable.
 -->
 
 
@@ -150,6 +138,21 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+
+- [ABC-008] SPIKE — Node search throughput  (merged: 2026-07-23, outcome: GO WITH CONSTRAINT, RISK-002 answered)
+- [ABC-001] Position state and FEN round-trip  (merged: 2026-07-23, 27 tests, ADR-0001)
+- [ABC-002] Pseudo-legal move generation for all piece types  (merged: 2026-07-23, 22 tests, QE PASS no defects)
+
+<!--
+  Done means MERGED, and as of 2026-07-23 these three are: `main` was created at 8d0a8f7,
+  the tip that contained all three stacked branches. In lean mode Done is the terminal
+  column — there is no release stage, so `mode=lean` closes the ticket at merge.
+
+  The merge was performed by an agent on explicit human instruction, which is the one path
+  that crosses the "humans hold merge" line without breaking it: the human holds the
+  decision, not the keystroke. The standing rule is unchanged — no future merge happens
+  without the same explicit instruction.
+-->
 
 ## Blocked (visible, time-tracked)
 

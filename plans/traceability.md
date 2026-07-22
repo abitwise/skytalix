@@ -1,5 +1,5 @@
 # Traceability Matrix
-_Updated: 2026-07-22_
+_Updated: 2026-07-23_
 
 <!--
   FORMAT — read before you append. (clear voice; this is a technical file, not a role prompt.)
@@ -35,14 +35,14 @@ _Updated: 2026-07-22_
 
 | Ticket | Title | Epic | Feature | NFRs | Code (PR/files) | Tests | UAT | Release | Status |
 |--------|-------|------|---------|------|-----------------|-------|-----|---------|--------|
-| ABC-001 | Position state and FEN round-trip | EPIC-001 | — | NFR-001, ADR-0001 | src/position.ts, src/fen.ts (branch grugops/ticket-to-pr-ABC-001) | src/fen.test.ts — 27 pass, coverage 100% stmt / 98.73% branch | | | In Review |
-| ABC-002 | Pseudo-legal move generation for all piece types | EPIC-001 | — | NFR-001 | src/moves.ts, src/position.ts (branch grugops/ticket-to-pr-ABC-002) | src/moves.test.ts — 22 pass, suite 49 pass, src coverage 100% stmt / 99.15% branch | | | In Review |
+| ABC-001 | Position state and FEN round-trip | EPIC-001 | — | NFR-001, ADR-0001 | src/position.ts, src/fen.ts (merged to main) | src/fen.test.ts — 27 pass, coverage 100% stmt / 98.73% branch | | | Done |
+| ABC-002 | Pseudo-legal move generation for all piece types | EPIC-001 | — | NFR-001 | src/moves.ts, src/position.ts (merged to main) | src/moves.test.ts — 22 pass, suite 49 pass, src coverage 100% stmt / 99.15% branch | | | Done |
 | ABC-003 | Apply and undo a move with full state restoration | EPIC-001 | — | NFR-001 | | | | | Ready |
 | ABC-004 | Special moves — castling, en passant, promotion | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | ABC-005 | Legal move filtering and attack detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | ABC-006 | Perft verification harness | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | ABC-007 | Game-end detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
-| ABC-008 | SPIKE — Node search throughput | EPIC-004 | — | NFR-001, NFR-005 | spike/perft-bench.ts, package.json, tsconfig.json, biome.json | n/a — spike (see note) | | | In Review |
+| ABC-008 | SPIKE — Node search throughput | EPIC-004 | — | NFR-001, NFR-005 | spike/perft-bench.ts, package.json, tsconfig.json, biome.json | n/a — spike (see note) | | | Done |
 | pending | Terminal board and game loop | EPIC-002 | pending | NFR-002 | | | | | Backlog |
 | pending | Move input and controls | EPIC-003 | pending | NFR-003 | | | | | Backlog |
 | pending | Engine and AI opponent | EPIC-004 | pending | NFR-004, NFR-005 | | | | | Backlog |
