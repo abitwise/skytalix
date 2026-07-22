@@ -14,12 +14,12 @@ _Updated: 2026-07-22_
 
 | Metric | Meaning | Value | Period |
 |--------|---------|-------|--------|
-| Throughput | tickets reaching Done per period | 0 | 2026-07-22 (7 tickets created from EPIC-001; 0 reached Done) |
+| Throughput | tickets reaching Done per period | 0 | 2026-07-22 (8 tickets exist; 2 reached In Review, 0 reached Done — humans hold merge) |
 | Cycle time | Ready for Dev -> Done, median | | |
 | Lead time | Backlog -> Done, median | no data — clock starts 2026-07-22 | 2026-07-22 |
 | WIP | average tickets in flight | | |
 | Blocked time | total/median time in Blocked | | |
 | Rework rate | tickets bounced back a column (e.g. Review -> Development) | | |
-| Gate pass rate | first-pass PASS at quality + security gates | | |
+| Gate pass rate | first-pass PASS at quality + security gates | 0/2 first-pass; 2/2 after 1 lint autofix each | 2026-07-22 (ABC-008, ABC-001 — both failed lint on formatting only) |
 | Escaped defects | bugs found in UAT or prod that tests missed | | |
 | Velocity | (scrum) size points per sprint | | |

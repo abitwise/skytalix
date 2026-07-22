@@ -35,7 +35,7 @@ _Updated: 2026-07-22_
 
 | Ticket | Title | Epic | Feature | NFRs | Code (PR/files) | Tests | UAT | Release | Status |
 |--------|-------|------|---------|------|-----------------|-------|-----|---------|--------|
-| ABC-001 | Position state and FEN round-trip | EPIC-001 | — | NFR-001 | | | | | Ready |
+| ABC-001 | Position state and FEN round-trip | EPIC-001 | — | NFR-001, ADR-0001 | src/position.ts, src/fen.ts (branch grugops/ticket-to-pr-ABC-001) | src/fen.test.ts — 27 pass, coverage 100% stmt / 98.73% branch | | | In Review |
 | ABC-002 | Pseudo-legal move generation for all piece types | EPIC-001 | — | NFR-001 | | | | | Ready |
 | ABC-003 | Apply and undo a move with full state restoration | EPIC-001 | — | NFR-001 | | | | | Ready |
 | ABC-004 | Special moves — castling, en passant, promotion | EPIC-001 | — | NFR-001 | | | | | Backlog |

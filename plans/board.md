@@ -93,9 +93,8 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   Blocked-column sense: no decision or external input is missing.
 -->
 
-## Ready (WIP 3/8)
+## Ready (WIP 2/8)
 
-- [ABC-001] Position state and FEN round-trip  (size: M, P0, epic: EPIC-001, deps: none)
 - [ABC-002] Pseudo-legal move generation for all piece types  (size: M, P0, epic: EPIC-001, deps: ABC-001)
 - [ABC-003] Apply and undo a move with full state restoration  (size: M, P0, epic: EPIC-001, deps: ABC-001, ABC-002)
 
@@ -115,9 +114,10 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 ## In Development (WIP 0/3)
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
 
 - [ABC-008] SPIKE — Node search throughput  (branch: grugops/ticket-to-pr-ABC-008, outcome: GO WITH CONSTRAINT, awaiting human merge)
+- [ABC-001] Position state and FEN round-trip  (branch: grugops/ticket-to-pr-ABC-001, gate: all mandatory PASS, 27 tests, coverage 100%, awaiting human merge)
 
 <!--
   ABC-008 sits in In Review, NOT Done. autonomy=pr means the work is on a branch waiting for
