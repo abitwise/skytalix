@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-23 by Orchestrator (ABC-003 merged to main on human instruction → Done)_
+_Updated: 2026-07-23 by Orchestrator (ABC-004 gate green → In Review; nonstop ABC-004..007 batch in flight)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -81,7 +81,6 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 - [EPIC-004] Engine and AI opponent  (owner: BA/PM, size: L, priority: P0, since: 2026-07-22)
 - [EPIC-005] Opening book  (owner: BA/PM, size: S, priority: P1, since: 2026-07-22)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, size: M, priority: P2, since: 2026-07-22)
-- [ABC-004] Special moves — castling, en passant, promotion  (size: L, P0, epic: EPIC-001, blocked-until: ABC-003)
 - [ABC-005] Legal move filtering and attack detection  (size: M, P0, epic: EPIC-001, blocked-until: ABC-004)
 - [ABC-006] Perft verification harness  (size: S, P0, epic: EPIC-001, blocked-until: ABC-005)
 - [ABC-007] Game-end detection  (size: M, P0, epic: EPIC-001, blocked-until: ABC-005)
@@ -118,15 +117,20 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-004] Special moves — castling, en passant, promotion  (branch: grugops/ticket-to-pr-ABC-004, gate: READY_FOR_HUMAN_REVIEW, QE PASS, 84 tests, src 100% coverage, awaiting human review+merge)
 
 <!--
-  Emptied 2026-07-23: ABC-003 was merged to main on explicit human instruction and moved to
-  Done. It passed the mandatory gate (lint, typecheck, unit, build) with QE PASS (15 tests,
-  src/apply.ts 100% coverage) and Security/NFR skipped by the Orchestrator's written reason.
-  The merge was a clean fast-forward (the branch was linear ahead of main). Humans hold
-  merge — the human decided, the agent supplied the keystroke; this is not standing
-  authorization, the same rule recorded for ABC-001/002/008.
+  ABC-004 entered 2026-07-23: gate green (lint/typecheck/unit/build), QE found no defects,
+  no Security/NFR trigger (throughput NFR-001 is measured in ABC-006, not gated here). It is
+  the base of the authorized ABC-004..007 stack — ABC-005 branches off it, not off main,
+  because its blocked-until predecessor is satisfied on the branch pending one human merge of
+  the stack (the same stacked-branch shape ABC-001/002/003 used before their single merge).
+
+  Prior occupant (context): ABC-003 was merged to main on explicit human instruction and moved
+  to Done — humans hold merge; the human decided, the agent supplied the keystroke; not
+  standing authorization, the same rule recorded for ABC-001/002/008.
 -->
 
 
