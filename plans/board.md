@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-23 by Orchestrator (ABC-003 pulled Ready → In Development, ticket-to-pr)_
+_Updated: 2026-07-23 by Orchestrator (ABC-003 merged to main on human instruction → Done)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -118,17 +118,15 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 1/3)
-
-- [ABC-003] Apply and undo a move with full state restoration  (branch: grugops/ticket-to-pr-ABC-003, QE: PASS no defects, gate: READY_FOR_HUMAN_REVIEW — awaiting human review/merge)
+## In Review (WIP 0/3)
 
 <!--
-  ABC-003 entered In Review 2026-07-23 with a green mandatory gate (lint, typecheck, unit,
-  build) and QE PASS (15 tests, src/apply.ts 100% coverage on every axis, no defects).
-  Security/NFR was skipped by the Orchestrator's written reason (no security surface; NFR-001
-  satisfied by construction — in-place mutation, no per-node board copy — and QE-verified).
-  It stays in In Review awaiting a human reviewer: in mode=lean, autonomy=pr, the factory
-  stops at a reviewable branch. A human holds merge — the same standing rule as ABC-001/002.
+  Emptied 2026-07-23: ABC-003 was merged to main on explicit human instruction and moved to
+  Done. It passed the mandatory gate (lint, typecheck, unit, build) with QE PASS (15 tests,
+  src/apply.ts 100% coverage) and Security/NFR skipped by the Orchestrator's written reason.
+  The merge was a clean fast-forward (the branch was linear ahead of main). Humans hold
+  merge — the human decided, the agent supplied the keystroke; this is not standing
+  authorization, the same rule recorded for ABC-001/002/008.
 -->
 
 
@@ -145,6 +143,7 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 - [ABC-008] SPIKE — Node search throughput  (merged: 2026-07-23, outcome: GO WITH CONSTRAINT, RISK-002 answered)
 - [ABC-001] Position state and FEN round-trip  (merged: 2026-07-23, 27 tests, ADR-0001)
 - [ABC-002] Pseudo-legal move generation for all piece types  (merged: 2026-07-23, 22 tests, QE PASS no defects)
+- [ABC-003] Apply and undo a move with full state restoration  (merged: 2026-07-23, 15 tests, QE PASS no defects, src/apply.ts 100% coverage)
 
 <!--
   Done means MERGED, and as of 2026-07-23 these three are: `main` was created at 8d0a8f7,
