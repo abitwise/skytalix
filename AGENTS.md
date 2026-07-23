@@ -46,6 +46,8 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 ### Development
 
 - Dev / run: `UNKNOWN - verify` <!-- no CLI entry point until EPIC-006 -->
+- Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft`
+- Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 npx vitest run src/perft.test.ts`
 - Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
 
 ### Test
