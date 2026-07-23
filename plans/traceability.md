@@ -37,7 +37,7 @@ _Updated: 2026-07-23_
 |--------|-------|------|---------|------|-----------------|-------|-----|---------|--------|
 | ABC-001 | Position state and FEN round-trip | EPIC-001 | — | NFR-001, ADR-0001 | src/position.ts, src/fen.ts (merged to main) | src/fen.test.ts — 27 pass, coverage 100% stmt / 98.73% branch | | | Done |
 | ABC-002 | Pseudo-legal move generation for all piece types | EPIC-001 | — | NFR-001 | src/moves.ts, src/position.ts (merged to main) | src/moves.test.ts — 22 pass, suite 49 pass, src coverage 100% stmt / 99.15% branch | | | Done |
-| ABC-003 | Apply and undo a move with full state restoration | EPIC-001 | — | NFR-001 | | | | | Ready |
+| ABC-003 | Apply and undo a move with full state restoration | EPIC-001 | — | NFR-001 | src/apply.ts (branch grugops/ticket-to-pr-ABC-003) | src/apply.test.ts — 15 pass (5 acceptance, 5 unit, 5 QE), suite 64 pass; src/apply.ts 100% stmt/branch/func/line | | | In Review |
 | ABC-004 | Special moves — castling, en passant, promotion | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | ABC-005 | Legal move filtering and attack detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | ABC-006 | Perft verification harness | EPIC-001 | — | NFR-001 | | | | | Backlog |

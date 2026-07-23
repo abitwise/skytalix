@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-23 by Orchestrator (ABC-008, ABC-001, ABC-002 merged to main → Done)_
+_Updated: 2026-07-23 by Orchestrator (ABC-003 pulled Ready → In Development, ticket-to-pr)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -93,15 +93,13 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   Blocked-column sense: no decision or external input is missing.
 -->
 
-## Ready (WIP 1/8)
-
-- [ABC-003] Apply and undo a move with full state restoration  (size: M, P0, epic: EPIC-001, deps: ABC-001, ABC-002)
+## Ready (WIP 0/8)
 
 <!--
-  Ready holds 1 of a permitted 8 on purpose. The limit is a ceiling, not a target: Ready is a
-  buffer feeding In Development (WIP 3), and flooding it to 7/8 would just move the queue
-  rather than shorten it. ABC-003 unblocks as ABC-002 lands; BA/PM promotes ABC-004 from
-  Backlog behind it.
+  Emptied 2026-07-23: ABC-003 was pulled into In Development for ticket-to-pr. Its deps
+  (ABC-001, ABC-002) are satisfied on main, so it was pulled straight from Ready — no
+  analysis or design hop was needed (it arrived meeting the Definition of Ready in full).
+  BA/PM promotes ABC-004 from Backlog to refill Ready behind it.
 -->
 
 
@@ -114,18 +112,23 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 ## In Development (WIP 0/3)
 
 <!--
-  ABC-002 was pulled straight from Ready, not via Ready for Dev. In lean mode that column is
-  a handoff buffer for tickets that needed analysis or design first; ABC-002 needed neither —
-  it arrived from BA/PM already meeting the Definition of Ready in full. Parking it in an
-  intermediate column to look procedural would add a hop and explain nothing.
+  Emptied 2026-07-23: ABC-003 moved to In Review once implemented with tests and a green
+  mandatory gate. In lean mode a ticket needing neither analysis nor design flows
+  Ready → In Development → In Review with no intermediate hop.
 -->
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-003] Apply and undo a move with full state restoration  (branch: grugops/ticket-to-pr-ABC-003, QE: PASS no defects, gate: READY_FOR_HUMAN_REVIEW — awaiting human review/merge)
 
 <!--
-  Emptied 2026-07-23: all three stacked branches were merged to main on human instruction.
-  The WIP-limit backpressure that had this column at 3/3 is released, and ABC-003 is pullable.
+  ABC-003 entered In Review 2026-07-23 with a green mandatory gate (lint, typecheck, unit,
+  build) and QE PASS (15 tests, src/apply.ts 100% coverage on every axis, no defects).
+  Security/NFR was skipped by the Orchestrator's written reason (no security surface; NFR-001
+  satisfied by construction — in-place mutation, no per-node board copy — and QE-verified).
+  It stays in In Review awaiting a human reviewer: in mode=lean, autonomy=pr, the factory
+  stops at a reviewable branch. A human holds merge — the same standing rule as ABC-001/002.
 -->
 
 
