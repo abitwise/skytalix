@@ -39,7 +39,7 @@ _Updated: 2026-07-23_
 | ABC-002 | Pseudo-legal move generation for all piece types | EPIC-001 | — | NFR-001 | src/moves.ts, src/position.ts (merged to main) | src/moves.test.ts — 22 pass, suite 49 pass, src coverage 100% stmt / 99.15% branch | | | Done |
 | ABC-003 | Apply and undo a move with full state restoration | EPIC-001 | — | NFR-001 | src/apply.ts (merged to main) | src/apply.test.ts — 15 pass (5 acceptance, 5 unit, 5 QE), suite 64 pass; src/apply.ts 100% stmt/branch/func/line | | | Done |
 | ABC-004 | Special moves — castling, en passant, promotion | EPIC-001 | — | NFR-001 | src/moves.ts, src/apply.ts (branch grugops/ticket-to-pr-ABC-004) | src/moves.test.ts + src/apply.test.ts — suite 84 pass, src 100% stmt/branch/func/line | | | In Review |
-| ABC-005 | Legal move filtering and attack detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
+| ABC-005 | Legal move filtering and attack detection | EPIC-001 | — | NFR-001 | src/legal.ts (branch grugops/ticket-to-pr-ABC-005) | src/legal.test.ts — 12 tests, suite 96 pass, src 100% coverage | | | In Review |
 | ABC-006 | Perft verification harness | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | ABC-007 | Game-end detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
 | ABC-008 | SPIKE — Node search throughput | EPIC-004 | — | NFR-001, NFR-005 | spike/perft-bench.ts, package.json, tsconfig.json, biome.json | n/a — spike (see note) | | | Done |
