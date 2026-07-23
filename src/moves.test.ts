@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { parseFen } from "./fen.ts";
-import { generateMoves, type Move } from "./moves.ts";
+import {
+  FLAG_CASTLE,
+  FLAG_EN_PASSANT,
+  FLAG_PROMOTION,
+  generateMoves,
+  isSquareAttackedBy,
+  type Move,
+} from "./moves.ts";
 import {
   BISHOP,
   BLACK,
@@ -206,5 +213,110 @@ describe("the move record", () => {
       flags: 0,
     });
     expect(to("c4")).toMatchObject({ piece: ROOK, captured: EMPTY, flags: 0 });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-004 acceptance — special-move GENERATION. The apply.test.ts sibling block
+// covers the make/unmake side; these assert which special moves appear (and, for
+// castling, which are correctly withheld). Destinations of castling moves name the
+// castle: g1/g8 kingside, c1/c8 queenside.
+// ---------------------------------------------------------------------------
+
+const CASTLE_FEN = "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
+
+/** Destination names of the FLAG_CASTLE moves in a list, sorted. */
+function castleTargets(moves: Move[]): string[] {
+  return moves
+    .filter((move) => (move.flags & FLAG_CASTLE) !== 0)
+    .map((move) => squareName(move.to))
+    .sort();
+}
+
+describe("ABC-004 acceptance — castling generation", () => {
+  it("offers both castles for White when the ranks are clear and unattacked", () => {
+    expect(castleTargets(generateMoves(parseFen(CASTLE_FEN)))).toEqual(["c1", "g1"]);
+  });
+
+  it("withholds queenside but keeps kingside when b1 is occupied", () => {
+    // A knight on b1 blocks queenside (b1 must be empty) but leaves kingside clear.
+    expect(castleTargets(generateMoves(parseFen("r3k2r/8/8/8/8/8/8/RN2K2R w KQkq - 0 1")))).toEqual(
+      ["g1"],
+    );
+  });
+
+  it("withholds kingside when the king would pass through an attacked square", () => {
+    // A black rook on f8 rakes the open f-file, attacking f1 — a square the king crosses.
+    const targets = castleTargets(generateMoves(parseFen("4kr2/8/8/8/8/8/8/R3K2R w KQ - 0 1")));
+    expect(targets).not.toContain("g1");
+    expect(targets).toContain("c1");
+  });
+
+  it("withholds every castle while the king is in check", () => {
+    // A black rook on e8 checks the white king down the open e-file; e1 is attacked.
+    expect(castleTargets(generateMoves(parseFen("4r2k/8/8/8/8/8/8/R3K2R w KQ - 0 1")))).toEqual([]);
+  });
+});
+
+describe("ABC-004 acceptance — en passant and promotion generation", () => {
+  it("offers the en-passant capture exactly onto the ep target square", () => {
+    // White pawn e5, black pawn d5, ep target d6 — exd6 is available.
+    const moves = generateMoves(parseFen("4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1"));
+    const ep = moves.filter((move) => (move.flags & FLAG_EN_PASSANT) !== 0);
+
+    expect(ep).toHaveLength(1);
+    expect(squareName((ep[0] as Move).to)).toBe("d6");
+    expect((ep[0] as Move).captured).toBe(PAWN | BLACK);
+  });
+
+  it("offers no en-passant capture once the one-move window is gone", () => {
+    // Same pieces, but no ep target set — the capture is not available.
+    const moves = generateMoves(parseFen("4k3/8/8/3pP3/8/8/8/4K3 w - - 0 1"));
+    expect(moves.filter((move) => (move.flags & FLAG_EN_PASSANT) !== 0)).toHaveLength(0);
+  });
+
+  it("generates exactly four promotions, one per piece, for a pawn reaching the last rank", () => {
+    const toE8 = generateMoves(parseFen("7k/4P3/8/8/8/8/8/4K3 w - - 0 1")).filter(
+      (move) => move.to === parseSquareName("e8"),
+    );
+
+    expect(toE8).toHaveLength(4);
+    expect(toE8.every((move) => (move.flags & FLAG_PROMOTION) !== 0)).toBe(true);
+    expect(toE8.map((move) => move.promotion).sort()).toEqual([KNIGHT, BISHOP, ROOK, QUEEN].sort());
+  });
+});
+
+describe("ABC-004 — attack detection", () => {
+  it("sees a rook attacking along its open file and rank, and colours it correctly", () => {
+    const position = parseFen("4k3/8/8/8/8/8/8/R3K3 w - - 0 1"); // white rook a1, white king e1
+    expect(isSquareAttackedBy(position, parseSquareName("a8"), false)).toBe(true); // up the open a-file
+    expect(isSquareAttackedBy(position, parseSquareName("d1"), false)).toBe(true); // along rank 1, before the king
+    expect(isSquareAttackedBy(position, parseSquareName("h1"), false)).toBe(false); // the e1 king blocks the rank
+    expect(isSquareAttackedBy(position, parseSquareName("a8"), true)).toBe(false); // not by Black
+    expect(isSquareAttackedBy(position, parseSquareName("b2"), false)).toBe(false);
+  });
+
+  it("sees pawn and knight attacks in the attacker's own direction", () => {
+    // Black pawn d5 attacks c4/e4; black knight g8 attacks f6.
+    const position = parseFen("4k1n1/8/8/3p4/8/8/8/4K3 w - - 0 1");
+    expect(isSquareAttackedBy(position, parseSquareName("c4"), true)).toBe(true);
+    expect(isSquareAttackedBy(position, parseSquareName("e4"), true)).toBe(true);
+    expect(isSquareAttackedBy(position, parseSquareName("c4"), false)).toBe(false);
+    expect(isSquareAttackedBy(position, parseSquareName("f6"), true)).toBe(true);
+  });
+
+  it("sees a bishop raking a diagonal, but not a square off it", () => {
+    // A black bishop on a8 rakes the long light diagonal a8–h1.
+    const position = parseFen("b3k3/8/8/8/8/8/8/4K3 w - - 0 1");
+    expect(isSquareAttackedBy(position, parseSquareName("h1"), true)).toBe(true);
+    expect(isSquareAttackedBy(position, parseSquareName("d5"), true)).toBe(true);
+    expect(isSquareAttackedBy(position, parseSquareName("a1"), true)).toBe(false); // on the file, not the diagonal
+  });
+
+  it("lets a blocker stop a sliding attack", () => {
+    // A white pawn on a4 blocks the a1 rook: a8 is unreachable, a3 still attacked.
+    const position = parseFen("4k3/8/8/8/P7/8/8/R3K3 w - - 0 1");
+    expect(isSquareAttackedBy(position, parseSquareName("a8"), false)).toBe(false);
+    expect(isSquareAttackedBy(position, parseSquareName("a3"), false)).toBe(true);
   });
 });

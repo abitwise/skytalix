@@ -1,8 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { makeMove, type UndoRecord, unmakeMove } from "./apply.ts";
 import { parseFen, toFen } from "./fen.ts";
-import { generateMoves, type Move } from "./moves.ts";
-import { CASTLE_BQ, CASTLE_WK, CASTLE_WQ, EMPTY, NO_SQUARE, parseSquareName } from "./position.ts";
+import { FLAG_CASTLE, FLAG_EN_PASSANT, FLAG_PROMOTION, generateMoves, type Move } from "./moves.ts";
+import {
+  BLACK,
+  CASTLE_BQ,
+  CASTLE_WK,
+  CASTLE_WQ,
+  EMPTY,
+  NO_SQUARE,
+  parseSquareName,
+  QUEEN,
+  ROOK,
+} from "./position.ts";
 
 /**
  * The six standard perft positions (CPW / Marcel van Kervinck). ABC-006 will use
@@ -252,5 +262,177 @@ describe("QE edge probes", () => {
     makeMove(position, push);
 
     expect(position.halfmoveClock).toBe(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-004 acceptance — special-move MAKE/UNMAKE. The moves.test.ts sibling block
+// covers generation; these assert that make executes the special mechanics and
+// unmake reverses them exactly (a FEN round-trip). The perft-position property
+// test above already round-trips every generated castle/promotion incidentally;
+// these pin the exact board and the undo record's restoration by hand.
+// ---------------------------------------------------------------------------
+
+const CASTLE_FEN = "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
+
+function findMove(moves: Move[], predicate: (move: Move) => boolean, description: string): Move {
+  const move = moves.find(predicate);
+  if (move === undefined) throw new Error(`expected ${description}`);
+  return move;
+}
+
+describe("ABC-004 acceptance — castling make/unmake", () => {
+  it("moves the rook and round-trips a White kingside castle", () => {
+    const position = parseFen(CASTLE_FEN);
+    const castle = findMove(
+      generateMoves(position),
+      (move) => (move.flags & FLAG_CASTLE) !== 0 && move.to === parseSquareName("g1"),
+      "a White kingside castle",
+    );
+
+    const undo = makeMove(position, castle);
+    // King on g1, rook jumped h1 -> f1, White's rights gone, clock ticks (not a pawn/capture).
+    expect(toFen(position)).toBe("r3k2r/8/8/8/8/8/8/R4RK1 b kq - 1 1");
+
+    unmakeMove(position, castle, undo);
+    expect(toFen(position)).toBe(CASTLE_FEN);
+  });
+
+  it("moves the rook and round-trips a White queenside castle", () => {
+    const position = parseFen(CASTLE_FEN);
+    const castle = findMove(
+      generateMoves(position),
+      (move) => (move.flags & FLAG_CASTLE) !== 0 && move.to === parseSquareName("c1"),
+      "a White queenside castle",
+    );
+
+    const undo = makeMove(position, castle);
+    // King on c1, rook jumped a1 -> d1.
+    expect(toFen(position)).toBe("r3k2r/8/8/8/8/8/8/2KR3R b kq - 1 1");
+
+    unmakeMove(position, castle, undo);
+    expect(toFen(position)).toBe(CASTLE_FEN);
+  });
+
+  it("clears White's kingside right when the h1 rook is captured on its home square", () => {
+    // The commonly-missed case: a right lost by CAPTURE, not by the king or rook moving.
+    const position = parseFen(CASTLE_FEN.replace(" w ", " b "));
+    const capture = findMove(
+      generateMoves(position),
+      (move) => move.to === parseSquareName("h1") && move.captured !== EMPTY,
+      "a capture of the h1 rook",
+    );
+
+    makeMove(position, capture);
+
+    expect(position.castling & CASTLE_WK).toBe(0);
+    expect(position.castling & CASTLE_WQ).not.toBe(0);
+  });
+});
+
+describe("ABC-004 acceptance — en passant and promotion make/unmake", () => {
+  it("restores both pawns after an en-passant capture is undone", () => {
+    const fen = "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1";
+    const position = parseFen(fen);
+    const ep = findMove(
+      generateMoves(position),
+      (move) => (move.flags & FLAG_EN_PASSANT) !== 0,
+      "the exd6 en-passant capture",
+    );
+
+    const undo = makeMove(position, ep);
+    // White pawn now on d6, the black d5 pawn removed from a square the capturer never sat on.
+    expect(toFen(position)).toBe("4k3/8/3P4/8/8/8/8/4K3 b - - 0 1");
+
+    unmakeMove(position, ep, undo);
+    expect(toFen(position)).toBe(fen); // black pawn back on d5, white pawn back on e5
+  });
+
+  it("restores a pawn, not the promoted piece, when a promotion is undone", () => {
+    const fen = "7k/4P3/8/8/8/8/8/4K3 w - - 0 1";
+    const position = parseFen(fen);
+    const promote = findMove(
+      generateMoves(position),
+      (move) => (move.flags & FLAG_PROMOTION) !== 0 && move.promotion === QUEEN,
+      "the e8=Q promotion",
+    );
+
+    const undo = makeMove(position, promote);
+    expect(toFen(position)).toBe("4Q2k/8/8/8/8/8/8/4K3 b - - 0 1");
+
+    unmakeMove(position, promote, undo);
+    expect(toFen(position)).toBe(fen); // a pawn stands on e7 again, no queen remains
+  });
+});
+
+// QE probes: the colour mirror and the capture-promotion, where a one-sided bug or a
+// dropped captured-piece would hide behind the White-only acceptance cases above.
+describe("ABC-004 QE edge probes", () => {
+  it("round-trips a Black kingside castle, moving the h8 rook and advancing fullmove", () => {
+    const fen = CASTLE_FEN.replace(" w ", " b ");
+    const position = parseFen(fen);
+    const castle = findMove(
+      generateMoves(position),
+      (move) => (move.flags & FLAG_CASTLE) !== 0 && move.to === parseSquareName("g8"),
+      "a Black kingside castle",
+    );
+
+    const undo = makeMove(position, castle);
+    expect(toFen(position)).toBe("r4rk1/8/8/8/8/8/8/R3K2R w KQ - 1 2");
+
+    unmakeMove(position, castle, undo);
+    expect(toFen(position)).toBe(fen);
+  });
+
+  it("round-trips a Black en-passant capture — the mirror of the White ep path", () => {
+    // White has just pushed d2–d4; Black's e4 pawn takes exd3, removing the pawn on d4.
+    const fen = "4k3/8/8/8/3Pp3/8/8/4K3 b - d3 0 1";
+    const position = parseFen(fen);
+    const ep = findMove(
+      generateMoves(position),
+      (move) => (move.flags & FLAG_EN_PASSANT) !== 0,
+      "the exd3 en-passant capture",
+    );
+
+    const undo = makeMove(position, ep);
+    expect(toFen(position)).toBe("4k3/8/8/8/8/3p4/8/4K3 w - - 0 2");
+
+    unmakeMove(position, ep, undo);
+    expect(toFen(position)).toBe(fen);
+  });
+
+  it("round-trips a Black promotion — the mirror of the White promotion path", () => {
+    const fen = "4k3/8/8/8/8/8/1p6/4K3 b - - 0 1";
+    const position = parseFen(fen);
+    const promote = findMove(
+      generateMoves(position),
+      (move) => (move.flags & FLAG_PROMOTION) !== 0 && move.promotion === QUEEN,
+      "the b1=q promotion",
+    );
+
+    const undo = makeMove(position, promote);
+    expect(toFen(position)).toBe("4k3/8/8/8/8/8/8/1q2K3 w - - 0 2");
+
+    unmakeMove(position, promote, undo);
+    expect(toFen(position)).toBe(fen);
+  });
+
+  it("generates four capture-promotions and round-trips one, clearing the rook's castling right", () => {
+    // White pawn b7 can take the a8 rook and promote; the capture also clears Black's queenside right.
+    const fen = "r3k3/1P6/8/8/8/8/8/4K3 w q - 0 1";
+    const position = parseFen(fen);
+    const captures = generateMoves(position).filter(
+      (move) => move.to === parseSquareName("a8") && (move.flags & FLAG_PROMOTION) !== 0,
+    );
+    expect(captures).toHaveLength(4);
+
+    const queen = findMove(captures, (move) => move.promotion === QUEEN, "bxa8=Q");
+    expect(queen.captured).toBe(ROOK | BLACK);
+
+    const undo = makeMove(position, queen);
+    expect(toFen(position)).toBe("Q3k3/8/8/8/8/8/8/4K3 b - - 0 1");
+
+    unmakeMove(position, queen, undo);
+    expect(toFen(position)).toBe(fen);
   });
 });

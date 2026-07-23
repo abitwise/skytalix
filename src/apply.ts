@@ -7,19 +7,21 @@
  * the 128-byte board — full-position copying is explicitly rejected by ABC-003 for
  * exactly this reason.
  *
- * Scope is normal moves and captures. This module updates castling *rights* and
- * sets the en-passant *target* on a double push, but does not execute the special
- * moves themselves — castling rook movement, the en-passant capture square, and the
- * promotion piece swap are ABC-004, which extends this same make/unmake mechanism.
+ * ABC-004 extends this same mechanism with the three special moves — castling rook
+ * movement, the en-passant capture square, and the promotion piece swap — kept off
+ * the common path: a single `flags === FLAG_NONE` fast path handles every ordinary
+ * move and capture untouched, and only a flagged move pays for the special handling.
  */
 
-import type { Move } from "./moves.ts";
+import { FLAG_EN_PASSANT, FLAG_NONE, FLAG_PROMOTION, type Move } from "./moves.ts";
 import {
+  BLACK,
   CASTLE_BK,
   CASTLE_BQ,
   CASTLE_WK,
   CASTLE_WQ,
   EMPTY,
+  isBlack,
   NO_SQUARE,
   PAWN,
   type Position,
@@ -62,6 +64,57 @@ const DOUBLE_PUSH = 32;
 const castlingLoss = (square: number): number => CASTLE_LOSS[square] ?? 0;
 
 /**
+ * The rook's leg of a castle, keyed by the king's destination square. Derivable from the
+ * king move alone, so the Move need carry only a FLAG_CASTLE flag, not the rook squares.
+ */
+const CASTLE_ROOK_MOVE: Readonly<Record<number, readonly [from: number, to: number]>> = {
+  6: [7, 5], //   white kingside:  h1 -> f1
+  2: [0, 3], //   white queenside: a1 -> d1
+  118: [119, 117], // black kingside:  h8 -> f8
+  114: [112, 115], // black queenside: a8 -> d8
+};
+
+/** The square the en-passant-captured pawn stands on: one rank behind the target, same file. */
+const enPassantCaptureSquare = (move: Move): number => move.to + (isBlack(move.piece) ? 16 : -16);
+
+/**
+ * The special-move half of makeMove, reached only for a flagged move. The generic step in
+ * makeMove has already moved the mover onto `to`; this finishes the parts that step cannot
+ * express: swapping in the promoted piece, removing the ep-captured pawn, or moving the rook.
+ */
+function applySpecial(position: Position, move: Move): void {
+  if ((move.flags & FLAG_PROMOTION) !== 0) {
+    position.board[move.to] = move.promotion | (isBlack(move.piece) ? BLACK : 0);
+    return;
+  }
+  if ((move.flags & FLAG_EN_PASSANT) !== 0) {
+    position.board[enPassantCaptureSquare(move)] = EMPTY;
+    return;
+  }
+  // FLAG_CASTLE — the king is already on `to`; send the rook to the far side of it.
+  const [rookFrom, rookTo] = CASTLE_ROOK_MOVE[move.to] as readonly [number, number];
+  position.board[rookTo] = position.board[rookFrom] as number;
+  position.board[rookFrom] = EMPTY;
+}
+
+/**
+ * The special-move half of unmakeMove. The generic step has already put the mover back on
+ * `from` and restored `to` from the undo record; promotion needs nothing more (the mover
+ * IS the pawn), en passant restores the captured pawn beside `to`, castling sends the rook
+ * home.
+ */
+function undoSpecial(position: Position, move: Move): void {
+  if ((move.flags & FLAG_PROMOTION) !== 0) return;
+  if ((move.flags & FLAG_EN_PASSANT) !== 0) {
+    position.board[enPassantCaptureSquare(move)] = move.captured;
+    return;
+  }
+  const [rookFrom, rookTo] = CASTLE_ROOK_MOVE[move.to] as readonly [number, number];
+  position.board[rookFrom] = position.board[rookTo] as number;
+  position.board[rookTo] = EMPTY;
+}
+
+/**
  * Applies `move` to `position` in place and returns the record unmakeMove needs to
  * reverse it exactly. The board's `to` square is the authoritative source of the
  * captured piece — it is read before it is overwritten.
@@ -76,6 +129,8 @@ export function makeMove(position: Position, move: Move): UndoRecord {
 
   position.board[move.to] = move.piece;
   position.board[move.from] = EMPTY;
+
+  if (move.flags !== FLAG_NONE) applySpecial(position, move);
 
   const isPawn = pieceType(move.piece) === PAWN;
   position.halfmoveClock = isPawn || undo.captured !== EMPTY ? 0 : position.halfmoveClock + 1;
@@ -101,6 +156,8 @@ export function unmakeMove(position: Position, move: Move, undo: UndoRecord): vo
 
   position.board[move.from] = move.piece;
   position.board[move.to] = undo.captured;
+
+  if (move.flags !== FLAG_NONE) undoSpecial(position, move);
 
   position.castling = undo.castling;
   position.epSquare = undo.epSquare;
