@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-23 by Orchestrator (ABC-006 gate green → In Review, RISK-001 retired; nonstop ABC-004..007 batch in flight)_
+_Updated: 2026-07-23 by Orchestrator (ABC-007 gate green → In Review; nonstop ABC-004..007 batch COMPLETE, EPIC-001 rule-complete)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -81,13 +81,10 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 - [EPIC-004] Engine and AI opponent  (owner: BA/PM, size: L, priority: P0, since: 2026-07-22)
 - [EPIC-005] Opening book  (owner: BA/PM, size: S, priority: P1, since: 2026-07-22)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, size: M, priority: P2, since: 2026-07-22)
-- [ABC-007] Game-end detection  (size: M, P0, epic: EPIC-001, blocked-until: ABC-005)
-
 <!--
-  ABC-004..007 meet the Definition of Ready in full — they are held in Backlog rather than
-  Ready only to keep Ready a real buffer (see the Ready column note). BA/PM promotes each to
-  Ready as its `blocked-until` predecessor reaches Done. They are NOT blocked in the
-  Blocked-column sense: no decision or external input is missing.
+  ABC-004..007 were the last of EPIC-001. All four are now In Review (gate green) as one
+  stacked review unit awaiting a single human merge. EPIC-002..006 remain decomposed-later
+  epics in Backlog above. No EPIC-001 ticket is left to pull.
 -->
 
 ## Ready (WIP 0/8)
@@ -115,11 +112,21 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 3/3)
+## In Review (WIP 4/3 — see written override below)
+
+<!--
+  WIP OVERRIDE (written reason, per the Orchestrator's "no overfill without a written reason").
+  In Review holds 4 against a limit of 3. ABC-004/005/006/007 are ONE stacked review unit —
+  main → 004 → 005 → 006 → 007, each branch a PR, all gate-green — awaiting a SINGLE human merge
+  of the stack (the same shape ABC-001/002/003 used before their one merge). This is not four
+  independent pulls; it clears to 0 the moment a human merges the stack. Authorized at batch
+  start for the nonstop ABC-004..007 run. autonomy=pr — no agent merge.
+-->
 
 - [ABC-004] Special moves — castling, en passant, promotion  (branch: grugops/ticket-to-pr-ABC-004, gate: READY_FOR_HUMAN_REVIEW, QE PASS, 84 tests, src 100% coverage, awaiting human review+merge)
 - [ABC-005] Legal move filtering and attack detection  (branch: grugops/ticket-to-pr-ABC-005 stacked on ABC-004, gate: READY_FOR_HUMAN_REVIEW, QE PASS, 96 tests, src 100% coverage, awaiting human review+merge)
 - [ABC-006] Perft verification harness  (branch: grugops/ticket-to-pr-ABC-006 stacked on ABC-005, gate: READY_FOR_HUMAN_REVIEW, QE PASS, 120 tests, library 100% coverage, RISK-001 retired, NFR-001 ~6.2M nps, awaiting human review+merge)
+- [ABC-007] Game-end detection  (branch: grugops/ticket-to-pr-ABC-007 stacked on ABC-006, gate: READY_FOR_HUMAN_REVIEW, QE PASS, 143 tests, library 100% coverage, EPIC-001 rule-complete, awaiting human review+merge)
 
 <!--
   ABC-004 entered 2026-07-23: gate green (lint/typecheck/unit/build), QE found no defects,

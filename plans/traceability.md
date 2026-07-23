@@ -41,7 +41,7 @@ _Updated: 2026-07-23_
 | ABC-004 | Special moves — castling, en passant, promotion | EPIC-001 | — | NFR-001 | src/moves.ts, src/apply.ts (branch grugops/ticket-to-pr-ABC-004) | src/moves.test.ts + src/apply.test.ts — suite 84 pass, src 100% stmt/branch/func/line | | | In Review |
 | ABC-005 | Legal move filtering and attack detection | EPIC-001 | — | NFR-001 | src/legal.ts (branch grugops/ticket-to-pr-ABC-005) | src/legal.test.ts — 12 tests, suite 96 pass, src 100% coverage | | | In Review |
 | ABC-006 | Perft verification harness | EPIC-001 | — | NFR-001 (~6.2M nps, above target), RISK-001 retired | src/perft.ts, src/perft-bench.ts, package.json (branch grugops/ticket-to-pr-ABC-006) | src/perft.test.ts — 24 fast + 8 deep (PERFT_DEEP), all 6 positions match published perft; suite 120 pass | | | In Review |
-| ABC-007 | Game-end detection | EPIC-001 | — | NFR-001 | | | | | Backlog |
+| ABC-007 | Game-end detection | EPIC-001 | — | NFR-001 | src/gameend.ts, src/zobrist.ts (branch grugops/ticket-to-pr-ABC-007) | src/gameend.test.ts + src/zobrist.test.ts — 23 tests, suite 143 pass, library 100% coverage | | | In Review |
 | ABC-008 | SPIKE — Node search throughput | EPIC-004 | — | NFR-001, NFR-005 | spike/perft-bench.ts, package.json, tsconfig.json, biome.json | n/a — spike (see note) | | | Done |
 | pending | Terminal board and game loop | EPIC-002 | pending | NFR-002 | | | | | Backlog |
 | pending | Move input and controls | EPIC-003 | pending | NFR-003 | | | | | Backlog |
