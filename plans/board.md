@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-23 by Orchestrator (ABC-007 gate green → In Review; nonstop ABC-004..007 batch COMPLETE, EPIC-001 rule-complete)_
+_Updated: 2026-07-24 by Orchestrator (EPIC-001 review gate PASS — QE/E2E + Security/NFR over the ABC-004..007 stack; In Review → Ready for UAT; merge + UAT execution remain human-held)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -112,38 +112,40 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 4/3 — see written override below)
+## In Review (WIP 0/3)
 
 <!--
-  WIP OVERRIDE (written reason, per the Orchestrator's "no overfill without a written reason").
-  In Review holds 4 against a limit of 3. ABC-004/005/006/007 are ONE stacked review unit —
-  main → 004 → 005 → 006 → 007, each branch a PR, all gate-green — awaiting a SINGLE human merge
-  of the stack (the same shape ABC-001/002/003 used before their one merge). This is not four
-  independent pulls; it clears to 0 the moment a human merges the stack. Authorized at batch
-  start for the nonstop ABC-004..007 run. autonomy=pr — no agent merge.
--->
-
-- [ABC-004] Special moves — castling, en passant, promotion  (branch: grugops/ticket-to-pr-ABC-004, gate: READY_FOR_HUMAN_REVIEW, QE PASS, 84 tests, src 100% coverage, awaiting human review+merge)
-- [ABC-005] Legal move filtering and attack detection  (branch: grugops/ticket-to-pr-ABC-005 stacked on ABC-004, gate: READY_FOR_HUMAN_REVIEW, QE PASS, 96 tests, src 100% coverage, awaiting human review+merge)
-- [ABC-006] Perft verification harness  (branch: grugops/ticket-to-pr-ABC-006 stacked on ABC-005, gate: READY_FOR_HUMAN_REVIEW, QE PASS, 120 tests, library 100% coverage, RISK-001 retired, NFR-001 ~6.2M nps, awaiting human review+merge)
-- [ABC-007] Game-end detection  (branch: grugops/ticket-to-pr-ABC-007 stacked on ABC-006, gate: READY_FOR_HUMAN_REVIEW, QE PASS, 143 tests, library 100% coverage, EPIC-001 rule-complete, awaiting human review+merge)
-
-<!--
-  ABC-004 entered 2026-07-23: gate green (lint/typecheck/unit/build), QE found no defects,
-  no Security/NFR trigger (throughput NFR-001 is measured in ABC-006, not gated here). It is
-  the base of the authorized ABC-004..007 stack — ABC-005 branches off it, not off main,
-  because its blocked-until predecessor is satisfied on the branch pending one human merge of
-  the stack (the same stacked-branch shape ABC-001/002/003 used before their single merge).
-
-  Prior occupant (context): ABC-003 was merged to main on explicit human instruction and moved
-  to Done — humans hold merge; the human decided, the agent supplied the keystroke; not
-  standing authorization, the same rule recorded for ABC-001/002/008.
+  Cleared 2026-07-24: the ABC-004..007 stacked review unit passed the EPIC-001 review gate
+  (QE/E2E independent PR-review-checklist pass + Security/NFR gate) and advanced to Ready for
+  UAT. The 4/3 WIP override recorded here at batch start is now RESOLVED — the column is back
+  to 0/3. The stacked branches are unchanged (main → 004 → 005 → 006 → 007); the single human
+  merge of that stack is still outstanding and still human-held (autonomy=pr).
 -->
 
 
 ## In Security/NFR (WIP 0/2)
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 4/4)
+
+<!--
+  Entered 2026-07-24 as ONE stacked unit (main → 004 → 005 → 006 → 007). Both agent gates
+  passed over the full stacked diff: QE/E2E independent PR-review-checklist PASS (suite 143
+  pass, skip-count 0, deep perft PERFT_DEEP=1 = 32/32 exact) and Security/NFR PASS_WITH_RISKS
+  (no risk-bearing trigger, no ASVS-L1 failure crossing block_on=high, NFR-001 ~6.2M nps ≥ 1M
+  MET). One low/process accepted risk: plans/nfr-catalog.md is still the empty template — seed
+  the NFR-001 row (owner: Architect/Design); non-blocking.
+
+  Honest state: "Ready for UAT" means every AGENT gate has passed. It does NOT mean merged and
+  does NOT mean UAT-run. Two human-held steps remain: (1) the single human merge of the stack
+  to main (autonomy=pr — no agent merge), and (2) actual UAT execution, which is deferred —
+  EPIC-001 is a pure rules library with no runnable surface until EPIC-006 packaging, so the
+  traceability UAT column stays empty until there is something a human can play against.
+-->
+
+- [ABC-004] Special moves — castling, en passant, promotion  (branch: grugops/ticket-to-pr-ABC-004, review gate PASS, QE PASS, sec/NFR PASS, awaiting human merge; UAT deferred to EPIC-006)
+- [ABC-005] Legal move filtering and attack detection  (branch: grugops/ticket-to-pr-ABC-005 stacked on ABC-004, review gate PASS, QE PASS, sec/NFR PASS, awaiting human merge; UAT deferred to EPIC-006)
+- [ABC-006] Perft verification harness  (branch: grugops/ticket-to-pr-ABC-006 stacked on ABC-005, review gate PASS incl. deep perft 32/32, sec/NFR PASS, NFR-001 ~6.2M nps, RISK-001 retired, awaiting human merge; UAT deferred to EPIC-006)
+- [ABC-007] Game-end detection  (branch: grugops/ticket-to-pr-ABC-007 stacked on ABC-006, review gate PASS, QE PASS, sec/NFR PASS, EPIC-001 rule-complete, awaiting human merge; UAT deferred to EPIC-006)
 
 ## In UAT (WIP 0/4)
 

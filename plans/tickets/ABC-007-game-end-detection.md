@@ -1,8 +1,8 @@
 ---
 id: ABC-007
 title: Game-end detection
-status: backlog
-column: Backlog
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P0
 epic: EPIC-001

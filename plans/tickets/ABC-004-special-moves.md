@@ -1,8 +1,8 @@
 ---
 id: ABC-004
 title: Special moves — castling, en passant, promotion
-status: backlog
-column: Backlog
+status: ready-for-uat
+column: Ready for UAT
 size: L
 priority: P0
 epic: EPIC-001

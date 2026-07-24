@@ -1,8 +1,8 @@
 ---
 id: ABC-005
 title: Legal move filtering and attack detection
-status: backlog
-column: Backlog
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P0
 epic: EPIC-001
