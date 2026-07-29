@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-24 by Orchestrator (EPIC-001 review gate PASS — QE/E2E + Security/NFR over the ABC-004..007 stack; In Review → Ready for UAT; merge + UAT execution remain human-held)_
+_Updated: 2026-07-24 by Orchestrator (ABC-004..007 merged to main on explicit human instruction → Done; EPIC-001 Chess rules core COMPLETE — all 8 tickets closed)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -75,16 +75,17 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Backlog (WIP unlimited)
 
-- [EPIC-001] Chess rules core  (owner: BA/PM, size: XL, priority: P0, since: 2026-07-22, decomposed: ABC-001..ABC-007)
 - [EPIC-002] Terminal board and game loop  (owner: BA/PM, size: M, priority: P0, since: 2026-07-22)
 - [EPIC-003] Move input and controls  (owner: BA/PM, size: M, priority: P0, since: 2026-07-22)
 - [EPIC-004] Engine and AI opponent  (owner: BA/PM, size: L, priority: P0, since: 2026-07-22)
 - [EPIC-005] Opening book  (owner: BA/PM, size: S, priority: P1, since: 2026-07-22)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, size: M, priority: P2, since: 2026-07-22)
 <!--
-  ABC-004..007 were the last of EPIC-001. All four are now In Review (gate green) as one
-  stacked review unit awaiting a single human merge. EPIC-002..006 remain decomposed-later
-  epics in Backlog above. No EPIC-001 ticket is left to pull.
+  EPIC-001 left Backlog 2026-07-24 — decomposed into ABC-001..ABC-007 (+ the ABC-008 spike),
+  all merged and Done; it now sits in the Done column below. EPIC-002..006 remain
+  decomposed-later epics above: each still needs `epic-to-tickets` (Workflow 03) before any
+  ticket can be pulled. Nothing is Ready right now — that is the next planning step, not an
+  oversight.
 -->
 
 ## Ready (WIP 0/8)
@@ -125,27 +126,15 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## In Security/NFR (WIP 0/2)
 
-## Ready for UAT (WIP 4/4)
+## Ready for UAT (WIP 0/4)
 
 <!--
-  Entered 2026-07-24 as ONE stacked unit (main → 004 → 005 → 006 → 007). Both agent gates
-  passed over the full stacked diff: QE/E2E independent PR-review-checklist PASS (suite 143
-  pass, skip-count 0, deep perft PERFT_DEEP=1 = 32/32 exact) and Security/NFR PASS_WITH_RISKS
-  (no risk-bearing trigger, no ASVS-L1 failure crossing block_on=high, NFR-001 ~6.2M nps ≥ 1M
-  MET). One low/process accepted risk: plans/nfr-catalog.md is still the empty template — seed
-  the NFR-001 row (owner: Architect/Design); non-blocking.
-
-  Honest state: "Ready for UAT" means every AGENT gate has passed. It does NOT mean merged and
-  does NOT mean UAT-run. Two human-held steps remain: (1) the single human merge of the stack
-  to main (autonomy=pr — no agent merge), and (2) actual UAT execution, which is deferred —
-  EPIC-001 is a pure rules library with no runnable surface until EPIC-006 packaging, so the
-  traceability UAT column stays empty until there is something a human can play against.
+  Cleared 2026-07-24: the ABC-004..007 stack was merged to main and moved to Done. UAT
+  execution for the EPIC-001 rules core is DEFERRED, not skipped — it is a pure library with
+  no surface a human can exercise until EPIC-006 packaging ships a runnable game. The
+  traceability UAT cells read "UAT deferred — EPIC-006" so the gap stays visible rather than
+  being quietly marked passed.
 -->
-
-- [ABC-004] Special moves — castling, en passant, promotion  (branch: grugops/ticket-to-pr-ABC-004, review gate PASS, QE PASS, sec/NFR PASS, awaiting human merge; UAT deferred to EPIC-006)
-- [ABC-005] Legal move filtering and attack detection  (branch: grugops/ticket-to-pr-ABC-005 stacked on ABC-004, review gate PASS, QE PASS, sec/NFR PASS, awaiting human merge; UAT deferred to EPIC-006)
-- [ABC-006] Perft verification harness  (branch: grugops/ticket-to-pr-ABC-006 stacked on ABC-005, review gate PASS incl. deep perft 32/32, sec/NFR PASS, NFR-001 ~6.2M nps, RISK-001 retired, awaiting human merge; UAT deferred to EPIC-006)
-- [ABC-007] Game-end detection  (branch: grugops/ticket-to-pr-ABC-007 stacked on ABC-006, review gate PASS, QE PASS, sec/NFR PASS, EPIC-001 rule-complete, awaiting human merge; UAT deferred to EPIC-006)
 
 ## In UAT (WIP 0/4)
 
@@ -153,10 +142,28 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Done (WIP unlimited)
 
+- [EPIC-001] Chess rules core  (complete: 2026-07-24, decomposed ABC-001..ABC-007 + ABC-008 spike, all merged; rule-complete and perft-proven)
 - [ABC-008] SPIKE — Node search throughput  (merged: 2026-07-23, outcome: GO WITH CONSTRAINT, RISK-002 answered)
 - [ABC-001] Position state and FEN round-trip  (merged: 2026-07-23, 27 tests, ADR-0001)
 - [ABC-002] Pseudo-legal move generation for all piece types  (merged: 2026-07-23, 22 tests, QE PASS no defects)
 - [ABC-003] Apply and undo a move with full state restoration  (merged: 2026-07-23, 15 tests, QE PASS no defects, src/apply.ts 100% coverage)
+- [ABC-004] Special moves — castling, en passant, promotion  (merged: 2026-07-24, review gate PASS, QE PASS, sec/NFR PASS; UAT deferred → EPIC-006)
+- [ABC-005] Legal move filtering and attack detection  (merged: 2026-07-24, review gate PASS, QE PASS, sec/NFR PASS; UAT deferred → EPIC-006)
+- [ABC-006] Perft verification harness  (merged: 2026-07-24, deep perft 32/32 exact, RISK-001 retired, NFR-001 ~6.2M nps; UAT deferred → EPIC-006)
+- [ABC-007] Game-end detection  (merged: 2026-07-24, review gate PASS, QE PASS, sec/NFR PASS, EPIC-001 rule-complete; UAT deferred → EPIC-006)
+
+<!--
+  ABC-004..007 merged 2026-07-24 as one fast-forward of the stacked unit
+  (main f80a15a → cd9caae, no conflicts), suite re-verified 143/143 green ON main after the
+  merge. EPIC-001 (Chess rules core) is now COMPLETE: all 8 tickets closed.
+
+  The merge was performed by an agent on EXPLICIT human instruction — the same one path that
+  crosses the "humans hold merge" line without breaking it: the human holds the DECISION, the
+  agent supplies the keystroke. This is NOT standing authorization; the standing rule is
+  unchanged and no future merge happens without the same explicit instruction. Identical to
+  the rule already recorded for ABC-001/002/003/008.
+-->
+
 
 <!--
   Done means MERGED, and as of 2026-07-23 these three are: `main` was created at 8d0a8f7,

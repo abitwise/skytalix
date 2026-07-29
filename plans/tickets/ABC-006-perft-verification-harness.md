@@ -1,8 +1,8 @@
 ---
 id: ABC-006
 title: Perft verification harness
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: S
 priority: P0
 epic: EPIC-001
