@@ -1,5 +1,5 @@
 # Traceability Matrix
-_Updated: 2026-07-23_
+_Updated: 2026-07-29_
 
 <!--
   FORMAT — read before you append. (clear voice; this is a technical file, not a role prompt.)
@@ -43,6 +43,8 @@ _Updated: 2026-07-23_
 | ABC-006 | Perft verification harness | EPIC-001 | — | NFR-001 (~6.2M nps ≥ 1M MET; sec/NFR PASS_WITH_RISKS — nfr-catalog empty, owner Architect/Design), RISK-001 retired | src/perft.ts, src/perft-bench.ts, package.json (merged to main) | src/perft.test.ts — 24 fast + 8 deep (PERFT_DEEP), all 6 positions match published perft; suite 120 pass; EPIC-001 review gate deep perft 32/32 exact 2026-07-24 | UAT deferred — EPIC-006 | | Done |
 | ABC-007 | Game-end detection | EPIC-001 | — | NFR-001 (sec/NFR PASS) | src/gameend.ts, src/zobrist.ts (merged to main) | src/gameend.test.ts + src/zobrist.test.ts — 23 tests, suite 143 pass, library 100% coverage; EPIC-001 review gate PASS 2026-07-24 (7/7 acceptance + precedence probes, skip-count 0) | UAT deferred — EPIC-006 | | Done |
 | ABC-008 | SPIKE — Node search throughput | EPIC-004 | — | NFR-001, NFR-005 | spike/perft-bench.ts, package.json, tsconfig.json, biome.json | n/a — spike (see note) | | | Done |
+| ABC-009 | legalMoves mutates the position it documents as unchanged | EPIC-001 | — | NFR-001 (no regression: perft ≥ 1M nps, deep perft 32/32) | not started — defect in merged src/legal.ts, src/moves.ts | not started — repro is the acceptance test | | | Backlog |
+| ABC-010 | FEN semantic validation | EPIC-003 | — | NFR-003 (parse+validate < 1 ms/call) | not started — defect in merged src/fen.ts | not started — repro table is the acceptance test | | | Backlog |
 | pending | Terminal board and game loop | EPIC-002 | pending | NFR-002 | | | | | Backlog |
 | pending | Move input and controls | EPIC-003 | pending | NFR-003 | | | | | Backlog |
 | pending | Engine and AI opponent | EPIC-004 | pending | NFR-004, NFR-005 | | | | | Backlog |
@@ -61,5 +63,14 @@ _Updated: 2026-07-23_
 
   Every NFR id above is a BA/PM trigger with a measurable target stated in its epic;
   Architect/Design seeds the matching rows in plans/nfr-catalog.md at design time.
+
+  ABC-009 and ABC-010 are DEFECT rows, cut 2026-07-29 from the architecture audit
+  (task `architecture-audit-2026-07-29`), and they trace backwards rather than forwards: the
+  code they name is already merged and Done, and the Code/Tests cells read "not started"
+  because the FIX has not been written. They are deliberately not left blank — a blank cell
+  reads as "no evidence yet gathered", whereas these carry a known defective file that a
+  later ticket-to-pr run must change. UAT and Release stay empty (Backlog, nothing gated).
+  ABC-009 sits under EPIC-001 (the rules core whose documented contract it breaks); ABC-010
+  under EPIC-003 (the input epic that makes it live).
 -->
 

@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-24 by Orchestrator (ABC-004..007 merged to main on explicit human instruction → Done; EPIC-001 Chess rules core COMPLETE — all 8 tickets closed)_
+_Updated: 2026-07-29 by BA/PM (ABC-009 + ABC-010 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`; no other ticket moved, no other column touched, Backlog is WIP-unlimited so no limit is breached)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -80,7 +80,17 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 - [EPIC-004] Engine and AI opponent  (owner: BA/PM, size: L, priority: P0, since: 2026-07-22)
 - [EPIC-005] Opening book  (owner: BA/PM, size: S, priority: P1, since: 2026-07-22)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, size: M, priority: P2, since: 2026-07-22)
+- [ABC-010] FEN semantic validation  (owner: BA/PM, size: M, priority: P1, epic: EPIC-003, since: 2026-07-29)
+- [ABC-009] legalMoves mutates the position it documents as unchanged  (owner: BA/PM, size: S, priority: P2, epic: EPIC-001, since: 2026-07-29)
 <!--
+  ABC-009 and ABC-010 cut 2026-07-29 by BA/PM from the architecture audit
+  (task `architecture-audit-2026-07-29`) — two correctness defects found in merged, Done,
+  100%-covered code. Both are LATENT today (`parseFen` has no user-facing caller) and go live
+  when EPIC-003 accepts a FEN from a user, which is why ABC-010 (the boundary) is P1 and
+  ABC-009 (the invariant behind it) is P2 with a stated escalation trigger. They are
+  independent of each other by design; neither is promoted to Ready — the Definition of Ready
+  gate is a separate step.
+
   EPIC-001 left Backlog 2026-07-24 — decomposed into ABC-001..ABC-007 (+ the ABC-008 spike),
   all merged and Done; it now sits in the Done column below. EPIC-002..006 remain
   decomposed-later epics above: each still needs `epic-to-tickets` (Workflow 03) before any

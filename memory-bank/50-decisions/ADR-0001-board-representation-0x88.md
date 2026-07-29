@@ -66,9 +66,38 @@ need most.
 
 ## Rollback
 
-The representation is confined behind `src/position.ts` and the helpers it exports. Moving
-to bitboards later means rewriting `position.ts`, `fen.ts`, and move generation, while the
-FEN round-trip test suite and the ABC-006 perft suite carry over unchanged — those tests
-assert behavior, not layout, so they are exactly the safety net a rollback needs. The
-realistic trigger for rollback is a measured failure of `NFR-005` on target hardware, not
-a preference.
+**Amended 2026-07-29 (architecture audit): the blast radius is wider than this section
+originally claimed.** It read "the representation is confined behind `src/position.ts` and the
+helpers it exports". It is not. The 16-per-rank stride and literal 0x88 square indices are
+baked into five other modules, verified by file and line:
+
+- `apply.ts:52` `CASTLE_LOSS` keyed on raw squares `4, 116, 0, 7, 112, 119`; `apply.ts:70`
+  `CASTLE_ROOK_MOVE` keyed `6/2/118/114`; `apply.ts:62` `DOUBLE_PUSH = 32`; `apply.ts:78`
+  `move.to ± 16`.
+- `moves.ts:58-61` the direction and leap tables (`±16, ±1, ±15, ±17, ±14, ±18, ±31, ±33`);
+  `moves.ts:152` and `moves.ts:236` `± 16`; `moves.ts:279,283` `WHITE_CASTLES` / `BLACK_CASTLES`
+  as raw square literals; `moves.ts:326` a scan to 128.
+- `zobrist.ts:45,62` a `15 * 128` table addressed `piece << 7 | square`; `zobrist.ts:59` a scan
+  to 128.
+- `gameend.ts:60` and `fen.ts:104` scan to 128.
+
+That is not a defect in the code and it must not be "fixed": routing offset tables through
+helper calls would be slower and less readable, and the constants carry explanatory comments
+(`moves.ts:278`). It was a defect in this section's prose — a maintainer reading the original
+sentence would plan the wrong-sized change.
+
+So: moving to bitboards later means rewriting `position.ts`, `fen.ts`, and move generation
+**and reworking the layout constants in `apply.ts`, `moves.ts`, `zobrist.ts`, and
+`gameend.ts`** — six of the nine modules in `src/`. Only `legal.ts`, `perft.ts` and
+`perft-bench.ts` are layout-free; they go through the exported helpers, constants and the
+`Move` type, which is what the Consequences section asks of every module. The FEN round-trip
+test suite and the ABC-006 perft suite carry over unchanged — those tests assert behavior, not
+layout, so they are exactly the safety net a rollback needs, and that mitigation is intact.
+Rollback is still *safe*; it is just wider than advertised.
+
+The realistic trigger for rollback is a measured failure of `NFR-001` generation throughput on
+target hardware, not a preference. This section previously named `NFR-005` while the Context
+binds on `NFR-001`; they are reconciled to `NFR-001` here, because `NFR-005` is in fact missed
+today (see `plans/nfr-catalog.md`, corrected 2026-07-29) for reasons the audit attributed to
+make/test/unmake legality filtering, not to the board representation — reading that miss as a
+rollback trigger for 0x88 would replace the right change with the wrong one.
