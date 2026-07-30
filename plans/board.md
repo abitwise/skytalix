@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-29 by BA/PM (ABC-009 + ABC-010 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`; no other ticket moved, no other column touched, Backlog is WIP-unlimited so no limit is breached)_
+_Updated: 2026-07-30 by BA/PM (ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation; no ticket moved, no column other than Backlog touched, Backlog is WIP-unlimited so no limit is at issue. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -82,7 +82,21 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 - [EPIC-006] Game session and packaging  (owner: BA/PM, size: M, priority: P2, since: 2026-07-22)
 - [ABC-010] FEN semantic validation  (owner: BA/PM, size: M, priority: P1, epic: EPIC-003, since: 2026-07-29)
 - [ABC-009] legalMoves mutates the position it documents as unchanged  (owner: BA/PM, size: S, priority: P2, epic: EPIC-001, since: 2026-07-29)
+- [ABC-011] Zobrist key hashes en passant when no capture is available  (owner: BA/PM, size: S, priority: P2, epic: EPIC-001, since: 2026-07-30)
 <!--
+  ABC-011 cut 2026-07-30 by BA/PM from the same architecture audit, on the recommendation in
+  ADR-0002's `Out of scope … en-passant hashing defect` section — a third correctness defect in
+  merged, Done, 100%-covered code (`src/zobrist.ts:71` hashes the en-passant file whenever
+  `epSquare` is set, not only when an ep capture is available, so FIDE-identical positions hash
+  differently and threefold repetition under-detects). ADR-0002 recommended it and did not cut it;
+  ticketing is BA/PM's. `S` / `P2` is BA/PM's own call, agreeing with the ADR: latent (no consumer
+  of the key list exists yet — `gameStatus`'s `positionCounts` has no supplier anywhere in `src/`)
+  and the error direction is safe (a legitimate draw is missed, never a false draw declared).
+  Ratification of ADR-0002 clause 2 widened its blast radius to four epics without moving its
+  severity or reachability, so it carries a sequencing escalation trigger rather than a higher
+  priority. INDEPENDENT of ABC-009 and ABC-010 — different module, and unlike those two nothing
+  makes this one unreachable. Not promoted to Ready; that gate is a separate step.
+
   ABC-009 and ABC-010 cut 2026-07-29 by BA/PM from the architecture audit
   (task `architecture-audit-2026-07-29`) — two correctness defects found in merged, Done,
   100%-covered code. Both are LATENT today (`parseFen` has no user-facing caller) and go live
