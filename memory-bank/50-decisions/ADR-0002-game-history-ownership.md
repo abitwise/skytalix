@@ -6,15 +6,54 @@ id: ADR-0002
 
 ## Status
 
-**proposed** — awaiting ratification by a human. No agent may move this to `accepted`.
+**accepted** — ratified by a named human on 2026-07-30. No agent may move an ADR to `accepted`; a
+human did.
 
-This ADR presents a decision; it does not take one. The 2026-07-29 architecture audit named
-game-history ownership as the single most expensive-to-reverse decision still unmade, and both
-audit agents declined to author it unilaterally. That stance is preserved here: what follows is a
-recommendation with its evidence and its confidence, written so a human can ratify, amend, or
-reject it in one reading.
+This ADR was written as a proposal: it presented a decision rather than taking one. The 2026-07-29
+architecture audit named game-history ownership as the single most expensive-to-reverse decision
+still unmade, and both audit agents declined to author it unilaterally. That stance held all the way
+to ratification: what follows was written as a recommendation with its evidence and its confidence,
+so a human could ratify, amend, or reject it in one reading — and it was ruled on in session.
 
-Ratified by: `__________________`  on `__________`
+Ratified by: Olger Oeselg  on 2026-07-30
+
+### Ratification record — all four clauses accepted AS PROPOSED
+
+The ruling was **"ratify ADR-0002"**, unqualified. Unlike `ADR-0003` — whose clause 2 was accepted
+only **as amended** — **no clause of this ADR was amended.** Clauses 1, 2, 3 and 4 stand exactly as
+they were written, and as they read below:
+
+- **Clause 1 — accepted as proposed.** The rules core keeps owning a position, not a game;
+  `makeMove` / `unmakeMove` stay history-free and `UndoRecord` stays caller-owned.
+- **Clause 2 — accepted as proposed.** One module above the core owns `{ initial position, Move[] }`
+  as the authoritative state, and the undo stack, key list and repetition counts are **derived by
+  replay, not maintained** — the most judgment-laden clause, ratified with no change.
+- **Clause 3 — accepted as proposed.** The search deliberately does not share that structure: a
+  preallocated per-ply Zobrist key array, seeded once per search rather than per node.
+- **Clause 4 — accepted as proposed.** `gameStatus`'s `positionCounts` gets exactly one supplier,
+  and the signature does not change.
+
+**The only other edits made on ratification are two factual refreshes, and they are NOT clause
+amendments.** Each is labelled in place with that exact phrase, because for `ADR-0003` the
+difference between "as proposed" and "as amended" was real, and a reader must be able to tell the
+two apart at a glance here too:
+
+- **Refresh A — the `~6%` counterfactual in `### Stated dependency on ADR-0003` is superseded.**
+  This ADR *predicted* that figure; `ADR-0003` *measured* it. The measured numbers replace the
+  predicted one, with attribution. The dependency itself is kept, not deleted.
+- **Refresh B — four references to `NFR-005`'s retired `>= 500,000 nodes/sec` target are
+  re-framed** against the depth-in-budget target ratified on 2026-07-30 (`plans/nfr-catalog.md`).
+  They sit in Context, in Consequences, in the shared-`Map` Alternative and in Rollback. **Every
+  measurement in this ADR stays; only the retired-target dressing goes** — no number, no conclusion
+  and no ranking changes, for the reason given under Context.
+
+Nothing else moved. The Decision clauses, the Alternatives and their ranking, the Confidence
+section, the out-of-scope en-passant defect and its recommendation were not softened, strengthened
+or re-ordered on ratification.
+
+**Ratification settled who owns game history and measured nothing.** Every figure in this file —
+including the two refreshed ones — is a transcription carrying its position, its node definition and
+its machine (Apple M3, Node v24.12.0, darwin/arm64); `UNKNOWN - verify` on any other hardware.
 
 ## Context
 
@@ -42,9 +81,29 @@ quietly ends a game that should continue, or fails to end one that should stop.
 
 **The search path is the hard constraint.** `EPIC-004`'s scope includes a transposition table and
 `RISK-002` already binds it to time-based iterative deepening. Repetition must be decided at every
-node, at depth, where allocating or copying per node is unaffordable. `NFR-005` is currently
-**missed** — the audit measured 163k-351k nodes/sec against a 500k target, with no evaluation
-running at all — so there is no throughput budget to spend on an elegant-but-allocating history.
+node, at depth, where allocating or copying per node is unaffordable. The audit measured the
+generator at **163k-351k nodes/sec with no evaluation running at all** — ABC-008 metric B, where
+every node including leaves calls `legalMoves()`, on an M3, 2026-07-29 — so there is no throughput
+budget to spend on an elegant-but-allocating history.
+
+*Factual refresh on ratification, 2026-07-30 — NOT a clause amendment.* The paragraph above
+originally read that `NFR-005` "is currently **missed** … against a 500k target". **That target no
+longer exists.** `>= 500,000 nodes/sec` was **RETIRED** when a human ratified `ADR-0003` clause 2 as
+amended on 2026-07-30, on the ground that it came from a benchmark with no legality filtering and
+that the same merged code measures 207k to ~6.1M nodes/sec on the node definition alone. As
+`plans/nfr-catalog.md` reads today, `NFR-005` is **depth-in-budget on the standing benchmark
+positions `kiwipete` and `position-6`**: at default difficulty the search completes **>= depth 6**
+within the 3 s budget and never exceeds the 5 s ceiling (**below depth 6 = FAIL**), and reaches
+**depth 7** within that same 3 s budget (**below depth 7 = WARN**, that level marked **PROVISIONAL**
+pending non-M3 measurement), with the node rate **demoted to a diagnostic** that must always carry
+its node definition, its position and its machine.
+
+**The 163k-351k measurement is unaffected and stays** — it was never a verdict, it is the per-node
+cost this ADR reasons about. **And nothing this ADR concludes changes.** The argument here is
+per-node cost against a ~5,000 ns search node (9-23 ns/node vs 86-101 ns/node vs 4.13x-4.21x), and
+under a depth-in-budget target a cheaper node still buys depth — cheaper is still better, in the same
+order. Every number, every clause and the whole Alternatives ranking below stand exactly as measured;
+what was stale was only the framing that dressed them in a missed 500k target.
 
 Measurements the decision rests on. The audit measured `zobristKey` at **306 ns** and
 `legalMoves(kiwipete)` at **5,298 ns**, i.e. one full key costs ~5.8% of the generate-and-filter
@@ -119,9 +178,9 @@ and I am not rejecting it on cost — see Alternatives.
 
 ### Stated dependency on ADR-0003 (legality strategy)
 
-`ADR-0003` is being written concurrently and I have not seen it. It decides whether legality stays
-make/test/unmake or becomes pin-aware generation. The interaction is real and is named here rather
-than assumed away:
+`ADR-0003` was being written concurrently and I had not seen it when this section was written. It
+decides whether legality stays make/test/unmake or becomes pin-aware generation. The interaction is
+real and was named here rather than assumed away:
 
 - **The 4.2x figure in clause 1 is contingent on make/test/unmake.** It is that large *because*
   `legalMoves` calls `makeMove` ~48 times per node. If `ADR-0003` chooses pin-aware generation,
@@ -132,9 +191,39 @@ than assumed away:
 - **Clauses 2, 3 and 4 do not depend on `ADR-0003` at all.** Nothing in them is a function of how
   legality is computed.
 
-If `ADR-0003` recommends pin-aware generation, the only edit owed to this ADR is re-measuring the
-one number above. If a human reads the two ADRs together and finds a contradiction I could not
-see, this section is the seam to cut along.
+*Factual refresh on ratification, 2026-07-30 — NOT a clause amendment. The `~6%` in the first bullet
+is a **prediction that has been superseded by measurement**. The figures below are transcribed from
+`ADR-0003`'s own `### Stated dependency on ADR-0002 (game history ownership) — answered with
+measurement` section — one machine (Apple M3, Node v24.12.0, darwin-arm64). Nothing was re-measured
+to write this refresh:*
+
+- **The 4.2x is confirmed independently.** `ADR-0003` reproduced this ADR's shape — one `zobristKey`
+  after every `makeMove` inside the filter — and measured **4.48x at kiwipete (+16.9 µs/node)** and
+  **4.60x at startpos (+6.9 µs/node)**, against the **4.13x-4.21x** and **+16.1 µs/node** measured
+  here. Same mechanism, same magnitude, reached separately. It also measured **`makeMove` calls per
+  node at 40.9** today (40.9 pseudo-legal moves per node across the six standard positions to depth
+  3), which is where the +16.9 µs comes from at ~300 ns per full key recompute.
+- **The `~6%` premise does not hold, and the conclusion holds anyway — more strongly.** Measured,
+  `makeMove` calls per node fall from **40.9 to 3.3** under lazy legality — a **12x** reduction,
+  **not to ~1** — and the penalty for maintaining history inside the core's make/unmake then measures
+  **1.93x at kiwipete and 0.99x at startpos**, **not ~1.06x**. Under a pseudo-legal search the
+  *relative* penalty gets **worse**, not better, because the node becomes ~12x cheaper while still
+  making one `makeMove` per move searched. So clause 1 — history must not attach to the core's
+  make/unmake — survives under **every** option `ADR-0003` considered and needs no weakening.
+  **`~6%` must not be quoted from this ADR again.**
+- **What `ADR-0003`'s ratification settled for this section.** Its **clause 1 was ratified as
+  proposed** by Olger Oeselg on 2026-07-30: make/test/unmake stays and `src/legal.ts` is not changed.
+  Therefore **this ADR's 4.13x-4.21x stands exactly as written, and the re-measurement this section
+  asks for is NOT owed today.** It becomes owed only if a human later authorizes an option from
+  `ADR-0003` clause 3 — which authorizes none of them. `ADR-0003` names its **(c1)** pseudo-legal
+  search and **(c2)** lazy legality as the two that move this number, and its last resort **(b)**,
+  full pin-aware generation, is precisely the counterfactual the `~6%` prediction above was written
+  about. The figures in this refresh are what any such re-measurement should be checked against.
+
+`ADR-0003` did not recommend pin-aware generation, so beyond this refresh no edit was owed to this
+ADR — it says so itself, in the same section. It read this ADR from disk and **found no contradiction
+between the two**. If a human reads the two together and finds one that neither author could see,
+this section is still the seam to cut along.
 
 ## Alternatives
 
@@ -142,10 +231,11 @@ see, this section is the seam to cut along.
 the cheapest. Its real cost is not code, it is ownership: a contract with no owner is a comment.
 `EPIC-002` still builds the move list inside its render loop because that is where it needs it,
 `EPIC-004` still builds a second one, and `EPIC-006` still discovers the mismatch. Rejected — but
-only just, and note how little separates it from the Decision. The recommendation above *is* this
+only just, and note how little separates it from the Decision. The Decision above *is* this
 option plus a name and a home; it adds no data structure the epics were not already going to
-build. If a human prefers to defer even that, the loss is bounded and the ADR is still useful as
-the written contract.
+build. Deferring even that was on the table and would have cost a bounded loss, leaving this ADR
+useful as the written contract — the 2026-07-30 ruling did not defer, and ratified clause 2's named
+owner as proposed.
 
 **A `Game` type inside the rules core, owning move list, undo stack and repetition map.** The
 tidiest to read, and it fixes the `gameStatus` optional-parameter smell at its source. Rejected
@@ -164,8 +254,12 @@ perft counts and empties itself at the end. It costs 86-101 ns/node, about 1.6-1
 node. **This is not rejected on cost; it is affordable.** It is rejected because it is the wrong
 shape for the consumer that matters: repetition is a property of the path from root to node, and a
 map re-derives that property through bookkeeping discipline that one missed decrement silently
-breaks. The array *is* the path. It is also 4-10x cheaper, on a metric (`NFR-005`) that is
-currently missed.
+breaks. The array *is* the path. It is also **4-10x cheaper per node** (9-23 ns against 86-101 ns),
+and under `NFR-005` as ratified on 2026-07-30 a cheaper node buys depth, so that advantage is
+undiminished. *(Factual refresh on ratification — NOT a clause amendment: this last sentence read
+"4-10x cheaper, on a metric (`NFR-005`) that is currently missed". The 500k target that metric was
+missed against was retired; the measurement, and the fact that this option is rejected on shape
+rather than on cost, are unchanged.)*
 
 **Derive everything, own nothing — no module at all.** Recompute the move list's consequences
 wherever they are needed, from `{initial position, Move[]}` held by the game loop. Attractive, and
@@ -181,8 +275,11 @@ clause 2, and it is small precisely because this alternative is mostly right.
   Risks section predicts becomes **unrepresentable**, not merely tested for: repetition counts
   cannot fall out of step with the position when both are functions of the same list.
 - `EPIC-004` pays 9-23 ns/node for in-tree repetition on top of a key the transposition table
-  forces it to compute anyway. Against a missed `NFR-005`, that is the cheapest correct option
-  measured.
+  forces it to compute anyway — **0.2-0.4% of a ~5,000 ns search node, the cheapest correct option
+  measured.** *(Factual refresh on ratification — NOT a clause amendment: this read "Against a missed
+  `NFR-005`, that is the cheapest correct option measured". The 500k target it referred to was retired
+  on 2026-07-30; `NFR-005` is now depth-in-budget, under which a cheaper node buys depth, so
+  "cheapest correct option measured" still ranks exactly where it did.)*
 - `EPIC-005` probes the book against the same derived key list; the played line is the move list.
 - The dependency graph stays an acyclic DAG with no upward edge: the new module sits above
   `gameend`, importing `position`, `apply`, `zobrist` and `gameend`. Nothing in the core imports it.
@@ -250,9 +347,13 @@ is to memoize inside the history module and re-measure — clauses 1, 3 and 4 ar
 only clause 2's "derived, not maintained" wording would need amending.
 
 A rollback of clause 3 — the search sharing the session's structure after all — is the expensive
-one, because it is the clause the `NFR-005` deficit binds on. It should not be reversed without a
-fresh measurement showing the shared structure's per-node cost against a search node, on the
-hardware in question.
+one, because it is the clause the search's per-node cost binds on. It should not be reversed without
+a fresh measurement showing the shared structure's per-node cost against a search node, on the
+hardware in question. *(Factual refresh on ratification — NOT a clause amendment: this read "it is
+the clause the `NFR-005` deficit binds on". The 500k target that deficit was measured against was
+retired on 2026-07-30 and `NFR-005` is now depth-in-budget, so what is at stake on this clause is
+depth rather than a rate. The binding, and the demand for a fresh measurement before any reversal,
+are unchanged.)*
 
 The mitigation that makes any of this safe is the same one `ADR-0001` relies on: the perft suite
 and the FEN round-trip suite assert behaviour, not structure, and carry over unchanged. Neither

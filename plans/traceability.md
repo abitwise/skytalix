@@ -1,5 +1,5 @@
 # Traceability Matrix
-_Updated: 2026-07-29_
+_Updated: 2026-07-30_
 
 <!--
   FORMAT — read before you append. (clear voice; this is a technical file, not a role prompt.)
@@ -45,6 +45,8 @@ _Updated: 2026-07-29_
 | ABC-008 | SPIKE — Node search throughput | EPIC-004 | — | NFR-001, NFR-005 | spike/perft-bench.ts, package.json, tsconfig.json, biome.json | n/a — spike (see note) | | | Done |
 | ABC-009 | legalMoves mutates the position it documents as unchanged | EPIC-001 | — | NFR-001 (no regression: perft ≥ 1M nps, deep perft 32/32) | not started — defect in merged src/legal.ts, src/moves.ts | not started — repro is the acceptance test | | | Backlog |
 | ABC-010 | FEN semantic validation | EPIC-003 | — | NFR-003 (parse+validate < 1 ms/call) | not started — defect in merged src/fen.ts | not started — repro table is the acceptance test | | | Backlog |
+| ADR-0002 | Game history ownership | EPIC-002, EPIC-004, EPIC-005, EPIC-006 | — | NFR-005 (per-node cost argued against a ~5,000 ns search node; catalog row NOT changed by this ADR), NFR-003 (replay 41 µs = 0.089% of the 50 ms keystroke budget), ADR-0003 (stated dependency, answered by measurement), ADR-0001 (mutable never-copied Position inherited) | no src/** change — decision only; memory-bank/50-decisions/ADR-0002-game-history-ownership.md | no test owed — no code change. The ADR states plainly that **no existing test would catch getting this wrong**: the history module's own tests and EPIC-006's "undo rewinds repetition history too" test are the only safety net, and both are owed at EPIC-002 decomposition | | | Accepted — ratified by Olger Oeselg 2026-07-30, **all four clauses as proposed** (two factual refreshes on ratification, no clause amended) |
+| ADR-0003 | Legality strategy — make / test / unmake | EPIC-004 | — | NFR-005 (target re-derived to depth-in-budget; catalog row rewritten 2026-07-30, old ≥ 500,000 nodes/sec RETIRED; depth-7 level PROVISIONAL), NFR-004 (the requirement underneath), NFR-003 (legalMoves ~19,000x under the 100 ms `moves` budget), RISK-002 (GO WITH CONSTRAINT unchanged) | no src/** change — clause 1 is precisely that src/legal.ts is not changed; memory-bank/50-decisions/ADR-0003-legality-strategy.md, plans/nfr-catalog.md (NFR-005 row) | no test owed — suite 143/143 green and deep perft 32/32 exact, both unchanged. EPIC-004's timeboxed spike (RISK-002's mitigation) owns the depth-in-budget measurement on non-M3 hardware that lifts the PROVISIONAL marker | | | Accepted — ratified by Olger Oeselg 2026-07-30, clauses 1 + 3 as proposed, **clause 2 as amended** |
 | pending | Terminal board and game loop | EPIC-002 | pending | NFR-002 | | | | | Backlog |
 | pending | Move input and controls | EPIC-003 | pending | NFR-003 | | | | | Backlog |
 | pending | Engine and AI opponent | EPIC-004 | pending | NFR-004, NFR-005 | | | | | Backlog |
@@ -72,5 +74,19 @@ _Updated: 2026-07-29_
   later ticket-to-pr run must change. UAT and Release stay empty (Backlog, nothing gated).
   ABC-009 sits under EPIC-001 (the rules core whose documented contract it breaks); ABC-010
   under EPIC-003 (the input epic that makes it live).
+
+  ADR-0002 and ADR-0003 are DECISION rows, appended 2026-07-30 by Architect/Design after a human
+  ratified both (task `architecture-audit-2026-07-29`). They are rows rather than only NFR-column
+  references — the way ADR-0001 appears on ABC-001 — because neither ADR hangs off a single ticket:
+  ADR-0002 constrains four epics at once and ADR-0003 was ratified with no ticket owed by it at all,
+  so a ticket row would have had nowhere to sit. Both trace FORWARD to the epics they constrain, not
+  back to a ticket, and the Epic cell carries every epic bound by the decision.
+
+  Code cells say "no src/** change" because that is the decision in both cases (ADR-0003's clause 1
+  is literally "src/legal.ts is not changed"), and they name the decision record plus, for ADR-0003,
+  the plans/nfr-catalog.md row its ratification rewrote. Tests cells name who owes the verification
+  rather than inventing evidence: EPIC-002's decomposition for ADR-0002, EPIC-004's spike for
+  ADR-0003's provisional depth-7 level. UAT and Release stay empty — a decision is not released, and
+  nothing here is gated.
 -->
 
