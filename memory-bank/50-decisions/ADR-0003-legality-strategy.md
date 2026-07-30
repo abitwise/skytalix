@@ -6,15 +6,40 @@ id: ADR-0003
 
 ## Status
 
-**proposed** — awaiting ratification by a human. No agent may move this to `accepted`.
+**accepted** — ratified by a named human on 2026-07-30. No agent may move an ADR to `accepted`; a
+human did.
 
-This ADR presents a decision; it does not take one. `src/legal.ts` deferred this choice in writing
-to "the EPIC-004 spike"; the 2026-07-29 architecture audit found `NFR-005` missed and named the
-deferred decision due as its required fix `RF-2`. What follows is a recommendation with its
-evidence, its confidence, and the things that would overturn it, written so a human can ratify,
-amend, or reject it in one reading.
+This ADR was written as a proposal: it presented a decision rather than taking one. `src/legal.ts`
+deferred this choice in writing to "the EPIC-004 spike"; the 2026-07-29 architecture audit found
+`NFR-005` missed and named the deferred decision due as its required fix `RF-2`. What follows is
+that recommendation with its evidence, its confidence, and the things that would overturn it — put
+to a human to ratify, amend, or reject in one reading, and ruled on in session.
 
-Ratified by: `__________________`  on `__________`
+Ratified by: Olger Oeselg  on 2026-07-30
+
+### Ratification record — clauses 1 and 3 as proposed, clause 2 AS AMENDED
+
+The ruling was **"ratify 1 and 3, amend 2"**. The distinction is the point of this record: the
+draft of clause 2 was **not** ratified as written, and this file must not be read as if it were.
+
+- **Clause 1 — accepted as proposed.** Make/test/unmake stays; `src/legal.ts` is not changed.
+- **Clause 3 — accepted as proposed.** The named trigger and the ordered menu stand as written, and
+  still authorize nothing.
+- **Clause 2 — accepted only as amended.** Three amendments came out of a review of this ADR, were
+  put to the human, and were accepted by the same ruling:
+  - **(2a) The positions are named.** "In a middlegame position" is not testable — it is the same
+    vagueness this clause corrects `NFR-005` for — so the target now names **kiwipete** and
+    **position-6**, the positions this ADR actually measured, as the standing benchmark set.
+  - **(2b) Two levels: depth 6 FAILS, depth 7 WARNS.** A bare depth-6 floor needs only ~47k
+    nodes/sec against a measured 207k-546k, so it would still read green after a 4x regression.
+    Depth 7 needs ~280k, which is where the code actually sits, so it is the level that detects one.
+  - **(2c) The depth-7 level is PROVISIONAL.** Every number here is one machine and one Node
+    version, and the unvalidated 2-3x slow-hardware factor is named below as this ADR's largest
+    single unknown — with depth 7 precisely what a 3x slower machine loses. It stays provisional
+    until `EPIC-004`'s spike measures on target hardware. The depth-6 floor is not provisional.
+
+The ratified wording is the amended clause 2 in the Decision section. The draft's own phrasing is
+quoted in the three amendments above, so this record can be read without the file's history.
 
 ## Context
 
@@ -131,8 +156,8 @@ And the exchange rate is brutal: at EBF 6, **a 3x speedup buys 0.61 ply**; 5x bu
 
 ## Decision
 
-**Recommended: keep make / test / unmake. Change the target, not the code.** Concretely, three
-clauses:
+**Ratified: keep make / test / unmake. Change the target, not the code** — clauses 1 and 3 as
+proposed, clause 2 as amended (see the ratification record in Status). Concretely, three clauses:
 
 **1. `src/legal.ts` is not changed.** Make/test/unmake stays the legality strategy. It is
 proven-correct at depth, it is 55 lines, and the measurements above say the throughput it costs is
@@ -140,11 +165,45 @@ not the binding constraint on anything this product has promised.
 
 **2. `NFR-005` is re-derived from `NFR-004` rather than inherited from the spike.** Its
 `>= 500,000 nodes/sec` was derived from an invalid proxy and is not testable as written. The
-replacement target should be **depth-in-budget**: *at default difficulty, in a middlegame position,
-the search completes at least depth 6 within the 3 s budget and never exceeds the 5 s ceiling* —
-with the node-rate figure demoted to a diagnostic that always carries its node definition, its
-position, and its machine. `NFR-004` stays the requirement it always was; `EPIC-004`'s puzzle suite
-and self-play ladder stay the only real verdict on strength.
+replacement target is **depth-in-budget on named positions, gated at two levels**: *at default
+difficulty, on **kiwipete** and **position-6**, the search completes at least **depth 6** within the
+3 s budget and never exceeds the 5 s ceiling — below depth 6 is a **FAIL** — and reaches **depth 7**
+within that same 3 s budget, below which is a **WARN**.* The node-rate figure is demoted to a
+diagnostic that always carries its node definition, its position, and its machine. `NFR-004` stays
+the requirement it always was; `EPIC-004`'s puzzle suite and self-play ladder stay the only real
+verdict on strength.
+
+*Amended on ratification, 2026-07-30 — see the Status record. The three amendments are part of what
+was accepted, and their reasoning belongs with the clause:*
+
+- **(2a) The positions are named, because "a middlegame position" was not testable.** The draft
+  target said exactly that, which is the same vagueness this clause corrects `NFR-005` for: a target
+  whose position is unspecified can be passed by choosing a position, and the 30x spread above is
+  what that costs. **kiwipete** and **position-6** are the standing benchmark set — the two positions
+  this ADR measured across every leaf-evaluation cost in the depth table (kiwipete at 134 / 543 /
+  1,097 ns, position-6 at 1,097 ns), both already encoded with their published perft counts in
+  `src/perft.test.ts`, and both move-rich, with kiwipete the slowest position measured here. The same
+  two positions on every re-measurement, or the numbers are not comparable.
+
+- **(2b) Two levels, because a depth-6 floor alone would pass a 4x regression.** By this ADR's own
+  arithmetic depth 6 needs **~47k nodes/sec**, while the code measures **207k-546k** under metric B —
+  so the engine could lose three quarters of its speed and a depth-6-only gate would still read
+  green. Depth 7 needs **~280k**, which is where the code actually sits: the measured wall clock
+  reaches depth 7 at kiwipete in 0.39-0.68 s and at position-6 in 0.644 s, well inside the 3 s
+  budget. So depth 7 is the level that detects a regression instead of rubber-stamping one. Both
+  levels are recorded because they answer different questions — **depth 6 FAILS** because it is the
+  level `NFR-004`'s promise and the 1400-1700 strength target rest on, and **depth 7 WARNS** because
+  missing it means the engine got materially slower without yet breaking a promise.
+
+- **(2c) The depth-7 level is PROVISIONAL until non-M3 hardware is measured; the depth-6 floor is
+  not.** Every number in this ADR is one machine and one Node version, and the unvalidated 2-3x
+  slow-hardware factor is named below as its largest single unknown — including the observation that
+  a 3x slower machine still clears depth 6 by ~1.5x and loses **precisely depth 7**. The depth-7
+  level is therefore marked provisional pending `EPIC-004`'s own spike measuring depth-in-budget on
+  target hardware; that spike either confirms the level or re-derives it, and until it reports, a
+  depth-7 WARN on slower hardware may be the machine rather than a regression and must be read that
+  way. The depth-6 floor carries no such marker: it is the level the arithmetic says survives the
+  worst hardware factor on the table.
 
 **3. The named trigger, and the ordered menu if it fires.** If `EPIC-004`'s own spike measures the
 depth floor in clause 2 missed on target hardware, spend the budget in this order — cheapest and
@@ -162,9 +221,12 @@ safest first, and only as far as needed:
 This ADR authorizes none of the three. It records which one to reach for, in what order, and on
 what evidence — so the choice is not made under time pressure mid-`EPIC-004`.
 
-**The follow-up this ADR does not take:** `plans/nfr-catalog.md`'s `NFR-005` row needs the clause-2
-correction. This ADR deliberately does not edit it. That edit belongs to whoever ratifies this
-decision, and it must not happen while this ADR is `proposed`.
+**The follow-up this ADR held back — taken on ratification:** `plans/nfr-catalog.md`'s `NFR-005` row
+needed the clause-2 correction, and this ADR deliberately did not edit it while `proposed`. That edit
+belonged to whoever ratified, and it was made on 2026-07-30 against the **amended** clause 2: the
+named positions, the two levels, and the provisional marker on depth 7 — with the node-rate figure
+demoted to a diagnostic and the measured 163k-351k and the ABC-008 2,639,455 proxy kept visible as
+history.
 
 ### Confidence, and what would change my mind
 
@@ -189,7 +251,8 @@ What would change my mind, stated so a human can check it later:
 - **Target hardware measuring 3x slower than this M3 *and* the depth-6 floor then missed.** The
   spike's 2-3x hardware factor has never been validated on a non-M3 machine — that gap is the
   largest single unknown in this ADR. Note that 3x slower still clears depth 6 by ~1.5x on the
-  arithmetic above; it is depth 7 that would be lost.
+  arithmetic above; it is depth 7 that would be lost. Clause 2's amendment (2c) prices this in: the
+  depth-7 level is provisional for exactly this reason, and the depth-6 floor is not.
 - **A consumer other than the search needing `legalMoves` thousands of times per second.** At
   2.1-5.4 µs per call it is ~19,000x under `NFR-003`'s 100 ms budget for the `moves` command, so no
   such consumer exists today.
@@ -348,22 +411,27 @@ under 24% in the best case.
 
 - **Nothing in `src/` changes and no ticket is owed by this ADR.** The 55-line `legal.ts`, the
   perft 32/32 proof, and the 143/143 suite all stand exactly as merged.
-- **`NFR-005` stops being a pass/fail gate and becomes a diagnostic.** That is a real loss: the
-  project gives up a single crisp number in exchange for a target that can actually be tested. Every
-  future quote of a nodes/sec figure must carry its node definition, its position and its machine,
-  or it repeats the mistake this ADR is correcting.
+- **The nodes/sec figure stops being the gate and becomes a diagnostic; `NFR-005` itself stays
+  pass/fail, on depth.** That is still a real loss: the project gives up a single crisp number in
+  exchange for a target that can actually be tested, and as amended it gives up one threshold for
+  two — a depth-6 FAIL floor and a provisional depth-7 WARN. Every future quote of a nodes/sec figure
+  must carry its node definition, its position and its machine, or it repeats the mistake this ADR is
+  correcting.
 - **`EPIC-004` inherits a decision it can act on rather than an open question.** The spike it must
   run is no longer "how fast is the generator" (answered here) but "does the search reach depth 6-7
-  in budget on target hardware, and does the puzzle suite pass at that depth".
+  in budget on target hardware, and does the puzzle suite pass at that depth". That spike now also
+  owns lifting clause 2's provisional marker on the depth-7 level — it is the named verification for
+  it, and `plans/nfr-catalog.md`'s `NFR-005` row says so.
 - **The audit's `RF-2` is answered, but not in the direction it expected.** `RF-2` named pin-aware
   generation as "the named fix" at confidence medium. Measured, its ceiling over the much safer
   lazy-legality option is ~1.5x. Recording the disagreement explicitly, because `RF-2` is a
   published recommendation and a future reader will find it.
 - **What this forecloses.** A pseudo-legal search (c1) would mean the search calls `generateMoves`
   directly, so any generation defect becomes reachable without passing through `legalMoves` — see
-  the `ABC-009` note below. And clause 2 means nobody can point at a green `NFR-005` row as evidence
-  the engine is fast enough; only the depth-in-budget measurement and the strength suite can say
-  that.
+  the `ABC-009` note below. And clause 2 means nobody can point at a nodes/sec figure as evidence the
+  engine is fast enough; only the depth-in-budget measurement on the named positions and the strength
+  suite can say that — and while the depth-7 level is provisional, a green row measured on this M3 is
+  not evidence about target hardware.
 - **`ADR-0002` needs no edit** — see the dependency section above.
 
 ### Interaction with `ABC-009` (`legalMoves` mutates the position it documents as unchanged)
@@ -387,7 +455,11 @@ no new information about `ABC-009`.**
 Clauses 1 and 3 cost zero lines, so reversing them means editing this file — cheap now, cheap
 later, because nothing is built on them. Clause 2 is the one with a cost curve: once `EPIC-004` is
 decomposed against a depth-in-budget target, reverting to a nodes/sec target means re-deciding what
-a node is, which is the ambiguity that produced this ADR.
+a node is, which is the ambiguity that produced this ADR. As amended, its two levels have different
+curves: the **depth-6 floor** is what `EPIC-004`'s decomposition binds on and is the expensive one to
+revert, while the **depth-7 level is explicitly provisional** and is *meant* to be re-derived by
+`EPIC-004`'s spike on target hardware — revising that level is the discharge of this ADR's own
+obligation, not a rollback of it.
 
 The realistic trigger for rollback is the first bullet under *what would change my mind*:
 `EPIC-004`'s puzzle suite or self-play ladder missing the strength target at the depth today's rate
@@ -402,5 +474,5 @@ sufficient, and that gap is the reason (b) is last.
 
 One honest limit on all of it: every number in this ADR is **one machine, one Node version** (Apple
 M3, Node v24.12.0, darwin-arm64), and the spike's 2-3x slower-hardware factor has never been
-validated. `UNKNOWN - verify` elsewhere. These are measurements recorded in a `proposed` decision
-record, not gate-verified findings.
+validated. `UNKNOWN - verify` elsewhere. These are measurements recorded in a decision record a human
+ratified, not gate-verified findings — ratification settled what the target is, and measured nothing.
