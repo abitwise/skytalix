@@ -1,15 +1,36 @@
 ---
 id: ABC-011
 title: Zobrist key hashes en passant when no capture is available
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
-priority: P2
+priority: P1
 epic: EPIC-001
 feature: —
 ---
 
 # ABC-011 — Zobrist key hashes en passant when no capture is available
+
+> **ESCALATED `P2` → `P1` and promoted `Backlog` → `Ready` on 2026-07-30 by BA/PM.**
+> **The escalation trigger written into this ticket has fired — verbatim, not by interpretation.**
+> The trigger reads: *"ABC-011 rises to `P1` the moment any consumer of the key list is planned or
+> built — specifically when **(a)** the history module of `ADR-0002` clause 2 is decomposed or
+> implemented under `EPIC-002`, or **(b)** a supplier is wired for `gameStatus`'s `positionCounts`."*
+>
+> `EPIC-002` was decomposed on 2026-07-30 (task `epic-to-tickets-EPIC-002`). **`ABC-012` is that
+> history module**, it is **(a)** and **(b)** at once — it supplies `positionCounts` through
+> `gameStatusOf` — and it has been promoted to `Ready` in the same step. The trigger's own
+> instruction is that this ticket *"must be `Ready` **before** whichever of those lands first,
+> otherwise that consumer's own tests are written against a key that under-detects and the defect
+> stops being a bug and becomes an encoded assumption."* Both are now in `Ready` together, which
+> satisfies that instruction and leaves the pull order to the Orchestrator.
+>
+> **Nothing else about this ticket changed.** Size stays `S`. The reproduction, the acceptance
+> criteria, the open design question and the `NFR-005` bar are untouched. Severity and reachability
+> did not move — the failure is still a missed draw and the error direction is still the safe one.
+> What moved is **sequencing**, which is exactly what the trigger was written to encode.
+>
+> **Not raised to `P0`:** nothing in flight is broken and no user-facing consumer exists yet.
 
 ## Problem
 
@@ -294,7 +315,13 @@ that happens to `ABC-009` or `ABC-010` — it is independent of both.
 Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (exact FENs, exact
 `bigint` keys, equality and inequality both asserted) · dependencies ✅ (none blocking; one open
 design question flagged and assigned) · NFR triggers ✅ (NFR-005, numeric per-call bar; NFR-001
-explicitly not at risk) · test notes ✅ · size `S` ✅ · priority `P2` ✅ · no blocker ✅
+explicitly not at risk) · test notes ✅ · size `S` ✅ · priority `P1` ✅ · no blocker ✅
 
-Sits in `Backlog`. The open design question is a design-hop input, not a blocker. Promotion to
-`Ready` is a separate BA/PM step and has **not** been taken.
+~~Sits in `Backlog`. ... Promotion to `Ready` is a separate BA/PM step and has **not** been taken.~~
+
+**Promoted to `Ready` 2026-07-30 by BA/PM** — the separate step named above, taken now because the
+escalation trigger fired (see the block at the head of this file). The open design question
+(board-only vs strict-FIDE reading of "available") remains a **design-hop input, not a blocker**:
+it decides one rare extra case and the ticket's dependency shape, and the headline acceptance
+criterion resolves identically either way. If the strict reading is chosen, re-size at that hop —
+at most `M`, and never split.

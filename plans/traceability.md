@@ -1,5 +1,5 @@
 # Traceability Matrix
-_Updated: 2026-07-30_
+_Updated: 2026-07-30 (EPIC-002 decomposed — eight ABC-012..ABC-019 rows replace its `pending` row; ABC-011's Status updated to Ready on its own escalation trigger)_
 
 <!--
   FORMAT — read before you append. (clear voice; this is a technical file, not a role prompt.)
@@ -45,10 +45,17 @@ _Updated: 2026-07-30_
 | ABC-008 | SPIKE — Node search throughput | EPIC-004 | — | NFR-001, NFR-005 | spike/perft-bench.ts, package.json, tsconfig.json, biome.json | n/a — spike (see note) | | | Done |
 | ABC-009 | legalMoves mutates the position it documents as unchanged | EPIC-001 | — | NFR-001 (no regression: perft ≥ 1M nps, deep perft 32/32) | not started — defect in merged src/legal.ts, src/moves.ts | not started — repro is the acceptance test | | | Backlog |
 | ABC-010 | FEN semantic validation | EPIC-003 | — | NFR-003 (parse+validate < 1 ms/call) | not started — defect in merged src/fen.ts | not started — repro table is the acceptance test | | | Backlog |
-| ABC-011 | Zobrist key hashes en passant when no capture is available | EPIC-001 | — | NFR-005 (depth-in-budget as ratified 2026-07-30 — EPIC-004's transposition table computes a key per node, so per-call cost buys depth; bar: zobristKey within 1.5x of the audit's 288–306 ns at kiwipete, no-ep path not slower), NFR-001 (**not** at risk and `npm run perft` is not the oracle — src/perft.ts never imports zobrist; the module's only production consumer is src/gameend.ts), ADR-0002 (clause 2, accepted 2026-07-30, makes the derived key list the substrate for every repetition verdict) | not started — defect in merged src/zobrist.ts:71 | not started — repro is the acceptance test; note src/gameend.test.ts:27-58 (threefold) CANNOT catch it — its knight cycle never sets an ep square | | | Backlog |
+| ABC-011 | Zobrist key hashes en passant when no capture is available | EPIC-001 | — | NFR-005 (depth-in-budget as ratified 2026-07-30 — EPIC-004's transposition table computes a key per node, so per-call cost buys depth; bar: zobristKey within 1.5x of the audit's 288–306 ns at kiwipete, no-ep path not slower), NFR-001 (**not** at risk and `npm run perft` is not the oracle — src/perft.ts never imports zobrist; the module's only production consumer is src/gameend.ts), ADR-0002 (clause 2, accepted 2026-07-30, makes the derived key list the substrate for every repetition verdict) | not started — defect in merged src/zobrist.ts:71 | not started — repro is the acceptance test; note src/gameend.test.ts:27-58 (threefold) CANNOT catch it — its knight cycle never sets an ep square, and ABC-012's own threefold test must reuse that same ep-free shape for the same reason | | | Ready — escalated P2→P1 2026-07-30, its own trigger fired when ABC-012 (the ADR-0002 clause 2 history module) was decomposed |
 | ADR-0002 | Game history ownership | EPIC-002, EPIC-004, EPIC-005, EPIC-006 | — | NFR-005 (per-node cost argued against a ~5,000 ns search node; catalog row NOT changed by this ADR), NFR-003 (replay 41 µs = 0.089% of the 50 ms keystroke budget), ADR-0003 (stated dependency, answered by measurement), ADR-0001 (mutable never-copied Position inherited) | no src/** change — decision only; memory-bank/50-decisions/ADR-0002-game-history-ownership.md | no test owed — no code change. The ADR states plainly that **no existing test would catch getting this wrong**: the history module's own tests and EPIC-006's "undo rewinds repetition history too" test are the only safety net, and both are owed at EPIC-002 decomposition | | | Accepted — ratified by Olger Oeselg 2026-07-30, **all four clauses as proposed** (two factual refreshes on ratification, no clause amended) |
 | ADR-0003 | Legality strategy — make / test / unmake | EPIC-004 | — | NFR-005 (target re-derived to depth-in-budget; catalog row rewritten 2026-07-30, old ≥ 500,000 nodes/sec RETIRED; depth-7 level PROVISIONAL), NFR-004 (the requirement underneath), NFR-003 (legalMoves ~19,000x under the 100 ms `moves` budget), RISK-002 (GO WITH CONSTRAINT unchanged) | no src/** change — clause 1 is precisely that src/legal.ts is not changed; memory-bank/50-decisions/ADR-0003-legality-strategy.md, plans/nfr-catalog.md (NFR-005 row) | no test owed — suite 143/143 green and deep perft 32/32 exact, both unchanged. EPIC-004's timeboxed spike (RISK-002's mitigation) owns the depth-in-budget measurement on non-M3 hardware that lifts the PROVISIONAL marker | | | Accepted — ratified by Olger Oeselg 2026-07-30, clauses 1 + 3 as proposed, **clause 2 as amended** |
-| pending | Terminal board and game loop | EPIC-002 | pending | NFR-002 | | | | | Backlog |
+| ABC-012 | Game history module — the move list is the authoritative state | EPIC-002 | — | NFR-003 (derives sit in the 50 ms turn, not the frame: takeBack(2) ≤ 5 µs, keyHistory ≤ 60 µs, repetitionCounts ≤ 75 µs, all @ 120 plies M3), NFR-002 (contributes nothing measurable to a frame), ADR-0002 (ratified — clause 2 is what this module IS; clause 4's single supplier is `gameStatusOf`) | not started — new module src/history.ts | not started — six named tests are this module's ONLY safety net; ADR-0002 states plainly that no existing test would catch getting it wrong. Test 1 = EPIC-006's "undo rewinds the repetition history too" | | | Ready |
+| ABC-013 | SAN rendering — src/san.ts with toSan only | EPIC-002 | — | NFR-002 (toSan with supplied legal list ≤ 0.20 µs, unassisted ≤ 6.5 µs, M3 @ ply-60; SAN is ~97% legalMoves), ADR-0004 (**proposed, NOT ratified** — blocks the merge, not the cutting) | not started — new module src/san.ts, `toSan` only. EPIC-003 adds `parseSan` to the SAME file; this epic ships no parser and EPIC-003 ships no second formatter | not started — hand-built (fen, move, expected) table. **The real safety net, the parse(toSan(move)) === move round-trip over perft positions, belongs to EPIC-003** and does not exist until then | | | Blocked — ADR-0004 unratified, needs a named human |
+| ABC-014 | Board frame renderer — grid, labels, shading, orientation, both glyph modes | EPIC-002 | — | NFR-002 (board-frame compute ≤ 500 µs/frame, recorded with its machine; one of the two unmeasured halves) | not started — merged src/ only (position.board, squareAt, squareName) | not started — snapshot matrix of (perft FENs x 2 glyph modes x 2 orientations), plus a code-point-count assertion for epic acceptance 2a and a file-label-order assertion for the both-axes orientation rule | | | Ready |
+| ABC-015 | Glyph mode selection — precedence, signal set, --unicode override | EPIC-002 | — | NFR-007 (inside the < 2 s cold start: zero filesystem and zero process operations — reads `process.stdout.isTTY` and `process.env` only), RISK-005 (this ticket IS the named mitigation, and "built in from the start rather than retrofitted" is why it carries a merge-with-or-before-ABC-014 constraint) | not started — implements epic acceptance 2b's five-row selection table | not started — nine table-driven unit tests with the environment injected, no TTY required; includes a win32 REGRESSION GUARD on the deliberate decision not to use `process.platform` as a signal | | | Backlog |
+| ABC-016 | Status panel — side to move, check, material, move number, last move, thinking row | EPIC-002 | — | NFR-002 (panel compute ≤ 250 µs/frame, derivation shown on the ticket) | not started — carries epic acceptance #3 (check indicator) | not started — material-balance FEN table INCLUDING the post-promotion case (the one a board-diff gets wrong), move number from a LOADED FEN (the one history.length gets wrong), row count asserted identical in both thinking states | | | Backlog |
+| ABC-017 | Bounded move-history pane — two-column SAN, constant height | EPIC-002 | — | NFR-002 (pane compute ≤ 150 µs at ANY game length, and the 40/120/300-ply figures within 2x of each other — the O(window) proof), ADR-0004 clause 3 (derived per frame, never stored) | not started — pre-adopts ADR-0004's own first response to its clause-3 trigger: render only the visible window | not started — row count asserted at 0 / 1 / 80 / 300 plies, move NUMBERS asserted (33–40 for a 40-move game, not 1–8), cost asserted as a RATIO as well as an absolute | | | Backlog |
+| ABC-018 | Frame output and redraw — in-place on a TTY, append otherwise | EPIC-002 | — | NFR-002 (**this ticket closes the half the catalog row calls "the half nobody has measured"** — frame compute + write < 16 ms at 40/120/300 plies against a non-TTY sink, recorded with its machine), NFR-007 (first frame is inside the < 2 s cold start), **SECURITY: terminal escape-sequence injection** via the frame's message region — the epic's one real security trigger, ASVS L1 output encoding applied to a terminal sink | not started — carries epic acceptance #4 in full (4a/4b/4c) | not started — assertions run against a captured sink and an in-memory screen model, never a real TTY; zero `\x1b` bytes in append mode; zero rows from frame N after frame N+1 | | | Backlog |
+| ABC-019 | Turn loop skeleton — ply dispatch, both seams stubbed, clean termination | EPIC-002 | — | NFR-002 (loop overhead ≤ 100 µs/ply at 120 plies, excluding render/input/engine), NFR-004 (**EPIC-004's target, not this ticket's** — what binds here is that the engine seam is asynchronous BY CONTRACT), ADR-0002 (clause 4: gameStatus is never called bare) | not started — 8 states, 15 transitions, two stub seams built from merged src/ alone. Carries ABC-009 (legalMoves called once per frame) and ABC-011 (every repetition verdict) as INHERITED exposure, not as new defects | not started — scripted games through the stub seams, one table row per terminal reason; asserts call ORDER inside a ply (append-then-evaluate, the only case a happy path misses) and frame COUNT (one render per ply) | | | Backlog |
 | pending | Move input and controls | EPIC-003 | pending | NFR-003 | | | | | Backlog |
 | pending | Engine and AI opponent | EPIC-004 | pending | NFR-004, NFR-005 | | | | | Backlog |
 | pending | Opening book | EPIC-005 | pending | NFR-006 | | | | | Backlog |
@@ -75,6 +82,43 @@ _Updated: 2026-07-30_
   path, and it says so explicitly so nobody runs the deep perft lane believing it proves something
   here. It sits under EPIC-001 (the rules core whose module and whose documented intent it breaks),
   and is independent of ABC-009 and ABC-010.
+
+  ABC-011 was ESCALATED P2 -> P1 and promoted Backlog -> Ready on 2026-07-30 by BA/PM, and its
+  Status cell above now reads Ready. This was not a judgment call made fresh: the ticket's own
+  escalation trigger names condition (a) as "the history module of ADR-0002 clause 2 is decomposed
+  or implemented under EPIC-002", and ABC-012 is that module. The trigger also required ABC-011 to
+  be Ready BEFORE that consumer lands, "otherwise that consumer's own tests are written against a
+  key that under-detects and the defect stops being a bug and becomes an encoded assumption".
+  Size, acceptance criteria, reproduction, the open design question and the NFR-005 bar are all
+  unchanged; only sequencing moved, which is what the trigger encodes.
+
+  EPIC-002's eight ABC-012..ABC-019 rows were appended 2026-07-30 by BA/PM (task
+  `epic-to-tickets-EPIC-002`, Workflow 03), replacing the `pending` row that stood for the whole
+  epic. Feature reads `—` rather than `pending` for the same reason EPIC-001's tickets do: this epic
+  maps directly to tickets and a single FEAT-xxx wrapping all eight would be a one-use grouping that
+  adds a hop to the trace and explains nothing (AGENTS.md coding rule 6).
+
+  Every Code and Tests cell reads "not started" because nothing under src/ was touched by the
+  decomposition — deliberately, and it is the subtask's stated constraint. The cells are not left
+  blank: a blank reads as "no evidence gathered yet", whereas these name the module a later
+  ticket-to-pr run must create and the test shape that must exist. Several Tests cells name what
+  a naive test would MISS rather than only what it must cover, because in this epic the misses are
+  the expensive part (a threefold test whose repeated line sets an en-passant square would fail on
+  ABC-011 rather than on the code under test; a history-pane test that only counts rows passes on
+  an implementation showing the FIRST eight move pairs instead of the last eight).
+
+  ABC-013's Status reads Blocked, not Backlog. ADR-0004 is `proposed` and blocks the merge of the
+  first line of src/san.ts; no agent may mark an ADR accepted, so this needs the same named-human
+  ratification ADR-0002 and ADR-0003 each received. NO ADR-0004 ROW WAS APPENDED to this file — the
+  convention recorded below is that ADR rows land AFTER ratification, and a row for a proposed
+  decision would read as settled. The row is owed on ratification, together with a re-read of
+  ABC-013's Status cell.
+
+  The NFR cells here name measurable targets rather than NFR ids alone, because two of this epic's
+  four acceptance criteria were amended on 2026-07-30 for being untestable as written, and the
+  amendment's whole point was that a target you cannot fail is not a target. Both amendments and
+  the two promise reductions they carry are recorded in place in
+  plans/epics/EPIC-002-terminal-board-and-game-loop.md.
 
   ABC-009 and ABC-010 are DEFECT rows, cut 2026-07-29 from the architecture audit
   (task `architecture-audit-2026-07-29`), and they trace backwards rather than forwards: the

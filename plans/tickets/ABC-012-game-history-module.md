@@ -1,0 +1,213 @@
+---
+id: ABC-012
+title: Game history module — the move list is the authoritative state
+status: ready
+column: Ready
+size: M
+priority: P0
+epic: EPIC-002
+feature: —
+---
+
+# ABC-012 — Game history module: the move list is the authoritative state
+
+## Problem
+
+*User*: every player who takes a move back, and every player entitled to a draw. Indirectly,
+every player at all — nothing in the product can evaluate a repetition draw today.
+
+*Pain*: `gameStatus`'s `positionCounts` parameter is optional and **has no supplier anywhere in
+`src/`** (`src/gameend.ts:87-90`). Omit it and threefold repetition is never reported — silently,
+with no error and no failing test. There is also nothing that holds a game: the loop this epic
+builds is the first component in the product that survives a move, and `Position` is a live
+mutable object that nothing clones.
+
+*Value*: one small module makes "what game are we playing" a single answer that four epics share.
+`ADR-0002` (ratified 2026-07-30, all four clauses) settles the rule: the move list is the
+authority, and the undo stack, the key list and the repetition counts are **derived by replay,
+never maintained**. That makes the class of bug `EPIC-006`'s Risks section predicts — "a shallow
+undo that forgets repetition history would corrupt draw detection" — unrepresentable rather than
+merely tested for.
+
+## Source
+
+- `memory-bank/50-decisions/ADR-0002-game-history-ownership.md` — ratified, all four clauses.
+- Task `epic-to-tickets-EPIC-002`, note `20260730T143500Z-architect-design-decision-d7a42f7a`
+  ("SEAM 1 CLOSED — the history module's exact API") and
+  `20260730T143800Z-architect-design-decision-38b772b6` ("SEAM 2 CLOSED — the derived counts are
+  NOT memoized"). Both close seams `ADR-0002` deliberately deferred to this decomposition.
+  **This ticket implements those decisions; it does not re-open them.**
+
+## Scope
+
+**A new module `src/history.ts`.** Free functions over a plain interface, no class — matching
+what the rest of `src/` already does (`Position` is an interface; `makeMove(position, move)` is a
+free function).
+
+State — three fields, one of them authoritative:
+
+- `initialFen: string` — the anchor. A FEN string, **not** a `Position`, because nothing in `src/`
+  clones a `Position` and a held one would be aliased and destroyed by the first replay.
+- `moves: readonly Move[]` — **the authoritative state**. Everything else is a function of it.
+- `position: Position` — live, forward-applied, **borrowed**. Read it; never mutate it.
+
+Six functions, and no seventh:
+
+- `newGame(initialFen)` — the FEN is **required, with no default**. `EPIC-006` owns startup and
+  supplies it.
+- `playMove(history, move)` — appends to `moves`, applies to `position`. **It does not validate
+  legality**; its documented precondition is that `move` came from `legalMoves(history.position)`.
+- `takeBack(history, plies)` — truncates the list and rebuilds `position` by replay from
+  `initialFen`. **Clamps at zero** rather than trusting the caller: `slice(0, negative)` would
+  silently produce a *different game*, which is a silent-corruption path, not an impossible one.
+  `moves.length === 0` is a legal state — the initial position.
+- `keyHistory(history)` — `keys[i] = zobristKey(position after i plies)`, length `moves.length + 1`.
+- `repetitionCounts(history)` — folds `keyHistory` into a `Map`, **including the current position**.
+- `gameStatusOf(history)` — `gameStatus(history.position, repetitionCounts(history))`, so
+  `ADR-0002` clause 4's "exactly one supplier" is a call-site default rather than a convention
+  someone must remember.
+
+**No memoization.** `keyHistory` and `repetitionCounts` recompute by replay on every call — no
+cache, no version counter, no invalidation. Seam 2 decided this against measured cost: the loop
+makes 2–4 derives per turn at 46–50 µs each (120 plies), and it would take ~320 derives in one
+turn to spend a 16 ms frame budget. The margin is 80x–300x.
+
+Dependency edges, all downward: `fen.ts`, `apply.ts`, `zobrist.ts`, `gameend.ts`, plus the `Move` /
+`Position` types. **Nothing in the rules core imports this module.** It does not import `legal.ts`
+directly and does not import `san.ts`.
+
+## Out of scope
+
+- **`redo`** — in no epic's scope.
+- **Material balance** — a board scan, and `ABC-016` (the status panel) owns it.
+- **`toPgn`** — `EPIC-006`'s negotiable slice. Not blocked: it needs only `initialFen` + `moves` +
+  SAN, all reachable from here without this module growing a job.
+- **SAN of any kind.** `history.ts` does not import `san.ts` (`ADR-0004` clause 3, proposed).
+- **Anything the search needs per node.** `ADR-0002` clause 3 says the search keeps its own
+  preallocated per-ply array and does not share this structure.
+- **Memoization** — decided against; see Scope. The trigger and the required shape (a monotonic
+  `version` counter, never a `moves.length` key) are recorded in the seam-2 note if it is ever
+  needed. **Do not add a cache in this ticket.**
+- **A shared `STARTPOS` constant.** The start FEN is currently duplicated across four files
+  (`src/perft-bench.ts:26` and three test files). *Flagged, not fixed* — it is not this ticket's
+  business (AGENTS.md rules 9 and 12).
+- Fixing `src/zobrist.ts`'s en-passant hashing — that is `ABC-011`. See Dependencies.
+
+## Acceptance (Given/When/Then)
+
+- **Given** a `GameHistory` from `newGame(STARTPOS_FEN)` and any sequence of N legal moves applied
+  with `playMove`, **when** `toFen(history.position)` is compared with `toFen` of a position
+  rebuilt from `initialFen` by replaying the same N moves, **then** the two strings are
+  **byte-identical**. *(The forward-apply path and the replay path are the module's two code paths
+  and this is the one property they must share. Held in wave 1's harness at 120 plies.)*
+- **Given** a game in which the start position has been reached three times, **when**
+  `gameStatusOf(history)` is called, **then** it returns `result: "draw"`, `reason:
+  "threefold-repetition"`; **and when** `takeBack(history, 2)` is called, **then** it returns
+  `result: "in-progress"`, `reason: null`, **and** `repetitionCounts(history)` is deep-equal to
+  the counts of a freshly replayed history built from the truncated move list.
+  *(This is `EPIC-006`'s named test — "undo must assert the repetition history is rewound too,
+  not just the board". It must use a repeated line that never sets an en-passant square; see
+  Test notes.)*
+- **Given** any history of N plies, **when** `keyHistory(history)` is called, **then** the returned
+  array has length **exactly N + 1**, and `keys[N] === zobristKey(history.position)`.
+- **Given** a history of N plies and the same history truncated to k plies by `takeBack`, **when**
+  both key lists are compared, **then** the truncated list is **exactly the first k + 1 entries**
+  of the full list. *(The prefix property is what makes `EPIC-004`'s per-search seeding sound.)*
+- **Given** `takeBack(history, k)` followed by replaying the same k moves with `playMove`, **when**
+  the FEN and the key list are compared with the originals, **then** both are identical.
+- **Given** a history whose current position has occurred twice before, **when**
+  `repetitionCounts(history)` is called, **then** `counts.get(zobristKey(history.position))` is
+  **exactly 3**, not 2. *(The off-by-one that would make threefold fire one repetition late.
+  `src/gameend.ts:106` tests `>= 3` and its doc comment states the count includes the current
+  occurrence.)*
+- **Given** `takeBack(history, n)` where `n` exceeds `moves.length`, **when** it returns, **then**
+  `moves.length === 0`, `toFen(history.position)` equals `initialFen`, and **no exception is
+  thrown**.
+- **Given** a `GameHistory` at 120 plies, **when** each function is called, **then** the measured
+  costs meet the bars in *Security / NFR triggers* below.
+- **Given** the full test suite, **when** it runs after this ticket, **then** it is green with a
+  skip count of **0** and **no existing test is modified**.
+
+## Dependencies
+
+- `ABC-001` / `ABC-003` / `ABC-007` — `parseFen` / `toFen`, `makeMove`, `gameStatus` and
+  `zobristKey` are all merged on `main`. Nothing here is blocked on unbuilt code.
+- **`ABC-011` — sequencing, not blocking, and its own escalation trigger has now fired.**
+  `ABC-011` states that it rises to `P1` "the moment ... the history module of `ADR-0002` clause 2
+  is decomposed or implemented under `EPIC-002`". That is this ticket. `ABC-011` has been raised
+  to `P1` and promoted to `Ready` accordingly. This ticket **can** be built against today's
+  `zobristKey`, because its threefold test uses a line that never sets an en-passant square — but
+  **every repetition verdict this module derives inherits `ABC-011`'s under-detection** (a
+  legitimate draw is missed; a false draw is never declared). The two must not be built in the
+  order that bakes the defect into this module's tests.
+- **No blocking dependency on `ADR-0004`.** This module does not touch SAN.
+
+## Security / NFR triggers
+
+- `NFR-003` (keystroke budget, 50 ms) and `NFR-002` (frame budget, 16 ms) — the derives sit in the
+  turn, not the frame. Bars, set at ~1.5x wave 1's measured figures on the same machine class
+  (**Apple M3, Node v24.12.0, darwin/arm64 — `UNKNOWN - verify` on any other hardware**), at
+  **120 plies**:
+  - `takeBack(history, 2)` ≤ **5 µs** *(measured 2.40 µs)*
+  - `keyHistory(history)` ≤ **60 µs** *(measured 39–41 µs)*
+  - `repetitionCounts(history)` / `gameStatusOf(history)` ≤ **75 µs** *(measured 46–50 µs)*
+  - `playMove(history, move)` ≤ **100 ns** *(measured ~10 ns)*
+  - Growth check: `repetitionCounts` at **300 plies** ≤ **150 µs** *(measured 97–102 µs)*, and
+    `ADR-0002`'s own stated threshold for re-opening clause 2 is replay above ~1 ms — **10x above
+    the 300-ply figure.**
+  - Every number recorded with its machine and its ply count, per the standing convention in
+    `plans/nfr-catalog.md`.
+- **No security trigger.** No injection sink, no trust boundary, no privilege, no data exposure,
+  no user-supplied string reaches this module.
+
+## Test notes
+
+`ADR-0002` says it plainly and it is the reason this ticket's tests are not optional: **no existing
+test would catch getting this wrong.** The perft and FEN suites assert the *core's* behaviour and
+never touch game history. This module's own tests are its only safety net.
+
+Six tests, in the order they matter — they map 1:1 onto the acceptance criteria above:
+
+1. Undo rewinds the repetition history too (`EPIC-006`'s named test).
+2. Forward-apply equals replay.
+3. Truncate-then-replay is exact.
+4. The `keyHistory` prefix property.
+5. The current position is counted.
+6. Seeding invariants (`length === moves.length + 1`, last key equals the live position's key).
+
+Three things a naive pass would miss:
+
+- **Test 1 must use a repeated line that never sets an en-passant square.** `ABC-011`
+  (`src/zobrist.ts:71` hashes the ep file whenever `epSquare` is set) means a repeated line
+  containing a double push hashes two FIDE-identical positions differently and the test would fail
+  for a reason that is not this module's. `src/gameend.test.ts:27-58` already uses a knight cycle
+  (`g1f3 g8f6 f3g1 f6g8`, twice) for exactly this reason. **Reuse that shape.** Note honestly that
+  this makes the test blind to `ABC-011` — `ABC-011`'s trace row already records the same fact.
+- **`position` is a borrow and TypeScript cannot enforce it.** `readonly` stops reassignment; it
+  does not stop `h.position.board[0] = 0`, and there is no deep-readonly for a `Uint8Array`. The
+  contract is documented and tested, not typed. A test that mutates `h.position` and asserts the
+  module notices would be testing something the language does not offer.
+- **`zobristKey` returns `bigint`.** Compare `bigint` values, and remember `Map<bigint, number>`
+  keys compare by value for `bigint`, unlike objects.
+
+## Size and priority rationale
+
+**Size `M` (3).** A new module with six small functions, one of which (`takeBack`) contains the
+only real logic — truncate and replay. Calibrated against `ABC-007` (game-end detection: a new
+module, five terminal conditions, `M`) and above `ABC-006` (perft harness, `S`). The cost is in the
+six tests, not the code. No new dependency, no new runtime package.
+
+**Priority `P0`.** Four epics rest on it (`ADR-0002` binds `EPIC-002`, `EPIC-004`, `EPIC-005`,
+`EPIC-006`), the turn loop cannot evaluate a terminal state without the counts it supplies, and it
+is the one ticket in this epic with **no unbuilt dependency at all**. It is one of the two tickets
+this decomposition puts straight into `Ready`.
+
+## Definition of Ready
+
+Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ (independent — merged `src/` only) · acceptance
+measurable ✅ (byte-identical FENs, exact array lengths, exact count of 3, numeric µs bars) ·
+dependencies ✅ (none blocking; `ABC-011` sequencing named) · NFR triggers ✅ (five numeric bars,
+each with its machine and ply count) · test notes ✅ · size `M` ✅ · priority `P0` ✅ · no
+blocker ✅
+
+**Promoted to `Ready` 2026-07-30 by BA/PM.**

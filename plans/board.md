@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-30 by BA/PM (ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation; no ticket moved, no column other than Backlog touched, Backlog is WIP-unlimited so no limit is at issue. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
+_Updated: 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -75,14 +75,40 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Backlog (WIP unlimited)
 
-- [EPIC-002] Terminal board and game loop  (owner: BA/PM, size: M, priority: P0, since: 2026-07-22)
+- [EPIC-002] Terminal board and game loop  (owner: BA/PM, size: XL, priority: P0, since: 2026-07-22, decomposed: ABC-012..ABC-019)
 - [EPIC-003] Move input and controls  (owner: BA/PM, size: M, priority: P0, since: 2026-07-22)
 - [EPIC-004] Engine and AI opponent  (owner: BA/PM, size: L, priority: P0, since: 2026-07-22)
 - [EPIC-005] Opening book  (owner: BA/PM, size: S, priority: P1, since: 2026-07-22)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, size: M, priority: P2, since: 2026-07-22)
 - [ABC-010] FEN semantic validation  (owner: BA/PM, size: M, priority: P1, epic: EPIC-003, since: 2026-07-29)
 - [ABC-009] legalMoves mutates the position it documents as unchanged  (owner: BA/PM, size: S, priority: P2, epic: EPIC-001, since: 2026-07-29)
-- [ABC-011] Zobrist key hashes en passant when no capture is available  (owner: BA/PM, size: S, priority: P2, epic: EPIC-001, since: 2026-07-30)
+- [ABC-015] Glyph mode selection — precedence, signal set, --unicode override  (size: S, P1, epic: EPIC-002, blocked-until: ABC-014)
+- [ABC-016] Status panel  (size: M, P1, epic: EPIC-002, blocked-until: ABC-013, ABC-014)
+- [ABC-017] Bounded move-history pane — two-column SAN  (size: S, P2, epic: EPIC-002, blocked-until: ABC-013, ABC-014)
+- [ABC-018] Frame output and redraw  (size: S, P0, epic: EPIC-002, blocked-until: ABC-014)
+- [ABC-019] Turn loop skeleton  (size: L, P0, epic: EPIC-002, blocked-until: ABC-012, ABC-014, ABC-018)
+
+<!--
+  EPIC-002 DECOMPOSED 2026-07-30 by BA/PM (task `epic-to-tickets-EPIC-002`, Workflow 03) into
+  ABC-012..ABC-019 — 8 tickets, 23 points. Epic size corrected M -> XL in-file with the reason,
+  exactly as EPIC-001 recorded its own L -> XL correction; the no-XL rule binds TICKETS, and the
+  largest here is L, so there is NO SPLIT_REQUIRED. The epic ROW STAYS IN BACKLOG carrying a
+  `decomposed:` annotation — that is precisely what EPIC-001 did on 2026-07-22, and it left Backlog
+  only on 2026-07-24 when all seven of its tickets were merged. An epic row is a container; it exits
+  Backlog for Done when its tickets are Done. The Backlog exit BA/PM actually owns and has taken
+  today is the TICKET-level one: Backlog -> Ready for ABC-012, ABC-014 and ABC-011.
+
+  ABC-015..ABC-019 meet the Definition of Ready in full. They are held in Backlog because each has
+  an unbuilt PREDECESSOR TICKET, not because anything about them is unresolved — they are NOT
+  Blocked-column blocked, and BA/PM promotes each as its `blocked-until` list clears. Same pattern
+  ABC-004..007 used.
+
+  Two of this epic's four acceptance criteria were AMENDED before these tickets were cut, because
+  wave 1 established they could not be met as written and an untestable criterion fails the
+  Definition of Ready for every ticket beneath it. Both amendments are recorded in place in
+  plans/epics/EPIC-002-terminal-board-and-game-loop.md with what changed and whether a promise was
+  reduced (it was, twice, and both are marked REDUCED rather than softened quietly).
+-->
 <!--
   ABC-011 cut 2026-07-30 by BA/PM from the same architecture audit, on the recommendation in
   ADR-0002's `Out of scope … en-passant hashing defect` section — a third correctness defect in
@@ -112,13 +138,27 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   oversight.
 -->
 
-## Ready (WIP 0/8)
+## Ready (WIP 3/8)
+
+- [ABC-011] Zobrist key hashes en passant when no capture is available  (size: S, P1, epic: EPIC-001, deps: none)
+- [ABC-012] Game history module — the move list is the authoritative state  (size: M, P0, epic: EPIC-002, deps: none)
+- [ABC-014] Board frame renderer — grid, labels, shading, orientation, both glyph modes  (size: M, P0, epic: EPIC-002, deps: none)
 
 <!--
+  Ready holds 3 of a permitted 8, and 3 is the honest number rather than a conservative one:
+  ABC-012 and ABC-014 are the ONLY two EPIC-002 tickets with no unbuilt dependency at all — both
+  stand on merged src/ alone. ABC-013 would have been the third and is in Blocked instead, on a
+  decision only a human can make. The limit is a ceiling, not a target; Ready is a buffer feeding
+  In Development (WIP 3), and flooding it would move the queue rather than shorten it. Same
+  reasoning recorded when EPIC-001 put 3 of its 7 into Ready.
+
+  ABC-011 joins them because its OWN escalation trigger fired: it rises to P1 and must be Ready
+  "before whichever consumer of the key list lands first", and ABC-012 is that consumer. Both are
+  in Ready together; the pull order is the Orchestrator's. ABC-011's size is unchanged at S.
+
   Emptied 2026-07-23: ABC-003 was pulled into In Development for ticket-to-pr. Its deps
   (ABC-001, ABC-002) are satisfied on main, so it was pulled straight from Ready — no
   analysis or design hop was needed (it arrived meeting the Definition of Ready in full).
-  BA/PM promotes ABC-004 from Backlog to refill Ready behind it.
 -->
 
 
@@ -201,6 +241,27 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 ## Blocked (visible, time-tracked)
+
+- [ABC-013] SAN rendering — src/san.ts with toSan only  (size: M, P1, epic: EPIC-002, blocked-by: ADR-0004 is `proposed`, not ratified — needs a named human, since **no agent may mark an ADR accepted**; raised by BA/PM, since: 2026-07-30)
+
+<!--
+  ABC-013 is the FIRST ticket this project has put in Blocked, and it is here rather than in Ready
+  on purpose. It meets every other Definition-of-Ready check; what it fails is "no major unresolved
+  blocker". ADR-0004 (SAN ownership) says of itself that it does NOT block cutting tickets but DOES
+  block "the merge of the first line of src/san.ts", because that is the point at which the decision
+  becomes expensive to reverse. A ticket in Ready is pullable, and pulling this one would produce
+  code that cannot land — so it sits in Blocked, visible and time-tracked against
+  `blocked_escalation_days: 2`, rather than buried in a dependency line where the human ruling it
+  needs would be invisible.
+
+  Ratification alone clears it. ADR-0002 and ADR-0003 were each ratified in session by a named
+  human on 2026-07-30; this is the same ruling on the same kind of artifact.
+
+  ABC-016 and ABC-017 depend on ABC-013 and therefore inherit the wait. They are in BACKLOG, not
+  Blocked: their blocker is a ticket, not a decision, and duplicating one decision across three
+  Blocked rows would make the column lie about how many human rulings are outstanding. There is
+  exactly one.
+-->
 
 ## Conventions
 
