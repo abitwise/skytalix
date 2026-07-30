@@ -1,5 +1,5 @@
 # NFR Catalog
-_Updated: 2026-07-30 by Architect/Design (NFR-005 rewritten to the depth-in-budget target ratified in ADR-0003 clause 2 **as amended** by Olger Oeselg on 2026-07-30 — named positions, floor 6 FAIL / target 7 WARN, depth 7 provisional pending EPIC-004's non-M3 spike; node rate demoted to a diagnostic. NFR-001 and NFR-003 untouched. Previously 2026-07-29: corrected NFR-005 against measurement; fenced NFR-001's denominator; NFR-003 partly verifiable. Seeded 2026-07-24.)_
+_Updated: 2026-07-30 by Architect/Design (NFR-002 made verifiable during EPIC-002's decomposition — **target unchanged at < 16 ms**; what changed is that the row now names what is in a frame, names the ply-count denominator the SAN history panel makes load-bearing, splits compute from terminal write, and records the measured compute half with its machine. See the NFR-002 section below. Earlier the same day: NFR-005 rewritten to the depth-in-budget target ratified in ADR-0003 clause 2 **as amended** by Olger Oeselg on 2026-07-30 — named positions, floor 6 FAIL / target 7 WARN, depth 7 provisional pending EPIC-004's non-M3 spike; node rate demoted to a diagnostic. NFR-001 and NFR-003 untouched. Previously 2026-07-29: corrected NFR-005 against measurement; fenced NFR-001's denominator; NFR-003 partly verifiable. Seeded 2026-07-24.)_
 
 <!--
   FORMAT — read before you append. (clear voice; this is a technical file, not a role prompt.)
@@ -24,12 +24,45 @@ _Updated: 2026-07-30 by Architect/Design (NFR-005 rewritten to the depth-in-budg
 | ID | Category | Target | Applies to | Verified by |
 |----|----------|--------|------------|-------------|
 | NFR-001 | Performance | Move generation throughput **≥ 1,000,000 nodes/sec** on perft, current-gen laptop | Legal move generator — the search hot path (EPIC-001) | `npm run perft` nodes/sec (ABC-006). **MET** — re-measured 2026-07-29 at 6.04M–6.21M over five runs (M3, Node v24.12.0); the earlier `~6.2M` was the top of that range. **Denominator fence: 97.3% of the nodes this counts are free leaves**, so it measures generation-with-free-leaves and is **never** evidence for NFR-005 — see below |
-| NFR-002 | Performance | Full board redraw completes in **< 16 ms** (never a perceptible stall) | Terminal renderer (EPIC-002) | `UNKNOWN - verify` — not built yet; verify by render benchmark over known FENs |
+| NFR-002 | Performance | Full board redraw completes in **< 16 ms** (never a perceptible stall). **Target unchanged** — transcribed from EPIC-002, 2026-07-24 | **One full frame** of the terminal renderer (EPIC-002): board + rank/file labels + status panel + the SAN move-history panel. **The frame is a function of GAME LENGTH, not only of position** — the history panel is O(plies) — so a frame measurement that does not state its ply count is not comparable to another one | **Still not built, but now testable — the denominator is named.** Measure the two halves separately, each carrying its ply count and its machine: **(a) frame COMPUTE** — replay + `toSan` per rendered ply + `gameStatus` + the board scan, at ply counts **40 / 120 / 300** on a game from `startpos`, board half over the standing FENs in `src/perft.test.ts`; **(b) frame WRITE** — the same frame serialized and written to a non-TTY sink, which is `UNKNOWN - verify` and is the half nobody has measured. Compute half measured 2026-07-30 on M3 / Node v24.12.0 / darwin-arm64 (SAN history derive only — no renderer exists): **171–176 µs @ 40 plies, 517–533 µs @ 120, 1,272–1,318 µs @ 300** = **1.1% / 3.3% / 8.2%** of the 16 ms budget, two runs. Board, status panel and terminal I/O are **unmeasured**. Design behind the shape: ADR-0002 clause 2 (derive, don't maintain) and ADR-0004 (**proposed** — SAN derived per frame, not cached) |
 | NFR-003 | Performance | Keystroke echo **< 50 ms**; `moves` command and tab-completion **< 100 ms** | Input prompt and controls (EPIC-003) | **Partly verifiable — NOT passed.** Compute half measured 2026-07-29: the `moves` command's `legalMoves()` costs 2.1–5.3 µs, ~19,000–47,000x under the 100 ms budget, so compute is not the risk. Keystroke echo and terminal I/O are the other half and stay `UNKNOWN - verify` — no prompt exists; verify by input-latency measurement once EPIC-003 is built |
 | NFR-004 | Performance | Engine returns a move in **≤ 3 s** at default difficulty; **hard ceiling 5 s** at any difficulty | Engine move search (EPIC-004) | `UNKNOWN - verify` — not built yet; verify by wall-clock over a fixed position suite. Depends on NFR-005 |
 | NFR-005 | Performance | **Depth-in-budget on the standing benchmark positions `kiwipete` and `position-6`** — at default difficulty the search completes **≥ depth 6** within the 3 s budget and never exceeds the 5 s ceiling (**below depth 6 = FAIL**), and reaches **depth 7** within that same 3 s budget (**below depth 7 = WARN**; the depth-7 level is **PROVISIONAL** pending non-M3 measurement). Node rate is a **diagnostic, not the target** | Engine search loop (EPIC-004) | **Target ratified in ADR-0003 clause 2 AS AMENDED by Olger Oeselg on 2026-07-30** — amendments: named positions / two levels / provisional depth 7. Depth-in-budget on target hardware is `UNKNOWN - verify`, and **the provisional obligation has a home: EPIC-004's own timeboxed spike (RISK-002's mitigation) measures depth-in-budget on non-M3 target hardware, and that spike is the verification that LIFTS the PROVISIONAL marker from the depth-7 level.** Until it reports, a depth-7 miss on slower hardware may be the machine rather than a regression. Measured 2026-07-30 on M3 / Node v24.12.0 / darwin-arm64 (ADR-0003; alpha-beta-shaped model at EBF 6, leaves evaluated not generated): `kiwipete` reaches **depth 7 in 0.39–0.68 s** and depth 8 inside the 5 s ceiling at leaf-eval costs 134 ns–1,097 ns; `position-6` reaches **depth 7 in 0.644 s** at 1,097 ns — both levels clear on this machine. **Node rate DEMOTED to a diagnostic (not deleted), each figure carrying its node definition, position and machine:** **163k–351k/sec** — ABC-008 metric B (every node, leaves included, calls `legalMoves()`), kiwipete d3/d4 + startpos d4, M3, 2026-07-29; **207k/sec kiwipete, 546k/sec startpos** — same metric B by the reciprocal of one `legalMoves` call, M3, 2026-07-30; historical proxy **2,639,455/sec** — the ABC-008 spike, **no legality filtering at all**, M3: a proxy for the engine, never a measurement of it. **The old ≥ 500,000 nodes/sec target is RETIRED** as underived and untestable — the same merged code measures 207k–6.1M/sec on the node definition alone |
 | NFR-006 | Cost | Compiled opening book stays **≤ 1 MB** (no published-package bloat) | Opening book artifact (EPIC-005) | `UNKNOWN - verify` — not built yet; verify by compiled artifact size check at build |
 | NFR-007 | Performance | `npx` invocation to first rendered board in **< 2 s** with a warm npm cache | CLI cold start / packaging (EPIC-006) | `UNKNOWN - verify` — not built yet; verify by timed `npx` end-to-end run |
+
+## NFR-002 — what a "full board redraw" is, and why the ply count is its denominator
+
+_Added 2026-07-30 by Architect/Design during EPIC-002's decomposition. **The < 16 ms target did not
+change** — it is still the number EPIC-002 states. What changed is that the row now says what is
+being measured, so it can be failed._
+
+The row was seeded honestly as `UNKNOWN - verify` on 2026-07-24 with "verify by render benchmark
+over known FENs". That instruction is not sufficient, for the same reason NFR-005's
+"in a middlegame position" was not: **a frame's cost is not a function of the position alone.**
+EPIC-002's frame includes a two-column SAN move-history panel, and the design that serves it
+(ADR-0002 clause 2, ratified: the move list is the authority and everything else is derived by
+replay) makes that panel **O(plies)** while the budget stays fixed at 16 ms. A benchmark over known
+FENs at ply 0 would measure the cheapest frame the game ever draws and would still read green after
+the panel had eaten the budget at move 60.
+
+So the row names three things it did not name before:
+
+- **What is in the frame.** Board + labels + status panel + move-history panel. If the renderer
+  ships something else in a frame, this row is what it must be re-measured against.
+- **The ply counts.** **40 / 120 / 300** — an opening, a typical complete game, and a long one. The
+  same three on every re-measurement, or the numbers are not comparable.
+- **The two halves.** Compute and terminal write. Only compute can be measured before a renderer
+  exists; the write half is `UNKNOWN - verify` and is named so it cannot be quietly forgotten — the
+  same split NFR-003 already carries for keystroke echo.
+
+**What is measured today, and what it is not.** 171–176 µs / 517–533 µs / 1,272–1,318 µs at
+40 / 120 / 300 plies is the **SAN move-history derive alone**: replay the move list from the initial
+FEN and format every ply, which costs one `legalMoves` call per ply (~97% of it) plus ~100 ns of
+string work. Two runs, Apple M3, Node v24.12.0, darwin/arm64, read-only harness outside the repo
+against merged `src/`. **It is not a frame measurement** — no renderer exists, and the board scan,
+the status panel and every byte written to the terminal are not in it. It is a lower bound on the
+frame, and it is the largest item known to be in it. `UNKNOWN - verify` on any other hardware.
 
 ## Notes on the measured rows (NFR-001, NFR-003, NFR-005)
 
