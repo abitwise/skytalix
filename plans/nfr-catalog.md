@@ -1,5 +1,5 @@
 # NFR Catalog
-_Updated: 2026-07-30 by Architect/Design (NFR-002 made verifiable during EPIC-002's decomposition — **target unchanged at < 16 ms**; what changed is that the row now names what is in a frame, names the ply-count denominator the SAN history panel makes load-bearing, splits compute from terminal write, and records the measured compute half with its machine. See the NFR-002 section below. Earlier the same day: NFR-005 rewritten to the depth-in-budget target ratified in ADR-0003 clause 2 **as amended** by Olger Oeselg on 2026-07-30 — named positions, floor 6 FAIL / target 7 WARN, depth 7 provisional pending EPIC-004's non-M3 spike; node rate demoted to a diagnostic. NFR-001 and NFR-003 untouched. Previously 2026-07-29: corrected NFR-005 against measurement; fenced NFR-001's denominator; NFR-003 partly verifiable. Seeded 2026-07-24.)_
+_Updated: 2026-07-30 by Architect/Design (**second NFR-002 edit today, and the target is still < 16 ms** — the ply-count denominator the first edit named is **CORRECTED to a bounded window**, because BA/PM's epic amendment `[A2]` bounds the SAN history pane to 8 move pairs and makes the frame O(window). What is in a frame, the compute/write split and the recorded measurement are all kept; the measurement is **relabelled as history** because it measured the unbounded panel EPIC-002 will no longer ship, and the bounded pane's own compute is **`UNKNOWN - verify`** — no number for it exists and none was invented. See the CORRECTED block in the NFR-002 section below. Earlier the same day: NFR-002 made verifiable during EPIC-002's decomposition — **target unchanged at < 16 ms**; the row gained what is in a frame, a named denominator, the compute/write split, and the measured compute half with its machine. Also earlier the same day: NFR-005 rewritten to the depth-in-budget target ratified in ADR-0003 clause 2 **as amended** by Olger Oeselg on 2026-07-30 — named positions, floor 6 FAIL / target 7 WARN, depth 7 provisional pending EPIC-004's non-M3 spike; node rate demoted to a diagnostic. NFR-001 and NFR-003 untouched. Previously 2026-07-29: corrected NFR-005 against measurement; fenced NFR-001's denominator; NFR-003 partly verifiable. Seeded 2026-07-24.)_
 
 <!--
   FORMAT — read before you append. (clear voice; this is a technical file, not a role prompt.)
@@ -24,18 +24,23 @@ _Updated: 2026-07-30 by Architect/Design (NFR-002 made verifiable during EPIC-00
 | ID | Category | Target | Applies to | Verified by |
 |----|----------|--------|------------|-------------|
 | NFR-001 | Performance | Move generation throughput **≥ 1,000,000 nodes/sec** on perft, current-gen laptop | Legal move generator — the search hot path (EPIC-001) | `npm run perft` nodes/sec (ABC-006). **MET** — re-measured 2026-07-29 at 6.04M–6.21M over five runs (M3, Node v24.12.0); the earlier `~6.2M` was the top of that range. **Denominator fence: 97.3% of the nodes this counts are free leaves**, so it measures generation-with-free-leaves and is **never** evidence for NFR-005 — see below |
-| NFR-002 | Performance | Full board redraw completes in **< 16 ms** (never a perceptible stall). **Target unchanged** — transcribed from EPIC-002, 2026-07-24 | **One full frame** of the terminal renderer (EPIC-002): board + rank/file labels + status panel + the SAN move-history panel. **The frame is a function of GAME LENGTH, not only of position** — the history panel is O(plies) — so a frame measurement that does not state its ply count is not comparable to another one | **Still not built, but now testable — the denominator is named.** Measure the two halves separately, each carrying its ply count and its machine: **(a) frame COMPUTE** — replay + `toSan` per rendered ply + `gameStatus` + the board scan, at ply counts **40 / 120 / 300** on a game from `startpos`, board half over the standing FENs in `src/perft.test.ts`; **(b) frame WRITE** — the same frame serialized and written to a non-TTY sink, which is `UNKNOWN - verify` and is the half nobody has measured. Compute half measured 2026-07-30 on M3 / Node v24.12.0 / darwin-arm64 (SAN history derive only — no renderer exists): **171–176 µs @ 40 plies, 517–533 µs @ 120, 1,272–1,318 µs @ 300** = **1.1% / 3.3% / 8.2%** of the 16 ms budget, two runs. Board, status panel and terminal I/O are **unmeasured**. Design behind the shape: ADR-0002 clause 2 (derive, don't maintain) and ADR-0004 (**proposed** — SAN derived per frame, not cached) |
+| NFR-002 | Performance | Full board redraw completes in **< 16 ms** (never a perceptible stall). **Target unchanged** — transcribed from EPIC-002, 2026-07-24, and unchanged again by the 2026-07-30 bounded-window correction: that ruling changed the frame's growth characteristic, not the latency budget | **One full frame** of the terminal renderer (EPIC-002): board + rank/file labels + status panel + the **bounded** SAN move-history panel (most recent **8 move pairs = 16 rendered plies**, blank-padded) + the fixed **2-row message region** (`ABC-018` assembles it and it is part of the frame). **CORRECTED 2026-07-30 — the frame is NO LONGER O(plies).** Epic amendment `[A2]` bounds the pane, so the dominant term is **O(window)**: a fixed 16 rendered plies at any game length. **A frame measurement must still state its ply count**, for two reasons the bound does not remove — (i) the pane replays from `initialFen` to the window's first ply, which is **O(plies)** (one `parseFen` plus ~10 ns/ply; measured near-flat at **2.2–3.9 µs across 40–300 plies**), and (ii) O(window) is now the claim under test, provable only by comparing ply counts. **Boundary condition:** `gameStatus` + `repetitionCounts` is **O(plies)** (46–50 µs @ 120, 97–102 µs @ 300) and belongs to the LOOP (`ABC-019`), not to a frame — `ABC-016`'s panel calls `isInCheck` directly. **If a renderer ever pulls the repetition derive into a frame, the frame is O(plies) again and this row's O(window) statement is void** | **Still not built. The two halves and the three ply counts stand; what the bound changed is which number is on record.** Measure separately, each carrying its ply count and its machine: **(a) frame COMPUTE** — replay to the window's first ply + `toSan` per **rendered** ply (16, not all) + the board scan + the status panel, at ply counts **40 / 120 / 300** on a game from `startpos`, board half over the standing FENs in `src/perft.test.ts`; **(b) frame WRITE** — the same frame serialized and written to a non-TTY sink, still `UNKNOWN - verify` and still the half nobody has measured, but now **length-independent by construction**, since `4a` makes the frame a constant row count (23 in the reference layout). **The BOUNDED pane's compute is `UNKNOWN - verify`. No measurement of it exists, none is invented here, and BA/PM's ≈ 70 µs is arithmetic over wave 1's per-item figures — a target, not a result.** What would close it: `ABC-017`'s cost test (40 / 120 / 300 plies; bar ≤ 150 µs absolute **and** the three within 2x of each other), which cannot run until `ABC-013` ships `toSan`, which is blocked on ADR-0004's ratification. **RETAINED AS HISTORY — it measured the UNBOUNDED panel, which will not be built:** 2026-07-30 on M3 / Node v24.12.0 / darwin-arm64, full-history derive **171–176 µs @ 40 plies, 517–533 µs @ 120, 1,272–1,318 µs @ 300** = 1.1% / 3.3% / 8.2% of the budget, two runs. It survives as an **upper bound** on any bounded pane and as the source of the still-valid per-item figures (`toSan` **4.31–4.45 µs** computing its own legal list, **0.10–0.11 µs** when the caller supplies it). Board, status panel, message region and terminal I/O remain **unmeasured**; every figure is one machine and one Node version, `UNKNOWN - verify` elsewhere. Design behind the shape: ADR-0002 clause 2 (derive, don't maintain) and ADR-0004 (**proposed** — SAN derived per frame, not cached), whose clause-3 first response *"render only the visible window"* `[A2]` pre-adopts |
 | NFR-003 | Performance | Keystroke echo **< 50 ms**; `moves` command and tab-completion **< 100 ms** | Input prompt and controls (EPIC-003) | **Partly verifiable — NOT passed.** Compute half measured 2026-07-29: the `moves` command's `legalMoves()` costs 2.1–5.3 µs, ~19,000–47,000x under the 100 ms budget, so compute is not the risk. Keystroke echo and terminal I/O are the other half and stay `UNKNOWN - verify` — no prompt exists; verify by input-latency measurement once EPIC-003 is built |
 | NFR-004 | Performance | Engine returns a move in **≤ 3 s** at default difficulty; **hard ceiling 5 s** at any difficulty | Engine move search (EPIC-004) | `UNKNOWN - verify` — not built yet; verify by wall-clock over a fixed position suite. Depends on NFR-005 |
 | NFR-005 | Performance | **Depth-in-budget on the standing benchmark positions `kiwipete` and `position-6`** — at default difficulty the search completes **≥ depth 6** within the 3 s budget and never exceeds the 5 s ceiling (**below depth 6 = FAIL**), and reaches **depth 7** within that same 3 s budget (**below depth 7 = WARN**; the depth-7 level is **PROVISIONAL** pending non-M3 measurement). Node rate is a **diagnostic, not the target** | Engine search loop (EPIC-004) | **Target ratified in ADR-0003 clause 2 AS AMENDED by Olger Oeselg on 2026-07-30** — amendments: named positions / two levels / provisional depth 7. Depth-in-budget on target hardware is `UNKNOWN - verify`, and **the provisional obligation has a home: EPIC-004's own timeboxed spike (RISK-002's mitigation) measures depth-in-budget on non-M3 target hardware, and that spike is the verification that LIFTS the PROVISIONAL marker from the depth-7 level.** Until it reports, a depth-7 miss on slower hardware may be the machine rather than a regression. Measured 2026-07-30 on M3 / Node v24.12.0 / darwin-arm64 (ADR-0003; alpha-beta-shaped model at EBF 6, leaves evaluated not generated): `kiwipete` reaches **depth 7 in 0.39–0.68 s** and depth 8 inside the 5 s ceiling at leaf-eval costs 134 ns–1,097 ns; `position-6` reaches **depth 7 in 0.644 s** at 1,097 ns — both levels clear on this machine. **Node rate DEMOTED to a diagnostic (not deleted), each figure carrying its node definition, position and machine:** **163k–351k/sec** — ABC-008 metric B (every node, leaves included, calls `legalMoves()`), kiwipete d3/d4 + startpos d4, M3, 2026-07-29; **207k/sec kiwipete, 546k/sec startpos** — same metric B by the reciprocal of one `legalMoves` call, M3, 2026-07-30; historical proxy **2,639,455/sec** — the ABC-008 spike, **no legality filtering at all**, M3: a proxy for the engine, never a measurement of it. **The old ≥ 500,000 nodes/sec target is RETIRED** as underived and untestable — the same merged code measures 207k–6.1M/sec on the node definition alone |
 | NFR-006 | Cost | Compiled opening book stays **≤ 1 MB** (no published-package bloat) | Opening book artifact (EPIC-005) | `UNKNOWN - verify` — not built yet; verify by compiled artifact size check at build |
 | NFR-007 | Performance | `npx` invocation to first rendered board in **< 2 s** with a warm npm cache | CLI cold start / packaging (EPIC-006) | `UNKNOWN - verify` — not built yet; verify by timed `npx` end-to-end run |
 
-## NFR-002 — what a "full board redraw" is, and why the ply count is its denominator
+## NFR-002 — what a "full board redraw" is, and what its denominator is (~~the ply count~~ the window, CORRECTED 2026-07-30)
 
 _Added 2026-07-30 by Architect/Design during EPIC-002's decomposition. **The < 16 ms target did not
 change** — it is still the number EPIC-002 states. What changed is that the row now says what is
 being measured, so it can be failed._
+
+> **READ THE CORRECTION BLOCK AT THE END OF THIS SECTION FIRST.** Everything between here and it was
+> written against an **unbounded** history panel that EPIC-002 no longer ships. It is kept as
+> history, exactly as NFR-005's withdrawn "~5x headroom" is. **The denominator is now the window,
+> not the ply count. The target is untouched.**
 
 The row was seeded honestly as `UNKNOWN - verify` on 2026-07-24 with "verify by render benchmark
 over known FENs". That instruction is not sufficient, for the same reason NFR-005's
@@ -63,6 +68,75 @@ string work. Two runs, Apple M3, Node v24.12.0, darwin/arm64, read-only harness 
 against merged `src/`. **It is not a frame measurement** — no renderer exists, and the board scan,
 the status panel and every byte written to the terminal are not in it. It is a lower bound on the
 frame, and it is the largest item known to be in it. `UNKNOWN - verify` on any other hardware.
+
+### CORRECTED 2026-07-30 (same day, second edit) — the denominator is the WINDOW, not the ply count
+
+*(Everything above in this section is kept as history. It is not wrong about the code it measured;
+it is wrong about the frame that will be built.)*
+
+**The < 16 ms target is untouched.** BA/PM ruled during the same decomposition — epic amendment
+`[A2]`, acceptance `4a`–`4d` — that the live move-history pane is **bounded to the most recent 8
+move pairs, blank-padded**, and that the frame is a **session-constant height**. That is a product
+ruling, it is made, and it is not reopened here. It changed the frame's **growth characteristic**,
+not its latency budget. BA/PM flagged this row rather than editing it because the row is
+Architect/Design's; this block is the fix.
+
+**Three things changed; four did not.**
+
+- **Changed — the growth characteristic.** The panel is no longer `O(plies)`. It renders a fixed
+  **16 plies** (8 pairs) at any game length, so the frame's dominant term is `O(window)`. The
+  arithmetic that forced the bound was never about cost at all — it was the viewport: ~16 fixed rows
+  on a 24-row terminal leave ~8 for history, so an unbounded pane overflows at about **move 9** and
+  the redraw criterion becomes undefined, not merely slow.
+- **Changed — which number is on record.** The 171–1,318 µs figures measure the **unbounded**
+  full-history derive. They are kept above and in the row, relabelled as history and as an **upper
+  bound**, because they still bound any bounded pane from above and because the per-item figures
+  underneath them (`toSan` at 4.31–4.45 µs unassisted, 0.10–0.11 µs when handed a legal list;
+  replay at 2.2–3.9 µs) are unaffected by the ruling and are what every remaining estimate rests on.
+- **Changed — the write half got easier to state.** `4a` makes the frame a constant row count (23 in
+  the reference layout), so the unmeasured write half has **no ply denominator at all**. It is still
+  `UNKNOWN - verify`; it is now a single number per machine and sink rather than a curve.
+- **Unchanged — the target, the frame's two halves, the three ply counts 40 / 120 / 300, and the
+  requirement that every figure carry its position/definition/machine.**
+
+**Why the ply count stays on every measurement even though it no longer drives the cost.** Two
+reasons, and neither is ceremony. First, the pane must still **replay from `initialFen` to the
+window's first ply** — `GameHistory` holds `initialFen` + `moves` + the live position and nothing
+else, so there is no O(1) way to reach the position before ply *n−16*. That replay is `O(plies)`:
+one `parseFen` at 1.62 µs plus ~10 ns per ply, measured near-flat at **2.2–3.9 µs from 40 to 300
+plies**. Small, real, and linear. Second, `O(window)` is now a **claim under test**. A single
+measurement at one ply count cannot falsify it; the 40 / 120 / 300 comparison can, which is why
+`ABC-017` asserts a **ratio** (the three within 2x) alongside its absolute bar — the ratio is
+machine-independent and the absolute is not.
+
+**The boundary condition of the `O(window)` statement, stated so it cannot be silently broken.**
+`gameStatus` fed by `repetitionCounts` is `O(plies)` — **46–50 µs @ 120 plies, 97–102 µs @ 300** —
+and it is the largest length-dependent quantity anywhere near this frame. The decomposition puts it
+in the **loop** (`ABC-019`), not in a frame: `ABC-016`'s status panel calls `isInCheck` directly and
+reports check, not game over. **If a renderer ever computes the repetition counts per frame, the
+frame is `O(plies)` again and the correction above is void.** That is the one change that would
+require rewriting this row a third time.
+
+**Not an optimization anyone should reach for:** the 40x cheaper `toSan(position, move, legal)` path
+does not help the pane, which has no legal list in hand and would have to compute the same
+`legalMoves` call to obtain one. ~70 µs is the honest price of 16 rendered plies, not a lazy
+implementation.
+
+**What is `UNKNOWN - verify`, and what would close each one.** Nothing in the frame as it will be
+built has been measured, because none of it exists.
+
+| Unknown | What would measure it |
+|---|---|
+| **Bounded pane compute** (BA/PM's ≈ 70–75 µs is arithmetic over wave 1's per-item figures — a target, not a result) | `ABC-017`'s cost test at 40 / 120 / 300 plies: ≤ 150 µs absolute **and** the three within 2x. Gated on `ABC-013` (`toSan`), itself blocked on `ADR-0004`'s ratification |
+| **Board-scan compute** | `ABC-014`, over the standing perft FENs; bar ≤ 500 µs |
+| **Status-panel compute** | `ABC-016`; bar ≤ 250 µs |
+| **Frame assembly + the WRITE half** — the half nobody has measured | `ABC-018`, against a non-TTY sink, recorded with its machine. **No number for terminal write time may be quoted from any note in this task; none exists** |
+| **Any non-M3 machine, any other Node version** | Unchanged by this correction and still open |
+
+**No number in this correction was measured today.** Every figure quoted here is transcribed from
+wave 1's measurement note (Apple M3, Node v24.12.0, darwin/arm64, two runs, read-only harness outside
+the repo against merged `src/`). A harness run today would have measured the same superseded
+quantities, since the bounded pane depends on a `toSan` that is not yet permitted to exist.
 
 ## Notes on the measured rows (NFR-001, NFR-003, NFR-005)
 
