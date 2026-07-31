@@ -6,7 +6,7 @@ column: Backlog
 priority: P0
 size: XL
 owner: BA/PM
-tickets: ABC-012, ABC-013, ABC-014, ABC-015, ABC-016, ABC-017, ABC-018, ABC-019
+tickets: ABC-012, ABC-013, ABC-014, ABC-015, ABC-016, ABC-017, ABC-018, ABC-019, ABC-021
 ---
 
 # EPIC-002 — Terminal board and game loop
@@ -88,7 +88,9 @@ read the position. This is the whole "console-based chess game, but in CLI" requ
 
 - Move *input parsing* — EPIC-003. This epic owns output only, plus the loop skeleton.
 - `parseSan` — EPIC-003 adds it to the same `src/san.ts` this epic creates. This epic ships
-  `toSan` only and no second grammar (`ADR-0004`, proposed).
+  `toSan` only and no second grammar (`ADR-0004` — **ratified 2026-07-31**; clauses 1 and 3 as
+  proposed, clause 2 **as amended**, and the amendment lands on EPIC-003's `parseSan`, not on this
+  epic's `toSan`. Corrected here — this line read "proposed").
 - Animations, mouse support, split-pane TUI framework.
 - **[A4] ANSI colour**, and with it the `NO_COLOR` convention. Deferred to a later slice;
   shading is delivered by character instead. Not deleted — `RISK-005` names colour and it
@@ -220,10 +222,21 @@ mean something, at any game length.
   Both are values handed *in*; this epic owns the orientation rule and the glyph-mode selection
   rule, `EPIC-006` owns the wiring. Recorded because the original dependency list named only
   `EPIC-001` and the gap was real.
-- **`ADR-0004` (`proposed`, NOT ratified)** — SAN ownership. It does not block cutting or building;
-  it blocks the **merge** of the first line of `src/san.ts`. Carried as a named human dependency
-  on `ABC-013`, which sits in `Blocked` for exactly that reason. **No agent may mark an ADR
-  `accepted`.**
+- **`ADR-0004` — `accepted` 2026-07-31. The merge block is LIFTED.** *(Corrected 2026-07-31; this
+  line read "`proposed`, NOT ratified … Carried as a named human dependency on `ABC-013`, which sits
+  in `Blocked` for exactly that reason." `ABC-013` left `Blocked` for `Ready` on 2026-07-31 after one
+  day, below the two-day escalation threshold, and `Blocked` is empty.)* Clauses 1 and 3 landed as
+  proposed; clause 2 was **amended**, and the amendment changes `EPIC-003`'s `parseSan` contract, not
+  `ABC-013`'s `toSan`, so nothing in this epic's scope moved. **Read that ADR's Status section before
+  citing it:** the ruling was made by the **Orchestrator under a named, quoted delegation from
+  Olger Oeselg** dated 2026-07-31 — the first ADR in this project not ratified by a human directly,
+  and **explicitly not precedent**. The standing rule that no agent may mark an ADR `accepted` is
+  unchanged for every other ADR.
+- **`ABC-020` — added 2026-07-31, and it is a merge-order dependency for three of this epic's
+  tickets.** The rules core stops applying FIDE 9.2/9.3 automatically and starts applying FIDE 9.6
+  automatically, which changes what the loop must stop on (`ABC-019`), gives the status panel a new
+  cell (`ABC-016`) and creates `ABC-021`. It is `EPIC-001`'s ticket and it is `P0`; this epic
+  consumes it and does not own it.
 
 ## Risks
 

@@ -82,7 +82,19 @@ directly and does not import `san.ts`.
 - **Material balance** — a board scan, and `ABC-016` (the status panel) owns it.
 - **`toPgn`** — `EPIC-006`'s negotiable slice. Not blocked: it needs only `initialFen` + `moves` +
   SAN, all reachable from here without this module growing a job.
-- **SAN of any kind.** `history.ts` does not import `san.ts` (`ADR-0004` clause 3, proposed).
+- **SAN of any kind.** `history.ts` does not import `san.ts` (`ADR-0004` clause 3 — **ratified
+  2026-07-31, accepted as proposed**; corrected here, this line read "proposed"). *Read `ADR-0004`'s
+  Status section before citing it: it was ratified by the Orchestrator under a named, quoted
+  delegation from Olger Oeselg, not by a human directly, and it is explicitly not precedent.*
+- **Making `gameStatus`'s `positionCounts` required.** It stays optional, and the reason to carry
+  forward is **not** the one `ADR-0002`'s Consequences section records (*"a breaking change to
+  merged, `Done`, 100%-covered code"* — QE measured that break at **9 test call sites and 0
+  production call sites**, which is not a reason). The decision is right for a stronger reason:
+  `ADR-0002` **clause 3** has `EPIC-004`'s search keep its own per-ply key array and decide
+  repetition itself, so a search leaf calling `gameStatus(position)` **bare is a legitimate second
+  caller shape**, and a required parameter would force the hot path to construct something it
+  deliberately does not want. Recorded on this ticket because this ticket is where a reader who
+  refuted the weak reason would act on it. `gameStatusOf` remains the single supplier of clause 4.
 - **Anything the search needs per node.** `ADR-0002` clause 3 says the search keeps its own
   preallocated per-ply array and does not share this structure.
 - **Memoization** — decided against; see Scope. The trigger and the required shape (a monotonic

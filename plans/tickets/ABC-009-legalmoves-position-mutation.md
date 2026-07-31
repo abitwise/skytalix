@@ -1,15 +1,43 @@
 ---
 id: ABC-009
 title: legalMoves mutates the position it documents as unchanged
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
-priority: P2
+priority: P1
 epic: EPIC-001
 feature: —
 ---
 
 # ABC-009 — legalMoves mutates the position it documents as unchanged
+
+> **ESCALATED `P2` → `P1` and promoted `Backlog` → `Ready` on 2026-07-31 by BA/PM.**
+> **This is a priority-directive escalation, NOT the escalation trigger written at the foot of this
+> file.** That trigger has *not* fired: `ABC-010` has not been deferred or descoped, and no epic
+> accepts a position from outside the rules core yet. Saying so plainly matters — a trigger that gets
+> treated as fired when it has not is a trigger nobody trusts again.
+>
+> What escalates it is the project owner **Olger Oeselg**, 2026-07-31: *"The most important thing is
+> that chess moves are legal according to game rules, everything else comes after that."* This defect
+> is squarely in that class and not by analogy: with rights `KQ` set and no rook on h1,
+> `legalMoves` **offers a `FLAG_CASTLE` move `4->6` that is not a legal chess move**, and taking it
+> back writes a king onto a square that never held one. The query that *defines* which moves are
+> legal returns an illegal move and corrupts the board while doing it.
+>
+> QE added one fact that sharpens the reachability half (`20260731T151500Z-qe-e2e-observation-36373ca4`,
+> gap G-6): **`gameStatus` calls `legalMoves` on its first line**, so it inherits this defect in full —
+> verified, one `gameStatus` call is enough to produce the phantom king — and `gameStatus` is the
+> entry point `ABC-019`'s loop calls **every ply**. That makes it the highest-frequency route to this
+> defect in the built product.
+>
+> **Not `P0`, and the line is worth stating.** `P0` on this board now means the owner's directive
+> applies *and* the fault is reachable. This one still needs a semantically-invalid position, and no
+> path in the product can produce one today. `ABC-020` — where a legal position reached by legal play
+> produces a wrong result — is the `P0`. This lands under it, not beside it.
+>
+> **Nothing else about this ticket changed.** Size stays `S`. The reproduction, the scope, the
+> acceptance criteria and the `NFR-001` bar are untouched. `ABC-010` still removes this defect's only
+> reachable trigger, and the two are still independent in either order.
 
 ## Problem
 
@@ -172,10 +200,23 @@ below `ABC-005` (legality filtering, `M`).
 `ABC-010` is deferred or descoped, or if any epic begins accepting a position from outside the
 rules core before ABC-010 lands.
 
+*Trigger status, 2026-07-31: **NOT fired.** `ABC-010` is neither deferred nor descoped, and the only
+position any epic accepts today is `ABC-012`'s `newGame(initialFen)`, supplied by `EPIC-006`'s
+startup from inside the product rather than typed by a user. The `P2` → `P1` escalation recorded at
+the head of this file came from the owner's legality-first directive instead. The trigger stays live
+and unspent: if `EPIC-003` begins accepting a user FEN before `ABC-010` lands, that is a separate
+escalation and it argues for `P0`.*
+
 ## Definition of Ready
 
 Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (exact FENs, exact
 counts, byte-identical FEN comparison) · dependencies ✅ (none blocking) · NFR triggers ✅
-(NFR-001, numeric bar) · test notes ✅ · size `S` ✅ · priority `P2` ✅ · no blocker ✅
+(NFR-001, numeric bar) · test notes ✅ · size `S` ✅ · priority `P1` ✅ · no blocker ✅
 
-Sits in `Backlog`. Promotion to `Ready` is a separate BA/PM step and has not been taken.
+~~Sits in `Backlog`. Promotion to `Ready` is a separate BA/PM step and has not been taken.~~
+
+**Promoted to `Ready` 2026-07-31 by BA/PM** — the separate step named above, taken now. It qualifies
+on this board's own `Ready` test and not on its priority: it has **no unbuilt dependency at all**
+(the defective code is merged on `main`), which is the one criterion that keeps `ABC-015`..`ABC-019`
+in `Backlog`. At `S` (2 points) it is the cheapest correctness win available, and it sits in `Ready`
+beside `ABC-011`, the other rules-core defect at `P1`.

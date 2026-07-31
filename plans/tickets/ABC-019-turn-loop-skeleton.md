@@ -54,6 +54,13 @@ while not terminal:
 - **The loop's terminal reason is a superset of `EndReason`.** `src/gameend.ts:28-34` has exactly
   five values plus `null`; `EPIC-006` promises **six** conditions — those five plus `resignation`.
   The loop must not type its terminal state as `EndReason` verbatim.
+  **[AMENDED 2026-07-31]** `ABC-020` widens the core's set: threefold and fifty-move leave it as
+  *terminal* values and re-enter as *claimable* state, and fivefold (FIDE 9.6.1) and 75-move (9.6.2)
+  join it as new automatic values. The superset rule is unchanged and the reason for it is
+  strengthened — the loop's terminal type must admit the automatic reasons, the two **claimed**
+  reasons `ABC-021` introduces, and `resignation`, all without `src/gameend.ts` being edited by this
+  ticket. The exact value names are `ABC-020`'s to settle at its design hop; what binds here is that
+  this type is a superset and never an alias.
 - **Two stub seams**, built here and replaced later:
   - **Input stub** — a coordinate-only reader built from merged code alone: match
     `squareName(move.from) + squareName(move.to)` (`src/position.ts:60`, already exported) across
@@ -82,10 +89,45 @@ while not terminal:
   broken.
 - **Frame content and writing** — `ABC-014`, `ABC-016`, `ABC-017`, `ABC-018`.
 - **An animating thinking indicator.** The loop owns the flag; the indicator is static.
-- **A "claim draw" interaction.** All five terminal conditions are automatic in this product:
+- ~~**A "claim draw" interaction.** All five terminal conditions are automatic in this product:
   `gameStatus` returns the draw without being asked, and `EPIC-006`'s result screen lists repetition
   and fifty-move among the reasons it must name. FIDE treats threefold and fifty-move as claimable;
-  this product does not. Settled by merged code plus `EPIC-006`'s acceptance, not open.
+  this product does not. Settled by merged code plus `EPIC-006`'s acceptance, not open.~~
+  **REVERSED 2026-07-31. See the amendment below.**
+- **The claim interaction itself — `ABC-021`.** It is out of scope *as a ticket boundary*, not as a
+  product decision: this loop provides the fifth prompt outcome's transition and `ABC-021` specifies
+  it. Folding it back in makes this ticket `XL` (8) and an automatic `SPLIT_REQUIRED`.
+
+### AMENDMENT 2026-07-31 by BA/PM — the claim-draw ruling is REVERSED
+
+The struck block above said *"Settled … not open"*. **It is now open and it has been answered the
+other way.** The reversal is recorded here rather than left as a silent edit, because a reader who
+finds that sentence quoted elsewhere is entitled to know what overturned it.
+
+**What overturned it.** The project owner **Olger Oeselg**, 2026-07-31: *"The most important thing is
+that chess moves are legal according to game rules, everything else comes after that. Game has to be
+played according to it's rules."* The struck ruling and `ABC-007`'s matching one both predate that
+directive. Neither was wrong when made; both were made under a priority that no longer applies.
+
+**What it is replaced by.** `ABC-020` (rules core — threefold and fifty-move become claimable under
+FIDE 9.2/9.3, fivefold and 75-move become automatic under FIDE 9.6) and `ABC-021` (this loop's claim
+path). QE's reproduction is in `20260731T151500Z-qe-e2e-observation-36373ca4`, gap G-1: a position
+where this code declares ½-½ and FIDE says the player to move mates instead, with the deviation
+running systematically against the human because the engine is the side that repeats when losing.
+
+**What this changes in THIS ticket, precisely — three things and no more:**
+
+1. The `## Out of scope` sentence above, struck.
+2. The **acceptance criterion on the five `EndReason` values**, amended in place below.
+3. The **terminal-reason superset** bullet in `## Scope`, amended in place below.
+
+**Size, priority, the eight states, the fifteen transitions, both stub seams, the intra-ply ordering,
+the EOF ruling and every NFR bar are UNCHANGED.** The claim outcome is `ABC-021`'s two points, not
+this ticket's, and this ticket stays `L` (5).
+
+**Merge order is load-bearing: `ABC-020` merges before this ticket.** Built against today's automatic
+semantics, this loop's own tests would encode the deviation and it would stop being a bug and become
+an assumption — the same failure `ABC-011`'s escalation trigger exists to prevent.
 
 ## Acceptance (Given/When/Then)
 
@@ -123,10 +165,18 @@ while not terminal:
   *(Failing loudly beats playing a corrupt board.)*
 - **Given** the loop is in the thinking state, **when** a frame renders, **then** the thinking flag
   is set; **given** any other state, **then** it is clear and the frame's row count is **identical**.
-- **Given** a position reaching **each** of the five `EndReason` values, **when** the loop
-  evaluates, **then** it stops with that reason. *(All five, including `fifty-move` and
-  `insufficient-material`. Note that because mate is tested first, a mate delivered on the 100th
-  halfmove is correctly **mate**, not a draw.)*
+- **Given** a position reaching **each** of the rules core's **automatic** terminal values, **when**
+  the loop evaluates, **then** it stops with that reason. *(**[AMENDED 2026-07-31 — `ABC-020`.]** As
+  originally written this read "each of the five `EndReason` values … including `fifty-move`", which
+  after `ABC-020` asserts a draw FIDE does not impose. The automatic set is checkmate, stalemate,
+  insufficient material, **fivefold repetition** and **75 moves**. Because mate is tested first, a
+  mate delivered on the 150th halfmove is correctly **mate**, not a draw — the same precedence the
+  original parenthetical made at 100, and FIDE 9.6.2 states it in words.)*
+- **Given** a line that reaches a **third** repetition or a halfmove clock of **100**, **when** the
+  loop evaluates, **then** it does **not** stop — the game is in progress with a draw claimable by
+  the side to move, and the loop continues. *(**[ADDED 2026-07-31 — `ABC-020`.]** This is the
+  negative half of the criterion above, and it is the one that fails if `ABC-020` is merged after
+  this ticket instead of before it. Taking the claim is `ABC-021`.)*
 - **Given** the loop's terminal-reason type, **when** it is inspected, **then** it admits
   `resignation` in addition to the five core values, **without** `src/gameend.ts` being changed.
 - **Given** the cost bar in *Security / NFR triggers*, **when** measured, **then** it holds.
@@ -149,6 +199,11 @@ CI.
 - **`ABC-014`** and **`ABC-018`** — it needs something to render and something to write with. It can
   be built against `ABC-016`/`ABC-017` stubs.
 - `ABC-005`, `ABC-003`, `ABC-007` — merged on `main`.
+- **`ABC-020` — added 2026-07-31, and it is a MERGE-ORDER dependency, not a build-order one.** This
+  loop can be built against today's `gameStatus`; what it must not do is **merge first**, because its
+  acceptance criteria describe the terminal set and two of them were amended today to match
+  `ABC-020`. `ABC-020` is `P0` and already in `Ready` with no unbuilt dependency, so the order is
+  available. `ABC-021` (the claim path) then sits behind both.
 - **`EPIC-006`** supplies the human's colour and the glyph flags. The loop takes them as parameters;
   it is not blocked on `EPIC-006`, because a test supplies them directly.
 - **Carried, not owned — `ABC-009`.** The loop calls `legalMoves` once per frame through

@@ -23,6 +23,23 @@ result screen at the end.
   `resign`, `new`, `quit` with confirmation.
 - Game-end screen: result, reason (checkmate / stalemate / repetition / fifty-move /
   insufficient material / resignation), and the full move list.
+
+  **[AMENDED 2026-07-31 by BA/PM — the reason set is wider than six, and the exact count is settled
+  at this epic's decomposition.]** `ABC-020` splits two of the six above and adds two more, because
+  FIDE distinguishes a draw the player *claims* from one that arrives automatically:
+  *repetition* becomes **threefold, claimed** (9.2) and **fivefold, automatic** (9.6.1);
+  *fifty-move* becomes **fifty-move, claimed** (9.3) and **75-move, automatic** (9.6.2).
+  With checkmate, stalemate, insufficient material and resignation that is **eight** distinct
+  reasons, not six. The result screen must name which one, and a screen that says "draw by
+  repetition" without saying whether anyone claimed it is under-reporting what happened in the game.
+
+  The acceptance criterion below is left reading "any of the six terminal conditions" **deliberately
+  unamended**: what it actually tests — that the reason is named explicitly and the process exits 0 —
+  is unchanged and still testable, and replacing "six" with a number this epic has not yet decomposed
+  would be trading a stale count for a guessed one. QE recorded the count as unsettled for a second
+  reason as well (`20260731T153200Z-qe-e2e-claim-aab64fc7` §4): a draw-offer command would add a
+  ninth, and this product has none today. **Settle the count at decomposition, against `ABC-020`'s
+  shipped reason set.**
 - Packaging: runs via `npx` with no install step and no global dependency.
 
 ## Out of scope

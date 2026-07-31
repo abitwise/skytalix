@@ -26,8 +26,22 @@ forced to type more than they need to.
   re-prompt rather than guessing.
 - Rejection messages that teach: name *why* the move is illegal (own king would be in
   check / no piece on that square / that piece cannot move there), never a bare "invalid".
-- In-game commands: `moves` (list legal moves), `help`, `board` (redraw), `quit`.
+- In-game commands: `moves` (list legal moves), `help`, `board` (redraw), `quit`, **`claim`**.
 - Tab-completion of legal moves at the prompt.
+
+**[AMENDED 2026-07-31 by BA/PM — `claim` added to the command set.]** `ABC-020` makes threefold
+repetition (FIDE 9.2) and the fifty-move rule (FIDE 9.3) **claimable by the player having the move**
+rather than applied automatically, which is what the Laws require and what the project owner's
+standing legality-first priority of 2026-07-31 demands. A right the player cannot type is not a
+right, so the verb belongs in this epic's command set — it is an in-game command at the prompt, the
+category this epic already owns.
+
+What this epic owns for it: the **grammar** (the token, its tolerance and case-insensitivity, whether
+it takes an argument naming which claim, tab-completion), and the **rejection message that teaches**
+when no claim is available — this epic's headline standard, applied to a command rather than to a
+move. What it does **not** own: whether a claim is available (`ABC-020`), what happens to the loop
+when one is made (`ABC-021`), the status-panel indicator that announces one (`ABC-016`), or the
+result screen (`EPIC-006`). Cut this at decomposition; it is not a separate epic and it is small.
 
 ## Out of scope
 

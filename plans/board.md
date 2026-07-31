@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-31 by Architect/Design (ADR-0004 ratified — clauses 1 + 3 as proposed, clause 2 as amended; ABC-013 moved Blocked → Ready, Ready 3/8 → 4/8, no limit approached, no override taken. Blocked is now empty after one day, no escalation. The ratification was made by the Orchestrator under a named, quoted delegation from Olger Oeselg — the first ADR here not ratified by a human directly, and explicitly not precedent). Previously 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
+_Updated: 2026-07-31 by BA/PM (subtask `ba-pm-legality-resequence`, task `epic-to-tickets-EPIC-002`). The project owner's standing priority of 2026-07-31 — "chess moves must be legal according to game rules, everything else comes after that" — re-sequenced this board. TWO TICKETS CUT: ABC-020 (FIDE 9.2/9.3 draws become claimable and FIDE 9.6 backstops land with them, M, P0, straight to Ready) and ABC-021 (the draw-claim interaction, S, P1, Backlog behind ABC-019). ONE PRIORITY CHANGED: ABC-009 P2 → P1, promoted Backlog → Ready. Everything else was re-read and DELIBERATELY LEFT — see the re-sequencing comment under Ready. Ready 4/8 → 6/8; no limit approached, no override taken. EPIC-002 is now 9 tickets / 25 points (was 8 / 23 — ABC-021 adds 2); ABC-020 sits under EPIC-001 with ABC-009 and ABC-011, so EPIC-001 now has three open tickets against merged, Done code. Previously 2026-07-31 by Architect/Design (ADR-0004 ratified — clauses 1 + 3 as proposed, clause 2 as amended; ABC-013 moved Blocked → Ready, Ready 3/8 → 4/8, no limit approached, no override taken. Blocked is now empty after one day, no escalation. The ratification was made by the Orchestrator under a named, quoted delegation from Olger Oeselg — the first ADR here not ratified by a human directly, and explicitly not precedent). Previously 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -75,20 +75,26 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Backlog (WIP unlimited)
 
-- [EPIC-002] Terminal board and game loop  (owner: BA/PM, size: XL, priority: P0, since: 2026-07-22, decomposed: ABC-012..ABC-019)
+- [EPIC-002] Terminal board and game loop  (owner: BA/PM, size: XL, priority: P0, since: 2026-07-22, decomposed: ABC-012..ABC-019 + ABC-021)
 - [EPIC-003] Move input and controls  (owner: BA/PM, size: M, priority: P0, since: 2026-07-22)
 - [EPIC-004] Engine and AI opponent  (owner: BA/PM, size: L, priority: P0, since: 2026-07-22)
 - [EPIC-005] Opening book  (owner: BA/PM, size: S, priority: P1, since: 2026-07-22)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, size: M, priority: P2, since: 2026-07-22)
 - [ABC-010] FEN semantic validation  (owner: BA/PM, size: M, priority: P1, epic: EPIC-003, since: 2026-07-29)
-- [ABC-009] legalMoves mutates the position it documents as unchanged  (owner: BA/PM, size: S, priority: P2, epic: EPIC-001, since: 2026-07-29)
 - [ABC-015] Glyph mode selection — precedence, signal set, --unicode override  (size: S, P1, epic: EPIC-002, blocked-until: ABC-014)
-- [ABC-016] Status panel  (size: M, P1, epic: EPIC-002, blocked-until: ABC-013, ABC-014)
+- [ABC-016] Status panel  (size: M, P1, epic: EPIC-002, blocked-until: ABC-013, ABC-014, ABC-020)
 - [ABC-017] Bounded move-history pane — two-column SAN  (size: S, P2, epic: EPIC-002, blocked-until: ABC-013, ABC-014)
 - [ABC-018] Frame output and redraw  (size: S, P0, epic: EPIC-002, blocked-until: ABC-014)
-- [ABC-019] Turn loop skeleton  (size: L, P0, epic: EPIC-002, blocked-until: ABC-012, ABC-014, ABC-018)
+- [ABC-019] Turn loop skeleton  (size: L, P0, epic: EPIC-002, blocked-until: ABC-012, ABC-014, ABC-018; merge-order: after ABC-020)
+- [ABC-021] Draw-claim interaction — the player having the move claims  (size: S, P1, epic: EPIC-002, blocked-until: ABC-020, ABC-019, since: 2026-07-31)
 
 <!--
+  AMENDED 2026-07-31: a NINTH EPIC-002 ticket, ABC-021 (draw-claim interaction, S, 2 points), was cut
+  under the owner's legality-first directive, taking this epic to 9 tickets / 25 points. The largest
+  is still L, so there is still no SPLIT_REQUIRED and the epic's XL size is unchanged. ABC-020 was
+  cut in the same step but belongs to EPIC-001, not here — it changes src/gameend.ts, which is the
+  rules core. See the re-sequencing comment under Ready.
+
   EPIC-002 DECOMPOSED 2026-07-30 by BA/PM (task `epic-to-tickets-EPIC-002`, Workflow 03) into
   ABC-012..ABC-019 — 8 tickets, 23 points. Epic size corrected M -> XL in-file with the reason,
   exactly as EPIC-001 recorded its own L -> XL correction; the no-XL rule binds TICKETS, and the
@@ -138,14 +144,92 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   oversight.
 -->
 
-## Ready (WIP 4/8)
+## Ready (WIP 6/8)
 
+- [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (size: M, P0, epic: EPIC-001, deps: none — merged src/ only; cut + promoted 2026-07-31)
+- [ABC-009] legalMoves mutates the position it documents as unchanged  (size: S, P1, epic: EPIC-001, deps: none; escalated P2→P1 and promoted 2026-07-31)
 - [ABC-011] Zobrist key hashes en passant when no capture is available  (size: S, P1, epic: EPIC-001, deps: none)
 - [ABC-012] Game history module — the move list is the authoritative state  (size: M, P0, epic: EPIC-002, deps: none)
 - [ABC-013] SAN rendering — src/san.ts with toSan only  (size: M, P1, epic: EPIC-002, deps: ABC-003 + ABC-005, both merged on main; unblocked 2026-07-31 when ADR-0004 was ratified)
 - [ABC-014] Board frame renderer — grid, labels, shading, orientation, both glyph modes  (size: M, P0, epic: EPIC-002, deps: none)
 
 <!--
+  RE-SEQUENCED 2026-07-31 by BA/PM (subtask `ba-pm-legality-resequence`) against the project owner's
+  standing priority, quoted verbatim from Olger Oeselg on 2026-07-31:
+
+    "The most important thing is that chess moves are legal according to game rules, everything else
+     comes after that. Game has to be played according to it's rules."
+
+  This is a priority directive, not a feature request, and it outranks the sequencing set on
+  2026-07-30. The input is QE's four notes of 2026-07-31 under task `epic-to-tickets-EPIC-002`
+  (ranked gaps G-1..G-6, six refutations, the test artifact-ref, and five unsettled items).
+
+  WHAT MOVED — three things, and only three.
+
+  1. ABC-020 CUT and promoted straight to Ready (M, P0, EPIC-001). QE's G-1: the code applies FIDE
+     9.2 (threefold) and 9.3 (fifty-move) automatically where the Laws make both a claim by the
+     player HAVING THE MOVE. Reproduced with a FEN — 6k1/5ppp/8/b7/8/8/5PPP/4R1K1 — where this code
+     declares 1/2-1/2 and FIDE says White mates with Re8. The deviation runs systematically against
+     the human, because the engine is the side that repeats when it is losing. It REVERSES rulings
+     made twice (ABC-007 and ABC-019 `## Out of scope`, the latter reading "Settled ... not open");
+     both predate the directive and both `## Out of scope` blocks were amended in place the same day,
+     so no two documents disagree. THE FIDE 9.6 BACKSTOPS (fivefold, 75-move) ARE IN THE SAME TICKET
+     AND MUST NOT BE SPLIT OUT: the automatic fifty-move rule is currently the only thing that ends
+     a locked position — QE drove one for 117 plies to prove it — so claims without 9.6 ship a game
+     that never terminates. Acceptance A5 is the criterion that fails if anyone separates them.
+  2. ABC-021 CUT (S, P1, EPIC-002, Backlog behind ABC-020 + ABC-019). The claim interaction: the
+     human claims by command, the engine does NOT claim (it has no evaluation until EPIC-004, and
+     "always claim" is strictly worse chess), no offer prompt (it would break epic acceptance 4a's
+     constant row count), and the status panel states availability attributed to the side to move.
+  3. ABC-009 ESCALATED P2 -> P1 and promoted Backlog -> Ready. `legalMoves` offers a FLAG_CASTLE move
+     that is not a legal chess move and corrupts the board taking it back — the query that DEFINES
+     legality returning an illegal move is exactly the class the directive names. Note carefully:
+     the ticket's OWN escalation trigger has NOT fired and is recorded as unspent. This is a
+     directive escalation. Not P0 — it still needs a semantically-invalid position, and no path in
+     the product produces one today.
+
+  WHAT WAS RE-READ AND DELIBERATELY NOT MOVED. A re-prioritisation that moves everything is a reflex,
+  not a judgment, so each of these carries its reason:
+
+  - ABC-010 (M, P1) stays P1. Already ranked as a legality defect on 2026-07-29 and its reachability
+    is unchanged by the directive — it goes live when EPIC-003 accepts a user FEN, which is still
+    unbuilt. Raising it to P0 would put an EPIC-003 ticket ahead of the tickets that make the game
+    exist at all.
+  - ABC-011 (S, P1) stays P1. ABC-020 gives it a second and now AUTOMATIC consumer (fivefold, FIDE
+    9.6.1). That does not raise it, because a repetition loop can contain no capture and no pawn
+    move, so the clock climbs and the CLOCK-BASED 75-move backstop terminates every game regardless
+    of what the key does. Under-detection costs a late draw, never a hung game.
+  - ABC-012 (M, P0), ABC-014 (M, P0), ABC-018 (S, P0), ABC-019 (L, P0) all stay P0. The directive
+    re-ranks CORRECTNESS AGAINST FEATURES, not feature against feature. These four are not renderer
+    polish — they are whether the product exists. Demoting them would model the directive as "stop
+    building the game", which it does not say. What the directive DOES set is the pull order INSIDE
+    P0: ABC-020 first.
+  - ABC-013 (M, P1) stays P1. Renderer work, already below every P0.
+  - ABC-015 (S, P1) stays P1. Its priority is a SEQUENCING constraint — RISK-005 requires it to merge
+    with or before ABC-014 — not a claim about user value. Lowering it would rank it behind the
+    ticket it must precede.
+  - ABC-016 (M, P1) stays P1. The directive argues both ways and they cancel: its new item 7 is a
+    rules affordance (without it no player learns a claim exists), items 1-6 are renderer work.
+  - ABC-017 (S, P2) stays P2. Already the drop-first tier; P3 is "someday" and this is in the epic's
+    scope line.
+  - Every EPIC priority is unchanged (EPIC-002/003/004 P0, EPIC-005 P1, EPIC-006 P2). The directive
+    lands on tickets, and the two epics that own rule conformance are already P0.
+
+  WIP AND THE LIMIT. Ready 4/8 -> 6/8 against a configured limit of 8 (`.grugops/factory.config.json`
+  `wip_limits.Ready`). NO LIMIT APPROACHED AND NO OVERRIDE TAKEN; no written reason is owed. Both
+  promotions qualify on this board's own Ready test rather than on their priority — ABC-020 and
+  ABC-009 each have NO unbuilt dependency, standing on merged src/ alone, which is the exact
+  criterion that keeps ABC-015..ABC-019 and ABC-021 in Backlog. Six is still under the ceiling and
+  Ready remains a buffer feeding In Development (WIP 3), not a target.
+
+  SUGGESTED PULL ORDER (guidance; the pull is the Orchestrator's). ABC-020 first — P0 correctness,
+  and it is a merge-order dependency for ABC-019 and ABC-016, whose acceptance criteria were amended
+  today to match it. Then ABC-012 and ABC-014, the P0 tickets the product's existence rests on. Then
+  ABC-009 and ABC-011, the P1 rules-core defects. Then ABC-013, the P1 renderer ticket. Within a
+  single priority the directive ranks rules-core work ahead of renderer work; that ordering is stated
+  here rather than encoded by inflating the P0-P3 scheme.
+
+  As written 2026-07-31 by Architect/Design, before this re-sequencing:
   ABC-013 joined Ready 2026-07-31, moved out of Blocked by Architect/Design when ADR-0004 was
   ratified. Ready 3/8 -> 4/8, well under the limit; no override needed and none taken. Ready is the
   right column and not a conservative Backlog hold: ABC-013's only remaining dependencies are

@@ -93,8 +93,16 @@ arithmetic above forces the bound anyway.
 
 ## Dependencies
 
-- **`ABC-013`** (`toSan`) — and through it the wait on `ADR-0004`'s ratification.
+- **`ABC-013`** (`toSan`). *(**CORRECTED 2026-07-31**: this line read "and through it the wait on
+  `ADR-0004`'s ratification". **That wait is over** — `ADR-0004` is `accepted` as of 2026-07-31 and
+  `ABC-013` moved to `Ready` the same day. `ABC-013` is a plain ticket dependency now. Read
+  `ADR-0004`'s Status section before citing the ratification: it was made by the Orchestrator under a
+  named, quoted delegation from Olger Oeselg, not by a human directly, and it is explicitly not
+  precedent.)*
 - **`ABC-012`** (the history) and **`ABC-014`** (frame conventions, glyph mode).
+- **No dependency on `ABC-020` or `ABC-021`.** The pane lists moves; it says nothing about terminal
+  state or claims. Recorded because every other `EPIC-002` ticket gained one on 2026-07-31 and the
+  absence here is deliberate rather than an oversight.
 
 ## Security / NFR triggers
 
@@ -139,11 +147,17 @@ status panel names the last move. It is the "feel" item, and `EPIC-006`'s end sc
 full list regardless. Not `P3` — `P3` is "someday", and this is in the epic's scope line and in its
 Done. It is the right thing to drop first if this epic runs long.
 
+*Re-read 2026-07-31 against the owner's legality-first directive and **deliberately left at `P2`**.
+The directive re-ranks rules-correctness above renderer work; this ticket is the most purely
+renderer-side item on the board and it is already in the drop-first tier. There is nothing below `P2`
+that is not "someday", and moving it to `P3` would say this is optional, which the epic's own scope
+line contradicts. No change is the judgment, not the absence of one.*
+
 ## Definition of Ready
 
 Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (exact row counts at
 four game lengths, exact move numbers, a ratio bound and an absolute bound) · dependencies ✅
-(`ABC-012`, `ABC-013`, `ABC-014`; the `ADR-0004` wait inherited through `ABC-013` and named) ·
+(`ABC-012`, `ABC-013`, `ABC-014`; the `ADR-0004` wait is **over** — ratified 2026-07-31) ·
 NFR triggers ✅ (numeric bar plus a machine-independent ratio, derivation shown) · test notes ✅ ·
 size `S` ✅ · priority `P2` ✅ · no blocker ✅
 

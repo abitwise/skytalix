@@ -45,6 +45,18 @@ Six items:
 6. **Engine thinking indicator** — **static**, from a flag the loop owns. Shown while the loop is in
    the thinking state, and **its row exists in every frame, blank when idle**, so the frame's height
    does not change when the engine starts or stops.
+7. **Draw-claim availability** — **[ADDED 2026-07-31 by BA/PM, `ABC-020` / `ABC-021`.]** What the
+   **side to move** may claim under FIDE 9.2 (threefold repetition) and 9.3 (the fifty-move rule),
+   naming which one, or both when both hold. Read from `gameStatusOf(history)` — the same call the
+   panel's other items already sit beside — never recomputed. **Blank when nothing is claimable**,
+   and, like the thinking indicator, **its cell exists in every frame** so the panel's height never
+   changes.
+
+   *It is attributed to the side to move, not to "you".* The panel renders on the engine's plies too,
+   and under FIDE the claim genuinely belongs to whoever has the move. One rule, no special case, and
+   it matches `gameStatus`'s own semantics. **This cell is the only way a player learns a claim is
+   available** — `ABC-021` deliberately ships no offer prompt, because a modal offer would break epic
+   acceptance `4a`'s constant row count.
 
 ## Out of scope
 
@@ -59,7 +71,11 @@ Six items:
 - **The board itself** (`ABC-014`), **the move-history pane** (`ABC-017`), **the message region and
   all writing** (`ABC-018`), **the loop that owns the thinking flag** (`ABC-019`).
 - **Terminal-state text** ("checkmate — white wins"). The loop's terminal reason and `EPIC-006`'s
-  result screen own that; this panel reports check, not game over.
+  result screen own that; this panel reports check, not game over. **A claimable draw is not a
+  terminal state** — under FIDE 9.2/9.3 the game is in progress until somebody claims — so item 7
+  belongs here and the claimed *result* still does not.
+- **Taking the claim.** The player types `claim` at the prompt (`ABC-021` owns the loop path,
+  `EPIC-003` owns the verb). This panel states that a claim exists; it is not an interaction.
 
 ## Acceptance (Given/When/Then)
 
@@ -90,6 +106,14 @@ Six items:
 - **Given** the loop's thinking flag true, **when** the panel renders, **then** the indicator is
   present; **given** it false, **then** the indicator row is present and **blank**, and the panel's
   **row count is identical** in both cases. *(This is the panel's half of epic acceptance `4a`.)*
+- **[ADDED 2026-07-31.] Given** `ABC-020`'s A1 line driven to the third occurrence of
+  `6k1/5ppp/8/b7/8/8/5PPP/4R1K1` (White to move), **when** the panel renders, **then** the claim cell
+  names a claimable threefold repetition **attributed to White**. **Given** a halfmove clock of 100,
+  **then** it names the fifty-move claim. **Given** both hold, **then** it names both. **Given**
+  nothing is claimable, **then** the cell is **blank and present**, and the panel's **row count is
+  identical** in all four cases. *(Assert the attribution and the row count, not merely the text. The
+  row count is epic acceptance `4a`; the attribution is the FIDE 9.2.1 rule `ABC-020` exists to
+  restore.)*
 - **Given** any of the above rendered twice, **when** compared, **then** the panels are
   byte-identical and `toFen(position)` is unchanged by rendering.
 - **Given** glyph mode ASCII, **when** the panel renders, **then** the count of code points above
@@ -100,10 +124,16 @@ Six items:
 ## Dependencies
 
 - **`ABC-014`** — the frame this panel is part of, and the `GlyphMode` type.
-- **`ABC-013`** — `toSan`, for the last-move cell. `ABC-013` is `Blocked` on `ADR-0004`'s
-  ratification, so **this ticket inherits that wait**. It is in `Backlog` behind two tickets rather
-  than in `Blocked`: its blocker is a ticket, not a decision.
+- **`ABC-013`** — `toSan`, for the last-move cell. *(**CORRECTED 2026-07-31**: this line read
+  "`ABC-013` is `Blocked` on `ADR-0004`'s ratification, so this ticket inherits that wait." **That
+  wait is over.** `ADR-0004` is `accepted` as of 2026-07-31 and `ABC-013` moved to `Ready` the same
+  day, so nothing is inherited. `ABC-013` is a plain ticket dependency now. Read `ADR-0004`'s Status
+  section before citing the ratification: it was made by the Orchestrator under a named, quoted
+  delegation from Olger Oeselg, not by a human directly, and it is explicitly not precedent.)*
 - **`ABC-012`** — the history supplies the last `Move` and the position before it.
+- **`ABC-020`** — **added 2026-07-31.** Item 7 has nothing to render until the rules core reports a
+  claimable set. Merge-order, like `ABC-019`'s: this panel must not be built against today's
+  semantics, in which a threefold repetition is a completed draw and there is no claim to show.
 - `ABC-005` (`isInCheck`) merged on `main`.
 
 ## Security / NFR triggers
@@ -134,20 +164,26 @@ Six items:
 
 ## Size and priority rationale
 
-**Size `M` (3).** Six small items, but four of them have a correctness trap that has already been
-identified (move number from FEN, material after promotion, `isInCheck` semantics, the invariant row
-count) and each needs a named test. The code is short; the panel is where several quiet wrong answers
-would live. Calibrated against `ABC-007` (`M`) and above `ABC-006` (`S`).
+**Size `M` (3), unchanged by the 2026-07-31 amendment.** Six small items — now seven — but four of
+them have a correctness trap that has already been identified (move number from FEN, material after
+promotion, `isInCheck` semantics, the invariant row count) and each needs a named test. The code is
+short; the panel is where several quiet wrong answers would live. Calibrated against `ABC-007` (`M`)
+and above `ABC-006` (`S`). Item 7 is a read off a value `ABC-020` computes plus one cell and one
+row-count assertion; it does not move a 3 to a 5.
 
-**Priority `P1`.** It carries epic acceptance #3, so the epic is not done without it, but the game
-runs and is playable with a board and a loop alone. Below the four `P0` tickets and above `ABC-017`.
+**Priority `P1`, and deliberately unmoved on 2026-07-31.** The owner's legality-first directive
+argues both ways on this ticket and the two cancel: item 7 is a **rules affordance** — without it no
+player ever learns a FIDE 9.2/9.3 claim is available — while items 1-6 are renderer work, which the
+directive ranks below rules work. It carries epic acceptance #3, so the epic is not done without it,
+and the game is playable with a board and a loop alone. `P1` remains the honest rank; what changed is
+that it now has a `P0` merge-order dependency (`ABC-020`) it did not have before.
 
 ## Definition of Ready
 
 Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (exact FENs, exact
-strings, exact integers, identical row counts) · dependencies ✅ (`ABC-012`, `ABC-013`, `ABC-014`;
-the `ADR-0004` wait is inherited through `ABC-013` and named) · NFR triggers ✅ (numeric bar with a
-stated derivation) · test notes ✅ · size `M` ✅ · priority `P1` ✅ · no blocker ✅ *(its
-dependencies are tickets, not unresolved decisions)*
+strings, exact integers, identical row counts, claim attribution) · dependencies ✅ (`ABC-012`,
+`ABC-013`, `ABC-014`, `ABC-020`; the `ADR-0004` wait is **over** — ratified 2026-07-31) · NFR
+triggers ✅ (numeric bar with a stated derivation) · test notes ✅ · size `M` ✅ · priority `P1` ✅ ·
+no blocker ✅ *(its dependencies are tickets, not unresolved decisions)*
 
 Sits in `Backlog`. Promotion to `Ready` is a separate BA/PM step.

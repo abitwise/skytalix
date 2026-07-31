@@ -301,6 +301,24 @@ it".
   *availability*) in the module whose output *defines* position identity for the whole product, and
   it fails silently.
 
+### 2026-07-31 — re-read against the owner's legality-first directive: `P1` STANDS, and here is the new coupling
+
+`ABC-020` (FIDE 9.2/9.3 claimable, 9.6 automatic) gives this key a **second consumer, and an
+automatic one**: fivefold repetition (FIDE 9.6.1) ends the game with no claim, counted off the same
+key list. Until today every consumer of this key drove a *claimable* or *display* verdict; now one
+drives a game end.
+
+**That does not raise this to `P0`, and the reason is measurable rather than a judgment.** A pure
+repetition loop can contain neither a capture nor a pawn move — that is what makes it a repetition —
+so the halfmove clock climbs monotonically through it, and `ABC-020`'s **75-move backstop (9.6.2) is
+clock-based and inherits nothing from this defect.** Every game therefore still terminates within 150
+plies no matter how badly the key under-detects. The cost of `ABC-011` remains what it always was: a
+legitimate draw arrives late or not at all, never a false draw and never a hung game.
+
+**`P1` and `Ready` are unchanged, size stays `S`, and the acceptance criteria are untouched.** What
+is recorded here is the new blast radius, so that a later reader does not have to re-derive whether
+9.6.1 changed the severity. It did not.
+
 **Escalation trigger (do not leave this to judgment later):** ABC-011 rises to **`P1`** the moment
 any consumer of the key list is planned or built — specifically when **(a)** the history module of
 `ADR-0002` clause 2 is decomposed or implemented under `EPIC-002`, **(b)** a supplier is wired for
