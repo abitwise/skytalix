@@ -1,8 +1,8 @@
 ---
 id: ABC-003
 title: Apply and undo a move with full state restoration
-status: in-development
-column: In Development
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-001
