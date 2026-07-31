@@ -303,13 +303,21 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   .grugops/context/ticket-to-pr-ABC-020/notes/20260731T181000Z-architect-design-decision-f95614ca.md
 -->
 
-## Ready for Dev (WIP 1/6)
-
-- [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (size: M, P0, epic: EPIC-001, deps: none — merged src/ only; design hop complete 2026-07-31, return shape settled on the ticket)
+## Ready for Dev (WIP 0/6)
 
 <!--
-  ENTERED 2026-07-31 by Architect/Design on the In Design exit, which this role owns. First occupant
-  of this column in the project's history.
+  ENTERED AND EXITED 2026-07-31. Architect/Design put ABC-020 here on the In Design exit (first
+  occupant of this column in the project's history); the Orchestrator pulled it to In Development
+  the same day, which is the move this role owns.
+
+  DEFINITION OF READY re-checked at the pull, not assumed from the earlier promotion: problem,
+  scope/out-of-scope, INVEST, measurable acceptance (exact FENs, exact move lists, thresholds at
+  149/150 and four/five occurrences, exact call counts), dependencies, NFR triggers with numbers,
+  test notes naming the five existing tests that may change, size M, priority P0, no blocker. The
+  one open item at cut time -- the return shape -- was closed by the design hop, so the pull is
+  clean rather than conditional.
+
+  Ready for Dev 1/6 -> 0/6, In Development 0/3 -> 1/3. Both under limit, no override taken.
 
   THE NEXT MOVE IS NOT MINE. Ready for Dev -> In Development is the ORCHESTRATOR's pull, and it is
   deliberately not taken here: In Development is 0/3 and the pull order the board's own re-sequencing
@@ -328,9 +336,20 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (owner: Software Engineer, size: M, P0, epic: EPIC-001, since: 2026-07-31)
 
 <!--
+  PULLED 2026-07-31 by the Orchestrator from Ready for Dev -- the one board move this role owns on
+  the way in. WIP 0/3 -> 1/3; the column takes ONE ticket, not three, because ABC-020 must merge
+  before ABC-019 and ABC-016 and pulling a second ticket now would invite a merge order the board
+  has twice recorded as load-bearing.
+
+  Why this ticket first among the P0s: ABC-012/014/018/019 are P0 because the product does not
+  exist without them. ABC-020 is P0 because the product plays chess by the wrong rules -- a
+  different P0, and the owner's 2026-07-31 directive orders the two.
+
   Emptied 2026-07-23: ABC-003 moved to In Review once implemented with tests and a green
   mandatory gate. In lean mode a ticket needing neither analysis nor design flows
   Ready → In Development → In Review with no intermediate hop.
