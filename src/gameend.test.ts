@@ -146,3 +146,57 @@ describe("ABC-007 QE edge probes", () => {
     expect(status.result).toBe("white-wins");
   });
 });
+
+// ---------------------------------------------------------------------------
+// QE conformance audit — the two tables the perft suite cannot reach. `npm run perft` counts
+// nodes and never calls gameStatus, so every draw rule below rests on these assertions alone.
+// ---------------------------------------------------------------------------
+
+describe("dead by material (FIDE 5.2.2), across the combinations that decide it", () => {
+  // The FIDE test is "mate is IMPOSSIBLE", not "mate cannot be forced". KNN vs K separates the
+  // two: no forced mate exists, but a mate does, so the game must run on. Bishop square colours
+  // — not the piece counts — decide the last four rows either way.
+  const dead: Array<[string, string]> = [
+    ["KBB vs K, both bishops on one colour (b1, f1)", "4k3/8/8/8/8/8/8/1B2KB2 w - - 0 1"],
+    ["KBB vs KB, all three bishops on one colour", "2b1k3/8/8/8/8/8/8/1B2KB2 w - - 0 1"],
+  ];
+  for (const [name, fen] of dead) {
+    it(`draws ${name}`, () => {
+      expect(gameStatus(parseFen(fen))).toEqual({
+        result: "draw",
+        reason: "insufficient-material",
+      });
+    });
+  }
+
+  const alive: Array<[string, string]> = [
+    ["KNN vs K — unforceable, but mate is constructible", "4k3/8/8/8/8/8/8/1N2K1N1 w - - 0 1"],
+    ["KN vs KN", "1n2k3/8/8/8/8/8/8/1N2K3 w - - 0 1"],
+    ["KBN vs K — a forced mate", "4k3/8/8/8/8/8/8/1N1BK3 w - - 0 1"],
+    ["KBB vs K on opposite colours (c1, f1)", "4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1"],
+    ["KBB on one colour vs KB on the other (f8)", "5b2/4k3/8/8/8/8/8/1B2KB2 w - - 0 1"],
+    ["KQ vs K", "4k3/8/8/8/8/8/8/3QK3 w - - 0 1"],
+  ];
+  for (const [name, fen] of alive) {
+    it(`does not draw ${name}`, () => {
+      expect(gameStatus(parseFen(fen))).toEqual({ result: "in-progress", reason: null });
+    });
+  }
+});
+
+describe("fifty-move rule — the halfmove-clock boundary", () => {
+  // 50 moves by EACH player is 100 plies, so 99 is one ply short: Black has made only 49.
+  const atClock = (plies: number) => gameStatus(parseFen(`4k3/8/8/8/8/8/8/R3K3 w - - ${plies} 60`));
+
+  it("does not draw at 99 plies", () => {
+    expect(atClock(99)).toEqual({ result: "in-progress", reason: null });
+  });
+
+  it("draws at exactly 100 plies", () => {
+    expect(atClock(100)).toEqual({ result: "draw", reason: "fifty-move" });
+  });
+
+  it("still draws above 100 plies, as a position loaded from FEN can be", () => {
+    expect(atClock(150)).toEqual({ result: "draw", reason: "fifty-move" });
+  });
+});
