@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-31 by Architect/Design (task `ticket-to-pr-ABC-020`, Workflow 04): ABC-020 moved Ready → In Design → Ready for Dev across one design hop, the return-shape question its own `### Open design question` assigns being settled. Ready 6/8 → 5/8, In Design 0/2 → 1/2 → 0/2, Ready for Dev 0/6 → 1/6; no limit approached, no override taken. First entry to and first exit from In Design, and first occupant of Ready for Dev, in this project's history. The shape is a two-arm discriminated union on the `result` field GameStatus already has, with the claimable set optional and absent-when-empty on the in-progress arm; ADR-0002 clause 4 is ruled an EXTENSION and not an amendment, so no human ruling is owed, no ratified clause was touched and no ADR was written. In Development is deliberately NOT entered — that pull is the Orchestrator's. Previously 2026-07-31 by BA/PM (subtask `ba-pm-legality-resequence`, task `epic-to-tickets-EPIC-002`). The project owner's standing priority of 2026-07-31 — "chess moves must be legal according to game rules, everything else comes after that" — re-sequenced this board. TWO TICKETS CUT: ABC-020 (FIDE 9.2/9.3 draws become claimable and FIDE 9.6 backstops land with them, M, P0, straight to Ready) and ABC-021 (the draw-claim interaction, S, P1, Backlog behind ABC-019). ONE PRIORITY CHANGED: ABC-009 P2 → P1, promoted Backlog → Ready. Everything else was re-read and DELIBERATELY LEFT — see the re-sequencing comment under Ready. Ready 4/8 → 6/8; no limit approached, no override taken. EPIC-002 is now 9 tickets / 25 points (was 8 / 23 — ABC-021 adds 2); ABC-020 sits under EPIC-001 with ABC-009 and ABC-011, so EPIC-001 now has three open tickets against merged, Done code. Previously 2026-07-31 by Architect/Design (ADR-0004 ratified — clauses 1 + 3 as proposed, clause 2 as amended; ABC-013 moved Blocked → Ready, Ready 3/8 → 4/8, no limit approached, no override taken. Blocked is now empty after one day, no escalation. The ratification was made by the Orchestrator under a named, quoted delegation from Olger Oeselg — the first ADR here not ratified by a human directly, and explicitly not precedent). Previously 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
+_Updated: 2026-07-31 by the Software Engineer (task `ticket-to-pr-ABC-020`, Workflow 04): ABC-020 moved In Development → In Review, implemented on branch `grugops/ticket-to-pr-ABC-020`. In Development 1/3 → 0/3, In Review 0/3 → 1/3; no limit approached, no override taken. The diff is `src/gameend.ts` alone (+113/−66) plus its test file: the design hop's ratified two-arm union built exactly as written, `gameStatus`'s signature byte-identical, no new import, no new state on `Position`. A1–A10 green; **A9 held exactly — the four named tests whose expectations changed are the only tests whose names changed, the fifth gained the absence assertion the ticket asked for, and no sixth test moved.** A10 measured on Apple M3 / Node v24.12.0 / darwin-arm64 and spied rather than inferred: `legalMoves` 1 per call across ten call shapes, `zobristKey` ≤ 1 (0 when bare), cost 2.17–2.24 µs against a 3.78 µs bar; `UNKNOWN - verify` on other hardware. `ABC-009` and `ABC-011` carried not owned, the FIDE 5.2.2 gap declined as documentation only, the terminal-check order untouched. Human holds merge and deploy. Previously 2026-07-31 by Architect/Design: ABC-020 moved Ready → In Design → Ready for Dev across one design hop, the return-shape question its own `### Open design question` assigns being settled. Ready 6/8 → 5/8, In Design 0/2 → 1/2 → 0/2, Ready for Dev 0/6 → 1/6; no limit approached, no override taken. First entry to and first exit from In Design, and first occupant of Ready for Dev, in this project's history. The shape is a two-arm discriminated union on the `result` field GameStatus already has, with the claimable set optional and absent-when-empty on the in-progress arm; ADR-0002 clause 4 is ruled an EXTENSION and not an amendment, so no human ruling is owed, no ratified clause was touched and no ADR was written. In Development is deliberately NOT entered — that pull is the Orchestrator's. Previously 2026-07-31 by BA/PM (subtask `ba-pm-legality-resequence`, task `epic-to-tickets-EPIC-002`). The project owner's standing priority of 2026-07-31 — "chess moves must be legal according to game rules, everything else comes after that" — re-sequenced this board. TWO TICKETS CUT: ABC-020 (FIDE 9.2/9.3 draws become claimable and FIDE 9.6 backstops land with them, M, P0, straight to Ready) and ABC-021 (the draw-claim interaction, S, P1, Backlog behind ABC-019). ONE PRIORITY CHANGED: ABC-009 P2 → P1, promoted Backlog → Ready. Everything else was re-read and DELIBERATELY LEFT — see the re-sequencing comment under Ready. Ready 4/8 → 6/8; no limit approached, no override taken. EPIC-002 is now 9 tickets / 25 points (was 8 / 23 — ABC-021 adds 2); ABC-020 sits under EPIC-001 with ABC-009 and ABC-011, so EPIC-001 now has three open tickets against merged, Done code. Previously 2026-07-31 by Architect/Design (ADR-0004 ratified — clauses 1 + 3 as proposed, clause 2 as amended; ABC-013 moved Blocked → Ready, Ready 3/8 → 4/8, no limit approached, no override taken. Blocked is now empty after one day, no escalation. The ratification was made by the Orchestrator under a named, quoted delegation from Olger Oeselg — the first ADR here not ratified by a human directly, and explicitly not precedent). Previously 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -336,11 +336,13 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Development (WIP 1/3)
-
-- [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (owner: Software Engineer, size: M, P0, epic: EPIC-001, since: 2026-07-31)
+## In Development (WIP 0/3)
 
 <!--
+  EMPTIED 2026-07-31 by the Software Engineer: ABC-020 implemented with tests and a green
+  mandatory gate, moved to In Review. WIP 1/3 -> 0/3. The In Development -> In Review exit is
+  the one board move this role owns.
+
   PULLED 2026-07-31 by the Orchestrator from Ready for Dev -- the one board move this role owns on
   the way in. WIP 0/3 -> 1/3; the column takes ONE ticket, not three, because ABC-020 must merge
   before ABC-019 and ABC-016 and pulling a second ticket now would invite a merge order the board
@@ -356,9 +358,54 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (owner: Software Engineer, size: M, P0, epic: EPIC-001, since: 2026-07-31)
 
 <!--
+  ENTERED 2026-07-31 by the Software Engineer, branch `grugops/ticket-to-pr-ABC-020`. WIP 0/3 ->
+  1/3; no limit approached, no override taken.
+
+  NO PR EXISTS, AND THIS IS NOT A GAP IN THE WORK. This repo has NO git remote -- `git remote` is
+  empty -- so there is nowhere to push and no pull request to open. `gh` IS installed and
+  authenticated (account `abitwise`), so the blocker is the missing remote, not the tool, and no PR
+  link was invented. The two commits sit on the local branch. This is the posture the ABC-004..007
+  stack has been in since 2026-07-24, where the same comment records a human merge still
+  outstanding. A human holds merge and deploy; nothing was merged and nothing was deployed.
+
+  WHAT LANDED. src/gameend.ts only, +113/-66 lines, no new module, no new import, no new state on
+  Position -- the import list is byte-for-byte the merged one, and the gameStatus signature is
+  byte-identical (positionCounts stays second and stays optional). The design hop's ratified shape
+  was built exactly as written: GameStatus is a two-arm discriminated union on the `result` field
+  it already had, `claimable` is ABSENT (not null, not []) when nothing is claimable, and
+  DrawClaims.by is required. EndReason gained fivefold-repetition + seventy-five-move and lost
+  threefold-repetition + fifty-move, which are now the whole of the disjoint ClaimableDraw.
+
+  ACCEPTANCE. A1-A10 all green -- see the artifact-ref note for how each was proved. A9 held
+  exactly: the FOUR named tests that had to change are the only ones whose names changed, the
+  fifth (99 plies) gained the absence assertion the ticket asked for, and NO sixth test moved.
+  Measured, not asserted: the first run after the implementation landed showed 4 failures, all
+  four named. Line 142 ("prefers checkmate over the fifty-move rule") is untouched, as instructed.
+
+  A10 MEASURED on Apple M3 / Node v24.12.0 / darwin-arm64, spied (not inferred) with an
+  instrumented copy of legal.ts + zobrist.ts outside the repo, gameend.ts byte-identical:
+  legalMoves calls per gameStatus = 1 across all ten call shapes (bar: exactly 1); zobristKey
+  calls <= 1, and 0 whenever the caller is bare or an earlier branch decides (bar: at most 1);
+  cost 2.17-2.24 us/call against the published 2.52 us baseline, i.e. 0.86-0.89x where the bar is
+  1.5x (<= 3.78 us). UNKNOWN - verify on any other hardware.
+
+  CARRIED, NOT FIXED, exactly as the ticket directs: ABC-009 (legalMoves mutating its argument)
+  and ABC-011 (en-passant hashing). Every repeated line in the new tests is an en-passant-free
+  knight or king shuffle for ABC-011's reason. The FIDE 5.2.2 dead-position gap is NOT fixed --
+  the module header now says honestly that insufficient-material is a SUBSET of 5.2.2, which was
+  QE's G-3 recommendation, and the terminal-check ORDER is unchanged (R-4's load-bearing
+  ordering, pinned by A6 at clock 150 as well as 100).
+
+  ONE THING FOR THE REVIEWER. `GameResult` is now referenced by nothing, here or anywhere in
+  src/. It was already exported before this ticket and the design hop's ratified shape spells it
+  out verbatim, so it was kept rather than deleted -- flagged, not removed, per coding rule 12,
+  and the call to keep or drop it belongs with whoever owns the ADR-0002 seam.
+
   Cleared 2026-07-24: the ABC-004..007 stacked review unit passed the EPIC-001 review gate
   (QE/E2E independent PR-review-checklist pass + Security/NFR gate) and advanced to Ready for
   UAT. The 4/3 WIP override recorded here at batch start is now RESOLVED — the column is back
