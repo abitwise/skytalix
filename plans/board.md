@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
+_Updated: 2026-07-31 by Architect/Design (ADR-0004 ratified — clauses 1 + 3 as proposed, clause 2 as amended; ABC-013 moved Blocked → Ready, Ready 3/8 → 4/8, no limit approached, no override taken. Blocked is now empty after one day, no escalation. The ratification was made by the Orchestrator under a named, quoted delegation from Olger Oeselg — the first ADR here not ratified by a human directly, and explicitly not precedent). Previously 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -138,14 +138,31 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   oversight.
 -->
 
-## Ready (WIP 3/8)
+## Ready (WIP 4/8)
 
 - [ABC-011] Zobrist key hashes en passant when no capture is available  (size: S, P1, epic: EPIC-001, deps: none)
 - [ABC-012] Game history module — the move list is the authoritative state  (size: M, P0, epic: EPIC-002, deps: none)
+- [ABC-013] SAN rendering — src/san.ts with toSan only  (size: M, P1, epic: EPIC-002, deps: ABC-003 + ABC-005, both merged on main; unblocked 2026-07-31 when ADR-0004 was ratified)
 - [ABC-014] Board frame renderer — grid, labels, shading, orientation, both glyph modes  (size: M, P0, epic: EPIC-002, deps: none)
 
 <!--
-  Ready holds 3 of a permitted 8, and 3 is the honest number rather than a conservative one:
+  ABC-013 joined Ready 2026-07-31, moved out of Blocked by Architect/Design when ADR-0004 was
+  ratified. Ready 3/8 -> 4/8, well under the limit; no override needed and none taken. Ready is the
+  right column and not a conservative Backlog hold: ABC-013's only remaining dependencies are
+  ABC-003 and ABC-005, both merged on main, so it has NO unbuilt predecessor — the one thing that
+  keeps ABC-015..ABC-019 in Backlog. It does not depend on ABC-012 or ABC-014, and the two tickets
+  that depend on IT (ABC-016, ABC-017) stay in Backlog behind it, unchanged.
+
+  Read ADR-0004's Status section before citing this move: that ADR was ratified by the ORCHESTRATOR
+  under a named, quoted delegation from Olger Oeselg dated 2026-07-31 — NOT by a human directly. It
+  is the first ADR in this project ratified that way and it is explicitly NOT precedent; the standing
+  rule that no agent may mark an ADR accepted is unchanged for every other ADR. The sentence in the
+  Blocked comment below that reads "this is the same ruling on the same kind of artifact" was written
+  on 2026-07-30 and is CORRECTED by this paragraph: it was the same kind of artifact, and it was not
+  the same kind of ruling.
+
+  As written 2026-07-30, before that ruling: Ready holds 3 of a permitted 8, and 3 is the honest
+  number rather than a conservative one:
   ABC-012 and ABC-014 are the ONLY two EPIC-002 tickets with no unbuilt dependency at all — both
   stand on merged src/ alone. ABC-013 would have been the third and is in Blocked instead, on a
   decision only a human can make. The limit is a ceiling, not a target; Ready is a buffer feeding
@@ -242,9 +259,31 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Blocked (visible, time-tracked)
 
-- [ABC-013] SAN rendering — src/san.ts with toSan only  (size: M, P1, epic: EPIC-002, blocked-by: ADR-0004 is `proposed`, not ratified — needs a named human, since **no agent may mark an ADR accepted**; raised by BA/PM, since: 2026-07-30)
+_Empty. The column's one and only occupant, ABC-013, was unblocked 2026-07-31._
 
 <!--
+  CLEARED 2026-07-31 by Architect/Design (subtask `architect-adr0004-ratify`): ADR-0004 is
+  `accepted`, so ABC-013's single blocker is gone and it moved to Ready (see the Ready comment for
+  why Ready and not Backlog). Blocked time: 2026-07-30 -> 2026-07-31, ONE day against
+  `blocked_escalation_days: 2` — it never escalated. First entry to and first exit from this column
+  in the project's history; the Blocked convention worked exactly as written, which is worth one
+  line in plans/metrics.md when the next sweep runs.
+
+  HOW it was ratified matters and is not what the paragraph below anticipated. ADR-0004 was ruled on
+  by the ORCHESTRATOR under an explicit, quoted delegation from the project owner Olger Oeselg dated
+  2026-07-31 ("I will give ADR-0004 ownership to you, you can decide if changes are needed or it can
+  be scrapped") — NOT by a human directly. It is the FIRST ADR in this project ratified that way, it
+  is explicitly NOT precedent, and the delegation was specific to ADR-0004 by name. The standing rule
+  that no agent may mark an ADR accepted is unchanged for every other ADR. The last line of the
+  paragraph below — "this is the same ruling on the same kind of artifact" — is therefore CORRECTED
+  rather than fulfilled: same kind of artifact, different kind of ruling.
+
+  The ruling accepted clauses 1 and 3 as proposed and AMENDED clause 2. The amendment lands on
+  EPIC-003's `parseSan` (a discriminated result that keeps `ambiguous` and `rejected` distinct, plus
+  the move-identity invariant), not on ABC-013's `toSan` — so ABC-013's scope, size, priority,
+  acceptance criteria and NFR bars are all unchanged by it.
+
+  As written 2026-07-30, when the ticket entered this column:
   ABC-013 is the FIRST ticket this project has put in Blocked, and it is here rather than in Ready
   on purpose. It meets every other Definition-of-Ready check; what it fails is "no major unresolved
   blocker". ADR-0004 (SAN ownership) says of itself that it does NOT block cutting tickets but DOES

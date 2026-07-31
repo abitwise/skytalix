@@ -6,24 +6,100 @@ id: ADR-0004
 
 ## Status
 
-**proposed** — written 2026-07-30 by Architect/Design during `EPIC-002`'s decomposition
-(task `epic-to-tickets-EPIC-002`, subtask `architect-epic002-seams`).
+**accepted** — ratified **2026-07-31 by the Orchestrator, under an explicit named delegation from
+the project owner Olger Oeselg**, dated the same day. Written 2026-07-30 by Architect/Design during
+`EPIC-002`'s decomposition (task `epic-to-tickets-EPIC-002`, subtask `architect-epic002-seams`); the
+ruling was applied to this file by Architect/Design (subtask `architect-adr0004-ratify`).
 
-**No agent may move an ADR to `accepted`.** `ADR-0002` and `ADR-0003` were each ratified in session
-by a named human, and this one needs the same ruling before a line of `src/san.ts` is merged. It is
-written the way both of those were: a recommendation with its evidence and its confidence, so a
-human can ratify, amend, or reject it in one reading.
+Ratified by: the **Orchestrator**, under delegation from **Olger Oeselg** — 2026-07-31
 
-**What this ADR does and does not block.** It does not block `EPIC-002`'s ticket cutting — the seam
-it closes is published as a `decision` note in the task's shared context, and BA/PM cuts against
-that. It blocks the *merge* of the first SAN code, because that is the point at which the decision
-becomes expensive to reverse. Tickets cut against it must name it as a dependency and say it is
-unratified.
+### The delegation, quoted — because this ratification is irregular
 
-**Per this repo's convention, no `plans/traceability.md` row was appended.** The `ADR-0002` and
-`ADR-0003` rows were appended *after* ratification, and the trailing comment in that file records
-that as deliberate. The row is owed on ratification, not before; recording a proposed decision in the
-trace would read as settled when it is not.
+The standing convention in this repo, stated in this ADR's own draft and in every ticket cut against
+it, is that **no agent may move an ADR to `accepted`**. `ADR-0002` and `ADR-0003` were each ratified
+in session by a named human. **This one was not**, and this record must not be read as though it
+were.
+
+The owner delegated the ruling rather than making it, on 2026-07-31:
+
+> *"I will give ADR-0004 ownership to you, you can decide if changes are needed or it can be
+> scrapped."*
+
+and set a standing priority that the ruling turns on:
+
+> *"The most important thing is that chess moves are legal according to game rules, everything else
+> comes after that. Game has to be played according to it's rules."*
+
+**`Ratified by: Olger Oeselg` is deliberately NOT written here.** It would be false: he delegated the
+ruling, he did not make it. A false attribution in an audit trail is worse than the irregularity it
+would hide.
+
+### NOT A PRECEDENT — read this before citing it
+
+This is the **first ADR in this project not ratified directly by a human**, and it must not be read
+as precedent for agents self-ratifying decision records. **The delegation was specific to `ADR-0004`,
+by name.** For every other ADR — drafted, or not yet written — the convention is unchanged and takes
+a named human. Any agent that cites this file as authority to accept its own ADR is citing it
+wrongly.
+
+### Ratification record — clauses 1 and 3 as proposed, clause 2 AS AMENDED
+
+The ruling was **"accept 1 and 3, amend 2"**. The distinction is the point of this record: clause 2's
+draft signature was **not** ratified as written, and this file must not be read as if it were.
+
+- **Clause 1 — accepted as proposed.** `src/san.ts` above `src/legal.ts`. It rests on a structural
+  fact — disambiguation requires `legalMoves` — read off merged code, not on a judgment.
+- **Clause 3 — accepted as proposed.** SAN derived per frame, never stored. Measured, and it keeps
+  `ADR-0002` clause 2's derive-don't-maintain rule whole with no exception.
+- **Clause 2 — accepted only as amended.** The single-module, single-grammar call is right, and the
+  owner's legality-first priority *strengthens* it: the reason this ADR's Context rejects the honest
+  default — *"the move a player reads on screen and the move their typed string resolves to stop
+  being the same move"* — is precisely a rule-integrity failure, not a tidiness complaint. But the
+  draft signature could not carry that contract. Two amendments:
+
+  - **(2a) `parseSan` must not return `Move | null`.** The draft wrote
+    `parseSan(position: Position, text: string): Move | null`. A bare `null` collapses two
+    rule-distinct outcomes: the string names a legal move but **more than one** matches (*ambiguous*
+    — the player must disambiguate), versus the string names **no** legal move (*illegal* — the
+    player broke a rule). Under legality-first the player must be told which, and the turn loop must
+    never silently treat an ambiguous input as an illegal one. The System Analyst's `EPIC-003` seam
+    contract (`…-system-analyst-observation-2fc3e3d9`, Seam A) already publishes `ambiguous` and
+    `rejected` as **separate members of a closed outcome set**, so the draft signature contradicted a
+    contract that was already on record. The ratified replacement is a discriminated
+    `SanParseResult`, in the Decision section below. `parseSan` stays a **total function** — it does
+    not throw for ordinary bad input.
+  - **(2b) The move-identity invariant is written into the contract as a normative clause.**
+    `parseSan` returns a `Move` that **is an element of the legal move list generated for that
+    position**, never one reconstructed from the parsed text. This was established on the seam as
+    invariant 2 ("settled rule R4") and called *"the single most load-bearing clause on this seam"*,
+    but it lived only in a context note — not in the contract any implementer will read. It is the
+    highest-severity legality landmine in this design, so it belongs in the Decision.
+
+**Nothing was re-measured and no number changed.** This ruling measured nothing; every figure in this
+file is exactly as written on 2026-07-30, on the machine named with it.
+
+**One correction to the ruling's evidence, recorded rather than quietly absorbed.** The ruling cited
+`src/apply.ts:158` (`position.board[move.to] = undo.captured`) as the line where a fabricated `Move`
+corrupts the board on the way back. Read against merged code that line is the one that is **immune**:
+`undo.captured` is read from the live board at `apply.ts:124`, not from `move.captured`. The genuine
+silent-on-unmake sites are `apply.ts:157` and `apply.ts:109` — named precisely under clause 2b below.
+The invariant is unchanged by the correction and is if anything broader than the cited line; only the
+mechanism is stated accurately, which is the standard this ADR's Context section already holds itself
+to.
+
+### What this ADR blocked, now cleared
+
+It never blocked `EPIC-002`'s ticket cutting — the seam it closes was published as a `decision` note
+in the task's shared context, and BA/PM cut against that. It blocked the **merge of the first SAN
+code**, because that is the point at which the decision becomes expensive to reverse. **That block is
+lifted as of 2026-07-31.** `ABC-013` left `Blocked` for `Ready` on the same ruling, and tickets that
+name this ADR as a dependency no longer need to say it is unratified.
+
+**The `plans/traceability.md` row this ADR held back was appended on ratification, 2026-07-31.** The
+draft deliberately appended none: the `ADR-0002` and `ADR-0003` rows landed *after* their
+ratification, the trailing comment in that file records that as deliberate, and a row for a proposed
+decision would read as settled. The row is now owed and paid, in the same shape as those two, and it
+carries the clause-by-clause ruling above rather than a bare "Accepted".
 
 ## Context
 
@@ -91,6 +167,9 @@ cost is what it is.
 
 ## Decision
 
+**Ratified: one module, both directions, derived per frame** — clauses 1 and 3 as proposed, clause 2
+as amended (see the ratification record in Status). Three clauses:
+
 **1. SAN lives in one new module, `src/san.ts`, above `src/legal.ts` and beside `src/gameend.ts`.**
 It imports `position.ts`, `moves.ts`, `apply.ts` and `legal.ts`. It does **not** import
 `gameend.ts` — the `#` suffix is checkmate only, and `gameStatus` would additionally compute
@@ -98,18 +177,115 @@ insufficient material and repetition, which are not SAN suffixes and would drag 
 counts. It does **not** import `history.ts`. The dependency graph stays an acyclic DAG with no
 upward edge, and `src/` gains its tenth production module. No new runtime dependency.
 
-**2. Both directions live in that one module, over one grammar.**
+**2. Both directions live in that one module, over one grammar.** *(As amended on ratification. The
+draft's signature was `parseSan(position: Position, text: string): Move | null`; it is quoted in
+amendment (2a) in Status so this clause can be read without the file's history.)*
 
 ```ts
 export function toSan(position: Position, move: Move, legal?: readonly Move[]): string;
-export function parseSan(position: Position, text: string): Move | null;
+export function parseSan(position: Position, text: string, legal?: readonly Move[]): SanParseResult;
+
+export type SanParseResult =
+  | { readonly outcome: "move"; readonly move: Move }
+  | { readonly outcome: "ambiguous"; readonly candidates: readonly Move[] }   // N ≥ 2
+  | { readonly outcome: "rejected"; readonly reason: SanRejectReason };
+
+// SanRejectReason is deliberately not defined here: a machine-readable code, never display
+// copy, whose membership EPIC-003 owns. This ADR fixes the three outcomes, not the reasons.
 ```
 
 One table of piece letters, castle strings, promotion and suffix; one disambiguation rule, used by
 both. The optional `legal` parameter is part of the contract rather than a tuning detail: the two
 call sites that already hold the list — `EPIC-003`'s parser, which just called `legalMoves` to
 validate, and its `moves` command, which is formatting that very list — pay **0.10 µs instead of
-4.31 µs per move**, and the `moves` command formats ~41 of them.
+4.31 µs per move**, and the `moves` command formats ~41 of them. It carries a caller obligation, and
+it is the same one in both directions: *the supplied list must be the legal moves of the supplied
+position*. Supply another position's list and both functions are wrong, silently — that is the price
+of the 40x and it is paid by the caller.
+
+**(2a) Three outcomes, and they are closed.** `parseSan` is a **total function**: every input
+produces one of the three arms and none of them throws. The three names are the seam contract's own
+(`…-system-analyst-observation-2fc3e3d9`, Seam A), matched deliberately:
+
+| `outcome` | Carries | Means | The loop |
+|---|---|---|---|
+| `move` | exactly one `Move` | the text names exactly one legal move | apply it, advance the ply |
+| `ambiguous` | **N ≥ 2** candidate `Move`s | the text names a legal move, but more than one matches | list the candidates, re-prompt, **ply not advanced** |
+| `rejected` | a machine-readable `SanRejectReason` | the text names **no** legal move in this position | show the reason, re-prompt, **ply not advanced** |
+
+- **`ambiguous` and `rejected` are never merged**, and this is the clause the owner's legality-first
+  priority buys. "More than one legal move matches" is the player being imprecise; "no legal move
+  matches" is the player breaking a rule or mistyping. A `null` cannot tell them apart, so a loop
+  built on `Move | null` must either guess or say something false to the player about the rules.
+- **A single match is `move`, never a one-element `ambiguous`.** N ≥ 2 is a contract, not a comment.
+- **`SanRejectReason` is a machine-readable code, never display copy.** Seam invariant 5 is that
+  message text is data the loop places, not output the parser prints; `EPIC-003` owns the wording and
+  the teaching rejections, so a rendered English string coming out of `src/san.ts` would put UI copy
+  in the grammar module. This ADR fixes the **outcome set** at three and does **not** fix the reason
+  vocabulary — `EPIC-003` owns its exact membership, and may extend it inside the `rejected` arm
+  without touching this clause. The floor it must meet: distinguish *this text is not SAN I can read*
+  from *this is well-formed SAN that names no legal move here*. Widening the outcome set from three
+  is an ADR change; widening the reason set is not.
+- **`parseSan` does not classify commands.** The seam's other two outcomes — `command` and
+  `input-unavailable` — belong to `EPIC-003`'s input layer, not to the grammar: `moves` / `help` /
+  `quit` are not SAN, and teaching `src/san.ts` the command set would drag `EPIC-003`'s command
+  vocabulary into a module whose entire justification is that it owns one grammar. `parseSan` is a
+  **supplier of three of the seam's five outcomes**, and the input layer owns the other two.
+- **It does not throw, and that is deliberately unlike `src/fen.ts`.** `parseFen` throws `FenError`
+  on every fault, and that is right for it: FEN arrives once, at a boundary, and a bad one should
+  stop a load. SAN arrives on **every line a human types**, on the loop's most-travelled edge — the
+  `S3` re-prompt, which the seam's own state map has four non-advancing outcomes for. Exceptions as
+  control flow for ordinary human typing is the wrong shape there, so the divergence is recorded
+  rather than left to look like an oversight.
+
+**(2b) Move identity — every `Move` this module returns comes from the generator.** Normative, and
+the highest-severity clause on this seam:
+
+> **Every `Move` in a `SanParseResult` — the one in `move`, and every one in `ambiguous.candidates` —
+> is an element of the legal move list generated for that position. `parseSan` never constructs a
+> `Move` from the parsed text.**
+
+This costs nothing: fact 3 above already says parsing resolves the text *against* the legal moves of
+the position, so the list is in hand either way, and selecting from it is strictly less work than
+building a `Move`. What it prevents has two levels, and both are legality failures:
+
+- **The loud one, which is the point.** A `Move` assembled from text can simply be **illegal** — a
+  pinned piece moving, a king walking into check, an en-passant capture that is not available.
+  Membership in `legalMoves(position)` rules that out by construction; a hand-rolled square-and-piece
+  parse does not.
+- **The quiet one, which is worse.** A `Move` with the right `from`/`to` but a wrong `captured`,
+  `flags` or `promotion` applies plausibly and shows a plausible board, then corrupts the position on
+  the way **back**, during `EPIC-006`'s `undo`. Read off merged code, the unmake path reads three of
+  the `Move`'s own fields rather than the undo record: `src/apply.ts:157`
+  (`position.board[move.from] = move.piece`) writes the mover back from the `Move`;
+  `src/apply.ts:160` branches on `move.flags`; and `undoSpecial`'s en-passant arm,
+  `src/apply.ts:109` (`position.board[enPassantCaptureSquare(move)] = move.captured`), materialises
+  the captured pawn from `move.captured`. Only `src/apply.ts:158` is safe, and only because
+  `undo.captured` was read from the live board at `src/apply.ts:124`. So a wrong `piece` or a wrong
+  `captured` puts a **wrong piece on the board during a take-back**, with nothing thrown and nothing
+  logged. `EPIC-006`'s `undo` is where a player would find it, a full move after the mistake.
+
+The candidates arm is bound by the same clause for the same reason: an ambiguity list is a list the
+player is about to pick from, so a fabricated candidate is a fabricated move one keystroke later.
+
+**How this is falsified** — and it is the reason `parseSan` takes the optional `legal` list. Because
+`generateMoves` allocates a fresh `Move` object per call, two `legalMoves(position)` calls return
+field-equal but **reference-distinct** objects, so `parse(toSan(move)) === move` across two separate
+calls can never hold, and a deep-equality comparison would pass a perfectly reconstructed `Move` —
+i.e. it cannot detect a 2b violation at all. Handing **one** list to both directions makes reference
+identity exact and makes the invariant testable:
+
+```ts
+const legal = legalMoves(position);
+for (const move of legal) {
+  const parsed = parseSan(position, toSan(position, move, legal), legal);
+  // outcome === "move" && parsed.move === move  — identity, not field equality
+}
+```
+
+That is the round-trip property test `EPIC-003` already owes, made precise: at 0.10 µs per call it is
+cheap enough to run over every legal move of every perft position, and it falsifies a grammar bug and
+a provenance bug with the same assertion.
 
 **The ticket boundary this implies, stated because the decomposition asked for it:** `EPIC-002`
 creates `src/san.ts` with `toSan` only and its tests. `EPIC-003` adds `parseSan` to the same file
@@ -221,6 +397,24 @@ only on the position at ply *i* and the move, so truncation never invalidates a 
   chain will need `san.ts` and `history.ts` added when they are built.** That update is owed at build
   time, not now — no module exists yet, and the as-built map should stay as-built.
 
+### Added on ratification, 2026-07-31 — the consequences clause 2's amendments create
+
+- **`EPIC-003`'s turn loop branches three ways at this seam, not two.** `Move | null` would have let
+  a loop be written with one `if`; `SanParseResult` will not compile that way. That is the amendment
+  doing its job — the ambiguity path is a real path (the seam note records it as reachable *without
+  SAN at all*, because `addPromotions` pushes four moves with identical `from`/`to`, `src/moves.ts`),
+  and a loop that never had to name it would have shipped treating a promotion as an illegal move.
+- **The round-trip property test gains an exact form and a second subject.** It asserts identity, not
+  field equality, and it now falsifies provenance as well as grammar (see clause 2b). It is still
+  `EPIC-003`'s and it still cannot run until both directions exist — this ADR's honest limit is
+  unchanged: **no existing test covers any of this.**
+- **`src/san.ts` gains no dependency from either amendment.** `SanParseResult` is declared in the
+  module itself over `Move` and `Position`, both already imported; the optional `legal` parameter
+  changes no import. The DAG in clause 1 is byte-for-byte the one that was ratified.
+- **A second, smaller divergence is now on record**: the newest parser in this codebase does not
+  throw, and the oldest one (`src/fen.ts`) throws on everything. Clause 2a says why. Anyone adding a
+  third parser should read that paragraph before matching either style by reflex.
+
 ## Rollback
 
 Cheap now, dear after `EPIC-003`. Today no line of SAN exists anywhere, so reversing any clause means
@@ -243,7 +437,10 @@ Clause 3 is the one with a live trigger, and it is deliberately the cheap clause
   `san.ts` (still downward, still acyclic).
 
 The mitigation that makes all of this safe is `EPIC-003`'s round-trip property test over the perft
-positions — `parse(toSan(move)) === move` for every legal move — which asserts behaviour, not
-structure, and survives every rollback above. Note the honest limit, the same one `ADR-0002` names:
+positions — for every legal move, `parseSan(position, toSan(position, move, legal), legal)` returns
+`outcome: "move"` with `move` **identical by reference** to the one formatted *(amended on
+ratification; the draft wrote this as `parse(toSan(move)) === move`, which is unsatisfiable across
+two `legalMoves` calls — see clause 2b)* — which asserts behaviour, not structure, and survives every
+rollback above. Note the honest limit, the same one `ADR-0002` names:
 **no existing test covers any of this**, because none of it exists. The round-trip test and the
 history module's own tests are the only safety net this decision will ever have.

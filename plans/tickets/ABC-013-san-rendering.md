@@ -1,8 +1,8 @@
 ---
 id: ABC-013
 title: SAN rendering — src/san.ts with toSan only
-status: blocked
-column: Blocked
+status: ready
+column: Ready
 size: M
 priority: P1
 epic: EPIC-002
@@ -29,9 +29,16 @@ move their typed string resolves to simply stop being the same move.**
 
 ## Source
 
-`memory-bank/50-decisions/ADR-0004-san-ownership.md` (**status `proposed`**) and task
-`epic-to-tickets-EPIC-002` note `20260730T144200Z-architect-design-decision-63309fd4` ("SEAM 3
-CLOSED"). This ticket implements the seam; it does not re-decide it.
+`memory-bank/50-decisions/ADR-0004-san-ownership.md` (**status `accepted` — ratified 2026-07-31,
+clauses 1 and 3 as proposed, clause 2 as amended**) and task `epic-to-tickets-EPIC-002` note
+`20260730T144200Z-architect-design-decision-63309fd4` ("SEAM 3 CLOSED"). This ticket implements the
+seam; it does not re-decide it.
+
+**What ratification changed for this ticket: nothing in its scope.** Clause 1 (the module and its
+placement) and clause 3 (derived per frame, never stored) were accepted **as proposed**, and this
+ticket is written against those two. Clause 2's amendment lands entirely on **`parseSan`**, which is
+`EPIC-003`'s — it is carried below under Dependencies because this ticket creates the file that
+function will be added to.
 
 ## Scope
 
@@ -59,7 +66,9 @@ export function toSan(position: Position, move: Move, legal?: readonly Move[]): 
 ## Out of scope
 
 - **`parseSan` — `EPIC-003` adds it to this same file.** This is a cross-epic ticket boundary over
-  one file, closed by wave 1 and **not re-opened here**: `EPIC-002` creates `src/san.ts` with
+  one file, closed by wave 1 and **not re-opened here** *(its contract was amended when `ADR-0004`
+  was ratified — the amended signature and the move-identity invariant are under Dependencies)*:
+  `EPIC-002` creates `src/san.ts` with
   `toSan` only; `EPIC-003` adds `parseSan` and owns the `parse(toSan(move)) === move` round-trip
   property test its Test notes already name. This epic ships no parser (it has no use for one —
   AGENTS.md rule 5) and `EPIC-003` ships no second formatter.
@@ -109,14 +118,44 @@ Every criterion is a hand-built FEN with an exact expected string.
 
 - `ABC-005` (`legalMoves`, `isInCheck`) and `ABC-003` (`makeMove` / `unmakeMove`) — merged on
   `main`.
-- **BLOCKING: `ADR-0004` is `proposed`, not `accepted`.** The ADR states it itself: it does not
-  block cutting tickets, **but it blocks the merge of the first line of `src/san.ts`**, because
-  that is the point at which the decision becomes expensive to reverse. **No agent may mark an ADR
-  `accepted`** — `ADR-0002` and `ADR-0003` were each ratified in session by a named human and this
-  one needs the same ruling. **This ticket therefore sits in `Blocked` with
-  `blocked-by: ADR-0004 unratified — needs a named human`, dated 2026-07-30**, rather than in
-  `Ready` where it would be pullable into work that cannot land.
-- Blocks `ABC-016` (last move in SAN) and `ABC-017` (the move-history pane).
+- **CLEARED 2026-07-31: `ADR-0004` is `accepted`.** It blocked the merge of the first line of
+  `src/san.ts` — not the cutting — and that block is lifted. **Read its Status section before citing
+  it:** it was ratified by the **Orchestrator under a named, quoted delegation from Olger Oeselg**,
+  not by a human directly. It is the first such ADR here and it is explicitly **not** precedent; the
+  standing rule that an ADR needs a named human is unchanged for every other ADR. This ticket moved
+  `Blocked` → `Ready` on that ruling, having met every other Definition-of-Ready check since
+  2026-07-30.
+- **`EPIC-003`'s `parseSan` contract, as AMENDED on ratification — carried here because this ticket
+  creates the file it lands in.** `EPIC-003` implements it; `ABC-013` must not close the door on it.
+
+  ```ts
+  export function parseSan(position: Position, text: string, legal?: readonly Move[]): SanParseResult;
+
+  export type SanParseResult =
+    | { readonly outcome: "move"; readonly move: Move }
+    | { readonly outcome: "ambiguous"; readonly candidates: readonly Move[] }   // N ≥ 2
+    | { readonly outcome: "rejected"; readonly reason: SanRejectReason };
+  ```
+
+  - The draft's `Move | null` was **rejected**: `null` collapses *"more than one legal move matches —
+    disambiguate"* into *"no legal move matches — you broke a rule"*, and under this project's
+    legality-first priority the player must be told which. The three outcome names are the System
+    Analyst's seam contract's own; the seam's other two (`command`, `input-unavailable`) belong to
+    `EPIC-003`'s input layer and **never** to `src/san.ts`.
+  - `parseSan` is **total** — it does not throw for ordinary bad input, deliberately unlike
+    `src/fen.ts`'s `parseFen`. SAN arrives on every typed line, on the re-prompt edge.
+  - **The move-identity invariant (`ADR-0004` clause 2b), normative:** every `Move` returned — the one
+    in `move` and every one in `ambiguous.candidates` — **is an element of the legal move list
+    generated for that position**, never a `Move` reconstructed from the parsed text. A fabricated
+    `Move` can be plainly illegal (a pinned piece, a king into check); and one with a wrong
+    `piece`/`captured`/`flags` applies plausibly, then puts a **wrong piece on the board during a
+    take-back** — `src/apply.ts:157` writes the mover back from `move.piece`, `src/apply.ts:160`
+    branches on `move.flags`, and `undoSpecial`'s en-passant arm (`src/apply.ts:109`) materialises the
+    captured pawn from `move.captured`. Nothing throws; the corruption surfaces during `EPIC-006`'s
+    `undo`, a full move later. *(Only `src/apply.ts:158` is safe there, and only because
+    `undo.captured` was read from the live board at `src/apply.ts:124`.)*
+- Blocks `ABC-016` (last move in SAN) and `ABC-017` (the move-history pane). Both are in `Backlog`
+  behind this ticket and neither is affected by the clause-2 amendment — they consume `toSan`.
 
 ## Security / NFR triggers
 
@@ -136,10 +175,29 @@ Every criterion is a hand-built FEN with an exact expected string.
 ## Test notes
 
 **The honest limit, stated up front:** the round-trip property test that is the real safety net
-for this grammar — `parse(toSan(move)) === move` over the perft positions — belongs to `EPIC-003`,
-because it needs the parser. Until then this module's only oracle is the hand-built table above.
-Write it as a table of `(fen, move, expected)` triples so `EPIC-003` can extend rather than replace
-it.
+for this grammar belongs to `EPIC-003`, because it needs the parser. Until then this module's only
+oracle is the hand-built table above. Write it as a table of `(fen, move, expected)` triples so
+`EPIC-003` can extend rather than replace it.
+
+**Write `toSan`'s tests so that round trip can be bolted on without reshaping them.** `ADR-0004`
+clause 2b fixed the test's exact form on ratification, and it is not the shape the draft implied:
+
+```ts
+const legal = legalMoves(position);
+for (const move of legal) {
+  const parsed = parseSan(position, toSan(position, move, legal), legal);
+  // outcome === "move" && parsed.move === move  — identity, not field equality
+}
+```
+
+**One legal list, handed to both directions.** `generateMoves` allocates a fresh `Move` object per
+call, so two `legalMoves(position)` calls return field-equal but reference-distinct objects: the
+literal `parse(toSan(move)) === move` across two calls can never pass, and a deep-equality comparison
+would happily accept a `Move` reconstructed from text — i.e. it cannot falsify clause 2b at all.
+Reference identity against one shared list is the only assertion that can. Practical consequence for
+**this** ticket: the `(fen, move, expected)` rows should obtain their `move` from
+`legalMoves(position)` — never from a hand-built object literal — so `EPIC-003` extends the same
+table instead of rebuilding it.
 
 - **Disambiguation is where the bugs are, in both directions** (`EPIC-003`'s Risks section says so
   too). The three-queen case is not exotic padding: file-then-rank-then-square is a precedence, and
@@ -172,9 +230,11 @@ the ratification clock should start early.
 Problem ✅ · scope + out-of-scope ✅ (cross-epic file boundary named) · INVEST ✅ · acceptance
 measurable ✅ (exact strings from exact FENs) · dependencies ✅ · NFR triggers ✅ (two numeric
 per-call bars with machine) · test notes ✅ · size `M` ✅ · priority `P1` ✅ ·
-**no major unresolved blocker ❌ — `ADR-0004` is unratified.**
+**no major unresolved blocker ✅ — `ADR-0004` ratified 2026-07-31.**
 
-**This ticket does NOT meet the Definition of Ready** on the last check, and it is deliberately not
-promoted to `Ready`. It sits in `Blocked`, visible and time-tracked (`blocked_escalation_days: 2`),
-so the human ruling it needs is on the board rather than buried in a dependency line. Everything
-else on the checklist is met, so ratification alone clears it.
+**This ticket now meets the Definition of Ready in full** and moved `Blocked` → `Ready` on
+2026-07-31. It was blocked for one day of a two-day `blocked_escalation_days` window and never
+escalated. Everything on the checklist except the last line was already met on 2026-07-30, and the
+ruling changed nothing in this ticket's scope, size, acceptance criteria or NFR bars — clauses 1 and
+3, the two this ticket is written against, were accepted **as proposed**. Its remaining dependencies
+(`ABC-003`, `ABC-005`) are merged on `main`, so it is pullable.
