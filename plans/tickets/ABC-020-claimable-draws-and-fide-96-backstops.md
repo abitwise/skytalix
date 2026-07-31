@@ -1,8 +1,8 @@
 ---
 id: ABC-020
 title: FIDE 9.2/9.3 draws become claimable, and FIDE 9.6 automatic backstops land with them
-status: ready
-column: Ready
+status: in-design
+column: In Design
 size: M
 priority: P0
 epic: EPIC-001
