@@ -1,8 +1,8 @@
 ---
 id: ABC-020
 title: FIDE 9.2/9.3 draws become claimable, and FIDE 9.6 automatic backstops land with them
-status: in-design
-column: In Design
+status: ready-for-dev
+column: Ready for Dev
 size: M
 priority: P0
 epic: EPIC-001
@@ -270,6 +270,103 @@ acceptance criteria** — every criterion above is written on observable behavio
 resolves identically under all three options. It is flagged and assigned, exactly as `ABC-010` and
 `ABC-011` flag theirs.
 
+### ANSWERED 2026-07-31 at the design hop by Architect/Design — build exactly this
+
+Task `ticket-to-pr-ABC-020`; the reasoning, the rejected options and the constraint check are in
+`.grugops/context/ticket-to-pr-ABC-020/notes/20260731T181000Z-architect-design-decision-f95614ca.md`.
+**The mechanism is no longer the engineer's call; the shape below is the contract. Everything else
+in this ticket — every acceptance criterion, the thresholds, the sizing, the NFR bars — is
+unchanged.** TDD and the implementation remain the Software Engineer's.
+
+**The shape: `GameStatus` becomes a two-arm discriminated union on the `result` field it already
+has, and the claimable set is an optional field that exists only on the in-progress arm.**
+
+```ts
+export type GameResult = "in-progress" | "white-wins" | "black-wins" | "draw";
+
+/** How a game ENDED. FIDE 9.2/9.3 are not here: a claimable draw has not ended anything. */
+export type EndReason =
+  | "checkmate"                // 5.1.1
+  | "stalemate"                // 5.2.1
+  | "insufficient-material"    // a subset of 5.2.2, as implemented — see the module header
+  | "fivefold-repetition"      // 9.6.1, automatic
+  | "seventy-five-move";       // 9.6.2, automatic
+
+/** A draw the player HAVING THE MOVE may claim. Disjoint from `EndReason`, by construction. */
+export type ClaimableDraw = "threefold-repetition" | "fifty-move";  // 9.2, 9.3
+
+export interface DrawClaims {
+  /** Who may claim. Always the side to move (9.2.1, 9.3.1) — never the side that just moved. */
+  readonly by: "white" | "black";
+  /** Which draws that side may claim. NEVER empty; ordered threefold first, then fifty-move. */
+  readonly draws: readonly ClaimableDraw[];
+}
+
+export type GameStatus =
+  | {
+      readonly result: "white-wins" | "black-wins" | "draw";
+      readonly reason: EndReason;
+      readonly claimable?: undefined;
+    }
+  | {
+      readonly result: "in-progress";
+      readonly reason: null;
+      readonly claimable?: DrawClaims;
+    };
+
+// The signature is BYTE-IDENTICAL to the merged one. positionCounts stays second and stays optional.
+export function gameStatus(
+  position: Position,
+  positionCounts?: ReadonlyMap<bigint, number>,
+): GameStatus;
+```
+
+Four rules that go with it, each of which a test can fail:
+
+1. **`claimable` is ABSENT when nothing is claimable** — not `null`, not `[]`, not a `DrawClaims`
+   with two `false`s. State (c) is `{ result: "in-progress", reason: null }` and nothing more. This
+   is load-bearing for **A9**; see the correction below.
+2. **`claimable` is present if and only if `draws` is non-empty**, and `by` is required whenever it
+   is present. An unattributed claim is unrepresentable, which is what **A7** is protecting.
+3. **State (b) as `result: "draw"` is a COMPILE ERROR**, not a test failure: `claimable` is typed
+   `undefined` on the terminal arm and `reason` is typed `null` on the in-progress arm. Verified
+   under this repo's exact `tsc` flags, `@ts-expect-error` by `@ts-expect-error`.
+4. **One key read, shared.** Read `positionCounts.get(zobristKey(position))` into a single local —
+   guarded by `positionCounts !== undefined`, so a bare caller still pays nothing — and use that one
+   local for BOTH the fivefold test (`>= 5`) and the threefold claim (`>= 3`). Two reads would break
+   the `at most 1 zobristKey` bar. Check order: zero-legal-moves, then insufficient material, then
+   the 150-ply clock, then fivefold, then build the claim set. The first branch is untouched, which
+   is what keeps **A6** and R-4's load-bearing ordering true.
+
+**A claim is a property of a position; a CLAIMED draw is an event, and events do not belong here.**
+That is why `EndReason` gains no `*-claimed` value: `gameStatus(position)` is a pure function of a
+position, and the same reasoning QE used to keep `resignation` out of the rules core (G-5) keeps
+`threefold-repetition-claimed` out of it. `ABC-021` names the claimed reasons in the LOOP's superset
+type, one-to-one with `ClaimableDraw`, and `src/gameend.ts` is not edited by that ticket — which is
+exactly what its own acceptance already demands.
+
+**`ADR-0002` clause 4: this EXTENDS AROUND it, it does not amend it. No human ruling is owed.** The
+clause's two propositions are that `positionCounts` has exactly one supplier (the history module) and
+that the parameter does not change. Both are untouched: the signature above is byte-identical, and no
+second entry point taking a counts map is added. The full reading, and the one thing that would
+overturn it, are in the note. Note the inversion, because it is the clause doing real work: the
+option that WOULD have brushed clause 4 is the second exported query, which creates a second sink for
+the map — and it is rejected here on other grounds as well.
+
+**CORRECTION to the paragraph above, and it matters: NOT every criterion resolves identically under
+all three options. `A9` does not, and `A7` does not.** `A9` ("the only modified tests are the ones
+named") is a hard **shape** constraint: `src/gameend.test.ts` has 18 assertions outside the named five
+that compare a whole status object with `toEqual`, and — measured on this repo's vitest 3.2.7 — an
+extra property survives that comparison only when it is **absent or `undefined`**; `null`, `[]` and
+any defined value all fail it. So a required claims field, or an empty-set sentinel, or a
+discriminated union carrying a NEW tag field, each breaks 18 tests that A9 forbids touching. `A7`
+("the claim is the side-to-move's and nobody else's") is what forces `by` to be a required field of
+the claims value rather than something a test infers from the position. **Neither criterion needs
+changing — both are correct as written, and between them they picked the shape.** What is wrong is
+only the claim of shape-independence, and it is corrected here rather than left to be discovered in
+review. The free bonus: those 18 untouched assertions now also assert that nothing is claimable in
+their positions, at no cost and with no edit.
+
 ### Why `positionCounts` stays optional — the reason to record, which is not the one on file
 
 `ADR-0002`'s Consequences section assigns the optional-parameter trap on the ground that *"making
@@ -324,6 +421,18 @@ Nothing else. In particular **"prefers checkmate over the fifty-move rule when b
 (line 142) does not change** — it uses a position where mate is already delivered, so the
 zero-legal-moves branch decides it and always did. It is exactly the test that *looks* like it covers
 G-1 and does not; leave it, and let A1/A2 cover what it misses.
+
+**What those five become under the ratified shape — added 2026-07-31 at the design hop.** Each was
+driven against merged `src/` read-only, so the side to move is measured and not inferred. All five
+are expressible; none needs a criterion changed.
+
+| Test | Becomes |
+|---|---|
+| threefold, line 27 (2 knight cycles) | measured: 3 occurrences, **White** to move, clock 8 → `{ result: "in-progress", reason: null, claimable: { by: "white", draws: ["threefold-repetition"] } }`. Extend the same cycle: **3** cycles = 4 occurrences, still in-progress + claimable (A3's second half); **4** cycles = 5 occurrences, clock 16 → `{ result: "draw", reason: "fivefold-repetition" }` |
+| fifty-move, line 69 (Ra1-a2 ticks the clock to 100) | measured: clock 100, **Black** to move → `{ result: "in-progress", reason: null, claimable: { by: "black", draws: ["fifty-move"] } }`. **Read that twice — the claimant is Black, because White made the move that reached 100.** It is also a **bare** call, so it doubles as the proof that the 9.3 claim needs no counts map |
+| 99 plies, line 191 | `{ result: "in-progress", reason: null }`, `claimable` **absent** — assert the absence explicitly (`.claimable` is `undefined`), which is the new half of the boundary A9 names |
+| 100 plies, line 195 | measured: **White** to move → in-progress + `{ by: "white", draws: ["fifty-move"] }`. The test's NAME changes with it ("claimable at exactly 100 plies"); a rename of a named test is inside A9 |
+| 150 plies, line 199 | `{ result: "draw", reason: "seventy-five-move" }` |
 
 Four things a naive pass would miss:
 
@@ -388,3 +497,13 @@ options)*
 
 **Promoted to `Ready` 2026-07-31 by BA/PM**, in the same step it was cut. `Ready` goes 4/8 → 6/8
 with `ABC-009`; no limit approached, no override taken.
+
+**Design hop complete 2026-07-31 by Architect/Design** (task `ticket-to-pr-ABC-020`): `Ready` →
+`In Design` → `Ready for Dev`. `Ready` 6/8 → 5/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev`
+0/6 → 1/6; no limit approached, no override taken. The design question is answered in the
+`### ANSWERED` block above and the expected values for the five permitted test edits are in
+`## Test notes`; **no acceptance criterion was edited.** The parenthetical above is corrected in one
+respect and one only — **`A9` and `A7` do NOT resolve identically under all three options**, they are
+what selected the shape; both are correct as written and neither changed. `ADR-0002` clause 4 was
+ruled an **extension, not an amendment**, so no human ruling is owed and none was taken. The pull to
+`In Development` is the Orchestrator's and has not been taken here.

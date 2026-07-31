@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-31 by Architect/Design (task `ticket-to-pr-ABC-020`, Workflow 04): ABC-020 pulled Ready → In Design for the return-shape design hop its own `### Open design question` assigns. Ready 6/8 → 5/8, In Design 0/2 → 1/2; no limit approached, no override taken. First occupant of In Design in this project's history. Previously 2026-07-31 by BA/PM (subtask `ba-pm-legality-resequence`, task `epic-to-tickets-EPIC-002`). The project owner's standing priority of 2026-07-31 — "chess moves must be legal according to game rules, everything else comes after that" — re-sequenced this board. TWO TICKETS CUT: ABC-020 (FIDE 9.2/9.3 draws become claimable and FIDE 9.6 backstops land with them, M, P0, straight to Ready) and ABC-021 (the draw-claim interaction, S, P1, Backlog behind ABC-019). ONE PRIORITY CHANGED: ABC-009 P2 → P1, promoted Backlog → Ready. Everything else was re-read and DELIBERATELY LEFT — see the re-sequencing comment under Ready. Ready 4/8 → 6/8; no limit approached, no override taken. EPIC-002 is now 9 tickets / 25 points (was 8 / 23 — ABC-021 adds 2); ABC-020 sits under EPIC-001 with ABC-009 and ABC-011, so EPIC-001 now has three open tickets against merged, Done code. Previously 2026-07-31 by Architect/Design (ADR-0004 ratified — clauses 1 + 3 as proposed, clause 2 as amended; ABC-013 moved Blocked → Ready, Ready 3/8 → 4/8, no limit approached, no override taken. Blocked is now empty after one day, no escalation. The ratification was made by the Orchestrator under a named, quoted delegation from Olger Oeselg — the first ADR here not ratified by a human directly, and explicitly not precedent). Previously 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
+_Updated: 2026-07-31 by Architect/Design (task `ticket-to-pr-ABC-020`, Workflow 04): ABC-020 moved Ready → In Design → Ready for Dev across one design hop, the return-shape question its own `### Open design question` assigns being settled. Ready 6/8 → 5/8, In Design 0/2 → 1/2 → 0/2, Ready for Dev 0/6 → 1/6; no limit approached, no override taken. First entry to and first exit from In Design, and first occupant of Ready for Dev, in this project's history. The shape is a two-arm discriminated union on the `result` field GameStatus already has, with the claimable set optional and absent-when-empty on the in-progress arm; ADR-0002 clause 4 is ruled an EXTENSION and not an amendment, so no human ruling is owed, no ratified clause was touched and no ADR was written. In Development is deliberately NOT entered — that pull is the Orchestrator's. Previously 2026-07-31 by BA/PM (subtask `ba-pm-legality-resequence`, task `epic-to-tickets-EPIC-002`). The project owner's standing priority of 2026-07-31 — "chess moves must be legal according to game rules, everything else comes after that" — re-sequenced this board. TWO TICKETS CUT: ABC-020 (FIDE 9.2/9.3 draws become claimable and FIDE 9.6 backstops land with them, M, P0, straight to Ready) and ABC-021 (the draw-claim interaction, S, P1, Backlog behind ABC-019). ONE PRIORITY CHANGED: ABC-009 P2 → P1, promoted Backlog → Ready. Everything else was re-read and DELIBERATELY LEFT — see the re-sequencing comment under Ready. Ready 4/8 → 6/8; no limit approached, no override taken. EPIC-002 is now 9 tickets / 25 points (was 8 / 23 — ABC-021 adds 2); ABC-020 sits under EPIC-001 with ABC-009 and ABC-011, so EPIC-001 now has three open tickets against merged, Done code. Previously 2026-07-31 by Architect/Design (ADR-0004 ratified — clauses 1 + 3 as proposed, clause 2 as amended; ABC-013 moved Blocked → Ready, Ready 3/8 → 4/8, no limit approached, no override taken. Blocked is now empty after one day, no escalation. The ratification was made by the Orchestrator under a named, quoted delegation from Olger Oeselg — the first ADR here not ratified by a human directly, and explicitly not precedent). Previously 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -264,23 +264,69 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## In Analysis (WIP 0/2)
 
-## In Design (WIP 1/2)
-
-- [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (owner: Architect/Design, since: 2026-07-31, task: ticket-to-pr-ABC-020, open question: how the claimable-draw set reaches the caller)
+## In Design (WIP 0/2)
 
 <!--
-  PULLED FROM READY 2026-07-31 by Architect/Design (task `ticket-to-pr-ABC-020`, Workflow 04). This
-  is the FIRST ticket this project has put in In Design, and it is here because the ticket itself
-  says so: `### Open design question — hand to Architect/Design at the design hop, do not decide in
-  dev`. No engineer starts until the return shape is settled, because an engineer who guesses the
-  shape writes code against a contract that gets rejected.
+  ENTERED AND EXITED 2026-07-31 by Architect/Design (task `ticket-to-pr-ABC-020`, Workflow 04).
+  ABC-020 is the FIRST ticket this project has put in In Design, and it was pulled here because the
+  ticket itself says so: `### Open design question — hand to Architect/Design at the design hop, do
+  not decide in dev`. No engineer starts until the return shape is settled, because an engineer who
+  guesses the shape writes code against a contract that gets rejected.
 
-  Ready 6/8 -> 5/8, In Design 0/2 -> 1/2. Both under their limits; no override needed and none taken.
-  The design hop is NOT a re-opening of the ticket: acceptance A1-A10 are written on observable
-  behaviour and are not this hop's to edit.
+  Ready 6/8 -> 5/8, In Design 0/2 -> 1/2 -> 0/2, Ready for Dev 0/6 -> 1/6. Every column under its
+  limit; no override needed and none taken. In Design is empty again in the same session, so no
+  design-hop WIP was left standing.
+
+  WHAT WAS SETTLED (the design hop is NOT a re-opening of the ticket — acceptance A1-A10 are written
+  on observable behaviour and none was edited):
+
+  1. THE SHAPE. GameStatus becomes a two-arm discriminated union on the `result` field it ALREADY
+     has, with `claimable?: DrawClaims` present only on the in-progress arm and ABSENT — not null,
+     not [] — when nothing is claimable. `DrawClaims.by` is REQUIRED, so an unattributed claim is
+     unrepresentable, which is what acceptance A7 is protecting. `EndReason` gains fivefold-repetition
+     and seventy-five-move and loses threefold-repetition and fifty-move, which become the whole of a
+     new, disjoint `ClaimableDraw`. State (b) reported as `result: "draw"` is now a COMPILE error
+     rather than a test failure. The signature `gameStatus(position, positionCounts?)` is
+     byte-identical to the merged one.
+  2. ADR-0002 CLAUSE 4 EXTENDS AROUND — it is NOT amended, so no human ruling is owed and none was
+     taken, and no ADR was written. Both of the clause's propositions have `positionCounts` as their
+     subject and both are untouched. The falsifier that would overturn that reading is recorded in
+     the note, one sentence long. Note which option the clause actually discriminates against: the
+     SECOND EXPORTED QUERY, which is rejected here on four other grounds as well.
+  3. A9 IS A SHAPE CONSTRAINT, contrary to the ticket's "resolves identically under all three
+     options". 18 whole-object toEqual assertions sit outside A9's named five, and measured on this
+     repo's vitest an extra property survives toEqual only when absent. The criterion is CORRECT as
+     written and was NOT edited — it is what selected the shape, and the correction is recorded
+     beside it.
+
+  Full reasoning, rejected options and constraint check:
+  .grugops/context/ticket-to-pr-ABC-020/notes/20260731T181000Z-architect-design-decision-f95614ca.md
 -->
 
-## Ready for Dev (WIP 0/6)
+## Ready for Dev (WIP 1/6)
+
+- [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (size: M, P0, epic: EPIC-001, deps: none — merged src/ only; design hop complete 2026-07-31, return shape settled on the ticket)
+
+<!--
+  ENTERED 2026-07-31 by Architect/Design on the In Design exit, which this role owns. First occupant
+  of this column in the project's history.
+
+  THE NEXT MOVE IS NOT MINE. Ready for Dev -> In Development is the ORCHESTRATOR's pull, and it is
+  deliberately not taken here: In Development is 0/3 and the pull order the board's own re-sequencing
+  comment suggests puts ABC-020 first, but a design role taking a dev pull would move work past the
+  one role that holds WIP truth for the whole board.
+
+  What the engineer gets, and it is on the ticket rather than only in a note: the exact TypeScript
+  the contract requires, in a dated `### ANSWERED` block under the ticket's own open design question,
+  plus an expected-value table in `## Test notes` for the five existing tests A9 permits changing —
+  each value driven read-only against merged src/, not inferred. The one to read twice is the
+  fifty-move test at line 69, where the claimant is BLACK, because White made the move that ticked
+  the clock to 100.
+
+  MERGE ORDER IS UNCHANGED AND STILL LOAD-BEARING: ABC-020 merges before ABC-019 and before ABC-016,
+  whose acceptance criteria were amended on 2026-07-31 to match it.
+-->
+
 
 ## In Development (WIP 0/3)
 
