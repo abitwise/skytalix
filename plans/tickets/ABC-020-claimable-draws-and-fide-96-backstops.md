@@ -1,8 +1,8 @@
 ---
 id: ABC-020
 title: FIDE 9.2/9.3 draws become claimable, and FIDE 9.6 automatic backstops land with them
-status: ready-for-dev
-column: Ready for Dev
+status: in-review
+column: In Review
 size: M
 priority: P0
 epic: EPIC-001
@@ -497,6 +497,25 @@ options)*
 
 **Promoted to `Ready` 2026-07-31 by BA/PM**, in the same step it was cut. `Ready` goes 4/8 → 6/8
 with `ABC-009`; no limit approached, no override taken.
+
+**Implemented 2026-07-31 by the Software Engineer** (task `ticket-to-pr-ABC-020`): `In Development`
+→ `In Review` on branch `grugops/ticket-to-pr-ABC-020`. `In Development` 1/3 → 0/3, `In Review`
+0/3 → 1/3; no limit approached, no override taken. The front matter above was `ready-for-dev` while
+the board said `In Development` — corrected here to `In Review` in the same move, so the
+board↔ticket contract holds. **A1–A10 green.** The ratified shape was built exactly as written and
+no acceptance criterion was edited. **A9 held exactly and was measured, not asserted:** the first
+run after the implementation landed failed exactly four tests, all four named in `## Test notes`;
+those four are the only tests whose names changed, the fifth (99 plies) gained the absence assertion
+this ticket asks for, and **no sixth test moved**. Line 142 is untouched. **A10 measured** on Apple
+M3 / Node v24.12.0 / darwin-arm64, spied rather than inferred — `legalMoves` exactly 1 per
+`gameStatus` across ten call shapes, `zobristKey` ≤ 1 and 0 when the caller is bare, cost 2.17–2.24
+µs against the 3.78 µs bar; `UNKNOWN - verify` on other hardware. `ABC-009` and `ABC-011` carried
+not owned; the FIDE 5.2.2 gap declined with the wording correction as its whole response; the
+terminal-check order untouched. **One item flagged for review:** `GameResult` is now referenced by
+nothing in `src/` — kept rather than deleted because the ratified shape spells it out. **No PR
+exists: this repo has no git remote**, so there is nowhere to push; `gh` is installed and
+authenticated, so the blocker is the missing remote, not the tool, and no PR link was invented. The
+two commits are on the local branch and **a human holds merge and deploy**.
 
 **Design hop complete 2026-07-31 by Architect/Design** (task `ticket-to-pr-ABC-020`): `Ready` →
 `In Design` → `Ready for Dev`. `Ready` 6/8 → 5/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev`
