@@ -1,5 +1,5 @@
 # Board
-_Updated: 2026-07-31 by the Software Engineer (task `ticket-to-pr-ABC-020`, Workflow 04): ABC-020 moved In Development → In Review, implemented on branch `grugops/ticket-to-pr-ABC-020`. In Development 1/3 → 0/3, In Review 0/3 → 1/3; no limit approached, no override taken. The diff is `src/gameend.ts` alone (+113/−66) plus its test file: the design hop's ratified two-arm union built exactly as written, `gameStatus`'s signature byte-identical, no new import, no new state on `Position`. A1–A10 green; **A9 held exactly — the four named tests whose expectations changed are the only tests whose names changed, the fifth gained the absence assertion the ticket asked for, and no sixth test moved.** A10 measured on Apple M3 / Node v24.12.0 / darwin-arm64 and spied rather than inferred: `legalMoves` 1 per call across ten call shapes, `zobristKey` ≤ 1 (0 when bare), cost 2.17–2.24 µs against a 3.78 µs bar; `UNKNOWN - verify` on other hardware. `ABC-009` and `ABC-011` carried not owned, the FIDE 5.2.2 gap declined as documentation only, the terminal-check order untouched. Human holds merge and deploy. Previously 2026-07-31 by Architect/Design: ABC-020 moved Ready → In Design → Ready for Dev across one design hop, the return-shape question its own `### Open design question` assigns being settled. Ready 6/8 → 5/8, In Design 0/2 → 1/2 → 0/2, Ready for Dev 0/6 → 1/6; no limit approached, no override taken. First entry to and first exit from In Design, and first occupant of Ready for Dev, in this project's history. The shape is a two-arm discriminated union on the `result` field GameStatus already has, with the claimable set optional and absent-when-empty on the in-progress arm; ADR-0002 clause 4 is ruled an EXTENSION and not an amendment, so no human ruling is owed, no ratified clause was touched and no ADR was written. In Development is deliberately NOT entered — that pull is the Orchestrator's. Previously 2026-07-31 by BA/PM (subtask `ba-pm-legality-resequence`, task `epic-to-tickets-EPIC-002`). The project owner's standing priority of 2026-07-31 — "chess moves must be legal according to game rules, everything else comes after that" — re-sequenced this board. TWO TICKETS CUT: ABC-020 (FIDE 9.2/9.3 draws become claimable and FIDE 9.6 backstops land with them, M, P0, straight to Ready) and ABC-021 (the draw-claim interaction, S, P1, Backlog behind ABC-019). ONE PRIORITY CHANGED: ABC-009 P2 → P1, promoted Backlog → Ready. Everything else was re-read and DELIBERATELY LEFT — see the re-sequencing comment under Ready. Ready 4/8 → 6/8; no limit approached, no override taken. EPIC-002 is now 9 tickets / 25 points (was 8 / 23 — ABC-021 adds 2); ABC-020 sits under EPIC-001 with ABC-009 and ABC-011, so EPIC-001 now has three open tickets against merged, Done code. Previously 2026-07-31 by Architect/Design (ADR-0004 ratified — clauses 1 + 3 as proposed, clause 2 as amended; ABC-013 moved Blocked → Ready, Ready 3/8 → 4/8, no limit approached, no override taken. Blocked is now empty after one day, no escalation. The ratification was made by the Orchestrator under a named, quoted delegation from Olger Oeselg — the first ADR here not ratified by a human directly, and explicitly not precedent). Previously 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
+_Updated: 2026-08-01 by QE/E2E (task `ticket-to-pr-ABC-020`, Workflow 04 step 5): **ABC-020 PASSED review** and moved In Review → In Security/NFR. In Review 1/3 → 0/3, In Security/NFR 0/2 → 1/2; no limit approached, no override taken. The In Review exit is the one board move this role owns. Nothing was merged and nothing was deployed. **QE fixed no production code**; six tests were added, all green, skip count still 0, suite 165 → 171. The verdict was reached by independent re-derivation, not by re-running the author's suite: the G-1 line driven from its FEN and move list (Black makes the third occurrence, White holds the claim, `Re8#` still reachable, `{white-wins, checkmate}`), every clock and occurrence boundary swept in both directions and both colours, and **thirteen mutations run against the delivered suite** — the check the ABC-007 gate did not make. Nine were killed. **Four survived, every one an ordering above the clock, and the ticket asserts a guard for them that does not exist** (`## Out of scope` says "A6 pins it"; A6 pins checkmate against the CLOCK, a different pair). Each changes a reason and never a result, so product severity is LOW and gate severity is higher — QE closed all four with one added test. A9 was verified by name-set diff against `b1b96cd~1` plus a body diff, and holds exactly. **A5's epoch argument is ruled CORRECT**, with the arithmetic reproduced on both trees (117 / 167 / 150, and 150−133=17, 17+100=117); the wording that is wrong is QE's own G-3 sentence carried into A5's Given — the wall unfreezes after its first capture and resets the clock three times, so "within 150 plies" holds per irreversible-move epoch, which is what FIDE 9.6.2 bounds. A5's substance holds under all ten drives and is now pinned by two tests rather than by argument. ABC-009 and ABC-011 confirmed genuinely carried and confirmed load-bearing for no new test. Gates re-run by QE on this branch: 171 pass / 0 skipped / lint, typecheck, build all exit 0 / `src/gameend.ts` 100%. **A10's NFR bars were deliberately NOT re-measured** — Security/NFR owns them next. Three items could not be settled and are recorded as a `claim` with `confidence: UNKNOWN - verify`: FIDE 9.6.1's "consecutive" wording, `GameResult`'s dead-but-correctly-kept alias, and the reason chosen when two automatic rules coincide. Previously 2026-07-31 by the Software Engineer (task `ticket-to-pr-ABC-020`, Workflow 04): ABC-020 moved In Development → In Review, implemented on branch `grugops/ticket-to-pr-ABC-020`. In Development 1/3 → 0/3, In Review 0/3 → 1/3; no limit approached, no override taken. The diff is `src/gameend.ts` alone (+113/−66) plus its test file: the design hop's ratified two-arm union built exactly as written, `gameStatus`'s signature byte-identical, no new import, no new state on `Position`. A1–A10 green; **A9 held exactly — the four named tests whose expectations changed are the only tests whose names changed, the fifth gained the absence assertion the ticket asked for, and no sixth test moved.** A10 measured on Apple M3 / Node v24.12.0 / darwin-arm64 and spied rather than inferred: `legalMoves` 1 per call across ten call shapes, `zobristKey` ≤ 1 (0 when bare), cost 2.17–2.24 µs against a 3.78 µs bar; `UNKNOWN - verify` on other hardware. `ABC-009` and `ABC-011` carried not owned, the FIDE 5.2.2 gap declined as documentation only, the terminal-check order untouched. Human holds merge and deploy. Previously 2026-07-31 by Architect/Design: ABC-020 moved Ready → In Design → Ready for Dev across one design hop, the return-shape question its own `### Open design question` assigns being settled. Ready 6/8 → 5/8, In Design 0/2 → 1/2 → 0/2, Ready for Dev 0/6 → 1/6; no limit approached, no override taken. First entry to and first exit from In Design, and first occupant of Ready for Dev, in this project's history. The shape is a two-arm discriminated union on the `result` field GameStatus already has, with the claimable set optional and absent-when-empty on the in-progress arm; ADR-0002 clause 4 is ruled an EXTENSION and not an amendment, so no human ruling is owed, no ratified clause was touched and no ADR was written. In Development is deliberately NOT entered — that pull is the Orchestrator's. Previously 2026-07-31 by BA/PM (subtask `ba-pm-legality-resequence`, task `epic-to-tickets-EPIC-002`). The project owner's standing priority of 2026-07-31 — "chess moves must be legal according to game rules, everything else comes after that" — re-sequenced this board. TWO TICKETS CUT: ABC-020 (FIDE 9.2/9.3 draws become claimable and FIDE 9.6 backstops land with them, M, P0, straight to Ready) and ABC-021 (the draw-claim interaction, S, P1, Backlog behind ABC-019). ONE PRIORITY CHANGED: ABC-009 P2 → P1, promoted Backlog → Ready. Everything else was re-read and DELIBERATELY LEFT — see the re-sequencing comment under Ready. Ready 4/8 → 6/8; no limit approached, no override taken. EPIC-002 is now 9 tickets / 25 points (was 8 / 23 — ABC-021 adds 2); ABC-020 sits under EPIC-001 with ABC-009 and ABC-011, so EPIC-001 now has three open tickets against merged, Done code. Previously 2026-07-31 by Architect/Design (ADR-0004 ratified — clauses 1 + 3 as proposed, clause 2 as amended; ABC-013 moved Blocked → Ready, Ready 3/8 → 4/8, no limit approached, no override taken. Blocked is now empty after one day, no escalation. The ratification was made by the Orchestrator under a named, quoted delegation from Olger Oeselg — the first ADR here not ratified by a human directly, and explicitly not precedent). Previously 2026-07-30 by BA/PM (EPIC-002 decomposed into ABC-012..ABC-019, 23 points; ABC-012 + ABC-014 promoted to Ready, ABC-013 to Blocked on ADR-0004's ratification, the rest held in Backlog behind their predecessors; ABC-011 escalated P2→P1 and promoted to Ready, its own trigger having fired. Ready 3/8, no limit approached, no override taken. Earlier the same day: ABC-011 cut to Backlog from the architecture audit `architecture-audit-2026-07-29`, on ADR-0002's recommendation. Previously 2026-07-29: ABC-009 + ABC-010 cut to Backlog from the same audit)_
 
 <!--
   FORMAT — read before you move a ticket. (clear voice; this is a technical file, not a role prompt.)
@@ -358,11 +358,83 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 1/3)
-
-- [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (owner: Software Engineer, size: M, P0, epic: EPIC-001, since: 2026-07-31)
+## In Review (WIP 0/3)
 
 <!--
+  EMPTIED 2026-08-01 by QE/E2E: ABC-020 reviewed and PASSED, moved In Review -> In Security/NFR.
+  WIP 1/3 -> 0/3. The In Review exit is the one board move this role owns.
+
+  VERDICT: PASS. ABC-020 meets the lean Definition of Done and the PR review checklist. No defect
+  blocks the exit. QE fixed NO production code; six tests were added, all green, skip count 0.
+
+  RE-DERIVED INDEPENDENTLY, not read off the Engineer's report. The G-1 line driven from the FEN
+  and the move list: Black's move makes the third occurrence, the status is `in-progress` with
+  `{by:"white", draws:["threefold-repetition"]}`, Re8 is still legal for the side to move, and Re8
+  gives `{white-wins, checkmate}`. FIDE 1-0 where merged main returns 1/2-1/2. The result is
+  `in-progress` and not a fourth value -- at runtime AND at compile time. Boundaries swept in both
+  directions and both colours: clock 98/99 no claim, 100/149 claimable, 150/151/999 automatic;
+  occurrences 0-2 no claim, 3-4 claimable, 5+ automatic; the full 4x4 cross-product correct,
+  including both draws reported together with threefold first.
+
+  THIRTEEN MUTATIONS RUN against the delivered suite in a throwaway worktree -- the check the
+  ABC-007 gate did not make. NINE were killed, including `by: "white"` unconditionally (the exact
+  G-1 defect, 2 tests), both thresholds in both directions, and `claimable` always present (12
+  tests, of which 8 are among the 18 whole-object toEqual assertions A9 forbids touching -- so
+  those 18 are demonstrably NOT inert and now also assert that nothing is claimable).
+
+  FOUR MUTANTS SURVIVED, every one an ordering above the clock, and the ticket claims a guard that
+  does not exist: `## Out of scope` says the zero-legal-moves-first ordering is load-bearing and
+  that "A6 pins it". A6 pins checkmate against the CLOCK -- a different pair. Moving
+  isInsufficientMaterial below the 150-ply check, below the fivefold check, or moving the
+  zero-legal-moves branch below isInsufficientMaterial each changed a REASON and never a RESULT, so
+  no whole-object assertion noticed. Product severity LOW (a reason string, read only by EPIC-006's
+  result screen; isInsufficientMaterial is correct per R-1, so no mutant can turn a win into a
+  draw). GATE severity higher -- a document asserting a guard that is not there is how ABC-007
+  passed. CLOSED by a QE test; all four now fail.
+
+  A9 VERIFIED BY NAME-SET DIFF against b1b96cd~1 (not against main, which would have counted the
+  architecture-audit tests as ABC-020 edits): 28 names before, 4 removed, 15 added, 24 unchanged.
+  A name diff is not sufficient, so the bodies were diffed too: the only pre-existing tests touched
+  are the five named on the ticket, and line 142 is byte-identical. No sixth test moved.
+
+  A5's EPOCH ARGUMENT RULED CORRECT, and the wording that is wrong is QE's own. Ten drives, five
+  policies x two trees: pre-ABC-020 first-legal 117 plies (reproducing QE's published G-3 figure to
+  the ply), this branch first-legal 167, quiet-only and last-legal 150 exactly. 150-133=17,
+  17+100=117, 17+150=167 -- all exact. The wall resets the clock THREE times (plies 8, 14, 17), and
+  ply 14 is a PAWN MOVE: the wall unfreezes after the first capture. So A5's Given -- "no capture
+  and no pawn move available to either side", carried verbatim from QE's own G-3 note -- is false
+  beyond ply 7, and "within 150 plies" holds only per irreversible-move epoch, which is what FIDE
+  9.6.2 actually bounds. The Engineer disclosed both narrowings rather than quietly satisfying the
+  criterion. A5's SUBSTANCE -- the game terminates automatically with no claim -- holds under every
+  one of the ten drives, and is now pinned by two QE tests instead of by argument. RECOMMENDATION
+  FOR BA/PM: correct A5's and A8's Given; the criteria themselves need no change and the code needs
+  none.
+
+  CARRIED DEFECTS CONFIRMED GENUINELY CARRIED. ABC-009 still mutates its argument (the phantom
+  second white king on 4k3/8/8/8/8/8/8/K7 w KQ - 0 1), and NO new test depends on it -- all eleven
+  FENs the new tests use round-trip through toFen unchanged across a gameStatus call, kiwipete
+  included. ABC-011 cannot decide anything here: epSquare measured -1 at every ply of the G-1
+  shuffle, QE's colour-mirror line, knightCycles(4), and the 150-ply wall drive.
+
+  GATES RE-RUN BY QE ON THIS BRANCH after the six added tests: npm test 171 passed / 7 files, skip
+  count 0, lint exit 0 (2 pre-existing biome config infos, present before this ticket), typecheck
+  exit 0, build exit 0, src/gameend.ts 100% stmt/branch/func/line. Every figure matches the
+  Engineer's independently.
+
+  NOT VERIFIED HERE, DELIBERATELY: A10's NFR-001 cost bars. Security/NFR reviews those next and two
+  roles measuring the same thing is waste. One thing flagged for them: moving the 150-ply check
+  below the fivefold check kills no test and would break the measured "zobristKey = 0 when the
+  clock decides" bar.
+
+  THREE ITEMS COULD NOT BE SETTLED and are recorded as a `claim` with confidence UNKNOWN - verify,
+  none of them blocking: (1) FIDE 9.6.1's "five CONSECUTIVE alternate moves" versus the plain
+  five-count the ticket specifies -- a BA/PM reading, and unfixable from a counts map anyway since
+  it carries no ordering; (2) GameResult is dead, keeping it was RIGHT (the ratified block spells it
+  out), and the trap is one line to close via `GameResult = GameStatus["result"]` -- for whoever
+  owns the ADR-0002 seam; (3) five occurrences AND clock >= 150 always reports seventy-five-move --
+  left deliberately unpinned, because pinning an arbitrary choice between two rules that both apply
+  is how a later correction becomes a "regression". EPIC-006's result screen decides.
+
   ENTERED 2026-07-31 by the Software Engineer, branch `grugops/ticket-to-pr-ABC-020`. WIP 0/3 ->
   1/3; no limit approached, no override taken.
 
@@ -414,7 +486,40 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+
+- [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (owner: Security/NFR, size: M, P0, epic: EPIC-001, since: 2026-08-01)
+
+<!--
+  ENTERED 2026-08-01 by QE/E2E on a PASS verdict. WIP 0/2 -> 1/2; no limit approached, no override
+  taken. FIRST OCCUPANT of this column since it was cleared -- the ABC-004..007 stack passed
+  through it on 2026-07-24.
+
+  WHAT IS OWED HERE, and it is a short list because QE deliberately did not touch it. ABC-020's
+  acceptance criterion A10 is "the cost bar in `Security / NFR triggers` holds when measured", and
+  that is the whole of what this column has to adjudicate:
+
+    - legalMoves calls per gameStatus stays EXACTLY 1;
+    - zobristKey calls per gameStatus stays AT MOST 1 (fivefold and threefold share one key read);
+    - gameStatus stays within 1.5x of its measured 2.52 us per call (bar: <= 3.78 us).
+
+  The Engineer reports these SPIED, not inferred, on Apple M3 / Node v24.12.0 / darwin-arm64:
+  legalMoves = 1 across ten call shapes, zobristKey <= 1 and 0 when the caller is bare or an earlier
+  branch decides, cost 2.17-2.24 us. `UNKNOWN - verify` on any other hardware. QE did NOT re-measure
+  any of it -- two roles measuring the same thing is waste, and nothing about it looked suspicious.
+
+  ONE THING QE FOUND THAT BEARS ON THIS COLUMN. Mutation testing showed that moving the 150-ply
+  clock check BELOW the fivefold check kills no test in the suite. That mutation would break the
+  bar-2 property the Engineer measured -- "zobristKey = 0 when the clock decides", since the key
+  read would then happen before the clock short-circuits -- and nothing would notice. QE did not add
+  that guard: a call-count spy is this column's instrument, not QE's, and the Engineer's decision
+  note records deliberately keeping the spy out of the permanent suite as reversible in one small
+  commit if this column wants it. That is the call to make here.
+
+  The ticket also records "No security trigger": no injection sink, no trust boundary, no privilege,
+  no data exposure. The consequence of a defect in this module is a wrong chess result -- which is
+  what the whole ticket is about, and neither to be inflated nor deflated.
+-->
 
 ## Ready for UAT (WIP 0/4)
 

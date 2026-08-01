@@ -1,8 +1,8 @@
 ---
 id: ABC-020
 title: FIDE 9.2/9.3 draws become claimable, and FIDE 9.6 automatic backstops land with them
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: M
 priority: P0
 epic: EPIC-001
@@ -516,6 +516,67 @@ nothing in `src/` — kept rather than deleted because the ratified shape spells
 exists: this repo has no git remote**, so there is nowhere to push; `gh` is installed and
 authenticated, so the blocker is the missing remote, not the tool, and no PR link was invented. The
 two commits are on the local branch and **a human holds merge and deploy**.
+
+**Reviewed 2026-08-01 by QE/E2E — PASS** (task `ticket-to-pr-ABC-020`, Workflow 04 step 5):
+`In Review` → `In Security/NFR`. `In Review` 1/3 → 0/3, `In Security/NFR` 0/2 → 1/2; no limit
+approached, no override taken. **Meets `agent-factory/checklists/definition-of-done.md` (lean) and
+the PR review checklist.** QE fixed **no production code**; six tests were added, all green, skip
+count still 0 (suite 165 → 171, `src/gameend.ts` still 100%). Every gate was re-run rather than
+quoted. **A1–A9 verified independently**: the G-1 line re-derived from its FEN and move list (the
+third occurrence is Black's to create and White's to claim, `Re8` still legal, `{white-wins,
+checkmate}`); every clock and occurrence boundary swept in both directions and both colours; A9
+verified by name-set diff against `b1b96cd~1` plus a body diff. **A10 was deliberately NOT
+re-measured** — Security/NFR owns it next.
+
+**Four defects, all LOW, none blocking, and two of them are on this ticket rather than on the code.**
+
+1. **The terminal-check order above the clock was unpinned, and `## Out of scope` above asserts a
+   guard that does not exist.** It says the zero-legal-moves-first ordering is load-bearing and that
+   "Acceptance **A6** pins it". **A6 pins checkmate against the CLOCK — a different pair.** Thirteen
+   mutations were run against the delivered suite; nine died, and the **four survivors were all
+   orderings**: `isInsufficientMaterial` moved below the 150-ply check, below the fivefold check,
+   the zero-legal-moves branch moved below `isInsufficientMaterial`, and the 150-ply check moved
+   below the fivefold check. Each changes a REASON and never a RESULT, which is why no whole-object
+   assertion noticed. **Closed by a QE test**; the first three now fail. The fourth was left
+   unpinned on purpose — see below.
+2. **A5's and A8's `Given` are factually false as written, and the error is QE's own.** The wall is
+   described as having *"no capture and no pawn move available to either side"*, carried verbatim
+   from QE's G-3 note. Measured: it resets the clock **three** times under the first-legal-move
+   policy (plies 8, 14, 17 — and **ply 14 is a pawn move**), because a king that walks to rank 3 can
+   take a loose pawn and the pawn behind it is then free. **The Engineer's epoch reading is CORRECT
+   and FIDE-correct**: "within 150 plies" is a bound per irreversible-move epoch, which is what
+   9.6.2 says. The arithmetic reproduces exactly on both trees — 150−133=17, 17+100=**117** (QE's
+   published figure, to the ply), 17+150=**167**. A5's substance holds under all ten drives QE ran
+   and is now pinned by two tests. **Recommendation for BA/PM: correct A5's and A8's `Given`. The
+   criteria need no change and the code needs none.**
+3. **FIDE 9.6.1 says "five CONSECUTIVE alternate moves"; `## Scope` above specifies five
+   occurrences and the code does exactly that.** If the reading is right, five non-consecutive
+   occurrences draw automatically where FIDE leaves only the 9.2 claim — the same error direction as
+   G-1, at a far rarer trigger. Recorded as a `claim` with `confidence: UNKNOWN - verify` because QE
+   will not assert a conformance gap on a remembered sentence, which is the mistake this ticket
+   exists to correct. **Unfixable from a counts map in any case** — it carries no ordering — so it
+   is an `ADR-0002` / `ABC-012` question. **Needs a BA/PM ruling; do not attach it to this ticket.**
+4. **`GameResult` is dead, and keeping it was RIGHT.** Referenced by nothing anywhere in `src/`.
+   Deleting a line of the ratified shape during implementation would be exactly the silent
+   substitution the design hop exists to prevent, and coding rule 12's halves genuinely pull
+   opposite ways. The trap it leaves is that it is now a flat union matching neither arm, so
+   `render(r: GameResult)` compiles and quietly loses the claim. **Closes in one line —
+   `export type GameResult = GameStatus["result"]` — for whoever owns the `ADR-0002` seam. Out of
+   scope here.**
+
+**One thing left deliberately unpinned:** five occurrences **and** clock ≥ 150 always reports
+`seventy-five-move`. Both are automatic and the result is identical; FIDE would say whichever arose
+first is operative, which a pure function of a position cannot know. Pinning an arbitrary choice
+between two rules that both apply is how a later correction becomes a "regression". `EPIC-006`'s
+result screen decides. **Flagged for Security/NFR:** that same mutation would break the measured
+A10 bar-2 property (`zobristKey` = 0 when the clock decides) and no test would notice.
+
+**Carried defects confirmed genuinely carried and load-bearing for no new test.** `ABC-009` still
+mutates its argument, and all eleven FENs the new tests use round-trip through `toFen` unchanged
+across a `gameStatus` call (kiwipete included). `ABC-011` cannot decide anything here — `epSquare`
+measured `-1` at every ply of the G-1 shuffle, QE's colour-mirror line, `knightCycles(4)` and the
+150-ply wall drive, which also makes no pawn move and no capture. **Nothing merged, nothing
+deployed; a human holds both.**
 
 **Design hop complete 2026-07-31 by Architect/Design** (task `ticket-to-pr-ABC-020`): `Ready` →
 `In Design` → `Ready for Dev`. `Ready` 6/8 → 5/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev`

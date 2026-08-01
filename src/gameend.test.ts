@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { makeMove } from "./apply.ts";
 import { parseFen } from "./fen.ts";
-import { gameStatus } from "./gameend.ts";
+import { type ClaimableDraw, type DrawClaims, type GameStatus, gameStatus } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
 import { EMPTY, PAWN, type Position, parseSquareName, pieceType } from "./position.ts";
 import { zobristKey } from "./zobrist.ts";
@@ -283,6 +283,160 @@ describe("the claimable set", () => {
   it("lets an automatic draw outrank a claim that holds at the same time", () => {
     expect(claimsAt(3, 150)).toEqual({ result: "draw", reason: "seventy-five-move" });
     expect(claimsAt(5, 100)).toEqual({ result: "draw", reason: "fivefold-repetition" });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// QE review (ABC-020, In Review) — independent probes, each of which kills a mutant the
+// delivered suite did not. Measured by mutating src/gameend.ts in a throwaway worktree: the
+// four probes below were the surviving holes, and every one of them is an ORDER or an
+// ASYMMETRY, which is the same class of defect as G-1 itself.
+// ---------------------------------------------------------------------------
+
+/** The G-1 shuffle with the colours swapped: WHITE's move makes the third occurrence. */
+const G1_SHUFFLE_MIRROR = [
+  ["a5", "b6"],
+  ["g1", "h1"],
+  ["b6", "a5"],
+  ["h1", "g1"],
+  ["a5", "b6"],
+  ["g1", "h1"],
+  ["b6", "a5"],
+  ["h1", "g1"],
+] as const;
+
+describe("QE review — the claim's asymmetry, the check order, and the coupling", () => {
+  it("gives the claim to Black when it is WHITE's move that makes the third occurrence", () => {
+    // The played-line mirror of A1, and the half A7 does not reach: A7 flips the side to move
+    // on a hand-built counts map, which cannot express who CREATED the occurrence. A1 has
+    // Black create it and White claim; this has White create it and Black claim. An
+    // implementation that attributed the claim to the creator passes exactly one of the two.
+    const position = parseFen("6k1/5ppp/8/b7/8/8/5PPP/4R1K1 b - - 0 1");
+    const counts = new Map<bigint, number>();
+    record(counts, position);
+    for (const [from, to] of G1_SHUFFLE_MIRROR) {
+      play(position, from, to);
+      record(counts, position);
+    }
+
+    expect(gameStatus(position, counts)).toEqual({
+      result: "in-progress",
+      reason: null,
+      claimable: { by: "black", draws: ["threefold-repetition"] },
+    });
+  });
+
+  it("decides no-legal-moves and thin material BEFORE the clock and the counts map", () => {
+    // ABC-020's `## Out of scope` calls this ordering load-bearing and says A6 pins it. A6
+    // pins checkmate against the CLOCK, which is a different pair: moving either check below
+    // the 150-ply test or below the fivefold test changes no RESULT, only the reason, so no
+    // existing whole-object assertion notices. Both mutants survived the delivered suite.
+    // The `stalemate` label is QE gap G-4's known divergence — FIDE would call 5.2.2 the
+    // operative article here. This pins the ORDER the ticket chose, not the label.
+    const stalemated = parseFen("7k/5K2/5N2/8/8/8/8/8 b - - 150 90");
+    expect(gameStatus(stalemated, new Map([[zobristKey(stalemated), 5]]))).toEqual({
+      result: "draw",
+      reason: "stalemate",
+    });
+
+    const bare = parseFen("4k3/8/8/8/8/8/8/4K3 w - - 150 90");
+    expect(gameStatus(bare, new Map([[zobristKey(bare), 5]]))).toEqual({
+      result: "draw",
+      reason: "insufficient-material",
+    });
+  });
+
+  it("terminates the locked wall on a second no-progress line, not just A5's first-quiet one", () => {
+    // A5 drives the FIRST quiet move at every ply. This drives the LAST legal move, which on
+    // this board is also a king shuffle — an independent line reaching the same verdict, so
+    // the 150-ply termination is a property of the position and not of A5's move filter.
+    const position = parseFen("8/8/8/p1p1p1p1/P1P1P1P1/8/8/K6k w - - 0 1");
+
+    let plies = 0;
+    let status = gameStatus(position);
+    while (status.result === "in-progress" && plies < 400) {
+      const moves = legalMoves(position);
+      const move = moves[moves.length - 1];
+      if (move === undefined) throw new Error(`no legal move at ply ${plies}`);
+      makeMove(position, move);
+      plies++;
+      status = gameStatus(position);
+    }
+
+    expect(plies).toBe(150);
+    expect(status).toEqual({ result: "draw", reason: "seventy-five-move" });
+  });
+
+  it("still terminates the locked wall on a line that DOES capture — 150 plies per epoch", () => {
+    // A5's Given says the wall offers "no capture and no pawn move ... to either side". That
+    // is true only at the starting position: a king that walks to rank 3 can take a loose pawn
+    // on rank 4, and the pawn behind it is then free to move. Driving the first legal move at
+    // every ply, the clock resets three times and the game runs PAST ply 150 — and still ends
+    // automatically, 150 plies after the LAST irreversible move, which is what FIDE 9.6.2
+    // actually bounds. This is the coupling A5 is about, pinned on the line A5 excludes: no
+    // claim is ever made and the game cannot run forever either way.
+    const position = parseFen("8/8/8/p1p1p1p1/P1P1P1P1/8/8/K6k w - - 0 1");
+
+    let plies = 0;
+    let lastIrreversible = 0;
+    let previousClock = position.halfmoveClock;
+    let status = gameStatus(position);
+    while (status.result === "in-progress" && plies < 400) {
+      const move = legalMoves(position)[0];
+      if (move === undefined) throw new Error(`no legal move at ply ${plies}`);
+      makeMove(position, move);
+      plies++;
+      if (position.halfmoveClock < previousClock) lastIrreversible = plies;
+      previousClock = position.halfmoveClock;
+      status = gameStatus(position);
+    }
+
+    expect(status).toEqual({ result: "draw", reason: "seventy-five-move" });
+    expect(lastIrreversible).toBeGreaterThan(0); // the line really does reset the clock
+    expect(plies).toBeGreaterThan(150); // so the bound is NOT 150 from the starting FEN
+    expect(plies - lastIrreversible).toBe(150); // it is 150 from the last irreversible move
+  });
+});
+
+// ---------------------------------------------------------------------------
+// QE review — the ratified shape's rule 3: state (b) spelled as `result: "draw"` is a COMPILE
+// error, not a test failure. Nothing in the delivered suite guards it, so a later widening of
+// the union would reinstate G-1 with every runtime assertion still green. Each
+// `@ts-expect-error` below is checked by `npm run typecheck`: if the line stops being an
+// error, tsc fails with "Unused '@ts-expect-error' directive".
+// ---------------------------------------------------------------------------
+
+/** A well-formed claim, so the negatives below fail for their own reason and not for this. */
+const CLAIM: DrawClaims = { by: "white", draws: ["fifty-move"] };
+
+describe("QE review — the forbidden states are unrepresentable", () => {
+  it("cannot spell a claimable draw as a completed draw, or a claim without a claimant", () => {
+    const forbidden: GameStatus[] = [
+      // @ts-expect-error a claimable draw has not ended anything (FIDE 9.2)
+      { result: "draw", reason: "threefold-repetition" },
+      // @ts-expect-error nor has a claimable fifty-move draw (FIDE 9.3)
+      { result: "draw", reason: "fifty-move" },
+      // @ts-expect-error a terminal status carries no claim
+      { result: "draw", reason: "stalemate", claimable: CLAIM },
+      // @ts-expect-error an in-progress status carries no end reason
+      { result: "in-progress", reason: "fivefold-repetition" },
+      // @ts-expect-error there is no fourth result value
+      { result: "claimable-draw", reason: null },
+    ];
+    expect(forbidden).toHaveLength(5);
+
+    const unattributed: DrawClaims[] = [
+      // @ts-expect-error `by` is required, so A7's defect is unrepresentable
+      { draws: ["fifty-move"] },
+    ];
+    expect(unattributed).toHaveLength(1);
+  });
+
+  it("lets a consumer read the claim off the bare union with no narrowing", () => {
+    // ABC-016's panel cell and ABC-021's prompt both depend on this being a one-liner.
+    const status: GameStatus = gameStatus(parseFen(START_FEN));
+    const draws: readonly ClaimableDraw[] = status.claimable?.draws ?? [];
+    expect(draws).toEqual([]);
   });
 });
 
