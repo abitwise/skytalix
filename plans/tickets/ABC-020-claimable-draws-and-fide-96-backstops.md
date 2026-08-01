@@ -1,8 +1,8 @@
 ---
 id: ABC-020
 title: FIDE 9.2/9.3 draws become claimable, and FIDE 9.6 automatic backstops land with them
-status: in-security-nfr
-column: In Security/NFR
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P0
 epic: EPIC-001
@@ -577,6 +577,88 @@ across a `gameStatus` call (kiwipete included). `ABC-011` cannot decide anything
 measured `-1` at every ply of the G-1 shuffle, QE's colour-mirror line, `knightCycles(4)` and the
 150-ply wall drive, which also makes no pawn move and no capture. **Nothing merged, nothing
 deployed; a human holds both.**
+
+**Gated 2026-08-01 by Security/NFR — PASS** (task `ticket-to-pr-ABC-020`, Workflow 04 step 6):
+`In Security/NFR` → `Ready for UAT`. `In Security/NFR` 1/2 → 0/2, `Ready for UAT` 0/4 → 1/4; no
+limit approached, no override taken. **No production code was changed at this gate, and no existing
+test was touched** (so `A9` is untouched — it constrains *modified* tests).
+
+**A10 is MET, and every number was re-measured rather than accepted.** Nothing below is quoted from
+the Engineer's report. Machine **Apple M3 (Mac15,13) / Node v24.12.0 / darwin-arm64**;
+**`UNKNOWN - verify` on any other hardware.** Call counts **spied** with instrumented throwaway
+copies of `legal.ts` + `zobrist.ts` outside the repo, `gameend.ts` `cmp`-verified byte-identical;
+timings load this branch and `65cb789` in **one process** and measure them interleaved.
+
+- **`legalMoves` calls per `gameStatus`: exactly 1** across sixteen call shapes. The invariant
+  `ABC-007` was built to hold; two new rules added no generation.
+- **`zobristKey` calls per `gameStatus`: at most 1** — exactly 1 when the counts map is consulted,
+  **0** when the caller is bare, **0** when a cheaper branch decides.
+- **`gameStatus(startpos, emptyMap)`: 2.13–2.26 µs** over three fresh processes = **0.56x–0.60x of
+  the 3.78 µs bar**, and **0.98x–1.01x** of the pre-`ABC-020` tree in the same process.
+
+**One correction, and it is to the BAR, not to the code.** The 3.78 µs figure is a
+**start-position** number and `plans/nfr-catalog.md` did not say so. `gameStatus` is dominated by
+its one `legalMoves` call, so `gameStatus(kiwipete, emptyMap)` measures **5.30–5.47 µs on this
+branch and 5.29–5.85 µs on merged code** — 1.4x the "bar" on *both* trees. Read as an absolute
+ceiling it indicts the baseline. The catalog row now carries the position and names the
+machine-independent quantity (the ratio to the same position on the baseline tree, 0.94–1.01); no
+target moved. This is the third time this project has had to write a denominator down, after
+`NFR-005`'s "in a middlegame position" and `NFR-002`'s ply count.
+
+**QE's ordering suspicion: confirmed, and it generalises.** Moving the 150-ply check below the
+fivefold check leaves `gameend.test.ts` **45/45 green** and takes a counts-map caller at clock ≥ 150
+from **0 to 1** `zobristKey` calls. Two precisions that decide the severity: the bar **as written**
+(≤ 1) is *not* broken — the mutant still measures max 1, so this is a durability gap, not a bar
+failure — and the cost is one key read (281–293 ns) on a terminal position reachable at most once
+per game. On its own that would not be worth acting on. **What was worth acting on is that two
+further mutations show all three bars were held by nothing in the repo:** a second `legalMoves()`
+call and two `zobristKey` reads instead of the one shared local **each left all 45 tests green**.
+The doubled generation is the serious one — it doubles the cost of `EPIC-004`'s hottest call with a
+green suite, and `plans/nfr-catalog.md` had already warned that these bars "must be spied, not
+inferred" with nothing enforcing it.
+
+**Closed by `src/gameend.nfr.test.ts`** — three spied assertions, one per bar, in its own file. The
+Engineer's objection (a `vi.mock` factory is hoisted to file scope and would re-route the module
+graph for all 45 tests in `gameend.test.ts`) was correct; a separate file **dissolves** it rather
+than overruling it, and that option was not on the table when the judgment was made. Verified one
+mutant per assertion. **The five-occurrences-and-clock-150 tie stays deliberately unpinned**, as QE
+intended: the zero-key assertion uses a counts map holding **one** occurrence, so no repetition rule
+is in play and the guard kills the reorder purely on cost — `EPIC-006` still decides which automatic
+rule names the tie.
+
+**Allocation.** State (c) — the common case at every search leaf — measures **1.33 B/call on both
+trees**, indistinguishable, over 1,000,000-call windows with zero GC events inside them. Stated
+precisely: state (c) is not literally allocation-free and never was (merged code already allocates
+the returned literal), and `src/gameend.ts:161` allocates `const draws = []` unconditionally on that
+path too — it costs nothing because TurboFan sinks it into the branch where it escapes, which is the
+path a hot leaf runs. State (b) allocates the `DrawClaims` the ratified shape asks for.
+
+**Structural: no new dependency edge** (import list byte-identical to `65cb789`'s), **no new state on
+`Position`** (`src/position.ts` unchanged), and no dependency change at all.
+
+**No security finding at any severity, and nothing at or near `security.block_on: high`.** The
+ticket's "No security trigger" was re-checked, not accepted: working the L1 tier of the ASVS
+checklist, every applicable row is not-applicable **by absence of the surface it names**. Two are
+worth naming rather than dismissing — V2.2.1 (`gameStatus` validates nothing and is right not to;
+FEN semantics are `ABC-010`'s and the integrity defect on this path is `ABC-009`) and V11.4.1
+(`zobristKey` is a repetition hash, not a security control; its collision behaviour is `ABC-011`'s).
+
+**Accepted risks, each with an owner:** the µs figure is a single-machine number and no wall-clock
+assertion was added to the suite, because it would pass or fail on the machine that runs it —
+**owner `EPIC-004`'s non-M3 spike**, which already carries the same obligation for `NFR-005`; the
+cold/un-optimized allocation cost of the state-(c) array literal is `UNKNOWN - verify` (measured,
+inconclusive, irrelevant at a hot leaf) — **owner `EPIC-004`**; `ABC-009` and `ABC-011` remain
+**carried, not owned**.
+
+**Gates re-run with the guard in place:** `npm test` **174 passed / 8 files** (was 171), skip count
+**0**, lint exit 0 (same 2 pre-existing biome infos), typecheck exit 0, build exit 0,
+`src/gameend.ts` still **100%** stmt/branch/func/line.
+
+**UAT: DEFERRED to `EPIC-006`, recorded as deferred and not as passed.** This ticket renders nothing
+and prompts for nothing, so there is no surface a human can exercise — the same posture
+`ABC-004..007` were given on 2026-07-24, for the same reason. Still **no git remote, so still no
+PR**; the work sits on the local branch and **a human holds merge and deploy**. Merge order remains
+load-bearing: this merges before `ABC-019` and `ABC-016`.
 
 **Design hop complete 2026-07-31 by Architect/Design** (task `ticket-to-pr-ABC-020`): `Ready` →
 `In Design` → `Ready for Dev`. `Ready` 6/8 → 5/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev`
