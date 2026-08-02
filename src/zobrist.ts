@@ -6,6 +6,13 @@
  * key XORs one random 64-bit number per (piece, square), plus one for black-to-move, the
  * castling rights, and the en-passant file, so exactly those four components decide equality.
  *
+ * "Availability" is decided by `hasLegalEnPassant` in legal.ts, not by whether the position
+ * carries an en-passant square (ABC-011, ADR-0005): FIDE 9.2.3 turns sameness on the possible
+ * moves, so an ep square no legal capture can use does not distinguish two positions. One
+ * consequence is worth knowing before calling this: on the ~2% of positions where an ep
+ * capture is on the board, the key is NOT a pure read — the predicate plays that capture and
+ * takes it back, so `zobristKey` transiently mutates the position it is given.
+ *
  * ABC-007 is the first ticket that needs it (repetition detection); EPIC-004's transposition
  * table is the second, which is why hashing is its own module rather than buried in game-end.
  *
@@ -14,6 +21,7 @@
  * is deliberately avoided: a table that varied per run would make hashes unreproducible.
  */
 
+import { hasLegalEnPassant } from "./legal.ts";
 import {
   CASTLE_BK,
   CASTLE_BQ,
@@ -68,7 +76,11 @@ export function zobristKey(position: Position): bigint {
     if ((position.castling & (CASTLE_FLAGS[i] as number)) !== 0) key ^= CASTLE_KEYS[i] as bigint;
   }
 
-  if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
+  // The NO_SQUARE guard comes first and short-circuits: the overwhelming majority of nodes
+  // carry no ep square at all and must run exactly the code they ran before ABC-011 (NFR-005).
+  if (position.epSquare !== NO_SQUARE && hasLegalEnPassant(position)) {
+    key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
+  }
 
   return key;
 }

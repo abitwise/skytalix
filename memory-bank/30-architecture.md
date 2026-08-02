@@ -41,16 +41,25 @@ covered), plus a deep perft lane behind `PERFT_DEEP=1`.
 
 ## System patterns
 
-- **Layered acyclic dependencies.** `position` ← {`fen`, `moves`, `zobrist`} ← `apply` ←
-  `legal` ← {`gameend`, `perft`} ← `perft-bench`. Verified 2026-07-29: zero cycles, depth 6, no
-  upward edge. `position.ts` is the only leaf and the hub — 7 of the 8 other modules import it.
+- **Layered acyclic dependencies.** `position` ← {`fen`, `moves`} ← `apply` ← `legal` ←
+  {`zobrist`, `perft`} ← {`gameend`, `perft-bench`}. Re-verified 2026-08-03 by rebuilding the
+  graph from `src/*.ts`: zero cycles, depth 6, no upward edge. `position.ts` is the only leaf
+  and the hub — 7 of the 8 other modules import it. **Corrected by ABC-011:** `zobrist.ts` was
+  a level-2 leaf beside `moves.ts` until it began asking `legal.ts` whether an en-passant
+  capture is real (ADR-0005), which moves it 2 → 5 and carries `gameend.ts` 5 → 6. The depth is
+  unchanged and the DAG is still clean; homing that predicate in `moves.ts` instead would have
+  made this project's first cycle (`apply → moves → apply`), which is why it is in `legal.ts`.
 - **Mutable `Position`, make/unmake, never copy.** `makeMove` mutates the 128-byte board in
   place and returns a four-field `UndoRecord` that the **caller** owns; `unmakeMove` reverses
   it. Nothing clones a `Position` and no clone function exists. Consequence for consumers: a
   `Position` is a live object, never a snapshot — hold one across a move and it changes under
   you.
-- **Transient mutation behind pure-looking queries.** `legalMoves`, `gameStatus` and `perft`
-  play moves and take them back internally, returning the position as they found it.
+- **Transient mutation behind pure-looking queries.** `legalMoves`, `gameStatus`, `perft` and —
+  since ABC-011 — `zobristKey` play moves and take them back internally, returning the position
+  as they found it. `zobristKey` is the one worth naming: it looks like a read and mostly is
+  one, but on the ~1% of nodes carrying an available en-passant capture it plays that capture
+  to test its legality. Consequence: you cannot hash a `Position` you are not permitted to
+  write to, nor hash one from two threads at once.
 - **The core owns a position, not a game.** No move list, no undo stack, no history;
   `gameStatus` takes repetition counts as an optional caller-supplied map. Who owns game
   history is an open decision, not a recorded one.

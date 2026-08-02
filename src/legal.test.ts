@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { parseFen } from "./fen.ts";
-import { isInCheck, legalMoves } from "./legal.ts";
-import { FLAG_EN_PASSANT, isSquareAttackedBy } from "./moves.ts";
+import { parseFen, toFen } from "./fen.ts";
+import { hasLegalEnPassant, isInCheck, legalMoves } from "./legal.ts";
+import { FLAG_EN_PASSANT, generateMoves, isSquareAttackedBy } from "./moves.ts";
 import { BLACK, KING, type Position, parseSquareName } from "./position.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -144,5 +144,74 @@ describe("ABC-005 QE edge probes", () => {
     const capture = moves.find((move) => move.to === parseSquareName("e2"));
     expect(capture).toBeDefined();
     expect(isInCheck(position)).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// hasLegalEnPassant — ABC-011. The predicate src/zobrist.ts asks so that the key
+// includes the en-passant file only when FIDE 9.2.3 says the position differs.
+// `legalMoves(p).some(m => m.flags === FLAG_EN_PASSANT)` is its DEFINITION and its
+// oracle; the cases below pin the two apart where a cheaper reading would diverge.
+// ---------------------------------------------------------------------------
+
+describe("hasLegalEnPassant — ABC-011", () => {
+  it("is true when the ep capture is genuinely playable", () => {
+    // White e5 takes d6 en passant; nothing pins the pawn.
+    expect(hasLegalEnPassant(parseFen("4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1"))).toBe(true);
+  });
+
+  it("is false when no ep square is set", () => {
+    expect(hasLegalEnPassant(parseFen("4k3/8/8/3pP3/8/8/8/4K3 w - - 0 1"))).toBe(false);
+  });
+
+  it("is false when the ep square is set but no pawn stands beside it", () => {
+    // The position one ply after 1.e4: e3 is the target, but Black has nothing on d4 or f4.
+    const afterE4 = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
+    expect(hasLegalEnPassant(parseFen(afterE4))).toBe(false);
+  });
+
+  it("is FALSE when the only ep capture is pseudo-legal but illegal — the strict FIDE reading", () => {
+    // c5xd6 clears both c5 and d5 off rank 5 in one move and bares the a5 king to the h5
+    // rook. Pseudo-legally the capture exists; FIDE 9.2.3's "possible moves" does not include
+    // it, and this case is the whole difference between the two readings of "available".
+    const position = parseFen("7k/8/8/K1Pp3r/8/8/8/8 w - d6 0 1");
+    expect(hasLegalEnPassant(position)).toBe(false);
+    // The generator does offer it, so the predicate is filtering rather than agreeing by luck.
+    expect(generateMoves(position).some((m) => (m.flags & FLAG_EN_PASSANT) !== 0)).toBe(true);
+  });
+
+  it("agrees with legalMoves — its definition — on every shape above", () => {
+    const fens = [
+      "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+      "4k3/8/8/3pP3/8/8/8/4K3 w - - 0 1",
+      "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+      "7k/8/8/K1Pp3r/8/8/8/8 w - d6 0 1",
+      "7k/8/8/K2pP2r/8/8/8/8 w - d6 0 1", // the legal.ts acceptance fixture: also illegal
+      "rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", // black d4 takes e3
+    ];
+
+    for (const fen of fens) {
+      const position = parseFen(fen);
+      const oracle = legalMoves(position).some((m) => (m.flags & FLAG_EN_PASSANT) !== 0);
+      expect(hasLegalEnPassant(position), fen).toBe(oracle);
+    }
+  });
+
+  it("leaves the position byte-identical across the call, on every shape above", () => {
+    // The predicate plays a move and takes it back, so purity is a property to assert rather
+    // than to assume — `legalMoves(...).some(...)` fails this on the second FEN (ABC-009).
+    const fens = [
+      "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+      "4k3/8/8/3pP3/8/8/8/K7 w KQ d6 0 1", // castling rights with no rook — ABC-009's trigger
+      "7k/8/8/K1Pp3r/8/8/8/8 w - d6 0 1",
+      "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+    ];
+
+    for (const fen of fens) {
+      const position = parseFen(fen);
+      const before = toFen(position);
+      hasLegalEnPassant(position);
+      expect(toFen(position), fen).toBe(before);
+    }
   });
 });
