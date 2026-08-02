@@ -2,7 +2,14 @@
 kind: index
 ---
 # Memory Bank — Index
-_Updated: <date>_
+_Updated: 2026-08-02 by the Orchestrator (state save before a context clear: `60-progress.md` filled, fill-state of the bank recorded below)._
+
+> **Fill state — read this before you read the bank.** Only three files below carry real project
+> content: **`60-progress.md`** (the plan-of-record — **start here**), **`30-architecture.md`**
+> (as-built after EPIC-001), and **`50-decisions/`** (four ratified ADRs). The rest —
+> `10-project-brief`, `20-product`, `40-contributing`, `70-runbook`, `80-glossary` — are still the
+> shipped empty templates. That is a real gap, not a hidden one; do not read them expecting content
+> and do not treat their silence as a decision. `plans/` carries the delivery state meanwhile.
 
 <!--
   FORMAT — read before you fill this bank. (clear voice; this is a technical file, not a role prompt.)
