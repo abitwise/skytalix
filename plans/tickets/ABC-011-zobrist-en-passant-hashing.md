@@ -1,9 +1,9 @@
 ---
 id: ABC-011
 title: Zobrist key hashes en passant when no capture is available
-status: ready
-column: Ready
-size: S
+status: ready-for-dev
+column: Ready for Dev
+size: M
 priority: P1
 epic: EPIC-001
 feature: —
@@ -211,6 +211,150 @@ criterion** — it decides one rare extra case and the ticket's dependency shape
 answered here; if the strict reading is chosen, re-size at the design hop (see *Size and priority
 rationale*).
 
+### ANSWERED 2026-08-02 at the design hop by Architect/Design — build exactly this
+
+Task `ticket-to-pr-ABC-011`; the reasoning, the rejected options, every measurement and the
+constraint check are in
+`.grugops/context/ticket-to-pr-ABC-011/notes/20260802T214500Z-architect-design-decision-501d774b.md`
+and `…-observation-5f316a31.md`, and the layering ruling is recorded in
+`memory-bank/50-decisions/ADR-0005-en-passant-availability-and-the-hash-layer.md` (**`proposed`** —
+see below; it does **not** block this ticket). **The reading is no longer the engineer's call. TDD
+and the implementation still are.** Every acceptance criterion, both reproduction FENs, the `NFR-005`
+bar and `## Out of scope` are unchanged.
+
+**"An en-passant capture is available to the side to move" means a LEGAL one exists — the
+strict-FIDE reading.**
+
+The Laws, quoted from the text BA/PM retrieved and retained in this repo's shared context during task
+`refinement-fide-9-6-1`:
+
+> **9.2.3** Positions are considered the same if and only if the same player has the move, pieces of
+> the same kind and colour occupy the same squares and **the possible moves of all the pieces of both
+> players are the same**. Thus positions are not the same if: **9.2.3.1** at the start of the sequence
+> a pawn **could have been captured** en passant.
+
+A capture that leaves your own king in check is not a *possible move*, so a pawn takeable only that
+way **could not have been captured**. The board-only reading answers a question the Laws do not ask.
+
+**Where the predicate lives, and it is not optional:**
+
+```ts
+// src/legal.ts — NEW export. This module already owns "is this legal"; the hash module asks it.
+/**
+ * Is an en-passant capture LEGAL for the side to move? True exactly when
+ * `legalMoves(position).some(m => m.flags === FLAG_EN_PASSANT)` is true — that expression is the
+ * DEFINITION and the test oracle, and it is deliberately NOT the implementation (see below).
+ * Leaves the position exactly as it found it.
+ */
+export function hasLegalEnPassant(position: Position): boolean;
+```
+
+```ts
+// src/zobrist.ts — the single changed condition. Line 71 becomes:
+if (position.epSquare !== NO_SQUARE && hasLegalEnPassant(position)) {
+  key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
+}
+```
+
+Six rules that go with it, each of which a test or a measurement can fail:
+
+1. **The `epSquare !== NO_SQUARE` guard comes FIRST and short-circuits.** The no-ep path is the
+   overwhelming majority of nodes and must execute exactly what it executes today — that is this
+   ticket's own `NFR-005` sub-bar ("not made slower at all"), and it holds by construction rather
+   than by luck.
+2. **Do NOT implement it as `legalMoves(position).some(...)`.** Measured: **1.979x per node
+   amortized** (against a 1.5x bar) and it **inherits `ABC-009`** — on
+   `4k3/8/8/3pP3/8/8/8/K7 w KQ d6 0 1` hashing then corrupts the position it is hashing, leaving a
+   phantom white king on e1. A hash that alters what it hashes is not a hash. Use the two candidate
+   from-squares only.
+3. **Do NOT home it in `src/moves.ts`.** `isSquareAttackedBy` lives there and looks like the natural
+   home, but the predicate needs `makeMove`/`unmakeMove` and `src/apply.ts` already imports
+   `src/moves.ts` — that home creates **this project's first dependency cycle**
+   (`apply -> moves -> apply`), verified by rebuilding the graph.
+4. **Do NOT re-implement legality inside `src/zobrist.ts`.** It is one layer shallower and it is the
+   same mistake this ticket exists to fix: the hashing module holding its own private notion of a
+   rules concept. One home for "legal"; the hash asks it.
+5. **The predicate must leave the position byte-identical on return** — assert it with a `toFen`
+   comparison across the call, not by inspection.
+6. **`zobristKey`'s signature does not change, no state is added to `Position`, and
+   `src/gameend.ts` / `src/apply.ts` are not touched.** The only files that change are
+   `src/zobrist.ts`, `src/legal.ts` and their tests, plus the two doc updates named below. The
+   `## Out of scope` line that permits a `src/legal.ts` change "if the design question is answered in
+   a way that requires one, in which case it is answered at the design hop" is **exercised here, and
+   only for `src/legal.ts`.**
+
+**Measured, so nobody has to re-derive it** (Apple M3 / Node v24.12.0 / darwin-arm64,
+`UNKNOWN - verify` on other hardware; driven read-only against merged `src/` from a scratchpad outside
+the repo, interleaved forward and backward):
+
+| | merged | board-only (rejected) | **ruled: strict** | strict via `legalMoves` (rejected) |
+|---|---|---|---|---|
+| **amortized per node**, 120,000-node pool at natural ep frequency | 317.2–317.3 ns | 0.996–1.004x | **1.014–1.022x** | 1.979x |
+| `kiwipete` / startpos — **the `NFR-005` bar's own positions**, no ep square | 302–317 ns | 1.00–1.03x | **1.00–1.07x** | 1.00–1.01x |
+| ep square set, no capture at all | 319.8–325.7 ns | 1.02–1.08x | **1.04–1.10x** | 9.34x |
+| ep square set, capture available (1.87% of pooled nodes) | 315.3–317.2 ns | 1.02x | **1.45–1.48x** | 13.9x |
+| allocation, ep-capture-available nodes only | 0.4 B/call | 0.4 | **2.7 (+2.3)** | — |
+
+`ADR-0002` clause 3 has `EPIC-004`'s transposition table computing a key **per node**, so the
+amortized row is the one that binds: **the ruling costs 1.4–2.2% per node.** The `NFR-005` bar in
+`## Security / NFR triggers` below is anchored at `kiwipete` / startpos, **both of which carry no ep
+square**, and it is met at 1.00–1.07x. The **1.45–1.48x** worst-case shape is recorded here in advance
+so the Security/NFR gate does not have to discover it.
+
+**The case this ruling decides — the one the board-only reading would have left wrong.** This is the
+consequence of the reading, not a new acceptance criterion; whether it becomes a numbered criterion is
+BA/PM's:
+
+```
+7k/8/8/K1Pp3r/8/8/8/8 w - d6 0 1   ->  973849139394194878   (1 pseudo-legal ep capture, 0 legal)
+7k/8/8/K1Pp3r/8/8/8/8 w - -  0 1   ->  285777158189409886
+after the fix these two keys must be EQUAL.  Today they differ.
+```
+
+**The fourth acceptance criterion's oracle is now fixed, and this is the guard that matters.** That
+criterion's phrase "no en-passant capture is available" resolves to the strict reading, and the
+property test over `src/perft.test.ts`'s table must take its ground truth from
+`legalMoves(position).some(m => m.flags === FLAG_EN_PASSANT)` rather than from a hand-written
+expectation. Reason: the predicate re-derives pawn geometry that `src/moves.ts` also owns, and that
+duplication is unguarded without this oracle. Measured at this hop over the whole table — **19,667
+ep-setting moves, 81,397 ep-set nodes** — the ruled predicate disagreed with `legalMoves` **0 times**
+and the board-only predicate missed the FIDE ground truth **862 times**.
+
+**The three existing assertions are safe and none needs editing.** Re-run at this hop: the repro pair
+becomes EQUAL, the real-capture control stays different, and `src/zobrist.test.ts:33-37` stays
+different (its fixture has a genuinely *legal* ep capture). Determinism and the make/unmake round trip
+are unaffected — the key is still a pure function of the position.
+
+**Two documentation edits are owed when this lands, and they are part of the ticket:**
+
+- `memory-bank/30-architecture.md` — the line
+  `position ← {fen, moves, zobrist} ← apply ← legal ← {gameend, perft} ← perft-bench` becomes
+  **false**. Verified by rebuilding the graph: it stays **acyclic** and stays **exactly as deep**
+  (max depth 6), but `zobrist` moves from level 2 to level 5 and `gameend` from 5 to 6. The
+  "transient mutation behind pure-looking queries" bullet must also gain `zobristKey`, which now
+  plays a move and takes it back on ~2% of nodes.
+- `src/zobrist.ts:4-7` — the header already says *availability*, which becomes true for the first
+  time. It should now also say that availability is decided by `src/legal.ts` and that the function
+  transiently mutates.
+
+**`ADR-0002` is EXTENDED AROUND, not amended — no human ruling is owed and none was taken.** Checked
+clause by clause against the ratified text: clause 1 (no new state on `Position`, make/unmake
+history-free, `UndoRecord` caller-owned), clause 2 (the move list is the authority, everything derived
+by replay), clause 3 (the search keeps its own per-ply key array, seeded once per search — its
+`9–23 ns/node` is the repetition scan *on top of* the key and does not move) and clause 4
+(`positionCounts` has exactly one supplier, signature unchanged) are all untouched. The ~300 ns key
+cost is a **Context-table figure**, not a clause proposition. The falsifier, so a later reader can
+check rather than trust: if clause 3's "Zero allocation per node" bound `zobristKey` rather than the
+per-ply array, the +2.3 B/call would brush it — but the clause's subject is the array, and merged
+`zobristKey` already allocates ~5 B/call in `bigint` intermediates, so no such reading was ever true.
+
+**`ADR-0005` was written anyway, and it is `proposed`.** Not on the amendment ground — on the ground
+that a recorded module-graph invariant becomes false and a ticket is not where a maintainer looks for
+the module graph. **No agent may mark it `accepted`, and none did**; `ADR-0004`'s delegated
+ratification is explicitly not precedent and was not leaned on. **This ticket is NOT blocked on it:**
+the authority for the ruling is this ticket's own delegation of the question to Architect/Design by
+name. If a human rejects the ADR, the reversal is one condition, one import and one predicate.
+
 ## Security / NFR triggers
 
 - `NFR-005` — **search depth in budget** (ratified 2026-07-30: depth-in-budget on `kiwipete` and
@@ -255,6 +399,21 @@ Three things a naive pass would miss:
   in this ticket are decimal `bigint` values, not numbers.
 
 ## Size and priority rationale
+
+> **RE-SIZED `S` → `M` on 2026-08-02 at the design hop by Architect/Design. The condition named at
+> the foot of this section FIRED, verbatim and not by interpretation:** the strict-FIDE reading of
+> "available" was chosen, so this ticket gains a dependency edge (`src/zobrist.ts` → `src/legal.ts`)
+> and a new exported predicate in a second module. Taken exactly as instructed — **`M`, and NOT
+> split**, because it is still one condition in one function. What pushes it past `S`: the new
+> predicate and its own tests, the new edge, doc-comment corrections in two files, an edit to
+> `memory-bank/30-architecture.md`'s layering line, and one more test shape than the two named in
+> `## Test notes`. Calibrated **below `ABC-005`** (legality filtering, `M`) and **above `ABC-009`**
+> (one guarded condition plus two test shapes, `S`).
+>
+> **Priority `P1` is unchanged, the acceptance criteria are unchanged, and no promise moved.** The
+> per-call cost question this section anticipated was measured rather than argued: 1.014–1.022x per
+> node amortized, and 1.00–1.07x at the two positions the `NFR-005` bar is anchored on. See the
+> `### ANSWERED` block above.
 
 **Size `S` (2)** — I agree with `ADR-0002`'s recommendation and reached it independently. One
 guarded condition in a 74-line module with a single production consumer, plus the two test shapes
@@ -332,8 +491,9 @@ that happens to `ABC-009` or `ABC-010` — it is independent of both.
 
 Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (exact FENs, exact
 `bigint` keys, equality and inequality both asserted) · dependencies ✅ (none blocking; one open
-design question flagged and assigned) · NFR triggers ✅ (NFR-005, numeric per-call bar; NFR-001
-explicitly not at risk) · test notes ✅ · size `S` ✅ · priority `P1` ✅ · no blocker ✅
+design question ~~flagged and assigned~~ **ANSWERED 2026-08-02 at the design hop**) · NFR triggers ✅
+(NFR-005, numeric per-call bar, **measured at the design hop**; NFR-001 explicitly not at risk) ·
+test notes ✅ · size ~~`S`~~ **`M`** ✅ · priority `P1` ✅ · no blocker ✅
 
 ~~Sits in `Backlog`. ... Promotion to `Ready` is a separate BA/PM step and has **not** been taken.~~
 
@@ -343,3 +503,11 @@ escalation trigger fired (see the block at the head of this file). The open desi
 it decides one rare extra case and the ticket's dependency shape, and the headline acceptance
 criterion resolves identically either way. If the strict reading is chosen, re-size at that hop —
 at most `M`, and never split.
+
+**Moved `Ready` → `In Design` → `Ready for Dev` on 2026-08-02 by Architect/Design** (task
+`ticket-to-pr-ABC-011`). The design hop is closed: the strict-FIDE reading is ratified in the
+`### ANSWERED` block above, and the re-size condition quoted in the paragraph above fired and was
+taken as written — **`M`, not split**. `ADR-0002` is extended around and not amended, so no human
+ruling is owed for this ticket to proceed; `ADR-0005` records the layering change as `proposed` and
+does **not** block it. **`Ready for Dev` → `In Development` is the Orchestrator's pull and has
+deliberately NOT been taken here.**

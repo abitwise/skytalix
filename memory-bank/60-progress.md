@@ -1,5 +1,5 @@
 # Progress
-_Updated: 2026-08-02 by the Orchestrator (ABC-020 merged to `main` on explicit owner instruction; branch stack resolved, board closed). Earlier the same day: first fill of this file, which had been the shipped empty template while the project ran to 27 unmerged commits._
+_Updated: 2026-08-02 by Architect/Design (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011's design hop is closed: "an en-passant capture is available" is ruled to mean a LEGAL one (strict FIDE 9.2.3), the predicate is homed in `src/legal.ts` with `src/zobrist.ts` importing it, the ticket is re-sized `S` → `M` and not split, and it sits in `Ready for Dev`.** `ADR-0002` is extended around and NOT amended (no human ruling owed, none taken); **`ADR-0005` is written and is `proposed` — no agent may accept it, and ABC-011 is not blocked on it.** Board: `Ready` 5/8 → 4/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. No production code changed. Previously the same day by BA/PM (task `refinement-fide-9-6-1`, Workflow 07) — **open question 1 CLOSED: FIDE 9.6.1 does NOT say "consecutive" and `src/gameend.ts` conforms**, ruled against the Laws text retrieved by this role from `handbook.fide.com` and retained verbatim under the task's context folder. No ticket cut, no board move (`Ready` stays 5/8), no code change owed on `main`. The "Next action" section is re-pointed accordingly. Previously the same day by the Orchestrator (ABC-020 merged to `main` on explicit owner instruction; branch stack resolved, board closed). Earlier the same day: first fill of this file, which had been the shipped empty template while the project ran to 27 unmerged commits._
 
 <!--
   The running plan-of-record. Read this FIRST on start, then `plans/board.md`. Keep it short and
@@ -29,15 +29,22 @@ latent/live test this project otherwise uses for priority. Rules-correctness bea
 - **NFR-001 met** (~6.1M nodes/sec generation-with-free-leaves; read its denominator fence in
   `plans/nfr-catalog.md` before quoting it — it is **never** evidence for NFR-005).
 - Four ADRs ratified: **0001** 0x88 board, **0002** game-history ownership, **0003** legality
-  strategy, **0004** SAN ownership.
+  strategy, **0004** SAN ownership. **A fifth, ADR-0005 (en-passant availability and the hash
+  layer), is `proposed` and awaits a human — no agent may accept it.** It records `ABC-011`'s design
+  ruling that `src/zobrist.ts` asks `src/legal.ts` whether an en-passant capture is legal; the
+  graph stays acyclic and exactly as deep, but `zobrist` moves from level 2 to level 5.
+  **`ABC-011` is not blocked on it** — the authority for that ruling is the ticket's own delegation
+  of the question to Architect/Design by name.
 
 ## What's left
 
 **Nothing is deployed and nothing is released.** `mode=lean`, `autonomy=pr`; Done means merged.
 
 - **`plans/board.md` is the WIP truth** — read it, do not infer state from here. As of 2026-08-02:
-  ABC-020 **Done**; `Ready` holds ABC-009, ABC-011, ABC-012, ABC-013, ABC-014;
-  ABC-015..019 + ABC-021 in `Backlog` behind their predecessors; `Blocked` empty.
+  ABC-020 **Done**; **ABC-011 in `Ready for Dev` (1/6), design hop closed**; `Ready` holds ABC-009,
+  ABC-012, ABC-013, ABC-014 (4/8); ABC-015..019 + ABC-021 in `Backlog` behind their predecessors;
+  `Blocked` and `In Design` empty. **`Ready for Dev` → `In Development` is the Orchestrator's pull
+  and has not been taken.**
 - **EPIC-002** (terminal board + game loop) is decomposed into ABC-012..ABC-019 + ABC-021.
   **EPIC-003..006 are still undecomposed** — each needs `epic-to-tickets` (Workflow 03) before any
   ticket under it can be pulled.
@@ -52,21 +59,32 @@ latent/live test this project otherwise uses for priority. Rules-correctness bea
 |---|---|---|---|
 | **ABC-009** | `legalMoves` mutates the position it documents as unchanged | S / P1 | latent — needs a semantically invalid position |
 | **ABC-010** | FEN semantic validation missing | M / P1 | live when EPIC-003 accepts a FEN from a user |
-| **ABC-011** | Zobrist hashes en passant when no capture is available → threefold **under**-detects | S / P1 | latent; error direction is safe (a draw is missed, never falsely declared) |
+| **ABC-011** | Zobrist hashes en passant when no capture is available → threefold **under**-detects | ~~S~~ **M** / P1 | latent; error direction is safe (a draw is missed, never falsely declared). **Design hop closed 2026-08-02 — in `Ready for Dev`, contract on the ticket** |
 
 All three are **carried, not owned** by ABC-020. Perft does not cover any of them, because
 `src/perft.ts` never calls `gameStatus` or `zobristKey`.
 
 ### Open questions nobody has ruled on
 
-1. **FIDE 9.6.1 says "five *consecutive* alternate moves"; ABC-020's code uses a plain 5-count.**
-   `UNKNOWN - verify` — QE declined to assert a conformance gap from a remembered sentence, which
-   was correct. **Not decidable from a counts map at all** (a map carries no ordering). Needs a
-   BA/PM ruling against the actual Laws text. **Inside the owner's standing directive.** The
-   Orchestrator recommended settling it before the merge; the owner merged first on 2026-08-02,
-   which is a legitimate call — the error direction is the safe one, as with ABC-011. The
-   consequence is now real rather than hypothetical: closing it means a **second change to
-   `src/gameend.ts` on `main`**, not one change on a branch.
+1. ~~**FIDE 9.6.1 says "five *consecutive* alternate moves"; ABC-020's code uses a plain 5-count.**~~
+   **CLOSED 2026-08-02 by BA/PM (task `refinement-fide-9-6-1`) against the retrieved Laws text.
+   THE CODE CONFORMS. No gap, no ticket, and `src/gameend.ts` does NOT change.** The current
+   Article 9.6.1, quoted verbatim from `handbook.fide.com/chapter/E012023` (HTTP 200, retrieved and
+   retained under `.grugops/context/refinement-fide-9-6-1/sources/` with its sha256), reads:
+
+   > 9.6.1 the same position has appeared, as in 9.2.2 at least five times.
+
+   **The word "consecutive" appears zero times in the entire 2023 Laws of Chess.** `>= 5` on a
+   counts map is a term-for-term match for "at least five times", and 9.2's own parenthesis —
+   "(not necessarily by a repetition of moves)" — confirms the repetition rules are counts with no
+   ordering predicate. **QE's remembered sentence was real, verbatim, and two editions stale**: it
+   is the 2014 text ("for at least five consecutive alternate moves by each player"), removed
+   effective 1 July 2017 and absent from the 2017, 2018 and 2023 editions. QE's `UNKNOWN - verify`
+   is **vindicated, not overturned** — right words, wrong edition, which is exactly what memory
+   cannot detect. **The feared second change to `src/gameend.ts` on `main` is NOT owed**, and the
+   conditional Architect/Design hop for a per-ply key list (`ADR-0002` clause 3) is **cancelled
+   rather than deferred** — no ordering is needed, so `ADR-0002` needs no amendment. Ruling and
+   evidence: `.grugops/context/refinement-fide-9-6-1/notes/20260802T210100Z-ba-pm-decision-968fe5b1.md`.
 2. **`GameResult` is dead** — referenced by nothing in `src/` after ABC-020. Kept deliberately
    (coding rule 12). The trap: it is a flat union matching neither arm of `GameStatus`, so
    `render(r: GameResult)` compiles and silently drops the claim. One-line close
@@ -86,8 +104,16 @@ after it on `main`: 174/174, 0 skips.
 **Branch from `main` now.** It carries all four ADRs and every ticket. The earlier warning that
 `main` lacked them is obsolete.
 
-No branch was deleted — the owner's call, not an agent's. There is still **no git remote on this
-repo at all**, so no PR exists or can be opened; that absence is recorded, not an oversight.
+**All eight merged branches were DELETED on 2026-08-02 on explicit owner instruction — `main` is
+now the only branch in the repo**, still at `4a73cf3`. Each was validated merged first
+(`git merge-base --is-ancestor <branch> main` + `git rev-list --count main..<branch>` = contained / 0)
+and deleted with `git branch -d`, the safe form that refuses an unmerged branch; `-D` was never
+used. **No commit was lost** — every deleted tip is still reachable from `main`, and the eight SHAs
+are recorded in `plans/board.md`'s Done comment so they survive a reflog expiry. This is **not
+standing authorization**; the standing rule is unchanged — branch deletion is the owner's call.
+
+There is still **no git remote on this repo at all**, so no PR exists or can be opened; that
+absence is recorded, not an oversight.
 
 **The load-bearing merge order was honoured**: ABC-020 landed before ABC-019 and ABC-016, whose
 acceptance criteria were amended on 2026-07-31 to match it. That constraint is now **discharged**,
@@ -118,16 +144,25 @@ the same explicit instruction.
 
 ## Next action
 
-The merge is done and the board has no work in flight — every column between `Ready` and `Done` is
-empty. Two candidates, and they are not equivalent:
+**Pull `ABC-011` from `Ready for Dev` into `In Development`.** That is the Orchestrator's move and it
+was deliberately not taken at the design hop. The ticket is unblocked, sized `M`, and its
+`### ANSWERED` block carries the ratified contract plus two traps an engineer would otherwise walk
+into (`legalMoves(...).some(...)` corrupts the position it hashes; the predicate in `src/moves.ts`
+creates this project's first dependency cycle). **`ABC-011` must land before `ABC-012`** — that is
+the whole reason it was pulled first, and `ABC-012`'s repetition tests are written against this key.
 
-1. **Settle open question 1 (FIDE 9.6.1 "consecutive")** — a BA/PM ruling against the actual Laws
-   text. Cheap, and it is inside the owner's standing directive. It is now a change on `main` if
-   real, so it will not get cheaper by waiting.
-2. **Pull the next ticket.** `Ready` holds five: ABC-009, ABC-011 (both rules-correctness, which the
-   directive ranks first), and ABC-012, ABC-013, ABC-014 (the EPIC-002 renderer P0s the product does
-   not exist without). Rules-before-renderer is pull-order guidance on the board, not an inflated
-   priority number — read the re-sequencing comment under `Ready` before choosing.
+After it: `Ready` holds ABC-009 (the other rules-core defect), and ABC-012, ABC-013, ABC-014 (the
+EPIC-002 P0s the product does not exist without). Rules-before-renderer is pull-order guidance on the
+board, not an inflated priority number — read the re-sequencing comment under `Ready` before
+choosing. **`ABC-014` still carries the ABC-015/RISK-005 sequencing knot the Orchestrator flagged for
+BA/PM on 2026-08-02; it is untouched by this hop.**
 
-The Orchestrator's recommendation is **(1) first**, on the same reasoning that made it right before
-the merge: it is the last open question that can change already-merged rules code, and it is small.
+**No open question can change already-merged rules code any more.** The one that could — 9.6.1 —
+closed as conformant on 2026-08-02. Questions 2 and 3 are a dead type alias and a wording
+correction; neither touches behaviour, and neither has been ruled on. **Question 2 is named as
+Architect/Design's seam and was deliberately NOT ruled at ABC-011's design hop** — that hop's scope
+was one question on one ticket, and taking a second ruling in passing is how a scope becomes a
+habit.
+
+**One thing owed to a human, and it is not blocking:** `ADR-0005` is `proposed`. No agent may mark it
+`accepted`, and nothing in flight waits on it.
