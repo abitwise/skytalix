@@ -1,8 +1,8 @@
 ---
 id: ABC-011
 title: Zobrist key hashes en passant when no capture is available
-status: ready-for-dev
-column: Ready for Dev
+status: in-review
+column: In Review
 size: M
 priority: P1
 epic: EPIC-001
@@ -511,3 +511,21 @@ taken as written — **`M`, not split**. `ADR-0002` is extended around and not a
 ruling is owed for this ticket to proceed; `ADR-0005` records the layering change as `proposed` and
 does **not** block it. **`Ready for Dev` → `In Development` is the Orchestrator's pull and has
 deliberately NOT been taken here.**
+
+**Moved `In Development` → `In Review` on 2026-08-03 by the Software Engineer** (task
+`ticket-to-pr-ABC-011`, branch `grugops/ticket-to-pr-ABC-011`). The `### ANSWERED` block was built
+exactly as ratified and none of its six rules was traded away: `hasLegalEnPassant` is a new export in
+`src/legal.ts`, `src/zobrist.ts` imports it, the `epSquare !== NO_SQUARE` guard comes first, the
+predicate derives the two candidate from-squares rather than calling `legalMoves`, and
+`src/gameend.ts` / `src/apply.ts` / `src/moves.ts` are untouched. **Every acceptance criterion is
+green**, including the two that were the point: the repro pair now hashes EQUAL, and the
+real-capture control plus `src/zobrist.test.ts`'s existing en-passant fixture still hash DIFFERENT
+with **no existing test modified** (only three import lines widened across the two test files; every
+other original line is byte-identical). Suite **184 passed / 0 skipped** (was 174), lint, typecheck
+and build all exit 0. `NFR-005` measured rather than argued on Apple M3 / Node v24.12.0 /
+darwin-arm64 (`UNKNOWN - verify` elsewhere): **302.9–306.5 ns at startpos and 309.1–315.6 ns at
+kiwipete against a 1.5x bar of ~450 ns / 432–459 ns**, the no-ep path spied at **0** predicate calls
+over 260,292 no-ep nodes, worst-case per-call shape **1.36–1.38x**, amortized over a 120,000-node
+pool at natural ep frequency **0.995–1.022x**. **No PR exists — this repo has no git remote**, so
+there is nowhere to push and no link to record; the commits sit on the local branch. Humans hold
+merge and deploy.
