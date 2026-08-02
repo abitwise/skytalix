@@ -171,5 +171,84 @@ describe("ABC-011 property — the ep component tracks availability, not the ep 
     // (the stays-different case) — a vacuous walk would otherwise pass green.
     expect(checked).toBeGreaterThan(0);
     expect(answered).toBeGreaterThan(0);
+    // ABC-011 QE: `checked > 0` does NOT pin the collapse half — `checked` counts double
+    // pushes of BOTH kinds, so a walk that only ever found ep-ANSWERED pushes would satisfy
+    // the two lines above while proving nothing about the equality case, which is the one
+    // this ticket exists to fix. Measured here: 557 double pushes, 52 answered, 505 not.
+    expect(checked - answered).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-011 QE additions. Two holes the mutation campaign at the In Review gate found in
+// the suite above, both closed here; the production code was already correct in both.
+// ---------------------------------------------------------------------------
+
+/** Everything zobristKey may read and must not change. */
+function positionSnapshot(position: Position): string {
+  return [
+    position.board.join(","),
+    position.blackToMove,
+    position.castling,
+    position.epSquare,
+    position.halfmoveClock,
+    position.fullmoveNumber,
+  ].join("|");
+}
+
+describe("ABC-011 QE — the ep component still distinguishes what FIDE distinguishes", () => {
+  it("separates two positions that differ ONLY in which file the ep target stands on", () => {
+    // Same placement, same side to move, same castling rights; b6 vs d6 as the ep target, and
+    // a legal ep capture answers each. FIDE 9.2.3 calls these different positions, so the keys
+    // must differ. Nothing else in the suite pins the FILE: mutating the XOR to a constant
+    // EP_FILE[0] leaves every other test green (on this branch AND on the pre-ABC-011 tree),
+    // and the collapsed key would then declare a repetition that never happened — a FALSE
+    // draw, the opposite of ABC-011's own "the error direction is the safe one".
+    const bFile = zobristKey(parseFen("4k3/8/8/1pPpP3/8/8/8/4K3 w - b6 0 1"));
+    const dFile = zobristKey(parseFen("4k3/8/8/1pPpP3/8/8/8/4K3 w - d6 0 1"));
+    expect(bFile).not.toBe(dFile);
+  });
+
+  it("keeps the key different when the SECOND candidate capturer is the legal one", () => {
+    // The key-level half of legal.test.ts's QE edge probe: c5xd6 is pinned, e5xd6 is not, so
+    // an ep capture IS available and the two positions genuinely differ.
+    const withEp = zobristKey(parseFen("2r4k/8/8/2PpP3/8/8/8/2K5 w - d6 0 1"));
+    const withoutEp = zobristKey(parseFen("2r4k/8/8/2PpP3/8/8/8/2K5 w - - 0 1"));
+    expect(withEp).not.toBe(withoutEp);
+  });
+});
+
+describe("ABC-011 QE — zobristKey returns the position exactly as it found it", () => {
+  it("is byte-pure at every node of a 2-ply walk from all six perft positions", () => {
+    // Since ABC-011 the key plays a move and takes it back, so "transiently mutates" is only
+    // safe if the restore is exact at EVERY node, not on the four hand-picked FENs the
+    // predicate's own purity test uses. Asserted over the whole reachable population, and
+    // over the full position state rather than through toFen, which cannot see the counters.
+    const impure: string[] = [];
+    let nodes = 0;
+    let withEpComponent = 0;
+
+    const walk = (position: Position, plies: number): void => {
+      for (const move of legalMoves(position)) {
+        const undo = makeMove(position, move);
+
+        const before = positionSnapshot(position);
+        const key = zobristKey(position);
+        if (positionSnapshot(position) !== before) impure.push(toFen(position));
+        nodes++;
+        // An ep component was XORed in, so hasLegalEnPassant returned true and the make/unmake
+        // path inside the key actually ran on this node — that is the path purity is about.
+        if (key !== keyWithoutEpSquare(position)) withEpComponent++;
+
+        if (plies > 1) walk(position, plies - 1);
+        unmakeMove(position, move, undo);
+      }
+    };
+
+    for (const [, fen] of PERFT_POSITIONS) walk(parseFen(fen), 2);
+
+    expect(impure).toEqual([]);
+    expect(nodes).toBeGreaterThan(0);
+    expect(withEpComponent).toBeGreaterThan(0); // the mutating path was genuinely exercised
   });
 });

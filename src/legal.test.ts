@@ -215,3 +215,42 @@ describe("hasLegalEnPassant — ABC-011", () => {
     }
   });
 });
+
+// ---------------------------------------------------------------------------
+// ABC-011 QE edge probes. The predicate walks its two candidate from-squares in a fixed
+// order (lower file first) and must keep looking when the first one's capture is illegal.
+// Nothing above reaches that shape: over an exhaustive walk of the perft table at its own
+// `fast` depths — 518,474 nodes — exactly TWO nodes have two pseudo-legal ep capturers at
+// all, and in neither is the lower-file one illegal, so the property test cannot get there.
+// Confirmed by mutation: replacing `if (legal) return true;` with `return legal;` left the
+// whole delivered suite green while making the key COLLAPSE two positions FIDE calls
+// different — an over-collapse, which is the unsafe error direction for a repetition key.
+// ---------------------------------------------------------------------------
+
+describe("ABC-011 QE edge probes", () => {
+  it("keeps looking when the lower-file candidate capturer is pinned — white", () => {
+    // Black just played d7-d5. c5xd6 e.p. is pinned by the c8 rook on the c-file; e5xd6 is
+    // not, because the c5 pawn stays put and keeps that file blocked.
+    const position = parseFen("2r4k/8/8/2PpP3/8/8/8/2K5 w - d6 0 1");
+    const pseudo = generateMoves(position).filter((m) => (m.flags & FLAG_EN_PASSANT) !== 0);
+    const legal = legalMoves(position).filter((m) => (m.flags & FLAG_EN_PASSANT) !== 0);
+
+    expect(pseudo).toHaveLength(2); // both candidates exist, so the ORDER is what is tested
+    expect(legal).toHaveLength(1);
+    expect(legal[0]?.from).toBe(parseSquareName("e5")); // the SECOND candidate is the legal one
+    expect(hasLegalEnPassant(position)).toBe(true);
+  });
+
+  it("keeps looking when the lower-file candidate capturer is pinned — black", () => {
+    // The mirror, so the predicate's `black ? target + 16 : target - 16` branch is covered
+    // by this shape too: c4xd3 is pinned by the c1 rook, e4xd3 is not.
+    const position = parseFen("2k5/8/8/8/2pPp3/8/8/2R4K b - d3 0 1");
+    const pseudo = generateMoves(position).filter((m) => (m.flags & FLAG_EN_PASSANT) !== 0);
+    const legal = legalMoves(position).filter((m) => (m.flags & FLAG_EN_PASSANT) !== 0);
+
+    expect(pseudo).toHaveLength(2);
+    expect(legal).toHaveLength(1);
+    expect(legal[0]?.from).toBe(parseSquareName("e4"));
+    expect(hasLegalEnPassant(position)).toBe(true);
+  });
+});
