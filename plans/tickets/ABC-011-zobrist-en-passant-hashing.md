@@ -1,8 +1,8 @@
 ---
 id: ABC-011
 title: Zobrist key hashes en passant when no capture is available
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: M
 priority: P1
 epic: EPIC-001
@@ -529,3 +529,37 @@ over 260,292 no-ep nodes, worst-case per-call shape **1.36–1.38x**, amortized 
 pool at natural ep frequency **0.995–1.022x**. **No PR exists — this repo has no git remote**, so
 there is nowhere to push and no link to record; the commits sit on the local branch. Humans hold
 merge and deploy.
+
+**Moved `In Review` → `In Security/NFR` on 2026-08-03 by QE/E2E on a PASS verdict** (task
+`ticket-to-pr-ABC-011`, same branch). **QE fixed no production code** — `src/legal.ts` and
+`src/zobrist.ts` are byte-identical to `98b07e7`; five tests were added plus one assertion line, all
+green, suite **184 → 189**, skip count **0**. The verdict was reached by re-deriving the ticket
+independently and by **breaking the delivered suite with 22 mutations**, not by re-running it: 17
+killed, **5 survived**, two of them real. **`L8`** (`if (legal) return true;` → `return legal;`,
+giving up after the first candidate capturer) survived a 184-test suite and is **not** an equivalent
+mutant — on `2r4k/8/8/2PpP3/8/8/8/2K5 w - d6 0 1` the lower-file capturer is pinned and the
+higher-file one is legal, so it **over-collapses** two positions FIDE calls different, which is the
+opposite of this ticket's safe error direction; the shape is unreachable by the property test
+(exactly **two** nodes in a 518,474-node walk have two pseudo-legal ep capturers, neither with that
+split), so the FEN was built. **`Z5`** (the ep **file** is load-bearing in no test) also survived,
+and is **pre-existing** — it survives the pre-ABC-011 baseline too. Both closed, plus a black mirror
+and a byte-purity walk over the reachable node population. **The three remaining survivors are one
+gap and belong to Security/NFR** — `Z1`/`Z4`/`L11` are behaviour-**equivalent** (189/189 green, no
+key changes on any input), so only cost moves and only on the majority path, which is `NFR-005`'s
+sub-bar verbatim; the instrument is a spied call count, not a key assertion. Handed forward with one
+new fact: **`Z1` and `L11` together are still green and make `zobristKey` write a stray piece onto
+off-board square 15.** **Every load-bearing claim held**: no existing test modified (line-level —
+only three import lines per file, `src/zobrist.test.ts:33-37` byte-identical); the fourth
+criterion's property test non-vacuous in **both** halves (557 double pushes, 52 answered, 505 not, 0
+violations — one added line now pins the collapse half, which `checked > 0` did not); purity over
+the full position state at **277,949** reachable nodes, **0 impure**, agreeing with the dev hop's spy
+to the six root positions; the module graph rebuilt a third time — acyclic, depth 6, `zobrist` 2 → 5;
+and the divergence table reproduced to the number (518,474 / 81,397 / 77,872 / 862 / **0**) with
+**zero** predicate-vs-oracle disagreements over all 81,397 ep-set nodes. **One new defect is named
+rather than fixed:** since `ABC-011`, `zobristKey` **permanently** corrupts a position whose ep
+square is semantically inconsistent (e.g. `4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1` gains a phantom black
+pawn on d5) — trigger class is semantically-invalid FEN only, the class `ABC-009`/`ABC-010` occupy
+and `## Out of scope` already carries; the ruled oracle corrupts identically on two of the three
+reproductions, and "does not inherit `ABC-009`" was independently confirmed true. It does **not**
+block this ticket. `NFR-005`'s cost bars were deliberately **not** re-measured — the next column
+owns them. Nothing was merged and nothing was deployed.
