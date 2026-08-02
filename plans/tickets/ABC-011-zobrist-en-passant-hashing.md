@@ -1,8 +1,8 @@
 ---
 id: ABC-011
 title: Zobrist key hashes en passant when no capture is available
-status: in-security-nfr
-column: In Security/NFR
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P1
 epic: EPIC-001
@@ -563,3 +563,163 @@ and `## Out of scope` already carries; the ruled oracle corrupts identically on 
 reproductions, and "does not inherit `ABC-009`" was independently confirmed true. It does **not**
 block this ticket. `NFR-005`'s cost bars were deliberately **not** re-measured — the next column
 owns them. Nothing was merged and nothing was deployed.
+
+**Moved `In Security/NFR` → `Ready for UAT` on 2026-08-03 by Security/NFR on a PASS verdict** (task
+`ticket-to-pr-ABC-011`, same branch). Gate run against `security.asvs_level: L1` and
+`security.block_on: high`. **Result PASS with three accepted risks, each carrying a named owner.**
+**No production code was changed at this gate** — `src/legal.ts` and `src/zobrist.ts` are
+byte-identical to `98b07e7`.
+
+**Acceptance criterion 7 — the `NFR-005` bar — is MET on both halves, re-measured INDEPENDENTLY with
+this gate's own scripts and its own `git archive` baseline of `4c6ed7d`; nothing was accepted from
+the Engineer's or QE's figures.** Both trees imported in ONE process, 300,000 iterations per cell
+after a 50,000 warm-up, every cell interleaved forward AND backward so drift hits both variants
+equally, two samples. **Apple M3 (Mac15,13) / Node v24.12.0 / darwin-arm64 — `UNKNOWN - verify` on
+any other hardware**; the machine-independent quantity is the ratio to the baseline tree measured in
+the same process, never the absolute nanoseconds.
+
+| position | merged (`4c6ed7d`) | ABC-011 | ratio | bar |
+|---|---|---|---|---|
+| **startpos — no ep square** | 296.8–340.7 ns | **297.2–298.4 ns** | 0.872–1.006 | ≤ ~450 ns — **MET** |
+| **kiwipete — no ep square** | 318.4–334.0 ns | **323.5–330.9 ns** | 0.969–1.039 | ≤ 432–459 ns — **MET** |
+| position-3 — no ep square | 165.8 ns | 166.2–166.8 ns | 1.003–1.007 | not a bar position |
+| ep set, no capture at all | 309.1–310.1 ns | 307.4–378.2 ns | 0.991–1.224 | not a bar position |
+| ep set, capture available | 300.6–301.6 ns | 417.6–420.8 ns | **1.385–1.400** | worst case, **under 1.5x** |
+| the divergence FEN (sparse board) | 147.8–148.2 ns | 260.6–261.0 ns | 1.759–1.766 | not a bar position |
+
+**How these cross-check the two prior hops, stated rather than glossed.** The worst-case per-call
+shape measures **1.385–1.400x** here, which lands **between** the dev hop's 1.357–1.383x and the
+design hop's 1.45–1.48x — so the spread this column was asked to adjudicate is resolved rather than
+inherited: three independently written runs agree the shape is real, is the worst on the table, and
+is comfortably inside the 1.5x bar. The divergence-FEN ratio (1.759–1.766x) sits just under the dev
+hop's 1.771–1.858x and confirms their reading of it — an artefact of a five-piece board where the
+base key costs half the normal amount, not a bar position, and its absolute cost (261 ns) is *below*
+the bar's own anchor value. One cell of this gate's own is noisy and is reported as measured rather
+than smoothed: "ep set, no capture at all" sampled 307.4 ns and 378.2 ns on the two runs; it is not a
+bar position and both samples sit far under any ceiling.
+
+**The sub-bar — "the no-ep-square path is not made slower at all" — HOLDS, and wall clock is the
+wrong instrument for it.** This gate's own timings put the shipped tree at 1.003–1.007x of baseline
+at position-3: inside noise, but "not slower **at all**" is a claim no timing run can settle at that
+resolution, and pretending otherwise would be the kind of number this file has learned three times
+not to trust. The claim is **structural** and that is how it was verified: on a no-ep node
+`position.epSquare !== NO_SQUARE` is false, `&&` short-circuits, and the executed work is
+byte-for-byte what the pre-ABC-011 tree executed. Re-spied independently with this gate's own
+counting shim through a copy of `zobrist.ts` whose body was `cmp`-verified identical to the shipped
+file apart from its two import specifiers, over a depth-3 walk of all six perft roots:
+
+```
+nodes hashed                 277,955
+nodes carrying an ep square   17,663
+hasLegalEnPassant calls       17,663
+  ... on the 260,292 NO-EP nodes:  0      <- the sub-bar
+max predicate calls per zobristKey call: 1
+```
+
+**Identical to the Engineer's figures to the node.** Three roles have now produced these counts on
+scripts none of them copied.
+
+**The gap both prior roles handed forward is PINNED, not waived — `src/zobrist.nfr.test.ts`.** It is
+a new file, not an edit to any existing test, and it lives in its own file for the reason
+`src/gameend.nfr.test.ts` does (ABC-020): a `vi.mock` factory is hoisted to file scope, so putting
+it in `src/zobrist.test.ts` would re-route the module graph for all 13 tests there to buy four
+assertions. **Each assertion was proven to fail rather than assumed to**, by applying each mutant to
+`src/` in turn and running it:
+
+- zero `hasLegalEnPassant` calls across four no-ep positions — kills **`Z1`** (reorder) and
+  **`Z4`** (drop the guard), both of which previously survived a 189-test suite.
+- exactly one call on each of three ep-set positions — stops the guard over-suppressing, and pins
+  that the answer is not recomputed.
+- the predicate returns `false` **and** leaves all 128 board bytes untouched, on two no-ep probe
+  FENs — kills **`L11`**.
+
+**The second probe FEN is this gate's own contribution and it is why the byte assertion is not
+redundant.** On `4K3/8/8/8/8/k7/p7/R7 b - - 0 1` the a2 pawn's departure discovers the a1 rook on the
+a3 king, so under `L11` the predicate still returns the **correct** `false` — and still leaves a
+stray pawn on off-board square 15. There the board-identity assertion is the only one that bites;
+verified by running it, not by reasoning about it.
+
+**The off-board write is ruled a CORRECTNESS defect, NOT a memory-safety one, and the distinction was
+measured rather than asserted.** `Position.board` is a `Uint8Array(128)` and the stray write lands on
+**index 15, which is inside the allocation** — "off-board" here is the 0x88 encoding's *logical*
+predicate (`(sq & 0x88) !== 0`), not a memory bound. And this runtime discards out-of-allocation
+typed-array writes outright: probed directly, `probe[-1] = 9` and `probe[999] = 9` both read back
+`undefined` with `length` and `byteLength` unchanged. There is no pointer arithmetic, no adjacent
+memory and no overflow reachable here, so ASVS **V1.4.1 is not-applicable** — and it is an L2 row in
+any case, outside this project's L1 tier. **What it is instead:** it breaks an invariant a *live*
+consumer leans on. `kingSquareOf` locates the king with `position.board.indexOf(KING | colour)`
+across all 128 bytes, and its own doc comment cites "off-board squares are EMPTY" as the reason that
+scan is sound. The mutant writes a PAWN byte, so it does not fool that scan — but it is the invariant
+the scan depends on, and the tidy-up that produces it left 189/189 green. That earned a guard, and it
+now has one.
+
+**QE's newly found defect is ruled MEDIUM and does NOT block.** Reproduced by this gate on all three
+of QE's FENs against the shipped tree, and against the `4c6ed7d` baseline for contrast — unchanged on
+all three there, so the property is genuinely **new** since `ABC-011`. QE's fairness to the Engineer
+was checked and holds: on the first two FENs the ruled oracle `legalMoves(p).some(...)` corrupts
+identically, so that pair is pre-existing in `generateMoves` + `apply` and merely reproduced
+faithfully; on the third, `4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1`, `generateMoves` does **not** offer the
+ep move, the oracle returns `false` and leaves the position clean, while `hasLegalEnPassant` returns
+`true` and corrupts — a genuine predicate-vs-oracle divergence, confirmed here. **Reachability was
+verified independently rather than accepted:** the only two writes to `epSquare` in `src/` are
+`fen.ts:175` (`parseFen`, which validates that the field is a square *name* and nothing about the
+board) and `apply.ts:139`, which sets it to `(move.from + move.to) / 2` only on a pawn double push —
+geometry that guarantees both the capturable pawn and the empty target. **No position reachable by
+play can trigger it.** MEDIUM rather than LOW because a function whose header promises the position
+comes back "as they found it" now silently and *permanently* mutates a caller's data on that class,
+and a maintainer will read that header as a guarantee; **not HIGH** because it is unreachable by
+play, has no untrusted-input path in a library with no entry point until `EPIC-006`, and carries no
+security consequence. **Owners: BA/PM** to cut it or fold it into `ABC-010`; **Architect/Design** to
+rule the predicate-vs-oracle divergence, which is a definition question and not an implementation
+one.
+
+**Security: NO finding at any severity, and nothing at or near `security.block_on: high`.** This
+ticket's own "No security trigger" line is upheld on inspection rather than quoted. `src/` has no
+`eval`, `new Function`, `vm`, `child_process` or `require`, no `fs`, no `http`/`https`, no `fetch`,
+no `process.env` and no `os` — grepped, all absent. Zero runtime dependencies, with `package.json`
+and the lockfile **byte-untouched** by this ticket, so no new supply-chain surface. No secret-shaped
+string anywhere in the `4c6ed7d..HEAD` diff. No auth, no session, no privilege, no personal data and
+no logging (none is required at L1). `compliance_regime` is empty, so no Compliance Officer hop is
+owed. **The ASVS L1 tier is 70 requirements and most are not-applicable by absence of the surface
+they name** — all 13 of V6 Authentication, all 6 of V7 Session Management, all 4 of V8
+Authorization, all 4 of V9 Tokens, all 5 of V10 OAuth/OIDC, all 8 of V3 Web Frontend, all 4 of V5
+File Handling, all 3 of V12 TLS and both V14 rows. **Four rows are named rather than dismissed:**
+
+- **V11.4.1** (approved hash functions) — **not-applicable**, and named precisely because it is the
+  row a scanner or a hurried reviewer *would* flag: this change sits in a module called "hashing"
+  that seeds its table from `splitmix64` with a hardcoded constant. Zobrist keys are a
+  position-identity key for game logic, not a "general cryptographic use case" — no signature, no
+  HMAC, no KDF, no random bit generation, and no security decision rests on collision resistance.
+  The fixed seed is a deliberate *requirement* (reproducible keys across runs) and the module
+  documents why `Math.random` is avoided. Flagging it would be gold-plating; passing over it
+  silently would leave the next reviewer to re-derive it.
+- **V2.1.1 / V2.2.1** (documented input-validation rules; input validated to business expectations)
+  — **partially met**, and the row that genuinely touches the defect above. FEN is this library's one
+  externally-authored input format; `parseFen` validates *structure* (it throws `FenError`) but not
+  *semantic consistency*. Pre-existing, already ticketed as **`ABC-010`**, and explicitly carried by
+  this ticket's `## Out of scope`. `ABC-011` does not create the gap — it adds one new consequence to
+  it. Owner: `ABC-010`.
+- **V15.1.1 / V15.2.1** (documented remediation timeframes for third-party components) — **not met**
+  at the project level; no such policy document exists. **Severity overridden from the L1 default of
+  `high` to `low`, with the reason stated as this role's hard limits require:** the project has zero
+  runtime dependencies, this change adds none, and a documentation-policy gap that the change neither
+  touches nor degrades is not a defect of this change. Recorded so it stays visible rather than
+  dropped. Owner: Architect/Design, at `EPIC-006` packaging.
+- **V13.4.1** (deployed without source-control metadata) — **deferred, not passed.** Nothing is
+  deployed and nothing is packaged until `EPIC-006`.
+
+**Where this change touches data it did not touch before** — the one genuinely new exposure, and the
+thing this gate looked hardest at: `zobristKey` used to **read** the board and nothing else; it now
+**writes** it transiently through `makeMove`/`unmakeMove` on the ~1–2% of nodes carrying a legal ep
+capture. Both defects on this desk are instances of exactly that. Purity on the reachable population
+is intact and pinned by QE's 277,949-node walk; this gate re-verified byte purity across all six of
+its own benchmark positions (board bytes and `toFen` both identical) and confirmed the two
+out-of-play classes above.
+
+**Gates re-run at this gate with the new guard in place:** `npm test` **193 passed / 9 files, skip
+count 0** (was 189), `npm run lint` exit 0 (the same 2 pre-existing biome config-schema infos),
+`npm run typecheck` exit 0, `npm run build` exit 0. **`ABC-009` and `ABC-010` still carried, not
+fixed. `ADR-0005` remains `proposed`; no agent may mark it `accepted` and this gate did not** — and
+the code it describes is merged on this branch, which is carried for a human rather than treated as
+self-resolving. **No PR exists and none was invented — this repo has no git remote.** Nothing was
+merged and nothing was deployed; **a human holds both.**
