@@ -1,5 +1,5 @@
 # Progress
-_Updated: 2026-08-02 by the Orchestrator (state save before a context clear). Previously: never — this file was the shipped empty template until now, while the project ran to 25 unmerged commits._
+_Updated: 2026-08-02 by the Orchestrator (ABC-020 merged to `main` on explicit owner instruction; branch stack resolved, board closed). Earlier the same day: first fill of this file, which had been the shipped empty template while the project ran to 27 unmerged commits._
 
 <!--
   The running plan-of-record. Read this FIRST on start, then `plans/board.md`. Keep it short and
@@ -19,6 +19,9 @@ latent/live test this project otherwise uses for priority. Rules-correctness bea
 
 ## What works
 
+- **ABC-020 is merged** — FIDE 9.2/9.3 draws are now claimable rather than automatic, and the 9.6
+  fivefold / 75-move backstops landed with them. The bug it fixed took a won game from the player
+  entitled to refuse the draw. **Suite 174/174, 0 skips, `src/gameend.ts` 100%.**
 - **EPIC-001 — the chess rules core is complete and merged on `main`** (ABC-001..007 + the ABC-008
   spike). Nine flat modules in `src/`, no runtime dependencies. Perft **32/32 exact at depth**,
   which is exhaustive proof of move generation, the legality filter, castling, en passant,
@@ -33,7 +36,7 @@ latent/live test this project otherwise uses for priority. Rules-correctness bea
 **Nothing is deployed and nothing is released.** `mode=lean`, `autonomy=pr`; Done means merged.
 
 - **`plans/board.md` is the WIP truth** — read it, do not infer state from here. As of 2026-08-02:
-  ABC-020 in `Ready for UAT`; `Ready` holds ABC-009, ABC-011, ABC-012, ABC-013, ABC-014;
+  ABC-020 **Done**; `Ready` holds ABC-009, ABC-011, ABC-012, ABC-013, ABC-014;
   ABC-015..019 + ABC-021 in `Backlog` behind their predecessors; `Blocked` empty.
 - **EPIC-002** (terminal board + game loop) is decomposed into ABC-012..ABC-019 + ABC-021.
   **EPIC-003..006 are still undecomposed** — each needs `epic-to-tickets` (Workflow 03) before any
@@ -59,8 +62,11 @@ All three are **carried, not owned** by ABC-020. Perft does not cover any of the
 1. **FIDE 9.6.1 says "five *consecutive* alternate moves"; ABC-020's code uses a plain 5-count.**
    `UNKNOWN - verify` — QE declined to assert a conformance gap from a remembered sentence, which
    was correct. **Not decidable from a counts map at all** (a map carries no ordering). Needs a
-   BA/PM ruling against the actual Laws text. **Inside the owner's standing directive, and it should
-   be settled BEFORE ABC-020 merges** — if real it changes `src/gameend.ts` again.
+   BA/PM ruling against the actual Laws text. **Inside the owner's standing directive.** The
+   Orchestrator recommended settling it before the merge; the owner merged first on 2026-08-02,
+   which is a legitimate call — the error direction is the safe one, as with ABC-011. The
+   consequence is now real rather than hypothetical: closing it means a **second change to
+   `src/gameend.ts` on `main`**, not one change on a branch.
 2. **`GameResult` is dead** — referenced by nothing in `src/` after ABC-020. Kept deliberately
    (coding rule 12). The trap: it is a flat union matching neither arm of `GameStatus`, so
    `render(r: GameResult)` compiles and silently drops the claim. One-line close
@@ -69,24 +75,28 @@ All three are **carried, not owned** by ABC-020. Perft does not cover any of the
    after its first capture; the clock resets three times). The criteria's **substance holds** under
    ten drives and is pinned by tests. Documentation only.
 
-## The branch stack — the single easiest thing to lose
+## The branch stack — RESOLVED 2026-08-02, everything is on `main`
 
-**25 commits are unmerged, in three stacked branches. A human holds every merge.** There is
-**no git remote on this repo at all**, so no PR exists or can be opened — that absence is recorded,
-not an oversight.
+**All nine branches are now contained in `main`** (`git branch --no-merged main` is empty), at
+`cb62c9f`. The three formerly-open branches — `architecture-audit-2026-07-29`,
+`epic-to-tickets-EPIC-002`, `ticket-to-pr-ABC-020` — were a single linear chain and landed in one
+fast-forward (27 commits, no merge commit). Gate verified before the merge on the tip and again
+after it on `main`: 174/174, 0 skips.
 
-```
-main                                    d53ce31   EPIC-001 closed
- └─ grugops/architecture-audit-2026-07-29        ADR-0002 + ADR-0003 ratified; ABC-009/010/011 cut
-     └─ grugops/epic-to-tickets-EPIC-002         EPIC-002 decomposed; ADR-0004 ratified; ABC-020/021 cut
-         └─ grugops/ticket-to-pr-ABC-020  c51e560  ABC-020 implemented + gated  <- current tip
-```
+**Branch from `main` now.** It carries all four ADRs and every ticket. The earlier warning that
+`main` lacked them is obsolete.
 
-Branch from the **tip**, not from `main` — `main` has none of the ADRs the current work rests on.
+No branch was deleted — the owner's call, not an agent's. There is still **no git remote on this
+repo at all**, so no PR exists or can be opened; that absence is recorded, not an oversight.
 
-**Merge order is load-bearing: ABC-020 merges before ABC-019 and ABC-016**, whose acceptance
-criteria were amended on 2026-07-31 to match it. Reverse it and today's FIDE deviation stops being
-a bug and becomes an encoded assumption.
+**The load-bearing merge order was honoured**: ABC-020 landed before ABC-019 and ABC-016, whose
+acceptance criteria were amended on 2026-07-31 to match it. That constraint is now **discharged**,
+not pending.
+
+**The merge was performed by an agent on explicit human instruction.** That is the one path that
+crosses the "humans hold merge" line without breaking it — the human holds the decision, the agent
+supplies the keystroke — and it is **not standing authorization**. No future merge happens without
+the same explicit instruction.
 
 ## Governance facts that must survive a context clear
 
@@ -108,6 +118,16 @@ a bug and becomes an encoded assumption.
 
 ## Next action
 
-**Settle open question 1 (FIDE 9.6.1 "consecutive") — a BA/PM ruling against the actual Laws text.**
-It is the last thing that could change `src/gameend.ts`, and it is cheaper before the merge than
-after. Then the ABC-020 merge is the owner's, in the order named above.
+The merge is done and the board has no work in flight — every column between `Ready` and `Done` is
+empty. Two candidates, and they are not equivalent:
+
+1. **Settle open question 1 (FIDE 9.6.1 "consecutive")** — a BA/PM ruling against the actual Laws
+   text. Cheap, and it is inside the owner's standing directive. It is now a change on `main` if
+   real, so it will not get cheaper by waiting.
+2. **Pull the next ticket.** `Ready` holds five: ABC-009, ABC-011 (both rules-correctness, which the
+   directive ranks first), and ABC-012, ABC-013, ABC-014 (the EPIC-002 renderer P0s the product does
+   not exist without). Rules-before-renderer is pull-order guidance on the board, not an inflated
+   priority number — read the re-sequencing comment under `Ready` before choosing.
+
+The Orchestrator's recommendation is **(1) first**, on the same reasoning that made it right before
+the merge: it is the last open question that can change already-merged rules code, and it is small.
