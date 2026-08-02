@@ -1,0 +1,28 @@
+# Fetch manifest — FIDE Laws of Chess, retrieved for task refinement-fide-9-6-1
+# Retrieved by: ba-pm, 2026-08-02, via curl from this sandbox (network egress confirmed).
+# Publisher: FIDE Handbook, handbook.fide.com — FIDE's own authoritative publication.
+
+url:    https://handbook.fide.com/chapter/E012014
+status: 200
+bytes:  163624
+sha256: dd466d3cd2814b84d821c57651bab8ea38336c5befd96f298c97eb019c512f7c
+title:  FIDE Handbook Laws of Chess: For competitions starting from 1 July 2014 till 30 June 2017
+
+url:    https://handbook.fide.com/chapter/E012017
+status: 200
+bytes:  189226
+sha256: d1d99aacd2361045c81f79cae1c80451fa3c04704ae8fb62543aff2711e33e36
+title:  FIDE Handbook Laws of Chess: For competitions starting from 1 July 2017 till 31 December 2017
+
+url:    https://handbook.fide.com/chapter/E012018
+status: 200
+bytes:  188830
+sha256: 61166d399ec6f21af488da272424673c60038441900d41a77b5c10ca4f8f4e37
+title:  FIDE Handbook Laws of Chess: For competitions starting from 1 January 2018 till 31 December 2022
+
+url:    https://handbook.fide.com/chapter/E012023
+status: 200
+bytes:  186226
+sha256: e0c8bee28c2dee07b724357b9802fee8591e9d11efd2a910b38e9bd21d3c7643
+title:  FIDE Handbook FIDE Laws of Chess taking effect from 1 January 2023
+
