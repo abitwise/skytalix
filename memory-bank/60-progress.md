@@ -1,5 +1,5 @@
 # Progress
-_Updated: 2026-08-03 by Architect/Design (task `ticket-to-pr-ABC-011`, subtask `architect-abc011-defect-definition-and-ratify`, Workflow 04) — **ABC-011's SECOND design hop is closed and the ticket is back in `Ready for Dev`.** Three things were owed and all three are ruled. **(1) The MEDIUM defect's definition question: purity is UNCONDITIONAL and is bought with a PRECONDITION on the probe move, not with a change to what the predicate means; the answer stays domain-restricted and is SPECIFIED (`false`, touching nothing) where the board contradicts the ep square, because the ruled oracle is demonstrably unsound there — `generateMoves` corrupts on two of QE's three FENs and offers a pawn capturing onto the mover's own knight on a third.** Two guards, not one: the captured-pawn guard buys purity and closes a **fourth** reproduction no prior role had; the empty-target guard buys oracle agreement and is needed only for two **pure** divergences constructed at this hop. Re-derived on a fourth independent script: 518,474 nodes / 81,397 ep-set, **0** answers changed, **0** keys changed, **0** guard firings on the reachable population; 193/193 green in a sandbox with no existing test edited. **(2) Castling is NOT the en-passant case** — `zobristKey` keeps hashing castling **rights**, ruled in **`ADR-0006`** from the retained FIDE text whose sha256 **and currency** were both re-verified that day. **(3) `ADR-0005` is `accepted` WITH AN AMENDMENT** (one of its statements was false as written) and **`ADR-0006` is new and `accepted`** — the first ADRs ratified under the owner's standing directive of 2026-08-03, both carrying per-clause falsifier tables. Board: `Ready for UAT` 1/4 → 0/4, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. **No production code changed**, size stays `M`, and one item (`generateMoves` offering a capture onto the mover's own piece) is **routed to BA/PM rather than cut here**. Previously 2026-08-02 by Architect/Design (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011's first design hop is closed: "an en-passant capture is available" is ruled to mean a LEGAL one (strict FIDE 9.2.3), the predicate is homed in `src/legal.ts` with `src/zobrist.ts` importing it, the ticket is re-sized `S` → `M` and not split, and it sits in `Ready for Dev`.** `ADR-0002` is extended around and NOT amended (no human ruling owed, none taken); **`ADR-0005` is written and is `proposed` — no agent may accept it, and ABC-011 is not blocked on it.** Board: `Ready` 5/8 → 4/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. No production code changed. Previously the same day by BA/PM (task `refinement-fide-9-6-1`, Workflow 07) — **open question 1 CLOSED: FIDE 9.6.1 does NOT say "consecutive" and `src/gameend.ts` conforms**, ruled against the Laws text retrieved by this role from `handbook.fide.com` and retained verbatim under the task's context folder. No ticket cut, no board move (`Ready` stays 5/8), no code change owed on `main`. The "Next action" section is re-pointed accordingly. Previously the same day by the Orchestrator (ABC-020 merged to `main` on explicit owner instruction; branch stack resolved, board closed). Earlier the same day: first fill of this file, which had been the shipped empty template while the project ran to 27 unmerged commits._
+_Updated: 2026-08-04 by the Orchestrator (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011 is MERGED to `main` and `Done`.** Fast-forward `4a73cf3` → `d3efba6`, 16 commits, no merge commit; gates run before the merge on the tip and again **after it on `main`** — 214/214, skip count 0, lint + typecheck + build exit 0. Merge performed by an agent on **explicit human instruction**, which is **not standing authorization**; the branch was not deleted. UAT deferred → EPIC-006. The **"Next action"** section is rewritten: two unowned items go to BA/PM **before** the next pull, because one of them is a move-generation legality defect that may outrank `ABC-012` under the owner's standing directive. Previously 2026-08-03 by Architect/Design (task `ticket-to-pr-ABC-011`, subtask `architect-abc011-defect-definition-and-ratify`, Workflow 04) — **ABC-011's SECOND design hop is closed and the ticket is back in `Ready for Dev`.** Three things were owed and all three are ruled. **(1) The MEDIUM defect's definition question: purity is UNCONDITIONAL and is bought with a PRECONDITION on the probe move, not with a change to what the predicate means; the answer stays domain-restricted and is SPECIFIED (`false`, touching nothing) where the board contradicts the ep square, because the ruled oracle is demonstrably unsound there — `generateMoves` corrupts on two of QE's three FENs and offers a pawn capturing onto the mover's own knight on a third.** Two guards, not one: the captured-pawn guard buys purity and closes a **fourth** reproduction no prior role had; the empty-target guard buys oracle agreement and is needed only for two **pure** divergences constructed at this hop. Re-derived on a fourth independent script: 518,474 nodes / 81,397 ep-set, **0** answers changed, **0** keys changed, **0** guard firings on the reachable population; 193/193 green in a sandbox with no existing test edited. **(2) Castling is NOT the en-passant case** — `zobristKey` keeps hashing castling **rights**, ruled in **`ADR-0006`** from the retained FIDE text whose sha256 **and currency** were both re-verified that day. **(3) `ADR-0005` is `accepted` WITH AN AMENDMENT** (one of its statements was false as written) and **`ADR-0006` is new and `accepted`** — the first ADRs ratified under the owner's standing directive of 2026-08-03, both carrying per-clause falsifier tables. Board: `Ready for UAT` 1/4 → 0/4, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. **No production code changed**, size stays `M`, and one item (`generateMoves` offering a capture onto the mover's own piece) is **routed to BA/PM rather than cut here**. Previously 2026-08-02 by Architect/Design (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011's first design hop is closed: "an en-passant capture is available" is ruled to mean a LEGAL one (strict FIDE 9.2.3), the predicate is homed in `src/legal.ts` with `src/zobrist.ts` importing it, the ticket is re-sized `S` → `M` and not split, and it sits in `Ready for Dev`.** `ADR-0002` is extended around and NOT amended (no human ruling owed, none taken); **`ADR-0005` is written and is `proposed` — no agent may accept it, and ABC-011 is not blocked on it.** Board: `Ready` 5/8 → 4/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. No production code changed. Previously the same day by BA/PM (task `refinement-fide-9-6-1`, Workflow 07) — **open question 1 CLOSED: FIDE 9.6.1 does NOT say "consecutive" and `src/gameend.ts` conforms**, ruled against the Laws text retrieved by this role from `handbook.fide.com` and retained verbatim under the task's context folder. No ticket cut, no board move (`Ready` stays 5/8), no code change owed on `main`. The "Next action" section is re-pointed accordingly. Previously the same day by the Orchestrator (ABC-020 merged to `main` on explicit owner instruction; branch stack resolved, board closed). Earlier the same day: first fill of this file, which had been the shipped empty template while the project ran to 27 unmerged commits._
 
 <!--
   The running plan-of-record. Read this FIRST on start, then `plans/board.md`. Keep it short and
@@ -71,6 +71,13 @@ that makes the difference — not a preference.**
 
 ## What works
 
+- **ABC-011 is merged** — `zobristKey` now includes the en-passant component **only when a LEGAL
+  en-passant capture exists**, so two positions FIDE calls the same finally hash the same and
+  threefold repetition stops under-detecting. The fix is **four executable lines** in `src/legal.ts`
+  behind a new `hasLegalEnPassant` export. **Suite 214/214, 0 skips**, `src/legal.ts` and
+  `src/zobrist.ts` both 100%. Cost to the per-node hot path is below what any instrument here can
+  resolve. Two ADRs landed with it — **ADR-0005** (the hash module asks the rules) and **ADR-0006**
+  (castling rights stay rights).
 - **ABC-020 is merged** — FIDE 9.2/9.3 draws are now claimable rather than automatic, and the 9.6
   fivefold / 75-move backstops landed with them. The bug it fixed took a won game from the player
   entitled to refuse the draw. **Suite 174/174, 0 skips, `src/gameend.ts` 100%.**
@@ -209,38 +216,36 @@ the same explicit instruction.
 
 ## Next action
 
-**Pull `ABC-011` from `Ready for Dev` into `In Development` — a SECOND time.** That is the
-Orchestrator's move and it was deliberately not taken at either design hop. What the engineer picks
-up is a **delta on already-gated branch work**, not a fresh ticket: two guard conditions in
-`hasLegalEnPassant`, six test cases, and two doc-comment corrections. **The only production file
-that changes is `src/legal.ts`.** The `### ANSWERED 2026-08-03` block carries the contract, the six
-probe FENs with the mutant each one kills, and the cost. **`ABC-011` must land before `ABC-012`** —
-that is the whole reason it was pulled first, and `ABC-012`'s repetition tests are written against
-this key. **Security/NFR re-gates after the fix**; the design hop measured but does not adjudicate.
+**`ABC-011` is merged and `Done`** (2026-08-04, fast-forward `4a73cf3` → `d3efba6`, 16 commits, no
+merge commit; 214/214 and skip count 0 re-verified **on `main`** after the merge). Every column
+between `Ready` and `Done` is empty. `Ready` holds four: ABC-009, ABC-012, ABC-013, ABC-014.
 
-After it: `Ready` holds ABC-009 (the other rules-core defect), and ABC-012, ABC-013, ABC-014 (the
-EPIC-002 P0s the product does not exist without). Rules-before-renderer is pull-order guidance on the
-board, not an inflated priority number — read the re-sequencing comment under `Ready` before
-choosing. **`ABC-014` still carries the ABC-015/RISK-005 sequencing knot the Orchestrator flagged for
-BA/PM on 2026-08-02; it is untouched by this hop.**
+**Route the two unowned items to BA/PM first, then pull `ABC-012`.** In that order, and the order is
+the point rather than a preference:
 
-**No open question can change already-merged rules code any more.** The one that could — 9.6.1 —
-closed as conformant on 2026-08-02. Questions 2 and 3 are a dead type alias and a wording
-correction; neither touches behaviour, and neither has been ruled on. **Question 2 is named as
-Architect/Design's seam and was deliberately NOT ruled at ABC-011's design hop** — that hop's scope
-was one question on one ticket, and taking a second ruling in passing is how a scope becomes a
-habit.
+1. **`generateMoves` offers an en-passant capture onto a square occupied by the mover's OWN piece.**
+   Found at ABC-011's second design hop, re-verified independently twice since, **routed to BA/PM by
+   three roles and cut by none — so it is currently owned by nobody.** It is a move-generation
+   legality defect in merged, `Done`, perft-proven code, which is precisely the class the owner's
+   standing legality-first directive ranks above everything else. **BA/PM must size and rank it
+   before the next pull order is fixed**, because if it lands P0 it goes ahead of `ABC-012`. Note
+   what perft cannot say here: perft counts nodes, and a generator that offers an extra move its
+   own legality filter later rejects can still produce exact perft numbers.
+2. **The `ABC-014` / `ABC-015` / `RISK-005` knot.** `ABC-015` says it merges "with or before
+   `ABC-014` reaches `Done`, never after", while the board holds `ABC-015` in `Backlog` with
+   `blocked-until: ABC-014`. That reads as a cycle and it gates a P0. **Owner: BA/PM.** It has been
+   flagged twice and untied zero times.
+3. **Then `ABC-012`** (game history module, M, P0) — the ticket `ABC-011` was deliberately sequenced
+   ahead of. Its blocker is now gone: its repetition tests can be written against a key that means
+   what FIDE means, instead of being shaped to dodge a defect. It needs no design hop.
 
-**Nothing is owed to a human except the merge.** `ADR-0005` and `ADR-0006` are both `accepted` as of
-2026-08-03 under the owner's standing directive, so the long-standing "an ADR awaits a human" item is
-closed. **Merge and deploy are still human-held and were not delegated**, and an agent supplies the
-keystroke only on explicit instruction — never standing.
+**Nothing is owed to a human except merges.** `ADR-0005` and `ADR-0006` are both `accepted` under the
+owner's standing delegation of 2026-08-03, so the long-standing "an ADR awaits a human" item is
+closed and stays closed. **Merge and deploy were NOT delegated** — an agent supplies the keystroke
+only on explicit instruction, never standing. The `grugops/ticket-to-pr-ABC-011` branch was **not
+deleted**; that is the owner's call.
 
-**One item is ROUTED TO BA/PM and is currently owned by nobody until they act:** `generateMoves`
-offers an en-passant capture onto a square occupied by the **mover's own** piece
-(`4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1`, `4k3/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1`, both reproduced
-2026-08-03). Invalid-FEN class, a sibling of `ABC-009`, plausibly folds into `ABC-010`. Architect/
-Design named it rather than cutting it, because cutting tickets is not that role's call. **A second,
-cheaper item rides with it:** `makeMove`'s doc comment does not state what a well-formed `Move` is,
-which is the precondition every one of these defects violates — one sentence, in a file `ABC-011`
-puts out of scope.
+**Two open questions remain and neither touches behaviour:** the dead `GameResult` alias
+(Architect/Design's seam, deliberately not ruled at either ABC-011 hop — that hop's scope was one
+question on one ticket) and ABC-020's A5/A8 `Given` wording. `ABC-009` and `ABC-010` are still
+carried, not fixed.

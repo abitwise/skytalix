@@ -1,8 +1,8 @@
 ---
 id: ABC-011
 title: Zobrist key hashes en passant when no capture is available
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: M
 priority: P1
 epic: EPIC-001
