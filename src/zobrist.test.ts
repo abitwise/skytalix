@@ -252,3 +252,38 @@ describe("ABC-011 QE — zobristKey returns the position exactly as it found it"
     expect(withEpComponent).toBeGreaterThan(0); // the mutating path was genuinely exercised
   });
 });
+
+// ---------------------------------------------------------------------------
+// ABC-011 second pass — the key-level half of the precondition, on the class where the board
+// contradicts the ep square. The predicate is specified to answer `false` there, so the ep
+// component is omitted and such a position hashes exactly as it would with no ep square at
+// all; and `zobristKey` must return the position it was handed, byte for byte, on EVERY input
+// rather than only on the reachable ones. Both halves are needed: on the last two FENs the
+// shipped code was already pure and only the key was wrong, and on the first three it was the
+// key AND the board.
+// ---------------------------------------------------------------------------
+
+/** The same table src/legal.test.ts drives the predicate with — the boards that contradict their own ep square. */
+const CONTRADICTORY_EP: [label: string, fen: string][] = [
+  ["no pawn to capture at all", "4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1"],
+  ["a WHITE pawn where the captured black one should be", "4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1"],
+  ["an ep square on the wrong rank for the side to move", "4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1"],
+  ["a white pawn standing ON the ep target", "4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1"],
+  ["the ep target occupied by an enemy knight", "4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1"],
+  ["the same, mirrored", "4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1"],
+];
+
+describe("ABC-011 — zobristKey where the board contradicts the ep square", () => {
+  it.each(CONTRADICTORY_EP)(
+    "omits the ep component and returns the position intact (%s)",
+    (_label, fen) => {
+      const position = parseFen(fen);
+      // Taken on a FRESH copy, so a corrupting key cannot poison its own reference value.
+      const reference = keyWithoutEpSquare(parseFen(fen));
+      const before = positionSnapshot(position);
+
+      expect(zobristKey(position), fen).toBe(reference);
+      expect(positionSnapshot(position), fen).toBe(before);
+    },
+  );
+});

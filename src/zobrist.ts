@@ -11,7 +11,11 @@
  * moves, so an ep square no legal capture can use does not distinguish two positions. One
  * consequence is worth knowing before calling this: on the ~2% of positions where an ep
  * capture is on the board, the key is NOT a pure read — the predicate plays that capture and
- * takes it back, so `zobristKey` transiently mutates the position it is given.
+ * takes it back, so `zobristKey` transiently mutates the position it is given. That mutation is
+ * bounded by the predicate's own precondition: it plays the capture only where the board holds
+ * exactly the pawn the capture takes and the target square is empty, so the move it plays is
+ * one `unmakeMove` can reverse exactly and the position comes back byte-identical on EVERY
+ * input — invalid FENs included, not only positions reachable by play.
  *
  * ABC-007 is the first ticket that needs it (repetition detection); EPIC-004's transposition
  * table is the second, which is why hashing is its own module rather than buried in game-end.

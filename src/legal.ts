@@ -59,10 +59,17 @@ const EP_CAPTURE_SIDES = [-1, 1] as const;
 
 /**
  * Is an en-passant capture LEGAL for the side to move? True exactly when
- * `legalMoves(position).some(m => m.flags === FLAG_EN_PASSANT)` is true — that expression is
- * the DEFINITION and the test oracle, and it is deliberately NOT the implementation: running
- * the whole generator here costs ~14x a bare key on the positions that reach it, and it is
- * called from `zobristKey` on every node ABC-011 makes it reach (ADR-0005).
+ * `legalMoves(position).some(m => m.flags === FLAG_EN_PASSANT)` is true ON POSITIONS WHOSE
+ * EN-PASSANT SQUARE THE BOARD DOES NOT CONTRADICT — that expression is the DEFINITION and the
+ * test oracle there, and it is deliberately NOT the implementation: running the whole generator
+ * here costs ~14x a bare key on the positions that reach it, and it is called from `zobristKey`
+ * on every node ABC-011 makes it reach (ADR-0005).
+ *
+ * That domain contains every position `makeMove` can produce, hence everything reachable by
+ * play. Outside it the oracle is unsound — `generateMoves` offers en-passant captures onto
+ * squares occupied by the mover's OWN piece — so the answer there is SPECIFIED rather than
+ * derived: `false`, which is the truthful answer about a board on which the named capture
+ * cannot be performed (the pawn to take is absent, or the destination is occupied).
  *
  * ABC-011: FIDE 9.2.3 makes two positions the same only when "the possible moves of all the
  * pieces of both players are the same", so a pawn takeable only by a move that exposes its
@@ -70,7 +77,10 @@ const EP_CAPTURE_SIDES = [-1, 1] as const;
  * why this is legality and not the cheaper board-only question.
  *
  * Like `legalMoves` it plays a move and takes it back, so the position is byte-identical on
- * return — asserted across the call rather than assumed (`src/legal.test.ts`).
+ * return — for EVERY input, not merely for reachable ones, and BY CONSTRUCTION rather than by
+ * luck of the input distribution: the two guards below establish the precondition `unmakeMove`
+ * assumes and does not state, so the probe is never played on a board it does not fit. Asserted
+ * across the call rather than assumed (`src/legal.test.ts`).
  */
 export function hasLegalEnPassant(position: Position): boolean {
   const target = position.epSquare;
@@ -83,6 +93,22 @@ export function hasLegalEnPassant(position: Position): boolean {
   // from-squares is what keeps this off `generateMoves`; 0x88 turns the file-wrap case at the
   // a- and h-files into the same edge test as everything else.
   const rank = black ? target + 16 : target - 16;
+  const captured = PAWN | (black ? 0 : BLACK);
+
+  // The probe move is synthesised here rather than taken from the generator, so its
+  // precondition has to be established here too — nothing else in the call chain does it.
+  // Both conditions are loop-invariant, so they sit above the loop rather than inside it.
+  //
+  // (a) buys the ANSWER: with the target occupied, `generateMoves` reads the square as an
+  //     ordinary capture and never offers the ep move, so the oracle says no and so must this.
+  //     Purity does NOT need it — make/unmake round-trips exactly when the captured pawn is
+  //     genuinely there — which is why it cannot be folded into (b).
+  // (b) buys PURITY: `undoSpecial` writes `move.captured` back onto `rank` unconditionally, so
+  //     if the board never held that pawn the "restore" creates one and the damage is
+  //     permanent. (a) does NOT catch that — an ep square on the wrong rank leaves the target
+  //     empty — which is why it cannot be folded into (a).
+  if (position.board[target] !== EMPTY) return false;
+  if (position.board[rank] !== captured) return false;
 
   for (const side of EP_CAPTURE_SIDES) {
     const from = rank + side;
@@ -92,7 +118,7 @@ export function hasLegalEnPassant(position: Position): boolean {
       from,
       to: target,
       piece: pawn,
-      captured: PAWN | (black ? 0 : BLACK),
+      captured,
       flags: FLAG_EN_PASSANT,
       promotion: EMPTY,
     };

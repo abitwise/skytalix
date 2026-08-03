@@ -254,3 +254,98 @@ describe("ABC-011 QE edge probes", () => {
     expect(hasLegalEnPassant(position)).toBe(true);
   });
 });
+
+// ---------------------------------------------------------------------------
+// ABC-011 second pass — the probe move's PRECONDITION.
+//
+// `hasLegalEnPassant` synthesises its probe Move rather than taking one from the generator,
+// and `unmakeMove` is an exact inverse only for a move that is well-formed FOR THIS BOARD:
+// `undoSpecial` writes `move.captured` back onto the capture square unconditionally, so where
+// the board never held that pawn the "restore" is a permanent CREATION. Ruled at the second
+// design hop (ticket, `### ANSWERED 2026-08-03`) after the project owner declined to merge
+// carrying it: purity is UNCONDITIONAL, it is bought with a precondition rather than with a
+// change to what the predicate means, and the answer off that domain is SPECIFIED — `false`,
+// touching nothing — because `generateMoves` is itself unsound there and the oracle cannot be
+// the authority on a class it gets wrong.
+//
+// TWO guards, and neither subsumes the other. Every row names the guard whose removal it
+// kills. The last two are the shapes where the shipped predicate was already byte-PURE and
+// only its ANSWER was wrong, which is why the empty-target guard cannot be dropped as
+// "already covered by the purity one".
+// ---------------------------------------------------------------------------
+
+/** Positions whose board CONTRADICTS their en-passant square — the class the ruling specifies. */
+const CONTRADICTORY_EP: [label: string, fen: string][] = [
+  // The ep target is EMPTY on these three, so the empty-target guard passes cleanly and only
+  // the captured-pawn guard stops the probe. Each one corrupts without it, permanently.
+  ["no pawn to capture at all", "4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1"],
+  ["a WHITE pawn where the captured black one should be", "4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1"],
+  ["an ep square on the wrong rank for the side to move", "4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1"],
+  // Target occupied AND the pawn to take absent — either guard alone closes this one.
+  ["a white pawn standing ON the ep target", "4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1"],
+  // The captured pawn IS present here, so make/unmake round-trips byte-exactly and the shipped
+  // predicate is PURE — only the answer is wrong, because `generateMoves` reads an occupied ep
+  // target as an ordinary capture and never offers the ep move. NOTHING but the empty-target
+  // guard closes these two.
+  ["the ep target occupied by an enemy knight", "4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1"],
+  ["the same, mirrored", "4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1"],
+];
+
+/**
+ * The FULL state of a Position: all 128 board bytes — the off-board ones included — and every
+ * scalar. `toFen` sees neither an off-board write (the ABC-011 Security/NFR gate found a mutant
+ * that left a stray pawn on square 15) nor the counters, so purity is compared over the whole
+ * object rather than through a serialization of the playable squares.
+ */
+function fullState(position: Position): string {
+  return [
+    position.board.join(","),
+    position.blackToMove,
+    position.castling,
+    position.epSquare,
+    position.halfmoveClock,
+    position.fullmoveNumber,
+  ].join("|");
+}
+
+describe("hasLegalEnPassant — ABC-011 the probe's precondition", () => {
+  it.each(CONTRADICTORY_EP)("answers false and touches nothing (%s)", (_label, fen) => {
+    const position = parseFen(fen);
+    const before = fullState(position);
+
+    expect(hasLegalEnPassant(position), fen).toBe(false);
+    expect(fullState(position), fen).toBe(before);
+  });
+
+  it("is pure for EVERY ep square value, not merely the reachable ones", () => {
+    // The bar this fix is held to is unconditional, so it is asserted over the whole input
+    // space rather than over a handful of FENs: every 0x88 index including the 64 off-board
+    // ones, plus values outside the array entirely. This subsumes the two boundary probes the
+    // design hop named — a1 on the third board is "an ep square on no ep rank" (kills nothing,
+    // and is here as documentation of the boundary rather than as coverage), a3 on that same
+    // board is the fourth reproduction. The NO_SQUARE (-1) input is the predicate's own early
+    // return and is pinned by "is false when no ep square is set" above and by
+    // src/zobrist.nfr.test.ts; every OTHER value is swept here.
+    const boards = [
+      "4k3/8/8/3pP3/8/8/8/4K3 w - - 0 1", // a real ep pair, white to move
+      "4k3/8/8/3pP3/8/8/8/4K3 b - - 0 1", // the same board, black to move
+      "4k3/8/8/8/8/8/1P6/4K3 w - - 0 1", // one white pawn on b2 — the a1/a3 boundary board
+      "4K3/8/8/8/8/k7/p7/R7 b - - 0 1", // the Security/NFR gate's off-board-write probe
+      "rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", // a full board
+    ];
+    const outsideTheArray = [-999, -16, -2, 128, 999];
+    const targets = [...Array.from({ length: 128 }, (_, square) => square), ...outsideTheArray];
+
+    for (const fen of boards) {
+      const position = parseFen(fen);
+      for (const target of targets) {
+        position.epSquare = target;
+        const before = fullState(position);
+
+        hasLegalEnPassant(position);
+
+        expect(fullState(position), `${fen} with epSquare ${target}`).toBe(before);
+      }
+    }
+  });
+});
