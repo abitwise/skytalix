@@ -243,9 +243,20 @@ mean something, at any game length.
 - `RISK-005` Terminal portability — Unicode chess glyphs and colour behave differently
   across Windows Terminal, iTerm2, tmux, and CI. Mitigated by the ASCII fallback being
   built in from the start rather than retrofitted. **The "built in from the start" clause is
-  why `ABC-015` carries a sequencing constraint: it merges with or before `ABC-014`, never
+  why `ABC-015` carries a sequencing constraint: it merges with or before `ABC-018`, never
   after.** The colour half of this risk is disposed of by [A4] — there is no colour to be
   portable about in the MVP.
+
+  > **CORRECTED 2026-08-04 by BA/PM** (task `refinement-2026-08-04`, Workflow 07). The bolded clause
+  > previously named **`ABC-014`** and that was wrong — it made a cycle with `ABC-015`'s own
+  > `blocked-until: ABC-014` (`ABC-015` cannot be written until `ABC-014` declares `GlyphMode`), and
+  > it stopped a `P0` lane twice. **The constraint binds at `ABC-018`, the first ticket in this epic
+  > that puts a board in front of a player.** `ABC-014` returns a frame as a value, writes nothing,
+  > and takes the glyph mode as a parameter — so merging it cannot produce the hardcoded-mode build
+  > this risk's mitigation rules out. **Only the event the constraint binds to moved. The risk's
+  > severity and its mitigation strategy are unchanged**, and if a later reader thinks the
+  > *mitigation* needs revisiting, that is Security/NFR's call and not BA/PM's. Full reasoning on
+  > `ABC-015`; `ABC-014` and `ABC-018` carry the matching clauses.
 
 ## NFR triggers
 

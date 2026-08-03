@@ -120,10 +120,50 @@ One criterion per row of the table, each a pure function call with no terminal a
 - **`ABC-014`** — declares the `GlyphMode` type this returns. Not a deep dependency; it is why this
   ticket sits behind `ABC-014` in `Backlog` rather than beside it in `Ready`.
 - **Sequencing constraint, from `RISK-005`'s own mitigation wording**: this ticket merges **with or
-  before** `ABC-014` reaches `Done`, never after. `RISK-005` is mitigated by the fallback being
-  *"built in from the start rather than retrofitted"*, and a renderer that ships with a hardcoded
-  mode and gains selection later is precisely the retrofit that wording rules out.
+  before `ABC-018`**, never after. `RISK-005` is mitigated by the fallback being *"built in from the
+  start rather than retrofitted"*, and a build that puts a board in front of a player with a
+  hardcoded glyph mode, and gains selection afterwards, is precisely the retrofit that wording rules
+  out. **`ABC-018` is that build** — it is the ticket that makes the frame a display rather than a
+  value, and it is the first thing in this epic a player can see.
 - No dependency on `ADR-0004`, `ABC-012` or `ABC-013`.
+
+> ### CORRECTED IN PLACE 2026-08-04 by BA/PM (task `refinement-2026-08-04`, Workflow 07)
+>
+> **This clause previously read "merges with or before `ABC-014` reaches `Done`, never after". That
+> wording was wrong and it was a cycle.** Stated so the correction can be checked rather than
+> inherited:
+>
+> - This ticket **needs** `ABC-014` first — `ABC-014` declares the `GlyphMode` type this function
+>   returns, which is why the board holds it `blocked-until: ABC-014`. **That is unchanged and
+>   correct.**
+> - In this project `Done` **means merged** (`mode=lean`, `autonomy=pr`). So the old clause required
+>   this ticket to merge no later than the ticket it cannot be written without. The two statements
+>   are jointly satisfiable only if both merge in the same act — i.e. only if they are one ticket,
+>   which `ABC-014`'s own size rationale deliberately rejects (*"folding all three into one renderer
+>   ticket gives an 8-point `XL` and an automatic `SPLIT_REQUIRED`"*).
+> - It was **flagged twice by the Orchestrator** (2026-08-02, 2026-08-03), which twice declined to
+>   pull `ABC-014` — a `P0` — rather than walk into it. It is a stopped lane, not a documentation
+>   nit.
+>
+> **Which document was wrong, and why this one:** `ABC-014`'s `## Dependencies` already said the
+> right thing — *"`ABC-015` … must merge **with or before this ticket's first user-visible use**"* —
+> and this ticket's clause is the one that mis-copied it as `ABC-014` reaching `Done`.
+> **`ABC-014` reaching `Done` is not a user-visible use of anything.** `ABC-014` is scoped as a pure
+> function that *"returns a frame as a value … and writes nothing"*, and it takes the glyph mode as a
+> **parameter** it does not choose. So merging `ABC-014` alone cannot realise `RISK-005`: there is no
+> player, no terminal, and structurally no hardcoded mode to retrofit. The retrofit becomes possible
+> only where a caller must supply a mode to draw something a player sees, and that caller is
+> `ABC-018`.
+>
+> **What did NOT change, deliberately:** `RISK-005`'s severity, its mitigation strategy, this
+> ticket's size, priority, scope, acceptance criteria and `Backlog` position, and the board's
+> `blocked-until: ABC-014`. Only the event the merge-order constraint binds to moved — from
+> `ABC-014`'s merge to `ABC-018`'s. If anyone reads this as changing the *mitigation* rather than its
+> sequencing, that is Security/NFR's call and not this one's; BA/PM ruled the sequencing under the
+> owner's 2026-08-03 delegation of scope, sizing and priority to this role.
+>
+> **Consequence for the pull order:** `ABC-014` is unblocked and pullable now. The resulting chain is
+> `ABC-014` → `ABC-015` → `ABC-018`, with no cycle anywhere in it.
 
 ## Security / NFR triggers
 
@@ -159,15 +199,17 @@ with real regression risk, not a one-liner.
 
 **Priority `P1`.** The game runs without it — the default is Unicode and most terminals render it.
 It is not `P2` because it is the whole of epic acceptance `2b`, it is `RISK-005`'s named mitigation,
-and its sequencing constraint means deferring it past `ABC-014` converts it from a small ticket into
-a retrofit.
+and its sequencing constraint means deferring it past `ABC-018` converts it from a small ticket into
+a retrofit. *(Read `ABC-018` here, not `ABC-014` — corrected 2026-08-04, see `## Dependencies`.)*
 
 ## Definition of Ready
 
 Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (nine enumerated input
-tuples, each with one exact output) · dependencies ✅ (`ABC-014`, with a stated sequencing
-constraint) · NFR triggers ✅ (zero-I/O bar; no perf bar, with the reason) · test notes ✅ ·
-size `S` ✅ · priority `P1` ✅ · no blocker ✅
+tuples, each with one exact output) · dependencies ✅ (`ABC-014`, with a sequencing constraint that
+is **no longer a cycle** — corrected 2026-08-04) · NFR triggers ✅ (zero-I/O bar; no perf bar, with
+the reason) · test notes ✅ · size `S` ✅ · priority `P1` ✅ · no blocker ✅
 
 Sits in `Backlog` behind `ABC-014`. Promotion to `Ready` is a separate BA/PM step, taken when
-`ABC-014` clears.
+`ABC-014` clears. **Not taken on 2026-08-04**: untying the merge-order constraint did not remove the
+build dependency, and `ABC-014` is still unbuilt, so this ticket still fails the board's own `Ready`
+test ("no unbuilt dependency"). Moving it now would put a ticket in `Ready` that cannot be started.

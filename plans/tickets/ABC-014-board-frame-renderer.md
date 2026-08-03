@@ -89,8 +89,19 @@ writes nothing. `ABC-018` owns writing.
 
 - `ABC-001` — `position.board`, `squareAt`, `fileOf` / `rankOf`, `pieceType`, `isBlack`, all merged
   on `main`. **No unbuilt dependency.**
-- `ABC-015` consumes the type this ticket declares and must merge **with or before** this ticket's
-  first user-visible use — see `ABC-015`.
+- `ABC-015` consumes the type this ticket declares and must merge **with or before `ABC-018`**, which
+  is this ticket's first user-visible use — see `ABC-015`.
+
+> **CLARIFIED IN PLACE 2026-08-04 by BA/PM** (task `refinement-2026-08-04`, Workflow 07). This
+> clause was already the **correct** half of a contradiction: `ABC-015` stated the same constraint as
+> *"with or before `ABC-014` reaches `Done`"*, which is a cycle — `ABC-015` cannot be written before
+> this ticket declares `GlyphMode`. **`ABC-015` was corrected, not this ticket**; the only change
+> here is naming which ticket "first user-visible use" means, so a reader does not have to re-derive
+> it. It is `ABC-018` — this renderer *"returns a frame as a value … and writes nothing"*, and takes
+> the glyph mode as a **parameter**, so nothing this ticket merges can put a hardcoded mode in front
+> of a player. **`ABC-014` DOES NOT BLOCK ON `ABC-015` AND NEVER DID.** This ticket is pullable now;
+> the two Orchestrator declines of 2026-08-02 and 2026-08-03 were against the contradiction, which is
+> resolved.
 
 ## Security / NFR triggers
 

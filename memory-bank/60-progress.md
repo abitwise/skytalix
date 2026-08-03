@@ -1,5 +1,5 @@
 # Progress
-_Updated: 2026-08-04 by the Orchestrator (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011 is MERGED to `main` and `Done`.** Fast-forward `4a73cf3` → `d3efba6`, 16 commits, no merge commit; gates run before the merge on the tip and again **after it on `main`** — 214/214, skip count 0, lint + typecheck + build exit 0. Merge performed by an agent on **explicit human instruction**, which is **not standing authorization**; the branch was not deleted. UAT deferred → EPIC-006. The **"Next action"** section is rewritten: two unowned items go to BA/PM **before** the next pull, because one of them is a move-generation legality defect that may outrank `ABC-012` under the owner's standing directive. Previously 2026-08-03 by Architect/Design (task `ticket-to-pr-ABC-011`, subtask `architect-abc011-defect-definition-and-ratify`, Workflow 04) — **ABC-011's SECOND design hop is closed and the ticket is back in `Ready for Dev`.** Three things were owed and all three are ruled. **(1) The MEDIUM defect's definition question: purity is UNCONDITIONAL and is bought with a PRECONDITION on the probe move, not with a change to what the predicate means; the answer stays domain-restricted and is SPECIFIED (`false`, touching nothing) where the board contradicts the ep square, because the ruled oracle is demonstrably unsound there — `generateMoves` corrupts on two of QE's three FENs and offers a pawn capturing onto the mover's own knight on a third.** Two guards, not one: the captured-pawn guard buys purity and closes a **fourth** reproduction no prior role had; the empty-target guard buys oracle agreement and is needed only for two **pure** divergences constructed at this hop. Re-derived on a fourth independent script: 518,474 nodes / 81,397 ep-set, **0** answers changed, **0** keys changed, **0** guard firings on the reachable population; 193/193 green in a sandbox with no existing test edited. **(2) Castling is NOT the en-passant case** — `zobristKey` keeps hashing castling **rights**, ruled in **`ADR-0006`** from the retained FIDE text whose sha256 **and currency** were both re-verified that day. **(3) `ADR-0005` is `accepted` WITH AN AMENDMENT** (one of its statements was false as written) and **`ADR-0006` is new and `accepted`** — the first ADRs ratified under the owner's standing directive of 2026-08-03, both carrying per-clause falsifier tables. Board: `Ready for UAT` 1/4 → 0/4, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. **No production code changed**, size stays `M`, and one item (`generateMoves` offering a capture onto the mover's own piece) is **routed to BA/PM rather than cut here**. Previously 2026-08-02 by Architect/Design (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011's first design hop is closed: "an en-passant capture is available" is ruled to mean a LEGAL one (strict FIDE 9.2.3), the predicate is homed in `src/legal.ts` with `src/zobrist.ts` importing it, the ticket is re-sized `S` → `M` and not split, and it sits in `Ready for Dev`.** `ADR-0002` is extended around and NOT amended (no human ruling owed, none taken); **`ADR-0005` is written and is `proposed` — no agent may accept it, and ABC-011 is not blocked on it.** Board: `Ready` 5/8 → 4/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. No production code changed. Previously the same day by BA/PM (task `refinement-fide-9-6-1`, Workflow 07) — **open question 1 CLOSED: FIDE 9.6.1 does NOT say "consecutive" and `src/gameend.ts` conforms**, ruled against the Laws text retrieved by this role from `handbook.fide.com` and retained verbatim under the task's context folder. No ticket cut, no board move (`Ready` stays 5/8), no code change owed on `main`. The "Next action" section is re-pointed accordingly. Previously the same day by the Orchestrator (ABC-020 merged to `main` on explicit owner instruction; branch stack resolved, board closed). Earlier the same day: first fill of this file, which had been the shipped empty template while the project ran to 27 unmerged commits._
+_Updated: 2026-08-04 by BA/PM (task `refinement-2026-08-04`, subtask `ba-pm-generator-defect-and-abc014-knot`, Workflow 07) — **both unowned items are closed and the pull order is fixed: `ABC-012` → `ABC-014` → `ABC-009` → `ABC-022` → `ABC-013`.** **`ABC-022` CUT** (`S`, `P1`, `EPIC-001`, straight to `Ready`) for the `generateMoves` en-passant precondition defect — **reproduced by this role before cutting**, not accepted from the three roles that described it and cut none, and the reproduction found three things none of them said: the shape is **piece-agnostic** (a rook reproduces it, not only the two knight FENs on record); the branch carries **two** defects, and the unrouted one makes **`legalMoves` permanently corrupt its argument**; and **the legality filter does NOT reject the over-offered move** — perft is silent because the trigger population is empty (**0 of 518,474 reachable nodes**), not because the filter absorbs it, which means **no perft depth or added position can ever reach this defect**. **`ABC-011`'s guard (a) is confirmed NOT deletable, and more strongly than QE put it:** deleting it makes the predicate answer `true` on **both** classes, because `hasLegalEnPassant` synthesises its probe and never consults the generator. **`ABC-022` is `P1`, not `P0`, so it does NOT precede `ABC-012`** — the open conditional, answered on this board's own P0 test. **The `ABC-015`/`ABC-014`/`RISK-005` knot is UNTIED and `ABC-014` is pullable:** `ABC-015`'s wording was the wrong one and the constraint binds at **`ABC-018`**, corrected in place in four files. `Ready` 4/8 → 5/8; no limit approached, no override taken. **Nothing merged, nothing deployed, no production code changed.** Previously 2026-08-04 by the Orchestrator (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011 is MERGED to `main` and `Done`.** Fast-forward `4a73cf3` → `d3efba6`, 16 commits, no merge commit; gates run before the merge on the tip and again **after it on `main`** — 214/214, skip count 0, lint + typecheck + build exit 0. Merge performed by an agent on **explicit human instruction**, which is **not standing authorization**; the branch was not deleted. UAT deferred → EPIC-006. The **"Next action"** section is rewritten: two unowned items go to BA/PM **before** the next pull, because one of them is a move-generation legality defect that may outrank `ABC-012` under the owner's standing directive. Previously 2026-08-03 by Architect/Design (task `ticket-to-pr-ABC-011`, subtask `architect-abc011-defect-definition-and-ratify`, Workflow 04) — **ABC-011's SECOND design hop is closed and the ticket is back in `Ready for Dev`.** Three things were owed and all three are ruled. **(1) The MEDIUM defect's definition question: purity is UNCONDITIONAL and is bought with a PRECONDITION on the probe move, not with a change to what the predicate means; the answer stays domain-restricted and is SPECIFIED (`false`, touching nothing) where the board contradicts the ep square, because the ruled oracle is demonstrably unsound there — `generateMoves` corrupts on two of QE's three FENs and offers a pawn capturing onto the mover's own knight on a third.** Two guards, not one: the captured-pawn guard buys purity and closes a **fourth** reproduction no prior role had; the empty-target guard buys oracle agreement and is needed only for two **pure** divergences constructed at this hop. Re-derived on a fourth independent script: 518,474 nodes / 81,397 ep-set, **0** answers changed, **0** keys changed, **0** guard firings on the reachable population; 193/193 green in a sandbox with no existing test edited. **(2) Castling is NOT the en-passant case** — `zobristKey` keeps hashing castling **rights**, ruled in **`ADR-0006`** from the retained FIDE text whose sha256 **and currency** were both re-verified that day. **(3) `ADR-0005` is `accepted` WITH AN AMENDMENT** (one of its statements was false as written) and **`ADR-0006` is new and `accepted`** — the first ADRs ratified under the owner's standing directive of 2026-08-03, both carrying per-clause falsifier tables. Board: `Ready for UAT` 1/4 → 0/4, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. **No production code changed**, size stays `M`, and one item (`generateMoves` offering a capture onto the mover's own piece) is **routed to BA/PM rather than cut here**. Previously 2026-08-02 by Architect/Design (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011's first design hop is closed: "an en-passant capture is available" is ruled to mean a LEGAL one (strict FIDE 9.2.3), the predicate is homed in `src/legal.ts` with `src/zobrist.ts` importing it, the ticket is re-sized `S` → `M` and not split, and it sits in `Ready for Dev`.** `ADR-0002` is extended around and NOT amended (no human ruling owed, none taken); **`ADR-0005` is written and is `proposed` — no agent may accept it, and ABC-011 is not blocked on it.** Board: `Ready` 5/8 → 4/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. No production code changed. Previously the same day by BA/PM (task `refinement-fide-9-6-1`, Workflow 07) — **open question 1 CLOSED: FIDE 9.6.1 does NOT say "consecutive" and `src/gameend.ts` conforms**, ruled against the Laws text retrieved by this role from `handbook.fide.com` and retained verbatim under the task's context folder. No ticket cut, no board move (`Ready` stays 5/8), no code change owed on `main`. The "Next action" section is re-pointed accordingly. Previously the same day by the Orchestrator (ABC-020 merged to `main` on explicit owner instruction; branch stack resolved, board closed). Earlier the same day: first fill of this file, which had been the shipped empty template while the project ran to 27 unmerged commits._
 
 <!--
   The running plan-of-record. Read this FIRST on start, then `plans/board.md`. Keep it short and
@@ -127,14 +127,53 @@ that makes the difference — not a preference.**
 | **ABC-010** | FEN semantic validation missing | M / P1 | live when EPIC-003 accepts a FEN from a user |
 | **ABC-011** | Zobrist hashes en passant when no capture is available → threefold **under**-detects | ~~S~~ **M** / P1 | latent; error direction is safe (a draw is missed, never falsely declared). **SECOND design hop closed 2026-08-03 — back in `Ready for Dev` with a second, dated contract on the ticket** |
 | **ABC-011a** | `zobristKey` **permanently** corrupts a position whose ep square the board contradicts (`4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1` gains a phantom black pawn on d5) | folded into **ABC-011**, no new ticket | latent — invalid FEN only, **0 impure over 518,474 reachable nodes**. MEDIUM (Security/NFR). **The owner declined to merge carrying it**; the fix contract is ruled and the ticket is back in `Ready for Dev` |
-| **NEW, unticketed** | `generateMoves` offers an en-passant capture onto a square occupied by the **mover's own** piece (`4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1`, `4k3/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1`) | **unsized — BA/PM's to cut or fold into ABC-010** | latent — invalid FEN only; **pure**, so it is a wrong answer without corruption, unlike ABC-009. Found 2026-08-03 at ABC-011's second design hop and routed, not cut |
+| **ABC-022** | `generateMoves` offers en-passant captures its own stated preconditions forbid — **two defects in one branch**: (a) the ep target is not checked to be empty, so a capture is offered onto the **mover's own** piece and `legalMoves` **passes it through**; (b) the captured pawn's presence is not checked, so `legalMoves` **permanently corrupts** the position (`4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1` gains a phantom black pawn on a2) | **S / P1** | latent — invalid FEN only, **0 of 518,474 reachable nodes**. **TICKETED 2026-08-04**, cut straight to `Ready` |
 
 The first three are **carried, not owned** by ABC-020. Perft does not cover any of them, because
 `src/perft.ts` never calls `gameStatus` or `zobristKey`. **All of them share one trigger class —
 a semantically invalid FEN — which is `ABC-010`'s surface**, and the last two are both instances of
 the same root shape: a `Move` handed to `makeMove` that `generateMoves` would not have produced
 from that board, or produced when it should not have. `ABC-011`'s ruled fix makes the **hash**
-immune to it; it does not clean the generator.
+immune to it; it does not clean the generator — **`ABC-022` is the ticket that does.**
+
+**`ABC-022` was cut 2026-08-04 by BA/PM after reproducing it rather than accepting three roles'
+descriptions of it, and the reproduction found three things none of them said.** Recorded here
+because each changed what the ticket says:
+
+1. **The shape is piece-agnostic.** Both FENs on record put a **knight** on the ep target; a
+   **rook** reproduces identically (`4k3/8/8/8/3pP3/4r3/8/4K3 b - e3 0 1`), because
+   `src/moves.ts:177` reads only the occupant's *colour*. An acceptance criterion naming the two
+   recorded FENs would have been satisfiable by a knight-shaped fix.
+2. **The branch carries two defects and the unrouted one is worse.** Only half (a) was routed. Half
+   (b) makes `legalMoves` corrupt its argument — `ABC-009`'s symptom by the en-passant route rather
+   than the castling one. Both are the same four lines, so they are one ticket.
+3. **"Perft cannot clear this because the legality filter later rejects the extra move" is WRONG in
+   its mechanism, and the correction strengthens the conclusion.** Measured: **the filter does not
+   reject it** — `legalMoves` returns the over-offered move on both reproductions. Perft is silent
+   because the **trigger population is empty**: 0 of 518,474 reachable nodes carry an occupied ep
+   target. **Consequence: no perft depth and no additional perft position can EVER reach this
+   defect**, so `ABC-022` forbids adding one and uses a constructed table instead. `32/32 exact`
+   still does not clear the class, for a better reason than the one previously recorded.
+
+**And the correction that must survive: `ABC-011`'s guard (a) is NOT a deletable workaround for
+this.** QE corrected the Engineer on that at the second review; re-derived on 2026-08-04 by
+**deleting** guard (a), the predicate answers `true` on **both** classes it covers — including the
+own-piece one. `hasLegalEnPassant` **synthesises** its probe move and never consults
+`generateMoves`, so guard (a) is a precondition of the *predicate*, not compensation for the
+*generator*, and fixing `ABC-022` changes neither row. "Deletable once the generator is fixed" is
+not over-stated — it is **false**. Anyone who deletes it reopens four assertions.
+
+**Two gaps in other tickets were found and are NAMED rather than fixed**, because closing them was
+not this task's scope:
+
+- **`ABC-010` does not fully gate `ABC-022`.** Its scope rejects *"an en-passant square with no pawn
+  that could have made the double push"*, which closes half (b)'s trigger — but **not half (a)'s**:
+  on `4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1` the double-push pawn is present and `ABC-010` as written
+  accepts the FEN. For `ABC-010`'s own refinement.
+- **`ABC-009`'s `## Scope` promises more than any of its acceptance criteria tests.** Its scope
+  bullet 1 says the position is byte-identical on return *"for every position it accepts"*, but
+  every one of its criteria is a castling FEN — so building it to its acceptance leaves `ABC-022`'s
+  half (b) live with a green gate. Recorded on `ABC-022` so the two do not silently overlap.
 
 ### Open questions nobody has ruled on
 
@@ -220,24 +259,52 @@ the same explicit instruction.
 merge commit; 214/214 and skip count 0 re-verified **on `main`** after the merge). Every column
 between `Ready` and `Done` is empty. `Ready` holds four: ABC-009, ABC-012, ABC-013, ABC-014.
 
-**Route the two unowned items to BA/PM first, then pull `ABC-012`.** In that order, and the order is
-the point rather than a preference:
+**Both unowned items are CLOSED (BA/PM, 2026-08-04, task `refinement-2026-08-04`). The pull order is
+fixed and `Ready` holds five.** The Orchestrator's next move is the `Ready → In Development` pull,
+in this order and for these reasons:
 
-1. **`generateMoves` offers an en-passant capture onto a square occupied by the mover's OWN piece.**
-   Found at ABC-011's second design hop, re-verified independently twice since, **routed to BA/PM by
-   three roles and cut by none — so it is currently owned by nobody.** It is a move-generation
-   legality defect in merged, `Done`, perft-proven code, which is precisely the class the owner's
-   standing legality-first directive ranks above everything else. **BA/PM must size and rank it
-   before the next pull order is fixed**, because if it lands P0 it goes ahead of `ABC-012`. Note
-   what perft cannot say here: perft counts nodes, and a generator that offers an extra move its
-   own legality filter later rejects can still produce exact perft numbers.
-2. **The `ABC-014` / `ABC-015` / `RISK-005` knot.** `ABC-015` says it merges "with or before
-   `ABC-014` reaches `Done`, never after", while the board holds `ABC-015` in `Backlog` with
-   `blocked-until: ABC-014`. That reads as a cycle and it gates a P0. **Owner: BA/PM.** It has been
-   flagged twice and untied zero times.
-3. **Then `ABC-012`** (game history module, M, P0) — the ticket `ABC-011` was deliberately sequenced
-   ahead of. Its blocker is now gone: its repetition tests can be written against a key that means
-   what FIDE means, instead of being shaped to dodge a defect. It needs no design hop.
+1. **`ABC-012`** (game history module, `M`, `P0`) — the ticket `ABC-011` was deliberately sequenced
+   ahead of. Its blocker is gone: its repetition tests can now be written against a key that means
+   what FIDE means, instead of being shaped to dodge a defect. It needs no design hop. **`ABC-022`
+   does not displace it** — see below.
+2. **`ABC-014`** (board frame renderer, `M`, `P0`) — **pullable for the first time.** The
+   `ABC-015`/`RISK-005` knot that the Orchestrator twice declined to walk into is untied, and
+   `ABC-014` **never blocked on `ABC-015`**: its own Dependencies clause was the correct half of the
+   contradiction. No design hop.
+3. **`ABC-009`** (`S`, `P1`) — first of the two rules-core defects, ahead of `ABC-022` on standing
+   rank (in `Ready` since 2026-07-31) and on the marginally wider reachable surface: `gameStatus`
+   calls `legalMoves` on its first line, every ply. **Deliberately not reordered against `ABC-022`.**
+4. **`ABC-022`** (`S`, `P1`) — the newly cut generator defect, beside `ABC-009`: same class, same
+   trigger (invalid FEN), same eventual gate (`ABC-010`). Different function (`addPawnMoves` vs
+   `addCastlingMoves`), so the two do not conflict and either may ship first.
+5. **`ABC-013`** (`M`, `P1`) — renderer work, below every `P0` and below the rules-core defects.
+   Unchanged.
+
+**`ABC-022` is `P1`, not `P0`, so it does NOT go ahead of `ABC-012`.** That was the open conditional
+and the honest answer is "no". Applied on this board's own `P0` test, written 2026-07-31 under the
+owner's legality-first directive and never overturned — *"`P0` means the directive applies **and**
+the fault is reachable"*. The directive applies; the fault does not — 0 of 518,474 reachable nodes,
+invalid-FEN only, and `EPIC-003` is undecomposed. `ABC-009` is the identical shape and was ruled
+`P1` on this same test on the same day, so ranking `ABC-022` `P0` would put it **above** `ABC-009`,
+which is not defensible. **The directive is honoured, not overridden: it re-ranks correctness against
+features, and it did — both rules-core defects sit above the `P1` renderer ticket. What it does not
+do is rank a latent defect above the tickets that make the game exist.**
+
+**The `ABC-014` / `ABC-015` / `RISK-005` knot is untied.** `ABC-015`'s wording was the one written
+wrong (*"with or before `ABC-014` reaches `Done`"* — a cycle, since it also needs `ABC-014` to
+declare `GlyphMode`, and `Done` means merged here). `ABC-014`'s wording was already right
+(*"first user-visible use"*). **The constraint binds at `ABC-018`**, the ticket that makes the frame
+a display rather than a value and the first thing in `EPIC-002` a player can see — `ABC-014` returns
+a frame as a value, writes nothing, and takes the glyph mode as a parameter it does not choose, so
+merging it cannot produce the hardcoded-mode build `RISK-005` rules out. Corrected in place in four
+files (`ABC-015`, `ABC-014`, `ABC-018`, `EPIC-002`'s `RISK-005` entry) so no two documents disagree.
+Chain: `ABC-014` → `ABC-015` → `ABC-018`, acyclic. **`RISK-005`'s severity and mitigation strategy
+are unchanged** — only the event the sequencing binds to moved; if that reads as changing the
+mitigation, it is Security/NFR's call. **`ABC-015` is NOT promoted to `Ready`**: the build dependency
+on `ABC-014` is real and unchanged.
+
+**The 2026-07-31 re-sequencing was NOT re-opened.** `ABC-010`, `ABC-016`, `ABC-017`, `ABC-019`,
+`ABC-021` and every epic priority were re-read and deliberately left.
 
 **Nothing is owed to a human except merges.** `ADR-0005` and `ADR-0006` are both `accepted` under the
 owner's standing delegation of 2026-08-03, so the long-standing "an ADR awaits a human" item is

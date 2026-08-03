@@ -98,6 +98,20 @@ a `(+N more)` marker rather than growing the frame.
   is not gated on `ABC-013`/`ADR-0004`; the height invariant is a property of the assembler, not of
   the panels' content.
 - **`ABC-019`** depends on this, not the reverse.
+- **`ABC-015` merges with or before this ticket — `RISK-005`'s merge-order constraint binds HERE.**
+  Added 2026-08-04 by BA/PM (task `refinement-2026-08-04`, Workflow 07), untying a contradiction
+  between `ABC-015`, `ABC-014` and `RISK-005` that had been flagged twice and untied zero times; the
+  full reasoning is in `ABC-015`'s `## Dependencies`. **This ticket is the first thing in `EPIC-002`
+  a player can see** — it is what makes the frame a display rather than a value — so it is the first
+  point at which `RISK-005`'s *"built in from the start rather than retrofitted"* can be violated: a
+  writer that emits a board while the glyph mode is hardcoded **is** the retrofit that wording rules
+  out. The constraint was previously written against `ABC-014`, which merges nothing user-visible
+  and takes the mode as a parameter it does not choose.
+  **Consequence for this ticket, and it is a real one:** whoever builds it takes the glyph mode as an
+  argument from `ABC-015`'s selection function. It must not default the mode, hardcode it, or
+  re-derive it from the environment — `ABC-015` owns that rule and runs it once at startup.
+  *(Not a build dependency: this ticket can still be built and tested against a stub mode, exactly as
+  it is against stub panels. It is a merge-order constraint.)*
 
 ## Security / NFR triggers
 
