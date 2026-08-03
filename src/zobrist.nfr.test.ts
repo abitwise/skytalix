@@ -82,13 +82,36 @@ describe("NFR-005 — the no-ep path costs exactly what it cost before ABC-011 (
 });
 
 describe("NFR-005 — hasLegalEnPassant's own NO_SQUARE guard", () => {
-  // The predicate's internal early return looks redundant once the caller guards on the same
-  // condition, so it is the kind of thing a tidy-up deletes. It is not redundant: with it gone,
-  // `NO_SQUARE` (-1) is used as a real target square and the make/unmake pair writes a stray pawn
-  // onto OFF-BOARD square 15 of the 0x88 board, breaking the invariant `src/position.ts` states
-  // ("Off-board squares stay EMPTY and are never read") and that `kingSquareOf`'s whole-array
-  // `indexOf` scan leans on. With the caller's guard reordered as well, both edits together left
-  // all 189 tests green at the ABC-011 QE gate.
+  // CORRECTED at ABC-011's SECOND Security/NFR gate. This block was written when deleting the
+  // predicate's internal early return ALONE put a stray pawn on OFF-BOARD square 15 of the 0x88
+  // board, and the comment here said so. ABC-011's two guards changed that, and the old comment
+  // would now mislead a reader about what these two cases defend.
+  //
+  // What is true after the fix, measured at that gate by deleting each combination in turn:
+  //   early return gone, both guards present  -> false, board untouched (guard (a): `board[-1]`
+  //                                              is `undefined`, and `undefined !== EMPTY`)
+  //   early return gone + guard (a) gone      -> false, board untouched (guard (b) catches it)
+  //   early return gone + guard (b) gone      -> false, board untouched (guard (a) catches it)
+  //   early return gone + BOTH guards gone    -> the stray pawn on square 15 is back, and both
+  //                                              cases below fail
+  // So these two cases are now a THREE-deletion regression guard rather than a one-deletion kill.
+  // They are kept, not deleted, because they are still the only thing in this repository that
+  // fails when the last of those three defences goes, and the damage they describe is invisible
+  // to `toFen`: it breaks the invariant `src/position.ts` states ("Off-board squares stay EMPTY
+  // and are never read") that `kingSquareOf`'s whole-array `indexOf` scan leans on.
+  //
+  // Deleting the early return on its own is now a pure COST change, and through `zobristKey` it
+  // costs NOTHING: `zobristKey` is the only production caller of this predicate and its own
+  // `epSquare !== NO_SQUARE` guard short-circuits, so a no-ep node never enters here at all.
+  // NO per-call figure is quoted for the direct call, because this project's instrument cannot
+  // support one — measured at the gate, the same benchmark reads +0.9 to +2.9 ns on cells where
+  // this deletion's delta is STRUCTURALLY zero (an ep square is set, so the deleted branch is
+  // never taken), which is the same size as the reading on the no-ep shape.
+  // It is deliberately NOT pinned here: no spied call count distinguishes it (makeMove,
+  // unmakeMove and isSquareAttackedBy are identical on 9 of 9 call shapes, at this predicate and
+  // through `zobristKey`), and a wall-clock assertion would pass or fail on the machine that runs
+  // it. What figures exist live in `plans/nfr-catalog.md` with their machine, which is this
+  // file's standing rule.
   const NO_EP_PROBES: [string, string][] = [
     // Return value AND board both go wrong here: a2 holds the only candidate capturer and the
     // probe is not illegal, so the deletion makes the predicate answer `true` on a position with
