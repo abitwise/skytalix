@@ -349,3 +349,50 @@ describe("hasLegalEnPassant — ABC-011 the probe's precondition", () => {
     }
   });
 });
+
+// ---------------------------------------------------------------------------
+// ABC-011 QE second pass — the two guards must name a PIECE, not a side.
+//
+// Both guards survived this gate's mutation campaign in a relaxed form that reads as an
+// equivalent simplification and is not one. Each row below is the input that kills one of
+// them; the shipped code is correct on all four and no production line was changed to make
+// them pass. They are here because the delivered table classifies its boards by what is
+// MISSING (no pawn, wrong-coloured pawn) and never by what is PRESENT INSTEAD, which is the
+// axis both relaxations move along.
+//
+//   - guard (b) relaxed from "exactly the enemy PAWN" to "any enemy PIECE" survives the whole
+//     suite and permanently rewrites the piece it finds: a black knight on the capture square
+//     comes back a black PAWN, from one zobristKey call. That is the MEDIUM defect the project
+//     owner declined to merge, reopened in a shape no existing row reaches.
+//   - guard (a) relaxed from "the ep target is EMPTY" to "the ep target holds no ENEMY piece"
+//     survives too, and answers `true` on exactly the FEN guard (a) exists for — the one where
+//     `generateMoves` offers an en-passant capture onto the mover's OWN piece (routed to BA/PM
+//     by the second design hop). Pure, and still the wrong answer: the ruling SPECIFIES `false`
+//     off-domain, so the oracle agreeing with the relaxed guard is not a defence.
+//
+// The oracle answers `true` on all four, which is the ruling's own point restated as a test:
+// off-domain the oracle is unsound and the answer is specified, not derived.
+// ---------------------------------------------------------------------------
+
+/** Boards whose ep square is contradicted by a piece that is present, rather than by one that is absent. */
+const EP_CONTRADICTED_BY_THE_WRONG_PIECE: [label: string, fen: string][] = [
+  // Guard (b): the capture square holds an enemy piece that is not the pawn the probe claims.
+  ["an enemy KNIGHT, not a pawn, on the ep capture square", "4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1"],
+  ["an enemy ROOK, not a pawn, on the ep capture square", "k7/8/8/8/3pR3/8/8/4K3 b - e3 0 1"],
+  // Guard (a): the ep target is occupied by the MOVER'S OWN piece.
+  ["the mover's OWN knight standing on the ep target", "4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1"],
+  ["the same, mirrored", "7k/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1"],
+];
+
+describe("hasLegalEnPassant — ABC-011 QE the guards name a piece, not a side", () => {
+  it.each(EP_CONTRADICTED_BY_THE_WRONG_PIECE)(
+    "answers false and touches nothing (%s)",
+    (_label, fen) => {
+      const position = parseFen(fen);
+      const before = fullState(position);
+
+      expect(hasLegalEnPassant(position), fen).toBe(false);
+      expect(fullState(position), fen).toBe(before);
+    },
+  );
+});

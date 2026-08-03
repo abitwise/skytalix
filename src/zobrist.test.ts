@@ -287,3 +287,34 @@ describe("ABC-011 — zobristKey where the board contradicts the ep square", () 
     },
   );
 });
+
+// ---------------------------------------------------------------------------
+// ABC-011 QE second pass — the key-level half of "the guards name a PIECE, not a side".
+// The reasoning and the two surviving relaxed guards are written out beside the twin block in
+// src/legal.test.ts; this half exists because the predicate-level assertion alone leaves the
+// key unpinned on two of these four boards, exactly as it did for the delivered table's last
+// two rows: relaxing guard (a) is PURE and still puts an ep component into the key that FIDE
+// does not put there.
+// ---------------------------------------------------------------------------
+
+/** The same four boards src/legal.test.ts drives the predicate with — contradicted by a piece that IS there. */
+const EP_CONTRADICTED_BY_THE_WRONG_PIECE: [label: string, fen: string][] = [
+  ["an enemy KNIGHT, not a pawn, on the ep capture square", "4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1"],
+  ["an enemy ROOK, not a pawn, on the ep capture square", "k7/8/8/8/3pR3/8/8/4K3 b - e3 0 1"],
+  ["the mover's OWN knight standing on the ep target", "4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1"],
+  ["the same, mirrored", "7k/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1"],
+];
+
+describe("ABC-011 QE — zobristKey where the wrong piece contradicts the ep square", () => {
+  it.each(EP_CONTRADICTED_BY_THE_WRONG_PIECE)(
+    "omits the ep component and returns the position intact (%s)",
+    (_label, fen) => {
+      const position = parseFen(fen);
+      const reference = keyWithoutEpSquare(parseFen(fen));
+      const before = positionSnapshot(position);
+
+      expect(zobristKey(position), fen).toBe(reference);
+      expect(positionSnapshot(position), fen).toBe(before);
+    },
+  );
+});
