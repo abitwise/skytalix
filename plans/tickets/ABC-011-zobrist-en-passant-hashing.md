@@ -1,8 +1,8 @@
 ---
 id: ABC-011
 title: Zobrist key hashes en passant when no capture is available
-status: ready-for-dev
-column: Ready for Dev
+status: in-review
+column: In Review
 size: M
 priority: P1
 epic: EPIC-001
@@ -947,3 +947,80 @@ scope` line was re-opened.** The three things owed here are settled in the
 `ABC-011`'s (`generateMoves` offering a capture onto the mover's own piece) is **routed to BA/PM**
 rather than cut here. **`Ready for Dev` → `In Development` is the Orchestrator's pull and has
 deliberately NOT been taken.** Nothing was merged and nothing was deployed.
+
+**Moved `Ready for Dev` → `In Development` → `In Review` on 2026-08-03 by the Software Engineer at
+the SECOND dev pass** (task `ticket-to-pr-ABC-011`, subtask `engineer-abc011-fix-purity`, same
+branch). The `### ANSWERED 2026-08-03` block was built exactly as ruled and the 2026-08-02 block was
+honoured unchanged. **The MEDIUM purity defect the owner declined to merge is closed, and with it all
+six known reproductions** — each one reproduced independently against the shipped tree *before* any
+code was written rather than taken from the notes.
+
+**The fix is the two guards, in the order and the place ruled**, both loop-invariant and both above
+the `EP_CAPTURE_SIDES` loop:
+
+```ts
+if (position.board[target] !== EMPTY) return false;    // (a) the ANSWER guard
+if (position.board[rank] !== captured) return false;   // (b) the PURITY guard
+```
+
+**Each was proven load-bearing by DELETING it and running the suite, not by argument.** Measured
+against the final tree:
+
+| mutant | tests failing | which |
+|---|---|---|
+| guard (a) deleted | **exactly 4** | both pure-divergence FENs, at the predicate **and** the key level — and nothing else |
+| guard (b) deleted | **exactly 7** | the three empty-target corruptions at both levels, plus the every-input purity sweep |
+| **both** deleted (the declined code) | **13** | and 193 pass — exactly the pre-fix baseline |
+
+**The two failure sets are DISJOINT.** Neither guard subsumes the other and neither can be removed
+with the suite green, so the "looks equivalent" one-line simplification is now held by a named test
+rather than by a comment. **One honesty note the table owes:** `4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1`
+(QE's third reproduction) is closed by **either** guard alone and therefore kills neither
+single-guard mutant — named rather than counted as evidence for one of them.
+
+**Rule 5 is now met unconditionally, and it is asserted the way this pass was asked to assert it:**
+over the **full position state** — all 128 board bytes including the 64 off-board ones, plus all five
+scalars — never through `toFen`, which sees neither an off-board write nor the counters. One test
+sweeps **every** ep-square value (all 128 0x88 indices plus five values outside the array) across
+five boards, so purity is established for every input rather than for a hand-picked list; that sweep
+subsumes the boundary probe the design hop named as killing nothing.
+
+**Diff, deliberately small:** `src/legal.ts` **+32/−6** — of which only **four lines are executable**
+(a hoisted `const captured`, the two guards, and the hoisted reference in the probe `Move`); the rest
+is the doc-comment correction item 9 owes. `src/zobrist.ts` **+5/−1, doc comment only** — its
+condition and `zobristKey`'s signature are byte-unchanged. `src/apply.ts`, `src/moves.ts`,
+`src/gameend.ts`, `src/position.ts` and `src/fen.ts` are **byte-untouched**; no dependency added.
+The `Hashing` row of `memory-bank/30-architecture.md` — flagged by QE, Security/NFR and
+Architect/Design in turn and taken by none of them — is corrected here, one cell, no reshuffle.
+
+**Gates, exactly as they ran:** `npm test` **206 passed / 9 files / 0 failed**, skip count **0** (was
+193); `npm run lint` **exit 0** (the same 2 pre-existing biome config-schema infos); `npm run
+typecheck` **exit 0**; `npm run build` **exit 0**. **No existing test was modified — zero changed
+pre-existing lines in either test file**, verified by line-level diff; not even an import was widened
+this pass. TDD was red first and **measured red**: all 13 new tests failed against the shipped tree
+before the guards existed, with all 33 pre-existing tests in those two files green throughout.
+
+**`NFR-005` re-derived by this role rather than inherited** (Apple M3 Mac15,13 / Node v24.12.0 /
+darwin-arm64 — `UNKNOWN - verify` elsewhere; pre-fix and guarded trees in one process, 9 alternating
+rounds, medians): startpos **291.3 ns** against a ~450 ns bar and kiwipete **313.6 ns** against a
+432–459 ns bar — **MET**. Isolated on the predicate: **−0.3 to +2.6 ns per call** on the 15.70% of
+nodes carrying an ep square, i.e. **≤ +0.41 ns amortized per node**, **0.13%** of a ~313 ns key —
+inside the design hop's published **+0.9…+3.0 ns** band without exceeding its ceiling. **20–25x
+cheaper** on the invalid class (127.0 → 6.3 ns, 151.0 → 6.0 ns), reproducing its 20–27x. The no-ep
+sub-bar is **zero structurally** — the guards sit inside the predicate, after its own `NO_SQUARE`
+early return, so the caller's short-circuit never reaches them and `src/zobrist.nfr.test.ts`'s
+zero-call assertions pass untouched. **The two no-ep anchors are kept as a NULL CONTROL** whose delta
+is structurally zero: they land at **+0.06 ns and +0.20 ns**, which *is* this instrument's resolution
+and is why the ep-set whole-key cells (+0.66 and −0.42 ns) are reported as measured rather than
+claimed.
+
+**The reachable population did not move**, re-derived on this role's own script — a fifth independent
+time — and reproducing the design, dev and QE hops **to the number**: **518,474 nodes / 81,397 ep-set
+(15.70%) / 0 answers changed / 0 keys changed / 0 firings of either guard / 0 impure nodes on either
+tree.** The guards are a precondition, not a behaviour change, which is `ADR-0005`'s falsifier **F5**.
+
+**Carried, not fixed:** `ABC-009`, `ABC-010`, and the `generateMoves` en-passant-onto-own-piece defect
+the design hop routed to **BA/PM** — re-verified this pass on its own FEN and still reproducing; this
+fix makes the *hash* immune to it and does not clean the generator. **No PR exists — this repo has no
+git remote**, so there is nowhere to push and no link to record; none was invented. Nothing was merged
+and nothing was deployed — a human holds both.

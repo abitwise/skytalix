@@ -28,7 +28,7 @@ Nine production modules, flat in `src/`, one job each.
 |---|---|---|
 | Representation | `position.ts` | the 0x88 board (ADR-0001), piece encoding, square geometry and naming |
 | Serialization | `fen.ts` | FEN parse/serialize; typed `FenError` on malformed grammar |
-| Hashing | `zobrist.ts` | 64-bit `bigint` position key, fixed seed, recomputed per call |
+| Hashing | `zobrist.ts` | 64-bit `bigint` position key, fixed seed, recomputed per call; asks `legal.ts` whether an en-passant capture is real (ABC-011), so this row is not a leaf |
 | Generation | `moves.ts` | pseudo-legal move generation, plus the `isSquareAttackedBy` primitive |
 | Mutation | `apply.ts` | `makeMove` / `unmakeMove` — the only writer of a `Position` |
 | Legality | `legal.ts` | `legalMoves`, `isInCheck` |
