@@ -1,8 +1,8 @@
 ---
 id: ABC-011
 title: Zobrist key hashes en passant when no capture is available
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: M
 priority: P1
 epic: EPIC-001
@@ -1024,3 +1024,140 @@ the design hop routed to **BA/PM** — re-verified this pass on its own FEN and 
 fix makes the *hash* immune to it and does not clean the generator. **No PR exists — this repo has no
 git remote**, so there is nowhere to push and no link to record; none was invented. Nothing was merged
 and nothing was deployed — a human holds both.
+
+---
+
+**Moved `In Review` → `In Security/NFR` on 2026-08-03 by QE/E2E** (task `ticket-to-pr-ABC-011`,
+subtask `qe-abc011-review-fix`, branch `grugops/ticket-to-pr-ABC-011`) — the **SECOND** review pass,
+run because the project owner declined to merge this ticket carrying the MEDIUM purity defect. In
+Review 1/3 → 0/3, In Security/NFR 0/2 → 1/2; no limit approached, no override taken. **No acceptance
+criterion, reproduction FEN, `NFR-005` bar or `## Out of scope` line was edited, and neither
+`### ANSWERED` block was touched.**
+
+### VERDICT: PASS. The defect is genuinely closed — and the suite had two holes that hid the same
+### class, which this gate found and closed with tests.
+
+The verdict was reached by re-deriving the ticket and by breaking the delivered suite with mutants.
+The Engineer's suite was **not** re-run and read as a verdict.
+
+**The mutation campaign is the part that matters.** 49 mutants against the **changed** production
+surface — the first pass's 22 re-run, plus 27 new ones aimed at the guard surface, because the
+surface moved and the old mutant set is a starting point rather than a result. **44 killed, 5
+survived**, and each survivor was then **proved behaviour-equivalent** over 55,600 adversarial
+inputs (same answer, same key, same purity) rather than left unkilled with a shrug.
+
+**Two of the new mutants survived all 206 delivered tests and were real.** Both are precisely the
+"one-line equivalent simplification" the second design hop warned about:
+
+| relaxation | survives | what it does |
+|---|---|---|
+| guard (b): "exactly the enemy PAWN" → "any enemy PIECE" | 206/206 green | on `4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1` a single `zobristKey` call **permanently rewrites the black KNIGHT on d5 into a black PAWN** — the owner's MEDIUM defect, reopened |
+| guard (a): "the target is EMPTY" → "the target holds no ENEMY piece" | 206/206 green | on `4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1` — **the exact FEN guard (a) exists for** — answers `true` where the ruling specifies `false`, and puts an ep component into the key. Pure, and still wrong |
+
+**The shipped code is correct on both, and on their mirrors. No production line was changed.** These
+were holes in the **suite**, not defects in the fix: the delivered `CONTRADICTORY_EP` table
+classifies boards by what is **missing** (no pawn, wrong-coloured pawn) and never by what is
+**present instead**, which is the axis both relaxations move along. Closed by **8 tests this gate
+added** — four FENs at the predicate level and the key level, appended to `src/legal.test.ts` and
+`src/zobrist.test.ts`. Both survivors now die at 4 failures each.
+
+### The Engineer's three load-bearing claims, judged rather than accepted
+
+1. **"Each guard is load-bearing, proven by two DISJOINT failure sets" — TRUE, and it survives this
+   gate's strengthening.** Reproduced exactly as reported: guard (a) deleted → **4** named failures,
+   guard (b) deleted → **7**, both deleted → **13** and the pass count falls to the pre-fix 193.
+   After my 8 tests: **8 / 11 / 21**, and the **intersection is still empty**. Neither guard
+   subsumes the other, and the property is now held by more inputs than it was.
+2. **"One of QE's own first-pass FENs is closed by EITHER guard alone, so it kills neither
+   single-guard mutant" — TRUE.** `4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1` appears in the both-deleted
+   failure set and in **neither** single-guard set; the arithmetic closes exactly (4 + 7 + 2 = 13,
+   and 8 + 11 + 2 = 21). The Engineer's correction of the first pass's inherited expectation is
+   right, and it is now measured twice rather than asserted once.
+3. **"No existing test was modified; this pass widened zero pre-existing lines" — TRUE at line
+   level, checked three ways**, not by inspection. Every line of every test file at three revisions
+   was searched for in the current tree, which is stricter than `git diff` because it also catches a
+   line that was moved *and* edited: **0 absent from `584defa`** (the Engineer's claim), **0 absent
+   from the branch tip** (this gate's tests are pure appends and widened no import either), and
+   **6 absent from the branch point `4c6ed7d` — all six are imports**, three per test file, exactly
+   what the first pass recorded. **Zero non-import lines have vanished across the whole branch.**
+   `src/zobrist.test.ts:33-37`, the fixture this ticket names by line number, is **byte-identical**;
+   only its line numbers moved, to 43-47.
+
+### Purity attacked from outside the Engineer's sweep
+
+The claim under test was "pure for EVERY input", asserted over 665 inputs (5 boards × 133 ep
+values). This gate attacked it with **187,328 inputs that sweep cannot reach**: 600 randomly
+generated boards, **hand-corrupted off-board squares — the exact case the Engineer named as
+unverified in its own claim note** — kingless and multi-king boards, all-pawn boards, extreme and
+negative counters, every castling value, and `epSquare` set to `NaN`, `Infinity`, fractional values,
+and out-of-array indices **including −256 and 256, which pass `isOnBoard` through two's complement**.
+
+**0 impure, 0 throws.** The same hunter finds **1,383 impurities** on a guard-stripped control tree,
+so it is non-vacuous rather than merely quiet. The unconditional claim survives an attack the
+delivered sweep was not shaped to make.
+
+### Re-derived independently
+
+- Reachable population, a **sixth** independent time: **518,474 nodes / 81,397 ep-set (15.70%) / 0
+  answers changed / 0 keys changed / 0 firings of either guard / 0 impure either tree.** The perft
+  table was read out of `src/perft.test.ts` rather than recalled.
+- Acceptance criteria **1, 2, 3 and 5** re-derived outside the suite by hashing the FENs directly:
+  AC1 **EQUAL**, AC2 and AC3 **DIFFERENT**, determinism holds, 75-move make/unmake round trip clean.
+  AC4 re-derived by the exhaustive sweep. AC6 by the line-level check and skip count **0**.
+  **AC7 (`NFR-005`) deliberately NOT re-measured — Security/NFR owns it and re-gates next.**
+- Gates as they ran here: **`npm test` 214 passed / 9 files / 0 failed**, skip count **0**,
+  `npm run lint` exit 0 (the same 2 pre-existing biome config infos), `npm run typecheck` exit 0,
+  `npm run build` exit 0, coverage `src/legal.ts` and `src/zobrist.ts` **100%** stmt/branch/func/line.
+
+### Two first-pass residuals are now CLOSED and should stop being carried
+
+- The **Z1+L11 combined mutant** the first pass handed to Security/NFR — green suite, stray pawn on
+  off-board square 15 — **no longer reproduces**. Guard (b) rejects it, and it stays closed even
+  with guard (a) also deleted.
+- **Z1 and Z4**, two of that pass's three survivors, are now **killed** by `src/zobrist.nfr.test.ts`
+  — the spied call-count test the Security/NFR gate wrote in response to that very handoff. The
+  handoff worked as designed.
+
+### For Security/NFR, whose column this now enters
+
+`NFR-005`'s cost bars were **not** re-measured here, on the same precedent every gate on this ticket
+has followed. Three things are handed over rather than absorbed:
+
+- **Two cost-shaped equivalent mutants are pinned by nothing in the repo.** (i) Deleting
+  `hasLegalEnPassant`'s own `NO_SQUARE` early return is now genuinely equivalent *because guard (a)
+  catches it* (`board[-1]` is `undefined !== EMPTY`) — equivalent for a different reason than on the
+  first pass. (ii) Moving both guards **inside** the `EP_CAPTURE_SIDES` loop gives the same answers
+  and the same keys with strictly more work. No assertion about a key can ever fail either.
+- Three further survivors — guards swapped, guards merged into one `||` line, `<= EMPTY` instead of
+  `!== EMPTY` — are equivalent **and** cost-neutral. Worth recording that the merged-into-one-line
+  form is **safe**, because two *other* one-line merges are not and are now pinned.
+- **The Engineer flagged and discarded its own first benchmark protocol**, after a null control on a
+  structurally-zero delta read up to **1.26x**. It re-ran with 9 alternating rounds and medians and
+  the control fell to **+0.06 / +0.20 ns**. That self-report is honest and is the third protocol on
+  this ticket to hit the same wall. This gate re-measured no nanosecond and takes no view on the
+  numbers; the caution is passed on, not endorsed.
+
+### One correction owed to the Engineer, recorded rather than blocking
+
+Its claim note item 5 states that guard (a) is "a workaround with a named owner, not a permanent
+design fact", and that it "may become deletable" once BA/PM's `generateMoves` defect is fixed.
+**That is over-stated, and the mutation data says so.** Guard (a) is load-bearing for **two**
+distinct classes, and only one of them is that defect:
+
+- the **mover's own piece** on the ep target (`4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1`) — here
+  `generateMoves` **is** defective, offers the ep move, and the oracle answers `true`;
+- an **enemy piece** on the ep target (`4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1` and its mirror) — here
+  `generateMoves` is **not** defective: it correctly reads the occupied target as an ordinary
+  capture and never offers the ep move, and the oracle answers `false`. Guard (a) is what makes the
+  fast predicate agree with the generator.
+
+Deleting guard (a) fails **both** pairs (4 of its 8 failures come from each). Fixing the generator
+would leave the second class needing guard (a) exactly as much as today. The *framing* — a
+workaround with an owner — is fair for half of guard (a) and wrong for the other half; the thread is
+worth leaving in the file, but "deletable" is not the word.
+
+**Carried, not fixed:** `ABC-009`, `ABC-010`, and the `generateMoves` en-passant-onto-own-piece
+defect routed to BA/PM — still reproducing, still owned by nobody until BA/PM acts. **`ADR-0005`
+Decision clause 6 is now built and the ADR does not say so**; whether it should is the Architect's,
+not this gate's. **No PR exists — this repo has no git remote**; none was invented. Nothing was
+merged and nothing was deployed — a human holds both.
