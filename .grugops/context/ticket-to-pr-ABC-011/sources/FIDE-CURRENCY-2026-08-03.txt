@@ -1,0 +1,92 @@
+# FIDE Laws of Chess — edition-currency and integrity re-verification
+# Run by: architect-design, 2026-08-03, task ticket-to-pr-ABC-011 (second design hop),
+#         via curl from this sandbox. Network egress confirmed working.
+# Purpose: ADR-0006 (the castling question) quotes FIDE 9.2.3.2. The quoted bytes are the
+#          ones BA/PM retained under task refinement-fide-9-6-1 on 2026-08-02. This file
+#          records that BOTH their integrity AND their CURRENCY were re-checked today,
+#          rather than inherited from the note that retrieved them.
+#
+# Why this check exists at all: on 2026-08-01 a remembered Laws sentence on this project was
+# verbatim correct and TWO EDITIONS STALE, and only retrieval caught it. A one-day-old
+# currency claim is still an inherited claim.
+#
+# NOTE: the 186,226 response bytes are NOT re-copied here. They are already retained at
+#   .grugops/context/refinement-fide-9-6-1/sources/E012023-laws-of-chess-2023.html
+# and are referenced by hash. Duplicating them would add ~186 KB for no evidentiary value,
+# and editing another task's evidence folder is not this role's to do.
+
+## 1. Integrity — the retained bytes are still the published bytes
+
+url:      https://handbook.fide.com/chapter/E012023
+status:   200
+bytes:    186226
+sha256:   e0c8bee28c2dee07b724357b9802fee8591e9d11efd2a910b38e9bd21d3c7643
+
+retained: .grugops/context/refinement-fide-9-6-1/sources/E012023-laws-of-chess-2023.html
+sha256:   e0c8bee28c2dee07b724357b9802fee8591e9d11efd2a910b38e9bd21d3c7643
+
+result:   IDENTICAL — byte count and sha256 both match the FETCH-MANIFEST.txt entry
+          BA/PM recorded on 2026-08-02. The retained copy is the current publication.
+
+## 2. Currency — E012023 is still the newest Laws chapter FIDE publishes
+
+FIDE's own handbook index (https://handbook.fide.com/, HTTP 200, 75,659 bytes) links exactly
+four Laws-of-Chess chapters, and nothing after 2023:
+
+    chapter/E01          (the section landing page)
+    chapter/E012014
+    chapter/E012017
+    chapter/E012018
+    chapter/E012023      <- CURRENT
+
+Probed directly for a later edition, because an index can lag:
+
+    https://handbook.fide.com/chapter/E012024   http=200  bytes=74467  <title>FIDE Handbook </title>
+    https://handbook.fide.com/chapter/E012025   http=200  bytes=74467  <title>FIDE Handbook </title>
+    https://handbook.fide.com/chapter/E012026   http=200  bytes=74467  <title>FIDE Handbook </title>
+    https://handbook.fide.com/chapter/E01ZZZZ   http=200  bytes=74467  <title>FIDE Handbook </title>   <- control
+
+All four return the handbook's generic soft-404 shell — identical byte count to a deliberately
+nonsensical chapter id, and no chapter title. The site answers 200 for a missing chapter, so
+the status code alone proves nothing; the byte count against the control is what does.
+For contrast, E012023 is 186,226 bytes and its <title> is
+"FIDE Handbook FIDE Laws of Chess taking effect from 1 January 2023".
+
+result:   E012023 is the operative edition as of 2026-08-03.
+
+## 3. The sentence ADR-0006 turns on, re-extracted from the retained HTML
+
+Not read from the derived Article-9 text file alone — grepped out of the retained response
+bytes themselves, so the extraction step is not a link in the chain of trust:
+
+    9.2.3.2    a king had castling rights with a rook that has not been moved, but forfeited
+               these after moving. The castling rights are lost only after the king or rook
+               is moved.
+
+It matches E012023-article-9.txt line 20 verbatim.
+
+## 4. The wording asymmetry across editions, measured on the retained files
+
+The en-passant clause is written in the CAPABILITY mood and the castling clause in the
+ENTITLEMENT mood, in every edition the handbook publishes:
+
+  2014  "at the start of the sequence a pawn could have been captured en passant."
+        "a king or rook had castling rights, but forfeited these after moving.
+         The castling rights are lost only after the king or rook is moved."
+  2017  "at the start of the sequence a pawn could have been captured en passant"
+        "a king had castling rights with a rook that has not been moved, but forfeited these
+         after moving. The castling rights are lost only after the king or rook is moved."
+  2018  identical to 2017
+  2023  identical to 2017 (9.2.3.1 / 9.2.3.2)
+
+The 2014 -> 2017 revision reworded the FIRST half of the castling clause and left the
+exclusivity sentence ("lost only after the king or rook is moved") untouched. The en-passant
+clause's "could have been captured" is unchanged across all four. The asymmetry ADR-0006
+rests on has survived twelve years and two revisions; it is not an artefact of one edition.
+
+## 5. What was NOT retrieved, stated so the gap is not discovered later
+
+FIDE arbiters' commentary / the Arbiters' Manual was NOT fetched and is NOT relied on.
+ADR-0006 rests on the Laws text alone. Its falsifier G2 ("an arbiter-level ruling that two
+positions differing only in an unusable castling right are the same position") is therefore
+recorded as UNKNOWN - verify rather than as checked and clear.

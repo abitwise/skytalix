@@ -6,22 +6,47 @@ id: ADR-0005
 
 ## Status
 
-**proposed** — written 2026-08-02 by Architect/Design at `ABC-011`'s design hop (task
-`ticket-to-pr-ABC-011`).
+**accepted** — 2026-08-03 by Architect/Design at `ABC-011`'s **second** design hop (task
+`ticket-to-pr-ABC-011`, subtask `architect-abc011-defect-definition-and-ratify`), **with the
+amendment recorded below**. Proposed 2026-08-02 by the same role at the first design hop.
 
-**No agent may move this to `accepted`; a human must.** `ADR-0004` was ratified by the Orchestrator
-under a named, quoted delegation from Olger Oeselg on 2026-07-31 and is recorded there as
-**explicitly not precedent**. It was not leaned on here and is not cited as authority.
+**Scope of this ADR, stated because it was read wider than it is.** It decides how the **en-passant**
+component of the Zobrist key is computed. It does **not** decide anything about the castling
+component, and the inference "if en-passant availability is a legality question then castling must be
+too" does not follow from it — see **`ADR-0006`**, which answers that question separately and
+reaches the opposite conclusion for reasons in the Laws' own wording.
 
-**`ABC-011` is NOT blocked on this ADR, and that is deliberate.** The authority for the ruling is
-`ABC-011` itself, which assigns the open design question to Architect/Design **by name** and says it
-is answered at the design hop and not in dev. This file records the same ruling where a maintainer
-will look for it — beside the module graph — rather than gating it. `ABC-013` was held in `Blocked`
-on `ADR-0004` because that ticket's *content* depended on the outcome; nothing here depends on
-ratification that is not already settled on the ticket.
+### The authority for ratification
 
-If a human amends or rejects this, see **Rollback**: the reversal is one condition in one function,
-one import, and one predicate.
+The standing rule *"no agent may mark an ADR `accepted`; a human must"* was **retired by the project
+owner on 2026-08-03**, quoted verbatim and read out in full in `memory-bank/60-progress.md` under
+**"Standing directive — who decides"**. The owner's stated reason is verifiability: a decision goes
+to the role that can actually check it, and they decline to rubber-stamp technical content they
+cannot. Architecture decisions, including ADR ratification, are Architect/Design's. `ADR-0004` stops
+being the recorded exception and becomes the ordinary case.
+
+**Ratifying carries owning.** The falsifiers below are part of the ratification, not decoration:
+each clause names the observation that would overturn it, and every one of them is checkable by a
+later reader without trusting this file.
+
+### This is a ratification WITH an amendment, and the amendment matters
+
+One statement in this ADR was **false as written**. Its Consequences described a predicate that
+"plays a move and takes it back" — implying restoration — and the shipped implementation of clause 3
+does not restore on every input. QE found it at the `In Review` gate; Security/NFR sized it MEDIUM
+and non-blocking. Accepting the file unchanged would have ratified a false sentence. So:
+
+- **Decision clause 6 is NEW** (the probe's precondition), and it is **decided but not yet built** —
+  `ABC-011` carries the build, exactly as `ADR-0002` clause 2 was ratified ahead of its history
+  module.
+- The Consequences section gains **"The precondition, and the defect that produced it"**.
+- Clauses 1–5 are accepted unchanged, on evidence three delivery gates established and the second
+  design hop re-derived independently.
+
+**`ABC-011` was never blocked on this ADR** and is not blocked now: the authority for the ruling is
+the ticket's own delegation of the question to Architect/Design by name. If this is later amended or
+rejected, see **Rollback** — the reversal is one condition in one function, one import, and one
+predicate.
 
 ## Context
 
@@ -78,8 +103,39 @@ apply`), verified by rebuilding the graph.
 what they execute today. This is load-bearing for `ABC-011`'s `NFR-005` bar, which requires the no-ep
 path not be made slower **at all**.
 
+**6. The probe move's precondition is checked BEFORE it is played.** *(Added 2026-08-03 at the
+second design hop; decided, not yet built — `ABC-011` carries it.)* The predicate synthesises a
+`Move` rather than taking one from the generator, so nothing else establishes that the move is
+well-formed for this board. `unmakeMove` is an exact inverse only for a well-formed move —
+`undoSpecial` writes `move.captured` back onto the capture square unconditionally, so if the board
+never held that piece the write creates one, permanently. Before calling `makeMove` the predicate
+must establish both:
+
+- **(a)** the en-passant target square is empty, and
+- **(b)** the square immediately behind it, on the mover's advance, holds exactly the enemy pawn the
+  probe claims to capture.
+
+When either fails, the position's en-passant square contradicts its own board, no en-passant capture
+exists on that board, and the predicate returns **`false`** and touches nothing. **Purity is
+unconditional** — it carries no domain qualifier, because a query that damages its argument is broken
+whatever the argument means — while the *answer* is exact on the domain named in the Decision above.
+The two conditions are not one guard: **(b)** buys purity, **(a)** buys agreement with the oracle,
+and each is falsified by positions the other does not reach.
+
 Deliberately not decided here, and left to the engineer: the predicate's exact name, its internals,
 and whether it takes the ep square as a parameter.
+
+### The domain of the oracle, made explicit
+
+Clause 1's *"the FIDE reading"* and clause 3's oracle
+`legalMoves(position).some(m => m.flags === FLAG_EN_PASSANT)` are exact **on positions whose
+en-passant square the board does not contradict**. That domain contains every position `makeMove`
+can produce and therefore everything reachable by play. **Outside it the oracle is not the
+authority**, and this is measured rather than conceded: on
+`4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1` it corrupts the position it is asked about, and on
+`4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1` `generateMoves` offers a pawn capturing onto a square occupied
+by the **mover's own** knight. Making the predicate track the oracle there would import a generator
+defect into the hash; clause 6 specifies the behaviour instead.
 
 ## Alternatives
 
@@ -154,8 +210,31 @@ falsifier: if clause 3's "Zero allocation per node" is read as binding `zobristK
 per-ply array, the +2.3 B/call brushes it — but the clause's subject is the array, and merged
 `zobristKey` already allocates, so no such reading was ever true.
 
+**The precondition, and the defect that produced it.** *(Added 2026-08-03.)* The first cut of clause
+3's implementation synthesised its probe move without checking that the board agreed with the
+en-passant square, and on that class `zobristKey` **permanently** mutated the position it was
+handed — `4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1` gained a phantom black pawn on d5. Found by QE at the
+`In Review` gate, sized MEDIUM and non-blocking by Security/NFR, and routed back here because
+guarding it changes what the predicate *means* on that class rather than how it computes. Clause 6
+is the ruling. Three things follow and are recorded so the cost of this ADR is not understated:
+
+- **The claim "it plays a move and takes it back" is true only under clause 6.** Before it, the
+  claim was false on positions whose en-passant square the board contradicts, and this ADR asserted
+  it without qualification. That is the amendment.
+- **The precondition is free where it matters and cheap where it does not.** Measured at the second
+  design hop (Apple M3 / Node v24.12.0 / darwin-arm64, `UNKNOWN - verify` elsewhere): **zero** cost
+  on the no-ep path and at both `NFR-005` anchor positions, because the caller's short-circuit never
+  enters the predicate; **+0.9 to +3.0 ns per call** on the 15.70% of nodes carrying an ep square,
+  which is **≤ +0.5 ns amortized per node**, under 0.15% of a ~317 ns key and below the resolution
+  of a whole-key benchmark; and **20–27x cheaper** on the invalid class, where it returns before the
+  make/unmake. **No `NFR-005` target moves.**
+- **It changes nothing reachable.** Over an exhaustive 518,474-node walk of the `src/perft.test.ts`
+  table (81,397 nodes with an ep square), neither condition fires once, no answer changes and no key
+  changes.
+
 **`ABC-011` is re-sized `S` → `M` and not split**, which is the re-size condition the ticket names for
-exactly this branch of the decision.
+exactly this branch of the decision. Clause 6 does **not** re-size it again: two conditions in the
+same function, six test cases and two doc corrections sit inside the same `M`.
 
 **What this does NOT change.** `zobristKey`'s signature; `Position`; determinism (the key is still a
 pure function of the position, fixed seed, same value within and across runs); the make/unmake
@@ -183,3 +262,22 @@ The trigger for reconsidering: a measurement on non-M3 hardware showing the per-
 not write to the board. Either one re-opens the *implementation* (a non-mutating attack test, at the
 price of a second legality definition) before it re-opens the *reading*, because the reading is the
 Laws and the Laws are not a performance decision.
+
+## What would falsify this — the ratification's own terms
+
+*(Recorded 2026-08-03. Ratifying carries owning: each clause names the observation that overturns it,
+and every one is checkable by a later reader without trusting this file.)*
+
+| # | clause | what would falsify it | how to check |
+|---|---|---|---|
+| **F1** | 1 — "available" means a LEGAL capture | a FIDE edition later than `E012023` that rewords 9.2.3.1 away from *"could have been captured"*, or an arbiter ruling that it means *"a double push had just occurred"* | re-fetch `handbook.fide.com/chapter/E012023` and diff against sha256 `e0c8bee28c2dee07b724357b9802fee8591e9d11efd2a910b38e9bd21d3c7643`, retained under task `refinement-fide-9-6-1`; and re-read the handbook index for a chapter after `E012023` |
+| **F2** | 2, 4 — the predicate's home | any import path from `src/legal.ts` back to `src/zobrist.ts`, which would make the graph cyclic; or the max depth rising above 6 | rebuild the `from "./x.ts"` graph from `src/*.ts` and run cycle detection — done four times to date, acyclic at depth 6 every time |
+| **F3** | 3 — not `legalMoves(...).some(...)` | **both** of its grounds falling together: a machine where the minimal predicate is not cheaper than the filter, **and** `ABC-009` fixed so the filter no longer corrupts. Either alone leaves the clause standing | re-run the per-call benchmark on that machine; `git log` for `ABC-009` |
+| **F4** | 5 — the short-circuit comes first | `src/zobrist.nfr.test.ts`'s "zero `hasLegalEnPassant` calls on a no-ep position" assertion going red | `npm test` |
+| **F5** | 6 — the precondition | a position **reachable by play** on which either condition fires. Measured at 0 over 81,397 ep-set nodes; if it is ever non-zero, the conditions are a behaviour change rather than a precondition and clause 6 is wrong as stated | walk the `src/perft.test.ts` table and count firings |
+| **F6** | the whole ADR | `EPIC-004` choosing a parallel or frozen-position search shape that needs a hash which never writes to the board | `EPIC-004`'s threading decision, which does not exist yet (`UNKNOWN - verify`) |
+
+**The falsifier this ADR already tripped once**, kept visible rather than tidied away: its
+Consequences asserted restoration without a precondition, and QE's reproduction falsified it. That is
+what the amendment is. An ADR that has been falsified once and corrected is worth more than one that
+never named a way to be wrong.

@@ -1,8 +1,8 @@
 ---
 id: ABC-011
 title: Zobrist key hashes en passant when no capture is available
-status: ready-for-uat
-column: Ready for UAT
+status: ready-for-dev
+column: Ready for Dev
 size: M
 priority: P1
 epic: EPIC-001
@@ -354,6 +354,191 @@ the module graph. **No agent may mark it `accepted`, and none did**; `ADR-0004`'
 ratification is explicitly not precedent and was not leaned on. **This ticket is NOT blocked on it:**
 the authority for the ruling is this ticket's own delegation of the question to Architect/Design by
 name. If a human rejects the ADR, the reversal is one condition, one import and one predicate.
+
+### ANSWERED 2026-08-03 at the SECOND design hop by Architect/Design — the MEDIUM defect's definition question, ruled
+
+The first `### ANSWERED` block above stands **unamended and unrevoked**; this one is additional and
+narrower. Task `ticket-to-pr-ABC-011`, subtask `architect-abc011-defect-definition-and-ratify`. The
+reasoning, every re-derivation and the five things this hop could not settle are in
+`.grugops/context/ticket-to-pr-ABC-011/notes/` — the `architect-design` notes of **2026-08-03**.
+The ticket entered `In Design` a second time on the project owner's instruction to fix the MEDIUM
+defect before merge. **No acceptance criterion, no reproduction FEN, no `NFR-005` bar and no line of
+`## Out of scope` is re-opened or edited here.**
+
+**The question, exactly as QE left it.** QE reproduced the shipped `hasLegalEnPassant` and its own
+ruled oracle disagreeing on `4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1` and declined to call it — *"needs
+an Architect ruling not a dev fix"*. Security/NFR sized the defect **MEDIUM**, non-blocking, and
+routed the same question here. Both were right to refuse it: guarding the predicate makes it answer
+`false` where the ruled oracle answers `true`, which changes a definition rather than an
+implementation.
+
+#### THE RULING — purity is unconditional; the answer is domain-restricted
+
+**1. `hasLegalEnPassant` must establish its probe move's precondition before playing it.** The
+predicate synthesises a `Move` and hands it to `makeMove`. `unmakeMove` is an exact inverse only for
+a move that is well-formed **for this board**, and `undoSpecial` (`src/apply.ts:108-110`) writes
+`move.captured` back onto the capture square unconditionally — so when the board never held that
+piece, the write is a *creation*, not a restore, and it is permanent. Two conditions make the probe
+well-formed, and both must be checked **before** `makeMove` is called:
+
+```ts
+// src/legal.ts, inside hasLegalEnPassant, after the NO_SQUARE early return:
+if (position.board[target] !== EMPTY) return false;               // (a) the ep target is empty
+...
+const captured = PAWN | (black ? 0 : BLACK);
+const rank = black ? target + 16 : target - 16;                   // already computed today
+if (position.board[rank] !== captured) return false;              // (b) the pawn to take is there
+```
+
+`rank` is already the capture square — `enPassantCaptureSquare` in `src/apply.ts:78` computes
+`to ± 16`, the same value — so (b) costs one read of a square the function already addresses. Both
+conditions are loop-invariant and both belong **above** the `EP_CAPTURE_SIDES` loop, not inside it.
+
+**2. The two guards are NOT the same guard, and each is load-bearing for a different property.**
+This is the part that could not be delegated, and it is why Security/NFR's one-line sketch
+("guarding on `board[target] === EMPTY`") is not sufficient:
+
+- **(b), the captured-pawn guard, is the PURITY guard.** It is the one that stops `undoSpecial`
+  writing a pawn onto a square that never held one. It closes all three of QE's reproductions and a
+  fourth, `4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1` (an ep square on the wrong rank for the side to move,
+  which drops a phantom **black** pawn on a2) that no prior role named and that **(a) alone does not
+  catch** — a3 is empty, so (a) passes.
+- **(a), the empty-target guard, is the ANSWER guard, and purity does not need it.** On
+  `4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1` and its mirror `4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1` the
+  captured pawn *is* correctly present, so make/unmake round-trips **byte-exactly** — and the shipped
+  predicate still answers `true` where the ruled oracle answers `false`, because `generateMoves`
+  handles an occupied ep target as an ordinary capture and never offers the ep move. Constructed and
+  run at this hop; **a pure divergence, which no prior hop had.**
+
+**3. `legalMoves(position).some(m => m.flags === FLAG_EN_PASSANT)` remains the DEFINITION and the
+test oracle — on positions whose en-passant square the board does not contradict.** That domain is
+stated once and is not a dodge: it contains every position `makeMove` can produce, therefore every
+position reachable by play, therefore the whole population `## Scope`'s *"exactly when FIDE calls
+them the same position"* is a meaningful claim about. **The oracle is not the authority outside it,
+because the generator is itself unsound there** — measured at this hop, not asserted: on
+`4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1` and `4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1` the oracle **corrupts
+identically** to the shipped predicate (QE established this; re-derived here), and on
+`4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1` `generateMoves` offers a pawn **capturing onto a square
+occupied by the mover's own knight**. Tracking the oracle on that class would mean importing a
+generator defect into the hash. **So the predicate is SPECIFIED there rather than derived: it
+returns `false` and touches nothing.**
+
+**4. `false` is the right answer off-domain, and it is not arbitrary.** When the board contradicts
+the FEN's ep square there is no en-passant capture available *on that board* — the pawn to take is
+absent, or the destination is occupied. `false` says exactly that. The consequence for `zobristKey`
+is that the ep component is omitted, so such a position hashes equal to itself with `-`; that class
+has no FIDE meaning and no reachable trigger, and `ABC-010` remains the owner of whether it should
+be rejected at `parseFen` at all.
+
+**5. Rule 5 of the first `### ANSWERED` block is now UNCONDITIONAL and is this fix's whole contract.**
+It reads *"the predicate must leave the position byte-identical on return"*. It carries no domain
+qualifier and it must not gain one: a query that damages its argument is broken whatever the
+argument means. `## Out of scope`'s invalid-FEN line governs what the predicate must **answer**, not
+whether it may corrupt what it was handed. After this fix the property holds **by construction** — a
+precondition check — rather than by luck of the input distribution.
+
+**6. What does NOT change, checked rather than assumed.** `zobristKey`'s signature; the strict-FIDE
+reading; the predicate's home in `src/legal.ts`; the `epSquare !== NO_SQUARE` short-circuit and its
+ordering; `src/moves.ts`, `src/apply.ts`, `src/gameend.ts`, `src/position.ts`, `src/fen.ts`. **The
+only production file this fix touches is `src/legal.ts`**, plus the two doc corrections in item 9.
+`ABC-009` and `ABC-010` stay carried and are not fixed here.
+
+#### Re-derived at this hop, so the contract rests on measurement rather than on the notes above
+
+Apple M3 / Node v24.12.0 / darwin-arm64 — `UNKNOWN - verify` on other hardware. Driven read-only
+against copies of the shipped tree from a scratchpad outside the repository; **no file under `src/`
+was changed by this hop.**
+
+- **All three QE reproductions reproduce exactly**, plus the fourth above and the two pure-divergence
+  FENs. The shipped `zobristKey` is impure on four of them; the guarded shape is pure on all six and
+  every FEN round-trips byte-identically through `toFen`.
+- **The guards change NOTHING on the reachable population.** Exhaustive walk of the
+  `src/perft.test.ts` table at its own `fast` depths, on a fourth independently written script:
+  **518,474 nodes / 81,397 with an ep square** — reproducing the design, dev and QE hops' figures to
+  the number. Guard (a) would fire on **0** of them, guard (b) on **0**, the predicate's answer
+  changes on **0**, `zobristKey`'s key changes on **0**, and both the shipped and the guarded
+  predicate disagree with the ruled oracle **0** times.
+- **The suite is unaffected.** The guarded shape run against the repository's own tests in a
+  sandbox: **193/193 pass, 0 skipped**, `tsc --noEmit` exit 0. **No existing test needs editing** —
+  the ticket's standing constraint holds through this fix too, including
+  `src/zobrist.nfr.test.ts`'s call-count and byte-identity assertions and QE's `L8` edge probes.
+
+#### Cost — asked because this sits in a function `EPIC-004` calls per node
+
+| where | effect of the two guards |
+|---|---|
+| the no-ep path (`NFR-005`'s sub-bar, 84.3% of nodes) | **zero** — the caller's `epSquare !== NO_SQUARE` short-circuit never enters the callee |
+| startpos / kiwipete (the `NFR-005` bar's own anchors, both no-ep) | **zero**, structurally, for the same reason |
+| ep-set nodes doing real work (15.70%) | **+0.9 to +3.0 ns per call**, measured on the predicate in isolation at 2,000,000 iterations/cell |
+| the same, amortized per node | **≤ +0.5 ns**, under **0.15%** of a ~317 ns key — below the resolution of a whole-key benchmark |
+| whole-key ratio, guarded ÷ shipped, two runs | **0.98–1.05** — the guard is inside my measurement noise and the runs bracket 1.0 from both sides; reported as measured, not smoothed |
+| the invalid class this fixes | **20–27x cheaper** (5 ns vs 111–134 ns) — the guard returns before the make/unmake |
+
+**No `NFR-005` bar moves and no catalog target moves.** Security/NFR re-gates after the fix and owns
+the verdict; these figures exist so that column starts ahead rather than discovers them.
+
+#### The tests this fix owes, each PROVEN to fail rather than assumed to
+
+Written in a sandbox at this hop and run against the shipped tree and against each single-guard
+mutant, so the engineer inherits assertions that are known to bite. **They are not committed by this
+hop — writing them is the engineer's, under TDD.**
+
+| probe FEN | asserts | kills |
+|---|---|---|
+| `4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1` | `false` + every board byte and scalar unchanged | guard (b) removed |
+| `4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1` | same | guard (b) removed |
+| `4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1` | same | guard (b) removed |
+| `4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1` | same | guard (b) removed |
+| `4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1` | `false` (purity already holds) | **guard (a) removed — and only these two do** |
+| `4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1` | same | **guard (a) removed** |
+
+Measured: against the shipped code **10 of 14** assertions fail; against guard-(a)-removed exactly
+**2** fail; against guard-(b)-removed exactly **6** fail. Each assertion is paired at the
+`zobristKey` level as well as at the predicate level, on the `src/zobrist.nfr.test.ts` precedent
+that a promise in a doc comment is worth an assertion. **One boundary probe kills nothing and is
+named so rather than shipped as a guard:** `4k3/8/8/8/8/8/1P6/4K3 w - a1 0 1` (an ep square on no ep
+rank) is already answered `false` and pure by the shipped code; keep it as documentation of the
+boundary or drop it, but do not count it as coverage.
+
+#### Two documentation corrections are part of this fix
+
+- `src/legal.ts` — `hasLegalEnPassant`'s doc comment says the oracle expression *"is the DEFINITION
+  and the test oracle"* and that the predicate *"leaves the position exactly as it found it"*. The
+  first sentence must gain the domain from item 3; the second is a promise the code must now keep
+  unconditionally, and the comment should say **why** it keeps it (the precondition), not merely that
+  it does.
+- `src/zobrist.ts:9-14` — the header says `zobristKey` *"transiently mutates the position it is
+  given"*. True on the reachable class and, before this fix, false off it. It should state that the
+  mutation is bounded by the predicate's precondition.
+
+#### Size, scope and routing — stated rather than absorbed quietly
+
+**Size stays `M`. This ruling does NOT grow the ticket** and no re-size is owed: two conditions in
+the one function `ABC-011` already changed, plus six test cases and two doc-comment corrections, is
+smaller than the delta that took this ticket `S` → `M` in the first place. Nothing here is a split
+candidate.
+
+**No new ticket is cut by this role, and one item is ROUTED TO BA/PM rather than absorbed:**
+`generateMoves` offers an en-passant capture onto a square occupied by the **mover's own** piece —
+`4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1` and `4k3/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1`, both verified at
+this hop. That is a generator defect on the invalid-FEN class, a sibling of `ABC-009`, and it is
+**not** `ABC-011`'s to fix: this fix makes the *hash* immune to it, it does not clean the generator.
+Owner: **BA/PM**, to cut it or fold it into `ABC-010`.
+
+#### `ADR-0005` is ratified at this hop, and `ADR-0006` is written
+
+Under the owner's standing directive of 2026-08-03 (`memory-bank/60-progress.md`, *"Standing
+directive — who decides"*), which retired *"no agent may mark an ADR `accepted`"*.
+
+- **`ADR-0005` → `accepted`, WITH an amendment, not as a rubber stamp.** One of its statements was
+  false as written — its Consequences describe a predicate that "plays a move and takes it back",
+  which the shipped code does not do on the class above. It gains **Decision clause 6** (the
+  precondition), a corrected Consequences paragraph, an explicit scope bound to en passant, and a
+  per-clause falsifier list. Clauses 1–5 are accepted on the evidence three gates already
+  established and this hop re-derived.
+- **`ADR-0006` — castling rights stay rights — is NEW and `accepted`.** It answers the owner's
+  follow-on. It is a *separate* ADR rather than a sixth clause of `ADR-0005`, and the reasoning for
+  splitting is in its own Status section.
 
 ## Security / NFR triggers
 
@@ -723,3 +908,42 @@ fixed. `ADR-0005` remains `proposed`; no agent may mark it `accepted` and this g
 the code it describes is merged on this branch, which is carried for a human rather than treated as
 self-resolving. **No PR exists and none was invented — this repo has no git remote.** Nothing was
 merged and nothing was deployed; **a human holds both.**
+
+**Moved `Ready for UAT` → `In Design` on 2026-08-03 by the Orchestrator**, on the project owner's
+explicit instruction — *"fix the medium defect before merging"* — recorded verbatim in
+`.grugops/context/ticket-to-pr-ABC-011/notes/20260803T113000Z-orchestrator-decision-913e6028.md`.
+A backward move from a gates-passed ticket: **the gates were not wrong to pass it**, they recorded
+it in the open as an accepted risk with a named owner, and the owner is the one who accepts an
+accepted risk. This one they declined. That is `autonomy=pr` working.
+
+**Moved `In Design` → `Ready for Dev` on 2026-08-03 by Architect/Design at the SECOND design hop**
+(task `ticket-to-pr-ABC-011`, subtask `architect-abc011-defect-definition-and-ratify`, same branch)
+— the first ticket in this project's history to enter `In Design` twice. **No production code was
+changed at this hop and no acceptance criterion, reproduction FEN, `NFR-005` bar or `## Out of
+scope` line was re-opened.** The three things owed here are settled in the
+`### ANSWERED 2026-08-03` block above and in two ADRs:
+
+1. **The definition question is ruled.** Purity is **unconditional** — rule 5 of the first
+   `### ANSWERED` block gains no domain qualifier — and it is bought with a **precondition check**
+   before the probe move is played, not with a change to what the predicate means. The answer stays
+   domain-restricted: `legalMoves(...).some(...)` is the definition and the oracle **on positions
+   whose ep square the board does not contradict**, and off that domain the predicate is
+   *specified* to answer `false` and touch nothing, because the oracle is demonstrably unsound
+   there. **Two guards, not one** — the captured-pawn guard buys purity, the empty-target guard buys
+   agreement, and each is killed by its own probe and by nothing else. Re-derived, not inherited:
+   518,474 nodes / 81,397 ep-set, **0** answers changed, **0** keys changed, **0** guard firings on
+   the reachable population, 193/193 green in a sandbox with no existing test edited.
+2. **The owner's technical ruling is recorded, and its follow-on is answered from retrieved text.**
+   *"Any legal move, even the special ones still need to be checked"* endorses the strict-FIDE
+   reading. **Castling is NOT the same case** — `zobristKey` keeps hashing castling **rights** and
+   must not be changed to hash availability. Answered from the FIDE Laws retained under task
+   `refinement-fide-9-6-1`, whose sha256 was re-verified today and whose currency was re-checked
+   against FIDE's own handbook index, **not** from memory. Ruled in **`ADR-0006`**.
+3. **`ADR-0005` is ratified** under the owner's standing directive of 2026-08-03 — `accepted`
+   **with an amendment**, because one of its statements was false as written. Both ADRs record what
+   would falsify them, clause by clause.
+
+**Size stays `M`** — this ruling does not grow the ticket, and the one item that is genuinely not
+`ABC-011`'s (`generateMoves` offering a capture onto the mover's own piece) is **routed to BA/PM**
+rather than cut here. **`Ready for Dev` → `In Development` is the Orchestrator's pull and has
+deliberately NOT been taken.** Nothing was merged and nothing was deployed.
