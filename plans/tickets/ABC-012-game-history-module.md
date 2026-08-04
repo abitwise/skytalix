@@ -1,8 +1,8 @@
 ---
 id: ABC-012
 title: Game history module — the move list is the authoritative state
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: M
 priority: P0
 epic: EPIC-002
@@ -223,3 +223,126 @@ each with its machine and ply count) · test notes ✅ · size `M` ✅ · priori
 blocker ✅
 
 **Promoted to `Ready` 2026-07-30 by BA/PM.**
+
+**Moved `In Development` → `In Review` on 2026-08-04 by the Software Engineer** (task
+`ticket-to-pr-ABC-012`, subtask `engineer-abc012-implement`, Workflow 04). In Development 1/3 → 0/3,
+In Review 0/3 → 1/3; no limit approached, no override taken. **No acceptance criterion, `## Out of
+scope` line, NFR bar or test note was edited** — the one criterion this implementation could not
+satisfy as literally worded is recorded below and handed to BA/PM, not quietly rewritten.
+
+### Implementation record — 2026-08-04, Software Engineer
+
+**What was built.** One new module `src/history.ts` (154 lines, **51 of them executable** — the rest
+is the doc comment that carries the two seams' reasoning) and its test file `src/history.test.ts`
+(213 lines, 7 tests). **No existing file under `src/` was touched** — every tracked file
+under `src/` is **md5-identical** to merged `main` `39e260d`, and `git diff --numstat 39e260d --
+src/` is **empty**, which is a byte-level result and stronger than the line-level check the last
+acceptance criterion asks for. `plans/` and `memory-bank/30-architecture.md` are the only other
+edits.
+
+**The seams were implemented, not re-opened.** All six functions have the exact signatures SEAM 1
+published, the three fields are the three it names, and there is **no cache, no version counter and
+no invalidation** (SEAM 2). The one thing the language could not express is recorded in the code:
+`GameHistory.moves` is `readonly Move[]` to callers, and the module's own two mutators reach through
+it via a single named helper, because TypeScript has no "writable inside this module" modifier.
+
+**The dependency claim was measured, not asserted.** The graph rebuilt from `src/*.ts`:
+**10 modules, zero cycles, max depth 6 → 7**, `history.ts` alone at level 7, its six edges all
+downward (`fen`, `apply`, `zobrist`, `gameend`, plus the `Move` / `Position` types), **no import of
+`legal.ts` and none of `san.ts`**, and it is the **one module with zero importers** — which is what
+keeps the rules core ignorant of the session.
+
+**Every acceptance criterion has its own test, and every test was proven able to fail.** Seven tests
+(the six the ticket names, plus one for the clamp criterion, which the six do not cover). Seven
+mutants of the shipped module, each killed:
+
+| Mutant | Killed by |
+|---|---:|
+| `repetitionCounts` drops the CURRENT position | 2 tests |
+| `keyHistory` drops the initial key | 5 tests |
+| `takeBack` truncates the list but does NOT replay the board | 2 tests |
+| `takeBack`'s zero clamp removed | 1 test |
+| `playMove` does not append to the list | 6 tests |
+| `playMove` appends but does not apply to the position | 6 tests |
+| `keyHistory` records the key BEFORE the move (off-by-one) | 1 test |
+
+**The deep-equal instrument was controlled rather than trusted:** `toEqual` on a `Map<bigint,
+number>` was proved to reject a differing count, a missing entry and an empty map while accepting a
+reordered equal map — otherwise the repetition-counts comparison could have passed on anything.
+
+**Gates.** `npm test` **221 passed / 10 files / 0 failed** (was 214 / 9); skip count **0**, captured
+with the `AGENTS.md` command and not eyeballed; `npm run lint`, `npm run typecheck` and `npm run
+build` all **exit 0** (the same 2 pre-existing biome config-schema infos). `src/history.ts` is at
+**100%** statements / branches / functions / lines.
+
+**The five NFR bars are MEASURED AND ALL MET**, on **Apple M3 (Mac15,13) / Node v24.12.0 /
+Darwin 25.5.0 arm64** and **`UNKNOWN - verify` on any other hardware**. Out of tree, in its own
+process, 11 rounds plus a discarded warm-up, cell order rotated every round, medians of per-round
+means, two independent samples — no wall-clock assertion was added to the suite, which is this
+project's standing rule. Population: one deterministic LCG game from the start position, the same
+game `src/history.test.ts` plays, so the ply counts mean the same thing in both places.
+
+| Bar (120 plies unless noted) | Measured (two samples) | Bar | Ratio |
+|---|---:|---:|---:|
+| `takeBack(history, 2)` — **upper bound**, see below | 2.45 / 2.45 µs | ≤ 5 µs | 0.49x |
+| `keyHistory(history)` | 40.66 / 40.51 µs | ≤ 60 µs | 0.68x |
+| `repetitionCounts(history)` | 45.72 / 45.78 µs | ≤ 75 µs | 0.61x |
+| `gameStatusOf(history)` | 49.33 / 48.99 µs | ≤ 75 µs | 0.66x |
+| `playMove(history, move)` | 12.4 / 12.7 ns | ≤ 100 ns | 0.13x |
+| `repetitionCounts` @ **300 plies** | 99.62 / 99.07 µs | ≤ 150 µs | 0.66x |
+
+Growth shape, no bar: **18.06 / 17.99 µs @ 40 plies** — linear with a constant offset, and at 300
+plies still **10x under** `ADR-0002`'s own ~1 ms threshold for re-opening clause 2. The `takeBack`
+figure is honestly an **upper bound**: the two restoring `playMove` calls sit inside its timed
+region, contributing about 0.025 µs of the 2.45 µs. Every figure reproduces SEAM 1's wave-1
+measurements (2.40 µs / 39–41 µs / 46–50 µs / ~10 ns / 97–102 µs) — which is a check, not a
+coincidence, since this is the first time the code being measured actually exists.
+
+**`plans/nfr-catalog.md` was deliberately NOT edited.** That file's own format comment gives its
+rows to Architect/Design and Security/NFR, and this ticket's bars are Security/NFR's to gate — the
+same division the `ABC-011` Engineer kept.
+
+### The one acceptance criterion that cannot be satisfied as worded — handed to BA/PM, not rewritten
+
+**Criterion 2's first half asks `gameStatusOf` to return `result: "draw"`, `reason:
+"threefold-repetition"`. `src/gameend.ts` cannot return that, and its TYPE cannot express it.**
+`threefold-repetition` is a `ClaimableDraw`, not an `EndReason`, so `{ result: "draw", reason:
+"threefold-repetition" }` is not an inhabitant of `GameStatus`. That is not an oversight: `ABC-020`
+ruled on FIDE 9.2.1 that the third occurrence is a draw **the side to move may claim and may just as
+well decline**, and `src/gameend.test.ts:68-92` pins the actual shape —
+`{ result: "in-progress", reason: null, claimable: { by: "white", draws: ["threefold-repetition"] } }`.
+
+**This ticket's `## Out of scope` forbids the only change that would satisfy the literal wording**
+(altering merged, `Done`, 100%-covered `gameend.ts`), and SEAM 1 fixes `gameStatusOf` as the one-line
+delegate `gameStatus(history.position, repetitionCounts(history))`. The criterion's **intent** —
+threefold is reported before the take-back and gone after it, and the counts rewind with the list —
+is tested in full and green. **The wording is BA/PM's to correct; it was not edited here, and it was
+not silently ignored either.** The criterion's second half (`in-progress` / `reason: null` /
+counts deep-equal a fresh replay after `takeBack(history, 2)`) is satisfied exactly as written.
+
+### Handed to QE rather than absorbed
+
+- **Criterion 2's own test does not pin the BOARD half of `takeBack`.** The "truncate but never
+  replay" mutant survives it, because after the take-back `gameStatusOf`'s verdict is decided by the
+  derived counts and the stale board still reads `in-progress`. It is killed by the criterion-5 and
+  criterion-7 tests, so the module is covered — but if that test is ever read as the whole guard on
+  undo, it is not.
+- **The off-by-one `keyHistory` mutant is killed by exactly one assertion.** One-assertion coverage
+  of a real defect class is thin by construction.
+- **The double-push repetition test is still not written.** The Orchestrator's pull note named it for
+  the QE gate and deliberately did not order it; it is in no acceptance criterion, so it was not
+  added here (`AGENTS.md` rules 5 and 9). `src/zobrist.ts:85` now hashes the ep file only when a
+  legal capture exists, so such a line would hash equal today — which is exactly why the test would
+  now mean something it could not have meant before `ABC-011`.
+- **`playMove` validates nothing.** SEAM 1 priced the defensive `legalMoves` check at ~2–5 µs and
+  left it out; nothing in the repository fails if a caller passes a move from another position.
+- **The `position` borrow is untypeable and untested.** `readonly` does not stop
+  `history.position.board[0] = 0`, and there is no deep-readonly for a `Uint8Array`. Documented, as
+  SEAM 1 accepted. One consequence worth naming: `takeBack` rebuilds the borrowed object **in
+  place**, so a caller holding `h.position` across a take-back keeps a valid reference — but a
+  caller holding `toFen(h.position)`'s subject is holding nothing.
+
+**Carried, not fixed:** `ABC-009`, `ABC-010` and `ABC-022`. The start FEN is now literal in **five**
+files rather than four — `## Out of scope` forbids the shared constant, and every test file in this
+suite already declares its own. **No PR exists — this repo has no git remote**, so there is nowhere
+to push and none was invented. Nothing was merged and nothing was deployed; a human holds both.

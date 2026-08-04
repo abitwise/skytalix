@@ -22,7 +22,7 @@ consumers deep-import a file by path.
 
 ## Key components
 
-Nine production modules, flat in `src/`, one job each.
+Ten production modules, flat in `src/`, one job each.
 
 | Layer | Module | Owns |
 |---|---|---|
@@ -33,6 +33,7 @@ Nine production modules, flat in `src/`, one job each.
 | Mutation | `apply.ts` | `makeMove` / `unmakeMove` — the only writer of a `Position` |
 | Legality | `legal.ts` | `legalMoves`, `isInCheck` |
 | Terminal state | `gameend.ts` | checkmate, stalemate, 50-move, repetition, insufficient material |
+| Game history | `history.ts` | `GameHistory` — the move list is the authority (ADR-0002 clause 2); undo, the key list and the repetition counts are derived by replay (ABC-012). Nothing in the core imports it |
 | Verification | `perft.ts` | node counting and per-first-move divide |
 | Harness (only I/O) | `perft-bench.ts` | `npm run perft`; the only module that prints, and it runs on import |
 
@@ -42,13 +43,17 @@ covered), plus a deep perft lane behind `PERFT_DEEP=1`.
 ## System patterns
 
 - **Layered acyclic dependencies.** `position` ← {`fen`, `moves`} ← `apply` ← `legal` ←
-  {`zobrist`, `perft`} ← {`gameend`, `perft-bench`}. Re-verified 2026-08-03 by rebuilding the
-  graph from `src/*.ts`: zero cycles, depth 6, no upward edge. `position.ts` is the only leaf
-  and the hub — 7 of the 8 other modules import it. **Corrected by ABC-011:** `zobrist.ts` was
-  a level-2 leaf beside `moves.ts` until it began asking `legal.ts` whether an en-passant
-  capture is real (ADR-0005), which moves it 2 → 5 and carries `gameend.ts` 5 → 6. The depth is
-  unchanged and the DAG is still clean; homing that predicate in `moves.ts` instead would have
-  made this project's first cycle (`apply → moves → apply`), which is why it is in `legal.ts`.
+  {`zobrist`, `perft`} ← {`gameend`, `perft-bench`} ← `history`. Re-verified 2026-08-04 by
+  rebuilding the graph from `src/*.ts`: zero cycles, depth 7, no upward edge. `position.ts` is
+  the only leaf and the hub — 8 of the 9 other modules import it. **Corrected by ABC-011:**
+  `zobrist.ts` was a level-2 leaf beside `moves.ts` until it began asking `legal.ts` whether an
+  en-passant capture is real (ADR-0005), which moves it 2 → 5 and carries `gameend.ts` 5 → 6;
+  homing that predicate in `moves.ts` instead would have made this project's first cycle
+  (`apply → moves → apply`), which is why it is in `legal.ts`. **Extended by ABC-012:**
+  `history.ts` sits alone at level 7 above `gameend.ts`, so the depth is 6 → 7. Every one of its
+  six edges points down (`fen`, `apply`, `zobrist`, `gameend`, plus the `Move` / `Position`
+  types) and **nothing imports it** — measured, not assumed: it is the one module with zero
+  importers, which is what keeps the core ignorant of the session.
 - **Mutable `Position`, make/unmake, never copy.** `makeMove` mutates the 128-byte board in
   place and returns a four-field `UndoRecord` that the **caller** owns; `unmakeMove` reverses
   it. Nothing clones a `Position` and no clone function exists. Consequence for consumers: a
@@ -61,8 +66,12 @@ covered), plus a deep perft lane behind `PERFT_DEEP=1`.
   to test its legality. Consequence: you cannot hash a `Position` you are not permitted to
   write to, nor hash one from two threads at once.
 - **The core owns a position, not a game.** No move list, no undo stack, no history;
-  `gameStatus` takes repetition counts as an optional caller-supplied map. Who owns game
-  history is an open decision, not a recorded one.
+  `gameStatus` still takes repetition counts as an optional caller-supplied map. **Answered by
+  ABC-012 (2026-08-04), and the answer keeps the core exactly as it was:** game history is owned
+  by `history.ts`, one level ABOVE the core, which no core module imports. `gameStatusOf` is
+  ADR-0002 clause 4's single supplier of that optional map; the parameter stays optional because
+  clause 3 has EPIC-004's search keep its own per-ply key array and decide repetition itself, so
+  a bare `gameStatus(position)` at a search leaf is a legitimate second caller shape.
 
 ## Tech context
 
