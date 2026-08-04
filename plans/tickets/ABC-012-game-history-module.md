@@ -1,8 +1,8 @@
 ---
 id: ABC-012
 title: Game history module — the move list is the authoritative state
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: M
 priority: P0
 epic: EPIC-002
@@ -346,3 +346,112 @@ counts deep-equal a fresh replay after `takeBack(history, 2)`) is satisfied exac
 files rather than four — `## Out of scope` forbids the shared constant, and every test file in this
 suite already declares its own. **No PR exists — this repo has no git remote**, so there is nowhere
 to push and none was invented. Nothing was merged and nothing was deployed; a human holds both.
+
+**Moved `In Review` → `In Security/NFR` on 2026-08-04 by QE/E2E** (task `ticket-to-pr-ABC-012`,
+subtask `qe-abc012-review`, Workflow 04) on a **PASS** verdict. In Review 1/3 → 0/3, In
+Security/NFR 0/2 → 1/2; no limit approached, no override taken. **No acceptance criterion, `## Out
+of scope` line, NFR bar or test note was edited** — including criterion 2, whose wording is upheld
+as unsatisfiable and routed to BA/PM rather than rewritten here.
+
+### QE review record — 2026-08-04, VERDICT PASS
+
+**The verdict was earned by breaking the module, not by re-running the Engineer's numbers.** Those
+were re-run only as a control and they reproduce: **221/221 on 10 files**, skip count **0**, lint /
+typecheck / build all **exit 0**, `git diff --numstat 39e260d -- src/` **empty**.
+
+**21 mutants of the shipped `src/history.ts`** — the Engineer's seven re-run as a control on its own
+table, **all seven dying exactly as reported**, plus **fourteen of this gate's own**. The harness ran
+from the session scratchpad, restored the file after every run and **md5-verified the restore**;
+`src/history.ts` is `12f8c562d46286e68383f8e2cab407fa` before and after all 21 cycles. It carries its
+own positive control (the seven known kills) and a **null control by construction** — one
+behaviour-equivalent mutant that *must* survive, and does.
+
+**THREE OF THE FOURTEEN SURVIVED ALL 221 DELIVERED TESTS**, and all three are the same shape:
+`resetTo`, the helper `takeBack` rebuilds the borrowed `Position` with, silently failing to copy one
+of its six fields.
+
+| Mutant of the shipped module | Result on the delivered suite | Why the suite could not see it |
+|---|---|---|
+| `resetTo` never copies `castling` | **SURVIVED** | `makeMove` only ever CLEARS rights, so a replay from an already-diminished position converges on the same answer — and **no acceptance test ever takes back the move that lost a right** |
+| `resetTo` never copies `blackToMove` | **SURVIVED** | `makeMove` TOGGLES the side to move, and **all three take-back tests run from EVEN ply counts (40, 40, 8)**, where two wrongs cancel exactly |
+| `resetTo` never copies `epSquare` | **SURVIVED** | `makeMove` sets the ep square on every move, so any replay of ≥ 1 move hides a stale one; the only test truncating to ZERO plies anchors at startpos, where it is empty either way |
+
+**One root cause, and it is the honest summary of the delivered suite: every acceptance test anchors
+at the START position and takes back only at EVEN ply counts.** `src/history.ts` is **correct on all
+three** — these were holes in the **suite**, not defects in the module.
+
+**Closed by five tests this gate added**, each aimed at a mutant that actually survived rather than
+at an imagined one: a castling right restored by take-back; a take-back landing on an **odd** ply
+count; a clamp to a **mid-game anchor carrying an en-passant square** (the first test in the file to
+anchor anywhere but startpos — which is what `newGame`'s required, defaultless FEN exists for — using
+the **tightest** over-run `plies = length + 1`, where the removed clamp keeps a *different game*
+rather than an obviously empty one); every `keyHistory` entry checked against a `parseFen` +
+`makeMove` oracle (**13 assertions instead of 1**); and the **automatic fivefold draw**, the module's
+only reachable end-of-game path and never previously tested. **Plus one assertion added to criterion
+2's own test.** Suite **221 → 226**, skip count **0**, `src/history.ts` still **100%** on all four
+coverage axes, and **no production code was changed**.
+
+### The three items the Engineer handed forward, adjudicated from the evidence
+
+1. **Criterion 2 cannot be satisfied as worded — UPHELD, and verified with the COMPILER rather than
+   by reading.** `const bad: GameStatus = { result: "draw", reason: "threefold-repetition" }` is
+   **TS2820**; the null control `reason: "stalemate"` compiles clean, so the probe is not vacuous.
+   **The criterion's INTENT is met and GREEN.** The wording is **BA/PM's** — neither this ticket nor
+   merged `gameend.ts` was edited. **One thing for BA/PM that was on nobody's list: `gameStatusOf`
+   CAN return `result: "draw"` for repetition — at FIVEFOLD (FIDE 9.6.1, automatic).** So the
+   criterion is re-wordable in either direction: to the claimable shape the module actually produces
+   at three occurrences, or to fivefold. The fivefold test now exists either way.
+2. **Criterion 2's test does not pin the BOARD half of `takeBack` — CONFIRMED by measurement, now
+   CLOSED.** One `toFen` assertion against a core-primitive oracle. The truncate-but-never-replay
+   mutant now dies **to that test** and to **6 tests in all** rather than 2.
+3. **Two mutants die to exactly one assertion — CONFIRMED, and both now have two INDEPENDENT
+   killers.** The `keyHistory` off-by-one and the zero clamp. The `position` borrow remains
+   untypeable, and see the naming below for what its doc comment gets wrong.
+
+### Two corrections of record, neither blocking
+
+- **The `grep -vxF -f` instrument is NOT unsound — the shell's `grep` is not `grep`.** The Engineer's
+  identity null control reproduces exactly (13 on `src/fen.test.ts`, 73 on `gameend`, 81 on `apply`),
+  and **those counts ARE the files' blank-line counts, 1:1 across four files**: `grep` in the agent
+  shell is a function shimming to **ugrep 7.5.0**, which does not match an empty `-F -x` pattern
+  against an empty line. **`/usr/bin/grep` returns 0 on the identity control for all four.** Claiming
+  no number from it was the right call; the *diagnosis* was wrong, and leaving it would teach the
+  next role to distrust a sound idiom instead of a shimmed binary.
+- **`npx vitest run --coverage` does not delete 22 tracked files.** `coverage/` is tracked (22 files)
+  and unignored, so the premise holds and the hazard is real — but measured under a controlled
+  restore, the **plain** command deletes **0** and modifies **15**, while the **filtered** command the
+  artifact-ref records deletes **12** and modifies **3**. Both reproduced, both restored
+  byte-identically. **Mitigation verified: `--coverage.reportsDirectory` pointed outside the
+  repository leaves `coverage/` untouched.**
+
+### Named, not fixed — QE does not change production code
+
+- **`takeBack(history, NaN)` silently discards the entire game.** No throw, no clamp,
+  `moves.length === 0`; `undefined` behaves the same, because `Math.max(0, NaN)` is `NaN` and
+  `splice(NaN)` starts at 0. A fractional `plies` takes back **more** than asked (1.5 → 2). Negative
+  and `Infinity` are both safe, exactly as the implementation record says. `NaN` is a `number` to
+  TypeScript and **`ABC-019`'s turn loop will parse a ply count from user input**, so this is the
+  same silent-corruption class the clamp exists for, in the one input shape it does not cover.
+  **Not fixed, and deliberately not pinned by a test** — a test asserting today's output would
+  enshrine it. Owner: BA/PM to rule, `ABC-019` to consume.
+- **`src/history.ts:42` says the borrow contract "is documented and tested". It is not tested** — no
+  test touches `history.position.board`, as the Engineer's own claim note states. The same comment
+  tells callers **not** to hold `position` across a `takeBack`, while the decision note and the
+  implementation record above say holding it is **safe** because `takeBack` rebuilds in place. Two
+  documents give `ABC-019` opposite guidance.
+- **The double-push repetition test is DECLINED with a reason rather than left open.** It would
+  assert a property of `src/zobrist.ts` — `ABC-011`'s, merged, gated twice and covered — not of
+  `src/history.ts`, which cannot distinguish the two hashes. It belongs on `ABC-011`'s trace row.
+- **`playMove` still validates nothing.** SEAM 1's priced decision, not re-opened here.
+
+### What this gate did NOT do
+
+**The five NFR bars were deliberately NOT re-measured — Security/NFR owns them and gates next** — and
+**nothing cost-shaped was added**: the five new tests carry **no wall-clock assertion**, this
+project's standing rule. `plans/nfr-catalog.md` and the trace row's `NFRs` cell were left alone.
+**Acceptance criterion 9 was verified at LINE level, which is what it asks, with a working null
+control: all nine test files present at `39e260d` are +0/−0**, while the same instrument reads 107
+added lines on the one file this gate changed; `src/history.test.ts` did not exist at `39e260d`, so
+it is not a pre-existing test and the criterion still holds. **`ABC-009`, `ABC-010` and `ABC-022` are
+carried, not fixed.** **No PR — this repo has no git remote.** Nothing was merged and nothing was
+deployed; a human holds both.

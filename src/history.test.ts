@@ -123,6 +123,13 @@ describe("ABC-012 acceptance", () => {
 
     expect(gameStatusOf(history)).toEqual({ result: "in-progress", reason: null });
 
+    // ADDED BY THE QE PASS. Everything this criterion words — the status and the counts — is
+    // derived from the move LIST, so a `takeBack` that truncates the list and never replays the
+    // BOARD survived this test; re-measured here and confirmed. EPIC-006's named test is quoted as
+    // *the* guard on undo, so it now guards both halves of it. The oracle is the core's own
+    // `parseFen` + `makeMove`, never this module compared against itself.
+    expect(toFen(history.position)).toBe(toFen(replay(START_FEN, history.moves)));
+
     // ...and the counts are those of a freshly replayed history built from the truncated list,
     // which is the half that fails on an undo that rewinds the board and forgets the history.
     const fresh = newGame(START_FEN);
@@ -209,5 +216,105 @@ describe("ABC-012 acceptance", () => {
     expect(history.moves.length).toBe(0);
     expect(toFen(history.position)).toBe(START_FEN);
     expect(keyHistory(history)).toEqual([zobristKey(parseFen(START_FEN))]);
+  });
+});
+
+/**
+ * The QE pass. Every test below closes a gap that was MEASURED — a mutant of the shipped
+ * `src/history.ts` that survived all 221 tests — rather than one that was imagined. The
+ * acceptance block above is unchanged except for one added board assertion, so its 1:1 mapping
+ * onto ABC-012's criteria still holds.
+ *
+ * The gaps share one root cause: the acceptance block replays only from the START position and
+ * only at EVEN ply counts, so three of `resetTo`'s six field copies were never observed.
+ */
+describe("ABC-012 QE adversarial pass", () => {
+  /** A mid-game anchor WITH an en-passant square — the shape `newGame` exists to accept. */
+  const EP_ANCHOR_FEN = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
+
+  it("restores a castling right that the taken-back move gave away", () => {
+    // A `resetTo` that never copies `castling` survived the whole suite: `makeMove` only ever
+    // CLEARS rights, so replaying from a position that has already lost one converges on the same
+    // answer, and no acceptance test ever takes back the move that lost it. Undo failing to give a
+    // castling right back is one of the classic undo defects, and nothing pinned it.
+    const history = newGame(START_FEN);
+    play(history, "g1", "f3");
+    play(history, "g8", "f6");
+    play(history, "h1", "g1"); // the rook leaves h1 — White's king-side right is gone
+
+    expect(toFen(history.position).split(" ")[2]).toBe("Qkq");
+
+    takeBack(history, 1);
+
+    expect(toFen(history.position).split(" ")[2]).toBe("KQkq");
+    expect(toFen(history.position)).toBe(toFen(replay(START_FEN, history.moves)));
+  });
+
+  it("leaves the right side to move when the take-back lands on an odd ply count", () => {
+    // A `resetTo` that never copies `blackToMove` survived the whole suite, because `makeMove`
+    // TOGGLES the side to move and every acceptance test takes back from an even ply count (40, 40
+    // and 8), where two wrongs cancel. Taking back from an odd count is not exotic: it is a player
+    // undoing their own last move.
+    const history = newGame(START_FEN);
+    playPseudoRandomGame(history, 41);
+    expect(history.moves.length).toBe(41);
+
+    takeBack(history, 2);
+
+    expect(history.moves.length).toBe(39);
+    expect(toFen(history.position).split(" ")[1]).toBe("b");
+    expect(toFen(history.position)).toBe(toFen(replay(START_FEN, history.moves)));
+  });
+
+  it("clamps to a MID-GAME anchor exactly, en-passant square included", () => {
+    // Two gaps in one, and the first test in this file to anchor anywhere but the start position —
+    // which is what `newGame`'s required, defaultless FEN exists for.
+    //
+    // A `resetTo` that never copies `epSquare` survived the whole suite: `makeMove` sets the ep
+    // square on every move, so any replay of one or more moves hides it, and the only acceptance
+    // test that truncates to ZERO plies anchors at the start position, where the ep square is empty
+    // either way. And `takeBack(moves.length + 1)` is the TIGHTEST over-run: with the zero clamp
+    // removed, `splice(-1)` drops one move instead of all of them and silently keeps a DIFFERENT
+    // game, where the acceptance test's `+ 5` over-run is far enough out to look right by accident.
+    const history = newGame(EP_ANCHOR_FEN);
+    play(history, "g8", "f6");
+    play(history, "g1", "f3");
+    play(history, "b8", "c6");
+    play(history, "b1", "c3");
+
+    takeBack(history, history.moves.length + 1);
+
+    expect(history.moves.length).toBe(0);
+    expect(toFen(history.position)).toBe(EP_ANCHOR_FEN);
+  });
+
+  it("agrees with a core-primitive replay at EVERY ply, not only the last", () => {
+    // The off-by-one `keyHistory` mutant — recording the key BEFORE the move — died to exactly one
+    // assertion in the acceptance block, so an unrelated edit to that one line would silently
+    // remove the guard on it. This checks every entry against an independent oracle built from
+    // `parseFen` + `makeMove`, which is thirteen assertions instead of one.
+    const history = newGame(START_FEN);
+    playPseudoRandomGame(history, 12);
+    expect(history.moves.length).toBe(12);
+
+    const keys = keyHistory(history);
+    expect(keys.length).toBe(13);
+    for (let ply = 0; ply <= history.moves.length; ply++) {
+      expect(keys[ply], `ply ${ply}`).toBe(
+        zobristKey(replay(START_FEN, history.moves.slice(0, ply))),
+      );
+    }
+  });
+
+  it("reports the AUTOMATIC fivefold draw through its own counts", () => {
+    // The only repetition verdict `gameStatusOf` can ever report as `result: "draw"` — and the one
+    // end-of-game path the module can reach at all, since ABC-020 ruled the threefold occurrence
+    // CLAIMABLE (FIDE 9.2.1) and acceptance criterion 2's literal wording is therefore not an
+    // inhabitant of `GameStatus`. Every other test here sees `in-progress`, so the module's
+    // integration with `gameend`'s automatic arm was never exercised.
+    const history = knightCycles(4); // the start position, five times
+
+    expect(repetitionCounts(history).get(zobristKey(history.position))).toBe(5);
+    expect(gameStatusOf(history)).toEqual({ result: "draw", reason: "fivefold-repetition" });
   });
 });
