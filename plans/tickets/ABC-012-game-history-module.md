@@ -1,8 +1,8 @@
 ---
 id: ABC-012
 title: Game history module — the move list is the authoritative state
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: M
 priority: P0
 epic: EPIC-002
