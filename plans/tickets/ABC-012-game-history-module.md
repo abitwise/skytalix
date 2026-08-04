@@ -1,8 +1,8 @@
 ---
 id: ABC-012
 title: Game history module — the move list is the authoritative state
-status: in-security-nfr
-column: In Security/NFR
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P0
 epic: EPIC-002
@@ -455,3 +455,222 @@ added lines on the one file this gate changed; `src/history.test.ts` did not exi
 it is not a pre-existing test and the criterion still holds. **`ABC-009`, `ABC-010` and `ABC-022` are
 carried, not fixed.** **No PR — this repo has no git remote.** Nothing was merged and nothing was
 deployed; a human holds both.
+
+**Moved `In Security/NFR` → `Ready for UAT` on 2026-08-04 by Security/NFR** (task
+`ticket-to-pr-ABC-012`, subtask `security-nfr-abc012-gate`, Workflow 04) on a **PASS_WITH_RISKS**
+verdict. In Security/NFR 1/2 → 0/2, Ready for UAT 0/4 → 1/4; no limit approached, no override taken.
+**No acceptance criterion, `## Out of scope` line, NFR bar or test note was edited** — including
+criterion 2, whose wording remains BA/PM's and is now upheld as unsatisfiable by two gates.
+
+### Security/NFR gate record — 2026-08-04, VERDICT PASS_WITH_RISKS
+
+**Result PASS. NO required fix outstanding. FIVE accepted risks, each with a named owner and a
+place.** Gated against `security.asvs_level: L1` and `security.block_on: high` — nothing sits at
+`high`, so nothing blocks. `compliance_regime` is `[]`, so no Compliance Officer hand-off is owed.
+
+**It was not earned by reading the Engineer's numbers or QE's verdict.** Those were re-run only as a
+control on this gate's own instruments and they reproduce: **226 passed / 10 files / 0 failed**, skip
+count **0** by the `AGENTS.md` command, `npm run lint` / `npm run typecheck` / `npm run build` all
+**exit 0**, and `src/history.ts` md5 `12f8c562d46286e68383f8e2cab407fa` — **identical to the
+Engineer's `feat` commit `47cad31`**, which is the independent confirmation that QE changed no
+production code.
+
+#### The five bars, RE-MEASURED — all six MET with room
+
+Own harness **outside the repository**, its own process doing nothing else, a **discarded warm-up
+round**, **11 rounds with the cell order rotated every round**, medians of per-round means, **two
+fully independent samples**, on **Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64** and
+**`UNKNOWN - verify` on any other hardware**. Population stated: the **same deterministic LCG game
+`src/history.test.ts:81-89` plays**, so a ply count means the same thing in the harness and in the
+suite. **No wall-clock assertion was added to the suite** — this project's standing rule.
+
+| Bar (120 plies unless noted) | This gate (two samples) | Bar | Ratio | Verdict |
+|---|---:|---:|---:|:--|
+| `takeBack(history, 2)` — upper bound | 2.46 / 2.45 µs | ≤ 5 µs | 0.49x | **MET** |
+| `keyHistory(history)` | 40.16 / 40.20 µs | ≤ 60 µs | 0.67x | **MET** |
+| `repetitionCounts(history)` | 44.35 / 44.45 µs | ≤ 75 µs | 0.59x | **MET** |
+| `gameStatusOf(history)` | 47.75 / 47.59 µs | ≤ 75 µs | 0.64x | **MET** |
+| `playMove(history, move)` | 8.6 / 8.2 ns | ≤ 100 ns | 0.09x | **MET** |
+| `repetitionCounts` @ **300 plies** | 91.93 / 92.15 µs | ≤ 150 µs | 0.61x | **MET** |
+
+Shape row, no bar: **17.57 / 17.48 µs @ 40 plies** — linear with a constant offset (17.5 / 44.4 /
+92.0 µs at 40 / 120 / 300), so at 300 plies the derive is still **~10x under** `ADR-0002`'s own
+~1 ms threshold for re-opening clause 2, and **SEAM 2's no-memoization decision is under no pressure
+from anything measured here.**
+
+**Where this gate's figures differ from the Engineer's, it is stated rather than smoothed:** the four
+derives read 1–8% lower here, `takeBack` agrees to 0.4%, and `playMove` is **1.5x apart** (8.2–8.6 ns
+against 12.4–12.7 ns) — a difference this gate **cannot attribute**, because the Engineer's harness
+shape is not recorded in enough detail to reproduce. It does not move the verdict; both figures are
+more than 7x under the bar. **Every bar is MET on two independently written harnesses**, which is the
+check the `UNKNOWN - verify` convention exists to make possible.
+
+#### Both fences QE handed forward — TESTED, and one produced a result nobody predicted
+
+**Fence 1 — `gameStatusOf`'s margin is position-dependent.** Discharged with the fence's own
+measurement rather than passed on a third time. The margin over `repetitionCounts` is **3.40 / 3.14
+µs** on the startpos-anchored line and **4.55 / 4.49 µs** on a kiwipete-anchored line, against bare
+`legalMoves` of **2.74 µs** and **3.89–3.96 µs** at those positions. **So the margin IS the one
+`legalMoves` call inside `gameStatus` plus ~0.6 µs of its other work, and it swings 1.4x on position
+alone.** The fence is real.
+
+**And the result nobody predicted: the expensive-`legalMoves` anchor is CHEAPER overall** — kiwipete
+**41.89 / 42.25 µs** against startpos **47.75 / 47.59 µs** — because on this module the O(plies)
+derive dominates and that line's replay is cheaper by more than its generator call is dearer. **The
+bar survives the worst `legalMoves` position this repository benchmarks.** The arithmetic worst case
+over the observed extremes (44.45 + 3.96 + ~0.6) is **~49.0 µs = 0.65x of the bar** — labelled as
+arithmetic, not as a measurement.
+
+**Fence 2 — the `takeBack` figure is an upper bound.** Tested by moving the two restoring `playMove`
+calls **outside** the timed region. **It reads HIGHER, not lower: 2.92–2.93 µs against 2.45–2.46
+µs**, because the clean variant builds a fresh 120-ply history per iteration and pays cold-object
+cost. The restore's arithmetic contribution is two `playMove` calls at ~8.4 ns ≈ **0.017 µs, below
+what this instrument can resolve.** So the bound is confirmed as a bound, is tight to within less
+than the instrument can see, and **the bar is MET on either framing (0.49x and 0.59x)**. No claim is
+made that either framing resolves the other.
+
+#### One instrument was built, measured, and DISCARDED before it produced a false MISS
+
+The first `takeBack` cell called `legalMoves` **twice inside the timed region** and read **10.38 µs
+against the 5 µs bar — 2.08x, a MISS.** Two generator calls at 2.7 µs each account for ~5.4 µs of it.
+The restoring moves are fixed across iterations (the state cycles), so they are now computed once
+outside the clock and the cell reads 2.46 µs. **No number is claimed from the discarded instrument
+and it is recorded rather than buried** — a gate that reports a MISS it manufactured itself is worse
+than one that reports nothing. Seventh instrument-limit correction this project has recorded.
+
+#### The "no security trigger" assertion — TESTED, not inherited, and it HOLDS
+
+**Structurally:** the transitive import closure of `src/history.ts` was rebuilt — **8 modules**
+(`history`, `apply`, `fen`, `gameend`, `legal`, `moves`, `position`, `zobrist`), **every import
+relative and inside `src/`, not one non-relative import**, and across the whole closure **zero**
+`node:` builtins, `child_process`, `require(`, `eval(`, `new Function`, `process.env`, `globalThis`
+or `__proto__`. No filesystem, no network, no environment, no serialization sink, no logger, no
+secret, no privilege check. **Zero runtime dependencies** (`package.json` has no `dependencies` key
+at all); `package.json` and `package-lock.json` are **byte-identical to merged `main` 39e260d**.
+
+**Adversarially:** 12 hostile payloads fed to `newGame(initialFen)`, the module's only external
+string input — prototype-pollution keys, `__proto__` and `constructor/prototype` placements, a
+10,000-character string, control bytes, `; rm -rf /`, `../../../../etc/passwd`, `' OR 1=1 --`,
+`<script>`. **Every one rejected with a typed `FenError`. Zero prototype pollution**
+(`Object.prototype` unmodified), zero hang, zero crash. **One payload got through and it is
+`src/fen.ts`'s, not this module's** — see accepted risk 3.
+
+**ASVS L1 judged, not padded: 12 of the 70 L1 requirements are reachable and each was judged from
+evidence; 58 are structurally N/A with the reason stated per block** (45 across V3/V4/V6/V7/V8/V9/
+V10/V12 — no HTTP, browser, user, account, session, token or socket; V5 — no file handling; V14 —
+**there is no sensitive data in this system at all**, the entire data content is a chess position and
+a move list; V11.3.x — no encryption; the V1 output-encoding half — no HTML, XML, URL, JSON or
+template). V1.2.4 / V1.2.5 / V1.3.2 **PASS by absence of sink**, verified structurally. **V11.4.1 is
+N/A with its reason stated rather than silently skipped:** `zobristKey` is a **non-cryptographic
+position-identity hash** that signs nothing, authenticates nothing and derives no key — a collision
+is a wrong draw verdict, a **correctness** risk and not a security one. A judged subset with its
+delta stated beats a re-run of 70 rows, which is the `ABC-011` gate's precedent.
+
+#### The `takeBack(NaN)` ruling — reasoned, not asserted
+
+**Reproduced on the shipped module and EXTENDED past QE's table:** `NaN`, `undefined`, **the raw
+string `"abc"`** and **`{}`** each silently discard the **entire** game; `null`, `[]`, `-1` and
+`-Infinity` are safe no-ops; `"2"` and `[3]` are correct by coercion; `1.5` takes back 2 and `0.5`
+takes back 1; `Infinity` and `1e21` clamp to 0 correctly. **The string case is new here and it is the
+one that matters** — `ABC-019` parses a ply count from user input, and **both** plausible
+implementations reach the defect (`Number.parseInt("abc")` is `NaN`; handing the raw token through is
+worse still, because there is no `NaN` anywhere for a reviewer to notice).
+
+**Severity MEDIUM. It does NOT block against `security.block_on: high`**, and the reasoning is
+written out because the convenient answer here would have been the easy one. It is a **correctness
+and data-integrity defect, not a security finding.** Under ASVS **V2.2.1** an unvalidated input used
+for a business decision is an L1 requirement, and this role's own rule makes an **L1 fail HIGH by
+default — which would block.** **It is not an L1 failure today, and the reason is a fact this gate
+measured rather than an opinion: the input surface does not exist.** `src/history.ts` has **zero
+production importers**, and there is **no call to `takeBack` or `playMove` anywhere outside
+`src/history.test.ts`**. Nothing untrusted reaches it; there is no trust boundary for a validation
+control to sit on. **The requirement is not FAILED — it is NOT YET ENGAGED.**
+
+**And the counterfactual is stated plainly rather than banking the convenient half: the moment
+`ABC-019` wires a parsed ply count to this function, V2.2.1 IS engaged, the default severity is HIGH,
+and it BLOCKS.** That is not a deferred security control — it is a named trigger with a named owner.
+**Owner: BA/PM to rule the guard; place: `ABC-019`.** Not fixed, and deliberately not pinned by a
+test, on QE's reason which this gate shares: a test asserting today's output would enshrine the
+behaviour and make the eventual fix look like a regression.
+
+#### `playMove`'s unguarded precondition — the consequence is worse than "a corrupt board"
+
+Feeding a start-position move to a history anchored at `8/8/8/8/8/8/8/K6k w - - 0 1` is accepted
+without error, materialises a knight, and `gameStatusOf` then returns
+`{"result":"draw","reason":"insufficient-material"}` — **a well-typed, confident, WRONG terminal
+verdict.** Neither prior note has that; both say "a corrupt board". ASVS **V2.3.1 PARTIAL**, not
+engaged today for the same zero-caller reason. SEAM 1 priced the guard at ~2–5 µs and declined it;
+**not re-opened here**, but now on the record with its real consequence.
+
+#### The three other items QE handed this column by name
+
+- **The coverage hazard was read BEFORE coverage was run.** `coverage/` is tracked (22 files,
+  confirmed) and **is not in `.gitignore`** (confirmed). **QE's mitigation was used and then verified
+  rather than trusted:** `--coverage.reportsDirectory` pointed outside the repository gave
+  `src/history.ts` **100 / 100 / 100 / 100** against a 0.8 threshold, with
+  `git status --porcelain -uall coverage` **empty** and `git diff --numstat 3a44b3f -- coverage`
+  **empty**. **`coverage/` is byte-identical after this gate's run.** The hazard was deliberately
+  **not** reproduced — QE reproduced it twice already under a controlled restore, and damaging
+  tracked files a third time would add nothing.
+- **The test-integrity checker was re-run and recorded as an ERROR, never as a pass.**
+  `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0` → *"Error: cannot
+  read the registry file"*, **exit 2**; the registry does not exist (confirmed with `ls`). Exit 2 is
+  "the checker could not run" — not the exit-1 short-circuit and **not a pass**. Three roles have now
+  run it independently on this ticket and all three recorded the same. Skip count is **0**, so there
+  is nothing for the registry to justify, and **no file was created** — an agent may not self-author
+  a justification to clear its own gate.
+- **The `src/history.ts:42` contradiction is CONFIRMED on this gate's own instruments, both halves.**
+  *"documented and tested"* is **false** — no test in `src/history.test.ts` touches `position.board`
+  (searched; seven other test files do, none about `history.position`). And the comment tells callers
+  not to hold the reference across a `takeBack`, which the shipped `resetTo` makes **safe**:
+  measured, a held reference is `=== h.position` afterwards, is not stale, and reads the **correctly
+  rewound** position. The comment errs in the safe direction, so it is not a defect and not a blocker
+  — but `ABC-019` is the first caller and will read one of two documents that disagree. **Named, not
+  fixed.**
+
+#### Five accepted risks, each with a named owner and a place
+
+1. **`takeBack(NaN)` / `"abc"` / `{}` / `undefined` destroys the game** — **MEDIUM** — owner
+   **BA/PM**, place **`ABC-019`**.
+2. **`playMove` validates nothing; a foreign move yields a confident WRONG verdict** — **MEDIUM** —
+   owner **Architect/Design** (SEAM 1 priced and made the call), place **`ABC-019` / `EPIC-003`**.
+3. **`src/fen.ts` accepts out-of-range move counters** — `999999999999999999999` is **accepted**,
+   becomes `1e+21`, **breaks FEN round-trip byte-identity**, and makes `gameStatusOf` report a
+   `seventy-five-move` draw before the game starts. Negative, non-numeric, exponential and hex
+   counters are all correctly rejected, so this is a **range gap in a control that exists**, not a
+   missing control. `ABC-001`'s merged `Done` code, out of scope here (`AGENTS.md` rules 9 and 12) —
+   recorded because **this ticket makes it reachable through a new door**, `newGame(initialFen)`.
+   **LOW** — owner **BA/PM** to cut it or fold it into the `ABC-009` / `ABC-010` invalid-FEN family,
+   place **`EPIC-001`**.
+4. **`coverage/` tracked, unignored and stale** — **LOW** — owner **a human** (repository hygiene, not
+   an agent's cleanup). **Three roles have now flagged it and no ticket exists for it**; three flags
+   with no ticket is how a flagged item evaporates, so the missing artefact is named rather than a
+   fourth flag added. **BA/PM** to cut it.
+5. **Every NFR figure is one machine and one Node version** — **LOW** — owner **Security/NFR**, place
+   **`EPIC-004`'s already-scheduled non-M3 spike** (`RISK-002`'s mitigation), the same instrument that
+   lifts `NFR-005`'s PROVISIONAL marker. Two samples agree to ~1% and the margins are 1.5x–11x, so a
+   3x slower machine still clears every bar — **but that is arithmetic, not a measurement.**
+
+#### What this gate could NOT settle
+
+Why this gate's `playMove` figure is 1.5x the Engineer's (both >7x under the bar; the Engineer's
+harness shape is not reproducible from what is recorded, and *"we do not know why these differ"* is
+the honest sentence); whether the two `takeBack` framings resolve each other (**they do not** — the
+delta is below instrument resolution); the true worst case for `gameStatusOf` across all positions
+(two anchors measured, the rest is arithmetic); and **whether `EPIC-006` will ever let a user type a
+FEN**, which is the scope question accepted risk 3's LOW severity rests on.
+
+#### What this gate deliberately did NOT do
+
+**No production code was changed and no test was added** — `src/history.ts` and `src/history.test.ts`
+are byte-identical to what QE handed over. This gate names required fixes rather than making them,
+and both defects it found need **guards**, which are production logic this column does not write.
+**NO NFR TARGET MOVED — not one.** `plans/nfr-catalog.md` gains `ABC-012`'s real-code measurements on
+the two rows that already name this module's derives (`NFR-002`'s boundary condition, `NFR-003`'s
+turn budget); `NFR-001`, `NFR-004`, `NFR-005`, `NFR-006` and `NFR-007` are byte-identical. **The
+double-push repetition test stays DECLINED** on QE's routing reason — this gate has no evidence that
+changes it. **`ABC-009`, `ABC-010` and `ABC-022` are carried, not fixed.** **UAT is DEFERRED to
+`EPIC-006` and recorded as deferred, never as passed** — this module has zero importers, renders
+nothing and prompts for nothing, so there is no surface a human can exercise. **No PR — this repo has
+no git remote and none was invented.** Nothing was merged and nothing was deployed; a human holds
+both.
