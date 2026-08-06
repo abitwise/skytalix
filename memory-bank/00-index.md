@@ -2,12 +2,14 @@
 kind: index
 ---
 # Memory Bank — Index
-_Updated: 2026-08-02 by the Orchestrator (state save before a context clear: `60-progress.md` filled, fill-state of the bank recorded below)._
+_Updated: 2026-08-06 by the Orchestrator (task `refinement-deploy-posture-2026-08-06`) — fill state corrected: `70-runbook.md` is no longer an empty template and the ADR count was three behind. Previously 2026-08-02 by the Orchestrator (state save before a context clear: `60-progress.md` filled, fill-state of the bank recorded below)._
 
-> **Fill state — read this before you read the bank.** Only three files below carry real project
+> **Fill state — read this before you read the bank.** Only four files below carry real project
 > content: **`60-progress.md`** (the plan-of-record — **start here**), **`30-architecture.md`**
-> (as-built after EPIC-001), and **`50-decisions/`** (four ratified ADRs). The rest —
-> `10-project-brief`, `20-product`, `40-contributing`, `70-runbook`, `80-glossary` — are still the
+> (as-built after EPIC-001, plus the deployment posture), **`70-runbook.md`** (first filled
+> 2026-08-06; short on purpose — this project deploys nowhere and there is almost nothing to
+> operate), and **`50-decisions/`** (**seven** ratified ADRs, `ADR-0001`–`ADR-0007`, all `accepted`).
+> The rest — `10-project-brief`, `20-product`, `40-contributing`, `80-glossary` — are still the
 > shipped empty templates. That is a real gap, not a hidden one; do not read them expecting content
 > and do not treat their silence as a decision. `plans/` carries the delivery state meanwhile.
 

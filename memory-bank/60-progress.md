@@ -1,5 +1,5 @@
 # Progress
-_Updated: 2026-08-06 by the Orchestrator (task `ticket-to-pr-ABC-012`, Workflow 04) — **THE BRANCHING MODEL CHANGED AND `ABC-012` IS MERGED AND `Done`.** The owner made merge approval **standing** (*"everything merges to main in this project, set it as branching model and i approve your merges"*), retiring the per-merge-instruction rule recorded on every previous merge in this project. A new standing-directive section below carries the quote, its reading, and **three limits that did NOT move: deploy is not included, the gate still binds, and the authority remains the owner's and is revocable.** **The config was deliberately NOT edited and that is a finding: `autonomy` allows only `diff`/`branch`/`pr` and there is no value meaning "agents may merge"** — inventing one would be a dial nothing reads. `ABC-012` merged by fast-forward `39e260d` → `7355b51`, 8 commits, no merge commit; gates run on the tip and **again on `main`** — 226/226, skip 0, lint + typecheck + build exit 0. It is the **first merge under the new model**. Three gates PASS: QE killed 21 mutants of which **three survived the delivered suite** (all `resetTo` field-copy holes, all hidden because every acceptance test anchored at startpos and took back at **even** ply counts), and Security/NFR **re-measured all six NFR bars independently**, meeting every one at 0.09x–0.67x. Five accepted risks, each owned; no required fix. UAT deferred → `EPIC-006` — **now the only human checkpoint left before code lands, which is flagged for revisit when a runnable game exists.** **Nothing deployed; a human still holds deploy. No branch was deleted — that call is put back to the owner.** Previously 2026-08-04 by BA/PM (task `refinement-2026-08-04`, subtask `ba-pm-generator-defect-and-abc014-knot`, Workflow 07) — **both unowned items are closed and the pull order is fixed: `ABC-012` → `ABC-014` → `ABC-009` → `ABC-022` → `ABC-013`.** **`ABC-022` CUT** (`S`, `P1`, `EPIC-001`, straight to `Ready`) for the `generateMoves` en-passant precondition defect — **reproduced by this role before cutting**, not accepted from the three roles that described it and cut none, and the reproduction found three things none of them said: the shape is **piece-agnostic** (a rook reproduces it, not only the two knight FENs on record); the branch carries **two** defects, and the unrouted one makes **`legalMoves` permanently corrupt its argument**; and **the legality filter does NOT reject the over-offered move** — perft is silent because the trigger population is empty (**0 of 518,474 reachable nodes**), not because the filter absorbs it, which means **no perft depth or added position can ever reach this defect**. **`ABC-011`'s guard (a) is confirmed NOT deletable, and more strongly than QE put it:** deleting it makes the predicate answer `true` on **both** classes, because `hasLegalEnPassant` synthesises its probe and never consults the generator. **`ABC-022` is `P1`, not `P0`, so it does NOT precede `ABC-012`** — the open conditional, answered on this board's own P0 test. **The `ABC-015`/`ABC-014`/`RISK-005` knot is UNTIED and `ABC-014` is pullable:** `ABC-015`'s wording was the wrong one and the constraint binds at **`ABC-018`**, corrected in place in four files. `Ready` 4/8 → 5/8; no limit approached, no override taken. **Nothing merged, nothing deployed, no production code changed.** Previously 2026-08-04 by the Orchestrator (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011 is MERGED to `main` and `Done`.** Fast-forward `4a73cf3` → `d3efba6`, 16 commits, no merge commit; gates run before the merge on the tip and again **after it on `main`** — 214/214, skip count 0, lint + typecheck + build exit 0. Merge performed by an agent on **explicit human instruction**, which is **not standing authorization**; the branch was not deleted. UAT deferred → EPIC-006. The **"Next action"** section is rewritten: two unowned items go to BA/PM **before** the next pull, because one of them is a move-generation legality defect that may outrank `ABC-012` under the owner's standing directive. Previously 2026-08-03 by Architect/Design (task `ticket-to-pr-ABC-011`, subtask `architect-abc011-defect-definition-and-ratify`, Workflow 04) — **ABC-011's SECOND design hop is closed and the ticket is back in `Ready for Dev`.** Three things were owed and all three are ruled. **(1) The MEDIUM defect's definition question: purity is UNCONDITIONAL and is bought with a PRECONDITION on the probe move, not with a change to what the predicate means; the answer stays domain-restricted and is SPECIFIED (`false`, touching nothing) where the board contradicts the ep square, because the ruled oracle is demonstrably unsound there — `generateMoves` corrupts on two of QE's three FENs and offers a pawn capturing onto the mover's own knight on a third.** Two guards, not one: the captured-pawn guard buys purity and closes a **fourth** reproduction no prior role had; the empty-target guard buys oracle agreement and is needed only for two **pure** divergences constructed at this hop. Re-derived on a fourth independent script: 518,474 nodes / 81,397 ep-set, **0** answers changed, **0** keys changed, **0** guard firings on the reachable population; 193/193 green in a sandbox with no existing test edited. **(2) Castling is NOT the en-passant case** — `zobristKey` keeps hashing castling **rights**, ruled in **`ADR-0006`** from the retained FIDE text whose sha256 **and currency** were both re-verified that day. **(3) `ADR-0005` is `accepted` WITH AN AMENDMENT** (one of its statements was false as written) and **`ADR-0006` is new and `accepted`** — the first ADRs ratified under the owner's standing directive of 2026-08-03, both carrying per-clause falsifier tables. Board: `Ready for UAT` 1/4 → 0/4, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. **No production code changed**, size stays `M`, and one item (`generateMoves` offering a capture onto the mover's own piece) is **routed to BA/PM rather than cut here**. Previously 2026-08-02 by Architect/Design (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011's first design hop is closed: "an en-passant capture is available" is ruled to mean a LEGAL one (strict FIDE 9.2.3), the predicate is homed in `src/legal.ts` with `src/zobrist.ts` importing it, the ticket is re-sized `S` → `M` and not split, and it sits in `Ready for Dev`.** `ADR-0002` is extended around and NOT amended (no human ruling owed, none taken); **`ADR-0005` is written and is `proposed` — no agent may accept it, and ABC-011 is not blocked on it.** Board: `Ready` 5/8 → 4/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. No production code changed. Previously the same day by BA/PM (task `refinement-fide-9-6-1`, Workflow 07) — **open question 1 CLOSED: FIDE 9.6.1 does NOT say "consecutive" and `src/gameend.ts` conforms**, ruled against the Laws text retrieved by this role from `handbook.fide.com` and retained verbatim under the task's context folder. No ticket cut, no board move (`Ready` stays 5/8), no code change owed on `main`. The "Next action" section is re-pointed accordingly. Previously the same day by the Orchestrator (ABC-020 merged to `main` on explicit owner instruction; branch stack resolved, board closed). Earlier the same day: first fill of this file, which had been the shipped empty template while the project ran to 27 unmerged commits._
+_Updated: 2026-08-06 by the Orchestrator (task `refinement-deploy-posture-2026-08-06`, Workflow 07) — **THE DEPLOYMENT POSTURE IS WRITTEN DOWN: THIS PROJECT DEPLOYS NOWHERE AND RUNS LOCALLY.** The owner: *"this project currently does not deploy anywhere, mark that as well, it will be used locally for now."* **"Currently" and "for now" are load-bearing and are honoured — present posture, explicitly revisitable, revisit trigger `EPIC-006`.** A standing-fact section below carries the quote, the reading, and the limits that did NOT move. **Unlike the branching model, the config COULD carry this and now does** — `default_stack.deploy` `kubernetes-ready` → `none-local-only`, `environments` `["dev","staging","prod"]` → `["local"]`, `nfr.availability` `99.9%` → not-applicable — three key contracts each verified in the kit's config reference BEFORE editing. **`production_requires_human_confirmation` stays `true`, every never-deploy limit stands, and no release machinery was deleted.** The absence was **measured, not assumed**: no Dockerfile, no YAML of any kind, no CI, no git remote, no `bin`/`main`/`exports`, no entry module, `plans/releases/` empty. **`ADR-0007` is new and `accepted`** (six clauses, five rejected alternatives, seven falsifiers) and **`memory-bank/70-runbook.md` is filled for the first time** — deliberately carrying NO command, because there is still no way to run the game. Security/NFR ruled the availability bar **retired rather than unmeasured** — it was never in `plans/nfr-catalog.md` at all, only an unadopted bootstrap default — parked with an owner and a named trigger, `PASS_WITH_RISKS`, no required fix. **Six untrue-default and two-documents-disagree items were FLAGGED, NOT FIXED, each with an owner** (see "Open questions nobody has ruled on"); the loudest is `EPIC-006` naming `npx` in four places while `ADR-0007` records distribution UNDECIDED. No ticket cut, no board column moved, no production code changed, nothing deployed. Previously the same day by the Orchestrator (task `ticket-to-pr-ABC-012`, Workflow 04) — **THE BRANCHING MODEL CHANGED AND `ABC-012` IS MERGED AND `Done`.** The owner made merge approval **standing** (*"everything merges to main in this project, set it as branching model and i approve your merges"*), retiring the per-merge-instruction rule recorded on every previous merge in this project. A new standing-directive section below carries the quote, its reading, and **three limits that did NOT move: deploy is not included, the gate still binds, and the authority remains the owner's and is revocable.** **The config was deliberately NOT edited and that is a finding: `autonomy` allows only `diff`/`branch`/`pr` and there is no value meaning "agents may merge"** — inventing one would be a dial nothing reads. `ABC-012` merged by fast-forward `39e260d` → `7355b51`, 8 commits, no merge commit; gates run on the tip and **again on `main`** — 226/226, skip 0, lint + typecheck + build exit 0. It is the **first merge under the new model**. Three gates PASS: QE killed 21 mutants of which **three survived the delivered suite** (all `resetTo` field-copy holes, all hidden because every acceptance test anchored at startpos and took back at **even** ply counts), and Security/NFR **re-measured all six NFR bars independently**, meeting every one at 0.09x–0.67x. Five accepted risks, each owned; no required fix. UAT deferred → `EPIC-006` — **now the only human checkpoint left before code lands, which is flagged for revisit when a runnable game exists.** **Nothing deployed; a human still holds deploy. No branch was deleted — that call is put back to the owner.** Previously 2026-08-04 by BA/PM (task `refinement-2026-08-04`, subtask `ba-pm-generator-defect-and-abc014-knot`, Workflow 07) — **both unowned items are closed and the pull order is fixed: `ABC-012` → `ABC-014` → `ABC-009` → `ABC-022` → `ABC-013`.** **`ABC-022` CUT** (`S`, `P1`, `EPIC-001`, straight to `Ready`) for the `generateMoves` en-passant precondition defect — **reproduced by this role before cutting**, not accepted from the three roles that described it and cut none, and the reproduction found three things none of them said: the shape is **piece-agnostic** (a rook reproduces it, not only the two knight FENs on record); the branch carries **two** defects, and the unrouted one makes **`legalMoves` permanently corrupt its argument**; and **the legality filter does NOT reject the over-offered move** — perft is silent because the trigger population is empty (**0 of 518,474 reachable nodes**), not because the filter absorbs it, which means **no perft depth or added position can ever reach this defect**. **`ABC-011`'s guard (a) is confirmed NOT deletable, and more strongly than QE put it:** deleting it makes the predicate answer `true` on **both** classes, because `hasLegalEnPassant` synthesises its probe and never consults the generator. **`ABC-022` is `P1`, not `P0`, so it does NOT precede `ABC-012`** — the open conditional, answered on this board's own P0 test. **The `ABC-015`/`ABC-014`/`RISK-005` knot is UNTIED and `ABC-014` is pullable:** `ABC-015`'s wording was the wrong one and the constraint binds at **`ABC-018`**, corrected in place in four files. `Ready` 4/8 → 5/8; no limit approached, no override taken. **Nothing merged, nothing deployed, no production code changed.** Previously 2026-08-04 by the Orchestrator (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011 is MERGED to `main` and `Done`.** Fast-forward `4a73cf3` → `d3efba6`, 16 commits, no merge commit; gates run before the merge on the tip and again **after it on `main`** — 214/214, skip count 0, lint + typecheck + build exit 0. Merge performed by an agent on **explicit human instruction**, which is **not standing authorization**; the branch was not deleted. UAT deferred → EPIC-006. The **"Next action"** section is rewritten: two unowned items go to BA/PM **before** the next pull, because one of them is a move-generation legality defect that may outrank `ABC-012` under the owner's standing directive. Previously 2026-08-03 by Architect/Design (task `ticket-to-pr-ABC-011`, subtask `architect-abc011-defect-definition-and-ratify`, Workflow 04) — **ABC-011's SECOND design hop is closed and the ticket is back in `Ready for Dev`.** Three things were owed and all three are ruled. **(1) The MEDIUM defect's definition question: purity is UNCONDITIONAL and is bought with a PRECONDITION on the probe move, not with a change to what the predicate means; the answer stays domain-restricted and is SPECIFIED (`false`, touching nothing) where the board contradicts the ep square, because the ruled oracle is demonstrably unsound there — `generateMoves` corrupts on two of QE's three FENs and offers a pawn capturing onto the mover's own knight on a third.** Two guards, not one: the captured-pawn guard buys purity and closes a **fourth** reproduction no prior role had; the empty-target guard buys oracle agreement and is needed only for two **pure** divergences constructed at this hop. Re-derived on a fourth independent script: 518,474 nodes / 81,397 ep-set, **0** answers changed, **0** keys changed, **0** guard firings on the reachable population; 193/193 green in a sandbox with no existing test edited. **(2) Castling is NOT the en-passant case** — `zobristKey` keeps hashing castling **rights**, ruled in **`ADR-0006`** from the retained FIDE text whose sha256 **and currency** were both re-verified that day. **(3) `ADR-0005` is `accepted` WITH AN AMENDMENT** (one of its statements was false as written) and **`ADR-0006` is new and `accepted`** — the first ADRs ratified under the owner's standing directive of 2026-08-03, both carrying per-clause falsifier tables. Board: `Ready for UAT` 1/4 → 0/4, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. **No production code changed**, size stays `M`, and one item (`generateMoves` offering a capture onto the mover's own piece) is **routed to BA/PM rather than cut here**. Previously 2026-08-02 by Architect/Design (task `ticket-to-pr-ABC-011`, Workflow 04) — **ABC-011's first design hop is closed: "an en-passant capture is available" is ruled to mean a LEGAL one (strict FIDE 9.2.3), the predicate is homed in `src/legal.ts` with `src/zobrist.ts` importing it, the ticket is re-sized `S` → `M` and not split, and it sits in `Ready for Dev`.** `ADR-0002` is extended around and NOT amended (no human ruling owed, none taken); **`ADR-0005` is written and is `proposed` — no agent may accept it, and ABC-011 is not blocked on it.** Board: `Ready` 5/8 → 4/8, `In Design` 0/2 → 1/2 → 0/2, `Ready for Dev` 0/6 → 1/6; no limit approached, no override taken. No production code changed. Previously the same day by BA/PM (task `refinement-fide-9-6-1`, Workflow 07) — **open question 1 CLOSED: FIDE 9.6.1 does NOT say "consecutive" and `src/gameend.ts` conforms**, ruled against the Laws text retrieved by this role from `handbook.fide.com` and retained verbatim under the task's context folder. No ticket cut, no board move (`Ready` stays 5/8), no code change owed on `main`. The "Next action" section is re-pointed accordingly. Previously the same day by the Orchestrator (ABC-020 merged to `main` on explicit owner instruction; branch stack resolved, board closed). Earlier the same day: first fill of this file, which had been the shipped empty template while the project ran to 27 unmerged commits._
 
 <!--
   The running plan-of-record. Read this FIRST on start, then `plans/board.md`. Keep it short and
@@ -68,6 +68,90 @@ statement about **destination, not cleanup**, and the owner has twice held that 
 (2026-08-02, when eight branches were deleted after per-branch validation, and on every merge since).
 **Nothing has been deleted.** Three branches are fully contained in `main`:
 `grugops/ticket-to-pr-ABC-011`, `grugops/refinement-2026-08-04`, `grugops/ticket-to-pr-ABC-012`.
+
+## Standing fact — this project deploys nowhere and runs locally. **Present posture, revisitable at `EPIC-006`.**
+
+**Project owner Olger Oeselg, 2026-08-06**, quoted verbatim:
+
+> *"this project currently does not deploy anywhere, mark that as well, it will be used locally for
+> now."*
+
+**"as well"** points at the branching-model entry above, written the same day: a standing fact about
+how this project works, recorded in the substrate rather than left in a chat window.
+
+**How this is read, stated so a later reader can check the reading rather than inherit it.** Two
+words are load-bearing and are honoured rather than rounded up:
+
+- **"currently" / "for now"** — this is **present posture, explicitly revisitable**. It is NOT a
+  ruling that the project may never be distributed. Nothing that exists to serve a future deploy was
+  deleted on the strength of it; what was fixed is every place the substrate **claimed** a deploy
+  target that does not exist.
+- **"used locally"** — the delivery target is a machine a developer already sits at. There is no
+  environment to promote to, so there is nothing to promote **between**.
+
+**The revisit trigger is named rather than left to memory: `EPIC-006` (packaging)** — the first work
+here that produces an artifact someone other than its author could run. That is the same parking spot
+as the merge-checkpoint consequence recorded under the branching-model directive.
+
+**THE ABSENCE WAS MEASURED, NOT ASSUMED**, by two roles on separate scans: no `Dockerfile`, no
+`docker-compose`, no chart, no Terraform, **no YAML file of any kind**; no `.github/workflows/` and
+therefore no CI; no git remote; `package.json` is `private: true` with no `bin`, `main`, `exports` or
+`start`; `src/` has no entry module; `plans/releases/` holds only `.gitkeep`. Re-checked independently
+at close: `git ls-files` matches zero deploy-shaped paths.
+
+**THE CONFIG COULD CARRY THIS, AND THAT IS THE DIFFERENCE FROM THE BRANCHING-MODEL CASE.** Recorded
+loudly, because a later reader could easily over-generalise the entry above into "grugops never edits
+the config". The branching model had **no expressible dial** — `autonomy` allows only
+`diff`/`branch`/`pr`, no value means "agents may merge", no `branching_model` key exists. **That
+reasoning does not transfer here.** All three keys below are documented free-form in the kit's own
+config reference, each contract verified there **before** editing:
+
+| Key | Was | Now | Ruled by |
+|---|---|---|---|
+| `default_stack.deploy` | `kubernetes-ready` | `none-local-only` | Architect/Design |
+| `environments` | `["dev","staging","prod"]` | `["local"]` | Architect/Design |
+| `nfr.availability` | `99.9%` | not-applicable, local-only | Security/NFR |
+
+**`["local"]` was chosen over `[]` deliberately**, and the reason generalises: the kit's
+default-on-absent rule reads an absent key back as the three fictional environments, so an empty
+array sits one step from an accidental "repair" that reinstates exactly the lie being removed.
+**Security/NFR hit the identical trap on `availability` and made the identical call** — deleting the
+key reads it straight back as `99.9%`.
+
+**THE AVAILABILITY BAR IS RETIRED, NOT UNMEASURED — the distinction matters here.** `UNKNOWN -
+verify` elsewhere in this project means *the quantity exists and nobody ran the instrument*. Here
+there is no quantity and no instrument: nothing listens, nothing is up, and *99.9% of what, over what
+window, missed by whom* has no answer. One fact settles it independently of the argument — **the bar
+was never in `plans/nfr-catalog.md` at all**, only in the FORMAT comment's list of categories to
+consider. It was an unadopted bootstrap default, not a commitment anyone made. Parked with owner
+(Security/NFR) and a **named condition, not a milestone**: the first time this project ships
+something that must be reachable while its user is away from the keyboard.
+
+**THREE LIMITS DID NOT MOVE, named because a fact that is not bounded in writing gets read wider than
+it was given.**
+
+1. **`production_requires_human_confirmation` STAYS `true`.** Re-read after every edit. "We have no
+   production" is a fact about today; the flag is a rail for the day that changes, and a rail that
+   costs nothing while unused is not dead config.
+2. **EVERY NEVER-DEPLOY LIMIT STANDS.** This instruction **confirms** the branching model's
+   *"DEPLOY IS NOT INCLUDED"* limit rather than modifying it. A human still holds deploy.
+3. **NO RELEASE MACHINERY WAS DELETED** — no board column, no workflow, nothing under
+   `plans/releases/`. Scope was "stop claiming a deploy target that does not exist", never "remove
+   the machinery for ever having one".
+
+**"WE DEPLOY NOWHERE" MUST NEVER BE READ AS "ONLY THIS MACHINE MATTERS."** Security/NFR fenced this
+explicitly and it is worth repeating: `RISK-002`'s non-M3 spike, `RISK-004`'s **redistribution**
+licence obligation (a `git clone` is still redistribution), `RISK-005`'s terminal portability, and
+every one-machine `UNKNOWN - verify` in `plans/nfr-catalog.md` all stand untouched.
+
+**Where the authority lives.** `memory-bank/50-decisions/ADR-0007-deployment-posture-local-only.md`
+(six clauses, five rejected alternatives, seven falsifiers, `accepted` under the owner's standing
+delegation of 2026-08-03). `AGENTS.md` § "Deployment posture" points at it and does not restate it.
+`memory-bank/70-runbook.md` was filled for the first time and **deliberately carries no command at
+all** — there is still no way to run the game, `Dev / run` stays `UNKNOWN - verify`, and a fabricated
+command in a runbook is worse than an admitted gap.
+
+**No ticket was cut and no board column moved**, the same shape as the branching-model entry.
 
 ## Standing directive — read before prioritising anything
 
@@ -264,6 +348,31 @@ not this task's scope:
 3. **ABC-020's A5/A8 `Given` wording** is factually wrong about the locked pawn wall (it unfreezes
    after its first capture; the clock resets three times). The criteria's **substance holds** under
    ten drives and is pinned by tests. Documentation only.
+4. **`EPIC-006` names `npx` in FOUR places while `ADR-0007` clause 5 records distribution as
+   UNDECIDED — two documents disagree, and this is the `ABC-015` shape again.** Both were written
+   2026-08-06; neither side was edited, because the fix is a ruling and not a wording tidy. Count
+   re-verified independently at close: `grep -c npx` on the epic returns 4 (Scope, epic acceptance,
+   NFR triggers, Test notes). **Owners: BA/PM (epic scope) and Architect/Design (`ADR-0007`), at
+   `EPIC-006`'s decomposition** — that decomposition must not start until this is ruled, or it will
+   inherit a distribution decision nobody made. Raised by Security/NFR,
+   `refinement-deploy-posture-2026-08-06`.
+5. **FIVE MORE bootstrap defaults in `.grugops/factory.config.json` describe a stack this project
+   does not use, and one of them is the same class as the deploy key just fixed.** Found by two roles
+   and **deliberately NOT fixed** — the owner asked about deployment, and quietly rewriting five
+   unrelated dials would have been scope the instruction did not carry. Named here so the next reader
+   sees them as known, not missed: **`default_stack.container: "docker"`** with no Dockerfile
+   anywhere (the closest to in-scope, and arguably an oversight in this task's own framing);
+   `nfr.perf_p95_ms: 300`, a p95 **API** latency on a project with no API; `nfr.a11y_target:
+   "WCAG-2.2-AA"`, a **web** standard on a terminal program; and `default_stack.backend:
+   "node-fastify"` / `frontend: "vue"` / `db: "postgresql"` / `e2e: "playwright"`, none of which
+   exists here. **Owners: Architect/Design for `default_stack`, Security/NFR for the two `nfr` bars**
+   (triggers `EPIC-002`/`EPIC-003`). One `refinement` closes the lot; none blocks anything today.
+6. **No `plans/traceability.md` row was written for this task, and the same was true of the
+   branching model.** Three roles reached that conclusion independently: the file's own rule is one
+   row per ticket, and a governance/substrate change cuts no ticket. **The open question is whether
+   this project wants a trace trail for substrate changes at all** — today they are traceable only
+   through `memory-bank/60-progress.md` and the task's context folder. Nobody's call but the
+   Orchestrator's or the owner's, and it is deliberately not taken here.
 
 ## The branch stack — RESOLVED 2026-08-02, everything is on `main`
 
@@ -315,6 +424,14 @@ the same explicit instruction.
   ABC-020 because the ADR's clauses are not a ticket's to edit.
 
 ## Next action
+
+**2026-08-06 — the deployment posture is recorded and this task is closed. The next pull is `ABC-014`
+(board frame renderer, `M`, `P0`), because `ABC-012` is now merged and `Done`.** The pull order below
+was written on 2026-08-04 and its first item is spent; the rest of it stands unchanged and was not
+re-opened. Nothing in the deploy-posture task changed a priority, a size or a board column —
+**`ABC-014` was already next after `ABC-012` and still is.** The one thing that gained a deadline is
+open question 4: **`EPIC-006`'s decomposition must not start until the `npx`-vs-`ADR-0007`
+contradiction is ruled.** `EPIC-006` is not next, so nothing is blocked today.
 
 **`ABC-011` is merged and `Done`** (2026-08-04, fast-forward `4a73cf3` → `d3efba6`, 16 commits, no
 merge commit; 214/214 and skip count 0 re-verified **on `main`** after the merge). Every column
