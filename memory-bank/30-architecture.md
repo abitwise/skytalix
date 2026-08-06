@@ -1,5 +1,9 @@
 # Architecture
-_Updated: 2026-07-29 by Architect/Design (as-built after EPIC-001, from the 2026-07-29 audit)_
+_Updated: 2026-08-06 by Architect/Design (task `refinement-deploy-posture-2026-08-06`) — added
+**"Deployment posture"** below, on the owner's instruction that this project deploys nowhere and runs
+locally; the posture was measured against the repo, not inherited from the config, and the why is in
+`50-decisions/ADR-0007`. Nothing else in this file changed. Previously 2026-07-29 by Architect/Design
+(as-built after EPIC-001, from the 2026-07-29 audit)._
 
 <!--
   FORMAT — read before you fill this in. (clear voice; this is a technical file, not a role prompt.)
@@ -80,3 +84,36 @@ transpile step; intra-repo imports carry explicit `.ts` extensions
 (`allowImportingTsExtensions`, `verbatimModuleSyntax`). Vitest for tests, Biome for lint and
 format. `npm run build` is `tsc --noEmit` — a typecheck, not an emit, because nothing is
 published until EPIC-006. Commands live in `AGENTS.md`.
+
+## Deployment posture — deploys nowhere, runs locally
+
+**Present posture, explicitly revisitable. Revisit trigger: `EPIC-006` (packaging).** Owner's
+instruction, 2026-08-06: *"this project currently does not deploy anywhere, mark that as well, it
+will be used locally for now."*
+
+Nothing is deployed, published or released, and there is no deploy target of any kind. **Measured
+across the whole repo on 2026-08-06, not assumed from the config:**
+
+- **No deploy artifact.** No Dockerfile, no compose file, no chart, no manifest, no IaC — the
+  repository contains **no YAML file at all**.
+- **No CI, so no CI deploy step.** `.github/` holds one file (`copilot-instructions.md`); there is
+  no `.github/workflows/`.
+- **Nothing publishable and nothing to run.** `package.json` is `private` with no `main`, `exports`
+  or `bin` and no `start` script; the build emits nothing (`tsc --noEmit`, no `dist/`); `src/` has
+  no entry module. `AGENTS.md` records `Dev / run: UNKNOWN - verify` for that reason.
+- **Nowhere to push.** The repo has no git remote.
+- **Nothing released.** `plans/releases/` holds only `.gitkeep`.
+
+The config now says this instead of implying a cluster: `default_stack.deploy` is `none-local-only`
+and `environments` is `["local"]` (previously `kubernetes-ready` and `["dev","staging","prod"]`,
+neither of which anything here implemented).
+
+**What this does NOT mean.** `production_requires_human_confirmation` stays `true`; the release and
+incident machinery stays; the never-deploy limit in every role stays. *"We have no production"* is a
+fact about today, and those are rails for the day it changes — a rail costs nothing while unused.
+**How the CLI will eventually be distributed — npm, a binary, a clone — is UNDECIDED and belongs to
+`EPIC-006`.**
+
+Why, the alternatives weighed (including why `environments` is `["local"]` and not `[]`), and what
+would falsify it: **`50-decisions/ADR-0007`**. What is true operationally — that there is nothing to
+operate, deploy or roll back — is in `70-runbook.md`.

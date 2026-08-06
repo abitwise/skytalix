@@ -13,7 +13,7 @@
     "db": "postgresql",
     "e2e": "playwright",
     "container": "docker",
-    "deploy": "kubernetes-ready"
+    "deploy": "none-local-only"
   },
   "wip_limits": {
     "Ready": 8,
@@ -60,7 +60,7 @@
     "stale_ttl_minutes": 30
   },
   "compliance_regime": [],
-  "environments": ["dev", "staging", "prod"],
+  "environments": ["local"],
   "production_requires_human_confirmation": true,
   "blocked_escalation_days": 2
 }
