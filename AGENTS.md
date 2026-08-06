@@ -134,6 +134,36 @@ rather than given a fake dial nothing reads, and `memory-bank/60-progress.md` is
 authority actually lives. This repo also has no git remote, so `pr` has always meant "branch +
 gate" here: nothing is pushed and no PR is opened.
 
+## Deployment posture
+
+This project deploys nowhere. It runs locally, from source on a developer's machine. There is no
+container, no manifest, no CI, no git remote, and no release has ever been cut — that absence was
+measured, not assumed. There is also no CLI entry point yet, which is why `Dev / run` above is
+`UNKNOWN - verify` and stays that way.
+
+This is **present posture and explicitly revisitable** — the owner said "currently" and "for now"
+(2026-08-06). The revisit trigger is named: `EPIC-006` (packaging). **How the CLI will eventually be
+distributed — npm, a binary, a `git clone` — is undecided, and `EPIC-006` decides it.** Do not fill
+that in.
+
+The ruling, the evidence behind it, and what is deliberately preserved for the day it changes are in
+`memory-bank/50-decisions/ADR-0007-deployment-posture-local-only.md`. **That ADR is the authority;
+this is a pointer to it.** The config carries the fact: `default_stack.deploy` is `none-local-only`
+and `environments` is `["local"]`.
+
+**Nothing here relaxes anything.** `production_requires_human_confirmation` stays `true`, the
+never-deploy safety rule below stands, and the branching model's deploy limit — deploy is not
+included in the owner's standing merge approval — is confirmed by this, not modified. "Deploys
+nowhere today" is not "decided never to deploy": no release machinery, board column or workflow was
+removed.
+
+**Precedence, so nobody has to guess.** The kit is shared and project-agnostic, so it still hardcodes
+a `dev → staging → prod` promotion path (`agent-factory/workflows/12-release.md` step 3;
+`agent-factory/roles/release-manager.md`'s release-record template). It is read-only and cannot carry
+a project override. On this project's deployment posture, `.grugops/factory.config.json`, `ADR-0007`
+and `memory-bank/` win; everything else in those files — never-deploy, the human-confirmation
+requirement — stands unchanged.
+
 ## Safety rules
 
 - Do not read or expose secrets.
@@ -142,7 +172,8 @@ gate" here: nothing is pushed and no PR is opened.
   is approval to merge work that PASSED, never to skip or soften a gate (`quality.gate_enforcement`
   is `blocking`): run the gates on the branch tip before and on `main` after, and record both.
 - Never deploy. `production_requires_human_confirmation` is `true`, and merge approval is not
-  deploy approval — a human holds deploy.
+  deploy approval — a human holds deploy. There is also nothing to deploy and nowhere to deploy it
+  — see `## Deployment posture`, which confirms this rule rather than changing it.
 - Do not change dependencies without reason. No unrelated refactors. No fake results.
 
 ## Coding rules (the 12)
