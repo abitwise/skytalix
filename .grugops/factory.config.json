@@ -43,7 +43,7 @@
   "nfr": {
     "a11y_target": "WCAG-2.2-AA",
     "perf_p95_ms": 300,
-    "availability": "99.9%"
+    "availability": "not-applicable-local-only (nothing is ever up; ruling in plans/nfr-catalog.md)"
   },
   "security": {
     "asvs_level": "L1",
