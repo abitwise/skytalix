@@ -26,7 +26,7 @@ consumers deep-import a file by path.
 
 ## Key components
 
-Ten production modules, flat in `src/`, one job each.
+Eleven production modules, flat in `src/`, one job each.
 
 | Layer | Module | Owns |
 |---|---|---|
@@ -38,6 +38,7 @@ Ten production modules, flat in `src/`, one job each.
 | Legality | `legal.ts` | `legalMoves`, `isInCheck` |
 | Terminal state | `gameend.ts` | checkmate, stalemate, 50-move, repetition, insufficient material |
 | Game history | `history.ts` | `GameHistory` — the move list is the authority (ADR-0002 clause 2); undo, the key list and the repetition counts are derived by replay (ABC-012). Nothing in the core imports it |
+| Presentation | `render.ts` | `renderBoard` — the board frame as a VALUE, 9 rows x 18 characters, shaded by character, in either glyph mode and either orientation (ABC-014). It writes nothing and reads no terminal; `ABC-018` owns writing. Nothing imports it yet |
 | Verification | `perft.ts` | node counting and per-first-move divide |
 | Harness (only I/O) | `perft-bench.ts` | `npm run perft`; the only module that prints, and it runs on import |
 
@@ -57,7 +58,14 @@ covered), plus a deep perft lane behind `PERFT_DEEP=1`.
   `history.ts` sits alone at level 7 above `gameend.ts`, so the depth is 6 → 7. Every one of its
   six edges points down (`fen`, `apply`, `zobrist`, `gameend`, plus the `Move` / `Position`
   types) and **nothing imports it** — measured, not assumed: it is the one module with zero
-  importers, which is what keeps the core ignorant of the session.
+  importers, which is what keeps the core ignorant of the session. **Extended by ABC-014
+  (2026-08-06), and it moves nothing:** `render.ts` imports `position.ts` and nothing else, so it
+  sits at **level 2** beside `fen.ts` and `moves.ts`, not on top of the stack — a renderer that
+  needed `legal.ts` or `gameend.ts` would be drawing something this ticket does not draw. Graph
+  rebuilt from `src/*.ts` at the same commit: **11 modules, zero cycles, depth still 7**,
+  `position.ts` imported by **9 of the other 10** (all but `perft-bench.ts`), and `render.ts` joins
+  `history.ts` and `perft-bench.ts` as a module with **zero importers** — `ABC-018` will be its
+  first.
 - **Mutable `Position`, make/unmake, never copy.** `makeMove` mutates the 128-byte board in
   place and returns a four-field `UndoRecord` that the **caller** owns; `unmakeMove` reverses
   it. Nothing clones a `Position` and no clone function exists. Consequence for consumers: a
