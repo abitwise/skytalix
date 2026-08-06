@@ -105,11 +105,44 @@ files directly via built-in type stripping, so there is no bundler or transpile 
 - Cadence + WIP: `.grugops/factory.config.json`
 - Traceability: `plans/traceability.md`
 
+## Branching model
+
+Trunk-based. `main` is the single long-lived branch. Work happens on a short-lived
+`grugops/<task>` branch — the only place a gate can run RED without `main` ever being red — and
+merges to `main` as soon as it is green. No `develop`, no release branches, no long-lived feature
+branches.
+
+The project owner authorized merges to `main` standing (2026-08-06). Three limits did not move:
+deploy is NOT included, the gate still binds, and the authority is the owner's and revocable. The
+directive, its reading and its limits are in `memory-bank/60-progress.md` § "Standing directive —
+the branching model, and who turns the merge key". **That section is the authority; this is a
+pointer to it.**
+
+The commit-side branch guard in `agent-factory/_commit-convention.md` still holds — commit on the
+`grugops/<task>` branch, never directly on `main`. What the owner changed is what happens *after*
+the gate is green, not how work is produced.
+
+**Precedence, so nobody has to guess.** The kit is shared and project-agnostic, so it still reads
+"agents never merge" (`_commit-convention.md` §(c), workflows 04, 05, 12). It is read-only and
+cannot carry a project override. On merge to `main` in THIS project, the owner's directive wins;
+everything else in those files — the branch guard, the gate, never-deploy — stands unchanged.
+
+**Config trap.** `.grugops/factory.config.json` says `autonomy: "pr"`, which the kit defines as
+"branch + open a PR (agents never merge)". The dial allows only `diff`/`branch`/`pr` and there is
+no `branching_model` key, so no value can express "agents may merge" — the config was left alone
+rather than given a fake dial nothing reads, and `memory-bank/60-progress.md` is where the merge
+authority actually lives. This repo also has no git remote, so `pr` has always meant "branch +
+gate" here: nothing is pushed and no PR is opened.
+
 ## Safety rules
 
 - Do not read or expose secrets.
 - Do not run destructive commands.
-- Never merge a protected branch. Never deploy prod without human confirmation.
+- Merging gated work to `main` is authorized standing by the owner — see `## Branching model`. It
+  is approval to merge work that PASSED, never to skip or soften a gate (`quality.gate_enforcement`
+  is `blocking`): run the gates on the branch tip before and on `main` after, and record both.
+- Never deploy. `production_requires_human_confirmation` is `true`, and merge approval is not
+  deploy approval — a human holds deploy.
 - Do not change dependencies without reason. No unrelated refactors. No fake results.
 
 ## Coding rules (the 12)
