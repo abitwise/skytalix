@@ -18,7 +18,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { parseFen, toFen } from "./fen.ts";
-import { EMPTY, squareAt } from "./position.ts";
+import { BLACK, EMPTY, emptyPosition, isOnBoard, KING, QUEEN, squareAt } from "./position.ts";
 import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -350,4 +350,285 @@ describe("ABC-014 — the rendered frame", () => {
       }
     });
   }
+});
+
+// ---------------------------------------------------------------------------
+// QE/E2E adversarial coverage — subtask `qe-abc014-break`, Workflow 04.
+//
+// Everything above this line reaches the module through `parseFen`, so it exercises only the
+// FEN-LEGAL slice of the input domain; `renderBoard` takes a `Position`, which is wider. And four
+// of the six standing FENs are pinned only by a GENERATED snapshot, which records what the code
+// did on the run that wrote it and proves "unchanged", never "correct".
+//
+// The tests below were written by running mutants, not by reading the code. Each names the defect
+// it was added to catch.
+// ---------------------------------------------------------------------------
+
+/**
+ * A SECOND, INDEPENDENT FEN READER. It expands the placement field textually and never touches
+ * `parseFen`, `squareAt` or the 0x88 layout — an oracle that reuses the implementation's arithmetic
+ * proves nothing. Maps a square name (`"e4"`) to its FEN piece letter.
+ */
+function piecesFromFenPlacement(fen: string): Map<string, string> {
+  const pieces = new Map<string, string>();
+  const ranks = (fen.split(" ")[0] as string).split("/");
+
+  ranks.forEach((rankText, index) => {
+    const rankNumber = 8 - index; // FEN lists rank 8 first.
+    let file = 0;
+    for (const char of rankText) {
+      if (char >= "1" && char <= "8") {
+        file += Number(char);
+        continue;
+      }
+      pieces.set(`${"abcdefgh"[file] as string}${rankNumber}`, char);
+      file++;
+    }
+  });
+
+  return pieces;
+}
+
+/**
+ * The dark squares, built by walking out from `a1` — the one square the criterion NAMES — and
+ * flipping on every step along both axes. Deliberately not the module's `(file + rank) % 2`.
+ */
+const DARK_SQUARES: ReadonlySet<string> = (() => {
+  const dark = new Set<string>();
+  let rankStartsDark = true; // a1 is dark.
+  for (let rank = 1; rank <= 8; rank++) {
+    let isDark = rankStartsDark;
+    for (const file of "abcdefgh") {
+      if (isDark) dark.add(`${file}${rank}`);
+      isDark = !isDark;
+    }
+    rankStartsDark = !rankStartsDark;
+  }
+  return dark;
+})();
+
+const UNICODE_BY_FEN_LETTER: Readonly<Record<string, string>> = {
+  K: "♔",
+  Q: "♕",
+  R: "♖",
+  B: "♗",
+  N: "♘",
+  P: "♙",
+  k: "♚",
+  q: "♛",
+  r: "♜",
+  b: "♝",
+  n: "♞",
+  p: "♟",
+};
+
+/**
+ * The whole frame, derived from the FEN TEXT and the ticket's orientation rule alone. The label row
+ * is built by PLACING each letter in the column its file's piece glyph occupies — the property that
+ * row exists to have — rather than by repeating `render.ts`'s join, which would inherit its bugs.
+ */
+function expectedFrame(fen: string, mode: GlyphMode, orientation: Orientation): string[] {
+  const pieces = piecesFromFenPlacement(fen);
+  const whiteBottom = orientation === "white-bottom";
+  const ranks = whiteBottom ? [8, 7, 6, 5, 4, 3, 2, 1] : [1, 2, 3, 4, 5, 6, 7, 8];
+  const files = whiteBottom ? [..."abcdefgh"] : [..."abcdefgh"].reverse();
+
+  const rows = ranks.map((rank) => {
+    const cells = files.map((file) => {
+      const square = `${file}${rank}`;
+      const shade = DARK_SQUARES.has(square) ? ":" : ".";
+      const letter = pieces.get(square);
+      if (letter === undefined) return shade + shade;
+      return shade + (mode === "ascii" ? letter : (UNICODE_BY_FEN_LETTER[letter] as string));
+    });
+    return `${rank} ${cells.join("")}`;
+  });
+
+  const labelRow = Array.from({ length: RANK_LABEL_WIDTH + 8 * CELL_WIDTH }, () => " ");
+  files.forEach((file, column) => {
+    labelRow[RANK_LABEL_WIDTH + column * CELL_WIDTH + 1] = file;
+  });
+
+  return [...rows, labelRow.join("")];
+}
+
+/** Every frame the module can be asked for over the standing table. */
+function eachMatrixCell(
+  callback: (fen: string, mode: GlyphMode, orientation: Orientation) => void,
+) {
+  for (const { fen } of PERFT_FENS) {
+    for (const mode of MODES) {
+      for (const orientation of ORIENTATIONS) callback(fen, mode, orientation);
+    }
+  }
+}
+
+describe("ABC-014 QE — adversarial coverage", () => {
+  it("matches a frame derived independently from the FEN text, on all 24 matrix cells", () => {
+    eachMatrixCell((fen, mode, orientation) => {
+      expect(render(fen, mode, orientation), `${fen} ${mode} ${orientation}`).toEqual(
+        expectedFrame(fen, mode, orientation),
+      );
+    });
+  });
+
+  it("draws a board with no pieces at all — a Position the FEN parser can never produce", () => {
+    // parseFen requires exactly one king per side, so no test that goes through it can reach the
+    // all-empty board. `renderBoard` accepts it, and it is the only input that shows all 64
+    // shading characters with nothing standing on them.
+    expect(() => parseFen("8/8/8/8/8/8/8/8 w - - 0 1")).toThrow();
+
+    for (const mode of MODES) {
+      expect(renderBoard(emptyPosition(), mode, "white-bottom"), mode).toEqual([
+        "8 ..::..::..::..::",
+        "7 ::..::..::..::..",
+        "6 ..::..::..::..::",
+        "5 ::..::..::..::..",
+        "4 ..::..::..::..::",
+        "3 ::..::..::..::..",
+        "2 ..::..::..::..::",
+        "1 ::..::..::..::..",
+        "   a b c d e f g h",
+      ]);
+    }
+  });
+
+  it("draws a board with all 64 squares occupied without changing its geometry", () => {
+    const position = emptyPosition();
+    for (let rank = 0; rank < 8; rank++) {
+      for (let file = 0; file < 8; file++) position.board[squareAt(file, rank)] = QUEEN;
+    }
+    position.board[squareAt(4, 0)] = KING;
+    position.board[squareAt(4, 7)] = KING | BLACK;
+
+    for (const orientation of ORIENTATIONS) {
+      const frame = renderBoard(position, "unicode", orientation);
+      expect(frame, orientation).toHaveLength(9);
+      expect(new Set(frame.map((row) => row.length)), orientation).toEqual(new Set([18]));
+      // Not one cell falls back to the empty-square form when every square is occupied.
+      expect(
+        cellsOf(frame).filter((cell) => glyphOf(cell) === shadeOf(cell)),
+        orientation,
+      ).toHaveLength(0);
+    }
+  });
+
+  it("reads the 64 on-board squares only, never the 0x88 off-board half of the array", () => {
+    // The 0x88 board is 128 entries and the odd half is padding (ADR-0001). A renderer that
+    // scanned 0..127, or that got the index arithmetic wrong, would drag padding into the frame.
+    const clean = renderBoard(emptyPosition(), "ascii", "white-bottom");
+
+    const dirty = emptyPosition();
+    for (let square = 0; square < 128; square++) {
+      if (!isOnBoard(square)) dirty.board[square] = QUEEN;
+    }
+
+    for (const orientation of ORIENTATIONS) {
+      expect(renderBoard(dirty, "ascii", orientation), orientation).toEqual(
+        renderBoard(emptyPosition(), "ascii", orientation),
+      );
+    }
+    expect(renderBoard(dirty, "ascii", "white-bottom")).toEqual(clean);
+  });
+
+  it("leaves the raw 128-byte board untouched on every matrix cell", () => {
+    // The delivered purity test asserts through `toFen`, which reads only the 64 on-board squares
+    // and only on one FEN. This compares the array itself, so it does not inherit `fen.ts`, and it
+    // is the second independent killer for a renderer that writes to the board as it reads it.
+    eachMatrixCell((fen, mode, orientation) => {
+      const position = parseFen(fen);
+      const before = Array.from(position.board);
+      renderBoard(position, mode, orientation);
+      expect(Array.from(position.board), `${fen} ${mode} ${orientation}`).toEqual(before);
+    });
+  });
+
+  it("throws rather than drawing a placeholder for a board byte that is not a real piece", () => {
+    // CHARACTERIZATION of a deliberate decision, not a new requirement: the ticket's `## Out of
+    // scope` puts position validity on ABC-009/ABC-010 and AGENTS.md rule 8 forbids handling a
+    // scenario that cannot occur — nothing in merged `src/` produces such a byte. It is pinned
+    // because the alternative failure mode is silent: a `?? placeholder` would widen the cell and
+    // break the constant geometry ABC-018 stands on, and no other test in this file would notice.
+    for (const byte of [7, 8, 15, 255]) {
+      const position = emptyPosition();
+      position.board[squareAt(0, 0)] = byte;
+      expect(() => renderBoard(position, "ascii", "white-bottom"), `byte ${byte}`).toThrow();
+    }
+  });
+
+  it("puts every file letter in its own file's glyph column, with no padding anywhere", () => {
+    // The delivered criterion-1 assertion trims the label row, so it cannot see the row shifted a
+    // column left or right; the property survives there only in the two hand-written frames.
+    eachMatrixCell((fen, mode, orientation) => {
+      const where = `${fen} ${mode} ${orientation}`;
+      const frame = render(fen, mode, orientation);
+      const labelRow = fileLabelRowOf(frame);
+      const files = orientation === "white-bottom" ? "abcdefgh" : "hgfedcba";
+
+      // Untrimmed and exact — three leading spaces, one between letters, nothing after `h`.
+      expect(labelRow, where).toBe(`   ${[...files].join(" ")}`);
+
+      // And each letter sits at the column that file's piece glyph occupies, not merely in order.
+      for (let column = 0; column < 8; column++) {
+        expect(
+          labelRow[RANK_LABEL_WIDTH + column * CELL_WIDTH + 1],
+          `${where} column ${column}`,
+        ).toBe(files[column]);
+      }
+
+      for (const row of frame) expect(row, `${where}: ${JSON.stringify(row)}`).toBe(row.trimEnd());
+    });
+  });
+
+  it("emits no ANSI escape and no control character in any frame", () => {
+    // Epic amendment [A4] — shading is by CHARACTER, never by ANSI background colour — stated as a
+    // property of the bytes rather than as prose. It is also the executable form of this ticket's
+    // "no security trigger" rationale, which Security/NFR gates next: a frame carrying no control
+    // byte cannot smuggle one into a terminal, and EPIC-006's pipe-driven end-to-end test can
+    // compare it verbatim.
+    // Compared numerically rather than with a regular expression: biome's
+    // `noControlCharactersInRegex` rejects a control character in a pattern, and it is right to.
+    const isControl = (char: string): boolean => {
+      const point = char.codePointAt(0) as number;
+      return point < 0x20 || (point >= 0x7f && point <= 0x9f);
+    };
+
+    eachMatrixCell((fen, mode, orientation) => {
+      for (const row of render(fen, mode, orientation)) {
+        expect([...row].filter(isControl), `${fen} ${mode} ${orientation}`).toEqual([]);
+      }
+    });
+  });
+
+  it("keeps 9 rows of 18 CODE POINTS, not merely 18 UTF-16 units", () => {
+    // The delivered geometry test measures `row.length`, which counts UTF-16 units. The ticket's
+    // own second test-note trap is that those two are not the same thing, and a glyph outside the
+    // BMP — or a variation selector after one — would part them.
+    const rowCounts = new Set<number>();
+    const widths = new Set<number>();
+    eachMatrixCell((fen, mode, orientation) => {
+      const frame = render(fen, mode, orientation);
+      rowCounts.add(frame.length);
+      for (const row of frame) widths.add([...row].length);
+    });
+    expect(rowCounts).toEqual(new Set([9]));
+    expect(widths).toEqual(new Set([RANK_LABEL_WIDTH + 8 * CELL_WIDTH]));
+  });
+
+  it("is not the white-bottom frame with its BOARD rows reversed — the falsifiable form", () => {
+    // The delivered form of this criterion compares the whole 9-row frame against the whole frame
+    // reversed. That can never be equal — reversing all nine rows moves the file-label row to
+    // index 0, where the black-bottom frame has a board row — so it passes whatever the renderer
+    // did, including a rank-only flip. Comparing the eight BOARD rows is the assertion the
+    // criterion means, and it fails when the files are not mirrored.
+    for (const { fen } of PERFT_FENS) {
+      for (const mode of MODES) {
+        const white = boardRowsOf(render(fen, mode, "white-bottom"));
+        const black = boardRowsOf(render(fen, mode, "black-bottom"));
+        // Rank labels differ by construction; compare the drawn squares.
+        const squaresOnly = (rows: string[]) => rows.map((row) => row.slice(RANK_LABEL_WIDTH));
+        expect(squaresOnly(black), `${fen} ${mode}`).not.toEqual(squaresOnly(white).reverse());
+      }
+    }
+  });
 });
