@@ -1,8 +1,8 @@
 ---
 id: ABC-014
 title: Board frame renderer — grid, labels, shading, orientation, both glyph modes
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: M
 priority: P0
 epic: EPIC-002

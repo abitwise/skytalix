@@ -144,14 +144,55 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   oversight.
 -->
 
-## Ready (WIP 4/8)
+## Ready (WIP 3/8)
 
 - [ABC-009] legalMoves mutates the position it documents as unchanged  (size: S, P1, epic: EPIC-001, deps: none; escalated P2→P1 and promoted 2026-07-31)
 - [ABC-013] SAN rendering — src/san.ts with toSan only  (size: M, P1, epic: EPIC-002, deps: ABC-003 + ABC-005, both merged on main; unblocked 2026-07-31 when ADR-0004 was ratified)
-- [ABC-014] Board frame renderer — grid, labels, shading, orientation, both glyph modes  (size: M, P0, epic: EPIC-002, deps: none; ABC-015/RISK-005 knot UNTIED 2026-08-04 — this ticket never blocked on ABC-015 and is pullable)
 - [ABC-022] generateMoves offers en-passant captures its own preconditions forbid  (size: S, P1, epic: EPIC-001, deps: none; cut 2026-08-04 by BA/PM, straight to Ready)
 
 <!--
+  EMPTIED OF ABC-014 ON 2026-08-06 by the Orchestrator (task `ticket-to-pr-ABC-014`, Workflow 04) —
+  the `Ready → In Development` pull this role owns. Ready 4/8 → 3/8, In Development 0/3 → 1/3.
+  NO LIMIT APPROACHED, NO OVERRIDE TAKEN, no written reason owed.
+
+  ABC-014 is item 2 of BA/PM's 2026-08-04 pull order and item 1 (ABC-012) is MERGED and Done, so
+  this pull takes the order's next item and nothing else. THE ORDER IS NOT RE-OPENED.
+
+  THE TWO PRIOR DECLINES ARE SPENT, NOT OVERTURNED. This role declined ABC-014 on 2026-08-02 and
+  again on 2026-08-03 against the ABC-015 / RISK-005 contradiction. BA/PM untied that knot on
+  2026-08-04 in four files; the constraint now binds at ABC-018, not here. Re-checked at the pull
+  rather than taken on trust: ABC-014's Dependencies, ABC-015's, ABC-018's and EPIC-002's RISK-005
+  entry all now name ABC-018, and no two of them disagree. Chain ABC-014 → ABC-015 → ABC-018 is
+  acyclic.
+
+  NO DESIGN HOP AND NO UI HOP — In Design stays 0/2, and this is a judgment, not an omission.
+  The three cross-ticket contracts this renderer would need a design hop to settle are already
+  settled in writing: shading is BY CHARACTER (EPIC-002 scope amendment [A4]), the glyph mode is a
+  PARAMETER this module does not choose (amendment [A1] / acceptance 2b, whose selection table is
+  ABC-015's), and the frame is a VALUE with constant geometry (acceptance 4a, which states in its
+  own words that "the exact split is the engineer's"). Frontend/UI was considered and declined: its
+  output is a UI contract — tokens, component inventory, five states, a11y bar — and every one of
+  those questions is either already answered above or does not exist for a function that returns an
+  array of strings. Inventing a hop to re-state settled decisions is waste, not caution. The trigger
+  that WOULD earn a Frontend/UI hop is named so it is not missed: ABC-018, where the board, status
+  panel, history pane and message region compose into one frame under acceptance 4a/4b/4c.
+
+  PREMISES RE-VERIFIED AGAINST MERGED `main` (ed42d26) AT THE PULL, not read off the ticket:
+  src/render.ts does not exist; fileOf, rankOf, squareAt, pieceType, isBlack and Position are all
+  exported from merged src/position.ts; the standing perft FEN table the geometry criterion is
+  written over is in src/perft.test.ts (7 FENs). NO UNBUILT DEPENDENCY.
+
+  ONE TICKET, NOT THREE, against a limit of 3 — the same reasoning recorded for ABC-020, ABC-011 and
+  ABC-012. ABC-009, ABC-013 and ABC-022 are all pullable; a second concurrent ticket buys throughput
+  this project has no way to spend and costs review attention it does. Width for this task is 1
+  regardless: ticket-to-pr is a chain (engineer → QE → Security/NFR), each stage reading what the
+  last one published.
+
+  NOTHING WAS MERGED AND NOTHING WAS DEPLOYED. Full reasoning, the Definition-of-Ready re-check and
+  what this pull does NOT authorize are in the pull decision note, not summarised here:
+  .grugops/context/ticket-to-pr-ABC-014/notes/20260806T090000Z-orchestrator-decision-3b7c1d24.md
+
+  ---
   ENTERED 2026-08-04 by BA/PM (task `refinement-2026-08-04`, subtask
   `ba-pm-generator-defect-and-abc014-knot`, Workflow 07) — the `Backlog -> Ready` exit this role
   owns. Two items were routed here by the Orchestrator; both are closed. Ready 4/8 -> 5/8.
@@ -790,9 +831,23 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-014] Board frame renderer — grid, labels, shading, orientation, both glyph modes  (size: M, P0, epic: EPIC-002; pulled 2026-08-06 from Ready by the Orchestrator, task `ticket-to-pr-ABC-014`, branch `grugops/ticket-to-pr-ABC-014` off `main` ed42d26; no design hop — see the Ready comment for why)
 
 <!--
+  ENTERED 2026-08-06 by the Orchestrator (task `ticket-to-pr-ABC-014`, Workflow 04) — the
+  `Ready → In Development` pull this role owns. 0/3 → 1/3, no limit approached, no override taken.
+  The reason for the pull, the Definition-of-Ready re-check and the no-design-hop ruling are in the
+  Ready comment above and in full in the pull decision note; not restated here.
+
+  THE EXIT FROM THIS COLUMN IS THE SOFTWARE ENGINEER'S (In Development → In Review), then QE/E2E
+  owns the In Review exit, then Security/NFR gates NFR-002 (board-frame compute ≤ 500 µs/frame,
+  recorded with its machine). ABC-014 has NO security trigger — it renders bytes from
+  position.board and no user-supplied string reaches it; the escape-sequence trigger belongs to
+  ABC-018's message region.
+
+  ---
   EMPTIED 2026-08-04 by the Software Engineer (task `ticket-to-pr-ABC-012`, subtask
   `engineer-abc012-implement`, Workflow 04): ABC-012 implemented with tests and a green mandatory
   gate, moved In Development -> In Review. In Development 1/3 -> 0/3, In Review 0/3 -> 1/3; no limit
