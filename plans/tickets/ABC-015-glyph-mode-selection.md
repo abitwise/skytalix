@@ -1,8 +1,8 @@
 ---
 id: ABC-015
 title: Glyph mode selection — precedence, signal set, and the --unicode override
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P1
 epic: EPIC-002
@@ -310,3 +310,58 @@ own pre-check had ticked both green** off this ticket's self-assessment; it reco
 acceptance bullets and confirms BA/PM's finding — **eight input tuples, not nine, plus one session
 criterion that could not fail.** Recorded because the fix is procedural, not clerical: a
 self-assessment is not evidence, and routing the `Backlog` exit to its owner is what caught it.
+
+## Implementation
+
+**IMPLEMENTED `In Development → In Review` 2026-08-08 by the Software Engineer** (task
+`ticket-to-pr-ABC-015`, subtask `engineer-abc015-implement`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-015`. `In Development` 1/3 → 0/3, `In Review` 0/3 → 1/3; no limit
+approached, no override taken. **Nothing merged and nothing deployed — a human holds both.**
+
+**Three new files, and no existing file under `src/` was touched.** Verified rather than asserted:
+`git diff --numstat main -- src/` lists only the new module and its two test files, and every
+pre-existing `src/` file is byte-identical to merged `main` at `f1743a3`.
+
+- `src/glyph-mode.ts` — 122 lines, **32 of them code**. `selectGlyphMode(signals): GlyphMode` is the
+  pure rule; `beginGlyphModeSession(flags): GlyphModeSession` reads the ambient signals once and
+  closes over the answer.
+- `src/glyph-mode.test.ts` — the eleven acceptance criteria, one test each, plus four that pin what
+  the criteria do not reach.
+- `src/glyph-mode.nfr.test.ts` — the `NFR-007` zero-I/O bar as a spied guard.
+
+**The one structural choice this ticket left open is decided: the session's cached value lives in the
+CLOSURE that `beginGlyphModeSession` returns.** Both stated requirements hold at once — the *rule*
+reads no ambient global (criterion 10), while the *session accessor* reads `process.stdout.isTTY` and
+`process.env` exactly once (the NFR bar's permitted reads). A module-level memo was rejected because
+it needs an exported reset for the tests to run more than one session, and that export is the one
+thing able to break the session-constant promise this ticket exists to keep; a plain value the caller
+holds was rejected because it pushes the once-ness back to `EPIC-006` — the seam BA/PM closed onto
+this ticket — and makes criterion 11 unfalsifiable again.
+
+**Gates, reported as they ran:** `npm run lint` exit 0 (**after one autofix pass** — `biome check`
+failed on formatting only, `lint.autofix` is `true`, and this was self-fix attempt 1 of 2),
+`npm run typecheck` exit 0, `npm test` **271 passed / 271 on 13 files** (253 on 11 before), `npm run
+build` exit 0. **Skipped-test count 0**, captured with the `AGENTS.md` command. `src/glyph-mode.ts`
+is at **100% statements / branches / functions / lines**.
+
+**21 MUTANTS WERE RUN AGAINST THE MODULE AND ALL 21 DIED** — including the one the `## Test notes`
+name (the session re-probing the environment on every call, killed only by criterion 11) and the
+platform rule smuggled back in (killed only by criterion 9's guard). **Two of the 21 survived the
+suite as first written and the suite was fixed, not the record:** a session that hardcoded `isTTY`,
+and one that forwarded only `LANG`, both passed every acceptance criterion, because criteria 10 and
+11 are written over ambients where `isTTY` and the locale agree. A test now isolates each ambient
+signal. The tree was restored byte-identically after the campaign (`cmp` against a pre-campaign
+copy).
+
+**ONE BEHAVIOUR WAS NOT SPECIFIED BY THE NINE TUPLES AND THE ENGINEER DECIDED IT — flagged here for
+QE and Security/NFR rather than buried.** The table says *"the first **set** of `LC_ALL` /
+`LC_CTYPE` / `LANG`"*, and none of the nine tuples constructs an **empty** one, so "set" had to be
+defined. **Ruled: an empty variable counts as UNSET and precedence falls through to the next.** That
+is the POSIX reading, and it is what this ticket's own rationale for row 4 requires — *"unset … carries
+no information; treating it as a negative signal would smuggle the platform rule back in through the
+side door"* — which is equally true of `LANG=`. Two tests pin it.
+
+**Not done, deliberately.** No argv parsing (`EPIC-006`'s), no caller wired up (`ABC-018` is the
+first, and it is unstarted), no edit to `src/render.ts`, `ABC-018`, `EPIC-006` or `plans/nfr-catalog.md`,
+and no wall-clock assertion anywhere — this project keeps microseconds in the catalog with the machine
+that measured them, and this ticket has no perf bar by design.
