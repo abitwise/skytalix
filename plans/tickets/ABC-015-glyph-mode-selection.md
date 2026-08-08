@@ -1,8 +1,8 @@
 ---
 id: ABC-015
 title: Glyph mode selection — precedence, signal set, and the --unicode override
-status: in-security-nfr
-column: In Security/NFR
+status: ready-for-uat
+column: Ready for UAT
 size: S
 priority: P1
 epic: EPIC-002
@@ -629,3 +629,192 @@ against a ten-column header. Counted by machine here, splitting on pipes **not p
 backslash**: the row has 12 raw pipes, **one of them escaped**, so 11 unescaped and **ten cells** —
 identical to the header and to every other row checked. **The table is intact and the escape is
 correct GFM. Do not "fix" it** — the fix removes a correct escape and breaks the row.
+
+## Security / NFR
+
+**GATE VERDICT: PASS_WITH_RISKS. `In Security/NFR → Ready for UAT` 2026-08-08 by Security/NFR**
+(task `ticket-to-pr-ABC-015`, subtask `security-nfr-abc015-gate`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-015`. `In Security/NFR` 1/2 → 0/2, `Ready for UAT` 0/4 → 1/4; no limit
+approached, no override taken. **Nothing merged and nothing deployed — a human holds both.**
+
+`security.asvs_level` **L1**, `security.block_on` **high**, `compliance_regime` **`[]`** — so **no
+Compliance Officer hand-off is owed**, recorded rather than silently omitted. **NO REQUIRED FIX IS
+OUTSTANDING.** Four accepted risks, each with a severity, a **named owner** and a **place**.
+**No production code was changed and no test was added** — `git diff --stat -- src/` is empty and
+`src/glyph-mode.ts` still hashes `9c1f4f4e957d4faf3c9cccc49a545185`.
+
+### `NFR-007`'s zero-I/O bar: RE-DERIVED on this gate's own instruments, and MET
+
+**The delivered guard (`src/glyph-mode.nfr.test.ts`) was never cited.** QE had already found it
+blind to `node:fs/promises` — a specifier it did not name — and a guard that fails by omission is
+not evidence. Three instruments, the first **specifier-agnostic by design**:
+
+1. **Node's permission model** (`node --permission --allow-fs-read=<dir>`), which denies at the
+   binding level, below every module mock. **Proved ARMED first**, by four positive controls —
+   `readFileSync`, `fs/promises.readFile`, `execSync` and `existsSync("/etc/locale.conf")` (the
+   exact mutant QE built) — **all `ERR_ACCESS_DENIED`**.
+2. **A `cmp`-verified byte-identical copy of the module alone in an empty directory, with no
+   `render.ts` beside it.** It imports and runs, which **proves the `import type` line is erased and
+   the runtime import closure is EMPTY** — stronger than reading the source.
+3. **165 functions patched** across `node:fs`, `node:fs/promises`, `node:child_process`, `node:os`
+   and `node:tty`, plus a module-load recorder (`node:module` `registerHooks`).
+
+Across three ambient shapes (`isTTY` absent / true / false): **0 modules loaded, 0 filesystem calls,
+0 process calls, 0 bytes written**, and **0 wrong answers** over all 11 selection paths and both
+session entry points.
+
+**ONE INSTRUMENT-LIMIT CORRECTION, RECORDED BECAUSE IT WOULD HAVE PRODUCED A FALSE MISS.** The first
+run counted three fs calls inside the region — `openSync` / `readSync` / `closeSync` — and they were
+the **ESM loader reading the module off disk**: the LOAD, not the SELECTION. Hoisted out, the count
+is **0**. That is the eighth instrument-limit correction of this shape on this project's record; the
+seventh produced a 2.08x false miss on `ABC-012`.
+
+**What the one permitted read actually does, measured rather than assumed:** `process.stdout` is a
+lazy getter and the first touch constructs the stream for fd 1 — `Socket` on a pipe,
+`SyncWriteStream` on a file and on `/dev/null`, `WriteStream` on a real terminal. It performs **no
+permission-checked filesystem operation and no child process** in any shape. The bar is met; the
+bigger sentence ("zero I/O below the JS line") is **not** claimed.
+
+**THE TTY PATH WAS EXERCISED AGAINST A REAL TERMINAL FOR THE FIRST TIME ON THIS TICKET** — every
+earlier test faked `isTTY` with `defineProperty`. A `python3`-allocated **pty**, under the permission
+model: **`LANG=en_US.UTF-8` → `unicode`, `LANG=C` → `ascii`**, with `isTTY` genuinely `true` and
+genuinely a boolean. One machine's terminal; Windows conhost, Windows Terminal, iTerm2 and tmux stay
+`UNKNOWN - verify` and are `RISK-005`'s open item.
+
+**The environment is touched narrowly** — measured with a recording `Proxy` on `process.env`: **at
+most 3 keys** and only `LC_ALL` / `LC_CTYPE` / `LANG`; it **stops at the first set rung**; **zero
+enumerations**; **zero env reads at all on a non-TTY sink** (row 3 short-circuits, so on the pipe
+`EPIC-006`'s end-to-end test uses this module reads no environment variable); and **zero further
+ambient reads across 8 accessor calls** after the session began.
+
+**A DIAGNOSTIC, EXPLICITLY NOT A BAR — and no bar was invented, because this ticket names none and
+says why.** `selectGlyphMode` **14.1–14.3 ns** first rung and **28.3–30.3 ns** all three rungs;
+`beginGlyphModeSession` **433–445 ns** — 11 rounds × 200,000 iterations, discarded warm-up, medians
+of per-round means, **two independent samples**, on **Apple M3 (Mac15,13) / Node v24.12.0 / Darwin
+25.5.0 arm64** and `UNKNOWN - verify` on any other hardware. ~**0.00002%** of `NFR-007`'s 2 s window.
+Attribution is **partial and labelled partial**: two ambient property reads measure 156–158 ns in
+isolation and the closure ~3 ns, which does not sum to 433–445, and the residual is **not
+attributed**. **No wall-clock assertion was added to the suite.**
+
+**One instrument could not answer its question and no number is taken from it:** whether the session
+closure retains an injected `env` object. The `WeakRef` + `--expose-gc` probe said "reachable" —
+**and so did the null control with no session created** — so it is `UNKNOWN - verify`. It is moot in
+production anyway: `process.env` outlives every session.
+
+**`NFR-007`'s actual target — `npx` to first board < 2 s — is NOT discharged** and remains
+`UNKNOWN - verify` in `plans/nfr-catalog.md`; it is `EPIC-006`'s. A zero-I/O component inside a
+window is not the window.
+
+### The "no security trigger" claim: the RULING holds, the REASON is wrong three times in one sentence
+
+Reported rather than ratified — `ABC-014`'s gate corrected exactly such a claim, and this gate was
+asked to re-derive rather than accept the wording.
+
+| This ticket says | Measured |
+|---|---|
+| *"reads **two** environment variables"* | **three** — `LC_ALL`, `LC_CTYPE`, `LANG`. The **fourth wrong count on this ticket**, and the first inside the section this gate audits |
+| *"and **a boolean**"* | `process.stdout.isTTY` is **`undefined`** on a pipe, a file and `/dev/null`; a boolean only on a real terminal. That is exactly why `Boolean()` is in the code |
+| *"**interprets no user text**"* | it **does** — three user-influenceable values against a regex, and `src/glyph-mode.ts` is the **first module in `src/` to read `process.env` at all** |
+| *"it writes nothing"* | **true** — 0 bytes to stdout, 0 to stderr, counted |
+
+**WHAT ACTUALLY HOLDS IS STRONGER: THE RETURN DOMAIN IS CLOSED.** Every path returns one of two
+module literals; the environment values are match **subjects** that are never returned, emitted or
+embedded in a message — the same load-bearing property `ABC-014`'s gate proved for the frame's
+output alphabet, one layer up. Measured over **138 hostile locale values** (ANSI `ESC` and OSC
+payloads, C0 controls, a NUL byte, CRLF injection, shell metacharacters, command substitution,
+format strings, path traversal, SQL, a script tag, a `__proto__` JSON payload, 10k- and
+1M-character values, Unicode confusables, an RTL override) × 3 rungs × 2 TTY states: **0 threw,
+return domain exactly `{ascii, unicode}`.** Also measured: `/utf-?8/i` has no `g` flag so it carries
+no `lastIndex`, and a 5 MB value scans in 1.55 ms — linear, no ReDoS.
+
+**ONE REAL PROPERTY, A GADGET AND NOT A VULNERABILITY.** `src/glyph-mode.ts:87`'s
+`signals.env[name]` is an unguarded prototype-chain lookup **and the real `process.env` falls
+through to `Object.prototype`**. Measured with a **live null control in both directions**, because
+this module's default answer is `unicode` and a "polluted with UTF-8" result would have looked like
+a hit while proving nothing: unpolluted → `unicode`; `Object.prototype.LC_ALL = "C"` → **`ascii`**
+(it **outranks** a real UTF-8 `LANG`); pollution deleted → `unicode` again. Under pollution the rung
+need not be a string, so `UTF8.test`'s `ToString` **runs attacker code** (measured) and a throwing
+`toString` escapes `beginGlyphModeSession` uncaught. **Four bounds, each verified:** a real
+environment can never hold a non-string (Node coerces on assignment); **no prototype-pollution sink
+exists anywhere in `src/`**; the reachable return domain **under** pollution is **still**
+`{ascii, unicode}` — it can flip a glyph table, it cannot inject a byte; and an own `false` flag
+shadows a polluted `Object.prototype.ascii`. **LOW, does not block.**
+
+### ASVS L1 — 70 active requirements, 12 judged individually, 58 structurally N/A
+
+`V1.2.5` (OS command injection) **PASS on evidence** — zero process operations under the permission
+model with a positive control; this is the requirement that would have been engaged had the module
+shelled out to `locale`, which this ticket forbids by name. `V1.3.2` **PASS** — and the module-load
+recorder measured **zero modules loaded**, stronger than a grep. `V2.1.1` **PASS** — the five-row
+table, the `## Scope` bullet defining "set" as non-empty, criterion 14 and the module header; **this
+requirement was weaker before 2026-08-08's second pass**. `V2.2.1` **PASS on the environment input**
+(positive pattern match, defined outcome for every non-match, closed return domain) and **NOT
+ENGAGED on the flags**. `V15.3.1` **PASS on evidence**. `V1.2.1`–`V1.2.4` **PASS by analogue** —
+ASVS 5.0 has no terminal-output requirement. `V13.4.1` **DEFERRED, not passed** (packaging,
+`EPIC-006`) and **not relaxed here**. `V15.1.1`/`V15.2.1` **not met at project level**, with the
+**carried** `high` → `low` override restated and its evidence re-checked (**zero runtime
+dependencies**; `package.json` and the lockfile untouched on this branch) — owner Architect/Design
+at `EPIC-006`, **not a new override**.
+
+**`V7` Session Management is N/A and is named rather than skipped, because the keyword matches:**
+ASVS "session" means an authentication session and a token; this module's session is a
+process-lifetime constant with no user, no token, no login and no timeout. **`V16` and `V17` carry
+no L1 requirement at all** — checked, not assumed. **No default severity was overridden by this gate
+in either direction.**
+
+### `ABC-014`'s banked `V2.2.1` counterfactual: HALF DISCHARGED by this ticket, HALF still live
+
+That gate banked *"the moment `EPIC-006` wires an unvalidated flag string to `mode`, `V2.2.1` IS
+engaged."*
+
+- **DISCHARGED — the `mode` half, by construction.** `beginGlyphModeSession` returns a value from a
+  closed two-literal domain, so **no user string can reach `renderBoard`'s `mode`**. **The condition
+  is stated rather than assumed: this holds only if `EPIC-006` passes this module's output and not a
+  raw flag string.**
+- **STILL LIVE — the flags half, and it is `EPIC-006`'s.** `GlyphFlags` are **booleans**, argv gives
+  **strings**, and a non-empty `"false"` is truthy — so a naive `--ascii=false` passed through
+  unconverted selects ASCII silently. `EPIC-006`'s conversion obligation, recorded here so the
+  decomposition inherits it rather than discovers it.
+
+### The four accepted risks — none unowned
+
+| # | Risk | Severity | Owner | Place |
+|---|---|---|---|---|
+| 1 | The environment prototype-chain gadget (above) | LOW | Architect/Design | `ABC-018` / `EPIC-006` |
+| 2 | An uncaught exception can escape the session's ambient read — no log, no context, and it **fails CLOSED rather than fail-safe**: no board at all is **neither** of `RISK-005`'s two directions. **No fix asked for** — there is no logger and no caller at this layer, and guarding a read that can only fail under a polluted prototype is the impossible-scenario handling `AGENTS.md` rule 8 forbids | LOW | `EPIC-006` (startup) | `EPIC-006` / `ABC-018` |
+| 3 | **The whole environment crosses the call boundary** — `GlyphSignals.env` is the entire record and `beginGlyphModeSession` hands it all of `process.env` when three named keys are all that is read. **Not a leak today** (3 keys, 0 enumerations, nothing emitted); a **blast-radius** statement. **Narrowing the parameter now was considered and REJECTED as gold-plating** | LOW | Software Engineer | `EPIC-006`, when a caller and a logger exist |
+| 4 | Every figure here is one machine and one Node version, and the real-terminal reading is one pty on it | LOW | Security/NFR | `EPIC-004`'s non-M3 spike; `RISK-005` |
+
+### A prior gate's accepted risk names an owner that does not own it — corrected
+
+`ABC-014`'s gate recorded accepted risk 3 (a non-`"white-bottom"` orientation silently renders
+black-bottom) with owner *"`ABC-015` / `EPIC-006` (they own the value)"*. **`ABC-015` has now
+shipped and it produces no orientation value at all** — its whole scope is the glyph mode, and the
+word *orientation* appears nowhere in this ticket. Checked at the source: **no `EPIC-002` ticket but
+`ABC-014` mentions orientation**, and `EPIC-002`'s own `## Dependencies` puts the human's colour,
+*"which fixes board orientation"*, in **`EPIC-006`'s startup scope**. **Ruled: that risk's sole
+owner is `EPIC-006`; the `ABC-015` half is struck.** The mechanism: that gate correctly found
+`renderBoard`'s two string parameters are both **erased** unions, then assigned **both values'
+ownership** to the same pair — but only one of the two, `mode`, is this ticket's.
+
+### Gates re-run on the tip `8de5624` rather than inherited
+
+`npm test` **277/277 on 13 files**, skip count **0** (the `AGENTS.md` command), `npm run lint`
+exit **0** (2 pre-existing `biome.json` infos), `npm run typecheck` exit **0**, `npm run build`
+exit **0** — plus **three further full-suite runs with `--sequence.shuffle`, 277/277 each**, this
+gate's own flakiness check rather than QE's. Per-file arithmetic re-derived: 253 on 11 files on
+`main` + 24 in the two new files = **277 on 13**. **No `--coverage` run was made**, so the tracked
+`coverage/` hazard never arose; the 100% figure is QE's and is not restated as this gate's.
+
+### UAT: DEFERRED to `EPIC-006`, explicitly NOT passed
+
+`src/glyph-mode.ts` has **zero runtime importers** (verified, not assumed), returns a value, writes
+nothing and prompts for nothing, and `AGENTS.md`'s `Dev / run` is `UNKNOWN - verify` because there
+is no CLI entry point. **There is no surface a human can exercise, so a UAT pass would be a
+fabrication.** `ABC-018` is the first ticket that puts this rule in front of a human. **The real-pty
+run is an instrument reading and is NOT offered as UAT.**
+
+### The merge-order constraint still binds
+
+`ABC-015` merges **with or before `ABC-018`**, never after. `ABC-018` is unstarted and in `Backlog`,
+so the constraint is satisfiable and satisfied by merging this now. This gate does not discharge it.
