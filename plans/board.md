@@ -2645,11 +2645,54 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   what the whole ticket is about, and neither to be inflated nor deflated.
 -->
 
-## Ready for UAT (WIP 1/4)
-
-- [ABC-014] Board frame renderer — grid, labels, shading, orientation, both glyph modes  (size: M, P0, epic: EPIC-002; **Security/NFR PASS_WITH_RISKS 2026-08-07**, task `ticket-to-pr-ABC-014`, branch `grugops/ticket-to-pr-ABC-014`, **not merged**; NFR-002's board-frame bar **RE-MEASURED and MET — 2.092 / 2.056 µs against ≤ 500 µs, ~240x headroom**, Apple M3 / Node v24.12.0 / darwin-arm64; the ticket's **"no security trigger" ruling re-derived and it HOLDS, with its stated reason reported as incomplete**; no required fix, **4 accepted risks each with a named owner**; 253/253 green, skip count 0, lint/typecheck/build exit 0, `src/render.ts` md5 unchanged. **UAT is DEFERRED to `EPIC-006`, not passed** — zero importers, no CLI entry point, no surface a human can exercise)
+## Ready for UAT (WIP 0/4)
 
 <!--
+  EMPTIED 2026-08-08 by the Orchestrator (task `ticket-to-pr-ABC-014`, Workflow 04): **ABC-014
+  MERGED to `main` and moved Ready for UAT → Done — the `… → Done` exit this role owns.** Fast-forward
+  `ed42d26` → `c1d694f`, 6 commits, **no merge commit** (`git log --merges` empty; the branch was
+  linear and nothing had diverged). Ready for UAT 1/4 → 0/4; no limit approached, no override taken.
+
+  GATES RUN BY THIS ROLE ON THE TIP BEFORE THE MERGE AND AGAIN ON `main` AFTER IT, both recorded, as
+  the standing directive requires — and NOT inherited from any of the three agents that worked this
+  ticket: **253/253 on 11 files, skip count 0** (captured with the `AGENTS.md` command, not
+  eyeballed), lint + typecheck + build exit 0 on both sides. `git branch --no-merged main` is empty.
+
+  THE MERGE WAS AUTHORIZED TWICE OVER, AND THE SECOND TIME IS THE ONE THAT MATTERS HERE. The owner's
+  standing directive of 2026-08-06 covers it (`memory-bank/60-progress.md` § "Standing directive —
+  the branching model, and who turns the merge key"). **But the first attempt was DENIED by the host's
+  permission classifier, and it was not worked around** — a merge is a governance surface, so it went
+  back to the human rather than to a different command. Project owner Olger Oeselg then said
+  *"merge it"* in session on 2026-08-08. **Recorded because the honest sequence is part of the trail:
+  the block was environmental, not a project rule, and the resolution was a human, not a workaround.**
+
+  THE THREE LIMITS ON THE STANDING GRANT ARE UNCHANGED AND WERE ALL HONORED. (1) **DEPLOY IS NOT
+  INCLUDED** — none was attempted or contemplated; `production_requires_human_confirmation` stays
+  `true` and `ADR-0007` says there is nowhere to deploy. (2) **THE GATE STILL BINDS** — it was run
+  green on both sides of the merge, never skipped or self-certified; `quality.gate_enforcement` is
+  `blocking`. (3) **THE AUTHORITY IS STILL THE OWNER'S AND REVOCABLE.**
+
+  **UAT IS DEFERRED TO `EPIC-006`, EXPLICITLY NOT PASSED** — Security/NFR's ruling, kept verbatim
+  through this move rather than quietly rounded to a pass. Zero importers, no CLI entry point, no
+  surface a human can exercise; a UAT pass would be a fabrication. This is the same posture every
+  ticket in this project has carried, and `60-progress.md` already records the consequence the owner
+  should see: with the merge checkpoint delegated there is now no human checkpoint between an agent's
+  work and `main` until `EPIC-006` produces something a human can actually drive.
+
+  **NOTHING WAS DEPLOYED AND NOTHING WAS PUSHED** — this repo has no remote and never had one. The
+  branch was NOT deleted; that call has always been the owner's.
+
+  TWO ITEMS ARE OPEN AND OWNED, named here so they are not lost with the ticket:
+  1. **The self-healing snapshot net** — `npm test` is `vitest run` with no `--ci`, no
+     `vitest.config.*` exists, and this project has no CI, so a missing snapshot cannot fail the
+     gate. Routed to the AGENTS.md Scribe; NOT fixed on the ticket branch (wrong scope, wrong diff,
+     and two agents must not write one working tree). Note
+     `20260807T113000Z-orchestrator-decision-8f5a2b60`.
+  2. **`ABC-012`'s ticket frontmatter is a column behind the board** — flagged 2026-08-06, still
+     open, belongs to the board sweep. Note `20260806T090500Z-orchestrator-observation-6d02ae91`.
+
+  ---
+  Prior occupancy, retained:
   ENTERED 2026-08-07 from Security/NFR's PASS_WITH_RISKS verdict (task `ticket-to-pr-ABC-014`,
   subtask `security-nfr-abc014-gate`, Workflow 04). In Security/NFR 1/2 -> 0/2, Ready for UAT
   0/4 -> 1/4; no limit approached, no override taken. Gated against `security.asvs_level: L1` and
@@ -2922,6 +2965,7 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Done (WIP unlimited)
 
+- [ABC-014] Board frame renderer — grid, labels, shading, orientation, both glyph modes  (merged: 2026-08-08 by fast-forward ed42d26 → c1d694f, 6 commits, no merge commit; 253/253 green + skip 0 re-verified ON main by the Orchestrator, lint/typecheck/build exit 0 both sides; QE PASS after 34 mutate-and-restore cycles with `src/render.ts` md5 unchanged; Security/NFR PASS_WITH_RISKS — NFR-002 board-frame bar re-measured 2.092 µs against ≤ 500 µs, ~240x headroom, Apple M3 / Node v24.12.0 / darwin-arm64; 4 accepted risks each with a named owner; **UAT deferred → EPIC-006, explicitly not passed** — zero importers, no CLI entry point; first merge in this project preceded by a host permission denial that was returned to the owner rather than worked around)
 - [ABC-012] Game history module — the move list is the authoritative state  (merged: 2026-08-06 by fast-forward 39e260d → 7355b51, 8 commits, no merge commit; 226/226 green + skip 0 re-verified ON main; **THE FIRST MERGE UNDER THE OWNER'S STANDING MERGE APPROVAL, not a per-instance instruction**; three gates PASS — QE killed 21 mutants of which 3 survived the delivered suite, Security/NFR re-measured all six NFR bars independently and MET every one at 0.09x–0.67x; five accepted risks each with a named owner, no required fix; UAT deferred → EPIC-006)
 - [ABC-011] Zobrist key hashes en passant when no capture is available  (merged: 2026-08-04 by fast-forward 4a73cf3 → d3efba6, 16 commits, no merge commit; 214/214 green + 0 skips re-verified ON main; two design hops, two dev passes, two QE reviews and two sec/NFR gates; the MEDIUM purity defect the owner declined to merge is CLOSED; ADR-0005 accepted-with-amendment and ADR-0006 accepted; UAT deferred → EPIC-006)
 - [ABC-020] FIDE 9.2/9.3 draws become claimable, FIDE 9.6 backstops land with them  (merged: 2026-08-02 by fast-forward d53ce31 → cb62c9f; 174/174 green re-verified ON main; QE PASS after 13 mutations, sec/NFR PASS on all three bars re-measured; UAT deferred → EPIC-006; its one open question — FIDE 9.6.1 "consecutive" — CLOSED 2026-08-02 as conformant, no code change owed)
