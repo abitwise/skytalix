@@ -1,8 +1,8 @@
 ---
 id: ABC-015
 title: Glyph mode selection — precedence, signal set, and the --unicode override
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: S
 priority: P1
 epic: EPIC-002
@@ -299,3 +299,14 @@ correction block under `## Acceptance`.
 **This is not the pull gate.** The Definition of Ready is applied again by the Orchestrator at
 `Ready → In Development` (Workflow 04 step 1); promotion makes this ticket pullable, nothing more.
 The merge-order constraint still binds: it merges **with or before `ABC-018`**.
+
+**PULLED `Ready → In Development` 2026-08-08 by the Orchestrator** (task `ticket-to-pr-ABC-015`,
+Workflow 04 step 2), on branch `grugops/ticket-to-pr-ABC-015`. `Ready` 4/8 → 3/8, `In Development`
+0/3 → 1/3; no limit approached, no override taken.
+
+**The Definition of Ready was re-applied at the pull, against this ticket as corrected today** —
+all ten checks hold. **Two of them hold only because of the corrections above, and the Orchestrator's
+own pre-check had ticked both green** off this ticket's self-assessment; it recounted the original
+acceptance bullets and confirms BA/PM's finding — **eight input tuples, not nine, plus one session
+criterion that could not fail.** Recorded because the fix is procedural, not clerical: a
+self-assessment is not evidence, and routing the `Backlog` exit to its owner is what caught it.
