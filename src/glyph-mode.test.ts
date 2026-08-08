@@ -293,3 +293,95 @@ describe("ABC-015 — an EMPTY locale variable counts as UNSET (the engineer's s
     expect(selectGlyphMode(tuple({ env: { LC_ALL: "", LC_CTYPE: "", LANG: "" } }))).toBe("unicode");
   });
 });
+
+// ---------------------------------------------------------------------------
+// QE/E2E adversarial coverage — subtask `qe-abc015-review`, Workflow 04.
+//
+// The eleven acceptance criteria above all pass, and so did three mutants that are real production
+// defects. The tests below were written by running mutants, not by reading the code, and each names
+// the defect it was added to catch. None of them changes production code — `src/glyph-mode.ts` is
+// byte-identical to the Engineer's.
+// ---------------------------------------------------------------------------
+
+describe("ABC-015 QE — locale precedence with CONFLICTING values set at once", () => {
+  // THE TICKET'S `## Test notes` REQUIRE THIS AND THE DELIVERED SUITE DID NOT HAVE IT:
+  // "Test the LC_ALL > LC_CTYPE > LANG precedence with conflicting values set at once, not one
+  // variable at a time. One-at-a-time tests pass on an implementation that reads the wrong one."
+  //
+  // Criterion 5 pins LC_ALL against LANG. Criterion 6 sets LC_CTYPE ALONE, which is precisely the
+  // one-at-a-time shape the note forbids, so the MIDDLE rung was never pinned against either
+  // neighbour. Two mutants proved it: reordering to LC_ALL > LANG > LC_CTYPE, and promoting
+  // LC_CTYPE above LC_ALL, both passed all 271 tests.
+  //
+  // Each row sets at least two variables to CONFLICTING values, so exactly one of them can produce
+  // the expected answer and every other rung points the other way.
+  const CONFLICTING: ReadonlyArray<readonly [string, Readonly<Record<string, string>>, GlyphMode]> =
+    [
+      [
+        "LC_ALL beats LC_CTYPE — LC_ALL=C against a UTF-8 LC_CTYPE and a UTF-8 LANG",
+        { LC_ALL: "C", LC_CTYPE: "en_US.UTF-8", LANG: "en_US.UTF-8" },
+        "ascii",
+      ],
+      [
+        "LC_ALL beats LC_CTYPE in the other direction — a UTF-8 LC_ALL against LC_CTYPE=C and LANG=C",
+        { LC_ALL: "en_US.UTF-8", LC_CTYPE: "C", LANG: "C" },
+        "unicode",
+      ],
+      [
+        "LC_CTYPE beats LANG — LC_CTYPE=C against a UTF-8 LANG, LC_ALL unset",
+        { LC_CTYPE: "C", LANG: "en_US.UTF-8" },
+        "ascii",
+      ],
+      [
+        "LC_CTYPE beats LANG in the other direction — a UTF-8 LC_CTYPE against LANG=C, LC_ALL unset",
+        { LC_CTYPE: "en_US.UTF-8", LANG: "C" },
+        "unicode",
+      ],
+    ];
+
+  it.each(CONFLICTING)("%s", (_label, env, expected) => {
+    expect(selectGlyphMode(tuple({ env }))).toBe(expected);
+  });
+});
+
+describe("ABC-015 QE — the session's ambient reads, in the shapes production actually presents", () => {
+  it("a sink whose isTTY property is ABSENT is ascii — the real non-TTY shape, which no test constructed", () => {
+    // Node does not set `isTTY` to `false` on a pipe, a file or CI: it leaves the property ABSENT,
+    // so `process.stdout.isTTY` is `undefined`. Every session test above rewrites it to a real
+    // boolean via `defineProperty`, so the undefined shape — the ONLY one a non-TTY process ever
+    // presents — was never exercised through `beginGlyphModeSession`.
+    //
+    // Two mutants that survived the delivered suite: `isTTY: process.stdout.isTTY ?? true` and a
+    // `typeof ... === "boolean" ? ... : true` guard. Both read a missing property as A TERMINAL,
+    // which sends Unicode into a pipe and breaks the determinism `EPIC-006`'s pipe-driven
+    // end-to-end test is promised in the ticket's own row-3 rationale.
+    //
+    // The locale is set to UTF-8 on purpose: it says "unicode", so ascii can only come from row 3.
+    setAmbient(true, { LANG: "en_US.UTF-8" });
+    Reflect.deleteProperty(process.stdout, "isTTY");
+    expect(
+      process.stdout.isTTY,
+      "the property must be genuinely absent, not false",
+    ).toBeUndefined();
+
+    expect(beginGlyphModeSession(NO_FLAGS)()).toBe("ascii");
+  });
+
+  it("decides EAGERLY when the session begins, not lazily on the first request", () => {
+    // Epic acceptance `2b` is "decided exactly once, BEFORE the first frame". Criterion 11 requests
+    // the mode immediately after beginning the session, so a lazy accessor that memoises on FIRST
+    // CALL satisfies it — that mutant passed all 271 tests. It is a real defect: it moves the
+    // decision from startup to whenever the first frame happens to be drawn, and any ambient change
+    // in between silently wins.
+    setAmbient(true, { LANG: "en_US.UTF-8" });
+    const session = beginGlyphModeSession(NO_FLAGS);
+
+    // The ambient moves BEFORE the value is ever requested — the window a lazy accessor is wrong in.
+    setAmbient(false, { LANG: "C" });
+
+    expect(session()).toBe("unicode");
+
+    // ...and the rewrite really would have flipped it, so the line above is not a coincidence.
+    expect(selectGlyphMode(tuple({ isTTY: false, env: { LANG: "C" } }))).toBe("ascii");
+  });
+});

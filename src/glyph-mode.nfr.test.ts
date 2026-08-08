@@ -45,7 +45,23 @@ vi.mock("node:child_process", async (importOriginal) => {
   };
 });
 
+// ADDED BY QE (`qe-abc015-review`): the guard named `node:fs` and `node:child_process` but not
+// `node:fs/promises`, which is a DIFFERENT module specifier and was therefore unspied. A mutant
+// reading `/etc/locale.conf` through `node:fs/promises` passed all 271 tests while the synchronous
+// twin of the same read died here. Same guard, the async half of it — not a new bar.
+vi.mock("node:fs/promises", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("node:fs/promises")>();
+  return {
+    ...actual,
+    readFile: vi.fn(actual.readFile),
+    stat: vi.fn(actual.stat),
+    readdir: vi.fn(actual.readdir),
+    access: vi.fn(actual.access),
+  };
+});
+
 const { readFileSync, existsSync, statSync, readdirSync } = await import("node:fs");
+const { readFile, stat, readdir, access } = await import("node:fs/promises");
 const { execSync, execFileSync, spawnSync, spawn } = await import("node:child_process");
 const { beginGlyphModeSession, selectGlyphMode } = await import("./glyph-mode.ts");
 
@@ -54,6 +70,10 @@ const FILESYSTEM = [
   ["existsSync", existsSync],
   ["statSync", statSync],
   ["readdirSync", readdirSync],
+  ["fs/promises readFile", readFile],
+  ["fs/promises stat", stat],
+  ["fs/promises readdir", readdir],
+  ["fs/promises access", access],
 ] as const;
 
 const PROCESS = [

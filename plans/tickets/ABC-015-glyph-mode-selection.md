@@ -1,8 +1,8 @@
 ---
 id: ABC-015
 title: Glyph mode selection — precedence, signal set, and the --unicode override
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: S
 priority: P1
 epic: EPIC-002
@@ -365,3 +365,91 @@ side door"* — which is equally true of `LANG=`. Two tests pin it.
 first, and it is unstarted), no edit to `src/render.ts`, `ABC-018`, `EPIC-006` or `plans/nfr-catalog.md`,
 and no wall-clock assertion anywhere — this project keeps microseconds in the catalog with the machine
 that measured them, and this ticket has no perf bar by design.
+
+## QE
+
+**QE VERDICT: PASS. `In Review → In Security/NFR` 2026-08-08 by QE/E2E** (task
+`ticket-to-pr-ABC-015`, subtask `qe-abc015-review`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-015`. `In Review` 1/3 → 0/3, `In Security/NFR` 0/2 → 1/2; no limit
+approached, no override taken. **Nothing merged and nothing deployed — a human holds both.**
+
+**All eleven acceptance criteria are implemented, tested and passing, and NO PRODUCTION DEFECT WAS
+FOUND.** `src/glyph-mode.ts` is **byte-identical to the Engineer's** (`md5
+9c1f4f4e957d4faf3c9cccc49a545185`) after 58 mutate-and-restore cycles. Everything below is a change
+to **tests only**.
+
+**The four mandatory gates were re-run on the tip by this role rather than inherited**, before and
+after the added tests: `npm run lint` exit 0, `npm run typecheck` exit 0, `npm run build` exit 0,
+`npm test` **271/271 then 277/277 on 13 files**, skip count **0** both times by the `AGENTS.md`
+command, `src/glyph-mode.ts` **100% statements / branches / functions / lines** against the `0.8`
+threshold. **The Engineer's and the Orchestrator's figures reproduce exactly.** One autofix pass was
+needed on QE's own new test code — **formatting only**, `quality.lint.autofix` is `true` — and is
+reported rather than smoothed. Five shuffled full-suite runs were clean, so the tests that rewrite
+real ambient globals are not order-dependent.
+
+**THE MUTANT THIS TICKET NAMES BY HAND WAS BUILT AND RUN, AND IT DIES.** The `## Test notes` say the
+session that re-reads `process.env` on every call "passes all nine table rows and must fail only
+these two". Established, not assumed: it dies, and it dies to **criterion 11 alone** — exactly what
+BA/PM rewrote that criterion to do at the `Backlog` exit. That correction did the job it was made
+for.
+
+**A 29-MUTANT CAMPAIGN FOUND THREE MUTANTS THAT PASSED ALL ELEVEN ACCEPTANCE CRITERIA AND ALL 271
+DELIVERED TESTS. All three are real production defects. All three are now dead.**
+
+1. **The `LC_CTYPE` rung of the locale precedence was never pinned against either neighbour.**
+   Reordering to `LC_ALL > LANG > LC_CTYPE`, or promoting `LC_CTYPE` above `LC_ALL`, both went
+   green. **This ticket's own `## Test notes` forbid the shape that let it through**, in these
+   words: *"Test the `LC_ALL` > `LC_CTYPE` > `LANG` precedence with conflicting values set at once,
+   not one variable at a time. One-at-a-time tests pass on an implementation that reads the wrong
+   one."* Criterion 5 pins `LC_ALL` against `LANG`; **criterion 6 sets `LC_CTYPE` alone — the
+   one-at-a-time shape** — so the middle rung was untested. Four rows added, each setting two or
+   three variables to conflicting values so exactly one can produce the expected answer.
+2. **A missing `isTTY` property was never constructed, and it is the only shape production ever
+   presents.** Node leaves `process.stdout.isTTY` **absent** on a pipe, a file or CI — it does not
+   set it to `false`. Every session test rewrote it to a real boolean, so a session reading a
+   missing property as **a terminal** (`?? true`, or a `typeof` guard) passed everything while
+   sending Unicode into a pipe — breaking the determinism this ticket's own row-3 rationale promises
+   `EPIC-006`'s pipe-driven end-to-end test. One test added that deletes the property.
+3. **The session was never pinned as eager.** A lazy accessor that memoises on **first call** passed
+   everything, because criterion 11 requests the mode immediately after beginning the session. Epic
+   acceptance `2b` is *"decided exactly once, **before the first frame**"*, and lazy moves that
+   decision to whenever the first frame is drawn. One test added that moves the ambient **between**
+   begin and the first request.
+
+**A fourth hole was in the `NFR-007` guard itself:** it spied `node:fs` and `node:child_process` but
+**not `node:fs/promises`**, a different module specifier — so a mutant reading `/etc/locale.conf`
+through `node:fs/promises` went green while the **synchronous twin of the same read died**. The
+async half of the same guard is now spied. *(The non-prefixed `fs` specifier was tested and **does**
+die — vitest aliases it. That one was not a hole.)*
+
+**ONE MUTANT SURVIVES AND IT IS REPORTED, NOT HIDDEN:** dropping the `Boolean()` coercion on
+`process.stdout.isTTY`. It is an **equivalent** mutant, proven rather than argued — with the
+property genuinely absent, `Boolean(undefined)` is `false` and `!false` is `true`, while `!undefined`
+is also `true`, so row 3 fires identically; the new absent-property test exercises exactly that input
+and passes either way. **This is not a coverage gap.** But the module's comment at that line claims
+the coercion *"is doing real work and is not decoration"*, and **that claim is false at runtime** —
+it is a type-honesty nicety. Flagged as a comment defect, not a code defect; **nothing was edited**
+(coding rule 9).
+
+**NO E2E WAS WRITTEN AND NONE COULD BE.** `quality.ui_e2e` is `ui-or-critical-path`, `AGENTS.md` has
+the E2E slot at `UNKNOWN - verify`, there is no CLI entry point until `EPIC-006`, and this module has
+**zero runtime importers**. Reported as a gap rather than filled with a fake — the first end-to-end
+exercise of this rule arrives with `ABC-018`.
+
+**THREE SPEC-LEVEL ITEMS ARE BA/PM's AND ARE NOT DISCHARGED HERE.** The suite now covers all three;
+the **criteria** still do not, and amending an acceptance criterion is the `Backlog` exit.
+
+1. **Criteria 10 and 11 are blind to a single-signal session** — the Engineer's, and it holds.
+2. **The empty-locale ruling** — the Engineer's, at `confidence: medium`. **QE concurs** with the
+   POSIX reading on the Engineer's own ground (this ticket's row-4 rationale forbids turning a
+   content-free variable into a negative signal) and **did not disturb it**. It remains a product
+   question because it can change code.
+3. **NEW from this pass — criterion 6 is itself the one-at-a-time shape the `## Test notes` forbid.**
+   The criteria, not just the delivered suite, under-specify the `LC_CTYPE` rung.
+
+**ONE ITEM HANDED FORWARD BY THE ENGINEER DOES NOT EXIST, AND THE ORCHESTRATOR'S DISPROOF IS
+CONFIRMED INDEPENDENTLY.** `plans/traceability.md`'s `ABC-015` row was flagged as having eleven cells
+against a ten-column header. Counted by machine here, splitting on pipes **not preceded by a
+backslash**: the row has 12 raw pipes, **one of them escaped**, so 11 unescaped and **ten cells** —
+identical to the header and to every other row checked. **The table is intact and the escape is
+correct GFM. Do not "fix" it** — the fix removes a correct escape and breaks the row.
