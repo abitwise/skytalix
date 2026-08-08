@@ -52,7 +52,7 @@ Precedence: **explicit flag > signal > default**, and the default is **Unicode**
 | 4 | no flag, a TTY, and the first **set** of `LC_ALL` / `LC_CTYPE` / `LANG` does **not** match `/utf-?8/i` | **ASCII** |
 | 5 | no flag, a TTY, and the locale is unset **or** matches `/utf-?8/i` | **Unicode** |
 
-Three things the table encodes deliberately, each recorded so it is not "improved" later:
+Four things the table encodes deliberately, each recorded so it is not "improved" later:
 
 - **`process.platform` is NOT a signal.** `win32` is a proxy for "legacy conhost", and Windows
   Terminal — the default on Windows 11 — renders the figurines correctly, so the proxy is wrong on
@@ -63,6 +63,14 @@ Three things the table encodes deliberately, each recorded so it is not "improve
   the side door.
 - **Non-TTY means ASCII** because a sink that cannot be seen and cannot be asked should receive the
   portable form. This is also what makes `EPIC-006`'s pipe-driven end-to-end test deterministic.
+- **"Set" means set to a NON-EMPTY value — ruled 2026-08-08 (second pass), see the second
+  correction block under `## Acceptance`.** A variable set to the empty string — `LC_ALL=`, which CI
+  images and shell wrappers really do export — **counts as unset, and precedence falls through to
+  the next variable.** This is the POSIX reading (a locale variable is consulted only when it is
+  "defined and not null") and it is what the row-4 bullet directly above already requires: an empty
+  variable carries no information, and the literal reading would turn a content-free variable into a
+  negative signal. It would also freeze the precedence at the first rung, so a perfectly good UTF-8
+  `LANG` would never be consulted at all.
 
 **`--unicode` is a new flag** and it exists because under any automatic rule a wrong detection needs
 an override, and today only the ASCII direction has one. It and `--ascii` are **mutually
@@ -99,10 +107,22 @@ not a change to its scope made by this ticket.
 
 ## Acceptance (Given/When/Then)
 
-Nine input tuples, each a pure function call with no terminal attached and each with one exact
-output, then two session criteria. *(Amended 2026-08-08: the lead-in read "one criterion per row of
-the table", which stopped being true at the eighth bullet — the `win32` guard is not a table row
-either. See the correction block below.)*
+**Twelve input tuples**, each a pure function call with no terminal attached and each with one exact
+output, then **three session criteria** — **fifteen in all**. *(Amended 2026-08-08: the lead-in read
+"one criterion per row of the table", which stopped being true at the eighth bullet — the `win32`
+guard is not a table row either. Amended again 2026-08-08, second pass: nine tuples plus two session
+criteria became twelve plus three. See both correction blocks below.)*
+
+**The bullets are numbered by position, and the whole project record cites them that way** — "the
+mutant dies to criterion 11 alone", "criterion 9 is the regression guard". So the four criteria added
+on 2026-08-08's second pass are **appended as 12–15 rather than filed next to their kin**: no earlier
+bullet changes its number, and every existing citation stays true.
+
+**A locale variable a bullet does not name is UNSET.** Stated once here rather than annotated onto
+each bullet. Without it criterion 6 has two readings — under the other one it would silently pin the
+`LC_CTYPE` > `LANG` precedence — and criterion 8's other reading is simply false, since a UTF-8
+`LC_ALL` beats its `LANG`. Criterion 4 is the one bullet that quantifies over the locale instead of
+fixing it, and it says so in its own words ("regardless of locale").
 
 - **Given** `--ascii` passed, a TTY, and `LANG=en_US.UTF-8`, **when** the mode is selected, **then**
   it is `ascii`. *(The flag beats every signal.)*
@@ -132,12 +152,49 @@ either. See the correction block below.)*
   that would produce the **other** answer, **then** both calls return the same value — the rule
   reads **no** ambient global. *(Falsifiable, and this is the point: an implementation that reads
   `process.env` directly passes every row above and fails only here.)*
-- **Given** the session's mode has already been selected, **when** the ambient signals are rewritten
-  to values that would produce the other answer and the session's mode is requested again, **then**
-  the same value is returned — **and** the selection rule, called directly with the **new** signals,
-  returns the **other** value. *(The second half is what makes this falsifiable: it proves the value
-  is cached rather than coincidentally equal. **Replaces, 2026-08-08, the criterion this ticket
-  carried until then**, which no implementation in scope could fail.)*
+- **Given** a session that has begun, **when** the ambient signals are rewritten to values that would
+  produce the other answer — **whether or not the mode has been requested even once beforehand** —
+  and the session's mode is then requested, **then** the value decided **when the session began** is
+  returned, **and** the selection rule, called directly with the **new** signals, returns the
+  **other** value. *(The second half is what makes this falsifiable: it proves the value is cached
+  rather than coincidentally equal. **Replaces, 2026-08-08, the criterion this ticket carried until
+  then**, which no implementation in scope could fail. **Widened 2026-08-08, second pass**, by the
+  clause on the request: the rewrite-before-the-first-request window is where epic acceptance `2b`'s
+  "decided exactly once, **before the first frame**" actually lives, and the earlier wording could
+  not reach it under **any** reading — a lazy accessor that memoises on first call satisfied it while
+  moving the decision to whenever the first frame happens to be drawn.)*
+
+- **Given** no flag, a TTY, and `LC_ALL=C` with **both** `LC_CTYPE=en_US.UTF-8` **and**
+  `LANG=en_US.UTF-8` also set, **when** the mode is selected, **then** it is `ascii` — **`LC_ALL` is
+  consulted before `LC_CTYPE`**, not merely before `LANG`. *(**Added 2026-08-08, second pass.** Kills
+  the implementation that promotes `LC_CTYPE` above `LC_ALL`, which passed all nine tuples.)*
+
+- **Given** no flag, a TTY, `LC_ALL` unset, and **`LC_CTYPE=C` against `LANG=en_US.UTF-8`**, **when**
+  the mode is selected, **then** it is `ascii` — **`LC_CTYPE` is consulted before `LANG`**.
+  *(**Added 2026-08-08, second pass.** Kills the implementation that reorders to `LC_ALL` > `LANG` >
+  `LC_CTYPE`. With criterion 5 and criterion 12, all three rungs are now pinned against both their
+  neighbours **with conflicting values set at once** — which is what the `## Test notes` have
+  demanded in writing since this ticket was cut, and which no criterion did.)*
+
+- **Given** no flag, a TTY, **`LC_ALL` set to the empty string**, `LC_CTYPE` unset and
+  `LANG=en_US.UTF-8`, **when** the mode is selected, **then** it is `unicode` — an empty variable
+  counts as **unset** and precedence falls through to the next one. *(**Added 2026-08-08, second
+  pass**, and it **ratifies** the reading the Software Engineer implemented and flagged at
+  `confidence: medium`. The literal reading — empty is "set", so it fails to match `/utf-?8/i` —
+  answers `ascii` here, and nothing in this ticket had ever chosen between them.)*
+
+- **Given** a session begun with a given pair of flags in a given ambient, **when** its mode is
+  requested, **then** it is the value the selection rule returns for the tuple built from **those
+  flags and that ambient** — every signal the session is handed or reads reaches the rule. Measured
+  by **six cases, each with exactly one decisive input**, every other input being unset or arguing
+  the other way: `LANG=en_US.ISO-8859-1` alone → `ascii`; `LC_ALL=C` over a UTF-8 `LANG` → `ascii`;
+  `LC_CTYPE=C` alone → `ascii`; a falsy `process.stdout.isTTY` under a UTF-8 locale → `ascii`;
+  `--ascii` under a TTY with a UTF-8 locale → `ascii`; `--unicode` with no TTY and `LANG=C` →
+  `unicode`. *(**Added 2026-08-08, second pass.** `unicode` is what this rule answers when a signal
+  never arrives, so an `ascii` expectation can only be produced by a signal that actually travelled —
+  that is the design of the six, not a coincidence. Kills three sessions that passed all eleven
+  earlier criteria and are each a real defect: one that hardcodes `isTTY`, one that forwards only
+  `LANG`, and one that drops the flags so `--ascii` is silently ignored.)*
 
 > ### CORRECTED IN PLACE 2026-08-08 by BA/PM (task `ticket-to-pr-ABC-015`, subtask `bapm-abc015-promote`, Workflow 07)
 >
@@ -180,6 +237,114 @@ either. See the correction block below.)*
 >
 > **Size re-checked, not assumed: still `S` (2).** The corrections add one cached value and two
 > tests. No argv, no I/O, no new module of consequence.
+
+> ### CORRECTED IN PLACE 2026-08-08 (SECOND PASS) by BA/PM (task `ticket-to-pr-ABC-015`, subtask `bapm-abc015-spec-gaps`, Workflow 07)
+>
+> **Four criteria amended: eleven → fifteen. NO CODE CHANGE IS OWED AND NO QE RE-RUN IS OWED —
+> every one of the four ratifies the delivered implementation**, and each is already pinned by a test
+> that exists and passes today (mapping at the end of this block). **The ticket did not move**: it
+> stays in `In Security/NFR`, and that column's exit is Security/NFR's alone.
+>
+> **Why this ran BEFORE the Security/NFR gate**: the gate certifies a change **against its acceptance
+> criteria**, and three roles had independently reported those criteria incomplete. The Orchestrator
+> reversed its own published order for that reason; this block is the discharge.
+>
+> **Nothing below was taken on trust.** This task has already produced one confirmed miscount and one
+> flagged non-defect, so every claim was re-derived by evaluating the criteria **as written** against
+> each implementation that has been proposed for this module — the delivered one and the mutants the
+> Engineer and QE built. What that measurement says is recorded with each item.
+>
+> **1 — CRITERIA 10 AND 11 WERE BLIND TO A SINGLE-SIGNAL SESSION. Upheld, and it is worse than it was
+> reported. This is the section this role itself corrected seven hours ago, and it is ruled on the
+> evidence rather than defended.** Criterion 11 never said **which** ambient values the rewrite uses.
+> Measured across all **11,232** instantiations its own wording admits: it excludes a session that
+> hardcodes `isTTY` in **2,592** of them and **admits it in 8,640** — so whether the criterion catches
+> a real defect depends on which ambient the test author happens to pick. **That is two readings of
+> one criterion, which is precisely the defect this role ruled against on this very ticket at the
+> `Backlog` exit.** Worse, two real defects are excluded by **no** reading at all: a session that
+> **drops the flags** (`--ascii` silently ignored — a straight breach of table rows 1 and 2) and a
+> **lazy** session.
+> **Ruled: fixed by ADDING criterion 15, not by widening 10 or 11.** Criterion 10's job is that the
+> *rule* reads no ambient global and criterion 11's is that the *session value* is decided once;
+> loading the *wiring* onto either is how this ticket produced four criteria that passed for reasons
+> other than the ones they were written for. Criterion 15 states the session's contract directly and
+> is measured by six cases in which exactly one input is decisive. Measured after drafting: the six
+> exclude all three wiring defects and the delivered session passes all six.
+>
+> **2 — THE `LC_CTYPE` RUNG WAS PINNED BY NO CRITERION. Upheld, with QE's characterisation
+> sharpened.** Measured: both reordering implementations — `LC_ALL` > `LANG` > `LC_CTYPE`, and
+> `LC_CTYPE` promoted above `LC_ALL` — satisfy **all nine** original tuples.
+> **But criterion 6 is not itself the fault, and it is not being rewritten.** Its job is the
+> case-insensitive, hyphen-less spelling and it does that job; it was carrying a precedence it was
+> never asked to carry. The two real faults are that **no criterion ever stated the middle rung**,
+> and that the file used its silent variables two different ways — under the other reading criterion
+> 6 *would* have pinned `LC_CTYPE` > `LANG`, and criterion 8 would have been false. **Ruled: one
+> sentence in the lead-in fixes the convention for every bullet at once, and criteria 12 and 13 state
+> the rung against each neighbour with conflicting values set at once — the shape the `## Test notes`
+> have demanded in writing since this ticket was cut. Criterion 6's text is untouched.**
+>
+> **3 — AN EMPTY LOCALE VARIABLE COUNTS AS UNSET. The Software Engineer's ruling is RATIFIED, not
+> overturned — this is the one item that could have changed code, and it does not.** It was ruled at
+> `confidence: medium` as an inference from an adjacent rationale, and QE concurred without disturbing
+> it; neither is why it stands. Three pieces of evidence, in the order they carried weight:
+> 1. **This ticket's own row-4 rationale requires it** — *"unset … carries no information; treating it
+>    as a negative signal would smuggle the platform rule back in through the side door."* `LC_ALL=`
+>    carries no information either.
+> 2. **POSIX, checked on this machine rather than recalled.** A locale variable is consulted only when
+>    it is "defined and not null". `env -i LC_ALL= LANG=en_US.UTF-8 locale` reports
+>    `LC_CTYPE="en_US.UTF-8"` — the empty `LC_ALL` fell through to `LANG` — while
+>    `env -i LC_ALL=C LANG=en_US.UTF-8 locale` reports `LC_CTYPE="C"`. The rule this ticket already
+>    describes is the one the platform underneath it implements.
+> 3. **The product value statement decides the tie.** *"The majority get figurines with no flag."*
+>    Under the literal reading, a CI image or shell wrapper exporting `LC_ALL=` freezes the precedence
+>    at the first rung and hands ASCII to a player whose `LANG` is UTF-8 — the exact case row 5 exists
+>    to serve. The tail that genuinely needs ASCII already has `--ascii`.
+>
+> **Why this does not contradict the both-flags-true ruling above, which chose the fail-safe
+> direction.** That tuple is a **contradiction** between two explicit requests, and the safe direction
+> breaks a genuine tie. An empty variable is not a request at all — it is the **absence** of
+> information, and reading absence as a negative signal is what row 4's rationale forbids. Different
+> inputs, different rule; both rulings stand together.
+> **Ruled: SPECIFIED, not merely inferred.** The `## Scope` bullet defines "set", criterion 14 pins
+> it, and the behaviour stops being an unmarked judgement call carried in a code comment. **The
+> delivered code already implements exactly this, so nothing is owed to the Software Engineer.**
+>
+> **4 — A FOURTH ITEM, FOUND HERE AND NAMED AS A FOURTH RATHER THAN SMUGGLED INTO THE THREE: NO
+> CRITERION COULD EVER EXCLUDE A LAZY SESSION.** QE reported this as a suite hole and closed it in
+> tests; measured here at the criteria level, criterion 11 admits a lazy session under **every one**
+> of its 11,232 conforming instantiations, because it requests the mode before rewriting anything.
+> **This is not a test detail, and this ticket in particular cannot leave it to one.** Epic acceptance
+> `2b` is *"decided exactly once, **before the first frame**"*, and on 2026-08-08 this role ruled that
+> once-ness **onto this ticket** after finding that `ABC-015` and `ABC-018` each pointed at the other.
+> **Owning a promise means stating it.** **Ruled: criterion 11 widened by one clause** — the rewrite
+> may happen before the mode has ever been requested. Measured: it excludes the lazy session and
+> nothing else, and the delivered session is already eager by construction.
+>
+> **What did NOT change, checked rather than asserted.** Size **`S` (2)** — no code, no test and no
+> implementation effort follows from any of the four. Priority **`P1`**. The five-row signal table's
+> rows, `## Out of scope` in full, the `## Dependencies` section and its 2026-08-04 correction, the
+> **merge-with-or-before-`ABC-018`** constraint, `RISK-005`'s severity and mitigation, the `NFR-007`
+> zero-I/O bar, the first correction block, and the `## Implementation` and `## QE` sections written
+> by the other two roles. **No criterion was renumbered and no criterion's text was rewritten except
+> criterion 11's, which was widened.** `src/` was not touched by this subtask.
+>
+> **Every new criterion is already covered by a test that exists and passes — which is why no dev work
+> and no QE re-run is owed.** Checked by reading the suite, not assumed:
+>
+> | Criterion | Already pinned by |
+> |---|---|
+> | 11 (widened — decided at begin) | `decides EAGERLY when the session begins, not lazily on the first request` |
+> | 12 (`LC_ALL` beats `LC_CTYPE`) | `LC_ALL beats LC_CTYPE — LC_ALL=C against a UTF-8 LC_CTYPE and a UTF-8 LANG` |
+> | 13 (`LC_CTYPE` beats `LANG`) | `LC_CTYPE beats LANG — LC_CTYPE=C against a UTF-8 LANG, LC_ALL unset` |
+> | 14 (empty is unset) | `falls through an empty variable to the next one in precedence order` |
+> | 15 (the session's wiring) | `carries EVERY ambient signal to the rule` (4 rows) + `hands the flags through` (2 rows) |
+>
+> **One consequence for whoever next edits the suite, flagged and NOT acted on here:** those tests
+> currently sit under headings that call them *beyond* the acceptance criteria — "QE/E2E adversarial
+> coverage" and "the engineer's stated assumption". After this amendment they **are** criteria 11–15's
+> tests. Re-labelling them is a one-line-per-heading job in `src/glyph-mode.test.ts` and it belongs to
+> QE, not to this role — **this subtask does not touch `src/`, and the labels are cosmetic: the
+> assertions already are the criteria.** It is not a gate blocker and must not be treated as one.
 
 ## Dependencies
 
@@ -254,16 +419,26 @@ cannot be tested for eight cases in one run — take the signals as an argument.
   in the test name, so a future reader does not "fix" it by adding the platform rule back.
 - **Do not test that a terminal renders anything.** That is the thing wave 1 established is not
   observable, and a test claiming to check it would be a fabricated verification.
-- **The two session criteria are written against a named mutant** (added 2026-08-08): the
-  implementation that reads `process.env` on every call passes all nine table rows and must fail
-  only these two. If a session test passes on that mutant, the test is decoration — rewrite it, do
-  not weaken the criterion.
+- **The three session criteria are each written against a named implementation that must fail it**
+  (two added 2026-08-08, the third on that day's second pass). Criterion 10 and 11: the implementation
+  that reads `process.env` on **every call** passes all twelve table rows and must fail these.
+  Criterion 11 also: the **lazy** session that memoises on first request. Criterion 15: the session
+  that **hardcodes `isTTY`**, the one that forwards **only `LANG`**, and the one that **drops the
+  flags**. If a session test passes on the implementation it names, the test is decoration — rewrite
+  it, do not weaken the criterion.
+- **Criteria 12 and 13 exist because a criterion can be blind to a rung it never mentions.** The
+  precedence note above was obeyed for `LC_ALL` against `LANG` and not for the `LC_CTYPE` rung, and
+  two reordered implementations passed every test for it. Do not collapse 12 and 13 back into
+  criterion 6.
 
 ## Size and priority rationale
 
-**Size `S` (2).** One function, five enumerated rows, one cached value, and a table of eleven unit
-tests — **nine input tuples plus two session criteria; recounted 2026-08-08**, and it read "nine
-unit tests" against eight tuples before the corrections above. No new module of consequence, no chess logic, no I/O. Calibrated against `ABC-011` (one
+**Size `S` (2).** One function, five enumerated rows, one cached value, and a table of **fifteen**
+unit tests — **twelve input tuples plus three session criteria; recounted 2026-08-08 (second
+pass)**. It read "nine unit tests" against eight tuples before that day's first corrections, and
+eleven before its second. **Size is unmoved by either pass**: the second added no implementation work
+at all — every one of its four criteria was already satisfied and already tested by delivered code.
+No new module of consequence, no chess logic, no I/O. Calibrated against `ABC-011` (one
 guarded condition plus two test shapes, `S`) and `ABC-006` (`S`). Not `XS`, because the precedence
 between the three locale variables and the deliberate non-use of the platform are real behaviour
 with real regression risk, not a one-liner.
@@ -275,9 +450,10 @@ a retrofit. *(Read `ABC-018` here, not `ABC-014` — corrected 2026-08-04, see `
 
 ## Definition of Ready
 
-Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (**nine** enumerated input
-tuples, each with one exact output, **plus two falsifiable session criteria** — see the correction
-block; it read "nine tuples" against eight until 2026-08-08) · dependencies ✅ (`ABC-014`, with a
+Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (**twelve** enumerated input
+tuples, each with one exact output, **plus three falsifiable session criteria** — see both correction
+blocks; it read "nine tuples" against eight until 2026-08-08, and nine plus two until that day's
+second pass) · dependencies ✅ (`ABC-014`, with a
 sequencing constraint that is **no longer a cycle** — corrected 2026-08-04) · NFR triggers ✅
 (zero-I/O bar; no perf bar, with the reason) · test notes ✅ · size `S` ✅ · priority `P1` ✅ · no
 blocker ✅
