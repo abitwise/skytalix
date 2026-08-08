@@ -24,11 +24,20 @@ produces them does not exist here.
 
 ## Read before acting
 
-`.grugops/context/ticket-to-pr-ABC-015/notes/` holds SIXTEEN notes and all sixteen were read in
-full, in `at` order, before any judgement was formed: three Orchestrator `decision` notes (routing,
-the pull, the reversal that put this subtask before the Security/NFR gate), one Orchestrator
-`observation` (gates re-run, one flagged defect disproved), this role's own four notes from the
-`Backlog` exit earlier today, five Software Engineer notes, and four QE/E2E notes.
+`.grugops/context/ticket-to-pr-ABC-015/notes/` holds **SEVENTEEN** notes and all seventeen were read
+in full, in `at` order, before any judgement was formed: three Orchestrator `decision` notes
+(routing, the pull, the reversal that put this subtask before the Security/NFR gate), one
+Orchestrator `observation` (gates re-run, one flagged defect disproved), this role's own four notes
+from the `Backlog` exit earlier today, five Software Engineer notes, and four QE/E2E notes.
+
+**CORRECTED, and recorded rather than quietly fixed: this line first read "SIXTEEN" while the
+itemisation right after it summed to seventeen (3 + 1 + 4 + 5 + 4).** Caught at the end of the
+subtask by counting the directory with `ls`, not by re-reading the sentence. **It is the same failure
+this task has now produced three times** — the Orchestrator's "nine tuples" copied from the ticket's
+self-assessment, this ticket's own Definition-of-Ready line, and now mine — and it is the reason
+every count published by this subtask was taken from the file by machine rather than carried from a
+neighbouring sentence. **A document's summary of itself is not evidence about itself, including when
+the document is mine.** The seventeen notes read were unaffected; only the headline was wrong.
 
 Then, deliberately NOT on any of their authority: `plans/tickets/ABC-015-glyph-mode-selection.md`
 line by line including both `CORRECTED IN PLACE` blocks, `src/glyph-mode.ts`,
