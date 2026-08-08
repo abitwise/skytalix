@@ -1,8 +1,8 @@
 ---
 id: ABC-015
 title: Glyph mode selection — precedence, signal set, and the --unicode override
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-002
