@@ -1,8 +1,8 @@
 ---
 id: ABC-009
 title: legalMoves mutates the position it documents as unchanged
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: S
 priority: P1
 epic: EPIC-001
@@ -932,3 +932,262 @@ its own instruments.
 - **That the gate is green in the Workflow 05 sense.** The four mandatory gates passed and the deep
   lane is 32/32, but the terminal verdict is the gate's to emit and QE owns the `In Review` exit.
   No `finding` was written and nothing is self-stamped.
+
+## QE
+
+**BROKEN-TESTED AND MOVED `In Review` → `In Security/NFR` 2026-08-09 by QE/E2E** (task
+`ticket-to-pr-ABC-009`, subtask `qe-abc009-review`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-009`. Verdict **PASS WITH RISKS**. `In Review` 1/3 → 0/3,
+`In Security/NFR` 0/2 → 1/2; no limit approached, no override taken, no written reason owed.
+**Nothing merged and nothing deployed — a human holds both.**
+
+**Nothing above this section was edited.** The `## Acceptance` criteria, BA/PM's correction block,
+`## Scope`, `## Out of scope`, `## Reproduction`, the escalation block, the `NFR-001` bar,
+`## Test notes` and the Engineer's `## Implementation` section all stand exactly as they were. Two
+criterion gaps are named below and **routed to BA/PM rather than patched in here** — the criteria are
+not this role's to rewrite, and `ABC-018`'s correction established that closing a gap in one artifact
+by editing another is the inversion to avoid.
+
+### The headline, because the distinction is the whole result
+
+**62 mutants were run against the delivered diff. Five survive the ENTIRE acceptance net — all twelve
+criteria, all 337 delivered tests AND the `PERFT_DEEP=1` lane at 32/32 — and NOT ONE of the five is a
+defect in the code.** All five are defects in the **criteria**. The delivered fix is correct on every
+position that exposes them; it is the mutants that are wrong. That is why this is a pass and not a
+return to dev: there is nothing for the engineer to fix.
+
+`src/moves.ts` is **byte-identical** to `8f540cf` — md5 `0e247853ab2c05887c76105ff83d8621`, the digest
+the Engineer published — and `git diff 8f540cf -- src/moves.ts` is **empty**. Zero production lines
+were changed by this role.
+
+### The instrument, and why the repository's `src/` was never mutated
+
+The Engineer mutated `src/moves.ts` in place and restored it. This role did not: every mutant was
+applied to a **copy** of `src/` held outside the repository. The driver refuses to manufacture a false
+survivor — each mutant asserts its anchor occurs **exactly once** and that the bytes actually changed
+(otherwise a harness error, never a "survived"), runs `tsc --noEmit` per mutant so a broken build is
+never scored as a legitimate survivor, and restores and re-hashes the file after every one. The
+precaution earned itself: a timed-out sweep left a mutant in the **scratch** copy, which the harness's
+own re-hash caught; pointed at the repository, that loop would have been pointed at the delivered fix.
+
+Calibrated before being trusted: the harness reproduces the Engineer's four-mutant table **exactly** —
+same failing criteria, same assertion counts, same 321 / 332 / 325 / 318 suite totals.
+
+### The fifth mutant, adjudicated: the equivalence argument HOLDS and no criterion is owed
+
+Corroborated on an instrument built differently from the Engineer's, over **12,584 positions
+`parseFen` ACCEPTS** — three squares varied jointly, three white-king placements, **all four rights
+combinations including both at once**, and the whole black-to-move mirror — with **zero divergence at
+`generateMoves`, at `legalMoves`, and on purity**.
+
+The scope boundary was read at the source rather than assumed, and it matters: `src/fen.ts`
+`assertBothKingsPresent` accepts a board only with **exactly one king of each colour**, and
+`parseCastling` performs **no** rights/board consistency check (that is `ABC-010`). An earlier probe of
+this role's own built boards by poking bytes and produced boards with zero or two white kings —
+`4k3/8/8/8/8/8/8/4Q2R w K - 0 1` has no white king and `parseFen` **throws** on it. A divergence there
+is out of scope and must not be reported as a gap, so every figure above comes from a corpus
+round-tripped `toFen` → `parseFen` and discarded unless accepted (16,912 candidates rejected).
+
+The mechanism is stronger than "the through-check test happens to catch it": `option.empty` requires
+the squares between king and rook to be EMPTY and is tested **before** the through-check, so on any
+board reaching it there is an **unobstructed line** from the rook's home square to the `kingPath`
+squares — an enemy rook or queen there attacks them **necessarily**, and no blocker can exist without
+having failed `option.empty` first. On the king's square, a king's attack on an adjacent `kingPath`
+square is unblockable by construction. Measured beside it: an **enemy queen** on either home square is
+likewise already refused (`4k3/8/8/8/8/8/8/K3q2R w K - 0 1`, `4k3/8/8/8/8/8/8/4K2q w K - 0 1`, zero
+castles each).
+
+**So a colour criterion would pass on `main`'s unfixed tree, on the delivered fix and on the mutant
+alike — unfalsifiable, and therefore theatre.** The Engineer's disposition was right on both halves:
+keep the stricter guard, propose no criterion. **Rejected alternative:** add a wrong-colour row anyway
+for symmetry with `A5`'s enemy-bishop row — rejected because the enemy *bishop* row is falsifiable and
+an enemy *king/rook/queen* row is not.
+
+### The soft spot nobody had examined, examined — and it is where all five live
+
+BA/PM named *"a criterion set written entirely over signals that agree"* and nobody had looked. On
+`A3`–`A6` every assertion on a row — the castle count in both layers, the exact move count, purity
+over 128 bytes and five scalars — is driven by **one binary event**: did this castle option survive the
+guards. Twelve rows carry twelve bits of discrimination, not thirty-six. That is not itself a flaw;
+**the flaw is what agreeing signals cannot show you — the dimensions the set holds CONSTANT.** Two are
+constant across all twelve rows and both controls, and a defect hides in each.
+
+**`G-1` — the impostor's PIECE TYPE. `A5`/`A6` vary two; the rule quantifies over all of them.**
+`## Test notes` 3 asks for *"at least two distinct piece types"* and a bishop and a knight satisfy it
+literally, but `## Scope` states *"the moving side's `KING` byte and no other"* — a claim about **every**
+other byte. A guard admitting one further own-colour type is green on everything:
+
+```
+reading either home square as "the mover's KING/ROOK **or QUEEN**"
+  -> 337/337 green · typecheck 0 · deep lane 32/32 · 74 and 70 diverging in-scope positions
+
+4k3/8/8/8/8/8/8/K3Q2R w K - 0 1   delivered  31 moves, 0 castles, position PURE
+                                  mutant     32 moves, 1 castle e1g1, and ONE legalMoves call
+                                             DESTROYS the white QUEEN on e1, writing a king over it
+```
+
+That is family 2's *"silent material loss and a piece-type change"* on the most valuable piece on the
+board, with every criterion green. The queen-on-the-rook's-square form leaves the position
+**byte-identical** — family 3's shape — so only the `FLAG_CASTLE` count could ever see it, exactly as
+`A6`'s own rationale says, and `A6` has no queen row to see it with.
+
+**`G-2` — HOW MANY of a side's rights are held at once. Never varied, and this is the deeper one.**
+Every acceptance FEN and every control holds **at most one right per side**; the sole exception is the
+reproduction FEN, where **both** castles are invalid and the expected answer is zero either way. So no
+criterion asks whether a **valid** castle survives when its sibling is bogus — and because every row
+expects zero castles, nothing distinguishes *"this option was rejected"* from *"the option loop was
+abandoned"*:
+
+```
+continue -> break (or return) on the ROOK guard
+  -> 337/337 green · typecheck 0 · deep lane 32/32 · 16 diverging in-scope positions
+
+4k3/8/8/8/8/8/8/R3K3 w KQ - 0 1   rights KQ; h1 EMPTY so `K` is bogus; a1 rook home so `Q` is LEGAL
+                                  delivered  16 moves, 1 castle = e1c1   (correct)
+                                  mutant     15 moves, 0 castles        a LEGAL MOVE VANISHES
+```
+
+**The asymmetry is the lesson.** The same mutation on the **king** guard is genuinely
+behaviour-equivalent, because both of a side's options share `kingFrom` (`e1` for `K` and for `Q`). On
+the **rook** guard it is a defect, because `rookFrom` differs per option (`h1` vs `a1`). One token, two
+opposite verdicts, and `A1`–`A10` returns the same green for both.
+
+**Why `A8` and `A9` cannot cover either dimension, structurally — by the Engineer's own argument.**
+`makeMove` clears a castling right whenever the king or the matching rook leaves home or that rook is
+captured, so in any position reachable from a legal start the right being set implies both pieces are
+home, and **the two new guards never fire**. A mutation to a guard that never fires cannot change a
+perft node. Measured rather than argued: **all five mutants survive `PERFT_DEEP=1` at 32/32.** The same
+argument that makes this fix safe for legal play makes the entire perft apparatus unable to certify it.
+
+### What the criteria actually did, measured over 62 mutants
+
+```
+PERFT (A8/A9)  29 kills   ·   the four legal-castle CONTROL rows  26   ·   moves.test.ts 22
+apply.test.ts  21         ·   A5 14   ·   A6 13   ·   A4 9   ·   A3 / A1 / A2 7 each
+A7             ZERO
+```
+
+**`A7` killed nothing.** The ticket already says it asserts count *equality* rather than
+*correctness*; that was measured on one build at refinement and is now measured on 62. Keep it as the
+standing purity walk `## Test notes` 2 asks for, but its green is not evidence about this fix and
+should not be cited as any. **The four legal-castle control rows are load-bearing and one mutant proves
+it alone:** swapping black's kingside and queenside `rookFrom` entries dies to the controls and
+nothing else — not even perft, because in any legally-reachable position with a black right both black
+rooks are home, so the swapped table still finds a rook.
+
+### One further hole, honestly NOT an `A1`–`A10` gap, recorded because it is next door
+
+Deleting the **pre-existing** castling-right test passes the whole 337-test default suite including all
+twelve criteria, offering a castle on `4k3/8/8/8/8/8/8/R3K2R w - - 0 1` (70 diverging positions).
+**`A9` does kill it** — deep lane 31/32, measured — because a king that steps off `e1` and back leaves
+both pieces home with the right cleared, which is reachable by legal play. So this is a hole in the
+**default** lane, not in the acceptance net, and it is **not charged against `ABC-009`**: the right is
+not one of the two **board** preconditions this ticket owns. The new rows below now kill it in the
+default lane too.
+
+### Closed in TESTS ONLY — and proved load-bearing
+
+`src/moves.castling.hardening.test.ts` — **NEW, 19 tests, all passing on the delivered fix.** A new
+file rather than additions to `src/moves.castling.test.ts`, so that **every** test file that existed
+before this hop is byte-identical: all fourteen `*.test.ts` files on `main` are unmodified (checked by
+diffing each **individually**, not by inspection) and the Engineer's own acceptance file is untouched.
+`A8`'s line-level requirement therefore holds for this role's work exactly as it did for the
+Engineer's.
+
+```
+                       delivered net      with the hardening rows
+62 mutants             47 killed          53 killed
+                       15 survived         9 survived
+```
+
+**Six mutants die to these rows and to nothing else in the suite** — the two queen-impostor mutants to
+the piece-type rows, the three loop-abandon mutants to the two-rights rows, and the right-test mutant
+to the no-right rows — so each group is independently load-bearing. **The nine behaviour-equivalent
+survivors still survive: these rows kill zero of them.** That is the property that matters most about
+an added test — it pins observable behaviour, not the shape of the implementation. A row that had
+killed the colour-blind mutant would have been the theatre the correction block rejected.
+
+The two-rights rows assert the surviving castle **by name** (`e1c1`, `e1g1`, `e8c8`, `e8g8`), not by
+count, because a count alone cannot tell *"the invalid one was rejected"* from *"the valid one was
+dropped and something else appeared"*. Two enemy-queen assertions are included and are **labelled in
+the file as a recorded measurement rather than a criterion**, precisely because they pass on the
+unfixed tree too.
+
+### Gates as they ran, re-run by this role on the tip and never inherited
+
+| gate | command | before the added rows | after |
+|---|---|---|---|
+| lint | `npm run lint` | exit 0, 2 pre-existing `biome.json` infos | exit 0, same 2; `npx biome check` on the new file alone reports **zero** |
+| typecheck | `npm run typecheck` | exit 0 | exit 0 |
+| unit | `npm test` | **337 passed (337) on 15 files** | **356 passed (356) on 16 files** |
+| build | `npm run build` | exit 0 | exit 0 |
+| skip count | the `AGENTS.md` command | **0** | **0** |
+| deep perft (`A9`) | `PERFT_DEEP=1 npx vitest run src/perft.test.ts` | 32/32, 39.52 s | **32/32 exact, 38.35 s** |
+| e2e | — | `UNKNOWN - verify` | `UNKNOWN - verify` |
+| test-integrity checker | `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0` | **exit 2** | **exit 2** |
+| auto-UAT oracles | `node scripts/check-uat-oracles.js` | `UNKNOWN - verify` — absent | `UNKNOWN - verify` |
+
+**Exit 2 is recorded as an ERROR and NOT as a pass.** `.grugops/test-skips.md` does not exist (`ls`,
+not assumed); Workflow 05 step 3 makes exit 2 *"the checker could not run"*, distinct from the exit-1
+human-only short-circuit. **No registry file was created** — an agent may not author a justification to
+clear its own gate, and with a skip count of 0 nothing is owed one.
+
+**Fifth independent derivation of the fifteen counts**, not required of this role and done anyway: all
+fifteen `A1`–`A6` rows hold, each over all 128 board bytes **and** the five scalars with **zero bytes
+changed**; `A2` reads 3, 3, 3; the `FLAG_CASTLE` count is 0 in `generateMoves` **and** `legalMoves` on
+every row. Both over-rejection controls hold — kiwipete **48 / 2 castles still offered**,
+`r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1` **26 / 2** — and the four legal castles read **15 / 16 / 15 /
+16, one castle each**. No discrepancy against the four prior derivations, and nothing was adjusted.
+
+**One figure of this role's own, corrected rather than deleted.** A first deep-lane run in the scratch
+copy read **544 tests in 211 s** with a failure. That was an artefact of this role's own making — the
+differential probe had written seventeen copies of `src/` inside the vitest root, and
+`vitest run src/perft.test.ts` matched all of them (544 = 17 × 32). Moved out and re-run, the lane
+reads 32/32. Recorded because a 211-second deep lane with a red test would have been a serious-looking
+false alarm.
+
+### `NFR-001` — deliberately NOT re-measured here
+
+Security/NFR follows this hop and owns that bar; **no throughput figure anywhere in this role's output
+is its own** and `npm run perft` was not run. The part of the Engineer's measurement that matters is
+its caveat, and it is honest: the instrument's **per-cell floor is ~±1%**, established by two
+structurally-zero cells and a byte-identical twin reading up to 1.0126 — larger than any signal the
+change could produce. So **kiwipete's 0.9930 is NOT a 0.7% regression** and no per-cell number is
+claimable; only the aggregate against the ≥ 0.98 bar is load-bearing, and it is met with a margin
+exceeding the resolution.
+
+One risk is routed to that gate: **the guard-ORDERING rationale is gate-unverifiable.** Moving both
+guards below the emptiness test, below the through-check test, or above the right test is
+behaviour-equivalent (zero divergence over 12,584 accepted positions) and therefore invisible to every
+test, while `NFR-001`'s own floor exceeds the effect. The cheap-tests-first reasoning is sound and
+rests on reading, which is the honest place for it to rest.
+
+### Risks carried, each with an owner
+
+1. **`G-1` and `G-2` are closed in TESTS but not in the criteria — owner BA/PM, medium.** `A5`/`A6` and
+   `## Test notes` 3 still say *"at least two piece types"*, and no criterion still varies the number
+   of rights held. The behaviour is pinned so a regression is caught; what is missing is the
+   *specification*, which is what let this class recur on `ABC-015`, `ABC-018` and `ABC-009`.
+2. **`A7` discriminated nothing across 62 mutants — owner BA/PM, low.**
+3. **The castling-right test is guarded in the whole suite only by a 40-second opt-in lane — owner
+   BA/PM or Architect, low.** Not charged against this ticket.
+4. **The guard-ordering rationale is gate-unverifiable — owner Security/NFR, low.**
+5. **`NFR-001` un-re-measured by QE and owed at the next gate — owner Security/NFR.**
+6. **`ABC-022` half (b) is live BY DESIGN — severity none.** Not tested here and not a miss.
+7. **Test-integrity checker exit 2 — an ERROR, not a pass, and human-owned.** E2E and the auto-UAT
+   oracles are `UNKNOWN - verify`, not green.
+
+### What this hop does NOT establish
+
+- **That `A1`–`A10` plus the new rows is complete.** 62 mutants is twelve times the Engineer's five and
+  still not a proof. Nine survivors remain and this role argues all nine equivalent — measured over an
+  enumerated corpus, not over the position space.
+- **That the equivalence results generalise beyond the corpus.** 12,584 accepted positions with at most
+  four pieces is not the position space. The mechanism argument says no blocker can change the result;
+  only the corpus is measured.
+- **A terminal Workflow 05 verdict.** `READY_FOR_HUMAN_REVIEW` is the gate's to emit and no §14 gate
+  exists in this install. **No `finding` was written and nothing is self-stamped.**
+- **Any coverage figure.** None measured — `## Problem` is explicit that a test which only raises
+  coverage adds nothing here.
+- **Anything about `ABC-010`.** Its stated scope would reject every FEN in this ticket including the new
+  rows'; what it implements is its own gate's to establish.
