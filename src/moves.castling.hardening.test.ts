@@ -41,8 +41,16 @@
  *    Two shapes are excluded from the enumeration on measurement, not on taste. The mover's
  *    own KING on the ROOK's home square is not constructible — with the king also home it
  *    needs two same-colour kings and `parseFen` refuses, and with the king elsewhere the king
- *    guard already refuses. An ENEMY-colour occupant of either square is unreachable, masked
- *    by the pre-existing through-check test (measured below, and on the unfixed tree too).
+ *    guard already refuses.
+ *
+ *    THIS PARAGRAPH CARRIED A SECOND EXCLUSION AND IT WAS FALSE — corrected 2026-08-09, third
+ *    QE hop. It read "an ENEMY-colour occupant of either square is unreachable, masked by the
+ *    pre-existing through-check test". That holds for an enemy KING, QUEEN and ROOK and for
+ *    NOTHING ELSE: an enemy KNIGHT or PAWN on e1/h1/a1 attacks none of e1/f1/g1, is not in the
+ *    `empty` set, and leaves the king out of check, so the identity guard is its only guard.
+ *    BA/PM measured it (four mutants surviving 371/371 with the harm live) after this file's
+ *    header asserted the generalisation. Dimension 3 below carries the repair. `A11`'s own
+ *    domain is the mover's OWN types, so `A11` is not reopened and its rows are unchanged.
  *
  * 2. HOW MANY OF A SIDE'S RIGHTS ARE HELD AT ONCE. Every acceptance FEN holds at most one
  *    right per side, except the reproduction FEN where BOTH castles are invalid. So no
@@ -53,19 +61,32 @@
  *    is shared by both of a side's options, so a `break` there is genuinely equivalent; the
  *    rook's home square is not, which is exactly where the hole is.
  *
- * A third dimension was checked and deliberately NOT given rows, because a row for it would
- * be theatre rather than a criterion. An ENEMY queen on either home square is already
- * refused today by the pre-existing through-check test, for the same reason an enemy rook
- * is: it attacks the squares `option.kingPath` requires unattacked. Measured on the
- * delivered tree — `4k3/8/8/8/8/8/8/K3q2R w K - 0 1` and `4k3/8/8/8/8/8/8/4K2q w K - 0 1`
- * both offer zero castles. The colour dimension of both home squares is masked, so only
- * OWN-colour impostors can pin anything here.
+ * 3. THE OCCUPANT'S COLOUR — and, since colour was the last axis left, THE WHOLE OCCUPANT
+ *    BYTE. `A13`, and it is a quantifier over a MEASURED domain rather than a fourth sample.
+ *
+ *    Dimension 1 closed piece type over the mover's OWN pieces and left the occupant's colour
+ *    on the blanket claim quoted above. The claim was measurably false for two types, so the
+ *    repair is not "add the enemy knight and the enemy pawn" — that would be a fifth sample and
+ *    the fifth prediction of a sixth. A home square holds exactly ONE BYTE; `parseFen` can put
+ *    exactly 13 distinct values in it (measured below, not asserted); ONE of the 13 is the
+ *    required piece; so 12 wrong values per square is THE ENTIRE SPACE, and every one of the 13
+ *    is assigned, by name, to exactly one bucket in the tables below — required, covered by an
+ *    absence row, covered by `A11`, covered by an existing enemy row, newly covered here,
+ *    measured-behaviour-equivalent, or not constructible. Delete a row and the accounting goes
+ *    red; make a fourteenth byte parseable and it goes red.
+ *
+ *    An ENEMY queen on either home square is still refused today by the pre-existing
+ *    through-check test, for the same reason an enemy rook and an enemy king are: each attacks a
+ *    square `option.kingPath` requires unattacked. Measured on the delivered tree —
+ *    `4k3/8/8/8/8/8/8/K3q2R w K - 0 1` and `4k3/8/8/8/8/8/8/4K2q w K - 0 1` both offer zero
+ *    castles. Those three bytes are the ONLY ones the masking argument covers, and the argument
+ *    is asserted here through `isSquareAttackedBy` rather than inherited from a comment.
  */
 
 import { describe, expect, it } from "vitest";
 import { parseFen, toFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
-import { FLAG_CASTLE, generateMoves, type Move } from "./moves.ts";
+import { FLAG_CASTLE, generateMoves, isSquareAttackedBy, type Move } from "./moves.ts";
 import {
   BISHOP,
   BLACK,
@@ -73,6 +94,7 @@ import {
   CASTLE_BQ,
   CASTLE_WK,
   CASTLE_WQ,
+  EMPTY,
   KING,
   KNIGHT,
   PAWN,
@@ -111,14 +133,37 @@ function castleNames(moves: Move[]): string[] {
 /**
  * The two home squares and the right byte, keyed on the single castling right each `A11` row
  * holds. e1=4 h1=7 a1=0 e8=116 h8=119 a8=112 in 0x88, the same values `CastleOption` carries.
+ * `empty` and `kingPath` are copied verbatim from the `WHITE_CASTLES` / `BLACK_CASTLES` tables
+ * in `src/moves.ts`, so an `A13` row can prove the OTHER two guards are not what refuses it.
  */
 const CASTLE_SHAPE: Readonly<
-  Record<string, { readonly kingFrom: number; readonly rookFrom: number; readonly right: number }>
+  Record<
+    string,
+    {
+      readonly kingFrom: number;
+      readonly rookFrom: number;
+      readonly right: number;
+      readonly empty: readonly number[];
+      readonly kingPath: readonly number[];
+    }
+  >
 > = {
-  K: { kingFrom: 4, rookFrom: 7, right: CASTLE_WK },
-  Q: { kingFrom: 4, rookFrom: 0, right: CASTLE_WQ },
-  k: { kingFrom: 116, rookFrom: 119, right: CASTLE_BK },
-  q: { kingFrom: 116, rookFrom: 112, right: CASTLE_BQ },
+  K: { kingFrom: 4, rookFrom: 7, right: CASTLE_WK, empty: [5, 6], kingPath: [4, 5, 6] },
+  Q: { kingFrom: 4, rookFrom: 0, right: CASTLE_WQ, empty: [1, 2, 3], kingPath: [4, 3, 2] },
+  k: {
+    kingFrom: 116,
+    rookFrom: 119,
+    right: CASTLE_BK,
+    empty: [117, 118],
+    kingPath: [116, 117, 118],
+  },
+  q: {
+    kingFrom: 116,
+    rookFrom: 112,
+    right: CASTLE_BQ,
+    empty: [113, 114, 115],
+    kingPath: [116, 115, 114],
+  },
 };
 
 /** The piece TYPE each `A11` row's label names. `KING` and `ROOK` are the legal occupants. */
@@ -155,11 +200,25 @@ function ownPieceTypesParseFenAccepts(): Set<number> {
 /**
  * Asserts the row is the EXPERIMENT it claims to be, before asserting the outcome. A row that
  * says "no castle is offered" also passes when the FEN accidentally sets up something else
- * entirely — a typo in a 22-row table would silently test nothing. So: the named own piece
- * really stands on the square under test, the OTHER precondition really HOLDS (so exactly one
- * condition can be the reason the castle is refused), and exactly the one right is held.
+ * entirely — a typo in a 22-row table would silently test nothing. So: the named piece really
+ * stands on the square under test IN THE COLOUR THE ROW CLAIMS, the OTHER precondition really
+ * HOLDS (so exactly one condition can be the reason the castle is refused), and exactly the one
+ * right is held.
+ *
+ * The COLOUR half of the byte assertion is load-bearing rather than belt-and-braces on `A13`'s
+ * rows, measured: on the king's home square an enemy BISHOP, an enemy KNIGHT and an enemy PAWN
+ * ALL answer 13 moves, and on the rook's home square an enemy BISHOP, an enemy PAWN and an
+ * EMPTY square all answer 5. A row asserting only its count is therefore interchangeable with
+ * rows for two other byte values, so the count cannot pin which value was tested — this can.
+ * It has already caught one lying label: a row labelled PAWN whose FEN carried a BISHOP, at a
+ * coinciding count of 19, so every outcome assertion passed.
  */
-function expectImpostorSetup(fen: string, piece: string, square: "king" | "rook"): void {
+function expectImpostorSetup(
+  fen: string,
+  piece: string,
+  square: "king" | "rook",
+  occupant: "own" | "enemy" = "own",
+): void {
   const fields = fen.split(" ");
   const black = fields[1] === "b";
   const shape = CASTLE_SHAPE[fields[2] as string];
@@ -170,13 +229,39 @@ function expectImpostorSetup(fen: string, piece: string, square: "king" | "rook"
   const underTest = square === "king" ? shape.kingFrom : shape.rookFrom;
   const other = square === "king" ? shape.rookFrom : shape.kingFrom;
   const otherPiece = (square === "king" ? ROOK : KING) | colour;
+  const occupantColour = occupant === "own" ? colour : colour ^ BLACK;
 
   expect(
     position.board[underTest],
-    `the impostor must stand on the square under test: ${fen}`,
-  ).toBe((PIECE_TYPES[piece] as number) | colour);
+    `the ${occupant === "enemy" ? "ENEMY " : ""}impostor must stand on the square under test: ${fen}`,
+  ).toBe((PIECE_TYPES[piece] as number) | occupantColour);
   expect(position.board[other], `the OTHER precondition must hold: ${fen}`).toBe(otherPiece);
   expect(position.castling, `exactly the one right: ${fen}`).toBe(shape.right);
+}
+
+/**
+ * Asserts the IDENTITY GUARD is the only thing that can be refusing this row's castle. If the
+ * occupant also attacked a square on `option.kingPath`, or a square in `option.empty` were
+ * occupied, the row would stay green on a build whose identity guard was deleted — an inert row
+ * that proves nothing about `A13`. That is not hypothetical: exactly three of the six
+ * two-rights rows below are inert against the rook-guard `break` mutant, so inertness is
+ * asserted here rather than assumed. `isSquareAttackedBy` is the same predicate the production
+ * through-check uses, asked directly.
+ */
+function expectIdentityGuardIsTheOnlyRefuser(fen: string): void {
+  const fields = fen.split(" ");
+  const shape = CASTLE_SHAPE[fields[2] as string];
+  if (shape === undefined) throw new Error(`row must hold exactly one castling right: ${fen}`);
+
+  const position = parseFen(fen);
+  const attackerIsBlack = fields[1] !== "b";
+  const masked = shape.kingPath.filter((square) =>
+    isSquareAttackedBy(position, square, attackerIsBlack),
+  );
+  const blocked = shape.empty.filter((square) => position.board[square] !== EMPTY);
+
+  expect(masked.map(squareName), `the king path must be UNATTACKED: ${fen}`).toEqual([]);
+  expect(blocked.map(squareName), `the empty squares must be EMPTY: ${fen}`).toEqual([]);
 }
 
 /** No castle from either exported layer, an exact `legalMoves` count, and the position untouched. */
@@ -196,10 +281,12 @@ function expectNoCastleAndPure(fen: string, expected: number): void {
 
 /**
  * `A11`, first half: EVERY one of the mover's own non-KING piece types on the KING's home
- * square, with the matching rook present. Own colour only — an enemy occupant is masked by
- * the through-check test (see the file header). One `legalMoves` call on a build that admits
- * any of these DESTROYS the occupant and writes a king of the moving side over it, so purity
- * is asserted on every row as well as the `FLAG_CASTLE` count.
+ * square, with the matching rook present. Own colour only, because `A11`'s domain is the
+ * mover's OWN pieces — the enemy-colour half of the byte space is `A13`'s and its rows are
+ * the `ENEMY_ON_*` tables below, NOT masked away by the through-check test as this file's
+ * header used to claim. One `legalMoves` call on a build that admits any of these DESTROYS the
+ * occupant and writes a king of the moving side over it, so purity is asserted on every row as
+ * well as the `FLAG_CASTLE` count.
  */
 const IMPOSTOR_ON_KING_SQUARE: ReadonlyArray<
   readonly [piece: string, fen: string, expected: number]
@@ -239,6 +326,157 @@ const IMPOSTOR_ON_ROOK_SQUARE: ReadonlyArray<
   ["PAWN", "4k3/8/8/8/8/8/8/4K2P w K - 0 1", 6], // own pawn on h1
   ["PAWN", "p3k3/8/8/8/8/8/8/4K3 b q - 0 1", 6], // own pawn on a8, black queenside
 ];
+
+/**
+ * `A13`, first half: the ENEMY occupants of the KING's home square that the identity guard is
+ * the ONLY guard against — an enemy KNIGHT and an enemy PAWN. Enemy KING/QUEEN/ROOK are excluded
+ * because the through-check test already refuses them (asserted, not inherited, further down);
+ * enemy BISHOP is `A5` row 3's; the mover's own types are `A11`'s. That is the whole enemy half
+ * of the byte space, and these four rows are the part of it nothing covered.
+ *
+ * A build admitting either byte destroys an ENEMY piece and leaves the mover with a SECOND KING
+ * on one `legalMoves` call — material loss, a piece-type change AND a colour change, strictly
+ * worse than `A11`'s own-colour family. The FENs are BA/PM's, measured independently there and
+ * re-measured here; the counts below are the ones both derivations returned.
+ */
+const ENEMY_ON_KING_SQUARE: ReadonlyArray<readonly [piece: string, fen: string, expected: number]> =
+  [
+    ["KNIGHT", "4k3/8/8/8/8/8/8/K3n2R w K - 0 1", 13], // black knight on e1, white king a1, rook home
+    ["KNIGHT", "4N2r/8/8/5k2/8/8/8/4K3 b k - 0 1", 17], // white knight on e8; it attacks f6, so 17 not 18
+    ["PAWN", "4k3/8/8/8/8/8/8/R3p2K w Q - 0 1", 14], // black pawn on e1, queenside
+    ["PAWN", "r3P3/8/8/5k2/8/8/8/4K3 b q - 0 1", 19], // white pawn on e8, black queenside
+  ];
+
+/**
+ * `A13`, second half: the same two enemy bytes on the ROOK's home square, king already home.
+ * The position is byte-identical across the call whichever way the guard reads, so the
+ * `FLAG_CASTLE` count is the only signal — `A6`'s structural reason, a third time.
+ */
+const ENEMY_ON_ROOK_SQUARE: ReadonlyArray<readonly [piece: string, fen: string, expected: number]> =
+  [
+    ["KNIGHT", "4k3/8/8/8/8/8/8/4K2n w K - 0 1", 4], // black knight on h1 — the ONE count that differs
+    ["KNIGHT", "4k2N/8/8/8/8/8/8/4K3 b k - 0 1", 4], // white knight on h8
+    ["PAWN", "4k3/8/8/8/8/8/8/p3K3 w Q - 0 1", 5], // black pawn on a1, queenside
+    ["PAWN", "P3k3/8/8/8/8/8/8/4K3 b q - 0 1", 5], // white pawn on a8, black queenside
+  ];
+
+/**
+ * `A13`'s value-by-value discharge map, keyed on the occupant RELATIVE to the mover — EMPTY plus
+ * the six types in each colour is 13 labels for the 13 bytes `parseFen` can write. Every value
+ * is assigned to exactly one bucket and the buckets are checked, not narrated: the two "in this
+ * file" buckets are compared against the tables above, so deleting a row goes red.
+ */
+const REQUIRED = "the REQUIRED value — the castle IS offered";
+const BY_A11 = "the A11 tables in this file";
+const BY_A13 = "the A13 tables in this file";
+const BY_ABSENCE_ROW = "an absence row in the acceptance file";
+const BY_ENEMY_BISHOP_ROW = "an existing enemy-bishop row in the acceptance file";
+const EQUIVALENT = "behaviour-equivalent, EXCLUDED — masks the king path";
+const NOT_CONSTRUCTIBLE = "NOT CONSTRUCTIBLE — parseFen refuses every construction";
+
+const KING_SQUARE_ACCOUNTING: Readonly<Record<string, string>> = {
+  EMPTY: BY_ABSENCE_ROW, // `A4`, 16 moves
+  "own PAWN": BY_A11,
+  "own KNIGHT": BY_A11,
+  "own BISHOP": BY_A11,
+  "own ROOK": BY_A11,
+  "own QUEEN": BY_A11,
+  "own KING": REQUIRED,
+  "enemy PAWN": BY_A13,
+  "enemy KNIGHT": BY_A13,
+  "enemy BISHOP": BY_ENEMY_BISHOP_ROW, // `A5` row 3
+  "enemy ROOK": EQUIVALENT,
+  "enemy QUEEN": EQUIVALENT,
+  "enemy KING": EQUIVALENT,
+};
+
+const ROOK_SQUARE_ACCOUNTING: Readonly<Record<string, string>> = {
+  EMPTY: BY_ABSENCE_ROW, // `A3`, 5 moves
+  "own PAWN": BY_A11,
+  "own KNIGHT": BY_A11,
+  "own BISHOP": BY_A11,
+  "own ROOK": REQUIRED,
+  "own QUEEN": BY_A11,
+  "own KING": NOT_CONSTRUCTIBLE,
+  "enemy PAWN": BY_A13,
+  "enemy KNIGHT": BY_A13,
+  "enemy BISHOP": BY_ENEMY_BISHOP_ROW, // `A6` row 4
+  "enemy ROOK": EQUIVALENT,
+  "enemy QUEEN": EQUIVALENT,
+  "enemy KING": EQUIVALENT,
+};
+
+/** Renders a 64-cell grid (index `rank * 8 + file`) as a FEN placement field. */
+function placementOf(cells: ReadonlyArray<string | null>): string {
+  const ranks: string[] = [];
+  for (let rank = 7; rank >= 0; rank--) {
+    let out = "";
+    let run = 0;
+    for (let file = 0; file < 8; file++) {
+      const cell = cells[rank * 8 + file] ?? null;
+      if (cell === null) {
+        run += 1;
+        continue;
+      }
+      if (run > 0) {
+        out += String(run);
+        run = 0;
+      }
+      out += cell;
+    }
+    ranks.push(run > 0 ? `${out}${run}` : out);
+  }
+  return ranks.join("/");
+}
+
+/**
+ * Every byte `parseFen` can put on `square`, measured instead of restated — this is `A13`'s
+ * quantifier turned into a test, the same way `ownPieceTypesParseFenAccepts` is `A11`'s.
+ *
+ * THE TRAP THIS FUNCTION IS BUILT AGAINST, because two roles fell into it on this ticket: a
+ * probe whose single board already holds a king of the colour being placed reports 11, not 13,
+ * because `K` and `k` on the target square raise "position must have exactly one white/black
+ * king, found 2" — a limit of the probe board presented as a fact about the domain, and one of
+ * the two bytes it drops is the REQUIRED value on the king's home square. So the king parking
+ * varies per attempt: both kings parked at c3/f6 (neither is ever a home square), then white
+ * only, then black only, so no attempt ever needs two kings of one colour.
+ */
+function occupantBytesParseFenAccepts(square: number): Map<number, string> {
+  const found = new Map<number, string>();
+  const target = (square >> 4) * 8 + (square & 7);
+  const candidates: Array<string | null> = [null]; // `null` = leave it empty, the EMPTY byte
+  for (let code = "A".charCodeAt(0); code <= "z".charCodeAt(0); code++) {
+    candidates.push(String.fromCharCode(code));
+  }
+
+  for (const candidate of candidates) {
+    for (const kings of [["K", "k"], ["K"], ["k"]]) {
+      const cells: Array<string | null> = Array.from({ length: 64 }, () => null);
+      if (kings.includes("K")) cells[2 * 8 + 2] = "K"; // c3
+      if (kings.includes("k")) cells[5 * 8 + 5] = "k"; // f6
+      cells[target] = candidate;
+      try {
+        const byte = parseFen(`${placementOf(cells)} w - - 0 1`).board[square] as number;
+        if (!found.has(byte)) found.set(byte, candidate ?? "<empty>");
+      } catch {
+        // `parseFen` refused this character on this king configuration — not in the domain here.
+      }
+    }
+  }
+  return found;
+}
+
+/** The 13 relative labels `KING_SQUARE_ACCOUNTING` is keyed on, and the byte each one names. */
+function bytesByLabel(moverIsBlack: boolean): Map<string, number> {
+  const own = moverIsBlack ? BLACK : 0;
+  const enemy = moverIsBlack ? 0 : BLACK;
+  const byLabel = new Map<string, number>([["EMPTY", EMPTY]]);
+  for (const [name, type] of Object.entries(PIECE_TYPES)) {
+    byLabel.set(`own ${name}`, type | own);
+    byLabel.set(`enemy ${name}`, type | enemy);
+  }
+  return byLabel;
+}
 
 /**
  * BOTH of a side's rights held, exactly ONE castle valid. The surviving castle is asserted
@@ -351,6 +589,153 @@ describe("ABC-009 A11 — the impostor's PIECE TYPE, quantified over every own t
     for (const fen of ["4k3/8/8/8/8/8/8/K3q2R w K - 0 1", "4k3/8/8/8/8/8/8/4K2q w K - 0 1"]) {
       expect(castles(generateMoves(parseFen(fen))), `generateMoves: ${fen}`).toHaveLength(0);
       expect(castles(legalMoves(parseFen(fen))), `legalMoves: ${fen}`).toHaveLength(0);
+    }
+  });
+});
+
+describe("ABC-009 A13 — the occupant BYTE of a home square, quantified over the WHOLE space", () => {
+  it.each(ENEMY_ON_KING_SQUARE)(
+    "offers no castle and destroys nothing when an ENEMY %s stands on the king's home square: %s",
+    (piece, fen, expected) => {
+      expectImpostorSetup(fen, piece, "king", "enemy");
+      expectIdentityGuardIsTheOnlyRefuser(fen);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+
+  it.each(ENEMY_ON_ROOK_SQUARE)(
+    "offers no castle when an ENEMY %s stands on the rook's home square: %s",
+    (piece, fen, expected) => {
+      expectImpostorSetup(fen, piece, "rook", "enemy");
+      expectIdentityGuardIsTheOnlyRefuser(fen);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+
+  it("measures the 13-value byte domain and accounts for EVERY value in exactly one bucket", () => {
+    // `A13` is a quantifier over the occupant byte, so the completeness of the accounting is a
+    // PROPERTY to check rather than a claim to make in a comment. Delete a row from either table
+    // and this goes red; make a fourteenth byte parseable and it goes red too.
+    const ascending = (a: number, b: number) => a - b;
+    const types = [PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING];
+    const domainBytes = [EMPTY, ...types, ...types.map((type) => type | BLACK)].sort(ascending);
+
+    expect(domainBytes.length, "13 values is the number A13's termination argument rests on").toBe(
+      13,
+    );
+    for (const square of [4, 7, 0, 116, 119, 112]) {
+      const domain = occupantBytesParseFenAccepts(square);
+      expect(
+        [...domain.keys()].sort(ascending),
+        `the occupant-byte domain parseFen accepts on ${squareName(square)}`,
+      ).toEqual(domainBytes);
+    }
+
+    const labelsFor = (accounting: Readonly<Record<string, string>>, bucket: string) =>
+      Object.keys(accounting)
+        .filter((label) => accounting[label] === bucket)
+        .sort();
+
+    for (const [square, accounting] of [
+      ["king", KING_SQUARE_ACCOUNTING],
+      ["rook", ROOK_SQUARE_ACCOUNTING],
+    ] as const) {
+      // The 13 labels the accounting is keyed on are exactly the 13 bytes, for either mover.
+      for (const moverIsBlack of [false, true]) {
+        const byLabel = bytesByLabel(moverIsBlack);
+        expect(
+          [...byLabel.keys()].sort(),
+          `${square}'s square: a bucket for every value and no value without one`,
+        ).toEqual(Object.keys(accounting).sort());
+        expect([...byLabel.values()].sort(ascending)).toEqual(domainBytes);
+      }
+      // Exactly one of the 13 is the required piece, so exactly 12 are wrong values.
+      const wrong = Object.values(accounting).filter((bucket) => bucket !== REQUIRED);
+      expect(wrong.length, `${square}'s square: 12 wrong values is the entire space`).toBe(12);
+    }
+
+    // The two "in this file" buckets are compared against the tables, so the map cannot drift
+    // from the rows it claims. This is the join `A13`'s discharge map asserts in prose.
+    expect(labelsFor(KING_SQUARE_ACCOUNTING, BY_A13)).toEqual(
+      [...new Set(ENEMY_ON_KING_SQUARE.map(([piece]) => `enemy ${piece}`))].sort(),
+    );
+    expect(labelsFor(KING_SQUARE_ACCOUNTING, BY_A11)).toEqual(
+      [...new Set(IMPOSTOR_ON_KING_SQUARE.map(([piece]) => `own ${piece}`))].sort(),
+    );
+    expect(labelsFor(ROOK_SQUARE_ACCOUNTING, BY_A13)).toEqual(
+      [...new Set(ENEMY_ON_ROOK_SQUARE.map(([piece]) => `enemy ${piece}`))].sort(),
+    );
+    expect(labelsFor(ROOK_SQUARE_ACCOUNTING, BY_A11)).toEqual(
+      [...new Set(IMPOSTOR_ON_ROOK_SQUARE.map(([piece]) => `own ${piece}`))].sort(),
+    );
+
+    // `A13`'s own both-colours-all-four-rights clause, at `A11`'s established doubling.
+    for (const table of [ENEMY_ON_KING_SQUARE, ENEMY_ON_ROOK_SQUARE]) {
+      expect([...new Set(table.map(([, fen]) => fen.split(" ")[2]))].sort()).toEqual([
+        "K",
+        "Q",
+        "k",
+        "q",
+      ]);
+      expect([...new Set(table.map(([, fen]) => fen.split(" ")[1]))].sort()).toEqual(["b", "w"]);
+      for (const piece of new Set(table.map(([type]) => type))) {
+        expect(
+          table.filter(([type]) => type === piece).length,
+          `${piece} needs a second configuration`,
+        ).toBeGreaterThanOrEqual(2);
+      }
+    }
+  });
+
+  it("checks A13's two EXCLUSIONS at their MECHANISM instead of inheriting them", () => {
+    // An exclusion nobody re-measures is this ticket's signature defect — the enemy-colour
+    // exclusion this file's header used to carry was one, and it was false. So both surviving
+    // exclusions are asserted here at the mechanism that justifies them.
+    //
+    // POLARITY FIRST: a predicate that answered one way for everything would fabricate a clean
+    // table either way, so it is checked before any of its verdicts is read.
+    expect(isSquareAttackedBy(parseFen("4k3/8/8/8/8/8/8/4K2r w K - 0 1"), 6, true)).toBe(true);
+    expect(isSquareAttackedBy(parseFen("4k3/8/8/8/8/8/8/4K3 w K - 0 1"), 6, true)).toBe(false);
+
+    // 1. BEHAVIOUR-EQUIVALENT: an enemy KING, QUEEN or ROOK on either home square is already
+    //    refused by the pre-existing through-check test, so a required row for it could NEVER
+    //    fail — it would be theatre. What is asserted is the reason: each masks the king path.
+    const masked: ReadonlyArray<readonly [piece: string, fen: string, square: "king" | "rook"]> = [
+      ["KING", "8/8/8/8/8/8/8/K3k2R w K - 0 1", "king"],
+      ["QUEEN", "4k3/8/8/8/8/8/8/K3q2R w K - 0 1", "king"],
+      ["ROOK", "4k3/8/8/8/8/8/8/K3r2R w K - 0 1", "king"],
+      ["KING", "8/8/8/8/8/8/8/4K2k w K - 0 1", "rook"],
+      ["QUEEN", "4k3/8/8/8/8/8/8/4K2q w K - 0 1", "rook"],
+      ["ROOK", "4k3/8/8/8/8/8/8/4K2r w K - 0 1", "rook"],
+    ];
+    for (const [piece, fen, square] of masked) {
+      expectImpostorSetup(fen, piece, square, "enemy");
+      const shape = CASTLE_SHAPE[fen.split(" ")[2] as string];
+      if (shape === undefined) throw new Error(`row must hold exactly one castling right: ${fen}`);
+
+      const position = parseFen(fen);
+      const attacked = shape.kingPath.filter((path) => isSquareAttackedBy(position, path, true));
+      expect(
+        attacked.map(squareName),
+        `an enemy ${piece} on the ${square}'s home square must mask the king path: ${fen}`,
+      ).not.toEqual([]);
+      expect(castles(legalMoves(parseFen(fen))), `legalMoves: ${fen}`).toHaveLength(0);
+    }
+
+    // 2. NOT CONSTRUCTIBLE: the mover's own KING on the ROOK's home square while the king is
+    //    also home needs two kings of one colour. All four constructions, both colours and both
+    //    sides — the exclusion is conditional on the OTHER precondition, and a probe that
+    //    drifted off it (a lone own KING on h1 with e1 empty, which is `A4`'s shape) reported
+    //    this value constructible.
+    for (const fen of [
+      "4k3/8/8/8/8/8/8/4K2K w K - 0 1",
+      "4k3/8/8/8/8/8/8/K3K3 w Q - 0 1",
+      "4k2k/8/8/8/8/8/8/4K3 b k - 0 1",
+      "k3k3/8/8/8/8/8/8/4K3 b q - 0 1",
+    ]) {
+      expect(() => parseFen(fen), `must not be constructible: ${fen}`).toThrow(
+        /exactly one (white|black) king, found 2/,
+      );
     }
   });
 });

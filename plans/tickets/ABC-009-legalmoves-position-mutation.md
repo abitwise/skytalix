@@ -2359,3 +2359,204 @@ instrument-noise mistake this project has now recorded ten times.
   re-measured — except that the enemy-queen assertions already in this file still pass.
 - **Anything about `ABC-010`.** Its stated scope would reject every FEN in these rows; unbuilt, and
   not edited.
+
+## QE — third hop: `A13` discharged, the occupant BYTE closed over its whole space
+
+**Eight rows, ten new tests, ZERO production lines.** `src/moves.castling.hardening.test.ts` goes
+**34 → 44 tests**; the suite goes **371 → 381 passed (381) on 16 files** at skip **0**;
+`src/moves.ts` is still md5 `0e247853ab2c05887c76105ff83d8621` with `git diff 8f540cf -- src/moves.ts`
+empty. **Not one of the 14 pre-existing test files on `main` was touched** — each diffed
+individually, 0 of 14 modified (`A8`, at line level rather than by inspection).
+
+### The eight rows, and BA/PM's eight counts reproduced with zero disagreements
+
+`A13`'s newly-required region is enemy `KNIGHT` and enemy `PAWN` on both home squares, at `A11`'s
+established doubling. BA/PM measured all eight; the Orchestrator re-derived four of them and
+explicitly did **not** re-derive `14`, `17`, `19` or the rook-square doubling. **This hop measured
+all eight itself, printing the decoded board rather than a verdict, and reproduced every one:**
+
+```
+KING's home square — king off home, matching rook present, ENEMY occupant
+enemy KNIGHT  W K  4k3/8/8/8/8/8/8/K3n2R w K - 0 1     13  0/0 castles  pure   BA/PM 13  AGREE
+enemy PAWN    W Q  4k3/8/8/8/8/8/8/R3p2K w Q - 0 1     14  0/0          pure   BA/PM 14  AGREE
+enemy KNIGHT  B k  4N2r/8/8/5k2/8/8/8/4K3 b k - 0 1    17  0/0          pure   BA/PM 17  AGREE
+enemy PAWN    B q  r3P3/8/8/5k2/8/8/8/4K3 b q - 0 1    19  0/0          pure   BA/PM 19  AGREE
+
+ROOK's home square — king already home, ENEMY occupant
+enemy KNIGHT  W K  4k3/8/8/8/8/8/8/4K2n w K - 0 1       4  0/0          pure   BA/PM  4  AGREE
+enemy PAWN    W Q  4k3/8/8/8/8/8/8/p3K3 w Q - 0 1       5  0/0          pure   BA/PM  5  AGREE
+enemy KNIGHT  B k  4k2N/8/8/8/8/8/8/4K3 b k - 0 1       4  0/0          pure   BA/PM  4  AGREE
+enemy PAWN    B q  P3k3/8/8/8/8/8/8/4K3 b q - 0 1       5  0/0          pure   BA/PM  5  AGREE
+
+labels lying 0/8 · rows inert 0/8 (masked false, blocked false on every row) · disagreements 0/8
+```
+
+Nothing was adjusted in either direction, and no discrepancy arose to raise. The instrument
+(`isSquareAttackedBy`, used for the inertness column) was **polarity-checked before any verdict was
+read** — a black rook on `h1` must report `g1` attacked and a board with no black attacker must
+report it unattacked.
+
+### The quantifier is a test, not a comment — and the probe that returned 11 twice returns 13 here
+
+`A13` quantifies over the occupant byte, so the accounting is asserted rather than narrated. The
+domain is **derived by probing `parseFen`**, and the probe is built against the failure that caught
+two roles: a single probe board that already holds a king of the colour being placed reports **11**,
+because `K` and `k` on the target square raise *"position must have exactly one white/black king,
+found 2"*. **The king parking varies per attempt** (both kings at `c3`/`f6`, then white only, then
+black only), and the measurement is **13 on all six home squares** — `e1`, `h1`, `a1`, `e8`, `h8`,
+`a8`, where BA/PM measured three — with a named witness per value and **243 of the 256 `Uint8Array`
+values never written** (the sub-16 ones being `7`, `8`, `15`). Third derivation, and the first on the
+black mirrors.
+
+The discharge map is then joined against the row tables: the `A11` bucket must equal the piece types
+in `IMPOSTOR_ON_*`, the `A13` bucket must equal the types in `ENEMY_ON_*`, the 13 labels must be
+exactly the 13 measured bytes for either mover, and exactly one value per square is the required
+piece so exactly 12 are wrong. **Delete a row and it goes red; make a fourteenth byte parseable and
+it goes red.** Both exclusions are checked at their mechanism instead of inherited — enemy
+`KING`/`QUEEN`/`ROOK` must mask the king path on both squares, and all four constructions of an own
+`KING` on the rook's home square must be refused by `parseFen`.
+
+### The kill/survive table: four dead, fifteen equivalents untouched
+
+24 mutants of the delivered tree, applied to a copy of `src/` **outside** the repository, each
+asserting its anchor occurs exactly once and that the bytes changed, `npx tsc --noEmit` per mutant so
+a broken build can never be scored a survivor, `src/moves.ts` re-hashed after every one, and **one
+process per tree** throughout.
+
+```
+BASELINE (delivered tree)   acceptance 33/33 · hardening 44/44 · full 381/381 · skip 0 · tsc 0
+
+MUST DIE — the identity guard is the ONLY guard against these four bytes
+KING's square admits enemy KNIGHT      33/33   42/44   379/381   KILLED   2 A13 rows
+KING's square admits enemy PAWN        33/33   42/44   379/381   KILLED   2 A13 rows
+ROOK's square admits enemy KNIGHT      33/33   42/44   379/381   KILLED   2 A13 rows
+ROOK's square admits enemy PAWN        33/33   42/44   379/381   KILLED   2 A13 rows
+   the acceptance file sees NONE of the four — 33/33 on every one
+
+MUST SURVIVE — the three enemy bytes the through-check test masks, on BOTH squares
+enemy KING / QUEEN / ROOK on the king's square    33/33  44/44  381/381   all SURVIVED
+enemy KING / QUEEN / ROOK on the rook's square    33/33  44/44  381/381   all SURVIVED
+
+MUST SURVIVE — the nine equivalents from the second hop
+colour-blind on the king's / rook's / BOTH squares          44/44  381/381  SURVIVED
+king guard continue -> break, continue -> return            44/44  381/381  SURVIVED
+both guards below empty / below through-check / above right  44/44  381/381  SURVIVED
+extra "rook square non-EMPTY" condition                     44/44  381/381  SURVIVED
+
+CONDITIONAL — does the doubling earn its keep?
+enemy KNIGHT on the king's square, only when WHITE to move  43/44  380/381  KILLED
+enemy KNIGHT on the king's square, only KINGSIDE            42/44  379/381  KILLED
+enemy PAWN on the rook's square, only when BLACK to move    43/44  380/381  KILLED
+enemy KNIGHT on the king's square, only QUEENSIDE           44/44  381/381  SURVIVED  <- residual
+enemy PAWN on the rook's square, only KINGSIDE              44/44  381/381  SURVIVED  <- residual
+
+24 mutants · 7 killed · 17 survived · 0 verdict mismatches · 0 broken builds
+```
+
+**The fifteen behaviour-equivalent survivors are the half of this table that matters most.** A row
+that killed one of them would pin implementation shape rather than behaviour, and the enemy
+`KING`/`QUEEN`/`ROOK` set is unfalsifiable by construction — so a kill there would be a bug in the
+row. Killed count on all fifteen: **zero**.
+
+### The harm reproduces on every kill — one fresh process per tree state
+
+```
+4k3/8/8/8/8/8/8/K3n2R w K - 0 1   delivered 13 / 0 castles / pure
+                                  mutant    14 / 1 / e1: 10 -> 6  ->  4k3/8/8/8/8/8/8/K3K2R w K - 0 1
+4k3/8/8/8/8/8/8/R3p2K w Q - 0 1   delivered 14 / 0 / pure
+                                  mutant    15 / 1 / e1:  9 -> 6  ->  4k3/8/8/8/8/8/8/R3K2K w Q - 0 1
+4k3/8/8/8/8/8/8/4K2n w K - 0 1    delivered  4 / 0 / pure    mutant  5 / 1 / byte-identical
+4k3/8/8/8/8/8/8/p3K3 w Q - 0 1    delivered  5 / 0 / pure    mutant  6 / 1 / byte-identical
+```
+
+The king's-square family destroys an **enemy** piece and writes a king of the moving side over it —
+material loss, a piece-type change **and** a colour change, and the second row leaves **two white
+kings on the board**. Strictly worse than `A11`'s own-colour family. The rook's-square family leaves
+the position byte-identical, so the illegal `FLAG_CASTLE` offer is the only witness — `A6`'s
+structural reason for the third time.
+
+### The rows were falsified, not trusted — and the colour half of the byte assertion is why
+
+Every row asserts its occupant byte (type **and** colour), the other precondition, exactly one right,
+and that the identity guard is the **only** refuser. That is not decoration on these values: on the
+king's home square enemy `BISHOP`/`KNIGHT`/`PAWN` **all answer 13**, and on the rook's home square
+enemy `BISHOP`, enemy `PAWN` and the **EMPTY** square all answer **5**. Three deliberate corruptions
+in a scratch copy against pristine source, each going red and naming the input:
+
+```
+label KNIGHT, FEN carries an enemy BISHOP — count 13 COINCIDES, every outcome assertion passes
+  -> RED: "the ENEMY impostor must stand on the square under test: 4k3/8/8/8/8/8/8/K3b2R w K - 0 1"
+          expected 11 to be 10
+label ENEMY KNIGHT, FEN carries the mover's OWN knight at the coinciding count 16
+  -> RED: "the ENEMY impostor must stand on the square under test: ... K3N2R w K - 0 1"
+          expected 2 to be 10   (ONLY the colour half can see this one)
+the row made INERT by an own bishop on f1
+  -> RED: "the empty squares must be EMPTY: 4k3/8/8/8/8/8/8/K3nB1R w K - 0 1" expected ['f1'] to be []
+```
+
+### The gates, re-run on the tip by this role and never inherited
+
+```
+lint         npm run lint                                     exit 0 after ONE autofix (below), 2 pre-existing biome.json infos
+typecheck    npm run typecheck                                exit 0
+unit         npm test                                         381 passed (381) on 16 files
+build        npm run build                                    exit 0
+skip count   the AGENTS.md ### Test integrity command         0
+deep perft   PERFT_DEEP=1 npx vitest run src/perft.test.ts    32/32 exact, 36.79 s
+A8 check     every *.test.ts on main, diffed individually      0 of 14 modified
+integrity    tools/grugops/test-skip-integrity.js …           exit 2 — an ERROR, NOT a pass
+e2e          —                                                UNKNOWN - verify
+auto-UAT     node scripts/check-uat-oracles.js                UNKNOWN - verify (absent in this install)
+coverage     —                                                UNKNOWN - verify (not measured; mode is lean)
+```
+
+**Lint went red once and it was this role's own formatting**, exactly as at the second hop: one
+autofix pass on the new file alone (**1 of 2 `self_fix_attempts` spent**), then the full
+`npm run lint` at exit 0, and the mutation campaign **re-run afterwards** so no number above
+predates the delivered bytes. **Exit 2 stays an ERROR** — `.grugops/test-skips.md` does not exist
+(`ls`, not assumed) and **no registry file was created**; an agent may not author a justification to
+clear its own gate, and with a skip count of 0 nothing is owed one. **`NFR-001` was NOT re-measured
+and no throughput figure here is this role's** — these rows add no production line and no code path.
+
+### The one thing deliberately NOT done, for the second hop in a row
+
+**`A13`'s own `⚠️ NOT YET SATISFIED BY THE SUITE` marker and the `## Acceptance` preamble line that
+carries it were left byte-identical.** `## Acceptance` is BA/PM's artifact, and the specific failure
+this sequence keeps repairing is a role certifying its own rows as a closed dimension — the fix for
+which is not for the role that wrote the rows to also stamp the criterion satisfied. Routed with the
+measurements to check it against. **The cost is named rather than hidden:** closing `ABC-009` while
+that marker stands would ship a contradiction, so the close needs either a verification hop or an
+explicit ruling recorded at the close. That is the Orchestrator's call, not this role's.
+
+### Risks carried, each with an owner
+
+1. **A side-conditional single-type admission survives the net — owner: the follow-up hardening
+   ticket, low.** Measured above, not argued. It is **inherited from `A11`'s established doubling
+   standard**, where each type's second configuration varies colour rather than side — measured on
+   `A11`'s own rows too: own `ROOK`-only-QUEENSIDE and own `BISHOP`-only-QUEENSIDE on the king's home
+   square both survive **381/381**. `A11` is **not** reopened by this (it satisfies its own clause,
+   and so does `A13`), and closing the class means widening both tables, which is a net-widening
+   change beyond `A13`'s stated eight-configuration region.
+2. **`A13`'s `⚠️` marker is stale — owner BA/PM / Orchestrator, low.** Above.
+3. **The byte space is exhausted for ONE dimension only — owner the follow-up ticket, low.** The
+   joint 13×13 pair space (inert today: `src/moves.ts:326-327` are two independent byte compares) and
+   the constants no criterion varies are named in `A13` and reserved, not closed.
+4. **The equivalence arguments remain arguments over a finite net — owner QE, low.** Fifteen
+   survivors survive **this suite**, which is weaker than "are equivalent".
+5. **Test-integrity exit 2, E2E, the auto-UAT oracles and coverage `UNKNOWN - verify` — human-owned.**
+   None is reported as green.
+6. **UAT stays DEFERRED to `EPIC-006` and is explicitly NOT passed.** These rows add no
+   human-exercisable surface; a UAT pass would be a fabrication.
+
+### What this hop does NOT establish
+
+- **That the criteria set is complete.** `A13` exhausts the occupant-byte dimension and says so
+  itself; completeness of the set is not claimed by anyone.
+- **A terminal Workflow 05 verdict.** `READY_FOR_HUMAN_REVIEW` is the gate's to emit and no §14 gate
+  exists in this install. **No `finding` was written and nothing is self-stamped**;
+  `context.human_admission` is `off`.
+- **Any `NFR-001`, perft or coverage figure of this role's.** None measured, at any of its three hops.
+- **That 24 mutants is a campaign.** It is not — 62 was called not-a-proof by this same role. These 24
+  attack one dimension and the equivalence set that bounds it.
+- **That `ABC-009` may be closed.** `Ready for UAT` is not `Done`, UAT is deferred and not passed, and
+  no board move was taken at this hop.
