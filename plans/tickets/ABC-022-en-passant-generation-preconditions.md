@@ -82,6 +82,14 @@ Reproduced independently by BA/PM on 2026-08-04 before this ticket was cut.
 
 ## Reproduction (verified 2026-08-04 by BA/PM, on `main`, Apple M3 / Node v24.12.0 / darwin-arm64)
 
+> **RE-VERIFIED 2026-08-09 by BA/PM** (task `ticket-to-pr-ABC-022`), because the 2026-08-04 tables were
+> measured on a `main` that has since changed: `ABC-009` merged in `e644039` and it edited
+> `src/moves.ts`. **All ten rows below reproduce unchanged on today's `main`** (`src/moves.ts` md5
+> `0e247853ab2c05887c76105ff83d8621`), each re-measured on a copy outside the repository with the FEN
+> printed and re-parsed before any verdict. **`ABC-009` therefore does not close any part of this
+> ticket** — that was an argument on 2026-08-04 and it is a measurement now. Two corrections and one
+> addition below carry the date `2026-08-09`.
+
 ### Half (a) — an en-passant capture onto the mover's OWN piece
 
 ```
@@ -122,6 +130,35 @@ FEN                                    generateMoves ep   position after ONE leg
                                                                        ^ the WHITE d5 pawn turned BLACK
 ```
 
+**ADDED 2026-08-09 — half (b) reproduces with BLACK to move, and nothing above or in `## Acceptance`
+exercised that direction.** All three rows above are white to move. The mirror is live and creates a
+phantom **white** pawn:
+
+```
+FEN                                    generateMoves ep   position after ONE legalMoves() call
+4k3/8/8/8/3p4/8/8/4K3 b - e3 0 1       d4e3               4k3/8/8/8/3pP3/8/8/4K3 b - e3 0 1
+                                                                       ^ phantom WHITE pawn e4
+4k3/8/8/8/6p1/8/8/4K3 b - h3 0 1       g4h3               4k3/8/8/8/6pP/8/8/4K3 b - h3 0 1
+                                                                       ^ phantom WHITE pawn h4, edge file
+```
+
+**And a THIRD black-to-move shape that the call-level purity oracle CANNOT SEE — measured, and it
+constrains how the table is built.** On `4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1` the generator offers
+`d4e3` and the make/unmake pair rewrites e4 from a **black** pawn (byte 9) to a **white** pawn
+(byte 1) — yet `legalMoves` reads **byte-identical across the call**, because the very next move in
+the same pass, `e4e3`, writes `move.piece` back onto e4 and heals the corruption:
+
+```
+after d4d3 pair: e4 = 9
+after d4e3 pair: e4 = 1   <- EN PASSANT, the corruption
+after e4e3 pair: e4 = 9   <- the next move in the SAME pass restores it
+...
+e4 after the whole pass = 9        legalMoves() purity across the call: reads CLEAN
+```
+
+A purity row is therefore only load-bearing when no later move in the same pass writes the corrupted
+square. This is a **row-selection rule, not a change to the contract** — see `## Test notes` item 2.
+
 `legalMoves` is documented as leaving its argument unchanged and does not. **This is `ABC-009`'s
 symptom by a different route** — that ticket's reproduction is the castling branch
 (`addCastlingMoves`); this is the en-passant branch (`addPawnMoves`). See *Dependencies* for why the
@@ -134,8 +171,13 @@ FEN                                     generateMoves ep   note
 4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1     (none)             ENEMY piece on the target — correct today
 4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1     (none)             mirror — correct today
 4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1       e5d6               valid position — must keep offering it
-7k/8/8/K1Pp3r/8/8/8/8 w - d6 0 1        e5d6 filtered      valid, capturer pinned — legalMoves 0
+7k/8/8/K1Pp3r/8/8/8/8 w - d6 0 1        c5d6 filtered      valid, capturer pinned — legalMoves 0
 ```
+
+**Correction 2026-08-09:** the last row read `e5d6` and the move is **`c5d6`** — there is no white
+pawn on e5 in that FEN; the capturer stands on **c5** and the discovered check runs along the 5th rank
+once both the c5 pawn leaves and the d5 pawn is removed. A copy-down from the row above, corrected
+here. `A6` states that row by **count** and never by name, so `A6` itself was not wrong.
 
 ### Reachability — measured, not argued
 
@@ -154,10 +196,14 @@ nodes whose ep TARGET is occupied (any piece)       :      0
 ep moves offered onto the mover's own piece         :      0
 ```
 
-**518,474 / 81,397 is the sixth independent reproduction of that figure on this project** (design,
-dev, QE, design-2, dev-2, and now this) — the cross-check that the walk is the same population the
-prior hops measured. The defect is **latent**: it needs a semantically invalid FEN, and no path in
-the product produces one today.
+**518,474 / 81,397 is now the SEVENTH independent reproduction of that figure on this project**
+(design, dev, QE, design-2, dev-2, this ticket's own cut, and **re-derived 2026-08-09 at the
+correction hop**, on today's `main`, roots and `fast` depths parsed out of `src/perft.test.ts` by the
+harness rather than retyped) — the cross-check that the walk is the same population the prior hops
+measured. Every one of the six per-root counts above re-measured **identical**, and all five figures
+in the block above re-measured identical (`81,397` = **15.70%**). **The count was `sixth` when this
+ticket was cut and is corrected here rather than left to drift.** The defect is **latent**: it needs a
+semantically invalid FEN, and no path in the product produces one today.
 
 ## Scope
 
@@ -216,8 +262,19 @@ who deletes it after this ticket lands reopens four assertions in `src/legal.tes
 
 ## Acceptance (Given/When/Then)
 
-Each criterion is a currently-failing test that must go green, except where marked as a regression
-guard. The parenthetical is the measured behaviour on `main` today.
+`A1`–`A4` are currently-failing tests that must go green. `A5`–`A10` are green on `main` today and are
+**gates or regression guards, not new reds** — the preamble previously claimed every criterion was
+currently failing "except where marked as a regression guard", and only `A5` and `A6` carried that
+marking, so `A7`–`A10` were mis-described; corrected 2026-08-09. `A11` is a documentation criterion.
+The parenthetical on each is the measured behaviour on `main` today.
+
+> **`## Acceptance` CORRECTED IN PLACE 2026-08-09 by BA/PM** (task `ticket-to-pr-ABC-022`), against a
+> Definition-of-Ready re-check five days after the ticket was cut. **No board move: `ABC-022` stays in
+> `Ready`.** Six criteria changed — `A2`, `A3`, `A4`, `A5`, `A11` and this preamble — and the shape
+> behind four of them is the same one this board keeps paying for: **a criterion narrower than the
+> ticket's own `## Scope`**. `## Scope`, `## Out of scope`, size `S` and priority `P1` are UNCHANGED
+> and nothing found here pushes on them. Every claim below was re-derived by measurement on copies
+> outside the repository; **no file under `src/` was touched and no test row was written.**
 
 - **A1 (half a, piece-agnostic).** **Given** each FEN in a table that places a piece of the **mover's
   own colour** on the en-passant target — at minimum `4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1`,
@@ -225,22 +282,91 @@ guard. The parenthetical is the measured behaviour on `main` today.
   two distinct piece types and both colours to move** — **when** `generateMoves` runs, **then** the
   count of returned moves carrying `FLAG_EN_PASSANT` is **exactly 0** for every row.
   *(Today: exactly 1 for every row.)*
-- **A2.** **Given** the same table, **when** `legalMoves` runs, **then** the count of returned moves
-  carrying `FLAG_EN_PASSANT` is **exactly 0** for every row. *(Today: exactly 1 for every row — the
-  legality filter does not reject it.)*
-- **A3 (half b).** **Given** each of `4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1`,
-  `4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1` and `4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1`, **when**
-  `generateMoves` runs, **then** the `FLAG_EN_PASSANT` count is **exactly 0**. *(Today: exactly 1
-  each.)*
-- **A4 (half b, the purity half).** **Given** those same three FENs, **when** `legalMoves` is called
-  once, **then** `toFen(position)` afterwards equals the input FEN **byte-for-byte** and all 128
-  board bytes are unchanged. *(Today: a phantom black pawn on a2 / d5, and a white d5 pawn rewritten
-  black.)*
-- **A5 (regression guard — must stay green, and must be present).** **Given**
-  `4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1` and `4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1` — an **enemy**
-  piece on the target — **when** `generateMoves` runs, **then** the `FLAG_EN_PASSANT` count is
-  **exactly 0**. *(Today: already 0. Named so the fix is not written as "reject own-colour
-  occupants", which would leave this passing by accident rather than by the rule.)*
+- **A2 (widened 2026-08-09).** **Given** the rows of **`A1` AND of `A3`**, **when** `legalMoves` runs,
+  **then** the count of returned moves carrying `FLAG_EN_PASSANT` is **exactly 0** for every row.
+  *(Today: exactly 1 for every row of both — the legality filter does not reject either half.)*
+  **`A2` previously said "the same table", meaning `A1`'s own-colour table only**, while the measured
+  fact it exists to pin — the filter passes the over-offered move through — holds on `A3`'s rows too.
+  `legalMoves` is a strict filter over `generateMoves` (`src/legal.ts:42-55`), so this is implied by
+  `A1`/`A3` rather than independent of them; it is kept because the pass-through is the surprising
+  part and it is cheap to assert.
+- **A3 (half b) — WIDENED 2026-08-09 TO BOTH COLOURS TO MOVE.** **Given** each FEN in a table that
+  places an en-passant target with **no capturable pawn behind it**, covering **both colours to
+  move** — at minimum, white to move: `4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1`,
+  `4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1`, `4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1`; and black to move:
+  `4k3/8/8/8/3p4/8/8/4K3 b - e3 0 1` and `4k3/8/8/8/6p1/8/8/4K3 b - h3 0 1` — **when**
+  `generateMoves` runs, **then** the `FLAG_EN_PASSANT` count is **exactly 0** for every row.
+  *(Today: exactly 1 each, on all five.)*
+
+  **Why this was a defect and not a nicety.** `A3` named three FENs and **all three were white to
+  move**, while `## Scope` bullet 2 requires the precondition "for every position it accepts" and
+  `A1` — the sibling half of this same defect — was already written as "both colours to move".
+  Measured at this hop: a fix that implements the captured-pawn precondition **for white only**
+  (`black || board[to - forward] === capturedPawn`) passes `A1`, `A2`, `A3`, `A4`, `A5` and `A6` **as
+  they were written**, typechecks clean, and passes the whole existing suite **381/381** — while
+  `4k3/8/8/8/3p4/8/8/4K3 b - e3 0 1` still offers `d4e3` and one `legalMoves` call still creates a
+  phantom **white** pawn on e4. Half (b) is the half this ticket calls the worse half, and it was
+  unguarded for black.
+- **A4 (half b, the purity half) — RESTATED 2026-08-09 AGAINST THE STATE, AND WIDENED TO EVERY
+  POSITION `## Scope` NAMES.** **Given** **every position in the `## Reproduction` tables above** —
+  the half-(a) rows, the half-(b) rows (both colours), and the control rows — **when** `legalMoves` is
+  called once, **then** the position is unchanged over **all 128 board bytes AND all five scalars**
+  (`blackToMove`, `castling`, `epSquare`, `halfmoveClock`, `fullmoveNumber`), compared field by field
+  and **not** through `toFen`. *(Today: a phantom black pawn on a2 / d5, a white d5 pawn rewritten
+  black, and a phantom white pawn on e4 / h4; the half-(a) and control rows are clean today and are
+  regression guards.)*
+
+  **Two things were wrong with `A4` as written, and the second is not the one the pre-check named.**
+  (i) **Coverage.** `## Scope` bullet 3 requires purity "on every position in the reproduction table
+  above"; `A4` required it on **three of the ten**. (ii) **Instrument.** `A4` made
+  `toFen(position) == input FEN` a co-equal required assertion, which `## Test notes` item 2
+  explicitly forbids and gives the reason for. **The pre-check's stated mechanism — "the five scalars
+  are absent, so a build that corrupts a scalar and no board byte satisfies `A4`" — is FALSE as a
+  behavioural claim and is corrected here rather than inherited:** `toFen` renders all five scalars,
+  and all **15** plausible single-scalar corruptions (3 FENs x 5 scalars) are **caught** by it. What
+  is true is narrower and uglier: `toFen` is **not injective** on the state. Measured — **28 castling
+  bit values** (`16, 32, … , 2^31`) change `position.castling` and leave the rendered field `-`
+  because only `K|Q|k|q` are rendered; and `epSquare` **32 (`a3`, on-board) renders identically to 40
+  (`0x28`, OFF-BOARD)**, since `squareName` reads `sq & 7` and `sq >> 4` and never tests
+  `isOnBoard`. That second alias is the very off-board family `## Test notes` item 2 cites. So `toFen`
+  is unfit as the purity oracle **in principle**, even though no realistic broken fix would exercise
+  the gap — which is why the repair is to state the requirement against the state, not to argue about
+  the instrument.
+- **A5 (regression guard — must stay green, and must be present) — WIDENED AND ITS JUSTIFICATION
+  REPLACED 2026-08-09.** **Given** each FEN in a table that places a piece of the **enemy** colour on
+  the en-passant target, covering **at least two distinct piece types and both colours to move** — at
+  minimum `4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1`, `4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1` and a
+  non-knight pair such as `4k3/8/8/8/3pP3/4R3/8/4K3 b - e3 0 1` and
+  `4k3/8/3r4/3pP3/8/8/8/4K3 w - d6 0 1` — **when** `generateMoves` runs, **then** the
+  `FLAG_EN_PASSANT` count is **exactly 0** for every row. *(Today: already 0 on all of them.)*
+
+  **The old justification was false and is retired, not softened.** It read: *"Named so the fix is not
+  written as 'reject own-colour occupants', which would leave this passing by accident rather than by
+  the rule."* `A5` cannot do that job, and **no criterion can** — proved by exhaustion at this hop
+  rather than argued. Control only reaches the en-passant branch when the target is **empty or the
+  mover's own colour**, because `src/moves.ts:177` consumes every enemy occupant and `continue`s at
+  line 180. At that program point an emptiness test (`target === EMPTY`) and a colour test
+  (`!(target !== EMPTY && isBlack(target) === black)`) are therefore **behaviour-equivalent**. Two
+  correct fixes differing only in that clause were built, typechecked clean, and run **one OS process
+  per tree**: byte-identical output digests over the branch's **entire input domain** (all 256 byte
+  values on the target x both colours to move = 512 states, plus all 20 FEN-producible occupants) and
+  byte-identical per-root digests of every node's full generated move set over the **whole 518,474-node
+  reachable population**. There is no distinguishing position, so `A5` is not the place to look for
+  one.
+
+  **`A5` is kept because it kills something else, and that is measured, not assumed.** The dangerous
+  shape is not the colour-shaped *clause* — it is the colour-shaped *restructure*: rejecting
+  own-colour occupants with a `continue` guard at the top of the loop and, in the same rewrite,
+  dropping the ordinary-capture branch's own `continue`. Every enemy occupant then falls through into
+  the en-passant branch. That mutant **passes `A1`, `A2`, `A3`, `A4` and `A6`, passes the full suite
+  381/381, and passes the deep perft lane 32/32** — perft is blind because an occupied en-passant
+  target is unreachable in legal play (0 of 518,474) — and **`A5` is the only thing on this board that
+  fails it**, red on both of its original rows. Its output digest over the 512-state domain differs
+  from a correct fix's: 257 emitting states against 2. **That is the claim `A5` may make: it is the
+  only guard against a rewrite of the ordinary-capture branch that stops consuming enemy occupants.**
+  The two extra piece types are required for the same reason `A1` carries them — `## Scope` bullet 1
+  says "whatever occupies it and whatever colour it is", and the enemy half of that bullet had one
+  piece type where the own-colour half had two.
 - **A6 (regression guard — the fix must not over-reject).** **Given**
   `4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1`, **then** `generateMoves` returns **exactly 1**
   `FLAG_EN_PASSANT` move (`e5d6`) and `legalMoves` returns **exactly 1**; **and given**
@@ -258,12 +384,26 @@ guard. The parenthetical is the measured behaviour on `main` today.
   **skip count of 0** and **no existing test is modified** — verified at line level, not by
   inspection.
 - **A10.** **Given** the bar in *Security / NFR triggers*, **when** measured, **then** it holds.
-- **A11 (documentation).** **Given** `src/moves.ts` after the fix, **then** the en-passant comment at
-  lines 183-186 states preconditions the code below it actually enforces; **and given**
-  `src/legal.ts:102-104`, **then** its claim that *"with the target occupied, `generateMoves` reads
-  the square as an ordinary capture and never offers the ep move"* is corrected — it is false today
-  for an own-colour occupant, which is precisely half (a), and it will become true only when this
-  ticket lands. *(A comment-only edit to `src/legal.ts`; no executable line there changes.)*
+- **A11 (documentation) — CITATION AND EXPECTED OUTCOME CORRECTED 2026-08-09.** **Given**
+  `src/moves.ts` after the fix, **then** the en-passant comment at lines **183-186** states
+  preconditions the code below it actually enforces; **and given** `src/legal.ts` lines **102-103**,
+  **then** its claim that *"with the target occupied, `generateMoves` reads the square as an ordinary
+  capture and never offers the ep move"* is corrected — it is false today for an own-colour occupant,
+  which is precisely half (a). *(A comment-only edit to `src/legal.ts`; no executable line there
+  changes.)*
+
+  **Two corrections, both re-read out of the source at this hop.** (i) The citation was
+  `src/legal.ts:102-104`. The false claim occupies **102-103**; line **104-105** is a **separate and
+  TRUE** sentence — *"Purity does NOT need it — make/unmake round-trips exactly when the captured pawn
+  is genuinely there — which is why it cannot be folded into (b)"* — and it must **not** be rewritten.
+  Pointing the engineer at 104 invites an edit to a correct line. (ii) The criterion said the false
+  claim *"will become true only when this ticket lands"*. Only its **conclusion** does. The
+  **mechanism** clause stays false after the fix: an own-colour occupant is never read "as an ordinary
+  capture", because `src/moves.ts:177` requires `isBlack(target) !== black` and an own-colour occupant
+  fails that test both before and after. After this ticket the generator rejects it as a
+  **precondition violation** — a different reason. The corrected comment must therefore say **why** the
+  ep move is not offered, not merely restate that it is not; leaving 102-103 untouched on the grounds
+  that "it is true now" would not satisfy this criterion.
 
 ## Dependencies
 
@@ -271,8 +411,11 @@ guard. The parenthetical is the measured behaviour on `main` today.
 - **Not dependent on `ABC-009`**, and `ABC-009` does not close this. `ABC-009`'s `## Scope` bullet 1
   is written broadly — *"the position is byte-identical on return … for every position it accepts"* —
   but **every one of its acceptance criteria is a castling FEN**, so an engineer who builds `ABC-009`
-  to its acceptance fixes `addCastlingMoves` and leaves half (b) live, with a green gate. The two
-  tickets touch different functions and either may ship first.
+  to its acceptance fixes `addCastlingMoves` and leaves half (b) live, with a green gate.
+  **Updated 2026-08-09: `ABC-009` has now MERGED (`e644039`) and this is no longer a prediction.** All
+  ten `## Reproduction` rows were re-measured on today's `main` after that merge and every one
+  reproduces unchanged, so `ABC-009` closed no part of this ticket, exactly as written. The sentence
+  "either may ship first" is spent; the remaining order-independence claim is unaffected.
 - **Not dependent on `ABC-010`, and `ABC-010` as written does not fully gate this.** `ABC-010`'s
   scope rejects *"an en-passant square with no pawn that could have made the double push"*, which
   closes half **(b)**'s trigger at the boundary. It does **not** close half **(a)**'s: on
@@ -295,6 +438,35 @@ guard. The parenthetical is the measured behaviour on `main` today.
   on any other hardware); the machine-independent quantity to report is the **ratio to the same
   measurement on the pre-fix tree in the same process**, which must be **≥ 0.98**. Deep perft stays
   **32/32 exact** (A8).
+
+  **AMENDED 2026-08-09 — the METHOD is stale, not the target, and NO TARGET MOVES HERE.**
+  `plans/nfr-catalog.md` was updated **on 2026-08-09**, five days after this ticket was cut, at
+  `ABC-009`'s Security/NFR gate, carrying its **tenth instrument-limit correction**: the perft
+  harness's **per-cell floor is ±2.0%** — not the ~±1% previously recorded — and the aggregate floor
+  (~±1%) had never been characterised at all. A **per-cell** ratio bar of ≥ 0.98 therefore sits at
+  roughly **half the instrument's resolution** and cannot carry a verdict on its own. The catalog's
+  own resolution is to move the question **off the clock and onto a count**, the same move it had
+  already made for `NFR-005`'s call-count sub-bar. This ticket adopts that route as the primary
+  evidence and keeps the clock as a floor:
+  - **Primary — a COUNT, not a clock.** Report how many times the added preconditions are
+    **evaluated** and how many times they **reject** anything, then price the change by arithmetic and
+    label it as arithmetic. **Measured at the correction hop on a copy outside the repository, over
+    the standing 518,474-node walk: the added conditions are evaluated 331 times when they sit AFTER
+    the `to === position.epSquare` test, and 216,269 times if placed before it — a ~650x difference
+    that is the engineer's ordering choice to make deliberately — and they reject 0.** Zero rejections
+    is expected by construction: 0 of 518,474 reachable nodes carry an occupied en-passant target.
+  - **Floor — clock.** `npm run perft` **≥ 1,000,000 nodes/sec** still applies, and is ~6x clear.
+  - **Ratio — clock, secondary.** The **aggregate** ratio ≥ 0.98 is kept. **No per-cell ratio claim is
+    admissible**, and a single cell reading below 0.98 is not by itself a regression. If it is
+    measured at all, the catalog's standing method applies: a `cmp`-verified byte-identical twin as a
+    null control by identity, rotated cell and tree order, and a structurally-zero cell read first.
+  - **Provenance of the baseline.** The **6.04M–6.21M** band is transcribed from
+    `plans/nfr-catalog.md`'s `NFR-001` row and is still what that row says. **No throughput figure in
+    this ticket is BA/PM's own — `npm run perft` has not been run by this role at any hop.** Note only
+    that the catalog's 2026-08-09 header records a measured floor of **6,030,518 nodes/sec**,
+    marginally below the bottom of that band, so a post-fix reading a little under 6.04M is inside
+    recorded instrument behaviour and is not evidence of a regression. **`plans/nfr-catalog.md` is NOT
+    edited by this ticket.**
 - **No `NFR-005` trigger.** `src/zobrist.ts` and `src/legal.ts` gain no executable line, so the
   per-node key cost is untouched by construction. State that structurally; do not re-run the key
   benchmark to "confirm" it. *(Read `plans/nfr-catalog.md`'s standing caution before benchmarking
@@ -312,11 +484,32 @@ The reproduction tables above are the tests. Four shapes, and they are not inter
 1. **A table keyed on what is PRESENT on the target, not on what is missing.** This is QE's
    2026-08-03 lesson, earned on this exact code: two mutants survived 206 tests because the delivered
    table classified boards by what was *absent*. Include **at least two piece types and both
-   colours to move** on the own-colour rows, and keep the enemy-occupant rows (A5) beside them — a
-   table with only own-colour rows is passed by a fix that tests colour instead of emptiness.
+   colours to move** on the own-colour rows (A1), and **the same two axes on the enemy-occupant rows**
+   (A5) beside them.
+   **Corrected 2026-08-09:** this item used to close *"a table with only own-colour rows is passed by
+   a fix that tests colour instead of emptiness."* **That is the same false claim `A5`'s old
+   parenthetical carried, and it is retired for the same measured reason** — at the en-passant branch
+   an emptiness test and a colour test are behaviour-equivalent (the ordinary-capture branch consumes
+   every enemy occupant first), verified by exhaustion over the branch's whole input domain and over
+   all 518,474 reachable nodes. The enemy rows earn their place against a different mutant, named in
+   `A5`. Fixing `A5` alone would have left the false sentence sitting here.
 2. **Purity asserted over the FULL position state** — all 128 board bytes and all five scalars —
    **not** via `toFen`. `toFen` cannot see an off-board square, and this project has already had one
-   defect (a stray write to square 15) that `toFen` was blind to.
+   defect (a stray write to square 15) that `toFen` was blind to. Measured 2026-08-09, so this is now
+   a fact rather than a caution: `toFen` also renders `epSquare` **32 (`a3`) and 40 (`0x28`,
+   off-board) identically**, and hides **28 distinct `castling` bit values**.
+   **Added 2026-08-09 — a purity row must not be SELF-MASKING.** The contract is stated across one
+   whole `legalMoves()` call, and a corruption made by one move in that pass can be **healed by a
+   later move in the same pass** that writes the same square. Measured on
+   `4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1`: `d4e3` rewrites e4 from a black pawn to a white pawn, and the
+   next move, `e4e3`, restores it, so the call-level oracle reads CLEAN on a position the generator
+   provably corrupts. Choose rows where no other legal move touches the capture square, or assert per
+   make/unmake pair as well. **All five rows named in `A3` were checked against this at the correction
+   hop and none of them self-masks** — every one reads DIRTY across the call today. The `A1`, `A5` and
+   `A6` rows in `A4`'s widened set are clean today and are regression guards, so whether a *future*
+   corruption on one of them could be masked is **`UNKNOWN - verify`** and was not measured.
+   **This does not widen `## Scope`**: the contract is still "byte-identical across a call"; this is
+   how the table must be built to test it honestly.
 3. **Prove each new assertion RED before the fix exists**, and prove each half load-bearing by
    deleting it: the empty-target condition alone and the captured-pawn condition alone should fail
    **disjoint** named sets. If deleting one fails nothing, the other is subsuming it and one of the
@@ -374,17 +567,53 @@ these fires:
 *Trigger status, 2026-08-04: **NOT fired.** `ABC-010` is neither deferred nor descoped, `EPIC-003` is
 undecomposed, and the reachability walk reads 0.*
 
+*Trigger status **RE-CHECKED 2026-08-09** at the correction hop, each clause against its own source
+rather than against the line above: **still NOT fired.** `ABC-010` is in `Backlog` with
+`status: backlog` / `priority: P1` — neither deferred nor descoped. `EPIC-003` has exactly one ticket
+cut from it (`ABC-010`, the validation ticket) and nothing in it accepts a position from outside the
+rules core. The reachability walk was re-run on today's `main` and still reads **0 of 518,474**.
+`ABC-009`'s merge is **not** a trigger and does not fire one.*
+
 ## Definition of Ready
 
 Problem ✅ (user, pain, value, with the mechanism read out of the source) · scope + out-of-scope ✅ ·
 INVEST ✅ (independent — no unbuilt dependency, defective code merged on `main`; small — one branch of
-one function) · acceptance measurable ✅ (exact `FLAG_EN_PASSANT` counts per named FEN, byte-identical
-128-byte board comparison, exact per-root node counts, 32/32 zero tolerance, skip count 0) ·
+one function) · acceptance measurable ✅ (exact `FLAG_EN_PASSANT` counts per named FEN on **both
+colours to move**, byte-identical comparison over **128 board bytes and five scalars**, exact per-root
+node counts, 32/32 zero tolerance, skip count 0) ·
 dependencies ✅ (none blocking; the `ABC-009` / `ABC-010` overlaps named and bounded) · NFR triggers ✅
-(`NFR-001`, numeric bar with a ratio and a named machine; `NFR-005` excluded structurally with the
-reason; no security trigger, with the reason) · test notes ✅ · size `S` ✅ · priority `P1` ✅ ·
+(`NFR-001`, an evaluation **count** with a named denominator plus a numeric floor, an aggregate ratio
+and a named machine; `NFR-005` excluded structurally with the reason; no security trigger, with the
+reason) · test notes ✅ · size `S` ✅ · priority `P1` ✅ ·
 no blocker ✅
 
 **Cut straight to `Ready` 2026-08-04 by BA/PM.** It qualifies on this board's own `Ready` test rather
 than on its priority: it has **no unbuilt dependency at all** — the defective code is merged on
 `main` — which is the exact criterion that keeps `ABC-015`..`ABC-019` and `ABC-021` in `Backlog`.
+
+**AMENDED 2026-08-09 by BA/PM (task `ticket-to-pr-ABC-022`) — the block above was dated 2026-08-04 and
+nothing had re-checked it in five days. NO TICK IS FLIPPED**, and the amendment exists so the next
+reader does not inherit an unaudited green. The re-check found **seven** corrections, **five of which
+no pre-check had named**, and they are recorded where they live rather than summarised here:
+
+- `acceptance measurable` was the row at risk and it now holds on stronger ground: `A2` widened to
+  both halves; `A3` widened to **both colours to move**; `A4` restated against the state (128 bytes +
+  five scalars) over **all ten** reproduction positions instead of three, with `toFen` removed as the
+  oracle; `A5` widened to two piece types on both colours and its **false justification replaced** by
+  the mutant it is measured to kill; `A11`'s line citation and expected outcome corrected; the
+  `## Acceptance` preamble corrected. **Four of the seven are the same shape — a criterion narrower
+  than this ticket's own `## Scope` — which is this board's recurring defect.**
+- `test notes` amended: item 1's justification was the same false claim as `A5`'s and is retired;
+  item 2 gains the measured `toFen` aliases and the **self-masking** row-selection rule.
+- `security/NFR triggers` amended in **method only**: `NFR-001` predates `plans/nfr-catalog.md`'s
+  2026-08-09 instrument-limit correction, so the per-cell ratio bar is demoted and a **count** is made
+  the primary evidence. **No target moved and the catalog was not edited.**
+- `dependencies` amended: `ABC-009` has merged and the reproduction was re-measured after it.
+- **`problem clear`, `scope and out-of-scope clear`, `INVEST`, `size S`, `priority P1` and
+  `no blocker` were re-checked and are unchanged.** Nothing found here pushes on scope, size or
+  priority: the widened criteria bring the acceptance **up to** `## Scope`, they do not widen it, and
+  the added rows are more rows in one existing table — the same calibration that made this `S`.
+- Verified structurally at the correction hop: `src/moves.ts` md5 `0e247853ab2c05887c76105ff83d8621`
+  unchanged, `git status --short -- src/` empty, `npm test` **381/381 on 16 files**, skip count **0**
+  by the AGENTS.md command, perft fast lane **24/24**. **No `src/` file was edited, no test row was
+  written, and no board column moved — `ABC-022` stays in `Ready`.**
