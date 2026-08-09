@@ -1,8 +1,8 @@
 ---
 id: ABC-009
 title: legalMoves mutates the position it documents as unchanged
-status: ready-for-uat
-column: Ready for UAT
+status: in-review
+column: In Review
 size: S
 priority: P1
 epic: EPIC-001

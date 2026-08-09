@@ -1706,7 +1706,9 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-009] legalMoves mutates the position it documents as unchanged  (size: S, P1, epic: EPIC-001, deps: none; RETURNED from Ready for UAT 2026-08-09 — acceptance criterion A11 NOT MET, ~9 test rows owed and ZERO production lines; code correct and unchanged, `src/moves.ts` md5 0e247853 identical to the Engineer's first commit; branch `grugops/ticket-to-pr-ABC-009`, suite 356/356 skip 0, deep lane 32/32, NFR-001 MET)
 
 <!--
   EMPTIED 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-009`, subtask `qe-abc009-review`,
@@ -4186,9 +4188,66 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   what the whole ticket is about, and neither to be inflated nor deflated.
 -->
 
-## Ready for UAT (WIP 1/4)
+## Ready for UAT (WIP 0/4)
 
-- [ABC-009] legalMoves mutates the position it documents as unchanged  (size: S, P1, epic: EPIC-001, deps: none; branch `grugops/ticket-to-pr-ABC-009`, Security/NFR PASS WITH RISKS 2026-08-09, NFR-001 re-derived and MET on both clauses, suite 356/356 on 16 files skip 0, deep lane 32/32; UAT DEFERRED to EPIC-006 and explicitly NOT passed — no CLI entry point, so no surface a human can exercise)
+<!--
+  LEFT THIS COLUMN 2026-08-09 by the Orchestrator (task `ticket-to-pr-ABC-009`, Workflow 04) — MOVED
+  BACKWARD to In Review. Ready for UAT 1/4 -> 0/4, In Review 0/3 -> 1/3. FIRST BACKWARD MOVE IN THIS
+  PROJECT'S HISTORY, and recorded as one rather than dressed up as a normal transition.
+
+  WHY: acceptance criterion A11, added by BA/PM at the criteria-text hop, is NOT MET. A ticket with an
+  unmet acceptance criterion cannot honestly sit in Ready for UAT. The move is not a backward move
+  because anything regressed — it is one because the board was asserting a readiness the ticket did
+  not have.
+
+  THE MOVE IS NOT ON THE ORCHESTRATOR'S TWO OWNED EXITS and is taken anyway. The alternatives were to
+  leave a known-unmet criterion sitting in Ready for UAT, or to close the ticket — both make the board
+  state a falsehood. A visible backward move is the honest record and it costs only wall-clock: the
+  CODE IS CORRECT and unchanged, `src/moves.ts` still md5 0e247853ab2c05887c76105ff83d8621, identical
+  to the Engineer's first commit, so no gate repaired the module to make its own verdict green.
+
+  WHAT A11 IS, MEASURED BY THE ORCHESTRATOR ON ITS OWN MUTANT BEFORE TAKING THIS MOVE: QE's hardening
+  rows closed the QUEEN INSTANCE, not the DIMENSION. A mutant reading the king's home square as "own
+  KING or own ROOK" passes the Engineer's 33 acceptance tests, ALL 19 of QE's hardening tests and the
+  full 356/356 on 16 files — and on 4k3/8/8/8/8/8/8/K3R2R w K - 0 1 one legalMoves() call DESTROYS THE
+  ROOK and writes a king over it. BA/PM found three such survivors over ten mutants; own-KING-or-ROOK,
+  own-KING-or-PAWN and own-ROOK-or-PAWN all pass everything, and only own-ROOK-or-KNIGHT dies (to A6's
+  knight row). So A11 quantifies over EVERY own piece type on BOTH home squares rather than adding a
+  fourth sample. What is owed is ~9 TEST ROWS AND ZERO PRODUCTION LINES.
+
+  THE SAME MISTAKE WAS MADE THREE TIMES ON THIS TICKET, INCLUDING TWICE BY THE ORCHESTRATOR, and it is
+  the ticket's own defect turned on the ticket: the original Scope named two preconditions and tested
+  one; the Orchestrator built the QUEEN mutant because QE named the queen, watched it die to four
+  hardening tests, and called the gap closed — testing the example instead of the rule. Recorded so the
+  fourth instance is caught by the board rather than by luck.
+
+  A12 (G-2, rights per side) is ALREADY SATISFIED by QE's existing rows and needs no work. A7 is KEPT
+  and RECLASSIFIED — inert by construction across 0 of 72 mutants, but the suite's only purity walk
+  over legal positions and ABSENT rather than failing before this ticket; what BA/PM deleted is its
+  FALSE JUSTIFICATION ("the guard that would have caught the defect originally"), disproved by the
+  Engineer's own red-before-green record showing those six rows GREEN ON THE UNFIXED TREE. Second
+  criterion on this project whose protective value was assumed rather than measured.
+
+  A TRACE DEFECT THE ORCHESTRATOR REPORTED HERE ON 2026-08-09 IS WITHDRAWN — IT DOES NOT EXIST. The
+  claim was that traceability rows ABC-011/ABC-015 carry 11 cells against the header's 10 from an
+  "unescaped |". BA/PM re-derived it: the pipes ARE escaped (`\|`), every row has ten cells in all
+  eight commits that ever touched the file, and the row's own author documented it on 2026-08-08. The
+  Orchestrator's awk splitter counted raw pipes and ignored the escape; its own "ABC-009 verified at
+  10" was luck of the splitter. Removing the backslash — the fix it proposed — is the one edit that
+  WOULD have corrupted those rows. No ticket cut, no row edited.
+
+  STILL OPEN AND SEPARATE, verified independently and NOT withdrawn: ABC-018 sits in Done here while
+  plans/tickets/ABC-018-frame-output-and-redraw.md still reads `status: ready-for-uat` /
+  `column: Ready for UAT`, against ABC-015's correct `done` / `Done`. Real state disagreement, not
+  ABC-009's, needs its own item.
+
+  NOT MERGED AND NOT CLOSED. Merge pre-checks are green and stay green: fast-forward available (0
+  commits on main not on the branch, 0 merge commits, 8 ahead), branch-tip gate lint 0 / typecheck 0 /
+  356 of 356 / build 0 / skip 0. The owner's standing merge directive of 2026-08-06 authorises the
+  keystroke for work that PASSED; A11 unmet means this has not passed, and limit 2 of that directive —
+  "the gate still binds" — is exactly this case. UAT stays deferred to EPIC-006 per the precedent on
+  every ticket this project has shipped; that ruling is not taken here.
+-->
 
 <!--
   ENTERED 2026-08-09 from In Security/NFR, by Security/NFR (task `ticket-to-pr-ABC-009`, subtask
