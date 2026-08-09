@@ -930,6 +930,78 @@ silently rewritten** — but it should not ship as it stands, and it belongs to 
 correction or to a follow-up ticket. Flagging it is a judgement about scope, not a measurement:
 the falsity is measured, the decision to leave it is not.
 
+### SECOND ENGINEER HOP 2026-08-09 — the widened `A11` applied, sites 3-6, comment-only
+
+Subtask `engineer-abc022-a11-apply`, same branch. **No board move: `ABC-022` stays in `In Review`
+(1/3).** `## Acceptance` was **not** edited — `A11` is BA/PM's and this hop implements it. `A1`–`A10`
+were not re-derived and `NFR-001` was not re-measured: a comment-only change cannot move throughput,
+and saying so structurally is the honest move rather than re-running a lane to restate a number.
+
+**Not one executable line changed, in any file.** `src/moves.ts` is byte-unchanged at md5
+`6335b452fc21ffe2d0f902ecab930840`. Two files were touched, both comment text only:
+
+- **`src/legal.ts` 68-72 (site 3)** — the unsoundness premise and its mechanism clause **deleted, not
+  softened**; the *SPECIFIED rather than derived* conclusion **kept**; the reason that actually holds
+  put in its place — the predicate **never consults `generateMoves`**, so it owns its own
+  preconditions and the key stays independent of the generator. It explicitly does **not** say "the
+  oracle is sound now, so we agree with it": the paragraph records that the off-domain agreement is
+  **bought by guard (a)**. md5 `aa645c6964ed902489425150e3879fd8` → `7be9fc8c1c313bdbc4c582040965c2eb`.
+- **`src/legal.test.ts` 268-269, 368-371, 373-374 (sites 4-6)** — the same premise removed at all
+  three, each rewritten to the measured post-fix picture. md5
+  `424cbd57dde9232749eb9247f5e627b5` → `72fa550c347510c506f174693358314a`.
+
+**`A9` on the replacement instrument.** The file-level filter now goes non-empty by design
+(`--diff-filter=M main -- 'src/*.test.ts'` = `src/legal.test.ts`), which is the collision `A11`
+predicted and not a breach. The line-level filter replaces it: all **21** changed lines of
+`src/legal.test.ts`, stripped of the diff marker, begin with optional whitespace and `//` — **0**
+exceptions — and the file's executable content is **byte-identical to `main`** (`cmp` on the
+comment-stripped file, 292 lines; `it` 21, `it.each` 2, `describe` 7, `expect` 40, every FEN and
+table entry unchanged). The same filter over the whole branch diff of `src/legal.ts` is 21 changed
+lines, **0** non-comment, and its executable content is byte-identical to `main` at 64 lines.
+`npx vitest run src/legal.test.ts` is **31/31 green unmodified before and 31/31 after**.
+
+**The four fenced-TRUE statements survived**, asserted mechanically rather than by reading:
+`src/legal.ts` 108-109, `src/legal.test.ts` 286-289 (the ENEMY-occupant rows) and 279-280 are each
+present once, identical to `main`, and appear in **no** changed line; `src/legal.test.ts` 202 —
+false but already false on `main` — was likewise left alone.
+
+**Re-measured at this hop, not inherited.** Three tree copies (`main`, the branch tip, and the tip
+with guard (a) deleted), one OS process each, `tsc --noEmit` exit 0 on all three before any result
+was believed, every FEN printed and re-parsed. The oracle
+`legalMoves(p).some(m => m.flags === FLAG_EN_PASSANT)` answers **`true` on all four**
+`EP_CONTRADICTED_BY_THE_WRONG_PIECE` rows on `main` and **`false` on all four** on the tip, which is
+what makes sites 5 and 6 false. Deleting guard (a) from the fixed tree — `src/legal.ts` md5
+`450cd8cd839a0d3514395512c743e05c`, **byte-equal to BA/PM's own mutant** — puts the predicate back at
+`true` on exactly the boards where the oracle says `false`, so the agreement is bought by guard (a)
+and not inherited. The 131,072-state exhaustion behind the 447 figure was **not** re-derived and is
+carried as BA/PM's.
+
+**Line citations drift, and it is named rather than left to be re-found.** The corrected paragraphs
+are longer than the ones they replace, so every `A11` citation below the edits moves. `A11` is BA/PM's
+and was not edited to follow them; the map as of this hop is: `src/legal.ts` site 3 was 69-70 and is
+now the paragraph at **68-77**; the already-satisfied site 2 comment starts at 102 → **107**; the
+fenced *"Purity does NOT need it"* was 108-109 → **113-114**. `src/legal.test.ts` site 4 was 268-269 →
+**267-272**, site 5 was 368-371 → **370-375**, site 6 was 373-374 → **377-379**; the fenced *"Each one
+corrupts without it, permanently"* was 279-280 → **282-283** and *"reads an occupied ep target as an
+ordinary capture"* was 286-289 → **289-292**. The out-of-remit line 202 does not move.
+
+**Gate:** full suite **439/439 on 17 files**, skip count **0**, lint / typecheck / build exit 0.
+`PERFT_DEEP=1` was **not** run and no throughput figure was taken — `src/moves.ts` is byte-identical
+to the tree hop one measured, so `A8` and `A10` cannot have moved, and no number is reported here
+that this hop did not measure.
+
+### `A11` IS NOT FULLY DISCHARGED — site 7 is blocked by this subtask's own boundary
+
+**Site 7 (`src/moves.enpassant.test.ts` 4-9 / 27-28) was NOT applied.** `A11`'s enumeration is closed
+at five open sites and this subtask's brief bounds the hop to *"comment text only, in `src/legal.ts`
+and `src/legal.test.ts`. No other file under `src/`"*, naming `src/moves.enpassant.test.ts`
+explicitly as not to be touched. Those two instructions cannot both be satisfied. The specific
+boundary was obeyed and the conflict is **escalated rather than absorbed or worked around**: the
+Orchestrator either lifts the boundary for that one comment-only edit, or BA/PM drops site 7 — which
+BA/PM already recorded as cheap to overrule, site 7 being a judgement about tense in a
+red-before-green header rather than a doc comment describing shipped design. Sites 3-6 are the ones
+that made `src/legal.ts` contradict itself 33 lines apart, and that contradiction is now gone.
+
 ## Board history
 
 Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
