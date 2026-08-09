@@ -153,9 +153,8 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   oversight.
 -->
 
-## Ready (WIP 3/8)
+## Ready (WIP 2/8)
 
-- [ABC-009] legalMoves mutates the position it documents as unchanged  (size: S, P1, epic: EPIC-001, deps: none; escalated P2→P1 and promoted 2026-07-31)
 - [ABC-013] SAN rendering — src/san.ts with toSan only  (size: M, P1, epic: EPIC-002, deps: ABC-003 + ABC-005, both merged on main; unblocked 2026-07-31 when ADR-0004 was ratified)
 - [ABC-022] generateMoves offers en-passant captures its own preconditions forbid  (size: S, P1, epic: EPIC-001, deps: none; cut 2026-08-04 by BA/PM, straight to Ready)
 
@@ -170,6 +169,40 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   renderer work in front of them (ABC-015 was the first). The owner may re-order their own queue and
   this is not an argument against it — it is recorded so the pattern is visible on the board rather
   than re-derived later. NEITHER is cancelled, re-sized or de-prioritised.
+-->
+
+<!--
+  ABC-009 LEFT THIS COLUMN 2026-08-09 by the Orchestrator (task `ticket-to-pr-ABC-009`, Workflow 04)
+  — pulled to In Development on the owner's direct request ("implement ABC-009"). Ready 3/8 -> 2/8;
+  its row now sits under In Development. THE DISPLACEMENT PATTERN RECORDED ABOVE IS BROKEN, not
+  continued: the third consecutive call went TO the rules-core defect, not past it. ABC-013 and
+  ABC-022 stay, unmoved and unchanged; ABC-022 is now the one displaced P1 and its own escalation
+  trigger is still unspent.
+
+  IT WAS NOT PULLED AS IT STOOD, and the delay was the FACTORY'S, not the owner's. The Definition of
+  Ready's "acceptance criteria clear, testable and measurable" row FAILED at this pull. The ticket's
+  own DoR block ticked it green on 2026-07-31 and nothing re-checked it for nine days; the
+  Orchestrator's pre-check left it AMBER with four named specifics; BA/PM re-derived and found SEVEN,
+  THREE of which no pre-check named. The ticket was corrected IN PLACE inside Ready first (no board
+  move, Ready stayed 3/8 throughout that hop) and the pull is of the corrected ticket. Six acceptance
+  criteria became ten, original order preserved.
+
+  THE BLOCKING DEFECT, STATED PLAINLY BECAUSE IT IS THE SECOND TIME THIS BOARD HAS SEEN IT: a
+  100%-passing acceptance set did not require fixing the harm the ticket's own P1 escalation was
+  written about. `## Scope` named two castling preconditions — king home, rook home — and only the
+  rook half was tested. Measured on a mutant, not argued: a fix implementing the rook precondition
+  ALONE passed all six original criteria, the suite 304/304 with skip count 0, and deep perft 32/32,
+  while `legalMoves` still offered an illegal FLAG_CASTLE and still wrote a phantom king on four
+  FENs. Delete the king precondition from a correct fix and NOT ONE criterion failed.
+
+  THE THREE-WAY CROSS-CHECK IS ON THE RECORD. BA/PM established the corrected numbers on seven
+  candidate builds patched into a COPY of main's src/ outside the repo. The Orchestrator then
+  re-derived all fifteen post-fix counts (A1 3, A2 3, A3 5, A4 16x4, A5 19/17/13/19, A6 12/7/12/5)
+  on an INDEPENDENTLY WRITTEN fix, plus all twelve "today" parentheticals and all four three-call
+  signatures on unpatched main — every one matched, and the suite baseline read 304/304 as claimed.
+  Two independently written fixes agreeing on fifteen counts is why this ticket is being pulled on a
+  PASS rather than a second amber. NO src/ FILE WAS MODIFIED BY EITHER ROLE: git diff --stat main --
+  src/ is empty and src/moves.ts still hashes fb4fa40934e768dffeaeed0b43548842.
 -->
 
 
@@ -987,9 +1020,45 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-009] legalMoves mutates the position it documents as unchanged  (size: S, P1, epic: EPIC-001, deps: none; pulled 2026-08-09 after SEVEN acceptance defects were fixed in place inside Ready — A1–A10, branch `grugops/ticket-to-pr-ABC-009`)
 
 <!--
+  ENTERED 2026-08-09 by the Orchestrator (task `ticket-to-pr-ABC-009`, Workflow 04) — the
+  `Ready for Dev -> In Development` exit this role owns, taken here as `Ready -> In Development`
+  because this board has no occupant of `Ready for Dev` and never has. In Development 0/3 -> 1/3,
+  Ready 3/8 -> 2/8. NO LIMIT APPROACHED, NO OVERRIDE TAKEN, no written reason owed for the count.
+  Width used is 1 against `queue.wip_limit` 3, and not because of the cap: the ticket-to-pr hops are
+  genuinely serial, so dev runs alone and QE and Security/NFR are enqueued after it rather than
+  beside it. `queue.claim_cap` 2 is unspent. Queue was empty at the pull.
+
+  THE DEFINITION-OF-READY GATE PASSED HERE, on the corrected ticket and on the second pass. The
+  first pass FAILED and the Ready-column comment carries what failed, what was measured on a mutant,
+  and the fifteen-count three-way cross-check behind the pass. Read the ticket's correction block
+  under `## Acceptance` before designing anything: it decides the identity-versus-occupancy question,
+  the layer each criterion is asserted at, and every post-fix count, and each ruling names the
+  alternative it rejected.
+
+  THREE THINGS THE ENGINEER INHERITS AS OPEN, none of them a blocker:
+  (1) SEVEN IS NOT PROVEN COMPLETE. This board's own history is a pre-check naming three, BA/PM
+      finding five, then QE finding SIX mutants past all twelve corrected criteria (ABC-018,
+      2026-08-09). Expect A1–A10 to be insufficient and say so if they are.
+  (2) THE POST-FIX COUNTS CAME FROM CANDIDATE FIXES, not from the delivered one. Two independent
+      derivations agree, which is strong but is not the same as the real diff. A discrepancy at the
+      implementation hop is to be RAISED, never silently adjusted to match the code.
+  (3) THE FIX SITE IS NOT RULED ON. `addCastlingMoves` and `legalMoves` are observationally
+      equivalent today because generateMoves has no non-test caller but legalMoves — BA/PM stated
+      that against its own criteria, which are written at the legalMoves layer. `## Scope` is the
+      requirement; the mechanism is the engineer's call.
+
+  NFR-001 IS TRIGGERED and its bar is now machine-independent: perft >= 1M nps AND ratio >= 0.98
+  against the same measurement on the pre-fix tree in the SAME process. No throughput figure has
+  been measured by any role on this ticket — the Orchestrator did not run `npm run perft` and neither
+  did BA/PM. The 6.04M-6.21M baseline is quoted from plans/nfr-catalog.md, which is the authority.
+  Read that catalog's standing benchmarking caution AND its denominator fence (97.3% of the nodes
+  perft counts are free leaves) before measuring.
+
   EXITED 2026-08-09 by the Software Engineer (task `ticket-to-pr-ABC-018`, subtask
   `engineer-abc018-implement`, Workflow 04): ABC-018 -> In Review. In Development 1/3 -> 0/3,
   In Review 0/3 -> 1/3. NO LIMIT APPROACHED, no override taken, no written reason owed. The
