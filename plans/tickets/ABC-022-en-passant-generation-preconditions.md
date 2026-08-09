@@ -276,6 +276,18 @@ The parenthetical on each is the measured behaviour on `main` today.
 > and nothing found here pushes on them. Every claim below was re-derived by measurement on copies
 > outside the repository; **no file under `src/` was touched and no test row was written.**
 
+> **`A11` WIDENED IN PLACE 2026-08-09, SECOND BA/PM HOP** (task `ticket-to-pr-ABC-022`), after the
+> `In Review` gate found the shipped fix satisfies `A11` while leaving a statement its own change made
+> **false** in the same file. **No board move: `ABC-022` stays in `In Review`** — the criterion was not
+> unmet, it was **too narrow**, which is a different thing. **`A11` is the only criterion touched;
+> `A1`–`A10` are unchanged and were not re-litigated.** The hop was a repo-wide **sweep** for every
+> statement this fix falsified, not a patch of the one flagged line: it found **four more**, in two
+> further files, and it also found statements that are **still true and must not be rewritten**, one
+> statement this fix **repairs**, and one that was **already false before this branch existed** and is
+> therefore not `A11`'s. `## Scope`, `## Out of scope`, size `S` and priority `P1` are re-checked and
+> **UNCHANGED** — nothing in the sweep pushes on them. **No file under `src/` was touched at this hop
+> either**, and every figure below was measured on tree copies outside the repository.
+
 - **A1 (half a, piece-agnostic).** **Given** each FEN in a table that places a piece of the **mover's
   own colour** on the en-passant target — at minimum `4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1`,
   `4k3/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1` and `4k3/8/8/8/3pP3/4r3/8/4K3 b - e3 0 1`, i.e. **at least
@@ -384,26 +396,144 @@ The parenthetical on each is the measured behaviour on `main` today.
   **skip count of 0** and **no existing test is modified** — verified at line level, not by
   inspection.
 - **A10.** **Given** the bar in *Security / NFR triggers*, **when** measured, **then** it holds.
-- **A11 (documentation) — CITATION AND EXPECTED OUTCOME CORRECTED 2026-08-09.** **Given**
-  `src/moves.ts` after the fix, **then** the en-passant comment at lines **183-186** states
-  preconditions the code below it actually enforces; **and given** `src/legal.ts` lines **102-103**,
-  **then** its claim that *"with the target occupied, `generateMoves` reads the square as an ordinary
-  capture and never offers the ep move"* is corrected — it is false today for an own-colour occupant,
-  which is precisely half (a). *(A comment-only edit to `src/legal.ts`; no executable line there
-  changes.)*
+- **A11 (documentation) — CITATION AND EXPECTED OUTCOME CORRECTED 2026-08-09; WIDENED TO THE FULL
+  FALSIFIED SET 2026-08-09 (second hop).** **Given** the tree after the fix, **then** **no comment or
+  doc comment anywhere under `src/` states, as current behaviour, anything about `generateMoves`'s
+  en-passant branch that this fix has made false.** The sites are enumerated below and the list is
+  **closed by a repo-wide sweep**, not by sampling; each is a **comment-only** edit and **no executable
+  line and no test row changes anywhere.**
 
-  **Two corrections, both re-read out of the source at this hop.** (i) The citation was
-  `src/legal.ts:102-104`. The false claim occupies **102-103**; line **104-105** is a **separate and
-  TRUE** sentence — *"Purity does NOT need it — make/unmake round-trips exactly when the captured pawn
-  is genuinely there — which is why it cannot be folded into (b)"* — and it must **not** be rewritten.
-  Pointing the engineer at 104 invites an edit to a correct line. (ii) The criterion said the false
-  claim *"will become true only when this ticket lands"*. Only its **conclusion** does. The
-  **mechanism** clause stays false after the fix: an own-colour occupant is never read "as an ordinary
+  | # | site | the false statement | status |
+  | --- | --- | --- | --- |
+  | 1 | `src/moves.ts` **183-195** | the ep comment must state preconditions the code below it enforces | **already satisfied** by the delivered fix (past tense throughout) |
+  | 2 | `src/legal.ts` **102-107** | *"with the target occupied, `generateMoves` reads the square as an ordinary capture and never offers the ep move"* | **already satisfied** by the delivered fix |
+  | 3 | `src/legal.ts` **69-70** | *"Outside it the oracle is unsound — `generateMoves` offers en-passant captures onto squares occupied by the mover's OWN piece"* | **OPEN — the trigger for this hop** |
+  | 4 | `src/legal.test.ts` **268-269** | *"because `generateMoves` is itself unsound there and the oracle cannot be the authority on a class it gets wrong"* | **OPEN — found by the sweep** |
+  | 5 | `src/legal.test.ts` **368-371** | *"the one where `generateMoves` offers an en-passant capture onto the mover's OWN piece"*, and *"the oracle agreeing with the relaxed guard is not a defence"* | **OPEN — found by the sweep** |
+  | 6 | `src/legal.test.ts` **373-374** | *"The oracle answers `true` on all four … off-domain the oracle is unsound"* | **OPEN — found by the sweep** |
+  | 7 | `src/moves.enpassant.test.ts` **4-9, 27-28** | the header's present-tense *"the generator offers a capture onto the mover's own piece"* and *"a board the generator provably corrupts"* | **OPEN — found by the sweep, lowest severity** |
+
+  **Sites 3-7 are one defect, not five.** Every one of them rests on a single premise — *the generator
+  is unsound outside the domain* — and this fix removed that premise. **`src/legal.ts` currently
+  contradicts itself 33 lines apart:** 69-70 says the generator offers the capture, while the
+  A11-corrected 102-107 says it does not and explains why. Shipping either alone would be worse than
+  shipping neither.
+
+  **The premise is not weakened, it is GONE, and that is measured over the guards' whole input
+  domain.** The en-passant branch's preconditions read exactly two board bytes (the ep **target** and
+  the square one rank back) plus the side to move, so `256 x 256 x 2 = 131,072` states **exhaust**
+  them. Swept on full tree copies, **one OS process per tree**, base FENs printed and re-parsed,
+  `tsc --noEmit` exit 0 on every tree before any result was believed. `30,271` states carry a byte that
+  is not a valid piece code and make the generator throw — the throw is captured as the observable and
+  the count is **identical on every tree**, so it is an instrument limit of direct board writes, not a
+  verdict — leaving **100,801** scored:
+
+  ```
+  tree                            moves.ts md5   ORACLE vs hasLegalEnPassant   legalMoves
+                                                 DISAGREEMENTS / 100,801        IMPURE
+  t-pristine  (main)              0e247853…              43,200                 35,583
+  t-fix       (branch tip)        6335b452…                   0                      0
+  t-fix       + guard (a) deleted 6335b452…                 447                      0
+  t-pristine  + guard (a) deleted 0e247853…               8,031                 35,583
+  ```
+
+  where the oracle is `legalMoves(position).some(m => m.flags === FLAG_EN_PASSANT)`. **On the delivered
+  tree the oracle disagrees with `hasLegalEnPassant` on ZERO of 100,801 states and `legalMoves` is pure
+  on all of them.** The two `true` answers left on `t-fix` are the two genuinely in-domain states, and
+  the oracle and the predicate return them together.
+
+  **The second question, and it is settled rather than hedged: the reason has not partly evaporated,
+  it has entirely evaporated — but the guards' justification INVERTS rather than weakens.** Read the
+  last two rows of the table: **before** the fix, deleting guard (a) took disagreement *down* from
+  43,200 to 8,031, so guard (a) was a **source** of disagreement — it made the predicate deviate from
+  an unsound oracle. **After** the fix, deleting guard (a) takes disagreement *up* from 0 to 447, so
+  guard (a) is now the **reason the two agree**. On this ticket's own four
+  `## THE CORRECTION THIS TICKET CARRIES` rows the inversion is visible one row at a time: the two
+  own-piece rows read `hasLEP=false / oracle=true` on `main` and `hasLEP=false / oracle=false` on the
+  delivered tree. **`ADR-0005` clause 6's *"(a) buys agreement with the oracle"* was loose-to-false as
+  written and this fix makes it exactly true** — a statement the fix **repairs**, recorded because a
+  sweep that only reports damage is not a sweep.
+
+  **What the corrected `src/legal.ts` paragraph must and must not say.** It must (i) **delete the
+  unsoundness premise and its mechanism clause outright** rather than soften them; (ii) **keep the
+  conclusion** — the answer off-domain is still **SPECIFIED rather than derived**, still `false`, and
+  lines 70-72 from *"so the answer there is SPECIFIED…"* onward are **still true** and may stand;
+  (iii) give the reason that actually holds, which is **not** about the generator being wrong but about
+  the predicate **never consulting the generator at all** — running it costs ~14x a bare key on the
+  nodes that reach it (`ADR-0005`), so `hasLegalEnPassant` synthesises its own probe and must establish
+  its own preconditions, and specifying rather than deriving is what keeps the hash independent of the
+  generator; and (iv) **not** say "the oracle is sound now, so we agree with it", because that reads as
+  making the guards optional and the measurement says the opposite — the agreement is **bought by guard
+  (a)**, not inherited from the generator. Cite `ABC-022` the way 102-107 already does.
+
+  **What must NOT be rewritten — the 104-105 trap, and the sweep found three more of it.** Each was
+  re-measured at this hop and each is **TRUE on the delivered tree**:
+
+  - `src/legal.ts` **108-109**, *"Purity does NOT need it — make/unmake round-trips exactly when the
+    captured pawn is genuinely there"*. Confirmed: with guard (a) deleted, `hasLegalEnPassant` stayed
+    **pure on all 100,801 scored states**; with guard (b) deleted it is impure on the **first** state
+    swept. Guard (b)'s justification is untouched by this ticket — it is about the predicate's own
+    synthesised probe and has nothing to do with `generateMoves`.
+  - `src/legal.test.ts` **286-289**, *"`generateMoves` reads an occupied ep target as an ordinary
+    capture and never offers the ep move"*. **Still true, because those two rows carry ENEMY
+    occupants**, which the ordinary-capture branch consumes and `continue`s past exactly as before.
+    This sentence is one word away from site 4 and must survive it.
+  - `src/legal.test.ts` **279-280**, *"Each one corrupts without it, permanently"* — a claim about the
+    predicate without guard (b), measured true.
+  - `src/zobrist.ts` **11-18** and this ticket's `## THE CORRECTION THIS TICKET CARRIES` — both
+    re-derived at this hop and both intact; the four-row table there is unchanged by the fix, which is
+    what it claims of itself.
+
+  **The `A9` interaction, and `A9` does NOT move.** Site 4-6 land in `src/legal.test.ts`, an **existing**
+  test file, so the engineer's chosen instrument — `git diff --name-only --diff-filter=M main --
+  'src/*.test.ts'` being empty — **will go non-empty and must not be read as `A9` failing.** `A9`
+  requires that *"no existing test is modified — verified at line level"*, and a comment-only edit
+  modifies no test. **`A9`'s text is unchanged and is not re-litigated**; what changes is only the
+  instrument, and the replacement is the one the engineer **already** applied to `src/legal.ts` at the
+  first hop: every `+`/`-` line of `git diff main -- src/legal.test.ts`, stripped of its diff marker,
+  must begin with optional whitespace and `//`. In addition the file's executable content must be
+  **byte-identical**: no `it`, `describe`, `expect`, FEN string or table entry may change, and the
+  suite's test count must stay at **439**. If any of that cannot be met, **stop and hand back** rather
+  than widen `A9`.
+
+  **Two corrections from the first hop, retained.** (i) The citation was `src/legal.ts:102-104`. The
+  false claim occupied **102-103**; **104-105** is a **separate and TRUE** sentence and must not be
+  rewritten — pointing the engineer at 104 invites an edit to a correct line. (ii) The criterion said
+  the false claim *"will become true only when this ticket lands"*. Only its **conclusion** does. The
+  **mechanism** clause stayed false after the fix: an own-colour occupant is never read "as an ordinary
   capture", because `src/moves.ts:177` requires `isBlack(target) !== black` and an own-colour occupant
-  fails that test both before and after. After this ticket the generator rejects it as a
-  **precondition violation** — a different reason. The corrected comment must therefore say **why** the
-  ep move is not offered, not merely restate that it is not; leaving 102-103 untouched on the grounds
-  that "it is true now" would not satisfy this criterion.
+  fails that test both before and after; the generator now rejects it as a **precondition violation** —
+  a different reason. Both were satisfied by the delivered edit and are recorded so the reasoning is
+  not lost.
+
+  **Found by the sweep and deliberately FENCED, not folded in.** Naming these is part of the criterion;
+  editing them is not, and none of them blocks `ABC-022`:
+
+  - **`memory-bank/50-decisions/ADR-0005-…md` lines 133-138** carry the same falsified premise with two
+    named witnesses — *"on `4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1` it corrupts the position it is asked
+    about, and on `4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1` `generateMoves` offers a pawn capturing onto a
+    square occupied by the mover's own knight"*. **Both witnesses measured FALSE on the delivered
+    tree** (first: `legalMoves` pure; second: zero ep moves offered). `ADR-0005` is **`accepted`**, and
+    amending an accepted ADR is an **Architect** ruling on this board's own precedent — not BA/PM's,
+    and not a comment's. **Flagged, unowned by this ticket, and `ADR-0005` is not reopened by it.**
+  - **`plans/tickets/ABC-011-…md` lines 418-422, 522, 931 and 1147** carry the same premise. `ABC-011`
+    is out of bounds for this ticket by the reciprocal-fence shape already used for the `ABC-010`
+    half-(a) gap; **named here, edited nowhere.**
+  - **`plans/board.md` (683-685, 743-744, 2431) and `memory-bank/60-progress.md` (275, 293, 314)** are
+    **dated historical records** and describe `main`, where the defect is still live. They are not
+    falsehoods today and they are the **merge/close hop's** to advance, not this one's.
+  - **`src/legal.test.ts` line 202** — *"`legalMoves(...).some(...)` fails this on the second FEN
+    (ABC-009)"* — is **false, but NOT falsified by this fix**: that FEN reads **PURE on `main` as
+    well**, so the statement was already stale before this branch existed. Its label attributes it to
+    `ABC-009`'s merge, which is an inference from the comment's own text and not something this hop
+    verified against a commit. **Out of `A11`'s remit by construction; recorded so the next sweep does
+    not re-find it and mis-attribute it.**
+
+  **What this criterion does NOT claim.** That the falsified set is complete. It is a sweep of every
+  comment and doc comment under `src/`, `plans/tickets/`, `plans/nfr-catalog.md`, `plans/board.md`,
+  `memory-bank/` and `memory-bank/50-decisions/`, closed by `git grep` on the premise's own vocabulary
+  and by reading each hit — but on this ticket every count so far has been a floor (pre-check 2, first
+  BA/PM hop 7, engineer 8, this hop 11), and a sweep is not a proof.
 
 ## Dependencies
 
