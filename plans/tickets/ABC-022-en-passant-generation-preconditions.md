@@ -1,8 +1,8 @@
 ---
 id: ABC-022
 title: generateMoves offers en-passant captures its own preconditions forbid
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: S
 priority: P1
 epic: EPIC-001
