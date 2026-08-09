@@ -1,8 +1,8 @@
 ---
 id: ABC-018
 title: Frame output and redraw — in-place on a TTY, append otherwise, constant height
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: S
 priority: P0
 epic: EPIC-002
