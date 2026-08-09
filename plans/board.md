@@ -1519,9 +1519,22 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-018] Frame output and redraw — in-place on a TTY, append otherwise, constant height  (size: S, P0, epic: EPIC-002, branch: grugops/ticket-to-pr-ABC-018, entered: 2026-08-09)
+<!--
+  EMPTIED 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-018`, subtask `qe-abc018-review`,
+  Workflow 04) on a PASS verdict. ABC-018 moved In Review -> In Security/NFR, the one exit this
+  role owns. In Review 1/3 -> 0/3, In Security/NFR 0/2 -> 1/2; no limit approached, no override
+  taken, no written reason owed. NOTHING MERGED AND NOTHING DEPLOYED -- a human holds both.
+  The full QE record is in the In Security/NFR comment below, in the ticket's `## QE` section and
+  in `.grugops/context/ticket-to-pr-ABC-018/notes/`; it is not restated here.
+
+  WHAT THIS COLUMN OWED IS PAID, AND IT WAS NOT PAID BY RE-READING THE MODULE. 56 mutants, 75
+  mutate-and-restore cycles, SIX of which passed all twelve acceptance criteria AND all 297
+  delivered tests. All six are now dead. The production module was NOT changed -- src/frame.ts is
+  byte-identical to the Engineer's commit d88a1f0 (md5 bb827f52fe537817e40020a29dfa0e6d, the
+  digest they published) and `git diff --stat d88a1f0 -- src/frame.ts` is EMPTY.
+-->
 
 <!--
   ENTERED 2026-08-09 from In Development, by the Software Engineer (task `ticket-to-pr-ABC-018`,
@@ -2222,7 +2235,87 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+
+- [ABC-018] Frame output and redraw — in-place on a TTY, append otherwise, constant height  (size: S, P0, epic: EPIC-002, branch: grugops/ticket-to-pr-ABC-018, entered: 2026-08-09)
+
+<!--
+  ENTERED 2026-08-09 from In Review, by QE/E2E (task `ticket-to-pr-ABC-018`, subtask
+  `qe-abc018-review`, Workflow 04) on a PASS verdict. In Security/NFR 0/2 -> 1/2. Security/NFR owns
+  this column's exit. NOTHING MERGED, NOTHING DEPLOYED -- a human holds both.
+
+  VERDICT: PASS, reached by BREAKING the module rather than by reading it. ALL TWELVE TESTABLE
+  ACCEPTANCE CRITERIA ARE COVERED AND NON-VACUOUS except the two BA/PM already ruled on. NO
+  PRODUCTION DEFECT WAS FOUND, and no production line was changed.
+
+  THE FOUR MANDATORY GATES WERE RE-RUN ON THE TIP BY THIS ROLE, before and after the added tests,
+  rather than inherited: lint exit 0 (the 2 infos are the pre-existing biome.json notices),
+  typecheck exit 0, build exit 0, npm test 297/297 THEN 304/304 on 14 files, skip count 0 both
+  times by the AGENTS.md command, src/frame.ts 100% on all four coverage axes against the 0.8
+  threshold. The 277-on-13 baseline was RE-DERIVED by running the suite without this file, not
+  subtracted. Test-integrity checker exit 2 (.grugops/test-skips.md absent) -- recorded as an
+  ERROR and NOT as a pass; no registry file was created. E2E UNKNOWN - verify. Five shuffled
+  full-suite runs clean.
+
+  BOTH FAKES THE TICKET'S OWN ## Test notes NAME WERE CHECKED BY CONSTRUCTION AND NEITHER IS
+  PRESENT. A byte-only rewrite of criteria 5 and 6 PASSES the no-padding mutant that the DELIVERED
+  forms kill -- the screen model is load-bearing. And the mutant that IS the second fake (sanitize()
+  left correct, the writer bypassing it) dies to criteria 11 and 12, which assert on the captured
+  stream.
+
+  BA/PM'S THREE CORRECTED CRITERIA EACH KILL THEIR MUTANT ALONE: the 23/23 boundary kills `>` for
+  `>=`; the injected-sink restatement kills the per-write re-decide; the relational N kills an
+  invented N. The corrections were not ceremony.
+
+  SIX MUTANTS PASSED ALL TWELVE CRITERIA AND ALL 297 DELIVERED TESTS, AND NOT ONE WAS A DEFECT IN
+  THE DELIVERED CODE. All six are now dead, each to exactly one added test:
+    (1) SEPARATOR = "" -- items run together into one unreadable token while both region criteria
+        still pass; the separator is load-bearing in the ticket's OWN arithmetic (6x4 + 5).
+    (2) the sanitizer skipped over the PANEL rows -- the Engineer said the narrower reading "would
+        pass every test in this suite", and it did.
+    (3) no (+N more) when NOT ONE supplied item fits -- the region goes SILENTLY BLANK and the
+        player is never told anything was withheld.
+    (4) a TTY exactly ONE ROW SHORT still redrawing in place -- the OTHER side of the >= boundary.
+        The criteria's only "too short" case is 13 rows short, which a `>= H - 1` slip clears.
+        This is the exact failure 4b exists to prevent.
+    (5) U+0000 surviving the C0 strip -- the bar is a RANGE and the range was never asserted.
+    (6) the C1 block stripped in unicode mode -- CHARACTERIZED, NOT DECIDED, and ROUTED TO THIS
+        GATE: the module matches the bar exactly (C0 and U+007F only), U+009B is 8-bit CSI, and a
+        UTF-8 terminal does not honour it. The disposition is Security/NFR's.
+
+  FOUR MUTANTS SURVIVE AND ALL FOUR ARE REPORTED. Three are PROVEN EQUIVALENT (`?? -1` for `?? 0`
+  since H >= 3 on every reachable input; `sink.isTTY === true` for `Boolean(sink.isTTY)` over the
+  declared type -- ABC-015's surviving mutant a SECOND TIME on the same coercion; `+ 1` for
+  `+ SEPARATOR.length`). The fourth reserves marker room on every region row: it shows fewer items
+  with a larger N, N stays a count of the input, so it is a CONFORMING ALTERNATIVE PACKING and not
+  a defect -- which is what this ticket intends by leaving packing to the engineer.
+
+  ONE PRODUCTION-SHAPED RISK IS NAMED AND IT IS STILL A PASS: W IS RECOMPUTED PER FRAME while the
+  ticket calls it "a session constant". beginFrameSession takes H and not W. Demonstrated on the
+  screen model -- a 24-wide frame followed by an 18-wide one leaves the wider frame's TAIL on
+  screen, the same class the padding decision prevents one level up. It breaks NO criterion, it
+  CANNOT FIRE TODAY (renderBoard is always 9x18, the other two panels are fixed-height stubs, and
+  there is no runtime importer), and the fix is an API change whose shape depends on ABC-016 and
+  ABC-017. Pinned by a CHARACTERIZATION test and handed to those tickets.
+
+  TWO CRITERIA-LEVEL ITEMS ARE BA/PM's AND ARE NOT DISCHARGED HERE:
+    (a) NO CRITERION CONSTRUCTS A SINK WHOSE isTTY OR rows IS ABSENT -- the Engineer's handed-over
+        gap, CONFIRMED INDEPENDENTLY: both mutants die to their own added pin and to nothing else.
+        THIRD CONSECUTIVE TICKET whose acceptance set is written over signals that agree.
+    (b) CRITERION 2 IS WEAKER THAN IT WAS RULED TO BE. BA/PM left criterion 1 near-vacuous
+        knowingly, on the reasoning that criterion 2 carries the falsifiable weight. MEASURED, it
+        does NOT kill the grown-message-region mutant its own rationale names -- its two-item
+        rejection never needs a third row. A third item fixes it. Amending a criterion is the
+        Backlog exit, not this role's.
+
+  NFR-002 WAS NOT RE-DERIVED HERE and no figure of QE's may be quoted as a measurement -- this
+  gate owns it. One coarse single-sample sanity check agreed with the Engineer's in-memory pair
+  (0.0071 ms vs 0.0067 ms per frame) so that a four-orders-of-magnitude claim was not relayed
+  unlooked-at. plans/nfr-catalog.md is untouched and undischarged.
+
+  NO E2E WAS WRITTEN AND NONE COULD BE: no CLI entry point until EPIC-006, zero runtime importers
+  of src/frame.ts, AGENTS.md E2E slot UNKNOWN - verify. Reported as a gap, not filled with a fake.
+-->
 
 <!--
   EMPTIED 2026-08-08 by Security/NFR (task `ticket-to-pr-ABC-015`, subtask

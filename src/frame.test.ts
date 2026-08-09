@@ -637,3 +637,151 @@ describe("ABC-018 — pins the acceptance criteria do not reach", () => {
     ).toHaveLength(24);
   });
 });
+
+// ---------------------------------------------------------------------------
+// ADDED BY QE/E2E 2026-08-09 (task `ticket-to-pr-ABC-018`, subtask `qe-abc018-review`).
+//
+// EACH TEST BELOW IS THE ONLY KILLER OF A MUTANT THAT SURVIVED ALL 297 DELIVERED TESTS. None of
+// them found a defect in `src/frame.ts` — the module is byte-identical to the Engineer's commit
+// after the whole campaign — so NO PRODUCTION CODE WAS CHANGED HERE. They close holes in the SUITE
+// and, in two cases, characterize a behaviour the CRITERIA are silent about so that changing it
+// later has to be deliberate.
+// ---------------------------------------------------------------------------
+
+describe("ABC-018 — holes QE found by mutation, closed in tests only", () => {
+  it("SEPARATES items in the message region — the space the ticket's own arithmetic counts", () => {
+    // `SEPARATOR = ""` survives every delivered test: "Nbd2Nfd2Rae1" still CONTAINS each candidate
+    // and still ends with the marker, so both region criteria pass while the player is shown one
+    // unreadable token. The ticket's arithmetic is what pins it: "six 4-character SANs need 29
+    // characters" is 6x4 + 5 SEPARATORS, so the separator is load-bearing in the criteria's own
+    // numbers and was asserted by nothing.
+    const candidates = ["Nbd2", "Nfd2", "Rae1"];
+    const region = messageRegionOf(
+      assembleFrame(partsFor(playTo(8), { messages: candidates }), "unicode"),
+    );
+
+    expect(region[0]).toBe(`${candidates.join(" ")}    `);
+    expect(candidates.join(" ")).toHaveLength(14);
+  });
+
+  it("sanitizes the PANEL rows too, not only the message items", () => {
+    // The Engineer's decision 4 — "the sanitizer runs over every string placed into the frame,
+    // panel rows included" — was recorded with the honest note that the narrower reading "would
+    // pass every test in this suite, because the stub panels are ASCII". It did: dropping the
+    // panel sanitize survived all 297. `ABC-016` and `ABC-017` are unbuilt, so the first panel
+    // that carries text this product did not generate is the first place it matters.
+    const frame = assembleFrame(
+      partsFor(playTo(8), { status: ["\x1b[2Jstatus", "caf\u00e9 \u0007", "c"], mode: "ascii" }),
+      "ascii",
+    );
+    const sink = captureSink(false, 0);
+    beginFrameSession(sink, HEIGHT)(frame);
+
+    expect(occurrences(captured(sink), "\x1b")).toBe(0);
+    expect(codePointsAbove(captured(sink), 0x7f)).toEqual([]);
+    expect(captured(sink)).toContain("[2Jstatus");
+    expect(frame).toHaveLength(HEIGHT);
+  });
+
+  it("still emits (+N more) when NOT ONE supplied item fits — the marker is present exactly when N > 0", () => {
+    // The `shown === 0` fall-through. Every delivered case leaves at least one item showing, so a
+    // build that dropped the marker on that path survived: the region went silently blank and the
+    // player was never told anything had been withheld. The ticket's `## Scope` is explicit — "the
+    // marker is present exactly when `N > 0`".
+    const frame = assembleFrame(
+      partsFor(playTo(8), { messages: ["a rejection far too wide for this frame"] }),
+      "unicode",
+    );
+    const region = messageRegionOf(frame);
+
+    expect(region[0]).toBe("".padEnd(widthOf(frame)));
+    expect((region[1] as string).trimEnd()).toBe("(+1 more)");
+    expect(frame).toHaveLength(HEIGHT);
+  });
+
+  it("strips the WHOLE C0 range, not just the escapes the criteria happen to name", () => {
+    // The two criteria that exercise the sanitizer supply `\x1b` and `\u0007` / `\u007f`. A
+    // that let `U+0000` through passed both. The ticket's measurable bar is a RANGE — "C0 control
+    // characters (< U+0020) and U+007F removed" — so the range is what gets asserted.
+    const c0 = Array.from({ length: 0x20 }, (_unused, code) => String.fromCodePoint(code)).join("");
+    const frame = assembleFrame(partsFor(playTo(8), { messages: [`a${c0}\u007fb`] }), "unicode");
+    const sink = captureSink(false, 0);
+    beginFrameSession(sink, HEIGHT)(frame);
+    const text = captured(sink);
+
+    // The only sub-`U+0020` code point left in the stream is the newline the WRITER emits itself.
+    expect([...text].filter((character) => character < " " && character !== "\n")).toEqual([]);
+    expect(text).not.toContain("\u007f");
+    expect(messageRegionOf(frame)[0]).toBe("ab".padEnd(widthOf(frame)));
+  });
+
+  it("APPENDS to a TTY exactly ONE row short of the frame — the other side of the >= boundary", () => {
+    // BA/PM's defect-3 correction added the 23/23 case and killed `>` where the rule says `>=`.
+    // The EXCLUSIVE side was left open: the only "too short" case in the criteria is 10 rows
+    // against 23, thirteen rows short, which a `>= H - 1` slip clears easily. That slip survived
+    // all 297 delivered tests, and it is the exact failure `4b` exists to prevent — a 22-row TTY
+    // scrolls the frame origin off the top on the first redraw and every later one lands high.
+    const frame = assembleFrame(partsFor(playTo(8), { messages: ["check"] }), "unicode");
+    const sink = captureSink(true, HEIGHT - 1);
+    const write = beginFrameSession(sink, HEIGHT);
+
+    write(frame);
+    write(frame);
+
+    expect(occurrences(captured(sink), "\x1b")).toBe(0);
+    expect(captured(sink)).toBe(`${frame.join("\n")}\n${frame.join("\n")}\n`);
+  });
+
+  it("CHARACTERIZES: W is recomputed per frame, so a narrowing frame leaves the wider one's tail", () => {
+    // NOT A RATIFICATION. The ticket calls `W` "a session constant"; the module derives it inside
+    // `assembleFrame` from the panels of THAT frame, and `beginFrameSession` takes only `H`. With
+    // the panels that exist today `W` cannot vary — the merged `renderBoard` is always 9 rows of
+    // 18 — so this cannot fire in production and it breaks NO acceptance criterion. It fires the
+    // moment `ABC-016` or `ABC-017` emits a variable-width row, and it is the SAME class the
+    // padding decision exists to prevent, one level up: `ED(0)` cannot reach what sits to the
+    // right of a row the new frame overwrote with a shorter one. Whether `W` should be hoisted to
+    // the session is a ticket-level decision (BA/PM + `ABC-016`/`ABC-017`), not a QE repair — so
+    // this test pins today's behaviour and fails loudly the day someone changes it.
+    const game = playTo(8);
+    const wide = assembleFrame(
+      partsFor(game, { status: ["a status panel 24 wide!!", "b", "c"] }),
+      "unicode",
+    );
+    const narrow = assembleFrame(partsFor(game, { status: ["a", "b", "c"] }), "unicode");
+    const sink = captureSink(true, 24);
+    const write = beginFrameSession(sink, HEIGHT);
+    const screen = createScreen(24, widthOf(wide));
+
+    expect(widthOf(wide)).toBe(24);
+    expect(widthOf(narrow)).toBe(18);
+
+    write(wide);
+    write(narrow);
+    for (const chunk of sink.chunks) screen.write(chunk);
+
+    const stale = screen
+      .lines()
+      .slice(0, HEIGHT - 1)
+      .filter((line, index) => line !== (narrow[index] as string).padEnd(widthOf(wide)));
+    // The wide frame's first status row is the only one whose tail is not blank, so it is the only
+    // one that shows: the narrow frame's row, then the wide frame's columns beyond W = 18.
+    expect(stale).toEqual([
+      `${narrow[BOARD_ROWS]}${(wide[BOARD_ROWS] as string).slice(widthOf(narrow))}`,
+    ]);
+  });
+
+  it("CHARACTERIZES: unicode mode keeps the C1 block, which the measurable bar does not name", () => {
+    // The bar is "C0 (< U+0020) and U+007F", and the module matches it exactly. `U+009B` is CSI in
+    // its 8-bit form; a UTF-8 terminal does not honour it, which is why keeping it is defensible —
+    // but the criteria are SILENT, so a build that stripped the whole C1 block was indistinguishable
+    // from this one. Recorded here and routed to the Security/NFR gate rather than decided by QE.
+    const frame = assembleFrame(partsFor(playTo(8), { messages: ["a\u0080\u009bb"] }), "unicode");
+    const ascii = assembleFrame(
+      partsFor(playTo(8), { messages: ["a\u0080\u009bb"], mode: "ascii" }),
+      "ascii",
+    );
+
+    expect(messageRegionOf(frame)[0]).toBe("a\u0080\u009bb".padEnd(widthOf(frame)));
+    expect(messageRegionOf(ascii)[0]).toBe("ab".padEnd(widthOf(ascii)));
+  });
+});
