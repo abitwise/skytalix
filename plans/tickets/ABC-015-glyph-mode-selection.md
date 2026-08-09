@@ -818,3 +818,10 @@ run is an instrument reading and is NOT offered as UAT.**
 
 `ABC-015` merges **with or before `ABC-018`**, never after. `ABC-018` is unstarted and in `Backlog`,
 so the constraint is satisfiable and satisfied by merging this now. This gate does not discharge it.
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-015-board-history.md`](history/ABC-015-board-history.md) (178,385 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.

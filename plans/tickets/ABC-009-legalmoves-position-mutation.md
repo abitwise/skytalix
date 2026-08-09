@@ -2732,3 +2732,10 @@ explicit ruling recorded at the close. That is the Orchestrator's call, not this
   attack one dimension and the equivalence set that bounds it.
 - **That `ABC-009` may be closed.** `Ready for UAT` is not `Done`, UAT is deferred and not passed, and
   no board move was taken at this hop.
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-009-board-history.md`](history/ABC-009-board-history.md) (88,103 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.

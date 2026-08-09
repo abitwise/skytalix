@@ -669,3 +669,10 @@ respect and one only — **`A9` and `A7` do NOT resolve identically under all th
 what selected the shape; both are correct as written and neither changed. `ADR-0002` clause 4 was
 ruled an **extension, not an amendment**, so no human ruling is owed and none was taken. The pull to
 `In Development` is the Orchestrator's and has not been taken here.
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-020-board-history.md`](history/ABC-020-board-history.md) (23,053 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.

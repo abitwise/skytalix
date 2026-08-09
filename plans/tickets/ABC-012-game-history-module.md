@@ -674,3 +674,10 @@ changes it. **`ABC-009`, `ABC-010` and `ABC-022` are carried, not fixed.** **UAT
 nothing and prompts for nothing, so there is no surface a human can exercise. **No PR — this repo has
 no git remote and none was invented.** Nothing was merged and nothing was deployed; a human holds
 both.
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-012-board-history.md`](history/ABC-012-board-history.md) (7,537 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.

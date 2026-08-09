@@ -238,3 +238,10 @@ escalated. Everything on the checklist except the last line was already met on 2
 ruling changed nothing in this ticket's scope, size, acceptance criteria or NFR bars — clauses 1 and
 3, the two this ticket is written against, were accepted **as proposed**. Its remaining dependencies
 (`ABC-003`, `ABC-005`) are merged on `main`, so it is pullable.
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-013-board-history.md`](history/ABC-013-board-history.md) (3,598 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.

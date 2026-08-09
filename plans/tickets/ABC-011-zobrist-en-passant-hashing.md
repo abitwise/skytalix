@@ -1161,3 +1161,10 @@ defect routed to BA/PM — still reproducing, still owned by nobody until BA/PM 
 Decision clause 6 is now built and the ADR does not say so**; whether it should is the Architect's,
 not this gate's. **No PR exists — this repo has no git remote**; none was invented. Nothing was
 merged and nothing was deployed — a human holds both.
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-011-board-history.md`](history/ABC-011-board-history.md) (108,629 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.

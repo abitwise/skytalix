@@ -151,3 +151,10 @@ dependencies ✅ (none blocking) · NFR triggers ✅ (numeric bar, machine requi
 test notes ✅ · size `M` ✅ · priority `P0` ✅ · no blocker ✅
 
 **Promoted to `Ready` 2026-07-30 by BA/PM.**
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-014-board-history.md`](history/ABC-014-board-history.md) (71,288 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.

@@ -813,3 +813,10 @@ exercise. **This gate attached no terminal and claims none.** No acceptance crit
 that is the `Backlog` exit — and no ticket other than this one was touched. **No `finding` was
 written**: none is admissible on this task. Nothing is self-stamped, and no `index.md` /
 `index.jsonl` was hand-faked.
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-018-board-history.md`](history/ABC-018-board-history.md) (42,241 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.

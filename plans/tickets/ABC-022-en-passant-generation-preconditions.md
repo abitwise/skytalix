@@ -929,3 +929,10 @@ It sits **outside `A11`'s cited 102-103** and outside this subtask's named bound
 silently rewritten** — but it should not ship as it stands, and it belongs to BA/PM as an eighth
 correction or to a follow-up ticket. Flagging it is a judgement about scope, not a measurement:
 the falsity is measured, the decision to leave it is not.
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-022-board-history.md`](history/ABC-022-board-history.md) (20,896 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.

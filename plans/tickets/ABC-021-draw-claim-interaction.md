@@ -221,3 +221,10 @@ no blocker ✅ *(its dependencies are tickets, not unresolved decisions)*
 
 Sits in `Backlog` behind `ABC-020` and `ABC-019`. Promotion to `Ready` is a separate BA/PM step and
 has not been taken.
+
+## Board history
+
+Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP
+counts at each move, and what each gate recorded — is in
+[`history/ABC-021-board-history.md`](history/ABC-021-board-history.md) (3,264 bytes), moved there **verbatim** on 2026-08-10 when the board
+was tidied. It is not duplicated on the board and nothing was summarised or dropped.
