@@ -99,8 +99,12 @@ export function hasLegalEnPassant(position: Position): boolean {
   // precondition has to be established here too — nothing else in the call chain does it.
   // Both conditions are loop-invariant, so they sit above the loop rather than inside it.
   //
-  // (a) buys the ANSWER: with the target occupied, `generateMoves` reads the square as an
-  //     ordinary capture and never offers the ep move, so the oracle says no and so must this.
+  // (a) buys the ANSWER: with the target occupied, `generateMoves` offers no ep move, so the
+  //     oracle says no and so must this. WHY it offers none is a precondition of the en-passant
+  //     branch itself (ABC-022), not a reading of the square as an ordinary capture: an ENEMY
+  //     occupant is consumed by the capture branch, but an occupant of the mover's OWN colour
+  //     never was and still never is — that branch requires `isBlack(target) !== black` — so it
+  //     used to fall through and be offered anyway, which was precisely the defect.
   //     Purity does NOT need it — make/unmake round-trips exactly when the captured pawn is
   //     genuinely there — which is why it cannot be folded into (b).
   // (b) buys PURITY: `undoSpecial` writes `move.captured` back onto `rank` unconditionally, so

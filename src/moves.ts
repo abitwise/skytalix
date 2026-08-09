@@ -180,19 +180,31 @@ function addPawnMoves(
       continue;
     }
 
-    // En passant: the target square is empty, but it is this move's `epSquare` and the
-    // captured pawn sits beside the mover on `to`'s file, one rank back. Reaching an
-    // ep target is only geometrically possible from the correct rank, so the file/rank
-    // guard is implicit in `to === epSquare`.
+    // En passant: `to` is this move's `epSquare`, the target square is EMPTY, and the
+    // captured pawn really does sit beside the mover on `to`'s file, one rank back. All
+    // three are CHECKED below (ABC-022); the last two used to be stated by this comment
+    // and enforced by nothing. An occupant of the mover's OWN colour survives the capture
+    // test above — that test requires `isBlack(target) !== black` — so the generator
+    // offered a capture onto the mover's own piece; and an absent captured pawn was still
+    // written into `move.captured`, which `undoSpecial` restores unconditionally, creating
+    // a pawn the board never held. Reaching an ep target is only geometrically possible
+    // from the correct rank, so the file/rank guard is implicit in `to === epSquare`.
+    //
+    // Both preconditions sit AFTER the `epSquare` test rather than before it: over the
+    // standing 518,474-node perft walk that is 331 evaluations instead of 216,269, for an
+    // identical answer (NFR-001).
     if (to === position.epSquare) {
-      moves.push({
-        from,
-        to,
-        piece,
-        captured: PAWN | (black ? 0 : BLACK),
-        flags: FLAG_EN_PASSANT,
-        promotion: EMPTY,
-      });
+      const capturedPawn = PAWN | (black ? 0 : BLACK);
+      if (target === EMPTY && position.board[to - forward] === capturedPawn) {
+        moves.push({
+          from,
+          to,
+          piece,
+          captured: capturedPawn,
+          flags: FLAG_EN_PASSANT,
+          promotion: EMPTY,
+        });
+      }
     }
   }
 }
