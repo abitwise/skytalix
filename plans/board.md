@@ -2235,9 +2235,191 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Security/NFR (WIP 1/2)
+## In Security/NFR (WIP 0/2)
 
-- [ABC-018] Frame output and redraw — in-place on a TTY, append otherwise, constant height  (size: S, P0, epic: EPIC-002, branch: grugops/ticket-to-pr-ABC-018, entered: 2026-08-09)
+<!--
+  EMPTIED 2026-08-09 by Security/NFR (task `ticket-to-pr-ABC-018`, subtask
+  `security-nfr-abc018-gate`, ABC-018's gate): **ABC-018 PASSES WITH RISKS and moved
+  In Security/NFR -> Ready for UAT — the one exit this column owns.** In Security/NFR 1/2 -> 0/2,
+  Ready for UAT 0/4 -> 1/4. No limit approached, no override taken, no written reason owed.
+  NOTHING MERGED AND NOTHING DEPLOYED — a human holds both.
+
+  security.asvs_level L1, security.block_on high, compliance_regime [] — so NO Compliance Officer
+  hand-off is owed, recorded rather than silently omitted. NO REQUIRED FIX IS OUTSTANDING and NO
+  HIGH-SEVERITY ITEM EXISTS TO BLOCK ON. Five accepted risks, each with a severity, a NAMED OWNER
+  and a place.
+
+  NOT ONE FIGURE IS INHERITED. The Engineer measured and QE explicitly declined to re-derive, so
+  both bars were re-derived here on this gate's own instruments, written outside the repository.
+
+  THE SECURITY BAR — asserted on the EMITTED STREAM at BYTE level, which is what a terminal reads.
+  21 adversarial strings (every C0 code point in one string, U+007F, ESC[2J, OSC-0 and OSC-8, DCS
+  passthrough, DSR — the sequence that makes a terminal WRITE BACK — alternate screen, 8-bit CSI
+  and OSC, both ends of the C1 block, a NUL run, CR overstrike, an RTL override, ZWSP and BOM,
+  combining marks, an astral pair, and the epic's own example rejection text) x 2 glyph modes x 2
+  strategies, placed in the MESSAGE region AND in a PANEL row:
+    0 ESC bytes from supplied data · 0 C0 bytes · 0 U+007F · 0 code points above U+007F in ASCII
+    mode · row count CONSTANT at 23 · exactly ONE write call per frame (84 frames, 84 writes) ·
+    exactly the module's own two sequences in place (ESC[H, ESC[0J) and ZERO in append.
+  Re-run in full under NODE'S PERMISSION MODEL, proved ARMED FIRST by three positive controls (fs
+  write, fs read outside the allowlist, child process — all ERR_ACCESS_DENIED): the campaign still
+  completes, so the module performs no filesystem operation and spawns no process while assembling
+  and emitting. V1.2.5 and V1.3.2 therefore pass ON EVIDENCE rather than on a grep.
+
+  ONE INSTRUMENT-LIMIT CORRECTION, RECORDED BECAUSE IT WOULD HAVE PRODUCED A FALSE MISS: this
+  gate's first run read 42 surviving C0 bytes over 21 in-place frames. ESC is itself a C0 byte and
+  those 42 are exactly 2 per frame — the module's OWN cursor-home and erase. Append mode read 0 and
+  gave it away. Subtracted, the count is 0. A second instrument fault is recorded too: a retyped
+  C1 payload lost its C1 code point in the editor and measured "2J"; the corpus is now referenced
+  by INDEX, and both faults were in the INSTRUMENT, never in the module.
+
+  THE C1 QUESTION QE ROUTED TO THIS GATE IS DECIDED, NOT RATIFIED — AND STRIPPING C1 WOULD BE
+  THEATRE. Measured: a clean unicode frame with NO SUPPLIED TEXT AT ALL already carries 64
+  C1-RANGE BYTES, and every one of them comes from the module's own glyph table (the board alone
+  accounts for all 64). The single 8-bit CSI byte 0x9B IS THE BLACK QUEEN — U+265B encodes as
+  E2 99 9B. The whole adversarial C1 payload adds 5 more. So stripping C1 from supplied strings
+  would remove 5 of 69 and leave 64: the control that makes unicode mode safe is THE TERMINAL
+  BEING UTF-8, which is a property of MODE SELECTION (ABC-015), not of sanitization. The bar stays
+  exactly as written; the residual is accepted risk 4 below, owner EPIC-006.
+
+  NFR-002 — BOTH HALVES RE-DERIVED, AND THE WRITE HALF'S UNKNOWN - verify IS DISCHARGED IN
+  plans/nfr-catalog.md. Own harness outside the repository, own process, replay and parseFen
+  hoisted out of every clock, the writer built once outside it, discarded warm-up, 11 rounds x
+  2,000 iterations per cell, cell order ROTATED every round, medians of per-round means, checksum
+  against elision, TWO FULLY INDEPENDENT SAMPLES, on Apple M3 (Mac15,13) / Node v24.12.0 /
+  Darwin 25.5.0 arm64 and UNKNOWN - verify on any other hardware. Denominator re-derived: a 23-row
+  frame at W = 18, 418 characters serialized, 419 characters / 483 BYTES on the wire in unicode
+  and 419 bytes in ASCII, 425 characters in place.
+    compute            5.998/6.031 · 5.978/6.015 · 6.137/6.046 us  (40 / 120 / 300 plies)
+    write, in memory   0.638/0.644 · 0.636/0.635 · 0.648/0.644 us
+    write, /dev/null   1.670/1.666 · 1.660/1.650 · 1.674/1.672 us
+    write, a file      2.733/2.772 · 2.714/2.733 · 2.711/2.768 us  <- the reading the row carries
+    write, a FIFO      2.317/2.294 · 2.285/2.285 · 2.302 us        <- EPIC-006's pipe shape
+  SUM 0.0087-0.0088 ms against 16 ms — 0.055% of the budget, ~1,800x headroom, MET AT EVERY PLY
+  COUNT ON EVERY DEFINITION, and BOTH HALVES FLAT across 40/120/300, which is this row's O(window)
+  claim measured rather than inferred.
+
+  THE ENGINEER'S SECOND ROUTED QUESTION IS ANSWERED: which of three "write" definitions the row
+  takes. RULED — the row's quantity is `serialize + exactly ONE write(2) to a real non-TTY fd`,
+  and the bar is judged against the MOST EXPENSIVE HONEST READING, the regular file. In-memory
+  omits the syscall the row's own words require and is a floor. The FIFO is EPIC-006's shape and is
+  recorded BESIDE the row rather than as it, because a pipe write's cost includes the READER's
+  scheduling and is a property of the pair, not of this module.
+
+  WHERE THIS GATE DIFFERS FROM THE ENGINEER IT IS STATED, NOT SMOOTHED: compute, the in-memory sink
+  and /dev/null all reproduce inside this gate's two samples; the REGULAR-FILE cell reads ~11%
+  HIGHER (2.711-2.772 against 2.43-2.48 us) and THIS GATE CANNOT ATTRIBUTE IT. Both are >1,800x
+  under the bar. THE IN-PLACE PATH, WHICH THE ENGINEER RECORDED AS NOT TIMED, IS NOW TIMED AND
+  COSTS THE SAME: 1.650-1.690 us against append's 1.643-1.671 us to the same fd, so the 7 extra
+  escape characters are BELOW INSTRUMENT RESOLUTION. What a real TERMINAL does with them is still
+  UNKNOWN - verify and is not claimed.
+
+  THE ONE WAY THIS BAR CAN BE BUSTED TODAY IS MEASURED RATHER THAN LEFT AS A WORRY. assembleFrame
+  places no bound on a supplied item's LENGTH. Cold, first frame, own process — the shape of a
+  frame assembled once per ply — a short message costs 0.16-0.20 ms, 100,000 characters 3.6-4.3 ms,
+  400,000 characters 14.1-15.8 ms (THE WHOLE 16 ms BUDGET) and 1,000,000 characters 28.4-41.9 ms
+  (1.8x-2.6x OVER). The item COUNT crosses at about 13,000; an ambiguity list is bounded by the
+  ~218 legal moves of a position and costs 0.13 ms. NINTH INSTRUMENT-LIMIT CORRECTION ON THIS
+  PROJECT'S RECORD: a warm micro-benchmark median reads ~5x lower on that cell and is the WRONG
+  instrument for a once-per-ply frame; no number is claimed from it.
+
+  A BOUNDARY WAS FOUND, LOCATED EXACTLY, AND SHOWN TO BE UNREACHABLE — recorded so nobody has to
+  rediscover it. "No emitted row exceeds W" is a DISPLAY invariant (a wider row wraps and adds a
+  screen row, which is the one way content breaks 4a). The (+N more) marker is emitted unpadded and
+  untruncated, so at W <= 8 the region row EXCEEDS W. It cannot fire while the merged renderBoard
+  is in the frame: W = max over the panel rows and renderBoard is always 18 wide, and the marker
+  reaches 19 characters only at N >= 10^10 supplied items. Structurally unreachable — a fence, not
+  a risk, and NO CHANGE IS ASKED FOR.
+
+  THE FIVE ACCEPTED RISKS, NONE UNOWNED, NONE HIGH:
+    1. THE CONTROL SITS IN THE ASSEMBLER, NOT IN THE WRITER. Measured: a raw row handed straight to
+       beginFrameSession's writer emits 1 ESC byte; the same payload through assembleFrame emits 0.
+       The writer's parameter is readonly string[] and cannot express "sanitized". LOW — there is
+       no untrusted consumer in-process and src/frame.ts has ZERO runtime importers. NO CHANGE
+       ASKED FOR: the split is the ticket's own VALUE/SESSION design. Owner ABC-019, the render
+       trigger that will own the only call site.
+    2. NO BOUND ON A SUPPLIED ITEM'S LENGTH — the 400,000-character measurement above. MEDIUM
+       (V2.2.1 by analogue; not a live L1 failure, because nothing supplies this input yet). Owner
+       BA/PM at EPIC-003, which owns the input surface and will decide what a rejection message may
+       quote back. Inventing a bound here is the unrequested flexibility rule 7 forbids.
+    3. THE mode PARAMETER IS AN UNCHECKED ERASED UNION AND IT FAILS OPEN. Measured: "ascii" gives 0
+       code points above U+007F; "unicode", "ASCII", "", undefined, null, 0 and a plain object ALL
+       give 34 — every non-"ascii" value selects unicode. selectGlyphMode fails SAFE to ascii on
+       ambiguity (RISK-005's whole mitigation direction); assembleFrame fails OPEN. THIRD
+       APPEARANCE OF THIS CLASS ON THIS BOARD (ABC-014's GLYPHS[mode] gadget, ABC-015's flags
+       half). LOW — the only producer is ABC-015's closed two-literal domain and there is no
+       runtime caller. Owner EPIC-006, where ABC-015's gate already placed the flags half.
+    4. A FORCED --unicode ON A TERMINAL THAT IS NOT UTF-8. ABC-015's rule row 2 lets the flag beat
+       the locale, so the mismatch is constructible; the frame then puts 64 C1-range bytes per
+       frame on the wire from its own glyph table, one of them 8-bit CSI. LOW, and NOT fixable in
+       this module — see the C1 ruling above. Owner EPIC-006, which owns the flag.
+    5. THE MESSAGE REGION CANNOT DISPLAY THE EPIC'S OWN EXAMPLE REJECTION TEXT. Measured at the
+       real W = 18: ["no piece on that square"] renders as ["", "(+1 more)"] — 23 characters do not
+       fit 18, each item is placed whole or not at all, so the player is told that something was
+       withheld and NEVER WHAT. "illegal move" and "e2e4 is illegal" do fit. This conforms to every
+       criterion and to ## Scope, so it is a DESIGN gap and not a defect; it is the diagnosability
+       shape this gate is required to look for — the failure message that explains a rejection is
+       the one thing the player cannot read. MEDIUM, and the severity is explicitly NOT an
+       ASVS-derived one; NO ASVS DEFAULT SEVERITY WAS OVERRIDDEN BY THIS GATE IN EITHER DIRECTION.
+       Owner BA/PM, place ABC-016 / ABC-017 (which set W) and EPIC-003 (which writes the text).
+
+  ASVS L1 COUNTED AT THE SOURCE RATHER THAN INHERITED: 70 active requirements, and V16 and V17
+  carry NO L1 requirement at all — checked, not assumed. Judged individually: V1.2.1 PASS BY
+  ANALOGUE ON EVIDENCE (the terminal-sink output-encoding bar above, this change's one real
+  engagement) · V1.2.5 and V1.3.2 PASS ON EVIDENCE under the permission model · V2.1.1 PASS (the
+  ticket's ## Scope and ## Security triggers ARE the documented input-validation rule, with a
+  measurable bar) · V2.2.1 PASS on the message text, with risks 2 and 3 recorded rather than
+  waived · V2.2.2 PASS BY ANALOGUE with risk 1 named · V15.3.1 PASS by analogue · V1.2.2/V1.2.3/
+  V1.2.4/V1.3.1/V1.5.1 NOT ENGAGED (no HTML, JSON, SQL, WYSIWYG or XML anywhere) · V13.4.1
+  DEFERRED, unchanged and NOT relaxed · V15.1.1/V15.2.1 NOT MET with the carried high -> low
+  override restated and its evidence RE-CHECKED HERE (dependencies is {}, package.json untouched on
+  this branch), owner Architect/Design at EPIC-006 · the remaining chapters STRUCTURALLY N/A. V7
+  SESSION MANAGEMENT IS N/A AND IS NAMED RATHER THAN SKIPPED BECAUSE THE KEYWORD MATCHES:
+  beginFrameSession is a process-lifetime strategy constant, and ASVS "session" means an
+  authentication session with a token.
+
+  THE PROTOTYPE-CHAIN GADGET WAS PROBED WITH A LIVE NULL CONTROL IN BOTH DIRECTIONS, the third time
+  on this board. Unpolluted with `messages` genuinely absent, assembleFrame THROWS a TypeError;
+  with Object.prototype.messages polluted it assembles and DISPLAYS the attacker's text; with the
+  pollution deleted it throws again. So pollution turns a loud crash into a silent success — and it
+  is BOUNDED: the sanitizer runs over whatever the property yields, so the emitted stream still
+  carries ZERO ESC bytes. Pollution can inject TEXT, never an ESCAPE. And there is no sink: every
+  computed-key write in non-test src/ is a numeric array index, with no __proto__, no Object.assign,
+  no JSON.parse and no merge anywhere. NOT a risk, recorded as a measured bound.
+
+  FAILURE MODES AND LOGGING, because a failure mode with no log is the incident nobody can diagnose
+  later. This module logs NOTHING and there is no logging anywhere in this project. It throws
+  TypeError on a missing panel, a non-array `messages` and a non-string row or item; a sink whose
+  write() throws (EPIPE — a reader that closed early, which is exactly EPIC-006's pipe shape)
+  propagates uncaught. NO ERROR HANDLING IS ASKED FOR HERE — guarding calls that cannot fail
+  through the only future caller is the impossible-scenario handling rule 8 forbids — but ABC-019
+  and EPIC-006 own the enclosing loop and should know that the frame write is a throw site. ONE
+  FAIL DIRECTION IS WORTH RECORDING AS A POSITIVE: a nonsense height makes (sink.rows ?? 0) >= h
+  false, so the writer APPENDS and emits zero cursor control. The strategy choice fails SAFE.
+
+  THE FOUR MANDATORY GATES WERE RE-RUN ON THE TIP a446297 BY THIS ROLE, NOT INHERITED: npm run lint
+  exit 0 (the 2 infos are the pre-existing biome.json schema-version and recommended-deprecation
+  notices, untouched), npm run typecheck exit 0, npm run build exit 0, npm test exit 0 at 304/304
+  on 14 files, skip count 0 by the AGENTS.md command. Test-integrity checker exit 2
+  (.grugops/test-skips.md absent) — the checker COULD NOT RUN, recorded as an ERROR and NOT as a
+  pass, and NO registry file was created: an agent may not self-author a justification to clear its
+  own gate. E2E and auto-UAT oracles UNKNOWN - verify. NO --coverage RUN WAS MADE, so the tracked
+  coverage/ hazard never arose and the 100% figure stays QE's rather than being restated as this
+  gate's.
+
+  NO PRODUCTION CODE AND NO TEST WAS CHANGED. git diff --stat -- src/ is EMPTY and src/frame.ts
+  still hashes bb827f52fe537817e40020a29dfa0e6d — the Engineer's FIRST-COMMIT digest this board's
+  merge record checks, and the digest QE published. Repairing the implementation to make this
+  gate's own verdict come out green is not this role's, and there was nothing to repair.
+
+  CARRIED FORWARD UNCHANGED AND NOT DISCHARGED HERE: QE's two criteria-level items for BA/PM (no
+  criterion constructs a sink whose isTTY or rows is ABSENT — the third consecutive ticket; and
+  criterion 2 is weaker than it was ruled to be); the per-frame W handed to ABC-016/ABC-017;
+  criterion 1's integration obligation at ABC-019/EPIC-006; the reserved prompt row's one-sided
+  contract, still the Orchestrator's; the EPIC-006/ADR-0007 npx disagreement; the two ASVS
+  deferrals; coverage/ tracked and stale. NO ACCEPTANCE CRITERION WAS AMENDED — that is the
+  Backlog exit — and no ticket other than ABC-018 was touched.
+-->
 
 <!--
   ENTERED 2026-08-09 from In Review, by QE/E2E (task `ticket-to-pr-ABC-018`, subtask
@@ -3542,7 +3724,42 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   what the whole ticket is about, and neither to be inflated nor deflated.
 -->
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+
+- [ABC-018] Frame output and redraw — in-place on a TTY, append otherwise, constant height  (size: S, P0, epic: EPIC-002, branch: grugops/ticket-to-pr-ABC-018, entered: 2026-08-09)
+
+<!--
+  ENTERED 2026-08-09 by Security/NFR (task `ticket-to-pr-ABC-018`, subtask
+  `security-nfr-abc018-gate`, ABC-018's gate): **ABC-018 In Security/NFR -> Ready for UAT on a
+  PASS_WITH_RISKS verdict.** Ready for UAT 0/4 -> 1/4; no limit approached, no override taken.
+  The full gate record — the byte-level escape campaign under Node's permission model, NFR-002's
+  two halves on four sinks with two independent samples, the two routed questions decided, the
+  ASVS L1 walkthrough, and the five accepted risks with their owners — is in the In Security/NFR
+  column above and in the Security/NFR notes under
+  .grugops/context/ticket-to-pr-ABC-018/notes/. It is NOT restated here.
+
+  WHAT THIS COLUMN IS BEING ASKED FOR, STATED PLAINLY: nothing a human can do yet. UAT IS DEFERRED
+  TO EPIC-006 AND IS EXPLICITLY NOT PASSED. Ruled on THIS ticket's evidence rather than inherited
+  from ABC-015's identical ruling: src/frame.ts has ZERO RUNTIME IMPORTERS (git grep in non-test
+  src/ returns nothing — checked here, not taken from QE's note), package.json has no bin, no main,
+  no exports and no start, and AGENTS.md's Dev / run is UNKNOWN - verify because there is no CLI
+  entry point until EPIC-006. assembleFrame returns a value and beginFrameSession writes only to a
+  sink a caller injects, so NOTHING REACHES A HUMAN'S TERMINAL and a UAT pass would be a fabrication.
+
+  WHAT A HUMAN MUST EVENTUALLY CHECK IS NAMED RATHER THAN LEFT IMPLICIT, because this gate could
+  not check it in-process: that a real terminal draws the frame without a staircase (this module
+  emits no carriage return and relies on ONLCR, which QE flagged as UNKNOWN - verify under the raw
+  mode EPIC-003's input surface may set); that the two escape sequences behave as the screen model
+  assumes; and that the 64 C1-range bytes a unicode frame carries are harmless on the terminal
+  actually in use. EPIC-006 is the first place all three are observable.
+
+  THIS GATE ATTACHED NO TERMINAL AND CLAIMS NONE. Unlike ABC-015's gate, which drove a real pty,
+  every reading here is of a captured sink or of a file descriptor — recorded as a limit rather
+  than glossed.
+
+  NOTHING MERGED AND NOTHING DEPLOYED — a human holds both. Merge is the Orchestrator's under the
+  owner's standing authority, and it is approval to merge work that PASSED, never to skip a gate.
+-->
 
 <!--
   EXITED 2026-08-08 by the Orchestrator: ABC-015 merged to main and moved Ready for UAT -> Done,

@@ -1,8 +1,8 @@
 ---
 id: ABC-018
 title: Frame output and redraw — in-place on a TTY, append otherwise, constant height
-status: in-security-nfr
-column: In Security/NFR
+status: ready-for-uat
+column: Ready for UAT
 size: S
 priority: P0
 epic: EPIC-002
@@ -632,3 +632,184 @@ Full detail — the per-criterion table with sole-killer counts, every mutant an
 what this gate does **not** establish — is in `.grugops/context/ticket-to-pr-ABC-018/notes/` and is
 not restated here. **No `finding` was written**: none is admissible on this task (no §14 gate to issue
 a stamp, `context.human_admission` is `off`). Nothing is self-stamped.
+
+## Security / NFR
+
+**VERDICT: `PASS_WITH_RISKS`. `In Security/NFR → Ready for UAT` 2026-08-09 by Security/NFR** (task
+`ticket-to-pr-ABC-018`, subtask `security-nfr-abc018-gate`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-018` at `a446297`. `In Security/NFR` 1/2 → 0/2, `Ready for UAT` 0/4 → 1/4;
+no limit approached, no override taken. Gated against `security.asvs_level: L1` and
+`security.block_on: high`; `compliance_regime` is `[]`, so **no Compliance Officer hand-off is
+owed** — recorded rather than silently omitted. **NO REQUIRED FIX IS OUTSTANDING and no
+high-severity item exists to block on. Five accepted risks, each with a severity, a NAMED OWNER and
+a place.** **Nothing merged and nothing deployed — a human holds both.**
+
+**NOT ONE FIGURE IS INHERITED.** The Engineer measured and QE explicitly declined to re-derive, so
+both bars were re-derived here, on instruments written outside the repository. Where this gate
+agrees with the Engineer it says so; where it does not, it says that too.
+
+### The measurable SECURITY bar — re-derived on the EMITTED STREAM, at byte level, and MET
+
+21 adversarial strings — every C0 code point in one string, `U+007F`, `ESC[2J`, OSC-0 and OSC-8,
+DCS passthrough, **DSR (the sequence that makes a terminal write back)**, alternate screen, 8-bit
+CSI and OSC, both ends of the C1 block, a NUL run, CR overstrike, an RTL override, ZWSP and BOM,
+combining marks, an astral pair, and the epic's own example rejection text — × **2 glyph modes** ×
+**2 strategies**, placed in the **message region** and in a **panel row**:
+
+**0 ESC bytes from supplied data · 0 C0 bytes · 0 `U+007F` · 0 code points above `U+007F` in ASCII
+mode · row count CONSTANT at 23 · exactly ONE `write` call per frame (84 frames, 84 writes) ·
+exactly the module's own two sequences in place (`ESC[H`, `ESC[0J`) and ZERO in append.**
+
+The whole campaign was re-run under **Node's permission model**, proved **ARMED first** by three
+positive controls (fs write, fs read outside the allowlist, child process — all
+`ERR_ACCESS_DENIED`), and still completes: the module performs no filesystem operation and spawns
+no process while assembling and emitting, so `V1.2.5` and `V1.3.2` pass **on evidence** rather than
+on a grep.
+
+**Two instrument faults are recorded rather than buried, and both were in the INSTRUMENT.** The
+first run read 42 surviving C0 bytes over 21 in-place frames — ESC is itself a C0 byte and those are
+exactly the module's own 2 per frame; append mode read 0 and gave it away. A retyped C1 payload lost
+its C1 code point in the editor and measured `"2J"`; the corpus is now referenced by index.
+
+### The C1 question QE routed here — DECIDED, and the answer is that stripping C1 would be theatre
+
+A clean unicode frame with **no supplied text at all** already carries **64 C1-range bytes**, and
+the board alone accounts for all 64. **The single 8-bit CSI byte `0x9B` is the black queen** —
+`U+265B` encodes as `E2 99 9B`. The whole adversarial C1 payload adds 5 more. Stripping C1 from
+supplied strings would remove 5 of 69 and leave 64. **The control that makes unicode mode safe is
+the terminal being UTF-8, which is a property of mode selection (`ABC-015`), not of sanitization.**
+The measurable bar stays exactly as written; the residual is accepted risk 4.
+
+### `NFR-002` — both halves re-derived, and the WRITE half's `UNKNOWN - verify` is DISCHARGED
+
+Own harness outside the repository, own process, replay and `parseFen` hoisted out of every clock,
+the writer built once outside it, a discarded warm-up round, **11 rounds × 2,000 iterations** per
+cell, cell order rotated every round, medians of per-round means, a checksum against elision, and
+**two fully independent samples**. **Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64;
+`UNKNOWN - verify` on any other hardware.** Denominator re-derived: a **23-row frame at `W = 18`,
+418 characters serialized — 419 characters / 483 BYTES on the wire in unicode, 419 bytes in ASCII,
+425 characters in place.**
+
+| Cell | 40 plies | 120 plies | 300 plies |
+|---|---|---|---|
+| compute (`renderBoard` + `assembleFrame`) | 5.998 / 6.031 µs | 5.978 / 6.015 µs | 6.137 / 6.046 µs |
+| write — in memory (a floor: no syscall) | 0.638 / 0.644 µs | 0.636 / 0.635 µs | 0.648 / 0.644 µs |
+| write — `fs.writeSync` to `/dev/null` | 1.670 / 1.666 µs | 1.660 / 1.650 µs | 1.674 / 1.672 µs |
+| **write — `fs.writeSync` to a regular file** | **2.733 / 2.772 µs** | **2.714 / 2.733 µs** | **2.711 / 2.768 µs** |
+| write — `fs.writeSync` to a FIFO with a live reader | 2.317 / 2.294 µs | 2.285 / 2.285 µs | 2.302 µs |
+
+**SUM 0.0087–0.0088 ms against 16 ms — 0.055% of the budget, ~1,800x headroom, MET at every ply
+count on every definition; both halves FLAT across 40/120/300**, which is the catalog's `O(window)`
+claim measured rather than inferred.
+
+**The Engineer's second routed question is answered: which "write" the row means.** **Ruled — the
+row's quantity is `serialize + exactly ONE write(2) to a real non-TTY fd`, judged against the most
+expensive honest reading (the regular file).** In-memory omits the syscall the row's own words
+require. The FIFO is `EPIC-006`'s pipe shape and is recorded **beside** the row rather than as it,
+because a pipe write's cost includes the reader's scheduling and is a property of the pair.
+
+**Where this gate differs from the Engineer it is stated, not smoothed:** compute, the in-memory
+sink and `/dev/null` all reproduce inside this gate's two samples; the **regular-file cell reads
+~11% higher (2.711–2.772 against 2.43–2.48 µs) and this gate CANNOT attribute it**. **The in-place
+path, which the Engineer recorded as NOT timed, is now timed and costs the same** — 1.650–1.690 µs
+against append's 1.643–1.671 µs to the same fd, so the 7 extra escape characters are below
+instrument resolution. What a real **terminal** does with them stays `UNKNOWN - verify`.
+
+**The one way this bar can be busted today is measured rather than left as a worry.** Cold, first
+frame, own process — the shape of a frame assembled once per ply — a short message costs
+0.16–0.20 ms, 100,000 characters 3.6–4.3 ms, **400,000 characters 14.1–15.8 ms (the whole budget)**
+and 1,000,000 characters **28.4–41.9 ms (1.8x–2.6x over)**. The item count crosses at ~13,000; an
+ambiguity list is bounded by the ~218 legal moves of a position and costs 0.13 ms. **A warm
+micro-benchmark median reads ~5x lower on that cell and is the wrong instrument for a once-per-ply
+frame — recorded as an instrument-limit correction, and no number is claimed from it.**
+
+### The five accepted risks, none unowned, none high
+
+1. **The control sits in the assembler, not in the writer.** A raw row handed straight to the
+   writer emits 1 ESC byte; the same payload through `assembleFrame` emits 0. **LOW** — no
+   untrusted consumer in-process, zero runtime importers. **No change asked for**: the split is
+   this ticket's own VALUE/SESSION design. Owner **`ABC-019`** (the only future call site).
+2. **No bound on a supplied item's length** — the 400,000-character measurement above. **MEDIUM**
+   (`V2.2.1` by analogue; not a live L1 failure, because nothing supplies this input yet). Owner
+   **BA/PM at `EPIC-003`**. Inventing a bound here is the unrequested flexibility rule 7 forbids.
+3. **`mode` is an unchecked erased union and it fails OPEN.** `"ascii"` gives 0 code points above
+   `U+007F`; `"unicode"`, `"ASCII"`, `""`, `undefined`, `null`, `0` and a plain object all give 34.
+   `selectGlyphMode` fails **safe** to ASCII on ambiguity; `assembleFrame` fails **open**. Third
+   appearance of this class on this board. **LOW** — the only producer is `ABC-015`'s closed
+   two-literal domain. Owner **`EPIC-006`**.
+4. **A forced `--unicode` on a terminal that is not UTF-8.** `ABC-015`'s rule row 2 lets the flag
+   beat the locale, so the mismatch is constructible, and the frame then carries 64 C1-range bytes
+   from its own glyph table. **LOW**, and **not fixable in this module**. Owner **`EPIC-006`**.
+5. **The message region cannot display the epic's own example rejection text.** At the real
+   `W = 18`, `["no piece on that square"]` renders as `["", "(+1 more)"]` — the player is told
+   something was withheld and never what. `"illegal move"` and `"e2e4 is illegal"` do fit. This
+   conforms to every criterion and to `## Scope`, so it is a **design** gap, not a defect — and it
+   is the diagnosability shape a risk gate is required to look for. **MEDIUM, and the severity is
+   explicitly NOT an ASVS-derived one; no ASVS default severity was overridden in either
+   direction.** Owner **BA/PM**, place `ABC-016`/`ABC-017` (which set `W`) and `EPIC-003`.
+
+### A boundary found, located exactly, and shown to be unreachable
+
+*"No emitted row exceeds `W`"* is a display invariant. The `(+N more)` marker is emitted unpadded
+and untruncated, so at `W ≤ 8` the region row exceeds `W`. It cannot fire while the merged
+`renderBoard` is in the frame — `W` is the max over panel rows and `renderBoard` is always 18 wide,
+and the marker reaches 19 characters only at `N ≥ 10^10` supplied items. **A fence, not a risk, and
+no change is asked for.**
+
+### ASVS L1, counted at the source
+
+**70 active requirements; `V16` and `V17` carry no L1 requirement at all — checked, not assumed.**
+`V1.2.1` **PASS by analogue on evidence** (the terminal-sink bar above — this change's one real
+engagement) · `V1.2.5`, `V1.3.2` **PASS on evidence** under the permission model · `V2.1.1` **PASS**
+(this ticket's `## Scope` and `## Security / NFR triggers` *are* the documented input-validation
+rule, with a measurable bar) · `V2.2.1` **PASS** on the message text, with risks 2 and 3 recorded
+rather than waived · `V2.2.2` **PASS by analogue** with risk 1 named · `V15.3.1` **PASS by
+analogue** · `V1.2.2`/`V1.2.3`/`V1.2.4`/`V1.3.1`/`V1.5.1` **not engaged** · `V13.4.1` **DEFERRED**,
+unchanged and not relaxed · `V15.1.1`/`V15.2.1` **NOT MET**, the carried `high → low` override
+restated with its evidence re-checked here (`dependencies` is `{}`, `package.json` untouched on
+this branch), owner Architect/Design at `EPIC-006` · the remaining chapters structurally N/A. **`V7`
+Session Management is N/A and is named rather than skipped because the keyword matches:**
+`beginFrameSession` is a process-lifetime strategy constant; ASVS "session" means an authentication
+session with a token.
+
+### Two probes that produced bounds rather than risks
+
+**The prototype-chain gadget, with a live null control in both directions** (the third on this
+board): unpolluted with `messages` genuinely absent, `assembleFrame` **throws**; with
+`Object.prototype.messages` polluted it assembles and displays the attacker's text; with the
+pollution deleted it throws again. So pollution turns a loud crash into a silent success — and it is
+**bounded**: the sanitizer runs over whatever the property yields, so the emitted stream still
+carries **zero** ESC bytes. **Pollution can inject text, never an escape**, and there is no sink —
+every computed-key write in non-test `src/` is a numeric array index, with no `__proto__`, no
+`Object.assign`, no `JSON.parse` and no merge anywhere.
+
+**Failure modes and logging.** This module logs nothing and there is no logging anywhere in this
+project. It throws `TypeError` on a missing panel, a non-array `messages` and a non-string row or
+item; a sink whose `write()` throws (**EPIPE — a reader that closed early, which is exactly
+`EPIC-006`'s pipe shape**) propagates uncaught. **No error handling is asked for here** — guarding
+calls that cannot fail through the only future caller is the impossible-scenario handling rule 8
+forbids — but `ABC-019` and `EPIC-006` own the enclosing loop and should know the frame write is a
+throw site. **One fail direction is a positive:** a nonsense height makes `(sink.rows ?? 0) >= h`
+false, so the writer **appends** and emits zero cursor control. The strategy choice fails safe.
+
+### Gates, re-run on the tip by this role
+
+`npm run lint` exit **0** (the 2 infos are the pre-existing `biome.json` notices, untouched) ·
+`npm run typecheck` exit **0** · `npm run build` exit **0** · `npm test` exit **0**,
+**304/304 on 14 files** · skip count **0** by the `AGENTS.md` command · **test-integrity checker
+exit 2** (`.grugops/test-skips.md` absent) — the checker *could not run*, recorded as an error and
+**not** as a pass, and **no registry file was created** · **E2E and auto-UAT oracles
+`UNKNOWN - verify`**. **No `--coverage` run was made**, so the tracked `coverage/` hazard never
+arose and the 100% figure stays QE's rather than being restated as this gate's.
+
+**NO PRODUCTION CODE AND NO TEST WAS CHANGED.** `git diff --stat -- src/` is empty and
+`src/frame.ts` still hashes **`bb827f52fe537817e40020a29dfa0e6d`** — the Engineer's first-commit
+digest this board's merge record checks. Repairing the implementation to make this gate's own
+verdict come out green is not this role's, and there was nothing to repair.
+
+**UAT is DEFERRED to `EPIC-006` and explicitly NOT passed** — zero runtime importers (verified
+here), no `bin`/`main`/`exports`/`start`, no CLI entry point, so there is no surface a human can
+exercise. **This gate attached no terminal and claims none.** No acceptance criterion was amended —
+that is the `Backlog` exit — and no ticket other than this one was touched. **No `finding` was
+written**: none is admissible on this task. Nothing is self-stamped, and no `index.md` /
+`index.jsonl` was hand-faked.
