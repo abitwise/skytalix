@@ -247,7 +247,13 @@ the branch tip by BA/PM at the third hop, 2026-08-09. **Amended 2026-08-09 at th
 reads over `A1`–`A12` only and is not a claim about the whole criteria set.** `A13` needs **no
 production change** — the delivered code already answers every row it asks for — it needs **test rows
 for two byte values** (enemy `KNIGHT`, enemy `PAWN`), and until they land the honest statement is
-*twelve of thirteen criteria green*. *(Reframed 2026-08-09, third hop. The word
+*twelve of thirteen criteria green*.
+**AMENDED AGAIN 2026-08-09 AT THE FIFTH BA/PM HOP — the two sentences above are the fourth hop's and
+are now SUPERSEDED, kept because they record what was owed and by whom.** The eight rows landed at
+QE's third hop (hardening **34 → 44** tests, suite **371 → 381**, **zero production lines**) and
+`A13` is **MET**, verified independently at this hop on its own instruments — so the honest statement
+is now **all thirteen criteria `A1`–`A13` green**: `npm test` **381 passed (381) on 16 files**, skip
+count **0**, re-run on the branch tip by BA/PM at the fifth hop, 2026-08-09. *(Reframed 2026-08-09, third hop. The word
 "today" was written before the fix existed and stops being true the moment this branch merges, while
 each figure beside it is evidence a later reader will want — so the baseline is pinned to a named
 commit and a hash instead. Only the framing changed: **no criterion, count, FEN or parenthetical below
@@ -276,7 +282,10 @@ sequence.** The Orchestrator authorised one further pass on a stated ground: the
 become a **quantifier over the whole byte space**, with the unfalsifiable values named, measured and
 excluded rather than silently omitted. **`A13` is the second criterion this ticket has carried
 unsatisfied, and it is unsatisfied in TESTS ONLY** — two byte values need rows, zero production lines
-are owed. **`A11` is NOT reopened by it and its verdict is untouched:** `A11` quantifies over the
+are owed. *(That sentence is the fourth hop's. **Both criteria this ticket carried unsatisfied are now
+MET**: `A11` at the third BA/PM hop and `A13` at the fifth, each closed in tests by QE and each
+verified by the other role before its marker came off — amended 2026-08-09, fifth hop.)*
+**`A11` is NOT reopened by it and its verdict is untouched:** `A11` quantifies over the
 mover's **own** piece types and is satisfied over that domain; `A13` quantifies over the **occupant
 byte**, a strictly wider dimension that **subsumes** `A11`'s domain and maps, value by value, which
 criterion already discharges which value. That mapping is why `A13` costs two values' worth of rows
@@ -617,8 +626,10 @@ instead of twelve.
 
 - **`A13` (the occupant of a home square is quantified over the WHOLE BYTE SPACE, not sampled one
   class at a time). ADDED 2026-08-09 (fourth BA/PM hop).
-  ⚠️ NOT YET SATISFIED BY THE SUITE — the enemy `KNIGHT` and enemy `PAWN` rows are owed; every other
-  value in the space is already discharged and the discharge is mapped, value by value, below.**
+  SATISFIED BY THE SUITE — the `⚠️ NOT YET SATISFIED` marker was retired 2026-08-09 at the FIFTH
+  BA/PM hop, on that hop's own instruments; the retirement note at the foot of this criterion carries
+  the measurement. The eight owed rows exist (QE's third hop, ten new tests, zero production lines),
+  and every value in the space is discharged with the discharge mapped, value by value, below.**
   **Given** a castling option whose right is held, **when** `generateMoves` runs **and when**
   `legalMoves` runs, **then** the option is offered **only if** the king's home square holds the
   mover's own `KING` **and** that option's rook home square holds the mover's own `ROOK` — so for
@@ -727,6 +738,13 @@ instead of twelve.
   it**, material loss *and* a colour change, strictly worse than the own-colour family this ticket was
   widened for. Verified independently by the Orchestrator before this criterion was authorised.
 
+  ***AMENDED 2026-08-09 AT THE FIFTH BA/PM HOP, so the paragraph above is not read as a claim about
+  today.*** Its measurements stand as the record of the tree that owed the rows, and the one sentence
+  that has stopped being true is named rather than quietly edited: ***"no row in this suite exercises
+  that"*** — four rows on each square now do. On the delivered suite the four admissions **die**, and
+  they die to those rows **alone**: the acceptance file scores **33/33 on every one of the four**, so
+  nothing but `A13`'s own rows can see them. Re-measured at this hop, independently of QE's table.
+
   *At `A11`'s established doubling — every type in at least two configurations, both sides to move,
   all four rights — the region is eight configurations. Measured on the delivered tree 2026-08-09 by
   BA/PM, with each row's setup ASSERTED rather than trusted from its label (0 of 8 labels lie about
@@ -777,6 +795,146 @@ instead of twelve.
   stopping rule recorded for this ticket, (ii) and (iii) belong to a follow-up hardening ticket for
   `src/moves.ts`, not to another `ABC-009` hop** — `## Scope` is three bullets about castling
   preconditions, and an unbounded mutation net is not in it.
+
+  **THAT FOLLOW-UP TICKET NOW EXISTS — `ABC-023`, cut 2026-08-09 at the fifth BA/PM hop
+  (`plans/tickets/ABC-023-castling-precondition-net-hardening.md`, `Backlog`, `S`, `P2`).** It carries
+  (ii) and (iii) above plus QE's side-conditional residual, each with a printed witness measured at
+  that hop rather than an argument. **(iii) grew sharper there and the growth is `ABC-023`'s, not this
+  ticket's:** of eight mutants of the `CastleOption` constants, six die, and the two that survive
+  **the full suite AND the standing `PERFT_DEEP=1` 32/32 lane** are the ones that drop the castle's
+  **destination** square from `kingPath` — `legalMoves`' own check filter masks that square, so only
+  the `generateMoves` layer can see it. **Nothing here is a defect in the delivered code, which tests
+  all three king-path squares**; it is a hole in the net, and under the stopping rule it was named and
+  routed rather than fixed inside `ABC-009`.
+
+  > **`A13`'s `⚠️ NOT YET SATISFIED` MARKER RETIRED 2026-08-09 AT THE FIFTH BA/PM HOP, ON THIS ROLE'S
+  > OWN INSTRUMENTS. `A13` IS MET. ONE NEW HOLE WAS MEASURED IN THE PROCESS AND IS NAMED, ROUTED TO
+  > `ABC-023`, AND NOT FIXED — the stopping rule operating as written.**
+  >
+  > QE closed `A13` in tests at its third hop (hardening 34 → 44, **eight rows, ten tests, zero
+  > production lines**) and deliberately left this marker byte-identical, on the reasoning the
+  > Orchestrator accepted for `A11`: **the failure these hops repair is a role certifying its own
+  > rows**, so the role that wrote the rows does not stamp the criterion satisfied. This note is that
+  > independent check. **Nothing below is taken from QE's table or the Orchestrator's** — the mutant
+  > set was derived from **`A13`'s own two accounting tables** (every one of the twelve wrong byte
+  > values on each home square), which is a different 24 from QE's 24 and predicts a different split.
+  >
+  > **Instrument.** A copy of `src/` outside the repository with `node_modules` symlinked. Every
+  > mutant asserts its anchor **unique** in the pristine source and its bytes **changed** (otherwise
+  > `HARNESS-ERROR`, never `SURVIVED`), typechecks under `tsc --noEmit` so a broken build can never be
+  > scored a survivor, runs in **one fresh OS process per tree state**, and restores `src/moves.ts` to
+  > md5 `0e247853ab2c05887c76105ff83d8621` after every mutant. **No file under `src/` in this
+  > repository was modified at any point** and no test row was written.
+  >
+  > **1. The whole byte space, one mutant per wrong value — 24 mutants, 17 KILLED, 7 SURVIVED, 0
+  > verdict disagreements with `A13`'s own accounting, 0 broken builds, 0 harness errors.** Each
+  > mutant admits exactly one wrong value on one home square; the bucket `A13` assigns that value is
+  > the prediction, and the run is the test of it:
+  >
+  > ```
+  > baseline (delivered)  acceptance 33/33 · hardening 44/44 · suite 381/381 · skip 0 · tsc 0
+  >
+  > KING's home square           verdict    acc     hard    suite     A13's bucket
+  > EMPTY                        KILLED     25/33   44/44   373/381   absence row A4
+  > own PAWN/KNIGHT/BISHOP       KILLED     33..29  42/44   379..375  A11
+  > own ROOK / own QUEEN         KILLED     33/33   42,40   379,377   A11
+  > enemy PAWN                   KILLED     33/33   42/44   379/381   NEWLY REQUIRED — A13's own rows
+  > enemy KNIGHT                 KILLED     33/33   42/44   379/381   NEWLY REQUIRED — A13's own rows
+  > enemy BISHOP                 KILLED     31/33   44/44   379/381   A5 row 3
+  > enemy ROOK / QUEEN / KING    SURVIVED   33/33   44/44   381/381   equivalent, EXCLUDED
+  >
+  > ROOK's home square           verdict    acc     hard    suite     A13's bucket
+  > EMPTY                        KILLED     32/33   40/44   376/381   absence row A3
+  > own PAWN/KNIGHT/BISHOP/QUEEN KILLED     33..31  42,40   379..375  A11
+  > own KING                     SURVIVED   33/33   44/44   381/381   NOT CONSTRUCTIBLE
+  > enemy PAWN                   KILLED     33/33   42/44   379/381   NEWLY REQUIRED — A13's own rows
+  > enemy KNIGHT                 KILLED     33/33   42/44   379/381   NEWLY REQUIRED — A13's own rows
+  > enemy BISHOP                 KILLED     32/33   44/44   380/381   A6 row 4
+  > enemy ROOK / QUEEN / KING    SURVIVED   33/33   44/44   381/381   equivalent, EXCLUDED
+  > ```
+  >
+  > **The four newly-required admissions die to `A13`'s rows ALONE — acceptance 33/33 on every one of
+  > the four**, and the failing tests name themselves as the `A13` rows, two per mutant. **The seven
+  > survivors are exactly the seven values `A13` names unfalsifiable** and no more: a kill among them
+  > would have been a bug in a row, not a win. That is the property that separates this criterion from
+  > a fifth sample — the rows pin observable behaviour, not the shape of the implementation.
+  >
+  > **2. The 13-value domain, re-derived on this role's own probe — and the trap DESIGNED OUT rather
+  > than remembered.** My fourth-hop probe returned `11` because its board already held a white king,
+  > and the Orchestrator's rebuild of it returned the same wrong `11`. QE designed the trap out; that
+  > is the standard now, so this probe carries **three** independent defences: the king parking
+  > **varies per attempt** (both kings at `d4`/`e6`, then white only, then black only, then `c5`/`g7`,
+  > so no attempt ever needs two kings of one colour), the parking squares are **asserted** never to
+  > be the square under test, and **every discovered byte prints the exact FEN that produced it**,
+  > which is then re-parsed before the byte is recorded. Result: **13 distinct bytes on all six home
+  > squares, the same 13 on each** — `0`, `1`–`6`, `9`–`14`, sweeping every code point `0x00`–`0x2FF`
+  > as a placement character. The two bytes the trap eats print their inputs:
+  >
+  > ```
+  > byte  6 on e1  "K"  parking: black king only    8/8/4k3/8/8/8/8/4K3 w - - 0 1
+  > byte 14 on e1  "k"  parking: white king only    8/8/8/8/3K4/8/8/4k3 w - - 0 1
+  > ```
+  >
+  > **3. The accounting is ENFORCED, not narrated — five deliberate corruptions of the suite file** in
+  > the scratch copy against **pristine** production source, each typechecked so the red is an
+  > assertion and not a transform error (`tsc 0` on all five), each restored afterwards and the tree
+  > re-run green:
+  >
+  > ```
+  > drop ONE of the two enemy-PAWN rows        RED  expected ['K','Q','k'] to equal ['K','Q','k','q']
+  > drop BOTH enemy-PAWN rows                  RED  expected ['enemy KNIGHT','enemy PAWN'] to equal
+  >                                                 ['enemy KNIGHT']  — the discharge-map join
+  > relabel the enemy-KNIGHT row as PAWN       RED  "the ENEMY impostor must stand on the square under
+  >   (count 13 COINCIDES, so every                 test: 4k3/8/8/8/8/8/8/K3n2R w K - 0 1"
+  >    outcome assertion still passes)
+  > SILENTLY OMIT one byte from the map        RED  "king's square: a bucket for every value and no
+  >                                                 value without one"
+  > make a row INERT (own bishop on f1)        RED  "the empty squares must be EMPTY"
+  > ```
+  >
+  > **The fourth of those is the one nobody had run, and it is the corruption that matters most here:
+  > silent omission of a value is this ticket's signature failure — it produced four consecutive
+  > misses — and the accounting map catches it mechanically.** One honest correction to my own
+  > prediction: I expected the first corruption to fail on the doubling clause and it fails on the
+  > all-four-rights clause instead, one assertion earlier. The clause is enforced either way (the
+  > doubling assertion fires on the relabel), and the measured message is printed above rather than
+  > the one I expected.
+  >
+  > **4. Structural, re-checked at the source rather than inherited.** `src/moves.ts` md5
+  > `0e247853ab2c05887c76105ff83d8621`, unchanged across six hops; `git status --short -- src/` empty;
+  > **all 14 pre-existing `main` test files diffed individually, 0 modified** (`A8`, at line level);
+  > `npm test` **381 passed (381) on 16 files** at skip **0** on the branch tip. The eight rows in
+  > `src/moves.castling.hardening.test.ts` are, FEN for FEN and count for count, the eight in `A13`'s
+  > own table above; each asserts the occupant byte in **type and colour**, the other precondition,
+  > exactly one right, non-inertness, both exported layers and full purity.
+  >
+  > **5. THE NEW HOLE, NAMED AND ROUTED — `ABC-023`, not a sixth hop.** Sizing the follow-up ticket on
+  > this board's own tests turned up something outside `A13`'s dimension: **the castle's DESTINATION
+  > square is not pinned by anything in the net.** Dropping each `kingPath` square in turn —
+  >
+  > ```
+  > WK drops e1 (ORIGIN)       KILLED    379/381   moves.test.ts, perft.test.ts
+  > WK drops f1 (CROSSED)      KILLED    378/381   moves.test.ts, perft.test.ts
+  > WK drops g1 (DESTINATION)  SURVIVED  381/381   and PERFT_DEEP=1 32/32 EXACT
+  > WQ drops e1 (ORIGIN)       KILLED    380/381   moves.test.ts
+  > WQ drops d1 (CROSSED)      KILLED    379/381   perft.test.ts
+  > WQ drops c1 (DESTINATION)  SURVIVED  381/381   and PERFT_DEEP=1 32/32 EXACT
+  >
+  > delivered  4k1r1/8/8/8/8/8/8/4K2R w K - 0 1  gen [] · legal [] · 14 moves
+  > mutant     4k1r1/8/8/8/8/8/8/4K2R w K - 0 1  gen [e1g1] · legal [] · 14 moves
+  > ```
+  >
+  > **Why it survives is the whole point: `legalMoves` masks it.** A castle landing on an attacked
+  > square leaves the mover's king in check, so the outer filter removes it and every count-based
+  > oracle — including perft, which counts legal moves — is blind. The origin and the crossed square
+  > are *not* masked that way, which is exactly why those four die. What the mutant breaks is the
+  > **exported `generateMoves`** and its own documented invariant (`src/moves.ts:306-308`, *"a castle
+  > never appears when the king would start, cross, or land in check"*), and `## Scope` bullet 4 of
+  > this ticket says *"offered"* means offered by **both** layers. **It is the only class found on
+  > this ticket whose position is LEGALLY REACHABLE** — everything else here needs a
+  > semantically-invalid FEN. **The delivered code is correct on it**; no criterion is owed by
+  > `ABC-009` and no row was written here. It is `ABC-023`'s, under the stopping rule, which is
+  > written down precisely so a new finding cannot argue itself into another loop.
 
 > ### CORRECTED IN PLACE 2026-08-09 by BA/PM (task `ticket-to-pr-ABC-009`, subtask `bapm-abc009-acceptance`, Workflow 07)
 >
@@ -1353,6 +1511,20 @@ this ticket could be **pulled into dev**, which it could and was, and *"measurab
 how the criteria are written, not a claim that every one is currently green. **A criterion added after
 delivery because a dimension was finally counted is not a Definition-of-Ready failure** — it is the
 fifth gap this ticket has found by measurement, and the first one whose region is provably the last.
+
+**Amended a last time 2026-08-09 at the FIFTH BA/PM hop, and again the correction is to the sentence
+directly above.** *"Twelve of thirteen criteria green"* was the fourth hop's honest statement and is
+now superseded: QE's third hop wrote `A13`'s eight rows and this hop verified the criterion
+independently (24 mutants derived from `A13`'s own accounting, 17 killed, 7 survived, **0 verdict
+disagreements**, 0 broken builds; the 13-value domain re-derived on six home squares with the
+11-vs-13 trap designed out; the accounting falsified on five deliberate corruptions of the suite
+file, including a silent omission nobody had tried). **All thirteen criteria `A1`–`A13` are green on
+the branch tip**, `npm test` **381/381** on 16 files at skip **0**. **Still no tick was flipped and
+still no board move was taken** — `ABC-009` stays in `Ready for UAT` **1/4**, and the UAT ruling, the
+merge and the close are the Orchestrator's. **One new hole was measured at this hop and is NOT a
+Definition-of-Ready failure either**: it is a hole in the test net around constants this ticket never
+varied, the delivered code is correct on it, and it is cut as **`ABC-023`** rather than argued into a
+sixth hop.
 
 ~~Sits in `Backlog`. Promotion to `Ready` is a separate BA/PM step and has not been taken.~~
 
