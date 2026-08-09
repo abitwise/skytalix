@@ -1,8 +1,8 @@
 ---
 id: ABC-009
 title: legalMoves mutates the position it documents as unchanged
-status: in-review
-column: In Review
+status: ready-for-uat
+column: Ready for UAT
 size: S
 priority: P1
 epic: EPIC-001
@@ -1719,3 +1719,263 @@ byte-for-byte the board they had before it.
   arithmetic carries a 10x robustness bound.
 - **A cause for the twin's ~+0.9% aggregate systematic** — observed across two gates, not attributed.
 - **Any figure for non-M3 hardware** — `UNKNOWN - verify`.
+
+## QE — second hop: `A11` closed as a DIMENSION
+
+**BROKEN-TESTED AND MOVED `In Review` → `Ready for UAT` 2026-08-09 by QE/E2E** (task
+`ticket-to-pr-ABC-009`, subtask `qe-abc009-a11`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-009`. Verdict **PASS**. `In Review` 1/3 → 0/3, `Ready for UAT` 0/4 → 1/4;
+no limit approached, no override taken, no written reason owed. **Nothing merged and nothing deployed
+— a human holds both, and the owner's standing merge authority is NOT deploy authority.**
+
+**Nothing above this section was edited — including `## Acceptance`.** `A11`'s own `⚠️ NOT YET
+SATISFIED BY THE SUITE` marker and the `## Acceptance` preamble line that carries it are **now stale
+and are left standing**: they are BA/PM's text, this role does not edit criteria, and *the one thing
+this hop must not do is let the role that wrote the rows also mark the criterion satisfied.* That is
+the exact failure this hop exists to repair — three roles in a row certified a sample as a dimension.
+Retiring the marker is **routed to BA/PM as risk 1** with the measurement to check it against.
+
+### Why this hop existed, stated plainly against this role's own first hop
+
+The first QE hop closed the **queen** and called the piece-type dimension closed. It was not. Four
+rows for one piece type is a third sample, not a quantifier — and BA/PM then measured three further
+builds of the same shape passing everything, one of which (*the king's square read as "own KING or own
+ROOK"*) **destroys a rook and writes a king over it** on `4k3/8/8/8/8/8/8/K3R2R w K - 0 1`. This
+role's rows were the ones that were not enough, and that is the honest way round to say it.
+
+### What was added: TEST ROWS AND ZERO PRODUCTION LINES
+
+`src/moves.castling.hardening.test.ts` — **19 tests → 34**, in the file this role already owns. **No
+production line changed:** `src/moves.ts` still hashes `0e247853ab2c05887c76105ff83d8621` and
+`git diff 8f540cf -- src/moves.ts` is empty. **All fourteen `*.test.ts` files that exist on `main`
+are unmodified** (checked by iterating `git ls-tree main -- src` and diffing each **individually**,
+not by inspection), and the Engineer's acceptance file `src/moves.castling.test.ts` is byte-identical
+— so `A8`'s line-level requirement holds for this hop as it did for the previous two.
+
+- **The two `QUEEN_ON_*` tables became `IMPOSTOR_ON_*` tables that enumerate EVERY own piece type**
+  the square can hold — 12 rows on the king's home square (`QUEEN`, `ROOK`, `BISHOP`, `KNIGHT`,
+  `PAWN`) and 10 on the rook's (`QUEEN`, `BISHOP`, `KNIGHT`, `PAWN`). The eight queen rows are carried
+  through verbatim, FENs and counts unchanged; **14 rows are new.**
+- **Each type appears in at least TWO (colour to move, castling side) configurations**, and all four
+  configurations appear in each table. Measured as load-bearing rather than assumed for symmetry —
+  see the two conditional mutants below.
+- **The bishop and knight rows deliberately repeat `A5`/`A6` rows.** `A11`'s enumeration has to be
+  exhaustive **where it is written**; a table that leans on another file's row set for two of its five
+  types is not a quantifier.
+- **One new test asserts the QUANTIFIER ITSELF**, so exhaustiveness is a property and not a comment:
+  the piece-type universe is **derived by probing `parseFen`** with every letter of the alphabet on
+  two boards (a white piece needs a white king elsewhere; the white-`KING` probe needs h1 to *be* that
+  king), and the two tables are required to cover that universe minus the legal occupant. Delete a row
+  and it goes red; **add a seventh parseable piece type and it goes red until `A11` gains a row.**
+  `## Scope` binds the contract to *"every position it accepts"*, so `parseFen` is the domain's
+  authority — not a second hand list that can drift from it.
+- **Every row asserts the EXPERIMENT before the outcome** (`expectImpostorSetup`): the named own piece
+  really stands on the square under test, **the other precondition really HOLDS** so exactly one
+  condition can be the reason the castle is refused, and exactly the one right is held.
+
+### `A11` measured on the delivered tree — a SEVENTH independent derivation, and every row holds
+
+`FLAG_CASTLE` counted in `generateMoves` **and** in `legalMoves`; state compared over all 128 board
+bytes **and** all five scalars; `toFen` asserted beside the bytes for a legible failure.
+
+```
+KING's home square, matching rook present         legalMoves  castles gen/legal  state
+own QUEEN    4k3/8/8/8/8/8/8/K3Q2R w K - 0 1          31           0 / 0         pure
+own QUEEN    4k3/8/8/8/8/8/8/R3Q2K w Q - 0 1          32           0 / 0         pure
+own QUEEN    k3q2r/8/8/8/8/8/8/4K3 b k - 0 1          31           0 / 0         pure
+own QUEEN    r3q2k/8/8/8/8/8/8/4K3 b q - 0 1          32           0 / 0         pure
+own ROOK     4k3/8/8/8/8/8/8/K3R2R w K - 0 1          24           0 / 0         pure   NEW
+own ROOK     k3r2r/8/8/8/8/8/8/4K3 b k - 0 1          24           0 / 0         pure   NEW
+own BISHOP   4k3/8/8/8/8/8/8/K3B2R w K - 0 1          19           0 / 0         pure   NEW (= A5 r1)
+own BISHOP   k3b2r/8/8/8/8/8/8/4K3 b k - 0 1          19           0 / 0         pure   NEW (= A5 r4)
+own KNIGHT   4k3/8/8/8/8/8/8/K3N2R w K - 0 1          16           0 / 0         pure   NEW
+own KNIGHT   4k3/8/8/8/8/8/8/R3N2K w Q - 0 1          17           0 / 0         pure   NEW (= A5 r2)
+own PAWN     4k3/8/8/8/8/8/8/K3P2R w K - 0 1          13           0 / 0         pure   NEW
+own PAWN     r3p2k/8/8/8/8/8/8/4K3 b q - 0 1          14           0 / 0         pure   NEW
+
+ROOK's home square, king already home
+own QUEEN    4k3/8/8/8/8/8/8/4K2Q w K - 0 1           21           0 / 0         pure
+own QUEEN    4k3/8/8/8/8/8/8/Q3K3 w Q - 0 1           22           0 / 0         pure
+own QUEEN    4k2q/8/8/8/8/8/8/4K3 b k - 0 1           21           0 / 0         pure
+own QUEEN    q3k3/8/8/8/8/8/8/4K3 b q - 0 1           22           0 / 0         pure
+own BISHOP   4k3/8/8/8/8/8/8/4K2B w K - 0 1           12           0 / 0         pure   NEW (= A6 r1)
+own BISHOP   4k2b/8/8/8/8/8/8/4K3 b k - 0 1           12           0 / 0         pure   NEW (= A6 r3)
+own KNIGHT   4k3/8/8/8/8/8/8/4K2N w K - 0 1            7           0 / 0         pure   NEW
+own KNIGHT   4k3/8/8/8/8/8/8/N3K3 w Q - 0 1            7           0 / 0         pure   NEW (= A6 r2)
+own PAWN     4k3/8/8/8/8/8/8/4K2P w K - 0 1            6           0 / 0         pure   NEW
+own PAWN     p3k3/8/8/8/8/8/8/4K3 b q - 0 1            6           0 / 0         pure   NEW
+```
+
+**Every figure BA/PM published for `A11` reproduced exactly**, and the four mirrors it measured
+(`R3Q2K w Q` 32, `k3q2r b k` 31, `r3p2k b q` 14, `p3k3 b q` 6) reproduced too. The five counts this
+role derived first — `k3r2r b k` 24, `k3b2r b k` 19, `R3N2K w Q` 17, `4k2b b k` 12, `N3K3 w Q` 7 —
+agree with `A5`/`A6`'s published values where the FEN is shared. **No discrepancy against any prior
+derivation and nothing was adjusted in either direction.** The four legal castles still read
+**15 / 16 / 15 / 16 with exactly one castle each**, and kiwipete **48 with both castles still
+offered** — the over-rejection controls hold.
+
+### The kill/survive table: the DIMENSION is closed, and the equivalents are untouched
+
+Twenty mutants of the **delivered** diff, each applied to a copy of `src/` held **outside** the
+repository, each asserting its anchor **unique** and its bytes **changed** before running (otherwise
+`HARNESS-ERROR`, never `SURVIVED` — and that path **fired**: nine mutants were mis-generated on the
+first sweep and the harness refused to score them rather than reporting nine false survivors), each
+`tsc --noEmit`'d so a broken build cannot be a survivor, each restored with `src/moves.ts` re-hashed
+afterwards. Both test files run per mutant with a JSON reporter, so failures are attributed by name.
+
+```
+MUST DIE — one further own piece type admitted, the whole dimension
+mutant (guard reads "own X or own Y")      acceptance  hardening  full suite   killed by
+KING's square admits own QUEEN                33/33      30/34     367/371     hardening
+KING's square admits own ROOK                 33/33      32/34     369/371     hardening      <- was OPEN
+KING's square admits own BISHOP               29/33      32/34     365/371     both
+KING's square admits own KNIGHT               31/33      32/34     367/371     both
+KING's square admits own PAWN                 33/33      32/34     369/371     hardening      <- was OPEN
+ROOK's square admits own QUEEN                33/33      30/34     367/371     hardening
+ROOK's square admits own BISHOP               31/33      30/34     365/371     both
+ROOK's square admits own KNIGHT               32/33      32/34     368/371     both
+ROOK's square admits own PAWN                 33/33      32/34     369/371     hardening      <- was OPEN
+admits own PAWN on the king's square ONLY when black is to move
+                                              33/33      33/34     370/371     hardening
+admits own KNIGHT on the rook's square ONLY queenside
+                                              32/33      33/34     369/371     both
+
+MUST SURVIVE — the nine behaviour-equivalent mutants, ALL NINE STILL SURVIVING
+colour-blind on the king's square / rook's square / both     33/33  34/34  371/371   survived
+king guard `continue` → `break` / → `return`                 33/33  34/34  371/371   survived
+both guards below `empty` / below the through-check / above the right test
+                                                             33/33  34/34  371/371   survived
+an extra "rook square non-EMPTY" condition (subsumed)        33/33  34/34  371/371   survived
+
+20 mutants · 11 killed · 9 survived · 0 verdict mismatches · 0 broken builds
+```
+
+**The three mutants that passed the entire net before this hop now die, and they die to these rows
+alone.** The dimension is closed rather than sampled: **every** own piece type on **either** home
+square is now pinned, and the enumeration is itself asserted, so the next admission of a type nobody
+has thought of cannot pass by being an example the table happened to omit.
+
+**The nine equivalents kill count is ZERO — that is the property that matters most about an added
+row.** Rows that had killed them would pin implementation shape rather than observable behaviour,
+which is the theatre BA/PM's correction and the Engineer's fifth-mutant note both rejected.
+
+**The two conditional mutants are why each type carries a second configuration, and they were built
+to falsify that choice rather than to decorate it.** The black-only pawn admission is killed by
+**exactly one row — the black-queenside pawn row** (`r3p2k b q`); with only BA/PM's white-kingside
+pawn row it would have **survived**. The queenside-only knight admission is killed by the queenside
+knight row. Six of this ticket's 62 earlier mutants made a guard conditional on side or castle, so
+this is a live class and not a hypothetical.
+
+### The harm reproduces on every one of them — ONE PROCESS PER TREE
+
+Recorded because BA/PM's first probe ran four tree states in one process and Node's module cache
+served pristine `moves.ts` to every round, producing a false *"the harms don't reproduce"*. Every
+measurement below is a **fresh `node` process per tree state**, pristine and mutant alike.
+
+```
+KING's home square — one legalMoves() call DESTROYS the occupant and writes a king over it
+own QUEEN   4k3/8/8/8/8/8/8/K3Q2R w K   delivered 31 / 0 castles / pure   mutant 32 / 1 / e1: 5 → 6
+own ROOK    4k3/8/8/8/8/8/8/K3R2R w K   delivered 24 / 0 / pure           mutant 25 / 1 / e1: 4 → 6
+own BISHOP  4k3/8/8/8/8/8/8/K3B2R w K   delivered 19 / 0 / pure           mutant 20 / 1 / e1: 3 → 6
+own KNIGHT  4k3/8/8/8/8/8/8/K3N2R w K   delivered 16 / 0 / pure           mutant 17 / 1 / e1: 2 → 6
+own PAWN    4k3/8/8/8/8/8/8/K3P2R w K   delivered 13 / 0 / pure           mutant 14 / 1 / e1: 1 → 6
+own PAWN    r3p2k/8/8/8/8/8/8/4K3 b q   delivered 14 / 0 / pure           mutant 15 / 1 / e8: 9 → 14
+  every king's-square row ends 4k3/8/8/8/8/8/8/K3K2R w K - 0 1 — a phantom king ON TOP of the piece
+
+ROOK's home square — BYTE-IDENTICAL, so only the FLAG_CASTLE count can ever see it
+own QUEEN / BISHOP / KNIGHT / PAWN      delivered 21 / 12 / 7 / 6, 0 castles, pure
+                                        mutant    22 / 13 / 8 / 7, 1 castle, position UNCHANGED
+```
+
+So every mutant these rows kill is a **real defect on a position `parseFen` accepts**, not a shape:
+the king's-square family is silent material loss with a piece-type change (`ABC-022` half (a)'s shape
+by the castling route) on **every** own piece type, and the rook's-square family confirms `A6`'s own
+structural rationale — purity is blind to it and the offer count is the only witness.
+
+### The rows were proved non-vacuous, which is a trap a 22-row table can fall into silently
+
+A row asserting *"no castle is offered"* also passes when its FEN sets up something else entirely, so
+a typo would make the table **claim** a type it never tested. `expectImpostorSetup` closes that, and
+it was falsified rather than trusted — two deliberate row corruptions in a scratch copy, pristine
+source:
+
+```
+label PAWN, FEN carrying a BISHOP (count 19 COINCIDES, so every outcome assertion passes)
+  -> RED: "the impostor must stand on the square under test: 4k3/8/8/8/8/8/8/K3B2R w K - 0 1"
+the matching rook deleted from the king's-square ROOK row
+  -> RED: "the OTHER precondition must hold: 4k3/8/8/8/8/8/8/K3R3 w K - 0 1"
+```
+
+Without those assertions the first corruption is **invisible**: the table would have carried a row
+labelled `PAWN` that tested `BISHOP` twice while the exhaustiveness check read green.
+
+### The gates, re-run on the tip by this role and never inherited
+
+| gate | command | result |
+|---|---|---|
+| lint | `npm run lint` | **exit 0** after one autofix (below); 2 pre-existing `biome.json` infos |
+| typecheck | `npm run typecheck` | **exit 0** |
+| unit | `npm test` | **371 passed (371) on 16 files** (356 before these rows) |
+| build | `npm run build` | **exit 0** (`tsc --noEmit`) |
+| skip count | the `AGENTS.md` `### Test integrity` command | **0** — `A8`'s requirement |
+| deep perft (`A9`) | `PERFT_DEEP=1 npx vitest run src/perft.test.ts` | **32/32 exact, 36.04 s** |
+| `A8` no existing test modified | every `*.test.ts` on `main` diffed individually | **0 of 14 modified** |
+| test-integrity checker | `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0` | **exit 2 — an ERROR, not a pass** |
+| e2e | — | `UNKNOWN - verify` — no UI surface and no runnable game until `EPIC-006` |
+| auto-UAT oracles | `node scripts/check-uat-oracles.js` | `UNKNOWN - verify` — absent in this install |
+
+**Lint went red once and it was this role's own formatting, fixed and reported rather than smoothed
+over:** `biome` wanted a different line break inside one `expect(...)` call. One autofix pass on the
+new file alone (`npx biome check --write src/moves.castling.hardening.test.ts`) — **1 of 2
+`self_fix_attempts` spent** — then the full `npm run lint` re-run at exit 0. The mutation campaign was
+**re-run after the format change** so every number above is against the delivered bytes, verified with
+`cmp` between the scratch tree's copy and the repository's file.
+
+**Exit 2 is recorded as an ERROR and not as a pass.** `.grugops/test-skips.md` does not exist (`ls`,
+not assumed); Workflow 05 step 3 makes exit 2 *"the checker could not run"*, distinct from the exit-1
+human-only short-circuit. **No registry file was created** — an agent may not author a justification
+to clear its own gate, and with a skip count of 0 nothing is owed one.
+
+**`NFR-001` was NOT re-measured and no throughput figure here is this role's.** These rows add no
+production line and change no code path, so the two guards execute exactly as often as before;
+Security/NFR's count-based discharge (**396,350 executions, 0 rejections, ~0.01% of the sweep**)
+stands untouched by a test-only change. Re-running the benchmark to "confirm" that would be the
+instrument-noise mistake this project has now recorded ten times.
+
+### Risks carried into `Ready for UAT`, each with an owner
+
+1. **`A11`'s `⚠️ NOT YET SATISFIED` marker is now STALE — owner BA/PM, low.** The criterion is met on
+   the measurements above; the marker and the `## Acceptance` preamble line are BA/PM's text and are
+   **deliberately not edited here**. This is the one item where leaving a false-looking line standing
+   is the lesser evil: the role that wrote the rows must not also be the role that marks the criterion
+   satisfied, on a ticket where three roles in a row certified a sample as a dimension.
+2. **`A11` is closed as a dimension over PIECE TYPE; no dimension bounds the criteria set as a whole
+   — owner QE/BA-PM.** Twenty mutants is not a proof, and the previous hop's 62 were not either. The
+   two dimensions this file now pins were found by asking what the rows hold constant, which is a
+   heuristic, not a decision procedure. **Expect a further class to exist.**
+3. **The nine equivalence arguments are still arguments over an enumerated corpus — owner QE, low.**
+   Nothing was re-enumerated this hop; the 12,584-position corpus stands as it was, and it is not the
+   position space.
+4. **`A7` remains inert by construction — owner BA/PM, low.** Not re-measured here, not re-litigated,
+   and not cited as evidence about this fix.
+5. **`ABC-022` half (b) is live BY DESIGN — severity none.** Fenced, untested here, not a miss.
+6. **Test-integrity checker exit 2, E2E and the auto-UAT oracles `UNKNOWN - verify` — human-owned.**
+   None of the three is reported as green.
+7. **UAT stays DEFERRED to `EPIC-006` and is explicitly NOT passed** — unchanged from the
+   Security/NFR gate's ruling, and these rows add no human-exercisable surface.
+
+### What this hop does NOT establish
+
+- **That the criteria set is now complete.** `A11` is closed; completeness is not claimed. Nine
+  equivalent survivors remain by design, and the honest expectation after three hops of finding one
+  more class each time is that a fourth exists.
+- **A terminal Workflow 05 verdict.** `READY_FOR_HUMAN_REVIEW` is the gate's to emit and no §14 gate
+  exists in this install. **No `finding` was written and nothing is self-stamped**;
+  `context.human_admission` is `off`.
+- **Any `NFR-001` or coverage figure.** Neither was measured here. `## Problem` is explicit that a
+  test which only raises coverage adds nothing on this ticket.
+- **That `A11`'s excluded shapes were re-derived.** The own-`KING`-on-the-rook's-square exclusion and
+  the enemy-occupant masking are BA/PM's and the previous hop's measurements, carried and cited, not
+  re-measured — except that the enemy-queen assertions already in this file still pass.
+- **Anything about `ABC-010`.** Its stated scope would reject every FEN in these rows; unbuilt, and
+  not edited.
