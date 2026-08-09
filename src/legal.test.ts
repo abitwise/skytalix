@@ -265,8 +265,11 @@ describe("ABC-011 QE edge probes", () => {
 // design hop (ticket, `### ANSWERED 2026-08-03`) after the project owner declined to merge
 // carrying it: purity is UNCONDITIONAL, it is bought with a precondition rather than with a
 // change to what the predicate means, and the answer off that domain is SPECIFIED — `false`,
-// touching nothing — because `generateMoves` is itself unsound there and the oracle cannot be
-// the authority on a class it gets wrong.
+// touching nothing — because the predicate never consults `generateMoves` and therefore owns
+// its own preconditions; specifying the answer is what keeps the key independent of the
+// generator. ABC-022 made the generator enforce those preconditions too, so the oracle now
+// returns the same `false` here — agreement bought by the guards below, not a reason to drop
+// them.
 //
 // TWO guards, and neither subsumes the other. Every row names the guard whose removal it
 // kills. The last two are the shapes where the shipped predicate was already byte-PURE and
@@ -365,13 +368,15 @@ describe("hasLegalEnPassant — ABC-011 the probe's precondition", () => {
 //     comes back a black PAWN, from one zobristKey call. That is the MEDIUM defect the project
 //     owner declined to merge, reopened in a shape no existing row reaches.
 //   - guard (a) relaxed from "the ep target is EMPTY" to "the ep target holds no ENEMY piece"
-//     survives too, and answers `true` on exactly the FEN guard (a) exists for — the one where
-//     `generateMoves` offers an en-passant capture onto the mover's OWN piece (routed to BA/PM
-//     by the second design hop). Pure, and still the wrong answer: the ruling SPECIFIES `false`
-//     off-domain, so the oracle agreeing with the relaxed guard is not a defence.
+//     survives too, and answers `true` on exactly the FEN guard (a) exists for — the one with
+//     the mover's OWN piece standing on the ep target (routed to BA/PM by the second design
+//     hop, and fixed in the GENERATOR by ABC-022). Pure, and still the wrong answer: the ruling
+//     SPECIFIES `false` off-domain, and since ABC-022 the oracle says `false` there as well, so
+//     the relaxed guard is now alone in answering `true`.
 //
-// The oracle answers `true` on all four, which is the ruling's own point restated as a test:
-// off-domain the oracle is unsound and the answer is specified, not derived.
+// The oracle answered `true` on all four before ABC-022 and `false` on all four after it, both
+// measured. These rows therefore no longer turn on the oracle at all: the answer off-domain is
+// SPECIFIED, and each row kills its relaxation whatever the oracle happens to say.
 // ---------------------------------------------------------------------------
 
 /** Boards whose ep square is contradicted by a piece that is present, rather than by one that is absent. */

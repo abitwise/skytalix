@@ -66,10 +66,15 @@ const EP_CAPTURE_SIDES = [-1, 1] as const;
  * on every node ABC-011 makes it reach (ADR-0005).
  *
  * That domain contains every position `makeMove` can produce, hence everything reachable by
- * play. Outside it the oracle is unsound — `generateMoves` offers en-passant captures onto
- * squares occupied by the mover's OWN piece — so the answer there is SPECIFIED rather than
- * derived: `false`, which is the truthful answer about a board on which the named capture
- * cannot be performed (the pawn to take is absent, or the destination is occupied).
+ * play. Outside it the answer is SPECIFIED rather than derived: `false`, which is the truthful
+ * answer about a board on which the named capture cannot be performed (the pawn to take is
+ * absent, or the destination is occupied). The reason is the cost above rather than anything
+ * the generator gets wrong: this predicate never consults `generateMoves`, so it has to
+ * establish its own preconditions (below) and specifying the answer is what keeps the key
+ * INDEPENDENT of the generator. ABC-022 made the en-passant branch enforce those same
+ * preconditions, so off-domain the oracle now answers `false` here too — but that agreement is
+ * BOUGHT by guard (a), not inherited: delete (a) and this predicate answers `true` on boards
+ * where the generator offers nothing.
  *
  * ABC-011: FIDE 9.2.3 makes two positions the same only when "the possible moves of all the
  * pieces of both players are the same", so a pawn takeable only by a move that exposes its
