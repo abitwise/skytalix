@@ -242,7 +242,12 @@ marked as a regression guard, and every *(Today: …)* parenthetical is the meas
 `fb4fa40934e768dffeaeed0b43548842`. **Read those parentheticals as the defect's record, not as a claim
 about the current tree.** The fix is delivered on `grugops/ticket-to-pr-ABC-009` and **every criterion
 `A1`–`A12` is green there**: `npm test` **371 passed (371) on 16 files**, skip count **0**, re-run on
-the branch tip by BA/PM at the third hop, 2026-08-09. *(Reframed 2026-08-09, third hop. The word
+the branch tip by BA/PM at the third hop, 2026-08-09. **Amended 2026-08-09 at the FOURTH BA/PM hop:
+`A13` was added at that hop and is `⚠️ NOT YET SATISFIED BY THE SUITE`, so the sentence above now
+reads over `A1`–`A12` only and is not a claim about the whole criteria set.** `A13` needs **no
+production change** — the delivered code already answers every row it asks for — it needs **test rows
+for two byte values** (enemy `KNIGHT`, enemy `PAWN`), and until they land the honest statement is
+*twelve of thirteen criteria green*. *(Reframed 2026-08-09, third hop. The word
 "today" was written before the fix existed and stops being true the moment this branch merges, while
 each figure beside it is evidence a later reader will want — so the baseline is pinned to a named
 commit and a hash instead. Only the framing changed: **no criterion, count, FEN or parenthetical below
@@ -256,13 +261,26 @@ ticket carried from 2026-07-29**, so the Orchestrator's routing note of 2026-08-
 
 **`A11` and `A12` were added, and `A7`'s justification corrected, 2026-08-09 at a SECOND BA/PM hop**
 after QE and Security/NFR routed two criterion gaps and one measured-inert criterion here — see the
-**second** correction block, which follows the first. **`A11` was the one criterion this ticket ever
+**second** correction block, which follows the first. **`A11` was, until the fourth hop below, the one
+criterion this ticket ever
 carried unsatisfied, and it is now SATISFIED** — closed in tests at QE's second hop (14 new rows in
 `src/moves.castling.hardening.test.ts`, **zero production lines**) and then **verified independently at
 a THIRD BA/PM hop, 2026-08-09**, which is the only reason its `⚠️` marker came off. The retirement note
 under `A11` carries that verification. **One NEW gap was measured at that hop; it is NAMED under `A11`
-and deliberately NOT fixed here — it is not `A11`'s shortfall, no criterion was added for it, and the
-routing is the Orchestrator's.**
+and deliberately NOT fixed there — it is not `A11`'s shortfall, no criterion was added for it at that
+hop, and the routing was the Orchestrator's.**
+
+**`A13` was added 2026-08-09 at a FOURTH BA/PM hop; it CLOSES that gap and ENDS the sample-class
+sequence.** The Orchestrator authorised one further pass on a stated ground: the gap's space is
+**finite and already fully measured**, so the criterion could stop being a list of sample classes and
+become a **quantifier over the whole byte space**, with the unfalsifiable values named, measured and
+excluded rather than silently omitted. **`A13` is the second criterion this ticket has carried
+unsatisfied, and it is unsatisfied in TESTS ONLY** — two byte values need rows, zero production lines
+are owed. **`A11` is NOT reopened by it and its verdict is untouched:** `A11` quantifies over the
+mover's **own** piece types and is satisfied over that domain; `A13` quantifies over the **occupant
+byte**, a strictly wider dimension that **subsumes** `A11`'s domain and maps, value by value, which
+criterion already discharges which value. That mapping is why `A13` costs two values' worth of rows
+instead of twelve.
 
 - **`A1` (purity, the reproduction FEN).** **Given** the FEN `4k3/8/8/8/8/8/8/K7 w KQ - 0 1`,
   **when** `legalMoves` is called once on the parsed position, **then** `toFen(position)` afterwards
@@ -425,6 +443,14 @@ routing is the Orchestrator's.**
   unchanged and unaffected: it quantifies over the mover's **own** types, and it is satisfied. See the
   retirement note below for the measured map and the named gap.
 
+  **The gap that correction named is now CARRIED BY `A13`, added 2026-08-09 at the fourth BA/PM hop**
+  — as a quantifier over all twelve wrong byte values per home square rather than as four more sample
+  rows, with the behaviour-equivalent enemy `KING`/`QUEEN`/`ROOK` named, measured on two independent
+  instruments, and excluded with its reason. **`A11` keeps its own domain, its own rows and its own
+  MET verdict; nothing under this criterion is reopened, and no row of it is owed.** Read `A13` for
+  the value-by-value accounting that shows `A11` discharges nine of the twenty-four wrong values
+  across the two squares.
+
   > **`A11`'s `⚠️ NOT YET SATISFIED` MARKER RETIRED 2026-08-09 AT THE THIRD BA/PM HOP, ON THIS ROLE'S
   > OWN INSTRUMENTS. `A11` IS MET. ONE NEW GAP WAS MEASURED IN THE PROCESS AND IS NAMED BELOW, NOT
   > FIXED.**
@@ -541,6 +567,18 @@ routing is the Orchestrator's.**
   > rows in QE's existing table would close it, on the same measured shape as `A11` (zero production
   > lines — the delivered code refuses all four FENs today), and whether that happens on this ticket, on
   > a follow-up, or is accepted as a named risk is a decision this role does not own.
+  >
+  > **AMENDED 2026-08-09 AT THE FOURTH BA/PM HOP — the paragraph above is left exactly as written,
+  > because it was true when written, and one sentence in it is now FALSIFIED and worth keeping for
+  > that reason.** *"this one is no more the last than any before it"* was the honest expectation from
+  > four consecutive hops of sample classes, and it is **wrong** — not because a fifth sample was not
+  > found, but because the space it would live in was never counted. Counting it ends the sequence:
+  > a home square holds **one byte**, `parseFen` can put **13** values in it, **1** is correct, so
+  > **12 wrong values is the whole space**, and all twelve are now measured. The gap named above is
+  > carried by **`A13`** as that quantifier. **The routing did go to the Orchestrator, which authorised
+  > exactly one further pass and wrote down the stopping rule**; the four rows this note estimated are
+  > **eight** at `A11`'s own doubling, which is the same correction `A11`'s own estimate took
+  > (*"roughly nine"* came in at fourteen).
 
 - **`A12` (a side holding BOTH rights: the invalid castle is refused and the VALID one SURVIVES).
   ADDED 2026-08-09 (second hop). Already satisfied by the suite.** **Given** a position in which one
@@ -576,6 +614,169 @@ routing is the Orchestrator's.**
   is behaviour-equivalent, because both of a side's options share `kingFrom` (`e1` for `K` and `Q`), and
   it passes all 33 acceptance and all 19 hardening rows. One token, two opposite verdicts; a criterion
   that tried to catch the equivalent one would be unfalsifiable.
+
+- **`A13` (the occupant of a home square is quantified over the WHOLE BYTE SPACE, not sampled one
+  class at a time). ADDED 2026-08-09 (fourth BA/PM hop).
+  ⚠️ NOT YET SATISFIED BY THE SUITE — the enemy `KNIGHT` and enemy `PAWN` rows are owed; every other
+  value in the space is already discharged and the discharge is mapped, value by value, below.**
+  **Given** a castling option whose right is held, **when** `generateMoves` runs **and when**
+  `legalMoves` runs, **then** the option is offered **only if** the king's home square holds the
+  mover's own `KING` **and** that option's rook home square holds the mover's own `ROOK` — so for
+  **every** other value either home square can hold, the `FLAG_CASTLE` count is **exactly 0** in
+  **both**, and on the rows where the king's home square is the one under test all 128 board bytes
+  and all five scalars are unchanged across the call. **The enumeration is over the byte, not over a
+  class of pieces:** a home square holds exactly **one byte**, `parseFen` can put exactly **13**
+  distinct values in it, **1** of those is the required piece, so **12 wrong values per square is the
+  entire space** and each of the twelve must be accounted for by name. Both colours to move and all
+  four castling rights must appear across the table.
+
+  **THIS IS THE CRITERION THAT ENDS THE SAMPLE-CLASS SEQUENCE, AND THE ARGUMENT IS WRITTEN OUT SO A
+  LATER READER CAN CHECK IT RATHER THAN INHERIT IT.** Four consecutive hops each found one more
+  *sample* class — `A5`/`A6` sampled two piece types, `A11` quantified over the mover's own types and
+  left the occupant's colour on a blanket claim, and that claim was measurably false for two types.
+  Each hop's fix was one more sample, so each hop predicted a fifth. **There cannot be a fifth,
+  because the space is finite and every value in it is now measured:** 13 values, 1 correct, 12
+  wrong, and each of the twelve falls in **exactly one** of six buckets — covered by an absence row,
+  covered by `A11`'s own-type quantifier, covered by an existing enemy row, **newly required here**,
+  measured-behaviour-equivalent-and-excluded, or not constructible by `parseFen` at all. The buckets
+  are disjoint and they sum to 12 on each square. That is a structural end, not a hope.
+
+  *The full accounting, measured on the delivered tree 2026-08-09 by BA/PM. Byte values are the
+  `src/position.ts` encoding — type `0..6` in the low three bits, `BLACK = 8` — and every row's
+  `legalMoves` count and `FLAG_CASTLE` count is measured, not derived:*
+
+  ```
+  KING's home square (king NOT home, matching rook present) — required byte: own KING
+  byte  occupant       bucket                                     delivered  castles
+    0   EMPTY          absence row — A4                              16        0     (= A4's 16)
+    1   own PAWN       A11 own-type quantifier                       13        0
+    2   own KNIGHT     A11 own-type quantifier                       16        0
+    3   own BISHOP     A11 own-type quantifier (= A5 row 1)          19        0
+    4   own ROOK       A11 own-type quantifier                       24        0
+    5   own QUEEN      A11 own-type quantifier                       31        0
+    6   own KING       *** THE REQUIRED VALUE — castle IS offered    15        1
+    9   enemy PAWN     >>> NEWLY REQUIRED BY A13 <<<                 13        0
+   10   enemy KNIGHT   >>> NEWLY REQUIRED BY A13 <<<                 13        0
+   11   enemy BISHOP   existing enemy row — A5 row 3                 13        0
+   12   enemy ROOK     equivalent, EXCLUDED (masks e1,f1,g1)          3        0
+   13   enemy QUEEN    equivalent, EXCLUDED (masks e1,f1,g1)          3        0
+   14   enemy KING     equivalent, EXCLUDED (masks f1)               13        0
+                                    1 + 5 + 2 + 1 + 3 = 12 wrong values, all accounted
+
+  ROOK's home square (king ALREADY home) — required byte: own ROOK
+  byte  occupant       bucket                                     delivered  castles
+    0   EMPTY          absence row — A3                               5        0     (= A3's 5)
+    1   own PAWN       A11 own-type quantifier                        6        0
+    2   own KNIGHT     A11 own-type quantifier                        7        0
+    3   own BISHOP     A11 own-type quantifier (= A6 row 1)          12        0
+    4   own ROOK       *** THE REQUIRED VALUE — castle IS offered    15        1
+    5   own QUEEN      A11 own-type quantifier                       21        0
+    6   own KING       NOT CONSTRUCTIBLE — parseFen refuses          n/a      n/a
+    9   enemy PAWN     >>> NEWLY REQUIRED BY A13 <<<                  5        0
+   10   enemy KNIGHT   >>> NEWLY REQUIRED BY A13 <<<                  4        0
+   11   enemy BISHOP   existing enemy row — A6 row 4                  5        0
+   12   enemy ROOK     equivalent, EXCLUDED (masks e1,f1,g1)          3        0
+   13   enemy QUEEN    equivalent, EXCLUDED (masks e1,f1,g1)          3        0
+   14   enemy KING     equivalent, EXCLUDED (masks g1)                5        0
+                                1 + 4 + 1 + 2 + 1 + 3 = 12 wrong values, all accounted
+  ```
+
+  **THE 13 IS MEASURED, NOT ASSERTED — and the first instrument that measured it was WRONG.** A
+  probe over every code point `0x00`–`0x2FF` as a placement character, on `e1`, `h1` and `a1`,
+  returns **exactly 13** distinct byte values per square — `0`, `1`–`6`, `9`–`14` — the **same 13 on
+  all three squares**, each with a named witness character (`"P"`, `"n"`, `<empty>`, …). The **first**
+  version of that probe returned **11**, because its single probe board already held a white king, so
+  `K` on `e1` raised *"position must have exactly one white king, found 2"* — **a limit of the probe
+  board reported as a fact about the domain.** Three king configurations per square fixed it. Recorded
+  because a quantifier justified by an under-counting probe is worse than an honest sample.
+
+  **The two EXCLUSIONS, each named, measured, and given its reason. Neither is silently omitted —
+  silent omission of exactly this kind produced four consecutive misses on this ticket.**
+
+  1. **Behaviour-equivalent, therefore unfalsifiable: enemy `KING`, `QUEEN`, `ROOK` on either home
+     square (3 of the 12, both squares).** Admitting one changes **no observable behaviour**, because
+     the pre-existing through-check test already refuses the option: each of those three attacks a
+     square on the king's path. **Measured on TWO independent instruments that agree 12/12.** (a) By
+     mutation at the third BA/PM hop: all six survive **371/371** with no behaviour change. (b) By
+     asking the masking predicate `isSquareAttackedBy` directly at the fourth hop, over all six enemy
+     types on both squares — `MASKED` for exactly `KING`/`QUEEN`/`ROOK` and `not masked` for exactly
+     `BISHOP`/`KNIGHT`/`PAWN`, in precise agreement with the mutation verdicts. That second instrument
+     was **polarity-checked before its verdicts were read** (a black rook on h1 must report g1
+     attacked, and a position with no black attacker must report it not attacked; a predicate that
+     answered one way for everything would fabricate a clean result). **A required row here could never
+     fail**, so it would be theatre — the same shape as the guard-ordering exclusion under `A12` and
+     the same reason. **It is named and measured, not omitted.**
+  2. **Not constructible: the mover's own `KING` on the ROOK's home square (1 of the 12, that square
+     only).** It needs two kings of one colour, and `parseFen` refuses — **re-measured on all four
+     constructions**, both colours and both sides: `4k3/…/4K2K w K`, `4k3/…/K3K3 w Q`,
+     `4k2k/…/4K3 b k`, `k3k3/…/4K3 b q` each raise *"position must have exactly one white/black king,
+     found 2"*. `A11` already carried this exclusion for its own domain and it is unchanged; it is
+     restated here only because the byte accounting must have a slot for it. **Note that the exclusion
+     is conditional on the criterion's other precondition** — a lone own `KING` on `h1` with `e1`
+     **empty** parses fine, but that is `A4`'s shape (the king off its home square), not this one.
+     **My own accounting probe drifted onto exactly that FEN and reported this value "constructible"
+     until the printed FEN gave it away.**
+
+  **What is NEWLY REQUIRED, and it is the whole of what this criterion adds: enemy `KNIGHT` and enemy
+  `PAWN`, on both home squares.** They are refused by the **identity guard alone** — an enemy knight
+  or pawn on `e1`/`h1`/`a1` attacks **none** of `e1`, `f1`, `g1`, is not in the `empty` set, and leaves
+  the king out of check — and **no row in this suite exercises that**. A mutant admitting an enemy
+  knight **compiles and survives 371/371** while `legalMoves` on
+  `4k3/8/8/8/8/8/8/K3n2R w K - 0 1` returns 14 moves and leaves
+  `4k3/8/8/8/8/8/8/K3K2R w K - 0 1` — **the black knight destroyed and a WHITE king written over
+  it**, material loss *and* a colour change, strictly worse than the own-colour family this ticket was
+  widened for. Verified independently by the Orchestrator before this criterion was authorised.
+
+  *At `A11`'s established doubling — every type in at least two configurations, both sides to move,
+  all four rights — the region is eight configurations. Measured on the delivered tree 2026-08-09 by
+  BA/PM, with each row's setup ASSERTED rather than trusted from its label (0 of 8 labels lie about
+  their own FEN) and each row checked NOT INERT (0 of 8 are masked or blocked, so the identity guard
+  is the only thing refusing each one):*
+
+  ```
+  KING's home square — king off home, matching rook present, ENEMY occupant
+  enemy KNIGHT  W K   4k3/8/8/8/8/8/8/K3n2R w K - 0 1          13   0 / 0   pure
+  enemy PAWN    W Q   4k3/8/8/8/8/8/8/R3p2K w Q - 0 1          14   0 / 0   pure
+  enemy KNIGHT  B k   4N2r/8/8/5k2/8/8/8/4K3 b k - 0 1         17   0 / 0   pure
+  enemy PAWN    B q   r3P3/8/8/5k2/8/8/8/4K3 b q - 0 1         19   0 / 0   pure
+
+  ROOK's home square — king already home, ENEMY occupant
+  enemy KNIGHT  W K   4k3/8/8/8/8/8/8/4K2n w K - 0 1            4   0 / 0
+  enemy PAWN    W Q   4k3/8/8/8/8/8/8/p3K3 w Q - 0 1            5   0 / 0
+  enemy KNIGHT  B k   4k2N/8/8/8/8/8/8/4K3 b k - 0 1            4   0 / 0
+  enemy PAWN    B q   P3k3/8/8/8/8/8/8/4K3 b q - 0 1            5   0 / 0
+  ```
+
+  **The delivered code already answers every one of those rows correctly, so this criterion asks for
+  ZERO production lines** — exactly as `A11` did. `src/moves.ts` has been byte-identical at md5
+  `0e247853ab2c05887c76105ff83d8621` since the Engineer's first commit, across four verification hops.
+  **This is a test-net gap, not a defect.**
+
+  **A WARNING FOR THE ROWS, MEASURED HERE BECAUSE THE COUNT ALONE CANNOT CARRY THEM.** On the king's
+  home square, enemy `BISHOP`, enemy `KNIGHT` and enemy `PAWN` **all answer 13 moves**; on the rook's
+  home square, enemy `PAWN`, enemy `BISHOP` **and the empty square** all answer **5**. So a row that
+  asserts only its count is **interchangeable with rows for two other values** and a mislabelled row
+  would pass. The rows must assert the occupant byte on the square under test — which QE's existing
+  `expectImpostorSetup` already does, and which is why it must not be skipped for these four values.
+
+  **What `A13` does NOT claim, stated because the opposite reading would be this ticket's signature
+  error for the fifth time.** It exhausts **one dimension** — the occupant byte of one home square,
+  under that square's own precondition. It does **not** establish that the criteria set is complete.
+  Three regions sit outside it, named rather than left silent: **(i)** the 243 byte values a
+  `Uint8Array` square can physically hold that `parseFen` **never writes** (`7`, `8`, `15` and
+  everything `≥ 16`; measured by the same probe) — no FEN produces them, so no `Given` clause in this
+  ticket's language can reach them, and a criterion over them would be unfalsifiable for the same
+  reason as exclusion 1; **(ii)** the **joint** space, which pairs of values co-occur across the two
+  squares — 169 combinations per option, not enumerated; for the **delivered** code the joint adds
+  nothing, because `addCastlingMoves` tests the two squares with two **independent** byte compares
+  (`src/moves.ts:326-327`) so per-square correctness implies joint correctness by construction, but a
+  mutant conditional on a *pair* could still survive a finite net; **(iii)** the constants no
+  criterion on this ticket varies — every criterion FEN puts the non-moving king on `e8`/`a8` and
+  carries an empty en-passant square with `halfmoveClock` 0, and the `empty`-set squares (`f1`/`g1`,
+  `b1`/`c1`/`d1`) are a different dimension guarded by the pre-existing emptiness test. **Under the
+  stopping rule recorded for this ticket, (ii) and (iii) belong to a follow-up hardening ticket for
+  `src/moves.ts`, not to another `ABC-009` hop** — `## Scope` is three bullets about castling
+  preconditions, and an unbounded mutation net is not in it.
 
 > ### CORRECTED IN PLACE 2026-08-09 by BA/PM (task `ticket-to-pr-ABC-009`, subtask `bapm-abc009-acceptance`, Workflow 07)
 >
@@ -1138,6 +1339,20 @@ was measured at this hop and is named under `A11`** — the occupant's colour, f
 production lines, routing the Orchestrator's. It is **not** a Definition-of-Ready failure: this ticket
 was correctly pullable and remains so, and a gap found by measurement after delivery is the fourth such
 on this ticket, not a re-adjudication of this block.
+
+**Amended once more 2026-08-09 at the FOURTH BA/PM hop, and the correction is to the sentence directly
+above.** *"Every criterion `A1`–`A12` is now green on the branch tip"* was true when written and is
+**no longer the whole set**: `A13` was added at this hop and is `⚠️ NOT YET SATISFIED BY THE SUITE`, so
+the honest statement is **twelve of thirteen criteria green, the thirteenth owing test rows for two
+byte values and zero production lines**. The gap named in the previous amendment is no longer merely
+*named*: it is **carried as `A13`**, restated as a quantifier over all twelve wrong byte values per
+home square instead of four sample rows. **Still no tick was flipped and still no board move was
+taken** — `ABC-009` stays in `Ready for UAT` **1/4**. The *acceptance measurable* row **stays ✅ and is
+stronger again**, for the same reason it survived the `A11` amendment: Definition of Ready asks whether
+this ticket could be **pulled into dev**, which it could and was, and *"measurable"* is a property of
+how the criteria are written, not a claim that every one is currently green. **A criterion added after
+delivery because a dimension was finally counted is not a Definition-of-Ready failure** — it is the
+fifth gap this ticket has found by measurement, and the first one whose region is provably the last.
 
 ~~Sits in `Backlog`. Promotion to `Ready` is a separate BA/PM step and has not been taken.~~
 
