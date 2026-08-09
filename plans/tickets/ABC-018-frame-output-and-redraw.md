@@ -1,8 +1,8 @@
 ---
 id: ABC-018
 title: Frame output and redraw — in-place on a TTY, append otherwise, constant height
-status: ready
-column: Ready
+status: in-review
+column: In Review
 size: S
 priority: P0
 epic: EPIC-002
@@ -368,3 +368,156 @@ for.
 
 **This is not the pull gate.** The Definition of Ready is applied again by the Orchestrator at
 `Ready → In Development` (Workflow 04 step 1); promotion makes this ticket pullable, nothing more.
+
+## Implementation
+
+**IMPLEMENTED `In Development → In Review` 2026-08-09 by the Software Engineer** (task
+`ticket-to-pr-ABC-018`, subtask `engineer-abc018-implement`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-018`. `In Development` 1/3 → 0/3, `In Review` 0/3 → 1/3; no limit
+approached, no override taken, no written reason owed. **Nothing merged and nothing deployed — a
+human holds both.**
+
+**Two new files, and no existing file under `src/` was touched.** Verified rather than asserted:
+`git diff --numstat main -- src/` is **empty**, and the only entries `git status --short -- src/`
+reports are the two new files.
+
+- `src/frame.ts` — 222 lines, **94 of them code**. `assembleFrame(parts, mode): string[]` is the
+  VALUE (it writes nothing and reads nothing ambient); `beginFrameSession(sink, height):
+  FrameWriter` is the SESSION (it reads the sink's two signals once, picks a strategy, and holds
+  it); `frameHeight({board, status, history})` is the one place the `+3` lives, so `H` is never
+  hardcoded.
+- `src/frame.test.ts` — the twelve acceptance criteria, one test each in this ticket's order, plus
+  eight that pin what the criteria do not reach, and the in-memory screen model the `## Test notes`
+  require.
+
+### `RISK-005`'s build obligation — discharged, and checked mechanically rather than asserted
+
+The mode is a **required parameter of `assembleFrame` with no default**. `src/frame.ts` imports
+exactly one thing — `import type { GlyphMode } from "./render.ts"`, a type-only import that is erased
+at runtime — so it cannot default the mode, cannot hardcode one (its only mode literal is the
+`mode === "ascii"` comparison inside the sanitizer), and cannot re-derive one: `grep` for `process.`
+finds it only in prose, and the only `isTTY` / `rows` reads in the file are of the **injected sink**.
+`ABC-015` owns the rule and runs it once; its answer reaches this module the same way it reaches
+`renderBoard`.
+
+### The structural choices this ticket left open, decided here
+
+1. **`W` is derived from the PANEL rows only, not from all assembled rows.** The ticket defines `W`
+   as "the widest row the assembled regions emit", which is circular if the message region is inside
+   the maximum: one long rejection would widen the frame, which is the one way content can break
+   `4a`'s constant geometry. The panels set `W`; the message region is bounded **by** it. A mutant
+   that takes `W` over the message rows too is killed by two tests.
+2. **Every row except the reserved prompt row is padded to exactly `W`.** This is what makes the
+   in-place redraw leave **no character** of the previous frame behind: `ED(0)` clears from the
+   cursor down, but a row SHORTER than the row it overwrites leaves the old tail on screen to its
+   right, and the Security bar allows only the two escape sequences this module emits — so a per-row
+   erase-to-end-of-line was not available and padding is the mechanism. The prompt row is
+   deliberately **not** padded: padding it would leave the cursor at column `W` instead of at the
+   row's start.
+3. **The packing search runs downward, because `N` and the marker are coupled.** Dropping an item
+   raises `N`, which can lengthen `(+N more)`, which can drop another item. The implementation takes
+   the largest number of items that fits **together with** the marker its own absence implies, so
+   `N` is always the count of supplied items not shown in full — never a number the implementation
+   picked.
+4. **The sanitizer runs over every string placed into the frame, panel rows included** — the ticket's
+   words are "any supplied string … before it is placed", and from the assembler every row is
+   supplied. It costs one pass over ~22 short rows and makes acceptance `2a` hold over the **whole**
+   emitted stream by construction rather than by trusting three panels to be pure.
+5. **Widths are counted in UTF-16 units.** They equal code points for everything this frame can
+   carry (ASCII mode strips above `U+007F`; the Unicode glyphs are `U+2654`–`U+265F`). A terminal's
+   DISPLAY columns are a third quantity and nothing in this epic supplies one — stated in the
+   module header rather than left to be discovered.
+
+### `NFR-002` — BOTH HALVES MEASURED, separately, with the machine and the ply count
+
+Measured **out of tree** (own harness outside the repository, its own process, the game replay and
+`parseFen` hoisted out of every timed region — the catalog's own caution, which produced a 2.08x
+false miss on `ABC-012`), a discarded warm-up round, **11 rounds** per cell, cell order rotated every
+round, medians of per-round means, and **two fully independent samples**. Machine: **Apple M3
+(Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64**, and **`UNKNOWN - verify` on any other hardware**.
+Denominator: a **23-row, 18-column frame, 418 characters serialized**.
+
+| Half | 40 plies | 120 plies | 300 plies |
+|---|---|---|---|
+| **(a) COMPUTE** — `renderBoard` + `assembleFrame` | **5.97 / 6.03 µs** | **6.02 / 6.07 µs** | **6.03 / 6.06 µs** |
+| **(b) WRITE** — serialize into an in-memory sink | **0.64 / 0.64 µs** | **0.64 / 0.65 µs** | **0.65 / 0.65 µs** |
+| **(b) WRITE** — `fs.writeSync` to `/dev/null` | **1.67 / 1.66 µs** | **1.66 / 1.66 µs** | **1.67 / 1.67 µs** |
+| **(b) WRITE** — `fs.writeSync` to a regular file | **2.43 / 2.48 µs** | **2.44 / 2.46 µs** | **2.44 / 2.48 µs** |
+
+**The bar is the SUM and it is MET at every ply count with four orders of magnitude of room:
+0.0084–0.0092 ms** (worst case: compute + the file sink), against **16 ms**. Roughly **0.05%** of the
+budget. **No number here is quoted from any existing note** — the write half was `UNKNOWN - verify`
+and this is its first measurement; the 171–1,318 µs SAN-derive figures on record are a **different
+measurement** of a **different quantity** and were deliberately not used.
+
+**Three limits travel with these figures and none of them may be dropped when they are quoted.**
+First, **the compute half is a LOWER BOUND**: `ABC-016`'s status panel and `ABC-017`'s history pane
+do not exist, so they entered as fixed-height stub arrays built OUTSIDE the clock, and `ABC-013`'s
+SAN derive is not in it at all. Second, **"write" was measured three ways because "written to a
+non-TTY sink" honestly means three different things** — serialization alone, serialization plus a
+syscall to `/dev/null`, and serialization plus a syscall that reaches a filesystem; all three are
+reported rather than the flattering one. Third, **the in-place (TTY) path was NOT timed separately**:
+this ticket's bar names a non-TTY sink, and what a real terminal does with the bytes is not
+observable in-process. **No wall-clock assertion was added to the suite** — this project's standing
+rule (`src/zobrist.nfr.test.ts:112`); the microseconds live here with their machine, and
+Security/NFR re-derives them on its own instruments.
+
+### Gates, reported exactly as they ran
+
+`npm install` exit 0 (no dependency change; `package-lock.json` untouched) · `npm run lint` exit 0
+**after ONE safe autofix pass** (`npx biome check --write src/frame.test.ts` — import ORDER and
+formatting only, `lint.autofix` is `true`, self-fix attempt **1 of 2**) · `npm run typecheck` exit 0 ·
+`npm test` **297 passed / 297 on 14 files** (**277 on 13 before**, measured by running the suite
+without this file rather than by subtraction) · `npm run build` exit 0. **Skipped-test count 0**,
+captured with the `AGENTS.md` command. `src/frame.ts` is at **100% statements / branches / functions
+/ lines**. **E2E: `UNKNOWN - verify`** — the `AGENTS.md` slot is unknown, there is no UI surface and
+no runnable game until `EPIC-006`. **Test-integrity checker: exit 2** (`node
+tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0` → "cannot read the
+registry file") — that is "the checker could not run", **recorded as an error and NOT as a pass**,
+and **no registry file was created**: an agent may not self-author a justification to clear its own
+gate. The skip count is 0, so nothing is owed a justification. **Auto-UAT oracles: `UNKNOWN - verify`**
+— `scripts/check-uat-oracles.js` does not exist in this install (non-blocking, per Workflow 05).
+The two lint **infos** are pre-existing `biome.json` schema/deprecation notices, unrelated to this
+ticket and deliberately not touched.
+
+### 18 mutants run against the module, all 18 killed — including the two the ticket names
+
+Each was applied to `src/frame.ts`, the suite run, and the file restored; the tree is byte-identical
+after the campaign (`md5` `bb827f52fe537817e40020a29dfa0e6d` before and after). The two the
+corrections were written for both die: **`>` where the rule says `≥`** (1 test) and **a trailing
+newline after the frame's last row** (2 tests), and so does the live one defect 5 names — **a writer
+that re-decides the strategy on every write** (1 test). Also dead: no padding (4), `N` invented (1),
+`W` taken over the message rows (2), an item split across rows (1), the marker emitted when nothing
+is hidden (2), a per-row erase-to-end-of-line instead of one erase-to-end-of-screen (4), a cursor
+sequence in append mode (3), the C0 strip removed (2), the ASCII strip removed (1), the prompt row
+not reserved (11), the message region grown to fit (8), two erases (3), an absent `rows` read as
+unlimited (1) and an absent `isTTY` read as a terminal (1).
+
+**TWO of them survived the suite as first written and the SUITE was fixed, not the record.** Both are
+the same shape and both are `ABC-015`'s QE finding a second time: **no acceptance criterion
+constructs a sink whose `isTTY` or `rows` is ABSENT**, which is the real shape Node presents on a
+pipe — every criterion names a row count. A writer reading an absent row count as unlimited, and one
+reading an absent `isTTY` as a terminal, therefore passed all twelve criteria. A test now writes to
+three sinks with missing signals. **That is a gap in the criteria, not in the code, and it is handed
+to QE and BA/PM rather than closed here.**
+
+### Handed over named, rather than left to be discovered
+
+1. **Acceptance criterion 1 is near-vacuous under stubs and the test says so in place.** BA/PM ruled
+   it left alone knowingly. It is implemented as strongly as stubs allow — a frame is assembled at
+   **every ply of a real 300-ply game** (a legal knight shuffle, so the ply count is real rather than
+   a position that merely looks like one) and every row count must be identical — but a fixed-height
+   stub makes any assembler pass. It becomes falsifiable at `ABC-019` / `EPIC-006`.
+2. **`W = 18` is a stub fixture and the suite derives it rather than asserting it into existence.**
+   It falls out of the merged `renderBoard`, which is the widest real panel that exists. When
+   `ABC-016` and `ABC-017` ship, `W` becomes whatever the widest of the three emits — one test
+   already pins that by handing in a 24-wide status stub.
+3. **The reserved prompt row's contract still has only one side written down.** This ticket reserves
+   the row, renders nothing into it and leaves the cursor at its start; `EPIC-003` and `ABC-019` have
+   not been told. That obligation is the Orchestrator's open item, not discharged here.
+
+**Not done, deliberately.** No panel content (`ABC-014` / `ABC-016` / `ABC-017`), no render trigger
+(`ABC-019`), no prompt text or input (`EPIC-003`), no argv (`EPIC-006`), no resize handling, no
+colour, no alternate screen, no edit to any existing `src/` file, no edit to `plans/nfr-catalog.md`
+(the catalog row is Architect/Security's and the Security/NFR gate owns the discharge), and no wall-
+clock assertion anywhere in the suite.
