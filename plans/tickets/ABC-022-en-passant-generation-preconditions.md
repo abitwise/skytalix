@@ -1002,6 +1002,119 @@ BA/PM already recorded as cheap to overrule, site 7 being a judgement about tens
 red-before-green header rather than a doc comment describing shipped design. Sites 3-6 are the ones
 that made `src/legal.ts` contradict itself 33 lines apart, and that contradiction is now gone.
 
+### THIRD ENGINEER HOP 2026-08-09 — site 7 applied, and `A11` IS NOW FULLY DISCHARGED
+
+Subtask `engineer-abc022-site7`, same branch. **No board move: `ABC-022` stays in `In Review` (1/3).**
+`## Acceptance` was **not** edited — `A11` stands exactly as BA/PM wrote it, and it was not reduced.
+The Orchestrator lifted the file boundary the hop above escalated; **the section above stays as the
+record of that hop and is superseded on its one open point only.**
+
+**One file, comment text only: `src/moves.enpassant.test.ts`.** md5
+`825d079d8508ec01832e3b553b706e16` → **`90b45c567cafadd620599b7acaf5bec1`**. `src/moves.ts` is
+byte-unchanged at **`6335b452fc21ffe2d0f902ecab930840`**, and `src/legal.ts`
+(`7be9fc8c1c313bdbc4c582040965c2eb`) and `src/legal.test.ts` (`72fa550c347510c506f174693358314a`)
+are byte-unchanged from the hop above — the settled work was not revisited.
+
+**Site 7, the way `A11` asked and not by deletion.** The header's defect description is the file's
+rationale and the reason its tables are shaped as they are, so it was kept and put in the **past
+tense** — the tense `src/moves.ts` 183-195 already uses, by the same role at the same hop, which
+makes the standard the project's own rather than this hop's. *"the generator offers a capture onto
+the mover's own piece"* → *"offered"*; the half-(b) *"the move is emitted … the 'restore' CREATES
+one"* → *"was emitted … CREATED one"*; *"the call reads CLEAN on a board the generator provably
+corrupts"* → *"read CLEAN on a board the generator was provably corrupting"*.
+
+**And it does not swing the other way.** A six-line paragraph was added saying the generator CHECKS
+both preconditions now — *"which is these tables' job and not a reason to retire them"* — with the
+mutant counts that prove the tables still bite, and the pair-level oracle is explicitly kept
+(*"the one that saw it, and it stays for the same reason the tables do"*).
+
+**TWO FURTHER SITES IN THE SAME FILE, not in `A11`'s table, found by reading it line by line.**
+Both are present-tense claims about the generator that this fix falsified, so both fall under
+`A11`'s binding clause — *no comment under `src/` states, as current behaviour, anything about
+`generateMoves`'s en-passant branch that this fix has made false* — even though the sweep's citation
+table lists only 4-9 / 27-28:
+
+- **82-83** (the `A1` table comment) — *"**Today** every row offers the capture and `legalMoves`
+  passes it through"*. Measured 1/1 before the fix and **0/0 after**, on all four rows.
+- **95-97** (the `A3` table comment) — *"the black-to-move mirror that **creates** a phantom WHITE
+  pawn"* and *"the self-masking witness whose corruption **is healed** later in the same pass"*.
+
+Both were past-tensed and nothing else about them changed. They are inside this hop's stated
+boundary (comment text in this file) and are named here rather than absorbed silently: a reviewer
+who reads `A11`'s table as exhaustive can revert two sentences at no cost.
+
+**Re-measured at this hop, not inherited.** Four tree copies outside the repository, **one OS
+process per tree**, `tsc --noEmit` **exit 0 on every tree before any result was believed**, every FEN
+printed and **re-parsed** (a FEN that does not render back identically aborts the probe):
+
+```
+tree                         moves.ts md5                        what it is
+t-pristine  (main)           0e247853ab2c05887c76105ff83d8621    git archive main src
+t-fix       (branch tip)     6335b452fc21ffe2d0f902ecab930840    git archive HEAD src, diff-verified
+t-fix-noEmpty                6762b334bd096f8b1d072cb68478786d    empty-target condition deleted
+t-fix-noPawn                 2f19080b1bf32fc1f72bd063f48ea3f3    captured-pawn condition deleted
+```
+
+| rows | `main` | branch tip |
+| --- | --- | --- |
+| the four own-colour-occupant rows | `gen_ep=1 legal_ep=1` each | **`gen_ep=0 legal_ep=0`** each |
+| the six no-captured-pawn rows | `gen_ep=1`, impure across the call on 5 of 6, **1 dirty make/unmake pair each** | **`gen_ep=0`, pure, 0 dirty pairs** |
+| the four ENEMY-occupant rows | `gen_ep=0` | `gen_ep=0` — unmoved, so *"Already 0 today"* at 109 stays TRUE and was not rewritten |
+| the two `A6` controls | `1/1` and `1/0` | `1/1` and `1/0` — the fix still does not over-reject |
+
+The self-masking sentence was traced move by move on `main`: e4 holds byte `9` (black pawn), **move
+#2 is the en-passant move and leaves e4 at `1`** (white pawn) after its unmake, **move #3 — literally
+the next move in the same pass — restores `9`**, and the pass ends clean. That is why the corrected
+sentence still says *"the very next move"*. Half (b) was traced the same way on
+`4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1`: d5 is empty, and after the ep make/unmake pair d5 holds `9` — the
+restore **created** a pawn. On the tip that row offers no ep move at all.
+
+**The two mutant counts in the new paragraph are this hop's own**, taken because a comment that
+carries a number is a number this role owns. Each mutant was an **anchored single edit** asserting
+`count == 1` before writing and asserting the file changed after; both mutant md5s came out
+**byte-equal to the first engineer hop's**, which corroborates that hop rather than restating it.
+`npx vitest run src/moves.enpassant.test.ts`: **58/58 on the fix**, **8 failed** on `t-fix-noEmpty`
+(A1 x4, A2 x4) and **23 failed** on `t-fix-noPawn` (A2 x6, A3 x6, **A4 x11**). The A4 rows are why
+the paragraph can say `undoSpecial` is the unguarded half: `undoSpecial` (`src/apply.ts` 106-111) is
+untouched by `ABC-022` and still writes `move.captured` back on any `FLAG_EN_PASSANT` move, so when
+the generator emits one the purity rows are what notice.
+
+**`A9` on the line-level filter, and this file's claim is the stronger one.** At **file** level
+`src/moves.enpassant.test.ts` is still an ADDITION relative to `main`
+(`git diff --name-only --diff-filter=A main -- 'src/*.test.ts'`), so it modifies no existing test at
+all; `--diff-filter=M` returns only `src/legal.test.ts`, the collision `A11` predicted. At **line**
+level, against the pre-hop file: **37 changed lines, 0 that are not comment lines**; comment-stripped
+content **`cmp`-IDENTICAL at 138 lines**; `it(` 2, `it.each` 6, `describe(` 6, `expect(` 14, `toBe(`
+13, `4k3/` 16, ` w - ` 9, ` b - ` 8 — every count identical before and after. No FEN, no table entry
+and no expected number moved.
+
+**Citation drift, this hop's shifts.** `A11`'s `src/legal.ts` and `src/legal.test.ts` citations do
+**not** move — that file pair was not touched. Inside `src/moves.enpassant.test.ts`, everything from
+old line 34 down is **+9**. Site 7's own two ranges: **4-9 → 4-10** (half (a)) with half (b)
+**10-13 → 11-14**, and **25-28 → 33-37**; the added paragraph is **16-21**. The two extra sites:
+**82-83 → 91-92** and **95-97 → 104-106**. The `A5` comment is **108-119 → 117-128** and its fenced
+*"Already 0 today"* is **109 → 118**. `A11` was **not** re-pinned to any of this: its quoted
+sentences are the stable key and the line numbers are the fragile part.
+
+**Gate:** full suite **439/439 on 17 files**, skip count **0** by the AGENTS.md command, lint /
+typecheck / build exit **0** (lint's 2 infos are the pre-existing `biome.json` ones; **no autofix
+pass was needed or run**, so 0 of 2 `self_fix_attempts` were spent). `PERFT_DEEP` was **not** run and
+**no perft or throughput figure is reported** — not one executable line changed in any file and
+`src/moves.ts` is byte-identical to the tree `A8` and `A10` were measured on, so neither can have
+moved; running the deep lane would have bought a restatement of an earlier hop's number, and
+reporting that number as this hop's would be worse.
+
+**One item flagged and deliberately NOT fixed (rules 9 and 12).** `src/moves.castling.test.ts` **7-10**
+says, in the present tense, *"`generateMoves` offers a `FLAG_CASTLE` move the rules forbid, and
+`legalMoves` … writes a king onto a square that never held one"*, and **98-99** says *"**Today** one
+`legalMoves` call DESTROYS the occupant and writes a king of the moving side over it"*. Measured on
+the delivered tree: `4k3/8/8/8/8/8/8/K6R w K - 0 1`, `4k3/8/8/8/8/8/8/K3B2R w K - 0 1` and
+`4k3/8/8/8/8/8/8/K3b2R w K - 0 1` all give **0 castles offered and a pure `legalMoves` call**, so both
+sentences are false. **They are out of `A11`'s remit by construction** — `ABC-009`'s fix falsified
+them, not this one — exactly as `src/legal.test.ts` 202 was fenced, and out of this hop's boundary.
+**Not edited.** The pattern behind all three is worth a retro rather than a ticket: a red-before-green
+test header written in the present tense and never re-tensed when it went green.
+
 ## Board history
 
 Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP

@@ -1,16 +1,24 @@
 /**
  * ABC-022 — the two en-passant GENERATION preconditions.
  *
- * `addPawnMoves` emits a `FLAG_EN_PASSANT` move on the single test `to === epSquare`,
- * while the comment three lines above it names two preconditions it never checks:
+ * Before the fix, `addPawnMoves` emitted a `FLAG_EN_PASSANT` move on the single test
+ * `to === epSquare`, while the comment above it named two preconditions it checked
+ * nowhere:
  *
  *   (a) the target square is EMPTY. The ordinary-capture branch consumes enemy
- *       occupants and `continue`s, so an occupant of the MOVER'S OWN colour falls
- *       through and the generator offers a capture onto the mover's own piece.
- *   (b) the pawn the move claims to capture is on the capture square. The move is
+ *       occupants and `continue`s, so an occupant of the MOVER'S OWN colour fell
+ *       through and the generator offered a capture onto the mover's own piece.
+ *   (b) the pawn the move claims to capture is on the capture square. The move was
  *       emitted with `captured: PAWN | …` regardless, and `undoSpecial` writes that
  *       byte back unconditionally — so when the board never held that pawn the
- *       "restore" CREATES one, permanently, inside a `legalMoves` call.
+ *       "restore" CREATED one, permanently, inside a `legalMoves` call.
+ *
+ * `src/moves.ts` CHECKS both now, so every row below reads 0 where it read 1 — which is
+ * these tables' job and not a reason to retire them. Delete the emptiness condition from
+ * the shipped fix and 8 of the 58 tests here go red; delete the captured-pawn condition
+ * and 23 do, the purity rows among them: `undoSpecial` is untouched by ABC-022 and still
+ * restores `move.captured` unconditionally, so the generator declining to emit the move
+ * is the whole of half (b)'s guard.
  *
  * Both halves reach both colours to move. A fix that guards (b) for white only passes
  * every criterion this ticket carried before 2026-08-09 and the whole suite, while
@@ -22,10 +30,11 @@
  * `epSquare` 32 (`a3`) and 40 (`0x28`, off-board) identically and hides 28 distinct
  * `castling` bit values, so it is not injective on the state it would be asked to
  * compare. It is also asserted per make/unmake PAIR and not only across the whole call,
- * because the call-level oracle SELF-MASKS: on `4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1` the
- * en-passant move rewrites e4 from a black pawn to a white one and the very next move in
- * the same pass writes it back, so the call reads CLEAN on a board the generator
- * provably corrupts.
+ * because the call-level oracle SELF-MASKED: on `4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1` the
+ * en-passant move rewrote e4 from a black pawn to a white one and the very next move in
+ * the same pass wrote it back, so the call read CLEAN on a board the generator was
+ * provably corrupting. The pair-level oracle is the one that saw it, and it stays for
+ * the same reason the tables do.
  *
  * This file is new rather than appended to `moves.test.ts` so that "no existing test is
  * modified" (`A9`) is a mechanical fact rather than an inspection — the same reason
@@ -79,8 +88,8 @@ function enPassantCount(moves: Move[]): number {
  * `A1` / half (a) — a piece of the MOVER'S OWN colour stands on the en-passant target.
  * Two piece types on both colours to move: the falling-through test at the capture
  * branch reads only the occupant's COLOUR, so a knight-shaped table would under-specify
- * the defect. Today every row offers the capture and `legalMoves` passes it through;
- * playing it removes the mover's own piece by overwrite.
+ * the defect. Before the fix every row offered the capture and `legalMoves` passed it
+ * through; playing it removed the mover's own piece by overwrite.
  */
 const OWN_COLOUR_OCCUPANT: readonly string[] = [
   "4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1", // own knight on e3, black to move
@@ -93,8 +102,8 @@ const OWN_COLOUR_OCCUPANT: readonly string[] = [
  * `A3` / half (b) — the en-passant target is empty but the pawn the move claims to
  * capture is not on the board. Both colours to move: the first three rows are the
  * recorded white-to-move reproductions, rows 4 and 5 are the black-to-move mirror that
- * creates a phantom WHITE pawn (row 5 on the h-file, where the edge test lives), and
- * row 6 is the self-masking witness whose corruption is healed later in the same pass.
+ * created a phantom WHITE pawn (row 5 on the h-file, where the edge test lives), and
+ * row 6 is the self-masking witness whose corruption was healed later in the same pass.
  */
 const NO_CAPTURED_PAWN: readonly string[] = [
   "4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1", // nothing on a2 — phantom BLACK pawn a2
