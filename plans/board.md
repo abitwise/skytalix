@@ -3724,9 +3724,57 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   what the whole ticket is about, and neither to be inflated nor deflated.
 -->
 
-## Ready for UAT (WIP 1/4)
+## Ready for UAT (WIP 0/4)
 
-- [ABC-018] Frame output and redraw — in-place on a TTY, append otherwise, constant height  (size: S, P0, epic: EPIC-002, branch: grugops/ticket-to-pr-ABC-018, entered: 2026-08-09)
+<!--
+  EMPTIED 2026-08-09 by the Orchestrator (task `ticket-to-pr-ABC-018`, Workflow 04): **ABC-018 MERGED
+  to main and CLOSED, Ready for UAT -> Done — the second exit this role owns.** Ready for UAT 1/4 ->
+  0/4. Fast-forward 7e0923c -> 364928b, 5 COMMITS, NO MERGE COMMIT: `git rev-list --count
+  branch..main` was 0 and `git log --merges main..branch` was empty, BOTH CHECKED BEFORE the merge
+  rather than assumed. `git branch --no-merged main` is now empty — all eleven branches contained.
+
+  GATES RUN BY THIS ROLE ON THE TIP BEFORE AND ON MAIN AFTER, BOTH RECORDED, NEITHER INHERITED from
+  the four agents that worked this ticket: lint / typecheck / build exit 0 on both sides, 304/304 on
+  14 files on both sides, skip count 0 by the AGENTS.md command on both sides.
+
+  src/frame.ts md5 bb827f52fe537817e40020a29dfa0e6d is IDENTICAL to the Engineer's first commit
+  d88a1f0, checked ON MAIN. QE changed src/frame.test.ts only (+148/-0) and Security/NFR changed no
+  source at all — NEITHER GATE REPAIRED THE MODULE TO MAKE ITS OWN VERDICT GREEN, which is the
+  specific failure this board checks on every merge.
+
+  MERGED UNDER THE OWNER'S STANDING DIRECTIVE OF 2026-08-06, read at its authority in
+  memory-bank/60-progress.md rather than from AGENTS.md's pointer. All three of its limits honored:
+  deploy not included and not attempted, the gate still binds and was run both sides, the authority
+  stays the owner's. UNLIKE THE PREVIOUS TWO MERGES THE HOST PERMISSION CLASSIFIER DID NOT DENY THIS
+  ONE — ABC-014 and ABC-015 were each blocked first and each returned to the owner rather than worked
+  around. Recorded because two denials had started to look like a rule; this is the counter-example.
+
+  NFR-002's WRITE HALF IS NOW MEASURED — the row plans/nfr-catalog.md carried as UNKNOWN - verify.
+  Re-derived at the gate on its own instruments: compute + write 0.0087-0.0088 ms against a 16 ms
+  bar, flat across 40/120/300 plies, Apple M3 / Node v24.12.0 / Darwin arm64. The gate's regular-file
+  cell reads ~11% above the Engineer's and THAT DISCREPANCY WAS STATED RATHER THAN SMOOTHED.
+
+  UAT DEFERRED TO EPIC-006 AND EXPLICITLY NOT PASSED — zero runtime importers, no CLI entry point, so
+  a pass would be a fabrication. Same disposition as every ticket this project has shipped.
+
+  RISK-005 IS FULLY DISCHARGED. Its merge-order half was satisfied before this ticket started
+  (ABC-015 merged 2026-08-08); its BUILD half was checked mechanically at the merge — the glyph mode
+  is a required parameter with no default, frame.ts's only import is an erased `import type
+  { GlyphMode }`, and the only isTTY/rows reads are of the INJECTED sink.
+
+  SIX ITEMS ARE RECORDED OPEN RATHER THAN DISCHARGED, in full in the close-out note: the prompt-row
+  contract has only one side written down (ABC-019 and EPIC-003 must carry it); six mutants passed
+  all twelve acceptance criteria at QE (gaps in the CRITERIA, not defects in the code, all pinned);
+  no criterion constructs an absent isTTY/rows sink for the third consecutive ticket; W is recomputed
+  per frame while Scope calls it a session constant; tools/grugops/test-skip-integrity.js exited 2 on
+  all three agent runs and has never run successfully in this project; and ABC-009 + ABC-022 have now
+  been displaced twice.
+
+  DEPLOY WAS NOT ATTEMPTED OR CONTEMPLATED — not in the standing grant,
+  production_requires_human_confirmation stays true, and ADR-0007 records there is nowhere to deploy.
+
+  Previously ENTERED 2026-08-09 by Security/NFR:
+-->
 
 <!--
   ENTERED 2026-08-09 by Security/NFR (task `ticket-to-pr-ABC-018`, subtask
@@ -4111,6 +4159,7 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Done (WIP unlimited)
 
+- [ABC-018] Frame output and redraw — in-place on a TTY, append otherwise, constant height  (merged: 2026-08-09 by fast-forward 7e0923c → 364928b, 5 commits, no merge commit — `git rev-list --count branch..main` was 0 and `git log --merges main..branch` empty, both checked BEFORE the merge; 304/304 on 14 files + skip 0 re-verified ON main by the Orchestrator, lint/typecheck/build exit 0 both sides; `src/frame.ts` md5 `bb827f52…` IDENTICAL to the Engineer's first commit — QE changed only its own test file (+148/-0) and Security/NFR changed no source, so neither gate repaired the module to make its own verdict green; **promoted only after BA/PM found and fixed FIVE acceptance defects at the `Backlog → Ready` exit — three the Orchestrator flagged, two named by no pre-check — including a frame row (the prompt row) that EPIC-002's own reference layout contained and NO ticket owned**; QE PASS after 56 distinct mutants over 75 cycles, of which **6 passed all twelve criteria and all 297 delivered tests** — every one a gap in the CRITERIA rather than a defect in the code, all pinned; Security/NFR PASS_WITH_RISKS, no required fix, 5 accepted risks each with a named owner, **NFR-002's write half measured for the first time in this project** at 0.0087–0.0088 ms against 16 ms; **UAT deferred → EPIC-006, explicitly NOT passed** — zero runtime importers, no CLI entry point; first merge in three not preceded by a host permission denial; `RISK-005` fully discharged — merge-order half satisfied before the ticket started, build half checked mechanically at the merge)
 - [ABC-015] Glyph mode selection — precedence, signal set, --unicode override  (merged: 2026-08-08 by fast-forward f1743a3 → f4d5d31, 12 commits, no merge commit — `git log --merges` empty and `git rev-list --count branch..main` was 0 before the merge, both verified not assumed; 277/277 on 13 files + skip 0 re-verified ON main by the Orchestrator, lint/typecheck/build exit 0 both sides; `src/glyph-mode.ts` md5 `9c1f4f4e…` IDENTICAL to the Engineer's first commit — QE and Security/NFR each changed tests or docs only and neither repaired the module to make its own verdict green; QE PASS after 29 mutants of which 3 passed every criterion AND all 271 delivered tests; Security/NFR PASS_WITH_RISKS, no required fix, 4 accepted risks each with a named owner, NFR-007's zero-I/O bar re-derived on that gate's own instruments and MET; **acceptance criteria AMENDED TWICE mid-flight by BA/PM, 9 criteria → 15, every amendment ratifying what was already built**; **UAT deferred → EPIC-006, explicitly not passed** — zero runtime importers, no CLI entry point; second merge in two days preceded by a host permission denial that was returned to the owner rather than worked around; RISK-005's merge-order constraint DISCHARGED — this merged before ABC-018, which is still unstarted)
 - [ABC-014] Board frame renderer — grid, labels, shading, orientation, both glyph modes  (merged: 2026-08-08 by fast-forward ed42d26 → c1d694f, 6 commits, no merge commit; 253/253 green + skip 0 re-verified ON main by the Orchestrator, lint/typecheck/build exit 0 both sides; QE PASS after 34 mutate-and-restore cycles with `src/render.ts` md5 unchanged; Security/NFR PASS_WITH_RISKS — NFR-002 board-frame bar re-measured 2.092 µs against ≤ 500 µs, ~240x headroom, Apple M3 / Node v24.12.0 / darwin-arm64; 4 accepted risks each with a named owner; **UAT deferred → EPIC-006, explicitly not passed** — zero importers, no CLI entry point; first merge in this project preceded by a host permission denial that was returned to the owner rather than worked around)
 - [ABC-012] Game history module — the move list is the authoritative state  (merged: 2026-08-06 by fast-forward 39e260d → 7355b51, 8 commits, no merge commit; 226/226 green + skip 0 re-verified ON main; **THE FIRST MERGE UNDER THE OWNER'S STANDING MERGE APPROVAL, not a per-instance instruction**; three gates PASS — QE killed 21 mutants of which 3 survived the delivered suite, Security/NFR re-measured all six NFR bars independently and MET every one at 0.09x–0.67x; five accepted risks each with a named owner, no required fix; UAT deferred → EPIC-006)
