@@ -12,6 +12,97 @@ Entries appear in the order they stood in `board.md` (newest first, as the board
 
 ---
 
+## In Review (WIP 0/3) — the QE exit
+
+EXITED 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-022`, subtask `qe-abc022-review`, Workflow 04):
+**ABC-022 -> In Security/NFR on a PASS. In Review 1/3 -> 0/3, In Security/NFR 0/2 -> 1/2.** No limit
+approached, no override taken, no written reason owed. The `In Review` exit is the one board move
+this role owns; **Security/NFR was NOT enqueued** — the Orchestrator owns decompose->enqueue.
+NOTHING MERGED, NOTHING DEPLOYED.
+
+**`src/moves.ts` WAS NOT TOUCHED AT THIS HOP** — still md5 `6335b452fc21ffe2d0f902ecab930840`, so the
+board's standing record holds for a fourth gate: no gate has ever repaired the module to make its own
+verdict green. `## Acceptance` was not edited either (section md5 `7123d5c641045a44c6f63c2c20dab415`,
+identical to HEAD), nor were `ABC-023`, `ABC-009`, `ABC-010`, `ABC-011` or `plans/nfr-catalog.md`.
+
+**ALL ELEVEN CRITERIA RE-DERIVED ON THIS ROLE'S OWN INSTRUMENTS, nothing carried from a hand-back.**
+Fourteen full tree copies outside the repository, **one OS process per tree state** (the `ABC-009`
+module-cache trap), `tsc --noEmit` **exit 0 on every one before any red was believed** (the
+non-compiling-control trap), every probe printing its FEN and re-parsing it before a verdict, and the
+counting walk kept in a separate run from the probing walk (the recorded failed attempt). `A7` walks
+to `206604 / 99950 / 46256 / 9738 / 63910 / 92016` = **518474**, epSquare set **81397**, ep offered
+onto an occupied square **0 before and 0 after**, and — stronger than the criterion asks — ep offered
+ANYWHERE **4389 before and 4389 after**, so the en-passant move set itself is unchanged in reachable
+play. `A8` **32/32 exact**, run twice by this role (36.85 s, then 38.15 s with the new file present).
+`A10`'s count primary re-derived at **331 / 216,269 / 0** over the same walk (18,357 non-leaf nodes) —
+a third independent derivation. `A9` holds on the stronger form: one existing test file modified,
+**21 changed lines and 0 non-comment**, comment- and blank-stripped content `cmp`-**identical to
+`main`**. `A11` matched on its **quoted sentences** rather than its stale line numbers: every
+falsified sentence absent, every fenced-TRUE sentence present exactly once.
+
+**THE LOAD-BEARING EVIDENCE REPRODUCED RATHER THAN INHERITED.** 58/58 on the fix and 31 red on the
+unfixed control, all 31 inside the new file. The **8-vs-23 disjoint split** confirmed by set
+arithmetic on failing test NAMES — **intersection EMPTY**, union **byte-identical** to the control's
+31 — with both mutant hashes coming out byte-equal to the engineer's (`6762b334…`, `2f19080b…`).
+**`A5` EARNS ITS KEEP:** the colour-shaped restructure, rebuilt independently, typechecks clean,
+passes `A1`-`A4` and `A6`, passes **435 of the 439** delivered tests and the deep lane **32/32**, and
+the only four failures in the entire suite are `A5`'s four rows. The self-masking row was traced move
+by move: `d4e3` writes e4 from `9` to `1` and the very next move in the same pass writes it back, so
+the call-level oracle reads CLEAN where the pair-level oracle reads DIRTY. The settled
+behaviour-equivalence ruling was respected and not re-litigated — a colour-shaped clause is 58/58 and
+439/439, and none of the rows added below kills it either, which is the correct outcome.
+
+**THE GATE'S REAL FINDING IS A HOLE IN THE NET, NOT A DEFECT IN THE CODE. THREE BUILDS PASS ALL
+ELEVEN CRITERIA, ALL 439 TESTS AND THE DEEP LANE 32/32:** (1) reading the target as *"EMPTY, or the
+mover's own QUEEN"* — `A1` names a knight and a rook only, so one further own type slips through, and
+the build offers a capture onto the mover's own queen and overwrites it with a pawn; (2) reading the
+capture square as *"some ENEMY piece is behind it"* — on `4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1` one
+`legalMoves` call rewrites the enemy KNIGHT (byte 10) into a PAWN (byte 9) and playing the move
+removes it outright; (3) *"anything that is not the mover's own pawn is behind it"* — 16 corrupting
+configurations, **four of which read CLEAN across the call and DIRTY per pair**. The shape is this
+board's most-repeated defect for the sixth time on this ticket: **`A1` samples two piece types where
+`## Scope` bullet 1 quantifies over every byte, and `A3`'s six rows put nothing but EMPTY or the
+mover's OWN pawn behind the target while `## Scope` bullet 2 requires the enemy PAWN.** The delivered
+code is correct on all 44 FEN-producible configurations of both axes — this is the criteria's blind
+spot, not the module's.
+
+**CLOSED BY QE ON THE `ABC-009` PRECEDENT, WITH NO CRITERION CHANGED.** Both `A1` and `A3` say *"at
+minimum"*, so the rows are inside them as written; `src/moves.enpassant.hardening.test.ts` was cut
+new (**120 tests**): the target byte quantified over all six of the mover's own piece types on both
+colours plus two EMPTY controls, the byte behind quantified over every FEN-producible piece code of
+both colours plus EMPTY on both colours, and purity over all 40 positions across the call AND per
+make/unmake pair, 128 bytes and five scalars. **Every row is green on the delivered fix**; the three
+surviving builds now fail **4 / 30 / 60** tests, **every one of them in the new file**. Suite
+**439 -> 559 on 18 files**, skip count **0**, lint / typecheck / build exit **0** (lint's 2 infos are
+the pre-existing `biome.json` ones; 1 of 2 `self_fix_attempts` spent on a formatting autofix of this
+role's own new file). `src/moves.ts` 100% statements / branches / functions / lines; `mode` is `lean`
+so `quality.coverage_threshold` is not enforced.
+
+**THE ENEMY-OCCUPANT AXIS WAS DELIBERATELY LEFT ALONE and is reported as an open gap.** It is `A5`'s
+axis, and quantifying it here would make the restructure mutant fail in two files and falsify `A5`'s
+own *"fails only here"* — a present-tense comment about the generator's en-passant branch, which is
+precisely the class `A11` exists to remove. Measured rather than assumed: **the restructure mutant
+passes all 40 hardening rows.** Also still open and named rather than absorbed: non-piece bytes are
+out of every in-repo instrument's reach (`parseFen` refuses them, direct writes make the generator
+throw), `ADR-0005` 133-138 is unowned, `ABC-023`'s `A4` hash pin is stale, `src/moves.castling.test.ts`
+7-10 / 98-99 stay `ABC-009`'s and are already routed to `ABC-023`, and E2E plus the auto-UAT oracle
+slot are `UNKNOWN - verify`. The test-integrity checker still exits **2** ("cannot read the registry
+file") — *could not run*, not a pass, and **no registry file was created**.
+
+**THE ORCHESTRATOR'S TWO RULINGS, CHECKED.** The two sites beyond `A11`'s citation table
+(`src/moves.enpassant.test.ts` 82-83, 95-97) are **NOT challenged** — both sentences are measurably
+false, both are gone, and `A11`'s binding clause is about statements this fix falsified rather than
+about a list of line numbers. The castling pair stays out of scope and was not counted against this
+ticket. Full record: `.grugops/context/ticket-to-pr-ABC-022/notes/`.
+
+---
+
+## board header — _Updated: entry (the 2026-08-10 board tidy, preserved verbatim when QE replaced it)
+
+_Updated: 2026-08-10 by the Orchestrator (board tidy, no task): **THE PER-HOP NARRATIVE MOVED OUT TO `plans/tickets/history/`. NO TICKET MOVED, NO WIP NUMBER CHANGED, NO TICKET BODY EDITED, NOTHING SUMMARISED OR DROPPED.** The board had reached **549,833 characters**, of which **532,677 (97%)** was per-hop transition narrative in 61 HTML-comment blocks and an 11-deep stack of `_Updated:` headers — one single header line was **103,498 characters**. Every entry is now in `plans/tickets/history/<ID>-board-history.md`, **verbatim**, one file per ticket, linked from that ticket. Checked before moving: **98% of that text exists nowhere else** (120 sampled sentences against all 330 context notes — only 3 were duplicates), so this was a relocation and deleting it would have destroyed the audit trail. **ONE ENTRY WAS RESTORED, NOT MOVED:** BA/PM's `ABC-009` `A13` header was **destroyed by the Orchestrator on 2026-08-09**, which treated a newest-first append stack as a single replaceable field; recovered from `e644039` and filed in `ABC-009`'s history. The board now carries what its own FORMAT comment always said it should — columns, WIP counts, one-line ticket rows and the conventions._
+
+---
+
 ## board header — _Updated: entry
 
 _Updated: 2026-08-09 by the Orchestrator (task `ticket-to-pr-ABC-022`, Workflow 04): **`In Review` GATE — THE IMPLEMENTATION HOLDS, BUT `ABC-022` DOES NOT ADVANCE TO QE YET. NO BOARD MOVE: it stays In Review 1/3.** Gates re-run by the Orchestrator on the branch tip rather than read off the hand-back: **lint 0, typecheck 0, build 0, 439/439 on 17 files, skip count 0, `PERFT_DEEP=1` 32/32 exact in 36.50 s** (engineer reported 36.55 s — reproduced). **`A9`'s line-level claim holds MECHANICALLY**: `git diff --diff-filter=M -- 'src/*.test.ts'` is EMPTY and `--diff-filter=A` returns exactly one addition, so no existing test was modified; the whole `src/` diff is `moves.ts` (+24 −12), a **comment-only** `legal.ts` edit and the new test file. **IT IS HELD FOR AN EIGHTH DEFECT THE ENGINEER FOUND AND CORRECTLY REFUSED TO FIX**: `src/legal.ts:69-71` claims *"`generateMoves` offers en-passant captures onto squares occupied by the mover's OWN piece"* — **made FALSE by this very fix**, confirmed by the Orchestrator reading the source. It sits outside `A11`'s cited 102-103 and outside the engineer's boundary, so flagging rather than widening the diff was right (AGENTS.md rules 9 and 12) and is recorded as right. **But `A11` AS WRITTEN IS SATISFIED WHILE THE HARM IS LIVE** — the ticket could pass every criterion and ship the falsehood `A11` was cut to remove. **THAT IS THE FIFTH INSTANCE ON THIS ONE TICKET OF A CRITERION NARROWER THAN THE HARM**, after the pre-check's 2 and BA/PM's 7. Routed to BA/PM, whose `## Acceptance` alone is — widening the boundary without amending `A11` would leave the new edit covered by NO criterion, which is the "green signal read as protection" failure this board keeps paying for. **The hop is scoped to a repo-wide SWEEP, not the one flagged line**, because every count here has been a floor and never a ceiling. A second question goes with it: with the generator fixed, the stated reason `hasLegalEnPassant`'s out-of-domain answer is *specified rather than derived* may have partly evaporated — **the guards themselves stay, `ADR-0005` is not reopened, and nothing executable may change.** `src/moves.ts` is now md5 `6335b452...`, so **`ABC-023`'s `A4` pin is stale as expected** and is deferred by design to its own promotion hop. NOTHING MERGED, NOTHING DEPLOYED._

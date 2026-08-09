@@ -1,6 +1,6 @@
 # Board
 
-_Updated: 2026-08-10 by the Orchestrator (board tidy, no task): **THE PER-HOP NARRATIVE MOVED OUT TO `plans/tickets/history/`. NO TICKET MOVED, NO WIP NUMBER CHANGED, NO TICKET BODY EDITED, NOTHING SUMMARISED OR DROPPED.** The board had reached **549,833 characters**, of which **532,677 (97%)** was per-hop transition narrative in 61 HTML-comment blocks and an 11-deep stack of `_Updated:` headers — one single header line was **103,498 characters**. Every entry is now in `plans/tickets/history/<ID>-board-history.md`, **verbatim**, one file per ticket, linked from that ticket. Checked before moving: **98% of that text exists nowhere else** (120 sampled sentences against all 330 context notes — only 3 were duplicates), so this was a relocation and deleting it would have destroyed the audit trail. **ONE ENTRY WAS RESTORED, NOT MOVED:** BA/PM's `ABC-009` `A13` header was **destroyed by the Orchestrator on 2026-08-09**, which treated a newest-first append stack as a single replaceable field; recovered from `e644039` and filed in `ABC-009`'s history. The board now carries what its own FORMAT comment always said it should — columns, WIP counts, one-line ticket rows and the conventions._
+_Updated: 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-022`, Workflow 04): **`ABC-022` PASSES the `In Review` gate. In Review 1/3 -> 0/3, In Security/NFR 0/2 -> 1/2.** No limit approached, no override taken; ticket frontmatter moved with the column. `src/moves.ts` NOT touched (md5 `6335b452…`); `## Acceptance` NOT edited (md5 `7123d5c6…`). Suite **439 -> 559 on 18 files** — QE added `src/moves.enpassant.hardening.test.ts`, 120 rows all green on the delivered fix. NOTHING MERGED, NOTHING DEPLOYED. **What was measured, what survived and what is still open: `plans/tickets/history/ABC-022-board-history.md` and `.grugops/context/ticket-to-pr-ABC-022/notes/`.** (The 2026-08-10 board-tidy header this replaces is preserved verbatim in that same history file, per the rule below.)_
 
 **Per-hop detail lives with its ticket, not here:** `plans/tickets/history/<ID>-board-history.md`.
 
@@ -107,11 +107,11 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## In Development (WIP 0/3)
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-022] generateMoves offers en-passant captures its own preconditions forbid  (size: S, P1, epic: EPIC-001, deps: none; entered 2026-08-09 by the Software Engineer, Workflow 04)
+## In Security/NFR (WIP 1/2)
 
-## In Security/NFR (WIP 0/2)
+- [ABC-022] generateMoves offers en-passant captures its own preconditions forbid  (size: S, P1, epic: EPIC-001, deps: none; entered 2026-08-09 by QE/E2E on a PASS, Workflow 04)
 
 ## Ready for UAT (WIP 0/4)
 

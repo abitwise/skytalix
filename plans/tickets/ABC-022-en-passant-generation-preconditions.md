@@ -1,8 +1,8 @@
 ---
 id: ABC-022
 title: generateMoves offers en-passant captures its own preconditions forbid
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: S
 priority: P1
 epic: EPIC-001
@@ -1114,6 +1114,129 @@ sentences are false. **They are out of `A11`'s remit by construction** — `ABC-
 them, not this one — exactly as `src/legal.test.ts` 202 was fenced, and out of this hop's boundary.
 **Not edited.** The pattern behind all three is worth a retro rather than a ticket: a red-before-green
 test header written in the present tense and never re-tensed when it went green.
+
+## QE
+
+**PASS. `In Review` -> `In Security/NFR`.** Appended 2026-08-09 by QE/E2E (task
+`ticket-to-pr-ABC-022`, subtask `qe-abc022-review`, Workflow 04). **`src/moves.ts` was NOT touched at
+this hop and is still md5 `6335b452fc21ffe2d0f902ecab930840`** — byte-identical to the engineer's
+first commit through every gate, as every ticket on this board records. `## Acceptance` was not
+edited; `ABC-023`, `ABC-009`, `ABC-010`, `ABC-011` and `plans/nfr-catalog.md` were not touched.
+
+### All eleven criteria re-derived on QE's own instruments
+
+Nothing below is carried from a hand-back. Fourteen full tree copies outside the repository, **one
+OS process per tree state**, `tsc --noEmit` **exit 0 on every one before any red was believed**,
+every probe printing its FEN and re-parsing it before taking a verdict.
+
+| criterion | verdict | how it was re-derived here |
+| --- | --- | --- |
+| `A1` | MET | own-colour occupant, `gen_ep=0` on every row; and quantified below over every own piece type |
+| `A2` | MET | `legal_ep=0` on both halves' rows |
+| `A3` | MET | half (b) both colours, `gen_ep=0`; and quantified below over the whole byte space behind the target |
+| `A4` | MET | purity over 128 bytes + 5 scalars, field by field, across the call **and** per make/unmake pair, on 16 positions |
+| `A5` | MET, and it EARNS ITS KEEP | see the restructure result below |
+| `A6` | MET | `1/1` and `1/0` exactly; and it is the only criterion that catches a wrong-direction capture square |
+| `A7` | MET | `206604 / 99950 / 46256 / 9738 / 63910 / 92016`, total **518474**, epSquare set **81397**, ep offered onto an occupied square **0 before and 0 after**, ep offered anywhere **4389 before and 4389 after** |
+| `A8` | MET | `PERFT_DEEP=1` **32/32 exact**, run twice by this role (36.85 s, then 38.15 s with the hardening file present) |
+| `A9` | MET | one existing test file modified (`src/legal.test.ts`), **21 changed lines, 0 non-comment**; comment- and blank-stripped content `cmp`-**identical to `main`** (236 code lines; `src/legal.ts` 49); `it(` 21/21, `it.each` 2/2, `describe(` 7/7, `expect(` 40/40, ` w - ` 28/28, ` b - ` 8/8 |
+| `A10` | MET | count primary re-derived at **331 / 216,269 / 0** over the standing 518,474-node walk (18,357 non-leaf nodes); clock floor **6,053,791–6,219,684 nodes/sec** against `>= 1,000,000`; aggregate ratio **0.9951** against `>= 0.98` |
+| `A11` | MET | all thirteen quoted sentences matched by TEXT, not by line number: every falsified one is **absent**, every fenced-TRUE one is **present exactly once** |
+
+`A7`'s "ep offered anywhere" being **4389 both before and after** is the strongest single statement
+that this is a precondition and not a behaviour change: the en-passant move SET is unchanged in
+reachable play, so nothing legal was removed.
+
+### The load-bearing evidence, reproduced rather than inherited
+
+- **58/58 on the delivered fix; 31 red on the unfixed control** — and the 31 are entirely in the new
+  file, so no existing test pinned the defective behaviour.
+- **The 8-vs-23 disjoint split holds by set arithmetic, not by reading.** Deleting the empty-target
+  condition fails **8** named tests, deleting the captured-pawn condition fails **23**, their
+  **intersection is EMPTY** and their union is **byte-identical** to the unfixed control's 31.
+  Both mutant hashes came out **byte-equal to the engineer's** (`6762b334…`, `2f19080b…`).
+- **`A5` is confirmed as this board's only guard against the colour-shaped restructure.** Rebuilt
+  independently: it typechecks clean, passes `A1`-`A4` and `A6`, passes **435 of the 439 delivered
+  tests**, passes the deep lane **32/32** — and the only four tests in the entire suite that fail it
+  are `A5`'s four rows. **The claim that justifies keeping `A5` is true.**
+- **The self-masking row reproduced move by move** on `4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1`: on the
+  unfixed tree `d4e3` writes e4 from `9` to `1` and the very next move in the same pass writes it
+  back, so the call-level oracle reads CLEAN while the pair-level oracle reads DIRTY.
+- **The behaviour-equivalence ruling was respected, not re-litigated.** A colour-shaped clause
+  (`!(target !== EMPTY && isBlack(target) === black)`) is **58/58 and 439/439** — indistinguishable,
+  as settled. None of the rows added below kills it either, which is the correct outcome.
+
+### THE GAP: three builds passed all eleven criteria, all 439 tests AND the deep lane
+
+The acceptance table SAMPLES two axes where `## Scope` quantifies over all of them. Each build below
+typechecks clean and was measured in its own process:
+
+| build | what it reads | delivered net | the harm it ships |
+| --- | --- | --- | --- |
+| "EMPTY, or the mover's own QUEEN" on the target | `A1` names a knight and a rook only | **439/439, deep 32/32** | offers a capture onto the mover's own queen; playing it overwrites the queen with a pawn |
+| "some ENEMY piece is behind it" | `A3` never puts anything but EMPTY or an own pawn there | **439/439, deep 32/32** | `4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1` — one `legalMoves` call rewrites the enemy KNIGHT (byte 10) into a PAWN (byte 9); playing it removes the knight outright |
+| "anything that is not the mover's own pawn is behind it" | same blind axis, weaker still | **439/439, deep 32/32** | 16 configurations corrupt, and **four of them read CLEAN across the call and DIRTY per pair** |
+
+**This is a gap in the criteria's tables, not a defect in the code**: the delivered fix is correct on
+every one of the 44 FEN-producible configurations of both axes. `A1` and `A3` both say **"at
+minimum"**, so closing it needed no change to `## Acceptance` and none was made.
+
+### What QE added — `src/moves.enpassant.hardening.test.ts`, 120 tests, no production line
+
+The `ABC-009` precedent (`src/moves.castling.hardening.test.ts`). Every row **passes on the delivered
+fix**; each exists because a build that fails it passes everything else.
+
+- **Axis 1 — the byte on the target:** all six of the mover's own piece types on both colours, plus
+  two EMPTY controls (14 rows x `generateMoves` and `legalMoves`).
+- **Axis 2 — the byte one rank behind it:** every FEN-producible piece code of both colours plus
+  EMPTY, on both colours to move, with exactly two rows offering the move (26 rows x two).
+- **Purity per make/unmake pair and across the call** over all 40 positions, 128 bytes + 5 scalars.
+
+Suite **439 -> 559 on 18 files**, skip count **0**, lint / typecheck / build exit **0**, deep lane
+**32/32**. The three surviving builds now fail **4 / 30 / 60** tests respectively, **every one of them
+in the new file**.
+
+**The enemy occupant on the TARGET is deliberately left alone.** It is `A5`'s axis; covering it here
+would make the restructure mutant fail in two files and falsify `A5`'s own *"fails only here"* — a
+present-tense comment about the generator's en-passant branch, which is the class `A11` exists to
+remove. Measured rather than assumed: **the restructure mutant passes all 40 hardening rows.** That
+this leaves the enemy axis SAMPLED at two piece types is reported as an open gap below.
+
+### Gaps this hop did NOT close, reported rather than absorbed
+
+1. **`A5`'s enemy-occupant axis is still a sample of two piece types.** Same shape as `ABC-009`'s
+   `A11`. Not closable here without falsifying the sibling file's comment; it belongs with BA/PM or
+   with `ABC-023`.
+2. **Bytes that are not valid piece codes are out of every in-repo instrument's reach** — `parseFen`
+   refuses them and direct writes make the generator throw. BA/PM's out-of-repo 512-state and
+   131,072-state sweeps remain the only cover, and they are not re-derived here.
+3. **`ADR-0005` 133-138 is still unowned** — both witnesses measured false on the delivered tree at
+   an earlier hop, amending an accepted ADR is an Architect ruling and no trigger is attached.
+4. **`ABC-023`'s `A4` hash pin is stale** against this branch and will be stale against `main` at
+   merge. Deferred by design; nothing here touched it.
+5. **`src/moves.castling.test.ts` 7-10 and 98-99** carry the same false present-tense shape.
+   `ABC-009` falsified them; already routed to `ABC-023`. Not folded in and not counted here.
+6. **E2E and the auto-UAT oracle slot are `UNKNOWN - verify`** — no UI surface until `EPIC-006` and
+   `scripts/check-uat-oracles.js` does not exist. The test-integrity checker still exits **2**
+   ("cannot read the registry file"): that is *could not run*, not a pass, and **no registry file was
+   created** — an agent may not author the justification that clears its own gate. The skip count is
+   independently **0**.
+7. **All throughput figures are one machine** (Apple M3 / Node v24.12.0 / darwin-arm64) and
+   `UNKNOWN - verify` anywhere else. The null control — a `cmp`-verified byte-identical twin —
+   deviates from the tree it is identical to by 0.10% and from the pre-fix baseline by 0.59%, while
+   the fix's apparent cost is 0.49%, so **no per-cell and no per-run cost claim is admissible** from
+   this data. The count is what carries `NFR-001`.
+
+**Coverage:** `src/moves.ts`, `src/legal.ts` and `src/apply.ts` are at **100%** statements, branches,
+functions and lines. `mode` is `lean`, so `quality.coverage_threshold` is not enforced; the figure is
+reported, not gated on. `coverage/` was left at its committed state — it was last regenerated at
+`76ca714` and is not this hop's to churn.
+
+**The Orchestrator's two rulings, checked:** the two sites beyond `A11`'s citation table
+(`src/moves.enpassant.test.ts` 82-83, 95-97) are **not challenged** — both sentences are measurably
+false, both are gone, and `A11`'s binding clause is about statements this fix falsified rather than
+about a list of line numbers. The castling pair stays out of scope and was not counted against this
+ticket.
 
 ## Board history
 
