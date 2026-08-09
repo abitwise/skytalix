@@ -152,12 +152,25 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   oversight.
 -->
 
-## Ready (WIP 4/8)
+## Ready (WIP 3/8)
 
 - [ABC-009] legalMoves mutates the position it documents as unchanged  (size: S, P1, epic: EPIC-001, deps: none; escalated P2→P1 and promoted 2026-07-31)
 - [ABC-013] SAN rendering — src/san.ts with toSan only  (size: M, P1, epic: EPIC-002, deps: ABC-003 + ABC-005, both merged on main; unblocked 2026-07-31 when ADR-0004 was ratified)
-- [ABC-018] Frame output and redraw  (size: S, P0, epic: EPIC-002, deps: ABC-014 merged; RISK-005's merge-order constraint SATISFIED — ABC-015 merged 2026-08-08 before this ticket started; promoted 2026-08-09 with five acceptance defects corrected first)
 - [ABC-022] generateMoves offers en-passant captures its own preconditions forbid  (size: S, P1, epic: EPIC-001, deps: none; cut 2026-08-04 by BA/PM, straight to Ready)
+
+<!--
+  ABC-018 ENTERED AND LEFT THIS COLUMN ON 2026-08-09 — promoted here by BA/PM and pulled to
+  In Development by the Orchestrator the same day, so its row now sits below. Ready 3/8 -> 4/8
+  -> 3/8, the same shape ABC-015 traced on 2026-08-08. ABC-009, ABC-013 and ABC-022 stay, unmoved
+  and unchanged.
+
+  ABC-009 AND ABC-022 HAVE NOW BEEN DISPLACED TWICE. Both are P1 rules-core defects, in Ready since
+  2026-07-31 and 2026-08-04, and this is the SECOND consecutive owner pull-order call putting
+  renderer work in front of them (ABC-015 was the first). The owner may re-order their own queue and
+  this is not an argument against it — it is recorded so the pattern is visible on the board rather
+  than re-derived later. NEITHER is cancelled, re-sized or de-prioritised.
+-->
+
 
 <!--
   ENTERED 2026-08-09 by BA/PM (task `ticket-to-pr-ABC-018`, subtask `bapm-abc018-promote`,
@@ -973,9 +986,45 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-018] Frame output and redraw — in-place on a TTY, append otherwise, constant height  (size: S, P0, epic: EPIC-002, branch: grugops/ticket-to-pr-ABC-018, pulled: 2026-08-09)
 
 <!--
+  ENTERED 2026-08-09 by the Orchestrator (task `ticket-to-pr-ABC-018`, Workflow 04 step 2) — the
+  `Ready -> In Development` exit this role owns. Ready 4/8 -> 3/8, In Development 0/3 -> 1/3.
+  NO LIMIT APPROACHED, NO OVERRIDE TAKEN, no written reason owed.
+
+  THE DEFINITION-OF-READY GATE PASSED ON THE CORRECTED TICKET, and BA/PM's five rulings were
+  RE-VERIFIED AT THE SOURCE rather than inherited -- the same standard BA/PM applied to this role's
+  pre-check, which is what caught that the pre-check's AMBER row was actually a FAIL:
+
+    - EPIC-002:197-198 does contain "1 prompt row = 23 rows", so `23` was never unsourced and this
+      role's pre-check item 2 was WRONG on that point. BA/PM's correction stands: the ticket's Scope
+      assembled four of five regions and summed to 22.
+    - ABC-016:72 gives "all writing" to ABC-018; ABC-019's eight `prompt` hits are all about WHEN to
+      prompt, never a frame row; EPIC-003's are the prompt's text, echo and NFR-003. So reserving the
+      row here creates NO DOUBLE OWNERSHIP -- this ticket reserves and renders nothing.
+    - EPIC-002:133 (#2a) asserts zero code points above U+007F "in the emitted frame", not in one
+      panel, so the ASCII sanitizer widening is CONSISTENCY WITH THE EPIC, not scope creep.
+    - EPIC-002:200 (#4b) says "at least as many rows as the frame", so R = H is in-place by the
+      epic's own rule and was untested. Defect 3 confirmed.
+    - Defect 4 (NFR-002 read as each half rather than the sum) contradicted the ticket's own NFR
+      section AND its traceability row. NO TARGET MOVED -- the 16 ms is EPIC-002's.
+
+  SIZE RE-CHECKED, NOT CARRIED: still S (2). One reserved row placed by the mechanism the message
+  region already uses, one width constant, one sanitizer clause, four tests. No argv, no I/O, no new
+  module. NOT XL, so no SPLIT_REQUIRED.
+
+  AN OPEN CROSS-TICKET OBLIGATION IS CREATED HERE AND IS NOT DISCHARGED BY THIS TASK. The reserved
+  prompt row is a contract with only one side written down: ABC-018 reserves the frame's last row and
+  leaves the cursor at its start, EPIC-003 is expected to type into exactly that row, and ABC-019
+  drives the loop around it. BA/PM did NOT edit and does NOT vouch for EPIC-002, ABC-016, ABC-017 or
+  ABC-019 -- correctly, since a promotion subtask should not quietly rewrite four other tickets. It
+  is NOT a blocker for ABC-018, which is buildable against a stub. WHEN ABC-019 IS REFINED AND WHEN
+  EPIC-003 IS DECOMPOSED, THE PROMPT-ROW CONTRACT MUST BE CARRIED INTO THEM. Routed to BA/PM then,
+  not now, and recorded here so it is not rediscovered as a defect.
+
   EXITED 2026-08-08 by the Software Engineer (task `ticket-to-pr-ABC-015`, subtask
   `engineer-abc015-implement`, Workflow 04): ABC-015 -> In Review. In Development 1/3 -> 0/3,
   In Review 0/3 -> 1/3. NO LIMIT APPROACHED, no override taken, no written reason owed. The
