@@ -1,8 +1,8 @@
 ---
 id: ABC-018
 title: Frame output and redraw — in-place on a TTY, append otherwise, constant height
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P0
 epic: EPIC-002
@@ -32,22 +32,55 @@ that finally measures `NFR-002`'s unmeasured half.
 
 - **In-place** — when stdout is a TTY **and** the TTY reports at least as many rows as the frame:
   return the cursor to the frame origin, write the frame, then **erase from the end of the new
-  frame to the end of the screen in one operation**.
+  frame to the end of the screen in one operation**. The frame's **last row is the reserved prompt
+  row** and carries **no trailing newline**, so the cursor is left at its start and nothing scrolls
+  when the TTY reports exactly as many rows as the frame.
 - **Append** — when stdout is **not** a TTY, **or** the TTY reports fewer rows than the frame:
   write the frame in full followed by a newline, emitting **no cursor-control sequence at all**.
 
 **Frame assembly**: composes the board (`ABC-014`), status panel (`ABC-016`), move-history pane
-(`ABC-017`) and a **message region of a fixed 2 rows** into one frame of constant height.
+(`ABC-017`), a **message region of a fixed 2 rows** and a **reserved prompt row of a fixed 1 row**
+into one frame of constant height.
+
+**The frame's height `H` is a session constant known before the first frame** — the panels' constant
+heights plus the 3 rows this ticket owns — and that is what makes a strategy chosen *once at startup*
+well defined. **`H` is never hardcoded.** The `23`-row frames in the criteria below are the epic's
+own reference layout used as a **stub fixture** (`4a`: 9 board + 3 status + 8 history + 2 message +
+1 prompt = **23**, *"the invariant is the criterion; the exact split is the engineer's"*).
+
+**The prompt row is RESERVED, not rendered.** *(Added 2026-08-09 — see the correction block under
+`## Acceptance`; it was missing, and the omission was a real off-by-one.)* This ticket owns **all
+writing** in the epic, and `EPIC-003`'s input surface types into the frame's last row — so that row
+is inside `H` and the in-place write leaves the cursor at its start. Reserving it is what makes
+*"the TTY reports at least as many rows as the frame"* count **every row that is drawn**; without it
+the comparison is short by exactly the row the player types into, and the first keystroke scrolls the
+frame origin off the top. This ticket reserves the row and places nothing in it — `EPIC-003` keeps
+the prompt surface.
 
 **The message region is frame-owned.** `EPIC-003` supplies rejection text and ambiguity candidates
-as **data**; it does not print beside the frame. A message longer than the region is truncated with
-a `(+N more)` marker rather than growing the frame.
+as **data** — a **list of items** (message lines, candidate moves), never one blob with newlines in
+it, since a newline is a C0 character and the sanitizer below removes it. It does not print beside
+the frame. Content longer than the region is truncated with a `(+N more)` marker rather than growing
+the frame: each item is placed **whole or not at all**, and **`N` is the number of supplied items the
+region does not show in full** — a count of the input, not a number the implementation picks. The
+marker is present **exactly when `N > 0`**.
+
+**The frame has ONE width `W`, and it is a session constant: the widest row the assembled regions
+emit.** `process.stdout.columns` is **not** read — there is no width at all in append mode, which is
+the mode `EPIC-006`'s end-to-end test runs in, and the frame is a session constant by the epic's
+SIGWINCH ruling. Every emitted row is at most `W`. The message region is where that is enforced: it
+is the only region carrying text this product did not generate, and a region row wider than `W`
+**wraps in the terminal and adds a screen row** — the one way content can break `4a`'s constant
+height.
 
 **Any supplied string is stripped of control characters before it is placed** — see Security.
 
 ## Out of scope
 
 - **Producing any panel's content** — `ABC-014`, `ABC-016`, `ABC-017`.
+- **The prompt itself** — its text, reading the player's input, and echoing keystrokes are
+  `EPIC-003`'s. *(Added 2026-08-09 with the reserved prompt row: this ticket reserves the row and
+  leaves the cursor at its start, and that is the whole of its interest in it.)*
 - **Deciding *when* to render** — `ABC-019` owns the loop and its render triggers.
 - **Terminal resize (SIGWINCH).** Cut by epic amendment: the frame is a session constant, so a
   resize changes nothing about what is drawn, and the erase-to-end-of-screen repairs the display on
@@ -64,32 +97,157 @@ a `(+N more)` marker rather than growing the frame.
   flag false and then true, **when** the frames are assembled, **then** all four have the **same row
   count**. *(Height must not vary with message content or thinking state — these are the two
   mechanisms that produce stale rows even under a bounded history.)*
-- **Given** an ambiguity list of **6** candidate moves and a 2-row message region, **when** the
-  frame is assembled, **then** the region holds as many candidates as fit plus a `(+N more)` marker,
-  the row count is unchanged, and **no candidate text escapes the region**.
+- **Given** an ambiguity list of **6** candidate moves that **fit** the 2-row message region at the
+  frame's width `W` (six 4-character SANs need **29** characters; a 2-row region at `W = 18` holds
+  **36**, three to a row), **when** the frame is assembled, **then** the region is **exactly 2 rows**,
+  **all 6** candidates appear **in full**, **no** `(+N more)` marker appears, no emitted row exceeds
+  `W`, and the frame's row count is unchanged.
+- **Given** an ambiguity list that does **not** fit — **10** candidates, needing **49** characters
+  against the **36** a 2-row region at `W = 18` holds, and a candidate is never split across rows —
+  **when** the frame is assembled, **then** the region is **exactly 2 rows**, every candidate shown
+  appears **in full** (never split, never cut mid-token), the last row ends with `(+N more)` where
+  **`N` equals the number of supplied candidates not shown in full**, no emitted row exceeds `W`, **no
+  candidate text appears outside the region**, and the frame's row count is unchanged. *(Which
+  candidates fit is the engineer's packing; `N` is not — it is a count of the input, so two
+  implementations that pack differently both pass, and one that invents `N` fails.)*
 - **Given** a TTY of 24 rows and a 23-row frame, **when** frame N+1 is written after frame N,
   **then** the emitted stream contains a cursor-home sequence, the frame, and **exactly one**
   erase-to-end-of-screen sequence; **and** a capture of the rendered region after frame N+1 contains
   **zero** rows from frame N. *(Epic acceptance `4b`. Erase-to-end-of-screen, **not**
   cursor-up-by-counted-lines: a counted redraw is correct only while consecutive frames have equal
   height and is the exact mechanism that produces the stale rows this criterion names.)*
+- **Given** a TTY reporting **exactly 23** rows and a 23-row frame — the boundary of *"at least as
+  many rows as the frame"* — **when** frames N and N+1 are written, **then** the **in-place** strategy
+  is used, and on a 23-row screen model the frame's first row is still on **screen row 1** after
+  frame N+1 (nothing scrolled) and **zero** rows from frame N remain. *(Added 2026-08-09. Kills two
+  mutants, not one: `>` where the rule says `≥`, and a trailing newline after the frame's last row —
+  at exactly this size that newline scrolls the origin off the top and every later in-place redraw
+  lands one row high.)*
+- **Given** an in-place write of a frame of `H` rows, **when** the frame has been written, **then**
+  `H` **includes the reserved prompt row** and the emitted stream leaves the cursor at the **start of
+  that row**, with no newline after the frame's last row. *(Added 2026-08-09. The row `EPIC-003` types
+  into is inside the frame, which is what makes the `R ≥ H` comparison account for every row drawn.)*
 - **Given** stdout is **not** a TTY, **when** 80 frames are written, **then** the output contains
   **zero** `\x1b` bytes, every frame appears in full, and none is truncated. *(Epic acceptance `4c`.
   This is the mode `EPIC-006`'s end-to-end test runs in.)*
 - **Given** a TTY reporting **10** rows and a 23-row frame, **when** frames are written, **then** the
   append strategy is used and **zero** cursor-control sequences are emitted. *(The frame does not
   fit; in-place redraw is undefined there, so it is not attempted.)*
-- **Given** the strategy chosen at startup, **when** `process.stdout.isTTY` changes afterwards,
-  **then** the strategy in use is unchanged.
+- **Given** a writer constructed against a sink reporting **TTY and 24 rows**, **when** the sink's
+  `isTTY` is set **false** and its row count to **10** *after* construction and two further frames are
+  written, **then** both are written **in place** — each emits a cursor-home sequence and **exactly
+  one** erase-to-end-of-screen. *(Replaces, 2026-08-09, the criterion this ticket carried until then:
+  "when `process.stdout.isTTY` changes afterwards, the strategy in use is unchanged". The signals
+  reach the writer at construction — the `## Test notes` **require** a captured sink — so a criterion
+  phrased against the ambient `process.stdout` cannot be tested against the design this ticket
+  mandates, and passes for every implementation including one that re-decides on every write. This
+  form kills that one.)*
 - **Given** a message string containing `\x1b[2J` (or any other CSI sequence), **when** the frame is
   written, **then** the emitted stream contains **zero** `\x1b` bytes originating from that string,
   and the frame's row count is unchanged. *(See Security.)*
-- **Given** glyph mode ASCII, **when** any frame is written to a non-TTY sink, **then** the count of
-  code points above `U+007F` in the captured output is **exactly 0**. *(Epic acceptance `2a`, over
-  the whole emitted stream rather than one panel.)*
+- **Given** glyph mode ASCII **and a supplied message containing `é` and `♞`**, **when** any frame is
+  written to a non-TTY sink, **then** the count of code points above `U+007F` in the captured output
+  is **exactly 0**. *(Epic acceptance `2a`, over the whole emitted stream rather than one panel —
+  including the one region carrying text this product did not generate. The two inputs were added
+  2026-08-09: without them this criterion and the sanitizer's bar contradicted each other the moment
+  a player typed a non-ASCII character. See Security.)*
 - **Given** a full frame at **40, 120 and 300 plies**, **when** compute and write are measured
-  separately against a non-TTY sink, **then** each total is **< 16 ms** and the figures are recorded
-  with their machine and their ply count. *(`NFR-002`. See below.)*
+  separately against a non-TTY sink, **then** at each ply count **compute + write SUMMED is < 16 ms**
+  — the bar is the sum, not each half — and **both halves are recorded separately**, each with its
+  machine and its ply count. *(`NFR-002`. See below. Amended 2026-08-09: "each total is < 16 ms" read
+  two ways, and the loose reading passed a 31 ms frame against a 16 ms bar. The target did not
+  move — it is `EPIC-002`'s.)*
+
+> ### CORRECTED IN PLACE 2026-08-09 by BA/PM (task `ticket-to-pr-ABC-018`, subtask `bapm-abc018-promote`, Workflow 07)
+>
+> **Five acceptance defects were fixed at the `Backlog → Ready` exit, before promotion, not after.**
+> This ticket's own `## Definition of Ready` block ticked *acceptance measurable* ✅ on 2026-07-30 and
+> nothing re-checked it until today; the Orchestrator's pre-check left the row **amber** with three
+> named specifics rather than green. **The row is a FAIL, not an amber** — it is met only after the
+> corrections below. **Nothing else moved**: size `S`, priority `P0`, the two strategies, the
+> `## Out of scope` list, the dependencies, `RISK-005`'s merge-order constraint and the security
+> disposition are untouched, and `EPIC-002`, `ABC-016`, `ABC-017` and `ABC-019` are **not edited**.
+>
+> **1 — `(+N more)` had no defined `N`, and the input named did not necessarily produce the marker it
+> asserts.** *(Orchestrator item 1 — AGREED, and it is worse than the pre-check said.)* *"As many
+> candidates as fit"* needs a width, and this system has none: `git grep -E "columns|COLUMNS|width"`
+> over non-test `src/` on merged `main` returns **zero**, nothing here supplied one, and **in append
+> mode there is no width at all**. The pre-check stopped there. Carrying it one step further: with any
+> plausible width the criterion's own example is **self-defeating** — six 4-character SANs need 29
+> characters and a 2-row region at `W = 18` holds 36, so a correct implementation shows all six, emits
+> **no** marker, and **fails the criterion as literally written**; a one-candidate-per-row
+> implementation answers `N = 5`. Two correct implementations disagree and one of them makes the
+> criterion vacuous — the same class as `ABC-015`'s defect 1, an input tuple with no stated output.
+> **Ruled:** the frame has one width `W`, a session constant (see `## Scope`); the region takes a
+> **list of items**, each placed whole or not at all; and **`N` is defined relationally** — the count
+> of supplied items the region does not show in full. Split into a *fits* case and a *does not fit*
+> case, both with the arithmetic in them. **Packing stays the engineer's**; only `N` is pinned.
+> *(This also disposes of a smaller wrinkle: a newline is a C0 character, so the sanitizer removes it —
+> a "2-line rejection" was never one string with a `\n` in it, and the region's input is a list.)*
+>
+> **2 — A frame row that no ticket owned.** *(Orchestrator item 2 — the substance is AGREED, the
+> diagnosis is CORRECTED.)* The pre-check said *"23 appears nowhere else and nothing defines the
+> assembled height"*. **`23` does have a source**: it is `EPIC-002` `4a`'s reference layout, 9 board +
+> 3 status + 8 history + 2 message + **1 prompt** = 23. The real fault is one row down. **This
+> ticket's `## Scope` assembled only four of those five regions and sums to 22**, while its criteria
+> are written against a 23-row frame. Checked across every ticket in the epic — `ABC-014`, `ABC-016`,
+> `ABC-017`, `ABC-019`, `ABC-021` and `EPIC-003` — **no ticket owned the prompt row**, and
+> `ABC-016` records that this ticket owns *"all writing"*. So the row the player types into was inside
+> the epic's frame, outside this ticket's frame, and owned by nobody. **The consequence is exactly the
+> failure `4b` names**: *"at least as many rows as the frame"* would be short by one, and the first
+> keystroke scrolls the frame origin off the top. **Ruled:** the frame **reserves** a 1-row prompt row
+> as its last row, inside `H`; the in-place write leaves the cursor at its start with no trailing
+> newline; `EPIC-003` keeps the prompt surface and this ticket renders nothing into the row.
+> **The alternative was considered and rejected, rather than picked silently:** leave the frame at 22
+> and require `R ≥ H + 1`. That fixes this ticket's omission by **amending the epic's own rule**
+> (`4b`/`4c` say *"as many rows as the frame"*) and by pushing the accounting into `ABC-019`, which
+> does not write. Reserving the row ratifies the epic's layout instead of editing it, and it is why
+> `H` is now stated as a session constant rather than left to be inferred.
+>
+> **3 — The equality boundary was untested.** *(Orchestrator item 3 — AGREED.)* The rule is *"at least
+> as many rows"*, and the tested cases were 24/23 and 10/23. Added a **23/23** criterion asserted on
+> the screen model. It kills **two** named mutants, not one: `>` where the rule says `≥`, and a
+> trailing newline after the frame's last row — at exactly this size that newline scrolls the origin
+> off the top and every later redraw lands one row high.
+>
+> **4 — The `NFR-002` bar was ambiguous by 2x. Named by no pre-check.** *"When compute and write are
+> measured separately … then **each total** is < 16 ms"* reads as *each half* < 16 ms, which passes a
+> 31 ms frame against a 16 ms bar. This ticket's own `## Security / NFR triggers` says *"compute +
+> write < 16 ms"* and `plans/traceability.md`'s `ABC-018` row says the same, so the criterion
+> contradicted its own ticket. **Rewritten to the sum at each ply count, both halves still recorded
+> separately. No target moved** — the 16 ms is `EPIC-002`'s.
+>
+> **5 — A criterion that could not fail. Named by no pre-check, and it is the `ABC-015` defect-2 shape
+> again.** The old criterion read *"when `process.stdout.isTTY` changes afterwards, then the strategy
+> in use is unchanged"*. It names an **ambient global that the design this ticket's own `## Test
+> notes` mandate never reads** — the writer is exercised against a captured sink — so mutating
+> `process.stdout` proves nothing and the criterion passes for **every** implementation, including one
+> that re-decides the strategy on every write. **Restated against the injected sink**: mutate its
+> `isTTY` and rows *after* construction, write two more frames, both must still be in place. That
+> kills the live mutant, which is a real one here — unlike `ABC-015`, the signals live on a **stateful
+> object the writer holds**, so re-reading them per write is a plausible implementation.
+>
+> **One further collision closed while there, folded into the Security bar rather than counted as a
+> sixth defect.** Acceptance `2a` asserts **zero** code points above `U+007F` over the **whole**
+> emitted stream in ASCII mode, while the sanitizer removed only C0 and `U+007F`. `EPIC-003` will echo
+> what the player typed, so a player who types `é` makes two of this ticket's own criteria contradict
+> each other — constructible input, no stated output, the same shape as defect 1. **Ruled:** in **ASCII
+> mode only**, the sanitizer removes code points above `U+007F` from supplied strings too; in Unicode
+> mode they survive, because a UTF-8 terminal can draw them. ASCII mode exists precisely for the
+> terminal that cannot.
+>
+> **Adjudicated and deliberately NOT changed, so the silence is not mistaken for an oversight.**
+> The first criterion (*identical row count at 80 and 300 plies*) is **near-vacuous under the stub
+> panels this ticket is built against** — a constant-height stub makes any assembler pass. It is left
+> exactly as it is: it is epic `4a` verbatim, it becomes falsifiable at integration (`ABC-019`,
+> `EPIC-006`), and under stubs the falsifiable weight is carried by the criterion beneath it, which
+> varies message content and thinking state. **No statistic (median / p95) was added to the `NFR-002`
+> criterion** either: this repo has no in-repo wall-clock bars by convention — `src/zobrist.nfr.test.ts`
+> states the reason at line 112 — and the figures are re-derived out-of-tree at the Security/NFR gate.
+>
+> **Size re-checked, not assumed: still `S` (2).** The corrections add one reserved row placed by the
+> same mechanism as the message region, one width constant, one sanitizer clause and four tests. No
+> argv, no I/O, no new module.
 
 ## Dependencies
 
@@ -124,8 +282,13 @@ a `(+N more)` marker rather than growing the frame.
   is no second user and no trust boundary in a single-player CLI game — which is why the disposition
   is *strip on the way in*, not a security architecture.
   **Measurable bar:** any string placed into a frame region has **C0 control characters (< `U+0020`)
-  and `U+007F` removed** before placement; given a message containing `\x1b[2J`, the emitted stream
-  contains **zero** `\x1b` bytes from that string. The only escape sequences in the output are the
+  and `U+007F` removed** before placement — **and, in ASCII glyph mode only, every code point above
+  `U+007F` as well** *(added 2026-08-09: acceptance `2a` asserts zero of those over the **whole**
+  emitted stream, and the message region is the one part of that stream carrying text this product
+  did not generate, so a player typing `é` otherwise made two of this ticket's criteria contradict
+  each other; in Unicode mode supplied non-ASCII survives, because a UTF-8 terminal can draw it)*;
+  given a message containing `\x1b[2J`, the emitted stream contains **zero** `\x1b` bytes from that
+  string. The only escape sequences in the output are the
   two this module emits itself (cursor home, erase to end of screen), and in append mode there are
   **zero**.
   ASVS L1 (`security.asvs_level`) output-encoding, applied to a terminal sink rather than to HTML.
@@ -152,6 +315,9 @@ a `(+N more)` marker rather than growing the frame.
   checks the sanitizer's return value passes even if the writer bypasses it.
 - **The height-invariance test must vary message content and thinking state in the same run**, since
   each alone changes height only in combination with a naive assembler.
+- **The region tests assert against the frame's width `W`, never the terminal's** — `process.stdout.columns`
+  is not read and in append mode it does not exist. **The strategy tests mutate the sink handed to the
+  writer, never `process.stdout`.** *(Both added 2026-08-09 with the corrections above.)*
 - Record both NFR-002 halves separately and with the ply count. A single "frame took X ms" number
   with no denominator is not comparable to the next measurement and the catalog row says so.
 
@@ -168,9 +334,37 @@ and it is the only place `NFR-002` can be measured.
 
 ## Definition of Ready
 
-Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ (buildable against stub panels) · acceptance
-measurable ✅ (identical row counts, zero `\x1b` bytes, zero stale rows on a screen model, < 16 ms
-at three named ply counts) · dependencies ✅ · security trigger ✅ (named, bounded, with a
-measurable bar) · NFR triggers ✅ · test notes ✅ · size `S` ✅ · priority `P0` ✅ · no blocker ✅
+**Re-derived 2026-08-09 at the `Backlog → Ready` exit.** The block below was written 2026-07-30 by
+the decomposition and was **never re-checked** until today; it is restated rather than left standing,
+because one of its ticks was wrong.
 
-Sits in `Backlog` behind `ABC-014`. Promotion to `Ready` is a separate BA/PM step.
+Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ (buildable against stub panels — re-asked and it
+holds: the height invariant is the assembler's, and the two unbuilt panels enter as fixed-height
+stubs) · **acceptance measurable — was ❌, now ✅ AFTER FIVE CORRECTIONS** (`N` defined relationally
+against a session-constant width, the reserved prompt row inside `H`, the `R = H` boundary on a screen
+model, `NFR-002` as the sum rather than per half, the strategy criterion restated against the injected
+sink — see the correction block under `## Acceptance`) · dependencies ✅ (both discharged and
+re-verified at the source: `ABC-014` merged and `renderBoard` is on `main`; `ABC-015` merged
+`f1743a3 → f4d5d31`, so `RISK-005`'s merge-order constraint is satisfied **before** this ticket
+starts, and what survives it is the build obligation in `## Dependencies`) · security trigger ✅
+(named, bounded, measurable bar — widened 2026-08-09 for ASCII mode) · NFR triggers ✅ (`< 16 ms`
+summed at 40/120/300 plies, recorded with its machine; `NFR-007`) · test notes ✅ · size `S` ✅ ·
+priority `P0` ✅ · no blocker ✅ (`Blocked` column empty)
+
+*(The line this block carried until 2026-08-09 read "acceptance measurable ✅ (identical row counts,
+zero `\x1b` bytes, zero stale rows on a screen model, < 16 ms at three named ply counts)". Every item
+in that list was true and the tick was still wrong — the defects were in criteria the list did not
+mention.)*
+
+**PROMOTED `Backlog → Ready` 2026-08-09 by BA/PM** (task `ticket-to-pr-ABC-018`, subtask
+`bapm-abc018-promote`, Workflow 07) — the `Backlog` exit this role owns. `Ready` 3/8 → 4/8; no limit
+approached and no override taken. *(This line replaced "Sits in `Backlog` behind `ABC-014`. Promotion
+to `Ready` is a separate BA/PM step." — that step is this one.)*
+
+**It was not promoted as it stood.** Five acceptance defects were found at this exit and fixed in
+place first; three of them were the Orchestrator's three flagged items, and **two were named by no
+pre-check**. The Definition of Ready is met **after** those corrections, which is what refinement is
+for.
+
+**This is not the pull gate.** The Definition of Ready is applied again by the Orchestrator at
+`Ready → In Development` (Workflow 04 step 1); promotion makes this ticket pullable, nothing more.
