@@ -1,8 +1,8 @@
 ---
 id: ABC-022
 title: generateMoves offers en-passant captures its own preconditions forbid
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P1
 epic: EPIC-001
@@ -617,3 +617,185 @@ no pre-check had named**, and they are recorded where they live rather than summ
   unchanged, `git status --short -- src/` empty, `npm test` **381/381 on 16 files**, skip count **0**
   by the AGENTS.md command, perft fast lane **24/24**. **No `src/` file was edited, no test row was
   written, and no board column moved — `ABC-022` stays in `Ready`.**
+
+## Implementation
+
+**IMPLEMENTED `In Development → In Review` 2026-08-09 by the Software Engineer** (task
+`ticket-to-pr-ABC-022`, subtask `engineer-abc022-implement`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-022`. `In Development` 1/3 → 0/3, `In Review` 0/3 → 1/3; no limit
+approached, no override taken, no written reason owed. **Nothing merged and nothing deployed — a
+human holds both.**
+
+**Nothing above this section was edited.** `## Acceptance` and its 2026-08-09 correction block,
+`## Scope`, `## Out of scope`, `## Reproduction`, `## Dependencies`, the `NFR-001` bar, the
+escalation block, `## Test notes` and the `## Definition of Ready` block all stand exactly as they
+did at the pull. Every criterion was met as written; **nothing was bent in either direction — no
+test was shaped to the code and no criterion was edited.**
+
+### One production file changed, one comment-only file, one test file added, no existing test touched
+
+`git status --short -- src/` reports exactly ` M src/legal.ts`, ` M src/moves.ts` and
+`?? src/moves.enpassant.test.ts`. `git diff --name-only main -- 'src/*.test.ts'` is **empty** —
+which is `A9`'s *"no existing test is modified, verified at line level, not by inspection"*, made
+mechanical rather than argued. The new tests went into a **new** file for exactly that reason.
+
+- **`src/moves.ts`** — `+24 −12`. The executable change is two conditions and one local `const` in
+  the en-passant branch of `addPawnMoves`; the remaining lines are the comment at 183-186, rewritten
+  for `A11`. md5 `0e247853ab2c05887c76105ff83d8621` → **`6335b452fc21ffe2d0f902ecab930840`**.
+- **`src/legal.ts`** — `+6 −2`, **comment-only**, `A11`'s second half. Lines 102-103 corrected;
+  **104-105 left byte-for-byte**. That no executable line changed was verified by filtering the diff
+  for non-comment lines, not by reading it.
+- **`src/moves.enpassant.test.ts`** — NEW, 208 lines, **58 tests**: `A1` (4 rows), `A3` (6), `A2`
+  (10, the union of both tables), `A4` (32 — every position the file uses, asserted twice: across the
+  call and per make/unmake pair), `A5` (4), `A6` (2).
+
+### The fix
+
+```ts
+if (to === position.epSquare) {
+  const capturedPawn = PAWN | (black ? 0 : BLACK);
+  if (target === EMPTY && position.board[to - forward] === capturedPawn) {
+    moves.push({ from, to, piece, captured: capturedPawn, flags: FLAG_EN_PASSANT, promotion: EMPTY });
+  }
+}
+```
+
+`to - forward` is the **same square `apply.ts`'s `enPassantCaptureSquare` derives** —
+`move.to + (isBlack(move.piece) ? 16 : -16)` — read out of that file rather than re-derived, so the
+generator and the applier cannot disagree about which pawn is being captured. `capturedPawn` is
+hoisted into the local that the pushed move already used, so the byte the guard tests and the byte
+the move claims are the same expression, not two expressions that happen to agree.
+
+The clause is written as an **emptiness** test rather than a colour test. `A5`'s corrected text
+already records that the two are behaviour-equivalent at this program point, so this is a
+readability choice and not a behavioural one, and no criterion was asked to discriminate them.
+
+### The ordering choice, made deliberately, with the alternative it rejected
+
+The two conditions sit **AFTER** the `to === position.epSquare` test. Re-derived on this build with
+counters at the guard site rather than inherited from the bar above:
+
+```
+conditions evaluated, shipped placement (after the epSquare test)  :     331
+conditions evaluated, rejected alternative (before that test)      : 216,269   (653x)
+times the two conditions rejected anything                         :       0
+```
+
+Both placements return an identical answer on every position, so this is purely cost and the cheap
+one was taken. The figures reproduce this ticket's `NFR-001` numbers **exactly**, which makes them a
+second independent derivation rather than a restatement.
+
+**A measurement trap was caught mid-hop and is recorded rather than quietly corrected.** The first
+counter run read `4,720 / 6,334,977` because the instrumented walk called `generateMoves` an extra
+time at every node for its own diagnostic. The residual `4,720 − 4,389 = 331` is exactly the
+ticket's figure; re-running on a plain `legalMoves`-driven walk reproduced `331 / 216,269 / 0`
+directly. The instrument was inflating the denominator, not the code.
+
+### Red before green, and each half proved load-bearing on disjoint named sets
+
+`## Test notes` item 3 is discharged by measurement. **One OS process per tree state** (this board's
+recorded `ABC-009` trap), every anchor asserted unique before writing, and **`tsc --noEmit` exit 0
+on every tree before any red was believed** — including the unfixed control.
+
+| tree | `src/moves.ts` md5 | tests failed |
+| --- | --- | --- |
+| unfixed control | `0e247853ab2c05887c76105ff83d8621` | **31** of 58 |
+| delivered fix | `6335b452fc21ffe2d0f902ecab930840` | **0** |
+| empty-target condition deleted | `6762b334bd096f8b1d072cb68478786d` | **8** — `A1`, `A2` |
+| captured-pawn condition deleted | `2f19080b1bf32fc1f72bd063f48ea3f3` | **23** — `A3`, `A2`, `A4` |
+| colour-shaped restructure | `dd5b7ab68fe2a7f2a1ec2cd80740c251` | **4** — `A5` only |
+
+The intersection of the two half-deletion sets is **EMPTY** and their union is **exactly** the 31
+reds, byte-compared. Neither condition subsumes the other. `A2` is reached by both halves but never
+on the same row, so disjointness holds at the level the ticket asks for — named tests, not criteria.
+
+The 27 tests that passed on the unfixed control are exactly `A5`'s four rows, `A6`'s two controls
+and the purity rows that are clean today, which confirms **on the tip** that `A5`–`A6` are
+regression guards rather than reds, as the corrected preamble says.
+
+### `A5` re-verified against the delivered table rather than inherited
+
+The colour-shaped restructure was rebuilt here against this file — own-colour rejected at the top of
+the loop, the ordinary-capture `continue` dropped, so every enemy occupant falls into the en-passant
+branch. It typechecks clean, passes `A1`, `A2`, `A3`, `A4` and `A6`, passes the **whole existing
+suite 381/381** — and fails **only** `A5`, on **all four** rows. The widened piece types and colours
+are doing work; `A5` is not inert and was not deleted.
+
+### `A7`, walked before and after
+
+One process per tree, roots and `fast` depths **parsed out of `src/perft.test.ts`** rather than
+retyped, every FEN printed and re-parsed before any verdict:
+
+```
+startpos    206604   kiwipete     99950   position-3  46256
+position-4    9738   position-5   63910   position-6  92016     TOTAL 518474
+ep offered onto an occupied square : 0 BEFORE and 0 AFTER
+ep moves offered anywhere          : 4389 BEFORE and 4389 AFTER
+```
+
+Every per-root count is identical. The second line is stronger than the criterion asks for: the
+en-passant move set itself is unchanged, so the fix rejects nothing reachable by legal play.
+
+### `A4`, and the self-masking row
+
+Purity is asserted over **all 128 board bytes and all five scalars, field by field**, never through
+`toFen`, over **every position this file uses** — a strict superset of the `## Reproduction` tables.
+It is **also** asserted per make/unmake **pair**, which is what catches the self-masking witness
+`4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1`: on the unfixed tree that row reads **GREEN across the whole
+call and RED per pair**. `## Test notes` item 2's row-selection rule is therefore satisfied by
+instrument as well as by row choice, and BA/PM's self-masking measurement is reproduced on a second,
+independently built oracle.
+
+### Gates, as they ran
+
+Lint exit 0 after **one** autofix pass on this role's own new file (1 of 2 `self_fix_attempts`
+spent); the two remaining `infos` are `biome.json`'s schema-version and deprecated `recommended`
+field, **pre-existing and identical on `main`** — verified by stashing this work and re-running,
+not assumed. Typecheck exit 0. `npm test` **439/439 on 17 files** (381/381 on 16 before, measured by
+running the suite on the tip rather than by subtraction). Skip count **0** by the AGENTS.md command.
+Perft fast lane **24/24**. `PERFT_DEEP=1 npx vitest run src/perft.test.ts` **32/32 exact in 36.55 s**,
+run **before** hand-back as `## Test notes` requires. E2E `UNKNOWN - verify` — no UI surface until
+`EPIC-006`.
+
+### `NFR-001` / `A10` — met on every clause
+
+The first throughput figures any role has taken on **this** ticket.
+
+- **Primary, a count.** 331 evaluations, **0** rejections, denominator above.
+- **Floor, clock.** `npm run perft` reads **6,393,713 nodes/sec** against ≥ 1,000,000 — ~6.4x clear.
+- **Aggregate ratio.** **0.9926** against ≥ 0.98. Three trees, one OS process each, tree order
+  rotated across three rounds, node count checksummed identical at 11,377,922 on every tree and
+  round.
+- **Why no per-cell and no per-run cost is claimed.** A `cmp`-verified **byte-identical twin** of the
+  fixed tree read **0.9883** against the same pre-fix baseline and **0.9956** against the tree it is
+  identical to. That deviation is 100% instrument, and it **exceeds** the 0.74% apparent cost of the
+  change. The catalog's standing caution held again.
+- `NFR-005` **not** measured — the exclusion is structural and this ticket says not to re-run the key
+  benchmark to "confirm" it. `plans/nfr-catalog.md` **not** edited and no target moved.
+
+Figures are Apple M3 / Node v24.12.0 / darwin-arm64 and `UNKNOWN - verify` on any other hardware.
+
+### What was deliberately not touched
+
+`src/legal.ts`'s two guards and `src/zobrist.ts` — untouched, and `## Out of scope`'s reasoning
+stands. No perft position added (`## Test notes` item 4). `plans/nfr-catalog.md`, `ABC-010`,
+`ABC-011`, `ABC-013` — untouched. **`ABC-023` — not edited and not re-pinned:** `src/moves.ts` moves
+to `6335b452fc21ffe2d0f902ecab930840`, invalidating its `A4` hash exactly as the Orchestrator
+recorded, and that is deferred by design to `ABC-023`'s own promotion hop. `## Scope`,
+`## Out of scope`, size `S` and priority `P1` did **not** move and nothing in implementation pushed
+on them.
+
+### One item routed rather than absorbed — a candidate EIGHTH correction
+
+`src/legal.ts` **lines 69-71** state: *"Outside it the oracle is unsound — `generateMoves` offers
+en-passant captures onto squares occupied by the mover's OWN piece — so the answer there is
+SPECIFIED rather than derived."* That is the **same class of false claim `A11` was cut for, in the
+same file**, and **this fix makes it false**: after this ticket the generator enforces both
+preconditions, so it no longer offers that capture and the sentence's mechanism clause no longer
+holds.
+
+It sits **outside `A11`'s cited 102-103** and outside this subtask's named boundary, which said
+`src/legal.ts` gets a comment-only edit **for `A11`**. It was therefore **flagged rather than
+silently rewritten** — but it should not ship as it stands, and it belongs to BA/PM as an eighth
+correction or to a follow-up ticket. Flagging it is a judgement about scope, not a measurement:
+the falsity is measured, the decision to leave it is not.

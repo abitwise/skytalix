@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-08-09 by the Software Engineer (task `ticket-to-pr-ABC-022`, subtask `engineer-abc022-implement`, Workflow 04): **`ABC-022` IMPLEMENTED AND MOVED `In Development` → `In Review`** — the one board move this role owns. `In Development` **1/3 → 0/3**, `In Review` **0/3 → 1/3**; no limit approached, no override taken, no written reason owed. Ticket frontmatter moved WITH the column. **NOTHING MERGED AND NOTHING DEPLOYED — a human holds both, and the owner's standing merge authority is NOT deploy authority. QE/E2E was NOT enqueued; the Orchestrator owns decompose→enqueue.** **THE FIX:** two preconditions in the en-passant branch of `addPawnMoves` — `target === EMPTY && position.board[to - forward] === capturedPawn` — where `to - forward` is the SAME square `apply.ts`'s `enPassantCaptureSquare` derives, read out of that file so generator and applier cannot disagree. `src/moves.ts` **+24 −12** (executable change: two conditions and one local const; the rest is the 183-186 comment), `src/legal.ts` **+6 −2 COMMENT-ONLY** with zero executable lines changed — verified by filtering the diff, not by inspection — and lines 104-105 left byte-for-byte. **THE ORDERING CHOICE WAS MADE DELIBERATELY AND RE-DERIVED ON THIS BUILD:** the conditions sit AFTER the `to === epSquare` test — **331 evaluations against 216,269 before it, 653x, and 0 rejections either way**, reproducing the ticket's figures exactly as an independent second derivation. **A measurement trap was caught mid-hop and is recorded rather than buried:** the first counter run read 4,720 / 6,334,977 because the instrumented walk called `generateMoves` an extra time per node; the residual 4,720 − 4,389 = **331** is exactly the ticket's number, and a plain `legalMoves`-driven walk then reproduced 331 / 216,269 / 0 directly. **RED BEFORE GREEN, WITH THE INSTRUMENT VERIFIED FIRST:** 31 failed / 27 passed on the unfixed tree at tsc exit 0. **EACH HALF PROVED LOAD-BEARING ON DISJOINT NAMED SETS, one OS process per tree:** empty-target deleted → **8** tests (A1, A2), captured-pawn deleted → **23** (A3, A2, A4), **intersection EMPTY**, union **exactly** the 31 reds. **`A5` RE-VERIFIED AGAINST THE DELIVERED TABLE rather than inherited:** the colour-shaped restructure passes A1-A4, A6 and the whole suite **381/381** and fails **only** A5, all four rows. **`A7` WALKED BEFORE AND AFTER** with roots and depths parsed out of `src/perft.test.ts`: six per-root counts identical (total **518474**), ep onto an occupied square **0 both ways**, and the ep move set itself unchanged at **4,389 offered** either way. **Purity over 128 bytes and five scalars field by field, never via `toFen`, AND per make/unmake pair** — which is what catches the self-masking row `4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1` (GREEN across the call on the unfixed tree, RED per pair), reproducing BA/PM's self-masking finding on a second instrument. **`A9` MECHANICAL:** `git diff --name-only main -- 'src/*.test.ts'` EMPTY; one NEW test file, 58 tests. **GATES:** lint 0 after ONE autofix of this role's own file (1 of 2 self-fix attempts; the 2 remaining infos are pre-existing `biome.json` items, identical on `main`), typecheck 0, `npm test` **439/439 on 17 files** (381/381 on 16 before, measured not subtracted), skip count **0**, perft fast 24/24, `PERFT_DEEP=1` **32/32 exact in 36.55 s** run BEFORE hand-back. **`NFR-001` MET ON EVERY CLAUSE and these are the first throughput figures taken on this ticket:** floor **6,393,713 nodes/sec** vs ≥ 1M, aggregate ratio **0.9926** vs ≥ 0.98 — **but a `cmp`-verified byte-identical twin read 0.9883 against the same baseline and 0.9956 against the tree it is identical to, so the instrument's own spread exceeds the 0.74% apparent cost and NO per-cell or per-run cost is claimed.** `NFR-005` not measured (structural exclusion); `plans/nfr-catalog.md` NOT edited, no target moved. **Scope, out-of-scope, size `S` and priority `P1` did not move.** `src/moves.ts` `0e247853...` → **`6335b452fc21ffe2d0f902ecab930840`**, which invalidates `ABC-023`'s `A4` pin exactly as recorded and deferred — **`ABC-023` NOT edited and NOT re-pinned**. **ONE ITEM ROUTED RATHER THAN ABSORBED — a candidate EIGHTH correction:** `src/legal.ts` **lines 69-71** carry the same class of false claim `A11` was cut for (*"the oracle is unsound ... `generateMoves` offers en-passant captures onto squares occupied by the mover's OWN piece"*) and **this fix makes it false**; it is outside `A11`'s cited 102-103 and outside this subtask's boundary, so it is flagged for BA/PM rather than silently rewritten._
 _Updated: 2026-08-09 by the Orchestrator (task `ticket-to-pr-ABC-022`, Workflow 04): **`ABC-022` PULLED `Ready` -> `In Development`. Ready 2/8 -> 1/8, In Development 0/3 -> 1/3. NO LIMIT APPROACHED, NO OVERRIDE TAKEN.** Chosen over `ABC-023` on priority (`P1` in `Ready` vs `P2` in `Backlog`) and on a dependency **the two tickets state backwards**: `ABC-023`'s `A4` pins `src/moves.ts` at md5 `0e247853ab2c05887c76105ff83d8621` and `ABC-022`'s fix lands in that same file, so `ABC-022` merging invalidates `ABC-023`'s evidence — they are serialised for that reason and `ABC-023` is promoted after `ABC-022` merges so the hash is re-derived once. **NOT PULLED AS IT STOOD: this is the FOURTH CONSECUTIVE PULL at which the Definition of Ready's "acceptance criteria clear, testable and measurable" row FAILED.** The Orchestrator's pre-check left it AMBER with two specifics; BA/PM found **SEVEN, five named by no pre-check**, and corrected the stated mechanism of both the pre-check did name. **FOUR OF THE SEVEN ARE ONE SHAPE — a criterion narrower than the ticket's own `## Scope` — now this board's most-repeated defect.** The worst, seen by nobody: **`A3` — half (b), the half the ticket calls the worse half — named three FENs and ALL THREE WERE WHITE TO MOVE**; a fix implementing the captured-pawn precondition for white only passed `A1`-`A6` as written and the whole suite 381/381 while still creating a phantom white pawn on e4. **The Orchestrator re-verified the crux on its own instrument** rather than accepting the hand-back — both new black-to-move rows reproduce exactly as claimed, one board byte changed, five scalars clean, FEN printed and re-parsed per row — and named what it did NOT re-derive (the 512-state exhaustion, the colour-restructure mutant, the `toFen` aliases, the 331 / 216,269 evaluation counts). **THE PARTIAL-FIX TEST THAT BLOCKED `ABC-009` IS NOW PASSED**: emptiness-only fails `A3`, captured-pawn-only fails `A1`, white-only fails `A3`'s new black rows, the colour-shaped restructure fails `A5`. One false justification (`A5`'s) **retired rather than softened**, the `ABC-009` `A7` precedent applied a second time. Scope, out-of-scope, size `S` and priority `P1` unchanged. `src/moves.ts` unchanged at `0e247853...`, no `src/` diff, no test row written, branch tip 381/381 on 16 files with skip count 0 and perft fast 24/24. **Ticket frontmatter moved WITH the column, not left for a sweep.** NOTHING MERGED, NOTHING DEPLOYED._
 _Updated: 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-009`, subtask `qe-abc009-a11`, Workflow 04): **`ABC-009` PASSES and moved `In Review` → `Ready for UAT`** — the one exit this role owns, and the return trip from the first backward move in this project's history. `In Review` **1/3 → 0/3**, `Ready for UAT` **0/4 → 1/4**; no limit approached, no override taken, no written reason owed. Every column carrying a numeric WIP header was re-verified against its line-item count (**10 counted columns, 0 wrong**; `Backlog`, `Done` and `Blocked` carry no numeric header). **NOTHING MERGED AND NOTHING DEPLOYED — a human holds both, and the owner's standing merge authority is NOT deploy authority.** **`A11` IS NOW MET AND CLOSED AS A DIMENSION RATHER THAN AS A FOURTH SAMPLE:** `src/moves.castling.hardening.test.ts` goes **19 → 34 tests** — every own piece type on the king's home square (`QUEEN`, `ROOK`, `BISHOP`, `KNIGHT`, `PAWN`) and on the rook's (`QUEEN`, `BISHOP`, `KNIGHT`, `PAWN`), each in **at least two colour/side configurations**, plus one test that asserts **the quantifier itself** by deriving the piece-type universe from `parseFen` instead of restating it. **ZERO PRODUCTION LINES:** `src/moves.ts` still `0e247853ab2c05887c76105ff83d8621`, `git diff 8f540cf -- src/moves.ts` empty, all **fourteen** `main` test files unmodified (each diffed individually). **PROVED ON 20 MUTANTS OF THE DELIVERED DIFF, ONE PROCESS PER TREE:** all **nine** own-type admissions DIE — including the **three that passed the entire net before this hop** (own `ROOK` and own `PAWN` on the king's square, own `PAWN` on the rook's) — two admissions conditional on colour/side die to exactly the second-configuration row that exists for them, and **THE NINE BEHAVIOUR-EQUIVALENT MUTANTS ALL STILL SURVIVE at 34/34**, which is what proves the rows pin behaviour and not implementation shape. The harm reproduces on every kill: on the king's square one `legalMoves()` call **DESTROYS the occupant** for every own type (`e1`: 5/4/3/2/1 → 6); on the rook's square the position is **byte-identical**, so only the `FLAG_CASTLE` count can see it. Gates re-run on the tip: lint **0** after ONE autofix of this role's own formatting (**1 of 2** `self_fix_attempts`), typecheck **0**, `npm test` **371 passed (371) on 16 files**, build **0**, skip count **0**, `PERFT_DEEP=1` **32/32 exact in 36.04 s**. Test-integrity checker **exit 2 = an ERROR, not a pass** (no registry file created). E2E and auto-UAT oracles **`UNKNOWN - verify`**. **`NFR-001` NOT re-measured and no throughput figure here is this role's** — a test-only change cannot move it. **`A11`'s own `⚠️ NOT YET SATISFIED` marker is STALE and was DELIBERATELY LEFT STANDING** — `## Acceptance` is BA/PM's, and the role that wrote the rows must not be the role that stamps the criterion satisfied on a ticket where three roles in a row certified a sample as a dimension; routed to BA/PM as risk 1._
 _Updated: 2026-08-09 by Security/NFR (task `ticket-to-pr-ABC-009`, subtask `sec-abc009-nfr`, Workflow 04): **`ABC-009` PASSES WITH RISKS and moved `In Security/NFR` → `Ready for UAT`** — the one exit this role owns. `In Security/NFR` **1/2 → 0/2**, `Ready for UAT` **0/4 → 1/4**; no limit approached, no override taken, no written reason owed. Every column's header count was re-verified against its line-item count (12 columns, 0 wrong). **NOTHING MERGED AND NOTHING DEPLOYED — a human holds both, and the owner's standing merge authority is NOT deploy authority.** Gated against `security.asvs_level` **L1** and `security.block_on` **high**; `compliance_regime` is `[]`, so **no Compliance Officer hand-off is owed** — recorded rather than silently omitted. **NO REQUIRED FIX IS OUTSTANDING AND NO HIGH-SEVERITY ITEM EXISTS TO BLOCK ON.** **`NFR-001` RE-DERIVED ON THIS GATE'S OWN INSTRUMENTS AND MET ON BOTH CLAUSES** — floor 6,030,518 / 6,136,238 / 6,117,496 nodes/sec against ≥ 1,000,000, aggregate ratio **1.0062 and 0.9967** against ≥ 0.98 on two independent samples, deep lane 32/32 in 38.49 s; three trees in one process with a `cmp`-verified byte-identical twin as a null control. **THE PER-CELL QUESTION THE ENGINEER COULD NOT RESOLVE IS RESOLVED BY COUNTING INSTEAD OF TIMING:** the two added lines execute **396,350 times** over the sweep and **reject nothing in any cell**, cost 0.33–0.43 ns each in isolation, so the whole change costs **~0.01%** — true ratio ≈ 0.9999, **kiwipete ≈ 0.9998**, and the 0.9930 reading is ~35x the true deviation. Their ±1% reasoning **HOLDS** but the estimate is **optimistic**: measured ±2.0% per cell and a previously-uncharacterised ~±1% aggregate floor. **GUARD ORDERING, ROUTED HERE BY QE, IS ADJUDICATED AND THE BEHAVIOUR HALF DISCHARGED:** the five guards are a conjunction of side-effect-free predicates, hence **permutation-invariant** (99 comparisons, zero divergence, all six perft counts exact per variant), so **no later reorder can silently break the equivalence QE relied on**; ordering is a cost question only and **no change is asked for**. **SECURITY CLASSIFICATION RE-ASKED AT THE SOURCE AND UNCHANGED: RELIABILITY, NOT SECURITY** — no sink, no trust boundary, no user-supplied string reaches `src/moves.ts`, all grepped rather than assumed; no trigger manufactured. **TEN RISKS CARRIED, NONE HIGH, EACH WITH A NAMED OWNER.** `src/moves.ts` untouched by this role (`0e247853ab2c05887c76105ff83d8621`); `plans/nfr-catalog.md`'s `NFR-001` row updated and **no target moved**, verified by hashing the cells before and after._
@@ -1041,9 +1042,17 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 0/3)
 
-- [ABC-022] generateMoves offers en-passant captures its own preconditions forbid  (size: S, P1, epic: EPIC-001, deps: none; entered 2026-08-09 by the Orchestrator, Workflow 04)
+<!--
+  EXITED 2026-08-09 by the Software Engineer (task `ticket-to-pr-ABC-022`, subtask
+  `engineer-abc022-implement`, Workflow 04): ABC-022 -> In Review. In Development 1/3 -> 0/3,
+  In Review 0/3 -> 1/3. NO LIMIT APPROACHED, no override taken, no written reason owed. The
+  In Development exit is the one board move this role owns. NOTHING MERGED, NOTHING DEPLOYED --
+  a human holds both. QE/E2E was NOT enqueued; the Orchestrator owns decompose->enqueue. The
+  In Review comment below carries what is handed over, and the full record is in
+  `.grugops/context/ticket-to-pr-ABC-022/notes/`.
+-->
 
 <!--
   ENTERED 2026-08-09 by the Orchestrator (task `ticket-to-pr-ABC-022`, Workflow 04) — the
@@ -1799,7 +1808,128 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-022] generateMoves offers en-passant captures its own preconditions forbid  (size: S, P1, epic: EPIC-001, deps: none; entered 2026-08-09 by the Software Engineer, Workflow 04)
+
+<!--
+  ENTERED 2026-08-09 by the Software Engineer (task `ticket-to-pr-ABC-022`, subtask
+  `engineer-abc022-implement`, Workflow 04). In Development 1/3 -> 0/3, In Review 0/3 -> 1/3.
+  NO LIMIT APPROACHED, NO OVERRIDE TAKEN. Ticket frontmatter moved WITH the column, not left for a
+  later sweep. NOTHING MERGED AND NOTHING DEPLOYED -- a human holds both, and the owner's standing
+  merge authority is NOT deploy authority.
+
+  THE FIX: two preconditions in the en-passant branch of `addPawnMoves` (src/moves.ts, +24 -12, of
+  which the executable change is two conditions plus one local const; the rest is the comment at
+  183-186 rewritten to state what the code now enforces):
+
+      if (to === position.epSquare) {
+        const capturedPawn = PAWN | (black ? 0 : BLACK);
+        if (target === EMPTY && position.board[to - forward] === capturedPawn) { ... }
+      }
+
+  `to - forward` is the SAME square `apply.ts`'s `enPassantCaptureSquare` derives
+  (`move.to + (isBlack(move.piece) ? 16 : -16)`), read out of that file rather than re-derived, so
+  the generator and the applier cannot disagree about which pawn is being captured.
+
+  THE ORDERING CHOICE, MADE DELIBERATELY AND WITH THE ALTERNATIVE IT REJECTED (the brief asked for
+  this to be a decision, not a default): the two conditions sit AFTER the `to === position.epSquare`
+  test. RE-DERIVED ON THIS BUILD rather than inherited from the ticket, with counters at the guard
+  site over the standing 518,474-node walk: 331 evaluations after the test against 216,269 before
+  it, a 653x difference, and 0 rejections either way. Both placements give an identical answer, so
+  this is purely cost, and the cheap one was taken. The ticket's own 331 / 216,269 figures reproduce
+  EXACTLY on this build, which is an independent second derivation of them.
+
+  A MEASUREMENT TRAP CAUGHT AND CORRECTED MID-HOP, recorded because the wrong number was nearly
+  published: the first counter run read 4,720 / 6,334,977 because the instrumented walk called
+  `generateMoves` an extra time at every node for its own diagnostic. The residual 4,720 - 4,389 =
+  331 is exactly the ticket's figure, and re-running on a plain legalMoves-driven walk reproduced
+  331 / 216,269 / 0 directly. The instrument was inflating the denominator, not the code.
+
+  RED BEFORE GREEN, PROVED NOT CLAIMED, AND THE INSTRUMENT VERIFIED FIRST: the new file reads 31
+  failed / 27 passed against the unfixed tree with tsc exit 0 on that tree, so the red is a real red
+  and not a broken build. The 27 that passed are exactly A5's four enemy-occupant rows, A6's two
+  controls, and the purity rows that are clean today -- which confirms on the tip that A5 and A6 are
+  regression guards rather than reds, as the corrected preamble says.
+
+  EACH HALF PROVED LOAD-BEARING BY DELETION, ON DISJOINT NAMED SETS -- `## Test notes` item 3
+  discharged by measurement, not by argument. One OS process per tree state (the board's recorded
+  ABC-009 trap), every anchor asserted unique before writing, tsc exit 0 on every mutant:
+
+      delete the empty-target condition   -> 8 tests fail  (A1 and A2, own-colour rows)
+      delete the captured-pawn condition  -> 23 tests fail (A3, A2 and A4, half-(b) rows)
+      intersection of the two sets        -> EMPTY
+      union of the two sets               -> EXACTLY the 31 reds, byte-compared
+
+  Neither condition subsumes the other. A2 is reached by both halves but never on the same row, so
+  the disjointness holds at the level the ticket asks for -- named tests, not criteria.
+
+  A5 RE-VERIFIED AGAINST THIS FILE RATHER THAN INHERITED. BA/PM measured the colour-shaped
+  restructure on their own tree; it was rebuilt here against the delivered table (own-colour
+  rejected at the top of the loop, the ordinary-capture `continue` dropped, so every enemy occupant
+  falls into the ep branch). It passes A1, A2, A3, A4 and A6, passes the whole existing suite
+  381/381, and fails ONLY A5 -- all four rows, both piece types, both colours. A5 is not inert and
+  was not deleted.
+
+  A7 WALKED BEFORE AND AFTER, one process per tree, roots and `fast` depths PARSED out of
+  src/perft.test.ts rather than retyped, every FEN printed and re-parsed: all six per-root counts
+  identical (206604 / 99950 / 46256 / 9738 / 63910 / 92016, total 518474), ep offered onto an
+  occupied square 0 BOTH before and after -- and, stronger than the criterion asks, the ep move set
+  itself is unchanged at 4,389 offered either way, so the fix rejects nothing reachable by play.
+
+  PURITY (A4) ASSERTED OVER 128 BOARD BYTES AND FIVE SCALARS FIELD BY FIELD, NEVER VIA `toFen`, over
+  every position this file uses -- a strict superset of the reproduction tables. It is ALSO asserted
+  per make/unmake PAIR, and that is what catches the self-masking row
+  `4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1`: on the unfixed tree it reads GREEN across the whole call and
+  RED per pair, reproducing BA/PM's self-masking measurement on a second, independently built
+  instrument.
+
+  A9 IS MECHANICAL, NOT AN INSPECTION: `git diff --name-only main -- 'src/*.test.ts'` is EMPTY and
+  `git status --short -- src/` reports exactly ` M src/legal.ts`, ` M src/moves.ts` and
+  `?? src/moves.enpassant.test.ts`. The new tests went into a NEW file for exactly that reason.
+
+  A11, BOTH HALVES. src/moves.ts 183-186 rewritten to state the preconditions the code below it now
+  enforces. src/legal.ts 102-103 corrected to say WHY no ep move is offered -- a precondition of the
+  en-passant branch, NOT a reading of the square as an ordinary capture, which was never true for an
+  own-colour occupant and still is not -- and 104-105 left byte-for-byte, as the ticket demands.
+  That NO executable line changed in src/legal.ts was verified by filtering the diff for
+  non-comment lines, not by reading it.
+
+  GATES AS THEY RAN: lint exit 0 after ONE autofix pass on this role's own new file (1 of 2
+  self_fix_attempts spent; the two remaining `infos` are biome.json's schema-version and deprecated
+  `recommended` field, PRE-EXISTING and identical on main, verified by stashing), typecheck exit 0,
+  `npm test` 439/439 on 17 files (381/381 on 16 before, measured by running the suite on the tip
+  rather than by subtraction), skip count 0 by the AGENTS.md command, perft fast 24/24, and
+  `PERFT_DEEP=1` 32/32 EXACT in 36.55 s, run BEFORE hand-back as `## Test notes` requires. E2E
+  `UNKNOWN - verify` (no UI surface until EPIC-006).
+
+  NFR-001 / A10 MET ON EVERY CLAUSE, and these are the first throughput figures any role has taken
+  on THIS ticket. PRIMARY (count): 331 evaluations, 0 rejections, denominator above. FLOOR:
+  `npm run perft` 6,393,713 nodes/sec against >= 1,000,000, ~6.4x clear. AGGREGATE RATIO: 0.9926
+  against >= 0.98 -- three trees, one OS process each, tree order rotated across three rounds, node
+  count checksummed identical at 11,377,922 on every tree and every round. THE NULL CONTROL IS WHY
+  NO PER-CELL OR PER-RUN COST IS CLAIMED: a `cmp`-verified byte-identical twin of the fixed tree
+  read 0.9883 against the same pre-fix baseline and 0.9956 against the tree it is identical to, so
+  100% of that deviation is instrument and it EXCEEDS the 0.74% apparent cost of the change. The
+  catalog's standing caution held again. NFR-005 NOT measured -- the exclusion is structural, and
+  the ticket says not to re-run the key benchmark to "confirm" it. plans/nfr-catalog.md NOT edited
+  and no target moved. Figures are Apple M3 / Node v24.12.0 / darwin-arm64 and `UNKNOWN - verify`
+  on any other hardware.
+
+  SCOPE, OUT-OF-SCOPE, SIZE `S` AND PRIORITY `P1` DID NOT MOVE, and nothing in implementation pushed
+  on them. `src/legal.ts`'s guards and `src/zobrist.ts` were NOT touched. NO perft position was
+  added. `ABC-023` was NOT edited: `src/moves.ts` goes 0e247853ab2c05887c76105ff83d8621 ->
+  6335b452fc21ffe2d0f902ecab930840, which invalidates its A4 pin exactly as already recorded and
+  deliberately deferred to its own promotion hop. plans/nfr-catalog.md, ABC-010, ABC-011 and ABC-013
+  were not touched either.
+
+  ONE ITEM ROUTED RATHER THAN ABSORBED, and it is a candidate EIGHTH correction to a ticket that
+  already carried seven: src/legal.ts lines 69-71 say "Outside it the oracle is unsound --
+  `generateMoves` offers en-passant captures onto squares occupied by the mover's OWN piece". That
+  is the SAME CLASS of false claim A11 was cut for, in the SAME file, and THIS FIX MAKES IT FALSE.
+  It sits outside A11's cited 102-103 and outside this subtask's named boundary, so it was flagged
+  for BA/PM instead of being silently rewritten -- but it should not ship as it stands.
+-->
 
 <!--
   EMPTIED AGAIN 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-009`, subtask `qe-abc009-a11`,
