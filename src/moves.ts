@@ -262,30 +262,41 @@ export function isSquareAttackedBy(position: Position, square: number, byBlack: 
 }
 
 /**
- * A castling option: the right that must be held, the king's two-square hop, the squares
- * between king and rook that must be EMPTY, and the squares the king stands on or crosses
- * that must not be attacked (its origin included — a king in check may not castle). The
- * rook's own leg is derived from the king's destination in apply.ts.
+ * A castling option: the right that must be held, the king's two-square hop, the rook's
+ * home square, the squares between king and rook that must be EMPTY, and the squares the
+ * king stands on or crosses that must not be attacked (its origin included — a king in
+ * check may not castle). The rook's own leg is derived from the king's destination in
+ * apply.ts; `rookFrom` here is the square the rook must STAND on for the castle to exist
+ * at all (ABC-009), which is a precondition rather than part of the move.
  */
 interface CastleOption {
   readonly right: number;
   readonly kingFrom: number;
   readonly kingTo: number;
+  readonly rookFrom: number;
   readonly empty: readonly number[];
   readonly kingPath: readonly number[];
 }
 
-// Squares in 0x88: e1=4 f1=5 g1=6 d1=3 c1=2 b1=1 a1=0; e8=116 f8=117 g8=118 d8=115 c8=114 b8=113 a8=112.
+// Squares in 0x88: e1=4 f1=5 g1=6 d1=3 c1=2 b1=1 a1=0 h1=7; e8=116 f8=117 g8=118 d8=115 c8=114 b8=113 a8=112 h8=119.
 const WHITE_CASTLES: readonly CastleOption[] = [
-  { right: CASTLE_WK, kingFrom: 4, kingTo: 6, empty: [5, 6], kingPath: [4, 5, 6] },
-  { right: CASTLE_WQ, kingFrom: 4, kingTo: 2, empty: [1, 2, 3], kingPath: [4, 3, 2] },
+  { right: CASTLE_WK, kingFrom: 4, kingTo: 6, rookFrom: 7, empty: [5, 6], kingPath: [4, 5, 6] },
+  { right: CASTLE_WQ, kingFrom: 4, kingTo: 2, rookFrom: 0, empty: [1, 2, 3], kingPath: [4, 3, 2] },
 ];
 const BLACK_CASTLES: readonly CastleOption[] = [
-  { right: CASTLE_BK, kingFrom: 116, kingTo: 118, empty: [117, 118], kingPath: [116, 117, 118] },
+  {
+    right: CASTLE_BK,
+    kingFrom: 116,
+    kingTo: 118,
+    rookFrom: 119,
+    empty: [117, 118],
+    kingPath: [116, 117, 118],
+  },
   {
     right: CASTLE_BQ,
     kingFrom: 116,
     kingTo: 114,
+    rookFrom: 112,
     empty: [113, 114, 115],
     kingPath: [116, 115, 114],
   },
@@ -295,14 +306,25 @@ const BLACK_CASTLES: readonly CastleOption[] = [
  * Adds the legal castling moves for the side to move. Unlike the rest of generation these
  * are filtered for the through-check rule (ABC-004 scope), so a castle never appears when
  * the king would start, cross, or land in check.
+ *
+ * The right being set is not enough on its own: a FEN can assert a right the board
+ * contradicts, and offering the castle then produces a move the rules forbid whose
+ * make/unmake pair writes a king onto a square that never held one (ABC-009). So the two
+ * home squares are read too, and each is an IDENTITY test — the mover's own KING and ROOK
+ * bytes, not merely an occupied square, since an occupancy test admits an impostor of
+ * either colour. They sit above the two costlier tests because a byte compare is cheaper
+ * than an emptiness scan and far cheaper than an attack scan (NFR-001).
  */
 function addCastlingMoves(moves: Move[], position: Position, black: boolean): void {
   const options = black ? BLACK_CASTLES : WHITE_CASTLES;
   const attackerIsBlack = !black;
   const king = KING | (black ? BLACK : 0);
+  const rook = ROOK | (black ? BLACK : 0);
 
   for (const option of options) {
     if ((position.castling & option.right) === 0) continue;
+    if (position.board[option.kingFrom] !== king) continue;
+    if (position.board[option.rookFrom] !== rook) continue;
     if (option.empty.some((square) => position.board[square] !== EMPTY)) continue;
     if (option.kingPath.some((square) => isSquareAttackedBy(position, square, attackerIsBlack))) {
       continue;

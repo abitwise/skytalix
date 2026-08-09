@@ -1,8 +1,8 @@
 ---
 id: ABC-009
 title: legalMoves mutates the position it documents as unchanged
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P1
 epic: EPIC-001
@@ -688,3 +688,247 @@ on this board's own `Ready` test and not on its priority: it has **no unbuilt de
 (the defective code is merged on `main`), which is the one criterion that keeps `ABC-015`..`ABC-019`
 in `Backlog`. At `S` (2 points) it is the cheapest correctness win available, and it sits in `Ready`
 beside `ABC-011`, the other rules-core defect at `P1`.
+
+## Implementation
+
+**IMPLEMENTED `In Development → In Review` 2026-08-09 by the Software Engineer** (task
+`ticket-to-pr-ABC-009`, subtask `engineer-abc009-implement`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-009`. `In Development` 1/3 → 0/3, `In Review` 0/3 → 1/3; no limit
+approached, no override taken, no written reason owed. **Nothing merged and nothing deployed — a
+human holds both.**
+
+**Nothing above this section was edited.** The `## Acceptance` criteria, BA/PM's correction block,
+`## Scope`, `## Out of scope`, `## Reproduction`, the escalation block, the `NFR-001` bar and the
+`## Test notes` are all as they stood at the pull. Where a number below could be read as changing
+one of them, it does not — every criterion was met as written.
+
+### One production file changed, one test file added, and no existing test touched
+
+`git status --short -- src/` reports exactly ` M src/moves.ts` and `?? src/moves.castling.test.ts`.
+`git diff --name-only -- 'src/*.test.ts'` is **empty** — which is `A8`'s *"no existing test is
+modified, verified at line level, not by inspection"*, made mechanical rather than argued. The new
+tests went into a **new** file for exactly that reason; appending them to `src/moves.test.ts` would
+have made the claim a judgement about which changed lines were tests.
+
+- **`src/moves.ts`** — `+30 −8`. Two guard conditions in `addCastlingMoves`, one `rookFrom` field
+  added to the `CastleOption` interface and its four table rows, one `rook` local beside the
+  existing `king` local, and the doc comments for both. Nothing else in the module was touched; the
+  four existing tests (`option.castling`, `option.empty`, `option.kingPath`, the move record) are
+  byte-identical.
+- **`src/moves.castling.test.ts`** — 33 tests: `A1`, `A2`, `A3`, the four `A4` rows twice (offer and
+  purity), the four `A5` rows twice, the four `A6` rows (offer only — see below), the four
+  legal-castle controls, and the six `A7` rows. Purity is asserted over **all 128 board bytes and
+  all five scalars** and additionally through `toFen` for a legible failure message, which is
+  `## Test notes` 4.
+
+### The fix, and the structural choice with the alternatives it rejected
+
+`## Scope` is the requirement and **the fix site was deliberately not ruled on**, so this is the
+engineer's call and is recorded as one.
+
+The two home squares are read as **identity** tests — `position.board[option.kingFrom] !== king` and
+`position.board[option.rookFrom] !== rook`, where `king` and `rook` carry the moving side's colour
+bit. They sit **above** the existing emptiness and through-check tests: a byte compare is cheaper
+than an emptiness scan and far cheaper than an attack scan, which matters because this is the
+innermost loop of the search (`NFR-001`).
+
+The rook's home square is a new **`rookFrom` field on the precomputed `CastleOption` table**
+(h1=7, a1=0, h8=119, a8=112), and the guards live in `addCastlingMoves` — the **generator** layer —
+so `generateMoves` and `legalMoves` are both fixed by one change rather than one of them by a filter.
+
+Three alternatives were considered and rejected:
+
+1. **Import `CASTLE_ROOK_MOVE` from `apply.ts`**, where the rook's leg already lives, instead of
+   adding a field. Rejected: `apply.ts` already imports from `moves.ts`, so this creates a **module
+   cycle** — and it would be a cycle introduced for a four-entry lookup table. The two tables also
+   answer different questions: `CASTLE_ROOK_MOVE` is *where the rook goes when the castle is played*,
+   keyed on the king's destination; `rookFrom` is *where the rook must stand for the castle to exist
+   at all*. They agree on the from-square today by construction, not by definition.
+2. **Derive the rook square arithmetically per call** from `kingTo` (`kingTo > kingFrom ? +3 : −4`).
+   Rejected: the module's own header commits to *"a precomputed table rather than per-call
+   arithmetic — this is the innermost loop of the search (NFR-001)"*, and a fourth table field costs
+   nothing at run time.
+3. **Filter at the `legalMoves` layer.** Rejected on the ticket's own words: `## Scope` requires that
+   *"offered" means offered by `generateMoves` AND by `legalMoves`*, so a `legalMoves`-layer filter
+   would leave the exported generator emitting a move the rules forbid. That the two are
+   observationally equivalent today (`generateMoves` has no non-test caller but `legalMoves`) is an
+   argument for pinning the layer, not against it.
+
+### `A1`–`A6`: all fifteen post-fix counts matched the delivered diff on the first run
+
+**No discrepancy was found, and nothing was adjusted in either direction** — no test was bent to the
+code and no criterion was edited. Measured on the delivered diff:
+
+```
+A1  4k3/8/8/8/8/8/8/K7 w KQ - 0 1      3 moves, 0 FLAG_CASTLE, toFen + 128 bytes + 5 scalars pure
+A2  (same, three calls)                3, 3, 3
+A3  4k3/8/8/8/8/8/8/4K3 w K - 0 1      5 moves, 0 FLAG_CASTLE in generateMoves AND legalMoves
+A4  K6R w K / R6K w Q / k6r b k / r6k b q      16 / 16 / 16 / 16, 0 castles both layers, pure
+A5  K3B2R / R3N2K / K3b2R / k3b2r              19 / 17 / 13 / 19, 0 castles both layers, pure
+A6  4K2B / N3K3 / 4k2b / 4K2b                  12 /  7 / 12 /  5, 0 castles both layers
+control  kiwipete                      48 legal moves, 2 castles STILL offered, position pure
+control  4K2R / R3K3 / 4k2r / r3k3      15 / 16 / 15 / 16, exactly 1 castle each
+```
+
+That is now **three** independent derivations of those counts — BA/PM's seven candidate builds, the
+Orchestrator's independently written fix, and this diff — where the ticket carried two.
+
+**`A6` is asserted on the offer only, and that is structural rather than an oversight.** Family 3
+leaves the position byte-identical, because the make/unmake pair round-trips the impostor exactly, so
+no purity assertion can ever see it and only the `FLAG_CASTLE` count can. Re-verified here rather
+than inherited from the correction block.
+
+### Red before green, and the load-bearing deletions
+
+`quality.tdd` is `encouraged`; the inner loop was run red-first and the red is recorded rather than
+described. Against the **unfixed** tree the new file read **23 failed / 10 passed of 33**, and the 10
+that passed are exactly the four legal-castle controls and the six `A7` rows — which confirms on the
+repository tip that `A7` was **absent rather than failing**, which is what *"must stay green, and
+must be present"* asks about.
+
+`## Test notes` 5 requires each precondition proved load-bearing by deleting it. BA/PM measured that
+on mutants of `main`; it is re-measured here **on the delivered diff**, by patching in place and
+restoring from a pristine copy, with `src/moves.ts` re-hashed to
+`0e247853ab2c05887c76105ff83d8621` after every mutant:
+
+| mutation of the delivered fix | criteria that fail | suite |
+|---|---|---|
+| delete the **king** condition | `A4` + `A5`, **nothing else** | 321/337 |
+| delete the **rook** condition | `A3` + `A6`, **nothing else** | 332/337 |
+| weaken both identity tests to **occupancy** (`!== EMPTY`) | `A5` + `A6` **only** | 325/337 |
+| **swap** the two squares (king sought on the rook's square, rook on the king's) | 19 assertions, including `ABC-004`'s castling generation and make/unmake, and kiwipete `perft(1)` — i.e. `A8` | 318/337 |
+
+All four legal-castle controls survived every mutant, so none of these reds is a false red. The
+disjoint-set property the ticket claims holds on the real change.
+
+### A fifth mutant survives all twelve criteria — and it is behaviour-equivalent, not a defect
+
+Reported because the ticket hands *"seven is not proven complete"* forward, and a surviving mutant is
+exactly what that warning predicts. Weakening both identity tests to **colour-blind** ones
+(`pieceType(...) !== KING` / `!== ROOK` instead of the full byte) reads **337/337 green** and
+typechecks clean.
+
+It is **not** a criterion gap. It was settled by differential test rather than by argument: over an
+exhaustive space of all 13 possible byte values on the king-home square × all 13 on the rook-home
+square × the four castles (**676 boards**, built directly rather than through `parseFen` because most
+are not legal FENs), the two rules read those squares differently on exactly **12** boards, and the
+generator's output **agrees on all 12** — an enemy king or an enemy rook standing there attacks a
+square the existing through-check test already requires unattacked. Re-run with every possible third
+piece on every other square of the board (**8,928 boards**, in case a blocker changed the attack
+geometry): divergence still **zero**.
+
+So the delivered fix is **stricter than reachability requires**, which is the safe direction, and no
+criterion can distinguish the two. This is the same class as `ABC-011`'s two behaviour-equivalent
+cost mutants that were deliberately **not** pinned, and it independently corroborates BA/PM's
+measured finding that a wrong-**colour** rook on the rook's home square is unreachable — now
+exhaustively over both squares and against the delivered fix rather than on two FENs. **No criterion
+is proposed for it**; one would be the theatre the correction block already rejected.
+
+### `A7`, `A8`, `A9` and the gates, as they ran
+
+| gate | command | result |
+|---|---|---|
+| install | `npm install` | exit 0 — no dependency change; `package.json` and `package-lock.json` untouched |
+| lint | `npm run lint` | **exit 0**, zero autofix passes needed (**0 of 2** self-fix attempts spent) |
+| typecheck | `npm run typecheck` | exit 0 |
+| unit | `npm test` | **337 passed (337) on 15 files** — 304/304 on 14 files before, measured by running the suite on the tip, not by subtraction |
+| build | `npm run build` | exit 0 (`tsc --noEmit`; honestly a typecheck in the build slot) |
+| skip count | the `AGENTS.md` `### Test integrity` command | **0** — `A8`'s requirement |
+| deep perft (`A9`) | `PERFT_DEEP=1 npx vitest run src/perft.test.ts` | **32/32 exact**, 36.93 s, **run before review** |
+| e2e | — | `UNKNOWN - verify` — the `AGENTS.md` slot is unknown; no UI surface and no runnable game until `EPIC-006` |
+| test-integrity checker | `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0` | **exit 2** — "cannot read the registry file" |
+| auto-UAT oracles | `node scripts/check-uat-oracles.js` | `UNKNOWN - verify` — absent in this install; non-blocking per Workflow 05 |
+
+**Exit 2 is recorded as an ERROR and not as a pass.** `.grugops/test-skips.md` does not exist
+(`ls` confirms). Per Workflow 05 step 3, exit 2 is *"the checker could not run"* — distinct from the
+exit-1 human-only short-circuit. **No registry file was created**: an agent may not self-author a
+justification to clear its own gate, and with a skip count of 0 nothing is owed one.
+
+The two lint **infos** are pre-existing `biome.json` schema and deprecation notices, unrelated to
+this ticket. Flagged rather than fixed, per the coding rules on adjacent code.
+
+`A9` was run on the **delivered** tree. It was not run on the pre-fix tree, because the deep lane is
+the oracle that the change is invisible to legal play and the pre-fix tree's 32/32 is `ABC-006`'s
+standing result, not a comparison this ticket needs. The stronger statement is that the fix cannot
+affect a position reachable by play at all: `makeMove` clears a castling right whenever the king or
+the matching rook leaves its home square or that rook is captured, so in any position reachable from
+a legal start the right implies both pieces are home — which is why 32/32 and the whole perft table
+are unchanged.
+
+### `NFR-001` / `A10` — MET on both clauses, and the first throughput figure measured on this ticket
+
+**No role on this ticket had measured any throughput number.** The 6.04M–6.21M range in
+`## Security / NFR triggers` is quoted from `plans/nfr-catalog.md`, which is the authority; the
+Orchestrator and BA/PM both recorded that they did not run `npm run perft`. Every figure below is
+this role's own, on **Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64**, and
+**`UNKNOWN - verify` on any other hardware**.
+
+**Clause 1 — the floor.** `npm run perft` on the delivered tree, three runs:
+**6,078,622 / 6,131,325 / 6,151,559 nodes/sec**. Inside the catalog's standing 6.04M–6.21M band, and
+about **6.1x** the ≥ 1,000,000 nodes/sec bar. **MET.**
+
+**Clause 2 — the ratio, in one process.** Three trees imported into a **single** process: the
+**pre-fix** tree (`main`'s `src/`, `moves.ts` at `fb4fa40934e768dffeaeed0b43548842`), the
+**delivered** tree, and a **byte-identical twin** of the delivered tree as a **null control by
+identity**. Seven rounds, tree order **and** cell order rotated every round, a discarded warm-up
+round, medians of per-round rates, node counts checksummed across every tree and round
+(238,936,362 nodes, so nothing could be elided), and **two fully independent samples** in their own
+processes, quoted separately and never averaged.
+
+```
+                       sample 1                    sample 2
+cell         rights    post/pre   twin/post        post/pre   twin/post
+position-3   -         1.0084     0.9991           1.0041     0.9937     <- structurally zero
+position-6   -         0.9918     1.0053           0.9989     1.0055     <- structurally zero
+kiwipete     KQkq      0.9930     1.0107           0.9967     0.9988
+startpos     KQkq      1.0002     1.0080           0.9880     1.0126
+position-4   kq        1.0003     1.0043           0.9949     0.9986
+position-5   KQ        1.0026     1.0065           0.9981     1.0013
+
+AGGREGATE              0.9987     1.0087           0.9974     0.9983
+```
+
+**Aggregate post/pre 0.9987 and 0.9974 against the ≥ 0.98 bar — MET on both samples.** Worst single
+cell across both, 0.9880, is also above the bar.
+
+**The catalog's standing benchmarking caution was followed, and it is the reason no per-cell claim is
+made.** A cell whose delta is **structurally zero** was read *first*: `position-3` and `position-6`
+carry **no castling rights**, and `makeMove` can only clear rights and never create them, so the two
+added byte compares execute **zero times anywhere in those two subtrees**. Their true ratio is
+exactly 1.0000, and they measured 1.0084, 0.9918, 1.0041 and 0.9989. The **identity twin** — the same
+bytes as the delivered tree — read 1.0087 and 0.9983 aggregate and up to 1.0126 on a single cell.
+**So this instrument's own floor is about ±1% per cell, which is larger than any signal the change
+could produce.** The bar is met with margin, and **no per-cell regression or improvement is claimed
+from it**: in particular the kiwipete 0.9930 reading sits inside noise established by cells whose
+delta is provably zero, and reading it as a 0.7% regression would be the same mistake this catalog
+has recorded nine times.
+
+**Denominator fence, carried rather than quoted: 97.3% of the nodes `npm run perft` counts are free
+leaves.** This is a generation-with-free-leaves figure and is **never** evidence for `NFR-005`.
+
+**`NFR-005` was not measured and the key benchmark was not re-run** — the ticket excludes it
+**structurally** (`zobristKey` → `hasLegalEnPassant` calls neither `generateMoves` nor `legalMoves`)
+and says explicitly not to re-run it to "confirm" it. **No NFR target moved and
+`plans/nfr-catalog.md` was not edited** — the catalog is Security/NFR's, and that role re-derives on
+its own instruments.
+
+**No wall-clock assertion was added to the suite** — this project's standing rule
+(`src/zobrist.nfr.test.ts:112`). The figures live here and in the context notes, with their machine.
+
+### What this hop does NOT establish
+
+- **That `A1`–`A10` is complete.** It came in open and goes out open. Five mutants were run and the
+  criteria killed four in disjoint named sets; the fifth is equivalent. That is five, against
+  `ABC-018` QE's fifty-six. A mutation campaign is QE's instrument.
+- **That the two places BA/PM said it would look first are clear.** A criterion set written over
+  signals that agree, and the interaction between a new precondition and the existing
+  `option.empty` / `option.kingPath` tests. The equivalence result above is a piece of the second —
+  the through-check test **masks** the colour dimension entirely — and nobody has examined the first.
+- **Anything about `ABC-022`.** Its half (b) is still live and that is intended: no line of
+  `addPawnMoves` was changed and no `FLAG_EN_PASSANT` behaviour was touched. `ABC-022`'s ticket was
+  not edited.
+- **Any coverage figure.** None was measured, and `## Problem` is explicit that a test which only
+  raises coverage adds nothing here — `src/legal.ts` was already at 100% when this defect shipped.
+- **That the gate is green in the Workflow 05 sense.** The four mandatory gates passed and the deep
+  lane is 32/32, but the terminal verdict is the gate's to emit and QE owns the `In Review` exit.
+  No `finding` was written and nothing is self-stamped.
