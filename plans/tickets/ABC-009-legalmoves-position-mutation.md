@@ -236,8 +236,17 @@ The mechanism is the engineer's call. The observable contract above is the requi
 
 ## Acceptance (Given/When/Then)
 
-Each criterion below is a currently-failing test that must go green, except where marked as a
-regression guard. The parenthetical is the measured behaviour on `main` today.
+Each criterion below was written as a **currently-failing** test that had to go green, except where
+marked as a regression guard, and every *(Today: …)* parenthetical is the measured behaviour of the
+**pre-fix tree** — merged `main` at `aad6d48`, whose `src/moves.ts` hashes
+`fb4fa40934e768dffeaeed0b43548842`. **Read those parentheticals as the defect's record, not as a claim
+about the current tree.** The fix is delivered on `grugops/ticket-to-pr-ABC-009` and **every criterion
+`A1`–`A12` is green there**: `npm test` **371 passed (371) on 16 files**, skip count **0**, re-run on
+the branch tip by BA/PM at the third hop, 2026-08-09. *(Reframed 2026-08-09, third hop. The word
+"today" was written before the fix existed and stops being true the moment this branch merges, while
+each figure beside it is evidence a later reader will want — so the baseline is pinned to a named
+commit and a hash instead. Only the framing changed: **no criterion, count, FEN or parenthetical below
+was edited.**)*
 
 **`A1`–`A6` were rewritten and `A4`–`A6`, `A10` added 2026-08-09** — see the first correction block
 below. **`A1`, `A2`, `A3`, `A7`, `A8` and `A9` are, in that order, the six criteria this
@@ -247,8 +256,13 @@ ticket carried from 2026-07-29**, so the Orchestrator's routing note of 2026-08-
 
 **`A11` and `A12` were added, and `A7`'s justification corrected, 2026-08-09 at a SECOND BA/PM hop**
 after QE and Security/NFR routed two criterion gaps and one measured-inert criterion here — see the
-**second** correction block, which follows the first. **`A11` is NOT YET SATISFIED BY THE SUITE and
-this ticket may not be closed as though it were**; the shortfall is test rows, not production code.
+**second** correction block, which follows the first. **`A11` was the one criterion this ticket ever
+carried unsatisfied, and it is now SATISFIED** — closed in tests at QE's second hop (14 new rows in
+`src/moves.castling.hardening.test.ts`, **zero production lines**) and then **verified independently at
+a THIRD BA/PM hop, 2026-08-09**, which is the only reason its `⚠️` marker came off. The retirement note
+under `A11` carries that verification. **One NEW gap was measured at that hop; it is NAMED under `A11`
+and deliberately NOT fixed here — it is not `A11`'s shortfall, no criterion was added for it, and the
+routing is the Orchestrator's.**
 
 - **`A1` (purity, the reproduction FEN).** **Given** the FEN `4k3/8/8/8/8/8/8/K7 w KQ - 0 1`,
   **when** `legalMoves` is called once on the parsed position, **then** `toFen(position)` afterwards
@@ -364,7 +378,9 @@ this ticket may not be closed as though it were**; the shortfall is test rows, n
   **then** it holds. *(Named as a criterion, not left as prose, so the ratio in that section is part
   of the acceptance the way it is on `ABC-022`.)*
 - **`A11` (the impostor's piece type is QUANTIFIED, not sampled). ADDED 2026-08-09 (second hop).
-  ⚠️ NOT YET SATISFIED BY THE SUITE — see the second correction block.** **Given** the king's home
+  SATISFIED BY THE SUITE — the `⚠️ NOT YET SATISFIED` marker was retired 2026-08-09 at the third
+  BA/PM hop, on that hop's own instruments; the retirement note below carries the measurement.**
+  **Given** the king's home
   square occupied by **each** of the mover's own non-`KING` piece types — `QUEEN`, `ROOK`, `BISHOP`,
   `KNIGHT`, `PAWN` — with the matching rook present, **and given** the rook's home square occupied by
   **each** of the mover's own non-`ROOK` types — `QUEEN`, `BISHOP`, `KNIGHT`, `PAWN` — with the king
@@ -394,13 +410,138 @@ this ticket may not be closed as though it were**; the shortfall is test rows, n
 
   **`parseFen` accepts every one of those FENs** — checked by running it, not assumed; it asserts one
   king of each colour and performs no rights/board consistency check, so a pawn on the first rank is
-  accepted (that is `ABC-010`'s boundary, not this ticket's). **Two shapes are excluded, each for a
-  measured reason, so nobody adds a row for them:** the mover's own `KING` on the **rook's** home square
-  is not constructible — with the king also home it needs two kings of one colour and `parseFen`
-  rejects it, and with the king elsewhere the king guard already refuses — and an **enemy-colour**
-  occupant of either square is unreachable, masked by the pre-existing through-check test and measured
-  exhaustively twice (9,604 and 12,584 positions, zero divergence). A row for either would be
-  unfalsifiable.
+  accepted (that is `ABC-010`'s boundary, not this ticket's).
+
+  **One shape is excluded and the exclusion holds:** the mover's own `KING` on the **rook's** home
+  square is not constructible — with the king also home it needs two kings of one colour and
+  `parseFen` refuses it (*re-measured at the third BA/PM hop on all three constructions:* `4K2K w K`,
+  `K3K3 w K` and `4k2k b k` each raise *"position must have exactly one white/black king, found 2"*),
+  and with the king elsewhere the king guard already refuses. A row for it would be unfalsifiable.
+
+  **The SECOND exclusion this criterion carried — *"an enemy-colour occupant of either square is
+  unreachable, masked by the pre-existing through-check test"* — was MEASURED AT THE THIRD BA/PM HOP
+  AND IS FALSE FOR TWO PIECE TYPES.** It is corrected here rather than softened, because as written it
+  instructed the next reader **not** to add the four rows that are missing. `A11`'s own scope is
+  unchanged and unaffected: it quantifies over the mover's **own** types, and it is satisfied. See the
+  retirement note below for the measured map and the named gap.
+
+  > **`A11`'s `⚠️ NOT YET SATISFIED` MARKER RETIRED 2026-08-09 AT THE THIRD BA/PM HOP, ON THIS ROLE'S
+  > OWN INSTRUMENTS. `A11` IS MET. ONE NEW GAP WAS MEASURED IN THE PROCESS AND IS NAMED BELOW, NOT
+  > FIXED.**
+  >
+  > QE closed `A11` in tests (19 → 34 hardening tests, 14 rows new, **zero production lines**) and
+  > deliberately left this marker byte-identical, routing it here: **the failure that hop repaired is a
+  > role certifying its own sample as a dimension, so the role that wrote the rows does not also stamp
+  > the criterion satisfied.** The Orchestrator declined it too, on a limit it had written itself. This
+  > note is that independent check. **Nothing below is taken from QE's table or the Orchestrator's** —
+  > the mutant set was derived from `A11`'s own text (every own non-`KING` type on the king's home
+  > square, every own non-`ROOK` type on the rook's), not from anyone's published rows.
+  >
+  > **Instrument.** A copy of `src/` outside the repository, `node_modules` symlinked. Every mutant
+  > asserts its anchor **unique** in the pristine source and its bytes **changed** (otherwise
+  > `HARNESS-ERROR`, never `SURVIVED`), typechecks with `tsc --noEmit` so a broken build can never be
+  > scored a survivor, and restores `src/moves.ts` to md5 `0e247853ab2c05887c76105ff83d8621` after.
+  > **No file under `src/` in this repository was modified at any point.**
+  >
+  > **1. Discrimination — 17 mutants, 12 killed, 4 survived, 0 verdict mismatches, 0 broken builds.**
+  > All **nine** single own-type admissions die, and the three that previously passed the ENTIRE net die
+  > to `A11`'s rows **alone** (acceptance 33/33, hardening 32/34 — two rows each):
+  >
+  > ```
+  > own type admitted on the KING's home square    acceptance  hardening  suite    killed by
+  > QUEEN                                            33/33       30/34    367/371  A11 rows
+  > ROOK          <- passed the whole net before      33/33       32/34    369/371  A11 rows
+  > BISHOP                                           29/33       32/34    365/371  A11 + A5
+  > KNIGHT                                           31/33       32/34    367/371  A11 + A5
+  > PAWN          <- passed the whole net before      33/33       32/34    369/371  A11 rows
+  > own type admitted on the ROOK's home square
+  > QUEEN                                            33/33       30/34    367/371  A11 rows
+  > BISHOP                                           31/33       30/34    365/371  A11 + A6 + A12
+  > KNIGHT                                           32/33       32/34    368/371  A11 + A6
+  > PAWN          <- passed the whole net before      33/33       32/34    369/371  A11 rows
+  > admission made CONDITIONAL on colour / on side   33/33       33/34    370/371  A11 rows
+  >                                                  32/33       33/34    369/371  A11 + A6
+  > MUST SURVIVE — colour-blind king / rook / both, and king guard `continue`->`break`
+  >                                                  33/33       34/34    371/371  survived, all four
+  > ```
+  >
+  > The four survivors matter as much as the twelve kills: **`A11`'s rows kill zero behaviour-equivalent
+  > mutants**, so they pin observable behaviour rather than the shape of the implementation.
+  >
+  > **2. Exhaustiveness — checked on this role's own domain probe, not on the suite's.** `parseFen`'s
+  > piece-type domain, probed over 26 letters × 2 cases × 4 probe boards, is exactly six types. The
+  > king's-square table covers all **five** non-`KING` types and the rook's-square table all **four**
+  > non-`KING`/non-`ROOK` types — **nothing missing, nothing extra**. All **22** rows were re-derived
+  > independently of the suite's own `expectImpostorSetup`: **0 rows whose label lies about its FEN**, 0
+  > rows where the other precondition fails, 0 rows holding the wrong right. Each table carries all four
+  > rights (`K`/`Q`/`k`/`q`), both sides to move, and **every type in at least two configurations**.
+  >
+  > **3. The quantifier FIRES — falsified rather than trusted.** Three deliberate corruptions of the
+  > suite file in the scratch copy, production code pristine: dropping **both** own-`PAWN` rows from the
+  > rook's-square table → RED *"expected [2,3,5] to deeply equal [1,2,3,5]"*; dropping **one** → RED
+  > *"PAWN needs a second configuration"*; **relabelling** the h1 knight row as `PAWN` → RED *"the
+  > impostor must stand on the square under test"*. **A shrunken enumeration cannot pass.** That is what
+  > separates this from a fourth sample.
+  >
+  > **4. Every kill is a real defect, measured one FRESH PROCESS PER TREE.** On the king's square each
+  > admission **destroys the occupant and writes a king over it** (`K3R2R w K` byte `4: 4->6`,
+  > `K3P2R w K` byte `4: 1->6`); on the rook's square the position is **byte-identical** and the illegal
+  > `FLAG_CASTLE` offer is the only witness, which is `A6`'s structural rationale confirmed on more
+  > types. **Both measurement traps this ticket has recorded were discharged, not avoided by luck:** one
+  > OS process per tree state (this role's first harm probe, at the second hop, ran four trees in one
+  > process and Node's module cache served pristine `moves.ts` to all four — the tell was identical
+  > output across trees, and the output above differs per tree), and **the instrument verified before a
+  > red is believed** — this hop's first three equivalence controls did **not compile** under
+  > `noUncheckedIndexedAccess` (`pieceType(board[i])` on `number | undefined`) and the harness scored
+  > them `BROKEN-BUILD` rather than reporting three dead controls. Rebuilt with `?? EMPTY`, all three
+  > survive 371/371. That is the third instance on this ticket of *a red from an unverified instrument
+  > is not a finding*.
+  >
+  > **5. THE NEW GAP, NAMED AND NOT ACTED ON — the fourth class QE told this board to expect.** Testing
+  > `A11`'s **enemy-colour exclusion** instead of inheriting it: all six enemy types on both home
+  > squares, twelve mutants, each classified by measurement rather than by geometry.
+  >
+  > ```
+  > enemy occupant admitted   verdict          suite     what refuses it in the delivered code
+  > king's sq  KING/QUEEN/ROOK  SURVIVED,equiv  371/371  the through-check test — genuinely masked
+  > king's sq  BISHOP           KILLED          369/371  `A5` row 3, the enemy-bishop row
+  > king's sq  KNIGHT           SURVIVED + HARM 371/371  the identity guard ALONE — nothing covers it
+  > king's sq  PAWN             SURVIVED + HARM 371/371  the identity guard ALONE — nothing covers it
+  > rook's sq  KING/QUEEN/ROOK  SURVIVED,equiv  371/371  the through-check test — genuinely masked
+  > rook's sq  BISHOP           KILLED          370/371  `A6` row 4, the enemy-bishop row
+  > rook's sq  KNIGHT           SURVIVED + HARM 371/371  the identity guard ALONE — nothing covers it
+  > rook's sq  PAWN             SURVIVED + HARM 371/371  the identity guard ALONE — nothing covers it
+  >
+  > 4k3/8/8/8/8/8/8/K3n2R w K - 0 1   delivered 13 / 0 castles / pure
+  >                                   mutant    14 / 1 castle / byte 4: 10 -> 6
+  >                                   -> 4k3/8/8/8/8/8/8/K3K2R w K - 0 1: the BLACK knight is gone and
+  >                                      white has a second king. Enemy material destroyed, colour flipped.
+  > 4k3/8/8/8/8/8/8/4K2n w K - 0 1    delivered  4 / 0 / pure    mutant 5 / 1 / byte-identical
+  > ```
+  >
+  > **Why the old claim was wrong, stated precisely so the correction is auditable.** An enemy `KING`,
+  > `QUEEN` or `ROOK` on a home square really is masked — it attacks the king's path, and the
+  > through-check test drops the option, which is also exactly why the **colour-blind** mutants are
+  > behaviour-equivalent (colour-blindness widens the king's square only to an enemy `KING` and the
+  > rook's only to an enemy `ROOK`). The 9,604- and 12,584-position enumerations were sound **for what
+  > they tested**; the blanket generalisation to *every* enemy occupant is what does not hold. An enemy
+  > `KNIGHT` or `PAWN` on `e1`/`h1`/`a1` attacks **none** of `e1`, `f1`, `g1`, is not in the `empty`
+  > set, and leaves the king out of check — so the identity guard is its only guard and no row in this
+  > suite exercises it. **The ticket's own criteria already contradicted the claim and nobody read it
+  > that way:** `A5` row 3 and `A6` row 4 are enemy-bishop rows, and they are the rows that kill the two
+  > enemy-`BISHOP` mutants. If enemy occupants were masked, those two rows would be inert.
+  >
+  > **This is NOT `A11`'s shortfall and it does not reopen it.** `A11` says *"the mover's own"* and is
+  > exhaustive over that domain; the suite satisfies it. The gap is a fourth **dimension** — the
+  > occupant's COLOUR — with the same shape as the three before it: closed on one axis, resting on a
+  > blanket claim on the other. **No criterion was added here** (that would be a fourth hop's work
+  > opened inside a verification hop) and **no row was written**. The progression is now engineer 5
+  > mutants → QE 62 → BA/PM 10 → QE 20 → BA/PM 17 + 12, each hop finding what its predecessor missed,
+  > and this one is no more the last than any before it. **The routing is the Orchestrator's:** four
+  > rows in QE's existing table would close it, on the same measured shape as `A11` (zero production
+  > lines — the delivered code refuses all four FENs today), and whether that happens on this ticket, on
+  > a follow-up, or is accepted as a named risk is a decision this role does not own.
+
 - **`A12` (a side holding BOTH rights: the invalid castle is refused and the VALID one SURVIVES).
   ADDED 2026-08-09 (second hop). Already satisfied by the suite.** **Given** a position in which one
   side holds **both** of its castling rights while **exactly one** of the two castles is invalid on the
@@ -656,7 +797,8 @@ this ticket may not be closed as though it were**; the shortfall is test rows, n
 > run per mutant with a JSON reporter so failures are attributed by criterion rather than eyeballed.
 >
 > **8 — `G-1`: the criteria sample the impostor's piece type where the rule quantifies over it. AGREED —
-> AND THE GAP IS WIDER THAN IT WAS ROUTED. `A11` added, and it is NOT YET MET BY THE SUITE.**
+> AND THE GAP IS WIDER THAN IT WAS ROUTED. `A11` added, and ~~it is NOT YET MET BY THE SUITE~~ — MET
+> since QE's second hop, verified independently at the third; see the amendment closing this item.**
 >
 > QE closed the **queen** in tests (`src/moves.castling.hardening.test.ts`, 8 queen rows) and routed the
 > criteria text here. Re-deriving rather than accepting the framing turned up the part nobody had
@@ -687,6 +829,17 @@ this ticket may not be closed as though it were**; the shortfall is test rows, n
 > quantifies, shipped green, with three live counter-examples already in hand. **This is the one ending
 > this ticket may not have.** **Second rejected alternative:** write the rows here. Not this role's —
 > BA/PM writes no test, and QE's file is QE's.
+>
+> ***AMENDED 2026-08-09 at the THIRD BA/PM hop, so this item is not read as a claim about today.*** The
+> ruling above stands exactly as it was made and is left unedited — it was true when written. What
+> changed is the fact it turned on: **QE's second hop wrote the rows (19 → 34 hardening tests, 14 new,
+> zero production lines) and `A11` is MET**, re-verified here on this role's own 17-mutant campaign
+> rather than on QE's table, and **the three builds tabulated above now die to `A11`'s rows alone**. The
+> *"roughly nine rows"* estimate came in at **fourteen**, and the difference is measured rather than
+> stylistic: a type appearing in only one configuration cannot see an admission made conditional on
+> colour or on side, and two such mutants die to exactly the doubled rows. The retirement note under
+> `A11` carries the numbers — and **one NEW gap** measured at that hop, the occupant's **colour** rather
+> than its type, named there and left for the Orchestrator to route.
 >
 > **9 — `G-2`: nothing varied HOW MANY rights a side holds. AGREED. `A12` added, WITH an ordering clause
 > the routed statement did not have — and the suite already satisfies it.**
@@ -973,6 +1126,18 @@ Definition of Ready asks whether a ticket can be *pulled into dev*, which `ABC-0
 **Nothing in this block was flipped, and no board move was taken** — `ABC-009` stays in `Ready for UAT`,
 and whether the shortfall is closed before it is closed out is the Orchestrator's routing call, not a tick
 this role may quietly re-draw.
+
+**Amended again 2026-08-09 at the THIRD BA/PM hop: the shortfall named above is CLOSED.** `A11` is
+satisfied — QE's second hop wrote the rows, and this hop verified it independently (17 mutants, 12
+killed, 4 equivalence controls surviving, 0 verdict mismatches; exhaustiveness re-derived on this role's
+own `parseFen` domain probe; the quantifier falsified on three deliberate corruptions of the suite file).
+**Every criterion `A1`–`A12` is now green on the branch tip**, `npm test` 371/371 on 16 files at skip 0.
+**Still no tick was flipped and still no board move was taken** — the *acceptance measurable* row was
+already ✅ and Definition of Ready was never the block that carried "currently satisfied". **One new gap
+was measured at this hop and is named under `A11`** — the occupant's colour, four rows wide, zero
+production lines, routing the Orchestrator's. It is **not** a Definition-of-Ready failure: this ticket
+was correctly pullable and remains so, and a gap found by measurement after delivery is the fourth such
+on this ticket, not a re-adjudication of this block.
 
 ~~Sits in `Backlog`. Promotion to `Ready` is a separate BA/PM step and has not been taken.~~
 
