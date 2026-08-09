@@ -1,8 +1,8 @@
 ---
 id: ABC-022
 title: generateMoves offers en-passant captures its own preconditions forbid
-status: in-security-nfr
-column: In Security/NFR
+status: ready-for-uat
+column: Ready for UAT
 size: S
 priority: P1
 epic: EPIC-001
@@ -1237,6 +1237,318 @@ reported, not gated on. `coverage/` was left at its committed state — it was l
 false, both are gone, and `A11`'s binding clause is about statements this fix falsified rather than
 about a list of line numbers. The castling pair stays out of scope and was not counted against this
 ticket.
+
+## Security / NFR
+
+**PASS_WITH_RISKS. `In Security/NFR` -> `Ready for UAT`.** Appended 2026-08-09 by Security/NFR (task
+`ticket-to-pr-ABC-022`, subtask `security-nfr-abc022-gate`, Workflow 04). Gated against
+`security.asvs_level` **L1** and `security.block_on` **high**. `compliance_regime` is **`[]`**, so
+**no Compliance Officer hand-off is owed** — recorded rather than silently omitted. **NO REQUIRED FIX
+IS OUTSTANDING AND NO HIGH-SEVERITY ITEM EXISTS TO BLOCK ON.** Thirteen accepted risks, each with a
+severity and a **named owner**. **NOTHING MERGED, NOTHING DEPLOYED** — a human holds both, and the
+owner's standing merge authority is not deploy authority.
+
+**`src/moves.ts` WAS NOT TOUCHED AT THIS HOP** — still md5 `6335b452fc21ffe2d0f902ecab930840`, so the
+board's standing record holds for a **fifth** gate: no gate has ever repaired the module to make its
+own verdict green. **`## Acceptance` was not edited** (section md5
+`7123d5c641045a44c6f63c2c20dab415`, identical before and after). **`plans/nfr-catalog.md` was NOT
+edited and no NFR target moved.** `ABC-023`, `ABC-009`, `ABC-010`, `ABC-011`, `ADR-0005` and
+`memory-bank/` were not touched. **No `src/` file was changed by this gate** — `git status --short --
+src/` is empty.
+
+**UAT IS NOT RULED ON HERE.** The `UAT` cell in `plans/traceability.md` was deliberately left
+untouched: this subtask's boundary reserves the UAT ruling and the merge for the Orchestrator, and a
+gate that quietly fills in another role's verdict is the same defect this board keeps recording.
+
+### Nothing is inherited — every figure below was taken on this gate's own instruments
+
+Five full tree copies outside the repository, `node_modules` symlinked, `tsconfig` narrowed to
+`src/**`, **one OS process per tree**, `tsc --noEmit` **exit 0 on every tree before any result was
+believed**, and every probe **printing its FEN and re-parsing it** (a FEN that does not render back
+identically aborts the probe).
+
+| tree | `src/moves.ts` md5 | what it is |
+| --- | --- | --- |
+| `t-fix` | `6335b452fc21ffe2d0f902ecab930840` | `git archive HEAD src`, `/usr/bin/diff -r` verified **identical to the working tree** |
+| `t-pristine` | `0e247853ab2c05887c76105ff83d8621` | `git archive main src` — the pre-fix baseline |
+| `t-twin` | `6335b452fc21ffe2d0f902ecab930840` | `cmp`-verified byte-identical twin of `t-fix`, **31 of 31 files in `src/` identical** — the NULL CONTROL BY IDENTITY |
+| `t-count` | `9b0b488d4d58bd5798b2959684de1579` | `t-fix` + two **anchored** counter insertions at the guard site and at `generateMoves`' entry |
+
+`t-count` is instrumented and is **not** the tree the verdict is about; it was proved to still behave
+like the tip before its counts were believed — `npx vitest run src/moves.enpassant.test.ts
+src/moves.enpassant.hardening.test.ts src/perft.test.ts` reads **202 passed (202)** on it. Each
+mutation was an anchored single replacement that asserted the anchor occurs **exactly once** before
+writing and that the file changed after; it refuses on any other count.
+
+**One instrument failure is recorded rather than glossed:** the first `tsc --noEmit` on `t-count`
+exited **2** — `TS1375`, a top-level `await` in a probe file of mine with no imports or exports. The
+fault was in **this gate's own harness, not in the module under test**; it was fixed and the tree
+re-checked to exit 0 before any count was believed. The board's rule is "typecheck every tree before
+believing any red"; it fired here on the measuring role.
+
+### The four mandatory gates, re-run on the tip
+
+```
+lint       npm run lint        exit 0   35 files, 2 infos — both the pre-existing biome.json ones
+typecheck  npm run typecheck   exit 0
+build      npm run build       exit 0   (tsc --noEmit in this project — the same command as
+                                         typecheck, named honestly, not a second signal)
+unit       npm test            559 passed (559) on 18 files
+skip count                     0        by the AGENTS.md command
+perft fast lane                24/24    inside npm test
+A8 deep lane   PERFT_DEEP=1 npx vitest run src/perft.test.ts   32 passed (32) EXACT in 36.06 s
+```
+
+The deep lane's **32/32 in 36.06 s** is a **fourth** independent run of that lane on this ticket,
+agreeing with 36.55 s (Engineer), 36.50 s (Orchestrator) and 36.85 / 38.15 s (QE).
+
+**Cannot run, and pre-existing:** `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md
+--skip-count 0` exits **2**, "cannot read the registry file" — `.grugops/test-skips.md` is absent,
+checked with `ls`. That is **could not run, NOT a pass**, and **no registry file was created**: an
+agent may not author the justification that clears its own gate. `quality.test_integrity` is `warn`
+and the gate's actual test-integrity step, the AGENTS.md skip-count command, reads **0**
+independently. **E2E** and **auto-UAT oracles** are `UNKNOWN - verify` — no UI surface until
+`EPIC-006`, and there is no `scripts/` directory in this repository at all.
+
+### `NFR-001` / `A10` — MET ON EVERY CLAUSE
+
+**Primary — the COUNT, which is what the amended method makes load-bearing.** Roots and `fast` depths
+**parsed out of `src/perft.test.ts`** by the harness (it exits non-zero unless it finds exactly six),
+every FEN printed and re-parsed, and the walk driven by **`legalMoves` alone** so that nothing else
+calls `generateMoves` — the recorded trap that inflated an earlier hop's denominator ~14x.
+
+```
+startpos   d4 206604    kiwipete   d3  99950    position-3 d4 46256
+position-4 d3   9738    position-5 d3  63910    position-6 d3 92016
+TOTAL nodes VISITED                                    : 518474
+non-leaf nodes (the nodes that call legalMoves)        : 18357
+conditions EVALUATED, shipped placement (AFTER the ep test) :    331
+conditions EVALUATED, rejected alternative (BEFORE it)      : 216269   (653.4x)
+times the two conditions REJECTED anything                  :      0
+```
+
+**A FOURTH independent derivation of `331 / 216,269 / 0`, exact**, after BA/PM's, the Engineer's and
+QE's — on a harness that copied none of theirs. All six per-root counts and both totals reproduce
+identically.
+
+**Two figures this gate adds that no prior hop had.**
+
+- **The count over the CLOCK's OWN population.** The 331 figure's denominator is the 518,474-node
+  fast-lane walk; `npm run perft` sweeps a **different** population (11,377,922 leaf nodes at deeper
+  depths). Pricing a clock reading with the other population's count would be an apples-to-oranges
+  error, so the counters were re-run over the bench workload itself: **4,177 evaluations, 0
+  rejections**, against **3,417,014** for the rejected placement (**818x**).
+- **The PER-CALL bound, measured rather than argued.** Over all **18,357** `generateMoves` calls of
+  the standing walk the added conditions execute **at most 1 time in any single call** (mean
+  **0.018**). The cost this change can add to one generator call is bounded by one comparison pair.
+
+**The arithmetic, LABELLED ARITHMETIC AND NOT A MEASUREMENT**, over the clock's own population
+(4,177 evaluations on a 1.822 s sweep): at 1 ns per evaluation the whole change costs **0.00023%**
+(true ratio ~0.999998); at a deliberately generous 10 ns, **0.0023%** (~0.999977). It is three orders
+of magnitude below what the instrument can resolve, which is why the clock cannot see it and did not.
+
+**The ordering decision is what keeps it unmeasurable, and that is now priced on the clock's own
+population.** The same arithmetic applied to the rejected "reject early" placement gives
+**0.19% at 1 ns and 1.88% at 10 ns** — inside the ≥ 0.98 bar, but within the bar's own 2-point margin
+at the top of that range. On the 518,474-node walk the ordering looked like tidiness; on the clock's
+population it is the difference between unmeasurable and arguable. **No change is asked for** (rules
+5, 9, 10) — the shipped order is the cheap one and the sharper reason is recorded here.
+
+**Floor — clock.** `npm run perft` on the tip: **11,377,922 nodes in 1.843 s = 6,172,810 nodes/sec**
+against `>= 1,000,000` — **~6.17x clear**, and the harness printed its own `AT OR ABOVE target` line.
+Across all **12** scored readings below, the **lowest single reading is 6,030,890/sec**, still
+**~6.03x** clear.
+
+**Aggregate ratio — MET, and the null control decides how to read it.** Three trees, **one OS process
+per reading**, tree order **rotated every round**, a discarded warm-up round, node count checksummed
+**identical at 11,377,922 on every tree and every round** (15 readings):
+
+```
+                mean          min          max      peak-to-peak
+t-pristine   6,234,066    6,201,748    6,272,713       1.14%
+t-fix        6,231,604    6,198,879    6,271,073       1.16%
+t-twin       6,174,643    6,030,890    6,272,065       3.91%   <- IDENTICAL CODE to t-fix
+
+AGGREGATE   fix / pristine  = 0.9996   against the >= 0.98 bar  ->  MET
+NULL CTRL   twin / fix      = 0.9909   byte-identical code (cmp, 31/31 files)
+NULL CTRL   twin / pristine = 0.9905
+```
+
+**The null control's deviation from the tree it is byte-identical to (0.914%) is 23.1x the fix's
+apparent aggregate cost (0.039%).** The bar is met and **no per-cell and no per-run cost claim is
+admissible from this data** — the catalog's standing caution holds for a **fifth** ticket running.
+Note that the lowest reading in the whole sample belongs to the **twin**, i.e. to code identical to
+the delivered fix: it is scatter, not cost.
+
+**The structurally-zero cell, read BEFORE the cell this gate cares about**, as the catalog's standing
+method requires — and it matters here because `NFR-001`'s **second** consumer is `gameStatus`, which
+is genuinely downstream of this change:
+
+```
+generateMoves(startpos)                         reached=14  evaluated=0  rejected=0  offered=0
+legalMoves(startpos)                            reached=14  evaluated=0  rejected=0  offered=0
+gameStatus(startpos, emptyMap)  <- the NFR-001 bar   reached=14  evaluated=0  rejected=0  offered=0
+generateMoves(a live-ep position)               reached=14  evaluated=1  rejected=0  offered=1
+```
+
+`NO_SQUARE` is **-1** and `to` is always an on-board 0x88 index, so `to === position.epSquare` is
+false at every iteration whenever no en-passant square is set. **`NFR-001`'s `gameStatus` half has a
+structurally zero delta from this change, and it is measured rather than argued.** Its call-count
+sub-bars (`legalMoves` exactly 1, `zobristKey` at most 1) are untouched by construction — this change
+adds no call.
+
+### `NFR-005` — the exclusion is STRUCTURAL, CONFIRMED TWO WAYS, and the benchmark was NOT re-run
+
+The ticket says to state this structurally and not to re-run the key benchmark to "confirm" a
+structural zero. That instruction was followed, and the **premise was verified rather than accepted**:
+
+1. **By bytes.** `src/zobrist.ts` is **byte-identical to `main`** (md5 `630fceddcd6af786e73ebdf1f65afa58`
+   on both), as are `src/zobrist.test.ts` and `src/zobrist.nfr.test.ts`. With comments and blank lines
+   stripped, `src/legal.ts` (**49** code lines) and `src/legal.test.ts` (**236** code lines) are
+   `cmp`-**IDENTICAL** to `main`. No executable line entered either file.
+2. **By the call graph, which is the stronger of the two and is new here.** `hasLegalEnPassant` — the
+   one predicate `src/zobrist.ts` imports from `src/legal.ts` — calls only `isBlack`, `isOnBoard`,
+   `isSquareAttackedBy`, `kingSquareOf`, `makeMove` and `unmakeMove`. **It never calls
+   `generateMoves` or `legalMoves` at all**, so the Zobrist path does not even reach the changed
+   function. The exclusion does not rest on the byte comparison alone.
+
+**No `NFR-005` figure is reported here, because none was measured.**
+
+### The other NFR rows, checked rather than assumed
+
+- **`NFR-002`** (terminal renderer, `EPIC-002`) — **structurally untouched.** `src/frame.ts`,
+  `src/render.ts` and `src/glyph-mode.ts` import nothing that reaches the generator (checked at the
+  import graph, not assumed).
+- **`NFR-003`** — **its second component IS downstream and the ticket's trigger block does not name
+  it.** `src/history.ts:gameStatusOf` -> `gameStatus` -> `legalMoves` -> `generateMoves`. Measured
+  rather than left as a worry: the per-call bound above (**<= 1 evaluation per `generateMoves` call,
+  0 when `epSquare` is unset**) makes the delta structurally negligible against a bar measured in
+  tens of microseconds. **`NFR-003` is untouched** — but the trigger block should say so. Recorded as
+  an accepted risk, owner BA/PM.
+- **`NFR-004`, `NFR-006`, `NFR-007`** — `EPIC-004` / `EPIC-005` / `EPIC-006`, none built; nothing on
+  this branch reaches them.
+
+### The security classification — CHECKED against ASVS L1, NOT inherited, and it holds
+
+The ticket claims no security trigger and says *"do not inflate it."* **That classification is
+correct, and this gate can give it a stronger reason than the ticket has.** The module is not merely
+free of sinks — **it is unreachable from any input surface that exists.**
+
+Everything below was **grepped at the source across all thirteen non-test files under `src/`**, not
+assumed: zero `eval` / `new Function` / `vm` / `require(`; zero `child_process`; zero
+`node:net|tls|http|https|dgram`, zero `fetch`; zero `node:fs` / `node:path` / any file operation;
+zero SQL, HTML, XML, DOM or URL sinks; zero `node:crypto`, passwords, secrets, tokens or API keys;
+zero `JSON.parse` or other deserialization. `src/moves.ts` reads no `process.argv`, `process.stdin`
+or `process.env`; the only such reads anywhere are `src/glyph-mode.ts`'s (a different module,
+`EPIC-002`) and the only logging in non-test `src/` is `src/perft-bench.ts`'s `console.log`.
+
+**The call graph closes it.** `addPawnMoves` is **module-private** — not exported, and its only
+caller is `generateMoves`. `generateMoves`' **only** non-test caller in the entire repository is
+`src/legal.ts:46` (`legalMoves`). `parseFen`'s only non-test callers are `src/history.ts` — which has
+**zero non-test importers** — and `src/perft-bench.ts`, which passes **hardcoded FENs**. There is no
+`bin`, no `main`, no `exports` in `package.json`, **no runtime dependency at all** (`dependencies` is
+`{}`), and no CLI entry point until `EPIC-006`. **No user-supplied string reaches `src/moves.ts`, and
+no user surface exists at all.** The consequence of the defect is a wrong chess answer and a
+corrupted in-memory board: **reliability, not security.** The 2026-07-29 architecture audit gave
+`ABC-009` the same classification and nothing here overturns it.
+
+**One security-shaped question this change genuinely raises was asked and answered.** The fix adds a
+board read whose index is **derived from `epSquare`** (`position.board[to - forward]`). Whether a
+crafted `epSquare` can make that read throw or wander is an availability question, and **it is the
+one axis nobody on this ticket swept** — BA/PM's 131,072-state sweep varied the two *bytes* the guard
+reads, and its own soft-edge note says *"I did not sweep `epSquare` values, off-board targets,
+kingless boards."* Swept here, exhaustively, on two base positions x **`epSquare` = -1..255** = **514
+states** (128 on-board 0x88-valid, 386 off-board or out of range), each base FEN printed and
+re-parsed:
+
+```
+                        states that THREW    states offering an ep move
+t-fix   (branch tip)            0                      2   <- the two genuinely valid ones
+t-pristine (main)               0                      4   <- + 0x55 (f6) white, 0x22 (c3) black
+```
+
+**Zero throws on either tree.** An out-of-range index into the `Uint8Array(128)` board yields
+`undefined`, which fails the `=== capturedPawn` comparison, so **the added guard fails closed** — no
+crash, no out-of-range access, no denial-of-service shape, on any `epSquare` value. And the change
+**halves** the emitting surface over that domain, from 4 states to 2: the two extra states on `main`
+are exactly this ticket's over-offers, on the *other* capture side. **The one security-adjacent
+property this change touches comes out in the change's favour.** `parseFen` cannot produce an
+off-board `epSquare`, so those states were written directly onto the position — a direct-write
+instrument limit, stated rather than glossed.
+
+**ASVS L1 counted at the source: 70 active requirements** of the standard's 345, and **V16 and V17
+carry no L1 requirement at all** (29 rows between them, zero at L1) — counted, not assumed.
+
+- **V2.2.1 — PASS, and this change is the thing that makes it pass.** The requirement is that input
+  is validated against "an expected structure and logical limits according to predefined rules." The
+  predefined rules were written in `src/moves.ts`'s own comment and enforced by nothing; the fix
+  enforces both at the point of use. Measured above: 2 emitting states over the `epSquare` domain
+  where `main` had 4.
+- **V2.1.1 — PASS on the syntactic half, boundary half OWNED.** `src/fen.ts` documents the FEN rules
+  and names every rejection; `src/moves.ts` 183-195 now documents the en-passant preconditions **and**
+  enforces them. The **semantic** rules are documented in `ABC-010` and not implemented — accepted
+  risk 1.
+- **V2.2.2, V2.3.1, V5.2.1, V15.3.1 — PASS BY ANALOGUE**, each labelled by analogue rather than as a
+  literal pass. V2.2.2: the validation sits in the rules core, the trusted layer, and there is no
+  client. V5.2.1: the input is a fixed 128-byte board and the added work is bounded at <= 1
+  evaluation per call, so no input size drives cost. V15.3.1: the change makes the returned set
+  strictly **narrower** — it stops emitting a move whose `captured` field claims a piece the board
+  does not hold.
+- **V1.2.1-1.2.5, V1.3.1, V1.3.2, V1.5.1, V3.x (8 rows), V4.1.1, V4.4.1, V5.2.2, V5.3.1, V5.3.2,
+  V6.x (13 rows), V7.x (6 rows), V8.x (4 rows), V9.x (4 rows), V10.4.x (5 rows), V12.1.1, V12.2.1,
+  V12.2.2, V14.2.1, V14.3.1 — N/A**, each because the surface does not exist, each grepped rather
+  than waved away. **V7 session management is NAMED as N/A rather than skipped.**
+- **V11.3.1 / V11.3.2 / V11.4.1 — N/A, and named rather than passed over in silence** because a
+  reader grepping for "hash" will find `src/zobrist.ts`. Its hash is a **Zobrist position key** — a
+  non-cryptographic XOR over a fixed random table, used for transposition lookup. It is not a
+  "general cryptographic use case": no signature, no HMAC, no KDF, no random-bit generation. It is
+  also untouched by this ticket.
+- **V13.4.1 — DEFERRED and NOT relaxed.** Owner Architect/Design at `EPIC-006`; this project deploys
+  nowhere (`ADR-0007`), and `plans/nfr-catalog.md`'s "Two ASVS deferrals DO depend on packaging"
+  section already records it.
+- **V15.1.1 and V15.2.1 — NOT MET, and the carried `high` -> `low` override is RE-TAKEN on
+  re-measured evidence rather than inherited.** An L1 fail defaults to **high**, which `block_on:
+  high` would block on, so this is the one place the verdict turned on a judgement and it is stated
+  as one. Re-measured here: runtime `dependencies` is **`{}`**; `package.json` and
+  `package-lock.json` are **byte-identical to `main` on this branch** (`git diff --stat main --` is
+  empty); the five devDependencies are build and test tooling that ship in nothing; there is no
+  `bin`, no `main`, no `exports`, and no published artifact. **The requirement's risk — a vulnerable
+  third-party component reaching a running system — has no delivery path today.** Override to **low**,
+  reason stated, **owner Architect/Design at `EPIC-006`**, because packaging is what creates the
+  delivery path and with it the obligation. **`ABC-022` did not cause this and does not worsen it:
+  it changes no dependency.**
+
+**Logging: looked for, and the honest finding is that there is nothing to log.** A failure mode with
+no log is normally what this gate flags. It does not apply: the module logs nothing, V16 carries zero
+L1 requirements, and the fix **eliminates** the failure mode rather than instrumenting it. **No
+logging is asked for** (rules 5 and 8).
+
+### Thirteen accepted risks, none high, none unowned
+
+| # | risk | severity | owner |
+| --- | --- | --- | --- |
+| 1 | **`ABC-010` unbuilt, so the semantically invalid FEN is still ACCEPTED at the boundary.** Verified at the source: `src/fen.ts` 170-176 takes any well-formed square name as `epSquare` with **no** consistency check against the board | low | **`ABC-010`** (`Backlog`, `status: backlog`, `priority: P1`, `EPIC-003` — re-checked at the source here) |
+| 2 | **The reciprocal of risk 1: `ABC-022`'s guards must NOT be deleted when `ABC-010` lands.** Same shape as `ABC-011`'s guard (a) — the module's contract must not depend on a caller having validated its input, which is the assumption that failed here in the first place. `ABC-010` as written also does **not** close half (a)'s trigger, which the ticket's `## Dependencies` already flags | low | **BA/PM** at `ABC-010`'s refinement |
+| 3 | **The escalation trigger is unspent and is what would raise risk 1's severity.** Re-checked clause by clause at the source: `ABC-010` is in `Backlog`, neither deferred nor descoped; `EPIC-003` is in `Backlog` and accepts no position from outside the rules core. **NOT FIRED** | low | **Orchestrator** at merge/close; **BA/PM** at `EPIC-003` decomposition |
+| 4 | **`A5`'s enemy-occupant axis is still a sample of two piece types** — QE's, deliberately left, not re-derived here | low | **`ABC-023`** / BA/PM at its promotion hop |
+| 5 | **`src/moves.castling.test.ts` 7-10 / 98-99 present-tense sites** — `ABC-009`'s, not re-measured here | low | **`ABC-023`** / BA/PM |
+| 6 | **`ADR-0005` 133-138 carries the falsified premise and was UNOWNED.** This gate does not amend it and does not adopt it, but an accepted risk with no owner is a risk nobody fixes, so **an owner is named here**: amending an `accepted` ADR is an Architect ruling on this board's own precedent, and the trigger is `ABC-022`'s merge, after which both witnesses are false on `main` rather than on a branch | low | **Architect/Design**, trigger: `ABC-022` merged |
+| 7 | **`ABC-023`'s `A4` hash pin is stale** (`src/moves.ts` is `6335b452…`) — deferred by design, nothing here touched it | low | **BA/PM** at `ABC-023`'s promotion hop |
+| 8 | **Test-integrity checker exits 2 — an ERROR, not a pass.** Re-run here; `.grugops/test-skips.md` absent, checked with `ls`; **no registry file created** | low | **human / Orchestrator** (nobody else may author it) |
+| 9 | **`NFR-001` per-cell and per-run figures are noise and must never be quoted** — this gate's null control deviates **23.1x** the signal | low | **Security/NFR** (standing) |
+| 10 | **CANDIDATE ELEVENTH INSTRUMENT-LIMIT CORRECTION for `plans/nfr-catalog.md`, NAMED AND ROUTED rather than applied** — this subtask forbids editing that file. The byte-identical twin's own **aggregate** readings span **3.91% peak-to-peak** on identical code, against the ~±1% aggregate floor the catalog's 2026-08-09 header records. On this evidence the aggregate floor is **at least as wide as the per-cell floor**, and the ≥ 0.98 bar's 2-point margin does **not** comfortably exceed resolution. Four rounds, one machine — a smaller sample than the figure it questions, and said so | low | **Security/NFR** at the next gate that measures `NFR-001`; **Architect/Design** as the catalog's seed owner |
+| 11 | **`NFR-003`'s second component is downstream of the changed function and the ticket's trigger block does not name it.** Harmless — the per-call bound is measured above — but the block should say so | low | **BA/PM** (the trigger block is the ticket's) |
+| 12 | **All throughput figures are one machine** — Apple M3 / Node v24.12.0 / darwin-arm64; `UNKNOWN - verify` anywhere else | low | **Security/NFR** (standing) |
+| 13 | **E2E and the auto-UAT oracle slot are `UNKNOWN - verify`**, and **bytes that are not valid piece codes remain beyond every in-repo instrument** — BA/PM's out-of-repo sweeps are still the only cover and this gate did not re-derive them | low | **human / `EPIC-006`**; **QE / BA-PM** for the byte space |
+
+### What this gate does NOT establish
+
+It did not re-derive QE's fourteen-tree mutation campaign, the three surviving builds, the 120
+hardening rows, the 8-vs-23 disjoint split, BA/PM's 512-state or 131,072-state sweeps, or the
+`A1`-`A9` / `A11` verdicts — those are QE's and BA/PM's and re-running them here would spend a hop
+restating another role's numbers. **`A10` is the criterion this gate owns and it is MET on every
+clause.** The `epSquare`-value sweep widens the covered domain along one axis; it says nothing about
+board populations, other move types, or other `epSquare` bases.
 
 ## Board history
 

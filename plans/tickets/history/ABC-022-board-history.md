@@ -12,6 +12,139 @@ Entries appear in the order they stood in `board.md` (newest first, as the board
 
 ---
 
+## In Security/NFR (WIP 0/2) — the Security/NFR exit
+
+EXITED 2026-08-09 by Security/NFR (task `ticket-to-pr-ABC-022`, subtask `security-nfr-abc022-gate`,
+Workflow 04): **ABC-022 -> Ready for UAT on PASS_WITH_RISKS. In Security/NFR 1/2 -> 0/2, Ready for
+UAT 0/4 -> 1/4.** No limit approached, no override taken, no written reason owed. The
+`In Security/NFR` exit is the one board move this role owns; **nobody was enqueued** — the
+Orchestrator owns decompose->enqueue — and **UAT WAS NOT RULED ON**, which is the Orchestrator's
+along with the merge. All 12 numbered column headings re-verified against their live row counts
+(**0 mismatches**). NOTHING MERGED, NOTHING DEPLOYED.
+
+Gated against `security.asvs_level` **L1** and `security.block_on` **high**. `compliance_regime` is
+**`[]`**, so **no Compliance Officer hand-off is owed** — recorded rather than silently omitted.
+**NO REQUIRED FIX AND NO HIGH-SEVERITY ITEM.** Thirteen accepted risks, each with a severity and a
+**named owner** — including **`ADR-0005` 133-138, which had been carried UNOWNED through three hops
+and now has an owner (Architect/Design) and a trigger (this ticket's merge)**, because an accepted
+risk nobody owns is a risk nobody fixes.
+
+**`src/moves.ts` WAS NOT TOUCHED** — still md5 `6335b452fc21ffe2d0f902ecab930840`, so the board's
+standing record holds for a **fifth** gate: no gate has ever repaired the module to make its own
+verdict green. `## Acceptance` not edited (`7123d5c641045a44c6f63c2c20dab415` before and after);
+`plans/nfr-catalog.md` not edited and no target moved; `ABC-023`, `ABC-009`, `ABC-010`, `ABC-011`,
+`ADR-0005` and `memory-bank/` untouched; `git status --short -- src/` empty.
+
+**NOTHING INHERITED.** Five tree copies outside the repository, one OS process per tree,
+`tsc --noEmit` exit 0 on every tree before any result was believed, every probe printing its FEN and
+re-parsing it. **One instrument failure recorded rather than glossed:** the first typecheck of the
+instrumented tree exited 2 on `TS1375` — a top-level `await` in one of **this gate's own probe
+files**, not in the module under test. Fixed and re-checked to exit 0 before any count was believed.
+
+**THE FOUR MANDATORY GATES RE-RUN ON THE TIP:** lint exit 0 (35 files, the 2 pre-existing
+`biome.json` infos), typecheck exit 0, build exit 0, `npm test` **559 passed (559) on 18 files**,
+skip count **0** by the AGENTS.md command, perft fast lane 24/24, and `PERFT_DEEP=1` **32/32 EXACT
+in 36.06 s** — a fourth independent run of that lane on this ticket, agreeing with 36.55 s
+(Engineer), 36.50 s (Orchestrator) and 36.85 / 38.15 s (QE). Test-integrity checker exits **2**
+(`.grugops/test-skips.md` absent, checked with `ls`) — recorded as an **ERROR, not a pass**, and no
+registry file was created. E2E and auto-UAT oracles `UNKNOWN - verify`.
+
+**`NFR-001` / `A10` MET ON EVERY CLAUSE, AND THE AMENDED METHOD WAS FOLLOWED — THE COUNT IS PRIMARY.**
+**331 evaluations / 216,269 for the rejected placement / 0 rejections** over the standing
+518,474-node walk (18,357 non-leaf nodes), roots and `fast` depths parsed out of `src/perft.test.ts`
+and the walk driven by `legalMoves` alone — **a FOURTH independent derivation, exact**. **TWO FIGURES
+NO PRIOR HOP HAD:** the count over the **clock's own** population (`npm run perft`'s 11,377,922
+nodes) is **4,177 / 3,417,014 / 0**, because the 331 figure's denominator is a different population
+and pricing the clock with it would be an apples-to-oranges error; and the **per-call bound** is
+**at most 1 evaluation in any single `generateMoves` call** over all 18,357 calls (mean 0.018).
+By arithmetic **labelled arithmetic**: 0.00023% at 1 ns per evaluation, 0.0023% at a generous 10 ns —
+three orders of magnitude below what the instrument resolves. **The ordering decision is what keeps
+it unmeasurable and that is now priced on the clock's own population:** the rejected placement is
+**818x** more executions, which is 0.19%-1.88% by the same arithmetic — inside the bar but within its
+own 2-point margin at the top. **No change asked for** (rules 5, 9, 10).
+
+**Floor 6,172,810 nodes/sec** against >= 1,000,000 (~6.17x), lowest of 12 scored readings
+**6,030,890** (~6.03x). **Aggregate ratio 0.9996** against >= 0.98. Three trees, one process per
+reading, order rotated every round, a discarded warm-up, node count checksummed identical at
+11,377,922 on all 15 readings. **THE NULL CONTROL DECIDES HOW TO READ IT: a `cmp`-verified
+byte-identical twin (31/31 files) deviates 0.914% from the tree it is IDENTICAL to — 23.1x the fix's
+apparent 0.039% cost — and the lowest reading in the whole sample is the TWIN's.** No per-cell and no
+per-run cost claim is admissible; the catalog's standing caution held for a fifth ticket running.
+**A CANDIDATE ELEVENTH INSTRUMENT-LIMIT CORRECTION IS NAMED AND ROUTED, NOT APPLIED** (this subtask
+forbids editing the catalog): the twin's own **aggregate** readings span **3.91% peak-to-peak** on
+identical code, against the ~±1% aggregate floor the catalog records — so the aggregate floor is at
+least as wide as the per-cell one and the bar's 2-point margin does not comfortably exceed
+resolution. Four rounds, one machine, and said so.
+
+**THE STRUCTURALLY-ZERO CELL WAS READ FIRST, as the catalog's method requires, and it matters because
+`NFR-001`'s SECOND consumer is `gameStatus`:** `gameStatus(startpos, emptyMap)` evaluates the added
+conditions **0 times** — `NO_SQUARE` is -1 and `to` is always an on-board 0x88 index, so the guard is
+unreachable whenever no ep square is set. That half of `NFR-001` has a **structurally zero** delta,
+measured rather than argued.
+
+**`NFR-005` EXCLUDED STRUCTURALLY AND CONFIRMED TWO WAYS, benchmark NOT re-run** as the ticket
+instructs: `src/zobrist.ts` is byte-identical to `main` (md5 `630fcedd…` both sides) and
+`src/legal.ts` / `src/legal.test.ts` are `cmp`-identical to `main` once comments are stripped (49 and
+236 code lines); **and, the stronger one, `hasLegalEnPassant` — the only thing `src/zobrist.ts`
+imports from `src/legal.ts` — never calls `generateMoves` or `legalMoves` at all**, so the Zobrist
+path does not even reach the changed function. **`NFR-002` structurally untouched** (the renderer
+modules import nothing reaching the generator). **`NFR-003`'s second component IS downstream and the
+ticket's trigger block does not name it** — harmless given the measured per-call bound, but recorded
+as an owned risk.
+
+**THE SECURITY CLASSIFICATION WAS CHECKED AGAINST ASVS L1 RATHER THAN INHERITED, AND IT HOLDS —
+RELIABILITY, NOT SECURITY, AND NOTHING WAS INFLATED.** Grepped at the source across all thirteen
+non-test files: zero `eval` / `new Function` / `vm`, zero `child_process`, zero network imports or
+`fetch`, zero filesystem or path building, zero SQL/HTML/XML/DOM/URL sinks, zero crypto or secrets,
+zero deserialization. **The call graph closes it:** `addPawnMoves` is module-private, `generateMoves`'
+only non-test caller in the repository is `src/legal.ts:46`, `parseFen`'s only non-test callers are
+`src/history.ts` (**zero non-test importers**) and `src/perft-bench.ts` (hardcoded FENs), and
+`package.json` has no `bin`, no `main` and **no runtime dependency at all**. **No user-supplied string
+reaches `src/moves.ts` and no user surface exists.** **ASVS L1 counted at the source: 70 active
+requirements; V16 and V17 carry NO L1 requirement at all** (29 rows, zero at L1). **V2.2.1 PASSES
+BECAUSE OF THIS CHANGE** — the module now enforces the preconditions its own comment states.
+V2.1.1 passes on the syntactic half with the boundary half owned by `ABC-010`; V2.2.2 / V2.3.1 /
+V5.2.1 / V15.3.1 pass **by analogue**, each labelled as such; V7 session management is **named** N/A
+rather than skipped; V11's rows are named N/A with `src/zobrist.ts`'s non-cryptographic position key
+called out so a future reader grepping "hash" is answered. **V13.4.1 DEFERRED and not relaxed.**
+**V15.1.1 / V15.2.1 NOT MET — an L1 fail defaults to HIGH, which `block_on: high` would block on, so
+the carried high -> low override was RE-TAKEN on re-measured evidence rather than inherited:** runtime
+`dependencies` is `{}`, `package.json` and `package-lock.json` are byte-identical to `main` on this
+branch, and there is no published artifact, so the requirement's risk has **no delivery path today**.
+Reason stated, **owner Architect/Design at `EPIC-006`**, and `ABC-022` neither caused nor worsened it.
+
+**THE ONE SECURITY-SHAPED QUESTION THIS CHANGE ACTUALLY RAISES WAS ASKED AND ANSWERED, ON THE ONE AXIS
+NOBODY HAD SWEPT.** The fix adds a board read indexed off `epSquare` (`position.board[to - forward]`),
+and BA/PM's own soft-edge note says the `epSquare` **value** domain was never swept. Swept here:
+two base positions x `epSquare` = -1..255 = **514 states** (128 on-board, 386 off-board or out of
+range, written directly because `parseFen` cannot produce an off-board ep square — an instrument
+limit stated, not glossed). **Zero throws on the fix AND on `main`**: an out-of-range index into the
+`Uint8Array(128)` board yields `undefined`, the comparison fails, and **the guard fails closed** — no
+crash, no out-of-range access, no denial-of-service shape. **The fix HALVES the emitting surface over
+that domain, 4 states -> 2**, the two extra states on `main` being this ticket's over-offers on the
+other capture side. The one security-adjacent property this change touches comes out **in the
+change's favour**.
+
+**LOGGING WAS LOOKED FOR AND THE HONEST FINDING IS THAT THERE IS NOTHING TO LOG:** the module logs
+nothing, V16 carries zero L1 rows, and the fix **eliminates** the failure mode rather than
+instrumenting it. No logging was asked for (rules 5 and 8).
+
+**WHAT THIS GATE DID NOT ESTABLISH:** QE's fourteen-tree campaign, the three survivors, the 120
+hardening rows, the 8-vs-23 split, BA/PM's 512-state and 131,072-state sweeps and the `A1`-`A9` /
+`A11` verdicts were **not** re-derived — they are QE's and BA/PM's, and re-running them would spend a
+hop restating another role's numbers. `A10` is the criterion this gate owns.
+
+---
+
+## The `_Updated:` board header this hop replaced, preserved VERBATIM
+
+Per `plans/board.md`'s own rule the header is replaced rather than stacked, and the replaced text is
+kept here so nothing is lost:
+
+_Updated: 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-022`, Workflow 04): **`ABC-022` PASSES the `In Review` gate. In Review 1/3 -> 0/3, In Security/NFR 0/2 -> 1/2.** No limit approached, no override taken; ticket frontmatter moved with the column. `src/moves.ts` NOT touched (md5 `6335b452…`); `## Acceptance` NOT edited (md5 `7123d5c6…`). Suite **439 -> 559 on 18 files** — QE added `src/moves.enpassant.hardening.test.ts`, 120 rows all green on the delivered fix. NOTHING MERGED, NOTHING DEPLOYED. **What was measured, what survived and what is still open: `plans/tickets/history/ABC-022-board-history.md` and `.grugops/context/ticket-to-pr-ABC-022/notes/`.** (The 2026-08-10 board-tidy header this replaces is preserved verbatim in that same history file, per the rule below.)_
+
+---
+
 ## In Review (WIP 0/3) — the QE exit
 
 EXITED 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-022`, subtask `qe-abc022-review`, Workflow 04):

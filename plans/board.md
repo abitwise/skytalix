@@ -1,6 +1,6 @@
 # Board
 
-_Updated: 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-022`, Workflow 04): **`ABC-022` PASSES the `In Review` gate. In Review 1/3 -> 0/3, In Security/NFR 0/2 -> 1/2.** No limit approached, no override taken; ticket frontmatter moved with the column. `src/moves.ts` NOT touched (md5 `6335b452…`); `## Acceptance` NOT edited (md5 `7123d5c6…`). Suite **439 -> 559 on 18 files** — QE added `src/moves.enpassant.hardening.test.ts`, 120 rows all green on the delivered fix. NOTHING MERGED, NOTHING DEPLOYED. **What was measured, what survived and what is still open: `plans/tickets/history/ABC-022-board-history.md` and `.grugops/context/ticket-to-pr-ABC-022/notes/`.** (The 2026-08-10 board-tidy header this replaces is preserved verbatim in that same history file, per the rule below.)_
+_Updated: 2026-08-09 by Security/NFR (task `ticket-to-pr-ABC-022`, subtask `security-nfr-abc022-gate`, Workflow 04): **`ABC-022` PASSES the risk/NFR gate — PASS_WITH_RISKS. In Security/NFR 1/2 -> 0/2, Ready for UAT 0/4 -> 1/4.** No limit approached, no override taken; ticket frontmatter moved with the column. NO REQUIRED FIX, NO HIGH-SEVERITY ITEM, 13 accepted risks each with a NAMED OWNER — including `ADR-0005` 133-138, which had none until this hop. `src/moves.ts` NOT touched (md5 `6335b452…`, a fifth gate); `## Acceptance` NOT edited (md5 `7123d5c6…`); `plans/nfr-catalog.md` NOT edited and no target moved. **`NFR-001` / `A10` MET on every clause, nothing inherited:** count **331 / 216,269 / 0** (a fourth independent derivation) plus **4,177 / 3,417,014 / 0** over the clock's own population and a measured **<= 1 evaluation per `generateMoves` call**; floor **6,172,810 nodes/sec** vs >= 1M; aggregate ratio **0.9996** vs >= 0.98 with a byte-identical null control deviating **23.1x the signal**; deep lane **32/32 in 36.06 s**. **`NFR-005` excluded structurally, confirmed TWO ways** (bytes, and `hasLegalEnPassant` never calling the generator) and the benchmark NOT re-run. **Security classification CHECKED against ASVS L1, not inherited, and it HOLDS** — reliability, not security; the `epSquare` value domain nobody had swept reads **0 throws over 514 states** on both trees and the fix HALVES the emitting surface. **UAT NOT ruled on — the Orchestrator's.** NOTHING MERGED, NOTHING DEPLOYED. **Detail: `plans/tickets/history/ABC-022-board-history.md` and `.grugops/context/ticket-to-pr-ABC-022/notes/`.** (The QE header this replaces is preserved verbatim in that same history file, per the rule below.)_
 
 **Per-hop detail lives with its ticket, not here:** `plans/tickets/history/<ID>-board-history.md`.
 
@@ -109,11 +109,11 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## In Review (WIP 0/3)
 
-## In Security/NFR (WIP 1/2)
+## In Security/NFR (WIP 0/2)
 
-- [ABC-022] generateMoves offers en-passant captures its own preconditions forbid  (size: S, P1, epic: EPIC-001, deps: none; entered 2026-08-09 by QE/E2E on a PASS, Workflow 04)
+## Ready for UAT (WIP 1/4)
 
-## Ready for UAT (WIP 0/4)
+- [ABC-022] generateMoves offers en-passant captures its own preconditions forbid  (size: S, P1, epic: EPIC-001, deps: none; entered 2026-08-09 by Security/NFR on PASS_WITH_RISKS, Workflow 04)
 
 ## In UAT (WIP 0/4)
 
