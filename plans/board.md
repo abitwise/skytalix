@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-08-09 by Security/NFR (task `ticket-to-pr-ABC-009`, subtask `sec-abc009-nfr`, Workflow 04): **`ABC-009` PASSES WITH RISKS and moved `In Security/NFR` → `Ready for UAT`** — the one exit this role owns. `In Security/NFR` **1/2 → 0/2**, `Ready for UAT` **0/4 → 1/4**; no limit approached, no override taken, no written reason owed. Every column's header count was re-verified against its line-item count (12 columns, 0 wrong). **NOTHING MERGED AND NOTHING DEPLOYED — a human holds both, and the owner's standing merge authority is NOT deploy authority.** Gated against `security.asvs_level` **L1** and `security.block_on` **high**; `compliance_regime` is `[]`, so **no Compliance Officer hand-off is owed** — recorded rather than silently omitted. **NO REQUIRED FIX IS OUTSTANDING AND NO HIGH-SEVERITY ITEM EXISTS TO BLOCK ON.** **`NFR-001` RE-DERIVED ON THIS GATE'S OWN INSTRUMENTS AND MET ON BOTH CLAUSES** — floor 6,030,518 / 6,136,238 / 6,117,496 nodes/sec against ≥ 1,000,000, aggregate ratio **1.0062 and 0.9967** against ≥ 0.98 on two independent samples, deep lane 32/32 in 38.49 s; three trees in one process with a `cmp`-verified byte-identical twin as a null control. **THE PER-CELL QUESTION THE ENGINEER COULD NOT RESOLVE IS RESOLVED BY COUNTING INSTEAD OF TIMING:** the two added lines execute **396,350 times** over the sweep and **reject nothing in any cell**, cost 0.33–0.43 ns each in isolation, so the whole change costs **~0.01%** — true ratio ≈ 0.9999, **kiwipete ≈ 0.9998**, and the 0.9930 reading is ~35x the true deviation. Their ±1% reasoning **HOLDS** but the estimate is **optimistic**: measured ±2.0% per cell and a previously-uncharacterised ~±1% aggregate floor. **GUARD ORDERING, ROUTED HERE BY QE, IS ADJUDICATED AND THE BEHAVIOUR HALF DISCHARGED:** the five guards are a conjunction of side-effect-free predicates, hence **permutation-invariant** (99 comparisons, zero divergence, all six perft counts exact per variant), so **no later reorder can silently break the equivalence QE relied on**; ordering is a cost question only and **no change is asked for**. **SECURITY CLASSIFICATION RE-ASKED AT THE SOURCE AND UNCHANGED: RELIABILITY, NOT SECURITY** — no sink, no trust boundary, no user-supplied string reaches `src/moves.ts`, all grepped rather than assumed; no trigger manufactured. **TEN RISKS CARRIED, NONE HIGH, EACH WITH A NAMED OWNER.** `src/moves.ts` untouched by this role (`0e247853ab2c05887c76105ff83d8621`); `plans/nfr-catalog.md`'s `NFR-001` row updated and **no target moved**, verified by hashing the cells before and after._
 _Updated: 2026-08-09 by QE/E2E (task `ticket-to-pr-ABC-009`, subtask `qe-abc009-review`, Workflow 04): **`ABC-009` PASSES WITH RISKS and moved `In Review` → `In Security/NFR`** — the one exit this role owns. `In Review` **1/3 → 0/3**, `In Security/NFR` **0/2 → 1/2**; no limit approached, no override taken, no written reason owed. `NFR-001` is triggered, so `In Security/NFR` is the next column rather than UAT. **NOTHING MERGED AND NOTHING DEPLOYED — a human holds both.** **62 MUTANTS RUN AGAINST THE DELIVERED DIFF; FIVE SURVIVE THE ENTIRE NET — all twelve criteria, all 337 delivered tests AND the `PERFT_DEEP=1` lane at 32/32 — AND NOT ONE OF THE FIVE IS A DEFECT IN THE CODE.** All five are defects in the **criteria**; the delivered fix is correct on every position that exposes them, which is why this is a pass and not a return to dev. `src/moves.ts` is **byte-identical** to `8f540cf` (md5 `0e247853ab2c05887c76105ff83d8621`, the digest the Engineer published). **THE FIFTH MUTANT THE ENGINEER HANDED OVER IS DECIDED: the colour-blind equivalence argument HOLDS and NO CRITERION IS OWED** — corroborated on a differently-built instrument (12,584 positions `parseFen` **accepts**, varying three squares jointly, three king placements, **both rights at once** and the black-to-move mirror, against the Engineer's 9,604 over two squares plus one extra piece) with **zero** divergence at `generateMoves`, at `legalMoves` and on purity; a colour criterion would pass on `main`'s unfixed tree, on the fix and on the mutant alike, so it is unfalsifiable and would be theatre. **THE SOFT SPOT NOBODY HAD EXAMINED — a criterion set written over signals that AGREE — IS NOW EXAMINED, AND IT IS WHERE ALL FIVE LIVE:** such a set hides the dimensions it holds **constant**, and two are constant across all twelve rows — **`G-1`** the impostor's PIECE TYPE (`A5`/`A6` use a bishop and a knight, satisfying "at least two piece types" literally, while the rule quantifies over ALL other bytes; a guard reading either home square as "the mover's KING/ROOK **or QUEEN**" is green on everything, and on `4k3/8/8/8/8/8/8/K3Q2R w K - 0 1` one `legalMoves` call **DESTROYS A QUEEN** and writes a king over it), and **`G-2`** HOW MANY of a side's rights are held (every criterion FEN carries at most one right per side except the reproduction FEN where BOTH castles are invalid, so nothing separates *"this option was rejected"* from *"the option loop was abandoned"* — `continue` → `break` on the **rook** guard **DELETES A LEGAL CASTLE** on `4k3/8/8/8/8/8/8/R3K3 w KQ - 0 1`, 16 moves / 1 castle becoming 15 / 0, and is green on all twelve; the **same** mutation on the **king** guard is genuinely equivalent because both options share `kingFrom` — one token, two opposite verdicts, one green). **`A8` AND `A9` CANNOT COVER EITHER DIMENSION, STRUCTURALLY, AND BY THE ENGINEER'S OWN ARGUMENT:** in any legally-reachable position the right being set implies both pieces are home, so the two new guards never fire and a mutation to them cannot change a perft node — measured, not argued, all five survive `PERFT_DEEP=1` at 32/32. **CLOSED IN TESTS ONLY, ZERO PRODUCTION LINES:** `src/moves.castling.hardening.test.ts` is NEW (19 tests, all green on the delivered fix), the Engineer's `src/moves.castling.test.ts` is **untouched**, and **every one of the fourteen test files on `main` is unmodified — checked by diffing each individually**, so `A8`'s line-level requirement holds for this role's work too. The rows are proved load-bearing by re-running the whole campaign with them present: **47 → 53 killed, 15 → 9 survived**, with **six mutants dying to these rows and nothing else in the suite** — and **the nine behaviour-equivalent survivors still survive**, which is what proves the rows pin observable behaviour rather than the shape of the implementation. **`A7` KILLED NOTHING ACROSS 62 MUTANTS** (the ticket already says it asserts count equality rather than correctness; measured on one build at refinement, now on 62). Gates re-run on the tip by this role, before and after the added rows: lint 0 (my file alone reports zero), typecheck 0, build 0, `npm test` **337/337 then 356/356 on 16 files**, skip count **0** both times by the `AGENTS.md` command, deep lane **32/32 exact in 38.35 s**. All fifteen `A1`–`A6` counts re-derived on a **fifth** independent derivation over 128 bytes and five scalars with **zero** bytes changed; both over-rejection controls hold (kiwipete 48 / 2, `r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1` 26 / 2). Test-integrity checker **exit 2** (`.grugops/test-skips.md` absent) recorded as an **ERROR and not a pass**, no registry file created; E2E and the auto-UAT oracles `UNKNOWN - verify`. **`NFR-001` was NOT re-measured by this role, deliberately — that gate follows and owns it**; the caveat that matters is the Engineer's own per-cell floor of ~±1%, larger than any signal, so **kiwipete's 0.9930 is NOT a regression**. Routed and not discharged here: `G-1`/`G-2` as criteria text and `A7`'s null discrimination to **BA/PM**, the ordering rationale to **Security/NFR**. `ABC-022` half (b) still live **by design**. Five notes published, **no `finding`** among them (none is admissible on this task) and **nothing self-stamped**; no `index.md`/`index.jsonl` hand-faked. Subtask claimed and closed **by hand** — this install has no `scripts/`. **Security/NFR was NOT enqueued — the Orchestrator owns decompose→enqueue.**
 _Updated: 2026-08-09 by the Software Engineer (task `ticket-to-pr-ABC-009`, subtask `engineer-abc009-implement`, Workflow 04): **`ABC-009` IMPLEMENTED AND MOVED `In Development` → `In Review`** — the one board move this role owns. `In Development` **1/3 → 0/3**, `In Review` **0/3 → 1/3**; no limit approached, no override taken, no written reason owed. **ONE PRODUCTION FILE CHANGED (`src/moves.ts`, +30 −8) AND ONE TEST FILE ADDED (`src/moves.castling.test.ts`); NOT ONE EXISTING TEST FILE TOUCHED — verified at LINE level as `A8` demands, not by inspection:** `git diff --name-only -- 'src/*.test.ts'` is **empty**, and the new tests went into a NEW file precisely so that claim is mechanical. **THE FIX:** two guard conditions in `addCastlingMoves` plus a `rookFrom` field on the `CastleOption` table, read as **IDENTITY** tests (the mover's own `KING` byte on the king-home square, its own `ROOK` byte on the rook-home square) and placed ABOVE the existing emptiness and through-check tests, a byte compare being cheaper than an emptiness scan and far cheaper than an attack scan. **THE STRUCTURAL CHOICE THE TICKET LEFT OPEN IS RECORDED WITH THE ALTERNATIVES IT REJECTED:** `rookFrom` joins the precomputed table and the guards live at the **generator** layer, so `generateMoves` and `legalMoves` are both fixed by one change; **rejected** were importing `CASTLE_ROOK_MOVE` from `apply.ts` (apply.ts already imports moves.ts — a MODULE CYCLE for a four-entry table), deriving the square arithmetically per call (the module's own header commits to precomputed tables over per-call arithmetic in the innermost search loop, `NFR-001`), and filtering at the `legalMoves` layer (`## Scope` requires the castle not be OFFERED by `generateMoves` either). **ALL FIFTEEN POST-FIX COUNTS IN `A1`–`A6` MATCHED THE DELIVERED DIFF ON THE FIRST RUN — NO DISCREPANCY, AND NOTHING WAS ADJUSTED IN EITHER DIRECTION:** no test was bent to the code and no criterion was edited. That makes **three** independent derivations of those counts (BA/PM's seven candidate builds, the Orchestrator's own fix, this diff), and the kiwipete control reproduces too — 48 legal moves, 2 castles still offered, position pure. **RED BEFORE GREEN, PROVED NOT CLAIMED:** the new file read **23 failed / 10 passed** against the unfixed tree, and the 10 passing are exactly the four legal-castle controls and the six `A7` purity rows — which confirms on the TIP that `A7` was **absent rather than failing**. **THE LOAD-BEARING DELETIONS FAIL DISJOINT NAMED SETS ON THE DELIVERED DIFF** (re-measured here because BA/PM measured them on mutants of `main`): deleting the **king** condition fails `A4`+`A5` and nothing else, deleting the **rook** condition fails `A3`+`A6` and nothing else, weakening both to **occupancy** fails `A5`+`A6` only, and swapping the two squares fails 19 assertions including `ABC-004`'s castling tests and kiwipete `perft(1)`. All four legal-castle controls survived every mutant, so none of the reds is a false red. **A FIFTH MUTANT SURVIVES ALL TWELVE CRITERIA AND THE WHOLE SUITE, AND IT IS REPORTED RATHER THAN BURIED BECAUSE OPEN ITEM (1) SAYS SEVEN IS NOT PROVEN COMPLETE — BUT IT IS NOT A DEFECT, IT IS BEHAVIOUR-EQUIVALENT, AND THAT WAS MEASURED:** colour-blind (`pieceType`) tests instead of full-byte identity read **337/337 green** and typecheck clean, yet over an exhaustive 676-board space (13×13 bytes on the two home squares × 4 castles) the two rules read the squares differently on exactly **12** boards and the generator AGREES on all 12 — an enemy king or enemy rook there attacks a square the existing through-check test requires unattacked — and re-run with every possible third piece on every other square (**8,928** boards) the divergence is still **zero**. Same class as `ABC-011`'s two behaviour-equivalent cost mutants that were deliberately not pinned; it independently corroborates BA/PM's "wrong-colour rook is unreachable" measurement, now exhaustively and on the delivered fix. **GATES, AS THEY RAN:** `npm install` exit 0 (no dependency change, `package.json` and `package-lock.json` untouched), lint exit 0 with **zero** autofix passes needed (0 of 2 self-fix attempts spent), typecheck exit 0, `npm test` **337/337 on 15 files** (304/304 on 14 BEFORE, measured by running the suite on the tip rather than by subtraction, matching the Orchestrator's figure at the pull), build exit 0, **skip count 0** by the `AGENTS.md` command. **`A9`'s DEEP LANE IS 32/32 EXACT in 36.93 s, RUN BEFORE REVIEW as the ticket requires — nobody had run it on either tree for this ticket.** E2E `UNKNOWN - verify` (the slot is unknown; no UI surface until `EPIC-006`). Test-integrity checker **exit 2** — "cannot read the registry file"; that is "could not run", is **not** the exit-1 human-only short-circuit and is **NOT A PASS**, and no registry file was created because an agent may not self-author a justification to clear its own gate. Auto-UAT oracles `UNKNOWN - verify` (`scripts/check-uat-oracles.js` absent, non-blocking). **`NFR-001` / `A10` MET ON BOTH CLAUSES, AND THIS IS THE FIRST THROUGHPUT FIGURE ANY ROLE HAS MEASURED ON THIS TICKET** — the 6.04M–6.21M in the ticket is quoted from `plans/nfr-catalog.md`, which neither the Orchestrator nor BA/PM measured. **FLOOR:** `npm run perft` on the delivered tree reads **6,078,622 / 6,131,325 / 6,151,559 nodes/sec** over three runs — inside the catalog's standing band, ~6.1x the ≥ 1M bar. **RATIO:** three trees in ONE process — pre-fix (`main`'s `src/`), delivered, and a **byte-identical twin of the delivered tree as a null control by identity** — 7 rounds, tree AND cell order rotated every round, discarded warm-up, medians of per-round rates, node counts checksummed across every tree and round (238,936,362 nodes), **two fully independent samples** in their own processes: aggregate **post/pre = 0.9987 and 0.9974** against the ≥ 0.98 bar, **MET on both**; worst single cell across both samples 0.9880. **THE CATALOG'S STANDING CAUTION WAS FOLLOWED AND IT IS THE REASON NO PER-CELL CLAIM IS MADE:** the **structurally-zero** cells were read FIRST — position-3 and position-6 hold NO castling rights and `makeMove` can only clear rights, never create them, so the two added byte compares execute **zero** times anywhere in those subtrees and their true delta is exactly zero, yet they read **1.0084 / 0.9918 / 1.0041 / 0.9989**; the identity twin read 1.0087 and 0.9983 aggregate and up to 1.0126 per cell. **The instrument's own floor is therefore about ±1% per cell, larger than any signal** — the bar is met with margin and **no per-cell regression or improvement is claimed**, the kiwipete 0.9930 reading in particular sitting inside noise established by cells whose delta is provably zero. **Denominator fence carried, not quoted: 97.3% of the nodes perft counts are free leaves, so this is generation-with-free-leaves and is NEVER evidence for `NFR-005`.** `NFR-005` was **not** measured and the key benchmark was **not** re-run — the exclusion is structural and the ticket says so. **NO WALL-CLOCK ASSERTION WAS ADDED TO THE SUITE** (this project's standing rule); figures are Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64 and `UNKNOWN - verify` on any other hardware. **NO NFR TARGET MOVED, `plans/nfr-catalog.md` WAS NOT EDITED, and no ticket other than `ABC-009` was touched.** **QE/E2E and Security/NFR were NOT enqueued** — the Orchestrator owns decompose→enqueue. **NOTHING MERGED AND NOTHING DEPLOYED — a human holds both.**
 _Updated: 2026-08-09 by the Software Engineer (task `ticket-to-pr-ABC-018`, subtask `engineer-abc018-implement`, Workflow 04): **`ABC-018` IMPLEMENTED AND MOVED `In Development` → `In Review`** — the one board move this role owns. `In Development` **1/3 → 0/3**, `In Review` **0/3 → 1/3**; no limit approached, no override taken, no written reason owed. **TWO NEW FILES UNDER `src/` AND NOT ONE EXISTING FILE TOUCHED**, verified rather than asserted: `git diff --numstat main -- src/` is **empty**. `src/frame.ts` (222 lines, 94 of them code) holds the VALUE (`assembleFrame`), the SESSION (`beginFrameSession`, which reads the sink's two signals once) and `frameHeight`, the one place the `+3` lives so `H` is never hardcoded; `src/frame.test.ts` holds the twelve criteria one test each, eight further pins, and the in-memory screen model the `## Test notes` require. **`RISK-005`'s BUILD OBLIGATION IS DISCHARGED AND CHECKED MECHANICALLY:** the mode is a required parameter with no default, and `src/frame.ts` imports exactly one thing — `import type { GlyphMode }`, erased at runtime — so it cannot default, hardcode or re-derive a mode; its only `isTTY`/`rows` reads are of the INJECTED SINK. **`NFR-002`'s WRITE HALF IS MEASURED FOR THE FIRST TIME AND BOTH HALVES ARE RECORDED SEPARATELY**, out of tree, two independent samples, on Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64 and `UNKNOWN - verify` elsewhere: compute (`renderBoard` + `assembleFrame`) **5.97–6.07 µs**, write **0.64–0.65 µs** in-memory / **1.66–1.67 µs** to `/dev/null` / **2.43–2.48 µs** to a file, at 40/120/300 plies on a 23-row 18-column 418-character frame — **SUM 0.0084–0.0092 ms against the 16 ms bar, MET with room; NO NUMBER QUOTED FROM ANY EXISTING NOTE** and the compute half is labelled a LOWER BOUND because two panels are stubs. **GATES AS THEY RAN:** lint exit 0 after ONE autofix pass (import order + formatting, self-fix 1 of 2), typecheck exit 0, `npm test` **297/297 on 14 files** (277 on 13 before, measured not subtracted), build exit 0, skip count **0**, `src/frame.ts` **100% on all four axes**; E2E `UNKNOWN - verify`, test-integrity checker **exit 2** (registry absent — an error, NOT a pass, and no file was created), auto-UAT oracles `UNKNOWN - verify` (script absent). **18 MUTANTS RUN, ALL 18 KILLED** — including both mutants the `23/23` correction was written for and the live "re-decides the strategy on every write" one — **but TWO SURVIVED THE SUITE AS FIRST WRITTEN and the SUITE was fixed, not the record: no acceptance criterion constructs a sink whose `isTTY` or `rows` is ABSENT, which is the real shape Node presents on a pipe.** That is a gap in the CRITERIA and it is handed to QE and BA/PM. **NOTHING MERGED, NOTHING DEPLOYED — a human holds both.** Full record in the ticket's `## Implementation` section and in `.grugops/context/ticket-to-pr-ABC-018/notes/`._
@@ -2537,9 +2538,120 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 -->
 
 
-## In Security/NFR (WIP 1/2)
+## In Security/NFR (WIP 0/2)
 
-- [ABC-009] legalMoves mutates the position it documents as unchanged  (size: S, P1, epic: EPIC-001, deps: none; branch `grugops/ticket-to-pr-ABC-009`, QE PASS WITH RISKS 2026-08-09, suite 356/356 on 16 files skip 0, deep lane 32/32, 62 mutants / 9 survivors all argued equivalent, NFR-001 NOT re-measured by QE and owed here)
+<!--
+  EMPTIED 2026-08-09 by Security/NFR (task `ticket-to-pr-ABC-009`, subtask `sec-abc009-nfr`,
+  Workflow 04): **ABC-009 PASSES WITH RISKS and moved In Security/NFR -> Ready for UAT — the one
+  exit this column owns.** In Security/NFR 1/2 -> 0/2, Ready for UAT 0/4 -> 1/4. No limit
+  approached, no override taken, no written reason owed. NOTHING MERGED AND NOTHING DEPLOYED — a
+  human holds both, and the owner's standing merge authority is NOT deploy authority.
+
+  security.asvs_level L1, security.block_on high, compliance_regime [] — so NO Compliance Officer
+  hand-off is owed, recorded rather than silently omitted. NO REQUIRED FIX IS OUTSTANDING and NO
+  HIGH-SEVERITY ITEM EXISTS TO BLOCK ON.
+
+  NOT ONE FIGURE IS INHERITED. The Engineer measured and QE explicitly declined to re-derive, so
+  NFR-001 was re-derived here on this gate's own instruments, written OUTSIDE the repository.
+  src/moves.ts is untouched by this role and still hashes 0e247853ab2c05887c76105ff83d8621.
+
+  THE FOUR MANDATORY GATES RE-RUN ON THE TIP cff45ee: lint exit 0 (2 pre-existing biome.json
+  infos), typecheck 0, build 0, npm test 356/356 on 16 files, skip count 0 by the AGENTS.md
+  command, deep lane 32/32 EXACT in 38.49 s (third independent run: 36.93 s Engineer, 38.35 s QE).
+  Test-integrity checker exit 2 (.grugops/test-skips.md absent, checked with ls) recorded as an
+  ERROR and NOT a pass, no registry file created. E2E and auto-UAT oracles UNKNOWN - verify.
+
+  (1) NFR-001 / A10 IS MET ON BOTH CLAUSES. Floor 6,030,518 / 6,136,238 / 6,117,496 nodes/sec
+      against >= 1,000,000 (~6.1x). Aggregate ratio 1.0062 and 0.9967 against >= 0.98 on two fully
+      independent samples, worst single cell 0.9863. Three trees in ONE process -- pre-fix,
+      delivered, and a byte-identical TWIN as a null control by identity, the twin cmp-verified on
+      all thirteen non-test files and `pre` verified to differ from `post` in moves.ts AND NOTHING
+      ELSE -- 12 rounds (round 0 discarded), tree AND cell order rotated, parseFen outside every
+      clock, checksum 409,605,192 nodes per sample. One honest difference from the Engineer: this
+      gate's LOWEST floor run (6,030,518) sits 0.16% UNDER the catalog's standing 6.04M-6.21M band.
+      Scatter on one run; NO BASELINE MOVED, and it is recorded rather than rounded into the band.
+
+  (2) THE ENGINEER'S +/-1% INSTRUMENT-FLOOR REASONING: IT HOLDS, THE ESTIMATE IS OPTIMISTIC, AND IT
+      WAS NOT THE END OF THE ROAD. Calibrating against provably-zero cells plus an identity twin is
+      the right move and "no per-cell number is claimable" is the right conclusion. But this gate
+      measures +/-2.0% per cell (twin, position-5), and characterises an AGGREGATE floor nobody had
+      (twin 1.0096 / 1.0087; three of four aggregate twin readings across two gates near +0.9%, a
+      SYSTEMATIC this gate CANNOT ATTRIBUTE) -- so the bar's 2-point margin exceeds resolution by
+      about 2x, not comfortably. Per-cell instability shown the hard way: kiwipete reads 0.9930 /
+      0.9967 (Engineer) against 1.0228 / 1.0052 (here). One wording overshoot named: "kiwipete's
+      0.9930 is NOT a regression" is stronger than a noise floor can license (it licenses only
+      "cannot resolve whether it is"); their note also states the correct form, so it is a phrasing
+      inconsistency, not a false result.
+
+  (3) THE QUESTION IS RESOLVED BY MOVING IT OFF THE CLOCK AND ONTO A COUNT -- the same move this
+      catalog already made for NFR-005's call-count sub-bar. Over the exact perft population the two
+      added lines execute 198,175 times EACH = 396,350 total across 11,377,922 nodes and REJECT
+      NOTHING IN ANY CELL (0 failures of 198,175 each), which confirms empirically over 11.4M nodes
+      the structural fact that makeMove only ever CLEARS a right (src/apply.ts:142); position-3 and
+      position-6 execute them ZERO times. Isolated on an exported addCastlingMoves the pair costs
+      +1.30 / +1.73 ns per call on startpos against a +/-0.22 ns null floor -- RESOLVED, ~0.33-0.43
+      ns per execution. ARITHMETIC over the measured count and cost (LABELLED ARITHMETIC, NOT A
+      MEASUREMENT): 0.131-0.170 ms on a 1.854-1.887 s sweep = 0.0070%-0.0091%, TRUE ratio ~0.9999
+      and KIWIPETE'S TRUE RATIO ~0.9998 -- the 0.9930 reading is ~35x the true deviation. Robust to
+      a 10x error in the multiplier. So the Engineer's conclusion is POSITIVELY ESTABLISHED, not
+      merely unrefuted. Denominator fence re-derived independently at 97.18% free leaves.
+
+  (4) GUARD ORDERING, ROUTED HERE BY QE AS GATE-UNVERIFIABLE: THE BEHAVIOUR HALF IS DISCHARGED, NOT
+      CARRIED. The five guards are a CONJUNCTION of side-effect-free predicates over an unmutated
+      position (isSquareAttackedBy and raySliderAttacks perform no writes -- checked; board is a
+      readonly Uint8Array(128) and every frozen-table index is in bounds, so no guard depends on an
+      earlier one for safety), therefore the emitted move set is PERMUTATION-INVARIANT under all 120
+      orderings. Measured: 3 reorderings x 33 FENs = 99 comparisons, ZERO divergence at
+      generateMoves, at legalMoves and on purity, with all six exact perft counts holding for every
+      variant. SO NO LATER REORDER CAN SILENTLY BREAK THE EQUIVALENCE QE RELIED ON. QE's mechanism
+      ("empty is tested before the through-check") is sound but stronger than needed; restated as a
+      conjunction it is reorder-proof, and that restatement is the durable form.
+      THE COST HALF IS REAL AND LIVES ON THE INVALID CLASS: an invalid FEN costs 522-526 ns pre-fix
+      against 27.9-28.1 ns delivered (~18x), because the byte compare sits ABOVE THE ATTACK SCAN;
+      below the through-check gives all of it back (+481 ns). BUT THE STATED REASON IS INVERTED FOR
+      THE POPULATION NFR-001 MEASURES, and this is where this gate disagrees with the Engineer:
+      measured selectivity is 0.0% for both added guards (0 rejects in 198,175 each) against 17.6%
+      for the empty test and 14.1% for the through-check, so in exact executions the delivered order
+      is the SECOND-MOST-EXPENSIVE of four (above-right 1,284,772 > delivered 396,350 > below-empty
+      326,476 > below-through 280,302). That is ~0.003% -- far below resolution. NO CHANGE IS ASKED
+      FOR (rules 5, 9, 10); the sharper reason is recorded instead. Nothing pins the ordering and
+      NOTHING CAN, since invariance means no test could ever fail on a reorder.
+
+  (5) SECURITY CLASSIFICATION: RELIABILITY, NOT SECURITY -- re-asked at the source with evidence, not
+      carried, and NO TRIGGER MANUFACTURED. Zero eval/new Function/vm/require, zero child_process,
+      zero HTML/XML/SQL/URL/fetch sinks, zero node:net|tls|http|https|dgram imports in non-test src/
+      -- each grepped. addCastlingMoves is MODULE-PRIVATE; its only caller is generateMoves, whose
+      only non-test caller is legalMoves (src/legal.ts:46). No process.argv/stdin/env/readFileSync in
+      src/moves.ts at all; positions enter only via parseFen, called from history.ts and
+      perft-bench.ts (hardcoded FENs). NO USER-SUPPLIED STRING REACHES src/moves.ts. QE's
+      queen-destroying result is a worse RELIABILITY consequence of a MUTANT THAT WAS NEVER SHIPPED,
+      not a security one. The one security-adjacent question this change touches -- a DoS-shaped cost
+      on malformed input -- was asked and comes out IN THE CHANGE'S FAVOUR (18x cheaper). ASVS L1
+      counted at the source: 70 active requirements, and V16/V17 carry NO L1 requirement at all
+      (29 rows, zero at L1) -- checked, not assumed.
+
+  (6) LOGGING: this module logs nothing and the only logging in non-test src/ is perft-bench.ts's
+      console.log. Normally this gate flags a failure mode with no log. IT DOES NOT APPLY HERE: the
+      fix ELIMINATES the failure rather than instrumenting it, so there is no later incident to
+      diagnose. No logging asked for (rules 5 and 8).
+
+  TEN RISKS CARRIED, NONE HIGH, EACH WITH A NAMED OWNER: (1) G-1/G-2 closed in TESTS but not in the
+  criteria -- BA/PM, MEDIUM, deliberately NOT discharged here since ## Acceptance is BA/PM's and this
+  gate did not touch it; (2) A7 killed nothing across 62 mutants -- BA/PM, LOW; (3) the castling-right
+  test is guarded in the default lane only by QE's rows -- BA/PM or Architect, LOW; (4) guard ordering
+  RESHAPED -- Architect/Design at ABC-010/EPIC-003, LOW: behaviour discharged, what remains is that
+  nothing pins it and, if user FENs are ever admitted, a reorder below the through-check restores an
+  18x cost on malformed input; (5) NFR-001 per-cell figures are noise and must never be quoted --
+  Security/NFR, LOW, the TENTH instrument-limit correction on this project; (6) NFR-001 has no guard
+  in the suite -- Security/NFR at EPIC-004, LOW, and no wall-clock assertion belongs there (standing
+  rule); (7) ABC-010 unbuilt so the invalid FEN is still ACCEPTED at the boundary -- ABC-010, LOW, by
+  design; (8) ABC-022 half (b) live BY DESIGN -- severity NONE; (9) A1-A10 plus QE's rows still not
+  PROVEN complete, nine equivalent survivors stand -- QE/BA-PM; (10) test-integrity exit 2, E2E and
+  auto-UAT oracles UNKNOWN - verify -- human-owned. V15.1.1/V15.2.1 NOT MET with the carried high->low
+  override, evidence re-checked (runtime dependencies is {}, package.json and package-lock.json
+  byte-identical to main on this branch), owner Architect/Design at EPIC-006. V13.4.1 DEFERRED,
+  unchanged and not relaxed.
+-->
 
 <!--
   ENTERED 2026-08-09 from In Review, by QE/E2E (task `ticket-to-pr-ABC-009`, subtask
@@ -4074,7 +4186,32 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
   what the whole ticket is about, and neither to be inflated nor deflated.
 -->
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+
+- [ABC-009] legalMoves mutates the position it documents as unchanged  (size: S, P1, epic: EPIC-001, deps: none; branch `grugops/ticket-to-pr-ABC-009`, Security/NFR PASS WITH RISKS 2026-08-09, NFR-001 re-derived and MET on both clauses, suite 356/356 on 16 files skip 0, deep lane 32/32; UAT DEFERRED to EPIC-006 and explicitly NOT passed — no CLI entry point, so no surface a human can exercise)
+
+<!--
+  ENTERED 2026-08-09 from In Security/NFR, by Security/NFR (task `ticket-to-pr-ABC-009`, subtask
+  `sec-abc009-nfr`, Workflow 04) on a PASS WITH RISKS verdict. Ready for UAT 0/4 -> 1/4. The gate
+  record is in the In Security/NFR comment above and in the ticket's `## Security / NFR` section; it
+  is not restated here. NOTHING MERGED AND NOTHING DEPLOYED — a human holds both.
+
+  UAT IS DEFERRED TO EPIC-006 AND IS EXPLICITLY NOT PASSED — ruled on this ticket's own evidence
+  rather than inherited: there is no CLI entry point and no runnable game (AGENTS.md `Dev / run` is
+  UNKNOWN - verify; `quality.ui_e2e` is ui-or-critical-path and this change has no UI surface), so
+  THERE IS NO SURFACE A HUMAN CAN EXERCISE and a UAT pass would be a fabrication.
+
+  WHAT A HUMAN MUST EVENTUALLY CHECK, named rather than left implicit: that a game played through
+  the real CLI never offers a castle the rules forbid, and that the board a player sees after a
+  `moves`/status query is the board they had before it. Neither is checkable today. Everything this
+  ticket fixes is reachable ONLY through a semantically-invalid FEN, which no product path can
+  produce until ABC-010 and EPIC-003 exist — which is also why the defect stayed latent and why its
+  escalation trigger remains unspent.
+
+  CARRIED INTO UAT: the ten risks in the In Security/NFR record, none high, each owned. The two that
+  a UAT reader most needs are BA/PM's G-1/G-2 criteria-text gap (MEDIUM — closed in tests, open in
+  the specification) and the standing fact that A1-A10 plus QE's rows is not PROVEN complete.
+-->
 
 <!--
   EMPTIED 2026-08-09 by the Orchestrator (task `ticket-to-pr-ABC-018`, Workflow 04): **ABC-018 MERGED

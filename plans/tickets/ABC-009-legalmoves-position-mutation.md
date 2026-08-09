@@ -1,8 +1,8 @@
 ---
 id: ABC-009
 title: legalMoves mutates the position it documents as unchanged
-status: in-security-nfr
-column: In Security/NFR
+status: ready-for-uat
+column: Ready for UAT
 size: S
 priority: P1
 epic: EPIC-001
@@ -1191,3 +1191,238 @@ rests on reading, which is the honest place for it to rest.
   coverage adds nothing here.
 - **Anything about `ABC-010`.** Its stated scope would reject every FEN in this ticket including the new
   rows'; what it implements is its own gate's to establish.
+
+## Security / NFR
+
+**GATED AND MOVED `In Security/NFR` → `Ready for UAT` 2026-08-09 by Security/NFR** (task
+`ticket-to-pr-ABC-009`, subtask `sec-abc009-nfr`, Workflow 04), on branch
+`grugops/ticket-to-pr-ABC-009`. Verdict **PASS WITH RISKS**. `In Security/NFR` 1/2 → 0/2,
+`Ready for UAT` 0/4 → 1/4; no limit approached, no override taken, no written reason owed.
+**Nothing merged and nothing deployed — a human holds both, and the owner's standing merge authority
+is NOT deploy authority.**
+
+Gated against `security.asvs_level` **L1** and `security.block_on` **high**. `compliance_regime` is
+**`[]`**, so **no Compliance Officer hand-off is owed** — recorded rather than silently omitted.
+**No required fix is outstanding and no high-severity item exists to block on.**
+
+**Nothing above this section was edited.** The `## Acceptance` criteria, BA/PM's correction block,
+`## Scope`, `## Out of scope`, `## Reproduction`, the escalation block, the `NFR-001` bar,
+`## Test notes`, the Engineer's `## Implementation` and QE's `## QE` all stand exactly as they were
+— the two frontmatter lines are the only deletions in this role's whole diff. **This gate changed no
+production code and no test:** `src/moves.ts` still hashes `0e247853ab2c05887c76105ff83d8621` and
+`git diff 8f540cf -- src/moves.ts` is empty. Repairing an implementation to make this gate's own
+verdict come out green is not this role's, and there was nothing to repair.
+
+### The gates, re-run here and never inherited
+
+| gate | command | result |
+|---|---|---|
+| lint | `npm run lint` | **exit 0**, 2 pre-existing `biome.json` infos |
+| typecheck | `npm run typecheck` | **exit 0** |
+| build | `npm run build` | **exit 0** |
+| unit | `npm test` | **356 passed (356) on 16 files** |
+| skip count | the `AGENTS.md` command | **0** |
+| deep perft (`A9`) | `PERFT_DEEP=1 npx vitest run src/perft.test.ts` | **32/32 exact, 38.49 s** |
+| test-integrity checker | `node tools/grugops/test-skip-integrity.js …` | **exit 2 — an ERROR, not a pass** |
+| e2e / auto-UAT oracles | — | `UNKNOWN - verify` |
+
+`.grugops/test-skips.md` does not exist (`ls`, not assumed) and **no registry file was created** — an
+agent may not author a justification to clear its own gate. `A9` is now on its **third** independent
+run and all three agree: 36.93 s (Engineer), 38.35 s (QE), 38.49 s (here).
+
+### `NFR-001` / `A10` — MET on both clauses, re-derived on this gate's own instruments
+
+Nothing inherited: the Engineer measured, QE explicitly declined to re-derive, and every figure below
+is this gate's own, on **Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64**,
+**`UNKNOWN - verify`** elsewhere.
+
+**Clause 1 — the floor. MET.** `npm run perft`, three runs: **6,030,518 / 6,136,238 / 6,117,496
+nodes/sec** against ≥ 1,000,000 — about **6.1x**. *(One honest difference from the Engineer: the
+lowest run sits **0.16% UNDER** the catalog's standing 6.04M–6.21M band. Scatter on one run, recorded
+rather than rounded into the band, and **no baseline moved**.)*
+
+**Clause 2 — the ratio, in one process. MET on two independent samples.** Three trees in a single
+process — pre-fix (`fb4fa40934e768dffeaeed0b43548842`), delivered
+(`0e247853ab2c05887c76105ff83d8621`), and a **byte-identical TWIN as a null control by identity**,
+the twin `cmp`-verified equal on **all thirteen** non-test files and `pre` verified to differ from
+`post` in `moves.ts` **and nothing else** — 12 rounds with round 0 discarded, tree **and** cell order
+rotated every round, `parseFen` hoisted **out of every clock**, medians of per-round rates, checksum
+**409,605,192** nodes per sample, harness held outside the repository.
+
+```
+                        SAMPLE 1                        SAMPLE 2
+cell         rights   post/pre   twin/post      post/pre   twin/post
+startpos     KQkq      0.9932     1.0072         1.0034     1.0024
+kiwipete     KQkq      1.0228     1.0049         1.0052     1.0047
+position-3   -         0.9959     1.0070         1.0063     1.0038   <- structurally zero
+position-4   kq        1.0048     1.0005         1.0037     0.9963
+position-5   KQ        0.9863     1.0202         0.9936     1.0056
+position-6   -         0.9926     1.0182         0.9966     1.0078   <- structurally zero
+
+AGGREGATE              1.0062     1.0096         0.9967     1.0087
+```
+
+**Aggregate 1.0062 and 0.9967 against ≥ 0.98 — MET**, worst single cell 0.9863.
+
+### The Engineer's ±1% instrument floor: the reasoning HOLDS, the estimate is OPTIMISTIC, and it was not the end of the road
+
+Calibrating against cells whose true delta is provably zero, plus an identity twin, is the strongest
+null control available, and *"no per-cell number is claimable"* is the correct conclusion from it.
+**An honest "the instrument cannot resolve this" is a result** and it is not treated here as a
+failure. Three things are added:
+
+- **The floor is bigger than reported.** This gate measures **±2.0% per cell** against their ~±1%,
+  and characterises an **AGGREGATE** floor nobody had: the twin reads **+0.96% / +0.87%**, and three
+  of four aggregate twin readings across both gates sit near **+0.9%** — a *systematic*, not scatter,
+  which this gate **cannot attribute**. The bar's margin is 2 points, so *"the margin exceeds the
+  resolution"* holds by about **2x**, not comfortably.
+- **One wording overshoot.** *"kiwipete's 0.9930 is NOT a regression"* is stronger than a noise floor
+  can license — a floor supports only *"the instrument cannot resolve whether it is one."* Their note
+  states the correct form elsewhere, so this is a phrasing inconsistency, not a false result.
+- **The question is resolvable, and it is now resolved in the change's favour** — below.
+
+### What resolves it: move the question off the clock and onto a COUNT
+
+The same move `plans/nfr-catalog.md` already made for `NFR-005`'s call-count sub-bar. `npm run perft`
+dilutes the two added lines ~35x (97.18% of counted nodes are free leaves — re-derived here against
+the catalog's 97.3% — and every generating node also pays the make/test/unmake filter).
+
+**The count, exact and noise-free.** Over the exact `npm run perft` population the two added lines
+execute **198,175 times each — 396,350 total — across 11,377,922 counted nodes**, and **reject
+nothing in any cell (0 failures out of 198,175 each)**. That confirms **empirically, over 11.4M
+nodes**, the structural fact that `makeMove` only ever *clears* a right (`src/apply.ts:142`), so a
+held right in a reachable position implies both pieces are home. `position-3` and `position-6`
+execute them **zero** times — the structurally-zero property established by count rather than by
+argument.
+
+**The isolated cost, with its own null control.** Exporting `addCastlingMoves` in scratch copies
+removes both dilutions. On startpos the pair costs **+1.30 and +1.73 ns per call** against a
+null-control floor of **±0.22 ns** — resolved, a signal 6–8x its local floor — giving **~0.33–0.43 ns
+per execution**; the structurally-zero cell reads **+0.24 / +0.33 ns**.
+
+**The two combined — labelled ARITHMETIC, not a measurement:** `396,350 × 0.33–0.43 ns =
+0.131–0.170 ms` on a 1.854–1.887 s sweep = **0.0070%–0.0091%**. **True `post/pre` ≈ 0.9999**, against
+a bar that allows 2%. Robust to a 10x error in the multiplier (0.085%, still 20x inside the bar).
+**For kiwipete specifically: 320,950 added executions over its ~0.66 s subtree = 0.0194%, so its true
+ratio is ≈ 0.9998** — the 0.9930 reading is ~35x the true deviation and this gate's own 1.0228 is
+~115x it the other way. **Both are noise; the truth is 0.9998, and the Engineer's conclusion is
+positively established rather than merely unrefuted.**
+
+### Guard ordering, routed here by QE as gate-unverifiable — the behaviour half is DISCHARGED
+
+**The ordering of the five guards is NOT load-bearing, and no later reorder can silently break the
+equivalence QE's `G-1`/`G-2` analysis relied on.** The five guards are a **conjunction of
+side-effect-free predicates over an unmutated position** — verified rather than assumed:
+`isSquareAttackedBy` and `raySliderAttacks` perform **no writes**, `board` is a
+`readonly Uint8Array(128)`, and every index the frozen `CastleOption` table names is in bounds, so
+**no guard depends on an earlier one for safety**. A conjunction is permutation-invariant, so the
+emitted move set is identical under **any** of the 120 orderings. **Measured:** three reorderings ×
+**33 FENs** (all twelve leaking rows, the four legal castles, both over-rejection controls, QE's
+`G-1` and `G-2` FENs, all six perft roots) = **99 comparisons, ZERO divergence** at `generateMoves`,
+at `legalMoves` and on purity, with **all six exact perft counts holding for every variant**.
+
+QE's mechanism (*"`option.empty` is tested before the through-check"*) is sound but stronger than its
+conclusion needs. Restated as a conjunction — *an option is emitted only if all five hold, so `empty`
+has passed whenever a castle is emitted* — **the argument is reorder-proof**, and that is the durable
+form.
+
+**The cost half is real and lives on the class this ticket exists for.** On
+`4k3/8/8/8/8/8/8/K7 w KQ - 0 1`, `addCastlingMoves` costs **522–526 ns pre-fix** against **27.9–28.1
+ns delivered** — an **~18x** saving, because the byte compare rejects **above the attack scan**;
+moving the guards below the through-check gives all of it back (**+481 ns**).
+
+**But the stated reason is inverted for the population `NFR-001` measures, and this is the one place
+this gate disagrees with the Engineer.** The comment reasons from per-test cost; the right criterion
+for ordering a conjunction is cost against **selectivity**, and measured over the perft sweep the two
+added guards are **0.0% selective** (0 rejects in 198,175 executions each) while `empty` rejects
+**17.6%** and the through-check **14.1%** of what reaches them. In exact executions the delivered
+order is the **second-most-expensive of four**: above-right 1,284,772 > **delivered 396,350** >
+below-empty 326,476 > below-through 280,302.
+
+**NO CHANGE IS ASKED FOR.** The penalty is ~**0.003%** of the sweep, far below resolution; the
+invalid-class benefit is real and points the other way; and churning a correct guard for it is the
+refactor coding rules 5, 9 and 10 forbid. The sharper reason is recorded instead: the placement earns
+its keep not because a byte compare is cheap, but because sitting above the attack scan it avoids an
+18x cost on exactly the malformed input it exists to reject. **Nothing pins the ordering and nothing
+can** — invariance means no test could ever fail on a reorder — so it rests on the code comment,
+which is the honest place for it.
+
+### Security classification — RELIABILITY, NOT SECURITY. Re-asked at the source; no trigger manufactured.
+
+- **No injection sink.** Zero `eval` / `new Function` / `vm` / `require`, zero `child_process` /
+  `exec` / `spawn`, zero HTML / XML / SQL / URL / `fetch` sinks, zero `node:net|tls|http|https|dgram`
+  imports in non-test `src/` — each grepped, not assumed.
+- **No trust boundary.** `addCastlingMoves` is **module-private**; its only caller is `generateMoves`,
+  whose only non-test caller is `legalMoves` (`src/legal.ts:46`). **No `process.argv`,
+  `process.stdin`, `process.env` or `readFileSync` appears in `src/moves.ts` at all.** Positions
+  enter only through `parseFen`, whose non-test callers are `history.ts` and `perft-bench.ts`
+  (hardcoded FENs). **No user-supplied string reaches `src/moves.ts`**, and there is no CLI entry
+  point.
+- **No privilege, no data exposure, no secrets, no personal data, no authn/authz, no network, and no
+  crypto used as a security control.**
+- **QE's queen-destroying result does not change the class.** It is a worse *reliability* consequence
+  — silent material loss and a piece-type change — of a **mutant that was never shipped**.
+- **The one security-adjacent question this change touches was asked and comes out in its favour:** a
+  DoS-shaped cost on malformed input. Measured — the delivered order makes an invalid position **~18x
+  cheaper** in this function.
+
+**ASVS L1 counted at the source: 70 active requirements, and V16 and V17 carry no L1 requirement at
+all** (29 rows between them, zero at L1) — checked, not assumed. **V2.1.1 PASS** (`## Scope` and
+`## Security / NFR triggers` are the documented validation rule, with the rule stated as *"the moving
+side's `KING` byte and no other"*); **V2.2.1 PASS on this module** — the guards are positive
+validation against an expected structure, an allow-list of exactly one byte value per square — **with
+the boundary half still open and owned by `ABC-010`**, by design; **V2.2.2 PASS by analogue** (the
+guard sits in the rules core, so no caller is trusted to pre-validate — exactly why the
+`legalMoves`-layer filter was rejected); **V2.3.1 PASS by analogue**, the closest row to the routed
+ordering question; **V5.2.1 PASS by analogue**; **V15.3.1 PASS by analogue**. **V15.1.1 / V15.2.1 NOT
+MET**, carried with the standing high→low override and its evidence re-checked here (runtime
+`dependencies` is `{}`; `package.json` and `package-lock.json` byte-identical to `main` on this
+branch), owner Architect/Design at `EPIC-006`. **V13.4.1 DEFERRED**, unchanged and not relaxed. **V7
+session management is N/A and is named rather than skipped.** Everything else structurally N/A.
+
+### Logging and failure modes
+
+`src/moves.ts` logs nothing, and the only logging in non-test `src/` is `perft-bench.ts`'s
+`console.log`. A failure mode with no log is normally exactly what this gate flags. **It does not
+apply here, and the reason is this ticket's whole point:** the defect was silent by construction and
+the fix **eliminates the failure** rather than instrumenting it, so there is no later incident to
+diagnose. No logging is asked for (coding rules 5 and 8).
+
+### The risks carried, none high, each with a named owner
+
+1. **`G-1` and `G-2` closed in TESTS but not in the criteria — owner BA/PM, MEDIUM.** Deliberately
+   **not** discharged here: `## Acceptance` is BA/PM's and this gate did not touch it.
+2. **`A7` killed nothing across 62 mutants — owner BA/PM, low.**
+3. **The castling-right test is guarded in the default lane only by QE's rows — owner BA/PM or
+   Architect, low.** Not charged against `ABC-009`.
+4. **Guard ordering — owner Architect/Design at `ABC-010`/`EPIC-003`, low. RESHAPED, not carried as
+   received:** behaviour discharged; what remains is that nothing pins it and that, if user FENs are
+   ever admitted, a reorder below the through-check restores an 18x cost on malformed input.
+5. **`NFR-001` per-cell figures are noise and must never be quoted — owner Security/NFR, low.** The
+   **tenth** instrument-limit correction on this project's record.
+6. **`NFR-001` has no guard in the suite — owner Security/NFR at `EPIC-004`, low.** No wall-clock
+   assertion belongs there; a call-count assertion is possible but **not asked for** at 0.01%.
+7. **`ABC-010` unbuilt, so the invalid FEN is still ACCEPTED at the boundary — owner `ABC-010`, low.**
+   By design; `## Out of scope` says so.
+8. **`ABC-022` half (b) live BY DESIGN — severity none.** Fenced, not tested here, not a miss.
+9. **`A1`–`A10` plus QE's rows still not PROVEN complete — owner QE / BA-PM.** Nine equivalent
+   survivors stand on an enumerated corpus, not the position space.
+10. **Test-integrity exit 2, E2E and the auto-UAT oracles `UNKNOWN - verify` — human-owned.**
+
+### UAT — DEFERRED and explicitly NOT passed
+
+There is no CLI entry point and no runnable game until `EPIC-006`, so **there is no surface a human
+can exercise and a UAT pass would be a fabrication.** What a human must eventually check is named in
+the traceability row rather than left implicit: that a game played through the real CLI never offers
+a castle the rules forbid, and that the board a player sees after a `moves` or status query is
+byte-for-byte the board they had before it.
+
+### What this gate does NOT establish
+
+- **That the criteria are complete.** Not this gate's, and not discharged here.
+- **A terminal Workflow 05 verdict.** No §14 gate exists in this install. **No `finding` was written
+  and nothing is self-stamped**; `context.human_admission` is `off`.
+- **That 0.33–0.43 ns/execution generalises off startpos** — one resolved cell, which is why the
+  arithmetic carries a 10x robustness bound.
+- **A cause for the twin's ~+0.9% aggregate systematic** — observed across two gates, not attributed.
+- **Any figure for non-M3 hardware** — `UNKNOWN - verify`.
