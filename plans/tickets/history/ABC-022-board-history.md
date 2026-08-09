@@ -454,3 +454,12 @@ ENTERED 2026-08-09 by the Software Engineer (task `ticket-to-pr-ABC-022`, subtas
   for BA/PM instead of being silently rewritten -- but it should not ship as it stands.
 
 ---
+
+## board header — _Updated: entry (ARCHIVED ON REPLACEMENT)
+
+Archived 2026-08-09 by the Orchestrator when the board's single `_Updated:` line was replaced at
+`ABC-022`'s close. Verbatim.
+
+_Updated: 2026-08-09 by Security/NFR (task `ticket-to-pr-ABC-022`, subtask `security-nfr-abc022-gate`, Workflow 04): **`ABC-022` PASSES the risk/NFR gate — PASS_WITH_RISKS. In Security/NFR 1/2 -> 0/2, Ready for UAT 0/4 -> 1/4.** No limit approached, no override taken; ticket frontmatter moved with the column. NO REQUIRED FIX, NO HIGH-SEVERITY ITEM, 13 accepted risks each with a NAMED OWNER — including `ADR-0005` 133-138, which had none until this hop. `src/moves.ts` NOT touched (md5 `6335b452…`, a fifth gate); `## Acceptance` NOT edited (md5 `7123d5c6…`); `plans/nfr-catalog.md` NOT edited and no target moved. **`NFR-001` / `A10` MET on every clause, nothing inherited:** count **331 / 216,269 / 0** (a fourth independent derivation) plus **4,177 / 3,417,014 / 0** over the clock's own population and a measured **<= 1 evaluation per `generateMoves` call**; floor **6,172,810 nodes/sec** vs >= 1M; aggregate ratio **0.9996** vs >= 0.98 with a byte-identical null control deviating **23.1x the signal**; deep lane **32/32 in 36.06 s**. **`NFR-005` excluded structurally, confirmed TWO ways** (bytes, and `hasLegalEnPassant` never calling the generator) and the benchmark NOT re-run. **Security classification CHECKED against ASVS L1, not inherited, and it HOLDS** — reliability, not security; the `epSquare` value domain nobody had swept reads **0 throws over 514 states** on both trees and the fix HALVES the emitting surface. **UAT NOT ruled on — the Orchestrator's.** NOTHING MERGED, NOTHING DEPLOYED. **Detail: `plans/tickets/history/ABC-022-board-history.md` and `.grugops/context/ticket-to-pr-ABC-022/notes/`.** (The QE header this replaces is preserved verbatim in that same history file, per the rule below.)_
+
+---
