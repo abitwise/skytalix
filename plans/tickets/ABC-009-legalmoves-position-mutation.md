@@ -239,11 +239,16 @@ The mechanism is the engineer's call. The observable contract above is the requi
 Each criterion below is a currently-failing test that must go green, except where marked as a
 regression guard. The parenthetical is the measured behaviour on `main` today.
 
-**`A1`–`A6` were rewritten and `A4`–`A6`, `A10` added 2026-08-09** — see the correction block
-immediately below. **`A1`, `A2`, `A3`, `A7`, `A8` and `A9` are, in that order, the six criteria this
+**`A1`–`A6` were rewritten and `A4`–`A6`, `A10` added 2026-08-09** — see the first correction block
+below. **`A1`, `A2`, `A3`, `A7`, `A8` and `A9` are, in that order, the six criteria this
 ticket carried from 2026-07-29**, so the Orchestrator's routing note of 2026-08-09 (which speaks of
 "criterion 3", "criteria 1 and 2", "criteria 4, 5, 6") reads onto `A3`, `A1`/`A2`, `A7`/`A8`/`A9`.
 **Nothing was reordered and nothing was dropped.**
+
+**`A11` and `A12` were added, and `A7`'s justification corrected, 2026-08-09 at a SECOND BA/PM hop**
+after QE and Security/NFR routed two criterion gaps and one measured-inert criterion here — see the
+**second** correction block, which follows the first. **`A11` is NOT YET SATISFIED BY THE SUITE and
+this ticket may not be closed as though it were**; the shortfall is test rows, not production code.
 
 - **`A1` (purity, the reproduction FEN).** **Given** the FEN `4k3/8/8/8/8/8/8/K7 w KQ - 0 1`,
   **when** `legalMoves` is called once on the parsed position, **then** `toFen(position)` afterwards
@@ -283,7 +288,10 @@ ticket carried from 2026-07-29**, so the Orchestrator's routing note of 2026-08-
   `FLAG_CASTLE` and 20 / 18 / 14 / 20 moves, and **one call destroys the occupant and writes a king
   of the moving side over it** — bishop→white king, knight→white king, **enemy** bishop→**white**
   king, black bishop→black king. Three successive calls read 20, 18, 18 · 18, 19, 19 · 14, 18, 18 ·
-  20, 18, 18.)*
+  20, 18, 18.)* **Amended 2026-08-09 (second hop): the four rows and their counts stand unchanged, but
+  the two piece types they carry are a SAMPLE of a rule that quantifies over every own byte, and three
+  builds that admit one further type pass this criterion. The quantified form is `A11`; this row is no
+  longer the whole of the piece-type requirement.**
 - **`A6` (the rook precondition is an IDENTITY test — and this family is invisible to every purity
   criterion). ADDED 2026-08-09.** **Given** each of the four FENs in `## Reproduction` family 3 — an
   own **bishop** on h1 (`4k3/8/8/8/8/8/8/4K2B w K - 0 1`), an own **knight** on a1 queenside
@@ -295,14 +303,54 @@ ticket carried from 2026-07-29**, so the Orchestrator's routing note of 2026-08-
   *(Today: exactly 1 `FLAG_CASTLE` and 13 / 8 / 13 / 6 moves — **and the position is byte-identical
   across the call on all four rows**, because the make/unmake pair round-trips the impostor exactly.
   Nothing about purity can see this family; only the `FLAG_CASTLE` count can. That is why it is a
-  criterion and not a footnote.)*
-- **`A7` (the perft-table regression guard — must stay green, and must be present).** **Given** every
+  criterion and not a footnote.)* **Amended 2026-08-09 (second hop): same as `A5` — the rows and counts
+  stand, the two piece types are a sample, and `A11` carries the quantified form.**
+- **`A7` (a standing purity walk over LEGAL positions — must stay green, and must be present. **NOT a
+  guard on this ticket's defect**; see the measured note below).** **Given** every
   position in the perft suite table (`src/perft.test.ts`), **when** `legalMoves` is called twice on
   each, **then** `toFen` **and all 128 board bytes and all five scalars** are identical before the
   first call, between the calls, and after the second, and both calls return equal move counts.
   *(Today: passes. It asserts count **equality**, not count **correctness** — measured 2026-08-09,
   this criterion passes unchanged on a build that never offers a castle at all, so it is **not** the
   over-rejection oracle. `A8` is.)*
+
+  > **`A7`'s PROTECTIVE VALUE WAS MEASURED AT THE SECOND BA/PM HOP, 2026-08-09, AND IT IS ZERO FOR THIS
+  > FIX. THE CRITERION IS KEPT; ITS STATED JUSTIFICATION WAS FALSE AND IS REPLACED.**
+  >
+  > **Measured, on two independent instruments.** QE's campaign: `A7` killed **0 of 62** mutants, while
+  > perft took 29 kills and the four legal-castle control rows took 26. This role then re-derived it on
+  > **10 mutants of its own** — the two guard deletions, four one-extra-type admissions, two
+  > `continue`→`break` variants and two more — and **not one `A7` row failed on any of them**, including
+  > the two mutants that break real behaviour badly (deleting the king guard fails 16 assertions,
+  > deleting the rook guard 5; `A7` reports green through both).
+  >
+  > **The reason is structural, and it is why no rewording could rescue the old claim.** `A7`'s
+  > population is the six perft positions — all **legally reachable**. `makeMove` only ever *clears* a
+  > castling right, so in any reachable position a held right implies both pieces are home and **the two
+  > guards this ticket added never fire there** (Security/NFR counted it: 198,175 executions each, **0
+  > rejections, ever**). A criterion whose whole population never executes the branch under test cannot
+  > discriminate any mutation of it.
+  >
+  > **The sentence that has to go, because it was never true.** `## Test notes` 2 called this *"the guard
+  > that would have caught the defect originally"*. It would not have. The original defect also needed a
+  > semantically-invalid position, which is exactly what `A7`'s population excludes — and the proof was
+  > already on this board, unread: the Engineer's red-before-green run recorded **10 of 33 new tests
+  > passing on the UNFIXED tree, and those 10 are the four legal-castle controls plus the six `A7` rows**.
+  > `A7` was green on the broken code. That is the claim falsified by this project's own measurement.
+  >
+  > **Why it is KEPT anyway, and this is a different argument from the one being retired.** It is the
+  > only purity walk over legal positions anywhere in the suite; it was **absent, not failing**, before
+  > this ticket, so writing it was real work; it costs six assertions and no runtime worth naming; and it
+  > guards a different class from this ticket's — a future change in generation that mutates a *legal*
+  > position, which is `ABC-022`'s shape and whatever `EPIC-004` does to the hot path. Deleting a green
+  > guard because it did not catch a defect it was never positioned to see is the reasoning that removes
+  > a smoke alarm from the hallway because the fire was in the garage.
+  >
+  > **What must never happen again:** citing `A7`'s green as evidence about this fix. It is evidence about
+  > legal positions only. **This is the second time this project shipped a criterion whose protective
+  > value was assumed rather than measured** — the first is named in `## Problem`, the 100% coverage
+  > number on `src/legal.ts` that this defect shipped straight through. Same error, different instrument:
+  > a green signal was read as protection without anyone asking what it could fail on.
 - **`A8` (the full suite — and the over-rejection oracle).** **Given** the full test suite, **when**
   it runs after the fix, **then** it is green with a **skip count of 0** and **no existing test is
   modified** to accommodate the change — **verified at line level, not by inspection**. *(This is
@@ -315,6 +363,78 @@ ticket carried from 2026-07-29**, so the Orchestrator's routing note of 2026-08-
 - **`A10`. ADDED 2026-08-09.** **Given** the bar in `## Security / NFR triggers`, **when** measured,
   **then** it holds. *(Named as a criterion, not left as prose, so the ratio in that section is part
   of the acceptance the way it is on `ABC-022`.)*
+- **`A11` (the impostor's piece type is QUANTIFIED, not sampled). ADDED 2026-08-09 (second hop).
+  ⚠️ NOT YET SATISFIED BY THE SUITE — see the second correction block.** **Given** the king's home
+  square occupied by **each** of the mover's own non-`KING` piece types — `QUEEN`, `ROOK`, `BISHOP`,
+  `KNIGHT`, `PAWN` — with the matching rook present, **and given** the rook's home square occupied by
+  **each** of the mover's own non-`ROOK` types — `QUEEN`, `BISHOP`, `KNIGHT`, `PAWN` — with the king
+  already on its home square, **when** `generateMoves` runs **and when** `legalMoves` runs, **then**
+  the `FLAG_CASTLE` count is **exactly 0** in **both** on **every** row, and on the king's-square rows
+  all 128 board bytes and all five scalars are unchanged across the call. **The enumeration must be
+  exhaustive over piece type: a sample of two, or of three, does not satisfy this criterion**, and both
+  colours to move and both castling sides must appear across the table.
+
+  *Measured on the delivered tree 2026-08-09 by BA/PM — the code already satisfies every row, so this
+  criterion asks for no behaviour change at all:*
+
+  ```
+  KING's home square, matching rook present   legalMoves  castles gen/legal  state
+  own QUEEN    4k3/8/8/8/8/8/8/K3Q2R w K - 0 1     31          0 / 0         pure
+  own ROOK     4k3/8/8/8/8/8/8/K3R2R w K - 0 1     24          0 / 0         pure
+  own BISHOP   4k3/8/8/8/8/8/8/K3B2R w K - 0 1     19          0 / 0         pure   (= A5 row 1)
+  own KNIGHT   4k3/8/8/8/8/8/8/K3N2R w K - 0 1     16          0 / 0         pure
+  own PAWN     4k3/8/8/8/8/8/8/K3P2R w K - 0 1     13          0 / 0         pure
+
+  ROOK's home square, king already home
+  own QUEEN    4k3/8/8/8/8/8/8/4K2Q w K - 0 1      21          0 / 0
+  own BISHOP   4k3/8/8/8/8/8/8/4K2B w K - 0 1      12          0 / 0         (= A6 row 1)
+  own KNIGHT   4k3/8/8/8/8/8/8/4K2N w K - 0 1       7          0 / 0
+  own PAWN     4k3/8/8/8/8/8/8/4K2P w K - 0 1       6          0 / 0
+  ```
+
+  **`parseFen` accepts every one of those FENs** — checked by running it, not assumed; it asserts one
+  king of each colour and performs no rights/board consistency check, so a pawn on the first rank is
+  accepted (that is `ABC-010`'s boundary, not this ticket's). **Two shapes are excluded, each for a
+  measured reason, so nobody adds a row for them:** the mover's own `KING` on the **rook's** home square
+  is not constructible — with the king also home it needs two kings of one colour and `parseFen`
+  rejects it, and with the king elsewhere the king guard already refuses — and an **enemy-colour**
+  occupant of either square is unreachable, masked by the pre-existing through-check test and measured
+  exhaustively twice (9,604 and 12,584 positions, zero divergence). A row for either would be
+  unfalsifiable.
+- **`A12` (a side holding BOTH rights: the invalid castle is refused and the VALID one SURVIVES).
+  ADDED 2026-08-09 (second hop). Already satisfied by the suite.** **Given** a position in which one
+  side holds **both** of its castling rights while **exactly one** of the two castles is invalid on the
+  board, **when** `generateMoves` runs **and when** `legalMoves` runs, **then** the valid castle is
+  **still offered in both, asserted BY NAME** — `e1g1` / `e1c1` / `e8g8` / `e8c8`, never by count alone
+  — the invalid one is absent, the total `legalMoves` count is exact, and the position is unchanged.
+  **At least one row must place the INVALID option EARLIER in generation order than the valid one**
+  (kingside precedes queenside in both `WHITE_CASTLES` and `BLACK_CASTLES`), and a row with **both**
+  castles valid is required beside it as the over-rejection control.
+
+  *Measured on the delivered tree 2026-08-09 by BA/PM:*
+
+  ```
+  4k3/8/8/8/8/8/8/R3K3 w KQ - 0 1    16 moves, exactly [e1c1]   h1 empty -> K bogus, a1 rook -> Q legal
+  4k3/8/8/8/8/8/8/4K2R w KQ - 0 1    15 moves, exactly [e1g1]   a1 empty -> Q bogus, h1 rook -> K legal
+  4k3/8/8/8/8/8/8/R3K2B w KQ - 0 1   23 moves, exactly [e1c1]   h1 holds an own BISHOP
+  4k3/8/8/8/8/8/8/B3K2R w KQ - 0 1   22 moves, exactly [e1g1]   a1 holds an own BISHOP
+  r3k3/8/8/8/8/8/8/4K3 b kq - 0 1    16 moves, exactly [e8c8]   black mirror
+  4k2r/8/8/8/8/8/8/4K3 b kq - 0 1    15 moves, exactly [e8g8]   black mirror
+  control  4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1   26 moves, BOTH offered [e1g1, e1c1]
+  control  r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1   26 moves, BOTH offered [e8g8, e8c8]
+  ```
+
+  **Why the ordering clause is load-bearing and not pedantry — measured, because half the table is inert
+  without it.** Turning the **rook** guard's `continue` into a `break` deletes a legal castle only when
+  the loop meets the invalid option first: on `R3K3 w KQ` (kingside bogus, reached first) it reads
+  **15 moves / 0 castles** against the correct 16 / 1, while on `4K2R w KQ` (queenside bogus, reached
+  second) it is **indistinguishable from correct**. Of the six rows above, exactly **three** go red on
+  that mutant. A criterion that said only *"one right valid, one bogus"* could be satisfied entirely by
+  the three inert rows — which is the same sampled-where-the-rule-quantifies defect as `A11`, one level
+  down. **Deliberately NOT pinned, with the measurement:** the identical mutation on the **king** guard
+  is behaviour-equivalent, because both of a side's options share `kingFrom` (`e1` for `K` and `Q`), and
+  it passes all 33 acceptance and all 19 hardening rows. One token, two opposite verdicts; a criterion
+  that tried to catch the equivalent one would be unfalsifiable.
 
 > ### CORRECTED IN PLACE 2026-08-09 by BA/PM (task `ticket-to-pr-ABC-009`, subtask `bapm-abc009-acceptance`, Workflow 07)
 >
@@ -513,6 +633,130 @@ ticket carried from 2026-07-29**, so the Orchestrator's routing note of 2026-08-
 > tickets structurally identical rather than divergent, which strengthens its calibration instead of
 > breaking it.)*
 
+> ### CORRECTED IN PLACE AGAIN 2026-08-09 by BA/PM — SECOND HOP (task `ticket-to-pr-ABC-009`, subtask `bapm-abc009-criteria-text`, Workflow 07)
+>
+> **This hop changed no behaviour and asks for none.** The delivered `src/moves.ts` is correct on every
+> position either of the gaps below exposes — verified here on this role's own probe, a **sixth**
+> independent derivation of the `A1`–`A6` counts and the first of the new rows. **No file under `src/`
+> was touched**, no board move was taken (`ABC-009` stays in `Ready for UAT`), and `ABC-022`, `ABC-010`,
+> `ABC-011` and `plans/nfr-catalog.md` were not edited. **Nothing merged, nothing deployed.**
+>
+> Two roles routed three items here rather than editing this section themselves — QE
+> (`20260809T123500Z-qe-e2e-decision-634cb408`, risks 1–3) and Security/NFR
+> (`20260809T131400Z-security-nfr-decision-b67fabe0`, risks 1–3), each leaving `## Acceptance`
+> byte-identical on purpose. **That seam is the reason both gaps were found at all**, and it is honoured
+> in the other direction here: nothing in `## Implementation`, `## QE` or `## Security / NFR` was edited
+> by this hop either.
+>
+> **How each ruling below was established.** Ten mutants of the **delivered** diff, each applied to a
+> **copy** of the repository's `src/` held outside the repository, each asserting its anchor **unique**
+> and its bytes **changed** before running, each typechecked so a broken build could not be scored as a
+> survivor, and each restored with `src/moves.ts` re-hashed to `0e247853ab2c05887c76105ff83d8621`
+> afterwards. **No file under `src/` in this repository was modified at any point.** Both test files were
+> run per mutant with a JSON reporter so failures are attributed by criterion rather than eyeballed.
+>
+> **8 — `G-1`: the criteria sample the impostor's piece type where the rule quantifies over it. AGREED —
+> AND THE GAP IS WIDER THAN IT WAS ROUTED. `A11` added, and it is NOT YET MET BY THE SUITE.**
+>
+> QE closed the **queen** in tests (`src/moves.castling.hardening.test.ts`, 8 queen rows) and routed the
+> criteria text here. Re-deriving rather than accepting the framing turned up the part nobody had
+> measured: **the queen rows closed one instance, not the dimension.** Three further builds of the same
+> shape — each admitting exactly one more of the mover's own piece types — pass **everything**:
+>
+> ```
+> mutant                                        acceptance   hardening   full suite    deep lane
+> KING's square read as "own KING or own ROOK"   33/33        19/19       356/356 sk0   32/32 exact
+> KING's square read as "own KING or own PAWN"   33/33        19/19       356/356 sk0   (not run)
+> ROOK's square read as "own ROOK or own PAWN"   33/33        19/19       356/356 sk0   (not run)
+> ```
+>
+> The first of those is the most plausible mis-implementation on the list — the two guards are adjacent
+> and compare against locals named `king` and `rook` — and it is **exactly the reading QE's own gap
+> statement used as its example** (*"the mover's KING/ROOK **or QUEEN**"*), with `QUEEN` swapped for the
+> byte sitting one line below. One of the four types is caught: admitting an own `KNIGHT` on the rook's
+> square dies to `A6`'s knight row (32/33). **The dimension is open; the queen is closed.** So `A11`
+> quantifies over every own piece type rather than adding a fourth sample, and the enumeration
+> requirement is written into the criterion so a future reader cannot satisfy it with a spread of three.
+>
+> **The cost is bounded and it is test-only: roughly nine rows in an existing table-driven file, zero
+> production lines.** Stated plainly because it is the uncomfortable part: **this ticket cannot honestly
+> be closed until they exist.** The alternative was considered and rejected —
+> **rejected alternative:** scope `A11` to the three piece types the suite already covers and carry the
+> rook/pawn hole as an accepted risk, which would let the ticket close today. Rejected because it is the
+> defect this ticket exists to fix, performed on itself: a criterion that samples where the rule
+> quantifies, shipped green, with three live counter-examples already in hand. **This is the one ending
+> this ticket may not have.** **Second rejected alternative:** write the rows here. Not this role's —
+> BA/PM writes no test, and QE's file is QE's.
+>
+> **9 — `G-2`: nothing varied HOW MANY rights a side holds. AGREED. `A12` added, WITH an ordering clause
+> the routed statement did not have — and the suite already satisfies it.**
+>
+> Confirmed at the source: every `A1`–`A10` FEN carries at most one right per side, except the
+> reproduction FEN where **both** castles are invalid and the expected answer is zero either way, so
+> nothing separated *"this option was rejected"* from *"the option loop was abandoned"*. Re-measured
+> here: `continue`→`break` on the **rook** guard turns `4k3/8/8/8/8/8/8/R3K3 w KQ - 0 1` from **16 moves
+> with `e1c1`** into **15 moves with no castle** — a legal move silently deleted — while passing all 33
+> acceptance rows.
+>
+> **What re-derivation added, and it is load-bearing.** The harm is **order-dependent**: it appears only
+> when the loop reaches the **invalid** option **first**. On the mirror row `4k3/8/8/8/8/8/8/4K2R w KQ`
+> (queenside bogus, reached second) the mutant is **indistinguishable from correct**, and exactly **three
+> of QE's six rows** go red on it. A criterion phrased only as *"one right valid, one bogus"* is
+> therefore **half inert**, and could be satisfied entirely by the three rows that discriminate nothing.
+> `A12` names the ordering requirement and requires the surviving castle asserted **by name**, since a
+> count alone cannot distinguish *"the invalid one was rejected"* from *"the valid one was dropped and
+> something else appeared"*. QE's rows meet all of this; **no new coverage is owed for `G-2`.**
+> **Rejected alternative:** pin the king-guard `break` too, for symmetry. Measured behaviour-equivalent
+> — both of a side's options share `kingFrom`, and the mutant passes all 33 acceptance and all 19
+> hardening rows — so a criterion for it would be unfalsifiable theatre, the same call this board made
+> for the wrong-colour rook and the colour-blind mutant.
+>
+> **10 — `A7` killed nothing across 62 mutants. KEPT, RECLASSIFIED, AND ITS JUSTIFICATION RETIRED AS
+> FALSE.** The full ruling is under `A7` itself, where a reader meets it. In short: re-measured here at
+> **0 kills of 10 further mutants**, inert by construction because its population is legally reachable
+> and the two guards never fire there; **kept** because it is the suite's only purity walk over legal
+> positions, was absent rather than failing before this ticket, and guards a different class; and
+> `## Test notes` 2's claim that it is *"the guard that would have caught the defect originally"* is
+> **withdrawn as false** — the original defect needed a semantically-invalid position too, and the
+> Engineer's own red-before-green record (10 of 33 passing on the unfixed tree, being the four controls
+> plus the six `A7` rows) already proved `A7` green on the broken code. **Rejected alternative: delete
+> `A7`.** It is a legitimate answer and it was taken seriously — a criterion measured inert against every
+> mutation of the fix it accompanies is exactly what a lean acceptance set should shed. Rejected because
+> the measurement says "inert against **this** class", not "inert"; it costs six assertions; and the
+> honest repair for a criterion whose value was assumed is to **state the measured value**, not to remove
+> the evidence that it was overclaimed. **The lesson is recorded as a lesson, in `## Problem`'s voice:
+> this is the second criterion on this project whose protective value was assumed rather than measured.**
+>
+> **11 — The right-test lane and guard ordering: NO criteria text, and each refusal is measured rather
+> than asserted.**
+>
+> - **The pre-existing castling-right test** (`(position.castling & option.right) === 0`) is not one of
+>   the two **board** preconditions this ticket owns, so no criterion here — the scope fence holds in both
+>   directions, which is the same discipline that kept `ABC-022`'s half (b) out. What changed is worth one
+>   line and it is now in `## Test notes`: QE's two no-right rows are what guard it in the **default**
+>   lane, so they must not be deleted as "not in the acceptance". **Rejected alternative:** promote it to a
+>   criterion here because `A9` (a 40-second opt-in lane) was otherwise its only guard. Rejected as scope
+>   creep onto a pre-existing guard; the lane-strategy question is real and belongs to `EPIC-004` /
+>   Architect where Security/NFR left it, not to this ticket's acceptance.
+> - **Guard ordering** deserves **no criteria text, and cannot have any.** Security/NFR discharged it
+>   from hazard to property: the five guards are a conjunction of side-effect-free predicates over an
+>   unmutated position, hence permutation-invariant, measured at 99 comparisons over 33 FENs with zero
+>   divergence. **A property no test can ever fail on cannot be an acceptance criterion** — that is the
+>   definition of unfalsifiable, and this is the third such refusal on this ticket. The cost half is
+>   0.003% of the sweep, below the instrument's own floor, so there is no budget a bar could defend
+>   either. **Rejected alternative:** write the measured ~18x cheaper-on-invalid-input figure into
+>   `## Security / NFR triggers` as a bar. Rejected twice over — it would pin an implementation ordering
+>   the code is free to change, and nothing in CI measures it.
+>
+> **Size re-checked at the source, not assumed: still `S` (2). Priority re-checked: still `P1`.** The two
+> new criteria add **no** new requirement — `A11` quantifies a rule `## Scope` has stated since the first
+> correction (*"the moving side's `KING` byte and no other"*) and `A12` names a case that rule already
+> covers; neither asks for a production line. Nine test rows in an existing table-driven file do not move
+> a size that already carried thirty-three. `P1` holds on the owner's legality-first directive of
+> 2026-07-31, and **the escalation trigger is still UNFIRED — re-read at the source rather than carried:
+> `ABC-010` is `Backlog` / `P1` / `M`, neither deferred nor descoped**, and there is still no CLI entry
+> point through which any epic accepts a position from outside the rules core.
+
 ## Dependencies
 
 - No blocking dependency. The defective code is merged on `main` (`ABC-002`, `ABC-004`,
@@ -568,21 +812,33 @@ ticket carried from 2026-07-29**, so the Orchestrator's routing note of 2026-08-
 
 ## Test notes
 
-The reproduction above is the test. **Five shapes are needed and they are not interchangeable**
-*(was two, until 2026-08-09 — see the correction block; the two below are the originals, sharpened)*:
+The reproduction above is the test. **Six shapes are needed and they are not interchangeable**
+*(was two until 2026-08-09, then five at the first hop and six at the second — see the two correction
+blocks; shapes 1 and 2 are the originals, sharpened)*:
 
 1. **The exact repro cases** — the FENs of `A1`–`A3`, asserted on the **full position state** and on
    move counts. These fail today and are the acceptance bar.
 2. **A purity property test across the perft table** — for every standard position, assert the **full
-   position state** is stable across two `legalMoves` calls. This is the guard that would have caught
-   the defect originally, and it is cheap because the position table already exists. **It is not the
-   over-rejection oracle** — `A8` is.
+   position state** is stable across two `legalMoves` calls. ~~This is the guard that would have caught
+   the defect originally~~, and it is cheap because the position table already exists. **It is not the
+   over-rejection oracle** — `A8` is. *(Struck 2026-08-09, second hop, and replaced rather than softened:
+   **it would NOT have caught the defect originally.** Its population is legally reachable, and both the
+   original defect and every mutation of its fix require a semantically-invalid position — measured, 0
+   kills of 62 mutants (QE) and 0 of 10 more (BA/PM), and the Engineer's red-before-green run already
+   showed these six rows GREEN on the unfixed tree. It is kept as a standing purity walk over **legal**
+   positions, which is a different and real job; see the boxed note under `A7`. **Never cite its green as
+   evidence about this fix.**)*
 3. **A table keyed on what is PRESENT on each home square, not on what is missing.** *(Added
    2026-08-09; this is `ABC-022`'s test note 1, earned by QE on 2026-08-03 on this same module, where
    two mutants survived 206 tests because the delivered table classified boards by what was
    *absent*.)* `A3` and `A4` are absence rows — an empty rook square, an empty king square. **`A5` and
-   `A6` are presence rows and they are the ones that pin identity over occupancy.** Include **at least
-   two piece types, both colours of occupant and both colours to move**, and keep the four legal-castle
+   `A6` are presence rows and they are the ones that pin identity over occupancy.** Include ~~at least
+   two piece types~~ **EVERY one of the mover's own piece types** *(corrected 2026-08-09, second hop —
+   see `A11`. "At least two" is satisfied literally by a bishop and a knight while the rule quantifies
+   over every other byte, and **three measured builds admitting one further own type pass all 356
+   tests, `A1`–`A10` and the deep lane**. A sample is not a quantifier; this is the same defect this
+   ticket exists to fix, one level up in the specification.)*, both colours of occupant and both colours
+   to move, and keep the four legal-castle
    controls from `## Reproduction` beside them so a fix cannot pass by rejecting more than it should.
 4. **Purity asserted over the FULL position state — all 128 board bytes and all five scalars — NOT
    via `toFen`.** *(Added 2026-08-09.)* `toFen` reads 64 of the 128 bytes and cannot see an off-board
@@ -602,6 +858,24 @@ The reproduction above is the test. **Five shapes are needed and they are not in
    false red. If deleting one fails nothing, that condition is not in the acceptance at all — which is
    exactly the state this ticket was in before today, where deleting the king condition failed the
    empty set.
+6. **Vary HOW MANY of a side's rights are held, with the INVALID option first in generation order.**
+   *(Added 2026-08-09, second hop — `A12`. Every criterion FEN before this one carried at most one right
+   per side, so nothing could distinguish "this option was rejected" from "the option loop was
+   abandoned": `continue`→`break` on the rook guard deletes a legal castle and was green on all twelve
+   criteria.)* The discrimination is **order-dependent** and measured: the harm shows only when the loop
+   meets the bogus option first — kingside precedes queenside in both `WHITE_CASTLES` and
+   `BLACK_CASTLES` — so a row with the *valid* castle first is inert and three of six such rows carry
+   the whole load. Assert the surviving castle **by name**, never by count alone, and keep a
+   both-castles-valid row beside them. **The mirror mutation on the king guard is behaviour-equivalent
+   (both options share `kingFrom`) and is deliberately not pinned.**
+
+**Two rows in `src/moves.castling.hardening.test.ts` are load-bearing without belonging to any criterion,
+and must not be deleted as "not in the acceptance."** *(Added 2026-08-09, second hop.)* The two
+no-right-held rows (`4k3/8/8/8/8/8/8/R3K2R w - - 0 1` and its black mirror) are what guard the
+**pre-existing** castling-right test in the **default** lane; deleting that test passes all 337 delivered
+tests and is caught otherwise only by the 40-second opt-in `A9`. The right is not one of the two **board**
+preconditions this ticket owns, so it gets no criterion here — but the coverage is real and the reason it
+exists is now written down.
 
 Assert the *contract* (position unchanged, results idempotent, no move offered that the rules
 forbid), not line execution. `src/legal.ts` was already at 100% coverage when this shipped; a test
@@ -655,6 +929,15 @@ the head of this file came from the owner's legality-first directive instead. Th
 and unspent: if `EPIC-003` begins accepting a user FEN before `ABC-010` lands, that is a separate
 escalation and it argues for `P0`.*
 
+*Trigger status re-read at the source 2026-08-09 (second BA/PM hop): **still NOT fired, and still on both
+clauses.** `plans/tickets/ABC-010-*.md` reads `status: backlog` / `column: Backlog` / `size: M` /
+`priority: P1` and `plans/board.md` line 90 carries it in `Backlog` — neither deferred nor descoped. There
+is still no CLI entry point (`AGENTS.md` *Dev / run* is `UNKNOWN - verify` until `EPIC-006`), so no epic
+accepts a position from outside the rules core. **Size `S` and priority `P1` both re-checked and both
+unmoved**; the second hop's two criteria add no production requirement. The header's `P2` in the block
+above is the ORIGINAL derivation and is left standing as the record of it — the live priority is `P1`,
+in the frontmatter and in the escalation note at the head of this file.*
+
 ## Definition of Ready
 
 **Re-derived 2026-08-09 at the `Ready → In Development` pull.** The block below was written
@@ -680,6 +963,16 @@ counts, byte-identical FEN comparison)". Every item in that list was literally t
 still wrong — the exact FENs were exact, and the defects were in the criteria the list did not
 mention. That is the same trap `ABC-018`'s block fell into two days earlier, and it is the reason a
 tick is now written with what it excludes rather than what it includes.)*
+
+**Amended 2026-08-09 at the second BA/PM hop, and the distinction matters.** The *acceptance measurable*
+row stays ✅ and is **stronger** than it was: `A11` replaces a sampled requirement with a quantified one
+and `A12` names an order-dependent case, both with exact measured numbers. **What is NOT true is that
+every criterion is currently SATISFIED** — `A11` is not, by roughly nine test rows, measured and named in
+the second correction block. Those are two different claims and this block only ever made the first one:
+Definition of Ready asks whether a ticket can be *pulled into dev*, which `ABC-009` was, on 2026-08-09.
+**Nothing in this block was flipped, and no board move was taken** — `ABC-009` stays in `Ready for UAT`,
+and whether the shortfall is closed before it is closed out is the Orchestrator's routing call, not a tick
+this role may quietly re-draw.
 
 ~~Sits in `Backlog`. Promotion to `Ready` is a separate BA/PM step and has not been taken.~~
 
