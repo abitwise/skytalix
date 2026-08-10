@@ -175,7 +175,21 @@ convention; the current status of each line is in the block that follows it.)*
 - **problem clear / scope / value / out-of-scope / test notes** ✅ — above, with the numbers measured
   rather than asserted.
 
-### DoR status after the Architect/Design hop, 2026-08-10 — **8 of 10 clean, 2 open, and neither open item is mine**
+### DoR status after the OWNER'S RATIFICATION, 2026-08-11 — **9 of 10 clean, ONE open item, and it is BA/PM's**
+
+> **RATIFIED 2026-08-11 by Olger Oeselg, the project owner, DIRECTLY and in session:** *"ratify
+> NFR-008 at 3s wall / 13s CPU"*. **The one gap no role on this board could close is CLOSED.**
+> `NFR-008`'s level is no longer `PROVISIONAL`; both clauses bind as written and `ADR-0008` is
+> `accepted`. **The Orchestrator was the CHANNEL, not the ratifier** — it escalated the level and
+> declined to set it, because `ADR-0004`'s Status section records its own by-delegation ratification
+> as explicitly not precedent. **So this level rests on a plain human decision and does NOT extend
+> that delegation.**
+>
+> **ONE DoR item remains and it is BA/PM's: the acceptance criteria.** They can now be written
+> against a ratified number. No further Architect/Design hop is needed, and no further owner input
+> is needed, before `Ready`.
+
+### DoR status after the Architect/Design hop, 2026-08-10 — **8 of 10 clean, 2 open, and neither open item is mine** (superseded above by the ratification; kept for the record)
 
 - **acceptance criteria clear, testable and measurable** ⚠️ → **the BLOCKER is removed and the
   criteria are still unwritten.** *"What may the lane cost in total"* now has an answer — `NFR-008`,
@@ -190,8 +204,9 @@ convention; the current status of each line is in the block that follows it.)*
 - **size assigned** ✅ → **`S` (2).** See `## Size` below.
 - **problem clear / scope / value / out-of-scope / test notes** ✅ — unchanged, and the scope sketch
   the cut called *"negotiable"* has been settled rather than re-opened.
-- **NEW, and it is the one gap no role on this board can close** ⚠️ — **`NFR-008`'s LEVEL is
-  `PROVISIONAL` and its ratifier is Olger Oeselg via the Orchestrator.** The *shape* is measured and
+- **NEW, and it is the one gap no role on this board can close** ✅ **— CLOSED 2026-08-11 by the
+  owner directly; see the ratification block above. What follows is the state as it stood before
+  that ruling.** **`NFR-008`'s LEVEL was `PROVISIONAL`.** The *shape* is measured and
   is not provisional. What is unratified is what a 3 s wait is worth to the humans who wait for it,
   and **there is no instrument on this board that measures that.** The 3 s is adopted from this
   ticket's own promotion trigger, so it is the board's own agreed figure rather than an invention —

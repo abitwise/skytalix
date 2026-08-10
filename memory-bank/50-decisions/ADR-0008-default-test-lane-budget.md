@@ -2,10 +2,21 @@
 
 ## Status
 
-**proposed** — the *shape* is decided and measured; the *level* (3 s wall / 13 s CPU) is
-`PROVISIONAL` and its ratifier is **Olger Oeselg via the Orchestrator**, for the reason in
-Consequences. Written 2026-08-10 by Architect/Design at task `refinement-ABC-026`, subtask
-`refinement-ABC-026-design`, Workflow 07, from `ABC-025`'s Security/NFR gate risk **#9**.
+**accepted** — RATIFIED 2026-08-11 by **Olger Oeselg**, the project owner, DIRECTLY and in
+session: *"ratify NFR-008 at 3s wall / 13s CPU"*. Both the *shape* and the *level* (3 s wall /
+13 s CPU) now stand; the `PROVISIONAL` marker is discharged and the level is no longer pending.
+
+**How this ratification was made, recorded because the distinction is load-bearing.** The owner
+ruled directly on his own words, quoted above. The Orchestrator was the CHANNEL, not the
+ratifier — it escalated the level, declined to set it, and stated in the board header that it
+would not, on the ground that `ADR-0004`'s Status section records its own by-delegation
+ratification as **explicitly not precedent**. **This ADR therefore does NOT rest on a delegation
+and does not extend `ADR-0004`'s.** It is a plain human decision, which is the only kind this
+level could ever have had: what a 3 s wait is worth to the humans who wait is not measurable by
+any role on this board, and no measurement in this file was ever going to supply it.
+
+Written 2026-08-10 as `proposed`, for the reason in Consequences. Authored by Architect/Design at task `refinement-ABC-026`, subtask `refinement-ABC-026-design`,
+Workflow 07, from `ABC-025`'s Security/NFR gate risk **#9**.
 
 This ADR is written because the *why* here is not recoverable from the catalog row alone: the row
 carries a number, and the thing a future maintainer will need is the argument that a per-ticket ratio
