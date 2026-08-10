@@ -1,8 +1,8 @@
 ---
 id: ABC-013
 title: SAN rendering — src/san.ts with toSan only
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: M
 priority: P1
 epic: EPIC-002
