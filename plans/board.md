@@ -98,6 +98,7 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 - [ABC-017] Bounded move-history pane — two-column SAN  (size: S, P2, epic: EPIC-002, blocked-until: ABC-013, ABC-014)
 - [ABC-019] Turn loop skeleton  (size: L, P0, epic: EPIC-002, blocked-until: ABC-012, ABC-014, ABC-018; merge-order: after ABC-020)
 - [ABC-021] Draw-claim interaction — the player having the move claims  (size: S, P1, epic: EPIC-002, blocked-until: ABC-020, ABC-019, since: 2026-07-31)
+- [ABC-024] Castling guards protected only by the opt-in deep lane — the `empty` corridor on black, and the right test off its default scalars  (owner: BA/PM, size: S, P2, epic: EPIC-001, since: 2026-08-10, cut from ABC-023's QE hop by BA/PM, HARDENING not a defect; **DoR NOT fully met — 8 of 10 clean, 2 recorded ⚠️**, blocked-until: ABC-023 merges (ordering dependency over one shared file, not content); **7 wrong builds pass the DEFAULT `npm test` at 625/625 and die ONLY in the opt-in `PERFT_DEEP=1` lane** — 4 of the 5 BLACK `empty` corridor squares (all 5 white ones die in the default lane) plus all 3 scalar-conditional forms of the castling right test; 6 of the 7 hang on EXACTLY ONE deep assertion; QE reported 2, BA/PM re-derived and measured 7 — 14 mutants, 0 broken builds, 0 harness errors, 26 witnesses, `src/moves.ts` md5 6335b452… never written; **ruling recorded in the ticket: a guard whose ONLY protection is the deep lane is owed a default-lane row, and the deep lane is NOT promoted into the gate**; ABC-009 not reopened, ABC-023 not edited)
 
 ## Ready (WIP 1/8)
 
