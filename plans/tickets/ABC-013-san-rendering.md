@@ -1,8 +1,8 @@
 ---
 id: ABC-013
 title: SAN rendering — src/san.ts with toSan only
-status: ready-for-dev
-column: Ready for Dev
+status: in-development
+column: In Development
 size: M
 priority: P1
 epic: EPIC-002
