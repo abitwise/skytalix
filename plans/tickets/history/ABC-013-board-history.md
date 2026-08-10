@@ -54,3 +54,62 @@ CLEARED 2026-07-31 by Architect/Design (subtask `architect-adr0004-ratify`): ADR
   exactly one.
 
 ---
+
+## `Ready → Ready for Dev` — the BA/PM promotion, 2026-08-10
+
+Recorded by BA/PM (task `ticket-to-pr-ABC-013`, subtask `ticket-to-pr-ABC-013-bapm`, Workflow 07).
+WIP at the move: **Ready 1/8 → 0/8, Ready for Dev 0/6 → 1/6**; `In Development` 0/3 and `Blocked`
+empty, both untouched. `queue.wip_limit` 3, unchanged. The `Ready` exit is BA/PM's per this board's
+`## Columns`; the `Ready for Dev → In Development` exit is the Orchestrator's and was **not** taken,
+and **no engineer was enqueued**.
+
+**The Definition of Ready is MET on all ten rows — after seventeen corrections.** The hop that
+opened this task returned AMBER on one row ("acceptance criteria clear, testable and measurable")
+and named four defects plus a fifth it explicitly declined to assert. Measured at this hop: **17
+corrections**, and the fifth candidate — *a castle can give check, and nothing pinned `O-O+`* — is
+**confirmed**.
+
+**Nine wrong builds passed all thirteen criteria as written.** Each was a real build of `toSan`,
+scored against a hand-typed oracle of 52 rows over 18 FENs, on merged `main`, outside the
+repository. They were scored *charitably*: every prose criterion was handed the best FEN that can be
+built for it, which is strictly more than an engineer holding only the ticket would have had. The
+nine: rank-before-file; rivals drawn from the **pseudo-legal** list (a **pinned** knight still forces
+a qualifier); rivals not filtered by piece type; `#` emitted on a **stalemate**; the `x` lost on an
+**en-passant** capture; `x` for pawn captures only; a castle returning before its suffix; a wrong
+`K` letter; and `P` on a quiet pawn push. All nine die on the repaired table.
+
+**The pre-check's `Pe4` lead was confirmed and its mechanism corrected.** The build it described —
+an explicit `P` on every quiet pawn move — is killed by the *promotion* criterion, because it also
+emits `Pe8=Q`. The build that actually survives is the narrower one whose promotion branch is
+written separately and correctly. Recorded rather than absorbed, because "confirmed" and "confirmed
+as described" are not the same verdict.
+
+**One of thirteen criteria was executable as written**, against a section that opened *"Every
+criterion is a hand-built FEN with an exact expected string"*. Five criteria named a position in
+prose, three named none at all, two were unbounded universals. Acceptance is now **22 criteria over
+18 named FENs and 52 hand-typed rows**; every FEN parses, round-trips through `toFen`
+byte-identically, and was confirmed a legal position on merged `main` with its named moves present
+in `legalMoves`. The oracle was written **before** any implementation existed in the harness — md5
+`56d56506fcf89de10d79c5774e2a630c`, stamped `2026-08-10T11:51:22Z` — so nothing computed an expected
+value; the reference build written afterwards agrees with all 52 rows, which is corroboration, not
+derivation.
+
+**Both NFR bars were not merely stale — they were unsatisfiable under the per-call reading.** A
+*correct* reference build misses the `6.5 µs` bar by 1.42x and the `0.20 µs` bar by 22.5x on a
+checking piece move, because deciding `+` versus `#` requires a second `legalMoves` on the position
+after the move. That is `ADR-0004`'s own definition of the mate suffix, so the failure is in the
+bar, not the build. Re-derived as `N1`–`N4` with the aggregation and the move population **stated**,
+against a benchmark position now **pinned as a literal FEN**: wave 1 named a method whose seed was
+never recorded, so its ply-60 position cannot be reconstructed and **no regression from `ABC-009`'s
+or `ABC-022`'s guards is claimed or refuted here**. `N3` is the ticket's original 6.5 µs figure
+re-measured and **confirmed, not moved**. `N1` is a ratio and is the only machine-independent bar.
+`plans/nfr-catalog.md` was **not** edited and no catalog target moved.
+
+**Not established, and it is the reason this is a promotion rather than a clean bill:** that the
+criteria set is now complete. Nine wrong builds passed a table a careful pre-check had just
+reviewed, and the instrument that scored those nine was written by the same role that wrote the
+rows — the exact dependency `ABC-023`'s QE hop broke, where an independent harness found fourteen
+more surviving builds. QE's mutation hop is the check this hop cannot be.
+
+Nothing under `src/` was touched, no test was written, `ADR-0004` was not re-opened, `EPIC-003`'s
+`parseSan` contract was not altered, and nothing was merged or deployed.
