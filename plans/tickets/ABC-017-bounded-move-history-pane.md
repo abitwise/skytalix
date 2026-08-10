@@ -115,10 +115,45 @@ arithmetic above forces the bound anyway.
   Node v24.12.0, darwin/arm64**, transcribed from wave 1's measurement note;
   **`UNKNOWN - verify` on any other hardware.** *This is BA/PM arithmetic over someone else's
   measurement — it is a target, not a result.*
-- **`plans/nfr-catalog.md`'s NFR-002 row is owed an update and this ticket is the reason.** That row
-  records that *"the frame is a function of GAME LENGTH, not only of position — the history panel is
-  O(plies)"*, which was true of the unbounded model and is not true of this one. **The row is
-  Architect/Design's to rewrite; flagged here, not edited.**
+- ~~**`plans/nfr-catalog.md`'s NFR-002 row is owed an update and this ticket is the reason.** That
+  row records that *"the frame is a function of GAME LENGTH, not only of position — the history panel
+  is O(plies)"*, which was true of the unbounded model and is not true of this one. **The row is
+  Architect/Design's to rewrite; flagged here, not edited.**~~
+  *(**STRUCK 2026-08-10 by Architect/Design** at task `refinement-ABC-026`, subtask
+  `refinement-ABC-026-design`. **The flag was already STALE when it was written, and no edit is owed
+  or has been made to the `NFR-002` row.** The bullet is left standing above rather than deleted,
+  because the original text is what the Orchestrator's hold decision and the board row both cite.
+  **The rewrite this flag asks for landed nine and a half hours after the flag did.** The quoted
+  sentence is verbatim from the row's `Applies to` cell as it stood at `f3d5966`; this ticket was cut
+  at `03b0a65`, **2026-07-31T00:27:21+03:00**, and `92046f9` — *"docs(architecture): grug correct
+  NFR-002 denominator, ply count to bounded window"* — landed at **2026-07-31T09:55:05+03:00**,
+  replacing that cell with *"CORRECTED 2026-07-30 — the frame is NO LONGER `O(plies)`"* and adding
+  the section-length correction block that states the `O(window)` claim, its boundary condition and
+  its falsifier. Checked at the source, not inferred: the quoted string occurs nowhere in the
+  `NFR-002` row or its section today. **Acting on this flag would have re-opened the most-corrected
+  row in that file for no reason**, which is why it is struck here rather than carried into
+  `ABC-017`'s own hop. The ruling, with the commit hashes and timestamps, is recorded in
+  `plans/nfr-catalog.md`'s `NFR-002` section and in
+  `.grugops/context/refinement-ABC-026/notes/`.)*
+- **What `NFR-002` still owes this ticket is a MEASUREMENT, not a rewrite, and it is unchanged.** The
+  bounded-pane compute is `UNKNOWN - verify` in that row's own unknowns table; the closer named there
+  is *"`ABC-017`'s cost test at 40 / 120 / 300 plies: ≤ 150 µs absolute **and** the three within 2x"*
+  — i.e. this ticket's own bar, above. **The result belongs in the `NFR-002` row when it is measured
+  on delivered code; the row is not owed anything before then.**
+- **NEW, and it applies to this ticket at its Security/NFR gate.** `NFR-002`'s `O(window)` claim rests
+  on a **structural** fact verified at `ABC-012`'s gate — *"`src/history.ts` has ZERO importers, so
+  nothing pulled the repetition derive into a frame"*. **This pane and `ABC-016`'s status panel are
+  the two tickets on this board that can void it.** This ticket's gate must re-verify the importer
+  fact on **delivered** code (a `grep` for importers of `src/history.ts`, not a reading of this
+  ticket) and say so. Ruled 2026-08-10 by Architect/Design; owner **Security/NFR at this ticket's
+  gate**; trigger: this ticket entering `In Security/NFR`.
+- **This ticket inherits `NFR-008`'s standing per-ticket lane bar `N8-LANE`** (added
+  2026-08-10 to `plans/nfr-catalog.md`): the tests it adds may cost **≤ 5% of the lane's TOTAL
+  budget — ≤ 650 ms CPU (user + sys)** — **not** 5% of the lane as it stands, **net of ~160 ms CPU
+  per test file added**, as the median of paired per-round deltas over n ≥ 7 interleaved rounds with
+  an identity null control. It adds one test file, so its floor allowance is ~160 ms CPU and its
+  content allowance is 650 ms. **Do not re-derive a lane bar for this ticket** — that practice has
+  cost this board two ruling hops.
 - **No security trigger.** SAN strings are derived from generator-owned `Move`s; no user-supplied
   text reaches this pane.
 
