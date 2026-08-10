@@ -63,7 +63,7 @@ empty, both untouched. `queue.wip_limit` 3, unchanged. The `Ready` exit is BA/PM
 `## Columns`; the `Ready for Dev → In Development` exit is the Orchestrator's and was **not** taken,
 and **no engineer was enqueued**.
 
-**The Definition of Ready is MET on all ten rows — after seventeen corrections.** The hop that
+**The Definition of Ready is MET on all ten rows — after eighteen corrections.** The hop that
 opened this task returned AMBER on one row ("acceptance criteria clear, testable and measurable")
 and named four defects plus a fifth it explicitly declined to assert. Measured at this hop: **17
 corrections**, and the fifth candidate — *a castle can give check, and nothing pinned `O-O+`* — is

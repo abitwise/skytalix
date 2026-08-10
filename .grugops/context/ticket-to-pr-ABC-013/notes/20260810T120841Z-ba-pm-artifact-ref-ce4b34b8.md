@@ -22,7 +22,7 @@ supersedes:
 
 | artifact | change |
 |---|---|
-| `plans/tickets/ABC-013-san-rendering.md` | `## Acceptance` rewritten (13 → 22 criteria, 18 named FENs, 52 exact strings); `## Security / NFR triggers` re-derived (`N1`–`N4`, position pinned as a FEN); `## Scope` gains the two caller obligations and a re-measurement note on the 40x; `## Test notes` false `ABC-009` sentence corrected and the disambiguation bullet given its measured result; `## Definition of Ready` amended with the seventeen corrections and what they do not establish; front matter `status: ready → ready-for-dev`, `column: Ready → Ready for Dev` |
+| `plans/tickets/ABC-013-san-rendering.md` | `## Acceptance` rewritten (13 → 22 criteria, 18 named FENs, 52 exact strings); `## Security / NFR triggers` re-derived (`N1`–`N4`, position pinned as a FEN); `## Scope` gains the two caller obligations and a re-measurement note on the 40x; `## Test notes` false `ABC-009` sentence corrected and the disambiguation bullet given its measured result; `## Definition of Ready` amended with the eighteen corrections and what they do not establish; front matter `status: ready → ready-for-dev`, `column: Ready → Ready for Dev` |
 | `plans/board.md` | `ABC-013` moved `Ready` → `Ready for Dev`; Ready 1/8 → 0/8, Ready for Dev 0/6 → 1/6; `_Updated:` header replaced (one line) |
 | `plans/tickets/history/ABC-023-board-history.md` | the outgoing `_Updated:` header appended **verbatim** (2,513 chars, byte-checked) BEFORE the board header was replaced |
 | `plans/tickets/history/ABC-013-board-history.md` | the promotion entry appended |

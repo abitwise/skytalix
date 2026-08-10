@@ -397,15 +397,19 @@ not a usable target — see below)** · test notes ✅ · size `M` ✅ · priori
 `Blocked` → `Ready` on 2026-07-31 after one day of a two-day `blocked_escalation_days` window,
 never escalated; its dependencies (`ABC-003`, `ABC-005`) are merged on `main`.
 
-### The 2026-08-10 repair — SEVENTEEN corrections, NINE of them witnessed by a wrong build
+### The 2026-08-10 repair — EIGHTEEN corrections, NINE of them witnessed by a wrong build
 
 Re-checked at the `Ready → Ready for Dev` exit, ten days after the ticket was cut. **Nothing here
 was unsatisfiable** — this was never `ABC-023`. The ticket was buildable the whole time; what it was
 not is *runnable as acceptance*. The pre-check that opened this hop named four defects and a fifth
-it declined to assert; **the measured count is seventeen**, which is the fifth consecutive ticket on
-this board where the opening count was low.
+it declined to assert; **the measured count is eighteen**, which is the fifth consecutive ticket on
+this board where the opening count was low. *(First written as "seventeen" and corrected on recount
+within the same hop: the enumerated list is the authority and it has eighteen entries — nine
+witnessed by a wrong build, eight found by reading, and the contract gap. Recorded rather than
+quietly amended, because a count nobody can re-derive from the list under it is the same defect this
+hop spent its day repairing.)*
 
-**The load-bearing number is not seventeen, it is nine.** Nine deliberately wrong builds of `toSan`
+**The load-bearing number is not eighteen, it is nine.** Nine deliberately wrong builds of `toSan`
 passed **all thirteen criteria as they were written** — and passed them *charitably*, with each
 prose criterion given the best FEN that can be built for it, which is more than an engineer holding
 only the ticket would have had. All nine die on the repaired table. Each was run as a real build
