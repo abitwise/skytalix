@@ -1,6 +1,7 @@
 # Board
 
-_Updated: 2026-08-10 by BA/PM (task `ticket-to-pr-ABC-023`, subtask `ticket-to-pr-ABC-023-bapm`, Workflow 07): **`ABC-023` PROMOTED `Backlog` → `Ready`. Ready 1/8 → 2/8.** The Definition of Ready is MET on a tree measured today, not on the cutting hop's. **Six acceptance defects fixed — three named by the pre-check, THREE named by no pre-check**, two of them unsatisfiable-by-construction: `A4` pinned `src/moves.ts` at `0e247853…` (re-pinned to `6335b452…`, re-derived at this hop) AND required *"no existing test file is modified"* while `## Scope` says the hardening file GAINS rows — now additions-only; `A5` enumerated THIRTEEN behaviour-equivalent controls while requiring fifteen (colour-blind on BOTH squares, and the extra rook-square non-`EMPTY` condition, both restored); `A1`'s four rows varied colour but not castling side — the exact one-axis blindness `A3` exists to police — fixed at ZERO extra rows. **ALL 16 INHERITED MUTANT VERDICTS RE-MEASURED against the 559-test suite they had never been scored against (they were scored at 381 on 16 files); 34 mutants run, 0 broken builds, 0 harness errors, 0 verdict mismatches** — every survivor still survives, every kill still kills with the identical failure count, so only the suite size moved. **All 15 of `ABC-009`'s behaviour-equivalent controls still survive at 559/559, killed count ZERO**, and the two black destination mutants that were `UNKNOWN - verify` are now measured survivors (559/559 + deep 32/32), closing that unknown. The *"9 of 13 type/table pairs"* table was re-derived by parsing the live tables — 30 rows, 13 pairs, 9 gapped, unchanged — so size `S` and the 17-row estimate STAND. Escalation trigger re-checked and still NOT fired (`ABC-013` is the only ticket in `Ready` or beyond and it changes no rules-core line). `src/` NOT touched: `src/moves.ts` md5 `6335b452…` identical before and after, every mutant applied to a copy outside the repository, one OS process per tree state. **`ABC-009` NOT reopened.** Nothing merged, nothing deployed. Per-ticket detail is in `plans/tickets/history/`, not here._
+_Updated: 2026-08-10 by the Orchestrator (task `ticket-to-pr-ABC-023`, Workflow 04): **`ABC-023` PULLED `Ready` → `In Development`. Ready 2/8 → 1/8, In Development 0/3 → 1/3.** Definition of Ready re-run against the ticket **as corrected this morning** — GREEN on all ten rows. **`In Analysis`, `In Design` and `Ready for Dev` SKIPPED with a stated reason**, not as a shortcut: no new module, export, dependency edge or design decision, so there is nothing to map and no tradeoff to record — the same path `ABC-022` took. BA/PM's hop was **verified at the source, not accepted**: `src/moves.ts` md5 `6335b452…` unchanged, `git diff main --name-only -- src/` **0 files**, ticket frontmatter in sync with the board row. **The blocking check this board exists to run — a partial delivery passing the whole criteria set, which is how `ABC-009` nearly shipped a phantom king — `ABC-023` PASSES: `A5` is a PINCER, not a checkbox.** Its first half (each named discriminating mutant must DIE) cannot be met without writing the rows; its second half (all **fifteen** behaviour-equivalent controls must still SURVIVE, killed count zero) cannot be met by rows that over-fit implementation shape; and `A1`/`A2`/`A3` each name a **distinct** mutant so no two can cover for a third. **Security/NFR NOT enqueued and NOT waived** — the trigger is left live and the decision deferred to when the diff exists: additions-only to one test file means it genuinely has not fired; any `src/` change enqueues it. **`A5`'s ~21 mutant runs were ASSIGNED — the ticket does not say who runs them, which is how a criterion ends up asserted by nobody**: the engineer runs the discriminating mutant per row it writes (for a test-only ticket that IS red-before-green — `ABC-009` retired `A7` as false because its rows were green on the UNFIXED tree), QE re-runs all of them independently plus the fifteen equivalents. `ABC-013` stays in `Ready` and was **not** pulled — the owner named one ticket. Previously 2026-08-10 by BA/PM (`Backlog` → `Ready`, six acceptance defects fixed, 34 mutants re-measured — archived verbatim in `plans/tickets/history/ABC-023-board-history.md`). Nothing merged, nothing deployed. Per-ticket detail is in `plans/tickets/history/`, not here._
+
 
 
 **Per-hop detail lives with its ticket, not here:** `plans/tickets/history/<ID>-board-history.md`.
@@ -98,10 +99,9 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 - [ABC-019] Turn loop skeleton  (size: L, P0, epic: EPIC-002, blocked-until: ABC-012, ABC-014, ABC-018; merge-order: after ABC-020)
 - [ABC-021] Draw-claim interaction — the player having the move claims  (size: S, P1, epic: EPIC-002, blocked-until: ABC-020, ABC-019, since: 2026-07-31)
 
-## Ready (WIP 2/8)
+## Ready (WIP 1/8)
 
 - [ABC-013] SAN rendering — src/san.ts with toSan only  (size: M, P1, epic: EPIC-002, deps: ABC-003 + ABC-005, both merged on main; unblocked 2026-07-31 when ADR-0004 was ratified)
-- [ABC-023] Castling precondition net — destination square, joint occupant pair, one-axis doubling  (size: S, P2, epic: EPIC-001, HARDENING not a defect, zero production lines expected; cut 2026-08-09, promoted Backlog → Ready 2026-08-10 by BA/PM after ABC-009 merged and 6 acceptance defects were fixed; all 16 mutant verdicts re-measured at 559 and A4 re-pinned to `6335b452…`)
 
 ## In Analysis (WIP 0/2)
 
@@ -109,7 +109,9 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Ready for Dev (WIP 0/6)
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-023] Castling precondition net — destination square, joint occupant pair, one-axis doubling  (owner: Software Engineer, since: 2026-08-10, size: S, P2, epic: EPIC-001, HARDENING not a defect, zero production lines expected; In Analysis/In Design/Ready for Dev skipped — no module, export, dependency edge or design decision, same path ABC-022 took)
 
 ## In Review (WIP 0/3)
 
