@@ -157,6 +157,51 @@ drift `NFR-008` documents for this machine.
 the repetition derive into a frame"*, names exactly the right call; a renderer calling bare
 `gameStatus` would not void the `O(window)` claim.
 
+## 8. A THIRD ruling this hop did not expect to make — `ADR-0009`'s own mutant table was wrong in two cells, and it is corrected
+
+Arrived mid-hop in `20260810T221848Z-orchestrator-observation-8fa03331`, which explicitly flags
+*"`ADR-0009`'s own table carries the same error in one cell pair, flagged for Architect/Design by BA/PM
+and not edited by either."* **Found by BA/PM at `repair-panel-tickets`, confirmed by the Orchestrator
+against its own earlier claim, and RE-MEASURED here rather than transcribed.**
+
+`src/frame.test.ts`'s test at `:632-638` has **three** assertions, not one. `:633` and `:634` are
+tautologies over shadows and literals. **`:635-637` is not:** it is `assembleFrame(partsFor(playTo(4),
+{ status: [4 rows] }), "unicode")` asserted at length 24, and `partsFor` (`:119-127`) sets
+`board: renderBoard(game.position, …)` — **the REAL board.**
+
+**Measured, the `:635` assertion's length per mutant:** 24 / 24 / 24 / 24 / **25** / **25** against an
+asserted 24.
+
+| mutant | `:633` shadows | `:634` literals | `:635` `assembleFrame` | TEST verdict | H | `4b` |
+|---|---|---|---|---|---|---|
+| delivered as budgeted 9/3/8 | PASS | PASS | PASS | PASS | 23 | yes |
+| M1 status ships 4 | PASS | PASS | PASS | **PASS — blind** | 24 | yes |
+| M2 history ships 9 | PASS | PASS | PASS | **PASS — blind** | 24 | yes |
+| M3 history ships 10 | PASS | PASS | PASS | **PASS — blind** | 25 | **no** |
+| M4 `renderBoard` ships 10 | PASS | PASS | **FAIL** | **FAIL — caught** | 24 | yes |
+| M5 board 10 + history 9 | PASS | PASS | **FAIL** | **FAIL — caught** | 25 | **no** |
+
+**So the merged test passes FOUR of six, not all six.** Term by term: the **board** term is real and
+live (catches M4, M5); the **status** term is a 4-row literal override (blind to M1); the **history**
+term is `historyStub` padded to the shadow `HISTORY_ROWS` (blind to M2, M3).
+
+**What it does not change:** `ADR-0009`'s ruling and every clause stand. The hole is **narrower and
+still sufficient** — M1/M2/M3, the two *panel* terms, and **M3 alone makes `4b` unreachable**, which is
+exactly what clause 5's `≤ 24` requirement catches.
+
+**What it adds, and it is the strongest single piece of evidence for clause 9:** the merged test's one
+**live** term is the one read from delivered geometry as `renderBoard(...)`, and its two **blind** terms
+are the ones restated as a literal and a shadow — **in merged code, measured.** A term read from
+delivered rows can fail; a term restated cannot. Clause 6 is therefore not a new form; it is what the
+merged test already does for the board, and clause 5's job is to extend it to the two panel terms.
+
+Corrected in `ADR-0009` at four places, each with the original struck through rather than replaced: the
+two table cells, the column header (*"merged shadow"* → *"merged test (`:632-638`)"*, because calling a
+three-assertion test *the shadow assertion* is what made it look like one literal sum), fact 1 under the
+table, the Alternative B rejection (unaffected, now measured term by term), and the `## Consequences`
+suite-hole bullet. **Two sentences in this hop's own amendment that inherited the error were also
+corrected before commit.**
+
 ## Two incidental observations, neither a defect, neither acted on
 
 - **Merged `src/frame.test.ts` already carries the derived-vs-declared cross-check inside one file.**

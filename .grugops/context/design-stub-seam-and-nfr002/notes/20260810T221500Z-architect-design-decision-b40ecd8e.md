@@ -182,6 +182,47 @@ exactly the right call, and a renderer that called bare `gameStatus` would not v
 
 ---
 
+---
+
+## RULING 3 (unplanned, and it is a correction to this role's own work) — `ADR-0009`'s mutant table was wrong in two cells
+
+`20260810T221848Z-orchestrator-observation-8fa03331` arrived mid-hop and explicitly flags
+*"`ADR-0009`'s own table carries the same error in one cell pair, flagged for Architect/Design by BA/PM
+and not edited by either."* **BA/PM found it, the Orchestrator confirmed it against its own earlier
+claim, and this hop re-measured it rather than transcribing the flag. The flag is correct and the
+correction is taken.**
+
+**The merged test at `src/frame.test.ts:632-638` passes FOUR of six mutants, not all six.** It has
+three assertions; the third is `assembleFrame(partsFor(...))` and `partsFor` supplies **the real
+`renderBoard`**, so it **fails M4 and M5** (measured: 25 against an asserted 24) and is blind to M1, M2
+and M3. Measurements in the observation note, §8.
+
+**`ADR-0009`'s ruling and every one of clauses 1–8 stand.** The reason clause 5 is needed is **narrower
+than recorded and still sufficient**: the hole is the two *panel* terms, and **M3 alone makes `4b`
+unreachable** — exactly what clause 5's `≤ 24` requirement catches. Alternatives A–D are unaffected;
+none turned on that cell pair.
+
+**It is also the strongest single piece of evidence for clause 9, and it arrived by accident:** the
+merged test's one **live** term is the one read from delivered geometry (`renderBoard(...)`), and its
+two **blind** terms are the ones restated as a literal and a shadow. **That is clause 9's thesis,
+measured in merged code rather than in a harness.** Clause 6 is not a new form — it is what the merged
+test already does for the board — and clause 5's job is to extend it to the panels.
+
+**Corrected in `ADR-0009` at six places, every original struck through rather than replaced** (the two
+table cells, the column header, fact 1, Alternative B's rejection, the `## Consequences` suite-hole
+bullet), plus **two sentences in this hop's own amendment that had inherited the error**. The column
+header changes from *"merged shadow"* to *"merged test (`:632-638`)"*: calling a three-assertion test
+*the shadow assertion* is what made it look like one literal sum, and the label was doing the misleading.
+
+**On how the original error happened, since this hop's own predecessor is the author.** The `## Context`
+table was built by running each *assertion form as its ticket words it* against merged `frameHeight`.
+That is a sound instrument for the four ticket-side columns and the wrong instrument for the fifth,
+because the merged test is not a form — it is a test with three assertions, one of which reaches real
+code. **The column was scored by modelling the test rather than by running it.** The Orchestrator's own
+account of verifying this and still getting it wrong is in its note and is worth reading beside this.
+
+---
+
 ## Flagged, not taken — each with an owner
 
 - **BA/PM: two acceptance criteria owed on `ABC-019`** — clause **9d** (stub row counts ≠ 3/8, two

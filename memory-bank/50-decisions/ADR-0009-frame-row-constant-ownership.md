@@ -73,20 +73,58 @@ the **append** path at `H` = 25, so epic acceptance `4b` becomes unreachable at 
 Each form as its ticket words it, run against merged `frameHeight`; `4b-reachable` is
 `beginFrameSession`'s own strategy choice on a 24-row TTY:
 
-| mutant | `A11` | `A1` | merged shadow | fit-check `=23` | fit-check `<=24` | H | `4b` |
+| mutant | `A11` | `A1` | merged test (`:632-638`) | fit-check `=23` | fit-check `<=24` | H | `4b` |
 |---|---|---|---|---|---|---|---|
 | delivered as budgeted (9/3/8) | PASS | PASS | PASS | PASS | PASS | 23 | yes |
 | M1 status ships 4 rows | **FAIL** | **FAIL** | PASS | **FAIL** | PASS | 24 | yes |
 | M2 history ships 9 rows | PASS | **FAIL** | PASS | **FAIL** | PASS | 24 | yes |
 | M3 history ships 10 rows | PASS | **FAIL** | PASS | **FAIL** | **FAIL** | 25 | **no** |
-| M4 `renderBoard` ships 10 rows | PASS | PASS | PASS | **FAIL** | PASS | 24 | yes |
-| M5 board 10 **and** history 9 | PASS | **FAIL** | PASS | **FAIL** | **FAIL** | 25 | **no** |
+| M4 `renderBoard` ships 10 rows | PASS | PASS | ~~PASS~~ **FAIL** | **FAIL** | PASS | 24 | yes |
+| M5 board 10 **and** history 9 | PASS | **FAIL** | ~~PASS~~ **FAIL** | **FAIL** | **FAIL** | 25 | **no** |
+
+> **[CORRECTED 2026-08-11 at task `design-stub-seam-and-nfr002` — two cells of this table and fact 1
+> below were WRONG, and the correction is written here rather than in place of the original because the
+> error is more instructive than the fix.]** The column was headed *"merged shadow"* and scored PASS on
+> all six. **Found by BA/PM at `repair-panel-tickets`, confirmed by the Orchestrator against itself at
+> `20260810T221848Z-orchestrator-observation-8fa03331`, and re-measured here rather than transcribed.**
+>
+> `src/frame.test.ts`'s test at `:632-638` has **THREE** assertions, not one. `:633` is
+> `frameHeight(shadows)` = 23 and `:634` is `frameHeight({9,4,8})` = 24 — both tautologies, and the
+> original characterisation is right about them. **`:635-637` is not a tautology:** it is
+> `assembleFrame(partsFor(playTo(4), { status: [4 rows] }), "unicode")` with length 24, and `partsFor`
+> (`:119-127`) sets `board: renderBoard(game.position, …)` — **the REAL board.**
+>
+> **Measured, per mutant, on the `:635` assertion:** 24 / 24 / 24 / 24 / **25** / **25** against an
+> asserted 24. So the merged test **FAILS M4 and M5** and is blind to M1, M2 and M3. Term by term:
+> the **board** term is real and live; the **status** term is a 4-row literal override (blind to M1);
+> the **history** term is `historyStub` padded to the shadow `HISTORY_ROWS` (blind to M2 and M3).
+>
+> **What this does NOT change: the ruling, or any clause.** The reason clause 5 is needed is **narrower
+> than recorded and still sufficient** — the hole is M1/M2/M3, the two *panel* terms, and **M3 alone
+> makes `4b` unreachable**, which is precisely what clause 5's `≤ 24` requirement catches. Alternatives
+> A–D are unaffected; none of them turned on this cell pair.
+>
+> **What it adds, and it strengthens clause 6 rather than weakening it:** the merged test's one LIVE
+> term is the one already read from delivered geometry as `renderBoard(...)`, and its two BLIND terms are
+> the ones restated as a literal and a shadow. **Clause 6 is therefore not a new form — it is what the
+> merged test already does for the board — and clause 5's whole job is to extend the same treatment to
+> the two panel terms.** The same measurement is the clearest evidence for clause 9 (see the amendment):
+> a term read as `.length` from delivered code can fail; a term restated cannot.
+>
+> The column header is corrected from *"merged shadow"* to *"merged test (`:632-638`)"*, because calling
+> it the *shadow* assertion is what made a three-assertion test look like one literal sum. The
+> Orchestrator's own account of how it verified this and still got it wrong is in that note and is worth
+> reading beside this one.
 
 Three facts fall out, and they are the whole basis of the decision:
 
-1. **The merged shadow assertion passes all six.** It is a tautology over three local literals: it
-   proves `frameHeight`'s arithmetic and says nothing about any panel. Useful, correct, and not the
-   protection anyone thinks it is.
+1. ~~**The merged shadow assertion passes all six.** It is a tautology over three local literals: it
+   proves `frameHeight`'s arithmetic and says nothing about any panel.~~ **CORRECTED 2026-08-11 — see
+   the block above. The merged test passes FOUR of six: it FAILS M4 and M5 on its third assertion,
+   which reads the real `renderBoard`. It is blind to M1, M2 and M3 — the two PANEL terms — and M3
+   alone kills `4b`.** The original sentence is right about `:633`/`:634` and wrong about the test.
+   Useful, correct, and not the protection anyone thinks it is — **that conclusion survives, on a
+   narrower hole.**
 2. **`A11` passes M3 and M5 — the only two mutants that actually make `4b` unreachable.** `A11` was
    added by `ABC-016`'s `D8` precisely to protect `4b`, and as written it cannot fail on the two cases
    that break it, because it hardcodes the term (`history`) that moves in both. That is the same
@@ -163,7 +201,11 @@ that a cheaper form does completely is the whole case against it.**
 
 **B. Keep the clause but write the foreign term as a literal or a local shadow (`const STATUS_ROWS =
 3`).** Rejected, and it is rejected by measurement rather than taste: that is exactly what merged
-`src/frame.test.ts:38-43` does, and the shadow form **passes all six mutants**. It also reproduces
+`src/frame.test.ts:38-43` does, and **a restated term cannot fail on the panel it restates** —
+~~the shadow form passes all six mutants~~ **CORRECTED 2026-08-11: the shadow/literal TERMS are blind to
+M1, M2 and M3, which is the whole point of this rejection; the merged test as a whole fails M4 and M5
+only because its board term is NOT restated. See the correction block in `## Context`. The rejection is
+unaffected and is now measured term by term rather than test-wide.** It also reproduces
 `ABC-017`'s own `D13` — *"Two tickets carrying the same magic number with nothing tying them is how the
 two come to disagree"* — from the other side.
 
@@ -196,9 +238,11 @@ integers (coding rule 6), and a third home for numbers that already have two.
   production change; a handful of test lines.
 - **Two ticket-text edits are owed and are NOT taken here** — `A1` and `A11`. `plans/tickets/` at the
   `ABC-016` / `ABC-017` promotion boundary is a BA/PM hop's; this ADR is the input to it.
-- **A hole in a merged suite is now named:** `src/frame.test.ts:632-638` passes on all six mutants.
-  Clause 5 closes it. It is a suite hole, not a production defect — `src/frame.ts` is correct and is
-  not touched.
+- **A hole in a merged suite is now named:** ~~`src/frame.test.ts:632-638` passes on all six mutants.~~
+  **CORRECTED 2026-08-11 — it passes FOUR of six: it FAILS M4 and M5 on its third assertion, which reads
+  the real `renderBoard`, and is blind to M1, M2 and M3 — the two PANEL terms. M3 alone kills `4b`. The
+  hole is narrower than recorded and clause 5 still closes it; see the correction block in `## Context`.**
+  It is a suite hole, not a production defect — `src/frame.ts` is correct and is not touched.
 - **`NFR-002` gains a structural link, not a target change.** That row's write half carries *"a 23-row
   frame at `W = 18`, 418 characters serialized"* as its measured denominator. If a panel ever ships a
   different row count, that denominator silently stops describing the delivered frame. Clause 5's
@@ -396,8 +440,9 @@ Rejected — a single-use abstraction over two arrays (rule 6) that is dead on a
 panels land, and it would be the third declaration site in person.
 
 **H. Have the loop assert `frameHeight({...}) === 23` somewhere as a belt-and-braces check.**
-Rejected: it is clause 5's assertion in a second place, it is the shadow-constant tautology this
-ADR's `## Context` measured passing all six mutants, and a second copy of a check is how the two
+Rejected: it is clause 5's assertion in a second place; written over restated terms it is the
+tautology `src/frame.test.ts:633` already is (**measured blind to M1, M2 and M3 — the two panel
+terms — per the correction block in `## Context`**); and a second copy of a check is how the two
 copies come to disagree.
 
 ### One tension surfaced and deliberately NOT acted on
@@ -407,10 +452,10 @@ Clause 5's fit-check reads **one term derived and two declared** — `renderBoar
 **Clause 5 is not reopened.** The two forms catch different things and the difference is real: the
 `.length` form fails when the *delivered* geometry breaks the frame, while the constant form fails
 when the *declared* geometry does and therefore checks the panel's declaration and its `A11`/`A1`
-assertion jointly. Both fail on all six mutants of table (ii) in this ADR's `## Context`, because a
-real panel change moves the rows and the constant together. Reopening an accepted clause for a
-near-tie is the refactor coding rule 10 forbids. **It is recorded here so a later hop reads the
-mixed form as deliberate rather than as an oversight.**
+assertion jointly. **Both forms fail on all five row-count mutants of the `## Context` table** (the
+budgeted world passes, as it must), because a real panel change moves the rows and the constant
+together. Reopening an accepted clause for a near-tie is the refactor coding rule 10 forbids. **It is
+recorded here so a later hop reads the mixed form as deliberate rather than as an oversight.**
 
 ### Consequences of clause 9 (added to the list above; nothing in it is retracted)
 

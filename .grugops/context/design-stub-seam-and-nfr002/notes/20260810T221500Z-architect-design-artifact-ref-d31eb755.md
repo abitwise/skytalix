@@ -24,7 +24,7 @@ supersedes:
 
 | Artifact | What it holds |
 |---|---|
-| `memory-bank/50-decisions/ADR-0009-frame-row-constant-ownership.md` | **AMENDED, not superseded.** New `## AMENDMENT 2026-08-11` section adding **clause 9** (9a–9f), with the seven measurements, four alternatives (E–H) and their rejections, the surfaced-and-declined clause-5 tension, a consequences addendum and a clause-9 rollback. **Clauses 1–8 unchanged — not one word edited.** Two lines added to `## Status` pointing at the amendment. Status stays `accepted`; **no target, no level, so no owner ratification owed.** |
+| `memory-bank/50-decisions/ADR-0009-frame-row-constant-ownership.md` | **AMENDED, not superseded.** New `## AMENDMENT 2026-08-11` section adding **clause 9** (9a–9f), with the seven measurements, four alternatives (E–H) and their rejections, the surfaced-and-declined clause-5 tension, a consequences addendum and a clause-9 rollback. **Clauses 1–8 unchanged — not one word of them edited.** Two lines added to `## Status`. Status stays `accepted`; **no target, no level, so no owner ratification owed.** **SEPARATELY: the `## Context` mutant table is CORRECTED in six places** — two cells (`~~PASS~~ **FAIL**` on M4/M5), the column header (*"merged shadow"* → *"merged test (`:632-638`)"*), fact 1, Alternative B's rejection and the `## Consequences` suite-hole bullet — **every original struck through, none replaced.** Flagged for this role by BA/PM via `20260810T221848Z-orchestrator-observation-8fa03331` and **re-measured here, not transcribed**. The ruling and all eight clauses are unaffected. |
 | `plans/nfr-catalog.md` | **`NFR-002` only.** ONE table cell edited — `Applies to` — plus one dated `###` section appended, plus the file's `_Updated:` header line. **`ID` / `Category` / `Target` / `Verified by` verified BYTE-IDENTICAL cell by cell against `HEAD`**, and `NFR-001` / `NFR-003`–`NFR-008` byte-identical. **The `< 16 ms` target does not move and no bar is created, moved or loosened.** |
 | `plans/traceability.md` | **ONE row edited in place (`ADR-0009`), FOUR cells appended to** — `NFRs`, `Code (PR/files)`, `Tests`, `Status` — plus the file's `_Updated:` header line. **`UAT` and `Release` left deliberately EMPTY.** See the staging note below: **this file is written but NOT staged.** |
 
@@ -107,8 +107,9 @@ entered the suite.
 `h3-timing.ts` (the third independent reading of `repetitionCounts` / `gameStatusOf` / bare
 `gameStatus` at 40/120/300), `h4-stub-counts.ts` (which stub counts catch a hardcoded height, and the
 session-constant invariant), `h5-recommended.ts` (the recommended loop shape run end to end against a
-stub seam and three real-geometry seams). All read-only against merged `src/`; **`src/` never
-written.**
+stub seam and three real-geometry seams), and `h6-merged-test.ts` (written mid-hop when the
+`ADR-0009`-table flag arrived: all three assertions of `src/frame.test.ts:632-638` scored per mutant).
+All read-only against merged `src/`; **`src/` never written.**
 
 ## Limits held
 
