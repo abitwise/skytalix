@@ -405,25 +405,162 @@ and no bar of theirs is re-opened, moved or re-measured here. What this ticket *
 inner-loop signal every engineer on this board depends on: the default `npm test` lane, which is
 **1.44 s** today and is the reason `ABC-024` refused to put a 36–40 s lane in front of a guard.
 
-| id | bar | measured at this hop |
+| id | bar | verdict |
 |---|---|---|
-| `N5` | **the tests this ticket adds cost ≤ 5% of the default `npm test` wall clock** — a ratio, so it survives a hardware change, which is `ABC-013`'s `N1` lesson applied | **0.4–1.2%** (6.3 / 7.5 / 16.8 ms over three runs, against 1.44 s for 652 tests on 20 files) |
-| `N6` | the `PERFT_DEEP=1` lane stays **32/32 exact** and the skip count stays **0** | standing numbers, carried by `A6` |
+| `N5` | **RE-DERIVED 2026-08-10 at the BA/PM ruling hop — the wording below is the bar of record, and the original is preserved beneath it rather than erased** | **NOT MET at +7.8% net against ≤ 5%.** Breach ACCEPTED as an owned risk; disposition below |
+| `N6` | the `PERFT_DEEP=1` lane stays **32/32 exact** and the skip count stays **0** | **MET** — 32/32 exact, skip 0, verified directly at the Security/NFR gate (36.55 s, the fourth independent run) |
 
-`N5` is the primary bar and the only one this ticket can move. **`npm run perft` was NOT run at this
-hop** and no throughput figure appears in this ticket — said plainly rather than implied.
+`N5` is the primary bar and the only one this ticket can move. **`npm run perft` was NOT run at the
+cutting hop** and no throughput figure appears in this ticket — said plainly rather than implied.
+
+### `N5` as re-derived (BA/PM, 2026-08-10, the ruling hop)
+
+> **`N5`.** The tests this ticket adds cost **≤ 5% of the default lane's CPU time (user + sys)**,
+> **net of the fixed floor measured for the same number of added test files**, where the reading is
+> the **median of paired per-round deltas** over **n ≥ 7 usable interleaved rounds** — round 0
+> discarded as warm-up, condition order **rotated every round**, **one fresh OS process per run**,
+> every run **asserting its own test count** or it is a harness error and never a datum — taken by
+> invoking the runner directly (`node_modules/.bin/vitest run`, **not** through `npm` or `npx`, so no
+> package-manager startup sits in the denominator), against a **denominator of the same lane with
+> this ticket's files removed**, where *"this ticket's files"* means **every file the branch adds
+> under `src/`, whichever hop added it**. **The reading is admissible only if two controls hold in
+> the same harness:** a **null control by identity** (a byte-identical tree, run as its own
+> condition) reading **≤ 1%**, and a **fixed-cost floor control** — the same number of trivial
+> one-assertion test files — whose reading is subtracted and **reported beside the result**.
+
+**Every degree of freedom Security/NFR named is now named here:** the statistic (median of paired
+per-round deltas), the sample size (n ≥ 7), the numerator (whole-lane CPU delta, not the file's own
+test time — so the isolated-vs-in-lane factor of 2.6 cannot arise), the denominator (the lane without
+the files, runner invoked directly), and the scope (both hardening files, not just the delivered one).
+Two clauses are new and neither came from a gate: the **instrument** is CPU rather than wall, and the
+**floor control** is mandatory.
+
+**Why CPU and not the wall clock the original named.** The wall instrument cannot adjudicate a 5% bar
+on this lane, and the ruling hop's own harness demonstrated it twice over: its **null control by
+identity read +0.3% / +3.2% / +0.7% across three runs** — an order of magnitude of drift on a change
+that is literally nothing, with the sign at chance every time — and in one interleaved run **two
+EMPTY test files measured MORE expensive on the wall clock (+6.0%) than this ticket's entire 24 tests
+(+4.2%)**. An instrument that ranks nothing above everything cannot rank anything. CPU reproduces:
+null **+0.1% / +0.0% / −0.1%**, sign 4-of-8 every time, against a delivered reading of **+12.8% /
++13.9% / +14.1%** with the sign positive in **24 of 24** rounds.
+
+**Why a floor control is mandatory, and it is the finding that makes the original bar unmeetable
+rather than merely unmeasurable.** Measured at the ruling hop: **two trivial one-assertion test files
+— no repository imports, nothing to run — cost +5.4% / +6.1% of the lane's CPU**, sign 8-of-8 both
+times. The lane's cost is dominated by per-file worker, transform and collect overhead rather than by
+test content. **So `≤ 5%` stated gross is a bar that NO ticket adding two test files can ever meet,
+including a ticket that adds two empty ones.** The 5% is therefore charged against the ticket's cost
+**net** of that floor — which charges a ticket for what it wrote and not for what the runner costs.
+
+**What the `5%` itself is, stated honestly.** It is **not** derived from a lane budget, because this
+board has no lane budget — that gap is `ABC-026`. It is the figure from the cutting hop, retained
+because net-of-floor it is (a) **measurable** — ~50x the CPU null floor — and (b) **achievable**,
+demonstrated rather than assumed: the narrowed-corpus variant priced at the ruling hop measures
+**~3.8% net**. A bar nothing can meet is not a bar, and a bar a no-op trips is not a bar; this one is
+neither. Whether 5% is the *right* fraction is **`UNKNOWN - verify`** until `ABC-026` sets the total.
+
+**The measurement, and the verdict.** Apple M3 / Node v24.12.0 / darwin arm64, vitest 3.2.7,
+`UNKNOWN - verify` on any other hardware; three interleaved harness runs, out-of-tree copies asserted
+byte-identical per file against the repository's `src/` (37 files, md5 each), the repository's own
+`src/` never written, 0 harness errors across 108 runs.
+
+```
+                                          CPU paired median (3 runs)   sign      wall (unusable)
+A'   null control by identity            +0.1% / +0.0% / -0.1%        4/8 4/8 4/8   +0.3/+3.2/+0.7%
+C    the delivered tree (both files)     +12.8% / +13.9% / +14.1%     8/8 8/8 8/8   +5.5/+3.2/+4.2%
+Z    fixed floor: two TRIVIAL files       +5.4% / +6.1%               8/8 8/8       +1.7/+6.0%
+Bn23 A1's corpus narrowed to the 23       +8.7% / +10.5%              8/8 8/8       +0.0/+2.8%
+
+N5 as re-derived:  gross +13.6%  −  floor +5.8%  =  NET +7.8%   against  <= 5%     NOT MET (1.6x)
+```
+
+**`N5` is NOT MET, on the bar as originally written and on the bar as re-derived, and the second
+reading is the one that matters because the first cannot be taken.** The re-derivation was tested for
+laundering the only way that means anything — by checking whether it changes the verdict — and it does
+not: it makes the bar measurable, and the ticket still fails it. It fails the original wording too, on
+every instrument that resolves.
+
+### Disposition: the breach is ACCEPTED as an owned risk. No coverage is cut.
+
+**Owner: BA/PM. Trigger: fired now, and again at `EPIC-003`'s `parseSan` cut, which inherits the
+re-derived wording above and not the original.** Whether `ABC-025` merges carrying it is the
+Orchestrator's call with the owner; this ruling does not hold the ticket and does not move its column.
+
+**A change that would meet the re-derived bar EXISTS, was built and priced at this hop, and is
+REFUSED at role level.** It is `A1` over this ticket's 23 positions instead of all 207 — a two-line
+variant, measured green, **+8.7% / +10.5% gross ≈ 3.8% net, which passes** — and it preserves every
+named discriminating requirement: all five mutants still die (`Q33` 44, `Q34` 24, `Q35` 18, `Q27` 80,
+`Q38` 30 mismatches from the 23 alone) and the 23 positions fill all 44 census cells by themselves.
+It is refused for four reasons, recorded so it is not re-proposed as new:
+
+1. **It is the trade this ticket exists to prevent.** `ABC-025` was cut because a thin corpus let six
+   wrong builds through 652 of 652. Cutting the corpus by 91% — 7,314 renders to 677 — to satisfy a
+   bar its own author wrote is the same failure in the same file.
+2. **Its evidence is the species this board already ruled void.** *"All five mutants still die
+   without the 184 derived positions"* has the same defect as the Engineer's *"the counts are
+   identical across 13 mutants"*, which QE refuted and Security/NFR upheld: the builds that would
+   witness the loss are the ones nobody has written. The 184 derived positions are dense real-play
+   boards; the 23 are three-piece ladders. This board's own prior — `ABC-023` found fourteen where two
+   were predicted, and QE found four suffix-class builds this very ticket missed — is that the unknown
+   classes are where the loss would land. **I will not accept for my own bar the argument I upheld QE
+   in rejecting for someone else's.**
+3. **The saving is invisible on the axis the harm lives on.** Between the delivered tree and the
+   narrowed variant the wall clock cannot tell the difference; the trade buys a saving no engineer can
+   perceive at the price of the ticket's purpose.
+4. **The larger lever is not this ticket's.** Two empty files cost 5.4–6.1% of the lane. The lane's
+   cost is per-file overhead, and recovering it is `ABC-026`'s job, not `A1`'s.
+
+**If anyone wants that trade anyway, it is a human's call and not a role's** — it is recorded above
+with its price so a human can take it in one reading. `A1` stands as written and as delivered; nothing
+was narrowed and no coverage was cut. Security/NFR's separately-measured assisted-only variant
+(+5.3% wall / +7.4% CPU) is not adopted either, for reason 1.
+
+### `N5` as originally written — SUPERSEDED, preserved, and wrong on the record
+
+> *"the tests this ticket adds cost ≤ 5% of the default `npm test` wall clock"* — a ratio, so it
+> survives a hardware change, which is `ABC-013`'s `N1` lesson applied. **Measured at the cutting hop:
+> 0.4–1.2%** (6.3 / 7.5 / 16.8 ms over three runs, against 1.44 s for 652 tests on 20 files).
+
+**That prediction was wrong by roughly an order of magnitude and it stays on the record wrong.** The
+Engineer diagnosed it and the diagnosis holds: 7,314 renders is **one call form**, measured in a plain
+`node` harness roughly 5x faster than the vitest lane the bar is a ratio *of* — numerator taken on one
+instrument, denominator on another. A ratio survives a change of hardware; it does not survive a change
+of instrument, and the original named neither. **The bar was never derived from a budget either — it
+was the cut hop's own prediction plus headroom, which is a bar reverse-engineered from an estimate.**
+Both defects are the bar author's and they are why this section was rewritten rather than defended.
 
 **Security: NOT pre-waived, and the threshold is named up front.** `ABC-023` wrote "none,
 structural" against an expected 17-row diff and delivered **+749 lines written by two agents**; the
 Orchestrator had to over-rule that line. The lesson is applied here as a measurable trigger rather
-than a word: **the security half fires if the delivered diff exceeds +900 lines, or touches any file
-that is not a `*.test.ts` file under `src/`.** The prediction it is set against is **~+550 lines**
-for 23 positions, 63 rows and 6 property/quantifier tests, derived from `ABC-023`'s **measured** +375
-for 17 rows and 2 quantifiers. Below the threshold the structural argument holds; above it, the added
-lines get read for secrets, spawns, network calls and unbounded loops before the ticket leaves
-review. No trigger from the input class itself: `toSan` takes a `Move` from the generator and a
-`Position`, no user-supplied string reaches this module, and there is no user surface until
-`EPIC-006`.
+than a word: **the security half fires if the diff OUTSIDE `plans/` and `.grugops/` exceeds +900
+lines, or if that diff touches any file that is not a `*.test.ts` file under `src/`.** The prediction
+it is set against is **~+550 lines** for 23 positions, 63 rows and 6 property/quantifier tests,
+derived from `ABC-023`'s **measured** +375 for 17 rows and 2 quantifiers. Below the threshold the
+structural argument holds; above it, the added lines get read for secrets, spawns, network calls and
+unbounded loops before the ticket leaves review. No trigger from the input class itself: `toSan` takes
+a `Move` from the generator and a `Position`, no user-supplied string reaches this module, and there
+is no user surface until `EPIC-006`.
+
+> **The denominator above is a CORRECTION made at the BA/PM ruling hop, and it changes no verdict
+> already rendered.** As originally written the clause read *"the delivered diff … touches any file
+> that is not a `*.test.ts` file under `src/`"* with no denominator, and Security/NFR measured that
+> **read literally it fires on every ticket this board has ever run** — the branch diff is now
+> **+4,340 / −2 across 34 files**, 32 of which are not a `*.test.ts` under `src/`, because every
+> ticket edits `plans/board.md` and writes context notes. The gate applied the code-diff reading, said
+> so, and handed the ambiguity here. **Verdict-preservation checked mechanically before the wording
+> was changed:** under the corrected denominator the diff is **+823 / −0 over two files, both
+> `*.test.ts` under `src/`, and 0 files fail clause 2** — clause 1 NOT fired (823 < 900), clause 2 NOT
+> fired, which is exactly what the gate reported. A trigger may be re-worded only when the re-wording
+> changes no verdict already rendered; that was the test, and it passed.
+>
+> **The correction is NOT the one-word fix the gate proposed, and the difference matters.**
+> *"the diff under `src/`"* would exempt `package.json`, `package-lock.json`, `tsconfig.json`,
+> `biome.json` and anything else outside `src/` — so **a ticket that added a dependency would not fire
+> the security half at all**, which is the one change on this board most worth reading. The wording
+> above excludes only `plans/` and `.grugops/` — the documentation, board and context paths that have
+> no execution surface — so a dependency change fires clause 2 as it should. Checked on this branch:
+> `package.json` and `package-lock.json` are byte-unchanged against `main`, so the two readings agree
+> here and differ only where it counts.
 
 ## Test notes
 
@@ -512,9 +649,17 @@ trusts again.
 ## Definition of Ready
 
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-10**. **Result: 10 of 10 clean — the Definition of Ready IS met and this ticket moves
-`Backlog` → `Ready`.** Every row below is a claim about this file that the Orchestrator can re-check
-against it; the two rows that carry a caveat carry it in the open rather than as a hedge.
+**2026-08-10**. **Result as claimed at the cut: 10 of 10 clean** — the Definition of Ready was judged
+met and this ticket moved `Backlog` → `Ready`. Every row below is a claim about this file that the
+Orchestrator can re-check against it; the two rows that carry a caveat carry it in the open rather
+than as a hedge.
+
+> **CORRECTED 2026-08-10 at the BA/PM ruling hop: it was 9 of 10, not 10 of 10.** The
+> security/NFR-triggers row did not hold and is marked ⚠️ below with what was wrong. The claim is
+> left standing above rather than edited down, because the cut hop's judgment is what the
+> Orchestrator pulled on and rewriting it into agreement would destroy the only evidence that this
+> checklist can pass a defective bar. **The row that failed is the row this ticket's whole ruling hop
+> exists to repair, and it was the author's own.**
 
 - **problem clear — user, pain, value stated** ✅ — `## Problem` names the user (`EPIC-003`'s
   `parseSan` hop, `ABC-016`/`ABC-017`, and behind them the player), the pain as a measured count (six
@@ -537,10 +682,18 @@ against it; the two rows that carry a caveat carry it in the open rather than as
   44 of 44) that make it falsifiable. `A5` is corroboration rather than a mutant-killer and says so.
 - **dependencies known** ✅ — **none open**, stated with what was checked; plus the one-way
   re-measurement rule for any `src/san.ts` change, and `EPIC-003` named as the deadline shape.
-- **security/NFR triggers marked, each with a measurable target** ✅ — NFR `N5` is a **ratio** bar
-  (≤ 5% of the default lane, measured 0.4–1.2%) chosen so it survives a hardware change, plus `N6`
-  carrying the two standing numbers; security **not pre-waived**, firing at **+900 lines or any
-  non-test file**, set against a measured prediction of ~+550.
+- **security/NFR triggers marked, each with a measurable target** ⚠️ **— THIS ROW WAS FALSIFIED ON
+  2026-08-10 AND IS THE ONE THING THIS TICKET GOT WRONG AT THE CUT.** It read, and still reads as it
+  was written: *"NFR `N5` is a **ratio** bar (≤ 5% of the default lane, measured 0.4–1.2%) chosen so
+  it survives a hardware change, plus `N6` carrying the two standing numbers; security **not
+  pre-waived**, firing at **+900 lines or any non-test file**, set against a measured prediction of
+  ~+550."* **Both halves of it were defective and four roles found it before its author did.** `N5`
+  named no statistic, no sample, no numerator, no denominator and no instrument, and its instrument —
+  the wall clock — reports a breach for a change that is literally nothing; the security clause named
+  no denominator and read literally fires on every ticket this board has run. **A target that names a
+  number but not the procedure that reads it is not a measurable target**, and the checklist row that
+  passed it should have caught that. Both are re-specified in `## Security / NFR triggers` above, at
+  the BA/PM ruling hop, by the role that wrote them.
 - **test notes present** ✅ — nine, of which four are lessons this board has already paid for
   (`ABC-009`'s module cache and setup assertions, `ABC-013`'s generated-expectation rule,
   `ABC-024`'s table-conflict rule) and one is this hop's own (note 1: widening `POSITIONS` would make
