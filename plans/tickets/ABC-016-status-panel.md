@@ -11,6 +11,40 @@ feature: —
 
 # ABC-016 — Status panel: side to move, check, material balance, move number, last move, thinking row
 
+> **AMENDED 2026-08-11 by BA/PM at task `repair-panel-tickets` (Workflow 07), applying accepted
+> `ADR-0009`. TWO DEFECTS ON A `Ready` TICKET, ONE OF THEM IN A PROMOTED CRITERION.** `ADR-0009` is
+> the input and is **not re-litigated**; what is recorded here is what applying it exposed.
+>
+> | # | Defect | Where |
+> |---|---|---|
+> | D17 | **`A11` PASSES M2–M5 — including BOTH mutants that push the frame past 24 rows and make epic `4b` unreachable — and `D8` added it to protect `4b`.** Its `frameHeight(...) is 23` clause was also the entire import edge to `ABC-017`, and its `STATUS_ROWS` had no stated provenance | Acceptance `A11`, Scope, Dependencies |
+> | D18 | The carried `NFR-002` flag reads *owed by Architect/Design* and was **already ruled on the day it was raised** (`refinement-ABC-026`, re-checked at `design-frame-contract`) | NFR, DoR |
+>
+> **D17 was re-measured here, not taken on trust.** The Architect's six-mutant table was **re-run**
+> against merged `src/frame.ts` / `src/render.ts` from an out-of-tree harness, a seventh mutant
+> (`status` = 5) was added, and every `4b` verdict is `beginFrameSession`'s own strategy choice on a
+> 24-row TTY rather than arithmetic. **The finding that matters is one the ADR does not state:**
+>
+> > **Striking the clause does NOT make `A11` able to catch M3/M5 — measured, `A11` passes both
+> > before the strike AND after it. Nothing writable on this ticket can catch them.** Both mutants
+> > move `history`, a term this panel must not name (`ADR-0009` cl. 2) and cannot read (`ABC-017` is
+> > unbuilt when this ticket merges first); the shadow-literal form that *could* name it passes all
+> > six and is `ADR-0009` Alternative B, rejected by measurement. **So `D8`'s claim that `A11`
+> > protects `4b` is retracted in half rather than repaired**: `A11` protects `4b` against **this
+> > panel's own** row count (`status` ≥ 5 → `H` = 25 → append path → `4b` dead; `A11` fails there),
+> > and the `history`/`board` halves move to `ABC-017`'s new `A13` per `ADR-0009` cl. 5. **A
+> > criterion that keeps claiming a protection it cannot deliver is worse than one claiming less.**
+>
+> **One new flag falls out and it is the Orchestrator's:** `ADR-0009` parks `4b`'s cross-panel guard
+> on `ABC-017`, which is `P2` and calls itself the first thing to drop. Between this ticket's merge
+> and `ABC-017`'s, `4b`'s 24-row budget is guarded only against a `status` change. See
+> `## Definition of Ready`.
+>
+> **Size `M` and priority `P1` both re-read and both unmoved** — the repair removes a clause and adds
+> two to an existing criterion. **Zero production lines; `src/` byte-identical to `main`.**
+> `plans/board.md`, `plans/nfr-catalog.md` and `memory-bank/50-decisions/` **not edited** — a
+> concurrent Architect/Design hop shares this branch and holds the latter two.
+
 > **AMENDED 2026-08-10 by BA/PM at the `Backlog → Ready` promotion** (task `refinement-ABC-016`,
 > Workflow 07). **Sixteen defects, two of which the Orchestrator's pre-check named.** Every one is
 > corrected below and every correction was verified against merged `src/` rather than argued — four
@@ -79,6 +113,18 @@ hop: `frameHeight({ board: 9, status: N, history: 8 })` is **21 / 22 / 23 / 24 /
 `beginFrameSession` takes the append path and epic acceptance `4b` — the in-place redraw with no
 stale rows — becomes unreachable on a standard terminal, silently.** Three is the epic's reference
 number (`4a`) and 4 is the last value that still fits; the panel ships 3.
+
+**[SCOPED 2026-08-11 — `ADR-0009` clauses 2, 4 and 5, D17.]** *The sweep above is a measurement and it
+stands; what it does NOT license is a criterion on this ticket that names another panel's count.* The
+`history: 8` in that sweep is **prose about the reference layout**, not a term this panel asserts —
+`A11`'s frame-level clause is struck and **this panel neither reads nor names `HISTORY_ROWS`, in
+production or in test.** The producer owns its count; this ticket owns `STATUS_ROWS` and no other.
+**The composition — all three terms read from delivered code, `= 23` as a tripwire and `≤ 24` as the
+requirement — lands once, in `src/frame.test.ts`, and it is `ABC-017`'s `A13` because `ABC-017`
+merges second.** Re-verified at this hop: `frameHeight({ board: 9, status: 5, history: 8 })` is
+**25**, and `beginFrameSession` on a 24-row TTY takes the **append** path at 25 and the **in-place**
+path at 23 and 24 — so `4b` dies at `N ≥ 5` exactly as stated, by the merged code's own choice rather
+than by arithmetic.
 
 **Inputs, and they are the whole contract** *(corrected 2026-08-10 — D1, D9)*:
 
@@ -343,16 +389,58 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   `history.moves.length` are unchanged across both renders. *(The move-list clause is new: item 4's
   replay is the one place a panel could reach for `takeBack`, which would mutate the caller's
   history and pass every content assertion.)*
-- **A11 — the row count is a NUMBER, not a relation. Given** every case above, **when** the panel
-  renders, **then** it has **exactly `STATUS_ROWS` = 3** rows, and **`frameHeight({ board: 9,
-  status: STATUS_ROWS, history: 8 })` is 23** — the epic's reference layout, which fits a 24-row
-  terminal.
+- **A11 — the row count is a NUMBER, and it is THIS panel's number. Given** every case above,
+  **when** the panel renders, **then** it has **exactly `STATUS_ROWS` rows**, **`STATUS_ROWS` is
+  `3`**, and **`STATUS_ROWS` is read from the panel module's own `export`** — imported by the test,
+  never re-declared as a local constant beside it.
 
-  *(**[ADDED 2026-08-10 — D8.]** Every previous criterion said "identical", which a 1-row panel and a
-  7-row panel both satisfy. Measured at this hop: at 5 status rows the frame is **25** rows,
-  `beginFrameSession` finds `sink.rows >= height` false on a standard terminal, takes the **append**
-  path, and epic acceptance `4b` — the in-place redraw — becomes unreachable with no test failing
-  anywhere.)*
+  *(**[ADDED 2026-08-10 — D8. AMENDED 2026-08-11 — `ADR-0009` clauses 4 and 5, `D17` below: one
+  clause STRUCK, two clauses ADDED, and D8's stated purpose PARTLY RETRACTED.]** The struck clause
+  read *"and `frameHeight({ board: 9, status: STATUS_ROWS, history: 8 })` is 23 — the epic's
+  reference layout, which fits a 24-row terminal."* It is struck because it was the entire import
+  edge to `ABC-017`, and because **it did not do the job D8 gave it.***
+
+  ***Re-measured at this hop against merged `src/frame.ts` and merged `src/render.ts` — the
+  Architect's table was re-run, not transcribed, and every `4b` verdict below is
+  `beginFrameSession`'s own strategy choice on a 24-row TTY rather than arithmetic:***
+
+  | mutant | `A11` as promoted | `A11` as repaired | `ABC-017` `A13` fit-check | H | `4b` |
+  |---|---|---|---|---|---|
+  | delivered as budgeted 9/3/8 | PASS | PASS | PASS | 23 | yes |
+  | M1 status ships 4 | **FAIL** | **FAIL** | **FAIL** | 24 | yes |
+  | M2 history ships 9 | PASS | PASS | **FAIL** | 24 | yes |
+  | M3 history ships 10 | PASS | PASS | **FAIL** | 25 | **no** |
+  | M4 `renderBoard` ships 10 | PASS | PASS | **FAIL** | 24 | yes |
+  | M5 board 10 **and** history 9 | PASS | PASS | **FAIL** | 25 | **no** |
+  | M6 status 5 | **FAIL** | **FAIL** | **FAIL** | 25 | **no** |
+
+  *(**What D8 claimed, and how much of it survives.** D8 added `A11` *"to protect `4b`"*, and the
+  frame-level clause was how it meant to. Measured: **`A11` passes M3 and M5 — the only two of M1–M5
+  that make `4b` unreachable — both BEFORE the strike and AFTER it.** Striking the clause therefore
+  does **not** repair that blindness; **nothing written on this ticket can.** Both mutants move
+  `history`, a term this panel must not name (`ADR-0009` clause 2) and cannot read (`ABC-017` is
+  unbuilt when this ticket merges **first**), and the shadow-literal form that could name it passes
+  all six — measured, and rejected as `ADR-0009` Alternative B.*
+
+  ***So the honest statement, which replaces D8's:*** `A11` **protects `4b` against THIS panel's own
+  row count and against nothing else.** That half is real and is worth the criterion: at
+  `status` = 5 the frame is **25** rows (M6, measured), `beginFrameSession` finds `sink.rows >= height`
+  false on a standard 24-row terminal, takes the **append** path, and `4b` — the in-place redraw with
+  no stale rows — becomes unreachable with no test failing anywhere. `A11`'s `= 3` clause is what
+  fails there. **The `history` and `board` halves of `4b`'s row budget are `ABC-017`'s `A13`, per
+  `ADR-0009` clause 5 — see the flag in `## Definition of Ready`, because `ABC-017` is `P2` and this
+  ticket merges without that cover.** A criterion that keeps claiming a protection it cannot deliver
+  is worse than one that claims less: a reader stops looking.*
+
+  ***The two added clauses, and the trap each closes.*** *`STATUS_ROWS` **is `3`** and **is the
+  module's export**, read by import. Neither was stated: `A11` as promoted said only *"exactly
+  `STATUS_ROWS` = 3 rows"*, which a build that returns 3 rows and **exports no constant at all**
+  satisfies, with the test supplying its own `const STATUS_ROWS = 3` beside the assertion. That is not
+  a hypothetical — **merged `src/frame.test.ts:38` does exactly that today**, labelled *"`ABC-016`'s
+  stated constant"*, and the shadow form it demonstrates passes all six mutants above. The export is
+  load-bearing twice over: `ABC-018`'s `frameHeight` consumes it as a session constant
+  (`src/frame.ts:84`, `:211`), and `ABC-017`'s `A13` cannot read delivered geometry without it. **A
+  local shadow makes this criterion an assertion about the test file.**)*
 - **A12 — ASCII, unconditionally, on the panel's OWN rows. Given** every case above, **when** the
   panel renders, **then** the count of code points above `U+007F` in the panel's rows is **exactly
   0**.
@@ -399,10 +487,15 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   no claim to show. **`ABC-020` merged on `main` 2026-08-02, so the constraint is discharged and the
   `DrawClaims` shape this ticket now names is the merged one** (`src/gameend.ts:50-55`).
 - `ABC-005` (`isInCheck`) merged on `main`.
-- **`ABC-018`** — **added 2026-08-10 (D15).** `frameHeight` consumes this panel's row count as a
-  **session constant** read once before the first frame (`src/frame.ts:84`, `:211`), and
-  `assembleFrame` takes the panel's widest row as the frame's `W` (`:179`). Merged on `main`
-  2026-08-08; the edge is real and was unlisted. `A11` is where it binds.
+- **`ABC-018`** — **added 2026-08-10 (D15); the binding site CORRECTED 2026-08-11 (D17).**
+  `frameHeight` consumes this panel's row count as a **session constant** read once before the first
+  frame (`src/frame.ts:84`, `:211`), and `assembleFrame` takes the panel's widest row as the frame's
+  `W` (`:179`). Merged on `main` 2026-08-08; the edge is real and was unlisted. *(This line read
+  *"`A11` is where it binds"*. **After `ADR-0009` clause 4 it does not.** `A11` now asserts this
+  panel's own row count and the export `frameHeight` consumes; it asserts **nothing** about
+  `frameHeight`'s output. **The edge binds at `ABC-017`'s `A13`**, which is where all three terms are
+  read from delivered code. What this ticket owes `ABC-018` is the exported constant, not the
+  identity.)*
 - **`ABC-019`** — **added 2026-08-10 (D15), and it is a CONTRACT dependency, not a build-order
   one.** The loop supplies the thinking flag (it always did) and now also the `GameStatus`, which it
   already evaluates once per ply before rendering. **This ticket is not blocked on it**: both are
@@ -468,15 +561,26 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   the gate's to accept and not the engineer's to absorb**, and a re-derivation of the bar is a valid
   ruling. Corroboration that the instrument is sane: `gameStatusOf` at 120 plies reads 47.93 µs here
   against `plans/nfr-catalog.md`'s independently measured 47.75 / 47.59 µs — 0.4%.
-- **`plans/nfr-catalog.md`'s `NFR-002` row is owed an update and this ticket adds a SECOND reason.
+- ~~**`plans/nfr-catalog.md`'s `NFR-002` row is owed an update and this ticket adds a SECOND reason.
   Flagged, deliberately NOT edited** — that file is Architect/Design's and `ABC-026`'s hop is inside
-  it right now. The row's `O(window)` boundary condition was verified **structurally** at `ABC-012`'s
-  gate on the ground that *"`src/history.ts` has ZERO importers, so nothing pulled the repetition
-  derive into a frame"*. **Item 7 as originally written was that importer**, and would have expired
-  the verification on merge. As now specified the panel imports `GameHistory` as a **type only** and
-  replays through `fen.ts` + `apply.ts`, so **the structural fact survives this ticket** — which is
-  worth the catalog knowing, since it is the thing the row's claim rests on. The other reason is
-  `EPIC-002` `[A2]`'s, already flagged on `ABC-017`.
+  it right now.~~ **RULED, AND NO EDIT IS OWED TO THAT ROW — CORRECTED 2026-08-11 (D18).** *This flag
+  read* **owed by Architect/Design** *and was stale. Both of its reasons were ruled at
+  `refinement-ABC-026` on the day they were raised, and both dispositions were re-checked and upheld
+  at `design-frame-contract` (2026-08-11):* **reason 1 — `EPIC-002` `[A2]`'s — is STALE** (the rewrite
+  it asks for landed nine and a half hours after the flag did; the strike, with commit hashes, is on
+  `ABC-017` and in `plans/nfr-catalog.md`'s `NFR-002` section), and **reason 2 — the structural note
+  below — is CARRIED, deliberately not written into the row, because that file does not certify a
+  ticket that has shipped zero lines.** The row is byte-identical and **Architect/Design owes it
+  nothing on this ticket's account.**
+  **The surviving obligation and its real owner: `Security/NFR`, at THIS ticket's own gate.** The
+  row's `O(window)` boundary condition was verified **structurally** at `ABC-012`'s gate on the ground
+  that *"`src/history.ts` has ZERO importers, so nothing pulled the repetition derive into a frame"*.
+  **Item 7 as originally written was that importer**, and would have expired the verification on
+  merge. As now specified the panel imports `GameHistory` as a **type only** and replays through
+  `fen.ts` + `apply.ts`, so **the structural fact survives this ticket** — and the gate re-verifies it
+  by `grep` on **delivered** code. **`A13` is this ticket's own half and does NOT discharge the
+  gate's** (Architect/Design, `design-frame-contract`). *(Re-checked at this hop for information only:
+  `src/history.ts` has exactly one importer today, `src/history.test.ts`.)*
 - **The panel calls `isInCheck` a second time**, independently of the one `gameStatus` makes inside
   its zero-legal-moves branch. That is deliberate and at 0.06–0.11 µs it is free; it is the honest
   reading of criterion #3, which is about the rendered board and not about the terminal check.
@@ -554,6 +658,13 @@ because epic acceptance #3 lives here and `EPIC-002` cannot close without it. It
 highest-priority unblocked item on this board, which is why it was scheduled; that is a scheduling
 fact and not an argument for moving the rank.
 
+**Re-read 2026-08-11 at the `ADR-0009` repair hop and still `M` (3) / `P1`.** The repair **removed** a
+criterion clause and **added** two clauses to a criterion that already existed; it added no cell, no
+input, no module and no test file. **`A11` is now cheaper to satisfy than it was**, because it no
+longer requires the test file to compose a frame height. The size arguments above are untouched. `P1`
+is untouched: nothing in `ADR-0009` moves epic acceptance #3, and the new flag in
+`## Definition of Ready` is a **merge-order** fact for the Orchestrator, not a value change here.
+
 ## Definition of Ready
 
 **RE-DERIVED IN FULL 2026-08-10 by BA/PM against `agent-factory/checklists/definition-of-ready.md`.
@@ -574,15 +685,62 @@ after it, because a DoR block that only ever says ✅ is what let two of these t
 | 9 | priority assigned | ✅ | ✅ `P1`, re-read |
 | 10 | no major unresolved blocker | ✅ | ✅ every dependency merged |
 
-**Two flags carried forward rather than closed, both named with an owner, neither blocking:**
+**RE-DERIVED AGAIN 2026-08-11 by BA/PM at task `repair-panel-tickets` (Workflow 07), applying accepted
+`ADR-0009`. The 2026-08-10 block above claimed ✅ on item 4 and it was WRONG — `A11` was defective as
+promoted, and no reader of that block could have known.** That is the third time on this board that a
+DoR self-assessment has certified a criterion a mutant walks through, so the column below is the state
+at the *promoted* text, not at the 2026-07-31 text.
 
-- **`plans/nfr-catalog.md`'s `NFR-002` row** — owed a rewrite for two reasons now (`EPIC-002` `[A2]`
+| # | Check | At promotion (2026-08-10) | After the `ADR-0009` repair |
+|---|---|---|---|
+| 1 | problem clear | ✅ | ✅ unchanged |
+| 2 | scope and out-of-scope clear | ⚠️ D17 — `## Scope`'s `N`-sweep implied a frame-level claim this panel may not make | ✅ scoped to `STATUS_ROWS`; `ADR-0009` cl. 2 stated |
+| 3 | INVEST | ⚠️ D17 — *independent* was false as promoted: `A11` named `history: 8`, `ABC-017`'s number | ✅ zero cross-ticket coupling, in production and in test; goes green alone |
+| 4 | acceptance testable and measurable | ❌ **D17** — `A11` PASSES M2–M5, incl. **both** mutants that make `4b` unreachable, and its `STATUS_ROWS` had no stated provenance | ✅ 14 criteria; `A11` re-measured on 7 mutants, provenance pinned, purpose stated honestly |
+| 5 | dependencies known | ⚠️ D17 — the `ABC-018` line named `A11` as the binding site; after the strike it is not | ✅ binding site corrected to `ABC-017`'s `A13` |
+| 6 | security/NFR triggers, measurable | ⚠️ **D18** — the `NFR-002` flag read *owed by Architect/Design* and had been ruled the day it was raised | ✅ ruled; surviving half re-homed to Security/NFR at this gate |
+| 7 | test notes present | ✅ | ✅ unchanged — the struck clause needed no note |
+| 8 | size assigned | ✅ `M` | ✅ `M`, re-read; the repair only removes work |
+| 9 | priority assigned | ✅ `P1` | ✅ `P1`, re-read |
+| 10 | no major unresolved blocker | ✅ | ✅ every dependency merged; three flags carried, each with an owner, none blocking |
+
+**Every ✅ in the right-hand column was verified against merged `src/` at this hop, not argued.** The
+seven-mutant table under `A11` was **re-run** rather than transcribed from Architect/Design's notes,
+`4b` reachability was taken from `beginFrameSession`'s own strategy choice on a 24-row TTY rather than
+from arithmetic, and the `NFR-002` disposition was read in `plans/nfr-catalog.md` rather than taken on
+trust. **Zero production lines: `src/` is byte-identical to `main`.**
+
+**What this hop deliberately did NOT do.** It did not re-litigate `ADR-0009` (accepted). It did not
+edit `plans/board.md` (the Orchestrator's), `plans/nfr-catalog.md` or `memory-bank/50-decisions/` (a
+concurrent Architect/Design hop's this wave). It did not move size or priority. And it did **not**
+invent a way for `A11` to catch M3/M5 — that is structurally impossible on this ticket and pretending
+otherwise is the defect, not the fix.
+
+**Flags carried forward rather than closed, each named with an owner, none blocking:**
+
+- ~~**`plans/nfr-catalog.md`'s `NFR-002` row** — owed a rewrite for two reasons now (`EPIC-002` `[A2]`
   and this ticket's structural note). **Owner Architect/Design**, and that role is inside the file on
-  `ABC-026` today. Not blocking: this ticket's bar lives here, with its machine.
+  `ABC-026` today.~~ **CORRECTED 2026-08-11 — D18: this flag was STALE when it was written here.**
+  It is **ruled**, no edit is owed to the row, and Architect/Design owns nothing on this ticket's
+  account. What survives is **`Security/NFR`'s, at this ticket's own gate** — a `grep` for importers
+  of `src/history.ts` on delivered code, which `A13` does not discharge. Full disposition, with both
+  reasons and who ruled them, is in `## Security / NFR triggers`. Not blocking: this ticket's bar
+  lives here, with its machine.
 - **`ABC-010` (FEN semantic validation), `Backlog`** — item 2 is honest about a loaded position in
   which the side *not* to move is in check, and it is `ABC-010` that makes such a position
   unreachable. **Carried, not owned**, exactly as `ABC-019` carries the same class. Not blocking:
   nothing supplies a FEN to this panel until `EPIC-003`.
+- **NEW 2026-08-11 — `4b`'s row budget is only half-covered while this ticket is the only panel
+  merged, and the other half rides on a `P2` ticket. Owner: the Orchestrator.** `ADR-0009` clause 5
+  puts the composition fit-check on whichever panel merges **second** — `ABC-017`, `P2`, whose own
+  `## Size and priority rationale` calls it *"the right thing to drop first if this epic runs long."*
+  Measured at this hop: between this ticket's merge and `ABC-017`'s, the only delivered-code guard on
+  `4b`'s 24-row budget is `A11`'s own `= 3` clause, which catches a `status` change (M1, M6) and is
+  blind to a `history` or `board` change (M2–M5, including **both** mutants that push `H` to 25). **If
+  `ABC-017` is dropped, deferred or resequenced, `A13` must be re-homed** — to `ABC-019`, which
+  composes the real panels, or to a ticket of its own. Not blocking this ticket: it cannot write that
+  check (`ABC-017` is unbuilt when it merges) and `ADR-0009` clause 2 forbids it naming the term.
+  **Flagged, not taken — merge order and board moves are the Orchestrator's.**
 
 **PROMOTED `Backlog` → `Ready` 2026-08-10 by BA/PM** (task `refinement-ABC-016`, subtask
 `refinement-ABC-016-bapm`, Workflow 07). `Ready` goes 0/8 → 1/8; no limit approached, no override
