@@ -1152,3 +1152,377 @@ describe("ABC-023 A3 — the doubling standard varies BOTH axes, not one", () =>
     expect(gappedBeforeTheseRows, "9 of the 13 varied ONE axis before these rows").toBe(9);
   });
 });
+
+/**
+ * ------------------------------------------------------------------------------------------------
+ * `ABC-023` QE — three regions the criteria's OWN rows do not reach, added 2026-08-10 at the
+ * `In Review` gate from an INDEPENDENT mutation campaign (67 mutants over both tree states, 0
+ * broken builds, 0 harness errors, its own harness rather than the engineer's).
+ *
+ * Every mutant named below SURVIVED the delivered tree at **578/578** AND the `PERFT_DEEP=1` lane
+ * at **32/32** — it passed every one of `A1`–`A5` and the whole suite. Each is a gap in the
+ * CRITERIA, never a defect in the code: `src/moves.ts` still hashes
+ * `6335b452fc21ffe2d0f902ecab930840`, no production line is touched here either, and every row
+ * below PASSES on the delivered tree. The repair is rows; no criterion was narrowed so that a
+ * survivor stops counting.
+ *
+ * 7. THE ATTACKER'S TYPE ON THE LANDING SQUARE — `A2`'s blind axis. `A2`'s four rows are every one
+ *    of them attacked by an enemy ROOK standing on the landing square's own FILE, which is
+ *    measured below rather than asserted. A build that tests the landing square for ORTHOGONAL
+ *    SLIDER attacks only — so a castle onto a square attacked by a knight, a pawn, a bishop, a
+ *    diagonally-placed queen or the enemy king is still offered — survives all four. `legalMoves`
+ *    removes the move for its own different reason, so perft stays blind exactly as
+ *    `## Reproduction` 1 describes; what breaks is `generateMoves`' documented invariant, which is
+ *    `A2`'s whole point. Twenty rows: five attacker types across all four options.
+ *
+ * 8. THE (COLOUR × SIDE) COMBINATION, not merely the two axes — the blind corner of `A3` AND `A1`.
+ *    `A3` requires every type to VARY both axes, and eleven of the thirteen type/table pairs still
+ *    cover only two or three of the four combinations. A single-type admission conditional on the
+ *    colour AND the side AT ONCE therefore survives — measured on seven of them, while the control
+ *    keyed on a combination a delivered row DOES carry dies at 577/578. The same corner sits in
+ *    `A1`'s four pair rows, which is the engineer's own declared limitation: a pair admission keyed
+ *    on (white, queenside) or (black, kingside) survives. Thirteen rows close the tables, four the
+ *    pairs.
+ *
+ * 9. THE SCALAR FIELDS — an axis no row in this file varies AT ALL. Every FEN in all six tables
+ *    above ends `- 0 1`, asserted below over the tables themselves. A build whose two identity
+ *    guards are skipped whenever `halfmoveClock !== 0`, or `fullmoveNumber !== 1`, or an
+ *    en-passant square is set, survives the entire net; so does one that skips only the LANDING
+ *    square's through-check test on the same slice. Legal play never trips those guards, so every
+ *    count-based oracle is blind by construction — the same masking argument as `## Reproduction`
+ *    1, on a different axis. Seven rows carry the three scalars off their defaults.
+ * ------------------------------------------------------------------------------------------------
+ */
+
+/** Algebraic to 0x88 — the inverse of `squareName`, so a row can name its attacker's square. */
+function squareIndex(name: string): number {
+  return FILES.indexOf(name[0] as string) + (Number(name[1]) - 1) * 16;
+}
+
+/** The (colour to move, castling side) pair a row carries, as one comparable label. */
+function combinationOf(fen: string): string {
+  return `${moverOf(fen)}/${sideOf(fen)}`;
+}
+
+/**
+ * `ABC-023` QE, region 7: the row's LANDING-square attacker is the piece the row names, it is the
+ * MECHANISM, and it is not the kind `A2`'s own four rows use.
+ *
+ * The third assertion is the discriminating one. Every delivered `A2` row is attacked by an
+ * orthogonal slider sitting on the landing square's own file, so a build that narrows the landing
+ * square's test to orthogonal sliders passes all four. Here the attacker shares neither the rank
+ * nor the file of the landing square, so that build goes red on all twenty rows.
+ */
+function expectNamedAttackerIsTheMechanism(fen: string, attacker: string, from: string): void {
+  const fields = fen.split(" ");
+  const black = fields[1] === "b";
+  const shape = CASTLE_SHAPE[fields[2] as string];
+  if (shape === undefined) throw new Error(`row must hold exactly one castling right: ${fen}`);
+
+  const position = parseFen(fen);
+  const attackerIsBlack = !black;
+  const landing = shape.kingPath[shape.kingPath.length - 1] as number;
+  const square = squareIndex(from);
+
+  expect(position.board[square], `the enemy ${attacker} must stand on ${from}: ${fen}`).toBe(
+    (PIECE_TYPES[attacker] as number) | (attackerIsBlack ? BLACK : 0),
+  );
+  expect(
+    [(square & 7) === (landing & 7), square >> 4 === landing >> 4],
+    `${from} must share neither file nor rank with ${squareName(landing)}: ${fen}`,
+  ).toEqual([false, false]);
+
+  const stripped: Position = { ...position, board: position.board.slice() };
+  stripped.board[square] = EMPTY;
+  expect(
+    isSquareAttackedBy(stripped, landing, attackerIsBlack),
+    `removing the ${attacker} must leave ${squareName(landing)} unattacked: ${fen}`,
+  ).toBe(false);
+}
+
+/**
+ * `ABC-023` QE, region 7 — the castle's landing square attacked by something OTHER than the
+ * file-borne rook every `A2` row uses. Five attacker types × four options; the queen rows attack
+ * along a DIAGONAL, so the piece type alone is not what these rows vary.
+ */
+const LANDING_ATTACKER_TYPES: ReadonlyArray<
+  readonly [attacker: string, from: string, fen: string, landing: string, expected: number]
+> = [
+  ["KNIGHT", "h3", "4k3/8/8/8/8/7n/8/4K2R w K - 0 1", "g1", 8],
+  ["PAWN", "h2", "4k3/8/8/8/8/8/7p/4K2R w K - 0 1", "g1", 8],
+  ["BISHOP", "h2", "4k3/8/8/8/8/8/7b/4K2R w K - 0 1", "g1", 8],
+  ["KING", "h2", "8/8/8/8/8/8/7k/4K2R w K - 0 1", "g1", 8],
+  ["QUEEN", "h2", "4k3/8/8/8/8/8/7q/4K2R w K - 0 1", "g1", 5],
+  ["KNIGHT", "a2", "4k3/8/8/8/8/8/n7/R3K3 w Q - 0 1", "c1", 9],
+  ["PAWN", "b2", "4k3/8/8/8/8/8/1p6/R3K3 w Q - 0 1", "c1", 15],
+  ["BISHOP", "a3", "4k3/8/8/8/8/b7/8/R3K3 w Q - 0 1", "c1", 10],
+  ["KING", "b2", "8/8/8/8/8/8/1k6/R3K3 w Q - 0 1", "c1", 15],
+  ["QUEEN", "a3", "4k3/8/8/8/8/q7/8/R3K3 w Q - 0 1", "c1", 10],
+  ["KNIGHT", "h6", "4k2r/8/7N/8/8/8/8/4K3 b k - 0 1", "g8", 8],
+  ["PAWN", "h7", "4k2r/7P/8/8/8/8/8/4K3 b k - 0 1", "g8", 8],
+  ["BISHOP", "h7", "4k2r/7B/8/8/8/8/8/4K3 b k - 0 1", "g8", 8],
+  ["KING", "h7", "4k2r/7K/8/8/8/8/8/8 b k - 0 1", "g8", 8],
+  ["QUEEN", "h7", "4k2r/7Q/8/8/8/8/8/4K3 b k - 0 1", "g8", 5],
+  ["KNIGHT", "a7", "r3k3/N7/8/8/8/8/8/4K3 b q - 0 1", "c8", 9],
+  ["PAWN", "b7", "r3k3/1P6/8/8/8/8/8/4K3 b q - 0 1", "c8", 15],
+  ["BISHOP", "a6", "r3k3/8/B7/8/8/8/8/4K3 b q - 0 1", "c8", 10],
+  ["KING", "b7", "r3k3/1K6/8/8/8/8/8/8 b q - 0 1", "c8", 15],
+  ["QUEEN", "a6", "r3k3/8/Q7/8/8/8/8/4K3 b q - 0 1", "c8", 10],
+];
+
+/**
+ * `ABC-023` QE, region 8 — the (colour, side) combinations the four impostor tables still do not
+ * carry after `A3`'s nine rows. One row per missing combination; the two QUEEN pairs already carry
+ * all four and gain nothing, so this is one row per GAP exactly as `A3` was.
+ */
+const COMBINATION_GAP_ROWS: ReadonlyArray<
+  readonly [
+    table: string,
+    piece: string,
+    square: "king" | "rook",
+    occupant: "own" | "enemy",
+    fen: string,
+    expected: number,
+  ]
+> = [
+  ["IMPOSTOR_ON_KING_SQUARE", "ROOK", "king", "own", "r3r2k/8/8/8/8/8/8/4K3 b q - 0 1", 25],
+  ["IMPOSTOR_ON_KING_SQUARE", "BISHOP", "king", "own", "r3b2k/8/8/8/8/8/8/4K3 b q - 0 1", 20],
+  ["IMPOSTOR_ON_KING_SQUARE", "KNIGHT", "king", "own", "r3n2k/8/8/8/8/8/8/4K3 b q - 0 1", 17],
+  ["IMPOSTOR_ON_KING_SQUARE", "PAWN", "king", "own", "4k3/8/8/8/8/8/8/R3P2K w Q - 0 1", 14],
+  ["IMPOSTOR_ON_KING_SQUARE", "PAWN", "king", "own", "k3p2r/8/8/8/8/8/8/4K3 b k - 0 1", 13],
+  ["IMPOSTOR_ON_ROOK_SQUARE", "BISHOP", "rook", "own", "b3k3/8/8/8/8/8/8/4K3 b q - 0 1", 12],
+  ["IMPOSTOR_ON_ROOK_SQUARE", "KNIGHT", "rook", "own", "n3k3/8/8/8/8/8/8/4K3 b q - 0 1", 7],
+  ["IMPOSTOR_ON_ROOK_SQUARE", "PAWN", "rook", "own", "4k3/8/8/8/8/8/8/P3K3 w Q - 0 1", 6],
+  ["IMPOSTOR_ON_ROOK_SQUARE", "PAWN", "rook", "own", "4k2p/8/8/8/8/8/8/4K3 b k - 0 1", 6],
+  ["ENEMY_ON_KING_SQUARE", "KNIGHT", "king", "enemy", "r3N2k/8/8/8/8/8/8/4K3 b q - 0 1", 13],
+  ["ENEMY_ON_KING_SQUARE", "PAWN", "king", "enemy", "k3P2r/8/8/8/8/8/8/4K3 b k - 0 1", 13],
+  ["ENEMY_ON_ROOK_SQUARE", "KNIGHT", "rook", "enemy", "N3k3/8/8/8/8/8/8/4K3 b q - 0 1", 5],
+  ["ENEMY_ON_ROOK_SQUARE", "PAWN", "rook", "enemy", "4k2P/8/8/8/8/8/8/4K3 b k - 0 1", 5],
+];
+
+/** The four tables region 8's quantifier runs over, joined to the name its rows cite. */
+const COMBINATION_TABLES: ReadonlyArray<
+  readonly [
+    name: string,
+    table: ReadonlyArray<readonly [piece: string, fen: string, expected: number]>,
+  ]
+> = [
+  ["IMPOSTOR_ON_KING_SQUARE", IMPOSTOR_ON_KING_SQUARE],
+  ["IMPOSTOR_ON_ROOK_SQUARE", IMPOSTOR_ON_ROOK_SQUARE],
+  ["ENEMY_ON_KING_SQUARE", ENEMY_ON_KING_SQUARE],
+  ["ENEMY_ON_ROOK_SQUARE", ENEMY_ON_ROOK_SQUARE],
+];
+
+/**
+ * `ABC-023` QE, region 8 applied to `A1` — the two (colour, side) combinations each pair family
+ * does not carry. `A1`'s four rows vary both axes and cover (w, kingside) and (b, queenside) in
+ * each family; a pair admission keyed on the OTHER diagonal of that square survives all four.
+ */
+const PAIR_COMBINATION_ROWS: ReadonlyArray<
+  readonly [
+    occupant: "own" | "enemy",
+    kingSquarePiece: string,
+    rookSquarePiece: string,
+    fen: string,
+    expected: number,
+  ]
+> = [
+  ["enemy", "KNIGHT", "KNIGHT", "4k3/8/8/8/8/8/8/n3n2K w Q - 0 1", 2], // white, QUEENSIDE
+  ["enemy", "KNIGHT", "KNIGHT", "k3N2N/8/8/8/8/8/8/4K3 b k - 0 1", 3], // black, kingside
+  ["own", "QUEEN", "QUEEN", "4k3/8/8/8/8/8/8/Q3Q2K w Q - 0 1", 39], // white, QUEENSIDE
+  ["own", "QUEEN", "QUEEN", "k3q2q/8/8/8/8/8/8/4K3 b k - 0 1", 38], // black, kingside
+];
+
+/**
+ * `ABC-023` QE, region 9 — the identity guards, on rows whose SCALAR fields are off their
+ * defaults. The occupants repeat rows that already exist; the scalars are the variable, which is
+ * the whole point of the region.
+ */
+const SCALAR_AXIS_IDENTITY: ReadonlyArray<readonly [label: string, fen: string, expected: number]> =
+  [
+    ["own QUEEN on the king's square, halfmoveClock 7", "4k3/8/8/8/8/8/8/K3Q2R w K - 7 1", 31],
+    ["own queen on the king's square, fullmoveNumber 27", "k3q2r/8/8/8/8/8/8/4K3 b k - 0 27", 31],
+    ["enemy KNIGHT on the king's square, an EP square set", "4k3/8/8/8/8/8/8/K3n2R w K c6 0 1", 13],
+    [
+      "own BISHOP on the rook's square, halfmove 3 / fullmove 9",
+      "4k3/8/8/8/8/8/8/4K2B w K - 3 9",
+      12,
+    ],
+    ["an enemy-KNIGHT PAIR, halfmove 9 / fullmove 5", "4k3/8/8/8/8/8/8/K3n2n w K - 9 5", 3],
+  ];
+
+/** `ABC-023` QE, region 9 — the same axis on `A2`'s class, where a separate mutant survives. */
+const SCALAR_AXIS_DESTINATION: ReadonlyArray<
+  readonly [label: string, fen: string, landing: string, expected: number]
+> = [
+  ["halfmoveClock 11 / fullmoveNumber 33", "4k1r1/8/8/8/8/8/8/4K2R w K - 11 33", "g1", 14],
+  ["an en-passant square set", "4k1r1/8/8/8/8/8/8/4K2R w K c6 0 1", "g1", 14],
+];
+
+describe("ABC-023 QE region 7 — the LANDING square, attacked by something other than a file rook", () => {
+  it.each(LANDING_ATTACKER_TYPES)(
+    "offers no castle when an enemy %s on %s attacks the landing square: %s",
+    (attacker, from, fen, landing, expected) => {
+      expectLandingSquareIsTheOnlyRefuser(fen, landing);
+      expectNamedAttackerIsTheMechanism(fen, attacker, from);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+
+  it("measures the axis A2's own four rows hold constant: every attacker of theirs is file-borne", () => {
+    // Not a criticism of those rows and not a re-run of them — a MEASUREMENT of the axis they do
+    // not vary, which is what makes the twenty rows above a gap rather than a preference. Strip
+    // the landing square's own file and every delivered row's attack disappears; strip it on the
+    // rows above and every one of them still stands.
+    expectAttackPolarity();
+
+    for (const [fen, landing] of DESTINATION_SQUARE_ATTACKED) {
+      const shape = CASTLE_SHAPE[fen.split(" ")[2] as string];
+      if (shape === undefined) throw new Error(`row must hold exactly one castling right: ${fen}`);
+      const position = parseFen(fen);
+      const attackerIsBlack = fen.split(" ")[1] !== "b";
+      const target = shape.kingPath[shape.kingPath.length - 1] as number;
+      const stripped: Position = { ...position, board: position.board.slice() };
+      for (let square = 0; square < 128; square++) {
+        if ((square & 0x88) === 0 && (square & 7) === (target & 7)) stripped.board[square] = EMPTY;
+      }
+      expect(
+        isSquareAttackedBy(stripped, target, attackerIsBlack),
+        `A2 row ${fen} is attacked on ${landing} from the file only`,
+      ).toBe(false);
+    }
+
+    // The twenty rows cover five attacker types across all four options, so the narrowing cannot
+    // be repaired for one option and left open on another.
+    for (const [, , fen] of LANDING_ATTACKER_TYPES) {
+      expect(fen.split(" ")[3], `region 7 rows keep the scalars at their default: ${fen}`).toBe(
+        "-",
+      );
+    }
+    for (const rights of ["K", "Q", "k", "q"]) {
+      const rows = LANDING_ATTACKER_TYPES.filter(([, , fen]) => fen.split(" ")[2] === rights);
+      expect(
+        [...new Set(rows.map(([attacker]) => attacker))].sort(),
+        `the ${rights} option needs all five attacker types`,
+      ).toEqual(["BISHOP", "KING", "KNIGHT", "PAWN", "QUEEN"]);
+    }
+  });
+});
+
+describe("ABC-023 QE region 8 — the (colour x side) COMBINATION, not merely the two axes", () => {
+  it.each(COMBINATION_GAP_ROWS)(
+    "%s: offers no castle with an %s %s on the %s's home square: %s",
+    (_table, piece, square, occupant, fen, expected) => {
+      expectImpostorSetup(fen, piece, square, occupant);
+      expectIdentityGuardIsTheOnlyRefuser(fen);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+
+  it.each(PAIR_COMBINATION_ROWS)(
+    "offers no castle with an %s %s and %s on BOTH home squares at the missing combination: %s",
+    (occupant, kingSquarePiece, rookSquarePiece, fen, expected) => {
+      expectPairSetup(fen, occupant, kingSquarePiece, rookSquarePiece);
+      expectAttackPolarity();
+      expectIdentityGuardIsTheOnlyRefuser(fen);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+
+  it("closes all four (colour, side) combinations for every type/table pair and both pair families", () => {
+    let pairs = 0;
+    let shortBeforeTheseRows = 0;
+    for (const [name, table] of COMBINATION_TABLES) {
+      const mine = COMBINATION_GAP_ROWS.filter(([owner]) => owner === name);
+      for (const type of new Set(table.map(([piece]) => piece))) {
+        pairs += 1;
+        const before = table.filter(([piece]) => piece === type).map(([, fen]) => fen);
+        const added = mine.filter(([, piece]) => piece === type).map(([, , , , fen]) => fen);
+
+        if (new Set(before.map(combinationOf)).size < 4) shortBeforeTheseRows += 1;
+        expect(
+          new Set([...before, ...added].map(combinationOf)).size,
+          `${name} ${type}: all four (colour, side) combinations`,
+        ).toBe(4);
+      }
+    }
+    // The counts this region rests on, asserted rather than cited: 13 type/table pairs, and 11 of
+    // them still carried fewer than all four combinations after `A3`'s nine rows landed.
+    expect(pairs, "13 type/table pairs across the four tables").toBe(13);
+    expect(shortBeforeTheseRows, "11 of the 13 were short of all four combinations").toBe(11);
+
+    // `A1`'s two families, the same measurement: two of four before, four of four after.
+    for (const family of ["enemy", "own"] as const) {
+      const before = JOINT_OCCUPANT_PAIRS.filter(([occupant]) => occupant === family).map(
+        ([, , , fen]) => fen,
+      );
+      const added = PAIR_COMBINATION_ROWS.filter(([occupant]) => occupant === family).map(
+        ([, , , fen]) => fen,
+      );
+      expect(
+        new Set(before.map(combinationOf)).size,
+        `the ${family} family carried two of the four combinations`,
+      ).toBe(2);
+      expect(
+        new Set([...before, ...added].map(combinationOf)).size,
+        `the ${family} family must carry all four`,
+      ).toBe(4);
+    }
+  });
+});
+
+describe("ABC-023 QE region 9 — the SCALAR fields, an axis no other row in this file varies", () => {
+  it.each(SCALAR_AXIS_IDENTITY)("offers no castle when %s: %s", (_label, fen, expected) => {
+    expectAttackPolarity();
+    expectIdentityGuardIsTheOnlyRefuser(fen);
+    expectNoCastleAndPure(fen, expected);
+  });
+
+  it.each(SCALAR_AXIS_DESTINATION)(
+    "offers no castle on an attacked landing square when %s: %s",
+    (_label, fen, landing, expected) => {
+      expectLandingSquareIsTheOnlyRefuser(fen, landing);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+
+  it("measures the axis every other row in this file holds constant, and moves it", () => {
+    // The gap, asserted over the tables instead of narrated: every row above carries `- 0 1`, so
+    // a guard switched off on any other value of those three fields is never exercised.
+    const scalarsOf = (fen: string) => fen.split(" ").slice(3).join(" ");
+    const held: ReadonlyArray<readonly [name: string, fens: readonly string[]]> = [
+      ["IMPOSTOR_ON_KING_SQUARE", IMPOSTOR_ON_KING_SQUARE.map(([, fen]) => fen)],
+      ["IMPOSTOR_ON_ROOK_SQUARE", IMPOSTOR_ON_ROOK_SQUARE.map(([, fen]) => fen)],
+      ["ENEMY_ON_KING_SQUARE", ENEMY_ON_KING_SQUARE.map(([, fen]) => fen)],
+      ["ENEMY_ON_ROOK_SQUARE", ENEMY_ON_ROOK_SQUARE.map(([, fen]) => fen)],
+      ["JOINT_OCCUPANT_PAIRS", JOINT_OCCUPANT_PAIRS.map(([, , , fen]) => fen)],
+      ["DESTINATION_SQUARE_ATTACKED", DESTINATION_SQUARE_ATTACKED.map(([fen]) => fen)],
+    ];
+    for (const [name, fens] of held) {
+      expect(
+        [...new Set(fens.map(scalarsOf))],
+        `${name}: every row carries the default scalars`,
+      ).toEqual(["- 0 1"]);
+    }
+
+    // ...and these rows move all three of them. The "no en-passant square" sentinel is MEASURED
+    // through `parseFen` rather than restated, the same way this file measures its byte domains.
+    const noEpSquare = parseFen("4k3/8/8/8/8/8/8/4K3 w K - 0 1").epSquare;
+    const positions = [
+      ...SCALAR_AXIS_IDENTITY.map(([, fen]) => parseFen(fen)),
+      ...SCALAR_AXIS_DESTINATION.map(([, fen]) => parseFen(fen)),
+    ];
+    expect(
+      positions.some((position) => position.halfmoveClock !== 0),
+      "a row with a non-zero halfmove clock",
+    ).toBe(true);
+    expect(
+      positions.some((position) => position.fullmoveNumber !== 1),
+      "a row with a fullmove number past 1",
+    ).toBe(true);
+    expect(
+      positions.some((position) => position.epSquare !== noEpSquare),
+      "a row with an en-passant square set",
+    ).toBe(true);
+  });
+});
