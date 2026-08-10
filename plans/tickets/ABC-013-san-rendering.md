@@ -1,8 +1,8 @@
 ---
 id: ABC-013
 title: SAN rendering — src/san.ts with toSan only
-status: in-security-nfr
-column: In Security/NFR
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P1
 epic: EPIC-002

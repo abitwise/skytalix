@@ -310,3 +310,153 @@ merged and nothing was deployed.
 Replaced when `ABC-013` moved `In Review` → `In Security/NFR`. Verbatim, nothing summarised:
 
 _Updated: 2026-08-10 by the Software Engineer (task `ticket-to-pr-ABC-013`, subtask `ticket-to-pr-ABC-013-dev`, Workflow 04, gate per Workflow 05): **`ABC-013` MOVED `In Development` → `In Review`. In Development 1/3 → 0/3, In Review 0/3 → 1/3.** `src/san.ts` is built — **one export `toSan`, no `parseSan`, importing `position.ts`/`moves.ts`/`apply.ts`/`legal.ts` and nothing else** (`A20`, asserted both on the runtime namespace and on the source text). Gate on the branch tip: lint/typecheck/build exit **0**, **652/652 on 20 files**, skip count **0**, and **NO EXISTING TEST MODIFIED** — `git diff --name-only -- 'src/*.test.ts'` is empty and the whole delivered diff is THREE NEW FILES, so nothing was made green by moving something that already existed. **ALL 20 IN-SUITE CRITERIA `A1`–`A20` PASS AND NOT ONE EXPECTED STRING WAS DISPUTED** — this was the ticket's single largest open risk and it came back clean: all 52 rows were re-derived from their FENs against the SAN rules BEFORE any implementation existed and every one agreed, the four BA/PM named as most attackable (`Qee1`, `Q1e1`, `Ne4`, `exd6`) included; **no row was edited and no code was bent to a row**. **THE AGREEMENT IS CORROBORATION, NOT PROOF**: mine is a second hand-derivation by a reader who had already seen the table, not an external implementation or a specification text, so the honest status of *the 52 strings match the standard* is unchanged and QE's mutation hop is still the check. **RED-BEFORE-GREEN REPORTED HONESTLY, INCLUDING THE ROWS THAT WERE ALREADY GREEN**: the module was built in six staged inner-loop steps and `A7` and `A8` were green on a build with NO DISAMBIGUATION CODE AT ALL, while `A18`/`A19` were green VACUOUSLY on a build that never touched the position — they kill a wrong disambiguation, not a missing one, and `A4`/`A5`/`A6` are what kill the missing one. **TWO TABLE-FREE PROPERTIES ADDED BENEATH THE TABLE** over 184 positions (the six perft positions and every position one legal move away): every legal move of a position renders to a DISTINCT string, and every string is of the SAN grammar — the one class of check a hand-typed oracle cannot be, since a table that is wrong in one direction is still self-consistent. **`A21` MEASURED AT `P60` ON THE DELIVERED BUILD AND ALL FOUR BARS HOLD**: `N1` **8.76x / 8.73x** (≥ 5x), `N2` **0.483 µs** (≤ 0.75), `N3` **4.228 / 4.220 µs** (≤ 6.5), `N4` worst single **10.24 / 10.37 µs** unassisted (≤ 14) — two runs in separate processes, null floor 0.001 µs, Apple M3 / Node v24.12.0 / darwin-arm64, `UNKNOWN - verify` elsewhere and the Security/NFR gate's to re-run. **TEN DELIBERATE SELF-MUTATIONS RUN, ALL TEN DEAD — and TWO of them are seen by NO ROW OF THE 52-ROW TABLE** (a build that ignores the supplied `legal` list, and one that runs the mate test on every move); both die only in `san.nfr.test.ts`, which is why that file exists and why this project keeps its suite NFR bars structural rather than on the clock. That mutant set is the engineer's own and is **NOT** QE's independent hop, which is still owed. **NOT ESTABLISHED: that the criteria set is complete, or that the 52 strings match the FIDE/PGN standard.** `plans/nfr-catalog.md` NOT edited, `ADR-0004` NOT re-opened, `src/legal.ts` and the rules core NOT touched, `parseSan` NOT written and NOT foreclosed. NOTHING MERGED, NOTHING DEPLOYED. Per-ticket detail is in `plans/tickets/history/`, not here._
+
+---
+
+## `In Security/NFR → Ready for UAT` — the Security/NFR exit, 2026-08-10
+
+**VERDICT: PASS_WITH_RISKS. No required fix. Nothing high or medium, so nothing blocks at
+`security.block_on: high`. In Security/NFR 1/2 → 0/2, Ready for UAT 0/4 → 1/4.**
+
+The gate was SPLIT and both halves were run — the security half because 628 new lines had landed and
+"probably nothing" is not a reading, the NFR half because `N1`–`N4` had been measured by the engineer
+who wrote the module, which is the instrument of the role being measured.
+
+### The security half: untriggered, and MEASURED rather than repeated
+
+All 628 new lines read for the one question (`src/san.ts` 148, `src/san.test.ts` 371,
+`src/san.nfr.test.ts` 109). The ticket's claim holds: `toSan` **accepts no string parameter of any
+kind**, so no user-supplied string can reach it even in principle; its two inputs are a `Position`
+and a `Move` from this repository's own generator. No I/O, no network, no filesystem, no `process`,
+no `eval` / `Function` / dynamic import, no logging, no `try`/`catch`, no timer, no dependency —
+`package.json` and `package-lock.json` are byte-identical to `main`, re-checked here.
+
+**The exposure surface was measured, not argued.** `toSan` feeds the frame, and `plans/nfr-catalog.md`
+records that an unbounded supplied string is the one way that 16 ms budget can be busted, while
+`ABC-018` carries the terminal-escape class. So what this module can emit was measured: **351,644 SAN
+strings over 8,478 positions — maximum length 7 characters (`axb8=Q#`), 27 distinct characters, code
+points `0x23`–`0x78`, ZERO control bytes, ZERO ESC, ZERO C1, nothing above `U+007E`.** Both classes
+are closed for this module by construction: its only two string sources are a five-entry piece-letter
+table and `squareName`.
+
+Three things a reader could call risks were checked and are NOT reported as risks: the
+`makeMove`/`unmakeMove` window has no `try`/`finally` and needs none (`grep -n throw` across
+`apply.ts`, `legal.ts`, `moves.ts`, `position.ts` returns **nothing**, so no exception site is
+reachable inside it, and adding one would be `AGENTS.md` rule 8); the test file's single
+`readFileSync` reads its own module source at a fixed URL with no user input; and both regexes are
+linear with no nested quantifier, so there is no ReDoS.
+
+ASVS filtered to `security.asvs_level: L1` (70 of 345 requirements): a pure in-process function with
+no I/O and no string input engages none of them. `V1.3.2` (no `eval`) PASS, verified at the source.
+`V2.2.1` is not a fail — at L1 it scopes itself to input used for business or security decisions, and
+a `Move` from this repo's own generator is neither — but the unvalidated caller obligation travels
+forward as a named risk. `V13.4.1` and the `V15.1.1`/`V15.2.1` `high` → `low` override are **untouched
+and NOT relaxed**; their evidence was re-checked (no dependency added).
+
+**Security result: PASS. Zero findings, zero required fixes, no severity of any level.**
+
+### The NFR half: all four bars re-derived independently and MET
+
+Nothing was inherited. Own harness outside the repository importing `src/` by absolute path; **two
+builds** (the delivered `toSan` and a REFERENCE build that allocates a rivals array per call, proved
+to emit identical strings on all 42 moves in both call forms before either was timed); **two
+protocols** (per-move tight loop; per-call timing inside a 42-move sweep); 11 rounds with round 0
+discarded, medians of per-round means; **two fully independent samples in separate OS processes**;
+Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64, `UNKNOWN - verify` elsewhere. `P60`
+re-verified here at 42 legal moves, 3 of them checks, `toFen` byte-identical before and after the
+whole probe. Null floor 0.0009 µs.
+
+| id | bar | measured (two samples) | verdict |
+|---|---|---:|---|
+| `N1` | mean supplied ≤ 1/5 of mean unassisted over all 42 at `P60` | **8.82x / 8.80x** | **MET** (1.76x headroom) |
+| `N2` | mean `toSan(…, legal)` over all 42 ≤ 0.75 µs | **0.480 / 0.482** | **MET** (0.64x) |
+| `N3` | mean `toSan(…)` over all 42 ≤ 6.5 µs | **4.235 / 4.243** | **MET** (0.65x) |
+| `N4` | no single legal move over 14 µs, either form | **10.307 / 10.350** un, 5.649 / 5.677 sup | **MET** (0.74x) |
+
+All four hold under **both** protocols in both samples, and **the Engineer's four figures reproduce
+to within 0.4–1.5%** — this gate went looking for a self-serving measurement and did not find one.
+
+### The `N4` attribution was tested: the conclusion holds, the mechanism does not
+
+The Engineer attributed his `N4` worst (10.24 µs) exceeding the reference build's (9.34 µs) to an
+instrument difference — *"I time one move in a tight loop; BA/PM timed the worst member of a 42-move
+sweep, where the surrounding moves keep caches and branch predictors warm."* Three experiments on one
+instrument:
+
+1. **Is the delivered build slower? NO.** Against the allocating reference build, same instrument,
+   same process, same order: the delivered build is **1.2–1.9% FASTER** on every aggregate and its
+   per-move worst is **LOWER** on both protocols in both samples (10.307 / 10.350 against 10.485 /
+   10.549). His conclusion is upheld and is now *positively established* rather than merely unrefuted.
+2. **Does a sweep read lower than a tight loop? NO — it reads the same or HIGHER.** Same build, same
+   move: tight loop 10.307 / 10.350, inside a sweep 10.392 / 10.629. A warm-cache effect cannot
+   explain a figure 9% lower, because the direction is wrong. **The stated mechanism is refuted.**
+3. **What IS 9.34, then? A MEAN OVER THE THREE CHECKING PIECE MOVES.** It is byte-identical to the
+   `checking PIECE moves only (3)` row in BA/PM's own bench note (9.341 / 9.248), and this gate's
+   reference build reproduces that group mean at **9.353 / 9.383 µs** while its true per-move worst is
+   **10.485–10.603**. No instrument here puts a reference build's per-move worst near 9.3. On the
+   delivered build the three checking moves read 10.307 / 8.917 / 8.462 — mean 9.229, maximum 10.307:
+   one population, two aggregations, 1.12x apart.
+
+**So `N4`'s measured cell in the ticket (`worst 9.34 / 9.25 µs`) is a group mean labelled a worst, and
+the 14 µs bar is ~1.32x of a true reference worst rather than the 1.5x its derivation implies.** The
+bar is still MET at 0.74x. **No NFR bar was edited and no catalog target moved** — a gate does not
+move a target, and a human decides this one.
+
+### Two more things measured rather than inherited
+
+**`N1` is machine-independent and NOT position-independent.** The ratio reads **4.33x at startpos,
+4.94x at perft-3, 8.94x at `P60`, 21.5x at perft-5, 24.65x at kiwipete** — below its own 5x bar at two
+of five positions, because a pawn move never builds a legal list at all. `N1` is MET because it PINS
+`P60`; the ~1.7x margin set against "position variation" actually covers run-to-run scatter.
+
+**`NFR-002`'s frame budget is intact.** Full history render **107.9 / 106.1 µs at 40 plies** and
+**416.5 / 410.5 µs at 120 plies = 2.60% / 2.57% of a 16 ms frame** — the ticket's 395 / 392 µs
+reproduced to within 5%, inside `ADR-0004`'s published band. The bounded 8-move-pair pane the catalog
+mandates costs 90.9 µs and is REPLAY-dominated, not SAN-dominated. Labelled arithmetic, not a
+measurement: 120 plies at the worst move measured anywhere here = **1.24 ms, 7.8% of a frame**, ~12.9x
+of headroom for `ABC-016` and `ABC-017`. `NFR-003` re-derived at 42 × 0.480 = **20.2 µs, ~4,950x under
+the 100 ms budget**.
+
+### The gate, re-run on the branch tip by this role
+
+lint exit **0**, typecheck exit **0**, build exit **0**, `npm test` **652/652 on 20 files**, skip count
+**0**, `src/` diff still **three added files, +628 / −0**. **Test-integrity checker exit 2** — the
+registry `.grugops/test-skips.md` does not exist, so it could not run; recorded as an ERROR and never
+as a pass, pre-existing and not introduced here, with the skip count independently 0.
+
+### Four accepted risks, every one with a named owner and a trigger
+
+- **`RISK-ABC013-01` — LOW — `N4`'s measured cell is a group MEAN labelled "worst".** Owner **BA/PM**
+  (that section is BA/PM's; a gate does not edit an NFR bar). Trigger: the next re-derivation of `N4`,
+  or any argument about the 14 µs bar — anyone comparing a per-move worst against 9.34 will read a
+  regression that does not exist.
+- **`RISK-ABC013-02` — LOW — `N1` is not position-independent** and falls below its own bar at two of
+  five measured positions. Owner **Security/NFR** (this column, at the next gate that touches `N1`).
+  Trigger: any re-derivation of `N1` away from `P60`, or any ticket quoting it as a property of
+  `toSan` rather than of `toSan` **at `P60`**.
+- **`RISK-ABC013-03` — LOW — `toSan` is silently wrong on a broken caller obligation, with no
+  validation and no log.** Both preconditions are documented caller obligations and `## Scope` declares
+  the illegal-`move` case explicitly undefined; there are **zero importers today**, which is why this
+  is low. Owner **BA/PM at `EPIC-003`**. Trigger: the first caller — `ABC-016`, `ABC-017` or
+  `parseSan` — since a total `toSan` is a contract change and belongs in a ticket, not in a gate.
+- **`RISK-ABC013-04` — LOW — QE's five criteria gaps (over-qualified disambiguation) stay open.**
+  Weighed here rather than inherited, and they bear on **neither** half: an over-qualified string stays
+  inside the 7-character bound and the printable-ASCII set, and over-qualification changes which rung
+  of the ladder returns, not whether a legal list is built — so the call counts and all four bars are
+  identical. Owner **BA/PM**. Trigger: before `ABC-016` / `ABC-017` consume `toSan`.
+
+### What this hop did NOT do
+
+No file under `src/` touched — no module, no test, not one character. `plans/nfr-catalog.md` not
+edited and no target moved. **No NFR bar, criterion, FEN or expected string in the ticket edited** —
+the `N4` mislabelling is reported to a human, not corrected by the gate that found it. `ADR-0004` not
+re-opened. `npm run perft` not run and no result reported for it. No ticket cut, no other board column
+touched. **Nothing merged and nothing deployed — a human holds both.**
+
+---
+
+## `_Updated:` board header, archived verbatim on 2026-08-10 by Security/NFR
+
+Replaced when `ABC-013` moved `In Security/NFR` → `Ready for UAT`. Verbatim, nothing summarised:
+
+_Updated: 2026-08-10 by QE/E2E (task `ticket-to-pr-ABC-013`, subtask `ticket-to-pr-ABC-013-qe`, Workflow 05): **`ABC-013` MOVED `In Review` → `In Security/NFR`. In Review 1/3 → 0/3, In Security/NFR 0/2 → 1/2. QE VERDICT: PASS — ZERO defects in the code, FIVE gaps in the CRITERIA, counted separately and not conflated.** **THE 52-ROW TABLE HAS AN EXTERNAL ORACLE FOR THE FIRST TIME AND IT DISPUTES NOTHING.** Every hop before this recorded that the expected strings were hand-derived with no external instrument available; one was available — `chess.js@1.4.0`, installed into a scratchpad OUTSIDE the repository, `package.json` and `package-lock.json` byte-unchanged and **no repo dependency added**. It disputes **none** of the table's expected strings, and `src/san.ts` matched it on **649,556 SAN strings over 8,435 positions in BOTH call forms with ZERO mismatches**. A second oracle built to a deliberately different shape (minimal-unique-qualifier search, capture read from the BOARD, castle side from the king's travel direction) agrees over **323,694 renders — 0 divergences, 0 purity failures**, and an out-of-tree matcher resolves every emitted string back to **exactly one legal move and the right `Move` object** — `ADR-0004` clause 2b's round trip, run one epic early and entirely outside `src/`. **`A7`'s `Ne4` IS UPHELD** — disambiguation over LEGAL rather than pseudo-legal moves is what the external implementation does too, so the one row where a reader could disagree with the RULE has been settled by something other than a grugops reading. **40 MUTANTS: 31 KILLED, 9 SURVIVED — 4 provably equivalent controls, and FIVE GENUINELY WRONG BUILDS THAT PASS ALL 22 CRITERIA AND ALL 652 TESTS.** All five are one class — **OVER-QUALIFIED (non-minimal) disambiguation**: rooks (`Ra1b1` for `Rab1`), bishops (`Bc4d5` for `B4d5`), qualified captures (`Nb6xd5` for `Nbxd5`), every black move, and black on the rank rung (`Nc3e4` for `N3e4`) — each confirmed wrong by the external oracle as well. **Root cause in one sentence: minimality is asserted ONLY by the acceptance table, and the table exercises it only on WHITE knights and WHITE queens** — the two table-free properties cannot see it, because an over-qualified string is still distinct and still of the SAN grammar. **THESE ARE GAPS IN THE CRITERIA, NOT DEFECTS IN THE CODE**, and the distinction is the whole verdict. **FOUR FURTHER MUTANTS PASS EVERY ONE OF `A1`–`A21` AND DIE ONLY ON THE ENGINEER'S INJECTIVITY PROPERTY** (black castle side by absolute square, disambiguator skipped on captures, `x` dropped for black, rooks under-qualified) — that property is far more load-bearing than the note introducing it claimed, and must not be weakened. The Engineer's two table-invisible mutants were reproduced independently and a third of the same shape found; `src/san.nfr.test.ts` earns its place. **ONE COUNTING DEFECT, NO CODE IMPACT: the table holds 68 expected strings (63 distinct), not 52** — 48 rows plus `A1`'s 20-string set, transcribed exactly by `src/san.test.ts` and all 68 present in the ticket, checked mechanically. `52` travelled from BA/PM's out-of-tree harness into the ticket, four notes, this board and the trace, and is re-derivable from nothing. Gate re-run by QE on the branch tip: lint/typecheck/build exit **0**, **652/652 on 20 files**, skip count **0**; `src/san.ts` coverage **100% lines / 95% branches** (both uncovered branches are `noUncheckedIndexedAccess` fallbacks). **Test-integrity checker exit 2** — `.grugops/test-skips.md` does not exist, so it could not run; recorded as an error and never as a pass, pre-existing and not introduced here, with the skip count independently measured at 0. **`src/san.ts` md5 `cbcc3be37c21414d16e8e6b4d0c68959` BYTE-IDENTICAL before the first mutation and after the last** — no gate repaired the thing it measures. **NO TEST WAS ADDED OR CHANGED BY THIS HOP**: the `src/` diff is still three new files, +628/−0, so the five criteria gaps are REPORTED AND NOT CLOSED — closing them is one property test or five rows and it is BA/PM's ticket, not hidden scope. `ADR-0004` not re-opened, `plans/nfr-catalog.md` not edited, no criterion or expected string edited, `parseSan` not written. NOTHING MERGED, NOTHING DEPLOYED. Per-ticket detail is in `plans/tickets/history/`, not here._
