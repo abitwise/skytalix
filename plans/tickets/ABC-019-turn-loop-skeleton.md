@@ -255,9 +255,11 @@ loop:
   >   stub that EXPORTS the two constants is the third declaration site in person — forbidden by 9c.
   > - **DERIVED is the only form both buildable against stubs and correct at the swap.** The identity
   >   `assembleFrame(parts, mode).length` == `frameHeight({...the three lengths})` holds over **560
-  >   shapes with 0 mismatches**, and the frame's row count is **invariant under the message region**
-  >   (0 / 1 / 200 items and one 100 000-character item all give the same `H`), so deriving from the
-  >   *first* frame is safe whatever that frame happens to carry.
+  >   shapes with 0 mismatches** — **Architect/Design's measurement** at `design-stub-seam-and-nfr002`,
+  >   attributed rather than re-claimed; spot-checked here at 2/5, 2/6, 3/8 and 4/9. The frame's row
+  >   count is **invariant under the message region** — re-measured at this hop: 0 items, 1 item, 200
+  >   items and one 100 000-character item all give the same `H` — so deriving from the *first* frame is
+  >   safe whatever that frame happens to carry.
   > - **The two panels enter as stub seams in a TEST file, never as a `src/` module** (9c). Merged
   >   `src/frame.test.ts` is the precedent — `statusStub` / `historyStub` are local functions there
   >   (`:55-78`) and the two unbuilt panels *"enter as fixed-height stubs"*. A `src/` stub module would
