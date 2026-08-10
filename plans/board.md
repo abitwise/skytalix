@@ -40,7 +40,7 @@ _Updated: 2026-08-10 by QE/E2E (task `ticket-to-pr-ABC-013`, subtask `ticket-to-
     ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 0/3)
+    ## In Review (WIP 1/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -112,7 +112,7 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 ## In Development (WIP 0/3)
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
 
 ## In Security/NFR (WIP 1/2)
