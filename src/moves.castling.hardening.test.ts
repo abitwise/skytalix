@@ -81,6 +81,45 @@
  *    `4k3/8/8/8/8/8/8/K3q2R w K - 0 1` and `4k3/8/8/8/8/8/8/4K2q w K - 0 1` both offer zero
  *    castles. Those three bytes are the ONLY ones the masking argument covers, and the argument
  *    is asserted here through `isSquareAttackedBy` rather than inherited from a comment.
+ *
+ * ----------------------------------------------------------------------------------------------
+ *
+ * ABC-023 — three regions the net above does not reach, added 2026-08-10. Same premise as
+ * `A11`/`A13`: every row PASSES on the delivered tree (`src/moves.ts` md5
+ * `6335b452fc21ffe2d0f902ecab930840`), NO production line changed, and each was written because a
+ * build that fails it passes all 559 delivered tests AND the `PERFT_DEEP=1` lane at 32/32.
+ *
+ * 4. THE CASTLE'S DESTINATION SQUARE — `A2`, and it is the reason this ticket exists. Dropping
+ *    `kingTo` from an option's `kingPath`, so a castle whose LANDING square is attacked is still
+ *    offered, survives the whole suite on ALL FOUR options. Nothing catches it because
+ *    `legalMoves` removes the move for a DIFFERENT reason — the king would end in check — so
+ *    every count-based oracle, perft included, is blind. What breaks is the exported
+ *    `generateMoves` and its own documented invariant (`src/moves.ts:318-320`: "a castle never
+ *    appears when the king would start, cross, or land in check"). Two consequences for the rows:
+ *    the count is asserted on `generateMoves`, where the harm is visible, and dimension 3's rule
+ *    is DELIBERATELY INVERTED — here the through-check test MUST be the mechanism, on the landing
+ *    square specifically, which is why `expectLandingSquareIsTheOnlyRefuser` is the mirror image
+ *    of `expectIdentityGuardIsTheOnlyRefuser` rather than a copy of it. This is also the only
+ *    class on this board whose position is LEGALLY REACHABLE.
+ *
+ * 5. THE JOINT OCCUPANT PAIR — `A1`. Every row above holds one home square wrong and the other
+ *    one RIGHT, on purpose, so that exactly one guard can be the reason the castle is refused.
+ *    That deliberate choice leaves a build that admits the castle only when BOTH squares hold a
+ *    specific wrong byte surviving 559/559 — measured on an enemy-KNIGHT pair, on an own-QUEEN
+ *    pair, and on a variant additionally conditional on the castling side. The rows pin the
+ *    CLASS at four rows and assert the byte on BOTH squares; enumerating the 169-combination
+ *    joint space is the trap `ABC-023` names and refuses.
+ *
+ * 6. THE DOUBLING VARIED ONE AXIS PER TYPE, NOT BOTH — `A3`. Dimension 1's standard is "at least
+ *    two (colour to move, castling side) configurations per type", and for 9 of the 13
+ *    type/table pairs those two configurations differ on only ONE of the two axes. An admission
+ *    conditional on the OTHER axis is therefore never exercised: six such single-type mutants
+ *    survive 559/559, and the two that die are exactly the types whose rows already vary the axis
+ *    in question — which is what makes the standard falsifiable rather than decorative. The gap
+ *    is symmetric: vary only colour and a SIDE-conditional admission lives; vary only side and a
+ *    COLOUR-conditional one does. ONE added configuration per gapped pair closes both axes, so
+ *    the nine `A3_ADDED_*` rows below are SPREAD INTO the four tables they extend — the tables
+ *    stay the quantifier, and no existing row, count or verdict is touched.
  */
 
 import { describe, expect, it } from "vitest";
@@ -280,6 +319,21 @@ function expectNoCastleAndPure(fen: string, expected: number): void {
 }
 
 /**
+ * `ABC-023` `A3`, first of four: the added configuration for each type in `IMPOSTOR_ON_KING_SQUARE`
+ * whose existing rows vary only ONE axis. ROOK (`Kk`) and BISHOP (`Kk`) double on COLOUR only, so
+ * each gains a QUEENSIDE row; KNIGHT (`KQ`, both white) doubles on SIDE only, so it gains a BLACK
+ * row. QUEEN (`KQkq`) and PAWN (`Kq`) already vary both and gain nothing — the nine rows are one
+ * per GAP, not one per type. Spread into the table below so the table itself stays the quantifier.
+ */
+const A3_ADDED_ON_KING_SQUARE: ReadonlyArray<
+  readonly [piece: string, fen: string, expected: number]
+> = [
+  ["ROOK", "4k3/8/8/8/8/8/8/R3R2K w Q - 0 1", 25], // own ROOK on e1, QUEENSIDE — the missing side
+  ["BISHOP", "4k3/8/8/8/8/8/8/R3B2K w Q - 0 1", 20], // own bishop on e1, queenside
+  ["KNIGHT", "k3n2r/8/8/8/8/8/8/4K3 b k - 0 1", 16], // own knight on e8, BLACK — the missing colour
+];
+
+/**
  * `A11`, first half: EVERY one of the mover's own non-KING piece types on the KING's home
  * square, with the matching rook present. Own colour only, because `A11`'s domain is the
  * mover's OWN pieces — the enemy-colour half of the byte space is `A13`'s and its rows are
@@ -303,6 +357,20 @@ const IMPOSTOR_ON_KING_SQUARE: ReadonlyArray<
   ["KNIGHT", "4k3/8/8/8/8/8/8/R3N2K w Q - 0 1", 17], // = `A5` row 2, queenside
   ["PAWN", "4k3/8/8/8/8/8/8/K3P2R w K - 0 1", 13], // own pawn on e1 — `parseFen` accepts a first-rank pawn
   ["PAWN", "r3p2k/8/8/8/8/8/8/4K3 b q - 0 1", 14], // own pawn on e8, black queenside
+  ...A3_ADDED_ON_KING_SQUARE, // ABC-023 A3 — one added configuration per gapped type
+];
+
+/**
+ * `ABC-023` `A3`, second of four: the added configuration for each gapped type in
+ * `IMPOSTOR_ON_ROOK_SQUARE`. BISHOP (`Kk`) doubles on COLOUR only and gains a QUEENSIDE row;
+ * KNIGHT (`KQ`, both white) doubles on SIDE only and gains a BLACK row. QUEEN (`KQkq`) and PAWN
+ * (`Kq`) already vary both axes.
+ */
+const A3_ADDED_ON_ROOK_SQUARE: ReadonlyArray<
+  readonly [piece: string, fen: string, expected: number]
+> = [
+  ["BISHOP", "4k3/8/8/8/8/8/8/B3K3 w Q - 0 1", 12], // own bishop on a1, QUEENSIDE — the missing side
+  ["KNIGHT", "4k2n/8/8/8/8/8/8/4K3 b k - 0 1", 7], // own knight on h8, BLACK — the missing colour
 ];
 
 /**
@@ -325,6 +393,20 @@ const IMPOSTOR_ON_ROOK_SQUARE: ReadonlyArray<
   ["KNIGHT", "4k3/8/8/8/8/8/8/N3K3 w Q - 0 1", 7], // = `A6` row 2, queenside
   ["PAWN", "4k3/8/8/8/8/8/8/4K2P w K - 0 1", 6], // own pawn on h1
   ["PAWN", "p3k3/8/8/8/8/8/8/4K3 b q - 0 1", 6], // own pawn on a8, black queenside
+  ...A3_ADDED_ON_ROOK_SQUARE, // ABC-023 A3 — one added configuration per gapped type
+];
+
+/**
+ * `ABC-023` `A3`, third of four: the added configuration for each gapped type in
+ * `ENEMY_ON_KING_SQUARE`. Both types double on COLOUR only — KNIGHT on `Kk` (kingside twice) and
+ * PAWN on `Qq` (queenside twice) — so each gains the side its rows never carried. Note the gap
+ * runs the OTHER way for the PAWN: its blind axis is the KINGSIDE, not the queenside.
+ */
+const A3_ADDED_ENEMY_ON_KING_SQUARE: ReadonlyArray<
+  readonly [piece: string, fen: string, expected: number]
+> = [
+  ["KNIGHT", "4k3/8/8/8/8/8/8/R3n2K w Q - 0 1", 13], // black knight on e1, QUEENSIDE
+  ["PAWN", "4k3/8/8/8/8/8/8/K3p2R w K - 0 1", 13], // black pawn on e1, KINGSIDE
 ];
 
 /**
@@ -345,7 +427,21 @@ const ENEMY_ON_KING_SQUARE: ReadonlyArray<readonly [piece: string, fen: string, 
     ["KNIGHT", "4N2r/8/8/5k2/8/8/8/4K3 b k - 0 1", 17], // white knight on e8; it attacks f6, so 17 not 18
     ["PAWN", "4k3/8/8/8/8/8/8/R3p2K w Q - 0 1", 14], // black pawn on e1, queenside
     ["PAWN", "r3P3/8/8/5k2/8/8/8/4K3 b q - 0 1", 19], // white pawn on e8, black queenside
+    ...A3_ADDED_ENEMY_ON_KING_SQUARE, // ABC-023 A3 — one added configuration per gapped type
   ];
+
+/**
+ * `ABC-023` `A3`, fourth of four: the added configuration for each gapped type in
+ * `ENEMY_ON_ROOK_SQUARE`, the same two COLOUR-only doublings as the table above and the same
+ * repair — the KNIGHT rows are both kingside and gain a queenside one, the PAWN rows are both
+ * queenside and gain a kingside one.
+ */
+const A3_ADDED_ENEMY_ON_ROOK_SQUARE: ReadonlyArray<
+  readonly [piece: string, fen: string, expected: number]
+> = [
+  ["KNIGHT", "4k3/8/8/8/8/8/8/n3K3 w Q - 0 1", 5], // black knight on a1, QUEENSIDE
+  ["PAWN", "4k3/8/8/8/8/8/8/4K2p w K - 0 1", 5], // black pawn on h1, KINGSIDE
+];
 
 /**
  * `A13`, second half: the same two enemy bytes on the ROOK's home square, king already home.
@@ -358,6 +454,7 @@ const ENEMY_ON_ROOK_SQUARE: ReadonlyArray<readonly [piece: string, fen: string, 
     ["KNIGHT", "4k2N/8/8/8/8/8/8/4K3 b k - 0 1", 4], // white knight on h8
     ["PAWN", "4k3/8/8/8/8/8/8/p3K3 w Q - 0 1", 5], // black pawn on a1, queenside
     ["PAWN", "P3k3/8/8/8/8/8/8/4K3 b q - 0 1", 5], // white pawn on a8, black queenside
+    ...A3_ADDED_ENEMY_ON_ROOK_SQUARE, // ABC-023 A3 — one added configuration per gapped type
   ];
 
 /**
@@ -775,5 +872,283 @@ describe("ABC-009 hardening — BOTH rights held with only ONE castle valid", ()
 describe("ABC-009 hardening — the castling right, with king and both rooks home", () => {
   it.each(NO_RIGHT_HELD)("offers no castle when no right is held: %s", (fen, expected) => {
     expectNoCastleAndPure(fen, expected);
+  });
+});
+
+/**
+ * The mover and the castling side a row carries, read off the FEN mechanically. `ABC-023` `A1` and
+ * `A3` are both statements about these two axes, and reading them by eye out of a 39-row table is
+ * how `## Reproduction` 3's gap survived `ABC-009` in the first place.
+ */
+function moverOf(fen: string): string {
+  return fen.split(" ")[1] as string;
+}
+function sideOf(fen: string): string {
+  return (fen.split(" ")[2] as string).toUpperCase() === "K" ? "kingside" : "queenside";
+}
+
+/**
+ * `ABC-023` `A1`: `expectImpostorSetup`'s assertion, owed on BOTH home squares at once.
+ *
+ * It cannot be `expectImpostorSetup` itself, and the difference is the whole point of the
+ * criterion: that helper asserts the OTHER precondition HOLDS, so that exactly one guard can be
+ * the reason the castle is refused. An `A1` row deliberately breaks both at once, so what is owed
+ * is the occupant byte — piece TYPE and COLOUR — on each square, plus exactly the one right.
+ */
+function expectPairSetup(
+  fen: string,
+  occupant: "own" | "enemy",
+  kingSquarePiece: string,
+  rookSquarePiece: string,
+): void {
+  const fields = fen.split(" ");
+  const black = fields[1] === "b";
+  const shape = CASTLE_SHAPE[fields[2] as string];
+  if (shape === undefined) throw new Error(`row must hold exactly one castling right: ${fen}`);
+
+  const position = parseFen(fen);
+  const colour = black ? BLACK : 0;
+  const occupantColour = occupant === "own" ? colour : colour ^ BLACK;
+
+  expect(
+    position.board[shape.kingFrom],
+    `the ${occupant} ${kingSquarePiece} must stand on the KING's home square: ${fen}`,
+  ).toBe((PIECE_TYPES[kingSquarePiece] as number) | occupantColour);
+  expect(
+    position.board[shape.rookFrom],
+    `the ${occupant} ${rookSquarePiece} must stand on the ROOK's home square: ${fen}`,
+  ).toBe((PIECE_TYPES[rookSquarePiece] as number) | occupantColour);
+  expect(position.castling, `exactly the one right: ${fen}`).toBe(shape.right);
+}
+
+/**
+ * `ABC-009`'s standing rule, extracted so `ABC-023`'s rows obey it too: a predicate that answered
+ * one way for everything would fabricate a clean table either way, so its polarity is checked
+ * before any of its verdicts is read (`## Test notes` 3).
+ */
+function expectAttackPolarity(): void {
+  expect(
+    isSquareAttackedBy(parseFen("4k3/8/8/8/8/8/8/4K2r w K - 0 1"), 6, true),
+    "polarity: an enemy rook on h1 DOES attack g1",
+  ).toBe(true);
+  expect(
+    isSquareAttackedBy(parseFen("4k3/8/8/8/8/8/8/4K3 w K - 0 1"), 6, true),
+    "polarity: a bare board attacks NOTHING",
+  ).toBe(false);
+}
+
+/**
+ * `ABC-023` `A2`: the deliberate INVERSION of `expectIdentityGuardIsTheOnlyRefuser`. There the
+ * through-check test must not be the mechanism; here it must be — and on the LANDING square
+ * specifically, because that is the only one of the three `kingPath` squares nothing else pins.
+ * So the row asserts that every other guard PASSES (the right is held, both home squares hold the
+ * mover's own king and rook, the `empty` set really is empty), that the landing square IS
+ * attacked, and that the origin and the crossed square are NOT.
+ *
+ * The row names its landing square and the helper re-derives it from `kingPath` and compares: a
+ * row mislabelled `g1` for a queenside option would otherwise assert the wrong square's attack
+ * and still pass, which is `expectImpostorSetup`'s lying-label lesson applied to this axis.
+ */
+function expectLandingSquareIsTheOnlyRefuser(fen: string, landing: string): void {
+  const fields = fen.split(" ");
+  const black = fields[1] === "b";
+  const shape = CASTLE_SHAPE[fields[2] as string];
+  if (shape === undefined) throw new Error(`row must hold exactly one castling right: ${fen}`);
+
+  expectAttackPolarity();
+
+  const position = parseFen(fen);
+  const colour = black ? BLACK : 0;
+  const attackerIsBlack = !black;
+  const landingSquare = shape.kingPath[shape.kingPath.length - 1] as number;
+
+  expect(squareName(landingSquare), `the row must name the option's LANDING square: ${fen}`).toBe(
+    landing,
+  );
+  expect(position.castling, `exactly the one right: ${fen}`).toBe(shape.right);
+  expect(position.board[shape.kingFrom], `the king must be HOME: ${fen}`).toBe(KING | colour);
+  expect(position.board[shape.rookFrom], `the rook must be HOME: ${fen}`).toBe(ROOK | colour);
+  expect(
+    shape.empty.filter((square) => position.board[square] !== EMPTY).map(squareName),
+    `the empty squares must be EMPTY: ${fen}`,
+  ).toEqual([]);
+
+  expect(
+    isSquareAttackedBy(position, landingSquare, attackerIsBlack),
+    `the LANDING square ${landing} must be attacked: ${fen}`,
+  ).toBe(true);
+  expect(
+    shape.kingPath
+      .filter((square) => square !== landingSquare)
+      .filter((square) => isSquareAttackedBy(position, square, attackerIsBlack))
+      .map(squareName),
+    `the ORIGIN and CROSSED squares must NOT be attacked: ${fen}`,
+  ).toEqual([]);
+}
+
+/**
+ * `ABC-023` `A1` — BOTH home squares of one option holding a wrong byte SIMULTANEOUSLY. Every row
+ * in every table above holds one square wrong and the other right, so a build that admits the
+ * castle only when a specific PAIR co-occurs survives all of them; both pairs below were measured
+ * surviving 559/559 on the delivered tree, and the enemy pair leaves
+ * `4k3/8/8/8/8/8/8/K3K2n w K - 0 1` behind on ONE `legalMoves` call — the black knight on e1
+ * destroyed and a second WHITE KING written over it.
+ *
+ * Four rows, and the shape of the four is load-bearing: within a family the two rows differ in
+ * BOTH the colour to move AND the castling side, so a pair admission additionally conditional on
+ * either axis dies too — that variant was measured surviving 559/559 as well. It is the CLASS
+ * that is pinned, at four rows; enumerating the 169-combination joint space is the trap the ticket
+ * names and refuses.
+ */
+const JOINT_OCCUPANT_PAIRS: ReadonlyArray<
+  readonly [
+    occupant: "own" | "enemy",
+    kingSquarePiece: string,
+    rookSquarePiece: string,
+    fen: string,
+    expected: number,
+  ]
+> = [
+  ["enemy", "KNIGHT", "KNIGHT", "4k3/8/8/8/8/8/8/K3n2n w K - 0 1", 3], // white, kingside
+  ["enemy", "KNIGHT", "KNIGHT", "N3N2k/8/8/8/8/8/8/4K3 b q - 0 1", 2], // black, QUEENSIDE
+  ["own", "QUEEN", "QUEEN", "4k3/8/8/8/8/8/8/K3Q2Q w K - 0 1", 38], // white, kingside
+  ["own", "QUEEN", "QUEEN", "q3q2k/8/8/8/8/8/8/4K3 b q - 0 1", 39], // black, QUEENSIDE
+];
+
+/**
+ * `ABC-023` `A2` — the castle's LANDING square attacked while its origin and crossed squares are
+ * not. All four options: both colours to move and both castling sides. Dropping the landing square
+ * from an option's `kingPath` survives the full suite AND the `PERFT_DEEP=1` lane at 32/32 on
+ * every one of the four, because `legalMoves` removes the move for a different reason and every
+ * count-based oracle is therefore blind — so the `FLAG_CASTLE` count is asserted where the harm
+ * is, on `generateMoves`.
+ */
+const DESTINATION_SQUARE_ATTACKED: ReadonlyArray<
+  readonly [fen: string, landing: string, expected: number]
+> = [
+  ["4k1r1/8/8/8/8/8/8/4K2R w K - 0 1", "g1", 14], // g1 attacked from g8
+  ["2r1k3/8/8/8/8/8/8/R3K3 w Q - 0 1", "c1", 15], // c1 attacked from c8
+  ["4k2r/8/8/8/8/8/8/4K1R1 b k - 0 1", "g8", 14], // g8 attacked from g1
+  ["r3k3/8/8/8/8/8/8/2R1K3 b q - 0 1", "c8", 15], // c8 attacked from c1
+];
+
+/**
+ * `ABC-023` `A3`'s nine added rows, joined to the table each one extends. The join is asserted
+ * rather than narrated: a future edit that drops a spread from a table goes red here, which is the
+ * only thing standing between "the tables are the quantifier" and a comment that says so.
+ */
+const A3_ADDED_CONFIGURATIONS: ReadonlyArray<
+  readonly [
+    table: string,
+    added: ReadonlyArray<readonly [piece: string, fen: string, expected: number]>,
+    extended: ReadonlyArray<readonly [piece: string, fen: string, expected: number]>,
+  ]
+> = [
+  ["IMPOSTOR_ON_KING_SQUARE", A3_ADDED_ON_KING_SQUARE, IMPOSTOR_ON_KING_SQUARE],
+  ["IMPOSTOR_ON_ROOK_SQUARE", A3_ADDED_ON_ROOK_SQUARE, IMPOSTOR_ON_ROOK_SQUARE],
+  ["ENEMY_ON_KING_SQUARE", A3_ADDED_ENEMY_ON_KING_SQUARE, ENEMY_ON_KING_SQUARE],
+  ["ENEMY_ON_ROOK_SQUARE", A3_ADDED_ENEMY_ON_ROOK_SQUARE, ENEMY_ON_ROOK_SQUARE],
+];
+
+describe("ABC-023 A1 — the JOINT occupant pair: BOTH home squares wrong at once", () => {
+  it.each(JOINT_OCCUPANT_PAIRS)(
+    "offers no castle and destroys nothing when an %s %s and %s stand on BOTH home squares: %s",
+    (occupant, kingSquarePiece, rookSquarePiece, fen, expected) => {
+      expectPairSetup(fen, occupant, kingSquarePiece, rookSquarePiece);
+      // Non-inert: neither the emptiness test nor the through-check test may be the refuser, or
+      // the row would stay green on a build with no identity guard at all.
+      expectAttackPolarity();
+      expectIdentityGuardIsTheOnlyRefuser(fen);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+
+  it("varies BOTH axes inside each family, so a side- or colour-conditional pair dies too", () => {
+    // The measured reason this is a criterion and not a preference: a pair admission ALSO
+    // conditional on the castling side survives 559/559 exactly as the plain pair mutant does, so
+    // four rows that held either axis constant would be blind to it — the same blindness
+    // `## Reproduction` 3 measures on `A11`'s own rows. It costs no extra row.
+    for (const family of ["enemy", "own"] as const) {
+      const rows = JOINT_OCCUPANT_PAIRS.filter(([occupant]) => occupant === family);
+      expect(rows.length, `the ${family} family needs two rows`).toBe(2);
+      expect(
+        new Set(rows.map(([, , , fen]) => moverOf(fen))).size,
+        `the ${family} family's two rows must differ in the COLOUR to move`,
+      ).toBe(2);
+      expect(
+        new Set(rows.map(([, , , fen]) => sideOf(fen))).size,
+        `the ${family} family's two rows must differ in the castling SIDE`,
+      ).toBe(2);
+    }
+
+    // ...and the four together cover both colours and both sides.
+    expect([...new Set(JOINT_OCCUPANT_PAIRS.map(([, , , fen]) => moverOf(fen)))].sort()).toEqual([
+      "b",
+      "w",
+    ]);
+    expect([...new Set(JOINT_OCCUPANT_PAIRS.map(([, , , fen]) => sideOf(fen)))].sort()).toEqual([
+      "kingside",
+      "queenside",
+    ]);
+  });
+});
+
+describe("ABC-023 A2 — the castle's DESTINATION square, pinned at the generateMoves layer", () => {
+  it.each(DESTINATION_SQUARE_ATTACKED)(
+    "offers no castle on %s — the LANDING square %s is attacked, the origin and crossed are not",
+    (fen, landing, expected) => {
+      expectLandingSquareIsTheOnlyRefuser(fen, landing);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+});
+
+describe("ABC-023 A3 — the doubling standard varies BOTH axes, not one", () => {
+  it("closes every gapped type/table pair and leaves each added row non-inert", () => {
+    expectAttackPolarity();
+
+    const added = A3_ADDED_CONFIGURATIONS.flatMap(([, rows]) => rows);
+    expect(added.length, "nine rows: one per gapped type/table pair, not one per type").toBe(9);
+
+    for (const [table, rows, extended] of A3_ADDED_CONFIGURATIONS) {
+      for (const row of rows) {
+        // The row is really IN the table it claims to extend — the spread, asserted.
+        expect(extended, `${table} must contain its added row: ${row[1]}`).toContainEqual(row);
+        // ...and the identity guard, not the emptiness or through-check test, is what refuses it.
+        expectIdentityGuardIsTheOnlyRefuser(row[1]);
+      }
+    }
+
+    // The quantifier itself: every type in every table now varies BOTH axes. Stated over the
+    // tables rather than over the added rows, so a future row that re-narrows a type goes red.
+    let pairs = 0;
+    let gappedBeforeTheseRows = 0;
+    for (const [table, rows, extended] of A3_ADDED_CONFIGURATIONS) {
+      const before = extended.filter((row) => !rows.includes(row));
+      for (const type of new Set(extended.map(([piece]) => piece))) {
+        const configurations = extended.filter(([piece]) => piece === type);
+        pairs += 1;
+        expect(
+          new Set(configurations.map(([, fen]) => moverOf(fen))).size,
+          `${table} ${type}: both COLOURS to move`,
+        ).toBe(2);
+        expect(
+          new Set(configurations.map(([, fen]) => sideOf(fen))).size,
+          `${table} ${type}: both castling SIDES`,
+        ).toBe(2);
+
+        const wasGapped = before.filter(([piece]) => piece === type);
+        if (
+          new Set(wasGapped.map(([, fen]) => moverOf(fen))).size < 2 ||
+          new Set(wasGapped.map(([, fen]) => sideOf(fen))).size < 2
+        ) {
+          gappedBeforeTheseRows += 1;
+        }
+      }
+    }
+    // The two counts `## Reproduction` 3 rests on, asserted rather than cited: 13 type/table
+    // pairs, 9 of which varied one axis only before these rows landed.
+    expect(pairs, "13 type/table pairs across the four tables").toBe(13);
+    expect(gappedBeforeTheseRows, "9 of the 13 varied ONE axis before these rows").toBe(9);
   });
 });
