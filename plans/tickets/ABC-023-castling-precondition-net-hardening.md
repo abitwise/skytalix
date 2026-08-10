@@ -1,8 +1,8 @@
 ---
 id: ABC-023
 title: castling precondition net — the destination square, the joint occupant pair, and doubling that varies one axis
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: S
 priority: P2
 epic: EPIC-001
