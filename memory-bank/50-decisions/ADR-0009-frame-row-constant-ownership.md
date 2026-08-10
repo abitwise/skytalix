@@ -14,6 +14,11 @@ decision note explicitly routed here rather than settling by fiat.
 claim below is gate-adjudicable: it either fails on the constructed mutants in `## Context` or it does
 not, and it was run. **Zero production lines are added by this decision.**
 
+**AMENDED 2026-08-11 at task `design-stub-seam-and-nfr002` — clause 9 added, clauses 1–8 unchanged.**
+The amendment is the last section of this file and it rules the **consumer** side that the original was
+not scoped to: the stub panels the owner's parallel-build directive creates for `ABC-019`. Still
+`accepted`, still no target and no level, still zero production lines.
+
 ## Context
 
 `ABC-016` (status panel, `Ready`, `M`/`P1`) and `ABC-017` (bounded history pane, `Ready`, `S`/`P2`)
@@ -211,3 +216,217 @@ into `A1` with a real import. That returns the project to Alternative A and re-a
 between merge order and the blocking `typecheck` gate. Since this ADR adds **zero production lines**,
 rollback cannot break any delivered behaviour — the only thing at risk either way is which assertion
 can fail on a row-count change.
+
+---
+
+## AMENDMENT 2026-08-11 — clause 9, the CONSUMER side. Clauses 1–8 stand unchanged and not one word of them is edited.
+
+Written by Architect/Design at task `design-stub-seam-and-nfr002` (Workflow 07), on the item the
+Orchestrator's consolidated `frame-merge-order-2026-08-11` decision recorded as *"still owed"*: the
+owner's directive to **build `ABC-019` in parallel against stub panels and merge it last** creates a
+**third site** for `STATUS_ROWS` and `HISTORY_ROWS`, in a third file, and this ADR was scoped to two
+tickets. The Orchestrator's own assessment was that clause 1 plus clause 5 *"plausibly covers a stub
+seam, but plausibly is not ruled."* It is ruled here.
+
+**This is an amendment, not a successor.** All eight clauses survive verbatim; nothing above is
+struck, reworded or reinterpreted. A successor would have folded out a ruling that measurement
+re-confirms, which costs a reader the reasoning. The amendment convention is this project's own —
+`ADR-0003` and `ADR-0004` both carry their ratification records as dated sections under the original
+text rather than in place of it. **Status stays `accepted`. No target and no level moves, so no owner
+ratification is owed — the same distinction from `ADR-0008` the Status section already draws. Zero
+production lines.**
+
+### The question, in its hardest form
+
+*Where do these constants live such that the real panels, the stub panels and `frameHeight` all
+reference ONE definition — and does a stub panel satisfy "producer owns its count" or subvert it?*
+
+### The answer, and it dissolves the question rather than answering it as asked
+
+**There is no third constant site, because a consumer of panel rows must not name a count at all.**
+The row counts' ONE definition is **the delivered rows themselves**; `readonly string[].length` is
+the only form in which a consumer may read one. `frameHeight` is then not a third reader — it is
+arithmetic a consumer never needs.
+
+**A stub panel that RETURNS ROWS satisfies clause 1 exactly as `renderBoard` does** — it produces
+rows, and its count *is* their length. It declares nothing, so nothing can drift from it. **A stub
+panel that DECLARES A CONSTANT subverts clause 1**, and the subversion is precise: clause 1 says the
+*producer* owns its count, and a test double that exports `STATUS_ROWS = 3` makes two modules
+declare one number with nothing tying them — which is `ABC-017`'s own `D13` (*"two tickets carrying
+the same magic number with nothing tying them is how the two come to disagree"*) reproduced at a
+third site. So the honest answer is **"it depends on the stub's shape, and only one shape is
+admissible"**, which is why a clause is needed rather than a reading of clause 1.
+
+### The measurement that decides it, against merged `src/` and not against ticket text
+
+**(i) `.length` is a total substitute for any declared count.** `assembleFrame(parts, mode).length`
+equals `frameHeight({ board: parts.board.length, status: parts.status.length, history:
+parts.history.length })` over **560 shapes with 0 mismatches** — status 0–10 × history 0–16 × five
+message-region shapes (none / one / three / a 400-character item / 40 items) × both glyph modes. The
+frame's row count is also **invariant under the message region**: 0, 1, 200 and one 100,000-character
+item all give `H` = 23, so deriving from the *first* frame is safe whatever that frame happens to
+carry.
+
+**(ii) Three forms a loop can use to obtain the height it hands `beginFrameSession`, against the
+row-count mutants that arrive when a stub is swapped for a real panel.** `4b` is
+`beginFrameSession`'s own strategy choice on a 24-row TTY, and *overflow* means it chose in-place for
+a frame taller than the viewport:
+
+| mutant | `H` | **A** declares (loop states 9/3/8) | **B** imports (loop imports both constants) | **C** derives (`frame.length`) | `4b` needs |
+|---|---|---|---|---|---|
+| delivered as budgeted 9/3/8 | 23 | 23 PASS | 23 PASS | 23 PASS | in-place |
+| M1 status ships 4 | 24 | 23 **FAIL** | 24 PASS | 24 PASS | in-place |
+| M2 history ships 9 | 24 | 23 **FAIL** | 24 PASS | 24 PASS | in-place |
+| M3 history ships 10 | 25 | 23 **FAIL — OVERFLOW** | 25 PASS | 25 PASS | append |
+| M4 board ships 10 | 24 | 23 **FAIL** | 24 PASS | 24 PASS | in-place |
+| M5 board 10 + history 9 | 25 | 23 **FAIL — OVERFLOW** | 25 PASS | 25 PASS | append |
+
+**Form A fails all five mutants, and on M3/M5 it is a real defect rather than a stale number:**
+`beginFrameSession` is told 23, chooses in-place, and emits **25 rows into a 24-row viewport — one
+row beyond it**, so the frame origin scrolls off the top and epic acceptance `4b` is unreachable.
+That is the same `4b` failure clause 4 struck `A11` for being unable to see, arriving through a
+different door.
+
+**(iii) Form B is mechanically impossible under the owner's parallel-build directive, and this was
+run rather than argued.** A loop that imports `STATUS_ROWS` / `HISTORY_ROWS` from unbuilt modules,
+compiled under **this project's own `tsconfig.json`** (strict, `moduleResolution: bundler`,
+`allowImportingTsExtensions`), fails `tsc --noEmit` with **`TS2307` × 2, exit 2** — and an unrelated
+file in the same program is red with it, because the typecheck is project-wide and `typecheck` is in
+`quality.mandatory_gates` under `gate_enforcement: blocking`. **So form B against stubs requires the
+stub module to EXPORT the constants, which is precisely the third declaration site.** This is the
+same cost this ADR's `## Context` measured for the panel-to-panel edge, now measured for the
+loop-to-panel edge.
+
+**Form C is therefore the only form that is BOTH buildable against stubs AND correct at the swap.
+That is forced by measurement, not preferred.**
+
+**(iv) Clause 5's fit-check does NOT cover this, and that was checked rather than assumed.** Run
+across all six mutants, clause 5's `= 23` and `≤ 24` verdicts are a pure function of the panels and
+are **identical whatever the loop does**; on the budgeted world a form-A loop's literal 23 and the
+panels' 23 agree *by coincidence* and both are green. **Clause 5 proves the real panels compose to a
+frame that fits. It says nothing about whether the loop's session height equals the frame the loop
+assembles.** Two different propositions; neither substitutes for the other. This is the concrete
+reason "plausibly covers it" was not good enough.
+
+**(v) The stub's chosen row count decides WHERE the failure lands.** With stubs at 3/8 a form-A loop
+is **GREEN at `ABC-019`'s own gate** and breaks only after the rebase, at the one moment nothing in
+the tree re-checks it. With stubs at 2/5, 1/1, 4/9 or 5/8 the same loop is **RED at its own gate**:
+
+| stub status/history | `H` | form A caught at `ABC-019`'s own gate? | strategy the geometry requires |
+|---|---|---|---|
+| 3/8 (copied from the tickets) | 23 | **NO — green, landmine armed for the rebase** | in-place |
+| 2/5 | 19 | YES — red here | in-place |
+| 1/1 | 14 | YES — red here | in-place |
+| 4/9 | 25 | YES — red here | **append** |
+| 5/8 | 25 | YES — red here | **append** |
+
+A 3/8 stub also **never exercises the append path at all**, so the loop's whole strategy branch goes
+untested until a panel changes in production.
+
+**(vi) `assembleFrame` does not normalise height** — two shapes one row apart return 19 and 20 — so
+*"every frame's `length` equals the session height"* is a **real assertion that can fail**, not a
+tautology. Form C gets that invariant for free; forms A and B do not, because their declared height
+is not the frame's.
+
+**(vii) The recommended shape was run end to end, not sketched.** One render seam of the exact
+signature `ABC-019`'s `## Scope` already states — `(GameHistory, GameStatus, thinking) => readonly
+string[]` — a stub seam at 2/5, the height taken from frame 1, one `beginFrameSession`, 13 frames for
+1 initial + 12 plies, 13 writes, one strategy chosen once, `distinctHeights: [19]`. **The identical
+loop code, unchanged, then ran against three real-geometry seams** and chose correctly every time:
+9/3/8 → 23 in-place; status 4 → 24 in-place; history 10 → **25 append**, no viewport overflow in any
+case.
+
+### Clause 9 — the consumer rule
+
+**9. A consumer of panel rows never names a row count. It reads `.length` from the rows it was
+given, and that is the ONE definition all three sites reference.** Concretely, and this is the
+whole clause:
+
+- **(9a) `ABC-019`'s loop declares no row count and imports no panel.** It obtains its session
+  height as `firstFrame.length` from the **first frame its render seam returns**, and holds that one
+  value for the session — `beginFrameSession` is called exactly once, which is the property
+  `src/frame.ts`'s own header rests on. The loop does not import `frameHeight`; it does not need
+  the arithmetic when it has the rows. It may import `beginFrameSession`, which is merged.
+- **(9b) The panels sit behind the ONE render seam `ABC-019`'s `## Scope` already declares** —
+  `(GameHistory, GameStatus, thinking) => readonly string[]`, *"the loop supplies the render seam
+  everything it draws, and the render seam derives nothing."* Frame composition, and therefore both
+  panel constants, live entirely behind that seam where clauses 1–6 already govern them. **This is
+  not a new seam: it is the seam that ticket already specifies, and clause 9 is the ruling that the
+  count must not cross it.**
+- **(9c) A test double for that seam lives in a TEST file, never in `src/` as a production module.**
+  Merged `src/frame.test.ts` is the precedent — `statusStub` / `historyStub` are local functions in
+  the test file, and the two unbuilt panels *"enter as fixed-height stubs"* there. A `src/` stub
+  module would be production code that is dead the moment the real panels land, and under coding
+  rule 12 it would then be flagged rather than removed, so it would linger.
+- **(9d) A stub's row counts MUST DIFFER from the reference layout's 3 and 8.** Measured in (v):
+  identical counts make a hardcoded height green at `ABC-019`'s own gate and defer the failure to
+  the rebase. Two shapes are wanted and both are cheap — one that keeps `H ≤ 24` (e.g. 2/5 → 19,
+  in-place) and one that pushes `H ≥ 25` (e.g. 4/9 → 25, append) — so the strategy branch is
+  exercised before a panel change in production is the thing that exercises it. **This is the
+  clause that converts a merge-time landmine into a build-time failure**, and it costs two literals.
+- **(9e) The loop owes one assertion of its own: every frame's `length` equals the session
+  height.** Real and falsifiable per (vi). It is the loop's half of `4a`'s session-constant
+  geometry, and it is the only place that property is checked at all.
+- **(9f) At the rebase, the re-gate must run the loop's tests against the REAL panels, not merely
+  rebase and re-run against stubs.** The Orchestrator's *"green on stubs is not evidence about the
+  assembled frame"* is strengthened, not restated: under clause 9 the loop's own code is
+  swap-invariant (measured in (vii)), so the thing the re-gate is actually testing is the **seam
+  wiring**, and only a real-panel run tests it.
+
+### Alternatives considered for clause 9, and why each loses
+
+**E. Move `STATUS_ROWS` / `HISTORY_ROWS` into `src/frame.ts` so all five row constants sit in one
+module — reopened here because a third site is exactly the argument that would have carried it.**
+Rejected again, and the new evidence *weakens* it rather than strengthening it: under clause 9 the
+third site does not exist, so the premise is gone. Everything in Alternative C above still holds —
+it edits a merged module for no behavioural gain (rules 9 and 10), inverts the direction
+`src/frame.ts`'s header establishes, and makes a panel untestable without the frame — and it would
+now **additionally** put the loop's session height on a constant rather than on the delivered rows,
+re-acquiring every form-A failure in table (ii). **A single home for the numbers is worth less than
+no home for them.**
+
+**F. Let the loop import the two constants (form B) and simply not build in parallel** — i.e. treat
+the owner's directive as the thing to give up. Rejected: the directive is the owner's, the cost of
+form B is a project-wide blocking typecheck gate coupled to merge order (measured in (iii)), and
+form C is strictly better than form B on every mutant anyway. **Nothing is being traded away here;
+form C dominates.**
+
+**G. A shared `src/panel-stubs.ts` imported by both the loop's tests and `src/frame.test.ts`.**
+Rejected — a single-use abstraction over two arrays (rule 6) that is dead on arrival when the real
+panels land, and it would be the third declaration site in person.
+
+**H. Have the loop assert `frameHeight({...}) === 23` somewhere as a belt-and-braces check.**
+Rejected: it is clause 5's assertion in a second place, it is the shadow-constant tautology this
+ADR's `## Context` measured passing all six mutants, and a second copy of a check is how the two
+copies come to disagree.
+
+### One tension surfaced and deliberately NOT acted on
+
+Clause 5's fit-check reads **one term derived and two declared** — `renderBoard(...).length`,
+`STATUS_ROWS`, `HISTORY_ROWS` — which a strict reading of clause 9 would make all three `.length`.
+**Clause 5 is not reopened.** The two forms catch different things and the difference is real: the
+`.length` form fails when the *delivered* geometry breaks the frame, while the constant form fails
+when the *declared* geometry does and therefore checks the panel's declaration and its `A11`/`A1`
+assertion jointly. Both fail on all six mutants of table (ii) in this ADR's `## Context`, because a
+real panel change moves the rows and the constant together. Reopening an accepted clause for a
+near-tie is the refactor coding rule 10 forbids. **It is recorded here so a later hop reads the
+mixed form as deliberate rather than as an oversight.**
+
+### Consequences of clause 9 (added to the list above; nothing in it is retracted)
+
+- **`ABC-019` gains no import edge to `ABC-016` or `ABC-017`** — in production or in test — so the
+  project-wide blocking typecheck gate stays free of the merge order for the third ticket too. The
+  build-order/merge-order split the owner's directive depends on is now structurally supported
+  rather than merely intended.
+- **Two acceptance criteria are OWED on `ABC-019` and are NOT written here** (`plans/tickets/` at
+  this boundary is a BA/PM hop's): 9d's stub row counts, and 9e's session-height invariant. **Owner
+  BA/PM.**
+- **The stubs' 3 and 8, if a build already has them, are a defect to fix and not a style
+  preference** — measured in (v).
+- **`NFR-002` gains nothing and loses nothing from clause 9.** The frame's row count is unchanged,
+  the write half's *"23-row frame at `W = 18`, 418 characters"* denominator is untouched, and the
+  `< 16 ms` target does not move. What clause 9 adds is a second place a row-count change becomes
+  discoverable — the loop's own gate, alongside clause 5's.
+- **Rollback for clause 9 alone:** have the loop declare its height again. Cheap, and it costs
+  exactly what table (ii) measures — five mutants, two of them a live `4b` breach. Zero production
+  lines were added, so nothing delivered can break either way.
