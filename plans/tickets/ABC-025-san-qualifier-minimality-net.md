@@ -1,8 +1,8 @@
 ---
 id: ABC-025
 title: SAN qualifier minimality — the acceptance net is exercised on white knights and white queens only, and six wrong builds pass 652 of 652
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: M
 priority: P2
 epic: EPIC-002
