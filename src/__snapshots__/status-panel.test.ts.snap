@@ -1,0 +1,85 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ABC-016 panel snapshots > matches its snapshot — after 1.Nf3 1`] = `
+"Black to move  1...
+last: Nf3  material: 0
+thinking..."
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — after 1.e4 1`] = `
+"Black to move  1...
+last: e4  material: 0
+           "
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — after 1.e4 e5 1`] = `
+"White to move  2.
+last: e5  material: 0
+           "
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — black may claim 1`] = `
+"Black to move  60...
+material: +2
+             Black may claim: fifty-move rule"
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — both claimable 1`] = `
+"White to move  64.
+last: Ba5  material: +2
+thinking...  White may claim: threefold repetition, fifty-move rule"
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — checkmated 1`] = `
+"White to move  3.  CHECK
+material: 0
+           "
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — fifty-move claimable 1`] = `
+"White to move  60.
+material: +2
+             White may claim: fifty-move rule"
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — in check 1`] = `
+"Black to move  1...  CHECK
+material: +5
+           "
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — loaded FEN at move 27 1`] = `
+"White to move  27.
+material: 0
+           "
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — material +8 1`] = `
+"White to move  1.
+material: +8
+           "
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — material -9 1`] = `
+"White to move  1.
+material: -9
+           "
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — start position 1`] = `
+"White to move  1.
+material: 0
+           "
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — start position, thinking 1`] = `
+"White to move  1.
+material: 0
+thinking..."
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — threefold claimable 1`] = `
+"White to move  5.
+last: Ba5  material: +2
+             White may claim: threefold repetition"
+`;
