@@ -27,6 +27,7 @@ import {
   MESSAGE_ROWS,
   PROMPT_ROWS,
 } from "./frame.ts";
+import { HISTORY_ROWS } from "./history-pane.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, parseSquareName, squareName } from "./position.ts";
@@ -34,12 +35,36 @@ import { type GlyphMode, renderBoard } from "./render.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-/** `ABC-016`'s stated constant: "a fixed number of rows (three, in the reference layout)". */
+/**
+ * `A13` (`ADR-0009` cl. 5) — the composition fit-check, owed by whichever panel ticket merges
+ * SECOND, and MET IN PART here because `ABC-016` has not merged yet.
+ *
+ * TWO OF THE THREE TERMS NOW READ DELIVERED GEOMETRY — `history` is `ABC-017`'s exported
+ * `HISTORY_ROWS`, imported above and re-declared nowhere in this file, and `board` is
+ * `renderBoard(...).length`. The third is `status`, and it CANNOT be made
+ * live on this branch: `src/status-panel.ts` does not exist on `main`, `tsconfig.json` includes
+ * `src/**` and `npm run typecheck` is project-wide `tsc --noEmit` under `gate_enforcement:
+ * blocking`, so importing `STATUS_ROWS` here would turn the whole project's typecheck gate red —
+ * the exact cost `ADR-0009`'s `## Context` measured and refused to pay. It is left as the shadow it
+ * already was, flagged rather than faked.
+ *
+ * OWED AT THE REBASE ONTO MERGED `ABC-016`, and it is two edits, not one:
+ *   1. `const STATUS_ROWS = 3` below becomes `import { STATUS_ROWS } from "./status-panel.ts"`;
+ *   2. `statusStub` (below) returns a HARDCODED three-element array while `historyStub` sizes
+ *      itself from `HISTORY_ROWS`. Once `STATUS_ROWS` is live the two can disagree, and the failure
+ *      surfaces at `expect([...counts]).toEqual([HEIGHT])` pointing at the wrong thing. Size the
+ *      stub from the constant, or use the real panel. Leaving it is the trap.
+ * Until then M1 (status ships 4) and M6 (status ships 5) are caught by `ABC-016`'s own `A11` and by
+ * nothing here; M2, M3, M4 and M5 — including both mutants that make epic `4b` unreachable — are
+ * caught by the two live terms. Measured at this hop, not transcribed.
+ */
 const STATUS_ROWS = 3;
-/** `ABC-017`'s stated constant: "a constant number of rows (8 in the reference layout)". */
-const HISTORY_ROWS = 8;
-/** `renderBoard`'s stated geometry: 8 board rows + 1 file-label row. */
-const BOARD_ROWS = 9;
+/**
+ * `renderBoard`'s DELIVERED geometry, MEASURED rather than restated. `ADR-0009` cl. 6 adds no
+ * `BOARD_ROWS` export to `src/render.ts` and does not touch that merged module: `.length` is
+ * stronger than a constant would be, and it is the only form that fails a `renderBoard` shipping 10.
+ */
+const BOARD_ROWS = renderBoard(parseFen(START_FEN), "unicode", "white-bottom").length;
 
 /** The height every test derives, so no test hands the writer a number the assembler disagrees with. */
 const HEIGHT = frameHeight({ board: BOARD_ROWS, status: STATUS_ROWS, history: HISTORY_ROWS });
@@ -315,8 +340,11 @@ describe("ABC-018 acceptance — the assembled frame", () => {
     expect(plies).toContain(80);
     expect(plies).toContain(300);
     expect([...counts]).toEqual([HEIGHT]);
-    // Epic `4a` verbatim, and near-vacuous under fixed-height stubs — BA/PM ruled it left in place
-    // for exactly that reason. The falsifiable weight sits in the criterion below.
+    // Epic `4a` verbatim. It was near-vacuous while `HEIGHT`'s three terms were local literals;
+    // `A13` made two of them delivered geometry, so this is now the TRIPWIRE — it fails on any
+    // change to the board's or the history pane's row count, which is what forces such a change to
+    // be deliberate rather than silent. The `<= 24` REQUIREMENT is the other half and lives with
+    // the composition test at the end of this block.
     expect(HEIGHT).toBe(23);
   });
 
@@ -671,6 +699,14 @@ describe("ABC-018 — pins the acceptance criteria do not reach", () => {
 
   it("derives H from the panels' constant heights — no 23 anywhere in the module", () => {
     expect(frameHeight({ board: BOARD_ROWS, status: STATUS_ROWS, history: HISTORY_ROWS })).toBe(23);
+    // `A13`'s REQUIREMENT clause, and it is not a weaker restatement of the `= 23` tripwire: 23 is
+    // what the reference layout happens to be, `<= 24` is what epic acceptance `4b` actually needs
+    // and what `beginFrameSession` switches on. A row-count change that keeps `H` at 24 breaks the
+    // tripwire and NOT the requirement; one that reaches 25 breaks both, and `4b` becomes
+    // unreachable because the in-place strategy would emit 25 rows into a 24-row viewport.
+    expect(
+      frameHeight({ board: BOARD_ROWS, status: STATUS_ROWS, history: HISTORY_ROWS }),
+    ).toBeLessThanOrEqual(24);
     expect(frameHeight({ board: 9, status: 4, history: 8 })).toBe(24);
     expect(
       assembleFrame(partsFor(playTo(4), { status: ["a", "b", "c", "d"] }), "unicode"),
