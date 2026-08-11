@@ -11,6 +11,34 @@ feature: —
 
 # ABC-027 — the in-place writer clears each row as it writes it
 
+> ## REPAIRED 2026-08-12 by BA/PM — `A1` PINNED THE UNSAFE EMISSION AND WAS BLOCKING THE REQUIRED FIX
+>
+> **Task `abc027-fail-2026-08-12`, subtask `refinement-ABC-027-a1`, Workflow 07.** The Security/NFR
+> gate returned **FAIL — the first in this project's recorded history** — after measuring on a REAL
+> terminal (GNU screen 5.0.2, attached pty, `TIOCSWINSZ`, read back with screen's own `hardcopy`)
+> that the delivered emission **loses the last cell of every row at a window exactly `W` wide: the
+> board's entire h-file plus its file label, 9 rows of 23, on every frame.** The erase fired AT the
+> right margin, where the cursor sits on the last cell with the wrap pending, so `EL(0)` erased that
+> cell. Required fix **`RF-1`** moves the erase to **column 0**, where the margin state cannot exist.
+>
+> **`A1` as written FORBADE that fix** — it pinned `\x1b[K` = `H − 1`, `\x1b` = `H + 1`, delta
+> `(H − 1) × 3`, and the safe shape is `H`, `H + 2`, `H × 3`. `A1` was GREEN, and that was the
+> contradiction: it described the delivered, unsafe emission byte for byte.
+>
+> **`A1` IS RE-DERIVED, NOT RELAXED.** Every count still comes from `H`, the text is still pinned
+> byte for byte, and one clause is ADDED. QE measured `A1` as where **9 of 14 mutants die**; loosening
+> it would have traded a three-character defect for the suite's strongest killer.
+>
+> **EVERY NUMBER BELOW WAS RUN AT THIS HOP BEFORE IT WAS WRITTEN**, on an out-of-tree copy of this
+> worktree, against the DELIVERED modules: the three emissions counted from the real writer, the new
+> `A1` witnessed against **nine writers** (one passes, eight fail), and the full suite taken to
+> **682/682 on 22 files** with `RF-1`, the repaired `A1`, the screen model's margin repair and the new
+> `A7`. **Zero `src/` bytes were written in this repository at this hop**
+> (`git status --porcelain src/` = 0 lines). The baseline was verified first: **681/681 on 22 files.**
+>
+> **`A7` is NEW.** `A2`, `A3`, `A4`, `A5` and `A6` were each re-run against the `RF-1` emission and
+> **none moves** — measured, not assumed.
+
 > **CUT 2026-08-11 by BA/PM** (task `refinement-ABC-027-cut`, subtask `refinement-ABC-027-cut`,
 > Workflow 07) to carry accepted **`ADR-0010`**'s clause 1. The Architect named the code and
 > deliberately declined to pick a home; the **Orchestrator** routed it here rather than reopening
@@ -78,8 +106,18 @@ smudge** — and it does not self-repair: `ADR-0010` measured the residue surviv
 frames**.
 
 *Value*: what the player reads is what the frame says. This is the single change that makes the
-in-place redraw honest at any terminal width, and `ADR-0010` measured it at **+66 characters per
-frame, exactly and always**.
+in-place redraw honest at any terminal width, and it costs **+69 characters per frame, exactly and
+always** — `H × 3`.
+
+**Where that number comes from, stated rather than quietly changed.** `ADR-0010` measured **+66** =
+`(H − 1) × 3` for the shape it proposed — the erase AFTER each row. The Security/NFR gate then
+measured that shape destroying a cell per row on a real terminal at a window exactly `W` wide, so the
+erase moves to **column 0** and the frame carries one more of them: `H`, not `H − 1`. **`ADR-0010` is
+NOT re-opened and its ruling is untouched** — clause 1 says the in-place redraw emits a per-row erase,
+which is exactly what ships; only *where in the row* it fires has changed. The ADR's `+66` is correct
+for the shape it costed and is left alone; this ticket's cost is `+69` and is measured here (425 →
+**494** characters on the reference layout, and the delta is content-independent: 69 at `W` = 18, 37
+and 39 alike).
 
 **Nothing is broken in production today** and that is the deadline, not a reason to defer: nothing
 composes a frame in a loop until `ABC-019`, which is **`In Development` right now**. The defect
@@ -134,27 +172,62 @@ fail the correct build. This is one of the two tickets this round that must not 
 **One expression in `src/frame.ts`'s in-place branch of `beginFrameSession`, and the tests that can
 see it.**
 
-- **`src/frame.ts:216`** — the emitted redraw becomes cursor-home, the rows joined by an
-  erase-in-line, then the single existing erase-to-end-of-screen. One new module constant for
-  `\x1b[K`, in the shape of the two that are already there (`:53-61`).
+- **`src/frame.ts`, the in-place branch of `beginFrameSession`** — the emitted redraw becomes
+  cursor-home, **an erase-in-line, then the rows joined by newline + erase-in-line**, then the single
+  existing erase-to-end-of-screen. **Every erase fires at COLUMN 0**, which is the whole of `RF-1`.
+  One new module constant for `\x1b[K`, in the shape of the two that are already there.
 - **`src/frame.ts:27-29`** — the header sentence *"…which is what makes an in-place redraw leave no
   character of the previous frame behind **without emitting a per-row erase**"* becomes false with
   the change and is edited with it. It is the module stating the broken invariant as a fact.
-- **`src/frame.test.ts`** — the screen model learns `\x1b[K`; the four assertion sites that hardcode
-  the old emission are updated; `:735-771`'s characterization is replaced by the criterion it was
-  waiting for; the criteria below are added.
+- **`src/frame.ts:66-73`** — the `ERASE_TO_END_OF_LINE` doc comment says *"Emitted once per row join
+  — **`H - 1`** of them"* and *"A **trailing** one on the last row is redundant"*. **Both sentences
+  are false under `RF-1`** and are edited with it: there are `H`, and none of them is trailing.
+  **Named here because the merged text describes the shape that failed a real terminal**, and a
+  comment left describing the old shape is how the next reader rebuilds it.
+- **`src/frame.test.ts`** — the screen model learns `\x1b[K` **and its RIGHT-MARGIN case is repaired**
+  (`A7`); the assertion sites that hardcode the old emission are updated; `:735-771`'s
+  characterization is replaced by the criterion it was waiting for; the criteria below are added.
 
-**Measured minimal and sufficient** (`ADR-0010` clause 1, re-run here): **one** `\x1b[0J`, **one**
-`write()` per frame, **+66 characters** = `(H − 1) × 3`, and **0 stale rows** at 80 and 120 columns.
-A trailing `\x1b[K` on the last row is **redundant** — `\x1b[0J` already clears the rest of the
-cursor's row — and is **not** added.
+**Measured minimal and sufficient** (`ADR-0010` clause 1, re-run at the repair hop): **one**
+`\x1b[0J`, **one** `write()` per frame, **+69 characters** = `H × 3`, **0 stale rows** at 80 and 120
+columns, and **no escape emitted at the right margin**.
+
+### The trailing-erase note, RE-ARGUED because `RF-1` inverted the shape it described
+
+**There is no trailing erase any more: under `RF-1` every erase is LEADING.** The old note argued
+that the last row needs no erase because `\x1b[0J` already clears the rest of the cursor's row, and
+that a trailing one would break the slice arithmetic at the *"cursor at the start of the prompt row"*
+test. **The second half is spent** — that site is edited by `RF-1` regardless (measured: it is one of
+the three tests `RF-1` moves on its own). **The first half survives, but it now applies to a
+different sequence**: the reserved prompt row's **leading** erase, the `H`-th one. Measured at this
+hop — the emission ends `\n\x1b[K\x1b[0J`, both firing at row `H − 1` column 0 — so that erase is
+**provably redundant**, and it is **kept anyway**, with the count pinned at exactly `H`:
+
+1. **`H × 3` is the shape that was MEASURED clean** on GNU screen 5.0.2 at `C == W` and at 80
+   columns. The 491-character `H − 1` variant was **not** measured. This ticket does not substitute an
+   argument for a measurement on the one surface that has already produced this project's first FAIL.
+2. **It costs a slice and a special case** in what is otherwise one expression, to save 3 characters
+   against `NFR-002`'s measured ~2,500x headroom (+0.13 µs for the delivered +66, and the bar is
+   16 ms). Coding rules 5 and 6.
+3. **Both `H − 1` variants FAIL the new `A1`, measured at this hop.** Dropping row 0's leading erase
+   is QE's mutant `M1`. Dropping the prompt row's is byte-distinguishable but behaviourally identical
+   — and this project has already decided that class deliberately: QE's judgement 1 on mutant `M5`
+   (`\x1b[0K` ≡ `\x1b[K`) records that the criteria pin the emission's **spelling**, not its meaning,
+   and accepts the trade. This is the same trade, taken the same way.
+
+**One erase per row, `H` of them, is an invariant a reader can restate without an off-by-one.**
+`H − 1` is the asymmetry that attached the erase to the join separator in the first place, which is
+how it came to fire at the margin.
 
 ## Out of scope
 
 - **ANY constant-frame-width criterion, anywhere, on this ticket or downstream. This is a
   PROHIBITION, not an omission.** Under `ADR-0010` clause 1 `W` varies by design; `F4` was measured
   above to fail the **correct** build. `ADR-0010` clause 7 states the same prohibition for
-  `ABC-019`.
+  `ABC-019`. **`A7`, added by the repair hop, is NOT one and the check is not rhetorical**: it
+  assembles no frame, never mentions `W`, and asserts nothing about any width being constant — it is
+  a property of the screen model at a 10-column screen. **Nor does it read a terminal's width**
+  (`src/frame.ts:25` and `EPIC-002`'s SIGWINCH ruling stand untouched).
 - **Any change to `assembleFrame`.** `W` stays a per-frame max over delivered rows (`:179`,
   unchanged) and every frame VALUE is byte-identical with or without this ticket — `ADR-0010`
   `## Rollback` says so and `A5` asserts it. The assembler is correct; only what survives on the
@@ -162,7 +235,9 @@ cursor's row — and is **not** added.
 - **Any panel.** `ADR-0010` clause 2: no panel reserves, pads or declares a frame width, and the
   delivered `ABC-016` panel needs **zero production lines**. Nothing here reaches into
   `src/status-panel.ts` or a history pane; neither module exists on `main` and this ticket does not
-  wait for them (`A7`).
+  wait for them (`## Dependencies`, where that independence is measured — **the merged text pointed
+  at `A7`, which did not exist; corrected at the repair hop before `A7` did exist and turned a
+  dangling reference into a wrong one**).
 - **The append and short-TTY strategies.** Untouched by construction — only the in-place branch
   changes. `A5` pins it rather than assuming it.
 - **Hoisting `W` to the session, freezing it at frame 1, or capping it.** `ADR-0010` alternatives B
@@ -178,17 +253,45 @@ cursor's row — and is **not** added.
 
 ## Acceptance (Given/When/Then)
 
-**A1 — the emitted redraw, byte for byte. Given** a 23-row frame and a TTY sink reporting 24 rows,
-**when** one frame is written, **then** the sink receives **exactly one** `write()` call whose text
-is **exactly** cursor-home, the frame's rows joined by `\x1b[K` + newline, and one `\x1b[0J`; and in
-that text the count of `\x1b[K` is **`H − 1`** (22), the count of `\x1b[0J` is **exactly 1**, the
-count of `\x1b` is **`H + 1`** (24), and its length exceeds the same frame's un-cleared emission by
-**exactly `(H − 1) × 3`** = **66** characters.
+**Re-derived at the repair hop 2026-08-12: `A1` is rewritten, `A7` is added, and `A2`–`A6` were each
+re-run against the `RF-1` emission and DO NOT MOVE — measured on an out-of-tree copy, not assumed.
+The evidence is under each criterion.**
 
-*(Every number is derived from `H`, never hardcoded — the merged file's own rule. Measured: 425 →
-**491** characters. The `\x1b` count is the assertion at `src/frame.test.ts:376` going from `2` to
-`2 + (H − 1)`; the byte delta is the ADR's cost claim made falsifiable. **Witnessed:** on the merged
-writer this criterion FAILS; on a partial fix that clears only the first 5 rows it FAILS.)*
+**A1 — the emitted redraw, byte for byte, and EVERY ERASE FIRES AT COLUMN 0. Given** a 23-row frame
+and a TTY sink reporting 24 rows, **when** one frame is written, **then** the sink receives **exactly
+one** `write()` call whose text is **exactly** cursor-home, then `\x1b[K`, then the frame's rows
+joined by newline + `\x1b[K`, then one `\x1b[0J`; and in that text the count of `\x1b[K` is **`H`**
+(23), the count of `\x1b[0J` is **exactly 1**, the count of `\x1b` is **`H + 2`** (25), and its length
+exceeds the same frame's un-cleared emission by **exactly `H × 3`** = **69** characters; **and every
+`\x1b[K` fires at column 0** — the text **begins** `\x1b[H\x1b[K`, and **no** `\x1b[K` in it is
+immediately followed by a newline.
+
+*(Every number is derived from `H`, never hardcoded — the merged file's own rule. Measured on the
+reference layout at this hop, from the real writer rather than a re-implementation: 425 → **494**
+characters. The `\x1b` count is the assertion at `src/frame.test.ts:391` going from `2 + (H − 1)` to
+`2 + H`; the byte delta is the cost claim made falsifiable.*
+
+***THE COLUMN-0 CLAUSE IS THE CLAUSE THIS PROJECT'S FIRST FAIL BOUGHT, and it is an assertion rather
+than a comment for a measured reason.** An erase fires where the cursor is. At the right margin the
+cursor sits on the **last cell** with the wrap pending, so `EL(0)` **destroys that cell** — measured
+by the Security/NFR gate on GNU screen 5.0.2 at a window exactly `W` wide, where the delivered
+emission lost the board's whole h-file and its file label on every frame. At column 0 that state
+cannot exist, so the emission stops depending on any emulator's margin representation: **safe by
+construction, not merely by measurement.** And the clause carries weight the counts no longer can —
+**once the counts move to `H` / `H + 2` / `H × 3`, QE's mutant `M2` (`map(row => row + \x1b[K)` joined
+by bare newlines: `H` erases, every one AT the margin) matches all three counts exactly.** Under the
+old `H − 1` counts the count alone killed it. **Measured: it now dies on the byte-exact text and on
+this clause, and on nothing else in `A1`.** A future hop that drops the clause as a restatement of the
+`toBe` would be removing the only assertion in the criterion that names WHY the order is what it is.*
+
+***WITNESSED at this hop against NINE writers on an out-of-tree copy — one passes, eight fail:*** *the
+required `RF-1` shape **PASSES**; the **delivered** erase-after-row shape **FAILS** (this is the whole
+point of the repair); the merged bare-newline join **FAILS**; dropping row 0's leading erase — QE's
+`M1`, `H − 1` — **FAILS**; dropping the reserved prompt row's leading erase — `H − 1`, behaviourally
+identical, killed on spelling, see `## Scope` — **FAILS**; `M2` above **FAILS**; a leading erase on
+row 11 only (`M3`) **FAILS**; no `\x1b[0J` (`M4`) **FAILS**; and `\x1b[0K` for `\x1b[K` (`M5`,
+semantically identical on every conformant terminal) **FAILS**. **`A1` was NOT relaxed: it kept all
+four counts, kept the byte-exact text, and gained a clause.**)*
 
 **A2 — AFTER EVERY REDRAW OF A SEQUENCE THAT NARROWS, THE SCREEN EQUALS THE FRAME, AT A REAL
 TERMINAL WIDTH. This is the criterion the ticket exists for. Given** the four-frame sequence in
@@ -208,7 +311,13 @@ assertion is not ceremony: `ADR-0010` measured that the merged file's entire fix
 `W` ∈ **{18}**, so a fixture that quietly stops narrowing turns this criterion green forever. **The
 mutant that proves it:** with the fixture's claim string shortened so `W` no longer moves, this
 criterion FAILS rather than passing vacuously. **Witnessed:** FAILS on the merged writer at both
-widths (2 stale rows each); FAILS on the partial fix; PASSES on the clause-1 writer.)*
+widths (2 stale rows each); FAILS on the partial fix; PASSES on the clause-1 writer.*
+
+***DOES NOT MOVE under `RF-1` — re-run at the repair hop and PASSES unchanged*** *at 80 and at 120.
+The reason is structural rather than lucky: `F3` compares **trimmed** rows on a screen asserted to be
+**wider** than the widest frame, so no row ends at the margin and where in the row the erase fires
+cannot reach this criterion. It is also why `A2` could not have caught the regression — and why
+`A1` has to.)*
 
 **A3 — the fixture is PROVED able to catch the defect, in the suite, on every run. Given** the same
 sequence, **when** it is written through the **un-cleared** emission — cursor-home, the rows joined
@@ -222,13 +331,17 @@ a candidate as correct because that candidate had destroyed the substring the ch
 `A3` makes `A2` self-evidencing: it fails the day the fixture stops being able to expose the defect,
 which is the only way `A2` can rot. It costs one screen and two writes. **Witnessed:** passes on
 both builds by construction — it tests the FIXTURE, not the writer — and FAILS on the degenerate
-fixture mutant.)*
+fixture mutant.*
+
+***DOES NOT MOVE under `RF-1` — re-run at the repair hop and PASSES unchanged.*** *It constructs the
+**un-cleared** emission in the test and the un-cleared emission is not what `RF-1` changes.)*
 
 **A4 — a STEADY pair is not flagged. Given** two consecutive frames with the **same** `W`, **when**
 they are written at 80 and 120 columns, **then** `A2`'s comparison holds with no failure.
 
 *(The false-positive control. `F2` fails this at both widths on a **correct** build; this criterion
-is what stops a future hop reaching for it.)*
+is what stops a future hop reaching for it. **DOES NOT MOVE under `RF-1` — re-run at the repair hop
+and PASSES unchanged**, and for `A2`'s reason: it is `A2`'s comparison, at the same two real widths.)*
 
 **A5 — the two append strategies and every frame VALUE are untouched. Given** a non-TTY sink and,
 separately, a TTY sink reporting `H − 1` rows, **when** a frame is written, **then** the text is
@@ -236,9 +349,13 @@ separately, a TTY sink reporting `H − 1` rows, **when** a frame is written, **
 `assembleFrame` call, **then** its returned rows are unchanged by this ticket.
 
 *(`ADR-0010` clause 8 keeps `4c` untouched and its `## Rollback` states no ticket's delivered
-behaviour depends on the clearing. **Measured at this hop:** both append paths byte-identical
+behaviour depends on the clearing. **Measured at the cut hop:** both append paths byte-identical
 before and after, 0 escape bytes; full suite **676/676 on 22 files** with the production change and
-before a single new test was added, so no existing frame VALUE moved.)*
+before a single new test was added, so no existing frame VALUE moved.*
+
+***DOES NOT MOVE under `RF-1` — re-run at the repair hop and PASSES unchanged.*** *`RF-1` edits the
+in-place branch only; both append branches are untouched by construction and still emit 0 escape
+bytes, and no frame VALUE is involved either way.)*
 
 **A6 — the merged characterization at `src/frame.test.ts:735-771` is DISCHARGED, and replaced rather
 than deleted. Given** the delivered build, **when** the suite runs, **then** that test no longer
@@ -250,7 +367,71 @@ narrowing fixture **survives**, and the property it was pinning is asserted from
 its comment routes the decision to *"BA/PM + `ABC-016`/`ABC-017`"* — this ticket is that decision
 arriving — and deleting a test that a ruling has just discharged is how the reason a property is
 checked gets lost. **Witnessed:** with clause 1 applied, its assertion fails, and its `stale` array
-is `[]`.)*
+is `[]`.*
+
+***DOES NOT MOVE under `RF-1` — re-run at the repair hop and PASSES unchanged, and this one was worth
+checking rather than assuming.*** *`A6` is the criterion most exposed to the repair: it is `F2` at the
+**artificial** width, building `createScreen(24, widthOf(wide))`, so **every row of its `wide` frame
+ends exactly at the margin** — the one place a margin change could bite. It passes because `RF-1`
+fires no escape there. **Measured twice, deliberately: green under the merged screen model AND green
+under `A7`'s repaired one.** Its two width assertions (`toBe(24)` / `toBe(18)`), its `stale`
+computation and its `toEqual([])` are all untouched by this repair, and it stays the only criterion
+keying row index 9 — QE measured that `A6` and `A2` kill different mutants precisely because they key
+different rows, so nothing here narrows the suite.*
+
+***One claim about `A6` was checked and came back FALSE, and it is recorded rather than dropped.***
+*The obvious guess is that under `A7`'s repaired model the DELIVERED writer would turn `A6` red along
+with the other margin-exposed sites. **It does not** — measured: with the model repaired and the
+delivered writer left in place, **three existing tests go red and `A6` stays GREEN**. `A6` asserts
+only about the **second, narrower** frame, whose 18-wide rows end at column 17 on its 24-column
+screen — below the margin, where model and terminal agree. The wide frame's lost cells are overwritten
+before anything looks at them. **So `A6` never could have caught this regression either**, and the
+list of criteria that could is exactly one long: `A1`.)*
+
+**A7 — THE SCREEN MODEL'S RIGHT MARGIN IS MEASURED, NOT ASSUMED, AND THE MODEL IS REPAIRED TO MATCH.
+Given** the suite's screen model at a width of `C` columns and a row of exactly `C` printable
+characters written to it, **when** `\x1b[K` is then written, **then** the cell at column `C − 1` is
+**erased** — the row reads `C − 1` characters followed by one space — **and** the deferred wrap
+**survives** the erase: the next printable character lands at **column 0 of the next row**. **And the
+two controls that make the erased cell attributable to the escape and to nothing else:** the same `C`
+characters with **no** erase leave all `C` cells intact, and `C − 1` characters followed by `\x1b[K`
+leave those `C − 1` intact.
+
+*(**A criterion on the TEST DOUBLE, and the one whose absence let a real regression pass six green
+criteria, a 14-mutant campaign with zero survivors, and 681 green tests.** The model lets `column` run
+to `columnCount` and makes the erase a **no-op** there (`src/frame.test.ts:212-215`, `:250-256`); a
+real terminal keeps the cursor at `columnCount − 1` with the wrap pending, and `EL(0)` erases from the
+cursor. `C` is the model's own column count and the row is sliced to it — nothing here is hardcoded,
+and `H` and `W` do not appear.*
+
+***The asserted behaviour is not a reading of ECMA-48. It is a MEASUREMENT*** *— the Security/NFR
+gate's, on GNU screen 5.0.2 driven attached to a pty whose winsize it set with `TIOCSWINSZ`, read back
+with screen's own `hardcopy`, at a 10-column window: ten characters survive; nine plus `\x1b[K`
+survive; **ten plus `\x1b[K` lose the last cell**; and the wrap-pending flag survived the erase. **The
+two controls above ARE that gate's two controls**, and the criterion exists so the number lives in the
+suite instead of only in a note. The model's *"assumptions stated rather than buried"* block at
+`:178-191` then holds four statements of which **one is measured rather than assumed, and it should
+say so.**
+
+***WHY THIS IS A CRITERION AND NOT THE ACCEPTED RISK `AR-1` ALONE — measured, not argued.*** *With
+`RF-1` in place the writer never fires an escape at the margin, so the model's margin case becomes
+**unreachable through the writer**. Measured at the repair hop by applying the repair and reverting
+it: the full suite is **682/682 either way except for this criterion**, which **fails alone**. So
+`AR-1` assigned to the Engineer *without* a criterion has **zero enforcement** — the repair could be
+skipped, or silently undone a year later, and nothing anywhere goes red. That is this project's
+most-recorded defect class, a check that cannot fail, in its purest form: the check would not exist.*
+
+***AND THE REPAIR IS NOT COSMETIC — the sharpest number this hop produced.*** *With the margin
+repaired and the **delivered** writer left in place, **three existing `ABC-018` tests go red**, and
+the failure text is literally the lost h-file: ``expected '8 .♜:♞.♝:♛.♚:♝.♞: ' to be
+'8 .♜:♞.♝:♛.♚:♝.♞:♜'``. **The suite reproduces the real-terminal FAIL on its own instrument the moment
+the instrument stops lying** — which is what stops the next writer change from walking into this hole,
+and it is why the repair belongs bound to `RF-1` in the same hop rather than carried as a risk.*
+
+***WITNESSED:*** *FAILS on the merged model (``expected 'ABCDEFGHIJ' to be 'ABCDEFGHI '``), PASSES on
+the repaired one, and it is **the only test in the suite that moves** between the two. **NOT a
+constant-frame-width criterion and not a terminal read** — see `## Out of scope`. Neither `ADR-0009`
+nor `ADR-0010` is re-opened: this is the test model's fidelity, not the ownership ruling.)*
 
 ## Dependencies
 
@@ -277,11 +458,17 @@ is `[]`.)*
 
 - **`NFR-002` (full redraw < 16 ms) — NO target moves, no bar is created, moved or loosened, and
   `plans/nfr-catalog.md` is NOT edited by this ticket.** `ADR-0010` already recorded the denominator
-  note there. This ticket adds **+66 characters per frame, exactly and always** (`(H − 1) × 3`) —
-  measured 425 → 491 characters for a 23-row frame — which is irrelevant against a 16 ms budget and
-  is stated so the row's serialized-length figures are not later read as stale for an unknown reason.
+  note there. This ticket adds **+69 characters per frame, exactly and always** (`H × 3`) — measured
+  425 → **494** characters for a 23-row frame — which is irrelevant against a 16 ms budget and is
+  stated so the row's serialized-length figures are not later read as stale for an unknown reason.
   Still **one** `write()` per frame, so `NFR-007`'s single-write constraint is untouched and `A1`
   asserts it.
+  - **`+66` → `+69` does NOT re-open the bar, and the headroom is measured rather than assumed.** The
+    Security/NFR gate re-derived `NFR-002` on its own instruments and found the delivered **+66
+    characters cost +0.13 / +0.15 µs** — 0.0009% of the 16 ms budget, ~2,500x headroom including
+    `assembleFrame`, with its merged cell reproducing `ABC-018`'s gate figures for the same quantity.
+    **The three extra characters are 1/22nd of a change that was already 0.0009% of budget.** `MET`
+    stands; no row is owed and none is written.
 - **`NFR-008` / `N8-LANE` — declared against, NOT re-derived.** *(Re-deriving a lane bar has cost
   this board two ruling hops; nothing here reopens `NFR-008`.)* **This ticket adds ZERO test files**
   — every criterion lives in the existing `src/frame.test.ts`, which is already in the lane — so its
@@ -306,16 +493,32 @@ is `[]`.)*
   `src/frame.test.ts:187-188` and `:232-236` make the model throw on any escape it does not
   implement, which is a deliberately good design and is why the suite cannot silently certify this.
   Implement it as erase-from-cursor-to-end-of-line, cursor unmoved, mirroring the existing
-  `eraseToEndOfScreen` helper's loop.
-- **The four assertion sites that hardcode the old emission, read at source at this hop so nobody
-  discovers them mid-build.** `ADR-0010` names one of them.
+  `eraseToEndOfScreen` helper's loop. **This is delivered.** What is NOT delivered is the model's
+  **margin** case, which `A7` now owns.
+- **`A7`'s model repair, and the one thing that makes it subtle.** With the wrap pending the cursor is
+  really at `columnCount − 1`, not one past it, so **both** erase helpers must erase from the cursor's
+  real column — `eraseToEndOfScreen` as well as `eraseToEndOfLine`, because a real terminal's `ED`
+  erases from the cursor too and leaving one of the two honest would be a model that disagrees with
+  itself. **Measured at the repair hop: repairing both, plus `A7`, takes the suite to 682/682 on 22
+  files with lint and typecheck clean; `A7` is the only test that moves when the repair is reverted.**
+  The shape of the fix is one derived column, not a rewrite of the model.
+- **The assertion sites that hardcode the old emission, RE-MEASURED at the repair hop by applying
+  `RF-1` to an out-of-tree copy with the suite otherwise untouched.** The merged table below named
+  four sites and predicted them from reading; this one was **run**, and it is **three, not four** —
+  line numbers are the delivered file's.
 
-  | site | what it says today | why it breaks |
+  | site | what it says today | what `RF-1` does to it |
   |---|---|---|
-  | `:374` | `expect(redraw).toContain(second.join("\n"))` | the rows are no longer joined by a bare newline. **Not named by the ADR, and it fails BEFORE `:376`, masking it** |
-  | `:376` | `expect(occurrences(redraw, "\x1b")).toBe(2)` | becomes `2 + (H − 1)` = **24** |
-  | `:419` | `expect(body).toBe(frame.join("\n"))` | same cause as `:374`. **Not named by the ADR** |
-  | `:768` | `expect(stale).toEqual([<the stale row>])` | the characterization — `A6` |
+  | `:389` | `expect(redraw).toContain(second.join(EL + "\n"))` | **RED** — the erase now precedes each row: `EL + second.join("\n" + EL)` |
+  | `:391` | `expect(occurrences(redraw, "\x1b")).toBe(2 + (HEIGHT - 1))` | becomes `2 + H` = **25**. **MASKED AGAIN — `:389` fails first, so this one never reports.** The same masking the cut hop recorded at `:374`/`:376`; it repeats, and a build that fixes only what the runner prints will leave this wrong |
+  | `:436` | `expect(body).toBe(frame.join(EL + "\n"))` | **RED** — the slice arithmetic site. `body` is now `EL + frame.join("\n" + EL)`. Its sibling assertion `expect(screen.cursor()).toEqual({row: H − 1, column: 0})` **does NOT move**: the prompt row is empty, so the cursor still lands at its start |
+  | `:790` (`A6`) | `expect(stale).toEqual([])` | **GREEN, unchanged.** The merged table listed this site because clause 1 moved it; `RF-1` does not. Measured, not assumed |
+
+- **`plans/traceability.md` carries `+66 characters … (H − 1) × 3, measured 425 → 491` in `ABC-027`'s
+  NFR cell and it is OWED an update at the `RF-1` hop, not before.** Deliberately not edited at the
+  repair hop: that figure is TRUE of the code that exists right now, and editing it before the code
+  changes would make the trace describe a build that does not exist — the fake trace Workflow 16
+  forbids. **Named here so it is not discovered in a diff.**
 
 - **Do NOT reuse `:381`'s form (`rowsOnlyIn`) for a narrowing test.** Measured at this hop: on a
   narrowing pair at a screen width equal to `W`(frame 1) it flags the **correct** build, because it
@@ -332,11 +535,24 @@ is `[]`.)*
   so the fixture needs no new helper.
 - **State the machine beside any microseconds and put no wall-clock assertion in the suite** — this
   project's standing rule. `A1`'s byte delta is a character count, not a clock, deliberately.
-- **The whole change was built and gated out-of-tree at this hop and the expected shape is known:**
-  `676/676 on 22 files` with the production change and the four assertion sites repaired, and
+- **The whole change was built and gated out-of-tree at the cut hop and the expected shape was known:**
+  `676/676 on 22 files` with the production change and the assertion sites repaired, and
   **`681/681 on 22 files, skip 0`** with the five criteria added — **22 files either way, because no
-  test file is added.** These are BA/PM's numbers from a copy; the gate's own run on delivered code
-  is what counts.
+  test file is added.**
+- **RE-MEASURED AT THE REPAIR HOP, and this is the number the `RF-1` hop should expect.** Same method,
+  fresh out-of-tree copy of this worktree, `node_modules` symlinked, baseline verified at **681/681 on
+  22 files** first:
+
+  | state of the copy | result |
+  |---|---|
+  | `RF-1` applied, **suite untouched** | **3 failed / 29 passed** — `:389`, `:436`, `A1`, and nothing else |
+  | screen model's margin repaired, **delivered writer left in place** | **3 failed** — the two in-place `ABC-018` redraw tests and the longer-previous-frame pin. `A6` stays GREEN |
+  | `RF-1` + repaired `A1` + model margin repair + `A7` | **682/682 on 22 files**, `tsc --noEmit` 0, `biome check` clean |
+  | the same, with the model repair **reverted** | **`A7` fails alone** |
+
+  **`681` → `682` is one new test and ZERO new test files**, so `N8-LANE`'s floor allowance stays
+  0 ms. These are BA/PM's numbers from a copy; **the gate's own run on delivered code is what counts**,
+  and this hop wrote no `src/` byte in the repository.
 
 ## Merge position
 
@@ -350,6 +566,31 @@ condition attached to it are in `## Size and priority rationale` and in
 ticket does not change it** — it records the argument where the next reader will find it.
 
 ## Size and priority rationale
+
+**RE-DERIVED AT THE REPAIR HOP 2026-08-12: `S` and `P1` BOTH HOLD, and neither moves.** The
+arguments below stand as written; what the repair adds is recorded first, so the re-derivation is
+visible rather than asserted.
+
+***Size stays `S` (2), and the honest split is worth stating.*** *The ticket's size is the WHOLE
+ticket's, and most of that work is delivered. The REMAINING work at the `RF-1` hop is **`XS` by any
+reading**: **three characters** of production (`+69` against `+66`), two false sentences in
+`src/frame.ts` comments, **three** assertion sites, `A1`'s five assertions, one derived column in the
+screen model, and `A7`'s ~15 lines. Measured end to end at this hop on a copy: **682/682 on 22 files,
+zero test files added, lint and typecheck clean.** The whole-ticket estimate does not move for a
+three-character correction, and `M` is still reserved for the one thing that would earn it —
+`assembleFrame` having to change, which `ADR-0010` clause 2 exists to prevent and which `A5` still
+asserts did not happen. **Nothing here is `XL` and no split is indicated.**
+
+***Priority stays `P1`, and the boundary that could have moved is argued rather than skipped.*** *The
+case for `P0` is real: the ticket now carries a **measured regression** rather than a projected one,
+and this project's first gate FAIL. **It still fails the `P0` test, for the reason the original
+argument gives.** `P0` is "drop everything", and nothing new has to be dropped: the regression lives
+on a branch that has **not merged**, no player can reach it, nothing composes a frame in a loop until
+`ABC-019`, and the ticket is already at the head of its lane with an Engineer hop queued behind this
+one. **The gate's FAIL is what holds it, and a blocking gate is a stronger instrument than a priority
+letter** — raising `P1` to `P0` would change no routing and would be inflation. `P2` is further away
+than it was: the ticket now fixes one misreported game state and is under obligation not to introduce
+another.*
 
 **Size `S` (2), at the BOTTOM of the band. Not `XS`, and this board makes that argument explicitly
 each time** (`ABC-009`, `ABC-015`, `ABC-022` all record a "Not `XS`" reason).
@@ -423,15 +664,21 @@ Derived from `agent-factory/checklists/definition-of-ready.md` at `refinement-AB
 2026-08-11. **BA/PM's verdict: MET, 10 of 10.** Every ✅ below was verified against merged `src/` at
 this hop, not asserted.
 
+> **RE-RUN AT THE REPAIR HOP 2026-08-12, and only the four items the repair actually touched were
+> re-checked.** Items **4**, **6**, **7** and **2** are re-annotated below; **1, 3, 5, 8, 9 and 10**
+> were deliberately NOT re-ticked, because a DoR block that only ever says ✅ is how twenty-five
+> defects got through on `ABC-019`. **Verdict unchanged: MET, 10 of 10** — the ticket does not return
+> to `Backlog`. **`A1` was re-derived, not relaxed; `A7` was added; nothing was struck.**
+
 | # | Check | Verdict | Evidence |
 |---|---|---|---|
 | 1 | problem clear | ✅ | user, pain and value stated; the pain is a **wrong material count** and an **expired draw claim**, both measured through the screen model, not inferred |
-| 2 | scope and out-of-scope clear | ✅ | one expression, one constant, one header sentence, one test file; the **prohibition** on a constant-width criterion is in `## Out of scope` as a scope item, not a footnote |
+| 2 | scope and out-of-scope clear | ✅ **re-checked 08-12** | one expression, one constant, **two** comment blocks in `src/frame.ts`, one test file; the **prohibition** on a constant-width criterion is in `## Out of scope` as a scope item, not a footnote, **and `A7` is checked against it there rather than assumed clear**; the trailing-erase note is **re-argued, not left stale** |
 | 3 | INVEST | ✅ | **independent MEASURED**: neither panel module exists on `main`, no symbol imported from either, **681/681 on 22 files** with both absent. Small, and estimable because the change was **built** |
-| 4 | acceptance testable and measurable | ✅ | 6 criteria, every number derived from `H`; **each witnessed against the merged writer and three mutants** — the broken writer, a partial fix, and a degenerate fixture. `A2` and `A3` are the two that refuse to be vacuous |
+| 4 | acceptance testable and measurable | ✅ **re-checked 08-12** | **7** criteria, every number still derived from `H` (and `A7`'s from the screen's own `C`); `A1` **re-derived to `H` / `H + 2` / `H × 3` and witnessed against NINE writers, one passing and eight failing**; `A2`–`A6` each **re-run against the `RF-1` emission and none moves**; `A7` witnessed failing on the merged model and passing on the repaired one. **Nothing became a range, a `toContain` or an approximation** |
 | 5 | dependencies known | ✅ | `ABC-018` (closed, both its files edited — named, not discovered in a diff), `ABC-014`, `ADR-0010`; **`ABC-019` FORCED after**; `ABC-016`/`ABC-017` measured **not** dependencies |
-| 6 | security/NFR triggers, measurable | ✅ | `NFR-002` **+66 characters exactly**, no target moves, catalog not edited; `N8-LANE` declared at **ZERO files added**, content ~20 ms measured, bar **not re-derived**; no security trigger, structurally |
-| 7 | test notes present | ✅ | the not-optional model change (**5 tests throw without it**), the four assertion sites with line numbers, the two forms that must NOT be reused with the measurement that kills each, and the row-count constraint on the fixture |
+| 6 | security/NFR triggers, measurable | ✅ **re-checked 08-12** | `NFR-002` **+69 characters exactly** (`H × 3`, 425 → 494), no target moves, **catalog still not edited and none owed** — the gate measured the delivered +66 at +0.13/+0.15 µs, 0.0009% of budget, so three more characters do not reach any bar; `N8-LANE` still **ZERO test files added** (`A7` lives in `src/frame.test.ts`), floor allowance 0 ms, bar **not re-derived**; security half **triggered, run and clean** at the gate over 180 cases, and `RF-1` adds one module-constant escape, no input path |
+| 7 | test notes present | ✅ **re-checked 08-12** | the not-optional model change (**5 tests throw without it**), the assertion sites **re-measured by running `RF-1` rather than predicted — three, not four, and the masking repeats**, `A7`'s two-helper subtlety, the two forms that must NOT be reused with the measurement that kills each, the row-count constraint on the fixture, and the **owed `plans/traceability.md` figure named rather than left in a diff** |
 | 8 | size assigned | ✅ | `S` (2), bottom of band, with the "not `XS`" argument this board requires |
 | 9 | priority assigned | ✅ | `P1`, with both boundaries argued (`not P0`, `not P2`) |
 | 10 | no major unresolved blocker | ✅ | `ABC-018` and `ABC-014` merged; `ADR-0010` accepted; nothing waits on `ABC-016` or `ABC-017`. **Three flags carried, each with an owner, none blocking** |
@@ -441,7 +688,8 @@ this hop, not asserted.
 board row is **requested** in this hop's context notes, not written — `plans/board.md` is the
 Orchestrator's.
 
-**Three flags carried, each with an owner, none blocking:**
+**Four flags carried, each with an owner, none blocking** (three from the cut hop, one added by the
+repair; flag 3 is reworded on QE's routing):
 
 1. **`ADR-0010`'s `## Consequences` under-counts the test changes and its *"first narrowing
    fixture"* clause is false** — measured above. **Owner: Architect/Design**, whenever
@@ -452,14 +700,44 @@ Orchestrator's.
    it is a wording hop only if the owner reads *"in one operation"* as forbidding the extra erase —
    a reading `ADR-0010` explicitly does not take.
 3. **The screen model implements `\x1b[H`, `\x1b[0J` and, after this ticket, `\x1b[K` — and throws on
-   everything else.** That is correct and deliberate. Recorded because it means any future writer
-   change is gated by a model edit, which is a feature and should not be read as a defect when the
-   suite goes red. **Owner: whoever changes the writer next.**
+   everything else.** That is correct and deliberate. **REWORDED 2026-08-12 on QE's routing, because
+   the merged wording invited exactly the wrong reading.** It said a red suite here "should not be
+   read as a defect", which tells the next engineer to treat the red as ceremony. The accurate
+   statement is narrower and more useful:
+
+   > **Any change to the BYTES the writer emits is gated by a model edit — including a change that
+   > emits a SEMANTICALLY IDENTICAL sequence. The model gates the emission's spelling, not its
+   > meaning.**
+
+   QE measured it: `\x1b[0K` and `\x1b[K` are the same sequence (ECMA-48 makes an omitted parameter
+   `0`), and swapping one for the other turns **8 tests red, five of them by the model THROWING**.
+   That is still the right trade — a model that parsed CSI generally would be a terminal emulator, and
+   coding rule 7 forbids unrequested flexibility — but the red is **diagnosable only if the flag says
+   what is gated.** The correct action on those throws is a two-line model edit, not a shrug.
+   **Owner: whoever changes the writer next.**
+4. **ADDED 2026-08-12 — the model's fidelity is now asserted in ONE place (`A7`) and only at the
+   margin.** Everything else the model does is still assumption. `A7` covers the case a real terminal
+   was measured on; the other three statements in the `:178-191` block are unmeasured and should not
+   be read as promoted by association. **Owner: Architect/Design** if model fidelity is ever judged an
+   ADR-level question — Security/NFR's `AR-1` names the same alternative owner. **Not blocking:** the
+   remaining three are the same assumptions the suite has always carried, and `RF-1` makes none of
+   them newly load-bearing.
 
 ## Source
 
 `memory-bank/50-decisions/ADR-0010-frame-width-stability-ownership.md` (accepted, merged
 2026-08-11) clauses 1, 2, 7 and 8; `.grugops/context/design-frame-width-clearing/notes/` (the
 Architect's measurements); `.grugops/context/adr0010-routing-2026-08-11/notes/` (the Orchestrator's
-routing, which named this id); `.grugops/context/refinement-ABC-027-cut/notes/` (this hop —
+routing, which named this id); `.grugops/context/refinement-ABC-027-cut/notes/` (the cut hop —
 every criterion witnessed, and the mutants that kill each one).
+
+**The repair hop's sources**, all read before `A1` was touched:
+`.grugops/context/security-nfr-ABC-027/notes/` (five notes — the real-terminal measurement, the
+primitive with its two controls, `RF-1` measured rather than proposed, and `AR-1`);
+`.grugops/context/quality-gate-ABC-027-qe/notes/` (four notes — the 14-mutant campaign, the
+attribution that puts 9 of 14 kills on `A1`, the margin `claim` that was right and said so, and the
+flag-3 wording routing); `.grugops/context/abc027-fail-2026-08-12/notes/` (the Orchestrator's
+acceptance of the FAIL and the forced BA/PM-before-Engineer ordering); and
+`.grugops/context/refinement-ABC-027-a1/notes/` (**this hop** — the emissions counted from the real
+writer, the nine-writer witness table for the new `A1`, and the measurement that put `A7` in the
+criteria instead of leaving it as `AR-1`).
