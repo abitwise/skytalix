@@ -1,10 +1,12 @@
 /**
- * `ABC-017`'s acceptance criteria, in the ticket's order — `A1`-`A10`.
+ * `ABC-017`'s acceptance criteria, in the ticket's order — `A1`-`A10`, plus `A14`.
  *
  * A CRITERION TAKES MORE THAN ONE `it` WHERE ITS CLAUSES WOULD MASK EACH OTHER. A failing
  * assertion ends the test, so a clause that states the REQUIREMENT and a clause that acts as a
- * TRIPWIRE never share an `it`: `A1` and `A9` are two each for that reason, and the reason is
- * written at each split. `A2` is four because its cases are unrelated.
+ * TRIPWIRE never share an `it`: `A1` is two for that reason and `A9` is three, and the reason is
+ * written at each split. `A2` is four because its cases are unrelated. `A6` is two because its
+ * fourth anchor is a different INPUT CLASS rather than a different clause — its three assertions
+ * share one `it` on the ticket's own ruling, being requirements that discriminate different builds.
  *
  * `A11` is a spied CALL COUNT and lives in `src/history-pane.nfr.test.ts`, because a `vi.mock`
  * factory is hoisted to file scope and vitest's module-registry isolation is per FILE: putting it
@@ -211,6 +213,27 @@ const FROM_WHITE_ANCHOR = anchoredShuffle(ANCHOR_27_WHITE, WHITE_ANCHOR_PLIES);
 const FROM_BLACK_ANCHOR = anchoredShuffle(ANCHOR_27_BLACK, BLACK_ANCHOR_PLIES);
 
 /**
+ * The SAME cycle from the SAME black-to-move anchor, carried to `plies` so the window SLIDES —
+ * `BLACK_ANCHOR_PLIES` is its first five plies and the cycle repeats every four.
+ *
+ * The first three anchors are five plies each, so three rows in a pane of eight: their windows
+ * never move, and the pane's leading-half-row correction is a no-op until `rowsInGame` exceeds
+ * `HISTORY_ROWS`. A fresh object every call, because `A14` plays a move on its own.
+ */
+function blackAnchorTo(plies: number): GameHistory {
+  const cycle = BLACK_ANCHOR_PLIES.slice(0, 4);
+  return anchoredShuffle(
+    ANCHOR_27_BLACK,
+    Array.from(
+      { length: plies },
+      (_, ply) => cycle[ply % cycle.length] as readonly [string, string],
+    ),
+  );
+}
+
+const FROM_BLACK_ANCHOR_20 = blackAnchorTo(20);
+
+/**
  * Every history this file builds, FRESH on every call — `A9` needs objects nothing has rendered.
  * One call rebuilds all fourteen, the 2,000-ply shuffle and the 300-ply deterministic game
  * included, and it is the only heavy work this file does more than once.
@@ -387,8 +410,44 @@ describe("ABC-017 acceptance", () => {
       ["Nb1", "Nc6"],
     ]);
 
-    // In none of the three does the pane contain a row numbered 1.
+    // In none of the FIRST three does the pane contain a row numbered 1. The loop is unchanged:
+    // it is the sole catcher in this table for `WPHANTOM` — a stray row numbered `1.` emitted into
+    // the blank region only for a white-to-move anchor past fullmove 1 — where it fails with
+    // "expected [ 27, 28, 29, 1 ] to not include 1". The fourth anchor is asserted separately below
+    // and is deliberately NOT added here.
     for (const rows of [fromStart, fromWhite, fromBlack]) expect(numbersOf(rows)).not.toContain(1);
+  });
+
+  /**
+   * `A6`'s FOURTH anchor, and the three assertions share one `it` on the ticket's own ruling: all
+   * three are requirements on the pane's OUTPUT and they discriminate different builds, so each
+   * reports on the build it catches and neither masks the other.
+   *
+   * The gap it closes is the PRODUCT of two dimensions. `A6`'s first three anchors are five plies
+   * each, so their windows never slide; `A1`'s ten lengths are all `newGame(START_FEN)`, so they
+   * are all white-anchored; `A2`'s black anchor is one ply. So the pane's leading-half-row terms
+   * were exercised only where they are no-ops — and `A13` cannot see it either, because `A13`
+   * composes the exported CONSTANT `HISTORY_ROWS` and never the pane's output.
+   *
+   * Twenty plies rather than the minimum sixteen: three whole rows have slid out, so an off-by-one
+   * in either correction term is still visible. The same cycle from the WHITE anchor at 20 plies
+   * renders 29-36, which is the contrast that makes the ANCHOR, not the length, the thing tested.
+   */
+  it("A6 — the FOURTH anchor: black-to-move with the window SLID and the leading half-row GONE", () => {
+    const rows = renderHistory(FROM_BLACK_ANCHOR_20);
+
+    // A build dropping the leading half-row from `rowsInGame` returns NINE ROWS here, from a pane
+    // whose single reason for existing is a constant height.
+    expect(rows).toHaveLength(HISTORY_ROWS);
+    expect(numbersOf(rows)).toEqual([30, 31, 32, 33, 34, 35, 36, 37]);
+
+    // A build dropping it from `firstVisiblePly` instead puts a phantom EMPTY white cell at the top
+    // of every slid black-anchored window — `D5`'s defect class INVERTED, and passed by the
+    // criterion added for `D5`. Once the window has slid the leading half-row is GONE, so row 1
+    // opens with a white ply. Read positionally: normalisation cannot tell an empty cell from a
+    // shifted one.
+    expect(whiteCell(rows[0] as string).trim()).toBe("Nc3");
+    expect(normalised(rows[7] as string)).toBe("37. Nb1");
   });
 
   it("A7 — takeBack(2) slides the window by a whole move; takeBack(1) leaves a half-row", () => {
@@ -448,19 +507,51 @@ describe("ABC-017 acceptance", () => {
     }
   });
 
-  it("A9 — neither render touches the caller's position or its move count", () => {
+  it("A9 — neither render touches the caller's position, its move count or its ANCHOR", () => {
     for (const [name, history] of buildAllCases()) {
       // Snapshotted before this object's FIRST render BY ANYTHING AT ALL: one taken between two
       // renders is byte-identical across a build that corrupts on every render, and one taken over
       // an already-rendered object is blind to a build that corrupts once per object.
       const fenBefore = toFen(history.position);
       const lengthBefore = history.moves.length;
+      // `GameHistory` is `{ initialFen, moves, position }` and this criterion named two of the
+      // three. `initialFen` is not an incidental third field: it is THE ANCHOR, the input `A6`,
+      // `D4` and `D5` all turn on, and the one this pane re-parses on every render. A build that
+      // rewrites it on the caller changes no rendered byte of its own output.
+      const anchorBefore = history.initialFen;
 
       renderHistory(history);
       renderHistory(history);
 
       expect(toFen(history.position), `${name} position`).toBe(fenBefore);
       expect(history.moves.length, `${name} move count`).toBe(lengthBefore);
+      expect(history.initialFen, `${name} anchor`).toBe(anchorBefore);
+    }
+  });
+
+  /**
+   * `A9`'s DURING-render clause, in its own `it` because a before/after snapshot cannot express it.
+   *
+   * The two clauses above are a comparison at the ENDS of a render, so a pane that mutates the
+   * caller's array and puts it back is invisible to them: it splices `moves` down to the window and
+   * `unshift`s it back, and every snapshot agrees. `A11`'s spies do not see it either — they watch
+   * `takeBack` and `playMove`, and raw array operations are neither.
+   *
+   * The instrument is therefore live ACROSS the call rather than at its ends: freeze the caller's
+   * array first, so a mutation THROWS at the moment it happens instead of being tidied away before
+   * anyone looks. ESM is strict, so `splice` / `push` / an element write on a frozen array throw
+   * `TypeError`. It is the exact inverse of `WFREEZE` — there the PANE freezes the caller's array
+   * and bricks it; here the TEST does, and the pane must not care.
+   */
+  it("A9 — the caller's moves array is not mutated AT ANY POINT DURING a render", () => {
+    for (const [name, history] of buildAllCases()) {
+      Object.freeze(history.moves);
+      // The instrument is armed rather than assumed: `moves` is a real array on the object, not a
+      // getter handing out a fresh copy, so freezing it is a guard and not a no-op.
+      expect(Object.isFrozen(history.moves), `${name} instrument armed`).toBe(true);
+
+      expect(() => renderHistory(history), `${name} first render`).not.toThrow();
+      expect(() => renderHistory(history), `${name} second render`).not.toThrow();
     }
   });
 
@@ -471,5 +562,46 @@ describe("ABC-017 acceptance", () => {
       );
       expect(above, name).toHaveLength(0);
     }
+  });
+
+  /**
+   * `A14` — FRESHNESS, and it is the one property here that REQUIRES a shared object.
+   *
+   * Nothing else on this ticket ever USED a `GameHistory` after rendering it, and two wrong builds
+   * live in that gap: one freezes the caller's `moves` and leaves it unable to play another move
+   * while satisfying `A9` exactly, and one memoises rows per `GameHistory` and shows move 1
+   * forever. The consumer is real — `playMove` mutates in place (`src/history.ts:85-88`), so
+   * `ABC-019`'s loop hands the SAME OBJECT to `renderHistory` every frame.
+   *
+   * SHARING THE OBJECT ACROSS THE TWO RENDERS IS THE ASSERTION, and it is not a `D23` regression.
+   * `D23` is about an object an EARLIER, UNRELATED test rendered before a snapshot was taken; this
+   * test owns its object, builds it here, and shares it deliberately inside its own criterion. The
+   * three properties are distinct: determinism wants any fixture and a cache satisfies it
+   * perfectly, non-mutation wants an object nothing has rendered (`A9`, `D23`), and freshness is a
+   * statement about a SEQUENCE — a fresh object has no earlier render to be stale against.
+   *
+   * `WSPLICE` is deliberately NOT this criterion's to catch: it restores what it breaks, so
+   * render -> play -> render sees nothing. It belongs to `A9`'s during-render clause above.
+   */
+  it("A14 — the caller is still USABLE after a render, and the next render is FRESH", () => {
+    const history = blackAnchorTo(20);
+    const first = renderHistory(history);
+
+    expect(normalised(first[7] as string)).toBe("37. Nb1");
+
+    // A pane that freezes the caller's `moves` satisfies every clause of `A9` — position
+    // unchanged, length unchanged, anchor unchanged — and bricks the caller: ESM is strict, so the
+    // next `playMove`'s `moves.push` throws `TypeError`. Asserted first because it is the failure
+    // that stops the loop dead.
+    expect(() => play(history, "b8", "c6"), "playMove after a render").not.toThrow();
+
+    const second = renderHistory(history);
+
+    // A pane that memoises rows per `GameHistory` shows move 1 forever and the game is unreadable
+    // from move 2. It satisfies determinism BETTER than the correct build, which is why the
+    // criterion that owns determinism cannot be the one that catches it.
+    expect(second).not.toEqual(first);
+    expect(normalised(second[7] as string)).toBe("37. Nb1 Nc6");
+    expect(history.moves).toHaveLength(21);
   });
 });
