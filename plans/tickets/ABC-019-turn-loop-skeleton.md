@@ -205,6 +205,57 @@ feature: —
 > re-opened.** Baseline re-verified here after the rebase: **758/758 on 26 files**, and it moved from
 > 723/723 **because `ABC-016` merged**, not because anything here changed.
 
+> **AMENDED 2026-08-12 (SEVENTH hop) by BA/PM — the two ticket sentences the delivering Engineer
+> flagged and correctly did NOT take, and the cl. 9f discharge this ticket had not yet recorded**
+> (task `refinement-ABC-019-row18-2026-08-12`, subtask `refinement-ABC-019-row18`, Workflow 07).
+> **Targeted, TEXT-ONLY, and it adds NO production scope:** no criterion `A1`–`A20` is added, amended,
+> renumbered or deleted, the count stays **27**, the table stays **18 rows**, and size `L` (5) /
+> priority `P0` are re-derived a **seventh** time and **UNMOVED**. **Nothing under `src/` was opened
+> for edit**, and `plans/board.md`, `plans/nfr-catalog.md`, every ADR and every other ticket were left
+> alone.
+>
+> **What is new about this hop is WHO found the defects: the Engineer that DELIVERED the code.** It
+> flagged two ticket sentences its own delivery had falsified and amended neither, because ticket text
+> is BA/PM's — the same handback shape as `A9b` and `A10b`, and the right one. **Both flags are
+> upheld. Every fact below was re-verified at source at this hop rather than taken from the report.**
+>
+> 1. **`[D53]` — row 18's Expected was STALE in EVERY clause, and it is the `[D21]` shape this ticket
+>    has produced before.** It read *"BLOCKED on `ABC-027`: RED until it merges, and written at the
+>    rebase with `ADR-0009` cl. 9f's real-panel re-gate — not before"*. Measured here: `ABC-027` is
+>    **merged** (`src/frame.ts:239` writes `\x1b[K` per row, and `frame.ts` is byte-identical to
+>    `main`), the rebase is done (**0 behind**), and `A20` is written and **GREEN**
+>    (`src/turn-loop.test.ts` **48/48**). **An Expected column that names a block which no longer
+>    exists tells the next reader the row is supposed to be RED.** Repaired as a **record and a
+>    check**, not as a fresh status — a status copied into a ticket is exactly what `[D21]` cost this
+>    ticket four times.
+> 2. **`[D54]` — the Engineer used the REAL status panel where `## Test notes` prescribed a STUB, said
+>    so, and the substitution is RATIFIED.** The prescribing sentence was written at the fourth hop
+>    when **neither** panel was in merged `src/`, so a stub was then the only buildable fixture; it
+>    encoded the tree's state, not a property of the criterion. **Both stub routes still available
+>    today cost something the real panel does not** — a third seam falsifies `A18`'s *"there are
+>    **two**"* (a criterion amended to satisfy a criterion, refused five times here), and a
+>    width-varying shared `statusStub` changes the fixture the other 14 rows drive through for one
+>    row's benefit, which is the mistake rows 3 and 16 were split to avoid. **The real panel's claim
+>    cell narrows for a DOMAIN reason and buys strictly stronger evidence:** it proves `ADR-0010`'s
+>    defect is reachable in the shipped composition, which no invented fixture can. **The sentence
+>    changes; the test does not.**
+> 3. **`[D55]` — `ADR-0009` cl. 9f is DISCHARGED IN FULL and the ticket did not say so.** `[D51]` (1)
+>    left the obligation open pending `ABC-017` and required whoever ran the re-gate to **state WHICH
+>    panels were real**. Measured here on merged `main`: `src/status-panel.ts` **`STATUS_ROWS = 3`**
+>    (`:71`) and `src/history-pane.ts` **`HISTORY_ROWS = 8`** (`:70`) — both present, both
+>    byte-identical to `main`, **so `HISTORY_ROWS = 8`'s `UNKNOWN - verify` is retired by measurement**
+>    and both panels were real. The discharge is now written in **the two places the obligation was
+>    recorded** and a rebase hop reads — `## Dependencies` (`[C9-4]`/`[D51]`) and `## Test notes`
+>    (row 18) — because a ticket that still says an obligation is outstanding after it is met is
+>    `[D21]`'s defect, arriving from the other direction.
+>
+> **The lane is RED and this hop does not touch that.** Re-run here: **2 failed / 794 passed on 796,
+> 1 file failed / 27 passed on 28, skip 0** — both failures are `ABC-029`'s in
+> `src/history-pane.nfr.test.ts` (`:247`, `:328`), neither is this ticket's, and **no test of this
+> ticket fails**. `src/turn-loop.ts` md5 `bd793612476c9d0eac28b75e1e3297cc`, unchanged.
+> **`RISK-ABC017-01`'s trap at `src/history-pane.nfr.test.ts:104-112` was NOT opened by this hop** —
+> the trigger is the EDIT, `ABC-028` closes it, and four roles have now declined it.
+
 ## Problem
 
 *User*: everyone. Without this there is no game — there are a renderer and a rules library.
@@ -1345,6 +1396,11 @@ CI.
     therefore written **at the rebase**, riding with `ADR-0009` clause 9f's real-panel re-gate
     (`[C9-4]`) — not before. **`ABC-027`'s ticket was NOT read or edited by this hop** (an Engineer is
     live on it); everything above comes from `ADR-0010` and from this ticket's own boundary. `[D48]`
+    *(**DONE, and dated so nobody reads the paragraph above as outstanding — `[D53]`, seventh hop.**
+    `ABC-027` is merged and the check is its own: `src/frame.ts:239` writes `ERASE_TO_END_OF_LINE`
+    **per row** inside the in-place branch, and `frame.ts` is byte-identical to `main` here. `A20` is
+    written and **GREEN at both widths**. The conditional above stays as written because it is
+    self-dating and it is the reason `A20` was not written earlier — it is **not** a live block.)*
   - **`ABC-016` is why `A5` and `A6` are satisfiable at all.** Both require a frame re-emit **without**
     re-evaluating, and a panel that derived its own status per frame made both **false**. `ABC-016`'s
     refinement deleted that `gameStatusOf` call and **its derive-at-0 clause** — `gameStatusOf`,
@@ -1366,8 +1422,12 @@ CI.
   - **`ABC-017`** supplies `HISTORY_ROWS`; `ABC-016` supplies `STATUS_ROWS`. *(This read **"Neither
     exists in merged `src/` today"** and it is **half false since `ABC-016` merged** — `[D51]`, fifth
     hop, measured: `STATUS_ROWS = 3` is exported from `src/status-panel.ts:71` and the history-pane
-    module is still absent. `HISTORY_ROWS = 8` is **`UNKNOWN - verify` at the rebase** — the board
-    records that value for `ABC-017` and this hop did not open that ticket to confirm it.)* This loop is
+    module is still absent. `HISTORY_ROWS = 8` was **`UNKNOWN - verify` at the rebase** — the board
+    recorded that value for `ABC-017` and that hop did not open the ticket to confirm it. **The
+    `UNKNOWN` is RETIRED BY MEASUREMENT at the seventh hop — `[D55]`: `HISTORY_ROWS = 8` is exported
+    from `src/history-pane.ts:70` on merged `main`, read at source, and the board's value was right.
+    Both halves of the check are now satisfied and neither sentence is a status: the check remains
+    "absent from merged `src/`", and neither module is.**)* This loop is
     **built** against fixed-height stub arrays for both panels and **merged** after both. **This loop
     reads neither constant, and after
     `ADR-0009` clause 9 that is a rule and not an accident: there is NO import edge to either panel in
@@ -1408,6 +1468,34 @@ CI.
     > `[D50]`. At the re-gate BOTH panels exist and importing them is exit 0, so the protection is
     > `A18`(i) + `A19`(b), which is precisely why the stub runs must survive the swap. **Nothing is owed
     > to the code by this note; it is an instruction to the re-gate.**
+
+    > **[D55 — THE RE-GATE HAS RUN. `ADR-0009` cl. 9f IS DISCHARGED IN FULL, and `[D51]`'s *partial*
+    > language is retired. Recorded 2026-08-12 (seventh hop), verified at source rather than taken
+    > from the delivering role's report.]**
+    >
+    > **WHICH PANELS WERE REAL — the sentence `[D51]` (1) asked for: BOTH.** `src/status-panel.ts`
+    > (`STATUS_ROWS = 3`, `:71`) and `src/history-pane.ts` (`HISTORY_ROWS = 8`, `:70`) are both on
+    > merged `main` and both byte-identical here (`git diff main -- src/` touches **only** the three
+    > `turn-loop` files). The re-gate's four tests read those two constants off the merged modules and
+    > call `renderStatusPanel` / `renderHistory` themselves, so **no half of the seam was stubbed** and
+    > the geometry is the real `3/8` → `H` = **23**, in place on a 24-row TTY. **The obligation
+    > `[D51]` left open is CLOSED, and it is closed by measurement rather than by the calendar.**
+    >
+    > **The re-gate ADDED, exactly as (2) required.** `SHAPE_A` (2/5 → 19, in place) and `SHAPE_B`
+    > (4/9 → 25, append) both still run, neither is 3/8, and **shape `B` is still the only
+    > append-branch run in this tree**. `A18` and `A19` are asserted unchanged. The landmine clause 9d
+    > exists to disarm was **not** armed by this discharge.
+    >
+    > **`[C9-3]` holds across the discharge and that was the thing most at risk.** The loop gains
+    > **no production import edge** to either panel: `src/turn-loop.ts` is byte-identical (md5
+    > `bd793612476c9d0eac28b75e1e3297cc`) and imports neither. The two imports are in a **test** file,
+    > which `[D50]` predicted would be exit 0 once both modules existed — so what holds the IMPORTED
+    > form out is `A18`(i) + `A19`(b) as `[D50]` measured, and it held.
+    >
+    > **What this does NOT discharge:** `ABC-029`, and `ABC-028` before it. Cl. 9f was one of three
+    > holds on this ticket; `A20`'s (`ABC-027`) is spent too, and **the RED lane is the one that is
+    > left.** See the `ABC-029` bullet below — it is a **merge** blocker and it is not this ticket's
+    > repair.
 - **`ABC-029` — NEW AND BLOCKING, added 2026-08-11 at the sixth hop (`[D52]`). This ticket cannot go
   GREEN until `ABC-029` lands, and this ticket does NOT own the repair.** The rebase onto merged
   `ABC-017` turned that ticket's two structural instruments in `src/history-pane.nfr.test.ts` RED
@@ -1629,7 +1717,11 @@ built from merged code. That is the point of the stubs.
   reason (or none) and an exact frame count.** *(Thirteen until `[D31]` added row 14 at the third
   2026-08-11 hop; **fourteen until the fourth hop added rows 15–18** for `[D40]`, `[D43]`, `[D42]` and
   `[D46]`.)* **Row 18 is the one row whose Expected is a SCREEN property rather than a terminal
-  reason, and it is the only one blocked on another ticket.** *(**[CORRECTED 2026-08-11 — `[D25]`.]** The list read
+  reason.** *(This continued **"…and it is the only one blocked on another ticket"** until the seventh
+  hop, when `ABC-027`'s merge made it false — `[D53]`. **It is not replaced with today's status**, on
+  `[D21]`'s lesson: **no row of this table is blocked on another ticket, and the check is the table
+  itself** — a row is blocked exactly while its Expected names the ticket it waits on, which none now
+  does.)* *(**[CORRECTED 2026-08-11 — `[D25]`.]** The list read
   *"a mate line, a **threefold** line, a stalemate line, a **fifty-move** line, an insufficient-material
   line …"*, and after `ABC-020` **two of those terminate nothing** while the two that do were missing.
   A row whose "exact expected terminal reason" does not exist is a row that will be made to pass by
@@ -1654,7 +1746,7 @@ built from merged code. That is the point of the stubs.
   | 15 | **prompt-driven `game-over`** (`[D40]`, `A8b`) — run **twice**, with two distinct `(result, reason)` pairs | the seam's own `result` and `reason` returned **unaltered**, exit 0; **1 frame**; both seams called **0** times afterwards; **no** *input ended* notice and never `{null, null}` |
   | 16 | **already-terminal START** — `1k6/8/8/8/8/8/1K6/2n5 w - - 0 1`, K+N vs K, **six legal moves available** (`[D43]`, the witness `A3b`'s `+ 1` claimed and did not have) | `draw` / `insufficient-material` **on the INITIAL evaluation**; **1 frame, 0 plies, 0 input calls, 0 engine calls**; `gameStatus` spied at **exactly 1** = `N + 1` at `N = 0` |
   | 17 | **input** seam returns a move **not in `legalMoves`** (`[D42]`, `A10b`) | **not applied** — `moves.length` unchanged and `toFen` byte-identical — **the exception propagates**: no `LoopOutcome`, no reason, **`engine-failure` NOT reused**, `A14` unchanged, zero render calls and zero sink writes |
-  | 18 | **a played game containing a NARROWING**, replayed into a local screen model at 80 columns **and** at `W`(frame 1) (`[D46]`, `A20`) | after **every** redraw the **screen equals the frame**, trimmed. **BLOCKED on `ABC-027`: RED until it merges, and written at the rebase with `ADR-0009` cl. 9f's real-panel re-gate — not before** |
+  | 18 | **a played game containing a NARROWING**, replayed into a local screen model at 80 columns **and** at `W`(frame 1) (`[D46]`, `A20`) | after **every** redraw the **screen equals the frame**, trimmed. **The narrowing must be asserted to EXIST in the run** — without that, every clause of this row passes vacuously on a fixture that stopped narrowing. *(Written at the rebase riding with `ADR-0009` cl. 9f's real-panel re-gate, as this row required, and **both are DISCHARGED** — `[D53]`, `[D55]`, seventh hop. This cell read **"BLOCKED on `ABC-027`: RED until it merges … not before"** until then; `ABC-027` is merged and the block is spent. **The check, not the status: this row is blocked exactly while this cell names a ticket it waits on.**)* |
 
 - **Both stubs are buildable from merged code alone and that was verified rather than assumed at the
   2026-08-11 refinement.** The coordinate reader is a `legalMoves` filter on
@@ -1707,11 +1799,55 @@ built from merged code. That is the point of the stubs.
 - **Row 18's narrowing must come from a PANEL row, and the screen model is LOCAL to this file.** `W`
   is the max over the **panel** rows only — the message region is bounded by `W` and cannot widen it
   (`src/frame.ts:176-179`) — so a fixture that varies `messages` narrows **nothing** and `A20` would
-  pass vacuously. A stub whose status panel's widest row **shrinks** between two frames is the shape.
+  pass vacuously. **The narrowing is the REAL status panel's claim cell, and the run carries no
+  message item at all.**
   Merged `src/frame.test.ts`'s `createScreen` (`:190`) is **not exported**, and **this ticket does not
   touch that file**, so the model is written locally here on `ADR-0009` clause 9c's precedent — and it
   must **throw on any escape it does not implement**, which is the property that makes it evidence
   rather than decoration.
+
+  > **[D54 — this sentence prescribed a STUB, the delivering Engineer used the REAL panel and said so,
+  > and the substitution is RATIFIED. Ruled 2026-08-12 (seventh hop). The SENTENCE changes; the TEST
+  > does not.]**
+  >
+  > It read ***"A stub whose status panel's widest row SHRINKS between two frames is the shape."***
+  > **It was written at the fourth hop, when NEITHER panel was in merged `src/`** — a stub was then the
+  > only fixture that could exist, so the sentence recorded the tree's state and not a property of
+  > `A20`. Both panels merged before the rebase and that reason expired.
+  >
+  > **(1) The real panel narrows for a DOMAIN reason.** `renderClaimCell` (`src/status-panel.ts:163-178`,
+  > read at source here) emits `White may claim: fifty-move rule` — **32 columns** — while the halfmove
+  > clock stands at 100, and **blank** the ply the clock resets, *"and the cell exists in every frame
+  > either way"*. The pawn move narrows the frame **45 → 22** with no fixture invented, and the
+  > narrowing is a **panel** row, which is this bullet's own load-bearing clause. Measured on the
+  > delivered run: `W` = **45 / 22 / 23 / 27 / 24** over five redraws, two of them narrowings, and the
+  > second is **not** the first redraw — so *"after EVERY redraw, not only the narrowing one"* is
+  > exercised rather than asserted.
+  >
+  > **(2) Both stub routes cost something the real panel does not, and neither cost is stylistic.** A
+  > **third stub seam** falsifies `A18` as written — its first clause is that there are **two** — and
+  > amending a criterion to satisfy a criterion is the change this ticket has refused five times.
+  > Making the **shared** `statusStub` width-varying instead avoids the third seam but changes the
+  > fixture **all 14 table rows** drive through for one row's benefit, which is precisely the mistake
+  > `[D43]` split rows 3 and 16 to stop making. **The real panel adds a run and takes nothing away:
+  > `SHAPE_A` (2/5) and `SHAPE_B` (4/9) both still run, neither is 3/8, and shape `B` remains the only
+  > append-branch run in this tree** — `[D51]` (2) obeyed rather than quoted.
+  >
+  > **(3) The evidence is STRICTLY STRONGER, and that is the ratification's real ground.** A stub
+  > narrowing proves the criterion fires at a narrowing someone invented. The real panel proves
+  > `ADR-0010`'s defect — *"`material: 0` rendered as `material: 01`, an expired draw claim left on
+  > screen"* — is **reachable in the composition this project ships**. That is the one thing `A20`
+  > exists to check and no stub can supply it.
+  >
+  > **(4) THE COST, STATED, BECAUSE IT IS REAL.** `A20`'s evidence now depends on the real status
+  > panel keeping a claim cell that appears and disappears. **If a later hop removes or reshapes that
+  > cell the fixture stops narrowing** — which is why the test **asserts the narrowing exists**
+  > (`src/turn-loop.test.ts:1431-1437`, verified at source) and fails **loudly** instead of passing
+  > vacuously. Vacuity is the exact failure this bullet was written to prevent, so the delivered
+  > fixture serves the bullet's purpose better than the bullet's own prescription did. **That
+  > assertion is now part of row 18's Expected and must not be removed as redundant.** Owner of the
+  > coupling: whoever next changes `src/status-panel.ts`'s claim cell — flagged at `ABC-016`'s door in
+  > `## Definition of Ready`, not taken here.
 - **`N8-LANE` does not move on any of this, and the reason is the FILE count.** Rows 15–18 are four
   rows in the **existing** table-driven file, and `A20`'s screen model rides in the file `A19`'s
   `vi.mock` already requires. **ZERO new test FILES.** At 159–179 ms CPU per file against a 650 ms
@@ -1934,6 +2070,45 @@ recorded, and it is a **build-edge fact, not a value change**: there is still no
 loop. **What DOES move is `ABC-029`'s priority, and that is BA/PM's to move and is done at this hop:
 `P2` → `P1`**, because its own `P2` derivation rests on the sentence *"Production runtime importers
 are zero, measured"* and that figure is now **ONE**, measured here.
+
+**RE-DERIVED A SEVENTH TIME 2026-08-12 for the two flagged sentences and the cl. 9f discharge
+(`[D53]`, `[D54]`, `[D55]`): `L` (5) HOLDS, `P0` HOLDS, and `SPLIT_REQUIRED` was tested against the
+real question rather than against the precedent.**
+
+**The standing tripwire is answered on its own terms, not stepped around.** Its words are *"a hop
+that adds production scope beyond one guard should re-derive size against `SPLIT_REQUIRED` seriously
+rather than by precedent"*:
+
+- **Production scope added: ZERO, in the strong form.** No criterion is added, amended, renumbered or
+  deleted — the count stays **27** and the table stays **18 rows**. `src/` was not opened for edit at
+  all; `src/turn-loop.ts` md5 `bd793612…` is unchanged and `git diff main -- src/` touches only the
+  three `turn-loop` files this branch already owned. **Three text rulings, and the largest of them
+  RATIFIES what was already built rather than commissioning anything.**
+- **Test scope added: ZERO.** No new file, no new row, no new assertion. `[D54]` moves a sentence to
+  match a delivered fixture and **changes no test**; `[D53]` and `[D55]` are records. `N8-LANE`'s
+  binding risk is the FILE count and the file count does not move — the delivering hop added **zero**
+  test files and its measured lane was **1.96 s wall / 10.01 s CPU** (medians of nine) against
+  `ADR-0008`'s 3 s / 13 s, with the paired delta **+100 ms = +1.00%** against `N8-LANE`'s 650 ms.
+  **`MET`/`MISS` remains Security/NFR's at the gate; this ticket has still never been through one.**
+- **Risk: DOWN, and in one specific place.** Two holds this ticket had carried for three hops
+  (`A20` on `ABC-027`, cl. 9f's real-panel run) are **discharged and now say so**, so the next reader
+  does not re-derive whether they are live. **One NEW coupling is created by the ratification and it
+  is recorded rather than absorbed:** `A20`'s fixture depends on the real status panel's claim cell,
+  mitigated by an assertion that the narrowing EXISTS (`[D54]` (4)). That is a smaller exposure than
+  the vacuous pass a stub fixture could have delivered silently.
+
+**`XL` (8) is still exactly one thing away and nothing moved toward it:** folding in `ABC-021`'s
+claim outcome, `ABC-018`'s frame output or `ABC-012`'s history module. **`SPLIT_REQUIRED` tested
+against the honest question — is a second ticket hiding here? — and the answer is the same one the
+sixth hop found: YES, and it is already `ABC-029`, with `ABC-028` before it.** The one candidate this
+hop could have created is *"re-fixture `A20` against a stub"*, and it is **not a ticket**: it has no
+user, no value independent of this loop, produces no artifact, and would spend a hop to make the
+evidence weaker.
+
+**Priority `P0` HOLDS.** Nothing here touched value. Two discharged holds move **readiness**, not
+value — the same distinction the fifth hop drew for `ABC-016`'s merge — and the one live blocker is
+another ticket's, recorded in `## Dependencies` rather than repriced here. **No other ticket's
+priority is touched by this hop; `ABC-029` was NOT opened** (a concurrent BA/PM hop is live on it).
 
 ## Definition of Ready
 
@@ -2314,3 +2489,63 @@ Neither is in this ticket's own tests, and no test of this ticket fails.**
     merge record are dated **2026-08-12**. This hop used the true clock in its own text rather than
     matching the record, and edited nothing to make the two agree. **The rebase hop recorded the same
     defect independently; two roles have now seen it.**
+    > **CLOSED 2026-08-12 (seventh hop) — it was a TIMEZONE, not a drift, and it is retracted rather
+    > than carried.** Measured here: `date -u` reads **2026-08-11T21:38Z** and `date` reads
+    > **2026-08-12 00:38 EEST (UTC+03:00)** — the same instant. **The board and this ticket are dated
+    > in LOCAL time; the context notes stamp UTC**, and the gap is the offset across local midnight.
+    > **Nobody's records are a day ahead, nothing was edited into agreement, and no later hop should
+    > re-derive this.** Flags 14, 16, 19 and 20 are **CARRIED unchanged and none was re-verified
+    > here**; flag 21 is carried and is now one hop older (see item 24 below).
+
+### DoR re-check 2026-08-12 (SEVENTH hop) — two sentences the delivering Engineer flagged, and an obligation that was met and not recorded
+
+**This hop wrote no criterion, changed no code and ran no gate it could pass.** It ruled two ticket
+sentences the delivery falsified and recorded one discharge. **The lane is RED and stays RED:**
+re-run here, **2 failed / 794 passed (796), 1 file failed / 27 passed (28), skip 0** — both failures
+are `ABC-029`'s in `src/history-pane.nfr.test.ts` (`:247`, `:328`). **`npx vitest run
+src/turn-loop.test.ts` is 48/48.** Every figure below was measured at this hop.
+
+| # | Ruling | Falsified by / evidence | Changes code? |
+|---|---|---|---|
+| 1 | **`[D53]` — row 18's Expected was stale in EVERY clause** and read as though the row were meant to be RED. Repaired as a **record + a check**, not as a fresh status; the sibling sentence *"the only one blocked on another ticket"* and the `ABC-027` bullet's instruction are dated with it | **`ABC-027`'s merge** — `src/frame.ts:239` writes `\x1b[K` per row in the in-place branch, `frame.ts` byte-identical to `main`; rebase done, 0 behind; `A20` GREEN at both widths | **no** |
+| 2 | **`[D54]` — the REAL panel replaces the prescribed STUB in `## Test notes`, RATIFIED.** The prescribing sentence encoded a tree in which neither panel existed. Both stub routes still cost something (a third seam falsifies `A18`'s *"there are two"*; a width-varying shared stub changes the fixture 14 rows drive through), the real claim cell narrows **45 → 22** for a domain reason, and the evidence is strictly stronger. **The sentence changes; the test does not** | `src/status-panel.ts:163-178` read at source; `SHAPE_A`/`SHAPE_B` both still run at `src/turn-loop.test.ts:297-299,1363-1390`; the existence assertion at `:1431-1437` | **no** |
+| 3 | **`[D55]` — `ADR-0009` cl. 9f is DISCHARGED IN FULL and the ticket did not say so.** `[D51]`'s *partial* language is retired and the sentence it demanded — **WHICH panels were real: BOTH** — is now in the two places the obligation was recorded. `HISTORY_ROWS = 8`'s `UNKNOWN - verify` is retired **by measurement** | `STATUS_ROWS = 3` (`src/status-panel.ts:71`), `HISTORY_ROWS = 8` (`src/history-pane.ts:70`), both on merged `main`; `git diff main -- src/` touches only the three `turn-loop` files | **no** |
+
+| # | Item | Verdict | What changed, and the evidence |
+|---|---|---|---|
+| 4 | acceptance testable + measurable | ✅ | **27 criteria, UNCHANGED** — none added, amended, renumbered or deleted; the table stays **18 rows**. **`A20` is not amended by `[D54]`**: its Given/When/Then never named a stub, the stub lived only in `## Test notes`, and `[D47]`'s width prohibition is untouched — `W` varies 45/22/23/27/24 in the delivered fixture, which is the opposite of the constant-width claim it forbids. **`A18`/`A19` re-read against the real-panel run and explicitly NOT amended** |
+| 5 | dependencies known | ⚠️ | **Two of the three carried holds are DISCHARGED** — `A20` on merged `ABC-027`, and cl. 9f's real-panel run (`[D55]`). The `⚠️` stays for the third: **`ABC-029`, with `ABC-028` ordered before or with it**, unchanged from the sixth hop and **not re-verified here — `ABC-029` was not opened, a concurrent BA/PM hop is live on it.** One NEW coupling is recorded: `A20`'s fixture depends on `src/status-panel.ts`'s claim cell (item 23) |
+| 7 | test notes | ✅ | **18 rows, unchanged. No row added, none deleted, one Expected cell repaired (`[D53]`) and one bullet's prescribing sentence replaced (`[D54]`).** Row 18's Expected now carries the assertion that makes it non-vacuous |
+| 8 | size | ✅ | `L` (5), **re-derived a seventh time and unmoved** — zero production scope, zero test scope, and the tripwire answered on its own terms. See `## Size and priority rationale` |
+| 9 | priority | ✅ | `P0`, unmoved. Discharged holds move **readiness**, not value. **No other ticket's priority was touched** |
+| 10 | no major unresolved blocker | ❌ | **Unchanged and still a genuine `❌`: the suite is RED and the repair belongs to another ticket.** Route to green is unchanged — **`ABC-028` → `ABC-029` → rebase → re-run**. What changed is that **nothing on this route is now waiting on this ticket**: its own work is complete as written, at zero production lines |
+
+**Items 1, 2, 3 and 6 are unchanged by this hop.** Item 6 is stated explicitly because it is the one
+a text hop could damage silently: **no bar, target or level moved, none was created and none was
+loosened**, `plans/nfr-catalog.md` was **not opened for edit**, and `N8-LANE` does not move because
+**zero test files were added**.
+
+> **REQUESTED: NO FORWARD MOVE. `ABC-019` stays in `In Development`, blocked on `ABC-029`** — the same
+> position the delivering Engineer requested and the sixth hop ruled, and this hop found no reason to
+> change it. `quality.gate_enforcement` is `blocking` and `npm test` is RED; **a blocking gate does
+> not read the reason.** The `Blocked` column remains the Orchestrator's call and the reason is
+> recorded either way. **`plans/board.md` was not opened or edited by this hop.** The front matter is
+> left at `in-development` / `In Development`, which is where the live board already has it.
+
+**Flags after this hop. Four are carried, one is closed, and two are new:**
+
+23. **NEW — `A20`'s fixture is COUPLED to `src/status-panel.ts`'s claim cell, and the coupling is
+    recorded rather than removed.** `[D54]` (4) is the ruling; the mitigation is
+    `src/turn-loop.test.ts:1431-1437`, which asserts the narrowing exists and fails **loudly** if the
+    cell ever stops narrowing. **Owner: whoever next changes that cell — `ABC-016`'s module.
+    `ABC-016` was NOT opened by this hop and nothing is owed to it today**; this is a note for the
+    hop that touches the claim cell, not a defect in either ticket.
+24. **NEW — the front matter and the board now AGREE, and flag 21 is therefore narrower.** Flag 21
+    recorded `in-review` / `In Review` against a live `In Development`. **This branch's front matter
+    reads `in-development` / `In Development`** and was not edited here. **Whether this branch's
+    `plans/board.md` is still one hop stale was NOT re-checked — `plans/board.md` was not opened, and
+    board hygiene remains the Orchestrator's.**
+25. **CLOSED — flag 17, the re-gate's completion test.** `[D51]` asked a cl. 9f re-gate to report
+    **which panels were real**; it ran, both were real, and `[D55]` records it in the ticket.
+    **Nothing is owed to the Orchestrator or QE by that flag any more.** Flag 22 is closed separately,
+    above, as a timezone artifact.
