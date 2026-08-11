@@ -337,11 +337,73 @@ exactly what `ADR-0009` clause 9 got it out of.
   routes it.** The module header's sentence at `:27-29` — *"…without emitting a per-row erase"* —
   becomes false with the change and is edited with it.
 
-- **Three test changes ride with that production line, and one of them is not optional.** Merged
+- ~~**Three test changes ride with that production line, and one of them is not optional.**~~ Merged
   `src/frame.test.ts`'s screen model **throws on any escape it does not implement** (`:187-188`,
   `:232-236`) — a deliberately good design — so it **must** learn `\x1b[K` or the suite goes red.
-  `:376`'s `occurrences(redraw, "\x1b") === 2` becomes `2 + (H − 1)` = 24. And the file needs its
-  **first narrowing fixture**: measured, its entire fixture space yields `W` ∈ {18}.
+  `:376`'s `occurrences(redraw, "\x1b") === 2` becomes `2 + (H − 1)` = 24. And the file ~~needs its
+  **first narrowing fixture**~~: measured, its entire fixture space yields `W` ∈ {18}.
+
+  > **[CORRECTED 2026-08-11 at task `design-adr-transcription-fixes`. Three errors in the bullet
+  > above, each found by a different role, and the corrections are written here rather than in place
+  > of the original because the errors are more instructive than the fixes. NO CLAUSE IS RE-OPENED —
+  > clause 1's ruling stands exactly as written, and correction (3) is a defence of it, not a
+  > retraction.]**
+  >
+  > **(1) *"the file needs its FIRST narrowing fixture"* is FALSE.** `src/frame.test.ts:735-771`
+  > already built one — `expect(widthOf(wide)).toBe(24)` and `expect(widthOf(narrow)).toBe(18)`, both
+  > asserted — and it **asserted the DEFECT WAS PRESENT**, being titled *"CHARACTERIZES: `W` is
+  > recomputed per frame, so a narrowing frame leaves the wider one's tail."* Found by BA/PM at
+  > `refinement-ABC-027-cut` and re-verified at source here: the line range is exact on `main` today.
+  > The `W` ∈ {18} sweep is **right and not retracted** — 301 plies × thinking × 4 message shapes — it
+  > simply never covered the one test that passes a bespoke `status:` override into `partsFor`. So the
+  > consequence is sharper than recorded: **the merged suite holds an assertion that no correct build
+  > can satisfy after clause 1.** `ABC-027`'s `A6` has since discharged it and requires it **replaced,
+  > never deleted** — both width assertions surviving byte for byte, the `stale` expectation flipped
+  > to `[]`. It is the sharpest instance yet of this project's most-recorded defect class, and it is a
+  > **tripwire doing its job**: its own comment routes the decision to *"BA/PM +
+  > `ABC-016`/`ABC-017`"*, and this ADR is the day it fires.
+  >
+  > **(2) *"Three test changes"* undercounts, and the miscount hides a MASKING.** Measured at this
+  > hop by applying clause 1 to an out-of-tree copy of merged `src/` and running the suite: **four
+  > assertion sites, carried by three tests, plus the screen model** — five sites in all. `:374`
+  > (`toContain(second.join("\n"))`) and `:376` share the test at `:357`; `:419`
+  > (`toBe(frame.join("\n"))`) is in the test at `:406`; `:768` (the characterization) is in the test
+  > at `:735`. **`:374` and `:419` are not named by the bullet above at all, and `:374` FAILS FIRST
+  > AND MASKS the `:376` the bullet does name.** The screen-model change is the one called
+  > not-optional and the measurement confirms it: with it absent **five tests throw**; with it taught
+  > `\x1b[K` exactly the three assertion-bearing tests fail. **The count *four tests* recorded in the
+  > `refinement-ABC-027-cut` decision note is itself one too many** — its own observation note
+  > tabulates four sites, and three tests is what running it yields. Recorded rather than transcribed,
+  > because transcribing a count is what produced this bullet.
+  >
+  > **(3) `:376`'s *"= 24"* is the number for an emission form that has since been REJECTED, and
+  > clause 1 is NOT the thing that was wrong.** The Security/NFR gate returned this project's first
+  > FAIL on `ABC-027` (`abc027-fail-2026-08-12`). Clause 1 prescribes a **per-row erase**; the
+  > delivered form fired it **at the right margin**, and on a real terminal — measured on **GNU screen
+  > 5.0.2**, with `xenl` declared by xterm, screen, vt100 and xterm-256color — that **erases the last
+  > cell of every row at a window exactly `W` wide**. At `W` = 18 the delivered writer lost the entire
+  > h-file and its label from all nine board rows, while merged stayed clean beside it on the same
+  > instrument. The fix moves the erase to **column 0**, where the margin state cannot exist.
+  >
+  > **Clause 1 is not wrong and is not re-opened: it never said WHERE IN THE ROW the erase fires.**
+  > It rules that the consumer clears each row as it writes it, and that ruling is untouched — the
+  > gate confirmed the ticket's own value on the same emulator, with the narrowing residue gone under
+  > the delivered writer. What moves is arithmetic downstream of a placement the clause left open, and
+  > it moves by three characters. Re-measured here on both forms at `H` = 23:
+  >
+  > | emission | `\x1b` count | `\x1b[K` | `\x1b[0J` | cost vs merged |
+  > |---|---|---|---|---|
+  > | right margin — `CURSOR_HOME + rows.join(EL + "\n") + ED` | 24 = `2 + (H − 1)` | 22 = `H − 1` | 1 | **+66** = `(H − 1) × 3` |
+  > | **column 0 — `CURSOR_HOME + EL + rows.join("\n" + EL) + ED`** | **25 = `2 + H`** | **23 = `H`** | 1 | **+69** = `H × 3` |
+  >
+  > So **`:376` becomes `2 + H` = 25, not 24**, and clause 1's own *"+66 characters (`(H − 1) × 3`)"*
+  > — repeated in the `NFR-002` bullet below — is the right-margin figure; the delivered cost is
+  > **+69 = `H × 3`**. **Clause 1's text is deliberately NOT edited here**: the byte shape is pinned on
+  > a ticket, not in this ADR, and `ABC-027`'s `A1` currently pins the unsafe form byte for byte, so
+  > **BA/PM must re-derive `A1` from `H` — never by relaxing it**, since QE measured `A1` as where 9
+  > of 14 mutants die. **`NFR-002` does not move**: the gate measured +66 at +0.13/+0.15 µs, 0.0009%
+  > of the 16 ms budget, and three more characters do not reach it. The set of broken assertion sites
+  > is **identical under both forms** — measured, not assumed; only `:376`'s value differs.
 
 - **`ABC-016` is owed NOTHING that changes a criterion, and needs zero production lines.** The width
   question is answered against it and it is clear. One rationale sentence is stale — `A7`'s stated
@@ -376,7 +438,9 @@ exactly what `ADR-0009` clause 9 got it out of.
   not move and no bar is created, moved or loosened. Clause 1 adds **+66 characters per frame,
   exactly and always** — irrelevant against a 16 ms budget, and recorded so the row's serialized-length
   figures are not later read as stale for an unknown reason. Recorded in the catalog's `NFR-002`
-  section; **no table row byte is touched.**
+  section; **no table row byte is touched.** *(**+66 is the right-margin figure**; the column-0 form
+  the Security/NFR gate requires costs **+69** = `H × 3` — see correction (3) above. The target still
+  does not move: the gate measured +66 at 0.0009% of the 16 ms budget.)*
 
 - **What this ADR does NOT decide.** `HISTORY_COLS`'s value stays the engineer's, subject to
   `ABC-017`'s stated requirement — clause 6 keeps `A2`, it does not choose a number. Nothing about

@@ -380,6 +380,21 @@ loop code, unchanged, then ran against three real-geometry seams** and chose cor
 9/3/8 → 23 in-place; status 4 → 24 in-place; history 10 → **25 append**, no viewport overflow in any
 case.
 
+> **[TRANSCRIPTION CORRECTED 2026-08-11 at task `design-adr-transcription-fixes`. The experiment
+> STANDS, it was NOT re-run at this hop, and no clause is re-opened.]** The seam this experiment
+> drove carried the **three** arguments `ABC-019`'s `## Scope` then stated; that ticket now specifies
+> a **fourth** (`messages: readonly string[]` — see the block under 9b). **Neither conclusion a later
+> reader is likely to draw from the mismatch is right: the ticket did not drift, and the experiment
+> is not invalid.**
+>
+> Every figure above is a **height** — `distinctHeights: [19]`, and 23/24/25 with the strategy each
+> requires — and heights are **invariant under the message region** by (i) of this same list (0, 1,
+> 200 and a 100,000-character item all give `H` = 23). That invariance was re-measured at
+> `abc019-a9b-2026-08-11` **at (vii)'s own 2/5 and 4/9 stub geometries**, so a fourth argument
+> feeding the message region cannot move a single number here. **Corroborating, and read off the
+> record rather than re-run by this hop:** the delivered `ABC-019` build carries the four-argument
+> seam and reproduces exactly these two stub geometries — 2/5 → `H` 19 in-place, 4/9 → `H` 25 append.
+
 ### Clause 9 — the consumer rule
 
 **9. A consumer of panel rows never names a row count. It reads `.length` from the rows it was
@@ -397,6 +412,30 @@ whole clause:
   panel constants, live entirely behind that seam where clauses 1–6 already govern them. **This is
   not a new seam: it is the seam that ticket already specifies, and clause 9 is the ruling that the
   count must not cross it.**
+
+  > **[TRANSCRIPTION CORRECTED 2026-08-11 at task `design-adr-transcription-fixes`. NO CLAUSE IS
+  > RE-OPENED: this fixes what the sentence QUOTES, not what it rules.]** The three-argument
+  > signature above is `ABC-019`'s `## Scope` **as that ticket read when this amendment was
+  > written**. It has since gained a fourth argument — `(GameHistory, GameStatus, thinking, messages:
+  > readonly string[]) => readonly string[]` — and it was **forced, not chosen**: `A5` requires the
+  > ambiguity candidate list to reach the frame's MESSAGE REGION and the seam has no second output
+  > channel, so the three-argument form cannot satisfy the ticket's own criterion.
+  >
+  > **9b is unaffected by its own words.** It defers the signature to the ticket and rules only that
+  > the row COUNT must not cross the seam — and that ruling was re-established **by measurement** at
+  > `abc019-a9b-2026-08-11` rather than by assertion: `layoutMessageRegion` returns exactly
+  > `MESSAGE_ROWS` rows in every branch, so assembled height is a **single** distinct value across
+  > 0/1/4/200 items and a 100,000-character item at geometries 2/5, 4/9, 3/8 and 3/10. **A `messages`
+  > argument cannot carry a row count.** So the ticket did not drift from this clause; the clause
+  > pointed at the ticket, and the ticket moved where the clause said it may.
+  >
+  > **One attribution, because two nearby sentences are easy to merge and they are NOT the same
+  > sentence.** *"The seam is not new and its arguments do not change"* is the **TICKET's** `[D27]`
+  > (`plans/tickets/ABC-019-turn-loop-skeleton.md:242` as `main` reads today) — **not this ADR's** —
+  > and it is the half the fourth argument falsifies, so repairing it is BA/PM's on the ticket. This
+  > ADR's own sentence is the one immediately above this block: *"this is not a new seam: it is the
+  > seam that ticket already specifies."* The fourth argument **confirms** that sentence rather than
+  > contradicting it.
 - **(9c) A test double for that seam lives in a TEST file, never in `src/` as a production module.**
   Merged `src/frame.test.ts` is the precedent — `statusStub` / `historyStub` are local functions in
   the test file, and the two unbuilt panels *"enter as fixed-height stubs"* there. A `src/` stub
