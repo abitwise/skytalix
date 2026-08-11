@@ -160,6 +160,51 @@ feature: —
 > fixed by the Orchestrator this hop and is **no longer flagged**. **`memory-bank/50-decisions/` was not
 > edited: `ADR-0009` and `ADR-0010` were read only and neither is re-opened.**
 
+> **AMENDED 2026-08-12 (FIFTH hop) by BA/PM — one sentence in `[D27]`, and what `ABC-016`'s MERGE
+> invalidated in the same block** (task `adr-done-2026-08-12`, subtask `refinement-ABC-019-d27`,
+> Workflow 07). **Targeted, TEXT-ONLY, and it adds NO production scope:** no criterion `A1`–`A20` is
+> added, amended, renumbered or deleted, the count stays **27**, the table stays **18 rows**, and size
+> `L` (5) / priority `P0` are re-derived a **fifth** time and **UNMOVED**.
+>
+> **THE DEFECT THIS HOP WAS SENT TO FIX WAS ALREADY FIXED ON THIS BRANCH, AND SAYING SO IS THE POINT.**
+> The brief named `[D27]`'s *"the seam is not new and its arguments do not change"* as falsified by the
+> fourth argument. **It is — on `main`.** On this branch the **THIRD** hop repaired it to *"…its RETURN
+> does not change"* in the same commit that added `[D28]` (added `4977d86`, repaired `a2bfd7e`), and
+> flag 8 of that hop's DoR block already says so in writing. **`main` still carries the false sentence
+> at `:242` because this ticket merges LAST**; this branch's merge is what discharges it, and no other
+> artifact consumes it — `ADR-0009` cl. 9b's quote of it is now dated as *the ticket as it then read*.
+> **Both tips were read at source at this hop. Nothing was inferred from the brief.**
+>
+> **What WAS left is a repair whose own baseline was never stated, and that is a real defect —
+> `[D49]`.** *"Its RETURN does not change"* is unanchored: `[D27]`'s own first sentence says
+> `readonly string[]` *"appears nowhere in this ticket's previous text"*, so there is no earlier value
+> **in this ticket** for the return to be unchanged FROM. Read against the ticket the sentence is
+> vacuous; read against the delivered BUILD and cl. 9b it is true and checkable. **It now says which,
+> and it carries the fourth argument's qualifier in its own words — because this is the sentence that
+> was lifted out of context into an ADR once already, and a sentence that has been quoted alone must
+> survive being quoted alone.**
+>
+> **`ABC-016` MERGED, and that invalidated a MEASURED claim in the same block — `[D50]`.** `[D27]`'s
+> IMPORTED bullet rests on *"`TS2307` × 2, exit 2 … that is self-enforcing and needs no criterion of
+> its own"*. **Re-measured at this hop against merged `src/`: `TS2307` × 1, and importing `STATUS_ROWS`
+> ALONE now typechecks clean at exit 0.** The self-enforcement is decaying and is **GONE the moment
+> `ABC-017` merges — which is BEFORE this ticket merges.** What actually kills the IMPORTED form is
+> `A18`(i) + `A19`(b), and that is measured rather than argued. **No criterion changes, none is added,
+> and `A19` still carries no import clause.**
+>
+> **`ADR-0009` cl. 9f's re-gate is CONFIRMED recorded in the two places a rebase hop will look, and it
+> is now sharper — `[D51]`.** A **partial** swap is possible today; **full discharge still needs
+> `ABC-017`.** And the re-gate **ADDS** a real-panel run — it never **REPLACES** `A18`'s two stub
+> shapes. Measured at this hop: the real pair is `3/8` → `H` = **23**, in-place, so a suite that swapped
+> the stubs out would retain **no run of the append branch at all**, which is the exact landmine clause
+> 9d exists to disarm.
+>
+> **Nothing under `src/` was written** — `git status --porcelain src/` = **0 lines** before and after,
+> and every measurement ran on an out-of-tree copy verified byte-identical to the worktree. **`ABC-017`,
+> `ABC-027`, `plans/board.md` and `memory-bank/50-decisions/` were not opened for edit; no ADR is
+> re-opened.** Baseline re-verified here after the rebase: **758/758 on 26 files**, and it moved from
+> 723/723 **because `ABC-016` merged**, not because anything here changed.
+
 ## Problem
 
 *User*: everyone. Without this there is no game — there are a renderer and a rules library.
@@ -403,7 +448,17 @@ loop:
   > seam's arguments and stops. `ADR-0009` clause 9b reads the return off *"the seam this ticket
   > already specifies"*, so it is recorded here rather than left to be inferred: **a seam that writes
   > instead of returning leaves the loop holding no rows, and then the session height cannot be
-  > derived and `A19` cannot be asserted at all.** The seam is not new and its RETURN does not change.
+  > derived and `A19` cannot be asserted at all.** **The seam is not new — cl. 9b says so in its own
+  > words, *"it is the seam that ticket already specifies"* — and recording its return moves nothing,
+  > because `readonly string[]` is what the delivered seam ALREADY returns (`RenderSeam`,
+  > `src/turn-loop.ts:97-102`) and what cl. 9b reads off this ticket. The return is stated here for the
+  > FIRST time, not restated, so "moves nothing" is measured against the BUILD and the ADR and never
+  > against this ticket's previous text, which named no return at all. Its ARGUMENT LIST is a separate
+  > question and it DID change: `[D28]` below adds a fourth argument.** *(**[REPAIRED AGAIN 2026-08-12
+  > (fifth hop) — `[D49]`.]** This sentence read *"the seam is not new and its arguments do not
+  > change"*, which the fourth argument falsified; the third hop repaired it to *"…its RETURN does not
+  > change"*, which is true but has no stated baseline. **`main` still carries the FIRST version at
+  > `:242` — this branch's merge is what discharges it.**)*
   >
   > **[D28 — the three-argument form was UNSATISFIABLE against `A5`, and the fourth argument is FORCED
   > by this ticket's own sentences rather than chosen. Ruled 2026-08-11 (third hop).]** The signature
@@ -432,12 +487,21 @@ loop:
   >   mutants, and on two of them it is a live `4b` breach** — told 23, `beginFrameSession` chooses
   >   in-place and the loop emits **25 rows into a 24-row viewport**, so the frame origin scrolls off
   >   the top and epic acceptance `4b` becomes unreachable. Re-measured at this hop, not transcribed.
-  > - **IMPORTED** (the loop imports `STATUS_ROWS` / `HISTORY_ROWS`) **is mechanically impossible while
-  >   the panels are unbuilt** — `TS2307` × 2, **exit 2**, and an unrelated file in the same program is
+  > - **IMPORTED** (the loop imports `STATUS_ROWS` / `HISTORY_ROWS`) **was mechanically impossible while
+  >   BOTH panels were unbuilt** — `TS2307` × 2, **exit 2**, and an unrelated file in the same program is
   >   red with it because `npm run typecheck` is project-wide and `typecheck` is in
-  >   `quality.mandatory_gates` under `gate_enforcement: blocking`. **That is self-enforcing and needs
-  >   no criterion of its own**, which is why `A19` does not carry an import clause. It also means a
-  >   stub that EXPORTS the two constants is the third declaration site in person — forbidden by 9c.
+  >   `quality.mandatory_gates` under `gate_enforcement: blocking`. It also means a stub that EXPORTS the
+  >   two constants is the third declaration site in person — forbidden by 9c.
+  >   **This bullet previously added *"that is self-enforcing and needs no criterion of its own, which is
+  >   why `A19` does not carry an import clause"*, and THAT half is now WRONG — the enforcement is
+  >   expiring on the merge order** (`[D50]`, fifth hop, re-measured rather than re-read). With `ABC-016`
+  >   merged the count is **`TS2307` × 1**, and importing `STATUS_ROWS` **alone** typechecks clean at
+  >   **exit 0**; when `ABC-017` merges it is **× 0**, and both merge **before this ticket does**. **What
+  >   kills the IMPORTED form at this ticket's gate is `A18`(i) + `A19`(b), not the compiler:** the
+  >   imported arithmetic yields `frameHeight({board 9, status 3, history 8})` = **23** while `A18`'s
+  >   shapes give first frames of **19** and **25**, so `A19`(b) is RED under both — measured at the fifth
+  >   hop. **That is why `A19` still needs no import clause, and the reason is now a criterion rather than
+  >   a build accident. `A19` is NOT amended.**
   > - **DERIVED is the only form both buildable against stubs and correct at the swap.** The identity
   >   `assembleFrame(parts, mode).length` == `frameHeight({...the three lengths})` holds over **560
   >   shapes with 0 mismatches** — **Architect/Design's measurement** at `design-stub-seam-and-nfr002`,
@@ -447,9 +511,41 @@ loop:
   >   safe whatever that frame happens to carry.
   > - **The two panels enter as stub seams in a TEST file, never as a `src/` module** (9c). Merged
   >   `src/frame.test.ts` is the precedent — `statusStub` / `historyStub` are local functions there
-  >   (`:55-78`) and the two unbuilt panels *"enter as fixed-height stubs"*. A `src/` stub module would
-  >   be production code that is dead the day the real panels land, and coding rule 12 would then have
-  >   it flagged rather than removed, so it would linger.
+  >   (`:55-78`, line range **re-verified exact at the fifth hop**) and its header comment reads
+  >   *"THE TWO UNBUILT PANELS ENTER AS FIXED-HEIGHT STUBS"* (`:11`, quoted at source). A `src/` stub
+  >   module would be production code that is dead the day the real panels land, and coding rule 12 would
+  >   then have it flagged rather than removed, so it would linger.
+  >
+  > > **[D49 / D50 — THE REST OF THIS BLOCK WAS RE-AUDITED SENTENCE BY SENTENCE AT THE FIFTH HOP, AND
+  > > WHAT SURVIVED IS RECORDED SO THE NEXT HOP DOES NOT RE-DERIVE IT.]** Two claims here have now been
+  > > falsified by two DIFFERENT events — the fourth argument (`[D28]`) and `ABC-016`'s merge — so
+  > > "checked once" was not enough and the check is written down.
+  > >
+  > > **Falsified and repaired:** `[D27]`'s closing sentence (`[D49]`, twice now) and the IMPORTED
+  > > bullet's self-enforcement half (`[D50]`).
+  > >
+  > > **Checked and STILL TRUE, each re-verified rather than assumed:**
+  > > - *"the bullet above states the seam's arguments and stops"* — **true today**: the bullet above
+  > >   lists four inputs and states no return. The third hop struck the word *"three"* from it and that
+  > >   was the right edit; no further one is owed.
+  > > - *"`readonly string[]` appears nowhere in this ticket's previous text"* — a claim about the text
+  > >   **before** `[D27]`, unaffected by anything after it.
+  > > - **DECLARED** and **DERIVED** — both are row-count arguments and a `messages` argument carries no
+  > >   row count (`[D28]`, measured). `frameHeight` still takes **exactly three lengths**
+  > >   (`{board, status, history}`, `src/frame.ts:84-88`, read at source here), so *"the three lengths"*
+  > >   is still the right phrase — **the fourth argument went to `assembleFrame`'s message region, not
+  > >   to `frameHeight`.** Re-measured at this hop: a `3/8` frame assembles to **23 rows with 0 message
+  > >   items and 23 with 4**.
+  > > - **9c's stub-in-a-test-file rule** — unaffected by both events. Its `:55-78` citation is exact.
+  > > - **`[D26]`** (`## Out of scope`) — re-read in full and untouched by either event: it is about
+  > >   where the WRITE lives, and neither the fourth argument nor a merged panel moves it.
+  > >
+  > > **Flagged, NOT taken — it is `src/` and it is another ticket's file.** Merged `src/frame.test.ts`
+  > > says *"`ABC-016` is unbuilt"* (`:54`), *"stubs for the two unbuilt panels"* (`:51`), *"`ABC-016`
+  > > and `ABC-017` are unbuilt"* (`:671`) and *"`ABC-016` (status, 3 rows) … do not exist"* (`:11`).
+  > > **`ABC-016` merged, so four comments in `ABC-018`'s merged file are now stale.** This ticket does
+  > > not open `src/frame.test.ts` and an Engineer is live in it for `ABC-027`. **Owner: whoever next
+  > > has a mandate in that file. Non-blocking, comment-only, no assertion depends on it.**
 - **Stdin EOF terminates the loop cleanly**: the loop stops, a one-line *input ended* notice is
   emitted, and the process exits **0**.
 - **On any exception thrown by either seam, the position is rebuilt by replay — and the primitive
@@ -1226,8 +1322,13 @@ CI.
   `ABC-021` (the claim path) sits behind this ticket.
 - **`ABC-016`, `ABC-027` and `ABC-017` — `ABC-016`/`ABC-017` added 2026-08-11 (`[D22]`), `ABC-027`
   added 2026-08-11 at the fourth hop (`[D48]`); `ABC-016` is a CORRECTNESS dependency, not merely a
-  render one, and `ABC-027` is a CORRECTNESS dependency of `A20` specifically.** All three are
-  unmerged. The merge order is **`ABC-016` → `ABC-027` → `ABC-017` → `ABC-019`** — three of four
+  render one, and `ABC-027` is a CORRECTNESS dependency of `A20` specifically.** *(This read **"All
+  three are unmerged"** until the fifth hop, when it became false — `[D51]`. **It is not replaced with
+  today's status, because a status copied into a ticket is exactly `[D21]`'s defect and it would be
+  stale again by the next merge.** It is replaced with the CHECK: **a panel is unmerged for this
+  ticket's purposes exactly while its module is absent from merged `src/` — test it, do not trust this
+  sentence.** At the fifth hop `src/status-panel.ts` was present and exported `STATUS_ROWS` and the
+  history-pane module was absent.)* The merge order is **`ABC-016` → `ABC-027` → `ABC-017` → `ABC-019`** — three of four
   established at this task's scheduling hop
   (`.grugops/context/frame-merge-order-2026-08-11/notes/…-orchestrator-decision-ac72dd8d`) and
   `ABC-027` inserted **second** when it was cut from `ADR-0010`. **This ticket merges LAST in all
@@ -1262,9 +1363,13 @@ CI.
     > in `ABC-016` was read for a ruling, inferred, or edited by this hop, and no message passed between
     > the two: this is a flag for the Orchestrator to re-check after both hops land, not a claim about
     > what the other hop will decide.**
-  - **`ABC-017`** supplies `HISTORY_ROWS`; `ABC-016` supplies `STATUS_ROWS`. Neither exists in merged
-    `src/` today, which is why this loop is **built** against fixed-height stub arrays for both panels
-    (verified at this hop) and **merged** after both. **This loop reads neither constant, and after
+  - **`ABC-017`** supplies `HISTORY_ROWS`; `ABC-016` supplies `STATUS_ROWS`. *(This read **"Neither
+    exists in merged `src/` today"** and it is **half false since `ABC-016` merged** — `[D51]`, fifth
+    hop, measured: `STATUS_ROWS = 3` is exported from `src/status-panel.ts:71` and the history-pane
+    module is still absent. `HISTORY_ROWS = 8` is **`UNKNOWN - verify` at the rebase** — the board
+    records that value for `ABC-017` and this hop did not open that ticket to confirm it.)* This loop is
+    **built** against fixed-height stub arrays for both panels and **merged** after both. **This loop
+    reads neither constant, and after
     `ADR-0009` clause 9 that is a rule and not an accident: there is NO import edge to either panel in
     production or in test, so the project-wide blocking `typecheck` gate stays free of the merge order
     for this ticket too, and the owner's parallel-build directive is structurally supported rather than
@@ -1278,6 +1383,31 @@ CI.
     stub 4/9, real 3/8, real 4/8 and real 3/10 — so what a re-gate is actually testing is the **seam
     wiring**, and only a real-panel run tests that. **Sequencing, and the re-gate itself, is the
     Orchestrator's and QE's: flagged here, not owned here.** `[C9-4]`
+
+    > **[D51 — cl. 9f's re-gate is PARTIALLY DISCHARGEABLE NOW, and the sentence above admits a build
+    > that would delete this ticket's only append run. Ruled 2026-08-12 (fifth hop).]**
+    >
+    > **(1) The swap is now PARTIAL, and partial is not discharge.** The real **status** panel is in
+    > merged `src/` (`src/status-panel.ts`, `STATUS_ROWS = 3` at `:71`, read at source at this hop); the
+    > **history** pane is not. So the status half of the wiring can be re-gated at the next rebase and
+    > **the obligation is NOT closed until `ABC-017` is merged too.** A re-gate that swaps one panel and
+    > reports cl. 9f discharged has tested half the seam. **Whoever runs it states WHICH panels were
+    > real.**
+    >
+    > **(2) The re-gate ADDS a real-panel run; it never REPLACES `A18`'s two stub shapes — and this is
+    > measured, not a preference.** Read literally, *"not rebase and re-run against the stubs"* invites
+    > deleting the stubs, and **that build cannot satisfy `A18` at all**: clause (i) forbids a status
+    > count of **3** and a history count of **8**, which is exactly what the real pair is. Worse, it is
+    > the landmine clause 9d exists to disarm — **measured here against merged `src/`: the real `3/8`
+    > pair assembles to `H` = 23 (≤ 24 → in-place), so a suite with only real panels never exercises the
+    > append branch once**, while `A18`'s shape `B` (4/9 → 25) is the only run in the tree that does.
+    > **`A18` and `A19` are NOT amended by this note.** Clause 9f asks for a real-panel run **in
+    > addition**; the stub shapes are what make the criteria falsifiable and they stay.
+    >
+    > **(3) The typecheck gate is no longer the thing that stops the loop importing the panels** — see
+    > `[D50]`. At the re-gate BOTH panels exist and importing them is exit 0, so the protection is
+    > `A18`(i) + `A19`(b), which is precisely why the stub runs must survive the swap. **Nothing is owed
+    > to the code by this note; it is an instruction to the re-gate.**
 - **`EPIC-006`** supplies the human's colour and the glyph flags. The loop takes them as parameters;
   it is not blocked on `EPIC-006`, because a test supplies them directly.
 - **Carried, not owned — `ABC-009`.** The loop calls `legalMoves` **once per ply** through
@@ -1659,6 +1789,39 @@ has held for that reason each time. **A FIFTH hop that adds production scope bey
 re-derive size against `SPLIT_REQUIRED` seriously rather than by precedent.** The trigger is named so
 the next reader does not have to infer it.
 
+**RE-DERIVED A FIFTH TIME 2026-08-12 for the `[D27]` sentence repair and what `ABC-016`'s merge
+invalidated: `L` (5) HOLDS, still not `XL`, still no `SPLIT_REQUIRED` — and `P0` HOLDS.**
+
+**The tripwire above was armed and is answered directly rather than stepped around. It did not fire,
+because this hop adds ZERO production scope — not "one guard", none:**
+
+- **Production: nothing.** No criterion is added, amended, renumbered or deleted; the count stays
+  **27** and the table stays **18 rows**. Three defects (`[D49]`, `[D50]`, `[D51]`) are all text, and
+  the delivered build satisfies every criterion it satisfied before this hop opened. `src/` is
+  byte-untouched.
+- **Test: nothing.** No new file, no new row, no new assertion. `N8-LANE`'s binding risk is the file
+  count and the file count does not move — **the delivered lane is 758/758 on 26 files, and it grew
+  from 723/723 because `ABC-016` MERGED, not because this ticket added anything.**
+- **Risk: DOWN, slightly, and in one specific place.** `[D50]` and `[D51]` remove a protection this
+  ticket believed it had for free. The IMPORTED form was being held out by a compiler error that
+  **expires before this ticket merges**, and the re-gate sentence admitted a swap that would have
+  dropped the only append-branch run in the tree. Both are now named, so neither is discovered at the
+  rebase — which is the one hop where nothing re-checks it.
+
+**`XL` (8) is still exactly one thing away and this hop moved nothing toward it:** folding in
+`ABC-021`'s claim outcome, `ABC-018`'s frame output or `ABC-012`'s history module. **`SPLIT_REQUIRED`
+was tested against the real question rather than the precedent** — *is there a second ticket hiding
+here?* The candidate would be *"re-gate against the real panels"*, and it is **not** a ticket: it has
+no criterion of its own, produces no artifact, and is a **gate step on this ticket's own criteria**
+(`A18`/`A19`/`A20`) that `ADR-0009` cl. 9f already assigns here. Cutting it out would create exactly
+the chain the `INVEST` rule warns about — a ticket that cannot start until three others merge and
+whose whole content is re-running someone else's suite.
+
+**Priority `P0`, unmoved, and for once the argument is not merely repeated.** This hop changed the
+text's fidelity, not the value. The one thing that could move priority — `ABC-016` merging — moves
+**readiness**, not value: it shortens the chain in front of this ticket without changing that there is
+no game without the loop.
+
 ## Definition of Ready
 
 > **The block below is the 2026-08-11 re-check. The version it replaced read every item ✅ and 25
@@ -1908,3 +2071,71 @@ no change, and none is made.** It is one `expect` on `A7`'s existing mate fixtur
     still present at this hop. **Coding rule 12: flagged, not removed** — it predates every hop that
     has seen it and removing it is an unrelated edit no hop has had a mandate for. **If a future hop
     wants it gone, that is a one-line mandate to give.**
+
+### DoR re-check 2026-08-12 (FIFTH hop) — one sentence, and what a MERGE invalidated around it
+
+**This hop is not a re-refinement and it is the smallest of the five.** It was sent to repair one
+sentence. **That sentence was already repaired on this branch two hops earlier**, so the hop's real
+work became auditing the repair — *a repair is an untested claim* — and re-checking the block against
+an event no previous hop could have accounted for: **`ABC-016` merged.** **Three items ruled on. NONE
+changes code, and none adds a criterion.**
+
+| # | Ruling | Falsified by | Changes code? |
+|---|---|---|---|
+| 1 | `[D49]` — `[D27]`'s closing sentence had **no stated baseline**. *"Its RETURN does not change"* is vacuous against this ticket's own text (which named no return) and true against the BUILD and cl. 9b; it now says which, and carries the fourth argument's qualifier | its own first sentence | **no** |
+| 2 | `[D50]` — the IMPORTED bullet's *"self-enforcing … needs no criterion of its own"* is **expiring**. Re-measured: `TS2307` **× 1** today, **exit 0** for `STATUS_ROWS` alone, **× 0** once `ABC-017` merges — all **before** this ticket merges. What kills the IMPORTED form is `A18`(i) + `A19`(b) | **`ABC-016`'s merge** | **no** |
+| 3 | `[D51]` — cl. 9f's re-gate is **partially dischargeable now** and its sentence admitted a swap that **deletes the only append-branch run in the tree** (real `3/8` → `H` = 23, in-place). The swap **ADDS** a real-panel run; it never **REPLACES** `A18`'s stubs | **`ABC-016`'s merge** | **no** |
+
+**The item this hop was briefed on is CLOSED as already-done, and that is written down rather than
+quietly re-fixed.** `[D27]`'s *"…its arguments do not change"* was falsified by `[D28]`'s fourth
+argument and was repaired **at the third hop, in the same commit that created the falsifying
+amendment** (`a2bfd7e`), with third-hop flag 8 recording it. **`main` still carries the false sentence
+at `:242`, and will until this ticket merges — it merges LAST.** Nothing consumes it: `ADR-0009`
+cl. 9b's quote of it is dated as *the ticket as it then read*. **Non-blocking, discharged by this
+branch's merge, no action owed to anyone.**
+
+| # | Item | Verdict | What changed, and the evidence |
+|---|---|---|---|
+| 2 | scope + out-of-scope | ✅ | `[D27]`'s closing sentence repaired (`[D49]`) and its IMPORTED bullet corrected against measurement (`[D50]`); the rest of the `[D26]`/`[D27]` block re-audited sentence by sentence and **what survived is recorded in place**, so the next hop does not re-derive it |
+| 4 | acceptance testable + measurable | ✅ | **27 criteria, UNCHANGED** — none added, amended, renumbered or deleted. `A18` and `A19` were re-read against the merge and are **explicitly not amended**; `[D51]` protects them rather than editing them |
+| 5 | dependencies known | ✅ | two sentences that `ABC-016`'s merge made false are repaired **as a CHECK, not as a status** (`[D51]`) — *"a panel is unmerged for this ticket's purposes exactly while its module is absent from merged `src/`"* — because a status copied into a ticket is `[D21]`'s defect and would be stale again at the next merge. `HISTORY_ROWS = 8` is marked **`UNKNOWN - verify`**: this hop did not open `ABC-017` |
+| 6 | NFR triggers, each measurable | ✅ | **no bar moved, created or loosened; nothing re-measured and nothing claimed to be.** `N8-LANE` unchanged — **zero test files added.** The lane figure moved 723 → **758/758 on 26 files** purely because `ABC-016` merged |
+| 7 | test notes | ✅ | **18 rows, unchanged.** No row added, none edited |
+| 8 | size | ✅ | `L` (5), **re-derived a fifth time and unmoved** — and the standing tripwire is **answered rather than stepped around**: it asks a fifth hop *adding production scope* to test `SPLIT_REQUIRED`, and **this hop adds none at all.** `SPLIT_REQUIRED` was still tested against the one plausible candidate (*"re-gate against the real panels"*) and rejected with a reason |
+| 9 | priority | ✅ | `P0`, re-derived and unmoved. `ABC-016`'s merge moves **readiness, not value** |
+| 10 | no major unresolved blocker | ✅ | unchanged. `A20` still waits on `ABC-027`; cl. 9f still waits on `ABC-017`. **Both are merge-order constraints, not start blockers**, and `[D51]` now says what "discharged" requires |
+
+**Items 1 and 3 are unchanged by this hop.**
+
+> **NO BOARD MOVE IS REQUESTED, AND THAT IS THE FINDING, NOT AN OMISSION.** This hop changes no code,
+> adds no criterion and closes no hold. **`ABC-019` stays in `In Review`, held for `ADR-0009` cl. 9f** —
+> and the hold is now **narrower and checkable**: the real status panel is merged so the status half of
+> the seam wiring can be re-gated at the next rebase, while **full discharge still needs `ABC-017`**,
+> and `A20` still needs `ABC-027`. **Front matter is deliberately left at `in-review`**, on the same
+> precedent as the previous three hops. **`plans/board.md` was not opened.**
+
+**Flags after this hop. Two are carried unchanged, one is closed, and two are new:**
+
+14. **`ABC-021` (flag 10) and `ADR-0009`'s clause 9e wording (flag 11) — CARRIED, unchanged, and
+    **NOT re-verified at this hop**. The last verification at source was the third hop's for `ABC-021`.
+    Neither ticket nor ADR was opened here.
+15. **CLOSED — flag 11's other half.** `ADR-0009` cl. 9b + evidence (vii) quoting a signature this
+    ticket no longer has **has been fixed by Architect/Design and is merged on `main`.** **Verified at
+    source at this hop, not taken from a report:** the correction blocks are at `ADR-0009:416-438`
+    (9b) and `:383-393` ((vii)), and the change was **+39/−0 — additions only, no clause edited**
+    (measured by `git show --numstat`, not quoted). The `[D27]` attribution was kept **split** at
+    `:432-438`, which is correct and is precisely why this hop had a ticket sentence to repair and no
+    ADR sentence to touch.
+    > **One consequence of THIS branch merging, for Architect/Design — non-blocking and optional.**
+    > That block cites the falsified sentence at *"`…ABC-019-turn-loop-skeleton.md:242` as `main` reads
+    > today"*. **It is self-dating, so it does not become FALSE when this branch merges** — but the
+    > `:242` locator will then point at a line that no longer carries the sentence, which is the stale-
+    > citation shape this project keeps catching. **Owner: Architect/Design; `memory-bank/50-decisions/`
+    > was NOT edited by this hop and no ADR is re-opened.**
+16. **NEW — four stale comments in merged `src/frame.test.ts`, for whoever next has a mandate in that
+    file.** `:11`, `:51`, `:54` and `:671` all say the two panels are unbuilt; `ABC-016` is merged.
+    **Comment-only, no assertion depends on them, and this ticket does not open that file** — an
+    Engineer is live in it for `ABC-027`. **Flagged, not taken.**
+17. **NEW — the re-gate itself now has a stated completion test, and it is not this ticket's to run.**
+    `[D51]` says what a cl. 9f re-gate must report: **which panels were real.** **Owner: the
+    Orchestrator and QE.** Recorded here because the rebase hop is where it will be read.
