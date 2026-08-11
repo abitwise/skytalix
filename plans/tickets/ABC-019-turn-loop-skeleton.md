@@ -72,6 +72,49 @@ feature: —
 > breaks only at the rebase onto the real panels** — and with the two shapes `A18` requires, **every
 > hardcoded height is RED here and only the derived form ships** (matrix in `## Acceptance`, `A18`).
 
+> **AMENDED 2026-08-11 (THIRD hop) by BA/PM — the defects the BUILD exposed** (task
+> `abc019-review-2026-08-11`, subtask `refinement-ABC-019-seam`, Workflow 07). **This is a targeted
+> amendment and NOT a re-refinement:** the 25 + 2 fixes above stay fixed, and size `L` (5) / priority
+> `P0` are re-derived a third time and **UNMOVED**.
+>
+> **What is new about this hop is WHO found the defects.** The two hops above found them by reading and
+> by building wrong builds on purpose. **These were found by the ticket being BUILT for real, gated
+> green — lint/typecheck/build 0, 715/715 on 24 files, skip 0, re-verified independently at this hop —
+> and then read back against its own text.** A ticket that produces a green build and is still wrong is
+> the case a gate cannot catch, which is why the engineer flagged three of them rather than amending
+> them: amendments are BA/PM's.
+>
+> **NINE rulings, and the count is checkable — the table is in `## Definition of Ready` § *DoR
+> re-check (THIRD hop)*, which also says of each one whether it changes the code:**
+>
+> 1. **`[D28]` — the render seam takes a FOURTH argument.** `## Scope` and `ADR-0009` cl. 9b both wrote
+>    `(GameHistory, GameStatus, thinking) => readonly string[]`, and **that form cannot satisfy `A5`**:
+>    the ambiguity candidate list has to reach the frame's message region and `## Scope` says there is
+>    no second output channel. **Every escape is closed by a sentence already in this ticket** — the
+>    loop composes no frame, the seam derives nothing, there is no second channel — so the fourth
+>    argument is *forced*, not chosen. **Measured here: it moves no clause of `ADR-0009` clause 9,**
+>    because a `messages` argument cannot carry a row count.
+> 2. **`[D32]` — `A3b` was wrong about BOTH counts it names**, and the second error made it satisfiable
+>    only by a build `A3` forbids. `gameStatus` is **`plies + 1`**; `repetitionCounts` at the module
+>    boundary is **0**.
+> 3. **`[D31]` — `## Scope`'s *"either seam"* and `A14`'s ten values were not a contradiction: one
+>    sentence was carrying two promises.** Repair is symmetric; termination with a named reason is the
+>    engine's alone. **`A9b` is added and THIS ONE CHANGES THE CODE.**
+>
+> **Six more the review did not name and this hop found by checking the other criteria** — `[D29]`
+> (`A2`'s cadence formula over-counts on every end-of-input run), `[D30]` (the glyph mode is not a loop
+> parameter), `[D36]` (the `NFR-002` derivation was missing `A10`'s `legalMoves` term; **no bar moves**),
+> `[D33]` and `[D34]` (`A12` and `A17` are met in **FULL**, and now say where each half is asserted),
+> and `[D35]` (test-note row 3's obvious fixture is a trap that loses the ply). **Three known defects
+> was not evidence the other sixteen were sound, and it was not.**
+>
+> **Nothing under `src/` was written by this hop** — code changes are the Engineer's, and `A9b` is
+> handed back for exactly that reason. **`plans/board.md` was not opened** — the move is requested in
+> `## Definition of Ready` and is the Orchestrator's. **`memory-bank/50-decisions/` was not edited**, and
+> the `ADR-0009` follow-up this hop decided IS owed is flagged there for routing, not taken.
+> **Front matter is deliberately left at `in-review`**, on the delivering engineer's own precedent: the
+> board is the authority and moving the ticket first would put the two out of step.
+
 ## Problem
 
 *User*: everyone. Without this there is no game — there are a renderer and a rules library.
@@ -141,11 +184,27 @@ loop:
   > The same build passes `A13` for the wrong reason. Naming the supplier closes it; the spied call
   > count in *Security / NFR triggers* pins it.
 
-- **The render cadence is `1 + plies + non-advancing prompt outcomes` frames**, not "one render per
-  ply". The initial position is rendered **before** the first act, every ply is followed by exactly
-  one frame, and **every non-advancing outcome re-emits a frame** — it has to, because the rejection
-  line and the ambiguity candidate list live in the frame's own message region (`src/frame.ts:172-185`)
-  and there is no second output channel.
+- **The render cadence is `1 + plies + RE-EMITTING non-advancing outcomes` frames**, not "one render
+  per ply". The initial position is rendered **before** the first act, every ply is followed by exactly
+  one frame, and **the three non-advancing outcomes that carry a message re-emit a frame** —
+  `rejected`, `ambiguous` and the non-mutating command — because the rejection line and the ambiguity
+  candidate list live in the frame's own message region (`src/frame.ts:172-185`) and there is no second
+  output channel. **`eof` re-emits NOTHING** (transition 10 goes to `exiting`, not to `rendering`; its
+  notice is a `sink.write`, not a frame), and neither does the prompt-driven `game-over`.
+
+  > **[D29 — the cadence formula counted FOUR non-advancing outcomes and only THREE of them emit a
+  > frame, so it over-counted by one on every run that ends at end-of-input. Found 2026-08-11 (third
+  > hop) by checking the formula against this ticket's own `## Test notes` table.]** It read
+  > *"`1 + plies + non-advancing prompt outcomes`"* and *"every non-advancing outcome re-emits a
+  > frame"*, while `## Problem` calls out *"the four ways a prompt returns without advancing a ply"*
+  > and the transition table sends **7, 8, 9** to `rendering` and **10 (EOF)** to `exiting`. Measured
+  > against the delivered suite: **row 11 (EOF, empty script) renders 1 frame; the old formula predicts
+  > 2**. Rows 8, 9 and 10 each end at EOF too after their one re-emitting outcome — actual **2**, old
+  > formula **3**. **Five of the thirteen rows disagreed with the sentence that is supposed to generate
+  > them**, and the table was green only because its counts were written from runs rather than from the
+  > formula. **This is not bookkeeping: the old formula is SATISFIED by a build that emits a frame on
+  > end-of-input, and `A8` does not forbid one** — so the ticket admitted a build its own state machine
+  > forbids. `A2` now carries the exclusion as a clause.
 
   > **[D5, D6 — "one render per ply. A full move produces two frames" was false in this ticket's own
   > terms, and so was the criterion built on it.]** Built and run, three ways: a **correct** build
@@ -212,23 +271,42 @@ loop:
     outcome for any unmatched input.
   - **Engine stub** — returns a move from `legalMoves(position)`, seeded-deterministic, with an
     optional artificial delay so the thinking state is exercised.
-- **`--ascii` / `--unicode` and the human's colour are parameters**, supplied by `EPIC-006`. The loop
-  discovers neither and defaults neither. **The colour parameter is a resolved `"white" | "black"`**:
+- **The human's colour is a LOOP parameter; the glyph mode is not — it is bound into the render seam.**
+  Both are supplied by `EPIC-006` and **the loop discovers neither and defaults neither** — it reads no
+  `process.env` and no `process.stdout`. **The colour parameter is a resolved `"white" | "black"`**:
   `EPIC-006`'s startup scope offers **white / black / random** (`EPIC-006` § Scope; `EPIC-002`
   § Dependencies) and resolves `random` before the loop sees it. `[D24]`
+
+  > **[D30 — this bullet made `--ascii` / `--unicode` a parameter of the LOOP, which clause 9 had
+  > already made impossible. Ruled 2026-08-11 (third hop).]** It read *"`--ascii` / `--unicode` and the
+  > human's colour are parameters"*. Under `ADR-0009` clause 9b frame composition lives **entirely
+  > behind the render seam**, and `## Out of scope` says the loop composes no frame — so the only
+  > consumer of the mode is `assembleFrame(parts, mode)`, on the far side of the seam. A `mode`
+  > parameter the loop never reads is **dead code the day it is written** (coding rules 5 and 7), and
+  > passing it through would make the seam five arguments to carry a value neither the loop nor the
+  > panels use. `EPIC-006` binds the mode into the seam closure exactly as it binds it into
+  > `renderBoard` and `assembleFrame` today. **The half of the sentence that binds — discovers neither,
+  > defaults neither — is unchanged and is now stated as the assertion it always was.** No criterion
+  > named the glyph mode, which is why this survived two refinements: it is the one `## Scope` sentence
+  > with no acceptance criterion under it, and it is text-only — the delivered build is already right.
 - **The loop supplies the render seam everything it draws, and the render seam derives nothing.**
   Per frame the loop hands over the `GameHistory`, the `GameStatus` **it evaluated for this ply**, and
   the `thinking` flag — the three inputs `ABC-016`'s panel takes, in that ticket's own words *"supplied
-  by the caller, never derived here"*. This is the line `ABC-016` was owed (its `## Dependencies`
+  by the caller, never derived here"* — **and the message-region items for that frame** (`[D28]`).
+  **The panel's three inputs are unchanged and the fourth is not the panel's:** the items go to
+  `assembleFrame`'s message region (`src/frame.ts:172-185`), which is `ABC-018`'s, so nothing here
+  adds an input to `ABC-016` or `ABC-017`. This is the line `ABC-016` was owed (its `## Dependencies`
   entry for this ticket) and it is **not decorative: it is what makes `A5` and `A6` satisfiable.**
   Until `ABC-016`'s refinement deleted the panel's per-frame `gameStatusOf` call, both were **false**,
-  and `ABC-016`'s `A13` now spies `gameStatusOf` / `repetitionCounts` / `keyHistory` / `gameStatus` at
-  **exactly 0** inside the panel. It is also what keeps `NFR-002`'s `O(window)` statement standing:
+  and that ticket's **derive-at-0 clause** — `gameStatusOf` / `repetitionCounts` / `keyHistory` /
+  `gameStatus` at **exactly 0** inside the panel, carried by its `A13` today (`[D37]`) — now pins it. It is also what keeps `NFR-002`'s `O(window)` statement standing:
   that row voids itself *"if a renderer ever pulls the repetition derive into a frame"*, and this loop
   is the only place the derive belongs.
 - **The render seam RETURNS the frame's rows and the LOOP writes them — and the loop never names a row
-  count.** The seam's signature is `(GameHistory, GameStatus, thinking) => readonly string[]`: the
-  three inputs of the bullet above, and **a frame's rows back**. The loop takes its session height as
+  count.** The seam's signature is
+  **`(GameHistory, GameStatus, thinking, messages: readonly string[]) => readonly string[]`**: the
+  three **panel** inputs of the bullet above, **the message-region items**, and **a frame's rows
+  back**. The loop takes its session height as
   **the first frame's `.length`**, calls **`beginFrameSession(sink, height)` exactly once** with it
   (`src/frame.ts:211`, merged), and hands the writer every frame **exactly as the seam returned it** —
   no padding, no truncation, no re-composition. It declares no row count, imports neither panel, and
@@ -236,10 +314,31 @@ loop:
 
   > **[D27 — the seam's RETURN was never stated, and without it clause 9 has nothing to stand on.]**
   > `readonly string[]` appears nowhere in this ticket's previous text — the bullet above states the
-  > seam's three arguments and stops. `ADR-0009` clause 9b reads the return off *"the seam this ticket
+  > seam's arguments and stops. `ADR-0009` clause 9b reads the return off *"the seam this ticket
   > already specifies"*, so it is recorded here rather than left to be inferred: **a seam that writes
   > instead of returning leaves the loop holding no rows, and then the session height cannot be
-  > derived and `A19` cannot be asserted at all.** The seam is not new and its arguments do not change.
+  > derived and `A19` cannot be asserted at all.** The seam is not new and its RETURN does not change.
+  >
+  > **[D28 — the three-argument form was UNSATISFIABLE against `A5`, and the fourth argument is FORCED
+  > by this ticket's own sentences rather than chosen. Ruled 2026-08-11 (third hop).]** The signature
+  > read `(GameHistory, GameStatus, thinking) => readonly string[]` in this bullet and `[D27]`'s
+  > closing sentence read *"its arguments do not change"*. **`A5` requires the ambiguity candidate list
+  > to reach the frame's message region and `## Scope` states there is no second output channel**, so
+  > three arguments could not carry it. Every other way out is closed by a sentence already in this
+  > ticket: the loop **composes no frame** (`## Out of scope`), so it cannot place the items itself;
+  > **the render seam derives nothing** (the bullet above), so it cannot invent them; and there is **no
+  > second channel**, so they cannot go around the frame. What is left is a fourth argument, and the
+  > engineer built it before this hop ruled — the build is right and the TEXT was wrong.
+  >
+  > **This moves no clause of `ADR-0009` clause 9, and that was MEASURED at this hop rather than
+  > argued.** Clause 9's ruling is that the **row count** must not cross the seam. A `messages`
+  > argument cannot carry one: `layoutMessageRegion` returns exactly `MESSAGE_ROWS` rows in **every**
+  > branch (`src/frame.ts:160-165`, and `packRegion` fills a fixed `MESSAGE_ROWS` array or returns
+  > `null`), and `frameHeight` adds `MESSAGE_ROWS + PROMPT_ROWS` as constants. Re-measured here across
+  > **0 items, 1 item, `A5`'s own 4 promotion candidates, 200 items and one 100 000-character item**,
+  > at geometries **2/5, 4/9, 3/8 and 3/10**: the assembled height is a **single distinct value** in
+  > every cell and equals `frameHeight` in every cell — 19 / 25 / 23 / 25. **The seam's argument list
+  > is this ticket's; the row count is the ADR's; and they do not touch.**
   >
   > **`ADR-0009` clause 9 (9a/9b/9c), and every reason below is a measurement against merged `src/`,
   > not a style preference:**
@@ -276,6 +375,45 @@ loop:
   `[D23]` — the ticket described a mechanism it did not have to invent. `legalMoves`, the search and
   `gameStatus` all play moves and take them back, so a throw mid-operation can leave the live object
   mid-mutation; nothing else in `src/` clones a `Position` and no clone function exists.
+
+  **REPAIR is symmetric across both seams. TERMINATING WITH A NAMED REASON is the ENGINE seam's
+  alone.** After the repair the two seams part company, and this is the whole of the split:
+  - **engine seam** — repair, then **stop** with `engine-threw` (`A9`), a value `A14` enumerates;
+  - **input seam** — repair, then **RETHROW**. The loop invents no reason, reports no result and does
+    **not** exit 0 down the end-of-input path. The exception is `EPIC-003`'s to own and `EPIC-006`'s to
+    catch; what this loop owes is that **nobody downstream is ever handed a mid-mutation board**
+    (`A9b`).
+
+  > **[D31 — *"either seam"* and `A14`'s ten values looked like a contradiction, and neither is wrong:
+  > one sentence was carrying two different promises. Ruled 2026-08-11 (third hop).]** The engineer
+  > built the engine handler only and flagged that a symmetric handler *"would need a tenth `A14` value
+  > that does not exist"*. **That is true of symmetric TERMINATION and not of symmetric REPAIR**, and
+  > this bullet only ever promised repair — `A9`, which adds the named reason, names the engine seam
+  > and nothing else. So the fix is neither *"narrow the sentence"* nor *"add a tenth value"*: it is to
+  > stop the one sentence promising two things.
+  >
+  > **The input-side corruption is real and was verified at source at this hop, not assumed.** The
+  > input seam calls `legalMoves(history.position)` — the delivered coordinate stub does it at
+  > `src/turn-loop.test.ts:136`, and `EPIC-003`'s parser must do the same to reject an illegal move —
+  > and `legalMoves` runs `makeMove` / `unmakeMove` **on the live borrowed object**
+  > (`src/legal.ts:47-51`; `GameHistory.position` is *"BORROWED, never a snapshot"*,
+  > `src/history.ts:39-44`). **The mechanism is identical to the engine's and this ticket's own
+  > `## Security / NFR triggers` already states it in writing** — *"the loop suspends at exactly two
+  > places … and both bracket a mutation"*. A throwing parser is a bug, not a path; so is a throwing
+  > search, and that one already gets a handler.
+  >
+  > **Why RETHROW rather than a tenth reason** — the cheaper option is also the more honest one.
+  > `[D13]` fought to make `A14` an exact enumeration, and a tenth value would additionally decide a
+  > question no epic has answered: *does a parser bug end the game?* That belongs to `EPIC-003` and
+  > `EPIC-006`, not to a skeleton. **And terminating QUIETLY is the one option that is definitely
+  > wrong:** with no result and no reason the outcome is byte-identical to `A8`'s end-of-input, which
+  > would present a crashed parser as a clean exit — the exact failure `A10`'s *"a result screen can
+  > never present an engine bug as a chess outcome"* exists to forbid.
+  >
+  > **This one changes the CODE.** The delivered loop wraps the engine `await` and not the input
+  > `await`, so the ticket returns to `In Development` for `A9b`. Cost: one `try`/`catch` around the
+  > input call that repairs and re-`throw`s, plus one test row. **No new terminal-reason value, so
+  > `A14` is untouched.**
 
 ## Out of scope
 
@@ -391,7 +529,18 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
 - **`A2` — Given** the human's colour is white, **when** the loop runs one full move and no input is
   rejected, **then** exactly **three** frames are rendered — the initial position, the position after
   White's ply, and the position after Black's ply — and in general the frame count is
-  **`1 + plies + non-advancing prompt outcomes`**. *(**[REPAIRED 2026-08-11 — `[D5]`, `[D6]`.]** This
+  **`1 + plies + RE-EMITTING non-advancing outcomes`**, where the re-emitting outcomes are exactly
+  `rejected`, `ambiguous` and the non-mutating command. **Given** a run that ends at **end-of-input**,
+  **then** that outcome adds **no** frame — the count is `1 + plies + re-emitting outcomes` and not one
+  more — and the same holds for a prompt-driven `game-over`.
+  *(**[REPAIRED AGAIN 2026-08-11 (third hop) — `[D29]`.]** The formula read
+  *"`1 + plies + non-advancing prompt outcomes`"*, and **four** outcomes are non-advancing while only
+  **three** emit a frame. Checked against this ticket's own `## Test notes` table and the delivered
+  suite: **row 11 (EOF) renders 1 and the old formula predicts 2**, and rows 8, 9 and 10 render 2
+  against a predicted 3 because each ends at EOF after its one re-emitting outcome — **five of thirteen
+  rows**. The end-of-input clause is now explicit and negative because the old formula was **satisfied
+  by a build that emits a frame on EOF**, which transition 10 forbids and `A8` does not catch.)*
+  *(**[REPAIRED 2026-08-11 — `[D5]`, `[D6]`.]** This
   read *"exactly **two** frames … one per ply"*. Under render-before-act — this ticket's own shape and
   `EPIC-002` `[A3]`'s — an N-ply game renders N + 1 frames. Built and run: a **correct** build renders
   3 and therefore failed this criterion; the only build that renders 2 skips the initial frame and
@@ -401,17 +550,53 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   *append to history → derive counts → evaluate → render*, and **every** evaluation in the whole run
   goes through **`gameStatusOf(history)`** (`src/history.ts:152`) — the `ADR-0002` clause-4 single
   supplier — so no `gameStatus` call is ever bare **and none is ever handed a map that is not this
-  game's**. *(**[REPAIRED 2026-08-11 — `[D7]`.]** This read *"every `gameStatus` call … carries a
+  game's**. **The *derive* and *evaluate* steps are asserted as ONE**, because `gameStatusOf` performs
+  both in one call and a module-boundary spy cannot separate them (`[D32]`) — what is assertable, and
+  what this criterion means, is that the **append** precedes that call and the **render** follows it,
+  plus the map handed to `gameStatus` being this game's. *(**[ORDER CLAUSE CLARIFIED 2026-08-11 (third
+  hop) — `[D32]`.]** The three-arrow order named a middle step no spy can see on a correct build, which
+  is the same observability gap that made `A3b` demand an impossible count. No code changes.)*
+  *(**[REPAIRED 2026-08-11 — `[D7]`.]** This read *"every `gameStatus` call … carries a
   counts map"*, which an **empty** `Map` satisfies. Built and run: that build passes the old clause at
   every call site and reports `in-progress` on the fifth occurrence of a position where `gameStatusOf`
   reports `{draw, fivefold-repetition}`. Naming the supplier closes it.)*
-- **`A3b` — Given** any complete run, **when** `repetitionCounts` and `gameStatus` are **spied**,
-  **then** each is called **exactly once per ply** and **exactly zero** times on a non-advancing
-  prompt outcome. *(**[ADDED 2026-08-11 — `[D19]`.]** This is the clause that binds the derive rule,
-  and it is a **count, not a clock**, for the reason `plans/nfr-catalog.md` has now moved a bar onto a
-  count five times: measured at 120 plies, one derive per ply is 48.34 µs and **two derives is
-  93.58 µs — MET against the ≤ 100 µs bar at 0.94x.** The timing bar cannot see the wrong build; the
-  spy cannot miss it.)*
+- **`A3b` — Given** any complete run of `N` plies, **when** `gameStatus` and `repetitionCounts` are
+  **spied at the module boundary**, **then** both of these hold:
+  **(a)** `gameStatus` is called **exactly `N + 1`** times — **one** evaluation before the first frame
+  (transition 1 → 2, which the machine mandates *"always, terminal or not"*) and **exactly one after
+  each applied ply** — and **exactly zero** additional times on any non-advancing prompt outcome, so a
+  run with `k` non-advancing outcomes still reads `N + 1`; and
+  **(b)** `repetitionCounts` is called **exactly 0** times.
+  *(**[ADDED 2026-08-11 — `[D19]`; BOTH COUNTS REPAIRED 2026-08-11 (third hop) — `[D32]`.]** This is
+  the clause that binds the derive rule, and it is a **count, not a clock**, for the reason
+  `plans/nfr-catalog.md` has now moved a bar onto a count five times: measured at 120 plies, one derive
+  per ply is 48.34 µs and **two derives is 93.58 µs — MET against the ≤ 100 µs bar at 0.94x.** The
+  timing bar cannot see the wrong build; the spy cannot miss it.)*
+
+  > **[D32 — this criterion was wrong about BOTH of the two counts it names, and the second error made
+  > it satisfiable only by a build `A3` forbids. Found 2026-08-11 (third hop).]** It read
+  > *"`repetitionCounts` and `gameStatus` are spied, then **each** is called exactly once per ply"*.
+  >
+  > - **`gameStatus` is `N + 1`, not `N`, and the extra one is LOAD-BEARING — verified, not accepted.**
+  >   The engineer reported the off-by-one; an off-by-one in a spy count is also how a real double
+  >   derive hides, so it was re-derived at source. The loop has **exactly two** `gameStatusOf` call
+  >   sites — one before the loop and one at the tail of an advancing iteration — so the count is
+  >   `1 + N` by construction and a two-derives build reads `2(N + 1)`, which the corrected clause still
+  >   catches. **The `+ 1` is not bookkeeping:** it is transition 2, and a build that skips it never
+  >   evaluates the STARTING position, so a game begun from an already-dead position plays a ply that
+  >   does not exist. `## Test notes` row 3 is exactly that fixture and it is the reason the clause is
+  >   stated as `N + 1` rather than relaxed to *"at least once per ply"*.
+  > - **`repetitionCounts` reads 0, and demanding *"once per ply"* of it contradicted `A3`.**
+  >   `gameStatusOf` calls it **inside** `src/history.ts:152`, where a module-boundary spy cannot see
+  >   it. **The only build that would make that spy read once per ply is one that hand-rolls
+  >   `gameStatus(position, repetitionCounts(history))` at the call site — which is precisely what `A3`
+  >   forbids.** As written, `A3b` and `A3` could not both be satisfied. **0 is not a weakened
+  >   assertion, it is the stronger one:** it is the proof that every derive went through the
+  >   `ADR-0002` clause-4 single supplier. Reading it as *"the per-ply derive count"* would be wrong,
+  >   and the derive the bar is about is counted by `gameStatus`.
+  >
+  > **This one does NOT change the code.** The delivered loop and both delivered suites already assert
+  > `plies + 1` and `repetitionCounts` at 0; it is the criterion that was behind the build.
 - **`A4` — Given** a repeated line that reaches the same position a **third** time, **when** the loop
   evaluates on the ply completing that occurrence, **then** it reports
   `{ result: "in-progress", reason: null, claimable: { by: <side to move>, draws: ["threefold-repetition"] } }`
@@ -462,6 +647,22 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   built and run, a build that repairs **nothing** passes it whenever the stub throws *before* touching
   the board, since the position was never corrupted. Only a mid-bracket throw can fail it — and that
   is also the only shape that resembles a real search.)*
+- **`A9b` — Given** the **input** seam throws **from inside a `makeMove`/`unmakeMove` bracket** — the
+  shape `legalMoves` produces, and the shape a real parser produces when it filters candidates — so
+  that the live object is left one ply ahead, **when** the loop recovers, **then** all three hold:
+  **(i)** `toFen(position)` equals `toFen` of the position replayed from `{ initialFen, moves }` and
+  `moves.length` is unchanged, exactly as `A9` requires of the engine side; **(ii)** the exception
+  **propagates out of the loop** — the caller sees it thrown; and **(iii)** the loop returns **no**
+  `LoopOutcome` at all, so it can never be mistaken for `A8`'s end-of-input (which returns
+  `{ result: null, reason: null, exitCode: 0 }`) and **no new terminal-reason value is introduced**
+  — `A14`'s enumeration is unchanged and is asserted unchanged.
+  *(**[ADDED 2026-08-11 (third hop) — `[D31]`.]** `## Scope` promised repair on *"either seam"* and
+  only the engine seam ever had a criterion, so the promise was unassertable and the delivered build
+  is one handler short. The fixture shape is part of the criterion for `[D10]`'s reason: **a stub that
+  throws before touching the board corrupts nothing, so a loop that repairs nothing passes.** Clause
+  (iii) is what keeps this from becoming a tenth `A14` value — a crashed parser is not a chess outcome
+  and must not be reported as one, and whether it ends the game is `EPIC-003`'s and `EPIC-006`'s
+  question, not this skeleton's.)*
 - **`A10` — Given** the engine seam returns a move that is not in `legalMoves(position)`, **when** the
   loop receives it, **then** it does **not** apply it, `moves.length` is unchanged, and it terminates
   with the **engine-failure** value of its terminal-reason type — a value **distinct from every
@@ -474,7 +675,16 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   frame's row count is **identical** in both cases, per `EPIC-002` `4a`.
 - **`A12` — Given** one fixture per value of the rules core's **automatic** terminal set — `checkmate`,
   `stalemate`, `insufficient-material`, `fivefold-repetition`, `seventy-five-move` — **when** the loop
-  evaluates, **then** it stops with that reason and that reason only. *(**[AMENDED 2026-07-31 —
+  evaluates, **then** it stops with that reason and that reason only. **And given** the scripted-game
+  table itself, **when** it is inspected, **then** it declares a row for **each** of those five values —
+  an assertion **over the table's declarations, not a sixth run**, which is `[D25]`'s requirement that
+  a table whose rows are not enumerated can be one row short and still green. **Both halves are this
+  criterion and neither is a partial pass:** the five runs are what make it true, the enumeration is
+  what stops a deleted row from making it vacuously true. *(**[CLAUSE MADE EXPLICIT 2026-08-11 (third
+  hop) — `[D33]`.]** The build reported `A12` *"met in part"* because the enumeration assertion reads
+  declarations rather than running a game. It is met in FULL: `[D25]` asked for exactly that guard and
+  the criterion did not say so, which is why a correct build had to hedge. Nothing about the five runs
+  changes and no code changes.)* *(**[AMENDED 2026-07-31 —
   `ABC-020`.]** As originally written this read "each of the five `EndReason` values … including
   `fifty-move`", which after `ABC-020` asserts a draw FIDE does not impose. Because mate is tested
   first, a mate delivered on the 150th halfmove is correctly **mate**, not a draw — the same precedence
@@ -513,7 +723,21 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   `toFen(position)`.)*
 - **`A17` — Given** the per-ply overhead bars in *Security / NFR triggers*, **when** measured at
   **40 / 120 / 300 plies** by the instrument that section names, **then** each holds, and `A3b`'s spied
-  counts hold with them. *(**[REPLACES 2026-08-11 — `[D15]`.]** The old criterion read *"Given the cost
+  counts hold with them. **The two halves are asserted in two different places and that is the
+  criterion, not a shortfall:** `A3b`'s counts are asserted **in the default lane** at all three ply
+  counts, and the **timing** figures are produced **out of tree** by the named instrument and recorded
+  **with their machine** as evidence for Security/NFR — **they are NOT asserted in the suite**, because
+  a number produced inside `vitest` would be a different measurement wearing this one's name. Merged
+  `src/gameend.nfr.test.ts:16-17` states the same rule for its own bars — *"wall-clock cost is not
+  asserted anywhere in this suite"* — and this criterion follows it rather than contradicting it.
+  **`MET`/`MISS` against the three bars is Security/NFR's at the gate, never the build's.**
+  *(**[SPLIT MADE EXPLICIT 2026-08-11 (third hop) — `[D34]`.]** The build reported `A17` *"met in
+  part"* because the timing half is out of tree. As written the criterion did not say where each half
+  lives, so a correct build could only either hedge or fabricate an in-suite timing assertion — and
+  this project has ruled six times that a clock in the lane is the wrong instrument. **It is met in
+  FULL, in the two places it names.** Text only; nothing about the measurement or the bars changes and
+  no bar moves.)*
+  *(**[REPLACES 2026-08-11 — `[D15]`.]** The old criterion read *"Given the cost
   bar … when measured, then it holds"* — singular, where that section holds three bars, one of which
   (`NFR-004`) it says is not this ticket's, and with no ply count, instrument, statistic or machine.)*
 - **`A18` — Given** the stub render seams this loop's own suite drives it through, **when** they are
@@ -637,9 +861,22 @@ CI.
   there.
   - **`ABC-016` is why `A5` and `A6` are satisfiable at all.** Both require a frame re-emit **without**
     re-evaluating, and a panel that derived its own status per frame made both **false**. `ABC-016`'s
-    refinement deleted that `gameStatusOf` call and its `A13` now spies it at exactly 0. This ticket
+    refinement deleted that `gameStatusOf` call and **its derive-at-0 clause** — `gameStatusOf`,
+    `repetitionCounts`, `keyHistory` and `gameStatus` each spied at exactly 0 inside the panel, carried
+    by `ABC-016`'s `A13` as that criterion stands today — now pins it. This ticket
     supplies the status instead — see the render-seam bullet in `## Scope`, **the line `ABC-016` was
     owed**.
+
+    > **[D37 — this ticket cited that criterion BY NUMBER, and a concurrent hop is ruling on it.
+    > Hardened 2026-08-11 (third hop).]** A separate BA/PM subtask (`refinement-ABC-016-a13`) is ruling
+    > on `ABC-016`'s `A13` because its `isInCheck` / `toSan` **call-count** clauses are reported
+    > unsatisfiable — `toSan`'s `suffix()` calls `isInCheck` itself. **The clause THIS ticket depends on
+    > is a different clause of that same criterion** — the four derive spies at 0 — and nothing in the
+    > other hop's brief touches it. But `A13` may be split or renumbered, so the dependency is now
+    > stated **by content** and the number is given as a locator rather than as the reference. **Nothing
+    > in `ABC-016` was read for a ruling, inferred, or edited by this hop, and no message passed between
+    > the two: this is a flag for the Orchestrator to re-check after both hops land, not a claim about
+    > what the other hop will decide.**
   - **`ABC-017`** supplies `HISTORY_ROWS`; `ABC-016` supplies `STATUS_ROWS`. Neither exists in merged
     `src/` today, which is why this loop is **built** against fixed-height stub arrays for both panels
     (verified at this hop) and **merged** after both. **This loop reads neither constant, and after
@@ -741,11 +978,19 @@ CI.
   - **Loop overhead per ply ≤ 45 µs @ 40 plies, ≤ 100 µs @ 120 plies, ≤ 200 µs @ 300 plies**,
     excluding the render, the input wait and the engine call. Today: **0.46x / 0.48x / 0.48x** —
     deliberately uniform, and the 120-ply clause is the ticket's original number untouched.
-  - **`A3b`'s spied counts are the clause that BINDS:** `repetitionCounts` and `gameStatus` exactly
-    **once per ply**, exactly **zero** on a non-advancing prompt outcome. Derivation of the per-ply
-    figure: one `repetitionCounts` + one `gameStatus` + one `playMove` (measured 8.2–8.6 ns at
+  - **`A3b`'s spied counts are the clause that BINDS:** `gameStatus` exactly **`plies + 1`** times,
+    `repetitionCounts` exactly **0** at the module boundary, and exactly **zero** additional evaluations
+    on a non-advancing prompt outcome — see `[D32]`, which repaired both counts. Derivation of the
+    per-ply figure: one `repetitionCounts` + one `gameStatus` + one `playMove` (measured 8.2–8.6 ns at
     `ABC-012`'s gate, ~0.02% of the budget — the ticket's "~10 ns" was `makeMove`'s figure and it
-    stands).
+    stands) **+ one `legalMoves(history.position)` on every ENGINE ply, which `A10`'s legality check
+    forces and which this derivation omitted until 2026-08-11 (third hop), `[D36]`.** The engineer's
+    out-of-tree run reads **27.23 / 58.79 / 112.86 µs** marginal at 40 / 120 / 300 plies against this
+    hop's one-derive-per-ply figures of 20.71 / 48.34 / 96.88, and the gap — roughly 6.5 / 10.5 / 16 µs,
+    about half a ply's worth amortised — **has that missing term as its named cause.** **NO BAR MOVES
+    AND NONE IS PROPOSED:** the marginal readings are **0.61x / 0.59x / 0.56x** of `≤ 45 / ≤ 100 /
+    ≤ 200`, and `MET`/`MISS` is Security/NFR's at the gate. What was wrong was the derivation's
+    completeness, not its conclusion.
   - **The loop is the ONLY place the repetition derive may live.** `NFR-002`'s row voids its own
     `O(window)` statement *"if a renderer ever pulls the repetition derive into a frame"*; `ABC-016`'s
     `A13` spies the panel at 0 derives and this ticket's render-seam contract is the other half.
@@ -793,8 +1038,9 @@ CI.
 The loop is testable end-to-end **today**, with no parser and no engine, because both stubs are
 built from merged code. That is the point of the stubs.
 
-- **Drive scripted games through the stub seams — thirteen rows, each with an exact expected terminal
-  reason (or none) and an exact frame count.** *(**[CORRECTED 2026-08-11 — `[D25]`.]** The list read
+- **Drive scripted games through the stub seams — FOURTEEN rows, each with an exact expected terminal
+  reason (or none) and an exact frame count.** *(Thirteen until `[D31]` added row 14 at the third
+  2026-08-11 hop.)* *(**[CORRECTED 2026-08-11 — `[D25]`.]** The list read
   *"a mate line, a **threefold** line, a stalemate line, a **fifty-move** line, an insufficient-material
   line …"*, and after `ABC-020` **two of those terminate nothing** while the two that do were missing.
   A row whose "exact expected terminal reason" does not exist is a row that will be made to pass by
@@ -804,7 +1050,7 @@ built from merged code. That is the point of the stubs.
   |---|---|---|
   | 1 | mate line (Fool's mate) | `black-wins` / `checkmate`, exit 0 |
   | 2 | stalemate line | `draw` / `stalemate` |
-  | 3 | insufficient-material line | `draw` / `insufficient-material` |
+  | 3 | insufficient-material line — **the capture must be the ply that makes it dead; see the fixture rule below** | `draw` / `insufficient-material` |
   | 4 | **fivefold** repetition line | `draw` / `fivefold-repetition` — **on the fifth occurrence** |
   | 5 | **75-move** line | `draw` / `seventy-five-move` |
   | 6 | **third** repetition, play on | **no terminal state**; `claimable.draws` = `["threefold-repetition"]` |
@@ -815,6 +1061,7 @@ built from merged code. That is the point of the stubs.
   | 11 | EOF | *input ended* notice, exit 0, **no** terminal result |
   | 12 | engine throw **inside a `makeMove` bracket** | position repaired by `takeBack(history, 0)`, named reason |
   | 13 | engine returns a foreign move | not applied, `moves.length` unchanged, engine-failure reason |
+  | 14 | **input** seam throws **inside a `makeMove` bracket** (`[D31]`, `A9b`) | position repaired by `takeBack(history, 0)`, **the exception propagates** — no `LoopOutcome`, no reason, no exit-0 path |
 
 - **Both stubs are buildable from merged code alone and that was verified rather than assumed at the
   2026-08-11 refinement.** The coordinate reader is a `legalMoves` filter on
@@ -823,10 +1070,10 @@ built from merged code. That is the point of the stubs.
   `7k/4P3/8/8/8/8/8/K7 w - - 0 1`, the token `e7e8` yields **exactly 4** candidates with identical
   `from`/`to` (`addPromotions`, `src/moves.ts:88-98`), so **`ambiguous` is reached for free**; an
   unmatched token yields `rejected`. Both of the ticket's stub claims hold.
-- **Two panel stub shapes, and the thirteen rows above run under shape `A` only** (`A18`, `[C9-1]`).
+- **Two panel stub shapes, and the fourteen rows above run under shape `A` only** (`A18`, `[C9-1]`).
   Shape `A` (status 2 / history 5 → `H` 19) is the default for every scripted-game row, because any
   hardcoded height is then RED on the whole table rather than in one test. Shape `B` (status 4 /
-  history 9 → `H` 25) is needed **once**, for `A19` plus the append-path clause — the 13 rows are not
+  history 9 → `H` 25) is needed **once**, for `A19` plus the append-path clause — the 14 rows are not
   re-run under it, since the frame count and the terminal verdict were measured **identical under every
   shape** (14 frames for 12 plies + 1 non-advancing outcome) and re-running them would buy nothing and
   spend `N8-LANE` budget. **Neither shape is 3/8, and that is `A18`'s clause (i), not a preference.**
@@ -834,6 +1081,19 @@ built from merged code. That is the point of the stubs.
   `src/frame.test.ts:55-78` is the shape to copy — `statusStub` / `historyStub` as local functions.
   Those two are `ABC-018`'s own fixtures at 3/8 and stay exactly as they are; this ticket adds its own
   and does not touch that file.
+- **Row 3's obvious fixture is a TRAP and loses the ply — the position before the capture must still be
+  in progress.** *(**[ADDED 2026-08-11 (third hop) — `[D35]`, from the build, and re-verified at source
+  here rather than transcribed.]** The obvious line is *"White captures the last black piece, leaving
+  K vs K"* — but then the position **before** the capture is K+N vs K, which is **already** a dead
+  position: `isInsufficientMaterial` returns true at `minors <= 1` (`src/gameend.ts:98-119`, and one
+  knight is one minor). Built and run: the loop stopped on the **initial** evaluation with the right
+  result and the right reason, rendered **one** frame, and **never played the ply** — a row that passes
+  its reason assertion while testing nothing. Give Black **two** knights (the delivered fixture is
+  `1k6/8/8/8/8/8/1K6/2n4n w - - 0 1`) so the capture is the ply that makes the position dead. **The
+  frame count is the clause that tells the two apart — 2, not 1** — which is this ticket's own argument
+  for asserting counts rather than final frames, and it is why `A3b`'s `+ 1` initial evaluation is
+  load-bearing rather than bookkeeping. **This is a trap under the ticket, not a defect in it; it is
+  written down so the next person to touch that fixture does not walk into it.**)*
 - **Rows 4, 6 and 9's fixtures must never set an en-passant square**, for the same reason `ABC-012`'s
   do not — `ABC-011` would otherwise make them fail for a reason that is not this loop's.
   `src/gameend.test.ts`'s knight cycle (`function knightCycles`, lines 26-50) is the shape to reuse:
@@ -841,15 +1101,16 @@ built from merged code. That is the point of the stubs.
 - **Assert the call *order* inside a ply, not just the outcome.** Append-then-evaluate versus
   evaluate-then-append produces the same result on every position except the one that completes a
   repetition, which is exactly the case a happy-path test does not contain.
-- **Assert the frame *count*, not just the final frame** — `1 + plies + non-advancing outcomes`
-  (`A2`). A loop that renders twice per ply passes every content assertion.
+- **Assert the frame *count*, not just the final frame** — `1 + plies + re-emitting non-advancing
+  outcomes`, and **end-of-input adds none** (`A2`, `[D29]`). A loop that renders twice per ply passes
+  every content assertion; so does one that emits a frame on EOF, until the count is exact.
 - **Assert what happens AFTER the terminal status is computed** (`A7b`), by spy. This is the only
   assertion that catches a loop whose exit test is one ply stale, and such a loop passes `A7`.
 - **Do not test the real engine's timing here.** `NFR-004` belongs to `EPIC-004`; the stub's delay
   exists to exercise the thinking state and `A15`'s macrotask boundary, and quoting a number from it
   would be a fabricated measurement.
 - **Watch the FILE count, not the test count** (`N8-LANE`): at 159–179 ms CPU per file against a
-  650 ms allowance, this ticket's thirteen rows belong in **one** table-driven file wherever they can.
+  650 ms allowance, this ticket's fourteen rows belong in **one** table-driven file wherever they can.
 - **Do not test the real engine's timing here.** `NFR-004` belongs to `EPIC-004`; the stub's delay
   exists to exercise the thinking state, and quoting a number from it would be a fabricated
   measurement.
@@ -861,7 +1122,7 @@ enumerated**, two stub seams, a load-bearing intra-ply ordering, exception recov
 terminal-reason type that must be a superset of the core's. It is the only ticket in this epic that
 touches every other component. Calibrated against `ABC-004` (special moves, `L`) — comparable in test
 surface, and like that ticket it is `L` for the number of distinct cases rather than the volume of
-code: **13 table rows, 17 criteria, one module.**
+code: **14 table rows, 23 labelled criteria (`A1`–`A19`, four of them sub-lettered), one module.**
 
 **What the refinement added and removed, so the unmoved size is an argument and not an assertion:**
 
@@ -908,6 +1169,29 @@ directions at once:
 **`XL` (8) is still exactly one thing away and that has not changed:** folding in `ABC-021`'s claim
 outcome, `ABC-018`'s frame output or `ABC-012`'s history module. Two criteria over an existing harness
 is not that.
+
+**RE-DERIVED A THIRD TIME 2026-08-11 for the seam ruling: `L` (5) HOLDS, still not `XL`, still no
+`SPLIT_REQUIRED` — and `P0` HOLDS.** This hop ruled on nine items and costed them rather than waving
+them through. **Eight are text-only and cost nothing.** The one that touches code is `A9b`:
+
+- **Production: one `try`/`catch` around the existing input `await`, repairing with the same
+  `takeBack(history, 0)` call the engine path already makes and re-`throw`ing.** Zero new modules, zero
+  new imports, zero new terminal-reason values, **no new seam and no signature change** — `A9b` was
+  always inside the sentence `## Scope` already carried. `[D28]`'s fourth seam argument costs **nothing
+  at all**: it is already built, and the amendment moves the ticket to the code rather than the code to
+  the ticket.
+- **Test: one row in the existing table-driven file** (row 14) over the fixture shape `A9`'s
+  mid-bracket throwing stub already provides. **No new test FILE**, so `N8-LANE`'s binding risk — the
+  file count, measured at 159–179 ms CPU per file against a 650 ms allowance — **does not move**. The
+  delivered lane's chargeable figure is **420 ms against 650 ms = 0.65x** with two files added, and
+  this hop adds none.
+- **Risk: it goes DOWN.** `A9b` closes a corruption path the ticket had promised in prose and never
+  asserted, which is the kind of unestimated risk an `L` is not supposed to carry.
+
+**Nothing was folded in.** `ABC-021`'s claim outcome, `EPIC-003`'s parser and `EPIC-004`'s engine are
+all still out, and `A9b` deliberately does **not** decide whether a parser crash ends the game — that
+question is handed on rather than answered here, which is what keeps this a skeleton. **Priority `P0`
+is unmoved for the reasons above: the value did not change, only the text's fidelity to it.**
 
 ## Definition of Ready
 
@@ -990,3 +1274,86 @@ lesson of the 2026-07-31 amendment is why it is stated as one:**
    the fourth-from-last and the last bullet of that section; the two differ only in that one names
    `A15`'s macrotask boundary. It predates this hop, harms nothing, and removing it is an unrelated edit
    this hop has no mandate for.
+
+### DoR re-check 2026-08-11 (THIRD hop) — the seam ruling and what the BUILD exposed
+
+**This hop is not a re-refinement.** `ABC-019` was built, gated green and reviewed, and the build
+exposed defects **in the ticket** that two refinements and a DoR table reading all-✅ did not.
+**Nine items were ruled on. The count is checkable, and it is stated as one because the 2026-07-31
+amendment said "three things and no more" and was wrong by three:**
+
+| # | Ruling | Changes code? |
+|---|---|---|
+| 1 | `[D28]` — the render seam takes a **fourth `messages` argument**; the three-argument form could not satisfy `A5` | **no** — the build is already right; the TEXT moved to it |
+| 2 | `[D32]` — `A3b`'s **`gameStatus` count is `plies + 1`**, and its **`repetitionCounts` count is `0`**, not "once per ply" | **no** |
+| 3 | `[D31]` — `## Scope`'s *"either seam"* promised **repair**, `A9` supplies **termination**, and only the engine had a handler → **`A9b` added** | **YES** |
+| 4 | `[D29]` — `A2`'s cadence formula **over-counted by one on every EOF run**; five of thirteen rows disagreed with it | **no** |
+| 5 | `[D30]` — the **glyph mode is not a loop parameter**; clause 9b put it behind the seam | **no** |
+| 6 | `[D36]` — the `NFR-002` per-ply derivation was **missing `A10`'s `legalMoves` term**; **no bar moves** | **no** |
+| 7 | `[D33]` — `A12` is met in **FULL**; the enumeration guard is now a stated clause | **no** |
+| 8 | `[D34]` — `A17` is met in **FULL**; the lane half and the out-of-tree half are now stated separately | **no** |
+| 9 | `[D35]` — `## Test notes` row 3's obvious fixture is a **trap** (K+N vs K is already dead) and now says so | **no** |
+
+| # | Item | Verdict | What changed, and the evidence |
+|---|---|---|---|
+| 2 | scope + out-of-scope | ✅ | four bullets repaired: the seam signature (`[D28]`), the cadence formula (`[D29]`), the glyph-mode parameter (`[D30]`), and the throw-recovery promise split into repair-vs-terminate (`[D31]`) |
+| 4 | acceptance testable + measurable | ✅ | **23 labelled criteria** (`A1`–`A19`, four sub-lettered). `A9b` **added**; `A2`, `A3`, `A3b`, `A12`, `A17` **repaired**. `A3b` was satisfiable only by a build `A3` forbids; `A2`'s formula was satisfied by a build transition 10 forbids; `A3`'s order clause named a step no spy can see |
+| 6 | NFR triggers, each measurable | ✅ | **no bar moved, created or loosened** — the derivation gained its missing term (`[D36]`) and the marginal readings are 0.61x / 0.59x / 0.56x; `N8-LANE` unchanged and **no test FILE added** |
+| 7 | test notes | ✅ | **14 rows** (row 14 for `A9b`), row 3's fixture trap written down (`[D35]`), the frame-count bullet corrected to match `A2` |
+| 8 | size | ✅ | `L` (5), **re-derived a third time and unmoved**; the one code change is a `try`/`catch` over an existing call — see `## Size and priority rationale` |
+| 9 | priority | ✅ | `P0`, re-derived and unmoved |
+
+**Items 1, 3, 5 and 10 are unchanged by this hop** — item 5 gains `[D37]` (the `ABC-016` dependency is
+now cited **by clause content**, not only by criterion number, because a concurrent hop is ruling on
+that criterion), but no dependency is added or removed.
+
+> **THIS TICKET DOES NOT EXIT `In Review` CLEAN, AND THAT IS THE HONEST OUTCOME.** Ruling 3 changes what
+> the code must do, so **`ABC-019` returns to `In Development` for `A9b` and row 14** — one `try`/`catch`
+> and one test row. **The other eight rulings are text-only and the delivered build already satisfies
+> them.** A ticket returning to `In Development` on a ruling is a working board, not a failed one; this
+> board did it on `ABC-009` and was right to. **The board move is the Orchestrator's — requested here,
+> not taken.**
+
+**Flags after this hop. Two carried items are RESTATED with what was verified at source rather than
+left to decay, and one is new:**
+
+6. **`ABC-021` still needs the matching half of `[D12]` — RESTATED, NOT discharged, and now cheaper
+   than when it was raised.** Verified at source at this hop rather than transcribed:
+   `plans/tickets/ABC-021-*.md` is still `status: backlog` / `column: Backlog`, its `## Scope:67` still
+   reads *"A fifth prompt outcome, `claim`, alongside `ABC-019`'s four non-advancing outcomes"* and its
+   size rationale`:192` still reads *"One new prompt outcome, **one terminal transition**"*. **Those
+   sentences are not wrong under the settled split** — `ABC-021` owns transition 16 and this ticket owns
+   only that `game-over` is reachable from `awaiting-human` at all — **but `ABC-021` does not say so in
+   its own words, so a reader of that ticket alone cannot tell which of the two owns the transition it
+   names.** What is owed there is one sentence recording the split, and an acceptance criterion for
+   transition 16. **`ABC-021` is outside this hop's lane and was READ ONLY; nothing in it was edited.**
+   It is in `Backlog`, so the fix costs nothing today and gets more expensive the moment it is pulled.
+7. **`ADR-0009` clause 9e's wording is still one measurement short, for Architect/Design — RESTATED,
+   unchanged** (item 3 above). Not re-verified at this hop and not claimed to be.
+8. **NEW — `ADR-0009` clause 9b and evidence (vii) now QUOTE a seam signature this ticket no longer has,
+   and Architect/Design IS owed a follow-up. This hop was asked to decide that either way, so it is
+   stated either way.**
+   - **The ruling itself was correctly routed here and NOT to the ADR, and that was checked rather than
+     inherited.** Clause 9b says in its own words *"this is not a new seam: it is the seam that ticket
+     already specifies, and clause 9 is the ruling that the count must not cross it"* — it **quotes** the
+     signature from this ticket instead of deciding it, so the signature's home is `plans/tickets/` and
+     the ruling was mine to make. **Clause 9's actual ruling is untouched, and that is measured, not
+     asserted:** a `messages` argument cannot carry a row count, because the assembled height is a single
+     distinct value across 0 / 1 / 4 / 200 items and a 100 000-character item at geometries 2/5, 4/9, 3/8
+     and 3/10, agreeing with `frameHeight` in every cell (`[D28]`).
+   - **The follow-up is owed anyway, and it is a TRANSCRIPTION correction, not a re-opening.** The ADR
+     records at (vii) an experiment it *ran* — *"one render seam of the exact signature `ABC-019`'s
+     `## Scope` already states — `(GameHistory, GameStatus, thinking) => readonly string[]`"* — and cl.
+     9b quotes the same form. A later reader who compares the two documents can only conclude either
+     *"the ticket drifted from the ADR"* or *"the ADR's experiment is invalid"*, and **both conclusions
+     are wrong**; distinguishing them requires re-running the invariance measurement above. **One
+     sentence in the ADR prevents that; nothing else in clause 9 moves, and no clause is re-opened.**
+   - **`memory-bank/50-decisions/` was NOT edited by this hop.** Routing is the Orchestrator's.
+   - **One attribution corrected while here:** the sentence *"the seam is not new and its arguments do
+     not change"* was reported during the build as the ADR's. It is **not** — it is this ticket's own
+     `[D27]` closing sentence, and it is fixed above. `grep` for *"argument"* in `ADR-0009` returns two
+     hits and neither is that sentence.
+9. **`plans/board.md`'s `ABC-019` row, for the Orchestrator — RESTATED, and the requested move has
+   changed.** The row's `blocked-until: ABC-012, ABC-014, ABC-018` and `merge-order: after ABC-020` were
+   flagged stale on all four at two previous hops and are still owed. **Requested now:
+   `In Review` → `In Development`**, for `A9b` only. **No board edit was made here.**
