@@ -63,6 +63,21 @@ const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 /** Three pieces, so the scan's 64 cannot be confused with the board's occupancy. */
 const SPARSE_FEN = "4k3/8/8/8/8/8/8/4R1K1 w - - 0 1";
 
+/** Two plies on the sparse anchor — `A13`'s stated minimum depth for a counting clause. */
+const SPARSE_PLIES = ["e1e2", "e8d8"] as const;
+
+/** Four plies on the same anchor: the count must not move with the depth. */
+const SPARSE_PLIES_DEEP = ["e1e2", "e8d8", "e2e4", "d8c8"] as const;
+
+/**
+ * The occupied squares of a FEN's board field. `parseFen` places one piece per occupied square
+ * (`src/fen.ts:90`), so this is the replay's whole `squareAt` contribution — derived from the
+ * anchor rather than written down as a literal, which is what lets the scan clause be stated
+ * ply-independently instead of as a second magic number.
+ */
+const occupiedIn = (fen: string): number =>
+  [...(fen.split(" ")[0] as string)].filter((character) => /[a-zA-Z]/.test(character)).length;
+
 /** As in `status-panel.test.ts`: the core's own primitives, never `history.ts`. */
 function gameFrom(initialFen: string, plies: readonly string[]): GameHistory {
   const position = parseFen(initialFen);
@@ -131,46 +146,119 @@ describe("ABC-016 A13 — the panel derives nothing (call counts, spied)", () =>
     renderStatusPanel(empty, statusFor(empty), false);
     expect(isInCheck).toHaveBeenCalledTimes(1);
 
-    // From the first move on, `toSan` makes its own `isInCheck` call inside `suffix` — it makes
-    // the move, asks whether the side moved against is in check, and unmakes it (`src/san.ts:101`).
+    // From the first move on, `toSan` makes its own `isInCheck` call inside `suffix` — it makes the
+    // move, asks whether the side moved against is in check, and unmakes it (`src/san.ts:104`).
     // That call is SAN's, not the panel's, and it arrives through the one `toSan` the test above
-    // pins. See the ticket flag raised at this hop: `A13` says "exactly 1" for the total, which no
-    // build satisfying items 2 and 4 together can reach on a non-empty history. The panel's own
-    // count is what the criterion is about and it is one; the delta below is exactly SAN's.
-    const played = gameFrom(START_FEN, ["g1f3"]);
+    // pins.
+    //
+    // THE DIFFERENCE FORM BELOW IS THE CRITERION AND IS NOT A DEPARTURE FROM IT. `A13` was ruled on
+    // 2026-08-11 and no longer says "exactly 1" for the render's TOTAL: it pins the panel's own
+    // call in two ways that name no other module's count — directly on an empty history, above,
+    // and by difference on a longer one, here. Written as a difference precisely so that it holds
+    // whatever `suffix()` does; stating the total as "1 empty, 2 thereafter" was REJECTED, because
+    // it would make this ticket restate a number `src/san.ts` owns.
+    //
+    // [CORRECTED — D26] The sentence that stood here said `A13` was unsatisfiable and pointed at a
+    // flag that had already been ruled. Taken at face value it told the next reader that this form
+    // is the engineer's improvisation around a broken criterion — AND YOU DO NOT PROBE THE DEPTH OF
+    // A CLAUSE YOU HAVE BEEN TOLD IS A WORKAROUND. QE reports it did exactly that: the two probes
+    // that found the depth gap below are the ones that sentence argued against writing. A stale
+    // comment on this ticket has now been measured to suppress a real gap.
+    //
+    // THE DEPTH IS PART OF THE CRITERION. Both counting clauses are measured at a ply depth of AT
+    // LEAST 2, because a build adding a second `isInCheck` from ply 2 on reads 1 at one ply — PASS
+    // — and 2 at four plies. The four-ply fixture is reused from the first test above rather than a
+    // second game being built.
+    const played = gameFrom(START_FEN, ["e2e4", "e7e5", "g1f3", "b8c6"]);
+    expect(played.moves.length).toBeGreaterThanOrEqual(2);
     renderStatusPanel(played, statusFor(played), false);
     const withSan = (isInCheck as ReturnType<typeof vi.fn>).mock.calls.length;
 
-    vi.clearAllMocks();
+    // The baseline is `toSan` on the SAME move against the SAME position the panel replays to —
+    // ply n-1, so a 3-ply replay here — and any other move would compare two quantities that are
+    // only equal by accident. The mocks are cleared IMMEDIATELY BEFORE the call so the replay's own
+    // work never enters the baseline.
     const position = parseFen(START_FEN);
-    toSan(position, played.moves[0] as Move);
+    for (let ply = 0; ply < played.moves.length - 1; ply++) {
+      makeMove(position, played.moves[ply] as Move);
+    }
+
+    vi.clearAllMocks();
+    toSan(position, played.moves[played.moves.length - 1] as Move);
     const sanAlone = (isInCheck as ReturnType<typeof vi.fn>).mock.calls.length;
+
+    // [ADDED — D26] An executable guard on the comment above, and NOT a protection of the panel.
+    // The flag that asked for it was raised as a discrimination gap and measured NOT to be one:
+    // SAN's call enters both terms with the same coefficient and cancels, so `2 - 1` and `1 - 0`
+    // give identical verdicts on every build and the difference form is sound either way. What the
+    // line records is PROVENANCE — that the spy does intercept SAN's internal call today, the fact
+    // the whole routing of two hops turned on and that nothing else in the repo records. It is
+    // deliberately not `toBe(1)`: `> 0` names no number `src/san.ts` owns.
+    expect(sanAlone).toBeGreaterThan(0);
 
     expect(withSan - sanAlone).toBe(1);
   });
 
-  it("scans the 64 squares exactly once, whatever the board holds", () => {
-    // On an empty history nothing else in the render steps a square: there is no replay, so no
-    // `parseFen`, and `legalMoves` does not use `squareAt` at all. The count is the scan, alone.
-    // Two occupancies — 32 pieces and 3 — because a scan that walked the OCCUPIED squares would
-    // agree with 64 on neither.
-    for (const fen of [START_FEN, SPARSE_FEN]) {
-      const history = gameFrom(fen, []);
+  it("scans the 64 squares exactly once, whatever the board holds and however deep the game", () => {
+    // The scan clause is stated PLY-INDEPENDENTLY: one render's `squareAt` count is 64 plus the
+    // occupied squares of `history.initialFen`. The 64 is the scan; the rest is the single
+    // `parseFen` the replay pays, which places one piece per occupied square (`src/fen.ts:90`).
+    // `makeMove` never calls `squareAt` at all, which is why the depth does not enter the count —
+    // and that is what makes a stated DEPTH meaningful here rather than a second magic number.
+    //
+    // [ADDED — D22] Every depth asserted is AT LEAST 2. The clause was measured at 0 and 1 ply
+    // only, so a build whose 64-square scan runs a second time FROM PLY 2 ON read 67 at one ply —
+    // PASS — and 131 at four. Two occupancies (32 pieces and 3) because a scan that walked the
+    // OCCUPIED squares rather than the 64 would agree with neither, and two depths because the
+    // count must not move with the depth.
+    const shapes: [name: string, history: GameHistory][] = [
+      ["32 pieces, 4 plies", gameFrom(START_FEN, ["e2e4", "e7e5", "g1f3", "b8c6"])],
+      ["3 pieces, 2 plies", gameFrom(SPARSE_FEN, SPARSE_PLIES)],
+    ];
+
+    for (const [name, history] of shapes) {
+      expect(history.moves.length, name).toBeGreaterThanOrEqual(2);
       const status = statusFor(history);
+
       renderStatusPanel(history, status, false);
-      expect(squareAt, fen).toHaveBeenCalledTimes(64);
+
+      expect(squareAt, name).toHaveBeenCalledTimes(64 + occupiedIn(history.initialFen));
     }
   });
 
   it("replays the history exactly once for the last move, and never twice", () => {
-    // With a move played, the render's `squareAt` calls are the scan's 64 plus the one `parseFen`
-    // the replay pays, which places one piece per occupied square (`src/fen.ts:90`). Three pieces
-    // here, so 67 — and a panel that replayed a second time would read 70.
-    const history = gameFrom(SPARSE_FEN, ["e1e2"]);
+    // The same count, one anchor, deeper — 64 + 3 = 67 at four plies exactly as at two, because
+    // the replay pays ONE `parseFen`. A panel that replayed a second time reads 70 here, and a
+    // panel whose replay cost grew with the game would not read the same number at both depths.
+    const history = gameFrom(SPARSE_FEN, SPARSE_PLIES_DEEP);
     const status = statusFor(history);
 
     renderStatusPanel(history, status, false);
 
-    expect(squareAt).toHaveBeenCalledTimes(64 + 3);
+    expect(squareAt).toHaveBeenCalledTimes(64 + occupiedIn(SPARSE_FEN));
+  });
+
+  it("pays no replay at all before the first move", () => {
+    // RETAINED DELIVERED COVERAGE, and it is deliberately NOT the ply-independent formula above.
+    // On an empty history `lastMoveSan` returns before it reaches `parseFen`, so there is no
+    // replay and the count is the scan ALONE: exactly 64, on any occupancy. The formula above
+    // describes the render that DOES replay and reads 64 + occupied; it is not claimed here,
+    // because at depth 0 the two disagree by the anchor's piece count.
+    //
+    // Moving the scan clause to a depth of at least 2 (D22) would otherwise have dropped this
+    // assertion, and dropping it would leave a panel that pays a POINTLESS `parseFen` before the
+    // first move invisible to everything: the deeper counts are unchanged by it, and it emits the
+    // same rows. That is `A13`'s own class — a cost regression no output can see — so it is kept
+    // rather than removed. Two occupancies, because a scan walking the OCCUPIED squares rather
+    // than the 64 would agree with neither.
+    for (const fen of [START_FEN, SPARSE_FEN]) {
+      const history = gameFrom(fen, []);
+      expect(history.moves, fen).toHaveLength(0);
+      const status = statusFor(history);
+
+      renderStatusPanel(history, status, false);
+
+      expect(squareAt, fen).toHaveBeenCalledTimes(64);
+    }
   });
 });

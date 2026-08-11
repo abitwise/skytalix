@@ -54,6 +54,27 @@ const SHUFFLE = ["g1h1", "a5b6", "h1g1", "b6a5", "g1h1", "a5b6", "h1g1", "b6a5"]
 const PLAYED_CHECK = ["e2e4", "e7e5", "d1h5", "g7g6", "h5e5"] as const;
 
 /**
+ * In check AND a fifty-move claim available, in the SAME render (`A2`, D23). It is `A8` row 2's
+ * fifty-move position with the king put in check by the same rook, so it is reachable rather than
+ * contrived — but it has to be CONSTRUCTED: QE's 400 seeded 80-ply games produced 2,138 in-check
+ * renders and ZERO claimable draws, so no corpus finds this pair.
+ */
+const CHECK_AND_CLAIM_FEN = "4k3/8/8/8/8/8/8/4R1K1 b - - 100 60";
+
+/**
+ * White knights on c2 and e2, BOTH able to capture on d4, so SAN must name the file the knight came
+ * from (`A5`, D25). The one case whose last move needs a disambiguator: a build that hands `toSan`
+ * an empty legal list renders `Nxd4` here and is correct on every other move this ticket names.
+ */
+const DISAMBIGUATOR_FEN = "4k3/8/8/8/3p4/8/2N1N3/4K3 w - - 0 1";
+
+/**
+ * The engine-thinking text, this file's own copy (AGENTS.md rules 5 and 9). `A7` blanks it to a run
+ * of spaces of the SAME LENGTH, which is what the panel reserves when the engine is idle.
+ */
+const THINKING = "thinking...";
+
+/**
  * A `GameHistory` played from `initialFen` through the named coordinate plies (`"g1f3"`), built
  * from the rules core alone. Throws on an illegal ply, so a fixture can never silently become a
  * shorter game than the criterion it stands under.
@@ -104,9 +125,6 @@ const panelOf = (history: GameHistory, thinking = false): string[] =>
 
 const textOf = (history: GameHistory, thinking = false): string =>
   panelOf(history, thinking).join("\n");
-
-const widestOf = (rows: readonly string[]): number =>
-  rows.reduce((widest, row) => Math.max(widest, row.length), 0);
 
 /**
  * Every case the criteria name, in one list. `A10`, `A11` and `A12` are each written over "every
@@ -161,6 +179,19 @@ const CASES: ReadonlyArray<{ name: string; history: GameHistory; thinking: boole
     history: gameFrom("6k1/5ppp/8/b7/8/8/5PPP/4R1K1 b - - 100 60", []),
     thinking: false,
   },
+  // [ADDED — D23] Check crossed with a claimable draw. It belongs in `CASES` so `A7`, `A10`, `A11`
+  // and `A12` sweep it and it gets a snapshot.
+  {
+    name: "in check and fifty-move claimable",
+    history: gameFrom(CHECK_AND_CLAIM_FEN, []),
+    thinking: false,
+  },
+  // [ADDED — D25] The last move that needs a SAN disambiguator, for the same four sweeps.
+  {
+    name: "disambiguated last move",
+    history: gameFrom(DISAMBIGUATOR_FEN, ["e2d4"]),
+    thinking: false,
+  },
 ];
 
 describe("ABC-016 acceptance", () => {
@@ -197,6 +228,17 @@ describe("ABC-016 acceptance", () => {
     expect(played).toContain("3...");
     expect(played).toContain("last: Qxe5+");
     expect(played).toContain("material: +1");
+
+    // [ADDED — D23] CHECK crossed with a claimable draw, in ONE render. Until this case the two
+    // were never crossed anywhere on the ticket, and a build that suppresses `CHECK` whenever a
+    // draw is claimable passed every criterion AND every snapshot. Both cells together is the
+    // assertion; either one alone is already covered above and in `A8`.
+    const checkAndClaim = gameFrom(CHECK_AND_CLAIM_FEN, []);
+    const rows = panelOf(checkAndClaim);
+    const text = rows.join("\n");
+    expect(text).toContain("CHECK");
+    expect(text).toContain("Black may claim: fifty-move rule");
+    expect(rows).toHaveLength(STATUS_ROWS);
   });
 
   it("A3 — renders the move number the side to move is about to play, both ways", () => {
@@ -235,6 +277,15 @@ describe("ABC-016 acceptance", () => {
     const rows = panelOf(empty);
     expect(rows.join("\n")).not.toMatch(/last:\s*\S/);
     expect(rows).toHaveLength(STATUS_ROWS);
+
+    // [ADDED — D25] The last move that NEEDS a disambiguator. Knights on c2 and e2 both capture on
+    // d4, so SAN must name the file. This is the panel's CALL SHAPE and not `toSan`'s body, which
+    // is `ABC-013`'s: a build handing `toSan` an empty legal list disables every disambiguator
+    // silently and diverged on 218 of 400 games while passing all three nets. The negative is what
+    // does the work — `last: Nexd4` does not contain `last: Nxd4`.
+    const disambiguated = textOf(gameFrom(DISAMBIGUATOR_FEN, ["e2d4"]));
+    expect(disambiguated).toContain("last: Nexd4");
+    expect(disambiguated).not.toContain("last: Nxd4");
   });
 
   it("A6 — the material balance, as a table of exact integers", () => {
@@ -244,6 +295,20 @@ describe("ABC-016 acceptance", () => {
       // The promotion case: white one pawn short and one queen up. A board diff against the
       // standard starting complement gets it wrong; a 64-square scan gets it right.
       ["rnbqkbnr/pppppppp/8/8/7Q/8/PPPPPPP1/RNBQKBNR w KQkq - 0 1", "material: +8"],
+      // [ADDED — D21] The three rows above vary PAWNS and QUEENS alone, so `KNIGHT`, `BISHOP` and
+      // `ROOK` were invisible to every criterion and every snapshot — a `KNIGHT = 4` build diverged
+      // on 325 of 400 games and passed all three nets. Each row below removes exactly ONE black
+      // piece from the starting complement and reads that piece's value on its own.
+      //
+      // THREE ROWS AND NOT THE SINGLE JOINT FEN that was available: a position down `R+N+B` reads
+      // `+11` and each of `KNIGHT=4`, `BISHOP=4`, `ROOK=6` reads `+12` there, so one row does kill
+      // each named build — but a COMPENSATING `KNIGHT=4, BISHOP=2` reads `4+2+5 = +11` and survives
+      // it. These kill it on the first row, and each says WHICH integer is wrong when it goes red.
+      ["r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "material: +3"],
+      ["rn1qkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "material: +3"],
+      // `KQk` and not `KQkq`: removing the a8 rook removes Black's queenside right, and `parseFen`
+      // accepts the position only when the castling field agrees with the board.
+      ["1nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk - 0 1", "material: +5"],
     ];
 
     for (const [fen, expected] of cases) {
@@ -251,20 +316,45 @@ describe("ABC-016 acceptance", () => {
     }
   });
 
-  it("A7 — the thinking cell is reserved, so the panel's geometry does not breathe", () => {
+  it("A7 — thinking changes the thinking cell and NOTHING else, on every case", () => {
     const history = gameFrom(START_FEN, ["e2e4"]);
     const status = statusOf(history);
 
-    const busy = renderStatusPanel(history, status, true);
-    const idle = renderStatusPanel(history, status, false);
+    expect(renderStatusPanel(history, status, true).join("\n")).toContain(THINKING);
+    expect(renderStatusPanel(history, status, false).join("\n")).not.toContain(THINKING);
 
-    expect(busy.join("\n")).toContain("thinking...");
-    expect(idle.join("\n")).not.toContain("thinking...");
-    // The width clause is what makes "blank but reserved" mean something: the panel's widest row
-    // is the frame's `W` (`src/frame.ts:179`), so a cell that shrinks when idle makes the whole
-    // frame breathe.
-    expect(idle).toHaveLength(busy.length);
-    expect(widestOf(idle)).toBe(widestOf(busy));
+    // [REPLACED — D20] The struck clause compared the panel's WIDEST row between the two states.
+    // It could not fail on the build `D7` added it to catch: at its own fixture the widest row is
+    // 21 and the thinking cell's row is 11, so dropping the reserved cell ENTIRELY still read
+    // 21 === 21. It caught a shrinking cell only when that cell happened to sit on the widest row,
+    // which is not a property any criterion states.
+    //
+    // This is the replacement, and it is stronger in the direction that was actually open:
+    // `thinking` was an INPUT that no criterion crossed with any CONTENT, because the three
+    // criteria that sweep `CASES` assert purity, row count and ASCII and NONE asserts content. So
+    // the flag could gate any cell. Blanking `thinking...` to spaces of the same length must leave
+    // a panel byte-identical to the idle one, on EVERY case in both states — which kills all five
+    // wrong builds on that axis (`CHECK`, the claim cell, the side-to-move cell and the reserved
+    // cell each dropped while thinking, and a non-ASCII check cell while thinking) where a single
+    // `thinking: true` entry in `CASES` kills one. It subsumes the row count and the per-row width
+    // by byte-identity, so neither is asserted separately.
+    //
+    // It names no row index, no width across different positions and no frame-level term: it
+    // compares two renders of the SAME position and history. `ADR-0010` clause 5 refuses a
+    // constant-width criterion and this is not one — the panel's width is free to vary between
+    // positions, which under clause 1 it does by design.
+    const blank = " ".repeat(THINKING.length);
+
+    for (const { name, history: caseHistory } of CASES) {
+      const caseStatus = statusOf(caseHistory);
+      const busy = renderStatusPanel(caseHistory, caseStatus, true);
+      const idle = renderStatusPanel(caseHistory, caseStatus, false);
+
+      expect(
+        busy.map((row) => row.replaceAll(THINKING, blank)),
+        name,
+      ).toEqual(idle);
+    }
   });
 
   it("A8 — the claim cell names the rules that hold and no others", () => {
@@ -310,9 +400,33 @@ describe("ABC-016 acceptance", () => {
     }
   });
 
-  it("A9 — the claim belongs to the side to move, on the engine's plies too", () => {
+  it("A9 — the claim is READ from status.claimable.by and is never inferred from the board", () => {
     const black = gameFrom("6k1/5ppp/8/b7/8/8/5PPP/4R1K1 b - - 100 60", []);
     expect(textOf(black)).toContain("Black may claim: fifty-move rule");
+
+    // [ADDED — D24] The one input shape that separates READING from INFERRING. Every status the
+    // rules core produces derives `by` from the same `position.blackToMove` an inferring panel
+    // would read (`src/gameend.ts:170`), so against a produced status the two builds are
+    // DEFINITIONALLY identical — an inferring build diverged 0 times in 400 games. Only a status
+    // whose claimant DISAGREES with the position can tell them apart.
+    //
+    // THIS STATUS IS CONSTRUCTED AND IS NOT PRODUCIBLE BY MERGED `gameStatusOf` TODAY, and it is
+    // stated here rather than left for a reader to discover, so nobody mistakes it for a reachable
+    // game state (this ticket's `D13` honesty, applied a second time). It is the right criterion
+    // anyway: `by` is a required field of the public `DrawClaims` interface, `status` is a
+    // PARAMETER this panel does not derive, and `ABC-021` adds a second producer of claims.
+    const white = gameFrom("6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 100 60", []);
+    expect(white.position.blackToMove).toBe(false);
+
+    const forged: GameStatus = {
+      result: "in-progress",
+      reason: null,
+      claimable: { by: "black", draws: ["fifty-move"] },
+    };
+
+    const text = renderStatusPanel(white, forged, false).join("\n");
+    expect(text).toContain("Black may claim: fifty-move rule");
+    expect(text).not.toContain("White may claim");
   });
 
   it("A10 — rendering twice is byte-identical and changes nothing the caller owns", () => {

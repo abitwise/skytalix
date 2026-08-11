@@ -36,6 +36,12 @@ material: 0
            "
 `;
 
+exports[`ABC-016 panel snapshots > matches its snapshot — disambiguated last move 1`] = `
+"Black to move  1...
+last: Nexd4  material: +6
+           "
+`;
+
 exports[`ABC-016 panel snapshots > matches its snapshot — fifty-move claimable 1`] = `
 "White to move  60.
 material: +2
@@ -46,6 +52,12 @@ exports[`ABC-016 panel snapshots > matches its snapshot — in check 1`] = `
 "Black to move  1...  CHECK
 material: +5
            "
+`;
+
+exports[`ABC-016 panel snapshots > matches its snapshot — in check and fifty-move claimable 1`] = `
+"Black to move  60...  CHECK
+material: +5
+             Black may claim: fifty-move rule"
 `;
 
 exports[`ABC-016 panel snapshots > matches its snapshot — loaded FEN at move 27 1`] = `

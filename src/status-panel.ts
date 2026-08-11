@@ -94,9 +94,20 @@ const CELL_GAP = "  ";
 
 /**
  * The engine-thinking text. Its WIDTH is reserved when the engine is idle rather than the cell
- * being dropped: the panel's widest row is the frame's `W` (`src/frame.ts:179`), so a cell that
- * shrinks when the engine stops makes the whole frame breathe. `A7` asserts the width, which is
- * what makes "blank but reserved" mean something.
+ * being dropped, so that this cell's content does not jump horizontally when the engine starts or
+ * stops — a legibility property of this panel, and nothing more than that.
+ *
+ * IT IS NOT A CLAIM ABOUT THE FRAME. The sentence that stood here said the panel's widest row is
+ * the frame's `W`, so a shrinking cell "makes the whole frame breathe". That was true when it was
+ * written and is FALSE after `ADR-0010` clause 1, which gives frame-width stability to the
+ * consumer: `W` is a `max` over the panels, the board is wider than this one, and clearing is the
+ * writer's job. This module names no frame-level term and must not: `ADR-0010` clause 5 refuses a
+ * constant-width criterion outright.
+ *
+ * `A7` is what makes "blank but reserved" mean something, and it no longer measures a width. It
+ * blanks this text to spaces of the SAME LENGTH and requires the result to be byte-identical to
+ * the idle panel, on every case in both thinking states — so the flag is crossed with every cell
+ * rather than with one position's widest row.
  */
 const THINKING = "thinking...";
 
