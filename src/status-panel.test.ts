@@ -47,6 +47,13 @@ const SHUFFLE_FEN = "6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 0 1";
 const SHUFFLE = ["g1h1", "a5b6", "h1g1", "b6a5", "g1h1", "a5b6", "h1g1", "b6a5"] as const;
 
 /**
+ * `1.e4 e5 2.Qh5 g6 3.Qxe5+` — this ticket's ONLY capture and its only check reached BY PLAY.
+ * Played rather than loaded on purpose (`## Test notes`, D19): loading the resulting FEN gives the
+ * same board with an EMPTY move list, which exercises neither the replay nor `last: Qxe5+`.
+ */
+const PLAYED_CHECK = ["e2e4", "e7e5", "d1h5", "g7g6", "h5e5"] as const;
+
+/**
  * A `GameHistory` played from `initialFen` through the named coordinate plies (`"g1f3"`), built
  * from the rules core alone. Throws on an illegal ply, so a fixture can never silently become a
  * shorter game than the criterion it stands under.
@@ -119,6 +126,11 @@ const CASES: ReadonlyArray<{ name: string; history: GameHistory; thinking: boole
     thinking: false,
   },
   {
+    name: "played check 3.Qxe5+",
+    history: gameFrom(START_FEN, PLAYED_CHECK),
+    thinking: false,
+  },
+  {
     name: "loaded FEN at move 27",
     history: gameFrom("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 27", []),
     thinking: false,
@@ -162,7 +174,7 @@ describe("ABC-016 acceptance", () => {
     expect(black).not.toContain("White to move");
   });
 
-  it("A2 — states CHECK on a plain check, on a mate, and never on a quiet board", () => {
+  it("A2 — states CHECK on a plain check, on a mate, on a check reached by play, and never on a quiet board", () => {
     // The plain-check FEN is the one that kills a build reading the indicator from
     // `status.reason === "checkmate"`: four legal replies, game in progress, and still CHECK.
     expect(textOf(gameFrom("4k3/8/8/8/8/8/8/4R1K1 b - - 0 1", []))).toContain("CHECK");
@@ -170,6 +182,21 @@ describe("ABC-016 acceptance", () => {
     // A mated board still says CHECK — this panel reports check, not game over.
     const mate = "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3";
     expect(textOf(gameFrom(mate, []))).toContain("CHECK");
+
+    // [ADDED — D19b] The check reached BY PLAY, and the only capture on this ticket. Every other
+    // in-check case above has an EMPTY move list and every other played case is quiet, so a panel
+    // reading the indicator (item 2) or the balance (item 5) out of item 4's REPLAY position — the
+    // `Position` it is already holding in order to name the last move — passed every criterion
+    // before this case existed. Here the replay is
+    // `rnbqkbnr/pppp1p1p/6p1/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 0 3`: WHITE to move and NOT in
+    // check, with the pawn still on e5. The live board is Black to move, in check, a pawn down.
+    // Five cells in ONE render, because the discriminator is that they agree with each other.
+    const played = textOf(gameFrom(START_FEN, PLAYED_CHECK));
+    expect(played).toContain("CHECK");
+    expect(played).toContain("Black to move");
+    expect(played).toContain("3...");
+    expect(played).toContain("last: Qxe5+");
+    expect(played).toContain("material: +1");
   });
 
   it("A3 — renders the move number the side to move is about to play, both ways", () => {

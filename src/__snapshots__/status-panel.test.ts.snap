@@ -66,6 +66,12 @@ material: -9
            "
 `;
 
+exports[`ABC-016 panel snapshots > matches its snapshot — played check 3.Qxe5+ 1`] = `
+"Black to move  3...  CHECK
+last: Qxe5+  material: +1
+           "
+`;
+
 exports[`ABC-016 panel snapshots > matches its snapshot — start position 1`] = `
 "White to move  1.
 material: 0
