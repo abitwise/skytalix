@@ -1,0 +1,465 @@
+---
+id: ABC-027
+title: The in-place frame writer clears each row as it writes it — a narrowing frame leaves stale columns on screen
+status: ready
+column: Ready
+size: S
+priority: P1
+epic: EPIC-002
+feature: —
+---
+
+# ABC-027 — the in-place writer clears each row as it writes it
+
+> **CUT 2026-08-11 by BA/PM** (task `refinement-ABC-027-cut`, subtask `refinement-ABC-027-cut`,
+> Workflow 07) to carry accepted **`ADR-0010`**'s clause 1. The Architect named the code and
+> deliberately declined to pick a home; the **Orchestrator** routed it here rather than reopening
+> `ABC-018`, which merged 2026-08-09 and is closed.
+>
+> **`ADR-0010` and `ADR-0009` are NOT re-opened.** Both are accepted. This ticket turns clause 1 into
+> acceptance criteria and changes no ruling.
+>
+> **EVERY criterion below was RUN before it was written — against merged `src/`, on an out-of-tree
+> copy, on both the merged writer and the clause-1 writer, plus three mutants.** The whole change
+> was built and gated on that copy: **681/681 on 22 files, skip 0**. **Zero `src/` bytes were
+> written in this repository at this hop** (`git status --porcelain src/` = 0 lines).
+>
+> **THE REASON THE CRITERIA ARE WORDED THIS HARD.** `ADR-0010` measured that the merged suite's
+> fixtures yield `W` ∈ **{18}** because the real board pins it, so **a criterion that does not force
+> a NARROWING passes on a broken build**. Two more forms were measured to be worse than useless:
+> the epic `4b` form is **blind at any real terminal width**, and the merged `:379` form
+> **false-positives on every screen wider than the frame**. `A2` and `A3` exist to make both
+> failures impossible, and each was witnessed by a mutant that kills it.
+
+> ## ONE CORRECTION TO `ADR-0010`'s `## Consequences`, MEASURED HERE AND REPORTED RATHER THAN QUIETLY USED
+>
+> **The ADR is NOT edited** — `memory-bank/50-decisions/` is not this hop's, and the correction
+> changes nothing in the ruling. It changes what the engineer will find.
+>
+> `ADR-0010` states *"**Three** test changes ride with that production line"* and names the screen
+> model, `:376`'s escape count, and *"the file needs its **first** narrowing fixture"*. Measured by
+> applying clause 1 to a copy and running the suite:
+>
+> | ADR says | measured |
+> |---|---|
+> | three test changes | **five assertion sites across four tests**, plus the new criteria |
+> | the model must learn `\x1b[K` | **confirmed — 5 tests THROW without it** |
+> | `:376`'s escape count `2` → `24` | confirmed, **but it is masked**: `:374`'s `toContain(second.join("\n"))` fails first and is not named by the ADR |
+> | — | **`:419`'s `expect(body).toBe(frame.join("\n"))` also fails and is not named by the ADR** |
+> | *"the file needs its FIRST narrowing fixture"* | **FALSE — `src/frame.test.ts:735-771` already has one**, `widthOf(wide)` **24** and `widthOf(narrow)` **18**, both asserted |
+>
+> **`:735-771` is the sharpest form of this project's most-recorded defect class yet.** It is titled
+> *"CHARACTERIZES: `W` is recomputed per frame, so a narrowing frame leaves the wider one's tail"* and
+> it **asserts the defect is present**. Its own comment says it *"pins today's behaviour and fails
+> loudly the day someone changes it"* — so it is not a bad test, it is a **tripwire doing its job**,
+> and this ticket is the day. But the consequence is concrete: **an assertion in the merged suite
+> that no correct build can satisfy after this ticket**, and the ADR's change list does not mention
+> it. `A6` owns it. It is **replaced, never deleted** — the property it was built to watch is exactly
+> what `A2` now asserts from the other side.
+
+## Problem
+
+*User*: the player looking at the board while the status panel's widest cell shrinks — a draw claim
+expiring, a captured piece changing the material readout, a move number gaining a digit.
+
+*Pain*: the frame's width `W` is a **max over the delivered panel rows** (`src/frame.ts:179`),
+recomputed per frame, so `W` shrinks whenever the widest panel row shrinks. The in-place writer
+emits cursor-home, the rows, and one `\x1b[0J`. **`\x1b[0J` erases downward from the end of the new
+frame and never rightward**, so every column to the right of a narrowed row keeps the previous
+frame's characters. Measured through a terminal model implementing this module's escape grammar:
+
+| what the frame says | what the player sees |
+|---|---|
+| `last: c3  material: 0` | `last: c3  material: 00` |
+| *(empty row — no claim)* | `claim: threefold repetition` |
+
+**A wrong material count and a draw claim that has expired. That is a misreported game state, not a
+smudge** — and it does not self-repair: `ADR-0010` measured the residue surviving **17 consecutive
+frames**.
+
+*Value*: what the player reads is what the frame says. This is the single change that makes the
+in-place redraw honest at any terminal width, and `ADR-0010` measured it at **+66 characters per
+frame, exactly and always**.
+
+**Nothing is broken in production today** and that is the deadline, not a reason to defer: nothing
+composes a frame in a loop until `ABC-019`, which is **`In Development` right now**. The defect
+becomes reachable the moment that loop lands.
+
+## The measurement that makes these criteria non-vacuous
+
+Run at this hop against merged `src/frame.ts` + the real `renderBoard` (**9 rows × 18 characters**),
+a 3-row status fixture and an 8-row history fixture, `H` = **23**, through the screen model:
+
+**The fixture — a draw claim offered, then expiring, then a check announcement, then quiet:**
+
+| frame | status row 3 | `W` |
+|---|---|---|
+| 1 | `White may claim: threefold repetition` | **37** |
+| 2 | *(empty)* | **18** |
+| 3 | `check: YES — White to move out of check` | **39** |
+| 4 | *(empty)* | **18** |
+
+Two narrowings and one widening, every frame **exactly 23 rows**. Asserting after **every** redraw
+that each screen row equals its frame row (trailing spaces trimmed):
+
+| writer | @ 80 columns | @ 120 columns |
+|---|---|---|
+| merged | **2 rows stale** | **2 rows stale** |
+| clause 1 | **0** | **0** |
+
+The residue, on a row the frame says is **empty**: `hreefold repetition` after redraw 2, and
+` to move out of check` after redraw 4.
+
+**Which assertion form catches it — re-measured here, and it adds one column `ADR-0010`'s table does
+not have: what each form does to the CORRECT build.**
+
+| form | narrowing @ `W`(frame 1) | narrowing @ 80/120 | steady @ 80/120 | **on the CORRECT build** |
+|---|---|---|---|---|
+| **F1** epic `4b` / merged `:381`, whole rows of frame N | catches | **BLIND** | pass | **FALSE POSITIVE at `W`(frame 1)** |
+| **F2** merged `:379`, untrimmed screen == frame | catches | catches | **FALSE POSITIVE** | false-positives with it |
+| **F3** screen == frame, **trimmed** | catches | **catches** | pass | **passes** |
+| **F4** every frame's `W` == the session `W` | catches | catches | pass | **FAILS the correct build** |
+
+Three of the four forms are wrong here, and **F1's extra failure mode is new**: at the artificial
+screen width `W`(frame 1) it flags the **correct** build, because `rowsOnlyIn` compares rows padded
+to two different widths. So `:381`'s form must not be reused for a narrowing test in either
+direction. **`F3` is the only sound form, and `A2` is `F3`.**
+
+**`F4` is why this ticket carries a PROHIBITION** (`## Out of scope`): under clause 1 `W` varies **by
+design** — measured `{37, 18, 39, 18}` over four frames — so a constant-frame-width criterion would
+fail the correct build. This is one of the two tickets this round that must not acquire one.
+
+## Scope
+
+**One expression in `src/frame.ts`'s in-place branch of `beginFrameSession`, and the tests that can
+see it.**
+
+- **`src/frame.ts:216`** — the emitted redraw becomes cursor-home, the rows joined by an
+  erase-in-line, then the single existing erase-to-end-of-screen. One new module constant for
+  `\x1b[K`, in the shape of the two that are already there (`:53-61`).
+- **`src/frame.ts:27-29`** — the header sentence *"…which is what makes an in-place redraw leave no
+  character of the previous frame behind **without emitting a per-row erase**"* becomes false with
+  the change and is edited with it. It is the module stating the broken invariant as a fact.
+- **`src/frame.test.ts`** — the screen model learns `\x1b[K`; the four assertion sites that hardcode
+  the old emission are updated; `:735-771`'s characterization is replaced by the criterion it was
+  waiting for; the criteria below are added.
+
+**Measured minimal and sufficient** (`ADR-0010` clause 1, re-run here): **one** `\x1b[0J`, **one**
+`write()` per frame, **+66 characters** = `(H − 1) × 3`, and **0 stale rows** at 80 and 120 columns.
+A trailing `\x1b[K` on the last row is **redundant** — `\x1b[0J` already clears the rest of the
+cursor's row — and is **not** added.
+
+## Out of scope
+
+- **ANY constant-frame-width criterion, anywhere, on this ticket or downstream. This is a
+  PROHIBITION, not an omission.** Under `ADR-0010` clause 1 `W` varies by design; `F4` was measured
+  above to fail the **correct** build. `ADR-0010` clause 7 states the same prohibition for
+  `ABC-019`.
+- **Any change to `assembleFrame`.** `W` stays a per-frame max over delivered rows (`:179`,
+  unchanged) and every frame VALUE is byte-identical with or without this ticket — `ADR-0010`
+  `## Rollback` says so and `A5` asserts it. The assembler is correct; only what survives on the
+  terminal between two frames changes.
+- **Any panel.** `ADR-0010` clause 2: no panel reserves, pads or declares a frame width, and the
+  delivered `ABC-016` panel needs **zero production lines**. Nothing here reaches into
+  `src/status-panel.ts` or a history pane; neither module exists on `main` and this ticket does not
+  wait for them (`A7`).
+- **The append and short-TTY strategies.** Untouched by construction — only the in-place branch
+  changes. `A5` pins it rather than assuming it.
+- **Hoisting `W` to the session, freezing it at frame 1, or capping it.** `ADR-0010` alternatives B
+  and E, rejected by measurement (truncation destroyed **8 panel rows** including a live draw-claim
+  offer).
+- **Clearing only when the frame narrows.** `ADR-0010` alternative D, rejected — it makes the writer
+  stateful to save 66 characters and its correct path is the one that almost never runs.
+- **Amending epic `4b`.** `ADR-0010` clause 8 rules `4b` not breached: one `\x1b[0J`, no count, no
+  cursor movement, one `write()`. Its *"zero rows from frame N"* wording is blind to this defect at
+  a real width (**F1**, re-measured above), and the ADR covers that at ticket level on purpose.
+  **If the owner reads `4b`'s *"in one operation"* as forbidding any additional erase, `4b` needs a
+  wording hop and it is BA/PM's — carried here, not owned, and not blocking.**
+
+## Acceptance (Given/When/Then)
+
+**A1 — the emitted redraw, byte for byte. Given** a 23-row frame and a TTY sink reporting 24 rows,
+**when** one frame is written, **then** the sink receives **exactly one** `write()` call whose text
+is **exactly** cursor-home, the frame's rows joined by `\x1b[K` + newline, and one `\x1b[0J`; and in
+that text the count of `\x1b[K` is **`H − 1`** (22), the count of `\x1b[0J` is **exactly 1**, the
+count of `\x1b` is **`H + 1`** (24), and its length exceeds the same frame's un-cleared emission by
+**exactly `(H − 1) × 3`** = **66** characters.
+
+*(Every number is derived from `H`, never hardcoded — the merged file's own rule. Measured: 425 →
+**491** characters. The `\x1b` count is the assertion at `src/frame.test.ts:376` going from `2` to
+`2 + (H − 1)`; the byte delta is the ADR's cost claim made falsifiable. **Witnessed:** on the merged
+writer this criterion FAILS; on a partial fix that clears only the first 5 rows it FAILS.)*
+
+**A2 — AFTER EVERY REDRAW OF A SEQUENCE THAT NARROWS, THE SCREEN EQUALS THE FRAME, AT A REAL
+TERMINAL WIDTH. This is the criterion the ticket exists for. Given** the four-frame sequence in
+`## The measurement…` — `W` = **37, 18, 39, 18**, every frame exactly `H` rows — **when** the frames
+are written through one session onto a modelled screen of **80** columns and again of **120**
+columns, **then** after **each** of the four redraws, **every** row `0 … H − 2` of the screen, with
+trailing spaces trimmed, **equals** the corresponding row of the frame just written, also trimmed.
+
+**And the test must first assert that the sequence actually narrows**: `W` takes **at least two
+distinct values**, and at least one adjacent pair has `W(next) < W(previous)`.
+
+*(**The trimming is load-bearing and so is the width.** Untrimmed (`F2`, the merged `:379` form)
+false-positives on any screen wider than the frame — that is every real terminal. At a screen width
+equal to `W`(frame 1) the whole criterion degenerates into a fixture artifact, which is why 80 and
+120 are named and why the test asserts each is **greater than** the widest frame. The narrowing
+assertion is not ceremony: `ADR-0010` measured that the merged file's entire fixture space yields
+`W` ∈ **{18}**, so a fixture that quietly stops narrowing turns this criterion green forever. **The
+mutant that proves it:** with the fixture's claim string shortened so `W` no longer moves, this
+criterion FAILS rather than passing vacuously. **Witnessed:** FAILS on the merged writer at both
+widths (2 stale rows each); FAILS on the partial fix; PASSES on the clause-1 writer.)*
+
+**A3 — the fixture is PROVED able to catch the defect, in the suite, on every run. Given** the same
+sequence, **when** it is written through the **un-cleared** emission — cursor-home, the rows joined
+by a bare newline, one `\x1b[0J`, constructed in the test — onto the same 80-column screen, **then**
+at least one row differs from its frame, and the differing text contains a fragment of the wider
+frame that the narrower frame does not contain.
+
+*(**This is a check on the check, and this project has now recorded a bar that cannot fail on the
+regression it exists to catch SIX times** — most recently `ADR-0010`'s own cost table, which scored
+a candidate as correct because that candidate had destroyed the substring the check keyed on.
+`A3` makes `A2` self-evidencing: it fails the day the fixture stops being able to expose the defect,
+which is the only way `A2` can rot. It costs one screen and two writes. **Witnessed:** passes on
+both builds by construction — it tests the FIXTURE, not the writer — and FAILS on the degenerate
+fixture mutant.)*
+
+**A4 — a STEADY pair is not flagged. Given** two consecutive frames with the **same** `W`, **when**
+they are written at 80 and 120 columns, **then** `A2`'s comparison holds with no failure.
+
+*(The false-positive control. `F2` fails this at both widths on a **correct** build; this criterion
+is what stops a future hop reaching for it.)*
+
+**A5 — the two append strategies and every frame VALUE are untouched. Given** a non-TTY sink and,
+separately, a TTY sink reporting `H − 1` rows, **when** a frame is written, **then** the text is
+**exactly** `frame.join("\n") + "\n"` and the count of `\x1b` is **exactly 0**; **and given** any
+`assembleFrame` call, **then** its returned rows are unchanged by this ticket.
+
+*(`ADR-0010` clause 8 keeps `4c` untouched and its `## Rollback` states no ticket's delivered
+behaviour depends on the clearing. **Measured at this hop:** both append paths byte-identical
+before and after, 0 escape bytes; full suite **676/676 on 22 files** with the production change and
+before a single new test was added, so no existing frame VALUE moved.)*
+
+**A6 — the merged characterization at `src/frame.test.ts:735-771` is DISCHARGED, and replaced rather
+than deleted. Given** the delivered build, **when** the suite runs, **then** that test no longer
+asserts a stale tail is present, its `expect(widthOf(wide)).toBe(24)` / `expect(widthOf(narrow)).toBe(18)`
+narrowing fixture **survives**, and the property it was pinning is asserted from the correct side by
+`A2`.
+
+*(**It must not be deleted.** It is the only place in the merged suite that constructs a narrowing,
+its comment routes the decision to *"BA/PM + `ABC-016`/`ABC-017`"* — this ticket is that decision
+arriving — and deleting a test that a ruling has just discharged is how the reason a property is
+checked gets lost. **Witnessed:** with clause 1 applied, its assertion fails, and its `stale` array
+is `[]`.)*
+
+## Dependencies
+
+- **`ABC-018`** (the frame). **Merged on `main` 2026-08-09 and CLOSED.** This ticket edits its
+  production module (`src/frame.ts`) and its test file (`src/frame.test.ts`). Named here because a
+  new obligation on a closed ticket's files must be visible on a ticket rather than discovered in a
+  diff — the same posture `ABC-017`'s fourth `ABC-018` edge takes. **`ABC-018` is not reopened.**
+- **`ABC-014`** (the board). Merged. Supplies the real 9 × 18 `renderBoard` the fixtures use, which
+  is also what pins `W` at 18 in the merged suite and therefore what the narrowing fixture has to
+  beat.
+- **`ADR-0010`** — accepted and merged. Clause 1 is the ruling; clause 7 is `ABC-019`'s half; clause
+  2 is why no panel is touched.
+- **NO dependency on `ABC-016` and NO dependency on `ABC-017`, and this was MEASURED rather than
+  assumed.** Neither `src/status-panel.ts` nor a history-pane module exists on `main`; this ticket
+  imports no symbol from either; and the whole change was built and run against today's `main` with
+  both panels absent — **681/681 on 22 files, skip 0**. **This ticket goes green ALONE.**
+- **`ABC-019`** (the turn loop). **`ABC-027` BEFORE `ABC-019` is FORCED** — `ADR-0010` clause 7 gives
+  `ABC-019` a criterion (`F3` over a played game containing a narrowing) that the **correct** build
+  cannot pass until this writer clears per row. Re-measured here from the other side: that form
+  fails on the merged writer at 80 and 120 columns and passes on the clause-1 writer.
+  **`ABC-019` is `In Development` now; nothing was written to its ticket or its branch at this hop.**
+
+## Security / NFR triggers
+
+- **`NFR-002` (full redraw < 16 ms) — NO target moves, no bar is created, moved or loosened, and
+  `plans/nfr-catalog.md` is NOT edited by this ticket.** `ADR-0010` already recorded the denominator
+  note there. This ticket adds **+66 characters per frame, exactly and always** (`(H − 1) × 3`) —
+  measured 425 → 491 characters for a 23-row frame — which is irrelevant against a 16 ms budget and
+  is stated so the row's serialized-length figures are not later read as stale for an unknown reason.
+  Still **one** `write()` per frame, so `NFR-007`'s single-write constraint is untouched and `A1`
+  asserts it.
+- **`NFR-008` / `N8-LANE` — declared against, NOT re-derived.** *(Re-deriving a lane bar has cost
+  this board two ruling hops; nothing here reopens `NFR-008`.)* **This ticket adds ZERO test files**
+  — every criterion lives in the existing `src/frame.test.ts`, which is already in the lane — so its
+  floor allowance is **0 ms** and only the content allowance (≤ 650 ms CPU) applies. Measured at this
+  hop by paired runs (n = 3, out-of-tree copy, Apple M3 (Mac15,13), Node v24.12.0, darwin/arm64):
+  `src/frame.test.ts` at **1.43 s** CPU without the new criteria and **1.47 s** with them — a
+  **~20 ms** median delta, ~3% of the content allowance. **`UNKNOWN - verify` on any other
+  hardware, n = 3 is below `N8-LANE`'s own n ≥ 7 protocol, and the figure is INDICATIVE: the real
+  measurement is the Security/NFR gate's on delivered code.**
+- **No security trigger, and it is structural rather than a judgement.** This ticket introduces no
+  input. The two escape sequences it emits are module constants; no user-supplied text reaches the
+  writer un-sanitized (`sanitize` at `src/frame.ts:101-110` already strips C0 and `U+007F` from every
+  panel row and message item before assembly, and this ticket does not touch it). The change adds a
+  fixed 3-character sequence between rows the module itself produced.
+- **`EPIC-002` acceptance `4b` and `4c`** — `ADR-0010` clause 8 rules both unbreached. `A5` is `4c`'s
+  half asserted here (**0 escape bytes** on both non-in-place paths, measured); `A1` is `4b`'s.
+
+## Test notes
+
+- **The screen model's `\x1b[K` case is NOT OPTIONAL and it is the first thing to write.** Measured:
+  with the production change and without the model change, **5 tests THROW** —
+  `src/frame.test.ts:187-188` and `:232-236` make the model throw on any escape it does not
+  implement, which is a deliberately good design and is why the suite cannot silently certify this.
+  Implement it as erase-from-cursor-to-end-of-line, cursor unmoved, mirroring the existing
+  `eraseToEndOfScreen` helper's loop.
+- **The four assertion sites that hardcode the old emission, read at source at this hop so nobody
+  discovers them mid-build.** `ADR-0010` names one of them.
+
+  | site | what it says today | why it breaks |
+  |---|---|---|
+  | `:374` | `expect(redraw).toContain(second.join("\n"))` | the rows are no longer joined by a bare newline. **Not named by the ADR, and it fails BEFORE `:376`, masking it** |
+  | `:376` | `expect(occurrences(redraw, "\x1b")).toBe(2)` | becomes `2 + (H − 1)` = **24** |
+  | `:419` | `expect(body).toBe(frame.join("\n"))` | same cause as `:374`. **Not named by the ADR** |
+  | `:768` | `expect(stale).toEqual([<the stale row>])` | the characterization — `A6` |
+
+- **Do NOT reuse `:381`'s form (`rowsOnlyIn`) for a narrowing test.** Measured at this hop: on a
+  narrowing pair at a screen width equal to `W`(frame 1) it flags the **correct** build, because it
+  compares rows padded to two different widths. It is sound where it stands today only because the
+  existing fixtures hold `W` at 18.
+- **Do NOT reuse `:379`'s form (untrimmed `screen == frame`) at a real width.** Measured: it
+  false-positives on a **steady** pair at 80 and 120 columns on a correct build. It works today only
+  because the model is constructed at exactly `widthOf(first)`.
+- **The narrowing fixture must move WIDTH ONLY and leave every panel's ROW COUNT at the reference
+  layout.** `src/frame.test.ts` asserts `H` = 23 and ~40 assertions consume `HEIGHT`; a fixture that
+  changes a row count collides with `ABC-017`'s `A13` and with `ADR-0009` clause 9c's precedent for
+  `statusStub` / `historyStub`. Vary the status stub's third row; leave it three rows.
+- **`partsFor(game, { status: [...] })` already accepts a status override** — `:745-750` uses it —
+  so the fixture needs no new helper.
+- **State the machine beside any microseconds and put no wall-clock assertion in the suite** — this
+  project's standing rule. `A1`'s byte delta is a character count, not a clock, deliberately.
+- **The whole change was built and gated out-of-tree at this hop and the expected shape is known:**
+  `676/676 on 22 files` with the production change and the four assertion sites repaired, and
+  **`681/681 on 22 files, skip 0`** with the five criteria added — **22 files either way, because no
+  test file is added.** These are BA/PM's numbers from a copy; the gate's own run on delivered code
+  is what counts.
+
+## Merge position
+
+**`ABC-027` BEFORE `ABC-019` is FORCED and BA/PM confirms it independently** — see
+`## Dependencies`. Not disputed.
+
+**`ABC-027` AFTER `ABC-017` was stated by the Orchestrator as a PREFERENCE and BA/PM DISPUTES it.**
+The recommendation is `ABC-027` **before** `ABC-017`; the argument, the honest cost, and the
+condition attached to it are in `## Size and priority rationale` and in
+`.grugops/context/refinement-ABC-027-cut/notes/`. **Merge order is the Orchestrator's and this
+ticket does not change it** — it records the argument where the next reader will find it.
+
+## Size and priority rationale
+
+**Size `S` (2), at the BOTTOM of the band. Not `XS`, and this board makes that argument explicitly
+each time** (`ABC-009`, `ABC-015`, `ABC-022` all record a "Not `XS`" reason).
+
+*The production side alone would be `XS`: **one** expression and **one** module constant, plus a
+header sentence — measured, because the change was built. What holds it at `S` is that the test side
+is not one guarded condition. It is **five assertion sites across four tests**, one of which is a
+characterization that must be **replaced rather than deleted** (`A6`), plus a criterion whose
+**FORM is a judgement with three measured wrong answers** — `F1` blind at real widths and
+false-positive at the artificial one, `F2` false-positive at real widths, `F4` failing the correct
+build. A build that reaches for any of them is wrong and reads fine. Calibrated below `ABC-018`
+(`S`), which built this entire module, and below `ABC-017` (`S`, top of band, 13 criteria and two
+test files). **It would move to `M` only if `assembleFrame` had to change, and `ADR-0010` clause 2
+exists precisely so that it does not.***
+
+**Priority `P1`.**
+
+***Not `P0`.*** *`ABC-019`'s **development** is not blocked — it can build its seams and `A9b`
+against today's writer, and only its owed `ADR-0010` clause 7 criterion cannot pass. And nothing
+composes a frame in a loop yet, so **no player can see this defect today**. `P0` is "drop
+everything" and this does not stop anyone from working.*
+
+***Not `P2`, and the reason is the one that moved it off `ABC-017`'s tier.*** *This is a correctness
+defect in **merged production code** that prints a **wrong material count** and keeps an **expired
+draw claim** on screen — the owner's standing legality/correctness-first directive ranks a
+misreported game state above renderer feel. It is a **hard predecessor of a `P0` ticket's
+acceptance** that is `In Development` right now. And unlike `ABC-017`, which its own ticket places in
+the "right thing to drop first" tier, **this ticket cannot be dropped at all**: dropping it means
+`ABC-019` merges without the only criterion `ADR-0010` clause 7 requires, on a writer the ADR
+measured as producing stale columns on 5–16 of every 20 redraws. `P1` also matches `ABC-016`, the
+other `EPIC-002` correctness-adjacent item.*
+
+### The merge-order dispute, argued rather than asserted
+
+**The Orchestrator invited this argument and marked the edge arguable. BA/PM's recommendation:
+put `ABC-027` before `ABC-017`. It is a recommendation, NOT a forced edge** — calling a preference
+forced is an error this round has already recorded twice and this is not a third.
+
+1. **`ABC-027` has exactly ONE ordering constraint and it is the forced one.** Measured: neither
+   panel module exists on `main`, this ticket imports no symbol from either, and the full suite runs
+   **681/681 on 22 files** with both absent. **`ABC-017` is NOT independent** — its own `A13` reads
+   `ABC-016`'s exported `STATUS_ROWS` from delivered code, so `A13` is *"not evaluable until
+   `ABC-016` has merged"* (its words). The current order puts the ticket that has a dependency ahead
+   of the ticket that has none, on the path to the forced edge.
+2. **The stated reason for the preference is now spent.** *"`ABC-017` is sized and ready while
+   `ABC-027` is uncut, so ordering by readiness costs nothing"* was true when it was written. As of
+   this hop `ABC-027` is cut, sized, prioritised and DoR-complete. The readiness gap is one gate
+   move, not a wait.
+3. **The shared-file reason is weak in BOTH directions, and that is a measurement.** The two tickets
+   edit **disjoint regions** of `src/frame.test.ts`: `ABC-017`'s `A13` touches the shadow-constant
+   block at `:38-45` and the `= 23` / `<= 24` assertions at `:288` and `:633`; `ABC-027` touches the
+   screen model (`:203-207`, `:219-223`), `:374`, `:376`, `:419` and `:735-771`. **No line is claimed
+   by both.** So "both touch `src/frame.test.ts`" does not favour either order — it is not an
+   argument for the current one either.
+4. **The risk asymmetry is the real argument.** `ABC-027` changes a **merged production expression**
+   that `ABC-019`'s Engineer is building against **right now**. `ABC-017` changes **zero production
+   lines** — its own ticket says so and `src/` was byte-identical at its hop. Landing the production
+   change earlier puts the writer's final byte shape in front of the live branch sooner; landing the
+   test-only change earlier puts nothing in front of it. Every hop `ABC-027` waits, `ABC-019`
+   accumulates work against an emission that is about to gain 22 escapes per frame.
+5. **The honest cost of flipping, stated rather than hidden.** `ABC-016` is `In Review`; when it
+   merges, `ABC-017` becomes fully evaluable and pullable. **If the Orchestrator has a free
+   development slot before it gates this ticket, pulling `ABC-017` first is better than pulling
+   nothing.** So the dispute is **conditional**: gate `ABC-027` at this hop and it should go first;
+   decline to gate it now and the original order stands and costs little. **Either way a rebase
+   settles it, exactly as the Orchestrator said.**
+
+## Definition of Ready
+
+Derived from `agent-factory/checklists/definition-of-ready.md` at `refinement-ABC-027-cut`,
+2026-08-11. **BA/PM's verdict: MET, 10 of 10.** Every ✅ below was verified against merged `src/` at
+this hop, not asserted.
+
+| # | Check | Verdict | Evidence |
+|---|---|---|---|
+| 1 | problem clear | ✅ | user, pain and value stated; the pain is a **wrong material count** and an **expired draw claim**, both measured through the screen model, not inferred |
+| 2 | scope and out-of-scope clear | ✅ | one expression, one constant, one header sentence, one test file; the **prohibition** on a constant-width criterion is in `## Out of scope` as a scope item, not a footnote |
+| 3 | INVEST | ✅ | **independent MEASURED**: neither panel module exists on `main`, no symbol imported from either, **681/681 on 22 files** with both absent. Small, and estimable because the change was **built** |
+| 4 | acceptance testable and measurable | ✅ | 6 criteria, every number derived from `H`; **each witnessed against the merged writer and three mutants** — the broken writer, a partial fix, and a degenerate fixture. `A2` and `A3` are the two that refuse to be vacuous |
+| 5 | dependencies known | ✅ | `ABC-018` (closed, both its files edited — named, not discovered in a diff), `ABC-014`, `ADR-0010`; **`ABC-019` FORCED after**; `ABC-016`/`ABC-017` measured **not** dependencies |
+| 6 | security/NFR triggers, measurable | ✅ | `NFR-002` **+66 characters exactly**, no target moves, catalog not edited; `N8-LANE` declared at **ZERO files added**, content ~20 ms measured, bar **not re-derived**; no security trigger, structurally |
+| 7 | test notes present | ✅ | the not-optional model change (**5 tests throw without it**), the four assertion sites with line numbers, the two forms that must NOT be reused with the measurement that kills each, and the row-count constraint on the fixture |
+| 8 | size assigned | ✅ | `S` (2), bottom of band, with the "not `XS`" argument this board requires |
+| 9 | priority assigned | ✅ | `P1`, with both boundaries argued (`not P0`, `not P2`) |
+| 10 | no major unresolved blocker | ✅ | `ABC-018` and `ABC-014` merged; `ADR-0010` accepted; nothing waits on `ABC-016` or `ABC-017`. **Three flags carried, each with an owner, none blocking** |
+
+**NOT PLACED IN `Ready for Dev`.** BA/PM owns the `Backlog → Ready` exit and has signed it; the
+`Ready → Ready for Dev` gate is the **Orchestrator's** and was deliberately not taken here. The
+board row is **requested** in this hop's context notes, not written — `plans/board.md` is the
+Orchestrator's.
+
+**Three flags carried, each with an owner, none blocking:**
+
+1. **`ADR-0010`'s `## Consequences` under-counts the test changes and its *"first narrowing
+   fixture"* clause is false** — measured above. **Owner: Architect/Design**, whenever
+   `memory-bank/50-decisions/` is free. Nothing in the ruling changes; `A6` covers the consequence.
+2. **Epic `4b`'s *"zero rows from frame N"* wording is blind to this defect at any real terminal
+   width** (`F1`, re-measured here, and it also false-positives on the correct build at the
+   artificial width). `ADR-0010` clause 8 covers it at ticket level on purpose. **Owner: BA/PM**, and
+   it is a wording hop only if the owner reads *"in one operation"* as forbidding the extra erase —
+   a reading `ADR-0010` explicitly does not take.
+3. **The screen model implements `\x1b[H`, `\x1b[0J` and, after this ticket, `\x1b[K` — and throws on
+   everything else.** That is correct and deliberate. Recorded because it means any future writer
+   change is gated by a model edit, which is a feature and should not be read as a defect when the
+   suite goes red. **Owner: whoever changes the writer next.**
+
+## Source
+
+`memory-bank/50-decisions/ADR-0010-frame-width-stability-ownership.md` (accepted, merged
+2026-08-11) clauses 1, 2, 7 and 8; `.grugops/context/design-frame-width-clearing/notes/` (the
+Architect's measurements); `.grugops/context/adr0010-routing-2026-08-11/notes/` (the Orchestrator's
+routing, which named this id); `.grugops/context/refinement-ABC-027-cut/notes/` (this hop —
+every criterion witnessed, and the mutants that kill each one).
