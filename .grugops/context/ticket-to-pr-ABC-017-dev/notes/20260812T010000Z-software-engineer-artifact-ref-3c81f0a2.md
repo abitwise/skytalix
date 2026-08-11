@@ -37,7 +37,7 @@ nothing deployed.**
 
 ## The files
 
-- **`src/history-pane.ts`** — 141 lines, **41 of them code.** Three exports:
+- **`src/history-pane.ts`** — 145 lines, **44 of them code.** Three exports:
   - `HISTORY_ROWS = 8` — the pane's constant height, exported because the producer owns its count
     (`ADR-0009` cl. 1) and because `frameHeight` consumes it as a session constant.
   - `HISTORY_COLS = 21` — the pane's constant width. Composed, not written as a literal:
