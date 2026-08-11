@@ -741,9 +741,103 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
     count, **minus** the count that a bare `toSan(position, lastMove)` makes on the **same move**
     against the **same position the panel replays to**, measured in the same file, is **exactly 1**.
 
-  **and both counting clauses are measured at a ply depth of AT LEAST 2**, the scan clause stated
-  ply-independently: **the spied `squareAt` count for one render is `64` plus the number of occupied
-  squares in `history.initialFen`**, at **every** depth asserted.
+  **and the scan clause is: one render's spied `squareAt` count is the sum of exactly two terms,
+  NEITHER of which grows with the number of plies —**
+  - **the material scan: exactly `64`, on EVERY render** — one `squareAt` per square of the board,
+    once, whatever the board holds and however deep the game;
+  - **the last-move replay: exactly the number of occupied squares in `history.initialFen`, paid
+    once on exactly the renders where the `toSan` clause above counts `1`, and `0` on the empty
+    history where that clause counts `0`.** The replay's `makeMove` steps cost nothing — `makeMove`
+    never calls `squareAt`.
+
+  **So the count is `64` when `history.moves` is empty, and `64` plus the anchor's occupied squares
+  when it is not.**
+
+  **Where each clause is asserted**, stated separately from what it counts:
+  - **the scan clause: at ply 0 AND at a depth of AT LEAST 2**, each on **two anchors of different
+    occupancy**. Both regimes are required and neither substitutes for the other. Ply 1 is not
+    required.
+  - **the `isInCheck` clause: its DIRECT half at ply 0** — as that half's own words already say —
+    **and its DIFFERENCE half at a depth of AT LEAST 2.**
+
+  **The "AT LEAST 2" requirement governs the difference half and the scan clause's non-empty regime.
+  It does not reach the two halves written on an empty history, and never did.**
+
+  *(**[CORRECTED 2026-08-11 — D27. The DEPTH requirement of D22 stands and the arithmetic of both
+  clauses is still unchanged; what is corrected is a sentence that was FALSE at ply 0 and
+  self-contradictory at the direct half. This is a defect inside the 2026-08-11 D22 ruling, found by
+  the engineer implementing it, and it is BA/PM's.]** The struck sentence read* "**both counting
+  clauses are measured at a ply depth of AT LEAST 2**, the scan clause stated ply-independently:
+  **the spied `squareAt` count for one render is `64` plus the number of occupied squares in
+  `history.initialFen`**, at **every** depth asserted." *It had **two** faults, both from the same
+  cause.*
+
+  ***Fault 1 — the formula is FALSE at ply 0, and implementing the sentence literally deletes real
+  coverage.*** *On an empty history `lastMoveSan` returns at the `moves.length === 0` guard
+  (`src/status-panel.ts:154`) **before** it reaches `parseFen`, so there is no replay and the count
+  is the scan alone. Re-spied out of tree at this hop, delivered panel, depths 0 to 5 on both
+  anchors:*
+
+  | anchor | ply 0 | ply 1 | ply 2 | ply 3 | ply 4 | ply 5 | `64 + occupied` |
+  |---|---|---|---|---|---|---|---|
+  | 32-piece start | **64** | 96 | 96 | 96 | 96 | 96 | 96 |
+  | 3-piece sparse | **64** | 67 | 67 | 67 | 67 | 67 | 67 |
+
+  *`parseFen`'s own cost was measured at **32** and **3** — exactly the occupied count — and
+  `makeMove` at **0**, both at this hop. **The boundary is 0 → 1 and nothing else; depth never
+  enters the value.** The cost of taking the struck sentence literally was measured, not asserted:
+  a panel paying a **pointless `parseFen` before the first move only** — invisible at every depth
+  ≥ 1, emitting identical rows — was run against the delivered suite with the two ply-0 assertions
+  removed as the literal reading requires, and it passed **34 of 34**, green in every acceptance
+  criterion, every snapshot and every remaining count. Against the delivered suite it dies at
+  **exactly one** assertion. **That is `A13`'s own class — a cost regression no output can reach —
+  so the literal reading would have deleted the only instrument that catches it.***
+
+  ***Fault 2 — the blanket depth ALSO contradicted the direct `isInCheck` half***, which is written
+  *"directly, on an empty history"* two lines above it, i.e. at ply 0. A reader applying "both
+  counting clauses … AT LEAST 2" literally deletes that assertion too. **Measured, and stated at its
+  true size: this one costs no coverage** — a build reading the check indicator out of SAN's
+  `+`/`#` suffix (the half's own stated target, zero own `isInCheck` calls) still dies at the
+  difference half (`0`, not `1`), at `A2` and at three snapshots. It is a contradiction in the
+  words, not a hole in the net, and it is recorded at that size rather than inflated.*
+
+  ***The root cause, because it is the same shape one level up.*** *The sentence fused **what the
+  count IS** with **where it must be MEASURED**, then closed with a quantifier — "at every depth
+  asserted" — that scopes to either. Once fused, a blanket depth was written across clauses with
+  **heterogeneous edge regimes**. That is the same defect as the ORIGINAL `A13` `isInCheck` clause
+  (D19), which stated a blanket total of "exactly 1" across one regime where it is 1 and another
+  where it is 2. **Both of this ticket's corrected rulings are one quantifier written over an
+  unexamined edge regime, and on this panel that regime is always the same one: the empty history.**
+  The replacement above separates value from assertion-site so the ambiguity cannot re-form, and
+  states the split on `history.moves` rather than on depth.*
+
+  ***"Ply-independent" was the wrong word and is retired.*** *What that phrase was buying is
+  **depth-invariance** — the count does not grow with the game — and depth-invariance is what makes
+  the ≥ 2 requirement meaningful rather than a second magic number, and what kills a scan running
+  twice from ply 2 on. **That property is untouched and both terms above still have it.** What the
+  phrase wrongly implied is regime-invariance, which was never true and was never needed. **Ply 0 is
+  not "depth 0" for this clause; it is the EMPTY regime**, and conflating the two is what made a
+  regime split look like a depth dependence.*
+
+  ***The ply-0 assertion is FOLDED INTO `A13` rather than made its own criterion.*** *It is the same
+  counter, the same render and the same instrument as the clause above it — one property in two
+  regimes, not two properties. `A13` already splits on the empty history **twice** (the `toSan`
+  clause's* "0 on an empty history" *and the direct `isInCheck` half); the scan clause was the one
+  clause of the three that failed to carry the carve-out its siblings carry, and it now does.
+  **The decisive reason is `## Security / NFR triggers` part 3, which names* "the call counts of
+  `A13`" *as the part of the bar that actually binds: folding keeps that reference complete with no
+  NFR edit, where a new criterion would put the only assertion that catches the empty-replay build
+  OUTSIDE the named bar** — the `D17` shape again, a bar naming a subset of what binds. A separate
+  criterion for one regime of one count is also bloat, and is declined as such.*
+
+  ***This correction requires NO test change and NO production change.*** *The delivered suite
+  already asserts both regimes on two anchors each — the ply-0 scan at `64` on a 32-piece and a
+  3-piece anchor, the non-empty scan at `64 + occupied` at 4 plies/32 pieces, 2 plies/3 pieces and
+  4 plies/3 pieces, the direct `isInCheck` half at ply 0 and the difference half at 4 plies. **The
+  engineer retained the ply-0 assertion as a separate named test and flagged the ambiguity without
+  amending the ticket, which was the correct call**; this amendment makes the criterion claim what
+  the test already protects. It is a wording repair, so `ABC-016` does **not** return to
+  `In Development` — see `## Test notes` D27 for the one non-blocking comment this leaves behind.)*
 
   *(**[ADDED 2026-08-11 — D22. The DEPTH is what is new; the arithmetic of both clauses is
   unchanged and both were already correct.]** The 2026-08-11 ruling that rewrote this clause fixed
@@ -768,10 +862,20 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   **1** at 1, 2, 4 and 5 plies — including a 5-ply history whose last move gives check, which adds no
   third call — and `squareAt` reads **67** on a 3-piece anchor at 1, 2 and 4 plies and **96** on the
   32-piece starting position, because `parseFen` places one piece per occupied square
-  (`src/fen.ts:90`) and **`makeMove` never calls `squareAt` at all** — verified by grep at this hop.
-  **That is why the scan clause can be stated ply-independently: its expected value depends on the
-  anchor's piece count and not on the depth**, which is what makes a depth requirement meaningful
-  rather than a second magic number.*
+  (`src/fen.ts:90`) and **`makeMove` never calls `squareAt` at all** — verified by grep at this hop,
+  and re-measured directly at the D27 hop (`parseFen` costs 32 and 3 `squareAt` calls on the two
+  anchors; `makeMove` costs 0).*
+
+  > ***STRUCK 2026-08-11 by D27, and it is the sentence that caused the defect.*** *This block went on
+  > to say* "**that is why the scan clause can be stated ply-independently: its expected value depends
+  > on the anchor's piece count and not on the depth**, which is what makes a depth requirement
+  > meaningful rather than a second magic number." *The second half stands; the phrase
+  > **"ply-independently" does not**, and it is retired. **The value is depth-INVARIANT, not
+  > regime-invariant**: it is `64` on the empty history and `64 + occupied` from the first move on,
+  > because the replay term is paid only when there is a last move to render. Depth-invariance is the
+  > property that makes the ≥ 2 requirement meaningful and it is untouched. See the D27 correction on
+  > the criterion above — the table in THIS block never measured ply 0, which is exactly why the
+  > sentence read as true.*
 
   ***The 4-ply fixture this needs already exists in the file*** *— `["e2e4","e7e5","g1f3","b8c6"]`,
   in the first `A13` test. The difference half at depth needs its baseline `toSan` on the position
@@ -1063,6 +1167,23 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
     grepping the tree for the sentence at this hop. It is the most misleading of the three, because
     it sits on the criterion this amendment rewrites.
   - **`plans/tickets/ABC-016-status-panel.md`, `A7`'s rationale** — **fixed here**, in `A7`.
+- **[ADDED 2026-08-11 — D27] ONE comment left behind by the `A13` ply-0 correction, and it is
+  deliberately NOT a reason to reopen a dev hop.** `src/status-panel.nfr.test.ts:241-253` — the
+  `"pays no replay at all before the first move"` block — opens *"RETAINED DELIVERED COVERAGE, and it
+  is deliberately NOT the ply-independent formula above"*. **Every factual sentence in it stays
+  true** and was re-checked one by one at the D27 hop: `lastMoveSan` does return before `parseFen`,
+  the count is `64`, and the `64 + occupied` formula is still not what is claimed at ply 0. What
+  changed is **provenance, not correctness** — the assertion is now **required by `A13`** rather than
+  retained at the engineer's discretion, and the phrase *"the ply-independent formula above"* now
+  points at vocabulary `A13` has retired. **The whole risk this leaves is that a later hop trimming
+  tests reads "RETAINED" as "discretionary" and deletes it** — the exact failure this correction
+  exists to prevent — and the mitigation is already in place: `A13` now names the ply-0 assertion as
+  required, and the test's own name states the property. **So: fold this repair into the next dev hop
+  that touches this file for ANY other reason. It does not by itself return `ABC-016` to
+  `In Development`** — a full dev hop and re-gate on the ticket that merges FIRST, and that three
+  tickets wait on, is not proportionate to a comment whose every sentence is true. *(Recorded as a
+  judgement, and the disagreement is named: a reader who weighs the delete-risk higher than the
+  merge-order cost would send it back now. The measured facts are identical either way.)*
 - **[ADDED 2026-08-10] `A13` needs a spy, and a separate test file.** The lesson is
   `src/gameend.nfr.test.ts`'s, recorded in `plans/nfr-catalog.md`: a `vi.mock` factory is hoisted to
   file scope and would re-route the module graph for every test in the file, so the call-count
@@ -1170,6 +1291,26 @@ first of four and these criteria become the net `ABC-017`, `ABC-027` and `ABC-01
 against — is an argument about WHEN, not about RANK**, and it is recorded as such for the fourth time
 on this ticket rather than being allowed to inflate the number. It is a scheduling input for the
 Orchestrator; the rank is `P1` on its own terms.
+
+**Re-derived 2026-08-11 a SIXTH time at the `A13` ply-0 correction (`refinement-ABC-016-a13-ply0`)
+and still `M` (3) / `P1`. This is the smallest hop this ticket has had.** *Added*: nothing — no
+criterion, no clause obligation, no case, no fixture, no `CASES` entry, no snapshot, no test, no
+production line, and **no edit to `## Security / NFR triggers`**. *Removed*: nothing. **The entire
+change is one sentence of `A13` replaced by a structured statement of the same two counts, one
+struck rationale sentence in the D22 block, and one `## Test notes` entry.** The delivered suite
+already asserts every regime the corrected wording requires — verified by running it: **711/711 on
+24 files** at this hop, and each of the four required assertions located in
+`src/status-panel.nfr.test.ts` at source. **A correction that makes a criterion match tests that
+already pass cannot move a size estimate**, and it does not move this one.
+
+**Priority `P1`, re-read a sixth time and unmoved.** The panel's delivered behaviour is unchanged and
+correct; nothing here touches item 7's rules-affordance argument, epic acceptance #3, or what a
+player gets. **Not `P0`** (the game runs with a board and a loop) and **not `P2`** (`EPIC-002` cannot
+close without epic acceptance #3). **The merge-order fact is recorded as an argument about WHEN and
+not RANK for the FIFTH time on this ticket.** It is the sharpest it has ever been — `ABC-016` is one
+Security/NFR gate from merging and three tickets wait on it — and it is *still* a scheduling input
+for the Orchestrator, not a rank. Allowing "everything is blocked on this" to inflate a priority
+would make the number describe the queue instead of the value.
 
 ## Definition of Ready
 
@@ -1379,3 +1520,54 @@ it does take is a test line with an honest and different reason.
 taken. **The board move itself is the Orchestrator's** — two agents share this branch — and the exact
 row text is in this hop's decision note. **Nothing under `src/` was written, nothing was committed,
 nothing merged, nothing deployed.**
+
+**RE-DERIVED A FIFTH TIME 2026-08-11 by BA/PM at task `refinement-ABC-016-a13-ply0` (Workflow 07),
+correcting a defect INSIDE the previous hop's own ruling. The block above claimed ✅ on item 4 for
+the sixth consecutive hop, and it was WRONG AGAIN — this time in the close it had just written.**
+The pattern has now inverted into something worth stating precisely, because "DoR blocks are
+unreliable" is no longer the useful lesson: **the last two defects on this ticket were not gaps in
+the criteria set, they were defects in the repairs.** `D19` fixed `A13`'s arithmetic and left its
+depth unstated; `D22` fixed the depth and wrote a blanket quantifier across an unexamined edge
+regime. **A repair is a criterion, and it earns the same adversarial reading as the thing it
+repaired** — which is the check this row now carries.
+
+| # | Check | At the `In Review` move, after D22 | After this correction |
+|---|---|---|---|
+| 1 | problem clear | ✅ | ✅ unchanged |
+| 2 | scope and out-of-scope clear | ✅ | ✅ unchanged — nothing moved; no cell, input, row count or production line is touched |
+| 3 | INVEST | ✅ | ✅ *testable* moved a third time, and only that: `A13`'s scan clause was **false at ply 0**, so it was not testable as written without deleting real coverage |
+| 4 | acceptance testable and measurable | ❌ **D27** — `A13`'s depth sentence is FALSE at ply 0 (the count is `64`, not `64 + occupied`), and implementing it literally deletes the only assertion that catches a panel paying a pointless `parseFen` before the first move — **measured: that build passes 34 of 34 under the literal reading**. The same sentence also contradicts the direct `isInCheck` half, which is written on an empty history | ✅ 14 criteria, unchanged in number; `A13`'s scan clause restated as **two depth-invariant terms** with the empty regime named, and value separated from assertion-site so the quantifier cannot re-form |
+| 5 | dependencies known | ✅ | ✅ unchanged — no new edge; `ABC-017`, `ABC-019` and `ABC-027` untouched, agents live on two |
+| 6 | security/NFR triggers, measurable | ✅ | ✅ **untouched, and deliberately so** — folding the ply-0 assertion into `A13` rather than into a new criterion is what keeps part 3's *"the call counts of `A13`"* complete with **no NFR edit** |
+| 7 | test notes present | ⚠️ nothing told the next reader that the ply-0 assertion is criterion-required rather than retained by choice | ✅ one note added (`D27`), naming the one comment left behind and why it is not worth a dev hop |
+| 8 | size assigned | ✅ `M` | ✅ `M`, re-derived a sixth time; **not `XL`, so no `SPLIT_REQUIRED`** |
+| 9 | priority assigned | ✅ `P1` | ✅ `P1`, re-read a sixth time |
+| 10 | no major unresolved blocker | ⚠️ this ruling open | ✅ **CLEARED — and this is the item that moved.** The correction is wording only: the delivered suite already asserts every regime, so **no test change and no production change is asked for**, and `ABC-016` **stays in `In Review`** and goes to the Security/NFR gate next |
+
+**Every ❌ and every ✅ above was measured at this hop, not argued, and not inherited from the
+engineer's flag.** The panel's `squareAt` and `isInCheck` counts were **re-spied out of tree at
+depths 0, 1, 2, 3, 4 and 5 on both a 32-piece and a 3-piece anchor** — the ply-0 count is `64` on
+**both**, which is what makes the empty regime occupancy-independent as well as depth-independent;
+`parseFen` was measured at **32** and **3** `squareAt` calls and `makeMove` at **0**;
+`src/status-panel.ts:154`'s early return was read at source. **The counterfactual was run in both
+directions with controls green:** against the delivered suite the empty-replay build dies at
+**exactly one** assertion, and against the suite with the two ply-0 assertions deleted — the literal
+reading — it passes **34 of 34**, identical to the control. The `isInCheck` half of the same defect
+was measured and **recorded at its true, smaller size**: it costs no coverage, because the
+suffix-reading build still dies at the difference half, at `A2` and at three snapshots. `A7` was
+re-checked for the same shape and is **clean** — a panel that never emits the indicator dies at
+`A7`'s own first half, measured, not assumed. The four gates were re-run in this worktree
+(**711/711 on 24 files, skip 0**) and `git rev-list --count HEAD..main` re-read as **0**. **Zero
+production lines: `git status --porcelain -- src/` is empty; the out-of-tree probe lived in the
+session scratchpad and was deleted, and the worktree was re-read after the delete.**
+
+**What THIS hop deliberately did NOT do.** It did not re-open `ADR-0009` or `ADR-0010`, and it added
+**no constant-frame-width criterion**. It did not edit `src/` — including the one comment it would
+have liked to improve, which is recorded as `D27` and left to the next dev hop that has another
+reason to open the file. It did not edit `plans/board.md` (the Orchestrator's), and it did not touch
+`ABC-017`, `ABC-019` or `ABC-027`. It did not add a criterion, a case, a fixture or a test — **the
+whole temptation of this hop was to promote the retained assertion into its own criterion, and that
+was declined as bloat and, more importantly, because a new criterion falls OUTSIDE the
+`## Security / NFR triggers` bar that names* "the call counts of `A13`"* by name.** And it did not
+weaken the clause to match the delivered test: the test was already right, the criterion was wrong,
+and the direction of the repair is stated so no reader mistakes one for the other.
