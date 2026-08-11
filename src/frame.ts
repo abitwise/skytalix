@@ -29,7 +29,9 @@
  * full — but `W` is a per-frame MAX over the delivered rows (`assembleFrame` below), so it SHRINKS
  * whenever the widest row does, and padding alone then leaves the previous frame's columns to the
  * right of the narrowed row. `ADR-0010` clause 1: the in-place redraw emits a per-row erase, and THAT
- * is what makes it leave no character of the previous frame behind.
+ * is what makes it leave no character of the previous frame behind — emitted BEFORE each row so it
+ * fires at COLUMN 0, never after one at the right margin, where it would destroy that row's last
+ * cell. `ERASE_TO_END_OF_LINE` below carries the measurement.
  *
  * Widths are counted in UTF-16 units (`String.length`), which equals the code-point count for
  * everything this frame can carry: ASCII mode strips every code point above `U+007F`, and the
@@ -66,9 +68,17 @@ const ERASE_TO_END_OF_SCREEN = "\x1b[0J";
 /**
  * CSI K — erase from the cursor to the end of the LINE, cursor unmoved. `ADR-0010` clause 1: `W` is a
  * per-frame max, so a narrowing frame's rows are shorter than the ones they overwrite, and
- * `ERASE_TO_END_OF_SCREEN` erases downward from the end of the frame and NEVER rightward. Emitted
- * once per row join — `H - 1` of them, +3 characters each. A trailing one on the last row is
- * redundant: the erase to end of screen already clears the rest of the cursor's row.
+ * `ERASE_TO_END_OF_SCREEN` erases downward from the end of the frame and NEVER rightward.
+ *
+ * EMITTED BEFORE EACH ROW, NEVER AFTER ONE — `H` of them, +3 characters each, and EVERY ONE FIRES AT
+ * COLUMN 0. That placement is the whole of `RF-1` and it is not a style choice: an erase fires where
+ * the cursor IS, and after a row of exactly `W` characters on a terminal exactly `W` wide the cursor
+ * sits ON the last cell with the wrap pending, so the erase DESTROYS that cell. Measured on GNU
+ * screen 5.0.2 by the Security/NFR gate: the after-each-row shape lost the board's whole h-file and
+ * its file label on every frame. At column 0 that state cannot exist, so this is safe BY
+ * CONSTRUCTION rather than by any emulator's margin behaviour. The reserved prompt row's leading
+ * erase is redundant with `ERASE_TO_END_OF_SCREEN`, which follows it at the same row and column; it
+ * is kept deliberately so the count is exactly `H` and the invariant is one erase per row.
  */
 const ERASE_TO_END_OF_LINE = "\x1b[K";
 
@@ -226,7 +236,7 @@ export function beginFrameSession(sink: FrameSink, height: number): FrameWriter 
   if (inPlace) {
     return (frame) => {
       sink.write(
-        `${CURSOR_HOME}${frame.join(`${ERASE_TO_END_OF_LINE}\n`)}${ERASE_TO_END_OF_SCREEN}`,
+        `${CURSOR_HOME}${ERASE_TO_END_OF_LINE}${frame.join(`\n${ERASE_TO_END_OF_LINE}`)}${ERASE_TO_END_OF_SCREEN}`,
       );
     };
   }

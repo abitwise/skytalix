@@ -183,7 +183,11 @@ interface Screen {
  *     which is what lets this module write a multi-row frame without emitting a carriage return;
  *   - the wrap at the right margin is DEFERRED, as xterm and Terminal.app do it: a row of exactly
  *     `columnCount` characters leaves the cursor AT the margin and does not move down until the next
- *     printable character. Modelling it eagerly would put a phantom blank row into every frame;
+ *     printable character. Modelling it eagerly would put a phantom blank row into every frame. THIS
+ *     ONE IS MEASURED RATHER THAN ASSUMED, and it is the only one that is: a cursor at the margin
+ *     sits ON the last cell, so an erase from there ERASES that cell and the pending wrap survives —
+ *     Security/NFR on GNU screen 5.0.2, and `ABC-027`'s `A7` pins it here. The other three bullets
+ *     are still assumptions and are NOT promoted by standing next to it;
  *   - moving below the last row scrolls the whole screen up by one — the mechanism the 23/23
  *     boundary criterion exists to catch;
  *   - an escape sequence this model does not implement THROWS. An ignored sequence is how a screen
@@ -202,16 +206,31 @@ function createScreen(rowCount: number, columnCount: number): Screen {
     row = rowCount - 1;
   };
 
+  /**
+   * `ABC-027` `A7` — the cursor's REAL column, which is where an erase fires from. With the wrap
+   * DEFERRED the cursor sits ON the last cell, not one past it: `column === columnCount` is this
+   * model's representation of "at the margin, wrap pending", and erasing from there erases the cell
+   * at `columnCount - 1`. Both erase helpers take it, because a real terminal's `ED` erases from the
+   * cursor too and a model honest in one helper and not the other disagrees with itself.
+   *
+   * MEASURED, NOT ASSUMED — the one statement in this model's assumption block that is. `A7` pins it
+   * with the Security/NFR gate's own numbers. Leaving it at `column` made the erase a NO-OP at the
+   * margin, and that is what let a real regression pass six criteria, a 14-mutant campaign and 681
+   * green tests. The `column` variable is deliberately NOT written here: the deferred wrap survives
+   * the erase, which is also measured.
+   */
+  const eraseFrom = (): number => Math.min(column, columnCount - 1);
+
   const eraseToEndOfScreen = (): void => {
     const current = grid[row] as string[];
-    for (let index = column; index < columnCount; index++) current[index] = " ";
+    for (let index = eraseFrom(); index < columnCount; index++) current[index] = " ";
     for (let below = row + 1; below < rowCount; below++) grid[below] = blankRow();
   };
 
   /** `ABC-027` — erase from the cursor to the end of the LINE, cursor unmoved. */
   const eraseToEndOfLine = (): void => {
     const current = grid[row] as string[];
-    for (let index = column; index < columnCount; index++) current[index] = " ";
+    for (let index = eraseFrom(); index < columnCount; index++) current[index] = " ";
   };
 
   return {
@@ -384,11 +403,13 @@ describe("ABC-018 acceptance — writing and redraw", () => {
 
     const redraw = sink.chunks[1] as string;
     expect(redraw.startsWith(CURSOR_HOME)).toBe(true);
-    // `ABC-027` — the rows are joined by an erase-in-line + newline, not by a bare newline, and the
-    // escape count is `2 + (H - 1)`. Both counts stay derived from `H`.
-    expect(redraw).toContain(second.join(`${ERASE_TO_END_OF_LINE}\n`));
+    // `ABC-027` `RF-1` — an erase-in-line precedes EVERY row, so it fires at COLUMN 0 and never at
+    // the right margin, and the escape count is `2 + H`. Both counts stay derived from `H`. The
+    // count below is MASKED by the assertion above it — that one fails first and this one never
+    // reports — so it is corrected here by derivation, not by whatever the runner happened to print.
+    expect(redraw).toContain(`${ERASE_TO_END_OF_LINE}${second.join(`\n${ERASE_TO_END_OF_LINE}`)}`);
     expect(occurrences(redraw, ERASE_TO_END_OF_SCREEN)).toBe(1);
-    expect(occurrences(redraw, "\x1b")).toBe(2 + (HEIGHT - 1));
+    expect(occurrences(redraw, "\x1b")).toBe(2 + HEIGHT);
 
     const lines = screen.lines();
     expect(lines.slice(0, HEIGHT - 1)).toEqual(second.slice(0, HEIGHT - 1));
@@ -431,9 +452,11 @@ describe("ABC-018 acceptance — writing and redraw", () => {
     expect(frame).toHaveLength(HEIGHT);
     expect(frame[HEIGHT - 1]).toBe("");
     const body = captured(sink).slice(CURSOR_HOME.length, -ERASE_TO_END_OF_SCREEN.length);
-    // `ABC-027` — same cause as the join above; the last row carries NO erase, which is what leaves
-    // the cursor at its start.
-    expect(body).toBe(frame.join(`${ERASE_TO_END_OF_LINE}\n`));
+    // `ABC-027` `RF-1` — same cause as the join above; the reserved prompt row carries a LEADING
+    // erase like every other row, and the cursor is still left at that row's start because an
+    // erase-in-line does not move the cursor. The `H`-th erase is redundant with the erase to end of
+    // screen that follows it at the same row and column, and is kept: see `ERASE_TO_END_OF_LINE`.
+    expect(body).toBe(`${ERASE_TO_END_OF_LINE}${frame.join(`\n${ERASE_TO_END_OF_LINE}`)}`);
     expect(screen.cursor()).toEqual({ row: HEIGHT - 1, column: 0 });
   });
 
@@ -871,7 +894,7 @@ function screenEqualsFrameAfterEveryRedraw(
 }
 
 describe("ABC-027 acceptance \u2014 the in-place writer clears each row as it writes it", () => {
-  it("A1 \u2014 the emitted redraw byte for byte: home, the rows joined by an erase-in-line, ONE erase to end of screen", () => {
+  it("A1 \u2014 the emitted redraw byte for byte, and EVERY erase fires at COLUMN 0: home, an erase-in-line, the rows joined by newline + erase-in-line, ONE erase to end of screen", () => {
     const frame = assembleFrame(partsFor(playTo(8), { messages: ["check"] }), "unicode");
     const sink = captureSink(true, 24);
 
@@ -882,18 +905,36 @@ describe("ABC-027 acceptance \u2014 the in-place writer clears each row as it wr
     const redraw = sink.chunks[0] as string;
 
     // The UN-cleared emission \u2014 the merged writer's, constructed here so `ADR-0010`'s cost claim is
-    // falsifiable rather than quoted. Measured on this fixture: 425 characters becomes 491.
+    // falsifiable rather than quoted. Measured on this fixture: 425 characters becomes 494.
     const uncleared = `${CURSOR_HOME}${frame.join("\n")}${ERASE_TO_END_OF_SCREEN}`;
 
     expect(redraw).toBe(
-      `${CURSOR_HOME}${frame.join(`${ERASE_TO_END_OF_LINE}\n`)}${ERASE_TO_END_OF_SCREEN}`,
+      `${CURSOR_HOME}${ERASE_TO_END_OF_LINE}${frame.join(`\n${ERASE_TO_END_OF_LINE}`)}${ERASE_TO_END_OF_SCREEN}`,
     );
-    // Every count derived from `H`, never hardcoded \u2014 the merged file's own rule. The last row
-    // carries no erase: `ERASE_TO_END_OF_SCREEN` already clears the rest of the cursor's row.
-    expect(occurrences(redraw, ERASE_TO_END_OF_LINE)).toBe(HEIGHT - 1);
+    // Every count derived from `H`, never hardcoded \u2014 the merged file's own rule. One erase per row,
+    // `H` of them, all LEADING: the reserved prompt row's is redundant with the erase to end of
+    // screen and is kept anyway, because `H` is the invariant a reader can restate without an
+    // off-by-one and `H - 1` is the asymmetry that put the erase at the margin in the first place.
+    expect(occurrences(redraw, ERASE_TO_END_OF_LINE)).toBe(HEIGHT);
     expect(occurrences(redraw, ERASE_TO_END_OF_SCREEN)).toBe(1);
-    expect(occurrences(redraw, "\x1b")).toBe(HEIGHT + 1);
-    expect(redraw.length - uncleared.length).toBe((HEIGHT - 1) * ERASE_TO_END_OF_LINE.length);
+    expect(occurrences(redraw, "\x1b")).toBe(HEIGHT + 2);
+    expect(redraw.length - uncleared.length).toBe(HEIGHT * ERASE_TO_END_OF_LINE.length);
+
+    // EVERY ERASE FIRES AT COLUMN 0 \u2014 the clause this project's first gate FAIL bought, and DO NOT
+    // read it as a restatement of the `toBe` above. An erase fires where the cursor IS. At the right
+    // margin the cursor sits on the LAST CELL with the wrap pending, so `\x1b[K` destroys that cell:
+    // measured by Security/NFR on GNU screen 5.0.2 at a window exactly `W` wide, where the
+    // erase-after-each-row shape lost the board's whole h-file and its file label on EVERY frame.
+    //
+    // THE COUNTS ABOVE CANNOT TELL SAFE FROM UNSAFE. QE's mutant `M2` \u2014 `rows.map(row => row + EL)`
+    // joined by bare newlines, `H` erases every one of them AT the margin \u2014 matches all four of them
+    // EXACTLY: `\x1b[K` = `H`, `\x1b[0J` = 1, `\x1b` = `H + 2`, delta = `H * 3`. Under the old
+    // `H - 1` counts the count alone killed it; under these it does not. These two assertions are
+    // what kill it now, and they are the only assertions in `A1` that name WHY the order is what it
+    // is. A hop that "simplifies" them away removes the criterion's entire defence against the
+    // regression this ticket exists to remove.
+    expect(redraw.startsWith(`${CURSOR_HOME}${ERASE_TO_END_OF_LINE}`)).toBe(true);
+    expect(redraw).not.toContain(`${ERASE_TO_END_OF_LINE}\n`);
   });
 
   it("A2 \u2014 after EVERY redraw of a NARROWING sequence the screen equals the frame, at 80 AND 120 columns", () => {
@@ -995,5 +1036,47 @@ describe("ABC-027 acceptance \u2014 the in-place writer clears each row as it wr
       expect(value.at(-1)).toBe("");
       for (const row of value.slice(0, -PROMPT_ROWS)) expect(row).toHaveLength(widthOf(value));
     }
+  });
+
+  it("A7 — the screen model's RIGHT MARGIN is measured, not assumed: an erase at the margin ERASES the last cell, and the deferred wrap survives it", () => {
+    // A CRITERION ON THE TEST DOUBLE, and the one whose absence let a real regression pass six
+    // criteria, a 14-mutant campaign with zero survivors and 681 green tests. The model let `column`
+    // run to `columnCount` and made the erase a NO-OP there, so it certified a writer that a real
+    // terminal punishes.
+    //
+    // THE ASSERTED BEHAVIOUR IS NOT A READING OF ECMA-48. It is the Security/NFR gate's MEASUREMENT,
+    // on GNU screen 5.0.2 driven attached to a pty whose winsize it set with `TIOCSWINSZ` and read
+    // back with screen's own `hardcopy`, at a 10-column window. The two controls below ARE that
+    // gate's two controls, and they are what make the erased cell attributable to the escape and to
+    // nothing else: each control differs from the test by exactly the three bytes of `\x1b[K`, or by
+    // exactly one character of content.
+    //
+    // Every number derives from the screen's own `C`. `H` and `W` do not appear, no frame is
+    // assembled, and nothing here asserts any width is constant — see the ticket's `## Out of scope`
+    // PROHIBITION, which this criterion was checked against rather than assumed clear of.
+    const COLUMNS = 10;
+    const full = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".slice(0, COLUMNS);
+    const short = full.slice(0, COLUMNS - 1);
+
+    // CONTROL A — exactly `C` characters, NO erase: all `C` cells survive. (`ABCDEFGHIJ`.)
+    const intact = createScreen(2, COLUMNS);
+    intact.write(full);
+    expect(intact.lines()[0]).toBe(full);
+
+    // CONTROL B — `C - 1` characters then the erase: below the margin, the erase harms nothing.
+    const belowMargin = createScreen(2, COLUMNS);
+    belowMargin.write(`${short}${ERASE_TO_END_OF_LINE}`);
+    expect(belowMargin.lines()[0]).toBe(`${short} `);
+
+    // THE TEST — exactly `C` characters then the erase: the cell at `C - 1` is ERASED.
+    const atMargin = createScreen(2, COLUMNS);
+    atMargin.write(`${full}${ERASE_TO_END_OF_LINE}`);
+    expect(atMargin.lines()[0]).toBe(`${short} `);
+
+    // ...and the DEFERRED WRAP SURVIVED the erase: the next printable character lands at column 0 of
+    // the NEXT row, not back in the row that was just erased. The gate's fourth payload.
+    atMargin.write("x");
+    expect(atMargin.lines()[1]).toBe("x".padEnd(COLUMNS));
+    expect(atMargin.cursor()).toEqual({ row: 1, column: 1 });
   });
 });
