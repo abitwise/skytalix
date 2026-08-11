@@ -388,6 +388,47 @@ its falsifier, the three ply counts and every other figure and machine on this r
 is byte-identical (36-file aggregate md5 `afbc181925173a615c3fbf18fd51dab8` before and after), so the
 standing no-wall-clock-in-the-suite rule is not engaged and `NFR-008`'s lane budget is not charged.
 
+### RE-MEASURED 2026-08-11 by Architect/Design (task `design-frame-width-clearing`) — the write half's serialized-length denominator, and what `ADR-0010` adds to it. **THE `< 16 ms` TARGET DOES NOT MOVE. NO BAR IS CREATED, MOVED OR LOOSENED. NOT ONE BYTE OF ANY TABLE ROW WAS TOUCHED** — all eight rows `NFR-001`–`NFR-008` verified byte-identical by hashing the eight lines together before and after the write (`sha256 1136d003…7c810`).
+
+**Why this row is touched at all.** `ADR-0010` (accepted 2026-08-11) rules that `src/frame.ts`'s
+in-place writer clears each row as it writes it, so the **emitted** redraw grows. This row's write half
+carries a serialized-length denominator, and a denominator that silently stops describing the delivered
+stream is the **TWO-DOCUMENTS-DISAGREE** class this file already tracks. **No figure in the row is
+edited; what follows is a note beside it.**
+
+**1. The existing 418-character figure is CORRECT and its scope is now stated.** Measured on merged
+code with the merged test file's own stubs: the assembled 23-row frame at `W = 18` serializes to
+**418 characters** as `frame.join("\n")` — 22 rows × 18 characters + 22 newlines, the prompt row being
+empty. **The stream actually written is 425 characters / 489 UTF-8 bytes**, because
+`beginFrameSession`'s in-place branch adds `\x1b[H` (3) and `\x1b[0J` (4). The two numbers measure
+different things and **the row's figure is not wrong** — it is the frame, not the emission. Recorded so
+the 7-character gap is never later read as drift.
+
+**2. `ADR-0010` adds exactly `(H − 1) × 3` = 66 characters per redraw, always.** Not a range and not a
+measurement that could come out differently: one `\x1b[K` between each pair of rows. Measured on the
+delivered `ABC-016` panel with a 24-column history pane — quiet frame 557 → 623 characters, both-claims
+frame 1129 → 1195. **Against a 16 ms budget this is not a cost, and it is recorded as a denominator
+change rather than as a performance item.**
+
+**3. What genuinely moves this denominator is the two panels landing, and that is NOT `ADR-0010`.**
+The 418-character figure rests on `W = 18`, which holds only while the two unbuilt panels are the
+merged test's stubs (widest rows 13 and 14, so the real board pins `W`). Measured against the
+**delivered** `ABC-016` panel: `W` is **24** on a quiet frame and **50** with a draw claimable, and the
+emitted stream is **621** and **1193** bytes. **No figure is edited here** — `ABC-016` and `ABC-017` are
+not merged, and recording a delivered figure for an unmerged ticket is this file certifying work that
+has not landed, which the 2026-08-11 `design-frame-contract` block declined to do for the same reason.
+**Owner: whichever hop re-measures this row after the second panel merges.**
+
+**Unchanged and explicitly not touched at this hop:** the `< 16 ms` target, the boundary condition and
+its `O(window)` falsifier, the three ply counts, every measured figure, machine and `UNKNOWN - verify`
+marker on this row — **the bounded-pane compute (`ABC-017`) and the status-panel compute (`ABC-016`)
+are both still unmeasured and no number was invented for either.** **Zero `src/` lines and zero test
+lines at this hop** — every measurement above ran on copies outside the repository, `src/` is
+byte-identical, so the standing no-wall-clock-in-the-suite rule is not engaged and `NFR-008`'s lane
+budget is not charged. **No new NFR row is created**: `ADR-0010`'s property is a per-frame correctness
+invariant with no target to miss, so it belongs in acceptance criteria (`ADR-0010` clause 7) and not in
+this catalog.
+
 ## Notes on the measured rows (NFR-001, NFR-003, NFR-005)
 
 Seeded 2026-07-24. Every target above is transcribed from its epic's stated `NFR triggers`
