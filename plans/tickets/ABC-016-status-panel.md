@@ -11,6 +11,64 @@ feature: —
 
 # ABC-016 — Status panel: side to move, check, material balance, move number, last move, thinking row
 
+> **AMENDED 2026-08-11 by BA/PM at task `refinement-ABC-016-qe-gaps` (Workflow 07), ruling on the
+> SEVEN CRITERION GAPS QE returned with `PASS_WITH_RISKS`. ZERO code defects; the criteria are
+> INCOMPLETE, not unmet, and `A1`–`A14` all hold.** Every gap was **re-measured here, not inherited**
+> — and two of QE's own proposed closes were measured and found **insufficient**. **This matters more
+> than a normal refinement because `ABC-016` merges FIRST of four (`ABC-016` → `ABC-017` → `ABC-027`
+> → `ABC-019`): these criteria become the net the other three are built on.**
+>
+> | # | Defect | Where |
+> |---|---|---|
+> | D20 | **`A7` measures the wrong quantity, and the `thinking` flag is crossed with no CONTENT anywhere.** The width clause compares the panel's WIDEST row; row 3 is 11 chars and the widest is row 2 at 21, so dropping the reserved cell entirely leaves `widestOf` at **21 === 21** and `D7`'s own target build passes. Separately, every content criterion is asserted at `thinking: false` only, so the flag can gate any cell | Acceptance `A7` |
+> | D21 | **Five piece values are stated as exact integers and only PAWN and QUEEN are pinned.** `A6`'s three FENs vary pawns and queens alone; `KNIGHT`, `BISHOP` and `ROOK` are invisible to every criterion | Acceptance `A6` |
+> | D22 | **`A13`'s two counting clauses state no PLY DEPTH**, so both are measured at 0 and 1 ply and a second derive that starts at ply 2 passes them — on the clause `## Security / NFR triggers` calls *"the part that actually binds"* | Acceptance `A13` |
+> | D23 | **`check` is never crossed with a claimable draw**, though the state is reachable and the delivered panel renders it correctly | Acceptance `A2` |
+> | D24 | **`A9` cannot fail on a panel that INFERS the claimant**, because `src/gameend.ts:170` derives `claimable.by` from the same `position.blackToMove` such a panel would read. `D17`'s class again | Acceptance `A9` |
+> | D25 | **The last-move cell's entire tested vocabulary is four strings**, none needing a SAN disambiguator, so a panel handing `toSan` an empty legal list renders `last: Nxd4` for `Nexd4` and passes everything | Acceptance `A5` |
+> | D26 | **Four stale-rationale sites and one flag that is already discharged.** Two are under `src/` and are the dev hop's; one was named by nobody | Acceptance `A7`, DoR, Test notes |
+>
+> **THE TWO CLOSES QE PROPOSED THAT DO NOT WORK, both measured here rather than argued.**
+>
+> 1. **`G1`: "`CASES` gains a `thinking: true` variant of the in-check case" kills ONE of the five
+>    thinking-axis wrong builds, not three.** Measured: that entry is swept only by `A10`, `A11` and
+>    `A12` — purity, row count and ASCII — and **no criterion that iterates `CASES` asserts CONTENT**.
+>    So it kills `m37` (non-ASCII in the check cell while thinking, via `A12`) and leaves `m06`
+>    (`CHECK` dropped while thinking, **378/400 games diverge** — the sharpest build in the report),
+>    `m29` (claim cell dropped) and `m46` (side-to-move cell dropped) alive at every criterion. Each
+>    would die only to a snapshot, and QE's own verdict on snapshots is *"a genuine regression net and
+>    a poor criterion"*, discharged by a single `-u`. **The ruling replaces `A7`'s width clause with
+>    one that kills all five and needs no new `CASES` entry at all** — see `A7`.
+> 2. **`G3`: "one FEN closes all three" is true of each single mutant and false of the class.**
+>    Measured: a position down `R+N+B` reads `material: +11` and each of `KNIGHT=4`, `BISHOP=4`,
+>    `ROOK=6` reads `+12`, so each dies — but a **compensating** `KNIGHT=4, BISHOP=2` reads
+>    `4+2+5 = +11` and **survives**. Three single-removal rows read `+3 / +3 / +5` and kill it on the
+>    first. The ruling takes three rows in a table that already exists.
+>
+> **What each defect costs the code: NOTHING. What it costs the TESTS: a dev hop, and that is the
+> ruling.** Every close is a test addition or a comment repair and **two of the repairs are under
+> `src/`**, which BA/PM may not write. Landing the criteria text alone would leave this ticket
+> claiming coverage it does not have on the hop where it becomes three other tickets' net — which is
+> `D17`'s fault exactly. **`In Review` → `In Development`, requested in this hop's notes.** The work:
+> **2 new `CASES` entries, 3 `A6` rows, 1 rewritten `A7` clause, 1 `A5` case, 1 `A9` case, 2 ply
+> depths, 1 test-only `> 0` line, 3 comment repairs, regenerated snapshots. ZERO production lines** —
+> every added case was rendered against the delivered panel at this hop and goes green on the code as
+> it stands.
+>
+> **`ADR-0010` is NOT re-opened and NO constant-width criterion is added.** Clause 5 refuses one, QE
+> did not ask for one, and neither does this. The replacement `A7` clause compares **two renders of
+> the SAME position and history** at different `thinking` values; it says nothing about width across
+> different positions, names no frame-level term and names no row index — so `ADR-0009` clause 2 and
+> `ADR-0010` clauses 2 and 5 are all untouched, and clause 5's *"row-3 content does not jump
+> horizontally"* is delivered **without pinning a layout this ticket deliberately leaves to the
+> engineer**.
+>
+> **Size `M` and priority `P1` both re-derived a FIFTH time and both unmoved; NOT `XL`, so
+> `SPLIT_REQUIRED` does not apply.** `plans/board.md` **not edited** and the front matter deliberately
+> still reads `In Review` — the board move is **requested** in this hop's notes. `src/`, `ABC-017` and
+> `ABC-019` **not touched**; a BA/PM agent is live on `ABC-017` and QE on `ABC-019`, and no channel to
+> either was opened.
+
 > **AMENDED 2026-08-11 by BA/PM at task `refinement-ABC-016-a13` (Workflow 07), ruling on `A13`.
 > TWO ACCEPTANCE DEFECTS ON A DELIVERED, GATED-GREEN TICKET SITTING IN `In Review`.** The
 > Orchestrator routed one of them here; the second was found by checking the rest, which this board's
@@ -347,6 +405,26 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   **3 legal replies, game in progress** — measured) — **then** the panel contains `CHECK`, and in
   that same render `Black to move`, `3...`, `last: Qxe5+` and `material: +1`.
 
+  **And given `4k3/8/8/8/8/8/8/4R1K1 b - - 100 60` with an empty move list** — Black to move, **in
+  check**, and with a **fifty-move draw claimable** (measured status
+  `{by:"black", draws:["fifty-move"]}`) — **then** the panel contains **both** `CHECK` **and**
+  `Black may claim: fifty-move rule` in the same render, and it has exactly `STATUS_ROWS` rows.
+
+  *(**[ADDED 2026-08-11 — D23.]** `check` had never been crossed with `claimable` anywhere on this
+  ticket, and a build that suppresses `CHECK` whenever a draw is claimable passed every criterion and
+  every snapshot. **The state is reachable, not contrived** — it is the fifty-move position of `A8`
+  row 2 with the king put in check by the same rook — and the delivered panel already renders it
+  correctly. Measured at this hop:*
+  ```
+  "Black to move  60...  CHECK"
+  "material: +5"
+  "             Black may claim: fifty-move rule"
+  ```
+  *It is worth stating why a random corpus will not find this: QE's 400 seeded 80-ply games produced
+  **2,138** in-check renders and **zero** claimable draws, so the pair has to be constructed. **This
+  case also belongs in `CASES`**, so `A7`, `A10`, `A11` and `A12` sweep it and it gets a snapshot.
+  **Costs no production change** — measured green on the panel as it stands.)*
+
   *(**[ADDED 2026-08-11 — D19. This is the fourth wrong build this criterion has had to be widened
   to kill, and the gap was in the criteria SET rather than in any one criterion's words.]* **Measured
   over all fourteen cases this ticket names: every case that is in check has an EMPTY move list, and
@@ -397,6 +475,27 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   character, and the panel still has exactly `STATUS_ROWS` rows. **And given** `toFen(history.position)` captured **before** the
   first render, **then** it is byte-identical after it.
 
+  **And given a last move that NEEDS A SAN DISAMBIGUATOR** — `4k3/8/8/8/3p4/8/2N1N3/4K3 w - - 0 1`
+  (white knights on **c2 and e2, both able to capture on d4**) played through the single ply `e2d4` —
+  **then** the panel contains **`last: Nexd4`**, with the file letter, and does **not** contain
+  `last: Nxd4`.
+
+  *(**[ADDED 2026-08-11 — D25.]** The whole tested vocabulary of this cell was four strings — `Nf3`,
+  `e4`, `e5`, `Qxe5+` — plus the empty-history negative, and **not one of them needs a
+  disambiguator**. A build that hands `toSan` an **empty legal list** silently disables every
+  disambiguator and passed all three nets while diverging on **218 of 400 games**. Measured at this
+  hop on the FEN above: the delivered panel renders `last: Nexd4` and that build renders
+  `last: Nxd4`.*
+
+  ***This is the panel's defect and not `ABC-013`'s, and the ticket's own counter-argument is only
+  half right.*** *`ABC-013` owns whether `toSan` is correct; **this ticket owns whether the panel
+  CALLS it correctly**, and the empty legal list is a defect in the call. That is also why exactly
+  **one** case is added and not four: a castle, a promotion and an en-passant capture were rendered
+  at this hop and are correct (`last: O-O`, `last: a8=Q+`, `last: exd6`), but they exercise `toSan`'s
+  body rather than the panel's call shape and would duplicate `ABC-013`'s own coverage. **The
+  disambiguator is the one that discriminates; the other three are bloat and are declined.** This
+  case also belongs in `CASES`. **Costs no production change.**)*
+
   *(**[ADDED 2026-08-10 — D12.]** The last clause is the criterion, not a nicety. Measured at this
   hop: `toSan(history.position, lastMove)` — SAN against the position *after* the move — returns the
   **correct** string `Nf3` and leaves the live board permanently corrupted with a phantom knight
@@ -405,27 +504,102 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   criterion.)*
 - **A6 — material balance, as a table of exact integers.**
 
-  | FEN | Contains |
-  |---|---|
-  | `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1` | `material: 0` |
-  | `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1` | `material: -9` |
-  | `rnbqkbnr/pppppppp/8/8/7Q/8/PPPPPPP1/RNBQKBNR w KQkq - 0 1` | `material: +8` |
+  | FEN | Contains | Pins |
+  |---|---|---|
+  | `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1` | `material: 0` | the zero |
+  | `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1` | `material: -9` | `QUEEN` |
+  | `rnbqkbnr/pppppppp/8/8/7Q/8/PPPPPPP1/RNBQKBNR w KQkq - 0 1` | `material: +8` | `QUEEN − PAWN`, so `PAWN` |
+  | `r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1` | `material: +3` | **`KNIGHT`** |
+  | `rn1qkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1` | `material: +3` | **`BISHOP`** |
+  | `1nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk - 0 1` | `material: +5` | **`ROOK`** |
 
-  *(All three measured at this hop under P 1 · N 3 · B 3 · R 5 · Q 9 · K 0. The third is the
+  *(**[ADDED 2026-08-11 — D21. Three rows, and the reason there are three rather than one.]** `D10`
+  added the value table because *"five exact integers were quoted and none of them was defined"*.
+  They were defined and then **only two of them were pinned**: the first three rows vary pawns and
+  queens alone, so `KNIGHT`, `BISHOP` and `ROOK` were invisible to every criterion and to every
+  snapshot — a `KNIGHT = 4` build diverges on **325 of 400 games** and passed all three nets. The
+  three added rows each remove **one** black piece from the starting complement and pin that piece's
+  value on its own, given `PAWN` and `QUEEN` from the rows above. All six measured at this hop
+  against merged `src/`; the castling field of the `ROOK` row is `KQk` because removing the a8 rook
+  removes Black's queenside right, and `parseFen` accepts it.*
+
+  ***Why not the single joint FEN that was available.*** *A position down `R+N+B` reads
+  `material: +11`, and `KNIGHT=4`, `BISHOP=4` and `ROOK=6` each read `+12` there, so one row does
+  kill each of the three named mutants. **It does not kill the class**: a compensating
+  `KNIGHT=4, BISHOP=2` reads `4+2+5 = +11` and survives it, while the three rows kill it on the
+  first. One row also does not say WHICH integer is wrong when it goes red, and it is measurably
+  harder to check by eye — the joint FEN was mis-built twice at this hop before it read `+11`. Three
+  rows in a table that already exists, iterated by a test that already loops, is the cheaper of the
+  two once the second failure mode is counted.*
+
+  ***`KING` stays unpinned, and that is a proof rather than an omission.*** *Its value is
+  unobservable — both sides always have exactly one, and `parseFen` refuses any position where they
+  do not (`"position must have exactly one white king, found 0"`, measured). A `KING = 9` build
+  diverges **0** times in 400 games. The ticket says the king's value is unobservable and the ticket
+  is right; **after these rows, all five observable integers are pinned and the sixth is provably
+  unpinnable.**)*
+
+  *(The first three measured at this hop under P 1 · N 3 · B 3 · R 5 · Q 9 · K 0. The third is the
   promotion case — white is one pawn short and one queen up — and it is the one a board-diff against
   the standard starting complement gets wrong; a 64-square scan gets it right. It is a constructed
   position rather than one reached by play, which is legitimate because the panel is a pure function
   of the board and `parseFen` accepts it.)*
-- **A7 — the thinking cell, both ways, in ONE test. Given** the thinking flag true, **then** the
-  panel contains `thinking...`; **given** it false, **then** it does **not** contain `thinking...`,
-  and — **for the same position and history** — the two panels have an **identical row count** and an
-  **identical widest-row width**.
+- **A7 — `thinking` changes the thinking cell and NOTHING else, on EVERY case. Given** the thinking
+  flag true, **then** the panel contains `thinking...`; **given** it false, **then** it does **not**.
+  **And given every case in `CASES`, rendered twice — once with the flag true and once with it
+  false — then** replacing the substring `thinking...` in the busy panel with a run of **spaces of
+  the same length** yields a panel **byte-identical** to the idle one, row for row.
 
-  *(**[CORRECTED 2026-08-10 — D7.]** This read "the indicator is present … the indicator row is
-  present and blank". A build whose thinking cell is **always blank** satisfies both halves as
-  worded, since the row is present either way. Naming the string kills it; the width clause is what
-  makes "blank but reserved" mean something, because the panel's widest row is the frame's `W`
-  (`src/frame.ts:179`) and a cell that shrinks when idle makes the whole frame breathe.)*
+  *(**[CORRECTED 2026-08-10 — D7. The width clause REPLACED 2026-08-11 — D20, and the criterion is
+  now swept over `CASES` rather than over one position.]** The struck clause read *"the two panels
+  have an **identical row count** and an **identical widest-row width**"*. The row-count half
+  survives inside byte-identity; **the widest-row half could not fail on the build `D7` added it to
+  catch**, and that was measured at `A7`'s own fixture rather than argued:*
+
+  ```
+  busy ["Black to move  1...", "last: e4  material: 0", "thinking..."]   widest = 21
+  idle ["Black to move  1...", "last: e4  material: 0", "           "]   widest = 21
+  row 3 is 11 in both states, and row 3 is NEVER the widest row here
+  if the idle cell were DROPPED entirely, widest would still be          21
+  ```
+
+  *`A7` compared the panel's **widest** row; the quantity the reservation moves is the **thinking
+  cell's own**. Row 2 is the widest row and does not vary with `thinking`, so the cell dropped
+  entirely — verbatim `D7`'s target — read `21 === 21` and passed `A7` and every other criterion,
+  dying only to snapshots. (`A7` was not inert: it killed a build that drops the **material** cell
+  while thinking, because material sits on the widest row. **Catching a shrinking cell iff that cell
+  happens to be the widest is not a property any criterion states.**)*
+
+  ***The replacement is stronger than a width comparison and it closes a second gap at the same
+  time.*** *`thinking` was an INPUT that no criterion crossed with any CONTENT: every content
+  criterion is asserted at `thinking: false`, so the flag could gate any cell. Measured at this hop,
+  the five wrong builds on that axis against the two candidate closes:*
+
+  | build | `CASES` gains a thinking+in-check entry | **this clause** |
+  |---|---|---|
+  | `m06` drops `CHECK` while thinking (378/400 diverge) | **survives** | **KILLED** |
+  | `m23` idle thinking cell dropped (`D7`'s target) | **survives** | **KILLED** |
+  | `m29` drops the claim cell while thinking | **survives** | **KILLED** |
+  | `m37` emits `U+2718` in the check cell while thinking | KILLED (`A12`) | **KILLED** |
+  | `m46` drops the side-to-move cell while thinking | **survives** | **KILLED** |
+
+  *The `CASES`-entry close was QE's and it kills **one** of the five, because the three criteria that
+  iterate `CASES` assert purity, row count and ASCII — **none of them asserts content**. This clause
+  renders **every** case in **both** states, so no new `CASES` entry is needed for the thinking axis
+  at all, and it subsumes the row-count and per-row-width properties by byte-identity. Verified green
+  on the delivered panel for every case, including the two this amendment adds.*
+
+  ***What it deliberately does NOT say, because `ADR-0010` is accepted and is not re-opened.*** *It
+  names **no frame-level term, no row index and no width across different positions.** It compares
+  two renders of the **same** position and history, which is exactly `ADR-0010` clause 5's surviving
+  rationale — *"`A7` is now a legibility clause (the row-3 content does not jump horizontally)"* —
+  delivered **without** pinning the row-3 layout, which `## Acceptance` leaves to the engineer
+  (*"the cell strings are pinned; the LAYOUT is not"*, epic acceptance `4a`). **It is NOT a
+  constant-width criterion**: `ADR-0010` clause 5 refuses one, QE did not ask for one, and this is
+  not one — the panel's width is still free to vary between positions, which under clause 1 it does
+  by design. The stale justification that a shrinking cell "makes the whole frame breathe" is struck
+  here; after `ADR-0010` clause 1 the consumer clears and that is the writer's job. **The same
+  sentence survives in two places under `src/` and is the dev hop's — see `## Test notes`, D26.**)*
 - **A8 — the claim cell, four cases, each asserting the ABSENCE of the other rule.**
 
   | Given | Contains | Does NOT contain |
@@ -447,12 +621,45 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   status `{by:"white", draws:["threefold-repetition","fifty-move"]}`. **The order is `draws`' own
   order — threefold first, then fifty-move — and the panel never re-sorts it**, because
   `src/gameend.ts:53` guarantees that order and a second sort is a second opinion.)*
-- **A9 — the claim is the side-to-move's and nobody else's. Given**
+- **A9 — the claim is READ from `status.claimable.by` and is never inferred from the board. Given**
   `6k1/5ppp/8/b7/8/8/5PPP/4R1K1 b - - 100 60` — the same position with the side to move flipped —
-  **when** the panel renders, **then** it contains `Black may claim: fifty-move rule`. *(Measured at
-  this hop. This is `ABC-020` `A7`'s rule surfacing in the frame: a panel that renders "you" or
-  infers the claimant from anything but `status.claimable.by` reproduces the exact defect `ABC-020`
-  exists to fix, and it does so on the engine's plies where nobody is watching.)*
+  **when** the panel renders, **then** it contains `Black may claim: fifty-move rule`.
+
+  **And given the one input shape that separates READING from INFERRING** — the position
+  `6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 100 60`, which is **White** to move, handed a `GameStatus`
+  whose claimant **disagrees** with it, `{ claimable: { by: "black", draws: ["fifty-move"] } }` —
+  **then** the panel contains `Black may claim: fifty-move rule` and does **not** contain
+  `White may claim`.
+
+  *(**[ADDED 2026-08-11 — D24.]** The parenthetical below claims two protections and the criterion
+  could only ever deliver one. It kills the *"you"* half — a build rendering `"You may claim:"` dies
+  on `A8` and `A9`. It **could not** kill the inferring half, and the reason is structural rather
+  than statistical: **`src/gameend.ts:170` derives the claimant from the same field the inferring
+  panel would read** —*
+
+  ```ts
+  claimable: { by: position.blackToMove ? "black" : "white", draws }
+  ```
+
+  *— so against any status the rules core actually produces, the two builds are **definitionally
+  identical**, and an inferring build diverged **0** times in 400 games. This is `D17`'s class
+  exactly, and `D17`'s remedy was to state what the criterion protects and stop claiming the rest.*
+
+  ***Here it is closeable rather than only strikeable, and the closing case was built and measured at
+  this hop.*** *The added input is **constructed and is NOT producible by merged `gameStatusOf`
+  today** — stated in the criterion so no reader mistakes it for a reachable game state, which is the
+  `D13` honesty this ticket already had to apply once. It is nonetheless the right criterion and not
+  a contrivance: `by` is a **required field of the public `DrawClaims` interface**
+  (`src/gameend.ts:50-55`), `status` is a **parameter this panel does not derive**, and `ABC-021`
+  will add a second producer of claims. The panel's stated contract is *"`status.claimable.by` is
+  that attribution, and it is a required field precisely so the panel cannot infer it"* — this case
+  is that sentence made falsifiable, at the one moment it is free, on the ticket that merges first.
+  Measured: the delivered panel renders `Black may claim: fifty-move rule` on a White-to-move board;
+  an inferring panel renders `White may claim`. **Costs no production change.**)*
+
+  *(This is `ABC-020` `A7`'s rule surfacing in the frame: a panel that renders "you" or infers the
+  claimant from anything but `status.claimable.by` reproduces the exact defect `ABC-020` exists to
+  fix, and it does so on the engine's plies where nobody is watching.)*
 - **A10 — purity and determinism. Given** any case above rendered **twice**, **when** compared,
   **then** the two panels are **byte-identical**; and **then** `toFen(history.position)` and
   `history.moves.length` are unchanged across both renders. *(The move-list clause is new: item 4's
@@ -530,9 +737,47 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   - **directly, on an empty history:** the render's **total** spied `isInCheck` count is **exactly
     1**. `toSan` is not called there (the clause above pins that), so the panel is the render's only
     caller and the total **is** its own count. **This clause names no other module.**
-  - **by difference, on a history of at least one move:** the render's **total** spied `isInCheck`
+  - **by difference, on a history of AT LEAST TWO MOVES:** the render's **total** spied `isInCheck`
     count, **minus** the count that a bare `toSan(position, lastMove)` makes on the **same move**
-    against the **same position**, measured in the same file, is **exactly 1**.
+    against the **same position the panel replays to**, measured in the same file, is **exactly 1**.
+
+  **and both counting clauses are measured at a ply depth of AT LEAST 2**, the scan clause stated
+  ply-independently: **the spied `squareAt` count for one render is `64` plus the number of occupied
+  squares in `history.initialFen`**, at **every** depth asserted.
+
+  *(**[ADDED 2026-08-11 — D22. The DEPTH is what is new; the arithmetic of both clauses is
+  unchanged and both were already correct.]** The 2026-08-11 ruling that rewrote this clause fixed
+  what it **counts** and left what it counts it **on** unstated — and an unstated depth defaults to
+  whatever fixture is nearest, which was **one ply**. Measured on the delivered file: the `isInCheck`
+  clauses are asserted on an **empty** and a **1-ply** history; the scan clause on **two empty** and
+  **one 1-ply**. So a build whose extra work starts at **ply 2** was invisible to the clause
+  `## Security / NFR triggers` calls "the part that actually binds". **That is this ticket's own
+  stated failure mode — "a bar that cannot fail on the regression it exists to catch is not a bar" —
+  one level down, and the previous ruling is where it should have been caught.***
+
+  ***Re-spied out of tree at this hop, delivered panel against the two builds that walked through:***
+
+  | build | difference @ 1 ply | difference @ 4 plies | `squareAt` @ 1 ply | `squareAt` @ 4 plies |
+  |---|---|---|---|---|
+  | **delivered** | 1 **PASS** | 1 **PASS** | 67 **PASS** | 67 **PASS** |
+  | a second `isInCheck` from ply 2 on | 1 **PASS** | **2 FAIL** | 67 PASS | 67 PASS |
+  | the 64-square scan twice from ply 2 on | 1 PASS | 1 PASS | 67 **PASS** | **131 FAIL** |
+
+  *Both builds are **invisible to output** by construction, so a call count is the only instrument
+  that could ever catch them. **The delivered panel is green at every depth**: the difference reads
+  **1** at 1, 2, 4 and 5 plies — including a 5-ply history whose last move gives check, which adds no
+  third call — and `squareAt` reads **67** on a 3-piece anchor at 1, 2 and 4 plies and **96** on the
+  32-piece starting position, because `parseFen` places one piece per occupied square
+  (`src/fen.ts:90`) and **`makeMove` never calls `squareAt` at all** — verified by grep at this hop.
+  **That is why the scan clause can be stated ply-independently: its expected value depends on the
+  anchor's piece count and not on the depth**, which is what makes a depth requirement meaningful
+  rather than a second magic number.*
+
+  ***The 4-ply fixture this needs already exists in the file*** *— `["e2e4","e7e5","g1f3","b8c6"]`,
+  in the first `A13` test. The difference half at depth needs its baseline `toSan` on the position
+  the panel replays to, which is a 3-ply replay rather than a bare `parseFen`; that is the
+  construction rule the `## Test notes` already carries, applied one ply deeper. **Costs no
+  production change** — the delivered panel satisfies every clause at every depth, measured.)*
 
   *(**[ADDED 2026-08-10 — D1, D2. The `isInCheck` clause REPLACED 2026-08-11 — D19. The criterion's
   purpose is UNCHANGED and every other clause of it is untouched.]** A count, not a clock, and the
@@ -761,6 +1006,63 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
 - **[ADDED 2026-08-11 — D19] `A13`'s difference half needs its baseline `toSan` on the SAME move and
   the SAME position the panel replays to**, and the baseline call must be made with the mocks cleared
   immediately before it. Any other move would compare two quantities that are only equal by accident.
+- **[ADDED 2026-08-11 — D20/D23/D25] Three `CASES` entries, and `CASES` is now swept in BOTH thinking
+  states.** Two entries are new — `A2`'s check-plus-claimable position and `A5`'s disambiguated SAN —
+  and both need snapshots. **No `thinking: true` entry is added for `A7`**: the criterion renders
+  every case both ways itself, which is what makes the flag crossed with all fifteen cells instead of
+  with one position. The existing `thinking` field on each entry still drives `A10`, `A11` and `A12`
+  and is unchanged.
+- **[ADDED 2026-08-11 — D22] `A13`'s deeper fixture already exists** — `["e2e4","e7e5","g1f3","b8c6"]`
+  in the first `A13` test. Reuse it rather than building a second game; the only new construction is
+  the baseline's 3-ply replay.
+- **[ADDED 2026-08-11 — D26] Take `expect(sanAlone).toBeGreaterThan(0)` in
+  `src/status-panel.nfr.test.ts`, and it is a TEST line and NOT a criterion.** It is deliberately not
+  `toBe(1)`: `> 0` names no number `src/san.ts` owns, so it is not the `ADR-0009` clause 1 fault that
+  got *"1 empty, 2 thereafter"* rejected.
+
+  **The flag it answers was raised as a discrimination gap and it is NOT one — that was measured, not
+  reasoned about, and the measurement is why no criterion moves.** The spy **does** intercept
+  `san.ts`'s internal call today (`withSan` = 2, `sanAlone` = 1, re-spied at this hop), and in the
+  world where it did not, SAN's call would enter both terms with the **same coefficient and cancel
+  exactly**: the delivered panel reads `2 − 1 = 1` and would read `1 − 0 = 1`; the two-calls build
+  reads `3 − 1 = 2` and would read `2 − 0 = 2`. **Identical verdicts.** The failure the flag imagined
+  — the assertion staying green while measuring something else — does not occur; it would stay green
+  while measuring the **same** thing by a different route. **The difference form is sound either way
+  and needs no repair.**
+
+  **So the reason for the line is provenance, and one more reason that is this ticket's own:** the
+  comment block at that site makes a load-bearing factual claim — *"the delta below is exactly
+  SAN's"* — and the item below proves this ticket's comments go stale and mislead a reader who acts
+  on them. A `> 0` assertion is an **executable guard on that claim**: it can only go red when the
+  recorded fact stops being true, which is exactly when the sentence above it stops being true. It
+  protects the comment, not the panel, and must not be written as if it protected the panel.
+  **`## Security / NFR triggers` does not gain a part 4 and `A13` is unchanged by this bullet** — a
+  criterion that pinned the spy's plumbing would go red when vitest changed its mock hoisting, which
+  is the foreign-ownership fault `A11`'s struck `frameHeight(...) is 23` clause was struck for.
+- **[ADDED 2026-08-11 — D26] FOUR stale comments, and two of them are the dev hop's to fix under
+  `src/`. One was named by nobody.** A stale comment on this ticket has now been shown to
+  **measurably suppress a real gap**, so these are not hygiene.
+  - **`src/status-panel.nfr.test.ts:134-139`** — still says *"`A13` says 'exactly 1' for the total,
+    which no build satisfying items 2 and 4 together can reach on a non-empty history"* and points at
+    *"the ticket flag raised at this hop"*. **That flag was ruled on 2026-08-11 and `A13` no longer
+    says it.** Read at face value the sentence tells the next reader that the difference form is the
+    engineer's improvisation around a broken criterion — **and you do not probe the depth of a clause
+    you have been told is a workaround.** QE reports it did exactly that, and the two probes that
+    found `D22` are precisely what that sentence argues against writing. It must now say that the
+    difference form **is** the criterion, and it must state the depth requirement. **Its
+    `src/san.ts:101` cite is also wrong for a sentence about a specific call** — verified at source
+    at this hop, `:101` is `suffix()`'s **declaration** and **`:104`** is the `isInCheck` call.
+    (*The ticket's own `src/san.ts:147` cite is correct: `:146` declares `toSan`, `:147` is the
+    return that calls `suffix`.*)
+  - **`src/status-panel.ts:95-101`** — justifies the reserved thinking cell by *"the panel's widest
+    row is the frame's `W` … a cell that shrinks makes the whole frame breathe."* True when written,
+    **false after `ADR-0010` clause 1**, which gives frame-width stability to the consumer.
+    `ADR-0010`'s `## Consequences` named this site and deliberately did not edit it.
+  - **`src/status-panel.test.ts:263-265`** — the same sentence, in `A7`'s own test. **Named by
+    nobody: not by `ADR-0010`, which listed only the module and the ticket, and not by QE.** Found by
+    grepping the tree for the sentence at this hop. It is the most misleading of the three, because
+    it sits on the criterion this amendment rewrites.
+  - **`plans/tickets/ABC-016-status-panel.md`, `A7`'s rationale** — **fixed here**, in `A7`.
 - **[ADDED 2026-08-10] `A13` needs a spy, and a separate test file.** The lesson is
   `src/gameend.nfr.test.ts`'s, recorded in `plans/nfr-catalog.md`: a `vi.mock` factory is hoisted to
   file scope and would re-route the module graph for every test in the file, so the call-count
@@ -839,6 +1141,35 @@ how two criteria are *worded* and adds one case; it does not touch item 7's rule
 argument, does not touch epic acceptance #3, and does not change what a player gets. **Not `P0`** (the
 game runs with a board and a loop) and **not `P2`** (`EPIC-002` cannot close without epic acceptance
 #3, which lives here).
+
+**Re-derived 2026-08-11 a FIFTH time at the QE-gaps ruling (`refinement-ABC-016-qe-gaps`) and still
+`M` (3) / `P1`.** *Added*: two `CASES` entries (`A2`'s check-plus-claim, `A5`'s disambiguated SAN),
+three `A6` table rows, one `A9` case, one rewritten `A7` clause swept over `CASES`, a stated ply
+depth on `A13`'s two counting clauses, one test-only `> 0` line, three comment repairs, and a
+regenerated snapshot file. *Removed*: `A7`'s widest-row clause, and the `## Definition of Ready`
+width flag, which `ADR-0010` discharged — **the only two items on this hop that take work off the
+ticket, and the second removes a carried obligation rather than a line.**
+
+**Why it stays a 3, stated against the two things that could have moved it.** *(1)* **No new cell,
+input, module, test file or production line**, and no new instrument: the spy, the `CASES` sweep and
+the `A6` table all already exist, and every addition is another row, entry or depth in a loop that is
+already written. **Six of the seven closes are a single fixture each.** *(2)* The one structural
+change — `A7` iterating `CASES` in both thinking states — **replaces** a clause rather than adding a
+test, and it is the change that lets this hop add **no** `thinking` case, so it is net cheaper than
+the close it was offered as. Calibrated the same way as before: this is **smaller than the 2026-08-10
+amendment** (three new criteria and a new test file, which did not move the 3 either) and larger than
+the `D19b` hop (one case). It sits with `ABC-007`, `ABC-013` and `ABC-014` — all `M`, all one short
+module with several traps — and above `ABC-018` (`S`). **Not `L`:** the work is fixtures, and every
+one of them was rendered against the delivered panel at this hop and goes green.
+
+**Priority `P1`, re-read a fifth time and unmoved.** Nothing here touches item 7's rules-affordance
+argument, epic acceptance #3, or what a player gets — the panel's delivered behaviour is unchanged
+and correct. **Not `P0`** (the game runs with a board and a loop) and **not `P2`** (`EPIC-002` cannot
+close without epic acceptance #3, which lives here). **The merge-order fact — that `ABC-016` merges
+first of four and these criteria become the net `ABC-017`, `ABC-027` and `ABC-019` are built
+against — is an argument about WHEN, not about RANK**, and it is recorded as such for the fourth time
+on this ticket rather than being allowed to inflate the number. It is a scheduling input for the
+Orchestrator; the rank is `P1` on its own terms.
 
 ## Definition of Ready
 
@@ -929,6 +1260,48 @@ to this panel: that is a real defect but the fix is a product decision that is n
 alone — see the flag below. And it did not weaken `A13` to make the delivered test right; the test
 happened to be right, which is a different thing and is stated as such.
 
+**RE-DERIVED A FOURTH TIME 2026-08-11 by BA/PM at task `refinement-ABC-016-qe-gaps` (Workflow 07),
+ruling on QE's seven criterion gaps. The block above claimed ✅ on item 4 and it was WRONG SEVEN
+TIMES.** That is the **fifth** consecutive time a DoR self-assessment on this board has certified
+acceptance a wrong build walks through, and the previous block said the pattern was the point. **It
+was right, and this hop is the evidence: the block that predicted its own unreliability was itself
+unreliable.** The column below is the state at the text as it stood at the start of this hop.
+
+| # | Check | At the QE gate (2026-08-11) | After this ruling |
+|---|---|---|---|
+| 1 | problem clear | ✅ | ✅ unchanged |
+| 2 | scope and out-of-scope clear | ✅ | ✅ unchanged — no scope moved; the panel's inputs, cells and row count are all as they were, and no production line is asked for |
+| 3 | INVEST | ✅ | ✅ *testable* is what moved again; no `I`/`N`/`V`/`E`/`S` term changed, and the ticket still goes green alone |
+| 4 | acceptance testable and measurable | ❌ **D20–D25** — twelve wrong builds pass every criterion: `A7` cannot fail on `D7`'s own target and `thinking` is crossed with no content (D20); three of five piece values unpinned (D21); `A13`'s counts have no stated ply depth (D22); `check` never crossed with `claimable` (D23); `A9` cannot fail on an inferring panel (D24); the last-move vocabulary is four strings (D25) | ✅ 14 criteria; each gap closed by a fixture measured green on delivered code, and **the two closes QE proposed were themselves measured and replaced where they did not kill** |
+| 5 | dependencies known | ✅ | ✅ unchanged — every dependency merged; no new edge, and `ABC-017`/`ABC-019` untouched |
+| 6 | security/NFR triggers, measurable | ⚠️ part 3 is *"the call counts of `A13`"* and both counting clauses were blind from ply 2 | ✅ part 3's counts now carry a stated depth; the µs figures and the three-part bar are untouched |
+| 7 | test notes present | ⚠️ nothing named the `CASES` sweep, the depth fixture, or the stale comments | ✅ four notes added, incl. the four stale sites and the `> 0` line's honest reason |
+| 8 | size assigned | ✅ `M` | ✅ `M`, re-derived a fifth time; **not `XL`, so no `SPLIT_REQUIRED`** |
+| 9 | priority assigned | ✅ `P1` | ✅ `P1`, re-read a fifth time |
+| 10 | no major unresolved blocker | ✅ | ⚠️ **not a blocker, but the ticket is NOT DONE**: every close is unwritten and two of the comment repairs are under `src/`, so the ticket goes back to `In Development` — see the board request in this hop's notes |
+
+**Every ❌ and every ✅ above was measured against merged `src/` at this hop, not argued.** The
+`A7` fixture widths, the `A6` integers, the `A9` forged-status render, the `A2` check-plus-claim
+render and the `A5` disambiguated SAN were all **rendered by the delivered panel**; `A13`'s two
+clauses were **re-spied out of tree at 1, 2, 4 and 5 plies against two mutant builds**;
+`src/gameend.ts:170` and `src/san.ts:101`/`:104`/`:146`/`:147` were **read at source**; the four
+stale-comment sites were found by **grepping the tree** rather than by taking QE's list; and the
+gates were re-run in this worktree (**lint / typecheck / build exit 0, 708/708 on 24 files, skip 0**)
+with `git rev-list --count HEAD..main` re-read as **0**. **Zero production lines written at this hop;
+`git status --porcelain -- src/` is empty and `src/` is byte-identical to the branch tip.**
+
+**What THIS hop deliberately did NOT do.** It did not re-open `ADR-0010` or `ADR-0009` (both
+accepted), and it did **not** add a constant-frame-width criterion — `ADR-0010` clause 5 refuses one,
+QE did not ask for one, and the replacement `A7` clause is not one. It did not edit `plans/board.md`
+(the Orchestrator's), `plans/nfr-catalog.md`, `memory-bank/50-decisions/`, `src/`, or `ABC-017`'s or
+`ABC-019`'s tickets — a BA/PM agent is live on the first and QE on the second, and no channel to
+either was opened. It did not accept QE's dispositions on trust: **two of the seven closes were
+measured to be insufficient and were replaced**, and one gap (`D26`) grew a site nobody had named. It
+did not add castle, promotion or en-passant cases to `A5` — those exercise `ABC-013`'s `toSan` rather
+than this panel's call and are declined as bloat, with the reason recorded. And it did not turn the
+`1 - 0` flag into a criterion: the discrimination gap was **measured not to exist**, and the one line
+it does take is a test line with an honest and different reason.
+
 **Flags carried forward rather than closed, each named with an owner, none blocking:**
 
 - ~~**`plans/nfr-catalog.md`'s `NFR-002` row** — owed a rewrite for two reasons now (`EPIC-002` `[A2]`
@@ -954,9 +1327,29 @@ happened to be right, which is a different thing and is stated as such.
   composes the real panels, or to a ticket of its own. Not blocking this ticket: it cannot write that
   check (`ABC-017` is unbuilt when it merges) and `ADR-0009` clause 2 forbids it naming the term.
   **Flagged, not taken — merge order and board moves are the Orchestrator's.**
-- **NEW 2026-08-11 — this panel's WIDTH is not constant, `src/frame.ts:179` makes the frame's `W` the
+- ~~**NEW 2026-08-11 — this panel's WIDTH is not constant, `src/frame.ts:179` makes the frame's `W` the
   widest panel row, and no criterion at any level covers it. Owner: Architect/Design to rule; the
-  Orchestrator to route.** Measured at this hop on delivered code: the panel's widest row is **17**
+  Orchestrator to route.**~~ **RULED AND DISCHARGED — `ADR-0010` (accepted 2026-08-11), read at this
+  hop rather than assumed. Struck rather than deleted so the flag's disposition is visible; the
+  measurements below stand and are what the ADR was decided on.** The routing worked exactly as this
+  flag asked: it named two candidate fixes, said the choice was a design decision and not a wording
+  one, and declined to write a criterion — and `ADR-0010` **upholds that judgement in its own Status
+  section** (*"the ruling below changes which criterion is even correct, so writing one first would
+  have picked the answer"*). **The answer is candidate (ii), the consumer:** `src/frame.ts`'s
+  in-place writer clears each row as it writes it, at a measured **+66 characters per frame** and
+  **0/24 stale frames**. Candidate (i) — this panel reserving its width — was **rejected by
+  measurement**: it makes the frame 67 columns wide in every frame of the game with 49 permanently
+  blank, for a cell populated in a small minority of them, at **+152% bytes**.
+  **What that leaves on THIS ticket: nothing that changes a criterion, and zero production lines** —
+  `ADR-0010` `## Consequences` says so in those words. **`A7` STANDS** (clause 5), narrowed to a
+  legibility clause; its stale rationale is repaired above under `D20`, and the two surviving copies
+  of that sentence under `src/` are `D26`'s. **No constant-width criterion is added here and clause 5
+  refuses one.** The production line has **no home on this ticket** — `ADR-0010` leaves the home to
+  the Orchestrator and the board records it as **`ABC-027`, second-to-last in the merge order**. The
+  `4b` residue, `ABC-017`'s `A2` parenthetical and `ABC-019`'s owed `F3` criterion are all named in
+  the ADR with owners and are **not this ticket's**.
+  *(The original flag text follows, unedited, because its numbers are the ADR's input:)* Measured at
+  the flagging hop on delivered code: the panel's widest row is **17**
   characters at the quiet starting position and **67** with both draws claimable — **a 50-column
   swing**, driven by the `CHECK` cell (+7) and the claim cell (up to +55), neither of which reserves
   its width. `A7` reserves the *thinking* cell's width and is the only width clause on the ticket;
