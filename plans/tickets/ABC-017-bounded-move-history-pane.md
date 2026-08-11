@@ -47,6 +47,35 @@ feature: —
 > **Zero production lines; `src/` byte-identical to `main`.** `plans/board.md`,
 > `plans/nfr-catalog.md` and `memory-bank/50-decisions/` **not edited**.
 
+> **AMENDED 2026-08-11 by BA/PM at task `refinement-ABC-027-cut` (Workflow 07), applying accepted
+> `ADR-0010` clause 6. ONE JUSTIFICATION STRUCK AS MEASURED FALSE — AND IT WAS IN THREE PLACES, NOT
+> ONE. NO CRITERION CHANGES, ACCEPTANCE STAYS AT 13, SIZE `S` AND PRIORITY `P2` BOTH RE-DERIVED AND
+> BOTH UNMOVED.**
+>
+> `ADR-0010` is the input and is **not re-litigated**. **`A2`'s constant-width assertion is KEPT in
+> full.** What is struck is its claim that the pane *"is expected to be the widest panel and
+> therefore to SET `W`"* and the frame-level argument under it — **measured false**: this pane is
+> **21–24** columns against the delivered status panel's **45 / 50 / 67** whenever a draw is
+> claimable, and `src/frame.ts:179` is a **max**, so only the largest contributor is visible. The
+> frame-level half is now the **consumer's** (`ADR-0010` cl. 1) and lives on **`ABC-027`**; this
+> ticket owes it nothing. **Same move as `ADR-0009` cl. 3/4: strike the cross-ticket clause, keep the
+> panel-local half.**
+>
+> | # | Defect | Evidence |
+> |---|---|---|
+> | D21 ⭐ | **`ADR-0010` names ONE site for this edit and the ticket carries THREE.** `A2`'s parenthetical (`## Acceptance`), the `ABC-014` dependency line (*"making this pane the frame's `W`"*), and the `ABC-018` dependency line (*"which is why `A2` is a criterion and not a nicety"*). **Correcting only the named one would have left the ticket asserting the struck claim twice** — the same shape as D19, where one struck clause left three dependent statements false elsewhere | read at source, all three struck here |
+>
+> **This ticket is UNBUILT and in `Ready for Dev`, which is why this edit is free.** `ADR-0010`
+> `## Consequences` says so explicitly and it is the reason the hop happened now rather than after a
+> build. **Zero production lines and zero test lines — `src/` byte-identical to `main`.**
+> `plans/board.md`, `plans/nfr-catalog.md` and `memory-bank/50-decisions/` **not edited**;
+> `ABC-016` and `ABC-019` **not edited** — an agent is live in each of their worktrees.
+>
+> **One PROHIBITION recorded on this ticket and it is not paperwork: no constant-FRAME-width
+> criterion may be added here.** Under `ADR-0010` cl. 1 the frame's `W` varies by design, and that
+> form was measured to fail the **correct** build. `A2` bounds this **pane's** width — a different
+> quantity, unaffected, and still required.
+
 > **PROMOTED `Backlog` → `Ready` 2026-08-10 by BA/PM** (task `refinement-ABC-017`, subtask
 > `refinement-ABC-017-bapm`, Workflow 07). **Eighteen defects found and fixed at this hop; the
 > Orchestrator deliberately supplied no flag list.** Five were witnessed by **wrong builds
@@ -238,11 +267,38 @@ are identical in count and width to the 0-ply case.
 *(**[CORRECTED 2026-08-10 — D6.]** The original said *"identical in count and width to the 0-ply
 case"* and separately that at 0 plies *"every row is blank"*, and **the two could not both hold**.
 Measured on an unpadded correct build: 0-ply rows are **0** characters, 80-ply rows **14–15**, 300-ply
-rows **16–17** — because move numbers gain digits and SAN strings vary from `e4` to `dxc8=Q+`. The
-quantity is frame-level and not cosmetic: `src/frame.ts:179` takes the frame's `W` as the **widest
-panel row**, so a pane whose width moves makes the whole frame breathe every ply — the same failure
-`ABC-016`'s `A7` width clause was added to stop. **This pane is expected to be the widest panel and
-therefore to SET `W`**; `ABC-018`'s own QE note already anticipates that (`renderBoard` is 18 wide).)*
+rows **16–17** — because move numbers gain digits and SAN strings vary from `e4` to `dxc8=Q+`.*
+
+*~~The quantity is frame-level and not cosmetic: `src/frame.ts:179` takes the frame's `W` as the
+**widest panel row**, so a pane whose width moves makes the whole frame breathe every ply — the same
+failure `ABC-016`'s `A7` width clause was added to stop. **This pane is expected to be the widest
+panel and therefore to SET `W`**; `ABC-018`'s own QE note already anticipates that (`renderBoard` is
+18 wide).~~*
+
+*(**STRUCK 2026-08-11 by BA/PM at task `refinement-ABC-027-cut`, applying accepted `ADR-0010`
+clause 6. THE ASSERTION ABOVE IS KEPT IN FULL; only this justification for it is struck, and it is
+struck as MEASURED FALSE rather than as a wording preference.** The pane is **21–24** columns wide
+against the delivered status panel's **45 / 50 / 67** in every state where a draw is claimable, so
+this pane does **not** set `W` and `src/frame.ts:179`'s max hides it whenever the panel is wider.
+The frame-level half is now someone else's: `ADR-0010` clause 1 rules that the **CONSUMER** owns
+frame-width stability — `src/frame.ts`'s in-place writer clears each row as it writes it —
+**because `W` composes by MAX while `H` composes by SUM**, and a producer-side width promise is
+unverifiable from outside the panel and green by masking as its normal state. The change lives on
+**`ABC-027`**. **This is the same move `ADR-0009` clauses 3 and 4 made on this ticket:** strike the
+cross-ticket clause, keep the panel-local half.*
+
+*The panel-local justification, which is the one that survives and is enough on its own:* **a ragged
+pane is ugly and `A3` asserts sixteen cells in fixed columns** *— a pane whose rows differ in length
+cannot put a cell in a stated column, and `A3`, `A6` and `A7` all read cells positionally. `A2` was
+worth having before the frame-level argument existed and it is worth having without it.*
+
+*Two consequences, so nothing downstream is read as still true:* **(i)** *`ABC-016`'s `A7` stands as
+delivered but its stated reason is superseded the same way — it is a legibility clause now, not a
+defence against stale columns (`ADR-0010` clause 5, and `ABC-016` is owed no criterion change and
+**zero** production lines);* **(ii)** ***no constant-FRAME-width criterion may be added to this
+ticket or any other*** *— under `ADR-0010` clause 1 the frame's `W` varies by design, and such a
+criterion was measured to fail the **correct** build. `A2` bounds this PANE's width, which is a
+different quantity and is unaffected.)*
 
 **A3 — the exact eight rows, all sixteen cells, for a line stated in full. Given** the standard
 start FEN and the 20-ply line
@@ -489,11 +545,22 @@ belongs.)*
   "frame conventions, glyph mode". **This pane takes no `GlyphMode`, so there is no import edge to
   `src/render.ts` at all.** What survives is real and is what `A1` stands on: `ABC-014`'s **9 rows**
   are the `board` term in `frameHeight`, and its **18-character** row width is the number this pane's
-  `HISTORY_COLS` is expected to exceed, making this pane the frame's `W`.)*
+  `HISTORY_COLS` is expected to exceed, ~~making this pane the frame's `W`~~.)* *(**SECOND SITE OF
+  THE SAME STRUCK CLAIM, found and corrected 2026-08-11 — `ADR-0010` cl. 6. The clause that survives
+  is the first half:** exceeding the board's 18 is measured and true. **Exceeding the board does not
+  make this pane the frame's `W`** — the delivered status panel reaches 45 / 50 / 67 against this
+  pane's 21–24, and `src/frame.ts:179` is a max, so only the largest contributor is visible. See
+  `A2`.)*
 - **`ABC-018`** (the frame). **Merged on `main`. ADDED 2026-08-10 — D15.** Three edges, all in
   merged code: `FrameParts.history` takes this pane's rows; `frameHeight` takes `HISTORY_ROWS` as a
   **session constant** known before the first frame; and `assembleFrame` takes the widest panel row
-  as the frame's `W` (`src/frame.ts:179`), which is why `A2` is a criterion and not a nicety.
+  as the frame's `W` (`src/frame.ts:179`), ~~which is why `A2` is a criterion and not a nicety~~.
+  *(**THIRD SITE, corrected 2026-08-11 — `ADR-0010` cl. 1 and 6. The FACT is true and stays; the
+  INFERENCE from it is struck.** `:179` is a max and is unchanged by `ADR-0010` (cl. 2). But `A2` is
+  a criterion for **panel-local** reasons now — `A3` asserts sixteen cells in fixed columns — and
+  **not** because this pane governs the frame's width. Frame-width stability is the **consumer's**
+  under `ADR-0010` cl. 1 and lives on **`ABC-027`**; this ticket owes it **nothing** and gains no
+  criterion from it.)*
   **A FOURTH EDGE ADDED 2026-08-11 — `ADR-0009` cl. 5, and it runs the other way: this ticket EDITS
   `ABC-018`'s merged test file.** `A13` replaces the three local shadow constants at
   `src/frame.test.ts:38-43` with delivered geometry and adds the `<= 24` clause. **Test-only — zero
@@ -515,6 +582,17 @@ belongs.)*
   pane the `GameHistory`. `ABC-018`'s own dependency block records that `ABC-019` depends on the
   frame and not the reverse, and that the frame can be built against stub panels — so nothing here is
   gated on `ABC-019` shipping.
+- **`ABC-027`** (the in-place writer clears each row). **ADDED 2026-08-11 — `ADR-0010` cl. 1 and 6.
+  NOT a code dependency and NOT a criterion dependency in either direction — it is ORDERING-ONLY,
+  and it is named here so it is not discovered in a diff (D15's defect class).** `ABC-027` carries
+  the frame-width obligation this ticket's `A2` used to justify itself with; it needs **no** symbol
+  from this pane and this pane needs none from it. **The one real contact point is that both tickets
+  edit `src/frame.test.ts`** — `A13` touches the shadow-constant block at `:38-45` and the `= 23` /
+  `<= 24` assertions at `:288` and `:633`; `ABC-027` touches the screen model, `:374`, `:376`, `:419`
+  and `:735-771`. **Measured at `refinement-ABC-027-cut`: the two edit DISJOINT line ranges and no
+  line is claimed by both**, so either merge order works and a rebase settles it. **Merge order is
+  the Orchestrator's**; BA/PM's recommendation and its one condition are argued in `ABC-027`'s
+  `## Size and priority rationale`. **Nothing on this ticket is gated on `ABC-027` shipping.**
 - **No dependency on `ABC-020` or `ABC-021`.** The pane lists moves; it says nothing about terminal
   state or claims. Recorded because every other `EPIC-002` ticket gained one on 2026-07-31 and the
   absence here is deliberate rather than an oversight. **Re-checked 2026-08-10 and still true** —
@@ -766,6 +844,33 @@ rather than denied:** `A13` must be **re-homed** — to `ABC-019`, which compose
 a ticket of its own. **Flagged for the Orchestrator, which owns merge order and board moves; not taken
 here.** `P3` remains wrong for the reason given above.*
 
+**Size `S` (2) re-derived 2026-08-11 at `refinement-ABC-027-cut` and unmoved; priority `P2` re-read a
+FIFTH time and unmoved. `ADR-0010` moved neither, and it is worth saying why each stayed put, because
+the ruling touched this ticket's text and could plausibly have moved either.**
+
+***Size — nothing was added and nothing was removed.*** *The edit strikes a justification in three
+places and adds no criterion, no clause, no test, no file and no production line. Acceptance stays at
+**13**. `A2`'s assertion — every row exactly `HISTORY_COLS`, blank rows included — is **unchanged
+character for character**, so the implementation work behind it is unchanged: one format string.
+**`S` (2) holds, still at the top of the band.** The one thing that could have moved it did the
+opposite: `ADR-0010` cl. 2 rules that **no panel reserves, pads or declares a frame width and the
+delivered panel needs zero production lines**, so the reserve-your-own-width alternative — which
+would have put a padding obligation on this pane and plausibly made it `M` — was **rejected by
+measurement** (it costs a 67-column frame with 49 permanently blank columns and **+152%** bytes per
+frame).*
+
+***Priority — the value ranking is untouched and so is the cost of dropping it.*** *The game is still
+fully playable without a history pane and `EPIC-006`'s end screen still carries the full list, so the
+`P2` value argument stands verbatim. **`ADR-0010` did not add a cost to dropping this ticket and did
+not remove one:** the D20 cost recorded above — `A13` is the only delivered-code guard on `4b`'s
+`board` and `history` row budget and must be **re-homed** if this ticket is dropped — is a **row-count**
+obligation under `ADR-0009`, and `ADR-0010` cl. 3 and 4 explicitly leave row counts alone. The
+frame-width obligation that arrived this hop landed on **`ABC-027`**, not here. **`P2` is the judgment
+again, not the absence of one.** One ordering note, which is the Orchestrator's and not a priority
+change: **BA/PM disputes the `ABC-027`-after-`ABC-017` preference and recommends the reverse** — the
+argument is in `ABC-027`'s `## Size and priority rationale`. Nothing on this ticket depends on the
+outcome.*
+
 ## Definition of Ready
 
 Re-derived from the checklist and the source at `refinement-ABC-017`, 2026-08-10. **Before → after.**
@@ -829,3 +934,45 @@ Orchestrator), because it is the only delivered-code guard on `4b`'s `board` and
 edit `plans/board.md` (the Orchestrator's), `plans/nfr-catalog.md` or `memory-bank/50-decisions/` (a
 concurrent Architect/Design hop's this wave) — including the one correction it found to `ADR-0009`'s
 mutant table, which is recorded in `## Test notes` and flagged, not applied to the ADR.
+
+**RE-DERIVED A THIRD TIME 2026-08-11 by BA/PM at task `refinement-ABC-027-cut` (Workflow 07),
+applying accepted `ADR-0010` cl. 6. THE EDIT DOES NOT BREAK THE DoR. VERDICT: STILL MET, 10 of 10 —
+the ticket stays where it is and does NOT move back to `Ready`.** The question was asked explicitly
+and it was checked item by item rather than answered by inspection, because on this ticket a wrong
+self-assessment has been a recorded defect twice (D18, then again one day later at D19).
+
+| # | Check | After the `ADR-0010` edit | What moved |
+|---|---|---|---|
+| 1 | problem clear | ✅ | nothing — the user, the pain and the value are untouched |
+| 2 | scope and out-of-scope clear | ✅ | nothing removed; **one PROHIBITION added** (no constant-FRAME-width criterion here), which narrows scope rather than blurring it |
+| 3 | INVEST | ✅ | *independent* still holds and was re-checked: `ABC-027` needs no symbol from this pane and this pane needs none from it; **`A1`–`A12` still go green with `ABC-016` absent** and `A13` is still ordering-only |
+| 4 | acceptance testable and measurable | ✅ | **13 criteria, unchanged. `A2`'s assertion is unchanged character for character** — only its justification was struck, and a justification is not a criterion |
+| 5 | dependencies known | ✅ | **`ABC-027` ADDED as an explicit ORDERING-ONLY dependency with the shared file named and the line ranges measured disjoint.** Leaving it unlisted would have recreated D15 exactly |
+| 6 | security/NFR triggers, measurable | ✅ | unchanged. No target, bar or measured figure moves; `plans/nfr-catalog.md` not edited. `ADR-0010`'s `NFR-002` denominator note is the Architect's and is already recorded there |
+| 7 | test notes present | ✅ | unchanged, and checked at source: **no line of `## Test notes` rested on the struck claim**, so nothing there went stale with it |
+| 8 | size assigned | ✅ `S` | re-derived a third time; the edit adds no criterion, file or production line, and `ADR-0010` cl. 2 removed the one alternative that could have grown it |
+| 9 | priority assigned | ✅ `P2` | re-read a fifth time; the value ranking is untouched and `ADR-0010` neither added nor removed a cost to dropping this ticket |
+| 10 | no major unresolved blocker | ✅ | unchanged. `ABC-012`/`ABC-013`/`ABC-014`/`ABC-018` merged; `A13` still needs `ABC-016` merged, which the standing merge order delivers; `ABC-027` blocks nothing here |
+
+**Why item 4 is the one that could have failed, and why it does not.** `ADR-0010` cl. 6 struck a
+sentence sitting inside an acceptance criterion's parenthetical, and on this board that has twice
+turned out to falsify statements elsewhere. It was checked rather than assumed: the **assertion**
+half of `A2` — every row exactly `HISTORY_COLS`, `HISTORY_COLS` invariant under game length, move
+magnitude and SAN length, a blank row is `HISTORY_COLS` spaces, 0-ply and 300-ply identical — makes
+**no reference to the frame, to `W`, or to any other panel**. It is testable against this pane's
+returned rows alone. **The struck claim was load-bearing for the ARGUMENT and load-bearing for
+nothing that runs.**
+
+**The one thing this hop found that `ADR-0010` did not name: the struck claim was in THREE places
+(D21), not one.** Two of them are in `## Dependencies`, where a build reads for its edges. All three
+are struck above and each is marked at its site.
+
+**Three flags carried, unchanged, each with an owner, none blocking** — the replay coefficient for
+`NFR-002` (Security/NFR, at this ticket's gate); `ABC-010`'s unbounded `fullmoveNumber` (carried, not
+owned); and `A13`'s re-homing if this ticket is dropped, deferred or resequenced (the Orchestrator).
+
+**What this hop deliberately did NOT do.** It did not re-litigate `ADR-0010` or `ADR-0009` (both
+accepted). It did not touch a criterion, a size, a priority or a column. It did not edit
+`plans/board.md` (the Orchestrator's), `plans/nfr-catalog.md`, `memory-bank/50-decisions/`,
+`ABC-016` or `ABC-019` (an agent is live in each of the last two's worktrees), or anything under
+`src/`.
