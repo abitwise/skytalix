@@ -11,6 +11,65 @@ feature: —
 
 # ABC-017 — Bounded move-history pane: two-column SAN, constant height, constant width
 
+> **AMENDED 2026-08-12 by BA/PM at task `refinement-ABC-017-gaps` (Workflow 07), ruling QE's five
+> criteria gaps and the Security/NFR gate's `RF-1`. FOUR GAPS CLOSED, ONE LEFT OPEN ON PURPOSE, AND
+> `RF-1`'s CRITERION HALF TURNED OUT TO BE MINE — for a defect neither gate named. Acceptance goes
+> 13 → 14; NOTHING is renumbered and NOTHING is deleted. Size `S` and priority `P2` both re-derived a
+> SEVENTH time and both unmoved; `SPLIT_REQUIRED` checked and it does not apply. Zero production lines
+> and zero test lines — `src/history-pane.ts` md5 `54fd4346dcc1a0060c4e66ae0149265d`, unchanged.**
+>
+> **BOTH GATES RETURNED `PASS_WITH_RISKS` WITH ZERO CODE DEFECTS.** The delivered pane is correct on
+> every input either gate could construct, including the three families the criteria never reached.
+> **Everything below is a repair of what the criteria ASK. The Engineer is owed fixtures, not a fix.**
+>
+> | # | Defect | Evidence |
+> |---|---|---|
+> | D24 ⭐ | **No criterion combined a black-to-move anchor with a window long enough to SLIDE, and one survivor RETURNS NINE ROWS** from a pane whose single reason for existing is a constant height. `A6`'s three anchors are **5 plies each** so the window never moves; `A1`'s ten lengths are **all white-anchored**; `A2`'s black anchor is **1 ply**; and **`A13` cannot see it, because `A13` composes the exported CONSTANT and never the pane's OUTPUT**. `WLEAD-B` puts a phantom empty white cell atop every slid black-anchored pane — **`D5`'s class INVERTED, passed by the criterion added FOR `D5`**. **Closed in `A6`** | 3 survivors (QE, 740/740); gap re-read at source here; the fixture's rows **measured** on delivered code |
+> | D25 ⭐ | **Nothing required the caller to be USABLE, or the pane FRESH, after a render.** `WFREEZE` bricks the caller (`Object.freeze` → the next `playMove` throws) and satisfies `A9` **exactly**; `WCACHE` shows move 1 forever. **`playMove` mutates in place (`src/history.ts:85-88`), so `ABC-019`'s loop hands the SAME OBJECT every frame.** **Closed by NEW `A14`** | 2 survivors + 1 whose only catcher is accidental; `A14`'s two panes **measured** here |
+> | D26 | **`A9` guarded two of `GameHistory`'s three fields, and its before/after shape is blind to a pane that RESTORES what it broke.** `initialFen` — **the anchor**, the input `A6`/`D4`/`D5` all turn on — was unguarded (`WFENSET` survived), and `WSPLICE` mutates mid-render and puts it back. **Closed in `A9`**: third field, plus *"at no point DURING a render"* | 2 survivors; fields read at `src/history.ts:34-46` |
+> | D27 | **`A11`'s clause was MEASURABLY FALSE as worded, and that is BA/PM's defect.** *"Zero runtime importers"* carried no scope, and `src/history.ts` has **FOUR** — all test files. The delivered guard was the half that was right: it is scoped to production and says so. *"Runtime importer"* was also **defined nowhere**, which is exactly how a guard implementing one of five forms could look adequate. **Corrected in `A11`** | counted a third time here, statement-scoped, surface enumerated exhaustively |
+>
+> **The `RF-1` verdict, since the gate explicitly left it open: the criterion MOVES, and the ruling
+> SPLITS.** The gate asked whether the clause was already right and the guard merely weaker. **On
+> REACH it was — that half is the ENGINEER's alone and I add nothing to it**: `WDYNIMP` and
+> `WBAREIMP` survive 740/740, and closing that needs a better instrument, not better words. **On SCOPE
+> and DEFINITION the clause was wrong, and that half is MINE** — `D27`. Both halves land on the same
+> Engineer hop.
+>
+> **The `G2` trap, resolved rather than recorded.** QE found that `WCACHE` dies **only** by the fixture
+> SHARING that the `D23` remedy removed — so the remedy and the only catcher pointed in opposite
+> directions. **The tension was an artefact of the property being unnamed.** Three properties were
+> riding on two criteria: determinism (a cache satisfies it perfectly), non-mutation (needs a FRESH
+> object — `D23`), and **freshness (needs ONE object rendered twice ACROSS a mutation, by
+> construction)**. Giving freshness its own criterion with its own deliberately-shared object dissolves
+> it: **`A11` can now be tidied to per-test fixtures freely and nothing is lost.** Putting freshness
+> into `A9` — the criterion `D23` just forced onto fresh objects — is the single edit that would have
+> made the contradiction real, and it is the reason `A14` is a new criterion rather than a clause.
+>
+> **`G5` / `AR-4` is LEFT OPEN AND UNOWNED, deliberately.** `WCOLS24R` now survives **740/740** — worse
+> than QE could measure, because `ABC-027` has merged and does not close it. **`HISTORY_COLS` HOLDS at
+> 21**, no widening, no criterion here or anywhere, no constant-FRAME-width criterion, `ADR-0009` and
+> `ADR-0010` **not re-opened**. Security/NFR left it unhomed saying *"recording a fake owner to satisfy
+> the format would be worse"*; **that is upheld — leaving a gap unclosed with a recorded reason is a
+> ruling, and this one is made on purpose.**
+>
+> **TWO RECORD CORRECTIONS, both owed and both made.** (1) The `src/history.ts` importer count is
+> **FOUR, not the THREE this ticket stated in bold** — and the SHAPE was wrong too: **two → four, not
+> one → three**. The missed importer is `src/status-panel.nfr.test.ts`, **`ABC-016`'s, already on
+> `main`**, reaching it by `vi.mock` + `await import` — *the exact form the correction was written to
+> catch, missed one ticket over*. Production runtime importers are **ZERO**. (2) **`## Test notes` was
+> WRONG about `A6`'s `not.toContain(1)`** and the Engineer was right to keep it against the note: on
+> `WPHANTOM` the clause fails *"expected [ 27, 28, 29, 1 ] to not include 1"*, and without it **nothing
+> in the acceptance table sees that build at all**. **No criterion changes and no test changes** — only
+> the note.
+>
+> **Board move requested, NOT taken: NONE — `ABC-017` stays in `In Development`**, where the
+> Orchestrator placed it for exactly this sequence. The Engineer's fixture hop follows this one.
+> `plans/board.md` is the Orchestrator's and was **not** written. *(One trap named: this branch is one
+> commit behind `main` and its `plans/board.md` copy still shows this ticket under `In Security/NFR`.
+> `main`'s board is correct and the frontmatter is correct in both trees — **do not "fix" the branch
+> copy**, it conflicts with `e22ed72` at the rebase.)*
+
 > **AMENDED 2026-08-12 by BA/PM at task `refinement-ABC-017-a3` (Workflow 07). ONE VACUOUS CLAUSE
 > STRUCK, AND THE HUNT FOR ITS SIBLINGS FOUND A SURVIVOR. Acceptance stays at 13; size `S` and
 > priority `P2` both re-derived and both unmoved. Zero production lines — `src/` is byte-identical
@@ -444,9 +503,67 @@ count-only test and is useless.)*
 | `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1` | `A3`'s 20-ply line | `3. Bc4 Bc5` … |
 | `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 27` | `Nc3 Nc6 Nb1 Nb8 Nc3` | `27. Nc3 Nc6`, `28. Nb1 Nb8`, `29. Nc3` |
 | `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 27` | `Nc6 Nc3 Nb8 Nb1 Nc6` | `27. ⟨empty⟩ Nc6`, `28. Nc3 Nb8`, `29. Nb1 Nc6` |
+| `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 27` | the **same knight cycle carried to 20 plies** | `30. Nc3 Nb8` … `37. Nb1` — **the window has SLID and the leading half-row is GONE** |
 
 and in the third case the first row's **white cell is empty** and its black cell holds the first ply.
-In none of the three does the pane contain a row numbered `1.`.
+In none of the **first three** does the pane contain a row numbered `1.`.
+
+**The FOURTH anchor is a black-to-move anchor whose window has SLID, and it carries three
+requirements of its own:** the pane has **exactly `HISTORY_ROWS` rows**; its eight row numbers are
+**30, 31, 32, 33, 34, 35, 36, 37** as an ordered list of integers; and **row 1's white cell is NOT
+empty** — it holds `Nc3`. The last row is `37. Nb1`, the white ply alone.
+
+*(**[ADDED 2026-08-12 — D24 ⭐, closing QE's `G1` and Security/NFR's `AR-2`.]** **The first three
+anchors are five plies each, so their windows NEVER SLIDE** — three rows in a pane of eight — and
+the pane's leading-half-row correction is a no-op until `rowsInGame` exceeds `HISTORY_ROWS`. Verified
+at source at this hop rather than taken from the gate: `WHITE_ANCHOR_PLIES` and `BLACK_ANCHOR_PLIES`
+are **five entries each** (`src/history-pane.test.ts:193-208`); `A1`'s ten lengths are built by
+`deterministicGame` and `shuffleGame`, **both `newGame(START_FEN)`** (`:88`, `:108`), so every one of
+them is white-anchored; and `A2`'s wide black cell is **one** ply from `WIDE_BLACK_FEN` (`:164`,
+`:180`). **So no criterion on this ticket combined a black-to-move anchor with a game long enough for
+the window to move**, and the two correction terms were exercised only where they cannot matter.*
+
+***What that cost, measured by QE against the delivered tree:*** *three wrong builds survive the whole
+project. **`WLEAD-A` returns NINE ROWS** at every even ply count ≥ 16 from a black-to-move anchor and
+**passes 734/734, and 740/740 on the merged tree** — from a pane whose single reason for existing is a
+constant height. `WLEAD-B` puts a **phantom empty white cell** at the top of every slid black-anchored
+window, which is **`D5`'s defect class INVERTED and passed by the criterion added FOR `D5`**. `A1`
+passes both because its lengths are white-anchored; **`A13` passes both because `A13` composes the
+exported CONSTANT `HISTORY_ROWS` and never the pane's OUTPUT.** The nine-row figure is QE's
+measurement and is attributed rather than re-run — this hop verified the STRUCTURAL gap at source,
+which is what makes the criterion owed regardless of any one mutant's row count.*
+
+***The fixture's numbers are WITNESSED, not derived.*** *Measured at this hop against the delivered
+pane from an out-of-tree harness — the arithmetic was done first and then checked, because a criterion
+carrying a number nobody ran is how this ticket has been wrong before:*
+
+```
+[  30. Nc3     Nb8    ]
+[  31. Nb1     Nc6    ]
+[  32. Nc3     Nb8    ]
+[  33. Nb1     Nc6    ]
+[  34. Nc3     Nb8    ]
+[  35. Nb1     Nc6    ]
+[  36. Nc3     Nb8    ]
+[  37. Nb1            ]
+```
+
+*Eight rows, all **21** characters, numbers **30–37**, and **moves 27, 28 and 29 have slid out** —
+three rows, so an off-by-one in either correction term is still visible. The same cycle from the
+**white**-to-move anchor at 20 plies renders 29–36, which is the contrast that makes the anchor, and
+not the length, the thing under test. **`A5` does not cover this**: `A5`'s game is white-anchored, so
+the leading-half-row terms are zero there too.*
+
+***Why here and not in `A1`.*** *`A1` enumerates LENGTHS and is accurate as scoped — its "in every
+case" means its own ten cases. The gap is the **product** of two dimensions, and the anchor is `A6`'s
+subject, so `A6` is where the fourth combination belongs. **No new criterion is cut for it**, `A1` is
+not edited, and nothing is renumbered.*
+
+***One note for the Engineer, so the split rule is not applied where it does not belong.*** *These
+three assertions may share one `it`. `## Test notes`' rule separates a TRIPWIRE from a REQUIREMENT;
+all three of these are requirements on the pane's OUTPUT, and they discriminate different builds —
+`WLEAD-A` fails the row count, `WLEAD-B` fails the white-cell clause — so each reports on the build
+it catches and neither masks the other.)*
 
 *(**[ADDED 2026-08-10 — D4, D5.]** All three measured at this hop against merged `src/`. **A build
 numbering rows `floor(i/2)+1` from the array index was constructed and run and it passes every
@@ -484,9 +601,41 @@ which" is exactly the vague form the Definition of Ready forbids.)*
 **A9 — determinism and non-mutation, on a history NOTHING has rendered yet. Given** any case above,
 **built fresh for this criterion — a `GameHistory` object no earlier test in the file has passed to
 `renderHistory`** — **when** it is rendered **twice** and the two panes are compared, **then** they
-are **byte-identical**; and **given** `toFen(history.position)` **and** `history.moves.length`
-captured **before that object's FIRST render by anything at all**, **then** both are unchanged after
-the second.
+are **byte-identical**; and **given** `toFen(history.position)`, `history.moves.length` **and
+`history.initialFen`** captured **before that object's FIRST render by anything at all**, **then**
+**all three** are unchanged after the second. **And the caller's `moves` array is not mutated AT ANY
+POINT DURING a render — not merely restored by the time one returns.**
+
+*(**[CORRECTED 2026-08-12 by BA/PM at task `refinement-ABC-017-gaps` (Workflow 07). D26 — `A9`
+GUARDED TWO OF `GameHistory`'S THREE FIELDS, AND ITS BEFORE/AFTER SHAPE IS BLIND TO A PANE THAT
+RESTORES WHAT IT BROKE.]** Both halves are QE's `G3`, and both are closed here rather than carried.*
+
+***The third field.*** *`GameHistory` is `{ initialFen, moves, position }` — read at source at this
+hop, `src/history.ts:34-46`. `A9` named two of them. **`WFENSET` — a pane that rewrites the caller's
+`history.initialFen` on every render — SURVIVED 734/734.** `initialFen` is not an incidental third
+field: it is **the anchor**, the input `A6`, `D4` and `D5` all turn on, and the one this pane
+re-parses on every render. Adding it costs one captured string and one comparison.*
+
+***The timing.*** *`A9`'s non-mutation clauses are a **before/after** snapshot, so a pane that
+mutates the caller's array and puts it back is invisible to them. **`WSPLICE` — splices the caller's
+`moves` to the window and `unshift`s it back — SURVIVED 734/734**, and it is the build this ticket
+previously believed `A11` caught: `A11` spies `takeBack` and `playMove`, and **raw array operations
+are neither**, so the claim that `A11` catches "mutates the caller's state mid-render" was true only
+for the `takeBack` route. The words **at any point during** are the criterion; a snapshot cannot
+satisfy them and the Engineer will need an observation that is live across the call. **This is the
+same correction `D10`/`D11` made once already** — that time the snapshot was taken too late, this
+time it is taken too coarsely — and it is `A9`'s third timing repair.*
+
+***What is NOT changed.*** *The byte-identical clause keeps its shared cases, exactly as
+`## Test notes` allows; only the non-mutation clauses need fresh objects, and that is `D23`'s remedy
+unchanged. **Determinism stays `A9`'s and FRESHNESS is deliberately NOT put here** — it is `A14`,
+for the reason argued there, and putting it in `A9` is the one thing that would have re-created the
+`D23` trap.*
+
+***Measured on delivered code at this hop, out of tree:*** *across two renders of a black-anchored
+20-ply history, `initialFen` unchanged, `toFen(position)` unchanged, `moves.length` unchanged — so
+**the delivered pane already satisfies every clause above and the Engineer is owed assertions, not a
+fix.**)*
 
 *(**[CORRECTED 2026-08-12 by BA/PM at task `refinement-ABC-017-a3` (Workflow 07). D23 ⭐ — THE
 SNAPSHOT CLAUSE COULD NOT FAIL AS DELIVERED, AND THERE IS A SURVIVOR.** Found by hunting `A1`–`A12`
@@ -563,7 +712,58 @@ points in ASCII mode (`src/frame.ts:106`) and would pass a pane that emits them.
 | `toSan` | **exactly once per rendered ply, and never more than `2 × HISTORY_ROWS` = 16** |
 
 **and** the pane imports `GameHistory` as a **type only** — after this ticket, `src/history.ts` still
-has **zero runtime importers**.
+has **zero runtime importers AMONG THE PRODUCTION MODULES**, where a file is a **runtime importer** if
+evaluating it causes `src/history.ts`'s module body to be **evaluated**. That covers **five** forms and
+the criterion is met only against all five: a static **value** import (including `import * as ns` and a
+mixed `{ type T, value }`), a **bare side-effect** import, a **re-export**, a **dynamic** `import()` in
+a value position, and a `vi.mock` whose factory calls `importOriginal()`. **`import type` is NOT one**
+— `verbatimModuleSyntax` erases it.
+
+*(**[CORRECTED 2026-08-12 by BA/PM at task `refinement-ABC-017-gaps` (Workflow 07). D27 — THIS CLAUSE
+WAS MEASURABLY FALSE AS WORDED, AND THAT IS BA/PM'S DEFECT, NOT THE ENGINEER'S.]** This is the
+criterion half of the Security/NFR gate's **`RF-1`**, and the gate offered me the option of ruling that
+no criterion moves. **It moves — for a defect neither gate named.***
+
+***The scope was missing and the clause was FALSE.*** *It read* "after this ticket, `src/history.ts`
+still has **zero runtime importers**" *, unqualified. **Counted independently at this hop — statement-
+scoped, and the textual surface enumerated exhaustively first (zero re-exports, zero bare imports, zero
+extensionless paths) — `src/history.ts` has FOUR runtime importers.** All four are test files; see the
+corrected table in `## Security / NFR triggers`. So the criterion as worded is **breached on the
+delivered tree by a build everybody agrees is correct**, and a future reader checking it literally would
+count four and report a violation that is not one. **The delivered guard is the half that was right:**
+it is scoped to production modules and says so in its own comment (`src/history-pane.nfr.test.ts:219-227`).
+The word `PRODUCTION` is what the criterion was always supposed to carry, and its absence is mine — this
+clause is BA/PM's, added at `D1`/`D2`/`D10`.*
+
+***The definition was missing, and that is why a guard blind in two of five directions could look
+adequate.*** *"Runtime importer" appeared nowhere on this ticket. Security/NFR stated the five-form rule
+**before** producing its number, which is the right order, and the rule is adopted verbatim above.
+Without it the clause cannot discriminate a guard that implements one form from one that implements all
+five, and a criterion that cannot discriminate its own guard is not testable.*
+
+***What is the ENGINEER's and NOT mine.*** *The **reach** of the in-suite guard. Its regex
+`/^import\s+(?!type\b)[^;]*from\s+"\.\/history\.ts";/m` implements **form 1 only**, so `WDYNIMP`
+(`void import("./history.ts")`) and `WBAREIMP` (a bare `import "./history.ts";`) each **survive
+740/740 while genuinely pulling the module** — found by QE, reproduced independently by Security/NFR,
+and caught by that gate's module-graph load probe. **On that half the gate's framing is exactly right
+and I add nothing: the clause was already stronger than the guard, and closing the gap needs no
+criterion.** Confirmed HEALTHY in the same regex and recorded so nobody re-sweeps it: multi-line
+`import { … }` blocks and `import * as ns` **are** matched.*
+
+***One trap for whoever writes the replacement, read at source at this hop and not obvious.***
+*The file that must hold the guard is **itself a runtime importer of `src/history.ts`** — 
+`src/history-pane.nfr.test.ts:43-44` is `vi.mock` + `importOriginal()` and `:58-60` is
+`await import("./history.ts")`, which `A7`'s `takeBack` and this file's own spies require. **So a
+load-closure assertion phrased as "`history.ts` never loads in this process" would fail in the very
+file that asserts it.** The property is about the **pane's runtime closure**, not the test process:
+the pane's closure is exactly seven modules and `history.ts` is not among them. That is also precisely
+why the criterion needs the word `PRODUCTION` — without it, the correct fix looks like it contradicts
+the criterion.*
+
+***`NFR-002` is NOT affected and its premise is stronger than before.*** *PRODUCTION runtime importers
+are **ZERO**, measured by Security/NFR through module-graph closure with a positive control and an
+armed negative control — a stronger result than the `grep` this ticket asked for. **No bar, target or
+level moves here; only the words that were wrong.**)*
 
 *(**[ADDED 2026-08-10 — D1, D2, D10.]** A count, not a clock, and the reason is this project's own
 record: `plans/nfr-catalog.md` has moved a bar off the clock and onto a count four times now
@@ -692,6 +892,70 @@ that DIFFER from 3 and 8, so a hardcoded height fails at its own gate. It says n
 `src/frame.test.ts`'s `statusStub` / `historyStub`, which are `ABC-018`'s, must stay at the reference
 layout because that file asserts `H` = 23, and are cited by 9c as the precedent for where a test double
 belongs.)*
+
+**A14 — the caller is still USABLE after a render, and the next render is FRESH. Given** a
+`GameHistory` the pane has **already rendered once**, **when** the caller plays another move with
+`playMove` and the pane renders **the same object** again, **then** the `playMove` **succeeds** — it
+does not throw — and the second pane **reflects the new ply**: it is not byte-identical to the first,
+and the new ply appears in its cell. **Given** the black-to-move anchor of `A6`'s fourth row at 20
+plies, **then** the last row moves from `37. Nb1` to `37. Nb1 Nc6` and `history.moves.length` is
+**21**.
+
+*(**[ADDED 2026-08-12 — D25 ⭐, closing QE's `G2` and Security/NFR's `AR-3`. THE ONLY NEW CRITERION
+THIS HOP CUTS, AND IT IS CUT RATHER THAN FOLDED INTO `A9` FOR A REASON THAT IS THE WHOLE OF THE
+GAP.]***
+
+***The gap.*** *Nothing on this ticket ever **used** a `GameHistory` after rendering it. Two wrong
+builds survive the whole project because of it. **`WFREEZE`** — the pane calls `Object.freeze` on the
+caller's `moves` — satisfies `A9`'s clauses **exactly** (position unchanged, length unchanged) and
+leaves the caller **unable to play another move**: ESM is strict, so the next `playMove`'s
+`moves.push` throws `TypeError`. **`WCACHE`** — a pane that memoises rows per `GameHistory` — shows
+move 1 forever.*
+
+***The live consumer is real, and it is the next ticket in the merge order.*** *`playMove` mutates
+the `GameHistory` **in place** — read at source at this hop, `src/history.ts:85-88`:
+`moveListOf(history).push(move)` then `makeMove(history.position, move)` — so **`ABC-019`'s loop hands
+the SAME OBJECT to `renderHistory` every frame.** A frozen array leaves that loop unable to play a
+move; a cached pane makes the game unreadable from move 2. Both would surface inside `ABC-019` and
+name the wrong subsystem.*
+
+***THE TENSION, AND HOW IT IS RESOLVED — this is the part that matters.*** *QE measured that
+**`WCACHE` dies only by fixture SHARING in `A11`'s file**: give `A11` the per-test fixtures `D23`
+just gave `A9` and `WCACHE` **survives 734/734**, with a green control proving the variant sound. So
+the `D23` remedy and the only existing catcher for a caching pane point in **opposite directions**,
+and the next person to tidy `A11` would remove a guard without knowing it existed.*
+
+***The resolution is that the tension is an artefact of the property being unnamed, and naming it
+dissolves it.*** *Three properties were being carried by two criteria:*
+
+| property | what it needs from a fixture | owner |
+|---|---|---|
+| **determinism** — same input, same output | anything; a cache satisfies it **perfectly** | `A9` |
+| **non-mutation** — the render leaves the caller alone | an object **nothing has rendered yet** (`D23`) | `A9` |
+| **freshness** — the next render sees the caller's next move | **one object rendered TWICE ACROSS A MUTATION**, by construction | **`A14`** |
+
+*Freshness is the only one of the three that **requires** a shared object, and it is a statement about
+a sequence rather than about a single call. **`D23`'s remedy was never in tension with freshness; it
+was in tension with freshness being provided ACCIDENTALLY, by fixtures that happened to be shared
+across unrelated tests in another file.** Once `A14` owns the property explicitly — with its own
+object, shared deliberately **inside** the criterion — `A11` can be tidied to per-test fixtures freely
+and nothing is lost. **That is why this is a new criterion and not a clause on `A9`: putting a
+property that requires a shared object inside the criterion `D23` just forced onto fresh objects is
+the one edit that would make the contradiction real.***
+
+***Why it earns its place against this ticket's own scope discipline.*** *One test, one object, three
+assertions, **no production line and no new test file**. Against that: the failure it catches destroys
+the feature's entire purpose in its only consumer, silently, from the second move of every game.
+**`WSPLICE` is deliberately NOT this criterion's to catch** — it restores what it breaks, so
+render→play→render sees nothing; it belongs to `A9`'s during-render clause and is homed there.*
+
+***Measured on delivered code at this hop, out of tree — so the numbers above are witnessed and the
+delivered pane already passes:*** *first render's last row `[  37. Nb1            ]`, then
+`playMove`, then `[  37. Nb1     Nc6    ]`; the two panes differ; `moves.length` is 21. **The Engineer
+is owed a test, not a fix.***
+
+***No masking, so no split is required:*** *`WFREEZE` fails at the `playMove` call and `WCACHE` fails
+at the comparison, so each build reports its own diagnosis.)*
 
 ## Dependencies
 
@@ -862,22 +1126,44 @@ belongs.)*
   obligation and does not discharge the gate's.** ~~*(Checked at this hop for information only:
   `src/history.ts` has exactly one importer today, `src/history.test.ts`.)*~~
 
-  **CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-017-a3`. THE COUNT THE GATE WILL FIND IS THREE.
-  It is recorded HERE and not in `## Dependencies` on purpose — a dependency line records an EDGE
-  between tickets, and this is a MEASUREMENT the gate makes.** The Engineer flagged the change and
-  said **two**; re-counted at this hop with a statement-scoped parse rather than a line `grep`, it is
-  **three**:
+  ~~**CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-017-a3`. THE COUNT THE GATE WILL FIND IS
+  THREE.**~~ **THE COUNT IS FOUR. CORRECTED AGAIN 2026-08-12 by BA/PM at `refinement-ABC-017-gaps`,
+  and the SHAPE of the correction was wrong too: it is TWO → FOUR, not one → three.** It is recorded
+  HERE and not in `## Dependencies` on purpose — a dependency line records an EDGE between tickets,
+  and this is a MEASUREMENT the gate makes. The Engineer said **two**; the `refinement-ABC-017-a3`
+  hop said **three**; **both gates independently measured FOUR**, and this hop re-counted a third
+  time rather than accepting either:
 
   | file | how it pulls `src/history.ts` into the runtime graph | whose |
   |---|---|---|
-  | `src/history.test.ts` | static value import | pre-existing |
-  | `src/history-pane.test.ts` | static value import — `newGame` / `playMove` / **`takeBack`**, which `A7` requires by name | **this ticket** |
-  | `src/history-pane.nfr.test.ts` | **its static import is `type`-only**; the runtime pull is `vi.mock("./history.ts")` + `await importOriginal()` + a dynamic `await import("./history.ts")` | **this ticket** |
+  | `src/history.test.ts` | static value import (`:15-23`) | pre-existing |
+  | **`src/status-panel.nfr.test.ts`** | **`vi.mock("./history.ts")` (`:16`) + `importOriginal()` (`:17`) + `await import("./history.ts")` (`:49`)** | **`ABC-016`'s — ALREADY MERGED ON `main`, and this branch does not touch it** |
+  | `src/history-pane.test.ts` | static value import (`:27`) — `newGame` / `playMove` / **`takeBack`**, which `A7` requires by name | **this ticket** |
+  | `src/history-pane.nfr.test.ts` | **its static import at `:25` is `type`-only**; the runtime pull is `vi.mock` (`:43`) + `importOriginal()` (`:44`) + `await import` (`:58-60`) | **this ticket** |
 
-  **The third is the reason this correction is worth the words.** A `grep` for
-  `^import .* from "./history.ts"` reads `src/history-pane.nfr.test.ts` as **type-only** and misses
-  it. A gate counting by line `grep` will report two, agree with the note it was handed, and both
-  will be wrong. **This ticket takes the count from one to three; all three are test files.**
+  **The missed row is `ABC-016`'s, and the shape of the miss is the same one this correction was
+  written to prevent — one ticket over.** The `refinement-ABC-017-a3` hop wrote the correction
+  *specifically* because a line `grep` for `^import .* from "./history.ts"` misses the
+  `vi.mock` + dynamic-`import` form — and then **missed exactly that form in `src/status-panel.nfr.test.ts`**,
+  because its table was scoped to the files THIS ticket touches while the sentence above it claimed a
+  total. A gate counting from that table reports three, agrees with the note it was handed, and is
+  wrong.
+
+  **Counted a third time at `refinement-ABC-017-gaps`, statement-scoped, with the textual surface
+  enumerated exhaustively first — every occurrence of `history.ts` in every `.ts` file, plus separate
+  sweeps for re-exports, bare side-effect imports and extensionless paths (`from "./history"`):
+  ZERO re-exports, ZERO bare imports, ZERO extensionless paths, so nothing can hide.** Correctly
+  **excluded** as type-only or type-position: `src/history-pane.ts:61`, `src/status-panel.ts:42`,
+  `src/status-panel.test.ts:33`, `src/status-panel.nfr.test.ts:58`; and `src/san.ts:16` is a comment.
+  **FOUR, all test files. This ticket takes the count from TWO to FOUR.**
+
+  **One production comment carries the same unqualified phrasing and is FLAGGED, NOT CHANGED.**
+  `src/history-pane.ts:30` reads *"so `src/history.ts` keeps its zero runtime importers"* — true of
+  the pane's own contribution, unqualified about the total, and the same wording defect `A11` carried
+  until this hop. **`src/` is not this ticket's to edit at a refinement hop and it was not edited:
+  zero production lines.** It is named for the Engineer's fixture hop as an optional one-word
+  clarification, and **no criterion requires it.** By contrast `src/status-panel.ts:24` — *"IT ADDS NO
+  RUNTIME IMPORTER"* — is exact, and is the phrasing that should win.
 
   **`NFR-002`'s claim is UNCHANGED and was re-verified rather than inherited: PRODUCTION runtime
   importers are ZERO.** `src/history-pane.ts` imports `GameHistory` as `import type`, which
@@ -888,8 +1174,21 @@ belongs.)*
   `void import("./history.ts")` — a genuine runtime pull — **passes it**. `A11`'s clause says *"zero
   runtime importers"*; the guard implements *"zero static value importers"*. The realistic regression
   this exists to catch (someone writing `import { repetitionCounts } from "./history.ts"`) is caught;
-  the dynamic form is not. **The criterion is right and stays as it is**; the gap is in the guard's
-  reach and is named so QE can decide whether it is worth closing.
+  the dynamic form is not. ~~**The criterion is right and stays as it is**~~; the gap is in the
+  guard's reach and is named so QE can decide whether it is worth closing.
+
+  **UPDATED 2026-08-12 at `refinement-ABC-017-gaps` — the struck half was WRONG about the criterion
+  and RIGHT about the guard. This is the Security/NFR gate's `RF-1`, and it splits in two.**
+  **(i) The guard's reach is wider than this record had it.** QE found a **second** blind direction
+  that is not written down anywhere above — `WBAREIMP`, a bare `import "./history.ts";` — because the
+  regex requires a `from` clause. **Two of the five forms survive 740/740**, both reproduced
+  independently by Security/NFR and both caught by that gate's module-graph load probe. **That half is
+  the ENGINEER's and needs no criterion**, exactly as the gate framed it. **(ii) The criterion was not
+  right, and it moved** — see `D27` at `A11`'s own site. *"Zero runtime importers"* was unqualified
+  and therefore **false on the delivered tree**, where four test files pull `history.ts` at runtime,
+  and *"runtime importer"* was defined nowhere on this ticket. **The scope and the definition were
+  BA/PM's and are corrected there.** Multi-line `import { … }` blocks and `import * as ns` **are**
+  matched — checked and healthy, recorded so nobody re-sweeps it.
 - **This ticket inherits `NFR-008`'s standing per-ticket lane bar `N8-LANE`** (added
   2026-08-10 to `plans/nfr-catalog.md`): the tests it adds may cost **≤ 5% of the lane's TOTAL
   budget — ≤ 650 ms CPU (user + sys)** — **not** 5% of the lane as it stands, **net of ~160 ms CPU
@@ -1000,10 +1299,27 @@ belongs.)*
     **Put the `= 8` tripwire in its own `it`.**
   - **These assertions are strictly implied by an exact-list assertion earlier in the same `it` and
     can never be the discriminator. QE should not expect a kill from any of them:** `A3`'s
-    `numbersOf(rows)` and its two `not.toContain` rows; `A4`'s `numbersOf(rows)`; `A6`'s
-    `not.toContain(1)` on the **third** anchor (its `numbersOf` is pinned exactly two lines above).
+    `numbersOf(rows)` and its two `not.toContain` rows; `A4`'s `numbersOf(rows)`; ~~`A6`'s
+    `not.toContain(1)` on the **third** anchor (its `numbersOf` is pinned exactly two lines above).~~
     They are harmless, they cost nothing, and **a later reader will mistake them for protection** —
     which is the whole of D22. Delete them or move them; do not count them.
+
+    **CORRECTED 2026-08-12 at `refinement-ABC-017-gaps` — THIS NOTE WAS WRONG ABOUT `A6`, AND THE
+    ENGINEER WAS RIGHT TO KEEP THE CLAUSE AGAINST IT.** The item above told the Engineer to *"delete
+    them or move them; do not count them"*, and the Engineer kept `A6`'s `not.toContain(1)` and
+    flagged the disagreement. **QE settled it by construction rather than by argument, and the note
+    loses.** The clause is written over a **loop across all three anchors**, and the implication
+    argument holds only for the **third** — `fromWhite`'s rows 0–2 are pinned by text while its
+    `numbersOf` is pinned nowhere, and rows 3–7 of that fixture are asserted by nothing else in the
+    project. On `WPHANTOM` — a build emitting a stray row numbered `1.` into the blank region only for
+    a white-to-move anchor past fullmove 1, which by construction excludes every other fixture —
+    **the clause FAILS with *"expected [ 27, 28, 29, 1 ] to not include 1"*, and with the clause
+    removed NOTHING in the acceptance table sees the build at all.** So it is the sole acceptance-table
+    catcher for at least one wrong build, and it fired on the **second** anchor, precisely where the
+    Engineer said it was live. **The criterion does not change and no test changes** — `A6` says *"in
+    none of the three"* and the delivered loop matches it. Only this note was wrong.
+    **The general rule is unharmed and still holds**; what was wrong was applying it to a clause whose
+    scope is wider than the assertion said to imply it.
   - **`A2`'s "300 plies is identical in count and width to 0 plies" is implied by `A1` plus `A2`'s
     every-row clause and cannot fail alone.** It is in its own `it`, so nothing masks it — it is
     redundant rather than vacuous, and it is left alone. Recorded so a mutant net is not built
@@ -1033,6 +1349,47 @@ belongs.)*
   8/20 at 21. **A restraint taken for another ticket's benefit cannot be guarded by a criterion on
   this one.** Carried as a flag for the Orchestrator; the defect belongs to **`ABC-027`**, which owns
   the swing. **Nothing here proposes widening `HISTORY_COLS`, and it must not be widened.**
+  **RE-DERIVED 2026-08-12 by Security/NFR and the exposure is WORSE than recorded — which changes
+  nothing here.** `WCOLS24R` survives **740/740**; QE measured 734/734, so **`ABC-027` merging did not
+  close it either**, and the six tests `ABC-027` added see nothing. `HISTORY_COLS` **HOLDS at 21**: no
+  widening, no criterion on this ticket or any other, no constant-FRAME-width criterion (`ADR-0010`
+  cl. 5 refuses it and `W` varies by design), `ADR-0009`/`ADR-0010` **not re-opened**. **`G5`/`AR-4`
+  stays deliberately UNOWNED** — see `## Size and priority rationale` for why this hop declined to
+  home it.
+- **[ADDED 2026-08-12 — the four test edits this hop's rulings owe, and what each is for.]** All four
+  land in files that already exist. **No new test file, so `N8-LANE`'s declared file count stays TWO
+  and its floor allowance stays ~320 ms.** Everything below is **content** against the 650 ms
+  allowance.
+  - **`A6`'s fourth anchor** (`src/history-pane.test.ts`): one fixture — the same knight cycle from
+    `ANCHOR_27_BLACK` carried to **20** plies rather than five — and three assertions (the row count,
+    the ordered list `30…37`, and row 1's white cell **non-empty**). It kills `WLEAD-A`, `WLEAD-B` and
+    `WLEAD-C`. **Build it with `newGame(fen)` and never by playing from the start FEN**, the rule the
+    other three anchors already carry.
+  - **`A9`'s third field and its during-render clause** (`src/history-pane.test.ts`): one more
+    captured string compared after, plus an observation that is **live across the call** — a
+    before/after snapshot cannot express *"at no point during"*, which is the whole of the clause.
+    Freezing the caller's `moves` **in the test** before rendering is one way, and it is the exact
+    inverse of `WFREEZE`; the instrument is the Engineer's choice.
+  - **`A14`** (`src/history-pane.test.ts`): one object, one `playMove` between two renders. **It must
+    SHARE its object across the two renders — that is the property**, and it is not a `D23`
+    regression. `A14`'s own table says why.
+  - **`RF-1`'s guard** (`src/history-pane.nfr.test.ts`): replace the regex with an assertion over the
+    **pane's runtime closure**, not the test process's — that file is itself a runtime importer of
+    `history.ts` (`:43-44`, `:58-60`), so a naively-scoped load probe would fail in the very file that
+    holds it. **No criterion mandates an instrument**; `A11` now states the property and the five
+    forms, and anything that discriminates all five satisfies it.
+  - **Expected cost — an ESTIMATE with its basis, NOT a measurement, because this hop measured none of
+    it.** The heaviest thing any of these does is build a fixture. A **full** rebuild of all fourteen
+    heavy cases — the 2,000-ply shuffle and the 300-ply deterministic game included — was measured at
+    `refinement-ABC-017-a3` at **8.2 ms warm**, and the Engineer measured the delivered `A9` fixture
+    change at **~35 ms cold, ≈ 6%** of the allowance. **Nothing here rebuilds fourteen:** `A6`'s
+    anchor is a 20-ply knight cycle, `A14` is one object plus one `playMove`, and a single render
+    costs **39–74 µs** on two roles' measurements. **So the expectation is TENS OF MILLISECONDS —
+    inside the 650 ms content allowance with room to spare, and inside the ~410 ms this ticket has
+    already measured against it.** **No bar is re-derived and no clause of `N8-LANE` is changed** —
+    the ticket forbids it and this hop did not. **The Engineer measures it; this is a prediction to
+    check, not a figure to inherit**, and the Engineer has already caught one warm-state figure on
+    this ticket.
 
 ## Size and priority rationale
 
@@ -1150,6 +1507,51 @@ dropping this ticket is not free and `A13` must be **re-homed** — is **unchang
 What moved is its urgency: **`ABC-016` has merged, so `A13` is satisfiable in full today** rather than
 at some future rebase. That makes the debt cheaper to discharge, not smaller. **Merge order and the
 re-home decision are the Orchestrator's; neither is taken here.***
+
+**Size `S` (2) re-derived 2026-08-12 at `refinement-ABC-017-gaps` and UNMOVED; priority `P2` re-read a
+SEVENTH time and UNMOVED. `SPLIT_REQUIRED` checked explicitly and it does NOT apply.** This hop added
+a criterion, which is the first time since `A13` that one was cut, so both were genuinely in question.
+
+***Size — one new criterion, and it is the cheapest kind there is.*** *`A14` adds **one test, one
+object, three assertions**. `A6` gains **one fixture**; `A9` gains **one captured field and one
+timing observation**; `A11` gains **words only — no assertion moves**, because the guard's reach is
+the Engineer's half of `RF-1` and needs no criterion. **Zero production lines, zero new modules, zero
+new test files, zero new dependencies, zero new inputs, and no architecture change.** The band is
+`XS=1 S=2 M=3 L=5 XL=8`; on this ticket `S` has meant *"layout and numbering over a slice of an
+existing list"* through six re-derivations, and **four test edits inside two existing files do not
+move it to `M`**. The one thing that would — a production line, or a criterion forcing one — was
+declined twice at this hop: `HISTORY_COLS` is not widened (`ADR-0010` cl. 2), and `RF-1`'s guard is a
+test instrument, not a module. **`S` (2) holds, still at the top of the band, still below `ABC-016`
+(`M`).***
+
+***`SPLIT_REQUIRED`: NO, and it was checked rather than assumed.*** *The rule bites at `XL` (8) and
+this is `2` — four sizes clear. More usefully than the arithmetic: a split has to produce two
+independently valuable tickets, and **every one of this hop's four edits is a guard on the SAME
+delivered pane, in the same two files, owed by the same Engineer hop.** Splitting them would
+manufacture a second ticket with no product value that could only be worked after the first. **The
+ticket is BUILT and the remainder is smaller than the whole**, which is the opposite of the condition
+a split exists to relieve.*
+
+***Priority — `P2`, and the value argument is again untouched verbatim.*** *The game is fully playable
+without a history pane: the board renders, the loop runs, the status panel names the last move, and
+`EPIC-006`'s end screen carries the full list. **`D25` is the closest thing this hop found to a
+priority argument and it deliberately does NOT move one.** `A14` guards a failure that would make the
+pane useless inside `ABC-019` — but a pane that is dropped cannot be cached, so **`A14` adds no cost
+to DROPPING this ticket**; it dies with the ticket it guards. That is the honest distinction from
+`D20`, which did add such a cost and is **unchanged and still carried**: `A13` guards epic `4b`'s
+24-row budget on delivered code and would have to be **re-homed** if this ticket were dropped.
+**Letting a guard gap re-rank a product is the same error as letting a checklist or a suite defect do
+it**, which this ticket has now refused three times. `P3` stays wrong for the reason given six times:
+`P3` is "someday", and this is in the epic's scope line and in its Done.*
+
+***One thing this hop declined to do, recorded because declining is a ruling.*** *`G5`/`AR-4` — the
+`HISTORY_COLS` self-comparison, now measured to survive **740/740** even after `ABC-027` merged — is
+**left UNOWNED**. It has no owner on this ticket, no criterion, and no proposed fix. Security/NFR
+deliberately left it unhomed and said *"recording a fake owner to satisfy the format would be worse
+than saying so"*; **that judgment is upheld here.** The restraint is cross-ticket — 21 rather than 24
+was chosen to keep `ABC-027`'s width swing **visible** — and a restraint taken for another ticket's
+benefit cannot be guarded by a criterion on this one. **It stays an unhomed Architect/Design question
+and this hop did not tidy it into a false home.***
 
 ## Definition of Ready
 
@@ -1300,3 +1702,63 @@ and the 8.2 ms fixture cost was measured. **Zero production lines: nothing under
 `A13`'s re-homing if this ticket is dropped, deferred or resequenced (the Orchestrator); and **NEW —
 `HISTORY_COLS` is held at 21 for a CROSS-TICKET reason that no criterion on this ticket guards**
 (the Orchestrator; the defect belongs to `ABC-027`).
+
+**RE-DERIVED A FIFTH TIME 2026-08-12 by BA/PM at task `refinement-ABC-017-gaps` (Workflow 07), on the
+two gates' output. VERDICT: 9 of 10 MET, and ITEM 4 IS ❌ AGAIN — the FOURTH time on this ticket and
+the fourth time in the same place.**
+
+**The pattern is stated first rather than buried, because it is now four for four.** `D18` recorded
+that a wrong self-assessment is a defect because it is what a promoting role reads. Item 4 was ❌ at
+`refinement-ABC-017` (D3–D12), ❌ at `repair-panel-tickets` (D19), ✅ at `refinement-ABC-027-cut`, ❌ at
+`refinement-ABC-017-a3` (D22, D23) on the question *"can each criterion's clauses actually fail?"* —
+and it is ❌ here on a **third** question nobody had asked: **not can a clause fail, but is there an
+INPUT CLASS the whole acceptance table never reaches?** There was. Black-to-move anchors past the
+window's slide point, and the caller's life after a render.
+
+| # | Check | At `refinement-ABC-017-a3` | After this hop |
+|---|---|---|---|
+| 1 | problem clear | ✅ | ✅ unchanged |
+| 2 | scope and out-of-scope clear | ✅ | ✅ unchanged; nothing entered or left scope, and `HISTORY_COLS` is held at 21 |
+| 3 | INVEST | ✅ | ✅ still independent — `A14` needs no symbol from `ABC-019` and adds no import edge; it asserts a property of THIS pane using `playMove`, which `A7` already requires |
+| 4 | acceptance testable and measurable | ❌ D22, D23 | ❌ **D24, D25, D26, D27** — three input classes the table never reached and one clause that was measurably FALSE as worded. **All four now fixed in text; D24/D25/D26 also need test edits** |
+| 5 | dependencies known | ✅ | ✅ unchanged. `A14`'s consumer relationship to `ABC-019` is the one already recorded — the loop hands this pane the `GameHistory` — and it creates no new edge |
+| 6 | security/NFR triggers, measurable | ✅ | ✅ every bar MET on delivered code by the gate's own instruments; **the importer count corrected a second time, THREE → FOUR**, and `A11`'s clause corrected to match what the guard always meant |
+| 7 | test notes present | ✅ | ✅ and materially extended — the four owed edits with their purposes, the `RF-1` closure-scope trap, and **one item CORRECTED against the Engineer's flag** (`A6`'s `not.toContain(1)`) |
+| 8 | size assigned | ✅ `S` | ✅ `S`, re-derived a seventh time; **`SPLIT_REQUIRED` checked explicitly and it does not apply** |
+| 9 | priority assigned | ✅ `P2` | ✅ `P2`, re-read a seventh time |
+| 10 | no major unresolved blocker | ✅ | ✅ nothing blocking. Both gates are `PASS_WITH_RISKS` with **ZERO code defects**; `RF-1` is `medium` and `security.block_on` is `high` |
+
+**Item 4 is ❌ and the ticket does NOT return to `Ready`.** It is built, both gates passed it, and the
+remedy is four test edits — not a re-specification. **The ❌ is recorded honestly rather than softened
+to ⚠️**, for the same reason as last time: a criterion that never reaches an input class is not a
+partially-met check, and on this ticket a ⚠️ has twice been the shape a defect hid in.
+
+**What was verified at THIS hop rather than inherited, item by item.** The baseline was re-run before
+any ruling — **lint / typecheck / build exit 0, 740/740 on 26 files, skip 0**, `src/history-pane.ts`
+md5 `54fd4346dcc1a0060c4e66ae0149265d` — and re-checked after, unchanged. The `G1` structural gap was
+read **at source** (`A6`'s two anchors are five plies each at `src/history-pane.test.ts:193-208`;
+`A1`'s builders are both `newGame(START_FEN)` at `:88`/`:108`; `A2`'s black anchor is one ply at
+`:164`/`:180`). `A6`'s fourth-anchor rows, `A14`'s two panes and `A9`'s three fields were **measured
+against the delivered pane from an out-of-tree harness**, so every number this hop writes into a
+criterion was run. The importer count was **re-counted a third time** with the textual surface
+enumerated exhaustively first. `GameHistory`'s three fields and `playMove`'s in-place mutation were
+read at `src/history.ts:34-46` and `:85-88`. **The nine-row figure for `WLEAD-A` is QE's and is
+attributed, not re-derived — this hop built no mutants.** **Zero production lines and zero test lines:
+`src/` is byte-identical to where this hop found it.**
+
+**Five flags carried, each with an owner, none blocking:** the four above — with the replay
+coefficient now **measured** by Security/NFR and reported as a **band** (4.86–4.92 ns/ply by
+total-render regression against 6.93–6.98 by replay-loop isolation, the two instrument families
+disagreeing and the gate declining to smooth them) — plus **NEW: `AR-1`, the supplied-FEN width and
+compute path**, whose owner is **BA/PM at `ABC-010`** with **Architect/Design at `EPIC-006`** as the
+checkpoint, triggered the first time a FEN reaches the process from outside it. **`AR-1` is NOT this
+ticket's to fix**: the gap is in `src/fen.ts`, it pre-exists this ticket, it is unreachable until
+`EPIC-006`, it is already an accepted limitation in `## Out of scope`, and it is **bounded** at +19
+characters. It is recorded here so `ABC-010` inherits a bar and not a feeling.
+
+**What this hop deliberately did NOT do.** It did not re-litigate `ADR-0009` or `ADR-0010` (both
+`accepted`, both read, neither re-opened). It did not widen `HISTORY_COLS` or add any criterion for
+it, and it did not home `G5`/`AR-4`. It added no constant-FRAME-width criterion anywhere. It wrote no
+code and no test — the fixture hop is the Engineer's. It did not touch `src/`, `plans/board.md` (the
+Orchestrator's), `plans/nfr-catalog.md`, `memory-bank/50-decisions/`, `ABC-016`, `ABC-019` or
+`ABC-027`. **Nothing was merged, pushed or deployed — a human holds merge and deploy.**
