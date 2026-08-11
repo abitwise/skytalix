@@ -1,5 +1,5 @@
 /**
- * `ABC-019`'s nineteen acceptance criteria, plus the thirteen scripted rows its `## Test notes`
+ * `ABC-019`'s nineteen acceptance criteria, plus the fourteen scripted rows its `## Test notes`
  * enumerate. The loop is testable end to end TODAY, with no parser and no engine, because both
  * stubs are built from merged code — that is the point of the stubs.
  *
@@ -125,6 +125,21 @@ const EVERY_END_REASON: readonly EndReason[] = [
 ];
 
 const EVERY_CLAIMABLE_DRAW: readonly ClaimableDraw[] = ["threefold-repetition", "fifty-move"];
+
+/**
+ * `A14`'s enumeration, in ONE place because two criteria assert it and a second copy could drift:
+ * `A14` asserts the type admits all ten, and `A9b` (iii) asserts the input-seam handler introduces no
+ * eleventh. The annotation is the assertion — `tsc --noEmit` is a blocking gate, and
+ * `EndReason | "resignation"`, which satisfies "admits resignation in addition to the five core
+ * values" word for word, cannot type this array. `src/gameend.ts` is not changed to make it work.
+ */
+const EVERY_TERMINAL_REASON: readonly TerminalReason[] = [
+  ...EVERY_END_REASON,
+  ...EVERY_CLAIMABLE_DRAW,
+  "resignation",
+  "engine-failure",
+  "engine-threw",
+];
 
 // ---------------------------------------------------------------------------
 // The two stub seams. Both are built from merged code alone.
@@ -301,8 +316,15 @@ function recordingSink(signals: { isTTY?: boolean; rows?: number } = {}): Record
 
 interface RunOptions {
   readonly fen?: string;
+  /**
+   * The game itself, when the CALLER must still hold it after the run. `A9b`'s loop rethrows, so its
+   * run has no `RunResult` to read the repaired position out of.
+   */
+  readonly history?: GameHistory;
   readonly humanColour?: "white" | "black";
   readonly script?: readonly string[];
+  /** Overrides the coordinate reader, exactly as `engine` overrides the scripted engine. */
+  readonly input?: InputSeam;
   readonly engine?: EngineSeam;
   /** Resolve the engine seam on a LATER MACROTASK — `A15`'s asynchronous-by-contract shape. */
   readonly delayEngine?: boolean;
@@ -323,10 +345,11 @@ interface RunResult {
 }
 
 async function run(options: RunOptions = {}): Promise<RunResult> {
-  const history = newGame(options.fen ?? START_FEN);
+  const history = options.history ?? newGame(options.fen ?? START_FEN);
   const scripted = scriptedSeams(options.script ?? []);
   const seam = panelSeam(options.shape ?? SHAPE_A);
   const sink = options.sink ?? recordingSink();
+  const inputSeam = options.input ?? scripted.input;
   const engineSeam = options.engine ?? scripted.engine;
 
   const frames: string[][] = [];
@@ -344,7 +367,7 @@ async function run(options: RunOptions = {}): Promise<RunResult> {
   };
   const input: InputSeam = (h) => {
     events.push("input");
-    return scripted.input(h);
+    return inputSeam(h);
   };
   const engine: EngineSeam = async (h) => {
     events.push("engine");
@@ -408,7 +431,7 @@ const derivesMade = (): number => vi.mocked(gameStatus).mock.calls.length;
 beforeEach(() => vi.clearAllMocks());
 
 // ---------------------------------------------------------------------------
-// The thirteen scripted rows — one table-driven file, `N8-LANE`'s own instruction.
+// The fourteen scripted rows — one table-driven file, `N8-LANE`'s own instruction.
 // ---------------------------------------------------------------------------
 
 interface Row extends RunOptions {
@@ -429,6 +452,27 @@ function midBracketThrowingEngine(record: (fen: string) => void): EngineSeam {
     makeMove(history.position, legalMoves(history.position)[0] as Move);
     record(toFen(history.position));
     throw new Error("search exploded inside the bracket");
+  };
+}
+
+/**
+ * `A9b`'s fixture — the INPUT seam's twin of the stub above, and the same shape deliberately rather
+ * than incidentally: a real parser filters `legalMoves` to reject an illegal move (the delivered
+ * coordinate reader does it at `movesNamed` above), and `legalMoves` runs `makeMove`/`unmakeMove` on
+ * the LIVE borrowed object (`legal.ts:42-53`), so a throw mid-filter leaves the position one ply
+ * ahead. A stub that threw BEFORE touching the board corrupts nothing, and a loop that repairs
+ * nothing would pass against it — which is `[D10]`'s reason, applied to the input side.
+ *
+ * The error is a module constant so the caller can assert IDENTITY: a loop that catches and rethrows
+ * an exception of its own making is a loop that has decided a parser bug is the loop's to describe.
+ */
+const PARSER_EXPLODED = new Error("parser exploded inside the bracket");
+
+function midBracketThrowingInput(record: (fen: string) => void): InputSeam {
+  return async (history) => {
+    makeMove(history.position, legalMoves(history.position)[0] as Move);
+    record(toFen(history.position));
+    throw PARSER_EXPLODED;
   };
 }
 
@@ -552,7 +596,7 @@ const TABLE: readonly Row[] = [
   },
 ];
 
-describe("ABC-019 — the thirteen scripted rows, each with an exact reason and an exact frame count", () => {
+describe("ABC-019 — the fourteen scripted rows: thirteen with an exact reason and an exact frame count, and one that throws", () => {
   for (const row of TABLE) {
     it(`row ${row.n} — ${row.name}`, async () => {
       const { outcome, frames } = await run(row);
@@ -561,6 +605,17 @@ describe("ABC-019 — the thirteen scripted rows, each with an exact reason and 
       expect(frames).toHaveLength(row.frameCount);
     });
   }
+
+  // Row 14 is not a `TABLE` row because its expectation is neither of the two columns every other
+  // row has: the loop RETHROWS, so there is no `LoopOutcome` to compare and `A9b` names no frame
+  // count. Giving it a `result` / `reason` / `frameCount` no assertion reads would be three fields
+  // of fiction. It sits here so the fourteen rows are enumerated in one place; the criterion's three
+  // clauses are asserted by the `A9b` test, exactly as row 12 pairs with `A9`.
+  it("row 14 — INPUT seam throws inside a `makeMove` bracket", async () => {
+    await expect(run({ input: midBracketThrowingInput(() => undefined) })).rejects.toBe(
+      PARSER_EXPLODED,
+    );
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -749,6 +804,39 @@ describe("ABC-019 acceptance", () => {
     expect(outcome).toEqual({ result: null, reason: "engine-threw", exitCode: 0 });
   });
 
+  it("A9b — an INPUT-seam mid-bracket throw is repaired and then RETHROWN", async () => {
+    const history = newGame(START_FEN);
+    const corrupted: string[] = [];
+
+    // ONE run, settled either way, so (ii) and (iii) are read off the same execution: a loop that
+    // returns an outcome and a loop that throws are told apart by the value here.
+    const settled: LoopOutcome | Error = await run({
+      history,
+      input: midBracketThrowingInput((fen) => corrupted.push(fen)),
+    }).then(
+      (result) => result.outcome,
+      (error: Error) => error,
+    );
+
+    // (i) — repaired by replay, exactly as `A9` requires of the engine side. The fixture really did
+    // corrupt the live object, or a loop that repairs nothing would pass this.
+    const oracle = toFen(replay(history));
+    expect(corrupted[0]).not.toBe(oracle);
+    expect(toFen(history.position)).toBe(oracle);
+    expect(history.moves).toHaveLength(0);
+
+    // (ii) — the exception propagates out of the loop, and it is the SAME exception: the loop owns
+    // the repair and nothing else. `EPIC-003` owns the exception and `EPIC-006` catches it.
+    expect(settled).toBe(PARSER_EXPLODED);
+
+    // (iii) — no `LoopOutcome` at all. A quiet stop returns `{ result: null, reason: null,
+    // exitCode: 0 }`, which is BYTE-IDENTICAL to `A8`'s end-of-input, so it would present a crashed
+    // parser as a clean exit; this assertion is what tells the two apart.
+    expect(settled).not.toEqual({ result: null, reason: null, exitCode: 0 });
+    // and no eleventh terminal reason was invented to name it — `A14`'s enumeration is unchanged.
+    expect(new Set(EVERY_TERMINAL_REASON).size).toBe(10);
+  });
+
   it("A10 — a foreign move is not applied, and its reason is no chess outcome", async () => {
     const { outcome, history } = await run({ humanColour: "black", engine: foreignEngine });
 
@@ -792,18 +880,9 @@ describe("ABC-019 acceptance", () => {
   });
 
   it("A14 — the terminal-reason type admits, and is assignable from, all ten values", () => {
-    // The assignments below are the assertion: `tsc --noEmit` is a blocking gate, and
-    // `EndReason | "resignation"` — which satisfies "admits resignation in addition to the five" word
-    // for word — cannot type this array. `src/gameend.ts` is not changed to make it work.
-    const admitted: readonly TerminalReason[] = [
-      ...EVERY_END_REASON,
-      ...EVERY_CLAIMABLE_DRAW,
-      "resignation",
-      "engine-failure",
-      "engine-threw",
-    ];
-
-    expect(new Set(admitted).size).toBe(10);
+    // The annotation on `EVERY_TERMINAL_REASON` is the assertion and `tsc --noEmit` is where it runs;
+    // the count here is what keeps a deleted value from passing silently.
+    expect(new Set(EVERY_TERMINAL_REASON).size).toBe(10);
   });
 
   it("A15 — a seam resolving on a LATER MACROTASK gives an identical frame sequence and verdict", async () => {

@@ -174,10 +174,14 @@ const sideToMove = (history: GameHistory): "white" | "black" =>
  * Run the game to a stop. Eight states and fifteen transitions; the sixteenth,
  * `awaiting-human` → `game-over` via the `claim` verb, is `ABC-021`'s.
  *
- * The render cadence is `1 + plies + non-advancing prompt outcomes` frames, not one per ply: the
- * initial position is rendered BEFORE the first act — a loop that renders one frame per ply prompts
- * the human before any board has been shown — and every non-advancing outcome re-emits a frame,
- * because that is where its message goes.
+ * The render cadence is `1 + plies + RE-EMITTING non-advancing outcomes` frames, not one per ply:
+ * the initial position is rendered BEFORE the first act — a loop that renders one frame per ply
+ * prompts the human before any board has been shown — and the THREE non-advancing outcomes that
+ * carry a message re-emit a frame, because that is where the message goes. END-OF-INPUT RE-EMITS
+ * NOTHING: transition 10 goes to `exiting`, not to `rendering`, and its notice is a `sink.write`
+ * rather than a frame. FOUR outcomes are non-advancing and only three of them emit a frame, so the
+ * count-every-outcome form of this sentence is satisfied by a build that emits a frame on EOF —
+ * which is why `A2` now carries the exclusion as its own clause (`[D29]`).
  */
 export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome> {
   const { history, humanColour, render, input, engine, sink } = options;
@@ -206,7 +210,26 @@ export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome
     }
 
     if (humanToMove) {
-      const outcome = await input(history);
+      let outcome: PromptOutcome;
+      try {
+        outcome = await input(history);
+      } catch (error) {
+        // `A9b`. REPAIR is symmetric across both seams; TERMINATING WITH A NAMED REASON is the
+        // engine seam's alone. The input seam calls `legalMoves` — a real parser must, to reject an
+        // illegal move — and `legalMoves` runs `makeMove`/`unmakeMove` on the LIVE borrowed object
+        // (`legal.ts:42-53`), so a throw mid-filter can leave the position a ply ahead. Same repair
+        // as transition 12, and nobody downstream is ever handed a mid-mutation board.
+        //
+        // RETHROWN, not terminated: stopping quietly would return `{ result: null, reason: null,
+        // exitCode: 0 }`, which is BYTE-IDENTICAL to `A8`'s end-of-input and would present a crashed
+        // parser as a clean exit — the failure `A10`'s "a result screen can never present an engine
+        // bug as a chess outcome" exists to forbid. A named reason is the other option and it is
+        // worse: it would invent a tenth `A14` value and decide whether a parser bug ends the game,
+        // which is `EPIC-003`'s and `EPIC-006`'s question, not this skeleton's. The exception is
+        // `EPIC-003`'s to own and `EPIC-006`'s to catch.
+        takeBack(history, 0);
+        throw error;
+      }
 
       if (outcome.kind === "eof") {
         // Transition 10 — `exiting`, not `game-over`: a notice, exit 0, and NO terminal result.
