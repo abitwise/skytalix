@@ -1,8 +1,8 @@
 ---
 id: ABC-016
 title: Status panel — side to move, check, material balance, move number, last move, thinking row
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: M
 priority: P1
 epic: EPIC-002
