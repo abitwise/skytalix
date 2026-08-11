@@ -1,7 +1,14 @@
 /**
- * `ABC-019`'s nineteen acceptance criteria, plus the fourteen scripted rows its `## Test notes`
+ * `ABC-019`'s twenty-seven acceptance criteria, plus the eighteen scripted rows its `## Test notes`
  * enumerate. The loop is testable end to end TODAY, with no parser and no engine, because both
  * stubs are built from merged code — that is the point of the stubs.
+ *
+ * TWO OF THE TWENTY-SEVEN ARE NOT ASSERTED HERE, and both are named rather than left as gaps.
+ * `A17`'s timing half is produced OUT OF TREE by the instrument that criterion names, because a
+ * number produced inside `vitest` would be a different measurement wearing its name. `A20` — and
+ * `## Test notes` row 18 with it — CANNOT BE SATISFIED until `ABC-027` merges: `ADR-0010` clause 1
+ * puts its production change in `src/frame.ts`'s in-place writer, which this ticket does not open.
+ * It is written at the rebase, riding with `ADR-0009` clause 9f's real-panel re-gate.
  *
  * THE STUB PANELS LIVE HERE AND NOWHERE ELSE. `ADR-0009` clause 9c: a test double for the render
  * seam lives in a TEST file, never in `src/` as a production module, and option **G** — a shared
@@ -107,6 +114,16 @@ const AT_149_FEN = "7k/8/8/8/8/8/8/K5R1 w - - 149 80";
 const AT_99_FEN = "7k/8/8/8/8/8/8/K5R1 w - - 99 60";
 /** `e7e8` names FOUR moves with identical `from`/`to`, so `ambiguous` is reached for free. */
 const PROMOTION_FEN = "7k/4P3/8/8/8/8/8/K7 w - - 0 1";
+/**
+ * Row 16 — `THIN_MATERIAL_FEN` minus one knight, so the game is ALREADY `{draw,
+ * insufficient-material}` on the initial evaluation (`isInsufficientMaterial` is true at
+ * `minors <= 1`). It is the witness `A3b`'s `+ 1` claimed and did not have: `[D32]` named row 3 and
+ * `[D35]`, in the same amendment, took the already-dead start OUT of row 3.
+ *
+ * SIX legal moves are available, and that is the fixture rule rather than a detail — a dead position
+ * with NO legal move is a stalemate fixture and exercises a different branch (`[D43]`).
+ */
+const DEAD_MATERIAL_FEN = "1k6/8/8/8/8/8/1K6/2n5 w - - 0 1";
 
 /**
  * The knight round trip. Each 4-ply cycle returns to the EXACT start position, so `n` cycles make
@@ -330,6 +347,12 @@ interface RunOptions {
   readonly delayEngine?: boolean;
   readonly shape?: Shape;
   readonly sink?: RecordingSink;
+  /**
+   * Fires on every RENDER-SEAM call. `RunResult.frames` already counts them, but a run that RETHROWS
+   * never produces a `RunResult` — so `A9b` (iv) and `A10b` (v), which bound the render calls made
+   * between a throw and the rethrow, have no other way to count them.
+   */
+  readonly onRender?: () => void;
 }
 
 interface RunResult {
@@ -358,6 +381,7 @@ async function run(options: RunOptions = {}): Promise<RunResult> {
   const events: string[] = [];
 
   const render: RenderSeam = (h, status, thinking, messages) => {
+    options.onRender?.();
     const frame = seam(h, status, thinking, messages);
     frames.push([...frame]);
     thinkingFlags.push(thinking);
@@ -431,7 +455,8 @@ const derivesMade = (): number => vi.mocked(gameStatus).mock.calls.length;
 beforeEach(() => vi.clearAllMocks());
 
 // ---------------------------------------------------------------------------
-// The fourteen scripted rows — one table-driven file, `N8-LANE`'s own instruction.
+// The eighteen scripted rows — one table-driven file, `N8-LANE`'s own instruction. Rows 15-18 added
+// four rows and ZERO new test FILES, which is the count `N8-LANE` actually binds.
 // ---------------------------------------------------------------------------
 
 interface Row extends RunOptions {
@@ -476,15 +501,44 @@ function midBracketThrowingInput(record: (fen: string) => void): InputSeam {
   };
 }
 
-/** Returns a move no generator produced: a1-a8 is blocked at the start position. */
-const foreignEngine: EngineSeam = async () => ({
+/**
+ * A move no generator produced: a1-a8 is blocked at the start position by White's own pawn and rook
+ * traffic. ONE constant behind both foreign-move fixtures, because `A10` and `A10b` are the same
+ * violation arriving through two different seams and a second hand-coded `Move` is how the two rows
+ * drift apart.
+ */
+const FOREIGN_MOVE: Move = {
   from: parseSquareName("a1"),
   to: parseSquareName("a8"),
   piece: ROOK,
   captured: EMPTY,
   flags: FLAG_NONE,
   promotion: EMPTY,
-});
+};
+
+/** `A10`'s fixture — the ENGINE seam returns it, and the loop terminates with `engine-failure`. */
+const foreignEngine: EngineSeam = async () => FOREIGN_MOVE;
+
+/**
+ * `A10b`'s fixture — the INPUT seam returns the same foreign move as a `{kind: "move"}` outcome, and
+ * the loop THROWS. Not `rejected`: a `{kind: "move"}` that is not legal is a PARSER BUG, and a real
+ * parser reports the user's illegal move as `rejected` itself.
+ *
+ * `record` fires immediately before the outcome is returned, so a caller can snapshot what has
+ * reached the writer and the sink at that instant — the only way to bound clause (v)'s window when
+ * the run REJECTS and there is no `RunResult` to read.
+ */
+function foreignInput(record: () => void): InputSeam {
+  return async () => {
+    record();
+    return { kind: "move", move: FOREIGN_MOVE };
+  };
+}
+
+/** `A8b`'s fixture — the prompt-driven `game-over`, carrying the seam's OWN result and reason. */
+const gameOverInput =
+  (result: FinalResult, reason: TerminalReason): InputSeam =>
+  async () => ({ kind: "game-over", result, reason });
 
 const TABLE: readonly Row[] = [
   {
@@ -594,9 +648,31 @@ const TABLE: readonly Row[] = [
     reason: "engine-failure",
     frameCount: 1,
   },
+  // Rows 15 and 16 are APPENDED rather than inserted, and that is load-bearing: `A12`'s enumeration
+  // guard reads `TABLE.slice(0, 5)`, so the five named automatic fixtures must stay at the front.
+  // Row 16 is a SECOND `insufficient-material` row and takes nothing from row 3 — `A12` asks the
+  // table to DECLARE a row for each of the five, which is an existence check and not a uniqueness
+  // check. A later hop rewriting it as "exactly one row per value" would break this, and must not.
+  {
+    n: 15,
+    name: "prompt-driven `game-over` (the seam's own result and reason)",
+    input: gameOverInput("draw", "resignation"),
+    result: "draw",
+    reason: "resignation",
+    frameCount: 1,
+  },
+  {
+    n: 16,
+    name: "already-terminal START — K+N vs K, six legal moves available",
+    fen: DEAD_MATERIAL_FEN,
+    script: [],
+    result: "draw",
+    reason: "insufficient-material",
+    frameCount: 1,
+  },
 ];
 
-describe("ABC-019 — the fourteen scripted rows: thirteen with an exact reason and an exact frame count, and one that throws", () => {
+describe("ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 deferred to `ABC-027`", () => {
   for (const row of TABLE) {
     it(`row ${row.n} — ${row.name}`, async () => {
       const { outcome, frames } = await run(row);
@@ -616,10 +692,32 @@ describe("ABC-019 — the fourteen scripted rows: thirteen with an exact reason 
       PARSER_EXPLODED,
     );
   });
+
+  // Row 17 is the second row that is not a `TABLE` row, for row 14's reason: the loop RETHROWS, so
+  // there is no `LoopOutcome` to put in a `result` / `reason` column. Its five clauses are asserted
+  // by the `A10b` test, exactly as row 13 pairs with `A10` and row 14 with `A9b`.
+  it("row 17 — INPUT seam returns a move not in `legalMoves`", async () => {
+    const history = newGame(START_FEN);
+
+    await expect(run({ history, input: foreignInput(() => undefined) })).rejects.toThrow(
+      "not in `legalMoves`",
+    );
+    // Not applied: the board the caller still holds is the one it handed in.
+    expect(history.moves).toHaveLength(0);
+    expect(toFen(history.position)).toBe(START_FEN);
+  });
+
+  // ROW 18 IS DEFERRED AND IS DELIBERATELY NOT WRITTEN HERE. `A20` states in its own words that it
+  // CANNOT BE SATISFIED until `ABC-027` merges: `ADR-0010` clause 1 puts the production change in
+  // `src/frame.ts`'s in-place writer, which is `ABC-027`'s module and which THIS TICKET DOES NOT
+  // OPEN. It is written at the rebase, riding with `ADR-0009` clause 9f's real-panel re-gate.
+  // Writing it now would turn this branch's gate red for a defect in another ticket's module — and
+  // writing it as a SKIPPED test would breach the zero-skip gate, so neither is done.
 });
 
 // ---------------------------------------------------------------------------
-// The nineteen acceptance criteria, in the ticket's order.
+// The twenty-seven acceptance criteria, in the ticket's order. `A17`'s timing half is out of tree
+// and `A20` is blocked on `ABC-027` — see the file header; neither is silently absent.
 // ---------------------------------------------------------------------------
 
 describe("ABC-019 acceptance", () => {
@@ -699,6 +797,28 @@ describe("ABC-019 acceptance", () => {
     const idle = await run({ script: ["zzzz", "board", "qqqq"] });
     expect(idle.history.moves).toHaveLength(0);
     expect(derivesMade()).toBe(1);
+
+    // ROW 16 — the `+ 1` at `N = 0`, which is the strongest form of (a) and the witness this clause
+    // claimed and did not have until `[D43]`. From an ALREADY-TERMINAL start the loop evaluates
+    // once, renders once and acts NEVER. A build whose exit test does not run on the first pass
+    // still reads `N + 1` on every other row: it prompts the human, who then MOVES, in a game the
+    // rules core has already ended.
+    vi.clearAllMocks();
+    const deadOnArrival = newGame(DEAD_MATERIAL_FEN);
+    // Dead by material, but NOT stuck — a fixture with no legal move is a stalemate fixture and
+    // exercises a different branch entirely.
+    expect(legalMoves(deadOnArrival.position)).toHaveLength(6);
+
+    const terminalStart = await run({ history: deadOnArrival });
+    expect(derivesMade()).toBe(1);
+    expect(terminalStart.history.moves).toHaveLength(0);
+    expect(terminalStart.frames).toHaveLength(1);
+    expect(actorsIn(terminalStart.events)).toEqual([]);
+    expect(terminalStart.outcome).toEqual({
+      result: "draw",
+      reason: "insufficient-material",
+      exitCode: 0,
+    });
   });
 
   it("A4 — the third occurrence is claimable ON THAT PLY, the fifth ends it ON THAT PLY", async () => {
@@ -737,6 +857,36 @@ describe("ABC-019 acceptance", () => {
     );
   });
 
+  it("A5b — a non-advancing outcome's message items belong to ONE frame and leave with it", async () => {
+    // All three outcomes that carry items, because `A5` and `A6` assert only that an item ARRIVES —
+    // nothing in twenty-three criteria said it LEAVES. A build that never clears repeats a rejection
+    // the player has already fixed on EVERY remaining frame of the game.
+    const cases = [
+      {
+        name: "rejected",
+        script: ["zzzz", "g1f3", "g8f6"],
+        fen: START_FEN,
+        item: "not a move: zzzz",
+      },
+      { name: "ambiguous", script: ["e7e8", "a1b1", "h8g8"], fen: PROMOTION_FEN, item: "e7e8q" },
+      { name: "command", script: ["board", "e2e4", "e7e5"], fen: START_FEN, item: "board redrawn" },
+    ] as const;
+
+    for (const { name, script, fen, item } of cases) {
+      const { frames } = await run({ fen, script });
+
+      // Frame 2 carries them — this is `A5`/`A6`'s half, restated here so the tail assertion below
+      // cannot pass against a build that never delivered the items at all.
+      expect(messageRegionOf(frames[1] as string[]).join(" ")).toContain(item);
+
+      // At least TWO further frames, so a build that never clears is red on the whole tail rather
+      // than on a single frame — and so this fixture cannot silently decay into a one-frame tail.
+      const tail = frames.slice(2);
+      expect(tail.length, `${name}: needs a tail of at least two frames`).toBeGreaterThanOrEqual(2);
+      for (const frame of tail) expect(messageRegionOf(frame).join("")).toBe("");
+    }
+  });
+
   it("A6 — a non-mutating command re-emits a frame, advances no ply and re-evaluates nothing", async () => {
     const { frames, history, events } = await run({ script: ["board"] });
 
@@ -744,6 +894,10 @@ describe("ABC-019 acceptance", () => {
     expect(history.moves).toHaveLength(0);
     expect(derivesMade()).toBe(1);
     expect(events).toEqual(["frame", "input", "frame", "input"]);
+    // The command's items are NOT optional — `## Scope` groups `board` with the three non-advancing
+    // outcomes that CARRY A MESSAGE, and a build that drops them for `kind === "command"` alone was
+    // green on all twenty-three criteria.
+    expect(messageRegionOf(frames[1] as string[])).toContain("board redrawn");
   });
 
   it("A7 — the final frame is the MATED position and the winner is `gameStatus`'s own result", async () => {
@@ -789,6 +943,33 @@ describe("ABC-019 acceptance", () => {
     expect(frames).toHaveLength(3);
   });
 
+  it("A8b — the prompt-driven `game-over` returns the seam's OWN result and reason, unaltered", async () => {
+    // (i) — TWO distinct pairs, so a build substituting a constant is RED rather than lucky. One
+    // build discarded the seam's `reason` and substituted `"resignation"`: a player who claimed a
+    // draw was told they resigned, and the whole branch was unexecuted by the suite.
+    const pairs = [
+      { result: "draw", reason: "fifty-move" },
+      { result: "black-wins", reason: "resignation" },
+    ] as const;
+
+    for (const { result, reason } of pairs) {
+      const { outcome, frames, events, sink } = await run({ input: gameOverInput(result, reason) });
+
+      expect(outcome).toEqual({ result, reason, exitCode: 0 });
+      // (ii) — no further frame, per `A2`: the only frame the player saw is the one that preceded
+      // the prompt, and no terminal `GameStatus` exists on this edge to render a second.
+      expect(frames).toHaveLength(1);
+      // (iii) — neither seam is called afterwards. `A7b`'s form on the edge `A7b` cannot reach,
+      // because no terminal status was ever computed here.
+      expect(events).toEqual(["frame", "input"]);
+      // (iv) — never byte-identical to `A8`'s end-of-input. A build reporting this outcome as EOF
+      // was green on all 717 tests, and it is the exact failure `A9b` (iii) exists to forbid,
+      // arriving through the one door nobody had looked at.
+      expect(outcome).not.toEqual({ result: null, reason: null, exitCode: 0 });
+      expect(sink.writes).not.toContain(`${INPUT_ENDED_NOTICE}\n`);
+    }
+  });
+
   it("A9 — a mid-bracket throw is repaired by replay, and the loop never continues on the object", async () => {
     const corrupted: string[] = [];
     const { outcome, history } = await run({
@@ -807,12 +988,26 @@ describe("ABC-019 acceptance", () => {
   it("A9b — an INPUT-seam mid-bracket throw is repaired and then RETHROWN", async () => {
     const history = newGame(START_FEN);
     const corrupted: string[] = [];
+    const sink = recordingSink();
+    let renders = 0;
+    // Snapshots taken AT THE THROW, which is the only way to bound clause (iv)'s window: the run
+    // rethrows, so there is no `RunResult` to read the totals out of afterwards.
+    let rendersAtThrow = -1;
+    let writesAtThrow = -1;
 
     // ONE run, settled either way, so (ii) and (iii) are read off the same execution: a loop that
     // returns an outcome and a loop that throws are told apart by the value here.
     const settled: LoopOutcome | Error = await run({
       history,
-      input: midBracketThrowingInput((fen) => corrupted.push(fen)),
+      sink,
+      onRender: () => {
+        renders += 1;
+      },
+      input: midBracketThrowingInput((fen) => {
+        corrupted.push(fen);
+        rendersAtThrow = renders;
+        writesAtThrow = sink.writes.length;
+      }),
     }).then(
       (result) => result.outcome,
       (error: Error) => error,
@@ -835,6 +1030,16 @@ describe("ABC-019 acceptance", () => {
     expect(settled).not.toEqual({ result: null, reason: null, exitCode: 0 });
     // and no eleventh terminal reason was invented to name it — `A14`'s enumeration is unchanged.
     expect(new Set(EVERY_TERMINAL_REASON).size).toBe(10);
+
+    // (iv) — NOTHING REACHES THE PLAYER between the throw and the rethrow. Clauses (i)-(iii) bound
+    // only what the CALLER sees. One build handed the MID-MUTATION position to the render seam and
+    // wrote that frame before repairing, so the last board the player saw contained a ply that never
+    // happened; another wrote `A8`'s notice and showed a clean exit for a crashed parser. Both were
+    // green on all 717 tests.
+    expect(rendersAtThrow).toBe(1); // the initial frame, and the window is genuinely open here
+    expect(renders).toBe(rendersAtThrow);
+    expect(sink.writes).toHaveLength(writesAtThrow);
+    expect(sink.writes).not.toContain(`${INPUT_ENDED_NOTICE}\n`);
   });
 
   it("A10 — a foreign move is not applied, and its reason is no chess outcome", async () => {
@@ -848,12 +1053,71 @@ describe("ABC-019 acceptance", () => {
     expect(outcome.result).toBeNull();
   });
 
+  it("A10b — a foreign move from the INPUT seam is not applied either, and the loop THROWS", async () => {
+    const history = newGame(START_FEN);
+    const sink = recordingSink();
+    let renders = 0;
+    let rendersAtMove = -1;
+    let writesAtMove = -1;
+
+    const settled: LoopOutcome | Error = await run({
+      history,
+      sink,
+      onRender: () => {
+        renders += 1;
+      },
+      input: foreignInput(() => {
+        rendersAtMove = renders;
+        writesAtMove = sink.writes.length;
+      }),
+    }).then(
+      (result) => result.outcome,
+      (error: Error) => error,
+    );
+
+    // (i) — NOT APPLIED. Before this guard the loop played it: `moves.length` 1, and a FEN with the
+    // white a1 rook gone from the board, White's queenside castling right lost and the halfmove
+    // clock advanced — a position no legal move can reach.
+    expect(history.moves).toHaveLength(0);
+    expect(toFen(history.position)).toBe(START_FEN);
+
+    // (ii) — the exception propagates and the loop invents no reason: it is the loop's own error
+    // because the fault is the SEAM's contract violation, not a value the seam threw.
+    expect(settled).toBeInstanceOf(Error);
+    expect((settled as Error).message).toContain("not in `legalMoves`");
+
+    // (iii) — no `LoopOutcome` at all, so it can never be mistaken for `A8`'s end-of-input.
+    expect(settled).not.toEqual({ result: null, reason: null, exitCode: 0 });
+    expect(sink.writes).not.toContain(`${INPUT_ENDED_NOTICE}\n`);
+
+    // (iv) — no new terminal-reason value, and `engine-failure` is NOT reused for an input-side
+    // fault: nothing here reports a reason at all. `A14`'s enumeration is asserted unchanged.
+    expect(settled).not.toHaveProperty("reason");
+    expect(new Set(EVERY_TERMINAL_REASON).size).toBe(10);
+
+    // (v) — zero render calls and zero sink writes between receiving the move and the throw,
+    // exactly as `A9b` (iv) requires of the other throw path.
+    expect(rendersAtMove).toBe(1);
+    expect(renders).toBe(rendersAtMove);
+    expect(sink.writes).toHaveLength(writesAtMove);
+  });
+
   it("A11 — the thinking flag is set only in the thinking state, and the row count never moves", async () => {
     const { thinkingFlags, frames } = await run({ script: ["g1f3", "g8f6"] });
 
     // Frame 2 is the one the player watches while the engine has the move.
     expect(thinkingFlags).toEqual([false, true, false]);
     expect(new Set(frames.map((frame) => frame.length)).size).toBe(1);
+
+    // THE NEGATIVE HALF ON A TERMINAL FRAME — the one state where the flag can be wrong and the one
+    // this criterion's "given any other state, then it is clear" reaches in its own words. Every
+    // "other state" above is `awaiting-human`, so dropping the `in-progress` guard from the flag
+    // leaves all three assertions green while LIGHTING THE THINKING INDICATOR ON THE MATED FINAL
+    // FRAME: the game is over and the screen says the engine is still moving. `A7`'s own mate
+    // fixture, already in this file.
+    const mated = await run({ fen: FOOLS_MATE_FEN, humanColour: "black", script: ["d8h4"] });
+    expect(mated.thinkingFlags).toEqual([false, false]);
+    expect(new Set(mated.frames.map((frame) => frame.length)).size).toBe(1);
   });
 
   it("A12 — one fixture per AUTOMATIC terminal value, and no value is missing from the table", async () => {

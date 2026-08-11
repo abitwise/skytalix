@@ -171,6 +171,27 @@ const sideToMove = (history: GameHistory): "white" | "black" =>
   history.position.blackToMove ? "black" : "white";
 
 /**
+ * Did the generator produce this move for the position in hand? `A10` and `A10b` — ONE membership
+ * test, shared by the two seams that can violate `playMove`'s precondition, because the question is
+ * the same on both sides and a second copy is a second thing to get wrong.
+ *
+ * All SIX fields, not `from`/`to`: `playMove` reads `captured`, `flags` and `promotion` to build the
+ * undo record, so a move with the right squares and a wrong `captured` corrupts the board exactly as
+ * a foreign move does. What the two call sites do NOT share is the answer to a false — the engine
+ * seam terminates with `engine-failure` and the input seam throws (`A10b`, `[D42]`).
+ */
+const wasGenerated = (history: GameHistory, move: Move): boolean =>
+  legalMoves(history.position).some(
+    (candidate) =>
+      candidate.from === move.from &&
+      candidate.to === move.to &&
+      candidate.piece === move.piece &&
+      candidate.captured === move.captured &&
+      candidate.flags === move.flags &&
+      candidate.promotion === move.promotion,
+  );
+
+/**
  * Run the game to a stop. Eight states and fifteen transitions; the sixteenth,
  * `awaiting-human` → `game-over` via the `claim` verb, is `ABC-021`'s.
  *
@@ -244,6 +265,23 @@ export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome
         messages = outcome.messages;
         continue;
       }
+
+      // `A10b`. THE SAME GUARD AS TRANSITION 13, ON THE OTHER SEAM. `A10` named the engine seam and
+      // nothing else, so this loop played a move no generator produced straight onto the board:
+      // measured from the start position, `moves.length` 1 and a FEN no legal move can reach. The
+      // stub "returns a generator-owned `Move`" is a property of the TEST DOUBLE, not of the
+      // `InputSeam` contract `EPIC-003` replaces it under (`[D31]`, `[D42]`).
+      //
+      // THROWN, not terminated and not converted to `rejected`. A `{kind: "move"}` that is not legal
+      // is a PARSER BUG, not a user typo — a real parser reports the user's illegal move as
+      // `rejected` itself — so presenting it as a typo would hide a broken parser forever. A named
+      // terminal reason is worse: it would invent a tenth `A14` value and decide whether a parser bug
+      // ends the game, which is `EPIC-003`'s and `EPIC-006`'s question. Reusing `engine-failure`
+      // would report an input fault as an engine fault. This is `A9b`'s answer, and the two paths are
+      // now symmetric: the loop invents nothing and throws.
+      if (!wasGenerated(history, outcome.move)) {
+        throw new Error("input seam returned a move that is not in `legalMoves`");
+      }
       playMove(history, outcome.move);
     } else {
       let move: Move;
@@ -261,16 +299,7 @@ export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome
       // Transition 13. `playMove` does not validate legality — its precondition is that the move
       // came from `legalMoves` — so a seam that returns a foreign move would corrupt the board
       // silently. Failing loudly beats playing a corrupt one.
-      const generated = legalMoves(history.position).some(
-        (candidate) =>
-          candidate.from === move.from &&
-          candidate.to === move.to &&
-          candidate.piece === move.piece &&
-          candidate.captured === move.captured &&
-          candidate.flags === move.flags &&
-          candidate.promotion === move.promotion,
-      );
-      if (!generated) {
+      if (!wasGenerated(history, move)) {
         return { result: null, reason: "engine-failure", exitCode: 0 };
       }
       playMove(history, move);
