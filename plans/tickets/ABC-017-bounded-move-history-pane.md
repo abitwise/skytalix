@@ -1,8 +1,8 @@
 ---
 id: ABC-017
 title: Bounded move-history pane — two-column SAN, constant height, constant width
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P2
 epic: EPIC-002
