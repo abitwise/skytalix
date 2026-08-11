@@ -187,6 +187,39 @@ the named rule that admits the loop is the **same one expression** `A1` already 
 > `perft-bench.ts` reachable by the regex.** This is a real design constraint on `A1` and it is
 > recorded here rather than discovered mid-build.
 
+### `A1` RE-STATED 2026-08-12 by BA/PM on `ADR-0011`, and made COUNTABLE
+
+**The one expression is `ADR-0011` clause 1:** *a **production module** is every `.ts` file under
+`src/` that is not a `.test.ts`.* **Both guards derive their SCANNED set from it**, and each then
+applies **one named rule** about that set — the *"name a SET plus a per-guard rule about it"* shape
+the trap note above sanctions:
+
+| guard | scanned set | its one named rule | source |
+|---|---|---|---|
+| regex `:228-251` | **all** production modules | the runtime-importer set **equals the declared licence set** | `ADR-0011` cl. 3 (`ADR-0002` cl. 4) |
+| probe `:275-329` | all production modules | roots at the **declared frame path** | `ADR-0011` cl. 2 (`NFR-002`'s row) |
+
+**Measurable form of `A1`, so it is a count and not a reading: ZERO files are omitted from either
+guard's SCANNED set by a filename.** Today that number is **two** — `file !== "history.ts"` and
+`file !== "perft-bench.ts"` at `:282` — and **both literals are DELETED, not replaced**.
+
+> **THE HONEST STATEMENT, because a reader who expects zero filenames at the site will not find zero:
+> the filenames do not disappear — they CHANGE JOB.** After the change there are **5** frame-path
+> declaration entries and **1** licence entry. `A1` forbids a **literal filename standing in for a
+> rule, in two places**; it does not forbid a **declaration** or a **licence**, each of which must sit
+> at **exactly one site** and **carry its citation**. **Count it: exclusion-literals 2 → 0;
+> cited declaration/licence entries 0 → 6.** Stated this way so nobody later reports the count as a
+> breach, and so nobody claims a cleanliness the change does not deliver.
+
+**`A1`'s `turn-loop.ts` clause is satisfied BY THE PROPERTY, and its verification MOVES TO `A5`.**
+`src/turn-loop.ts` is green because it is not a declared frame producer (probe) and because it is the
+declared licence holder (regex) — **not** by a `file !== "turn-loop.ts"` literal, and the third
+literal `A1` forbids is not created. **But that clause cannot be observed on this ticket's own build
+tree**: measured at this hop, `main`, `grugops/abc019-rebase-2026-08-12` and this branch all carry
+**16** non-test `.ts` files and **no `src/turn-loop.ts`**. A criterion whose `Given` does not exist on
+the tree the gate runs on is not testable there, so it is restated against named constructed builds in
+**`A5`**.
+
 **A2 — a production module that writes to stdout at import does not change the probe's verdict.
 Given** a build that adds `console.log(...)` at module scope in a production module inside the
 probe's roots, **when** the full suite runs, **then** the suite is **green at its full count**, and
@@ -203,33 +236,56 @@ the probe reports **no JSON parse error**.
 > `CHILD FAILED: Unexpected token 'A', "ABC-006 pe"... is not valid JSON`.
 
 **A3 — `src/perft-bench.ts` is resolved under the definition, and `WPERFT-DYN` stops being a silent
-breach.** ***This criterion has TWO forms and the ruling picks one. It is deliberately not pre-picked
-here — see `## Open design question`.***
+breach. WRITTEN IN ONE FORM 2026-08-12 by BA/PM on `ADR-0011` (`accepted`). The two forms below are
+collapsed into the one above them and the internal contradiction is gone.**
 
-- **Form (a), if the benchmark harness IS a production module for this property. Given**
+**Given** `void import("./history.ts")` in `src/perft-bench.ts` (`WPERFT-DYN`), **when** the suite
+runs, **then** it **passes** — the harness is an **entry point** (`ADR-0011` clause 4: a production
+module that exports nothing) and is **not on the frame path** (clause 2), so this build breaches
+neither `NFR-002`'s premise nor `ADR-0002` clause 4;
+
+**and given** a **static** `import … from "./history.ts"` in that same file (`WPERFT-STATIC`),
+**when** the suite runs, **then** the **regex guard is RED** and is the **only** instrument that
+reports it — because the regex holds `ADR-0002` clause 4's **whole-tree licence** property
+(`ADR-0011` clause 3), which is a **different property** from the probe's;
+
+**and** `src/perft-bench.ts` is **inside the regex guard's scanned set** and is **not** a probe root,
+**and neither fact is expressed by its filename** — the first follows from clause 1, the second from
+it not being a declared frame producer.
+
+> **The *"and the regex guard excludes it too"* clause of form (b) is DENIED and DROPPED** — that was
+> the half that contradicted the sentence below it. **The *"either way, `WPERFT-STATIC` must still
+> die, and it must die on the regex"* sentence is HONOURED and KEPT. No measured kill is lost here.**
+>
+> *Re-measured at this hop independently of the design hop, on **both** trees this ticket lands
+> between (`## Test notes` 8): `WPERFT-STATIC` → regex **RED**, probe green. `WPERFT-DYN` → green /
+> green. `WOFFFRAME-STAT` (static pull in `zobrist.ts`, off the frame path and unlicensed) → regex
+> **RED**, probe green — so under the ruling the regex has **two** sole-catcher builds, not one.*
+
+<details><summary>Superseded: the two forms and the contradiction flag, kept as the record</summary>
+
+- ~~**Form (a), if the benchmark harness IS a production module for this property. Given**
   `void import("./history.ts")` in `src/perft-bench.ts`, **when** the suite runs, **then** it **fails**,
-  and the failing assertion names **the module evaluation** — not a channel error. *(This form is
-  reachable only with `A2` satisfied first: `perft-bench.ts` calls `main()` at module scope
-  (`src/perft-bench.ts:114`) and prints, which is what breaks the channel today.)*
-- **Form (b), if it is NOT. Given** the same build, **when** the suite runs, **then** it **passes**,
+  and the failing assertion names **the module evaluation** — not a channel error.~~ **REJECTED by
+  `ADR-0011`**: rooting the harness corrupts the probe's channel (reproduced), guards nothing (the
+  harness is not on the frame path), and would pull a `main()`-guard production change into
+  `src/perft-bench.ts`.
+- ~~**Form (b), if it is NOT. Given** the same build, **when** the suite runs, **then** it **passes**,
   **and** `A11`'s property as restated by this ticket says in its own words that the benchmark harness
   is excluded, **and** the regex guard excludes it too — so no instrument reports a file the criterion
-  does not cover, in either direction.
+  does not cover, in either direction.~~ **ADOPTED WITH ITS SECOND CLAUSE DENIED**, as above.
 
-**Either way, `WPERFT-STATIC` must still die**, and it must die on the **regex**, which is its sole
-catcher today.
-
-> **[FLAGGED 2026-08-11 by BA/PM — `A3` CONTRADICTS ITSELF AND IT IS FLAGGED HERE RATHER THAN PICKED,
+> ~~**[FLAGGED 2026-08-11 by BA/PM — `A3` CONTRADICTS ITSELF AND IT IS FLAGGED HERE RATHER THAN PICKED,
 > because picking it IS the design ruling.]** Form (b) says the regex guard **excludes**
 > `perft-bench.ts` *"so no instrument reports a file the criterion does not cover"*. The sentence
 > immediately above says `WPERFT-STATIC` **must still die on the regex**. **A guard that excludes the
-> file cannot kill a mutant in it** — the two cannot both hold. So form (b) as written is not
-> buildable, and it needs one of two repairs at the design hop: either (b) keeps the file in the
-> **regex**'s reach while excluding it from the **probe**'s roots — which is a per-guard rule and must
-> be reconciled with `A1`'s one-expression demand — or the *"either way"* sentence is dropped and
-> `WPERFT-STATIC` is accepted as a non-breach under (b), which **loses a measured kill** and must be
-> stated as a loss rather than discovered. **Not decided here. This is the second item for the
-> Architect/Design hop and it was invisible until `A1` gained the `turn-loop.ts` clause.**
+> file cannot kill a mutant in it** — the two cannot both hold.~~ **RESOLVED 2026-08-12: the flag was
+> right, and the repair is the first of the two it named** — the file stays in the **regex's** reach
+> and is absent from the **probe's** roots, and `ADR-0011` clauses 1–3 are the reconciliation with
+> `A1`'s one-expression demand. **The second repair (dropping the *either way* sentence and swallowing
+> a lost kill) was NOT taken and was not needed.**
+
+</details>
 
 **A4 — the retired vocabulary is gone from production, and every site was AUDITED rather than the
 named one patched. Given** `src/history-pane.ts:30`, **when** it is read, **then** it no longer claims
@@ -243,16 +299,115 @@ test files — and it states the module's **own contribution**, which is the tru
 `IT ADDS NO RUNTIME IMPORTER OF src/history.ts` is the phrasing that should win** — it is scoped to the
 module's own contribution and is already merged and true.
 
-**and** the note at the probe's site that calls the regex *"not load-bearing any more"* is corrected:
+~~**and** the note at the probe's site that calls the regex *"not load-bearing any more"* is corrected:
 measured, **`WPERFT-STATIC` is killed by the regex and by nothing else**, so the two instruments'
-coverage is **not nested** and neither is redundant.
+coverage is **not nested** and neither is redundant.~~
+
+**CORRECTED 2026-08-12 by BA/PM — this half named the wrong site, and the correction is a stronger
+one. Given** the probe's docblock at **`src/history-pane.nfr.test.ts:253-262`**, **when** it is read,
+**then** it no longer presents the regex as a strictly weaker subset of the probe, **and** it states
+`ADR-0011` clause 3's reason: **the regex is not redundant because it holds a DIFFERENT property** —
+`ADR-0002` clause 4's whole-tree licence equality — not merely because the coverage is not nested.
+
+> **The site was wrong and it is worth saying why, because this ticket's `A4` is itself the "audit the
+> site it names, not the site it points at" criterion.** Swept at this hop:
+> **`grep -in 'load.bearing' src/history-pane.nfr.test.ts` returns `:106` and `:286`, and NEITHER is
+> about the regex**; `grep -rn 'redundan' src/` returns three hits, all in `frame.ts`/`frame.test.ts`
+> about ANSI erase. **The phrase *"not load-bearing any more"* has never been in `src/`** —
+> `git log --all -S'not load-bearing any more' -- src/` is **empty**. It lives at line **97** of the
+> Engineer's context note for `ticket-to-pr-ABC-017-fixtures`.
+>
+> **That note is an immutable record and is NOT edited** — Workflow 16 appends and supersedes, it does
+> not rewrite. What *is* inheritable, and what `A4` must actually repair, is the docblock at
+> `:253-262`, which says the regex *"implements ONE of the five forms"*, that it *"sees neither"* of
+> two of them, and that both *"survive the whole suite"*. **Every one of those sentences is true and
+> together they invite exactly the deletion `## Out of scope` forbids**, because nothing at that site
+> says the regex is measuring something else.
+
+**A5 — the regex guard's licence is an EQUALITY, and BOTH guards are green on BOTH trees this ticket
+lands between. NEW 2026-08-12 by BA/PM.** ***This criterion exists because `A1`–`A4` as previously
+written can all be satisfied by a build that leaves `ABC-019` RED. That is measured below, not
+feared.***
+
+**Given** the regex guard, **when** the suite runs, **then** the set of runtime importers of
+`src/history.ts` that it finds is asserted **EQUAL** to the **declared licence set** (`ADR-0011`
+clause 3), every entry carrying its citation — **not** asserted empty, and **not** asserted to be a
+subset.
+
+Required verdicts. Each row is a named build on a named tree, and each was constructed and run at this
+hop:
+
+| # | build | tree | required |
+|---|---|---|---|
+| **A5.1** | **BASE** — this ticket's own build tree, **16** non-test `.ts`, **no** `turn-loop.ts` | `main` | **regex green, probe green** |
+| **A5.2** | **BASE** — `ABC-019`'s tip, **17** non-test `.ts`, `turn-loop.ts` md5 `bd793612476c9d0eac28b75e1e3297cc` | `grugops/ABC-019-turn-loop-skeleton` | **regex green, probe green** |
+| **A5.3** | `WSTALELICENCE` — the licence holder **exists** and stops importing `history.ts` | tip | **regex RED** |
+| **A5.4** | `WPERFT-STATIC` and `WOFFFRAME-STAT` — an **unlicensed** production module gains a static runtime import | both | **regex RED** |
+| **A5.5** | `WLOOPINFRAME` — a declared frame producer imports the licence holder | tip | **probe RED** |
+
+> ### THE GAP THIS CRITERION CLOSES, STATED PLAINLY BECAUSE A `P0` STANDS ON IT
+>
+> `ADR-0011`'s load-bearing result is **"BASE green on both guards, so `ABC-019` is unblocked"**, and
+> it is correct — **on the 17-file tree it was measured on**. **This ticket's own gate does not run on
+> that tree.** Measured at this hop on both, out of tree, from the object database:
+>
+> | regex form | BASE on **`main`** (16 files) | BASE on **tip** (17 files) | `WPERFT-STATIC` | `WSTALELICENCE` |
+> |---|---|---|---|---|
+> | **delivered** `toEqual([])` | **green** | RED | RED | green *(blind)* |
+> | **literal licence** `toEqual(["turn-loop.ts"])` | **RED** | green | RED | RED |
+> | **subset**, not equality | green | green | RED | **green — loses the gain** |
+> | **equality over the licence entries that EXIST** | green | green | RED | RED |
+>
+> **Two ways to satisfy the old criteria and still leave `ABC-019` red, both measured:**
+>
+> 1. **Leave the regex alone.** `toEqual([])` is **green on this ticket's own tree**, so `A1`–`A4` pass,
+>    the suite is 744/744, the gate is green — and `ABC-019` rebases straight back onto
+>    `expected [ 'turn-loop.ts' ] to deeply equal []`. **The regex half of this ticket has NO failing
+>    witness on the tree it is built on.** That is why `A5.2`–`A5.4` are stated as constructed builds
+>    rather than as "the suite is green here".
+> 2. **Read `ADR-0011` clause 3 literally and hard-code the licence.** *"Today the licence set is
+>    exactly `{ turn-loop.ts }`"* is true on the tip and **false on this ticket's own tree**, where
+>    `turn-loop.ts` does not exist. A literal `toEqual(["turn-loop.ts"])` is **RED on `main`**, so
+>    `ABC-029` fails **its own** blocking gate, never merges, and `ABC-019` stays blocked **forever**.
+>    **This is the form that passes the ADR's ledger and fails the actual build.**
+>
+> **A third, subtler one: a `subset` check** (*"no unlicensed importer"*) is green on both trees and
+> kills `WPERFT-STATIC`, so it satisfies any loosely-worded version of this criterion — **and it
+> silently drops `WSTALELICENCE`, one of the two gains `ADR-0011` claims.** `A5.3` exists to forbid it.
+>
+> **An existence proof, NOT a mandated implementation:** asserting equality against the licence entries
+> whose file exists in the production set satisfies **every** row above, measured. **The mechanism is
+> the Engineer's choice**; the rows are the criterion.
+>
+> **The bounded reach of the equality, named rather than discovered.** Under any form that is green on
+> `A5.1`, a licence whose file has been **deleted** is vacuous rather than red. **That is not a choice
+> and cannot be traded away:** `main` and *"the tip with `turn-loop.ts` deleted"* are **the same 16
+> files, verified `cmp`-identical**, so no guard can be green on the first and red on the second.
+> `WSTALELICENCE` is caught in its **stopped-importing** form and is **not** catchable in its
+> **file-removed** form. This bounds a gain `ADR-0011` claims; it is **an input for Architect/Design at
+> the next hop that touches clause 3, and BA/PM did not edit the ADR.**
 
 > **`ABC-016`'s `R1`/`D27` is the precedent and its lesson is applied here rather than cited.** There,
 > a repair was *"audited on the site it names, not the site it points at"* — `D27` named one of three
 > sites carrying a retired vocabulary and two survived into `main`. **This ticket's sweep was run
 > first and its result is written above**, so the count is a measurement and not a hope.
 
-## Open design question — hand to Architect/Design at the design hop, do not decide in dev
+## ~~Open design question~~ — CLOSED 2026-08-12 by `ADR-0011` (`accepted`)
+
+> **CLOSED. `ADR-0011` — *"What a 'production module' is for `NFR-002`'s structural premise"* — is
+> `accepted` (2026-08-12, Architect/Design, task `design-ABC-029-2026-08-12`). It answers this question
+> and the `A3` contradiction below it, on 15 constructed builds against a byte-verified replica of
+> `ABC-019`'s tip. `ABC-029` no longer carries an open design question.**
+>
+> **The answer, in one line: `src/perft-bench.ts` IS a production module (cl. 1), IS an entry point
+> (cl. 4), and is NOT on the frame path (cl. 2) — three separate facts the single word was carrying.**
+> `A3` is written above in one form. **No owner ratification is owed** — the ADR moves no target, bar
+> or level, and argues that against `ADR-0008`'s precedent explicitly.
+>
+> **BA/PM re-ran the ruling's load-bearing rows independently at this hop rather than citing them**, on
+> both trees; every row of the ADR's kill ledger reproduced. See `## Test notes` 8 and `A5`.
+>
+> **The question and its two readings are kept below as the record.** Nothing below is live.
 
 **Is `src/perft-bench.ts` a production module for the purposes of `NFR-002`'s structural premise?**
 
@@ -374,8 +529,18 @@ throughput instrument.*
 3. **Re-run the five reach mutants after any channel change**, not just the two in the criterion:
    `WDYNIMP`, `WBAREIMP`, `WQUERY` (`import("./history.ts?v=2")`), `WREEXPORT`
    (`export { newGame } from "./history.ts"`) and `WINDIRECT` (a bare import inside `glyph-mode.ts`,
-   a **transitive** pull through a non-pane production module). `WINDIRECT` is the one that proves the
-   probe guards the whole production graph.
+   a **transitive** pull through a non-pane production module). ~~`WINDIRECT` is the one that proves the
+   probe guards the whole production graph.~~
+   > **CORRECTED 2026-08-12 by BA/PM — that last sentence goes FALSE the moment `ADR-0011` lands, and
+   > it would mislead the QE hop that re-runs these.** Under the ruling the probe guards the **frame
+   > path**, not the whole production graph — measured: a bare `import "./history.ts"` in
+   > `zobrist.ts` (off the frame path) is **green** on both trees, which is the ruling's one recorded
+   > loss.
+   > **`WINDIRECT` also stops being the transitive witness**: `glyph-mode.ts` is a **declared frame
+   > producer**, so it is a probe **ROOT** under the ruling and the pull is direct. **Use `san.ts`
+   > instead for the transitive claim** — it is in the 11-module closure and is **not** a root, and a
+   > bare import there is **RED on both trees, measured this hop.** Keep `WINDIRECT` as well; it
+   > guards a root that is not the pane.
 4. **`WSTDERR` must keep surviving.** Module-scope `console.error` is benign and correctly invisible.
    A channel fix that starts failing on stderr has over-reached.
 5. **No explicit `testTimeout` is requested, and that is a decision.** `execFileSync` blocks the event
@@ -391,6 +556,25 @@ throughput instrument.*
    correct: the md5-stability constraint was evidence for four roles **while the ticket was open**,
    and it died at the merge — gates were re-run on `main` after the fast-forward. **It is the only
    production line this ticket is permitted.**
+8. **THIS TICKET IS GATED ON A TREE THAT CANNOT SHOW ITS OWN MAIN RESULT. Every guard change must be
+   run against BOTH trees.** Measured at this hop: `main`, `grugops/abc019-rebase-2026-08-12` and this
+   branch each carry **16** non-test `.ts` files with **no `src/turn-loop.ts`**;
+   `grugops/ABC-019-turn-loop-skeleton` carries **17**, and the 16 shared files are **`cmp`-identical**
+   on both, so the trees differ by **exactly one file**. Reconstruct the tip **from the git object
+   database** (`git show <branch>:<path>`) into a scratch directory and mutate **throwaway copies** —
+   **never open `../cli-chess-ABC-019`**, and never write a repository worktree from a measurement.
+   `src/turn-loop.ts` md5 is `bd793612476c9d0eac28b75e1e3297cc`; if it does not reproduce, stop and
+   re-measure rather than proceeding.
+9. **The ruled probe's own figures, re-measured here so QE has a baseline to diff against, not to
+   re-derive.** Rooted at the five declared frame producers, the closure is **11 modules** on **both**
+   trees — `apply`, `fen`, `frame`, `glyph-mode`, `history-pane`, `legal`, `moves`, `position`,
+   `render`, `san`, `status-panel` — with `history.ts` **absent**, the arming control **reporting**
+   `history.ts`, and both positive controls **falsifiable** (`roots = []` → closure **0**). **The probe
+   half of the ruling is tree-independent; only the regex half is not.**
+10. **One build was constructed at this hop and DISCARDED as invalid, recorded so nobody re-runs it as
+    evidence.** Prepending `import "./history.ts";` to `src/position.ts` makes the child die with
+    `ReferenceError: Cannot access 'QUEEN' before initialization` in `moves.ts` — a circular-init
+    artefact of the mutation, **not** a probe verdict. Use `san.ts` for the transitive witness.
 
 ## Size and priority rationale
 
@@ -449,6 +633,40 @@ than on a change of mind.**
 
 **Promote to `P0`** only if the frame path itself gains a runtime importer of `src/history.ts` — that
 is `NFR-002`'s actual void-condition and it has never fired.
+
+### Size and priority RE-DERIVED 2026-08-12 by BA/PM at `refinement-ABC-029-criteria` — both HOLD
+
+**Size `S` (2) HOLDS, re-derived rather than inherited.** The design hop reported that it holds and
+did not request a re-derivation; the Orchestrator asked for one anyway and here it is.
+
+- **The one named condition that would have moved it did not fire.** *"If the design hop chooses form
+  (a), this size is re-derived"* — **form (a) was REJECTED**, so the `main()`-guard production change
+  in `src/perft-bench.ts` never falls due. Verified against `ADR-0011`'s ruling at source, not against
+  the summary.
+- **The work is still one existing test file plus one comment line in one existing production file.**
+  Four items: the probe's roots (`:282`), the regex's assertion (`:247`), the channel (`A2`), and the
+  two comment corrections (`src/history-pane.ts:30`, `src/history-pane.nfr.test.ts:253-262`). **No new
+  module, no new test file, no new dependency, no new input, no architecture change.**
+- **`A5` adds a criterion but not a file.** It changes one assertion and adds a cited declaration at
+  the same site. Calibration is unchanged: `ABC-024` was `S` with **five** criteria and named
+  discriminating mutants in one existing file; this is now five criteria in one existing file plus one
+  comment line.
+- **The new condition that would move it, named in advance in place of the old one:** if `A2`'s channel
+  fix cannot be made without **a third file in the lane** or **a dependency**, the size is re-derived —
+  `## Security / NFR triggers` fixes the lane at **file count TWO** and `dependencies` at `{}`.
+
+**Priority `P1` HOLDS, and the measurement it was set on was re-taken rather than assumed.**
+
+- **The figure `P1` rests on is unchanged.** *"Production runtime importers = ONE"* — re-measured this
+  hop with `A11`'s own regex on `ABC-019`'s tip: **1**, `src/turn-loop.ts`. **On this ticket's own tree
+  it is 0**, which is why the count alone cannot carry the priority and the trigger below does.
+- **The trigger that fired is still firing, re-measured:** both delivered instruments are **RED** on
+  `ABC-019`'s tip (regex `toEqual([])` against `['turn-loop.ts']`; probe reports `history.ts` in the
+  production closure), `ABC-019` is `P0`, and `quality.gate_enforcement` is `blocking`.
+- **Still NOT `P0`, and the line is worth holding a second time under more pressure than the first.**
+  The promote-to-`P0` trigger is *"the frame path itself gains a runtime importer of `src/history.ts`"*.
+  **Measured this hop: the frame closure is 11 modules on both trees and `history.ts` is not among
+  them. The trigger has NOT fired.** Being on a `P0`'s critical path still does not make a ticket `P0`.
 
 ## Definition of Ready
 
@@ -518,3 +736,60 @@ urgent.** What changed is the content of the two `❌`s and the length of the ho
 > scheduling call is the Orchestrator's; the input it needs is that the hop is now smaller and has two
 > named questions rather than one open-ended one: **(i)** `perft-bench.ts`'s membership under the
 > surviving frame-path reading, and **(ii)** `A3`'s internal contradiction.
+
+### DoR RE-SCORE 2026-08-12 by BA/PM at `refinement-ABC-029-criteria` (Workflow 07) — item by item
+
+**The hop the two `❌`s were waiting for RAN, and it delivered. Result: 10 of 10 items MET — 9 clean
+`✅` and 1 `⚠️` met-with-caveat (item 3). THE DEFINITION OF READY IS MET. `ABC-029` reaches `Ready`.**
+
+**The design hop reported items 4 and 10 *unblocked* and deliberately did NOT score them. That was a
+claim about inputs. This is the score, and every item below was re-assessed, not carried forward.**
+
+| # | item | cut | prev | **now** | why |
+|---|---|---|---|---|---|
+| 1 | problem clear — user, pain, value | ✅ | ✅ | **✅** | user is still `NFR-002`. The pain is now stated at its root rather than by symptom: **the two guards were never holding the same property**, and one word fused them. Value unchanged and still claims nothing is broken |
+| 2 | scope and out-of-scope clear | ✅ | ✅ | **✅** | all five scope items are now answerable, and the two load-bearing fences were **verified un-breached by measurement, not by reading**: the regex keeps `perft-bench.ts` in reach (`WPERFT-STATIC` **RED** on both trees) and the root narrowing 15 → 5 keeps `WINDIRECT` (**RED** on both trees) and is by property, not to save time (`−0.3 ms`, inside noise) |
+| 3 | INVEST-shaped | ⚠️ | ⚠️ | **⚠️** | **one half CLEARED, one half unchanged.** *Estimable* is now clean — the ruling is made, form (a) rejected, size re-derived `S`. *Independent* is still **not** clean: it shares one file with `ABC-028` (must land second) and it gates `ABC-019`. **See the note below; this is the one item scored by judgment rather than by measurement** |
+| 4 | acceptance clear, testable + measurable | ❌ | ❌ | **✅** | **CLEARED.** `A3` is written in **ONE** form on `ADR-0011`; its two forms no longer assert opposite verdicts, and the *either way* sentence is honoured rather than dropped — **`WPERFT-STATIC` → regex RED, measured on both trees**. `A1` is restated as a **count** (exclusion-literals 2 → 0). `A4`'s second half is re-pointed at the site that actually carries the defect. **`A5` is new** and states five named builds on two named trees. Every criterion now carries a site, a discriminating build, a required verdict and a measured today-value |
+| 5 | dependencies known | ✅ | ✅ | **✅** | unchanged, plus one **new measured** dependency recorded in `## Test notes` 8: this ticket's own tree cannot exhibit its own main result, so the guard change must be run against **both** trees |
+| 6 | security/NFR triggers, each measurable | ✅ | ✅ | **✅** | unchanged — `N8-LANE` ≤ **650 ms**, `ADR-0008`'s ≤ **3 s** wall / ≤ **13 s** CPU, file count **TWO**, determinism **12/12**, three falsifiable controls, skip **0**, security not pre-waived with a firing threshold. **No target, bar or level moved at this hop**, and `plans/nfr-catalog.md` was **not opened** |
+| 7 | test notes present | ✅ | ✅ | **✅** | seven → **ten**. Note 3 **corrected** (it was about to go false), and 8/9/10 added, including the discarded invalid build |
+| 8 | size assigned | ✅ | ✅ | **✅** | `S` (2), **re-derived** this hop; the condition that would have moved it did not fire, and a new one is named in its place |
+| 9 | priority assigned | ✅ | ✅ | **✅** | `P1`, **re-derived** this hop on a re-taken measurement; the `P0` trigger was checked and has **not** fired |
+| 10 | no major unresolved blocker | ❌ | ❌ | **✅** | **CLEARED.** `ADR-0011` is `accepted`, it is the role that owns the ruling, and **no owner ratification is owed** — it moves no target, bar or level, and argues that against `ADR-0008`'s precedent rather than assuming it. Nothing this ticket needs is now outside BA/PM |
+
+**Why item 3 stays `⚠️` and why that is not a failed check.** The DoR reads *"story is INVEST-shaped"*.
+This ticket has **never** been independent and the two prior scorings both recorded `⚠️` here while
+routing to `Ready` through items 4 and 10 only — *"one hop … after which `A3` is written in one form,
+the size is re-derived if form (a) is chosen, and items 4 and 10 are re-assessed"*. **The caveat is a
+documented sequencing constraint in `## Dependencies` (`ABC-028` first, one file, no concurrency), not
+an unstated risk**, and this hop made the item strictly better rather than worse. **This is the single
+item on this page scored by judgment rather than by a measurement, it is flagged as such so it can be
+disputed, and if a reader scores it `❌` the ticket returns to `Backlog`.**
+
+> **THE ANTI-SMOOTHING CHECK, RUN EXPLICITLY BECAUSE THE PRESSURE IS REAL AND IS NAMED IN THE BRIEF.**
+> This ticket is `P1`, a `P0` is behind it, and `ABC-024`, `ABC-026`, `ABC-028` and this ticket's own
+> first cut all chose `Backlog` over a smoothed score. **The test applied: would each `❌` clear if
+> `ABC-019` were not behind it?**
+>
+> - **Item 4 — yes.** It failed because `A3`'s two forms asserted **opposite verdicts on the same
+>   build**. A ruling picked one, and the resulting single form was **re-measured here on 10 builds
+>   across 2 trees** rather than taken from the ADR. That is a defect repaired, not a bar lowered.
+> - **Item 10 — yes.** It failed because *"the thing that would let it be written is outside this
+>   role"*. It is no longer outside: the owning role ruled, in an `accepted` ADR, with the ratification
+>   question answered against precedent rather than skipped.
+> - **And the direction of travel is the tell: this hop ADDED a criterion (`A5`), corrected a test note
+>   that was about to go false, and re-pointed `A4` at a different site.** Smoothing removes
+>   obligations. This added three. **Nothing was scored on a report: every load-bearing row of
+>   `ADR-0011`'s ledger was reproduced independently at this hop, and the one figure that was NOT in it
+>   — the 16-file tree — is the one that produced `A5`.**
+>
+> **`Ready` IS NOT `pull it now`.** `ABC-028` still lands **FIRST** (`## Dependencies`), and the two
+> build hops share one file and must not run concurrently. **That sequencing is the Orchestrator's
+> call, and the DoR does not override it.**
+
+**Requested board move: `Backlog → Ready`.** **This page's front matter still reads
+`status: backlog` / `column: Backlog` and that is deliberate, not an oversight** — `plans/board.md` is
+the Orchestrator's and was **not opened for edit** at this hop, and a ticket header that disagrees with
+the board is the two-records-disagree defect this project keeps paying for. **The front matter moves
+when the board does, by the role that owns the board.**
