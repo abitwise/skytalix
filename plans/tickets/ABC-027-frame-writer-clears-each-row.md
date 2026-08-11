@@ -1,8 +1,8 @@
 ---
 id: ABC-027
 title: The in-place frame writer clears each row as it writes it — a narrowing frame leaves stale columns on screen
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: S
 priority: P1
 epic: EPIC-002
