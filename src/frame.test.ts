@@ -343,8 +343,8 @@ describe("ABC-018 acceptance — the assembled frame", () => {
     // Epic `4a` verbatim. It was near-vacuous while `HEIGHT`'s three terms were local literals;
     // `A13` made two of them delivered geometry, so this is now the TRIPWIRE — it fails on any
     // change to the board's or the history pane's row count, which is what forces such a change to
-    // be deliberate rather than silent. The `<= 24` REQUIREMENT is the other half and lives with
-    // the composition test at the end of this block.
+    // be deliberate rather than silent. The `<= 24` REQUIREMENT is the other half and has its own
+    // test at the end of this block, for the reason recorded there.
     expect(HEIGHT).toBe(23);
   });
 
@@ -697,16 +697,27 @@ describe("ABC-018 — pins the acceptance criteria do not reach", () => {
     expect(region.trimEnd().endsWith("(+1 more)")).toBe(true);
   });
 
-  it("derives H from the panels' constant heights — no 23 anywhere in the module", () => {
-    expect(frameHeight({ board: BOARD_ROWS, status: STATUS_ROWS, history: HISTORY_ROWS })).toBe(23);
-    // `A13`'s REQUIREMENT clause, and it is not a weaker restatement of the `= 23` tripwire: 23 is
-    // what the reference layout happens to be, `<= 24` is what epic acceptance `4b` actually needs
-    // and what `beginFrameSession` switches on. A row-count change that keeps `H` at 24 breaks the
-    // tripwire and NOT the requirement; one that reaches 25 breaks both, and `4b` becomes
-    // unreachable because the in-place strategy would emit 25 rows into a 24-row viewport.
+  /**
+   * `A13`'s REQUIREMENT clause, and it is deliberately its OWN test rather than a second assertion
+   * beside the `= 23` tripwire.
+   *
+   * The two clauses do different jobs and the ticket's own mutant table is the argument: a change
+   * that leaves `H` at 24 fails the tripwire and NOT the requirement — `4b` is fine and the change
+   * only has to be ratified — while one that reaches 25 fails both, because `beginFrameSession`
+   * would then choose the in-place strategy and emit 25 rows into a 24-row viewport. Measured at
+   * this hop: sharing an `it` with the tripwire hides that distinction entirely, because the
+   * tripwire asserts first and a failing assertion ends the test before the requirement is
+   * evaluated. A reader would then have to rediscover which of the two mattered, which is exactly
+   * what keeping both clauses exists to prevent.
+   */
+  it("fits epic 4b's 24-row budget — the REQUIREMENT, separate from the 23 tripwire", () => {
     expect(
       frameHeight({ board: BOARD_ROWS, status: STATUS_ROWS, history: HISTORY_ROWS }),
     ).toBeLessThanOrEqual(24);
+  });
+
+  it("derives H from the panels' constant heights — no 23 anywhere in the module", () => {
+    expect(frameHeight({ board: BOARD_ROWS, status: STATUS_ROWS, history: HISTORY_ROWS })).toBe(23);
     expect(frameHeight({ board: 9, status: 4, history: 8 })).toBe(24);
     expect(
       assembleFrame(partsFor(playTo(4), { status: ["a", "b", "c", "d"] }), "unicode"),
