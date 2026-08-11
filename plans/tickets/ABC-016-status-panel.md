@@ -11,6 +11,53 @@ feature: —
 
 # ABC-016 — Status panel: side to move, check, material balance, move number, last move, thinking row
 
+> **AMENDED 2026-08-11 by BA/PM at task `refinement-ABC-016-a13` (Workflow 07), ruling on `A13`.
+> TWO ACCEPTANCE DEFECTS ON A DELIVERED, GATED-GREEN TICKET SITTING IN `In Review`.** The
+> Orchestrator routed one of them here; the second was found by checking the rest, which this board's
+> record says to do. **The ruling sends the ticket BACK to `In Development` for one added test case —
+> a deliberate backward move, not a failure** (precedent: `ABC-009`, `Ready for UAT` → `In Review`).
+>
+> | # | Defect | Where |
+> |---|---|---|
+> | D19a | **`A13`'s `isInCheck` clause is unsatisfiable by any correct build.** It demands `isInCheck` **exactly 1** *and* `toSan` **exactly 1**, but `toSan`'s `suffix()` calls `isInCheck` unconditionally at **`src/san.ts:104`** — merged code this ticket does not own — so the render's total is **1 on an empty history and 2 from the first move onward** | Acceptance `A13` |
+> | D19b | **`A2` and `A6` are blind to a build that reads the check indicator or the material balance from the REPLAY position.** Measured over all 14 cases: every in-check case has an **empty move list** and every played case is **quiet and capture-free**, so nothing on the ticket exercises items 2, 4 and 5 together on a game reached by play | Acceptance `A2`, `A6`, Test notes |
+>
+> **`A13` was re-measured here, not inherited.** The unsatisfiability was re-spied out of tree
+> independently of the engineer's test and of the Orchestrator's source read, and `src/san.ts:104`
+> and `src/legal.ts:42-55` were read at source. **The ruling is neither of the two obvious
+> amendments.** Stating the total as *"1 empty, 2 thereafter"* would make this ticket **restate a
+> number `src/san.ts` owns** — the exact fault `ADR-0009` clause 1 names and that `A11`'s struck
+> `frameHeight(...) is 23` clause was struck for. Dropping the clause would lose the only thing on
+> this ticket that catches a panel asking the board about check twice. **So the clause now pins the
+> panel's OWN call in two ways that name no other module's count**: directly on an empty history,
+> where the panel is the render's only caller, and by difference against a bare `toSan` baseline on
+> any longer one.
+>
+> **What each defect costs the code, stated separately, because they are not the same answer:**
+>
+> - **`D19a` costs NOTHING.** `src/status-panel.ts` was already correct and **both halves of the new
+>   clause are already asserted by delivered `src/status-panel.nfr.test.ts`** (`:130-132` and
+>   `:140-149`). The engineer's delivered test stops being a stated departure from the criterion and
+>   becomes the criterion. **The engineer flagged this and did not amend the ticket — the correct
+>   call**, and the amendment is made here where it belongs.
+> - **`D19b` costs ONE TEST CASE and no production line.** `1.e4 e5 2.Qh5 g6 3.Qxe5+` renders
+>   correctly on the panel as it stands — measured — so the added case goes green on delivered code.
+>   It is unwritten, so **the ticket is not done**, and that is why it goes back.
+>
+> **One new flag falls out, and it is neither of the above:** this panel's **width** is not constant
+> — measured **17** columns quiet against **67** with both claims — while `src/frame.ts:179` makes
+> the frame's `W` the widest panel row and `ERASE_TO_END_OF_SCREEN` cannot clear to the right of a
+> row. `ABC-017` already carries a constant-width criterion for a **3**-column swing. **Not taken
+> here**: the two available fixes are a product decision, not a wording one. See
+> `## Definition of Ready`.
+>
+> **Size `M` and priority `P1` both re-derived a fourth time and both unmoved; NOT `XL`, so
+> `SPLIT_REQUIRED` does not apply.** **Zero production lines; `src/` byte-identical to the delivered
+> branch tip.** `plans/board.md` **not edited**, and this file's **front matter deliberately still
+> reads `In Review`** — `git log` shows `status:` / `column:` have only ever moved in the
+> Orchestrator's own `docs(board):` commits, in the same commit as the board row, and front matter
+> must never lead the board. The move is **requested** in this hop's notes.
+
 > **AMENDED 2026-08-11 by BA/PM at task `repair-panel-tickets` (Workflow 07), applying accepted
 > `ADR-0009`. TWO DEFECTS ON A `Ready` TICKET, ONE OF THEM IN A PROMOTED CRITERION.** `ADR-0009` is
 > the input and is **not re-litigated**; what is recorded here is what applying it exposed.
@@ -295,6 +342,28 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   progress** — measured), **when** the panel renders, **then** it contains `CHECK`. **Given** the
   starting position, **then** it does **not**. **Given**
   `rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3`, **then** it contains `CHECK`.
+  **And given the check reached BY PLAY** — from the starting position through
+  `1.e4 e5 2.Qh5 g6 3.Qxe5+`, i.e. the ply list `e2e4 e7e5 d1h5 g7g6 h5e5` (Black to move, in check,
+  **3 legal replies, game in progress** — measured) — **then** the panel contains `CHECK`, and in
+  that same render `Black to move`, `3...`, `last: Qxe5+` and `material: +1`.
+
+  *(**[ADDED 2026-08-11 — D19. This is the fourth wrong build this criterion has had to be widened
+  to kill, and the gap was in the criteria SET rather than in any one criterion's words.]* **Measured
+  over all fourteen cases this ticket names: every case that is in check has an EMPTY move list, and
+  every case with a move played is quiet and capture-free.** So both the check indicator (item 2) and
+  the material balance (item 5) were pinned only on positions that never went through item 4's
+  replay, and **a build that read either of them from the REPLAYED position — the one `lastMoveSan`
+  is already holding, which is the natural shortcut for an engineer who has a `Position` in hand —
+  passes every criterion as they stood.** Measured at this hop on merged `src/`: at the case above
+  the replay position is `rnbqkbnr/pppp1p1p/6p1/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 0 3`, **White**
+  to move and **not** in check, so that build renders **nothing** here while the correct one renders
+  `CHECK`. This is also **the only case on the ticket in which a capture has occurred**, which is
+  what pins the balance to the live board rather than to the replay, and it is the only one that
+  exercises items 2, 4 and 5 together on a game reached by play. **Epic acceptance #3 is about a
+  played game; until this case, nothing on this ticket proved the indicator on one** — and this
+  ticket's own `D13` correction turns on precisely the loaded-FEN/played-position distinction.
+  **Costs no production change: the delivered `src/status-panel.ts` already renders this case
+  correctly — measured — so the added case goes green on the code as it stands.**)*
 
   *(**[CORRECTED 2026-08-10 — D4.]** The third FEN was this criterion's ONLY in-check case and it is
   **checkmate**: measured, `gameStatus` returns `{result:"black-wins",reason:"checkmate"}` and
@@ -454,15 +523,76 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   them.)*
 - **A13 — the panel derives nothing, and this is a CALL COUNT. Given** any panel render, **when** the
   calls are **spied**, **then** `gameStatusOf`, `repetitionCounts` and `keyHistory` are called
-  **exactly 0** times, `gameStatus` **exactly 0** times, `isInCheck` **exactly 1** time, `toSan`
-  **exactly 1** time (**0** on an empty history), and the 64-square scan runs **exactly once**.
+  **exactly 0** times, `gameStatus` **exactly 0** times, `toSan` **exactly 1** time (**0** on an
+  empty history), the 64-square scan runs **exactly once**, and **the panel makes exactly 1
+  `isInCheck` call of its OWN** — asserted in **both** of the two ways below, because neither alone
+  is enough:
+  - **directly, on an empty history:** the render's **total** spied `isInCheck` count is **exactly
+    1**. `toSan` is not called there (the clause above pins that), so the panel is the render's only
+    caller and the total **is** its own count. **This clause names no other module.**
+  - **by difference, on a history of at least one move:** the render's **total** spied `isInCheck`
+    count, **minus** the count that a bare `toSan(position, lastMove)` makes on the **same move**
+    against the **same position**, measured in the same file, is **exactly 1**.
 
-  *(**[ADDED 2026-08-10 — D1, D2.]** A count, not a clock, and the reason is this project's own
-  record: `plans/nfr-catalog.md` has now moved a bar off the clock and onto a count three times
-  — `NFR-005`'s predicate sub-bar, `NFR-001`'s `legalMoves`/`zobristKey` bars, and `ABC-009`'s
-  guards — each time because a timing bar with an order of magnitude of headroom cannot fail on the
-  regression it exists to catch. **This is the criterion that fails if anybody puts the repetition
-  derive back into the panel**, and it fails at zero timing sensitivity.)*
+  *(**[ADDED 2026-08-10 — D1, D2. The `isInCheck` clause REPLACED 2026-08-11 — D19. The criterion's
+  purpose is UNCHANGED and every other clause of it is untouched.]** A count, not a clock, and the
+  reason is this project's own record: `plans/nfr-catalog.md` has now moved a bar off the clock and
+  onto a count three times — `NFR-005`'s predicate sub-bar, `NFR-001`'s `legalMoves`/`zobristKey`
+  bars, and `ABC-009`'s guards — each time because a timing bar with an order of magnitude of
+  headroom cannot fail on the regression it exists to catch. **This is still the criterion that fails
+  if anybody puts the repetition derive back into the panel** — that property lives entirely in the
+  four zero-counts above, which this amendment does not touch — and it still fails at zero timing
+  sensitivity.*
+
+  ***The replaced clause read `isInCheck` **exactly 1** time, with the empty-history carve-out
+  attached to `toSan` and to nothing else. NO CORRECT BUILD COULD REACH IT, and that was re-measured
+  at this hop rather than inherited.*** *`toSan` calls `suffix()` unconditionally (`src/san.ts:147`)
+  and `suffix()` calls `isInCheck` unconditionally, before it branches on the answer
+  (**`src/san.ts:104`**) — merged code this ticket neither owns nor may work around. Item 2 requires
+  one `isInCheck` and item 4 requires one `toSan`, and both are mandatory, so the **render's total**
+  is:*
+
+  | history | total spied `isInCheck` in one render |
+  |---|---|
+  | empty | **1** |
+  | 1 ply (`Nf3`) | **2** |
+  | 4 plies | **2** |
+  | last move gives check | **2** |
+  | last move gives mate | **2** |
+  | a loaded FEN, in check, empty move list | **1** |
+
+  *(Measured at this hop with a throwaway out-of-tree spy, independently of the engineer's test.
+  **The split is on `history.moves.length`, not on whether anybody is in check** — it is the same
+  condition the `toSan` clause already carries. A checking or a mating last move adds **no third**
+  call: `suffix`'s mate test is `legalMoves`, and `legalMoves` reaches `isSquareAttackedBy` directly
+  and never calls `isInCheck` — `src/legal.ts:42-55`, read at source. **These totals are recorded as
+  an observation and are deliberately NOT the criterion** — see the next paragraph.)*
+
+  ***Why this shape, and not either of the two obvious alternatives.*** *State the total honestly as
+  **"1 on an empty history and 2 thereafter"** — **rejected**, because it makes this ticket
+  **restate a number `src/san.ts` owns**, so a change to SAN's suffix strategy turns this ticket's
+  suite red for another module's reason. That is the same fault `ADR-0009` clause 1 names in the
+  other direction (*the producer owns its count; a consumer must never restate it*), and it is what
+  this board struck `A11`'s `frameHeight(...) is 23` clause for. **The difference clause holds
+  whatever `suffix()` does**, which is the whole reason it is written as a difference. And **drop the
+  clause entirely** — **rejected**, because the four zero-counts catch a returning repetition derive
+  but **nothing else on this ticket catches a panel that asks the board about check twice**, and
+  `## Security / NFR triggers` names *"the call counts of `A13`"* as the part of the bar that
+  actually binds.*
+
+  ***What each half kills, so the mutant net has a target.*** *The **direct** half fails on any build
+  whose own count is not one — two calls, or zero (a build reading the indicator out of `toSan`'s
+  `+`/`#` suffix reads **0** on an empty history, where there is no last move at all). The
+  **difference** half fails on a build that adds a call only once a move exists — the natural one
+  being a second `isInCheck` against the replay position `lastMoveSan` is already holding.*
+
+  ***This clause requires NO production change.*** *`src/status-panel.ts` was already correct; it was
+  the criterion's arithmetic that was wrong. Both halves above are **already asserted by delivered
+  `src/status-panel.nfr.test.ts`** — the direct half at `:130-132`, the difference half at
+  `:140-149` — so this amendment repairs the ticket and not the code, and the delivered test stops
+  being a stated departure from the criterion and becomes the criterion. **The engineer flagged this
+  and did NOT amend the ticket, which was the correct call**; the amendment is BA/PM's and is made
+  here.)*
 - **A14 — the cost bar in *Security / NFR triggers* holds when measured**, at all three of its ply
   counts.
 
@@ -500,11 +630,23 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   one.** The loop supplies the thinking flag (it always did) and now also the `GameStatus`, which it
   already evaluates once per ply before rendering. **This ticket is not blocked on it**: both are
   parameters, and a test supplies them directly — the same posture `ABC-019` itself takes toward
-  `EPIC-006`'s colour and glyph flags. What is owed is one line on `ABC-019`'s side saying its render
-  seam passes the status it just computed; **flagged for the Orchestrator, not edited here.**
-- **The board row's `blocked-until: ABC-013, ABC-014, ABC-020` is stale on all three** — `ABC-020`
+  `EPIC-006`'s colour and glyph flags. ~~What is owed is one line on `ABC-019`'s side saying its
+  render seam passes the status it just computed; **flagged for the Orchestrator, not edited
+  here.**~~ **DISCHARGED — verified 2026-08-11 at this hop, read in `ABC-019`'s ticket rather than
+  assumed.** That line landed at `ABC-019`'s own refinement and names itself as such:
+  `plans/tickets/ABC-019-turn-loop-skeleton.md:219-228` — *"the loop hands over the `GameHistory`,
+  the `GameStatus` **it evaluated for this ply**, and the `thinking` flag … This is the line
+  `ABC-016` was owed"*. The seam signature it records at `:230`,
+  `(GameHistory, GameStatus, thinking) => readonly string[]`, **accepts the delivered
+  `renderStatusPanel(history, status, thinking): string[]`** — `string[]` is assignable to
+  `readonly string[]`, so the two are compatible and neither side is owed a change. **Nothing was
+  relayed to the `ABC-019` engineer to establish this and no channel to it was opened**: the ticket
+  on disk is the only thing that was read.
+- ~~**The board row's `blocked-until: ABC-013, ABC-014, ABC-020` is stale on all three** — `ABC-020`
   merged 2026-08-02, `ABC-014` 2026-08-08, `ABC-013` 2026-08-10. **Board hygiene, flagged not
-  edited**: two agents share this branch and the Orchestrator makes board moves.
+  edited**: two agents share this branch and the Orchestrator makes board moves.~~ **DISCHARGED —
+  the Orchestrator corrected it; the row now reads `blocked-until: NONE`** (read in `plans/board.md`
+  at this hop, not assumed). Struck rather than deleted so the flag's disposition is visible.
 
 ## Security / NFR triggers
 
@@ -584,6 +726,13 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
 - **The panel calls `isInCheck` a second time**, independently of the one `gameStatus` makes inside
   its zero-legal-moves branch. That is deliberate and at 0.06–0.11 µs it is free; it is the honest
   reading of criterion #3, which is about the rendered board and not about the terminal check.
+  **[CLARIFIED 2026-08-11 — D19, because there are now two different "second calls" in play and they
+  are not the same one.]** This bullet is about `gameStatus`'s call, which the panel never triggers
+  (`gameStatus` is an input, spied at **0** by `A13`). The *other* one — `toSan`'s own call inside
+  `suffix()` at `src/san.ts:104` — is what `A13`'s `isInCheck` clause was rewritten around; it is
+  also free at the same price, it is SAN's rather than this panel's, and this ticket deliberately
+  does not restate its count. **Neither one is a second derive of anything**; nothing is computed
+  twice here, which is the distinction from `D1`.
 - **No security trigger.** Every value rendered here is derived from `history.position`, from
   generator-owned `Move`s and from a `GameStatus` the rules core produced. No user-supplied string
   reaches this panel. *(It is not the panel's job to sanitize; `ABC-018` does it for the whole frame,
@@ -604,6 +753,14 @@ cell's text carries a negative** — see `A3`, which is the one place that bites
   green on a panel that emits them.
 - **[ADDED 2026-08-10] Take the `toFen` snapshot BEFORE the first render** (`A5`, `A10`). A snapshot
   taken between two renders is byte-identical across a panel that corrupts the board on every render.
+- **[ADDED 2026-08-11 — D19] `A2`'s played-check case must be built by PLAYING the plies, never by
+  loading the resulting FEN.** Loading `rnbqkbnr/pppp1p1p/6p1/4Q3/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 0
+  3` gives the same board with an EMPTY move list, which is the fifteenth case of exactly the kind
+  this ticket already had fourteen of, and it exercises neither the replay nor `last: Qxe5+`. It also
+  belongs in `CASES`, so `A10`, `A11` and `A12` pick it up and it gets a snapshot.
+- **[ADDED 2026-08-11 — D19] `A13`'s difference half needs its baseline `toSan` on the SAME move and
+  the SAME position the panel replays to**, and the baseline call must be made with the mocks cleared
+  immediately before it. Any other move would compare two quantities that are only equal by accident.
 - **[ADDED 2026-08-10] `A13` needs a spy, and a separate test file.** The lesson is
   `src/gameend.nfr.test.ts`'s, recorded in `plans/nfr-catalog.md`: a `vi.mock` factory is hoisted to
   file scope and would re-route the module graph for every test in the file, so the call-count
@@ -665,6 +822,24 @@ longer requires the test file to compose a frame height. The size arguments abov
 is untouched: nothing in `ADR-0009` moves epic acceptance #3, and the new flag in
 `## Definition of Ready` is a **merge-order** fact for the Orchestrator, not a value change here.
 
+**Re-derived 2026-08-11 at the `A13` ruling hop (`refinement-ABC-016-a13`) and still `M` (3) /
+`P1`.** *Added*: one acceptance case (`A2`'s played check, which also becomes a fifteenth `CASES`
+entry and one more snapshot) and one rewritten clause on `A13`. *Removed*: nothing. **No new cell, no
+new input, no new module, no new test file, and no production line** — `A13`'s replacement is already
+satisfied by delivered code and delivered tests, and `A2`'s new case goes green on the panel as it
+stands (measured). The remaining work is **one `CASES` entry, one assertion block of roughly a dozen
+lines, and a regenerated snapshot file**. The size arguments above are untouched and this is well
+inside `M`: it is smaller than the 2026-08-10 amendment, which added three criteria and a test file
+and did not move the 3 either.
+
+**Explicitly NOT `XL`, so `SPLIT_REQUIRED` does not apply.** The ticket is still one module, seven
+cells, one short function, no chess logic and no new rules; nothing in this ruling adds a second
+deliverable or a second seam. **Priority `P1` re-read a fourth time and unmoved** — this hop changes
+how two criteria are *worded* and adds one case; it does not touch item 7's rules-affordance
+argument, does not touch epic acceptance #3, and does not change what a player gets. **Not `P0`** (the
+game runs with a board and a loop) and **not `P2`** (`EPIC-002` cannot close without epic acceptance
+#3, which lives here).
+
 ## Definition of Ready
 
 **RE-DERIVED IN FULL 2026-08-10 by BA/PM against `agent-factory/checklists/definition-of-ready.md`.
@@ -716,6 +891,44 @@ concurrent Architect/Design hop's this wave). It did not move size or priority. 
 invent a way for `A11` to catch M3/M5 — that is structurally impossible on this ticket and pretending
 otherwise is the defect, not the fix.
 
+**RE-DERIVED A THIRD TIME 2026-08-11 by BA/PM at task `refinement-ABC-016-a13` (Workflow 07), ruling
+on `A13`. The 2026-08-11 block above claimed ✅ on item 4 and it was WRONG TWICE — `A13`'s
+`isInCheck` clause was unsatisfiable by any correct build, and `A2` was blind to a wrong build the
+whole criteria set never reached.** That is the **fourth** consecutive time a DoR self-assessment on
+this board has certified acceptance a mutant walks through. The pattern is now the point: **a DoR
+block reading all ✅ is evidence that nobody re-derived it, not that the ticket is sound**, and this
+column is written against the text as it stood at the start of this hop.
+
+| # | Check | At the `In Review` move (2026-08-11) | After the `A13` ruling |
+|---|---|---|---|
+| 1 | problem clear | ✅ | ✅ unchanged |
+| 2 | scope and out-of-scope clear | ✅ | ✅ unchanged — no scope moved; the panel's inputs, cells and row count are all as they were |
+| 3 | INVEST | ✅ | ✅ *testable* is what moved: `A13` was **not** testable as written, and no `S`/`I`/`N`/`V`/`E` term changed |
+| 4 | acceptance testable and measurable | ❌ **D19** — `A13`'s `isInCheck` clause is unsatisfiable by ANY correct build (`toSan` calls it at `src/san.ts:104`); **and** `A2`/`A6` are blind to a build reading the check indicator or the balance from the REPLAY position, because all 14 cases are either in check with an empty move list or played and capture-free | ✅ 14 criteria; `A13`'s clause re-derived to two halves that name no other module's count, `A2` gains the played-check case that kills the replay build |
+| 5 | dependencies known | ⚠️ two carried flags were STALE — the `ABC-019` owed line had landed and the board's `blocked-until` had been corrected | ✅ both verified DISCHARGED by reading `ABC-019`'s ticket and `plans/board.md`, and struck rather than deleted |
+| 6 | security/NFR triggers, measurable | ⚠️ the bar's part 3 is *"the call counts of `A13`"*, one of which could not be met | ✅ part 3 now names counts that can all be met; the `isInCheck` bullet clarified, the µs figures untouched |
+| 7 | test notes present | ⚠️ nothing told the engineer to build the played case by PLAYING it | ✅ two notes added |
+| 8 | size assigned | ✅ `M` | ✅ `M`, re-derived; **not `XL`, so no `SPLIT_REQUIRED`** |
+| 9 | priority assigned | ✅ `P1` | ✅ `P1`, re-read a fourth time |
+| 10 | no major unresolved blocker | ✅ | ⚠️ **not a blocker, but the ticket is NOT DONE**: `A2`'s new case is unwritten, so the ticket goes back to `In Development` for it — see the board request in this hop's notes |
+
+**Every ✅ and every ❌ above was measured against merged `src/` at this hop, not argued.** The
+`isInCheck` totals were re-spied out of tree rather than taken from the engineer's or the
+Orchestrator's report; `src/san.ts:104` and `src/legal.ts:42-55` were read at source; the 14-case
+matrix (plies / in-check / captures) was generated by running every case rather than by reading the
+list; the four gates were re-run in this worktree (**lint / typecheck / build exit 0, 707/707 on 24
+files, skip 0**) and `git rev-list --count HEAD..main` re-read as **0**. **Zero production lines
+written at this hop; `src/` is byte-identical to the branch tip as delivered.**
+
+**What THIS hop deliberately did NOT do.** It did not re-open `ADR-0009` (accepted). It did not edit
+`plans/board.md`, `plans/nfr-catalog.md`, `memory-bank/50-decisions/`, `src/`, or `ABC-017`'s or
+`ABC-019`'s tickets. It did not adopt the engineer's recommended amendment `(a)` as offered — the
+ruling takes its intent and rejects its wording, because *"exactly 1 from the panel itself"* names no
+instrument and two readers would build two different tests. It did not add a constant-width criterion
+to this panel: that is a real defect but the fix is a product decision that is not BA/PM's to take
+alone — see the flag below. And it did not weaken `A13` to make the delivered test right; the test
+happened to be right, which is a different thing and is stated as such.
+
 **Flags carried forward rather than closed, each named with an owner, none blocking:**
 
 - ~~**`plans/nfr-catalog.md`'s `NFR-002` row** — owed a rewrite for two reasons now (`EPIC-002` `[A2]`
@@ -741,6 +954,32 @@ otherwise is the defect, not the fix.
   composes the real panels, or to a ticket of its own. Not blocking this ticket: it cannot write that
   check (`ABC-017` is unbuilt when it merges) and `ADR-0009` clause 2 forbids it naming the term.
   **Flagged, not taken — merge order and board moves are the Orchestrator's.**
+- **NEW 2026-08-11 — this panel's WIDTH is not constant, `src/frame.ts:179` makes the frame's `W` the
+  widest panel row, and no criterion at any level covers it. Owner: Architect/Design to rule; the
+  Orchestrator to route.** Measured at this hop on delivered code: the panel's widest row is **17**
+  characters at the quiet starting position and **67** with both draws claimable — **a 50-column
+  swing**, driven by the `CHECK` cell (+7) and the claim cell (up to +55), neither of which reserves
+  its width. `A7` reserves the *thinking* cell's width and is the only width clause on the ticket;
+  the engineer recorded the consequence for the other two honestly rather than hiding it. **Why it
+  matters, read at source:** `assembleFrame` recomputes `width` per frame and pads every row to it
+  (`src/frame.ts:179`, `:182`), while the in-place writer emits `CURSOR_HOME` + rows +
+  `ERASE_TO_END_OF_SCREEN` (`:216`) — and `\x1b[0J` erases from the END of the new frame downward,
+  never to the right of a row already written. **So when a claim expires the frame narrows and roughly
+  50 columns of the previous frame survive on every row of the redrawn region.** `assembleFrame`'s own
+  comment states the assumption this breaks: *"The panels set `W`; the message region is bounded BY
+  it"* — the message region was excluded precisely because it was known to be variable, and this
+  panel is variable too. **The board already recognises this class for the sibling ticket**:
+  `ABC-017` carries *"constant WIDTH is now a criterion because `src/frame.ts:179` takes W as the
+  widest panel row"* for a measured **3**-character swing, while this panel's is 50 and has no such
+  criterion. **Not taken here, and deliberately so.** There are two defensible fixes and choosing
+  between them is a design decision, not a wording one: **(i)** this panel reserves width for its
+  variable cells, which costs a permanently blank ~53-column claim area on every frame — a visual
+  product decision BA/PM will not make alone; or **(ii)** `ABC-018` clears each row as it writes
+  (`\x1b[K`), which touches merged code and reads against epic `4b`'s *"in one operation"* clause.
+  **Not blocking this ticket:** nothing composes a frame in a loop until `ABC-019`, so no stale
+  column can be rendered before then, and epic `4a` is about row count only while `4b` is worded over
+  *rows* rather than characters — so no current criterion is violated today. **The decision is owed
+  before `ABC-019` merges**, which is the first moment a second frame is ever written.
 
 **PROMOTED `Backlog` → `Ready` 2026-08-10 by BA/PM** (task `refinement-ABC-016`, subtask
 `refinement-ABC-016-bapm`, Workflow 07). `Ready` goes 0/8 → 1/8; no limit approached, no override
