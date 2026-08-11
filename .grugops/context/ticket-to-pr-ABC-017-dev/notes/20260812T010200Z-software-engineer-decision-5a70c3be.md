@@ -21,7 +21,14 @@ supersedes:
 > Hand-authored; `scripts/context-io.ts` is absent. Not a `finding`.
 
 **`src/status-panel.ts` does not exist on `main`.** `ABC-016` is in `In Review`, not merged. This
-was checked at source on the branch tip, not inferred from the board.
+was checked at source, not inferred from the board.
+
+**Re-checked at the END of the hop, because `main` moved while this was being built.** The branch
+was cut at `523eb30`; `main` is now `9fb55db`, two commits ahead. Both are `docs(board)` and
+`git diff --stat 523eb30..main -- src/` is **empty — zero `src/` bytes**. So neither `ABC-016` nor
+`ABC-027` has landed: `src/status-panel.ts` still does not exist and `src/frame.ts` still has no
+per-row erase. **Nothing below changed as a result, and this branch's `src/` baseline is still
+current with `main`'s.**
 
 `A13` requires all three terms of `frameHeight` to read delivered geometry. Two of them can, and
 now do. The third cannot be made live on this branch, and the reason is the exact cost `ADR-0009`'s
