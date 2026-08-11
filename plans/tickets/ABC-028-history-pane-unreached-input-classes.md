@@ -214,13 +214,29 @@ own guard is not testable — the `D27` bar, applied to this hop's own output.**
 
 - **`ABC-017` is merged.** Nothing here is blocked by it, and nothing here may edit it.
 - **`ABC-029` shares one file with this ticket** — `src/history-pane.nfr.test.ts`. **They must not run
-  concurrently in two worktrees.** Either order works; the second to land rebases. This is the one
-  reason `INVEST`'s *independent* is recorded ⚠️ rather than ✅.
+  concurrently in two worktrees.** ~~Either order works; the second to land rebases.~~ **CORRECTED
+  2026-08-11 by BA/PM at `refinement-ABC-019-a11`: the order is now DECIDED — THIS TICKET FIRST.**
+  `ABC-029` is now the hop that edits that file (it repairs the two guards `ABC-019` turned red), so
+  it is *"the next hop into the file"* the bullet below names. With `A2` landed first the false
+  sentence becomes **true** and no merged text is edited by anyone; with `ABC-029` first, the
+  conditional at the foot of this section fires. This is the one reason `INVEST`'s *independent* is
+  recorded ⚠️ rather than ✅.
 - **`ABC-019` is in flight and is the next hop into `src/history-pane.nfr.test.ts`.** That is this
   ticket's trigger and its interim exposure: **until `A1`/`A2` land, the comment at `:106-112` is a
   live invitation to delete the sole catcher for `WCACHE-LEN`.** The Orchestrator has put the hazard
   into `ABC-019`'s brief; **a brief is transient and the comment is permanent**, which is why this is
   `P1`.
+  > **[UPDATED 2026-08-11 by BA/PM at `refinement-ABC-019-a11` — THE TRIGGER FIRED, THE HOP DECLINED,
+  > AND THE OWED CORRECTION DID NOT FALL DUE.]** `ABC-019`'s rebase turned `A11`'s two structural
+  > guards RED, so that hop **did** open this file. It **read** the comment at `:106-112` and **did
+  > not act on it**: no fixture was rebuilt, no line of `src/history-pane.nfr.test.ts` was written,
+  > and the ruling it produced requires nobody to touch those fixtures. **The trigger this risk names
+  > is the EDIT, not the READ** — a comment saying *"these may be rebuilt freely"* is only dangerous
+  > to someone who acts on it — so the conditional below **has not fired**. It fires at **`ABC-029`'s
+  > BUILD hop**, which edits the two guards ~120 lines below the comment. **That is the hop this
+  > ticket must land before.** The brief was transient exactly as this bullet predicted and the
+  > comment is still there; what changed is that the next reader is now a **named ticket** rather than
+  > *"whoever comes next"*, which is the first time this hazard has had a schedulable owner.
 - **`EPIC-006` owns `undo`** and is the consumer that makes `A1`'s path a product path rather than a
   test path.
 - **Not dependent on `ABC-010`.** `AR-1`'s width and compute path is ruled separately and is neither

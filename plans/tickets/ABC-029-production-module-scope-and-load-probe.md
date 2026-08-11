@@ -4,7 +4,7 @@ title: "\"Production module\" is undefined — the two guards of NFR-002's struc
 status: backlog
 column: Backlog
 size: S
-priority: P2
+priority: P1
 epic: EPIC-002
 feature: —
 ---
@@ -37,6 +37,53 @@ feature: —
 > design hop: `ABC-010`'s question changes **where a check lives**, this one changes **what a
 > criterion says**.
 
+> ## AMENDED 2026-08-11 by BA/PM at task `abc019-rebase-2026-08-12`, subtask `refinement-ABC-019-a11` (Workflow 07)
+>
+> ### **THE HEADLINE ABOVE IS NOW FALSE, AND IT IS CORRECTED RATHER THAN DELETED. `NOTHING IS BROKEN` NO LONGER HOLDS: THIS TICKET'S TWO GUARDS ARE RED ON `ABC-019`'s BRANCH, AND THEY BLOCK A `P0`.**
+>
+> **What changed is the tree, not this ticket's analysis** — every measurement above was correct on
+> the tree it was run against, which is the same sentence `ABC-017`'s `A11` earned four times.
+>
+> `ABC-019` (turn loop) rebased onto merged `main` on 2026-08-11 and **`src/turn-loop.ts:52` imports
+> `./history.ts` at runtime**. Re-measured at this hop with this ticket's own instruments:
+>
+> | figure | before | now |
+> |---|---|---|
+> | production runtime importers of `src/history.ts` (`A11`'s regex, 17 non-test files) | **0** | **1** — `src/turn-loop.ts` |
+> | `src/history-pane.nfr.test.ts` `:228` | green | **RED** — `expected [ 'turn-loop.ts' ] to deeply equal []` |
+> | `src/history-pane.nfr.test.ts` `:275` (load probe) | green | **RED** — `history.ts was evaluated in a production closure` |
+> | full suite on `grugops/ABC-019-turn-loop-skeleton` | 744/744 | **2 failed / 789 passed on 28 files**, skip 0 |
+>
+> **`NFR-002` IS STILL NOT BREACHED, AND THAT IS MEASURED HERE RATHER THAN ASSUMED.** The premise the
+> catalog row states is scoped to **a renderer** and **a frame** — it voids itself *"if a **renderer**
+> ever pulls the repetition derive into a frame"* and says *"the quantity belongs to the LOOP
+> (`ABC-019`), not to a frame"*. Probed with the same `module.registerHooks` technique the `RF-1` probe
+> uses, rooted at the five renderer modules (`frame.ts`, `render.ts`, `history-pane.ts`,
+> `status-panel.ts`, `glyph-mode.ts`): **the render closure is 11 modules — `apply`, `fen`, `frame`,
+> `glyph-mode`, `history-pane`, `legal`, `moves`, `position`, `render`, `san`, `status-panel` — and
+> `history.ts` is NOT among them.** **The zero is armed:** the same probe rooted at `turn-loop.ts`
+> **does** report `history.ts`. And **nothing in `src/` imports `turn-loop.ts`** (`grep` = 0), so the
+> loop cannot be reached from a frame's assembly by any path.
+>
+> **SO THE UNDEFINED WORD HAS BITTEN A SECOND TIME, FROM THE OPPOSITE SIDE, AND IT IS THE SAME BITE.**
+> `RISK-ABC017-04` is *a file the criterion covers and the instrument does not* (`perft-bench.ts`).
+> This is *a file both instruments cover and the **property** does not* (`turn-loop.ts`). Both exist
+> because *"production module"* was never defined, which is this ticket's whole subject.
+>
+> **`ABC-017` IS NOT RE-OPENED AND ITS `A11` STILL DOES NOT MOVE.** A criterion on a merged ticket is
+> a statement about **that ticket's delivery**, discharged at its gate; it does not become false when a
+> later ticket changes the tree, it becomes **stale as a standing invariant** — a defect of phrasing,
+> not a breach. `A11` was MET. The two **instruments** are live code in the suite and are what this
+> ticket repairs, which is exactly the split `## Out of scope` already drew.
+>
+> **`ABC-019` DOES NOT OWN THIS REPAIR AND DID NOT TAKE IT**, for three measured reasons recorded in
+> its `## Dependencies`: a per-ticket exclusion writes a **third** hand-maintained filename into the
+> two places `A1` forbids them; narrowing the regex's file set would remove `perft-bench.ts` from its
+> reach and **destroy `WPERFT-STATIC`'s sole catcher**, which `## Out of scope` protects by name; and
+> `A1`'s one-expression demand is **indivisible from `A2`** (the regex needs `perft-bench.ts` in, the
+> probe needs it out until the channel is private). **No `src/` byte was written by that hop or this
+> one.**
+
 ## Problem
 
 *User*: `NFR-002`, and through it every frame `ABC-019`'s loop will render.
@@ -68,6 +115,15 @@ the code does.**
 - **Define "production module"** for the purposes of the zero-runtime-importer property, and make the
   two guards derive their file sets from that one definition rather than from two hand-maintained
   exclusion lists.
+- **Resolve `src/turn-loop.ts` under that definition — ADDED 2026-08-11, and this is the item that
+  turned the ticket from latent to live.** The loop is unambiguously a **production module** by any
+  file-level reading, and it is the **first** one in this project that is neither the rules core nor a
+  renderer. It imports `src/history.ts` at runtime because `ADR-0002` clause 4 and `ABC-019`'s `A3`
+  **require** it to: `gameStatusOf` (`src/history.ts:152`) is the single `positionCounts` supplier and
+  the loop is the only place the repetition derive may live. **So the property cannot be *"no
+  production module imports `history.ts`"* — that reading forbids the build the architecture
+  mandates.** What the definition must produce is a set the property is actually about, and the
+  catalog row already names it: **the frame path.**
 - **Make the probe's report channel private to the probe**, so a module that writes to stdout at
   import cannot corrupt it.
 - **Resolve `src/perft-bench.ts`** under the definition — either it is in scope and the probe reaches
@@ -114,6 +170,23 @@ is a self-inflicted load that proves nothing, and Security/NFR's own first probe
 discarded it. **`perft-bench.ts`'s is the one that is really a scope ruling wearing an implementation
 comment.***
 
+**and — ADDED 2026-08-11 — `A1` is now the criterion that makes `ABC-019` GREEN, so it carries one
+more clause. Given** `src/turn-loop.ts`, **when** the suite runs, **then** it is **green**, **and**
+the named rule that admits the loop is the **same one expression** `A1` already demands — **not a
+`file !== "turn-loop.ts"` beside the two literals that are already there.**
+
+> **A THIRD hand-maintained filename is the failure mode, not the fix.** `ABC-019`'s hop was offered
+> exactly that shortcut and refused it, because it would leave this ticket a partly-done job and would
+> put a literal filename in the two places this criterion forbids them.
+>
+> **One measured trap for whoever writes the expression: do NOT reach for the frame-path closure and
+> apply it to BOTH guards unchanged.** The regex guard is `WPERFT-STATIC`'s **sole** catcher, and
+> `perft-bench.ts` is not on the frame path — so a frame-path filter applied to the regex removes that
+> kill, which `## Out of scope` forbids and `A3`'s closing sentence requires. **The one expression must
+> therefore name a SET plus a per-guard rule about it, or it must be a definition that keeps
+> `perft-bench.ts` reachable by the regex.** This is a real design constraint on `A1` and it is
+> recorded here rather than discovered mid-build.
+
 **A2 — a production module that writes to stdout at import does not change the probe's verdict.
 Given** a build that adds `console.log(...)` at module scope in a production module inside the
 probe's roots, **when** the full suite runs, **then** the suite is **green at its full count**, and
@@ -145,6 +218,18 @@ here — see `## Open design question`.***
 
 **Either way, `WPERFT-STATIC` must still die**, and it must die on the **regex**, which is its sole
 catcher today.
+
+> **[FLAGGED 2026-08-11 by BA/PM — `A3` CONTRADICTS ITSELF AND IT IS FLAGGED HERE RATHER THAN PICKED,
+> because picking it IS the design ruling.]** Form (b) says the regex guard **excludes**
+> `perft-bench.ts` *"so no instrument reports a file the criterion does not cover"*. The sentence
+> immediately above says `WPERFT-STATIC` **must still die on the regex**. **A guard that excludes the
+> file cannot kill a mutant in it** — the two cannot both hold. So form (b) as written is not
+> buildable, and it needs one of two repairs at the design hop: either (b) keeps the file in the
+> **regex**'s reach while excluding it from the **probe**'s roots — which is a per-guard rule and must
+> be reconciled with `A1`'s one-expression demand — or the *"either way"* sentence is dropped and
+> `WPERFT-STATIC` is accepted as a non-breach under (b), which **loses a measured kill** and must be
+> stated as a loss rather than discovered. **Not decided here. This is the second item for the
+> Architect/Design hop and it was invisible until `A1` gained the `turn-loop.ts` clause.**
 
 **A4 — the retired vocabulary is gone from production, and every site was AUDITED rather than the
 named one patched. Given** `src/history-pane.ts:30`, **when** it is read, **then** it no longer claims
@@ -190,11 +275,55 @@ either way: reading (a) forces `A2` to land first, and makes the probe pay a ben
 first-class command (`npm run perft`), and `plans/nfr-catalog.md`'s `NFR-001` treats it as the
 throughput instrument.*
 
+> **[2026-08-11 by BA/PM at `refinement-ABC-019-a11` — ONE OF THE TWO READINGS IS NOW REFUTED BY
+> CONSTRUCTION. THE QUESTION IS NOT ANSWERED AND THE DESIGN HOP IS NOT SKIPPED; IT IS SHORTER.]**
+>
+> **The "in scope / `NFR-002` is about the module graph" reading is dead, and `ABC-019` is what killed
+> it.** Applied to the tree as it now stands, that reading says a **production module** importing
+> `src/history.ts` at runtime breaches the property. `src/turn-loop.ts` does exactly that, and it does
+> it because `ADR-0002` clause 4 makes `gameStatusOf` the single `positionCounts` supplier and
+> `ABC-019`'s `A3` names it. **A reading under which the correct, architecture-mandated build breaches
+> the property is not a live reading of the property** — it is a reading of a proxy that has outlived
+> its scope.
+>
+> **The "out of scope / `NFR-002`'s subject is a frame" reading survives, and the catalog row already
+> says it in its own words** — *"if a **renderer** ever pulls the repetition derive into a frame … this
+> row's `O(window)` statement is void"* and *"the quantity belongs to the LOOP (`ABC-019`), not to a
+> frame"*. **No catalog edit is needed for this and none was made.**
+>
+> **WHAT IS STILL OPEN, AND IT IS NARROWER THAN IT WAS.** The surviving reading answers *what the
+> property is about* (the frame path). It does **not** by itself answer **`perft-bench.ts`'s
+> membership**, because that question is about **a GUARD's reach** rather than about the property:
+> `perft-bench.ts` is not on the frame path either, so the frame reading pushes `A3` toward form (b) —
+> **and form (b) is the form that contradicts *"`WPERFT-STATIC` must still die"*.** See the flag at
+> `A3`. **That is now the design hop's real question, and it is a smaller one than the hop was cut
+> for.**
+>
+> **BA/PM DID NOT TAKE THIS RULING AND IS NOT ENTITLED TO.** Recorded as an input, measured, with the
+> owner unchanged: **Architect/Design** rules; **Security/NFR** still owns `NFR-002`'s `MET`/`MISS`;
+> `plans/nfr-catalog.md` and every ADR were **read, not edited**.
+
 ## Dependencies
 
 - **`ABC-017` is merged**; nothing here is blocked by it, and nothing here may edit it.
-- **`ABC-028` shares `src/history-pane.nfr.test.ts` with this ticket.** They must not run concurrently
-  in two worktrees; either order works and the second to land rebases.
+- **`ABC-028` shares `src/history-pane.nfr.test.ts` with this ticket.** ~~They must not run
+  concurrently in two worktrees; either order works and the second to land rebases.~~ **CORRECTED
+  2026-08-11: either order no longer works. `ABC-028` should land FIRST.** Its `A2` makes the false
+  *"may be rebuilt per test freely"* sentence at `src/history-pane.nfr.test.ts:106-112` **TRUE**
+  rather than correcting it, so with `ABC-028` first **no merged text is edited at all**. If this
+  ticket opens that file first, `ABC-028`'s own board row records the consequence: **the correction
+  falls due at three sites and it is BA/PM's, not the Engineer's.** The non-concurrency rule is
+  unchanged.
+- **`ABC-019` is BLOCKED ON THIS TICKET — added 2026-08-11, and it is the reason the priority moved.**
+  `ABC-019` is `P0`, is the only ticket in flight, is rebased and **RED** on this ticket's two guards,
+  and `quality.gate_enforcement` is `blocking`, so it **cannot merge until this lands**. The
+  dependency runs one way only: this ticket needs nothing from `ABC-019` and is not blocked by it.
+  **`ABC-019` measured the collision, refused the shortcut fix and routed it here rather than
+  half-doing it** — see its `[D52]` and its `## Dependencies`.
+  > **The whole ordering, stated once so nobody re-derives it:**
+  > **design hop on this ticket → `ABC-028` → `ABC-029` → `ABC-019` rebases → `A20` + `ADR-0009`
+  > cl. 9f's real-panel run → `ABC-019`'s gate.** The design hop can run in parallel with `ABC-028`;
+  > the two BUILD hops cannot, because they share one file.
 - **A design hop is a genuine prerequisite for `Ready`** — see `## Open design question`. This mirrors
   `ABC-026`, which sat in `Backlog` until an Architect/Design hop produced the number its criteria
   needed.
@@ -283,20 +412,43 @@ cannot answer: **a split must produce two independently valuable tickets**, and 
 are one subject (what the guards cover) reached through one file by one engineer; `A2` is a
 **prerequisite** for one form of `A3`, which is the opposite of independence.
 
-**Priority `P2`.** Applying the latent/live test:
+~~**Priority `P2`.** Applying the latent/live test:~~
 
-- **Not `P0`/`P1`.** Nothing is broken and nothing is imminent. Production runtime importers are
+- ~~**Not `P0`/`P1`.** Nothing is broken and nothing is imminent. Production runtime importers are
   **zero, measured**; `WPERFT-DYN` breaches `A11` **as literally worded** while the property `NFR-002`
   depends on is intact; and the stdout route's trigger is **`EPIC-006`**, which is `P2`, undecomposed,
   and not next. Unlike `ABC-028`, **nothing in the merged tree instructs anyone to remove a guard** —
   the one misleading note here calls a guard redundant, which invites deletion but does not measure
-  it as safe.
+  it as safe.~~
 - **Not `P3`.** `P3` is "someday". This has a **named, dated trigger** and a **measured breach of a
   merged criterion's literal words**, and the definition it produces is what the next role reading
   `A11` needs.
 
-**Promote to `P1`** when `EPIC-006` is decomposed, or when any production module gains a module-scope
-write to stdout — whichever comes first.
+~~**Promote to `P1`** when `EPIC-006` is decomposed, or when any production module gains a module-scope
+write to stdout — whichever comes first.~~
+
+**RE-DERIVED 2026-08-11 by BA/PM at `refinement-ABC-019-a11`: `P2` → `P1`. The struck text above is
+kept as the record, because the `P2` derivation was correct and it died on its own premise rather
+than on a change of mind.**
+
+- **The `P2` argument rested on one figure and that figure has changed.** It reads *"Production
+  runtime importers are **zero, measured**"*. **Measured at this hop: ONE** — `src/turn-loop.ts`. The
+  latent/live test therefore returns the other answer: this is **live**, not latent.
+- **Neither of the two recorded promotion triggers fired, and a third one did.** `EPIC-006` is still
+  undecomposed and no production module writes to stdout at import. What fired is stronger than
+  either: **a merged criterion's two instruments are RED on a `P0` ticket's branch, and a `blocking`
+  gate means that `P0` cannot merge until this ticket lands.** That trigger was not foreseen at the
+  cutting hop and it is written down now so the next reader sees why the priority moved.
+- **Not `P0`, and this is the line that is worth holding.** `P0` is *"there is no product without
+  it"*. Nothing user-facing is broken: the pane is correct, the loop is correct, `NFR-002`'s premise
+  is intact and measured, and no frame pulls the repetition derive. **This is a guard-scope defect
+  blocking a `P0`, which is `P1` — being on a `P0`'s critical path does not make a ticket `P0`.**
+- **The `S` size does NOT move with the priority** — see `## Size and priority rationale`. Priority is
+  urgency; nothing about the work got bigger. The one condition that could move the size is still form
+  (a) of `A3`, unchanged.
+
+**Promote to `P0`** only if the frame path itself gains a runtime importer of `src/history.ts` — that
+is `NFR-002`'s actual void-condition and it has never fired.
 
 ## Definition of Ready
 
@@ -340,3 +492,29 @@ ticket stays in `Backlog`, and it needs an Architect/Design hop before it can re
 **Route to `Ready`: one hop.** An Architect/Design ruling on the open design question, after which
 `A3` is written in one form, the size is re-derived if form (a) is chosen, and items 4 and 10 are
 re-assessed. **No owner input and no new measurement are needed beyond that.**
+
+### DoR re-assessment 2026-08-11 by BA/PM at `refinement-ABC-019-a11` — still NOT met, still 7 of 10, and the design hop is SHORTER
+
+**The score does not move and that is deliberate: a ticket does not become Ready because it became
+urgent.** What changed is the content of the two `❌`s and the length of the hop that clears them.
+
+| # | Item | Before | Now | Why |
+|---|---|---|---|---|
+| 1 | problem clear | ✅ | ✅ | the user is still `NFR-002`; the pain is now **two** measured instances of the undefined word rather than one, arriving from opposite sides |
+| 3 | INVEST-shaped | ⚠️ | ⚠️ | unchanged in kind, worse in degree — **not independent**: it now shares a file with `ABC-028` **and** gates `ABC-019` |
+| 4 | acceptance testable + measurable | ❌ | ❌ | **still `A3`, and it is now `A3` for TWO reasons.** Its two forms still assert opposite verdicts on the same build, **and** form (b) is now recorded as **internally contradictory** with the *"either way `WPERFT-STATIC` must still die"* sentence. `A1` gained a clause and stays measurable |
+| 9 | priority | ✅ | ✅ | **`P2` → `P1`**, re-derived from a premise that died rather than from a preference |
+| 10 | no major unresolved blocker | ❌ | ❌ | **still the design question, and it is still outside BA/PM.** What changed: **one of its two readings is refuted by construction** (see `## Open design question`), so the hop is a narrower ruling than the one this ticket was cut for |
+
+**Items 2, 5, 6, 7 and 8 are unchanged.** `## Scope` gained one item and `## Dependencies` gained the
+`ABC-019` edge — both are *more* stated, not less. **No security or NFR target, bar or level moved**;
+`plans/nfr-catalog.md` was **read and not edited**, and no ADR was re-opened.
+
+> **THE HONEST TENSION, NAMED RATHER THAN RESOLVED BY SCORING.** This is `P1`, it blocks a `P0`, and
+> its Definition of Ready is **not met** — so it cannot be pulled, and neither can the thing behind it.
+> **Smoothing the DoR to unblock the `P0` is exactly the defect this project has recorded four times**
+> (`ABC-024`, `ABC-026`, `ABC-028`, and this ticket at its own cutting hop), and it is refused again.
+> **The way out is to run the Architect/Design hop NOW, not to pretend it already ran.** That
+> scheduling call is the Orchestrator's; the input it needs is that the hop is now smaller and has two
+> named questions rather than one open-ended one: **(i)** `perft-bench.ts`'s membership under the
+> surviving frame-path reading, and **(ii)** `A3`'s internal contradiction.
