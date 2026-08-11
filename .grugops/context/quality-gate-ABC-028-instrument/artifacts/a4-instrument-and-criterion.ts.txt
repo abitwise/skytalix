@@ -1,0 +1,253 @@
+/**
+ * `ABC-028` `A4` — the during-render clause over the WHOLE `GameHistory` graph.
+ *
+ * WHY NOT `Object.freeze`. Measured on this machine, not assumed: `Object.freeze` on a non-empty
+ * `Uint8Array` throws `TypeError: Cannot freeze array buffer views with elements`, so `position.board`
+ * is uncoverable by `A9`'s instrument; and freezing `history.moves` leaves the `moves` SLOT writable
+ * (`{writable: true, configurable: true}`), which is `WMOVESWAP` mechanically.
+ *
+ * THE INSTRUMENT hands the pane a PROXY of the caller's graph and reports every write through it at
+ * the instant it happens, so a mutation that is restored before the render returns is still recorded.
+ * Two detectors, because each closes the other's measured hole:
+ *   D1 write trap — `set` / `defineProperty` / `deleteProperty` on any node reached through the view.
+ *      Instant. Blind to a write that reaches the board through `board.buffer`.
+ *   D2 board digest — the raw board bytes re-checked at EVERY trap, so every read the pane makes is
+ *      also a sampling point. Covers `.buffer` aliasing and the TypedArray methods. Blind to a
+ *      mutation applied AND reverted between two samples.
+ *
+ * ARMED, and armed PER SLOT rather than in aggregate: the first `it` below writes to each named slot
+ * through the view and requires a report. A probe that cannot look is otherwise indistinguishable
+ * from a clean render — the failure this ticket's parent shipped once.
+ */
+interface A4Violation {
+  readonly detector: "write-trap" | "board-digest";
+  readonly path: string;
+  readonly detail: string;
+}
+
+interface A4Watch {
+  readonly view: GameHistory;
+  readonly violations: readonly A4Violation[];
+  /** How many times the instrument LOOKED. Zero means it never got the chance. */
+  readonly samples: number;
+  finish(): void;
+}
+
+function watchHistory(history: GameHistory): A4Watch {
+  const violations: A4Violation[] = [];
+  const proxies = new WeakMap<object, object>();
+  let samples = 0;
+
+  const board = history.position.board;
+  const baseline = Uint8Array.from(board);
+  let boardReported = false;
+
+  const sampleBoard = (where: string): void => {
+    samples++;
+    if (boardReported) return;
+    for (let index = 0; index < baseline.length; index++) {
+      if (board[index] !== baseline[index]) {
+        boardReported = true;
+        violations.push({
+          detector: "board-digest",
+          path: "position.board",
+          detail: `byte ${index} is ${board[index]}, was ${baseline[index]} (sampled at ${where})`,
+        });
+        return;
+      }
+    }
+  };
+
+  const wrap = <T extends object>(target: T, path: string): T => {
+    const existing = proxies.get(target);
+    if (existing !== undefined) return existing as T;
+
+    const isView = ArrayBuffer.isView(target);
+    // Every `%TypedArray%.prototype` method throws `TypeError: this is not a typed array` when
+    // `this` is a Proxy. Left unhandled, a build that mutates the board through one of them CRASHES
+    // the render instead of being REPORTED — "instrument broken" announced where the truth is
+    // "property violated". So a view's methods are bound to the raw board and D2 reports the result.
+    const bound = new Map<PropertyKey, unknown>();
+
+    const proxy = new Proxy(target, {
+      get(node, property, receiver) {
+        sampleBoard(`get ${path}.${String(property)}`);
+        const value = Reflect.get(node, property, isView ? node : receiver);
+        if (isView && typeof value === "function") {
+          const cached = bound.get(property);
+          if (cached !== undefined) return cached;
+          const fixed = (value as (...args: unknown[]) => unknown).bind(node);
+          bound.set(property, fixed);
+          return fixed;
+        }
+        if (typeof value === "object" && value !== null && !(value instanceof ArrayBuffer)) {
+          return wrap(value, `${path}.${String(property)}`);
+        }
+        return value;
+      },
+      set(node, property, value, receiver) {
+        samples++;
+        violations.push({
+          detector: "write-trap",
+          path: `${path}.${String(property)}`,
+          detail: `assigned ${Array.isArray(value) ? `Array(${value.length})` : String(value)}`,
+        });
+        // The write is PERFORMED, not blocked: blocking turns a detection into a crash.
+        return Reflect.set(node, property, value, isView ? node : receiver);
+      },
+      defineProperty(node, property, descriptor) {
+        samples++;
+        violations.push({
+          detector: "write-trap",
+          path: `${path}.${String(property)}`,
+          detail: "defineProperty",
+        });
+        return Reflect.defineProperty(node, property, descriptor);
+      },
+      deleteProperty(node, property) {
+        samples++;
+        violations.push({
+          detector: "write-trap",
+          path: `${path}.${String(property)}`,
+          detail: "delete",
+        });
+        return Reflect.deleteProperty(node, property);
+      },
+      has(node, property) {
+        sampleBoard(`has ${path}.${String(property)}`);
+        return Reflect.has(node, property);
+      },
+      ownKeys(node) {
+        sampleBoard(`ownKeys ${path}`);
+        return Reflect.ownKeys(node);
+      },
+    });
+
+    proxies.set(target, proxy);
+    return proxy as T;
+  };
+
+  return {
+    view: wrap(history, "history"),
+    get violations() {
+      return violations;
+    },
+    get samples() {
+      return samples;
+    },
+    finish() {
+      sampleBoard("finish");
+    },
+  };
+}
+
+describe("ABC-028 A4 — candidate instrument", () => {
+  /**
+   * THE ARMING CONTROL, per slot and in its own `it`. It asserts the instrument REPORTS a write it
+   * is supposed to catch, one slot at a time, so a hole in one slot cannot hide behind another.
+   */
+  it("A4 arming — the instrument reports a write to every slot A4 names", () => {
+    const hostiles: readonly (readonly [string, (view: GameHistory) => void])[] = [
+      [
+        "initialFen",
+        (view) => {
+          const saved = view.initialFen;
+          (view as { initialFen: string }).initialFen = "8/8/8/8/8/8/8/8 w - - 0 1";
+          (view as { initialFen: string }).initialFen = saved;
+        },
+      ],
+      [
+        "position.fullmoveNumber",
+        (view) => {
+          view.position.fullmoveNumber = 1234;
+        },
+      ],
+      [
+        "position.blackToMove",
+        (view) => {
+          view.position.blackToMove = !view.position.blackToMove;
+        },
+      ],
+      [
+        "position.board element",
+        (view) => {
+          view.position.board[0] = (view.position.board[0] as number) ^ 0xff;
+        },
+      ],
+      [
+        "position.board through .buffer",
+        (view) => {
+          const alias = new Uint8Array(view.position.board.buffer);
+          alias[0] = (alias[0] as number) ^ 0xff;
+          void view.moves.length;
+        },
+      ],
+      [
+        "the moves SLOT",
+        (view) => {
+          const saved = view.moves;
+          (view as { moves: readonly Move[] }).moves = [...view.moves];
+          (view as { moves: readonly Move[] }).moves = saved;
+        },
+      ],
+      [
+        "the moves CONTENTS",
+        (view) => {
+          const moves = view.moves as Move[];
+          moves.unshift(...moves.splice(0, 1));
+        },
+      ],
+      [
+        "a Move's own field",
+        (view) => {
+          (view.moves[0] as { from: number }).from = 99;
+        },
+      ],
+    ];
+
+    for (const [slot, hostile] of hostiles) {
+      const watch = watchHistory(lineTo(20));
+      hostile(watch.view);
+      watch.finish();
+      expect(watch.violations.length, `${slot} must be reported`).toBeGreaterThan(0);
+    }
+  });
+
+  /** The POSITIVE control: an instrument that reports a violation on a clean run is worthless too. */
+  it("A4 arming — a run that mutates nothing reports nothing", () => {
+    const watch = watchHistory(lineTo(20));
+    void watch.view.moves.length;
+    void watch.view.initialFen;
+    void watch.view.position.fullmoveNumber;
+    watch.finish();
+
+    expect(watch.violations).toEqual([]);
+    expect(watch.samples).toBeGreaterThan(0);
+  });
+
+  it("A4 — no reachable slot of the supplied GameHistory differs during a render, at all ten lengths", () => {
+    for (const [plies, history] of LENGTH_CASES) {
+      const watch = watchHistory(history);
+
+      renderHistory(watch.view);
+      watch.finish();
+
+      // The instrument LOOKED. Without this a pane the instrument cannot see is indistinguishable
+      // from a pane that mutates nothing.
+      expect(watch.samples, `${plies} plies — instrument armed`).toBeGreaterThan(0);
+      expect(watch.violations, `${plies} plies`).toEqual([]);
+    }
+  });
+
+  /**
+   * The instrument's OWN tripwire, in its own `it` and at ONE length rather than ten: the pane must
+   * render the same bytes through the view as it does through the bare object. Measured at ten
+   * lengths out of tree; one length is what the lane pays for, and it is the length every other
+   * clause of this file already uses.
+   */
+  it("A4 tripwire — rendering through the instrument changes no rendered byte", () => {
+    const history = lineTo(20);
+
+    expect(renderHistory(watchHistory(history).view)).toEqual(renderHistory(history));
+  });
+});
