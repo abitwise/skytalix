@@ -115,6 +115,51 @@ feature: —
 > **Front matter is deliberately left at `in-review`**, on the delivering engineer's own precedent: the
 > board is the authority and moving the ticket first would put the two out of step.
 
+> **AMENDED 2026-08-11 (FOURTH hop) by BA/PM — QE's EIGHT criterion gaps and `ADR-0010`'s owed
+> criterion, ruled TOGETHER** (task `abc019-qe-gaps-2026-08-11`, subtask
+> `refinement-ABC-019-qe-gaps`, Workflow 07). **This is a targeted amendment and NOT a
+> re-refinement:** the 25 + 2 + 9 fixes above stay fixed, **no criterion `A1`–`A19` is renumbered or
+> deleted**, and size `L` (5) / priority `P0` are re-derived a **fourth** time and **UNMOVED**.
+>
+> **What is new about this hop is, once again, WHO found the defects.** Hop one and hop two found them
+> by reading. Hop three found them by reading a green build back against its own text. **This hop rules
+> on nine survivors QE produced by writing thirteen WRONG BUILDS into `src/turn-loop.ts` and running
+> them** — every one typecheck-clean, every one green on 717/717. **All twenty-three criteria hold as
+> written and there is ZERO code defect.** What the survivors measure is not this build: it is where a
+> *future* correct-looking build would also be green, and nothing would catch it.
+>
+> **Every one of the eight was RE-VERIFIED at this hop by an out-of-tree probe of my own against the
+> delivered build, not accepted from the report** — and one of them came back with a different residue
+> than QE recorded, which is written down in place rather than smoothed over (`[D42]`).
+>
+> **WHY THE `ADR-0010` CRITERION IS IN THIS HOP AND NOT ITS OWN.** `[D38]` (G-6) and `A20` both touch
+> `## Scope`'s transitions and the frame the loop emits. Split across two hops, each would have been
+> self-consistent and the pair would not — **which is exactly `[D43]`'s defect, a contradiction inside
+> a single amendment, and it is the one this ticket has now committed twice.** Ruling them together is
+> the fix for the shape, not a convenience.
+>
+> **ELEVEN rulings, `[D38]`–`[D48]`. The count is checkable — the table is in `## Definition of Ready`
+> § *DoR re-check (FOURTH hop)*, which says of each one whether it changes the code.** Four criteria
+> are ADDED (`A5b`, `A8b`, `A10b`, `A20`), four are amended in place (`A2`, `A6`, `A9b`, `A19`), and
+> **the criterion count goes 23 → 27**.
+>
+> **TEN of the eleven are text-or-test-only and the delivered build already satisfies them. ONE
+> CHANGES THE CODE — `[D42]` / `A10b`:** `A10` guards the **engine** seam's move and nothing guards the
+> **input** seam's, so the delivered loop plays a move no generator produced and **corrupts the board**.
+> Measured at this hop against the delivered build. **`ABC-019` therefore returns to `In Development`,
+> and the board move is the Orchestrator's — requested in `## Definition of Ready`, not taken.**
+>
+> **`ADR-0010`'s two owed items are written and neither re-opens it:** `A20` (clause 7's `F3` form) and
+> **the PROHIBITION under it** (clause 7's second half — no constant-frame-width criterion, because `W`
+> varies by design and such a criterion fails the *correct* build). **`A20` cannot be SATISFIED until
+> `ABC-027` merges**, and it says so in its own words; the merge order is now
+> **`ABC-016` → `ABC-027` → `ABC-017` → `ABC-019`** (`[D48]`).
+>
+> **Nothing under `src/` was written by this hop** — `A10b` is handed to the Engineer for exactly the
+> reason `A9b` was. **`plans/board.md` was not opened**; its `blocked-until`/`merge-order` text was
+> fixed by the Orchestrator this hop and is **no longer flagged**. **`memory-bank/50-decisions/` was not
+> edited: `ADR-0009` and `ADR-0010` were read only and neither is re-opened.**
+
 ## Problem
 
 *User*: everyone. Without this there is no game — there are a renderer and a rules library.
@@ -235,13 +280,54 @@ loop:
   | 12 | `engine-thinking` → `game-over` | the seam threw; the position is repaired first, then a named reason |
   | 13 | `engine-thinking` → `game-over` | the seam returned a move not in `legalMoves`; named engine-failure reason |
   | 14 | `applying` → `evaluating-terminal` | the move is appended and the counts derived |
-  | 15 | `game-over` → `exiting` | the terminal frame has been shown; exit 0 |
+  | 15 | `game-over` → `exiting` | the state has been entered — from 3, from 12, from 13 or from the prompt-driven outcome — and **no frame is emitted on this edge, ever**; exit 0. On **3** the terminal frame was already shown by `rendering`, which is that transition's own trigger. On **12**, **13** and the prompt-driven outcome **there is no terminal frame to show**, and that is a type-level fact, not a choice (`[D38]`) |
 
   **Transitions 7, 8 and 9 reach `rendering` WITHOUT passing through `evaluating-terminal`, and that
   is the structural reason `A5` and `A6`'s "`gameStatus` is not re-evaluated" is satisfiable at all** —
   it is a property of the machine, not only of a spy. The **sixteenth** transition,
   `awaiting-human` → `game-over` (the `claim` outcome), is **`ABC-021`'s** — see `## Out of scope`
   (`[D12]`).
+
+  > **[D38 — transition 15's trigger required what `A2` and `## Test notes` rows 12/13 FORBID, and the
+  > two halves of the contradiction were written by different hops, each self-consistent. Ruled
+  > 2026-08-11 (fourth hop), from QE's `G-6`.]** The trigger read ***"the terminal frame has been
+  > shown; exit 0."*** **Four edges reach `game-over`: 3, 12, 13 and the prompt-driven outcome. On
+  > three of the four no frame is emitted after entry**, so on three of the four the trigger's own
+  > precondition is false. QE's mutant `Q6` — emit the frame transition 15 names — is **KILLED**, and
+  > killed by row 12's `frameCount: 1`, i.e. **by a table cell rather than by any criterion about
+  > frames after termination**. The ticket forbade in one section what it required in another.
+  >
+  > **RULED ONE WAY, AND THE WAY IS FORCED BY A TYPE RATHER THAN PREFERRED.** `A2`'s formula and rows
+  > 12/13's counts **STAND**; transition 15's trigger is reworded, and `A2` gains the exclusion as an
+  > explicit clause so the property is carried by a criterion and not by a cell.
+  >
+  > **The render seam takes a `GameStatus` (`## Scope`'s render-seam bullet, and `A11`/`A16` assert on
+  > it), and a terminal `GameStatus` requires `reason: EndReason`** — read at source at this hop,
+  > `src/gameend.ts:57-69`, where the terminal arm of the union is
+  > `{ result: "white-wins" | "black-wins" | "draw"; reason: EndReason }`. **`EndReason` is exactly the
+  > five automatic values (`:40-45`).** `engine-threw`, `engine-failure` and `resignation` are members
+  > of *this loop's* `TerminalReason` and **of no `GameStatus`**. So on 12, 13 and the prompt-driven
+  > outcome the loop has **no terminal `GameStatus` in hand and cannot construct one** without editing
+  > `src/gameend.ts` — which `A14` forbids in its own words. **A "terminal frame" on those three edges
+  > is not undesirable, it is not constructible.**
+  >
+  > **Measured at this hop on the delivered build, transition 13** (engine returns a foreign move,
+  > human black): outcome `{result: null, reason: "engine-failure", exitCode: 0}`, **1 frame**, and
+  > that frame reads `status in-progress ... thinking true`. **QE's reading of the player-visible
+  > consequence is CORRECT and is not disputed: the game ends and nothing on screen says so.** What is
+  > ruled is **where that is owed**, and it is not owed here — **`EPIC-006`'s result screen is
+  > `## Out of scope` by name**, and `A10`'s own rationale (*"a result screen can never present an
+  > engine bug as a chess outcome"*) presumes it exists elsewhere. **What this loop owes is a
+  > `LoopOutcome` carrying a reason distinct from every `EndReason`, and it delivers one.** Emitting a
+  > second frame here would repeat an `in-progress` board with the thinking flag cleared — it would
+  > **not** make the screen say the game ended, and it would cost `A2` its arithmetic.
+  >
+  > **This does NOT change the code**, and the residue is named rather than buried: **on 12 and 13 the
+  > last frame the player sees has the thinking indicator lit.** In the shipped product `EPIC-006`
+  > draws the result screen the moment `runTurnLoop` returns, so that frame is transient — **and there
+  > is no CLI entry point today, so "transient" is a design expectation and not a measurement.**
+  > **Handed to `EPIC-006` as a named input, not left as a defect here** (`## Definition of Ready`,
+  > flag 12).
 - **The loop's terminal reason is a superset of `EndReason`, and the whole admitted set is now
   enumerated.** `src/gameend.ts:40-45` has exactly five values plus `null`, and they are
   `checkmate` · `stalemate` · `insufficient-material` · `fivefold-repetition` · `seventy-five-move`.
@@ -427,6 +513,11 @@ loop:
 - **Frame CONTENT, and the WRITE STRATEGY** — `ABC-014`, `ABC-016`, `ABC-017`, `ABC-018`. The loop
   composes no frame and chooses no strategy: it calls merged `beginFrameSession` **once** and calls the
   writer it returns. **Driving that writer IS this ticket's** — see the render-seam bullet in `## Scope`.
+  **`ABC-027` is added to that list 2026-08-11 (`[D48]`): the in-place writer's per-row clearing is
+  `ADR-0010` clause 1's ONE production change and it lives in `src/frame.ts`, which this ticket does
+  not open. What IS this ticket's is `A20` — the assertion that nothing stale reaches the screen over
+  a played game — and the PROHIBITION beneath it, which forbids a constant-frame-width criterion here
+  because `W` varies by design and such a criterion would fail the correct build (`ADR-0010` cl. 7).**
 
   > **[D26 — this line read *"Frame content and writing"*, and *writing* is satisfied by a build that
   > puts the write behind the render seam.]** That build is not a style variant: the loop then never
@@ -532,7 +623,19 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   **`1 + plies + RE-EMITTING non-advancing outcomes`**, where the re-emitting outcomes are exactly
   `rejected`, `ambiguous` and the non-mutating command. **Given** a run that ends at **end-of-input**,
   **then** that outcome adds **no** frame — the count is `1 + plies + re-emitting outcomes` and not one
-  more — and the same holds for a prompt-driven `game-over`.
+  more — and the same holds for a prompt-driven `game-over`. **Given** a run that ends at an
+  **engine-side termination** — the seam threw (transition 12) or returned a move not in `legalMoves`
+  (transition 13) — **then** that outcome adds **no** frame either, and in general **NO frame is
+  emitted after `game-over` is entered, on any of the four edges that reach it**: on transition 3 the
+  frame that entered it *is* the terminal one and is already counted, and on 12, 13 and the
+  prompt-driven outcome there is no terminal `GameStatus` to render at all.
+  *(**[CLAUSE ADDED 2026-08-11 (fourth hop) — `[D38]`, from QE's `G-6`.]** `## Scope` transition 15
+  required the opposite — *"the terminal frame has been shown"* — while `A2`'s formula and rows 12/13's
+  `frameCount: 1` forbade it, and the two were written by different hops. QE's mutant `Q6` (emit that
+  frame) is **KILLED, but only by row 12's count cell**, so the property lived in the table and in no
+  criterion. It now lives here. **The rewording is transition 15's; this clause is its assertable
+  half. No code changes** — the delivered build was already on this side, measured at this hop:
+  transition 13 renders **1** frame and returns `{null, "engine-failure", 0}`.)*
   *(**[REPAIRED AGAIN 2026-08-11 (third hop) — `[D29]`.]** The formula read
   *"`1 + plies + non-advancing prompt outcomes`"*, and **four** outcomes are non-advancing while only
   **three** emit a frame. Checked against this ticket's own `## Test notes` table and the delivered
@@ -584,8 +687,34 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   >   `1 + N` by construction and a two-derives build reads `2(N + 1)`, which the corrected clause still
   >   catches. **The `+ 1` is not bookkeeping:** it is transition 2, and a build that skips it never
   >   evaluates the STARTING position, so a game begun from an already-dead position plays a ply that
-  >   does not exist. `## Test notes` row 3 is exactly that fixture and it is the reason the clause is
+  >   does not exist. ~~`## Test notes` row 3 is exactly that fixture~~ **— see the correction
+  >   immediately below; the witness is `## Test notes` ROW 16 —** and it is the reason the clause is
   >   stated as `N + 1` rather than relaxed to *"at least once per ply"*.
+  >
+  > **[D43 — `[D32]` AND `[D35]` LANDED IN THE SAME AMENDMENT AND CONTRADICT EACH OTHER, so `A3b`'s
+  > `+ 1` had NO WITNESS. Corrected 2026-08-11 (fourth hop), from QE's `G-5`.]** `[D32]` justified the
+  > `+ 1` by naming *"`## Test notes` row 3"* as *"exactly that fixture"* — a game begun from an
+  > already-dead position. **`[D35]`, ruled in the SAME third hop, found row 3's already-dead start to
+  > be a TRAP that loses the ply and replaced it with `1k6/8/8/8/8/8/1K6/2n4n w - - 0 1`, whose start
+  > is IN PROGRESS.** Both rulings are individually right. Together they left **no row of the fourteen
+  > starting from a terminal position**, so `[D32]`'s named witness did not exist. QE's mutant **`Q11`**
+  > — the exit test does not run on the first pass, initial evaluation untouched, so `A3b` still reads
+  > `N + 1` — is typecheck-clean and **717/717 green**.
+  >
+  > **This is the second time this ticket has contradicted itself INSIDE one amendment** (the first was
+  > the 2026-07-31 *"three things and no more"*, wrong by three), and it is why this hop rules `[D38]`
+  > and `A20` together rather than in two.
+  >
+  > **The delivered build is CORRECT here and `A3b`'s count is correct; what was missing is the
+  > fixture its justification claimed to have.** Fixed by **adding `## Test notes` row 16** — an
+  > already-terminal start — rather than by weakening the clause. **Re-measured at this hop on the
+  > delivered build from `1k6/8/8/8/8/8/1K6/2n5 w - - 0 1`** (K+N vs K, `gameStatusOf` at the start
+  > returns `{result: "draw", reason: "insufficient-material"}`, **and six legal moves are available**,
+  > so the position is dead but not stuck): **1 frame, 0 plies, 0 input calls, 0 engine calls**,
+  > outcome `{draw, insufficient-material, 0}`. Under `Q11` the human is prompted and **moves**, in a
+  > game the rules core has already ended — `[D32]`'s own sentence, reproduced. **The row is what makes
+  > `A3b`(a) assertable at `N = 0` and `A7b` assertable at ply 0, which is the strongest form of both.
+  > No code changes, and no criterion is edited.**
   > - **`repetitionCounts` reads 0, and demanding *"once per ply"* of it contradicted `A3`.**
   >   `gameStatusOf` calls it **inside** `src/history.ts:152`, where a module-boundary spy cannot see
   >   it. **The only build that would make that spy read once per ply is one that hand-rolls
@@ -615,8 +744,36 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   **not** advanced, the position is byte-identical by `toFen`, **no** evaluation is re-run (`A3b`'s
   spy reads 0), and the prompt is re-issued after the frame carrying the rejection message. **Given**
   `ambiguous`, **then** the same holds and the candidate list reaches the frame's message region.
+- **`A5b` — Given** any of the three non-advancing outcomes that carry message items — `rejected`,
+  `ambiguous`, or the non-mutating command — **when** the frame carrying those items has been
+  emitted, **then** the message items the loop hands the render seam for **every** subsequent frame of
+  that game are **empty**, until another such outcome supplies new ones. The items belong to **one**
+  frame: the one that re-emits for that outcome. **Assert over a run with at least two further frames
+  after the carrying one**, so a build that never clears is red on the whole tail rather than on a
+  single frame.
+  *(**[ADDED 2026-08-11 (fourth hop) — `[D39]`, from QE's `G-1`.]** `A5` asserts only that the item
+  **ARRIVES**; nothing in twenty-three criteria said it **LEAVES**, and `## Scope` says only that the
+  rejection line and the candidate list *"live in the frame's own message region"* and that there is
+  no second channel. QE's mutant `Q3` — delete `messages = []` (`src/turn-loop.ts:205`) — is
+  typecheck-clean and **717/717 green**, and in it a rejection the player has already fixed is
+  repeated on **every remaining frame of the game**. **Re-measured at this hop on the delivered build,
+  script `["zzzz", "g1f3", "g8f6"]`: message regions `[] / [not a move: zzzz] / [] / [] /
+  [not a move: g8f6]` — the delivered loop is CORRECT and no criterion protects it. No code
+  changes.** **This is a CONTENT clause and touches nothing `ADR-0010` rules on**: the region's row
+  count is fixed (`layoutMessageRegion` returns exactly `MESSAGE_ROWS` in every branch) and **no width
+  is asserted, measured or implied here.**)*
 - **`A6` — Given** the input seam returns a non-mutating command (`board`), **when** the loop
-  continues, **then** a frame is re-emitted, the ply is not advanced and no evaluation is re-run.
+  continues, **then** a frame is re-emitted, the ply is not advanced, no evaluation is re-run, **and
+  the outcome's message items reach that frame's message region — exactly as `A5` requires of the
+  ambiguity candidate list. They are NOT optional.**
+  *(**[CLAUSE ADDED 2026-08-11 (fourth hop) — `[D44]`, from QE's `G-8`.]** QE's mutant `Q8` — drop
+  `messages` for `kind === "command"` only — is **41/41 green**: `A5` names `rejected` and `ambiguous`
+  and stops, `A6` asserted no message at all, and row 10's Expected cell is *"as row 8"*, which
+  carries no message clause either. **`## Scope` already groups `board` with *"the three non-advancing
+  outcomes that CARRY A MESSAGE"***, so "optional" was the reading the ticket did not take anywhere
+  else, and taking it here would have made that sentence false. **Ruled NOT optional. No code
+  changes** — the delivered loop assigns `messages = outcome.messages` for all three kinds
+  identically; this is one assertion the suite never made.)*
 - **`A7` — Given** a scripted game driven to **checkmate**, **when** the loop ends, **then** the
   **final frame shows the mated position**, the terminal reason is `checkmate`, **the reported winner
   is `gameStatus`'s own `result`** — `"white-wins"` when Black is mated and `"black-wins"` when White
@@ -638,6 +795,33 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   prompt and **no** engine call, exits **0**, and **reports no terminal result**. *(A truncated script
   must fail a test on the missing result screen, not pass on the exit code. See the ruling note below.
   *"terminates within one ply"* replaced by the spy count it was reaching for.)*
+- **`A8b` — Given** the input seam returns the prompt-driven **`game-over`** outcome — the transition
+  `EPIC-006`'s `resign` and `ABC-021`'s `claim` both drive, and the one this ticket owns **only** to
+  the extent that it is reachable from `awaiting-human` at all (`[D12]`) — **when** the loop receives
+  it, **then** all four hold: **(i)** the loop returns the seam's **own** `result` and its **own**
+  `reason`, **unaltered and un-substituted**, with `exitCode: 0`; **(ii)** it emits **no** further
+  frame, per `A2`; **(iii)** it calls **neither seam** afterwards — assert by spy, `A7b`'s form on the
+  edge `A7b` does not reach, because no terminal `GameStatus` was ever computed here; and **(iv)** it
+  writes **no** `input ended` notice and returns **no** `{ result: null, reason: null }`, so the
+  outcome can **never** be byte-identical to `A8`'s end-of-input. **Clause (i) is asserted with at
+  least two distinct `(result, reason)` pairs**, so a build substituting a constant is red rather than
+  lucky.
+  *(**[ADDED 2026-08-11 (fourth hop) — `[D40]`, from QE's `G-2`, which THREE independent instruments
+  found and which is the survivor QE would close first.]** `[D12]` settled the `ABC-021` boundary
+  one-directionally and then cited only `A14`, **which is about the TYPE**. No row of the fourteen and
+  no criterion drove this outcome: `grep` for `game-over` in `src/turn-loop.test.ts` returns
+  **nothing** — re-run at this hop, still nothing. The three instruments: mutant **`Q5`** (the seam's
+  `reason` discarded and the constant `"resignation"` substituted — a player who claims a draw is told
+  they resigned) at 41/41; mutant **`Q5b`** (the outcome reported as end-of-input) at **717/717**; and
+  a **v8 coverage run whose only uncovered lines in the entire module are `src/turn-loop.ts:240-241`**
+  — this branch, and nothing else. **`Q5b` is the sharp one: it is byte-identical to `A8`, the exact
+  failure `A9b`(iii) was written to forbid, arriving through the one door nobody had looked at.**
+  Clause (iv) is that forbiddance moved onto this path. `A2`'s own clause *"the same holds for a
+  prompt-driven `game-over`"* was likewise unasserted, and clause (ii) is what asserts it.
+  **Re-measured at this hop on the delivered build: a seam returning `{draw, resignation}` yields
+  `{result: "draw", reason: "resignation", exitCode: 0}`, 1 frame, 1 input call, 0 engine calls — the
+  delivered loop is CORRECT on all four clauses. No code changes; what is owed is a fixture, and it is
+  `## Test notes` row 15.**)*
 - **`A9` — Given** the engine seam throws **from inside a `makeMove`/`unmakeMove` bracket**, so that
   the live object is left one ply ahead, **when** the loop recovers via `takeBack(history, 0)`,
   **then** `toFen(position)` equals `toFen` of the position replayed from `{ initialFen, moves }`,
@@ -649,13 +833,30 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   is also the only shape that resembles a real search.)*
 - **`A9b` — Given** the **input** seam throws **from inside a `makeMove`/`unmakeMove` bracket** — the
   shape `legalMoves` produces, and the shape a real parser produces when it filters candidates — so
-  that the live object is left one ply ahead, **when** the loop recovers, **then** all three hold:
+  that the live object is left one ply ahead, **when** the loop recovers, **then** all **four** hold:
   **(i)** `toFen(position)` equals `toFen` of the position replayed from `{ initialFen, moves }` and
   `moves.length` is unchanged, exactly as `A9` requires of the engine side; **(ii)** the exception
-  **propagates out of the loop** — the caller sees it thrown; and **(iii)** the loop returns **no**
+  **propagates out of the loop** — the caller sees it thrown; **(iii)** the loop returns **no**
   `LoopOutcome` at all, so it can never be mistaken for `A8`'s end-of-input (which returns
   `{ result: null, reason: null, exitCode: 0 }`) and **no new terminal-reason value is introduced**
-  — `A14`'s enumeration is unchanged and is asserted unchanged.
+  — `A14`'s enumeration is unchanged and is asserted unchanged; and **(iv)** between the seam's throw
+  and the rethrow the loop makes **zero** render-seam calls and **zero** `sink` writes, so **nothing
+  reaches the PLAYER on this path at all** — not a frame of the mid-mutation board, and not an
+  *input ended* notice.
+  *(**[CLAUSE (iv) ADDED 2026-08-11 (fourth hop) — `[D41]`, from QE's `G-3`.]** Clauses (i)–(iii)
+  bound what the **CALLER** sees — `history`, the thrown value's identity, and the absent
+  `LoopOutcome` — and **nothing bounded the output channels**, which is the engineer's honest
+  non-claim #2 (*"row 14 carries no frame-count assertion"*) extended to its real width. Two mutants,
+  both typecheck-clean and both **717/717**: **`Q4`** hands the **mid-mutation** position to the
+  render seam and writes that frame, *then* repairs and rethrows — **the last board the player sees
+  contains a ply that never happened**; **`Q4b`** repairs, writes `A8`'s *input ended* notice to the
+  sink, then rethrows — the caller gets the exception and the **player is shown a clean exit for a
+  crashed parser**, which is the same confusion (iii) exists to forbid, one channel over.
+  **`## Scope` already states the property in words — *"nobody downstream is ever handed a
+  mid-mutation board"* — and the render seam IS downstream.** No code changes: the delivered handler
+  is `takeBack(history, 0);` immediately followed by `throw error;` with nothing between them
+  (`src/turn-loop.ts:230-231`, read at source at this hop and cited by line rather than by memory —
+  `[D2]` is why).)*
   *(**[ADDED 2026-08-11 (third hop) — `[D31]`.]** `## Scope` promised repair on *"either seam"* and
   only the engine seam ever had a criterion, so the promise was unassertable and the delivered build
   is one handler short. The fixture shape is part of the criterion for `[D10]`'s reason: **a stub that
@@ -670,6 +871,71 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   *(**[REPAIRED 2026-08-11 — `[D14]`.]** *"a named engine-failure reason"* named no name, so any
   string passed; and `A14` as written could not even represent one. Failing loudly beats playing a
   corrupt board.)*
+- **`A10b` — Given** the **INPUT** seam returns a `{ kind: "move" }` outcome whose `Move` is **not in
+  `legalMoves(history.position)`** — the same membership test `A10` applies to the engine seam, on all
+  six fields — **when** the loop receives it, **then** all five hold: **(i)** it does **not** apply it
+  — `moves.length` is unchanged and `toFen(position)` is byte-identical to the position before the
+  prompt; **(ii)** an exception **propagates out of the loop**, the caller sees it thrown, and the
+  loop **invents no reason and reports no result**; **(iii)** the loop returns **no** `LoopOutcome` at
+  all, so this can never be mistaken for `A8`'s end-of-input; **(iv)** **no new terminal-reason value
+  is introduced** — `A14`'s enumeration is unchanged and is asserted unchanged, and in particular the
+  **`engine-failure` value is NOT reused for an input-side fault**; and **(v)** between receiving the
+  move and the throw the loop makes **zero** render-seam calls and **zero** `sink` writes, exactly as
+  `A9b`(iv) requires of the throw path.
+  *(**[ADDED 2026-08-11 (fourth hop) — `[D42]`, from QE's `G-4`. THIS ONE CHANGES THE CODE.]**
+  **`A10` names the engine seam and nothing else, so nothing guards the input seam, and the delivered
+  loop plays the foreign move onto the board.** QE classed it a criterion gap rather than a code
+  defect for the right reason — **no criterion asked the loop to guard that seam** — and said plainly
+  that it did not pick the answer, because the ticket said **neither**. **Ruled: the loop guards BOTH
+  seams. It is not `EPIC-003`'s alone.** Four reasons, in the order they bind:*
+  >
+  > **1. The owner's standing directive is directly on point and outranks the convenience.** *"The
+  > most important thing is that chess moves are legal according to game rules, everything else comes
+  > after that. Game has to be played according to it's rules."* (Olger Oeselg, 2026-07-31 — the
+  > directive recorded in `## Out of scope`'s amendment, which **already overturned one BA/PM ruling
+  > on this ticket**). A loop that plays a move no generator produced is that directive's exact
+  > negation, and "a later epic will validate it" is the *"everything else"* the directive puts
+  > second.
+  >
+  > **2. Measured at this hop against the DELIVERED build, and the residue differs from QE's — said
+  > rather than smoothed.** With the input seam handed `{from: a1, to: a8, ...}` at the start position:
+  > `legalMoves` membership **false**, the move **applied anyway**, `moves.length` **1**, and the FEN
+  > `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR b Kkq - 1 1` — **the white a1 rook is gone from the
+  > board, White has lost queenside castling, and the halfmove clock advanced.** QE recorded
+  > `Rnbqkbnr/… /1NBQKBNR b Kk - 0 1` — the rook *arriving* on a8 and capturing Black's. **Both are
+  > corruption and the difference is ours, not the loop's:** QE built its `Move` from the named piece
+  > constants and I hand-coded the six fields, so `piece` / `captured` / `to` differ. **What both
+  > instruments agree on is every load-bearing fact** — not generated, applied regardless, ply
+  > counted, and a resulting position **no legal move can reach**.
+  >
+  > **3. `[D31]` already ruled that this loop must not assume that seam is well-behaved**, and it ruled
+  > the *shape* of the answer too. `## Scope` justifies the missing guard only by a property of the
+  > **STUB** — *"It returns a generator-owned `Move`, so it cannot get `captured`, `flags` or
+  > `promotion` wrong"* — which is a statement about the test double, **not about the `InputSeam`
+  > contract `EPIC-003` replaces it under**. `playMove`'s documented precondition is a generator-owned
+  > move; the loop enforced it on one of the two seams that can violate it.
+  >
+  > **4. THROW, not terminate, and not `rejected` — and the choice is `A9b`'s, not a new one.** A
+  > `{kind: "move"}` that is not legal is a **PARSER BUG**, not a user typo: a real parser reports a
+  > user's illegal move as `rejected` itself. **Converting it to `rejected` would present a broken
+  > parser as a typo, forever and invisibly** — the failure `A10`'s own rationale exists to forbid,
+  > with the roles swapped. **Terminating with a named reason is worse:** it would invent a tenth
+  > `A14` value and decide *does a parser bug end the game?*, which `[D31]` handed to `EPIC-003` and
+  > `EPIC-006` on this very seam. **Reusing `engine-failure` would report an input fault as an engine
+  > fault.** What is left is `A9b`'s answer, and the two paths are now symmetric: **on the input seam
+  > the loop repairs what it must, invents nothing, and throws.**
+  >
+  > **COST, stated because it moves the board.** Production: **one membership check over the existing
+  > six-field comparison at `src/turn-loop.ts:264-272`, plus a throw** — zero new modules, zero new
+  > imports, **zero new terminal-reason values, `A14` untouched, no signature change**. Test: **one
+  > row** (`## Test notes` row 17) in the existing table-driven file — **no new test FILE**, so
+  > `N8-LANE` does not move. Whether the comparison is shared between the two call sites or written
+  > twice is the **Engineer's** call and this ticket does not design it. QE's mutant **`Q7`** — the
+  > check applied to the input side — is **41/41 green**, i.e. the suite cannot tell the two builds
+  > apart **in either direction**, which is why the criterion and the row are both owed.
+  >
+  > **`ABC-019` returns to `In Development` for this ruling alone.** Every other ruling of this hop is
+  > text-or-test-only.)*
 - **`A11` — Given** the loop is in the thinking state, **when** a frame renders, **then** the thinking
   flag it passes the render seam is set; **given** any other state, **then** it is clear — and the
   frame's row count is **identical** in both cases, per `EPIC-002` `4a`.
@@ -812,6 +1078,17 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   > not to catch a live defect at this gate: it is to stop (d) from becoming a tautology, which is the
   > whole reason clause 9e is worth asserting.*
   >
+  > > **[D45 — the declaration above is CONFIRMED by an independent instrument and the disposition is
+  > > UNCHANGED. 2026-08-11 (fourth hop), from QE's `G-9`.]** QE re-found it from the other side —
+  > > mutant `Q12` (derive `H` from frame 1, then pad/truncate every frame to it) is **41/41 green**
+  > > against both `A18` shapes — and **reported it as a confirmation of this paragraph rather than as
+  > > a new gap, which is the correct reading.** **Nothing is owed and nothing is added.** Closing it
+  > > would need a **variable-height** stub, and a variable-height seam makes the *correct* loop fail
+  > > clause **(d)** by construction — so the only run that exercises (c) is one that must also assert
+  > > a failure. **That is a test of this criterion rather than of the loop, and it is deliberately not
+  > > bought**: (c)'s stated job is to stop (d) becoming a tautology, and it does that by existing.
+  > > **Recorded so this is not rediscovered as new a fourth time.**
+  >
   > ***The instrument, so the criterion is not asserted into an unavailable mechanism:*** *a sink whose
   > `rows` accessor counts reads gives clause (a) with **no mocking at all** — `beginFrameSession`
   > reads `sink.isTTY` then `sink.rows` exactly once per call (`src/frame.ts:212`), so one session on a
@@ -820,6 +1097,100 @@ an assumption — the same failure `ABC-011`'s escalation trigger exists to prev
   > the argument itself: `vi.mock("./frame.ts", importOriginal)` + `vi.fn(actual.beginFrameSession)`,
   > the exact form merged `src/gameend.nfr.test.ts:22-30` already uses. See `## Test notes` for why
   > that costs no new test FILE.)*
+- **`A20` — Given** a played game driven through this loop whose frames contain at least one
+  **NARROWING** — a frame whose width is **strictly less** than the immediately preceding frame's,
+  where a frame's width is the length of its padded rows (`W`, `src/frame.ts:179`) — **when** the
+  bytes the loop wrote are replayed into a terminal model that implements every escape this writer
+  emits and **throws on any escape it does not**, **then** after **EVERY** redraw of the run — not the
+  last, and not only the narrowing one — the **screen equals the frame the loop handed the writer**:
+  the same number of rows, and each screen row equal to the corresponding frame row **once both are
+  right-trimmed**. **Given** the same run replayed at a screen width **wider than every frame in it**
+  (assert at 80 columns), **then** the same holds.
+  *(**[ADDED 2026-08-11 (fourth hop) — `[D46]`, `ADR-0010` clause 7, which recorded this criterion as
+  **owed on this ticket and deliberately not written there**. `ADR-0010` is accepted and is NOT
+  re-opened by this ticket.]** It is the **width** counterpart of `ADR-0009` clause 9e, and like 9e
+  **this is the only place the property is checked at all** — no criterion anywhere asserts what
+  reaches the SCREEN between two frames of a played game.)*
+  >
+  > **THIS CRITERION CANNOT BE *SATISFIED* UNTIL `ABC-027` MERGES, AND THAT IS STATED HERE SO IT IS
+  > NEVER READ AS A BUILD FAILURE.** `ADR-0010` clause 1 puts the fix in the **consumer**:
+  > `src/frame.ts`'s in-place writer must clear each row as it writes it, and **that production change
+  > is `ABC-027`'s, not this ticket's.** Until it lands, `\x1b[0J` erases downward from the end of the
+  > new frame and **never rightward**, so a narrowed frame leaves stale columns that survive — measured
+  > in `ADR-0010` at up to **17 consecutive frames**, rendering `material: 0` as `material: 01` and
+  > leaving an **expired draw claim** on screen. **`A20` is therefore RED by design before `ABC-027`
+  > and GREEN after it, at ZERO production lines in this module.** Merge order is
+  > **`ABC-016` → `ABC-027` → `ABC-017` → `ABC-019`** (`[D48]`), so `ABC-027` lands well before this
+  > ticket and **the assertion is written at the rebase, riding with `ADR-0009` clause 9f's real-panel
+  > re-gate** (`## Dependencies`, `[C9-4]`) rather than before it. **Writing it earlier turns this
+  > branch's own gate red for a defect in another ticket's module, which is not this ticket's to
+  > carry.**
+  >
+  > **The FORM is `F3` and the three forms it is not were each scored by measurement in `ADR-0010`, so
+  > the trimming is not a stylistic choice:**
+  >
+  > | form | narrowing @ `W`(frame 1) | narrowing @ 80 cols | steady @ 80 cols |
+  > |---|---|---|---|
+  > | **F1** epic `4b`'s *"zero ROWS from frame N"* | CATCHES | **BLIND** | PASS |
+  > | **F2** screen equals frame, **untrimmed** | CATCHES | CATCHES | **FALSE POSITIVE** |
+  > | **F3** screen equals frame, **trimmed** — *this criterion* | CATCHES | CATCHES | PASS |
+  > | **F4** every frame's `W` equals the session `W` | CATCHES | CATCHES | PASS — **and see the prohibition below** |
+  >
+  > **Epic `4b` as worded is BLIND to this at a real terminal width** (F1) — it only fires at the
+  > artificial width `W`(frame 1) — which is why the ADR covers it at the ticket level, and **`4b` is
+  > neither breached nor amended by any of this.** The **untrimmed** comparison (F2) false-positives on
+  > any screen wider than the frame, i.e. on every real terminal, which is why the second Given exists
+  > at 80 columns.
+  >
+  > **Two things the fixture must do, both measured facts rather than preferences.** **(1) The
+  > narrowing must come from a PANEL row, not a message item**: `W` is the max over the **panel** rows
+  > only and the message region is bounded by it (`src/frame.ts:176-179`, read at source at this hop —
+  > *"a long rejection would then widen the frame"*), so a fixture that tries to narrow via `messages`
+  > narrows nothing and the criterion passes vacuously. **(2) The screen model is LOCAL to this ticket's
+  > test file** — merged `src/frame.test.ts`'s `createScreen` is **not exported** (`:190`, verified at
+  > this hop), and `ADR-0009` clause 9c's precedent is that this ticket's fixtures live in its own test
+  > file and never under `src/`. **`src/frame.test.ts` is not touched by this ticket**, and the
+  > `\x1b[K` case that file's model must learn is **`ABC-027`'s**, named in `ADR-0010`'s
+  > `## Consequences`.
+  >
+  > **This criterion does NOT constrain `A18` or `A19`.** Those govern **row counts**; this governs
+  > **width**, and `ADR-0010` clause 3 is the rule that separates them — *a frame quantity that
+  > composes by SUM is owned by its PRODUCER; one that composes by MAX is owned by its CONSUMER*. A
+  > stub whose panel rows vary in **width** varies no row **count**, so `A18`'s two shapes and `A19`'s
+  > four clauses are untouched and are asserted unchanged.
+
+> ### PROHIBITION — **`ABC-019` MUST NOT BE GIVEN A CONSTANT-FRAME-WIDTH CRITERION**
+>
+> **[`[D47]`, `ADR-0010` clause 7's second half, written into this ticket 2026-08-11 (fourth hop) so
+> that the next reader cannot re-invent it.]**
+>
+> **No criterion of this ticket may assert that the frame's width is constant, that every frame's `W`
+> equals the session's `W`, that `W` equals the first frame's width, or that any panel reserves or
+> pads to a fixed width.** That is form **`F4`** in the table above, and **it would fail the CORRECT
+> build.**
+>
+> **The reason is measured, not stylistic.** Under `ADR-0010` clause 1 the consumer clears and **`W`
+> varies BY DESIGN**: it is `panels.reduce((widest, row) => Math.max(widest, row.length), 0)`
+> (`src/frame.ts:179`) — a **max**, recomputed per frame. `ADR-0010` measured it at **four distinct
+> values over a 510-shape sweep**, and **{24, 50} over a real played game**. The three alternatives
+> were run and rejected there: reserving the widest case makes the frame **67 columns with 49
+> permanently blank** and costs **+152% bytes per frame**; freezing `W` at the first frame **destroys
+> 8 panel rows** across one 20-ply game, including a live draw-claim offer.
+>
+> **This is NOT the row-count rule and must not be reasoned about as one.** `ADR-0009` clause 9's
+> `firstFrame.length` derivation is sound **because `H` is invariant** (0 mismatches over 510 shapes);
+> `W` is **not** invariant over the identical sweep. **`A19`(b)/(d) are the height clauses and they
+> stand exactly as written** — the width analogue of them is the thing this prohibition forbids.
+>
+> **What replaces it is `A20`**, which asserts the property that actually matters — *nothing stale
+> reaches the screen* — instead of a proxy for it. **The honest cost of rejecting `F4`, stated because
+> `ADR-0010` states it:** the frame's width is no longer a stated constant anywhere, and a reader who
+> wants to know how wide the frame is must run it.
+>
+> **QE held this boundary unprompted at the 2026-08-11 QE hop** — nine survivors and **not one**
+> proposes a width criterion, and its `G-1` note says in its own words that the message region's row
+> count is fixed and **no width is asserted anywhere in it.** The prohibition is written down so that
+> holding it stops depending on each role remembering why.
 
 ## The EOF ruling, recorded because the record did not contain it
 
@@ -853,12 +1224,26 @@ CI.
   previously read "`ABC-020` is `P0` and already in `Ready` with no unbuilt dependency, so the order is
   available." It merged nine days ago and its reason set is settled in merged code — see `[D3]`.)*
   `ABC-021` (the claim path) sits behind this ticket.
-- **`ABC-016` and `ABC-017` — added 2026-08-11 (`[D22]`), and `ABC-016` is a CORRECTNESS dependency,
-  not merely a render one.** Both are in `Ready`, unmerged. The merge order is
-  **`ABC-016` → `ABC-017` → `ABC-019`**, established at this task's scheduling hop
-  (`.grugops/context/frame-merge-order-2026-08-11/notes/…-orchestrator-decision-ac72dd8d`) — this
-  ticket merges **last**, and a `P0` merging behind a `P1` and a `P2` is a build-edge fact recorded
-  there.
+- **`ABC-016`, `ABC-027` and `ABC-017` — `ABC-016`/`ABC-017` added 2026-08-11 (`[D22]`), `ABC-027`
+  added 2026-08-11 at the fourth hop (`[D48]`); `ABC-016` is a CORRECTNESS dependency, not merely a
+  render one, and `ABC-027` is a CORRECTNESS dependency of `A20` specifically.** All three are
+  unmerged. The merge order is **`ABC-016` → `ABC-027` → `ABC-017` → `ABC-019`** — three of four
+  established at this task's scheduling hop
+  (`.grugops/context/frame-merge-order-2026-08-11/notes/…-orchestrator-decision-ac72dd8d`) and
+  `ABC-027` inserted **second** when it was cut from `ADR-0010`. **This ticket merges LAST in all
+  versions of the order**, and a `P0` merging behind a `P1`, a `P1` and a `P2` is a build-edge fact
+  recorded there. **Their live columns are deliberately NOT restated here — `plans/board.md` is the
+  authority for status, and four of this ticket's own defects were stale status text copied into a
+  ticket** (`[D21]`).
+  - **`ABC-027` (the in-place writer clears each row as it writes it) — added 2026-08-11, and it is
+    what makes `A20` SATISFIABLE rather than merely assertable.** `ADR-0010` clause 1 puts the fix in
+    the consumer, and its **one production change is a single expression in `src/frame.ts`'s in-place
+    branch of `beginFrameSession`** — `ABC-018`'s merged module, which this ticket does not open.
+    Until it merges, `\x1b[0J` never erases rightward and a narrowed frame leaves stale columns, so
+    **`A20` is RED before it and GREEN after it at zero production lines here.** `A20`'s assertion is
+    therefore written **at the rebase**, riding with `ADR-0009` clause 9f's real-panel re-gate
+    (`[C9-4]`) — not before. **`ABC-027`'s ticket was NOT read or edited by this hop** (an Engineer is
+    live on it); everything above comes from `ADR-0010` and from this ticket's own boundary. `[D48]`
   - **`ABC-016` is why `A5` and `A6` are satisfiable at all.** Both require a frame re-emit **without**
     re-evaluating, and a panel that derived its own status per frame made both **false**. `ABC-016`'s
     refinement deleted that `gameStatusOf` call and **its derive-at-0 clause** — `gameStatusOf`,
@@ -1038,9 +1423,11 @@ CI.
 The loop is testable end-to-end **today**, with no parser and no engine, because both stubs are
 built from merged code. That is the point of the stubs.
 
-- **Drive scripted games through the stub seams — FOURTEEN rows, each with an exact expected terminal
+- **Drive scripted games through the stub seams — EIGHTEEN rows, each with an exact expected terminal
   reason (or none) and an exact frame count.** *(Thirteen until `[D31]` added row 14 at the third
-  2026-08-11 hop.)* *(**[CORRECTED 2026-08-11 — `[D25]`.]** The list read
+  2026-08-11 hop; **fourteen until the fourth hop added rows 15–18** for `[D40]`, `[D43]`, `[D42]` and
+  `[D46]`.)* **Row 18 is the one row whose Expected is a SCREEN property rather than a terminal
+  reason, and it is the only one blocked on another ticket.** *(**[CORRECTED 2026-08-11 — `[D25]`.]** The list read
   *"a mate line, a **threefold** line, a stalemate line, a **fifty-move** line, an insufficient-material
   line …"*, and after `ABC-020` **two of those terminate nothing** while the two that do were missing.
   A row whose "exact expected terminal reason" does not exist is a row that will be made to pass by
@@ -1061,7 +1448,11 @@ built from merged code. That is the point of the stubs.
   | 11 | EOF | *input ended* notice, exit 0, **no** terminal result |
   | 12 | engine throw **inside a `makeMove` bracket** | position repaired by `takeBack(history, 0)`, named reason |
   | 13 | engine returns a foreign move | not applied, `moves.length` unchanged, engine-failure reason |
-  | 14 | **input** seam throws **inside a `makeMove` bracket** (`[D31]`, `A9b`) | position repaired by `takeBack(history, 0)`, **the exception propagates** — no `LoopOutcome`, no reason, no exit-0 path |
+  | 14 | **input** seam throws **inside a `makeMove` bracket** (`[D31]`, `A9b`) | position repaired by `takeBack(history, 0)`, **the exception propagates** — no `LoopOutcome`, no reason, no exit-0 path, **and zero render calls and zero sink writes between the throw and the rethrow** (`[D41]`, `A9b`(iv)) |
+  | 15 | **prompt-driven `game-over`** (`[D40]`, `A8b`) — run **twice**, with two distinct `(result, reason)` pairs | the seam's own `result` and `reason` returned **unaltered**, exit 0; **1 frame**; both seams called **0** times afterwards; **no** *input ended* notice and never `{null, null}` |
+  | 16 | **already-terminal START** — `1k6/8/8/8/8/8/1K6/2n5 w - - 0 1`, K+N vs K, **six legal moves available** (`[D43]`, the witness `A3b`'s `+ 1` claimed and did not have) | `draw` / `insufficient-material` **on the INITIAL evaluation**; **1 frame, 0 plies, 0 input calls, 0 engine calls**; `gameStatus` spied at **exactly 1** = `N + 1` at `N = 0` |
+  | 17 | **input** seam returns a move **not in `legalMoves`** (`[D42]`, `A10b`) | **not applied** — `moves.length` unchanged and `toFen` byte-identical — **the exception propagates**: no `LoopOutcome`, no reason, **`engine-failure` NOT reused**, `A14` unchanged, zero render calls and zero sink writes |
+  | 18 | **a played game containing a NARROWING**, replayed into a local screen model at 80 columns **and** at `W`(frame 1) (`[D46]`, `A20`) | after **every** redraw the **screen equals the frame**, trimmed. **BLOCKED on `ABC-027`: RED until it merges, and written at the rebase with `ADR-0009` cl. 9f's real-panel re-gate — not before** |
 
 - **Both stubs are buildable from merged code alone and that was verified rather than assumed at the
   2026-08-11 refinement.** The coordinate reader is a `legalMoves` filter on
@@ -1094,6 +1485,36 @@ built from merged code. That is the point of the stubs.
   for asserting counts rather than final frames, and it is why `A3b`'s `+ 1` initial evaluation is
   load-bearing rather than bookkeeping. **This is a trap under the ticket, not a defect in it; it is
   written down so the next person to touch that fixture does not walk into it.**)*
+- **Row 16 is the position row 3 STOPPED being, and BOTH rows are needed — this is `[D43]`, and two
+  rows are why it will not recur.** `[D35]` was right to take the already-dead start **out** of row 3,
+  whose job is to prove the **capture is the ply that kills the game** (frame count **2**). `[D32]`
+  was right that the `+ 1` needs an already-dead start as its witness. **The mistake was believing one
+  row could be both**, and the fix is two rows that differ by one knight:
+  `1k6/8/8/8/8/8/1K6/2n4n w - - 0 1` (row 3 — **two** knights, starts in progress, 2 frames) and
+  `1k6/8/8/8/8/8/1K6/2n5 w - - 0 1` (row 16 — **one** knight, already `{draw,
+  insufficient-material}` because `isInsufficientMaterial` returns true at `minors <= 1`, 1 frame).
+  **Both measured at this hop against the delivered build.** Row 16 must keep **legal moves
+  available** (the named fixture has six) — a fixture with none is a stalemate fixture and tests a
+  different branch.
+- **Adding rows 15–18 does NOT disturb `A12`'s enumeration guard, and that was checked rather than
+  assumed.** `A12`'s second half asserts the table **declares a row for each** of the five automatic
+  terminal values — an **existence** check over declarations, **not a uniqueness check and not a row
+  count**. Rows 1–5 stay the five named fixtures; row 16 is a **second** `insufficient-material` row
+  and takes nothing from row 3. **A later hop that rewrites that guard as "exactly one row per value"
+  would break this, and must not.**
+- **Row 18's narrowing must come from a PANEL row, and the screen model is LOCAL to this file.** `W`
+  is the max over the **panel** rows only — the message region is bounded by `W` and cannot widen it
+  (`src/frame.ts:176-179`) — so a fixture that varies `messages` narrows **nothing** and `A20` would
+  pass vacuously. A stub whose status panel's widest row **shrinks** between two frames is the shape.
+  Merged `src/frame.test.ts`'s `createScreen` (`:190`) is **not exported**, and **this ticket does not
+  touch that file**, so the model is written locally here on `ADR-0009` clause 9c's precedent — and it
+  must **throw on any escape it does not implement**, which is the property that makes it evidence
+  rather than decoration.
+- **`N8-LANE` does not move on any of this, and the reason is the FILE count.** Rows 15–18 are four
+  rows in the **existing** table-driven file, and `A20`'s screen model rides in the file `A19`'s
+  `vi.mock` already requires. **ZERO new test FILES.** At 159–179 ms CPU per file against a 650 ms
+  allowance, with the delivered lane chargeable at **420 ms = 0.65x**, **a fifth file is what would
+  breach the allowance — not a fifth hundred assertions.** Inherited, not re-derived (`[D20]`).
 - **Rows 4, 6 and 9's fixtures must never set an en-passant square**, for the same reason `ABC-012`'s
   do not — `ABC-011` would otherwise make them fail for a reason that is not this loop's.
   `src/gameend.test.ts`'s knight cycle (`function knightCycles`, lines 26-50) is the shape to reuse:
@@ -1122,7 +1543,9 @@ enumerated**, two stub seams, a load-bearing intra-ply ordering, exception recov
 terminal-reason type that must be a superset of the core's. It is the only ticket in this epic that
 touches every other component. Calibrated against `ABC-004` (special moves, `L`) — comparable in test
 surface, and like that ticket it is `L` for the number of distinct cases rather than the volume of
-code: **14 table rows, 23 labelled criteria (`A1`–`A19`, four of them sub-lettered), one module.**
+code: **18 table rows, 27 labelled criteria (`A1`–`A20`, SEVEN of them sub-lettered), one module.**
+*(Counts refreshed at the fourth hop — 14/23 with four sub-letters before it. The calibration
+argument against `ABC-004` is unchanged; only the counts moved.)*
 
 **What the refinement added and removed, so the unmoved size is an argument and not an assertion:**
 
@@ -1192,6 +1615,49 @@ them through. **Eight are text-only and cost nothing.** The one that touches cod
 all still out, and `A9b` deliberately does **not** decide whether a parser crash ends the game — that
 question is handed on rather than answered here, which is what keeps this a skeleton. **Priority `P0`
 is unmoved for the reasons above: the value did not change, only the text's fidelity to it.**
+
+**RE-DERIVED A FOURTH TIME 2026-08-11 for QE's eight gaps and `ADR-0010`'s two owed items: `L` (5)
+HOLDS, still not `XL`, still no `SPLIT_REQUIRED` — and `P0` HOLDS.** Eleven rulings, costed rather
+than waved through. **Ten are text-or-test-only. One touches production, `[D42]`/`A10b`:**
+
+- **Production: one `legalMoves` membership check on the input path, over the six-field comparison
+  the engine path already runs at `src/turn-loop.ts:264-272`, plus a throw.** Zero new modules, zero
+  new imports, **zero new terminal-reason values — `A14` untouched** — no new seam and no signature
+  change. It is the same shape and the same size as `A9b` at the previous hop, and it lands beside it
+  in the same `try` block's neighbourhood.
+- **Test: FOUR rows in the existing table-driven file (15–18) and one local screen model. NO new test
+  FILE**, so `N8-LANE`'s binding risk — the file count, 159–179 ms CPU per file against a 650 ms
+  allowance, delivered lane chargeable at **420 ms = 0.65x** — **does not move.** The added assertions
+  for `A5b`, `A6`'s message clause, `A9b`(iv) and `G-7`'s `A11` half are all one `expect` each on
+  fixtures already in the file.
+- **Risk: it goes DOWN, and by more than at any previous hop.** `A10b` closes a **board-corrupting**
+  path — measured, not hypothesised — that no criterion mentioned; `A8b` closes the only branch in the
+  module with no test coverage at all; `A5b`, `A9b`(iv) and `A6`'s clause each close a
+  player-visible failure that shipped green. **Nine places where a wrong build was indistinguishable
+  from the right one are now distinguishable.**
+
+**The criterion count grew 23 → 27 and the table 14 → 18, and that is NOT what `XL` measures here.**
+This ticket's `XL` trigger has been the same at all four hops and is unchanged: **folding in
+`ABC-021`'s claim outcome, `ABC-018`'s frame output or `ABC-012`'s history module.** None of them is
+folded in. `A20` explicitly does **not** fold in `ABC-027` — the production line stays in that
+ticket, and what lands here is an assertion. **`A10b` deliberately does NOT decide whether a parser
+bug ends the game**, which is the same line `A9b` drew and the same reason this stays a skeleton.
+
+**And splitting was considered rather than dismissed, because `A20` is the one plausible candidate.**
+It is blocked on `ABC-027`, so a reader could argue it belongs in a follow-up ticket that merges
+after. **Rejected: `ADR-0010` clause 7 assigns it here and says why — like `ADR-0009` clause 9e, this
+is THE ONLY PLACE THE PROPERTY IS CHECKED AT ALL.** Splitting it out would defer the only check of a
+defect the ADR measured surviving **17 consecutive frames**, and would make it the sole content of a
+ticket that cannot start until two others merge — *"a ticket only a long chain delivers is two tickets
+hiding"*, in the direction that creates the chain rather than removing it. **`ABC-019` already
+rebases onto `ABC-027` before its final gate**, so the criterion costs no extra sequencing.
+
+**One honest caution, recorded because four amendments is a lot.** This ticket has now been amended
+four times and returns to `In Development` a second time. Every hop's added scope has been an
+assertion over an existing harness plus, twice, a single guard around an existing call — and the size
+has held for that reason each time. **A FIFTH hop that adds production scope beyond one guard should
+re-derive size against `SPLIT_REQUIRED` seriously rather than by precedent.** The trigger is named so
+the next reader does not have to infer it.
 
 ## Definition of Ready
 
@@ -1357,3 +1823,88 @@ left to decay, and one is new:**
    changed.** The row's `blocked-until: ABC-012, ABC-014, ABC-018` and `merge-order: after ABC-020` were
    flagged stale on all four at two previous hops and are still owed. **Requested now:
    `In Review` → `In Development`**, for `A9b` only. **No board edit was made here.**
+   > **CLOSED 2026-08-11 (fourth hop). The stale `blocked-until` / `merge-order` text was FIXED by the
+   > Orchestrator at task `abc019-qe-gaps-2026-08-11`** — verified by reading the row at this hop, not
+   > taken from a report. It had been raised by **three separate roles across five hops** and no role
+   > but the Orchestrator could fix it, because board text is the Orchestrator's alone. **It is not
+   > re-flagged, and this note exists so the next reader does not re-raise it a sixth time.**
+
+### DoR re-check 2026-08-11 (FOURTH hop) — QE's eight criterion gaps and `ADR-0010`'s two owed items
+
+**This hop is not a re-refinement either.** `ABC-019` was built, gated green, ruled on, rebuilt, gated
+green again and then **attacked with thirteen wrong builds**. All twenty-three criteria held and there
+was **zero code defect** — and nine places were found where a *future* correct-looking build is green
+too. **Eleven items were ruled on. The count is checkable, and it is stated as one for the reason the
+2026-07-31 amendment's "three things and no more" is stated as one: it was wrong by three, and
+`[D43]` is this ticket committing the same error a second time.**
+
+| # | Ruling | From | Changes code? |
+|---|---|---|---|
+| 1 | `[D38]` — transition 15's trigger reworded; **`A2` gains the no-frame-after-`game-over` clause**. A terminal frame on edges 12/13/prompt is **not constructible** — the render seam takes a `GameStatus` and a terminal one requires `reason: EndReason` | `G-6` | **no** |
+| 2 | `[D39]` — **`A5b` ADDED**: a non-advancing outcome's message items belong to **one** frame; every later frame carries none | `G-1` | **no** |
+| 3 | `[D40]` — **`A8b` ADDED**: the prompt-driven `game-over` returns the seam's own `result`/`reason` unaltered, adds no frame, calls neither seam after, and can never be `A8`'s `{null, null}` | `G-2` | **no** |
+| 4 | `[D41]` — **`A9b` gains clause (iv)**: zero render calls and zero sink writes between the throw and the rethrow | `G-3` | **no** |
+| 5 | `[D42]` — **`A10b` ADDED**: the loop guards the **INPUT** seam's move too, and **throws** rather than terminating | `G-4` | **YES** |
+| 6 | `[D43]` — `[D32]`'s witness corrected: the `+ 1`'s fixture is **row 16**, not row 3, which `[D35]` replaced in the same amendment | `G-5` | **no** |
+| 7 | `[D44]` — **`A6` gains the message clause**: the `board` command's items are **not optional** | `G-8` | **no** |
+| 8 | `[D45]` — `A19`(c)'s declared limit **CONFIRMED** by an independent instrument; disposition unchanged, nothing added | `G-9` | **no** |
+| 9 | `[D46]` — **`A20` ADDED**, `ADR-0010` cl. 7's `F3` form; **cannot be SATISFIED until `ABC-027` merges** and says so | `ADR-0010` | **no** |
+| 10 | `[D47]` — **the PROHIBITION written in**: no constant-frame-width criterion, because `W` varies by design and `F4` fails the *correct* build | `ADR-0010` | **no** |
+| 11 | `[D48]` — `ABC-027` added to `## Dependencies`; merge order is now **`ABC-016` → `ABC-027` → `ABC-017` → `ABC-019`** | `ADR-0010` | **no** |
+
+**`G-7` is NOT in that table and that is deliberate: it is not mine.** QE classed it a **test gap** —
+`A11` forbids a lit thinking indicator on the terminal frame **in its own words** (*"given any other
+state, then it is clear"*), and no assertion reaches that state. **Confirmed at this hop: `A11` needs
+no change, and none is made.** It is one `expect` on `A7`'s existing mate fixture and it is the
+**Engineer's**, riding with the `A10b` hop.
+
+| # | Item | Verdict | What changed, and the evidence |
+|---|---|---|---|
+| 2 | scope + out-of-scope | ✅ | transition 15's trigger reworded (`[D38]`) — a **type-level** argument read at source, not a preference; `## Out of scope` gains `ABC-027` and points at the prohibition |
+| 4 | acceptance testable + measurable | ✅ | **27 labelled criteria** (was 23), `A1`–`A20` with seven sub-lettered. `A5b`, `A8b`, `A10b`, `A20` **added**; `A2`, `A6`, `A9b`, `A19` amended in place; **nothing renumbered or deleted.** Every one of the eight gaps was **re-verified at this hop by BA/PM's own out-of-tree probe against the delivered build**, and where the residue differed from QE's it is written down (`[D42]`) |
+| 5 | dependencies known | ✅ | `ABC-027` added as a **correctness dependency of `A20`** (`[D48]`); merge order now four tickets; live columns deliberately **not** restated, because `[D21]` was four stale status statements copied into a ticket |
+| 6 | NFR triggers, each measurable | ✅ | **no bar moved, created or loosened.** `A17`'s figures unchanged — QE re-ran the out-of-tree timing half at **0.47x / 0.51x / 0.43x** and **left the engineer's more conservative 27.23 / 58.79 / 112.86 µs as the record**, which is the right call and is not overridden here. `N8-LANE` inherited, **ZERO new test FILES** |
+| 7 | test notes | ✅ | **18 rows** (15–18 added); row 16 explained against row 3's trap; `A12`'s enumeration guard checked as unaffected; row 18's narrowing must come from a **panel** row and its screen model is local |
+| 8 | size | ✅ | `L` (5), **re-derived a fourth time and unmoved**; the one code change is a membership check over an existing comparison; splitting `A20` out was **considered and rejected with a reason** |
+| 9 | priority | ✅ | `P0`, re-derived and unmoved. `A20`'s dependency on `ABC-027` is **readiness, not value** |
+| 10 | no major unresolved blocker | ✅ | **and this was the one item worth arguing.** `A20` cannot be **satisfied** until `ABC-027` merges — but `ABC-027` is **2nd of four in the merge order and this ticket is 4th**, so it is a **merge-order constraint, not a start blocker**, exactly as `ABC-016`/`ABC-017` already are. Nothing waits on it to begin; `A20`'s assertion is written at the rebase that was already owed for `ADR-0009` cl. 9f |
+
+**Items 1 and 3 are unchanged by this hop.**
+
+> **THIS TICKET DOES NOT EXIT `In Review` CLEAN, AND AGAIN THAT IS THE HONEST OUTCOME.** Ruling 5
+> (`[D42]` / `A10b`) changes what the code must do: **the delivered loop plays a move from the input
+> seam that no generator produced and corrupts the board** — measured at this hop, and the owner's
+> 2026-07-31 directive (*"chess moves are legal according to game rules … everything else comes after
+> that"*) is directly on it. **`ABC-019` returns to `In Development`.** The other ten rulings are
+> text-or-test-only and the delivered build already satisfies every one of them.
+>
+> **REQUESTED: `In Review` → `In Development`**, for **`A10b` + row 17** (production), and carrying
+> with it the test-only work the same hop should land: **`G-7`'s `A11` assertion**, **`A5b`**,
+> **`A6`'s message clause**, **`A9b`(iv)**, **`A8b` + row 15**, and **row 16**. **`A20` + row 18 do
+> NOT ride with that hop** — they are written at the rebase, after `ABC-027` merges. **No board edit
+> was made here; board moves are the Orchestrator's.** **Front matter is deliberately left at
+> `in-review`**, on the same precedent as the previous two hops: the board is the authority.
+
+**Flags after this hop. Two are carried, one is closed above, and two are new:**
+
+10. **`ABC-021` still needs the matching half of `[D12]` — RESTATED, NOT discharged, and NOT
+    re-verified at this hop.** The last verification at source was the third hop's. It was in `Backlog`
+    then, which is where the fix is free. **`ABC-021` was not opened by this hop.**
+11. **`ADR-0009` is owed two narrow items by Architect/Design — RESTATED, unchanged, neither
+    re-verified here.** Clause 9e's wording is one measurement short (third-hop flag 3 / item 7), and
+    clause 9b + evidence (vii) quote a seam signature this ticket no longer has (third-hop flag 8) —
+    the board records the latter as **QUEUED**. **`memory-bank/50-decisions/` was not edited by this
+    hop and neither `ADR-0009` nor `ADR-0010` is re-opened.**
+12. **NEW — `EPIC-006` inherits one player-visible residue from `[D38]`, and it is handed on rather
+    than left as a defect.** On transitions 12 and 13 the last frame the player sees carries
+    `status in-progress` **with the thinking indicator lit**, because no terminal `GameStatus` exists
+    on those edges and this loop must not fabricate one. **`EPIC-006`'s result screen is what says the
+    game ended**, and it draws the moment `runTurnLoop` returns. **There is no CLI entry point today,
+    so "the residue is transient" is a design expectation and NOT a measurement** — which is exactly
+    why it is written down here instead of assumed.
+13. **NEW — the duplicate `## Test notes` bullet flagged at the second hop (flag 5) is STILL PRESENT
+    and is STILL not deleted.** *"Do not test the real engine's timing here. `NFR-004` belongs to
+    `EPIC-004`…"* appears twice, differing only in that one names `A15`'s macrotask boundary. Verified
+    still present at this hop. **Coding rule 12: flagged, not removed** — it predates every hop that
+    has seen it and removing it is an unrelated edit no hop has had a mandate for. **If a future hop
+    wants it gone, that is a one-line mandate to give.**
