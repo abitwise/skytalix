@@ -398,12 +398,24 @@ exactly what `ADR-0009` clause 9 got it out of.
   >
   > So **`:376` becomes `2 + H` = 25, not 24**, and clause 1's own *"+66 characters (`(H − 1) × 3`)"*
   > — repeated in the `NFR-002` bullet below — is the right-margin figure; the delivered cost is
-  > **+69 = `H × 3`**. **Clause 1's text is deliberately NOT edited here**: the byte shape is pinned on
-  > a ticket, not in this ADR, and `ABC-027`'s `A1` currently pins the unsafe form byte for byte, so
-  > **BA/PM must re-derive `A1` from `H` — never by relaxing it**, since QE measured `A1` as where 9
-  > of 14 mutants die. **`NFR-002` does not move**: the gate measured +66 at +0.13/+0.15 µs, 0.0009%
+  > **+69 = `H × 3`**. **`NFR-002` does not move**: the gate measured +66 at +0.13/+0.15 µs, 0.0009%
   > of the 16 ms budget, and three more characters do not reach it. The set of broken assertion sites
   > is **identical under both forms** — measured, not assumed; only `:376`'s value differs.
+  >
+  > **Clause 1's text is deliberately NOT edited here, and one trap is recorded so this block is not
+  > misread as a specification.** The byte shape is pinned on a ticket, not in this ADR, and
+  > `ABC-027`'s `A1` still pins the unsafe form. **The three counts above do NOT by themselves
+  > distinguish the safe emission from the unsafe one** — re-measured at this hop against QE's `M2`
+  > mutant (`rows.map(r => r + EL).join("\n")`, every erase at the margin): `M2` and the column-0 form
+  > both give `\x1b[K` = 23, `\x1b` = 25, delta = 69, **identical in all three**. Under the OLD
+  > `H − 1` counts the count alone killed `M2`, so **substituting `H` for `H − 1` and stopping there
+  > would leave `A1` measurably WEAKER against the exact failure this repair exists to prevent, while
+  > reading as a faithful repair.** What separates them is a **shape** clause — the text must begin
+  > `\x1b[H\x1b[K` and no `\x1b[K` may be immediately followed by a newline (verified here: true/false
+  > and false/true across the two forms). That repair is BA/PM's and is recorded at
+  > `abc027-rf1-2026-08-12` as a `failed-attempt` against the count-only prescription; it is **not
+  > made by this ADR**, which names the arithmetic only so the stale `24` and `+66` are not read as
+  > current.
 
 - **`ABC-016` is owed NOTHING that changes a criterion, and needs zero production lines.** The width
   question is answered against it and it is clear. One rationale sentence is stale — `A7`'s stated
