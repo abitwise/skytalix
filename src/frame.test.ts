@@ -8,8 +8,11 @@
  * mutated: the strategy tests mutate the sink handed to the writer, which is what makes the
  * "signals change after construction" criterion able to fail at all.
  *
- * THE TWO UNBUILT PANELS ENTER AS FIXED-HEIGHT STUBS, exactly as the ticket's `## Dependencies`
- * prescribes — `ABC-016` (status, 3 rows) and `ABC-017` (history, 8 rows) do not exist. The BOARD is
+ * THE TWO PANELS ENTER AS STUBS, exactly as the ticket's `## Dependencies` prescribes. They were
+ * stubs because `ABC-016` and `ABC-017` did not exist; both do now, and the doubles STAY — this
+ * file asserts `H` = 23 and `ADR-0009` cl. 9c cites them as the precedent for where a test double
+ * belongs. What changed is that each stub is SIZED FROM the panel's delivered export rather than
+ * from a literal, so a stub and its real panel can no longer disagree. The BOARD is
  * NOT stubbed: it is the merged `renderBoard` from `ABC-014`, 9 rows of 18 characters, so the
  * `W = 18` the criteria quote as a stub fixture FALLS OUT of the real panel rather than being
  * asserted into existence here. `W` and `H` are derived in every test (`widthOf`, `frameHeight`);
@@ -32,33 +35,33 @@ import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, parseSquareName, squareName } from "./position.ts";
 import { type GlyphMode, renderBoard } from "./render.ts";
+import { STATUS_ROWS } from "./status-panel.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 /**
  * `A13` (`ADR-0009` cl. 5) — the composition fit-check, owed by whichever panel ticket merges
- * SECOND, and MET IN PART here because `ABC-016` has not merged yet.
+ * SECOND, and MET IN FULL as of the rebase onto merged `ABC-016`.
  *
- * TWO OF THE THREE TERMS NOW READ DELIVERED GEOMETRY — `history` is `ABC-017`'s exported
- * `HISTORY_ROWS`, imported above and re-declared nowhere in this file, and `board` is
- * `renderBoard(...).length`. The third is `status`, and it CANNOT be made
- * live on this branch: `src/status-panel.ts` does not exist on `main`, `tsconfig.json` includes
- * `src/**` and `npm run typecheck` is project-wide `tsc --noEmit` under `gate_enforcement:
- * blocking`, so importing `STATUS_ROWS` here would turn the whole project's typecheck gate red —
- * the exact cost `ADR-0009`'s `## Context` measured and refused to pay. It is left as the shadow it
- * already was, flagged rather than faked.
+ * ALL THREE TERMS READ DELIVERED GEOMETRY. `history` is `ABC-017`'s exported `HISTORY_ROWS`,
+ * `status` is `ABC-016`'s exported `STATUS_ROWS` (both imported above and re-declared nowhere in
+ * this file), and `board` is `renderBoard(...).length`. The `status` term was a local shadow
+ * `const STATUS_ROWS = 3` until this hop, because `src/status-panel.ts` did not exist on `main`
+ * and `npm run typecheck` is project-wide `tsc --noEmit` under `gate_enforcement: blocking`, so
+ * the import would have turned the whole project's typecheck gate red — the exact cost
+ * `ADR-0009`'s `## Context` measured and refused to pay. `ABC-016` has since merged, so the
+ * deferral's trigger has fired and both owed edits are applied: the import, and `statusStub` sized
+ * from the constant rather than returning a hardcoded three-element array.
  *
- * OWED AT THE REBASE ONTO MERGED `ABC-016`, and it is two edits, not one:
- *   1. `const STATUS_ROWS = 3` below becomes `import { STATUS_ROWS } from "./status-panel.ts"`;
- *   2. `statusStub` (below) returns a HARDCODED three-element array while `historyStub` sizes
- *      itself from `HISTORY_ROWS`. Once `STATUS_ROWS` is live the two can disagree, and the failure
- *      surfaces at `expect([...counts]).toEqual([HEIGHT])` pointing at the wrong thing. Size the
- *      stub from the constant, or use the real panel. Leaving it is the trap.
- * Until then M1 (status ships 4) and M6 (status ships 5) are caught by `ABC-016`'s own `A11` and by
- * nothing here; M2, M3, M4 and M5 — including both mutants that make epic `4b` unreachable — are
- * caught by the two live terms. Measured at this hop, not transcribed.
+ * THE SECOND EDIT IS LOAD-BEARING AND IT WAS MEASURED, not assumed. With `statusStub` left
+ * hardcoded, the stub and the real `STATUS_ROWS` can disagree and the failure surfaces at
+ * `expect([...counts]).toEqual([HEIGHT])` — pointing at the assembler. On M1 (status ships 4):
+ * both edits give 4 failures led by `expect(HEIGHT).toBe(23)`, `A13`'s tripwire naming the right
+ * quantity; the import alone gives 15, led by an assertion naming the wrong subsystem.
+ *
+ * With all three terms live, M1–M6 are caught here — including M4 (`renderBoard` ships 10), which
+ * only `renderBoard(...).length` catches, and both mutants that make epic `4b` unreachable.
  */
-const STATUS_ROWS = 3;
 /**
  * `renderBoard`'s DELIVERED geometry, MEASURED rather than restated. `ADR-0009` cl. 6 adds no
  * `BOARD_ROWS` export to `src/render.ts` and does not touch that merged module: `.length` is
@@ -75,21 +78,30 @@ const ERASE_TO_END_OF_SCREEN = "\x1b[0J";
 const ERASE_TO_END_OF_LINE = "\x1b[K";
 
 // ---------------------------------------------------------------------------
-// Fixtures — the real board, stubs for the two unbuilt panels, a real game.
+// Fixtures — the real board, stubs sized from the two panels' own exports, a real game.
 // ---------------------------------------------------------------------------
 
-/** `ABC-016` is unbuilt. Three rows, one of which carries the thinking state. */
-const statusStub = (thinking: boolean): string[] => [
-  "White to move",
-  "check: no",
-  thinking ? "thinking..." : "ready",
-];
+/**
+ * A stub for `ABC-016`'s panel, SIZED FROM `STATUS_ROWS` rather than from a hardcoded three. One
+ * row carries the thinking state; the rest are filler. `ADR-0009` cl. 9c keeps the double here and
+ * `A13` requires the frame's `H` to compose from delivered row counts, so the stub must agree with
+ * the real panel's count or the disagreement surfaces as a frame-assembly failure.
+ */
+function statusStub(thinking: boolean): string[] {
+  const rows = ["White to move", "check: no", thinking ? "thinking..." : "ready"].slice(
+    0,
+    STATUS_ROWS,
+  );
+  while (rows.length < STATUS_ROWS) rows.push("");
+  return rows;
+}
 
 const coordinatesOf = (move: Move): string => `${squareName(move.from)}${squareName(move.to)}`;
 
 /**
- * `ABC-017` is unbuilt. Eight rows, blank-padded, holding the most recent 8 move pairs — the shape
- * its ticket states. Coordinate notation, not SAN: `ABC-013` owns SAN and is unbuilt too.
+ * A stub for `ABC-017`'s pane, already sized from `HISTORY_ROWS`. Blank-padded, holding the most
+ * recent `HISTORY_ROWS` move pairs — the shape its ticket states. Coordinate notation, not SAN:
+ * this double predates `ABC-013` and stays a double for the reason in the file header.
  */
 function historyStub(moves: readonly Move[]): string[] {
   const pairs: string[] = [];

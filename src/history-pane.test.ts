@@ -1,5 +1,10 @@
 /**
- * `ABC-017`'s acceptance criteria, one test each in the ticket's order — `A1`-`A10`.
+ * `ABC-017`'s acceptance criteria, in the ticket's order — `A1`-`A10`.
+ *
+ * A CRITERION TAKES MORE THAN ONE `it` WHERE ITS CLAUSES WOULD MASK EACH OTHER. A failing
+ * assertion ends the test, so a clause that states the REQUIREMENT and a clause that acts as a
+ * TRIPWIRE never share an `it`: `A1` and `A9` are two each for that reason, and the reason is
+ * written at each split. `A2` is four because its cases are unrelated.
  *
  * `A11` is a spied CALL COUNT and lives in `src/history-pane.nfr.test.ts`, because a `vi.mock`
  * factory is hoisted to file scope and vitest's module-registry isolation is per FILE: putting it
@@ -122,21 +127,29 @@ const numbersOf = (rows: readonly string[]): number[] =>
   rows.filter((row) => !isBlank(row)).map((row) => Number(row.slice(0, 5).replace(".", "")));
 
 // ---------------------------------------------------------------------------
-// The ten lengths of `A1`, built once and shared by `A1`, `A2`, `A9` and `A10`.
+// The ten lengths of `A1`, built once and shared by `A1`, `A2` and `A10`.
+//
+// THE FIXTURES ARE BUILDERS AND NOT SINGLETONS. `A9` asserts over a `GameHistory` no earlier test
+// has passed to `renderHistory`, so it calls the builder again rather than reusing the shared
+// objects — see the D23 note on `A9` below for the survivor that made this necessary.
 // ---------------------------------------------------------------------------
 
-const LENGTH_CASES: readonly (readonly [plies: number, history: GameHistory])[] = [
-  [0, lineTo(0)],
-  [1, lineTo(1)],
-  [3, lineTo(3)],
-  [19, lineTo(19)],
-  [20, lineTo(20)],
-  [40, deterministicGame(40)],
-  [80, deterministicGame(80)],
-  [120, deterministicGame(120)],
-  [300, deterministicGame(300)],
-  [2000, shuffleGame(2000)],
-];
+function buildLengthCases(): readonly (readonly [plies: number, history: GameHistory])[] {
+  return [
+    [0, lineTo(0)],
+    [1, lineTo(1)],
+    [3, lineTo(3)],
+    [19, lineTo(19)],
+    [20, lineTo(20)],
+    [40, deterministicGame(40)],
+    [80, deterministicGame(80)],
+    [120, deterministicGame(120)],
+    [300, deterministicGame(300)],
+    [2000, shuffleGame(2000)],
+  ];
+}
+
+const LENGTH_CASES = buildLengthCases();
 
 /**
  * A 4-digit move number with a 7-character SAN in the WHITE cell: `9998. dxc8=Q+`. The pawn
@@ -177,24 +190,42 @@ function anchoredShuffle(fen: string, steps: readonly (readonly [string, string]
 }
 
 /** `27.Nc3 Nc6 28.Nb1 Nb8 29.Nc3` — five plies from a white-to-move anchor at fullmove 27. */
-const FROM_WHITE_ANCHOR = anchoredShuffle(ANCHOR_27_WHITE, [
+const WHITE_ANCHOR_PLIES: readonly (readonly [string, string])[] = [
   ["b1", "c3"],
   ["b8", "c6"],
   ["c3", "b1"],
   ["c6", "b8"],
   ["b1", "c3"],
-]);
+];
 
 /** `27...Nc6 28.Nc3 Nb8 29.Nb1 Nc6` — the same five plies from a BLACK-to-move anchor. */
-const FROM_BLACK_ANCHOR = anchoredShuffle(ANCHOR_27_BLACK, [
+const BLACK_ANCHOR_PLIES: readonly (readonly [string, string])[] = [
   ["b8", "c6"],
   ["b1", "c3"],
   ["c6", "b8"],
   ["c3", "b1"],
   ["b8", "c6"],
-]);
+];
 
-/** Every history this file builds — `A9` and `A10` are asserted over all of them. */
+const FROM_WHITE_ANCHOR = anchoredShuffle(ANCHOR_27_WHITE, WHITE_ANCHOR_PLIES);
+const FROM_BLACK_ANCHOR = anchoredShuffle(ANCHOR_27_BLACK, BLACK_ANCHOR_PLIES);
+
+/**
+ * Every history this file builds, FRESH on every call — `A9` needs objects nothing has rendered.
+ * One call rebuilds all fourteen, the 2,000-ply shuffle and the 300-ply deterministic game
+ * included, and it is the only heavy work this file does more than once.
+ */
+function buildAllCases(): readonly (readonly [name: string, history: GameHistory])[] {
+  return [
+    ...buildLengthCases().map(([plies, history]) => [`${plies} plies`, history] as const),
+    ["4-digit move number, white cell", widePromotion(WIDE_WHITE_FEN, "d7", "c8")],
+    ["4-digit move number, black cell", widePromotion(WIDE_BLACK_FEN, "d2", "c1")],
+    ["white-to-move anchor at fullmove 27", anchoredShuffle(ANCHOR_27_WHITE, WHITE_ANCHOR_PLIES)],
+    ["black-to-move anchor at fullmove 27", anchoredShuffle(ANCHOR_27_BLACK, BLACK_ANCHOR_PLIES)],
+  ];
+}
+
+/** The shared set — `A10` asserts a property of the OUTPUT and does not care what has rendered. */
 const ALL_CASES: readonly (readonly [name: string, history: GameHistory])[] = [
   ...LENGTH_CASES.map(([plies, history]) => [`${plies} plies`, history] as const),
   ["4-digit move number, white cell", WIDE_WHITE],
@@ -204,11 +235,20 @@ const ALL_CASES: readonly (readonly [name: string, history: GameHistory])[] = [
 ];
 
 describe("ABC-017 acceptance", () => {
-  it("A1 — renders exactly HISTORY_ROWS rows at every one of the ten lengths, and it is 8", () => {
-    // HISTORY_ROWS is IMPORTED from the pane's own export and is re-declared nowhere in this file:
-    // a build that returns 8 rows and exports no constant must not be able to pass this.
+  /**
+   * `A1`'s TRIPWIRE, in its own `it` — the same split `A13` was given, for the same measured
+   * reason. A failing assertion ends the test, so while `HISTORY_ROWS === 8` asserted first in the
+   * `it` below, a self-consistent 9-row build (ships 9, exports 9) reported only "expected 9 to be
+   * 8" and the row-count REQUIREMENT was never evaluated — the output could not say whether the
+   * pane still honoured its own constant.
+   */
+  it("A1 — HISTORY_ROWS is 8, and it is imported from the pane's own export", () => {
+    // Re-declared nowhere in this file: a build that returns 8 rows and exports no constant must
+    // not be able to pass the requirement below.
     expect(HISTORY_ROWS).toBe(8);
+  });
 
+  it("A1 — renders exactly HISTORY_ROWS rows at every one of the ten lengths", () => {
     for (const [plies, history] of LENGTH_CASES) {
       // The ply count is asserted so a game that ended early cannot silently weaken the case.
       expect(history.moves, `${plies}-ply fixture length`).toHaveLength(plies);
@@ -279,11 +319,10 @@ describe("ABC-017 acceptance", () => {
       ["bxc3", "d5"],
       ["Ba3", "Be6"],
     ]);
-    // Moves 1 and 2 have slid out of the window. Asserted as move NUMBERS and as whole rows —
-    // never as the substring `e4`, which is also the tail of `Nxe4` in row 5.
-    expect(numbersOf(rows)).toEqual([3, 4, 5, 6, 7, 8, 9, 10]);
-    expect(rows.map(normalised)).not.toContain("1. e4 e5");
-    expect(rows.map(normalised)).not.toContain("2. Nf3 Nc6");
+    // D22: the "moves 1 and 2 have slid out" clause was STRUCK from `A3` on 2026-08-12 and its
+    // three assertions are gone with it. The eight-row table above is the WHOLE of what this
+    // criterion asserts; every statement about what the pane does NOT contain is a consequence of
+    // it and can never be the assertion that reports. `A5` guards the slid window non-vacuously.
   });
 
   it("A4 — 19 plies: the last row carries the white ply ALONE and no black ply sits in a white cell", () => {
@@ -302,9 +341,11 @@ describe("ABC-017 acceptance", () => {
       "9. bxc3 d5",
       "10. Ba3",
     ]);
+    // The two positional clauses are NOT implied by the normalised table above — normalisation
+    // loses position — so they stay. The `numbersOf` clause that stood here WAS implied by it and
+    // is gone (D22's shape, recorded in the ticket's `## Test notes`).
     expect(whiteCell(rows[7] as string)).toBe("Ba3    ");
     expect(blackCell(rows[7] as string)).toBe(" ".repeat(7));
-    expect(numbersOf(rows)).toEqual([3, 4, 5, 6, 7, 8, 9, 10]);
 
     // Every white cell holds a WHITE ply: the black plies of this line, in the white column, would
     // be the wrong-window build's signature.
@@ -383,17 +424,41 @@ describe("ABC-017 acceptance", () => {
     expect(three.slice(2).every(isBlank)).toBe(true);
   });
 
-  it("A9 — byte-identical twice, and the caller's history is untouched by either render", () => {
-    for (const [name, history] of ALL_CASES) {
-      // The snapshots are taken BEFORE the first render: one taken between two renders is
-      // byte-identical across a build that corrupts on EVERY render.
-      const fenBefore = toFen(history.position);
-      const lengthBefore = history.moves.length;
-
+  /**
+   * `A9`, IN TWO `it`s OVER FIXTURES BUILT HERE — D23, and both halves of that are load-bearing.
+   *
+   * THE FIXTURES. `ALL_CASES` are module-scope singletons that `A1`, `A2` and `A6` have already
+   * rendered, so a snapshot taken over them is taken AFTER any first-render corruption — the
+   * `ABC-016` defect this criterion exists to prevent, reproduced at FILE scope. Measured: `WPOS`
+   * — a pane that corrupts the caller's `history.position` once per object and changes no rendered
+   * byte — passes 732/732 on 26 files against the shared fixtures, with zero catchers anywhere in
+   * the project, and fails here. `buildAllCases()` is called inside each test for that reason.
+   *
+   * THE SPLIT. Byte-identical asserts over a whole pane and the non-mutation clauses assert over
+   * two scalars, and in one `it` the first one masks the others: on a build that corrupts on every
+   * render, `expect(second).toEqual(first)` fails and `moves.length` — the clause the ticket calls
+   * "the criterion" — is never evaluated. Same silent-precedence shape as `A1` and `A13`.
+   */
+  it("A9 — two renders of a history nothing has rendered are byte-identical", () => {
+    for (const [name, history] of buildAllCases()) {
       const first = renderHistory(history);
       const second = renderHistory(history);
 
       expect(second, name).toEqual(first);
+    }
+  });
+
+  it("A9 — neither render touches the caller's position or its move count", () => {
+    for (const [name, history] of buildAllCases()) {
+      // Snapshotted before this object's FIRST render BY ANYTHING AT ALL: one taken between two
+      // renders is byte-identical across a build that corrupts on every render, and one taken over
+      // an already-rendered object is blind to a build that corrupts once per object.
+      const fenBefore = toFen(history.position);
+      const lengthBefore = history.moves.length;
+
+      renderHistory(history);
+      renderHistory(history);
+
       expect(toFen(history.position), `${name} position`).toBe(fenBefore);
       expect(history.moves.length, `${name} move count`).toBe(lengthBefore);
     }
