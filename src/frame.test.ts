@@ -46,6 +46,8 @@ const HEIGHT = frameHeight({ board: BOARD_ROWS, status: STATUS_ROWS, history: HI
 
 const CURSOR_HOME = "\x1b[H";
 const ERASE_TO_END_OF_SCREEN = "\x1b[0J";
+/** `ABC-027` / `ADR-0010` cl. 1 — the per-row erase the in-place writer emits between rows. */
+const ERASE_TO_END_OF_LINE = "\x1b[K";
 
 // ---------------------------------------------------------------------------
 // Fixtures — the real board, stubs for the two unbuilt panels, a real game.
@@ -206,6 +208,12 @@ function createScreen(rowCount: number, columnCount: number): Screen {
     for (let below = row + 1; below < rowCount; below++) grid[below] = blankRow();
   };
 
+  /** `ABC-027` — erase from the cursor to the end of the LINE, cursor unmoved. */
+  const eraseToEndOfLine = (): void => {
+    const current = grid[row] as string[];
+    for (let index = column; index < columnCount; index++) current[index] = " ";
+  };
+
   return {
     write(text: string): void {
       let index = 0;
@@ -219,6 +227,11 @@ function createScreen(rowCount: number, columnCount: number): Screen {
         if (text.startsWith(ERASE_TO_END_OF_SCREEN, index)) {
           eraseToEndOfScreen();
           index += ERASE_TO_END_OF_SCREEN.length;
+          continue;
+        }
+        if (text.startsWith(ERASE_TO_END_OF_LINE, index)) {
+          eraseToEndOfLine();
+          index += ERASE_TO_END_OF_LINE.length;
           continue;
         }
         const character = text[index] as string;
@@ -371,9 +384,11 @@ describe("ABC-018 acceptance — writing and redraw", () => {
 
     const redraw = sink.chunks[1] as string;
     expect(redraw.startsWith(CURSOR_HOME)).toBe(true);
-    expect(redraw).toContain(second.join("\n"));
+    // `ABC-027` — the rows are joined by an erase-in-line + newline, not by a bare newline, and the
+    // escape count is `2 + (H - 1)`. Both counts stay derived from `H`.
+    expect(redraw).toContain(second.join(`${ERASE_TO_END_OF_LINE}\n`));
     expect(occurrences(redraw, ERASE_TO_END_OF_SCREEN)).toBe(1);
-    expect(occurrences(redraw, "\x1b")).toBe(2);
+    expect(occurrences(redraw, "\x1b")).toBe(2 + (HEIGHT - 1));
 
     const lines = screen.lines();
     expect(lines.slice(0, HEIGHT - 1)).toEqual(second.slice(0, HEIGHT - 1));
@@ -416,7 +431,9 @@ describe("ABC-018 acceptance — writing and redraw", () => {
     expect(frame).toHaveLength(HEIGHT);
     expect(frame[HEIGHT - 1]).toBe("");
     const body = captured(sink).slice(CURSOR_HOME.length, -ERASE_TO_END_OF_SCREEN.length);
-    expect(body).toBe(frame.join("\n"));
+    // `ABC-027` — same cause as the join above; the last row carries NO erase, which is what leaves
+    // the cursor at its start.
+    expect(body).toBe(frame.join(`${ERASE_TO_END_OF_LINE}\n`));
     expect(screen.cursor()).toEqual({ row: HEIGHT - 1, column: 0 });
   });
 
@@ -732,16 +749,20 @@ describe("ABC-018 — holes QE found by mutation, closed in tests only", () => {
     expect(captured(sink)).toBe(`${frame.join("\n")}\n${frame.join("\n")}\n`);
   });
 
-  it("CHARACTERIZES: W is recomputed per frame, so a narrowing frame leaves the wider one's tail", () => {
-    // NOT A RATIFICATION. The ticket calls `W` "a session constant"; the module derives it inside
-    // `assembleFrame` from the panels of THAT frame, and `beginFrameSession` takes only `H`. With
-    // the panels that exist today `W` cannot vary — the merged `renderBoard` is always 9 rows of
-    // 18 — so this cannot fire in production and it breaks NO acceptance criterion. It fires the
-    // moment `ABC-016` or `ABC-017` emits a variable-width row, and it is the SAME class the
-    // padding decision exists to prevent, one level up: `ED(0)` cannot reach what sits to the
-    // right of a row the new frame overwrote with a shorter one. Whether `W` should be hoisted to
-    // the session is a ticket-level decision (BA/PM + `ABC-016`/`ABC-017`), not a QE repair — so
-    // this test pins today's behaviour and fails loudly the day someone changes it.
+  it("DISCHARGED by ABC-027: W is still recomputed per frame, and the narrowing frame leaves NO tail", () => {
+    // THE TRIPWIRE FIRED, AND THIS IS THE DAY. Until `ABC-027` this test was titled "CHARACTERIZES:
+    // `W` is recomputed per frame, so a narrowing frame leaves the wider one's tail" and it ASSERTED
+    // THE STALE TAIL WAS PRESENT — deliberately, as a pin that "fails loudly the day someone changes
+    // it", with the decision routed to "BA/PM + `ABC-016`/`ABC-017`". That decision arrived:
+    // `ADR-0010` ruled the CONSUMER owns frame-width stability (clause 1) and `ABC-027`'s `A6`
+    // discharges this test. It is REPLACED, NEVER DELETED — it is the only place in the merged suite
+    // that constructs a narrowing, and the property it was pinning is now asserted from the correct
+    // side by `A2` below.
+    //
+    // What did NOT change: `W` is still a per-frame max over the delivered rows (`src/frame.ts:179`,
+    // untouched — `ADR-0010` clause 2), so the two width assertions below still hold and `W` is still
+    // ALLOWED to vary. What changed is the writer: it now erases each row to the end of the line as
+    // it writes it, so nothing of the wider frame survives to the right of the narrower one.
     const game = playTo(8);
     const wide = assembleFrame(
       partsFor(game, { status: ["a status panel 24 wide!!", "b", "c"] }),
@@ -763,11 +784,10 @@ describe("ABC-018 — holes QE found by mutation, closed in tests only", () => {
       .lines()
       .slice(0, HEIGHT - 1)
       .filter((line, index) => line !== (narrow[index] as string).padEnd(widthOf(wide)));
-    // The wide frame's first status row is the only one whose tail is not blank, so it is the only
-    // one that shows: the narrow frame's row, then the wide frame's columns beyond W = 18.
-    expect(stale).toEqual([
-      `${narrow[BOARD_ROWS]}${(wide[BOARD_ROWS] as string).slice(widthOf(narrow))}`,
-    ]);
+    // Was `[the narrow frame's row followed by the wide frame's columns beyond W = 18]`. The wide
+    // frame's first status row was the only one whose tail was not blank, so it was the only one
+    // that showed. Nothing shows now.
+    expect(stale).toEqual([]);
   });
 
   it("CHARACTERIZES: unicode mode keeps the C1 block, which the measurable bar does not name", () => {
@@ -783,5 +803,197 @@ describe("ABC-018 — holes QE found by mutation, closed in tests only", () => {
 
     expect(messageRegionOf(frame)[0]).toBe("a\u0080\u009bb".padEnd(widthOf(frame)));
     expect(messageRegionOf(ascii)[0]).toBe("ab".padEnd(widthOf(ascii)));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ADDED BY `ABC-027` 2026-08-11 (task `ticket-to-pr-ABC-027-dev`), carrying accepted `ADR-0010`
+// clause 1: the CONSUMER owns frame-width stability, so the in-place writer clears each row as it
+// writes it. `ABC-018` merged 2026-08-09 and is CLOSED; this section edits its test file under a
+// ticket of its own rather than in a diff nobody signed for.
+//
+// THE FORM OF `A2` IS A JUDGEMENT WITH THREE MEASURED WRONG ANSWERS, all recorded so no future hop
+// reaches for one:
+//   - `F1` (epic `4b` / `rowsOnlyIn` at `:381`+): BLIND at any real terminal width, and it
+//     FALSE-POSITIVES on the CORRECT build at the artificial width `W`(frame 1), because it compares
+//     rows padded to two different widths. Not reused here, in either direction.
+//   - `F2` (untrimmed screen == frame, the `:379`+ form): false-positives on a STEADY pair at 80 and
+//     120 columns on a correct build. `A4` is the control that keeps it out.
+//   - `F4` (every frame's `W` == the session `W`): FAILS the correct build. `W` varies BY DESIGN
+//     under `ADR-0010` clause 1 \u2014 measured {37, 18, 39, 18} over these four frames \u2014 which is why
+//     `ABC-027` carries an explicit PROHIBITION on any constant-frame-width criterion here or
+//     downstream (`ADR-0010` clauses 5 and 7). None is added.
+// `F3` \u2014 screen == frame, TRIMMED, at a real width \u2014 is the only sound form, and `A2` is `F3`.
+// ---------------------------------------------------------------------------
+
+/**
+ * `ABC-027`'s narrowing fixture: a draw claim offered, then expiring, then a check announcement,
+ * then quiet. Only the status stub's THIRD row moves \u2014 every panel keeps its reference row count, so
+ * `H` stays 23 and nothing here collides with `ABC-017`'s `A13` or `ADR-0009` clause 9c. `W` is
+ * 37, 18, 39, 18: two narrowings and one widening.
+ */
+const NARROWING_STATUS_ROW = [
+  "White may claim: threefold repetition",
+  "",
+  "check: YES \u2014 White to move out of check",
+  "",
+] as const;
+
+const narrowingFrames = (): string[][] => {
+  const game = playTo(8);
+  return NARROWING_STATUS_ROW.map((third) =>
+    assembleFrame(partsFor(game, { status: ["White to move", "check: no", third] }), "unicode"),
+  );
+};
+
+const trimmedRows = (rows: readonly string[]): string[] => rows.map((row) => row.trimEnd());
+
+/**
+ * `A2`'s comparison, and the same one `A4` reuses so the false-positive control is checked by the
+ * identical form: write every frame through ONE session onto ONE modelled screen and, after EVERY
+ * redraw, assert each screen row equals its frame row with trailing spaces trimmed on both sides.
+ */
+function screenEqualsFrameAfterEveryRedraw(
+  frames: readonly (readonly string[])[],
+  columns: number,
+): void {
+  const sink = captureSink(true, 24);
+  const write = beginFrameSession(sink, HEIGHT);
+  const screen = createScreen(24, columns);
+
+  frames.forEach((frame, index) => {
+    write(frame);
+    screen.write(sink.chunks[index] as string);
+    expect(trimmedRows(screen.lines().slice(0, HEIGHT - 1))).toEqual(
+      trimmedRows(frame.slice(0, HEIGHT - 1)),
+    );
+  });
+}
+
+describe("ABC-027 acceptance \u2014 the in-place writer clears each row as it writes it", () => {
+  it("A1 \u2014 the emitted redraw byte for byte: home, the rows joined by an erase-in-line, ONE erase to end of screen", () => {
+    const frame = assembleFrame(partsFor(playTo(8), { messages: ["check"] }), "unicode");
+    const sink = captureSink(true, 24);
+
+    beginFrameSession(sink, HEIGHT)(frame);
+
+    expect(frame).toHaveLength(HEIGHT);
+    expect(sink.chunks).toHaveLength(1);
+    const redraw = sink.chunks[0] as string;
+
+    // The UN-cleared emission \u2014 the merged writer's, constructed here so `ADR-0010`'s cost claim is
+    // falsifiable rather than quoted. Measured on this fixture: 425 characters becomes 491.
+    const uncleared = `${CURSOR_HOME}${frame.join("\n")}${ERASE_TO_END_OF_SCREEN}`;
+
+    expect(redraw).toBe(
+      `${CURSOR_HOME}${frame.join(`${ERASE_TO_END_OF_LINE}\n`)}${ERASE_TO_END_OF_SCREEN}`,
+    );
+    // Every count derived from `H`, never hardcoded \u2014 the merged file's own rule. The last row
+    // carries no erase: `ERASE_TO_END_OF_SCREEN` already clears the rest of the cursor's row.
+    expect(occurrences(redraw, ERASE_TO_END_OF_LINE)).toBe(HEIGHT - 1);
+    expect(occurrences(redraw, ERASE_TO_END_OF_SCREEN)).toBe(1);
+    expect(occurrences(redraw, "\x1b")).toBe(HEIGHT + 1);
+    expect(redraw.length - uncleared.length).toBe((HEIGHT - 1) * ERASE_TO_END_OF_LINE.length);
+  });
+
+  it("A2 \u2014 after EVERY redraw of a NARROWING sequence the screen equals the frame, at 80 AND 120 columns", () => {
+    const frames = narrowingFrames();
+    const widths = frames.map(widthOf);
+
+    // FIRST, the fixture must actually NARROW. `ADR-0010` measured the merged file's entire fixture
+    // space at `W` in {18}, so a fixture that quietly stops moving turns this criterion green
+    // forever \u2014 the degenerate mutant this assertion exists to reject.
+    expect(frames).toHaveLength(4);
+    expect(new Set(widths).size).toBeGreaterThanOrEqual(2);
+    expect(widths.some((width, index) => index > 0 && width < (widths[index - 1] as number))).toBe(
+      true,
+    );
+    for (const frame of frames) expect(frame).toHaveLength(HEIGHT);
+
+    for (const columns of [80, 120]) {
+      // At a screen width equal to `W`(frame 1) the whole comparison degenerates into a fixture
+      // artifact, so both widths are asserted to EXCEED the widest frame \u2014 they are real terminals.
+      expect(columns).toBeGreaterThan(Math.max(...widths));
+      screenEqualsFrameAfterEveryRedraw(frames, columns);
+    }
+  });
+
+  it("A3 \u2014 the FIXTURE is proved able to catch the defect: the un-cleared emission leaves the wider frame's tail", () => {
+    // A check on the check. `A3` passes on both writers BY CONSTRUCTION \u2014 it exercises the fixture,
+    // not the writer \u2014 and fails the day the fixture stops being able to expose the defect, which is
+    // the only way `A2` can rot. This project has recorded a bar that cannot fail on the regression
+    // it exists to catch six times, most recently in `ADR-0010`'s own cost table.
+    const frames = narrowingFrames();
+    const screen = createScreen(24, 80);
+    let narrowings = 0;
+
+    frames.forEach((frame, index) => {
+      // The merged emission, constructed HERE: home, a BARE newline join, one erase to end of screen.
+      screen.write(`${CURSOR_HOME}${frame.join("\n")}${ERASE_TO_END_OF_SCREEN}`);
+
+      const previous = frames[index - 1];
+      if (previous === undefined || widthOf(previous) <= widthOf(frame)) return;
+      narrowings++;
+
+      const differing = trimmedRows(screen.lines().slice(0, HEIGHT - 1)).filter(
+        (line, row) => line !== (frame[row] as string).trimEnd(),
+      );
+      expect(differing.length).toBeGreaterThan(0);
+
+      // The tail is the previous frame's columns beyond the narrower frame's `W` \u2014 `hreefold
+      // repetition`, then ` to move out of check`.
+      const tails = previous
+        .map((row) => row.slice(widthOf(frame)).trimEnd())
+        .filter((fragment) => fragment !== "");
+      expect(tails.length).toBeGreaterThan(0);
+      for (const tail of tails) {
+        expect(differing.some((line) => line.includes(tail))).toBe(true);
+        expect(frame.join("\n")).not.toContain(tail);
+      }
+    });
+
+    expect(narrowings).toBe(2);
+  });
+
+  it("A4 \u2014 a STEADY pair is NOT flagged: the false-positive control at 80 and 120 columns", () => {
+    const game = playTo(8);
+    const first = assembleFrame(partsFor(game, { messages: ["first"] }), "unicode");
+    const second = assembleFrame(
+      partsFor(game, { messages: ["second"], thinking: true }),
+      "unicode",
+    );
+
+    expect(widthOf(first)).toBe(widthOf(second));
+    // UNtrimmed (`F2`) this pair fails on the CORRECT build at both widths, because the screen's rows
+    // are padded to the SCREEN's width and the frame's to `W`. This is what stops a future hop
+    // reaching for that form.
+    for (const columns of [80, 120]) {
+      screenEqualsFrameAfterEveryRedraw([first, second], columns);
+    }
+  });
+
+  it("A5 \u2014 both APPEND strategies and every frame VALUE are untouched: zero escape bytes in either", () => {
+    const frame = assembleFrame(partsFor(playTo(8), { messages: ["check"] }), "unicode");
+    const pipe = captureSink(false, 0);
+    const short = captureSink(true, HEIGHT - 1);
+
+    beginFrameSession(pipe, HEIGHT)(frame);
+    beginFrameSession(short, HEIGHT)(frame);
+
+    for (const sink of [pipe, short]) {
+      expect(captured(sink)).toBe(`${frame.join("\n")}\n`);
+      expect(occurrences(captured(sink), "\x1b")).toBe(0);
+    }
+
+    // The VALUE half. The clearing lives in the WRITER and never in `assembleFrame` \u2014 `ADR-0010`
+    // clause 2 leaves `W` a per-frame max at `src/frame.ts:179` and its `## Rollback` states every
+    // frame value is byte-identical with or without clause 1 \u2014 so no frame carries an escape byte
+    // and every row but the reserved prompt row is still exactly `W` wide.
+    for (const value of [frame, ...narrowingFrames()]) {
+      expect(occurrences(value.join("\n"), "\x1b")).toBe(0);
+      expect(value).toHaveLength(HEIGHT);
+      expect(value.at(-1)).toBe("");
+      for (const row of value.slice(0, -PROMPT_ROWS)) expect(row).toHaveLength(widthOf(value));
+    }
   });
 });

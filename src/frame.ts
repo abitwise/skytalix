@@ -25,8 +25,11 @@
  * THE TERMINAL'S WIDTH IS NEVER READ. `process.stdout.columns` does not exist in append mode — the
  * mode `EPIC-006`'s end-to-end test runs in — and the frame is a session constant by the epic's
  * SIGWINCH ruling. The frame has ONE width `W`: the widest row the assembled regions emit. Every row
- * except the reserved prompt row is padded to exactly `W`, which is what makes an in-place redraw
- * leave no character of the previous frame behind without emitting a per-row erase.
+ * except the reserved prompt row is padded to exactly `W`, so each row overwrites its predecessor in
+ * full — but `W` is a per-frame MAX over the delivered rows (`assembleFrame` below), so it SHRINKS
+ * whenever the widest row does, and padding alone then leaves the previous frame's columns to the
+ * right of the narrowed row. `ADR-0010` clause 1: the in-place redraw emits a per-row erase, and THAT
+ * is what makes it leave no character of the previous frame behind.
  *
  * Widths are counted in UTF-16 units (`String.length`), which equals the code-point count for
  * everything this frame can carry: ASCII mode strips every code point above `U+007F`, and the
@@ -59,6 +62,15 @@ const CURSOR_HOME = "\x1b[H";
  * height, and it is the exact mechanism that produces the stale rows `4b` exists to prevent.
  */
 const ERASE_TO_END_OF_SCREEN = "\x1b[0J";
+
+/**
+ * CSI K — erase from the cursor to the end of the LINE, cursor unmoved. `ADR-0010` clause 1: `W` is a
+ * per-frame max, so a narrowing frame's rows are shorter than the ones they overwrite, and
+ * `ERASE_TO_END_OF_SCREEN` erases downward from the end of the frame and NEVER rightward. Emitted
+ * once per row join — `H - 1` of them, +3 characters each. A trailing one on the last row is
+ * redundant: the erase to end of screen already clears the rest of the cursor's row.
+ */
+const ERASE_TO_END_OF_LINE = "\x1b[K";
 
 /** The regions a frame is composed of. The panels arrive as rows; this module renders none of them. */
 export interface FrameParts {
@@ -213,7 +225,9 @@ export function beginFrameSession(sink: FrameSink, height: number): FrameWriter 
 
   if (inPlace) {
     return (frame) => {
-      sink.write(`${CURSOR_HOME}${frame.join("\n")}${ERASE_TO_END_OF_SCREEN}`);
+      sink.write(
+        `${CURSOR_HOME}${frame.join(`${ERASE_TO_END_OF_LINE}\n`)}${ERASE_TO_END_OF_SCREEN}`,
+      );
     };
   }
   return (frame) => {
