@@ -3,12 +3,20 @@
  * enumerate. The loop is testable end to end TODAY, with no parser and no engine, because both
  * stubs are built from merged code — that is the point of the stubs.
  *
- * TWO OF THE TWENTY-SEVEN ARE NOT ASSERTED HERE, and both are named rather than left as gaps.
- * `A17`'s timing half is produced OUT OF TREE by the instrument that criterion names, because a
- * number produced inside `vitest` would be a different measurement wearing its name. `A20` — and
- * `## Test notes` row 18 with it — CANNOT BE SATISFIED until `ABC-027` merges: `ADR-0010` clause 1
- * puts its production change in `src/frame.ts`'s in-place writer, which this ticket does not open.
- * It is written at the rebase, riding with `ADR-0009` clause 9f's real-panel re-gate.
+ * ONE OF THE TWENTY-SEVEN IS NOT ASSERTED HERE, and it is named rather than left as a gap. `A17`'s
+ * timing half is produced OUT OF TREE by the instrument that criterion names, because a number
+ * produced inside `vitest` would be a different measurement wearing its name.
+ *
+ * `A20` — and `## Test notes` row 18 with it — IS WRITTEN NOW, at the rebase and riding with
+ * `ADR-0009` clause 9f's real-panel re-gate, exactly where the ticket said it would be written. It
+ * could not be SATISFIED before `ABC-027` merged, because `ADR-0010` clause 1 put its production
+ * change in `src/frame.ts`'s in-place writer — a module THIS TICKET STILL DOES NOT OPEN and which is
+ * merged on this tip. That the criterion asserts something was measured at this hop rather than
+ * assumed, and OUT OF TREE because the merged writer is not this ticket's to edit: with that
+ * writer's per-row `\x1b[K` stripped from the byte stream — the pre-`ABC-027` writer, byte for byte
+ * — FOUR of this run's five redraws go RED at both screen widths. The wrong build is not bought as a
+ * test here for `A19` (c)'s recorded reason: it would assert a failure of the CRITERION rather than
+ * of the loop, and it would spend a `N8-LANE` file to do it.
  *
  * THE STUB PANELS LIVE HERE AND NOWHERE ELSE. `ADR-0009` clause 9c: a test double for the render
  * seam lives in a TEST file, never in `src/` as a production module, and option **G** — a shared
@@ -23,6 +31,15 @@
  * it — and a 3/8 stub never exercises the append path at all. ONE shape is not enough either: a
  * literal tuned to shape `A` passes every clause of `A19` under `A` alone. Two shapes whose heights
  * differ cannot both be satisfied by any literal, so the derived form is the only build that passes.
+ *
+ * AND THE REAL PANELS ARE HERE TOO, ADDED TO THOSE TWO SHAPES AND NOT REPLACING THEM (`[D51]` (2)).
+ * Both are merged on this tip, so `ADR-0009` clause 9f's re-gate runs the loop through the real
+ * `renderStatusPanel` and the real `renderHistory` below — the real pair IS 3/8, which is exactly
+ * what clause (i) forbids a STUB from being, and a real-panels-only suite assembles to `H` = 23 and
+ * would never take the append branch once. Importing the two panels FROM A TEST FILE is exit 0 now
+ * that both exist (`[D50]`), and it gives the loop no import edge of its own: `src/turn-loop.ts`
+ * imports neither panel and reads neither constant, which is `[C9-3]` and is a rule rather than an
+ * accident.
  *
  * THE SPIES, AND THE ONE HONEST LIMIT. `gameend.ts`, `history.ts` and `frame.ts` are re-routed by
  * `vi.mock` + `vi.fn(actual)`, so every mock CALLS THROUGH and no behaviour changes. The limit,
@@ -41,6 +58,7 @@ import { parseFen, toFen } from "./fen.ts";
 import type { FrameSink, FrameWriter } from "./frame.ts";
 import type { ClaimableDraw, EndReason, GameStatus } from "./gameend.ts";
 import type { GameHistory } from "./history.ts";
+import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
 import { legalMoves } from "./legal.ts";
 import { FLAG_NONE, type Move } from "./moves.ts";
 import {
@@ -54,6 +72,7 @@ import {
   squareName,
 } from "./position.ts";
 import { renderBoard } from "./render.ts";
+import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
 import type {
   EngineSeam,
   FinalResult,
@@ -124,6 +143,20 @@ const PROMOTION_FEN = "7k/4P3/8/8/8/8/8/K7 w - - 0 1";
  * with NO legal move is a stalemate fixture and exercises a different branch (`[D43]`).
  */
 const DEAD_MATERIAL_FEN = "1k6/8/8/8/8/8/1K6/2n5 w - - 0 1";
+/**
+ * `A20`'s anchor — row 18. The halfmove clock is at `FIFTY_MOVE_PLIES`, so the status the LOOP
+ * evaluates carries `claimable`, the REAL status panel's third row spends 32 columns on
+ * `White may claim: fifty-move rule`, and the first frame is 45 columns wide. The first ply is a
+ * PAWN move: the clock resets, the claim cell goes, and the frame NARROWS to 22 — the widening and
+ * the narrowing both come from a PANEL row, which is the fixture rule `## Test notes` states,
+ * because `W` is the max over the panel rows ONLY and a fixture narrowing via `messages` narrows
+ * nothing at all (`src/frame.ts:176-179`).
+ *
+ * Measured at this hop against merged `src/`: widths 45, 22, 23, 27, 24 over five frames — TWO
+ * narrowings, and the second one (the check on ply 3 clearing) is not the first redraw, so
+ * "after EVERY redraw" is not satisfiable by looking only at the frame after the narrowing.
+ */
+const FIFTY_MOVE_ANCHOR_FEN = "7k/8/8/8/8/8/P7/K5R1 w - - 100 60";
 
 /**
  * The knight round trip. Each 4-ply cycle returns to the EXACT start position, so `n` cycles make
@@ -346,6 +379,12 @@ interface RunOptions {
   /** Resolve the engine seam on a LATER MACROTASK — `A15`'s asynchronous-by-contract shape. */
   readonly delayEngine?: boolean;
   readonly shape?: Shape;
+  /**
+   * The whole render seam, for the runs that drive the REAL panels rather than a stub shape
+   * (`ADR-0009` clause 9f). One harness for both, because a second `run` is how the stub runs and
+   * the real-panel run stop being comparable — and comparing them is the entire point of a re-gate.
+   */
+  readonly seam?: RenderSeam;
   readonly sink?: RecordingSink;
   /**
    * Fires on every RENDER-SEAM call. `RunResult.frames` already counts them, but a run that RETHROWS
@@ -370,7 +409,7 @@ interface RunResult {
 async function run(options: RunOptions = {}): Promise<RunResult> {
   const history = options.history ?? newGame(options.fen ?? START_FEN);
   const scripted = scriptedSeams(options.script ?? []);
-  const seam = panelSeam(options.shape ?? SHAPE_A);
+  const seam = options.seam ?? panelSeam(options.shape ?? SHAPE_A);
   const sink = options.sink ?? recordingSink();
   const inputSeam = options.input ?? scripted.input;
   const engineSeam = options.engine ?? scripted.engine;
@@ -451,6 +490,139 @@ const countsTotal = (counts: ReadonlyMap<bigint, number> | undefined): number =>
   counts === undefined ? -1 : [...counts.values()].reduce((sum, count) => sum + count, 0);
 
 const derivesMade = (): number => vi.mocked(gameStatus).mock.calls.length;
+
+/** The frame's `W` — every row but the reserved prompt row is padded to it (`src/frame.ts:194`). */
+const widthOf = (frame: readonly string[]): number =>
+  frame.reduce((widest, row) => Math.max(widest, row.length), 0);
+
+const rightTrimmed = (rows: readonly string[]): string[] => rows.map((row) => row.trimEnd());
+
+// ---------------------------------------------------------------------------
+// The REAL panels, and the screen `A20` replays into. `ADR-0009` clause 9f's re-gate.
+// ---------------------------------------------------------------------------
+
+/**
+ * The REAL render seam — merged `src/status-panel.ts` and merged `src/history-pane.ts` behind the
+ * same four-argument seam the stubs sit behind, so what the re-gate tests is the SEAM WIRING, which
+ * is the only thing a real-panel run tests that a stub run cannot (`[C9-4]`).
+ *
+ * IT IS NOT A THIRD STUB. `A18` inspects the STUB seams this suite drives the loop through and
+ * there are still exactly two of those — `SHAPE_A` and `SHAPE_B`, both alive below, neither at 3/8
+ * and one of them the only run in this tree that takes the append branch. This seam is ADDED to
+ * them (`[D51]` (2)); nothing is replaced and no criterion is amended.
+ */
+const realPanelSeam: RenderSeam = (history, status, thinking, messages) =>
+  assembleFrame(
+    {
+      board: renderBoard(history.position, "unicode", "white-bottom"),
+      status: renderStatusPanel(history, status, thinking),
+      history: renderHistory(history),
+      messages,
+    },
+    "unicode",
+  );
+
+/** The three escapes this writer emits (`src/frame.ts:59-83`), declared locally as `frame.test.ts:75-78` declares them. */
+const CURSOR_HOME = "\x1b[H";
+const ERASE_TO_END_OF_SCREEN = "\x1b[0J";
+const ERASE_TO_END_OF_LINE = "\x1b[K";
+
+interface Screen {
+  write(text: string): void;
+  lines(): string[];
+}
+
+/**
+ * A terminal small enough to reason about, LOCAL TO THIS FILE — merged `src/frame.test.ts`'s model
+ * is not exported (`:190`, verified again here) and `ADR-0009` clause 9c keeps this ticket's
+ * fixtures in this ticket's own test file. That file is not touched by this ticket.
+ *
+ * Four behaviours are modelled and each is an assumption stated rather than buried:
+ *
+ *   - `\n` moves to column 0 of the next row — the ONLCR translation a terminal in cooked mode
+ *     does, which is what lets the writer emit a multi-row frame with no carriage return;
+ *   - the wrap at the right margin is DEFERRED, as xterm and Terminal.app do it: a row of exactly
+ *     `columnCount` characters leaves the cursor AT the margin and does not move down until the
+ *     next printable character, and an erase fired from there erases that last cell rather than
+ *     doing nothing. `ABC-027`'s `A7` measured that second half on GNU screen 5.0.2 and pins it in
+ *     `frame.test.ts`; it is INHERITED here, not re-measured, and `A20` is why it matters — at
+ *     `W`(frame 1) every row of the widest frame ends exactly at the margin;
+ *   - moving below the last row scrolls the whole screen up by one;
+ *   - AN ESCAPE THIS MODEL DOES NOT IMPLEMENT THROWS. That is the property that makes the model
+ *     evidence rather than decoration: an ignored sequence is how a screen model quietly certifies
+ *     a writer that emitted something the terminal would have obeyed.
+ */
+function createScreen(rowCount: number, columnCount: number): Screen {
+  const blankRow = (): string[] => new Array<string>(columnCount).fill(" ");
+  const grid: string[][] = Array.from({ length: rowCount }, blankRow);
+  let row = 0;
+  let column = 0;
+
+  const scrollIfBelow = (): void => {
+    if (row < rowCount) return;
+    grid.shift();
+    grid.push(blankRow());
+    row = rowCount - 1;
+  };
+
+  /** Where an erase fires from: at the margin the cursor sits ON the last cell, never past it. */
+  const eraseToEndOfLine = (): void => {
+    const current = grid[row] as string[];
+    for (let index = Math.min(column, columnCount - 1); index < columnCount; index++) {
+      current[index] = " ";
+    }
+  };
+
+  const eraseToEndOfScreen = (): void => {
+    eraseToEndOfLine();
+    for (let below = row + 1; below < rowCount; below++) grid[below] = blankRow();
+  };
+
+  return {
+    write(text: string): void {
+      let index = 0;
+      while (index < text.length) {
+        if (text.startsWith(CURSOR_HOME, index)) {
+          row = 0;
+          column = 0;
+          index += CURSOR_HOME.length;
+          continue;
+        }
+        if (text.startsWith(ERASE_TO_END_OF_SCREEN, index)) {
+          eraseToEndOfScreen();
+          index += ERASE_TO_END_OF_SCREEN.length;
+          continue;
+        }
+        if (text.startsWith(ERASE_TO_END_OF_LINE, index)) {
+          eraseToEndOfLine();
+          index += ERASE_TO_END_OF_LINE.length;
+          continue;
+        }
+        const character = text[index] as string;
+        index++;
+        if (character === "\n") {
+          column = 0;
+          row++;
+          scrollIfBelow();
+          continue;
+        }
+        if (character === "\x1b") {
+          throw new Error(
+            `screen model: unmodelled escape ${JSON.stringify(text.slice(index - 1))}`,
+          );
+        }
+        if (column >= columnCount) {
+          column = 0;
+          row++;
+          scrollIfBelow();
+        }
+        (grid[row] as string[])[column] = character;
+        column++;
+      }
+    },
+    lines: () => grid.map((cells) => cells.join("")),
+  };
+}
 
 beforeEach(() => vi.clearAllMocks());
 
@@ -672,7 +844,7 @@ const TABLE: readonly Row[] = [
   },
 ];
 
-describe("ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 deferred to `ABC-027`", () => {
+describe("ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property", () => {
   for (const row of TABLE) {
     it(`row ${row.n} — ${row.name}`, async () => {
       const { outcome, frames } = await run(row);
@@ -707,17 +879,17 @@ describe("ABC-019 — the eighteen scripted rows: fifteen with an exact reason a
     expect(toFen(history.position)).toBe(START_FEN);
   });
 
-  // ROW 18 IS DEFERRED AND IS DELIBERATELY NOT WRITTEN HERE. `A20` states in its own words that it
-  // CANNOT BE SATISFIED until `ABC-027` merges: `ADR-0010` clause 1 puts the production change in
-  // `src/frame.ts`'s in-place writer, which is `ABC-027`'s module and which THIS TICKET DOES NOT
-  // OPEN. It is written at the rebase, riding with `ADR-0009` clause 9f's real-panel re-gate.
-  // Writing it now would turn this branch's gate red for a defect in another ticket's module — and
-  // writing it as a SKIPPED test would breach the zero-skip gate, so neither is done.
+  // Row 18 is the third row that is not a `TABLE` row, and for a different reason than rows 14 and
+  // 17: its Expected is a SCREEN property rather than a `result` / `reason` / frame count, which is
+  // the one thing every `TABLE` column asserts. It was DEFERRED here until `ABC-027` merged and it
+  // is written now, with the `A20` test below — the criterion's five redraws are asserted there
+  // rather than duplicated into a row whose three columns would say nothing about it.
 });
 
 // ---------------------------------------------------------------------------
-// The twenty-seven acceptance criteria, in the ticket's order. `A17`'s timing half is out of tree
-// and `A20` is blocked on `ABC-027` — see the file header; neither is silently absent.
+// The twenty-seven acceptance criteria, in the ticket's order. `A17`'s timing half is out of tree —
+// see the file header; it is not silently absent. Every other criterion is asserted here, `A20`
+// included, now that `ABC-027` is merged on this tip.
 // ---------------------------------------------------------------------------
 
 describe("ABC-019 acceptance", () => {
@@ -1235,4 +1407,176 @@ describe("ABC-019 acceptance", () => {
       for (const frame of writtenFrames()) expect(frame).toHaveLength(sessionHeight());
     });
   }
+
+  // `## Test notes` row 18. It runs against the REAL panels because that is where a narrowing comes
+  // from without one being invented: the real status panel's claim cell is 32 columns wide and the
+  // real history pane is a fixed 21, so a claim that appears and goes moves `W` by more than 20.
+  it("A20 — after EVERY redraw the screen equals the frame, at `W`(frame 1) and at 80 columns", async () => {
+    const { sink } = await run({
+      fen: FIFTY_MOVE_ANCHOR_FEN,
+      script: ["a2a3", "h8h7", "g1g7", "h7g7"],
+      seam: realPanelSeam,
+      // EXACTLY `H` rows: `beginFrameSession` takes the in-place branch at `>=`, so this is the
+      // tightest viewport that still redraws in place, nothing scrolls at that size, and the screen
+      // the model holds IS the frame's viewport — which is what makes "the same number of rows"
+      // mean something rather than being satisfied by a taller screen's blank remainder.
+      sink: recordingSink({ isTTY: true, rows: 23 }),
+    });
+
+    const written = writtenFrames();
+    const widths = written.map(widthOf);
+
+    // THE `GIVEN`, ASSERTED RATHER THAN ASSUMED. A fixture that stopped narrowing would satisfy
+    // every assertion below vacuously, which is the failure mode this criterion is most exposed to.
+    const narrowedAt = widths.flatMap((width, index) =>
+      index > 0 && width < (widths[index - 1] as number) ? [index] : [],
+    );
+    expect(narrowedAt.length).toBeGreaterThan(0);
+    // ...and redraws continue after the first narrowing, so "after EVERY redraw — not the last, and
+    // not only the narrowing one" is not satisfiable by a run whose narrowed frame is its last.
+    expect(narrowedAt[0]).toBeLessThan(written.length - 1);
+
+    // The narrowing comes from a PANEL row and not from a message item: `W` is the max over the
+    // panel rows only and the message region is bounded BY it (`src/frame.ts:176-179`), so a
+    // fixture that narrowed via `messages` would narrow nothing and this criterion would pass
+    // vacuously. This run carries NO message item at all — asserted, not arranged — and the claim
+    // cell that widens frame 1 is the real status panel's third row.
+    for (const frame of written) expect(messageRegionOf(frame)).toEqual(["", ""]);
+    expect((written[0] as string[]).join("\n")).toContain("White may claim: fifty-move rule");
+    expect((written[1] as string[]).join("\n")).not.toContain("may claim");
+
+    // The redraws are the writer's writes, one per frame (`src/frame.ts:233-245`). The ONE trailing
+    // write is `EPIC-006`'s end-of-input notice, which is a `sink.write` and NOT a frame (`A2`,
+    // `[D29]`) — asserted here so that pairing byte `i` with frame `i` below is checked rather than
+    // assumed, and so a loop that started writing anything else would break this test first.
+    expect(sink.writes).toHaveLength(written.length + 1);
+    expect(sink.writes[sink.writes.length - 1]).toBe(`${INPUT_ENDED_NOTICE}\n`);
+
+    // A FIXTURE PRECONDITION, AND DELIBERATELY NOT A WIDTH CRITERION. `[D47]` forbids this ticket
+    // asserting that `W` is constant, that it equals the session's, that it equals the first
+    // frame's, or that any panel pads to a fixed width — this asserts none of those and `W` varies
+    // by design here, measured 45/22/23/27/24. What it says is that THIS FIXTURE's first frame is
+    // its widest, which is what makes `W`(frame 1) a screen the whole run fits inside instead of
+    // one a later frame wraps on and fails for a reason that is not the writer's.
+    expect(widths[0]).toBe(Math.max(...widths));
+    expect(Math.max(...widths)).toBeLessThan(80);
+
+    // The second `Given`: `W`(frame 1) is the artificial width epic `4b` fires at, and 80 is a real
+    // terminal — the untrimmed comparison (`ADR-0010`'s form `F2`) false-positives on every frame
+    // at 80 and is why both this loop and the trim exist.
+    for (const columns of [widths[0] as number, 80]) {
+      const screen = createScreen((written[0] as string[]).length, columns);
+      written.forEach((frame, index) => {
+        screen.write(sink.writes[index] as string);
+        expect(rightTrimmed(screen.lines()), `redraw ${index} at ${columns} columns`).toEqual(
+          rightTrimmed(frame),
+        );
+      });
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `ADR-0009` clause 9f — the real-panel re-gate, run at the rebase and stating WHICH panels were
+// real: BOTH of them. `[D51]` (1) asked for that sentence because the swap was PARTIAL when it was
+// written — `src/status-panel.ts` was merged and the history pane was not — and a re-gate that
+// swapped one panel and reported the clause discharged would have tested half the seam. On this tip
+// `STATUS_ROWS` = 3 and `HISTORY_ROWS` = 8 are both read off merged modules by the tests below, so
+// the partial is discharged IN FULL and no half of the wiring is left untested.
+//
+// The clause asks for this run IN ADDITION. `A18`'s two stub shapes above are untouched and still
+// run: the real pair is 3/8, which clause (i) forbids a stub from being, and it assembles to
+// `H` = 23 — in place on a 24-row TTY — so a suite that had swapped the stubs out would have lost
+// the only append-branch run in this tree along with the criterion that catches a tuned literal.
+// ---------------------------------------------------------------------------
+
+describe("ADR-0009 clause 9f — the loop against the REAL panels, both of them", () => {
+  it("the real pair is 3/8, assembles to H = 23, and redraws IN PLACE on a 24-row TTY", async () => {
+    const history = newGame(START_FEN);
+    const status = gameStatusOf(history);
+
+    // Read off the producers, never restated: `ADR-0009` clause 1 gives each count to its panel, and
+    // a consumer that restates one cannot fail on the panel it restates.
+    expect(STATUS_ROWS).toBe(3);
+    expect(HISTORY_ROWS).toBe(8);
+    expect(renderStatusPanel(history, status, false)).toHaveLength(STATUS_ROWS);
+    expect(renderHistory(history)).toHaveLength(HISTORY_ROWS);
+    expect(realPanelSeam(history, status, false, [])).toHaveLength(23);
+
+    // 23 <= 24, so the real pair takes the in-place branch — and shape `B` at 25 remains the only
+    // run in this tree that takes the other one. That is `[D51]` (2), observed rather than quoted.
+    const { sink } = await run({
+      seam: realPanelSeam,
+      script: ["board"],
+      sink: recordingSink({ isTTY: true, rows: 24 }),
+    });
+    expect(sink.writes[0]?.startsWith(CURSOR_HOME)).toBe(true);
+  });
+
+  it("`A19`'s four clauses hold at the real geometry, and the height is DERIVED there too", async () => {
+    const { frames } = await run({
+      seam: realPanelSeam,
+      script: ["zzzz", "g1f3", "g8f6"],
+      sink: recordingSink({ isTTY: true, rows: 24 }),
+    });
+
+    expect(vi.mocked(beginFrameSession)).toHaveBeenCalledTimes(1); // (a)
+    expect(sessionHeight()).toBe((frames[0] as string[]).length); // (b)
+    expect(writtenFrames()).toEqual(frames); // (c)
+    for (const frame of writtenFrames()) expect(frame).toHaveLength(sessionHeight()); // (d)
+
+    // The one figure the swap moves, and the reason `A18`(i) + `A19`(b) — not the compiler — is what
+    // kills the IMPORTED form (`[D50]`): a loop that had imported the two constants and computed
+    // `frameHeight` would read 23 here and be RED at both stub shapes' 19 and 25.
+    expect(sessionHeight()).toBe(23);
+  });
+
+  it("the WIRING: the real panels derive nothing, and the status, the thinking flag and the messages are the LOOP's", async () => {
+    const { frames, thinkingFlags, statuses } = await run({
+      seam: realPanelSeam,
+      script: ["zzzz", "g1f3", "g8f6"],
+    });
+
+    // The line `ABC-016` was owed, now measurable for the first time: with STUB panels this was
+    // vacuous, because a stub derives nothing by construction. The real panels are on the other side
+    // of the seam here and the counts do not move — `N + 1` derives for `N` = 2 plies, and the
+    // rejected prompt adds none.
+    expect(derivesMade()).toBe(3);
+    expect(vi.mocked(gameStatusOf)).toHaveBeenCalledTimes(3);
+    expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
+
+    // The thinking flag is the LOOP's and it reaches the real panel — the real
+    // `renderStatusPanel` blanks that cell to spaces of the same length when it is false, so this
+    // crosses the flag with the panel rather than merely observing that the flag exists.
+    expect(frames.map((frame) => frame.join("\n").includes("thinking..."))).toEqual(thinkingFlags);
+    expect(thinkingFlags).toContain(true);
+
+    // The fourth seam argument (`[D28]`) reaches the real geometry's message region, which is the
+    // one part of the wiring `A5` depends on and no stub run can prove.
+    expect(messageRegionOf(frames[1] as string[])).toEqual(["not a move: zzzz", ""]);
+
+    // ...and the status the panel renders is the one the LOOP evaluated and handed across, not one
+    // the panel derived for itself.
+    expect(statuses).toHaveLength(frames.length);
+    for (const status of statuses) expect(status.result).toBe("in-progress");
+  });
+
+  it("the loop is SWAP-INVARIANT: same verdict, same cadence, same plies at stub 2/5, stub 4/9 and the real 3/8", async () => {
+    const script = ["g1f3", "g8f6", "zzzz", "b1c3", "b8c6"];
+    const stubA = await run({ script, shape: SHAPE_A });
+    const stubB = await run({ script, shape: SHAPE_B });
+    const real = await run({ script, seam: realPanelSeam });
+
+    for (const swapped of [stubB, real]) {
+      expect(swapped.outcome).toEqual(stubA.outcome);
+      expect(swapped.frames).toHaveLength(stubA.frames.length);
+      expect(swapped.history.moves).toEqual(stubA.history.moves);
+      expect(swapped.events).toEqual(stubA.events);
+    }
+
+    // ...and the FRAMES differ, so the four equalities above are about the loop rather than about
+    // three seams that happen to return the same rows. Without this the invariance is a tautology.
+    expect(real.frames).not.toEqual(stubA.frames);
+    expect(stubB.frames).not.toEqual(stubA.frames);
+  });
 });
