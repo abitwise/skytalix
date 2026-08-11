@@ -1408,6 +1408,39 @@ CI.
     > `[D50]`. At the re-gate BOTH panels exist and importing them is exit 0, so the protection is
     > `A18`(i) + `A19`(b), which is precisely why the stub runs must survive the swap. **Nothing is owed
     > to the code by this note; it is an instruction to the re-gate.**
+- **`ABC-029` — NEW AND BLOCKING, added 2026-08-11 at the sixth hop (`[D52]`). This ticket cannot go
+  GREEN until `ABC-029` lands, and this ticket does NOT own the repair.** The rebase onto merged
+  `ABC-017` turned that ticket's two structural instruments in `src/history-pane.nfr.test.ts` RED
+  (`:228`, `:275`), because this loop is `src/history.ts`'s first production runtime importer. The
+  instruments assert a **whole-tree** invariant that `ABC-029` was already cut to re-scope: its `A1`
+  owns *"both derive the set of files they consider from ONE expression"* and *"a **production
+  module** is defined, once, in this ticket and at that site"*, and its `## Scope` item 1 is
+  literally **define "production module"**. **The turn loop is the same undefinedness arriving from
+  the other side**, and it is recorded there rather than half-solved here.
+  - **Three measured reasons this repair may NOT be split into this ticket**, so the ordering is an
+    argument and not a preference:
+    1. **A per-ticket exclusion is the exact defect `ABC-029` exists to remove.** Excluding
+       `turn-loop.ts` here writes a **third** hand-maintained filename into the two places `A1`
+       forbids literal filenames, and leaves `ABC-029` a partly-done job to finish.
+    2. **Narrowing the regex guard's file set here would silently destroy a measured kill.**
+       `ABC-029` records `WPERFT-STATIC` as dying on **the regex alone**; its `## Out of scope`
+       forbids deleting, replacing or weakening that guard by name. A frame-path narrowing applied
+       to the regex removes `perft-bench.ts` from its reach and nothing else catches that form.
+    3. **The correct repair is indivisible from `ABC-029`'s `A2`/`A3`.** `A1` demands ONE expression
+       for both guards; the regex needs `perft-bench.ts` **in** and the probe needs it **out** until
+       the stdout channel is made private. That channel is `A2`, and this ticket cannot satisfy `A1`
+       without it.
+  - **`ABC-028` should be scheduled BEFORE or WITH `ABC-029`, and that ordering is now load-bearing
+    for a reason this ticket created.** Both open `src/history-pane.nfr.test.ts`. `ABC-028`'s `A2`
+    makes the false *"may be rebuilt per test freely"* sentence at `src/history-pane.nfr.test.ts:106-112`
+    **TRUE** instead of correcting it, so if it lands first **no merged text is edited at all**. If
+    `ABC-029` opens that file first, `ABC-028`'s own row records the consequence: the correction
+    falls due at three sites and it is **BA/PM's**, not the Engineer's.
+  - **This hop OPENED that file and declined the instruction in it.** `RISK-ABC017-01`'s trap was read
+    and not acted on: no fixture was rebuilt, no line of `src/history-pane.nfr.test.ts` was written,
+    and **this ruling requires nobody to touch those fixtures.** The trigger the risk names is the
+    **EDIT**, not the read — a comment that says *"these may be rebuilt freely"* is only dangerous to
+    someone who acts on it — so the correction falls due at `ABC-029`'s BUILD hop and not here.
 - **`EPIC-006`** supplies the human's colour and the glyph flags. The loop takes them as parameters;
   it is not blocked on `EPIC-006`, because a test supplies them directly.
 - **Carried, not owned — `ABC-009`.** The loop calls `legalMoves` **once per ply** through
@@ -1509,6 +1542,45 @@ CI.
   - **The loop is the ONLY place the repetition derive may live.** `NFR-002`'s row voids its own
     `O(window)` statement *"if a renderer ever pulls the repetition derive into a frame"*; `ABC-016`'s
     `A13` spies the panel at 0 derives and this ticket's render-seam contract is the other half.
+
+    > **[D52 — 2026-08-11 by BA/PM at task `abc019-rebase-2026-08-12`, subtask `refinement-ABC-019-a11`
+    > (Workflow 07). THE REBASE MADE THIS BULLET COLLIDE WITH A MERGED TICKET'S CRITERION, AND THE
+    > COLLISION IS RULED IN THIS BULLET'S FAVOUR. NO CRITERION OF THIS TICKET MOVES, NO PRODUCTION LINE
+    > IS OWED, AND `src/turn-loop.ts` IS NOT TO BE CHANGED.]**
+    >
+    > `src/turn-loop.ts:52` imports `./history.ts` at runtime, so **`ABC-019` is this project's FIRST
+    > production runtime importer of `src/history.ts`** — re-derived at this hop with `A11`'s own regex
+    > over the 17 non-test `.ts` files in `src/`: **exactly one match, `src/turn-loop.ts`.** That turns
+    > `ABC-017`'s two structural instruments in `src/history-pane.nfr.test.ts` RED (`:228` and `:275`),
+    > and the full suite reads **2 failed / 789 passed on 28 files, skip 0**, re-run here and identical
+    > to the figures the rebase hop recorded.
+    >
+    > **`NFR-002`'s premise is NOT dead, and that is a MEASUREMENT rather than a reading of this
+    > bullet.** The premise this row states in its own words is scoped to **a renderer** and **a
+    > frame** — *"the quantity belongs to the LOOP (`ABC-019`), not to a frame"*. Probed at this hop
+    > with the same `module.registerHooks` technique the merged probe uses, rooted at the five
+    > renderer modules (`frame.ts`, `render.ts`, `history-pane.ts`, `status-panel.ts`,
+    > `glyph-mode.ts`): the render closure is **11 modules** — `apply`, `fen`, `frame`, `glyph-mode`,
+    > `history-pane`, `legal`, `moves`, `position`, `render`, `san`, `status-panel` — and
+    > **`history.ts` is NOT among them.** **The zero is not a blind zero:** the same probe rooted at
+    > `turn-loop.ts` DOES report `history.ts`, so the instrument sees what it should. And
+    > **nothing in `src/` imports `turn-loop.ts`** (`grep` = 0), so the loop is not reachable from a
+    > frame's assembly by any path. `NFR-002`'s `O(window)` statement stands, unweakened.
+    >
+    > **What died is `A11`'s PROXY for that premise, not the premise.** *"Zero runtime importers among
+    > the production modules"* was a sound stand-in for *"no renderer pulls the derive into a frame"*
+    > only while every production module in `src/` was either the rules core or a renderer. This ticket
+    > adds the first that is neither: a driver that **`ADR-0002` clause 4 requires** to hold the single
+    > `positionCounts` supplier (`gameStatusOf`, `src/history.ts:152`), which is `A3`'s own named
+    > contract. **A reading of `A11` that forbids this import forbids the build the architecture
+    > mandates**, so it is not a live reading.
+    >
+    > **Six of `A11`'s eight tests still PASS**, including the whole spied-call-count table the merged
+    > ticket calls *"the clause that binds"*. Only the two whole-tree structural instruments are red.
+    >
+    > **Ownership: the instruments are `ABC-029`'s and NOT this ticket's** — see `## Dependencies`.
+    > **`ABC-017` is `Done`, `A11` was MET at its gate and is not re-opened, not moved and not
+    > edited**; `ABC-029`'s own `## Out of scope` already rules it *"discharged and does not move"*.
   - **`ADR-0009` clause 9 moves NOTHING on this row and that is explicit** (`[C9-5]`). The frame's row
     count is unchanged, the write half's *"23-row frame at `W = 18`, 418 characters serialized"*
     denominator is untouched, the `< 16 ms` target does not move, and none of the three ply-count
@@ -1821,6 +1893,47 @@ whose whole content is re-running someone else's suite.
 text's fidelity, not the value. The one thing that could move priority — `ABC-016` merging — moves
 **readiness**, not value: it shortens the chain in front of this ticket without changing that there is
 no game without the loop.
+
+**RE-DERIVED A SIXTH TIME 2026-08-11 for the `A11` collision (`[D52]`): `L` (5) HOLDS, `P0` HOLDS, and
+`SPLIT_REQUIRED` was tested against the real question rather than against the precedent — because the
+standing tripwire named at the fourth hop was ARMED for exactly this shape of hop.**
+
+**The tripwire's own words are** *"a FIFTH hop that adds production scope beyond one guard should
+re-derive size against `SPLIT_REQUIRED` seriously rather than by precedent"*. **This is the sixth hop
+and the tripwire is answered on its own terms, not stepped around:**
+
+- **Production scope added: ZERO, and this is the strong form of zero.** No criterion is added,
+  amended, renumbered or deleted — the count stays **27** and the table stays **18 rows**. No guard,
+  no `try`/`catch`, no membership check, no import. **`src/turn-loop.ts` is byte-identical across the
+  rebase and this hop** (md5 `bd793612…`, asserted here against the rebase hop's own record). **The
+  ruling's whole content is that the delivered loop is CORRECT and must not be changed** — the
+  opposite of adding scope.
+- **Test scope added: ZERO.** No new file, no new row, no new assertion. `N8-LANE`'s binding risk is
+  the file count and the file count does not move. The suite grew 758 → 791 on 26 → 28 files because
+  **`ABC-017` and `ABC-027` merged**, not because this ticket added anything.
+- **Risk: DOWN in one place and UP in another, and both are stated.** DOWN, because a criterion
+  collision that would otherwise have been discovered at the merge is now named with an owner. UP,
+  because this ticket is **RED and cannot merge until a ticket it does not own lands** — which is a
+  scheduling exposure, recorded in `## Dependencies` rather than smoothed.
+
+**`SPLIT_REQUIRED` — the verdict, and the candidate was real this time.** The `XL` trigger has been
+the same at six hops and none of it moved: folding in `ABC-021`'s claim outcome, `ABC-018`'s frame
+output or `ABC-012`'s history module. But the honest test is not the number — **it is whether a second
+ticket is hiding here**, and at this hop **one was, and it was found, and it is NOT this ticket.** The
+candidate is *"re-scope `NFR-002`'s structural guards so they measure the frame path rather than every
+non-test file"*. It has its own user (`NFR-002`), its own value independent of this loop, its own file
+(`src/history-pane.nfr.test.ts`, which this ticket does not otherwise touch), and its own open design
+question. **It is already a ticket — `ABC-029` — cut 2026-08-12 before this collision was visible.**
+So `SPLIT_REQUIRED` does **not** fire on `ABC-019`: the split already happened, and this hop's job was
+to route to it rather than to absorb it. **Absorbing it is what would have made this ticket bigger,
+and it was refused for three measured reasons** (`## Dependencies`, `ABC-029` bullet).
+
+**Priority `P0` HOLDS, and the uncomfortable consequence is stated rather than hidden.** This `P0` now
+merges behind a `P1`, a `P1` and a `P2`-promoted-to-`P1` — that is one more than the previous hop
+recorded, and it is a **build-edge fact, not a value change**: there is still no game without the
+loop. **What DOES move is `ABC-029`'s priority, and that is BA/PM's to move and is done at this hop:
+`P2` → `P1`**, because its own `P2` derivation rests on the sentence *"Production runtime importers
+are zero, measured"* and that figure is now **ONE**, measured here.
 
 ## Definition of Ready
 
@@ -2139,3 +2252,65 @@ branch's merge, no action owed to anyone.**
 17. **NEW — the re-gate itself now has a stated completion test, and it is not this ticket's to run.**
     `[D51]` says what a cl. 9f re-gate must report: **which panels were real.** **Owner: the
     Orchestrator and QE.** Recorded here because the rebase hop is where it will be read.
+
+### DoR re-check 2026-08-11 (SIXTH hop) — the rebase turned a MERGED ticket's instrument RED, and the ruling is that this ticket is right
+
+**This hop wrote no criterion and changed no code. It ruled one collision and routed it.** The rebase
+onto merged `main` is done; the branch is 0 behind; `lint` / `typecheck` / `build` are 0; and
+**`npm test` is RED at 2 failed / 789 passed on 28 files, skip 0** — re-run at this hop and identical
+to the rebase hop's figures. **Both failures are in `src/history-pane.nfr.test.ts`, a MERGED file.
+Neither is in this ticket's own tests, and no test of this ticket fails.**
+
+| # | Ruling | Falsified by / evidence | Changes code? |
+|---|---|---|---|
+| 1 | **`[D52]` — `NFR-002`'s premise is INTACT and the loop is RIGHT.** The premise the catalog row states is scoped to *a renderer* and *a frame*; probed here, the five renderer roots' closure is **11 modules with `history.ts` NOT among them**, the same probe rooted at `turn-loop.ts` **does** report it (so the zero is not blind), and **nothing imports `turn-loop.ts`**. What died is `A11`'s whole-tree PROXY, not the premise | measured at this hop with `module.registerHooks`; `A11`'s own regex re-run over the 17 non-test files gives **exactly one** match, `src/turn-loop.ts` | **no** |
+| 2 | **The two RED instruments are `ABC-029`'s, not this ticket's** — its `A1` and `## Scope` item 1 already own *"define production module"* and *"one expression"*. Refused here for three measured reasons, not by preference | `ABC-029` `## Scope`/`A1`/`## Out of scope`, read at source | **no** |
+| 3 | **No merged TICKET text moves.** `ABC-017` is `Done` and `A11` was MET at its gate; `ABC-029` already rules it *"discharged and does not move"*. The board's own correction stands — `ABC-016`'s `R1`/`D27` is a precedent about a merged **TEST FILE**, not a merged **TICKET** — and this hop creates no new precedent | `ABC-029` `## Out of scope`; board row for `ABC-028` | **no** |
+| 4 | **`ABC-029` `P2` → `P1`**, re-derived because its stated `P2` premise — *"Production runtime importers are zero, measured"* — is now **ONE**, and its `A1` blocks a `P0`'s gate | measured at this hop | **no** |
+
+| # | Item | Verdict | What changed, and the evidence |
+|---|---|---|---|
+| 4 | acceptance testable + measurable | ✅ | **27 criteria, UNCHANGED** — none added, amended, renumbered or deleted; the table stays **18 rows**. **`A3`/`A3b` are re-read and explicitly NOT amended**: the loop's own half of `NFR-002` is already a criterion (`gameStatus` exactly `plies + 1`, `repetitionCounts` **0** at the module boundary), so nothing new is owed here. **A criterion asserting *"nothing imports `turn-loop.ts`"* was considered and REFUSED as bloat** — once `ABC-029`'s guard measures the frame path as a closure, importing the loop from a renderer pulls `history.ts` into that closure and the guard catches it **without a second criterion** |
+| 5 | dependencies known | ⚠️ | **NEW BLOCKING DEPENDENCY: `ABC-029`, with `ABC-028` ordered before or with it.** This is the first time this ticket cannot go green on its own hop, and the `⚠️` is recorded rather than smoothed. It is **not** a start blocker — the loop is built, delivered and correct — it is a **merge blocker**, and it stacks on the two already carried (`A20` on merged `ABC-027`, cl. 9f's real-panel run) |
+| 6 | NFR triggers, each measurable | ✅ | **no bar, target or level moves**, on this ticket or anywhere. `NFR-002`'s three ply-count clauses, `A3b`'s spied counts and the `< 16 ms` target are untouched. `N8-LANE` unmoved — zero files added. **`plans/nfr-catalog.md` was NOT edited** (flag 19) |
+| 8 | size | ✅ | `L` (5), **re-derived a sixth time and unmoved.** The tripwire was armed for this shape of hop and is answered on its own terms: **zero production scope, zero test scope.** `SPLIT_REQUIRED` tested against the real question — a second ticket WAS hiding here, it was found, and **it is already `ABC-029`** |
+| 9 | priority | ✅ | `P0`, unmoved. What moved is `ABC-029` `P2` → `P1` |
+| 10 | no major unresolved blocker | ❌ | **The suite is RED and the repair belongs to another ticket.** This is a genuine `❌` and it is written as one. Route to green: `ABC-028` → `ABC-029` → rebase → then `A20` + cl. 9f's real-panel run |
+
+**Items 1, 2, 3 and 7 are unchanged by this hop.**
+
+> **REQUESTED: NO FORWARD MOVE. `ABC-019` stays in `In Development`, now BLOCKED on `ABC-029`.** The
+> Orchestrator may prefer the `Blocked` column, which is visible and time-tracked and is the honest
+> home for *"cannot merge until another ticket lands"*; **the choice is the Orchestrator's and the
+> reason is recorded either way.** What must NOT happen is a move to `In Review` or forward: the suite
+> is RED and `quality.gate_enforcement` is `blocking`. **`plans/board.md` was not opened or edited by
+> this hop.**
+
+**Flags after this hop. Two are carried, and three are new:**
+
+18. **CARRIED — flags 14, 16 and 17 are unchanged and none was re-verified here.** `ABC-021`,
+    `ADR-0009` cl. 9e's wording, the four stale comments in `src/frame.test.ts`, and cl. 9f's
+    completion test. **No ticket, ADR or `src/` file was opened for a ruling by this hop.**
+19. **NEW — `plans/nfr-catalog.md`'s `NFR-002` row is owed ONE note, and it is NOT BA/PM's.** The row
+    already scopes its own void-condition to *a renderer* and already says *"the quantity belongs to
+    the LOOP (`ABC-019`), not to a frame"* — **so this ruling needs no catalog edit and none was
+    made.** What the row does not yet record is that the first non-renderer production importer of
+    `src/history.ts` now exists, which is the fact that makes the scoping load-bearing rather than
+    incidental. **Owner: Architect/Design seeds the row; Security/NFR still owns `NFR-002`'s
+    `MET`/`MISS`, and this ticket has never been through a Security/NFR gate.** Flagged, not taken.
+20. **NEW — `ABC-029`'s `A3` contradicts itself and it is flagged at its own site, not fixed here.**
+    Form (b) excludes `perft-bench.ts` from **both** guards, while `A3`'s closing sentence says
+    *"Either way, `WPERFT-STATIC` must still die, and it must die on the regex"* — which form (b)
+    makes impossible. **Recorded in `ABC-029` for its design hop.**
+21. **NEW — the ticket front matter reads `in-review` / `In Review` and the live column is
+    `In Development`.** The move is committed on `grugops/abc019-rebase-2026-08-12` and is **not
+    merged**, so this branch's `plans/board.md` is one hop stale and the front matter agrees with the
+    stale board rather than with the truth. **Deliberately NOT edited**, on the same precedent as the
+    previous four hops and on `[D21]`'s lesson — board hygiene is the Orchestrator's, and editing one
+    half of a two-file contract on a branch carrying a stale other half creates a third state.
+    **Owner: the Orchestrator.**
+22. **NEW — a date defect, carried forward and NOT smoothed.** This machine's clock reads
+    **2026-08-11T20:37Z** (local 23:37) while the board, the traceability headers and `ABC-017`'s
+    merge record are dated **2026-08-12**. This hop used the true clock in its own text rather than
+    matching the record, and edited nothing to make the two agree. **The rebase hop recorded the same
+    defect independently; two roles have now seen it.**
