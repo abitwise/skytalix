@@ -332,6 +332,159 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
   });
 
   /**
+   * `ABC-029` `A6.3` AND `A6.4` — THE EXPRESSION ABOVE, WITNESSED IN THE SUITE RATHER THAN OUT OF
+   * TREE.
+   *
+   * Every required verdict `A6.1` and `A6.2` state is a CONSTRUCTED build — one line prepended to a
+   * real production module, run out of tree — and QE recorded what that leaves behind: nothing in
+   * the committed suite goes red if a later hop regresses this expression, so a row is "only as good
+   * as the next person re-running it". The three tests below close that for `A6.3` and `A6.4`: the
+   * same constructed sources, the same expression, on every run.
+   *
+   * THE GUARD'S OWN SITE IS BYTE-UNTOUCHED. `ABC-029` permits zero characters of that expression to
+   * change and none did, so what stands below is a SECOND INSTANCE of the literal rather than the
+   * literal moved out of the guard. The first test is what stops the two diverging: it asserts the
+   * guard's executable site still holds exactly this expression, so a hop that widens the guard
+   * cannot leave these witnesses silently measuring a dead copy. Without it a copy would be worse
+   * than no witness.
+   *
+   * `A6.3` RESTS ON A SET CLOSED BY GRAMMAR, AND THE CLOSURE IS THE POINT — four more sampled
+   * spellings would be the same defect one level up. After the `type` keyword in a type-only
+   * declaration carrying a specifier, TypeScript admits exactly THREE clause shapes — a brace, a
+   * namespace `*` with or without `as ns`, and a bare identifier — over TWO keywords. Six cells, of
+   * which `export type <Ident> from` is not a form at all; `import type Default, { A } from` is
+   * `TS1363` and does not exist either. The table below is that grid with its one hole DECLARED, and
+   * the `A6.3` test's first assertion is the accounting — every cell is witnessed or declared not a
+   * form. The next reader checks a closure instead of trusting a sample, and there is no seventh
+   * cell for a later spelling to arrive in.
+   *
+   * `A6.4`'s set is closed the same way and is smaller: an ESM re-export admits `*`, `* as ns` and
+   * `{ … }`, and all three must be RED. `* as ns` is `A6.4`'s own row; the other two are `A6.1`'s,
+   * restated from the closure's side and NOT a second obligation — the same shape as `A6.2`'s
+   * `WPERFT-DYN` row restating `A3`'s verdict from the guard's side.
+   *
+   * WHAT THESE WITNESSES DO NOT WITNESS, so they are not read as more than they are:
+   *
+   * - They run the EXPRESSION, not the guard. The scanned set, the declared licence and the
+   *   `toEqual` equality are the guard's above; `A1` and `A5` are where those are stated.
+   * - They read SOURCE TEXT, exactly as the guard does, and never compile a build. That is a real
+   *   bound on one cell: `import type H from "./history.ts";` is rejected by `tsc` here with
+   *   `TS1192`, because `src/history.ts` has zero default exports — the same root cause as `L4`, and
+   *   its trigger is `L4`'s (the first `export default` added to `src/history.ts`). The cell is a
+   *   form TypeScript admits, so the closure holds; what this tree cannot supply is a compiling
+   *   build of it.
+   * - `A6.4` CANNOT FORBID ENUMERATION AS A TECHNIQUE. An enumeration patched with `as <ident>`
+   *   passes every row here and, measured, is not wrong. The reason to prefer the generalisation is
+   *   historical — `export * as ns from` was added to ESM in ES2020, so the clause set an
+   *   enumeration has to track has grown once already.
+   * - `L3` AND `L4` STAY OPEN BY DESIGN AND ARE NOT A LICENCE TO WIDEN THIS EXPRESSION. `(?!type\s)`
+   *   in place of `(?!type\b)` is green on all six witnesses below, and the only build separating
+   *   them — `import type{ … } from "./history.ts";` — is REJECTED by `biome check`, so no
+   *   lint-clean witness exists (`L3`). Both limits carry an owner and a trigger in the ticket.
+   */
+  const WITNESSED_EXPRESSION =
+    /^(?:import|export)\s+(?!type\b)(?:[^;]*from\s+)?"\.\/history\.ts";/m;
+  const witnessDirectory = new URL(".", import.meta.url).pathname;
+  const zobristSource = readFileSync(`${witnessDirectory}zobrist.ts`, "utf8");
+  /**
+   * The record's own construction: one line prepended to `zobrist.ts` — a production module that is
+   * unlicensed and off the frame path, so a match here is exactly the guard above going RED. THE
+   * BLANK LINE IS DELIBERATE: a single newline puts the statement against that file's docblock and
+   * trips `biome`'s import assist, which is how a false "contained" verdict was produced once.
+   */
+  const prependedToZobrist = (line: string): string => `${line}\n\n${zobristSource}`;
+
+  const TYPE_ONLY_SHAPES = ["brace", "namespace-star", "bare-identifier"] as const;
+  const TYPE_ONLY_KEYWORDS = ["import", "export"] as const;
+  const cellOf = (keyword: string, shape: string): string => `${keyword} type ${shape}`;
+
+  /** `A6.2`'s two brace spellings and `A6.3`'s four, each tagged with the grammar cell it covers. */
+  const TYPE_ONLY_WITNESSES: readonly (readonly [shape: string, keyword: string, build: string])[] =
+    [
+      ["brace", "import", 'import type { GameHistory } from "./history.ts";'],
+      ["brace", "export", 'export type { GameHistory } from "./history.ts";'],
+      ["namespace-star", "import", 'import type * as H from "./history.ts";'],
+      ["namespace-star", "export", 'export type * from "./history.ts";'],
+      ["namespace-star", "export", 'export type * as history from "./history.ts";'],
+      ["bare-identifier", "import", 'import type H from "./history.ts";'],
+    ];
+
+  /**
+   * THE ONE CELL OF THE GRID TYPESCRIPT DOES NOT ADMIT, declared rather than left as a gap in the
+   * table above: there is no `export type <Ident> from "…"` form. Declaring it is what makes the
+   * closure checkable — a reader counts 3 x 2 and finds every cell accounted for.
+   */
+  const NOT_A_TYPE_ONLY_FORM: readonly (readonly [shape: string, keyword: string])[] = [
+    ["bare-identifier", "export"],
+  ];
+
+  /** The ESM re-export clause set, also closed: `A6.4`'s row plus `A6.1`'s two, all RED. */
+  const REEXPORT_WITNESSES: readonly (readonly [shape: string, build: string])[] = [
+    ["*", 'export * from "./history.ts";'],
+    ["* as ns", 'export * as history from "./history.ts";'],
+    ["{ … }", 'export { repetitionCounts } from "./history.ts";'],
+  ];
+
+  it("runs the guard's OWN expression — a drift tripwire, not a copy that can go stale", () => {
+    // `ABC-029` forbids changing the guard's expression, so the witnesses hold a second instance of
+    // the literal instead of moving it out of the guard. THIS is what keeps the two the same: a hop
+    // that widens the guard reds this test and is told, at the site, to re-run the witnesses.
+    const instrument = readFileSync(`${witnessDirectory}history-pane.nfr.test.ts`, "utf8");
+
+    expect(instrument, "the guard above runs the expression the witnesses below run").toContain(
+      `/${WITNESSED_EXPRESSION.source}/${WITNESSED_EXPRESSION.flags}.test(`,
+    );
+  });
+
+  it("A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar", () => {
+    // The closure itself, asserted rather than argued: the witnesses cover exactly the 3 x 2 grid
+    // minus the cell TypeScript does not admit. A new spelling has to land in an existing cell.
+    const grid = TYPE_ONLY_SHAPES.flatMap((shape) =>
+      TYPE_ONLY_KEYWORDS.map((keyword) => cellOf(keyword, shape)),
+    );
+    const absent = NOT_A_TYPE_ONLY_FORM.map(([shape, keyword]) => cellOf(keyword, shape));
+    const witnessed = [
+      ...new Set(TYPE_ONLY_WITNESSES.map(([shape, keyword]) => cellOf(keyword, shape))),
+    ];
+
+    expect(witnessed.sort(), "every grammar cell is witnessed or declared not a form").toEqual(
+      grid.filter((cell) => !absent.includes(cell)).sort(),
+    );
+
+    // ARMING control: a green is worthless without one, the same reason the probe below carries an
+    // arming root. The SAME expression on the SAME base is RED on a real runtime importer, so the
+    // six greens are the type-only exclusion working and not an expression that matches nothing.
+    expect(
+      WITNESSED_EXPRESSION.test(prependedToZobrist('import { newGame } from "./history.ts";')),
+      "the witness is ARMED",
+    ).toBe(true);
+    expect(WITNESSED_EXPRESSION.test(zobristSource), "the unmutated control").toBe(false);
+
+    for (const [, , build] of TYPE_ONLY_WITNESSES)
+      expect(WITNESSED_EXPRESSION.test(prependedToZobrist(build)), build).toBe(false);
+  });
+
+  it("A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set", () => {
+    expect(
+      REEXPORT_WITNESSES.map(([shape]) => shape),
+      "every ESM re-export clause shape is witnessed",
+    ).toEqual(["*", "* as ns", "{ … }"]);
+
+    // FALSIFIABILITY control: the same expression on the same base is GREEN on the type-only
+    // counterpart of `A6.4`'s own build, so the reds below are the FORM being detected and not an
+    // expression that matches every line beginning `export`.
+    expect(
+      WITNESSED_EXPRESSION.test(
+        prependedToZobrist('export type * as history from "./history.ts";'),
+      ),
+      "the witness is not matching every export line",
+    ).toBe(false);
+
+    for (const [, build] of REEXPORT_WITNESSES)
+      expect(WITNESSED_EXPRESSION.test(prependedToZobrist(build)), build).toBe(true);
+  });
+
+  /**
    * `NFR-002`'s OWN property, MEASURED rather than pattern-matched — a DIFFERENT property from the
    * guard above, over a DIFFERENT set. Neither is a weaker version of the other and neither may be
    * deleted as redundant (`ADR-0011` clause 3; `ABC-029` `## Out of scope`).
