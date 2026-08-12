@@ -20,7 +20,7 @@
  * `vi.mock` factory is hoisted to file scope, so putting these assertions in `history-pane.test.ts`
  * would re-route the module graph for that whole acceptance table.
  */
-import { execFileSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { readdirSync, readFileSync } from "node:fs";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { GameHistory } from "./history.ts";
@@ -145,6 +145,69 @@ const renderedPliesOf = (rows: readonly string[]): number =>
     0,
   );
 
+/**
+ * `ADR-0011` CLAUSE 1 — THE ONE EXPRESSION. Both guards at the bottom of this file derive their
+ * scanned set from this function and from nothing else.
+ *
+ * > A **production module** is every `.ts` file under `src/` that is not a `.test.ts`.
+ *
+ * No exclusions, no exceptions, no filenames. `history.ts` is one, `perft-bench.ts` is one, and on
+ * `ABC-019`'s branch `turn-loop.ts` is one. Each guard then applies exactly ONE named rule about
+ * this set — `FRAME_PRODUCERS` for the probe, `LICENSED_DRIVERS` for the regex — and the two rules
+ * differ because THE TWO GUARDS HOLD DIFFERENT PROPERTIES. Being a production module is not the
+ * same as being in scope for `NFR-002`, and conflating those two was the defect `ABC-029` fixed.
+ */
+const productionModulesIn = (directory: string): readonly string[] =>
+  readdirSync(directory).filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"));
+
+/**
+ * `ADR-0011` CLAUSE 2 — THE DECLARED FRAME PATH, which is the probe's one named rule about the set
+ * above. `NFR-002`'s premise is: `src/history.ts`'s module body is never evaluated in the closure
+ * of the frame's producers. No other module set is in scope for that row.
+ *
+ * IT IS DECLARED, NOT DERIVED, and that is forced rather than chosen: `src/frame.ts` imports
+ * NOTHING — its runtime closure is exactly itself — because a frame is composed by INJECTION,
+ * `frame.ts` taking rows as data, and nothing in `src/` imports a renderer at all. So no closure of
+ * any single module yields the frame path and there is nothing to derive from the module graph.
+ *
+ * The five entries are the producers of the frame `plans/nfr-catalog.md`'s `NFR-002` row
+ * enumerates — board and labels, status panel, history pane, message region — plus the glyph mode
+ * the board renders through. Check this list by READING it against that row's `Applies to` cell.
+ *
+ * IT FAILS OPEN, and that is recorded rather than discovered: a renderer added without being
+ * declared here is silently unguarded. `ADR-0009`'s frame-height identity is a PARTIAL tripwire (a
+ * renderer that adds no rows would not trip it) and is not claimed as more. Owner: Architect/Design,
+ * at the next hop that adds a frame producer. Dated expiry: `EPIC-006`, where the entry point
+ * assembles a frame, composition becomes an import, and this declaration is replaced by
+ * `closure(<assembly module>)` and DELETED.
+ */
+const FRAME_PRODUCERS: readonly string[] = [
+  "frame.ts",
+  "glyph-mode.ts",
+  "history-pane.ts",
+  "render.ts",
+  "status-panel.ts",
+];
+
+/**
+ * `ADR-0011` CLAUSE 3 — THE DECLARED LICENCE, which is the regex guard's one named rule about the
+ * same set. `ADR-0002` clause 4: "`gameStatus`'s `positionCounts` gets exactly one supplier: the
+ * history module. No other caller constructs that map." A production module may hold a runtime
+ * import of the history module only if it is the game-owning driver that rule requires.
+ *
+ * ONE entry, carrying its citation: `turn-loop.ts` is `ABC-019`'s loop, whose `A3` names
+ * `gameStatusOf(history)` as the single repetition-derive site — the loop is where the quantity
+ * belongs, and `NFR-002`'s row says so in its own words.
+ *
+ * THE LICENCE IS FILTERED TO THE ENTRIES THAT EXIST, so a driver that has not been built yet is
+ * vacuous rather than red — this tree has no `turn-loop.ts` and `ABC-019`'s has one, and the guard
+ * is green on both. The reach that bounds is named in `ADR-0011` and is NOT a choice: this tree and
+ * "`ABC-019`'s tree with `turn-loop.ts` deleted" are the same 16 files, so no guard can be green on
+ * the first and red on the second. A licence that goes stale while its file EXISTS is caught, and
+ * that is the kill the equality below buys.
+ */
+const LICENSED_DRIVERS: readonly string[] = ["turn-loop.ts"];
+
 describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
   beforeEach(() => vi.clearAllMocks());
 
@@ -233,18 +296,20 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     expect([whiteCell(rows[1] as string), blackCell(rows[1] as string)]).toEqual(["Ng1", ""]);
   });
 
-  it("leaves src/history.ts with ZERO runtime importers among the production modules", () => {
+  it("licenses src/history.ts's runtime importers: the set EQUALS the declared licence", () => {
     // The structural half of `A11`, asserted against delivered SOURCE rather than against a reading
     // of the ticket: the pane must import `GameHistory` as a TYPE and nothing else, or `history.ts`
     // and everything it derives are back in the frame's module graph.
     //
+    // THIS GUARD IS NOT AN `NFR-002` GUARD AND NEVER WAS (`ADR-0011` clause 3): it holds
+    // `ADR-0002` clause 4's WHOLE-TREE single-supplier invariant, which is why it scans every
+    // production module — including the ones no frame can reach, `perft-bench.ts` among them.
+    //
     // Scope stated plainly: PRODUCTION modules. `src/history.test.ts` and
     // `src/history-pane.test.ts` both import it at runtime to BUILD fixtures — `A7` requires
-    // `takeBack` — and a test importer is not what `NFR-002`'s claim is about.
+    // `takeBack` — and a test importer is not what `ADR-0002` clause 4 is about.
     const directory = new URL(".", import.meta.url).pathname;
-    const production = readdirSync(directory).filter(
-      (file) => file.endsWith(".ts") && !file.endsWith(".test.ts"),
-    );
+    const production = productionModulesIn(directory);
     const runtimeImporters = production.filter((file) =>
       /^import\s+(?!type\b)[^;]*from\s+"\.\/history\.ts";/m.test(
         readFileSync(`${directory}${file}`, "utf8"),
@@ -252,42 +317,62 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     );
 
     expect(production).toContain("history-pane.ts");
-    expect(runtimeImporters).toEqual([]);
+    // AN EQUALITY — not empty, and NOT a subset. Empty is red on `ABC-019`'s correct build, where
+    // the licensed driver exists and legitimately imports `history.ts`. A subset ("no UNLICENSED
+    // importer") is green on both trees and would silently drop the kill this equality buys: a
+    // licence that has gone STALE — its driver still there, no longer importing — leaves an entry
+    // asserting something untrue, and only an equality reports it.
+    expect(runtimeImporters).toEqual(production.filter((file) => LICENSED_DRIVERS.includes(file)));
     expect(readFileSync(`${directory}history-pane.ts`, "utf8")).toContain(
       'import type { GameHistory } from "./history.ts";',
     );
   });
 
   /**
-   * The same property MEASURED rather than pattern-matched, because the assertion above reads
-   * SYNTAX and syntax has a reach.
+   * `NFR-002`'s OWN property, MEASURED rather than pattern-matched — a DIFFERENT property from the
+   * guard above, over a DIFFERENT set. Neither is a weaker version of the other and neither may be
+   * deleted as redundant (`ADR-0011` clause 3; `ABC-029` `## Out of scope`).
    *
-   * Its regex `/^import\s+(?!type\b)[^;]*from\s+"\.\/history\.ts";/m` implements ONE of the five
-   * forms that evaluate a module body. A production module carrying `void import("./history.ts")`
-   * or a bare `import "./history.ts";` is a genuine runtime pull that voids `NFR-002`'s premise,
-   * and the regex sees neither — the second because it requires a `from` clause. Both survive the
-   * whole suite. (Healthy in the same regex and recorded so nobody re-sweeps it: multi-line
-   * `import { … }` blocks and `import * as ns` ARE matched, because `[^;]*` spans newlines.)
+   * The guard above holds `ADR-0002` clause 4's whole-tree licence EQUALITY over every production
+   * module. This one holds `NFR-002`'s frame-scoped premise — `history.ts`'s module body is never
+   * evaluated in the closure of the DECLARED frame producers. Each catches builds the other cannot,
+   * in BOTH directions, and that is a consequence of the properties rather than a coincidence of
+   * coverage:
    *
-   * So this asserts the property `NFR-002` actually depends on — `history.ts`'s module body is
-   * never EVALUATED — over the production module graph. It is blind to none of the five forms and
-   * needs no list of syntaxes to keep up to date.
+   * - a static pull in `perft-bench.ts` or `zobrist.ts` — off the frame path, unlicensed — is RED
+   *   above and green here, because it breaches the licence and not the premise;
+   * - a licence that goes STALE is RED above and green here, for the same reason;
+   * - a renderer reaching `history.ts` by `void import`, a bare import, a query string or a
+   *   re-export is green above and RED here. The regex above reads SYNTAX and syntax has a reach:
+   *   `/^import\s+(?!type\b)[^;]*from\s+"\.\/history\.ts";/m` implements ONE of the five forms that
+   *   evaluate a module body and sees neither `void import("./history.ts")` nor a bare
+   *   `import "./history.ts";` — the second because it requires a `from` clause. (Healthy in the
+   *   same regex and recorded so nobody re-sweeps it: multi-line `import { … }` blocks and
+   *   `import * as ns` ARE matched, because `[^;]*` spans newlines.)
    *
-   * THE SCOPE IS THE PRODUCTION CLOSURE, NOT THIS PROCESS, and that distinction is the whole
+   * So this measurement is blind to none of the five forms and needs no list of syntaxes to keep up
+   * to date — and it is scoped to the frame path, not to the whole production graph. A pull into a
+   * production module that no frame can reach is not an `NFR-002` breach, and it is the guard above
+   * that decides whether it is allowed at all.
+   *
+   * THE SCOPE IS THE FRAME PATH'S CLOSURE, NOT THIS PROCESS, and that distinction is the whole
    * reason this runs in a child. THIS FILE is itself a runtime importer of `history.ts` — the
    * `vi.mock` + `importOriginal()` at `:43-44` and the `await import` at `:58-60`, which this
    * file's own spies and `A7`'s `takeBack` require — so a probe phrased as "`history.ts` never
    * loads in this process" would fail in the very file that holds it. A child process rooted at
-   * the production modules is that scoping made mechanical.
+   * the declared frame producers is that scoping made mechanical.
    */
-  it("evaluates history.ts's module body in NO production closure — measured, not pattern-matched", () => {
+  it("evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched", () => {
     const directory = new URL(".", import.meta.url);
-    const production = readdirSync(directory.pathname).filter(
-      (file) => file.endsWith(".ts") && !file.endsWith(".test.ts"),
-    );
-    // `history.ts` itself would be a self-inflicted load and proves nothing; `perft-bench.ts` runs
-    // a benchmark at module scope (`:114`).
-    const roots = production.filter((file) => file !== "history.ts" && file !== "perft-bench.ts");
+    const production = productionModulesIn(directory.pathname);
+    // The one named rule (`ADR-0011` clause 2): root at the DECLARED frame path. The two
+    // hand-maintained filename exclusions that stood here are DELETED, not replaced, and NO THIRD
+    // ONE IS CREATED — `history.ts` is not a frame producer, so rooting it is not something that
+    // has to be refused by name; `perft-bench.ts` exports nothing (`ADR-0011` clause 4) so nothing
+    // can import a binding from it and it can never be on this path; and `ABC-019`'s
+    // `turn-loop.ts` never appears here at all, which is why the loop is green BY THE PROPERTY
+    // rather than by an exemption.
+    const roots = production.filter((file) => FRAME_PRODUCERS.includes(file));
     // The arming control is a root whose closure DOES contain `history.ts`, reached the same way a
     // real regression would reach it — as a DEPENDENCY of the root, not as the root itself.
     //
@@ -300,7 +385,14 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     // ticket keeps paying for. Measured on `WDYNIMP` and `WBAREIMP` before and after.
     const armingRoot = `data:text/javascript,${encodeURIComponent(`import ${JSON.stringify(new URL("history.ts?arming", directory).href)};`)}`;
 
+    // THE REPORT CHANNEL IS PRIVATE TO THE PROBE, and that is `ABC-029`'s `A2`. The child reports
+    // on FILE DESCRIPTOR 3 and its stdout is discarded, so a production module that writes to
+    // stdout when it is imported can no longer make this guard the sole red of the suite with
+    // `is not valid JSON` — a symptom in the wrong place, reported by the guard that exists to stop
+    // symptoms appearing in the wrong place. The trigger is dated, not hypothetical: `EPIC-006`'s
+    // CLI entry point is the first module that will print at import.
     const probe = `import { registerHooks } from "node:module";
+      import { writeSync } from "node:fs";
       let loaded = [];
       registerHooks({ load(url, context, nextLoad) { loaded.push(url); return nextLoad(url, context); } });
       const seen = () => loaded.filter((url) => url.startsWith("file:")).map((url) => url.slice(url.lastIndexOf("/") + 1).replace(/\\?.*$/, ""));
@@ -309,21 +401,32 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
       const closure = seen();
       loaded = [];
       await import(arming);
-      console.log(JSON.stringify({ closure, armed: seen() }));`;
+      writeSync(3, JSON.stringify({ closure, armed: seen() }));`;
 
-    const { closure, armed } = JSON.parse(
-      execFileSync(
-        process.execPath,
-        [
-          "--input-type=module",
-          "-e",
-          probe,
-          armingRoot,
-          ...roots.map((file) => new URL(file, directory).href),
-        ],
-        { encoding: "utf8" },
-      ),
-    ) as { closure: string[]; armed: string[] };
+    // stderr stays PIPED and is surfaced below rather than swallowed, and nothing on it is parsed —
+    // so module-scope `console.error` stays correctly invisible and nothing over-reaches onto it.
+    const child = spawnSync(
+      process.execPath,
+      [
+        "--input-type=module",
+        "-e",
+        probe,
+        armingRoot,
+        ...roots.map((file) => new URL(file, directory).href),
+      ],
+      { encoding: "utf8", stdio: ["ignore", "ignore", "pipe", "pipe"] },
+    );
+    // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK. `execFileSync` used to throw this for us; a
+    // child that dies now says so here, loudly and with its own stderr, instead of arriving as an
+    // unreadable empty report. This is the path an older Node without `module.registerHooks` takes,
+    // and it is deliberately not wrapped in a skip.
+    if (child.status !== 0)
+      throw new Error(`probe child failed (${child.status}): ${child.stderr}`);
+
+    const { closure, armed } = JSON.parse(child.output[3] as string) as {
+      closure: string[];
+      armed: string[];
+    };
 
     // POSITIVE control: the recorder sees what it should, so an empty closure cannot pass here.
     expect(closure, "the probe loaded the pane").toContain("history-pane.ts");
@@ -333,6 +436,6 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     expect(armed, "the probe is ARMED").toContain("history.ts");
 
     // The measurement itself.
-    expect(closure, "history.ts was evaluated in a production closure").not.toContain("history.ts");
+    expect(closure, "history.ts was evaluated on the frame path").not.toContain("history.ts");
   });
 });

@@ -27,7 +27,7 @@
  * and so is the layout, and a parameter no output depends on is an invitation to make an output
  * depend on it.
  *
- * IT IMPORTS `GameHistory` AS A TYPE ONLY, so `src/history.ts` keeps its zero runtime importers.
+ * IT IMPORTS `GameHistory` AS A TYPE ONLY, so IT ADDS NO RUNTIME IMPORTER OF `src/history.ts`.
  * That structural fact is what `NFR-002`'s `O(window)` claim rests on: the pane derives nothing —
  * no `gameStatusOf`, no `repetitionCounts`, no `keyHistory`, no `takeBack` — it replays forward from
  * the anchor with the core's own `parseFen` + `makeMove`, exactly as `keyHistory` does. The pane is
