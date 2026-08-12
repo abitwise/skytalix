@@ -1706,7 +1706,71 @@ CI.
   that moment rather than a pre-suspension capture. *(`[D16]` — the previous wording, "every rendered
   value is re-read from the live object at that moment", is a code-review property and cannot fail a
   test.)*
-- **No security trigger of its own.** The loop places strings; `ABC-018` sanitizes them.
+- **No security BAR of its own — which is NOT the same as "no security trigger", and the difference
+  cost a sentence here.** The loop adds no security control and introduces no injection of its own:
+  measured at the gate, it hands seam-supplied message strings to the render seam **untouched**
+  (`loopSanitizesAnything` **false**), and the only notice string it originates is the
+  `INPUT_ENDED_NOTICE` constant (`src/turn-loop.ts:168`) — the loop's one non-frame sink write. What
+  it **does** add is two **trust boundaries**, the input seam and the engine seam, so the Security/NFR
+  half **is** triggered here. It ran 2026-08-13 to `PASS_WITH_RISKS` with **no required fix**: ASVS
+  **L1** `V2.1.1`, `V2.2.1`, `V2.2.2`, `V2.3.1`, `V15.3.1` and `V1.3.2` all PASS. `A10`/`A10b` and
+  `A9`/`A9b` are the criteria those two boundaries exist behind.
+- **The loop places strings and `ABC-018` sanitizes them — ALL of them in `ascii` glyph mode; in
+  `unicode` mode only C0 and `U+007F`.** Read at source (`src/frame.ts:123-132`, and the function's
+  own doc comment says it in its own words): `sanitize` drops `code < 0x20` and `U+007F` in **both**
+  modes, and drops everything above `U+007F` **only when `mode === "ascii"`**. So in `unicode` mode the
+  **C1 block `U+0080`–`U+009F` reaches the frame, including `U+009B`, the single-code-point CSI** — as
+  do `U+00A0` / `U+200B` / `U+2028`. It is applied to the panels and to the message region alike
+  (`src/frame.ts:195-202`). **`ABC-018` is not at fault, is not re-opened and is not asked to change:**
+  passing non-ASCII through in Unicode mode is that function's stated purpose, and epic acceptance
+  `2a`'s zero-non-ASCII assertion is an `ascii`-mode assertion. **What was wrong is this ticket's own
+  justification, which claimed a wider control than the one it delegates to.** **Not blocking and not
+  reachable today:** the requirement it would engage is ASVS **`V1.3.3`, which is `L2`**, and
+  `security.asvs_level` is **`L1`**; there is no CLI entry point, no real parser and no terminal on the
+  loop's path. Whether a UTF-8 terminal *acts* on `U+009B` arriving as `C2 9B` is emulator-dependent —
+  **`UNKNOWN - verify`** from here. Carried as accepted risk **`R-A`**: owners **`EPIC-006`** (it wires
+  the render seam and owns the glyph mode) and **`ABC-018`** (`sanitize` itself); trigger **`EPIC-003`'s
+  real parser or `EPIC-006`'s CLI entry point, whichever comes first**.
+
+  > **[D56 — 2026-08-13 by BA/PM at task `refinement-ABC-019-ra-2026-08-13`, subtask
+  > `refinement-ABC-019-ra` (Workflow 07). THE TWO BULLETS ABOVE REPLACE ONE THAT CLAIMED MORE THAN ITS
+  > MEASUREMENT. NO CRITERION MOVES — ALL 27 STAND AND THE TABLE STAYS 18 ROWS — NO PRODUCTION LINE IS
+  > OWED, AND `src/turn-loop.ts` IS UNCHANGED (md5 `bd793612476c9d0eac28b75e1e3297cc`, re-checked at
+  > this hop).]**
+  >
+  > The bullet read, in full: *"**No security trigger of its own.** The loop places strings; `ABC-018`
+  > sanitizes them."* It is quoted rather than deleted — the repair is only legible beside the
+  > original, and this file's own convention is to refute a sentence with measurement rather than
+  > replace it quietly.
+  >
+  > **Two claims were in it and BOTH were wider than what holds.** The delegation half is the one the
+  > gate named (`R-A`) and is repaired above. The lead-in half — *"no security trigger of its own"* —
+  > is true only under the reading *"adds no security BAR"*; under the reading this section's own title
+  > invites, *"does not trigger a security review"*, it is **false, and was false when it was
+  > written**: the gate ran both halves and named the input and engine seams as the reason. A reader
+  > using this section to decide routing would have skipped Security/NFR on it.
+  >
+  > **This is the SEVENTH instance of one shape on this stack** — after *"non-static"*, *"the
+  > maximum"*, *"unreachable by any pattern"*, *"exactly one"*, *"the trees differ by exactly one
+  > file"* and *"the fd-3 channel cannot be forged"*. **No rule is written here to police it, and that
+  > is deliberate rather than an omission:** `ABC-028`'s instrument for exactly this shape was demoted
+  > to a convention one hop ago because nothing enforced it and its false-positive count grew while its
+  > own rule was being discussed. The shape is paid off one clause at a time, in the sentence that
+  > overclaims.
+  >
+  > **The two neighbouring accepted risks were checked IN THIS SECTION and neither needs a clause here
+  > — recorded so the absence is a measurement rather than an oversight.**
+  > **`R-B`** (`takeBack(history, 0)` repairs the **position** *from* the **move list**, so a corrupted
+  > list is outside its domain): this section makes **no repair claim at all.** Its one
+  > repair-adjacent sentence is *"No `Position` reference is held across a suspension"*, which
+  > constrains what the loop **holds**, not what the primitive can **undo**. The broader promise `R-B`
+  > narrows is `## Scope`'s *"nobody downstream is ever handed a mid-mutation board"*, and the gate
+  > measured that one TRUE as written — a phantom-ply board is a consistent board of a different game,
+  > not a mid-mutation one — so there is nothing to qualify and `A9b`(i) is untouched.
+  > **`R-C`** (the engine `catch` has no binding, so the thrown cause is discarded): **this section
+  > nowhere claims the cause is preserved**, and neither do `A9` or `A14` — they name *that* the ply
+  > failed and which reason value it carries, never *why*. Had either claimed otherwise it would be
+  > wrong; neither does. `EPIC-004` owns the day an engine failure becomes diagnosable.
 
 ## Test notes
 
@@ -2109,6 +2173,22 @@ evidence weaker.
 value — the same distinction the fifth hop drew for `ABC-016`'s merge — and the one live blocker is
 another ticket's, recorded in `## Dependencies` rather than repriced here. **No other ticket's
 priority is touched by this hop; `ABC-029` was NOT opened** (a concurrent BA/PM hop is live on it).
+
+**RE-DERIVED AN EIGHTH TIME 2026-08-13 for `[D56]`'s security clause: `L` (5) HOLDS, `P0` HOLDS, and
+`SPLIT_REQUIRED` does NOT fire.** The standing tripwire — *"a hop that adds production scope beyond
+one guard should re-derive size against `SPLIT_REQUIRED` seriously rather than by precedent"* — is
+answered on its own terms and not stepped around: **production scope added ZERO** (`src/` not opened
+for edit, `src/turn-loop.ts` md5 `bd793612…` re-checked and unchanged, 27 criteria and 18 test rows
+untouched) and **test scope added ZERO** (no file, no row, no assertion), so `N8-LANE`'s binding risk
+— the test FILE count — does not move either. **Risk is DOWN in one specific place:** the security
+justification now states the control it actually delegates to, so the next reader does not re-derive
+it and a future `EPIC-006` hop inherits a scoped obligation rather than a slogan. **`XL` (8) remains
+exactly one thing away and nothing moved toward it.** The one candidate this hop could have created —
+an instrument or checklist that polices the over-broad-sentence shape — is **deliberately not a
+ticket**: `ABC-028`'s was demoted to a convention one hop ago because nothing enforced it, and its
+false-positive count grew while its own rule was discussed. **Priority `P0` HOLDS: nothing here
+touched value, and no other ticket's priority was touched.** *(The subtask brief for this hop asked
+to re-derive `S` and `P1` — those are `ABC-029`'s numbers, not this ticket's; see flag 26.)*
 
 ## Definition of Ready
 
@@ -2549,3 +2629,45 @@ loosened**, `plans/nfr-catalog.md` was **not opened for edit**, and `N8-LANE` do
     **which panels were real**; it ran, both were real, and `[D55]` records it in the ticket.
     **Nothing is owed to the Orchestrator or QE by that flag any more.** Flag 22 is closed separately,
     above, as a timezone artifact.
+
+### DoR re-check 2026-08-13 (EIGHTH hop) — one sentence that claimed a wider control than it delegates to
+
+**This hop wrote no criterion, changed no code, added no test and moved no bar.** It repaired one
+bullet of `## Security / NFR triggers` and checked the two accepted risks that neighbour it. **The
+ticket is GATED and GREEN:** the 2026-08-13 Security/NFR gate returned `PASS_WITH_RISKS` with **no
+required fix**, and the lane on this tip reads lint **0**, typecheck **0**, build **0**,
+**807/807 on 28 files**, skip a measured **0**. `src/turn-loop.ts` md5 `bd793612476c9d0eac28b75e1e3297cc`
+— re-checked at this hop and unchanged.
+
+| # | Ruling | Falsified by / evidence | Changes code? |
+|---|---|---|---|
+| 1 | **`[D56]` — *"No security trigger of its own. The loop places strings; `ABC-018` sanitizes them"* claimed a wider control than the one it delegates to, in BOTH of its clauses.** The delegation half is repaired with the clause that makes it true (`ascii` fully; `unicode` only C0 + `U+007F`); the lead-in half is repaired from *"no security trigger"* to *"no security BAR"*, because the security half **did** trigger and **did** run. Carried as `R-A`, owners `EPIC-006` / `ABC-018`, trigger `EPIC-003`'s parser or `EPIC-006`'s entry point | `src/frame.ts:123-132` read at source — `code < 0x20` and `U+007F` dropped in both modes, `code > 0x7f` dropped **only** under `mode === "ascii"`; applied to panels and messages alike at `:195-202`. The 2026-08-13 gate measured the same thing over eleven code points × two modes, and the function's own doc comment states it | **no** |
+
+| # | Item | Verdict | What changed, and the evidence |
+|---|---|---|---|
+| 4 | acceptance testable + measurable | ✅ | **27 criteria, UNCHANGED** — none added, amended, renumbered or deleted; the table stays **18 rows**. `[D56]` is `## Security / NFR triggers` **prose**. `A9`/`A9b`/`A10`/`A10b`/`A14` were re-read against `R-B` and `R-C` and **explicitly NOT amended** |
+| 5 | dependencies known | ⚠️ | **Unchanged and not re-verified here.** `ABC-029` (with `ABC-028` ordered before or with it) is still the carried hold; neither ticket was opened — a QE hop is live on `ABC-028` |
+| 6 | NFR/security triggers | ✅ | **The one item this hop touched, and no bar moved.** `NFR-002`'s three ply clauses, `A3b`'s spied counts, `N8-LANE`'s ≤ 650 ms allowance and `NFR-004`'s async contract are all **unedited**. `plans/nfr-catalog.md` was **not opened**. What changed is the security bullet's SCOPE, from a claim to a measurement |
+| 7 | test notes | ✅ | **18 rows, unchanged.** No row added, none deleted, no Expected cell touched |
+| 8 | size | ✅ | `L` (5), **re-derived an EIGHTH time and unmoved.** Production scope added **zero** (`src/` not opened; md5 unchanged), test scope added **zero** (no file, no row, no assertion), so `N8-LANE`'s binding risk — the test FILE count — does not move either. `XL` (8) is still exactly one thing away and nothing moved toward it: folding in `ABC-021`'s claim outcome, `ABC-018`'s frame output or `ABC-012`'s history module. **`SPLIT_REQUIRED` does NOT fire** — the honest question *"is a second ticket hiding here?"* has the same answer as the sixth and seventh hops: yes, and it is already `ABC-029`. **The one candidate this hop could have created — an instrument that polices over-broad sentences — is deliberately NOT a ticket; see the flag below** |
+| 9 | priority | ✅ | `P0`, unmoved. **Nothing here touched value** — there is still no game without the loop. **No other ticket's priority is touched by this hop.** *(Recorded because the subtask brief asked for `S`/`P1`: those are `ABC-029`'s size and priority, not this ticket's, and neither was adopted — see the flag below.)* |
+| 10 | no major unresolved blocker | ✅ | **This flips from `❌` to `✅` on the seventh hop's own stated route, and the flip is not this hop's doing.** The `❌` was *"the suite is RED and the repair belongs to another ticket"*; the lane on this tip is **807/807 on 28 files** and the ticket is through its Security/NFR gate. **`R-D` is NOT a blocker of this ticket** — it is a merge-order question about what else rides in this branch, and it is the Orchestrator's |
+
+**Items 1, 2 and 3 are unchanged by this hop.**
+
+**Flags after this hop. One is new, one is narrowed, the rest are carried:**
+
+26. **NEW — the subtask brief for this hop named `S` and `P1` as the size and priority to re-derive.
+    Those are `ABC-029`'s, which sits in the same board column; this ticket is `L` (5) / `P0` in its
+    own front matter, on the board row, and in all seven previous derivations.** Neither was moved to
+    match the brief, and `L` / `P0` are re-derived above on the work actually done. **Owner: the
+    Orchestrator, as the brief's author. Trigger: the next brief cut for this ticket** — the risk is
+    that a hop takes the instruction literally and re-sizes a `P0` to another ticket's numbers.
+27. **NARROWED — flag 24's front-matter question is CLOSED.** The front matter now reads
+    `ready-for-uat` / `Ready for UAT` and `plans/board.md` has it under `## Ready for UAT (WIP 2/4)`.
+    **They agree**, checked at this hop by reading both. `plans/board.md` was **not opened for edit**.
+28. **NOT TAKEN, and recorded as a refusal rather than an omission — no instrument, checklist or rule
+    was written to police the over-broad-sentence shape.** `[D56]` is the seventh instance of it on
+    this stack. `ABC-028`'s repair for exactly this was demoted to a convention one hop ago because
+    nothing enforced it and its false-positive count grew while its own rule was being discussed.
+    **Writing a second one here would be the same trade at a worse price.** The clause is the repair.
