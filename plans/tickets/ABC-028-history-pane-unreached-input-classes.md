@@ -684,14 +684,16 @@ ever happens, the counterfactual **becomes** the tree and `A1` runs in it.
 ~~**The real hazard runs the other way, and it is the one to watch: if `A1` is ever deleted, weakened
 or folded into `A14`, the comment at `src/history-pane.nfr.test.ts:102-120` goes FALSE again and the
 `RISK-ABC017-01` trap is RE-ARMED**~~ **A SECOND hazard, additional to the one above: if `A1` is ever
-deleted, weakened or folded into `A14`, the comment at
-`src/history-pane.nfr.test.ts:`~~`103-120`~~**`103-123` goes FALSE for `WCACHE-LEN` too** — with the same call-count mechanism that hid it for six roles.
+deleted, weakened or folded into `A14`, the comment at `src/history-pane.nfr.test.ts:103-123` goes
+FALSE for `WCACHE-LEN` too** — ~~`:103-120`~~, corrected 2026-08-12 at `refinement-ABC-028-anchors`
+— with the same call-count mechanism that hid it for six roles.
 **`## Test notes` 2 already forbids folding `A1` into `A14`**; this risk is why that note is
 load-bearing rather than stylistic.
 
 **Standing obligation:** any hop that deletes, weakens or relocates `ABC-028` `A1` **or `A5`** **must
-re-read `src/history-pane.nfr.test.ts:`~~`103-120`~~**`103-123` and correct it in the same change**,
-because that comment asserts they exist. **Owner: whoever touches `A1` or `A5`.** No date — this is a latent
+re-read `src/history-pane.nfr.test.ts:103-123` and correct it in the same change**, because that
+comment asserts they exist — ~~`:103-120`~~, corrected 2026-08-12 at `refinement-ABC-028-anchors`.
+**Owner: whoever touches `A1` or `A5`.** No date — this is a latent
 hazard, and it is recorded as one rather than dressed up with a trigger it does not have.
 
 **A3 — the black-anchored slid window at ODD length. Given** the same anchor and cycle carried to
@@ -1130,8 +1132,9 @@ whole point: *the guard stops being an accident in another file.*
 > two diagnoses, two verdicts. **`A5` is a sibling of `A1`, not a supersession of it.**
 
 **and — THE COMMENT HALF, which `A2` owns and which is ~~NOT discharged~~ DISCHARGED.** The comment at
-`src/history-pane.nfr.test.ts:`~~`103-120`~~**`103-123`** is left saying **only what is true**, which
-~~today it does not~~ **it now does**, at the **three** places measured at the hop below:
+~~`src/history-pane.nfr.test.ts:103-120`~~ **`src/history-pane.nfr.test.ts:103-123`** is left saying
+**only what is true**, which ~~today it does not~~ **it now does**, at the **three** places measured at
+the hop below:
 
 | line | what it says now | why it is false / stale |
 |---|---|---|
