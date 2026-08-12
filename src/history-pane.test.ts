@@ -488,10 +488,14 @@ describe("ABC-017 acceptance", () => {
    *
    * THE FIXTURES. `ALL_CASES` are module-scope singletons that `A1`, `A2` and `A6` have already
    * rendered, so a snapshot taken over them is taken AFTER any first-render corruption — the
-   * `ABC-016` defect this criterion exists to prevent, reproduced at FILE scope. Measured: `WPOS`
-   * — a pane that corrupts the caller's `history.position` once per object and changes no rendered
-   * byte — passes 732/732 on 26 files against the shared fixtures, with zero catchers anywhere in
-   * the project, and fails here. `buildAllCases()` is called inside each test for that reason.
+   * `ABC-016` defect this criterion exists to prevent, reproduced at FILE scope. THE MECHANISM,
+   * which is a fact about the code in front of you and not a count of anything: a snapshot taken
+   * over an already-rendered module-scope singleton is BLIND to a corruption that happens once per
+   * object, because that corruption is already inside the snapshot — so the fixture must be built
+   * inside the test that snapshots it. `WPOS` is that build: a pane that corrupts the caller's
+   * `history.position` once per object and changes no rendered byte. It dies here, and it dies
+   * again at `ABC-028` `A4` in this file, which watches the caller's graph DURING a render.
+   * `buildAllCases()` is called inside each test for that reason.
    *
    * THE SPLIT. Byte-identical asserts over a whole pane and the non-mutation clauses assert over
    * two scalars, and in one `it` the first one masks the others: on a build that corrupts on every
