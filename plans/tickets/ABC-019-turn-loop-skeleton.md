@@ -1,8 +1,8 @@
 ---
 id: ABC-019
 title: Turn loop skeleton — ply dispatch, both seams stubbed, clean termination
-status: in-review
-column: In Review
+status: blocked
+column: Blocked
 size: L
 priority: P0
 epic: EPIC-002
