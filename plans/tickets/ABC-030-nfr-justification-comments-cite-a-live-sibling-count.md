@@ -148,10 +148,21 @@ green forever if the repair is right, and go red the moment anyone writes a live
 
 **NONE FIRE, and the threshold is stated so the claim is falsifiable rather than asserted.**
 
-- **Firing threshold: any production line at all, or any new file.** This ticket adds **zero
-  production lines and zero files** — it edits comments in four existing test files. **Measure it at
-  the gate rather than trusting this sentence:** `git diff --numstat` must show four `*.nfr.test.ts`
-  files and nothing else.
+- **Firing threshold: any production line at all, or any new file _under `src/`_.** This ticket adds
+  **zero production lines and zero files under `src/`** — it edits comments in four existing test
+  files. **Measure it at the gate rather than trusting this sentence:** `git diff --numstat` must show
+  four `*.nfr.test.ts` files under `src/` and nothing else under `src/`.
+
+  > **CLAUSE CORRECTED 2026-08-12 by BA/PM** (task `post-abc030-2026-08-12`, subtask
+  > `refinement-post-abc030`, Workflow 07). This threshold read *"any production line at all, or any
+  > new file"*, **unscoped**, and `ABC-028`'s final gate measured the consequence: the unscoped clause
+  > **fires on 33 non-source files** — context notes, queue records, board-history archives — every one
+  > of which a normal hop writes. **A threshold that fires on a hop doing its paperwork is a threshold
+  > nobody trusts, which is the same failure this ticket exists to fix one layer down.** The gate
+  > routed the fix to BA/PM as a LOW item against `ABC-028`; **`ABC-028` is in `Done` and is not
+  > re-opened**, so the two false sentences on that page stand as a closed record and the correction
+  > is applied **here**, where the clause is still live. The word added is *under `src/`*; nothing
+  > else moved, no criterion changed, and the DoR stays 10 of 10.
 - **`NFR-008` / `N8-LANE`: the delta is ZERO BY CONSTRUCTION** — no test, no file and no line is added
   to the repository, so `ADR-0008`'s paired protocol has nothing to resolve and must not be run for
   it. **`ABC-026` still owns the lane total.**

@@ -502,3 +502,66 @@ complete set — the catalogue reached the corridor and the right test because t
 reported survivors pointed at; a guard nobody asked about would not appear here. And **this ticket goes
 stale the moment `src/moves.ts` changes**: if that happens before it is built, all fourteen verdicts,
 all twenty-six witness counts and the `A4` hash must be re-measured, exactly as `ABC-023`'s were.
+
+### DoR RE-SCORED 2026-08-12 by BA/PM — **9 of 10. The two original ⚠️s are DISCHARGED and ONE NEW ⚠️ opens. The ticket predicted the wrong staleness.**
+
+Task `post-abc030-2026-08-12`, subtask `refinement-post-abc030`, Workflow 07. Every figure below was
+**measured at this hop on `main` at `43d5a9d`**, not read off a board row.
+
+**The two 2026-08-10 ⚠️s are both discharged, and by the same event:**
+
+- **INVEST / independence ⚠️ → ✅.** `ABC-023` merged 2026-08-10 (`b2d3554` → `f739a30`) and is in
+  `Done`. Nothing is in flight in `src/moves.castling.hardening.test.ts`.
+- **no major unresolved blocker ⚠️ → ✅.** The ordering dependency it named is the same one, and it is
+  closed.
+
+**ONE NEW ⚠️, on item 4 (acceptance criteria clear, testable and measurable):**
+
+```
+                       when this ticket was cut (2026-08-10)   measured 2026-08-12 on 43d5a9d
+src/moves.ts md5       6335b452fc21ffe2d0f902ecab930840        6335b452fc21ffe2d0f902ecab930840  UNCHANGED
+default suite          625 tests on 18 files                   807 tests on 28 files             +182 / +10
+```
+
+- **`A4` carries a stale number INSIDE a criterion, not only inside evidence.** It reads *"the full
+  suite is green (**625 before this ticket's rows**, plus them)"*. On today's tree that is **807**, so
+  the criterion as written is false before a single row is added. **One clause fix; the shape of the
+  criterion is right.**
+- **The seven survivor verdicts are `UNKNOWN - verify` at 807 on 28 files.** They were scored against
+  an 18-file lane. Ten test files have landed since, and at least four of them
+  (`san.test.ts`, `san.nfr.test.ts`, `san.qualifier.hardening.test.ts`, `san.suffix.hardening.test.ts`)
+  drive `toSan` over generated legal move lists while `turn-loop.test.ts` drives `legalMoves` through a
+  whole game — **any of which could kill a castling mutant that survived in August's 18-file lane.**
+  A survivor that has since acquired a catcher is a row this ticket no longer needs, and the ticket
+  cannot tell which without re-running its own instrument.
+- **This is NOT a BA/PM measurement to take.** Re-running fourteen mutants is a dev/QE hop with one OS
+  process per tree state (`## Test notes` 5); this hop wrote no code and ran no mutant, and says so.
+
+**THE LESSON, because the ticket predicted the OTHER failure mode.** Its `## Dependencies` warns that
+*"any ticket that changes `src/moves.ts` invalidates every verdict here"*. **`src/moves.ts` did not
+change — the hash is byte-identical four merges later — and the ticket went stale anyway, because the
+LANE grew around it.** A mutant's survival is a property of the *whole suite*, not of the file the
+mutant is in. The ticket's own instruction — *"every parenthetical names the suite size it was measured
+against"* — is what makes this visible at all, and it is the reason this is a one-hop repair instead of
+a silent wrong answer.
+
+**Both escalation triggers RE-CHECKED at the source at this hop, and BOTH remain NOT FIRED:**
+
+1. *Promote to `P1` when any ticket proposes to change `addCastlingMoves`, the `CastleOption` tables or
+   the castling right test.* **NOT FIRED.** The eight tickets cut at this hop (`ABC-031`…`ABC-038`,
+   `EPIC-003`) each forbid touching `src/moves.ts` in their own `## Out of scope`, and `EPIC-004` is
+   still undecomposed in `Backlog`.
+2. *Promote to `P1` if `src/perft.test.ts`'s six positions or their `fast` depths change.* **NOT
+   FIRED** — that file was last touched at `a517ff7` (2026-07-24) and no ticket proposes to change it.
+   **One thing did change around it, and it raises the stakes rather than the priority:** three of the
+   new `EPIC-003` tickets (`ABC-031` `A5`, `ABC-032` `A1`, `ABC-034` `A2`) now run property tests
+   **over that same six-position table**. It is read-only in all three, so the trigger does not fire —
+   but the table now carries more load than it did, and a future proposal to trim it should expect to
+   fire this trigger loudly.
+
+**Priority stays `P2`.** Nothing is wrong in the delivered code, there is still no user surface, and
+the new ⚠️ is a staleness in this ticket's own record rather than a new risk in the tree.
+
+**Result: 9 of 10, DoR NOT met, stays in `Backlog`, not smoothed.** What is needed before `Ready` is
+one dev/QE re-measurement hop against 807 on 28 files: re-run the fourteen mutants, re-score the seven
+survivors, and fix `A4`'s number. `Backlog` is unlimited; no WIP limit is approached.

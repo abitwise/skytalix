@@ -4,7 +4,7 @@ title: The default test lane has no cumulative budget — only per-ticket ratios
 status: backlog
 column: Backlog
 size: S
-priority: P2
+priority: P1
 epic: —
 feature: —
 ---
@@ -275,6 +275,128 @@ the next refinement pass.
   before this ticket lands. **That hold is discharged by this hop** — the total exists, so `ABC-017`
   may proceed. Priority stays **`P2`**: the lane is at 59% of the wall clause with the budget
   measured, and nothing is broken. It is now a `P2` with a number behind it rather than a feeling.
+
+## Acceptance (Given/When/Then) — WRITTEN 2026-08-12 by BA/PM. The last open DoR item is closed.
+
+Task `post-abc030-2026-08-12`, subtask `refinement-post-abc030`, Workflow 07. **This is the one item
+`## What remains` left to BA/PM.** The criteria are written against `NFR-008` as **ratified**, not
+against a feeling, and they cover the three things that section names — (a) inheritance by name,
+(b) `pool: "threads"` adopted or refused with its measurement, (c) the isolation dependence recorded
+where the next engineer will read it — **plus `H5`, the lane total, which is now owed past two merges
+and which nothing else on this board owns.**
+
+- **`A1` (the lane total is MEASURED on the current tree — this is `H5`, discharged).** **Given**
+  `main` as it stands and `NFR-008`'s own protocol — `npm test` with `PERFT_DEEP` **unset**, medians of
+  **≥ 7 interleaved runs**, round 0 discarded as warm-up, one fresh OS process per run, every run
+  asserting its own test count or it is a harness error and never a datum — **when** the lane is
+  measured, **then** **both** clauses are reported with their machine: **wall against ≤ 3 s** and **CPU
+  against ≤ 13 s**, each as a median with its spread, and each stated **MET or NOT MET**. **A single
+  run is not a reading and must not be recorded as one.** *(`H5` has been `UNKNOWN - verify` across two
+  merges; `ABC-028`'s Security/NFR hop refused even `ADR-0008`'s cheap clauses because a QE hop was
+  live on the same cores. **That refusal was right and it is the reason this criterion names the
+  protocol rather than a number.**)*
+- **`A2` (the budget is reported in FILES, not only in percent).** **Given** `A1`'s CPU reading and the
+  per-file floor already in `plans/nfr-catalog.md` (**160 ms CPU per test file, band 100–229 ms**,
+  `CPU = 0.85 s + 159 ms × files`, R² 0.9999), **when** the headroom is derived, **then** the record
+  states **how many more test FILES the CPU clause admits**, with the band, and **the arithmetic is
+  shown**. *(A percentage is not actionable at a cutting hop; a file count is. BA/PM's arithmetic over
+  the published figures at 2026-08-12 gives **≈ 26 files, band 18–41**, from
+  `(13 s − 8.85 s) ÷ 160 ms`; `A1` replaces the 8.85 with a measured number and this criterion replaces
+  the estimate with a reading.)*
+- **`A3` (`N8-LANE` is inherited BY NAME, and that is asserted over the backlog rather than asserted
+  about it).** **Given** every ticket in `Backlog` and `Ready` that expects to add a test file, **when**
+  its `## Security / NFR triggers` section is read, **then** each either **cites `N8-LANE` by name** or
+  states no lane bar at all — and **none states a looser bar**, which the row forbids. **The
+  discriminating requirement:** a ticket that re-derives its own lane bar turns this criterion red, and
+  that is the practice this ticket exists to end. *(Checked at this hop: the eight `EPIC-003` tickets
+  cut on 2026-08-12 all cite it by name with its number; `ABC-010` and `ABC-021` predate the row and
+  state nothing, which the row's own sentence — "a ticket that states nothing has stated this one" —
+  makes correct rather than a gap.)*
+- **`A4` (`pool: "threads"` is ADOPTED or REFUSED, with its measurement, never on preference).**
+  **Given** the priced candidate — **−13.97% wall / −10.78% CPU, sign 0/8 on both samples, 676/676
+  green in 24 of 24 runs** — **when** the decision is taken, **then** exactly one of two records
+  exists: **adopted**, with the required screen satisfied — **≥ 20 consecutive green runs including all
+  four `*.nfr.test.ts` files**, each run's count recorded — or **refused**, with the measurement that
+  refuses it. **"Green 24 times" is not the bar and this criterion says so**: that is exactly what
+  `--no-isolate` produced before it was caught, and **the first observed `--no-isolate` run was green**.
+- **`A5` (the isolation dependence is recorded where the person who would break it is standing — and
+  NOT in the four test files).** **Given** the measured fact that `--no-isolate` saves **−30.7% /
+  −36.5% CPU**, is green in only **4 of 21** observed runs, and fails **only** in
+  `zobrist.nfr.test.ts` / `gameend.nfr.test.ts` / `san.nfr.test.ts` (remove those and the four-file set
+  and it is green 6 of 6), **when** the warning is placed, **then** it sits in **the runner
+  configuration the change would be made in** (`vitest.config.ts` — **verified 2026-08-12: no such file
+  exists today**, so it is created by `A4`'s adoption or by this criterion) **and in `ADR-0008`**, the
+  ADR that governs this lane. **It does NOT go in the four `*.nfr.test.ts` files.**
+  > **RULING, 2026-08-12 by BA/PM, because the obvious placement is a collision.** `## What remains`
+  > item 1(c) says *"recorded where the next engineer will read it"*, and the four files are the
+  > tempting answer. **`ABC-030` is rewriting the justification comment in all four of those exact
+  > files and its `## Dependencies` says "do not run concurrently with any hop live in one of the
+  > four".** Two `Backlog` tickets editing the same four comment blocks is a conflict nobody had
+  > noticed. It is also the wrong place on its own merits: **the engineer who disarms these guards is
+  > editing the runner config, not reading a test file.** So the warning goes where the hand is.
+- **`A6` (nothing under `src/` moves, and no test is deleted, narrowed or merged).** **Given** the
+  delivered diff, **when** `git diff --numstat` and a per-file hash are read, **then** **zero** files
+  under `src/` are added, changed or removed — `src/` byte-identical — the **test count and the test
+  FILE count are identical before and after**, and `plans/nfr-catalog.md`'s rows `NFR-001`–`NFR-007`
+  are byte-identical. *(This ticket's standing promise since its cut: not a defect ticket, not a
+  proposal to delete tests, expected production diff **zero lines**. `A6` is what makes that
+  checkable instead of stated.)*
+
+## Priority RAISED `P2` → `P1` on 2026-08-12 by BA/PM — **the trigger FIRED, and it fired by a margin**
+
+The trigger written at this ticket's own cut: *"promote to `P1` when the default lane passes 3 s, **or
+when any two further tickets each add a test file under `src/`** — whichever comes first."* **Saying
+"not fired" plainly matters, and so does saying FIRED.**
+
+```
+test files under src/ when this ticket was cut (2026-08-10)   22
+test files under src/ measured 2026-08-12 on 43d5a9d          28
+
+tickets that each added a test file since the cut — THREE, and the trigger needed TWO:
+  ABC-016  695a2e7  src/status-panel.test.ts   src/status-panel.nfr.test.ts
+  ABC-017  09d4515  src/history-pane.test.ts   src/history-pane.nfr.test.ts
+  ABC-019  d83a7e4  src/turn-loop.test.ts      src/turn-loop.nfr.test.ts
+```
+
+- **Second half of the trigger: FIRED**, three tickets against a threshold of two. The hold that kept
+  `ABC-017` back was expressly discharged by the Architect/Design hop, and `ABC-019` landed after it.
+- **First half of the trigger: NOT fired.** The lane read **1.59 s wall** on the Orchestrator's single
+  run at this hop — one run, not a median, and quoted as such.
+- **And the plan just grew by eight tickets.** `EPIC-003` was decomposed on 2026-08-12 into
+  `ABC-031`…`ABC-038`, **each implying about one new test file — 7 to 8 files, ≈ 1.1–1.3 s CPU at the
+  measured 160 ms floor**. That is roughly a quarter to a third of the headroom `A2` will report, and
+  it is committed to a `P0` epic. **A budget ticket that stays `P2` while the plan that spends it
+  doubles is a budget ticket in name only.**
+
+`P1`, not `P0`: nothing is broken, the ratified clauses are not breached on any published reading, and
+`N8-LANE` still fires ticket-by-ticket at each gate long before the total is reached — which is this
+ticket's own recorded reason for why the coincidence of trigger and bar is not a design.
+
+## Size — `S` (2) STANDS, re-checked 2026-08-12 by BA/PM
+
+The Architect/Design hop assigned `S` and left the promotion to BA/PM. It stands: what remains is one
+measurement pass to an already-written protocol, one config decision with a screen, one warning placed
+in two named files, and the arithmetic in `A2`. **The one thing that would make it `M`:** if `A1`'s
+reading **breaches** either ratified clause, this stops being a budget ticket and becomes a remediation
+— re-size at that moment, and do not fold the remediation into this page.
+
+## Definition of Ready — RE-SCORED 2026-08-12 by BA/PM: **10 of 10 MET**
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** unchanged since the cut |
+| 2 | scope and out-of-scope clear | **✅** the cut's "negotiable sketch" was settled by the Architect/Design hop and is not re-opened |
+| 3 | INVEST-shaped | **✅** independent (nothing is in flight in any file it touches; `A5`'s collision with `ABC-030` is **ruled out of the four test files**, so the two no longer contend), negotiable, valuable, estimable, small, testable |
+| 4 | acceptance testable and measurable | **✅ CLOSED AT THIS HOP** — six criteria: a protocol-bound median with both clauses stated MET/NOT MET, a headroom in **files** with its band and its arithmetic shown, a quantifier over the backlog, an adopt-or-refuse with a **≥ 20-consecutive-green-run** screen, a placement ruling, and a byte-identical `src/` |
+| 5 | dependencies known | **✅** closed by the Architect/Design hop; no further Architect/Design or owner input is needed |
+| 6 | security/NFR triggers with a measurable target | **✅** `NFR-008` is the subject, ratified, both clauses numeric; **no security trigger** — zero production lines, no dependency added (`package.json` has no `dependencies` key, verified 2026-08-12), and the only file the runner reads that may be created is `vitest.config.ts`, outside `src/` |
+| 7 | test notes present | **✅** the protocol, the controls and the failure modes are all recorded above and in `plans/nfr-catalog.md` |
+| 8 | size assigned | **✅** `S` (2), re-checked, with the condition that would make it `M` |
+| 9 | priority assigned | **✅** `P1` — raised at this hop on a trigger that fired three-for-two, with the un-fired half stated as un-fired |
+| 10 | no major unresolved blocker | **✅** none. The owner's ratification landed 2026-08-11 and the acceptance criteria landed here |
+
+**`Backlog → Ready` REQUESTED 2026-08-12 by BA/PM.** `plans/board.md` was **not** opened for edit — it
+is the Orchestrator's. `Ready` stands at 0/8, so no WIP limit is approached.
 
 ## Source
 

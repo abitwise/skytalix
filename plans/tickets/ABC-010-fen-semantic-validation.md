@@ -224,3 +224,72 @@ size `M` ✅ · priority `P1` ✅ · no blocker ✅
 
 Sits in `Backlog`. The open design question is a design-hop input, not a blocker. Promotion
 to `Ready` is a separate BA/PM step and has not been taken.
+
+### DoR RE-SCORED 2026-08-12 by BA/PM — **9 of 10. NOT promoted, and the reason is a measurement this page's own argument rests on.**
+
+Task `post-abc030-2026-08-12`, subtask `refinement-post-abc030`, Workflow 07. **`EPIC-003` was
+decomposed at this hop** (`ABC-031`…`ABC-038`), which is the event this page's closing line names:
+*"this must be `Ready` before EPIC-003 is decomposed, so it is not discovered as rework mid-epic."*
+So the promotion was assessed rather than deferred — **and it does not pass.**
+
+**THE MODULE MAP THIS TICKET QUOTES IS STALE, MEASURED AT THE SOURCE ON `main` AT `43d5a9d`:**
+
+```
+this page says:  "src/fen.ts has exactly ONE production consumer (perft-bench.ts)"
+                 "parseFen has no user-facing caller"
+                 "NFR-001 is not at risk: fen.ts ... is not on the search hot path"
+
+measured 2026-08-12, production (non-test) importers of src/fen.ts:  FOUR
+  src/perft-bench.ts   :63 :71 :84
+  src/history.ts       :58  :74  :117   <- :117 is inside keyHistory(), which repetitionCounts
+                                            uses, which gameStatusOf uses, which the LOOP calls
+                                            once per ply
+  src/status-panel.ts  :156                <- ONCE PER FRAME
+  src/history-pane.ts  :121                <- ONCE PER FRAME
+```
+
+**`parseFen` is now on the render path, twice per frame, and on the per-ply evaluation path.** Three
+tickets merged after this one was written (`ABC-012`, `ABC-016`, `ABC-017`) put it there, each
+legitimately — `ADR-0002`'s derive-don't-maintain rule makes replay-from-`initialFen` the correct
+shape, and replay starts with a `parseFen`.
+
+**What that does to this page, item by item:**
+
+- **item 6 — security/NFR triggers, each with a measurable target: ✅ → ⚠️.** The trigger set names
+  `NFR-003` and `NFR-001` and **does not mention `NFR-002` at all** — the render-latency bar of
+  **< 16 ms per frame**, which is now reachable by this ticket **twice per frame**. And the stated bar
+  is the wrong size in the new context: *"full parse-with-validation adds **< 1 ms** per call"* was set
+  against a module with one consumer on no hot path; **two calls at 1 ms each is 12.5% of the whole
+  frame budget.** The bar needs re-deriving against `NFR-002`, not merely re-typing. **This is the one
+  item that blocks promotion.**
+- **item 9 — priority `P1`: still ✅, and the argument is now stronger in one half and weaker in the
+  other, so both are stated.** *Weaker:* "no user-facing caller, one consumer, nothing in flight" is
+  false — four consumers, two of them per-frame. *Unchanged:* the **latency** argument for `P1` rather
+  than `P0` still holds, because none of the four callers feeds `parseFen` a **user-supplied** string
+  — all three new ones pass `history.initialFen`, which the product produced itself. The defect this
+  ticket fixes stays latent until `EPIC-003` accepts a FEN from a human, exactly as written.
+- **items 1–5, 7, 8, 10: ✅, re-verified individually.** The acceptance criteria are unaffected by the
+  module-map change — every FEN and every expected `FenError` is a property of `parseFen` alone.
+
+**On the open design question, and why it is NOT the ⚠️.** *Does `fen.ts` gain an edge to `moves.ts`
+for the side-not-to-move-in-check rule?* It stays a **design-hop input, not a blocker**, and that
+differs from `ABC-026`'s precedent for a stated reason: there, the acceptance criteria **could not be
+written** until an architect produced a number; here they **are written** and are identical whichever
+way the edge falls. **The routing consequence is real though and belongs to the Orchestrator:** when
+this ticket is pulled it goes `Ready → In Design → Ready for Dev`, not straight to development.
+**And the new measurement makes that design hop bigger than it looked** — an edge from `fen.ts` to
+`moves.ts` now lands on a module the renderers call twice per frame.
+
+**`N8-LANE` inheritance, noted because this ticket predates the row.** `plans/nfr-catalog.md`'s
+standing bar did not exist on 2026-07-29, and its own sentence — *"a ticket that states nothing has
+stated this one"* — makes this page compliant without an edit: **≤ 650 ms CPU** (5% of `NFR-008`'s
+13 s clause), net of 160 ms per test file added. **Expected new test files: 0–1** — the table tests
+belong in the existing `src/fen.test.ts`, so **0 is the honest expectation** and this ticket may cost
+the lane nothing at all in per-file floor.
+
+**Result: 9 of 10, DoR NOT met, stays in `Backlog`, NOT promoted, and not smoothed** — `ABC-024`,
+`ABC-026`, `ABC-028` and `ABC-030` were each left with the DoR honestly unmet rather than rounded up,
+and this board's standard is not suspended because a promotion would have been convenient. **What is
+needed before `Ready` is one short BA/PM pass with Architect/Design input: re-derive item 6's bar
+against `NFR-002` with the four call sites in view.** It is small, it is named, and it is cheaper than
+discovering it inside `EPIC-003`.

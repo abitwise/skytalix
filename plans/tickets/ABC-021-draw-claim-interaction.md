@@ -67,6 +67,34 @@ owns the rendering; this ticket owns the value it renders.
 - **A fifth prompt outcome, `claim`,** alongside `ABC-019`'s four non-advancing outcomes (rejected,
   ambiguous, non-mutating command, input unavailable). It is the only command outcome that
   **terminates**; the other four return to the prompt.
+
+  > **BOUNDARY CORRECTED 2026-08-12 by BA/PM** (task `post-abc030-2026-08-12`, subtask
+  > `refinement-post-abc030`, Workflow 07). This is the paragraph the board row recorded as *"flagged
+  > by BA/PM at `refinement-ABC-019`, not taken"*. **Taken here, and re-derived from merged code rather
+  > than transcribed from the row.**
+  >
+  > **`ABC-019` shipped, and the outcome union already has six arms** — `move`, `rejected`,
+  > `ambiguous`, `command`, `eof`, `game-over` (`src/turn-loop.ts:118-124`). So *"a fifth prompt
+  > outcome"* is no longer an accurate description of what this ticket adds: **the arm exists**.
+  >
+  > **The split, stated once.** `ABC-019` owns **only that the transition exists** — that `game-over`
+  > is reachable from `awaiting-human` at all — and says so in merged code
+  > (`src/turn-loop.ts:114-116`: *"`game-over` is the transition `EPIC-006`'s `resign` and `ABC-021`'s
+  > `claim` both drive. THIS TICKET OWNS ONLY THAT THE TRANSITION EXISTS … Neither verb, its
+  > availability nor its wording is decided here."*). **This ticket owns transition 16**: driving
+  > `game-over` from `awaiting-human` **with a claimed reason**, plus the availability value and the
+  > incorrect-claim rejection.
+  >
+  > **No size change.** `S` (2) stands: the arm being present makes this ticket smaller, not larger,
+  > and the re-sizing condition below (an `ABC-019` design hop landing the terminal-reason type in a
+  > non-additive shape) is **discharged** — `TerminalReason` shipped as a union
+  > (`src/turn-loop.ts:78`) and admits additional reasons additively.
+  >
+  > **One further boundary, recorded because it did not exist when this ticket was cut:** the `claim`
+  > **token** at the real prompt is `ABC-035`'s (cut 2026-08-12 under `EPIC-003`), which owns its
+  > grammar, its tolerance and the teaching rejection when nothing is claimable. That ticket and this
+  > one have **no build-time dependency in either direction** — this ticket builds against `ABC-019`'s
+  > stub input seam, exactly as its `## Out of scope` already says.
 - **A correct claim ends the game.** The loop stops with a terminal reason naming the claimed article
   (threefold repetition claimed, or fifty-move claimed), the final frame shows the claimed position,
   and the process exits **0** — the same termination shape `ABC-019` already specifies for checkmate.
@@ -183,9 +211,18 @@ coordinate.
 - **Assert the `gameStatusOf` call count per ply.** One. This is the same shape as `ABC-019`'s
   spy-assertion that every `gameStatus` call carries a counts map, and it belongs in the same test
   harness.
-- **Reuse an en-passant-free repeated line** (`src/gameend.test.ts:27-58`'s knight cycle shape) for
+- **Reuse an en-passant-free repeated line** (`src/gameend.test.ts:26-50`'s `knightCycles` shape) for
   every repetition fixture, for `ABC-011`'s reason — the same instruction `ABC-012`, `ABC-019` and
   `ABC-020` all carry.
+
+  > **CITATION CORRECTED 2026-08-12 by BA/PM** (task `post-abc030-2026-08-12`, subtask
+  > `refinement-post-abc030`, Workflow 07). This line read **`src/gameend.test.ts:27-58`** and that
+  > range was wrong in both directions. **Re-measured at the source on `main` at `43d5a9d`, not
+  > repeated from the board row that flagged it:** `knightCycles` runs from its doc comment at line
+  > **26** to its closing brace at line **50** — `27-58` starts one line inside the comment and runs
+  > eight lines past the function, into `describe("ABC-007 acceptance")`. The correction was flagged
+  > by BA/PM at `refinement-ABC-019` and **not taken**; it is taken here. Nothing else in this bullet
+  > moved and no fixture changes.
 
 ## Size and priority rationale
 
@@ -221,6 +258,40 @@ no blocker ✅ *(its dependencies are tickets, not unresolved decisions)*
 
 Sits in `Backlog` behind `ABC-020` and `ABC-019`. Promotion to `Ready` is a separate BA/PM step and
 has not been taken.
+
+### RE-VERIFIED 2026-08-12 by BA/PM — **both hard dependencies are MERGED; the `blocked-until` is FULLY discharged and this is the SIXTH stale reference on this board**
+
+Task `post-abc030-2026-08-12`, subtask `refinement-post-abc030`, Workflow 07. **Checked at the source,
+not read off the row that carries the claim.**
+
+- **`ABC-020` — merged 2026-08-02** (`d53ce31` → `cb62c9f`). That half was already recorded as
+  discharged on 2026-08-11.
+- **`ABC-019` — MERGED, and it is in `Done`.** `src/turn-loop.ts` exists on `main` at `43d5a9d` with
+  `InputSeam`, `PromptOutcome`, `TerminalReason` and `runTurnLoop` all exported. **The board row still
+  reads `blocked-until: ABC-019 only`.** That row was corrected on 2026-08-11 and was accurate that
+  day; `ABC-019` landed after it. **This is the sixth stale `blocked-until` reference found on this
+  board — the fifth was found on 2026-08-11 and the reason it keeps happening is structural: the row
+  is corrected when the blocker is checked, not when the blocker merges.**
+- **Nothing else blocks it.** `ABC-012` and `ABC-016` are both in `Done`.
+
+**Definition of Ready, re-scored item by item against
+`agent-factory/checklists/definition-of-ready.md`: 10 of 10 MET.** Problem ✅ · scope + out-of-scope ✅
+*(both corrected at this hop — the transition-16 boundary and the `gameend.test.ts` citation)* ·
+INVEST ✅ *(and now genuinely **independent**: both hard dependencies are merged, so nothing is in
+flight beneath it)* · acceptance measurable ✅ *(exact fixture line, exact terminal reasons,
+byte-identical FEN on rejection, exact call counts, exit code)* · dependencies ✅ *(both merged;
+two hand-offs recorded with owners; one new non-dependency named — `ABC-035`)* · NFR triggers ✅
+*(`ABC-019`'s ≤ 100 µs per-ply bar, unchanged, with the wrong implementation priced at 46–50 µs)* ·
+test notes ✅ · size `S` ✅ · priority `P1` ✅ · no blocker ✅.
+
+**One NFR note added at this hop and it changes nothing on this page:** `N8-LANE`
+(`plans/nfr-catalog.md`) did not exist when this ticket was cut, and its own rule is that *"a ticket
+that states nothing has stated this one"*. So this ticket inherits **≤ 650 ms CPU** (5% of
+`NFR-008`'s 13 s clause), net of 160 ms per test file added. **Expected new test files: 0–1** — the
+claim path's rows belong beside `ABC-019`'s in `src/turn-loop.test.ts`, which already exists.
+
+**`Backlog → Ready` REQUESTED 2026-08-12 by BA/PM.** `plans/board.md` was **not** opened for edit — it
+is the Orchestrator's. `Ready` stands at 0/8, so no WIP limit is approached.
 
 ## Board history
 

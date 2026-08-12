@@ -4,11 +4,91 @@ title: Move input and controls
 status: backlog
 column: Backlog
 priority: P0
-size: M
+size: XL
 owner: BA/PM
+tickets: ABC-010, ABC-031, ABC-032, ABC-033, ABC-034, ABC-035, ABC-036, ABC-037, ABC-038
 ---
 
 # EPIC-003 — Move input and controls
+
+> **DECOMPOSED 2026-08-12 by BA/PM** (task `post-abc030-2026-08-12`, subtask `refinement-post-abc030`,
+> Workflows 07 + 03). Eight tickets cut, `ABC-031`…`ABC-038`, all into `Backlog`. **`ABC-010` was
+> already under this epic before the decomposition** (`epic: EPIC-003` in its front matter since
+> 2026-07-29) and is **not re-cut** — so this epic was never "undecomposed", it was one ticket in and
+> eight short.
+>
+> **Size corrected `M` → `XL`, and the arithmetic is shown rather than asserted.** The indicative `M`
+> (3 points) set at idea-to-epics time is wrong by ~7x: the decomposition comes to **eight new tickets
+> totalling 19 points** — `ABC-031` `S`, `ABC-032` `M`, `ABC-033` `S`, `ABC-034` `M`, `ABC-035` `S`,
+> `ABC-036` `S`, `ABC-037` `M`, `ABC-038` `S` — **plus `ABC-010` (`M`) = 22 points over nine tickets**.
+> `EPIC-002` recorded the identical correction on 2026-07-30 at 23 points over nine tickets, and this
+> is the same class of number. **The Orchestrator's no-`XL`-into-dev rule applies to TICKETS, not
+> epics** — the largest ticket here is `M`, so the rule is satisfied and there is **no
+> `SPLIT_REQUIRED`**. Recording the correction rather than leaving a stale estimate, exactly as
+> `EPIC-001` and `EPIC-002` both did.
+>
+> ## Where the two paragraphs `plans/board.md`'s row has been holding now live
+>
+> The `EPIC-003` `Backlog` row on `plans/board.md` has carried two paragraphs since `ABC-025`'s `N5`
+> ruling hop, to be placed into the `parseSan` ticket **at decomposition** — put there then rather than
+> left to a gate, *because a warning owned only by a gate that runs after the work arrives too late*.
+> **Both are now on `ABC-032`**, in `## The two paragraphs this ticket was owed`, at the head of that
+> page's NFR section:
+>
+> - **(a) `src/san.nfr.test.ts`'s five `N1` call-count rows will go red on a sanctioned optimisation of
+>   `toSan`** — that is `N1` working as specified, and the next engineer's cheapest move is to delete
+>   the row. `ABC-032` `A6` forbids the diff and its `## Test notes` 4 names the temptation. **Verified
+>   at this hop: `src/san.nfr.test.ts` holds exactly 5 tests, all in one `N1` describe block.**
+> - **(b) the lane bar it inherits.** The row says *"inherits `ABC-025`'s RE-DERIVED `N5` wording … and
+>   NOT the original wall-clock wording"*. **That is correct in every clause and one generation stale in
+>   its name**: `ABC-026` records that the instruction *"now resolves to `N8-LANE`, same clauses,
+>   corrected denominator"*. `ABC-032` carries `N8-LANE` by name with the denominator change stated and
+>   the wall-clock refusal kept, with its measured reason.
+>
+> **The `EPIC-003` row's instruction is therefore discharged** and may be retired when that row is next
+> written — by the Orchestrator, who owns `plans/board.md`.
+>
+> ## A THIRD paragraph, found at this hop and routed
+>
+> `ABC-019` `[D31]` left one question open **by name** — ***does a parser bug end the game?*** — and
+> handed it to *"`EPIC-003` and `EPIC-006`"*. **`EPIC-003`'s half is ruled on `ABC-037`**: the prompt
+> catches nothing, `ABC-019`'s merged repair-then-rethrow runs, and the crash surfaces as a crash rather
+> than as `rejected` or as a clean exit. **`EPIC-006`'s half — what the top-level handler prints and
+> what it exits with — is recorded against that epic** so it is not lost a second time.
+>
+> ## Three rulings made at this decomposition, each because the scope lines needed one
+>
+> 1. **Case-insensitivity in SAN is a RETRY, not a fold, and a multi-match is `ambiguous`.** Three of
+>    this epic's scope lines cannot all hold for SAN — `bxc4` and `Bxc4` are two different legal moves
+>    in some positions, so a case-folding parser must guess, which the ambiguity line forbids. `ABC-032`
+>    stays case-exact; `ABC-033` owns the folded retry and routes a multi-match to `ambiguous`.
+> 2. **This epic owns the move PROMPT SURFACE**, not only the grammars. Tab-completion is a completer on
+>    a line reader, so the reader is this epic's (`ABC-037`); `EPIC-006` *extends* that prompt with its
+>    own session commands, which is what its own `## Dependencies` already says.
+> 3. **`quit` and `claim` each appear in two epics' scope and they do not conflict.** This epic owns the
+>    **grammar** — the token, its tolerance, its completion target and the teaching rejection; the other
+>    epic owns **the effect** (`EPIC-006` for `quit`'s confirmation and exit, `ABC-021` for `claim`'s
+>    terminal transition). One rule, applied twice, rather than two special cases.
+>
+> ## One acceptance criterion of this epic is REDUCED, and it is flagged for a named human
+>
+> Criterion **#4** promises that `moves` lists **every** legal move in SAN. **The merged frame cannot
+> show that list**: `MESSAGE_ROWS` is 2 (`src/frame.ts:45`), the region is bounded by the panels' width
+> (~21 chars in the merged snapshots), and the start position has 20 legal moves — so the region would
+> show roughly 9 and append `+11`. The amended promise is **an exact count plus a partial list**, ruled
+> and evidenced on `ABC-036`, with the one reversible choice (a pager) named. **It does not block
+> ticket cutting or development** — the amended criterion is testable either way. Same posture
+> `EPIC-002` `[A1]` took, and for the same reason.
+>
+> ## `feature:` stays `—` and `plans/features/` stays empty. Ruled, not overlooked.
+>
+> **No `FEAT-` file is created for this epic.** A feature layer earns its keep only when an epic's
+> tickets need an intermediate grouping that changes a decision, and nothing here does: nine tickets,
+> each independently valuable, each already tracing to this epic in `plans/traceability.md`. A `FEAT-`
+> row would be a value no gate, no board move and no trace query reads — a single-use abstraction
+> (coding rule 6) and unrequested flexibility (rule 7). **The `feature:` field is NOT deleted** — it
+> stays, and it stays `—`, exactly as `EPIC-001`'s and `EPIC-002`'s 25 delivered tickets left it.
+> Revisit only if an epic ever produces two clusters that ship and are accepted separately.
 
 ## User value
 
