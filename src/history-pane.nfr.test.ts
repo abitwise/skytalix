@@ -103,13 +103,21 @@ function shuffleGame(plies: number): GameHistory {
 // Built ONCE, before any assertion. `beforeEach` clears every fixture call away, so the counts
 // below are the RENDER's and nothing else.
 //
-// THE SHARING HERE IS NO LONGER LOAD-BEARING, and that is now measured rather than argued. These
-// objects being module-scope singletons used to be the ONLY thing killing a pane that memoises
-// rows per `GameHistory` — so the obvious tidy-up to per-test fixtures would have silently removed
-// a guard nobody knew was here. `A14` now owns that property explicitly, with its own deliberately
-// shared object, and it kills a caching pane with THIS FILE not even loaded. So these may be
-// rebuilt per test freely; measured, doing so costs ~9.3 ms per rebuild (6.0 ms of it the
-// 2,000-ply shuffle) and buys nothing, which is why it was declined rather than forgotten.
+// THE FRESHNESS PROPERTY IS OWNED IN `src/history-pane.test.ts`, NOT HERE — `ABC-017`'s `A14` for
+// a cache that never invalidates, and `ABC-028`'s `A1` for one keyed on `moves.length`. A reader
+// looking for the guard against a memoising pane finds it there, with this file not loaded at all.
+//
+// UNTIL `A1` LANDED THE SHARING HERE WAS LOAD-BEARING, and the note that used to stand in this
+// place said the opposite. Measured at `ABC-028`'s build hop: with `A1` absent and these fixtures
+// rebuilt per test, a pane keyed on `moves.length` passes the whole suite 744/744; shared, it
+// fails the two `toSan` call-count assertions below, because tests earlier in this file have
+// already rendered `AT_40` and a cache HIT calls `toSan` zero times. THE MECHANISM IS A CALL
+// COUNT, NOT A ROW COMPARISON — which is why `A14` never caught that build and why the tidy-up
+// would have removed the only guard that did.
+//
+// With `A1` landed the cache dies in `src/history-pane.test.ts` either way, so rebuilding these
+// per test would no longer lose a guard. It still costs ~9.3 ms per rebuild (6.0 ms of it the
+// 2,000-ply shuffle) and buys nothing, so it stays declined — as it was at `ABC-017`.
 const AT_0 = newGame(START_FEN);
 const AT_1 = shuffleGame(1);
 const AT_3 = shuffleGame(3);

@@ -605,3 +605,368 @@ describe("ABC-017 acceptance", () => {
     expect(history.moves).toHaveLength(21);
   });
 });
+
+// ---------------------------------------------------------------------------
+// `ABC-028` — the three unreached input classes. THE PANE IS CORRECT ON ALL OF THEM: this is a
+// HARDENING ticket, `src/history-pane.ts` is not touched by it, and every criterion below is a gap
+// in what a criterion ASKED rather than a defect in what the pane does.
+//
+// `A4`'S INSTRUMENT IS THE ONLY MACHINERY THIS TICKET ADDS, and it lives in this file rather than
+// in `src/history-pane.nfr.test.ts` because it needs no `vi.mock`: it hands the pane a recording
+// view of the caller's own graph and reads what comes back. No new file, no new module, no new
+// import — every symbol it uses is already imported above.
+// ---------------------------------------------------------------------------
+
+interface GraphViolation {
+  readonly detector: "write-trap" | "board-digest";
+  readonly path: string;
+  readonly detail: string;
+}
+
+interface GraphWatch {
+  /** The recording view. The pane is handed THIS and never the caller's own object. */
+  readonly view: GameHistory;
+  readonly violations: readonly GraphViolation[];
+  /** How many times the instrument LOOKED. Zero means it never got the chance to see anything. */
+  readonly samples: number;
+  finish(): void;
+}
+
+/**
+ * `A4`'s recording view — a `Proxy` over every node reached through the handed reference.
+ *
+ * It is LIVE ACROSS THE INTERVAL rather than a before/after pair, because `D26` already established
+ * that a comparison at the ends of a render cannot express this property: a pane that mutates the
+ * caller and puts it back is invisible to any snapshot.
+ *
+ * TWO DETECTORS, because each closes the other's measured hole.
+ *   D1 the WRITE TRAP — `set` / `defineProperty` / `deleteProperty` on any node reached through the
+ *      view, reported at the INSTANT of the write, so a mutation restored before the render returns
+ *      is still on the record. Blind to a write that reaches the board through `board.buffer`.
+ *   D2 the BOARD DIGEST — the raw 128 bytes re-compared at EVERY trap, so every access the pane
+ *      makes is also a sampling point. Covers `.buffer` aliasing and the TypedArray methods. Blind
+ *      to a mutation applied AND reverted with no access in between — that is `RISK-ABC028-01`,
+ *      named in the ticket, and it is a property of synchronous calls rather than of this
+ *      instrument: a callee is observable only where it touches instrumented state.
+ *
+ * TWO RULES IT MUST NOT BREAK, both from `## Test notes` 10, both re-measured on this build:
+ *   - a view's methods are BOUND TO THE RAW NODE, because every `%TypedArray%.prototype` method
+ *     throws `TypeError: this is not a typed array` when `this` is a `Proxy`. Left unbound, a build
+ *     that mutates the board with `board.set(...)` CRASHES the render instead of being REPORTED —
+ *     "instrument broken" announced where the truth is "property violated";
+ *   - the write trap PERFORMS the write (`Reflect.set`) rather than blocking it. Blocking turns a
+ *     detection into a crash and changes the wrong build's behaviour. Detect, pass through, report.
+ *
+ * `board.buffer` IS HANDED BACK RAW ON PURPOSE. Returning a COPY would close `RISK-ABC028-01` by
+ * reporting GREEN on the wrong build, and a false negative is strictly worse than a stated limit.
+ */
+function watchHistory(history: GameHistory): GraphWatch {
+  const violations: GraphViolation[] = [];
+  const views = new WeakMap<object, object>();
+  let samples = 0;
+
+  // Read from the RAW graph, never through the view, so building the instrument is not itself an
+  // access and the baseline can never be a previous probe's damage.
+  const board = history.position.board;
+  const entryBytes = Uint8Array.from(board);
+  let boardReported = false;
+
+  /** One sampling point. EVERY trap calls it — a write is an access to the graph as much as a read. */
+  const sample = (where: string): void => {
+    samples++;
+    if (boardReported) return;
+    for (let index = 0; index < entryBytes.length; index++) {
+      if (board[index] !== entryBytes[index]) {
+        boardReported = true;
+        violations.push({
+          detector: "board-digest",
+          path: "position.board",
+          detail: `byte ${index} is ${board[index]}, entered as ${entryBytes[index]} (at ${where})`,
+        });
+        return;
+      }
+    }
+  };
+
+  const wrap = <T extends object>(node: T, path: string): T => {
+    const seen = views.get(node);
+    if (seen !== undefined) return seen as T;
+
+    const isTypedArray = ArrayBuffer.isView(node);
+    const boundMethods = new Map<PropertyKey, unknown>();
+    const write = (property: PropertyKey, detail: string): void => {
+      violations.push({ detector: "write-trap", path: `${path}.${String(property)}`, detail });
+      sample(`write ${path}.${String(property)}`);
+    };
+
+    const view = new Proxy(node, {
+      get(target, property, receiver) {
+        sample(`get ${path}.${String(property)}`);
+        const value = Reflect.get(target, property, isTypedArray ? target : receiver);
+        if (isTypedArray && typeof value === "function") {
+          const cached = boundMethods.get(property);
+          if (cached !== undefined) return cached;
+          const bound = (value as CallableFunction).bind(target) as unknown;
+          boundMethods.set(property, bound);
+          return bound;
+        }
+        if (typeof value === "object" && value !== null && !(value instanceof ArrayBuffer)) {
+          return wrap(value, `${path}.${String(property)}`);
+        }
+        return value;
+      },
+      set(target, property, value, receiver) {
+        write(
+          property,
+          `assigned ${Array.isArray(value) ? `Array(${value.length})` : String(value)}`,
+        );
+        return Reflect.set(target, property, value, isTypedArray ? target : receiver);
+      },
+      defineProperty(target, property, descriptor) {
+        write(property, "defineProperty");
+        return Reflect.defineProperty(target, property, descriptor);
+      },
+      deleteProperty(target, property) {
+        write(property, "delete");
+        return Reflect.deleteProperty(target, property);
+      },
+      has(target, property) {
+        sample(`has ${path}.${String(property)}`);
+        return Reflect.has(target, property);
+      },
+      ownKeys(target) {
+        sample(`ownKeys ${path}`);
+        return Reflect.ownKeys(target);
+      },
+      getOwnPropertyDescriptor(target, property) {
+        sample(`descriptor ${path}.${String(property)}`);
+        return Reflect.getOwnPropertyDescriptor(target, property);
+      },
+    });
+
+    views.set(node, view);
+    return view as T;
+  };
+
+  return {
+    view: wrap(history, "history"),
+    get violations() {
+      return violations;
+    },
+    get samples() {
+      return samples;
+    },
+    /** One last sampling point, so a board still altered when the render returns is on the record. */
+    finish() {
+      sample("finish");
+    },
+  };
+}
+
+describe("ABC-028 acceptance", () => {
+  /**
+   * `A1` — FRESHNESS ACROSS A MUTATION THAT DOES NOT CHANGE `moves.length`.
+   *
+   * `A14` renders the same object twice across an APPEND, so `moves.length` moves and a cache keyed
+   * on it invalidates exactly on cue — which is why `A14` cannot be the criterion that catches one.
+   * THE DISCRIMINATOR HERE IS THE UNCHANGED LENGTH: the caller takes a move back and plays a
+   * DIFFERENT one, so the pane must show `Nf6` where a length-keyed cache still holds `Nc6` at a
+   * `moves.length` of 21 both times. Do not weaken this to a second `playMove` — an append-based
+   * freshness check cannot fail on a length-keyed cache, because the key moves.
+   *
+   * THE LENGTH CLAUSES ARE CONTEXT, NOT GUARDS, and that is measured rather than assumed:
+   * `moves.length` is the CALLER's state and reads 21 on the delivered pane and on `WCACHE-LEN`
+   * alike, so they cannot mask the two clauses that report.
+   *
+   * ITS FIXTURE IS ITS OWN OBJECT (`## Test notes` 3). `blackAnchorTo` builds a fresh history on
+   * every call and this test plays moves on its own, so a fixture shared with `A3` would corrupt
+   * `A3` depending on test order — a hazard this pane has already paid for twice.
+   */
+  it("A1 — a mutation that leaves moves.length UNCHANGED still renders fresh", () => {
+    const history = blackAnchorTo(20);
+
+    const first = renderHistory(history);
+    expect(normalised(first[7] as string)).toBe("37. Nb1");
+    expect(history.moves, "20 plies").toHaveLength(20);
+
+    play(history, "b8", "c6");
+    const second = renderHistory(history);
+    expect(normalised(second[7] as string)).toBe("37. Nb1 Nc6");
+    expect(history.moves, "after the append").toHaveLength(21);
+
+    takeBack(history, 1);
+    play(history, "g8", "f6");
+    const third = renderHistory(history);
+
+    // THE CRITERION. Same object, same length, DIFFERENT game — so a pane memoising rows per
+    // `GameHistory` and invalidating on `moves.length` shows the player the move they took back.
+    expect(history.moves, "the length is unchanged across the edit").toHaveLength(21);
+    expect(third, "the third pane must not repeat the second").not.toEqual(second);
+    expect(normalised(third[7] as string)).toBe("37. Nb1 Nf6");
+  });
+
+  /**
+   * `A3` — THE BLACK-ANCHORED SLID WINDOW AT ODD LENGTH.
+   *
+   * `A6`'s fourth anchor is this same anchor and this same cycle at TWENTY plies — EVEN — so the
+   * black-anchored ODD slid window is reached by nothing else in this suite. `WLEAD-ODD` applies
+   * the leading-half-row correction at even ply counts only; it renders this input with a phantom
+   * empty white cell in row 1 and silently drops the `Nc3` ply off the top of the window.
+   *
+   * ONLY THE WHITE-CELL CLAUSE CAN REPORT, and that is MEASURED, not reasoned: at 21 plies
+   * `WLEAD-ODD` renders eight rows, the SAME eight numbers 30-37, and the SAME full last row
+   * `37. Nb1 Nc6`. The other clauses all pass on the build this test exists to catch, so they are
+   * context — they cannot mask the discriminator and they must not be mistaken for guards.
+   */
+  it("A3 — 21 plies from a black anchor: row 1 opens with a WHITE ply, not an empty cell", () => {
+    const rows = renderHistory(blackAnchorTo(21));
+
+    // THE DISCRIMINATOR, first and read POSITIONALLY: normalisation cannot tell an empty cell from
+    // a shifted one, and that is the whole of what `WLEAD-ODD` gets wrong.
+    expect(whiteCell(rows[0] as string).trim()).toBe("Nc3");
+    expect(blackCell(rows[0] as string).trim()).toBe("Nb8");
+
+    // Context. Every clause below passes on `WLEAD-ODD` and is here to state the frame.
+    expect(rows).toHaveLength(HISTORY_ROWS);
+    for (const [index, row] of rows.entries()) {
+      expect(row, `row ${index + 1}`).toHaveLength(HISTORY_COLS);
+    }
+    expect(numbersOf(rows)).toEqual([30, 31, 32, 33, 34, 35, 36, 37]);
+    expect(normalised(rows[7] as string), "the last row is FULL").toBe("37. Nb1 Nc6");
+  });
+
+  /**
+   * `A4`'S ARMING CONTROL — PER SLOT AND IN ITS OWN `it`.
+   *
+   * Per slot rather than in aggregate, so a hole in one slot cannot hide behind another. That is
+   * the only version that would have caught the pre-fix bug in the instrument this criterion was
+   * written on, where a board mutation by TypedArray method threw `TypeError` and recorded ZERO
+   * violations — "instrument broken" announced where the truth was "property violated".
+   *
+   * EVERY CONTROL GETS A FRESH FIXTURE (`## Test notes` 9). Four of the eight do not restore what
+   * they break, so a shared object would make the next control's baseline the previous control's
+   * damage — a measured failure mode, not a style preference.
+   */
+  it("A4 arming — the instrument reports a write to every slot A4 names", () => {
+    const hostiles: readonly (readonly [string, (view: GameHistory) => void])[] = [
+      [
+        "1 initialFen",
+        (view) => {
+          const saved = view.initialFen;
+          (view as { initialFen: string }).initialFen = "8/8/8/8/8/8/8/8 w - - 0 1";
+          (view as { initialFen: string }).initialFen = saved;
+        },
+      ],
+      [
+        "2 position.fullmoveNumber",
+        (view) => {
+          view.position.fullmoveNumber = 1234;
+        },
+      ],
+      [
+        "3 position.blackToMove",
+        (view) => {
+          view.position.blackToMove = !view.position.blackToMove;
+        },
+      ],
+      [
+        "4 a position.board ELEMENT",
+        (view) => {
+          view.position.board[0] = (view.position.board[0] as number) ^ 0xff;
+        },
+      ],
+      [
+        "5 position.board through .buffer",
+        (view) => {
+          const alias = new Uint8Array(view.position.board.buffer);
+          alias[0] = (alias[0] as number) ^ 0xff;
+          // The digest samples at ACCESSES, so this control must make one — which is exactly the
+          // boundary `RISK-ABC028-01` records: a build that makes none is not reported.
+          void view.moves.length;
+        },
+      ],
+      [
+        "6 the moves SLOT",
+        (view) => {
+          const saved = view.moves;
+          (view as { moves: readonly Move[] }).moves = [...view.moves];
+          (view as { moves: readonly Move[] }).moves = saved;
+        },
+      ],
+      [
+        "7 the moves CONTENTS",
+        (view) => {
+          const moves = view.moves as Move[];
+          moves.unshift(...moves.splice(0, 1));
+        },
+      ],
+      [
+        "8 a Move's own field",
+        (view) => {
+          (view.moves[0] as { from: number }).from = 99;
+        },
+      ],
+    ];
+
+    for (const [slot, hostile] of hostiles) {
+      const watch = watchHistory(lineTo(20));
+
+      hostile(watch.view);
+      watch.finish();
+
+      expect(watch.violations.length, `${slot} must be REPORTED`).toBeGreaterThan(0);
+    }
+  });
+
+  /** The POSITIVE control: an instrument that cries on a clean render is as worthless as a blind one. */
+  it("A4 arming — a run that mutates nothing reports nothing, and still LOOKS", () => {
+    const watch = watchHistory(lineTo(20));
+
+    void watch.view.initialFen;
+    void watch.view.moves.length;
+    void watch.view.position.fullmoveNumber;
+    watch.finish();
+
+    expect(watch.violations).toEqual([]);
+    expect(watch.samples).toBeGreaterThan(0);
+  });
+
+  /**
+   * `A4` — THE DURING-RENDER CLAUSE, STATED ONCE OVER THE WHOLE `GameHistory` GRAPH.
+   *
+   * Stated once over the graph rather than once per node, because `A9` has been repaired once per
+   * node of that graph four times and a fifth per-slot restatement is what guarantees a sixth. The
+   * same property covers `position.castling`, `position.epSquare`, `position.halfmoveClock` and
+   * every field of every `Move` at no extra cost — all four re-measured on this instrument.
+   *
+   * THE `Given` IS THE SHARED `LENGTH_CASES`, deliberately and not by oversight: `A4` asserts a
+   * property of its OWN render, so `D23`'s rendered-too-early hazard cannot reach it, and rebuilding
+   * the ten fixtures was measured at ~9.8 ms warm against this ticket's whole lane margin.
+   */
+  it("A4 — no write reaches the caller's graph during a render, at all ten lengths", () => {
+    for (const [plies, history] of LENGTH_CASES) {
+      const watch = watchHistory(history);
+
+      renderHistory(watch.view);
+      watch.finish();
+
+      // THE INSTRUMENT LOOKED — asserted first, and at EVERY length. Without it a pane the
+      // instrument cannot see is indistinguishable from a pane that mutates nothing, which is the
+      // failure this ticket's parent shipped once and the exact shape `D27` bars.
+      expect(watch.samples, `${plies} plies — instrument armed`).toBeGreaterThan(0);
+      expect(watch.violations, `${plies} plies`).toEqual([]);
+    }
+  });
+
+  /**
+   * The instrument's OWN tripwire, in its own `it` and at ONE length rather than ten: the pane must
+   * render the same bytes through the view as through the bare object, or every clause above is a
+   * statement about a different render. Ten lengths were checked out of tree and cost ~14 ms of the
+   * lane margin for no additional information; 20 plies is the length every other clause here uses.
+   */
+  it("A4 tripwire — rendering through the instrument changes no rendered byte", () => {
+    const history = lineTo(20);
+
+    expect(renderHistory(watchHistory(history).view)).toEqual(renderHistory(history));
+  });
+});
