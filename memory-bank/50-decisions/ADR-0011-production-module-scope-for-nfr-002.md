@@ -16,6 +16,20 @@ Still `accepted`, still no target and no level, still zero production lines. **T
 reaches code — widening the regex to two textual forms it misses — is a TEST-file change and it
 routes to the Engineer; this ADR rules it and does not write it.**
 
+**AMENDED AGAIN 2026-08-12 at task `design-ABC-029-max-2026-08-12`, subtask `design-ABC-029-maximum`,
+Workflow 07 — one RATIONALE sentence is struck as OVERSTATED and the alternative it dismissed is
+re-measured, priced and REJECTED ON ITS MERITS. No clause, no verdict, no criterion row and no line
+of the Engineer's hop changes.** BA/PM flagged at `refinement-ABC-029-rows` that *"6 of 12 is the
+**maximum** a textual guard may recover"* over-reaches in the same shape as the word *"non-static"*
+this file already corrected — the sentence states the ceiling for the class of guard that was
+**considered** as the ceiling for **all** textual guards. **BA/PM marked that `UNKNOWN - verify` and
+said plainly it had not built or run it. It was built and run here: the counterexample is CORRECT and
+recovers 12 of 12 while breaking no accepted criterion.** The sentence is struck and bounded; a new
+**alternative 11** records the rule, and a priced **rejection** records why it is still not adopted —
+it false-positives on a construct this file's own `A3` ruling calls not-a-breach. **This is the third
+instance of one defect shape in this file, and the second reason the fix is a bound rather than a
+reversal: the RULING was right all three times, one of its reasons was not.**
+
 **No target moves and no level is set, so no owner ratification is owed** — the same distinction from
 `ADR-0008` that `ADR-0009` and `ADR-0010` both draw. `ADR-0008` needed **Olger Oeselg** because it
 fixed a budget *level* a human has to value; there is no level here. Every claim below is
@@ -286,7 +300,8 @@ Each was constructed and run, not reasoned about.
 | 6 | **Licence whatever the regex finds** (derive the licence set instead of declaring it) | **REJECTED.** A guard that licenses its own findings catches nothing — it would have admitted `turn-loop.ts` silently and never raised this question at all |
 | 7 | **Replace the probe with a static transitive-import walk** (~1 ms) | **REJECTED**, and not re-derived — QE measured it loses `WQUERY`, `WDYNIMP` and `WBAREIMP` and cannot see a computed specifier. `## Out of scope` already fences it |
 | 8 | **Form (a) of `A3`** | **REJECTED** — see the ruling above; channel corruption reproduced, and it would move the ticket's size off `S` |
-| 9 | **ADDED 2026-08-12. Widen the regex to the DYNAMIC literal spellings too** (`import("./history.ts")`, `import("./history.ts?v=2")`), recovering all 12 rather than 6 | **REJECTED, and the first reason is binding.** It turns **`WPERFT-DYN` RED**, and `A3` — written on this ADR — requires it to **pass**; adopting it would break an accepted criterion to fix an accepted ADR. Second, it is evaded by a computed specifier (`import(someVar)`), so it buys **false confidence** rather than reach. The dynamic forms are recoverable only by rooting the probe outside the frame path, which is alternative 2 under a different name |
+| 9 | **ADDED 2026-08-12. Widen the regex to the DYNAMIC literal spellings too** (`import("./history.ts")`, `import("./history.ts?v=2")`), recovering all 12 rather than 6 | **REJECTED, and the first reason is binding.** It turns **`WPERFT-DYN` RED**, and `A3` — written on this ADR — requires it to **pass**; adopting it would break an accepted criterion to fix an accepted ADR. Second, it is evaded by a computed specifier (`import(someVar)`), so it buys **false confidence** rather than reach. ~~The dynamic forms are recoverable only by rooting the probe outside the frame path, which is alternative 2 under a different name~~ **CORRECTED 2026-08-12 at `design-ABC-029-maximum` — the struck *"only"* is false; see alternative 11. The VERDICT on this alternative is unchanged and was re-measured: applied uniformly it still reds `WPERFT-DYN` on both trees** |
+| 11 | **ADDED 2026-08-12. Widen to the dynamic literal ONLY IN A MODULE THAT EXPORTS SOMETHING** — clause 4's discriminator, textual and filename-free, recovering all 12 (BA/PM's counterexample at `refinement-ABC-029-rows`) | **MEASURED, PRICED, REJECTED — and it DOES work, which is why alternative 9's *"maximum"* sentence is struck.** It recovers **12 of 12** and breaks no accepted criterion. Rejected on three measured costs — it reds `WPERFT-DYN-EXPORTING`, a construct the `A3` ruling calls not-a-breach; it pre-authorises `EPIC-006`'s entry point as an evasion; and its dynamic half cannot be anchored, so it reds a comment and a string quoting the specifier, uncontained by `lint`. Full block under `## Consequences` |
 | 10 | **ADDED 2026-08-12. Restore the delivered root set** so the twelve come back | **REJECTED — it re-reds `ABC-019` and reinstates the `turn-loop.ts` false positive.** This is the state the ruling was asked to resolve. The corrected count is an argument for containing the loss, never for reverting the ruling |
 
 ## Consequences
@@ -427,13 +442,128 @@ binding:
 
 1. **`A3` forbids the fourth.** A pattern reaching the dynamic literal spelling `import("./history.ts")`
    would turn **`WPERFT-DYN` RED**, and `A3` — written on this ADR and scored through `ABC-029`'s DoR
-   — requires it to **pass**. So 6 of 12 is not a compromise; it is the **maximum a textual guard may
-   recover without breaking an accepted criterion.**
+   — requires it to **pass**. ~~So 6 of 12 is not a compromise; it is the **maximum a textual guard may
+   recover without breaking an accepted criterion.**~~ **CORRECTED 2026-08-12 — the struck sentence is
+   FALSE and refuted by measurement; see the block below. What is true, and all the reason supports:
+   6 of 12 is the maximum recoverable by an expression that TREATS EVERY SCANNED FILE ALIKE, which
+   the delivered and the ruled expressions both do.**
 2. **The record's reason is nearly right and is corrected here.** QE recorded the other six as
    *"dynamic and unreachable by any pattern"*. Measured: a pattern **can** match the literal
    `void import("./history.ts")`. What no pattern can match is a **computed specifier**
-   (`import(someVar)`), so such a rule would buy **false confidence** rather than reach. The dynamic
-   forms need the probe's roots back, which is the whole-tree proxy clause 2 deliberately removed.
+   (`import(someVar)`), so such a rule would buy **false confidence** rather than reach. ~~The dynamic
+   forms need the probe's roots back, which is the whole-tree proxy clause 2 deliberately removed.~~
+   **CORRECTED 2026-08-12 — also false, and by the same measurement: the literal dynamic forms do
+   NOT need the probe's roots back. Reason 2 survives in full and is the ground that actually
+   carries this ruling; only its final sentence is struck.**
+
+> ### **[CORRECTED 2026-08-12 at `design-ABC-029-maximum` — *"the MAXIMUM a textual guard may recover"* IS OVERSTATED, IT IS OVERSTATED IN THE SAME SHAPE AS *"non-static"* ONE SECTION ABOVE, AND BA/PM FOUND IT RATHER THAN THIS ROLE.]**
+>
+> **The shape, stated plainly because it is now the third instance in this file.** *"Non-static"*
+> described the class the delivered regex **happened to match** rather than the class it **named**.
+> *"The maximum a textual guard may recover"* states the ceiling for the class of guard that was
+> **considered** — expressions applying one rule uniformly to every scanned file — as the ceiling for
+> **all** textual guards. Reason 1's argument only ever supported the narrower claim. **The
+> conclusion is still right; this reason was doing more work than it can carry, and reason 2 was
+> always the one holding it up.**
+>
+> **The counterexample, constructed and RUN.** `ADR-0011` clause 4 supplies a textual, filename-free
+> discriminator — *an entry point is a production module that exports nothing* — and `perft-bench.ts`
+> is still the only one (re-measured this hop: 16 production modules, `perft-bench.ts` has **zero**
+> `export` tokens, the other 15 have 1 to 23). A rule counting the dynamic literal **only in a module
+> that exports something** was built and measured on both trees:
+>
+> ```
+> widened  (ruled)   /^(?:import|export)\s+(?!type\b)(?:[^;]*from\s+)?"\.\/history\.ts";/m
+> exports  (this)    widened  ||  ( /^export\b/m  &&  /\bimport\(\s*"\.\/history\.ts(?:\?[^"]*)?"\s*\)/ )
+> ```
+>
+> | build | tree | ruled `widened` | **`exports`** |
+> |---|---|---|---|
+> | **BASE** | 16 **and** 17 | green / green | **green / green, 8/8 both** |
+> | **`WPERFT-DYN`** — the crux, `A3`/`A6.2` require GREEN | 16 **and** 17 | green | **green both** |
+> | `WOFFFRAME-DYN` · `WQUERY-OFFFRAME` (`zobrist.ts`) | 16 | green | **regex RED** |
+> | `WGAMEEND-DYN` · `WGAMEEND-QUERY` (`gameend.ts`) | 16 | green | **regex RED** |
+> | `WPERFTMOD-DYN` · `WPERFTMOD-QUERY` (`perft.ts`) | 16 | green | **regex RED** |
+> | `WLAUNDER` (`A6.1`) | 16 **and** 17 | regex RED | **regex RED both** |
+> | `WOFFFRAME-BARE` · `WREEXPORT-STAR` (`A6.1`) | 16 | regex RED | **regex RED** |
+> | `WTYPEREEXPORT` · `WTYPEREEXPORT-PANEL` (`A6.2`) | 16 | green | **green** |
+> | `WPERFT-STATIC` · `WOFFFRAME-STAT` · `WSTALELICENCE` | 16 / 17 | regex RED | **regex RED** |
+>
+> **It recovers 12 of 12 and breaks NO accepted criterion** — every `A6.1` row RED, every `A6.2` row
+> green, `A5`'s rows unmoved, BASE green on both trees, **full suite 752 passed (752) on 26 files**.
+> The control confirms the original reason applies where it was aimed: the same dynamic rule applied
+> **uniformly** (alternative 9 as this file states it) reds `WPERFT-DYN` on both trees
+> (`expected [ 'perft-bench.ts' ] to deeply equal []`). **So the sentence is false as written and the
+> alternative it was written about is still correctly rejected.**
+>
+> ### **The ruling: the recovery is MEASURED, PRICED, and DECLINED. The containment stands at 6 of 12.**
+>
+> A priced *no* rather than a shrug. Three costs, each constructed and run:
+>
+> **1. It false-positives on a construct THIS FILE RULED CORRECT.** `WPERFT-DYN-EXPORTING` — the
+> harness keeps the `void import("./history.ts")` that the `A3` ruling calls **not a breach**, and
+> gains one unrelated `export const PERFT_BENCH_VERSION = 1;` — goes **regex RED on both trees** under
+> `exports`, and **green** under the ruled containment. **The `A3` ruling turns on *"it is not a
+> caller"* and *"off the frame path"*; neither changes when the harness gains an export.** So
+> *"exports something"* is a **proxy** that fits today's tree rather than the property the ruling
+> names — **the same defect shape as *"non-static"* and as *"the maximum"*, and adopting it would
+> write that shape into the CODE instead of into a sentence.** That is the binding reason.
+>
+> **2. The hole it opens is DATED, not hypothetical.** `WENTRY-DYN` — a new zero-export production
+> module holding `void import("./history.ts")` — is **green** under `exports` and **RED** under the
+> uniform dynamic rule. Clause 4 above names **`EPIC-006`'s CLI entry point as the second entry
+> point**, so the rule would be buying its `WPERFT-DYN` green by pre-authorising the exact evasion at
+> the exact site this file already has on a schedule.
+>
+> **3. A false-positive surface that CANNOT be closed, because a dynamic import cannot be anchored.**
+> The static halves are anchored (`^`, `/m`), which is what fences them from block-comment
+> continuation lines. A dynamic import is an **expression**, so its ordinary position is indented
+> inside a function body — measured: `WOFFFRAME-DYN-INDENTED` is caught only by the unanchored form.
+> Unanchored matches comments and strings. Measured under `exports`, all on the 16-file tree:
+>
+> | build | `exports` | comment-aware variant |
+> |---|---|---|
+> | `WCOMMENT-DYN` — a comment quoting the literal | **RED (false positive)** | green |
+> | `WSTRING-DYN` — the literal inside a template string | **RED** | **RED** |
+> | `WTRAILING-DYN` — a trailing comment on a code line | **RED** | **RED** |
+> | `WPERFT-DYN-EXPORTING` — cost 1 above | **RED** | **RED** |
+>
+> **A comment-aware variant reduces the surface and does not remove it, at the price of a harder
+> expression, and it does not touch cost 1 at all.** **None of these is contained by the `lint`
+> gate** — QE's containment argument covers `biome check` violations (a single-quoted specifier, a
+> missing semicolon, an indented import); **the contents of a comment are not a biome violation.**
+> This file's own prose, `ABC-029`'s ticket and the instrument's docblock all quote
+> `void import("./history.ts")` verbatim, so **a maintainer documenting the guard inside a production
+> module would red the build.**
+>
+> **What the recovery is worth, which reason 2 bounds and which is why the price is not worth
+> paying.** Measured: `WOFFFRAME-COMPUTED` (`const spec = "./history" + ".ts"; void import(spec);` in
+> `zobrist.ts`) is **green under `exports` AND under the uniform dynamic rule.** The containment's six
+> are **closed forms** — `export … from` and a bare `import` cannot be evaded, because ESM requires a
+> literal specifier there. The extra six are **one spelling of an open form.** So the recovery buys
+> reach against a careless dynamic import and none against an evasive one: **`false confidence` names
+> it exactly, and the six that are already contained are the six worth having.**
+>
+> **Cost, measured and NOT the reason for the ruling:** the added predicate is **+20 µs per full
+> 16-file scan** (77.7 µs against 57.4 µs, regex work only, 20,000 iterations, files pre-read) —
+> **inside the noise of a single vitest boot and irrelevant next to the probe's ~20 ms spawn.**
+> Cheapness was never the question. **No `N8-LANE` verdict is claimed and none is owed here.**
+>
+> **This changes NOTHING that is being built.** `A6.2` is written as a required **verdict**
+> (`WPERFT-DYN` green), not as a ban on a technique, so the wider expression satisfies it too —
+> **measured, not assumed.** The Engineer's hop lands the ruled `widened` expression unchanged and
+> **no criterion row moves.** If a future hop ever wants the other six, it is **a new row on a new
+> ticket, not a change to this one**: BA/PM writes the row, the Engineer builds it, and **this block
+> is the price they must beat** — costs 1 and 3 above, not the arithmetic.
+>
+> **Measured this hop:** 57 runs of the real instrument under real vitest across two out-of-tree
+> trees, plus one full-suite run out of tree and one on the branch tip. The 17-file tree is
+> `ABC-019`'s `turn-loop.ts` (md5 `bd793612476c9d0eac28b75e1e3297cc`, reproducing the recorded
+> figure) restored from the git object database over the current tree; **no repository worktree other
+> than this one was opened and nothing under `src/` was written.** *(Precision, since this file's
+> own instrument claims it: the current 16 and `ABC-019`'s tip differ in **one** file,
+> `history-pane.ts`, and the difference is **one sentence of a docblock** — the `import type` line is
+> byte-identical, so no guard on either side can see it.)*
 
 **This is a change to `src/history-pane.nfr.test.ts` and it routes back to the Engineer.** Two sites:
 the executable expression, and the docblock above the probe, which currently states the misses as a
@@ -479,6 +609,14 @@ reader looking for the risk register finds all three.
 **R4 is a residual this file already ruled on and is NOT a new acceptance** — `WPERFT-DYN` is ruled
 not a breach above, for the same reason. It is listed because *"the loss is twelve, six of which are
 contained"* is only honest if the other six have an owner.
+
+> **[AMENDED 2026-08-12 at `design-ABC-029-maximum` — `R4` must not be read as *"nothing textual could
+> catch these six"*, because that reading is now measured false.]** They **are** recoverable by a
+> textual rule that does not treat every scanned file alike — **12 of 12, measured, breaking no
+> accepted criterion** — and that recovery was **priced and DECLINED**, not overlooked. The owner and
+> the trigger are unchanged. What changes is what a hop arriving at this row must do: **read the
+> priced rejection under `## Consequences` and beat costs 1 and 3 there.** Re-deriving the recovery
+> and re-proposing it is a wasted hop; this file has now measured it twice.
 
 **R1 in full, as originally written.** **The declared frame path can go stale, and it fails OPEN.** A new renderer added without being
 declared is silently unguarded — the "guard that fails by omission" class this catalog has recorded
