@@ -114,6 +114,16 @@ _Updated: 2026-08-08 by the Software Engineer (task `ticket-to-pr-ABC-015`, subt
     - The validator can check for tickets missing rows or rows missing tests.
 -->
 
+<!-- COLUMN INVARIANT — read before you report this table malformed.
+  This table has TEN columns. A well-formed row has ELEVEN `|` characters and ENDS with one.
+  Count COLUMNS, not `|`-split FIELDS: `line.strip().strip('|').split('|')` must give 10.
+  Splitting on `|` without stripping gives 12 fields for a correct row; reading that as
+  "11 content cells against 10 columns" is a FALSE malformation report. Two roles made
+  exactly that report on the ABC-029 row on 2026-08-12 AFTER it had been repaired, and the
+  safeguard that let the original defect through made the same miscount. Hence this note.
+  KNOWN PRE-EXISTING malformations, flagged not rewritten (rule 12): ABC-009 (12 cells),
+  ABC-011, ABC-015, ABC-019 (11 each). ABC-029 was repaired 2026-08-12 and is CORRECT.
+-->
 | Ticket | Title | Epic | Feature | NFRs | Code (PR/files) | Tests | UAT | Release | Status |
 |--------|-------|------|---------|------|-----------------|-------|-----|---------|--------|
 | ABC-001 | Position state and FEN round-trip | EPIC-001 | — | NFR-001, ADR-0001 | src/position.ts, src/fen.ts (merged to main) | src/fen.test.ts — 27 pass, coverage 100% stmt / 98.73% branch | | | Done |
