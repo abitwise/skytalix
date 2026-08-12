@@ -304,10 +304,13 @@ measured, **`WPERFT-STATIC` is killed by the regex and by nothing else**, so the
 coverage is **not nested** and neither is redundant.~~
 
 **CORRECTED 2026-08-12 by BA/PM — this half named the wrong site, and the correction is a stronger
-one. Given** the probe's docblock at **`src/history-pane.nfr.test.ts:253-262`**, **when** it is read,
-**then** it no longer presents the regex as a strictly weaker subset of the probe, **and** it states
-`ADR-0011` clause 3's reason: **the regex is not redundant because it holds a DIFFERENT property** —
-`ADR-0002` clause 4's whole-tree licence equality — not merely because the coverage is not nested.
+one. Given** the probe's docblock at ~~**`src/history-pane.nfr.test.ts:253-262`**~~ **the docblock
+immediately above the probe's `it(` — see `## Test notes` 13 for the live range and for the `grep`
+that re-finds it, because the line number in this clause has now gone stale twice** — **when** it is
+read, **then** it no longer presents the regex as a strictly weaker subset of the probe, **and** it
+states `ADR-0011` clause 3's reason: **the regex is not redundant because it holds a DIFFERENT
+property** — `ADR-0002` clause 4's whole-tree licence equality — not merely because the coverage is
+not nested.
 
 > **The site was wrong and it is worth saying why, because this ticket's `A4` is itself the "audit the
 > site it names, not the site it points at" criterion.** Swept at this hop:
@@ -442,6 +445,13 @@ production module counts as a runtime importer of `src/history.ts` if it holds *
 `export … from "./history.ts";` **including `export *`** — **and does NOT count** for a **type-only**
 form on **either keyword** or for a **dynamic `import(…)`** call.
 
+> **EXTENDED 2026-08-12 at `refinement-ABC-029-g1g2`: both halves are stated over the GRAMMAR's form
+> set, not over a list of spellings.** The re-export half covers **every** ESM clause shape after the
+> keyword — `*`, `* as ns`, `{ … }` — and the type-only half covers **every** clause shape TypeScript
+> admits after the `type` keyword — `{ … }`, `* as ns`, a bare identifier. **`A6.1`'s and `A6.2`'s six
+> rows sample spellings; `A6.3` and `A6.4` are what make the reading above enforceable**, and QE
+> constructed one wrong build against each half to prove the six alone do not.
+
 Required verdicts. Each row is a named build on a named tree.
 
 | # | build | tree | required |
@@ -452,6 +462,11 @@ Required verdicts. Each row is a named build on a named tree.
 | **A6.2** | `WTYPEREEXPORT` — an unlicensed, off-frame-path module (`zobrist.ts`) gains `export type { … } from "./history.ts";` | 16 | **regex GREEN** |
 | **A6.2** | `WTYPEREEXPORT-PANEL` — a **frame-path** module (`status-panel.ts`) gains the same type-only re-export | 16 | **regex GREEN** |
 | **A6.2** | **`WPERFT-DYN`** — `void import("./history.ts")` in `src/perft-bench.ts` | **16 and 17** | **regex GREEN, and the suite passes** |
+| **A6.3** | `WTYPESTAR-IMPORT` — `import type * as H from "./history.ts";` in `zobrist.ts` | 16 | **regex GREEN** |
+| **A6.3** | `WTYPEDEFAULT-IMPORT` — `import type H from "./history.ts";` in `zobrist.ts` | 16 | **regex GREEN** |
+| **A6.3** | `WTYPESTAR-EXPORT` — `export type * from "./history.ts";` in `zobrist.ts` | 16 | **regex GREEN** |
+| **A6.3** | **`WTYPESTARAS-EXPORT`** — `export type * as history from "./history.ts";` in `zobrist.ts` | 16 | **regex GREEN** |
+| **A6.4** | **`WEXPORTSTAR-AS`** — `export * as history from "./history.ts";` in `zobrist.ts` | 16 | **regex RED** |
 
 **and** the instrument's docblock no longer states the regex's misses as a **completed** set: after the
 change the residual is **the two dynamic forms** and it is named — *that silence is what made
@@ -497,11 +512,128 @@ site is `## Test notes` 11 and there may be two of them.**
 > | **`Wdyn`** — widen to the dynamic literal spellings too (`ADR-0011` alternative 9) | all three `A6.1` rows | **`A6.2`'s `WPERFT-DYN` row, and `A3`** |
 > | **`Wnoscan`** — keep `WPERFT-DYN` green by removing `perft-bench.ts` from the SCANNED set instead of by not matching the form | all of `A6.2` | **THREE independent rows: `A1`** (zero files omitted from either guard's scanned set by a filename), **`A3`** (`perft-bench.ts` is inside the regex's scanned set), **`A5.4`** (`WPERFT-STATIC` regex RED — the regex is its sole catcher) |
 
+### `A6.3` and `A6.4` ADDED 2026-08-12 by BA/PM at `refinement-ABC-029-g1g2` — the ninth and tenth wrong builds, and the rows are written against the GRAMMAR rather than against a longer list
+
+**`A6.1` and `A6.2` were re-gated by QE and every one of their fourteen required verdicts reproduced,
+message for message. QE then constructed two builds that pass ALL FOURTEEN and are wrong, and would
+not carry them.** They are `Wtypebrace` and `Wenumerated`, and each is the **next spelling of the class
+its row was written to catch** — the defect shape that forced `A6` to be split from `A5` one hop ago.
+
+**Every verdict in this subsection was RE-MEASURED at this hop**, on a throwaway out-of-tree copy of
+this branch's `src/` under real vitest against the real instrument — **not attributed**. That is a
+deliberate reversal of `## Test notes` 12: the previous refinement brief fenced `src/` wholesale and
+the cost was that no today-value on this page was re-taken. **`src/` was READ at this hop and NOT
+written.** Digest of the instrument read: `src/history-pane.nfr.test.ts` md5
+`1d33bea667cc792e1fa1fd4030caa718`, 460 lines, 8 tests, 16 production modules.
+
+#### `A6.3` — the type-only exclusion is pinned to the WORD, not to the brace
+
+**Given** a production module holding a **type-only** import or re-export of `src/history.ts` in **any**
+of the spellings TypeScript admits — the clause after the `type` keyword being a **brace**, a
+**namespace `*`**, or a **bare identifier**, on **either** keyword — **when** the suite runs, **then**
+the **regex guard is GREEN**, because every one of them is erased before the module is evaluated.
+
+**The build that would pass every other row while being wrong: `Wtypebrace`.**
+
+```
+landed      /^(?:import|export)\s+(?!type\b)(?:[^;]*from\s+)?"\.\/history\.ts";/m
+Wtypebrace  /^(?:import|export)\s+(?!type\s*\{)(?:[^;]*from\s+)?"\.\/history\.ts";/m
+```
+
+**One token.** It is what an Engineer writes who checks the expression against `A6.2`'s rows rather
+than against TypeScript: **both `A6.2` rows and both of BASE's `import type` lines are the
+`type { … }` spelling**, so nothing on the page before this one showed any other. It passes all
+fourteen. **Measured at this hop, and QE named three of these — there are FOUR:**
+
+| build | line prepended to `src/zobrist.ts` | **landed** | **`Wtypebrace`** |
+|---|---|---|---|
+| `WTYPESTAR-IMPORT` | `import type * as H from "./history.ts";` | **green** | **RED** — `expected [ 'zobrist.ts' ] to deeply equal []` |
+| `WTYPEDEFAULT-IMPORT` | `import type H from "./history.ts";` | **green** | **RED** — same |
+| `WTYPESTAR-EXPORT` | `export type * from "./history.ts";` | **green** | **RED** — same |
+| **`WTYPESTARAS-EXPORT`** | `export type * as history from "./history.ts";` | **green** | **RED** — same. **Named HERE; QE's note records three and this is the fourth** |
+
+> **WHY THIS ROW IS NOT ITSELF A LONGER ENUMERATION, which is the whole question the Orchestrator put
+> to this hop.** Four more sampled spellings would be `Wenumerated`'s defect one level up. **The row is
+> written against a set that is CLOSED BY GRAMMAR instead.** After the `type` keyword in a type-only
+> declaration carrying a specifier, TypeScript admits exactly **three** clause shapes and no fourth:
+> **`{ … }`**, **`* as ns`**, and **a bare identifier** (default, `import` only — `export type Ident
+> from` is not a form). `import type Default, { A } from` is `TS1363` and does not exist.
+> **Three shapes × the keywords that admit them = the five witnesses on this page** — `A6.2`'s two
+> `type { … }` rows plus `A6.3`'s four, with `export type * as ns` measured as the `*` shape's second
+> spelling to show the shape rather than the spelling is what is pinned. **There is no sixth cell for
+> a next spelling to arrive in.** That is why this row covers the build after `Wtypebrace` and not
+> merely `Wtypebrace`.
+
+> **THE BUILD THAT PASSES `A6.3` WHILE BEING WRONG, AND I COULD NOT KILL IT WITH A ROW — see `L3`.**
+> `Wtypespace` — `(?!type\b)` → `(?!type\s)` — is **green on all six type-only witnesses** and passes
+> every other row. It is separated from the landed expression by exactly one build,
+> **`WTYPETIGHT`** (`import type{ GameHistory } from "./history.ts";` — a correct type-only import with
+> no space after `type`): **landed green, `Wtypespace` RED.** **That build is rejected by `biome
+> check`** — measured at this hop — **so no lint-clean witness separates them, and a required verdict
+> on a build the `lint` gate already refuses would be a row against source that cannot exist in this
+> repo.** The limit is marked at `L3` rather than smoothed into a row. *(`Wtypeset` — the three clause
+> shapes enumerated explicitly — also passes, and is not wrong: on lint-clean source it is
+> behaviourally identical to `(?!type\b)`. Recorded so nobody reports it as an eleventh wrong build.)*
+
+#### `A6.4` — the runtime-importer forms are GENERALISED, not enumerated
+
+**Given** a production module that gains `export * as history from "./history.ts";` — an ordinary ESM
+namespace re-export, which evaluates the history module's body and republishes its API from an
+unlicensed module — **when** the suite runs, **then** the **regex guard is RED**.
+
+**The build that would pass every other row while being wrong: `Wenumerated`** — `A6`'s three named
+forms written as an enumeration instead of as a generalisation.
+
+```
+Wenumerated /^(?:import\s+(?!type\b)(?:[^;]*from\s+)?|export\s+\*\s+from\s+|export\s+\{[^;]*\}\s+from\s+)"\.\/history\.ts";/m
+```
+
+It reads as **more** careful than the ruled expression — it names exactly what `A6`'s statement names —
+and it passes all fourteen. Measured at this hop:
+
+| build | line prepended to `src/zobrist.ts` | required | **landed** | **`Wenumerated`** |
+|---|---|---|---|---|
+| **`WEXPORTSTAR-AS`** | `export * as history from "./history.ts";` | **RED** | **RED** — `expected [ 'zobrist.ts' ] to deeply equal []` | **green — MISSED** |
+| `WREEXPORT-STAR` (control) | `export * from "./history.ts";` | RED | RED | RED — **so `A6.4` is not `A6.1`'s star row under a new name** |
+
+`export * as ns from` is **`WLAUNDER`'s own shape**: a third module reaches the repetition machinery
+through the re-exporter without ever naming `history.ts`. It is the form `A6.1` was written to stop,
+and `A6.1` does not require the generalisation that stops it.
+
+> **THE BUILD THAT PASSES `A6.4` WHILE BEING WRONG, named to this row's own standard.** `Wenumplus` —
+> `Wenumerated` with `as\s+<ident>\s+` patched into its star branch — passes `A6.4`. **Measured, it is
+> not wrong**: against the ESM re-export clause set, which is **closed at three shapes** (`*`,
+> `* as ns`, `{ … }`), the patched enumeration and the generalisation agree on every build run at this
+> hop, including the multi-line brace forms. **So the honest statement is that `A6.4` selects the
+> generalisation over one SPECIFIC enumeration and cannot forbid enumeration as a technique** — the
+> same verdict-not-technique shape `A6.2`'s ceiling note already argues for.
+>
+> **The reason to prefer the generalisation is historical and is not speculation: `export * as ns from`
+> was added to ESM in ES2020.** The clause set this enumeration must track **has grown once already**,
+> which is exactly how `Wenumerated` came to miss a form its author had enumerated correctly for the
+> language they learned. A generalisation absorbs the next addition; an enumeration schedules a hop.
+> **That is an argument for the row, not a claim the row enforces it.**
+
+#### What routes onward, stated plainly because the brief asked for it plainly
+
+**The landed expression is ALREADY CORRECT for both rows — re-measured at this hop, not accepted from
+the record.** It is green on all four `A6.3` builds and RED on `A6.4`'s. **So the Engineer's hop adds
+WITNESSES to `src/history-pane.nfr.test.ts` and does not change the guard**; the expression at the
+executable site is not touched, and a red-first construction of these two rows is a test-file change
+with **zero production lines** and **zero changes to the regex literal**. `A6.3` and `A6.4` are the
+first rows on this page whose red-first witness the current build already satisfies, and that is stated
+here so nobody reads them as a defect report against the containment. **QE's read — "two BA/PM rows on
+a rig that already exists" — is confirmed by measurement.**
+
+**Nothing here re-opens `ADR-0011`.** Both rows are satisfied by the ruled expression verbatim; no
+clause, no alternative and no ledger row is implicated, and the ADR was **read, not opened for edit**.
+
 ### The limits of `A5.6` and `A6`, MARKED IN THE TICKET rather than left in a note
 
-**Two. Each carries the build that exposes it, an owner and a trigger. They are here because
-`RISK-ABC028-01` was named inside `A4` rather than in a note — and because this ticket's own `A5` is
-the measured cost of an unmarked limit.**
+**~~Two.~~ FOUR as of 2026-08-12 (`refinement-ABC-029-g1g2`) — `L2` is RESTATED because it was
+measurably WRONG, and `L3` and `L4` are new. Each carries the build that exposes it, an owner and a
+trigger. They are here because `RISK-ABC028-01` was named inside `A4` rather than in a note — and
+because this ticket's own `A5` is the measured cost of an unmarked limit.**
 
 **`L1` — `A5.6` does not separate `Wcount+first` from a true equality, and NO row constructible on
 either of this ticket's two trees can.** The build that would separate them needs the two sets to have
@@ -515,17 +647,105 @@ is cheap to add.** **`A5`'s statement carries the universal (*"asserted EQUAL"*)
 this is where the sampling stops. Owner: BA/PM. Trigger: the first licence entry added after
 `turn-loop.ts` — deliberately the SAME trigger as `ADR-0011`'s `R2`, so one hop clears both.**
 
-**`L2` — `A6` pins the expression's FORM SET, not its ANCHOR.** An unanchored variant (`^` and `/m`
-dropped) passes **every `A6` row and every `A5` row**: it is green on both type-only forms
-(the `(?!type\b)` lookahead still fails at the only `import`/`export` token on those lines) and green
-on `WPERFT-DYN` (`import(` has no whitespace after the keyword). It is not *weaker* — it would also
-catch an indented import, which the anchored form misses and which the `lint` gate contains (QE) — but
-it carries an **unmeasured false-positive risk** against a production comment or string that quotes
-the specifier. **`ADR-0011`'s ruled expression IS anchored, so an Engineer landing it verbatim
-satisfies this by construction; the limit bites only if a different mechanism is chosen, which `A5`
-explicitly permits.** **Not measurable at this hop — `src/` was not opened (`## Test notes` 12).**
-**Owner: BA/PM. Trigger: the next hop that changes this expression's anchoring, or the first
-production module that quotes `"./history.ts"` inside a comment or a string.**
+> #### ~~**`L2` — `A6` pins the expression's FORM SET, not its ANCHOR.**~~ **RESTATED 2026-08-12 by BA/PM at `refinement-ABC-029-g1g2`. THE STRUCK TEXT IS KEPT BECAUSE IT IS A CLAIM THIS TICKET HAD BANKED AND IT IS FALSE, AND THE WAY IT WENT FALSE MATTERS MORE THAN THE CORRECTION.**
+>
+> ~~An unanchored variant (`^` and `/m` dropped) passes **every `A6` row and every `A5` row**: it is
+> green on both type-only forms (the `(?!type\b)` lookahead still fails at the only `import`/`export`
+> token on those lines) and green on `WPERFT-DYN` (`import(` has no whitespace after the keyword). It
+> is not *weaker* — it would also catch an indented import, which the anchored form misses and which
+> the `lint` gate contains (QE) — but it carries an **unmeasured false-positive risk** against a
+> production comment or string that quotes the specifier. **`ADR-0011`'s ruled expression IS anchored,
+> so an Engineer landing it verbatim satisfies this by construction; the limit bites only if a
+> different mechanism is chosen, which `A5` explicitly permits.** **Not measurable at this hop — `src/`
+> was not opened (`## Test notes` 12).**~~
+>
+> **Two sentences of that are wrong, and both were written as settled.** *"An Engineer landing it
+> verbatim satisfies this by construction"* is the load-bearing one. **`src/` WAS opened at this hop —
+> read, never written — and the expression was run.**
+
+**`L2` — the anchor closes ONE direction and NOT the other, and the ANCHORED expression carries the
+false positive `L2` attributed to the unanchored one.** Stated against measurement rather than against
+construction:
+
+| direction | what is measured | closed by |
+|---|---|---|
+| **over-anchored** (`/m` dropped — an expression that can only see line 1) | **RED on BASE, tree 17** | **`A5.2`, a ROW** — the only positive-detection witness in the set. Not by construction, and the struck text did not mention this half at all |
+| **unanchored** (`^` and `/m` dropped) | passes every `A5` and `A6` row | **nothing on this page.** Unchanged from the struck text and still true |
+| **anchored — the LANDED expression** | **carries the false positive anyway** | **nothing** — see below |
+
+**The measurement, re-run at this hop against the landed expression rather than cited:**
+
+| build | line prepended to `src/zobrist.ts` | **landed (anchored)** | **delivered (pre-containment)** | **`biome check`** |
+|---|---|---|---|---|
+| **`WEXPORT-STRING`** | `export const HISTORY_SPEC = 'from "./history.ts";';` | **RED — a false positive on a correct build with ZERO runtime imports** | **green** | **PASSES — UNCONTAINED** |
+
+**Why the anchor stopped helping, which is the part worth carrying forward.** The delivered expression
+required a line to begin with `import`, and in valid TypeScript a line beginning `import` + whitespace
+**is** an import statement. **A line beginning `export` + whitespace is an ordinary declaration** —
+`export const`, `export function`, `export class`. The widening moved `[^;]*` from a surface where it
+could only span import syntax onto one where it can span **arbitrary initialiser text**, including a
+string that quotes the specifier. **So `L2`'s own trigger — *"the first production module that quotes
+`"./history.ts"` inside a comment or a string"* — now fires against the ANCHORED expression, which the
+struck text says it cannot.**
+
+**THE COMPENSATING HALF, MEASURED AT THIS HOP AND PUT BESIDE THE LIMIT RATHER THAN LEFT IN A NOTE.**
+The containment's residual argument leans on `lint` containing every spelling the anchored expression
+misses. **It does — five for five, re-run through this repo's own `@biomejs/biome`:**
+
+| spelling the landed regex MISSES | `biome check` |
+|---|---|
+| `  import "./history.ts";` (indented) | **FAILS — contained** |
+| `import { newGame } from './history.ts';` (single-quoted) | **FAILS — contained** |
+| `import { newGame } from "./history.ts"` (no semicolon) | **FAILS — contained** |
+| `import { newGame } from "./history.ts" ;` (space before `;`) | **FAILS — contained** |
+| `import{newGame}from"./history.ts";` (no whitespace) | **FAILS — contained** |
+
+**The two halves are asymmetric and that asymmetry IS the limit.** Every **false negative** the anchor
+causes is caught by `lint`; the **false positive** the widening causes is not. `biome check` **passes**
+on `WEXPORT-STRING`. **So the anchor's cost is contained and its benefit is not — the opposite of what
+the struck text claims.**
+
+**How big is it, without inflation.** The rare part is not the `export` prefix; it is
+`from\s+"./history.ts";` appearing inside a semicolon-free span. **No production module holds such a
+string today** — and this ticket's own `A4` sweep is the reason that is a measurement and not a hope.
+**The defect is the RECORD claiming the risk was closed, not the expression carrying it.** The
+expression is not re-opened, `ADR-0011` is not re-opened, and no row moves: `WEXPORT-STRING` is a
+correct build and no criterion says it must be green, so this is a marked limit and not a required
+verdict. **Owner: BA/PM. Trigger: the first production module that quotes `"./history.ts"` inside a
+comment or a string — unchanged from the struck text, and it now fires one expression earlier than the
+struck text said it could.**
+
+> **The residual argument's OTHER unstated condition, recorded once because the five-for-five above
+> depends on it:** the containment's *"the residual is the two dynamic forms"* is **conditional on
+> `lint` staying in `quality.mandatory_gates` and on `biome.json`'s formatter configuration.** Both
+> hold today (`mandatory_gates` is `["lint", "typecheck", "unit", "build"]`). **Neither is asserted by
+> any criterion**, and that is a documentation gap rather than a defect. Owner: whoever next opens the
+> docblock; it is **not** worth a hop of its own.
+
+**`L3` — `A6.3` cannot separate `Wtypespace` from the landed expression, and NO lint-clean build can.**
+`Wtypespace` (`(?!type\b)` → `(?!type\s)`) is green on all six type-only witnesses and passes every
+row on this page. The one build that separates it is **`WTYPETIGHT`** —
+`import type{ GameHistory } from "./history.ts";`, a correct type-only import with no space after
+`type`: **landed green, `Wtypespace` RED (false positive).** **Measured at this hop: `biome check`
+REJECTS that source**, so the discriminating witness cannot exist in a lint-clean tree and a required
+verdict on it would be a row against source this repo forbids. **This is the same containment shape as
+`L2`'s compensating half, pointing the other way: here `lint` is what makes the limit tolerable rather
+than what fails to.** `A6.3`'s grammar-closure argument covers every spelling that CAN appear; this is
+what is left over below it. **Owner: BA/PM. Trigger: the next hop that changes this expression's
+type-only lookahead — the SAME trigger as `L2`'s anchoring clause, so one hop clears both.**
+
+**`L4` — the `type\b` lookahead has ONE measured false negative and it is not constructible on this
+tree.** `import type from "./history.ts";` — a **default** import whose binding is literally named
+`type` — is a real runtime importer, and the landed expression is **green** on it (`type\b` matches, so
+the lookahead suppresses the line). **Verified at the expression at this hop.** It is **not
+constructible as a working build here**: `src/history.ts` has **zero** default exports, so the mutant
+dies in the probe's child with `SyntaxError: The requested module './history.ts' does not provide an
+export named 'default'` — **a wrong-reason red, recorded so nobody re-runs it as evidence, in the same
+class as `## Test notes` 10's discarded build.** **This bounds the mutant's fidelity, not the row's
+validity, and it is NOT a defect in the containment** — `(?!type\b)` is the right token and every
+alternative measured at this hop misses this spelling too. **Owner: BA/PM. Trigger: the first
+`export default` added to `src/history.ts`** — at which moment a build exhibiting it becomes
+constructible and the row becomes writable.
 
 ## Routed to Architect/Design — `ADR-0011`'s *"the maximum a textual guard may recover"* is OVERSTATED, and the shape is the one this amendment exists to correct
 
@@ -765,15 +985,19 @@ throughput instrument.*
     evidence.** Prepending `import "./history.ts";` to `src/position.ts` makes the child die with
     `ReferenceError: Cannot access 'QUEEN' before initialization` in `moves.ts` — a circular-init
     artefact of the mutation, **not** a probe verdict. Use `san.ts` for the transitive witness.
-11. **ADDED 2026-08-12 at `refinement-ABC-029-rows`. The containment's docblock site and `A4`'s
-    docblock site may not be the same block, and the record gives TWO line ranges.** `A4`'s second half
-    names **`:253-262`** — the block presenting the regex as a strictly weaker subset of the probe. QE's
-    reach-claims block — the one that *"names two misses and is silent on re-export"* — is recorded at
-    **`:346-351`**. `ADR-0011` calls it *"the docblock above the probe"* and does not disambiguate.
-    **If they are ONE block the Engineer corrects it once; if they are TWO, BOTH must be true after the
-    change** — `A4`'s clause and `A6`'s clause are then two obligations, not one. **This is `A4`'s own
-    lesson — *audit the site it names, not the site it points at* — applied to `A4`'s successor.**
-    Line numbers are inherited from the record and were **NOT re-verified at this hop**; see note 12.
+11. ~~**ADDED 2026-08-12 at `refinement-ABC-029-rows`. The containment's docblock site and `A4`'s
+    docblock site may not be the same block, and the record gives TWO line ranges.**~~ **ANSWERED
+    2026-08-12 at `refinement-ABC-029-g1g2` BY READING THE FILE: THEY ARE ONE BLOCK, and both
+    obligations are already satisfied in it.** The open question is kept below as the record.
+    ~~`A4`'s second half names **`:253-262`** — the block presenting the regex as a strictly weaker
+    subset of the probe. QE's reach-claims block — the one that *"names two misses and is silent on
+    re-export"* — is recorded at **`:346-351`**. `ADR-0011` calls it *"the docblock above the probe"*
+    and does not disambiguate. **If they are ONE block the Engineer corrects it once; if they are TWO,
+    BOTH must be true after the change** — `A4`'s clause and `A6`'s clause are then two obligations,
+    not one.~~ **This is `A4`'s own lesson — *audit the site it names, not the site it points at* —
+    applied to `A4`'s successor, and this hop applied it by opening the file instead of citing the
+    record.** ~~Line numbers are inherited from the record and were **NOT re-verified at this hop**;
+    see note 12.~~ **They were re-verified at `refinement-ABC-029-g1g2`; see note 13.**
 12. **ADDED 2026-08-12 at `refinement-ABC-029-rows`: NO MEASUREMENT WAS TAKEN AT THAT HOP AND `src/`
     WAS NOT OPENED.** The refinement brief forbade it — a concurrent Engineer hop is live on `ABC-028`
     in `src/history-pane.test.ts`. **Every today-value in `A5.6` and `A6` is ATTRIBUTED, not
@@ -783,6 +1007,37 @@ throughput instrument.*
     load-bearing rows independently, and it is recorded as a cost rather than left to be discovered.**
     The rows state required verdicts the Engineer must **produce red-first**, which is the criterion's
     job and does not depend on a today-value; but no today-value on this page was re-taken at that hop.
+13. **ADDED 2026-08-12 at `refinement-ABC-029-g1g2`. STOP CITING LINE NUMBERS IN THIS FILE; CITE THE
+    `grep` THAT RE-FINDS THE SITE.** Note 12's cost was paid back at this hop — **`src/` was READ
+    (never written) and every row on this page that this hop touched was re-measured** — and the first
+    thing reading it showed is that **every line number the record carries for this file is stale
+    again.** This is the **fifth** instance of one defect on this stack (`A4`'s `:253-262`, note 11's
+    two ranges, `A11`'s four dated measurements, the guard's `:314`, and now these). **It is stale, not
+    wrong-at-the-time**, and nothing depends on it that a `grep` cannot re-find.
+
+    | site | the record says | **live at md5 `1d33bea667cc792e1fa1fd4030caa718`** | the `grep` that re-finds it |
+    |---|---|---|---|
+    | the regex guard's `it(` | `:228` / `:230-244` / `:314`+ | **`:302`** | `grep -n 'it("licenses' src/history-pane.nfr.test.ts` |
+    | the regex **expression** | `:247` / `:314` | **`:317`** | `grep -n 'history\\.ts");/m' src/history-pane.nfr.test.ts` |
+    | the probe's `it(` | `:275` / `:277-283` | **`:384`** | `grep -n 'it("evaluates' src/history-pane.nfr.test.ts` |
+    | the probe's docblock | `:253-262` **and** `:346-351` | **ONE block, `:334-383`** | `grep -n '^  /\*\*' src/history-pane.nfr.test.ts` |
+    | `productionModulesIn` | `:237-239` | **`:163`** | `grep -n 'productionModulesIn =' src/history-pane.nfr.test.ts` |
+    | the two deleted literals | `:281-282` | **gone** — `FRAME_PRODUCERS` `:187`, `LICENSED_DRIVERS` `:212` | `grep -n 'FRAME_PRODUCERS\|LICENSED_DRIVERS' src/history-pane.nfr.test.ts` |
+
+    **The Orchestrator's own briefings carried `:314`+ as the start of both guards; the guards start at
+    `:302` and `:384`, and `:314` was never either of them** — it is the `const directory` line. That
+    correction is recorded here because two roles were told the wrong thing and neither could have
+    caught it from the record alone.
+
+    **Note 11 is answered by this row: ONE block, `:334-383`.** `A4`'s obligation (the regex is not a
+    strictly weaker subset — it states a **different property**) is carried at **`:335-343`**, and
+    `A6`'s obligation (the residual is **named**, not a completed list) at **`:354-361`**. **Both are
+    already TRUE on the landed build** — read, not assumed — so the Engineer corrects nothing there and
+    the two clauses are **one satisfied obligation, not two open ones.**
+
+    **Only LIVE sites were corrected at this hop.** Dated, attributed measurement blocks keep their
+    line numbers: they were right about the file they were taken against, and rewriting them would
+    destroy the audit trail this page exists to keep.
 
 ## Size and priority rationale
 
@@ -915,6 +1170,43 @@ about what is left of it.** A ticket's size does not shrink because some of it i
   ticket's blocker is unchanged.
 - **Both figures are ATTRIBUTED, not re-measured** — `src/` was not opened at this hop
   (`## Test notes` 12).
+
+### Size and priority RE-DERIVED 2026-08-12 by BA/PM at `refinement-ABC-029-g1g2` — both HOLD, and this time the re-derivation is MEASURED rather than reasoned
+
+**Size `S` (2) HOLDS.**
+
+- **The condition named in advance at the previous hop was CHECKED AT SOURCE and did NOT fire.** *"If
+  the widened expression cannot be landed without a second expression in the scanned-set derivation or
+  a **third site** in the instrument, the size is re-derived — `## Test notes` 11 is the live candidate
+  for the second of those."* **`## Test notes` 11 is now answered by reading the file: ONE block,
+  `:334-383`, both obligations already true.** There is no third site. The scanned-set derivation is
+  still one expression (`productionModulesIn`, `:163`, three call sites).
+- **`A6.3` and `A6.4` add criteria, not files — and they add less than any previous row on this page.**
+  Every earlier row required the Engineer to change something. These two are **satisfied by the landed
+  build verbatim**: zero production lines, zero test-file lines, **zero characters of the regex
+  literal**. The witnesses are constructed builds run out of tree, as `A5`'s and `A6`'s are; not one is
+  a committed file.
+- **What DID grow is what QE must re-run: required verdicts 14 → 19** (`A6.3` ×4, `A6.4` ×1). That is
+  the honest cost of this hop and it lands on the re-gate, not on the build.
+- **`SPLIT_REQUIRED` still does not apply** — it bites at `XL` (8) and this is 2.
+- **The new condition that would move it, named in advance in place of the spent one:** if `L2`'s
+  false-positive surface is ever converted from a marked limit into a **required verdict**, the
+  expression must gain a comment/string discriminator — which `ADR-0011`'s own priced rejection shows
+  is *"a harder expression"* — and the size is re-derived then. **It is NOT converted here**, and the
+  reason is in `L2`.
+
+**Priority `P1` HOLDS.**
+
+- **Not `P0`, and the line is held for the FOURTH time.** The promote trigger is *"the frame path
+  itself gains a runtime importer of `src/history.ts`"*. **Checked at this hop by running the suite on
+  this branch rather than by re-enumerating a closure: the load probe is GREEN inside 752/752, and it
+  is the frame-path measurement — with its arming control in the same file.** The trigger has **not**
+  fired. Being on a `P0`'s critical path still does not make this ticket `P0`.
+- **Not `P2`.** The trigger that moved it to `P1` is still firing: `ABC-019` is `P0`, sits in the board's
+  `Blocked` column *blocked-by `ABC-029`'s merge*, `quality.gate_enforcement` is `blocking`, and
+  **`ABC-029` has not landed** — this branch is thirty-first in a linear stack off `main` and the
+  fast-forward is denied by the host classifier and is with the owner.
+- **Neither figure is attributed.** `## Test notes` 12's cost is paid back here: both were re-taken.
 
 ## Definition of Ready
 
@@ -1087,3 +1379,47 @@ extend* the requirement→epic→feature→ticket linkage and `Status`. **The li
 wrote produces a new code, test or UAT artefact, so **a `Tests` cell here would have to describe tests
 BA/PM did not add** — the same refusal Architect/Design and QE both recorded on that file. The row the
 containment deserves is appended by the hop that lands it, from a note it admits.
+
+### DoR RE-CHECK 2026-08-12 by BA/PM at `refinement-ABC-029-g1g2` — TWO items, and both are STRONGER
+
+**No re-score is written, for the same reason as the previous hop:** the Definition of Ready is the
+`Backlog → Ready` bar, this ticket cleared it at `refinement-ABC-029-criteria` (10 of 10), and a ticket
+in review is not re-admitted through a gate it already passed. **What is checked is whether this hop's
+writing could have made a passed item FAIL.**
+
+- **Item 4 — acceptance clear, testable and measurable: still ✅ and strictly stronger.** Five required
+  verdicts added across two new criteria, **each naming a site, a build, a tree and a verdict**, each
+  with **the build that would pass it while being wrong** — and, where that build cannot be killed by a
+  row, the limit is **marked** (`L3`) instead of the row being written weaker than it reads. **Every
+  today-value on the two new rows was re-measured at this hop rather than attributed.**
+- **Item 7 — test notes present: still ✅.** 12 → **13**; note 11 moved from an open question to an
+  answer, and note 13 replaces a class of stale citation with the `grep` that re-finds each site.
+- **Item 3 — INVEST: still `⚠️`, unchanged in kind.** This ticket has never been independent; it still
+  shares `src/history-pane.nfr.test.ts` with `ABC-028`. **Nothing this hop wrote touches that file.**
+- **Items 1, 2, 5, 6, 8, 9, 10 — unchanged.** **No security or NFR target, bar or level moved**;
+  `plans/nfr-catalog.md` was **not opened**; no ADR was opened for edit.
+
+> **THE ANTI-SMOOTHING CHECK, RUN AGAIN, AND THIS HOP IS THE ONE WHERE IT BITES HARDEST.** A `P0` is
+> behind this ticket, the build is `PASS_WITH_RISKS` with **zero code defects**, and the cheapest
+> honest-looking move available was to note the two wrong builds and carry them. **This hop instead
+> ADDED five required verdicts, MARKED two limits it could not close with a row, RESTATED a limit this
+> ticket had already BANKED as closed, and ANSWERED an open test note.** Smoothing removes obligations;
+> this added eight. **The one thing it did not do is change any criterion's verdict on the landed
+> build — because the landed build is correct, and saying so is not smoothing when it is measured.**
+
+### Requested board move 2026-08-12 by BA/PM at `refinement-ABC-029-g1g2` — **NONE, and the useful output is an input to the Orchestrator's hold rather than a request**
+
+`ABC-029` is in **`In Review`** (WIP 1/3) and this page's front matter reads `status: in-review` /
+`column: In Review`. **The two AGREE — verified at source at this hop — so nothing moves and no front
+matter is edited.** **BA/PM's own board transition is the `Backlog → Ready` exit and it was SPENT** at
+`refinement-ABC-029-criteria`; writing criterion rows onto a ticket already in review does not move it.
+**`plans/board.md` was NOT opened for edit** — it is the Orchestrator's and the brief reserves it.
+
+> **THE INPUT THAT MATTERS, and it bears directly on the stated reason for the current hold.** The
+> board records `ABC-029` held at `In Review`, overriding QE's requested `In Security/NFR`, *"because
+> that gate would measure a file two owed rows are about to change."* **Measured at this hop: the two
+> owed rows do NOT change that file.** `A6.3` and `A6.4` are satisfied by the landed expression
+> verbatim — regex green on all four `A6.3` builds, RED on `A6.4`'s — so the Engineer's hop, if one is
+> scheduled at all, adds **witnesses run out of tree** and touches **zero characters** of
+> `src/history-pane.nfr.test.ts`. **The premise of the hold is discharged by measurement, not argued
+> away.** Whether that releases the hold is the Orchestrator's call and this role does not make it.
