@@ -344,6 +344,7 @@ hop:
 | **A5.3** | `WSTALELICENCE` — the licence holder **exists** and stops importing `history.ts` | tip | **regex RED** |
 | **A5.4** | `WPERFT-STATIC` and `WOFFFRAME-STAT` — an **unlicensed** production module gains a static runtime import | both | **regex RED** |
 | **A5.5** | `WLOOPINFRAME` — a declared frame producer imports the licence holder | tip | **probe RED** |
+| **A5.6** | **`WSWAP`** — the licence holder stops importing `history.ts` (its import made **type-only**) **and**, in the **same** tree, an unlicensed production module gains a **static** runtime import of it. **ADDED 2026-08-12 at `refinement-ABC-029-rows`; drafted by QE at `quality-gate-ABC-029-qe`** | tip | **regex RED** |
 
 > ### THE GAP THIS CRITERION CLOSES, STATED PLAINLY BECAUSE A `P0` STANDS ON IT
 >
@@ -391,6 +392,195 @@ hop:
 > a repair was *"audited on the site it names, not the site it points at"* — `D27` named one of three
 > sites carrying a retired vocabulary and two survived into `main`. **This ticket's sweep was run
 > first and its result is written above**, so the count is a measurement and not a hope.
+
+### `A5.6` ADDED 2026-08-12 by BA/PM at `refinement-ABC-029-rows` — the row that makes the word **EQUAL** enforceable, because five rows did not
+
+**`A5`'s statement already says the assertion is an EQUALITY — *"not asserted empty, and not asserted
+to be a subset"*. Its five rows did not enforce that word, and QE measured the gap at ONE TOKEN.**
+
+`toEqual(...)` → `toHaveLength(....length)` — the build QE names **`W4count`** — passes **`A5.1`,
+`A5.2`, `A5.3`, `A5.4` (both builds) and `A5.5`**, and is **green on `WSWAP` where the delivered build
+is RED**. The two forms diverge only when the runtime-importer set and the licence set have **the same
+cardinality and different members**, and **no row of `A5` constructed that**. `A5.6` constructs it.
+
+**`A5.6` — the two sets have the same size and different members. Given** a build in which the
+licensed driver stops importing `src/history.ts` **and** an unlicensed production module gains a
+static runtime import of it, **when** the suite runs, **then** the **regex guard is RED**.
+
+*Construction, stated so it is not re-derived: `base17` (`ABC-019`'s tip), `src/turn-loop.ts`'s import
+of `./history.ts` made **type-only**, and `import { newGame } from "./history.ts";` prepended to
+`src/zobrist.ts`. Runtime importers `['zobrist.ts']`, licence `['turn-loop.ts']` — cardinality 1 = 1,
+members disjoint. **Measured by QE at `quality-gate-ABC-029-qe`: the delivered build RED, `W4count`
+green.** Not re-run at this hop — see `## Test notes` 12.*
+
+> **THE BUILD THAT PASSES `A5.6` WHILE BEING WRONG, NAMED RATHER THAN LEFT FOR A LATER HOP.** This
+> ticket's own `A5` reached one token from vacuous **while being the anti-smoothing criterion**, so the
+> same test is run on the row that repairs it.
+>
+> - **`Wsubset` — a subset check, *"no unlicensed importer"*.** It is **RED on `WSWAP`**
+>   (`['zobrist.ts']` is not a subset of `['turn-loop.ts']`), so it passes `A5.6` cleanly.
+>   **It cannot survive `A5.3`**, which is **green** under it — measured, and that row exists to forbid
+>   exactly this form. **So `A5.6` does NOT subsume `A5.3`; the two rows are not redundant and neither
+>   may be dropped for the other.**
+> - **`Wcount+first` — cardinality equality PLUS a comparison of the first element only.** Green on
+>   `A5.1` and `A5.2`, RED on `A5.3` (0 ≠ 1), RED on both `A5.4` builds, RED on `A5.6`
+>   (`'zobrist.ts' !== 'turn-loop.ts'`) and RED on `A6.1`'s `WLAUNDER` on both trees (2 ≠ 1 and 1 ≠ 0).
+>   **It passes every row on this page and it is strictly weaker than an equality.
+>   I CANNOT KILL IT WITH A ROW, and the limit is marked in this ticket rather than in a note** — see
+>   `### The limits of A5.6 and A6`, `L1`.
+
+**A6 — the regex guard detects THREE of `D27`'s five runtime-import forms, and its reach is bounded in
+BOTH directions. NEW 2026-08-12 by BA/PM at `refinement-ABC-029-rows`, on `ADR-0011` AS AMENDED.**
+***This criterion exists because clause 3 asserts a property over FIVE forms while the delivered
+expression implements ONE — and clause 2's narrowing made that expression the SOLE holder of the
+property over `gameend.ts`, `perft.ts` and `zobrist.ts`. That is the defect; `WLAUNDER` is its
+witness; `A5` cannot carry it, because `A5` is about the ASSERTION and this is about the EXPRESSION.***
+
+**Given** the regex guard in `src/history-pane.nfr.test.ts`, **when** the suite runs, **then** a
+production module counts as a runtime importer of `src/history.ts` if it holds **any** of three forms
+— a bindings-carrying `import … from`, a **bare** `import "./history.ts";`, or an
+`export … from "./history.ts";` **including `export *`** — **and does NOT count** for a **type-only**
+form on **either keyword** or for a **dynamic `import(…)`** call.
+
+Required verdicts. Each row is a named build on a named tree.
+
+| # | build | tree | required |
+|---|---|---|---|
+| **A6.1** | `WOFFFRAME-BARE` — an unlicensed, off-frame-path module (`zobrist.ts`) gains a **bare** `import "./history.ts";` | 16 | **regex RED** |
+| **A6.1** | `WREEXPORT-STAR` — the same module gains `export * from "./history.ts";` | 16 | **regex RED** |
+| **A6.1** | **`WLAUNDER`** — `zobrist.ts` gains `export { repetitionCounts } from "./history.ts";` **and** `perft.ts` consumes it from `zobrist.ts` | **16 and 17** | **regex RED on BOTH** |
+| **A6.2** | `WTYPEREEXPORT` — an unlicensed, off-frame-path module (`zobrist.ts`) gains `export type { … } from "./history.ts";` | 16 | **regex GREEN** |
+| **A6.2** | `WTYPEREEXPORT-PANEL` — a **frame-path** module (`status-panel.ts`) gains the same type-only re-export | 16 | **regex GREEN** |
+| **A6.2** | **`WPERFT-DYN`** — `void import("./history.ts")` in `src/perft-bench.ts` | **16 and 17** | **regex GREEN, and the suite passes** |
+
+**and** the instrument's docblock no longer states the regex's misses as a **completed** set: after the
+change the residual is **the two dynamic forms** and it is named — *that silence is what made
+`WLAUNDER` invisible* (`ADR-0011`, containment section). **Verified by READING, exactly as `A4` is; its
+site is `## Test notes` 11 and there may be two of them.**
+
+> **NAMING, so nobody thinks these are inherited.** `WOFFFRAME-BARE`, `WREEXPORT-STAR`, `WLAUNDER` and
+> `WPERFT-DYN` are the record's names. **`WTYPEREEXPORT` and `WTYPEREEXPORT-PANEL` are named HERE** —
+> Architect/Design measured them as *"`export type { … } from` in `zobrist.ts`"* and *"in
+> `status-panel.ts`"* and gave them no name. **Naming and wording of all three rows are BA/PM's, which
+> is what `ADR-0011` reserves.**
+>
+> **`A6.2`'s `WPERFT-DYN` row deliberately restates `A3`'s required verdict from the GUARD's side and
+> is not a second obligation.** `A3` states it as a property verdict; `A6.2` states it as a bound on
+> the expression, so that a hop editing the expression meets the constraint at the expression's own
+> criterion instead of having to reason back to `A3`.
+
+> ### THE CEILING — **SIX OF TWELVE IS A LIMIT, NOT A COMPROMISE. THE ROW ENFORCES THE VERDICT AND NOT THE TECHNIQUE, AND THAT DIFFERENCE FROM HOW `ADR-0011` STATES IT IS DELIBERATE.**
+>
+> The containment recovers **6 of the 12** lost kills — 3 modules × 2 static forms. The other six are
+> the two **dynamic** forms in the same three modules, and `A6.2` is what stops a later hop reaching
+> for them: **any expression that turns `WPERFT-DYN` RED breaks `A3`**, which requires it to pass and
+> which was scored through this ticket's Definition of Ready.
+>
+> **`A6.2` is written as a required VERDICT (`WPERFT-DYN` green), NOT as a prohibition on detecting the
+> dynamic form.** `ADR-0011` states the bound as *"6 of 12 is the **maximum** a textual guard may
+> recover without breaking an accepted criterion"*. **That sentence is stronger than its own argument
+> supports, in the same shape as the word *"non-static"* this amendment exists to correct** — see
+> `## Routed to Architect/Design` below. A criterion encoding the ADR's universal would forbid a
+> *technique*; a criterion encoding the verdict forbids the *outcome* `A3` actually protects.
+> **The verdict form is strictly safer, it is what is written, and it is not weaker: every build that
+> reaches the dynamic literal in a file the regex scans reds `WPERFT-DYN` and dies on this row.**
+
+> ### THE BUILD THAT PASSES EACH `A6` ROW WHILE BEING WRONG — run because `A5` is what happens when this is skipped
+>
+> | the wrong build | which rows it PASSES | **what kills it — a row, not a hope** |
+> |---|---|---|
+> | **`Wnothing`** — do not widen; ship the delivered expression | **all of `A6.2`, trivially** | **`A6.1`.** Green on `WLAUNDER` on both trees, measured. **`A6.2` is a RESTRAINT row and a restraint row is ALWAYS satisfied by doing nothing — alone it has NO discriminating power, and that is stated here rather than discovered. The pair is the criterion; neither row may be taken without the other** |
+> | **`Wbareonly`** — make the `from` clause optional but keep the `import` keyword | `A6.1`'s bare-import row; all of `A6.2` | **`A6.1`'s `WLAUNDER` and `WREEXPORT-STAR` rows** — green under it. **This is why the row names the re-export form and names `WLAUNDER`, instead of saying "the forms it misses"** |
+> | **`Wexportonly`** — add the `export` keyword but keep `from` mandatory | `A6.1`'s two re-export rows; all of `A6.2` | **`A6.1`'s `WOFFFRAME-BARE` row** |
+> | **`Wsubstring`** — replace the expression with a plain `src.includes('"./history.ts"')` | **all three `A6.1` rows** | **`A6.2` and `A5.1`/`A5.2`.** RED on both type-only rows and on `WPERFT-DYN`; and BASE goes RED on both trees, because `history-pane.ts` and `status-panel.ts` each hold an `import type … from "./history.ts"` (QE swept: those two lines and four comments are the ONLY references to `history.ts` in production `src/`) |
+> | **`Whalfguard`** — the obvious widening, with `(?!type\b)` applied to the **`import` branch only** | **all three `A6.1` rows — AND `A5.1`/`A5.2`: BASE stays GREEN**, because **no production module holds `export type … from "./history.ts"` today** (QE: zero re-exports of any local module anywhere in production `src/`) | **`A6.2`'s two type-only rows, AND NOTHING ELSE ON THIS PAGE.** Architect/Design found this control and **QE never ran it**. **This is the row's entire reason to exist: BASE cannot witness it, so only a constructed build can — the same argument that forced `A5.2`–`A5.4` to be constructed builds rather than "the suite is green here"** |
+> | **`Wdyn`** — widen to the dynamic literal spellings too (`ADR-0011` alternative 9) | all three `A6.1` rows | **`A6.2`'s `WPERFT-DYN` row, and `A3`** |
+> | **`Wnoscan`** — keep `WPERFT-DYN` green by removing `perft-bench.ts` from the SCANNED set instead of by not matching the form | all of `A6.2` | **THREE independent rows: `A1`** (zero files omitted from either guard's scanned set by a filename), **`A3`** (`perft-bench.ts` is inside the regex's scanned set), **`A5.4`** (`WPERFT-STATIC` regex RED — the regex is its sole catcher) |
+
+### The limits of `A5.6` and `A6`, MARKED IN THE TICKET rather than left in a note
+
+**Two. Each carries the build that exposes it, an owner and a trigger. They are here because
+`RISK-ABC028-01` was named inside `A4` rather than in a note — and because this ticket's own `A5` is
+the measured cost of an unmarked limit.**
+
+**`L1` — `A5.6` does not separate `Wcount+first` from a true equality, and NO row constructible on
+either of this ticket's two trees can.** The build that would separate them needs the two sets to have
+the **same cardinality, the same first element, and a difference later**, which needs **two licence
+entries whose files exist**. Today there is exactly **one** (`turn-loop.ts`) on the 17-file tree and
+**zero** on the 16-file tree, so such a build is reachable only by mutating the **licence declaration
+itself** to carry a second real entry — a four-part mutation, against an assertion form nobody writes
+(`W4count` was one token; this is a positional index). **Judged not worth a required verdict and
+marked instead; if a reader disagrees, the build is fully specified in the context notes and the row
+is cheap to add.** **`A5`'s statement carries the universal (*"asserted EQUAL"*); the rows sample it;
+this is where the sampling stops. Owner: BA/PM. Trigger: the first licence entry added after
+`turn-loop.ts` — deliberately the SAME trigger as `ADR-0011`'s `R2`, so one hop clears both.**
+
+**`L2` — `A6` pins the expression's FORM SET, not its ANCHOR.** An unanchored variant (`^` and `/m`
+dropped) passes **every `A6` row and every `A5` row**: it is green on both type-only forms
+(the `(?!type\b)` lookahead still fails at the only `import`/`export` token on those lines) and green
+on `WPERFT-DYN` (`import(` has no whitespace after the keyword). It is not *weaker* — it would also
+catch an indented import, which the anchored form misses and which the `lint` gate contains (QE) — but
+it carries an **unmeasured false-positive risk** against a production comment or string that quotes
+the specifier. **`ADR-0011`'s ruled expression IS anchored, so an Engineer landing it verbatim
+satisfies this by construction; the limit bites only if a different mechanism is chosen, which `A5`
+explicitly permits.** **Not measurable at this hop — `src/` was not opened (`## Test notes` 12).**
+**Owner: BA/PM. Trigger: the next hop that changes this expression's anchoring, or the first
+production module that quotes `"./history.ts"` inside a comment or a string.**
+
+## Routed to Architect/Design — `ADR-0011`'s *"the maximum a textual guard may recover"* is OVERSTATED, and the shape is the one this amendment exists to correct
+
+**FLAGGED, NOT FIXED. `ADR-0011` is `accepted`, it is not BA/PM's, and it was NOT opened for edit at
+this hop.** Raised 2026-08-12 by BA/PM at `refinement-ABC-029-rows`.
+
+`ADR-0011`'s containment section rules: *"So 6 of 12 is not a compromise; it is the **maximum a textual
+guard may recover without breaking an accepted criterion**."* Architect/Design's own note calls that
+sentence *"a ruling, and it is in the ADR"*.
+
+**The argument supports a narrower claim than the sentence makes.** The binding reason given is that a
+pattern reaching the dynamic literal turns `WPERFT-DYN` RED while `A3` requires it to pass. **That
+holds for any expression that treats every scanned file ALIKE** — which the delivered and the ruled
+expressions both do. It does **not** hold for an expression that keys on a **textual, filename-free
+property of the scanned file**, and `ADR-0011` **clause 4 supplies exactly one**:
+
+> **an ENTRY POINT is a production module that exports nothing** — and *"`src/perft-bench.ts` is the
+> only production module with ZERO exports (the other 16 have 1 to 23)"*, measured by Architect/Design
+> at the ruling hop.
+
+**So a rule of the shape *"a dynamic `import("./history.ts")` counts as a runtime importer only in a
+module that exports something"* would keep `WPERFT-DYN` GREEN** — `perft-bench.ts` exports nothing —
+**while turning `WOFFFRAME-DYN` and `WQUERY-OFFFRAME` RED in `gameend.ts`, `perft.ts` and
+`zobrist.ts`, which all export.** That is the remaining six recovered, without breaking `A3`, with no
+filename, using the ADR's own clause 4.
+
+**`UNKNOWN - verify` — I did NOT construct it and I did NOT run it.** `src/` was not opened at this
+hop (`## Test notes` 12) and BA/PM does not write instruments. **It is offered as a counterexample to a
+SENTENCE, not as a design.**
+
+**What this does NOT change, checked before it was written down:**
+
+- **The RULING stands and is not reopened.** Alternative 9 **as the ADR states it** — *"widen the regex
+  to the DYNAMIC literal spellings too"* — is correctly rejected: a plain dynamic widening does turn
+  `WPERFT-DYN` RED. And the ADR's **second** ground survives the counterexample intact and is the
+  stronger one: a dynamic rule catches only the literal spelling and is evaded by a computed specifier
+  (`import(someVar)`), **which the two static forms cannot be — `export … from` and a bare `import`
+  require a literal specifier by ESM syntax.** So *"it buys false confidence"* genuinely discriminates
+  the dynamic case, where *"it is the maximum"* does not.
+- **No criterion row changes.** `A6.2` is written as a required verdict, which the counterexample also
+  satisfies. **Had it been written as the ADR's universal it would have forbidden a build that breaks
+  nothing** — which is the whole reason the row is worded the way it is.
+- **Nothing in `## Scope` moves and the Engineer's hop is unchanged**: the ruled expression is what is
+  built.
+
+**Owner: Architect/Design. Trigger: the next edit to `ADR-0011` for any reason, OR the first hop that
+cites *"the maximum"* as a reason not to look further — whichever is first.**
+
+> **WHY THIS IS FLAGGED AND NOT A STOP, stated so the Orchestrator can overrule it rather than discover
+> it.** The brief instructs BA/PM to say so and stop if the row writing implies the ADR is still wrong.
+> **The rows are writable, correct, and unchanged by this**; what is overstated is a **rationale
+> sentence in the Consequences/containment section** — not clause 1, 2, 3 or 4, not the adoption of the
+> containment, and not a single verdict in the kill ledger. Stopping would hold a `P0`'s dependency on
+> a one-sentence amendment that changes no verdict, no row and no line of the Engineer's hop.
+> **The scheduling call is the Orchestrator's.**
 
 ## ~~Open design question~~ — CLOSED 2026-08-12 by `ADR-0011` (`accepted`)
 
@@ -575,6 +765,24 @@ throughput instrument.*
     evidence.** Prepending `import "./history.ts";` to `src/position.ts` makes the child die with
     `ReferenceError: Cannot access 'QUEEN' before initialization` in `moves.ts` — a circular-init
     artefact of the mutation, **not** a probe verdict. Use `san.ts` for the transitive witness.
+11. **ADDED 2026-08-12 at `refinement-ABC-029-rows`. The containment's docblock site and `A4`'s
+    docblock site may not be the same block, and the record gives TWO line ranges.** `A4`'s second half
+    names **`:253-262`** — the block presenting the regex as a strictly weaker subset of the probe. QE's
+    reach-claims block — the one that *"names two misses and is silent on re-export"* — is recorded at
+    **`:346-351`**. `ADR-0011` calls it *"the docblock above the probe"* and does not disambiguate.
+    **If they are ONE block the Engineer corrects it once; if they are TWO, BOTH must be true after the
+    change** — `A4`'s clause and `A6`'s clause are then two obligations, not one. **This is `A4`'s own
+    lesson — *audit the site it names, not the site it points at* — applied to `A4`'s successor.**
+    Line numbers are inherited from the record and were **NOT re-verified at this hop**; see note 12.
+12. **ADDED 2026-08-12 at `refinement-ABC-029-rows`: NO MEASUREMENT WAS TAKEN AT THAT HOP AND `src/`
+    WAS NOT OPENED.** The refinement brief forbade it — a concurrent Engineer hop is live on `ABC-028`
+    in `src/history-pane.test.ts`. **Every today-value in `A5.6` and `A6` is ATTRIBUTED, not
+    re-derived**: to QE at `quality-gate-ABC-029-qe` (60 vitest runs, two trees) or to Architect/Design
+    at `design-ABC-029-loss-record` (28 instrument runs on two trees plus a full-suite run).
+    **This is a DEPARTURE from the two previous BA/PM hops on this ticket, both of which re-ran the
+    load-bearing rows independently, and it is recorded as a cost rather than left to be discovered.**
+    The rows state required verdicts the Engineer must **produce red-first**, which is the criterion's
+    job and does not depend on a today-value; but no today-value on this page was re-taken at that hop.
 
 ## Size and priority rationale
 
@@ -667,6 +875,46 @@ did not request a re-derivation; the Orchestrator asked for one anyway and here 
   The promote-to-`P0` trigger is *"the frame path itself gains a runtime importer of `src/history.ts`"*.
   **Measured this hop: the frame closure is 11 modules on both trees and `history.ts` is not among
   them. The trigger has NOT fired.** Being on a `P0`'s critical path still does not make a ticket `P0`.
+
+### Size and priority RE-DERIVED 2026-08-12 by BA/PM at `refinement-ABC-029-rows` — both HOLD
+
+**Size `S` (2) HOLDS, re-derived rather than inherited — and the derivation is about the TICKET, not
+about what is left of it.** A ticket's size does not shrink because some of it is built.
+
+- **The condition named in advance at the previous hop did NOT fire.** *"If `A2`'s channel fix cannot
+  be made without a third file in the lane or a dependency, the size is re-derived."* `A2` is built:
+  the report channel moved to **file descriptor 3**, lane file count stayed **TWO**, `dependencies`
+  stayed `{}` — recorded on `ABC-029`'s `plans/traceability.md` row at the build hop.
+- **The containment adds no file, no module and no dependency.** `ADR-0011` rules it as **two sites in
+  ONE existing test file with ZERO production lines** — one regex literal and one docblock. It is a
+  fraction of an `S`, not an addition to one.
+- **`A6` and `A5.6` add criteria, not files** — the same reasoning that held when `A5` was added, and
+  the same calibration: `ABC-024` was `S` with **five** criteria and named discriminating mutants in
+  one existing file. The six new required verdicts are **constructed builds run out of tree; not one
+  of them is a committed file.**
+- **`SPLIT_REQUIRED` still does not apply** — it bites at `XL` (8) and this is 2.
+- **The new condition that would move it, named in advance in place of the spent one:** if the widened
+  expression cannot be landed without a **second expression in the scanned-set derivation** (which
+  `A1` fixes at **zero** filename exclusions) or a **third site** in the instrument, the size is
+  re-derived. `## Test notes` 11 is the live candidate for the second of those.
+
+**Priority `P1` HOLDS.**
+
+- **Not `P0`.** The promote trigger is *"the frame path itself gains a runtime importer of
+  `src/history.ts`"*. **It has NOT fired**: the frame closure is **11 modules on both trees** with
+  `history.ts` absent — measured independently twice on this stack, by QE (60 runs) and by
+  Architect/Design (28 runs). **Being on a `P0`'s critical path still does not make this ticket `P0`;
+  the line has now been held three times.**
+- **Not `P2`.** The trigger that moved it to `P1` is still firing: `ABC-019` is `P0`,
+  `quality.gate_enforcement` is `blocking`, and **`ABC-029` has not landed** — this branch is
+  nineteenth in a linear stack off `main` and the fast-forward is with the owner. `ABC-019` cannot
+  merge until `ABC-029` does.
+- **The containment itself is LATENT, and that does not lower the ticket's priority.** QE swept
+  exhaustively: **zero bare imports and zero re-exports of any local module anywhere in production
+  `src/`**, so nothing in the tree is one edit from `WLAUNDER`. The priority is the ticket's, and the
+  ticket's blocker is unchanged.
+- **Both figures are ATTRIBUTED, not re-measured** — `src/` was not opened at this hop
+  (`## Test notes` 12).
 
 ## Definition of Ready
 
@@ -793,3 +1041,49 @@ disputed, and if a reader scores it `❌` the ticket returns to `Backlog`.**
 the Orchestrator's and was **not opened for edit** at this hop, and a ticket header that disagrees with
 the board is the two-records-disagree defect this project keeps paying for. **The front matter moves
 when the board does, by the role that owns the board.**
+
+### DoR RE-CHECK 2026-08-12 by BA/PM at `refinement-ABC-029-rows` — ONE item, and it is STRONGER
+
+**No re-score is written, and that is deliberate.** The Definition of Ready is the `Backlog → Ready`
+bar and this ticket cleared it at `refinement-ABC-029-criteria` (10 of 10). **A ticket in development
+is not re-admitted through a gate it already passed**; what is checked is whether this hop's writing
+could have made a passed item FAIL.
+
+- **Item 4 — acceptance clear, testable and measurable: still ✅ and strictly stronger.** Six required
+  verdicts added across two new named builds and four existing ones, **each naming a site, a build, a
+  tree and a verdict** — plus, for every row, **the build that would pass it while being wrong and
+  what kills it.** Two limits are marked in the ticket where a row could not be written.
+- **Item 6 — security/NFR triggers: unchanged. NO target, bar or level moved**, and
+  `plans/nfr-catalog.md` was **not opened**. **`N8-LANE`'s delta for the containment is owed at the
+  Engineer's hop, not here** — two sites in one file, zero production lines — and the lane **TOTAL is
+  disputed and routed to `ABC-026`**, which is not this ticket's to settle.
+- **Item 3 — INVEST: still `⚠️`, unchanged in kind.** This ticket has never been independent; it still
+  shares `src/history-pane.nfr.test.ts` with `ABC-028`.
+- **Items 1, 2, 5, 7, 8, 9, 10 — unchanged.** `## Test notes` went 10 → 12; `## Scope` did not move.
+
+> **THE ANTI-SMOOTHING CHECK, RUN AGAIN BECAUSE THE PRESSURE HAS NOT GONE AWAY.** A `P0` is still
+> behind this ticket. **This hop ADDED six required verdicts, MARKED two limits it could not close with
+> a row, and ROUTED one sentence back to Architect/Design. Smoothing removes obligations; this added
+> nine.** The one thing it did not do is re-measure — that is recorded as a cost in `## Test notes` 12
+> rather than papered over.
+
+### Requested board move 2026-08-12 by BA/PM at `refinement-ABC-029-rows` — **NONE, and that is the answer rather than an omission**
+
+`ABC-029` is in **`In Development`** (WIP 2/3) and this page's front matter reads
+`status: in-development` / `column: In Development`. **The two AGREE** — verified at source by the
+Orchestrator this hop — **so nothing moves and no front matter is edited.** Editing a header that
+already agrees with the board would manufacture the two-records-disagree defect this project keeps
+paying for, in the opposite direction.
+
+**BA/PM's own board transition is the `Backlog → Ready` exit and it was SPENT** at
+`refinement-ABC-029-criteria`. **Writing criterion rows onto a ticket that is already in development
+does not move it** — the rows are what the Engineer's next hop goes red against, and the sequencing of
+that hop is the Orchestrator's. **`plans/board.md` was NOT opened for edit**; it is the Orchestrator's
+and the brief reserves it.
+
+**`plans/traceability.md` — read, CONFIRMED, not edited.** Workflow 07 asks this role to *confirm or
+extend* the requirement→epic→feature→ticket linkage and `Status`. **The linkage is present and correct
+(`ABC-029` → `EPIC-002` → no feature) and did not move; `Status` did not move.** Nothing this hop
+wrote produces a new code, test or UAT artefact, so **a `Tests` cell here would have to describe tests
+BA/PM did not add** — the same refusal Architect/Design and QE both recorded on that file. The row the
+containment deserves is appended by the hop that lands it, from a note it admits.
