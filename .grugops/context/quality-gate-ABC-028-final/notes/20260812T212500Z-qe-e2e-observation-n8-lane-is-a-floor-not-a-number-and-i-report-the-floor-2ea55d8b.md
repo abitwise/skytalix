@@ -83,14 +83,22 @@ up as the other. Against the 650 ms content allowance that is ~0.5%.
 own `Duration` 1.76 s** — 59% of the clause, and within a hundredth of a second of `ADR-0008`'s own
 recorded baseline of **1.765 s**. That is the instrument whose value matches the ADR's number.
 
-**Everything after it in this session is LOAD-CONTAMINATED, and I caused the load.** This hop ran
-roughly seventy full suites. The same tree, same instrument, later in the session reads `Duration`
+**Everything in the middle of this session is LOAD-CONTAMINATED, and I caused the load.** This hop ran
+roughly seventy full suites. The same tree, same instrument, mid-session reads `Duration`
 **3.25–3.54 s**; process wall through `npm test` reads 3.02–5.15 s. `ADR-0008`'s own consequence
 section predicts exactly this — *"the same tree read 6.68 s CPU / 1.61 s wall early and 8.14 s /
-1.96 s after ~15 min of sustained load. Ratios replicate; absolutes do not."* **My "cooled" re-run is
-NOT usable either and I am discarding it rather than quoting it: it overlapped with my own foreground
-mutant lanes, so it measured contention, not recovery.** A clean re-verification of the wall clause on
-a quiet machine is `UNKNOWN - verify` at this hop beyond that first reading.
+1.96 s after ~15 min of sustained load. Ratios replicate; absolutes do not."* **My deliberate "cooled"
+re-run is NOT usable and I am discarding it rather than quoting it: it overlapped with my own
+foreground mutant lanes, so it measured contention, not recovery.**
+
+> **[ADDENDUM, same hop, after the work was committed and the lanes were torn down.]** The hop's
+> **closing** `npm test` on the tip — machine quiet again — reads **752/752 on 26 files, `Duration`
+> 1.39 s**. So the clause is now confirmed on **two independent quiet readings** taken at opposite
+> ends of this hop (**1.76 s** and **1.39 s**, both under the ADR's own 1.765 s baseline), with the
+> 3.25–5.15 s readings sandwiched between them under a load I created. **That is the discriminator:
+> the drift is the session's and not the lane's, demonstrated rather than assumed, and I am recording
+> it because it makes this note's earlier `UNKNOWN - verify` unnecessary.** The `≤ 3 s wall` clause
+> **HOLDS** on the tip.
 
 **Clause `≤ 13 s CPU`: HOLDS in every reading I took, including the worst.** Under seventy-suites-deep
 load with concurrent lanes the tip read **10.80–12.05 s CPU** — under the bar in the most adversarial
