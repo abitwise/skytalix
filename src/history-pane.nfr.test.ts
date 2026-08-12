@@ -311,7 +311,7 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     const directory = new URL(".", import.meta.url).pathname;
     const production = productionModulesIn(directory);
     const runtimeImporters = production.filter((file) =>
-      /^import\s+(?!type\b)[^;]*from\s+"\.\/history\.ts";/m.test(
+      /^(?:import|export)\s+(?!type\b)(?:[^;]*from\s+)?"\.\/history\.ts";/m.test(
         readFileSync(`${directory}${file}`, "utf8"),
       ),
     );
@@ -342,13 +342,29 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
    * - a static pull in `perft-bench.ts` or `zobrist.ts` — off the frame path, unlicensed — is RED
    *   above and green here, because it breaches the licence and not the premise;
    * - a licence that goes STALE is RED above and green here, for the same reason;
-   * - a renderer reaching `history.ts` by `void import`, a bare import, a query string or a
-   *   re-export is green above and RED here. The regex above reads SYNTAX and syntax has a reach:
-   *   `/^import\s+(?!type\b)[^;]*from\s+"\.\/history\.ts";/m` implements ONE of the five forms that
-   *   evaluate a module body and sees neither `void import("./history.ts")` nor a bare
-   *   `import "./history.ts";` — the second because it requires a `from` clause. (Healthy in the
-   *   same regex and recorded so nobody re-sweeps it: multi-line `import { … }` blocks and
-   *   `import * as ns` ARE matched, because `[^;]*` spans newlines.)
+   * - a renderer reaching `history.ts` by a DYNAMIC `void import("./history.ts")` or a query
+   *   string is green above and RED here. The regex above reads SYNTAX and syntax has a reach:
+   *   `/^(?:import|export)\s+(?!type\b)(?:[^;]*from\s+)?"\.\/history\.ts";/m` implements THREE of
+   *   the five forms that evaluate a module body — a bindings-carrying `import … from`, a BARE
+   *   `import "./history.ts";`, and an `export … from` re-export INCLUDING `export *`.
+   *
+   *   THE RESIDUAL IS THE TWO DYNAMIC FORMS AND IT IS NAMED HERE RATHER THAN LEFT AS A COMPLETED
+   *   LIST, because the earlier silence is what made `WLAUNDER` invisible (`ADR-0011`'s
+   *   containment). Re-export was the miss that silence hid: `export { … } from "./history.ts"`
+   *   republishes the history module's API from an unlicensed module, so a third module reaches
+   *   the repetition machinery WITHOUT EVER NAMING `history.ts`. Stopping at three forms is a
+   *   RULING, not an oversight — a pattern reaching the dynamic literal turns `WPERFT-DYN` RED and
+   *   `ABC-029`'s `A3` requires it to pass, and a rule that catches only the literal spelling is
+   *   evaded by a computed specifier anyway. `ADR-0011`'s `R4` owns the two that stay uncaught.
+   *
+   *   `(?!type\b)` APPLIES TO BOTH KEYWORDS AND THAT IS LOAD-BEARING. `import type` and
+   *   `export type { … } from` are erased at runtime and must stay GREEN. A widening that guards
+   *   only the `import` branch passes every RED build above — no production module holds a
+   *   type-only re-export today, so this tree cannot witness it — and turns a correct
+   *   `export type … from` red. Only a constructed build sees it (`ABC-029` `A6.2`).
+   *
+   *   (Healthy in the same regex and recorded so nobody re-sweeps it: multi-line `import { … }`
+   *   blocks and `import * as ns` ARE matched, because `[^;]*` spans newlines.)
    *
    * So this measurement is blind to none of the five forms and needs no list of syntaxes to keep up
    * to date — and it is scoped to the frame path, not to the whole production graph. A pull into a
