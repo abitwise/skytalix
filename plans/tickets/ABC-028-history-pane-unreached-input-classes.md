@@ -2868,3 +2868,95 @@ the end of this hop, `git diff -- src/` **EMPTY**. **`In Development` is `1/3`, 
 **FRONT MATTER: NOT MOVED.** It reads `status: in-development` / `column: In Development`, and
 `plans/board.md` carries `ABC-028` under `## In Development (WIP 1/3)` — **read at source at this
 hop.** The two records agree and **`plans/board.md` was NOT opened for edit.**
+
+## Post-merge debt discharge — 2026-08-12, task `abc028-owed-2026-08-12` (Workflows 05/15)
+
+**This ticket merged carrying two named debts. Both are discharged here. The ticket does NOT move —
+it stays `Done`. A gap found after a merge becomes a NEW ticket, never a silent re-open**, so
+everything below is either a record or a routed item, and nothing below re-opens `ABC-028`.
+
+**Scheduled in PARALLEL at width 2** of `queue.wip_limit` 3 (QE and Security/NFR), both drawing from
+their own `ref:` and neither relaying data to the other.
+
+### 1. The QE FINAL re-gate — `READY_FOR_HUMAN_REVIEW` on the merged tip `0ee148e`
+
+Owed because the last verdict was taken at **755 on 26 files** and the tip is **807 on 28**. All five
+criteria **MET**, **zero code defects**, five gaps.
+
+**The `:493` mechanism was attacked, not read, and it SPLITS into a half that is unfalsifiable as
+claimed and a half that is not:**
+
+- **The DEDUCTION holds, and this hop is the first to TEST it.** `HOIST` (make `A9`'s snapshot iterate
+  the module-scope `ALL_CASES`) + `WPOS` → **1 failed / 807, and the sole catcher is this ticket's own
+  `A4`** — `A9` goes blind exactly as the sentence predicts. **`HOIST` ALONE is GREEN at 807/807**:
+  the regression the comment warns about is entirely **unenforced**, which makes obligation (iii)
+  — *preserve the reason* — the load-bearing one, not a nicety.
+- **The CITATION clause is falsifiable by two GREEN commits.** `A4-RENAMED` → **0 failed / 807**,
+  nothing deleted, no coverage lost, and the comment then cites a letter resolving to `ABC-017`'s
+  `A4`, which does not kill `WPOS`. `A4-DELETED` → **0 / 806**. This is **`H1` (MED, BA/PM): ONE
+  CLAUSE OF SCOPE. Do not re-open the ticket for it.**
+- **The Engineer's own narrower claim SURVIVED** — *no falsifier outside the file it sits in*: both
+  falsifiers are inside `src/history-pane.test.ts`. The over-broad restatement — *nothing anyone
+  commits can falsify it* — is what fails.
+
+### 2. The Security/NFR look — `PASS_WITH_RISKS`, SCOPED TO THIS TICKET'S OWN COMMITS
+
+**No required fix. This ticket's own firing threshold — *any production line at all, or any new file*
+— DOES NOT FIRE, and it is a measured empty set rather than a shrug.**
+
+**THE SCOPE LINE MATTERED MORE THAN THE VERDICT, and it corrected this ticket's own record:**
+
+- **`ABC-028`'s own commits are FOUR, not three: `8de988d`, `26e452f`, `593ba70`, `1ae7b8f`.** The
+  scope was derived mechanically — every hop commits its queue record and context notes alongside its
+  `src/` edit, so **commits attribute themselves**; `--grep=ABC-028` returns 31 commits and 5 touching
+  `src/`, pulling in `ABC-029`'s `f31e2e7`, and is recorded as the wrong method.
+- **The wrong number's ORIGIN was reproduced, not guessed:** exactly **three** commits touch
+  `src/history-pane.test.ts`; the fourth, `593ba70` (`A5`'s comment half), touches **only**
+  `src/history-pane.nfr.test.ts`. **"Three" was a count of one FILE's commits wearing the ticket's
+  name.** It does not move the verdict — which is precisely why it survived unchallenged.
+- **Orchestrator-verified per commit:** zero non-test `src/` files at all four, **`+536/−25` across
+  two test files**, zero new files under `src/`. The **branch** scope is `+314/−1` production lines
+  and three new `src/` files belonging to `ABC-019` and `ABC-029` — **a branch-scoped review would
+  have put a permanently FALSE security record on a ticket that shipped zero production lines.**
+- **One word comes back on the pane digest.** `src/history-pane.ts` is `54fd4346…` on **both** sides
+  of `8de988d`, and moves to `c4653c4c…` at **`b7e1226` — `ABC-029`'s commit, not this ticket's.** So
+  this file's *"unmoved at `c4653c4c…`"* is true only **from `26e452f` onward**. The zero-diff
+  property is unaffected and was re-verified.
+- ASVS **L1**: 70 requirements counted off the checklist, 64 with no surface, **6 assessed with
+  evidence, no failure**. **`NFR-002` re-derived and MET** — the pane's importer set *grew*
+  (`turn-loop.test.ts`, `ABC-019`'s, a test) and the zero-production-importers premise **survived**,
+  checked against all 17 production modules individually.
+
+### Owed after this hop, each with an owner — named rather than absorbed
+
+| id | what | sev | owner |
+|---|---|---|---|
+| `H1` | the `:493` block's citation clause is falsifiable by two green commits, while the block's opening implies it is not | MED | BA/PM — one clause of scope |
+| `H2` | Workflow 05's test-integrity step **cannot run**: `tools/grugops/test-skip-integrity.js` exists, `.grugops/test-skips.md` does not → **exit 2**, which the workflow says must never be read as a pass. Three gates recorded the runner's `skip 0` in its place | MED | a **human** — this is `S-2`; an agent may not author that registry. Non-blocking: vacuously satisfied at 0 skips |
+| `H3` | `A4`'s live lane figure stale a **fourth** time — page `1/749`, tip `1 failed / 807`. The **shape** held all four times | LOW | BA/PM |
+| `H4` | the published `+4` drift rule self-contradicts at `:495` | LOW | whoever next opens that note |
+| `H5` | **`ABC-026`'s lane total, now owed PAST the merge.** Neither hop ran, estimated or implied it; Security/NFR refused even `ADR-0008`'s two cheap clauses **because the QE re-gate was live on the same cores and contending would corrupt both sets of numbers**. `UNKNOWN - verify` | LOW | `ABC-026` |
+| `S-3` | `t493`'s `lane.mjs` does `rmSync(…, {recursive, force})` + `mkdirSync` under its own artifact directory — i.e. **inside `.grugops/context/`** if run in place. Verified at source; bounded, and it aborts a line later on a dead hard-coded worktree path | LOW | Orchestrator |
+| — | **two false sentences in this file**, both verified: `package.json`'s `dependencies` key is **ABSENT, not `{}`** as `## Security / NFR triggers` says; and that section's *or any new file* clause **fires on 33 non-source files** and wants *under `src/`* | LOW | BA/PM |
+
+**Flagged, not repaired (rule 12):** the duplicate `ABC-028` / `ABC-029` rows in
+`plans/traceability.md`. Measured this hop — **the stale `ABC-028` row is NOT a prefix of the live
+one**; it diverges at char 1619 into empty columns and a cut-time `Backlog — DoR NOT MET` status. Like
+`ABC-029`'s, it needs a hop that can **reconcile two histories**, not a delete. This hop appended to
+the **first** row of the pair, per that file's own column invariant, and verified the column count
+held at 10.
+
+### Verification posture of this hop
+
+**Gates RE-RUN by the Orchestrator rather than transcribed from either agent:** lint **0** (49 files,
+2 pre-existing `biome.json` infos) · typecheck **0** · build **0** · **807 / 807, 0 failed, 0 pending,
+0 todo, 140 suites on 28 test files** · runner skip **0** · `git diff main -- src/` **EMPTY** ·
+`src/history-pane.ts` md5 **`c4653c4c…`** unmoved.
+
+**Neither hop admitted a `finding`. Twelve notes published, ZERO `kind: finding`** — no `§14-gate`
+stamp exists under this task and `human_admission` is `off`, so every result is a `claim` or an
+`observation` carrying its own confidence. That is the honest kind, and it is what this ticket's own
+record — five false statements caught inside published prose — exists to protect.
+
+**FRONT MATTER: NOT MOVED.** It reads `status: done` / `column: Done`, and `plans/board.md` carries
+`ABC-028` under `## Done (WIP unlimited)`. The two records agree.
