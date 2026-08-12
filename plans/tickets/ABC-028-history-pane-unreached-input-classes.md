@@ -36,6 +36,18 @@ feature: —
 > Closing the gap that falsifies a sentence is better than editing the sentence, and it is the only
 > repair that also removes the trap. **The interim exposure is real and is named in
 > `## Dependencies`.**
+>
+> **[AMENDED 2026-08-12 by BA/PM at task `refinement-ABC-028-2026-08-12`, subtask
+> `refinement-ABC-028-a4` (Workflow 07).** `A4` is **written** on an instrument QE built, armed, costed
+> and bounded at `quality-gate-ABC-028-instrument`; its one surviving build is recorded as
+> **`RISK-ABC028-01`** inside `A4` rather than in a context note; the `Object.freeze` blocker's number
+> is **corrected from `Uint8Array(8)` to `Uint8Array(128)`** (`src/position.ts:76`, read at source —
+> the conclusion does not move); the shared-file sequencing question is answered as **evidence in
+> `## Dependencies`, not as a decision**; and the Definition of Ready is **re-scored item by item —
+> 10 of 10 MET, 9 `✅` and 1 `⚠️` (item 3, INVEST *independent*)**, with the anti-smoothing check run
+> explicitly and its direction of travel counted. **Board move `Backlog → Ready` is REQUESTED, not
+> taken**: `plans/board.md` was not opened for edit. **No `src/` file was written. `ABC-017`,
+> `ABC-029`, `ABC-019` and every ADR were left untouched.]**
 
 ## Problem
 
@@ -102,9 +114,25 @@ test file, no new dependency.
 
 ## Acceptance (Given/When/Then)
 
-**Every criterion names the wrong build it must kill and the lane that build must die in.** All four
-builds below **survive 744/744 on 26 files with skip 0** today — QE's measurement, on builds QE
+**Every criterion names the wrong build it must kill and the lane that build must die in.** ~~All four
+builds below~~ **survive 744/744 on 26 files with skip 0** today — QE's measurement, on builds QE
 constructed from its own definitions.
+
+> **[COUNT CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-028-a4` — the set below GREW at this hop
+> and the old count would have gone false.]** `A4` now names **`WBOARDSET`, `WBOARDBUF` and
+> `WBOARDBLIND` in addition to the original four**, and all three also survive the delivered suite.
+> **The per-build verdict is stated in `A4`'s own table rather than counted here**, because the set is
+> the thing that keeps changing. Two builds named below do **not** survive and never did — `WSPLICE`
+> (dead on `A9`'s freeze) and naive `WCACHE` (dead in `A2`'s single-file lane, 1 of 18) — and they are
+> named as *must stay dead*, which is a different obligation from *must start dying*.
+>
+> **FLAGGED, NOT EDITED — a pre-existing tension in the header table, reported per the 12 coding
+> rules.** The header says `WCACHE-LEN` *"survives 744/744"* **and** that its only catcher is the
+> incidental fixture sharing in `src/history-pane.nfr.test.ts`; `A2` says it *"survives 18/18"* with
+> that file **not loaded**. Those two readings cannot both be literally true of the same full-suite run.
+> **This hop did not measure `WCACHE-LEN` and therefore did not touch either sentence** — `A1`/`A2` are
+> not this subtask's scope, the text is a merged-risk restatement, and guessing at it is exactly the
+> defect `## Test notes` 4 exists to prevent. **Owner: the hop that measures `A1`/`A2`.**
 
 **A1 — freshness across a mutation that does NOT change `moves.length`. Given** the black-to-move
 anchor `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 27` carried to **20 plies** by the
@@ -179,36 +207,148 @@ last row full: false                last row full: true
 > window. **The white-cell clause is the assertion that reports; the other three are context and must
 > not be mistaken for guards.**
 
-**A4 — the during-render clause, stated ONCE over the whole `GameHistory` graph. Given** any of
-`ABC-017` `A1`'s ten lengths, **when** the pane renders, **then** **no reachable slot of the supplied
-`GameHistory` differs at any point during the render** — covering, and named so the criterion cannot
-be satisfied by a subset:
+**A4 — the during-render clause, stated ONCE over the whole `GameHistory` graph.**
 
-| slot | wrong build that survives 744/744 today |
-|---|---|
-| `initialFen` | `WFENMID` — rewritten mid-render, restored before return |
-| `position`'s scalar fields (`fullmoveNumber`, `blackToMove`) | `WPOSMID` |
-| `position.board` — a `Uint8Array` | `WBOARDMID` |
-| the `moves` property **binding** (not its contents) | `WMOVESWAP` — swaps the slot to a copy and back |
-| the `moves` **contents** | `WSPLICE` — **already dead** on `A9`'s freeze, and must STAY dead |
+> **[WRITTEN 2026-08-12 by BA/PM at `refinement-ABC-028-a4` (Workflow 07), on an instrument QE BUILT,
+> ARMED, COSTED and BOUNDED at `quality-gate-ABC-028-instrument`.** The prior text of this criterion
+> was an **absolute** — *"no reachable slot differs at any point during the render"* — and it is
+> replaced rather than extended, because **no instrument can hold that absolute for a synchronous
+> callee.** The property below is what was actually measured; the one thing it does not cover is named
+> as `RISK-ABC028-01` at the foot of this criterion rather than left for the fifth repair to find.
+> **This criterion is written to be FAILABLE, not to be comprehensive.**]
 
-**and** the instrument is **live across the interval** — not a before/after pair, which `D26` already
-established cannot express the property — **and it is ARMED**: a control asserts the instrument
-reports a mutation it is supposed to catch, so it cannot pass by being unable to look.
+**Given** any of `ABC-017` `A1`'s ten lengths — the **shared** `LENGTH_CASES` at
+`src/history-pane.test.ts:139-154`, deliberately **not** freshly-built objects: `A4` asserts a
+property of **its own** render, so `D23`'s rendered-too-early hazard does not reach it, and a rebuild
+was measured at **~9.8 ms warm / ~20.3 ms cold** per call against a **~75 ms** ticket margin —
 
-*(**Two instrument facts MEASURED at the cutting hop, because a criterion that cannot discriminate its
-own guard is not testable — the `D27` bar, applied to this hop's own output.***
+**when** the pane renders a **recording view** of the supplied `GameHistory` rather than the object
+itself — an instrument that is **live across the interval**, not the before/after pair `D26` already
+established cannot express this property —
 
-> ***`Object.freeze` CANNOT be the instrument for this criterion.*** *Measured:
-> `Object.freeze(new Uint8Array(8))` throws `TypeError: Cannot freeze array buffer views with
-> elements`, so `position.board` is not merely uncovered by `A9`'s instrument — it is **uncoverable by
-> that instrument's kind**. And freezing `history.moves` leaves the **slot writable**: reassigning
-> `history.moves` after the freeze **succeeds**, which is `WMOVESWAP` mechanically.*
+**then all four of these hold at EVERY one of the ten lengths:**
+
+1. **Zero writes recorded.** Every write reaching the supplied graph through the reference the pane
+   was handed is reported **at the instant it happens** — so a mutation restored before the render
+   returns is still on the record — and the reported-write count is **exactly `0`**.
+2. **The board's 128 bytes never differ at a sampling point.** `position.board` is re-compared
+   against its entry state at **every** access the pane makes through the view, and no sample differs.
+3. **The instrument LOOKED — the sample counter is `> 0` at every one of the ten lengths.** This is an
+   assertion, not a hope: without it, **a pane the instrument cannot see is indistinguishable from a
+   pane that mutates nothing**, which is the failure this ticket's parent shipped once and the exact
+   shape `D27` bars.
+4. **The instrument changes no rendered byte.** Rendering through the view produces output identical
+   to rendering the bare object — checked at **ONE** length (20 plies, the length every other clause
+   of this file already uses). Ten lengths were checked out of tree and cost **~14 ms** of the margin
+   for no additional information; one length is what the lane pays for.
+
+**and it is ARMED PER SLOT, NOT IN AGGREGATE** — so a hole in one slot cannot hide behind another.
+A control writes to each slot below through the handed-out view and the instrument **must report it**;
+measured, each does:
+
+| # | a control writes to … | reported by |
+|---|---|---|
+| 1 | `initialFen` | write trap |
+| 2 | `position.fullmoveNumber` | write trap |
+| 3 | `position.blackToMove` | write trap |
+| 4 | a `position.board` **element** | write trap **and** board digest |
+| 5 | `position.board` **through `.buffer`** | board digest |
+| 6 | the `moves` **slot** | write trap |
+| 7 | the `moves` **contents** | write trap |
+| 8 | a `Move`'s **own field** | write trap |
+
+**and the POSITIVE control**: a run that mutates nothing reports **nothing** — and still samples
+`> 0`. An instrument that cries on a clean render is as worthless as one that cannot look.
+
+> **The aggregate form is the thing this ticket family got wrong once.** `A4`'s previous text asked
+> for *"a control"*, singular. **Per-slot is the only version that would have caught the pre-fix bug in
+> QE's own instrument** — a board mutation by TypedArray method threw `TypeError: this is not a typed
+> array` and recorded **ZERO** violations, i.e. *"instrument broken"* announced where the truth was
+> *"property violated"*, which is the `ABC-017` fixtures-hop failure shape exactly. **The arming
+> controls MUST use FRESH fixtures**, not `LENGTH_CASES`: controls 2, 4, 7 and 8 do not restore, and a
+> shared object makes the next assertion's baseline the previous control's damage. **QE's own harness
+> produced one false clean this way and it is recorded here so the test does not.**
+
+**The builds this criterion must kill, with the verdict each was measured at — all ten lengths, all
+run, none reasoned:**
+
+| slot | wrong build | today (delivered suite) | under `A4` |
+|---|---|---|---|
+| `initialFen` | `WFENMID` — rewritten mid-render, restored before return | survives 744/744 | **RED** (write trap) |
+| `position`'s scalars (`fullmoveNumber`, `blackToMove`) | `WPOSMID` | survives 744/744 | **RED** (write trap) |
+| `position.board` — a `Uint8Array` | `WBOARDMID` | survives 744/744 | **RED** (write trap **and** digest) |
+| the `moves` property **binding** (not its contents) | `WMOVESWAP` — swaps the slot to a copy and back | survives 744/744 | **RED** (write trap) |
+| the `moves` **contents** | `WSPLICE` — **already dead** on `A9`'s freeze | dies on `A9` | **RED** — and it must STAY dead |
+| `position.board` by TypedArray **method** | `WBOARDSET` — `board.set(…)` | **survives 744/744** | **RED** (digest) |
+| `position.board` through an **`ArrayBuffer` alias** | `WBOARDBUF` | **survives 744/744** | **RED** (digest) |
+| — | `WCLEAN`, the delivered pane | 744/744 | **GREEN**, and the counter is non-zero at all ten lengths |
+
+**`WBOARDSET` and `WBOARDBUF` are NEW to this ticket** — QE constructed them, and they are named here
+because they are **the two shapes that would have made a write-trap-only instrument a false green**.
+Both survive the delivered suite today.
+
+**Lane, and what "RED" means concretely:** on each wrong build the full suite reports **exactly one**
+failure and it is this criterion — `1 failed, 747 passed` against `748 passed (748)` on the delivered
+pane, `tsc` **0**, `biome` clean, **26 files**, skip **0**. **It fails ZERO pre-existing tests.**
+
+**Coverage this criterion gets at no extra cost, and states deliberately:** the same property covers
+`position.castling`, `position.epSquare`, `position.halfmoveClock` and **every field of every `Move`**
+— slots no table above names. **That is what `## Test notes` 1 asked for: the property stated ONCE
+over the graph instead of once per node.** A per-slot restatement is what guarantees the fifth repair.
+
+### `RISK-ABC028-01` — the one build that survives `A4`, named here rather than discovered later
+
+**`WBOARDBLIND` SURVIVES and is accepted.** It mutates `position.board` through an `ArrayBuffer` alias
+and reverts it **with no intervening access to the graph**, so no sample falls inside the window in
+which the board differs. Measured: `clean` at all ten lengths, `748 passed (748)` on the lane — it is
+invisible to this instrument and to the delivered suite alike.
+
+**It is NOT one of the five builds this criterion names.** QE built it deliberately to find the
+boundary, having already killed everything the ticket asked for.
+
+**It is not closable by a better proxy, and that is a property of synchronous calls, not of this
+instrument.** A callee is observable only where it touches instrumented state; `board.buffer` yields
+the real buffer and a view built on it passes no trap, so `.buffer` aliasing is detectable only by
+**sampling**, and sampling is defeatable by a short enough window. **Three closures were considered
+and rejected:**
+
+- **Return a copied `ArrayBuffer` from the `buffer` getter** — makes the wrong build **invisible while
+  reporting green**. *A false negative is strictly worse than a stated limit*, and this ticket exists
+  because of criteria that claimed more than their instrument could see.
+- **Flag any read of `.buffer` during a render** — over-strict: it fires on a legitimate build that
+  reads the board, and the criterion would then constrain **implementations** rather than behaviour.
+- **`vi.mock` `makeMove` / `toSan` to add sampling points inside the loop** — adds points, closes
+  nothing (any two points leave a gap), and moves the criterion into `src/history-pane.nfr.test.ts`,
+  which `## Scope` forbids.
+
+**Standing obligation:** any future change to `A4`'s instrument **re-runs `WBOARDBLIND`** and updates
+this record. If a cheap closure is ever found, this is the risk it closes. **Until then the honest
+statement of the property is *"every write that reaches the supplied graph through the reference the
+pane is given is reported, and the board's contents are sampled at every access"* — not *"nothing can
+differ"*.**
+
+> ***Why `Object.freeze` is NOT the instrument — CORRECTED 2026-08-12 at this hop.*** *Measured twice,
+> independently, at the cutting hop and again by QE: **`Object.freeze` throws
+> `TypeError: Cannot freeze array buffer views with elements` on a `Uint8Array` of ANY non-empty
+> length**, so `position.board` is not merely uncovered by `A9`'s instrument — it is **uncoverable by
+> that instrument's kind**. And freezing `history.moves` leaves the **slot writable**
+> (`{writable: true, enumerable: true, configurable: true}`): reassigning `history.moves` after the
+> freeze **succeeds**, which is `WMOVESWAP` mechanically.*
 >
-> ***So the instrument this criterion needs does not exist yet and has not been demonstrated.*** *A
-> `Proxy` over the graph, or a structural digest sampled from inside the render, are the two shapes
-> that could work; neither was built here, because this hop wrote no code. **This is why item 4 of the
-> Definition of Ready is ❌ and this ticket sits in `Backlog`.***)*
+> ***THE NUMBER IN THE EARLIER TEXT WAS WRONG AND IS FIXED HERE.*** *This ticket, the board row and the
+> traceability row all said `Object.freeze(new Uint8Array(8))`. **The real board is
+> `new Uint8Array(128)` — `src/position.ts:76`, read at source at this hop** (`0x88` board, 128 bytes,
+> not 8). **The conclusion does not move**: freeze throws at `1`, `8` and `128` alike and returns
+> without throwing only at `0`, where there are no indexed elements. `## Test notes` 4 is the rule that
+> says to check, and it was applied to this ticket's own text.*
+
+> **The worked implementation is an EXISTENCE PROOF, NOT A MANDATE.** QE's `~125` lines
+> (`.grugops/context/quality-gate-ABC-028-instrument/artifacts/a4-instrument-and-criterion.ts.txt`) are
+> the exact text that produced every verdict above and they are reproducible, not a design ruling.
+> **The mechanism is the Engineer's.** Any instrument satisfying the four clauses, the eight arming
+> controls and the positive control discharges this criterion. **The shape below is adopted as the
+> criterion's evidence, not as its implementation** — but a different mechanism owes the same
+> measurements, including `WBOARDSET` and `WBOARDBUF`.
 
 ## Dependencies
 
@@ -221,6 +361,45 @@ own guard is not testable — the `D27` bar, applied to this hop's own output.**
   sentence becomes **true** and no merged text is edited by anyone; with `ABC-029` first, the
   conditional at the foot of this section fires. This is the one reason `INVEST`'s *independent* is
   recorded ⚠️ rather than ✅.
+  > **[SEQUENCING EVIDENCE, 2026-08-12 by BA/PM at `refinement-ABC-028-a4` — A FLAG, NOT A DECISION.
+  > THE ORDER RECORDED ABOVE IS UNCHANGED BY THIS BLOCK.]** With all four criteria now written, the
+  > question *"does this ticket's build hop open `src/history-pane.nfr.test.ts` at all?"* is answerable
+  > file by file and criterion by criterion. **It is answerable YES, and here is exactly where.**
+  >
+  > | criterion | file(s) its build hop opens | opens the shared file? |
+  > |---|---|---|
+  > | `A1` | `src/history-pane.test.ts` — one fixture pair + assertions | **no** |
+  > | `A2` | **`src/history-pane.nfr.test.ts`** + `src/history-pane.test.ts` | **YES — see below** |
+  > | `A3` | `src/history-pane.test.ts` — one fixture + assertions | **no** |
+  > | `A4` | `src/history-pane.test.ts` — instrument + four `it`s | **no — MEASURED, not assumed** |
+  >
+  > **`A4` is measured clean and that is the new fact.** QE built and ran the whole criterion as an
+  > append to `src/history-pane.test.ts`: **no new file, no new module, no new dependency, file count
+  > stays 26**, and `src/history-pane.nfr.test.ts` was **never opened**. Its `Given` is `LENGTH_CASES`,
+  > defined in the **same** file at `src/history-pane.test.ts:139-154`, so it imports nothing from the
+  > shared file either. **`A4` does not re-open what `A2` closes.**
+  >
+  > **`A2` touches it, at ONE region, and the region is the trap.** Read at source this hop:
+  > - the comment block is **`:103-112`**, its load-bearing false sentence **`:106-112`**, and the
+  >   `AT_0`…`AT_2000` module-scope fixtures begin at **`:113`** — exactly as `A2` states;
+  > - **the fixture rebuild is NOT required** — `## Out of scope` says `A2` *"establishes that it may be
+  >   done; it does not ask for it"*, and `A2`'s **preferred** form measures the property by running
+  >   `npx vitest run src/history-pane.test.ts` **alone with this file not loaded at all**, which opens
+  >   zero lines of it;
+  > - **what remains is the comment.** `A2`'s own blockquote requires it *"left saying only what is true
+  >   of it — including that the property is now owned in `src/history-pane.test.ts`"*. That sentence is
+  >   **not in the comment today**, so discharging `A2` as written is an **EDIT to `:104-112`** — and
+  >   `RISK-ABC017-01`'s trigger *"is the EDIT, not the READ"*. **This ticket's own `A2` is therefore the
+  >   first hop scheduled to edit the trap lines** — which is intended (it is what makes the sentence
+  >   true), but it means the shared-file touch is real and not eliminable by re-reading the scope.
+  >
+  > **Two facts offered without the conclusion drawn, because the conclusion is the Orchestrator's.**
+  > (i) The two tickets' regions in this file are **disjoint**: `ABC-028` `A2` at `:104-112` (a comment),
+  > `ABC-029`'s build at `A11`'s two structural guards **~120 lines below**. (ii) The ordering rule above
+  > is **semantic, not merely mechanical** — with `A1` landed first the false sentence becomes true and
+  > no merged text needs correcting; with `ABC-029` first, the three-site conditional at the foot of this
+  > section fires. **Disjoint regions do not by themselves make concurrent worktrees safe, and this hop
+  > does not claim they do.**
 - **`ABC-019` is in flight and is the next hop into `src/history-pane.nfr.test.ts`.** That is this
   ticket's trigger and its interim exposure: **until `A1`/`A2` land, the comment at `:106-112` is a
   live invitation to delete the sole catcher for `WCACHE-LEN`.** The Orchestrator has put the hazard
@@ -263,6 +442,24 @@ own guard is not testable — the `D27` bar, applied to this hop's own output.**
   > **If both land without measuring, the bar is plausibly breached, and the ticket that lands second
   > pays.** Whichever lands second must re-measure the total, not its own delta alone. `ABC-026` owns
   > the lane total and is the escalation route if it breaks. **No bar is re-derived by this ticket.**
+  > **[`A4`'s DELTA MEASURED 2026-08-12 at `quality-gate-ABC-028-instrument`, recorded here with the
+  > three limits that travel with it.]** `A4`'s criterion costs **−21.9 ms** median CPU at sign
+  > **3/8**, against an **identity null control reading −71.0 ms at 3/8 in the same session** — i.e.
+  > **below `N8-LANE`'s own resolution**. *Claimed: no cost is demonstrable at n = 8 on that machine.
+  > NOT claimed: zero.* `ADR-0008`'s ratified clauses re-run and hold with room (`laneD` **1.69–1.74 s**
+  > wall against ≤ 3 s, **8.93–8.99 s** CPU against ≤ 13 s), file count **TWO**, so the ~320 ms floor
+  > allowance does not move and the 160 ms-per-added-file subtraction does not apply. **The three limits,
+  > because a figure that travels without them has already produced a defect on this pane twice:**
+  > **(1)** it is `A4`'s criterion **ALONE** — `A1`, `A2` and `A3` add their own and are not in it, while
+  > the ~75 ms margin is for the **whole** ticket; **(2)** it is a **DELTA**, and the ticket's own rule
+  > stands unchanged — whichever of `ABC-028` / `ABC-029` lands second **re-measures the TOTAL**;
+  > **(3)** it was measured on the **16-file** tree (`../cli-chess-ABC-029`, no `src/turn-loop.ts`) and
+  > is **`UNKNOWN - verify` on `ABC-019`'s 17-file tip**. **A one-file tree difference produced a real
+  > defect two hops ago.** Machine for every figure: Apple M3 (`Mac15,13`), 8 cores, macOS 26.5.2, node
+  > `v24.12.0`, vitest `3.2.7` — `UNKNOWN - verify` on any other. **The rejected first shape is recorded
+  > because it is the finding:** four `it`s with two fixture rebuilds and the distortion check at ten
+  > lengths cost **+252.7 ms at 8/8 positive — 3.4x the whole remaining margin.** It was rejected on the
+  > measurement, not on appearance, and the shape `A4` now specifies is what remains after it.
 - **`NFR-002` — untouched, and this ticket must not touch it.** Its `O(window)` structural premise is
   about production runtime importers, measured **ZERO** by module-graph closure. This ticket adds
   **zero production lines** and imports nothing new into `src/history-pane.ts`. The 150 µs pane bar,
@@ -308,6 +505,24 @@ own guard is not testable — the `D27` bar, applied to this hop's own output.**
    buys nothing.
 7. **Expect nine survivors to stay dead.** `WLEAD-A/B/C`, `WFENSET`, `WSPLICE`, `WFREEZE`, `WCACHE`,
    `WDYNIMP`, `WBAREIMP` are all killed on the merged tree. Re-run them; do not trust this list.
+8. **`A9`'s freeze and `A4`'s recording view must NEVER be applied to the same object in the same
+   test.** Measured: `Object.freeze(view.moves)` records **21** write-trap violations, because a freeze
+   is a `defineProperty` per element plus a `preventExtensions` — the instrument correctly reports the
+   *test's own* writes and the criterion goes red for the wrong reason. **They do not collide today**
+   (every fixture is freshly built), but this is the first hop where both instruments live in one repo
+   and the next hop into this file must know.
+9. **`A4`'s ARMING controls use FRESH fixtures; `A4`'s ten-length clause uses the SHARED
+   `LENGTH_CASES`.** This is not a style choice: four of the eight arming controls (`fullmoveNumber`,
+   the board element, the `moves` contents, the `Move` field) **do not restore**, so a shared object
+   would make the next assertion's baseline the previous control's damage. **QE's own harness produced
+   a false clean exactly this way** — `fill(0)` read clean on a board an earlier probe had already
+   zeroed. This is `## Test notes` 3's rule, extended to `A4`.
+10. **A view's methods must be bound to the raw board, or a TypedArray-method build CRASHES instead of
+    being REPORTED.** Every `%TypedArray%.prototype` method throws `TypeError: this is not a typed
+    array` when `this` is a `Proxy`. Left unhandled, `WBOARDSET` announces *"instrument broken"* where
+    the truth is *"property violated"* — the `ABC-017` fixtures-hop failure shape. **Equally: the write
+    trap must PERFORM the write (`Reflect.set`), not block it** — blocking turns a detection into a
+    crash and changes the wrong build's behaviour. Detect, pass through, report.
 
 ## Size and priority rationale
 
@@ -346,6 +561,48 @@ only be worked in one place by one engineer.
 > is a guard ticket, and a guard ticket's priority is set by its trigger date. If the Orchestrator
 > judges the warning already in `ABC-019`'s brief to be sufficient mitigation, `P2` is defensible;
 > **I do not take that view, because a brief expires at the end of a hop and the comment does not.**
+
+### Size and priority RE-DERIVED 2026-08-12 by BA/PM at `refinement-ABC-028-a4` — both HOLD
+
+**`S` (2) HOLDS, re-derived rather than carried.** `A4`'s *text* grew — one sentence became four
+clauses, eight arming controls, a positive control, a tripwire and seven named builds — but **the
+work shrank in risk, which is what a size prices.** The single largest unknown this ticket carried
+was *"build an instrument that discriminates all five builds"*, and it is now a solved problem with a
+**~125-line worked reference** that typechecks `0`, lints clean, **adds no file, no module and no
+dependency**, and costs nothing measurable in the lane. The Engineer's job moved from *invent an
+instrument* to *write a criterion whose shape is demonstrated*. Everything else is unchanged: **two
+existing files, zero production lines, zero new modules, zero new test files, zero new dependencies,
+no architecture change.** `ABC-024` (`S`) remains the closest calibration.
+
+**The honest counterweight, stated because it nearly went the other way:** had the instrument stayed
+undemonstrated, I would have argued **`M`** at this hop — an unestimated invention risk sitting in the
+middle of a ticket is precisely what a size exists to price, and *"`S`, and by the way nobody knows if
+the central criterion is buildable"* is the smoothing move in the size field rather than the DoR
+field. It did not stay undemonstrated. **`SPLIT_REQUIRED` still does not apply** — it bites at `XL`
+(8), this is 2, and the split-value test is unchanged: `A1`/`A2` are one property with its
+demonstration, and `A3`/`A4` land in the same file, in the same hop, guarding the same module.
+
+**The one condition that would move the size, named in advance:** if the Engineer's chosen instrument
+needs a **new module or a new file** (the reference implementation needs neither, and `## Scope`
+forbids both), or if any criterion forces a **production line**. Either fires Security/NFR's stated
+threshold at the same moment, so the two re-open together or not at all.
+
+**`P1` HOLDS, and the `P0` behind it was explicitly NOT allowed to move it.** The latent/live test is
+re-applied, not inherited:
+
+- **Not `P0`.** Nothing is broken. The delivered pane is correct on **all seven** wrong builds now
+  constructed against it, `src/history-pane.ts` md5 is still `54fd4346dcc1a0060c4e66ae0149265d`, and
+  no consumer observes any of it today.
+- **`ABC-019` being `P0` and waiting is scheduling pressure on the queue, not severity on this
+  ticket.** Priority ranks the work; it does not rank the queue behind it. **Promoting this to `P0` so
+  that pulling it sooner looks justified would be the DoR-smoothing defect committed in a different
+  field** — and this project has refused that four times (`ABC-024`, `ABC-026`, `ABC-029`, and this
+  ticket's own first cut).
+- **Not `P2`.** Unchanged: `ABC-024` and `ABC-026` are passive gaps; this one has a dated trigger, and
+  the trigger is **nearer than at the cutting hop** — `ABC-029` moved `Backlog → Ready` on 2026-08-12
+  and is now a **named, pullable** ticket whose build hop edits guards ~120 lines below the comment.
+  The trigger did not change in kind; it acquired a schedulable owner.
+- The counter-argument recorded above **stands unchanged and was not quietly dropped.**
 
 ## Definition of Ready
 
@@ -392,3 +649,93 @@ both set here.
 or split `A4` off and take `A1`–`A3` alone. **That is a BA/PM call at the next refinement hop and it
 is deliberately not pre-made here**, because the honest answer depends on a measurement nobody has
 taken.
+
+### DoR RE-SCORE 2026-08-12 by BA/PM at `refinement-ABC-028-a4` (Workflow 07) — item by item
+
+**The measurement the route named was TAKEN, and it delivered. Result: 10 of 10 items MET — 9 clean
+`✅` and 1 `⚠️` met-with-caveat (item 3). THE DEFINITION OF READY IS MET.**
+
+**QE reported item 4's technical blocker gone and deliberately did NOT score it. That was a claim
+about inputs. This is the score, and every item below was re-assessed rather than carried forward.**
+
+| # | item | cut | **now** | why |
+|---|---|---|---|---|
+| 1 | problem clear — user, pain, value | ✅ | **✅** | unchanged. Two named users (the player who takes a move back; the next engineer into the file), the pain measured on delivered code, the value stated as the two promises the pane already makes. Nothing at this hop claims anything is broken |
+| 2 | scope and out-of-scope clear | ✅ | **✅** | unchanged in content and **verified against the new `A4` rather than assumed**: the criterion lands entirely in `src/history-pane.test.ts`, adds **no file, no module, no dependency**, keeps the file count at **26**, and the *zero production lines* fence was checked against a **built** reference implementation, not against an intention |
+| 3 | INVEST-shaped | ⚠️ | **⚠️** | **THIS IS THE `⚠️`, and it is the *independent* facet ONLY.** *Valuable*, *negotiable*, *small* (`S`); *estimable* is now **stronger** (the instrument is built, run and costed rather than hypothesised); and **testable now covers all FOUR criteria, up from three of four**. *Independent* is still not clean — `A2` touches `src/history-pane.nfr.test.ts:104-112`, evidenced file-by-file in `## Dependencies`. **Unchanged in kind, better in degree.** Scored by judgment, flagged as such |
+| 4 | acceptance clear, testable + measurable | ❌ | **✅** | **CLEARED.** `A4` is written on an instrument that was **BUILT and RUN**: nine builds × ten lengths, eight per-slot arming controls, a positive control, a full-suite verdict per build (`1 failed, 747 passed` on each wrong build; `748 passed (748)` on the delivered pane), and a lane cost by `N8-LANE`'s own method with an identity null control. It names an exact fixture (`LENGTH_CASES`, `src/history-pane.test.ts:139-154`), exact expected values (`0` writes, samples `> 0`, byte-identical render), **seven** named discriminating builds with required verdicts, and the lane each must die in. **Its one boundary is named as `RISK-ABC028-01` rather than left for the fifth repair to find** |
+| 5 | dependencies known | ✅ | **✅** | unchanged, **plus** the sequencing evidence added to `## Dependencies` — criterion by criterion, with line numbers read at source. That is *more* stated, not less; the recorded order is untouched |
+| 6 | security/NFR triggers, each measurable | ✅ | **✅** | **no target, bar or level moved at this hop** and `plans/nfr-catalog.md` was **not opened**. `N8-LANE` ≤ **650 ms** content, `ADR-0008` ≤ **3 s** wall / ≤ **13 s** CPU, file count **TWO**, skip **0**, security **not pre-waived** with its firing threshold — all unchanged. `A4`'s **−21.9 ms** delta added **with its three limits attached** |
+| 7 | test notes present | ✅ | **✅** | seven → **ten**. Notes 8, 9 and 10 added: the `A9`-freeze / `A4`-view collision (**21** spurious violations), the fresh-vs-shared fixture rule for the arming controls, and the `Proxy`/TypedArray crash trap that turns *"property violated"* into *"instrument broken"* |
+| 8 | size assigned | ✅ | **✅** | `S` (2), **re-derived** this hop with the counterweight recorded (it would have been `M` had the instrument stayed undemonstrated) and the one condition that would move it named in advance |
+| 9 | priority assigned | ✅ | **✅** | `P1`, **re-derived** this hop. The `P0` test was re-applied and **did not fire**; the recorded counter-argument stands |
+| 10 | no major unresolved blocker | ✅ | **✅** | nothing external blocks it. The `A4` instrument question was **inside** the ticket — counted once, at item 4 — and it is now answered |
+
+**The route's own condition, checked on its own terms.** The cutting hop wrote *"demonstrate an
+instrument that discriminates all five builds in `A4`"*. **All five die** — `WFENMID`, `WPOSMID`,
+`WBOARDMID`, `WMOVESWAP` newly, and `WSPLICE` stays dead — **plus two more the ticket never asked
+for.** **`WBOARDBLIND` is not one of the five**: QE built it *after* the five were dead, specifically
+to locate the boundary. **The second branch of the route — split `A4` off and take `A1`–`A3` alone —
+is therefore NOT taken**, and `A1`–`A4` stay one ticket.
+
+**Why item 3's `⚠️` does not block, stated rather than assumed.** The cutting hop's own route named
+**ONE** item and did not route through item 3 — that is a documented prior decision of this ticket, not
+a ruling invented under pressure at this hop. `ABC-029` reached `Ready` on 2026-08-12 carrying the
+**same `⚠️` on the same facet for the same shared file**, so scoring it blocking here would
+retroactively invalidate that promotion. **This is the single item on this page scored by judgment
+rather than by measurement; it is flagged so it can be disputed, and if a reader scores it `❌` the
+ticket returns to `Backlog`.**
+
+> **THE ANTI-SMOOTHING CHECK, RUN EXPLICITLY BECAUSE THE PRESSURE IS REAL AND WAS NAMED IN THE BRIEF.**
+> `ABC-019` is `P0` and is waiting on this ticket and then `ABC-029`. **That is pressure, not a reason.**
+> `ABC-024`, `ABC-026`, `ABC-029` and this ticket's own first cut all recorded NOT MET and stayed put.
+>
+> **DIRECTION OF TRAVEL — 13 obligations ADDED, 1 REMOVED.** Smoothing removes obligations and hides
+> the removal. Counted rather than asserted:
+>
+> **Added (13):** (1) the reported-write count is **exactly `0`**, reported at the instant of the
+> write; (2) a **second, independent detector** — the 128 board bytes re-compared at **every** access;
+> (3) the arming **counter must be `> 0` at every one of the ten lengths**, which the old text did not
+> require; (4) a **tripwire** — rendering through the instrument must change no rendered byte;
+> (5) arming **PER SLOT across eight named slots**, where the old text asked for *"a control"*,
+> singular; (6) a **positive control** — a clean run must report nothing; (7) **two new discriminating
+> builds with required verdicts**, `WBOARDSET` and `WBOARDBUF`, **both of which survive 744/744 today**;
+> (8) coverage **extended** to `castling`, `epSquare`, `halfmoveClock` and every `Move` field, none of
+> which the old table named; (9) **`RISK-ABC028-01` recorded in the ticket**, with a standing
+> obligation to re-run `WBOARDBLIND` on any instrument change; (10) **three new test notes**;
+> (11) `A4`'s **lane delta with its three limits**; (12) **sequencing evidence** that makes `A2`'s
+> shared-file touch explicit and located instead of implied; (13) a **size condition named in advance**.
+>
+> **Removed (1), and it is published rather than buried:** the **absolute** — *"no reachable slot
+> differs at any point during the render"*. `A4` no longer claims to catch a board mutation applied and
+> reverted through an `ArrayBuffer` alias with **no** intervening graph access. **It is removed because
+> no instrument can hold it for a synchronous callee**, not because it was inconvenient: a callee is
+> observable only where it touches instrumented state, three closures were considered and rejected with
+> reasons, **and one of them — copying the `ArrayBuffer` — would report GREEN on the wrong build.** *A
+> false negative is worse than a stated limit.* The hole is named, witnessed, and given a standing
+> re-run obligation. **The build it gives up on is not one of the five the criterion names.**
+>
+> **The counterfactual test: would item 4 have cleared if `ABC-019` were not behind it? YES.** It failed
+> because the instrument was undemonstrated and the obvious candidate was measurably unavailable. An
+> instrument was then **built and run** — not argued — and every verdict is reproducible from
+> `.grugops/context/quality-gate-ABC-028-instrument/artifacts/`. **That is a defect repaired, not a bar
+> lowered**, and nothing in the repair depends on who is waiting.
+>
+> **What was NOT taken on trust.** QE's results are `claim` / `observation` notes — **no §14 gate ran
+> and `context.human_admission` is `off`, so nothing backing this score is a stamped `finding`**, and
+> that is stated rather than glossed. Two load-bearing facts were therefore re-checked **at source** at
+> this hop rather than read out of a note: **`src/position.ts:76` reads `new Uint8Array(128)`** (the
+> correction below), and the shared file's line map — **comment `:103-112`, fixtures from `:113`** —
+> which is what makes the sequencing answer **YES** instead of a guess. The DoR asks for criteria that
+> are testable, not for gate-stamped evidence; **the stamp falls due at the build hop's gate, which is
+> `blocking`.**
+
+> **`Ready` IS NOT `pull it now`.** The two build hops share one file and **must not run concurrently
+> in two worktrees**; `## Dependencies` records the order and this hop did not change it. **That
+> sequencing is the Orchestrator's call and the DoR does not override it.**
+
+**Requested board move: `Backlog → Ready`.** **This page's front matter still reads `status: backlog` /
+`column: Backlog`, and that is deliberate, not an oversight** — `plans/board.md` is the Orchestrator's
+and was **not opened for edit** at this hop, and a ticket header that disagrees with the board is the
+two-records-disagree defect this project keeps paying for. **The front matter moves when the board
+does, by the role that owns the board** — the same handling `ABC-029` received on 2026-08-12.
