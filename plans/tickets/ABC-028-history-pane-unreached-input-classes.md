@@ -1,8 +1,8 @@
 ---
 id: ABC-028
 title: The history pane's three unreached input classes — a length-preserving mutation, an odd slid window, and the during-render clause over the whole GameHistory graph
-status: in-review
-column: In Review
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-002

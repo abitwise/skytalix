@@ -1,8 +1,8 @@
 ---
 id: ABC-029
 title: "\"Production module\" is undefined — the two guards of NFR-002's structural premise disagree about their own file set, and one of them shares a channel with the modules it measures"
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-002
