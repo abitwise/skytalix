@@ -117,14 +117,27 @@ _Updated: 2026-08-08 by the Software Engineer (task `ticket-to-pr-ABC-015`, subt
 -->
 
 <!-- COLUMN INVARIANT — read before you report this table malformed.
-  This table has TEN columns. A well-formed row has ELEVEN `|` characters and ENDS with one.
-  Count COLUMNS, not `|`-split FIELDS: `line.strip().strip('|').split('|')` must give 10.
-  Splitting on `|` without stripping gives 12 fields for a correct row; reading that as
-  "11 content cells against 10 columns" is a FALSE malformation report. Two roles made
-  exactly that report on the ABC-029 row on 2026-08-12 AFTER it had been repaired, and the
-  safeguard that let the original defect through made the same miscount. Hence this note.
-  KNOWN PRE-EXISTING malformations, flagged not rewritten (rule 12): ABC-009 (12 cells),
-  ABC-011, ABC-015, ABC-019 (11 each). ABC-029 was repaired 2026-08-12 and is CORRECT.
+  This table has TEN columns. A well-formed row ENDS with `|`.
+
+  COUNT WITH AN ESCAPE-AWARE SPLIT. Cells may legitimately contain `\|` inside inline code
+  spans, and a naive split counts each one as an extra column:
+      re.split(r'(?<!\\)\|', line.strip().strip('|'))   -> must give 10
+  A plain `.split('|')` does NOT, and reading its result as "N content cells against 10
+  columns" is a FALSE malformation report.
+
+  THIS NOTE'S FIRST VERSION PRESCRIBED THE NAIVE SPLIT AND WAS ITSELF THE DEFECT IT EXISTS TO
+  PREVENT. It listed ABC-009, ABC-011, ABC-015 and ABC-019 as malformed; BA/PM re-measured on
+  2026-08-13 and ALL FOUR ARE WELL-FORMED — in each, the excess equalled that row's escaped-pipe
+  count exactly (2, 1, 1, 1). Corrected by the Orchestrator, who wrote the wrong version.
+  That is the SECOND rule on this stack to contain the defect it was written to end.
+
+  MEASURED STATE 2026-08-13: every row gives 10 under the escape-aware split. The ABC-029 row
+  WAS genuinely malformed (11 by BOTH counters, zero escaped pipes, no trailing `|`, one
+  narrative stranded in UAT and another past Status) and was repaired structurally on
+  2026-08-12 — text relocated into its column, not one word changed.
+
+  Whether a markdown renderer agrees is UNKNOWN - verify: there is no renderer in node_modules,
+  so this is raw-text measurement only. Do not append to a row you believe malformed; report it.
 -->
 | Ticket | Title | Epic | Feature | NFRs | Code (PR/files) | Tests | UAT | Release | Status |
 |--------|-------|------|---------|------|-----------------|-------|-----|---------|--------|
