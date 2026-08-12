@@ -2,16 +2,22 @@
 kind: index
 ---
 # Memory Bank — Index
-_Updated: 2026-08-06 by the Orchestrator (task `refinement-deploy-posture-2026-08-06`) — fill state corrected: `70-runbook.md` is no longer an empty template and the ADR count was three behind. Previously 2026-08-02 by the Orchestrator (state save before a context clear: `60-progress.md` filled, fill-state of the bank recorded below)._
+_Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask `audit-architecture`) — **the ADR count was STALE BY FOUR** (this file said seven; there are eleven) and `30-architecture.md`'s description was stale by a whole epic. Both corrected below; the ADR count was measured by listing `50-decisions/`, not inferred. Previously 2026-08-06 by the Orchestrator (task `refinement-deploy-posture-2026-08-06`) — fill state corrected: `70-runbook.md` is no longer an empty template and the ADR count was three behind. Previously 2026-08-02 by the Orchestrator (state save before a context clear: `60-progress.md` filled, fill-state of the bank recorded below)._
 
 > **Fill state — read this before you read the bank.** Only four files below carry real project
 > content: **`60-progress.md`** (the plan-of-record — **start here**), **`30-architecture.md`**
-> (as-built after EPIC-001, plus the deployment posture), **`70-runbook.md`** (first filled
-> 2026-08-06; short on purpose — this project deploys nowhere and there is almost nothing to
-> operate), and **`50-decisions/`** (**seven** ratified ADRs, `ADR-0001`–`ADR-0007`, all `accepted`).
+> (as-built after **`EPIC-001` and `EPIC-002`**, rewritten 2026-08-12, plus the deployment posture),
+> **`70-runbook.md`** (first filled 2026-08-06; short on purpose — this project deploys nowhere and
+> there is almost nothing to operate), and **`50-decisions/`** (**eleven** ratified ADRs,
+> `ADR-0001`–`ADR-0011`, all `accepted`; next free id is **`ADR-0012`**).
 > The rest — `10-project-brief`, `20-product`, `40-contributing`, `80-glossary` — are still the
 > shipped empty templates. That is a real gap, not a hidden one; do not read them expecting content
 > and do not treat their silence as a decision. `plans/` carries the delivery state meanwhile.
+>
+> **This count has now gone stale twice** (three behind on 2026-08-06, four behind on 2026-08-12),
+> and it goes stale because it is a hand-maintained census of a directory. **Whoever writes
+> `ADR-0012` updates this line in the same commit** — or better, reads `50-decisions/` and trusts
+> that instead of this sentence.
 
 <!--
   FORMAT — read before you fill this bank. (clear voice; this is a technical file, not a role prompt.)

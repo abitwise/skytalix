@@ -1,9 +1,12 @@
 # Architecture
-_Updated: 2026-08-06 by Architect/Design (task `refinement-deploy-posture-2026-08-06`) — added
-**"Deployment posture"** below, on the owner's instruction that this project deploys nowhere and runs
-locally; the posture was measured against the repo, not inherited from the config, and the why is in
-`50-decisions/ADR-0007`. Nothing else in this file changed. Previously 2026-07-29 by Architect/Design
-(as-built after EPIC-001, from the 2026-07-29 audit)._
+_Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask `audit-architecture`,
+Workflow 07) — **REWRITTEN TO AS-BUILT.** The previous revision described the tree *after `EPIC-001`*
+and was written before the whole `EPIC-002` render/loop stack landed; it said **eleven** production
+modules and **depth 7** against a measured **seventeen** and **depth 8**, and its
+"`render.ts` has zero importers" / "one `*.test.ts` beside each module" sentences were false. Every
+graph figure below was rebuilt from `src/*.ts` imports at this hop, not carried over. **No ADR was
+re-opened and no decision was taken here** — this file records structure, and `50-decisions/` still
+owns every why. Previously 2026-08-06 (deployment posture) and 2026-07-29 (as-built after EPIC-001)._
 
 <!--
   FORMAT — read before you fill this in. (clear voice; this is a technical file, not a role prompt.)
@@ -16,82 +19,106 @@ locally; the posture was measured against the repo, not inherited from the confi
 ## System context
 
 A single-player terminal chess game running in one local process. No network, no database, no
-service boundary, zero runtime dependencies. `package.json` is `private` with no `main`,
-`exports` or `bin`, so nothing is published and nothing imports this from outside.
+service boundary, **zero runtime dependencies** (`package.json` has no `dependencies` key at all —
+verified, not assumed). It is `private` with no `main`, `exports` or `bin`, so nothing is published
+and nothing imports this from outside.
 
-Only the **rules core** is built (EPIC-001, merged): position, rules, and a perft verification
-harness. Renderer (EPIC-002), input parser (EPIC-003), engine search (EPIC-004), opening book
-(EPIC-005) and packaging (EPIC-006) do not exist yet. There is no barrel and no entry module —
-consumers deep-import a file by path.
+**Two epics are built and merged: `EPIC-001` (rules core) and `EPIC-002` (terminal board and game
+loop).** The renderer, the panels, the frame assembler/writer and the turn loop all exist.
+`EPIC-003` (input parser and commands), `EPIC-004` (engine search), `EPIC-005` (opening book) and
+`EPIC-006` (session and packaging) do not.
+
+**There is still no barrel and no entry module** — consumers deep-import a file by path, and
+`AGENTS.md` records `Dev / run` as `UNKNOWN - verify` because nothing starts a game. `EPIC-006`
+owns the first entry point; `ADR-0011` clause 4 already classifies what one is.
 
 ## Key components
 
-Eleven production modules, flat in `src/`, one job each.
+**Seventeen production modules, flat in `src/`, one job each.** `src/` has no subdirectory holding
+a `.ts` file (its only subdirectory, `__snapshots__`, holds none). Level = longest import path,
+measured below.
 
-| Layer | Module | Owns |
+| L | Module | Owns |
 |---|---|---|
-| Representation | `position.ts` | the 0x88 board (ADR-0001), piece encoding, square geometry and naming |
-| Serialization | `fen.ts` | FEN parse/serialize; typed `FenError` on malformed grammar |
-| Hashing | `zobrist.ts` | 64-bit `bigint` position key, fixed seed, recomputed per call; asks `legal.ts` whether an en-passant capture is real (ABC-011), so this row is not a leaf |
-| Generation | `moves.ts` | pseudo-legal move generation, plus the `isSquareAttackedBy` primitive |
-| Mutation | `apply.ts` | `makeMove` / `unmakeMove` — the only writer of a `Position` |
-| Legality | `legal.ts` | `legalMoves`, `isInCheck` |
-| Terminal state | `gameend.ts` | checkmate, stalemate, 50-move, repetition, insufficient material |
-| Game history | `history.ts` | `GameHistory` — the move list is the authority (ADR-0002 clause 2); undo, the key list and the repetition counts are derived by replay (ABC-012). Nothing in the core imports it |
-| Presentation | `render.ts` | `renderBoard` — the board frame as a VALUE, 9 rows x 18 characters, shaded by character, in either glyph mode and either orientation (ABC-014). It writes nothing and reads no terminal; `ABC-018` owns writing. Nothing imports it yet |
-| Verification | `perft.ts` | node counting and per-first-move divide |
-| Harness (only I/O) | `perft-bench.ts` | `npm run perft`; the only module that prints, and it runs on import |
+| 1 | `position.ts` | the 0x88 board (ADR-0001), piece encoding, square geometry and naming. The only leaf and the hub |
+| 2 | `fen.ts` | FEN parse/serialize; typed `FenError` on malformed grammar |
+| 2 | `moves.ts` | pseudo-legal move generation, plus the `isSquareAttackedBy` primitive |
+| 2 | `render.ts` | `renderBoard` — the board frame as a VALUE, 9 rows, shaded by character, either glyph mode, either orientation. Reads no terminal and writes nothing |
+| 3 | `apply.ts` | `makeMove` / `unmakeMove` — the only writer of a `Position` |
+| 3 | `frame.ts` | `assembleFrame` (the frame as a constant-height VALUE) and `beginFrameSession` (the writer, strategy chosen once). Imports only a TYPE — it composes by injection, so its runtime closure is itself alone (ADR-0011) |
+| 3 | `glyph-mode.ts` | the five-row glyph precedence RULE plus the SESSION that reads `isTTY`/`env` exactly once. The only module that reads ambient terminal signals |
+| 4 | `legal.ts` | `legalMoves`, `isInCheck`, and `hasLegalEnPassant` — make/test/unmake (ADR-0003), and the en-passant oracle the hash asks (ADR-0005) |
+| 5 | `perft.ts` | node counting and per-first-move divide |
+| 5 | `san.ts` | `toSan`. `parseSan` is `EPIC-003`'s and lands in THIS file over the same tables — one grammar, both directions (ADR-0004 clause 2) |
+| 5 | `zobrist.ts` | 64-bit `bigint` key, fixed seed, **recomputed per call**; asks `legal.ts` whether an en-passant capture is real (ADR-0005), so it is not a leaf |
+| 6 | `gameend.ts` | checkmate, stalemate, 50/75-move, repetition, insufficient material |
+| 6 | `perft-bench.ts` | `npm run perft`. **The only module that prints and the only one with zero exports** — it calls `main()` at module scope (`:114`). That is exactly `ADR-0011` clause 4's *entry point* |
+| 7 | `history.ts` | `GameHistory` — the move list is the authority (ADR-0002 clause 2); undo, keys and repetition counts derived by replay. Nothing in the rules core imports it |
+| 8 | `history-pane.ts` | the bounded two-column SAN pane, constant height and width. Returns rows, writes nothing |
+| 8 | `status-panel.ts` | the status panel rows. Derives nothing about game state — `status` is a parameter |
+| 8 | `turn-loop.ts` | ply dispatch, both seams stubbed, clean termination. Drives the writer; composes no frame and reads no stdin |
 
-One `*.test.ts` beside each module (`position.ts` covered transitively, `perft-bench.ts` not
-covered), plus a deep perft lane behind `PERFT_DEEP=1`.
+**Test files: 28, not one per module.** The mapping is deliberate and uneven — `moves` has 5,
+`san` 4, seven modules carry a `*.nfr.test.ts` sibling, `position.ts` is covered transitively and
+`perft-bench.ts` is not covered. A deep perft lane sits behind `PERFT_DEEP=1`.
 
 ## System patterns
 
-- **Layered acyclic dependencies.** `position` ← {`fen`, `moves`} ← `apply` ← `legal` ←
-  {`zobrist`, `perft`} ← {`gameend`, `perft-bench`} ← `history`. Re-verified 2026-08-04 by
-  rebuilding the graph from `src/*.ts`: zero cycles, depth 7, no upward edge. `position.ts` is
-  the only leaf and the hub — 8 of the 9 other modules import it. **Corrected by ABC-011:**
-  `zobrist.ts` was a level-2 leaf beside `moves.ts` until it began asking `legal.ts` whether an
-  en-passant capture is real (ADR-0005), which moves it 2 → 5 and carries `gameend.ts` 5 → 6;
-  homing that predicate in `moves.ts` instead would have made this project's first cycle
-  (`apply → moves → apply`), which is why it is in `legal.ts`. **Extended by ABC-012:**
-  `history.ts` sits alone at level 7 above `gameend.ts`, so the depth is 6 → 7. Every one of its
-  six edges points down (`fen`, `apply`, `zobrist`, `gameend`, plus the `Move` / `Position`
-  types) and **nothing imports it** — measured, not assumed: it is the one module with zero
-  importers, which is what keeps the core ignorant of the session. **Extended by ABC-014
-  (2026-08-06), and it moves nothing:** `render.ts` imports `position.ts` and nothing else, so it
-  sits at **level 2** beside `fen.ts` and `moves.ts`, not on top of the stack — a renderer that
-  needed `legal.ts` or `gameend.ts` would be drawing something this ticket does not draw. Graph
-  rebuilt from `src/*.ts` at the same commit: **11 modules, zero cycles, depth still 7**,
-  `position.ts` imported by **9 of the other 10** (all but `perft-bench.ts`), and `render.ts` joins
-  `history.ts` and `perft-bench.ts` as a module with **zero importers** — `ABC-018` will be its
-  first.
-- **Mutable `Position`, make/unmake, never copy.** `makeMove` mutates the 128-byte board in
-  place and returns a four-field `UndoRecord` that the **caller** owns; `unmakeMove` reverses
-  it. Nothing clones a `Position` and no clone function exists. Consequence for consumers: a
-  `Position` is a live object, never a snapshot — hold one across a move and it changes under
-  you.
-- **Transient mutation behind pure-looking queries.** `legalMoves`, `gameStatus`, `perft` and —
-  since ABC-011 — `zobristKey` play moves and take them back internally, returning the position
-  as they found it. `zobristKey` is the one worth naming: it looks like a read and mostly is
-  one, but on the ~1% of nodes carrying an available en-passant capture it plays that capture
-  to test its legality. Consequence: you cannot hash a `Position` you are not permitted to
-  write to, nor hash one from two threads at once.
-- **The core owns a position, not a game.** No move list, no undo stack, no history;
-  `gameStatus` still takes repetition counts as an optional caller-supplied map. **Answered by
-  ABC-012 (2026-08-04), and the answer keeps the core exactly as it was:** game history is owned
-  by `history.ts`, one level ABOVE the core, which no core module imports. `gameStatusOf` is
-  ADR-0002 clause 4's single supplier of that optional map; the parameter stays optional because
-  clause 3 has EPIC-004's search keep its own per-ply key array and decide repetition itself, so
-  a bare `gameStatus(position)` at a search leaf is a legitimate second caller shape.
+- **Layered acyclic dependencies — measured, not asserted.** Rebuilt from `src/*.ts` at this hop:
+  **17 modules, 49 import edges, ZERO cycles, depth 8.** `position.ts` is the only leaf and the hub
+  (**fan-in 11** of the other 16); the next-most-depended-on are `moves.ts` (8), then `apply.ts` and
+  `legal.ts` (6 each). **Five modules have zero importers** — `turn-loop.ts`, `status-panel.ts`,
+  `history-pane.ts`, `glyph-mode.ts` and `perft-bench.ts` — and that is the shape of a system whose
+  top layer is not yet driven by anything. **`EPIC-006`'s entry point is what will finally import
+  four of those five.**
+- **Twelve of the 49 edges are type-only and are ERASED at runtime, and the distinction is
+  load-bearing rather than pedantic.** Under `verbatimModuleSyntax` an `import type` compiles to
+  nothing, so the *runtime* graph is 37 edges and a different shape: `frame.ts` and `glyph-mode.ts`
+  import `render.ts` for the `GlyphMode` type ONLY, so **`render.ts` has two importers on paper and
+  zero at runtime**; `status-panel.ts` and `history-pane.ts` name `history.ts` only as a type, so
+  **`turn-loop.ts` is the single runtime importer of `history.ts`** — which is `ADR-0002` clause 4's
+  single-supplier rule and precisely what `ADR-0011` clause 3's licence asserts. **A guard that read
+  the text instead of the loads would get this wrong**, which is why `NFR-002`'s probe measures
+  module *evaluation* in a child process rather than pattern-matching source.
+- **A frame is composed by INJECTION, not by import**, so frame membership is not derivable from
+  the module graph at all — no closure of any single module yields the frame path (`ADR-0011`
+  clause 2, which is why the path is DECLARED). Nothing in `src/` imports a renderer.
+- **Mutable `Position`, make/unmake, never copy.** `makeMove` mutates the 128-byte board in place
+  and returns a four-field `UndoRecord` the **caller** owns; `unmakeMove` reverses it. Nothing
+  clones a `Position` and **no clone function exists** (verified). A `Position` is a live object,
+  never a snapshot — hold one across a move and it changes under you.
+- **Transient mutation behind pure-looking queries.** `legalMoves`, `gameStatus`, `perft`,
+  `zobristKey` (ADR-0005) and **`toSan`** all play moves and take them back internally, returning
+  the position as they found it. `zobristKey` is the one worth naming: it looks like a read and
+  mostly is one, but on the ~2% of nodes carrying an available en-passant capture it plays that
+  capture to test its legality. **Consequence: you cannot hash a `Position` you may not write to,
+  nor hash one from two threads at once** — which forecloses one shape of parallel search and is an
+  open input to `EPIC-004` (`UNKNOWN - verify`).
+- **The renderers replay; they never rewind the caller.** `history-pane.ts` and `status-panel.ts`
+  call `parseFen` + `makeMove` on **their own fresh position** built from the anchor, never on the
+  caller's. That is why they can be pure-looking without owning an undo.
+- **The core owns a position, not a game.** No move list, no undo stack, no history in the core;
+  `gameStatus` takes repetition counts as an optional caller-supplied map, and `history.ts` — one
+  level above the core, imported by no core module — is `ADR-0002` clause 4's single supplier via
+  `gameStatusOf`. The parameter stays optional because clause 3 has `EPIC-004`'s search keep its own
+  per-ply key array.
+- **The loop owns no I/O.** `turn-loop.ts` takes its `FrameSink`, render seam, input seam and engine
+  seam as injected options; it never reaches for `process.stdout` and never reads stdin. It names no
+  row count either — the session height is the FIRST frame's `.length` (`ADR-0009` clause 9).
 
 ## Tech context
 
 TypeScript on Node >= 22, ESM. Node type-strips `.ts` directly, so there is no bundler and no
-transpile step; intra-repo imports carry explicit `.ts` extensions
-(`allowImportingTsExtensions`, `verbatimModuleSyntax`). Vitest for tests, Biome for lint and
-format. `npm run build` is `tsc --noEmit` — a typecheck, not an emit, because nothing is
-published until EPIC-006. Commands live in `AGENTS.md`.
+transpile step; intra-repo imports carry explicit `.ts` extensions (`allowImportingTsExtensions`,
+`verbatimModuleSyntax`). Vitest for tests, Biome for lint and format. **There is no
+`vitest.config.ts`** — the runner runs on defaults, which is why `pool: "threads"` is a two-line
+change and why `ADR-0008` prices it as one. `npm run build` is `tsc --noEmit` — a typecheck, not an
+emit, because nothing is published until `EPIC-006`. `spike/perft-bench.ts` (`npm run spike:perft`)
+is `ABC-008`'s throwaway harness and is not production. Commands live in `AGENTS.md`.
+
+**The default test lane has a ratified budget — `NFR-008` / `ADR-0008`, 3 s wall AND 13 s CPU** —
+and the lane costs ~160 ms CPU per test FILE against ~0.4 ms per test, so **file count is the
+architectural cost driver and it is charged to the floor account, owner Architect/Design.**
 
 ## Deployment posture — deploys nowhere, runs locally
 
@@ -99,8 +126,8 @@ published until EPIC-006. Commands live in `AGENTS.md`.
 instruction, 2026-08-06: *"this project currently does not deploy anywhere, mark that as well, it
 will be used locally for now."*
 
-Nothing is deployed, published or released, and there is no deploy target of any kind. **Measured
-across the whole repo on 2026-08-06, not assumed from the config:**
+Nothing is deployed, published or released, and there is no deploy target of any kind. **Every
+bullet below was RE-VERIFIED at this hop, 2026-08-12, and all five still hold:**
 
 - **No deploy artifact.** No Dockerfile, no compose file, no chart, no manifest, no IaC — the
   repository contains **no YAML file at all**.
@@ -112,9 +139,8 @@ across the whole repo on 2026-08-06, not assumed from the config:**
 - **Nowhere to push.** The repo has no git remote.
 - **Nothing released.** `plans/releases/` holds only `.gitkeep`.
 
-The config now says this instead of implying a cluster: `default_stack.deploy` is `none-local-only`
-and `environments` is `["local"]` (previously `kubernetes-ready` and `["dev","staging","prod"]`,
-neither of which anything here implemented).
+The config says this rather than implying a cluster: `default_stack.deploy` is `none-local-only`
+and `environments` is `["local"]`.
 
 **What this does NOT mean.** `production_requires_human_confirmation` stays `true`; the release and
 incident machinery stays; the never-deploy limit in every role stays. *"We have no production"* is a

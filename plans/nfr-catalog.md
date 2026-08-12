@@ -1031,3 +1031,27 @@ test, any file or any coverage decision** — no row is under suspicion and none
 deletion. **Not a promotion of the `PERFT_DEEP=1` lane into anything** — `ABC-024`'s rejection stands
 untouched. **Not a ruling on what a 3 s wait is worth to a human**, which is the one input this whole
 row rests on and the one no role here can measure — **it is `PROVISIONAL` and its ratifier is named.**
+
+### AUDIT NOTE 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask `audit-architecture`, Workflow 07) — the FLOOR ACCOUNT's consumption is restated at today's file count, and ONE SCREEN CONDITION IN `ADR-0008` IS NOW STALE. **NO TARGET, BAR, LEVEL, MEASURED FIGURE OR `UNKNOWN - verify` MARKER MOVED ANYWHERE IN THIS FILE.** All eight rows `NFR-001`–`NFR-008` verified byte-identical by hashing the matched row lines together before and after the write (`sha256 325c5c03…f6d4`). **`NFR-008`'s 3 s / 13 s level is Olger Oeselg's, ratified in person, and an audit does not move it.**
+
+**Nothing here is a re-measurement of the lane total.** `ABC-026`'s `H5` owns that measurement and it is still `UNKNOWN - verify`; running it at this hop would collide with that open work. **Every number below is ARITHMETIC on figures already in this section**, and the inferred CPU total is labelled as an inference, not a reading.
+
+**1. The file count moved 22 → 28 and the floor account moved with it.** This section's `pool: "threads"` table reads the lane at **22 files / 7.640 s CPU / 1.765 s wall**. Today `src/` carries **28 test files** (counted, not estimated). At this section's own **160 ms CPU per file**, the six added files put the floor account **+0.96 s**, for an **inferred ~8.6 s CPU — about 66% of the 13 s clause** (band 8.24–9.01 s at the recorded 100–229 ms marginal band).
+
+**2. THE CPU CLAUSE BINDS FIRST, AND THAT IS THE PLANNING FACT.** The lane is commonly quoted against the wall clause (~52–59% of 3 s). **On the CPU clause it is further along — ~66% — and CPU is where a test FILE is expensive**, because this section already measured wall to move −15 to +3 ms per added file while CPU moves 100–229 ms. **Reading headroom off the wall clock overstates it.**
+
+**3. Headroom, in the unit a ticket author actually spends: TEST FILES.**
+
+```
+remaining CPU under the 13 s clause          ~4.4 s      (from the inferred ~8.6 s)
+files if each were EMPTY (floor only)          ~27       band 19-44 at 229/100 ms
+files at TODAY's all-in average (307 ms/file)  ~14       floor + content, today's own mix
+tickets at N8-LANE's full 650 ms content each   ~6       ignoring the floor those files also cost
+absolute ceiling from CPU = 0.852 + 0.1593K     76 files total (zero content; unreachable)
+```
+
+**Use ~14 as the planning number and ~27 as the ceiling.** `EPIC-003` and `EPIC-004` are both file-adding epics and `EPIC-004` is sized **L**. **The budget does not comfortably admit both at today's per-file cost** — which is `ADR-0008`'s own *"tight, not comfortable"* finding, restated six files later and closer to the wall.
+
+**4. `ADR-0008`'s `pool: "threads"` SCREEN IS STALE AND UNDER-SPECIFIES — this is the one actionable item.** Decision 8 requires *"≥ 20 consecutive green runs including **all four** `*.nfr.test.ts` files"*. **There are now SEVEN**: `gameend`, `glyph-mode`, `history-pane`, `san`, `status-panel`, `turn-loop`, `zobrist`. **The count was CORRECT when `ADR-0008` was written and the drift is dated precisely** — at 2026-08-10 the four were `gameend` (added 08-01), `zobrist` (08-03), `glyph-mode` (08-08) and `san` (08-10); **`history-pane`, `status-panel` and `turn-loop` all landed on 2026-08-11**, after that sentence was written and on the day it was ratified. Those three were not in the screen's contemplation, and `ABC-025`-era evidence showed spied call-count guards are **exactly** the files that break under a changed isolation model. **Whoever runs that screen must read it as "every `*.nfr.test.ts` file", not "the four".** The ADR's *ruling* is untouched and correct; its *census* went stale the same way `00-index.md`'s ADR count did. **No ADR text was edited by this audit and `ADR-0008` is not re-opened.**
+
+**5. `pool: "threads"` is still the right lever and is still NOT adopted here.** It is the only measured saving that does not touch a guard: **−13.97% wall / −10.78% CPU** for a two-line config change, against `--no-isolate`'s larger −30–36% CPU which is **unavailable** because it disarms the spied call-count guards this catalog reached for three times. Threads buys roughly **0.8 s of CPU ≈ 5 more test files** — real, and **not** a substitute for the per-file cost being the structural driver. **Owner remains Architect/Design and the deciding hop remains `ABC-026`'s**, exactly as Decision 8 states. **Nothing is adopted, screened or reversed at this audit.**
