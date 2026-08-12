@@ -187,6 +187,97 @@ feature: —
 > WAS WRITTEN**; `plans/board.md`, every ADR, `plans/nfr-catalog.md`, `ABC-029`, `ABC-019`, `ABC-017`
 > and every merged ticket were **NOT opened for edit**. **Requested board move: `In Development → In
 > Review`, for a NARROW re-gate on the two clauses whose text this hop changed.**]**
+>
+> **[AMENDED 2026-08-12 by BA/PM at task `refinement-ABC-028-shape-2026-08-13`, subtask
+> `refinement-ABC-028-shape` (Workflow 07), ON QE's NARROW RE-GATE (`READY_FOR_HUMAN_REVIEW`, zero code
+> defects, THREE further live instances of this page's own defect shape).** **ONE OF THE THREE IS A
+> FALSE SENTENCE IN `src/` AND IT ROUTES TO THE ENGINEER — the first work this ticket has owed since
+> `A5`. The ticket HOLDS at `In Development`.** The other two sit in files owned by MERGED tickets;
+> **`ABC-028` MAY NOT touch them and they are RE-HOMED to `ABC-030` with a named owner**, because the
+> *"whoever next opens it"* disposition was **tested twice and failed twice, and I measured both
+> failures rather than asserting them.**
+>
+> **AND THE BASELINE I WAS BRIEFED WITH WAS ALREADY STALE — BY FIFTY-TWO TESTS, NOT THREE.** Every hop
+> above measured `755 / 755 on 26 files`. **Measured on this tip (`ca6c424`): `807 / 807` on 28 files,
+> lint 0, typecheck 0, skip 0.** `ABC-019`'s turn loop landed on this stack between QE's tip
+> (`6cd2507`) and mine — `src/turn-loop.test.ts` (48) and `src/turn-loop.nfr.test.ts` (4) — and
+> `755 + 52 = 807`, `26 + 2 = 28`, exact. **`F2` said an absolute goes stale on a neighbour's commit.
+> It went stale again while this ticket sat still, seventeen times faster than last time, and the
+> number that went stale this round was in the ORCHESTRATOR'S BRIEF and in this page's own header.**
+>
+> **THE ONE THING WORTH MORE THAN THE FIX — and it bounds what any future control can do.** `G1`
+> (`src/history-pane.test.ts:493`) is an **EXHAUSTIVENESS** claim — *"with zero catchers anywhere in
+> the project"* — falsified by this ticket's **own `A4`**, one day later, in the same file. **An
+> exhaustiveness claim going stale is invisible to every instrument that reads TEXT and detectable only
+> by building the MUTANT.** `grep` cannot see it; **both candidate controls priced under `F4` would
+> have missed it**; the `shapehunt` instrument QE built finds *"claims a count"* and cannot evaluate
+> *"claims a negative over the whole tree."* That is written where the decision is made — under `F4`'s
+> candidate table — because it is the measurement that bounds both candidates and any third.
+>
+> **THE FOUR RULINGS.**
+>
+> | # | site | ruling |
+> |---|---|---|
+> | **`G1`** | `src/history-pane.test.ts:493` | **FALSE, not stale. ROUTES TO THE ENGINEER** as a comment-only edit in `src/history-pane.test.ts`, with obligations and a falsifiable done-condition under `## Test notes` 15. **NO `A6` is minted** — see the refusal below |
+> | **`G2`/`G3`** | `src/zobrist.nfr.test.ts:18`, `src/status-panel.nfr.test.ts:11` | **`ABC-028` MAY NOT TOUCH EITHER.** Both are outside `## Scope`'s two named files and inside merged tickets' work. **RE-HOMED to `ABC-030`** (`XS`, `P3`, `Backlog` requested), which owns the class repair and names an owner |
+> | **`G4`** | `A5`'s *"a future row that changes the builder"* | **AGREE — recorded, page NOT re-opened.** And it is sharper than *"inaccurate"*: **the antecedent is impossible, so the sentence is VACUOUSLY TRUE, not false.** The exact replacement parenthesis is recorded under `A5`'s domain block for whoever opens it next |
+> | **`G5`** | the page carries `src/`'s string score and not its shape score | **WRITTEN**, re-measured by me over **45** `src/*.ts` (QE measured 42): **`src/` scores 0 on strings and 5 on shape.** Both numbers now stand beside each other under `F4` |
+>
+> **`:115`'s numerator is CLOSED and it closes in this page's favour** — QE built `WCACHE-LAST3` and it
+> fails exactly 2 of 755, both the `toSan` call-count assertions, owned lane `26/26` exact. **Only the
+> totals were ever stale, and they are now stale by 55 rather than 3.** The standing instruction is
+> unchanged and is the whole point: **replace the totals with the SHAPE; do not refresh them.**
+>
+> **THE RE-HOMING IS NOT A PREFERENCE — IT IS THE MEASURED FAILURE OF THE ALTERNATIVE.** *"Owner:
+> whoever next opens the block"* is this page's standing disposition for latent text debt. Tested at
+> source at this hop, on the two sites it now applies to:
+>
+> ```
+> zobrist.nfr.test.ts:18   "all 13 tests there"   exact at 584defa (13 static it(, 0 it.each)
+>   2efe9ac +1 it.each, 862c687 +1 it.each        -> sibling is 23
+>   d74476b RE-OPENED zobrist.nfr.test.ts (+30/-7) WITH THE NUMBER ALREADY STALE — not updated
+> status-panel.nfr.test.ts:11 "all 26 tests there"  exact at 695a2e7
+>   dc06b40 edited BOTH files IN ONE COMMIT (+109/-21 nfr, +129/-15 sibling), TOOK THE SIBLING
+>   TO 29 ITSELF — and did not move the number
+> ```
+>
+> **Two opportunities, two misses, one of them in the very commit that broke the number.** A
+> disposition with a 0-for-2 record is not an owner; it is a place to put things nobody will do.
+> **`ABC-030` is the smallest honest fix: one owner, one page, `P3`, and explicitly not to be pulled
+> ahead of anything.**
+>
+> **A SECOND, BIGGER RANGE TRAP IS NOW ARMED ON THIS BRANCH, AND SECURITY/NFR IS THE ROLE IT WILL
+> CATCH.** QE recorded that `git diff 8de988d^..593ba70 -- src/` misattributes `ABC-029`'s one comment
+> line to this ticket. Measured on my tip, the same trap at the BRANCH level:
+>
+> ```
+> ABC-028's own three commits, measured individually   2 files, BOTH *.test.ts, 0 production lines
+> branch vs merge-base, all tickets                    src/history-pane.ts  1/1   (ABC-029's comment)
+>                                                      src/turn-loop.ts   313/0   (ABC-019's, A NEW
+>                                                                                  PRODUCTION MODULE)
+> ```
+>
+> **This ticket's firing threshold is *"any production line at all, or any new file"*. Measured against
+> `ABC-028`'s own commits it does NOT fire — unchanged, and re-measured here rather than inherited.
+> Measured against the branch it fires 313 times on a module this ticket never touched.** The owed
+> Security/NFR look must be scoped to `ABC-028`'s own commits, and that scoping is now on the page
+> instead of in a reviewer's head. **It is a measurement, not a waiver, and it is not mine to waive.**
+>
+> **FLAGGED, NOT REPAIRED — `plans/traceability.md` CARRIES DUPLICATE `ABC-028` AND `ABC-029` ROWS.**
+> Rows 162/163 are the live, appended-to copies; rows 164/165 are **stale snapshots of the same two
+> tickets**, introduced by `5caef94` (an `ABC-019` hop, `4+/1-`, which replaced its own row and
+> re-added two others from a pre-rebase copy of the table). **A reader taking the LAST match for
+> `ABC-028` gets a row frozen before five hops of appends.** I appended to the LIVE row only, flagged
+> the duplicates in the file's own `COLUMN INVARIANT` note where the next reader hits them, and
+> **deleted nothing** — rule 12, and **a BA/PM hop is live on `ABC-019` right now**, whose row sits two
+> lines away. **Owner: the Orchestrator, to sequence against that live hop.**
+>
+> **`S` (2) and `P1` RE-DERIVED; both hold** — and `S` holds across a change of premise, because this
+> hop routes build work for the first time since `A5`. **NO `src/` FILE WAS WRITTEN** (`git diff --
+> src/` is EMPTY; all three digests unmoved). **`plans/board.md`, every ADR, `plans/nfr-catalog.md`,
+> `ABC-029`, `ABC-019`, `ABC-017` and every merged ticket were NOT opened for edit.** **Requested board
+> move: NONE — HOLD at `In Development`**, because the `:493` repair is `src/` work and the Engineer
+> has not made it yet.]**
 
 ## Problem
 
@@ -795,6 +886,56 @@ ever happens, the counterfactual **becomes** the tree and `A1` runs in it.
 > > > Orchestrator, to schedule as its own ticket or to refuse **with the number attached** — which is
 > > > a decision, not a default. **This is the note that says both were on the table.**
 > > >
+> > > > ### **THE CEILING ON BOTH CANDIDATES, AND ON ANY THIRD — MEASURED 2026-08-12 by BA/PM at `refinement-ABC-028-shape` on QE's `G1`. READ THIS BEFORE BUYING A CONTROL; IT IS WORTH MORE THAN THE FIX IT CAME FROM.**
+> > > >
+> > > > **The defect shape splits in two, and only one half is reachable by anything that reads TEXT.**
+> > > >
+> > > > | half | example | how it is detected |
+> > > > |---|---|---|
+> > > > | **a claim that CITES** — a count, a total, a line number | *"all 13 tests there"*, *"752/752"*, *"`history.ts:152`"* | **mechanically, from the tree.** Resolve the citation, count the siblings, run the suite. QE's `shapehunt` does exactly this and it works: 27 citations checked, 0 broken; 3 tree counts checked, 2 stale, 1 holding |
+> > > > | **a claim that QUANTIFIES** — a negative over the whole project | *"with zero catchers **anywhere in the project**"* | **only by CONSTRUCTING THE COUNTEREXAMPLE.** There is nothing in the text to resolve. The sentence is a statement about builds that do not exist yet, and the only way to falsify it is to write one |
+> > > >
+> > > > **`G1` is the second kind, and that is why three hops walked past it.** It contains **none of
+> > > > the four banned strings**, so candidate **(a)** — a comment-content guard — **would not have
+> > > > fired.** It cites no line and states no count, so QE's `shapehunt`, the instrument that found
+> > > > the other four, **would not have fired either — and it did not: `G1` was found by `wpos.mjs`,
+> > > > the mutant, not by the census.** It says nothing about fixture scope, so candidate **(b)** —
+> > > > the structural guard — **is orthogonal to it.** **A pane mutant found it, one day late, and
+> > > > nothing else in this project could have.**
+> > > >
+> > > > **THE BOUND, STATED SO IT CONSTRAINS THE PURCHASE:** *no control that reads source TEXT can
+> > > > ever catch an exhaustiveness claim going stale, because the fact that falsifies it is not in
+> > > > the text.* A mutation campaign catches it and costs a mutant per claim; nothing cheaper does.
+> > > > **This does not argue against (a) or (b) — it prices what they can and cannot buy**, which is
+> > > > the *"refuse with the number attached"* the paragraph above asks for.
+> > > >
+> > > > **THE ONE THING THAT IS FREE, AND IT IS A WRITING RULE, NOT A CONTROL — SO IT IS LABELLED AS
+> > > > ONE.** The cheapest disposition is not to detect the claim later but **not to write it**: a
+> > > > comment justifying a test's structure should state the **MECHANISM** that makes the structure
+> > > > necessary, never a **CENSUS OF THE REST OF THE PROJECT**. `:493`'s load-bearing content is
+> > > > *"a snapshot over an already-rendered module-scope singleton is blind to a once-per-object
+> > > > corruption"* — true of the code in front of the reader, unfalsifiable by any neighbour's
+> > > > commit, and it needs no total and no quantifier. **Nothing enforces this, no lint rule reads
+> > > > it, and it is a convention exactly like the one `F4` demoted. It is recorded at its true
+> > > > strength and no later hop may cite it as a guard.**
+> > > >
+> > > > **AND THE NUMBER `G5` ASKED FOR, RE-MEASURED HERE OVER A TREE THAT GREW SINCE QE TOOK IT
+> > > > (`45` `src/*.ts`, was 42):**
+> > > >
+> > > > ```
+> > > > src/ occurrences of the four banned STRINGS           0    (45 files, /usr/bin/grep, this tip)
+> > > > src/ live instances of the SHAPE                      5    (1 inside the bound region)
+> > > > src/turn-loop.{ts,test.ts,nfr.test.ts} — the 3 files QE's census never saw:   0 new instances
+> > > >   (its two "green on all 717 tests" lines are PAST-TENSE witnesses and are excluded on QE's
+> > > >    own stated rule — they assert nothing about the current tree)
+> > > > ```
+> > > >
+> > > > **Both numbers belong on this page together and neither may travel alone.** *"`src/` scores
+> > > > 0"* is true of strings and invites the conclusion that the merged tree is clean; **it is not —
+> > > > five live instances sit in it and one of them is FALSE rather than stale.** The string score
+> > > > is not wrong, it is **the wrong instrument reported without its denominator**, which is this
+> > > > page's own defect at the level of a measurement instead of a sentence.
+> > >
 > > > **AND THE THING THAT REPLACES THE RULE AT THE LEVEL THAT MATTERS — a priced precondition on the
 > > > ACT, which the standing obligation below now carries. IT IS NOT ENFORCED EITHER, AND IT SAYS SO.**
 > > > Banning a sentence guards the warning label. The hazard is the rebuild.
@@ -1386,6 +1527,50 @@ whole point: *the guard stops being an accident in another file.*
 > > **NO LANDED ROW MOVES.** Rows 1 and 2 sit at `preservedTail` 1 and 2, well inside the domain, and
 > > both are green on the delivered pane. **`A5` is MET.** What was missing is the domain of its
 > > extension rule, not any of its assertions — this ticket's own thesis for the eighteenth time.
+> >
+> > > **[`G4` RULED 2026-08-12 by BA/PM at `refinement-ABC-028-shape` — QE's report is CORRECT, I
+> > > VERIFIED ITS PREMISE AT SOURCE, AND THE CLAUSE IS NOT EDITED. THE CRITERION DOES NOT MOVE AND
+> > > NEITHER DOES ITS TEXT.]**
+> > >
+> > > QE reported: *"a future row that changes the builder changes the bound"* — **but a row cannot
+> > > change the builder.** Verified at source at this hop rather than taken from the note:
+> > > `EditShape` has exactly three fields (`preservedTail`, `replacement`, `changes` —
+> > > `src/history-pane.test.ts:1017-1024`) and **none of them is a fixture**; the `it` body hardcodes
+> > > `blackAnchorTo(21)` at **`:1063`** (one hit inside `A5`; `:822` is `A3`'s) and `toHaveLength(21)`
+> > > at **`:1084`**. QE also measured the consequence: the `R22` row's data, appended as a row and
+> > > nothing else, dies with `Error: no legal move a2a3`.
+> > >
+> > > **THE RULING IS SHARPER THAN *"INACCURATE"*, AND THE SHARPENING IS WHY IT STAYS.** The clause is
+> > > a conditional whose antecedent **cannot occur**. That makes it **VACUOUSLY TRUE — not false.**
+> > > `G1` is a sentence that ASSERTS something untrue about the tree; this one asserts nothing at all
+> > > and warns against a bare *"≤ 15"* that WOULD be false if the builder ever moved. **The two are
+> > > not the same defect and must not be dispositioned the same way: one is repaired, one is left.**
+> > >
+> > > **AND I CHECKED THE ONE ARGUMENT FOR RIDING IT ALONG, BECAUSE IT IS REAL.** The `:493` repair
+> > > sends this ticket back through a gate anyway, so a parenthesis here would cost almost nothing in
+> > > gate time. **Refused anyway:** the marginal cost is not gate time, it is that **every criterion-
+> > > TEXT edit on this page has cost a scoping argument about what the previous verdict still
+> > > covers** (*"a verdict does not cover text written after it"* — the `f4` hop's own words, and the
+> > > reason the last re-gate had to be narrowed by hand). **Paying that for a sentence that is not
+> > > false is a bad trade, and `AGENTS.md` coding rule 9 — *preserve adjacent code* — says the same
+> > > thing about text nobody asked me to touch.**
+> > >
+> > > **THE EXACT REPLACEMENT, RECORDED SO THE NEXT HOP PASTES IT INSTEAD OF RE-DERIVING IT.** When
+> > > `A5`'s block is next opened **for a reason of its own**, replace
+> > >
+> > > > *"a future row that changes the builder changes the bound"*
+> > >
+> > > with
+> > >
+> > > > *"changing the builder changes the bound — and that is an `it`-body edit, not a row:
+> > > > `EditShape` carries no fixture field"*
+> > >
+> > > **Owner: whoever next opens `A5`'s domain block for a reason of its own.** No date: latent, and
+> > > recorded as latent. **This disposition is the SAME ONE this hop just measured at 0-for-2 on
+> > > `G2`/`G3`, and it is used here anyway on purpose** — there the cost of a miss is a reader
+> > > trusting a false number, here it is a reader trying one row that fails loudly with *"no legal
+> > > move a2a3"*. **A disposition is only as good as the harm it is holding back, and this harm is a
+> > > confusing five minutes.**
 
 > **AND `A5` DOES NOT REPLACE `A1`.** `A1` is landed, green, and does exactly what it says.
 > `## Test notes` 2 forbids folding it into `A14` and **this criterion does not disturb it either** —
@@ -1829,6 +2014,74 @@ one.** No date: latent, and recorded as latent.
     at the same hop by the sibling ticket's own citation table, which contains a `grep` that exits
     `1`** (note 13, caveat 2).
 
+15. **THE `:493` REPAIR — THE ONLY WORK THIS TICKET OWES, AND IT IS THE ENGINEER'S.** *Routed
+    2026-08-12 by BA/PM at `refinement-ABC-028-shape` on QE's `G1`. This note is the whole
+    instruction: **no `A6` is minted, and the refusal is deliberate**.*
+
+    **WHY NO CRITERION.** A criterion of the form *"the comment says only what is true"* is a
+    **one-time verdict wearing a standing tense** — this page has already ruled that, twice, about
+    `A5`'s comment half and about the `F4` rule. Nothing in this repository reads a comment, so
+    nothing holds such a criterion true after the hop that discharges it. **Minting `A6` would
+    knowingly rebuild the object `F4` demoted.** The work is real and is instructed here; the
+    criterion would be theatre.
+
+    **WHAT IS FALSE.** `src/history-pane.test.ts:493` (inside the `A9` doc comment, `:486-500`) reads:
+
+    > *"Measured: `WPOS` — a pane that corrupts the caller's `history.position` once per object and
+    > changes no rendered byte — **passes 732/732 on 26 files** against the shared fixtures, **with
+    > zero catchers anywhere in the project**, and fails here."*
+
+    **Both halves fail, and they fail differently.** Written at `0b508a2` on 2026-08-11, when both
+    were exact. `8de988d` — **this ticket's own build commit, the next day, in the same file** —
+    added `A4`, which watches for writes to the caller's graph DURING a render and therefore kills
+    `WPOS` too. Measured at this hop on my own lane, pinned by md5 to this tip, with a null control:
+
+    ```
+    NULL CONTROL (no mutant)   0 failed / 807 on 28 files    <- the lane is calibrated
+    WPOS                       2 failed / 807 on 28 files
+      FAIL  A9 — neither render touches the caller's position, its move count or its ANCHOR
+      FAIL  A4 — no write reaches the caller's graph during a render, at all ten lengths
+    ```
+
+    **QE measured the same two catchers at `755` on a tree that did not contain `ABC-019`'s turn
+    loop; I measured them at `807` on one that does. The same two kills on two different trees is a
+    stronger result than either alone** — the sentence is false about the tree, not about a tip.
+
+    **THE OBLIGATIONS, and they are the point rather than the wording.**
+
+    - **(i) The exhaustiveness claim goes.** *"with zero catchers anywhere in the project"* is FALSE
+      and must not survive in any tense or hedge.
+    - **(ii) The total goes, and is NOT REFRESHED.** `732/732 on 26 files` was stale at `755/26` and
+      is staler at `807/28`. **Refreshing it to `807` buys one hop of accuracy and re-arms the same
+      defect** — this page's standing instruction for `:115`, applied unchanged.
+    - **(iii) THE REASON IS PRESERVED.** The sentence is load-bearing: it is why `buildAllCases()` is
+      called inside each `A9` test. **A repair that deletes the reason is worse than the false
+      sentence** — the next reader hoists the fixtures back to module scope and re-opens `ABC-016`.
+    - **(iv) State the MECHANISM, not a census.** The durable form is a fact about the code in front
+      of the reader: *a snapshot taken over an already-rendered module-scope singleton is blind to a
+      corruption that happens once per object, so the fixture must be built inside the test that
+      snapshots it.* **That sentence cannot be falsified by a neighbour's commit, which is exactly
+      what the two it replaces could not survive.**
+    - **(v) If a catcher is named, name it as a CRITERION, never as a COUNT.** *"`A4` kills it too"*
+      is checkable forever; *"there are two catchers"* is the same defect with a bigger number.
+
+    **DONE-CONDITION, falsifiable, and every part of it is one command.**
+
+    ```
+    1  comment-only edit, src/history-pane.test.ts ONLY.  git diff --stat must show that one file;
+       src/history-pane.ts diff EMPTY (this ticket's fence, unchanged)
+    2  /usr/bin/grep -nE 'anywhere in the project|[0-9]{3}/[0-9]{3}' src/history-pane.test.ts
+       -> no hit inside the A9 doc comment
+    3  the mutant still dies, and dies TWICE: rebuild WPOS, expect 2 failures, A9 and A4, on the
+       tip's own total (807 on 28 files at ca6c424 — MEASURE IT, do not paste this number)
+    4  npm run lint 0 · npm run typecheck 0 · npm test green · skip 0
+    ```
+
+    **`src/history-pane.test.ts:1014` is NOT part of this repair and must not be touched with it** —
+    it is BA/PM's instance 2, latent, and bundling them turns a two-line fix into a text hop.
+    **`src/zobrist.nfr.test.ts` and `src/status-panel.nfr.test.ts` are `ABC-030`'s and are OUT OF
+    SCOPE for this repair** — see the header ruling.
+
 ## Size and priority rationale
 
 **Size `S` (2).** Three fixtures, one instrument, one measurement, in **two files that already
@@ -2172,6 +2425,55 @@ at the gate as a **floor, not a number**, and that reading stands. The *"whichev
 `ABC-029` lands second re-measures the TOTAL"* rule is **untouched and still owed at the merge**.
 **No bar moved, `plans/nfr-catalog.md` was not opened, `ABC-026` still owns the total.**
 
+### Size and priority RE-DERIVED 2026-08-12 by BA/PM at `refinement-ABC-028-shape` — `S` HOLDS ACROSS A CHANGED PREMISE, `P1` HOLDS, and the premise that changed is that this ticket OWES BUILD WORK AGAIN
+
+**The premise that moved is not a number, it is a kind: for the first time since `A5`, this hop routes
+work into `src/`.** Every re-derivation above rested on *"this hop adds no build work at all."* That
+sentence is FALSE of this hop and the size has to be re-derived without it, not carried past it.
+
+**`S` (2) HOLDS, and here is the whole of what was added.** One **comment-only** edit in
+`src/history-pane.test.ts` — a doc block of roughly six lines, inside a criterion that is already
+landed and green (`## Test notes` 15). **Zero production lines, zero new files, zero new `it`s, zero
+new fixtures, zero new instruments, zero new dependencies.** No criterion was added, amended,
+renumbered or weakened; `A1`–`A5` all still read exactly as they did before this hop. **The two
+sites this hop refused to touch — `src/zobrist.nfr.test.ts:18` and `src/status-panel.nfr.test.ts:11`
+— are `ABC-030`'s and carry NONE of their weight here**, which is the second reason the re-homing was
+worth doing: absorbing them would have grown this ticket's file set from two to four, across two
+merged tickets' work, at the sixth hop. **`SPLIT_REQUIRED` bites at `XL` (8); this is 2.**
+
+**The honest challenge to `S`, stated and answered.** *A ticket on its sixth refinement hop is not
+`S`.* **The hops are not the ticket.** What has been built is `+496` lines in one test file and
+`+32 / −21` of comment in another; what has been *discussed* is this page. **Size measures the change,
+not the ink** — and a page this long is evidence that the record is doing work the tree cannot do,
+which is this ticket's thesis rather than a size signal. **If a future hop wants a number that tracks
+the ink, that is `ABC-026`'s subject, not a size field.**
+
+**`P1` HOLDS. Its original basis stays DISCHARGED, and the new finding does not reverse it — I
+checked, rather than assuming it would not.** `P1` was cut for a **live, signed, measured-sounding
+invitation in a merged file to delete the only catcher**. `G1` is a different animal and it runs the
+other way:
+
+- **`:493` UNDERSTATES the tree.** It says there are zero catchers besides `A9`; there are two, `A9`
+  and `A4`. **A reader who believes it preserves the fixture structure more carefully than the truth
+  requires.** The harm is to the record's credibility, not to the pane's guards.
+- **`:113` still says the opposite of the invitation** (`grep -n 'THE SHARING HERE IS STILL
+  LOAD-BEARING' src/history-pane.nfr.test.ts` → `:113`, re-run this hop). **The reversal `P1` was cut
+  for is intact.**
+- **Not `P0`** — nothing is broken: **`807 / 807` on 28 files, lint 0, typecheck 0, skip 0**, all
+  measured on this tip.
+- **Not `P2`** — unchanged and for the unchanged reason: **priority ranks unstarted work, and this
+  ticket is built, green, and now owes one small repair.** Re-ranking it downward strands a routed
+  fix behind unstarted work. **The falsifiable statement stands: if this ticket were ever returned to
+  `Backlog` unbuilt it should be re-cut at `P1`, not `P2`.**
+
+**`N8-LANE`: NOT re-derived here, and this time there is a second reason on top of the standing
+one.** This hop adds no test, no file and no line to the repository, so its own delta is zero by
+construction. **And the machine is not quiet — I was instructed not to take a timing measurement on
+this hop, and I took none.** `A5`'s landed delta stays **`UNKNOWN - verify`**; QE's reading of it as a
+**floor rather than a number** stands untouched; the *"whichever of `ABC-028` / `ABC-029` lands second
+re-measures the TOTAL"* rule is **untouched and still owed at the merge**. **`ABC-026` still owns the
+total, no bar moved, and `plans/nfr-catalog.md` was not opened.**
+
 ## Definition of Ready
 
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
@@ -2504,5 +2806,65 @@ or any new file*) is measured NOT to fire, and this hop adds nothing to `src/` e
 measurement, not a waiver, and it is not this role's to waive.**
 
 **FRONT MATTER: NOT MOVED.** It reads `status: in-development` / `column: In Development`;
+`plans/board.md` carries `ABC-028` under `## In Development (WIP 1/3)` — **read at source at this
+hop.** The two records agree and **`plans/board.md` was NOT opened for edit.**
+
+### DoR items 4 and 10 RE-CHECKED 2026-08-12 by BA/PM at `refinement-ABC-028-shape` — the TWO this hop touches
+
+**The Definition of Ready is a `Backlog → Ready` gate and this ticket is long past it. This is NOT a
+re-score and the 10-of-10 is not re-opened.** Two items are re-checked because this hop moved the
+things they score.
+
+**Item 4 — acceptance clear, testable and measurable: `✅` HOLDS, and it holds UNTOUCHED for once.**
+**No criterion's text moved at this hop.** `A5`'s domain clause was examined and deliberately left
+alone (`G4`, ruled vacuous rather than false); `A4`'s and `A9`'s clauses are unchanged; the `:493`
+repair is routed as `## Test notes` 15 and **explicitly refuses to mint an `A6`**. `A1`–`A5` are all
+still MET and all still read exactly as the last gate read them. **This is the first hop in five whose
+re-gate does not have to be narrowed by hand to exclude text written after the verdict** — the
+Engineer's repair is a comment edit under an existing criterion, so the gate that covers it is the
+ordinary one.
+
+**Item 10 — no major unresolved blocker: `✅` HOLDS, and this is the item that changed.** There is now
+one **open, routed, named** piece of work — the `:493` repair — and it is small, owned, and carries
+its own done-condition. **An owed repair with an owner and a check is not a blocker; it is a task.**
+The two things that *could* block are both measured not to: the repair touches only
+`src/history-pane.test.ts`, which **`ABC-029` does not open** (`## Dependencies`'s concurrency rule
+binds the nfr file, not this one), and it adds **zero production lines**, so the Security/NFR
+threshold still does not fire on `ABC-028`'s own commits.
+
+**Item 3 — INVEST *independent*, `⚠️`: UNCHANGED, not re-argued, and now with a bigger demonstration.**
+The coupling the `⚠️` names has been demonstrated once per hop for five hops. **This hop it arrived
+from a third ticket:** `ABC-019` landed a 313-line production module and `+52` tests on this stack
+between QE's tip and mine, and the first thing it broke was every suite total on this page. **It does
+not block.**
+
+**No other item was re-assessed, and none is claimed to have been.**
+
+### Requested board move 2026-08-12 by BA/PM at `refinement-ABC-028-shape`: **NONE — HOLD at `In Development`**
+
+**The Orchestrator already made this move for the right reason and I am confirming it, not repeating
+it.** `ABC-028` was pulled back `In Review → In Development` on the narrow re-gate because a comment
+in `src/` is FALSE. **It is still false — I rebuilt the mutant and re-measured it on a tree QE never
+saw — so the ticket stays where it is until the Engineer lands `## Test notes` 15.**
+
+**What moves next, in order:**
+
+1. **Engineer** — the `:493` repair, comment-only, `src/history-pane.test.ts`, done-condition in
+   `## Test notes` 15. **This is the only work `ABC-028` owes.**
+2. **QE** — a re-gate scoped to that one comment block and the tip's own totals. **`## Test notes` 11
+   stands: gate the tip, not a digest — and the tip is `807 / 807` on 28 files, not `755 / 26`.**
+3. **Security/NFR** — still owed, still not waived, and now with a scoping instruction on the page:
+   **measure `ABC-028`'s own three commits, never the branch**, which carries `ABC-019`'s 313
+   production lines.
+4. **The Orchestrator** — `ABC-030` (`Backlog` placement requested, not taken), the duplicate rows in
+   `plans/traceability.md`, and the two `F4` candidate controls, which this hop did not buy and did
+   not price, but did **bound** — see the ceiling block under `F4`.
+
+**Verified independently at this hop rather than inherited: lint 0 · typecheck 0 · `807 / 807` on 28
+files · skip 0**; `src/history-pane.ts` **`c4653c4c…` unmoved**, `src/history-pane.test.ts`
+**`9533f050…`**, `src/history-pane.nfr.test.ts` **`16bf2f50…`** — all three identical at the start and
+the end of this hop, `git diff -- src/` **EMPTY**. **`In Development` is `1/3`, so holding fits.**
+
+**FRONT MATTER: NOT MOVED.** It reads `status: in-development` / `column: In Development`, and
 `plans/board.md` carries `ABC-028` under `## In Development (WIP 1/3)` — **read at source at this
 hop.** The two records agree and **`plans/board.md` was NOT opened for edit.**
