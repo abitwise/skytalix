@@ -44,6 +44,28 @@ feature: —
 > repair that also removes the trap. **The interim exposure is real and is named in
 > `## Dependencies`.**
 >
+> > **[THAT RULING IS HALF TRUE AND THE FALSE HALF IS THE LOAD-BEARING ONE — CORRECTED 2026-08-12 by
+> > BA/PM at `refinement-ABC-028-anchors`, RE-MEASURED ON THIS TIP ON AN INDEPENDENT HARNESS. THIS IS
+> > THE SENTENCE THAT WOULD HAVE PRODUCED A SIXTH OCCURRENCE.]**
+> >
+> > ***"`A2` below makes it TRUE"* is FALSE, and `A1`, `A5`'s two rows and the comment repair do not
+> > make it true either.** `ABC-017`'s sentence is *"`A11` may be tidied to per-test fixtures **freely**
+> > and **nothing** is lost"* — a statement about the **class**. Measured here: rebuild those fixtures
+> > per test and a pane keyed on `moves.length` plus the last **three** move identities goes
+> > **`2 failed / 752` → `752 PASSED`.** **Something is lost. The sentence is still false.**
+> >
+> > **WHAT THE STRATEGY DID ACHIEVE, stated because it is real and it is most of the win:** the
+> > **file-comment** site — the one a later engineer actually reads before tidying — was **not**
+> > corrected by argument, it was **made true by construction and then repaired to say only what is
+> > true**. It now reads *"THE SHARING HERE IS STILL LOAD-BEARING"* with three measured cells attached.
+> > **That site is closed.**
+> >
+> > **WHAT THIS TICKET MAY THEREFORE NOT CLAIM:** that `RISK-ABC017-01`'s text half needs no edit to
+> > merged text. **It needs one, at two sites, and neither is this ticket's to make** —
+> > `plans/tickets/ABC-017-bounded-move-history-pane.md:45` and `:941-942`, read at source at this hop.
+> > `## Out of scope` forbids editing `ABC-017` and that fence is **upheld, not weakened**. The
+> > obligation is re-homed in `## Dependencies`'s standing conditional with its owner named there.
+>
 > **[AMENDED 2026-08-12 by BA/PM at task `refinement-ABC-028-2026-08-12`, subtask
 > `refinement-ABC-028-a4` (Workflow 07).** `A4` is **written** on an instrument QE built, armed, costed
 > and bounded at `quality-gate-ABC-028-instrument`; its one surviving build is recorded as
@@ -91,6 +113,39 @@ feature: —
 > **QE gated a tree two commits stale.** See `## Test notes` 11. **No `src/` file was written, no test
 > weakened, `plans/board.md` / `plans/nfr-catalog.md` / every ADR / `ABC-017` / `ABC-019` / `ABC-029`
 > not opened for edit.**]**
+>
+> **[AMENDED 2026-08-12 by BA/PM at task `refinement-ABC-028-anchors-2026-08-12`, subtask
+> `refinement-ABC-028-anchors` (Workflow 07), AFTER BOTH HALVES OF `A5` LANDED. ALL FIVE CRITERIA ARE
+> MET; THIS HOP IS THE TICKET'S RECORD, NOT ITS CRITERIA. NO CRITERION'S OBLIGATION WAS ADDED,
+> REMOVED OR WEAKENED.]**
+>
+> **THE ONE THING THAT CHANGES WHAT THIS TICKET MAY CLAIM: the accidental `A11` fixture sharing is
+> STILL LOAD-BEARING, one rung past `A5`'s deepest row — and this page said otherwise in FOUR places,
+> two of which nobody had reported.** Re-measured here on an independent harness (`TAIL` = trailing
+> identities in the cache key, one generator at 0/1/2/3, pinned by md5 to this tip, two null controls
+> both `752/752`): the owned lane kills **3 / 2 / 1 / 0**, and at `TAIL = 3` the whole project's only
+> catcher is the sharing — `2 failed / 752` shared, **`752 PASSED` rebuilt.** **`RISK-ABC017-01` is
+> CLOSED for the four keys `A1` and `A5` own and OPEN for the class**, and the ledger that says so is
+> at `RISK-ABC028-02`. **The forbidden formulations are named there** — *"freely"*, *"nothing is
+> lost"*, *"no longer load-bearing"*, *"the class is closed"* — because all five occurrences of this
+> page's defect took exactly that shape.
+>
+> **WRITTEN AT THIS HOP:** the **six** stale live line-map anchors corrected (`:103-120` → **`:103-123`**,
+> fixtures `:121` → **`:124`**), with dated blocks left alone on purpose; **`A5`'s comment half ruled
+> DISCHARGED** on the comment as landed, with all three of its numbers **re-run rather than
+> transcribed**; **`RISK-ABC028-03` ruled — `UNKNOWN - verify` RETIRED**, `WCACHE-LAST2` measured,
+> predicted correctly, and **closed by a ROW in `A5`'s table exactly as designed**; a **seventh** live
+> false generalisation found in `## Out of scope` and an **eighth** in this header's own
+> `RISK-ABC017-01` text-half ruling, both corrected; the `ABC-017` merged-text residual **re-homed with
+> an owner** in `## Dependencies`; and the two-tickets-one-`A5` collision **ruled ACCEPT on a
+> measurement** — `## Test notes` 12. **`S` (2) and `P1` RE-DERIVED; both hold, and `P1`'s original
+> basis is discharged for the second time and MEASURED for the first.**
+>
+> **REQUESTED BOARD MOVE: `In Development → In Review`.** `plans/board.md` was **NOT opened for edit**
+> and the front matter is **NOT moved** — it reads `in-development` / `In Development`, which was
+> **verified against the board at source at this hop** rather than trusted. **No `src/` file was
+> written** (`src/` was READ freely and re-measured out of tree); **no ADR, `plans/nfr-catalog.md`,
+> `plans/board.md`, `ABC-017`, `ABC-019`, `ABC-029` or any merged ticket was opened for edit.**
 
 ## Problem
 
@@ -130,7 +185,8 @@ test file, no new dependency.
 
 - `src/history-pane.test.ts` — three new fixtures and their assertions (`A1`, `A3`, `A4`).
 - `src/history-pane.nfr.test.ts` — the `A2` demonstration, and whatever the `A2` result obliges the
-  fixture-sharing comment at ~~`:106-112`~~ ~~`:102-120`~~ **`:103-120` as it now stands** to say.
+  fixture-sharing comment at ~~`:106-112`~~ ~~`:102-120`~~ ~~`:103-120`~~ **`:103-123` as it now
+  stands** to say.
   > **[LINE MAP CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-028-a2`, read at source.]** `A2`'s
   > comment edit was `+15 / -7`, so **every `:106-112` and `:113` reference written before the build
   > hop is stale by eight lines.** As landed: the comment block is ~~`:102-120`~~ **`:103-120`**, the
@@ -157,6 +213,32 @@ test file, no new dependency.
   > tickets edit in different regions; it goes stale on a change that does not touch the region it is
   > guarding. **The line map is the fence; the digest was decoration.** Same defect as the
   > `src/history-pane.ts` md5 pin — see `## Out of scope`.
+  >
+  > **[THE BLOCK MOVED — CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-028-anchors`, read at
+  > source. THIS IS THE THIRD LINE-MAP CORRECTION AND THE FIRST THAT IS NOT A BA/PM ERROR.]**
+  > `A5`'s comment half landed `+17 / −14`, comment text only, so the block **GREW BY THREE LINES**:
+  > it is now **`:103-123`** (was `:103-120`) and the `AT_0`…`AT_2000` fixtures now begin at
+  > **`:124`** (was `:121`). Line **102 is still blank**. Read at source at this hop, not taken from
+  > the hop that moved it.
+  >
+  > **The two earlier corrections were mistakes in the record; this one is a real move caused by a
+  > licensed edit** — and the Engineer that made it **considered compressing its replacement back to
+  > 18 lines to keep the map true, and refused**, because that would have cost either the *"the note
+  > that used to stand in this place said the opposite"* warning or one of three measured cells.
+  > **That refusal was right: compressing prose to preserve a number in a document you are not allowed
+  > to edit is the tail wagging the dog.** The number is corrected here instead, which is where the
+  > cost belongs.
+  >
+  > **SIX LIVE REFERENCES were stale by three lines and ALL SIX ARE CORRECTED at this hop** — this
+  > bullet, `A2`'s `Given`, `RISK-ABC028-02` ×2, `A5`'s comment table and the standing obligation at
+  > the foot of `RISK-ABC028-02`. **Dated, attributed blocks keep their original numbers on purpose**
+  > — rewriting a block that says *"read at source this hop"* falsifies a dated measurement, which is
+  > the rule this page has now applied three times.
+  >
+  > **AND `A5`'s COMMENT TABLE IS NOT A `+3` SHIFT, WHICH IS WHY IT IS RULED SEPARATELY.** The three
+  > sentences it names were **replaced, not moved** — see the ruling at the foot of `A5`. **A
+  > mechanical `+3` there would have pointed at real lines saying the opposite of what the table
+  > says they say**, which is a worse defect than the stale number it fixed.
 
 ## Out of scope
 
@@ -206,8 +288,22 @@ test file, no new dependency.
 - **The supplied-FEN width and compute path (`AR-1`).** Ruled at the cutting hop: the **compute** half
   is closed by `ABC-010`, the **width** half is not. Neither is this ticket's. See
   `## Dependencies`.
-- **Tidying `A11`'s fixtures to per-test.** `A2` establishes that it *may* be done; it does not ask
-  for it. The Engineer declined it once with three measured reasons and that decision stands.
+- **Tidying `A11`'s fixtures to per-test.** ~~`A2` establishes that it *may* be done; it does not ask
+  for it.~~ The Engineer declined it once with three measured reasons and that decision stands.
+  > **[A SEVENTH LIVE SITE OF THE SAME FALSE GENERALISATION, FOUND AND CORRECTED 2026-08-12 by BA/PM
+  > at `refinement-ABC-028-anchors`. NOBODY REPORTED IT AND IT IS ON THIS TICKET'S OWN PAGE — I FOUND
+  > IT BY GREPPING THIS PAGE FOR THE SHAPE INSTEAD OF FOR THE SIX ANCHORS I WAS SENT TO FIX.]**
+  >
+  > **`A2` establishes no such thing.** What `A2` establishes is that the rebuild loses nothing **for
+  > `A1`'s key**; `A5`'s two rows extend that to **two more keys**. Measured at this hop: with the
+  > fixtures rebuilt per test, a cache keyed on `moves.length` plus the last **three** identities takes
+  > the suite from `2 failed / 752` to **`752 PASSED`**. **The rebuild MAY NOT be done freely; it costs
+  > the project its only guard for every key deeper than `A5`'s deepest row.**
+  >
+  > **The fence itself does not move — this ticket still does not ask for the tidy-up and still forbids
+  > it.** What is corrected is the REASON, which was the false one: it is out of scope because it
+  > **loses a guard**, not because it is merely unrequested. **A fence that stands on a false reason
+  > falls the moment somebody checks the reason.**
 
 ## Acceptance (Given/When/Then)
 
@@ -306,7 +402,7 @@ are each run in **both** of these configurations —
 - **(a) the single-file lane:** `npx vitest run src/history-pane.test.ts` **alone**, with
   `src/history-pane.nfr.test.ts` **not loaded at all**;
 - **(b) the full suite in an OUT-OF-TREE replica** whose `src/history-pane.nfr.test.ts` module-scope
-  fixtures (now at `:121` and following) are rebuilt **per test** —
+  fixtures (now at ~~`:121`~~ **`:124`** and following) are rebuilt **per test** —
 
 **then** in **both** configurations **both builds die**, and ~~**every** surviving kill is in
 `src/history-pane.test.ts` — **none** in `src/history-pane.nfr.test.ts`~~ **every surviving kill is in
@@ -496,7 +592,8 @@ comment:      md5 e27a8387d589adf21ba5b5dd2244225e -> 65f4f29ac930d7a7f432e14f2e
 ### `RISK-ABC028-02` — the residual `A2` leaves, named here rather than discovered later
 
 **Configuration (b) is a demonstration and the repository does not re-run it.** If a later hop
-rebuilds the `:121`+ fixtures per test, nothing in the tree re-checks that `WCACHE-LEN` still dies —
+rebuilds the ~~`:121`~~ **`:124`**+ fixtures per test, nothing in the tree re-checks that
+`WCACHE-LEN` still dies —
 the evidence lives in this criterion and in the build hop's context notes, not in a test.
 
 ~~**The exposure is small and it is bounded by construction, which is why it is a named residual and
@@ -528,8 +625,57 @@ ever happens, the counterfactual **becomes** the tree and `A1` runs in it.
 > **THE RESTATED BOUND, written so it tracks the criteria instead of needing a third correction:** the
 > residual is **bounded by construction for every cache class that has an owned guard in
 > `src/history-pane.test.ts`, and unbounded for every class that does not.** Today that is one class —
-> the length-and-last-identity cache — and **`A5` is what closes it.** When `A5` lands, this risk
-> returns to *small and bounded* **by construction rather than by assertion**.
+> the length-and-last-identity cache — and **`A5` is what closes it.** ~~When `A5` lands, this risk
+> returns to *small and bounded* **by construction rather than by assertion**.~~
+>
+> > **[THE BOUND'S FORM IS RIGHT AND ITS LAST SENTENCE IS WRONG — CORRECTED 2026-08-12 by BA/PM at
+> > `refinement-ABC-028-anchors`, RE-MEASURED HERE. `A5` LANDED; THE RISK DID NOT RETURN TO *small and
+> > bounded*, AND IT NEVER CAN.]**
+> >
+> > **THE CLOSURE LEDGER — what `RISK-ABC017-01` MAY now claim, and what it MAY NOT. This is the
+> > authoritative statement; every other sentence on this page about "the sharing" is subordinate to
+> > it.** Measured on this branch tip at `refinement-ABC-028-anchors`, on a harness built from this
+> > ticket's own definitions, one generator parameterised on the axis itself (`TAIL` = how many
+> > trailing move IDENTITIES join `moves.length` in the key), pinned by md5 to this tip:
+> >
+> > ```
+> > build            key                    full suite     history-pane.test.ts ALONE   nfr fixtures
+> >                                         (26 files)     (the OWNED lane)             rebuilt per test
+> > delivered pane   —                      752 passed     26 passed                    752 passed
+> > WCACHE-LEN       length                 5 failed/752   3 failed/26  A1, A5r1, A5r2  3 failed/752
+> > WCACHE-LAST      length + last 1        4 failed/752   2 failed/26  A5r1, A5r2      2 failed/752
+> > WCACHE-LAST2     length + last 2        3 failed/752   1 failed/26  A5r2 ONLY       1 failed/752
+> > WCACHE-LAST3     length + last 3        2 failed/752   26 PASSED — NOTHING          752 PASSED
+> >                                         A11 x2 ONLY    no owned guard               THE GUARD IS GONE
+> > ```
+> >
+> > **MAY CLAIM — three things, each measured, none inferred.** (1) **`RISK-ABC017-01` is CLOSED for
+> > every key in `A5`'s table and for `A1`'s**: `WCACHE-LEN`, `WCACHE-LAST` and `WCACHE-LAST2` all now
+> > die in the file that owns the property, and they die there **with the nfr file not loaded at all**.
+> > (2) For those three keys the rebuild is genuinely free — rebuild the fixtures and they still die,
+> > `3 / 2 / 1` failures respectively, **every one of them in `src/history-pane.test.ts`**. (3) **The
+> > accident is no longer the sole guard for any key any criterion names.**
+> >
+> > **MAY NOT CLAIM — and this is the half the page has now got wrong five times.** (1) **NOT that the
+> > class is closed.** (2) **NOT that the sharing is free to remove**, in any wording, tense or
+> > implicature — it is the project's **only** catcher for `WCACHE-LAST3`, one rung past `A5`'s deepest
+> > row, and rebuilding takes that build from `2 failed` to **`752 PASSED`**. (3) **NOT that the risk
+> > is "small and bounded"** — the bound's own form says why: *unbounded for every class without an
+> > owned guard*, and the axis is infinite, so there is **always** a next class without one. **A ledger
+> > that runs out of rungs is a ledger that has stopped measuring.**
+> >
+> > **THE RULE THIS LEAVES, so the sixth occurrence has to get past a written bar rather than past a
+> > reader's attention: any sentence on this page, in this file's comment, or in a context note that
+> > says the sharing may be removed MUST NAME THE KEYS IT IS TRUE OF.** *"Freely"*, *"nothing is
+> > lost"*, *"no longer load-bearing"* and *"the class is closed"* are **forbidden formulations** here,
+> > because each of the five occurrences took exactly that shape: **a measurement that was real but
+> > narrower than the generalisation drawn from it.**
+> >
+> > **The two null controls, so this reports rather than merely agrees:** the delivered pane with the
+> > fixtures rebuilt per test is **752/752** (the transform breaks nothing), and the untouched replica
+> > is **752/752** (it is this tree). **The ladder is its own calibration** — an instrument blind to
+> > caches would read 26 passed at every rung; one that saw everything would kill at every rung. It
+> > does neither: `3 / 2 / 1 / 0` in the owned lane.
 >
 > **AND THE HAZARD DOES NOT RUN ONLY THE OTHER WAY.** The paragraph below says the danger needs `A1`
 > deleted. **It does not.** With `A1` present, landed and green, rebuilding those fixtures still loses
@@ -538,14 +684,14 @@ ever happens, the counterfactual **becomes** the tree and `A1` runs in it.
 ~~**The real hazard runs the other way, and it is the one to watch: if `A1` is ever deleted, weakened
 or folded into `A14`, the comment at `src/history-pane.nfr.test.ts:102-120` goes FALSE again and the
 `RISK-ABC017-01` trap is RE-ARMED**~~ **A SECOND hazard, additional to the one above: if `A1` is ever
-deleted, weakened or folded into `A14`, the comment at `src/history-pane.nfr.test.ts:103-120` goes
-FALSE for `WCACHE-LEN` too** — with the same call-count mechanism that hid it for six roles.
+deleted, weakened or folded into `A14`, the comment at
+`src/history-pane.nfr.test.ts:`~~`103-120`~~**`103-123` goes FALSE for `WCACHE-LEN` too** — with the same call-count mechanism that hid it for six roles.
 **`## Test notes` 2 already forbids folding `A1` into `A14`**; this risk is why that note is
 load-bearing rather than stylistic.
 
 **Standing obligation:** any hop that deletes, weakens or relocates `ABC-028` `A1` **or `A5`** **must
-re-read `src/history-pane.nfr.test.ts:103-120` and correct it in the same change**, because that
-comment asserts they exist. **Owner: whoever touches `A1` or `A5`.** No date — this is a latent
+re-read `src/history-pane.nfr.test.ts:`~~`103-120`~~**`103-123` and correct it in the same change**,
+because that comment asserts they exist. **Owner: whoever touches `A1` or `A5`.** No date — this is a latent
 hazard, and it is recorded as one rather than dressed up with a trigger it does not have.
 
 **A3 — the black-anchored slid window at ODD length. Given** the same anchor and cycle carried to
@@ -960,9 +1106,16 @@ whole point: *the guard stops being an accident in another file.*
 > `A14`. `WCACHE-LEN` (length) dies at `A1`. `WCACHE-LAST` (length + last identity) dies at `A5`.
 >
 > **`A5` DOES NOT CERTIFY THE CLASS CLOSED, and saying so is the entire lesson of this page.**
-> `WCACHE-LAST2` — keyed on length plus the last **two** identities — **survives `A5`**, because `A5`'s
-> edit changes ply 19. **It is named here so it is inside the record rather than a future discovery.**
-> It is recorded as **`RISK-ABC028-03`** below.
+> `WCACHE-LAST2` — keyed on length plus the last **two** identities — ~~**survives `A5`**~~ **survives
+> `A5` ROW 1**, because `A5`'s edit changes ply 19. **It is named here so it is inside the record
+> rather than a future discovery.** It is recorded as **`RISK-ABC028-03`** below.
+>
+> > **[CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-028-anchors` — `A5` LANDED WITH TWO ROWS AND
+> > ROW 2 KILLS IT. THE PREDICTION WAS RIGHT ABOUT ROW 1 AND THE SENTENCE WAS WRITTEN AS IF `A5` HAD
+> > ONLY ONE.]** Measured in the owned lane: `WCACHE-LAST2` is **1 failed / 26**, and the kill is
+> > **`A5` row 2 ONLY**. **The class statement below is UNCHANGED and is the reason this correction is
+> > small**: the deepest rung `A5` reaches is now two, the rung after it is `WCACHE-LAST3`, and that
+> > one has **no owned guard at all** — see the closure ledger under `RISK-ABC028-02`.
 >
 > **THEREFORE: WRITE `A5` AS A TABLE OVER EDIT SHAPES, NOT AS A SINGLE FIXTURE.** One `it.each`-style
 > row per shape, each row a **fresh** fixture. **Closing a future member of the class must be a NEW ROW,
@@ -976,9 +1129,9 @@ whole point: *the guard stops being an accident in another file.*
 > `## Test notes` 2 forbids folding it into `A14` and **this criterion does not disturb it either** —
 > two diagnoses, two verdicts. **`A5` is a sibling of `A1`, not a supersession of it.**
 
-**and — THE COMMENT HALF, which `A2` owns and which is NOT discharged.** The comment at
-`src/history-pane.nfr.test.ts:103-120` is left saying **only what is true**, which today it does not, at
-**three** places measured at this hop:
+**and — THE COMMENT HALF, which `A2` owns and which is ~~NOT discharged~~ DISCHARGED.** The comment at
+`src/history-pane.nfr.test.ts:`~~`103-120`~~**`103-123`** is left saying **only what is true**, which
+~~today it does not~~ **it now does**, at the **three** places measured at the hop below:
 
 | line | what it says now | why it is false / stale |
 |---|---|---|
@@ -989,6 +1142,38 @@ whole point: *the guard stops being an accident in another file.*
 **The repair is to the WITNESS, not the class** — *"a cache keyed on `moves.length` dies in
 `src/history-pane.test.ts`"* — plus whatever `A5` makes true once it lands. **No merged ticket text is
 edited.**
+
+> **[DISCHARGED 2026-08-12 by BA/PM at `refinement-ABC-028-anchors`, ON THE COMMENT AS LANDED, READ AT
+> SOURCE, WITH ALL THREE OF ITS NUMBERS RE-MEASURED HERE RATHER THAN TRANSCRIBED FROM THE HOP THAT
+> WROTE THEM.]**
+>
+> **THE TABLE ABOVE IS NOW A DATED RECORD, NOT A LIST OF OPEN DEFECTS — and its three line numbers are
+> deliberately NOT shifted by three.** The three sentences were **REPLACED, not moved**. `+3` would
+> point at real lines that say the OPPOSITE of what the table says they say, which is a worse fence
+> than a stale one. What stands at each site now, at `:103-123`:
+>
+> | was | is, on this tip |
+> |---|---|
+> | `:118-120` *"rebuilding these per test would **no longer lose a guard**"* | **`:119-123`** — *"So rebuilding these per test **STILL LOSES A GUARD** — not for `A1`'s or `A5`'s keys, which die in `src/history-pane.test.ts` either way, but for every key deeper than their rows reach"* |
+> | `:106-108` *"a reader looking for the guard against **a memoising pane** finds it there"* | **`:106-111`** — the property is owned **for four named keys and no other**, enumerated; *"Against a memoising pane IN GENERAL there is no guard at all: every key on the axis is its own witness"* |
+> | `:112` *"passes the whole suite **744/744**"* | **GONE.** The stale counterfactual is replaced by a **live witness** at **`:113-118`**: a last-three-identity cache **fails 2 of 752**, `src/history-pane.test.ts` **alone passes 26/26** on it, and rebuilding the fixtures takes the suite to **752/752 GREEN** |
+>
+> **EVERY ONE OF THOSE THREE NUMBERS WAS RE-RUN AT THIS HOP ON AN INDEPENDENT HARNESS AND HOLDS —
+> `2 failed / 752`, `26 / 26`, `752 / 752`** (the ladder and its two null controls are in the closure
+> ledger under `RISK-ABC028-02`). **`## Test notes` 4 says re-measure before writing a number; it says
+> nothing about the numbers you inherit, so I ran them.** The comment describes the tree it lives in.
+>
+> **`A5`'s LANE CLAUSE IS ALSO DISCHARGED, and the two *"today"* figures in it are the PRE-`A5` tree's.**
+> The clause required that on `WCACHE-LAST` the suite report a failure **in `src/history-pane.test.ts`**
+> and not only the two `A11` counts. Measured here after landing: `WCACHE-LAST` is **4 failed / 752**,
+> **two of them `A5`'s rows in the file that owns the property**, and in the single-file lane it is
+> **2 failed / 26** where before `A5` it was **24 passed / nothing**. *The guard stopped being an
+> accident in another file* — for that key.
+>
+> **AND THE OBLIGATION THAT REPLACES IT, because a discharged criterion is not a closed subject:** the
+> comment is true **of the tree as it stands** and goes false the moment `A1` or `A5` is deleted,
+> weakened or relocated — which is what the standing obligation under `RISK-ABC028-02` is for, and why
+> that obligation now names `:103-123`.
 
 > **SEQUENCING — THE TWO HALVES OF `A5` GO IN DIFFERENT HOPS AND THE SPLIT IS DELIBERATE.**
 > **The test half touches `src/history-pane.test.ts` ONLY** — the file `ABC-029` does **not** open —
@@ -1001,8 +1186,45 @@ edited.**
 ### `RISK-ABC028-03` — the next member of the cache class, named at the hop that added `A5` rather than discovered by the hop after it
 
 **`WCACHE-LAST2` — a pane keyed on `moves.length` plus the identities of the last TWO moves — survives
-`A5`**, because `A5`'s edit changes ply 19. **NOT MEASURED at this hop: it was derived from `A5`'s own
-fixture and is recorded as a prediction, not as a verdict.** `UNKNOWN - verify` until somebody runs it.
+`A5`**, because `A5`'s edit changes ply 19. ~~**NOT MEASURED at this hop: it was derived from `A5`'s own
+fixture and is recorded as a prediction, not as a verdict.** `UNKNOWN - verify` until somebody runs
+it.~~
+
+> ### **[STATUS RULED 2026-08-12 by BA/PM at `refinement-ABC-028-anchors` — `UNKNOWN - verify` IS
+> RETIRED. THE PREDICTION WAS MEASURED TWICE, IT WAS RIGHT, AND `A5` CLOSED IT WITH A ROW.]**
+>
+> **THE STATUS IS: MEASURED, AND CLOSED BY `A5` ROW 2 — not accepted, not latent, not `UNKNOWN`.**
+> The risk's own owner clause said *"Owner: whoever measures one"*; the `A5` build hop measured one and
+> **declined to change the status because correcting a risk is a refinement act.** That was the right
+> call about ownership, and the correction is made here. **Re-measured independently at this hop on a
+> harness built from this ticket's definitions rather than from that hop's:**
+>
+> ```
+>                                    A5 row 1     A5 row 2     owned lane      full suite
+> WCACHE-LAST2  (length + last 2)    SURVIVES     KILLS        1 failed / 26   3 failed / 752
+> ```
+>
+> **The prediction was exactly right and for exactly the stated reason** — row 1 changes ply 19, which
+> sits inside a last-two key. **Confirmed, not inherited.**
+>
+> **AND IT COST WHAT THIS RISK SAID IT WOULD COST: ONE ROW OF DATA.** *"If `WCACHE-LAST2` or any
+> successor is ever measured live, it is closed by a new ROW in `A5`'s table — not by `A6`."* It was,
+> at `preservedTail: 2`. **No new criterion, no new `it` body, no new instrument, no production line.**
+> The design property `A5` claims for itself is now **exercised rather than asserted** — which is worth
+> more than the risk it closed.
+>
+> **WHAT REPLACES IT — AND IT IS DELIBERATELY NOT `RISK-ABC028-04`.** The next rung, `WCACHE-LAST3`, is
+> **measured live and open**: no owned guard, `26 PASSED` in the owned lane, and the project's only
+> catcher is the accidental fixture sharing in `src/history-pane.nfr.test.ts`. **Minting a risk id per
+> rung is `## Test notes` 1's defect wearing a risk number** — a hole described per witness is a hole
+> re-found once per witness. **The class's home is `RISK-ABC028-02`'s closure ledger, `WCACHE-LAST3` is
+> recorded there as its deepest known live witness, and the extension mechanism is unchanged: a ROW in
+> `A5`'s table, never an `A6` and never a new risk.**
+>
+> **This ticket does NOT add that row.** All five criteria are met and green; adding a row now would
+> re-open a built ticket to close a rung whose plausibility argument below — *"each step up the axis
+> buys a strictly less plausible build"* — **still holds and applies with more force at depth three.**
+> **Owner: whoever next has cause to open `A5`'s table.** No date: latent, and recorded as latent.
 
 **It is accepted, and the reason is that it is contrived where its predecessors were natural.** `WCACHE`
 is what a careless engineer writes; `WCACHE-LEN` is what a **competent** one writes; `WCACHE-LAST` is
@@ -1091,6 +1313,27 @@ one.** No date: latent, and recorded as latent.
 > `src/history-pane.nfr.test.ts:106-112`), and `ABC-016`'s `R1`/`D27` is the precedent for what
 > happens when a repair is audited at the site it names rather than every site it points at.
 > **Owner: BA/PM, who authored the sentence. Not this hop's, and not the Engineer's.**
+>
+> > **[RULED 2026-08-12 by BA/PM at `refinement-ABC-028-anchors`. THE TRIGGER DID NOT FIRE AND THE
+> > CONSEQUENT IS OWED ANYWAY — FOR A REASON THE CONDITIONAL DID NOT ANTICIPATE.]**
+> >
+> > **The trigger is discharged, on its own terms.** This ticket WAS scheduled first: `A2`'s comment
+> > edit landed, `A5`'s comment half repaired it again, and no merged text was edited by anybody.
+> >
+> > **But the conditional's premise was that closing the gap makes the sentence TRUE. It does not —
+> > measured.** The sentence is about the class (*"freely"*, *"nothing is lost"*), and the gap is
+> > closed for four keys out of an infinite axis. **Site 3 of the three is REPAIRED and now says the
+> > opposite** (`src/history-pane.nfr.test.ts:`~~`106-112`~~**`113-123`**). **Sites 1 and 2 are still
+> > FALSE**, read at source at this hop:
+> > `plans/tickets/ABC-017-bounded-move-history-pane.md:45` and **`:941-942`**.
+> >
+> > **NOT TAKEN HERE, and the fence is the reason rather than the excuse.** `ABC-017` is `Done` and
+> > `## Out of scope`'s first bullet forbids re-opening, editing or moving it. **A hardening ticket
+> > correcting a merged ticket's text on its own authority is a bigger decision than this ticket is
+> > allowed to make** — and the exposure is materially smaller than it was, because the site a later
+> > engineer actually reads before tidying is the file comment, and that one is closed.
+> > **Owner: BA/PM, unchanged — at whatever hop is licensed to edit merged text, or a ticket cut for
+> > it. No date: latent, and recorded as latent.**
 
 ## Security / NFR triggers
 
@@ -1216,6 +1459,38 @@ one.** No date: latent, and recorded as latent.
     disjoint regions goes stale on a change that does not touch what it guards, and a stale fence is
     worse than none — it fails loudly for the wrong reason and gets quoted forward. **The line map is the
     fence.** Same defect, same hop, as `## Out of scope`'s `src/history-pane.ts` md5 pin.
+
+12. **`src/history-pane.test.ts` NOW CONTAINS TWO TICKETS' `A5`, AND THE RULING IS: ACCEPT — NO TEST
+    FILE CHANGES, NOTHING ROUTES TO THE ENGINEER.** *Added 2026-08-12 at `refinement-ABC-028-anchors`,
+    on a measurement rather than on a reading. The collision is real and was reported by no role; the
+    consequence claimed for it is not.*
+
+    `ABC-017`'s `A5` is at **`:381`** (*"the most recent 8 move numbers of the 80-ply deterministic
+    game: 33..40"*) and this ticket's is the `it.each(A5_SHAPES)("A5 — %s")` table at **`:1062`**. The
+    concern put to me was that **both emit `A5 — …` on failure, so a red would not say which ticket's
+    criterion broke.** **Measured on this tip, by forcing each one red in an out-of-tree replica and
+    reading what the runner actually printed:**
+
+    ```
+    default reporter   FAIL  src/history-pane.test.ts > ABC-017 acceptance > A5 — the most recent 8 …
+                       FAIL  src/history-pane.test.ts > ABC-028 acceptance > A5 — the last move's …
+    json reporter      ancestorTitles = ["ABC-017 acceptance"] / ["ABC-028 acceptance"]
+                       fullName       = "ABC-017 acceptance A5 — …" / "ABC-028 acceptance A5 — …"
+    ```
+
+    **The premise is FALSE on both channels this project uses.** Vitest prints the whole ancestor path,
+    the two `describe` blocks are **already ticket-qualified**, and the text after `A5 — ` is different
+    in every character. **A red says which ticket's criterion broke, twice over.** There is nothing to
+    rename, and renaming a green test to fix a problem that measurement says does not exist is `AGENTS.md`
+    rules 8 and 10 in one move. **`AR-2`'s misdiagnosis is not the precedent here** — that was an
+    assertion naming the wrong SUBSYSTEM in its own message; this is two correctly-named criteria in two
+    correctly-named `describe` blocks.
+
+    **THE RESIDUAL IS IN PROSE, NOT IN THE RUNNER, and it is real: this page says "`A5`" over fifty
+    times and two of them now mean different things.** So the rule is documentary and it is set here:
+    **whenever `src/history-pane.test.ts` is in scope, write `ABC-028 A5` or `ABC-017 A5` — never bare
+    `A5`.** Zero cost, no test touched. **If a later hop disputes this and wants the rename, the thing
+    to dispute is the measurement above, not the inconvenience.**
 
 ## Size and priority rationale
 
@@ -1427,6 +1702,78 @@ not scheduled — the next reader is reading.
   counter-argument — that `WCACHE-LAST` needs `EPIC-006`'s redo, so a reader may reasonably call `G1`
   `LOW` — **is recorded here rather than buried too.** I do not take it, for QE's own reason: **the
   hazard is not the cache, it is the sentence, and a sentence outlives a brief.**
+
+### Size and priority RE-DERIVED 2026-08-12 by BA/PM at `refinement-ABC-028-anchors` — `S` HOLDS, `P1` HOLDS, and `P1`'s ORIGINAL BASIS IS DISCHARGED FOR THE SECOND TIME AND MEASURED FOR THE FIRST
+
+**Both numbers are re-derived, not carried, and the premise this time is the one the last three
+re-derivations were arguing about: *is there anything left to build?* There is not, and that is a
+verdict on measured criteria rather than a hope.**
+
+**`S` (2) HOLDS, and this is the cheapest of the four re-derivations to defend because the work is
+DONE and can be counted instead of predicted.** What this ticket landed, end to end:
+`src/history-pane.test.ts` **+365 then +125, pure appends**; `src/history-pane.nfr.test.ts`
+**+15 / −7 then +17 / −14, comment text only, every changed line beginning `//`**. **Zero production
+lines** — `src/history-pane.ts` is `c4653c4c…` at the start of this hop and at the end of it, re-hashed
+here. **Zero new files, zero new modules, zero new dependencies; file count 26.** `ABC-024` (`S`)
+remains the closest calibration and the predicted shape and the delivered shape match item for item.
+
+**THIS HOP ADDS NO BUILD WORK AT ALL, and that is the load-bearing fact for the size.** Every item on
+it is text: six stale anchors, a discharged comment obligation, a risk status, a closure ledger, a
+naming ruling that measurement resolved to *accept*, and two live false generalisations found on this
+page. **`SPLIT_REQUIRED` does not fire** — it bites at `XL` (8); this is 2.
+
+**The honest counterweight, stated because it was live and I refused it.** `WCACHE-LAST3` is measured,
+open, and closable by **one row** in `A5`'s table — the mechanism this ticket built for exactly that
+purpose. Adding it would be `+1` row of data, well inside `S`. **I refused it anyway**, and not on
+size: the ticket is built and green with all five criteria met, its own acceptance reasoning says each
+rung up the axis buys a strictly less plausible build, and **re-opening a green ticket to chase an
+infinite axis one rung at a time is the per-witness defect `## Test notes` 1 exists to forbid** —
+committed in the extension mechanism instead of in the criterion. **If a hop ever wants that row, this
+is the note that says it was on the table, it is cheap, and it was not taken.**
+
+**`P1` HOLDS — and its ORIGINAL BASIS IS NOW GENUINELY DISCHARGED. THE LAST HOP TO SAY THAT WAS WRONG,
+SO THIS ONE SAYS IT WITH THE MEASUREMENT ATTACHED.**
+
+**The `P1` was earned by a dated trigger: a live, signed, measured-sounding invitation in a merged file
+to delete the only catcher for a wrong build.** At `refinement-ABC-028-a2` BA/PM declared that trigger
+discharged; at `refinement-ABC-028-qe-gaps` its own author measured it and struck it, because
+`:118-120` still said the rebuild *"would no longer lose a guard"*. **That has now actually happened**,
+and here is why this claim is different in kind from the one that was struck:
+
+- **The comment's text was replaced, not reinterpreted** — read at source at this hop, `:113-123` now
+  reads *"THE SHARING HERE IS STILL LOAD-BEARING"* and *"rebuilding these per test STILL LOSES A
+  GUARD"*. **A reader who acts on this comment now declines the tidy-up.** That is the hazard reversed,
+  not narrowed.
+- **Its three numbers were re-run at this hop on an independent harness** — `2 failed / 752`, `26 / 26`
+  alone, `752 / 752` rebuilt — so the warning is not merely present, it is TRUE.
+- **The last claim of discharge rested on an inference (*"`A1` landed, therefore…"*); this one rests on
+  the file's own bytes plus four re-measured builds.** The difference is `## Test notes` 4.
+
+- **Not `P0`.** Nothing is broken, re-checked here: the delivered pane is `752 / 752` on 26 files with
+  skip `0`, correct on every wrong build constructed against it, and no consumer observes any of it.
+- **The `P0` waiting behind this ticket is STILL not a reason.** `ABC-019` is `P0` and waits; this hop
+  is the last thing before a QE gate, so the pressure to smooth is at its maximum and the rule is
+  unchanged: *priority ranks the work; it does not rank the queue behind it.*
+- **On SEVERITY ALONE, a ticket cut TODAY for what remains would be `P2`** — the residual is
+  `RISK-ABC028-02`'s class hazard and the two false sentences in `ABC-017`'s merged text, both latent,
+  both without a date, exactly the shape `ABC-024` and `ABC-026` are the `P2` calibration for. **That
+  is the falsifiable half of this derivation and it is stated rather than buried.**
+- **`P1` nonetheless holds, on the same ground the `a2` hop found and for no new reason: priority ranks
+  UNSTARTED work for pull order, and this ticket is built and green.** Re-ranking a finished ticket
+  downward strands it behind unstarted work and inverts the board's pull order. **The remaining
+  transitions — one QE gate — are not priced by priority.**
+- **The falsifiable statement, re-stated so it can be disputed:** *if this ticket were ever returned to
+  `Backlog` unbuilt, it should be re-cut at `P1`, not `P2`* — because the invitation it was cut to
+  remove would be back in the tree, and this time we know it is false one rung deeper than the ticket's
+  criteria reach. **The previous hop's version of this sentence said `P2` and was struck by
+  measurement; this is the corrected version and it is offered for the same treatment.**
+
+**`N8-LANE`: this hop added no test, no file and no line to the repository, so its own delta is ZERO
+and `ADR-0008`'s protocol was not run.** `A5`'s landed delta remains **`UNKNOWN - verify`** and is owed
+at the gate. The ≤ 650 ms content allowance, the ~75 ms margin, `ADR-0008`'s ≤ 3 s wall / ≤ 13 s CPU,
+the **file count TWO** rule and the *"whichever of `ABC-028` / `ABC-029` lands second re-measures the
+TOTAL"* rule are **all unchanged and all still bind.** **No bar was re-derived and
+`plans/nfr-catalog.md` was not opened.** `ABC-026` still owns the total.
 
 ## Definition of Ready
 
@@ -1664,3 +2011,53 @@ Engineer's verdict, not on mine.
 **FRONT MATTER: NOT MOVED, and it is already correct.** It reads `status: in-development` /
 `column: In Development`, which agrees with `plans/board.md` today. **`plans/board.md` was NOT opened
 for edit at this hop** — the front matter moves when the board does, by the role that owns the board.
+
+### DoR items 3 and 4 RE-CHECKED 2026-08-12 by BA/PM at `refinement-ABC-028-anchors` — the TWO this hop touches
+
+**The Definition of Ready is a `Backlog → Ready` gate and this ticket is long past it. This is NOT a
+re-score and the 10-of-10 is not re-opened.** Two items are re-checked because this hop **discharged a
+criterion's outstanding half and ruled a risk's status**, and those are what items 3 and 4 score.
+
+**Item 4 — acceptance clear, testable and measurable: `✅` HOLDS, and for the first time it holds
+against a COMPLETE, LANDED, GREEN criterion set.** `A5`'s comment half is discharged on the comment as
+landed, with its three numbers re-run rather than transcribed; `A5`'s lane clause is discharged with
+the landed figures (`4 failed / 752` on `WCACHE-LAST`, **two kills in the file that owns the
+property**, `2 failed / 26` in the owned lane against `24 passed` before it); `RISK-ABC028-03` no
+longer carries `UNKNOWN - verify`. **Nothing was made less falsifiable at this hop and two things were
+made more so** — the closure ledger names the keys the claim is true of, and `## Out of scope`'s
+fixture fence now stands on a measurement instead of on a preference.
+
+**Item 3 — INVEST *independent*, `⚠️`: UNCHANGED IN SCORE, and BETTER in the half that was worse.**
+`A2`/`A5`'s shared-file coupling was ACTIVE at the last re-check because `ABC-029` held
+`src/history-pane.nfr.test.ts`. **That file is now written and closed for this ticket** — the comment
+half landed, and this hop wrote **nothing** under `src/` at all. The `⚠️` stays because the file is
+still shared and **a QE hop is gating it concurrently**, which is a live coupling even though no
+`ABC-028` work remains in it. **It is still the single item on this page scored by judgment rather
+than measurement, and it is still flagged so it can be disputed. It does not block.**
+
+**No other item was re-assessed, and none is claimed to have been.**
+
+### Requested board move 2026-08-12 by BA/PM at `refinement-ABC-028-anchors`: `In Development → In Review`
+
+**ALL FIVE CRITERIA ARE MET AT ZERO PRODUCTION LINES, and for the first time nothing is owed to the
+Engineer.** `A1`, `A3` and `A4` at the build hop; `A2` under the repaired wording; **`A5`'s test half
+built and green** (`ticket-to-pr-ABC-028-a5`) and **`A5`'s comment half built, green and DISCHARGED
+here** (`ticket-to-pr-ABC-028-a5-comment`). The record now matches the tree: **six stale anchors
+corrected, one risk status ruled, one comment obligation discharged, three false claims struck.**
+
+**This routes FORWARD to a single QE gate on the COMPLETE criterion set. The `In Review` exit is
+QE/E2E's and this hop does not claim it.** Verified independently at this hop rather than inherited:
+**lint 0 · typecheck 0 · 752 / 752 on 26 files · skip 0**, `src/history-pane.ts` **`c4653c4c…`
+unmoved**, production diff **zero bytes**.
+
+**What QE should be told it is gating, so the gate is not the place this is discovered:** the ticket's
+`## Test notes` 11 finding stands — **`ABC-028` was once gated on a tree two commits stale** — and this
+branch is twenty-ninth in a linear stack. **Gate the tip, not a digest.** `RISK-ABC028-01a` (accepted,
+not closable), `RISK-ABC028-01b` (open, closable, unpriced) and `RISK-ABC028-02`'s class hazard are
+**named residuals, not gaps** — the closure ledger says exactly what may and may not be claimed of each.
+
+**FRONT MATTER: NOT MOVED, and I checked rather than assumed.** It reads `status: in-development` /
+`column: In Development`; `plans/board.md` carries `ABC-028` under `## In Development (WIP 1/3)` at
+`:118` — **read at source at this hop, because the brief that sent me here got this wrong once on this
+stack.** The two records agree. **`plans/board.md` was NOT opened for edit** — the front matter moves
+when the board does, by the role that owns the board.
