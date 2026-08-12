@@ -1,8 +1,8 @@
 ---
 id: ABC-028
 title: The history pane's three unreached input classes — a length-preserving mutation, an odd slid window, and the during-render clause over the whole GameHistory graph
-status: backlog
-column: Backlog
+status: in-development
+column: In Development
 size: S
 priority: P1
 epic: EPIC-002
@@ -26,7 +26,7 @@ feature: —
 >
 > | risk | what survives, and where it came from |
 > |---|---|
-> | `RISK-ABC017-01` ⭐ | **`WCACHE-LEN`** — a cache invalidated on `moves.length` — **passes `A14` exactly** and survives 744/744. Its only catcher in the whole project is the **incidental fixture sharing** in `src/history-pane.nfr.test.ts`, which `ABC-017`'s own merged text and a signed comment at `:106-112` both declare free to remove. **QE said in words it would not carry this one.** |
+> | `RISK-ABC017-01` ⭐ | **`WCACHE-LEN`** — a cache invalidated on `moves.length` — **passes `A14` exactly**. ~~and survives 744/744~~ **CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-028-a2`, on the build hop's measurement: IT DOES NOT SURVIVE 744/744 — IT FAILS 2 OF 744**, both in `src/history-pane.nfr.test.ts` `A11`. Its only catcher in the whole project is the **incidental fixture sharing** in that file — that half was **TRUE** and is now proved **by construction** (rebuild those fixtures per test with `A1` absent and it goes to `744 passed`). **THE MECHANISM IS A `toSan` CALL COUNT, NOT A ROW COMPARISON: a cache HIT calls `toSan` ZERO times, and `A11`'s tests re-render the module-scope `AT_*` singletons, so by the fourth `it` the count assertion reads 0 where it expects 16. THAT IS WHY `A14` NEVER CAUGHT THIS BUILD** — `A14` compares ROWS across an append, and a length-keyed cache invalidates exactly on cue there. **A tidy-up to per-test fixtures would have silently removed the only guard in the project, through an instrument in a different file, by accident.** `ABC-017`'s merged text and the signed comment at `:106-112` both declared that sharing free to remove. **QE said in words it would not carry this one.** |
 > | `RISK-ABC017-02` | **`WLEAD-ODD`** — the leading-half-row correction applied at **even** ply counts only — survives 744/744. `A6`'s fourth anchor is **20 plies, EVEN**, so the black-anchored **odd** slid window is reached by nothing. |
 > | `RISK-ABC017-03` | **`WFENMID`, `WPOSMID`, `WBOARDMID`, `WMOVESWAP`** all survive 744/744. `A9`'s *"at no point DURING a render"* is closed for the **contents** of `moves` and open for `initialFen`, `position`, `position.board` and the `moves` property **binding**. |
 >
@@ -48,6 +48,28 @@ feature: —
 > explicitly and its direction of travel counted. **Board move `Backlog → Ready` is REQUESTED, not
 > taken**: `plans/board.md` was not opened for edit. **No `src/` file was written. `ABC-017`,
 > `ABC-029`, `ABC-019` and every ADR were left untouched.]**
+>
+> **[AMENDED 2026-08-12 by BA/PM at task `refinement-ABC-028-a2-2026-08-12`, subtask
+> `refinement-ABC-028-a2` (Workflow 07), after the BUILD hop.** **`A2` IS RULED: IT CONTRADICTED
+> ITSELF AND IT IS REWRITTEN.** Its literal `Given` demanded the `:113`+ fixtures be rebuilt per
+> test; its own `## Out of scope` **forbids** that rebuild, and its own `## Test notes` 6 says the
+> rebuild is **not required**. **Two of this ticket's three statements agreed and one did not — the
+> `Given` was the defect, and it is conformed to the other two rather than the other two relaxed to
+> it.** The Engineer did not fail `A2`; **`A2`-as-written could not be satisfied by any build.**
+> **Under the repaired wording `A2` is MET by work already landed and NOTHING FURTHER MUST BE
+> BUILT** — see `A2` for the ruling, the two obligations that were kept, the one that was removed
+> and why, and `RISK-ABC028-02` for the residual. **Three corrections the build hop measured are
+> written in: `WCACHE-LEN` does NOT survive 744/744 (it fails 2 of 744, and the mechanism is a
+> CALL COUNT); `RISK-ABC028-01` is widened to any buffer-level write reverted before the next
+> sampling point; the lane figures move from `748` / `1 failed, 747` to `750` / `1 failed, 749` for
+> a six-`it` ticket.** A fourth correction fell due at this hop and is made: **the shared file's
+> line map MOVED when `A2` landed** — the comment is now `:102-120` and the fixtures now begin at
+> `:121`, so every `:106-112` / `:113` reference written before the build is stale. **`S` (2) and
+> `P1` both RE-DERIVED; both hold, and `P1`'s ORIGINAL BASIS IS RECORDED AS DISCHARGED.**
+> **Requested board move `In Development → In Review`; `plans/board.md` was NOT opened for edit.**
+> **`N8-LANE`'s TOTAL was NOT re-derived here — it is `ABC-026`'s and was routed there.** No `src/`
+> file written, `plans/nfr-catalog.md` not opened, no ADR opened, `ABC-017` / `ABC-019` / `ABC-029`
+> untouched.**]**
 
 ## Problem
 
@@ -87,7 +109,15 @@ test file, no new dependency.
 
 - `src/history-pane.test.ts` — three new fixtures and their assertions (`A1`, `A3`, `A4`).
 - `src/history-pane.nfr.test.ts` — the `A2` demonstration, and whatever the `A2` result obliges the
-  fixture-sharing comment at `:106-112` to say.
+  fixture-sharing comment at ~~`:106-112`~~ **`:102-120` as it now stands** to say.
+  > **[LINE MAP CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-028-a2`, read at source.]** `A2`'s
+  > comment edit was `+15 / -7`, so **every `:106-112` and `:113` reference written before the build
+  > hop is stale by eight lines.** As landed: the comment block is **`:102-120`**, the false sentence
+  > it replaced was at `:106-112`, and the `AT_0`…`AT_2000` module-scope fixtures now begin at
+  > **`:121`** (md5 `65f4f29ac930d7a7f432e14f2eef47f9`). Historical, dated blocks elsewhere on this
+  > page keep their original numbers **on purpose** — they are records of what was read on the day,
+  > and rewriting them would falsify a dated measurement. **The live references are corrected; the
+  > dated ones are flagged.**
 
 ## Out of scope
 
@@ -126,13 +156,25 @@ constructed from its own definitions.
 > (dead on `A9`'s freeze) and naive `WCACHE` (dead in `A2`'s single-file lane, 1 of 18) — and they are
 > named as *must stay dead*, which is a different obligation from *must start dying*.
 >
-> **FLAGGED, NOT EDITED — a pre-existing tension in the header table, reported per the 12 coding
-> rules.** The header says `WCACHE-LEN` *"survives 744/744"* **and** that its only catcher is the
-> incidental fixture sharing in `src/history-pane.nfr.test.ts`; `A2` says it *"survives 18/18"* with
-> that file **not loaded**. Those two readings cannot both be literally true of the same full-suite run.
-> **This hop did not measure `WCACHE-LEN` and therefore did not touch either sentence** — `A1`/`A2` are
-> not this subtask's scope, the text is a merged-risk restatement, and guessing at it is exactly the
-> defect `## Test notes` 4 exists to prevent. **Owner: the hop that measures `A1`/`A2`.**
+> ~~**FLAGGED, NOT EDITED — a pre-existing tension in the header table, reported per the 12 coding
+> rules.**~~ **RESOLVED BY MEASUREMENT 2026-08-12 — the flag below was raised at `refinement-ABC-028-a4`
+> and is kept verbatim so the correction can be audited against what was actually predicted.** The
+> header said `WCACHE-LEN` *"survives 744/744"* **and** that its only catcher is the incidental fixture
+> sharing in `src/history-pane.nfr.test.ts`; `A2` says it *"survives 18/18"* with that file **not
+> loaded**. Those two readings cannot both be literally true of the same full-suite run. **This hop did
+> not measure `WCACHE-LEN` and therefore did not touch either sentence** — `A1`/`A2` are not this
+> subtask's scope, the text is a merged-risk restatement, and guessing at it is exactly the defect
+> `## Test notes` 4 exists to prevent. **Owner: the hop that measures `A1`/`A2`.**
+>
+> **[THE OWNER RAN. RULED 2026-08-12 by BA/PM at `refinement-ABC-028-a2` on the build hop's
+> measurement.] THE FALSE SENTENCE IS *"survives 744/744"*.** `WCACHE-LEN` **fails 2 of 744** on the
+> **unmodified** delivered tree, both in `src/history-pane.nfr.test.ts` `A11`. **The other sentence —
+> *"its only catcher is the incidental fixture sharing"* — is TRUE**, and it is now proved **by
+> construction** rather than by argument: rebuild those fixtures per test with `A1` absent and the
+> build goes from `2 failed` to **`744 passed`**. **The flag was right that both could not hold; it
+> was right about which way round only after somebody ran it, which is `## Test notes` 4 working
+> exactly as intended.** The mechanism — a `toSan` **CALL COUNT**, not a row comparison — is in the
+> header table and in `A1`, because it is the reason `A14` never caught this build.
 
 **A1 — freshness across a mutation that does NOT change `moves.length`. Given** the black-to-move
 anchor `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 27` carried to **20 plies** by the
@@ -155,21 +197,159 @@ panes 2 and 3 differ: true
 
 **Kills `WCACHE-LEN`** — a pane memoising rows per `GameHistory`, invalidated when `moves.length`
 changes. **It is the cache a competent engineer actually writes**, and it is more natural than the
-naive `WeakMap` that never invalidates. It passes `A14` exactly and survives 744/744 today.
+naive `WeakMap` that never invalidates. It passes `A14` exactly. ~~and survives 744/744 today~~
+
+> **[CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-028-a2`, on the build hop's measurement —
+> AND THIS IS THE MOST USEFUL THING THAT HOP FOUND, SO IT IS WRITTEN HERE AND NOT IN A FOOTNOTE.]**
+>
+> **`WCACHE-LEN` DOES NOT SURVIVE 744/744. IT FAILS 2 OF 744**, both in
+> `src/history-pane.nfr.test.ts` `A11` — *"calls `toSan` exactly once per RENDERED ply"* (`toSan at
+> 40: expected 16 times, got 0 times`) and *"hands `toSan` no legal move list"* (`expected "toSan" to
+> be called at least once`). Measured against the **UNMODIFIED** delivered suite.
+>
+> **THE MECHANISM IS A CALL COUNT, NOT A ROW COMPARISON — and it is the answer to the question this
+> ticket kept asking: why did `A14` never catch this build?** `A11`'s tests re-render the
+> module-scope `AT_*` singletons, so by the time its fourth `it` asserts *"`toSan` called once per
+> rendered ply"*, `AT_40` has **already been rendered by three earlier tests in the same file**. A
+> cache **HIT** calls `toSan` **zero** times, and the count assertion reads `0` where it expects
+> `16`. **`A14`, by contrast, compares ROWS across an APPEND — and a length-keyed cache invalidates
+> exactly on cue there, so `A14` is structurally incapable of failing on it.** The build was caught
+> in a **different file, by a different instrument, of a different kind, by accident.**
+>
+> **THIS IS WHY THE TIDY-UP WAS DANGEROUS AND WHY NOBODY COULD SEE IT.** A reader auditing *"is the
+> freshness guard safe if I rebuild these fixtures?"* naturally looks at the freshness tests. The
+> guard was never a freshness test. **`A1` is the first freshness guard that actually catches it**,
+> and it catches it by the row comparison at `expect(third).not.toEqual(second)` — the honest
+> instrument for the property, in the file that owns it.
 
 > **The discriminator is the SAME LENGTH, and that is the whole criterion.** An append-based freshness
 > check — which is what `A14` is — cannot fail on a length-keyed cache, because the key moves. Do not
 > weaken this to a second `playMove`.
 
-**A2 — the freshness guard does not depend on another file's fixtures. Given** the fixtures at
-`src/history-pane.nfr.test.ts:113` and following rebuilt **per test**, **when** the full suite runs
-against `WCACHE-LEN` and against the naive `WCACHE`, **then** both still **die**, and the surviving
-kills are in `src/history-pane.test.ts` — **not** in `src/history-pane.nfr.test.ts`.
+**A2 — the freshness guard does not depend on another file's fixtures.**
 
-**Equivalently and preferably, measured the way QE measured it:** running
-`npx vitest run src/history-pane.test.ts` **alone**, with `src/history-pane.nfr.test.ts` **not loaded
-at all**, `WCACHE-LEN` **fails**. Today it **survives 18/18** in that configuration while naive
-`WCACHE` fails 1 of 18.
+> **[REWRITTEN 2026-08-12 by BA/PM at task `refinement-ABC-028-a2-2026-08-12`, subtask
+> `refinement-ABC-028-a2` (Workflow 07). THE CRITERION CONTRADICTED ITSELF AND COULD NOT BE
+> SATISFIED BY ANY BUILD. THE PRIOR TEXT IS PRESERVED BELOW THE RULING SO THE REPAIR CAN BE
+> AUDITED AGAINST WHAT IT REPLACED.]**
+
+**Given** `A1` landed in `src/history-pane.test.ts`, **when** `WCACHE-LEN` and the naive `WCACHE`
+are each run in **both** of these configurations —
+
+- **(a) the single-file lane:** `npx vitest run src/history-pane.test.ts` **alone**, with
+  `src/history-pane.nfr.test.ts` **not loaded at all**;
+- **(b) the full suite in an OUT-OF-TREE replica** whose `src/history-pane.nfr.test.ts` module-scope
+  fixtures (now at `:121` and following) are rebuilt **per test** —
+
+**then** in **both** configurations **both builds die**, and **every** surviving kill is in
+`src/history-pane.test.ts` — **none** in `src/history-pane.nfr.test.ts`;
+
+**and** the comment at the trap site in `src/history-pane.nfr.test.ts` is left saying **only what is
+true of that result**, naming `src/history-pane.test.ts` as the owner of the property, so a reader
+looking for the guard finds it;
+
+**and** the measurements above are **recorded where a later reader can locate them**, because
+configuration (b) does not exist in the repository and its evidence has no other home.
+
+**Measured 2026-08-12 at the build hop, `ticket-to-pr-ABC-028-dev` — every figure RUN, none derived:**
+
+```
+configuration                                        WCACHE-LEN        WCACHE (naive)
+(a) src/history-pane.test.ts ALONE, WITH A1          1 failed / 24     2 failed / 24
+      before A1:                                     18 passed / 18    1 failed / 18
+(b) nfr fixtures REBUILT PER TEST, WITH A1           1 failed / 750    2 failed / 750
+      before A1:                                     744 passed        1 failed / 744  (A14)
+kills in (b): src/history-pane.test.ts > ABC-028 acceptance > A1  (and A14 for WCACHE)
+              NOT ONE kill is in src/history-pane.nfr.test.ts
+comment:      md5 e27a8387d589adf21ba5b5dd2244225e -> 65f4f29ac930d7a7f432e14f2eef47f9
+              one hunk, +15/-7, EVERY changed line begins `//`, no fixture line touched
+```
+
+> ### THE RULING — what was wrong, what was kept, what was removed, and what was refused
+>
+> **THE DEFECT.** `A2`'s literal `Given` was *"the fixtures at `src/history-pane.nfr.test.ts:113` and
+> following rebuilt **per test**"* — a statement about **the state of the repository**. This ticket's
+> own `## Out of scope` **forbids** that rebuild (*"`A2` establishes that it may be done; it does not
+> ask for it"*) and its own `## Test notes` 6 says it in terms (*"It does **not** require rebuilding
+> those fixtures per test"*). **No build could satisfy the `Given` and the fences at the same time.**
+> The Engineer discharged both measurement forms out of tree, wrote the comment, and declared `A2`
+> **MET IN PART** rather than rounding up. **That was the correct call and it is upheld: the Engineer
+> did not fail this criterion — the criterion could not be met as written.**
+>
+> **THE REPAIR, AND WHY IT IS NOT A SOFTENING.** Three statements in this ticket described `A2`'s
+> obligation. **Two said no rebuild is required (`## Out of scope`, `## Test notes` 6) and one said
+> the rebuild is the `Given`.** The minority statement is conformed to the majority. **The `Given`
+> was the defect, not the fences** — and the repair names the configuration the measurement always
+> had to be taken in, which is exactly what the Engineer did.
+>
+> **KEPT — every obligation the old text carried, all three:** both builds must die; every kill must
+> be in `src/history-pane.test.ts` and none in the nfr file; the comment must say only what is true
+> and must name the owning file. **Nothing was dropped to make a build pass.**
+>
+> **ADDED — four, so the direction of travel is counted rather than asserted:** (1) **both**
+> configurations are now required, where the old text offered (b) as the `Given` and (a) as an
+> *"equivalently and preferably"* aside — an *or* became an *and*; (2) *"the surviving kills"*
+> becomes ***"every** surviving kill"*, closing a reading in which one stray kill in the nfr file
+> would have passed; (3) the evidence must be **locatable**, which the old text never required and
+> which is the whole reason configuration (b)'s result was nearly homeless; (4) the stale `:113` is
+> corrected to `:121`, so the `Given` points at real lines — `## Test notes` 4's own rule, applied
+> to this page.
+>
+> **REMOVED — ONE, and it is published rather than buried:** the reading in which the repository
+> itself must be left with per-test fixtures. **It is removed because it is forbidden by this
+> ticket's own `## Out of scope`**, not because it was expensive — and the cost is on record anyway
+> (~9.3 ms per rebuild, 6.0 ms of it the 2,000-ply shuffle, buying nothing).
+>
+> **WHAT THE REPAIRED CRITERION DOES NOT CLAIM, stated plainly.** Configuration (b) is a
+> **demonstration, not a standing guard**. Nothing in the repository re-runs it. That residual is
+> named as **`RISK-ABC028-02`** below rather than left for a later hop to rediscover — the same
+> handling `RISK-ABC028-01` gets inside `A4`.
+>
+> **THE STANDING IN-TREE GUARD EXISTS AND IT IS `A1` — this is the fact that decided the ruling.**
+> `A1` is landed at `src/history-pane.test.ts:785`, runs on every `npm test`, and kills `WCACHE-LEN`
+> at `expect(third, "the third pane must not repeat the second").not.toEqual(second)`. **Its
+> independence from the nfr file is structural, not measured: `src/history-pane.test.ts` imports
+> NOTHING from `src/history-pane.nfr.test.ts`** — verified by reading its seven imports, all of them
+> production modules — **and vitest isolates per file.** The out-of-tree measurement therefore
+> **corroborates a structural fact; it does not stand in for a missing guard.** That is a materially
+> stronger position than *"we measured it once"*, and it is why the residual below is a note to the
+> next reader rather than a hole.
+>
+> **THREE CLOSURES CONSIDERED AND REFUSED, priced rather than waved away** — because *"build a
+> standing guard"* was a live option at this ruling and a later hop deserves to know it was costed:
+>
+> - **An import guard** — an `it` asserting `src/history-pane.test.ts` does not import from the nfr
+>   file. **Refused: it guards a thing that cannot happen silently.** The hazard `RISK-ABC017-01`
+>   names runs the other way (someone deletes the sharing believing nothing is lost), and an import
+>   would be a visible refactor, not a tidy-up. `AGENTS.md` rules 5 and 8.
+> - **A child-process probe** that runs `src/history-pane.test.ts` alone and asserts it green.
+>   **Refused: it guards nothing.** That lane is green with or without the property, because
+>   `WCACHE-LEN` is not in the tree. It would also cost roughly what `RF-1` costs (~102 ms) on a
+>   lane whose content total is under active dispute at `ABC-026`.
+> - **Landing `WCACHE-LEN` in-tree as a mutant fixture** so `A1`'s kill is asserted directly.
+>   **Refused here, and it is the only one of the three with real merit.** It is a mutation-testing
+>   harness — a pattern this project has never adopted, used by no criterion in `ABC-017`,
+>   `ABC-023`, `ABC-024` or this ticket, all of which build mutants out of tree. **Introducing it
+>   through the side door of one criterion, with unpriced lane cost, is a bigger decision than this
+>   ticket is allowed to make.** If a hop ever wants it, this is the note that says it was on the
+>   table and why it was not taken.
+>
+> **CONSEQUENCE FOR THE BUILD: NONE. `A2` as repaired is MET by work already landed.** Both
+> configurations were run, both verdicts hold, the comment is written and mechanically verified
+> comment-only. **This ruling routes the ticket FORWARD to QE, not back to the Engineer** — no
+> further production line, test line or measurement is owed by it.
+
+**PRIOR TEXT, preserved verbatim for audit — superseded by the ruling above, NOT deleted:**
+
+> ~~**Given** the fixtures at `src/history-pane.nfr.test.ts:113` and following rebuilt **per test**,
+> **when** the full suite runs against `WCACHE-LEN` and against the naive `WCACHE`, **then** both
+> still **die**, and the surviving kills are in `src/history-pane.test.ts` — **not** in
+> `src/history-pane.nfr.test.ts`.~~
+>
+> ~~**Equivalently and preferably, measured the way QE measured it:** running
+> `npx vitest run src/history-pane.test.ts` **alone**, with `src/history-pane.nfr.test.ts` **not
+> loaded at all**, `WCACHE-LEN` **fails**. Today it **survives 18/18** in that configuration while
+> naive `WCACHE` fails 1 of 18.~~
 
 > **This is the criterion that MAKES A MERGED SENTENCE TRUE rather than correcting it.** `ABC-017`
 > states *"`A11` can now be tidied to per-test fixtures freely and nothing is lost"* and
@@ -178,6 +358,34 @@ at all**, `WCACHE-LEN` **fails**. Today it **survives 18/18** in that configurat
 > only what is true of it — including that the property is now owned in
 > `src/history-pane.test.ts`, so a reader looking for the guard finds it. **No merged ticket text is
 > edited by this ticket.**
+>
+> **[DISCHARGED 2026-08-12 at the build hop, and it is worth recording that it worked.]** The
+> sentence was made **TRUE BY CONSTRUCTION** and no merged text was edited by anybody. **Six roles
+> read that trap and declined to act on it; the seventh edited it, sanctioned and required, and
+> touched not one fixture line.** The three-site correction the `## Dependencies` conditional held in
+> reserve **did not fall due.**
+
+### `RISK-ABC028-02` — the residual `A2` leaves, named here rather than discovered later
+
+**Configuration (b) is a demonstration and the repository does not re-run it.** If a later hop
+rebuilds the `:121`+ fixtures per test, nothing in the tree re-checks that `WCACHE-LEN` still dies —
+the evidence lives in this criterion and in the build hop's context notes, not in a test.
+
+**The exposure is small and it is bounded by construction, which is why it is a named residual and
+not a blocker.** `A1` is in a different file, imports nothing from the nfr file, and vitest isolates
+per file, so rebuilding those fixtures **cannot** reach `A1`'s verdict. Moreover, if that rebuild
+ever happens, the counterfactual **becomes** the tree and `A1` runs in it.
+
+**The real hazard runs the other way, and it is the one to watch: if `A1` is ever deleted, weakened
+or folded into `A14`, the comment at `src/history-pane.nfr.test.ts:102-120` goes FALSE again and the
+`RISK-ABC017-01` trap is RE-ARMED** — with the same call-count mechanism that hid it for six roles.
+**`## Test notes` 2 already forbids folding `A1` into `A14`**; this risk is why that note is
+load-bearing rather than stylistic.
+
+**Standing obligation:** any hop that deletes, weakens or relocates `ABC-028` `A1` **must re-read
+`src/history-pane.nfr.test.ts:102-120` and correct it in the same change**, because that comment
+asserts `A1` exists. **Owner: whoever touches `A1`.** No date — this is a latent hazard, and it is
+recorded as one rather than dressed up with a trigger it does not have.
 
 **A3 — the black-anchored slid window at ODD length. Given** the same anchor and cycle carried to
 **21 plies** (ODD), **when** the pane renders, **then** **row 1's white cell is NOT empty — it holds
@@ -288,8 +496,24 @@ because they are **the two shapes that would have made a write-trap-only instrum
 Both survive the delivered suite today.
 
 **Lane, and what "RED" means concretely:** on each wrong build the full suite reports **exactly one**
-failure and it is this criterion — `1 failed, 747 passed` against `748 passed (748)` on the delivered
-pane, `tsc` **0**, `biome` clean, **26 files**, skip **0**. **It fails ZERO pre-existing tests.**
+failure and it is this criterion — ~~`1 failed, 747 passed` against `748 passed (748)`~~ **`1 failed,
+749 passed` against `750 passed (750)`** on the delivered pane, `tsc` **0**, `biome` clean, **26
+files**, skip **0**. **It fails ZERO pre-existing tests.**
+
+> **[FIGURES CORRECTED 2026-08-12 by BA/PM at `refinement-ABC-028-a2`, on the build hop's
+> measurement.]** The old numbers were **QE's `A4`-ONLY** figures: `A4` is four `it`s, so the lane
+> read `744 + 4 = 748`. **This ticket lands `A1` and `A3` as well — SIX `it`s, not four — so the
+> lane is `744 + 6 = 750`.** Both figures were correct for what they measured; the ticket carried
+> the narrower one after its own scope had grown, which is how a stale number goes false without
+> anybody writing anything untrue. **THE SHAPE THIS CRITERION ASSERTS IS UNCHANGED AND WAS RE-RUN:
+> exactly one failure, it is this criterion, and zero pre-existing tests break — verified on all six
+> `A4` builds.**
+>
+> **TWO BUILDS DO NOT PRODUCE EXACTLY ONE FAILURE, and that is a property of the delivered tree
+> rather than of this criterion.** `WCACHE-LEN` reports **3 failed / 747** and naive `WCACHE`
+> **4 failed / 746**, because each also trips the two pre-existing `A11` `toSan` count assertions —
+> the same fact the header table's correction rules on. **Neither is an `A4` build**; both are
+> `A1`'s, and `A1` is the failure that matters on them.
 
 **Coverage this criterion gets at no extra cost, and states deliberately:** the same property covers
 `position.castling`, `position.epSquare`, `position.halfmoveClock` and **every field of every `Move`**
@@ -300,8 +524,34 @@ over the graph instead of once per node.** A per-slot restatement is what guaran
 
 **`WBOARDBLIND` SURVIVES and is accepted.** It mutates `position.board` through an `ArrayBuffer` alias
 and reverts it **with no intervening access to the graph**, so no sample falls inside the window in
-which the board differs. Measured: `clean` at all ten lengths, `748 passed (748)` on the lane — it is
-invisible to this instrument and to the delivered suite alike.
+which the board differs. Measured: `clean` at all ten lengths, ~~`748 passed (748)`~~ **`750 passed
+(750)`** on the lane — it is invisible to this instrument and to the delivered suite alike.
+
+> ### **[WIDENED 2026-08-12 by BA/PM at `refinement-ABC-028-a2` — AND THE WIDENING CAME FROM THIS RISK'S OWN STANDING OBLIGATION, WHICH IS THE POINT.]**
+>
+> **The standing re-run below ACTUALLY RAN.** The build hop changed the instrument (it samples on
+> **write** traps as well as reads, and adds a `getOwnPropertyDescriptor` trap), so the obligation
+> fired. **Verdict unchanged and re-measured: `WBOARDBLIND` still survives — `clean` at all ten
+> lengths, `750 passed (750)`.** A standing obligation that fires, runs and reports is worth more
+> than one that is merely written down, and this is the first time this one has been exercised.
+>
+> **THE HOLE IS BROADER THAN THE WORDING NAMES.** Stressing the instrument beyond this ticket's eight
+> arming slots reproduced the same silence with a **`DataView` over `board.buffer`**, mutated and
+> restored with no intervening graph access. **Same class, different mechanism.** The
+> `ArrayBuffer`-alias wording named **one witness and read as if it named the class.**
+>
+> **THE HONEST STATEMENT OF THE HOLE IS THEREFORE: *any buffer-level write reverted before the next
+> sampling point*** — not *"a `Uint8Array` alias"*, not *"an `ArrayBuffer` alias"*. `WBOARDBLIND` and
+> the `DataView` shape are **two witnesses to one class**, and any future witness of that class is
+> already inside this risk rather than a new discovery. **This is the same defect shape `## Test
+> notes` 1 names for `A9`: a hole described per node instead of over the class is a hole that gets
+> re-found once per mechanism.** Naming the class here is what stops `RISK-ABC028-03` from being a
+> `DataView` ticket.
+>
+> **What does NOT move:** the risk is still **accepted**, still **not closable by a better proxy**
+> (the three rejected closures below stand, including the one that would have reported GREEN on a
+> wrong build), and `A4`'s four clauses, eight arming slots and positive control are **unchanged**.
+> **This widens the description of a known hole; it does not admit a new one.**
 
 **It is NOT one of the five builds this criterion names.** QE built it deliberately to find the
 boundary, having already killed everything the ticket asked for.
@@ -322,10 +572,12 @@ and rejected:**
   which `## Scope` forbids.
 
 **Standing obligation:** any future change to `A4`'s instrument **re-runs `WBOARDBLIND`** and updates
-this record. If a cheap closure is ever found, this is the risk it closes. **Until then the honest
-statement of the property is *"every write that reaches the supplied graph through the reference the
-pane is given is reported, and the board's contents are sampled at every access"* — not *"nothing can
-differ"*.**
+this record. **[EXTENDED 2026-08-12 at `refinement-ABC-028-a2`: it re-runs the `DataView`-over-
+`board.buffer` witness too, because one witness of a class does not test the class** — that is what
+this hop's widening cost, and re-running only `WBOARDBLIND` would re-learn it.**]** If a cheap
+closure is ever found, this is the risk it closes. **Until then the honest statement of the property
+is *"every write that reaches the supplied graph through the reference the pane is given is reported,
+and the board's contents are sampled at every access"* — not *"nothing can differ"*.**
 
 > ***Why `Object.freeze` is NOT the instrument — CORRECTED 2026-08-12 at this hop.*** *Measured twice,
 > independently, at the cutting hop and again by QE: **`Object.freeze` throws
@@ -604,6 +856,63 @@ re-applied, not inherited:
   The trigger did not change in kind; it acquired a schedulable owner.
 - The counter-argument recorded above **stands unchanged and was not quietly dropped.**
 
+### Size and priority RE-DERIVED 2026-08-12 by BA/PM at `refinement-ABC-028-a2` — both HOLD, and `P1`'s ORIGINAL BASIS IS DISCHARGED
+
+**This is the first re-derivation taken AFTER the build**, so for the first time the numbers can be
+checked against what the work actually cost rather than against what it was predicted to cost.
+
+**`S` (2) HOLDS, and it is now the easiest of the three re-derivations to defend.** The build landed
+at **zero production lines**, in the **two files that already existed**: `src/history-pane.test.ts`
+**+365 / −0, a pure append** (the pre-existing 607 lines verified byte-identical to `HEAD`), and
+`src/history-pane.nfr.test.ts` **+15 / −7, comment-only, one hunk, every changed line beginning
+`//`**. **Zero new files, zero new modules, zero new imports, zero new dependencies; file count stays
+26; `package.json` and `package-lock.json` byte-unchanged; `src/history-pane.ts` md5
+`54fd4346dcc1a0060c4e66ae0149265d` unchanged.** The predicted shape and the delivered shape **match
+item for item.** `ABC-024` (`S`) remains the closest calibration.
+
+**And this hop's own ruling adds NO build work** — `A2` as repaired is met by what is already landed
+— so nothing in the size moves on account of it.
+
+**The honest counterweight, stated because it was genuinely live at this hop and nearly went the
+other way.** Had I ruled that `A2` needs a **standing in-tree guard** — the third refused closure, a
+mutant landed in-tree so `A1`'s kill is asserted directly — that is a **mutation-testing harness**,
+a pattern this project has never adopted, with **unpriced lane cost on a lane whose content total is
+under active dispute at `ABC-026`**. **That is an `M` at least, and it would have routed the ticket
+BACK to the Engineer rather than forward to QE.** I refused it on **value** — the property is
+guarded by `A1` and independent by construction — **not on size**, and the refusal is priced in
+`A2`'s ruling so a later hop can overturn it on the merits rather than rediscover it.
+
+**`SPLIT_REQUIRED` does not fire.** It bites at `XL` (8); this is 2. The split-value test is moot in
+the same direction it always pointed: the work is **done**, in one hop, in two files.
+
+**`P1` HOLDS AS RECORDED — and its ORIGINAL BASIS IS DISCHARGED, which is stated rather than
+glossed.** The `P1` was derived from a **dated trigger**: the comment at
+`src/history-pane.nfr.test.ts:106-112` was a live, signed, measured-sounding invitation to delete the
+sole catcher for `WCACHE-LEN`, and the next hop into that file was named and imminent. **`A2` has now
+edited that comment. The trap is defused, `A1` is landed, and the sharing genuinely is no longer
+load-bearing. The hazard this ticket's `P1` priced is GONE — because this ticket removed it.**
+
+- **Not `P0`.** Unchanged and re-checked: nothing is broken, the pane is correct on **all twelve**
+  wrong builds now constructed against it, its md5 is unchanged, and no consumer observes any of it.
+- **The `P0` waiting behind this ticket is STILL not a reason.** `ABC-019` is `P0` and `ABC-029` is
+  `P1`, and both sit behind this one. **This ticket's own prior hop ruled that queue pressure is not
+  severity** — *"Priority ranks the work; it does not rank the queue behind it"* — and that ruling
+  binds me here in the direction it inconveniences me. **I did not use it to hold `P1`.**
+- **On SEVERITY ALONE, a ticket cut TODAY for what remains would be `P2`.** The residual is
+  `RISK-ABC028-02`: a latent hazard with **no date**, of exactly the shape `ABC-024` and `ABC-026`
+  are the `P2` calibration for. **That is stated as the falsifiable half of this derivation.**
+- **`P1` nonetheless holds, because the field no longer ranks anything that is left.** Priority
+  ranks **unstarted work for pull order**, and this ticket's work is **built and green**. Re-ranking
+  a built ticket downward by what it would be worth if it had not been built would mean every
+  ticket's priority collapses at the moment it is delivered — inverting the board's pull order and
+  stranding finished work behind unstarted work. **The remaining transitions (review, gate) are not
+  priced by priority.**
+- **The falsifiable statement this leaves, which is more use than a bare "`P1` holds": if this ticket
+  were ever returned to `Backlog` unbuilt, it should be re-cut at `P2`, not `P1`** — because the
+  dated trigger that earned the `P1` would have been discharged by `A2` on the way. If a reader
+  disagrees, that is the sentence to dispute.
+- The counter-argument recorded at the cut **stands unchanged and was not quietly dropped.**
+
 ## Definition of Ready
 
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
@@ -663,7 +972,7 @@ about inputs. This is the score, and every item below was re-assessed rather tha
 | 1 | problem clear — user, pain, value | ✅ | **✅** | unchanged. Two named users (the player who takes a move back; the next engineer into the file), the pain measured on delivered code, the value stated as the two promises the pane already makes. Nothing at this hop claims anything is broken |
 | 2 | scope and out-of-scope clear | ✅ | **✅** | unchanged in content and **verified against the new `A4` rather than assumed**: the criterion lands entirely in `src/history-pane.test.ts`, adds **no file, no module, no dependency**, keeps the file count at **26**, and the *zero production lines* fence was checked against a **built** reference implementation, not against an intention |
 | 3 | INVEST-shaped | ⚠️ | **⚠️** | **THIS IS THE `⚠️`, and it is the *independent* facet ONLY.** *Valuable*, *negotiable*, *small* (`S`); *estimable* is now **stronger** (the instrument is built, run and costed rather than hypothesised); and **testable now covers all FOUR criteria, up from three of four**. *Independent* is still not clean — `A2` touches `src/history-pane.nfr.test.ts:104-112`, evidenced file-by-file in `## Dependencies`. **Unchanged in kind, better in degree.** Scored by judgment, flagged as such |
-| 4 | acceptance clear, testable + measurable | ❌ | **✅** | **CLEARED.** `A4` is written on an instrument that was **BUILT and RUN**: nine builds × ten lengths, eight per-slot arming controls, a positive control, a full-suite verdict per build (`1 failed, 747 passed` on each wrong build; `748 passed (748)` on the delivered pane), and a lane cost by `N8-LANE`'s own method with an identity null control. It names an exact fixture (`LENGTH_CASES`, `src/history-pane.test.ts:139-154`), exact expected values (`0` writes, samples `> 0`, byte-identical render), **seven** named discriminating builds with required verdicts, and the lane each must die in. **Its one boundary is named as `RISK-ABC028-01` rather than left for the fifth repair to find** |
+| 4 | acceptance clear, testable + measurable | ❌ | **✅** | **CLEARED.** `A4` is written on an instrument that was **BUILT and RUN**: nine builds × ten lengths, eight per-slot arming controls, a positive control, a full-suite verdict per build (~~`1 failed, 747 passed` on each wrong build; `748 passed (748)` on the delivered pane~~ — **QE's `A4`-ONLY figures; CORRECTED at `refinement-ABC-028-a2` to `1 failed, 749 passed` against `750 passed (750)` for this SIX-`it` ticket**), and a lane cost by `N8-LANE`'s own method with an identity null control. It names an exact fixture (`LENGTH_CASES`, `src/history-pane.test.ts:139-154`), exact expected values (`0` writes, samples `> 0`, byte-identical render), **seven** named discriminating builds with required verdicts, and the lane each must die in. **Its one boundary is named as `RISK-ABC028-01` rather than left for the fifth repair to find** |
 | 5 | dependencies known | ✅ | **✅** | unchanged, **plus** the sequencing evidence added to `## Dependencies` — criterion by criterion, with line numbers read at source. That is *more* stated, not less; the recorded order is untouched |
 | 6 | security/NFR triggers, each measurable | ✅ | **✅** | **no target, bar or level moved at this hop** and `plans/nfr-catalog.md` was **not opened**. `N8-LANE` ≤ **650 ms** content, `ADR-0008` ≤ **3 s** wall / ≤ **13 s** CPU, file count **TWO**, skip **0**, security **not pre-waived** with its firing threshold — all unchanged. `A4`'s **−21.9 ms** delta added **with its three limits attached** |
 | 7 | test notes present | ✅ | **✅** | seven → **ten**. Notes 8, 9 and 10 added: the `A9`-freeze / `A4`-view collision (**21** spurious violations), the fresh-vs-shared fixture rule for the arming controls, and the `Proxy`/TypedArray crash trap that turns *"property violated"* into *"instrument broken"* |
@@ -739,3 +1048,44 @@ ticket returns to `Backlog`.**
 and was **not opened for edit** at this hop, and a ticket header that disagrees with the board is the
 two-records-disagree defect this project keeps paying for. **The front matter moves when the board
 does, by the role that owns the board** — the same handling `ABC-029` received on 2026-08-12.
+
+### DoR item 4 RE-CHECKED 2026-08-12 by BA/PM at `refinement-ABC-028-a2` — the ONE item this hop moved
+
+**The Definition of Ready is a `Backlog → Ready` gate and this ticket is past it; this is NOT a
+re-score and the 10-of-10 above is not re-opened.** One item is re-checked because **this hop edited
+a criterion**, and a criterion edit is exactly what item 4 scores.
+
+**Item 4 — acceptance clear, testable and measurable: `✅` HOLDS, and it holds for a better reason
+than before.** `A2` previously scored `✅` on a `Given` that **no build could satisfy** — the score
+was clean because nobody had tried to discharge it. **That is the defect this ticket exists to catch,
+found in this ticket's own acceptance section, at the fifth reading, by the hop that built it.** As
+repaired, `A2` names two runnable configurations, exact expected verdicts for two named builds in
+each, an md5 for the comment half, and a home for the evidence. **It is now testable in the sense the
+DoR means: somebody can run it and get a verdict.** `A1`, `A3` and `A4` are unchanged.
+
+**Item 3 — INVEST *independent*, `⚠️`: UNCHANGED IN SCORE, IMPROVED IN FACT.** The shared-file
+concern was `A2`'s touch on `src/history-pane.nfr.test.ts`. **That touch has happened, is one
+comment-only hunk, and is verified mechanically.** The `⚠️` stays because the shared file is still
+shared with `ABC-029` — but the ordering hazard it stood for is **discharged by construction**.
+
+**No other item was re-assessed, and none is claimed to have been.**
+
+### Requested board move 2026-08-12 by BA/PM at `refinement-ABC-028-a2`: `In Development → In Review`
+
+**All four criteria are MET at zero production lines.** `A1`, `A3` and `A4` were met at the build
+hop; **`A2` is MET under the repaired wording, and the repair adds no build work.** Gates on the
+branch tip, run by the Engineer and independently verified by the Orchestrator: **lint 0, typecheck
+0, 750/750 on 26 files, skip 0**, production `src/` diff **zero bytes**, `src/history-pane.ts` md5
+`54fd4346…` unchanged.
+
+**This routes FORWARD to QE, not back to the Engineer.** The `In Review` exit is QE/E2E's and this
+hop does not claim it.
+
+**FRONT MATTER: MOVED AT THIS HOP, and the reason is a defect found rather than a rule applied.**
+This page's front matter read `status: backlog` / `column: Backlog` while `plans/board.md` has
+carried `ABC-028` under `## In Development` since the pull — **the two records disagreed, and they
+disagreed in every commit on this branch.** The build hop reported moving it, but that change was
+uncommitted in another worktree and **never landed**; it does not exist on this branch's history.
+The front matter is now **`in-development` / `In Development`, which agrees with the board TODAY** —
+it is deliberately **not** advanced to `In Review`, because **the front matter moves when the board
+does, by the role that owns the board.** `plans/board.md` was **NOT opened for edit** at this hop.
