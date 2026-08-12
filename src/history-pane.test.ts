@@ -969,4 +969,135 @@ describe("ABC-028 acceptance", () => {
 
     expect(renderHistory(watchHistory(history).view)).toEqual(renderHistory(history));
   });
+
+  /**
+   * `A5`'S TABLE — ONE ROW PER EDIT SHAPE, AND THE ROW IS THE UNIT OF EXTENSION.
+   *
+   * THE CLASS IS: ANY CACHE KEYED ON A PROPER SUBSET OF THE MOVE LIST. `WCACHE` (no key) dies at
+   * `ABC-017` `A14`; `WCACHE-LEN` (length) dies at `A1`; every deeper member dies HERE, because the
+   * only thing that changes down the family is HOW MUCH OF THE TAIL the key watches — and that is a
+   * NUMBER, so it is a column, not a criterion.
+   *
+   * `preservedTail` IS THE AXIS COORDINATE. A row takes back `preservedTail + replacement.length`
+   * plies, plays `replacement` in their place, then puts the last `preservedTail` `Move` OBJECTS back
+   * VERBATIM — so the length is unchanged by construction and the identities of the last
+   * `preservedTail` moves are unchanged by construction. That is precisely the key a cache of that
+   * depth watches, held still while the rendered game underneath it moves.
+   *
+   * CLOSING A FURTHER MEMBER OF THE CLASS IS A NEW ROW HERE, NEVER A NEW CRITERION. That is the whole
+   * design: `## Test notes` 1 records that `A9` was repaired once per node of its object graph and
+   * that a per-witness repair is what guarantees the next one. A per-witness CACHE criterion would do
+   * the same thing to this family — `A5`, then `A6`, then `A7`, one per depth. The table refuses that
+   * shape by making depth data.
+   *
+   * MEASURED ON THIS BRANCH TIP, out of tree, every cell RUN (`## Test notes` 4) — the mutants built
+   * from the ticket's own definitions, not from a harness:
+   *
+   *     build           key                          row 1        row 2      delivered pane
+   *     WCACHE-LEN      length                       KILLS        KILLS      both rows GREEN
+   *     WCACHE-LAST     length + last 1 identity     KILLS        KILLS
+   *     WCACHE-LAST2    length + last 2 identities   survives     KILLS
+   *
+   * ROW 2 IS WHY THE TABLE IS SHAPED THIS WAY, AND IT IS NOT DECORATION. `WCACHE-LAST2` is
+   * `RISK-ABC028-03`, which the ticket recorded as a PREDICTION — `UNKNOWN - verify`, "survives `A5`",
+   * nobody had run it. It was measured at this hop: the prediction HOLDS for row 1, and row 2 closes
+   * it. The closure cost one row of data and no new criterion, which is the design property being
+   * claimed here demonstrated rather than asserted.
+   *
+   * EACH ROW BUILDS ITS OWN FIXTURE (`## Test notes` 3) — `blackAnchorTo` returns a fresh history per
+   * call, and every row plays moves on its object, so a shared one would make the next row's baseline
+   * the previous row's edit. One row is one `it` and one verdict, per `## Test notes` 2.
+   *
+   * `A5` DOES NOT REPLACE `A1` AND DOES NOT CLOSE THE CLASS. `A1` is a sibling on the same axis —
+   * it pins the point where the last move's identity CHANGES, which no row here reaches — and it
+   * stays exactly where it is. And the class is infinite: a cache keyed on the last THREE identities
+   * survives both rows below. That is not a hole to be alarmed by, it is the axis being infinite;
+   * what matters is that the next member costs a row.
+   */
+  interface EditShape {
+    /** How many trailing `Move` OBJECTS go back VERBATIM — this row's coordinate on the axis. */
+    readonly preservedTail: number;
+    /** The plies played in place of those taken back, before the preserved tail goes back on. */
+    readonly replacement: readonly (readonly [from: string, to: string])[];
+    /** The rows that MUST move, `[index, before, after]`, MEASURED on the delivered pane. */
+    readonly changes: readonly (readonly [index: number, before: string, after: string])[];
+  }
+
+  const A5_SHAPES: readonly (readonly [name: string, shape: EditShape])[] = [
+    [
+      "the last move's identity is preserved and ply 19 changes — kills WCACHE-LAST",
+      {
+        preservedTail: 1,
+        // Take back plies 19 and 20; play a DIFFERENT ply 19 (`Ne4` for `Nb1`); replay the saved
+        // ply 20 (`Nb8-c6`), still legal because the edit never touched Black's knight.
+        replacement: [["c3", "e4"]],
+        changes: [[7, "37. Nb1 Nc6", "37. Ne4 Nc6"]],
+      },
+    ],
+    [
+      "the last TWO moves' identities are preserved and plies 16 and 18 change — kills WCACHE-LAST2",
+      {
+        preservedTail: 2,
+        // The knight cycle forbids the obvious shape: ply 20 is `Nb8-c6`, so ply 18 MUST leave the
+        // knight on b8, and only the original `Nc6-b8` does that. The edit therefore goes deeper and
+        // moves two PAWNS instead, leaving both knights where the preserved tail needs them. Ply 17
+        // is rebuilt as a FRESH object — outside the preserved tail, so its identity is free to move.
+        replacement: [
+          ["a7", "a6"],
+          ["b1", "c3"],
+          ["h7", "h6"],
+        ],
+        // THE LAST ROW IS IDENTICAL ACROSS BOTH RENDERS HERE — `37. Nb1 Nc6` either way, because the
+        // preserved tail IS the last row. The discriminator has moved UP the pane, which is exactly
+        // what a deeper key does, and it is why the criterion asserts the whole pane rather than the
+        // last row: an `A5` written against `A1`'s last-row clause could not have caught this build.
+        changes: [
+          [5, "35. Nb1 Nc6", "35. Nb1 a6"],
+          [6, "36. Nc3 Nb8", "36. Nc3 h6"],
+        ],
+      },
+    ],
+  ];
+
+  it.each(A5_SHAPES)("A5 — %s", (_name, shape) => {
+    const history = blackAnchorTo(21);
+    const kept = history.moves.slice(history.moves.length - shape.preservedTail);
+
+    const first = renderHistory(history);
+
+    takeBack(history, shape.preservedTail + shape.replacement.length);
+    for (const [from, to] of shape.replacement) play(history, from, to);
+    for (const move of kept) playMove(history, move);
+
+    const second = renderHistory(history);
+
+    // THE ROW IS ARMED — asserted FIRST, and for `A4`'s reason rather than for tidiness. These two
+    // clauses are what make this edit a member of the class at all: the length did not move, and the
+    // tail the build keys on went back BY IDENTITY. If a future row's `replacement` ever failed to
+    // restore that tail, the edit would silently degenerate into `A1`'s shape — and asserted last,
+    // that would report as "the pane did not notice" when the truth is "the fixture is broken". That
+    // is the `## Test notes` 10 inversion, and the file has paid for it once already.
+    //
+    // THEY CANNOT MASK THE DISCRIMINATOR, and that is measured rather than assumed: `moves` is the
+    // CALLER's state and no build in the table touches it, so both clauses read identically on the
+    // delivered pane and on all three mutants — checked on each.
+    expect(history.moves, "the length is unchanged across the edit").toHaveLength(21);
+    for (const [index, move] of kept.entries()) {
+      expect(
+        history.moves[history.moves.length - kept.length + index],
+        `the last ${kept.length} move object(s) go back VERBATIM — ${index + 1}`,
+      ).toBe(move);
+    }
+
+    // THE CRITERION, and it is asserted over the WHOLE pane. Same object, same length, the tail this
+    // shape's build keys on held still — so a pane memoising rows per `GameHistory` and invalidating
+    // on that tail shows the player a game they have already edited away.
+    expect(second, "the second pane must not repeat the first").not.toEqual(first);
+
+    // The content of the change, MEASURED on the delivered pane at this hop and never predicted.
+    for (const [index, before, after] of shape.changes) {
+      expect(normalised(first[index] as string), `row ${index + 1}, first render`).toBe(before);
+      expect(normalised(second[index] as string), `row ${index + 1}, second render`).toBe(after);
+    }
+  });
 });
