@@ -25,7 +25,7 @@ supersedes:
 | `plans/traceability.md` | `ABC-021`'s row + one `_Updated:` line | the QE result, the two rows added, the gaps, and the two numbers `:2` got wrong |
 | `plans/tickets/ABC-021-…md` | one block | the gate record and the gaps, where BA/PM will look for them |
 
-Plus this task's six context notes and the queue records under
+Plus this task's SEVEN context notes and the queue records under
 `.grugops/queue/{claimed,done}/quality-gate-ABC-021/`.
 
 **Files this hop did NOT write, asserted rather than assumed:** `src/turn-loop.ts` md5
@@ -48,7 +48,7 @@ they add nothing to the lane `ABC-026` measures and there is no repo file to for
 
 **Assertion that they are gone from the tree:** `git status --short` in the worktree lists no
 untracked file under `src/`, `plans/` or the repo root; the only paths this hop leaves behind are
-the three files in the table above, the six notes, and the queue records. `node_modules` was a
+the three files in the table above, the seven notes, and the queue records. `node_modules` was a
 symlink to `../cli-chess-example/node_modules` for the duration and **was removed before the hop
 closed** — asserted, not assumed.
 
