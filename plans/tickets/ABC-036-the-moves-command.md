@@ -127,9 +127,18 @@ shape `EPIC-002` `[A1]`/`2c` flagged for a human and shipped anyway.
 - **`ABC-035` must land first — OPEN.** The command table is that ticket's.
 - **`ABC-032` must land first — OPEN.** `toSan` is merged, but the `legal`-supplied call path this
   ticket's `A4` depends on is the one `ADR-0004` clause 2 specifies for both directions.
-- **A named human on the reduced promise — OPEN, and NON-BLOCKING.** Same posture `EPIC-002` `[A1]`
-  carries: the amended criterion is testable either way, so the work is not held. If the human chooses
-  the pager, this ticket is re-cut at `M` or `L` and the criteria above are replaced.
+- ~~**A named human on the reduced promise — OPEN, and NON-BLOCKING.**~~ **CLOSED 2026-08-13: the
+  reduced promise is ACCEPTED and the pager is REFUSED.** Ruled by the Orchestrator under the owner's
+  in-session delegation (*"Decide on 2, 3 and 4 based on your best recommendations"*); the ruling, its
+  three limits and its explicit not-precedent status are in `memory-bank/60-progress.md` § "Standing
+  rulings taken under delegation, 2026-08-13", item 3, and the epic-level amendment it authorises is in
+  `plans/epics/EPIC-003-move-input-and-controls.md` § Acceptance. **The count clause binds exactly; the
+  list clause is reduced to a partial list plus the exact total and the `+N` marker.** The pager was
+  refused as unrequested scope (coding rules 5 and 7), and the reversal is named rather than closed off:
+  if play-testing under `EPIC-006` shows the truncation is a real barrier, the pager is the change to
+  make and this ticket is re-cut at `M` or `L`. **The DoR score below is NOT re-scored here — that is
+  BA/PM's at pull time.** The Orchestrator ruled the blocker, not the checklist; re-scoring another
+  role's ⚠️ is precisely how a recorded gap gets smoothed away.
 - **`EPIC-006` supplies the runtime frame width** (the render-seam closure, `ADR-0009` clause 9b), which
   is why `A3`'s `N > 0` is asserted against the delivered panels rather than against a number typed
   here.

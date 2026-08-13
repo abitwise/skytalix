@@ -140,6 +140,25 @@ result screen (`EPIC-006`). Cut this at decomposition; it is not a separate epic
 - **Given** the `moves` command, **when** it is run, **then** every legal move in the
   position is listed in SAN and the count matches EPIC-001's generator exactly.
 
+**[AMENDED 2026-08-13 by the Orchestrator under the owner's in-session delegation — the ruling and
+its limits are in `memory-bank/60-progress.md` § "Standing rulings taken under delegation,
+2026-08-13", item 3. That section is the authority; this is the amendment it authorises.]** The
+criterion above promises more than the merged frame can deliver, and `ABC-036` refused to smooth it:
+`MESSAGE_ROWS` is **2** (`src/frame.ts:45`) against a region bounded to ~21 chars, so at the start
+position **~9 of 20 legal moves show and `+11` hides**. The criterion now reads, in two halves:
+
+- **The count clause is UNCHANGED and binds exactly** — the total stated must equal `EPIC-001`'s
+  generator for the position, zero tolerance. This is the half that carries the chess correctness,
+  and it is fully testable today.
+- **The list clause is REDUCED** — a partial list plus that exact total and the frame's existing
+  `+N` marker, rather than every move. A pager was considered and **refused as unrequested scope**
+  (coding rules 5 and 7): new interaction surface bought to satisfy a sentence, before any human has
+  run this program once.
+
+**This is a reduced user-facing promise, recorded as one rather than absorbed.** It is reversible and
+the reversal is named: if play-testing under `EPIC-006` shows the truncation is a real barrier, the
+pager is the change to make — the same moment `ABC-038`'s escalation trigger fires.
+
 ## Dependencies
 
 - `EPIC-001` — the legal move list is the parser's source of truth.

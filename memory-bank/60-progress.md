@@ -162,6 +162,65 @@ to it's rules."*
 This is standing, not a one-off. It re-sequenced the board on 2026-07-31 and it outranks the
 latent/live test this project otherwise uses for priority. Rules-correctness beats features.
 
+**READ 2026-08-13 by the Orchestrator, under a delegation quoted below — the directive is NOT
+revoked and NOT weakened. Its PRECONDITION is now MET, which is a different thing.** The delivery
+audit (`audit-delivery`, `3215004`) declined to assume this directive a thirteenth day without
+asking, and the owner answered by delegating the call. The ruling: *rules-correctness beats
+features* **still binds every feature** — no feature may ship a rules shortcut, and the generator
+remains the source of truth for every parser, command and renderer (`ABC-031`, `ABC-034`, `ABC-036`
+all resolve against `legalMoves` for exactly this reason). **What it no longer does is justify
+deferring the entry point.** Its own precondition is discharged, measured not assumed: `EPIC-001` is
+`Done`, deep perft is 32/32, 807/807 green on 28 files, and three real defects that escaped the
+2026-07-24 merges were caught by the chain with nothing escaping since 2026-08-04. A directive that
+says *legality first* is satisfied when legality is first and done; it does not also say *and
+nothing may be run*. **`EPIC-006` at `P1` and a thin "it runs" slice are therefore CONSISTENT with
+this directive, not an exception to it.** If the owner disagrees, this paragraph is the thing to
+strike — the directive above it is untouched and stands as written.
+
+## Standing rulings taken under delegation, 2026-08-13. **NOT precedent.**
+
+**Project owner Olger Oeselg, 2026-08-13, in session, quoted verbatim:** *"commit and merge. Decide
+on 2, 3 and 4 based on your best recommendations."* — where 2, 3 and 4 were the three items the
+Orchestrator had escalated as needing a named human. Three limits did not move: the delegation is
+**this hop's three items only**, it is the owner's and **revocable**, and — following `ADR-0004`'s
+Status section, which records its own by-delegation ratification as explicitly not precedent —
+**this delegation extends nothing and is not citable as authority for the next one.** An agent
+holding a general "use your judgement" does not thereby hold every judgement.
+
+1. **The legality-first directive** — ruled in the amendment immediately above.
+
+2. **`H2`, the test-integrity registry — RULED: THE ORCHESTRATOR DECLINES TO CREATE IT, and the
+   delegation does not reach it.** This was the one item where the recommendation reversed on
+   verification. `.grugops/test-skips.md` is four lines of markdown and the Factory Coach proved the
+   tool works (header-only registry outside the repo, `--skip-count 0` → `No findings.`, exit `0`),
+   so writing it was trivial and tempting. **The kit forbids it in three separate places, verified at
+   source, not taken on report:** `05-pr-quality-gate.md` step 3 (*"This step is always human-only (a
+   human owns `.grugops/test-skips.md`): the agent may not self-author a justification to clear its
+   own gate"*), step 4 (*"do not retry, do not edit the baseline, do not write into the skip
+   registry"*), and `config/factory.config.md`'s `test_integrity` dial (*"never `off`"* — the TINT-03
+   carve-out). An empty registry authorises no skip and would have been defensible on its own terms;
+   creating the control surface that governs whether an agent may excuse its own failing tests, on a
+   general delegation rather than an explicit instruction, is not. **Nothing is being hidden
+   meanwhile:** the skip count is `0`, measured on every gate this week, and the workflow already
+   records exit `2` honestly as *could not run*, never as a pass. **Owner: a named human. Action: create
+   `.grugops/test-skips.md` containing the six-column header row (`Test ID | Reason | Owner |
+   Ticket/REQ | Expiry | Category`) and nothing else, then wire
+   `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` into the gate.
+   Cost: minutes.** Recorded so the next hop does not re-derive it.
+
+3. **`ABC-036`'s reduced user-facing promise — RULED: ACCEPT the amendment, REJECT the pager.**
+   `EPIC-003` acceptance #4 promises every legal move is listed; the merged frame cannot deliver it
+   (`MESSAGE_ROWS` is `2` at `src/frame.ts:45`, region bounded to ~21 chars, so ~9 of 20 show at the
+   start position with `+11` hidden). The **count** clause is kept exactly and is the testable half —
+   it must equal `EPIC-001`'s generator with zero tolerance. The **list** clause is amended to *a
+   partial list plus the exact total and a `+N` marker*. A pager is refused as unrequested scope
+   (coding rules 5 and 7) — it is new interaction surface bought to satisfy a sentence, before any
+   human has ever run this program. **This is reversible and the reversal is named:** if play-testing
+   under `EPIC-006` shows the truncation is a real barrier, the pager is the change to make, and
+   `ABC-038`'s identical escalation trigger (*no play-testing has happened because there is nothing
+   runnable to test*) fires at the same moment. **The DoR re-score stays BA/PM's** — the Orchestrator
+   ruled the blocker, not the score; re-scoring another role's checklist is how a ⚠️ gets smoothed.
+
 ## Standing directive — who decides. **This supersedes "no agent may ratify an ADR".**
 
 **Project owner Olger Oeselg, 2026-08-03**, quoted verbatim:
