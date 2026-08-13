@@ -1055,3 +1055,81 @@ absolute ceiling from CPU = 0.852 + 0.1593K     76 files total (zero content; un
 **4. `ADR-0008`'s `pool: "threads"` SCREEN IS STALE AND UNDER-SPECIFIES — this is the one actionable item.** Decision 8 requires *"≥ 20 consecutive green runs including **all four** `*.nfr.test.ts` files"*. **There are now SEVEN**: `gameend`, `glyph-mode`, `history-pane`, `san`, `status-panel`, `turn-loop`, `zobrist`. **The count was CORRECT when `ADR-0008` was written and the drift is dated precisely** — at 2026-08-10 the four were `gameend` (added 08-01), `zobrist` (08-03), `glyph-mode` (08-08) and `san` (08-10); **`history-pane`, `status-panel` and `turn-loop` all landed on 2026-08-11**, after that sentence was written and on the day it was ratified. Those three were not in the screen's contemplation, and `ABC-025`-era evidence showed spied call-count guards are **exactly** the files that break under a changed isolation model. **Whoever runs that screen must read it as "every `*.nfr.test.ts` file", not "the four".** The ADR's *ruling* is untouched and correct; its *census* went stale the same way `00-index.md`'s ADR count did. **No ADR text was edited by this audit and `ADR-0008` is not re-opened.**
 
 **5. `pool: "threads"` is still the right lever and is still NOT adopted here.** It is the only measured saving that does not touch a guard: **−13.97% wall / −10.78% CPU** for a two-line config change, against `--no-isolate`'s larger −30–36% CPU which is **unavailable** because it disarms the spied call-count guards this catalog reached for three times. Threads buys roughly **0.8 s of CPU ≈ 5 more test files** — real, and **not** a substitute for the per-file cost being the structural driver. **Owner remains Architect/Design and the deciding hop remains `ABC-026`'s**, exactly as Decision 8 states. **Nothing is adopted, screened or reversed at this audit.**
+
+### `NFR-008` IS MEASURED — 2026-08-13 by Architect/Design (task `abc026-2026-08-13`, subtask `ABC-026-lane-budget`, Workflow 04). **BOTH CLAUSES MET. `H5` IS DISCHARGED.** **NO TARGET, BAR, LEVEL, MEASURED FIGURE OR `UNKNOWN - verify` MARKER MOVED ANYWHERE IN THIS FILE** — all eight rows `NFR-001`–`NFR-008` verified byte-identical by hashing the matched row lines together before and after the write (`sha256 63f66795…ca31`, unchanged from the `ABC-029` hop) and by hashing each row individually; 46 table lines before and after. **The 3 s / 13 s level is Olger Oeselg's, ratified in person 2026-08-11, and this hop measures AGAINST it rather than touching it.**
+
+**This is the reading `H5` has been owed across two merges.** Two prior hops declined it because a live QE hop shared the same cores; the audit hops that did approach it were explicit that they had not discharged it. **Everything below is a median of ≥ 7 interleaved runs to this row's own protocol** — `npm test`, `PERFT_DEEP` unset, one fresh OS process per run, condition order rotated every round, round 0 discarded as warm-up, **every run asserting its own test-file count AND its own test count** (a run whose tree state is not what its label claims is a harness error and never a datum). **135 recorded runs, 0 harness errors.** Measured at `main` = **`06c5427`**, `src/` = **28 test files / 807 tests**.
+
+**1. THE LANE TOTAL, TWO INDEPENDENT SAMPLES, AND BOTH CLAUSES ARE MET.**
+
+```
+n = 8 usable rounds per condition per sample, interleaved                    WALL           CPU (user+sys)
+sample A  (in-worktree, loaded: 1-min loadavg median 9.83 on 8 cores)     2.210 s        10.390 s
+            spread                                                    1.880-2.970    10.070-11.590
+sample B  (in-worktree, quieter: loadavg median 7.65)                    1.845 s         9.975 s
+            spread                                                    1.770-2.050     9.660-10.340
+sample C  (out-of-tree copy, cmp-verified byte-identical per file)       1.935 s        10.315 s
+
+NFR-008 wall <= 3 s    ->  MET on every sample.  Worst median 2.210 s = 73.7% of the clause.
+NFR-008 CPU  <= 13 s   ->  MET on every sample.  Worst median 10.390 s = 79.9% of the clause.
+```
+
+**Stated honestly rather than flattered: individual RUNS touched 2.97 s and 3.02 s under concurrent load.** The clause binds the **median**, and the median is MET with margin on all three samples — but the lane is close enough to 3 s that a single loaded run can reach it, and **a single run was never a reading of this row.**
+
+**2. THE CPU CLAUSE BINDS FIRST. The architecture audit's RULING is confirmed; its NUMBER is not.** That audit inferred **~8.6 s CPU** (band 8.24–9.01) by arithmetic on a 22-file / 7.640 s figure and labelled the inference as an inference. **Measured: 9.975–10.390 s — the inference was 14–17% LOW.** The gap is not added test content (the +131 tests since are worth only 46–56 ms at this section's own 0.35–0.43 ms per test); it is that the 22-file baseline it extrapolated from was a *different session*, which is this section's own ±22% fence doing exactly what it warns about. **The audit's qualitative call — CPU binds, not wall — is CONFIRMED, and by a second route it did not have:** on this hop's own identity null control the **wall** clock's null reads **+3.88% (sign 6/8)**, which is LARGER than its signal for two added files (**+1.81%, sign 5/8**), while **CPU**'s null reads **+0.48% (sign 5/8)** against a two-file signal of **+3.49% (sign 7/8)**. **The wall clock cannot see two added test files; CPU can. That is measured here, not inherited.**
+
+**3. The delivery audit's reading is NOT refuted — it was consistent all along, and it was right to refuse to call itself a discharge.** Its **1.98 s wall / 9.51 s CPU** sits 4.5% below this hop's quieter CPU median and between its wall medians — well inside this section's ±22% session fence. Its own stated reasons for not discharging `H5` (runs sequential rather than interleaved) were correct and are what this hop supplies. **So the two prior readings never disagreed about the LANE. They disagreed about the HEADROOM, and the disagreement is entirely explained by the architecture audit having INFERRED its CPU total instead of measuring it.**
+
+**4. THE PER-FILE FLOOR, RE-DERIVED ON THE REAL 28-FILE LANE RATHER THAN INHERITED.** Out-of-tree copies, every copied repository file `cmp`-verified byte-identical per file (250 file copies, 0 mismatches), `K` trivial one-assertion test files importing nothing from the repository, plus a second byte-identical copy as the **identity null control**:
+
+```
+files    28 (control)   30 (+2)    32 (+4)    36 (+8)        null control (28, identical copy)
+CPU      10.315 s      10.685 s   11.025 s   11.590 s        +0.48% CPU, sign 5/8  ADMISSIBLE
+paired delta vs 28        +0.360     +0.615     +1.320  s
+sign                         7/8        8/8        8/8
+marginal CPU per file     180 ms     154 ms     165 ms
+marginal WALL per file     18 ms      34 ms       40 ms   <- and the WALL null is +75 ms, i.e.
+                                                             larger than the +2-file signal
+
+fit over files = 28..36:   CPU = 5.920 s + 158.2 ms x files    R^2 0.9954
+```
+
+**THE PUBLISHED SLOPE IS RE-DERIVED, NOT INHERITED: 158.2 ms/file against the recorded 159 ms/file — agreement within 0.5%, from an independent harness on a lane six files larger.** **Use 160 ms; this hop's own band is 154–180 ms**, which sits inside the recorded 100–229 ms. **The INTERCEPTS are not comparable and must not be quoted against each other:** the recorded `0.85 s` is an EMPTY-tree intercept fitted over `K` = 1…128 trivial files, while `5.920 s` is this lane's content-loaded intercept fitted over a narrow 28…36 window. **Extrapolating 5.920 s to K = 0 is not valid and is not done here.**
+
+**5. THE HEADROOM, IN THE UNIT A TICKET AUTHOR SPENDS — TEST FILES, WITH THE ARITHMETIC SHOWN.** Computed on the **conservative** (highest) measured CPU median, sample A:
+
+```
+remaining CPU under the 13 s clause     13 - 10.390 = 2.610 s     (sample B: 13 - 9.975 = 3.025 s)
+
+files if each added file were EMPTY     2.610 / 0.1582 = 16.5  ->  ~16 files   band 14-19
+  (floor only, at the re-derived slope)   band: 2.610/0.185 = 14.1 ; 3.025/0.159 = 19.0
+
+files at TODAY's ALL-IN cost per file   10.390 / 28 = 371 ms per file
+  (floor + the content a real file adds) 2.610 / 0.371 =  7.0  ->  ~7 files    band 7-8
+
+tickets at N8-LANE's full 650 ms         2.610 / 0.650 =  4.0  ->  ~4 tickets  before the floor
+  content each                                                       those files also cost
+```
+
+**USE ~7 AS THE PLANNING NUMBER AND ~16 AS THE CEILING.** **This roughly HALVES the audit's ~14 planning / ~27 ceiling, and the correction is entirely the measured-vs-inferred CPU total in item 2 — not a change of method.** `EPIC-003` alone was decomposed into eight tickets implying **7–8 new test files**. **At today's all-in cost that is the whole planning number.** This is `ADR-0008`'s *"tight, not comfortable"* holding, and it is tighter than the last restatement of it.
+
+**6. A CONCURRENT LANE IS LIVE AND THE RESTATEMENT RULE IS ARITHMETIC, NOT A RE-MEASUREMENT.** `ABC-021` is building in a separate worktree and carried **28 test files — no new file yet** — when this was measured. **If it (or any ticket) merges a test file first, do NOT re-measure: restate by arithmetic from the per-file cost above** — subtract **160 ms CPU** (band 154–180) per added file from the remaining 2.610 s, and subtract **one** from the file counts in item 5. The reading is anchored to `06c5427`; that is why the commit is recorded.
+
+**7. WHAT WAS RUNNING WHILE THIS WAS MEASURED — part of the measurement, not a footnote.** Two other agents were live on this machine throughout (one `ABC-021` build in a sibling worktree, one markdown-only refinement cut), plus Chrome, Docker Desktop and VS Code. **98 of the 135 runs began at a 1-min load average above the machine's 8 cores** (min 3.23, median 10.56, max 35.90). **A sibling worktree's vitest was directly observed in exactly 2 of 135 runs** — `npm exec vitest run src/turn-loop.test.ts src/turn-loop.nfr.test.ts`, i.e. `ABC-021`'s own lane. **Both fell in the `pool: "threads"` slope sweep: one was the discarded warm-up round, and the other landed at the TOP of its condition's range and does not move that condition's median of 8.** **Neither of the two lane-total samples (A and B) nor the per-file floor sweep observed a sibling vitest at all.** The honest reading: **this is a LOADED measurement, the load pushes the absolutes UP, and both clauses are MET anyway** — so the contention makes this reading conservative rather than flattering.
+
+**8. `pool: "threads"` IS ADOPTED, AND THE SCREEN WAS RUN AGAINST SEVEN FILES, NOT FOUR.** See `ADR-0008`'s 2026-08-13 addendum for the ruling and the reasoning; the delivered file is `vitest.config.ts`, which did not exist before this hop. Measured here, paired and interleaved in the same rounds as the totals above:
+
+```
+                        CPU delta        sign     WALL delta        sign
+sample A            -0.800 s  -7.70%     0/8    -0.510 s -23.08%    0/8
+sample B            -0.730 s  -7.32%     0/8    -0.260 s -14.09%    0/8
+recorded 2026-08-10           -10.78%     0/8            -13.97%    0/8
+
+per-file CPU SLOPE  forks 158.2 ms/file  ->  threads 138.9 ms/file   = -12.2%   R^2 0.9988
+```
+
+**The recorded −13.97% wall replicates almost exactly in the quieter sample; the recorded −10.78% CPU does NOT — this hop reads −7.3% / −7.7%, and that is reported rather than smoothed.** **The audit's characterisation *"a one-time discount, not a change in the slope"* is REFUTED: the slope falls 12.2%.** It is nonetheless a *modest* structural change — the per-file floor is still ~139 ms — so the audit's conclusion that threads is **not a substitute for the per-file cost being the driver** stands. **Headroom after adoption: `13 − 9.545 = 3.455 s`; `3.455 / 0.1389 = ~25` empty files, `3.455 / 0.341 = ~10` files at the all-in mix — i.e. the planning number moves from ~7 to ~10, and the ceiling from ~16 to ~25.**
+
+**9. Creating `vitest.config.ts` was PRICED, because creating a file the runner reads is a real decision.** A config file containing `defineConfig({})` and nothing functional was run as its own condition in the same interleaved harness: **+0.24% CPU (sign 6/8) / −0.45% wall (sign 2/8)** in sample A and **+0.30% CPU (sign 5/8) / 0.00% wall (sign 3/8)** in sample B. **Both sit inside this row's own ≤ 1.5% null band with the sign at chance, so the file's mere existence costs measurably nothing.** **This also settles what would have happened had `A4` REFUSED: `A5` still owes the file, and it can be created at zero measured cost.**
+
+**10. What this reading does NOT establish.** **Not a figure for any other machine or core count** — Apple M3 (Mac15,13) / 8 logical cores / Darwin 25.5.0 arm64 / Node v24.12.0 / npm 11.7.0 / vitest 3.2.7; **`UNKNOWN - verify` elsewhere.** **`node_modules` was SYMLINKED from the sibling `cli-chess-example` worktree** — the named environment in this row assumes an installed tree, and a symlink is a deviation from it; it is the same deviation the delivery audit recorded, it affects module *resolution* rather than execution, and it is disclosed rather than buried. **Not a re-measurement of `NFR-001`–`NFR-007`** — none was touched and no target moved. **Not a verdict on any test, file or coverage decision** — nothing was examined for deletion, and `src/` is byte-identical. **Not a proof that `pool: "threads"` cannot flake** — 24 of 24 green bounds the failure rate at roughly **12.5%** by the rule of three, **not at zero**, which is why the rollback is written into `vitest.config.ts` itself.

@@ -195,3 +195,112 @@ Cheap and complete at every level, and nothing downstream has been built on it y
   the position `ABC-025`'s gate left it in, with the measurements still on record.
 - **Decisions 7 and 8 have nothing to roll back** — isolation was retained (the status quo) and
   `pool: "threads"` was not adopted.
+
+## ADDENDUM 2026-08-13 — Decision 8 is DISCHARGED (`pool: "threads"` ADOPTED), and the budget is MEASURED for the first time
+
+Architect/Design, task `abc026-2026-08-13`, subtask `ABC-026-lane-budget`, Workflow 04, at
+`main` = `06c5427`. **Nothing above is edited.** The Status stays `accepted`; **the 3 s wall /
+13 s CPU level is Olger Oeselg's, ratified in person 2026-08-11, and this hop measures against it
+rather than touching it.** Decisions 1–7 stand unchanged and unre-opened. What follows discharges
+Decision 8, which this ADR explicitly handed to *"`ABC-026`'s development hop"* with owner
+Architect/Design.
+
+### The budget is MET, and `H5` is discharged
+
+**`NFR-008` measured to its own protocol — medians of ≥ 7 interleaved runs, `PERFT_DEEP` unset, one
+fresh OS process per run, every run asserting its own file and test counts. 135 runs, 0 harness
+errors, 28 test files / 807 tests.** Two independent in-worktree samples plus one out-of-tree
+replicate: **wall 1.845 / 1.935 / 2.210 s against ≤ 3 s — MET. CPU 9.975 / 10.315 / 10.390 s against
+≤ 13 s — MET.** Full figures, spreads, controls and the disclosed deviations are in
+`plans/nfr-catalog.md`'s `NFR-008` section; they are not restated here.
+
+**The Consequences section above says today's lane is "1.765 s wall / 7.640 s CPU — 59% of the wall
+clause". That was true of a 22-file lane on 2026-08-10 and it is now stale by six files and one
+session.** The lane is at **74% of the wall clause and 80% of the CPU clause**, and **the CPU clause
+is the binding one** — measured, and for the reason this ADR already gave in Decision 3: the wall
+clock cannot resolve a per-file delta. **The paragraph above is left standing rather than rewritten,
+per this board's convention; this is its current status.** The practical consequence is that
+*"tight, not comfortable"* is now tighter: **~7 more test files at today's all-in cost, ~16 if every
+one were empty**, against `EPIC-003`'s eight tickets implying 7–8 files.
+
+### Decision 8, discharged: `pool: "threads"` is **ADOPTED**
+
+**The required screen is SATISFIED, and it was run against SEVEN files, not four.** Decision 8 says
+*"all four `*.nfr.test.ts` files"*; four was the correct census when this ADR was written on
+2026-08-10, and `history-pane`, `status-panel` and `turn-loop` landed on 2026-08-11 — the day it was
+ratified. The 2026-08-12 architecture audit flagged the drift and did not edit this ADR. **This hop
+read the census from disk (seven) and screened against all seven.** Decision 8's sentence is left
+standing; **read it as "every `*.nfr.test.ts` file".**
+
+```
+screen result   24 CONSECUTIVE green runs, no red at any point
+                807/807 tests on 28 files in every run, each run's counts recorded
+                all SEVEN *.nfr.test.ts files passed in every one of the 24
+saving          -7.32% / -7.70% CPU and -14.09% / -23.08% wall, sign 0/8 on all four,
+                paired per-round deltas in the same interleaved harness, two samples
+slope           per-file CPU cost 158.2 -> 138.9 ms/file, -12.2%
+```
+
+**Why this is adoptable when `--no-isolate` is not, stated as a mechanism rather than a run count —
+because this ADR's own warning is that a run count is exactly what `--no-isolate` had.**
+
+1. **`isolate` stays `true` and was not touched.** Per-file module-registry isolation is RETAINED.
+   The mechanism that breaks `zobrist` / `gameend` / `san` under `--no-isolate` — a spy installed
+   after a sibling file in the same worker already imported the module — **is not present.** This is
+   the whole difference, and Decision 7 is unchanged: **the lane's dominant cost still buys exactly
+   that isolation, and this adoption does not spend it.**
+2. **What threads genuinely does share is the process, and that hazard was PROBED and ARMED rather
+   than argued.** Five test files read `process.*` and `src/glyph-mode.test.ts` **mutates** both
+   `process.env` and `process.stdout.isTTY`. A dedicated probe — one file mutating both and holding
+   the mutation live while six sibling files read them concurrently — was **green 6 of 6** under
+   `pool: "threads"`, and **the identical assertion goes RED when the mutation and the read share a
+   worker**, which is the arming control that makes the green meaningful. `tinypool` does not pass
+   `SHARE_ENV`, so each worker receives its own `process.env` copy. **A green probe that cannot fail
+   proves nothing; this one was shown to fail on demand.**
+3. **The evidence classes are not the same, and that is the point.** `--no-isolate` had *green runs
+   and nothing else* — and at 4 of 21 it was ~80% red once anyone looked. `pool: "threads"` has
+   24 consecutive green runs **plus** a named mechanism for why the guard-breaking failure mode is
+   absent **plus** an armed probe of the one hazard it does introduce.
+
+**What this adoption does NOT claim.** **24 of 24 green bounds the per-run failure rate at roughly
+12.5% by the rule of three — not at zero.** `worker_threads` remains a weaker boundary than a child
+process for anything process-global that Node does not copy per worker. **If this lane starts
+flaking, delete `vitest.config.ts` first** — that is the entire rollback, one file, no other change —
+**and say so on the ticket rather than debugging the ticket that happened to be in flight.**
+
+**It was adopted because the screen passed AND the mechanism holds AND the lane is at 80% of its
+binding clause with 7–8 committed files against ~7 of planning headroom — not because it was
+available.** It buys ~3 more files of planning headroom (~7 → ~10) and ~0.3 s of wall on every run of
+every hop. **It is not a solution to the per-file floor and must not be treated as one:** the floor
+is still ~139 ms per file and it is still the structural driver, exactly as the 2026-08-12 audit
+warned. That audit's other claim — *"a one-time discount, not a change in the slope"* — is
+**refuted**: the slope falls 12.2%. The correction is small and does not change its conclusion.
+
+### `A5`: where the isolation warning lives, and where it deliberately does not
+
+**The warning is placed in `vitest.config.ts` and in this ADR — the two places named by `ABC-026`'s
+`A5` — and NOT in the four `*.nfr.test.ts` files.** BA/PM ruled that placement on 2026-08-12 for two
+reasons this hop confirms: `ABC-030` is rewriting the justification comment in those same files, and
+**the engineer who would disarm these guards is editing the runner config, not reading a test file.**
+`vitest.config.ts` is where the hand is, and as of this hop it exists.
+
+> **THE WARNING, RECORDED HERE AS `A5` REQUIRES.** `isolate: false` / `--no-isolate` saves
+> **30.7–36.5% of lane CPU** — the largest saving available anywhere on this lane, larger than every
+> test-content saving ever proposed for it, combined. **IT IS NOT AVAILABLE.** It is green in **4 of
+> 21 observed runs**, and **the first observed run was green** — a single-run adoption was available
+> and would have silently disarmed `NFR-005`'s call-count sub-bar, `NFR-001`'s three `gameStatus`
+> bars and `ABC-025`'s five `N1` rows. The only files that ever fail are `zobrist.nfr.test.ts`,
+> `gameend.nfr.test.ts` and `san.nfr.test.ts`; remove them and it is green 6 of 6. **Those guards are
+> the instruments this catalog reached for three separate times when a clock could not resolve a
+> question. The lane's dominant cost is buying them. No guard is under suspicion and no test is
+> proposed for deletion — the price is recorded so nobody rediscovers the lever and takes it.**
+
+### Rollback, extended for this addendum only
+
+**The adoption:** delete `vitest.config.ts`. That is the whole of it — one file, created by this hop,
+outside `src/`, outside `tsconfig.json`'s `include` and outside `biome.json`'s `files.includes`.
+A config containing only `defineConfig({})` was measured as its own interleaved condition at
+**+0.24% / +0.30% CPU with the sign at chance**, so deleting the settings while keeping the file, or
+deleting the file entirely, both return the lane to its measured baseline at no cost. **The
+measurement itself has nothing to roll back:** zero production lines, zero test lines, `src/`
+byte-identical, and `NFR-001`–`NFR-008` byte-identical with no target, bar or level moved.
