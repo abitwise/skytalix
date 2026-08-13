@@ -84,6 +84,16 @@ forbids, which is why a hole was re-found four times on that ticket.**
 - **`src/history-pane.nfr.test.ts:115`, `src/history-pane.test.ts:493` and
   `src/history-pane.test.ts:1014`.** Same defect shape, but they are **`ABC-028`'s**, and `:493` is
   already routed to an Engineer there. **This ticket does not touch `src/history-pane.*`.**
+- **`src/turn-loop.nfr.test.ts` and `src/glyph-mode.nfr.test.ts` — the other two of the SEVEN.**
+  **Added 2026-08-13 by BA/PM at `refinement-home-the-gaps`, so this page is not re-routed here a
+  third time.** Two gate hops proposed **this ticket** as the home for a false sentence in
+  `turn-loop.nfr.test.ts` and a missing assertion in `glyph-mode.nfr.test.ts`. **Both were refused,
+  and the refusal is mechanical rather than a preference: each needs a TEST assertion, and `A2` of
+  this ticket requires *zero lines changed that are not inside a comment*, `A3` requires every file's
+  test count identical before and after, and `A2` names *exactly four files, every one
+  `*.nfr.test.ts`*.** Taking either would falsify three of this page's own criteria. They are
+  **`ABC-051`** and **`ABC-050`** respectively. **The three file sets are disjoint** — verified at
+  source 2026-08-13.
 - **Any `*.test.ts` sibling.** Read only, and only to count.
 - **A lint rule, a CI check or any other control over comment text.** Named and refused at
   `ABC-028`'s `F4` with the measurement attached; **nothing here re-opens that.**
