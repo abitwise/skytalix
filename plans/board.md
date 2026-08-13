@@ -107,21 +107,14 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 - [EPIC-005] Opening book  (owner: BA/PM, size: S, priority: P1, since: 2026-07-22)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, size: M, **priority: P1 — RAISED from P2 2026-08-13 on a measurement two lanes reached independently: `status-panel`, `history-pane`, `turn-loop` have ZERO production importers and `renderBoard` has zero runtime consumers (both importers of `render.ts` are `import type`). Four of seventeen production modules are reachable only from test files, and they are the entire user-visible surface of a P0 XL epic otherwise nine-ninths delivered. P2 here means the drop-first tier; this is the one epic that cannot be dropped without the product ceasing to exist. Not P0 — nothing is broken and there is no user today**, since: 2026-07-22, **NOT decomposed: packaging depends on a distribution decision ADR-0007 reserves to this epic (*do not fill that in*) and its undo criteria need EPIC-004. Three cuttable tickets named in prose, no IDs allocated. RECOMMENDED AS THE NEXT DECOMPOSITION HOP**)
 
-## Ready (WIP 2/8)
-
-- [ABC-021] Draw-claim interaction — the player having the move claims  (BA/PM, S, P1, epic: EPIC-002, promoted: 2026-08-13 by BA/PM at task `post-abc030`; **DoR 10/10 re-verified item by item; blocked-until NONE — both deps re-checked AT THE SOURCE, the SIXTH stale `blocked-until` found on this board; two owed corrections applied (the `gameend.test.ts` citation is 26-50 not 27-58; transition 16 is this ticket's, no size change)**; closes EPIC-002)
-- [ABC-026] The default test lane has no cumulative budget  (BA/PM with Architect/Design, S, **P1 — raised from P2, the ticket's own trigger fired three-for-two: test files under `src/` went 22 → 28**, promoted: 2026-08-13; **DoR 9/10 → 10/10, BA/PM wrote the one open item (the acceptance criteria) this hop; `A1` discharges `H5`, owed past two merges**; isolation warning ruled into `vitest.config.ts` + ADR-0008, NOT the four `*.nfr.test.ts` files ABC-030 is rewriting)
-
-
-## In Analysis (WIP 0/2)
-
-## In Design (WIP 0/2)
-
-## Ready for Dev (WIP 0/6)
+## Ready (WIP 0/8)
 
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+
+- [ABC-021] Draw-claim interaction — the player having the move claims  (owner: Software Engineer, S, P1, epic: EPIC-002, pulled: 2026-08-13 at task `abc021-2026-08-13`, DoR 10/10; **closes EPIC-002 — the last of its nine tickets**; owns transition 16 only, ABC-020 owns whether a claim is available)
+- [ABC-026] The default test lane has no cumulative budget  (owner: Architect/Design, S, P1, pulled: 2026-08-13 at task `abc026-2026-08-13`, DoR 10/10; **this hop is expected to DISCHARGE `H5`, owed past two merges**; A6 pins `src/` byte-identical; two prior readings of the lane disagree and A1 must resolve them)
 
 
 
