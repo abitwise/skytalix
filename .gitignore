@@ -5,4 +5,10 @@ dist/
 
 # Claude code
 .claude/agents/*
-.claude/skills/*coverage/
+.claude/skills/*
+
+# Test coverage — vitest WIPES this directory before writing.
+# It was tracked from 2026-07-24 to 2026-08-13; a coverage run showed 22 tracked
+# files deleted. Untracked and ignored rather than warned about: a warning is not
+# a control (measured 0-for-2 on this board).
+coverage/
