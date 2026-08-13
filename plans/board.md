@@ -1,8 +1,8 @@
 # Board
 
-_Updated: 2026-08-13 by the Orchestrator (task `pull-abc041-2026-08-13`, Workflow 04): **`ABC-041` PULLED `Backlog` → `In Development` (1/3) — the first `EPIC-006` ticket to move and the first work in flight since `EPIC-002` closed.** DoR was NOT re-scored (BA/PM's 10/10 stands); what ran instead is `AGENTS.md` rule 1's criteria review at the `In Development` entry, **Orchestrator reviewing, BA/PM authoring** — every signature re-read out of the tree at `032589a`, and **`A8`'s headline RE-MEASURED TODAY: `status-panel.ts` 0, `history-pane.ts` 0, `render.ts` 2 both `import type` — still `0/0/0`, so the criterion is still falsifiable.** **TWO GAPS recorded at that exit, both non-blocking, neither a criterion change: (1) `A9` names `FRAME_PRODUCERS` but not `LICENSED_DRIVERS`, and adding the module to the wrong list would widen `ADR-0011` clause 3 AND blow `A10`; (2) `A1` needs an `EngineSeam` + `InputSeam` that the board says exist nowhere — they are TEST STUBS, verified against `src/turn-loop.test.ts`, so neither `ABC-037` nor `ABC-043` blocks it.** **WIDTH IS ONE AND THAT IS A DEPENDENCY, NOT CAUTION: `ABC-042` is the only other work in the owner's request and its single DoR blocker IS `ABC-041`** — it is queued behind, gets its OWN criteria review against the tree `ABC-041` will have changed, and is NOT enqueued by this hop. **LANE BUDGET: `ABC-041` spends 1 test file (≈160 ms, ≈1.2% of the 13 s clause), `ABC-042` 1 more and it is the heaviest either epic adds — running both leaves 8 of ~10.** **ONE STALE QUEUE CLAIM SWEPT** (`refinement-home-the-gaps`, claimed 2026-08-13T12:13:56Z against a 30-min TTL; its subtask was already in `done/`, so the orphan registry record was filed beside it, not returned to `pending/`). **A BOARD DEFECT FOUND WHILE PLACING THE ROW AND DELIBERATELY NOT FIXED: 13 columns are DEFINED, 10 have headings — `In Analysis`, `In Design` and `Ready for Dev` have none, so three WIP limits (2, 2, 6) are unenforceable by reading this file. Flagged for BA/PM to cut; restructuring the single source of WIP truth mid-pull was declined.** Detail per hop lives in `.grugops/context/ticket-to-pr-ABC-041/notes/` and `plans/tickets/history/`, never here._
+_Updated: 2026-08-13 by the Software Engineer (task `pull-abc041-2026-08-13`, subtask `ticket-to-pr-ABC-041`, Workflow 04): **`ABC-041` BUILT and moved `In Development` → `In Review` (1/3). NOT MERGED and NOT gated — branch `grugops/ticket-to-pr-ABC-041` is handed back for the gate.** **`A10`'s budget spent EXACTLY: `git diff --numstat` is the new module (+62), its test file (+304) and the ONE probe-root line (+1/−0) — `src/frame.ts`, `src/render.ts`, `src/status-panel.ts`, `src/history-pane.ts`, `src/turn-loop.ts` all BYTE-IDENTICAL (empty diff, checked not assumed).** Branched off `main` @ `eea6afc`, not the subtask's `032589a`, because `main` moved first — **that commit touches ZERO bytes under `src/`, so the entry criteria review still holds byte for byte.** Gates on the branch tip: lint **0** (2 pre-existing `biome.json` infos, not mine, flagged not fixed; ONE autofix pass, formatting only, **self-fix 1 of 2**), typecheck **0**, build **0**, `npm test` **824/824 on 29 files**, skip **0**, `test-integrity` **`No findings.`, exit 0**. **Baseline MEASURED not inferred — 816/816 on 28 with the three files stashed, so +8 tests, +1 file, ZERO regressions.** **THE GREENS WERE CHECKED FOR ARMING: five mutants built, run and reverted, each killed by the criterion it targets** — and the runtime-`history.ts` mutant reds BOTH probe guards, which is the entry review's gap 1 proved rather than repeated (adding the module to `LICENSED_DRIVERS` silences one red and leaves the other standing). Probe run BOTH ways: rooted here `history.ts` ABSENT, rooted at `turn-loop.ts` still REPORTED, so it stays armed. **TWO NEW WORDING GAPS FOUND IN DEVELOPMENT, neither blocking, no criterion waived: (3) `A4`'s "byte-identical" is unsatisfiable by ANY build — `assembleFrame` pads every panel row to the frame width (board 18, pane 21), and it is merged and byte-frozen by `A10` — so the delivered assertion is byte-equality THROUGH the merged assembler with the width read off the frame, which is strictly stronger; (4) the security firing threshold's "imports any Node builtin", read over the whole diff, contradicts `A3`/`A6`, which REQUIRE textual assertions over the module source. Security did NOT fire on the clause's own stated rationale — no `dependencies` key, zero builtins in the module.** **TWO THINGS FLAGGED NOT FIXED, both inside the probe file this hop may touch by exactly one line: its docblock now says "five entries" over six, and `ADR-0011` clause 2's DATED EXPIRY IS NOW RIPE — this module is the first to import all four frame producers, so `closure(<assembly module>)` is finally derivable; it is Architect/Design's by that comment's own words and `ABC-042`'s hop to take.** **Lane cost: 1 file, 13 ms of its own test time against a 94.2 ms median — but the paired delta reads 170 ms against a null control of ±50–180 ms, so the instrument CANNOT resolve one file here and 170 ms is an UPPER BOUND, not a measurement.** Detail per hop lives in `.grugops/context/ticket-to-pr-ABC-041/notes/` and `plans/tickets/history/`, never here._
 
-<!-- OUTGOING HEADER ARCHIVED VERBATIM to plans/tickets/history/ABC-028-board-history.md before this replacement (verified byte-identical by re-hashing the written line — not asserted). -->
+<!-- OUTGOING HEADER ARCHIVED VERBATIM to plans/tickets/history/ABC-041-board-history.md before this replacement (verified byte-identical by re-hashing the written line — not asserted). -->
 
 
 
@@ -122,9 +122,7 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Development (WIP 1/3)
-
-- [ABC-041] Render-seam closure — four merged modules become one `RenderSeam`  (owner: Software Engineer, S, P0, epic: EPIC-006, since: 2026-08-13, **pulled at DoR 10/10; criteria re-read at this entry — 2 gaps, non-blocking, in `.grugops/context/ticket-to-pr-ABC-041/notes/`**; branch: `grugops/ticket-to-pr-ABC-041`, 1 new test file)
+## In Development (WIP 0/3)
 
 
 
@@ -140,7 +138,10 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Review (WIP 0/3)
+
+## In Review (WIP 1/3)
+
+- [ABC-041] Render-seam closure — four merged modules become one `RenderSeam`  (owner: QE/E2E, S, P0, epic: EPIC-006, since: 2026-08-13, in review since: 2026-08-13, **BUILT on `grugops/ticket-to-pr-ABC-041`, NOT merged**; 824/824 on 29, skip 0, all four gates + test-integrity green on the tip; `A10` budget exact, five named modules byte-identical; **2 further wording gaps recorded in `.grugops/context/ticket-to-pr-ABC-041/notes/`**)
 
 
 
