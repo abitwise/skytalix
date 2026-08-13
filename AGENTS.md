@@ -24,6 +24,20 @@ Roles pull the shared verified context they need and publish their work output a
 - Workflows:  `agent-factory/workflows/`
 - Checklists: `agent-factory/checklists/`
 
+> **No `finding` is admissible on this install.** `scripts/context-io.ts`, `scripts/claim.js` and
+> `mcp__grugops__propose_note` are absent from this repository and from the kit, and
+> `context.human_admission` is `off`, so no `§14-gate#<id>` verdict can be emitted. Record results as
+> `claim` / `observation` / `decision` / `artifact-ref`, hand-authored per
+> `agent-factory/contracts/context-note.md`, and take the queue claim by hand: `mkdir -p
+> .grugops/queue/claimed` for the parent, then a **bare** `mkdir` (no `-p`) of the task directory —
+> that bare `mkdir` is the atomic act. **Do not re-derive this; do not invent a stamp.**
+
+Drafted by BA/PM at task `home-the-gaps-2026-08-13` and placed by the Orchestrator on the owner's
+instruction. It is here because **eight consecutive hops re-derived it from scratch** before doing any
+work. It records what IS, not what should be: restoring the sanctioned writer is an install-level fix
+(`node install/install.js --check`), not project work, and it is escalated to the owner rather than
+ticketed.
+
 ## Kit vs state
 
 Clear voice — this is a resolution and safety rule, not a joke.
