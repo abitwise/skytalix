@@ -188,6 +188,7 @@ const FRAME_PRODUCERS: readonly string[] = [
   "frame.ts",
   "glyph-mode.ts",
   "history-pane.ts",
+  "render-seam.ts",
   "render.ts",
   "status-panel.ts",
 ];
