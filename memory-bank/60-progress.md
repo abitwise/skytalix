@@ -208,6 +208,14 @@ holding a general "use your judgement" does not thereby hold every judgement.
    `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` into the gate.
    Cost: minutes.** Recorded so the next hop does not re-derive it.
 
+   **DISCHARGED 2026-08-13 — the owner created the file, and the step RAN.** `node
+   tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0` → **`No findings.`,
+   exit 0**, with the count taken from the `AGENTS.md` slot command rather than assumed. **This is
+   the first time Workflow 05's test-integrity step has executed in this project's history** — it
+   had exited `2` on every prior gate. The registry ships with the header row and **zero entries**,
+   so it authorises zero skips; the human-owned rule is unchanged, and an agent may read and run it
+   but never write a row into it. `H2` is closed.
+
 3. **`ABC-036`'s reduced user-facing promise — RULED: ACCEPT the amendment, REJECT the pager.**
    `EPIC-003` acceptance #4 promises every legal move is listed; the merged frame cannot deliver it
    (`MESSAGE_ROWS` is `2` at `src/frame.ts:45`, region bounded to ~21 chars, so ~9 of 20 show at the
