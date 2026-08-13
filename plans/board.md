@@ -90,6 +90,9 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## Backlog (WIP unlimited)
 
+- [ABC-039] Backward-move ordinals are uncitable — a false FIRST live on this board, and a double-booked SECOND  (BA/PM, S, P2, epic: —, since: 2026-08-13, DoR 9/10 ⚠️x1 — the register is citable but not reachable; the one LIVE instance is this board's own ABC-009 row, the other seven are archived headers of Done tickets and may not be edited. **The Orchestrator DID NOT pre-empt the one-clause fix while cutting the ticket — the audit's *off-by-one* remedy was REFUTED here (two moves are both labelled SECOND; a uniform +1 leaves the collision), so half-fixing it would have shipped the refuted repair**)
+- [ABC-040] Duplicate ABC-028/ABC-029 rows in traceability — 40 rows for 38 tickets  (BA/PM, S, P2, epic: —, since: 2026-08-13, **DoR 10/10**; the ABC-028 pair is a LOSSLESS DELETE and the ABC-029 pair a 2404-byte MERGE — precedence ruled R1–R5 on the page, which is the question that deferred this three times; the Orchestrator still sequences it against trace-appending hops)
+
 - [ABC-031] Coordinate move input — `e2e4`, `E2E4`, `e2-e4`, `e7e8q` against the legal move list  (BA/PM, S, P0, epic: EPIC-003, since: 2026-08-13, **DoR 10/10**, independent of ABC-032 and ABC-010, 1 new test file, no `*.nfr.test.ts`)
 - [ABC-032] `parseSan` — SAN resolved against the legal move list, three closed outcomes  (BA/PM, M, P0, epic: EPIC-003, since: 2026-08-13, **DoR 10/10**, **carries the two paragraphs this board owed since ABC-025's N5 hop — the EPIC-003 row's instruction is DISCHARGED**, 0–1 new test files)
 - [ABC-033] One prompt, both formats, no mode switch — and the ambiguity outcome  (BA/PM, S, P0, epic: EPIC-003, since: 2026-08-13, DoR 9/10 ⚠️x2 — ordering on ABC-031+ABC-032, 1 new test file)
@@ -111,9 +114,8 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 
-- [ABC-021] Draw-claim interaction — the player having the move claims  (owner: Software Engineer, S, P1, epic: EPIC-002, pulled: 2026-08-13 at task `abc021-2026-08-13`, DoR 10/10; **closes EPIC-002 — the last of its nine tickets**; owns transition 16 only, ABC-020 owns whether a claim is available)
 - [ABC-026] The default test lane has no cumulative budget  (owner: Architect/Design, S, P1, pulled: 2026-08-13 at task `abc026-2026-08-13`, DoR 10/10; **this hop is expected to DISCHARGE `H5`, owed past two merges**; A6 pins `src/` byte-identical; two prior readings of the lane disagree and A1 must resolve them)
 
 
@@ -130,7 +132,9 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-021] Draw-claim interaction — the player having the move claims  (owner: QE/E2E, S, P1, epic: EPIC-002, to review: 2026-08-13; **built at `4601f14`, 3 files, +298/−11, boundary clean against the merge base**; engineer's own gate green — lint 0, typecheck 0, build 0, **814/814 on 28 files, ZERO new test files**, skip 0; `PERFT_DEEP` not run, ruled unreachable by the diff; **engineer flagged FIVE things wrong in the ticket and TWO `ABC-035` conflicts — QE attacks them, does not read them**)
 
 
 
