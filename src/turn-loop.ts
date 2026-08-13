@@ -49,7 +49,7 @@
 
 import { beginFrameSession, type FrameSink, type FrameWriter } from "./frame.ts";
 import type { ClaimableDraw, EndReason, GameResult, GameStatus } from "./gameend.ts";
-import { type GameHistory, gameStatusOf, playMove, takeBack } from "./history.ts";
+import { type GameHistory, gameStatusOf, keyHistory, playMove, takeBack } from "./history.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 
@@ -111,15 +111,23 @@ export type RenderSeam = (
  * rejection line or an ambiguity candidate list: those live in the frame's own message region and
  * there is no second output channel.
  *
- * `game-over` is the transition `EPIC-006`'s `resign` and `ABC-021`'s `claim` both drive. THIS
- * TICKET OWNS ONLY THAT THE TRANSITION EXISTS — that `game-over` is reachable from `awaiting-human`
- * at all. Neither verb, its availability nor its wording is decided here.
+ * `game-over` is the transition `EPIC-006`'s `resign` and `ABC-021`'s `claim` both drive. `ABC-019`
+ * OWNS ONLY THAT THE TRANSITION EXISTS — that `game-over` is reachable from `awaiting-human` at all.
+ * Neither verb, its availability nor its wording is decided there.
+ *
+ * `claim` is `ABC-021`'s, and it is a REQUEST rather than a verdict: the player having the move asks
+ * for the draw FIDE 9.2/9.3 grants them, and THE LOOP adjudicates it against the status it already
+ * evaluated for this ply. It carries no article and no message, which is the boundary: `ABC-020`
+ * decides what is claimable, `EPIC-003`'s parser decides what the player typed, and neither decides
+ * the other's half. A seam that adjudicated for itself would have to derive the status a second time
+ * to do it, which is the one implementation `NFR-002` prices and forbids.
  */
 export type PromptOutcome =
   | { readonly kind: "move"; readonly move: Move }
   | { readonly kind: "rejected"; readonly messages: readonly string[] }
   | { readonly kind: "ambiguous"; readonly messages: readonly string[] }
   | { readonly kind: "command"; readonly messages: readonly string[] }
+  | { readonly kind: "claim" }
   | { readonly kind: "eof" }
   | { readonly kind: "game-over"; readonly result: FinalResult; readonly reason: TerminalReason };
 
@@ -192,17 +200,65 @@ const wasGenerated = (history: GameHistory, move: Move): boolean =>
   );
 
 /**
- * Run the game to a stop. Eight states and fifteen transitions; the sixteenth,
- * `awaiting-human` → `game-over` via the `claim` verb, is `ABC-021`'s.
+ * The two thresholds a rejected claim REPORTS. They are `src/gameend.ts:72,78`'s own values, and
+ * they are restated rather than imported because that module does not export them and `ABC-021` does
+ * not change the rules core to make a message legible.
+ *
+ * NOTHING HERE DECIDES ANYTHING. `status.claimable` — `ABC-020`'s answer, computed from these same
+ * two constants inside `gameStatus` — is what admits or refuses a claim; these numbers only tell the
+ * player how far off they are. A drifted copy therefore produces a wrong SENTENCE and never a wrong
+ * verdict, and the acceptance rows pin the message against the boundary the loop actually takes.
+ */
+const THREEFOLD_OCCURRENCES = 3;
+const FIFTY_MOVE_PLIES = 100;
+
+/**
+ * How far this position is from a claim, as the message items a refused claim carries — the
+ * "reject with a reason that teaches" standard applied to a command. Both rules are named because on
+ * this path NEITHER is claimable, and a player told about one of them has to guess about the other.
+ *
+ * SHORT BY CONSTRUCTION, and that is `EPIC-002` `4a` rather than terseness for its own sake: the
+ * message region is bounded BY the frame's `W` and never widens it (`src/frame.ts:194-200`), an item
+ * is placed whole or dropped behind a `(+N more)` marker, and `W` is 18 at the narrowest board-only
+ * frame. Both items are ≤ 17 columns at every value they can hold here — occurrences ≤ 2 and the
+ * clock ≤ 99, because 3 and 100 are the values that make a claim AVAILABLE and never reach this
+ * path. The player-facing wording at the real prompt is `ABC-034`/`ABC-035`'s, not this seam's.
+ *
+ * THE ONE DERIVE THIS LOOP MAKES ON ITS OWN, and it is stated rather than hidden: `keyHistory` is an
+ * `O(plies)` replay, ~46-50 µs at 120 plies (`history.ts:13-15`). It runs ONLY here — on a claim the
+ * rules core refused, which advances no ply — so `NFR-002`'s per-ply bar is untouched, and the
+ * occurrence count exists nowhere cheaper: `GameStatus` reports `claimable` at three occurrences and
+ * carries no count below it. One replay, not `repetitionCounts` plus a second `zobristKey` call, and
+ * no import edge from the loop to `zobrist.ts`.
+ */
+function claimShortfall(history: GameHistory): string[] {
+  const keys = keyHistory(history);
+  const current = keys[keys.length - 1] as bigint;
+  let occurrences = 0;
+  for (const key of keys) if (key === current) occurrences++;
+
+  return [
+    `repetition ${occurrences} of ${THREEFOLD_OCCURRENCES}`,
+    `50-move ${history.position.halfmoveClock} of ${FIFTY_MOVE_PLIES}`,
+  ];
+}
+
+/**
+ * Run the game to a stop. Eight states and sixteen transitions; the sixteenth,
+ * `awaiting-human` → `game-over` via the `claim` verb, is `ABC-021`'s and is built below.
  *
  * The render cadence is `1 + plies + RE-EMITTING non-advancing outcomes` frames, not one per ply:
  * the initial position is rendered BEFORE the first act — a loop that renders one frame per ply
- * prompts the human before any board has been shown — and the THREE non-advancing outcomes that
- * carry a message re-emit a frame, because that is where the message goes. END-OF-INPUT RE-EMITS
- * NOTHING: transition 10 goes to `exiting`, not to `rendering`, and its notice is a `sink.write`
- * rather than a frame. FOUR outcomes are non-advancing and only three of them emit a frame, so the
+ * prompts the human before any board has been shown — and the non-advancing outcomes that carry a
+ * message re-emit a frame, because that is where the message goes. END-OF-INPUT RE-EMITS NOTHING:
+ * transition 10 goes to `exiting`, not to `rendering`, and its notice is a `sink.write` rather than
+ * a frame. FIVE outcomes are non-advancing and only four of them emit a frame, so the
  * count-every-outcome form of this sentence is satisfied by a build that emits a frame on EOF —
  * which is why `A2` now carries the exclusion as its own clause (`[D29]`).
+ *
+ * THE FIFTH IS `ABC-021`'s REFUSED CLAIM and the count was THREE-of-FOUR until it landed: a claim
+ * the rules core refuses is `rejected`'s path, message and all, while a claim it allows terminates.
+ * One outcome, two edges, and which one is taken is `status.claimable`'s answer and never the seam's.
  */
 export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome> {
   const { history, humanColour, render, input, engine, sink } = options;
@@ -259,6 +315,29 @@ export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome
       }
       if (outcome.kind === "game-over") {
         return { result: outcome.result, reason: outcome.reason, exitCode: 0 };
+      }
+      if (outcome.kind === "claim") {
+        // TRANSITION 16 — `awaiting-human` → `game-over`, and the ONE outcome whose edge the LOOP
+        // chooses: `game-over` arrives already decided by the seam, a claim arrives as a request and
+        // is answered here. `status` is this ply's own evaluation, so it is adjudicated against the
+        // position the player is looking at and NOTHING is re-derived: `A5`'s "not re-evaluated"
+        // holds on this edge for the same structural reason it holds on the other three.
+        //
+        // `claimable.by` is not tested: it is the side to move (`gameend.ts:51-52`) and this branch
+        // runs only when the side to move is the human, so a check here would be a guard on a state
+        // the machine cannot reach.
+        //
+        // THE FIRST OF `draws`, which is `gameend.ts:53`'s ratified order — threefold before
+        // fifty-move — and never a re-sort, exactly as `ABC-016`'s panel reads it
+        // (`status-panel.ts:169`). The token carries no article: `EPIC-003`'s stub seam matches a
+        // literal `claim`, and WHICH article a player may name is `ABC-035`'s grammar. Either ground
+        // draws the same game under FIDE 9.2/9.3; only the recorded reason differs.
+        const claimable = status.claimable;
+        if (claimable === undefined) {
+          messages = claimShortfall(history);
+          continue;
+        }
+        return { result: "draw", reason: claimable.draws[0] as ClaimableDraw, exitCode: 0 };
       }
       if (outcome.kind !== "move") {
         // Transitions 7, 8, 9 — back to `rendering`, carrying the message, WITHOUT re-evaluating.

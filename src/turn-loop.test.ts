@@ -166,6 +166,30 @@ const FIFTY_MOVE_ANCHOR_FEN = "7k/8/8/8/8/8/P7/K5R1 w - - 100 60";
 const CYCLE = ["g1f3", "g8f6", "f3g1", "f6g8"] as const;
 const cycles = (count: number): string[] => Array.from({ length: count }, () => [...CYCLE]).flat();
 
+/**
+ * `ABC-021`'s acceptance line, which is `ABC-020` `A1`'s position (`gameend.test.ts:144`) — the ONE
+ * fixture this ticket's first two criteria both run from. White to move has `Re8#` AND a shuffle, so
+ * the same position offers two legal continuations with two different correct results, and neither
+ * result can be reached by accident from the other.
+ */
+const SHUFFLE_FEN = "6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 0 1";
+
+/**
+ * `Kh1 Bb6 Kg1 Ba5` twice — eight plies back to the position's THIRD occurrence, with White to move
+ * and the claim White's under FIDE 9.2.1. King and bishop only: a repeated line must never set an
+ * en-passant square, which `ABC-011` hashes into the key (the instruction `ABC-012`, `ABC-019` and
+ * `ABC-020` all carry). It is also irreversible-move-free, so the halfmove clock only ever climbs.
+ */
+const SHUFFLE_CYCLE = ["g1h1", "a5b6", "h1g1", "b6a5"] as const;
+const shuffle = (cycleCount: number): string[] =>
+  Array.from({ length: cycleCount }, () => [...SHUFFLE_CYCLE]).flat();
+
+/** `SHUFFLE_FEN` at 9.3's claimable clock with an empty move list — `ABC-020` `A2`'s twin. */
+const AT_100_FEN = "6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 100 60";
+
+/** Eight plies short of BOTH: the shuffle takes the clock 92 → 100 as it makes the third occurrence. */
+const AT_92_FEN = "6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 92 60";
+
 const EVERY_END_REASON: readonly EndReason[] = [
   "checkmate",
   "stalemate",
@@ -217,6 +241,11 @@ const candidateOf = (move: Move): string =>
  * wrong, and it reaches `ambiguous` and `rejected` without either being written into it.
  *
  * It is a TEST SEAM, not a design for `EPIC-003`'s parser.
+ *
+ * `claim` is ONE MORE LITERAL TOKEN beside `board` and the coordinates (`ABC-021` `## Test notes`),
+ * and it is deliberately dumb: it neither derives a status nor decides whether a claim is available,
+ * because a stub that adjudicated would test itself instead of the loop. `ABC-035` owns the real
+ * verb's grammar and tolerance; this is the two-line seam that reaches transition 16.
  */
 function scriptedSeams(script: readonly string[]): { input: InputSeam; engine: EngineSeam } {
   let cursor = 0;
@@ -226,6 +255,7 @@ function scriptedSeams(script: readonly string[]): { input: InputSeam; engine: E
     const token = script[cursor] as string;
     cursor += 1;
     if (token === "board") return { kind: "command", messages: ["board redrawn"] };
+    if (token === "claim") return { kind: "claim" };
 
     const candidates = movesNamed(history, token);
     if (candidates.length === 0) return { kind: "rejected", messages: [`not a move: ${token}`] };
@@ -1578,5 +1608,181 @@ describe("ADR-0009 clause 9f — the loop against the REAL panels, both of them"
     // three seams that happen to return the same rows. Without this the invariance is a tautology.
     expect(real.frames).not.toEqual(stubA.frames);
     expect(stubB.frames).not.toEqual(stubA.frames);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `ABC-021` — TRANSITION 16 only. `ABC-019` owns that `game-over` is reachable from
+// `awaiting-human` at all (`turn-loop.ts:114-116`); what is asserted below is the player having the
+// move CLAIMING, with a claimed reason, and the loop ending the game — plus the availability value
+// and the refusal. The other fifteen transitions are not re-litigated here.
+//
+// ZERO NEW TEST FILES, which is the count `N8-LANE` binds: these rows sit beside `ABC-019`'s in the
+// file that already mocks `gameend.ts`, `history.ts` and `frame.ts`, exactly as the ticket's
+// re-verification expected. They are their own `describe` rather than four more `TABLE` rows because
+// `TABLE` is `ABC-019`'s eighteen and `A12` reads its first five positionally.
+// ---------------------------------------------------------------------------
+
+describe("ABC-021 acceptance — transition 16, the draw claim", () => {
+  it("A1 — the human claims the third occurrence: the loop stops with the CLAIMED article, and the final frame is that position", async () => {
+    const { outcome, frames, history, events } = await run({
+      fen: SHUFFLE_FEN,
+      script: [...shuffle(2), "claim"],
+    });
+
+    // The reason names the claimed article and can name nothing else: `ClaimableDraw` is disjoint
+    // from `EndReason` BY CONSTRUCTION (`gameend.ts:47-48`), so `gameStatus` never returns
+    // `threefold-repetition` as the reason a game ended — only a claim can put it here.
+    expect(outcome).toEqual({ result: "draw", reason: "threefold-repetition", exitCode: 0 });
+    expect(EVERY_END_REASON).not.toContain(outcome.reason);
+
+    // The claim advanced no ply, so the last frame the player saw IS the position they claimed in.
+    expect(history.moves).toHaveLength(8);
+    const claimed = boardOf(replay(history));
+    expect(boardRegionOf(lastFrame(frames), claimed.length)).toEqual(claimed);
+
+    // Cadence `1 + plies`: the claim TERMINATES rather than re-emitting, and no terminal
+    // `GameStatus` exists on this edge to render a tenth frame from (`A8b` (ii)'s shape).
+    expect(frames).toHaveLength(9);
+    expect(events[events.length - 1]).toBe("input");
+  });
+
+  it("A2 — the same position played ON instead: mate, and NO draw is reported at any point in the run", async () => {
+    const { outcome, statuses, history } = await run({
+      fen: SHUFFLE_FEN,
+      script: [...shuffle(2), "e1e8"],
+    });
+
+    expect(outcome).toEqual({ result: "white-wins", reason: "checkmate", exitCode: 0 });
+    expect(history.moves).toHaveLength(9);
+
+    // THE WHOLE RUN'S VERDICTS, not only the last one. A build with `ABC-020` undone underneath this
+    // ticket reports `draw` at the third occurrence — one frame before the mate — and the final
+    // verdict alone never sees it. This is the owner's directive end to end: the draw was available
+    // for the whole shuffle and it was never imposed.
+    for (const status of statuses) expect(status.result).not.toBe("draw");
+    expect(statuses[8]?.claimable).toEqual({ by: "white", draws: ["threefold-repetition"] });
+  });
+
+  it("A3 — a claim the rules core refuses takes `rejected`'s path, and the message names BOTH gaps in numbers", async () => {
+    const before = toFen(parseFen(START_FEN));
+    const { history, frames, events } = await run({ script: ["claim"] });
+
+    expect(history.moves).toHaveLength(0);
+    expect(toFen(history.position)).toBe(before);
+    // NOT re-evaluated: the initial evaluation only. The claim is adjudicated against the status the
+    // ply already holds, which is why this reads exactly as `A5` does for `rejected`/`ambiguous`.
+    expect(derivesMade()).toBe(1);
+    // The prompt is re-issued AFTER the frame carrying the refusal.
+    expect(events).toEqual(["frame", "input", "frame", "input"]);
+
+    const region = messageRegionOf(frames[1] as string[]).join(" ");
+    // Never a bare "cannot claim": each rule, the value in hand, and the value a claim needs.
+    expect(region).toContain("repetition 1 of 3");
+    expect(region).toContain("50-move 0 of 100");
+    // ...and both items are SHOWN. An item too wide for the region is dropped whole behind a
+    // `(+N more)` marker (`frame.ts:134,146-172`), and a teaching message nobody can read teaches
+    // nothing — this is the clause that keeps the wording inside the frame's own `W`.
+    expect(region).not.toContain("more)");
+
+    // The boundary, from the other side: at TWO occurrences the message says so and the claim is
+    // refused, and at three (`A1`, same fixture, one cycle further) it is allowed. The restated
+    // `3` and `100` are pinned by the pair rather than by a comment.
+    const nearly = await run({ fen: SHUFFLE_FEN, script: [...shuffle(1), "claim"] });
+    expect(nearly.history.moves).toHaveLength(4);
+    // Frame 5, not 4: `1 + 4 plies` frames precede the prompt, and the refusal RE-EMITS one.
+    expect(nearly.frames).toHaveLength(6);
+    expect(messageRegionOf(nearly.frames[5] as string[]).join(" ")).toContain("repetition 2 of 3");
+    expect(nearly.outcome).toEqual({ result: null, reason: null, exitCode: 0 });
+  });
+
+  it("A4 — the ENGINE is never asked for a claim: it is handed the game, it answers with a move, and the game goes on", async () => {
+    // The human is BLACK, so the side holding the claim at the third occurrence is the ENGINE's.
+    const seams = scriptedSeams([...shuffle(2), "g1h1"]);
+    const engineSpy = vi.fn(seams.engine);
+    const { outcome, statuses, history } = await run({
+      fen: SHUFFLE_FEN,
+      humanColour: "black",
+      input: seams.input,
+      engine: engineSpy,
+    });
+
+    // The claim really was on offer to the engine's own side on that ply — without this clause the
+    // whole test passes against a game in which nothing was ever claimable.
+    expect(statuses[8]?.claimable).toEqual({ by: "white", draws: ["threefold-repetition"] });
+
+    // THE SPY. Every call is the loop handing the seam the GAME and nothing else: there is no second
+    // argument through which a claim could be asked for, and every answer is a `Move` that was
+    // played. An engine that starts claiming has to change this shape to do it, so it fails a test
+    // rather than surprising a player — and the loop never claimed on its behalf either.
+    expect(engineSpy.mock.calls).toHaveLength(5);
+    for (const call of engineSpy.mock.calls) expect(call).toHaveLength(1);
+    for (const answer of engineSpy.mock.results) {
+      expect(history.moves).toContainEqual(await answer.value);
+    }
+
+    // It played ON: the ply advanced past the claimable position and no claimed draw was recorded.
+    expect(history.moves).toHaveLength(9);
+    expect(EVERY_CLAIMABLE_DRAW).not.toContain(outcome.reason);
+    expect(outcome).toEqual({ result: null, reason: null, exitCode: 0 });
+  });
+
+  it("A5 — neither side ever claims: the FIFTH occurrence ends it automatically, reached through the LOOP", async () => {
+    const { outcome, history, statuses } = await run({ fen: SHUFFLE_FEN, script: shuffle(4) });
+
+    expect(outcome).toEqual({ result: "draw", reason: "fivefold-repetition", exitCode: 0 });
+    expect(history.moves).toHaveLength(16);
+    // Claimable from the third occurrence onward and declined every time. This is FIDE 9.6.1 reached
+    // through the loop rather than through the rules core in isolation: declining a claim is always
+    // legal and it cannot hang the game.
+    expect(statuses[8]?.claimable).toEqual({ by: "white", draws: ["threefold-repetition"] });
+    expect(statuses[16]).toEqual({ result: "draw", reason: "fivefold-repetition" });
+  });
+
+  it("A6 — the availability reaches the FRAME, off the ONE derive that ply already makes", async () => {
+    const { frames, statuses } = await run({
+      fen: SHUFFLE_FEN,
+      script: shuffle(2),
+      shape: SHAPE_B,
+    });
+
+    // In the frame's own text and not merely in the value the seam was handed: shape `B`'s status
+    // stub is four rows, so the claim cell is INSIDE the frame instead of sliced off it.
+    expect(rightTrimmed(frames[8] as string[])).toContain("claim threefold-repetition");
+    expect(statuses[8]?.claimable).toEqual({ by: "white", draws: ["threefold-repetition"] });
+
+    // Eight plies plus the mandatory initial evaluation. A build that read availability from a
+    // SECOND `gameStatusOf` on the frame path is 2x here and identical on every content assertion —
+    // and it would spend 46-50 µs a ply of `NFR-002`'s 100 µs on a value already in hand.
+    expect(derivesMade()).toBe(9);
+    expect(vi.mocked(gameStatusOf)).toHaveBeenCalledTimes(9);
+    // The loop derives nothing of its own on an advancing ply — every evaluation went through
+    // `gameStatusOf`. (The honest limit on this spy is the module-boundary one in the header.)
+    expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
+  });
+
+  it("A7 — BOTH claimed reasons are reachable through the loop, and the ratified order decides when both are", async () => {
+    const fifty = await run({ fen: AT_100_FEN, script: ["claim"] });
+
+    expect(fifty.outcome).toEqual({ result: "draw", reason: "fifty-move", exitCode: 0 });
+    expect(fifty.history.moves).toHaveLength(0);
+
+    // Both claimable at once — the shuffle carries the clock 92 → 100 as it makes the third
+    // occurrence. `draws` is ordered threefold-first by `gameend.ts:53` and is never re-sorted
+    // (`status-panel.ts:169` reads the same order), so the loop takes the first and the stub token
+    // needs no article; WHICH article a player may name is `ABC-035`'s grammar.
+    const both = await run({ fen: AT_92_FEN, script: [...shuffle(2), "claim"] });
+    expect(both.statuses[8]?.claimable).toEqual({
+      by: "white",
+      draws: ["threefold-repetition", "fifty-move"],
+    });
+    expect(both.outcome).toEqual({ result: "draw", reason: "threefold-repetition", exitCode: 0 });
+
+    // `A14` pins the TYPE at ten values; this pins which of them transition 16 can actually emit,
+    // and both are read FROM `gameend.ts` rather than re-spelled — that module is not changed by
+    // this ticket to make either of them typable.
+    expect(new Set([fifty.outcome.reason, both.outcome.reason])).toEqual(
+      new Set(EVERY_CLAIMABLE_DRAW),
+    );
   });
 });
