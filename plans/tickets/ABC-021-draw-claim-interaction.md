@@ -293,6 +293,68 @@ claim path's rows belong beside `ABC-019`'s in `src/turn-loop.test.ts`, which al
 **`Backlog → Ready` REQUESTED 2026-08-12 by BA/PM.** `plans/board.md` was **not** opened for edit — it
 is the Orchestrator's. `Ready` stands at 0/8, so no WIP limit is approached.
 
+## QE gate 2026-08-13 — `READY_FOR_HUMAN_REVIEW`: all eight criteria MET, zero code defects, seven gaps
+
+Task `abc021-qe-2026-08-13`, subtask `quality-gate-ABC-021`, Workflow 05, on the branch tip
+`4601f14`. **Every figure below was run; the full evidence is in `.grugops/context/quality-gate-ABC-021/`.**
+
+**Gates:** lint **0** (49 files, 2 pre-existing infos, green on the FIRST run — `self_fix_attempts`
+**0 of 2** consumed by QE), typecheck **0**, build **0**, `npm test` **0** — **816 passed / 816 on 28
+files**, skip **0**. **`test-integrity` exit `2` = COULD NOT RUN** (`.grugops/test-skips.md` absent —
+`H2`'s, a named human's, and NOT created here); recorded as an error distinct from a clean fail and
+never as a pass. **`PERFT_DEEP` ruled NOT REQUIRED** — the rules-core diff is empty for the branch and
+for this hop — **and run anyway: 32/32 exact, 37.47 s.** Coverage of `src/turn-loop.ts` **100 %** on
+all four v8 counters; with this ticket's `describe` skipped, **81.11 %**, uncovered at `234-244` and
+`335-341` — exactly the ticket's own lines and nothing else. **`git merge-tree --write-tree main
+HEAD` exits 0 with a clean tree: no rebase conflict.**
+
+**All eight acceptance criteria MET, each against a named wrong build with a measured verdict** —
+seventeen mutants on an md5-pinned tree, full suite each, restored in a `finally`. Fifteen killed.
+**Seven of them die at criterion 3's row and nowhere else, two of those being criterion-1 and
+boundary defects: that row is this ticket's load-bearing one and a later hop must not simplify it.**
+The build this ticket's own page literally asks for — the illustrative prose at **53** and **43**
+columns — is RED at criterion 3, because an over-wide item is dropped whole behind `(+2 more)` at
+every `W` this product can produce (18 board-only, 21–23 at the real panels). **The delivered
+numbers max at 17 columns against a floor of 18: one column, and it is structural.**
+
+**The no-second-derive deduction SURVIVES; the bar guarding it did not.** Zero derives on any
+advancing ply, confirmed. But a build calling `keyHistory` once per ply passed **814/814** with
+`repetitionCounts` at 0 and `gameStatus` at `plies + 1` — both bars at their exact correct-build
+values while paying the second 46-50 µs replay `NFR-002` forbids. This ticket opened the first
+production import edge from the loop to `keyHistory`; the hole pre-existed and this is the first code
+through it. Two rows were added to the existing `src/turn-loop.test.ts` (**zero new test FILES**,
++73/−1, ≤ ~200 ms CPU and not distinguishable from a null control) and both survivors now die.
+
+**Seven gaps, none blocking, each with an owner:**
+
+- **`G-1` (MEDIUM) — `ABC-030`.** `src/turn-loop.nfr.test.ts`'s *"`repetitionCounts` at 0 proves the
+  loop derives nothing on its own"* is now false, and its bar cannot see `keyHistory`. One line, in
+  the file the bar lives in. **That file was NOT opened here** — the bar is proved by it unedited.
+- **`G-2` (MEDIUM) — BA/PM, before `ABC-035` is built.** `ABC-035` contradicts itself three ways on
+  who owns the unavailable-claim message. Its `gameStatusOf`-is-a-`repetitionCounts`-call defect is
+  confirmed; **the claim that such a derive is invisible to the loop's spy is FALSE — measured, seven
+  tests go red, four of them `ABC-019`'s.** The ruling rests on ownership, not on invisibility.
+- **`G-3` (LOW-MEDIUM) — Software Engineer, comment text, zero behaviour.** `src/turn-loop.ts`
+  contradicts itself: `:105` *"FOUR of these do not advance a ply"* against `:255` *"FIVE outcomes are
+  non-advancing"*; and `:247`'s *"sixteen transitions"* is **seventeen** under `ABC-019`'s ratified
+  by-trigger table, since the refused claim is its own trigger and its own path — the module's own
+  new paragraph says *"one outcome, TWO EDGES"* and then counts one.
+- **`G-4` (LOW).** `plans/traceability.md`'s own 2026-08-13 header claims `git diff --stat` reads
+  `1 insertion(+), 1 deletion(-)` (measured **3/1**) and `+88/−10` where its `ABC-021` row correctly
+  reads **+89/−10**. Corrected in the QE append, not by rewriting the header.
+- **`G-5` (LOW, criterion gap not a defect) — BA/PM.** No criterion says in falsifiable form that the
+  **loop** owns transition 16. A build with the loop's arm deleted and the seam adjudicating from
+  `keyHistory` passed 814/814. The new `A8` (iv) falsifies it now; this page still does not.
+- **`G-6` (LOW) — whoever is next in `src/turn-loop.test.ts`.** The human playing **black** and
+  claiming on its own ply is covered by no row here (all drive `humanColour: "white"`; criterion 4's
+  black run puts the claim on the *engine's* side). Driven by hand this hop: correct. One row.
+- **`G-7` (INFO) — `H2`, a named human.** No skip registry, so `test-integrity` exits `2` every gate.
+
+**`src/turn-loop.ts` md5 `347755ed…` unmoved across the whole hop: QE wrote no production line, in
+any file.** `plans/board.md` NOT opened (the Orchestrator's), `plans/metrics.md` not written,
+`.grugops/test-skips.md` not created, the four `*.nfr.test.ts` files `ABC-030` owns not opened.
+**The `In Review` exit is REQUESTED, not taken. Nothing merged, pushed or deployed.**
+
 ## Board history
 
 Every `plans/board.md` entry ever written about this ticket — column entries and exits, the WIP

@@ -102,6 +102,12 @@ vi.mock("./history.ts", async (importOriginal) => {
   return {
     ...actual,
     gameStatusOf: vi.fn(actual.gameStatusOf),
+    // `ABC-021` opened the FIRST production import edge from the loop to `keyHistory`, and until
+    // this spy existed that edge was the one derive door NEITHER standing bar could see: a build
+    // calling `keyHistory` once per ply reads `repetitionCounts` at 0 and `gameStatus` at
+    // `plies + 1` — both bars' exact green values — while paying a second `O(plies)` replay a ply.
+    // Measured: that build passes 814/814 unedited. Spied here, it is caught by `A8` below.
+    keyHistory: vi.fn(actual.keyHistory),
     playMove: vi.fn(actual.playMove),
     repetitionCounts: vi.fn(actual.repetitionCounts),
   };
@@ -109,7 +115,9 @@ vi.mock("./history.ts", async (importOriginal) => {
 
 const { assembleFrame, beginFrameSession, MESSAGE_ROWS, PROMPT_ROWS } = await import("./frame.ts");
 const { gameStatus } = await import("./gameend.ts");
-const { gameStatusOf, newGame, playMove, repetitionCounts } = await import("./history.ts");
+const { gameStatusOf, keyHistory, newGame, playMove, repetitionCounts } = await import(
+  "./history.ts"
+);
 const { INPUT_ENDED_NOTICE, runTurnLoop } = await import("./turn-loop.ts");
 
 // ---------------------------------------------------------------------------
@@ -1784,5 +1792,69 @@ describe("ABC-021 acceptance — transition 16, the draw claim", () => {
     expect(new Set([fifty.outcome.reason, both.outcome.reason])).toEqual(
       new Set(EVERY_CLAIMABLE_DRAW),
     );
+  });
+
+  // -------------------------------------------------------------------------
+  // The two rows below are QE's, added at the `quality-gate-ABC-021` gate. ZERO new test FILES:
+  // they sit in the file that already mocks `history.ts`, so the lane `ABC-026` measures moves by
+  // two `it` bodies and no `+160 ms` file. `A8` exists because a MUTANT SURVIVED the delivered
+  // suite; `A9` exists because the width argument was carried in a comment and by nothing else.
+  // -------------------------------------------------------------------------
+
+  it("A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else", async () => {
+    // (i) An ADVANCING run. Both standing bars read their green values here...
+    await run({ fen: SHUFFLE_FEN, script: shuffle(2) });
+    expect(derivesMade()).toBe(9);
+    expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
+    // ...and so must the door this ticket opened. WITHOUT THIS LINE a build that calls
+    // `keyHistory` once per ply — a second `O(plies)` replay a ply, which is exactly the 46-50 µs
+    // at 120 plies `NFR-002` prices and forbids — passes every other assertion in this file AND
+    // `turn-loop.nfr.test.ts` unedited, because `repetitionCounts` still reads 0 and `gameStatus`
+    // still reads `plies + 1`. Measured at the gate: 814 of 814, green. A count nothing counts is
+    // not a bar.
+    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
+
+    // (ii) A REFUSED claim costs EXACTLY ONE, and it is `claimShortfall`'s — the module declares it
+    // rather than leaving it for a spy to discover, and this is the spy that holds it to the number.
+    vi.clearAllMocks();
+    await run({ script: ["claim"] });
+    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(1);
+    expect(derivesMade()).toBe(1);
+    expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
+
+    // (iii) The price is PER REFUSAL and is never cached: two refusals, two replays. `history.ts`
+    // recomputes on every call by ratified design (`ADR-0002` clause 2, `history.ts:12-15`), so a
+    // build that memoised here would be changing that contract from the wrong module.
+    vi.clearAllMocks();
+    await run({ script: ["claim", "claim"] });
+    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(2);
+
+    // (iv) An ALLOWED claim derives NOTHING: it is answered from the ply's own `status`, which is
+    // the whole reason transition 16 lives in the loop and not behind the seam.
+    vi.clearAllMocks();
+    const allowed = await run({ fen: SHUFFLE_FEN, script: [...shuffle(2), "claim"] });
+    expect(allowed.outcome.reason).toBe("threefold-repetition");
+    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
+    expect(derivesMade()).toBe(9);
+  });
+
+  it("A9 — the WIDEST refusal message the loop can emit still fits the NARROWEST frame it can emit it into", async () => {
+    const { frames } = await run({ fen: AT_99_FEN, script: ["claim"] });
+    const refusal = frames[1] as string[];
+
+    // `W` is the max over the PANEL rows only (`frame.ts:198-201`), and the board is 18 columns in
+    // both glyph modes at every position — so 18 is the floor under `W`, not a property of this
+    // fixture. Asserted rather than reasoned, because it is what the next clause spends.
+    expect(widthOf(refusal)).toBe(18);
+
+    // `50-move 99 of 100` is 17 columns and is the WIDEST value either item can hold on this path:
+    // 100 makes the claim AVAILABLE and never reaches the refusal, and `repetition 2 of 3` is the
+    // other 17. `A3` proves the ONE-column margin at `50-move 0 of 100` (16); this proves it at the
+    // maximum. The ticket's own illustrative prose measures 53 and 43 columns and is dropped WHOLE
+    // behind `(+2 more)` at this width — which is why the numbers shipped and the sentences did not.
+    const region = messageRegionOf(refusal);
+    expect(region).toEqual(["repetition 1 of 3", "50-move 99 of 100"]);
+    for (const row of region) expect(row.length).toBeLessThanOrEqual(widthOf(refusal));
+    expect(region.join(" ")).not.toContain("more)");
   });
 });
