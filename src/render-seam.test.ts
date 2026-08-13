@@ -283,8 +283,15 @@ describe("ABC-041 — the render seam", () => {
   it("A6 / A7 — no ambient reads, no glyph-mode import, and history.ts imported nowhere", () => {
     const source = sourceOf("render-seam.ts");
 
-    // Over the WHOLE source, comments included: there is no ambient read to find here.
+    // Over the WHOLE source, comments included: there is no ambient read to find here. ALL FOUR
+    // spellings `A6` names, not just the first — `process.` alone is one keystroke wide, and an
+    // ambient read reached through `globalThis["process"]` shipped GREEN against it (mutant `X8`,
+    // measured at the re-gate and again here). The bare-word line subsumes the `process.` line and
+    // is deliberately a substring, not a word boundary: stronger than the criterion, never weaker.
     expect(source).not.toContain("process.");
+    expect(source).not.toContain("process");
+    expect(source).not.toContain("globalThis");
+    expect(source).not.toContain("import.meta");
     expect(source).not.toContain('from "./glyph-mode.ts"');
     // `A7`'s structural half. The measurement itself is the merged probe's, rooted at this module;
     // this says the seam holds no import of the history module AT ALL — not even a type-only one,
