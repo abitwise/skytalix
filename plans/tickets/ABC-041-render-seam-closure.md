@@ -1,8 +1,8 @@
 ---
 id: ABC-041
 title: The render-seam closure — four merged modules become one `RenderSeam`, and three modules that only tests can reach get a production importer
-status: backlog
-column: Backlog
+status: in-development
+column: In Development
 size: S
 priority: P0
 epic: EPIC-006
