@@ -5,4 +5,4 @@ dist/
 
 # Claude code
 .claude/agents/*
-.claude/skills/*
+.claude/skills/*coverage/
