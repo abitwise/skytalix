@@ -105,6 +105,30 @@ files directly via built-in type stripping, so there is no bundler or transpile 
 - Cadence + WIP: `.grugops/factory.config.json`
 - Traceability: `plans/traceability.md`
 
+## Process rules (this project)
+
+Two rules the owner adopted 2026-08-13, in this order. Evidence and the full controls live in the
+delivery audit's notes (`.grugops/context/audit-delivery/notes/`) — read them there, not here.
+
+**1. Criteria review happens at the `Ready for Dev` exit, not at a gate.** The Orchestrator owns that
+exit: before a ticket enters `In Development`, re-read its acceptance criteria against the built tree
+and record the gaps found there. Not a Definition of Ready re-run — DoR asks whether criteria are well
+formed; this asks whether they still match what exists. **Control: gaps found at QE fall below 3 per
+ticket for five consecutive tickets and backward moves below 0.5 per ticket, while gaps recorded at
+the `Ready for Dev` exit RISE.** If gaps fall at both ends the rule is not working — it is hiding.
+
+**2. Ticket prose has a size budget; overflow goes to context notes.** Acceptance criteria, scope and
+risks stay in the ticket; measurements, rejected alternatives and gate narration go to
+`.grugops/context/<task>/notes/` (Workflow 16). This is `plans/board.md`'s one-line rule applied to
+`plans/tickets/`. **Control: median length of the next ten cut tickets ≤ 300 lines (720 today) and
+criterion gaps at QE do not rise.** Shorter tickets bought with worse gaps mean the budget cut rigour
+instead of prose — revert it.
+
+**Precedence, so nobody has to guess.** The kit is silent on both: no kit workflow re-reads criteria
+against the built tree at that exit, and no kit file budgets ticket prose (its `size` is effort,
+`XS`–`XL`, not lines). These rules ADD a project step and contradict nothing in the kit — which is
+read-only and cannot carry them.
+
 ## Branching model
 
 Trunk-based. `main` is the single long-lived branch. Work happens on a short-lived
