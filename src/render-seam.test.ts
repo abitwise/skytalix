@@ -1,5 +1,5 @@
 /**
- * `ABC-041`'s ten acceptance criteria.
+ * `ABC-041`'s eleven acceptance criteria (`A11` was cut by BA/PM after the QE gate).
  *
  * NO `vi.mock`, NO SPAWN, NO TTY — the ticket's `## Test notes` row 5, and the reason this is a
  * plain `*.test.ts` rather than an eighth `*.nfr.test.ts`: a `vi.mock` factory is hoisted to file
@@ -16,17 +16,24 @@
  * the licence would satisfy that guard while quietly widening `ADR-0011` clause 3 from one licensed
  * driver to two. The correct repair is always the import, never the list, and now a test says so.
  *
- * `A4`'s WORDING IS REPAIRED HERE, NOT WAIVED, AND THE REPAIR IS STRICTLY STRONGER. The criterion
- * asks for the frame's board region to be "byte-identical to `renderBoard(position, mode,
- * orientation)`". Measured on this tree, NO implementation can satisfy that literally:
- * `assembleFrame` pads every panel row to the frame's own width (`src/frame.ts:205`), and the board
- * is the narrowest panel — 18 columns against the history pane's 21 — so the board region is
- * `renderBoard`'s rows plus trailing blanks, always. `assembleFrame` is merged and `A10` forbids
- * touching it, and the padding is the frame's constant-geometry guarantee rather than a defect. So
- * the assertion below is byte-equality against the merged renderer THROUGH the merged assembler,
- * with the width read off the frame itself and never named: it fails on a second board
- * implementation, on a dropped orientation and on a re-ordered region exactly as the criterion
- * intends (`## Test notes` row 2), and it additionally pins the whole frame to the merged four.
+ * `A4`'s WIDTH IS DERIVED FROM THE PANELS, AND THIS FILE'S EARLIER "STRICTLY STRONGER" ACCOUNT OF
+ * ITSELF IS WITHDRAWN. The premise stands: measured on this tree, no build satisfies `A4`'s original
+ * "byte-identical to `renderBoard(position, mode, orientation)`" literally, because `assembleFrame`
+ * pads every panel row to the widest panel (`src/frame.ts:194-208`) and the board is never the
+ * widest — 18 columns against the history pane's 21. BA/PM repaired the criterion on that premise.
+ * What does NOT stand is what this file claimed for itself. A criterion that rejects EVERY build is
+ * maximally strong, so nothing can be strictly stronger than it; and the width this file used to
+ * read off `frame[0]` was CIRCULAR, because `frame[0]` IS a board row — a seam that padded the board
+ * itself inflated both sides of the comparison at once and walked straight through (QE's mutant
+ * `X2`: 8 passed, with the adjacent whole-frame equality removed). The width below is now computed
+ * from the three panels, which is where `assembleFrame` takes it from, and is never read off the
+ * frame or off the board region — the repaired `A4`'s own clause.
+ *
+ * BYTE-EQUALITY DOES NOT FORBID A SECOND BOARD IMPLEMENTATION, AND THIS FILE NO LONGER SAYS IT DOES.
+ * A copy of `renderBoard` in its own module renders the same bytes and is invisible to every
+ * comparison here — measured at 824/824 green with `renderBoard` never called (QE's mutant `X3b`).
+ * What catches it inside this seam is `A11`'s call count, below. Across the repository it is
+ * `ABC-054`'s instrument, not this file's, and no criterion on this page reaches that far.
  */
 
 import { readdirSync, readFileSync } from "node:fs";
@@ -221,15 +228,23 @@ describe("ABC-041 — the render seam", () => {
       const { history, status, seam } = fixture("unicode", orientation);
       const frame = seam(history, status, false, []);
       const board = renderBoard(history.position, "unicode", orientation);
-      // The width is READ OFF THE FRAME, never named: every panel row is padded to it by
-      // `assembleFrame`, and the first row of a frame is a board row.
-      const width = (frame[0] as string).length;
+      // THE WIDTH COMES FROM THE PANELS — the repaired `A4`'s own clause, and never read off the
+      // frame or off the board region. `assembleFrame` takes `W` over board + status + history
+      // (`src/frame.ts:195-201`); `frame[0]` IS a board row, so reading `W` off it would let a seam
+      // that padded the board ITSELF inflate both sides of the comparison at once (mutant `X2`).
+      const width = Math.max(
+        ...[...board, ...renderStatusPanel(history, status, false), ...renderHistory(history)].map(
+          (row) => row.length,
+        ),
+      );
 
       expect(boardRegionOf(frame, board.length)).toEqual(board.map((row) => row.padEnd(width)));
       regions.set(orientation, boardRegionOf(frame, board.length));
 
-      // The whole frame is the merged four composed by the merged assembler — the property that
-      // forbids a second implementation of ANY region, not just the board.
+      // The whole frame is the merged four composed by the merged assembler. It is what caught
+      // `X2` while the width above was still circular, and it is kept for that reach. It does NOT
+      // forbid a second implementation of any region — a byte-identical copy passes every
+      // comparison here (`X3b`, measured). That property is `A11`'s.
       expect(frame).toEqual(
         assembleFrame(
           {
@@ -308,15 +323,19 @@ describe("ABC-041 — the render seam", () => {
   /**
    * THE FOUR ROWS BELOW WERE ADDED BY THE QE GATE (`quality-gate-ABC-041`), each because a mutant
    * built against the delivered module SURVIVED every assertion above. They add no file — the lane
-   * allotment of 1 was already spent by this file itself.
+   * allotment of 1 was already spent by this file itself. The first of them was written as
+   * "`A4` (purpose)"; BA/PM has since deleted that false purpose clause and cut the property as the
+   * ticket's own `A11`, which is what the row is now named for.
    */
 
-  it("A4 (purpose) — the merged producers are CALLED, never re-implemented", () => {
-    // `A4`'s parenthetical says byte-equality "is what forbids a second board implementation". It
-    // is not: a second implementation that renders the SAME BYTES is green on every equality in
-    // this file. Measured — a copy of `renderBoard` in its own module passed 824/824 and `tsc`,
-    // with `renderBoard` never called. What forbids it is that the merged four are CALLED, and
-    // that is a call count rather than a comparison.
+  it("A11 — the merged four are each CALLED exactly once, never re-implemented", () => {
+    // `A4`'s parenthetical used to say byte-equality "is what forbids a second board
+    // implementation". It does not: a second implementation that renders the SAME BYTES is green on
+    // every equality in this file. Measured — a copy of `renderBoard` in its own module passed
+    // 824/824 and `tsc`, with `renderBoard` never called. What forbids it INSIDE THIS SEAM is that
+    // the merged four are CALLED, which is a call count rather than a comparison. It does not reach
+    // across the repository — a seam could call them for the count and render from a copy — and
+    // that repo-wide property is `ABC-054`'s.
     const { history, status, seam } = fixture();
     const board = vi.spyOn(render, "renderBoard");
     const panel = vi.spyOn(statusPanel, "renderStatusPanel");
@@ -332,10 +351,11 @@ describe("ABC-041 — the render seam", () => {
   });
 
   it("A4 (width) — the board's padding is the PANELS' width, derived without reading the frame", () => {
-    // `A4`'s width above is read off `frame[0]`, which IS a board row — so the seam and the
-    // assertion draw it from the same place and a seam that pads the board ITSELF inflates both
-    // together. Measured: a seam appending blanks to every board row passes that assertion.
-    // This width comes from the panels, which is where `assembleFrame` takes it from.
+    // Written by the gate while `A4` above still read its width off `frame[0]`, which IS a board
+    // row — so the seam and the assertion drew it from the same place and a seam appending blanks
+    // to every board row passed (`X2`). `A4` above now derives the width from the panels for BOTH
+    // orientations, so this row restates that clause for one. It is KEPT, not folded in: it is the
+    // gate's own row, and when it reds it names the width property alone.
     const { history, status, seam } = fixture();
     const frame = seam(history, status, false, []);
     const board = renderBoard(history.position, "unicode", "white-bottom");
