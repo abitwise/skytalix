@@ -31,15 +31,18 @@
 
 import { readdirSync, readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import * as frameModule from "./frame.ts";
 import { assembleFrame, frameHeight } from "./frame.ts";
 import * as gameend from "./gameend.ts";
 import * as historyModule from "./history.ts";
 import { gameStatusOf, newGame } from "./history.ts";
+import * as historyPane from "./history-pane.ts";
 import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
 import * as legal from "./legal.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { parseSquareName } from "./position.ts";
+import * as render from "./render.ts";
 import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
 import { makeRenderSeam } from "./render-seam.ts";
 import * as statusPanel from "./status-panel.ts";
@@ -300,5 +303,74 @@ describe("ABC-041 — the render seam", () => {
     // holds none. If the licence guard ever fires for this module the repair is the import; adding
     // the module here would silence a real red and widen the licence to two drivers.
     expect(declaredList("LICENSED_DRIVERS")).not.toContain("render-seam.ts");
+  });
+
+  /**
+   * THE FOUR ROWS BELOW WERE ADDED BY THE QE GATE (`quality-gate-ABC-041`), each because a mutant
+   * built against the delivered module SURVIVED every assertion above. They add no file — the lane
+   * allotment of 1 was already spent by this file itself.
+   */
+
+  it("A4 (purpose) — the merged producers are CALLED, never re-implemented", () => {
+    // `A4`'s parenthetical says byte-equality "is what forbids a second board implementation". It
+    // is not: a second implementation that renders the SAME BYTES is green on every equality in
+    // this file. Measured — a copy of `renderBoard` in its own module passed 824/824 and `tsc`,
+    // with `renderBoard` never called. What forbids it is that the merged four are CALLED, and
+    // that is a call count rather than a comparison.
+    const { history, status, seam } = fixture();
+    const board = vi.spyOn(render, "renderBoard");
+    const panel = vi.spyOn(statusPanel, "renderStatusPanel");
+    const pane = vi.spyOn(historyPane, "renderHistory");
+    const assembler = vi.spyOn(frameModule, "assembleFrame");
+
+    seam(history, status, false, []);
+
+    expect(board, "renderBoard").toHaveBeenCalledTimes(1);
+    expect(panel, "renderStatusPanel").toHaveBeenCalledTimes(1);
+    expect(pane, "renderHistory").toHaveBeenCalledTimes(1);
+    expect(assembler, "assembleFrame").toHaveBeenCalledTimes(1);
+  });
+
+  it("A4 (width) — the board's padding is the PANELS' width, derived without reading the frame", () => {
+    // `A4`'s width above is read off `frame[0]`, which IS a board row — so the seam and the
+    // assertion draw it from the same place and a seam that pads the board ITSELF inflates both
+    // together. Measured: a seam appending blanks to every board row passes that assertion.
+    // This width comes from the panels, which is where `assembleFrame` takes it from.
+    const { history, status, seam } = fixture();
+    const frame = seam(history, status, false, []);
+    const board = renderBoard(history.position, "unicode", "white-bottom");
+    const width = Math.max(
+      ...[...board, ...renderStatusPanel(history, status, false), ...renderHistory(history)].map(
+        (row) => row.length,
+      ),
+    );
+
+    expect(boardRegionOf(frame, board.length)).toEqual(board.map((row) => row.padEnd(width)));
+  });
+
+  it("A1 (messages) — the seam's FOURTH parameter reaches the frame's message region", () => {
+    // Nothing above asserts it. `A4` and `A3` pass `[]`; `A5` passes one item and then asserts only
+    // that no code point exceeds U+007F — which a seam that DISCARDED the item satisfies best of
+    // all. Measured: `messages: []` hardcoded in the composition passes 824/824 and `npm run lint`
+    // (exit 0 — `quality.lint.strict` is false, and the one warning it raises is autofixable).
+    // `src/turn-loop.ts` names this region the loop's ONLY channel for a rejection line or an
+    // ambiguity candidate list, so a seam that drops it loses every one of them silently.
+    const { history, status, seam } = fixture();
+    const marker = "no such move";
+
+    const frame = seam(history, status, false, [marker]);
+
+    expect(frame.some((row) => row.includes(marker))).toBe(true);
+  });
+
+  it("A2 (thinking) — `thinking` reaches renderStatusPanel verbatim, both ways", () => {
+    // The ticket's `## Scope` says `status` AND `thinking` are "passed through verbatim". `A2`
+    // asserts it of `status` only. Measured: a seam hardcoding `false` passes 824/824 and lint.
+    const { history, status, seam } = fixture();
+    const panel = vi.spyOn(statusPanel, "renderStatusPanel");
+
+    for (const thinking of [true, false]) seam(history, status, thinking, []);
+
+    expect(panel.mock.calls.map((call) => call[2])).toEqual([true, false]);
   });
 });
