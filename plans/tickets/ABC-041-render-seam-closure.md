@@ -1,8 +1,8 @@
 ---
 id: ABC-041
 title: The render-seam closure — four merged modules become one `RenderSeam`, and three modules that only tests can reach get a production importer
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P0
 epic: EPIC-006
@@ -93,30 +93,54 @@ Every criterion is provable as a value with **no TTY and no child process** — 
 - **`A1` (it is the seam, by type and by use).** **Given** merged `runTurnLoop`, **when** this
   module's result is passed as `options.render`, **then** it typechecks with **no adapter and no
   cast**, and a scripted game of ≥ 4 plies runs to a terminal result through it with all four real
-  panels in place.
+  panels in place. **And given** a one-item `messages` list, **then** that item's text appears in the
+  returned frame. *(The fourth parameter is the loop's only channel for a rejection line or an
+  ambiguity list. A seam that hardcodes `messages: []` is green on every other criterion on this
+  page — measured, not feared.)*
 - **`A2` (it derives nothing — spied, not asserted by reading).** **Given** three consecutive seam
   calls, **then** `gameStatus`, `gameStatusOf` and `legalMoves` are called **exactly 0** times inside
   the seam, and the `GameStatus` object reaching `renderStatusPanel` is **reference-identical** to the
   one the caller passed. *(Reference identity is the discriminator: a build that re-derives an equal
-  status passes every content assertion and fails this one.)*
+  status passes every content assertion and fails this one.)* **And given** `thinking: true` and then
+  `thinking: false`, **then** `renderStatusPanel`'s third argument is `true` and then `false` —
+  `## Scope` requires `thinking` to pass through verbatim too, and a seam that hardcodes `false` is
+  otherwise green.
 - **`A3` (constant height, and no row count is named).** **Given** message lists of **0, 1, 4 and 200**
   items and one **100,000-character** item, at **both** glyph modes, **then** the returned row count is
   a **single distinct value** across all ten cases, and it equals
   `frameHeight({ board: <renderBoard's own length>, status: STATUS_ROWS, history: HISTORY_ROWS })`
-  computed from the merged exports. **The delivered module contains no numeric row-count literal** —
-  asserted textually over the diff (`ADR-0009` clause 9).
+  computed from the merged exports. **And the delivered module's executable text — `src/render-seam.ts`
+  with comments stripped — contains no digit character at all**, so no row count can be written there
+  to drift from `frameHeight`'s (`ADR-0009` clause 9). *(Scope is **this module's source**, which is
+  what the instrument reads; the fence that keeps the count out of a sibling file is `A10`, not this
+  clause. **Known blind spot, stated rather than implied**: a height spelled without digits — a
+  string's `.length`, say — is not caught here, and is invisible to the behavioural half as well
+  because `frameHeight` returns the same value for every input this module can be given.)*
 - **`A4` (orientation is passed through, not re-implemented).** **Given** the start position, **when**
-  the seam is built `white-bottom` and again `black-bottom`, **then** the frame's board region is
-  **byte-identical** to `renderBoard(position, mode, orientation)` for the matching orientation, and
-  the two differ. *(Byte-equality against the merged renderer is what forbids a second board
-  implementation.)*
+  the seam is built `white-bottom` and again `black-bottom`, **then** for the matching orientation
+  the frame's board region equals `renderBoard(position, mode, orientation)`'s rows each padded with
+  trailing blanks to **the width `assembleFrame` derives from the panels** — the widest row of
+  `renderBoard` / `renderStatusPanel` / `renderHistory` (`src/frame.ts:194-208`), computed from those
+  three and **never read off the frame or off the board region** — and the two orientations' board
+  regions differ. *(Two things this catches, both measured as surviving mutants of the weaker forms:
+  a seam that ignores the bound orientation, and a seam that pads the board itself — reading the
+  width off `frame[0]`, which **is** a board row, makes the seam and the assertion draw the number
+  from the same place and the padding mutant walks through. **What it does not catch is a second
+  board implementation**: a copy that renders the same bytes is invisible to every byte comparison,
+  measured. That property is `A11`'s inside this seam and `ABC-054`'s across the repository.)*
 - **`A5` (one mode, bound once, reaching both consumers).** **Given** `mode: "ascii"`, **then** the
   whole returned frame carries **zero** code points above `U+007F`, including in the message region
   fed a `♞` (proving the mode reached `assembleFrame`'s sanitizer as well as `renderBoard`);
   **given** `mode: "unicode"`, **then** the board region carries **at least one** code point in
   `U+2654`–`U+265F`. *(`EPIC-002` `2a`, re-asserted through the closure.)*
-- **`A6` (no ambient reads).** The delivered module contains **zero** occurrences of `process.` —
-  asserted over the diff, not by inspection. It imports nothing from `glyph-mode.ts`.
+- **`A6` (no ambient reads).** The delivered module's source — `src/render-seam.ts`, comments
+  included — contains **zero** occurrences of `process.`, of the bare word `process`, of
+  `globalThis` and of `import.meta`, and **zero** imports from `glyph-mode.ts`; asserted textually,
+  not by inspection. *(Scope is **this module's source**, which is what the instrument reads. The
+  three added spellings are not decoration: a substring check for `process.` alone is one keystroke
+  wide and an ambient read via `globalThis["process"]` was measured green against it. **Known blind
+  spot**: any grep loses to the next spelling, so this clause guards the module's *text*, not the
+  repository's capability — the capability property is the firing threshold's clause (b) below.)*
 - **`A7` (`history.ts` is a TYPE import only — `NFR-002`'s structural premise).** **Given** the merged
   frame-path probe rooted at this module, **then** `src/history.ts` is **absent** from the reported
   closure. *(The seam takes `GameHistory` and reads `history.position`; it needs no runtime binding
@@ -135,7 +159,34 @@ Every criterion is provable as a value with **no TTY and no child process** — 
 - **`A10` (no production change outside this module).** `git diff --numstat` shows this module and its
   test file, plus the one probe-root line `A9` requires, and **nothing else** — `src/frame.ts`,
   `src/render.ts`, `src/status-panel.ts`, `src/history-pane.ts` and `src/turn-loop.ts`
-  **byte-identical**. Suite green, skip **0**.
+  **byte-identical**. Suite green, skip **0**. *(This is the only diff-scoped criterion on the page,
+  and it is the fence `A3` and `A6` rest on: their instruments read one file, and what stops a
+  literal or an ambient read being moved one module away is that a second module cannot be added at
+  all. It is checked by reading the diff, not by an assertion in the suite.)*
+- **`A11` (the merged four are CALLED, not re-implemented).** **Given** one seam call, **then**
+  `renderBoard`, `renderStatusPanel`, `renderHistory` and `assembleFrame` are each called **exactly
+  once** — a call count, not a comparison. *(This is `## Scope`'s own "every panel is called, none is
+  re-implemented", which until now no criterion asserted. **Its reach, stated honestly**: it forbids
+  **this seam** from rendering a region itself, and it is the assertion — not `A4` — that a
+  byte-identical copy of `renderBoard` in its own module fails. It does **not** forbid the repository
+  from containing a second board implementation, and no ticket-local criterion can: a seam could call
+  the merged four for the count and render from a copy, and both would be byte-equal. The repo-wide
+  property needs an instrument that measures **consumers**, and that is `ABC-054`.)*
+
+## Criterion repair — 2026-08-13, BA/PM, after the QE gate
+
+**The code was never wrong; four criteria were.** `A4` as originally written (*"the frame's board
+region is byte-identical to `renderBoard(...)`"*) is satisfiable by **no** build on this tree —
+`assembleFrame` pads every panel row to the widest panel, which is never the board's — and its stated
+purpose (*"byte-equality … is what forbids a second board implementation"*) is **false**: a copy of
+`renderBoard` in its own module ships green against every byte comparison here. `A4` above now says
+what byte-equality does measure; `A11` carries the call-count property that actually forbids a
+re-implemented region **inside this seam**; `A3` and `A6` now name the instrument they are read by,
+the file it reads, and the blind spot each carries. **Nothing here relaxes a criterion to fit the
+delivered build, and the delivered `src/render-seam.ts` satisfies every clause above unchanged.**
+
+The measurements, the refuted characterisation and the mutants behind each line live in
+`.grugops/context/refinement-ABC-041-a4/notes/` and `quality-gate-ABC-041/notes/`, not here.
 
 ## Dependencies
 
@@ -160,17 +211,35 @@ Every criterion is provable as a value with **no TTY and no child process** — 
 - **`NFR-002` module scope: this adds a production module AND a frame producer.** `A7` and `A9` are the
   two measurable consequences. The `ADR-0011` census moves by one **deliberately**, not by discovery.
 - **Security: not triggered.** This module reads no input from outside the process, spawns nothing,
-  opens nothing and writes nothing. **Firing threshold, falsifiable:** it fires if the delivered diff
-  adds a runtime dependency (`package.json` has **no `dependencies` key** — absent, not `{}`), imports
-  any Node builtin, or touches any file under `src/` other than this module, its test file and the one
-  probe-root line.
+  opens nothing and writes nothing. **Firing threshold, falsifiable — four clauses, each with its own
+  stated subject** (repaired 2026-08-13; the one-subject form it replaces fired on a property the
+  tree had already abandoned two tickets earlier, so it measured the repo rather than the change):
+  - **(a) Runtime dependency.** Fires if `package.json` gains a `dependencies` key, or if
+    `package.json` / `package-lock.json` is touched at all. *(`git diff --numstat <base> HEAD --
+    package.json package-lock.json` non-empty, or `jq 'has("dependencies")' package.json` true.)*
+  - **(b) Production capability.** Fires if **any non-`.test.ts` file under `src/`** — this module or
+    any module in its runtime closure — imports a Node builtin, reads `process.`, or calls
+    `spawn` / `exec` / `fetch` / `eval` / `new Function`. *(`grep -rlE 'from "node:' src/ | grep -v
+    '\.test\.ts'` empty. It is empty today across 47 files — a real invariant with a real baseline of
+    zero, and **`ABC-042` is the hop that ends it**, deliberately rather than by surprise.)*
+  - **(c) Test-lane capability beyond existing precedent.** Fires if a **test** file in the diff
+    introduces a capability this lane does not already hold: network, a filesystem write outside a
+    temp dir, or a new `child_process` spawn. Read-only `node:fs` over the repository's own source is
+    **explicit precedent** (`src/san.test.ts`, `src/history-pane.nfr.test.ts`) and does not fire.
+  - **(d) Blast radius.** Fires if the diff touches any file under `src/` other than this module, its
+    test file and the one probe-root line. *(This is `A10`, unchanged.)*
+  **Whichever way a reading is disputed, it fires and the gate resolves it** — the implementer is
+  structurally the wrong decider of a threshold whose answer decides whether their own work is
+  reviewed.
 
 ## Test notes
 
 1. **Assert reference identity, not equality, for the passed-through `GameStatus`** (`A2`). An equal
    copy is what a re-deriving build produces.
-2. **Assert byte-equality against `renderBoard`** (`A4`), not "the board looks right". A second board
-   implementation is the failure this catches.
+2. **Derive `A4`'s padding width from the panels, never from the frame** — `frame[0]` is a board row,
+   so a width read off it lets a seam that pads the board inflate both sides of the assertion at
+   once. **`A4` catches a wrong board, not a second implementation**; `A11`'s call count is what
+   catches a re-implemented region, and neither reaches across the repository.
 3. **The 100,000-character message item is `ADR-0009`'s own probe** and it is cheap — height
    invariance under the message region is already measured merged code; this re-asserts it through the
    closure.
@@ -221,3 +290,11 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `S` (2), calibrated, with the split line named |
 | 9 | priority assigned | **✅** `P0` |
 | 10 | no major unresolved blocker | **✅** nothing this ticket needs is open. The one decision it required — board orientation — is **ruled on this page**, not deferred |
+
+**This table is the score taken at the cut and is NOT re-scored here** — `ABC-041` is in flight, not
+being pulled, and DoR asks whether criteria are *well formed*, which is a different question from the
+one the gate answered. Read items **4** and **6** as historical: item 4's evidence cell cites
+*"byte-equality against the merged renderer"* and item 6 cites the single-subject firing threshold,
+and **both of those phrases were refuted by measurement and are replaced above**. A 10/10 at the cut
+that survived a gate refutation is exactly what a well-formed-but-wrong criterion looks like; the
+control it feeds is `AGENTS.md` § Process rules, rule 1, and it is honest only if it is left standing.
