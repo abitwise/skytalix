@@ -321,11 +321,20 @@ describe("ABC-041 — the render seam", () => {
   });
 
   /**
-   * THE FOUR ROWS BELOW WERE ADDED BY THE QE GATE (`quality-gate-ABC-041`), each because a mutant
+   * THE THREE ROWS BELOW WERE ADDED BY THE QE GATE (`quality-gate-ABC-041`), each because a mutant
    * built against the delivered module SURVIVED every assertion above. They add no file — the lane
    * allotment of 1 was already spent by this file itself. The first of them was written as
    * "`A4` (purpose)"; BA/PM has since deleted that false purpose clause and cut the property as the
    * ticket's own `A11`, which is what the row is now named for.
+   *
+   * A FOURTH — "`A4` (width)" — WAS DELETED BY THE SAME GATE AT ITS RE-GATE, and it was measured
+   * before it was cut. It was written while `A4` above read its width off `frame[0]`; now that `A4`
+   * derives the width from the panels for BOTH orientations it is a white-bottom-only restatement
+   * of that clause, and `fixture()` defaults to exactly `A4`'s first iteration. Measured on the
+   * padding mutant `X2`, the orientation mutant `X1` and a black-bottom-only padding mutant `X2b`:
+   * dropping it loses NO kill — every one still reds `A4` — and `X2b` reds `A4` while that row
+   * stayed GREEN, so it was strictly weaker than the clause it duplicated. It was not removed to
+   * make anything pass: `A4` reds on `X2` on its own with the whole-frame equality deleted.
    */
 
   it("A11 — the merged four are each CALLED exactly once, never re-implemented", () => {
@@ -348,24 +357,6 @@ describe("ABC-041 — the render seam", () => {
     expect(panel, "renderStatusPanel").toHaveBeenCalledTimes(1);
     expect(pane, "renderHistory").toHaveBeenCalledTimes(1);
     expect(assembler, "assembleFrame").toHaveBeenCalledTimes(1);
-  });
-
-  it("A4 (width) — the board's padding is the PANELS' width, derived without reading the frame", () => {
-    // Written by the gate while `A4` above still read its width off `frame[0]`, which IS a board
-    // row — so the seam and the assertion drew it from the same place and a seam appending blanks
-    // to every board row passed (`X2`). `A4` above now derives the width from the panels for BOTH
-    // orientations, so this row restates that clause for one. It is KEPT, not folded in: it is the
-    // gate's own row, and when it reds it names the width property alone.
-    const { history, status, seam } = fixture();
-    const frame = seam(history, status, false, []);
-    const board = renderBoard(history.position, "unicode", "white-bottom");
-    const width = Math.max(
-      ...[...board, ...renderStatusPanel(history, status, false), ...renderHistory(history)].map(
-        (row) => row.length,
-      ),
-    );
-
-    expect(boardRegionOf(frame, board.length)).toEqual(board.map((row) => row.padEnd(width)));
   });
 
   it("A1 (messages) — the seam's FOURTH parameter reaches the frame's message region", () => {
