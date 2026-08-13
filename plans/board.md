@@ -114,9 +114,7 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Development (WIP 1/3)
-
-- [ABC-026] The default test lane has no cumulative budget  (owner: Architect/Design, S, P1, pulled: 2026-08-13 at task `abc026-2026-08-13`, DoR 10/10; **this hop is expected to DISCHARGE `H5`, owed past two merges**; A6 pins `src/` byte-identical; two prior readings of the lane disagree and A1 must resolve them)
+## In Development (WIP 0/3)
 
 
 
@@ -132,8 +130,10 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Review (WIP 1/3)
 
+## In Review (WIP 2/3)
+
+- [ABC-026] The default test lane has no cumulative budget  (owner: QE/E2E, S, P1, to review: 2026-08-13; **built at `21f5a12`, 4 files, ZERO `src/` bytes, no ratified target moved (ADR-0008 edits are pure additions, 0 deletions)**; **`H5` DISCHARGED — wall 2.210 s / 3 s and CPU 10.390 s / 13 s, medians of n=8 interleaved, 135 runs, 0 harness errors; CPU binds first, measured**; headroom **~7 planning / ~16 ceiling files**, halving the architecture audit's ~14/~27; **`pool: "threads"` ADOPTED — 24/24 green bounds flake at ~12.5%, NOT zero, and that is what QE attacks**)
 - [ABC-021] Draw-claim interaction — the player having the move claims  (owner: QE/E2E, S, P1, epic: EPIC-002, to review: 2026-08-13; **built at `4601f14`, 3 files, +298/−11, boundary clean against the merge base**; engineer's own gate green — lint 0, typecheck 0, build 0, **814/814 on 28 files, ZERO new test files**, skip 0; `PERFT_DEEP` not run, ruled unreachable by the diff; **engineer flagged FIVE things wrong in the ticket and TWO `ABC-035` conflicts — QE attacks them, does not read them**)
 
 
