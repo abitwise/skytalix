@@ -373,10 +373,14 @@ describe("ABC-042 — the accepted set is closed", () => {
     // The two builds a resolver that quietly recognises a fifth flag can take, and both are red
     // here: enlarging the enumeration fails the equality above; writing the literal anywhere else
     // fails this row. `A6`(ii)'s random corpus is blind to both (P ~ 1.4e-9, measured).
+    // THE TEMPLATE-LITERAL ALTERNATION IS LOAD-BEARING (`S3`, Security/NFR's gate): with only the
+    // two quote forms scanned, a fifth flag recognised through a backtick literal is invisible here
+    // — the enumeration is unchanged so the equality above passes, (ii)'s random corpus is blind
+    // (P ~ 1.4e-9) and the near-miss family is derived from the table, so nothing else sees it.
     const code = executableCodeOf("cli-options.ts");
-    const literals = [...code.matchAll(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g)].map((match) =>
-      match[0].slice(1, -1),
-    );
+    const literals = [
+      ...code.matchAll(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`/g),
+    ].map((match) => match[0].slice(1, -1));
     // Import specifiers and `render.ts`'s own orientation vocabulary: space-free literals that are
     // NOT argv spellings, transcribed here so a new one cannot arrive unnoticed.
     const NOT_ARGV = ["./glyph-mode.ts", "./render.ts", "white-bottom", "black-bottom"];
@@ -394,14 +398,29 @@ describe("ABC-042 — the accepted set is closed", () => {
     }
   });
 
-  it("A6(i) — the 18 near misses derived from the table are rejected in their legal position", () => {
-    // Derived FROM THE TABLE so they cannot go stale, and aimed at the two mutants data-equality
-    // alone does not catch: prefix matching (`startsWith`) and case folding.
-    const nearMisses = (spelling: string): readonly string[] => [
-      spelling.toUpperCase(),
-      `${spelling}x`,
-      spelling.slice(0, -1),
-    ];
+  it("A6(i) — the near-miss family, COMPLETE OVER POSITION, is rejected in its legal position", () => {
+    // Derived FROM THE TABLE so they cannot go stale. The family the criterion now names: the
+    // upper-case form, plus one character from `{"x", " "}` INSERTED at every index or DELETED at
+    // every index. The three derivations this replaced — upper-case, `+"x"`, one-character
+    // truncation — all touched the END of the spelling or the whole of it, so `token.endsWith(...)`
+    // and `token.trim() === ...` shipped 856/856 green: the set had not missed a transformation, it
+    // had missed the FRONT HALF OF THE STRING. Walking every index cannot have that hole again — a
+    // weakening invisible to this family must accept only tokens at edit distance >= 2. The old 18
+    // are a strict subset, so nothing already armed is traded away.
+    const nearMisses = (spelling: string): readonly string[] => {
+      const family = [spelling.toUpperCase()];
+      for (let index = 0; index <= spelling.length; index++) {
+        // A space is the only member a `trim()` weakening cannot survive; `x` is a printable
+        // non-space that keeps the old `+"x"` case inside the family.
+        for (const character of ["x", " "]) {
+          family.push(spelling.slice(0, index) + character + spelling.slice(index));
+        }
+      }
+      for (let index = 0; index < spelling.length; index++) {
+        family.push(spelling.slice(0, index) + spelling.slice(index + 1));
+      }
+      return family;
+    };
     const derived: string[] = [];
     const cases: (readonly string[])[] = [];
 
@@ -429,8 +448,16 @@ describe("ABC-042 — the accepted set is closed", () => {
       }
     }
 
-    expect(derived).toHaveLength(18);
-    // It cannot false-RED a legal build: none of the 18 is an accepted spelling.
+    // THE ROW PINS THE DERIVED COUNT, and it pins BOTH numbers because they differ and the
+    // difference is a trap: 138 CASES over 134 DISTINCT strings. The four duplicates are deletions
+    // at a repeated character — either `-` of `--` gives `-ascii` / `-unicode` / `-colour`, either
+    // `i` of `ascii` gives `--asci`. 138 is the count of cases actually resolved (`3n+3` per
+    // spelling, n = 7+9+8+5+5+6); 134 is what a uniqueness assertion may say. Asserting uniqueness
+    // against 138 reds a CORRECT build, which is why both are written down here rather than left
+    // for the next reader to re-derive.
+    expect(derived).toHaveLength(138);
+    expect(new Set(derived).size).toBe(134);
+    // It cannot false-RED a legal build: none of the 138 is an accepted spelling.
     expect(
       derived.filter((miss) => (ACCEPTED_ARGUMENTS as readonly string[]).includes(miss)),
     ).toEqual([]);
@@ -492,17 +519,33 @@ describe("ABC-042 — the accepted set is closed", () => {
       );
     };
 
+    // THE DRAW BUDGET. `while (drawn.length < 250)` cannot exit until it has 250, so counting
+    // SURVIVORS afterwards can never fail for any filter: the over-dropping CONTAINS reading this
+    // row forbids empties the `--colour <word>` shape and the run HANGS to the 180 s timeout rather
+    // than reding. Bounding the loop by DRAWS is what turns that hang into a failed assertion. 500
+    // is measured, not chosen: the correct whole-form filter needs exactly 250 draws for 250 items
+    // (drawing `--ascii` or `white` at random is ~1e-10), so this is 2x headroom and cannot flake.
+    const DRAW_BUDGET = 500;
     const corpus = new Map<string, (readonly [readonly string[], string])[]>();
+    const drawsPerShape = new Map<string, number>();
     for (const [shape, generate] of Object.entries(SHAPES)) {
       const drawn: (readonly [readonly string[], string])[] = [];
-      while (drawn.length < 250) {
+      let draws = 0;
+      while (drawn.length < 250 && draws < DRAW_BUDGET) {
+        draws++;
         const candidate = generate();
         if (!isAcceptedForm(candidate[0])) drawn.push(candidate);
       }
       corpus.set(shape, drawn);
+      drawsPerShape.set(shape, draws);
     }
 
-    // ASSERTED FIRST: the non-vacuity control. Each shape still contributes 250 AFTER filtering.
+    // ASSERTED FIRST: the DRAWS. Reaching the budget is exactly "this filter dropped more than it
+    // kept", and it is the only reading of the corpus that an over-dropping filter can fail.
+    for (const [shape, draws] of drawsPerShape) {
+      expect(draws, `draws for shape ${shape}`).toBeLessThan(DRAW_BUDGET);
+    }
+    // And only then the survivors, which the bounded loop has now made falsifiable.
     for (const [shape, drawn] of corpus) expect(drawn, `shape ${shape}`).toHaveLength(250);
     expect([...corpus.values()].flat()).toHaveLength(1000);
 
@@ -706,14 +749,23 @@ describe("ABC-042 — the shape of what was delivered", () => {
 
   it("bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes", () => {
     const child = CHILDREN.escape;
-    const echoed = child.union.split("\n")[0] as string;
+    // THE TOKEN IS LOCATED, NOT ASSUMED TO SIT ON LINE 0 (`S2`, Security/NFR's gate).
+    // `union.split("\n")[0]` is a POSITIONAL proxy: it is a superset of the echoed token only while
+    // the echo happens to land on the first line, and a build with the sanitiser removed AND the
+    // token moved down two lines emitted a literal `ESC [ 2 J` to the terminal while shipping
+    // green. Splitting on WHITESPACE follows the token wherever the message puts it, and every
+    // occurrence is taken, not the first: `ESC` is not whitespace, so an unstripped one stays
+    // attached to the word it precedes and lands inside what is asserted over.
+    const located = child.union.split(/\s+/).filter((word) => word.includes("[2Jpurple"));
+    const echoed = located.join(" ");
 
     // (i) NON-VACUITY FIRST: a build whose message never echoes the argument would satisfy every
     // absence below by saying nothing at all.
     expect(child.union).toContain("[2Jpurple");
-    // (ii) The echoed LINE — a superset of the echoed token, so this is stronger, never weaker —
-    // carries no C0, no U+007F and no escape. The newline that terminates it is excluded, which is
-    // why the assertion is scoped to the line rather than to the whole message.
+    expect(located.length, "the echoed token is on neither channel").toBeGreaterThan(0);
+    // (ii) The echoed TOKEN — every occurrence of it, joined by the one character that cannot
+    // affect the verdict — carries no C0, no U+007F and no escape. The newline that terminates the
+    // message is excluded by construction, which is why the assertion is scoped to the token.
     expect(codePointsOf(echoed).filter((code) => code < 0x20 || code === 0x7f)).toEqual([]);
     expect(echoed).not.toContain("\u001b");
     // (iii) And no frame, on either channel.
