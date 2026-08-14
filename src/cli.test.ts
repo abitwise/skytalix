@@ -405,11 +405,22 @@ describe("ABC-042 — the accepted set is closed", () => {
     const derived: string[] = [];
     const cases: (readonly string[])[] = [];
 
-    for (const flag of [...TABLE_FLAGS, TABLE_COLOUR]) {
+    for (const flag of TABLE_FLAGS) {
       for (const miss of nearMisses(flag)) {
         derived.push(miss);
         cases.push([miss]);
       }
+    }
+    // `--colour`'s LEGAL ARGV POSITION IS TWO TOKENS, and the criterion says "in its legal argv
+    // position". Asserted in the ONE-token form, every `--colour` near miss rejects for the WRONG
+    // reason — the value word is missing — and that is green on a resolver whose membership test
+    // has been weakened. `token.startsWith(COLOUR)` and `token.toLowerCase() === COLOUR` both
+    // ACCEPT `--colourx white` / `--COLOUR white`, print a 23-row board and exit 0; both were
+    // green against the one-token form. `--ascii` and `--unicode` need no such change: the
+    // one-token form IS their legal position, and the same weakening on them is already caught.
+    for (const miss of nearMisses(TABLE_COLOUR)) {
+      derived.push(miss);
+      cases.push([miss, TABLE_VALUES[0]]);
     }
     for (const value of TABLE_VALUES) {
       for (const miss of nearMisses(value)) {
@@ -510,7 +521,11 @@ describe("ABC-042 — the accepted set is closed", () => {
 
 describe("ABC-042 — the shape of what was delivered", () => {
   it("A2 — the entry point exports nothing", () => {
+    // `export` is the letter; "nothing can import a binding from it" is the purpose. A module that
+    // hangs a binding on `globalThis` publishes it without the keyword, and was green against the
+    // keyword alone — so the purpose gets its own row rather than trusting the letter to carry it.
     expect(executableCodeOf("cli.ts")).not.toMatch(/\bexport\b/);
+    expect(executableCodeOf("cli.ts")).not.toContain("globalThis");
   });
 
   it("A3 — the entry point is flat in src/, where the licence guard can see it", () => {
@@ -551,6 +566,19 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // The resolver is the exclusive validator: nothing branches on the argument vector after it
     // returns, so there is no second, unvalidated input path (ASVS V2.2.2).
     expect(entry.match(/\bresolveOptions\s*\(/g)).toHaveLength(1);
+    // THE WHOLE PROCESS SURFACE, TRANSCRIBED — the instrument shape `A8` uses for numbers, and for
+    // the same reason: a COUNT of `process.argv` cannot see a SECOND read spelled `process["argv"]`.
+    // That build reads the argument vector twice and branches on it after the resolver returned —
+    // exactly the unvalidated second path V2.2.2 forbids — and it was green against the count above.
+    // The resolver already gets this stronger form (`not.toContain("process")` on its whole source);
+    // this is that form's other half, on the one module that legitimately names the handles.
+    expect((entry.match(/process\.\w+/g) ?? []).sort()).toEqual([
+      "process.argv",
+      "process.exitCode",
+      "process.stderr",
+      "process.stdout",
+    ]);
+    expect(entry, "argv reached by bracket access").not.toMatch(/process\s*\[/);
   });
 
   it("A9 — the resolver names no ambient handle at all, comments included", () => {
