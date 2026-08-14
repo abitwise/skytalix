@@ -30,6 +30,21 @@ it false-positives on a construct this file's own `A3` ruling calls not-a-breach
 instance of one defect shape in this file, and the second reason the fix is a bound rather than a
 reversal: the RULING was right all three times, one of its reasons was not.**
 
+**AMENDED A THIRD TIME 2026-08-15 at task `abc042-b1-2026-08-15`, subtask
+`design-ABC-042-adr0011-clause3`, Workflow 07 — clause 3's LICENCE ADMISSION TEST is struck and
+replaced, and a fifth residual (`R5`) is registered. No clause's VERDICT, no instrument, no
+criterion, no expression and no line of any build changes.** `R2`'s dated trigger — *"the first
+licence entry added after `turn-loop.ts`"* — fired when `ABC-042` landed `cli.ts` in
+`LICENSED_DRIVERS`, and it exposed that clause 3's admission sentence is **false of the correct
+build and misquotes `ADR-0002` in two independent ways**. The replacement is a two-part property test
+discharged in the per-entry citation this clause already required; **the wide reading that would make
+the licence a formality is refused by name and priced**, and the one verdict that moves — `cli.ts`,
+the shipped entry — is confronted in the block rather than left for a reader to notice. **This is the
+fourth instance of one defect shape in this file** (*"non-static"*, *"the maximum"*, *"under `src/`"*,
+and now *"game-owning driver"*): the RULING was right every time, one of its **descriptions** was
+not. Still `accepted`, still no target and no level, **still zero production lines and zero test
+lines.**
+
 **No target moves and no level is set, so no owner ratification is owed** — the same distinction from
 `ADR-0008` that `ADR-0009` and `ADR-0010` both draw. `ADR-0008` needed **Olger Oeselg** because it
 fixed a budget *level* a human has to value; there is no level here. Every claim below is
@@ -193,10 +208,12 @@ module that legitimately imports `history.ts`, and it is simply not on the frame
 ### Clause 3 — the regex holds a DIFFERENT property, `ADR-0002` clause 4, and that is why it must NOT be narrowed
 
 > The regex scans **every** production module and asserts that the set of runtime importers of
-> `src/history.ts` **equals the declared licence set**. A module may hold a runtime import of the
+> `src/history.ts` **equals the declared licence set**. ~~A module may hold a runtime import of the
 > history module only if it is the game-owning driver `ADR-0002` clause 4's single-supplier rule
-> requires. **Today the licence set is exactly `{ turn-loop.ts }`**, and each entry carries its
-> citation.
+> requires.~~ **STRUCK 2026-08-15 at `design-ABC-042-adr0011-clause3` — the admission test is
+> replaced in the block below; the equality above is UNCHANGED.** ~~**Today the licence set is exactly
+> `{ turn-loop.ts }`**~~ **— true when written, SUPERSEDED 2026-08-15: the set is
+> `{ turn-loop.ts, cli.ts }` and `R2`'s trigger has fired** — and each entry carries its citation.
 
 `ADR-0002` clause 4 — *"`gameStatus`'s `positionCounts` gets exactly one supplier: the history
 module. No other caller constructs that map"* — is a **whole-tree** invariant, unlike `NFR-002`,
@@ -246,6 +263,105 @@ a kill the delivered rule does not have (measured below).
 > the moment a second name can be wrong and nothing will say so. **`EPIC-006` is the WRONG expiry for
 > this half**: clause 2's declaration is deleted there when the frame path becomes a real closure, but
 > the licence is not, so **clause 3's bound outlives clause 2's.**
+
+> ### **[AMENDED 2026-08-15 at `design-ABC-042-adr0011-clause3` (Workflow 07) — THE ADMISSION TEST IS STRUCK AND REPLACED. `R2`'s trigger has FIRED: `ABC-042` landed the second licence entry. The equality, the scan set, the detection reach (3 of 5 forms) and EVERY instrument are UNCHANGED — what moves is one sentence that the correct, gated build violates.]**
+>
+> **What fired, and why it could not wait.** `R2` dates itself *"the first licence entry added after
+> `turn-loop.ts`"*. `LICENSED_DRIVERS` is now `["turn-loop.ts", "cli.ts"]`
+> (`src/history-pane.nfr.test.ts:219`), and `cli.ts` is a **composition root**, not a driver: it
+> constructs the game, writes one frame and exits. Read over the delivered tree at this hop —
+> **20 production modules, `runtimeImporters = ["cli.ts", "turn-loop.ts"]`, guard green** — the
+> licence is correct and the equality holds. **Nothing is blocked and nothing about the build is in
+> question.** What is wrong is the sentence that says who may be in that array.
+>
+> **The struck sentence is not merely narrow. It is wrong in this repository's own vocabulary, and
+> that is what makes this a CORRECTION rather than a widening.** Two independent faults, both
+> checkable against `ADR-0002`'s text rather than against intent:
+>
+> 1. **It misattributes a requirement to `ADR-0002` clause 4.** Clause 4 in full
+>    (`ADR-0002-game-history-ownership.md:146-147`): *"`gameStatus`'s `positionCounts` gets exactly
+>    one supplier: the history module. No other caller constructs that map. The signature does not
+>    change."* It constrains who **CONSTRUCTS THE MAP**. It says nothing about who may **import** the
+>    history module and it names no driver at all. *"The game-owning driver `ADR-0002` clause 4's
+>    single-supplier rule requires"* asks for a party that rule never asks for.
+> 2. **`ADR-0002` uses *"owns the game"* for the module on the OTHER SIDE of the import edge.**
+>    Clause 2: *"One module above the core owns the game, and its authoritative state is the move
+>    list"* — and that module is **`src/history.ts`**, the module being imported. The struck sentence
+>    borrows `ADR-0002`'s own phrase and attaches it to the **importer**. `src/history.ts` cannot be
+>    its own runtime importer, so read strictly the licence set is **empty** and `turn-loop.ts` was
+>    never licensed either. A test that refuses both of its own entries is not a narrow test; it is a
+>    broken one.
+>
+> ### THE REPLACEMENT — two parts, discharged in the per-entry citation this clause already requires
+>
+> > A production module may hold a runtime import of `src/history.ts` only if **BOTH** hold, and
+> > **its citation at the declaration site must show both**:
+> >
+> > **(i) NECESSITY.** Its runtime import is **unavoidable given what the module must do** — it
+> > **constructs or advances the game**. A module that can take a `GameHistory` as a **type**, or
+> > receive one **injected**, is NOT licensable. Those two forms are what every other module in this
+> > tree already uses (`history-pane.ts` imports the type; `render-seam.ts` is guarded against
+> > importing the module at all; `frame.ts` receives rows as data), so a licence entry owes an
+> > argument for why neither is available to it.
+> >
+> > **(ii) THE SINGLE SUPPLIER IS INTACT.** It never constructs a `positionCounts` map; where it
+> > needs a status it calls `gameStatusOf(history)` — never a bare `gameStatus`, never a status
+> > literal. This is `ADR-0002` clause 4 stated as what it actually says.
+>
+> **NOT part of this test, deliberately: being off the frame path.** That is **clause 2's** property
+> and the probe's kill. A licence does not make a module frame-legal, and a licensed module that
+> reaches the frame path is still RED on the probe. Conflating the two is the defect this whole ADR
+> exists to separate and the replacement must not re-import it.
+>
+> **The two entries against the replacement.** `turn-loop.ts`: (i) it advances the game, which is
+> what a loop is; (ii) `ABC-019`'s `A3` names `gameStatusOf(history)` at every evaluation. `cli.ts`:
+> (i) measured at `design-ABC-042-stderr` and re-read here — `newGame` is the only constructor,
+> `render-seam.ts` is guarded against importing `history.ts` while `RenderSeam` takes a `GameHistory`,
+> a third module is forbidden by the ticket's scope, and `import type` is unavailable because
+> `newGame` is **called**; (ii) its citation states it and `ADR-0002` clause 4 is intact on the
+> delivered build. **Both pass on the property. Neither passed on the struck role-name.**
+>
+> ### THE WIDE READING IS REFUSED BY NAME, so this block cannot be cited as licence for it
+>
+> The obvious replacement — *"a module that does not itself construct a `positionCounts` map"* — is
+> **true of every production module in this tree except `history.ts`**. It licenses `zobrist.ts`,
+> `gameend.ts`, `perft.ts` and every renderer, and it makes **`WLAUNDER`** — the one build this
+> file's own containment was adopted to kill — licensable in a single sentence. **Part (i) is the
+> entire gate, and it is the part a hop under time pressure will want to drop.** Dropping it turns
+> the declaration into a formality.
+>
+> ### EXACTLY ONE VERDICT CHANGES, AND IT IS THE ONE THAT SHIPPED — said plainly, because that is the reason to suspect this block of being the move this file has refused three times
+>
+> Read over today's 20 production modules, the replacement refuses **everything the struck sentence
+> refused** — the `WLAUNDER` re-export from `zobrist.ts`, a laundering consumer in `perft.ts`, a
+> renderer, `cli-options.ts` — and admits **one module the struck sentence refused: `cli.ts`, the
+> delivered entry.** *(A reading over the tree, not a build ledger: no instrument reads this
+> sentence, so no build's verdict can be measured against it. The equality is machine-checked; the
+> **admission is not**, which is precisely why the sentence is the only gate there is.)*
+>
+> **The test that separates a correction from a widening, since one verdict moving is not
+> self-evidently innocent.** A widening-to-fit moves the **PROPERTY**, so a build that breaches it
+> now passes. A correction moves a **DESCRIPTION** that was never the property. Here the property is
+> `ADR-0002` clause 4's single-supplier rule; `cli.ts` satisfied it the day it landed, satisfies it
+> now, and not one word above changes what it must do to keep satisfying it. What the struck sentence
+> did was refuse a build that **breaches nothing**, on a role-name borrowed from the wrong side of an
+> import edge. **Amending a rule so a BREACHING build passes is the refused move and it is refused
+> here too; leaving a description that a NON-breaching build violates is how the next hop learns to
+> read this clause as elastic — and an elastic clause is the wide reading above, arrived at by
+> default instead of by decision.**
+>
+> **What does NOT move, so the blast radius is countable:** the equality assertion and its two kills
+> (`WSTALELICENCE`, and an unlicensed importer); the scanned set (clause 1); the detection reach (3
+> of 5 of `D27`'s forms, the containment's expression, byte-untouched); clause 2's declared frame
+> path and the probe's 11-module closure; clause 4; `R1`–`R4`; the ruling on `A3`; every alternative;
+> every criterion on every ticket; **zero production lines and zero test lines.**
+>
+> **One site is left inconsistent, named rather than discovered.**
+> `src/history-pane.nfr.test.ts:196-199` **restates the struck sentence verbatim** in the licence
+> docblock. `ABC-042`'s `A12` bounds that file to *"one element … plus its citation … and nothing
+> else in that file"*, so it cannot be corrected on that ticket and **is not corrected here.** It is
+> routed under `## What this changes elsewhere` with `R5`. **A routed inconsistency is the honest
+> outcome; the alternative was leaving the ADR and the docblock agreeing on something false.**
 
 ### Clause 4 — an ENTRY POINT is a production module with no exports
 
@@ -605,6 +721,12 @@ reader looking for the risk register finds all three.
 | **R2** | **clause 3** — the licence over-lists with names that have **no file**: unbounded and silent | Architect/Design | the **first licence entry added after `turn-loop.ts`**. **`EPIC-006` is the wrong expiry** — clause 2's declaration dies there, the licence does not |
 | **R3** | **clause 1** — the instrument reads *"directly in `src/`"* and the specifier is depth-fixed | Architect/Design | the **first `.ts` file under a subdirectory of `src/`** |
 | **R4** | **the two DYNAMIC forms** in unlicensed, off-frame-path modules stay uncaught after the containment | Architect/Design | **the first production module that gains a dynamic import of any local module**, or `EPIC-006` when the frame path becomes a real closure and the probe's reach can be reconsidered |
+| **R5** | **ADDED 2026-08-15 — clause 3's EQUALITY IS ITSELF UNWITNESSED.** `toEqual` at `src/history-pane.nfr.test.ts:335` can be weakened to a containment and **the whole suite stays green** (QE's `M15` at `quality-gate-ABC-042`, survived). Either direction lost is a real kill: superset-of-licence loses the **unlicensed importer** (the primary kill, `WLAUNDER`/`WPERFT-STATIC`), subset loses **`WSTALELICENCE`** (the gained one). **Pre-existing and latent** — the comparator has been unwitnessed since `ABC-029` and `ABC-042` changed the array, not the operator | Architect/Design | **OPEN NOW.** Routed at this hop as a **new-ticket row** (BA/PM writes it, the Engineer builds it) — `ABC-042`'s `A12` bars the file. If that row is not cut, the trigger is **the next hop that opens `src/history-pane.nfr.test.ts` for any reason** |
+
+**`R5` is a residual of the INSTRUMENT, not of the ruling** — the same species as `R3`, and it is
+listed here because *"the equality is the kill this clause buys"* is only honest if something notices
+when the equality stops being one. **The guard is machine-checked; the guard's own comparator is
+not.**
 
 **R4 is a residual this file already ruled on and is NOT a new acceptance** — `WPERFT-DYN` is ruled
 not a breach above, for the same reason. It is listed because *"the loss is twelve, six of which are
@@ -670,6 +792,33 @@ before.**
   **`NFR-002`'s `MET`/`MISS` remains Security/NFR's, and `ABC-026` still owns the lane total.**
   *(Flagged, not fixed: that row's note calls `ABC-029` `Backlog`, which is stale — the column is the
   Orchestrator's.)*
+**ADDED 2026-08-15 at `design-ABC-042-adr0011-clause3` — what the third amendment changes elsewhere,
+and who owns each. TWO SITES, ONE FILE, and NEITHER IS TAKEN HERE because `ABC-042`'s `A12` bars that
+file.**
+
+- **`src/history-pane.nfr.test.ts:196-199` — the licence docblock restates the STRUCK sentence
+  verbatim.** Correcting it is a **prose** edit at one site: zero executable characters, nothing
+  pinned (the drift tripwire at `:441-442` pins the regex literal, not this paragraph). **Route:
+  BA/PM writes the row, the Engineer edits the docblock — on a NEW ticket, not on `ABC-042`.**
+- **`src/history-pane.nfr.test.ts:335` — `R5`, the unwitnessed comparator.** The instrument is
+  **one assertion in the block that already reads the file**: `expect(instrument).toContain(...)`
+  over the comparator's literal text, the same shape as the drift tripwire at `:441-442` that this
+  file already sanctions. Zero production lines, zero spawns, no lane pressure. **It is the only
+  in-suite instrument available** — an assertion's operator cannot be observed behaviourally without
+  a mutation harness this repository does not have — and like its sibling it makes a weakening
+  **deliberate and visible in the diff** rather than impossible. **Route: identical, and it is the
+  same ticket and the same file as the site above — they should be cut together.**
+- **`ABC-042` is NOT re-opened and its criteria do NOT move.** `A12`'s bound is doing exactly the job
+  it was written for; widening it to carry two repairs the ticket did not cause would trade a
+  measured blast radius for unrelated hardening on a ticket already held at merge. **The struck
+  sentence never blocked `ABC-042` and the replacement does not unblock it** — the property was
+  satisfied throughout.
+- **`plans/nfr-catalog.md` and `ADR-0008` — NOT opened.** No bar, target, level or
+  `UNKNOWN - verify` marker moves. `NFR-002` is clause 2's and clause 2 is untouched; clause 3's
+  property is `ADR-0002` clause 4, which is not an NFR row.
+- **`ADR-0002` — READ CLOSELY, NOT RE-OPENED.** Clauses 2 and 4 are quoted above as they stand and
+  neither moves. What this amendment corrects is `ADR-0011`'s **misquotation** of them.
+
 - **`ADR-0002`, `ADR-0008`, `ADR-0009`, `ADR-0010` — read, NOT re-opened.** None is implicated:
   `ADR-0002` clause 4's single-supplier sentence is intact on every build measured, including
   `WLAUNDER`, and no lane budget or frame constant is touched.
