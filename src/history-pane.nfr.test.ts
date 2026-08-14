@@ -203,6 +203,12 @@ const FRAME_PRODUCERS: readonly string[] = [
  * `gameStatusOf(history)` as the single repetition-derive site — the loop is where the quantity
  * belongs, and `NFR-002`'s row says so in its own words.
  *
+ * `cli.ts` is the composition root (`ABC-042`). It calls `newGame` once to construct the game and,
+ * if it needs a status, `gameStatusOf(history)` — never bare `gameStatus`, and it never constructs a
+ * `positionCounts` map. `ADR-0002` clause 4's single-supplier rule is therefore untouched, which is
+ * the same construction `ABC-019`'s `A3` requires of `turn-loop.ts`. `ADR-0011` clause 4: it exports
+ * nothing, so it is never on the frame path and never a probe root.
+ *
  * THE LICENCE IS FILTERED TO THE ENTRIES THAT EXIST, so a driver that has not been built yet is
  * vacuous rather than red — this tree has no `turn-loop.ts` and `ABC-019`'s has one, and the guard
  * is green on both. The reach that bounds is named in `ADR-0011` and is NOT a choice: this tree and
@@ -210,7 +216,7 @@ const FRAME_PRODUCERS: readonly string[] = [
  * the first and red on the second. A licence that goes stale while its file EXISTS is caught, and
  * that is the kill the equality below buys.
  */
-const LICENSED_DRIVERS: readonly string[] = ["turn-loop.ts"];
+const LICENSED_DRIVERS: readonly string[] = ["turn-loop.ts", "cli.ts"];
 
 describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
   beforeEach(() => vi.clearAllMocks());

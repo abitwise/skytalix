@@ -59,7 +59,10 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 ### Development
 
-- Dev / run: `UNKNOWN - verify` <!-- no CLI entry point until EPIC-006 -->
+- Dev / run: `npm run chess` <!-- verified 2026-08-14 at ABC-042: prints the start position (23
+  rows) on stdout and exits 0. Optional arguments, and the complete set: `--colour white|black|random`,
+  `--ascii`, `--unicode`. It PRINTS A BOARD; it does not play a game — no move can be typed until
+  ABC-043. -->
 - Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft`
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 npx vitest run src/perft.test.ts`
 - Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
