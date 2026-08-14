@@ -579,6 +579,19 @@ describe("ABC-042 — the shape of what was delivered", () => {
       "process.stdout",
     ]);
     expect(entry, "argv reached by bracket access").not.toMatch(/process\s*\[/);
+    // AND THE IDENTIFIER ITSELF IS COUNTED, not only its property accesses. Both rows above
+    // enumerate SPELLINGS, and a spelling list is never longer than the last census that wrote it:
+    // an alias (`const ambient = process`), an ESM import (`import { argv } from "node:process"`)
+    // and an optional chain (`process?.argv`) each add a second, unvalidated read that BOTH rows
+    // above let through, and all three shipped 856/856 green. `process` occurs exactly FOUR times
+    // in this module and the row above says which four — together they CLOSE the set instead of
+    // listing it, which is the same move `A6`(i) makes on the accepted arguments.
+    expect(entry.match(/\bprocess\b/g)).toHaveLength(4);
+    // `globalThis` is asserted here as well as on `A2`'s row, for a different reason: there it is
+    // about publishing a binding, here about acquiring an ambient one. `globalThis["process"].argv`
+    // — `X8`'s own spelling in the `ABC-041` re-gate — is caught today ONLY by `A2`'s row, so `A9`
+    // would lose it silently the day `A2` is reworded.
+    expect(entry).not.toContain("globalThis");
   });
 
   it("A9 — the resolver names no ambient handle at all, comments included", () => {
@@ -714,5 +727,16 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // that adds one has to change this number and say why.
     expect(spawned).toBe(10);
     expect(Object.keys(CHILDREN)).toHaveLength(10);
+    // THE PIN ABOVE IS SELF-REFERENTIAL: `spawned` counts only children made through `childOf`, so
+    // a direct `spawnSync` adds an eleventh child the counter never sees, and that build was green.
+    // `N8-LANE` is breached and escalated, which makes this the instrument the owner's decision
+    // rests on — so the count is closed at its source rather than at the wrapper: `spawnSync` is
+    // the ONLY name this file takes from `node:child_process`, and it has exactly one call site.
+    const self = sourceOf("cli.test.ts");
+    const imported = [...self.matchAll(/import\s*\{([^}]*)\}\s*from\s*"node:child_process"/g)].map(
+      (match) => (match[1] as string).trim(),
+    );
+    expect(imported).toEqual(["spawnSync"]);
+    expect(self.match(/\bspawnSync\s*\(/g)).toHaveLength(1);
   });
 });
