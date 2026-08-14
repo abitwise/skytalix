@@ -181,8 +181,10 @@ gate" here: nothing is pushed and no PR is opened.
 
 This project deploys nowhere. It runs locally, from source on a developer's machine. There is no
 container, no manifest, no CI, no git remote, and no release has ever been cut — that absence was
-measured, not assumed. There is also no CLI entry point yet, which is why `Dev / run` above is
-`UNKNOWN - verify` and stays that way.
+measured, not assumed. There IS a CLI entry point as of `ABC-042` (2026-08-14) — `Dev / run` above
+is `npm run chess` — and it changes none of the above: it runs `src/cli.ts` from source, in place.
+**Runnable is not deployable.** `package.json` is still `private: true` with no `bin`, `main`,
+`exports` or `files`; nothing is built, emitted, published or installable.
 
 This is **present posture and explicitly revisitable** — the owner said "currently" and "for now"
 (2026-08-06). The revisit trigger is named: `EPIC-006` (packaging). **How the CLI will eventually be
