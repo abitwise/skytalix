@@ -157,9 +157,7 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Review (WIP 1/3)
-
-- [ABC-066] The usage line printed on every refusal is not a runnable command — the user who does what it says reproduces the error he is reading  (owner: QE/E2E, S, P1, epic: —, since: 2026-08-15, **BUILT 2026-08-16 on `grugops/ticket-to-pr-ABC-066` @ `8fb6ff1`, NOT MERGED — the owner's standing grant is permission to merge work that PASSED, and QE has not run**; engineer gate GREEN, **857/857 on 30 files** (856 before), lint/typecheck/build 0, skip 0, `self_fix_attempts` **0 of 2**; **`A4`'s mutant IS `main`'s own delivered string and it redded, plus a second mutant (`[--depth 3]`) redding a DIFFERENT row, so neither assertion carries the other**; delivery commit `ab0864e` **re-verified by the Orchestrator: 2 paths, `7 2` = 1 production line comments aside, 0 new files, `spawned` 10**; lane delta **+70 ms, BELOW its own +100 ms identity-null control — not distinguishable from zero**; **wrote the FIRST stderr→usage-line helper, 4 functions at module scope, because `ABC-062` has not merged — `ABC-065`'s guard reuses them**)
+## In Review (WIP 0/3)
 
 
 
@@ -175,7 +173,9 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+
+- [ABC-066] The usage line printed on every refusal is not a runnable command — the user who does what it says reproduces the error he is reading  (owner: Security/NFR, S, P1, epic: —, since: 2026-08-15, **QE GREEN 2026-08-16 — `READY_FOR_HUMAN_REVIEW`, all six criteria MET, 6 gaps (0 HIGH, 2 MEDIUM, 4 LOW), still NOT MERGED**; QE re-ran the whole gate independently in a linked worktree and **every number agreed with the engineer's** (857/857 on 30, lint/typecheck/build 0, skip 0, `spawned` 10, `A6` 2 paths / 1 production line); **12 MUTANTS: 9 RED across SIX DISTINCT assertions, and the 3 GREEN ones are the informative half — `M11` rewrote the whole sentence to `DO WHAT I SAY: npm run chess -- […]` and stayed green, which is the behavioural PROOF the guard tests the property and not the spelling**; **`A4`'s mutant is `main`'s own delivered string and was watched RED by someone who did not write the guard, so it is no longer an argument**; **THE VACUITY CHECK CAME BACK INVERTED AND IT MATTERS: a zero-member expansion is impossible (`[[]]` is seeded), but `resolveOptions([])` is `ok: true`, so a guard checking only "everything advertised resolves" WOULD be vacuously green — three other rows save `A2`, NOT the expander**; QE verified `src/` byte-identical to the engineer's tip after reverting all 12 mutants, and the Orchestrator re-verified that independently; **fires into Security/NFR on the TICKET'S OWN WORDS — it argues clause (b) quiet and then says "disputed either way, it fires and the gate resolves it"**; `security.block_on` = `high`)
 
 
 
