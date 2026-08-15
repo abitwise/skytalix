@@ -158,6 +158,62 @@ const CHILDREN = {
   escape: run("--colour", "\u001b[2Jpurple"),
 } as const;
 
+// ---------------------------------------------------------------------------------------------
+// `ABC-066` — reading the usage line back off a child's stderr, where a human reads it. `USAGE` is
+// not exported and must not become so (`ADR-0011` clause 4), so the line is LOCATED, never imported.
+//
+// THESE TWO HELPERS ARE THE SHARED ONES. `ABC-065`'s guard block lands in this file next and its
+// instruction is to REUSE them rather than write a second stderr->usage-line extraction: they are at
+// module scope, above every `describe`, for exactly that reason. Neither spells any accepted
+// argument, and neither spells any part of the usage sentence — both work by position and by
+// grammar, so a guard built on them cannot pass by matching text it transcribed (`A5`).
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * The one form `A1` requires the refusal to advertise. It is the criterion's own string, not a copy
+ * of the usage sentence, and it contains no member of `ACCEPTED_ARGUMENTS` — a bare `--` is the
+ * package runner's separator, not an argument this program accepts (`A3`).
+ */
+const SEPARATOR_FORM = "npm run chess -- ";
+
+/** The usage line as a human reads it: the LAST non-empty line a refused child wrote to stderr. */
+const usageLineOf = (stderr: string): string => {
+  const lines = stderr
+    .split("\n")
+    .map((line) => line.trimEnd())
+    .filter((line) => line !== "");
+  const last = lines[lines.length - 1];
+  // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK: a build that refused in silence would hand
+  // every assertion below an empty string to be satisfied by.
+  if (last === undefined) throw new Error("the refused child wrote nothing to stderr");
+  return last;
+};
+
+/** What the usage line offers: everything after the separator the criterion names. */
+const advertisedTextOf = (usageLine: string): string =>
+  usageLine.slice(usageLine.indexOf(SEPARATOR_FORM) + SEPARATOR_FORM.length);
+
+/**
+ * Expand advertised text into the invocations it advertises — a bracketed group OPTIONAL, `|` an
+ * ALTERNATION over the group's last token, which is what `[--colour white|black|random]` means and
+ * `[--colour white|--colour black|...]` does not say. The empty invocation is a member because every
+ * group is optional; each group's alternatives are then offered ONE AT A TIME.
+ *
+ * DELIBERATELY NOT A CROSS PRODUCT (`## Test notes` 5): twelve combinations prove nothing the six
+ * single-option forms do not, and the parse is the fiddly part — this stays small enough to read.
+ */
+const invocationsAdvertisedBy = (advertised: string): readonly (readonly string[])[] => {
+  const invocations: string[][] = [[]];
+  for (const group of advertised.matchAll(/\[([^\]]*)\]/g)) {
+    const alternatives = (group[1] as string).split("|").map((alternative) => alternative.trim());
+    const stem = (alternatives[0] as string).split(/\s+/).slice(0, -1);
+    for (const alternative of alternatives) {
+      invocations.push([...stem, ...alternative.split(/\s+/).slice(-1)]);
+    }
+  }
+  return invocations;
+};
+
 describe("ABC-042 — a human can run it", () => {
   it("A1 — `npm run chess` writes the start position and exits 0", () => {
     const frame = frameOf("ascii", "white-bottom");
@@ -790,5 +846,41 @@ describe("ABC-042 — the shape of what was delivered", () => {
     );
     expect(imported).toEqual(["spawnSync"]);
     expect(self.match(/\bspawnSync\s*\(/g)).toHaveLength(1);
+  });
+});
+
+describe("ABC-066 — the usage line is a command the user can actually run", () => {
+  it("A1/A2/A3 — every refusal advertises the separator, and all it advertises resolves", () => {
+    // THE REFUSAL CHILDREN, DERIVED FROM THE CAPTURE, NOT LISTED: every child that exited non-zero.
+    // Zero new spawns — `spawned` stays at the ten this file's `N8-LANE` row pins — and a listed set
+    // would go stale the day an eleventh criterion refuses a command line this row cannot see.
+    const refused = Object.values(CHILDREN).filter((child) => child.status !== 0);
+    expect(refused, "the captured refusal children").toHaveLength(6);
+
+    // `A1` — the separator reaches the user, on all six, on the channel he reads it on.
+    const usageLines = refused.map((child) => usageLineOf(child.stderr));
+    for (const line of usageLines) expect(line).toContain(SEPARATOR_FORM);
+    // One constant, so one line: reading the first below is reading all six.
+    expect(new Set(usageLines).size).toBe(1);
+
+    // `A2` — what it advertises is what the resolver accepts.
+    const advertised = advertisedTextOf(usageLines[0] as string);
+    // Nothing outside a bracketed group: a line that later advertised a MANDATORY argument would
+    // otherwise be expanded as if it had not, and the unread half would never be run.
+    expect(advertised.replace(/\[[^\]]*\]/g, "").trim(), "text outside every group").toBe("");
+    const invocations = invocationsAdvertisedBy(advertised);
+
+    expect(invocations.length).toBeGreaterThanOrEqual(6);
+    // The no-arguments form is advertised — every group is optional — and it is run like the rest.
+    expect(invocations).toContainEqual([]);
+    for (const argv of invocations) {
+      expect(resolveOptions(argv).ok, `advertised argv ${JSON.stringify(argv)}`).toBe(true);
+    }
+
+    // `A3` — the vocabulary does not move: the tokens the line advertises are the accepted set,
+    // 6 of 6, both ways, read off `ACCEPTED_ARGUMENTS` at run time rather than spelled again here.
+    // It is also what makes the six named forms present without transcribing one of them: each
+    // accepted token appears in some advertised invocation, and every one of those resolved above.
+    expect([...new Set(invocations.flat())].sort()).toEqual([...ACCEPTED_ARGUMENTS].sort());
   });
 });
