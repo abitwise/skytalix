@@ -153,6 +153,108 @@ command in a runbook is worse than an admitted gap.
 
 **No ticket was cut and no board column moved**, the same shape as the branching-model entry.
 
+## Standing directive — deploy is ALLOWED and NOT NEEDED; merge, test and UAT are the agent's, per ticket. 2026-08-15.
+
+**Project owner Olger Oeselg, 2026-08-15, in session, quoted verbatim:**
+
+> *"I allow you to deploy, but this project does not need to be deployed, it is local for now until
+> completed, mark that down. Mark also down that you can merge and test each ticket. If you have all
+> the tools and you can re-validate test coverage. You can also conduct UAT-s, you have that
+> ability."*
+
+**FOUR things were granted in one message and they are recorded separately**, the same discipline the
+2026-08-06 entry used, so that a later reader can check the reading rather than inherit it.
+
+### 1. DEPLOY IS ALLOWED — AND IT IS DORMANT, BY THE SAME SENTENCE
+
+**Both halves are the owner's and both are recorded.** The authority to deploy is granted; the need
+is denied. **The grant has no surface to act on today**, and that is measured rather than assumed: no
+CI, no git remote, no container, no manifest, no release ever cut, `environments: ["local"]`,
+`default_stack.deploy: none-local-only`.
+
+- **`ADR-0007`'s posture is CONFIRMED by this sentence, not overturned.** *"it is local for now until
+  completed"* says the same thing the 2026-08-06 quote said. **What moved is who holds the deploy
+  key, not where anything runs.**
+- **"until completed" is NEW wording and is the owner's own bound.** It names a condition, not a
+  date, and it sits alongside the trigger already on record: **`EPIC-006` decides distribution** —
+  npm, a binary, a `git clone` — and that decision is still not made. Do not fill it in.
+- **`production_requires_human_confirmation` is STILL `true`. THIS ENTRY DID NOT FLIP IT.**
+  `ADR-0007` built a detection row — **D7** — for exactly that flag being found `false`, deleted, or
+  argued obsolete. The owner did not name the flag; the flag has **zero present effect** because
+  nothing deploys; and flipping a tripwire that someone deliberately built, on machinery `EPIC-006`
+  has not designed yet, is a separate act with its own authority. **Named here, unasked, awaiting the
+  owner's explicit word.** `ADR-0007`'s clause that *"a human holds deploy"* is now stale and is
+  **Architect/Design's to amend under this directive** — the same shape as `N8-SPAWN`, where the
+  owner authorized and the role that owns the document wrote it.
+- **The kit still reads "never deploy" and cannot carry a project override.** On this project the
+  owner's directive wins; everything else in those files stands unchanged. Same precedence shape as
+  the branching model and the deployment posture.
+
+### 2. MERGE AND TEST EACH TICKET — a re-affirmation, and one limit RETIRED
+
+This widens the 2026-08-06 delegation of the merge keystroke and makes it explicit **per ticket**,
+with testing named alongside it.
+
+**Of the three limits the 2026-08-06 entry recorded as unchanged, ONE HAS NOW MOVED and TWO STAND:**
+
+| 2026-08-06 limit | status after 2026-08-15 |
+|---|---|
+| 1. **Deploy is not included** | **RETIRED by grant 1** — deploy is now allowed (and not needed) |
+| 2. **The gate still binds** | **STANDS.** `quality.gate_enforcement` is `blocking`. Approval to merge work that PASSED, never to skip, soften or self-certify. Gates run on the branch tip before and on `main` after, both recorded. A red gate is still a stop. |
+| 3. **The authority is still the owner's** | **STANDS.** What is delegated is the keystroke, not the right. One sentence revokes it. |
+
+### 3. UAT IS THE AGENT'S TO CONDUCT — and what that does and does not mean
+
+**This answers the open question raised at task `g1-answered-2026-08-15`.** 28 `Done` tickets each
+recorded *UAT deferred → `EPIC-006`, explicitly NOT passed*, because nothing was exercisable. **That
+reason expired when `ABC-042` merged and `npm run chess` printed a board.** The owner has now said
+the ability is the agent's.
+
+**Recorded honestly, because "UAT passed" must not later be read as something it was not:**
+
+- **An agent-run UAT is the execution of the business scenarios and the reporting of the result.** It
+  is a real, useful thing: scenarios, test data, pass/fail criteria, and an actual run against an
+  actual build.
+- **It is NOT a named human's acceptance signature.** The kit's UAT Planner exists to make a pack *so
+  a named human can accept the work*; `context.human_admission` is `off` on this install and **no
+  `finding` is admissible**, so a UAT result is recorded as `decision` / `observation` like every
+  other result and **cannot be stamped**.
+- **The owner may define UAT in this project however he wishes** — this entry records the distinction
+  rather than deciding it, so that the two readings never quietly merge.
+
+### 4. COVERAGE — the tool was already installed, the bar had NEVER been measured, and it is measured now
+
+**Measured 2026-08-15 by the Orchestrator on `main` @ `7313156`** (Apple M3, Darwin 25.5.0 arm64,
+Node v24.12.0, vitest 3.2.7): **`@vitest/coverage-v8` is in `devDependencies` and NO script, and no
+`vitest.config.ts` key, has ever invoked it.** `quality.coverage_threshold` is `0.8` and
+`quality.mandatory_gates` is `["lint","typecheck","unit","build"]` — **so the coverage bar has a
+number, an installed instrument, and nothing that runs it.** First run ever:
+
+| denominator | % stmts | % branch | % funcs | vs `0.8` |
+|---|---|---|---|---|
+| **all files** (includes `tools/grugops/*.js`) | **79.15** | 99.14 | 97.64 | **NOT MET** |
+| **`src/` only** | **97.29** | 99.48 | 100 | **MET, comfortably** |
+
+**The whole question is the denominator, and that is the SAME SHAPE as `N8-LANE`'s** — the defect
+`ABC-026` exists for. Two `tools/grugops/*.js` files (279 lines, 0%) decide whether this project is
+above or below its own bar. **Not resolved here: choosing a denominator is a bar decision, and a bar
+is not an Orchestrator's to set.**
+
+**One finding worth more than the number:** **`src/cli.ts` reads 0% (lines 43–93) — the entry point
+`ABC-042` merged today.** It is covered by 29 tests that **spawn it as a child process**, and v8
+coverage does not cross a process boundary. **The module is thoroughly tested and completely
+invisible to the instrument at the same time.** Consequence, recorded before anyone trips on it:
+**any coverage gate adopted as written would go RED on the best-tested new module in the
+repository** — and the same child-process strategy is what `N8-SPAWN` exists to account for. One
+test strategy, three instruments blind to it.
+
+### What this entry does NOT do
+
+**No config value was changed. No ADR was edited. No gate was added, removed or softened. No ticket
+was cut and no board column moved** — the same shape as the branching-model and deployment-posture
+entries. `AGENTS.md` is the **AGENTS.md Scribe's** to update and `ADR-0007` is **Architect/Design's**;
+this entry is the authority both of them cite, not the specification.
+
 ## Standing directive — read before prioritising anything
 
 **Project owner Olger Oeselg, 2026-07-31:** *"The most important thing is that chess moves are
