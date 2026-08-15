@@ -138,26 +138,12 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 ## Ready (WIP 0/8)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 0/3)
 
-- [ABC-065] `AGENTS.md`'s `Dev / run` never shows the `--` separator, and its option list is compared to nothing  (owner: Software Engineer next, S, P1, epic: —, since: 2026-08-15, **HALF LANDED 2026-08-16 on `grugops/ticket-to-pr-ABC-065-scribe` @ `717e51d`, NOT merged — one ticket, one branch, two hands, and it does NOT close on the documentation half**; Scribe put the separator example INSIDE the slot's HTML comment so it falls within the span `A1`/`A3` score, `npm run chess -- ` **0 → 1**; both documented commands RUN before recording, exit 0 — and `npm run chess --ascii` measured to pass **no arguments** to the program; **`A2` verified by the Orchestrator by BLOB HASH, not by reading a diff — `src/cli.test.ts` identical on `main` and the branch, so `:193-204` cannot have moved**; **`A1` vs `A3` are in tension and I RULED: the bare `--` is not an option token, the collector excludes it explicitly, and removing the separator to satisfy `A3` is forbidden — wording repair routed to BA/PM**; guard hop branches from the Scribe's tip, not `main`)
+## In Review (WIP 1/3)
 
+- [ABC-065] `AGENTS.md`'s `Dev / run` never shows the `--` separator, and its option list is compared to nothing  (owner: QE/E2E, S, P1, epic: —, since: 2026-08-15, **BOTH HALVES BUILT on ONE branch `grugops/ticket-to-pr-ABC-065-scribe` @ `901c670` — Scribe's `AGENTS.md` at `39122ec`, guard at `c5a5493`, `main` merged in at `9490740` — NOT MERGED, QE has not run**; gate GREEN, **859/859 on 30 files** (857 before = exactly the two new rows), lint 0 after ONE autofix of biome FORMATTING only (`self_fix_attempts` 1 of 2, no rule disabled), typecheck 0, build 0, skip 0; **THE VACUITY PROOF IS THE RESULT: the `V` mutant is not synthetic — it restores `AGENTS.md` to the state `ABC-065` FOUND it in, and the guard reds on `toContain(SEPARATOR_FORM)`; typecheck was run ALONE first so a red could not be a compile error in disguise**; both `A4` mutants RED, plus a THIRD the engineer built unasked (`C`, swap holding the count at 3) because `A4`-2 redded on the count floor and left open whether the set equality does independent work — **it does**; **`invocationsAdvertisedBy` GENUINELY CANNOT SERVE this input and the hop said so instead of forcing the reuse I asked for — forcing it would have manufactured the exact vacuity I sent it to avoid**; `advertisedTextOf` reused and fought TWICE exactly as QE's `Q2` predicted, both handled caller-side, no fork, no edit; Orchestrator-verified: **1 path excluding `.grugops/`, `85 0` PURE APPEND, ZERO production files on the whole branch, `ABC-042`'s `A1` row md5 `0cf8f54c…` identical, `spawned` 10**)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## In Review (WIP 0/3)
 
 
 
