@@ -884,3 +884,88 @@ describe("ABC-066 — the usage line is a command the user can actually run", ()
     expect([...new Set(invocations.flat())].sort()).toEqual([...ACCEPTED_ARGUMENTS].sort());
   });
 });
+
+describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set", () => {
+  /** The closing delimiter of the slot's HTML comment. Written once; never as an offset. */
+  const COMMENT_CLOSE = "-->";
+
+  /**
+   * The slot, LOCATED MECHANICALLY (`## Test notes` 1): the `- Dev / run:` list item through the end
+   * of its HTML comment. Line numbers move — `ABC-042`'s own `AGENTS.md` row moved 56 lines when
+   * `ABC-066` landed — so nothing here is tied to a position in either file. This is `ABC-059`'s
+   * blindness (a guard pinned to one rendering) declined one file over.
+   */
+  const devRunSlot = (): string => {
+    const agents = readFileSync(`${REPOSITORY}AGENTS.md`, "utf8");
+    const start = agents.indexOf("- Dev / run:");
+    const end = agents.indexOf(COMMENT_CLOSE, start);
+    // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK: a renamed slot, or one whose comment never
+    // closes, would otherwise arrive as an empty string that every assertion below is satisfied by.
+    if (start < 0 || end < 0)
+      throw new Error("AGENTS.md has no `- Dev / run:` slot with a comment");
+    return agents.slice(start, end + COMMENT_CLOSE.length);
+  };
+
+  it("A1 — the slot shows the separator, and the invocation it shows RESOLVES", () => {
+    const slot = devRunSlot();
+
+    // THIS ASSERTION COMES FIRST, AND IT IS THE WHOLE REASON THIS ROW IS NOT VACUOUS (`ABC-066`'s
+    // QE hop, `Q2`). `advertisedTextOf` is `slice(indexOf(SEPARATOR_FORM) + SEPARATOR_FORM.length)`,
+    // and `indexOf` returns `-1` when the separator is ABSENT — so on the unrepaired slot it
+    // returns a corrupted stem SILENTLY instead of throwing, and every downstream reading of it is
+    // garbage that still parses. Its sibling `usageLineOf` throws on bad input; this one does not.
+    // Without this line the row would go green on exactly the defect `ABC-065` exists to catch.
+    expect(slot, "the separator form in the `Dev / run` slot").toContain(SEPARATOR_FORM);
+
+    // The documented invocation sits inside a markdown code fence and `ABC-066`'s stderr line does
+    // not, so the fence comes off before the text is read as argv. Copying `ABC-066`'s row verbatim
+    // would false-RED a correct slot on the trailing backtick.
+    const fenced = advertisedTextOf(slot).split("`")[0] as string;
+    const argv = fenced.split(/\s+/).filter((token) => token !== "");
+
+    // The count floor, and it is load-bearing: `resolveOptions([])` is `ok: true`, so "what it
+    // advertises resolves" is on its own satisfiable by advertising nothing at all.
+    expect(
+      argv.length,
+      `the invocation after the separator: ${JSON.stringify(argv)}`,
+    ).toBeGreaterThanOrEqual(1);
+    // `A1`'s own words: `<option>` is an element of `ACCEPTED_ARGUMENTS`. Read at run time (`A5`).
+    for (const token of argv) {
+      expect(ACCEPTED_ARGUMENTS, `documented token ${token}`).toContain(token);
+    }
+    expect(resolveOptions(argv).ok, `documented argv ${JSON.stringify(argv)}`).toBe(true);
+  });
+
+  it("A3 — the documented option list EQUALS the accepted set, both ways, and names every value", () => {
+    const slot = devRunSlot();
+
+    // RULED BY THE ORCHESTRATOR AT THIS HOP: the BARE `--` separator is NOT an option token. `A1`
+    // requires the separator in this slot and `A3` then counts it as a FOURTH `--`-prefixed token
+    // against its required three — on a literal reading the two criteria contradict. Removing the
+    // separator to satisfy `A3` is FORBIDDEN: it destroys the ticket's purpose. So the bare form is
+    // excluded by EXACT EQUALITY and by nothing looser — a pattern loose enough to drop `--` could
+    // also swallow a real option, which is the failure that would make this row silently weaker.
+    // The same exact match also drops the HTML comment's own `<!--` and `-->` delimiters.
+    const documented = new Set(
+      (slot.match(/(?<![\w-])--[A-Za-z0-9-]*/g) ?? []).filter((token) => token !== "--"),
+    );
+
+    // Both sides are derived from `ACCEPTED_ARGUMENTS` at run time (`A5`): no accepted argument is
+    // spelled a second time anywhere in this block.
+    const acceptedOptions = ACCEPTED_ARGUMENTS.filter((argument) => argument.startsWith("--"));
+    const acceptedValues = ACCEPTED_ARGUMENTS.filter((argument) => !argument.startsWith("--"));
+
+    // The floor before the equality: an empty documented set passes a one-way containment check.
+    expect(
+      documented.size,
+      `documented options ${JSON.stringify([...documented])}`,
+    ).toBeGreaterThanOrEqual(acceptedOptions.length);
+    // BOTH WAYS — a documented option that does not exist and an accepted option nobody documented
+    // are the two directions `A4` names, and set equality is red in each.
+    expect([...documented].sort()).toEqual([...acceptedOptions].sort());
+    // `A3`'s last clause: each value word appears in the slot. Derived, never transcribed.
+    for (const value of acceptedValues) {
+      expect(slot, `documented value ${value}`).toContain(value);
+    }
+  });
+});

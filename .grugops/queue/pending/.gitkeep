@@ -1,0 +1,5 @@
+# Queue: pending subtasks.
+
+Empty is the normal resting state. Kept in git so the directory exists for the
+next `mkdir`/`mv` — an empty directory is not tracked by git otherwise, and the
+ABC-065 merge deleted it once already.

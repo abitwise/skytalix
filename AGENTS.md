@@ -62,7 +62,12 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 - Dev / run: `npm run chess` <!-- verified 2026-08-14 at ABC-042: prints the start position (23
   rows) on stdout and exits 0. Optional arguments, and the complete set: `--colour white|black|random`,
   `--ascii`, `--unicode`. It PRINTS A BOARD; it does not play a game — no move can be typed until
-  ABC-043. -->
+  ABC-043.
+  Pass an option AFTER `--`: `npm run chess -- --colour black` — RUN 2026-08-15 at `4e9ed1d`, exit 0,
+  black-bottom board. The separator is load-bearing; do not tidy this example away. Without it npm
+  keeps the flag: `npm run chess --ascii` (RUN 2026-08-15 at `4e9ed1d`, npm 11.7.0) warns `Unknown
+  cli config "--ascii"` on stderr, runs `node src/cli.ts` with NO arguments, prints the DEFAULT board
+  and exits 0 — the option is silently discarded and stdout looks like success. -->
 - Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft`
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 npx vitest run src/perft.test.ts`
 - Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
