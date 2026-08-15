@@ -1,8 +1,8 @@
 ---
 id: ABC-042
 title: The entry point — argv, the resolved colour, and the first frame a human can actually see
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-006
