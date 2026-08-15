@@ -133,12 +133,13 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 - [EPIC-005] Opening book  (owner: BA/PM, size: S, priority: P1, since: 2026-07-22)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: L — corrected from M, 13 points over six tickets**, priority: P1, since: 2026-07-22, **DECOMPOSED 2026-08-13 into ABC-041…ABC-046 — the RUNNABLE half only. Packaging, difficulty and `undo` NOT cut; distribution stays with a human. Largest ticket is M, no SPLIT_REQUIRED**)
 
-## Ready (WIP 2/8)
+## Ready (WIP 0/8)
 
-- [ABC-065] `AGENTS.md`'s `Dev / run` never shows the `--` separator, and its option list is compared to nothing  (BA/PM, S, P1, epic: —, since: 2026-08-15, **DoR 10/10 MET — re-scored 2026-08-16, item 10 cleared: the `agents-md-owner-grants` claim drained to `done/`**; **BA/PM `B4` ≡ QE `R9` — one repair under two names — folded with QE `R6`, its guard, because split the guard reds on merge**; the only follow-up a human meets today; 2 paths, 0 production lines)
-- [ABC-066] The usage line printed on every refusal is not a runnable command — the user who does what it says reproduces the error he is reading  (BA/PM, S, P1, epic: —, since: 2026-08-15, **DoR 10/10 MET**, unchanged, re-read 2026-08-16; **CUT ON THE OWNER'S DIRECT INSTRUCTION** — *"accept it and cut the usage line fix"* — the first defect UAT has ever caught in this repository; **RULED A SEPARATE TICKET, NOT a duplicate of `ABC-065`**: disjoint files (`src/cli.ts` vs `AGENTS.md`), neither's criteria satisfiable by the other's diff; `npm run chess -- ` measured **0** times in the program's output and **0** under `src/`; **1 production line**, 1 guard block, 0 new spawns; **`ABC-042` does not move and its page is not edited — this is a NEW requirement, not a missed criterion**; **pulled together with `ABC-065` 2026-08-16 per this row's own routing instruction**)
 
-## In Development (WIP 0/3)
+## In Development (WIP 2/3)
+
+- [ABC-065] `AGENTS.md`'s `Dev / run` never shows the `--` separator, and its option list is compared to nothing  (owner: AGENTS.md Scribe then Software Engineer, S, P1, epic: —, since: 2026-08-15, **PULLED 2026-08-16 on the owner's instruction; `Ready for Dev` exit re-read done, 3 gaps recorded, none blocking — `.grugops/context/pull-abc065-066-2026-08-16/notes/`**; **ONE TICKET, ONE BRANCH, TWO HANDS IN SEQUENCE** — `ticket-to-pr-ABC-065-scribe` (`AGENTS.md` only) runs now, the guard block in `src/cli.test.ts` is enqueued only after `ABC-066` lands, because `G2` found the two tickets SHARE that file and the pages call themselves disjoint; 2 paths, 0 production lines)
+- [ABC-066] The usage line printed on every refusal is not a runnable command — the user who does what it says reproduces the error he is reading  (owner: Software Engineer, S, P1, epic: —, since: 2026-08-15, **PULLED 2026-08-16**, DoR 10/10 MET, all four premises re-measured on `main` @ `3fb6ebd` and HOLD; **`ABC-062` has NOT merged, so this hop writes the first stderr→usage-line extraction helper and `ABC-065`'s block reuses it (`G3`)**; **1 production line** at `src/cli.ts:53`, 1 guard block, `spawned` pinned 10; **`ABC-042` does not move and its page is not edited**)
 
 
 
