@@ -885,6 +885,12 @@ re-deriving a lane bar per ticket, which has now cost two ruling hops.
 > - **NET of the per-file floor: subtract 160 ms CPU per test file the ticket adds.** The floor is the
 >   runner's cost, not the ticket's; charging a ticket for it makes a bar that two EMPTY files trip.
 >   The floor is charged to `NFR-008`'s **floor account**, owner Architect/Design.
+> - **NET of the SPAWN ACCOUNT: subtract the measured CPU of every child process the ticket's own
+>   ACCEPTED CRITERIA force it to spawn.** A criteria-forced child is the operating system's price of
+>   proving a command runs, not test content. Charged to `NFR-008`'s **spawn account**, owner
+>   Architect/Design — **created 2026-08-15 on the project owner's instruction. Its charging test, its
+>   four exclusions and its three stops are the `N8-SPAWN` section at the end of this row, and you
+>   must read them before you subtract anything: most of what looks chargeable is not.**
 > - **Scope:** every file the branch adds under `src/`. **Denominator:** the lane without those files,
 >   `npm test`, `PERFT_DEEP` unset, runner invoked directly or via `npm test` **stated either way**.
 > - **Every figure carries its machine.** `UNKNOWN - verify` on anything but the reference machine.
@@ -1133,3 +1139,100 @@ per-file CPU SLOPE  forks 158.2 ms/file  ->  threads 138.9 ms/file   = -12.2%   
 **9. Creating `vitest.config.ts` was PRICED, because creating a file the runner reads is a real decision.** A config file containing `defineConfig({})` and nothing functional was run as its own condition in the same interleaved harness: **+0.24% CPU (sign 6/8) / −0.45% wall (sign 2/8)** in sample A and **+0.30% CPU (sign 5/8) / 0.00% wall (sign 3/8)** in sample B. **Both sit inside this row's own ≤ 1.5% null band with the sign at chance, so the file's mere existence costs measurably nothing.** **This also settles what would have happened had `A4` REFUSED: `A5` still owes the file, and it can be created at zero measured cost.**
 
 **10. What this reading does NOT establish.** **Not a figure for any other machine or core count** — Apple M3 (Mac15,13) / 8 logical cores / Darwin 25.5.0 arm64 / Node v24.12.0 / npm 11.7.0 / vitest 3.2.7; **`UNKNOWN - verify` elsewhere.** **`node_modules` was SYMLINKED from the sibling `cli-chess-example` worktree** — the named environment in this row assumes an installed tree, and a symlink is a deviation from it; it is the same deviation the delivery audit recorded, it affects module *resolution* rather than execution, and it is disclosed rather than buried. **Not a re-measurement of `NFR-001`–`NFR-007`** — none was touched and no target moved. **Not a verdict on any test, file or coverage decision** — nothing was examined for deletion, and `src/` is byte-identical. **Not a proof that `pool: "threads"` cannot flake** — 24 of 24 green bounds the failure rate at roughly **12.5%** by the rule of three, **not at zero**, which is why the rollback is written into `vitest.config.ts` itself.
+
+### THE SPAWN ACCOUNT (`N8-SPAWN`) IS CREATED — 2026-08-15 by Architect/Design (task `g1-answered-2026-08-15`, subtask `design-nfr008-spawn-account`, Workflow 07), **on the project owner's instruction and on no role's own authority**. **Recommended by Security/NFR** at `ABC-042`'s gate as option 2 of three, and deliberately NOT created there (*"I did not create it. I have no authority to and I am not going to invent one at a gate"*); **authorized by the project owner, Olger Oeselg, in session 2026-08-15** — *"My decision: create a spawn account and merge"*; **written here** by the role that owns this row and owns the floor account it is modelled on. **NO TARGET, BAR, LEVEL OR MEASURED FIGURE MOVED ANYWHERE IN THIS FILE. THE 3 s WALL / 13 s CPU CLAUSE IS UNTOUCHED AND THE 5% IS UNTOUCHED** — all eight rows `NFR-001`–`NFR-008` verified byte-identical by hashing the matched row lines together before and after the write (`sha256 63f66795…ca31`, unchanged from the `ABC-029` and `ABC-026` hops) and by hashing each row individually; 46 table lines before and after. **`N8-LANE`'s instrument, statistic, null-control and floor clauses are BYTE-IDENTICAL as well, hashed bullet by bullet before and after — this account is added BESIDE them and changes none of them.**
+
+**What the owner authorized, and what the owner did not — separated here so a later reader can check the reading rather than inherit it.** The owner authorized **a new cost class in an owner-ratified document**, which is the one thing no role here could grant itself; the previous hop named the objection this discharges — *"a coordinator inventing one at a gate is the same loophole with a better justification."* **The owner did NOT authorize a larger budget.** `NFR-008`'s 13 s CPU clause, its 3 s wall clause and the total they express are outside that answer and are untouched. **This account moves ATTRIBUTION. It never moves the total.**
+
+> **`N8-SPAWN` — the CPU of a child process that a ticket's own ACCEPTED CRITERIA force it to spawn is
+> charged to `NFR-008`'s SPAWN ACCOUNT, not to the ticket, and is subtracted from that ticket's
+> `N8-LANE` charge — exactly as the per-file floor already is. Owner: Architect/Design.**
+>
+> **IT IS AN ATTRIBUTION, NOT AN ALLOWANCE. Every millisecond charged here is still spent inside
+> `NFR-008`'s 13 s CPU clause.** The account answers *"whose cost is this"*. It never answers *"may the
+> lane cost more"*.
+>
+> **WHAT MAY BE CHARGED — one test, and a cost has to pass all three parts of it.**
+> 1. It is a **child process**, and what is charged is the **child's own measured CPU** — median of
+>    ≥ 5 direct timings on the reference machine, **listed child by child beside the criterion that
+>    forces it**. No lump sum, no residual, no estimate. (The protocol is the one Security/NFR actually
+>    ran at `ABC-042`'s gate, adopted here with attribution rather than invented.)
+> 2. It is **named by an accepted criterion or security bar of the ticket**, and the number of children
+>    is **countable off the criterion text before the build exists** — a property of the ticket page,
+>    not of the implementation.
+> 3. **Deleting the child would require deleting or weakening that criterion.** That is the whole test,
+>    and it is the floor account's test in a second dress: *the floor is the runner's cost, not the
+>    ticket's* — and a criteria-forced child is the operating system's price of proving a command runs.
+>
+> **WHAT MAY NOT BE CHARGED — the four things the drawer would otherwise fill with.**
+> 1. **The in-process cost of the file that holds the children** — transform, collect, sweeps, source
+>    reads, fixtures, helpers. That is CONTENT and it stays on the ticket under `N8-LANE`.
+> 2. **A child that proves something an in-process assertion could prove.** If the criterion survives
+>    the child's deletion, the child is a convenience and the ticket pays for it.
+> 3. **Any child beyond the count the criterion text forces** — repeats, retries, statistical
+>    replicates, a loop over one criterion's argv, or a child added after the cut that no criterion
+>    names.
+> 4. **The per-file floor of the file that holds the children** — that is already the FLOOR account's.
+>    **Nothing is charged to two accounts.**
+>
+> **WHO OWNS IT AND WHO CHECKS IT — BOTH UNCHANGED. Owner: BA/PM at each cut** (who writes the
+> ticket's NFR trigger). **Checked by Security/NFR at each gate**, against this wording rather than
+> against a per-ticket invention. **A gate does not move this bar, and it does not move this account
+> either.** No new owner, no new checker and no new hop is created. Two things this account does fix
+> for the checker: **the child count is derived FROM THE CRITERION TEXT, NOT FROM THE BUILD**, and
+> **a delivered spawn that no criterion names is a finding against the ticket, never a charge here.**
+>
+> **WHAT STOPS IT — three stops, because a cost class with no ceiling is a drawer, and an unbounded
+> account hands back the geometric budget this row exists to have killed.**
+> 1. **THE TOTAL STOPS IT ABSOLUTELY.** A charge that would put the lane's measured median over 13 s
+>    CPU — or over 3 s wall — is a breach of `NFR-008` itself, **and this account gives no relief from
+>    it.** Nothing charged here is exempt from the total, and the account may never be used to buy a
+>    lane the total does not admit.
+> 2. **THE CRITERION TEXT IS THE CEILING ON A SINGLE CHARGE**, and it is fixed at the cut — before
+>    anyone can know what the measurement will say.
+> 3. **TWO TRIP-WIRES, BOTH DENOMINATED IN THE FIXED TOTAL** and never in the lane as it stands (that
+>    denominator is the defect this row exists to have killed):
+>    - **A single ticket charging more than one full `N8-LANE` slice — more than 650 ms, i.e. more
+>      than 5% of the CPU clause — has that figure REPORTED by the gate and carried into the merge
+>      decision, never silently netted out.** It does not fail the ticket. It forbids the charge being
+>      invisible, which is the whole reason this row prefers an attributable budget to a total.
+>    - **When the account's CUMULATIVE charge passes 10% of the CPU clause — 1.3 s, two slices — the
+>      account is CLOSED to new charges until Architect/Design restates it in this section against a
+>      fresh lane reading.** CLOSED means what it says: while it is closed, a ticket's forced children
+>      are charged to the ticket under `N8-LANE` as though this account did not exist.
+>
+> **The running total is restated in this section at every charge, beside the lane's remaining CPU
+> headroom** — the same restatement duty the floor account already carries.
+> **OPENING BALANCE: 0 ms. Nothing is charged to this account by the hop that writes it.**
+>
+> **CPU ONLY.** This is an attribution on the CPU instrument, which is the instrument `N8-LANE` is
+> written on. **The 3 s WALL clause is a total, has no per-ticket bar, and knows nothing about
+> accounts** — child processes ARE visible on the wall, unusually for this lane, and nothing here
+> exempts them from it.
+
+**What this account does NOT do — stated because a carve-out not bounded in writing gets read wider.**
+
+- **It does not move `NFR-008`'s level.** 3 s wall / 13 s CPU is Olger Oeselg's, ratified in person
+  2026-08-11, and this hop writes an account against it rather than touching it.
+- **It does not re-derive the 5%.** That was option 3 and the owner did not choose it. This row's own
+  invitation — *"Re-derive it when the plan changes; the arithmetic is one line"* — is addressed to a
+  BA/PM cut hop and **stays open and unexercised.**
+- **It does not touch `N8-LANE`'s instrument, statistic, null control or floor clause.** All four are
+  hashed byte-identical across this write.
+- **It does not grade any ticket, past or in flight.** No verdict, no ratio and no prediction is
+  written here. **This account was written against the criterion-text test above, not tuned to any
+  ticket's number**, and applying it to a ticket is Security/NFR's at a gate.
+- **It does not licence a ticket to spawn.** A ticket does not acquire children by wanting them — the
+  criteria must force them, and whether criteria *should* force them is a question for the cut, owner
+  BA/PM.
+- **It does not create headroom.** The lane's remaining CPU after this section is exactly what it was
+  before it.
+
+**TWO CENSUSES GO STALE HERE AND BOTH ARE FLAGGED RATHER THAN REPAIRED.** This row's own table cell
+says the budget has **TWO ACCOUNTS**; there are now **three** — content, floor, spawn. `ADR-0008`'s
+Decision 6 says the same. **Neither is edited by this hop:** the cell's target, level, instrument,
+statistic and machine are byte-identical and what went stale is a COUNT, and `ADR-0008` is
+owner-ratified and the account is fully writable without it. **This is the same species as the stale
+census this file has already recorded once** — `ADR-0008`'s *"all four `*.nfr.test.ts` files"*, correct
+when written and stale at seven, flagged by the 2026-08-12 audit and deliberately not edited. Same
+class, same treatment, and the repair is a census correction rather than a ruling.
