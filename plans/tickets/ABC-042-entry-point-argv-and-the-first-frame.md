@@ -11,12 +11,12 @@ feature: —
 
 # ABC-042 — `npm run` prints a board: the composition root, flat in `src/`, exporting nothing
 
-> **Cut 2026-08-13 by BA/PM** (Workflow 03). **Criteria REPAIRED TWICE on 2026-08-14 by BA/PM** at the
-> `Ready for Dev` exit: ten changes against Security/NFR's ASVS L1 **BLOCK** (`RF-1`…`RF-6`) and
-> Architect/Design's rulings, then four (`RF-7`…`RF-10`) after that block was **DISCHARGED** — **zero
-> code, both times.** Rulings, measurements and rejected alternatives live under `.grugops/context/` in
-> this ticket's five task folders and are **not** restated here (rule 2). **THIS IS THE THIN SLICE** —
-> read `## What this ticket does NOT make runnable` before assuming it delivers a game.
+> **Cut 2026-08-13 by BA/PM** (Workflow 03), criteria **REPAIRED THREE TIMES** by BA/PM — ten changes and
+> then four at the `Ready for Dev` exit (2026-08-14, `RF-1`…`RF-10`), and six after the quality gate
+> (2026-08-15: `E1`, `Q4`, `G2`, `G5`, `G7`, `G8`) — **zero code, all three times.** Rulings, measurements
+> and rejected alternatives live under `.grugops/context/` in this ticket's task folders and are **not**
+> restated here (rule 2). **THIS IS THE THIN SLICE** — read `## What this ticket does NOT make runnable`
+> before assuming it delivers a game.
 
 ## Problem
 
@@ -93,13 +93,11 @@ own — `A4`'s 1000 resolutions, `A5`'s spy, `A6`(i)/(ii) — are unit tests wit
 
 - **`A1` (a human can run it — the criterion this whole ticket exists for).** **Given** a checkout with
   `npm install` done and **no other setup**, **when** `npm run <name>` is executed with stdout as a pipe,
-  **then** the process writes a frame of exactly
+  **then** the process's stdout **ENDS WITH** a frame of exactly
   `frameHeight({ board: renderBoard(<start position>, mode, orientation).length, status: STATUS_ROWS, history: HISTORY_ROWS })`
-  rows containing the eight ranks of the start position, and exits with code **0**. **`AGENTS.md`'s
+  rows containing the eight ranks of the start position and **no frame row precedes it** — `npm` writes a
+  banner first, so it is a byte-exact TAIL — and it exits with code **0**. **`AGENTS.md`'s
   `Dev / run: UNKNOWN - verify` is replaced with this exact command in the same diff, having been run.**
-  *(Keys **verified** at `src/frame.ts:106-110`: the parameter is exactly `{ board, status, history }`.
-  There is **no exported board-row constant** — measured — so the board term is read off
-  `renderBoard(...).length`; the composed seam was run and returns exactly this many rows.)*
 - **`A2` (it is an entry point by `ADR-0011` clause 4).** The delivered entry-point module contains
   **zero** `export` statements — asserted textually over the diff — so nothing can import a binding from
   it, it is never on the frame path, and it is never a probe root.
@@ -130,15 +128,18 @@ own — `A4`'s 1000 resolutions, `A5`'s spy, `A6`(i)/(ii) — are unit tests wit
      test asserts it **equals `## Scope`'s table element for element, both ways, no extras**, against its own
      transcription. **Rejection is the DEFAULT branch:** membership is **exact string equality**, that
      enumeration is the **only** argv literal in the delivered resolver (asserted textually), and — **derived
-     from the table, so they cannot go stale** — each spelling's upper-case form, `+"x"` extension and
-     one-character truncation is rejected **in its legal argv position**. **A fifth flag (`--debug`) must be
-     enumerated or written as a literal: both RED deterministically**, where (ii) is blind to it.
+     from the table, so they cannot go stale** — each spelling's **near-miss family, complete over POSITION**,
+     is rejected **in its legal argv position**: its upper-case form, and one character from `{"x", " "}`
+     **inserted at every index** or **deleted at every index**; the row **pins the derived count**. **A fifth
+     flag (`--debug`) must be enumerated or written as a literal: both RED deterministically**, where (ii)
+     is blind to it.
   2. **The complement, as a property, zero spawns.** **Given 1000 generated tokens** — printable ASCII,
      lengths 1–24, **250 from each** shape `--<word>`, `-<char>`, `<word>`, `--colour <word>`, **filtered
      by WHOLE ACCEPTED FORM only** (dropped only when the whole argv is `--colour white|black|random`,
      `--ascii`, `--unicode` or empty — **never because it CONTAINS an accepted token**) — **then** each
-     shape still contributes **250** after filtering, **asserted first**, and **then** every token returns
-     a usage error **naming the offending token**, **zero** accepted. This kills classes literals cannot:
+     shape reaches its **250 within a budget of 500 DRAWS**, the **draws counted and asserted first** (a
+     count of items KEPT cannot fail under rejection sampling), and **then** every token returns a usage
+     error **naming the offending token**, **zero** accepted. This kills classes literals cannot:
      any unknown `--flag` ignored, rejection without naming, `--colour <anything>`, short flags eaten.
   3. **End-to-end, spawned:** **given** each of `--difficulty 3`, `-x`, `--colour purple` and `foo`,
      **then** a usage message **naming the offending argument** is written, the exit code is **non-zero**,
@@ -181,7 +182,8 @@ own — `A4`'s 1000 resolutions, `A5`'s spy, `A6`(i)/(ii) — are unit tests wit
   are **DELETED, not re-worded** — false on the delivered build; their surviving property is now `A12`.)*
 - **`A11` (startup cost, recorded, without touching the catalog).** **Given** the entry point run as a
   child ≥ 5 times, **then** the median wall time from process start to the last byte of the first frame is
-  **≤ 1 s**, recorded in this ticket **with its machine** — or `A11` is unrecorded rather than met.
+  **≤ 1 s**, recorded **with its machine** in this task's context notes (rule 2, and `A12` bars this page)
+  — or `A11` is unrecorded rather than met.
   *(**Not** `NFR-007` (`npx`-to-first-board **< 2 s**; no package and no `npx` path here) and deliberately
   **not** a suite assertion — a wall clock in a shared lane is a flake generator. **`plans/nfr-catalog.md`
   is not edited.**)*
@@ -190,8 +192,8 @@ own — `A4`'s 1000 resolutions, `A5`'s spy, `A6`(i)/(ii) — are unit tests wit
   resolver, their test file(s), `package.json`, `AGENTS.md` and **`src/history-pane.nfr.test.ts`** — and
   nothing else. **All 18 merged PRODUCTION modules under `src/` are byte-identical.** The only change to a
   merged file under `src/` is in `src/history-pane.nfr.test.ts`: **`LICENSED_DRIVERS` (`:213`) gains
-  exactly one element — the delivered entry point's filename — plus its citation line, and nothing else in
-  that file.** **Suite green, skip 0.** *(**The licence edit is EXPECTED and the red is anticipated, not
+  exactly one element — the delivered entry point's filename — plus **its citation as Architect/Design
+  supplied it, however many lines that is** (five, and the numstat is +7/−1), and nothing else in that file.** **Suite green, skip 0.** *(**The licence edit is EXPECTED and the red is anticipated, not
   diagnosed under pressure:** the entry point unavoidably imports `newGame` from `src/history.ts` while
   `src/render-seam.ts` is guarded against importing it, so the correct build reds the merged licence guard
   until the entry lands — measured out of tree. **The citation text to paste is in the
@@ -207,8 +209,7 @@ own — `A4`'s 1000 resolutions, `A5`'s spy, `A6`(i)/(ii) — are unit tests wit
 - **Everything else is MERGED and named, re-measured at HEAD `eefc217` 2026-08-14:** `selectGlyphMode`
   (`src/glyph-mode.ts:81`), `beginGlyphModeSession` (`:113`), `newGame` (`src/history.ts:73`),
   `gameStatusOf` (`:152`), `frameHeight` (`src/frame.ts:106`), `beginFrameSession` (`:233`), `STATUS_ROWS`
-  (`src/status-panel.ts:71`), `HISTORY_ROWS` (`src/history-pane.ts:70`). **Two citation pairs were recorded
-  INVERTED at cut and are corrected here** (`frame.ts`, `glyph-mode.ts`). **The seam's `status` comes from
+  (`src/status-panel.ts:71`), `HISTORY_ROWS` (`src/history-pane.ts:70`). **The seam's `status` comes from
   `gameStatusOf(history)`** — never a bare `gameStatus`, never a status literal: a literal typechecks and
   puts the status rule in a second place, which `ADR-0002` clause 4 exists to prevent.
 - **`ABC-037` and `EPIC-004` are NOT dependencies** — this ticket writes one frame and exits, so it needs
@@ -224,9 +225,11 @@ own — `A4`'s 1000 resolutions, `A5`'s spy, `A6`(i)/(ii) — are unit tests wit
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**, same instrument and protocol as every ticket since
   `ABC-026`, and **this ticket is the most likely in either epic to test it: ONE new test file, the
   heaviest either epic adds** (both modules share it; no `vi.mock`, so no `*.nfr.test.ts`). **Plan for it
-  at several times the 94.2 ms per-file median and keep the spawn count in single digits** — everything the
-  repairs add (`A6`(i)'s structural assertions, (ii)'s sweep, `A5`'s spy) is **zero-spawn**, and the
-  both-channel captures reuse existing spawns. Anchor: the merged spawning file runs 11 tests in **92 ms**.
+  at several times the 94.2 ms per-file median, and expect TEN spawns — not "single digits":** ten is
+  forced by `A1`(1), `A4`(3), `A5`(1), `A6`(iii)(4) and bar 3(1), no two mergeable without changing what a
+  criterion says, and it is pinned at ten in the test file — an eleventh child is a defect. Everything the
+  repairs add (`A6`(i)'s near-miss family, (ii)'s sweep and draw budget, `A5`'s spy) is **zero-spawn**, and
+  the both-channel captures reuse existing spawns. Anchor: the merged spawning file runs 11 tests in **92 ms**.
 - **`NFR-002` — not triggered.** This module composes no frame row; `ABC-041`'s seam does, and `A8`'s "no
   row-count literal" is the structural guard. The `ADR-0011` census moves as clause 4 predicts: production
   **18 → 20**, entry points **1 → 2**, frame producers **6 → 6 unchanged**, licence entries **1 → 2**
@@ -271,8 +274,7 @@ own — `A4`'s 1000 resolutions, `A5`'s spy, `A6`(i)/(ii) — are unit tests wit
   declared fired above unconditionally: **the added lines get read before the ticket leaves review** if the
   diff adds a runtime dependency, imports any Node builtin in a **production** module (permitted set:
   **empty**), or touches any file under `src/` other than the two new modules, their test file(s) and
-  `src/history-pane.nfr.test.ts` (`A12`). *(Relabelled 2026-08-14 — it was called a firing threshold and
-  could fire nothing. `RF-7`'s structural `A6`(i) is the first thing Security reads at the gate.)*
+  `src/history-pane.nfr.test.ts` (`A12`).
 
 ## Test notes
 
@@ -293,7 +295,7 @@ own — `A4`'s 1000 resolutions, `A5`'s spy, `A6`(i)/(ii) — are unit tests wit
 
 ## Size and priority rationale
 
-**Size `M` (3), UNCHANGED by both repairs** — the fourteen changes add assertions to the one new test file
+**Size `M` (3), UNCHANGED by all three repairs** — their twenty changes add assertions to the one new test file
 and one array element to a merged one: **zero production lines, zero new spawns.** Calibrated against
 `ABC-018`/`ABC-037` (both `M`); below `L` (`ABC-019`) — no state machine, no open design decision; above the
 Coach's `S`, which I recorded not taking. **Not `XL`. The split line if it moves:** **(a)** the
@@ -304,25 +306,23 @@ a human can run something.
 
 ## Definition of Ready
 
-**Scored twice on 2026-08-14 by BA/PM** against `agent-factory/checklists/definition-of-ready.md`: after
-the ten repairs, then again after `RF-7`…`RF-10`. **Result: 10 of 10 — MET.** *(8/10 at the cut, both ⚠️
-being `ABC-041` open. **The first 10/10 did not survive measurement:** items 4 and 6 were **⚠️ from
-2026-08-14 18:12 until this hop** — see their rows. They are ✅ because the instruments were repaired.)*
+**Re-scored 2026-08-15 by BA/PM** against `agent-factory/checklists/definition-of-ready.md` — the third
+scoring. **Result: 10 of 10 — MET, moved UP from 9/10**, because the gate measured item 4's *"RED
+deterministically"* false for two mutant classes (`E1`): it was **⚠️ from 2026-08-15 11:24 until this
+repair**, and the page's recorded 10/10 across that interval was stale. Scoring history: the notes.
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** the owner and every future user; `Dev / run: UNKNOWN - verify`, no `bin`/`main`, 28 `Done` tickets with both UAT columns at 0/4 and no destination, one unmeasurable metric — measured, not argued |
 | 2 | scope and out-of-scope clear | **✅** two modules and one `package.json` line; a **closed** argv allowlist; six fences, two naming the epic criteria they leave unmet |
 | 3 | INVEST-shaped | **✅ was ⚠️ — `ABC-041` MERGED and `Done` 2026-08-13, so the one ordering dependency is closed.** Independent, negotiable, valuable, estimable, small (`M`, unchanged), testable |
-| 4 | acceptance testable and measurable | **✅ was ⚠️ for one hop (`RF-7`), and the ⚠️ was earned:** `A6`(i)'s *"no other token does"* carried **no instrument**, and (ii) is a random sample that catches a targeted fifth flag with **P ≈ 1.4e-9** — the original HIGH's own build shipping green. `A6`(i) is now **structural** (accepted set asserted as data against `## Scope`, exact-equality membership, near-misses derived from the table), so that build is RED **deterministically**. The rest: exit **0** on a real `npm run`; **zero** `export`s; a flat path; **1000** spawn-free `random` resolutions with both outcomes; **1000** complement tokens, **250 per shape**, all rejected; **zero** frame rows on three rejection paths **over stdout ∪ stderr**; `process.argv` **exactly once**; **zero** code points above `U+007F`; **zero** `\x1b[`; `beginFrameSession` **exactly once**; `package.json` key by key; `LICENSED_DRIVERS` **+1**; **18** modules byte-identical; a **≤ 1 s** recorded median |
+| 4 | acceptance testable and measurable | **✅ was ⚠️ TWICE, and both ⚠️ were earned by measurement rather than argument.** (`RF-7`) `A6`(i)'s *"no other token does"* carried **no instrument**. (`E1`) its replacement enumerated **three** near-miss derivations and all three touch the END of the spelling, so `endsWith` / `trim` weakenings shipped **856/856 green**. The family is now **complete over POSITION** — upper-case, plus one character inserted or deleted at **every** index — and was measured before it was ruled: **138 cases, ZERO accepted by the delivered build (no false RED), and both surviving mutants RED**. `A6`(ii)'s "250 per shape" control was a **tautology** (`Q4`) and is now a **500-draw budget** that reds where it used to hang. The rest: exit **0** on a real `npm run`; **zero** `export`s; a flat path; **1000** spawn-free `random` resolutions with both outcomes; **1000** complement tokens, **250 per shape**, all rejected; **zero** frame rows on three rejection paths **over stdout ∪ stderr**; `process.argv` **exactly once**; **zero** code points above `U+007F`; **zero** `\x1b[`; `beginFrameSession` **exactly once**; `package.json` key by key; `LICENSED_DRIVERS` **+1**; **18** modules byte-identical; a **≤ 1 s** recorded median |
 | 5 | dependencies known | **✅** the ordering dependency is **closed**; eight merged contracts with **re-measured** line numbers (two inverted pairs corrected); `makeRenderSeam` cited for the first time; `ABC-037`/`EPIC-004` named as **not** dependencies; the `ADR-0011` clause-3 wording flagged with its owner and named **not a blocker** |
-| 6 | security/NFR triggers with a measurable target | **✅ was ⚠️ for one hop (`RF-9`):** `BAR 1b` permitted `execFileSync` and forbade *"occurrences of `exec`"* one sentence later — a **guaranteed false RED** on the correct build, which must contain `process.execPath`. It now asserts **call sites**, and bar 4's grammar covers `node:http2` (`RF-10`). `N8-LANE` ≤ **650 ms CPU**; `NFR-002` not triggered with the structural reason; `NFR-007` ruled not-firing, catalog untouched; **four** bars, each decidable by `grep` or a byte assertion over a captured stream, **each with its file scope stated**; the review obligation relabelled to what it is. ASVS L1 row by row: **V2.2.1's fail repaired and the BLOCK discharged**, four accepted risks with named owners |
+| 6 | security/NFR triggers with a measurable target | **✅ was ⚠️ for one hop (`RF-9`):** `BAR 1b` permitted `execFileSync` and forbade *"occurrences of `exec`"* one sentence later — a **guaranteed false RED** on the correct build, which must contain `process.execPath`. It now asserts **call sites**, and bar 4's grammar covers `node:http2` (`RF-10`). `N8-LANE` ≤ **650 ms CPU**, with the spawn count stated as the **ten** its own criteria force rather than the *"single digits"* they contradict (`G2`) — the **breach** of that bar is `G1`, the project owner's, and is not a DoR defect; `NFR-002` not triggered with the structural reason; `NFR-007` ruled not-firing, catalog untouched; **four** bars, each decidable by `grep` or a byte assertion over a captured stream, **each with its file scope stated**; the review obligation relabelled to what it is. ASVS L1 row by row: **V2.2.1's fail repaired and the BLOCK discharged**, four accepted risks with named owners |
 | 7 | test notes present | **✅** six, including the two the repair added (both-channel capture; the licence red is expected) |
-| 8 | size assigned | **✅** `M` (3), unchanged by either repair, calibrated, split line named, the Coach's `S` addressed rather than quietly overridden |
+| 8 | size assigned | **✅** `M` (3), unchanged by any of the three repairs, calibrated, split line named, the Coach's `S` addressed rather than quietly overridden |
 | 9 | priority assigned | **✅** `P0` |
-| 10 | no major unresolved blocker | **✅ was ⚠️ — `ABC-041` is `Done`.** Every question this page held open is now ruled **on the page**: the bars' file scope, the `process.stderr` rule, `A7`/`A8`'s "emitted stream", the licence edit, and the `ADR-0011` clause-1 trigger check |
+| 10 | no major unresolved blocker | **✅ was ⚠️ — `ABC-041` is `Done`.** Every question this page held open is ruled **on the page**: the bars' file scope, the `process.stderr` rule, `A7`/`A8`'s "emitted stream", the licence edit, the `ADR-0011` clause-1 trigger check. **The ticket is HELD at the merge on `G1`** (`N8-LANE` at 2.00×, with the project owner) — a delivery hold, not a DoR defect: this item asks whether the criteria are well formed |
 
-> **The BLOCK is discharged — by Security/NFR, on measurement, not by this score.** **DoR met is still
-> not the `Ready for Dev` exit passed**; that exit is the Orchestrator's. The `Backlog → Ready` board move
-> this score earns is **owed and not taken** — `plans/board.md` is the Orchestrator's file and was not
-> edited on either repair hop.
+> **This score is not a gate and not a board move.** `plans/board.md` is the Orchestrator's and was not
+> edited on any of the three repair hops.
