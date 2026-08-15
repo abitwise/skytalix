@@ -173,19 +173,11 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Security/NFR (WIP 1/2)
+## In Security/NFR (WIP 0/2)
 
-- [ABC-066] The usage line printed on every refusal is not a runnable command — the user who does what it says reproduces the error he is reading  (owner: Security/NFR, S, P1, epic: —, since: 2026-08-15, **QE GREEN 2026-08-16 — `READY_FOR_HUMAN_REVIEW`, all six criteria MET, 6 gaps (0 HIGH, 2 MEDIUM, 4 LOW), still NOT MERGED**; QE re-ran the whole gate independently in a linked worktree and **every number agreed with the engineer's** (857/857 on 30, lint/typecheck/build 0, skip 0, `spawned` 10, `A6` 2 paths / 1 production line); **12 MUTANTS: 9 RED across SIX DISTINCT assertions, and the 3 GREEN ones are the informative half — `M11` rewrote the whole sentence to `DO WHAT I SAY: npm run chess -- […]` and stayed green, which is the behavioural PROOF the guard tests the property and not the spelling**; **`A4`'s mutant is `main`'s own delivered string and was watched RED by someone who did not write the guard, so it is no longer an argument**; **THE VACUITY CHECK CAME BACK INVERTED AND IT MATTERS: a zero-member expansion is impossible (`[[]]` is seeded), but `resolveOptions([])` is `ok: true`, so a guard checking only "everything advertised resolves" WOULD be vacuously green — three other rows save `A2`, NOT the expander**; QE verified `src/` byte-identical to the engineer's tip after reverting all 12 mutants, and the Orchestrator re-verified that independently; **fires into Security/NFR on the TICKET'S OWN WORDS — it argues clause (b) quiet and then says "disputed either way, it fires and the gate resolves it"**; `security.block_on` = `high`)
+## Ready for UAT (WIP 1/4)
 
-
-
-
-
-
-
-
-
-## Ready for UAT (WIP 0/4)
+- [ABC-066] The usage line printed on every refusal is not a runnable command — the user who does what it says reproduces the error he is reading  (owner: UAT Planner, S, P1, epic: —, since: 2026-08-15, **MERGED to `main` @ `aec9911` 2026-08-16 under the owner's standing per-ticket grant — gates GREEN on the branch tip BEFORE (lint 0 · typecheck 0 · 857/857 on 30 files · build 0 · skip 0 · `No findings.`) and on `main` AFTER (identical six)**; QE `READY_FOR_HUMAN_REVIEW`, 12 mutants / 9 RED across six distinct assertions, `M11` green-by-design proving the guard tests the PROPERTY not the spelling; **Security/NFR `PASS_WITH_RISKS`, 0 HIGH — and it OVERTURNED the ticket's own clause-(b) analysis: the ticket answers a DELTA where `ABC-041` states a STATE predicate, 7 production files read `process.`, so (b) FIRES — then cleared it on the merits, `src/cli.ts`'s capability surface byte-identical either side. What saved the ticket was its fail-safe sentence, not its reasoning (`S1`, MEDIUM, BA/PM)**; Security/NFR **refused to quote its own `N8-LANE` re-run** because its null control drifted (sign 0/8) and reported the engineer's sound figure instead — the decisive new instrument is the added test at **0.31 ms, 0.0005× the 650 ms bar**; ASVS L1 **7 of 70 apply, 7 PASS, 0 FAIL, 0 unbacked ticks**; **the rename/rename conflict at merge landed exactly where the Orchestrator predicted it and was resolved drained-state-wins in one command**; **THE OWNER'S OWN TRANSCRIPT REPLAYED ON `main`: the refusal now prints `npm run chess -- […]`, and typing that verbatim exits 0 with 27 stdout lines and EMPTY stderr — the first defect UAT ever caught here is repaired end to end, not merely guarded**)
 
 
 
