@@ -49,8 +49,13 @@ import { makeRenderSeam } from "./render-seam.ts";
 /** The standard start position, in the spelling every test file in this repository uses. */
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-/** What a human is shown when their command line is refused. It names the real command. */
-const USAGE = "usage: npm run chess [--colour white|black|random] [--ascii | --unicode]";
+/**
+ * What a human is shown when their command line is refused. THE `--` IS LOAD-BEARING, NOT NOISE:
+ * without it the package runner eats the flag as its own, so the line would teach the reader the
+ * command he was just refused for (`ABC-066`). Every form it advertises was run before it was
+ * printed. Do not tidy the separator away.
+ */
+const USAGE = "usage: npm run chess -- [--colour white|black|random] [--ascii | --unicode]";
 
 /** A refused command line is a failure, and the shell is told so. Nothing here calls `exit`. */
 const USAGE_EXIT_CODE = 1;
