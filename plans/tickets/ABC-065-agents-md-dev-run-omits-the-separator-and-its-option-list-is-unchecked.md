@@ -1,8 +1,8 @@
 ---
 id: ABC-065
 title: `AGENTS.md`'s `Dev / run` slot lists three options and never shows the `--` separator — a reader who combines them gets a board, exit 0 and a silently discarded flag, and no test compares the documented list to the accepted set
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P1
 epic: —
@@ -156,8 +156,9 @@ nothing is broken in the product.**
 ## Definition of Ready
 
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-15**. **Result: 9 of 10 — NOT MET.** ⚠️×1, and the ⚠️ is a live claim on the file, not an
-unknown.
+**2026-08-15**, and item 10 RE-SCORED by BA/PM **2026-08-16** (task
+`abc065-066-claim-drained-2026-08-16`, Workflow 07). **Result: 10 of 10 — MET.** The claim that held
+item 10 back has drained.
 
 | # | item | verdict |
 |---|---|---|
@@ -170,4 +171,4 @@ unknown.
 | 7 | test notes present | **✅** four, including "locate the slot mechanically" and "run the documented command before documenting it" |
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P1`, with the reason it is not `P0` stated |
-| 10 | no major unresolved blocker | **⚠️** `AGENTS.md` is under a live queue claim by `agents-md-owner-grants`. External, real, and scored rather than written off; it clears when that subtask drains to `done/` |
+| 10 | no major unresolved blocker | **✅** RE-SCORED 2026-08-16: the `agents-md-owner-grants` claim has drained — `.grugops/queue/done/agents-md-owner-grants.md` and `.claim.md` both sit under `done/`, verified independently (not cited on faith): `.grugops/queue/{pending,claimed}/` hold nothing named `agents-md-owner-grants`, and `AGENTS.md` on `main` carries no live-claim marker for itself |
