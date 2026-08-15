@@ -196,8 +196,8 @@ gate" here: nothing is pushed and no PR is opened.
 
 Running a ticket's tests and conducting its UAT are the agent's, granted standing by the owner
 (2026-08-15) alongside the per-ticket merge authority above. The same two limits apply: the gate
-still binds, and the authority is the owner's and revocable. Every ticket to date deferred UAT to
-`EPIC-006` because nothing was exercisable; `npm run chess` ended that reason.
+still binds, and the authority is the owner's and revocable. Every ticket CLOSED to date deferred
+UAT to `EPIC-006` because nothing was exercisable; `npm run chess` ended that reason.
 
 **An agent-run UAT executes the business scenarios against a real build and reports the result. It
 is NOT a named human's acceptance signature.** `context.human_admission` is `off` and no `finding`
