@@ -71,6 +71,16 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 - Test (all): `npm test` <!-- vitest run -->
 - Test (single file): `npx vitest run <path>`
+- Coverage: `npx vitest run --coverage` <!-- RUN 2026-08-15 at `daa20c4` (this hop changed no code):
+  exit 0, 856/856 on 30 files. `@vitest/coverage-v8` is in `devDependencies`; no npm script and no
+  `vitest.config.ts` key invokes it, and `coverage` is NOT in `quality.mandatory_gates` — a
+  measurement you run, not a gate that runs you. Figures, and which denominator decides whether this
+  project meets `quality.coverage_threshold` (`0.8`), are in
+  `.grugops/context/owner-grants-2026-08-15/notes/` — read them before quoting a number. TRAP from
+  that note: `src/cli.ts`'s tests SPAWN it as a child process and v8 coverage does not cross a
+  process boundary, so it reads uncovered while being thoroughly tested. -->
+- Coverage (`src/` only — the other denominator; neither is the agreed one):
+  `npx vitest run --coverage --coverage.include='src/**'` <!-- RUN 2026-08-15 at `daa20c4`: exit 0. -->
 
 ### Acceptance
 
@@ -155,11 +165,14 @@ Trunk-based. `main` is the single long-lived branch. Work happens on a short-liv
 merges to `main` as soon as it is green. No `develop`, no release branches, no long-lived feature
 branches.
 
-The project owner authorized merges to `main` standing (2026-08-06). Three limits did not move:
-deploy is NOT included, the gate still binds, and the authority is the owner's and revocable. The
-directive, its reading and its limits are in `memory-bank/60-progress.md` § "Standing directive —
-the branching model, and who turns the merge key". **That section is the authority; this is a
-pointer to it.**
+The project owner authorized merges to `main` standing (2026-08-06), and on 2026-08-15 made merge
+and test explicitly the agent's **per ticket**. Of the three limits the 2026-08-06 directive set,
+**one is retired and two stand**: deploy is no longer excluded — see `## Deployment posture`, which
+is where that grant and its own limits live — while the gate still binds and the authority is still
+the owner's and revocable. Both directives, with their words, reading and limits, are in
+`memory-bank/60-progress.md` §§ "Standing directive — the branching model, and who turns the merge
+key" and "Standing directive — deploy is ALLOWED and NOT NEEDED; merge, test and UAT are the
+agent's, per ticket. 2026-08-15." **Those sections are the authority; this is a pointer to them.**
 
 The commit-side branch guard in `agent-factory/_commit-convention.md` still holds — commit on the
 `grugops/<task>` branch, never directly on `main`. What the owner changed is what happens *after*
@@ -177,6 +190,32 @@ rather than given a fake dial nothing reads, and `memory-bank/60-progress.md` is
 authority actually lives. This repo also has no git remote, so `pr` has always meant "branch +
 gate" here: nothing is pushed and no PR is opened.
 
+## Test and UAT authority
+
+Running a ticket's tests and conducting its UAT are the agent's, granted standing by the owner
+(2026-08-15) alongside the per-ticket merge authority above. The same two limits apply: the gate
+still binds, and the authority is the owner's and revocable. Every ticket CLOSED to date deferred
+UAT to `EPIC-006` because nothing was exercisable; `npm run chess` ended that reason.
+
+**An agent-run UAT executes the business scenarios against a real build and reports the result. It
+is NOT a named human's acceptance signature.** `context.human_admission` is `off` and no `finding`
+is admissible here, so a UAT result is recorded as `decision` / `observation` like every other
+result and carries no stamp. Write it so "UAT passed" can never later be read as a human having
+accepted the work.
+
+The authority is `memory-bank/60-progress.md` § "Standing directive — deploy is ALLOWED and NOT
+NEEDED; merge, test and UAT are the agent's, per ticket. 2026-08-15." **That section is the
+authority; this is a pointer to it.**
+
+**Precedence, so nobody has to guess — and one thing is genuinely open.** The kit is shared and
+project-agnostic, so `agent-factory/workflows/06-uat-pack.md` and
+`agent-factory/roles/uat-planner.md` still make the `In UAT` → `Ready to Release` exit a **named
+human's signoff** and forbid an agent self-signing. It is read-only and cannot carry a project
+override. What the owner granted is the **conduct** of UAT, which the kit already leaves to the
+role; **he did not say an agent's report is the acceptance signature, and this file does not say it
+either.** So: conduct the UAT, report the result, never self-sign — and if a ticket's `In UAT` exit
+needs a signature, that is the owner's to give or to redefine. Do not resolve it by inference.
+
 ## Deployment posture
 
 This project deploys nowhere. It runs locally, from source on a developer's machine. There is no
@@ -192,22 +231,34 @@ distributed — npm, a binary, a `git clone` — is undecided, and `EPIC-006` de
 that in.
 
 The ruling, the evidence behind it, and what is deliberately preserved for the day it changes are in
-`memory-bank/50-decisions/ADR-0007-deployment-posture-local-only.md`. **That ADR is the authority;
-this is a pointer to it.** The config carries the fact: `default_stack.deploy` is `none-local-only`
-and `environments` is `["local"]`.
+`memory-bank/50-decisions/ADR-0007-deployment-posture-local-only.md`. **That ADR is the authority on
+the posture; this is a pointer to it.**
 
-**Nothing here relaxes anything.** `production_requires_human_confirmation` stays `true`, the
-never-deploy safety rule below stands, and the branching model's deploy limit — deploy is not
-included in the owner's standing merge approval — is confirmed by this, not modified. "Deploys
-nowhere today" is not "decided never to deploy": no release machinery, board column or workflow was
-removed.
+**Who holds the deploy key changed on 2026-08-15, and where anything runs did not.** The owner
+granted the deploy authority to the agent and in the same breath re-affirmed that this project does
+not need deploying and stays local, naming a condition of his own for when that ends. **Both halves
+are his**, so this section is confirmed by that grant, not weakened by it. The authority is
+`memory-bank/60-progress.md` § "Standing directive — deploy is ALLOWED and NOT NEEDED; merge, test
+and UAT are the agent's, per ticket. 2026-08-15."; `ADR-0007` is Architect/Design's to amend under
+it. The config carries the fact: `default_stack.deploy` is `none-local-only` and `environments` is
+`["local"]`.
+
+**Nothing here relaxes anything.** `production_requires_human_confirmation` is still `true` — the
+2026-08-15 grant **deliberately did NOT flip it**, and `ADR-0007` carries a detection row for that
+flag being found `false` or argued obsolete. Record its real state and leave it alone; do not read
+the deploy grant as having moved it, and do not argue it obsolete because nothing deploys today. The
+branching model's 2026-08-06 deploy limit is the one thing that DID move, and it moved by a later
+grant of the owner's, not by this posture. "Deploys nowhere today" is not "decided never to deploy",
+and "may deploy" is not "has anything to deploy": no release machinery, board column or workflow was
+removed, and none was added.
 
 **Precedence, so nobody has to guess.** The kit is shared and project-agnostic, so it still hardcodes
 a `dev → staging → prod` promotion path (`agent-factory/workflows/12-release.md` step 3;
 `agent-factory/roles/release-manager.md`'s release-record template). It is read-only and cannot carry
-a project override. On this project's deployment posture, `.grugops/factory.config.json`, `ADR-0007`
-and `memory-bank/` win; everything else in those files — never-deploy, the human-confirmation
-requirement — stands unchanged.
+a project override. On this project's deployment posture — and, since 2026-08-15, on who may turn
+the key — `.grugops/factory.config.json`, `ADR-0007` and `memory-bank/` win; the kit's never-deploy
+line is overridden HERE and nowhere else, and everything else in those files — the
+human-confirmation requirement above all — stands unchanged.
 
 ## Safety rules
 
@@ -216,9 +267,15 @@ requirement — stands unchanged.
 - Merging gated work to `main` is authorized standing by the owner — see `## Branching model`. It
   is approval to merge work that PASSED, never to skip or soften a gate (`quality.gate_enforcement`
   is `blocking`): run the gates on the branch tip before and on `main` after, and record both.
-- Never deploy. `production_requires_human_confirmation` is `true`, and merge approval is not
-  deploy approval — a human holds deploy. There is also nothing to deploy and nowhere to deploy it
-  — see `## Deployment posture`, which confirms this rule rather than changing it.
+  Running a ticket's tests and conducting its UAT are the agent's on the same terms — see
+  `## Test and UAT authority`.
+- **Deploy is allowed, and there is nothing to deploy.** Both halves came from the owner in one
+  sentence (2026-08-15): the authority was granted and the need was denied — this project stays
+  local. Read it as neither "deploy freely" nor "the old prohibition stands". There is no artifact,
+  no target and no release machinery today, so there is no deploy to perform; `EPIC-006` is where
+  that could change. `production_requires_human_confirmation` is `true` and the grant did not flip
+  it — it binds as written, and moving it is the owner's word, never an inference from the grant.
+  See `## Deployment posture`.
 - Do not change dependencies without reason. No unrelated refactors. No fake results.
 
 ## Coding rules (the 12)
