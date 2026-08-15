@@ -140,28 +140,13 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 ## In Development (WIP 0/3)
 
-## In Review (WIP 1/3)
-
-- [ABC-065] `AGENTS.md`'s `Dev / run` never shows the `--` separator, and its option list is compared to nothing  (owner: QE/E2E, S, P1, epic: —, since: 2026-08-15, **BOTH HALVES BUILT on ONE branch `grugops/ticket-to-pr-ABC-065-scribe` @ `901c670` — Scribe's `AGENTS.md` at `39122ec`, guard at `c5a5493`, `main` merged in at `9490740` — NOT MERGED, QE has not run**; gate GREEN, **859/859 on 30 files** (857 before = exactly the two new rows), lint 0 after ONE autofix of biome FORMATTING only (`self_fix_attempts` 1 of 2, no rule disabled), typecheck 0, build 0, skip 0; **THE VACUITY PROOF IS THE RESULT: the `V` mutant is not synthetic — it restores `AGENTS.md` to the state `ABC-065` FOUND it in, and the guard reds on `toContain(SEPARATOR_FORM)`; typecheck was run ALONE first so a red could not be a compile error in disguise**; both `A4` mutants RED, plus a THIRD the engineer built unasked (`C`, swap holding the count at 3) because `A4`-2 redded on the count floor and left open whether the set equality does independent work — **it does**; **`invocationsAdvertisedBy` GENUINELY CANNOT SERVE this input and the hop said so instead of forcing the reuse I asked for — forcing it would have manufactured the exact vacuity I sent it to avoid**; `advertisedTextOf` reused and fought TWICE exactly as QE's `Q2` predicted, both handled caller-side, no fork, no edit; Orchestrator-verified: **1 path excluding `.grugops/`, `85 0` PURE APPEND, ZERO production files on the whole branch, `ABC-042`'s `A1` row md5 `0cf8f54c…` identical, `spawned` 10**)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## In Review (WIP 0/3)
 
 ## In Security/NFR (WIP 0/2)
 
-## Ready for UAT (WIP 1/4)
+## Ready for UAT (WIP 2/4)
+
+- [ABC-065] `AGENTS.md`'s `Dev / run` never shows the `--` separator, and its option list is compared to nothing  (owner: UAT Planner, S, P1, epic: —, since: 2026-08-15, **MERGED to `main` @ `460b9f5` 2026-08-16 under the owner's standing per-ticket grant — gates GREEN on the tip `901c670` BEFORE (lint 0 · typecheck 0 · 859/859 on 30 files · build 0 · skip 0) and on `main` AFTER (identical, plus test-integrity `No findings.` and `npm run chess -- ` measured at 1 in `AGENTS.md` ON MAIN)**; QE all six criteria MET, **18 mutants, 14 RED — `N14` completes the matrix (accepted-and-undocumented + documented-and-unaccepted holding the count at 4 v 4) so the FLOOR and the SET EQUALITY are each independently live in both directions**; **`A4`'s long-term direction is now proved: the failure that arrives the day `EPIC-006` adds an option reds with `expected 3 to be greater than or equal to 4`**; **QE PUBLICLY CORRECTED ITS OWN EARLIER NOTE — its `ABC-066` `Q2` quoted `slice(… + 17)` where the source reads `+ SEPARATOR_FORM.length`; the build hop caught it and QE confirmed the build hop right and itself wrong**; **SECURITY/NFR DELIBERATELY NOT RUN and the reason is on the record, not buried: ZERO production files (measured), the file is a `.test.ts` so `ABC-041` clause (b)'s subject does not apply, and unlike `ABC-066` this ticket carries NO fail-safe 'it fires anyway' sentence — if the owner disagrees, that note is the paragraph to argue with**; **`Q8` MEDIUM NOT closed quietly: an unterminated HTML comment silently EXTENDS the slot 9 → 16 lines and ships GREEN BY LUCK — it gets a ticket, not a patch**)
 
 - [ABC-066] The usage line printed on every refusal is not a runnable command — the user who does what it says reproduces the error he is reading  (owner: UAT Planner, S, P1, epic: —, since: 2026-08-15, **MERGED to `main` @ `aec9911` 2026-08-16 under the owner's standing per-ticket grant — gates GREEN on the branch tip BEFORE (lint 0 · typecheck 0 · 857/857 on 30 files · build 0 · skip 0 · `No findings.`) and on `main` AFTER (identical six)**; QE `READY_FOR_HUMAN_REVIEW`, 12 mutants / 9 RED across six distinct assertions, `M11` green-by-design proving the guard tests the PROPERTY not the spelling; **Security/NFR `PASS_WITH_RISKS`, 0 HIGH — and it OVERTURNED the ticket's own clause-(b) analysis: the ticket answers a DELTA where `ABC-041` states a STATE predicate, 7 production files read `process.`, so (b) FIRES — then cleared it on the merits, `src/cli.ts`'s capability surface byte-identical either side. What saved the ticket was its fail-safe sentence, not its reasoning (`S1`, MEDIUM, BA/PM)**; Security/NFR **refused to quote its own `N8-LANE` re-run** because its null control drifted (sign 0/8) and reported the engineer's sound figure instead — the decisive new instrument is the added test at **0.31 ms, 0.0005× the 650 ms bar**; ASVS L1 **7 of 70 apply, 7 PASS, 0 FAIL, 0 unbacked ticks**; **the rename/rename conflict at merge landed exactly where the Orchestrator predicted it and was resolved drained-state-wins in one command**; **THE OWNER'S OWN TRANSCRIPT REPLAYED ON `main`: the refusal now prints `npm run chess -- […]`, and typing that verbatim exits 0 with 27 stdout lines and EMPTY stderr — the first defect UAT ever caught here is repaired end to end, not merely guarded**)
 
