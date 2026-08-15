@@ -167,8 +167,8 @@ the gate is green, not how work is produced.
 
 **Precedence, so nobody has to guess.** The kit is shared and project-agnostic, so it still reads
 "agents never merge" (`_commit-convention.md` §(c), workflows 04, 05, 12). It is read-only and
-cannot carry a project override. On merge to `main` in THIS project, the owner's directive wins;
-everything else in those files — the branch guard, the gate, never-deploy — stands unchanged.
+cannot carry a project override. Merge to main is allowed, deploys are currently not implemented.
+Merge to `main` in THIS project only when all tests pass and ticket is done, never before.
 
 **Config trap.** `.grugops/factory.config.json` says `autonomy: "pr"`, which the kit defines as
 "branch + open a PR (agents never merge)". The dial allows only `diff`/`branch`/`pr` and there is
