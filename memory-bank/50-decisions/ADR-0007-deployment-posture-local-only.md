@@ -13,6 +13,31 @@ recorded in `memory-bank/60-progress.md` under **"Standing directive — who dec
 delegation carries a condition — an ADR ratified under it **must record what would falsify it** — and
 the table at the end of this file is that record.
 
+**AMENDED 2026-08-15 at task `owner-grants-2026-08-15`, subtask `design-adr0007-deploy-authority`,
+Workflow 07 — ONE HALF-SENTENCE IN CLAUSE 4 IS STRUCK AND FALSIFIER `D7`'s TRIGGER IS WIDENED. THE
+POSTURE IS UNCHANGED, AND IT WAS RE-CONFIRMED BY THE OWNER ON THE SAME DAY THIS FILE WAS AMENDED.**
+Clauses 1, 2, 3, 5 and 6 are untouched, `default_stack.deploy` is still `none-local-only`,
+`environments` is still `["local"]`, and **`production_requires_human_confirmation` is UNTOUCHED and
+still reads `true`** — re-checked at this hop, not assumed.
+
+The owner granted the agent deploy authority and denied the need for it in one sentence on
+2026-08-15. **The authority is `memory-bank/60-progress.md` § "Standing directive — deploy is ALLOWED
+and NOT NEEDED; merge, test and UAT are the agent's, per ticket. 2026-08-15", where the words are
+quoted verbatim and all four grants are recorded separately. This file CITES that section and does
+not restate it.** Two fragments identify it: *"I allow you to deploy"* and *"it is local for now
+until completed"*.
+
+**What moved is who holds the deploy key. Nothing about where anything runs moved** — the second
+fragment says what the 2026-08-06 quote said, and adds the owner's own bound, *"until completed"*,
+alongside the revisit trigger clause 1 already names. So this is not a reversal: it is one clause
+going stale inside a document the owner has now confirmed twice.
+
+**No ratification is manufactured and none is owed.** This amendment sets no target and no level and
+accepts no new risk — the same distinction `ADR-0008` draws and `ADR-0011` re-asks at each amending
+hop. It transcribes an authority the owner stated himself, and it neither extends nor narrows it.
+Still `accepted`. **Zero production lines, zero test lines, zero config values, no ticket cut, no
+board column moved.**
+
 **What the owner stated and what this role decided are different things, and are kept apart.**
 Project owner Olger Oeselg, 2026-08-06, verbatim:
 
@@ -126,9 +151,61 @@ NOT an argument that any of it is dead.** Explicitly and permanently:
   `agent-factory/workflows/13-incident.md`, and the never-deploy hard limit carried in all 17 role
   adapters are untouched.** (The kit is read-only regardless; this clause states intent, not just
   compliance.)
-- The deploy limit written into the branching-model directive — *"DEPLOY IS NOT INCLUDED"* — is
-  **confirmed by this ADR, not modified.** Merge approval is still not deploy approval; a human holds
-  deploy.
+- **[DATED 2026-08-15 at `design-adr0007-deploy-authority` — every sentence in this bullet was TRUE
+  when written. TWO have since been overtaken by the owner and ONE still stands. The strike marks the
+  half that no longer holds; the amendment block at the end of this clause rules it.]** The deploy
+  limit written into the branching-model directive — *"DEPLOY IS NOT INCLUDED"* — is **confirmed by
+  this ADR, not modified.** *(That limit was **RETIRED** by the owner on 2026-08-15; this file
+  confirmed it correctly for the nine days it stood.)* **Merge approval is still not deploy approval**
+  — that half is unchanged and is the reason the sentence is not deleted outright, see the block —
+  ~~a human holds deploy~~.
+
+> ### **[AMENDED 2026-08-15 at task `owner-grants-2026-08-15`, subtask `design-adr0007-deploy-authority` (Workflow 07) — WHO HOLDS THE DEPLOY KEY HAS MOVED; WHAT CAN BE DEPLOYED HAS NOT. Bullet 3 is dated and half of it struck. Bullets 1 and 2 STAND, and the flag is UNTOUCHED.]**
+>
+> **This file was written when *"deploys nowhere"* and *"may not deploy"* were one sentence. They are
+> two facts now, they fail for different reasons, and a reader in three months has to know which one
+> stops him. Separating them is the whole of this block.**
+>
+> **Fact A — CAPABILITY. There is nothing to deploy and nowhere to deploy it.** Re-measured at this
+> hop rather than inherited from 2026-08-06: `D1` zero deploy artifacts and still no YAML file of any
+> kind, `D2` `private: true` with no `bin` / `main` / `exports` / `files`, `D3` no git remote, `D4`
+> `plans/releases/` holds `.gitkeep` only. **UNCHANGED, and this is what stops you today.**
+>
+> **Fact B — PERMISSION. An agent may deploy.** Granted by the owner on 2026-08-15, dormant on
+> arrival, revocable by one sentence. **This stopped you before 2026-08-15. It does not stop you
+> now.**
+>
+> **The consequence that inverts the obvious reading of the grant.** Three things would stop an agent
+> from a production deploy: **A** (nothing to deploy), **B** (no permission), and
+> **`production_requires_human_confirmation`**. **B is gone. A is `EPIC-006`'s to remove by design —
+> that is what packaging IS.** The flag is the only one of the three that is not scheduled to
+> disappear. **Its apparent redundancy and its actual importance both went up on the same day**, and
+> that is the argument for `D7` that this file could not make on 2026-08-06.
+>
+> **The flag was NOT moved here and bullet 1 is unchanged.** The owner did not name it; what would
+> legitimately move it is ruled in the `D7` block under `## What would falsify this`. Bullet 1's
+> forbidden inference gains a **second route** and loses nothing: reading `environments: ["local"]`
+> and concluding the flag is obsolete was the route that existed in August 2026; reading *"the owner
+> allowed deploy"* and concluding the same is the route that opened on 2026-08-15. **Same conclusion,
+> different premise, same defect.**
+>
+> **Bullet 2 stands exactly as written and is deliberately not amended.** Those files ARE untouched.
+> What is true today and was not on 2026-08-06 is that the never-deploy line carried in all 17 role
+> adapters **contradicts the owner on this project** — and the adapters are GENERATED
+> (`scripts/generate-role-adapters.js`), so hand-editing them is wrong and regeneration would restore
+> the line anyway. **That is a precedence question, it is answered immediately below, and it is not a
+> licence to edit a generated file.**
+>
+> **Precedence, unchanged in shape from the merge case.** The kit is shared, project-agnostic and
+> read-only; it still says never deploy and cannot carry a project override. **On this project the
+> owner's directive of 2026-08-15 wins.** Everything else in those kit files stands unchanged —
+> including the human-confirmation requirement, which the owner did not touch.
+>
+> **What this amendment does NOT do.** It does not move the posture, `default_stack.deploy`,
+> `environments`, `production_requires_human_confirmation`, clause 5's undecided distribution, any
+> board column, any ticket or any traceability row. It writes **zero bytes under `src/`**. It is one
+> block, not a new clause 7, because **adding a clause would imply this ADR decided something new
+> about the posture. It did not — the owner did, and this file records it.**
 
 **5. How the CLI will eventually be distributed is UNDECIDED, and this ADR does not decide it.** npm,
 a standalone binary, a `git clone` and `npm start` — all open. That is `EPIC-006`'s question.
@@ -194,9 +271,13 @@ empty "how to deploy" template, backed by not one deploy artifact in the reposit
   `agent-factory/roles/release-manager.md` hardcodes an *"environments path `dev → staging → prod`"*
   in its release-record template. **The kit is shared, project-agnostic and read-only; it cannot
   carry a project override.** On this project's deployment posture, `.grugops/factory.config.json`,
-  this ADR and `memory-bank/` win; everything else in those kit files — including the never-deploy
-  limit and the human-confirmation requirement — stands unchanged. This is the same precedence shape
-  `AGENTS.md` already uses for the branching model.
+  this ADR and `memory-bank/` win; everything else in those kit files — including ~~the never-deploy
+  limit and~~ **[STRUCK 2026-08-15 at `design-adr0007-deploy-authority` — the owner's directive of
+  2026-08-15 overrides the kit's never-deploy limit on this project, by the very precedence rule this
+  sentence states. The RULE is unchanged and produced the right answer; one of the examples it listed
+  is no longer an example of it. See clause 4's amendment block.]** the human-confirmation
+  requirement — stands unchanged. This is the same precedence shape `AGENTS.md` already uses for the
+  branching model.
 - **`memory-bank/70-runbook.md` stops being an empty template** and says honestly that there is
   nothing to operate, deploy or roll back, with the dev/test commands left where they already live
   (`AGENTS.md § Commands`) rather than duplicated.
@@ -231,4 +312,85 @@ changes character is when `EPIC-006` picks a distribution mechanism: at that poi
 | **D4** | a release is actually cut | a `REL-xxxx.md` appears in `plans/releases/`. **At this hop: `.gitkeep` only** |
 | **D5** | the owner revises the posture, or `EPIC-006` selects a distribution mechanism | the named revisit trigger firing. Handled by a **superseding** ADR, not a revert — clause 1 says "currently", so this is expected evolution, not a defect |
 | **D6** | **the sharp one** — `environments: ["local"]` misleads a role into treating "local" as a deploy **target** to promote to, which is exactly the imprecision accepted in Alternatives | any role's published note or release record that reads `["local"]` as a destination. The mitigation is clause 3 plus `memory-bank/70-runbook.md § Deploy`, which both state that nothing is deployed anywhere. If it happens anyway, `[]` becomes the better value and clause 3 is re-openable |
-| **D7** | `production_requires_human_confirmation` is found set to `false`, deleted, or argued obsolete on the strength of this ADR | `grep production_requires_human_confirmation .grugops/factory.config.json` → must read `true`. Clause 4 forbids the inference; this row is how a reader detects that it was drawn anyway |
+| **D7** | **TRIGGER WIDENED 2026-08-15 — the CHECK and the VERDICT are unchanged; see the block below.** `production_requires_human_confirmation` is found set to `false`, deleted, or argued obsolete ~~on the strength of this ADR~~ **on the strength of ANY document, dial or grant — including the owner's deploy grant of 2026-08-15 — WITHOUT the owner having named the flag or the human-confirmation requirement itself** | `grep production_requires_human_confirmation .grugops/factory.config.json` → must read `true`. **At the amending hop: `true`.** If it does not, the row fires **unless** `grep -rn` over `memory-bank/` returns a **dated, attributed, verbatim owner quotation naming the flag or the confirmation requirement** — the absence of that quotation IS the firing condition. Clause 4 forbids the inference by both of its routes; this row is how a reader detects that it was drawn anyway |
+
+> ### **[AMENDED 2026-08-15 at task `owner-grants-2026-08-15`, subtask `design-adr0007-deploy-authority` (Workflow 07) — `D7` SURVIVES. Its CHECK and its VERDICT are unchanged. Its TRIGGER named the only inference route that existed in 2026-08-06, and there are two now.]**
+>
+> **`D7` was tested for the first time on the day the authority moved, and it held.** The owner
+> granted deploy on 2026-08-15 and **did not name this flag**. The Orchestrator recorded the grant
+> and **deliberately did not flip the flag, citing `D7` by name**
+> (`memory-bank/60-progress.md` § "Standing directive — deploy is ALLOWED and NOT NEEDED…", grant 1).
+> Architect/Design re-checked at this amending hop: `grep` → **`true`**. Recorded because **a tripwire
+> nobody has ever seen fire is not yet known to work**, and this one now is.
+>
+> **Why the trigger needed widening.** *"On the strength of this ADR"* names one route: read
+> `environments: ["local"]`, conclude the flag is obsolete. A second route opened on 2026-08-15 —
+> *"the owner allowed deploy, so the human-confirmation rail went with it"* — and that inference is
+> **not drawn on the strength of this ADR**, so the row as written would not have caught it. The
+> widened trigger is **source-agnostic**: what fires it is the flag moving without the owner naming
+> it, whatever document is cited.
+>
+> #### What would LEGITIMATELY move the flag
+>
+> **Exactly one thing: the owner naming it.** Specifically — words that name
+> `production_requires_human_confirmation` or the human-confirmation requirement **itself**, recorded
+> **verbatim, dated and attributed** in `memory-bank/`, the way every owner directive in this project
+> already is. That is checkable by a third party who trusts nothing in this file:
+> `grep -rn production_requires_human_confirmation memory-bank/` returns an owner quotation, and
+> `git log -S` on that quotation dates it and names the commit that introduced it
+> (`context.audit_retention` is `git`).
+>
+> **What does NOT move it. Each of these is a live temptation, not a hypothetical:**
+>
+> 1. **The deploy grant of 2026-08-15.** It moves **who may act**. The flag governs **what is
+>    required at the moment of acting**. A human can hand an agent the deploy key and still want to be
+>    asked before production — those are orthogonal, and nothing in the owner's sentence speaks to the
+>    moment of the act. **Read together the two are consistent, not contradictory:** the agent may
+>    deploy; a production deploy asks a human; there is no production environment, so the pair has no
+>    effect today.
+> 2. **`environments: ["local"]`, or "there is no production".** The original forbidden inference,
+>    unchanged and still forbidden.
+> 3. **"It has zero present effect."** True — and it is an argument for leaving a **free** rail
+>    standing, never for removing it.
+> 4. **An agent's judgement that the owner would say yes if asked.** Asking is cheap; the flag is not
+>    an obstacle to any work in flight, because nothing deploys.
+> 5. **A kit default, a bootstrap re-run, or a config regeneration** restoring a default — the
+>    *deleted* route this row has always covered.
+>
+> **The honest limit of that discriminator, stated rather than assumed away.**
+> `context.human_admission` is `off` and no `human:<name>` stamp is emittable on this install, so
+> **there is no mechanically un-forgeable owner signal here**. The verbatim-quote-in-`memory-bank`
+> convention is the whole of it. Its strength is that it is **auditable** — a quotation is a string,
+> and `git log -S` dates it and names the commit that added it — **not** that it cannot be forged. A
+> reader who needs more than an audit trail must ask the owner directly.
+>
+> #### The recommendation, which is a recommendation and NOT an edit
+>
+> **Do not flip it.** Four reasons, in order of weight: the owner did not name it; it guards a
+> different object than the grant moved (see 1 above); it has **zero present effect**, so flipping
+> buys nothing today while disarming a rail before `EPIC-006` has designed the machinery it guards;
+> and the kit's own reference calls it a must-stay flag. **If the owner wants it moved, one sentence
+> naming the flag does it** — and that sentence is worth asking for explicitly, because with **B**
+> retired and **A** scheduled for removal by `EPIC-006` (clause 4's block), this flag is the last of
+> the three.
+>
+> **The counter-argument, recorded rather than suppressed:** a reader may say that leaving `true`
+> standing after the owner granted deploy is an agent overriding an owner. **It is not.** `true` is
+> the value the owner's own session left in place — the flag read `true` before, during and after his
+> sentence, and he named deploy, merge, test and UAT without naming it. **Preserving a state is not
+> overriding one**, and nothing is blocked by it today.
+>
+> #### Two decisions of restraint, so they are not read as oversights
+>
+> **No `D8` was added.** The permission half of the new fact is not falsifiable by measurement — it is
+> granted and revoked by the owner's sentence — and the dormancy half is exactly `D1`–`D4`, all four
+> of which were **re-run at this hop and all four hold**. Splitting the flag question across two rows
+> would make it possible to satisfy one tripwire and miss the other. **One flag, one row.**
+>
+> **The gap `D7` does NOT close, named so nobody mistakes its reach.** It detects the flag being
+> **changed**. It does not detect the flag being **ignored**. Nothing on this install parses
+> `.grugops/factory.config.json` — there is no `scripts/` directory, `.claude/settings.json` enables a
+> plugin and registers **no hook**, and no test asserts the value — so the flag is **prose honoured by
+> roles, not an enforced control**. Its observable trace if ignored would be a release record (`D4`)
+> or a deploy artifact (`D1`). **A rail with no instrument is exactly as strong as its prose, which is
+> the strongest argument in this file against weakening the prose.**
