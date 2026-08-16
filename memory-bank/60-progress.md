@@ -596,6 +596,17 @@ the same explicit instruction.
 
 ## Governance facts that must survive a context clear
 
+- **Open question 4's decomposition precondition was WAIVED by the owner, 2026-08-16, AFTER the
+  fact — and the contradiction it guarded is STILL OPEN.** The Orchestrator started `EPIC-006`'s
+  second-half decomposition while the `npx`-vs-`ADR-0007` contradiction was unruled, disclosed it,
+  and the owner answered: ***"it was ok to decompose, we can deal with blocker items later, i wanted
+  the information saved that we know we have these blocked items for later decomposition."***
+  **Read this narrowly.** He waived the PRECONDITION and asked that blocked items be RECORDED. He
+  did **not** rule the contradiction, did **not** choose a distribution channel, and did **not**
+  authorise cutting the decision-blocked work. `EPIC-006` still asserts `npx` in four places
+  (`:206`, `:222`, `:252`, `:257`) against `ADR-0007` clause 5's "undecided"; the repair is
+  `ABC-100` `A7` and it reads *"say what the owner chose"*, so it cannot close until he chooses.
+  **Do not cite this waiver as permission to fill in the channel.**
 - **ADR-0004 was ratified by the Orchestrator under an explicit, quoted delegation from Olger
   Oeselg on 2026-07-31 — the first ADR here not ratified by a human directly.** It is recorded in
   the ADR as **NOT precedent**; the delegation was specific to ADR-0004 by name. The standing rule
