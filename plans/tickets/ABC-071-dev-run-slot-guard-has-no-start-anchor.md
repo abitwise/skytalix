@@ -1,8 +1,8 @@
 ---
 id: ABC-071
 title: The `Dev / run` slot guard has no START anchor either — a second slot appended after the first is invisible, the same broken slot placed BEFORE the good one reds, and the guard's result depends on which copy comes first
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: —
