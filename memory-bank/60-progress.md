@@ -255,6 +255,70 @@ was cut and no board column moved** — the same shape as the branching-model an
 entries. `AGENTS.md` is the **AGENTS.md Scribe's** to update and `ADR-0007` is **Architect/Design's**;
 this entry is the authority both of them cite, not the specification.
 
+## Standing directive — the owner's word in session IS the `In UAT` signature. 2026-08-16.
+
+**Project owner Olger Oeselg, 2026-08-16, in session, quoted verbatim and complete:**
+
+> *"I accept both, my word is the signature"*
+
+**He was asked a direct question and this is his answer to it.** The Orchestrator put three options to
+him for what this project's `In UAT` exit signature is — his word in session, a file he writes
+himself, or a redefinition of the exit — and told him explicitly that **a green agent report would
+NOT be treated as his acceptance**. He chose the first.
+
+**TWO SEPARABLE THINGS were done in one sentence, and they are recorded separately** — the same
+discipline the 2026-08-06 and 2026-08-15 entries used, so a later reader can check the reading rather
+than inherit it.
+
+### 1. A per-ticket acceptance — `ABC-065` and `ABC-066`
+
+*"both"* is **`ABC-065` and `ABC-066`**, the two tickets sitting in `In UAT`, conducted and unsigned.
+Both are **ACCEPTED by the owner**. This half is spent on those two tickets and is not authority for
+any third.
+
+### 2. A standing ruling — what signs the `In UAT` exit here
+
+**The owner's word in session IS this project's `In UAT` exit signature.** Standing, and revocable by
+one sentence like every other authority he has delegated here.
+
+**This RESOLVES gap `U1` (MEDIUM)**, raised by the UAT Planner hop at `uat-ABC-065-2026-08-16`, which
+found the exit **unreachable by construction**: the kit requires a named human's signoff, and this
+install has no channel that could record one. `U1` is closed by the owner naming a signature this
+project can actually produce — a spoken word, transcribed into git.
+
+**THE KIT IS NOT OVERRIDDEN HERE. This is a kit requirement SATISFIED.** `agent-factory/workflows/06-uat-pack.md`
+and `agent-factory/roles/uat-planner.md` require a **NAMED HUMAN's** signoff and forbid an agent
+self-signing. **The owner IS that named human and he gave it.** What was missing was never his
+authority — only a **mechanism to record it**, and he has now named the mechanism. **Do not file this
+alongside the branching model or the deployment posture as a place where this project overrides the
+kit. It is not one.**
+
+**THREE LIMITS, named because a grant that is not bounded in writing gets read wider than it was
+given.**
+
+1. **AN AGENT STILL MAY NOT SELF-SIGN.** The ruling says **the OWNER'S WORD signs**. It does not say a
+   green agent report signs, and it does not license any agent to sign on his behalf. An agent-run UAT
+   is still the **execution and reporting** of the scenarios — evidence offered to the signer, never
+   the signature. **This is the exact misreading to expect**, and it is refused in advance: the owner
+   was told a green report would not count as his acceptance *before* he answered, so his answer
+   cannot be read as having granted it.
+2. **THE FIDELITY OF THE RECORD IS AN AGENT'S TRANSCRIPTION, NOT A STAMP.**
+   `context.human_admission` is **still `off` and the owner did NOT flip it**. No `finding` is
+   admissible here and no `human:<name>` stamp exists or can be written. So the acceptance is carried
+   as a **`decision` note in git, hand-authored by an agent from the owner's words in session** — a
+   transcription, with the usual provenance of one. That is the honest evidence level and a future
+   reader must be able to see it for what it is. **Flipping `human_admission` is the owner's word, not
+   anyone's inference from this one, and is not proposed here.**
+3. **THE SCOPE IS THE `In UAT` EXIT SIGNATURE ONLY.** Nothing else moved.
+   `quality.gate_enforcement` is still `blocking`; `production_requires_human_confirmation` is still
+   `true`; the merge and deploy posture is exactly as the 2026-08-06 and 2026-08-15 entries left it.
+   No config value was changed, no ADR edited, no gate added, removed or softened.
+
+**Where this is written down.** `AGENTS.md` § "Test and UAT authority" is updated to record what IS —
+that section previously called the signature question genuinely open and forbade resolving it by
+inference, **which was correct until the question was put to the owner and he answered it**. That
+section points here; **this entry is the authority.**
+
 ## Standing directive — read before prioritising anything
 
 **Project owner Olger Oeselg, 2026-07-31:** *"The most important thing is that chess moves are

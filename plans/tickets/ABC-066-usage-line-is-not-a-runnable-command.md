@@ -1,8 +1,8 @@
 ---
 id: ABC-066
 title: The usage line printed on every refusal is not a runnable command — `npm run chess -- ` occurs 0 times in the program's output, so a user who does what the error message tells him reproduces the error he is reading
-status: in-uat
-column: In UAT
+status: done
+column: Done
 size: S
 priority: P1
 epic: —

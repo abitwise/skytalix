@@ -208,18 +208,35 @@ is admissible here, so a UAT result is recorded as `decision` / `observation` li
 result and carries no stamp. Write it so "UAT passed" can never later be read as a human having
 accepted the work.
 
-The authority is `memory-bank/60-progress.md` § "Standing directive — deploy is ALLOWED and NOT
-NEEDED; merge, test and UAT are the agent's, per ticket. 2026-08-15." **That section is the
-authority; this is a pointer to it.**
+**The signature question was put to the owner directly on 2026-08-16 and he answered it: his word in
+session IS this project's `In UAT` exit signature.** He was offered three options — his word, a file
+he writes himself, or a redefinition of the exit — and was told explicitly that a green agent report
+would NOT be treated as his acceptance. On the same word he accepted `ABC-065` and `ABC-066`.
 
-**Precedence, so nobody has to guess — and one thing is genuinely open.** The kit is shared and
-project-agnostic, so `agent-factory/workflows/06-uat-pack.md` and
-`agent-factory/roles/uat-planner.md` still make the `In UAT` → `Ready to Release` exit a **named
-human's signoff** and forbid an agent self-signing. It is read-only and cannot carry a project
-override. What the owner granted is the **conduct** of UAT, which the kit already leaves to the
-role; **he did not say an agent's report is the acceptance signature, and this file does not say it
-either.** So: conduct the UAT, report the result, never self-sign — and if a ticket's `In UAT` exit
-needs a signature, that is the owner's to give or to redefine. Do not resolve it by inference.
+**That answer SATISFIES the kit's requirement; it does not override it.**
+`agent-factory/workflows/06-uat-pack.md` and `agent-factory/roles/uat-planner.md` make the `In UAT`
+→ `Ready to Release` exit a **named human's signoff** and forbid an agent self-signing. **The owner
+IS that named human and he gave it.** What was missing was never his authority — only a mechanism to
+record it. So this is NOT one of this project's kit overrides; do not list it with the branching
+model or the deployment posture.
+
+**Two things follow, and both are the misreadings to expect.**
+
+- **An agent still may not self-sign.** The ruling is that the **owner's word** signs. It does not
+  say a green agent report signs, and it licenses no agent to sign on his behalf. Conduct the UAT,
+  report the result, never self-sign.
+- **The recorded acceptance is an agent's transcription, not a stamp.**
+  `context.human_admission` is still `off` and the owner did NOT flip it, so no `human:<name>` stamp
+  exists and no `finding` is admissible. His acceptance is carried as a hand-authored `decision` note
+  in git. Record that fidelity level honestly, and do not read this ruling as having moved the flag.
+
+Scope is the `In UAT` exit signature only. `quality.gate_enforcement` is still `blocking`,
+`production_requires_human_confirmation` is still `true`, and the merge/deploy posture is unchanged.
+
+The authority is `memory-bank/60-progress.md` §§ "Standing directive — deploy is ALLOWED and NOT
+NEEDED; merge, test and UAT are the agent's, per ticket. 2026-08-15." and "Standing directive — the
+owner's word in session IS the `In UAT` signature. 2026-08-16." **Those sections are the authority;
+this is a pointer to them.**
 
 ## Deployment posture
 
