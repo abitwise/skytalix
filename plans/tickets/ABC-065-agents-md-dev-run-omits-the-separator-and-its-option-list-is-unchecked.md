@@ -1,8 +1,8 @@
 ---
 id: ABC-065
 title: `AGENTS.md`'s `Dev / run` slot lists three options and never shows the `--` separator — a reader who combines them gets a board, exit 0 and a silently discarded flag, and no test compares the documented list to the accepted set
-status: in-development
-column: In Development
+status: ready-for-uat
+column: Ready for UAT
 size: S
 priority: P1
 epic: —
@@ -55,7 +55,9 @@ follow-up set and the only one a human is meeting today.
 
 ## Out of scope
 
-- **`ABC-042`'s `A1` row at `src/cli.test.ts:193-204` — BYTE-IDENTICAL.** Its assertion is
+- **`ABC-042`'s `A1` row in `src/cli.test.ts` — BYTE-IDENTICAL.** *(Re-worded 2026-08-16 with `A2`
+  and for the same reason: this bullet said `:193-204`, and `ABC-066`'s merge moved that range onto a
+  different block. See the annotation under `A2`; the subject is unchanged.)* Its assertion is
   `toContain("- Dev / run: \`npm run chess\`")`, a **substring of the line, not the whole line**
   (read at the cut), so an example added inside the same slot leaves it green. **If a chosen wording
   would require that literal to move, stop: re-opening a merged criterion's instrument is the
@@ -78,9 +80,35 @@ follow-up set and the only one a human is meeting today.
   contains at least one complete invocation of the form `npm run chess -- <option>` where `<option>`
   is an element of `ACCEPTED_ARGUMENTS`. *(Today: `npm run chess -- ` occurs **0** times in the
   file — measured.)*
-- **`A2` (`ABC-042`'s row stays green and unmoved).** **Given** the diff, **then**
-  `src/cli.test.ts:193-204` is **byte-identical**, the substring `- Dev / run: \`npm run chess\`` is
-  still present in `AGENTS.md`, and the suite is green.
+- **`A2` (`ABC-042`'s row stays green and unmoved).** **Given** the diff, **then** **`ABC-042`'s `A1`
+  block in `src/cli.test.ts` — the `it("A1 — AGENTS.md's \`Dev / run\` line is the command that was
+  run", …)` block, whose three assertions are `toContain("- Dev / run: \`npm run chess\`")`,
+  `not.toContain("- Dev / run: \`UNKNOWN - verify\`")` and
+  `expect(packaged.scripts.chess).toBe("node src/cli.ts")`** — is **byte-identical**, the substring
+  `- Dev / run: \`npm run chess\`` is still present in `AGENTS.md`, and the suite is green.
+
+  > **`A2` RE-WORDED AFTER MERGE — 2026-08-16, BA/PM, task `refinement-abc065-wording`, on the
+  > Orchestrator's `G8` ruling. Read this before scoring the criterion.** The original wording, kept
+  > verbatim so nothing is erased, was: *"**Given** the diff, **then** `src/cli.test.ts:193-204` is
+  > **byte-identical**, the substring `- Dev / run: \`npm run chess\`` is still present in
+  > `AGENTS.md`, and the suite is green."*
+  >
+  > **What changed and why this is honest.** The fence was a LINE RANGE, and `ABC-066` merged in
+  > between and moved it: `ABC-042`'s `A1` row is now at `:249-260`, and `:193-204` holds `ABC-066`'s
+  > `advertisedTextOf` and the expander's doc comment. The criterion named a region it did not mean.
+  > **This re-wording changes the fence's ADDRESS, never its subject and never its bar** — it names
+  > the same block the criterion always meant, by content that cannot move.
+  >
+  > **The build hop met the re-worded criterion, and that is measured, not assumed.** Two independent
+  > hops verified the intended block byte-identical across this ticket's own commit: the guard hop by
+  > hash, and QE at the gate by extracting the range at four commits — `6effd96e…` at `dbaf972`
+  > (`ABC-042`'s merge), at `717e51d`, on `main`, and at the branch tip `901c670`. **No obligation
+  > was added after the fact; a scorer following the old words would have checked the wrong block and
+  > got the right answer only by the coincidence that both regions were byte-identical.**
+  >
+  > **The general lesson, ruled by the Orchestrator and seconded by QE and the guard hop: fence a
+  > criterion by CONTENT or by hash, never by line range.** This is the second position in this file
+  > to go stale in one session.
 - **`A3` (the documented list equals the accepted set).** **Given** the `Dev / run` slot's text,
   **when** its `--`-prefixed tokens are collected, **then** that set **equals** the `--`-prefixed
   elements of `ACCEPTED_ARGUMENTS`, both ways — **3 of 3** (`--colour`, `--ascii`, `--unicode`) —
