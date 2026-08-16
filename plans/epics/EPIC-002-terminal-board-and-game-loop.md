@@ -1,8 +1,8 @@
 ---
 id: EPIC-002
 title: Terminal board and game loop
-status: backlog
-column: Backlog
+status: done
+column: Done
 priority: P0
 size: XL
 owner: BA/PM

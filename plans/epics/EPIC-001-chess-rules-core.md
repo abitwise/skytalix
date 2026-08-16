@@ -1,8 +1,8 @@
 ---
 id: EPIC-001
 title: Chess rules core
-status: backlog
-column: Backlog
+status: done
+column: Done
 priority: P0
 size: XL
 owner: BA/PM
