@@ -162,7 +162,11 @@ const CHILDREN = {
 // `ABC-066` — reading the usage line back off a child's stderr, where a human reads it. `USAGE` is
 // not exported and must not become so (`ADR-0011` clause 4), so the line is LOCATED, never imported.
 //
-// THESE TWO HELPERS ARE THE SHARED ONES. `ABC-065`'s guard block lands in this file next and its
+// THE SHARED NAMES THIS BLOCK INTRODUCES: `SEPARATOR_FORM`, `usageLineOf`, `advertisedTextOf`,
+// `invocationsAdvertisedBy`. Named rather than counted (`ABC-068` `A4`): the count that stood on
+// this line had gone stale against the block beneath it, so the line now carries no number at all.
+// Of those names, the extraction pair `usageLineOf` and `advertisedTextOf` is what the "neither"
+// below speaks of. `ABC-065`'s guard block lands in this file next and its
 // instruction is to REUSE them rather than write a second stderr->usage-line extraction: they are at
 // module scope, above every `describe`, for exactly that reason. Neither spells any accepted
 // argument, and neither spells any part of the usage sentence — both work by position and by
@@ -176,7 +180,13 @@ const CHILDREN = {
  */
 const SEPARATOR_FORM = "npm run chess -- ";
 
-/** The usage line as a human reads it: the LAST non-empty line a refused child wrote to stderr. */
+/**
+ * The usage line as a human reads it: the LAST non-empty line a refused child wrote to stderr.
+ *
+ * FAILURE CONTRACT — ON BAD INPUT IT THROWS. Handed stderr with no non-empty line at all, it raises
+ * rather than returning an empty string, so no caller can assert against a value that was never
+ * read. The guard in the body is that contract; this line is it stated where a caller looks.
+ */
 const usageLineOf = (stderr: string): string => {
   const lines = stderr
     .split("\n")
@@ -189,7 +199,23 @@ const usageLineOf = (stderr: string): string => {
   return last;
 };
 
-/** What the usage line offers: everything after the separator the criterion names. */
+/**
+ * What the usage line offers: everything after the separator the criterion names — on a value that
+ * CONTAINS that separator.
+ *
+ * FAILURE CONTRACT — ON BAD INPUT IT RETURNS A MEANINGLESS VALUE AND NEVER THROWS. Handed a value
+ * the separator is absent from, `indexOf` yields `-1` and the expression degrades to
+ * `slice(SEPARATOR_FORM.length - 1)`: a corrupted stem, returned silently, that still parses
+ * everywhere downstream. Nothing reds; the answer is simply wrong.
+ *
+ * PRECONDITION EVERY CALLER MUST MEET: assert `includes(SEPARATOR_FORM)` on the value you pass —
+ * the value, not the variable it came from — BEFORE calling. Both callers today meet it and are
+ * safe for that reason alone; a third that trusts this helper to complain gets a wrong answer.
+ *
+ * THE DIVERGENCE FROM `usageLineOf`, WHICH THROWS, IS A DECISION AND IT STANDS (`ABC-068` `A3`).
+ * Making this one throw would change the semantics of `ABC-066`'s merged and gated block, so it is
+ * a new ticket with its own gate — not a repair anybody makes in passing here.
+ */
 const advertisedTextOf = (usageLine: string): string =>
   usageLine.slice(usageLine.indexOf(SEPARATOR_FORM) + SEPARATOR_FORM.length);
 
@@ -864,6 +890,7 @@ describe("ABC-066 — the usage line is a command the user can actually run", ()
     expect(new Set(usageLines).size).toBe(1);
 
     // `A2` — what it advertises is what the resolver accepts.
+    // Precondition met by `toContain` above: `advertisedTextOf` needs `includes(SEPARATOR_FORM)`.
     const advertised = advertisedTextOf(usageLines[0] as string);
     // Nothing outside a bracketed group: a line that later advertised a MANDATORY argument would
     // otherwise be expanded as if it had not, and the unread half would never be run.
@@ -945,6 +972,7 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
     // The documented invocation sits inside a markdown code fence and `ABC-066`'s stderr line does
     // not, so the fence comes off before the text is read as argv. Copying `ABC-066`'s row verbatim
     // would false-RED a correct slot on the trailing backtick.
+    // Precondition met by the assertion above: `advertisedTextOf` needs `includes(SEPARATOR_FORM)`.
     const fenced = advertisedTextOf(slot).split("`")[0] as string;
     const argv = fenced.split(/\s+/).filter((token) => token !== "");
 
