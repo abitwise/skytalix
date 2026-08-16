@@ -1,8 +1,8 @@
 ---
 id: ABC-021
 title: Draw-claim interaction — the player having the move claims, the loop ends the game, the engine does not
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-002

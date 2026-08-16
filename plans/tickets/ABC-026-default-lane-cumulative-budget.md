@@ -1,8 +1,8 @@
 ---
 id: ABC-026
 title: The default test lane has no cumulative budget — only per-ticket ratios, and two EMPTY test files cost 5.4–6.1% of it
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: —
