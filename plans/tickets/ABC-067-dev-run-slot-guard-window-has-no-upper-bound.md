@@ -1,8 +1,8 @@
 ---
 id: ABC-067
 title: The `Dev / run` slot guard's window has no upper bound — an unterminated HTML comment silently extends the scored region from 9 lines to 16, the block's own comment claims a protection it does not have, and the suite ships green
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: —
