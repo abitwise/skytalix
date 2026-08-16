@@ -888,23 +888,48 @@ describe("ABC-066 — the usage line is a command the user can actually run", ()
 describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set", () => {
   /** The closing delimiter of the slot's HTML comment. Written once; never as an offset. */
   const COMMENT_CLOSE = "-->";
+  /** The slot's label. Written once — the locator, the count and the mutants all read it here. */
+  const SLOT_LABEL = "- Dev / run:";
 
   /**
    * The slot, LOCATED MECHANICALLY (`## Test notes` 1): the `- Dev / run:` list item through the end
    * of its HTML comment. Line numbers move — `ABC-042`'s own `AGENTS.md` row moved 56 lines when
    * `ABC-066` landed — so nothing here is tied to a position in either file. This is `ABC-059`'s
    * blindness (a guard pinned to one rendering) declined one file over.
+   *
+   * PURE, AND OVER A STRING (`ABC-067` `## Test notes` 1). The read is the one-line caller below, so
+   * every mutant this block drives is an IN-MEMORY fixture: nothing here writes `AGENTS.md`, and no
+   * failure can leave the working tree dirty.
    */
-  const devRunSlot = (): string => {
-    const agents = readFileSync(`${REPOSITORY}AGENTS.md`, "utf8");
-    const start = agents.indexOf("- Dev / run:");
+  const devRunSlotIn = (agents: string): string => {
+    // `ABC-071` — THE START ANCHOR, AND THE UNIQUENESS DECISION THAT TICKET REQUIRED, MADE HERE:
+    // the label must occur EXACTLY ONCE. `indexOf` takes the FIRST match, so without this the same
+    // duplicate slot passed when appended after the good one and failed when placed before it —
+    // one file, two verdicts, decided by ordering. Expressed as a count so the failure names it.
+    // This is a NEW obligation on `ABC-071`'s page: `ABC-065`'s `A1` says "the slot", singular, and
+    // never required uniqueness. `AGENTS.md` has one `### Development` section and one such slot.
+    expect(agents.split(SLOT_LABEL).length - 1, "`- Dev / run:` slots in AGENTS.md").toBe(1);
+
+    const start = agents.indexOf(SLOT_LABEL);
     const end = agents.indexOf(COMMENT_CLOSE, start);
-    // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK: a renamed slot, or one whose comment never
-    // closes, would otherwise arrive as an empty string that every assertion below is satisfied by.
-    if (start < 0 || end < 0)
-      throw new Error("AGENTS.md has no `- Dev / run:` slot with a comment");
+    // `ABC-067` — THE UPPER BOUND. `indexOf(COMMENT_CLOSE, start)` finds the first closer ANYWHERE
+    // later in the file, so deleting this slot's own closer did not fail to look: it looked at more,
+    // silently, and shipped green. The window must close before the next top-level list item begins.
+    const nextItem = agents.indexOf("\n- ", start + SLOT_LABEL.length);
+    // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK, AND NEVER BY LOOKING TOO FAR. Both failures
+    // are LOUD and both are exercised below: an absent or duplicated label reds on the count above,
+    // and a slot whose comment does not close before the next list item throws here. The protection
+    // claimed is the protection delivered — the earlier wording claimed a never-closes branch that
+    // `end < 0` could not reach, since `AGENTS.md` carries 13 further closers after this slot's own.
+    if (end < 0 || (nextItem >= 0 && nextItem < end))
+      throw new Error(
+        "AGENTS.md's `- Dev / run:` slot comment does not close before the next list item",
+      );
     return agents.slice(start, end + COMMENT_CLOSE.length);
   };
+
+  /** The reader. One line, and the only place this block touches the disk. */
+  const devRunSlot = (): string => devRunSlotIn(readFileSync(`${REPOSITORY}AGENTS.md`, "utf8"));
 
   it("A1 — the slot shows the separator, and the invocation it shows RESOLVES", () => {
     const slot = devRunSlot();
@@ -967,5 +992,79 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
     for (const value of acceptedValues) {
       expect(slot, `documented value ${value}`).toContain(value);
     }
+  });
+
+  /** What the locator did with a fixture, as a string: the failure's REASON, or that there was none. */
+  const reasonOf = (agents: string): string => {
+    try {
+      devRunSlotIn(agents);
+      return "NO FAILURE — the guard accepted this file";
+    } catch (error) {
+      return (error as Error).message;
+    }
+  };
+
+  it("ABC-071 A1/A2/A3 — the slot label occurs EXACTLY once, and a duplicate reds on the COUNT wherever it sits", () => {
+    const agents = readFileSync(`${REPOSITORY}AGENTS.md`, "utf8");
+
+    // `A3` — the file as delivered is unaffected: one slot, and the locator accepts it.
+    expect(agents.split(SLOT_LABEL).length - 1, "`- Dev / run:` slots in AGENTS.md").toBe(1);
+    expect(reasonOf(agents)).toBe("NO FAILURE — the guard accepted this file");
+
+    // QE's `N3a`/`N3b`, in memory: the SAME broken duplicate — no separator, no options — appended
+    // AFTER the good slot and placed BEFORE it. Green and red respectively before this ticket.
+    const duplicate = `${SLOT_LABEL} \`npm run chess\``;
+    const slotEnd =
+      agents.indexOf(COMMENT_CLOSE, agents.indexOf(SLOT_LABEL)) + COMMENT_CLOSE.length;
+    const after = `${agents.slice(0, slotEnd)}\n${duplicate}${agents.slice(slotEnd)}`;
+    const before = `${duplicate}\n\n${agents}`;
+
+    // `A1` — the appended duplicate no longer ships green, and `A2` — the asymmetry is gone: ONE
+    // stated reason for both, and it names the COUNT of slots rather than a missing option.
+    const reasons = [reasonOf(after), reasonOf(before)];
+    expect(new Set(reasons).size, `reasons ${JSON.stringify(reasons)}`).toBe(1);
+    expect(reasons[0], "the reason both duplicate mutants give").toContain(
+      "`- Dev / run:` slots in AGENTS.md",
+    );
+
+    // The other end of the same count, and it is why there is no separate `start < 0` branch to go
+    // dead: a RENAMED slot is zero slots, and it reds here on the same assertion.
+    expect(reasonOf(agents.replace(SLOT_LABEL, "- Dev / start:"))).toContain(
+      "`- Dev / run:` slots in AGENTS.md",
+    );
+  });
+
+  it("ABC-067 A1/A2/A4 — the window stops inside the slot's OWN comment, and an unterminated slot is LOUD", () => {
+    const agents = readFileSync(`${REPOSITORY}AGENTS.md`, "utf8");
+    const start = agents.indexOf(SLOT_LABEL);
+    const closer = agents.indexOf(COMMENT_CLOSE, start);
+
+    // `A2`, on the unmutated file: the captured region reaches no further top-level list item.
+    expect(
+      (devRunSlotIn(agents).match(/\n- /g) ?? []).length,
+      "further list items inside the captured slot",
+    ).toBe(0);
+
+    // `A1` / QE's `N4` — this slot's OWN closer removed, the rest of the file untouched.
+    const unterminated = agents.slice(0, closer) + agents.slice(closer + COMMENT_CLOSE.length);
+    // `A2`'s second half, and the whole defect in one number: the UNBOUNDED window — first closer
+    // anywhere later in the file — swallows text below the slot instead of failing to look.
+    const swallowed = unterminated.slice(
+      start,
+      unterminated.indexOf(COMMENT_CLOSE, start) + COMMENT_CLOSE.length,
+    );
+    expect(
+      (swallowed.match(/\n- /g) ?? []).length,
+      "further list items the UNBOUNDED window swallowed",
+    ).toBeGreaterThanOrEqual(1);
+    expect(reasonOf(unterminated), "the unterminated slot").toContain("does not close");
+
+    // `A4` — the second-order mutant, and it is the point: with this slot's closer AND the next one
+    // removed, the window used to reach the `Coverage` bullet and red on `--coverage` — the right
+    // verdict for the WRONG reason. It now reds for the SAME reason as the one-closer case.
+    const nextCloser = unterminated.indexOf(COMMENT_CLOSE, start);
+    const twoRemoved =
+      unterminated.slice(0, nextCloser) + unterminated.slice(nextCloser + COMMENT_CLOSE.length);
+    expect(reasonOf(twoRemoved), "the two-closer mutant").toBe(reasonOf(unterminated));
   });
 });
