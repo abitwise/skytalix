@@ -1,8 +1,8 @@
 ---
 id: ABC-065
 title: `AGENTS.md`'s `Dev / run` slot lists three options and never shows the `--` separator — a reader who combines them gets a board, exit 0 and a silently discarded flag, and no test compares the documented list to the accepted set
-status: ready-for-uat
-column: Ready for UAT
+status: in-uat
+column: In UAT
 size: S
 priority: P1
 epic: —
