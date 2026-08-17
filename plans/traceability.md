@@ -204,6 +204,24 @@ _Updated: 2026-08-08 by the Software Engineer (task `ticket-to-pr-ABC-015`, subt
   delete), and a BA/PM hop was live on ABC-019 at the time — whose row sits two lines away.
   Owner: the Orchestrator, to sequence the de-duplication against that hop.
 -->
+
+> **The `UAT` column's MEANING changed on 2026-08-17, and this legend records it because no row can.**
+> A ticket whose **delivered diff carries zero production lines** has its UAT **waived, standing** —
+> so `UAT` may legitimately read *waived* on such a row, and **that is not an omission and not an
+> acceptance**. **A waiver is not a signature: no UAT was conducted and no human accepted the work**,
+> so `Done` on a waived row means *merged and gated*, never *accepted*. **ANY production line and the
+> rule does not apply.** The criterion is measured from git, never asserted. Authority:
+> `memory-bank/60-progress.md` § "Standing directive — a ticket whose delivered diff carries ZERO
+> PRODUCTION LINES has its UAT WAIVED, standing. 2026-08-17."; pointer in `AGENTS.md` § "Test and UAT
+> authority". First rows under it: `ABC-063` (the owner's named word) and `ABC-064` (the rule applied
+> to a measurement).
+>
+> **No row was added for the directive itself and that is deliberate.** This table is keyed by ticket
+> or epic; a standing directive is neither, and inventing a row shape to carry one would put a
+> non-ticket in a ticket trail. The `AGENTS.md` Scribe's 2026-08-17 hop
+> (`grugops/agents-md-standing-uat-waiver`, merged `4805bc9`) therefore appears here as this legend
+> entry rather than as a row — recorded by the Orchestrator, since the Scribe was fenced out of this
+> file and flagged the gap rather than filling it silently.
 | Ticket | Title | Epic | Feature | NFRs | Code (PR/files) | Tests | UAT | Release | Status |
 |--------|-------|------|---------|------|-----------------|-------|-----|---------|--------|
 | ABC-001 | Position state and FEN round-trip | EPIC-001 | — | NFR-001, ADR-0001 | src/position.ts, src/fen.ts (merged to main) | src/fen.test.ts — 27 pass, coverage 100% stmt / 98.73% branch | | | Done |
