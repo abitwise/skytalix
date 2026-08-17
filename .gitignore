@@ -12,3 +12,6 @@ dist/
 # files deleted. Untracked and ignored rather than warned about: a warning is not
 # a control (measured 0-for-2 on this board).
 coverage/
+
+# agent worktrees — live sub-checkouts, never part of this repo
+.claude/worktrees/

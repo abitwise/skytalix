@@ -1,8 +1,8 @@
 ---
 id: ABC-076
 title: Evaluation — material and piece-square tables (the scoring floor)
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-004
