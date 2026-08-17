@@ -164,6 +164,31 @@ describe("ABC-076 A1 — the corpus is derived and counts out to 184", () => {
     expect(PERFT_POSITIONS.reduce((sum, entry) => sum + entry.depth1, 0)).toBe(178);
     expect(buildCorpus()).toHaveLength(184);
   });
+
+  // ADDED AT QE (task quality-gate-ABC-076-qe-2026-08-17). The two assertions above count the
+  // corpus; nothing checked WHICH 184 positions are in it. Measured, not argued: a buildCorpus
+  // that pushed `clonePosition(parseFen(START_FEN))` in both places — 184 copies of the start
+  // position — passed all 20 tests in this file, because a count is not a content check and A1's
+  // symmetry holds for any position whatsoever. This closes that: the corpus is 184 DISTINCT
+  // positions, grouped 1 root + depth1 children per entry, in PERFT_POSITIONS order.
+  it("holds the RIGHT 184 — distinct positions, grouped per root", () => {
+    const corpus = buildCorpus();
+
+    const key = ({ position }: { position: Position }): string =>
+      `${Array.from(position.board).join(",")}|${position.blackToMove}|${position.castling}|${position.epSquare}`;
+    expect(new Set(corpus.map(key)).size).toBe(184);
+
+    let offset = 0;
+    for (const entry of PERFT_POSITIONS) {
+      expect(corpus[offset]?.name, entry.name).toBe(entry.name);
+      const children = corpus.slice(offset + 1, offset + 1 + entry.depth1);
+      expect(children, entry.name).toHaveLength(entry.depth1);
+      for (const child of children)
+        expect(child.name.startsWith(`${entry.name} child `)).toBe(true);
+      offset += 1 + entry.depth1;
+    }
+    expect(offset).toBe(184);
+  });
 });
 
 describe("ABC-076 A1 — mirror helper", () => {
