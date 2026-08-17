@@ -445,6 +445,75 @@ rule and none was invented, the same call the branching-model entry made about `
 was edited, no gate added, removed or softened, no ticket cut and no board column moved by this
 hop.** `AGENTS.md` § "Test and UAT authority" points here; **this entry is the authority.**
 
+## Standing directive — EVERY ticket passes through QE's validation. QE dispatch resumes. 2026-08-17.
+
+**Project owner Olger Oeselg, 2026-08-17, in session, quoted verbatim and complete:**
+
+> *"QE should yes resume, each ticket needs to pass through QE-s validation"*
+
+**THE RULE: every ticket gets a QE/E2E hop and QE's recorded verdict before it may leave `In Review`.
+No ticket reaches `Done` without one.** Asked and answered after a two-step exchange in which the
+owner first declined the retro half; both halves are recorded, and the boundary between them is the
+point of this entry.
+
+### 1. WHAT THIS REPAIRS — five consecutive tickets, and no decision behind any of them
+
+`ABC-068`, `ABC-061`, `ABC-062`, `ABC-063` and `ABC-064` were all gated and merged with **no
+`qe-e2e` hop**. Measured, not asserted: listing every QE-authored note across
+`.grugops/context/*/notes/` and sorting by timestamp returns
+`20260816T032000Z-qe-e2e-decision-qe-verdict-on-abc065-all-six-criteria-met-d9c47f01.md` as the
+newest anywhere — `ABC-065`, 2026-08-16. **No note in this repository records a decision to stop
+dispatching QE. It just stopped.** This directive ends that.
+
+### 2. IT IS FORWARD-ONLY — the five closed tickets stay closed, and that is also the owner's call
+
+In the same session the owner declined a retro QE hop over the five (*"the UAT was cancelled for
+these 5 tickets so no other action is needed imho"*). **That decision stands and this directive does
+not reopen it.** The reasoning, the correction put to him before he made it, and the residual
+exposure it accepts — +435/−11 lines of assertions in `src/cli.test.ts` never reviewed by the role
+that owns reviewing assertions — are in
+`.grugops/context/qe-dispatch-resume-2026-08-17/notes/`. **Forward from the next ticket; backward,
+never.**
+
+### 3. THIS IS NOT A KIT OVERRIDE. Do NOT list it with the other three.
+
+`agent-factory/workflows/04-ticket-to-pr.md` **step 5** already reads *"QE/E2E breaks the feature and
+reports the result and gaps"*; `05-pr-quality-gate.md` already names QE/E2E a gate participant; the
+Orchestrator routing matrix already maps `tests -> QE/E2E`. **The kit already required this hop and
+five tickets skipped it anyway.** So this entry ADDS NOTHING to the kit and contradicts nothing in
+it — it is a **re-affirmation of a rule that was already binding**, in the same shape as the
+2026-08-16 UAT-signature ruling, which SATISFIED a kit requirement rather than overriding one. This
+project's kit overrides remain **three**: the branching model, the deployment posture, and the
+zero-production-lines UAT waiver. A later reader who finds this and counts four is wrong.
+
+**The consequence worth naming: restating a rule is the weakest possible fix for a rule that was
+already there and got dropped anyway.** If this drifts a second time, the answer is a detector — a
+check that no ticket reaches `Done` without a `qe-e2e` note in its task folder — not a sixth
+restatement. That was offered to the owner and he has not ruled on it; it is NOT cut and NOT assumed.
+
+### 4. THE LIMITS
+
+1. **QE IS NOT UAT AND THIS DIRECTIVE TOUCHES NEITHER THE WAIVER NOR THE SIGNATURE.** The
+   zero-production-lines UAT waiver (2026-08-17, above) stands **completely unamended** — a test-only
+   ticket still skips UAT, and now still gets QE. The 2026-08-16 signature ruling stands unamended.
+   **The conflation of these two is precisely what let QE go missing for five tickets; do not
+   re-make it.**
+2. **NO CONFIG VALUE CHANGED.** `quality.mandatory_gates` is still `["lint", "typecheck", "unit",
+   "build"]` — QE's hop is a workflow step, not a gate command, and no dial was invented to hold it.
+   `gate_enforcement` is still `blocking`, `production_requires_human_confirmation` still `true`.
+3. **A QE VERDICT IS NOT A STAMP.** `context.human_admission` is still `off` and no `finding` is
+   admissible here, so QE records its verdict as hand-authored `decision` / `observation` notes like
+   every other result on this install.
+4. **IT IS THE OWNER'S AND REVOCABLE.** One sentence ends it.
+
+### What this entry does NOT do
+
+**No board column moved, no ticket was cut, no code changed and no gate was added, removed or
+softened by this hop.** It does not re-open the five, it does not create the detector, and it does
+not decide the alpha/beta UAT phasing the owner raised in the same session — that remains an
+undecided proposal with an unresolved `Ready for UAT` WIP conflict (limit 4), recorded here so it is
+not lost and **not** mistaken for something he ruled on.
+
 ## Standing directive — read before prioritising anything
 
 **Project owner Olger Oeselg, 2026-07-31:** *"The most important thing is that chess moves are
