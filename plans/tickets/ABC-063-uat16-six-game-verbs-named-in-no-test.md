@@ -1,8 +1,8 @@
 ---
 id: ABC-063
 title: UAT-16 — the pack's most load-bearing scenario — names six commands, and not one of them appears in any test
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: XS
 priority: P2
 epic: —

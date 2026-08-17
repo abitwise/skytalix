@@ -1,8 +1,8 @@
 ---
 id: ABC-064
 title: The frame's shape is pinned on one child of four, and no test asserts the status panel for any child but the default — UAT-5's and UAT-6's status clauses rest on the UAT run
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: S
 priority: P2
 epic: —
