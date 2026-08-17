@@ -16,6 +16,15 @@ feature: —
 > merged, `Done`, and both gates passed against it: its page is NOT edited and no criterion of its is
 > re-opened.**
 
+> **Line anchors corrected 2026-08-17, measured against `1a806ee`** (the delivery's base; `1a806ee`
+> is a board commit and changes no `src/` file, so the anchors it carries are `6aedb7e`'s). Every
+> `:NNN` on this page was stale — the page was cut 2026-08-15 and `ABC-061`, `ABC-066`, `ABC-068`,
+> `ABC-062` and `ABC-063` have all appended to `src/cli.test.ts` since. `:162`→**`:244`**,
+> `:226`→**`:308`**, `:274`→**`:356`**, `:780`→**`:933`**, and test note 4's `:186`→**the rank loop at
+> `:266`-`:270`**. **All five were re-read line by line before being written here**, not copied from
+> the table that supplied them. Substance is untouched: no criterion is re-worded, struck or added.
+> Anchors are a `G-5`-class defect and will go stale again the next time this file grows.
+
 ## Problem
 
 *User*: the human who runs `npm run chess -- --colour black` — a first-class row of `ABC-042`'s scope
@@ -24,10 +33,10 @@ table, not an edge case — and the signer who is asked to confirm UAT-5 and UAT
 *Pain*: **the frame's shape is asserted for one of the four accepted board-printing command lines,
 and the status panel for none of the other three.**
 
-- `src/cli.test.ts:162` pins the frame as a **byte-exact tail** — 23 rows, the eight ranks named
-  individually, no frame row allowed to precede it — and `:226` pins **zero `ESC [`** and **exactly
+- `src/cli.test.ts:244` pins the frame as a **byte-exact tail** — 23 rows, the eight ranks named
+  individually, no frame row allowed to precede it — and `:308` pins **zero `ESC [`** and **exactly
   one trailing newline**. **Both run on `npmRun` alone.**
-- For the `white`, `black` and `random` children, `:274` compares the **9 board rows only** (the file
+- For the `white`, `black` and `random` children, `:356` compares the **9 board rows only** (the file
   letter row included). **Their row count, their trailing newline and the absence of cursor control
   are asserted by nothing** — the other **14 rows** of each frame are unread.
 - **No test asserts the status panel for any non-default child.** UAT-5's verdict includes *"It is
@@ -52,8 +61,8 @@ the one with no arguments.**
 ## Out of scope
 
 - **Any new child process.** All three children are already spawned at module scope; the count is
-  pinned at **10** (`:780`) and an eleventh is a defect.
-- **`:162`, `:226` and `:274` — byte-identical.** `ABC-042`'s `A1`, `A7`, `A8` keep their exact
+  pinned at **10** (`:933`) and an eleventh is a defect.
+- **`:244`, `:308` and `:356` — byte-identical.** `ABC-042`'s `A1`, `A7`, `A8` keep their exact
   instruments; the new assertions are separately named blocks over the same captured children.
 - **Writing a row-count literal.** The expectation is derived from the reference frame the file
   already composes per (glyph mode, orientation) pair. `ABC-042`'s `A8` forbids a row-count literal
@@ -82,7 +91,7 @@ the one with no arguments.**
   Orchestrator, not a criterion to soften — see test note 2.)*
 - **`A4` (`random` is resolved before anything can see it).** **Given** the `random` child's entire
   stdout, **then** the token `random` occurs **zero** times. *(This is UAT-6's status-line half; the
-  board half already follows from `:274`.)*
+  board half already follows from `:356`.)*
 - **`A5` (nothing else moved).** `git diff --name-only <the delivered commit>~1 <the delivered
   commit>` shows **exactly** `src/cli.test.ts` — **one path**, **zero production lines**, **zero new
   child processes** (`spawned` still `10`). Suite green, skip **0**.
@@ -117,11 +126,11 @@ the one with no arguments.**
    rows differ, stop and report** — a criterion bent to fit an unexpected measurement is the defect
    this whole follow-up set exists to prevent.
 3. **`A4` must not be a substring test over the board region.** The word `random` could only appear
-   in the status or message rows, which is precisely the region `:274` does not read; assert over the
+   in the status or message rows, which is precisely the region `:356` does not read; assert over the
    whole of stdout.
 4. **One block per property, not one block per child.** Three children × three properties in nine
    blocks is noise; a per-property loop over the three children keeps the failure message specific
-   (name the child in the assertion message, as `:186` already does for ranks).
+   (name the child in the assertion message, as the rank loop at `:266`-`:270` already does).
 
 ## Lane cost — how many test FILES this ticket implies
 
