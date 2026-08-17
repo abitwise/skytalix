@@ -64,6 +64,19 @@ which one — instead of being handed a bishop and told nothing.
 - **The result maps onto `ABC-019`'s merged `PromptOutcome`**: `move`, `rejected` and `ambiguous`
   (`src/turn-loop.ts:118-124`). `command` and `eof` are the other two arms and belong to `ABC-035`
   and `ABC-036`.
+- **`ABC-032`'s tolerance list is five entries, not two — ruled 2026-08-18 by BA/PM** (task
+  `refinement-abc032-tolerances-2026-08-18`), and this ticket inherits it rather than re-deciding it.
+  **Three consequences, and all three shrink this ticket rather than growing it.**
+  - **Both resolvers now trim.** `parseCoordinateMove` already did; `parseSan` does and it is now
+    asserted and named on the page. **This dispatcher must NOT trim a third time, and must not
+    normalise the line before handing it over** — one line, unmodified, to both readers.
+  - **Redundant qualifiers (`Nfg5`) and mixed castle spellings (`O-0`) return `move`, not
+    `rejected`.** No new arm, no new branch: the dispatch shape is unchanged and the fixed order of
+    attempt is unaffected. What changes is that fewer strings reach the case-folded retry.
+  - **The case-folded retry is still wholly this ticket's, and `o-o` is one of its cases.** `parseSan`
+    refuses lowercase deliberately (case is meaning) and the 2026-08-18 ruling did **not** widen it.
+    `o-o` / `o-o-o` fold to `O-O` / `O-O-O` with **exactly one** candidate — assert it here, and do
+    not push it back into `ABC-032`.
 
 ## Out of scope
 

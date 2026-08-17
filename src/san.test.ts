@@ -282,9 +282,13 @@ describe("ABC-013 acceptance", () => {
     }
   });
 
-  it("A20 — the module surface: one export, four imports, and no `parseSan` foreclosure", async () => {
+  it("A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure", async () => {
     const namespace = await import("./san.ts");
-    expect(Object.keys(namespace)).toEqual(["toSan"]);
+    // `ABC-013` read `["toSan"]` here and called the row a NON-foreclosure of `parseSan`; `ABC-032`
+    // is the hop that exercised it, so the expected surface moves by exactly the one export that
+    // ticket adds. What the row actually guards — the import set below, i.e. that the second
+    // direction dragged no new dependency into the module — is unchanged and is asserted as before.
+    expect(Object.keys(namespace)).toEqual(["toSan", "parseSan"]);
 
     const source = readFileSync(new URL("./san.ts", import.meta.url), "utf8");
     const specifiers = [...source.matchAll(/\bfrom "([^"]+)"/g)].map((match) => match[1] as string);
