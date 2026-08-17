@@ -75,6 +75,13 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 ### Test
 
 - Test (all): `npm test` <!-- vitest run -->
+- Search deep lane (opt-in slow suite, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts`
+  <!-- RUN 2026-08-17 at the ABC-077 branch tip: exit 0, 41 passed (28 in the default lane), 23.0 s.
+  Unset, the deep cases are NOT DEFINED rather than skipped, so the gate's skip count stays 0 —
+  the same shape as PERFT_DEEP. It holds the expensive REPETITIONS of A1-A7 (the depth-3 sweep on
+  five of the six perft positions, A2's own kiwipete-depth-3 case, the 204-position broad corpus,
+  and the depth-7 mate-in-2-vs-mate-in-4 case); every criterion is also answered in the default
+  lane. Run it at the QE hop and after any change to src/search.ts. -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- RUN 2026-08-15 at `daa20c4` (this hop changed no code):
   exit 0, 856/856 on 30 files. `@vitest/coverage-v8` is in `devDependencies`; no npm script and no
