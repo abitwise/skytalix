@@ -256,6 +256,33 @@ owner's word in session IS the `In UAT` signature. 2026-08-16." and "Standing di
 whose delivered diff carries ZERO PRODUCTION LINES has its UAT WAIVED, standing. 2026-08-17."
 **Those sections are the authority; this is a pointer to them.**
 
+## QE validation authority
+
+**Every ticket gets a `qe-e2e` hop and QE's recorded verdict before it may leave `In Review`. No
+ticket reaches `Done` without one.** The owner's, 2026-08-17, standing and revocable.
+
+**It is forward-only.** `ABC-068`, `ABC-061`, `ABC-062`, `ABC-063` and `ABC-064` were gated and
+merged with no QE hop; the owner declined a retro pass over them and they stay closed. The residual
+exposure that accepts is named, not glossed: **+435/−11 lines of assertions in `src/cli.test.ts`
+were never reviewed by QE.**
+
+**QE IS NOT UAT, and conflating them is the misreading to refuse in advance** — it is exactly what
+let QE go missing for five consecutive tickets. The 2026-08-17 zero-production-lines waiver waives
+**UAT and nothing else** and stands **completely unamended**: a test-only ticket still skips UAT,
+and now still gets QE. The 2026-08-16 signature ruling stands unamended too.
+
+**Precedence, so nobody has to guess. This is NOT a kit override.**
+`agent-factory/workflows/04-ticket-to-pr.md` **step 5** already required this hop, so this
+RE-AFFIRMS a rule that was already binding rather than adding one — the same shape as the 2026-08-16
+ruling, which satisfied a kit requirement. **This project's kit overrides remain THREE**: the
+branching model, the deployment posture, and the zero-production-lines UAT waiver. A reader who
+counts four is wrong.
+
+No config value changed. `quality.mandatory_gates` is unchanged — QE's hop is a workflow step, not a
+gate command. The authority is `memory-bank/60-progress.md` § "Standing directive — EVERY ticket
+passes through QE's validation. QE dispatch resumes. 2026-08-17." **That section is the authority;
+this is a pointer to it.**
+
 ## Deployment posture
 
 This project deploys nowhere. It runs locally, from source on a developer's machine. There is no
