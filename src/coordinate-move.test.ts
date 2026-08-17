@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { parseCoordinateMove } from "./coordinate-move.ts";
 import { parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
-import { FLAG_PROMOTION, type Move } from "./moves.ts";
+import { FLAG_EN_PASSANT, FLAG_PROMOTION, type Move } from "./moves.ts";
 import { BISHOP, KNIGHT, QUEEN, ROOK, squareName } from "./position.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -189,5 +189,128 @@ describe("ABC-031 A6 — the supplied list is the list that is used", () => {
     if (result.outcome !== "move") return;
     expect(legal.includes(result.move)).toBe(true);
     expect(other.includes(result.move)).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Added at the QE hop (task `quality-gate-ABC-031-qe-2026-08-17`), by mutation
+// testing against ABC-031's A1-A7. These rows close three gaps where a mutant
+// of `src/coordinate-move.ts` stayed GREEN through the whole 895-row suite.
+// They ADD coverage only: no existing row was weakened, skipped or deleted, and
+// no new test FILE is created, so the ticket's `## Lane cost` of ONE file holds.
+// The production module is byte-identical to the engineer's delivery.
+// ---------------------------------------------------------------------------
+
+describe("ABC-031 QE — the out-of-scope grammar fence is closed", () => {
+  const position = parseFen(START_FEN);
+  const legal = legalMoves(position);
+
+  // GAP 1. `## Out of scope` forbids every tolerance not named in `## Scope` —
+  // "No `e2 e4`, no `e2,e4`, no `P-K4`, no SAN-ish input" — and coding rules 5
+  // and 7 are cited for it. No A1-A7 row watched that fence: a mutant widening
+  // COORDINATE to /^([a-h][1-8])[-,. ]*([a-h][1-8])([qrbn])?$/ passed 895/895.
+  // Each of these names a string that is a LEGAL move on the board if the
+  // grammar is widened, so a widened grammar returns `move` and reds this row.
+  for (const text of ["e2 e4", "e2,e4", "e2--e4", "e2.e4", "e2\te4", "e2-e4-", "e2e4-"]) {
+    it(`rejects ${JSON.stringify(text)} as unreadable — separator not in Scope`, () => {
+      const result = parseCoordinateMove(position, text, legal);
+      expect(`${JSON.stringify(text)} -> ${result.outcome}`).toBe(
+        `${JSON.stringify(text)} -> rejected`,
+      );
+      if (result.outcome !== "rejected") return;
+      expect(result.reason).toBe("unreadable");
+    });
+  }
+
+  // This module holds no piece letter, no capture marker and no castle string
+  // (ADR-0004 clause 2: two grammars in one module is the thing to avoid).
+  for (const text of ["Nf3", "O-O", "O-O-O", "P-K4", "e4", "exd5", "Ng1f3"]) {
+    it(`rejects ${JSON.stringify(text)} as unreadable — not this module's grammar`, () => {
+      const result = parseCoordinateMove(position, text, legal);
+      expect(`${JSON.stringify(text)} -> ${result.outcome}`).toBe(
+        `${JSON.stringify(text)} -> rejected`,
+      );
+    });
+  }
+});
+
+describe("ABC-031 QE — the `legal`-omitted call is a contract path and must work", () => {
+  // GAP 2. `## Scope` makes `legal` OPTIONAL, so `parseCoordinateMove(position, text)`
+  // is a supported call. Every A1-A6 row supplies `legal`, so the `legal ?? legalMoves(position)`
+  // fallback was executed by NO test: replacing it with `legal ?? []` passed 895/895 AND
+  // typechecked. A caller such as ABC-033 using the two-argument form would then get
+  // `rejected`/`no-such-move` for every legal move on the board, silently.
+  const position = parseFen(START_FEN);
+
+  it("resolves 'e2e4' to a move when `legal` is not supplied", () => {
+    const result = parseCoordinateMove(position, "e2e4");
+    expect(result.outcome).toBe("move");
+    if (result.outcome !== "move") return;
+    // Provenance still holds against a freshly generated list: field-equal to the real
+    // move, and it must be one the generator produced, not one built from the text.
+    const regenerated = legalMoves(position);
+    const twin = regenerated.find(
+      (move) => squareName(move.from) === "e2" && squareName(move.to) === "e4",
+    ) as Move;
+    expect(result.move).toEqual(twin);
+    expect(result.move.piece).toBe(twin.piece);
+    expect(result.move.flags).toBe(twin.flags);
+    expect(result.move.captured).toBe(twin.captured);
+  });
+
+  it("still classifies both rejection reasons when `legal` is not supplied", () => {
+    const wellFormed = parseCoordinateMove(position, "e2e5");
+    const garbage = parseCoordinateMove(position, "zz9q");
+    expect(wellFormed.outcome).toBe("rejected");
+    expect(garbage.outcome).toBe("rejected");
+    if (wellFormed.outcome !== "rejected" || garbage.outcome !== "rejected") return;
+    expect(wellFormed.reason).toBe("no-such-move");
+    expect(garbage.reason).toBe("unreadable");
+  });
+
+  it("still returns ambiguous for a bare promotion when `legal` is not supplied", () => {
+    const result = parseCoordinateMove(parseFen(PROMOTION_FEN), "e7e8");
+    expect(result.outcome).toBe("ambiguous");
+    if (result.outcome !== "ambiguous") return;
+    expect(result.candidates).toHaveLength(4);
+  });
+});
+
+describe("ABC-031 QE — en-passant provenance, the ADR-0004 (2b) site A5's corpus misses", () => {
+  // GAP 3. Measured over A5's six perft positions: 178 legal moves, 3 castles,
+  // 4 promotions, 19 captures — and ZERO en-passant moves (all six FENs carry `-`
+  // as the ep square). So A5, the criterion that exists to catch a fabricated
+  // `captured`, never renders the one move where `captured` names a piece that is
+  // NOT standing on `to`. That is precisely `src/apply.ts:109`, the arm ADR-0004
+  // (2b) names as materialising the captured pawn from `move.captured` on unmake.
+  const EN_PASSANT_FEN = "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1";
+
+  it("resolves 'e5d6' to the en-passant move itself, by reference", () => {
+    const position = parseFen(EN_PASSANT_FEN);
+    const legal = legalMoves(position);
+    const enPassant = legal.find((move) => (move.flags & FLAG_EN_PASSANT) !== 0) as Move;
+    expect(enPassant).toBeDefined();
+
+    const result = parseCoordinateMove(position, "e5d6", legal);
+    expect(`e5d6 -> ${result.outcome}`).toBe("e5d6 -> move");
+    if (result.outcome !== "move") return;
+    expect(result.move).toBe(enPassant);
+    // The two fields a constructed Move gets wrong here, asserted off the generator's
+    // own object rather than hand-rolled: the captured pawn is not on `to`.
+    expect(result.move.flags & FLAG_EN_PASSANT).not.toBe(0);
+    expect(result.move.captured).not.toBe(0);
+  });
+
+  it("resolves every legal move of the en-passant position back by reference", () => {
+    const position = parseFen(EN_PASSANT_FEN);
+    const legal = legalMoves(position);
+    expect(legal.length).toBeGreaterThan(0);
+    for (const move of legal) {
+      const text = coordinateOf(move);
+      const result = parseCoordinateMove(position, text, legal);
+      expect(`${text} -> ${result.outcome}`).toBe(`${text} -> move`);
+      if (result.outcome !== "move") continue;
+      expect(result.move === move, `${text} resolved to a different object`).toBe(true);
+    }
   });
 });
