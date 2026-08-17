@@ -199,8 +199,8 @@ gate" here: nothing is pushed and no PR is opened.
 
 Running a ticket's tests and conducting its UAT are the agent's, granted standing by the owner
 (2026-08-15) alongside the per-ticket merge authority above. The same two limits apply: the gate
-still binds, and the authority is the owner's and revocable. Every ticket CLOSED to date deferred
-UAT to `EPIC-006` because nothing was exercisable; `npm run chess` ended that reason.
+still binds, and the authority is the owner's and revocable. Tickets closed before `ABC-042` all
+deferred UAT to `EPIC-006` because nothing was exercisable; `npm run chess` ended that reason.
 
 **An agent-run UAT executes the business scenarios against a real build and reports the result. It
 is NOT a named human's acceptance signature.** `context.human_admission` is `off` and no `finding`
@@ -213,12 +213,29 @@ session IS this project's `In UAT` exit signature.** He was offered three option
 he writes himself, or a redefinition of the exit — and was told explicitly that a green agent report
 would NOT be treated as his acceptance. On the same word he accepted `ABC-065` and `ABC-066`.
 
-**That answer SATISFIES the kit's requirement; it does not override it.**
+**A whole class of tickets no longer needs signing at all, since 2026-08-17.** A ticket whose
+**delivered diff carries zero production lines** has its UAT **waived standing** — `Ready for UAT` →
+`Done`, no UAT conducted, no per-ticket asking. **The criterion is measured from git, never
+asserted:** `git diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'`
+must come back **empty**. **ANY production line and the rule does not apply** — not "mostly test",
+not "one trivial line"; then the owner's word is needed as before. **A waiver is not a signature:** a
+waived ticket has had NO UAT and carries NO human acceptance, so `Done` under this rule means
+*merged and gated*, never *accepted by a human*. It waives UAT and nothing else, and it is the
+owner's and revocable. **It does NOT supersede the 2026-08-16 ruling — they compose:** that one says
+who signs a UAT that is conducted, this one says which tickets need no signing. **Unlike 2026-08-16,
+this one IS a kit override** — the kit's UAT stage is unconditional and carries no waiver — and it is
+the third, alongside the branching model and the deployment posture. Authority, reasoning and the
+2026-08-17 close-out (`ABC-063` by his named word, `ABC-064` by the rule applied to a measurement):
+`memory-bank/60-progress.md` § "Standing directive — a ticket whose delivered diff carries ZERO
+PRODUCTION LINES has its UAT WAIVED, standing. 2026-08-17."
+
+**The 2026-08-16 answer SATISFIES the kit's requirement; it does not override it.**
 `agent-factory/workflows/06-uat-pack.md` and `agent-factory/roles/uat-planner.md` make the `In UAT`
 → `Ready to Release` exit a **named human's signoff** and forbid an agent self-signing. **The owner
 IS that named human and he gave it.** What was missing was never his authority — only a mechanism to
 record it. So this is NOT one of this project's kit overrides; do not list it with the branching
-model or the deployment posture.
+model or the deployment posture. **The 2026-08-17 waiver above IS one — different case, and the
+reasoning for the split is in `memory-bank/60-progress.md`, not to be re-derived here.**
 
 **Two things follow, and both are the misreadings to expect.**
 
@@ -234,9 +251,10 @@ Scope is the `In UAT` exit signature only. `quality.gate_enforcement` is still `
 `production_requires_human_confirmation` is still `true`, and the merge/deploy posture is unchanged.
 
 The authority is `memory-bank/60-progress.md` §§ "Standing directive — deploy is ALLOWED and NOT
-NEEDED; merge, test and UAT are the agent's, per ticket. 2026-08-15." and "Standing directive — the
-owner's word in session IS the `In UAT` signature. 2026-08-16." **Those sections are the authority;
-this is a pointer to them.**
+NEEDED; merge, test and UAT are the agent's, per ticket. 2026-08-15.", "Standing directive — the
+owner's word in session IS the `In UAT` signature. 2026-08-16." and "Standing directive — a ticket
+whose delivered diff carries ZERO PRODUCTION LINES has its UAT WAIVED, standing. 2026-08-17."
+**Those sections are the authority; this is a pointer to them.**
 
 ## Deployment posture
 

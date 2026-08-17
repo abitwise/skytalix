@@ -319,6 +319,132 @@ that section previously called the signature question genuinely open and forbade
 inference, **which was correct until the question was put to the owner and he answered it**. That
 section points here; **this entry is the authority.**
 
+## Standing directive — a ticket whose delivered diff carries ZERO PRODUCTION LINES has its UAT WAIVED, standing. 2026-08-17.
+
+**Project owner Olger Oeselg, 2026-08-17, in session, quoted verbatim and complete:**
+
+> *"skip UAT for ABC-063, and yes make it a standing rule"*
+
+**Eleven words, TWO CLAUSES OF DIFFERENT KINDS**, and the whole reason this entry exists is that the
+distinction survives — the same discipline the 2026-08-06, 2026-08-15 and 2026-08-16 entries used, so
+a later reader can check the reading rather than inherit it.
+
+- **Clause 1, `"skip UAT for ABC-063"` — a NAMED WAIVER for ONE ticket.** The fifth in that exact
+  form, after `ABC-068`, `ABC-061`, `ABC-062` and the first. Spent on `ABC-063`; authority for no
+  other ticket.
+- **Clause 2, `"and yes make it a standing rule"` — the ANSWER to a question asked SIX TIMES across
+  six tickets** (`ABC-068`, `ABC-061`, `ABC-062`, `ABC-063`, `ABC-064` and the first) **and answered
+  none of those times until now.** Each earlier asking got the ticket answered, never the rule. The
+  record of "askings without an answer" closes here.
+
+### 1. What the rule IS, stated no wider than the question he said yes to
+
+The question he answered was, in the Orchestrator's words at the close of the sweep: *"should 'zero
+production lines, test-only change' become a standing UAT waiver, so this stops consuming a
+round-trip every time?"*
+
+**THE RULE: a ticket whose DELIVERED DIFF contains ZERO PRODUCTION LINES — a test-only change — has
+its UAT step WAIVED, standing. It moves `Ready for UAT` → `Done` with NO UAT conducted and WITHOUT
+the owner being asked per ticket.**
+
+### 2. THE CRITERION IS MEASURED FROM GIT, NEVER ASSERTED
+
+At the `Ready for UAT` exit the delivery commit is measured first-hand:
+
+```
+git diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'
+```
+
+**EMPTY OUTPUT, AND ONLY EMPTY OUTPUT, INVOKES THE RULE.** A ticket page, a PR body or a role's
+summary claiming "zero production lines" is **not evidence**; the diff is. Both tickets in the
+2026-08-17 sweep were measured that way *before* the rule was applied to either — `e6697f6`
+**`63 0`** and `9957ddf` **`121 0`**, `src/cli.test.ts` only, no non-`.test.ts` file under `src/` in
+either. Those measurements are the Orchestrator's, recorded in
+`.grugops/context/sweep-ABC-063-064-2026-08-17/notes/`; they are not re-derived here.
+
+### 3. THE LIMITS — named because a grant that is not bounded in writing gets read wider than it was given
+
+1. **ANY PRODUCTION LINE AND THE RULE DOES NOT APPLY.** Not "mostly test". Not "one trivial line".
+   Not "the production line is only a comment". **One production line and the ticket needs the
+   owner's word exactly as before.** This is the rule most likely to drift by degrees, so the
+   boundary is binary and it is measured: the command above returns empty, or the rule is not
+   available.
+2. **A WAIVER IS NOT A SIGNATURE.** A waived ticket has had **NO UAT conducted** and carries **NO
+   human acceptance**. Nobody signed anything and no scenario was executed. **`Done` under this rule
+   means MERGED AND GATED — never ACCEPTED BY A HUMAN.** If a later reader finds "UAT waived" on a
+   ticket and reads it as someone having accepted the work, that reader is wrong and this sentence
+   is the refusal written in advance.
+3. **IT WAIVES UAT AND NOTHING ELSE.** `quality.gate_enforcement` is still `blocking`.
+   `production_requires_human_confirmation` is still `true` — **he did not flip it and no inference
+   may.** `context.human_admission` is still `off`, so there is no `human:<name>` stamp and **no
+   `finding` is admissible**; this entry, like every acceptance record here, is a hand-authored
+   transcription in git and that is the honest fidelity level. No config value changed, no ADR
+   edited, no gate added, removed or softened.
+4. **IT IS THE OWNER'S AND REVOCABLE**, on the same terms as every other standing directive in this
+   file. One sentence ends it.
+
+### 4. HOW THIS COMPOSES WITH THE 2026-08-16 DIRECTIVE — it does NOT supersede it
+
+**The 2026-08-16 entry ("the owner's word in session IS the `In UAT` signature") STANDS, unamended.**
+The two answer different questions and both are live:
+
+| | question answered | applies to |
+|---|---|---|
+| **2026-08-16** | **WHO SIGNS** a UAT that is conducted | every ticket that goes through UAT |
+| **2026-08-17** (this entry) | **WHICH TICKETS NEED NO SIGNING AT ALL** | only tickets measured at zero production lines |
+
+A ticket carrying even one production line still goes through UAT, and the owner's word in session is
+still its signature. This entry removes the step for a measured class of tickets; it changes nothing
+about the step where it still runs. **Do not read this as having replaced the 2026-08-16 ruling.**
+
+### 5. PRECEDENCE — this one IS a kit override, and that is a DIFFERENT verdict from 2026-08-16 on purpose
+
+**Reasoned here rather than copied from the entry above, because the two cases are not the same.**
+
+`agent-factory/workflows/06-uat-pack.md` and `agent-factory/roles/uat-planner.md` make the `In UAT`
+exit **a named human's signoff** and forbid an agent self-signing. Checked at this hop: **the kit
+contains no waiver, no "not applicable", and no class of ticket exempt from UAT.** Its UAT stage is
+unconditional.
+
+- **2026-08-16 SATISFIED that requirement.** A signature was required, and the owner — who IS the
+  named human the kit asks for — gave one. Nothing in the kit was set aside; only a mechanism to
+  record his word was supplied. That is why it is explicitly **not** listed among this project's kit
+  overrides.
+- **This directive DISPENSES WITH the requirement for a measured class of tickets.** No signature is
+  produced, because no acceptance happens. The kit asks for a signoff the waived tickets will never
+  have. Calling that "satisfied" would be false, so it is recorded honestly as what it is: **a
+  project override of the kit's unconditional UAT stage, scoped to tickets whose delivered diff
+  measures zero production lines, and to nothing else.** It joins the branching model and the
+  deployment posture as the **third** place this project overrides the read-only kit; everywhere
+  else — including the UAT stage for every ticket carrying production code — the kit stands
+  unchanged.
+- **The counter-reading, recorded so it is not lost:** one could argue the person whose signature is
+  required may decline in advance to require his own, making this a use of the signing authority
+  rather than an override. That reading is available and it is weaker — the 2026-08-16 case produces
+  a per-ticket act by the named human, and this one produces none for tickets not yet written. **The
+  stronger, more honest verdict is chosen: an override, named as an override.** The owner's word
+  settles it either way; the classification is what a future reader gets to check.
+
+### 6. THE 2026-08-17 CLOSE-OUT — two tickets, TWO DIFFERENT AUTHORITIES
+
+Recorded because it is part of the honest record and because one half is a reading, not a quote.
+
+- **`ABC-063` closed by his NAMED WORD** — clause 1, verbatim above.
+- **`ABC-064` closed by THE STANDING RULE applied to a MEASUREMENT.** **He named `ABC-063` and did
+  NOT name `ABC-064`**, though the question put to him named both. The Orchestrator took the reading
+  that the rule reaches the ticket already sitting in the column, because stopping the per-ticket
+  round-trip is the thing the owner had just granted, and `ABC-064` met the criterion on measurement
+  rather than assertion. **That call is the Orchestrator's, not the owner's, and ONE LINE FROM THE
+  OWNER REVERSES IT** — `ABC-064` reopens as a board move, nothing else; its merge and its gate were
+  never in question.
+
+### What this entry does NOT do
+
+**No config value was changed** — `.grugops/factory.config.json` has no dial that can express this
+rule and none was invented, the same call the branching-model entry made about `autonomy`. **No ADR
+was edited, no gate added, removed or softened, no ticket cut and no board column moved by this
+hop.** `AGENTS.md` § "Test and UAT authority" points here; **this entry is the authority.**
+
 ## Standing directive — read before prioritising anything
 
 **Project owner Olger Oeselg, 2026-07-31:** *"The most important thing is that chess moves are
