@@ -16,6 +16,17 @@ feature: —
 > merged, `Done`, and both gates passed against it: its page is NOT edited and no criterion of its is
 > re-opened.**
 
+> **Line anchors corrected 2026-08-17 by the Software Engineer at `ABC-063`, in a SECOND commit** so
+> the delivery commit stays the one path `A4` measures. **Every `:NNN` below was measured against
+> `main` @ `2ad1dff`** (`src/cli.test.ts` byte-identical to `39d3c5b`; the delivery appends at the
+> end of the file and moves none of them). Seven corrected: `:353`→`:435`, `:372`→`:525`,
+> `:477`→`:630`, `:780`→`:933`, `:247`→`:329`, and — the one the Orchestrator recorded UNRESOLVED
+> rather than guess — **`:401`→`:554`**. `:401` was resolved by *reading it*, not from memory: the
+> page was cut against `56c5cea`, the one revision of this file where `:353`, `:372`, `:477` and
+> `:780` all hold simultaneously, and `56c5cea:401` is `A6(i) — the near-miss family, COMPLETE OVER
+> POSITION, is rejected in its legal position`, which is `:554` today. **No substance changed; only
+> pointers.**
+
 ## Problem
 
 *User*: the project owner, at the moment he is asked to sign the `ABC-042` UAT pack — and every agent
@@ -26,9 +37,9 @@ by-name backing of the seventeen.** It turns the limitation *"it does not play a
 commands a signer types and watches fail — `--move e4`, `e4`, `--new`, `--undo`, `--resign`,
 `--quit`. **None of the six is written in any test file, and none is spawned.**
 
-What does back it is a class argument, and it is a good one: `:477` generates 1000 tokens, 250 per
-shape, and every one is rejected; `:353` pins `ACCEPTED_ARGUMENTS` element-for-element against the
-scope table; `:372` bars any argv literal outside the enumeration. Together they make a quietly
+What does back it is a class argument, and it is a good one: `:630` generates 1000 tokens, 250 per
+shape, and every one is rejected; `:435` pins `ACCEPTED_ARGUMENTS` element-for-element against the
+scope table; `:525` bars any argv literal outside the enumeration. Together they make a quietly
 recognised fifth flag red. **But a class argument is silent on names**, and these six names are the
 ones a human will type, the ones `EPIC-006` will eventually make legal, and the ones the pack's
 strongest section stands on.
@@ -45,10 +56,10 @@ deterministic case list makes that day red on purpose, in a row that names the s
 
 ## Out of scope
 
-- **Spawning any of the six.** Zero new children; the count is pinned at **10** (`:780`) and an
+- **Spawning any of the six.** Zero new children; the count is pinned at **10** (`:933`) and an
   eleventh is a defect. The resolver is the exclusive validator (`ABC-042`'s `A9`), so a rejected
   argv cannot reach a frame by any other route.
-- **`:353`, `:372`, `:401` and `:477` — byte-identical.** This ticket adds names beside the class
+- **`:435`, `:525`, `:554` and `:630` — byte-identical.** This ticket adds names beside the class
   argument; it does not replace or weaken it.
 - **Deciding whether any of the six should become legal.** `ABC-043`–`ABC-046` own the session
   commands. This row asserts today's truth and is designed to red when that truth changes.
@@ -67,7 +78,7 @@ deterministic case list makes that day red on purpose, in a row that names the s
   has **exactly six** entries and the comment above it names **UAT-16**, so a hop making one of them
   legal cannot mistake the row for a generic corpus.
 - **`A3` (it reds on purpose when the vocabulary grows).** **Given** any of the six added to
-  `ACCEPTED_ARGUMENTS`, **then** the suite is **RED** — here **and** at `:353`. *(This is a
+  `ACCEPTED_ARGUMENTS`, **then** the suite is **RED** — here **and** at `:435`. *(This is a
   deliberate future red, not a maintenance cost: `EPIC-006` must move both rows in the same hop that
   makes a verb legal.)*
 - **`A4` (nothing else moved).** `git diff --name-only <the delivered commit>~1 <the delivered
@@ -86,8 +97,8 @@ deterministic case list makes that day red on purpose, in a row that names the s
 ## Security / NFR triggers
 
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**. **0 new test files, 0 new files under `src/`,
-  0 new child processes.** Six pure resolver calls, against a file that already makes 1000 at `:247`
-  and 1000 at `:477`. **`N8-LANE` is `MET` at 0.23× (152.5 ms of 650 ms); this ticket must not move
+  0 new child processes.** Six pure resolver calls, against a file that already makes 1000 at `:329`
+  and 1000 at `:630`. **`N8-LANE` is `MET` at 0.23× (152.5 ms of 650 ms); this ticket must not move
   it.**
 - **`NFR-002` not triggered.** No frame path.
 - **Security: not triggered.** `ABC-041`'s four clauses: no manifest touch, no non-`.test.ts` file
@@ -117,7 +128,7 @@ deterministic case list makes that day red on purpose, in a row that names the s
 written in the pack and in QE's map.
 
 **Priority `P2`.** No mutant, no live defect, and the class argument means a regression toward
-accepting one of the six already reds at `:353`. What is unprotected is narrower: a build that
+accepting one of the six already reds at `:435`. What is unprotected is narrower: a build that
 refused one of them **with the wrong token named**, and the signer's ability to see the scenario's
 own words in the suite. **Promote to `P1` the moment `ABC-043` or `ABC-045`/`ABC-046` is pulled** —
 that is when the six stop being permanently-refused words and start being a vocabulary in motion.
