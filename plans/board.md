@@ -193,12 +193,13 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 
-- [ABC-032] `parseSan` — SAN resolved against the legal move list, three closed outcomes  (owner: Software Engineer, M, P0, epic: EPIC-003, since: 2026-08-17, branch `grugops/abc032-parse-san`, base `main` @ `bf371d7`; **DoR 10/10, and the criteria re-read cost it NOTHING — it fences by `git diff -U0` and test-file IDENTITY, not by line number**; 1 gap at the `Ready for Dev` exit — `ABC-031`'s merged `src/coordinate-move.ts` is now a sibling to READ, never to edit)
 - [ABC-077] Negamax with alpha-beta — the recursion core  (owner: Software Engineer, M, P0, epic: EPIC-004, since: 2026-08-17, branch `grugops/abc077-negamax-alpha-beta`, base `main` @ `bf371d7`; **DoR 8/10 → 9/10 — the "needs ABC-076" ⚠️ is DISCHARGED by yesterday's merge and § Dependencies still reads OPEN**; 4 gaps, incl. **`A1` is a differential oracle whose two sides share one `evaluate()`, so green ≠ correct evaluation**; remaining ⚠️ is the unmeasured `N8-LANE` fit, whose remedy the page already decides)
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-032] `parseSan` — SAN resolved against the legal move list, three closed outcomes  (owner: QE/E2E, M, P0, epic: EPIC-003, since: 2026-08-17, branch `grugops/abc032-parse-san` @ `da69986`; **A1–A7 all MET on the engineer's own measurement — 178 round-trip moves by REFERENCE, 0 exceptions; `src/san.ts` is a PURE-APPEND single hunk with 0 deletions so `toSan` is byte-unchanged, verified by the Orchestrator not taken on report**; gates green on the tip, 957/957 on 33 files, skip 0, `PERFT_DEEP=1` 32/32; **`N8-LANE` is `UNKNOWN - verify` — the engineer's own null control read 2.8% against an ≤1.5% admissibility clause and he REFUSED to call it a pass, which is the second consecutive ticket to leave that bar unclaimed**; **the ticket's printed `A4` FEN is DEFECTIVE, kings adjacent on e1/e2 — SECOND ticket to trip on a kings-adjacent FEN after `ABC-031`'s `A2`; page repair is BA/PM's**; QE hop RUNNING — mandatory before this may leave `In Review`)
 
 
 ## In Security/NFR (WIP 0/2)
