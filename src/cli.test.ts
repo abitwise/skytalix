@@ -21,7 +21,7 @@
 import { spawnSync } from "node:child_process";
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
-import { ACCEPTED_ARGUMENTS, resolveOptions } from "./cli-options.ts";
+import { ACCEPTED_ARGUMENTS, type ResolvedOptions, resolveOptions } from "./cli-options.ts";
 import { frameHeight } from "./frame.ts";
 import * as glyphMode from "./glyph-mode.ts";
 import { gameStatusOf, newGame } from "./history.ts";
@@ -449,6 +449,77 @@ describe("ABC-042 — the accepted set is closed", () => {
     for (const argv of accepted) {
       expect(resolveOptions(argv).ok, `argv ${JSON.stringify(argv)}`).toBe(true);
     }
+  });
+
+  it("ABC-061 A2 — the five deterministic accepted argvs are pinned by WHAT THEY RESOLVE TO", () => {
+    // THE MUTANTS THIS BLOCK EXISTS TO KILL, both one word at `src/cli-options.ts:153`:
+    // `flags: { ascii, unicode }` -> `flags: { ascii: false, unicode }`, and the same with
+    // `unicode: false`. The first shipped 861/861 GREEN before this block existed — measured on a
+    // copy of the tree outside the repository — because every automated child runs on a pipe, where
+    // `--ascii` and no flag at all draw the same board, so no child can tell them apart.
+    // DO NOT "SIMPLIFY" THESE OBJECT COMPARISONS BACK TO `.ok`: `.ok` is `true` under both mutants,
+    // which is exactly how the accepting path came to be guarded by a boolean (the row above).
+    // THE WHOLE OBJECT, NEVER FIELD BY FIELD — a field-by-field assertion is how `.ok` got here, and
+    // the next field added to `ResolvedOptions` would arrive unasserted from birth. It is `.options`
+    // and not the resolution: `Resolution` is a discriminated union, and comparing its top level
+    // whole would fold `ok: true` into the expectation and assert something weaker than this.
+    const expectations: readonly (readonly [readonly string[], ResolvedOptions])[] = [
+      [
+        [],
+        { colour: "white", orientation: "white-bottom", flags: { ascii: false, unicode: false } },
+      ],
+      [
+        ["--ascii"],
+        { colour: "white", orientation: "white-bottom", flags: { ascii: true, unicode: false } },
+      ],
+      [
+        ["--unicode"],
+        { colour: "white", orientation: "white-bottom", flags: { ascii: false, unicode: true } },
+      ],
+      [
+        ["--colour", "white"],
+        { colour: "white", orientation: "white-bottom", flags: { ascii: false, unicode: false } },
+      ],
+      [
+        ["--colour", "black"],
+        { colour: "black", orientation: "black-bottom", flags: { ascii: false, unicode: false } },
+      ],
+    ];
+
+    for (const [argv, expected] of expectations) {
+      const resolution = resolveOptions(argv);
+      if (!resolution.ok) throw new Error(`a documented argv was rejected: ${argv.join(" ")}`);
+      expect(resolution.options, `argv ${JSON.stringify(argv)}`).toEqual(expected);
+    }
+  });
+
+  it("ABC-061 A3 — `--colour random` is pinned as a PAIR, whichever side the coin lands", () => {
+    // The sixth accepted argv, and the one the table above cannot hold: the coin is resolved inside
+    // the resolver. The PAIRING is the assertion — `colour` and the `orientation` derived from it,
+    // compared as one object — so a build that returns `black` with `white-bottom` reds here.
+    // THE EXPECTATION TABLE IS THE TEST'S OWN; only WHICH ROW applies is read off the build. No
+    // seeding and no 1000 iterations: the distribution is already the property owned by the `A4`
+    // block that resolves this argv 1000 times with zero spawns (named, not numbered — every line
+    // number the ticket page carried had drifted by the time this was written).
+    const PAIRS: Readonly<Record<ResolvedOptions["colour"], ResolvedOptions>> = {
+      white: {
+        colour: "white",
+        orientation: "white-bottom",
+        flags: { ascii: false, unicode: false },
+      },
+      black: {
+        colour: "black",
+        orientation: "black-bottom",
+        flags: { ascii: false, unicode: false },
+      },
+    };
+
+    const resolution = resolveOptions(["--colour", "random"]);
+    if (!resolution.ok) throw new Error("`--colour random` was rejected");
+    const landed = resolution.options.colour;
+
+    expect(["white", "black"], "the coin landed on a documented colour").toContain(landed);
+    expect(resolution.options, `the coin landed ${landed}`).toEqual(PAIRS[landed]);
   });
 
   it("A6(i) — the enumeration is the ONLY argv literal in the delivered resolver", () => {
