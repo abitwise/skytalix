@@ -1167,3 +1167,45 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
     expect(reasonOf(twoRemoved), "the two-closer mutant").toBe(reasonOf(unterminated));
   });
 });
+
+describe("ABC-062 — the two command lines that reach the refusal path untested", () => {
+  it("A1/A2/A7 — `--colour` alone and a bare `white` are each refused, naming their own token and their own reason", () => {
+    // A NEW BLOCK OF ITS OWN, deliberately: the near-miss family at `:554` is COMPLETE OVER POSITION
+    // and derived from the table, so hand-picking two members into it would change what a merged
+    // criterion means. Nothing here reads a `CHILDREN` entry — two pure resolver calls, no child
+    // process, `spawned` still 10 (`N8-LANE`).
+    const missingValue = resolveOptions(["--colour"]);
+    const unrecognised = resolveOptions(["white"]);
+
+    expect(missingValue.ok, "resolveOptions([--colour])").toBe(false);
+    expect(unrecognised.ok, "resolveOptions([white])").toBe(false);
+    // Narrowing only — either row above has already red by the time this could be taken.
+    if (missingValue.ok || unrecognised.ok) return;
+
+    // `A1` — THE COMMAND LINE THAT SIMPLY STOPS, and the reason this ticket exists. The `?? token`
+    // fallback at `src/cli-options.ts:130` is the only thing that puts a token in `.offending` here:
+    // `next` is `undefined`, so the message names `--colour` itself. THE MUTANT IS `next as string`
+    // AT THAT LINE — it shipped 863/863 GREEN on `main` at `4c5e19e` (measured 2026-08-17), and
+    // under it `node src/cli.ts --colour` throws `TypeError: text is not iterable` out of
+    // `printableOf` (`src/cli.ts:69`) — a Node stack trace where the usage sentence belongs, at the
+    // same exit code `1`, so even an exit-code assertion passes. The deep equality is what kills it;
+    // do not loosen it to a `toContain`. UAT-10 row c.
+    //
+    // `.problem` is matched on its distinguishing substring, the delivered practice at `:388`:
+    // `MISSING_VALUE` and `UNRECOGNISED` are module-private (`src/cli-options.ts:92-93`) and
+    // exporting them would be a production line this ticket does not have.
+    expect(missingValue.problem).toContain("white|black|random");
+    expect(missingValue.offending).toEqual(["--colour"]);
+
+    // `A2` — A VALUE WORD WITH NO `--colour` IN FRONT OF IT (UAT-10 row d). It reaches the default
+    // branch and is resolved by no test at any level: the random corpus in the `:545` region gets
+    // here only by accident.
+    expect(unrecognised.problem).toContain("unrecognised");
+    expect(unrecognised.offending).toEqual(["white"]);
+
+    // `A7` — AND THE TWO REFUSALS ARE DISTINGUISHABLE. Both `toContain`s above pass for a build that
+    // answers both command lines with ONE message, and that build tells one of the two users the
+    // wrong thing. This is the hole the loose matching leaves open, closed in one line.
+    expect(missingValue.problem).not.toBe(unrecognised.problem);
+  });
+});
