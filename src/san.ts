@@ -146,3 +146,135 @@ function body(position: Position, move: Move, legal?: readonly Move[]): string {
 export function toSan(position: Position, move: Move, legal?: readonly Move[]): string {
   return `${body(position, move, legal)}${suffix(position, move)}`;
 }
+
+/**
+ * `parseSan` — the second direction of the SAN grammar, over the SAME tables (`ADR-0004` clause 2).
+ *
+ * IT IS RESOLUTION, NOT A SECOND GRAMMAR. Nothing below decodes a piece letter back into a piece
+ * type, decodes a castle string back into a king move, or builds a `Move`: the parsed text is
+ * matched against the description that `PIECE_LETTERS` and `body` above ALREADY produce for each
+ * legal move, and the answer is an element of the list. So the piece letters, the promotion letters
+ * and the castle strings each occur exactly once in this file (`ABC-032` `A7`) — the reverse
+ * direction reads them through the forward one and owns no table of its own.
+ *
+ * The castle strings are reached the strongest way available: a castle candidate's own
+ * `toSan(position, move, legal)` output, suffix stripped, compared against the input. That is why
+ * this file holds no castle literal of its own and why NO EXISTING LINE OF THIS MODULE CHANGED for
+ * `ABC-032` (`A6`). The one visible price is recorded rather than hidden: when castling is not
+ * legal in the position there is no castle move to ask, so a castle-shaped input is `unreadable`
+ * rather than `no-such-move`. Both are `rejected`, the two codes never collapse, and no acceptance
+ * criterion turns on it — but a reader should not have to discover it.
+ *
+ * MOVE IDENTITY — `ADR-0004` (2b). Every `Move` returned, in `move` and in every `ambiguous`
+ * candidate, is an ELEMENT of the legal move list for the position (`filter` never copies).
+ *
+ * CASE IS MEANING and this reader is case-exact: `bxc4` is a pawn capture, `Bxc4` a bishop capture,
+ * and both can be legal in one position (`ABC-032` § Out of scope). `ABC-033` owns the case-folded
+ * retry and the multi-match it can produce.
+ *
+ * The same caller obligation as `toSan`: a supplied `legal` must be the legal moves of `position`.
+ */
+
+/**
+ * A machine-readable code, never display copy — `ABC-034` owns the wording. The two members are
+ * `ADR-0004` (2a)'s floor and they must never collapse into one; the same two the coordinate
+ * grammar carries (`src/coordinate-move.ts`), so `ABC-033` sees one shape at the seam.
+ */
+export type SanRejectReason =
+  /** The text is not SAN this module can read at all. */
+  | "unreadable"
+  /** Well-formed SAN that names no legal move in this position. */
+  | "no-such-move";
+
+/** The three outcomes, closed — `ADR-0004` (2a). A single match is `move`, never a 1-element list. */
+export type SanParseResult =
+  | { readonly outcome: "move"; readonly move: Move }
+  | { readonly outcome: "ambiguous"; readonly candidates: readonly Move[] }
+  | { readonly outcome: "rejected"; readonly reason: SanRejectReason };
+
+/** Derived from the one table above — not a second one. `"NBRQK"` at load. */
+const PIECE_LETTER_CLASS = Object.values(PIECE_LETTERS).join("");
+
+/** `Nbd2`, `R1a3`, `Qh4xe1`, `Be5` — letter, optional file and/or rank qualifier, capture, target. */
+const PIECE_MOVE = new RegExp(`^([${PIECE_LETTER_CLASS}])([a-h]?)([1-8]?)(x?)([a-h][1-8])$`);
+
+/** `e4`, `exd5`, `e8=Q`, `bxa1=N` — the capture form carries the origin file, which is a rule. */
+const PAWN_MOVE = new RegExp(`^(?:([a-h])x)?([a-h][1-8])(?:=([${PIECE_LETTER_CLASS}]))?$`);
+
+/** Check and mate are decoration ON INPUT: `Nxf3`, `Nxf3+` and `Nxf3#` all name the same move. */
+const CHECK_SUFFIX = /[+#]$/;
+
+/** The piece letter `body` would print for this move — `""` for a pawn. One table, read forwards. */
+function pieceLetterOf(move: Move): string {
+  return PIECE_LETTERS[pieceType(move.piece)] ?? "";
+}
+
+/**
+ * Resolves a SAN string against the legal moves of `position`.
+ *
+ * `legal` is optional and carries the caller obligation above; supplying the list the caller
+ * already holds means this function performs ZERO `legalMoves` calls of its own on the piece and
+ * pawn paths (`ADR-0004` clause 2: 0.10 µs supplied against 4.31 µs unsupplied, which is what makes
+ * `A1`'s run over the whole perft corpus affordable).
+ *
+ * `text` is declared `string` because that is what every caller has; the runtime guard is what
+ * makes the function TOTAL against whatever a loop actually hands over (`A5`).
+ */
+export function parseSan(
+  position: Position,
+  text: string,
+  legal?: readonly Move[],
+): SanParseResult {
+  if (typeof text !== "string") return { outcome: "rejected", reason: "unreadable" };
+
+  const written = text.trim().replace(CHECK_SUFFIX, "");
+  const moves = legal ?? legalMoves(position);
+
+  const piece = PIECE_MOVE.exec(written);
+  if (piece !== null) {
+    const [, letter, qualifierFile, qualifierRank, capture, destination] = piece;
+    return resolve(
+      moves.filter(
+        (move) =>
+          (move.flags & FLAG_CASTLE) === 0 &&
+          pieceLetterOf(move) === letter &&
+          squareName(move.to) === destination &&
+          (move.captured !== EMPTY) === (capture === "x") &&
+          (qualifierFile === "" || squareName(move.from)[0] === qualifierFile) &&
+          (qualifierRank === "" || squareName(move.from)[1] === qualifierRank),
+      ),
+    );
+  }
+
+  const pawn = PAWN_MOVE.exec(written);
+  if (pawn !== null) {
+    const [, originFile, destination, promotion] = pawn;
+    return resolve(
+      moves.filter(
+        (move) =>
+          pieceLetterOf(move) === "" &&
+          squareName(move.to) === destination &&
+          (move.captured !== EMPTY) === (originFile !== undefined) &&
+          (originFile === undefined || squareName(move.from)[0] === originFile) &&
+          (promotion === undefined || PIECE_LETTERS[move.promotion] === promotion),
+      ),
+    );
+  }
+
+  // `0-0` / `0-0-0` are accepted for `O-O` / `O-O-O`; the strings themselves come from `toSan`.
+  const castled = written.replaceAll("0", "O");
+  const castles = moves.filter(
+    (move) =>
+      (move.flags & FLAG_CASTLE) !== 0 &&
+      toSan(position, move, moves).replace(CHECK_SUFFIX, "") === castled,
+  );
+  if (castles.length === 0) return { outcome: "rejected", reason: "unreadable" };
+  return resolve(castles);
+}
+
+/** The three arms, closed, from one candidate list: none, exactly one, or two and more. */
+function resolve(candidates: readonly Move[]): SanParseResult {
+  if (candidates.length === 0) return { outcome: "rejected", reason: "no-such-move" };
+  if (candidates.length === 1) return { outcome: "move", move: candidates[0] as Move };
+  return { outcome: "ambiguous", candidates };
+}
