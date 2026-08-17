@@ -47,7 +47,9 @@ material, and it is what makes endgame play recognisable rather than random.
 
 - **`A1` (symmetry — `ABC-076`'s property, extended not forked).** **Given** any position and its
   colour mirror, **then** the scores are **exactly equal**, over `ABC-076`'s corpus **plus ≥ 15 new
-  pawn-structure positions**. *(Pawn terms are directional and this is where a sign bug lives.)*
+  pawn-structure positions**. *(Pawn terms are directional and this is where a sign bug lives.
+  `ABC-076`'s 184 are inherited as INPUTS, not as evidence: their equality under `ABC-076`'s term is
+  an algebraic identity of its mirrored-index read, so only THIS ticket's term is under test here.)*
 - **`A2` (doubled).** **Given** two positions identical except that white's two pawns share the
   `c`-file in one and stand on `c` and `d` in the other, **then** the doubled position scores
   **strictly lower** for white, and the difference is **≤ 50 centipawns** — a structural term must
@@ -65,6 +67,15 @@ material, and it is what makes endgame play recognisable rather than random.
   measured mean cost per call stays within **`ABC-076`'s ≤ 1,100 ns total bar** for the combined
   evaluation. **If the combined evaluation exceeds 1,100 ns, report and stop** — `ADR-0003`'s depth
   model is derived at that leaf cost.
+- **`A7` (one corpus and one mirror helper, not two — the non-fork made mechanically red).**
+  **Given** this ticket's mirror corpus, **then** it is a **strict superset** of `ABC-076`'s 184
+  positions keyed on `board|blackToMove|castling|epSquare` — all 184 present — **and**
+  `src/evaluate.test.ts` and this ticket's suite **import that corpus and the mirror helper from one
+  shared module**, lifted out of `src/evaluate.test.ts` here rather than in a standalone refactor
+  ticket. **And** that shared module is **not** counted by `src/cli.test.ts`'s `productionModules()`:
+  test-support code stays off `ADR-0011`'s licence surface, so that row's hand-maintained count moves
+  only if this ticket adds a real production module. *(A forked corpus fails the superset half; a
+  retyped helper fails the import half.)*
 
 ## Dependencies
 
@@ -83,13 +94,18 @@ material, and it is what makes endgame play recognisable rather than random.
 
 1. **`A5` is the real test.** "Passed" is the only one of the three that is easy to get subtly wrong,
    and `A4` will pass with a wrong definition.
-2. **Extend `ABC-076`'s corpus and mirror helper; do not fork them.**
+2. **Extend `ABC-076`'s corpus and mirror helper; do not fork them** — `A7` is the red test that
+   enforces it, and it replaces the advisory comment in `src/evaluate.test.ts`. The lift is in scope
+   HERE, so it is not a coding-rule-9/10 drive-by refactor. Do not relax
+   `lint/suspicious/noExportsInTest`: the answer is a plain module, not an exception.
 3. **Assert relations, not totals.** The weights are hand-tuned and will move.
 
 ## Size and priority rationale
 
 **Size `S` (2).** Three small predicates and a weighted sum, on an existing module with an existing
-test property. **Not `M`:** no new module, no new dependency edge, no open decision.
+test property. **`A7`'s lift is inside `S`:** moving three working functions into a shared module and
+re-pointing two imports is typing, not thinking. **Not `M`:** no new production module, no new
+dependency edge, no open decision.
 
 **Not `XL`. No `SPLIT_REQUIRED`.**
 
@@ -105,7 +121,7 @@ Assessed by BA/PM, **2026-08-16**. **Result: 9 of 10 clean, 1 ⚠️ — NOT met
 | 1 | problem clear | **✅** stated as a limitation of the delivered PST term, not as a missing feature |
 | 2 | scope and out-of-scope clear | **✅** four fences, including a rejected optimisation with the evidence that would reopen it |
 | 3 | INVEST-shaped | **⚠️** **not independent** — `ABC-076` must land first |
-| 4 | acceptance testable and measurable | **✅** six: exact-equality mirror over an extended corpus, three strict orderings, a **≤ 50 cp** ceiling on a structural term, **20/20** passed-pawn classification with the two hard cases named, a **≤ 1,100 ns** combined cost bar |
+| 4 | acceptance testable and measurable | **✅** seven (`A7` added 2026-08-17): exact-equality mirror over an extended corpus, a strict-superset + one-module corpus check, three strict orderings, a **≤ 50 cp** ceiling on a structural term, **20/20** passed-pawn classification with the two hard cases named, a **≤ 1,100 ns** combined cost bar |
 | 5 | dependencies known | **✅** one open ticket |
 | 6 | security/NFR triggers with a measurable target | **✅** ≤ 1,100 ns combined with a named owner for the overrun; lane bar assessed |
 | 7 | test notes present | **✅** three |

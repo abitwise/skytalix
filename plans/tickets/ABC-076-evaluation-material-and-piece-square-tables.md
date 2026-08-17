@@ -47,13 +47,17 @@ non-idiotic chess, and it is the term every later term is measured against.
 
 ## Acceptance (Given/When/Then)
 
-- **`A1` (symmetry — the property that catches sign bugs).** **Given** any position and its
-  colour-mirrored twin (pieces swapped, ranks flipped, side to move flipped, castling rights
+- **`A1` (symmetry — the property that catches side-to-move sign bugs).** **Given** any position and
+  its colour-mirrored twin (pieces swapped, ranks flipped, side to move flipped, castling rights
   swapped, `epSquare` mirrored), **when** both are evaluated, **then** the scores are **exactly
   equal**. Corpus, enumerated because the named source holds only **six** positions: those six
   (`src/perft.test.ts`'s `PERFT_SUITE`) **plus every position one legal ply from each**
   (20+48+14+6+44+46 = 178, that file's own depth-1 counts) = **184 positions**, and their mirrors.
-  **Assert all 184.** *(One hard-coded sign error, or one wrong mirrored table entry, fails this.)*
+  **Assert all 184.** *(What fails this, measured at QE 2026-08-17: a hard-coded sign error on the
+  side-to-move negation — 170 of 184 mismatch. What does NOT fail it, also measured: a wrong
+  piece-square table entry or a wrong material value, at any corpus size — under a mirrored-INDEX
+  implementation the equality is an algebraic identity of the read. `A1` green is therefore **not**
+  evidence about table contents, and `ABC-082`/`ABC-083` must not read it as such.)*
 - **`A2` (the start position is balanced).** **Given** `startpos`, **then** the score is **exactly
   0**.
 - **`A3` (material dominates, and by the stated amounts).** **Given** `startpos` with one black
@@ -85,8 +89,11 @@ non-idiotic chess, and it is the term every later term is measured against.
 
 ## Test notes
 
-1. **`A1` is the whole test suite in one property.** Write the mirror helper first; every later
-   evaluation ticket (`ABC-082`, `ABC-083`) reuses it and must extend `A1`'s corpus, not fork it.
+1. **`A1` constrains the SHAPE of the score, not the CONTENTS of the tables** (measured at QE
+   2026-08-17); the corpus is kept because `ABC-082`/`ABC-083` need its size and its
+   castling/`epSquare` mirroring, not because it widens what `A1` detects. Write the mirror helper
+   first; every later evaluation ticket (`ABC-082`, `ABC-083`) reuses it and must extend `A1`'s
+   corpus, not fork it — `ABC-082` `A7` makes that mechanical.
    The one-ply expansion is merged `legalMoves` (`src/legal.ts:42`) + `makeMove`/`unmakeMove`
    (`src/apply.ts:122`/`:152`) — no new machinery, and deterministic, so the 184 is stable.
 2. **`A5`'s byte-identical assertion is not paranoia** — this project has a merged function that
@@ -113,7 +120,7 @@ Assessed by BA/PM, **2026-08-16**. **Result: 10 of 10 clean — DoR MET.**
 | 1 | problem clear | **✅** no scoring function exists in merged `src/`; the user pain is the hanging piece |
 | 2 | scope and out-of-scope clear | **✅** four fences, including terminal scoring pushed to `ABC-077` with a stated reason |
 | 3 | INVEST-shaped | **✅** genuinely independent — zero open dependencies |
-| 4 | acceptance testable and measurable | **✅** six: exact-equality symmetry over 184 enumerated mirrored pairs (`A1` corpus repaired 2026-08-17), exact 0 at startpos, a bounded material window, a strict ordering, byte-identical purity, a ≤ 1,100 ns bar |
+| 4 | acceptance testable and measurable | **✅** six: exact-equality symmetry over 184 enumerated mirrored pairs (`A1` corpus repaired 2026-08-17, its claim narrowed to what QE measured 2026-08-17), exact 0 at startpos, a bounded material window, a strict ordering, byte-identical purity, a ≤ 1,100 ns bar |
 | 5 | dependencies known | **✅** one merged module; nothing open |
 | 6 | security/NFR triggers with a measurable target | **✅** ≤ 1,100 ns/call, ≤ 650 ms CPU lane, a falsifiable security threshold |
 | 7 | test notes present | **✅** three |
