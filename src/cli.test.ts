@@ -1209,3 +1209,66 @@ describe("ABC-062 — the two command lines that reach the refusal path untested
     expect(missingValue.problem).not.toBe(unrecognised.problem);
   });
 });
+
+describe("ABC-063 — UAT-16's six game verbs, by name", () => {
+  it("A1/A2/A3 — the six argvs UAT-16 names are each refused, each naming its own first token", () => {
+    // UAT-16 — "there is no way to make a move, by any route" — is the scenario the `ABC-042` pack
+    // calls its most important, and until this row it had the LEAST by-name backing of the
+    // seventeen. What backed it was a class argument, and a good one: `:435` pins
+    // `ACCEPTED_ARGUMENTS` element-for-element against the scope table, `:525` bars any argv literal
+    // outside the enumeration, `:630` rejects 1000 generated tokens, 250 per shape. BUT A CLASS
+    // ARGUMENT IS SILENT ON NAMES, and these six are the words a human types.
+    //
+    // TRANSCRIBED FROM THE SCENARIO, NEVER DERIVED. The pack and its run are in
+    // `.grugops/context/uat-ABC-042-pack/notes/` — the run's own table records all six refused at
+    // exit `1` with `unrecognised argument: <verb>` on stderr and 0 board rows. A derivation of
+    // these six would go stale in silence, which is the defect `ABC-059` exists for.
+    //
+    // ITS OWN BLOCK, DELIBERATELY. `ABC-062`'s two argvs at `:1172` are UAT-10 and the near-miss
+    // family at `:554` is derived and COMPLETE OVER POSITION; hand-picking these six into either
+    // would leave a future hop unable to tell which half it is licensed to touch. Six pure resolver
+    // calls, no child process — `spawned` is still 10 (`:933`, `N8-LANE`).
+    const UAT_16: readonly (readonly [argv: readonly string[], offending: string])[] = [
+      [["--move", "e4"], "--move"],
+      [["e4"], "e4"],
+      [["--new"], "--new"],
+      [["--undo"], "--undo"],
+      [["--resign"], "--resign"],
+      [["--quit"], "--quit"],
+    ];
+
+    // `A2` — THE LIST IS CLOSED AT SIX, because UAT-16 names six. `--help` is UAT-10 row g, a
+    // different scenario, and is deliberately not folded in here.
+    expect(UAT_16, "the command lines UAT-16 names").toHaveLength(6);
+
+    for (const [argv, offending] of UAT_16) {
+      const name = `resolveOptions(${JSON.stringify(argv)})`;
+      const resolution = resolveOptions(argv);
+
+      expect(resolution.ok, name).toBe(false);
+      // Narrowing only — the row above has already red by the time this could be taken.
+      if (resolution.ok) continue;
+
+      // `A1` — NAME THE TOKEN, not just `ok === false`. `["--move","e4"]` must blame `--move` and
+      // not `e4`: the resolver returns on the FIRST unrecognised token, so an `ok`-only assertion
+      // ships green on a build that refuses the right command line for the wrong word. That is the
+      // same `.ok`-only weakness `ABC-061` repairs on the accepting side.
+      expect(resolution.offending, `${name} offending`).toEqual([offending]);
+      expect(resolution.problem, `${name} problem`).toContain("unrecognised");
+    }
+
+    // `A3` — AND THIS IS THE ROW THAT REDS ON PURPOSE THE DAY A VERB BECOMES LEGAL. The loop above
+    // alone does NOT, and the reason is worth writing down: membership in `src/cli-options.ts` is
+    // exact equality against the six names POSITIONALLY destructured out of `ACCEPTED_ARGUMENTS`, so
+    // a seventh element appended to that enumeration changes no resolver behaviour at all and would
+    // red only at `:435`. Asserting the absence directly is what makes `A3`'s "here AND at `:435`"
+    // true in both directions. `ABC-043` (session), `ABC-045` (`resign`) and `ABC-046` (`quit`,
+    // `new`) must move this row and `:435` in the SAME hop that makes a verb legal — a deliberate
+    // future red, so that day is a decision and never a side effect.
+    for (const [argv] of UAT_16) {
+      for (const token of argv) {
+        expect(ACCEPTED_ARGUMENTS, `${token} is not an accepted argument`).not.toContain(token);
+      }
+    }
+  });
+});
