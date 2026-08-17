@@ -730,7 +730,9 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // `ADR-0011` clause 1's trigger check are the same assertion from two directions.
     expect(productionModules()).toContain("cli.ts");
     expect(productionModules()).toContain("cli-options.ts");
-    expect(productionModules()).toHaveLength(20);
+    // 21 since ABC-031 added `coordinate-move.ts` (20 at ABC-042). The count is an inventory of
+    // what sits flat in src/, not a cap on it — this row's subject is flatness and the entry point.
+    expect(productionModules()).toHaveLength(21);
     const nested = (readdirSync(SOURCE_DIRECTORY, { recursive: true }) as string[]).filter(
       (entry) => entry.includes("/") && entry.endsWith(".ts"),
     );
