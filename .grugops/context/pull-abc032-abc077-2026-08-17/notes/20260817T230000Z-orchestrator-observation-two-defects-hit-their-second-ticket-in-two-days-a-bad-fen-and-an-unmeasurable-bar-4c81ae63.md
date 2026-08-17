@@ -64,6 +64,44 @@ out-of-tree method is Security/NFR's, and whether the clause is re-cut is Archit
 **Neither is decided here, and I did not route it** — `ABC-032` has a QE hop in flight and its
 verdict may add a third data point.
 
+---
+
+## ⚠️ PATTERN 2 IS REFUTED. `ABC-077` MEASURED THE SAME BAR ADMISSIBLY, ~90 MINUTES LATER.
+
+**I wrote the paragraph above from two data points and it was wrong. The correction is recorded
+here rather than by editing the claim away.**
+
+`ABC-077` measured `N8-LANE` and **MET** it: **median delta 625 ms CPU, sign 8/8**, net of the
+160 ms per-file floor **465 ms ≤ 650 ms**, with an identity null control of **−0.005 s at 4/8
+≈ −0.04%** — **comfortably inside the ≤1.5% admissibility clause that `ABC-032`'s run blew at 2.8%.**
+
+**So the bar is measurable, and my generalisation — "the clause is stricter than this machine's
+noise, it will produce `UNKNOWN` on every ticket" — is false.** Same machine, same afternoon, same
+clause.
+
+**What actually differs is METHOD**, and that is the real finding:
+
+| | `ABC-032` | `ABC-077` |
+|---|---|---|
+| rounds | 7 | **8 usable** |
+| order | interleaved | interleaved **and rotated** |
+| process | — | **fresh process each round** |
+| null control | **2.8%** — inadmissible | **0.04%** — admissible |
+
+**`N8-LANE` is not an unmeasurable bar. It is a bar with a real precision requirement that one
+method meets and another does not** — which is exactly what an admissibility clause is FOR, and it
+did its job by refusing `ABC-032`'s run rather than waving it through. **The clause is working.**
+
+**The correct escalation is therefore the opposite of what I wrote**: not "re-cut the clause"
+but "**the measurement protocol that satisfies it should be written down once instead of
+rediscovered per hop**" — `ABC-077`'s note carries a method that works and `ABC-032`'s does not.
+Still not routed by me; still Security/NFR's and Architect/Design's. **Pattern 1 (the illegal FEN)
+is untouched by this and stands.**
+
+**The lesson I am charging to myself: I called two occurrences a pattern and reached for a systemic
+cause when the second sample had not yet arrived.** The board header records this project's
+appetite for exactly that error.
+
 ## Where this goes
 
 Both feed the **escalation stream the board header already names as open** — the one with six

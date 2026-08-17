@@ -193,12 +193,12 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 0/3)
 
-- [ABC-077] Negamax with alpha-beta — the recursion core  (owner: Software Engineer, M, P0, epic: EPIC-004, since: 2026-08-17, branch `grugops/abc077-negamax-alpha-beta`, base `main` @ `bf371d7`; **DoR 8/10 → 9/10 — the "needs ABC-076" ⚠️ is DISCHARGED by yesterday's merge and § Dependencies still reads OPEN**; 4 gaps, incl. **`A1` is a differential oracle whose two sides share one `evaluate()`, so green ≠ correct evaluation**; remaining ⚠️ is the unmeasured `N8-LANE` fit, whose remedy the page already decides)
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
 
+- [ABC-077] Negamax with alpha-beta — the recursion core  (owner: QE/E2E, M, P0, epic: EPIC-004, since: 2026-08-17, branch `grugops/abc077-negamax-alpha-beta` @ `45d6591`, module `src/search.ts`; **A1–A7 all MET on the engineer's measurement; `A6`'s `RISK-002` guard VERIFIED BY THE ORCHESTRATOR — no default `depth` anywhere in the module, checked, not taken on report**; A2 prunes to **9.0%** against the <40% bar, A5 stalemate exactly 0 on 12 cases, A7 byte-identical over 231+204 positions; gates green, 963/963 on 33 files, skip 0; **`N8-LANE` MET at 465 ms ≤ 650 ms with an ADMISSIBLE 0.04% null control — which REFUTES this hop's earlier claim that the bar is unmeasurable, since `ABC-032` blew the same clause at 2.8%; the difference is METHOD, not the machine**; **the depth-3 sweep and `A2`'s own kiwipete case now run ONLY under `SEARCH_DEEP=1`, so a depth-3-only pruning regression passes `npm test` — disclosed, and handed to QE to rule on**; **`ABC-103`'s hand-maintained module count taxed a FOURTH ticket**; QE hop RUNNING — mandatory before this may leave `In Review`)
 - [ABC-032] `parseSan` — SAN resolved against the legal move list, three closed outcomes  (owner: QE/E2E, M, P0, epic: EPIC-003, since: 2026-08-17, branch `grugops/abc032-parse-san` @ `da69986`; **A1–A7 all MET on the engineer's own measurement — 178 round-trip moves by REFERENCE, 0 exceptions; `src/san.ts` is a PURE-APPEND single hunk with 0 deletions so `toSan` is byte-unchanged, verified by the Orchestrator not taken on report**; gates green on the tip, 957/957 on 33 files, skip 0, `PERFT_DEEP=1` 32/32; **`N8-LANE` is `UNKNOWN - verify` — the engineer's own null control read 2.8% against an ≤1.5% admissibility clause and he REFUSED to call it a pass, which is the second consecutive ticket to leave that bar unclaimed**; **the ticket's printed `A4` FEN is DEFECTIVE, kings adjacent on e1/e2 — SECOND ticket to trip on a kings-adjacent FEN after `ABC-031`'s `A2`; page repair is BA/PM's**; QE hop RUNNING — mandatory before this may leave `In Review`)
 
 
