@@ -1,8 +1,8 @@
 ---
 id: ABC-031
 title: Coordinate move input — `e2e4`, `E2E4`, `e2-e4`, `e7e8q`, resolved against the legal move list
-status: backlog
-column: Backlog
+status: in-development
+column: In Development
 size: S
 priority: P0
 epic: EPIC-003

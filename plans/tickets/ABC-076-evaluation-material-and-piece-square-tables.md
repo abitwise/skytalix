@@ -1,8 +1,8 @@
 ---
 id: ABC-076
 title: Evaluation — material and piece-square tables (the scoring floor)
-status: backlog
-column: Backlog
+status: in-development
+column: In Development
 size: M
 priority: P0
 epic: EPIC-004
@@ -48,10 +48,12 @@ non-idiotic chess, and it is the term every later term is measured against.
 ## Acceptance (Given/When/Then)
 
 - **`A1` (symmetry — the property that catches sign bugs).** **Given** any position and its
-  colour-mirrored twin (pieces swapped, ranks flipped, side to move flipped), **when** both are
-  evaluated, **then** the scores are **exactly equal**. Asserted over **≥ 40** positions drawn from
-  `src/perft.test.ts`'s set and their mirrors. *(A single hard-coded sign error passes every
-  hand-picked example and fails this.)*
+  colour-mirrored twin (pieces swapped, ranks flipped, side to move flipped, castling rights
+  swapped, `epSquare` mirrored), **when** both are evaluated, **then** the scores are **exactly
+  equal**. Corpus, enumerated because the named source holds only **six** positions: those six
+  (`src/perft.test.ts`'s `PERFT_SUITE`) **plus every position one legal ply from each**
+  (20+48+14+6+44+46 = 178, that file's own depth-1 counts) = **184 positions**, and their mirrors.
+  **Assert all 184.** *(One hard-coded sign error, or one wrong mirrored table entry, fails this.)*
 - **`A2` (the start position is balanced).** **Given** `startpos`, **then** the score is **exactly
   0**.
 - **`A3` (material dominates, and by the stated amounts).** **Given** `startpos` with one black
@@ -85,6 +87,8 @@ non-idiotic chess, and it is the term every later term is measured against.
 
 1. **`A1` is the whole test suite in one property.** Write the mirror helper first; every later
    evaluation ticket (`ABC-082`, `ABC-083`) reuses it and must extend `A1`'s corpus, not fork it.
+   The one-ply expansion is merged `legalMoves` (`src/legal.ts:42`) + `makeMove`/`unmakeMove`
+   (`src/apply.ts:122`/`:152`) — no new machinery, and deterministic, so the 184 is stable.
 2. **`A5`'s byte-identical assertion is not paranoia** — this project has a merged function that
    transiently mutates the position it reads.
 3. **Do not assert exact centipawn totals** beyond `A2`. They are hand-tuned and will move; assert
@@ -109,7 +113,7 @@ Assessed by BA/PM, **2026-08-16**. **Result: 10 of 10 clean — DoR MET.**
 | 1 | problem clear | **✅** no scoring function exists in merged `src/`; the user pain is the hanging piece |
 | 2 | scope and out-of-scope clear | **✅** four fences, including terminal scoring pushed to `ABC-077` with a stated reason |
 | 3 | INVEST-shaped | **✅** genuinely independent — zero open dependencies |
-| 4 | acceptance testable and measurable | **✅** six: exact-equality symmetry over ≥ 40 mirrored pairs, exact 0 at startpos, a bounded material window, a strict ordering, byte-identical purity, a ≤ 1,100 ns bar |
+| 4 | acceptance testable and measurable | **✅** six: exact-equality symmetry over 184 enumerated mirrored pairs (`A1` corpus repaired 2026-08-17), exact 0 at startpos, a bounded material window, a strict ordering, byte-identical purity, a ≤ 1,100 ns bar |
 | 5 | dependencies known | **✅** one merged module; nothing open |
 | 6 | security/NFR triggers with a measurable target | **✅** ≤ 1,100 ns/call, ≤ 650 ms CPU lane, a falsifiable security threshold |
 | 7 | test notes present | **✅** three |
