@@ -1,8 +1,8 @@
 ---
 id: ABC-077
 title: Negamax with alpha-beta — the recursion core, driven by a caller, never by a fixed budget
-status: in-review
-column: In Review
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P0
 epic: EPIC-004
