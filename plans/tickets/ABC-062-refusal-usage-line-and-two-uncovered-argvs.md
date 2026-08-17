@@ -1,8 +1,8 @@
 ---
 id: ABC-062
 title: Two command lines reach the refusal path untested, and one of them crashes there instead of refusing
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: XS
 priority: P1
 epic: —
