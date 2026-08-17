@@ -295,3 +295,145 @@ describe("A7 — one grammar table, asserted structurally", () => {
     expect((parsing as string).includes("PIECE_LETTERS[move.promotion]")).toBe(true);
   });
 });
+
+/**
+ * `ABC-032` QE hop, 2026-08-17 — the rows added because a MUTATION of `src/san.ts` did NOT turn the
+ * suite red. Each row below names the surviving mutant it exists to kill; every one of them was run
+ * against `src/san.ts`, confirmed green before the row and red after it, and the module reverted.
+ * No production line is changed by this hop — these are assertions, not fixes.
+ */
+describe("QE — mutants that survived the delivered suite", () => {
+  /** `src/san.ts` with comments stripped: a second table hides in code, not in prose. */
+  const CODE = readFileSync(new URL("./san.ts", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\/\/.*$/gm, "");
+
+  it("A7 gap: no hand-spelled piece-letter CHARACTER CLASS anywhere in the module", () => {
+    // Surviving mutant: `PIECE_MOVE` rebuilt as the literal `/^([NBRQK])…/`. That is a second
+    // spelling of the one table, and `A7`'s string-literal counter cannot see it because a regex
+    // literal is not a string literal — the shape this module's own style would reach for first.
+    expect(CODE.match(/\[\^?[NBRQK]{2,}\]/g)).toBeNull();
+    // The class the two input regexes are built from stays DERIVED from the one declaration.
+    expect(CODE.includes('const PIECE_LETTER_CLASS = Object.values(PIECE_LETTERS).join("")')).toBe(
+      true,
+    );
+  });
+
+  it("A7 gap: the castle strings are spelled on exactly one line of code", () => {
+    // Surviving mutant: the parse side matching `/^O-O(-O)?$/` instead of asking a castle
+    // candidate for its own `toSan` output — a second castle table, again invisible to a
+    // string-literal count. One line of code may spell `O-O`, and it is `body`'s.
+    const spelt = CODE.split("\n").filter((line) => line.includes("O-O"));
+    expect(spelt.length).toBe(1);
+    expect(spelt[0]).toContain("KINGSIDE_FILE");
+  });
+
+  it("the capture marker must AGREE with the move on the piece path", () => {
+    // Surviving mutant: dropping `(move.captured !== EMPTY) === (capture === "x")`. `A1` cannot see
+    // it — the round-trip only proves `toSan`'s own output reads back, never that a string `toSan`
+    // would NEVER emit is refused. `A2` asserts `Bxf7` and `Bxf7+`; neither negative was asserted.
+    const [position, legal] = open(A2_FEN);
+    // f7 is a capture, so the bare form names no legal move.
+    expect(parseSan(position, "Bf7", legal)).toEqual({
+      outcome: "rejected",
+      reason: "no-such-move",
+    });
+    // g5 is empty, so the capture form names no legal move either.
+    expect(parseSan(position, "Nxg5", legal)).toEqual({
+      outcome: "rejected",
+      reason: "no-such-move",
+    });
+  });
+
+  it("a pawn's capture form must AGREE with the move, in both directions", () => {
+    // Surviving mutant: dropping `(move.captured !== EMPTY) === (originFile !== undefined)`, which
+    // makes the bare `d5` resolve to the CAPTURE `exd5` — a move the player did not type.
+    const [position, legal] = open("4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1");
+    expect(legal.map((move) => toSan(position, move, legal))).toContain("exd5");
+    expect(parseSan(position, "d5", legal)).toEqual({
+      outcome: "rejected",
+      reason: "no-such-move",
+    });
+    // And the mirror: the capture form must not resolve to the quiet push.
+    expect(parseSan(position, "exe5", legal)).toEqual({
+      outcome: "rejected",
+      reason: "no-such-move",
+    });
+  });
+
+  it("surrounding whitespace is trimmed — the tolerance the ticket's closed list does not name", () => {
+    // Surviving mutant: removing `text.trim()`. The trim was added deliberately, for seam
+    // consistency with the merged `parseCoordinateMove` (`src/coordinate-move.ts`), which
+    // `ABC-033` dispatches the same line of user input to. Unasserted, it can be removed by the
+    // next edit and the two readers at one seam would silently disagree about a trailing space.
+    const [position, legal] = open(A2_FEN);
+    const bare = parseSan(position, "Ng5", legal);
+    for (const text of ["  Ng5", "Ng5  ", "\tNg5\n", " Ng5 "]) {
+      const padded = parseSan(position, text, legal);
+      expect(
+        padded.outcome === "move" && bare.outcome === "move" && padded.move === bare.move,
+        text,
+      ).toBe(true);
+    }
+    // Interior whitespace is NOT tolerated — the widening is trim, not "ignore spaces".
+    expect(parseSan(position, "N g5", legal).outcome).toBe("rejected");
+  });
+
+  /**
+   * CHARACTERIZATION, not a demanded tolerance. `ABC-032` calls its input tolerances closed (the
+   * check/mate suffix, and `0-0` for `O-O`); these two widenings are neither named there nor
+   * disclosed by the delivery notes, and no acceptance criterion can see them. They are pinned so
+   * that `ABC-033` / `ABC-034` inherit a measured shape, and so that whoever rules on them —
+   * BA/PM owns the page — is ruling on behaviour that is written down.
+   */
+  describe("undisclosed input widenings, pinned so a ruling has something to rule on", () => {
+    it("accepts a REDUNDANT qualifier that `toSan` would never emit", () => {
+      const [position, legal] = open(A2_FEN);
+      const bare = parseSan(position, "Ng5", legal);
+      expect(bare.outcome).toBe("move");
+      for (const text of ["Nfg5", "N3g5", "Nf3g5"]) {
+        const over = parseSan(position, text, legal);
+        // Still an ELEMENT of `legal` (`ADR-0004` (2b) holds); the question is only whether the
+        // string should have been read at all.
+        expect(
+          over.outcome === "move" && bare.outcome === "move" && over.move === bare.move,
+          text,
+        ).toBe(true);
+      }
+      // A WRONG origin is still refused, so the widening is redundancy, not a free-for-all.
+      expect(parseSan(position, "Ne4g5", legal).outcome).toBe("rejected");
+    });
+
+    it("accepts MIXED castle spellings (`O-0`, `0-O`), not only the two the ticket names", () => {
+      const [position, legal] = open(A2_FEN);
+      const written = parseSan(position, "O-O", legal);
+      for (const text of ["0-0", "O-0", "0-O"]) {
+        const mixed = parseSan(position, text, legal);
+        expect(
+          mixed.outcome === "move" && written.outcome === "move" && mixed.move === written.move,
+          text,
+        ).toBe(true);
+      }
+      // Case is still meaning: the lower-case spelling is not read.
+      expect(parseSan(position, "o-o", legal).outcome).toBe("rejected");
+    });
+
+    it("codes an IMPOSSIBLE promotion `e8=K` as `no-such-move`, not `unreadable`", () => {
+      // Promotion to a king is not well-formed SAN, so the floor's own words put it on the
+      // `unreadable` side. It lands on the other side because the promotion letter class is
+      // derived from the one table — the price of `A7`'s no-second-table shape, and the same
+      // root cause as the castle case the delivery note discloses. `A5` is still met: the two
+      // codes are independently reachable and never collapse. `ABC-034` owns the wording.
+      const [position, legal] = open(A4_FEN_CORRECTED);
+      expect(parseSan(position, "e8=K", legal)).toEqual({
+        outcome: "rejected",
+        reason: "no-such-move",
+      });
+      // A letter that is in no table at all is `unreadable`, so the two codes stay distinct here.
+      expect(parseSan(position, "e8=P", legal)).toEqual({
+        outcome: "rejected",
+        reason: "unreadable",
+      });
+    });
+  });
+});
