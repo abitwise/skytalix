@@ -74,13 +74,19 @@ objects, so deep equality would pass a perfectly reconstructed `Move`).
   `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1` and `legal`, **when** each of `e2e4`,
   `E2E4`, `e2-e4` and `  e2e4  ` is resolved, **then** each returns `outcome: "move"` and the SAME
   element of `legal` **by reference** (`result.move === legal[i]` for one fixed `i`), four times.
-- **`A2` (promotion letter selects one of four).** **Given** `8/4P3/8/8/8/8/4k3/4K3 w - - 0 1` and
+- **`A2` (promotion letter selects one of four).** **Given** `8/4P3/8/8/8/4k3/8/4K3 w - - 0 1` and
   `legal`, **when** `e7e8q` is resolved, **then** `outcome: "move"`, the move's `promotion` is the
   queen, and it is reference-identical to the matching element of `legal`. **When** `e7e8` is resolved
   with no letter, **then** `outcome: "ambiguous"` with **exactly 4** candidates, every one reference-
   identical to an element of `legal` and all four sharing `from`/`to`. *(`src/moves.ts:88-98` pushes
   four promotion moves with identical `from`/`to`; `ABC-019` recorded that the ambiguity arm is
-  reached for free here, and this is the criterion that collects it.)*
+  reached for free here, and this is the criterion that collects it.)* **FEN repaired 2026-08-17 by
+  BA/PM — one character, black king `e2` → `e3`; the criterion's meaning is unchanged.** As printed
+  at the cut it was `8/4P3/8/8/8/8/4k3/4K3 w - - 0 1`, whose kings stand adjacent on `e1`/`e2`: an
+  illegal position where `legalMoves` returns **exactly one move, `e1e2`**, no promotion is legal,
+  and `A2` was unsatisfiable by any correct implementation. The repaired FEN, executed against merged
+  `src/legal.ts` by the engineer, by QE and by BA/PM independently, returns **6 moves — `e1f1`,
+  `e1d1` and four `e7e8` (Q/R/B/N)**, which is exactly what this criterion asks for.
 - **`A3` (rejection is classified, not merged).** **Given** the start position, **when** each of
   `e2e5` (well-formed, names no legal move), `zz9q` (not two squares), `e2e4e5` (too long), `""` and
   `e9e4` (off-board rank) is resolved, **then** each returns `outcome: "rejected"` and the code
@@ -104,9 +110,10 @@ objects, so deep equality would pass a perfectly reconstructed `Move`).
   with nothing thrown and nothing logged.
 - **`A6` (the supplied list is the list that is used).** **Given** a position and `legal`, **when** a
   form from `A1` is resolved **with** `legal` supplied, **then** the returned move is reference-
-  identical to an element of **that exact array**. *(This is a call-count guard without a spy and
-  without a second test file: a function that generated its own list returns a reference-distinct
-  object and fails. No `vi.mock`, so no `*.nfr.test.ts` file is added — see `## Lane cost`.)*
+  identical to an element of **that exact array**. *(**A provenance guard, not a call-count guard** —
+  corrected 2026-08-17, see `## Security / NFR triggers`. A function that generated its own list and
+  returned from it fails, because the object is reference-distinct; a function that generates a list
+  and discards it passes. No `vi.mock`, so no `*.nfr.test.ts` file is added — see `## Lane cost`.)*
 - **`A7` (no production line outside the new module).** **Given** the delivered diff, **when**
   `git diff --numstat` is read, **then** the only non-test file added or changed under `src/` is this
   ticket's own new module, the suite is green with a skip count of **0**, and `PERFT_DEEP=1` is
@@ -139,8 +146,19 @@ objects, so deep equality would pass a perfectly reconstructed `Move`).
   joins the set `ADR-0011` / `ABC-029` scoped `NFR-002`'s structural premise over. Expected effect:
   none. Named so the next `NFR-002` re-derivation counts 18 modules and not 17.
 - **`NFR-003` (input responsiveness — keystroke echo < 50 ms) is NOT this ticket's.** It belongs to the
-  prompt (`ABC-036`), which owns the keystroke. This module's own cost bar is `A6`: with `legal`
-  supplied it performs **zero** additional `legalMoves` calls.
+  prompt (`ABC-036`), which owns the keystroke. **This ticket states no cost bar of its own. The
+  zero-call claim this bullet carried until 2026-08-17 is WITHDRAWN as unverifiable** — it read
+  *"this module's own cost bar is `A6`: with `legal` supplied it performs zero additional
+  `legalMoves` calls"*, and QE falsified the bar: `A6` asserts reference identity of the RESULT, so
+  mutant `M6` — burn a `legalMoves(position)` call, discard it, still select from `legal` — survived
+  **895/895 green**. **`A6` proves provenance, not call count.** Whether this module performs zero
+  additional `legalMoves` calls is **`UNKNOWN - verify`**. **BA/PM ruling 2026-08-17: accepted as
+  unwatched, no follow-up ticket.** Observing a call count needs a `vi.mock` spy, `vi.mock` is
+  hoisted to file scope and forces the second test file `## Lane cost` refuses at 160 ms CPU; what
+  `M6` models is one wasted move generation per line a human types — correctness-neutral, with no NFR
+  bar above it. **The bar that would make it matter is `NFR-003`, and `ABC-036` owns it** and already
+  buys the `*.nfr.test.ts` file a spy needs; if that budget is ever missed, the call-count probe
+  rides there, not here.
 - **Security: no trigger, and it is not pre-waived.** No user string reaches a sink from here — this
   function returns data, prints nothing, and there is no user surface at all until `EPIC-006`. **Firing
   threshold, stated so it is falsifiable:** the security half fires if the delivered diff touches any
@@ -164,10 +182,12 @@ objects, so deep equality would pass a perfectly reconstructed `Move`).
 
 ## Lane cost — how many test FILES this ticket implies
 
-**One.** A single `*.test.ts` beside the new module. **No `*.nfr.test.ts`**, because `A6` makes the
-call-count property observable through reference identity instead of through `vi.mock` — and a
-`vi.mock` factory is what forces a second file (it is hoisted to file scope and re-routes the module
-graph for every test in the file it sits in).
+**One.** A single `*.test.ts` beside the new module. **No `*.nfr.test.ts`**, because a `vi.mock`
+factory is what forces a second file (it is hoisted to file scope and re-routes the module graph for
+every test in the file it sits in) and nothing here needs one. **Corrected 2026-08-17: the one-file
+decision stands, but its old reason — that `A6` makes the call count observable through reference
+identity — does not.** `A6` observes provenance; the call count is not observed at all and is
+accepted as unwatched above.
 
 At the measured per-file floor — **160 ms CPU, band 100–229 ms** (`plans/nfr-catalog.md`,
 `CPU = 0.85 s + 159 ms × files`, R² 0.9999) — one file is **≈ 1.2% of `NFR-008`'s 13 s CPU clause**.
@@ -207,3 +227,16 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `S` (2), calibrated, with the condition that would make it `M` |
 | 9 | priority assigned | **✅** `P0`, with the reason it ranks below `ABC-010` |
 | 10 | no major unresolved blocker | **✅** none |
+
+**Correction, 2026-08-17 (BA/PM, task `refinement-abc031-qe-repairs-2026-08-17`).** Two rows above
+were scored on prose that was not executed, and both are now repaired in place:
+
+- **Row 4 was wrong about `A2`.** *"Exact FENs"* was assessed by reading, not by running. `A2`'s FEN
+  was illegal and its criterion unsatisfiable, uncaught across the cut, this DoR, the pull and the
+  `Ready for Dev` exit review; the engineer found it at build. **Standing repair, adopted here and
+  owed to every future cut: execute every FEN and literal input a criterion names against the merged
+  generator before the ticket leaves `Ready`, and again at the QE hop.** One `node -e` would have
+  caught it. Row 4 stands as **✅ only as of the repaired `A2`**.
+- **Row 6 over-credited the NFR bullet.** The zero-call bar it scored does not exist; it is withdrawn
+  and ruled accepted-as-unwatched above. Row 6 stands as **✅** on `N8-LANE`, `NFR-002` and the
+  security threshold, which are unaffected.
