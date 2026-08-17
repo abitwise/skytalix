@@ -1272,3 +1272,124 @@ describe("ABC-063 — UAT-16's six game verbs, by name", () => {
     }
   });
 });
+
+describe("ABC-064 — the frame's shape and the status panel, on the three non-default children", () => {
+  /**
+   * The three children that print a frame with an argument on them, each with the (glyph mode,
+   * orientation) pairs its OWN command line admits. The mode differs per child by design and is not
+   * a property this ticket asserts: `white` also carries `--unicode` (it is `A7`'s second Given),
+   * the other two run on a pipe with no glyph flag and so are `ascii`. `random` admits BOTH
+   * orientations — which one it drew is not knowable from outside the child and is deliberately not
+   * asserted here; `:356` already owns that question.
+   *
+   * ONE BLOCK PER PROPERTY, NOT ONE PER CHILD (`## Test notes` 4): three children by three
+   * properties in nine blocks is noise, so each row below loops and NAMES THE CHILD in its message,
+   * the way the rank loop at `:266`-`:270` names the rank. Zero new children — every capture here is
+   * one `ABC-042` already spawned at module scope, so `spawned` is still the ten `:933` pins.
+   */
+  const NON_DEFAULT: readonly {
+    readonly name: string;
+    readonly child: Child;
+    readonly mode: GlyphMode;
+    readonly orientations: readonly Orientation[];
+  }[] = [
+    { name: "white", child: CHILDREN.white, mode: "unicode", orientations: ["white-bottom"] },
+    { name: "black", child: CHILDREN.black, mode: "ascii", orientations: ["black-bottom"] },
+    { name: "random", child: CHILDREN.random, mode: "ascii", orientations: ORIENTATIONS },
+  ];
+
+  /** A frame's status region, LOCATED by the board region's height — never by a written offset. */
+  const statusRowsIn = (
+    frame: readonly string[],
+    mode: GlyphMode,
+    orientation: Orientation,
+  ): readonly string[] => {
+    const top = boardRegionOf(mode, orientation).length;
+    return frame.slice(top, top + STATUS_ROWS);
+  };
+
+  it("A1 — each non-default child writes the reference frame's row count, and one newline after its last row", () => {
+    // NO ROW-COUNT LITERAL (`## Out of scope`). The 23 is `frameOf`'s, composed from the merged
+    // modules per (mode, orientation), so the day the pane's height changes this row moves with it.
+    for (const { name, child, mode, orientations } of NON_DEFAULT) {
+      const rows = child.stdout.split("\n");
+      const heights = orientations.map((orientation) => frameOf(mode, orientation).length);
+
+      expect(child.status, `${name} exited non-zero: ${child.stderr}`).toBe(0);
+      // "EXACTLY ONE NEWLINE AFTER THE LAST ROW", as `:308` means it and NOT as a naive trailing
+      // newline test would read it: the frame's last row is the RESERVED EMPTY PROMPT ROW, so a
+      // correct stream genuinely ends in two newlines and an `endsWith` test for one would red on a
+      // correct build. The two rows below say it exactly — the stream splits into the frame's rows
+      // plus ONE empty tail, which holds only when exactly one newline follows that last row.
+      expect(rows[rows.length - 1], `${name} does not end with a newline`).toBe("");
+      expect(heights, `${name} row count`).toContain(rows.length - 1);
+    }
+  });
+
+  it("A2 — no cursor control on any non-default child: zero CSI introducers on stdout", () => {
+    // Counted rather than `not.toContain`ed, so a failure reports HOW MANY escaped, per child.
+    for (const { name, child } of NON_DEFAULT) {
+      expect(child.stdout.split("\u001b[").length - 1, `${name} CSI introducers`).toBe(0);
+    }
+  });
+
+  it("A3 — the human's colour changes the orientation only: `black` and `random` carry the default child's status rows", () => {
+    // MEASURED BEFORE IT WAS ASSERTED (`## Test notes` 2), because the claim "colour changes
+    // orientation only" came from the status panel's contract and not from a reading of the `black`
+    // child. The measurement RAN against the delivered children before this row was written and
+    // every status region came back byte-identical to the default child's, so the criterion is
+    // asserted as it was cut. Had they differed, this row would not exist and the difference would
+    // be the ticket's result.
+    const reference = frameOf("ascii", "white-bottom");
+    // The default child is `npmRun`, and `npm`'s own banner precedes its frame — so the frame is
+    // taken as the TAIL exactly as `:263` takes it, rather than from row 0.
+    const npmRows = CHILDREN.npmRun.stdout.split("\n");
+    const defaultFrame = npmRows.slice(npmRows.length - reference.length - 1, npmRows.length - 1);
+    const defaultStatus = statusRowsIn(defaultFrame, "ascii", "white-bottom");
+
+    // (i) NON-VACUITY FIRST: blank arrays compare equal to blank arrays, so a build that emitted no
+    // status panel at all would satisfy every comparison below by saying nothing.
+    expect(defaultStatus, "the default child's status rows").toHaveLength(STATUS_ROWS);
+    expect(defaultStatus.join("").trim(), "the default child's status rows are blank").not.toBe("");
+
+    // (ii) `A3` NAMES TWO CHILDREN, not three: `white` is the default child's own orientation and
+    // proves nothing about colour. The pair is pinned so a later hop cannot quietly drop one.
+    const coloured = NON_DEFAULT.filter(({ name }) => name !== "white");
+    expect(
+      coloured.map(({ name }) => name),
+      "the children A3 names",
+    ).toEqual(["black", "random"]);
+
+    for (const { name, child, mode, orientations } of coloured) {
+      // Under EVERY orientation the child's command line admits. For `random` that is both, which
+      // costs nothing while the two board regions are the same height and reds honestly if they ever
+      // are not — rather than silently picking one slice and asserting the wrong rows.
+      for (const orientation of orientations) {
+        expect(
+          statusRowsIn(child.stdout.split("\n"), mode, orientation),
+          `${name} status rows, sliced for ${orientation}`,
+        ).toEqual([...defaultStatus]);
+      }
+    }
+  });
+
+  it("A4 — `random` is resolved before anything can see it: the word occurs zero times on the child's whole stdout", () => {
+    // OVER THE WHOLE OF STDOUT, NOT THE BOARD REGION (`## Test notes` 3). `:356` compares a
+    // `boardRegionOf(...)`-length PREFIX, and the status and message rows — the only rows the word
+    // could survive into — are precisely what that prefix does not read. This is UAT-6's status-line
+    // half; the board half already follows from `:356`.
+    const child = CHILDREN.random;
+
+    // NON-VACUITY: the stream asserted over is a frame, not an empty capture that carries no word
+    // because it carries nothing at all.
+    expect(
+      frameRowsIn(child.stdout).length,
+      "the random child printed no frame row",
+    ).toBeGreaterThan(0);
+    expect(child.status, `random exited non-zero: ${child.stderr}`).toBe(0);
+    expect(
+      child.stdout.split("random").length - 1,
+      "occurrences of `random` on the random child's stdout",
+    ).toBe(0);
+  });
+});
