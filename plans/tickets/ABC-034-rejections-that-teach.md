@@ -47,6 +47,14 @@ from this product, which is what makes it worth more than its size.
   | `must-address-check` | the same, while already in check | `own-king-exposed` **and** `isInCheck(position)` |
   | `no-legal-move-named` | well-formed SAN naming no move in this position at all | no `from` square is derivable |
 
+- **The IMPOSSIBLE PROMOTION `e8=K` is this ticket's to place, and it arrives pre-measured.** Ruled
+  2026-08-18 by BA/PM (task `refinement-abc032-tolerances-2026-08-18`): `ABC-032` codes it
+  `no-such-move` and that is **accepted there and not re-opened** — the promotion letter class is
+  derived from the one shared table (`ADR-0004` clause 2), which contains `K`. **By the floor's own
+  words it belongs on the `unreadable` side**, and this ticket is the hop that writes the wording, so
+  it is the hop that decides. It shares its root cause with the castle price the `ABC-032` engineer
+  disclosed (`parseSan(position, "O-O", legal)` is `unreadable` when no castle is legal): **see them
+  together, place them together.** See `A8`.
 - **One message per code, and no catch-all.** Every code renders one sentence that names a concrete
   referent — a square, a piece, or the king. There is no default arm and no fallback string.
 - **Messages are DATA, placed by the loop.** They travel as `PromptOutcome.rejected.messages`
@@ -106,6 +114,16 @@ from this product, which is what makes it worth more than its size.
 - **`A7` (no production change outside this ticket's module).** `git diff --numstat` shows this
   ticket's module and test file(s) and nothing else under `src/`; `src/legal.ts` and `src/moves.ts`
   hash unchanged; suite green, skip **0**, `PERFT_DEEP=1` **32/32**.
+- **`A8` (the two ill-formed-SAN cases are placed, asserted, and cost no eighth code).** **Given**
+  `8/4P3/8/8/8/4k3/8/4K3 w - - 0 1` and the input `e8=K`, and **given** `4k3/8/8/8/8/8/8/K6R w - - 0 1`
+  and the input `O-O`, **when** each is submitted, **then** each produces exactly one of the **seven**
+  codes above — **the set stays at seven; no code is added for either** — and the message names a
+  concrete referent, and **`e8=P` still resolves to a different code than `e8=Q` in a position where
+  `e8=Q` is legal**, so nothing collapses. **Constraint on the fix:** no second promotion-letter or
+  castle-string table is introduced in `src/san.ts` (`ADR-0004` clause 2, and `ABC-032`'s `A7` guards
+  it); whatever this ticket needs is computed in **its own module** from `generateMoves` /
+  `legalMoves` or derived from the one table. *(Measured at the `ABC-032` gate by QE and by BA/PM:
+  `e8=K` → `no-such-move`, `e8=P` → `unreadable`, `O-O` with no castle legal → `unreadable`.)*
 
 ## Dependencies
 
@@ -189,7 +207,7 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 1 | problem clear | **✅** the beginner; `ABC-032`'s floor is the bare rejection this epic forbids; the only place a player learns a rule |
 | 2 | scope and out-of-scope clear | **✅** seven codes with the computation for each; six fences, including retrograde reasoning and localisation |
 | 3 | INVEST-shaped | **⚠️** valuable, negotiable, estimable, small, testable — **not fully independent**: it widens `ABC-032`'s reason arm and must land after it. Recorded rather than claimed clean |
-| 4 | acceptance testable and measurable | **✅** seven criteria: a set-difference property over six positions with **zero** exceptions, **seven** distinct messages with no substring relation and no catch-all, a **hidden count of 0**, byte-identical `toFen`, `32/32`, skip **0** |
+| 4 | acceptance testable and measurable | **✅** eight criteria (`A8` added 2026-08-18): a set-difference property over six positions with **zero** exceptions, **seven** distinct messages with no substring relation and no catch-all, a **hidden count of 0**, byte-identical `toFen`, `32/32`, skip **0** |
 | 5 | dependencies known | **✅** one open ordering dependency in the direction it runs; three merged instruments named with their line numbers |
 | 6 | security/NFR triggers with a measurable target | **✅** `N8-LANE` ≤ **650 ms CPU** with `A2` named as the criterion to watch; `NFR-001` structurally not at risk with a hash pin; the sanitization sink named with its line; firing threshold falsifiable |
 | 7 | test notes present | **✅** six |

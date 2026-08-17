@@ -58,13 +58,33 @@ export type SanParseResult =
   list generated for that position. **`parseSan` never constructs a `Move` from the parsed text.**
 - **One grammar table, both directions.** Piece letters, castle strings, promotion, suffix and the
   disambiguation rule are shared with `toSan`, not duplicated (`ADR-0004` clause 2).
-- **Decoration tolerance, SAN-side only:** the check/mate suffix is optional on input (`Nxf3+`, `Nxf3`
-  and `Nxf3#` all read as the same move if that move is legal), and `0-0` / `0-0-0` are accepted for
-  `O-O` / `O-O-O`.
+- **Decoration tolerance, SAN-side only. The list is CLOSED and it has five entries** — widened from
+  two by BA/PM on 2026-08-18, ruling on the tolerances QE measured in the delivered code
+  (`G4`–`G6`; task `refinement-abc032-tolerances-2026-08-18`). Anything not on this list is refused,
+  and the reasons for each ACCEPT are in that task's notes, not here.
+  1. **Check/mate suffix optional** — `Nxf3+`, `Nxf3` and `Nxf3#` all read as the same move if that
+     move is legal.
+  2. **Digit-zero castles** — `0-0` / `0-0-0` are accepted for `O-O` / `O-O-O`.
+  3. **Leading and trailing whitespace is trimmed** (`ACCEPTED`; seam consistency with the merged
+     `parseCoordinateMove`, which `ABC-033` dispatches to on the same line). **`trim`, not "ignore
+     spaces": interior whitespace is still refused** — `N g5` is `unreadable`.
+  4. **A REDUNDANT origin qualifier is accepted** (`ACCEPTED`) — `Nfg5`, `N3g5` and `Nf3g5` resolve
+     to the same move as `Ng5`, strings `toSan` never emits. **Bounded: a CONTRADICTORY qualifier
+     stays refused** — `Ne4g5` is `no-such-move` — so this is redundancy, never a free-for-all, and
+     no string can resolve to a move the player did not name.
+  5. **`O` and `0` are interchangeable INSIDE the castle strings** (`ACCEPTED`) — `O-0` and `0-O`
+     read as `O-O`. **Bounded: case is still meaning** — `o-o` is refused, and case-folded retry is
+     `ABC-033`'s, not this ticket's.
 - **`SanRejectReason` — a machine-readable code, never display copy.** This ticket ships the **floor**
   `ADR-0004` (2a) requires and nothing more: *this text is not SAN I can read* vs *this is well-formed
   SAN that names no legal move in this position*. `ABC-034` widens the vocabulary, which that ADR
-  explicitly permits without an ADR change.
+  explicitly permits without an ADR change. **One classification is ACCEPTED AS DELIVERED and named
+  rather than discovered (`G7`): `e8=K` — promotion to a king, which is not well-formed SAN — is
+  coded `no-such-move`, not `unreadable`**, because the promotion letter class is derived from the
+  one shared table (`ADR-0004` clause 2) and that table contains `K`. It is the same root cause as
+  the castle price the engineer disclosed. **`A5` is still MET** — the two codes are independently
+  reachable from many inputs and never collapse. **Re-classifying it is `ABC-034`'s, which owns the
+  vocabulary; it is not re-opened here and it must not be bought with a second private table.**
 
 ## Out of scope
 
@@ -171,12 +191,25 @@ the assertion throughout, for `ADR-0004`'s stated reason.
   of `legal`. *(`EPIC-003` § Risks names this as the fiddly surface and names round-trip testing as
   the mitigation; `A1` covers most of it and this criterion pins the ambiguity arm, which `A1` cannot
   reach because `toSan` never emits an ambiguous string.)*
-- **`A4` (promotion and suffix tolerance).** **Given** `8/4P3/8/8/8/8/4k3/4K3 w - - 0 1` and `legal`,
+- **`A4` (promotion and suffix tolerance).** **Given** `8/4P3/8/8/8/4k3/8/4K3 w - - 0 1` and `legal`,
   **when** `e8=Q` is resolved, **then** `outcome: "move"` with the queen promotion by reference; **when**
   `e8` is resolved, **then** `outcome: "ambiguous"` with **exactly 4** candidates. **Given** any
   position where a checking move exists, **when** its SAN is resolved with the `+` present, absent and
   replaced by `#`, **then** all three return the same move by reference. *(The suffix is decoration on
-  input; `src/san.suffix.hardening.test.ts` owns it on output and is not touched.)*
+  input; `src/san.suffix.hardening.test.ts` owns it on output and is not touched.)* **FEN repaired
+  2026-08-18 by BA/PM — one character, black king `e2` → `e3`; the criterion is unchanged and is NOT
+  weakened.** As printed at the cut it was `8/4P3/8/8/8/8/4k3/4K3 w - - 0 1`, whose kings stand
+  adjacent on `e1`/`e2`: an illegal position where the entire legal list is **`["Kxe2"]`**, no
+  promotion exists, and `A4` was **unsatisfiable by any correct implementation**. The repaired FEN,
+  executed against merged `src/fen.ts` + `src/legal.ts` by the engineer, by QE and by BA/PM
+  independently, returns **6 moves — `Kf1`, `Kd1`, `e8=Q+`, `e8=R+`, `e8=B`, `e8=N`**: four
+  promotions, nothing else reaching `e8`, and two of them checking, which exercises the suffix half
+  rather than softening it. **`A4` is MET on the corrected position** — the delivered code was
+  measured against exactly this FEN. **This is the SECOND ticket to carry the defective string**
+  (`ABC-031` `A2` was the first); `src/coordinate-move.test.ts:17` pins it as `A2_FEN_AS_WRITTEN`
+  deliberately and **that pin is correct and must not be removed**. How a hand-written FEN is
+  validated before a ticket is cut is stated in
+  `.grugops/context/refinement-abc032-tolerances-2026-08-18/notes/`.
 - **`A5` (totality — it never throws, and `rejected` classifies).** **Given** each of `null`,
   `undefined`, `42`, `{}`, `[]`, `""`, a 10,000-character string, `Zx9`, and `Qh5#` in a position where
   no queen move exists, **when** each is passed, **then** the call returns `outcome: "rejected"` and
