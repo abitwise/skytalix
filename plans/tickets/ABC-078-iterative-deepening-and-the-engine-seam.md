@@ -175,6 +175,17 @@ state ahead of it rather than assuming its outcome.**
 - **`N8-LANE` — NOT MET at ~840 ms net against 650 ms (1.29x).** **ACCEPTED RISK `AR-N8LANE-078`,
   LOW, owner Architect/Design**, inside `ABC-025`'s 1.6x precedent. **Its discharge is `ABC-108`'s
   re-measurement, where this 840 ms is one input.**
+  **DISCHARGED 2026-08-19, and DISCHARGED means NOT CHARGED — recorded here by BA/PM (task
+  `cut-lane-remedy-2026-08-19`) so this page can never be read as though this ticket caused the
+  lane's breach.** `ABC-108`'s ruling (`ADR-0014`) found `NFR-008`'s CPU clause **BREACHED at
+  14.480 s against 13 s** — and **`NFR-008`'s own restatement arithmetic, `9.545 + 11 × 0.341 =
+  13.30 s`, was already over the clause on 2026-08-13's published numbers, before `ABC-078`
+  existed.** This ticket's **190 ms** overspend is **13% of the 1.480 s deficit**; removing it
+  entirely would not clear the clause. **No new risk is opened against this ticket and
+  `src/engine.test.ts` is not a privileged candidate for the remedy (`ABC-110`).**
+  **Nothing above is relaxed: `N8-LANE` is still NOT MET at ~840 ms against 650 ms (1.29x), the
+  accepted risk stays on the record as written, and `ADR-0014` makes `N8-LANE` a rate limit rather
+  than a grant — so passing it would not have implied the lane was within budget either.**
 - **`AR-ENGINE-DOC`, LOW** — `chooseMove` does not terminate on `budgetMs: Infinity` or on a
   non-advancing injected clock, and documents no valid range for either. **Owner: the `RF-1` repair
   hop**; the clamp closes the `Infinity` half outright.

@@ -154,6 +154,64 @@ none of them**:
   before and after this ticket. *(A ticket about the lane's cost that changes the lane's contents
   has measured itself.)*
 
+## Criterion re-score — **2026-08-19 by BA/PM** (task `cut-lane-remedy-2026-08-19`)
+
+**Scored against Architect/Design's delivered ruling** (`ADR-0014`, `plans/nfr-catalog.md` §
+*"`OQ-1` IS RULED"*, and `.grugops/context/design-oq1-lane-budget-2026-08-19/notes/`).
+**No criterion is rewritten and none is deleted** — the precedent is `ABC-033` `A4`, whose falsified
+criterion was neither marked met nor removed.
+
+**`A1` — FAILED, and it is UNSATISFIABLE AS WRITTEN. It is not re-written to something that would
+have passed.**
+
+- **Measured:** the criterion requires a maximum recorded 1-min load average **≤ 1.0 on 8 cores**.
+  The ruling hop recorded **min 1.72 / median 7.19 / max 10.24** at round boundaries under the
+  protocol, and **min 1.44 / median 2.17 / max 2.77** immediately before each cooled run. **The
+  lowest 1-min load observed anywhere in the hop was 1.44.** The threshold was never reached.
+- **Why it is impossible IN PRINCIPLE for this lane, not merely hard:** the default lane runs
+  `pool: "threads"` at `availableParallelism() − 1` = **7 workers**, consuming ~14.6 s of CPU in
+  ~2.9 s of wall — **~5x parallelism**. A back-to-back interleaved harness therefore drives the
+  1-min load average above 1.0 **by itself, inside a single round**, whatever else is running.
+  **A load threshold sampled during a self-parallel harness measures the harness.** No amount of
+  quieting the machine from inside it can satisfy this, and the machine's own floor was 1.44 with
+  ~20 agent worktrees live.
+- **What this criterion got RIGHT and is worth keeping legible:** it was written to prevent exactly
+  one outcome — *"reporting a number taken at load 2.9 as quiet"* — and **that outcome did not
+  happen.** `A1` failing is what forced the honest move. It was a well-intentioned criterion that
+  turned out impossible; **it is recorded as failed, not quietly relaxed.**
+- **THE CRITERION SHAPE THAT WORKED, and the one to reuse the next time this lane is measured:**
+  **measure the load SENSITIVITY of the instrument and SIZE the contamination, rather than assert
+  quiet.** Three independent estimates — **+1.63%** across a 3.2x load rise within one sample,
+  **−1.90%** across a ~3x fall between samples, and the single quietest run of the hop (load 1.74)
+  still reading **14.15 s = 8.8% over the clause** — bound the whole load effect at **~1.9% against
+  a 10.2% breach, a ratio of 5.4x.** That bound is what let a ruling stand at `high` confidence on a
+  machine that failed `A1`, **instead of a claim nobody could have made.**
+- **Consequence for the `P0` trigger below, stated so it cannot be misread:** the trigger's words are
+  *"over 13 s CPU **on a quiet machine**"*. **The machine was not quiet. The trigger is met on
+  SUBSTANCE — 1.9% measured contamination against a 10.2% breach — and NOT because `A1` passed.**
+
+**`A5` — its stated gap is now CLOSED. The follow-up ticket id is `ABC-110`.** `A5` required the
+ruling to name what happens next including a follow-up ticket id; Architect/Design supplied the
+requirement, the priority and the owner and **declined to invent an id**, because cutting tickets and
+assigning ids are BA/PM's and an invented id would have fabricated a board state. **That was the
+right refusal and it left a stated gap, not a silent one.** `ABC-110` was cut 2026-08-19 as **`P0`**,
+and `A5` reads met from that date.
+
+**`A2`, `A3`, `A4`, `A6`, `A7`, `A8` — MET**, on the ruling hop's own record: protocol at n = 8 with
+an identity null control of **+0.10% at sign 5/8 (admissible)**; the restated median stated against
+both clauses at `54cbb23` / 39 files / 1181 tests; per-file all-in at **371–378 ms** set beside the
+ratified **341 ms** and inherited **383 ms** with its unattributable residue stated in both
+directions; the `N8-LANE` sentence written as *rate limit, not grant*; the eight `NFR-001`–`NFR-008`
+rows hashing **`63f66795…ca31`** before and after; and `git diff --name-only … -- src/` **empty**.
+
+**`AR-N8LANE-078` is DISCHARGED, not charged, and `## Out of scope` above is confirmed rather than
+amended.** `ABC-078` did not cause this breach: **`NFR-008`'s own restatement arithmetic —
+`9.545 + 11 × 0.341 = 13.30 s` — was already over the clause on 2026-08-13's published numbers,
+before `ABC-078` existed.** Its 190 ms overspend is **13% of the 1.480 s deficit** and removing it
+entirely would not clear the clause. **This page's title says the lane sat at or over the clause
+BEFORE `ABC-078` arrived, and the measurement confirms it. Nothing here reads as though that ticket
+caused this, and nothing should be written that does.**
+
 ## Dependencies
 
 - **A QUIET MACHINE is an environmental input no agent can conjure, and it is the reason this page
@@ -253,5 +311,19 @@ precondition is answered.**
 | 8 | size assigned | **✅** `M`, with the not-`S`/not-`L` arguments and a re-size trigger that says the size does **not** grow if the answer is "over" |
 | 9 | priority assigned | **✅** `P1`, with the not-`P0` and not-`P2` arguments both stated and a named promotion trigger for the follow-up |
 | 10 | no major unresolved blocker | **⚠️ ONE, and it is environmental rather than a decision.** `A1` requires a machine at load **≤ 1.0**; the inherited reading was taken at **2.92** and its author said his machine was not a quiet one. **No agent can guarantee it** — same species as `ABC-074`'s non-M3 hardware, though smaller, since quiet is a measurable state rather than a device. **Not smoothed to ✅**: a page that scored 10/10 here would be promising a reading it may not be able to take, and the failure mode is publishing a loaded number as a quiet one |
+
+**DoR RE-SCORE — 2026-08-19 by BA/PM (task `cut-lane-remedy-2026-08-19`), after delivery.**
+**The score does NOT move: it stays 9/10, ⚠️x1, and the ⚠️ stays on item 10.** The reason changes and
+that change is the point.
+
+| # | item | 2026-08-18 | 2026-08-19 |
+|---|---|---|---|
+| 10 | no major unresolved blocker | **⚠️** the quiet machine `A1` requires may not be reachable; if it is not, the ticket goes to `Blocked` rather than publishing a loaded number | **⚠️ STILL — and it is now MEASURED rather than feared. The quiet machine was NOT reachable and is NOT reachable in principle** (7 workers at ~5x parallelism drive loadavg above 1.0 unaided; floor observed 1.44). **The ticket did NOT go to `Blocked` and did NOT publish a loaded number as a quiet one** — it sized the contamination at 1.9% against a 10.2% breach and ruled on the bound. **That is a better outcome than either branch this row anticipated, and the ⚠️ is kept anyway: `A1` as written is unmeetable, and a page scoring 10/10 here would be claiming otherwise** |
+
+**Why this is NOT re-scored to 10/10, and the reasoning is the useful part.** The ⚠️ was a real
+defect in this page's own criteria — `A1` asked for something no measurement of a self-parallel lane
+can deliver — and **discharging it by pointing at a successful ruling would hide the criteria defect
+inside a good result.** The ruling stands on a *replacement* instrument, not on `A1`. **Score
+unchanged, reason replaced, criteria defect recorded above rather than smoothed away.**
 
 Column moves are the Orchestrator's.
