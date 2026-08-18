@@ -84,8 +84,15 @@ satisfies `EngineSeam`, which `turn-loop.ts` has been waiting on since `ABC-019`
 
 ## Dependencies
 
-- **`ABC-077` must land first — OPEN.** It is the iteration body.
-- **`ABC-076` must land first — OPEN** (transitively).
+- **`ABC-077` — MERGED to `main`, and this dependency is DISCHARGED.** It is the iteration body.
+  Measured 2026-08-18 at HEAD `7ea9e1b`, not asserted: `search(position, depth)` is exported at
+  `src/search.ts:167`, `SearchResult` at `:42`, `searchWithoutPruning` at `:178`, `MATE_SCORE` at
+  `:40`. `ABC-077` merged 2026-08-18 and sits in `Done`. **Read its board row before building:** it
+  records that this module *"has NO way to choose a move without a caller-supplied depth"* — which is
+  precisely the hole this ticket fills — and it carries a HIGH QE gap that **nothing in the repo
+  asserts the material values the search maximises**.
+- **`ABC-076` — MERGED to `main` 2026-08-17, DISCHARGED** (transitively; `src/evaluate.ts` is in the
+  tree).
 - **`src/turn-loop.ts` — MERGED**, and supplies `EngineSeam`. **Not modified** (`A6`).
 - **Enables `ABC-074`** — the spike measures depth-in-budget and cannot run before this exists.
 - **`EPIC-005`'s opening book CONSUMES this move interface.** *(Boundary: the book is `EPIC-005`'s
@@ -132,17 +139,45 @@ the recursion is `ABC-077`'s and the budget-to-level mapping is `ABC-087`'s.
 
 ## Definition of Ready
 
-Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met; stays in `Backlog`.**
+Cut-hop assessment by BA/PM **2026-08-16**: **7 of 10, ⚠️x3** — items 3, 5 and 10.
+
+**RE-SCORED against the tree at `main` HEAD `7ea9e1b` by BA/PM, 2026-08-18** (task
+`refinement-p0-chain-2026-08-18`). **Result: 9 of 10, ⚠️x1 — still NOT met; stays in `Backlog`.**
+
+- **⚠️(3) is DISCHARGED BY MEASUREMENT.** `ABC-076` merged 2026-08-17 and `ABC-077` merged
+  2026-08-18; both are in `Done` and `search()` is exported at HEAD. The two tickets that stood in
+  front of this one are behind it.
+- **⚠️(5) STANDS, and it blocks NEITHER building NOR verifying.** The `EPIC-005` composition point
+  is a **cross-epic contract question with no owner**, and it is unchanged by any merge. This ticket
+  builds against `EngineSeam` **exactly as merged** (`src/turn-loop.ts:138`, re-checked at HEAD) and
+  `A6` pins `src/turn-loop.ts` byte-identical, so the contract is not touched here and every one of
+  `A1`–`A7` is measurable without an answer. What the open question carries is **forward rework
+  risk**, not a build or verification obstacle. It is kept as ⚠️ rather than smoothed to ✅ precisely
+  so it stays visible and routable — **BA/PM does not resolve it and assigns no owner**; see
+  `## Dependencies` and the routing note under
+  `.grugops/context/refinement-p0-chain-2026-08-18/notes/`.
+- **⚠️(10) is RE-SCORED to ✅, and NOT by a merge — by separating BUILDING from VERIFYING.** It was
+  never a blocker on *doing* this ticket. `A1` is runnable and reportable **as written** — it already
+  says *"worst case reported with machine"* — and `A2`, `A3`, `A5`, `A7` are the machine-independent
+  guards. What cannot be taken on this hardware is the **generalisation off this machine**, which is
+  `ABC-074`'s, is `Blocked` in the visible column with the reason stated (no non-M3 machine exists
+  here), and is recorded per this project's standing `UNKNOWN - verify` practice rather than being
+  claimed. **The residual is named, not smoothed:** on delivery, `A1`'s number is true of the machine
+  that ran it and of nothing else, and `NFR-005`'s depth-7 level stays **PROVISIONAL** until
+  `ABC-074` reports. A ticket whose measurement is honestly bounded is ready; a ticket whose
+  measurement is *fabricated* is not, and nothing here licenses the second.
+
+Column moves are the Orchestrator's.
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** the unvalidated hardware factor is quoted from `ADR-0003`, not asserted |
 | 2 | scope and out-of-scope clear | **✅** four fences, including the `EPIC-006` difficulty boundary written down |
-| 3 | INVEST-shaped | **⚠️** **not independent** — two open tickets in front of it |
+| 3 | INVEST-shaped | **✅** *(was ⚠️)* **independent** — both tickets that stood in front of it (`ABC-076`, `ABC-077`) are merged to `main` and in `Done`; `search()` is exported at HEAD `7ea9e1b`. Discharged by measurement 2026-08-18 |
 | 4 | acceptance testable and measurable | **✅** seven: 30/30 under 3 s, a 50 ms adversarial budget at ≤ 2x, a discarded-partial-iteration check, a no-depth-argument guard, monotonic depth over three budgets, byte-identical `turn-loop.ts`, 200 positions at 1 ms |
-| 5 | dependencies known | **⚠️** the `EPIC-005` composition point is **named and deliberately unresolved** — a cross-epic contract question with no owner assigned to it yet |
+| 5 | dependencies known | **⚠️ STANDS** the `EPIC-005` composition point is **named and deliberately unresolved** — a cross-epic contract question with **no owner**, unchanged by any merge. **It blocks neither BUILDING nor VERIFYING** (`EngineSeam` is merged and `A6` pins `turn-loop.ts` byte-identical); it carries forward rework risk. Needs routing to Architect/Design — BA/PM does not resolve it and invents no owner |
 | 6 | security/NFR triggers with a measurable target | **✅** `NFR-004` 3 s / 5 s; `NFR-005` reported not ruled; `N8-LANE` 650 ms with the conflict named and a decided remedy |
 | 7 | test notes present | **✅** four |
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P0` |
-| 10 | no major unresolved blocker | **⚠️** **`NFR-004`'s verification is machine-dependent and this project has one machine.** `A1` can be *run* but its result is `UNKNOWN - verify` off that machine until `ABC-074` reports |
+| 10 | no major unresolved blocker | **✅** *(was ⚠️)* **`NFR-004`'s verification is machine-dependent and this project has one machine — that limits VERIFYING, it does not block BUILDING, and it is not a blocker on this ticket.** `A1` runs and reports as written (*"worst case reported with machine"*); `A2`/`A3`/`A5`/`A7` are machine-independent. The off-machine generalisation is `UNKNOWN - verify` behind `ABC-074`, which is visible in `Blocked` with its reason. **Residual, recorded not smoothed:** `A1`'s number is true of the machine that ran it and of nothing else, and `NFR-005`'s depth-7 level stays PROVISIONAL |

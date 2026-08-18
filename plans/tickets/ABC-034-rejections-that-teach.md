@@ -58,7 +58,7 @@ from this product, which is what makes it worth more than its size.
 - **One message per code, and no catch-all.** Every code renders one sentence that names a concrete
   referent — a square, a piece, or the king. There is no default arm and no fallback string.
 - **Messages are DATA, placed by the loop.** They travel as `PromptOutcome.rejected.messages`
-  (`src/turn-loop.ts:120`) into the frame's message region; nothing here prints. Seam invariant 5 and
+  (`src/turn-loop.ts:127`) into the frame's message region; nothing here prints. Seam invariant 5 and
   `ADR-0004` (2a)'s "never display copy" both hold: the *codes* live with the grammar, the *wording*
   lives here.
 
@@ -127,8 +127,11 @@ from this product, which is what makes it worth more than its size.
 
 ## Dependencies
 
-- **`ABC-032` must land first — OPEN.** The `SanRejectReason` arm this ticket widens is that ticket's.
-  An **ordering** dependency over one type, in one direction.
+- **`ABC-032` — MERGED to `main`, and this dependency is DISCHARGED.** Measured 2026-08-18 at HEAD
+  `7ea9e1b`, not asserted: `SanRejectReason` is exported at `src/san.ts:183` with exactly the two arms
+  this page assumed (`unreadable`, `no-such-move`), and `SanParseResult` at `:190`. `ABC-032` merged
+  2026-08-18 and sits in the board's `Done` column. It was an **ordering** dependency over one type,
+  in one direction, and the ordering has occurred.
 - **`ABC-033` is not a dependency in either direction.** The classifier is a pure function of position
   and input; the dispatcher calls it. Either may land first once `ABC-032` has.
 - **`ABC-031` is not a dependency.** A coordinate rejection classifies through the same seven codes;
@@ -199,18 +202,33 @@ puts that player back where they started.
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-12**. **Result: 9 of 10 clean, 1 recorded ⚠️ — NOT fully met; stays in `Backlog`.**
+Cut-hop assessment by BA/PM **2026-08-12**: **9 of 10, ⚠️x2** — items 3 and 10, both the same open
+ordering dependency on `ABC-032`. *(The cut-hop prose said "1 recorded ⚠️" while its own table carried
+two, and the board row said `⚠️x2`; the table and the board were right.)*
+
+**RE-SCORED against the tree at `main` HEAD `7ea9e1b` by BA/PM, 2026-08-18** (task
+`refinement-p0-chain-2026-08-18`). **Result: 10 of 10, 0 ⚠️ — the Definition of Ready is MET.** Both
+⚠️ were the SAME fact stated twice, and that fact is **discharged by measurement**: `ABC-032` merged
+to `main` 2026-08-18 and `SanRejectReason` is exported at HEAD with the two arms this page widens
+(see `## Dependencies`). Nothing else on this page changed. Column moves are the Orchestrator's.
+
+**`A8` is UNCHANGED and was re-read at this hop, because `ABC-106` cites it.** The `e8=K` behaviour
+`A8` is written against is the behaviour on `main`: `src/san.parse.test.ts:421` asserts
+`parseSan(position, "e8=K", legal)` → `rejected` / `no-such-move`, and `e8=P` → `unreadable`. **`A8`
+PLACES those two inputs inside THIS ticket's seven-code vocabulary; it does not re-classify
+`ABC-032`'s `no-such-move`, which this page's `## Scope` accepts as delivered and does not re-open.**
+See the note under `.grugops/context/refinement-p0-chain-2026-08-18/notes/` for the wording gap this
+opens on `ABC-106`'s page — it is `ABC-106`'s to fix, not this page's.
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** the beginner; `ABC-032`'s floor is the bare rejection this epic forbids; the only place a player learns a rule |
 | 2 | scope and out-of-scope clear | **✅** seven codes with the computation for each; six fences, including retrograde reasoning and localisation |
-| 3 | INVEST-shaped | **⚠️** valuable, negotiable, estimable, small, testable — **not fully independent**: it widens `ABC-032`'s reason arm and must land after it. Recorded rather than claimed clean |
+| 3 | INVEST-shaped | **✅** *(was ⚠️)* valuable, negotiable, estimable, small, testable — and now **independent**: the `SanRejectReason` arm it widens is merged and exported at HEAD `7ea9e1b`. Discharged by measurement 2026-08-18, not by re-argument |
 | 4 | acceptance testable and measurable | **✅** eight criteria (`A8` added 2026-08-18): a set-difference property over six positions with **zero** exceptions, **seven** distinct messages with no substring relation and no catch-all, a **hidden count of 0**, byte-identical `toFen`, `32/32`, skip **0** |
-| 5 | dependencies known | **✅** one open ordering dependency in the direction it runs; three merged instruments named with their line numbers |
+| 5 | dependencies known | **✅** the one ordering dependency is now **merged**, stated in the direction it ran; three merged instruments re-checked at HEAD and still exact (`src/legal.ts:42`/`:32`, `src/frame.ts:194`), and the `PromptOutcome.rejected` cite corrected from `src/turn-loop.ts:120` to `:127` where it had drifted |
 | 6 | security/NFR triggers with a measurable target | **✅** `N8-LANE` ≤ **650 ms CPU** with `A2` named as the criterion to watch; `NFR-001` structurally not at risk with a hash pin; the sanitization sink named with its line; firing threshold falsifiable |
 | 7 | test notes present | **✅** six |
 | 8 | size assigned | **✅** `M` (3), calibrated, with the split line named |
 | 9 | priority assigned | **✅** `P0` |
-| 10 | no major unresolved blocker | **⚠️** **one ordering dependency is OPEN** — `ABC-032`, cut at this hop, in `Backlog`. Named, owned, and the reason this sits in `Backlog`. Nothing else is unresolved |
+| 10 | no major unresolved blocker | **✅** *(was ⚠️)* the one ordering dependency is **CLOSED** — `ABC-032` is in `Done`. `A8`'s two cases arrive pre-measured against the merged tree rather than pending. Nothing else is unresolved |
