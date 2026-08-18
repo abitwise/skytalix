@@ -65,7 +65,13 @@ import type { InputSeam, PromptOutcome } from "./turn-loop.ts";
 export const PROMPT = "> ";
 
 /**
- * The input cap, in CHARACTERS of one submitted line. **1024.**
+ * The input cap of one submitted line, in **UTF-16 CODE UNITS**. **1024.**
+ *
+ * The unit is `String.prototype.length`'s, not the character's, and the difference is real rather
+ * than pedantic: every astral-plane character is a surrogate PAIR, so a line of emoji or of
+ * historic script caps at **512** of them. That is the honest statement of what the check counts
+ * and it is deliberately not "fixed" by counting code points — this is a MEMORY bound and UTF-16
+ * code units are the unit memory is actually spent in.
  *
  * The number is this ticket's to pick and it is stated here and in the test rows. It is a MEMORY
  * bound, not a parsing one: `ABC-031` `A4` and `ABC-032` `A5` already require totality on a
@@ -157,7 +163,12 @@ export function createLineInputSeam(options: LineInputOptions): InputSeam {
   const absorb = (text: string): void => {
     if (overlong) return; // already over the cap: the rest of this line is not kept at all
     pending += text;
-    if (pending.length > MAX_LINE_LENGTH) {
+    // ONE character of slack, and it is the carriage return's. `absorb` is the MEMORY bound and it
+    // runs before the terminator is known, so a `\r\n` line at exactly the cap is still one
+    // character short of its own terminator here; `completeLine` gives the cap verdict once the
+    // `\r` has been stripped and the line's real length is known. Capping at `MAX_LINE_LENGTH`
+    // here made the effective cap 1023 on a Windows pipe.
+    if (pending.length > MAX_LINE_LENGTH + 1) {
       overlong = true;
       pending = "";
     }
@@ -166,7 +177,9 @@ export function createLineInputSeam(options: LineInputOptions): InputSeam {
   const completeLine = (): void => {
     // `\r\n` from a Windows pipe: the carriage return is part of the terminator, not of the line.
     const text = pending.endsWith("\r") ? pending.slice(0, -1) : pending;
-    queued.push({ text, overlong });
+    // The cap verdict, on the line WITHOUT its terminator. `overlong` may already be set by
+    // `absorb`'s memory bound, which never un-sets here.
+    queued.push({ text, overlong: overlong || text.length > MAX_LINE_LENGTH });
     pending = "";
     overlong = false;
   };
