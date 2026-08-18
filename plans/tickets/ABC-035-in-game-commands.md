@@ -1,8 +1,8 @@
 ---
 id: ABC-035
 title: In-game commands — `help`, `board`, `quit`, `claim`: the grammar, the tolerance, and the teaching rejection
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P1
 epic: EPIC-003
