@@ -196,13 +196,14 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 
-- [ABC-103] `src/cli.test.ts` hard-codes the production-module count, and it reds on every new module  (**engineer in flight**, task `ticket-to-pr-ABC-103-2026-08-18`, branch `grugops/abc103-production-module-count`; pulled 2026-08-18 at DoR 10/10; **rule-1 re-read measured the page STALE: the row is at line 738 not 733 and reads `23` not `20`, so it is GREEN today — three further hand-bumps since the cut, which CONFIRMS the ticket rather than closing it**; qe-e2e hop owed before it leaves `In Review`) (BA/PM, S, P2, epic: —, since: 2026-08-17; **three tickets of evidence and two hops in one day**; the row's own subject is FLATNESS, already carried by two `toContain` assertions — `A1` needs the red gone in BOTH directions so the repair cannot be a deletion in disguise)
 - [ABC-106] The three QE rows call ruled tolerances "CHARACTERIZATION", which is now false and invites the next author to delete specification  (**engineer in flight**, task `ticket-to-pr-ABC-106-2026-08-18`, branch `grugops/abc106-ruled-tolerances`; pulled 2026-08-18 at DoR 10/10; comments and titles ONLY, assertions and the `A2_FEN_AS_WRITTEN` pin fenced out, 999/999 must not move; qe-e2e hop owed before it leaves `In Review`) (BA/PM, XS, P2, epic: EPIC-003, since: 2026-08-18, **DoR 10/10**; blocked on `ABC-032` merging; **comments and `describe`/`it` titles ONLY** — assertions, fixtures and `ABC-031`'s `A2_FEN_AS_WRITTEN` pin all fenced out; cut rather than recommended because the defect sits inside `src/` and BA/PM does not edit `src/`)
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-103] `src/cli.test.ts` hard-codes the production-module count, and it reds on every new module  (**engineer DONE, qe-e2e in flight** (`quality-gate-ABC-103-qe-2026-08-18`) — **the repair is a DELETION of the count, no substitute**; the Orchestrator re-ran BOTH arming controls himself: a new flat module leaves the file 42 passed GREEN, a nested `src/cli/main.ts` goes RED as the only failure, so it is not a deletion in disguise; 0 production lines by diff; the page cited FOUR hand-bumps in its own comment where the ticket claims two, task `ticket-to-pr-ABC-103-2026-08-18`, branch `grugops/abc103-production-module-count`; pulled 2026-08-18 at DoR 10/10; **rule-1 re-read measured the page STALE: the row is at line 738 not 733 and reads `23` not `20`, so it is GREEN today — three further hand-bumps since the cut, which CONFIRMS the ticket rather than closing it**; qe-e2e hop owed before it leaves `In Review`) (BA/PM, S, P2, epic: —, since: 2026-08-17; **three tickets of evidence and two hops in one day**; the row's own subject is FLATNESS, already carried by two `toContain` assertions — `A1` needs the red gone in BOTH directions so the repair cannot be a deletion in disguise)
 
 
 
