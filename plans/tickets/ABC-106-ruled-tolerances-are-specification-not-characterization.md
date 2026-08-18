@@ -1,7 +1,7 @@
 ---
 id: ABC-106
-status: backlog
-column: Backlog
+status: in-review
+column: In Review
 size: XS
 priority: P2
 epic: EPIC-003

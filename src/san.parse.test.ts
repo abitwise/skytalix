@@ -380,31 +380,41 @@ describe("QE — mutants that survived the delivered suite", () => {
   });
 
   /**
-   * CHARACTERIZATION, not a demanded tolerance. `ABC-032` calls its input tolerances closed (the
-   * check/mate suffix, and `0-0` for `O-O`); these two widenings are neither named there nor
-   * disclosed by the delivery notes, and no acceptance criterion can see them. They are pinned so
-   * that `ABC-033` / `ABC-034` inherit a measured shape, and so that whoever rules on them —
-   * BA/PM owns the page — is ruling on behaviour that is written down.
+   * RULED SPECIFICATION. These rows were once pinned as characterization while the tolerances they
+   * measured were still unruled; BA/PM ruled on 2026-08-18 (task
+   * `refinement-abc032-tolerances-2026-08-18`) and ACCEPTED all three. The redundant qualifier and
+   * the mixed castle spellings are now entries **4** and **5** of `ABC-032` § Scope's CLOSED
+   * decoration-tolerance list, and `e8=K`'s code is accepted as delivered with the
+   * re-classification placed on `ABC-034` `A8`.
+   *
+   * Every ACCEPT was granted **bounded**, and the bound is the point of the block: `Ne4g5` refused
+   * and `o-o` refused are the BOUNDARY of the accepted tolerance, not incidental observations. An
+   * unbounded tolerance is a widening nobody can stop from creeping, so deleting or relaxing either
+   * assertion below removes the limit the ruling was granted under — it does not tidy a note. These
+   * rows are what `ABC-033` and `ABC-034` read to learn what the input grammar accepts.
    */
-  describe("undisclosed input widenings, pinned so a ruling has something to rule on", () => {
-    it("accepts a REDUNDANT qualifier that `toSan` would never emit", () => {
+  describe("accepted input tolerances (`ABC-032` § Scope entries 4 and 5), each held at its bound", () => {
+    it("accepts a REDUNDANT qualifier that `toSan` would never emit — `ABC-032` § Scope entry 4", () => {
       const [position, legal] = open(A2_FEN);
       const bare = parseSan(position, "Ng5", legal);
       expect(bare.outcome).toBe("move");
       for (const text of ["Nfg5", "N3g5", "Nf3g5"]) {
         const over = parseSan(position, text, legal);
-        // Still an ELEMENT of `legal` (`ADR-0004` (2b) holds); the question is only whether the
-        // string should have been read at all.
+        // Still an ELEMENT of `legal` (`ADR-0004` (2b) holds). That these strings SHOULD be read
+        // is settled: a redundant qualifier cannot change which move is named, so it admits only
+        // strings that are unambiguous and correct.
         expect(
           over.outcome === "move" && bare.outcome === "move" && over.move === bare.move,
           text,
         ).toBe(true);
       }
-      // A WRONG origin is still refused, so the widening is redundancy, not a free-for-all.
+      // THE BOUND entry 4 was granted under, and it is specification: a CONTRADICTORY origin is
+      // still refused, so the tolerance is redundancy and never a free-for-all — no string can
+      // resolve to a move the player did not name. Do not remove this row; it is the limit.
       expect(parseSan(position, "Ne4g5", legal).outcome).toBe("rejected");
     });
 
-    it("accepts MIXED castle spellings (`O-0`, `0-O`), not only the two the ticket names", () => {
+    it("accepts MIXED castle spellings (`O-0`, `0-O`) — `ABC-032` § Scope entry 5", () => {
       const [position, legal] = open(A2_FEN);
       const written = parseSan(position, "O-O", legal);
       for (const text of ["0-0", "O-0", "0-O"]) {
@@ -414,16 +424,24 @@ describe("QE — mutants that survived the delivered suite", () => {
           text,
         ).toBe(true);
       }
-      // Case is still meaning: the lower-case spelling is not read.
+      // THE BOUND entry 5 was granted under, and it is specification: case is still meaning in SAN
+      // (`bxc4` / `Bxc4` can both be legal), so the lower-case spelling is not read here. The
+      // asymmetry is deliberate — case-folded retry is `ABC-033`'s, not this ticket's, because a
+      // fold can produce two candidates. Do not remove this row; it is the limit.
       expect(parseSan(position, "o-o", legal).outcome).toBe("rejected");
     });
 
-    it("codes an IMPOSSIBLE promotion `e8=K` as `no-such-move`, not `unreadable`", () => {
+    it("codes an IMPOSSIBLE promotion `e8=K` as `no-such-move`, not `unreadable` — placed on `ABC-034` `A8`", () => {
       // Promotion to a king is not well-formed SAN, so the floor's own words put it on the
       // `unreadable` side. It lands on the other side because the promotion letter class is
       // derived from the one table — the price of `A7`'s no-second-table shape, and the same
       // root cause as the castle case the delivery note discloses. `A5` is still met: the two
-      // codes are independently reachable and never collapse. `ABC-034` owns the wording.
+      // codes are independently reachable and never collapse. RULED 2026-08-18 (task
+      // `refinement-abc032-tolerances-2026-08-18`): ACCEPTED AS DELIVERED for `ABC-032`, with the
+      // re-classification and its player-facing wording placed on `ABC-034` `A8`, which owns both
+      // ill-formed-SAN cases together and may not add an eighth reason code. Fixing it here would
+      // need a private promotion-letter table — the second table `ADR-0004` clause 2 and `A7`
+      // exist to prevent. This row is the record of the code as ruled, not a defect awaiting one.
       const [position, legal] = open(A4_FEN_CORRECTED);
       expect(parseSan(position, "e8=K", legal)).toEqual({
         outcome: "rejected",

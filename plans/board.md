@@ -131,7 +131,6 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 - [ABC-103] `src/cli.test.ts` hard-codes the production-module count, and it reds on every new module  (BA/PM, S, P2, epic: —, since: 2026-08-17; **three tickets of evidence and two hops in one day**; the row's own subject is FLATNESS, already carried by two `toContain` assertions — `A1` needs the red gone in BOTH directions so the repair cannot be a deletion in disguise)
 - [ABC-104] `coordinate-move.ts`'s docblock claims a totality it does not have  (BA/PM, XS, P3, epic: EPIC-003, since: 2026-08-17; **blocked on `ABC-031` merging — now unblocked**; docblock only, behaviour change fenced out as an `ADR-0004` question)
-- [ABC-106] The three QE rows call ruled tolerances "CHARACTERIZATION", which is now false and invites the next author to delete specification  (BA/PM, XS, P2, epic: EPIC-003, since: 2026-08-18, **DoR 10/10**; blocked on `ABC-032` merging; **comments and `describe`/`it` titles ONLY** — assertions, fixtures and `ABC-031`'s `A2_FEN_AS_WRITTEN` pin all fenced out; cut rather than recommended because the defect sits inside `src/` and BA/PM does not edit `src/`)
 
 - [ABC-057] Licence guard — the unwitnessed `toEqual` comparator, and the docblock still stating `ADR-0011` clause 3's struck sentence  (BA/PM, XS, P2, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ ordered behind `ABC-042`'s merge — `src/cli.test.ts` does not exist on `main`; `Q3`/`R5` + `D1`/`Q14`, routed by Architect/Design as one review)
 - [ABC-058] Three security-bar instruments cannot observe their own clauses  (BA/PM, S, P2, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ same ordering; `S1`/`Q5`, `S4`, `S5` — **all Security/NFR's findings about its OWN bar text**, six mutants, zero production lines, `A7` pins `spawned` at 10 so it cannot move `G1`)
@@ -201,7 +200,9 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 ## In Development (WIP 0/3)
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-106] The three QE rows call ruled tolerances "CHARACTERIZATION", which is now false and invites the next author to delete specification  (Software Engineer, XS, P2, epic: EPIC-003, since: 2026-08-18, branch `grugops/abc106-ruled-tolerances`, **NOT merged**; **pulled Backlog → In Review in one hop on the Orchestrator's dispatch — it never sat in `Ready for Dev` or `In Development`, so this project's rule-1 criteria re-read at the `Ready for Dev` exit DID NOT HAPPEN and its gap count for this ticket is unrecorded, not zero**; `ABC-032` merged at `7ea9e1b` so the blocker is discharged; **+32/−14 on `src/san.parse.test.ts` alone, every changed line a comment or an `it`/`describe` title — `git diff | grep 'expect('` is EMPTY, measured**; gates green on the branch tip: lint 62 files 0 · typecheck 0 · build 0 · **999/999 on 35 files, IDENTICAL to the pre-edit baseline** · skip 0 · `No findings.` · file 30/30 unchanged · `PERFT_DEEP=1` 32/32; **awaiting the mandatory `qe-e2e` hop** — no QE verdict yet, so it may not leave `In Review`)
 
 
 
