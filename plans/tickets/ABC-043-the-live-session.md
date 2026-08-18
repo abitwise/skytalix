@@ -133,17 +133,29 @@ child process — `EPIC-002` `4c` and this epic's own `## Test notes`.
   and its test file and **nothing else** under `src/` — **`src/turn-loop.ts`, `src/frame.ts` and
   `ABC-041`'s seam module byte-identical**. Suite green, skip **0**, `PERFT_DEEP=1` **32/32**.
 
-## Dependencies — and this ticket is BLOCKED on two of them
+## Dependencies — ALL THREE ARE DISCHARGED (re-measured 2026-08-19)
 
-- **`ABC-041` and `ABC-042` must land first — OPEN.** Both are cut, `P0`, and in this epic.
-- **`ABC-037` must land first — OPEN, and it is not this epic's.** It is `EPIC-003`'s production
-  `InputSeam`, `P0`, and it has two open ordering dependencies of its own (`ABC-033`, `ABC-035`).
-  **So the shortest path to a playable game is at least four merges long and three of them are not in
-  this epic.**
-- **AN `EngineSeam` DOES NOT EXIST, AND THIS IS THE REAL BLOCKER.** `EPIC-004` is **undecomposed**,
-  and its own first ticket must be `RISK-002`'s timeboxed spike (`NFR-005`'s depth-7 level is
-  `PROVISIONAL`). The loop calls `engine(history)` on every ply the human does not own, and there is no
-  way to run a game without one.
+**Re-measured by BA/PM at task `refine-ABC-043-2026-08-19` against `main` `e70fda1`. Every ordering
+blocker this section was cut with has landed; the original wording is replaced rather than annotated,
+because a stale blocker is read as a live one.**
+
+- **`ABC-041` and `ABC-042` — DISCHARGED.** Both are in `Done`. The entry point this ticket edits is
+  `src/cli.ts`, delivered by `ABC-042`; `ABC-041`'s `RenderSeam` is `src/render-seam.ts` and `cli.ts`
+  already calls `makeRenderSeam`.
+- **`ABC-037` — DISCHARGED.** Merged; `src/line-input.ts` is in the tree and exports
+  `createLineInputSeam(options): InputSeam` (`src/line-input.ts:150`). Its QE hop
+  (`quality-gate-ABC-037-qe-2026-08-19`) passed it with gaps, one of which this page now carries — see
+  `## Scope`'s single-caller constraint.
+- **AN `EngineSeam` NOW EXISTS — DISCHARGED, and this was the blocker the ticket was cut around.**
+  `src/engine.ts` is merged (`ABC-078`) and `createEngine(options): EngineSeam`
+  (`src/engine.ts:305`) is the seam `src/turn-loop.ts:138` has been waiting on. **`ADR-0013` is
+  therefore moot in practice for this ticket:** a real opponent exists, so nothing here needs a
+  placeholder and the ruling below is not weakened — it is simply no longer load-bearing on the
+  schedule.
+
+**So the *"a playable game waits for `EPIC-004`"* consequence recorded below has been overtaken by
+`ABC-078` landing.** It is left in place unedited because it records what was ruled and why; read it
+as history, not as a live blocker.
 
 ### The named decision this ticket cannot make for itself
 
