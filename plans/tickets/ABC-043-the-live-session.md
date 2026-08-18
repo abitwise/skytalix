@@ -421,3 +421,28 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `M` (3), calibrated, with the split line named |
 | 9 | priority assigned | **✅** `P0` |
 | 10 | no major unresolved blocker | **⚠️⚠️ TWO.** **(a) `ABC-037` is OPEN** and is `EPIC-003`'s, with two open dependencies of its own. **(b) NO `EngineSeam` EXISTS and `EPIC-004` is undecomposed** — and the question of whether the composition root may supply a default opponent before then is a **conformance ruling owned by Architect/Design**, stated in full under `## Dependencies` and **not decided here** |
+
+### RE-SCORED 2026-08-19 by BA/PM — **9 of 10 clean, 1 ⚠️. STILL NOT MET, and the one ⚠️ is not this ticket's to clear**
+
+Re-assessed at task `refine-ABC-043-2026-08-19` against `main` `e70fda1`, on the same checklist. **The
+2026-08-13 table above is kept whole rather than edited in place** — it records what was true at the
+cut. **Three of the four marks are discharged BY MEASUREMENT; the one that remains is NEW, and it was
+not visible in August 13's table because the lane reading that produced it did not exist yet.**
+
+| # | item | 2026-08-13 | 2026-08-19 | what moved |
+|---|---|---|---|---|
+| 3 | INVEST-shaped | ⚠️ | **✅** | **Independent now.** `ABC-041`, `ABC-042` in `Done`; `ABC-037` merged (`src/line-input.ts`); `src/engine.ts` merged with `createEngine`. Zero open ordering dependencies — see `## Dependencies`, re-measured |
+| 4 | acceptance testable and measurable | ✅ | **✅** | **Held under challenge, which is the point.** Architect/Design flagged `A5` (and `A2`) as possibly unsatisfiable because `src/cli.ts` exports **0** symbols. **Ruled satisfiable AS WRITTEN, with a MEASURED mechanism** (`## The ruling on `A5` and `A2`'s testability`) — no criterion weakened, no criterion re-scoped, `ADR-0011` clause 4 untouched. **Had the mechanism not worked, this row would read ⚠️ and the ticket would be at Architect/Design, not here** |
+| 5 | dependencies known | ✅ | **✅** | Re-measured rather than re-asserted; every discharged blocker carries the file that discharges it |
+| 6 | security/NFR triggers with a measurable target | ✅ | **⚠️ THE ONE MARK** | **`N8-LANE` ≤ 650 ms is arithmetic over a question `ABC-108` says is OPEN**: the default lane medians **13.400 s CPU against `NFR-008`'s 13 s clause** (n=8), and until Architect/Design rules it *"`N8-LANE` cannot honestly be granted to any ticket"* — `plans/board.md`, 2026-08-18. **This ticket is not a bystander to that:** it adds **7 criterion-forced children** (the new `N8-SPAWN` row) at a **measured 62.5 ms median wall per child** (n=7, board-only child, this hop) ≈ **0.44 s**, and `N8-SPAWN`'s own total-stop clause says the account gives **no relief from the total**. The trigger is stated and the targets are measurable — what is missing is a lane the arithmetic is honest against |
+| 7 | test notes present | ✅ (five) | **✅** (eight) | Three added: the moved spawn pin, the stdin-piping harness change, the engine-double mechanism, and the deliberate absence of a real-engine default-lane row |
+| 10 | no major unresolved blocker | ⚠️⚠️ | **✅** | **Both discharged.** (a) `ABC-037` merged. (b) `src/engine.ts` merged, so the `EngineSeam` exists and `ADR-0013`'s NO answer is moot in practice — a real opponent ships and nothing needs a placeholder |
+
+**Items 1, 2, 8, 9 unchanged and still ✅** (2 gained two composition constraints; 8's `M` and its split
+line still hold — the ruling added no build work, only named the mechanism).
+
+**What clearing the last ⚠️ takes, so it is not mistaken for this ticket's job:** `ABC-108`'s `OQ-1`
+ruled by **Architect/Design**. Nothing on this page can clear it, and no wording change here would —
+which is exactly why it is recorded as a ⚠️ rather than smoothed into prose. **A pull with it open is
+a decision the Orchestrator may take with the number in front of him** (≈ 0.44 s of new child cost, on
+a lane already reading over its clause); it is not a decision this table makes for him.
