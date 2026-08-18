@@ -32,7 +32,7 @@ supersedes:
 | `npm run build` | **exit 0** |
 | `PERFT_DEEP=1 npx vitest run src/perft.test.ts` | **exit 0 — 32/32, 37.62 s** |
 | `INPUT_DEEP=1 npx vitest run src/line-input.test.ts` | **exit 0 — 26 passed** (23 in the default lane) |
-| `A8` from git | `src/line-input.ts` **232/0**, `src/line-input.test.ts` **769/0**, nothing else under `src/`; `src/turn-loop.ts` and `src/frame.ts` byte-identical by blob hash `9334daf1…` / `6d2a8685…` on both sides |
+| `A8` from git | `src/line-input.ts` **232/0**, `src/line-input.test.ts` **771/0**, nothing else under `src/`; `src/turn-loop.ts` and `src/frame.ts` byte-identical by blob hash `9334daf1…` / `6d2a8685…` on both sides |
 
 ## Lane cost — REPORTED, and `N8-LANE` explicitly NOT claimed met
 
