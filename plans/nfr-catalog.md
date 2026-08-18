@@ -1357,3 +1357,135 @@ THE CHARGE     gross +1 000 ms  -  160 ms floor (1 file)  -  0 ms N8-SPAWN  =  ~
 > 4. **Until it is ruled, `N8-LANE` cannot honestly be granted to any ticket — a 5% slice of a total that is already spent is not a slice of anything.** That is the sentence the next gate should inherit.
 
 **WHAT THIS READING DOES NOT ESTABLISH — the honesty clause, and it is why `OQ-1` is an open question rather than a verdict.** All-in cost here is 13.400/35 = **383 ms per file** against the ratified 2026-08-13 post-`threads` figure of **341 ms**; deflating my base by that 12% puts it near **11.9 s, under the clause**. **A fraction of these absolute totals is load inflation and this gate cannot separate it from content.** So: **the paired deltas are the robust part** — and this row is deliberately written on paired deltas, which is exactly why. **The absolute totals are indicative and discharge nothing.** **This section does NOT record "`NFR-008` BREACHED" as a verdict** — that verdict is Architect/Design's, under this row's protocol, on a quiet machine. It records that two independent readings from two machine states both land at or over the clause, and that the question is due. **Machine: Apple M3 (Mac15,13) / 8 logical cores / Darwin 25.5.0 arm64 / Node v24.12.0 / vitest 3.2.7; `UNKNOWN - verify` elsewhere.** `node_modules` was symlinked into each out-of-tree condition — the same disclosed deviation every prior lane reading on this project carries — and `AGENTS.md` was copied into each condition because `src/cli.test.ts` reads it. **No repository file was modified: `src/` is byte-identical across this hop and nothing was moved or reverted.**
+
+
+## `OQ-1` IS RULED — **`NFR-008`'s CPU CLAUSE IS BREACHED at 14.480 s against 13 s**, and `N8-LANE` IS A **RATE LIMIT, NOT A GRANT** — 2026-08-19 by Architect/Design (task `design-oq1-lane-budget-2026-08-19`, subtask `design-oq1-lane-budget`, Workflow 07), the row's owner, at `ABC-108`. **NO TARGET, BAR, LEVEL, FLOOR, ACCOUNT, INSTRUMENT OR `UNKNOWN - verify` MARKER MOVED ANYWHERE IN THIS FILE** — all eight rows `NFR-001`–`NFR-008` verified byte-identical by hashing the matched row lines together before and after the write (`sha256 63f66795…ca31`, unchanged from the `ABC-029`, `ABC-026`, `N8-SPAWN` and `ABC-078` hops) and by hashing each row individually; 56 table lines before and after. **`NFR-008`'s 3 s wall / 13 s CPU level is Olger Oeselg's, ratified in person 2026-08-11, and this hop rules AGAINST it rather than touching it. `N8-LANE`'s 5%, CPU instrument, paired-median statistic, identity null control and 160 ms floor are untouched, and `N8-SPAWN`'s balance stays 0 ms.**
+
+**This is the verdict `OQ-1` said was Architect/Design's and nobody else's.** The full reading, its raw per-run data, its protocol and its honesty clause are in `.grugops/context/design-oq1-lane-budget-2026-08-19/notes/` and are **not restated here** — this section carries the ruling and the numbers it is ruled on.
+
+### THE RULING, and both clauses get an answer or an honest refusal
+
+> **`NFR-008` CPU (`≤ 13 s`): BREACHED.** Ruled on **14.480 s**, at `main` @ **`54cbb23`**, **39 test files / 1181 tests**. **Over by 1.480 s = 111.4% of the clause.**
+>
+> **`NFR-008` WALL (`≤ 3 s`): NOT RULED, and deliberately so.** Two samples straddle it — **2.805 s (93.5%)** and **3.120 s (104.0%)**. **A clause whose verdict flips with the filesystem cache has not been measured well enough to rule, and picking the flattering sample is exactly what `ABC-108` exists to prevent.** It is the first time any sample of this lane has exceeded 3 s. **It wants its own measurement and it is not this ticket's clause.**
+
+Machine: Apple M3 (Mac15,13) / 8 logical cores / Darwin 25.5.0 arm64 / macOS 26.5.2 / Node v24.12.0 / vitest 3.2.7. **`UNKNOWN - verify` on any other hardware.**
+
+### The two samples. **The ruling is taken on the LOWER of them, deliberately**
+
+Out-of-tree copies from `git archive 54cbb23` (tracked files only, so **no `.claude/worktrees/` existed in any measured tree** — the `vitest.config.ts` trap avoided by construction and verified by counting, not assumed), `node_modules` symlinked in — **the same disclosed deviation every prior lane reading on this project carries**. `AGENTS.md` needed no separate copy this time because it is tracked; the inherited reading's second disclosed deviation **does not arise here**, which is a difference from it rather than a silent repeat. **`ABC-078` is IN and that is no longer a choice: it merged, as did `ABC-037`.**
+
+```
+SAMPLE 1 - the protocol reading. CPU (user+sys), one fresh OS process per run, condition order
+rotated every round, 9 rounds, round 0 discarded, n = 8, every run asserting its own test-FILE
+count AND test count. 27 usable runs, 0 harness errors.
+
+condition medians, n = 8              CPU (user+sys)      WALL
+A  the lane, 39 files / 1181 tests       14.760 s        2.805 s     range 14.67-15.05 / 2.75-2.85
+N  diff -r-verified identity twin        14.795 s        2.785 s
+P  A + 8 trivial one-assertion files     16.120 s        2.880 s     (47 files / 1189 tests)
+
+IDENTITY NULL CONTROL  N-A  +15 ms = +0.10% CPU, sign 5/8   ->  inside the <= 1.5% clause,
+                                                                sign at chance -> ADMISSIBLE
+                                                                (recorded before the treatment)
+SLOPE PROBE            P-A  +1230 ms CPU, sign 8/8          ->  153.7 ms CPU per test file
+
+SAMPLE 2 - the COOLED series. Six single runs of A with a 90 s idle gap before each, load read
+immediately BEFORE each run. NOT protocol-conformant (n = 6) - a supplement, never averaged.
+
+MEDIAN  14.480 s CPU / 3.120 s WALL      range 14.19-14.78 / 3.03-3.26     load before: 1.44-2.77
+
+NFR-008 CPU <= 13 s   ->  14.480 s = 111.4%   OVER by 1.480 s        <- THE RULED FIGURE
+                          14.760 s = 113.5%   OVER by 1.760 s
+NFR-008 WALL <= 3 s   ->   2.805 s =  93.5%   /   3.120 s = 104.0%   <- straddles; not ruled
+```
+
+**The cooled sample reads LOWER CPU and HIGHER wall than the protocol sample, and that is reported rather than smoothed.** Lower CPU at lower load is what a machine should do; higher wall is not. **The consistent explanation is a cold filesystem/JIT cache after each 90 s idle gap — interleaved rounds run warm — and it was NOT separately established, so it is a candidate and not a cause.** It is precisely why the wall clause is left unruled.
+
+### `A1` FAILED — quiet could not be bought, so the contamination was **SIZED** instead of asserted
+
+**The lowest 1-min load average observed anywhere in this hop was 1.44 and the maximum was 10.24, against `A1`'s threshold of 1.0.** `ABC-108`'s ⚠️ and its `## Dependencies` were right: ~20 agent worktrees are live on this machine and it cannot be quieted from inside itself.
+
+**`A1` also cannot be satisfied by a measurement of THIS lane on THIS machine at all, and that is a property of the criterion rather than of the machine.** The lane runs `pool: "threads"` at `availableParallelism() − 1` = 7 workers, consuming ~14.6 s of CPU in ~2.9 s of wall — **~5x parallelism.** A back-to-back interleaved harness therefore pushes the 1-min load average above 1.0 **by itself, inside one round**, whatever else is running. **A load threshold sampled at round boundaries during a self-parallel harness measures the harness.**
+
+**So the ruling does not rest on a claim of quiet. It rests on a measured bound on the contamination:**
+
+```
+load sensitivity of this instrument, measured three independent ways
+  within sample 1, load rose 3.2x (3.0 -> 9.5) during the run          +1.63% CPU
+  across the samples, load fell ~3x (7.19 -> 2.17)                     -1.90% CPU
+  the single QUIETEST run of the whole hop, at load 1.74               14.15 s = 8.8% OVER
+
+deflation required to bring the ruled figure under 13 s                 10.2%
+largest load effect measurable over a 6x load swing (1.7 -> 10.2)        1.9%
+                                                          RATIO         5.4x
+```
+
+**The breach is five to six times larger than the entire measured load sensitivity of the instrument, and not one of the fifteen runs of this lane taken in this hop — at any load — came in under 13 s.** That is a bounded honest answer from a machine that failed `A1`, and it is offered as exactly that.
+
+### `A4` — the per-file all-in cost, and **the honesty clause `ABC-108` was built around is DISCHARGED**
+
+```
+ratified 2026-08-13, post-`threads`      9.545 s / 28 files  =  341 ms per file
+Security/NFR 2026-08-18 (condition B)   13.400 s / 35 files  =  383 ms per file
+THIS RULING, sample 1                   14.760 s / 39 files  =  378 ms per file
+THIS RULING, sample 2 (cooled)          14.480 s / 39 files  =  371 ms per file
+```
+
+**This hop lands BETWEEN the two figures while being taken at a LOWER load than either.** `ABC-108` was written so it could not be read as though the breach were established, because Security/NFR read 383 against 341 and could not size the difference. **It is sized now:**
+
+- **ATTRIBUTED — of the 42 ms/file gap, ~7 ms/file (about 2%) is load** by the sensitivity measured above, and **the remaining ~35 ms/file — five sixths of it — is content and file mix.** The lane grew **28 → 39 files and 807 → 1181 tests**, and the eleven files added since the ratified reading cost `(14.480 − 9.545) / 11` = **449 ms per file all-in, 32% above the old lane's 341 ms average.** The lane did not drift slower per file; **it took on eleven above-average files.**
+- **REPORTED BUT CONFOUNDED, and not banked — this hop's slope reads 153.7 ms/file against the ratified post-`threads` 138.9 ms/file (+10.7%).** This row's own floor measurement records that marginal cost **rises with file count**, and this window is 39→47 against the ratified 28→36. **Some unknown share of that +10.7% is the window, not the load.**
+- **NOT ATTRIBUTABLE, and it cuts AGAINST deflation rather than for it — the ratified 341 ms is ITSELF a loaded figure.** Item 7 of the 2026-08-13 reading states it in its own words: two other agents live throughout, **98 of 135 runs beginning above 8 cores (load median 10.56, max 35.90)**, *"this is a LOADED measurement, the load pushes the absolutes UP, and both clauses are MET anyway."* **Deflating today's number toward a baseline that is itself inflated is not a correction; it is double-counting in the lane's favour.** The honest residue: **how much of the ratified 341 ms is inflation is `UNKNOWN - verify` — only that it is not a floor.**
+
+### This row's OWN restatement arithmetic reaches the same verdict, from 2026-08-13's published numbers alone
+
+Item 6 of the 2026-08-13 reading says: when files land, **do not re-measure, restate by arithmetic.** Nobody ever ran it. Run now against 39 files:
+
+```
+floor only, at the ratified threads slope   9.545 + 11 x 0.1389  =  11.07 s   under
+at this hop's measured slope                9.545 + 11 x 0.1537  =  11.23 s   under
+at the ratified ALL-IN 341 ms/file          9.545 + 11 x 0.341   =  13.30 s   OVER THE CLAUSE
+MEASURED                                                            14.48 - 14.76 s
+```
+
+**The clause was already arithmetically breached on this row's own published per-file figure, before any measurement of mine and before `ABC-078` was cut.** The row forecast it out loud on 2026-08-13 — *"USE ~7 AS THE PLANNING NUMBER AND ~16 AS THE CEILING"*, *"tight, not comfortable"* — **and eleven files landed against a planning number of seven.** The measurement confirmed a published forecast; it did not discover a surprise. **The gap between the arithmetic restatement (13.30 s) and the measurement (14.48 s) is those eleven files being heavier than average, and it is 1.18 s — most of the breach.**
+
+### `A6` — WHAT `N8-LANE` MEANS FROM 2026-08-19 FORWARD. **This grants nothing and loosens nothing**
+
+Security/NFR left the next gate the sentence *"a 5% slice of a total that is already spent is not a slice of anything."* **Here is the sentence that replaces it:**
+
+> **`N8-LANE`'s 650 ms is STILL MEASURED, STILL BINDING, and STILL 5% OF THE 13 s CLAUSE — but from 2026-08-19 it is a RATE LIMIT and NOT A GRANT, and passing it no longer implies `NFR-008` is respected, because it is not.** A ticket still measures its charge under this row's protocol and still states it against **650 ms**, against **the clause** and never against the current lane. **What it may no longer do is conclude anything about the budget from passing.** The lane is **overdrawn by 1.480 s**, so every charge — including a fully compliant one — adds to an overdraft.
+
+**Three consequences, written so they cannot be read as permission:**
+
+1. **`N8-LANE MET` may never again be written to mean "the lane is within budget".** Write the measured milliseconds, then the ruled clause state. A cut or a gate that writes only a percentage of the budget has said nothing true.
+2. **Every ticket in flight and in `Backlog` carrying an `N8-LANE ≤ 650 ms` line KEEPS that line and it is still checkable.** The arithmetic that stopped being honest was *"and therefore the lane is fine"*, never the 650 ms. **No ticket needs re-cutting for this and BA/PM does not have to re-open pages.**
+3. **Nothing is looser than what it replaced.** The 5%, the CPU instrument, the paired-median statistic, the identity null control, the 160 ms floor and `N8-SPAWN`'s 0 ms are all unmoved; every clause is strictly **harder** to read as a pass than it was yesterday.
+
+### `AR-N8LANE-078` — DISCHARGED as an input, exactly as it was framed
+
+`ABC-078`'s ~840 ms is **not** the cause of the breach, and charging it there would be the category error Security/NFR already named: **the arithmetic restatement was over the clause at 13.30 s on 2026-08-13's own published figure, before `ABC-078` existed.** **`AR-N8LANE-078` is closed as an accounting question and stands as a historical record; its 190 ms overspend is 13% of the 1.480 s deficit and removing it entirely would not clear the clause.** No new risk is opened against `ABC-078`.
+
+### THE REMEDY IS NOT CHOSEN HERE — but the options are now **SIZED** rather than listed
+
+**The deficit a remedy must close is 1.480 s** (1.760 s on the protocol sample). `ABC-108` fences the remedy out and this ruling keeps that fence.
+
+1. **`isolate: false` — UNAVAILABLE, and NOT rediscovered.** `ADR-0008` decision 7: 30–36% saving, green in 4 of 21 runs, disarms `zobrist.nfr.test.ts` / `gameend.nfr.test.ts` / `san.nfr.test.ts`. **It would close this gap twice over and it is still not available.** Recorded so nobody spends a hop finding it again.
+2. **Move WHOLE FILES behind an existing opt-in lane** (`PERFT_DEEP` / `SEARCH_DEEP` / `ENGINE_DEEP` / `INPUT_DEEP`). **AVAILABLE, and the only lever an agent can pull.** **Sized, and the sizing is the useful part: ~70% of this lane's CPU is the per-file floor, not test execution** — the whole per-file in-worker time sums to roughly 4.2 s of a 14.5 s total. **So trimming assertions inside files aims at the smaller 30% and cannot close 1.480 s; only moving a whole file removes its floor.** At 371 ms all-in per average file that is **~4 average files**, or fewer heavy ones. **`UNKNOWN - verify`: the all-in saving of moving any SPECIFIC file was not measured here and must be measured by the remedy ticket, never inferred.** **The price is named: it removes default-lane coverage, against this project's standing convention that every acceptance criterion is answered in the default lane.**
+3. **Re-derive the 5% against today's plan** — this row's own standing invitation, **still unexercised**. **Plainly: it creates no headroom.** It changes what a *ticket* may spend, not what the *lane* already costs. Worth doing; not a remedy for this breach.
+4. **Moving the 13 s level is the owner's alone and this hop STOPS at naming it.** It is `ABC-108`'s `## Out of scope`, it is this row's own wording, and it is Olger Oeselg's, ratified in person 2026-08-11. **Not recommended, not argued obsolete, not moved.**
+
+### WHAT HAPPENS NEXT — and the one thing this ruling could NOT do
+
+**A remedy ticket is OWED and it is `P0`** by `ABC-108`'s own named promotion trigger. **Stated honestly: that trigger says *"on a quiet machine"* and this machine was not one — the trigger is met on substance, because the contamination was sized at 1.9% against a 10.2% breach, not because `A1` passed. It did not.**
+
+**`A5` asks this ruling to name a follow-up ticket ID and it cannot supply one.** Cutting a ticket and assigning an id are **BA/PM's at a cut**, and the board is the Orchestrator's. **Inventing an id here would be fabricating a board state**, so the ruling names the requirement, the priority and the owner and leaves the id to be written in by BA/PM at the cut. **That is a stated gap in `A5`, not a silent one.**
+
+### ESCALATED, plainly, rather than routed around
+
+1. **`NFR-008` is a merged, ratified contract and it is now BREACHED.** The clause did not change — the lane grew past it. **Every remedy that closes the gap changes something the owner ruled:** option 2 changes what the default lane guarantees, option 4 changes his level. **That choice is Olger Oeselg's and it is escalated, not routed around.**
+2. **`ABC-108`'s `A1` is unsatisfiable as written** for a self-parallel lane on this machine. The measurable replacement that worked is the **load SENSITIVITY** of the instrument. Whoever re-scores that page should know `A1` failed, why, and that the ruling stands on the bound rather than on a claim of quiet.
+3. **The wall clause is unruled and one sample is over it** — the first 3 s+ sample this lane has produced. It wants its own measurement with the warm/cold question settled.
+
+**THE FENCE ON THIS SECTION.** This hop **measured and ruled**; it **moved nothing**. No target, bar, level, floor, account, instrument, statistic, null control or `UNKNOWN - verify` marker was edited anywhere in this file; the eight rows hash to `63f66795…ca31` unchanged; `src/` is byte-identical and `git diff --name-only` under `src/` is **empty**; no test was added, deleted, trimmed or moved; no board column was moved; nothing was merged or deployed. **The measurement harness ran entirely outside the repository and is not committed — this ruling's own charge against the lane is 0 ms, and `N8-SPAWN`'s balance stays 0 ms.**
