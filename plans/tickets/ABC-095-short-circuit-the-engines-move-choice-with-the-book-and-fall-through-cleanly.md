@@ -173,15 +173,36 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 **2026-08-16**. **Result: 7 of 10 — items 3, 5 and 10 carry a ⚠️. THE SCORE IS NOT INFLATED AND
 THIS TICKET IS NOT READY TO PULL; it is honestly cut, honestly blocked, and it says so.**
 
+**RE-SCORED 2026-08-18 by BA/PM** (task `cut-frame-overflow-2026-08-18`), on `ADR-0012` being
+`accepted` and merged (`3f73d7e`). **Result: 8 of 10, ⚠️x2 — STILL NOT READY TO PULL.** One of the
+three ⚠️ is discharged; the other two are **half** discharged, and a half is not a ✅.
+
+- **⚠️(5) → ✅. All three named unknowns are answered by ruling.** **(a) the id is `ABC-078`**;
+  **(b) wrappable from outside: YES** — `EngineSeam` is a function type and `ABC-078` `A6` requires
+  assignability to it; **(c) spy-able: YES** — the inner seam is an **argument**, so `A1`/`A3` count
+  calls with a stub and need no module mocking. **`A6` does not fire.** No id was guessed: the ADR
+  names it.
+- **⚠️(10) STANDS, reduced from TWO blockers to ONE.** Blocker **(b)** — *where the short-circuit
+  lives* — is **RULED and closed**: a third module, a decorator, owned by neither epic's core.
+  Blocker **(a)** stands: **`ABC-078` is `In Review` and NOT merged**, and `ABC-093`/`ABC-094` — the
+  artifact and the probe, both hard blockers on this page — are **unbuilt and in `Backlog`**. There
+  is nothing to wrap and nothing to probe with. **The ⚠️ is not smoothed because the ruling moved
+  the architecture question, not the build order.**
+- **⚠️(3) STANDS** for the same reason: still **not independent**, now of three merges rather than
+  of an unmade decision. What the ruling did buy is that item 8's conditional is settled — see below.
+- **Also settled by the ADR, and worth the reader's attention: `ADR-0012` clause 6 flags that one of
+  this ticket's "two or three call sites" is `ABC-043`'s composition root, which does not exist
+  yet.** That blocks **`EPIC-005`'s user value**, not this ticket's criteria — recorded, not scored.
+
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** user, pain and value stated; this is the only ticket in the epic a player can perceive |
 | 2 | scope and out-of-scope clear | **✅** four in, four out; the engine boundary is written as a STOP and again as `A6` |
-| 3 | INVEST-shaped | **⚠️ NOT independent.** Valuable, estimable, small and testable — but it depends on an epic that has not been cut. Honest, and stated rather than scored away. |
+| 3 | INVEST-shaped | **⚠️ STANDS — NOT independent**, updated 2026-08-18. Valuable, estimable, small and testable, and the shape question is now ruled (`ADR-0012`) — but it still waits on three merges: `ABC-078` (`In Review`, not merged), `ABC-093` and `ABC-094` (both `Backlog`, both hard blockers on this page). The dependency changed character, not existence. |
 | 4 | acceptance testable and measurable | **✅** six criteria on counts and states: search called 0 / exactly 1, ≤ 30 ms, 0 stderr bytes, equal row counts, exactly 1 warning, 0 engine lines changed |
-| 5 | dependencies known | **⚠️ KNOWN BY NAME, UNRESOLVED BY IDENTITY.** `EPIC-004`'s seam is described by behaviour because its tickets were being minted in parallel with this page. Three sub-unknowns named — id, wrappable-or-not, spy-able-or-not. **No id was guessed.** |
+| 5 | dependencies known | **✅** *(was ⚠️)* **RESOLVED BY IDENTITY 2026-08-18, by ruling** — `ADR-0012` (`accepted`, `3f73d7e`) answers all three sub-unknowns: **id `ABC-078`**, **wrappable: YES** (`EngineSeam` is a function type), **spy-able: YES** (the inner seam is an argument). No id was ever guessed; the ADR supplied it |
 | 6 | security/NFR triggers with a measurable target | **✅** `NFR-004` 30 ms hit / 5 ms miss; `NFR-002` observed only; `NFR-005` explicitly not triggered and the tempting misuse named; `NFR-008` ≤ 650 ms / 1 file / 0 spawns |
 | 7 | test notes present | **✅** five, including "check the seam is spy-able before estimating" |
-| 8 | size assigned | **✅** `S`, conditional on the seam's shape, with the re-size trigger named |
+| 8 | size assigned | **✅** `S`, and **the condition is now DISCHARGED** — `ADR-0012` rules the seam a wrappable function type, which is the assumption `S` was priced on, so the re-size trigger (*"a seam this ticket must reach inside"*) **cannot fire**. `S` stands unconditionally |
 | 9 | priority assigned | **✅** `P1`, with the reasons it is neither `P0` nor `P2` |
-| 10 | no major unresolved blocker | **⚠️ TWO.** (a) **`EPIC-004`'s move interface does not exist.** (b) **Where the short-circuit lives is an unmade architecture decision straddling two epics.** Neither is resolvable by this role and neither was resolved by inference. |
+| 10 | no major unresolved blocker | **⚠️ ONE** *(was TWO)*, 2026-08-18. **(b) is CLOSED by `ADR-0012`** — the short-circuit lives in a third module, a decorator; neither epic's core owns it. **(a) STANDS and is now a MERGE-ORDER blocker, not a design one:** `ABC-078` is `In Review` and unmerged, and `ABC-093`/`ABC-094` are unbuilt — no seam to wrap, no probe to place. Not resolvable by this role, and not resolved by inference |

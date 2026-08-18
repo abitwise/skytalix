@@ -107,15 +107,41 @@ which one — instead of being handed a bishop and told nothing.
   capture is legal, **when** `bxc4` is submitted, **then** `kind: "move"` and it is the pawn capture,
   reached on the **exact** attempt and not the fold. *(The third row is what proves the fold is a
   retry and not the first thing tried.)*
-- **`A4` (the candidate list fits the frame — the frame hides nothing).** **Given** any `ambiguous`
-  outcome this ticket can produce, **when** its messages are passed to `assembleFrame` at the width
-  the delivered panels set, **then** the message region's **hidden count is exactly 0** — every
-  candidate is shown in full, in the region's 2 rows (`MESSAGE_ROWS`, `src/frame.ts:45`). *(Merged
-  code packs the region and appends a `+N` marker for what it drops, `src/frame.ts:182-188`. A
-  criterion that says "the candidates are listed" is satisfied by a frame that shows one of them and
-  `+3`. **If any reachable ambiguity cannot fit, that is a finding for `EPIC-002`'s frame owner and a
-  new ticket — not a silent truncation and not a widening of the frame**, which would break epic
-  acceptance `4a`.)*
+- **`A4` (the candidate list fits the frame — the frame hides nothing). FALSIFIED 2026-08-18 AND
+  RE-SCOPED — see the block immediately below. It is NOT met, and it is NOT deleted.** **Given** any
+  `ambiguous` outcome this ticket can produce, **when** its messages are passed to `assembleFrame` at
+  the width the delivered panels set, **then** the message region's **hidden count is exactly 0** —
+  every candidate is shown in full, in the region's 2 rows (`MESSAGE_ROWS`, `src/frame.ts:45`).
+  *(Merged code packs the region and appends a `+N` marker for what it drops, `src/frame.ts:134-142`
+  — the cut-hop cite of `:182-188` had drifted and is corrected here. A criterion that says "the
+  candidates are listed" is satisfied by a frame that shows one of them and `+3`. **If any reachable
+  ambiguity cannot fit, that is a finding for `EPIC-002`'s frame owner and a new ticket — not a
+  silent truncation and not a widening of the frame**, which would break epic acceptance `4a`.)*
+
+  > **`A4` IS FALSIFIED. CORRECTED 2026-08-18 by BA/PM** (task `cut-frame-overflow-2026-08-18`,
+  > Workflow 07), on QE's `G1` and the Orchestrator's independent reproduction.
+  >
+  > **The criterion above is FALSE AS WRITTEN.** It reads as an unconditional promise — *hidden
+  > count is exactly 0 for **any** `ambiguous` outcome this ticket can produce* — and this ticket
+  > can produce an outcome for which it is not 0. **Seven knights attacking `d4` → `(+2 more)`,
+  > eight → `(+3 more)`. Six is the last size that fits.** Both FENs are legal and round-trip
+  > byte-identically through `toFen`. Measured twice, independently; the numbers are in
+  > `.grugops/context/quality-gate-ABC-033-qe-2026-08-18/notes/` and
+  > `.grugops/context/repair-ABC-033-2026-08-18/notes/` and are not re-derived here.
+  >
+  > **This is a criterion whose PREMISE was wrong, not an implementation defect.** The delivered
+  > module is on the correct side of the line this criterion itself draws: it produced the full 7-
+  > and 8-candidate lists and handed them over intact — **it truncated nothing and it widened
+  > nothing**. The premise that failed is the engineer's cap argument (*"exactly six squares attack
+  > any given square by knight move"*), which is true of `d2`, the square every `A4` knight fixture
+  > used, and false of a central square: `d4` has **eight** knight-attackers.
+  >
+  > **`A4` therefore reads, from this date, as bounded rather than unconditional:** the hidden count
+  > is **0 for every ambiguity of up to 6 candidates**, which is every ambiguity a game reaches, and
+  > **the 7+ case is `EPIC-002`'s** — cut as **`ABC-107`**, exactly as the criterion's own prose
+  > directs. **`A4` is NOT marked met on this page, in `plans/board.md` or in
+  > `plans/traceability.md`.** A criterion that was falsified and re-scoped is a better record than
+  > one that quietly disappears.
 - **`A5` (one derive per prompt).** **Given** one submitted line, **when** it is resolved, **then**
   `legalMoves` is called **exactly once**, asserted by spy, regardless of how many attempts the line
   goes through. *(Four attempts × one generation each is the easy wrong implementation and it is
@@ -201,12 +227,22 @@ to `main` 2026-08-17 and `ABC-032` merged 2026-08-18, both are in the board's `D
 result shapes are exported at HEAD (see `## Dependencies`). Nothing else on this page changed —
 the ⚠️ were not smoothed, they were outlived. Column moves are the Orchestrator's.
 
+**RE-SCORED AGAIN 2026-08-18 by BA/PM** (task `cut-frame-overflow-2026-08-18`) after QE falsified
+`A4`. **Result: 10 of 10, 0 ⚠️ — THE SCORE DOES NOT MOVE, and that is a judgement, not an
+oversight.** The Definition of Ready asks whether the criteria are *well formed*; it does not ask
+whether they turn out to be true. `A4` named an instrument (`assembleFrame`), a quantity (the hidden
+count) and a threshold (**0**), and it pre-assigned the disposition if the threshold failed — which
+is why the falsification produced a ticket (`ABC-107`) in one hop instead of an argument. **Only
+item 4 is annotated, and only to say why it stayed ✅.** Nothing else on this page moved. **The
+falsification is recorded on `A4` itself, where a reader meets it; it is not smoothed into this
+table and `A4` is NOT met.**
+
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** every player; two resolvers and no prompt behaviour; the epic's criterion #2 |
 | 2 | scope and out-of-scope clear | **✅** one entry point, a fixed attempt order, one derive; five fences including an explicit refusal to guess |
 | 3 | INVEST-shaped | **✅** *(was ⚠️)* valuable, negotiable, estimable, small, testable — and now **independent**: both shapes it consumes are merged and exported at HEAD `7ea9e1b`, so it stands alone. Discharged by measurement 2026-08-18, not by re-argument |
-| 4 | acceptance testable and measurable | **✅** seven criteria: exact candidate counts (**2**), reference identity, byte-identical `toFen`, an exact call count (**1**), a **hidden count of 0** in the frame's message region, `32/32`, skip **0** |
+| 4 | acceptance testable and measurable | **✅ — UNCHANGED, and deliberately so after `A4` was falsified 2026-08-18.** Seven criteria: exact candidate counts (**2**), reference identity, byte-identical `toFen`, an exact call count (**1**), a **hidden count of 0** in the frame's message region, `32/32`, skip **0**. **`A4` was measurable, was measured, and came back FALSE — that is the DoR working, not the DoR failing.** This item asks whether a criterion is *well formed*, not whether it turned out true; a falsified criterion is the strongest possible evidence it was testable |
 | 5 | dependencies known | **✅** the two sibling dependencies are now **merged**, stated in the direction they ran; two merged instruments named with their line numbers (`src/turn-loop.ts:125` re-checked at HEAD — the cut-hop cite of `:118` had drifted and is corrected on this page) |
 | 6 | security/NFR triggers with a measurable target | **✅** `N8-LANE` ≤ **650 ms CPU**; `A5`'s count bar; sanitization sink named with its line; firing threshold falsifiable |
 | 7 | test notes present | **✅** five |

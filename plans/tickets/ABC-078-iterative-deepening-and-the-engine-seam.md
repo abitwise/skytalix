@@ -100,8 +100,11 @@ satisfies `EngineSeam`, which `turn-loop.ts` has been waiting on since `ABC-019`
   wraps or precedes the engine, it consumes `EngineSeam` — the type is **merged and unchanged by
   this ticket**, so nothing here breaks it. **If `EPIC-005`'s decomposition needs a different
   shape — a "book first, else search" composition point, or a way to ask the engine to skip the
-  book — that is a contract change on a merged type and is NOT resolved here.** Owner: whoever
-  decides the `EPIC-005`/`EPIC-004` composition point. Flagged, not designed.
+  book — that is a contract change on a merged type and is NOT resolved here.** ~~Owner: whoever
+  decides the `EPIC-005`/`EPIC-004` composition point.~~ **STALE SINCE 2026-08-18 — struck by BA/PM
+  at task `cut-frame-overflow-2026-08-18`, the pen Architect/Design left it to. The composition
+  point HAS an owner and HAS been decided: `ADR-0012`, `accepted`, merged at `3f73d7e`. The feared
+  contract change cannot arrive — the seam-widening shape was rejected.** Flagged, not designed.
 - **RULED 2026-08-18 — `ADR-0012` is `accepted`, and it costs this ticket NOTHING.** The book is a
   **decorator of `EngineSeam`** (`EngineSeam → EngineSeam`), built by `EPIC-005` as a separate module
   and wired by `EPIC-006`'s composition root. **`src/turn-loop.ts` and `EngineSeam` are not modified,
@@ -150,6 +153,24 @@ the recursion is `ABC-077`'s and the budget-to-level mapping is `ABC-087`'s.
 
 Cut-hop assessment by BA/PM **2026-08-16**: **7 of 10, ⚠️x3** — items 3, 5 and 10.
 
+**RE-SCORED again 2026-08-18 by BA/PM** (task `cut-frame-overflow-2026-08-18`), on `ADR-0012` being
+`accepted` and merged (`3f73d7e`). **Result: 10 of 10, 0 ⚠️ — the Definition of Ready is MET.**
+
+- **⚠️(5) is DISCHARGED BY RULING, not by a merge and not by re-argument.** The `EPIC-005`
+  composition point had no owner; it now has an answer. The book is a **decorator** of `EngineSeam`
+  (`EngineSeam → EngineSeam`), built by `EPIC-005` as a separate module and wired by `EPIC-006`'s
+  composition root; the **seam-widening shape was rejected**; `src/turn-loop.ts` is unmodified.
+  **This ticket's page does not change one criterion because of it** — `A6`'s byte-identical pin
+  stands verbatim and is *strengthened in role*: it is now the criterion that protects the
+  composition point. The forward rework risk the ⚠️ carried is the thing that is gone.
+- **The stale prose it rested on is struck**, in `## Dependencies` above.
+- **NOT TOUCHED HERE, deliberately: `A1`.** It came back **not literally met** on delivery — worst
+  case **3027 ms**, **29/30** over the 3 s clause by ≤ 27 ms, **0/30** over the 5 s ceiling. That is
+  an **NFR bar against `NFR-004`**, it is **Security/NFR's at the gate after QE**, and BA/PM neither
+  re-scores it nor rules on it. It is not a DoR item and it does not move this score.
+
+**Superseded below, retained: the 2026-08-18 `refinement-p0-chain` scoring.**
+
 **RE-SCORED against the tree at `main` HEAD `7ea9e1b` by BA/PM, 2026-08-18** (task
 `refinement-p0-chain-2026-08-18`). **Result: 9 of 10, ⚠️x1 — still NOT met; stays in `Backlog`.**
 
@@ -184,7 +205,7 @@ Column moves are the Orchestrator's.
 | 2 | scope and out-of-scope clear | **✅** four fences, including the `EPIC-006` difficulty boundary written down |
 | 3 | INVEST-shaped | **✅** *(was ⚠️)* **independent** — both tickets that stood in front of it (`ABC-076`, `ABC-077`) are merged to `main` and in `Done`; `search()` is exported at HEAD `7ea9e1b`. Discharged by measurement 2026-08-18 |
 | 4 | acceptance testable and measurable | **✅** seven: 30/30 under 3 s, a 50 ms adversarial budget at ≤ 2x, a discarded-partial-iteration check, a no-depth-argument guard, monotonic depth over three budgets, byte-identical `turn-loop.ts`, 200 positions at 1 ms |
-| 5 | dependencies known | **⚠️ STANDS** the `EPIC-005` composition point is **named and deliberately unresolved** — a cross-epic contract question with **no owner**, unchanged by any merge. **It blocks neither BUILDING nor VERIFYING** (`EngineSeam` is merged and `A6` pins `turn-loop.ts` byte-identical); it carries forward rework risk. Needs routing to Architect/Design — BA/PM does not resolve it and invents no owner |
+| 5 | dependencies known | **✅** *(was ⚠️)* the `EPIC-005` composition point is **RULED**: `ADR-0012`, `accepted` and merged `3f73d7e` — the book is a **decorator** of `EngineSeam`, built by `EPIC-005`, wired by `EPIC-006`'s composition root, seam-widening **rejected**, `src/turn-loop.ts` unmodified. **Discharged by ruling 2026-08-18**, by the role it was routed to; the ⚠️ was not smoothed, it was answered. No criterion on this page changed |
 | 6 | security/NFR triggers with a measurable target | **✅** `NFR-004` 3 s / 5 s; `NFR-005` reported not ruled; `N8-LANE` 650 ms with the conflict named and a decided remedy |
 | 7 | test notes present | **✅** four |
 | 8 | size assigned | **✅** `M` (3) |
