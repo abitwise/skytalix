@@ -567,6 +567,8 @@ describe("ABC-037 — the production InputSeam", () => {
         /\bspawn(Sync)?\b/,
         /\bfetch\b/,
         /\bwriteSync\b/,
+        // A SIDE-EFFECT import carries no `from`, so the import-set row cannot see it. This can.
+        /node:/,
         /\bprocess\b/,
         /\bconsole\b/,
         /\bglobalThis\b/,
