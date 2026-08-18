@@ -91,6 +91,18 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   30-position run at the 3 s budget (90.4 s of the 98.7), `NFR-005`'s depth-in-budget
   measurement, and the real-clock repetitions of `A2`, `A3`, `A5` and `A7`. Run it after any
   change to `src/engine.ts`. -->
+- Input-seam deep lane (opt-in slow suite, ABC-037): `INPUT_DEEP=1 npx vitest run src/line-input.test.ts`
+  <!-- RUN 2026-08-19 at the ABC-037 branch tip: exit 0, 26 passed (23 in the default lane), 0.24 s.
+  Unset, the deep cases are NOT DEFINED rather than skipped, so the gate's skip count stays 0 — the
+  same shape as PERFT_DEEP, SEARCH_DEEP and ENGINE_DEEP. It holds the BREADTH only: a 16 MiB
+  unterminated-flood survival row, the chunk-boundary permutation sweep, and the 10,000-character
+  totality row. Every ACCEPTANCE criterion is answered in the default lane. It is opt-in because
+  ABC-108 has the default lane at or over NFR-008's 13 s CPU clause, so this ticket did not claim
+  N8-LANE's 650 ms; its measured default-lane cost is +0.185 s CPU (paired, interleaved, n=7, 7/7
+  positive sign). Run it after any change to src/line-input.ts. TRAP: this lane does NOT assert a
+  memory bound. The heapUsed row that used to is deleted — measured with node --expose-gc, a build
+  retaining a 16,777,216-character line reports 0.01 MiB of heapUsed growth, so that assertion could
+  never fire. The retention bound is a construction argument in absorb(), not a test. -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- RUN 2026-08-15 at `daa20c4` (this hop changed no code):
   exit 0, 856/856 on 30 files. `@vitest/coverage-v8` is in `devDependencies`; no npm script and no
