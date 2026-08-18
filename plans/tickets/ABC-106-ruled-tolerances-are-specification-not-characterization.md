@@ -1,7 +1,7 @@
 ---
 id: ABC-106
-status: in-development
-column: In Development
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-003
