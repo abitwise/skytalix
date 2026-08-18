@@ -58,7 +58,7 @@
  * LANE COST. `ABC-108` records the default lane at or over `NFR-008`'s 13 s CPU clause, so
  * `N8-LANE`'s 650 ms slice is not honestly available and this file does not claim it. The default
  * lane here is kept to the criteria and one boundary row per bar; the BREADTH — the 16 MiB
- * unterminated-flood memory bound, the chunk-boundary permutation sweep and the 10,000-character
+ * unterminated-flood survival row, the chunk-boundary permutation sweep and the 10,000-character
  * totality row — runs only under `INPUT_DEEP=1`. Unset, those cases are NOT DEFINED rather than
  * skipped, so the gate's skip count stays 0 — the same shape as `PERFT_DEEP`, `SEARCH_DEEP` and
  * `ENGINE_DEEP`.
@@ -303,6 +303,57 @@ describe("ABC-037 — the production InputSeam", () => {
       expect(outcome).toEqual({ result: null, reason: null, exitCode: 0 });
       expect(sink.writes).toContain(`${INPUT_ENDED_NOTICE}\n`);
       expect(history.moves.length).toBe(0);
+    });
+
+    /**
+     * `LineSource` declares `readableEnded` OPTIONAL, so the seam may not require it — and every
+     * other row here uses a `PassThrough`, which has it. Written because mutant `M16` (never set
+     * the module's own `ended` flag) survived the whole suite: `PassThrough.readableEnded` was
+     * answering for it, and the flag was dead code that only a source without that property could
+     * prove alive. This row is that source.
+     */
+    it("keeps answering eof on a minimal LineSource that has no `readableEnded`", async () => {
+      type Listener = ((chunk: string | Uint8Array) => void) & (() => void);
+      const listeners = new Map<string, Listener[]>();
+      const minimal = {
+        on(event: string, listener: Listener) {
+          listeners.set(event, [...(listeners.get(event) ?? []), listener]);
+        },
+        off(event: string, listener: Listener) {
+          listeners.set(
+            event,
+            (listeners.get(event) ?? []).filter((registered) => registered !== listener),
+          );
+        },
+        pause() {},
+        resume() {},
+        emit(event: string, chunk = "") {
+          for (const listener of [...(listeners.get(event) ?? [])]) listener(chunk);
+        },
+      };
+      const seam = createLineInputSeam({ source: minimal, output: recordingOutput() });
+      const history = newGame(START_FEN);
+
+      const first = seam(history);
+      minimal.emit("data", "e4\n");
+      expect((await first).kind).toBe("move");
+
+      const second = seam(history);
+      minimal.emit("end");
+      expect(await second).toEqual({ kind: "eof" });
+      // And AGAIN, with no `end` event left to fire — the module's own flag is what answers.
+      expect(await seam(history)).toEqual({ kind: "eof" });
+    });
+
+    it("treats a CRLF terminator as a terminator, not as part of the line", async () => {
+      const source = new PassThrough();
+      const { deps, texts } = spiedDeps();
+      const seam = createLineInputSeam({ source, output: recordingOutput(), deps });
+
+      source.write("e4\r\n");
+      expect((await seam(newGame(START_FEN))).kind).toBe("move");
+      expect(texts).toContain("e4");
+      expect(texts).not.toContain("e4\r");
     });
   });
 
@@ -629,25 +680,44 @@ describe("ABC-037 — the production InputSeam", () => {
 
   if (RUN_DEEP) {
     describe("breadth [deep, INPUT_DEEP=1]", () => {
-      it("bounds memory on a 16 MiB unterminated flood — the cap frees the partial line rather than holding it", async () => {
+      /**
+       * THIS ROW PROVES LIVENESS ON A FLOOD, AND IT DOES NOT PROVE THE RETENTION BOUND. Read the
+       * second half of that sentence before adding a `heapUsed` assertion back.
+       *
+       * The first version of this row asserted `process.memoryUsage().heapUsed` growth under
+       * 8 MiB across a 16 MiB unterminated flood. THREE MUTANTS SURVIVED IT: `M6` (drop the
+       * `pending = ""` free), `M6b` (drop `absorb`'s early return) and `M6c` (drop BOTH, which
+       * really does retain all 16 MiB). Measured out of tree, `node --expose-gc`, the two builds
+       * side by side: bounded retains −0.00 MiB, leaking retains **0.01 MiB with a `pending` of
+       * 16,777,216 characters**. `heapUsed` does not account a V8 cons-string's referents, so it
+       * cannot see this leak AT ALL — with or without a forced collection, in or out of a worker.
+       * A green `heapUsed` row here would have been a guard that never could have fired.
+       *
+       * What holds the bound is `absorb`: `pending` is freed at the cap AND further bytes are
+       * refused, two mutually redundant halves, which is also why `M6` and `M6b` are equivalent
+       * mutants rather than gaps — either half alone caps retention at one chunk. That is a
+       * CONSTRUCTION argument, not a measurement, and it is recorded as one.
+       *
+       * What this row does assert is that a 16 MiB flood is survived, rejected, kept away from
+       * every resolver, and recovered from on the very next line.
+       */
+      it("survives a 16 MiB unterminated flood, rejects it, tells no resolver, and recovers", async () => {
         const source = new PassThrough();
         const { deps, texts } = spiedDeps();
         const seam = createLineInputSeam({ source, output: recordingOutput(), deps });
+        const history = newGame(START_FEN);
 
-        globalThis.gc?.();
-        const before = process.memoryUsage().heapUsed;
-        const pending = seam(newGame(START_FEN));
+        const pending = seam(history);
         for (let index = 0; index < 16; index++) {
           source.write("z".repeat(1024 * 1024));
           await tick();
         }
-        const peak = process.memoryUsage().heapUsed - before;
-        source.write("\n");
+        source.write("\ne4\n");
 
         expect(await pending).toEqual({ kind: "rejected", messages: LINE_TOO_LONG_MESSAGES });
         expect(texts).toEqual([]);
-        // A build that kept accumulating holds all 16 MiB; the capped one holds ~1 KiB.
-        expect(peak).toBeLessThan(8 * 1024 * 1024);
+        expect(deps.legalMoves).toHaveBeenCalledTimes(0);
+        expect((await seam(history)).kind).toBe("move");
       });
 
       it("reads the same three lines however the chunk boundaries fall", async () => {
