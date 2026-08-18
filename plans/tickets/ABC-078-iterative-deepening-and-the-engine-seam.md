@@ -149,7 +149,70 @@ the recursion is `ABC-077`'s and the budget-to-level mapping is `ABC-087`'s.
 **Priority `P0`.** It discharges the epic's non-negotiable constraint, it satisfies the merged
 `EngineSeam`, it is `NFR-004`'s only implementation, and `ABC-074` is blocked behind it.
 
+## Criteria state after QE and Security/NFR — RECORDED, NOT RESOLVED
+
+**Written 2026-08-18 by BA/PM** (task `cut-lane-budget-2026-08-18`) from QE's `PASS WITH FINDINGS`
+verdict and Security/NFR's `PASS_WITH_RISKS` verdict. **Every number is theirs.** **BA/PM rules no
+NFR bar and marks no criterion met that is not; a repair hop is in flight and this section records
+state ahead of it rather than assuming its outcome.**
+
+| criterion | state | what the gates found |
+|---|---|---|
+| **`A1`** | **NOT MET, and it is not marked met** | **Clause A (≤ 3 s at default difficulty): NOT MET.** Worst case **3 027 / 3 030 / 3 031 ms** across three hops on three different positions, 27–29 of 30 calls over 3 s, worst overshoot **31 ms = 1.03%**. **ACCEPTED RISK `AR-NFR004-A`, severity LOW. Owner: Security/NFR at `EPIC-006`'s difficulty hop (`ABC-087` if it lands first). Discharge: that hop passes ~2 900 ms — which makes the clause literally true at zero cost and changes no line of the module — or re-accepts the risk IN WRITING with its number. It may NOT be discharged by editing the `NFR-004` row.** **Clause B (5 s hard ceiling at any difficulty): BREACHED.** `budgetMs` 5 000 → **5 002 ms**, 6 000 → **6 004 ms**; `chooseMove` contains no reference to 5 000 of any kind. **REQUIRED FIX `RF-1`, severity MEDIUM, ruled owed BY THIS TICKET** (`## Scope` claims the ceiling; `## Out of scope` defers only the *choosing*): an exported `HARD_CEILING_MS = 5_000`, one `Math.min` in the deadline initialiser, two comment lines, one injected-clock assertion. **Not a validation, not a throw, not a margin.** **IN THE REPAIR HOP IN FLIGHT — not done.** |
+| **`A2`** | met as written; **its guard is BYPASSABLE** | **QE `G1`, HIGH.** The ticket calls `A2` *"the criterion that proves the clock is checked inside the recursion"*. On `A2`'s own fixture the delivered build and a between-iterations build are **byte-identically indistinguishable** (depth 2, 360 nodes, `elapsedMs` 75, 4 clock consultations) — the in-recursion check is never reached. **`A3` is what actually kills that mutant, as an undeclared side effect.** Two false statements sit in `src/engine.test.ts:206-212`. **In the repair hop.** |
+| **`A3`** | **MET**, and genuinely guarded | The keep-the-partial-iteration mutant reds it; the `position-6` fixture choice is load-bearing. **QE `G4`: its OTHER job — coupling the two negamax copies — is far too thin.** |
+| **`A4`** | met on the delivered code; **its guard is BYPASSABLE** | **QE `G2`, HIGH.** A two-line `if (iteration > 4) break;` inside the deepening loop produces a hard depth-4 cap that passes `tsc`, `biome`, **1 016/1 016** default tests and **23/23** `ENGINE_DEEP`. **`A4`'s four checks are all TEXTUAL — source regexes, `Object.keys`, `Function.length` — and not one of them runs a search.** `RISK-002`, this epic's non-negotiable inherited constraint, has one guard and it does not hold. **In the repair hop.** |
+| **`A5`** | met; **it cannot see the `G2` cap** | Monotonicity is asserted and the pinned-depth-1 mutant reds it, but the observed depths (1/2/3, and 1/3/4 deep) never exceed a cap at 4, so `A5` passes on the capped build too. Same repair. |
+| **`A6`** | **MET**, verified not asserted | Four identical `src/turn-loop.ts` blob hashes (working tree, branch base, `main`, `16e9269`); delivered `src/` diff is exactly two ADDED files, 0 modifications. |
+| **`A7`** | **MET**, and it survived a harder attack than the suite runs | 409 positions × 5 budgets = **2 045 real-clock calls: 0 null, 0 throws, 0 illegal, 0 mutated positions.** |
+
+**Three other results recorded so they are not rediscovered, and none of them is BA/PM's to rule:**
+
+- **`NFR-005` — measured BELOW its FAIL floor and the floor is NOT relaxed.** Depth 4 / depth 3 at
+  3 s against a floor of 6. **Ruled a WAYPOINT, not a verdict**: the row measures *the search* and
+  this ticket built the *time control around* it; `ABC-079`, `ABC-080` and `ABC-081` are unbuilt.
+  **The floor becomes DUE at the close of the last of those three.**
+- **`N8-LANE` — NOT MET at ~840 ms net against 650 ms (1.29x).** **ACCEPTED RISK `AR-N8LANE-078`,
+  LOW, owner Architect/Design**, inside `ABC-025`'s 1.6x precedent. **Its discharge is `ABC-108`'s
+  re-measurement, where this 840 ms is one input.**
+- **`AR-ENGINE-DOC`, LOW** — `chooseMove` does not terminate on `budgetMs: Infinity` or on a
+  non-advancing injected clock, and documents no valid range for either. **Owner: the `RF-1` repair
+  hop**; the clamp closes the `Infinity` half outright.
+
+**Security review: CHECKED, not inherited — no ASVS L1 requirement fails, no high-severity finding,
+`security.block_on` is `high`, so the gate is `PASS_WITH_RISKS` rather than `BLOCKED`.**
+
 ## Definition of Ready
+
+**RE-SCORED 2026-08-18 by BA/PM** (task `cut-lane-budget-2026-08-18`) against the QE and
+Security/NFR results above. **Result: 9 of 10, ⚠️x1 — DOWN from 10/10, and item 4 is the item that
+moved.**
+
+**The ⚠️ is BA/PM's own authorship defect and it is owned rather than routed.** DoR item 4 asks
+whether the acceptance criteria are *testable and measurable*. `A2` and `A4` are both — and QE
+proved that **a compliant implementation can satisfy every word of them while violating the
+property they name**: `A4`'s four checks are textual and none runs a search, so a two-line depth cap
+passes it; `A2`'s fixture never reaches the in-recursion check it exists to prove. **A criterion
+that is measurable but measures the wrong thing is a vague criterion wearing a number**, and
+letting one exit `Ready` is exactly the defect this role is supposed to catch. `A5` inherits the
+blind spot. **Discharge: the repair hop lands criteria and tests that detect what they name — at
+which point item 4 returns to ✅ and not before.**
+
+**What did NOT move, and why, so the score is not read as more than it is:**
+
+- **`A1` is NOT a DoR item and this hop does not treat it as one.** It is an `NFR-004` bar; it is
+  **RULED** above by Security/NFR, with an accepted risk and a required fix, and BA/PM records that
+  ruling without re-opening it. The same fence the 2026-08-18 `cut-frame-overflow` re-score set.
+- **Item 6 stays ✅ and is deliberately not marked down for `ABC-108`.** The `N8-LANE ≤ 650 ms`
+  target on this page is a fixed catalog number, it was measured against, and it has not moved.
+  **What `ABC-108` puts under question is the derivation of that number, not its measurability** —
+  and re-scoring every page in the repository on that would be BA/PM using the DoR to express
+  alarm. The exposure is recorded on `ABC-108`, which is where it is routable.
+- **⚠️(5) stays DISCHARGED** by `ADR-0012` and ⚠️(3), ⚠️(10) stay discharged by measurement.
+  Nothing in the gate results re-opens them.
+
+**Superseded below, retained: the 2026-08-18 `cut-frame-overflow` and `refinement-p0-chain`
+scorings.**
 
 Cut-hop assessment by BA/PM **2026-08-16**: **7 of 10, ⚠️x3** — items 3, 5 and 10.
 
@@ -204,7 +267,7 @@ Column moves are the Orchestrator's.
 | 1 | problem clear | **✅** the unvalidated hardware factor is quoted from `ADR-0003`, not asserted |
 | 2 | scope and out-of-scope clear | **✅** four fences, including the `EPIC-006` difficulty boundary written down |
 | 3 | INVEST-shaped | **✅** *(was ⚠️)* **independent** — both tickets that stood in front of it (`ABC-076`, `ABC-077`) are merged to `main` and in `Done`; `search()` is exported at HEAD `7ea9e1b`. Discharged by measurement 2026-08-18 |
-| 4 | acceptance testable and measurable | **✅** seven: 30/30 under 3 s, a 50 ms adversarial budget at ≤ 2x, a discarded-partial-iteration check, a no-depth-argument guard, monotonic depth over three budgets, byte-identical `turn-loop.ts`, 200 positions at 1 ms |
+| 4 | acceptance testable and measurable | **⚠️** *(was ✅; re-scored 2026-08-18 against QE `G1`/`G2`, both HIGH)* seven criteria, all carrying numbers — **and two of them do not detect the property they name.** `A4`'s no-depth-argument guard is **entirely textual** (source regexes, `Object.keys`, `Function.length`; none runs a search), so QE's two-line `if (iteration > 4) break;` cap passes it, the full suite and `ENGINE_DEEP`; `A2`'s 50 ms fixture is **byte-identically insensitive** to the between-iterations build it was written to catch. `A5` inherits the blind spot. **BA/PM's own defect, owned here. Discharge: the repair hop lands criteria that detect what they name** |
 | 5 | dependencies known | **✅** *(was ⚠️)* the `EPIC-005` composition point is **RULED**: `ADR-0012`, `accepted` and merged `3f73d7e` — the book is a **decorator** of `EngineSeam`, built by `EPIC-005`, wired by `EPIC-006`'s composition root, seam-widening **rejected**, `src/turn-loop.ts` unmodified. **Discharged by ruling 2026-08-18**, by the role it was routed to; the ⚠️ was not smoothed, it was answered. No criterion on this page changed |
 | 6 | security/NFR triggers with a measurable target | **✅** `NFR-004` 3 s / 5 s; `NFR-005` reported not ruled; `N8-LANE` 650 ms with the conflict named and a decided remedy |
 | 7 | test notes present | **✅** four |
