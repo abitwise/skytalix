@@ -106,6 +106,18 @@ placing the short-circuit and proving the fall-through is invisible.
   (which makes the turn owner know about both) is an **architecture** decision that straddles two
   epics. **Architect/Design's, at `In Design`. It is recorded here and taken nowhere**, because
   taking it in a ticket page would be `EPIC-005` deciding `EPIC-004`'s shape.
+- **RULED 2026-08-18 — `ADR-0012` is `accepted`, and the answer is NEITHER of the two places above.**
+  The short-circuit lives in a **third module, owned by neither epic's core**: this ticket delivers a
+  **decorator** taking the book probe and an **inner `EngineSeam`**, returning an `EngineSeam`; on a
+  hit it never calls the inner seam. `EPIC-006`'s composition root wires it. The three unknowns in
+  the `EPIC-004` bullet above are answered — **(a) the ticket id is `ABC-078`**; **(b) wrappable from
+  outside: YES**, `EngineSeam` is a function type and `ABC-078` `A6` requires assignability to it;
+  **(c) spy-able: YES**, the inner seam is an **argument**, so `A1`/`A3` count calls with a stub and
+  need no module mocking. **`A6` therefore does not fire.** One thing this ticket did not know it had
+  is flagged in `ADR-0012` clause 6: one of its "two or three call sites" is `ABC-043`'s composition
+  root, which does not exist yet — it blocks `EPIC-005`'s **user value**, not this ticket's criteria.
+  *(Recorded by Architect/Design at task `design-p0-chain-rulings-2026-08-18`. **Re-scoring the DoR
+  and closing `G3` on the board are BA/PM's pen** and are not done here.)*
 
 ## Security / NFR triggers
 

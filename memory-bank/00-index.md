@@ -8,15 +8,18 @@ _Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask 
 > content: **`60-progress.md`** (the plan-of-record — **start here**), **`30-architecture.md`**
 > (as-built after **`EPIC-001` and `EPIC-002`**, rewritten 2026-08-12, plus the deployment posture),
 > **`70-runbook.md`** (first filled 2026-08-06; short on purpose — this project deploys nowhere and
-> there is almost nothing to operate), and **`50-decisions/`** (**eleven** ratified ADRs,
-> `ADR-0001`–`ADR-0011`, all `accepted`; next free id is **`ADR-0012`**).
+> there is almost nothing to operate), and **`50-decisions/`** (**thirteen** ratified ADRs,
+> `ADR-0001`–`ADR-0013`, all `accepted`; next free id is **`ADR-0014`**). **Re-measured 2026-08-18 by
+> listing `50-decisions/`, not inferred:** `ADR-0012` (book/engine composition point) was written
+> `proposed` on 2026-08-18 and ratified the same day; `ADR-0013` (no placeholder opponent in `src/`)
+> was written and ratified 2026-08-18.
 > The rest — `10-project-brief`, `20-product`, `40-contributing`, `80-glossary` — are still the
 > shipped empty templates. That is a real gap, not a hidden one; do not read them expecting content
 > and do not treat their silence as a decision. `plans/` carries the delivery state meanwhile.
 >
 > **This count has now gone stale twice** (three behind on 2026-08-06, four behind on 2026-08-12),
 > and it goes stale because it is a hand-maintained census of a directory. **Whoever writes
-> `ADR-0012` updates this line in the same commit** — or better, reads `50-decisions/` and trusts
+> `ADR-0014` updates this line in the same commit** — or better, reads `50-decisions/` and trusts
 > that instead of this sentence.
 
 <!--
