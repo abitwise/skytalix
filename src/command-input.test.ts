@@ -495,6 +495,40 @@ describe("ABC-035 fences — grammar only", () => {
     expect(board).toEqual(quit);
   });
 
+  /**
+   * ADDED AFTER A MUTANT SURVIVED, and it is the only guard in this file that was not written from
+   * the criterion. `A3`'s render count and the empty-message assertion both catch a `board` arm
+   * that draws through the LOOP; mutant `M13` — `process.stdout.write(renderBoard(…))` inside
+   * `resolvePromptLine` — reded **0 of 78**, because a module that writes to the stream directly
+   * bypasses the render seam the count watches. That is exactly `ABC-035`'s named security firing
+   * threshold ("any direct stream write"), so it gets a guard rather than a sentence.
+   */
+  it("writes to no stream of its own — the outcome is the only channel", () => {
+    const history = claimable();
+    const write = vi.spyOn(process.stdout, "write").mockImplementation(() => true);
+    const errorWrite = vi.spyOn(process.stderr, "write").mockImplementation(() => true);
+
+    let written: number;
+    let errored: number;
+    let control: number;
+    try {
+      for (const [line] of TOKEN_SPELLINGS) resolvePromptLine(history, line);
+      resolvePromptLine(history, "e4");
+      written = write.mock.calls.length;
+      errored = errorWrite.mock.calls.length;
+      // The control, in the same window: a spy nothing routes through reports 0 for free.
+      process.stdout.write("probe");
+      control = write.mock.calls.length;
+    } finally {
+      write.mockRestore();
+      errorWrite.mockRestore();
+    }
+
+    expect(written).toBe(0);
+    expect(errored).toBe(0);
+    expect(control).toBe(1);
+  });
+
   it("takes no argument: a token with anything after it is not a command", () => {
     const history = newGame(RICH_FEN);
     for (const line of ["claim threefold", "quit now", "help claim", "board white"]) {
