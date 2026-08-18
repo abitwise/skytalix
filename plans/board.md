@@ -72,9 +72,7 @@ _Updated: 2026-08-18 by BA/PM (task `cut-frame-overflow-2026-08-18`, Workflow 07
   trigger fires (the columns still exist; they just stay empty).
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)
-
-- [ABC-035] In-game commands — `help`, `board`, `quit`, `claim`: grammar only, effects stay with EPIC-006/ABC-021  (BA/PM, S, P1, epic: EPIC-003, since: 2026-08-13, DoR 9/10 ⚠️x2 — ordering on ABC-033, 1 new test file)  **→ In Development 2026-08-18.** Pulled by the Orchestrator at task `ticket-to-pr-ABC-035-2026-08-18`, branch `grugops/abc035-in-game-commands`, base `main` @ `23312b3`. **Both recorded ⚠️ (DoR items 3 and 10) were the SAME fact — the ordering dependency on `ABC-033` — and it is DISCHARGED BY MEASUREMENT: `ABC-033` merged at `0d0f635`, `resolveMoveInput` is exported on `main`, suite 1049/36 skip 0.** The page still reads 9/10 ⚠️x1; **re-scoring it is BA/PM's pen and has not happened** — I pulled on the measured fact, not on a re-scored page, and that is recorded here rather than smoothed.` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
 
@@ -201,7 +199,9 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-035] In-game commands — `help`, `board`, `quit`, `claim`: grammar only, effects stay with EPIC-006/ABC-021  (S, P1, epic: EPIC-003, **→ In Development 2026-08-18.** Pulled by the Orchestrator at task `ticket-to-pr-ABC-035-2026-08-18`, branch `grugops/abc035-in-game-commands`, base `main` @ `23312b3`. **Both recorded ⚠️ (DoR items 3 and 10) were the SAME fact — the ordering dependency on `ABC-033` — and it is DISCHARGED BY MEASUREMENT: `ABC-033` merged at `0d0f635`, `resolveMoveInput` is exported on `main`, suite 1049/36 skip 0.** The page still reads 9/10 ⚠️x1; **re-scoring it is BA/PM's pen and has not happened** — I pulled on the measured fact, not on a re-scored page, and that is recorded here rather than smoothed)
 
 
 ## In Review (WIP 0/3)
