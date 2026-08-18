@@ -1,8 +1,8 @@
 ---
 id: ABC-103
 title: `src/cli.test.ts` hard-codes the production-module count, so every new module reds the suite
-status: in-development
-column: In Development
+status: done
+column: Done
 size: S
 priority: P2
 epic: —
