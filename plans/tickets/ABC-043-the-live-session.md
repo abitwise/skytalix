@@ -197,6 +197,84 @@ This changes no dependency on this page — the `EngineSeam` blocker was already
 records that the answer would be identical if that ticket did not exist. **Column moves and the DoR
 re-score are not made here.**
 
+## The ruling on `A5` and `A2`'s testability — 2026-08-19 by BA/PM
+
+**Both are SATISFIABLE AS WRITTEN. Neither is weakened, neither is re-scoped, and no ADR has to
+move.** Ruled at task `refine-ABC-043-2026-08-19` on Architect/Design's flag
+(`design-p0-chain-rulings-2026-08-18`, and `ADR-0013` clause 7, which hands this criterion question
+here by name). **`ADR-0011` clause 4 is untouched: the entry point still exports NOTHING, and this
+ruling depends on it continuing to export nothing.**
+
+**The mistake the flag rests on, named first because it is the whole ruling.** *"Through the real
+entry point rather than through a stub harness"* constrains **the DRIVER**, not **the SEAM**. `A5`
+cannot be asking for a real engine that really throws — it asks for *"an `EngineSeam` that throws"*
+and *"one that returns a move `legalMoves` did not produce"*, which are **faults, deliberately
+constructed**, i.e. test doubles at the seam by definition. What the clause forbids is proving them
+by calling a handler in-process with a hand-built options bag: the exit code, the frame stream and
+the top-level handler must be the **process's**. **A double at the engine seam plus a real spawned
+entry point satisfies both halves at once.** So the question was never *"may the entry point export
+an injection point"* — it is *"can the child process be given a different `./engine.ts` without any
+production line changing"*.
+
+**It can, and it was measured rather than reasoned. Node's module customization hooks
+(`node:module`'s `registerHooks`), loaded into the child with `--import`, replace the module the
+entry point imports.** Verified at this hop on **Node v24.12.0** (the interpreter this repo runs), on
+a throwaway three-file replica outside the repository — **no file under `src/` was read into a build
+and none was written**:
+
+| probe | result |
+|---|---|
+| child spawned with `--import <hook>`, hook substitutes `./engine.ts` with a throwing `createEngine` | entry point ran, the fault reached its own `try`/`catch`, **exit code 7** — the process's, not a harness's |
+| the identical child spawned with **no** `--import` | real module, real behaviour, **exit 0** — production is unaffected by the rig's existence |
+| the hook passed as a **`data:text/javascript,…` URL** instead of a file | **works** — so the rig needs **zero new files**: the whole thing is a string inside `src/cli.test.ts` |
+| the substituted module holding `import { … } from "./legal.ts"` | **resolves** — relative specifiers inside a substituted module resolve against the module it replaced, so a deterministic double may use the real `legalMoves` |
+
+**What this buys, criterion by criterion:**
+
+- **`A5`** — two children: one whose substituted `createEngine` returns a seam that **throws**, one
+  whose seam returns a **move `legalMoves` did not produce**. The loop's merged `engine-threw` /
+  `engine-failure` arms (`src/turn-loop.ts:375,382`) run for real, the process exits **0**, and the
+  `EndReason` word-absence is asserted over the child's real stdout+stderr union. **The
+  discriminating requirement on this page is untouched.**
+- **`A2`** — the *"deterministic opponent"* is the same substitution, carrying a scripted reply list
+  (or the first legal move from the real `legalMoves`). **This is required, not merely convenient:**
+  the merged engine is an **iterative deepening search against a wall clock**
+  (`src/engine.ts:83,305`), so the depth it reaches — and therefore the move it picks — is **hardware
+  and load dependent**. A scripted mating line asserted against the real engine would be a **flaky
+  criterion**, and at `DEFAULT_BUDGET_MS` = 3 s per engine ply it would also breach `NFR-008`'s 3 s
+  wall clause on its own. `A2` says *"a deterministic opponent"* and that is exactly what it gets.
+
+**The three shapes that were offered, and what happened to each:**
+
+1. **A spawned-process test that induces the fault without an export — ADOPTED**, in the form above.
+2. **An env- or argv-gated fault injection — REFUSED, and this is the important refusal.** It would
+   put a fault path **in `src/cli.ts`**: production behaviour, reachable by a human who sets the
+   variable, needing its own justification, its own criterion and — by `ADR-0013` clause 3's
+   discriminator, *"exercisable by a human running the delivered product"* — the **owner**. The
+   adopted rig is the first class instead: **only a test can exercise it**, because a human running
+   `npm run chess` never passes `--import`. It is a test double, and `ADR-0009` clause 9c is
+   satisfied because it lives **in the test file**, as a string, not in `src/`.
+3. **Re-scoping `A5` to what the entry point can be driven through — REFUSED.** It is unnecessary
+   now, and it was the outcome the ticket's own text forbids: *a build that catches the throw and
+   exits 0 passes every other criterion and fails this one*, and `ABC-019` `A10` is enforced at the
+   top level here.
+
+**Three limits on this ruling, so it is not read wider than it is.**
+
+- **No production line, no export, no flag, no env var in `src/`.** The moment a build needs one,
+  this ruling has been left behind and the question goes back to Architect/Design.
+- **The rig is not a licence to substitute modules generally.** It exists for the **engine seam**
+  under `A2` and `A5`. Substituting `./line-input.ts`, `./frame.ts` or `./turn-loop.ts` would test the
+  harness instead of the product and is out of scope on this page.
+- **`--import` is child-only.** It never appears in `npm run chess`, in `package.json`, or in
+  `AGENTS.md`'s `Dev / run` line.
+
+**One consequence that is NOT a criterion and is named so nobody assumes it:** with `A2` and `A5`
+both driven by doubles, **no criterion on this page runs the REAL engine end to end**, and that is
+deliberate — a real-engine game costs 3 s of wall per ply against a 3 s lane clause. If a real-engine
+end-to-end row is wanted it belongs in an **opt-in lane** (`ENGINE_DEEP` is the precedent, `AGENTS.md`
+§ Test), never in the default lane. **Not cut as a ticket here; recorded as the honest gap.**
+
 ## Security / NFR triggers
 
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**. **This ticket shares `ABC-042`'s test file
