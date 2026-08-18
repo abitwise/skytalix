@@ -196,14 +196,14 @@ WIP limits come from config (`wip_limits`); the numbers above are the lean defau
 
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 
 - [ABC-078] Iterative deepening + EngineSeam — RISK-002 discharged here  (M, P0, epic: EPIC-004, pulled 2026-08-18 by the Orchestrator at task `ticket-to-pr-ABC-078-2026-08-18`, branch `grugops/abc078-iterative-deepening-engine-seam`, base `main` @ `16e9269`; **PULLED AT DoR 9/10 UNDER A WRITTEN WAIVER — the missing input is NAMED: the `EPIC-004`/`EPIC-005` composition point, which had no owner and is ROUTED to Architect/Design in this same wave** (`design-p0-chain-rulings-2026-08-18`). Pulled because BA/PM measured the ⚠️ as blocking neither building nor verifying and I re-measured the fact it rests on — `EngineSeam` is exact at `src/turn-loop.ts:138` at HEAD and `A6` pins that file byte-identical, so this ticket does not touch the contract the question is about; all of `A1`-`A7` are executable without an answer. **Residual, recorded not smoothed: if Architect/Design later rules `EPIC-005` needs a different composition shape, this ticket's caller-side wiring may be reworked — its module and its seam conformance would not be.** Waiver text in `.grugops/context/wave-p0-chain-2026-08-18/notes/`)
 
-- [ABC-033] One prompt, both formats, no mode switch — and the ambiguity outcome  (S, P0, epic: EPIC-003, pulled 2026-08-18 by the Orchestrator at task `ticket-to-pr-ABC-033-2026-08-18`, branch `grugops/abc033-one-prompt-both-formats`, base `main` @ `16e9269`; **DoR 10/10, zero ⚠️ — no waiver needed, the only ticket in the requested chain in that state**. Head of the `ABC-033` → `ABC-035` → `ABC-037` → `ABC-043` chain. Carries two STALE `src/frame.ts` anchors corrected first-hand at `Ready for Dev` exit: the `+N` marker is `:134-141` not `:182-188`, the sanitizer is `:123` not `:202` — both in `.grugops/context/wave-p0-chain-2026-08-18/notes/`)
 
+## In Review (WIP 1/3)
 
-## In Review (WIP 0/3)
+- [ABC-033] One prompt, both formats, no mode switch — and the ambiguity outcome  (S, P0, epic: EPIC-003, moved to `In Review` 2026-08-18 by the Software Engineer at task `ticket-to-pr-ABC-033-2026-08-18`, branch `grugops/abc033-one-prompt-both-formats` @ `e2bed3e`, base `main` @ `3054ee0`; delivery commit `a83b933` is `src/move-input.ts` +182 and `src/move-input.test.ts` +374 and **nothing else under `src/` — `A7` measured, not asserted**. Gate on the branch tip in a contained lane: **36 files / 1039 tests green, skip 0**, `No findings.`, lint/typecheck/build clean, `PERFT_DEEP=1` **32/32**. **`A1`-`A7` all met; `A4` is met against six ambiguities INCLUDING adversarial five-knight and six-queen lists, which is a worst case FOUND and not a proof over all positions** — stated in the claim note. **The zero-production-lines UAT waiver does NOT apply**: the delivered diff carries `src/move-input.ts`. The two stale `src/frame.ts` anchors are corrected on the page in a SEPARATE commit `e2bed3e`. NOT merged and NOT QE-validated — both are the next hops. Notes in `.grugops/context/ticket-to-pr-ABC-033-2026-08-18/notes/`)
 
 
 
