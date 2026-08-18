@@ -380,9 +380,8 @@ describe("QE — mutants that survived the delivered suite", () => {
   });
 
   /**
-   * RULED SPECIFICATION. These rows were once pinned as characterization while the tolerances they
-   * measured were still unruled; BA/PM ruled on 2026-08-18 (task
-   * `refinement-abc032-tolerances-2026-08-18`) and ACCEPTED all three. The redundant qualifier and
+   * RULED SPECIFICATION. BA/PM ruled on all three of these tolerances on 2026-08-18 (task
+   * `refinement-abc032-tolerances-2026-08-18`) and ACCEPTED every one. The redundant qualifier and
    * the mixed castle spellings are now entries **4** and **5** of `ABC-032` § Scope's CLOSED
    * decoration-tolerance list, and `e8=K`'s code is accepted as delivered with the
    * re-classification placed on `ABC-034` `A8`.
