@@ -1,8 +1,8 @@
 ---
 id: ABC-037
 title: The real prompt — a line reader over stdin that IS `ABC-019`'s `InputSeam`, with EOF and a ruling on a parser bug
-status: in-review
-column: In Review
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P0
 epic: EPIC-003
