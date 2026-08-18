@@ -469,8 +469,34 @@ describe("RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured
   /** A coarse step on purpose: three searches for the price of one, and the deadline is the
    * subject here, not the depth. */
   const STEP_MS = 2_500;
+
+  /**
+   * A ticking clock WITH A FUSE, and the fuse is what makes this criterion reportable.
+   *
+   * Remove the clamp and the `Infinity` case below does not fail — it HANGS: `deadline` is
+   * `Infinity`, the deepening loop has no other exit, and a synchronous CPU loop is not
+   * interruptible by a test timeout, so the whole FILE stops reporting and every other
+   * criterion in it goes silent with it. The fuse turns that into a thrown error at a
+   * consultation count these runs cannot legitimately reach — the clamped build uses four of
+   * the sixty-four.
+   */
+  const fusedClock = (stepMs: number, maxConsultations: number): Clock => {
+    const tick = tickingClock(stepMs);
+    let consultations = 0;
+    return () => {
+      consultations++;
+      if (consultations > maxConsultations) {
+        throw new Error(
+          `the clock was consulted ${consultations} times: the deepening loop is unbounded, ` +
+            "which is what removing the HARD_CEILING_MS clamp does to an infinite budget",
+        );
+      }
+      return tick();
+    };
+  };
+
   const run = (budgetMs: number) =>
-    chooseMove(parseFen(fenOf("startpos")), { budgetMs, now: tickingClock(STEP_MS) }) as {
+    chooseMove(parseFen(fenOf("startpos")), { budgetMs, now: fusedClock(STEP_MS, 64) }) as {
       move: Move;
       score: number;
       depth: number;
@@ -478,10 +504,11 @@ describe("RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured
       elapsedMs: number;
     };
 
-  /** THREE runs, four assertions on them — the searches are the cost, as in `A2` and `A3`. */
-  const atCeiling = run(HARD_CEILING_MS);
-  const aboveCeiling = run(2 * HARD_CEILING_MS);
-  const unbounded = run(Number.POSITIVE_INFINITY);
+  /**
+   * Each run is called INSIDE its `it` rather than once at describe scope, which is the shape
+   * `A2` and `A3` use. Here the fuse can throw, and a throw during collection takes down the
+   * whole file instead of naming the criterion that failed. At this step a run is ~4 ms.
+   */
 
   it("names the ceiling as an exported constant", () => {
     expect(HARD_CEILING_MS).toBe(5_000);
@@ -491,18 +518,18 @@ describe("RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured
     // The deepening stops at the first reading at or past the deadline, and the return reading
     // is one step later — so the ceiling plus one step is the tightest true bound. Unclamped
     // this run stops at 10 000 and returns 12 500, which is what reds here.
-    expect(aboveCeiling.elapsedMs).toBeLessThanOrEqual(HARD_CEILING_MS + STEP_MS);
+    expect(run(2 * HARD_CEILING_MS).elapsedMs).toBeLessThanOrEqual(HARD_CEILING_MS + STEP_MS);
   });
 
   it("makes any budget above the ceiling indistinguishable from the ceiling itself", () => {
     // Not just "stops sooner" — the SAME search. Move, score, depth, nodes and elapsed all.
-    expect(aboveCeiling).toEqual(atCeiling);
+    expect(run(2 * HARD_CEILING_MS)).toEqual(run(HARD_CEILING_MS));
   });
 
   it("terminates on an infinite budget — the module's only unbounded path, closed", () => {
-    // Before the clamp this call never returned: `deadline` was `Infinity` and the deepening
-    // loop had no other exit. A hang, not a failure, which is why it is asserted here.
-    expect(unbounded).toEqual(atCeiling);
+    // Unclamped, `deadline` is `Infinity` and the deepening loop has no other exit: this call
+    // never returns. The fuse in the clock above is what turns that hang into this failure.
+    expect(run(Number.POSITIVE_INFINITY)).toEqual(run(HARD_CEILING_MS));
   });
 
   it("leaves every degenerate budget exactly as it was — Math.min, not an if", () => {
