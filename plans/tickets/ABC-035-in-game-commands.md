@@ -265,6 +265,30 @@ any more — it is shipped.
 
 ## Definition of Ready
 
+**RE-SCORED 2026-08-18 by BA/PM** (task `cut-lane-budget-2026-08-18`, Workflow 07) against `main`
+at `387c9b2`. **Result: 10 of 10, 0 ⚠️ — the Definition of Ready is MET.**
+
+- **⚠️(3) and ⚠️(10) were ONE fact, and it is DISCHARGED BY MEASUREMENT.** Both marks said the same
+  thing in two places: this ticket classifies in front of `ABC-033`'s entry point and must land
+  after it. **`ABC-033` merged to `main` at `0d0f635`**, `resolveMoveInput` is exported at
+  `src/move-input.ts:149` on `main`, and the suite stood at **1049 tests / 36 files, skip 0** at
+  the time of the pull. The ticket that stood in front of this one is behind it.
+- **THE OVERDUE CORRECTION, recorded rather than smoothed.** The Orchestrator pulled `ABC-035` into
+  `In Development` on **the measured fact** and wrote on the board that *"the page still reads
+  9/10 ⚠️ x1; re-scoring it is BA/PM's pen and has not happened"*. **He was right to say so and
+  right not to re-score it himself.** This section is that pen arriving late; the board row is not
+  edited to hide the gap, and the ticket has since been built and sits in `In Review` at `e01033f`.
+- **The arithmetic of the old line is corrected too, and it is a smaller correction than it looks.**
+  The 2026-08-13 header read *"9 of 10 clean, 1 recorded ⚠️"* while the table below it carried
+  **two** ⚠️ marks. That was not a miscount: the two marks were counted as the single fact they
+  are. **Strictly, the table said 8 of 10 marks clean and the header said 9 of 10 items;
+  today both readings agree at 10.**
+- **NOTHING ELSE ON THIS PAGE IS RE-SCORED, and no criterion is marked met here.** The eight
+  acceptance criteria and their delivery evidence are the engineer's and QE's; this hop moves the
+  DoR score and touches nothing else.
+
+**Superseded below, retained: the 2026-08-13 `refinement-home-the-gaps` scoring.**
+
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
 **2026-08-12**; **RE-SCORED item by item at `refinement-home-the-gaps`, 2026-08-13**, after six
 statements on this page were corrected. **Result: unchanged at 9 of 10 clean, 1 recorded ⚠️ — NOT
@@ -276,15 +300,15 @@ were **over-scored on 2026-08-12**, at a time when `ABC-021` had not merged and 
 were not checkable against a tree. **Recorded, not smoothed:** the cut-time scores were defensible on
 the evidence then available and are wrong in hindsight; today's ✅ are earned against merged code.
 
-| # | item | verdict (2026-08-13) |
+| # | item | verdict — 2026-08-13, with the two 2026-08-18 re-scores marked in place |
 |---|---|---|
 | 1 | problem clear | **✅** the player holding a claim; a right nobody can type; `help` currently answered with *not a legal move* |
 | 2 | scope and out-of-scope clear | **✅ — REPAIRED.** Four tokens with the effect-owner named per token and **the outcome kind named per token**; the `quit` / `claim` epic boundary ruled on this page; six fences. *(Was ✅ on 2026-08-12 while the `claim` row named the wrong outcome kind — over-scored, and now earned.)* |
-| 3 | INVEST-shaped | **⚠️** valuable, negotiable, estimable, small, testable — **not fully independent**: it classifies in front of `ABC-033`'s entry point and must land after it |
+| 3 | INVEST-shaped | **✅** *(was ⚠️)* valuable, negotiable, estimable, small, testable — and now **independent**: `ABC-033` merged at `0d0f635` and `resolveMoveInput` is exported on `main` at `src/move-input.ts:149`. **Discharged by measurement 2026-08-18** |
 | 4 | acceptance testable and measurable | **✅ — `A5` and `A6` REWRITTEN.** Eight criteria: exact tokens and exact non-tokens, spied counts of **0** and **1**, a table-derived help assertion, **an outcome value that must be IDENTICAL in the claimable and unclaimable positions**, derive counts of **zero**, a **hidden count of 0**, `32/32`, skip **0**. *(The old `A5` specified a build that cannot reach the merged claim path — an acceptance criterion for the wrong product.)* |
 | 5 | dependencies known | **✅ — CORRECTED.** One open ordering dependency (`ABC-033`); one soft quality dependency stated as soft; **`ABC-021` re-stated as MERGED code this ticket builds against**, not as a deliberate non-dependency |
 | 6 | security/NFR triggers with a measurable target | **✅** `N8-LANE` ≤ **650 ms CPU**; `NFR-002`'s ≤ 100 µs per-ply bar carried with the cost of the wrong implementation quantified (**46–50 µs**) **and its failure mode measured (7 tests red, not silent)**; sanitization sink named and narrowed to `help`; firing threshold falsifiable |
 | 7 | test notes present | **✅** seven |
 | 8 | size assigned | **✅** `S` (2), calibrated, **re-derived on a changed premise** |
 | 9 | priority assigned | **✅** `P1`, with the not-`P0` and not-`P2` arguments both stated, the latter now measured |
-| 10 | no major unresolved blocker | **⚠️** **one ordering dependency is OPEN** — `ABC-033`. Named, owned, and the reason this sits in `Backlog` |
+| 10 | no major unresolved blocker | **✅** *(was ⚠️)* the one ordering dependency — `ABC-033` — is **CLOSED**: merged to `main` at `0d0f635`, suite 1049/36 skip 0 at the pull. **Same fact as item 3; it was recorded twice on purpose and is discharged once.** Discharged by measurement 2026-08-18 |
