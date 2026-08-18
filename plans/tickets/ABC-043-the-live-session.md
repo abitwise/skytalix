@@ -294,6 +294,10 @@ deterministic double may call the real `legalMoves`.
 - **The rig is not a licence to substitute modules generally.** It exists for the **engine seam**
   under `A2` and `A5`. Substituting `./line-input.ts`, `./frame.ts` or `./turn-loop.ts` would test the
   harness instead of the product and is out of scope on this page.
+  **AMENDED 2026-08-19 by BA/PM for `A3` ONLY — the original words are kept above as the record.**
+  `./line-input.ts` is admissible **as `A3`'s constructed fault and nowhere else**; `./frame.ts` and
+  `./turn-loop.ts` are unchanged and are now refused mechanically by `ADR-0015` clause (S). See
+  `## The (N) limit — one criterion, one constructed fault, at the seam its Given names` below.
 - **`--import` is child-only.** It never appears in `npm run chess`, in `package.json`, or in
   `AGENTS.md`'s `Dev / run` line.
 
@@ -302,6 +306,60 @@ both driven by doubles, **no criterion on this page runs the REAL engine end to 
 deliberate — a real-engine game costs 3 s of wall per ply against a 3 s lane clause. If a real-engine
 end-to-end row is wanted it belongs in an **opt-in lane** (`ENGINE_DEEP` is the precedent, `AGENTS.md`
 § Test), never in the default lane. **Not cut as a ticket here; recorded as the honest gap.**
+
+## The (N) limit — one criterion, one constructed fault, at the seam its Given names
+
+Written 2026-08-19 by BA/PM at `refine-abc043-a3-name-2026-08-19`, answering the one question
+`ADR-0015` left open. `ADR-0015` clauses **(S)** and **(C)** are Architect/Design's structural filter
+and are **not touched here**; clause **(N)** is BA/PM's and this section is what (N) says. Reasoning,
+and what this hop refused, are in `.grugops/context/refine-abc043-a3-name-2026-08-19/notes/`.
+
+**The answer: the name-refusal of `./line-input.ts` does NOT extend to `A3`.** `A2` and `A5` are the
+criteria it was written for and it stands there unchanged.
+
+**The rule the three names were examples of.** A double substituted into a spawned child, having
+already passed `ADR-0015` (S) and (C), is admissible only if **all three** hold:
+
+- **(N1) It stands at the seam the criterion's own Given STIPULATES AS CONSTRUCTED.** `A3` — *"an
+  `InputSeam` that throws"*. `A5` — *"an `EngineSeam` that throws"*. A Given that stipulates no
+  constructed component licenses no substitution, and that criterion comes back to BA/PM.
+- **(N2) It constructs the GIVEN only — never the When, never any Then.** Every observable the
+  criterion asserts must be produced by product code that was **not** substituted. **A component the
+  Given stipulates as REAL may never be doubled** — that is the sharpest form of testing the harness
+  instead of the product.
+- **(N3) One criterion, one substituted seam.** A second double, at a seam the Given does not
+  stipulate, is refused even when it passes (S) and (C): it is a fixture quietly widening the
+  criterion.
+
+**(N) is CRITERION-RELATIVE, and this is the misread to refuse in advance.** A module refused under
+one criterion is not thereby refused under another; a module admitted under one criterion is not
+thereby admitted generally. **Neither the `A2`/`A5` licence nor this amendment is a module
+allow-list**; there is no list, in either direction.
+
+**What the rule decides on this page, so it is checkable rather than argued.**
+
+| criterion + proposed double | (N1) | (N2) | (N3) | verdict |
+|---|---|---|---|---|
+| `A5` + `./engine.ts` throwing / illegal-move seam | ✅ `EngineSeam` | ✅ exit code, `reason`, output all real | ✅ one | **admissible** — the original grant, reproduced |
+| `A3` + `./line-input.ts` seam that throws | ✅ `InputSeam` | ✅ error line, absence of result screen and exit code are `src/turn-loop.ts`, `src/cli.ts` and the process | ✅ one | **ADMISSIBLE — the name is lifted for `A3`** |
+| `A2` + `./line-input.ts` | ❌ | **❌ `A2`'s Given stipulates a REAL piped stdin carrying the scripted line** | — | **refused, unchanged** |
+| `A5` + `./line-input.ts` alongside the engine double | ❌ | — | **❌ second seam** | **refused, unchanged** |
+| `A3` + `./command-input.ts` (the rig that shipped) | **❌ `A3`'s Given stipulates the `InputSeam`, not the parser** | — | — | **refused by (N) as well as by (S)** |
+
+**The last row is the point.** The shipped `parserBug` child is out under **both** halves of the
+fence, independently. Lifting a name for `A3` ratifies **nothing** currently in `src/cli.test.ts`.
+
+**What `A3` becomes.** Rebuilt on a `./line-input.ts` double whose `createLineInputSeam` returns an
+`InputSeam` that throws, driven through the real spawned entry point. **One spawn — `N8-SPAWN`'s pin
+of 17 does not move**, and no `src/` production line changes. **The shape only: the test is the
+engineer's and no line of it was written here.** `A3`'s criterion text is **unchanged** — this
+matches its Given more literally than the rig that shipped did.
+
+**`ABC-044` and `ABC-045` inherit (N1)–(N3), not this outcome.** The question to ask there is never
+*"is this module on a list"* but *"does my criterion's Given stipulate this component as constructed,
+and is everything I assert produced by something I did not replace"*. Where the answer is no,
+`ADR-0015` clause 2 already rules: re-scope the criterion or move it to an opt-in lane — never widen
+the fence at the point of need.
 
 ## Security / NFR triggers
 
