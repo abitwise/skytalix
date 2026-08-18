@@ -256,6 +256,24 @@ _Updated: 2026-08-19 by BA/PM (task `cut-agents-md-cap-2026-08-19`, Workflow 07)
 > (`grugops/agents-md-standing-uat-waiver`, merged `4805bc9`) therefore appears here as this legend
 > entry rather than as a row — recorded by the Orchestrator, since the Scribe was fenced out of this
 > file and flagged the gap rather than filling it silently.
+
+> **A SECOND Scribe hop is recorded here for the same reason, 2026-08-19.** The `AGENTS.md`
+> amendment at `grugops/agents-md-input-deep` (`8466bef`, merged `c5dc3d2`, `AGENTS.md` +13/−4)
+> corrected the `INPUT_DEEP` slot's `heapUsed` trap paragraph. **It carries no row and cannot:** it
+> is neither a ticket nor an epic, and the hop was fenced out of `plans/` — it **flagged the gap
+> rather than filling it silently**, exactly as the 2026-08-17 hop did. **BA/PM verified at
+> `cut-agents-md-cap-2026-08-19` that the entry was still absent AFTER the merge and declined to
+> guess at another hop's trace.** Both refusals were right and both are why this entry exists.
+>
+> What the amendment fixed, because it matters more than the bytes: the paragraph asserted that the
+> `ABC-037` retention bound **cannot be a test**. That was **false**, and it **steered the next
+> engineer away from the guard that works** (`process.memoryUsage().external` after a forced `gc()`
+> — delivered 40 B vs the leaking build 33,554,472 B). **A warning that closes off the solution is
+> worse than no warning.** The lesson it preserved is the durable half: **never ship a memory guard
+> you have not watched go RED.** Recorded by the Orchestrator at the merge of
+> `grugops/abc037-repair` + `grugops/agents-md-input-deep`; the follow-on command-line correction
+> (the recorded lane command ran **142** tests where the complete one runs **144**) is routed to the
+> Scribe at `agents-md-expose-gc-2026-08-19` and is NOT yet on `main`.
 | Ticket | Title | Epic | Feature | NFRs | Code (PR/files) | Tests | UAT | Release | Status |
 |--------|-------|------|---------|------|-----------------|-------|-----|---------|--------|
 | ABC-001 | Position state and FEN round-trip | EPIC-001 | — | NFR-001, ADR-0001 | src/position.ts, src/fen.ts (merged to main) | src/fen.test.ts — 27 pass, coverage 100% stmt / 98.73% branch | | | Done |
