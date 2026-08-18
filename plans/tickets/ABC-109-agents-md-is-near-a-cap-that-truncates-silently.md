@@ -45,8 +45,8 @@ it while the loss is still hypothetical rather than after a hop has run on a hal
 
 ## The measurement — taken at this hop, reproducible
 
-Every size is `git cat-file -s <sha>:AGENTS.md`. The six most recent commits that touched the file,
-oldest first:
+Every size is `git cat-file -s <sha>:AGENTS.md`. The eight most recent states of the file, oldest
+first — six that were on `main` when this hop started:
 
 ```
 39122ec  docs(agents-md): the -- separator in Dev / run, ABC-065       21,638
@@ -60,12 +60,14 @@ a00c2a3  feat(search): ABC-077 recursion core                          26,902   
 **Five measured deltas on `main`, +6,052 bytes, mean +1,210 per edit. Not one of them shrank the
 file.**
 
-Two further edits exist today and are **unmerged**, so `main`'s 27,690 is not the number to plan
-against:
+Two further edits landed **while this ticket was being cut** — they were unmerged when the
+measurement was taken and the Orchestrator merged both mid-hop (`3032622`, `c5dc3d2`). **Re-measured
+after the merges, not assumed:**
 
 ```
-grugops/quality-gate-ABC-037-qe-2026-08-19  (the ABC-037 INPUT_DEEP slot)   28,873   +1,183
-grugops/agents-md-input-deep                (the Scribe's heapUsed amend)   29,749     +876
+8347c6d  docs(agents): the ABC-037 INPUT_DEEP lane                          28,873   +1,183
+8466bef  docs(agents-md): the Scribe's heapUsed amendment                   29,749     +876
+                                                     <- main @ c5dc3d2, VERIFIED 2026-08-19
 ```
 
 **All seven measured deltas: +8,111 bytes, mean +1,159 bytes per edit — the rate this page sizes
@@ -74,10 +76,10 @@ headroom against.**
 | | bytes | headroom | headroom in edits at +1,159 |
 |---|---|---|---|
 | the cap (inherited) | **32,768** | — | — |
-| `main` @ `14c34bd` | **27,690** | 5,078 (15.5%) | **4.4** |
-| with both unmerged branches integrated | **29,749** | **3,019 (9.2%)** | **2.6** |
+| `main` @ `14c34bd` (when this hop started) | **27,690** | 5,078 (15.5%) | **4.4** |
+| **`main` @ `c5dc3d2` — LIVE, both merges landed** | **29,749** | **3,019 (9.2%)** | **2.6** |
 
-**Three more ordinary documentation edits after the integration and the file is over** — and two of
+**Three more ordinary documentation edits and the file is over** — and two of
 the seven measured edits were larger than 1,700 bytes on their own, so **two** is a live case, not a
 pessimistic one. That is not a forecast on a trend line; it is arithmetic on seven consecutive
 measured edits, none of which was unusual and none of which was resisted at the time.
@@ -127,14 +129,14 @@ exists to make impossible**, and `A2` below is written to catch exactly it.
   other reader: **`UNKNOWN - verify`.**
 - **Why the ticket stands anyway, and this is the honest part:** the direction is monotone, so what
   an error in the cap moves is the deadline, not the sign. **A cap 15% larger (37,683) would leave
-  the integrated file 7,934 bytes ≈ 6.8 edits of headroom instead of 2.6** — about four edits of
+  today's file 7,934 bytes ≈ 6.8 edits of headroom instead of 2.6** — about four edits of
   postponement, at a rate of roughly one edit per hop that touches the file. **`A8` requires the
   provenance to be written down**, so the next reader inherits an inherited number as inherited.
 
 ## Scope
 
 - **Bring `AGENTS.md` under a stated byte budget with headroom expressed in edits at the measured
-  rate**, measured on the integrated content (see `A1`) — not on `main` alone.
+  rate**, measured on `main` at or after `c5dc3d2` — the 29,749-byte tree (see `A1`).
 - **Preserve every owner directive and every kit-override precedence note as a resolvable
   pointer**, enumerated before and after (`A2`).
 - **Keep the tail's gate instructions** — `## When uncertain`, the DoR pointer, the DoD pointer
@@ -153,18 +155,20 @@ exists to make impossible**, and `A2` below is written to catch exactly it.
   never be a destination for moved text (`A7`).
 - **Re-deriving the reader cap or building a harness to prove silent truncation.** Inherited on
   purpose; see above.
-- **The `plans/traceability.md` row owed by the Scribe's unmerged amendment branch.** Recorded in
-  this hop's context notes, owned by whoever integrates that branch. Not this ticket's.
+- **The `plans/traceability.md` entry owed by the Scribe's amendment (`8466bef`).** The branch was
+  merged mid-hop at `c5dc3d2` **and `plans/traceability.md` on `main` still carries no entry for
+  it** — verified, not assumed. Recorded in this hop's context notes and on the trace header, owned
+  by the integrator. **Not this ticket's**, and this ticket must not quietly absorb it.
 
 ## Acceptance (Given/When/Then)
 
-- **`A1` (it fits, with headroom stated as a number AND as edits).** **Given** the integrated
-  content — `main` plus the `ABC-037` `INPUT_DEEP` slot plus the Scribe's `heapUsed` amendment, the
-  29,749-byte tree — **when** the restructure lands, **then** `wc -c AGENTS.md` reads
-  **≤ 24,576 bytes** and the record states the exact figure, the headroom against 32,768, **and**
-  that headroom divided by the measured **1,159 bytes/edit** (at 24,576 that is 8,192 bytes ≈ **7.1
-  edits**). *(Measuring the shrink against `main` alone would be measuring against a tree that does
-  not exist by the time this lands — the two unmerged branches are +2,059 bytes of it.)*
+- **`A1` (it fits, with headroom stated as a number AND as edits).** **Given** `AGENTS.md` at or
+  after `main` @ `c5dc3d2` — the **29,749**-byte tree that already contains the `ABC-037`
+  `INPUT_DEEP` slot and the Scribe's `heapUsed` amendment — **when** the restructure lands, **then**
+  `wc -c AGENTS.md` reads **≤ 24,576 bytes** and the record states the exact figure, the headroom
+  against 32,768, **and** that headroom divided by the measured **1,159 bytes/edit** (at 24,576 that
+  is 8,192 bytes ≈ **7.1 edits**). *(The base must be re-measured at pull time rather than taken
+  from this page: it moved by +2,059 bytes during the hop that cut the ticket.)*
 - **`A2` (no owner directive and no kit-override precedence note loses its pointer — enumerated,
   not asserted).** **Then** the record carries a **before/after table with one row per item**,
   covering at minimum: the 2026-08-15 merge/test/UAT/deploy grant; the 2026-08-16 signature ruling
@@ -212,13 +216,14 @@ exists to make impossible**, and `A2` below is written to catch exactly it.
 
 ## Dependencies
 
-- **Two unmerged branches carry +2,059 bytes of this file and both touch it.**
-  `grugops/quality-gate-ABC-037-qe-2026-08-19` (the `INPUT_DEEP` slot, `### Test`) and
-  `grugops/agents-md-input-deep` (the `heapUsed` trap inside that slot's comment).
-  **This ticket is cheapest AFTER both are integrated and most conflict-prone if run in parallel** —
-  a restructure of `### Test` against a live amendment of a comment inside `### Test` is a merge
-  conflict in the densest region of the file. **Ordering preference, not a blocker**: if it runs
-  first, `A1` is still measured against the integrated content.
+- **The ordering hazard this page was cut with is DISCHARGED BY MEASUREMENT, and the discharge is
+  recorded rather than smoothed away.** When the ticket was written, two branches carried +2,059
+  bytes of this file and both touched `### Test` — a restructure of that section beside a live
+  amendment of a comment inside it is a conflict in the densest region of the file. **Both merged
+  mid-hop** (`3032622`, `c5dc3d2`) and `main:AGENTS.md` was re-measured at **29,749** afterwards.
+  **No unmerged edit to this file is outstanding at cut time.** The standing obligation that
+  replaces it: **re-measure the base at pull time** — this file moved by 2,059 bytes in the hours it
+  took to cut one ticket about its size.
 - **`src/cli.test.ts` is a live consumer of this file's STRUCTURE, not just its text.** It reads
   `AGENTS.md` from the repository root at `:278`, `:1050`, `:1127` and `:1157` and asserts slot
   uniqueness, comment closure and the `Dev / run` command string. **A restructure that moves or
@@ -273,8 +278,9 @@ already recorded twice.
 1. **Measure bytes, not characters, and measure from disk.** `wc -c` / `git cat-file -s`. Every
    figure on this page was taken that way and any restatement that disagrees should be assumed to be
    measuring something else.
-2. **Measure `A1` on the integrated content.** A shrink measured on `main` alone is measuring a tree
-   that will not exist by the time this merges — the two unmerged branches are +2,059 bytes of it.
+2. **Re-measure the base at pull time; do not quote 29,749 from this page.** That figure is `main`
+   @ `c5dc3d2` on 2026-08-19, and the file moved **+2,059 bytes during the hop that cut this
+   ticket**. A shrink stated against a stale base is not a measurement.
 3. **`src/cli.test.ts` reads `AGENTS.md` from the repository root**, which is why out-of-tree lane
    measurements on this project copy `AGENTS.md` alongside (`ABC-108` test note 2). Any restructure
    that splits content out of `AGENTS.md` into a second file **must not** add a second such
@@ -305,8 +311,8 @@ directive is the owner's and is fenced out of this page by `## Out of scope`.
 
 **Priority `P1`.**
 
-**NOT `P0`.** Nothing is truncated today. `main` sits at 27,690 with 15.5% headroom, and even
-integrated at 29,749 the file is still whole. Putting this ahead of the `EPIC-004` chain would be
+**NOT `P0`.** Nothing is truncated today: `main` sits at **29,749 with 3,019 bytes still under the
+cap** and the file is whole. Putting this ahead of the `EPIC-004` chain would be
 BA/PM using priority to express alarm, and the alarm is already in the first paragraph.
 
 **NOT `P2`, and this is the half worth defending.** Three measured reasons. **(1) The margin is 2.6
@@ -324,8 +330,14 @@ branch, or if any role reports a read of it that is missing `## When uncertain`,
 ## Definition of Ready
 
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-19**. **Result: 9 of 10 — item 5 carries a ⚠️. READY IN SUBSTANCE; the ⚠️ is an ORDERING
-fact, not a missing decision.**
+**2026-08-19**. **Result: 10 of 10, 0 ⚠️ — READY.**
+
+**Scored 9/10 first, with a ⚠️ on item 5, and re-scored inside the same hop when the fact it rested
+on was DISCHARGED BY MEASUREMENT.** The ⚠️ was the two unmerged branches carrying +2,059 bytes of
+this file into `### Test`; the Orchestrator merged both mid-hop (`3032622`, `c5dc3d2`) and
+`main:AGENTS.md` was re-measured at 29,749 afterwards. **The first score and the reason it moved are
+recorded here rather than overwritten** — a DoR that quietly becomes 10/10 teaches the next reader
+nothing.
 
 | # | item | verdict |
 |---|---|---|
@@ -333,10 +345,10 @@ fact, not a missing decision.**
 | 2 | scope and out-of-scope clear | **✅** six in scope, six fenced out including the remedy's shape, the directives' content, the kit as a destination, and the Scribe's owed trace row |
 | 3 | INVEST-shaped | **✅** independent of every ticket in flight; estimable because the remedy shape is the Scribe's and the preservation list is enumerated; small (0 production lines); **testable — every criterion is a byte count, a resolved pointer, an unmodified diff region, or an observed failure message** |
 | 4 | acceptance testable and measurable | **✅** eight: **≤ 24,576 bytes** measured on the integrated tree with headroom stated in edits at **1,159 B/edit**; a **nine-row minimum** before/after pointer table verified by opening each destination; three tail anchors with byte offsets; four named assertion sites in `src/cli.test.ts` unmodified; a guard **watched RED** with its message recorded; `grep '^src/'` **empty** with **0** new test files and **≤ 2** new tests; every destination named with its reader; the cap recorded as inherited |
-| 5 | dependencies known | **⚠️ ONE, and it is ORDERING rather than an unanswered question.** Two unmerged branches carry **+2,059 bytes** of this very file and both touch `### Test`; this ticket is cheapest after they integrate and conflict-prone beside them. **Not smoothed to ✅**: the integration is the Orchestrator's and has not happened, so the tree this ticket restructures is not the tree that exists on `main`. Everything else is known and named — the `src/cli.test.ts` structural coupling with four line anchors, the read-only kit, and the inherited cap |
-| 6 | security/NFR triggers with a measurable target | **✅** no new surface with a falsifiable firing threshold; `NFR-008` targeted at **no measurable change** with counts stated before and after; **`N8-LANE` deliberately not quoted** while `ABC-108` is open, replaced by falsifiable zeroes; `N8-SPAWN` 0 ms |
+| 4 | acceptance testable and measurable | **✅** eight: **≤ 24,576 bytes** measured on the live tree with headroom stated in edits at **1,159 B/edit**; a **nine-row minimum** before/after pointer table verified by opening each destination; three tail anchors with byte offsets; four named assertion sites in `src/cli.test.ts` unmodified; a guard **watched RED** with its message recorded; `grep '^src/'` **empty** with **0** new test files and **≤ 2** new tests; every destination named with its reader; the cap recorded as inherited |
+| 5 | dependencies known | **✅, and it was a ⚠️ until it was measured.** The ordering hazard — two unmerged branches carrying **+2,059 bytes** of this file into `### Test` — **is DISCHARGED: both merged mid-hop (`3032622`, `c5dc3d2`) and `main:AGENTS.md` re-measured at 29,749.** No unmerged edit to this file is outstanding. The standing obligation that replaces it is on the page: **re-measure the base at pull time.** The rest were known from the start — the `src/cli.test.ts` structural coupling with four line anchors, `agent-factory/` as read-only KIT and therefore never a destination, and the inherited cap |
 | 7 | test notes present | **✅** six, including the integrated-tree measurement trap, the two-document copy hazard for out-of-tree lane readings, the in-memory red-path pattern, and one found-but-deliberately-not-cut item |
-| 8 | size assigned | **✅** `M`, with the not-`S` (58% of mass is load-bearing; the preservation proof is the work) and not-`L` arguments, and a re-size trigger that stops the hop rather than growing it |
+| 7 | test notes present | **✅** six, including the re-measure-at-pull-time trap (this file moved +2,059 bytes during the cutting hop), the two-document copy hazard for out-of-tree lane readings, the in-memory red-path pattern, and one found-but-deliberately-not-cut item |
 | 9 | priority assigned | **✅** `P1`, with not-`P0` and not-`P2` both argued from measured numbers and a named promotion trigger at **31,000 bytes** |
 | 10 | no major unresolved blocker | **✅** the owner is named, the remedy shape is explicitly the owner's to choose, the guard question is **RULED on this page** rather than left open, and no environmental precondition is needed — the work is one editorial pass and one assertion |
 
