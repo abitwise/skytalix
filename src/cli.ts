@@ -9,15 +9,40 @@
  * unit-tested was moved OUT, into `src/cli-options.ts`; what is left is composition, and composition
  * is proved by running the command as a child (`A1`).
  *
- * IT PRINTS A BOARD. IT DOES NOT PLAY A GAME, and the ticket says so before its title can be
- * misread: no move can be typed here. The production `InputSeam` is `ABC-037` and no `EngineSeam`
- * implementation exists, so `runTurnLoop` is `ABC-043`'s. This writes ONE frame and exits.
+ * `ABC-043` — IT NOW PLAYS A GAME. The sentence that stood here said it prints a board and does not
+ * play one; `runTurnLoop` (`ABC-019`), the production `InputSeam` (`ABC-037`) and the real
+ * `EngineSeam` (`ABC-078`) are all merged, and this is the one place that wires them. Six options,
+ * one call, no adapter and no cast (`A1`). The frame session belongs to the loop now: this module
+ * hands it `process.stdout` as the `FrameSink` and calls `beginFrameSession` nowhere — which is what
+ * keeps `A6`'s "exactly once" a property of merged code rather than of a second call site here.
  *
- * THE TWO HANDLES, AND THE RULE THEY OBEY. Only this module may acquire `process.stdout` or
- * `process.stderr` as a WRITABLE HANDLE, and only `process.stdout` is ever passed onward — as the
- * injected `FrameSink`, which is the only shape `beginFrameSession` accepts (`A9`). Nothing below
- * this file writes on either channel; `beginGlyphModeSession` is the one merged module that reads
- * ambient signals, and it reads them, once, without writing.
+ * THE INPUT SEAM IS BUILT ONCE AND CALLED NOWHERE (`G6`, `ABC-037`'s QE hop, on the ticket under
+ * `## Scope`). `createLineInputSeam`'s `waiting` is a SINGLE SLOT, so two overlapping `seam()` calls
+ * orphan the first read forever and the product hangs with no output and no exit code. The loop
+ * awaits the seam before calling it again, so the merged sequencing is safe; a build that
+ * "helpfully" pre-reads a line here would hang. It is constructed, passed, and never invoked.
+ *
+ * THE OPPONENT IS THE MERGED ENGINE AT ITS MERGED BUDGET — `createEngine({ budgetMs:
+ * DEFAULT_BUDGET_MS })`, no new number, no `--difficulty`, no flag (`ADR-0013`: no placeholder
+ * opponent ships, and none is needed now that a real one exists).
+ *
+ * THE ONE `try`/`catch` IN THIS PRODUCT is below, around the whole session. `ABC-019`'s input arm
+ * repairs the borrowed board and RETHROWS (`turn-loop.ts:293-309`), and `ABC-037` catches nothing,
+ * so a parser bug arrives here — `ABC-019` `[D31]`'s second half, ruled on this ticket: it ends the
+ * game, loudly, as an internal error that is never a chess outcome, and the process exits NON-ZERO.
+ * EXIT CODES, once for the whole product: `LoopOutcome.exitCode` verbatim for everything the loop
+ * returns (the type is `0` and only `0`, `engine-threw` and `engine-failure` INCLUDED — the loop
+ * handled those, and what distinguishes them from a real game is the message, `ABC-044`'s `A3`);
+ * non-zero for exactly two things, a usage error before the game starts and an exception that never
+ * became a `LoopOutcome`.
+ *
+ * THE HANDLES, AND THE RULE THEY OBEY. Only this module may acquire `process.stdout`,
+ * `process.stderr` or `process.stdin`, and `process.stdout` is passed onward twice — as the loop's
+ * `FrameSink` and as the prompt's `PromptOutput`, the two shapes merged code accepts (`A9`). It is
+ * read ONCE, into `sink`, so this module still names the handle a single time. `process.stdin` is
+ * `ABC-043`'s addition and it is passed only as `createLineInputSeam`'s `LineSource`: the reader
+ * imports no Node builtin and reaches for nothing, by its own header, and this is where the stream
+ * it reads is supplied. Nothing below this file writes on either output channel.
  *
  * THE REJECTION PATH IS STDERR, WHICH IS THIS ENGINEER'S CHOICE UNDER `A6`'s EXPLICIT LICENCE, and
  * the consequence Architect/Design attached to that choice is honoured above: the handle is acquired
@@ -32,8 +57,9 @@
  * message is not a frame and turning a human's `--colour <chess knight glyph>` into `--colour ?`
  * would corrupt the one diagnostic they get.
  *
- * IT NAMES NO ROW COUNT (`ADR-0009` clause 9a, `A8`): `beginFrameSession` is called exactly once,
- * with the first frame's own `.length`, which is why the frame is built before the session begins.
+ * IT NAMES NO ROW COUNT (`ADR-0009` clause 9a, `ABC-042` `A8`, `ABC-043` `A6`): the loop derives the
+ * session height from the first frame's own `.length` and this module supplies neither a height nor
+ * a count.
  *
  * THERE IS NO EXPORTED START POSITION UNDER `src/` — measured; every test file defines its own
  * `START_FEN` — so the literal below is held here rather than promoted into a merged module, which
@@ -41,10 +67,12 @@
  */
 
 import { resolveOptions } from "./cli-options.ts";
-import { beginFrameSession } from "./frame.ts";
+import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
 import { beginGlyphModeSession } from "./glyph-mode.ts";
-import { gameStatusOf, newGame } from "./history.ts";
+import { newGame } from "./history.ts";
+import { createLineInputSeam } from "./line-input.ts";
 import { makeRenderSeam } from "./render-seam.ts";
+import { runTurnLoop } from "./turn-loop.ts";
 
 /** The standard start position, in the spelling every test file in this repository uses. */
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -61,6 +89,31 @@ const USAGE = "usage: npm run chess -- [--colour white|black|random] [--ascii | 
 const USAGE_EXIT_CODE = 1;
 
 /**
+ * What a human is shown when an exception leaves the session — `[D31]`'s ruling, as a string.
+ *
+ * IT NAMES NO CHESS RESULT, and that is the criterion (`A3`(ii)) rather than a style choice: it
+ * carries none of the ten `TerminalReason` values and none of the words `win`, `draw`, `resign`,
+ * `checkmate`, `stalemate`. A result screen that presented a parser bug as a chess outcome is
+ * exactly what `ABC-019` `A10` forbids, enforced here at the top level.
+ *
+ * THE THROWN VALUE IS DELIBERATELY NOT ECHOED, and the trade is recorded rather than hidden: a bug's
+ * own message is written by the code that broke, so echoing it would make `A3`(ii) a property of
+ * that message instead of of this build — one `throw new Error("checkmate detection failed")`
+ * anywhere below and the product reports a chess word on its crash path. The exit code and this
+ * line are what the human gets; the stack belongs to whoever debugs the bug, and no criterion on
+ * this page asks for it.
+ */
+const INTERNAL_ERROR = "internal error: a bug ended this session, and it is not a chess outcome";
+
+/**
+ * The other non-zero exit, and the only other one. `70` is `sysexits.h`'s `EX_SOFTWARE` — "an
+ * internal software error has been detected" — chosen over a bare `2` so that a shell can tell a
+ * refused command line (`1`) from a crashed session at all: both are non-zero, and `A4` is
+ * distinguishable from `A3` by message AND by exit code, which leaves nothing to carry this one.
+ */
+const INTERNAL_ERROR_EXIT_CODE = 70;
+
+/**
  * Drop what must not reach a terminal: C0 controls (`\x1b` included) and `U+007F`. Same shape as
  * `src/frame.ts`'s private `sanitize`, minus the glyph-mode arm — see the docblock.
  */
@@ -74,7 +127,7 @@ function printableOf(text: string): string {
   return kept;
 }
 
-function main(): void {
+async function main(): Promise<void> {
   const resolution = resolveOptions(process.argv.slice(2));
 
   if (!resolution.ok) {
@@ -87,12 +140,33 @@ function main(): void {
     return;
   }
 
-  const { orientation, flags } = resolution.options;
+  const { colour, orientation, flags } = resolution.options;
   const mode = beginGlyphModeSession(flags)();
-  const history = newGame(START_FEN);
-  const frame = makeRenderSeam(mode, orientation)(history, gameStatusOf(history), false, []);
+  // Read ONCE and passed twice: the loop's `FrameSink` and the prompt's `PromptOutput` are two
+  // shapes over one handle, and `A9`'s "acquired once, in the entry point" is about the acquisition.
+  const sink = process.stdout;
 
-  beginFrameSession(process.stdout, frame.length)(frame);
+  try {
+    const outcome = await runTurnLoop({
+      history: newGame(START_FEN),
+      humanColour: colour,
+      render: makeRenderSeam(mode, orientation),
+      // BUILT HERE, CALLED NOWHERE — `G6`'s single-caller precondition. See the module header.
+      input: createLineInputSeam({ source: process.stdin, output: sink }),
+      engine: createEngine({ budgetMs: DEFAULT_BUDGET_MS }),
+      sink,
+    });
+
+    // VERBATIM, and the assignment is the rule rather than a formality: `LoopOutcome.exitCode` is
+    // typed `0` and only `0`, so a build that computed an exit code from `reason` would be inventing
+    // a signal `ABC-019` deliberately did not put there.
+    process.exitCode = outcome.exitCode;
+  } catch {
+    // `[D31]`'s second half. NOT `process.exit()` — same reason the usage path gives: on macOS a
+    // pipe is asynchronous and exiting on the spot truncates the line the human is meant to read.
+    process.stderr.write(`${INTERNAL_ERROR}\n`);
+    process.exitCode = INTERNAL_ERROR_EXIT_CODE;
+  }
 }
 
 main();
