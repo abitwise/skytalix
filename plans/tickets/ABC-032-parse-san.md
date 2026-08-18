@@ -1,8 +1,8 @@
 ---
 id: ABC-032
 title: `parseSan` — SAN resolved against the legal move list, three closed outcomes, every move generator-owned
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-003
