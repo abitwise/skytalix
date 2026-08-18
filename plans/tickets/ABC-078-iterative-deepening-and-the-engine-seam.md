@@ -102,6 +102,15 @@ satisfies `EngineSeam`, which `turn-loop.ts` has been waiting on since `ABC-019`
   shape — a "book first, else search" composition point, or a way to ask the engine to skip the
   book — that is a contract change on a merged type and is NOT resolved here.** Owner: whoever
   decides the `EPIC-005`/`EPIC-004` composition point. Flagged, not designed.
+- **RULED 2026-08-18 — `ADR-0012` is `accepted`, and it costs this ticket NOTHING.** The book is a
+  **decorator of `EngineSeam`** (`EngineSeam → EngineSeam`), built by `EPIC-005` as a separate module
+  and wired by `EPIC-006`'s composition root. **`src/turn-loop.ts` and `EngineSeam` are not modified,
+  and no criterion on this page changes — `A6`'s byte-identical pin stands and is strengthened in
+  role**: it is now the criterion that protects the composition point. The seam-widening shape (a
+  skip-the-book flag) was **rejected**, so the contract change this bullet feared cannot arrive from
+  `EPIC-005`. *(Recorded by Architect/Design at task `design-p0-chain-rulings-2026-08-18`. The
+  "Owner: whoever decides…" sentence above is now **stale prose**, and re-scoring **⚠️(5)** is
+  **BA/PM's pen** — neither is touched here.)*
 
 ## Security / NFR triggers
 

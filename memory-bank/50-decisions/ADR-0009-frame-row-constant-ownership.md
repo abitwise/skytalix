@@ -441,6 +441,15 @@ whole clause:
   the test file, and the two unbuilt panels *"enter as fixed-height stubs"* there. A `src/` stub
   module would be production code that is dead the moment the real panels land, and under coding
   rule 12 it would then be flagged rather than removed, so it would linger.
+
+  > **[SCOPE POINTER, added 2026-08-18 at task `design-p0-chain-rulings-2026-08-18`. NO CLAUSE IS
+  > RE-OPENED and 9c's words above are byte-unchanged.]** 9c's subject is a test double for the
+  > render seam and the thing it forbids is a **`src/` stub module**. It was asked in 2026-08-18
+  > whether it also forbids a **one-line default opponent inside the non-exporting entry point**
+  > (`ABC-043`). **It does not, by its letter — and the answer is still NO**, on a rule that
+  > `ADR-0013` adds rather than reads into this clause: placeholder behaviour a human can exercise by
+  > running the delivered product is not a stub at all. **Read `ADR-0013` before answering that
+  > question again.**
 - **(9d) A stub's row counts MUST DIFFER from the reference layout's 3 and 8.** Measured in (v):
   identical counts make a hardcoded height green at `ABC-019`'s own gate and defer the failure to
   the rebase. Two shapes are wanted and both are cheap — one that keeps `H ≤ 24` (e.g. 2/5 → 19,

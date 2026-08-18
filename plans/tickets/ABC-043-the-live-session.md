@@ -167,6 +167,24 @@ Architect/Design, not BA/PM and not this ticket.**
 **I am not ruling it, and I am not smoothing it into a dependency line.** It is the reason this
 ticket's Definition of Ready is not met.
 
+**RULED 2026-08-18 by Architect/Design — the answer is NO. `ADR-0013` is `accepted`
+(`memory-bank/50-decisions/ADR-0013-no-placeholder-opponent-ships-in-src.md`), at task
+`design-p0-chain-rulings-2026-08-18`.** The composition root may **not** supply a default opponent
+before `EPIC-004` lands — not as a module, not as a one-line `EngineSeam` literal in the entry point,
+not behind a flag. **`ADR-0009` clause 9c does not decide it by its letter** (its subject is a `src/`
+stub *module*, and the entry point exports nothing), so `ADR-0013` adds the rule instead, with this
+discriminator: **code only tests can exercise is a test double and belongs in a test file (9c); code
+a human can exercise by running the delivered product is not a stub at all — it is an undelivered
+feature, and it needs a cut ticket and the owner.** A default opponent is the second kind, because
+`npm run chess` would play a human against it. **A YES was not Architect/Design's to give**; the
+owner may license one, and it would then arrive as a cut ticket with criteria.
+
+**So the consequence above resolves to the second branch: a playable game waits for `EPIC-004`.**
+This changes no dependency on this page — the `EngineSeam` blocker was already stated — and it is
+**independent of `ABC-078`**, which is in development at the time of the ruling: `ADR-0013` clause 6
+records that the answer would be identical if that ticket did not exist. **Column moves and the DoR
+re-score are not made here.**
+
 ## Security / NFR triggers
 
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**. **This ticket shares `ABC-042`'s test file

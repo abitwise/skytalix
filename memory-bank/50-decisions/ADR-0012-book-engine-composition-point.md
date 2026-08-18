@@ -5,27 +5,76 @@ kind: adr
 
 ## Status
 
-**proposed** — 2026-08-18 by Architect/Design at task `design-engine-seam-composition-2026-08-18`,
-on the question BA/PM raised at `refinement-p0-chain-2026-08-18` and routed here with no owner
-assigned. It is `G3` on the `epic-to-tickets-EPIC-005` gaps note, whose owner cell reads
-**Architect/Design, at `ABC-095`'s `In Design`**. That is this hop.
+**accepted** — 2026-08-18 by Architect/Design at task `design-p0-chain-rulings-2026-08-18`, on the
+Orchestrator's routing of `ABC-078`'s open DoR item 5 and `ABC-095`'s hard blocker.
 
-**NOT self-ratified, and the reason is stated rather than assumed.** By `ADR-0009`'s own accepted
-test — *"no target moves and no level is set, so no owner ratification is owed"* — nothing here
-would be owed a signature: this decision moves no NFR target, sets no level, measures nothing, and
-adds **zero production lines**. It is left `proposed` anyway on two grounds. (1) This project has a
-standing rule, recorded on `ABC-092`, that **an agent researches and a human ratifies**, and
-`AGENTS.md` records that `context.human_admission` is `off`, so no agent verdict is admissible here
-in any form. (2) Unlike `ADR-0009`, which ruled a row-count constant inside one epic, this binds the
-**ticket shape of three epics** — `ABC-078` (`EPIC-004`), `ABC-095` (`EPIC-005`) and `ABC-043`
-(`EPIC-006`) — and the Orchestrator is about to pull the first of them. A ruling that decides what
-three tickets may and may not touch is more consequential than a constant, and it should carry the
-owner's word before it is quoted as binding.
+**Proposed 2026-08-18** by Architect/Design at task `design-engine-seam-composition-2026-08-18`, on
+the question BA/PM raised at `refinement-p0-chain-2026-08-18`. It is `G3` on the
+`epic-to-tickets-EPIC-005` gaps note, whose owner cell reads **Architect/Design, at `ABC-095`'s
+`In Design`**.
 
-**What ratification would cost and what it would buy.** Cost: one sentence from the owner. Buy: the
-right for `ABC-095` to treat `G3` as closed and for `ABC-078` to be pulled with its `A6` untouched.
-**Until it is ratified, `ABC-078` is pullable exactly as cut anyway** — see clause 5 — because this
-ADR requires nothing of it.
+**Nothing below the Status section is edited by this ratification.** `## Context`, `## Decision`
+(clauses 1–9), `## Alternatives`, `## Consequences` and `## Rollback` stand **exactly as proposed**.
+What this hop adds is the signature, the falsifiers the ratifying role owes, clause 9's **discharge**,
+and two re-measurements.
+
+### Why it is ratified here, when the proposing hop declined
+
+That hop left it `proposed` on two named grounds. The first is a misreading and is corrected; the
+second is real weight that names the wrong owner.
+
+- **Ground (1) — *"this project has a standing rule, recorded on `ABC-092`, that an agent researches
+  and a human ratifies"*. MISREAD.** That sentence is `ABC-092`'s board row and it is about **the
+  opening book's SOURCE and its LICENCE** (`RISK-004`) — a legal and product choice, which is the
+  owner's. It is not a general rule about ADRs, and it was never written as one. The general rule is
+  `memory-bank/60-progress.md` § "Standing directive — who decides" (**owner, 2026-08-03**), which
+  says in its own heading that it **supersedes "no agent may ratify an ADR"**: *"If it is
+  architecture question then to architect to make the decision."* Architecture decisions —
+  **including ratifying an ADR** — are Architect/Design's, and `ADR-0004` stopped being the
+  exception that day. The rest of the ground — `context.human_admission` is `off` — is true and
+  **irrelevant here**: that flag governs `finding` notes and `§14-gate` stamps, never an ADR's
+  `Status` line. `ADR-0005`, `ADR-0006`, `ADR-0009`, `ADR-0010` and `ADR-0011` are all `accepted` by
+  Architect/Design with that flag off.
+- **Ground (2) — *"it binds the ticket shape of three epics"*. REAL, AND STILL NOT THE OWNER'S.**
+  The owner's own hedge ("in most cases") reserves to him decisions that **change what the product
+  promises a user**, **spend money**, or **trade away a stated commitment**. This decision does none
+  of the three: `EPIC-005` already promises the book and `EPIC-004` already promises the search, and
+  this rules only **where the composition sits**. It adds **zero production lines**, moves no NFR
+  target, sets no level and measures nothing — which is `ADR-0009`'s own accepted test, met.
+  Binding three tickets' shape is not a product promise; it is structure, which is the thing the
+  owner delegated because he cannot verify it.
+
+**One thing this ratification deliberately does NOT do: it does not require `ABC-078` to change.**
+Clause 5 is the load-bearing sentence and it was re-checked at `main` `3054ee0` before signing —
+`A6`'s byte-identical pin on `src/turn-loop.ts` stands, and this ADR requires zero bytes of that
+file. Had it required one, the ruling would have stopped and escalated to the owner rather than
+signed.
+
+### What would falsify this ADR — owed by the role that ratifies it
+
+| clause | falsified by |
+|---|---|
+| 2 | an `EPIC-005` decorator that cannot be delivered without editing `src/turn-loop.ts` or an `EPIC-004` module — measured, not argued, by `ABC-095` `A6`'s **0 changed lines** assertion going red |
+| 3(a) | a book move reaching `playMove` on any path that does not pass `wasGenerated` — measured by `ABC-094` `A6`'s illegal-entry case driven through `runTurnLoop` |
+| 3(b) | the decorator needing an RNG it did not receive as a parameter — measured by `ABC-086` `A4`'s no-`Math.random` diff scan |
+| 6(c) | `ABC-095` `A1`/`A3` proving unwritable with a counting stub passed as the **inner** seam |
+| 5 | any `ABC-078` criterion having to change. **That is an escalation to the owner, never an amendment made here.** |
+
+### AMENDED at ratification — clause 9 is DISCHARGED, and two anchors re-measured
+
+- **Clause 9 is spent, not pending.** It said `src/cli.test.ts:738` asserts `productionModules()` has
+  length **23** and recommended `ABC-103` before `ABC-078`. **`ABC-103` merged and closed
+  2026-08-18.** At `main` `3054ee0` the count is **computed**: `productionModules()` at
+  `src/cli.test.ts:51` reads `src/` with `readdirSync`, filters `.ts` that are not `.test.ts`, and no
+  literal length assertion remains. **The collision clause 9 predicted cannot occur**, and neither
+  `ABC-078`'s nor `ABC-095`'s module reds that guard on arrival.
+- **Clause 8 is unaffected and its premise re-measured.** The guard still reads `src/`
+  **non-recursively**, so a module in `src/engine/` or `src/book/` would still fall outside it —
+  which is the whole of clause 8's argument. Production modules at `3054ee0`:
+  `ls src/*.ts | grep -v '\.test\.ts$' | wc -l` → **23**, unchanged from the proposing hop.
+- **`EngineSeam` re-measured at `3054ee0`**: `src/turn-loop.ts:138`
+  `export type EngineSeam = (history: GameHistory) => Promise<Move>;`, exact; `TurnLoopOptions.engine`
+  at `:150`.
 
 ## Context
 
