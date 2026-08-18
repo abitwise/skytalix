@@ -1,8 +1,8 @@
 ---
 id: ABC-078
 title: Iterative deepening against a wall clock — the per-move budget, and `EngineSeam` satisfied
-status: backlog
-column: Backlog
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P0
 epic: EPIC-004
