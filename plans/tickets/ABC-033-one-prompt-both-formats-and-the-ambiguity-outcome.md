@@ -53,10 +53,17 @@ which one — instead of being handed a bishop and told nothing.
 
 - **One entry point** that takes the raw line and the `GameHistory` and returns a merged result over
   `ABC-031`'s and `ABC-032`'s three-arm shapes, ready for the seam.
-- **Order of attempt, fixed and asserted:** exact coordinate → exact SAN → case-folded retry of both.
+- **Precedence, fixed and asserted:** exact coordinate → exact SAN → case-folded retry of both.
   **Coordinate first, because it is the smaller grammar and cannot match a SAN string by accident**
   (four characters of `[a-h][1-8]`), while a SAN string like `b4` and a coordinate are distinguishable
   by length in every case the epic accepts.
+  **It is a precedence over answers, not an order of attempt** — corrected 2026-08-18 at the repair
+  hop, where the page was found to be describing something the code does not do. Both readers are
+  asked about every text, eagerly; the order decides which answer is preferred, and nothing is
+  skipped. The two are indistinguishable by any real input for the very reason given above — the
+  grammars are disjoint — so the precedence is asserted through the module's dependency seam, with
+  two stub readers that both claim the same text. QE's mutant M12 swapped the two and reded nothing
+  (`G5`); it reds now.
 - **`legalMoves(position)` is generated ONCE per prompt and handed to every attempt** as the optional
   `legal` parameter both resolvers take. Not once per grammar, not once per retry.
 - **The candidate list is rendered in SAN** (`EPIC-003` acceptance #2: *"both candidate moves are
@@ -123,7 +130,11 @@ which one — instead of being handed a bishop and told nothing.
   `legalMoves` is called **exactly once**, asserted by spy, regardless of how many attempts the line
   goes through. *(Four attempts × one generation each is the easy wrong implementation and it is
   invisible to every content assertion. Same shape as `ABC-021`'s per-ply `gameStatusOf` call-count
-  assertion and `ABC-019`'s counts-map spy.)*
+  assertion and `ABC-019`'s counts-map spy.)* **The once is of the PROMPT POSITION, and rendering an
+  ambiguity is not free** — clarified 2026-08-18 at the repair hop, unchanged in substance.
+  `toSan` derives the position AFTER each checking candidate for its `+`/`#` suffix, so a prompt
+  costs `1 + O(candidates)` derives in all and six queens measured six. `A5` holds as written; what
+  does not hold is quoting "one derive per prompt" as a cost bound for an ambiguity (`G3`).
 - **`A6` (rejection does not advance and does not re-evaluate).** **Given** a line no attempt resolves,
   **when** it is submitted, **then** `kind: "rejected"`, `toFen(position)` is byte-identical, and the
   ply is not advanced. *(`ABC-019`'s `rejected` path, unchanged; this ticket produces the outcome, it

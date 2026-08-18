@@ -35,10 +35,18 @@
  * and does not normalise: one line, as typed, to both readers. The case-folded variants below are
  * the ONE transformation this module applies, and only on the retry.
  *
- * ONE DERIVE PER PROMPT — `A5`. `legalMoves` is called EXACTLY ONCE per submitted line and the one
- * array is handed to every attempt through the optional `legal` parameter both resolvers take, and
- * to `toSan` when the candidate list is rendered. Four attempts x one generation each is the easy
- * wrong implementation and it is invisible to every content assertion, so it is asserted by spy.
+ * ONE DERIVE PER PROMPT — `A5`. `legalMoves` is called EXACTLY ONCE on the PROMPT POSITION per
+ * submitted line and the one array is handed to every attempt through the optional `legal`
+ * parameter both resolvers take, and to `toSan` when the candidate list is rendered. Four attempts
+ * x one generation each is the easy wrong implementation and it is invisible to every content
+ * assertion, so it is asserted by spy.
+ *
+ * WHAT `A5` DOES NOT SAY, because it was once read as saying it: rendering an ambiguity is NOT
+ * free. `toSan` derives the legal moves of the position AFTER a checking candidate to decide its
+ * `+`/`#` suffix (`src/san.ts:105`), so the honest cost of a prompt is `1 + O(candidates)` derives
+ * — six queens on `d4` cost six of those, measured by QE. Those are OTHER positions, which is why
+ * `A5`'s one-derive-per-prompt still holds as written; anyone quoting "one derive per prompt" as a
+ * cost bound for `NFR-003` or `N8-LANE` is quoting a number that does not hold for ambiguities.
  *
  * MOVE IDENTITY is inherited, not re-established: every `Move` returned here is an ELEMENT of that
  * one array, because both resolvers `filter` it and this module only ever selects from it.
@@ -81,26 +89,49 @@ export interface MoveInputDeps {
     legal?: readonly Move[],
   ) => CoordinateParseResult;
   readonly parseSan: (position: Position, text: string, legal?: readonly Move[]) => SanParseResult;
+  /**
+   * `toSan` is on the seam for ONE reason: `A5`'s derive count is otherwise unobservable through
+   * it. `toSan(position, move, legal)` falls back to `legal ?? legalMoves(position)`
+   * (`src/san.ts:78`), so a build that drops the third argument derives the prompt position once
+   * per candidate — three real derives for a two-candidate ambiguity — while a spy watching
+   * `deps.legalMoves` alone still reports 1. QE mutant M11 did exactly that and reded 0 tests
+   * (`G3`, `quality-gate-ABC-033-qe-2026-08-18`). Spying the ARGUMENT is what makes the sharing
+   * assertable; the count alone never could.
+   */
+  readonly toSan: (position: Position, move: Move, legal?: readonly Move[]) => string;
 }
 
-const PRODUCTION_DEPS: MoveInputDeps = { legalMoves, parseCoordinateMove, parseSan };
+const PRODUCTION_DEPS: MoveInputDeps = { legalMoves, parseCoordinateMove, parseSan, toSan };
 
 /**
  * The case-folded RETRY's variants, applied to the whole line and nowhere else.
  *
- * Three, and each one exists for a case the epic names. `bxc4` reads the pawn capture; `Bxc4` the
+ * Four, and each one exists for a case the epic names. `bxc4` reads the pawn capture; `Bxc4` the
  * bishop capture — SAN's piece letter is the first character, so capitalising it is one operation
  * and not a token table; `O-O` is reached from `o-o`, which `parseSan` refuses deliberately (case is
  * meaning) and the 2026-08-18 tolerance ruling did NOT widen.
  *
+ * THE FOURTH EXISTS BECAUSE THE FIRST THREE SHARE ONE ASSUMPTION — that the case-significant
+ * character of a line is at index 0. That holds for every piece-move SAN, which is why `NF3` is
+ * understood via variant 2. It is false at the OTHER end: `e8=Q` needs a lowercase head and an
+ * uppercase tail, which no whole-line transform above can produce, so a caps-lock player typing
+ * `E8=Q` was told `unreadable` while `e8=Q` resolved — the single family where case folding did not
+ * reach, found by QE at `quality-gate-ABC-033-qe-2026-08-18` (`G2`). Variant 4 lowercases the line
+ * and uppercases its LAST character. It is the mirror of variant 2 and knows exactly as little:
+ * nothing of `=`, nothing of promotion, nothing of which letters name a piece. For every line
+ * ending in a digit — which is most of them — it produces the same string as variant 1 and costs
+ * nothing, because a variant that reproduces an already-tried text adds no move to the union.
+ *
  * A variant is a STRING HANDED BACK TO THE SAME TWO READERS, never a second grammar: whatever a
  * variant resolves to is the resolvers' answer, and the union of those answers is what decides
- * between `move` and `ambiguous`.
+ * between `move` and `ambiguous`. Variant 4 changes NOTHING about that: it widens what is asked,
+ * never what is accepted, and a line it makes readable is still `ambiguous` if it names two moves.
  */
 const CASE_VARIANTS: readonly ((line: string) => string)[] = [
   (line) => line.toLowerCase(),
   (line) => line.slice(0, 1).toUpperCase() + line.slice(1).toLowerCase(),
   (line) => line.toUpperCase(),
+  (line) => line.slice(0, -1).toLowerCase() + line.slice(-1).toUpperCase(),
 ];
 
 /** `no-such-move` outranks `unreadable`: the more specific of the codes any attempt produced. */
@@ -128,7 +159,8 @@ export function resolveMoveInput(
   //    `[a-h][1-8]` cannot match a SAN string by accident — then `parseSan`.
   for (const attempt of attemptsOn(position, line, legal, deps)) {
     if (attempt.outcome === "move") return { kind: "move", move: attempt.move };
-    if (attempt.outcome === "ambiguous") return ambiguous(position, attempt.candidates, legal);
+    if (attempt.outcome === "ambiguous")
+      return ambiguous(position, attempt.candidates, legal, deps);
     reasons.push(attempt.reason);
   }
 
@@ -151,7 +183,7 @@ export function resolveMoveInput(
   // which move.
   const candidates = legal.filter((move) => folded.has(move));
   if (candidates.length === 1) return { kind: "move", move: candidates[0] as Move };
-  if (candidates.length > 1) return ambiguous(position, candidates, legal);
+  if (candidates.length > 1) return ambiguous(position, candidates, legal, deps);
 
   return {
     kind: "rejected",
@@ -159,7 +191,23 @@ export function resolveMoveInput(
   };
 }
 
-/** The fixed order of attempt, over one text: coordinate, then SAN. Both get the same `legal`. */
+/**
+ * The two attempts over one text, in the fixed order coordinate-then-SAN. Both get the same `legal`.
+ *
+ * BOTH RESOLVERS ARE CALLED, ALWAYS — this returns an array, not a lazy sequence, so the order here
+ * is a PRECEDENCE over two answers already in hand, not a short-circuit that spares the second
+ * reader. The distinction is invisible in production, because the two grammars are disjoint on
+ * every string either accepts (a coordinate is four-plus characters of `[a-h][1-8]`; a SAN that
+ * short is not one), so no line can make both claim a move and no line can tell the two orderings
+ * apart by its outcome. QE's M12 swapped them and reded nothing, exactly for that reason
+ * (`G5`, `quality-gate-ABC-033-qe-2026-08-18`).
+ *
+ * It is NOT made lazy. Laziness would buy one skipped parse of a four-character string on the
+ * winning path and would make the order observable — but the order is not a behaviour anyone can
+ * reach, and building a mechanism so that a test can watch it is the wrong way round. The
+ * precedence is pinned instead through `MoveInputDeps`, by two stub resolvers that both claim the
+ * same text, which is the only place the rule has an observable consequence at all.
+ */
 function attemptsOn(
   position: Position,
   text: string,
@@ -174,9 +222,10 @@ function ambiguous(
   position: Position,
   candidates: readonly Move[],
   legal: readonly Move[],
+  deps: MoveInputDeps,
 ): MoveInputOutcome {
   return {
     kind: "ambiguous",
-    messages: candidates.map((move) => toSan(position, move, legal)),
+    messages: candidates.map((move) => deps.toSan(position, move, legal)),
   };
 }

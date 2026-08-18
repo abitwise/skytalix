@@ -29,12 +29,33 @@ const PAWN_ONLY_FEN = "4k3/8/8/8/2n5/1P6/8/4K3 w - - 0 1";
 const PROMOTION_CAPTURE_FEN = "3q1k2/4P3/8/8/8/8/8/4K3 w - - 0 1";
 /**
  * A4's adversarial rows — NOT positions from a game, deliberately. Five white knights all reach d2
- * and six white queens all take on d4, which is the widest candidate list this module was able to
- * produce at all, so the frame is measured against the worst case found rather than the pleasant
- * one. Both are legal positions and both round-trip below.
+ * and six white queens all take on d4. Both are legal positions and both round-trip below.
+ *
+ * THESE ARE NOT THE WIDEST CANDIDATE LISTS THIS MODULE CAN PRODUCE, and an earlier version of this
+ * file said they were on a bound that is false. The bound offered was *"exactly six squares attack
+ * any given square by knight move"*: that is true of an edge-ish square like **d2**, which is the
+ * square every knight fixture here uses, and false of a central one — **d4 has eight knight
+ * attackers**, so eight knights of one colour can all name it. QE built exactly that at
+ * `quality-gate-ABC-033-qe-2026-08-18` and reached 7 and 8 candidates; at 7 the frame's message
+ * region appends `(+2 more)`, which FALSIFIES `A4` (`G1`). The generalisation was taken from the
+ * square in hand, which is the ordinary way a bound goes wrong — the fixture chose the square that
+ * made it hold.
+ *
+ * `G1` is NOT repaired here and no seven-knight fixture is added: the overflow is `src/frame.ts`'s
+ * packing meeting a list longer than two rows, this module truncates nothing and widens nothing,
+ * and `A4`'s own prose routes that outcome to `EPIC-002`'s frame owner and a new ticket. The rows
+ * below therefore assert the widest list that is KNOWN TO FIT, and claim nothing beyond it.
  */
 const FIVE_KNIGHTS_FEN = "4k3/8/8/8/2N1N3/1N3N2/8/1N3KN1 w - - 0 1";
 const SIX_QUEENS_FEN = "3Q1k2/8/1Q4Q1/8/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1";
+/**
+ * G2 — a pawn on e7 with the promotion square empty, so `e8=Q` names exactly one legal move and
+ * the four case spellings of it are four spellings of the SAME move. The black king is on a5 and
+ * not on the eighth rank deliberately: from f8 or h8 it would be in check after the promotion and
+ * every SAN here would carry a `+`, which is a different string with a different last character
+ * and would quietly test something else.
+ */
+const PROMOTION_FEN = "8/4P3/8/k7/8/8/8/4K3 w - - 0 1";
 /** The folded castle case — `o-o` / `o-o-o`, which `parseSan` refuses case-exact, deliberately. */
 const CASTLE_FEN = "4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1";
 
@@ -53,6 +74,7 @@ describe("fixtures — every FEN in this file round-trips through toFen", () => 
     CASTLE_FEN,
     FIVE_KNIGHTS_FEN,
     SIX_QUEENS_FEN,
+    PROMOTION_FEN,
   ]) {
     it(`round-trips ${fen}`, () => {
       expect(toFen(newGame(fen).position)).toBe(fen);
@@ -72,17 +94,27 @@ function spied(history: GameHistory): {
   readonly derives: () => number;
   readonly sanTexts: () => string[];
   readonly coordinateTexts: () => string[];
+  readonly sanRenderLegals: () => (readonly Move[] | undefined)[];
 } {
   const legal = legalMoves(history.position);
   const deriveLegal = vi.fn(() => legal);
   const coordinate = vi.fn(parseCoordinateMove);
   const san = vi.fn(parseSan);
+  const render = vi.fn(toSan);
   return {
-    deps: { legalMoves: deriveLegal, parseCoordinateMove: coordinate, parseSan: san },
+    deps: {
+      legalMoves: deriveLegal,
+      parseCoordinateMove: coordinate,
+      parseSan: san,
+      toSan: render,
+    },
     legal,
     derives: () => deriveLegal.mock.calls.length,
     sanTexts: () => san.mock.calls.map((call) => call[1]),
     coordinateTexts: () => coordinate.mock.calls.map((call) => call[1]),
+    // The third ARGUMENT of every candidate render, which is the only place the shared array's
+    // onward journey is observable — see the A5 guard below and G3.
+    sanRenderLegals: () => render.mock.calls.map((call) => call[2]),
   };
 }
 
@@ -208,6 +240,43 @@ describe("ABC-033 A3 — the case-folded retry, both directions", () => {
     expect((outcome as { move: Move }).move).toBe(moveNamed(history, seam.legal, "bxc4"));
   });
 
+  /**
+   * G5 — the ticket says the order is *"fixed and asserted"*. It was fixed and it was not asserted:
+   * QE swapped the two resolvers in `attemptsOn` (mutant M12) and reded 0 of 40 tests.
+   *
+   * The reason nothing red is worth stating exactly, because it decides what the right repair is.
+   * `attemptsOn` returns an ARRAY — both resolvers are called on every text, eagerly — so the order
+   * is a PRECEDENCE over two answers already in hand, not a short-circuit. And the two grammars are
+   * disjoint on every string either accepts, so no real line can make both claim a move: with the
+   * real readers, the two orderings are indistinguishable by any input, which is exactly why the
+   * test below at `:the fixed order` cannot tell them apart either.
+   *
+   * So the honest repair is NOT to make the module lazy. Laziness would make the order observable,
+   * but it would be a mechanism built so a test can watch it — the ticket page has been corrected
+   * to say precedence rather than order of attempt, which is what the code does. What IS assertable
+   * is the precedence itself, through the seam the module already exposes for exactly this kind of
+   * question: two stub readers that BOTH claim the same text. Coordinate's answer must win.
+   */
+  it("coordinate outranks SAN when both readers claim the same text — the precedence, asserted", () => {
+    const history = newGame(START_FEN);
+    const legal = legalMoves(history.position);
+    const coordinateMove = moveNamed(history, legal, "e4");
+    const sanMove = moveNamed(history, legal, "Nf3");
+    expect(coordinateMove).not.toBe(sanMove);
+
+    // Not a position and not a grammar: two stubs that disagree, which is the only arrangement in
+    // which the precedence rule has an observable consequence at all.
+    const outcome = resolveMoveInput(history, "whatever", {
+      legalMoves: () => legal,
+      parseCoordinateMove: () => ({ outcome: "move", move: coordinateMove }),
+      parseSan: () => ({ outcome: "move", move: sanMove }),
+      toSan,
+    });
+
+    expect(outcome.kind).toBe("move");
+    expect((outcome as { move: Move }).move).toBe(coordinateMove);
+  });
+
   it("the fold is tried in the fixed order — coordinate before SAN, exact before folded", () => {
     const history = newGame(BISHOP_ONLY_FEN);
     const seam = spied(history);
@@ -220,6 +289,51 @@ describe("ABC-033 A3 — the case-folded retry, both directions", () => {
     expect(seam.sanTexts()[0]).toBe("BXC4");
     expect(seam.coordinateTexts().length).toBe(seam.sanTexts().length);
   });
+
+  /**
+   * G2 — the family the first three variants could not reach, and the one a caps-lock player hits.
+   *
+   * Variants 1-3 all assume the case-significant character is at index 0. That is true of every
+   * piece-move SAN (`NF3` is understood through variant 2) and false of promotion SAN, where the
+   * piece letter is last. `e8=Q` resolved and `E8=Q` — its exact uppercasing — was refused
+   * `unreadable`, which QE found and the engineer's own note reported at half its width (it named
+   * only `e8=q`). Variant 4, the mirror of variant 2, closes it; the assertion is that all four
+   * spellings name the SAME legal move BY REFERENCE, never merely an equal one.
+   */
+  it("promotion SAN is reached in every case spelling: e8=Q, E8=Q, e8=q, E8=q are one move", () => {
+    const history = newGame(PROMOTION_FEN);
+    const seam = spied(history);
+    const before = toFen(history.position);
+
+    const outcomes = ["e8=Q", "E8=Q", "e8=q", "E8=q"].map((line) =>
+      resolveMoveInput(history, line, seam.deps),
+    );
+
+    for (const outcome of outcomes) expect(outcome.kind).toBe("move");
+    const moves = outcomes.map((outcome) => (outcome as { move: Move }).move);
+    expect(moves[0]).toBe(moveNamed(history, seam.legal, "e8=Q"));
+    for (const move of moves) expect(move).toBe(moves[0]);
+    expect(toFen(history.position)).toBe(before);
+  });
+
+  // The underpromotions too — the variant knows nothing about which letters name a piece, so if it
+  // reached only the queen that would be a token table hiding in a string transform.
+  it("the same holds for the underpromotions: E8=N and e8=n both name e8=N", () => {
+    const history = newGame(PROMOTION_FEN);
+    const seam = spied(history);
+
+    for (const line of ["E8=N", "e8=n"]) {
+      const outcome = resolveMoveInput(history, line, seam.deps);
+      expect(outcome.kind).toBe("move");
+      expect((outcome as { move: Move }).move).toBe(moveNamed(history, seam.legal, "e8=N"));
+    }
+  });
+
+  // NOT asserted, and deliberately: `E8=Q+` and `e8=q+` are still refused, because the
+  // case-significant character is no longer last once a check marker follows it. Reaching those
+  // needs the knowledge that `+`/`#` is a trailing decoration — grammar, which this module may not
+  // hold (see the module header's fences). Left to ABC-032's grammar owner and recorded in the
+  // repair notes; no test pins them as rejected, so closing them there will not fight this file.
 
   // `parseSan` refuses lowercase castles deliberately (case is meaning) and the 2026-08-18
   // tolerance ruling did NOT widen it — so this is ABC-033's case, asserted here.
@@ -304,15 +418,82 @@ describe("ABC-033 A5 — one derive per prompt", () => {
 
       resolveMoveInput(history, line, seam.deps);
 
-      // Every attempt is handed the ONE array, so no resolver derives its own either.
+      // Exactly one derive OF THE PROMPT POSITION. This says nothing about other positions — see
+      // the guard below, which is where the claim that used to be made here now lives honestly.
       expect(seam.derives()).toBe(1);
+    });
+  }
+
+  /**
+   * G3 — the guard the count alone could never be.
+   *
+   * This block used to carry the comment *"Every attempt is handed the ONE array, so no resolver
+   * derives its own either."* **That was false**, in a way `seam.derives()` is structurally unable
+   * to notice. `toSan(position, move, legal)` falls back to `legal ?? legalMoves(position)`
+   * (`src/san.ts:78`) and imports `legalMoves` DIRECTLY from `./legal.ts`, so a build that drops
+   * the third argument re-derives the prompt position once per candidate and the spy still reports
+   * `1` — it is watching `deps.legalMoves`, which nobody called. QE's mutant M11 did precisely that
+   * and reded 0 of 40 tests.
+   *
+   * So the guard is the ARGUMENT, not the count: every candidate render must receive the one array
+   * the prompt derived, by reference. `toEqual` would pass on a freshly generated copy holding the
+   * same moves, which is the mistake this asserts against.
+   *
+   * The honest cost, since it is not one derive: `toSan` DOES derive on its own for the `+`/`#`
+   * suffix, on the position AFTER each checking candidate (`src/san.ts:105`). Those are other
+   * positions, so `A5` as written still holds — but a prompt costs `1 + O(candidates)` derives in
+   * total, and six queens on `d4` measured six. Do not quote "one derive per prompt" as a cost
+   * bound for an ambiguity.
+   */
+  const RENDERED: ReadonlyArray<readonly [name: string, fen: string, line: string]> = [
+    ["an ambiguity", TWO_KNIGHTS_FEN, "Nd2"],
+    ["an ambiguity found by the fold", BOTH_CAPTURES_FEN, "BXC4"],
+    ["six queens, the widest known to fit", SIX_QUEENS_FEN, "Qxd4"],
+  ];
+
+  for (const [name, fen, line] of RENDERED) {
+    it(`hands the ONE derived array to every candidate render for ${name}`, () => {
+      const history = newGame(fen);
+      const seam = spied(history);
+
+      const outcome = resolveMoveInput(history, line, seam.deps);
+
+      expect(outcome.kind).toBe("ambiguous");
+      const rendered = seam.sanRenderLegals();
+      // One render per candidate, and not one of them was left to derive its own.
+      expect(rendered).toHaveLength((outcome as { messages: readonly string[] }).messages.length);
+      expect(rendered.length).toBeGreaterThan(1);
+      for (const passed of rendered) expect(passed).toBe(seam.legal);
     });
   }
 });
 
 describe("ABC-033 A6 — rejection does not advance and does not re-evaluate", () => {
-  for (const line of ["hello", "e9e9", "Qz9", "", "   "]) {
-    it(`rejects ${JSON.stringify(line)} without touching the position`, () => {
+  /**
+   * G4 — each row names the code it expects, and the pair below is what makes the precedence rule
+   * an assertion rather than a wish.
+   *
+   * This loop used to assert `stringMatching(/^(unreadable|no-such-move)$/)`, which pins "a code,
+   * not prose" — worth having, and not enough. Because the regex accepts either, `unreadable` was
+   * pinned to NO input in the whole suite: QE's mutant M6 returned `no-such-move` for every
+   * rejection, including `""` and `"hello"`, and all 40 tests passed. The code is not dead — it is
+   * what every one of these five lines actually produces — it was simply never asserted. The
+   * inverse mutant (always `unreadable`) already died on the `e2e5` row below, so with the exact
+   * codes here the rule `no-such-move` outranks `unreadable` is now asserted in BOTH directions.
+   */
+  const REJECTIONS: ReadonlyArray<readonly [line: string, reason: string]> = [
+    // Nothing in either grammar can read these at all: no reader got as far as a legality question.
+    ["hello", "unreadable"],
+    ["e9e9", "unreadable"],
+    ["Qz9", "unreadable"],
+    ["", "unreadable"],
+    ["   ", "unreadable"],
+    // Read by the coordinate grammar, and no such move here — the more specific code wins.
+    ["e2e5", "no-such-move"],
+  ];
+
+  for (const [line, reason] of REJECTIONS) {
+    it(`rejects ${JSON.stringify(line)} as ${reason} without touching the position`, () => {
       const history = newGame(START_FEN);
       const seam = spied(history);
       const before = toFen(history.position);
@@ -320,10 +501,8 @@ describe("ABC-033 A6 — rejection does not advance and does not re-evaluate", (
       const outcome = resolveMoveInput(history, line, seam.deps);
 
       expect(outcome.kind).toBe("rejected");
-      // A CODE, never display copy — ABC-034 owns the wording.
-      expect((outcome as { messages: readonly string[] }).messages).toEqual([
-        expect.stringMatching(/^(unreadable|no-such-move)$/),
-      ]);
+      // A CODE, never display copy — ABC-034 owns the wording — and THIS code, not either code.
+      expect((outcome as { messages: readonly string[] }).messages).toEqual([reason]);
       expect(toFen(history.position)).toBe(before);
       expect(history.moves).toHaveLength(0);
       expect(seam.derives()).toBe(1);
