@@ -24,11 +24,15 @@ import { describe, expect, it, vi } from "vitest";
 import { ACCEPTED_ARGUMENTS, type ResolvedOptions, resolveOptions } from "./cli-options.ts";
 import { frameHeight } from "./frame.ts";
 import * as glyphMode from "./glyph-mode.ts";
-import { gameStatusOf, newGame } from "./history.ts";
+import { type GameHistory, gameStatusOf, newGame, playMove } from "./history.ts";
 import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
+import { legalMoves } from "./legal.ts";
+import { PROMPT } from "./line-input.ts";
+import { squareName } from "./position.ts";
 import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
 import { makeRenderSeam } from "./render-seam.ts";
 import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
+import { INPUT_ENDED_NOTICE, type TerminalReason } from "./turn-loop.ts";
 
 const SOURCE_DIRECTORY = new URL(".", import.meta.url).pathname;
 const REPOSITORY = new URL("..", import.meta.url).pathname;
@@ -103,6 +107,60 @@ const frameRowsIn = (text: string): readonly string[] =>
 const codePointsOf = (text: string): readonly number[] =>
   [...text].map((character) => character.codePointAt(0) as number);
 
+/**
+ * `ABC-043` — THE FRAMES A CHILD'S STDOUT CARRIES, in order, byte for byte.
+ *
+ * The stream is no longer one frame: a session emits one per render, `ABC-037`'s prompt (`PROMPT`,
+ * two bytes and NO newline) between them, and `INPUT_ENDED_NOTICE` at the end of a truncated one.
+ * So a frame can no longer be read as "the whole stream" or as a fixed offset from row 0 —
+ * `npm`'s banner already made that false for one child, and a prompt now makes it false for the rest.
+ *
+ * FRAMES ARE LOCATED BY THE BOARD'S FILE LEGEND, never by an offset and never by a count. The legend
+ * is `renderBoard`'s own last row — read from the merged renderer per (mode, orientation), so its
+ * spelling and the board's height both move with that module rather than being transcribed here —
+ * and it occurs exactly once per frame at a known distance from the frame's first row. That makes
+ * this robust to `npm`'s banner, to the prompt, to the notice, and to `W` changing between frames.
+ *
+ * The prompt is stripped from the frame's FIRST row and only there: the writer ends every frame with
+ * a newline and the prompt carries none, so a prompt always lands at the start of the line the next
+ * frame's row 0 is written onto, and nowhere else.
+ */
+const framesIn = (
+  stream: string,
+  mode: GlyphMode,
+  orientation: Orientation,
+): readonly (readonly string[])[] => {
+  const board = boardRegionOf(mode, orientation);
+  const legend = (board[board.length - 1] as string).trimEnd();
+  const height = frameOf(mode, orientation).length;
+  const lines = stream.split("\n");
+
+  return lines.flatMap((line, index) => {
+    if (line.trimEnd() !== legend) return [];
+    const top = index - (board.length - 1);
+    const rows = lines.slice(top, top + height);
+    const first = rows[0] as string;
+    return [[first.startsWith(PROMPT) ? first.slice(PROMPT.length) : first, ...rows.slice(1)]];
+  });
+};
+
+/**
+ * The game the child was scripted to play, replayed here through the MERGED modules — the reference
+ * `A2`'s final frame is compared against, rather than a second transcription of what a mated board
+ * looks like. Moves are named as the engine double names them: from-square then to-square.
+ */
+const playedOut = (coordinates: readonly string[]): GameHistory => {
+  const history = startGame();
+  for (const wanted of coordinates) {
+    const move = legalMoves(history.position).find(
+      (candidate) => `${squareName(candidate.from)}${squareName(candidate.to)}` === wanted,
+    );
+    if (move === undefined) throw new Error(`no legal move ${wanted} in the replay`);
+    playMove(history, move);
+  }
+  return history;
+};
+
 // ---------------------------------------------------------------------------------------------
 // THE CHILDREN. Ten, spawned once each, and the count is asserted below so it cannot creep.
 // ---------------------------------------------------------------------------------------------
@@ -115,15 +173,46 @@ interface Child {
   readonly union: string;
 }
 
+/**
+ * `ABC-043`'s two additions to `ABC-042`'s one helper (`## Test notes` 5 and 6: extend the helper,
+ * do not add a second `spawnSync` call site — `:950`'s guard asserts that textually and stays green).
+ *
+ * `input` — the script the child types. `ABC-042` spawned with `stdio: ["ignore", …]` because a
+ * board-printer reads nothing; every `ABC-043` criterion feeds a pipe, so stdin is now a pipe on
+ * EVERY child. A child given no script gets an empty one, which is the same end-of-input a closed
+ * `/dev/null` handed it before.
+ *
+ * `hook` — a `data:` URL loaded with `--import`, substituting one module in the CHILD only. See
+ * `substituting` below for the mechanism, its licence and its limits.
+ */
+interface ChildOptions {
+  readonly input?: string;
+  readonly hook?: string;
+}
+
 let spawned = 0;
 
-const childOf = (command: string, args: readonly string[]): Child => {
+const childOf = (command: string, args: readonly string[], options: ChildOptions = {}): Child => {
   spawned++;
-  const child = spawnSync(command, [...args], {
-    cwd: REPOSITORY,
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "pipe"],
-  });
+  const child = spawnSync(
+    command,
+    options.hook === undefined ? [...args] : ["--import", options.hook, ...args],
+    {
+      cwd: REPOSITORY,
+      encoding: "utf8",
+      input: options.input ?? "",
+      stdio: ["pipe", "pipe", "pipe"],
+      // A HUNG CHILD MUST BE A RED ROW, NOT A STALLED LANE — `ABC-043`, and it is `G6`'s failure
+      // mode made survivable rather than a general precaution. Two overlapping `seam()` calls
+      // orphan the first read FOREVER: MEASURED at this hop, that build wrote 501 bytes and then
+      // never exited, and a suite with no bound waits for it as long as anyone lets it. With one,
+      // `spawnSync` returns an `ETIMEDOUT` error and the throw below names it — WATCHED going red
+      // at this hop, at a temporary 1 ms bound. The bound is deliberately two orders of magnitude
+      // above the 64-72 ms a child costs here, so nothing but a genuine hang can reach it: it is
+      // not a performance assertion and must never be read as one.
+      timeout: 30_000,
+    },
+  );
   // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK: a child that never started says so here,
   // loudly, instead of arriving as an empty capture that every absence assertion would swallow.
   if (child.error !== undefined)
@@ -140,13 +229,110 @@ const childOf = (command: string, args: readonly string[]): Child => {
 const run = (...args: readonly string[]): Child =>
   childOf(process.execPath, [ENTRY_POINT, ...args]);
 
+/** The same entry point, typed at and — where a criterion needs a constructed fault — hooked. */
+const play = (args: readonly string[], options: ChildOptions): Child =>
+  childOf(process.execPath, [ENTRY_POINT, ...args], options);
+
+// ---------------------------------------------------------------------------------------------
+// THE SUBSTITUTION RIG (`ABC-043` `A2`/`A5`, ruled and measured by BA/PM at
+// `refine-ABC-043-2026-08-19`, on the ticket under `## The ruling on `A5` and `A2`'s testability`).
+//
+// WHAT IT IS. `node:module`'s `registerHooks`, loaded into the CHILD with `--import`, replaces one
+// module's source in that child and nothing else. The hook rides a `data:text/javascript,…` URL, so
+// the whole rig is a string in this file: no new file, nothing under `src/`, no env var any
+// production line reads, and no export — `src/cli.ts` still exports NOTHING (`ADR-0011` clause 4).
+// A human running `npm run chess` never passes `--import`, which is the discriminator `ADR-0013`
+// clause 3 draws: only a test can reach this, so it is a test double and not an undelivered feature.
+//
+// WHY IT IS NEEDED. `A5` asks for "an `EngineSeam` that throws" and "one that returns a move
+// `legalMoves` did not produce" — constructed faults, i.e. doubles by definition — driven "through
+// the real entry point rather than through a stub harness". That clause constrains the DRIVER: the
+// exit code, the frame stream and the top-level handler must be the PROCESS's, and they are. `A2`'s
+// "deterministic opponent" must be a double for a second reason the ticket states as a requirement:
+// the merged engine is iterative deepening against a wall clock (`src/engine.ts:83,305`), so a
+// scripted line asserted against it is flaky by construction — and MEASURED here, one real engine
+// ply on the start position costs 3.09 s of wall against `NFR-008`'s 3 s clause for the whole lane.
+//
+// THE LIMITS THIS FILE HONOURS. `./line-input.ts`, `./frame.ts` and `./turn-loop.ts` are NEVER
+// substituted — replacing any of them would test the harness instead of the product. The engine
+// seam is substituted under `A2`, `A5` and `A7`, and by `ABC-042`'s two colour children, which now
+// reach an engine ply through the delivered composition and which `## Test notes` 8 forbids to run
+// the real search in the default lane. `./command-input.ts` is substituted by `A3` alone, and that
+// one is an EXTENSION of BA/PM's ruling rather than an application of it — the reasoning, and why
+// no smaller instrument reaches `A3`, is at the `A3` row.
+// ---------------------------------------------------------------------------------------------
+
+/** A hook URL that gives the child a different `src/<module>` and leaves every other module real. */
+const substituting = (module: string, source: string): string =>
+  `data:text/javascript,${encodeURIComponent(
+    [
+      'import { registerHooks } from "node:module";',
+      "registerHooks({",
+      "  load(url, context, nextLoad) {",
+      `    if (!url.endsWith(${JSON.stringify(`/src/${module}`)})) return nextLoad(url, context);`,
+      `    return { format: "module", shortCircuit: true, source: ${JSON.stringify(source)} };`,
+      "  },",
+      "});",
+    ].join("\n"),
+  )}`;
+
+/**
+ * A deterministic opponent: the scripted moves in order, named as from-square + to-square.
+ *
+ * It calls the REAL `legalMoves` — a substituted module's relative imports resolve against the
+ * module it replaced — so the move it returns is a generator-owned `Move` with all six fields, which
+ * is what `wasGenerated` (`src/turn-loop.ts:191`) demands and what keeps this a deterministic
+ * opponent rather than a second fault. `DEFAULT_BUDGET_MS` is exported because the entry point
+ * imports it; the double consults no clock, so its value cannot matter.
+ */
+const scriptedEngine = (moves: readonly string[]): string => `
+import { legalMoves } from "./legal.ts";
+import { squareName } from "./position.ts";
+export const DEFAULT_BUDGET_MS = 0;
+export function createEngine() {
+  const scripted = ${JSON.stringify(moves)};
+  let ply = 0;
+  return async (history) => {
+    const want = scripted[ply++];
+    const move = legalMoves(history.position).find(
+      (candidate) => squareName(candidate.from) + squareName(candidate.to) === want,
+    );
+    if (move === undefined) throw new Error("scripted engine: no legal move " + want);
+    return move;
+  };
+}
+`;
+
+/**
+ * The first legal move, instantly. The opponent for a child whose criterion is not about the GAME —
+ * `ABC-042`'s two colour children, whose subject is the first frame's orientation and whose command
+ * line now reaches an engine ply. It plays on forever, so nothing it does can end a session early.
+ */
+const FIRST_LEGAL_ENGINE = `
+import { legalMoves } from "./legal.ts";
+export const DEFAULT_BUDGET_MS = 0;
+export function createEngine() {
+  return async (history) => legalMoves(history.position)[0];
+}
+`;
+
 const CHILDREN = {
   /** `A1` — the real command, and the only one that goes through `npm`. */
   npmRun: childOf("npm", ["run", "chess"]),
-  /** `A4` white + `A7`'s unicode half: one child, two criteria. */
+  /** `A4` white + `A7`'s unicode half: one child, two criteria. The human moves first — no engine. */
   white: run("--colour", "white", "--unicode"),
-  black: run("--colour", "black"),
-  random: run("--colour", "random"),
+  /**
+   * `ABC-042`'s two colour children, HOOKED at `ABC-043` and not re-scoped. Their subject is the
+   * FIRST frame — the orientation and the status rows — which is rendered before anything acts. What
+   * changed is the composition below them: `--colour black` opens with the ENGINE, and `random`
+   * opens with it whenever the coin lands black. MEASURED at this hop: the same two children on the
+   * real search cost 3.09 s of wall EACH (`node src/cli.ts --colour black </dev/null`, real 3.085 s,
+   * user 3.192 s), which is `NFR-008`'s whole 3 s wall clause spent by one child and half of it
+   * spent at random. `## Test notes` 8 forbids a default-lane row to run the real engine, so they
+   * get the instant opponent; the real search end to end stays the named, uncovered gap it was.
+   */
+  black: play(["--colour", "black"], { hook: substituting("engine.ts", FIRST_LEGAL_ENGINE) }),
+  random: play(["--colour", "random"], { hook: substituting("engine.ts", FIRST_LEGAL_ENGINE) }),
   /** `A5` end to end. */
   conflict: run("--ascii", "--unicode"),
   /** `A6`(iii)'s four, exactly as the criterion names them. */
@@ -156,6 +342,96 @@ const CHILDREN = {
   bareWord: run("foo"),
   /** Security bar 3 — one spawn, one token carrying a literal escape sequence. */
   escape: run("--colour", "\u001b[2Jpurple"),
+
+  // -------------------------------------------------------------------------------------------
+  // `ABC-043`'s SEVEN, counted off the criteria at the cut (`N8-SPAWN`, on the ticket) and not one
+  // more. Measured here at 64-72 ms of wall each; the pin below moves 10 -> 17 with that row as its
+  // reason, and 17 is a ceiling rather than a target.
+  // -------------------------------------------------------------------------------------------
+
+  /**
+   * `A2` — a scripted game end to end, and `A6`'s ">= 6 frames" run. Fool's mate: the human types
+   * `f3` and `g4`, the deterministic opponent answers `e5` and `Qh4#`. `zzz` between them is the
+   * third term of the frame formula — a non-advancing outcome that carries a message — and it is
+   * fed in the MIDDLE rather than at the end, so a build that dropped it shifts the whole tail.
+   */
+  mate: play(["--colour", "white"], {
+    input: "f3\nzzz\ng4\n",
+    hook: substituting("engine.ts", scriptedEngine(["e7e5", "d8h4"])),
+  }),
+
+  /**
+   * `A3` — `[D31]`'s ruling, as a child. The PARSER throws, one layer below the real `InputSeam`:
+   * `src/line-input.ts` catches nothing by its own ruling, so the throw crosses the merged seam, the
+   * merged loop repairs the borrowed board and rethrows, and it arrives at the entry point's own
+   * handler in the process that owns the exit code.
+   */
+  parserBug: play(["--colour", "white"], {
+    input: "e4\n",
+    hook: substituting(
+      "command-input.ts",
+      'export function resolvePromptLine() { throw new Error("the parser threw"); }\n',
+    ),
+  }),
+
+  /**
+   * `A4` — end-of-input, and the child `A3` is asserted AGAINST. No hook and no engine ply: the real
+   * `./engine.ts` is loaded and never called, so this is the delivered product on a truncated
+   * script. The script ends WITHOUT a trailing newline, which is the criterion's own Given.
+   */
+  truncated: play(["--colour", "white"], { input: "e4" }),
+
+  /** `A5` — an `EngineSeam` that throws. `--colour black`, so the engine acts before anything else. */
+  engineThrows: play(["--colour", "black"], {
+    hook: substituting(
+      "engine.ts",
+      `export const DEFAULT_BUDGET_MS = 0;
+export function createEngine() {
+  return async () => { throw new Error("the engine seam threw"); };
+}
+`,
+    ),
+  }),
+
+  /**
+   * `A5` again — an `EngineSeam` that returns a move `legalMoves` did not produce. A REAL legal move
+   * with one field falsified: `captured` decides the undo record `playMove` builds, so a move with
+   * the right squares and a wrong `captured` corrupts the board exactly as a foreign move does
+   * (`src/turn-loop.ts:191-200`). A pair of made-up squares would be caught by a weaker guard too.
+   */
+  engineForeign: play(["--colour", "black"], {
+    hook: substituting(
+      "engine.ts",
+      `import { legalMoves } from "./legal.ts";
+export const DEFAULT_BUDGET_MS = 0;
+export function createEngine() {
+  return async (history) => ({ ...legalMoves(history.position)[0], captured: 1 });
+}
+`,
+    ),
+  }),
+
+  /**
+   * `A7` black — the engine acts first and NO prompt is read before it. The witness is the
+   * unconsumed line (`## Test notes` 3): the script's first line is a move only BLACK can play, so a
+   * build that read it before the engine's ply would consume it into the void and the game would go
+   * on without it. The opponent is scripted for two plies, so the session ends on end-of-input
+   * rather than on an opponent that ran out of script.
+   */
+  colourBlack: play(["--colour", "black"], {
+    input: "e5\n",
+    hook: substituting("engine.ts", scriptedEngine(["a2a3", "b2b3"])),
+  }),
+
+  /**
+   * `A7` white — the reverse, because either direction alone is satisfied by a wrong build. The
+   * opponent is scripted for exactly the ONE ply this session gives it: a build that asked it twice
+   * would run the script out and end on `engine-threw`, which is a red rather than a silent pass.
+   */
+  colourWhite: play(["--colour", "white"], {
+    input: "e4\n",
+    hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
+  }),
 } as const;
 
 // ---------------------------------------------------------------------------------------------
@@ -256,20 +532,28 @@ describe("ABC-042 — a human can run it", () => {
       }),
     );
 
-    // `npm` prints its own two-line banner on stdout before the script's output, so the frame is
-    // asserted as the TAIL of the stream, byte for byte. Nothing about the banner is asserted —
-    // it is npm's, not this ticket's — but the rows before the frame carry no frame row.
-    const rows = child.stdout.split("\n");
-    const tail = rows.slice(rows.length - frame.length - 1, rows.length - 1);
-    expect(tail).toEqual([...frame]);
-    expect(frameRowsIn(rows.slice(0, rows.length - frame.length - 1).join("\n"))).toEqual([]);
+    // `npm` prints its own two-line banner on stdout before the script's output, and since
+    // `ABC-043` the START POSITION IS NO LONGER THE WHOLE STREAM: this command now opens a session,
+    // so the frame is followed by `ABC-037`'s prompt and — stdin being an empty pipe here — the
+    // loop's end-of-input notice. The frame is therefore LOCATED rather than sliced off either end
+    // (`framesIn`), which is what makes this row read the same on a board-printer and on a game.
+    const frames = framesIn(child.stdout, "ascii", "white-bottom");
+    expect(frames, "the start position, once").toHaveLength(1);
+    const shown = frames[0] as readonly string[];
+    expect(shown).toEqual([...frame]);
+    // Nothing outside the frame carries a frame row — npm's banner above it and the session's tail
+    // below it are both asserted to be frame-free, which is what the old whole-stream slice bought.
+    expect(frameRowsIn(child.stdout.replace(shown.join("\n"), ""))).toEqual([]);
     // The eight ranks, named as `A1` names them, so the row count alone cannot satisfy it.
     for (const rank of ["8", "7", "6", "5", "4", "3", "2", "1"]) {
       expect(
-        tail.some((row) => row.startsWith(`${rank} `)),
+        shown.some((row) => row.startsWith(`${rank} `)),
         `rank ${rank}`,
       ).toBe(true);
     }
+    // `ABC-043` — and the command a human types is now a GAME. The one board it prints is the one
+    // above; what follows it is the prompt and the clean end-of-input notice, in that order.
+    expect(child.stdout.endsWith(`${PROMPT}${INPUT_ENDED_NOTICE}\n`)).toBe(true);
   });
 
   it("A1 — AGENTS.md's `Dev / run` line is the command that was run", () => {
@@ -310,18 +594,23 @@ describe("ABC-042 — a human can run it", () => {
     const stream = CHILDREN.npmRun.stdout;
 
     expect(stream).not.toContain("\u001b[");
-    // "Ends with exactly one `\n` after the last row" as a byte assertion: the frame joined by
-    // newlines, one newline, and nothing more. The second expectation is what makes the first
-    // exact rather than a lower bound.
-    expect(stream.endsWith(`${frame.join("\n")}\n`)).toBe(true);
-    expect(stream.endsWith(`${frame.join("\n")}\n\n`)).toBe(false);
+    // "Exactly one `\n` after the last row" as a byte assertion: the frame joined by newlines, one
+    // newline, and — since `ABC-043` — the session's own tail rather than the end of the stream.
+    // The second expectation is what makes the first exact rather than a lower bound: TWO newlines
+    // after the last row would mean the writer emitted a blank line of its own.
+    expect(stream).toContain(`${frame.join("\n")}\n${PROMPT}`);
+    expect(stream).not.toContain(`${frame.join("\n")}\n\n`);
   });
 
-  it("A8 — `beginFrameSession` is called once, with the first frame's own length", () => {
+  it("A8 / ABC-043 A6 — the entry point begins NO frame session and names no height", () => {
     const code = executableCodeOf("cli.ts");
 
-    expect(code.match(/\bbeginFrameSession\s*\(/g)).toHaveLength(1);
-    expect(code).toMatch(/beginFrameSession\(process\.stdout,\s*frame\.length\)/);
+    // `ABC-042` called `beginFrameSession` itself, with the one frame's own `.length`. `ABC-043`
+    // hands `process.stdout` to `runTurnLoop` and the LOOP owns the session — so "called exactly
+    // once" moved from this module into merged, mutation-tested code, and what this row now asserts
+    // is that no SECOND session can be begun here. `ABC-043` `A6`'s observed half is at its own row.
+    expect(code).not.toContain("beginFrameSession");
+    expect(code).toMatch(/sink,\s*\}\)/);
   });
 });
 
@@ -764,8 +1053,14 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // merged before this ticket. A whole-tree reading reds on `src/frame.ts`, whose docblock names
     // the handle in order to say it never reaches for it, and on `glyph-mode.ts`, which legitimately
     // reads `isTTY` and is the one merged exception the ticket names. Neither is this ticket's.
+    // STILL ACQUIRED ONCE, and `ABC-043` is where that stopped being free: the session needs the
+    // handle TWICE — as the loop's `FrameSink` and as the prompt's `PromptOutput` — so the entry
+    // point reads it into `sink` and passes that. A build naming `process.stdout` at both options
+    // acquires it twice and reds here, which is the property `A9` is about.
     expect(entry.match(/process\.stdout/g)).toHaveLength(1);
-    expect(entry).toMatch(/beginFrameSession\(process\.stdout,/);
+    expect(entry).toMatch(/const sink = process\.stdout;/);
+    expect(entry).toMatch(/output:\s*sink/);
+    expect(entry).toMatch(/\bsink,/);
     expect(sourceOf("cli-options.ts")).not.toContain("process.stdout");
     // And the new modules are the two named ones: a third would put this row out of date silently.
     expect(productionModules().filter((module) => module.startsWith("cli"))).toEqual([
@@ -788,10 +1083,19 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // exactly the unvalidated second path V2.2.2 forbids — and it was green against the count above.
     // The resolver already gets this stronger form (`not.toContain("process")` on its whole source);
     // this is that form's other half, on the one module that legitimately names the handles.
+    // A SORTED LIST WITH ITS REPEATS, not a set, and `ABC-043` is why that matters: the product now
+    // writes `process.exitCode` THREE times and those three ARE the exit-code rule — the refused
+    // command line, the loop's outcome carried verbatim, and the crash. A FOURTH assignment is a
+    // fourth rule and has to be seen; a set would hide it. `process.stderr` twice for the same
+    // reason: the two things this product writes there are a usage error and an internal error.
     expect((entry.match(/process\.\w+/g) ?? []).sort()).toEqual([
       "process.argv",
       "process.exitCode",
+      "process.exitCode",
+      "process.exitCode",
       "process.stderr",
+      "process.stderr",
+      "process.stdin",
       "process.stdout",
     ]);
     expect(entry, "argv reached by bracket access").not.toMatch(/process\s*\[/);
@@ -799,10 +1103,12 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // enumerate SPELLINGS, and a spelling list is never longer than the last census that wrote it:
     // an alias (`const ambient = process`), an ESM import (`import { argv } from "node:process"`)
     // and an optional chain (`process?.argv`) each add a second, unvalidated read that BOTH rows
-    // above let through, and all three shipped 856/856 green. `process` occurs exactly FOUR times
-    // in this module and the row above says which four — together they CLOSE the set instead of
-    // listing it, which is the same move `A6`(i) makes on the accepted arguments.
-    expect(entry.match(/\bprocess\b/g)).toHaveLength(4);
+    // above let through, and all three shipped 856/856 green. `process` occurs exactly EIGHT times
+    // in this module and the row above says which eight — together they CLOSE the set instead of
+    // listing it, which is the same move `A6`(i) makes on the accepted arguments. It was FOUR until
+    // `ABC-043` wired the session: `process.stdin` is the reader's source, and the crash path adds
+    // the second `process.stderr` and the third `process.exitCode`.
+    expect(entry.match(/\bprocess\b/g)).toHaveLength(8);
     // `globalThis` is asserted here as well as on `A2`'s row, for a different reason: there it is
     // about publishing a binding, here about acquiring an ambient one. `globalThis["process"].argv`
     // — `X8`'s own spelling in the `ABC-041` re-gate — is caught today ONLY by `A2`'s row, so `A9`
@@ -825,17 +1131,28 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // The instrument is a TRANSCRIPTION, not a denylist of the row counts: every numeric literal in
     // the two modules is listed here with what it is, so a new number cannot arrive unexplained and
     // none of the listed ones is a count of rows.
+    //
+    // THE TEMPLATE-LITERAL BLANKER WAS BLIND AND IS FIXED HERE — found at `ABC-043` by mutation, and
+    // it is a hole in the INSTRUMENT rather than in what it measures. The old expression could not
+    // match a literal containing an interpolation at all, so with TWO such literals in a module it
+    // matched the CLOSING backtick of the first through the OPENING backtick of the second and
+    // blanked every line between them. MEASURED: with a deliberate `beginFrameSession(sink, 23)`
+    // planted in that gap, this row stayed GREEN — the `23` was erased before the scan ever ran.
+    // `ABC-042` shipped ONE interpolated literal, so the hole could not open until `ABC-043` added
+    // the crash line's. Matching to the next unescaped backtick is correct for both delivered
+    // modules and is what a row-count guard has to do; the same planted `23` reds this row now.
     const numbersIn = (file: string): readonly string[] => {
       const code = executableCodeOf(file)
         .replace(/"(?:[^"\\]|\\.)*"/g, '""')
         .replace(/'(?:[^'\\]|\\.)*'/g, "''")
-        .replace(/`(?:[^`\\$]|\\.|\$(?!\{))*`/g, "``");
+        .replace(/`(?:[^`\\]|\\.)*`/g, "``");
       return [...new Set(code.match(/0[xX][0-9a-fA-F]+|\d+(?:\.\d+)?/g) ?? [])].sort();
     };
 
     // `2` skips the two argv entries node supplies; `1` is the usage exit code; `0`, `0x20` and
-    // `0x7f` are the byte filter's C0/DEL bounds.
-    expect(numbersIn("cli.ts")).toEqual(["0", "0x20", "0x7f", "1", "2"]);
+    // `0x7f` are the byte filter's C0/DEL bounds; `70` is `sysexits.h`'s `EX_SOFTWARE`, `ABC-043`'s
+    // internal-error exit — and NONE of the six is a count of rows, which is what this row decides.
+    expect(numbersIn("cli.ts")).toEqual(["0", "0x20", "0x7f", "1", "2", "70"]);
     // `0` starts the scan, `1` steps over `--colour`'s value, `0.5` is a fair coin.
     expect(numbersIn("cli-options.ts")).toEqual(["0", "0.5", "1"]);
   });
@@ -947,11 +1264,20 @@ describe("ABC-042 — the shape of what was delivered", () => {
     expect(child.status).not.toBe(0);
   });
 
-  it("N8-LANE — this file spawns TEN children and no more", () => {
+  it("N8-LANE — this file spawns SEVENTEEN children and no more", () => {
     // The budget, pinned mechanically. Every child is spawned once at module scope; a later hop
     // that adds one has to change this number and say why.
-    expect(spawned).toBe(10);
-    expect(Object.keys(CHILDREN)).toHaveLength(10);
+    //
+    // TEN UNTIL `ABC-043`, and the reason it moved is on that ticket rather than in this comment:
+    // `## Security / NFR triggers`' `N8-SPAWN` row derives SEVEN more, criterion by criterion
+    // (`A2` 1, `A3` 1, `A4` 1, `A5` 2, `A7` 2; `A1`, `A6` and `A8` add none), and the pin moves with
+    // that derivation as its reason. SEVENTEEN IS A CEILING, NOT A TARGET: a child no criterion
+    // names is a finding against the ticket, never a charge on the account. Measured at that hop:
+    // 64-72 ms of wall each, ~0.46 s for the seven. `N8-LANE`'s 650 ms bar is NOT claimed met here —
+    // `ABC-108`'s `OQ-1` has the lane's own total under open question, and until Architect/Design
+    // rules it no ticket may honestly be measured against that number.
+    expect(spawned).toBe(17);
+    expect(Object.keys(CHILDREN)).toHaveLength(17);
     // THE PIN ABOVE IS SELF-REFERENTIAL: `spawned` counts only children made through `childOf`, so
     // a direct `spawnSync` adds an eleventh child the counter never sees, and that build was green.
     // `N8-LANE` is breached and escalated, which makes this the instrument the owner's decision
@@ -969,9 +1295,17 @@ describe("ABC-042 — the shape of what was delivered", () => {
 describe("ABC-066 — the usage line is a command the user can actually run", () => {
   it("A1/A2/A3 — every refusal advertises the separator, and all it advertises resolves", () => {
     // THE REFUSAL CHILDREN, DERIVED FROM THE CAPTURE, NOT LISTED: every child that exited non-zero.
-    // Zero new spawns — `spawned` stays at the ten this file's `N8-LANE` row pins — and a listed set
-    // would go stale the day an eleventh criterion refuses a command line this row cannot see.
-    const refused = Object.values(CHILDREN).filter((child) => child.status !== 0);
+    // Zero new spawns — `spawned` stays at what this file's `N8-LANE` row pins — and a listed set
+    // would go stale the day a further criterion refuses a command line this row cannot see.
+    //
+    // `ABC-043` GAVE THE PRODUCT A SECOND NON-ZERO EXIT and the derivation had to narrow with it: a
+    // crashed SESSION also exits non-zero, and it is refused nothing — its command line was accepted
+    // and its game started. The discriminator is the product's own, not a code transcribed here: a
+    // refusal is a non-zero exit that is NOT marked an internal error. Narrowing by the usage line
+    // instead would have made `A1` circular, since `A1` is what asserts that line exists.
+    const refused = Object.values(CHILDREN).filter(
+      (child) => child.status !== 0 && !/internal error/i.test(child.union),
+    );
     expect(refused, "the captured refusal children").toHaveLength(6);
 
     // `A1` — the separator reaches the user, on all six, on the channel he reads it on.
@@ -1329,20 +1663,29 @@ describe("ABC-064 — the frame's shape and the status panel, on the three non-d
   };
 
   it("A1 — each non-default child writes the reference frame's row count, and one newline after its last row", () => {
-    // NO ROW-COUNT LITERAL (`## Out of scope`). The 23 is `frameOf`'s, composed from the merged
+    // NO ROW-COUNT LITERAL (`## Out of scope`). The height is `frameOf`'s, composed from the merged
     // modules per (mode, orientation), so the day the pane's height changes this row moves with it.
     for (const { name, child, mode, orientations } of NON_DEFAULT) {
       const rows = child.stdout.split("\n");
       const heights = orientations.map((orientation) => frameOf(mode, orientation).length);
 
       expect(child.status, `${name} exited non-zero: ${child.stderr}`).toBe(0);
-      // "EXACTLY ONE NEWLINE AFTER THE LAST ROW", as `:308` means it and NOT as a naive trailing
+      // "EXACTLY ONE NEWLINE AFTER THE LAST ROW", as `A8` means it and NOT as a naive trailing
       // newline test would read it: the frame's last row is the RESERVED EMPTY PROMPT ROW, so a
       // correct stream genuinely ends in two newlines and an `endsWith` test for one would red on a
-      // correct build. The two rows below say it exactly — the stream splits into the frame's rows
-      // plus ONE empty tail, which holds only when exactly one newline follows that last row.
+      // correct build.
       expect(rows[rows.length - 1], `${name} does not end with a newline`).toBe("");
-      expect(heights, `${name} row count`).toContain(rows.length - 1);
+      // `ABC-043` — A CHILD IS A SESSION NOW, so the stream is no longer one frame and its length
+      // no longer answers this. EVERY frame is measured instead of the stream, which is strictly
+      // more than the old row asked for: each one carries the reference height, and a session that
+      // grew or shrank a frame mid-stream reds where a whole-stream count could not see it.
+      for (const orientation of orientations) {
+        const frames = framesIn(child.stdout, mode, orientation);
+        if (frames.length === 0) continue; // `random`'s other orientation — `:1600` owns the coin
+        for (const [index, frame] of frames.entries()) {
+          expect(heights, `${name} frame ${index} row count`).toContain(frame.length);
+        }
+      }
     }
   });
 
@@ -1360,11 +1703,9 @@ describe("ABC-064 — the frame's shape and the status panel, on the three non-d
     // every status region came back byte-identical to the default child's, so the criterion is
     // asserted as it was cut. Had they differed, this row would not exist and the difference would
     // be the ticket's result.
-    const reference = frameOf("ascii", "white-bottom");
     // The default child is `npmRun`, and `npm`'s own banner precedes its frame — so the frame is
-    // taken as the TAIL exactly as `:263` takes it, rather than from row 0.
-    const npmRows = CHILDREN.npmRun.stdout.split("\n");
-    const defaultFrame = npmRows.slice(npmRows.length - reference.length - 1, npmRows.length - 1);
+    // LOCATED, exactly as `A1`'s row locates it, rather than sliced off either end of the stream.
+    const defaultFrame = framesIn(CHILDREN.npmRun.stdout, "ascii", "white-bottom")[0] ?? [];
     const defaultStatus = statusRowsIn(defaultFrame, "ascii", "white-bottom");
 
     // (i) NON-VACUITY FIRST: blank arrays compare equal to blank arrays, so a build that emitted no
@@ -1380,15 +1721,36 @@ describe("ABC-064 — the frame's shape and the status panel, on the three non-d
       "the children A3 names",
     ).toEqual(["black", "random"]);
 
+    // (iii) `ABC-043` — WHAT COLOUR NOW ALSO CHANGES, and it is not the panel: WHO ACTS FIRST. A
+    // human playing black watches the engine's opening ply, so that child's FIRST frame carries the
+    // `thinking` flag the loop sets, and one cell of the status panel says so. The criterion is
+    // still "the orientation only" and it is still asserted — against the MERGED panel with the
+    // flag the composition supplies, which is what tells "a different game state" (a real failure)
+    // apart from "the same state, watched while the opponent thinks" (the delivered behaviour).
+    // The default child anchors the not-thinking form, so no expectation here is free-standing.
+    const start = startGame();
+    const panelWhenIdle = renderStatusPanel(start, gameStatusOf(start), false);
+    const panelWhenThinking = renderStatusPanel(start, gameStatusOf(start), true);
+    const trimmed = (rows: readonly string[]): readonly string[] =>
+      rows.map((row) => row.trimEnd());
+    expect(trimmed(defaultStatus), "the default child is the merged panel, idle").toEqual(
+      trimmed(panelWhenIdle),
+    );
+
     for (const { name, child, mode, orientations } of coloured) {
-      // Under EVERY orientation the child's command line admits. For `random` that is both, which
-      // costs nothing while the two board regions are the same height and reds honestly if they ever
-      // are not — rather than silently picking one slice and asserting the wrong rows.
+      // Under EVERY orientation the child's command line admits. For `random` that is both, and the
+      // one it did not draw carries no frame at all — read off the stream rather than guessed, which
+      // is what keeps this row silent about a coin it cannot see.
       for (const orientation of orientations) {
+        const frames = framesIn(child.stdout, mode, orientation);
+        if (frames.length === 0) continue;
+        // The human is black exactly when the board is drawn black-bottom, and then the engine
+        // opens: the first frame is the one the player watches while it thinks.
+        const expected = orientation === "black-bottom" ? panelWhenThinking : panelWhenIdle;
         expect(
-          statusRowsIn(child.stdout.split("\n"), mode, orientation),
+          trimmed(statusRowsIn(frames[0] as readonly string[], mode, orientation)),
           `${name} status rows, sliced for ${orientation}`,
-        ).toEqual([...defaultStatus]);
+        ).toEqual(trimmed(expected));
       }
     }
   });
@@ -1411,5 +1773,293 @@ describe("ABC-064 — the frame's shape and the status panel, on the three non-d
       child.stdout.split("random").length - 1,
       "occurrences of `random` on the random child's stdout",
     ).toBe(0);
+  });
+});
+
+describe("ABC-043 — the live session", () => {
+  /**
+   * THE TEN `TerminalReason` VALUES, CLOSED BY THE TYPE AND BY THE COUNT. `A3`(ii) says "none of the
+   * ten", so a list that silently lost one would let the word it lost through: the annotation makes
+   * a value that is NOT a reason a type error, and the length makes a missing one a red row. What it
+   * cannot do is notice an ELEVENTH — that is `src/turn-loop.test.ts`'s to pin, and the count here
+   * reds the day the union grows, which is the notification this file needs.
+   */
+  const TERMINAL_REASONS: readonly TerminalReason[] = [
+    "checkmate",
+    "stalemate",
+    "insufficient-material",
+    "fivefold-repetition",
+    "seventy-five-move",
+    "threefold-repetition",
+    "fifty-move",
+    "resignation",
+    "engine-failure",
+    "engine-threw",
+  ];
+
+  /** `A3`(ii)'s second list, as the criterion spells it. */
+  const RESULT_WORDS: readonly string[] = ["win", "draw", "resign", "checkmate", "stalemate"];
+
+  /** What `A3` writes and `A4` must not: the marker, matched case-insensitively and as a phrase. */
+  const INTERNAL_ERROR_MARKER = /internal error/i;
+
+  const entry = executableCodeOf("cli.ts");
+
+  /**
+   * The frames a scripted session must produce, rebuilt from the MERGED modules: one before the
+   * first act and one after every ply, each rendered from the position as it stood, with `thinking`
+   * set exactly when the side to move is not the human's. Nothing about a frame's content is
+   * transcribed here — `makeRenderSeam` composes it and `gameStatusOf` supplies the status, which is
+   * what makes a byte-for-byte comparison an assertion about the LOOP rather than about the panels.
+   */
+  const expectedFrames = (
+    script: readonly string[],
+    humanColour: "white" | "black",
+    mode: GlyphMode,
+    orientation: Orientation,
+  ): readonly (readonly string[])[] => {
+    const render = makeRenderSeam(mode, orientation);
+    const prefixes = [...script.map((_, ply) => script.slice(0, ply)), script];
+    return prefixes.map((plies) => {
+      const history = playedOut(plies);
+      const status = gameStatusOf(history);
+      const sideToMove = history.position.blackToMove ? "black" : "white";
+      const thinking = status.result === "in-progress" && sideToMove !== humanColour;
+      return render(history, status, thinking, []);
+    });
+  };
+
+  it("A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter", () => {
+    // The criterion's own instrument is the TYPECHECK (`npm run typecheck`, run at the gate): six
+    // merged types meeting at one call site with nothing between them is what "no adapter" means,
+    // and `tsc` is what decides it. These rows are what the typecheck cannot see — that the call
+    // happens once, that every option is the merged factory's own return value, and that no `as`
+    // was reached for to make any of it fit.
+    expect(entry.match(/\brunTurnLoop\s*\(/g)).toHaveLength(1);
+
+    // ALL SIX, each pinned to what supplies it. A build that passed five and defaulted the sixth
+    // would satisfy a key-count row.
+    expect(entry).toMatch(/history:\s*newGame\(START_FEN\)/);
+    expect(entry).toMatch(/humanColour:\s*colour/);
+    expect(entry).toMatch(/render:\s*makeRenderSeam\(mode,\s*orientation\)/);
+    expect(entry).toMatch(/input:\s*createLineInputSeam\(/);
+    expect(entry).toMatch(/engine:\s*createEngine\(\{\s*budgetMs:\s*DEFAULT_BUDGET_MS\s*\}\)/);
+    expect(entry).toMatch(/\bsink,/);
+
+    // NO CAST AND NO ADAPTER, over the CALL — which is what the criterion is about, and scoped
+    // there rather than over the module because `ABC-042`'s byte filter legitimately casts
+    // (`codePointAt(0) as number`, `src/cli.ts:67-75`) and is none of this ticket's business. The
+    // window runs from the call to the closing brace of its options object.
+    const call = entry.slice(
+      entry.indexOf("runTurnLoop("),
+      entry.indexOf("sink,") + "sink,".length,
+    );
+    expect(call, "a type assertion at the wiring").not.toMatch(/\bas\b/);
+    // NO ADAPTER: no seam is wrapped in a function written here. An arrow at any option is the
+    // shape this catches — `input: (history) => seam(history)` typechecks and is an adapter.
+    expect(call, "a wrapper around a seam").not.toMatch(/=>/);
+  });
+
+  it("G6 — the input seam is built ONCE and called NOWHERE (the hang with no output)", () => {
+    // `createLineInputSeam`'s `waiting` is a single slot (`ABC-037` `G6`, on the ticket under
+    // `## Scope`): two overlapping `seam()` calls orphan the first read FOREVER, and the failure
+    // mode is a product that hangs with no output and no exit code — nothing else in this suite
+    // would report it, because a hung child produces no assertion at all, only a stalled lane.
+    expect(entry.match(/\bcreateLineInputSeam\s*\(/g)).toHaveLength(1);
+    // The seam is constructed INSIDE the options object and never bound to a name, so there is no
+    // identifier here that a second call could be made through. That is the property, not the style.
+    expect(entry).toMatch(/input:\s*createLineInputSeam\(\{\s*source:\s*process\.stdin,/);
+    expect(entry, "the seam bound to a name it could be called through").not.toMatch(
+      /(?:const|let|var)\s+\w+\s*=\s*createLineInputSeam/,
+    );
+  });
+
+  it("A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0", () => {
+    const child = CHILDREN.mate;
+    const PLIES = ["f2f3", "e7e5", "g2g4", "d8h4"];
+    const NON_ADVANCING_WITH_A_MESSAGE = 1; // the `zzz` line — `rejected`, which re-emits a frame
+
+    expect(child.status, `the scripted game failed: ${child.stderr}`).toBe(0);
+
+    const frames = framesIn(child.stdout, "ascii", "white-bottom");
+    // `ABC-019`'s cadence, as the formula and not as a number: 1 + plies + the non-advancing
+    // outcomes that carry a message, with end-of-input excluded (`[D29]`) — and this session never
+    // reaches end-of-input, which is the next assertion.
+    expect(frames).toHaveLength(1 + PLIES.length + NON_ADVANCING_WITH_A_MESSAGE);
+    // IT ENDED ON THE MATE, NOT ON THE PIPE. A build that lost the last ply and then ran out of
+    // script would emit the notice, and a frame-count row alone would not tell the two apart.
+    expect(child.stdout, "the game ended on end-of-input").not.toContain(INPUT_ENDED_NOTICE);
+
+    // The mated position, byte for byte, composed from the merged modules rather than described.
+    const mated = playedOut(PLIES);
+    const status = gameStatusOf(mated);
+    expect(frames[frames.length - 1]).toEqual([
+      ...makeRenderSeam("ascii", "white-bottom")(mated, status, false, []),
+    ]);
+    // `A2`'s "the mating side's win with `reason: "checkmate"`" — the loop returns `status.result`
+    // and `status.reason` for the position it last rendered, and that is the position above.
+    expect(status.result).toBe("black-wins");
+    expect(status.reason).toBe("checkmate");
+    // NON-VACUITY on the board itself: the mating move is on the board as SAN, with the `#` the
+    // merged writer only produces for a checkmating move.
+    expect((frames[frames.length - 1] as readonly string[]).join("\n")).toContain("Qh4#");
+  });
+
+  it("A3 — a parser bug ends the game as an INTERNAL ERROR, never as a chess outcome, and exits non-zero", () => {
+    const child = CHILDREN.parserBug;
+
+    // NON-VACUITY FIRST, and on this criterion it is the whole risk: a child that died before the
+    // game started would satisfy every absence below by never having played. It rendered a frame
+    // and it reached the prompt, so the throw happened where the criterion says it happens.
+    expect(framesIn(child.stdout, "ascii", "white-bottom"), "frames before the throw").toHaveLength(
+      1,
+    );
+    expect(child.stdout, "the child never reached the prompt").toContain(PROMPT);
+
+    // (i) It is MARKED an internal error.
+    expect(child.union).toMatch(INTERNAL_ERROR_MARKER);
+    // (ii) And it names no chess result — none of the ten reasons, none of the five words.
+    expect(TERMINAL_REASONS).toHaveLength(10);
+    for (const reason of TERMINAL_REASONS) {
+      expect(child.union, `the crash line named \`${reason}\``).not.toContain(reason);
+    }
+    for (const word of RESULT_WORDS) {
+      expect(child.union.toLowerCase(), `the crash line named \`${word}\``).not.toContain(word);
+    }
+    // (iii) NO RESULT SCREEN: no frame follows the throw — the frame count above is the one frame
+    // the loop had already rendered — and the loop's clean-exit notice is absent too.
+    expect(child.stdout).not.toContain(INPUT_ENDED_NOTICE);
+    // (iv) THE DISCRIMINATING REQUIREMENT (`ABC-019` `A10` at the top level). A build that caught
+    // the throw and exited 0 passes every other criterion on the page and must fail here.
+    expect(child.status, "a crashed session exited 0").not.toBe(0);
+    // And it is distinguishable from a REFUSED COMMAND LINE as well as from a clean exit: a usage
+    // error is the product's other non-zero, and one code for both would lose the difference.
+    expect(child.status).not.toBe(CHILDREN.badColour.status);
+  });
+
+  it("A4 — end-of-input is the CLEAN path, and it is distinguishable from A3 by message and by code", () => {
+    const clean = CHILDREN.truncated;
+    const crashed = CHILDREN.parserBug;
+
+    // `ABC-019` `A8`, byte for byte, through the delivered entry point: one notice, exit 0.
+    expect(clean.stdout.split(INPUT_ENDED_NOTICE).length - 1, "notices written").toBe(1);
+    expect(clean.status).toBe(0);
+    // No result screen and no crash line: a truncated script is not an error and says nothing about
+    // the game — the trailing partial line was never submitted, so nothing was played at all.
+    expect(framesIn(clean.stdout, "ascii", "white-bottom")).toHaveLength(1);
+
+    // `[D31]`'s whole point (`## Test notes` 2): the two paths are asserted AGAINST each other,
+    // because the wrong build makes them identical. BOTH halves — the message and the code.
+    expect(clean.union).not.toMatch(INTERNAL_ERROR_MARKER);
+    expect(crashed.union).toMatch(INTERNAL_ERROR_MARKER);
+    expect(crashed.stdout).not.toContain(INPUT_ENDED_NOTICE);
+    expect(clean.status).not.toBe(crashed.status);
+  });
+
+  it("A5 — an engine fault is not a chess outcome: both faulty seams exit 0 and name nothing", () => {
+    // The two the criterion names: one that THROWS and one that returns a move `legalMoves` did not
+    // produce. Both are doubles at the seam; the DRIVER is the delivered entry point, spawned, with
+    // its own exit code — which is what "rather than through a stub harness" asks for.
+    const FAULTS = [
+      { name: "engine-threw", child: CHILDREN.engineThrows },
+      { name: "engine-failure", child: CHILDREN.engineForeign },
+    ] as const;
+
+    for (const { name, child } of FAULTS) {
+      // NON-VACUITY: the session ran and rendered the frame that precedes the engine's ply.
+      expect(framesIn(child.stdout, "ascii", "black-bottom"), `${name}: frames`).toHaveLength(1);
+      // THE DISCRIMINATING REQUIREMENT: the loop HANDLED it, so the process did what it was asked.
+      // A build that exits non-zero here fails, exactly as a build that exits 0 on `A3` fails.
+      expect(child.status, `${name} exited non-zero: ${child.stderr}`).toBe(0);
+      expect(child.union, `${name}: a crash line`).not.toMatch(INTERNAL_ERROR_MARKER);
+      // No `EndReason` word anywhere on either channel — an engine bug is never a chess outcome.
+      for (const reason of TERMINAL_REASONS) {
+        expect(child.union, `${name} named \`${reason}\``).not.toContain(reason);
+      }
+      for (const word of RESULT_WORDS) {
+        expect(child.union.toLowerCase(), `${name} named \`${word}\``).not.toContain(word);
+      }
+      // And no notice: this is not the end-of-input path either.
+      expect(child.stdout, `${name}: the notice`).not.toContain(INPUT_ENDED_NOTICE);
+    }
+  });
+
+  it("A6 — one frame session, one writer, and no row count is named on either side of the diff", () => {
+    // The session belongs to the LOOP now. The entry point neither begins one nor imports the
+    // module that does, so "exactly once" is a property of merged, mutation-tested code rather than
+    // of a second call site here — and this row is what would see one arrive.
+    expect(entry).not.toContain("beginFrameSession");
+    expect(entry).not.toContain("./frame.ts");
+    expect(sourceOf("turn-loop.ts").match(/\bbeginFrameSession\s*\(/g)).toHaveLength(1);
+
+    // OBSERVED, on a run of >= 6 frames: every frame reaches the writer with the row count the seam
+    // returned. Equal heights across the session is what a single session with a held height looks
+    // like from outside; a second `beginFrameSession` would re-choose the strategy mid-stream.
+    const frames = framesIn(CHILDREN.mate.stdout, "ascii", "white-bottom");
+    const height = frameOf("ascii", "white-bottom").length;
+    expect(frames.length).toBeGreaterThanOrEqual(6);
+    for (const [index, frame] of frames.entries()) {
+      expect(frame, `frame ${index} height`).toHaveLength(height);
+    }
+    // The append strategy, chosen once and never re-chosen: zero cursor control on the whole stream.
+    expect(CHILDREN.mate.stdout.split("\u001b[").length - 1, "CSI introducers").toBe(0);
+
+    // NO NUMERIC ROW-COUNT LITERAL IN THE DIFF (`ADR-0009` clause 9a). The entry point's numbers are
+    // transcribed at `A8`'s row; this closes the other half of the diff — the test file — where the
+    // height is computed from the merged modules at every use and is never written down.
+    const heights = new Set([height, ...MODES.map((mode) => frameOf(mode, "black-bottom").length)]);
+    for (const named of heights) {
+      expect(
+        executableCodeOf("cli.test.ts").match(new RegExp(`\\b${named}\\b`, "g")),
+        `the row count ${named} is written down in the suite`,
+      ).toBeNull();
+    }
+  });
+
+  it("A7 — the human's colour decides who moves first, in BOTH directions", () => {
+    // Either direction alone is satisfied by a loop that always opens with the engine (`ABC-019`
+    // `A1`/`A1b`), so both run, and each is asserted frame by frame against the game the script
+    // describes — replayed here through the merged modules, never transcribed.
+    const DIRECTIONS = [
+      {
+        name: "black",
+        child: CHILDREN.colourBlack,
+        // The engine opens with `a3`; the script's FIRST line is `e5`, a move only black can play.
+        script: ["a2a3", "e7e5", "b2b3"],
+        humanColour: "black",
+        orientation: "black-bottom",
+        // Two frames precede the first prompt: the one the player watches while the engine thinks,
+        // and the one that follows the engine's move. THIS IS THE UNCONSUMED-LINE WITNESS'S
+        // POSITIONAL HALF (`## Test notes` 3) — a build that read a line before the engine's first
+        // move prompts after ONE frame.
+        framesBeforeFirstPrompt: 2,
+      },
+      {
+        name: "white",
+        child: CHILDREN.colourWhite,
+        script: ["e2e4", "e7e5"],
+        humanColour: "white",
+        orientation: "white-bottom",
+        framesBeforeFirstPrompt: 1,
+      },
+    ] as const;
+
+    for (const direction of DIRECTIONS) {
+      const { name, child, script, humanColour, orientation } = direction;
+      expect(child.status, `--colour ${name} failed: ${child.stderr}`).toBe(0);
+
+      // THE CONTENT WITNESS: the game that was actually played, frame by frame. A build that ate
+      // the player's first line plays a different game, and every frame after the first differs.
+      expect(framesIn(child.stdout, "ascii", orientation)).toEqual(
+        expectedFrames(script, humanColour, "ascii", orientation).map((frame) => [...frame]),
+      );
+      // THE POSITIONAL WITNESS: no prompt was written before the engine's first move.
+      expect(
+        framesIn(child.stdout.slice(0, child.stdout.indexOf(PROMPT)), "ascii", orientation),
+        `${name}: frames before the first prompt`,
+      ).toHaveLength(direction.framesBeforeFirstPrompt);
+      // The script was consumed to its end and the session then ended on the pipe, cleanly.
+      expect(child.stdout.split(INPUT_ENDED_NOTICE).length - 1, `${name}: notices`).toBe(1);
+    }
   });
 });
