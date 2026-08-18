@@ -27,7 +27,7 @@ feature: —
 
 *Pain*: **`ABC-019` shipped the loop that awaits an `InputSeam` and there is no production
 implementation of one.** `InputSeam = (history: GameHistory) => Promise<PromptOutcome>` is published
-in merged code (`src/turn-loop.ts:127`) with the comment *"`EPIC-003` replaces it; the loop waits on it
+in merged code (`src/turn-loop.ts:135`) with the comment *"`EPIC-003` replaces it; the loop waits on it
 and never reads stdin itself"*, and the only implementation is a scripted stub inside
 `src/turn-loop.test.ts`. That module's header says why a stub was not shipped under `src/`
 (`src/turn-loop.ts:45-47`, `ADR-0009` clause 9c): *"a `src/` stub module would be production code that
@@ -50,7 +50,7 @@ the merged panels plus the merged stub-shaped engine become a game a person can 
 - **Classification order, delegated not duplicated:** the line goes to `ABC-035`'s command table, then
   to `ABC-033`'s dispatcher. This module contains **no grammar and no token table**.
 - **EOF is an outcome, not an error.** When stdin ends, the call resolves `{ kind: "eof" }`
-  (`src/turn-loop.ts:123`) and the loop terminates with `INPUT_ENDED_NOTICE` and `exitCode: 0` — the
+  (`src/turn-loop.ts:131`) and the loop terminates with `INPUT_ENDED_NOTICE` and `exitCode: 0` — the
   merged behaviour `ABC-019`'s `A8` specifies and this ticket must not re-decide.
 - **The reserved prompt row is the frame's, not this module's.** `PROMPT_ROWS = 1`
   (`src/frame.ts:53`) is reserved by the frame and *"deliberately NOT padded"*; this module writes the
@@ -118,7 +118,7 @@ end-to-end test runs in (`EPIC-002` `4c`) and the mode that needs no TTY.
   ends with no trailing newline, and again one that ends mid-line, **when** the seam is awaited, **then**
   it resolves `{ kind: "eof" }` in both cases; **and** driving the merged loop with it terminates with
   `result: null`, `reason: null`, `exitCode: 0`, and the sink receives `INPUT_ENDED_NOTICE`
-  (`src/turn-loop.ts:168`). *(`ABC-019`'s `A8`, re-asserted through a real reader rather than a stub.)*
+  (`src/turn-loop.ts:176`). *(`ABC-019`'s `A8`, re-asserted through a real reader rather than a stub.)*
 - **`A4` (commands are classified before grammars, through the delegated table).** **Given** a piped
   line `help`, **when** the seam resolves, **then** the outcome is `kind: "command"` and neither
   resolver was called — asserted by spy, the same assertion `ABC-035` `A2` makes, re-asserted here
@@ -180,7 +180,7 @@ end-to-end test runs in (`EPIC-002` `4c`) and the mode that needs no TTY.
      to a resolver, and it never grows the frame. `ABC-031` `A4` and `ABC-032` `A5` already require
      totality on a 10,000-character string; this bar is about memory, not parsing.
   3. **Every byte that reaches the terminal goes through the frame's sanitizer.** Any echo of the typed
-     line travels as a message through `assembleFrame`, which **sanitizes** (`src/frame.ts:202`,
+     line travels as a message through `assembleFrame`, which **sanitizes** (`src/frame.ts:123`,
      `ABC-018`'s ownership of terminal escape-sequence injection). `A6` is what pins it: this module
      writes the prompt string and nothing else.
   **Firing threshold, falsifiable:** the security half fires — and the added lines get read for
