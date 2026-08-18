@@ -307,10 +307,33 @@ end-to-end row is wanted it belongs in an **opt-in lane** (`ENGINE_DEEP` is the 
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**. **This ticket shares `ABC-042`'s test file
   (see `## Lane cost`), so the two tickets' spawn costs land in ONE file and must be read together
   against one bar.**
+- **`N8-SPAWN` — SEVEN forced children, counted off the criteria above and fixed here at the cut**
+  (added 2026-08-19; the account is `plans/nfr-catalog.md`'s, created 2026-08-15, and writing this row
+  is BA/PM's duty at each cut).
+
+  | criterion | children | why deleting the child would delete the criterion |
+  |---|---|---|
+  | `A1`, `A6`, `A8` | **0** | read off the diff / typecheck, and `A6` rides `A2`'s ≥ 6-frame run |
+  | `A2` | **1** | a scripted game end to end IS a run of the delivered command |
+  | `A3` | **1** | the exit code and the absence of a result screen are the **process's** |
+  | `A4` | **1** | `[D31]` requires `A4` asserted **against** `A3`, so both children exist or neither does |
+  | `A5` | **2** | *"an `EngineSeam` that throws, **and again** one that returns a move `legalMoves` did not produce"* — the criterion text names two |
+  | `A7` | **2** | *"**Given** `--colour black` … **Given** `--colour white`, the reverse"* — either alone is satisfied by a wrong build |
+  | **total** | **7** | |
+
+  **The file's mechanical pin therefore moves 10 → 17** (`src/cli.test.ts:950`), and **17 is a
+  ceiling, not a target**: a delivered child that no criterion above names is a finding against this
+  ticket, never a charge on the account. **The wall clause has no account** — `NFR-008`'s 3 s wall is
+  a total, children are visible on it, and seven more serial `spawnSync` calls are the largest wall
+  risk this ticket carries. **Security/NFR checks both at the gate; this row does not pre-empt that
+  reading.**
 - **`NFR-002` (< 16 ms per frame) — carried, not re-decided.** The loop's own per-ply derive count is
   merged and mutation-tested; this ticket adds **zero** derives. `A6` is the structural guard.
-- **`NFR-004` (the engine may occupy 3 s) — not measurable here** and it is `EPIC-004`'s. Named so it
-  is not silently inherited.
+- **`NFR-004` (the engine may occupy 3 s) — still not measured here, and the reason has CHANGED.**
+  It was *"`EPIC-004`'s and nothing to measure"*; `src/engine.ts` is merged, and `ABC-078` measured the
+  budget on its own deep lane. What this ticket adds is the **composition** — `createEngine` at
+  `DEFAULT_BUDGET_MS` — and **no criterion here runs the real search** (`## Test notes` 8), so no row
+  on this page may be read as a re-measurement of `NFR-004`. Named so it is not silently inherited.
 - **Security: triggered by composition, not by new input surface.** This is the ticket that connects
   the first module reading outside input (`ABC-037`) to the first module writing to a terminal
   (`ABC-042`). Two measurable bars: **(1)** every byte reaching stdout is either a frame row from
