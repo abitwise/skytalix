@@ -82,6 +82,15 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   five of the six perft positions, A2's own kiwipete-depth-3 case, the 204-position broad corpus,
   and the depth-7 mate-in-2-vs-mate-in-4 case); every criterion is also answered in the default
   lane. Run it at the QE hop and after any change to src/search.ts. -->
+- Engine deep lane (opt-in slow suite, ABC-078): `ENGINE_DEEP=1 npx vitest run src/engine.test.ts`
+  <!-- RUN 2026-08-18 at the ABC-078 branch tip: exit 0, 23 passed (17 in the default lane),
+  98.7 s. Unset, the deep cases are NOT DEFINED rather than skipped, so the gate's skip count
+  stays 0 — the same shape as PERFT_DEEP and SEARCH_DEEP. It holds every WALL-CLOCK case, which
+  is why it is opt-in: `plans/nfr-catalog.md`'s standing rule keeps wall-clock assertions out of
+  the default lane, and the default lane runs entirely on an INJECTED clock. It carries `A1`'s
+  30-position run at the 3 s budget (90.4 s of the 98.7), `NFR-005`'s depth-in-budget
+  measurement, and the real-clock repetitions of `A2`, `A3`, `A5` and `A7`. Run it after any
+  change to `src/engine.ts`. -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- RUN 2026-08-15 at `daa20c4` (this hop changed no code):
   exit 0, 856/856 on 30 files. `@vitest/coverage-v8` is in `devDependencies`; no npm script and no
