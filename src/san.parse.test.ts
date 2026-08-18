@@ -361,7 +361,10 @@ describe("QE — mutants that survived the delivered suite", () => {
     });
   });
 
-  it("surrounding whitespace is trimmed — the tolerance the ticket's closed list does not name", () => {
+  it("surrounding whitespace is trimmed — `ABC-032` § Scope entry 3, ACCEPTED", () => {
+    // RULED SPECIFICATION. ACCEPTED 2026-08-18 (task `refinement-abc032-tolerances-2026-08-18`)
+    // and carried as entry **3** of `ABC-032` § Scope's CLOSED decoration-tolerance list, which
+    // names this tolerance and its bound in the same breath.
     // Surviving mutant: removing `text.trim()`. The trim was added deliberately, for seam
     // consistency with the merged `parseCoordinateMove` (`src/coordinate-move.ts`), which
     // `ABC-033` dispatches the same line of user input to. Unasserted, it can be removed by the
@@ -383,8 +386,8 @@ describe("QE — mutants that survived the delivered suite", () => {
    * RULED SPECIFICATION. BA/PM ruled on all three of these tolerances on 2026-08-18 (task
    * `refinement-abc032-tolerances-2026-08-18`) and ACCEPTED every one. The redundant qualifier and
    * the mixed castle spellings are now entries **4** and **5** of `ABC-032` § Scope's CLOSED
-   * decoration-tolerance list, and `e8=K`'s code is accepted as delivered with the
-   * re-classification placed on `ABC-034` `A8`.
+   * decoration-tolerance list, and `e8=K`'s code is accepted as delivered with the PLACEMENT —
+   * which of the seven existing codes it takes — put on `ABC-034` `A8`.
    *
    * Every ACCEPT was granted **bounded**, and the bound is the point of the block: `Ne4g5` refused
    * and `o-o` refused are the BOUNDARY of the accepted tolerance, not incidental observations. An
@@ -437,8 +440,11 @@ describe("QE — mutants that survived the delivered suite", () => {
       // root cause as the castle case the delivery note discloses. `A5` is still met: the two
       // codes are independently reachable and never collapse. RULED 2026-08-18 (task
       // `refinement-abc032-tolerances-2026-08-18`): ACCEPTED AS DELIVERED for `ABC-032`, with the
-      // re-classification and its player-facing wording placed on `ABC-034` `A8`, which owns both
-      // ill-formed-SAN cases together and may not add an eighth reason code. Fixing it here would
+      // PLACEMENT and its player-facing wording put on `ABC-034` `A8`, which owns both
+      // ill-formed-SAN cases together and may not add an eighth reason code. Read `A8` before
+      // assuming this code flips: it requires only that `e8=K` produce EXACTLY ONE OF THE SEVEN
+      // existing codes and that the set stay at seven, so `no-such-move` standing satisfies it.
+      // `A8` decides which code; it does not mandate a change. Fixing it here would
       // need a private promotion-letter table — the second table `ADR-0004` clause 2 and `A7`
       // exist to prevent. This row is the record of the code as ruled, not a defect awaiting one.
       const [position, legal] = open(A4_FEN_CORRECTED);
