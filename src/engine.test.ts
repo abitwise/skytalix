@@ -9,17 +9,22 @@
  * fast instead of slow and flaky. `A1` is a wall-clock MEASUREMENT and lives in the opt-in lane.
  *
  * TWO LANES, on the `PERFT_DEEP` / `SEARCH_DEEP` precedent. `ENGINE_DEEP=1` registers the
- * real-clock lane: `A1`'s 30 positions at the 3 s default budget, `NFR-005`'s depth-in-budget
- * measurement, and the real-clock repetitions of `A2`, `A3`, `A5` and `A7` — 23 tests in 98.7 s
- * at the branch tip, against 17 tests in 49 ms of test time in the default lane. Unset, those
- * cases are NOT DEFINED rather than skipped, so the gate's skip count stays 0.
+ * real-clock lane and the expensive REPETITIONS of the injected-clock ones: `A1`'s 30 positions
+ * at the 3 s default budget, `NFR-005`'s depth-in-budget measurement, the full `A3` identity
+ * sweep, and the real-clock repetitions of `A2`, `A3`, `A5` and `A7` — 33 tests in 120 s at the
+ * repair tip, against 24 tests in ~256 ms of test time in the default lane (17 tests / 49 ms
+ * before the repair; the ~206 ms is the price of the three guards below actually guarding, and
+ * it is charged to `N8-LANE` knowingly). Unset, the deep cases are NOT DEFINED rather than
+ * skipped, so the gate's skip count stays 0.
  *
  * WHAT AN INJECTED CLOCK CANNOT SEE, said plainly. Virtual time advances per CONSULTATION, not
  * per node, so "elapsed" in the default lane cannot by itself expose an engine that checks the
  * clock only between iterations — such a build consults rarely and therefore appears fast. `A2`
- * is written to catch it a different way: it bounds the NODES visited. A between-iterations
- * build, on `A2`'s fixture, enters depth 3, 4 and 5 on a clock that says there is time left and
- * reports node counts two orders of magnitude above the bound.
+ * is written to catch it a different way: it bounds the NODES visited. THAT ONLY WORKS IF THE
+ * FIXTURE'S CLOCK STEP IS FINE ENOUGH FOR AN ITERATION TO BE ENTERED AND ABORTED FROM INSIDE —
+ * at a 25 ms step it was not, and the criterion was blind to the exact build it was written for
+ * (`ABC-078` QE, gap `G1`). At 10 ms the between-iterations build enters depths 3, 4 and 5 on a
+ * clock that says there is time left and reports 1 280 509 nodes against a bound of 10 240.
  *
  * `A6`'s "src/turn-loop.ts is byte-identical" IS NOT ASSERTED HERE, deliberately. The evidence
  * is `git diff` against the branch base, recorded in this ticket's context notes; a hash pinned
