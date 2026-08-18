@@ -460,6 +460,21 @@ describe("ABC-037 — the production InputSeam", () => {
 
       vi.restoreAllMocks();
     });
+
+    it("writes the prompt BEFORE it waits for the line, not after", async () => {
+      const source = new PassThrough();
+      const output = recordingOutput();
+      const seam = createLineInputSeam({ source, output });
+
+      const pending = seam(newGame(START_FEN));
+      await tick();
+      // Nothing has been typed yet and the player must already be able to see the prompt.
+      expect(output.writes).toEqual([PROMPT]);
+
+      source.write("e4\n");
+      await pending;
+      expect(output.writes).toEqual([PROMPT]);
+    });
   });
 
   describe("A7 — no per-keystroke work. NFR-003 as a count, not a clock", () => {
