@@ -91,27 +91,28 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   30-position run at the 3 s budget (90.4 s of the 98.7), `NFR-005`'s depth-in-budget
   measurement, and the real-clock repetitions of `A2`, `A3`, `A5` and `A7`. Run it after any
   change to `src/engine.ts`. -->
-- Input-seam deep lane (opt-in slow suite, ABC-037): `INPUT_DEEP=1 npx vitest run src/line-input.test.ts`
-  <!-- RUN 2026-08-19 at the ABC-037 branch tip: exit 0, 26 passed (23 in the default lane), 0.24 s.
-  Unset, the deep cases are NOT DEFINED rather than skipped, so the gate's skip count stays 0 — the
-  same shape as PERFT_DEEP, SEARCH_DEEP and ENGINE_DEEP. It holds the BREADTH only: a 16 MiB
-  unterminated-flood survival row, the chunk-boundary permutation sweep, and the 10,000-character
-  totality row. Every ACCEPTANCE criterion is answered in the default lane. It is opt-in because
-  ABC-108 has the default lane at or over NFR-008's 13 s CPU clause, so this ticket did not claim
-  N8-LANE's 650 ms; its measured default-lane cost is +0.185 s CPU (paired, interleaved, n=7, 7/7
-  positive sign). Run it after any change to src/line-input.ts — QE 2026-08-19 measured two mutants
-  that die in this lane and in nothing else. TRAP, and read all of it before you act on any of it:
-  this lane asserts NO memory bound today, and heapUsed must never be how one gets asserted. A build
-  retaining a 16,777,216-character line reports 0.01 MiB of heapUsed growth (QE: 0.11 MiB leaking vs
-  0.10 MiB bounded) — a heapUsed row is green whichever build it runs against. One was written,
-  watched NOT fail, and DELETED rather than shipped green; do not put it back. But the bound IS
-  testable, so do not read this as "not a test": the blindness is not cons-string accounting —
-  heapUsed accounts a FLATTENED 16 MiB string in full (16.00 MiB QE, 16.19 MiB re-measured here) —
-  the retained leaves are EXTERNAL string data, and process.memoryUsage().external after a gc()
-  separates the builds 0.00 vs 32.00 MiB — 32:1 in 36 ms, under NODE_OPTIONS=--expose-gc. Numbers
-  and the guard itself are in .grugops/context/quality-gate-ABC-037-qe-2026-08-19/notes/, not
-  restated here; the lane command above gains NODE_OPTIONS=--expose-gc on the hop that lands it. The rule this cost us: never ship a
-  memory guard you have not watched go RED. -->
+- Input-seam deep lane (opt-in slow suite, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
+  <!-- RUN 2026-08-19 at `298bb95`: exit 0, 33 passed, 0.28 s. COUNT YOUR RUN: 33 is the whole lane;
+  32 means NODE_OPTIONS was dropped and the external-memory retention guard did not run — it exits 0
+  either way, so the count is the only signal. 29 is the default lane. Unset, the deep cases are NOT
+  DEFINED rather than skipped, so the gate's skip count stays 0 — the same shape as PERFT_DEEP,
+  SEARCH_DEEP and ENGINE_DEEP. It holds the BREADTH plus that guard: a 16 MiB unterminated-flood
+  survival row, the chunk-boundary permutation sweep, the 10,000-character totality row. Every
+  ACCEPTANCE criterion is answered in the default lane. It is opt-in because ABC-108 has the default
+  lane at or over NFR-008's 13 s CPU clause, so this ticket did not claim N8-LANE's 650 ms. Run it
+  after any change to src/line-input.ts — QE 2026-08-19 measured two mutants that die in this lane
+  and in nothing else. TRAP, and read all of it: heapUsed must never be how a memory bound gets
+  asserted here. A build retaining a 16,777,216-character line reports 0.01 MiB of heapUsed growth,
+  so a heapUsed row is green whichever build it runs against; one was written, watched NOT fail, and
+  DELETED rather than shipped green — do not put it back. But the bound IS testable, and heapUsed is
+  not blind to cons-strings: it accounts a FLATTENED 16 MiB string in full. An unflattened rope does
+  read ~0.02 MiB, so that account was HALF TRUE, and half-true aimed at the wrong field is worse than
+  wrong: it ends the search. The retained leaves are EXTERNAL string data, and
+  process.memoryUsage().external after a gc() separates the builds 0.00 vs 32.00 MiB (33,554,472 B,
+  reproduced to the byte from a second tree) — which is why --expose-gc is in the command. Numbers
+  and the guard itself are in .grugops/context/quality-gate-ABC-037-qe-2026-08-19/notes/ and its
+  repair-ABC-037-2026-08-19/ sibling, not restated here. The rule this cost us: never ship a memory
+  guard you have not watched go RED. -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- RUN 2026-08-15 at `daa20c4` (this hop changed no code):
   exit 0, 856/856 on 30 files. `@vitest/coverage-v8` is in `devDependencies`; no npm script and no
