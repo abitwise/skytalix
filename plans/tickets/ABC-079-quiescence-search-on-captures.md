@@ -69,8 +69,23 @@ ordering *"where most of the strength-per-line-of-code lives"*, and quiescence i
 
 ## Dependencies
 
-- **`ABC-077` must land first — OPEN.** It is the search this modifies.
-- **`ABC-076` must land first — OPEN** (transitively; stand-pat is the static evaluation).
+- **`ABC-077` — MERGED to `main` 2026-08-18, DISCHARGED.** It is the search this modifies. Measured
+  2026-08-18 at HEAD `7ea9e1b`: `search()` at `src/search.ts:167`, `searchWithoutPruning()` at
+  `:178`, `MATE_SCORE` at `:40`. **`A4`'s "pre-quiescence build" baseline is therefore a real thing
+  in the tree**, not a hypothetical.
+- **`ABC-076` — MERGED to `main` 2026-08-17, DISCHARGED** (transitively; stand-pat is the static
+  evaluation, `src/evaluate.ts`).
+- **THE ≥ 20-POSITION CORPUS IS THIS TICKET'S TO BUILD — ruled 2026-08-18 by BA/PM** (task
+  `refinement-p0-chain-2026-08-18`), and the ruling is **asymmetric on purpose**. Both this page and
+  `ABC-084` carried *"whichever lands first builds it"*, which is a rule that decides nothing while
+  both are open. **The dependency graph decides it, not preference:** at HEAD `7ea9e1b` this
+  ticket's only two dependencies are merged, while `ABC-084` still needs `ABC-078`, which is not
+  built — so this ticket is the only one of the two that CAN land first. `ABC-084`'s own page already
+  says *"`ABC-079` should land first"*. **So: `ABC-079` builds the corpus; `ABC-084` extends it and
+  does not fork it.** The cost was already priced into `S` (see `## Size and priority rationale`,
+  which names the curated position set as this ticket's main cost). **`ABC-084`'s page and board row
+  still carry the symmetric wording and need the one-line follow-up; that is the Orchestrator's to
+  route, and it does not gate this ticket.**
 
 ## Security / NFR triggers
 
@@ -102,17 +117,31 @@ design decision open.
 
 ## Definition of Ready
 
-Assessed by BA/PM, **2026-08-16**. **Result: 8 of 10 clean, 2 ⚠️ — NOT met; stays in `Backlog`.**
+Cut-hop assessment by BA/PM **2026-08-16**: **8 of 10, ⚠️x2** — items 3 and 10.
+
+**RE-SCORED against the tree at `main` HEAD `7ea9e1b` by BA/PM, 2026-08-18** (task
+`refinement-p0-chain-2026-08-18`). **Result: 10 of 10, 0 ⚠️ — the Definition of Ready is MET.**
+
+- **⚠️(3) is DISCHARGED BY MEASUREMENT.** `ABC-076` merged 2026-08-17 and `ABC-077` merged
+  2026-08-18; both in `Done`, both exports present at HEAD.
+- **⚠️(10) is DISCHARGED BY RULING, not by a merge.** The corpus still does not exist — what has
+  changed is that **it is no longer nobody's**. It is **this ticket's to build**, ruled from the
+  dependency graph rather than from preference (see `## Dependencies`). The corpus was never a
+  blocker on BUILDING or on VERIFYING; it was an **ownership vacuum**, which is this board's recorded
+  failure mode, and it is now filled asymmetrically. Building a fixture set is in-scope work, and the
+  `S` sizing already priced it.
+
+Column moves are the Orchestrator's.
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** the horizon effect stated as a behaviour, tied to the epic's own fourth criterion |
 | 2 | scope and out-of-scope clear | **✅** three fences, two of them recorded as *decisions not to build*, with the evidence that would reopen them |
-| 3 | INVEST-shaped | **⚠️** **not independent** — two open tickets in front of it |
+| 3 | INVEST-shaped | **✅** *(was ⚠️)* **independent** — both tickets in front of it (`ABC-076`, `ABC-077`) are merged to `main` and in `Done`. Discharged by measurement 2026-08-18 |
 | 4 | acceptance testable and measurable | **✅** six: ≥ 19/20 with a mandatory worse baseline, exact equality on quiet positions, 200/200 termination under a stated cap, unchanged quiet scores, a 2.5x/4x multiplier with a stop rule, byte-identical position |
-| 5 | dependencies known | **✅** two open tickets, both named with their ordering reason |
+| 5 | dependencies known | **✅** the two ordering dependencies are **merged**, both named with the reason they ran in that direction; and the shared corpus now has **one named owner** rather than a symmetric race |
 | 6 | security/NFR triggers with a measurable target | **✅** `NFR-005` 2.5x expected / **4x stop** with a named owner; lane bar with a stated remedy |
 | 7 | test notes present | **✅** four |
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P0` |
-| 10 | no major unresolved blocker | **⚠️** **the ≥ 20 position set does not exist and nobody has curated it.** It is shared with `ABC-084` — **whichever lands first builds it**, and the second extends rather than forks. Named because two tickets silently each expecting the other to build a corpus is exactly this board's recorded failure mode |
+| 10 | no major unresolved blocker | **✅** *(was ⚠️)* the ≥ 20 position set still does not exist, and **that is scope, not a blocker: it is now ruled THIS ticket's to build** (2026-08-18, from the dependency graph — `ABC-084` needs `ABC-078`, which is unbuilt, so this ticket is the only one of the two that can land first). `ABC-084` extends and does not fork. The symmetric *"whichever lands first"* rule that decided nothing is replaced by a named owner. **Open follow-up, not gating: `ABC-084`'s page and row still carry the old symmetric wording** |

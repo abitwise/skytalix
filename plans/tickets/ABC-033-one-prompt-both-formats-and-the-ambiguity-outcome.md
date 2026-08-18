@@ -62,7 +62,7 @@ which one — instead of being handed a bishop and told nothing.
 - **The candidate list is rendered in SAN** (`EPIC-003` acceptance #2: *"both candidate moves are
   listed in SAN"*), through `toSan(position, move, legal)` with that same list.
 - **The result maps onto `ABC-019`'s merged `PromptOutcome`**: `move`, `rejected` and `ambiguous`
-  (`src/turn-loop.ts:118-124`). `command` and `eof` are the other two arms and belong to `ABC-035`
+  (`src/turn-loop.ts:125-132`). `command` and `eof` are the other two arms and belong to `ABC-035`
   and `ABC-036`.
 - **`ABC-032`'s tolerance list is five entries, not two — ruled 2026-08-18 by BA/PM** (task
   `refinement-abc032-tolerances-2026-08-18`), and this ticket inherits it rather than re-deciding it.
@@ -131,10 +131,14 @@ which one — instead of being handed a bishop and told nothing.
 
 ## Dependencies
 
-- **`ABC-031` and `ABC-032` must land first — both OPEN.** This is an **ordering** dependency on two
-  siblings inside its own epic, in the direction stated: it consumes their result shapes and neither
-  consumes anything of this ticket's. Either order between them; both before this.
-- **`ABC-019` is merged**, and `PromptOutcome` is the published target shape (`src/turn-loop.ts:118`).
+- **`ABC-031` and `ABC-032` — both MERGED to `main`, and this dependency is DISCHARGED.** Measured
+  2026-08-18 at HEAD `7ea9e1b`, not asserted: `parseCoordinateMove` is exported at
+  `src/coordinate-move.ts:77` with `CoordinateParseResult` at `:51`, `parseSan` at `src/san.ts:223`
+  with `SanParseResult` at `:190`. Both tickets sit in the board's `Done` column (`ABC-031` merged
+  2026-08-17, `ABC-032` merged 2026-08-18). It was an **ordering** dependency on two siblings inside
+  its own epic — it consumed their result shapes and neither consumed anything of this ticket's — and
+  the ordering has occurred.
+- **`ABC-019` is merged**, and `PromptOutcome` is the published target shape (`src/turn-loop.ts:125`).
 - **`ABC-018` is merged**, and `assembleFrame`'s message region is `A4`'s instrument.
 - **Not dependent on `ABC-034`.** Codes now, wording later; `A2`'s candidate list is SAN, not prose.
 
@@ -186,20 +190,26 @@ switch" observable. Not `P1`: without it the two resolvers are libraries nothing
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-12**. **Result: 9 of 10 clean, 1 recorded ⚠️ — the Definition of Ready is NOT fully met and
-this ticket stays in `Backlog`.** The ⚠️ is recorded rather than smoothed: `ABC-024`'s precedent on
-this board is that an open ordering dependency is a ⚠️, not a footnote.
+Cut-hop assessment by BA/PM **2026-08-12**: **9 of 10, ⚠️x2** — items 3 and 10, both the same open
+ordering dependency on `ABC-031` + `ABC-032`. *(The cut-hop prose said "1 recorded ⚠️" while its own
+table carried two, and the board row said `⚠️x2`; the table and the board were right.)*
+
+**RE-SCORED against the tree at `main` HEAD `7ea9e1b` by BA/PM, 2026-08-18** (task
+`refinement-p0-chain-2026-08-18`). **Result: 10 of 10, 0 ⚠️ — the Definition of Ready is MET.** Both
+⚠️ were the SAME fact stated twice, and that fact is **discharged by measurement**: `ABC-031` merged
+to `main` 2026-08-17 and `ABC-032` merged 2026-08-18, both are in the board's `Done` column, and both
+result shapes are exported at HEAD (see `## Dependencies`). Nothing else on this page changed —
+the ⚠️ were not smoothed, they were outlived. Column moves are the Orchestrator's.
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** every player; two resolvers and no prompt behaviour; the epic's criterion #2 |
 | 2 | scope and out-of-scope clear | **✅** one entry point, a fixed attempt order, one derive; five fences including an explicit refusal to guess |
-| 3 | INVEST-shaped | **⚠️** valuable, negotiable, estimable, small, testable — but **NOT independent**: it consumes `ABC-031`'s and `ABC-032`'s result shapes and must land after both. Recorded rather than claimed clean |
+| 3 | INVEST-shaped | **✅** *(was ⚠️)* valuable, negotiable, estimable, small, testable — and now **independent**: both shapes it consumes are merged and exported at HEAD `7ea9e1b`, so it stands alone. Discharged by measurement 2026-08-18, not by re-argument |
 | 4 | acceptance testable and measurable | **✅** seven criteria: exact candidate counts (**2**), reference identity, byte-identical `toFen`, an exact call count (**1**), a **hidden count of 0** in the frame's message region, `32/32`, skip **0** |
-| 5 | dependencies known | **✅** two open sibling dependencies stated in the direction they run; two merged instruments named with their line numbers |
+| 5 | dependencies known | **✅** the two sibling dependencies are now **merged**, stated in the direction they ran; two merged instruments named with their line numbers (`src/turn-loop.ts:125` re-checked at HEAD — the cut-hop cite of `:118` had drifted and is corrected on this page) |
 | 6 | security/NFR triggers with a measurable target | **✅** `N8-LANE` ≤ **650 ms CPU**; `A5`'s count bar; sanitization sink named with its line; firing threshold falsifiable |
 | 7 | test notes present | **✅** five |
 | 8 | size assigned | **✅** `S` (2), calibrated |
 | 9 | priority assigned | **✅** `P0` |
-| 10 | no major unresolved blocker | **⚠️** **two ordering dependencies are OPEN** — `ABC-031` and `ABC-032`, both cut at this hop, both in `Backlog`. Named, owned, and precisely why this sits in `Backlog` rather than competing for `Ready`. Nothing else is unresolved and nobody is waiting on a decision |
+| 10 | no major unresolved blocker | **✅** *(was ⚠️)* the two ordering dependencies are **CLOSED** — `ABC-031` and `ABC-032` are both in `Done`. Nothing else is unresolved and nobody is waiting on a decision |
