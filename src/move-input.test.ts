@@ -58,6 +58,13 @@ const SIX_QUEENS_FEN = "3Q1k2/8/1Q4Q1/8/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1";
 const PROMOTION_FEN = "8/4P3/8/k7/8/8/8/4K3 w - - 0 1";
 /** The folded castle case — `o-o` / `o-o-o`, which `parseSan` refuses case-exact, deliberately. */
 const CASTLE_FEN = "4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1";
+/**
+ * G5 — the position where the two grammars OVERLAP and disagree. White pawn `b2`, white bishop
+ * `d2`: the one line `B2b4` is a legal coordinate move (`b2`→`b4`, the pawn) AND a legal
+ * rank-qualified SAN (`Bb4`, the bishop from rank 2), naming two DIFFERENT moves. `b` is the only
+ * piece letter that is also a file letter, which is the whole of the overlap.
+ */
+const SHIFT_SLIP_FEN = "4k3/8/8/8/8/8/1P1B4/4K3 w - - 0 1";
 
 /**
  * Test note 5: the fixtures are round-tripped through `toFen` before anything is believed of them.
@@ -75,6 +82,7 @@ describe("fixtures — every FEN in this file round-trips through toFen", () => 
     FIVE_KNIGHTS_FEN,
     SIX_QUEENS_FEN,
     PROMOTION_FEN,
+    SHIFT_SLIP_FEN,
   ]) {
     it(`round-trips ${fen}`, () => {
       expect(toFen(newGame(fen).position)).toBe(fen);
@@ -246,16 +254,20 @@ describe("ABC-033 A3 — the case-folded retry, both directions", () => {
    *
    * The reason nothing red is worth stating exactly, because it decides what the right repair is.
    * `attemptsOn` returns an ARRAY — both resolvers are called on every text, eagerly — so the order
-   * is a PRECEDENCE over two answers already in hand, not a short-circuit. And the two grammars are
-   * disjoint on every string either accepts, so no real line can make both claim a move: with the
-   * real readers, the two orderings are indistinguishable by any input, which is exactly why the
-   * test below at `:the fixed order` cannot tell them apart either.
+   * is a PRECEDENCE over two answers already in hand, not a short-circuit.
    *
-   * So the honest repair is NOT to make the module lazy. Laziness would make the order observable,
-   * but it would be a mechanism built so a test can watch it — the ticket page has been corrected
-   * to say precedence rather than order of attempt, which is what the code does. What IS assertable
-   * is the precedence itself, through the seam the module already exposes for exactly this kind of
-   * question: two stub readers that BOTH claim the same text. Coordinate's answer must win.
+   * The rest of what this comment used to say was WRONG and is corrected below it: it claimed the
+   * two grammars are disjoint on every string either accepts, so that no real line could make both
+   * claim a move and the two orderings were indistinguishable by any input. QE falsified that at
+   * `quality-gate-ABC-033-delta-2026-08-18` with `B2b4`, and the next test pins it with the REAL
+   * readers. M12 reds there, so this stub case is no longer the only thing standing between the
+   * precedence and a silent swap.
+   *
+   * The repair was never to make the module lazy — laziness would be a mechanism built so a test
+   * can watch it, and the ticket page has been corrected to say precedence rather than order of
+   * attempt, which is what the code does. This case keeps its own job: it asserts the precedence
+   * through the seam, on two stub readers that BOTH claim the same text, with no dependence on a
+   * grammar overlap existing. Coordinate's answer must win.
    */
   it("coordinate outranks SAN when both readers claim the same text — the precedence, asserted", () => {
     const history = newGame(START_FEN);
@@ -275,6 +287,41 @@ describe("ABC-033 A3 — the case-folded retry, both directions", () => {
 
     expect(outcome.kind).toBe("move");
     expect((outcome as { move: Move }).move).toBe(coordinateMove);
+  });
+
+  /**
+   * G5, and the guard that bites on a string a player can actually type — NO stubs, NO seam, the
+   * production resolvers throughout. `B2b4` on `SHIFT_SLIP_FEN` is claimed by BOTH readers and they
+   * claim different moves, so it is the one shape where the precedence has a consequence in
+   * production. Swap the two lines of `attemptsOn` (QE's mutant M12) and this case goes red with
+   * the bishop; the stub case above stays the weaker of the two.
+   *
+   * It asserts the pawn, not merely "some move": coordinate-first is right BECAUSE a player typing
+   * `B2b4` is a coordinate typist whose shift slipped on `b2b4`.
+   */
+  it("coordinate outranks SAN on a real line both readers claim — `B2b4` is the pawn, not the bishop", () => {
+    const history = newGame(SHIFT_SLIP_FEN);
+    const legal = legalMoves(history.position);
+    const pawn = moveNamed(history, legal, "b4");
+    const bishop = moveNamed(history, legal, "Bb4");
+    expect(pawn).not.toBe(bishop);
+
+    // The overlap itself, so this case fails loudly if a future grammar change closes it rather
+    // than quietly asserting a precedence that no longer decides anything.
+    const asCoordinate = parseCoordinateMove(history.position, "B2b4", legal);
+    const asSan = parseSan(history.position, "B2b4", legal);
+    expect(asCoordinate.outcome).toBe("move");
+    expect(asSan.outcome).toBe("move");
+    expect((asCoordinate as { move: Move }).move).toBe(pawn);
+    expect((asSan as { move: Move }).move).toBe(bishop);
+
+    const outcome = resolveMoveInput(history, "B2b4");
+
+    expect(outcome.kind).toBe("move");
+    // `toEqual`, not `toBe`: with no `deps` the module derives its OWN legal array, so the move it
+    // returns is a structurally equal object and never the same reference as this fixture's.
+    expect((outcome as { move: Move }).move).toEqual(pawn);
+    expect((outcome as { move: Move }).move).not.toEqual(bishop);
   });
 
   it("the fold is tried in the fixed order — coordinate before SAN, exact before folded", () => {

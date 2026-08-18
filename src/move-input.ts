@@ -155,8 +155,9 @@ export function resolveMoveInput(
   const legal = deps.legalMoves(position);
   const reasons: RejectReason[] = [];
 
-  // 1. Exactly as typed: coordinate first — it is the smaller grammar and four characters of
-  //    `[a-h][1-8]` cannot match a SAN string by accident — then `parseSan`.
+  // 1. Exactly as typed: coordinate first — then `parseSan`. Coordinate-first is a real precedence
+  //    and not a formality: a `B`-initial line can be read by both, and `attemptsOn` below says
+  //    which reader wins and why.
   for (const attempt of attemptsOn(position, line, legal, deps)) {
     if (attempt.outcome === "move") return { kind: "move", move: attempt.move };
     if (attempt.outcome === "ambiguous")
@@ -196,17 +197,31 @@ export function resolveMoveInput(
  *
  * BOTH RESOLVERS ARE CALLED, ALWAYS — this returns an array, not a lazy sequence, so the order here
  * is a PRECEDENCE over two answers already in hand, not a short-circuit that spares the second
- * reader. The distinction is invisible in production, because the two grammars are disjoint on
- * every string either accepts (a coordinate is four-plus characters of `[a-h][1-8]`; a SAN that
- * short is not one), so no line can make both claim a move and no line can tell the two orderings
- * apart by its outcome. QE's M12 swapped them and reded nothing, exactly for that reason
- * (`G5`, `quality-gate-ABC-033-qe-2026-08-18`).
+ * reader. And the precedence is REAL, not a formality: the two grammars are NOT disjoint. A line
+ * can make both readers claim a move, and they can claim DIFFERENT moves. On
+ * `4k3/8/8/8/8/8/1P1B4/4K3 w - - 0 1` the input `B2b4` is read by `parseCoordinateMove` as the
+ * pawn's `b4` and by `parseSan` as the rank-qualified bishop `Bb4`; the order below is what decides
+ * it, and swapping these two lines changes the move the player gets.
+ *
+ * The cause is one letter of the alphabet. `parseCoordinateMove` lowercases before matching, and of
+ * the piece letters `N B R Q K` exactly one — `b` — is also a file letter, so every string shaped
+ * `B<rank><file><rank>` is in both grammars at once. This is pre-existing, it resolves on the
+ * exact-as-typed path, and it is not created by the case-folded retry below.
+ *
+ * COORDINATE-FIRST IS THE RIGHT WAY ROUND, which is why the order is this one: a player who types
+ * `B2b4` is a coordinate typist whose shift slipped on `b2b4`, and the pawn is the move they meant.
+ * Do not swap these two lines.
+ *
+ * An earlier version of this comment asserted the opposite — that the grammars were disjoint on
+ * every string either accepts, so no line could make both claim a move and no line could tell the
+ * two orderings apart by its outcome. That was FALSE in both halves, and `B2b4` falsifies both
+ * (QE, `quality-gate-ABC-033-delta-2026-08-18`). QE's M12 — swapping these two lines — reded
+ * nothing at the original gate because no test then used such a line; `src/move-input.test.ts` now
+ * pins `B2b4` through the real readers and M12 reds on it.
  *
  * It is NOT made lazy. Laziness would buy one skipped parse of a four-character string on the
- * winning path and would make the order observable — but the order is not a behaviour anyone can
- * reach, and building a mechanism so that a test can watch it is the wrong way round. The
- * precedence is pinned instead through `MoveInputDeps`, by two stub resolvers that both claim the
- * same text, which is the only place the rule has an observable consequence at all.
+ * winning path, and the precedence is already observable without it — on a real line like `B2b4`,
+ * and through `MoveInputDeps` with two stub resolvers that both claim the same text.
  */
 function attemptsOn(
   position: Position,
