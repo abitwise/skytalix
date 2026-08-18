@@ -202,6 +202,15 @@ const childOf = (command: string, args: readonly string[], options: ChildOptions
       encoding: "utf8",
       input: options.input ?? "",
       stdio: ["pipe", "pipe", "pipe"],
+      // A HUNG CHILD MUST BE A RED ROW, NOT A STALLED LANE — `ABC-043`, and it is `G6`'s failure
+      // mode made survivable rather than a general precaution. Two overlapping `seam()` calls
+      // orphan the first read FOREVER: MEASURED at this hop, that build wrote 501 bytes and then
+      // never exited, and a suite with no bound waits for it as long as anyone lets it. With one,
+      // `spawnSync` returns an `ETIMEDOUT` error and the throw below names it — WATCHED going red
+      // at this hop, at a temporary 1 ms bound. The bound is deliberately two orders of magnitude
+      // above the 64-72 ms a child costs here, so nothing but a genuine hang can reach it: it is
+      // not a performance assertion and must never be read as one.
+      timeout: 30_000,
     },
   );
   // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK: a child that never started says so here,
@@ -1122,11 +1131,21 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // The instrument is a TRANSCRIPTION, not a denylist of the row counts: every numeric literal in
     // the two modules is listed here with what it is, so a new number cannot arrive unexplained and
     // none of the listed ones is a count of rows.
+    //
+    // THE TEMPLATE-LITERAL BLANKER WAS BLIND AND IS FIXED HERE — found at `ABC-043` by mutation, and
+    // it is a hole in the INSTRUMENT rather than in what it measures. The old expression could not
+    // match a literal containing an interpolation at all, so with TWO such literals in a module it
+    // matched the CLOSING backtick of the first through the OPENING backtick of the second and
+    // blanked every line between them. MEASURED: with a deliberate `beginFrameSession(sink, 23)`
+    // planted in that gap, this row stayed GREEN — the `23` was erased before the scan ever ran.
+    // `ABC-042` shipped ONE interpolated literal, so the hole could not open until `ABC-043` added
+    // the crash line's. Matching to the next unescaped backtick is correct for both delivered
+    // modules and is what a row-count guard has to do; the same planted `23` reds this row now.
     const numbersIn = (file: string): readonly string[] => {
       const code = executableCodeOf(file)
         .replace(/"(?:[^"\\]|\\.)*"/g, '""')
         .replace(/'(?:[^'\\]|\\.)*'/g, "''")
-        .replace(/`(?:[^`\\$]|\\.|\$(?!\{))*`/g, "``");
+        .replace(/`(?:[^`\\]|\\.)*`/g, "``");
       return [...new Set(code.match(/0[xX][0-9a-fA-F]+|\d+(?:\.\d+)?/g) ?? [])].sort();
     };
 
