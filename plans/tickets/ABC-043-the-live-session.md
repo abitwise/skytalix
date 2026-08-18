@@ -249,12 +249,13 @@ entry point imports.** Verified at this hop on **Node v24.12.0** (the interprete
 a throwaway three-file replica outside the repository — **no file under `src/` was read into a build
 and none was written**:
 
-| probe | result |
-|---|---|
-| child spawned with `--import <hook>`, hook substitutes `./engine.ts` with a throwing `createEngine` | entry point ran, the fault reached its own `try`/`catch`, **exit code 7** — the process's, not a harness's |
-| the identical child spawned with **no** `--import` | real module, real behaviour, **exit 0** — production is unaffected by the rig's existence |
-| the hook passed as a **`data:text/javascript,…` URL** instead of a file | **works** — so the rig needs **zero new files**: the whole thing is a string inside `src/cli.test.ts` |
-| the substituted module holding `import { … } from "./legal.ts"` | **resolves** — relative specifiers inside a substituted module resolve against the module it replaced, so a deterministic double may use the real `legalMoves` |
+**The four probes, their commands and their outputs are in this task's notes**
+(`.grugops/context/refine-ABC-043-2026-08-19/notes/`, observation *"What was MEASURED at this hop"*) —
+measurement belongs there under this project's process rule 2, not on the page. **The four facts they
+establish:** the fault reaches the entry point's own handler and the child exits with the code the
+build chose; a child spawned WITHOUT the hook is byte-unaffected; a `data:` URL carries the hook, so
+the rig needs **zero new files**; and a substituted module's relative imports resolve, so a
+deterministic double may call the real `legalMoves`.
 
 **What this buys, criterion by criterion:**
 
