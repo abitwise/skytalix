@@ -730,12 +730,13 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // `ADR-0011` clause 1's trigger check are the same assertion from two directions.
     expect(productionModules()).toContain("cli.ts");
     expect(productionModules()).toContain("cli-options.ts");
-    // 23: 20 at ABC-042, +1 ABC-031 `coordinate-move.ts`, +1 ABC-076 `evaluate.ts`, +1 ABC-077
-    // `search.ts`. Both ABC-031 and ABC-076 independently wrote 21 — correct for each ALONE, wrong
-    // once both land. The count is an inventory of what sits flat in src/, not a cap on it; this
-    // row's subject is flatness and the entry point. ABC-103 removes the hand-maintained integer,
-    // which has now cost FOUR tickets — ABC-077 is the fourth, and it paid the tax again.
-    expect(productionModules()).toHaveLength(23);
+    // NO TOTAL IS ASSERTED HERE, and that is `ABC-103`'s whole change. A hand-maintained count of
+    // what sits flat in src/ went red for every correct addition of an unrelated module — measured
+    // four times (20 at ABC-042, then ABC-031, ABC-076 and ABC-077 each bumped it by hand) — while
+    // adding NOTHING to this row's subject. The wrong build this row exists to catch,
+    // `src/cli/main.ts`, moves a name OUT of the flat listing and INTO the nested one: the two
+    // `toContain` rows above and the `nested` equality below both go red on it, and neither can be
+    // satisfied by editing an integer.
     const nested = (readdirSync(SOURCE_DIRECTORY, { recursive: true }) as string[]).filter(
       (entry) => entry.includes("/") && entry.endsWith(".ts"),
     );
