@@ -46,6 +46,25 @@ suite.
 - **The end of the session is handed to `ABC-044`** — this ticket returns from `runTurnLoop` and exits;
   the result screen is that ticket's.
 
+**Two composition constraints added 2026-08-19 by BA/PM, now that the modules they name are merged.**
+
+- **The opponent is the MERGED engine at its MERGED default budget.** `createEngine` from
+  `src/engine.ts` (`:305`), with `DEFAULT_BUDGET_MS` (`:83`) — **no new number, no `--difficulty`, no
+  new flag and no new constant**; `--difficulty` is fenced by `ABC-042` and stays fenced. This is a
+  scope statement, not a design choice: it forbids inventing a budget here, and it is what keeps
+  `ADR-0013` satisfied — a real opponent ships, not a placeholder.
+- **`createLineInputSeam` HAS A SINGLE-CALLER PRECONDITION, and this is the ticket that wires it.**
+  QE recorded it at `ABC-037` (`G6`, `quality-gate-ABC-037-qe-2026-08-19`): `waiting` is a **single
+  slot**, so **two overlapping `seam()` calls orphan the first read FOREVER** — the first promise never
+  settles and the session hangs with no output and no exit. `runTurnLoop` awaits the seam before
+  calling it again, so the merged loop is safe **by its own sequencing, not by any guard in the
+  module**, and the precondition is written down in neither the module header nor the suite. **The
+  entry point therefore builds the input seam ONCE, passes it to `runTurnLoop`, and calls it
+  NOWHERE ELSE.** No new criterion is cut for this: `A1` already pins `runTurnLoop` at exactly one
+  call with no adapter, and `A8` reads the whole delivered diff — a second `seam()` call would have to
+  appear there. **A build that "helpfully" pre-reads a line before the loop starts hangs the product,
+  and this is where that gets caught rather than at integration.**
+
 ## The ruling on a parser bug — `EPIC-006`'s half of `ABC-019` `[D31]`
 
 **BA/PM, 2026-08-13. It ends the game, loudly, as an internal error that is never a chess outcome,
@@ -103,7 +122,10 @@ child process — `EPIC-002` `4c` and this epic's own `## Test notes`.
   the last frame written shows the mated position, the loop's `result` is the mating side's win with
   `reason: "checkmate"`, and the process exits **0**. **The frame count equals
   `1 + plies + non-advancing outcomes that carry a message`** — `ABC-019`'s cadence, asserted rather
-  than assumed, with end-of-input excluded (`[D29]`).
+  than assumed, with end-of-input excluded (`[D29]`). **The deterministic opponent is a TEST DOUBLE
+  substituted into the child process — never the merged search, and nothing in `src/`** (see
+  `## The ruling on `A5` and `A2`'s testability`): the merged engine is wall-clock bound, so a
+  scripted line asserted against it would be flaky by construction and would cost 3 s of wall per ply.
 - **`A3` (`[D31]`'s ruling, as a criterion).** **Given** an `InputSeam` that throws, **when** the
   session runs, **then** the process writes a line that (i) marks it an internal error, (ii) contains
   **none** of the ten `TerminalReason` values and none of the words `win`, `draw`, `resign`,
@@ -119,7 +141,12 @@ child process — `EPIC-002` `4c` and this epic's own `## Test notes`.
   one that returns a move `legalMoves` did not produce, **then** the loop returns
   `reason: "engine-threw"` / `"engine-failure"` with `result: null`, the process exits **0**, and the
   written output contains **no** `EndReason` word. *(`ABC-019` `A9`/`A10`, re-asserted through the real
-  entry point rather than through a stub harness.)*
+  entry point rather than through a stub harness.)* **Both faulty seams are TEST DOUBLES substituted
+  into the child process; the DRIVER is the delivered entry point, spawned, with its own exit code —
+  that is what *"rather than through a stub harness"* asks for and it is met without one production
+  line changing** (see `## The ruling on `A5` and `A2`'s testability`). **The discriminating
+  requirement is unchanged: a build that catches the throw and exits non-zero here, or names a chess
+  outcome, fails.**
 - **`A6` (one frame session, one writer, no recomposition).** **Given** any run of ≥ 6 frames,
   **then** `beginFrameSession` is called **exactly once**, every frame reaches the writer with the row
   count the seam returned, and the delivered diff contains **no numeric row-count literal**
@@ -133,17 +160,29 @@ child process — `EPIC-002` `4c` and this epic's own `## Test notes`.
   and its test file and **nothing else** under `src/` — **`src/turn-loop.ts`, `src/frame.ts` and
   `ABC-041`'s seam module byte-identical**. Suite green, skip **0**, `PERFT_DEEP=1` **32/32**.
 
-## Dependencies — and this ticket is BLOCKED on two of them
+## Dependencies — ALL THREE ARE DISCHARGED (re-measured 2026-08-19)
 
-- **`ABC-041` and `ABC-042` must land first — OPEN.** Both are cut, `P0`, and in this epic.
-- **`ABC-037` must land first — OPEN, and it is not this epic's.** It is `EPIC-003`'s production
-  `InputSeam`, `P0`, and it has two open ordering dependencies of its own (`ABC-033`, `ABC-035`).
-  **So the shortest path to a playable game is at least four merges long and three of them are not in
-  this epic.**
-- **AN `EngineSeam` DOES NOT EXIST, AND THIS IS THE REAL BLOCKER.** `EPIC-004` is **undecomposed**,
-  and its own first ticket must be `RISK-002`'s timeboxed spike (`NFR-005`'s depth-7 level is
-  `PROVISIONAL`). The loop calls `engine(history)` on every ply the human does not own, and there is no
-  way to run a game without one.
+**Re-measured by BA/PM at task `refine-ABC-043-2026-08-19` against `main` `e70fda1`. Every ordering
+blocker this section was cut with has landed; the original wording is replaced rather than annotated,
+because a stale blocker is read as a live one.**
+
+- **`ABC-041` and `ABC-042` — DISCHARGED.** Both are in `Done`. The entry point this ticket edits is
+  `src/cli.ts`, delivered by `ABC-042`; `ABC-041`'s `RenderSeam` is `src/render-seam.ts` and `cli.ts`
+  already calls `makeRenderSeam`.
+- **`ABC-037` — DISCHARGED.** Merged; `src/line-input.ts` is in the tree and exports
+  `createLineInputSeam(options): InputSeam` (`src/line-input.ts:150`). Its QE hop
+  (`quality-gate-ABC-037-qe-2026-08-19`) passed it with gaps, one of which this page now carries — see
+  `## Scope`'s single-caller constraint.
+- **AN `EngineSeam` NOW EXISTS — DISCHARGED, and this was the blocker the ticket was cut around.**
+  `src/engine.ts` is merged (`ABC-078`) and `createEngine(options): EngineSeam`
+  (`src/engine.ts:305`) is the seam `src/turn-loop.ts:138` has been waiting on. **`ADR-0013` is
+  therefore moot in practice for this ticket:** a real opponent exists, so nothing here needs a
+  placeholder and the ruling below is not weakened — it is simply no longer load-bearing on the
+  schedule.
+
+**So the *"a playable game waits for `EPIC-004`"* consequence recorded below has been overtaken by
+`ABC-078` landing.** It is left in place unedited because it records what was ruled and why; read it
+as history, not as a live blocker.
 
 ### The named decision this ticket cannot make for itself
 
@@ -185,15 +224,117 @@ This changes no dependency on this page — the `EngineSeam` blocker was already
 records that the answer would be identical if that ticket did not exist. **Column moves and the DoR
 re-score are not made here.**
 
+## The ruling on `A5` and `A2`'s testability — 2026-08-19 by BA/PM
+
+**Both are SATISFIABLE AS WRITTEN. Neither is weakened, neither is re-scoped, and no ADR has to
+move.** Ruled at task `refine-ABC-043-2026-08-19` on Architect/Design's flag
+(`design-p0-chain-rulings-2026-08-18`, and `ADR-0013` clause 7, which hands this criterion question
+here by name). **`ADR-0011` clause 4 is untouched: the entry point still exports NOTHING, and this
+ruling depends on it continuing to export nothing.**
+
+**The mistake the flag rests on, named first because it is the whole ruling.** *"Through the real
+entry point rather than through a stub harness"* constrains **the DRIVER**, not **the SEAM**. `A5`
+cannot be asking for a real engine that really throws — it asks for *"an `EngineSeam` that throws"*
+and *"one that returns a move `legalMoves` did not produce"*, which are **faults, deliberately
+constructed**, i.e. test doubles at the seam by definition. What the clause forbids is proving them
+by calling a handler in-process with a hand-built options bag: the exit code, the frame stream and
+the top-level handler must be the **process's**. **A double at the engine seam plus a real spawned
+entry point satisfies both halves at once.** So the question was never *"may the entry point export
+an injection point"* — it is *"can the child process be given a different `./engine.ts` without any
+production line changing"*.
+
+**It can, and it was measured rather than reasoned. Node's module customization hooks
+(`node:module`'s `registerHooks`), loaded into the child with `--import`, replace the module the
+entry point imports.** Verified at this hop on **Node v24.12.0** (the interpreter this repo runs), on
+a throwaway three-file replica outside the repository — **no file under `src/` was read into a build
+and none was written**:
+
+**The four probes, their commands and their outputs are in this task's notes**
+(`.grugops/context/refine-ABC-043-2026-08-19/notes/`, observation *"What was MEASURED at this hop"*) —
+measurement belongs there under this project's process rule 2, not on the page. **The four facts they
+establish:** the fault reaches the entry point's own handler and the child exits with the code the
+build chose; a child spawned WITHOUT the hook is byte-unaffected; a `data:` URL carries the hook, so
+the rig needs **zero new files**; and a substituted module's relative imports resolve, so a
+deterministic double may call the real `legalMoves`.
+
+**What this buys, criterion by criterion:**
+
+- **`A5`** — two children: one whose substituted `createEngine` returns a seam that **throws**, one
+  whose seam returns a **move `legalMoves` did not produce**. The loop's merged `engine-threw` /
+  `engine-failure` arms (`src/turn-loop.ts:375,382`) run for real, the process exits **0**, and the
+  `EndReason` word-absence is asserted over the child's real stdout+stderr union. **The
+  discriminating requirement on this page is untouched.**
+- **`A2`** — the *"deterministic opponent"* is the same substitution, carrying a scripted reply list
+  (or the first legal move from the real `legalMoves`). **This is required, not merely convenient:**
+  the merged engine is an **iterative deepening search against a wall clock**
+  (`src/engine.ts:83,305`), so the depth it reaches — and therefore the move it picks — is **hardware
+  and load dependent**. A scripted mating line asserted against the real engine would be a **flaky
+  criterion**, and at `DEFAULT_BUDGET_MS` = 3 s per engine ply it would also breach `NFR-008`'s 3 s
+  wall clause on its own. `A2` says *"a deterministic opponent"* and that is exactly what it gets.
+
+**The three shapes that were offered, and what happened to each:**
+
+1. **A spawned-process test that induces the fault without an export — ADOPTED**, in the form above.
+2. **An env- or argv-gated fault injection — REFUSED, and this is the important refusal.** It would
+   put a fault path **in `src/cli.ts`**: production behaviour, reachable by a human who sets the
+   variable, needing its own justification, its own criterion and — by `ADR-0013` clause 3's
+   discriminator, *"exercisable by a human running the delivered product"* — the **owner**. The
+   adopted rig is the first class instead: **only a test can exercise it**, because a human running
+   `npm run chess` never passes `--import`. It is a test double, and `ADR-0009` clause 9c is
+   satisfied because it lives **in the test file**, as a string, not in `src/`.
+3. **Re-scoping `A5` to what the entry point can be driven through — REFUSED.** It is unnecessary
+   now, and it was the outcome the ticket's own text forbids: *a build that catches the throw and
+   exits 0 passes every other criterion and fails this one*, and `ABC-019` `A10` is enforced at the
+   top level here.
+
+**Three limits on this ruling, so it is not read wider than it is.**
+
+- **No production line, no export, no flag, no env var in `src/`.** The moment a build needs one,
+  this ruling has been left behind and the question goes back to Architect/Design.
+- **The rig is not a licence to substitute modules generally.** It exists for the **engine seam**
+  under `A2` and `A5`. Substituting `./line-input.ts`, `./frame.ts` or `./turn-loop.ts` would test the
+  harness instead of the product and is out of scope on this page.
+- **`--import` is child-only.** It never appears in `npm run chess`, in `package.json`, or in
+  `AGENTS.md`'s `Dev / run` line.
+
+**One consequence that is NOT a criterion and is named so nobody assumes it:** with `A2` and `A5`
+both driven by doubles, **no criterion on this page runs the REAL engine end to end**, and that is
+deliberate — a real-engine game costs 3 s of wall per ply against a 3 s lane clause. If a real-engine
+end-to-end row is wanted it belongs in an **opt-in lane** (`ENGINE_DEEP` is the precedent, `AGENTS.md`
+§ Test), never in the default lane. **Not cut as a ticket here; recorded as the honest gap.**
+
 ## Security / NFR triggers
 
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**. **This ticket shares `ABC-042`'s test file
   (see `## Lane cost`), so the two tickets' spawn costs land in ONE file and must be read together
   against one bar.**
+- **`N8-SPAWN` — SEVEN forced children, counted off the criteria above and fixed here at the cut**
+  (added 2026-08-19; the account is `plans/nfr-catalog.md`'s, created 2026-08-15, and writing this row
+  is BA/PM's duty at each cut).
+
+  | criterion | children | why deleting the child would delete the criterion |
+  |---|---|---|
+  | `A1`, `A6`, `A8` | **0** | read off the diff / typecheck, and `A6` rides `A2`'s ≥ 6-frame run |
+  | `A2` | **1** | a scripted game end to end IS a run of the delivered command |
+  | `A3` | **1** | the exit code and the absence of a result screen are the **process's** |
+  | `A4` | **1** | `[D31]` requires `A4` asserted **against** `A3`, so both children exist or neither does |
+  | `A5` | **2** | *"an `EngineSeam` that throws, **and again** one that returns a move `legalMoves` did not produce"* — the criterion text names two |
+  | `A7` | **2** | *"**Given** `--colour black` … **Given** `--colour white`, the reverse"* — either alone is satisfied by a wrong build |
+  | **total** | **7** | |
+
+  **The file's mechanical pin therefore moves 10 → 17** (`src/cli.test.ts:950`), and **17 is a
+  ceiling, not a target**: a delivered child that no criterion above names is a finding against this
+  ticket, never a charge on the account. **The wall clause has no account** — `NFR-008`'s 3 s wall is
+  a total, children are visible on it, and seven more serial `spawnSync` calls are the largest wall
+  risk this ticket carries. **Security/NFR checks both at the gate; this row does not pre-empt that
+  reading.**
 - **`NFR-002` (< 16 ms per frame) — carried, not re-decided.** The loop's own per-ply derive count is
   merged and mutation-tested; this ticket adds **zero** derives. `A6` is the structural guard.
-- **`NFR-004` (the engine may occupy 3 s) — not measurable here** and it is `EPIC-004`'s. Named so it
-  is not silently inherited.
+- **`NFR-004` (the engine may occupy 3 s) — still not measured here, and the reason has CHANGED.**
+  It was *"`EPIC-004`'s and nothing to measure"*; `src/engine.ts` is merged, and `ABC-078` measured the
+  budget on its own deep lane. What this ticket adds is the **composition** — `createEngine` at
+  `DEFAULT_BUDGET_MS` — and **no criterion here runs the real search** (`## Test notes` 8), so no row
+  on this page may be read as a re-measurement of `NFR-004`. Named so it is not silently inherited.
 - **Security: triggered by composition, not by new input surface.** This is the ticket that connects
   the first module reading outside input (`ABC-037`) to the first module writing to a terminal
   (`ABC-042`). Two measurable bars: **(1)** every byte reaching stdout is either a frame row from
@@ -213,8 +354,29 @@ re-score are not made here.**
    engine's first move passes a content assertion and eats the player's first input.
 4. **The frame count in `A2` is `ABC-019`'s formula, with EOF excluded.** Re-deriving it here rather
    than reading it is how `[D29]` got written the first time.
-5. **Reuse `ABC-042`'s spawn harness. Do not build a second one**, and keep the total spawn count
-   across both tickets in single digits.
+5. **Reuse `ABC-042`'s spawn harness. Do not build a second one.** ~~keep the total spawn count
+   across both tickets in single digits~~ **— STRUCK 2026-08-19: that budget was already spent before
+   this ticket could honour it.** `src/cli.test.ts` spawns **TEN** children today and pins the number
+   mechanically (`"N8-LANE — this file spawns TEN children and no more"`, `src/cli.test.ts:950`), so
+   "single digits across both tickets" was unachievable the day `ABC-042` merged. **The budget that
+   replaces it is a COUNT DERIVED FROM THIS PAGE'S CRITERIA — `## Security / NFR triggers`'
+   `N8-SPAWN` row — and the pin moves from 10 to 17 with that derivation as its reason.** Do not
+   raise the pin without moving the row.
+6. **The harness needs stdin.** `ABC-042`'s `childOf` spawns with `stdio: ["ignore", "pipe", "pipe"]`
+   (`src/cli.test.ts:120-126`) because a board-printer reads nothing. Every criterion on this page
+   feeds a script, so the helper gains piped input — **extend the one helper; do not add a second
+   `spawnSync` call site.** `src/cli.test.ts:961-965` asserts textually that `spawnSync` is the only
+   name taken from `node:child_process` and has **exactly one call site**, and that guard stays green.
+7. **The engine double is a string in the test file, injected with `--import`** — see
+   `## The ruling on `A5` and `A2`'s testability` for the measured mechanism and its three limits.
+   **No new file, nothing under `src/`, no env var read by production code.** A `data:` URL keeps the
+   hook in the test file; a hook file placed outside `src/` would sit outside both
+   `tsconfig.json`'s and `biome.json`'s `includes` (neither typechecked nor linted — the trap
+   `vitest.config.ts`'s header already records) and is the worse of the two.
+8. **No criterion here runs the real engine**, deliberately, and no default-lane row may: at
+   `DEFAULT_BUDGET_MS` one engine ply costs 3 s of wall against `NFR-008`'s 3 s wall clause for the
+   WHOLE lane. A real-engine end-to-end row belongs in an opt-in lane (`ENGINE_DEEP` precedent) and is
+   not cut here.
 
 ## Lane cost — how many test FILES this ticket implies
 
@@ -260,3 +422,28 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `M` (3), calibrated, with the split line named |
 | 9 | priority assigned | **✅** `P0` |
 | 10 | no major unresolved blocker | **⚠️⚠️ TWO.** **(a) `ABC-037` is OPEN** and is `EPIC-003`'s, with two open dependencies of its own. **(b) NO `EngineSeam` EXISTS and `EPIC-004` is undecomposed** — and the question of whether the composition root may supply a default opponent before then is a **conformance ruling owned by Architect/Design**, stated in full under `## Dependencies` and **not decided here** |
+
+### RE-SCORED 2026-08-19 by BA/PM — **9 of 10 clean, 1 ⚠️. STILL NOT MET, and the one ⚠️ is not this ticket's to clear**
+
+Re-assessed at task `refine-ABC-043-2026-08-19` against `main` `e70fda1`, on the same checklist. **The
+2026-08-13 table above is kept whole rather than edited in place** — it records what was true at the
+cut. **Three of the four marks are discharged BY MEASUREMENT; the one that remains is NEW, and it was
+not visible in August 13's table because the lane reading that produced it did not exist yet.**
+
+| # | item | 2026-08-13 | 2026-08-19 | what moved |
+|---|---|---|---|---|
+| 3 | INVEST-shaped | ⚠️ | **✅** | **Independent now.** `ABC-041`, `ABC-042` in `Done`; `ABC-037` merged (`src/line-input.ts`); `src/engine.ts` merged with `createEngine`. Zero open ordering dependencies — see `## Dependencies`, re-measured |
+| 4 | acceptance testable and measurable | ✅ | **✅** | **Held under challenge, which is the point.** Architect/Design flagged `A5` (and `A2`) as possibly unsatisfiable because `src/cli.ts` exports **0** symbols. **Ruled satisfiable AS WRITTEN, with a MEASURED mechanism** (`## The ruling on `A5` and `A2`'s testability`) — no criterion weakened, no criterion re-scoped, `ADR-0011` clause 4 untouched. **Had the mechanism not worked, this row would read ⚠️ and the ticket would be at Architect/Design, not here** |
+| 5 | dependencies known | ✅ | **✅** | Re-measured rather than re-asserted; every discharged blocker carries the file that discharges it |
+| 6 | security/NFR triggers with a measurable target | ✅ | **⚠️ THE ONE MARK** | **`N8-LANE` ≤ 650 ms is arithmetic over a question `ABC-108` says is OPEN**: the default lane medians **13.400 s CPU against `NFR-008`'s 13 s clause** (n=8), and until Architect/Design rules it *"`N8-LANE` cannot honestly be granted to any ticket"* — `plans/board.md`, 2026-08-18. **This ticket is not a bystander to that:** it adds **7 criterion-forced children** (the new `N8-SPAWN` row) at a **measured 62.5 ms median wall per child** (n=7, board-only child, this hop) ≈ **0.44 s**, and `N8-SPAWN`'s own total-stop clause says the account gives **no relief from the total**. The trigger is stated and the targets are measurable — what is missing is a lane the arithmetic is honest against |
+| 7 | test notes present | ✅ (five) | **✅** (eight) | Three added: the moved spawn pin, the stdin-piping harness change, the engine-double mechanism, and the deliberate absence of a real-engine default-lane row |
+| 10 | no major unresolved blocker | ⚠️⚠️ | **✅** | **Both discharged.** (a) `ABC-037` merged. (b) `src/engine.ts` merged, so the `EngineSeam` exists and `ADR-0013`'s NO answer is moot in practice — a real opponent ships and nothing needs a placeholder |
+
+**Items 1, 2, 8, 9 unchanged and still ✅** (2 gained two composition constraints; 8's `M` and its split
+line still hold — the ruling added no build work, only named the mechanism).
+
+**What clearing the last ⚠️ takes, so it is not mistaken for this ticket's job:** `ABC-108`'s `OQ-1`
+ruled by **Architect/Design**. Nothing on this page can clear it, and no wording change here would —
+which is exactly why it is recorded as a ⚠️ rather than smoothed into prose. **A pull with it open is
+a decision the Orchestrator may take with the number in front of him** (≈ 0.44 s of new child cost, on
+a lane already reading over its clause); it is not a decision this table makes for him.
