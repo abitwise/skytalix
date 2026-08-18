@@ -99,10 +99,19 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   totality row. Every ACCEPTANCE criterion is answered in the default lane. It is opt-in because
   ABC-108 has the default lane at or over NFR-008's 13 s CPU clause, so this ticket did not claim
   N8-LANE's 650 ms; its measured default-lane cost is +0.185 s CPU (paired, interleaved, n=7, 7/7
-  positive sign). Run it after any change to src/line-input.ts. TRAP: this lane does NOT assert a
-  memory bound. The heapUsed row that used to is deleted — measured with node --expose-gc, a build
-  retaining a 16,777,216-character line reports 0.01 MiB of heapUsed growth, so that assertion could
-  never fire. The retention bound is a construction argument in absorb(), not a test. -->
+  positive sign). Run it after any change to src/line-input.ts — QE 2026-08-19 measured two mutants
+  that die in this lane and in nothing else. TRAP, and read all of it before you act on any of it:
+  this lane asserts NO memory bound today, and heapUsed must never be how one gets asserted. A build
+  retaining a 16,777,216-character line reports 0.01 MiB of heapUsed growth (QE: 0.11 MiB leaking vs
+  0.10 MiB bounded) — a heapUsed row is green whichever build it runs against. One was written,
+  watched NOT fail, and DELETED rather than shipped green; do not put it back. But the bound IS
+  testable, so do not read this as "not a test": the blindness is not cons-string accounting —
+  heapUsed accounts a FLATTENED 16 MiB string in full (16.00 MiB QE, 16.19 MiB re-measured here) —
+  the retained leaves are EXTERNAL string data, and process.memoryUsage().external after a gc()
+  separates the builds 0.00 vs 32.00 MiB — 32:1 in 36 ms, under NODE_OPTIONS=--expose-gc. Numbers
+  and the guard itself are in .grugops/context/quality-gate-ABC-037-qe-2026-08-19/notes/, not
+  restated here; the lane command above gains NODE_OPTIONS=--expose-gc on the hop that lands it. The rule this cost us: never ship a
+  memory guard you have not watched go RED. -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- RUN 2026-08-15 at `daa20c4` (this hop changed no code):
   exit 0, 856/856 on 30 files. `@vitest/coverage-v8` is in `devDependencies`; no npm script and no
