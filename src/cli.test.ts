@@ -19,7 +19,7 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { readdirSync, readFileSync } from "node:fs";
+import { lstatSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import { ACCEPTED_ARGUMENTS, type ResolvedOptions, resolveOptions } from "./cli-options.ts";
 import { frameHeight } from "./frame.ts";
@@ -741,6 +741,20 @@ describe("ABC-042 — the shape of what was delivered", () => {
       (entry) => entry.includes("/") && entry.endsWith(".ts"),
     );
     expect(nested).toEqual([]);
+    // ADDED by QE at `quality-gate-ABC-103-qe-2026-08-18`, and it is NOT a restatement of the
+    // count `ABC-103` deleted: it names no module, no total and no list, so no correct addition
+    // under `src/` can ever red it. `toContain` reads a DIRECTORY ENTRY'S NAME, and a name is not
+    // a file. MEASURED at that hop: with `src/cli.ts` replaced by a symlink to a `lib/cli-entry.ts`
+    // outside `src/`, ALL 42 rows in this file stayed GREEN — this row included — and the whole
+    // repository's only red was `history-pane.nfr.test.ts`'s licence equality, in another file, on
+    // another property, and only because `cli.ts` happens to sit in `LICENSED_DRIVERS`. That build
+    // defeats this row's stated purpose precisely: the licence guard's depth-fixed `"./history.ts"`
+    // specifier stops matching the real module's `"../src/history.ts"` — `ADR-0011` `R3` cause 2,
+    // reached through a LINK rather than through a subdirectory, which `R3`'s trigger does not
+    // name. The DELETED count was green on that build too, so this hole is older than `ABC-103`
+    // and is not its doing. Residual, stated rather than left to be discovered: `cli-options.ts`
+    // is asserted by NAME only and the same link would still launder it.
+    expect(lstatSync(ENTRY_POINT).isFile()).toBe(true);
   });
 
   it("A9 — process.stdout is acquired once, in the entry point, and only as the FrameSink", () => {
