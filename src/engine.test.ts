@@ -37,6 +37,7 @@ import {
   chooseMove,
   createEngine,
   DEFAULT_BUDGET_MS,
+  HARD_CEILING_MS,
   NODES_PER_CLOCK_CHECK,
 } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
@@ -74,6 +75,32 @@ const PERFT_CORPUS: ReadonlyArray<{ name: string; fen: string }> = [
     fen: "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
   },
 ];
+
+/**
+ * MATE- AND STALEMATE-ADJACENT ENDGAMES. The six benchmark roots never reach a mate or a
+ * stalemate leaf inside depths 1-3, so they CANNOT see a scoring drift in the mate/stalemate
+ * branch no matter how many of them are compared (`ABC-078` QE, gap `G4`). These can: the three
+ * corner positions each have a stalemate available in ONE move and a forced mate a few plies
+ * further, and the two pawn endgames are sparse enough to reach depth 6-7 on a virtual clock in
+ * milliseconds.
+ *
+ * They serve two criteria: the identity sweep below (`search` vs `chooseMove`, move AND score)
+ * and `A4`'s behavioural depth guard.
+ */
+const ENDGAME_CORPUS: ReadonlyArray<{ name: string; fen: string }> = [
+  // Stalemate in one (Qc7), mate in three plies (Qb7#) — the pair that separates a correct
+  // mate/stalemate branch from one that scores a stalemate as a loss.
+  { name: "kq-corner", fen: "k7/8/1K6/8/8/8/8/1Q6 w - - 0 1" },
+  { name: "kr-corner", fen: "k7/8/1K6/8/8/8/8/1R6 w - - 0 1" },
+  { name: "kqk-h8", fen: "7k/8/6K1/8/8/8/8/6Q1 w - - 0 1" },
+  // No mate and no stalemate inside the horizon: breadth, and the cheapest deep position here.
+  { name: "kp-vs-k", fen: "8/8/8/4k3/8/8/4P3/4K3 w - - 0 1" },
+  { name: "krk-a-file", fen: "8/8/8/8/8/k7/8/KR6 w - - 0 1" },
+  { name: "pawn-race", fen: "8/6p1/8/8/8/8/1P6/k1K5 w - - 0 1" },
+];
+
+const endgameFen = (name: string): string =>
+  (ENDGAME_CORPUS.find((entry) => entry.name === name) as { fen: string }).fen;
 
 const fenOf = (name: string): string =>
   (PERFT_CORPUS.find((entry) => entry.name === name) as { fen: string }).fen;
@@ -185,7 +212,21 @@ function broadCorpus(): { name: string; position: Position }[] {
 
 describe("A2 — a budget far below one iteration's cost still returns a move, and stops near it", () => {
   const BUDGET_MS = 50;
-  const STEP_MS = 25;
+  /**
+   * 10 ms, NOT 25 — and the step is the whole criterion (`G1`, `ABC-078` QE).
+   *
+   * At a 25 ms step this fixture consumed its budget in three consultations, all of them at an
+   * ITERATION BOUNDARY: the in-recursion check was never reached, so a build that consults the
+   * clock only between iterations produced the SAME depth, the SAME 360 nodes and the SAME 4
+   * consultations as the delivered one. `A2` bounded a number the defect does not move, and the
+   * mutant died on `A3` instead — the criterion written for the bug was byte-identically blind
+   * to it.
+   *
+   * A 10 ms step buys five consultations against the same 50 ms budget, so the deepening enters
+   * an iteration (depth 3, ~9 000 nodes) that costs far more than `NODES_PER_CLOCK_CHECK` and
+   * the abort has to come from INSIDE the recursion. Measured below.
+   */
+  const STEP_MS = 10;
 
   /** ONE run, three assertions on it: the searches are the cost and repeating them buys nothing. */
   const choice = chooseMove(parseFen(fenOf("kiwipete")), {
@@ -205,10 +246,15 @@ describe("A2 — a budget far below one iteration's cost still returns a move, a
 
   it("visits only a bounded number of nodes past the deadline — the in-recursion check", () => {
     // THIS is the assertion that fails an engine which consults the clock only between
-    // iterations. Such a build, on this fixture, sees time remaining at every boundary (virtual
-    // time advances per consultation, and it consults ~once per iteration), so it runs depth 3
-    // (9 016 nodes), depth 4 (38 023) and depth 5 — hundreds of thousands of nodes against the
-    // bound below. Measured on the delivered build: 3 120.
+    // iterations, and BOTH numbers below are measured on THIS fixture at the branch tip rather
+    // than transcribed from another one — the previous pair were not (`G1`).
+    //
+    //   delivered build (in-recursion check present):       depth 2,     3 120 nodes
+    //   in-recursion check DELETED (QE's `M1`):             depth 5, 1 280 509 nodes
+    //
+    // The mutant sees time remaining at every iteration boundary — virtual time advances per
+    // consultation — so it enters depth 3, 4 and 5 and finishes them, two orders of magnitude
+    // above the bound. The delivered build enters depth 3 and is stopped INSIDE it.
     expect(choice.nodes).toBeLessThanOrEqual(10 * NODES_PER_CLOCK_CHECK);
   });
 });
@@ -224,6 +270,7 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
   const position = () => parseFen(fenOf("position-6"));
   const choice = chooseMove(position(), { budgetMs: 5, now: tickingClock(1) }) as {
     move: Move;
+    score: number;
     depth: number;
     nodes: number;
   };
@@ -236,12 +283,87 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
   });
 
   it("returns the completed depth-2 move, which is NOT the depth-3 move", () => {
-    expect(label(choice.move)).toBe(label(search(position(), 2).move as Move));
+    // The MOVE half of the coupling, at this one fixture. The SCORE half, and the breadth that
+    // makes either of them bite, are the identity sweep below: `position-6` is a quiet
+    // middlegame with no mate or stalemate inside a depth-2 horizon, so a scoring drift in the
+    // mate/stalemate branch agrees with `search` here completely (`ABC-078` QE, gap `G4`).
+    const reference = search(position(), 2) as { move: Move | null; score: number };
+    expect(label(choice.move)).toBe(label(reference.move as Move));
+    expect(choice.score).toBe(reference.score);
     // `search(position-6, 3).move` is `c3d5`, measured at this branch tip (14 565 nodes, ~500 ms
     // under the runner). It is a LITERAL here rather than a call because that one call is most
     // of this file's lane budget; the computed form of this same assertion runs in the deep lane
     // below, so a drift between the literal and the search is red there rather than unnoticed.
     expect(label(choice.move)).not.toBe("c3d5");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// A3 (identity) — the ~55 lines this module duplicates from src/search.ts are held together by
+// THIS, and by nothing else: the completed iteration must equal search() in move AND score.
+// ---------------------------------------------------------------------------
+
+/**
+ * Compare `chooseMove`'s completed iteration against `search(position, thatDepth)` on both
+ * fields, at every budget given, and return every divergence as a readable line.
+ *
+ * WHY THE COMPLETED DEPTH IS READ BACK rather than fixed: `chooseMove` has no depth parameter
+ * (`A4`), so the only honest reference is the depth it reports having completed. That also makes
+ * the sweep hardware-independent — the injected clock advances per CONSULTATION, so the depth
+ * reached is a function of the node counts alone and is the same on every machine.
+ *
+ * WHY BOTH FIELDS: a move-only comparison is blind to score drift at exactly the depth it runs.
+ * QE measured a mate-distance drift in this module's copy giving 39 score mismatches and ZERO
+ * move mismatches at depth 2 (`ABC-078`, gap `G4`).
+ *
+ * WHY SEVERAL BUDGETS: the two survivors show at different horizons. A stalemate scored as a
+ * loss diverges once the stalemate leaf is inside the horizon; a lost mate distance diverges
+ * only when the MATE sits exactly at the leaf, which is one ply shallower here.
+ */
+function identityDivergences(
+  corpus: ReadonlyArray<{ name: string; fen: string }>,
+  budgets: readonly number[],
+): string[] {
+  const out: string[] = [];
+  for (const { name, fen } of corpus) {
+    for (const budgetMs of budgets) {
+      const choice = chooseMove(parseFen(fen), { budgetMs, now: tickingClock(1) }) as {
+        move: Move;
+        score: number;
+        depth: number;
+      };
+      const reference = search(parseFen(fen), choice.depth) as { move: Move | null; score: number };
+      const at = `${name} @ depth ${choice.depth}`;
+      if (label(choice.move) !== label(reference.move as Move)) {
+        out.push(`${at}: move ${label(choice.move)} vs search ${label(reference.move as Move)}`);
+      }
+      if (choice.score !== reference.score) {
+        out.push(`${at}: score ${choice.score} vs search ${reference.score}`);
+      }
+    }
+  }
+  return out;
+}
+
+describe("A3 (identity) — the completed iteration equals search() in move AND score", () => {
+  /**
+   * The cheap 90%: three corner endgames where a stalemate is one move away and a mate is a few
+   * plies further, plus one pawn endgame with neither for breadth. The full sweep — every one of
+   * these plus every position one legal move from each, and the six benchmark roots on top — is
+   * in the deep lane below, because `N8-LANE` is 650 ms and that sweep is seconds.
+   *
+   * `position-6` is NOT repeated here: `A3` above already compares it on both fields, at the
+   * budget it was already running. Nothing is measured twice in this lane.
+   */
+  const DEFAULT_LANE_CORPUS = ENDGAME_CORPUS.filter(({ name }) =>
+    ["kq-corner", "kr-corner", "kqk-h8", "kp-vs-k"].includes(name),
+  );
+
+  it("agrees with search() on move and score across the mate/stalemate endgames", () => {
+    // Budget 3 reaches depth 3 on the corner positions (the mate sits AT the leaf) and budget 5
+    // reaches depth 4 (the stalemate is inside the horizon). Both are needed: neither budget
+    // alone reds both of the drift mutants QE found surviving the delivered suite.
+    expect(identityDivergences(DEFAULT_LANE_CORPUS, [3, 5])).toEqual([]);
   });
 });
 
@@ -262,6 +384,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
   it("exports the two entry points and the two named values, and nothing that takes a depth", () => {
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
+      "HARD_CEILING_MS",
       "NODES_PER_CLOCK_CHECK",
       "chooseMove",
       "createEngine",
@@ -289,6 +412,110 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
     // The `for` that deepens is bounded by `now() < budget.deadline` and by nothing else. A
     // `iteration <= SOMETHING` clause here would be the depth constant this criterion forbids.
     expect(source).toMatch(/for \(let iteration = 2; now\(\) < budget\.deadline; iteration\+\+\)/);
+  });
+
+  /**
+   * THE BEHAVIOURAL HALF, and it is here because the four checks above are all TEXTUAL (`G2`,
+   * `ABC-078` QE). A two-line cap in the loop BODY — `if (iteration > 4) break;` as its first
+   * statement — passes every one of them: the loop HEADER is untouched, the constant is an
+   * anonymous `4` that matches neither `depth…=` nor `max_?depth`, and `A5` never observes a
+   * depth above 4, so it cannot see a ceiling at 4 either. It passed 1 016 tests, the 23
+   * `ENGINE_DEEP` tests, `tsc` and lint — and it made `A1`'s reported numbers look BETTER
+   * (5/30 over 3 s instead of 29/30), which is the reward structure this test exists to remove.
+   *
+   * A grep cannot see a `break`. This RUNS a search and looks at the depth that comes back.
+   *
+   * NO ABSOLUTE HARDWARE DEPTH IS ASSERTED, so ticket test note 4 is honoured: the clock is
+   * INJECTED and advances per consultation, so the depths below are a function of node counts
+   * alone and are identical on every machine. They are also a LOWER bound — move ordering
+   * (`ABC-080`), quiescence (`ABC-079`) and the transposition table (`ABC-081`) can only make
+   * this position go deeper, never shallower.
+   */
+  it("goes DEEPER than any small hard-coded ceiling would allow — the behavioural half", () => {
+    const sparse = () => parseFen(endgameFen("kp-vs-k"));
+    const depthAt = (budgetMs: number): number =>
+      (chooseMove(sparse(), { budgetMs, now: tickingClock(1) }) as { depth: number }).depth;
+
+    const shallow = depthAt(5);
+    const deep = depthAt(10);
+
+    // Delivered: 4 then 6. With `if (iteration > 4) break;` in the loop body: 4 then 4 — both
+    // assertions red. A ceiling anywhere at or below 5 is caught the same way.
+    expect(deep).toBeGreaterThan(shallow);
+    expect(deep).toBeGreaterThanOrEqual(6);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// RF-1 — NFR-004 clause B: the 5 s hard ceiling, enforced by the MECHANISM.
+// ---------------------------------------------------------------------------
+
+/**
+ * `NFR-004`'s ceiling holds *"at any difficulty"*, so it is the module's to honour and not the
+ * caller's to respect — ruled at `ABC-078`'s security/NFR gate (`plans/nfr-catalog.md`,
+ * `NFR-004` clause B, required fix `RF-1`). Before the clamp, `chooseMove` contained no
+ * reference to 5 000 of any kind and `budgetMs = 6000` returned at 6 004 ms.
+ *
+ * ON THE INJECTED CLOCK, NOT THE WALL. A real-clock version of this costs 5 s of lane time and
+ * is machine-dependent, which `plans/nfr-catalog.md`'s standing rule keeps out of the suite.
+ * With virtual time it is deterministic, millisecond-cheap, and it reds the moment the
+ * `Math.min` is removed.
+ *
+ * WHAT IS NOT ASSERTED, AND DELIBERATELY: that a 10 s budget returns within 5 000 ms EXACTLY.
+ * The clamp bounds the deadline, not the abort granularity, so the real-clock answer is
+ * ~5 003 ms — accepted risk `AR-NFR004-A`, stated rather than papered over with a safety margin.
+ */
+describe("RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured", () => {
+  /** A coarse step on purpose: three searches for the price of one, and the deadline is the
+   * subject here, not the depth. */
+  const STEP_MS = 2_500;
+  const run = (budgetMs: number) =>
+    chooseMove(parseFen(fenOf("startpos")), { budgetMs, now: tickingClock(STEP_MS) }) as {
+      move: Move;
+      score: number;
+      depth: number;
+      nodes: number;
+      elapsedMs: number;
+    };
+
+  /** THREE runs, four assertions on them — the searches are the cost, as in `A2` and `A3`. */
+  const atCeiling = run(HARD_CEILING_MS);
+  const aboveCeiling = run(2 * HARD_CEILING_MS);
+  const unbounded = run(Number.POSITIVE_INFINITY);
+
+  it("names the ceiling as an exported constant", () => {
+    expect(HARD_CEILING_MS).toBe(5_000);
+  });
+
+  it("stops at start + HARD_CEILING_MS when handed twice that budget", () => {
+    // The deepening stops at the first reading at or past the deadline, and the return reading
+    // is one step later — so the ceiling plus one step is the tightest true bound. Unclamped
+    // this run stops at 10 000 and returns 12 500, which is what reds here.
+    expect(aboveCeiling.elapsedMs).toBeLessThanOrEqual(HARD_CEILING_MS + STEP_MS);
+  });
+
+  it("makes any budget above the ceiling indistinguishable from the ceiling itself", () => {
+    // Not just "stops sooner" — the SAME search. Move, score, depth, nodes and elapsed all.
+    expect(aboveCeiling).toEqual(atCeiling);
+  });
+
+  it("terminates on an infinite budget — the module's only unbounded path, closed", () => {
+    // Before the clamp this call never returned: `deadline` was `Infinity` and the deepening
+    // loop had no other exit. A hang, not a failure, which is why it is asserted here.
+    expect(unbounded).toEqual(atCeiling);
+  });
+
+  it("leaves every degenerate budget exactly as it was — Math.min, not an if", () => {
+    // `Math.min(NaN, 5000)` is `NaN`, so both deadline comparisons stay false and depth 1 comes
+    // back as before; 0 and negatives are already below the ceiling and are untouched. This is
+    // the reason the fix is a `Math.min` and not a conditional.
+    for (const budgetMs of [Number.NaN, 0, -1, -1e9]) {
+      const choice = chooseMove(parseFen(fenOf("startpos")), {
+        budgetMs,
+        now: tickingClock(STEP_MS),
+      }) as { depth: number };
+      expect(choice.depth).toBe(1);
+    }
   });
 });
 
@@ -523,6 +750,51 @@ if (RUN_DEEP) {
       expect(depths[1] as number).toBeGreaterThanOrEqual(depths[0] as number);
       expect(depths[2] as number).toBeGreaterThanOrEqual(depths[1] as number);
       expect(depths[2] as number).toBeGreaterThan(depths[0] as number);
+    }, 30_000);
+  });
+
+  describe("A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1]", () => {
+    /** Every endgame plus every position one legal move from each — terminal positions dropped. */
+    const endgamesWithChildren = (): { name: string; fen: string }[] =>
+      ENDGAME_CORPUS.flatMap(({ name, fen }) => [
+        { name, fen },
+        ...childrenOf(name, parseFen(fen))
+          .filter(({ position }) => gameStatus(position).result === "in-progress")
+          .map(({ name: childName, position }) => ({ name: childName, fen: toFen(position) })),
+      ]);
+
+    it("agrees with search() on move and score over the whole endgame corpus", () => {
+      const corpus = endgamesWithChildren();
+      // The denominator, asserted rather than trusted — a sweep over an empty corpus is green.
+      expect(corpus.length).toBeGreaterThanOrEqual(100);
+      expect(identityDivergences(corpus, [3, 5])).toEqual([]);
+    }, 120_000);
+
+    it("agrees with search() on move and score over the six benchmark roots and their children", () => {
+      // These CANNOT see a mate/stalemate drift — no such leaf is inside depths 1-3 from any of
+      // them — and they are here for the opposite property: the two recursions must not diverge
+      // in ordinary middlegame play either. Both halves of the coupling, on their own corpora.
+      const corpus = broadCorpus().map(({ name, position }) => ({ name, fen: toFen(position) }));
+      expect(corpus.length).toBeGreaterThanOrEqual(200);
+      expect(identityDivergences(corpus, [5])).toEqual([]);
+    }, 300_000);
+  });
+
+  describe("A4 — the behavioural depth guard, further out [deep, ENGINE_DEEP=1]", () => {
+    it("keeps deepening well past any small ceiling on the sparse endgame", () => {
+      const depths = [5, 10, 40].map(
+        (budgetMs) =>
+          (
+            chooseMove(parseFen(endgameFen("kp-vs-k")), {
+              budgetMs,
+              now: tickingClock(1),
+            }) as { depth: number }
+          ).depth,
+      );
+      // Delivered: 4 / 6 / 7. Injected clock, so these are node counts and not this machine.
+      expect(depths[1] as number).toBeGreaterThan(depths[0] as number);
+      expect(depths[2] as number).toBeGreaterThan(depths[1] as number);
+      expect(depths[2] as number).toBeGreaterThanOrEqual(7);
     }, 30_000);
   });
 

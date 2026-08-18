@@ -34,15 +34,26 @@
  * `A6` pins that module to exactly three exports and to carrying NO clock — `src/search.test.ts`
  * fails on a `Date.now` in that file and on a fourth export. An abortable search cannot be added
  * there without breaking a merged criterion, so the abortable copy lives here, in the module that
- * owns the clock. The two are held together by test rather than by sharing code: `A3` asserts
- * this module's completed-iteration move is IDENTICAL to `search(position, depth)`'s, so a drift
- * between the two recursions is red.
+ * owns the clock. The two are held together by test rather than by sharing code: the identity
+ * sweep in `src/engine.test.ts` asserts this module's completed iteration equals
+ * `search(position, depth)` in BOTH `move` AND `score`, over mate- and stalemate-adjacent
+ * endgames as well as the middlegame, so a drift between the two recursions is red. The score
+ * and the breadth are load-bearing — a move-only comparison at one quiet position is blind to
+ * exactly the drift a second copy produces (`ABC-078` QE, gap `G4`).
+ *
+ * THE BUDGET IS CLAMPED TO `HARD_CEILING_MS` (`RF-1`). `NFR-004`'s ceiling reads *"hard ceiling
+ * 5 s AT ANY DIFFICULTY"*, and a ceiling that holds only when the caller chooses well is not a
+ * ceiling on the engine — so it is honoured here, whatever a caller passes. Ruled at `ABC-078`'s
+ * security/NFR gate (`plans/nfr-catalog.md`, `NFR-004` clause B): this module owns the MECHANISM,
+ * `EPIC-006` owns the CHOOSING, and a ceiling is the bound every choice must land inside rather
+ * than a choice. **The residual is stated and not hidden:** the clamp bounds the DEADLINE, not the
+ * abort granularity, so a 10 s budget still returns at ~5 003 ms — accepted risk `AR-NFR004-A`,
+ * same mechanism and same ≤ 31 ms bound as the ≤ 3 s clause. No safety margin is applied, because
+ * a margin would make the sentence true by making `budgetMs` a lie.
  *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows, null-move pruning, late-move reductions
- * and threading (none requested; `ADR-0005` F6 leaves threading to Architect/Design). This module
- * does not clamp the budget it is given either — `NFR-004`'s 5 s ceiling is a promise about the
- * budget a caller CHOOSES, and choosing is `EPIC-006`'s.
+ * and threading (none requested; `ADR-0005` F6 leaves threading to Architect/Design).
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
@@ -55,7 +66,13 @@ import type { Position } from "./position.ts";
 import { MATE_SCORE } from "./search.ts";
 import type { EngineSeam } from "./turn-loop.ts";
 
-/** A source of milliseconds. `Date.now` satisfies it; a test supplies virtual time instead. */
+/**
+ * A source of milliseconds. `Date.now` satisfies it; a test supplies virtual time instead.
+ *
+ * CONTRACT: real-time and NON-DECREASING. The deepening loop terminates because successive
+ * readings advance towards the deadline — a frozen clock or one that runs backwards does not
+ * terminate, and nothing here defends against that.
+ */
 export type Clock = () => number;
 
 /**
@@ -64,6 +81,13 @@ export type Clock = () => number;
  * this module applies on its own: `budgetMs` below is required.
  */
 export const DEFAULT_BUDGET_MS = 3_000;
+
+/**
+ * `NFR-004`'s hard ceiling, in milliseconds. A bound on the MECHANISM, not a difficulty:
+ * `NFR-004` says the ceiling holds AT ANY DIFFICULTY, so it is honoured here whatever a caller
+ * passes. `EPIC-006` chooses a budget; it does not choose the ceiling.
+ */
+export const HARD_CEILING_MS = 5_000;
 
 /**
  * Nodes between clock consultations. A power of two, and a NODE count rather than a depth: the
@@ -76,7 +100,13 @@ export const DEFAULT_BUDGET_MS = 3_000;
 export const NODES_PER_CLOCK_CHECK = 1024;
 
 export interface EngineOptions {
-  /** The per-move budget in milliseconds. REQUIRED — see the module header, and `A4`. */
+  /**
+   * The per-move budget in milliseconds. REQUIRED — see the module header, and `A4`.
+   *
+   * VALID RANGE: `0 < budgetMs <= HARD_CEILING_MS`. A larger value is CAPPED at the ceiling
+   * rather than honoured (`RF-1`); a zero, negative or `NaN` value leaves the unabortable first
+   * iteration, so depth 1 comes back either way.
+   */
   readonly budgetMs: number;
   /** The clock. Defaults to `Date.now`; a test injects virtual time so nothing waits. */
   readonly now?: Clock;
@@ -221,7 +251,10 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
   const start = now();
   const budget: Budget = {
     now,
-    deadline: start + options.budgetMs,
+    // `Math.min` and NOT an `if`: it preserves every degenerate budget already measured safe
+    // (`NaN` stays `NaN` — both comparisons false, depth 1; `0` / `-1` / `-1e9` unchanged) and
+    // turns `Infinity` into the ceiling, which is the module's only non-terminating budget.
+    deadline: start + Math.min(options.budgetMs, HARD_CEILING_MS),
     nodes: 0,
     // Disarmed for the first iteration: depth 1 always completes, so a move always exists.
     nextCheck: Number.POSITIVE_INFINITY,
