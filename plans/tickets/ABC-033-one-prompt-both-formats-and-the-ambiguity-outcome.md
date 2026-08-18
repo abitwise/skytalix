@@ -111,7 +111,10 @@ which one — instead of being handed a bishop and told nothing.
   outcome this ticket can produce, **when** its messages are passed to `assembleFrame` at the width
   the delivered panels set, **then** the message region's **hidden count is exactly 0** — every
   candidate is shown in full, in the region's 2 rows (`MESSAGE_ROWS`, `src/frame.ts:45`). *(Merged
-  code packs the region and appends a `+N` marker for what it drops, `src/frame.ts:182-188`. A
+  code packs the region and appends a `+N` marker for what it drops, `src/frame.ts:134-141`
+  (`markerFor` at `:134`, `withMarker` at `:136-141`, `packRegion` at `:149` — RE-MEASURED at `main`
+  HEAD `16e9269` by the Orchestrator at the `Ready for Dev` exit; the page cited `:182-188`, which
+  had drifted). A
   criterion that says "the candidates are listed" is satisfied by a frame that shows one of them and
   `+3`. **If any reachable ambiguity cannot fit, that is a finding for `EPIC-002`'s frame owner and a
   new ticket — not a silent truncation and not a widening of the frame**, which would break epic
@@ -153,7 +156,9 @@ which one — instead of being handed a bishop and told nothing.
   `assembleFrame` as an instrument and changes nothing in it.
 - **Security: no trigger, not pre-waived.** The only user-supplied text this ticket can put in front
   of a player is echoed inside a rejection or candidate message, and every message reaches the terminal
-  through `assembleFrame`, which **sanitizes** (`src/frame.ts:202` — `ABC-018` owns terminal
+  through `assembleFrame`, which **sanitizes** (`src/frame.ts:123`, module-private, not exported —
+  RE-MEASURED at `main` HEAD `16e9269`; the page cited `:202`, which had drifted. The claim is
+  unchanged in substance; only the number moved — `ABC-018` owns terminal
   escape-sequence injection for the whole frame). **This ticket introduces no second path to that
   sink**, and that is the measurable claim: `git diff` shows no write to a stream. **Firing threshold:**
   any file touched under `src/` other than this ticket's module and test file(s), or any runtime
