@@ -61,8 +61,16 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 - Dev / run: `npm run chess` <!-- verified 2026-08-14 at ABC-042: prints the start position (23
   rows) on stdout and exits 0. Optional arguments, and the complete set: `--colour white|black|random`,
-  `--ascii`, `--unicode`. It PRINTS A BOARD; it does not play a game — no move can be typed until
-  ABC-043.
+  `--ascii`, `--unicode`.
+  IT PLAYS A GAME as of ABC-043 (2026-08-19) — the line above described a board-printer and is kept
+  for the row count and the option set, which are unchanged. It prints the board, prompts with `> `,
+  reads one line per turn and answers with the merged engine, which occupies UP TO 3 SECONDS PER
+  MOVE (`DEFAULT_BUDGET_MS`): `--colour black` opens with the engine, so the first board sits there
+  thinking before the prompt appears, and that is the product working. RUN 2026-08-19 at the ABC-043
+  branch tip: `node src/cli.ts` on a closed stdin prints one board, the prompt and `input ended`,
+  and exits 0 (real 0.07 s); `--colour black` on a closed stdin prints two boards and exits 0
+  (real 3.09 s, one engine ply). EXIT CODES: 0 when the session ran, 1 for a refused command line,
+  70 for an internal error — a bug that ended the session, which is never a chess result.
   Pass an option AFTER `--`: `npm run chess -- --colour black` — RUN 2026-08-15 at `4e9ed1d`, exit 0,
   black-bottom board. The separator is load-bearing; do not tidy this example away. Without it npm
   keeps the flag: `npm run chess --ascii` (RUN 2026-08-15 at `4e9ed1d`, npm 11.7.0) warns `Unknown
