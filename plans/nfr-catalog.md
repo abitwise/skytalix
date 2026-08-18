@@ -1236,3 +1236,124 @@ owner-ratified and the account is fully writable without it. **This is the same 
 census this file has already recorded once** — `ADR-0008`'s *"all four `*.nfr.test.ts` files"*, correct
 when written and stale at seven, flagged by the 2026-08-12 audit and deliberately not edited. Same
 class, same treatment, and the repair is a census correction rather than a ruling.
+
+## `NFR-004` IS RULED FOR THE FIRST TIME — 2026-08-18 by Security/NFR at `ABC-078`'s gate (task `security-nfr-ABC-078-2026-08-18`, subtask `abc078-secnfr`, Workflow 15). **BOTH CLAUSES ADJUDICATED: the ≤ 3 s clause is NOT MET and is an ACCEPTED RISK with a named owner; the 5 s HARD CEILING is BREACHED and its enforcement is RULED OWED BY `ABC-078`.** **NO TARGET, BAR, LEVEL, MEASURED FIGURE OR `UNKNOWN - verify` MARKER MOVED ANYWHERE IN THIS FILE** — all eight rows `NFR-001`–`NFR-008` verified byte-identical by hashing the matched row lines together before and after the write (`sha256 63f66795…ca31`, unchanged from the `ABC-029`, `ABC-026` and `N8-SPAWN` hops). **The `NFR-004` row's `Verified by` cell still reads `UNKNOWN - verify` and this hop deliberately did NOT edit it** — see the fence at the end of this section for why.
+
+**This row waited from `EPIC-004`'s cut until now for a measurement, and it got three.** `ABC-078` is the first ticket that could exercise it. **The engineer measured and refused to rule; QE measured harder and wrote *"I do NOT rule `NFR-004`"*. Both refusals were correct — the bar is Security/NFR's — and this section is that ruling.**
+
+### CLAUSE A — "≤ 3 s at default difficulty": **NOT MET. ACCEPTED AS RISK `AR-NFR004-A`.**
+
+**Three independent hops, three DIFFERENT worst-case positions, three worst-case numbers inside 4 ms** — which is the signature of a machine-wide granularity floor rather than a pathological position:
+
+| hop | worst case | position | calls over 3 s |
+|---|---|---|---|
+| Software Engineer, delivery | 3 027 ms | `position-4/f3d4` | 29/30 |
+| QE, validation | 3 030 ms | `position-5/b1c3` | 29/30 |
+| **Security/NFR, this gate** | **3 031 ms** | **`kiwipete`** | **27/30** |
+
+**Worst overshoot ever measured: 31 ms = 1.03% of the budget. Median overshoot 2–3 ms over 450 samples.** Apple M3 (Mac15,13) / Darwin 25.5.0 arm64 / Node v24.12.0; **`UNKNOWN - verify` on any other hardware.**
+
+**The attribution is PROVEN, not assumed.** Iterative deepening spends its budget by construction — the last iteration is aborted AT the deadline — and what remains is the abort granularity. QE varied `NODES_PER_CLOCK_CHECK` over a **64x** range and instrumented the check site: median inter-check gap scales **linearly** with the constant on all six benchmark positions, and **`max(gap) >= overshoot` in 24 of 24 runs.** There is no hidden second cause; this gate went looking for one.
+
+**Accepted rather than fixed, for four reasons, and the fourth decides it:** (1) the cause is structural and bounded, not a defect; (2) **both in-module remedies are worse than the overshoot** — aiming at `deadline − margin` makes the sentence true by silently redefining `budgetMs` on the module whose whole subject is that the budget is honest (coding rules 5 and 7), and **dropping `NODES_PER_CLOCK_CHECK` to 256 DOES NOT WORK for this purpose: QE measured a 256-node interval taking 105 ms of wall clock, a GC/scheduler stall the constant has no influence over, so it cuts the MEDIAN ~4x and leaves the TAIL where it is**; (3) materiality is one move's latency in a local CLI, nothing downstream is denominated in this clause, and **live exposure today is nil** — `src/turn-loop.ts` is byte-identical and nothing in the shipped tree constructs an engine; (4) **the clause is dischargeable for free by the party that already owns the choosing** — a caller passing **2 900 ms** puts all 30 measured calls under 3 s with ~70 ms to spare and changes no line of the module. Unlike clause B, clause A really IS a claim about a chosen default: it says *"at default difficulty"*, and the default is `EPIC-006`'s.
+
+> **ACCEPTED RISK `AR-NFR004-A`.** `NFR-004`'s ≤ 3 s clause is missed by ≤ 31 ms (≤ 1.03%) on 27–29 of 30 benchmark calls at `budgetMs = 3000`, by the abort granularity. Accepted for `ABC-078` as delivered. **It also covers the ~3 ms residual over the 5 s ceiling that survives clause B's clamp** — same mechanism, same bound.
+> **Owner: Security/NFR, at `EPIC-006`'s difficulty hop** (`ABC-087` if that lands first).
+> **Discharge:** that hop either passes ~2 900 ms, making the clause literally true at zero cost, or re-accepts this risk in writing with its number. **It may NOT be discharged by editing this row.**
+> **Scope of the acceptance:** it is denominated in a measured 1.03% on named positions on ONE machine. **A later reading materially worse than that is a NEW question and is not covered here**, and `ABC-074`'s off-M3 measurement is still owed.
+
+### CLAUSE B — "hard ceiling 5 s at any difficulty": **BREACHED. Enforcement RULED OWED BY `ABC-078`, and a REQUIRED FIX is specified.**
+
+**Measured twice, independently.** QE: `budgetMs = 4999` → 5 003 ms. This gate, real clock, `kiwipete`: 3 000 → 3 006 ms; **4 999 → 5 000 ms; 5 000 → 5 002 ms; 6 000 → 6 004 ms.** The exact tipping budget moves by a millisecond between runs and **the structure does not: `chooseMove` computes `deadline = start + options.budgetMs` and contains NO reference to 5 000 of any kind.** Elapsed tracks the budget upward without limit — `budgetMs = 600000` would return at ten minutes. **The ceiling holds today only because every caller in existence passes 3 000.**
+
+**THE RULING: the clamp belongs to `ABC-078`, not to `EPIC-006`.** The counter-argument — that `ABC-078` *"takes a budget as a parameter"* and choosing is `EPIC-006`'s — quotes the wrong section of the ticket. **Four reasons, in order of weight:**
+
+1. **The ticket's own `## Scope` claims the ceiling:** *"The default budget: 3 s, hard ceiling 5 s (`NFR-004`)."* `## Out of scope` defers *difficulty selection* — "a flag, a prompt, or how a chosen level persists" — and says in the same breath **"It owns the mechanism; `EPIC-006` owns the choosing."** A ceiling is not a selection; it is the bound inside which every selection must land, i.e. a property of the mechanism.
+2. **"AT ANY DIFFICULTY" is exactly the phrase that puts it beyond the caller.** A ceiling that holds only when the caller chooses well is not a ceiling on the engine — it is an unwritten second requirement on the caller. Clause A survives being a statement about a chosen default because it says *"at default difficulty"*; clause B says the opposite.
+3. **`EPIC-006` cannot honour a constraint nothing records.** There is today no test, type, constant, comment or ticket line anywhere in the tree saying that a budget above ~4.99 s breaches a merged NFR. **Deferring enforcement to a hop that has not been told the constraint exists is not deferral; it is loss.**
+4. **Enforcing it here costs one line** — and closes the module's only genuinely unbounded path for free.
+
+> **REQUIRED FIX `RF-1` — severity MEDIUM.** (`security.block_on` is `high`, so it does **not** block the gate; live exposure is nil today. It is a required fix, not an accepted risk, and it is not closed by anything less than this.) In `src/engine.ts` and nowhere else:
+> 1. `export const HARD_CEILING_MS = 5_000;` beside `DEFAULT_BUDGET_MS`, documented as a bound on the MECHANISM — `NFR-004` says the ceiling holds at ANY difficulty, so it is honoured whatever a caller passes; `EPIC-006` chooses a budget, not the ceiling.
+> 2. In `chooseMove`'s `budget` initialiser: `deadline: start + Math.min(options.budgetMs, HARD_CEILING_MS),`. **`Math.min` and not an `if`, because it preserves every degenerate input already measured safe:** `NaN` → `NaN` (both comparisons false → depth 1, exactly as today); `0` / `-1` / `-1e9` → unchanged; **`Infinity` → 5 000**, which also fixes the module's only non-terminating budget. **No behaviour below 5 s changes at all.**
+> 3. Two comment lines — one on `budgetMs` (values above the ceiling are capped, not honoured) and one on `Clock` (must be a real-time, non-decreasing source; `Date.now` satisfies it, a frozen or backwards clock does not terminate).
+> 4. **One guarding assertion, on the INJECTED clock, not the wall** — with a virtual clock the search must stop at `start + 5 000` when handed `budgetMs = 10_000`. Machine-independent, millisecond-cheap, reds the moment the clamp is removed, and it honours this catalog's standing rule that **no wall-clock assertion belongs in the default suite**. It adds no test FILE and no child process, so it charges neither `N8-LANE`'s content nor the floor or spawn accounts.
+>
+> **NOT required, and deliberately so: no validation, no throw, no rejection, and NO SAFETY MARGIN.**
+
+**THE RESIDUAL AFTER THE FIX, recorded now so it is not discovered later as a surprise.** With the clamp, a caller passing 10 s returns at **~5 003 ms — still ~3 ms over a "hard" ceiling.** That residual is `AR-NFR004-A` above: same mechanism, same ≤ 31 ms bound, same owner. **A margin to hide it is refused at this gate.** The engineer declined to invent one, QE recorded that refusal as correct, and this gate agrees: a margin makes the sentence true by making `budgetMs` a lie. **If this project wants the 5 s ceiling literally true to the millisecond, that is a decision to take at `EPIC-006` alongside the budget choice, with its cost visible — not something to slip into a repair hop.**
+
+### THE FENCE ON THIS SECTION
+
+**The row's TARGET is untouched and was never in question.** `≤ 3 s at default difficulty` and `hard ceiling 5 s at any difficulty` stand exactly as written. **This section rules the row; it does not edit it, and a gate could not.**
+
+**The `Verified by` cell still says `UNKNOWN - verify` and that is CORRECT, not an oversight.** The row is now measured on **one machine** and is enforced by **nothing** until `RF-1` lands. The cell moves when the off-M3 obligation (`ABC-074`, `Blocked`) reports — not when a gate takes a reading on an M3.
+
+**Every number in this section is true of Apple M3 (Mac15,13) / Darwin 25.5.0 arm64 / Node v24.12.0 and of nothing else.** No production file was modified to take any of these readings: the ceiling and degenerate-budget probes are throwaway scripts outside the repository that IMPORT `src/engine.ts`, and the deep lane ran on an out-of-tree copy. `src/` is byte-identical across this hop.
+
+## `NFR-005` IS MEASURED FOR THE FIRST TIME — 2026-08-18 by Security/NFR at `ABC-078`'s gate. **IT SITS BELOW ITS FAIL FLOOR AND THE FLOOR IS NOT RELAXED, NOT LOWERED AND NOT ONE BYTE EDITED. THE TICKET DOES NOT FAIL ON IT.** This is a WAYPOINT, not a verdict.
+
+**Three independent readings at the 3 s budget, and the number is stable:**
+
+| hop | `kiwipete` | `position-6` |
+|---|---|---|
+| Software Engineer | depth **4**, 81 968 nodes, 3 005 ms | depth **3**, 101 422 nodes, 3 025 ms |
+| QE | depth **4**, 91 184 nodes, 3 021 ms | depth **3**, 114 734 nodes, 3 025 ms |
+| **Security/NFR, this gate** | depth **4**, 88 112 nodes, 3 030 ms | depth **3**, 91 182 nodes, 3 005 ms |
+
+**Against this row: `≥ depth 6` is the FAIL floor and depth 7 the PROVISIONAL WARN level. Measured: depth 4 and depth 3 — two and three plies below the floor.** Apple M3 (Mac15,13); `UNKNOWN - verify` elsewhere.
+
+**THE FLOOR IS NOT RELAXED.** The temptation at a gate that measures 4 against a 6 is to argue the 6 was optimistic. It was not, and it is not a gate's to move regardless: the level is **`ADR-0003` clause 2 as amended by Olger Oeselg on 2026-07-30.** **The gap is evidence about the ENGINE, not about the BAR.**
+
+**`ABC-078` DOES NOT FAIL ON IT, and the reason is causal rather than charitable.** This row measures **the search**; `ABC-078` did not build the search — it built the time control around it. **The three tickets that buy depth at a fixed budget are all unbuilt: `ABC-080` (move ordering — conventionally several plies, and the largest single item), `ABC-079` (quiescence), `ABC-081` (transposition table).** Iterative deepening WITHOUT move ordering is the configuration in which alpha-beta is worth least, because ordering is what makes the previous iteration's best move pay for the next one. **Charging `ABC-078` with depth 4 charges the clock for the engine's strength.** The ticket's own `Security / NFR triggers` section predicted exactly this in advance — *"first point at which the FAIL floor and WARN level are measurable at all. Report; do not rule."*
+
+**THE FLOOR IS NOT DUE YET, and that distinction is the point of this entry.** Recording "FAIL" against a third-built engine would burn the word — the next reader would find a FAIL against a bar nobody intended to be met yet and would either relax it or ignore it, and both are how bars die. Recording nothing would be worse.
+
+> **WHEN THE FLOOR BECOMES DUE — the test the next reader inherits.** **At the close of the LAST of `ABC-079`, `ABC-080` and `ABC-081`.** From that point `NFR-005` is live on `kiwipete` and `position-6` at 3 s and a miss IS a FAIL. **A reading taken after only one or two of them is another waypoint, not a verdict — record it as one.** **The depth-7 WARN level stays PROVISIONAL until `ABC-074`** (`Blocked`, wants a non-M3 machine); this gate does not lift that marker and could not, since every number here is true of one machine. **`ABC-074` being blocked does NOT block the FAIL floor — depth 6 is not provisional; only depth 7 is.**
+
+**The honest size of the gap, so nobody is surprised at that hop:** depth 4 → depth 6 is two plies at the ~6 effective branching factor this catalog models, i.e. **roughly 30–40x more work inside the same 3 s.** That is not a tuning distance; `ADR-0003`'s own model says the three unbuilt tickets are what pay for it. **If all three land and the number is still 4, THAT is a finding about the engine**, it belongs to whoever closes the last of them, and at that point the row's level is argued on evidence by Architect/Design and the owner — never by a gate.
+
+## `N8-LANE` AT `ABC-078` — **NOT MET at ~840 ms net against 650 ms (1.29x)**, and the LANE'S OWN BUDGET WAS ALREADY SPENT BEFORE THIS TICKET ARRIVED — 2026-08-18 by Security/NFR at `ABC-078`'s gate. **NO LEVEL, ACCOUNT, INSTRUMENT OR CLAUSE MOVED: `NFR-008`'s 3 s wall / 13 s CPU is Olger Oeselg's and is untouched; `N8-LANE`'s 5%, CPU instrument, paired-median statistic, identity null control and 160 ms floor are untouched; `N8-SPAWN`'s opening balance stays 0 ms.**
+
+**The engineer could not take this under the row's own protocol** (six sibling worktrees live inside the shared checkout) and honestly said so. **This gate could, and the conditions are different rather than merely newer:** three **out-of-tree** copies of the delivered tree, so no sibling worktree is inside any measured tree and `.claude/worktrees/` does not exist in any of them; machine 1-min load average **2.92** on 8 cores at the start.
+
+- **A** = the delivered tree, 36 test files / 1 016 tests
+- **B** = the same tree without `src/engine.test.ts`, 35 files / 999 tests — **the lane as it stood BEFORE this ticket**
+- **C** = a `diff -r`-verified byte-identical twin of A — **the identity null control this row requires**
+
+Protocol as this row writes it: CPU (user + sys), one fresh OS process per run, condition order rotated every round, **9 rounds, round 0 discarded, n = 8**, every run asserting its own test-FILE count and test count (**27 usable runs, 0 harness errors**).
+
+```
+paired per-round CPU deltas, seconds       A-B (this ticket's file)    C-A (identity null)
+rounds 1..8      +0.88 +0.87 +0.89 +1.94 +1.11 +0.86 +1.39 +1.40   -0.09 -0.10 +0.15 -0.22 -0.04 +0.23 -0.12 -0.68
+MEDIAN                        +1.000 s                              -0.095 s  =  -0.66%
+SIGN                             8/8                                   2/8 positive  -> at chance
+
+  null control -0.66% CPU with its sign at chance  ->  INSIDE the row's <= 1.5% clause  ->  ADMISSIBLE
+
+condition medians, n = 8            CPU (user+sys)      WALL
+A  delivered,        36 files          14.635 s        2.935 s
+B  without the file, 35 files          13.400 s        2.805 s     <- the lane BEFORE this ticket
+C  identity twin,    36 files          14.540 s        2.960 s
+
+THE CHARGE     gross +1 000 ms  -  160 ms floor (1 file)  -  0 ms N8-SPAWN  =  ~840 ms net
+               against N8-LANE's 650 ms  =  1.29x  =  6.5% of the 13 s CPU clause     NOT MET
+```
+
+**Nothing is chargeable to `N8-SPAWN`:** `src/engine.test.ts` spawns no child process and no accepted criterion of `ABC-078` forces one. The account's balance is unchanged at **0 ms**.
+
+**FINDING 1 — about `ABC-078`. `N8-LANE` NOT MET. Severity LOW. It does not fail the ticket.** The engineer never claimed it met — it reported ~700 ms net, named its confound and refused to rule. **That refusal was correct, and the confound was not what put the number over: cleaner conditions read the charge HIGHER (~840 ms, not ~700 ms).** It does not fail the ticket because (a) the miss is **190 ms on a 13 000 ms clause — 1.5% of the lane** — and it is reported rather than netted away, which is what this row asks a gate to do; (b) **`ABC-025`'s `N5` missed at 1.6x, was accepted as an owned risk and merged — 1.29x is inside that precedent**, applied rather than re-invented; (c) the content is not waste — the expensive repetitions already sit behind `ENGINE_DEEP=1`, the default-lane cases already use millisecond budgets as the ticket required, and this gate looked for a cheap 190 ms rather than assuming there was none; (d) **QE found three of this ticket's criteria are guarded by tests that do not detect what they exist to detect, so a follow-up that makes those guards real will COST lane time, not save it.** Trimming a file whose guards are known-thin, to buy 190 ms, optimises the wrong quantity.
+
+> **ACCEPTED RISK `AR-N8LANE-078`.** `ABC-078` charges ~840 ms CPU net against `N8-LANE`'s 650 ms (1.29x; 6.5% of the 13 s clause). Accepted, and **reported into the merge decision rather than silently netted out**. **Owner: Architect/Design**, who owns `NFR-008`, its floor account and its spawn account. **Discharge: at the lane re-measurement below, where this 840 ms is one input among many rather than a separate question.**
+
+**FINDING 2 — about THE LANE, not about `ABC-078`, and it is the larger of the two.** **Condition B — the lane exactly as it stood before this ticket — medians 13.400 s CPU against `NFR-008`'s 13 s clause.** The engineer, from a very different machine state, measured **12.2–13.1 s** for the same thing. **Two independent readings, two machine conditions, both landing at or over the clause.** This would be true if `ABC-078` had never been cut; **charging it to this ticket would be a category error — the ticket did not spend the lane's budget, it arrived after the budget was spent and asked for a slice that was no longer there.**
+
+**And it is precisely what this row's own arithmetic forecast, out loud, on 2026-08-13:** 9.545 s CPU at 28 files post-`threads`, *"USE ~7 AS THE PLANNING NUMBER AND ~16 AS THE CEILING"* at ~341 ms all-in per file, *"tight, not comfortable"*. **The lane now carries 35–36 files. Seven to eight files have been added since — the whole planning number, exactly as forecast. The row did not fail to see this coming; nobody re-read it at a cut.**
+
+> **`OQ-1` — OPEN, and it wants a ticket. Owner: Architect/Design** (this row's owner; a gate does not move this bar and does not restate this row).
+> 1. **Re-measure the lane total under this row's own protocol on a QUIET machine** — this gate's was not one — and restate the reading anchored to a commit.
+> 2. **Rule on the CPU clause.** Either the lane is genuinely over 13 s and something gives, or the restated figure says it is not. **Both answers are useful; not asking is not.**
+> 3. **If it is over, the options are Architect/Design's and the owner's, not a gate's.** Named only so the ticket is not written from scratch: `ADR-0008` records that **`isolate: false` saves 30–36% and is UNAVAILABLE** — it disarms three `*.nfr.test.ts` guards, **do not rediscover that lever**; moving the slowest content behind an existing opt-in lane is available; **re-deriving the 5% against today's plan is this row's own standing invitation and is still unexercised**; and moving the 13 s level is the owner's alone. **This gate recommends none of them and records that the question is now due.**
+> 4. **Until it is ruled, `N8-LANE` cannot honestly be granted to any ticket — a 5% slice of a total that is already spent is not a slice of anything.** That is the sentence the next gate should inherit.
+
+**WHAT THIS READING DOES NOT ESTABLISH — the honesty clause, and it is why `OQ-1` is an open question rather than a verdict.** All-in cost here is 13.400/35 = **383 ms per file** against the ratified 2026-08-13 post-`threads` figure of **341 ms**; deflating my base by that 12% puts it near **11.9 s, under the clause**. **A fraction of these absolute totals is load inflation and this gate cannot separate it from content.** So: **the paired deltas are the robust part** — and this row is deliberately written on paired deltas, which is exactly why. **The absolute totals are indicative and discharge nothing.** **This section does NOT record "`NFR-008` BREACHED" as a verdict** — that verdict is Architect/Design's, under this row's protocol, on a quiet machine. It records that two independent readings from two machine states both land at or over the clause, and that the question is due. **Machine: Apple M3 (Mac15,13) / 8 logical cores / Darwin 25.5.0 arm64 / Node v24.12.0 / vitest 3.2.7; `UNKNOWN - verify` elsewhere.** `node_modules` was symlinked into each out-of-tree condition — the same disclosed deviation every prior lane reading on this project carries — and `AGENTS.md` was copied into each condition because `src/cli.test.ts` reads it. **No repository file was modified: `src/` is byte-identical across this hop and nothing was moved or reverted.**
