@@ -698,6 +698,44 @@ real work, they are not tickets, and before this entry they existed only in
 here so they survive a context clear. **Do not cut the three that are decision-blocked; cutting them
 requires inventing the decision.**
 
+#### Three more, recorded 2026-08-19 by the Orchestrator, for the same reason
+
+Found and **deliberately not cut** during the `ABC-078 → ABC-037 → ABC-043` chain. Each was found by
+the role that owned the surrounding work, reported rather than absorbed, and left uncut on purpose.
+**They exist only in `.grugops/context/*/notes/` otherwise, and Workflow 18 compacts those.**
+
+1. **The wall-clause ticket — SKETCHED, NOT CUT.** `ADR-0014` ruled `NFR-008`'s **CPU** clause
+   breached and explicitly **did not rule the wall clause**: 2.805 s warm vs 3.120 s cooled straddle
+   the 3 s level, and Architect/Design refused to pick the flattering sample. **One sample exceeded
+   3 s — the first time this lane has done so.** BA/PM sized it rather than cutting it, because I
+   said cut one not two: scope = settle warm/cold and rule, n=8 with a null control at a named
+   commit; out of scope = the 3 s level itself and the CPU deficit; **`M` / `P1`**; owner
+   Architect/Design; `P0` trigger = a conformant n=8 median over 3 s. **Its decider, worth keeping:
+   it is an INPUT to `ABC-110`, not part of it** — if warm/cold is still open at `ABC-110` `A6`, the
+   remedy could be declared successful on CPU while leaving a breached wall undetected.
+
+2. **The restatement rule nobody runs — the highest-value item of the three, and BA/PM said so.**
+   `NFR-008` item 6 publishes a restatement rule; it was written with a *"~7 files"* planning
+   number; **eleven files landed; and nobody ran the one line of arithmetic at any cut.** No role
+   re-runs it and **nothing observes that it wasn't run** — the same shape as `ABC-105` (*nothing
+   observes the QE hop*). That is how a budget went 0.4 s over its clause with four separate trees
+   later reproducing it and no one noticing at the time. Sizing off `ABC-105`'s design: **`S`**.
+   **This is a factory defect, not a product defect**, which is exactly why it keeps surviving.
+
+3. **No criterion runs the real engine end to end.** Named first by BA/PM at
+   `refine-ABC-043-2026-08-19` and again by the engineer at delivery. `ABC-043`'s `A2` and `A5` both
+   drive **doubles** — mandatorily so, because `createEngine` deepens against a wall clock and a
+   scripted line against it is flaky by construction at ~3 s of wall per ply. **The real engine is
+   therefore never exercised through the real entry point by any criterion.** It belongs in an
+   opt-in lane (`ENGINE_DEEP` precedent), **never the default one** — and note `ADR-0014` rules the
+   default lane already over its CPU clause, so this cannot go there even if someone wanted it to.
+
+**Two more, smaller, same reason:** `ABC-109` and `ABC-110` **collide in `AGENTS.md`** — `ABC-110`
+`A9` adds lane entries to the file `ABC-109` is trying to get under a 32,768-byte cap with ~2,900
+bytes left; recorded as a dependency, neither blocks the other. And **`ABC-086`'s trace row still
+reads *"79.9% of its CPU clause at 28 files"*** — stale, directionally vindicated by `ADR-0014`,
+left standing and flagged rather than quietly corrected.
+
 | # | Uncut work | Why not cut | Unblocked by |
 |---|---|---|---|
 | 1 | **All packaging tickets** | the scope of packaging is a *function of* the distribution channel, and npm / standalone binary / `git clone` share almost no work. `EPIC-006` acceptance criterion 1 (`npx <package>`) is unmeetable by any ticket that exists | **the owner**, via `ABC-100` — then Architect/Design writes the superseding ADR per `ADR-0007` `D5` |
