@@ -1,0 +1,39 @@
+#!/bin/bash
+# ABC-110 A1 harness. Runs OUTSIDE the repository. Throwaway; never committed.
+# usage: harness.sh <label> <cond1:file1,file2> <cond2:...> ...
+S="$(cd "$(dirname "$0")" && pwd)"
+LABEL="$1"; shift
+CONDS=("$@")
+OUT="$S/out-$LABEL.tsv"
+: > "$OUT"
+printf 'round\tcond\tfiles\ttests\tskip\tuser\tsys\tcpu\twall\texit\tload_pre\n' >> "$OUT"
+
+# build trees
+for c in "${CONDS[@]}"; do
+  name="${c%%:*}"; rm="${c#*:}"
+  d="$S/trees/$name"
+  rm -rf "$d"; mkdir -p "$d"
+  git -C "$REPO" archive 54cbb23 | tar -x -C "$d"
+  ln -s "$REPO/node_modules" "$d/node_modules"
+  if [ "$rm" != "-" ]; then
+    IFS=',' read -ra FS <<< "$rm"
+    for f in "${FS[@]}"; do rm -f "$d/src/$f"; done
+  fi
+done
+
+N=${#CONDS[@]}
+for r in $(seq 0 9); do
+  for i in $(seq 0 $((N-1))); do
+    idx=$(( (i + r) % N ))
+    c="${CONDS[$idx]}"; name="${c%%:*}"
+    d="$S/trees/$name"
+    load=$(uptime | sed 's/.*averages*: //' | awk '{print $1}' | tr -d ,)
+    ( cd "$d" && /usr/bin/time -p npx vitest run --reporter=json --outputFile="$S/j.json" ) >/dev/null 2>"$S/t.txt"
+    ec=$?
+    user=$(awk '/^user/{print $2}' "$S/t.txt"); sys=$(awk '/^sys/{print $2}' "$S/t.txt"); wall=$(awk '/^real/{print $2}' "$S/t.txt")
+    read files tests skip < <(node -e 'const j=require(process.argv[1]);console.log(j.testResults.length,j.numTotalTests,j.numPendingTests+j.numTodoTests)' "$S/j.json")
+    cpu=$(node -e "console.log((($user)+($sys)).toFixed(3))")
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$r" "$name" "$files" "$tests" "$skip" "$user" "$sys" "$cpu" "$wall" "$ec" "$load" >> "$OUT"
+  done
+done
+echo "DONE $OUT"
