@@ -51,6 +51,107 @@ const executableCodeOf = (file: string): string =>
     .replace(/\/\*[\s\S]*?\*\//g, "")
     .replace(/\/\/.*$/gm, "");
 
+// ---------------------------------------------------------------------------------------------
+// THE TWO DERIVED VIEWS, AND THE ONE RULE THEY BOTH BROKE (`ABC-043` repair, 2026-08-20).
+//
+// QE's 2026-08-19 hop found four guards on this page that passed by being unable to look, and read
+// them as ONE defect rather than four. Measured at this hop and CONFIRMED: three of the four are
+// one mechanism. A guard here does not assert over the evidence — it asserts over a VIEW it derives
+// from the evidence (a blanked source, a sliced window, a relation between two exit codes) — and
+// every one of those derivations could silently DROP the evidence, at which point the guard is
+// green by construction. The blanker erased `${…}` with the literal it sat in; the window returned
+// the EMPTY STRING when its two anchors were the wrong way round.
+//
+// THE RULE, stated once for the whole file: A DERIVATION MUST PROVE IT PRESERVED THE EVIDENCE, OR
+// THE GUARD MUST ASSERT OVER THE EVIDENCE ITSELF. The two functions below are the derivations this
+// page still needs, each written so that losing the evidence is LOUD — and both are watched losing
+// it, on hostile input, at the `the instruments themselves are not blind` row. A future derivation
+// on this page goes under that row too; that row is the fix, and these two are its first customers.
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * The source with what a human wrote as TEXT blanked, and everything that RUNS kept.
+ *
+ * `${…}` INSIDE A TEMPLATE IS EXECUTABLE CODE. The blanker this replaces matched a whole template
+ * and erased its interpolations along with its text, so a row count written `` `${23}` `` — or the
+ * realistic `` write(`${INTERNAL_ERROR.padEnd(23)}\n`) `` — was invisible to `A8` and shipped GREEN
+ * (QE, 2026-08-19; the `ABC-043` repair before this one narrowed the blanker and MOVED the hole
+ * rather than closing it). Interpolations are kept and scanned; a string nested inside one is text
+ * again, and is blanked.
+ */
+const withoutStringText = (code: string): string => {
+  let kept = "";
+  let index = 0;
+  while (index < code.length) {
+    const character = code[index] as string;
+    if (character === '"' || character === "'") {
+      kept += character;
+      index++;
+      while (index < code.length && code[index] !== character)
+        index += code[index] === "\\" ? 2 : 1;
+      kept += character;
+      index++;
+      continue;
+    }
+    if (character === "`") {
+      kept += "`";
+      index++;
+      while (index < code.length && code[index] !== "`") {
+        if (code[index] === "\\") {
+          index += 2;
+          continue;
+        }
+        if (code[index] === "$" && code[index + 1] === "{") {
+          const opened = index;
+          let depth = 0;
+          while (index < code.length) {
+            if (code[index] === "{") depth++;
+            else if (code[index] === "}") {
+              depth--;
+              if (depth === 0) {
+                index++;
+                break;
+              }
+            }
+            index++;
+          }
+          kept += withoutStringText(code.slice(opened, index));
+          continue;
+        }
+        index++;
+      }
+      kept += "`";
+      index++;
+      continue;
+    }
+    kept += character;
+    index++;
+  }
+  return kept;
+};
+
+/**
+ * A WINDOW THAT PROVES IT LOOKED: the span from `opening` to the end of `closing`, or a THROW.
+ *
+ * The expression this replaces was `source.slice(source.indexOf(opening), source.indexOf(closing) +
+ * closing.length)`, which returns the EMPTY STRING whenever `closing` precedes `opening` — and
+ * every `.not.toMatch` over it then passes over nothing. QE hoisted `src/cli.ts`'s options object
+ * out of the `runTurnLoop(` call, which puts `sink,` first, and shipped a real `as` cast through
+ * `A1` with `tsc` clean and 50 rows green. Three refusals, because all three are silent losses of
+ * the evidence and only one of them is the one that was found.
+ */
+const windowOf = (source: string, opening: string, closing: string): string => {
+  const from = source.indexOf(opening);
+  const to = source.indexOf(closing);
+  if (from < 0) throw new Error(`the window never opened: \`${opening}\` is not in this source`);
+  if (to < 0) throw new Error(`the window never closed: \`${closing}\` is not in this source`);
+  if (to < from)
+    throw new Error(
+      `the window is INVERTED: \`${closing}\` precedes \`${opening}\` in this source`,
+    );
+  return source.slice(from, to + closing.length);
+};
+
 /** `ADR-0011` clause 1's own expression: a `.ts` under `src/` that is not a `.test.ts`. */
 const productionModules = (): readonly string[] =>
   readdirSync(SOURCE_DIRECTORY).filter(
@@ -253,13 +354,30 @@ const play = (args: readonly string[], options: ChildOptions): Child =>
 // scripted line asserted against it is flaky by construction — and MEASURED here, one real engine
 // ply on the start position costs 3.09 s of wall against `NFR-008`'s 3 s clause for the whole lane.
 //
-// THE LIMITS THIS FILE HONOURS. `./line-input.ts`, `./frame.ts` and `./turn-loop.ts` are NEVER
-// substituted — replacing any of them would test the harness instead of the product. The engine
-// seam is substituted under `A2`, `A5` and `A7`, and by `ABC-042`'s two colour children, which now
-// reach an engine ply through the delivered composition and which `## Test notes` 8 forbids to run
-// the real search in the default lane. `./command-input.ts` is substituted by `A3` alone, and that
-// one is an EXTENSION of BA/PM's ruling rather than an application of it — the reasoning, and why
-// no smaller instrument reaches `A3`, is at the `A3` row.
+// THE LIMITS THIS FILE HONOURS, and both halves are now RULED rather than read off three names:
+// `ADR-0015` clauses (S)/(C), and BA/PM's (N1)-(N3), both 2026-08-20.
+//
+//   (S) the substituted module is a supplier NAMED AT AN INJECTION POINT of the delivered
+//       composition — imported by `src/cli.ts` AND passed in the `runTurnLoop({ … })` bag;
+//   (C) the double satisfies the seam's PUBLISHED TYPE, so it builds a composition the production
+//       contract already permits;
+//   (N) the criterion's own GIVEN stipulates that component as constructed, everything the criterion
+//       asserts is produced by code that was NOT substituted, and it is ONE criterion, ONE seam.
+//
+// `./frame.ts` and `./turn-loop.ts` are NEVER substituted: neither is a seam supplier, so a
+// substitution there is a PRODUCT REWRITE however clean its diff. `./command-input.ts` stood in the
+// IDENTICAL structural position — one static import below the seam supplier `./line-input.ts`
+// (`src/line-input.ts:56`), named nowhere in `src/cli.ts` — and the `A3` child that substituted it
+// is REFUSED by (S) and by (N1) both, and is gone from this file.
+//
+// The engine seam is substituted under `A2`, `A5` and `A7`, and by `ABC-042`'s two colour children,
+// which now reach an engine ply through the delivered composition and which `## Test notes` 8
+// forbids to run the real search in the default lane. `./line-input.ts` is substituted by `A3`
+// ALONE, whose Given stipulates "an `InputSeam` that throws": it is `src/cli.ts:155`'s own `input:`
+// supplier, one line above the `engine:` seam `A5` doubles, and BA/PM's name-refusal of it stands
+// UNCHANGED on `A2` (whose Given stipulates the reader as REAL) and on `A5` (one criterion, one
+// seam). A module refused under one criterion is not thereby refused under another, and one admitted
+// under one is not admitted generally — there is no module list here, in either direction.
 // ---------------------------------------------------------------------------------------------
 
 /** A hook URL that gives the child a different `src/<module>` and leaves every other module real. */
@@ -361,16 +479,29 @@ const CHILDREN = {
   }),
 
   /**
-   * `A3` — `[D31]`'s ruling, as a child. The PARSER throws, one layer below the real `InputSeam`:
-   * `src/line-input.ts` catches nothing by its own ruling, so the throw crosses the merged seam, the
-   * merged loop repairs the borrowed board and rethrows, and it arrives at the entry point's own
-   * handler in the process that owns the exit code.
+   * `A3` — `[D31]`'s ruling, as a child, and it is `A5`'s engine child with the fault moved one seam
+   * up. `A3`'s Given is "an `InputSeam` that throws", so the constructed fault stands AT THE SEAM
+   * the criterion names: `createLineInputSeam` returns a seam that throws when the loop calls it.
+   *
+   * WHAT IS REAL HERE IS EVERYTHING `A3` ASSERTS. The merged loop's repair-and-rethrow, the entry
+   * point's one `try`/`catch`, the internal-error line, and the process's own exit code are all
+   * delivered code, driven through the delivered entry point. The double produces NO observable this
+   * row reads — it writes nothing, not even the prompt, which is why `A3`'s non-vacuity witness is
+   * the FRAME the loop had already rendered rather than the prompt the real reader would have
+   * written. Asserting a substituted module's output back at itself is exactly (N2)'s refusal.
+   *
+   * It replaces a child that substituted `./command-input.ts` — refused by `ADR-0015` (S) (a module
+   * reached only by a static import is not a seam supplier) and by BA/PM's (N1) (`A3`'s Given
+   * stipulates the seam, not the parser). ONE SPAWN, exactly as that one was: `N8-SPAWN`'s pin of 17
+   * does not move. No stdin script: the seam never reads one.
    */
-  parserBug: play(["--colour", "white"], {
-    input: "e4\n",
+  inputSeamThrows: play(["--colour", "white"], {
     hook: substituting(
-      "command-input.ts",
-      'export function resolvePromptLine() { throw new Error("the parser threw"); }\n',
+      "line-input.ts",
+      `export function createLineInputSeam() {
+  return async () => { throw new Error("the input seam threw"); };
+}
+`,
     ),
   }),
 
@@ -515,6 +646,71 @@ const invocationsAdvertisedBy = (advertised: string): readonly (readonly string[
   }
   return invocations;
 };
+
+describe("this file's own instruments", () => {
+  it("the instruments themselves are not blind — every derived view is WATCHED losing its evidence", () => {
+    // THIS ROW IS THE `ABC-043` REPAIR (2026-08-20), and it is the whole of it. QE found four guards
+    // on this page that passed by being unable to look; the shape was never four bugs, it was one
+    // rule nobody had anywhere to write down — a derivation that drops the evidence makes its guard
+    // green by construction, and nothing on this page had ever been watched going red on the input
+    // that drops it. Both derivations below are fed exactly the hostile source QE's mutants planted
+    // in `src/cli.ts`, IN PROCESS: no spawn, no mutation of a delivered module, no `N8-SPAWN` cost.
+    // A NEW DERIVED VIEW ON THIS PAGE COMES HERE FIRST. That is the fence, and it is cheap to hold.
+    //
+    // The probe numbers are deliberately NOT a frame height: `A6`'s last row forbids this suite to
+    // write a row count down, and an instrument fixture is not an exemption from it.
+    const PROBE = 137;
+
+    // (1) THE BLANKER. `${…}` is executable code and must survive the blanking of the text it sits
+    // in — QE's two surviving mutants, verbatim in shape. Each fixture is SOURCE, so a literal
+    // `${` is the point of it and Biome's placeholder warning is suppressed one line at a time
+    // rather than by weakening the rule.
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
+    const INTERPOLATED = "const unused = `${137}`;";
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
+    const PAD_ON_THE_CRASH_PATH = "process.stderr.write(`${INTERNAL_ERROR.padEnd(137)}\\n`);";
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
+    const NUMBER_IN_TEXT_AND_IN_CODE = "const line = `rows ${137} of 8`;";
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
+    const NESTED_IN_AN_INTERPOLATION = 'const line = `${"137"}`;';
+
+    expect(withoutStringText(INTERPOLATED), "an interpolated number").toContain(`${PROBE}`);
+    expect(
+      withoutStringText(PAD_ON_THE_CRASH_PATH),
+      "a pad-to-a-row-count on the crash path",
+    ).toContain(`${PROBE}`);
+    // …and it still blanks what is genuinely TEXT, which is the whole reason a blanker exists: the
+    // start position's `8/8/8/8` must not read as a numeric literal.
+    expect(withoutStringText('const fen = "8/8/8/8";'), "a number in a string").not.toContain("8");
+    expect(withoutStringText(NUMBER_IN_TEXT_AND_IN_CODE)).toContain(`${PROBE}`);
+    expect(withoutStringText(NUMBER_IN_TEXT_AND_IN_CODE)).not.toContain("8");
+    // A string NESTED inside an interpolation is text again — the recursion is asserted, not assumed.
+    expect(
+      withoutStringText(NESTED_IN_AN_INTERPOLATION),
+      "a number in a nested string",
+    ).not.toContain(`${PROBE}`);
+
+    // (2) THE WINDOW. All three ways of losing a window THROW rather than returning "" — and the
+    // third is QE's `A1` mutant: hoisting the options object puts the closing anchor FIRST.
+    expect(() => windowOf("runTurnLoop({ sink, })", "loopTurns(", "sink,")).toThrow(/never opened/);
+    expect(() => windowOf("runTurnLoop({ a: 1 })", "runTurnLoop(", "sink,")).toThrow(
+      /never closed/,
+    );
+    expect(
+      () =>
+        windowOf(
+          "const options = ({ sink, });\nawait runTurnLoop(options);",
+          "runTurnLoop(",
+          "sink,",
+        ),
+      "the hoisted options object",
+    ).toThrow(/INVERTED/);
+    // NON-VACUITY on the window itself: it returns the span, not merely the absence of a throw.
+    expect(windowOf("x = runTurnLoop({ engine, sink, });", "runTurnLoop(", "sink,")).toBe(
+      "runTurnLoop({ engine, sink,",
+    );
+  });
+});
 
 describe("ABC-042 — a human can run it", () => {
   it("A1 — `npm run chess` writes the start position and exits 0", () => {
@@ -1132,20 +1328,17 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // the two modules is listed here with what it is, so a new number cannot arrive unexplained and
     // none of the listed ones is a count of rows.
     //
-    // THE TEMPLATE-LITERAL BLANKER WAS BLIND AND IS FIXED HERE — found at `ABC-043` by mutation, and
-    // it is a hole in the INSTRUMENT rather than in what it measures. The old expression could not
-    // match a literal containing an interpolation at all, so with TWO such literals in a module it
-    // matched the CLOSING backtick of the first through the OPENING backtick of the second and
-    // blanked every line between them. MEASURED: with a deliberate `beginFrameSession(sink, 23)`
-    // planted in that gap, this row stayed GREEN — the `23` was erased before the scan ever ran.
-    // `ABC-042` shipped ONE interpolated literal, so the hole could not open until `ABC-043` added
-    // the crash line's. Matching to the next unescaped backtick is correct for both delivered
-    // modules and is what a row-count guard has to do; the same planted `23` reds this row now.
+    // THE BLANKER WAS BLIND TWICE AND IS NOW A WATCHED INSTRUMENT. First hole (`ABC-043`): the
+    // expression could not match a literal containing an interpolation at all, so with TWO such
+    // literals in a module it matched the CLOSING backtick of the first through the OPENING backtick
+    // of the second and blanked every line between them. Second hole (QE, 2026-08-19), which the
+    // narrowing MOVED rather than closed: `${…}` is EXECUTABLE CODE and was erased with the literal
+    // it sat in, so `` `${23}` `` — and a real `` write(`${INTERNAL_ERROR.padEnd(23)}\n`) `` on the
+    // crash path — shipped GREEN. `withoutStringText` keeps every interpolation and blanks only what
+    // a human wrote as text; it is watched losing neither, on both of QE's mutants, at
+    // `the instruments themselves are not blind`. THAT ROW IS WHY THIS ONE CAN BE TRUSTED.
     const numbersIn = (file: string): readonly string[] => {
-      const code = executableCodeOf(file)
-        .replace(/"(?:[^"\\]|\\.)*"/g, '""')
-        .replace(/'(?:[^'\\]|\\.)*'/g, "''")
-        .replace(/`(?:[^`\\]|\\.)*`/g, "``");
+      const code = withoutStringText(executableCodeOf(file));
       return [...new Set(code.match(/0[xX][0-9a-fA-F]+|\d+(?:\.\d+)?/g) ?? [])].sort();
     };
 
@@ -1850,9 +2043,15 @@ describe("ABC-043 — the live session", () => {
     // there rather than over the module because `ABC-042`'s byte filter legitimately casts
     // (`codePointAt(0) as number`, `src/cli.ts:67-75`) and is none of this ticket's business. The
     // window runs from the call to the closing brace of its options object.
-    const call = entry.slice(
-      entry.indexOf("runTurnLoop("),
-      entry.indexOf("sink,") + "sink,".length,
+    // THE WINDOW THROWS RATHER THAN COMING BACK EMPTY (`ABC-043` repair). The slice this replaces
+    // returned "" for a build that HOISTED the options object out of the call — `sink,` then
+    // precedes `runTurnLoop(` — and both refusals below passed over nothing. QE shipped a real `as`
+    // cast through this row that way, `tsc` clean and 50 rows green.
+    const call = windowOf(entry, "runTurnLoop(", "sink,");
+    // NON-VACUITY, and it is also the property `A1` is about: the six options are the call's OWN
+    // argument, written inline, so there is no name between the wiring and the loop.
+    expect(call, "the options bag is not the call's own argument").toContain(
+      "createLineInputSeam(",
     );
     expect(call, "a type assertion at the wiring").not.toMatch(/\bas\b/);
     // NO ADAPTER: no seam is wrapped in a function written here. An arrow at any option is the
@@ -1872,6 +2071,19 @@ describe("ABC-043 — the live session", () => {
     expect(entry, "the seam bound to a name it could be called through").not.toMatch(
       /(?:const|let|var)\s+\w+\s*=\s*createLineInputSeam/,
     );
+    // THE CLAUSE THAT WAS MISSING, and it is the one that made this row's other three PROXIES rather
+    // than the property (QE, 2026-08-19). All three above are green on a build that hoists the
+    // options bag to a name and then calls the seam THROUGH THE BAG — `void options.input(…)` —
+    // because none of them names the bag. Measured at this hop on a LIVE stdin (a FIFO carrying one
+    // move and held open, which is a human at a keyboard): that build renders ONE board, writes
+    // THREE prompts and NEVER PLAYS THE MOVE, where the delivered build plays it and renders TWO.
+    // The bag is the call's own argument, so there is no name reaching the seam AT ALL, which is the
+    // property "called nowhere" actually states. `windowOf` throws on the hoist rather than
+    // returning an empty window — the same derivation `A1` uses, and the same repair.
+    expect(
+      windowOf(entry, "runTurnLoop(", "sink,"),
+      "the seam reachable through a hoisted options bag",
+    ).toContain("createLineInputSeam(");
   });
 
   it("A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0", () => {
@@ -1906,15 +2118,17 @@ describe("ABC-043 — the live session", () => {
   });
 
   it("A3 — a parser bug ends the game as an INTERNAL ERROR, never as a chess outcome, and exits non-zero", () => {
-    const child = CHILDREN.parserBug;
+    const child = CHILDREN.inputSeamThrows;
 
     // NON-VACUITY FIRST, and on this criterion it is the whole risk: a child that died before the
-    // game started would satisfy every absence below by never having played. It rendered a frame
-    // and it reached the prompt, so the throw happened where the criterion says it happens.
+    // game started would satisfy every absence below by never having played. It rendered a frame,
+    // which is the loop's own work and happens before the seam is ever called, so the throw happened
+    // where the criterion says it happens. The prompt is NOT the witness any more: with the fault
+    // constructed at the seam, the prompt would be the DOUBLE's output, and a criterion asserted
+    // against its own instrument is (N2)'s refusal.
     expect(framesIn(child.stdout, "ascii", "white-bottom"), "frames before the throw").toHaveLength(
       1,
     );
-    expect(child.stdout, "the child never reached the prompt").toContain(PROMPT);
 
     // (i) It is MARKED an internal error.
     expect(child.union).toMatch(INTERNAL_ERROR_MARKER);
@@ -1935,11 +2149,20 @@ describe("ABC-043 — the live session", () => {
     // And it is distinguishable from a REFUSED COMMAND LINE as well as from a clean exit: a usage
     // error is the product's other non-zero, and one code for both would lose the difference.
     expect(child.status).not.toBe(CHILDREN.badColour.status);
+    // THE TWO CODES BY VALUE, NOT BY RELATION (`ABC-043` repair, 2026-08-20). The rule — 0 for a
+    // session that ran, 1 for a refused command line, 70 for a bug that ended the session — is
+    // written in `src/cli.ts`'s header, in `AGENTS.md` and on the ticket, and until this pair it was
+    // asserted NOWHERE: QE swapped the usage arm and the catch arm and the whole suite stayed green,
+    // with `node src/cli.ts --colour purple` exiting 70. A relation survives a swap; a value does
+    // not. `A8`'s transcription pins that both numbers EXIST in the module — this pins which path
+    // uses which, which is the half `A8` structurally cannot see.
+    expect(child.status, "a crashed session is `EX_SOFTWARE`").toBe(70);
+    expect(CHILDREN.badColour.status, "a refused command line").toBe(1);
   });
 
   it("A4 — end-of-input is the CLEAN path, and it is distinguishable from A3 by message and by code", () => {
     const clean = CHILDREN.truncated;
-    const crashed = CHILDREN.parserBug;
+    const crashed = CHILDREN.inputSeamThrows;
 
     // `ABC-019` `A8`, byte for byte, through the delivered entry point: one notice, exit 0.
     expect(clean.stdout.split(INPUT_ENDED_NOTICE).length - 1, "notices written").toBe(1);
