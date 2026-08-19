@@ -2040,8 +2040,19 @@ describe("ABC-043 — the live session", () => {
     // the merged factory's own return value") standing: a shorthand row alone would be green on
     // `const history = someOtherThing`, and the initializer row alone would be green on a build that
     // constructed the game and then passed a different one. The count row below is unchanged.
+    //
+    // THE SHORTHAND ROW IS ANCHORED IN THE CALL'S OWN WINDOW (repair, 2026-08-20), and the build
+    // that forced it was measured rather than imagined: `const decoy = { ...history }; const both =
+    // [history, decoy];` with `history: decoy` at the call typechecks and ran the WHOLE suite green
+    // when this row was an unanchored `/\bhistory,/` over the module — the token it matched was the
+    // array element, not the option. The option's key and its value are pinned in ONE place again,
+    // the way the other five options are (`humanColour:\s*colour` and so on); the window is the same
+    // one this test's cast/adapter rows use, and it THROWS rather than coming back empty.
     expect(entry).toMatch(/const history = newGame\(START_FEN\);/);
-    expect(entry).toMatch(/\bhistory,/);
+    expect(
+      windowOf(entry, "runTurnLoop(", "sink,"),
+      "the `history` option is not the shorthand for the game the entry point built",
+    ).toMatch(/\bhistory,/);
     expect(entry.match(/\bnewGame\s*\(/g)).toHaveLength(1);
     expect(entry).toMatch(/humanColour:\s*colour/);
     expect(entry).toMatch(/render:\s*makeRenderSeam\(mode,\s*orientation\)/);
