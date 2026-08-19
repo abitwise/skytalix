@@ -31,6 +31,7 @@ import { PROMPT } from "./line-input.ts";
 import { squareName } from "./position.ts";
 import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
 import { makeRenderSeam } from "./render-seam.ts";
+import { renderResultScreen } from "./result-screen.ts";
 import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
 import { INPUT_ENDED_NOTICE, type TerminalReason } from "./turn-loop.ts";
 
@@ -2032,7 +2033,16 @@ describe("ABC-043 — the live session", () => {
 
     // ALL SIX, each pinned to what supplies it. A build that passed five and defaulted the sixth
     // would satisfy a key-count row.
-    expect(entry).toMatch(/history:\s*newGame\(START_FEN\)/);
+    // `ABC-044` MOVED THIS ROW AND DID NOT WEAKEN IT. The history is now HELD by the entry point —
+    // the result screen is a function of the game as well as of the outcome, so the entry point has
+    // to still have it when the loop returns — so the option is a shorthand and the factory call is
+    // one line above it. BOTH halves are pinned, which is what keeps the criterion ("every option is
+    // the merged factory's own return value") standing: a shorthand row alone would be green on
+    // `const history = someOtherThing`, and the initializer row alone would be green on a build that
+    // constructed the game and then passed a different one. The count row below is unchanged.
+    expect(entry).toMatch(/const history = newGame\(START_FEN\);/);
+    expect(entry).toMatch(/\bhistory,/);
+    expect(entry.match(/\bnewGame\s*\(/g)).toHaveLength(1);
     expect(entry).toMatch(/humanColour:\s*colour/);
     expect(entry).toMatch(/render:\s*makeRenderSeam\(mode,\s*orientation\)/);
     expect(entry).toMatch(/input:\s*createLineInputSeam\(/);
@@ -2283,6 +2293,111 @@ describe("ABC-043 — the live session", () => {
       ).toHaveLength(direction.framesBeforeFirstPrompt);
       // The script was consumed to its end and the session then ended on the pipe, cleanly.
       expect(child.stdout.split(INPUT_ENDED_NOTICE).length - 1, `${name}: notices`).toBe(1);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-044` `A6` — the result screen reaches the player, after the last frame, in ONE write.
+//
+// NO NEW CHILD IS SPAWNED (`## Test notes` 5, and `N8-SPAWN`'s pin of 17 does not move). `A6`'s
+// Given is "a scripted game driven to checkmate through the entry point with stdout a pipe", and
+// `CHILDREN.mate` — `ABC-043` `A2`'s fool's-mate child — IS that game. It is read again here rather
+// than re-spawned; a third harness is exactly what the ticket forbids.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-044 — the result screen reaches the player", () => {
+  const entry = executableCodeOf("cli.ts");
+  /** `CHILDREN.mate`'s game, as the engine double names its plies. Fool's mate — Black mates. */
+  const PLIES = ["f2f3", "e7e5", "g2g4", "d8h4"];
+
+  /**
+   * The screen the delivered stream must end with, composed HERE from the merged renderer over the
+   * game the child actually played — never a transcription of what a result screen looks like. The
+   * outcome is `gameStatus`'s own, which is what `ABC-019`'s loop returns for the position it last
+   * rendered, so this is the same value the entry point was handed.
+   */
+  const expectedScreen = (): readonly string[] => {
+    const mated = playedOut(PLIES);
+    const status = gameStatusOf(mated);
+    // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK: if the replay did not reach a terminal
+    // position there is no screen to expect, and this says so instead of comparing against a
+    // silently in-progress one.
+    if (status.result === "in-progress") throw new Error("the replayed game did not end");
+    return renderResultScreen({ result: status.result, reason: status.reason, exitCode: 0 }, mated);
+  };
+
+  it("A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0", () => {
+    const child = CHILDREN.mate;
+    const written = `${expectedScreen().join("\n")}\n`;
+
+    // NON-VACUITY FIRST: the scripted game ran to the mate. Without this every property below is
+    // satisfiable by a child that died before playing.
+    expect(child.status, `the scripted game failed: ${child.stderr}`).toBe(0);
+    const frames = framesIn(child.stdout, "ascii", "white-bottom");
+    expect(frames.length).toBeGreaterThanOrEqual(1);
+
+    // IT ENDS WITH THE SCREEN, byte for byte. `slice` rather than `endsWith` so a mismatch prints
+    // the two strings instead of `false`.
+    expect(child.stdout.slice(-written.length)).toBe(written);
+
+    // AFTER THE FINAL FRAME'S LAST ROW, and asserted from both sides. (i) the screen begins past the
+    // last row of the last frame; (ii) NOTHING frame-shaped follows it — a build that wrote the
+    // screen mid-session would satisfy (i) on some other frame and fail here.
+    const lastFrame = frames[frames.length - 1] as readonly string[];
+    const lastRow = [...lastFrame].reverse().find((row) => row.trim() !== "") as string;
+    expect(child.stdout.indexOf(written)).toBeGreaterThan(child.stdout.lastIndexOf(lastRow));
+    expect(
+      framesIn(child.stdout.slice(child.stdout.indexOf(written)), "ascii", "white-bottom"),
+      "frames after the screen",
+    ).toHaveLength(0);
+
+    // ZERO ANSI CSI SEQUENCES OF ITS OWN. The whole stream is asserted at zero by `ABC-043` `A6`;
+    // this is the screen's own contribution, so a regression is located in the renderer.
+    expect(
+      [...written].filter((character) => character === "\u001b"),
+      "escape bytes on the screen",
+    ).toHaveLength(0);
+
+    // THE EXIT CODE IS THE LOOP'S, VERBATIM. `LoopOutcome.exitCode` is typed `0` and only `0`, so a
+    // build that derived a code from `reason` — a mate as a failure — is what this row refuses.
+    expect(child.status).toBe(0);
+  });
+
+  it("A6 — the screen is ONE write, and it is the only thing the entry point writes to the sink", () => {
+    // "In one write" is not observable from outside a pipe, so it is asserted where it is decided:
+    // the entry point has exactly one `sink.write` call site, guarded on a non-empty screen. A build
+    // that wrote row by row would interleave with nothing today and would be a different contract.
+    expect(entry.match(/sink\.write\(/g)).toHaveLength(1);
+    expect(entry).toMatch(/renderResultScreen\(outcome,\s*history\)/);
+  });
+
+  it("A4 — end of input writes ZERO BYTES for the screen: the notice is still the last thing said", () => {
+    // The module's half of `A4` (zero ROWS) is in `src/result-screen.test.ts`. This is the entry
+    // point's half: nothing at all follows `ABC-019`'s notice — not a blank line, not a newline. A
+    // build that wrote the joined rows unguarded appends one byte here and nothing else in this
+    // suite would see it.
+    const clean = CHILDREN.truncated;
+    const notice = `${INPUT_ENDED_NOTICE}\n`;
+
+    expect(clean.status).toBe(0);
+    expect(clean.stdout.slice(-notice.length)).toBe(notice);
+  });
+
+  it("A3 — a faulty engine gets a screen that is not a chess outcome, and says the game did not finish", () => {
+    // `ABC-043` `A5`'s two fault children already assert the ABSENCE half over the whole stream —
+    // none of the ten reasons, none of the five words, on either channel — and those rows now cover
+    // the result screen too, because the screen is on that stream. What is added here is the
+    // PRESENCE half, which absence rows structurally cannot give: the player is told the game did
+    // not finish rather than being shown nothing at all.
+    const FAULTS = [
+      { name: "engine-threw", child: CHILDREN.engineThrows },
+      { name: "engine-failure", child: CHILDREN.engineForeign },
+    ] as const;
+
+    for (const { name, child } of FAULTS) {
+      expect(child.status, `${name} exited non-zero: ${child.stderr}`).toBe(0);
+      expect(child.stdout, `${name}: the screen is missing`).toContain("did not finish");
     }
   });
 });

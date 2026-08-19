@@ -72,6 +72,7 @@ import { beginGlyphModeSession } from "./glyph-mode.ts";
 import { newGame } from "./history.ts";
 import { createLineInputSeam } from "./line-input.ts";
 import { makeRenderSeam } from "./render-seam.ts";
+import { renderResultScreen } from "./result-screen.ts";
 import { runTurnLoop } from "./turn-loop.ts";
 
 /** The standard start position, in the spelling every test file in this repository uses. */
@@ -145,10 +146,15 @@ async function main(): Promise<void> {
   // Read ONCE and passed twice: the loop's `FrameSink` and the prompt's `PromptOutput` are two
   // shapes over one handle, and `A9`'s "acquired once, in the entry point" is about the acquisition.
   const sink = process.stdout;
+  // HELD RATHER THAN PASSED ANONYMOUSLY (`ABC-044`). The result screen is a pure function of the
+  // loop's `LoopOutcome` AND of the game that was played, so the entry point is the one place that
+  // holds both once the loop has returned. It is still the merged factory's own value and it is
+  // still constructed exactly once — `ABC-043` `A1`'s row is pinned on this line now.
+  const history = newGame(START_FEN);
 
   try {
     const outcome = await runTurnLoop({
-      history: newGame(START_FEN),
+      history,
       humanColour: colour,
       render: makeRenderSeam(mode, orientation),
       // BUILT HERE, CALLED NOWHERE — `G6`'s single-caller precondition. See the module header.
@@ -156,6 +162,14 @@ async function main(): Promise<void> {
       engine: createEngine({ budgetMs: DEFAULT_BUDGET_MS }),
       sink,
     });
+
+    // `ABC-044` — THE RESULT SCREEN, AFTER THE LAST FRAME, IN ONE WRITE. It is NOT a frame: it goes
+    // to the same sink the loop wrote its frames to, with no session, no height and no padding, and
+    // `INPUT_ENDED_NOTICE` (`src/turn-loop.ts:312`) is the merged precedent for that. The renderer
+    // returns ZERO rows on end of input, and the guard turns that into ZERO BYTES rather than a
+    // stray newline — the loop has already written the notice and a second line would double-report.
+    const screen = renderResultScreen(outcome, history);
+    if (screen.length > 0) sink.write(`${screen.join("\n")}\n`);
 
     // VERBATIM, and the assignment is the rule rather than a formality: `LoopOutcome.exitCode` is
     // typed `0` and only `0`, so a build that computed an exit code from `reason` would be inventing
