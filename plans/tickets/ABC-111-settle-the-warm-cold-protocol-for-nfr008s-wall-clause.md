@@ -15,8 +15,8 @@ feature: —
 > recommendation at `cut-lane-remedy-2026-08-19`, routed by the Orchestrator.
 > **Every absolute measurement on this page is Architect/Design's, copied and not re-derived** —
 > `.grugops/context/design-oq1-lane-budget-2026-08-19/notes/` including the raw per-run TSVs.
-> **The derived per-run CPU/wall ratios below ARE this hop's arithmetic**, computed from those same
-> TSVs and shown with their inputs so they can be checked rather than trusted;
+> **The derived per-run CPU/wall ratios below ARE this hop's arithmetic**, computed from those TSVs
+> and shown with their inputs so they can be checked rather than trusted;
 > `.grugops/context/cut-nfr008-wall-2026-08-20/notes/` carries the working.
 > **THE DELIVERABLE IS THE PROTOCOL QUESTION SETTLED, NOT THE CLAUSE RULED.** Ruling the wall clause
 > is Architect/Design's, as `NFR-008`'s owner, and it is `## Out of scope` here.
@@ -115,7 +115,7 @@ not in any prior note.**
   left them standing on purpose. **Not re-derived, not re-cut.**
 - **`AR-N8LANE-078`.** Discharged with the arithmetic. Not re-opened.
 - **Any other machine.** Apple M3 (Mac15,13) / 8 logical cores / Darwin 25.5.0 arm64 / Node v24.12.0
-  / vitest 3.2.7. **`UNKNOWN - verify` anywhere else** — and the row already says the wall clause is a
+  / vitest 3.2.7. **`UNKNOWN - verify` anywhere else** — the row already says the wall clause is a
   function of core count.
 
 ## The rival candidates — named at the cut so nobody re-derives them, and NONE is established

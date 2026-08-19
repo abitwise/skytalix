@@ -195,6 +195,17 @@ behind his word.
   verdict at all**, which makes it an **input to this ticket rather than a part of it**. **BA/PM
   recommends it be cut separately and routed FIRST or in parallel; it is deliberately NOT cut here
   (one ticket was authorised, and this is the one `ADR-0014` says is owed).**
+  **CUT 2026-08-20 AT TASK `cut-nfr008-wall-2026-08-20`: THE ID IS `ABC-111`** (`M`, `P1`, DoR 9/10,
+  pullable today) — this bullet's stated gap is closed the way `ABC-108` `A5`'s was closed by this
+  page's existence. **`A6` consumes `ABC-111` `A4`/`A7`; the dependency is one-way.**
+  **AND IT REACHES FURTHER THAN `A6`, which was not previously written down: `ABC-111` also moves the
+  NUMBER `A2` sums against.** The CPU clause was ruled on **14.480 s — the COOLED sample** — while the
+  **protocol-conformant** sample reads **14.760 s**, so **if `ABC-111` settles on the warm state this
+  ticket's deficit is 1.760 s, not 1.480 s (+280 ms, 19% larger)**. **The CPU ruling STANDS EITHER WAY
+  and is NOT re-opened by either ticket** — both figures are over 13 s, and Architect/Design ruled on
+  the lower on purpose so the ruling would not depend on sample choice. **`A2` is NOT re-cut and this
+  page is NOT re-scored: it stays DoR 8/10 ⚠️x2.** Whoever executes `A2` states which figure the
+  settled protocol implies and sums against that one.
 - **`ABC-109` and this ticket collide in `AGENTS.md`, and both directions are real.** `AGENTS.md` is
   **29,749 bytes against an inherited 32,768-byte cap that truncates SILENTLY from the tail** —
   3,019 bytes of headroom, ~2.6 edits at the measured mean of +1,159. **`A9` adds lane entries to the
