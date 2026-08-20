@@ -1,10 +1,10 @@
 ---
 id: ABC-050
 title: The lane runner config has no guard — no static tool reads `vitest.config.ts`, and no assertion watches the containment it buys
-status: backlog
-column: Backlog
+status: in-review
+column: In Review
 size: S
-priority: P2
+priority: P1
 epic: —
 feature: —
 ---
