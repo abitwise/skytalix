@@ -1,0 +1,100 @@
+---
+id: 20260820T204500Z-qe-e2e-claim-what-abc044-was-never-exercised-on-resignation-is-unreachable-through-the-entry-point-and-the-tty-path-has-no-harness-b71c8e02
+kind: claim
+by: qe-e2e
+role: qe-e2e
+task: qe-ABC-044-2026-08-20
+at: 2026-08-20T20:45:00Z
+verified_by:
+confidence: high
+refs:
+  - ABC-044
+  - ABC-044/A1
+  - ABC-044/A5
+  - ABC-044/A6
+  - ABC-021
+  - EPIC-006
+  - NFR-002
+supersedes:
+---
+
+# What `ABC-044` was NEVER exercised on: `resignation` cannot be reached through the entry point at all, two of the eight only in principle, and the TTY path has no harness
+
+Stated plainly because the Orchestrator asked plainly: **which criteria are only ever exercised on
+synthetic input.**
+
+## `resignation` — SYNTHETIC ONLY, and not by a testing shortcut. The path does not exist yet
+
+`LoopOutcome.reason === "resignation"` can only arrive on the loop's `game-over` edge, which is fed by
+`PromptOutcome.kind === "game-over"`. **No production module in this tree ever constructs that
+value** — `grep -rn 'kind: "game-over"'` finds it in `src/turn-loop.ts`'s type declaration and in
+`src/turn-loop.test.ts`'s double, **and nowhere else**. `COMMAND_TABLE` (`src/command-input.ts:74-79`)
+is `help`, `board`, `quit`, `claim`, and its own header says *"`undo`, `resign` and `new` are NOT
+here — they are `EPIC-006`'s command set."*
+
+**So one of the eight — the one the ticket's own table sources to `src/turn-loop.ts:81` — is rendered
+correctly against a hand-built `LoopOutcome` and cannot today be produced by any sequence of player
+input.** That is not a defect in this ticket (the ticket renders a merged type value, exactly as
+cut), and it is not a hole a test could close. **It is a fact the next gate should not inherit as
+"eight reasons shipped and eight reasons seen".**
+
+## `threefold-repetition` and `fifty-move` — REACHABLE, but not demonstrated end to end
+
+`claim` IS in the table and resolves to `{ kind: "claim" }`, and the loop adjudicates it against the
+ply's own status, so both claimed draws are reachable through the delivered entry point **by
+construction of the command path**. I tried to drive one and did not get there:
+
+```
+$ printf 'Nf3\nNg1\nNf3\nNg1\nNf3\nNg1\nclaim\n' | node src/cli.ts | tail
+   6. Ng1     Nge7
+repetition 1 of 3      50-move 4 of 100
+```
+
+**The engine does not repeat, so a threefold cannot be forced by shuffling one side.** I did not
+build a scripted-engine child to force it: `A1` builds these two by hand by the ticket's own
+`## Test notes` 4, and a forced repetition would be a test of `src/gameend.ts`, which is `Done` and
+mutation-tested. **Recorded as un-exercised end to end, not as a gap in the criterion.**
+
+**What IS reached through the real entry point:** `checkmate` (`CHILDREN.mate`, live, plus my own
+hand run), the two faults (`CHILDREN.engineThrows` / `engineForeign`, a real spawn of `src/cli.ts`
+with `engine.ts` substituted), and the end-of-input no-screen path (`CHILDREN.truncated`). The other
+five of the eight are hand-built values only.
+
+## The TTY path — NO harness, and the criteria do not ask for one
+
+Every `A6` measurement is on a **pipe**. On a TTY, `src/frame.ts` repaints in place with
+`CURSOR_HOME` + erase (`:58-83`, gated on `sink.isTTY` at `:234`), and the result screen is written
+straight after the final frame with no session and no cursor control of its own. **A long move list
+(a 120-ply game is 60 rows) will scroll the frame off a short terminal.** No criterion covers it,
+nothing in this diff is wrong for it, and I could not exercise it — there is no TTY harness in this
+repository and building one was not in scope. **`UNKNOWN — verify` for the interactive rendering.**
+
+## A cosmetic edge nobody wrote a criterion for
+
+**A screen for a game with ZERO plies ends with a blank row** — the separator before an empty move
+list — so a fault child emits one trailing empty line. Measured:
+
+```
+["", "The game did not finish: the engine threw an error.",
+     "That is a bug in this program, not a chess outcome.", ""]
+```
+
+No criterion forbids it, `A4`'s zero-bytes rule is about the end-of-input path and is unaffected,
+and `ABC-042` `A1`'s trailing-byte row is on a different child. **Reported, not raised.**
+
+## The security threshold — re-measured against its own falsifiable wording, and it does NOT fire
+
+The threshold fires *"if any string on this screen is ever derived from a player-typed byte, or if
+the diff adds a runtime dependency or a Node builtin."*
+
+- **Zero Node builtins.** `src/result-screen.ts`'s six imports are `./apply.ts`, `./fen.ts`,
+  `./history.ts` (type), `./moves.ts` (type), `./san.ts`, `./turn-loop.ts` (type). No `node:` specifier.
+- **`package.json` and `package-lock.json` are byte-identical** to `main` @ `30482cd`.
+- **No player-typed byte reaches the screen, and I checked the one place it could.** The move list is
+  the only content derived from anything a player did, and it is **re-generated by `toSan` from the
+  `Move` structs**, never echoed: `moveList` reads `position` and `history.moves` and calls
+  `toSan(position, move)`. A player's typed text is parsed into a closed value domain by `ABC-033`'s
+  resolvers and is discarded there. **A player cannot place a byte of their own on this screen.**
+
+**Threshold NOT fired. The Orchestrator's routing stands unchanged.** Confidence high; the check is a
+read of six imports, two `git diff`s and one 20-line function, all re-run at the branch tip.
