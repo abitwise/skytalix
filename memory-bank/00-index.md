@@ -8,15 +8,19 @@ _Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask 
 > content: **`60-progress.md`** (the plan-of-record — **start here**), **`30-architecture.md`**
 > (as-built after **`EPIC-001` and `EPIC-002`**, rewritten 2026-08-12, plus the deployment posture),
 > **`70-runbook.md`** (first filled 2026-08-06; short on purpose — this project deploys nowhere and
-> there is almost nothing to operate), and **`50-decisions/`** (**fifteen** ratified ADRs,
-> `ADR-0001`–`ADR-0015`, all `accepted`; next free id is **`ADR-0016`**). **Re-measured 2026-08-19 by
+> there is almost nothing to operate), and **`50-decisions/`** (**sixteen** ratified ADRs,
+> `ADR-0001`–`ADR-0016`, all `accepted`; next free id is **`ADR-0017`**). **Re-measured 2026-08-19 by
 > listing `50-decisions/`, not inferred:** `ADR-0012` (book/engine composition point) was written
 > `proposed` on 2026-08-18 and ratified the same day; `ADR-0013` (no placeholder opponent in `src/`)
 > was written and ratified 2026-08-18; **`ADR-0014` (the default lane's CPU budget is overdrawn;
 > `N8-LANE` is a rate limit, not a grant) was written and ratified 2026-08-19 at `ABC-108`, and this
 > line was updated in the SAME COMMIT as the rule below requires; **`ADR-0015` (a substituted module
 > must be a seam supplier) was written and ratified 2026-08-19 at `ABC-043` `G-01`, and this line was
-> again updated in the SAME COMMIT.**
+> again updated in the SAME COMMIT.** **`ADR-0016` (a closed stdout reader ENDS the session at exit
+> `0`; the entry point, not the write site, owns the stdout error arm) was written and ratified
+> 2026-08-20 by Architect/Design at `design-ABC-115-2026-08-20`, and this line was updated in the
+> SAME COMMIT — the count was RE-MEASURED by listing `50-decisions/` (sixteen `ADR-00*` files), not
+> incremented from the sentence above it.**
 > The rest — `10-project-brief`, `20-product`, `40-contributing`, `80-glossary` — are still the
 > shipped empty templates. That is a real gap, not a hidden one; do not read them expecting content
 > and do not treat their silence as a decision. `plans/` carries the delivery state meanwhile.

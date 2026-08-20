@@ -1,8 +1,8 @@
 ---
 id: ABC-115
 title: A piped session dies on `write EPIPE` with a raw Node stack and exits `1` — the code the product reserves for a refused command line
-status: backlog
-column: Backlog
+status: ready-for-dev
+column: Ready for Dev
 size: S
 priority: P1
 epic: EPIC-006
@@ -134,6 +134,39 @@ question; this is decidable from the contract that already exists, so it is deci
 **The cost of ruling it here rather than escalating, stated: an Architect/Design hop may overrule me at
 `In Design`.** That is the ⚠️ in the DoR score below, and `A2` is shaped so an overrule changes one
 literal rather than the ticket.
+
+## Design ruling — `ADR-0016`, 2026-08-20 (Architect/Design, task `design-ABC-115-2026-08-20`)
+
+**DoR item 10's ⚠️ is CLOSED and `## Ruling` above is CONFIRMED, not overruled.** `A2`(i)'s literal
+`0` stands, `A2`(ii) is unaffected, **the ticket is not re-cut, not re-scored (`S`/`P1` is BA/PM's)
+and no criterion is edited.** The authority is
+`memory-bank/50-decisions/ADR-0016-closed-stdout-reader-ends-the-session-at-exit-zero.md`; this is a
+pointer to it and the reasoning is in `.grugops/context/design-ABC-115-2026-08-20/notes/`, not here.
+
+Four things the repair hop is handed, so it chooses no architecture at the bench:
+
+1. **Exit `0`, three codes, no fourth.** `141` is rejected on four grounds, three of them new at the
+   design hop — chiefly that Node ignores `SIGPIPE`, so a truthful `141` needs a signal death, which
+   `A2` forbids, and the untruthful one is a hand-set status claiming a signal that never fired.
+2. **`A8` IS SATISFIED BY ITS FIRST BRANCH: no edit is owed to `AGENTS.md` and none to
+   `src/cli.ts`'s exit-code docblock** — both stay true verbatim under this ruling. Say so in the
+   delivery note; do not open `AGENTS.md` (`ABC-109` is live against it under a byte cap).
+3. **The seam: the entry point owns the stdout error arm** — one `sink.on("error")` at
+   `src/cli.ts:148`, `EPIPE`-only, re-throwing every other code; `frame.ts`, `turn-loop.ts` and
+   `line-input.ts` stay byte-unchanged. **Ending the session: PRIMARY `process.stdin.destroy()`
+   (the delivered end-of-input transition then carries `exitCode 0` through the one existing
+   assignment); FALLBACK `process.exit(0)` only if the primary is measured to fail.** Both measured
+   green at the design hop; ≤ 5 production lines.
+4. **A FIFTH FORBIDDEN SHAPE, MEASURED, that `A4` does not catch:** a bare swallow — a listener that
+   silences `EPIPE` and does nothing else — **passes `A1` and `A2` and lets the session run on
+   invisibly into a dead pipe** (8.02 s vs 3.07 s with a live stdin). `A3` asserts the trigger and
+   `A2` the status; **nothing on this page asserts that the session ENDS.** A row for it is
+   recommended to BA/PM (it would take `N8-SPAWN` to +6, above the derived ceiling, so it is BA/PM's
+   word and not the engineer's) and is **not added here**.
+
+**`XS` re-size trigger NOT fired** — the guard does not collapse to one child. **`A1`'s "1196 bytes"
+is a base for a red watch, not a constant: it is path-length dependent (1282 measured at this hop in
+a longer path) and must be re-measured, never asserted.**
 
 ## Scope
 
