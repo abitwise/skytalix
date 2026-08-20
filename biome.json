@@ -5,6 +5,7 @@
       "src/**/*.ts",
       "spike/**/*.ts",
       "*.json",
+      "vitest.config.ts",
       "!.claude",
       "!.gemini",
       "!.github",
