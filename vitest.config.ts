@@ -65,5 +65,31 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     pool: "threads",
+    /**
+     * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+     * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by
+     * hand. Drop one and it comes back into the lane.
+     *
+     * The rest are this repo's non-source directories. `.claude/worktrees/` is the one that
+     * actually bites: each live agent worktree is a FULL checkout of this project, so the
+     * default glob collected 1191 extra `*.test.ts` files - the whole suite, once per
+     * worktree - on top of the 28 real ones. `coverage/` is vitest's own output, and
+     * `memory-bank/`, `plans/`, `.grugops/`, `.github/`, `.gemini/` are docs and factory
+     * state that may carry illustrative code.
+     */
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.idea/**",
+      "**/.git/**",
+      "**/.cache/**",
+      ".claude/**",
+      ".gemini/**",
+      ".github/**",
+      ".grugops/**",
+      "coverage/**",
+      "memory-bank/**",
+      "plans/**",
+    ],
   },
 });

@@ -1,7 +1,18 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.5.5/schema.json",
   "files": {
-    "includes": ["src/**/*.ts", "spike/**/*.ts", "*.json"]
+    "includes": [
+      "src/**/*.ts",
+      "spike/**/*.ts",
+      "*.json",
+      "!.claude",
+      "!.gemini",
+      "!.github",
+      "!.grugops",
+      "!coverage",
+      "!memory-bank",
+      "!plans"
+    ]
   },
   "formatter": {
     "enabled": true,

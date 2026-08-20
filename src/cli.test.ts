@@ -2049,10 +2049,34 @@ describe("ABC-043 — the live session", () => {
     // the way the other five options are (`humanColour:\s*colour` and so on); the window is the same
     // one this test's cast/adapter rows use, and it THROWS rather than coming back empty.
     expect(entry).toMatch(/const history = newGame\(START_FEN\);/);
+
+    // THE BINDER COUNT (`ABC-113` `A1`): `history` is BOUND EXACTLY ONCE in the executable view of
+    // the entry point. The initializer row above and the shorthand row below pin a name and a
+    // shorthand, and a regex over source text cannot do scope analysis — a shadowing-parameter
+    // rebind (`D3`) or a flat copy bound under the same name (`M9`, `history: decoy,`) hands the
+    // loop a different object with both of those rows still green. It is placed BEFORE them so the
+    // COUNT is the row that speaks first on such a build. Measured at the cut and re-measured on
+    // this branch: delivered → `["history ="]`, 1; `D3` → 2; `M9` → 2.
+    // Counted over `executableCodeOf` and never the raw file (`## Test notes` 1 — the word
+    // `history` in a comment reddens a raw count), and written as a COUNT rather than a
+    // `not.toContain("decoy")` (`## Test notes` 2 — a negative row on a literal passes on every
+    // build that spells its decoy differently).
+    //
+    // `ABC-043` `A1`'S PRE- AND POST-REPAIR INSTRUMENTS ARE INCOMPARABLE, NOT ORDERED: the old
+    // single `/history:\s*newGame\(START_FEN\)/` row was blind to `M10` (a SECOND
+    // `newGame(START_FEN)` in the entry point) and the repair's triple is blind to `D3` (a
+    // shadowing-parameter rebind), so neither dominates the other — and THIS row is what makes the
+    // current instrument stronger than both.
+    expect(
+      entry.match(/\bhistory\s*[:=]/g),
+      "the entry point binds `history` more than once — the loop may not be getting the game it built",
+    ).toHaveLength(1);
+
     expect(
       windowOf(entry, "runTurnLoop(", "sink,"),
       "the `history` option is not the shorthand for the game the entry point built",
     ).toMatch(/\bhistory,/);
+
     expect(entry.match(/\bnewGame\s*\(/g)).toHaveLength(1);
     expect(entry).toMatch(/humanColour:\s*colour/);
     expect(entry).toMatch(/render:\s*makeRenderSeam\(mode,\s*orientation\)/);

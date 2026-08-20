@@ -168,12 +168,26 @@ describe("ABC-044 A2 — a CLAIMED draw and an AUTOMATIC one are distinguishable
   it("NEITHER STRING IS A SUBSTRING OF THE OTHER, which inequality alone does not buy", () => {
     // `## Test notes` 2: `draw by repetition` and `draw by repetition (claimed)` are unequal, pass
     // a `not.toBe` row, and are exactly the wrong build this criterion was written to fail.
+    // RETARGETED TO THE HEADLINE (`ABC-113` `A2`), because over the WHOLE screen these two rows
+    // could not fail. Both screens carry the headline plus the IDENTICAL move list, so one can
+    // contain the other only by being EQUAL to it — which `A1`'s set-of-8 row already buys. The
+    // ticket's own named wrong build `M11b` (`fivefold-repetition` → `"by repetition"`,
+    // `threefold-repetition` → `"by repetition. it was claimed by the player to move under FIDE
+    // 9.2"`) left the whole-screen rows GREEN and turns the headline rows RED.
+    // `renderResultScreen` returns `["", ...headline, "", ...moveList]`, so row 1 IS the headline.
+    //
+    // WHAT THIS BUYS, AND WHAT IT DOES NOT — stated so the next reader does not overclaim it: it
+    // buys NON-VACUITY and the criterion's own words, NOT new coverage. `M11b` also reddens the
+    // sibling `automatic` word row in the test above, and a mutant that these headline rows kill
+    // ALONE is unconstructible while those word rows stand — a substring relation forces the
+    // forbidden word into the other screen. BOTH directions and BOTH pairs are kept: dropping a
+    // direction re-creates the dominated row in a shorter form.
     for (const [claimed, automatic] of PAIRS) {
-      const one = screenFor(claimed, "draw");
-      const other = screenFor(automatic, "draw");
+      const one = screenFor(claimed, "draw").split("\n")[1];
+      const other = screenFor(automatic, "draw").split("\n")[1];
 
-      expect(one, `${claimed} contains ${automatic}`).not.toContain(other);
-      expect(other, `${automatic} contains ${claimed}`).not.toContain(one);
+      expect(one, `${claimed}'s headline contains ${automatic}'s`).not.toContain(other);
+      expect(other, `${automatic}'s headline contains ${claimed}'s`).not.toContain(one);
     }
   });
 });

@@ -1,8 +1,8 @@
 ---
 id: ABC-113
 title: Two instrument residuals in `EPIC-006`'s own test files — one row that a wrong build passes, and two rows that cannot fail
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-006
