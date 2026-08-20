@@ -1,8 +1,8 @@
 ---
 id: ABC-043
 title: The live session — `runTurnLoop` driven for real, and the top-level handler that catches a rethrown parser bug
-status: in-review
-column: In Review
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-006
