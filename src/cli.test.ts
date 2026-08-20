@@ -290,6 +290,15 @@ interface Child {
   readonly stderr: string;
   /** stdout and stderr, unioned — what an absence property is asserted over. */
   readonly union: string;
+  /**
+   * `G-QE115-5` — THE ARGV THE PRODUCT ITSELF RECEIVED, which for a `/bin/sh`-wrapped child is NOT
+   * the argv `spawnSync` was handed. `ABC-066`'s row derives its subject — the refused command
+   * lines — and a command line is refused by the RESOLVER, so this is the field that derivation
+   * has to read. It is a REQUIRED positional on `childOf` and never defaulted: a child whose
+   * product argv were allowed to go unstated would drop silently out of that derivation, which is
+   * the exact blindness this field exists to end.
+   */
+  readonly productArgv: readonly string[];
 }
 
 /**
@@ -321,7 +330,12 @@ interface ChildOptions {
 
 let spawned = 0;
 
-const childOf = (command: string, args: readonly string[], options: ChildOptions = {}): Child => {
+const childOf = (
+  command: string,
+  args: readonly string[],
+  productArgv: readonly string[],
+  options: ChildOptions = {},
+): Child => {
   spawned++;
   const child = spawnSync(
     command,
@@ -355,16 +369,17 @@ const childOf = (command: string, args: readonly string[], options: ChildOptions
     stdout: child.stdout,
     stderr: child.stderr,
     union: `${child.stdout}${child.stderr}`,
+    productArgv,
   };
 };
 
 /** The delivered entry point, run as a child the way a human's shell runs it. */
 const run = (...args: readonly string[]): Child =>
-  childOf(process.execPath, [ENTRY_POINT, ...args]);
+  childOf(process.execPath, [ENTRY_POINT, ...args], args);
 
 /** The same entry point, typed at and — where a criterion needs a constructed fault — hooked. */
 const play = (args: readonly string[], options: ChildOptions): Child =>
-  childOf(process.execPath, [ENTRY_POINT, ...args], options);
+  childOf(process.execPath, [ENTRY_POINT, ...args], args, options);
 
 // ---------------------------------------------------------------------------------------------
 // `ABC-115` — A READER THAT CLOSES EARLY, and why it cannot be an ordinary child of this file.
@@ -402,10 +417,14 @@ const PRODUCT = `${shellWord(process.execPath)} ${shellWord(ENTRY_POINT)}`;
  * already at end of input. `glyph` is `--ascii`, `--unicode` or nothing (the default mode).
  */
 const closedReader = (glyph: string, lines: number): Child =>
-  childOf("/bin/sh", [
-    "-c",
-    `set -o pipefail; ${PRODUCT} ${glyph} </dev/null | head -${lines} >/dev/null; echo "NODE_EXIT=$?"`,
-  ]);
+  childOf(
+    "/bin/sh",
+    [
+      "-c",
+      `set -o pipefail; ${PRODUCT} ${glyph} </dev/null | head -${lines} >/dev/null; echo "NODE_EXIT=$?"`,
+    ],
+    glyph === "" ? [] : [glyph],
+  );
 
 /**
  * `A9` — THE SESSION ENDS. The reader closes after 2 lines and stdin STAYS OPEN behind it, so a
@@ -447,6 +466,7 @@ const heldOpenReaderClosed = (): Child =>
         'echo "NODE_EXIT=$?"; rm -rf "$D"',
       ].join(" "),
     ],
+    ["--ascii"],
     { timeout: A9_BOUND_MS },
   );
 
@@ -472,7 +492,7 @@ const heldOpenReaderClosed = (): Child =>
  * swallowing build alike. The status is read from `NODE_EXIT=` and NEVER from `child.status`.
  */
 const unwritableStdout = (): Child =>
-  childOf("/bin/sh", ["-c", `${PRODUCT} --ascii 1</dev/null; echo "NODE_EXIT=$?"`]);
+  childOf("/bin/sh", ["-c", `${PRODUCT} --ascii 1</dev/null; echo "NODE_EXIT=$?"`], ["--ascii"]);
 
 /** The `NODE_EXIT=<n>` the wrappers above echo. Throws rather than defaulting: see `usageLineOf`. */
 const productStatusOf = (child: Child): number => {
@@ -480,6 +500,19 @@ const productStatusOf = (child: Child): number => {
   if (marked === null) throw new Error(`no NODE_EXIT marker in: ${JSON.stringify(child.stdout)}`);
   return Number(marked[1]);
 };
+
+/**
+ * `G-QE115-5` — THE PRODUCT'S OWN EXIT, WRAPPED OR NOT, for a reader that must not care which. Where
+ * a `/bin/sh` wrapper stands between, `child.status` is the trailing `echo`'s and says nothing about
+ * the product; where none does, `child.status` IS the product's. This picks the right one.
+ *
+ * IT IS NOT A REPLACEMENT FOR `productStatusOf` AND MUST NOT BECOME ONE. A row whose criterion is a
+ * wrapped child's exit code reads `productStatusOf`, which THROWS when the marker is missing — that
+ * throw is the guard against a wrapper that stopped echoing. This one falls back instead, so it is
+ * for readers that span both kinds of child and would otherwise have to read the wrapper.
+ */
+const productExitOf = (child: Child): number | null =>
+  /^NODE_EXIT=/m.test(child.stdout) ? productStatusOf(child) : child.status;
 
 // ---------------------------------------------------------------------------------------------
 // THE SUBSTITUTION RIG (`ABC-043` `A2`/`A5`, ruled and measured by BA/PM at
@@ -610,7 +643,7 @@ const CLOSE_POINTS = {
 
 const CHILDREN = {
   /** `A1` — the real command, and the only one that goes through `npm`. */
-  npmRun: childOf("npm", ["run", "chess"]),
+  npmRun: childOf("npm", ["run", "chess"], []),
   /** `A4` white + `A7`'s unicode half: one child, two criteria. The human moves first — no engine. */
   white: run("--colour", "white", "--unicode"),
   /**
@@ -1759,19 +1792,73 @@ describe("ABC-042 — the shape of what was delivered", () => {
 
 describe("ABC-066 — the usage line is a command the user can actually run", () => {
   it("A1/A2/A3 — every refusal advertises the separator, and all it advertises resolves", () => {
-    // THE REFUSAL CHILDREN, DERIVED FROM THE CAPTURE, NOT LISTED: every child that exited non-zero.
-    // Zero new spawns — `spawned` stays at what this file's `N8-LANE` row pins — and a listed set
-    // would go stale the day a further criterion refuses a command line this row cannot see.
+    // THE REFUSAL CHILDREN, DERIVED FROM THE CAPTURE, NOT LISTED: every child whose COMMAND LINE THE
+    // RESOLVER REFUSES. Zero new spawns — `spawned` stays at what this file's `N8-LANE` row pins —
+    // and a listed set would go stale the day a further criterion refuses a command line this row
+    // cannot see. That promise is kept HERE, by deriving; it was not kept by the exit-code
+    // derivation this replaces, and `G-QE115-5` is the audit that found out why.
     //
-    // `ABC-043` GAVE THE PRODUCT A SECOND NON-ZERO EXIT and the derivation had to narrow with it: a
-    // crashed SESSION also exits non-zero, and it is refused nothing — its command line was accepted
-    // and its game started. The discriminator is the product's own, not a code transcribed here: a
-    // refusal is a non-zero exit that is NOT marked an internal error. Narrowing by the usage line
-    // instead would have made `A1` circular, since `A1` is what asserts that line exists.
+    // THE SENTENCE THAT USED TO STAND HERE IS DELETED BECAUSE IT STOPPED BEING TRUE, and it is
+    // written out rather than quietly dropped (`ABC-114`'s defect is a true-sounding sentence that
+    // is not true). It read: *"a refusal is a non-zero exit that is NOT marked an internal error"*.
+    // `ABC-043` had given the product a second non-zero exit (the crashed session, exit `70`, which
+    // that clause excluded), and the sentence was true of the two shapes that then existed.
+    // `ABC-115` gave it a THIRD on 2026-08-21: a failed non-`EPIPE` stdout write re-thrown out of
+    // the sink's error arm arrives as an UNHANDLED exception — Node's own banner and stack, exit
+    // `1`, no usage line, and NOT marked an internal error, because the re-throw fires on a later
+    // tick than the entry point's `try`. MEASURED at this hop on the delivered build, and this is
+    // the whole reason the clause had to go: `1` is also `USAGE_EXIT_CODE`, so a non-zero exit that
+    // is not an internal error is no longer enough to identify a refused command line.
+    //
+    // THE OLD FILTER WAS GREEN ONLY BECAUSE IT COULD NOT SEE THAT CHILD. It read `child.status` —
+    // the WRAPPER's — and `A10`'s wrapper exits `0` on the trailing `echo` whatever the product did.
+    // That is `unwritableStdout`'s own documented trap ("A ROW THAT FALLS IN IT IS GREEN ON EVERY
+    // BUILD") and this row had fallen into it. MEASURED both ways at `G-QE115-5`: reading the
+    // wrapper, 6 refusal children; reading the product (`productExitOf`), 7 — and the seventh
+    // carries `Node.js v24.12.0` as its last stderr line, which the row then asserts should contain
+    // the separator. THAT RED WOULD HAVE BEEN THE INSTRUMENT'S, NOT THE PRODUCT'S: it would be this
+    // row demanding a usage line from a CRASH. `ABC-066` `A1` asks it of refusals only.
+    //
+    // SO THE SUBJECT IS SELECTED IN THE CRITERION'S OWN TERMS AND NOT OFF AN EXIT CODE AT ALL. A
+    // refused command line is one `resolveOptions` refuses; the exit code is then something this row
+    // ASSERTS about that set, below, rather than something it identifies the set by. `A10`'s child
+    // is excluded because its command line (`--ascii`) is ACCEPTED and its session started — not
+    // because a wrapper hid it.
+    //
+    // NOT CIRCULAR, IN EITHER DIRECTION, and both were measured. Narrowing by the usage line would
+    // have made `A1` circular — `A1` is what asserts that line exists — and that is still refused.
+    // `resolveOptions` is not that: a build that accepted everything empties this set and reds the
+    // count; a build that refused everything fills it with all 24 and reds it too. `A2` reads the
+    // same function in the OPPOSITE direction (advertised argvs must resolve `ok`), over different
+    // inputs, so neither row can be satisfied by the other's mutation.
     const refused = Object.values(CHILDREN).filter(
-      (child) => child.status !== 0 && !/internal error/i.test(child.union),
+      (child) => !resolveOptions([...child.productArgv]).ok,
     );
     expect(refused, "the captured refusal children").toHaveLength(6);
+
+    // WHAT THE DELETED CLAUSE USED TO SAY, NOW ASSERTED RATHER THAN ASSUMED — and it is strictly
+    // more than the filter said, because the filter only ever SELECTED on these. Read through
+    // `productExitOf`, so a wrapper can never again stand between this row and the product.
+    for (const child of refused) {
+      const argv = JSON.stringify(child.productArgv);
+      expect(productExitOf(child), `refused ${argv} exit status`).not.toBe(0);
+      expect(/internal error/i.test(child.union), `refused ${argv} marked internal error`).toBe(
+        false,
+      );
+    }
+
+    // AND THE CONVERSE, WHICH IS WHAT ENDS THE BLINDNESS RATHER THAN MERELY MOVING IT: no child
+    // OUTSIDE the derived set advertises the separator. A future criterion that refuses a command
+    // line this derivation somehow cannot see would print the usage line from outside the set and
+    // red HERE, so the row can no longer be green by looking at too few children. It also reds a
+    // build that started printing usage at a crash or on a session that ran.
+    const advertisingOutside = Object.values(CHILDREN).filter(
+      (child) => !refused.includes(child) && child.union.includes(SEPARATOR_FORM),
+    );
+    expect(
+      advertisingOutside.map((child) => child.productArgv),
+      "children advertising the separator from outside the refusal set",
+    ).toEqual([]);
 
     // `A1` — the separator reaches the user, on all six, on the channel he reads it on.
     const usageLines = refused.map((child) => usageLineOf(child.stderr));
