@@ -146,6 +146,19 @@ async function main(): Promise<void> {
   // Read ONCE and passed twice: the loop's `FrameSink` and the prompt's `PromptOutput` are two
   // shapes over one handle, and `A9`'s "acquired once, in the entry point" is about the acquisition.
   const sink = process.stdout;
+  // `ABC-115` / `ADR-0016` clauses 3-4. WHOEVER ACQUIRES A STREAM OWNS ITS ERROR POLICY, so the arm
+  // is installed HERE — before the handle is handed on — and never at any of the five write sites.
+  // `EPIPE` means the reader went away: not this product's failure, so nothing is written and the
+  // session ENDS (`process.stdin.destroy()` drives the delivered end-of-input transition, whose
+  // `LoopOutcome.exitCode` is 0 and flows through the ONE existing assignment below — no second
+  // exit-status site). A BARE SWALLOW IS THE MEASURED WRONG FIX: it passes the silence and the
+  // status and leaves the game running into a dead pipe, which is what `A9` exists to red.
+  // Every other code is RE-THROWN: an unmeasured stdout failure (`ENOSPC`, `EIO`) behaves exactly
+  // as it does today rather than being absorbed by a listener installed for something else.
+  sink.on("error", (error) => {
+    if ((error as NodeJS.ErrnoException).code !== "EPIPE") throw error;
+    process.stdin.destroy();
+  });
   // HELD RATHER THAN PASSED ANONYMOUSLY (`ABC-044`). The result screen is a pure function of the
   // loop's `LoopOutcome` AND of the game that was played, so the entry point is the one place that
   // holds both once the loop has returned. It is still the merged factory's own value and it is

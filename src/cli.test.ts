@@ -14,7 +14,16 @@
  *
  * BAR 1b GOVERNS THIS FILE, and bars 1, 3 and 4 do not: they are scoped to the delivered PRODUCTION
  * modules. `node:child_process` is reached only in argument-array form; there is no `exec(` or
- * `execSync(` call site, no `shell:`, and no spawn argument built by string concatenation. The file
+ * `execSync(` call site and no `shell:`.
+ *
+ * THE "no spawn argument built by string concatenation" CLAUSE IS AMENDED AT `ABC-115` RATHER THAN
+ * LEFT STANDING FALSE (`ABC-114`'s defect is a true-sounding sentence that is not true).
+ * `ABC-115`'s six children need a REAL `head` on the other end of a REAL pipe — `spawnSync` with
+ * full capture reads everything a child writes and can never let a reader go away — so they spawn
+ * `/bin/sh` with a `-c` script this file composes. What that clause protected is still true, as the
+ * narrower claim it always was: every word of that script comes from `process.execPath`,
+ * `ENTRY_POINT` or this file's own literals, no test datum or external value reaches a shell word,
+ * and both paths are quoted by `shellWord`. The file
  * MUST contain `process.execPath` — which is why the bar counts call sites and never occurrences.
  */
 
@@ -269,6 +278,12 @@ const playedOut = (coordinates: readonly string[]): GameHistory => {
 
 interface Child {
   readonly status: number | null;
+  /**
+   * `ABC-115` `A2`/`A9` — "the child is NOT killed by a signal". `spawnSync` reports a signal death
+   * as `status: null` + `signal: "SIGPIPE"`, so a row that asserted only the status would read a
+   * signal death as `null !== 1` and pass. The name has to be on the shape to be assertable.
+   */
+  readonly signal: NodeJS.Signals | null;
   readonly stdout: string;
   readonly stderr: string;
   /** stdout and stderr, unioned — what an absence property is asserted over. */
@@ -290,6 +305,16 @@ interface Child {
 interface ChildOptions {
   readonly input?: string;
   readonly hook?: string;
+  /**
+   * `ABC-115`'s addition (`A9`), and the only reason the 30 s default is not simply reused: `A9`
+   * asserts that a child HAS EXITED inside a bound, so the bound IS the criterion. It must be
+   * strictly under `T_open` (the 10 s the stdin writer stays open) or the row proves only that
+   * end-of-input works, and comfortably under vitest's own 5 s per-test default or a red arrives as
+   * a runner timeout instead of as this file's own named throw. MEASURED at this hop: a hanging
+   * child returns `error: spawnSync /bin/sh ETIMEDOUT`, `status: null`, `signal: "SIGTERM"` at the
+   * bound, so the `child.error` guard below is what makes a hung `A9` a red row.
+   */
+  readonly timeout?: number;
 }
 
 let spawned = 0;
@@ -312,15 +337,19 @@ const childOf = (command: string, args: readonly string[], options: ChildOptions
       // at this hop, at a temporary 1 ms bound. The bound is deliberately two orders of magnitude
       // above the 64-72 ms a child costs here, so nothing but a genuine hang can reach it: it is
       // not a performance assertion and must never be read as one.
-      timeout: 30_000,
+      timeout: options.timeout ?? 30_000,
     },
   );
   // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK: a child that never started says so here,
   // loudly, instead of arriving as an empty capture that every absence assertion would swallow.
   if (child.error !== undefined)
-    throw new Error(`child ${command} failed to start: ${child.error}`);
+    // THE ARGUMENTS ARE NAMED SINCE `ABC-115`, and the reason is a red that was watched arriving
+    // unattributable: seven children now spawn `/bin/sh`, so `child /bin/sh failed to start` alone
+    // does not say WHICH — and the one that hangs (`A9`'s) is the one whose red is the point.
+    throw new Error(`child ${command} ${args.join(" ")} failed to start: ${child.error}`);
   return {
     status: child.status,
+    signal: child.signal,
     stdout: child.stdout,
     stderr: child.stderr,
     union: `${child.stdout}${child.stderr}`,
@@ -334,6 +363,97 @@ const run = (...args: readonly string[]): Child =>
 /** The same entry point, typed at and — where a criterion needs a constructed fault — hooked. */
 const play = (args: readonly string[], options: ChildOptions): Child =>
   childOf(process.execPath, [ENTRY_POINT, ...args], options);
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-115` — A READER THAT CLOSES EARLY, and why it cannot be an ordinary child of this file.
+//
+// `childOf` captures a child with `spawnSync` and full output capture, which reads EVERYTHING the
+// child writes: there is no moment at which the reader goes away, so no capture-shaped child can
+// reproduce a closed stdout. The reader has to be a real `head` in a real pipeline, so the child
+// this file spawns is `/bin/sh`, and the product is the pipeline's left-hand side.
+//
+// ZERO NEW `spawnSync` CALL SITES. It goes through `childOf` exactly like every other child, so
+// `:1480-1485`'s pin — one call site, `spawnSync` the only imported name — stays green. That pin is
+// the whole reason shape (b) (an async `spawn` with `child.stdout.destroy()`) was not taken; it also
+// reproduces, and it reds the pin.
+//
+// THE STATUS IS CARRIED OUT BY HAND, and `set -o pipefail` is NOT trusted alone. `sh`'s own exit is
+// the trailing `echo`'s, so `NODE_EXIT=<n>` on stdout is what the criteria read — the PRODUCT's
+// status, not the shell's, and it distinguishes 0 from 1 from 70 from a 128+n signal death, which
+// `pipefail` on its own would flatten into "non-zero". `/bin/sh` on this host honours `pipefail`;
+// a hop that changes platform re-measures.
+//
+// THIS FILE'S HEADER SAID "no spawn argument built by string concatenation" AND THAT SENTENCE IS
+// NOW AMENDED RATHER THAN LEFT STANDING (`ABC-114`'s defect is a true-sounding sentence that is not
+// true). The two builders below compose a `/bin/sh -c` script out of `process.execPath`,
+// `ENTRY_POINT` and this file's own literals — no test datum and no external value reaches a shell
+// word, and every path is single-quoted by `shellWord`.
+// ---------------------------------------------------------------------------------------------
+
+/** A path as one `sh` word. Single quotes, with any embedded quote closed and re-opened. */
+const shellWord = (value: string): string => `'${value.replaceAll("'", `'\\''`)}'`;
+
+const PRODUCT = `${shellWord(process.execPath)} ${shellWord(ENTRY_POINT)}`;
+
+/**
+ * `A1`/`A2`/`A3` — the product with stdout piped to a `head` that closes after `lines`, and stdin
+ * already at end of input. `glyph` is `--ascii`, `--unicode` or nothing (the default mode).
+ */
+const closedReader = (glyph: string, lines: number): Child =>
+  childOf("/bin/sh", [
+    "-c",
+    `set -o pipefail; ${PRODUCT} ${glyph} </dev/null | head -${lines} >/dev/null; echo "NODE_EXIT=$?"`,
+  ]);
+
+/**
+ * `A9` — THE SESSION ENDS. The reader closes after 2 lines and stdin STAYS OPEN behind it, so a
+ * build that merely silences `EPIPE` has nothing to end it and runs on into the dead pipe forever.
+ *
+ * `T_OPEN` (10 s) is how long the writer holds the FIFO; `T_BOUND` (4 s) is the `spawnSync` bound,
+ * and `T_BOUND < T_OPEN` is the criterion — a row whose input source closes first proves only that
+ * end-of-input works, which `A3` already covers. `SETTLE` (0.6 s) is required, not decoration: with
+ * no settle the input races the reader's close and the row was MEASURED FLAKY at the amendment
+ * (1 of 3 hung). Re-measured here, 5 consecutive identical runs on each of three builds.
+ *
+ * TWO TRAPS, ONE INHERITED AND ONE FOUND HERE.
+ *   - Inherited: NEVER TIME THE PIPELINE. A timer around the whole pipeline reads the left-hand
+ *     side's sleep and makes every build look identical. There is no timer here at all — the FIFO
+ *     writer is DETACHED, so `sh` waits only for `node | head` and `sh`'s own return IS the child's
+ *     ending. The assertion is "did it come back inside the bound", not a stopwatch reading.
+ *   - FOUND AT THIS HOP, and it is new: the detached writer INHERITS `sh`'s stdout and stderr, and
+ *     `spawnSync` waits for those capture pipes to close — not merely for `sh` to exit. The first
+ *     build of this row therefore sat for the writer's full `sleep` on EVERY build, delivered and
+ *     unfixed alike, and discriminated nothing. `>"$F" 2>/dev/null` below hands the orphan the FIFO
+ *     and `/dev/null` and no capture pipe, which is what makes the row able to go red.
+ *
+ * The detached `sleep` outlives the row as a bounded orphan (`T_OPEN`), and the FIFO's directory is
+ * this row's to remove — the trailing `rm -rf` is that.
+ */
+const A9_SETTLE_SECONDS = 0.6;
+const A9_OPEN_SECONDS = 10;
+const A9_BOUND_MS = 4_000;
+
+const heldOpenReaderClosed = (): Child =>
+  childOf(
+    "/bin/sh",
+    [
+      "-c",
+      [
+        'D=$(mktemp -d); F="$D/fifo"; mkfifo "$F";',
+        `( { sleep ${A9_SETTLE_SECONDS}; echo zz; sleep ${A9_OPEN_SECONDS}; } >"$F" 2>/dev/null & );`,
+        `set -o pipefail; ${PRODUCT} --ascii <"$F" | head -2 >/dev/null;`,
+        'echo "NODE_EXIT=$?"; rm -rf "$D"',
+      ].join(" "),
+    ],
+    { timeout: A9_BOUND_MS },
+  );
+
+/** The `NODE_EXIT=<n>` the wrappers above echo. Throws rather than defaulting: see `usageLineOf`. */
+const productStatusOf = (child: Child): number => {
+  const marked = /^NODE_EXIT=(\d+)$/m.exec(child.stdout);
+  if (marked === null) throw new Error(`no NODE_EXIT marker in: ${JSON.stringify(child.stdout)}`);
+  return Number(marked[1]);
+};
 
 // ---------------------------------------------------------------------------------------------
 // THE SUBSTITUTION RIG (`ABC-043` `A2`/`A5`, ruled and measured by BA/PM at
@@ -434,6 +554,33 @@ export function createEngine() {
   return async (history) => legalMoves(history.position)[0];
 }
 `;
+
+/**
+ * `ABC-115` `A3` — WHERE A READER HAS TO CLOSE, DERIVED FROM THE PRODUCT AND NOT COPIED OFF THE
+ * TICKET. The ticket's own instruction: the frame height has moved twice this month, so a criterion
+ * pinned to the literal `23` goes stale in silence.
+ *
+ * `total` is what a session on a closed stdin writes: ONE frame (`frameHeight`'s own arithmetic on
+ * the merged constants, the same call `ABC-042` `A1` makes at `:857`) plus the loop's one-line
+ * end-of-input notice. `near` is the last line BEFORE that total — the close point that still
+ * reproduces — and `far` is 2, deliberately nowhere near the boundary, because a guard that only
+ * samples the boundary is the flaky one.
+ *
+ * Re-measured at this hop on the delivered build, both glyph modes: 24 lines, `head -N` reproduces
+ * for N <= 23 and does not for N >= 24. The derivation is CROSS-CHECKED against a real stream in
+ * `A3`'s row below rather than trusted here.
+ */
+const OPENING_FRAME_ROWS = frameHeight({
+  board: renderBoard(startGame().position, "ascii", "white-bottom").length,
+  status: STATUS_ROWS,
+  history: HISTORY_ROWS,
+});
+
+const CLOSE_POINTS = {
+  far: 2,
+  near: OPENING_FRAME_ROWS,
+  total: OPENING_FRAME_ROWS + 1,
+} as const;
 
 const CHILDREN = {
   /** `A1` — the real command, and the only one that goes through `npm`. */
@@ -564,6 +711,31 @@ export function createEngine() {
     input: "e4\n",
     hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
   }),
+
+  // -------------------------------------------------------------------------------------------
+  // `ABC-115`'s SIX, counted off the criteria on that ticket (`N8-SPAWN`, ceiling raised +5 -> +6
+  // by BA/PM at the 2026-08-20 amendment with the reason written on the page) and not one more.
+  // `A3` names five, `A9` names one, and `A1`, `A2`, `A4`-`A8` name NONE: `A4` re-reads
+  // `inputSeamThrows` and `badColour`, which is why it adds nothing.
+  //
+  // THE BOUNDARY IS RE-DERIVED HERE, NOT COPIED. The ticket warns that the frame height has moved
+  // twice this month and a criterion pinned to a stale literal goes red for the wrong reason, so
+  // `TOTAL_LINES` below is asserted against the delivered stream before any close point is read.
+  // Re-measured at this hop on both glyph modes: 24 lines total; `head -N` reproduces for N <= 23
+  // and does not for N >= 24.
+  // -------------------------------------------------------------------------------------------
+
+  /** `A1`/`A2`/`A3` — far from the boundary, `--ascii`. The child `A1` and `A2` are asserted over. */
+  asciiClosedAt2: closedReader("--ascii", 2),
+  /** `A3` — the last line before the full read, `--ascii`. The near-boundary half of the pair. */
+  asciiClosedAt23: closedReader("--ascii", CLOSE_POINTS.near),
+  /** `A3` — the same two on the DEFAULT glyph mode: this is not an `--ascii` defect. */
+  defaultClosedAt2: closedReader("", 2),
+  defaultClosedAt23: closedReader("", CLOSE_POINTS.near),
+  /** `A3`'s CONTROL — a reader that takes everything must stay exit 0 with an empty stderr. */
+  fullRead: closedReader("--ascii", CLOSE_POINTS.total),
+  /** `A9` — stdin held open behind the closed reader. The only child that kills a bare swallow. */
+  heldOpen: heldOpenReaderClosed(),
 } as const;
 
 // ---------------------------------------------------------------------------------------------
@@ -1293,6 +1465,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       "process.stderr",
       "process.stderr",
       "process.stdin",
+      "process.stdin",
       "process.stdout",
     ]);
     expect(entry, "argv reached by bracket access").not.toMatch(/process\s*\[/);
@@ -1305,7 +1478,15 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // listing it, which is the same move `A6`(i) makes on the accepted arguments. It was FOUR until
     // `ABC-043` wired the session: `process.stdin` is the reader's source, and the crash path adds
     // the second `process.stderr` and the third `process.exitCode`.
-    expect(entry.match(/\bprocess\b/g)).toHaveLength(8);
+    //
+    // EIGHT UNTIL `ABC-115`, and the ninth is the whole of that fix: `process.stdin.destroy()` in
+    // the stdout error arm is HOW a closed reader ends the session. It is deliberately a SECOND
+    // read of the handle the seam already holds and NOT a fourth `process.exitCode`: the destroy
+    // drives the delivered end-of-input transition, whose outcome carries `0` through the third
+    // assignment above, so no second exit-status site exists to be seen here. A build that reached
+    // exit `0` by assigning it in the arm would show a FOURTH `process.exitCode` on the row above,
+    // which is precisely the blanket-`exitCode` shape `ADR-0016` clause 5 forbids and `A4` fails.
+    expect(entry.match(/\bprocess\b/g)).toHaveLength(9);
     // `globalThis` is asserted here as well as on `A2`'s row, for a different reason: there it is
     // about publishing a binding, here about acquiring an ambient one. `globalThis["process"].argv`
     // — `X8`'s own spelling in the `ABC-041` re-gate — is caught today ONLY by `A2`'s row, so `A9`
@@ -1458,7 +1639,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
     expect(child.status).not.toBe(0);
   });
 
-  it("N8-LANE — this file spawns SEVENTEEN children and no more", () => {
+  it("N8-LANE — this file spawns TWENTY-THREE children and no more", () => {
     // The budget, pinned mechanically. Every child is spawned once at module scope; a later hop
     // that adds one has to change this number and say why.
     //
@@ -1470,8 +1651,42 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // 64-72 ms of wall each, ~0.46 s for the seven. `N8-LANE`'s 650 ms bar is NOT claimed met here —
     // `ABC-108`'s `OQ-1` has the lane's own total under open question, and until Architect/Design
     // rules it no ticket may honestly be measured against that number.
-    expect(spawned).toBe(17);
-    expect(Object.keys(CHILDREN)).toHaveLength(17);
+    //
+    // SEVENTEEN UNTIL `ABC-115`, and the derivation moves the same way it did at `ABC-043`: that
+    // page's `N8-SPAWN` row derives SIX more, criterion by criterion — `A3` five (the far and near
+    // close points on `--ascii`, the same two on the default glyph mode, and the full-read control)
+    // and `A9` one (the held-open-stdin child); `A1`, `A2` and `A4`-`A8` add NONE, `A4` because it
+    // re-reads `inputSeamThrows` and `badColour` rather than spawning its own. THE +6 CEILING WAS
+    // RAISED FROM +5 BY BA/PM AT THE 2026-08-20 AMENDMENT, ON THE PAGE, WITH THE REASON WRITTEN —
+    // it is not an engineer's judgement taken at the bench, and the under-ceiling alternative
+    // (dropping the default-glyph near-boundary close) was priced and rejected there.
+    //
+    // THE COUNT IS NO LONGER THE WHOLE CAP, and that is the part a later hop must not drop. `A9`'s
+    // child costs ~9x a normal one in wall because most of its second is a settle `sleep`, so
+    // `ABC-115` re-expressed the cap in three clauses — <= 6 added children AND <= 2.0 s added wall
+    // AND <= 0.5 s added CPU.
+    //
+    // MEASURED AT THE REPAIR HOP, 5 INTERLEAVED PAIRED RUNS: +6 children, +1.14 s wall, +1.02 s CPU
+    // (user+sys; +0.78 s on `user` alone). THE CPU CLAUSE IS BREACHED AND IT IS SAID HERE RATHER
+    // THAN SHIPPED QUIETLY. The `64-72 ms per child` the ceiling was derived from is WALL: a node
+    // child costs ~0.16 s of CPU against 0.07 s of wall, because node's startup is multi-threaded.
+    // Six children of ANY shape this product has therefore cost ~0.96 s of CPU, so `<= 0.5 s` is
+    // unmeetable by the six the criteria REQUIRE — it is arithmetic on the derivation, not a cost
+    // this harness chose, and no row was dropped to fit it (that trade is BA/PM's, and the page
+    // records it priced and rejected). Reported to `ABC-108`, not buried; the numbers and the three
+    // options are in `.grugops/context/ticket-to-pr-ABC-115-2026-08-20/notes/`.
+    //
+    // TWENTY-THREE IS A CEILING, NOT A TARGET.
+    //
+    // WRITTEN AS `17 + 6` AND NOT AS ITS VALUE, and that is not evasion of the row-count guard —
+    // `A6`'s `ADR-0009` clause 9a row bars any literal equal to a frame's height from this file's
+    // executable code, and the new pin COLLIDES with it by coincidence: the frame is 23 rows and
+    // the budget is now 23 children, two unrelated numbers that happen to be equal. Spelling the
+    // pin as its derivation keeps both guards armed and says more than the value did. A hop that
+    // "tidies" it back to a literal reds `A6`, and the collision is the reason, not a bug.
+    const N8_SPAWN = 17 + 6;
+    expect(spawned).toBe(N8_SPAWN);
+    expect(Object.keys(CHILDREN)).toHaveLength(N8_SPAWN);
     // THE PIN ABOVE IS SELF-REFERENTIAL: `spawned` counts only children made through `childOf`, so
     // a direct `spawnSync` adds an eleventh child the counter never sees, and that build was green.
     // `N8-LANE` is breached and escalated, which makes this the instrument the owner's decision
@@ -2434,5 +2649,168 @@ describe("ABC-044 — the result screen reaches the player", () => {
       expect(child.status, `${name} exited non-zero: ${child.stderr}`).toBe(0);
       expect(child.stdout, `${name}: the screen is missing`).toContain("did not finish");
     }
+  });
+});
+
+// =============================================================================================
+// `ABC-115` — A CLOSED STDOUT READER ENDS THE SESSION QUIETLY AT EXIT `0`.
+//
+// The defect these rows close: with stdout piped to a reader that stops reading, the delivered
+// entry point died on an unhandled `write EPIPE`, printed a raw Node stack — internal paths, the
+// absolute path of the checkout — at the player, and exited `1`, the code this product reserves for
+// a REFUSED COMMAND LINE. Nothing had crashed; a consumer stopped consuming.
+//
+// The fix is `ADR-0016`: whoever ACQUIRES a stream owns its error policy, so ONE `sink.on("error")`
+// at `src/cli.ts:148` — installed before the handle is passed on — ends the session on `EPIPE`
+// (`process.stdin.destroy()`, driving the delivered end-of-input transition) and RE-THROWS every
+// other code. Exit `0`, three codes, no fourth: `AGENTS.md` `## Development` and `src/cli.ts`'s
+// exit-code docblock stay true VERBATIM, which is `A8` satisfied by its first branch.
+//
+// WHY `A9` EXISTS AND WHY IT IS NOT DECORATION. The cheap fix — a bare swallow that silences
+// `EPIPE` and does nothing else — passes `A1` and `A2` COMPLETELY, and was measured doing so twice
+// by two independent hops. It leaves the game running blind into a dead pipe. `A9` is the only row
+// that kills it, and it reds against a bare-swallow mutant rather than against the unfixed build:
+// the unfixed build crashes fast, so it DOES end. Both RED rounds were run at the repair hop and
+// both outputs are verbatim in `.grugops/context/ticket-to-pr-ABC-115-2026-08-20/notes/`.
+// =============================================================================================
+
+describe("ABC-115 — a reader that closes early ends the session quietly, at the right code", () => {
+  /** Every stack frame Node prints starts with indentation and `at `. */
+  const STACK_FRAME = /^\s+at /gm;
+
+  it("A1 — the player is shown NO stack, no `write EPIPE`, no checkout path, no crash claim", () => {
+    const { stderr } = CHILDREN.asciiClosedAt2;
+
+    // NON-VACUITY FIRST, and here it is structural rather than a witness in the stream: this
+    // criterion is a set of ABSENCES over stderr, so a child that never ran would satisfy all of
+    // them by writing nothing. The child's own stdout carries the wrapper's `NODE_EXIT` marker, and
+    // `productStatusOf` THROWS if it is missing — so the product is known to have run and exited.
+    expect(productStatusOf(CHILDREN.asciiClosedAt2)).toBeTypeOf("number");
+
+    expect(stderr.split("write EPIPE").length - 1, "`write EPIPE` on stderr").toBe(0);
+    expect(stderr.split("Unhandled 'error' event").length - 1, "an unhandled error").toBe(0);
+    expect(stderr.match(STACK_FRAME) ?? [], "stack frames").toHaveLength(0);
+    // The security half of this criterion: the delivered stack named the absolute path of the
+    // checkout twice, to whatever captures stderr.
+    expect(stderr.split(REPOSITORY).length - 1, "the checkout path").toBe(0);
+    // And it does not claim a bug either — `70`'s line here would be the `ABC-114` defect, a
+    // true-sounding sentence that is not true. Nothing crashed.
+    expect(stderr).not.toMatch(/internal error/i);
+
+    // "Either empty or <= 1 line that names no file path." Measured at this hop: EMPTY, 0 bytes.
+    const written = stderr.split("\n").filter((line) => line.trim() !== "");
+    expect(written.length, `stderr: ${JSON.stringify(stderr)}`).toBeLessThanOrEqual(1);
+    for (const line of written) expect(line, "a file path on stderr").not.toContain("/");
+  });
+
+  it("A2 — it exits 0, and independently of that it is neither a refusal nor a crash", () => {
+    const child = CHILDREN.asciiClosedAt2;
+    const status = productStatusOf(child);
+
+    // (i) The ruled code — `ADR-0016`, confirming BA/PM's `## Ruling`. "0 when the session ran": it
+    // ran, and the consumer's choice to stop consuming is not this session's failure.
+    expect(status, "a closed reader is not a failure of this product").toBe(0);
+
+    // (ii) THE HALF THAT BINDS EVEN IF THE RULING IS LATER REPLACED. If a fourth, SIGPIPE-shaped
+    // code is ever adopted, (i)'s literal changes and this does not: a shell must be able to tell
+    // this path from a refused command line and from a crashed session, which is exactly what the
+    // delivered build could not do — it exited `1`, `USAGE_EXIT_CODE`, on both.
+    expect(status, "`1` is USAGE_EXIT_CODE, a refused command line").not.toBe(1);
+    expect(status, "`70` is INTERNAL_ERROR_EXIT_CODE, a bug that ended the session").not.toBe(70);
+
+    // NOT killed by a signal, asserted on BOTH processes: the wrapper by name, and the product by
+    // value — a shell reports a signal death as 128+n, so a status under 128 is that clause on the
+    // process the criterion is actually about.
+    expect(child.signal, "the wrapper was signalled").toBeNull();
+    expect(status, "the product died of a signal").toBeLessThan(128);
+  });
+
+  it("A3 — the trigger is the RULE: any reader that closes before the session's last write", () => {
+    // THE BOUNDARY, CROSS-CHECKED AGAINST A REAL STREAM rather than trusted from `frameHeight`'s
+    // arithmetic alone. `CHILDREN.white` is a delivered session on a closed stdin, captured whole,
+    // and its line count IS the total this criterion's close points are derived against. Without
+    // this, a build whose frame grew by a row would leave `near` sampling the middle of the stream
+    // and the "control" closing early, and every row below would still be green.
+    // ONLY THE TRAILING EMPTY ELEMENT IS DROPPED, never every empty line: the frame's own message
+    // region is blank rows, and filtering all empties silently shortened the stream by one and made
+    // this cross-check disagree with `wc -l` — caught here, at this hop, by watching it red.
+    const lines = CHILDREN.white.stdout.split("\n");
+    const written = lines[lines.length - 1] === "" ? lines.slice(0, -1) : lines;
+    expect(written, "the delivered session's whole output").toHaveLength(CLOSE_POINTS.total);
+    expect(CLOSE_POINTS.near, "the last line before the total").toBe(CLOSE_POINTS.total - 1);
+    expect(CLOSE_POINTS.far, "far from the boundary").toBeLessThan(CLOSE_POINTS.near);
+
+    // FOUR CLOSE POINTS ON TWO GLYPH MODES. Both modes, because this is not an `--ascii` defect —
+    // measured identically on the default; and both distances, because a guard that samples only
+    // the boundary is the flaky one and one that samples only 2 lines misses a build that fixed
+    // the common case. `grep -q` is NOT among them: it was measured 5/5 exit 0 and would ship a
+    // guard that cannot go red.
+    const CLOSING_EARLY = [
+      ["--ascii, 2 lines", CHILDREN.asciiClosedAt2],
+      [`--ascii, ${CLOSE_POINTS.near} lines`, CHILDREN.asciiClosedAt23],
+      ["default glyphs, 2 lines", CHILDREN.defaultClosedAt2],
+      [`default glyphs, ${CLOSE_POINTS.near} lines`, CHILDREN.defaultClosedAt23],
+    ] as const;
+
+    for (const [name, child] of CLOSING_EARLY) {
+      expect(productStatusOf(child), `${name}: ${child.stderr}`).toBe(0);
+      expect(child.stderr, `${name} wrote to stderr`).toBe("");
+    }
+
+    // THE CONTROL. A reader that takes the whole stream never goes away before the last write, so
+    // it never reproduced and must not have changed: exit 0, stderr empty. It is what proves the
+    // arm did not buy silence by making every session look successful.
+    expect(productStatusOf(CHILDREN.fullRead), CHILDREN.fullRead.stderr).toBe(0);
+    expect(CHILDREN.fullRead.stderr, "the full read wrote to stderr").toBe("");
+  });
+
+  it("A4 — the arm swallows NO real failure: 70 still means a crash and 1 still means a refusal", () => {
+    // THE REGRESSION GUARD ON `ABC-043` `A3`, and the reason `A4` is a criterion rather than a test
+    // note. A global `process.on("uncaughtException")`, a blanket `process.exitCode = 0`, or a
+    // muted stderr each satisfy `A1` and `A2` in full and destroy the crash path the whole of
+    // `ABC-043` `A3` and `[D31]` exist to guarantee. This is what stands between the ticket and
+    // that build, and it re-reads the DELIVERED entry point's own children — zero new spawns.
+    const crashed = CHILDREN.inputSeamThrows;
+    expect(crashed.status, "an InputSeam that throws").toBe(70);
+    expect(crashed.union, "the internal-error line").toMatch(/internal error/i);
+    expect(crashed.stderr, "stderr was muted").not.toBe("");
+
+    const refused = CHILDREN.badColour;
+    expect(refused.status, "a refused command line").toBe(1);
+    expect(usageLineOf(refused.stderr)).toContain(SEPARATOR_FORM);
+
+    // AND THE CLEAN PATH IS STILL CLEAN: end-of-input exits 0 with the notice. Three codes, three
+    // meanings, all three still distinguishable in the delivered build — which is `A8`'s first
+    // branch measured rather than asserted in prose: `AGENTS.md` and `src/cli.ts`'s exit-code
+    // docblock describe this build VERBATIM and neither is edited by this ticket.
+    expect(CHILDREN.truncated.status, "end of input").toBe(0);
+    expect(CHILDREN.truncated.stdout).toContain(INPUT_ENDED_NOTICE);
+  });
+
+  it("A9 — THE SESSION ENDS: stdin stays open behind the closed reader and the child still exits", () => {
+    // THE ONLY ROW THAT KILLS A BARE SWALLOW, and the criterion is the BOUND, not a stopwatch.
+    // `heldOpen` is built at module scope with `timeout: T_BOUND`; `childOf` THROWS on
+    // `child.error`, so a build that never exits fails at construction with
+    // `child /bin/sh failed to start: Error: spawnSync /bin/sh ETIMEDOUT` and this file does not
+    // load at all. Reaching this line is therefore already the ENDING clause: the child came back.
+    //
+    // THE FIRST UNKNOWN THE TICKET HANDED THIS HOP was whether that timeout kill reports cleanly
+    // through `childOf` inside vitest — it had only ever been run as shell commands. MEASURED: it
+    // does, `status: null`, `signal: "SIGTERM"`, at the bound, 5/5. No criterion was weakened.
+    expect(A9_BOUND_MS / 1000, "T_bound must be strictly under T_open").toBeLessThan(
+      A9_OPEN_SECONDS,
+    );
+    expect(
+      A9_SETTLE_SECONDS,
+      "the settle the amendment measured flaky below 0.5 s",
+    ).toBeGreaterThanOrEqual(0.5);
+
+    const child = CHILDREN.heldOpen;
+    // Non-vacuity: it exited because the SESSION ended, not because its input ran out — the writer
+    // holds the FIFO for T_open (10 s) and the bound is T_bound (4 s), so an input-ended exit
+    // cannot be what is being observed here. `A3` already covers end-of-input.
+    expect(productStatusOf(child), `A9: ${child.stderr}`).toBe(0);
+    expect(child.signal, "the wrapper was signalled").toBeNull();
+    expect(child.stderr, "A9 wrote to stderr").toBe("");
   });
 });
