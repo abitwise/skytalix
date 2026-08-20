@@ -8,9 +8,11 @@ import { defineConfig } from "vitest/config";
  * 2026-08-11 by Olger Oeselg). Created 2026-08-13 by Architect/Design at `ABC-026`
  * (`A4` adoption + `A5` placement). There was no `vitest.config.*` in this project before.
  *
- * NOTE FOR THE NEXT ENGINEER: this file is outside `tsconfig.json`'s `include` and outside
- * `biome.json`'s `files.includes`, so NEITHER `npm run typecheck` NOR `npm run lint` reads it.
- * A mistake here is caught only by `npm test` actually running. Verified 2026-08-13.
+ * NOTE FOR THE NEXT ENGINEER: this file IS read by both static tools as of `ABC-050`
+ * (2026-08-20) — it is named in `tsconfig.json`'s `include` and in `biome.json`'s
+ * `files.includes`, so `npm run typecheck`, `npm run build` and `npm run lint` all read it.
+ * Until then neither did, and a mistake here was caught only by `npm test` actually running.
+ * Keep the two entries: remove either and this file goes back to being guarded by nothing.
  *
  * ===========================================================================================
  *  READ THIS BEFORE YOU TURN ISOLATION OFF.
@@ -49,9 +51,13 @@ import { defineConfig } from "vitest/config";
  *   - What threads DOES share is the process. Measured 2026-08-13 on an ARMED probe: a test
  *     file that mutates `process.env` and `process.stdout.isTTY` is NOT observed by a sibling
  *     test file running concurrently in another worker (6 of 6 green), while the identical
- *     assertion goes RED when the mutation and the read share a worker. tinypool does not pass
- *     `SHARE_ENV`, so each worker gets its own `process.env` copy. This matters because
- *     `src/glyph-mode.test.ts` really does mutate both.
+ *     assertion goes RED when the mutation and the read are in the SAME MODULE. That is the
+ *     lever, and it is the only one: `isolate: true` gives every test FILE its own fresh worker
+ *     thread (measured as a distinct `threadId` per file), so no arrangement of two FILES
+ *     reproduces the red. Corrected at `ABC-050` `A4` - this sentence used to name a
+ *     file-against-file arrangement as the red-maker, which is a lever that does not exist.
+ *     tinypool does not pass `SHARE_ENV`, so each worker gets its own `process.env` copy. This
+ *     matters because `src/glyph-mode.test.ts` really does mutate both.
  *   - Measured saving, paired and interleaved, two independent samples: -7.3% / -7.7% CPU and
  *     -14.1% / -23.1% wall, sign 0/8 on all four. It also lowers the per-file CPU slope from
  *     158.2 to 138.9 ms/file (-12.2%), so it is not purely a one-time discount.

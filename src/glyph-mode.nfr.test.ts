@@ -83,7 +83,26 @@ const PROCESS = [
   ["spawn", spawn],
 ] as const;
 
-/** Every shape the selection can be reached in: the nine tuples collapse to these paths. */
+/**
+ * Every shape the selection can be reached in: the nine tuples collapse to these paths.
+ *
+ * THE LAST LINE IS ALSO THE LEAK GUARD (`ABC-050` `A5`), and it used to discard its answer.
+ * `beginGlyphModeSession` is the ONLY call here that reads the AMBIENT `process.stdout.isTTY`
+ * and `process.env` (`src/glyph-mode.ts`); every other line injects its signals as values. So if
+ * another test file in this worker mutates either and does not restore it, this is the one call
+ * in 1207 that can see it - and while its answer was thrown away, it could not.
+ *
+ * THE EXPECTATION IS ABSOLUTE ON PURPOSE, and a baseline captured at module load would be a
+ * fake: a file polluted BEFORE this one loaded records the pollution as pristine and sees no
+ * deviation. `ascii` is a MECHANISM, not a sample - a vitest worker's `process.stdout` is a pipe
+ * to the parent, never a terminal, so `isTTY` is `undefined` and row 3 of the rule decides
+ * before any locale variable is consulted. Watched RED before being shipped green.
+ *
+ * KNOWN BLIND SPOT, stated rather than left to be discovered: while `isTTY` is falsy row 3
+ * short-circuits, so a leak that mutates ONLY the locale variables cannot change this answer.
+ * It is not observable in the selected mode at all, which is why the `isTTY` row below is
+ * asserted separately from the mode.
+ */
 function runEverySelectionPath(): void {
   selectGlyphMode({ ascii: true, unicode: false, isTTY: true, env: { LANG: "en_US.UTF-8" } });
   selectGlyphMode({ ascii: false, unicode: true, isTTY: false, env: { LANG: "C" } });
@@ -93,7 +112,10 @@ function runEverySelectionPath(): void {
   selectGlyphMode({ ascii: false, unicode: false, isTTY: true, env: { LC_CTYPE: "en_US.utf8" } });
   selectGlyphMode({ ascii: false, unicode: false, isTTY: true, env: {} });
   selectGlyphMode({ ascii: false, unicode: false, isTTY: true, env: { LANG: "en_US.ISO-8859-1" } });
-  beginGlyphModeSession({ ascii: false, unicode: false })();
+  expect(process.stdout.isTTY, "ambient process.stdout.isTTY").toBeFalsy();
+  expect(beginGlyphModeSession({ ascii: false, unicode: false })(), "ambient glyph mode").toBe(
+    "ascii",
+  );
 }
 
 describe("NFR-007 — the glyph-mode selection reaches its answer with no I/O (spied)", () => {
