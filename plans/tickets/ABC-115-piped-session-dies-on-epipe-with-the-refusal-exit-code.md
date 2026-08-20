@@ -246,6 +246,82 @@ merged, nothing deployed, nothing self-signed. Numbers, the ten paired runs and 
 nearly misled me are in `.grugops/context/budget-ABC-115-2026-08-21/notes/` — **hand-authored and
 UNSTAMPED** (`human_admission` is `off`), not on this page.
 
+## Residual ruling — 2026-08-21 (BA/PM, task `rule-ABC-115-residuals-2026-08-21`)
+
+**QE's `G-QE115-1` IS UPHELD, THE GUARD IS OWED, AND I RAISED MY OWN CEILING TO PAY FOR IT.**
+`A10` below is added, `N8-SPAWN`'s count clause goes **+6 → +7** and the pin **23 → 24**, with the
+reason on this page rather than in a note. **Size stays `S` and priority stays `P1`** — `A10` adds
+**zero production lines** (the delivered arm already discriminates; `A10` only asserts that it does),
+one row in a file this ticket already opens, and one child through the existing `childOf` shape.
+`SPLIT_REQUIRED` is **not** raised.
+
+**RE-MEASURED, NOT INHERITED.** QE's note is an unstamped `claim` (`human_admission` is `off`), so a
+fresh copy of `src/` **outside the repository**, my own one-token mutant and my own runs decided
+this. **Their claim reproduces exactly:** delete the `code !== "EPIPE"` test and `src/cli.test.ts` is
+**60/60**, the whole lane is **40 files / 1212 tests / 0 skipped green**, and `npx tsc --noEmit` and
+`npx biome check src/cli.ts` are both clean. **The central design clause of a 13-line production diff
+is asserted by nothing, across the entire suite** — not by one file, by all forty.
+
+**IT IS NOT A DISTINCTION WITHOUT A DIFFERENCE, and the difference is this ticket's own species of
+defect.** Handed a read-only fd as stdout, the first frame write fails `EBADF` and the two builds
+part: delivered **exits 1 with 1507 bytes of stderr whose caret sits on the delivered `throw error`
+itself** (`src/cli.ts:159` — the re-throw is genuinely reached, not dead code); the mutant **exits 0
+with empty stderr, having written nothing at all**. 3/3 and then 5/5 on two instruments. **A build
+that writes no board and tells the shell `0` is the false-success end of exactly the contract
+`ABC-115` was cut to make honest** — worse than the defect being fixed, because `0` is the strongest
+claim of success the product can make.
+
+**Why the guard is owed rather than nice-to-have.** `## Risks` on this page already pre-registered
+it: *"a hop that widens the arm to every stdout error should say so and price it"* — with no row,
+that widening ships **green and silent**, and the next hop to touch the arm gets no signal. This is
+`A9`'s case one level down: `A9` exists because a bare-swallow mutant passed every row then, and the
+narrowing clause is unasserted now exactly as the ending clause was then.
+
+**THE CEILING: RAISED TO 7 WITH THE REASON, NOT QUIETLY EXCEEDED — and the under-ceiling routes were
+priced first.** **`N8-SPAWN` IN FORCE: `<= 7 added children` AND `<= 2.0 s added wall` AND
+`<= 0.30 s added CPU (user+sys) PER ADDED CHILD`.** Only the count moves; **the two time clauses are
+untouched and are re-measured at the repair hop on the paired-run lane instrument.**
+
+1. **Folding `A10` into an existing child is impossible by construction, and that is measured rather
+   than asserted.** The row's whole Given is a stdout that cannot be written to, so the child
+   produces **zero capturable stdout** — every existing `CHILDREN` entry asserts on its stdout, so
+   none can carry this Given without losing its own row.
+2. **Dropping a row to make room is rejected for the third time**, on the rule this page already
+   wrote: *a row may only go by a RE-CUT argued on the criterion's own value, never to make a number
+   fit.*
+3. **The count was again the wrong instrument, and in the opposite direction to last time.** `A9`'s
+   child was ~15x an ordinary child in wall; **`A10`'s child is CHEAPER than an ordinary one** — it
+   dies at the first write, rendering and capturing nothing: **0.06-0.07 s wall and 0.11-0.12 s CPU
+   (user+sys), against 0.07 s / 0.16-0.17 s for a plain child on the same standalone instrument**,
+   and against the clause's `<= 0.30 s per added child`. **A seventh child that costs less than the
+   first six cannot be the child that breaks a budget the first six met** — the count clause was the
+   only thing in the way, and a count that blocks the cheapest child on the page is measuring the
+   wrong quantity. The delivered wall was +1.12 s against `<= 2.0 s`; this adds ~0.07 s.
+
+**RESIDUAL, KNOWINGLY ACCEPTED AND NAMED — the non-`EPIPE` path still exits `1`.** On the `EBADF`
+probe the delivered build exits **`1`**, which is `USAGE_EXIT_CODE`, so the collision this ticket was
+cut for **still exists off the `EPIPE` path**, together with a raw stack that discloses the checkout
+path. **This is accepted, not overlooked, and it is NOT a criterion failure:** `## Out of scope` and
+`ADR-0016` clause 3 chose *"exactly as today"* for every other errno deliberately, and `A1`/`A2` are
+scoped to the `EPIPE`-shaped Given. **`ADR-0016` is NOT re-opened here and no wider arm is proposed.**
+**`A10` is written so the residual can be closed later without touching it:** it asserts *non-zero
+and non-empty*, never `1`, so a future ticket routing non-`EPIPE` to `70` leaves it green.
+**What would make it a cut, pre-registered:** a real non-`EPIPE` stdout failure observed outside a
+probe, or any hop or script measured taking a wrong routing decision off this path's `1` — the same
+trigger shape as `## Priority`'s `P0` promotion trigger, and it is nobody's silent inheritance.
+
+**NOT MINE AND NOT DONE HERE: `G-QE115-2`** — the superseded `<= 0.5 s CPU` clause and the false
+"THE CPU CLAUSE IS BREACHED" sentence left in `src/cli.test.ts` by my own budget ruling. It is a real
+defect of mine, it is routed to its own repair hop, and **nothing on this page repairs it**.
+
+**NOT DONE HERE:** `src/` untouched — **not `src/cli.ts`, not `src/cli.test.ts`**, and the mutant
+above lived in a throwaway copy outside the repository; the exit code NOT re-opened (`ADR-0016`);
+`ADR-0016`, `AGENTS.md` and `plans/nfr-catalog.md` not opened for writing; `NFR-008` NOT graded and
+`ABC-108` untouched; **`ABC-115` NOT moved** — it stays in `In Development` until both defects are
+repaired, and the move is the Orchestrator's. Nothing merged, nothing deployed, nothing self-signed.
+The mutant, the two instruments, the timings and the two probes I rejected are in
+`.grugops/context/rule-ABC-115-residuals-2026-08-21/notes/` — **hand-authored and UNSTAMPED**.
+
 ## Scope
 
 - **One production file: `src/cli.ts`.** The sink is acquired exactly once in the entry point
@@ -349,6 +425,33 @@ UNSTAMPED** (`human_admission` is `off`), not on this page.
   against a one-line mutant (`sink.on("error", e => { if (e.code !== "EPIPE") throw e; })` and
   nothing else), with **both** RED outputs verbatim in the delivery note. **Watching only `main` is
   not watching `A9` red.**
+- **`A10` (A REAL WRITE FAILURE IS NOT ABSORBED — the row that kills the widened arm, added
+  2026-08-21 by BA/PM).** **Given** the delivered entry point run as `node src/cli.ts --ascii` with a
+  **read-only file descriptor handed to it as its stdout**, so that its first frame write fails with
+  a genuine errno that is **not** `EPIPE`, **when** the child exits, **then** its exit status is
+  **NON-ZERO** **and** its stderr is **NON-EMPTY**. **NOTHING ELSE IS ASSERTED — no status literal,
+  no errno name, no byte count, no stack shape — and that is deliberate**: the delivered status here
+  is `1`, a collision this ticket neither fixes nor endorses (`## Residual ruling`), so a later
+  ticket that routes non-`EPIPE` to `70` must find this row **still green**. The row asserts one
+  thing only: the discrimination `ADR-0016` clause 4 states in the imperative — **silence is for the
+  reader going away, never for a write that failed.**
+  **Instrument, measured at this ruling and NOT a suggestion to re-derive from scratch: a per-command
+  fd-1 INPUT redirection inside the single `/bin/sh -c` string `childOf` already spawns — ZERO new
+  `spawnSync` call sites**, so `:1480-1485`'s pin stays green:
+  `node src/cli.ts --ascii 1</dev/null; echo NODE_EXIT=$?`
+  **TRAP, and a row that falls in it is green on every build: read the status from `NODE_EXIT=` on
+  stdout, NEVER from the wrapper's own status.** The redirection binds `node` alone, so the
+  wrapper's stdout stays capturable and the wrapper exits `0` (`echo`'s status) on the fixed, the
+  unfixed and the swallowing build alike. *Measured 5/5 each, plus 3/3 on an independent `spawnSync`
+  read-only-fd probe: delivered `NODE_EXIT=1` with 1507 bytes of stderr whose caret is on
+  `src/cli.ts:159`; the mutant `sink.on("error", () => { process.stdin.destroy(); })` gives
+  `NODE_EXIT=0` with 0 bytes.* **The byte count is a reading, never an assertion** — same rule as
+  `A1`.
+  **`A10` DOES NOT RED AGAINST `main`, and a hop that reports it as if it did is wrong** — `main`
+  installs no arm at all, so it dies loudly on this path and passes `A10` by accident. **It reds
+  against the one-token mutant above and against nothing else**, so `A5`'s watched-RED round is run
+  against that mutant, with the RED output verbatim in the delivery note — exactly the shape `A9`
+  already set.
 
 ## Dependencies
 
@@ -434,6 +537,14 @@ UNSTAMPED** (`human_admission` is `off`), not on this page.
   ~+1 s of wall, **reported to `ABC-108` at the repair hop as a measured contribution** — that lane
   budget is `ABC-108`'s to rule, and this ticket neither rules it nor hides in it.
   **`N8-SPAWN`'s balance is NOT claimed met here** — see the line above.
+  **⚠️ THE `<= 6 added children` COUNT ON THIS BULLET IS SUPERSEDED — RAISED TO `<= 7` AT THE
+  2026-08-21 RESIDUAL RULING, AND THE PIN MOVES 23 → 24.** It is left standing rather than edited
+  away because the `+5 → +6` history above it is the record of how a count clause gets re-derived.
+  **THE CLAUSE IN FORCE IS: `<= 7 added children` AND `<= 2.0 s added wall` AND `<= 0.30 s added CPU
+  (user+sys) PER ADDED CHILD`** — the two time clauses are UNCHANGED and unaffected; `A10`'s child
+  was measured at **0.11-0.12 s CPU and 0.06-0.07 s wall**, cheaper than an ordinary child. The
+  seventh child is `A10`'s (the read-only-fd stdout), and the reason it was paid for rather than
+  refused is in `## Residual ruling` above.
 - **`NFR-002` NOT triggered** — no frame is composed and `src/frame.ts` is untouched. This is an exit
   path, not a latency one.
 - **Security: one real, small surface.** The delivered stack trace discloses the **absolute filesystem
@@ -452,7 +563,7 @@ UNSTAMPED** (`human_admission` is `off`), not on this page.
 | 3 | INVEST | ✅ independent of every open ticket, one file, one hop, testable at `A1`–`A9` |
 | 4 | acceptance testable and measurable | ✅ every criterion is a count, a status, a file list or a **time bound** — `A1` counts stderr occurrences (and **asserts no byte count**, corrected 2026-08-20), `A2` asserts a status twice, `A6` is a `git diff`, `A9` is "exited within `T_bound`" |
 | 5 | dependencies known | ✅ none blocking; the `ABC-114` file overlap is named as ordering |
-| 6 | security/NFR triggers with measurable targets | ✅ `N8-SPAWN` derived to a **+6 ceiling (raised from +5 at the 2026-08-20 amendment, reason on the page) with TIME clauses beside the count — ≤ 2.0 s wall, ≤ 0.5 s CPU**, `NFR-002` explicitly not triggered, `N8-LANE` explicitly NOT claimed with the reason, path-disclosure closed by `A1` |
+| 6 | security/NFR triggers with measurable targets | ✅ **`N8-SPAWN` ceiling is `+7` since the 2026-08-21 residual ruling (pin 23 → 24, reason on the page); the CPU clause is `<= 0.30 s PER ADDED CHILD` since the 2026-08-21 budget ruling. The cell below is the ORIGINAL wording, kept as the record and superseded by both.** `N8-SPAWN` derived to a **+6 ceiling (raised from +5 at the 2026-08-20 amendment, reason on the page) with TIME clauses beside the count — ≤ 2.0 s wall, ≤ 0.5 s CPU**, `NFR-002` explicitly not triggered, `N8-LANE` explicitly NOT claimed with the reason, path-disclosure closed by `A1` |
 | 7 | test notes present | ✅ lane, gates, helper constraint, timeout rule, integrity posture |
 | 8 | size assigned | ✅ `S` — argued below |
 | 9 | priority assigned | ✅ `P1` — argued below |
