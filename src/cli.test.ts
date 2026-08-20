@@ -18,9 +18,11 @@
  *
  * THE "no spawn argument built by string concatenation" CLAUSE IS AMENDED AT `ABC-115` RATHER THAN
  * LEFT STANDING FALSE (`ABC-114`'s defect is a true-sounding sentence that is not true).
- * `ABC-115`'s six children need a REAL `head` on the other end of a REAL pipe — `spawnSync` with
- * full capture reads everything a child writes and can never let a reader go away — so they spawn
- * `/bin/sh` with a `-c` script this file composes. What that clause protected is still true, as the
+ * `ABC-115`'s seven children each need a shell construct `spawnSync` cannot express. SIX need a
+ * REAL `head` on the other end of a REAL pipe — `spawnSync` with full capture reads everything a
+ * child writes and can never let a reader go away — and the SEVENTH (`A10`) needs a per-command
+ * fd-1 redirection, so that the product's stdout is a descriptor it may not write to. All seven
+ * therefore spawn `/bin/sh` with a `-c` script this file composes. What that clause protected is still true, as the
  * narrower claim it always was: every word of that script comes from `process.execPath`,
  * `ENTRY_POINT` or this file's own literals, no test datum or external value reaches a shell word,
  * and both paths are quoted by `shellWord`. The file
@@ -448,6 +450,30 @@ const heldOpenReaderClosed = (): Child =>
     { timeout: A9_BOUND_MS },
   );
 
+/**
+ * `A10` — A REAL WRITE FAILURE IS NOT ABSORBED. The product's stdout is a READ-ONLY fd, so its very
+ * first frame write fails with a genuine errno that is NOT `EPIPE`, and the delivered arm re-throws
+ * it. It is the only child that separates the delivered build from one whose arm swallows EVERY
+ * stdout error: that build writes no board at all and then tells the shell `0`.
+ *
+ * `1</dev/null` is a per-command fd-1 INPUT redirection — `/dev/null` opened for READING and handed
+ * to `node` as fd 1, so the WRITE is illegal rather than the fd absent. THE CHEAPER-LOOKING PROBE
+ * IS A NO-OP AND WAS MEASURED SO: `1>&-` closes fd 1, node re-opens a closed standard fd onto
+ * `/dev/null` during bootstrap, and that build writes the whole board into the void and exits 0
+ * with no error arm firing at all. To fail a write you must make the WRITE illegal, not the fd
+ * absent.
+ *
+ * ZERO NEW `spawnSync` CALL SITES. The redirection lives inside the single `/bin/sh -c` string
+ * `childOf` already spawns, so the one-call-site pin below stays green. No `set -o pipefail` and no
+ * `head`: there is no pipe in this row, and the reader never goes away — the fd is simply unusable.
+ *
+ * THE TRAP, AND A ROW THAT FALLS IN IT IS GREEN ON EVERY BUILD: the redirection binds `node` alone,
+ * so the wrapper's own status is the trailing `echo`'s and is `0` on the fixed, the unfixed and the
+ * swallowing build alike. The status is read from `NODE_EXIT=` and NEVER from `child.status`.
+ */
+const unwritableStdout = (): Child =>
+  childOf("/bin/sh", ["-c", `${PRODUCT} --ascii 1</dev/null; echo "NODE_EXIT=$?"`]);
+
 /** The `NODE_EXIT=<n>` the wrappers above echo. Throws rather than defaulting: see `usageLineOf`. */
 const productStatusOf = (child: Child): number => {
   const marked = /^NODE_EXIT=(\d+)$/m.exec(child.stdout);
@@ -713,10 +739,11 @@ export function createEngine() {
   }),
 
   // -------------------------------------------------------------------------------------------
-  // `ABC-115`'s SIX, counted off the criteria on that ticket (`N8-SPAWN`, ceiling raised +5 -> +6
-  // by BA/PM at the 2026-08-20 amendment with the reason written on the page) and not one more.
-  // `A3` names five, `A9` names one, and `A1`, `A2`, `A4`-`A8` name NONE: `A4` re-reads
-  // `inputSeamThrows` and `badColour`, which is why it adds nothing.
+  // `ABC-115`'s SEVEN, counted off the criteria on that ticket (`N8-SPAWN`, ceiling raised +5 -> +6
+  // by BA/PM at the 2026-08-20 amendment and +6 -> +7 at the 2026-08-21 residual ruling, each with
+  // the reason written on the page) and not one more. `A3` names five, `A9` names one, `A10` names
+  // one, and `A1`, `A2`, `A4`-`A8` name NONE: `A4` re-reads `inputSeamThrows` and `badColour`,
+  // which is why it adds nothing.
   //
   // THE BOUNDARY IS RE-DERIVED HERE, NOT COPIED. The ticket warns that the frame height has moved
   // twice this month and a criterion pinned to a stale literal goes red for the wrong reason, so
@@ -736,6 +763,12 @@ export function createEngine() {
   fullRead: closedReader("--ascii", CLOSE_POINTS.total),
   /** `A9` — stdin held open behind the closed reader. The only child that kills a bare swallow. */
   heldOpen: heldOpenReaderClosed(),
+  /**
+   * `A10` — a stdout that cannot be written to. The only child that kills a WIDENED arm, and it
+   * cannot be folded into any child above: its whole Given is a stdout that yields nothing, so it
+   * has no capturable output for another row to assert over.
+   */
+  unwritableStdout: unwritableStdout(),
 } as const;
 
 // ---------------------------------------------------------------------------------------------
@@ -1639,7 +1672,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
     expect(child.status).not.toBe(0);
   });
 
-  it("N8-LANE — this file spawns TWENTY-THREE children and no more", () => {
+  it("N8-LANE — this file spawns TWENTY-FOUR children and no more", () => {
     // The budget, pinned mechanically. Every child is spawned once at module scope; a later hop
     // that adds one has to change this number and say why.
     //
@@ -1653,38 +1686,61 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // rules it no ticket may honestly be measured against that number.
     //
     // SEVENTEEN UNTIL `ABC-115`, and the derivation moves the same way it did at `ABC-043`: that
-    // page's `N8-SPAWN` row derives SIX more, criterion by criterion — `A3` five (the far and near
-    // close points on `--ascii`, the same two on the default glyph mode, and the full-read control)
-    // and `A9` one (the held-open-stdin child); `A1`, `A2` and `A4`-`A8` add NONE, `A4` because it
-    // re-reads `inputSeamThrows` and `badColour` rather than spawning its own. THE +6 CEILING WAS
-    // RAISED FROM +5 BY BA/PM AT THE 2026-08-20 AMENDMENT, ON THE PAGE, WITH THE REASON WRITTEN —
-    // it is not an engineer's judgement taken at the bench, and the under-ceiling alternative
-    // (dropping the default-glyph near-boundary close) was priced and rejected there.
+    // page's `N8-SPAWN` row derives SEVEN more, criterion by criterion — `A3` five (the far and
+    // near close points on `--ascii`, the same two on the default glyph mode, and the full-read
+    // control), `A9` one (the held-open-stdin child) and `A10` one (the read-only-fd stdout);
+    // `A1`, `A2` and `A4`-`A8` add NONE, `A4` because it re-reads `inputSeamThrows` and
+    // `badColour` rather than spawning its own. THE CEILING WAS RAISED TWICE BY BA/PM, ON THE PAGE,
+    // WITH THE REASON WRITTEN EACH TIME — +5 -> +6 at the 2026-08-20 amendment, +6 -> +7 at the
+    // 2026-08-21 residual ruling — and neither is an engineer's judgement taken at the bench. The
+    // under-ceiling alternatives were priced and rejected there: dropping the default-glyph
+    // near-boundary close the first time; the second time, folding `A10` into an existing child,
+    // which is impossible by construction (its whole Given is a stdout that yields nothing to
+    // assert over) and dropping a row to make room, refused on this page's own rule that a row may
+    // go only by a re-cut argued on its own value, never to make a number fit. `A10`'s child is the
+    // CHEAPEST on the page — it dies at its first write, rendering and capturing nothing.
     //
     // THE COUNT IS NO LONGER THE WHOLE CAP, and that is the part a later hop must not drop. `A9`'s
     // child costs ~9x a normal one in wall because most of its second is a settle `sleep`, so
-    // `ABC-115` re-expressed the cap in three clauses — <= 6 added children AND <= 2.0 s added wall
-    // AND <= 0.5 s added CPU.
+    // `ABC-115` re-expressed the cap in three clauses. THE CLAUSE IN FORCE, and it is the 2026-08-21
+    // budget ruling's, not the 2026-08-20 amendment's — <= 7 added children AND <= 2.0 s added wall
+    // AND <= 0.30 s added CPU (`user` + `sys`) PER ADDED CHILD, on `npx vitest run --dir src`,
+    // measured as the median of >= 5 INTERLEAVED PAIRED RUNS against the base, sign agreeing on
+    // >= 4 of 5.
     //
-    // MEASURED AT THE REPAIR HOP, 5 INTERLEAVED PAIRED RUNS: +6 children, +1.14 s wall, +1.02 s CPU
-    // (user+sys; +0.78 s on `user` alone). THE CPU CLAUSE IS BREACHED AND IT IS SAID HERE RATHER
-    // THAN SHIPPED QUIETLY. The `64-72 ms per child` the ceiling was derived from is WALL: a node
-    // child costs ~0.16 s of CPU against 0.07 s of wall, because node's startup is multi-threaded.
-    // Six children of ANY shape this product has therefore cost ~0.96 s of CPU, so `<= 0.5 s` is
-    // unmeetable by the six the criteria REQUIRE — it is arithmetic on the derivation, not a cost
-    // this harness chose, and no row was dropped to fit it (that trade is BA/PM's, and the page
-    // records it priced and rejected). Reported to `ABC-108`, not buried; the numbers and the three
-    // options are in `.grugops/context/ticket-to-pr-ABC-115-2026-08-20/notes/`.
+    // THE CLAUSE THIS BLOCK USED TO QUOTE — `<= 0.5 s added CPU` as a LUMP — WAS RE-DERIVED, AND
+    // THIS BLOCK CARRIED THE SUPERSEDED WORDING AND A "THE CPU CLAUSE IS BREACHED" SENTENCE FOR A
+    // DAY AFTER IT STOPPED BEING TRUE. Both sentences were true when written and neither was true
+    // when read, which is `ABC-114`'s defect class committed in the file that invokes it twice; QE
+    // found it as `G-QE115-2` and this hop corrected it. THE BREACH DOES NOT EXIST. The lump form
+    // was arithmetically impossible from the day it was written — the `64-72 ms per child` it was
+    // derived from is WALL, while a node child costs ~0.15 s of CPU, so the six children the
+    // criteria REQUIRE could never have fitted 0.5 s and the clause failed everything and therefore
+    // nothing. The per-child form caps how expensive each child is and leaves the count clause to
+    // cap how many, instead of two clauses doing one job in the wrong unit.
     //
-    // TWENTY-THREE IS A CEILING, NOT A TARGET.
+    // MEASURED AT THIS HOP, 5 INTERLEAVED PAIRED RUNS, base `main` @ `414ef75` vs this tip, both
+    // git worktrees with a symlinked `node_modules`: +7 children (17 -> 24), wall deltas 1.40 /
+    // 1.24 / 1.20 / 1.07 / 1.18 s => MEDIAN +1.20 s, CPU (`user`+`sys`) deltas 0.61 / 1.09 / 1.27 /
+    // 1.32 / 1.25 s => MEDIAN +1.25 s over 7 children = 0.179 s PER ADDED CHILD. Sign agrees 5/5 on
+    // both. ALL THREE CLAUSES ARE MET: 7 <= 7, 1.20 <= 2.0, 0.179 <= 0.30 — the count clause at its
+    // ceiling and the CPU clause at 60% of it.
     //
-    // WRITTEN AS `17 + 6` AND NOT AS ITS VALUE, and that is not evasion of the row-count guard —
-    // `A6`'s `ADR-0009` clause 9a row bars any literal equal to a frame's height from this file's
-    // executable code, and the new pin COLLIDES with it by coincidence: the frame is 23 rows and
-    // the budget is now 23 children, two unrelated numbers that happen to be equal. Spelling the
-    // pin as its derivation keeps both guards armed and says more than the value did. A hop that
-    // "tidies" it back to a literal reds `A6`, and the collision is the reason, not a bug.
-    const N8_SPAWN = 17 + 6;
+    // `NFR-008` IS NOT GRADED HERE AND NO `N8-LANE` LINE IS CLAIMED. `user` alone exceeds that
+    // NFR's 13 s CPU clause on BOTH sides of every pair above — it is `ABC-108`'s to rule, this
+    // ticket's ~0.18 s per child is reported to it as a contribution, and `ABC-108`'s `OQ-1` still
+    // has the lane's own total under open question.
+    //
+    // TWENTY-FOUR IS A CEILING, NOT A TARGET.
+    //
+    // WRITTEN AS `17 + 7` AND NOT AS ITS VALUE. At `17 + 6` the form was FORCED: `A6`'s `ADR-0009`
+    // clause 9a row bars any literal equal to a frame's height from this file's executable code,
+    // the frame is 23 rows, and the budget was 23 children — two unrelated numbers that happened to
+    // be equal, so a literal would have redded `A6`. AT 24 THE COLLISION IS GONE and the form is
+    // now a choice, kept because the derivation says what the value cannot: WHICH ticket bought
+    // WHICH children. A hop that "tidies" it to a literal reds nothing today and loses that, and
+    // the next raise may collide again.
+    const N8_SPAWN = 17 + 7;
     expect(spawned).toBe(N8_SPAWN);
     expect(Object.keys(CHILDREN)).toHaveLength(N8_SPAWN);
     // THE PIN ABOVE IS SELF-REFERENTIAL: `spawned` counts only children made through `childOf`, so
@@ -2812,5 +2868,43 @@ describe("ABC-115 — a reader that closes early ends the session quietly, at th
     expect(productStatusOf(child), `A9: ${child.stderr}`).toBe(0);
     expect(child.signal, "the wrapper was signalled").toBeNull();
     expect(child.stderr, "A9 wrote to stderr").toBe("");
+  });
+
+  it("A10 — a REAL write failure is not absorbed: the arm narrows to EPIPE and nothing wider", () => {
+    // THE ONLY ROW THAT KILLS A WIDENED ARM, and it is `A9` one level down. `A9` exists because a
+    // bare-swallow mutant passed every row there was; the arm's NARROWING clause — `ADR-0016`
+    // clause 4, the central design decision of a 13-line production diff — was in the same position
+    // until this row: deleting `code !== "EPIPE"` from the delivered arm left all 40 files, all
+    // 1212 tests and all four mandatory gates GREEN. Measured twice, independently, by QE and by
+    // BA/PM, on a copy of the tree outside the repository.
+    //
+    // WHAT THE MUTANT ACTUALLY DOES, because "the branch is untested" understates it: it writes no
+    // board at all — the first frame write fails — and then tells the shell `0`. That is the
+    // false-success end of the very exit-code contract this ticket was cut to make honest, and it
+    // is worse than the defect being repaired, since `1` at least says something went wrong.
+    //
+    // NON-ZERO AND NON-EMPTY IS THE WHOLE ASSERTION, and the omissions are the criterion, not
+    // laziness: no status literal, no errno name, no byte count, no stack shape. The delivered
+    // status on this path is `1`, which is `USAGE_EXIT_CODE` — a collision this ticket neither
+    // fixes nor endorses and which its `## Residual ruling` accepts knowingly, with a named cut
+    // trigger. A row pinning `1` would pin that defect and would go red for the WRONG reason the
+    // day a later ticket correctly routes non-`EPIPE` to `70`; this row stays green through that
+    // change. Readings at this hop, for the record and NEVER as assertions: delivered
+    // `NODE_EXIT=1` with ~1.5 kB of stderr whose caret sits on the delivered `throw error` itself
+    // (`src/cli.ts:159` — so the branch is genuinely reached and is not dead code); the one-token
+    // mutant `NODE_EXIT=0` with 0 bytes.
+    //
+    // IT DOES NOT GO RED AGAINST `main`, and a hop reporting it as if it did is wrong: `main`
+    // installs no arm at all, so it dies loudly on this path and passes this row by accident. It
+    // reds against the one-token mutant and against nothing else, which is where `A5`'s
+    // watched-RED round for this row was run — the shape `A9` already set.
+    const child = CHILDREN.unwritableStdout;
+    const status = productStatusOf(child);
+
+    // Non-vacuity, structural as in `A1`: `productStatusOf` THROWS if the marker is missing, so
+    // reaching this line is already proof the product ran and exited rather than never starting.
+    expect(status, "the product ran and reported a status").toBeTypeOf("number");
+    expect(status, `a failed write was absorbed: ${JSON.stringify(child.stdout)}`).not.toBe(0);
+    expect(child.stderr, "a failed write was absorbed silently").not.toBe("");
   });
 });
