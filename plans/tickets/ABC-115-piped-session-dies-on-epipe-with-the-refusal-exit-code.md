@@ -201,6 +201,51 @@ raised. **What DID grow is the lane's wall cost, and that is reported, not absor
 off `Ready for Dev`; nothing merged. The four builds, the rejected instruments and the byte fit are in
 `.grugops/context/amend-ABC-115-2026-08-20/notes/`, not on this page.
 
+## Budget ruling — 2026-08-21 (BA/PM, task `budget-ABC-115-2026-08-21`)
+
+**THE `<= 0.5 s CPU` CLAUSE WAS MINE AND IT WAS IMPOSSIBLE. IT IS RE-DERIVED, NOT RELAXED, AND THE
+DELIVERY IS NOT AT FAULT.** The engineer reported a breach rather than shipping or quietly restating
+my sentence, exactly as the clause above demands. **They were right to stop, and they were right on
+the arithmetic** — re-measured at my own hand, not inherited from their unstamped note.
+
+**`N8-SPAWN` IN FORCE, in full:** **`<= 6 added children` AND `<= 2.0 s added wall` AND `<= 0.30 s
+added CPU (user + sys) PER ADDED CHILD`** on `npx vitest run --dir src`, measured as the **median of
+>= 5 interleaved paired runs** against the immediate base commit, with the sign agreeing on **>= 4 of
+5**. The count and wall clauses are **UNCHANGED**; only the CPU clause moves, and it changes shape.
+
+**WHY THE FIRST DERIVATION WAS WRONG — so it is not repeated.** `ABC-043`'s **64-72 ms per child is
+WALL**. I carried it into a CPU clause (`0.07 x 6 = 0.42`, written `<= 0.5 s`) without ever measuring
+a child's CPU. **Measured here: a child costs ~0.07 s of wall and ~0.15 s of CPU**, and in the
+8-worker lane the gap is ~11x, not 2x — six children add **+0.08 s wall** and **+0.91 s CPU**,
+because idle cores absorb child CPU without moving the clock. **There is no safe wall→CPU constant;
+the clause must measure the quantity it names.** Two further faults: **"CPU" was left unqualified**
+(`user` and `user+sys` differ by 0.27 s here — over half the old budget), and **the sentence
+contradicted itself** — 0.5 s admitted 3.3 children while `<= 6 children` sat beside it.
+
+**RE-DERIVED, NOT EXCUSED, and the measurements say so rather than I do:** six of the CHEAPEST
+children that exist on this product, with this harness removed entirely, cost **+0.91 s CPU** — **no
+build could ever have met 0.5 s**; the delivery lands at **1.3x that floor**, so there is no overrun
+to excuse; and **0.30 was derived from a probe on `badf6c3` that contains none of this ticket's
+code**, before the delivered figure was consulted. **It has teeth: 0.30 is 1.97x the measured floor**,
+so a child twice as expensive as a bare `node src/cli.ts` fails it, and an engine-running child fails
+it tenfold. **The old clause could not fail anything, because it failed everything.**
+
+**DELIVERY AGAINST THE CLAUSE IN FORCE — MET ON ALL THREE:** children **+6** (at the ceiling, pin
+17 → 23, asserted by the suite), wall **+1.12 s**, CPU **0.198 s per child** (+1.19 s over six).
+
+**NO ROW IS DROPPED.** Dropping `A3`'s default-glyph pair saves ~0.30 s and still misses 0.5 s by
+1.8x — it was pointless as well as wrong, and reaching 0.5 s needed **three** of the six criterion
+children deleted. Rejected for the second time. **A row may only go by a RE-CUT argued on the
+criterion's own value, never to make a number fit.**
+
+**NOT DONE HERE:** `src/` untouched; the exit code NOT re-opened (`ADR-0016`); `ADR-0016`, `AGENTS.md`
+and `plans/nfr-catalog.md` not opened for writing; `ABC-108`/`ABC-110`/`ABC-111` untouched and
+**`NFR-008` NOT graded**; size and priority NOT re-scored (`S`/`P1` stand); **`ABC-115` NOT moved** —
+the `In Review` exit follows QE's owed `qe-e2e` hop and the move is the Orchestrator's. Nothing
+merged, nothing deployed, nothing self-signed. Numbers, the ten paired runs and the instrument that
+nearly misled me are in `.grugops/context/budget-ABC-115-2026-08-21/notes/` — **hand-authored and
+UNSTAMPED** (`human_admission` is `off`), not on this page.
+
 ## Scope
 
 - **One production file: `src/cli.ts`.** The sink is acquired exactly once in the entry point
@@ -380,6 +425,11 @@ off `Ready for Dev`; nothing merged. The four builds, the rejected instruments a
   now three clauses, all re-measured at the repair hop: <= 6 added children AND <= 2.0 s added wall
   AND <= 0.5 s added CPU** on `npx vitest run --dir src`. A hop that meets the count and blows a time
   clause has breached this ticket and says so rather than shipping.
+  **⚠️ THE `<= 0.5 s added CPU` CLAUSE ON THE LINE ABOVE IS SUPERSEDED — IT WAS ARITHMETICALLY
+  IMPOSSIBLE AND IS RE-DERIVED AT THE 2026-08-21 BUDGET RULING BELOW.** It is left standing rather
+  than edited away because the `~2x in CPU` phrase three lines up is the evidence of how it broke.
+  **THE CLAUSE IN FORCE IS: `<= 6 added children` AND `<= 2.0 s added wall` AND `<= 0.30 s added CPU
+  (user+sys) PER ADDED CHILD`** — see `## Budget ruling` below.
   **The wall is routed, not buried:** `A9` adds ~+1.2% of `NFR-008`'s 13 s CPU clause (0.16 s) and
   ~+1 s of wall, **reported to `ABC-108` at the repair hop as a measured contribution** — that lane
   budget is `ABC-108`'s to rule, and this ticket neither rules it nor hides in it.
