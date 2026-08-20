@@ -168,6 +168,39 @@ Four things the repair hop is handed, so it chooses no architecture at the bench
 is a base for a red watch, not a constant: it is path-length dependent (1282 measured at this hop in
 a longer path) and must be re-measured, never asserted.**
 
+## Amendment — 2026-08-20 (BA/PM, task `amend-ABC-115-2026-08-20`)
+
+**Architect/Design was RIGHT, and I re-measured their claim before writing a line of it rather than
+inheriting it.** Their note is an unstamped `observation` (`human_admission` is `off`), so a fresh
+worktree, a fresh copy of `src/` **outside the repository**, and my own runs decided this — not their
+numbers. **The bare swallow reproduces exactly as they measured it: `real 8.02 s` against `3.08 s`,
+twice each, on the instrument that times the CHILD.** It passes `A1` and `A2` completely (exit `0`,
+0 bytes of stderr) on this page's own Givens. **The gap was real, so a criterion was written.**
+
+Four things settled, all four decided rather than deferred:
+
+1. **`A9` added** — the session must END, expressed as a bound a test asserts (`exited within
+   T_bound < T_open`), never as prose about intent. It is the only row that kills the bare swallow.
+2. **`N8-SPAWN` raised +5 → +6 with the reason on the page**, and the ceiling re-expressed with time
+   clauses beside the count, because the count under-priced `A9`'s child by ~15× in wall. The
+   under-ceiling alternative was priced (drop one `A3` row, save ~70 ms) and **rejected**.
+3. **`A1`'s byte figure corrected to a formula** — `982 + 2 × (checkout path length)`, fitted on four
+   paths. **1196 and 1282 were never a disagreement**; they are the same measurement at two path
+   lengths, and the page said "path-length dependent" without saying by how much.
+4. **DoR item 10's ⚠️ closed on the page**, so the table stops contradicting the `## Design ruling`
+   section three inches above it. **9/10 ⚠️x1 → 10/10.**
+
+**Size stays `S` and priority stays `P1`, and this is a deliberate statement rather than silence.**
+`A9` adds **zero production lines** — the ruled fix already ends the session; `A9` only asserts that
+it does — one test row in a file this ticket already opens, and one child. `SPLIT_REQUIRED` is **not**
+raised. **What DID grow is the lane's wall cost, and that is reported, not absorbed** (see
+`## NFR / security`).
+
+**Not done here, so no silence reads as a pass:** `src/` untouched; the exit code NOT re-opened
+(`ADR-0016` settled it); `ADR-0016`, `AGENTS.md` and every other ticket untouched; `ABC-115` not moved
+off `Ready for Dev`; nothing merged. The four builds, the rejected instruments and the byte fit are in
+`.grugops/context/amend-ABC-115-2026-08-20/notes/`, not on this page.
+
 ## Scope
 
 - **One production file: `src/cli.ts`.** The sink is acquired exactly once in the entry point
@@ -201,8 +234,16 @@ a longer path) and must be re-measured, never asserted.**
   exits, **then** its stderr contains **zero** occurrences of `write EPIPE`, **zero** occurrences of
   `Unhandled 'error' event`, **zero** lines matching `/^\s+at /` (no stack frames), **zero** occurrences
   of the repository path, and **zero** occurrences of the `internal error:` line — and its stderr is
-  **either empty or ≤ 1 line that names no file path**. *Base for the RED watch: the same command on
-  `main` @ `414ef75` produced 1196 bytes of stderr containing all of the first three.*
+  **either empty or ≤ 1 line that names no file path**. *Base for the RED watch — a SHAPE, NEVER A
+  CONSTANT, corrected at the 2026-08-20 amendment.* The byte count of that stack is a function of **where the tree is checked out**: re-measured on the
+  delivered build at four path lengths, `bytes = 982 + 2 × (characters in the absolute checkout
+  path)` — 68 → **1118**, 142 → **1266**, 152 → **1286**, 156 → **1294**; the stack names the path
+  exactly twice, so each extra character costs two bytes. **The model also dissolves what looked
+  like two disagreements: 1196 (the cut) and 1282 (the design hop) are this same measurement at
+  107- and 150-character paths.** **NO TEST MAY ASSERT A BYTE COUNT, and no hop may quote one from
+  this page.** The RED watch is the path-independent shape: stderr non-empty and carrying
+  `Unhandled 'error' event`, `Error: write EPIPE` and `/^\s+at /` frames. Re-measure the count in
+  your own tree for the delivery note; never pin it.
 - **`A2` (the exit code, and it survives the ruling being overruled).** **Then** (i) the child's exit
   status is **`0`**; **and** (ii) **independently of (i), and this half binds even if `## Ruling` 4 is
   taken**: the status is **not `1`** (`USAGE_EXIT_CODE`) and **not `70`** (`INTERNAL_ERROR_EXIT_CODE`).
@@ -240,6 +281,29 @@ a longer path) and must be re-measured, never asserted.**
   the delivered behaviour verbatim **or** are amended in the same commit with the change named — and the
   delivery note states which. **Silently leaving a false sentence on `AGENTS.md` is the `ABC-114` defect
   and is a FAIL of this criterion.**
+- **`A9` (THE SESSION ENDS — the row that kills the bare swallow, added 2026-08-20 by BA/PM).**
+  **Given** the delivered entry point run as `node src/cli.ts --ascii` with **stdin held OPEN** by a
+  source that stays open at least `T_open` and supplies, after a settle delay, one line the session
+  answers **without an engine search** (measured: `zz`, an unparsable move — it forces a write and no
+  search, so the row costs no part of `DEFAULT_BUDGET_MS`), **and** stdout piped to a reader that
+  closes after 2 lines **before** that line is supplied, **when** the child is allowed `T_bound`,
+  **then** the child **HAS EXITED** within `T_bound` — and it exited with status **`0`**,
+  `signal === null`, and **empty stderr**. **`T_bound` must be strictly less than `T_open`**: a row
+  whose input source closes first proves only that end-of-input still works, which `A3` already
+  covers. The settle delay is **required and re-measured, not copied**: at `T_open = 10 s`,
+  `T_bound = 5 s`, a settle of **0.2 s ran 8/8 deterministic on both builds** and **0 s was measured
+  FLAKY** (1 of 3 delivered-build runs hung), so use >= 0.5 s and prove 5 consecutive identical runs
+  before shipping the row. *Measured at this amendment, one child, `--ascii`: the delivered `main`
+  build exits **1** at **1.05 s**; the ruled `process.stdin.destroy()` shape exits **0** at
+  **1.05 s**; the `process.exit(0)` fallback exits **0** at **1.05 s**; **the bare swallow NEVER
+  EXITS and is killed at the bound, 5/5**.*
+  **`A9` DOES NOT GO RED THE WAY THE OTHER ROWS DO, and a hop that reports it as if it did is
+  wrong.** Against `main` it reds on its **status** clause only — `main` crashes fast, so it *does*
+  end. **The ENDING clause reds against a bare-swallow mutant and against nothing else.** So `A5`'s
+  watched-RED round is run **twice** for this row: once against the delivered `main` build, once
+  against a one-line mutant (`sink.on("error", e => { if (e.code !== "EPIPE") throw e; })` and
+  nothing else), with **both** RED outputs verbatim in the delivery note. **Watching only `main` is
+  not watching `A9` red.**
 
 ## Dependencies
 
@@ -279,6 +343,19 @@ a longer path) and must be re-measured, never asserted.**
 - **Extend `src/cli.test.ts`'s existing `childOf` helper; do not add a second `spawnSync` call site** —
   `src/cli.test.ts:1480-1485` asserts that textually and must stay green (`ABC-043` `## Test notes` 5-6,
   inherited).
+- **`A9`'s instrument, measured at the amendment — and the second half is the trap.** A child whose
+  stdin stays open cannot be built with `spawnSync`'s `input:` (that closes stdin), so stdin comes
+  from a FIFO held open by a **detached** writer, inside the **same single `/bin/sh -c` string**
+  `childOf` already spawns — **zero new `spawnSync` call sites**:
+  `mkfifo $F; ( { sleep 0.5; echo zz; sleep 10; } > $F & ); set -o pipefail; node src/cli.ts --ascii < $F | head -2 >/dev/null; echo NODE_EXIT=$?`
+  **NEVER TIME THE PIPELINE — time the child.** A `time` around the whole pipeline reads the
+  left-hand side's sleep for every build and makes the fixed, the unfixed and the bare-swallow builds
+  look identical (the design hop's notes record that dead end). The shape above avoids the trap by
+  construction: `sh` waits only for `node | head`, because the writer is detached — so **the
+  wrapper's own exit IS the child's ending**, and the assertion is "did it exit inside `timeout:`",
+  not a stopwatch reading. Two consequences to accept out loud: the detached `sleep` **outlives the
+  row** as a harmless orphan (bound it, <= 10 s), and the FIFO is the row's to remove. `/bin/sh` on
+  this host honours `set -o pipefail`; a hop that changes platform re-measures.
 - Every child keeps a `timeout:` bound. A hung child must be a red row, not a stalled lane.
 - **Test integrity:** `.grugops/test-skips.md` is human-owned; `quality.test_integrity` is `warn`. Its
   absence is `UNKNOWN - verify` and must not be read as a pass.
@@ -292,9 +369,21 @@ a longer path) and must be re-measured, never asserted.**
   `A3` names **five** (2-line and 23-line close on `--ascii`, the same two on the default glyph mode, and
   the 24-line control), `A4` names **two** (the throwing `InputSeam` and the refused command line) **only
   if `ABC-043`'s existing children cannot be reused — they can, so `A4` should add ZERO**. `A1`, `A2`,
-  `A5`–`A8` add none. **Ceiling: +5, i.e. the pin moves 17 → 22, and a child no criterion names is a
-  finding against the ticket, not a charge on the account.** At the 64-72 ms per child `ABC-043`
-  measured, +5 ≈ 0.35 s wall. **`N8-SPAWN`'s balance is NOT claimed met here** — see the line above.
+  `A5`–`A8` add none, and **`A9` names ONE** (the open-stdin child) — **six**.
+  **CEILING RAISED +5 → +6 BY BA/PM AT THE 2026-08-20 AMENDMENT, WITH THE REASON WRITTEN, NOT
+  QUIETLY EXCEEDED. The pin moves 17 → 23**, and a child no criterion names is still a finding
+  against the ticket, not a charge on the account.
+  **Raised, not absorbed — and the under-ceiling alternative was PRICED (drop `A3`'s default-glyph
+  23-line close, saving ~70 ms) and REJECTED**; reasoning in the notes. **The count was the wrong
+  instrument**: `A9`'s child measured **real 1.04 s, user 0.14 s, sys 0.02 s** against 64-72 ms for a
+  normal child — ~15x in wall, ~2x in CPU, because most of its second is a `sleep`. **So the cap is
+  now three clauses, all re-measured at the repair hop: <= 6 added children AND <= 2.0 s added wall
+  AND <= 0.5 s added CPU** on `npx vitest run --dir src`. A hop that meets the count and blows a time
+  clause has breached this ticket and says so rather than shipping.
+  **The wall is routed, not buried:** `A9` adds ~+1.2% of `NFR-008`'s 13 s CPU clause (0.16 s) and
+  ~+1 s of wall, **reported to `ABC-108` at the repair hop as a measured contribution** — that lane
+  budget is `ABC-108`'s to rule, and this ticket neither rules it nor hides in it.
+  **`N8-SPAWN`'s balance is NOT claimed met here** — see the line above.
 - **`NFR-002` NOT triggered** — no frame is composed and `src/frame.ts` is untouched. This is an exit
   path, not a latency one.
 - **Security: one real, small surface.** The delivered stack trace discloses the **absolute filesystem
@@ -304,20 +393,20 @@ a longer path) and must be re-measured, never asserted.**
 - **Falsifiable zeroes:** 0 new test files, 0 new production modules, 0 new dependencies, 0 changes to
   any file under `src/` other than `src/cli.ts` and `src/cli.test.ts`, ≤ 15 added production lines.
 
-## Definition of Ready — 9/10, ⚠️x1
+## Definition of Ready — 10/10 (was 9/10 ⚠️x1; item 10 closed by `ADR-0016`, 2026-08-20)
 
 | # | check | verdict |
 |---|---|---|
 | 1 | problem clear (user, pain, value) | ✅ user = anyone piping stdout, incl. every agent that samples this product; pain re-measured today |
 | 2 | scope / out-of-scope clear | ✅ one production file named, five write sites named, four exclusions named |
-| 3 | INVEST | ✅ independent of every open ticket, one file, one hop, testable at `A1`–`A8` |
-| 4 | acceptance testable and measurable | ✅ every criterion is a count, a status, a file list or a byte — `A1` counts stderr occurrences, `A2` asserts a status twice, `A6` is a `git diff` |
+| 3 | INVEST | ✅ independent of every open ticket, one file, one hop, testable at `A1`–`A9` |
+| 4 | acceptance testable and measurable | ✅ every criterion is a count, a status, a file list or a **time bound** — `A1` counts stderr occurrences (and **asserts no byte count**, corrected 2026-08-20), `A2` asserts a status twice, `A6` is a `git diff`, `A9` is "exited within `T_bound`" |
 | 5 | dependencies known | ✅ none blocking; the `ABC-114` file overlap is named as ordering |
-| 6 | security/NFR triggers with measurable targets | ✅ `N8-SPAWN` derived to a **+5 ceiling**, `NFR-002` explicitly not triggered, `N8-LANE` explicitly NOT claimed with the reason, path-disclosure closed by `A1` |
+| 6 | security/NFR triggers with measurable targets | ✅ `N8-SPAWN` derived to a **+6 ceiling (raised from +5 at the 2026-08-20 amendment, reason on the page) with TIME clauses beside the count — ≤ 2.0 s wall, ≤ 0.5 s CPU**, `NFR-002` explicitly not triggered, `N8-LANE` explicitly NOT claimed with the reason, path-disclosure closed by `A1` |
 | 7 | test notes present | ✅ lane, gates, helper constraint, timeout rule, integrity posture |
 | 8 | size assigned | ✅ `S` — argued below |
 | 9 | priority assigned | ✅ `P1` — argued below |
-| 10 | no major unresolved blocker | ⚠️ **the exit-code ruling is BA/PM's and Architect/Design may overrule it at `In Design`.** It is not an *open question* — it is decided, on this page, from the product's own contract — but it is reversible, and `A2` is deliberately shaped in two halves so an overrule changes **one literal** and re-argues nothing. **This does not stop the ticket being pulled today.** |
+| 10 | no major unresolved blocker | ✅ **CLOSED 2026-08-20 by `ADR-0016`, which CONFIRMED the ruling; the ⚠️ below is kept as the record of what it was and is no longer live.** ~~the exit-code ruling is BA/PM's and Architect/Design may overrule it at `In Design`.~~ It is not an *open question* — it is decided, on this page, from the product's own contract — but it is reversible, and `A2` is deliberately shaped in two halves so an overrule changes **one literal** and re-argues nothing. **This does not stop the ticket being pulled today.** |
 
 ## Sizing — `S`, and the comparables are named
 
