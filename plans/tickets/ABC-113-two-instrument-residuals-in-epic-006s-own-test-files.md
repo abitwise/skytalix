@@ -1,8 +1,8 @@
 ---
 id: ABC-113
 title: Two instrument residuals in `EPIC-006`'s own test files — one row that a wrong build passes, and two rows that cannot fail
-status: in-development
-column: In Development
+status: ready-for-uat
+column: Ready for UAT
 size: XS
 priority: P2
 epic: EPIC-006
