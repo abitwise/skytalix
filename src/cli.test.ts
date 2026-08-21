@@ -467,9 +467,14 @@ const heldOpenReaderClosed = (): Child =>
  * `childOf` already spawns, so the one-call-site pin below stays green. No `set -o pipefail` and no
  * `head`: there is no pipe in this row, and the reader never goes away — the fd is simply unusable.
  *
- * THE TRAP, AND A ROW THAT FALLS IN IT IS GREEN ON EVERY BUILD: the redirection binds `node` alone,
- * so the wrapper's own status is the trailing `echo`'s and is `0` on the fixed, the unfixed and the
- * swallowing build alike. The status is read from `NODE_EXIT=` and NEVER from `child.status`.
+ * THE TRAP, AND A ROW THAT FALLS IN IT DISCRIMINATES NOTHING — IN EITHER DIRECTION: the redirection
+ * binds `node` alone, so the wrapper's own status is the trailing `echo`'s and is `0` on the fixed,
+ * the unfixed and the swallowing build alike. A row reading `child.status` therefore measures that
+ * constant and not the product. MEASURED 2026-08-21 in an out-of-repo copy, delivered build against
+ * the one-token swallowing arm: this row's `not.toBe(0)` over `child.status` is RED on BOTH, never
+ * the green-on-every-build shape a reader may expect; the `toBe(0)` spelling of the same clause is
+ * GREEN on both, and its red against the mutant comes only from the separate non-empty-stderr
+ * assertion. The status is read from `NODE_EXIT=` and NEVER from `child.status`.
  */
 const unwritableStdout = (): Child =>
   childOf("/bin/sh", ["-c", `${PRODUCT} --ascii 1</dev/null; echo "NODE_EXIT=$?"`]);
