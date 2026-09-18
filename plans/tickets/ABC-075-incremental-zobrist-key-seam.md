@@ -141,3 +141,57 @@ Assessed by BA/PM, **2026-08-16**. **Result: 8 of 10 clean, 2 ⚠️ — NOT met
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P0` |
 | 10 | no major unresolved blocker | **⚠️** **the ep-component design is genuinely unresolved** and is not BA/PM's. This ticket is `Blocked` until Architect/Design rules |
+
+## Ruling applied — 2026-09-19, Architect/Design (`ADR-0020`)
+
+**The precondition is met.** `ADR-0020` (`memory-bank/50-decisions/ADR-0020-ep-component-keys-on-the-ep-square-and-the-key-rides-the-per-ply-array.md`)
+rules both open questions. Nothing above is deleted; where the ruling makes a sentence above false
+as written, the correction is here, dated, and the ADR is the authority.
+
+- **Ep component — the owner's word:** *"relax to "ep swuare set""* (2026-09-19, verbatim in the
+  ADR). The component enters the key **iff `position.epSquare !== NO_SQUARE`**. `src/apply.ts`
+  sets that field on **every** double push, so the component is a plain XOR delta.
+- **Threading — Architect/Design's:** the key rides the **search's per-ply array** (`ADR-0002`
+  clause 3). `Position` gains no field; `makeMove`/`unmakeMove` are not touched; `unmakeMove`
+  needs no key work because `keys[ply]` still holds the pre-move key.
+- **The seam this ticket implements, in `src/zobrist.ts` beside `zobristKey`:**
+  `zobristKeyAfterMove(keyBefore: bigint, position: Position /* after makeMove */, move: Move, undo: UndoRecord): bigint`,
+  pure, with the invariant `zobristKeyAfterMove(zobristKey(before), after, move, undo) === zobristKey(after)`.
+  The ADR lists the six components the delta touches. **The array, its seeding and its two
+  consumers are `ABC-081`'s**, not this ticket's — `src/search.ts` stays outside the fence.
+
+**Sentences above that the ruling supersedes as written — read them this way now:**
+
+1. **Out of scope, first bullet** (*"Changing what the key hashes … `ADR-0005` (ep availability)
+   … ratified"*): `ADR-0005` clause 1 is superseded by `ADR-0020`. This ticket **does** change the
+   ep clause of `zobristKey` — to the bare `epSquare !== NO_SQUARE` test, dropping the
+   `hasLegalEnPassant` import — because the incremental key and the oracle must agree. `ADR-0006`
+   is still ratified and still not re-opened.
+2. **`A3`**: the two classes stay, the expected relation flips for the first. *Ep square set, no
+   legal capture* now hashes **differently** from the no-ep twin (`src/zobrist.test.ts:49` and
+   `:73` are those cases and go `not.toBe`); *ep set, capture legal* still differs. `A1` must hold
+   on both against the **post-ruling** oracle.
+3. **`A6`** (*"`src/zobrist.test.ts` and `src/zobrist.nfr.test.ts` pass unchanged"*): **false as
+   written.** The ADR's Consequences names every assertion that goes red on purpose (`:49`, `:73`,
+   `:158`'s oracle, `nfr.test.ts:51–79`'s call-count spies) and what each becomes. The rest of
+   `A6` stands: `src/legal.ts` byte-identical, `zobristKey`'s signature unchanged, suite green,
+   skip 0.
+4. **Security threshold**: `src/zobrist.ts`, its two test files and — if `A5`'s harness needs it — a
+   bench file are the whole diff. `src/apply.ts` is **not** expected to change under this design;
+   a diff touching it is a design deviation to stop on, not a fence violation to argue.
+5. **Owed with this ticket, not before it:** the two `memory-bank/30-architecture.md` edits the ADR
+   names (Key-components row 5, the transient-mutation paragraph).
+
+### Definition of Ready — re-scored 2026-09-19 by Architect/Design
+
+Items 1–4 and 6–9 unchanged from BA/PM's 2026-08-16 assessment. **Result: 10 of 10 — met.**
+
+| # | item | verdict |
+|---|---|---|
+| 5 | dependencies known | **✅** the Architect/Design ep and threading rulings are `ADR-0020`, `status: accepted`; `ADR-0002`/`ADR-0006` unchanged; `ABC-081` still consumes this |
+| 10 | no major unresolved blocker | **✅** the ep-component design is ruled and the seam is named; nothing this ticket needs is owned by another hop |
+
+**What is pullable now:** the whole ticket, as one `M`. **Recommendation to the Orchestrator:
+`Blocked` → `Ready`** (DoR 10/10; `Ready` WIP 8, this hop did not open the board to count it —
+the Orchestrator's move, and `Backlog` if `Ready` is at limit). Zero `src/` bytes were written at
+this hop.
