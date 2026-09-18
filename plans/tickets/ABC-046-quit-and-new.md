@@ -207,3 +207,48 @@ only ticket in this epic blocked by a DECISION rather than by an ordering.**
 | 8 | size assigned | **✅** `S` (2), calibrated, with the split line named and the nearly-unblocked half identified |
 | 9 | priority assigned | **✅** `P2`, on the measured fact that Ctrl-D already exits cleanly |
 | 10 | no major unresolved blocker | **⚠️⚠️ TWO.** **(a) THE CONTRACT RULING IS OPEN** — `quit` has no representable outcome and `new` cannot clear the stale claim cell without one; three shapes are priced and **none is adopted here**. **(b) three ordering dependencies are OPEN**, one of them itself blocked |
+
+## Design ruling 2026-09-19 — shape (b) is RULED; the ruling is `ADR-0021`
+
+**Architect/Design, task `owner-rulings-2026-09-19`, subtask `ruling-abc046-quit-arm`, on the owner's
+word in session — *"5. b, resign should be separate"* (Olger Oeselg, 2026-09-19).** The authority is
+`memory-bank/50-decisions/ADR-0021-the-turn-loop-gains-quit-and-take-back-arms.md`; this section is a
+pointer plus what changes on THIS page. Reasoning, alternatives and measurements are in the ADR and in
+`.grugops/context/ruling-abc046-quit-arm/notes/`, not restated here.
+
+- **The blocker named in `## Dependencies` is CLOSED.** Shape (b). Shape (c) stays rejected, now on the
+  owner's word too. `resign` is `ABC-045`'s and separate.
+- **What the arm is, for this ticket's engineer:** `PromptOutcome` gains `{ kind: "quit" }` and
+  `{ kind: "take-back"; plies; messages }` (transitions 17 and 18; states stay 8). `quit` → the loop
+  writes an exported `QUIT_NOTICE` (≠ `INPUT_ENDED_NOTICE`), no frame, returns `{ null, null, 0 }`.
+  `new` → `{ kind: "take-back", plies: history.moves.length, messages: [] }` and the loop
+  **re-evaluates** before rendering — which is how `A5` is met, and why `A5` needs no BA/PM amendment.
+- **The confirmation is the SEAM's, not the loop's** (`ADR-0021` clause 6): a per-session
+  `quitArmed` flag in `ABC-035`'s command module, cleared by any other line; first `quit` →
+  `{ kind: "command", messages: [<confirmation item, ≤ 17 columns>] }`; second consecutive `quit` →
+  `{ kind: "quit" }`. `resolvePromptLine` stays pure and exported; a stateful wrapper around it binds
+  `classifyCommand`. That is exactly `## Scope`'s two-state, no-second-read mechanism.
+- **`A3` STANDS AS WRITTEN** — it was written to pass under (b), and it does: assert inequality
+  against the two exported constants.
+- **`A8` IS AMENDED, in one clause:** the file list gains **`src/line-input.ts`, one call-site line
+  (`:243`)** — the reader must call the stateful wrapper instead of bare `resolvePromptLine`. The
+  rest of `A8` holds verbatim: **`src/turn-loop.ts` byte-identical on this ticket** — the loop change
+  is the arm ticket's (cut by BA/PM; `ADR-0021` clause 8), which must land **before** this one.
+- **The `Done` assertion this ticket will red, authorised here in writing:**
+  `src/command-input.test.ts` → `ABC-035 fences — grammar only` → *"no token carries an effect: `quit`
+  and `board` are outcome-identical and payload-free"* (`:486-495`). Its own comment says it reds the
+  day `EPIC-006` gives `quit` an effect. Superseded by this ruling; `ABC-035`'s page is NOT re-opened.
+- **`ABC-112` becomes a one-line dependency on this ticket** and its own trigger says cancel when
+  this one is scheduled. Not this page's call; recorded so the engineer does not deliver a filter
+  into a build that honours the command.
+
+### DoR re-check 2026-09-19 (Architect/Design) — **8 of 10 clean, 2 ⚠️, BOTH the same fact**
+
+| # | item | verdict |
+|---|---|---|
+| 1, 2, 4, 5, 6, 7, 8, 9 | unchanged | **✅** as scored 2026-08-13; `A8` amended by one clause above, `A3` confirmed |
+| 3 | INVEST-shaped | **⚠️** still **not independent** — the 2026-08-13 orderings (`ABC-035`, `ABC-037`, `ABC-043`) are ALL `Done`, and ONE new ordering replaces them: **the arm ticket (uncut) must land first** |
+| 10 | no major unresolved blocker | **⚠️ ONE (was two).** The ruling is CLOSED. **The arm ticket is not yet cut** — BA/PM's pen; until it lands, `A1`'s second `quit` has no outcome to return |
+
+**Column: unchanged on this page — the board move is the Orchestrator's.** Recommended pull order
+(`ADR-0021` § Consequences): `ABC-045` → the arm ticket → **this ticket** → `ABC-102`.
