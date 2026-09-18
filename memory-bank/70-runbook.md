@@ -67,6 +67,13 @@ place; nothing is shipped to it, and there is no environment to promote *between
 `git clone` — and that is `EPIC-006`'s question, not this file's. When `EPIC-006` answers it, this
 section is the first place that has to change.
 
+**[CHANGED 2026-09-19, as the sentence above said it would be.** The owner ruled: *"1. git clone +
+npm start works for now"* (Olger Oeselg, in session, 2026-09-19). The channel is **`git clone` +
+`npm install` + `npm run chess`** — the script is `chess`, there is no `start` script — recorded in
+`memory-bank/50-decisions/ADR-0018-distribution-channel-git-clone-npm-run-chess.md`, which supersedes
+`ADR-0007` clause 5 only. Nothing is published, built or deployed; there is still no git remote, so
+today the clone path is realised only on the author's machine. Everything else in this file stands.]**
+
 ## Roll back
 
 **Nothing is deployed, so there is nothing to roll back.** No released artifact, no running instance,
