@@ -1,0 +1,84 @@
+// Throwaway measurement harness for ABC-110 A6 under NFR-008's own protocol.
+// Lives OUTSIDE the repository and is never committed. No git is invoked anywhere in it.
+import { spawnSync, execSync } from "node:child_process";
+import { writeFileSync, appendFileSync } from "node:fs";
+
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/abc110";
+const EXPECT_FILES = 40;
+const EXPECT_TESTS = 1213;
+const ROUNDS = 9; // round 0 discarded -> n = 8
+const OUT = `${S}/raw.tsv`;
+const LOAD = `${S}/load.txt`;
+
+const loadavg = () => execSync("sysctl -n vm.loadavg").toString().trim();
+const load1 = () => loadavg().split(/\s+/)[1];
+
+writeFileSync(OUT, "round\tcond\twall\tuser\tsys\tcpu\tfiles\ttests\tload1_before\tload1_after\tcounts\n");
+writeFileSync(LOAD, "");
+
+for (let round = 0; round < ROUNDS; round++) {
+  const order = round % 2 === 0 ? ["A", "N"] : ["N", "A"];
+  appendFileSync(LOAD, `ROUND ${round} loadavg_start=${loadavg()}\n`);
+  for (const c of order) {
+    const lb = load1();
+    const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", "--dir", "src"], {
+      cwd: `${S}/${c}`,
+      encoding: "utf8",
+      maxBuffer: 64 * 1024 * 1024,
+    });
+    const la = load1();
+    const stdout = r.stdout || "";
+    const stderr = r.stderr || "";
+    writeFileSync(`${S}/out-${round}-${c}.log`, stdout);
+    writeFileSync(`${S}/time-${round}-${c}.log`, stderr);
+    const pick = (k) => {
+      const m = stderr.match(new RegExp(`^${k}\\s+([0-9.]+)`, "m"));
+      return m ? Number(m[1]) : NaN;
+    };
+    const wall = pick("real");
+    const user = pick("user");
+    const sys = pick("sys");
+    const cpu = +(user + sys).toFixed(2);
+    const fm = stdout.match(/Test Files\s+(\d+) passed/);
+    const tm = stdout.match(/^\s*Tests\s+(\d+) passed/m);
+    const files = fm ? Number(fm[1]) : NaN;
+    const tests = tm ? Number(tm[1]) : NaN;
+    const ok = files === EXPECT_FILES && tests === EXPECT_TESTS && r.status === 0 ? "ok" : "HARNESS_ERROR";
+    appendFileSync(OUT, [round, c, wall, user, sys, cpu, files, tests, lb, la, ok].join("\t") + "\n");
+  }
+  appendFileSync(LOAD, `ROUND ${round} loadavg_end=${loadavg()}\n`);
+}
+
+// Summary: medians over rounds 1..8 per condition, paired N-A deltas per round.
+import { readFileSync } from "node:fs";
+const rows = readFileSync(OUT, "utf8").trim().split("\n").slice(1).map((l) => {
+  const [round, cond, wall, user, sys, cpu, files, tests, lb, la, ok] = l.split("\t");
+  return { round: +round, cond, wall: +wall, user: +user, sys: +sys, cpu: +cpu, files: +files, tests: +tests, lb: +lb, la: +la, ok };
+});
+const median = (xs) => {
+  const s = [...xs].sort((a, b) => a - b);
+  const m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+};
+const usable = rows.filter((r) => r.round >= 1);
+const summary = [];
+for (const c of ["A", "N"]) {
+  const rs = usable.filter((r) => r.cond === c);
+  summary.push(`${c}: n=${rs.length} medianCPU=${median(rs.map((r) => r.cpu)).toFixed(3)} rangeCPU=${Math.min(...rs.map((r) => r.cpu))}-${Math.max(...rs.map((r) => r.cpu))} medianWALL=${median(rs.map((r) => r.wall)).toFixed(3)} rangeWALL=${Math.min(...rs.map((r) => r.wall))}-${Math.max(...rs.map((r) => r.wall))}`);
+}
+const deltas = [];
+for (let round = 1; round < ROUNDS; round++) {
+  const a = usable.find((r) => r.round === round && r.cond === "A");
+  const n = usable.find((r) => r.round === round && r.cond === "N");
+  deltas.push({ round, dcpu: +(n.cpu - a.cpu).toFixed(2), dwall: +(n.wall - a.wall).toFixed(2) });
+}
+const mdA = median(usable.filter((r) => r.cond === "A").map((r) => r.cpu));
+const dmed = median(deltas.map((d) => d.dcpu));
+summary.push(`NULL CONTROL N-A per round CPU: ${deltas.map((d) => d.dcpu).join(" ")}  median=${dmed.toFixed(3)} (${((100 * dmed) / mdA).toFixed(2)}%)  sign+ ${deltas.filter((d) => d.dcpu > 0).length}/${deltas.length}`);
+summary.push(`NULL CONTROL N-A per round WALL: ${deltas.map((d) => d.dwall).join(" ")}  median=${median(deltas.map((d) => d.dwall)).toFixed(3)}`);
+summary.push(`loads before each run: min=${Math.min(...rows.map((r) => r.lb))} median=${median(rows.map((r) => r.lb)).toFixed(2)} max=${Math.max(...rows.map((r) => r.lb))}`);
+summary.push(`harness errors: ${rows.filter((r) => r.ok !== "ok").length} of ${rows.length}`);
+writeFileSync(`${S}/summary.txt`, summary.join("\n") + "\n");
+console.log(readFileSync(OUT, "utf8"));
+console.log(readFileSync(LOAD, "utf8"));
+console.log(summary.join("\n"));

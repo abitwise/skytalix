@@ -4,6 +4,16 @@ kind: index
 # Memory Bank — Index
 _Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask `audit-architecture`) — **the ADR count was STALE BY FOUR** (this file said seven; there are eleven) and `30-architecture.md`'s description was stale by a whole epic. Both corrected below; the ADR count was measured by listing `50-decisions/`, not inferred. Previously 2026-08-06 by the Orchestrator (task `refinement-deploy-posture-2026-08-06`) — fill state corrected: `70-runbook.md` is no longer an empty template and the ADR count was three behind. Previously 2026-08-02 by the Orchestrator (state save before a context clear: `60-progress.md` filled, fill-state of the bank recorded below)._
 
+> **ADR census, re-measured 2026-09-19 by Architect/Design (subtask `ruling-abc110-level-15s`) by
+> listing `50-decisions/`, in the SAME COMMIT that added `ADR-0019`:** the paragraph below says
+> "sixteen" and "next free id `ADR-0017`" and both are stale — `ADR-0017` (spawn-budget time clauses
+> are non-mechanical) already existed, and this commit adds **`ADR-0019`** (`NFR-008`'s CPU level is
+> 15 s on the owner's word; supersedes `ADR-0014` on the level only — `ADR-0014` now reads
+> `superseded by ADR-0019`). **`ADR-0018` and `ADR-0020`–`ADR-0023` are PRE-ASSIGNED to the five
+> sibling hops of `owner-rulings-2026-09-19`** (`memory-bank/60-progress.md`) and may or may not exist
+> yet when you read this — list the directory rather than trust any count written here, including
+> this one.
+>
 > **Fill state — read this before you read the bank.** Only four files below carry real project
 > content: **`60-progress.md`** (the plan-of-record — **start here**), **`30-architecture.md`**
 > (as-built after **`EPIC-001` and `EPIC-002`**, rewritten 2026-08-12, plus the deployment posture),

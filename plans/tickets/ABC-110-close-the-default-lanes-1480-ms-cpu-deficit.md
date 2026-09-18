@@ -21,6 +21,48 @@ feature: —
 > an id are BA/PM's, and inventing one at the ruling would have fabricated a board state.
 > **`ADR-0014` `A5`'s stated gap is closed by this page's existence: the id is `ABC-110`.**
 
+> **RULED 2026-09-19 by Architect/Design** (task `owner-rulings-2026-09-19`, subtask
+> `ruling-abc110-level-15s`, Workflow 07) — **THE OWNER TOOK LEVER (ii). `A5` IS SATISFIED.** His word,
+> verbatim and dated, item 3 of six: *"3. raise to 15s for now"* — Olger Oeselg, in session,
+> 2026-09-19; transcribed in
+> `.grugops/context/owner-rulings-2026-09-19/notes/20260919T100000Z-orchestrator-decision-six-owner-rulings-verbatim-3c9e1f42.md`.
+> **Option taken: the CPU LEVEL moves 13 s → 15 s (`ADR-0019`, superseding `ADR-0014` on the level
+> only). Lever (i) is NOT taken — no test file changed lane. The wall clause did not move.**
+>
+> **Criterion state, so nothing on this page reads as owed when it is not:**
+> - **`A1`–`A4` — DONE 2026-08-20 by QE** (`.grugops/context/ticket-to-pr-ABC-110-a1a4-2026-08-20/notes/`,
+>   150 runs, null control −0.34% at 6/8): minimum closing set `engine` + `perft`, 2.550 s measured
+>   jointly, 12 criteria; no single file closes it. **They did their job — the owner chose with the
+>   sized alternative in front of him — and their result is now the standing remedy IF 15 s is ever
+>   breached.** Not re-measured here. (QE's `A3` note corrects this page's "smaller than twice the
+>   deficit" sentence: 4.2 s > 2.96 s; the conclusion stands, the comparison does not — read it there.)
+> - **`A5` — SATISFIED** by the word above.
+> - **`A6` — CPU HALF RULED: MET at 15 s, by 60 ms.** At `2c96dbd`, **40 files / 1213 tests / skip 0**,
+>   `npx vitest run --dir src`, n = 8, rotated, round 0 discarded, identity null control **−0.37% at
+>   3/8 — ADMISSIBLE**: **median CPU 14.940 s = 99.6% of 15 s** (114.9% of the old 13 s). **4 of 16
+>   usable runs individually read over 15 s; the margin (0.4%) is smaller than the instrument's load
+>   sensitivity (+1.1%) — MET and NOT ROBUST.** **WALL HALF NOT RULED: median wall 4.385 s = 146.2%
+>   of 3 s is REPORTED ONLY** — `ABC-111`'s protocol is unsettled and this page's own `## Dependencies`
+>   says the wall verdict cannot be read until it is. It is 46% over, which no warm/cold choice
+>   (±0.3 s) explains; CPU/wall 3.41x vs 5.29x on 2026-08-19 at load 4–7.5 → core contention is the
+>   **candidate, not the cause**. Raw data: `.grugops/context/ruling-abc110-level-15s/notes/`.
+> - **`A7` — VERIFIED on the diff, the level-moved branch of the criterion:** `NFR-001`–`NFR-007` rows
+>   byte-identical (hashed individually); `NFR-008`'s row changed in the level and its dating only;
+>   `N8-LANE`'s 5% / 650 ms / instrument / statistic / null control / 160 ms floor unmoved;
+>   `N8-SPAWN` 0 ms. The eight-row hash therefore moved off `63f66795…ca31` by design; the new one and
+>   the byte range (the eight `^| NFR-00[1-8] |` lines, concatenated) are in the catalog section.
+> - **`A8` — VERIFIED as a no-op:** nothing moved lanes; **1213 tests before and after, skip 0**
+>   (JSON reporter). *(The page's 1181 was the count at `54cbb23`; the lane grew +1 file / +32 tests
+>   on `main` since, none of it this ticket's.)*
+> - **`A9` — NOT APPLICABLE:** no opt-in lane was created, so no `AGENTS.md` entry is owed and
+>   `ABC-109`'s cap is not engaged.
+>
+> **Recommendation to the Orchestrator: CLOSE `ABC-110` on the CPU clause, and name the residual on
+> `ABC-111` — `A6`'s WALL half, which was always that ticket's input.** The 60 ms headroom means the
+> next ticket that adds a test file most likely re-breaches at 15 s; `ADR-0019` names that as revisit
+> trigger (a) with `OPT-1` as the sized remedy already on the table, so it is not a fresh escalation
+> when it happens. Board moves are the Orchestrator's; this page moves no column.
+
 ## Problem
 
 *User*: every role that runs the default lane — the Software Engineer at a gate, QE at a validation
