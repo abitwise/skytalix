@@ -8,6 +8,20 @@ _Updated: 2026-08-06 by the Orchestrator (task `refinement-deploy-posture-2026-0
   (verified context), `memory-bank/50-decisions/` (ADRs).
 -->
 
+## Standing rulings — six owner decisions taken in session, 2026-09-19. **Verbatim in the note; this is the pointer.**
+
+**Project owner Olger Oeselg, 2026-09-19**, answering six numbered questions, quoted verbatim:
+
+> *"1. git clone + npm start works for now ; 2. i don't have preferred source, we can research that ; 3. raise to 15s for now ; relax to "ep swuare set" ; 5. b, resign should be separate ; 6. implement best guess for now"*
+
+The reading of each clause, its bound, and what it does NOT decide is in
+`.grugops/context/owner-rulings-2026-09-19/notes/20260919T100000Z-orchestrator-decision-six-owner-rulings-verbatim-3c9e1f42.md`.
+In one line each: **(1)** `ABC-100` channel = `git clone` + `npm start`, supersedes `ADR-0007` clause 5 only;
+**(2)** `ABC-092` research authorised, ratification still owed; **(3)** `NFR-008` CPU level 13 s → 15 s, wall clause untouched, no file changes lane;
+**(4)** `ABC-075` ep hash component = "ep square set", supersedes `ADR-0005`'s legal-capture clause, threading still Architect/Design's;
+**(5)** `ABC-046` shape (b) — a real `quit` arm; `resign` (`ABC-045`) stays separate; **(6)** `ABC-107` Architect/Design picks and implements the best option.
+Carried by six subtasks under `.grugops/queue/` (`ruling-abc100-…`, `research-abc092-…`, `ruling-abc110-…`, `ruling-abc075-…`, `ruling-abc046-…`, `ruling-abc107-…`), ADR ids pre-assigned `ADR-0018`…`ADR-0023` to avoid a parallel-numbering collision.
+
 ## Standing directive — the branching model, and who turns the merge key. **This supersedes "a merge needs its own explicit instruction".**
 
 **Project owner Olger Oeselg, 2026-08-06**, quoted verbatim:
