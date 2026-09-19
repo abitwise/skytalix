@@ -16,10 +16,12 @@
  * `searchWithoutPruning`). Green says quiescence changed the CHOICE; the baseline arm is what
  * makes the number mean anything.
  *
- * `A5` IS A STOP CONDITION AND IT IS ASSERTED, NOT ADMIRED. The ticket names 4x as the level at
- * which the epic's depth arithmetic (`ADR-0003`, quiescence factor 2.5) is invalidated and the
- * ticket halts. The multiplier is printed with its node counts and the assertion holds the bar;
- * a red here is the ticket saying "stop and report", and the number is not to be tuned to fit.
+ * `A5` IS A STOP CONDITION AND IT IS ASSERTED, NOT ADMIRED. The ticket's original 4x tripped at
+ * 62x–1 540x and was RULED (`ADR-0024`): the build is sound, the multiplier was UNORDERED
+ * captures, and `A5` is re-stated at 1.5x the MVV-LVA-ORDERED reading per position and depth.
+ * The multiplier is printed with its node counts and the assertion holds the bar; a red here is
+ * the ticket saying "stop and report to Architect/Design", and the number is not to be tuned to
+ * fit. Losing the sort reads 6x–30x over the level, which is what the stop must catch.
  */
 
 import { describe, expect, it } from "vitest";
@@ -427,12 +429,22 @@ describe("A4 — a position with no capture anywhere near the leaves scores exac
 });
 
 // ---------------------------------------------------------------------------
-// A5 — the cost is bounded and REPORTED. Above 4x the ticket stops; this is where it stops.
+// A5 — the cost is bounded and REPORTED. Above the level the ticket stops; this is where it stops.
 // ---------------------------------------------------------------------------
 
-describe("A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded by 4x", () => {
-  /** `ADR-0003`'s model assumes 2.5x; the ticket's stop level is 4x. Not a number to tune. */
-  const STOP_LEVEL = 4;
+describe("A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024", () => {
+  /**
+   * `ADR-0024` decision 3: 1.5x the ORDERED figure the ruling measured (kiwipete 120.2x / 33.2x /
+   * 45.0x, position-6 6.3x / 17.4x / 8.3x at depths 1–3), indexed `[depth]`. Node counts are
+   * deterministic, so the headroom absorbs legitimate evaluator changes, not noise. Not a number
+   * to tune: over the level, halt and report to Architect/Design.
+   */
+  const STOP_LEVEL: Readonly<Record<string, readonly number[]>> = {
+    kiwipete: [Number.NaN, 180, 50, 70],
+    "position-6": [Number.NaN, 10, 26, 13],
+  };
+  const stopLevel = (name: string, depth: number): number =>
+    (STOP_LEVEL[name] as readonly number[])[depth] as number;
 
   function multiplier(name: string, depth: number): number {
     const position = parseFen(fenOf(name));
@@ -447,16 +459,16 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
   }
 
   for (const name of ["kiwipete", "position-6"]) {
-    it(`${name} at depth 1 — the default lane's cheap reading`, () => {
-      expect(multiplier(name, 1)).toBeLessThanOrEqual(STOP_LEVEL);
+    it(`${name} at depth 1 — the default lane's cheap reading, level ${stopLevel(name, 1)}x`, () => {
+      expect(multiplier(name, 1)).toBeLessThanOrEqual(stopLevel(name, 1));
     });
   }
 
   if (RUN_DEEP) {
     for (const name of ["kiwipete", "position-6"]) {
       for (const depth of [2, 3]) {
-        it(`${name} at depth ${depth} [deep, SEARCH_DEEP=1]`, () => {
-          expect(multiplier(name, depth)).toBeLessThanOrEqual(STOP_LEVEL);
+        it(`${name} at depth ${depth}, level ${stopLevel(name, depth)}x [deep, SEARCH_DEEP=1]`, () => {
+          expect(multiplier(name, depth)).toBeLessThanOrEqual(stopLevel(name, depth));
         }, 120_000);
       }
     }

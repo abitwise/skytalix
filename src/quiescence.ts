@@ -20,9 +20,17 @@
  *
  * Not here, each a recorded decision rather than an omission: checks in quiescence, delta
  * pruning, static exchange evaluation, and QUIET promotions (a capturing promotion is a capture
- * and is searched like any other). Move ordering is `ABC-080`'s; captures are searched in
- * generation order. No terminal detection: a quiescence node with no captures stands pat, and
- * mate and stalemate are the full-width search's to notice.
+ * and is searched like any other). No terminal detection: a quiescence node with no captures
+ * stands pat, and mate and stalemate are the full-width search's to notice.
+ *
+ * CAPTURES ARE SEARCHED MOST-VALUABLE-VICTIM FIRST (`ADR-0024`), and that ordering is THIS
+ * module's, not `ABC-080`'s: unordered, a losing capture is refuted only when its child reaches
+ * the recapture, and every capture generated before it is searched to its own subtree first —
+ * the capture tree GROWS with capture ply and only the cap holds it (kiwipete depth 1: 702x the
+ * bare-leaf node count unordered, 13 730x uncapped). Ordered MVV-LVA the same search reads 120x
+ * and lifting the cap is a 1.2–1.7x change, so the cap is honestly a guard. The sort is lossless
+ * — same score, same move — it only decides which refutation is found first. `ABC-080`'s
+ * full-width ordering reuses `mvvLvaKey` rather than writing a second one.
  *
  * Both recursions — `src/search.ts`'s and the abortable copy in `src/engine.ts` — call this one
  * function, so the leaf is shared rather than duplicated a third time. `visit` is how each
@@ -34,7 +42,31 @@
 import { makeMove, unmakeMove } from "./apply.ts";
 import { evaluate } from "./evaluate.ts";
 import { legalMoves } from "./legal.ts";
-import { EMPTY, type Position } from "./position.ts";
+import type { Move } from "./moves.ts";
+import { EMPTY, type Position, pieceType } from "./position.ts";
+
+/**
+ * Centipawn value per piece type for ORDERING only, indexed by `pieceType` like
+ * `src/evaluate.ts`'s table (which is private to the evaluator, by design — the two must not
+ * drift apart in meaning, but ordering is free to weight differently one day). The king is 0
+ * here as it is there: a king capture is only ever legal when the victim is undefended, so as
+ * an attacker the king is the safest piece to try first, not the most valuable to risk.
+ */
+const ORDER_VALUE: readonly number[] = [0, 100, 320, 330, 500, 900, 0];
+
+/**
+ * MVV-LVA key of a capture — HIGHER SEARCHES FIRST. Most valuable victim first (a capturing
+ * promotion counts its victim plus the piece the pawn becomes), least valuable attacker as the
+ * tiebreak. Pure and stateless; the attacker term is scaled so it never outranks a victim
+ * difference. Exported for `ABC-080`'s full-width ordering (`ADR-0024` decision 2).
+ */
+export function mvvLvaKey(move: Move): number {
+  return (
+    (ORDER_VALUE[pieceType(move.captured)] as number) +
+    (ORDER_VALUE[move.promotion] as number) -
+    (ORDER_VALUE[pieceType(move.piece)] as number) / 1000
+  );
+}
 
 /**
  * The deepest capture ply the quiescence recursion enters past the leaf. A node at this ply
@@ -72,9 +104,14 @@ export function quiesce(
   let best = standPat;
   if (best > alpha) alpha = best;
 
+  const captures: Move[] = [];
   for (const move of legalMoves(position)) {
-    if (move.captured === EMPTY) continue;
+    if (move.captured !== EMPTY) captures.push(move);
+  }
+  // Stable sort: equal keys keep generation order, so the count is deterministic.
+  captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));
 
+  for (const move of captures) {
     const undo = makeMove(position, move);
     let score: number;
     try {
