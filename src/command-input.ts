@@ -1,11 +1,24 @@
 /**
  * ABC-035 — the command table, classified in front of `ABC-033`'s entry point.
  *
- * GRAMMAR ONLY. This module decides whether a submitted line IS one of five commands and nothing
- * about what any of them DOES. `help` carries the one message set this ticket owns; `board` and
- * `quit` carry none; `claim` is a REQUEST the loop adjudicates. There is no state change here, no
- * exit, no confirmation prompt, no second render and no availability test — `EPIC-006` owns what
- * `quit` does, `ABC-021` owns both edges of a claim, and this file owns the vocabulary.
+ * GRAMMAR, PLUS ONE FLAG. This module decides whether a submitted line IS one of seven commands
+ * and, for six of them, nothing about what any of them DOES beyond naming the arm. `help` carries
+ * the one message set `ABC-035` owns; `board` carries none; `claim` is a REQUEST the loop
+ * adjudicates. There is no exit here, no second render and no availability test — `ABC-021` owns
+ * both edges of a claim, and this file owns the vocabulary.
+ *
+ * `quit` (`ABC-046`) IS THE ONE TOKEN THAT CARRIES STATE, and the state is a PER-SESSION FLAG in
+ * `createPromptLineResolver`, never in the loop (`ADR-0021` clause 6): the first `quit` is a
+ * `command` outcome carrying `QUIT_CONFIRMATION_MESSAGES` — transition 9, a re-emitted frame — and
+ * the second CONSECUTIVE `quit` is `{ kind: "quit" }`, transition 17. Any other line in between
+ * clears the flag. Two states, no second read: a handler that read a confirmation line itself
+ * would break `ABC-037`'s one-line-per-call contract. `resolvePromptLine` stays a PURE function
+ * over a string and always answers the first-`quit` shape; the wrapper is what knows about the
+ * second.
+ *
+ * `new` (`ABC-046`) is the one token whose effect MUTATES the game, and this module still mutates
+ * nothing: the row resolves to `ADR-0021`'s `take-back` arm carrying `plies: moves.length`, and the
+ * LOOP calls `takeBack` and re-evaluates (transition 18). `undo` is `ABC-102`'s and is not here.
  *
  * `resign` (`ABC-045`) IS THE ONE TOKEN THAT CARRIES A VERDICT, and it is still grammar: the row
  * resolves to the EXISTING `game-over` arm (`src/turn-loop.ts`, `ABC-019`'s transition) with the
@@ -53,29 +66,33 @@ import type { GameHistory } from "./history.ts";
 import { type MoveInputDeps, resolveMoveInput } from "./move-input.ts";
 import type { PromptOutcome } from "./turn-loop.ts";
 
-/** The five tokens, and the type that makes a sixth a compile error rather than a string typo. */
-export type CommandToken = "help" | "board" | "quit" | "claim" | "resign";
+/** The six tokens, and the type that makes a seventh a compile error rather than a string typo. */
+export type CommandToken = "help" | "board" | "quit" | "claim" | "resign" | "new";
 
 /**
  * One row of the table: the token, and WHICH arm of `PromptOutcome` classifying it produces.
  *
- * `outcome` is here because the five tokens do NOT share one arm. Three are `command` — the merged
- * non-advancing outcome (`src/turn-loop.ts:129`) — `claim` is the dedicated payload-free
- * `{ kind: "claim" }` arm (`:130`), and `resign` is the `game-over` arm with a result. A parser
- * that returned `command` for `claim` would never reach transition 16 and the player's claim would
- * silently become a redraw; the ticket page said exactly that until it was repaired on 2026-08-13.
+ * `outcome` is here because the six tokens do NOT share one arm. Three are `command` — the merged
+ * non-advancing outcome (`src/turn-loop.ts`) — `claim` is the dedicated payload-free
+ * `{ kind: "claim" }` arm, `resign` is the `game-over` arm with a result, and `new` is the
+ * `take-back` arm with a ply count. A parser that returned `command` for `claim` would never reach
+ * transition 16 and the player's claim would silently become a redraw; the ticket page said
+ * exactly that until it was repaired on 2026-08-13.
+ *
+ * `quit` is `command` here because CLASSIFYING it produces the confirmation; the `{ kind: "quit" }`
+ * arm is produced by the session flag in `createPromptLineResolver`, not by a row.
  */
 export interface CommandSpec {
   readonly token: CommandToken;
-  readonly outcome: "command" | "claim" | "game-over";
+  readonly outcome: "command" | "claim" | "game-over" | "take-back";
 }
 
 /**
  * The table. It is the single source of the vocabulary: `help`'s message set is folded out of it,
  * the classifier looks up in it, and `ABC-038`'s tab completion will read it rather than repeat it.
  *
- * `moves` is NOT here — it is `ABC-036`. `undo` and `new` are NOT here — they are `ABC-102`'s and
- * `ABC-046`'s. `resign` IS here, `ABC-045`'s row. A token absent from this table is not a command,
+ * `moves` is NOT here — it is `ABC-036`. `undo` is NOT here — it is `ABC-102`'s. `resign` IS here,
+ * `ABC-045`'s row, and `new` IS here, `ABC-046`'s. A token absent from this table is not a command,
  * and the tests assert that in both directions.
  */
 export const COMMAND_TABLE: readonly CommandSpec[] = [
@@ -84,10 +101,19 @@ export const COMMAND_TABLE: readonly CommandSpec[] = [
   { token: "quit", outcome: "command" },
   { token: "claim", outcome: "claim" },
   { token: "resign", outcome: "game-over" },
+  { token: "new", outcome: "take-back" },
 ];
 
 /** The heading item. It is not a token, and `help` naming it costs the message region nothing. */
 const HELP_HEADING = "commands:";
+
+/**
+ * What the FIRST `quit` says. One item, 17 columns — the message region's bound (`W` is 18 at the
+ * narrowest frame; `claimShortfall`'s reasoning in `src/turn-loop.ts`), so it is placed whole at
+ * every frame this project draws. It names the token the player must repeat, because the
+ * confirmation IS the repeat: there is no `y`, no `yes` and no second reader.
+ */
+export const QUIT_CONFIRMATION_MESSAGES: readonly string[] = ["quit again to end"];
 
 /**
  * `help`'s message set, FOLDED OUT OF THE TABLE — never a second copy of the vocabulary.
@@ -114,10 +140,23 @@ export function classifyCommand(line: string): CommandSpec | undefined {
   return COMMAND_TABLE.find((spec) => spec.token === token);
 }
 
-/** The arms one submitted line can produce: `ABC-033`'s three, `ABC-035`'s two, `ABC-045`'s one. */
+/**
+ * The arms one submitted line can produce: `ABC-033`'s three, `ABC-035`'s two, `ABC-045`'s one,
+ * `ABC-046`'s two (`quit` from the wrapper only, `take-back` from the table).
+ */
 export type PromptLineOutcome = Extract<
   PromptOutcome,
-  { readonly kind: "move" | "rejected" | "ambiguous" | "command" | "claim" | "game-over" }
+  {
+    readonly kind:
+      | "move"
+      | "rejected"
+      | "ambiguous"
+      | "command"
+      | "claim"
+      | "game-over"
+      | "quit"
+      | "take-back";
+  }
 >;
 
 /**
@@ -127,11 +166,15 @@ export type PromptLineOutcome = Extract<
  * nothing to the history and reads no availability — on every arm `toFen(history.position)` is
  * byte-identical afterwards and `history.moves` is untouched.
  *
- * `history` is consulted on ONE command path and derived from on NONE: every token is classified
- * without the position being asked anything, and `resign` then reads `position.blackToMove` — a
- * field, not a derive — to name the loser, so no derive can hide here. It is taken so this
- * function can stand in the `InputSeam` shape the loop already binds, and it is handed to
- * `resolveMoveInput` unchanged when the line is not a command.
+ * `history` is consulted on TWO command paths and derived from on NONE: every token is classified
+ * without the position being asked anything; `resign` then reads `position.blackToMove` — a
+ * field, not a derive — to name the loser, and `new` reads `moves.length` — a field, not a
+ * derive — to name the ply count, so no derive can hide here. It is taken so this function can
+ * stand in the `InputSeam` shape the loop already binds, and it is handed to `resolveMoveInput`
+ * unchanged when the line is not a command.
+ *
+ * `quit` ALWAYS answers the first-`quit` shape here — the confirmation. This function has no
+ * memory, by design; `createPromptLineResolver` is where the second `quit` becomes an exit.
  *
  * `deps` is `ABC-033`'s test seam, passed straight through and never called from this module.
  */
@@ -147,6 +190,13 @@ export function resolvePromptLine(
     return resolveMoveInput(history, line, deps);
   }
   if (spec.outcome === "claim") return { kind: "claim" };
+  if (spec.outcome === "take-back") {
+    // `ABC-046` `A4`: ALL plies, so the loop's `takeBack` replays nothing and the position, the
+    // key list and the repetition counts rewind together (`ADR-0002`). Nothing is mutated HERE —
+    // `moves.length` is read, the loop does the splice — so this stays a pure function over a
+    // string with the history borrowed, exactly as on every other arm.
+    return { kind: "take-back", plies: history.moves.length, messages: [] };
+  }
   if (spec.outcome === "game-over") {
     // `ABC-045` `A1`, both directions from ONE expression: the resigner is the side to move, and
     // the opponent wins. `blackToMove` is read, never `humanColour` — the loop prompts only when
@@ -158,5 +208,32 @@ export function resolvePromptLine(
       reason: "resignation",
     };
   }
+  if (spec.token === "quit") return { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
   return { kind: "command", messages: spec.token === "help" ? helpMessages() : [] };
+}
+
+/** What `createPromptLineResolver` returns: `resolvePromptLine`'s shape with `deps` bound. */
+export type PromptLineResolver = (history: GameHistory, line: string) => PromptLineOutcome;
+
+/**
+ * The stateful wrapper `ABC-037`'s reader binds — ONE per session, holding the `quit` flag
+ * (`ADR-0021` clause 6). It reads the token off `classifyCommand` and nothing else off the line:
+ * a `quit` in any of `ABC-035`'s tolerated spellings arms it, and ANY other line — a move, a
+ * rejection, another command — clears it. Armed and asked again, it answers `{ kind: "quit" }`
+ * and never consults the table; otherwise it delegates to `resolvePromptLine` unchanged, so every
+ * pure property asserted of that function holds of this one on every line but the second `quit`.
+ *
+ * Why here and not in the loop: the loop is the mechanism and confirmation is product policy
+ * (`ADR-0021` clause 6). Why not a module-level flag: two seams in one process — two tests, or a
+ * future second session — would share it, and a flag armed by one player's `quit` must never end
+ * another's session.
+ */
+export function createPromptLineResolver(deps?: MoveInputDeps): PromptLineResolver {
+  let quitArmed = false;
+  return (history, line) => {
+    const wasArmed = quitArmed;
+    quitArmed = classifyCommand(line)?.token === "quit";
+    if (wasArmed && quitArmed) return { kind: "quit" };
+    return resolvePromptLine(history, line, deps);
+  };
 }
