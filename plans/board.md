@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-19 by the Orchestrator (task `wave-2026-09-19`, Workflow 04) — **`ABC-075` `Ready` → `In Development`. `Ready` 0/8, `In Development` 1/3, `In Review` 1/3 (`ABC-120`), `Ready for UAT` 1/4 (`ABC-034`), `Blocked` 2.**_
+
 _Updated: 2026-09-19 by the Orchestrator (task `wave-2026-09-19`, Workflow 15 → 06) — **`ABC-034` `In Security/NFR` → `Ready for UAT` (Security/NFR PASS, no AR). `In Security/NFR` 0/2, `Ready for UAT` 1/4.**_
 
 _Updated: 2026-09-19 by the Orchestrator (task `wave-2026-09-19`, Workflow 05) — **`ABC-120` `In Development` → `In Review` (built, 18/30 lines, merged to the wave branch, lane 42 / 1297 / 0). `In Development` 0/3, `In Review` 1/3, `In Security/NFR` 1/2 (`ABC-034`), `Blocked` 2.**_
@@ -264,15 +266,15 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-005] Opening book  (owner: BA/PM, **size: M — corrected from `S`; the cutter stopped at `M` deliberately, refusing the M→XL/M→L precedent as "a pattern, not evidence", since `L` would claim the book is the size of `EPIC-004`'s whole engine**, priority: P1, since: 2026-07-22, **DECOMPOSED 2026-08-16 into `ABC-092`…`ABC-096`. The WORK is pullable today — 4 of 5 tickets need nothing from `EPIC-004` — but the VALUE is not deliverable until `EPIC-004` lands; collapsing those two is how a board lies.** `EPIC-001`'s dependency verified DISCHARGED by reading the tree, not the front matter; `ABC-095` is the only hard blocker. Largest ticket `M`, no `SPLIT_REQUIRED`)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 1/8)
+## Ready (WIP 0/8)
 
-- [ABC-075] Incremental Zobrist key seam  (EPIC-004, M, P0, DoR 8/10, BLOCKED: Architect/Design owes the ep-component ruling)  **→ Ready 2026-09-19 (was Blocked).** `ADR-0020` rules the ep component = `epSquare !== NO_SQUARE` (owner's word) and the key rides the per-ply array (Architect/Design); seam `zobristKeyAfterMove(keyBefore, after, move, undo)`; DoR re-scored **10/10**. Board move on the owner's word.
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
 
+- [ABC-075] Incremental Zobrist key seam  (EPIC-004, M, P0, DoR 8/10, BLOCKED: Architect/Design owes the ep-component ruling)  **→ Ready 2026-09-19 (was Blocked).** `ADR-0020` rules the ep component = `epSquare !== NO_SQUARE` (owner's word) and the key rides the per-ply array (Architect/Design); seam `zobristKeyAfterMove(keyBefore, after, move, undo)`; DoR re-scored **10/10**. Board move on the owner's word.  **→ In Development 2026-09-19.** Pulled by the Orchestrator at task `wave-2026-09-19`, subtask `ticket-to-pr-ABC-075`, branch `grugops/ABC-075-incremental-zobrist`; base lane 42 / 1297 / 0; `ADR-0020`'s seam signature is the shape; named assertions go red-then-updated, any other red is a stop.
 
 
 
