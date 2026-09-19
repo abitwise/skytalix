@@ -78,6 +78,7 @@ import type {
   FinalResult,
   InputSeam,
   LoopOutcome,
+  PromptOutcome,
   RenderSeam,
   TerminalReason,
 } from "./turn-loop.ts";
@@ -118,7 +119,7 @@ const { gameStatus } = await import("./gameend.ts");
 const { gameStatusOf, keyHistory, newGame, playMove, repetitionCounts } = await import(
   "./history.ts"
 );
-const { INPUT_ENDED_NOTICE, runTurnLoop } = await import("./turn-loop.ts");
+const { INPUT_ENDED_NOTICE, QUIT_NOTICE, runTurnLoop } = await import("./turn-loop.ts");
 
 // ---------------------------------------------------------------------------
 // Positions. Every one of them was RUN against merged `src/` before it was written down.
@@ -254,6 +255,11 @@ const candidateOf = (move: Move): string =>
  * and it is deliberately dumb: it neither derives a status nor decides whether a claim is available,
  * because a stub that adjudicated would test itself instead of the loop. `ABC-035` owns the real
  * verb's grammar and tolerance; this is the two-line seam that reaches transition 16.
+ *
+ * `quit`, `new` and `undo` are `ABC-120`'s three tokens, and they are TEST-SEAM TOKENS, NOT GRAMMAR:
+ * the real words, `quit`'s confirmation and `undo`'s boundary refusal are `ABC-046`'s and
+ * `ABC-102`'s (`ADR-0021` clauses 6 and 7). This seam maps each straight to its arm — `new` is a
+ * take-back of every ply played so far and `undo` a take-back of two — and decides nothing.
  */
 function scriptedSeams(script: readonly string[]): { input: InputSeam; engine: EngineSeam } {
   let cursor = 0;
@@ -264,6 +270,9 @@ function scriptedSeams(script: readonly string[]): { input: InputSeam; engine: E
     cursor += 1;
     if (token === "board") return { kind: "command", messages: ["board redrawn"] };
     if (token === "claim") return { kind: "claim" };
+    if (token === "quit") return { kind: "quit" };
+    if (token === "new") return { kind: "take-back", plies: history.moves.length, messages: [] };
+    if (token === "undo") return { kind: "take-back", plies: 2, messages: ["took back 2"] };
 
     const candidates = movesNamed(history, token);
     if (candidates.length === 0) return { kind: "rejected", messages: [`not a move: ${token}`] };
@@ -994,7 +1003,7 @@ describe("ABC-019 acceptance", () => {
     });
   });
 
-  it("A3b — one derive per ply, and ZERO on a non-advancing prompt outcome", async () => {
+  it("A3b — one derive per ply, and ZERO on a non-mutating prompt outcome", async () => {
     const { history } = await run({ script: ["zzzz", "board", "e2e4", "e7e5"] });
 
     expect(history.moves).toHaveLength(2);
@@ -1856,5 +1865,162 @@ describe("ABC-021 acceptance — transition 16, the draw claim", () => {
     expect(region).toEqual(["repetition 1 of 3", "50-move 99 of 100"]);
     for (const row of region) expect(row.length).toBeLessThanOrEqual(widthOf(refusal));
     expect(region.join(" ")).not.toContain("more)");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `ABC-120` — TRANSITIONS 17 and 18 only, `ADR-0021` clauses 3, 4 and 9. `quit` is a sibling of
+// transition 10 with a different notice; `take-back` is the one edge into `evaluating-terminal`
+// that does not come from `applying`. Nothing existing reds on the arms (measured: 42 / 1291 green
+// with the arms and none of these rows), which is the whole reason these rows exist.
+//
+// ZERO NEW TEST FILES, again the count `N8-LANE` binds: the rows sit beside `ABC-019`'s and
+// `ABC-021`'s in the file that already mocks `gameend.ts`, `history.ts` and `frame.ts`. `A6`'s
+// no-re-evaluation mutant was watched RED on `A3`, `A4` and `A5` and green on `A1` before these rows
+// were trusted; the raw output is in the delivery note, and `src/` never carried the mutant.
+// ---------------------------------------------------------------------------
+
+describe("ABC-120 acceptance — transitions 17 (quit) and 18 (take-back)", () => {
+  it("A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read", async () => {
+    const seams = scriptedSeams(["board", "quit", "e2e4"]);
+    // The seam THROWS on a third read: a loop that read past `quit` would fail here rather than
+    // quietly playing `e2e4` into a session the player has already left.
+    let reads = 0;
+    const input: InputSeam = (history) => {
+      reads += 1;
+      if (reads > 2) throw new Error("input seam read past `quit`");
+      return seams.input(history);
+    };
+
+    const { outcome, frames, sink, events, history } = await run({ input });
+
+    expect(outcome).toEqual({ result: null, reason: null, exitCode: 0 });
+    // `board` re-emits one frame; `quit` re-emits nothing — `eof`'s cadence, transition 10's shape.
+    expect(frames).toHaveLength(2);
+    const notice = sink.writes[sink.writes.length - 1] as string;
+    expect(notice).toBe(`${QUIT_NOTICE}\n`);
+    expect(notice.split("\n").filter((line) => line !== "")).toHaveLength(1);
+    // The false sentence shape (a) would have shown: NOWHERE in the run, not merely not last.
+    for (const write of sink.writes) expect(write).not.toContain(INPUT_ENDED_NOTICE);
+    // The run ends ON the prompt that read `quit`: no engine call, no frame after it.
+    expect(events[events.length - 1]).toBe("input");
+    expect(reads).toBe(2);
+    expect(derivesMade()).toBe(1);
+    expect(history.moves).toHaveLength(0);
+  });
+
+  it("A2 — `QUIT_NOTICE` is exported, is not `INPUT_ENDED_NOTICE`, is one line, and names no chess outcome", () => {
+    expect(typeof QUIT_NOTICE).toBe("string");
+    // Asserted on the two CONSTANTS, never a substring: `ABC-046` `A3` reads the same pair.
+    expect(QUIT_NOTICE).not.toBe(INPUT_ENDED_NOTICE);
+    expect(QUIT_NOTICE).not.toContain("\n");
+    expect(QUIT_NOTICE.length).toBeGreaterThan(0);
+    // None of the ten `TerminalReason` words and none of the five result words — a loop over the
+    // array plus the five, so a value deleted from `EVERY_TERMINAL_REASON` cannot pass silently.
+    const forbidden = [...EVERY_TERMINAL_REASON, "win", "draw", "resign", "checkmate", "stalemate"];
+    expect(forbidden).toHaveLength(15);
+    for (const word of forbidden) expect(QUIT_NOTICE.toLowerCase()).not.toContain(word);
+  });
+
+  it("A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together", async () => {
+    // `A4`'s own fixture: the third occurrence is claimable by White at frame 9.
+    const { statuses, frames, history, outcome } = await run({
+      script: [...cycles(2), "new", "quit"],
+    });
+
+    // The GIVEN, asserted: frame 9 really did carry the claim.
+    expect(statuses[8]?.claimable).toEqual({ by: "white", draws: ["threefold-repetition"] });
+    // Frame 10 is the rewound position's OWN status — not the discarded game's claim. Shape (a)'s
+    // defect reads the stale `{ by: "white" }` here, which is `ABC-046` `## Problem`'s sentence.
+    expect(statuses[9]?.claimable).toBeUndefined();
+    expect(statuses[9]?.result).toBe("in-progress");
+    // 1 + 8 plies + 1 re-emit for the take-back; `quit` adds none.
+    expect(frames).toHaveLength(10);
+    // 1 + 8 + EXACTLY one for the take-back, none for `quit`. A build that re-evaluates a
+    // non-mutating outcome reads 11; a build that does not re-evaluate the take-back reads 9.
+    expect(derivesMade()).toBe(10);
+    expect(outcome).toEqual({ result: null, reason: null, exitCode: 0 });
+
+    // The three that `ADR-0002` clause 2 rewinds TOGETHER, asserted as three numbers: a build that
+    // rewinds the move list and not the key list passes any one of them.
+    expect(history.moves).toHaveLength(0);
+    expect(toFen(history.position)).toBe(START_FEN);
+    expect(keyHistory(history)).toHaveLength(1);
+    const counts = repetitionCounts(history);
+    expect(counts.size).toBe(1);
+    expect([...counts.values()]).toEqual([1]);
+  });
+
+  it("A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it", async () => {
+    // The FEN is read INSIDE the render seam, at the frame it belongs to: after the run two more
+    // plies are on, and `statuses[]` / `frames[]` are copies while `history` is the live object.
+    const fensAtRender: string[] = [];
+    const stub = panelSeam(SHAPE_A);
+    const seam: RenderSeam = (history, status, thinking, messages) => {
+      fensAtRender.push(toFen(history.position));
+      return stub(history, status, thinking, messages);
+    };
+
+    const { frames, history } = await run({
+      script: ["e2e4", "e7e5", "undo", "g1f3", "g8f6"],
+      seam,
+    });
+
+    // Two on, two off, two on.
+    expect(history.moves).toHaveLength(2);
+    expect(history.moves.map(coordinatesOf)).toEqual(["g1f3", "g8f6"]);
+    // 1 + 2 + 1 (the take-back re-emits) + 2.
+    expect(frames).toHaveLength(6);
+    expect(derivesMade()).toBe(6);
+    // Frame 4 carries the item; frames 5 and 6 do not (`A5b`'s shape, on the new arm).
+    expect(messageRegionOf(frames[3] as string[])).toContain("took back 2");
+    expect(messageRegionOf(frames[4] as string[]).join("")).toBe("");
+    expect(messageRegionOf(frames[5] as string[]).join("")).toBe("");
+    // The position the player saw on frame 4 IS the start position — rewound, then rendered.
+    expect(fensAtRender[3]).toBe(START_FEN);
+    expect(fensAtRender[2]).not.toBe(START_FEN);
+  });
+
+  it("A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else", async () => {
+    const { frames, history, events, outcome } = await run({ script: ["new"] });
+
+    expect(frames).toHaveLength(2);
+    expect(derivesMade()).toBe(2);
+    expect(history.moves).toHaveLength(0);
+    expect(toFen(history.position)).toBe(START_FEN);
+    expect(keyHistory(history)).toHaveLength(1);
+    expect(events).toEqual(["frame", "input", "frame", "input"]);
+    // The `eof` after the script, byte-identical to `A8`'s — `quit` was not in this script.
+    expect(outcome).toEqual({ result: null, reason: null, exitCode: 0 });
+  });
+
+  it("A7 — `A14`'s ten, every unchanged type, and EXACTLY nine `PromptOutcome` members", () => {
+    expect(new Set(EVERY_TERMINAL_REASON).size).toBe(10);
+    expect(INPUT_ENDED_NOTICE).toBe("input ended");
+
+    // `exitCode` stays the LITERAL type `0`: `[number] extends [0]` is false, so a widened field is
+    // a `tsc --noEmit` error here rather than a surprise at the entry point.
+    const exitCodeIsLiteralZero: [LoopOutcome["exitCode"]] extends [0] ? true : false = true;
+    expect(exitCodeIsLiteralZero).toBe(true);
+    const outcome: LoopOutcome = { result: null, reason: null, exitCode: 0 };
+    expect(outcome.exitCode).toBe(0);
+
+    // The union ENUMERATED and made executable: a `Record` keyed by every `kind` is a type error
+    // with a tenth arm missing from it AND with a deleted arm still in it, so the enumeration
+    // `ABC-019` fixed at seven and `ADR-0021` moved to nine cannot drift unnoticed.
+    const everyKind: Record<PromptOutcome["kind"], true> = {
+      move: true,
+      rejected: true,
+      ambiguous: true,
+      command: true,
+      claim: true,
+      eof: true,
+      quit: true,
+      "take-back": true,
+      "game-over": true,
+    };
+    expect(Object.keys(everyKind)).toHaveLength(9);
+    expect(Object.keys(everyKind)).toContain("quit");
+    expect(Object.keys(everyKind)).toContain("take-back");
   });
 });
