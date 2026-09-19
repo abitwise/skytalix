@@ -228,3 +228,42 @@ changes scores) are recorded as the next levers for `ABC-084`'s puzzle count to 
 **`NFR-005`'s ratified levels do not move here**; the arithmetic consequence (depth 6 in 3 s needs
 ~850k nodes/s with a factor of ~45, against a measured 200k–550k) is stated for the owner in
 `ADR-0024` decision 6.
+
+## Delivery (re-hop)
+
+**Re-hopped 2026-09-19 by the Software Engineer** (task `wave-2026-09-19`, subtask
+`ticket-to-pr-ABC-079-rehop`, Workflow 04) on the SAME branch `grugops/ABC-079-quiescence`, fast-forwarded
+over the ruling (`f6772c5`), code commit `700730b`. **NOT merged.** Three files, 103/−37:
+`src/quiescence.ts` 42/−5, `src/quiescence.test.ts` 24/−12, `src/engine.test.ts` 37/−20. Nothing else
+under `src/`; `plans/board.md`, `AGENTS.md`, `plans/nfr-catalog.md`, `ADR-0024`'s status untouched.
+
+- **Delivered per the ruling:** MVV-LVA sort of the capture list inside `quiesce` (victim value
+  descending, attacker ascending as the tiebreak, a capturing promotion ranked by victim plus
+  promotion piece), the pure key **`mvvLvaKey(move)` exported** for `ABC-080`, the header's
+  "generation order" line corrected, **cap stays 8**. Lossless: same score and move at every cell.
+- **`A5` MET as re-stated, still asserted, still a stop:** kiwipete **119.96x / 32.74x / 45.02x**
+  (levels ≤ 180x / 50x / 70x), position-6 **6.32x / 17.44x / 8.26x** (≤ 10x / 26x / 13x) at depths
+  1–3. Kiwipete's counts (5 878 / 10 249 / 405 945) are 10–133 nodes off the probe's because the
+  probe's sort had no promotion term and the ruling's spec does (verified with a probe variant);
+  position-6 reproduces the probe to the node.
+- **`A1`–`A4`, `A6` re-run: MET, verdicts unchanged.**
+- **`src/engine.test.ts`:** `A2`'s 10 240 bound held at 9 973 nodes and stays as written. `A3` is
+  **RE-FIXTURED on a new position (after 1. g4 d5)** — position-6's premise (best move changes
+  between depth 2 and 3) is gone under a quiescence leaf (c3d5 at 1, 2 and 3), not just its count;
+  the new fixture completes depth 2 and aborts inside depth 3 at every budget 3–12 on a 1 ms tick,
+  and an emulated keep-best-so-far mutant is caught at all ten abort points.
+- **Lanes:** default **41 files / 1 243 pass / 0 skip, exit 0**; `SEARCH_DEEP=1` on
+  `src/quiescence.test.ts` **37/37, exit 0, 13.7 s**; `ENGINE_DEEP=1` **33/33, exit 0, 123.7 s**, the
+  50 ms case at **89 ms** (passes as written, 11 ms of headroom, loaded). **`SEARCH_DEEP=1` on
+  `src/search.test.ts` ran to completion and is RED: 4 timeouts** (kiwipete d3 unpruned pair
+  1 016 s, position-5 d3 55 s, position-6 d3 195 s, `A7` roots-at-depth-3 1 281 s; 37 pass,
+  2 678 s wall) — the licensed kiwipete-only drop cannot make it green and the file is outside this
+  hop's fence, so it is **REPORTED, not tuned**. Owner of the next decision: Architect/Design.
+- **`NFR-004` holds** (3 001–3 004 ms on all six roots at 3 s). **`NFR-005` reported:** kiwipete
+  **2–3** (load-dependent; 405 945 nodes for depth 3), position-6 **3** — back to the `ABC-078`
+  record on position-6, one ply under on kiwipete's worse reading. **`NFR-008` non-conforming
+  under load** (CPU 27–29 s vs 15 s; the before arms already 21–25 s at load 10–19); attributable
+  delta vs base `4f0ef01` **+6.0 s CPU** (was +19.1 s unordered). **`N8-LANE`** paired median
+  **0.61 s gross / ≈ 0.45 s net** (0.30–1.37 s across pairs; low confidence, not claimed MET).
+- **Gates at `700730b`:** lint 0, typecheck 0, build 0, unit 0 (0 skipped; integrity `No findings.`).
+  Numbers, transcripts and limits are in `.grugops/context/ticket-to-pr-ABC-079/notes/` (six re-hop notes).
