@@ -1,0 +1,4 @@
+{"run":1,"load_before":"{ 3.08 5.43 6.08 }","real":4.81,"user":15.96,"sys":1.71,"cpu":17.67,"files":42,"tests":1291,"ok":"ok"}
+{"run":2,"load_before":"{ 7.40 6.29 6.38 }","real":4.55,"user":16.21,"sys":1.67,"cpu":17.88,"files":42,"tests":1291,"ok":"ok"}
+{"run":3,"load_before":"{ 7.28 6.29 6.38 }","real":4.58,"user":16.51,"sys":1.66,"cpu":18.17,"files":42,"tests":1291,"ok":"ok"}
+SUMMARY before: median CPU 17.88 s, range 17.67-18.17

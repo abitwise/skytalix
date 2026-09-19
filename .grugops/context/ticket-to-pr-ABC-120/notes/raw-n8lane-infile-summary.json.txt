@@ -1,0 +1,162 @@
+{
+  "rows": [
+    {
+      "round": 0,
+      "label": "A",
+      "exit": 0,
+      "tests": 57,
+      "testsMs": 46,
+      "collectMs": 93,
+      "durationMs": 282
+    },
+    {
+      "round": 0,
+      "label": "T",
+      "exit": 0,
+      "tests": 63,
+      "testsMs": 49,
+      "collectMs": 92,
+      "durationMs": 261
+    },
+    {
+      "round": 1,
+      "label": "T",
+      "exit": 0,
+      "tests": 63,
+      "testsMs": 50,
+      "collectMs": 94,
+      "durationMs": 272
+    },
+    {
+      "round": 1,
+      "label": "A",
+      "exit": 0,
+      "tests": 57,
+      "testsMs": 46,
+      "collectMs": 87,
+      "durationMs": 247
+    },
+    {
+      "round": 2,
+      "label": "A",
+      "exit": 0,
+      "tests": 57,
+      "testsMs": 47,
+      "collectMs": 87,
+      "durationMs": 247
+    },
+    {
+      "round": 2,
+      "label": "T",
+      "exit": 0,
+      "tests": 63,
+      "testsMs": 51,
+      "collectMs": 93,
+      "durationMs": 252
+    },
+    {
+      "round": 3,
+      "label": "T",
+      "exit": 0,
+      "tests": 63,
+      "testsMs": 50,
+      "collectMs": 96,
+      "durationMs": 265
+    },
+    {
+      "round": 3,
+      "label": "A",
+      "exit": 0,
+      "tests": 57,
+      "testsMs": 50,
+      "collectMs": 86,
+      "durationMs": 260
+    },
+    {
+      "round": 4,
+      "label": "A",
+      "exit": 0,
+      "tests": 57,
+      "testsMs": 48,
+      "collectMs": 89,
+      "durationMs": 252
+    },
+    {
+      "round": 4,
+      "label": "T",
+      "exit": 0,
+      "tests": 63,
+      "testsMs": 59,
+      "collectMs": 94,
+      "durationMs": 274
+    },
+    {
+      "round": 5,
+      "label": "T",
+      "exit": 0,
+      "tests": 63,
+      "testsMs": 52,
+      "collectMs": 111,
+      "durationMs": 292
+    },
+    {
+      "round": 5,
+      "label": "A",
+      "exit": 0,
+      "tests": 57,
+      "testsMs": 48,
+      "collectMs": 88,
+      "durationMs": 250
+    },
+    {
+      "round": 6,
+      "label": "A",
+      "exit": 0,
+      "tests": 57,
+      "testsMs": 48,
+      "collectMs": 90,
+      "durationMs": 246
+    },
+    {
+      "round": 6,
+      "label": "T",
+      "exit": 0,
+      "tests": 63,
+      "testsMs": 51,
+      "collectMs": 94,
+      "durationMs": 255
+    }
+  ],
+  "summary": {
+    "A": {
+      "n": 7,
+      "tests": 57,
+      "medianTestsMs": 48,
+      "medianDurationMs": 250,
+      "rangeTestsMs": [
+        46,
+        50
+      ]
+    },
+    "T": {
+      "n": 7,
+      "tests": 63,
+      "medianTestsMs": 51,
+      "medianDurationMs": 265,
+      "rangeTestsMs": [
+        49,
+        59
+      ]
+    },
+    "pairedDeltaTestsMs": [
+      3,
+      4,
+      4,
+      0,
+      11,
+      4,
+      3
+    ],
+    "medianPairedDeltaTestsMs": 4
+  }
+}

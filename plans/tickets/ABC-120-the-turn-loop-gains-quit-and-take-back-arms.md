@@ -264,3 +264,46 @@ nothing on `main` is broken by its absence — Ctrl-D exits cleanly today (`ABC-
 `ABC-046` or `ABC-102` by name. **`P2` demotion trigger:** `ABC-046` and `ABC-102` both dropped from
 `EPIC-006`'s slice on the owner's word — then this arm has no consumer and should be dropped with them,
 not delivered into a loop nothing calls.
+
+## Delivery
+
+**Built 2026-09-19 by the Software Engineer** (task `wave-2026-09-19`, subtask
+`ticket-to-pr-ABC-120`, Workflow 04) on branch `grugops/ABC-120-turn-loop-arms` @ **`d8e7ccc`**,
+off `grugops/wave-2026-09-19` @ `20ad7cb`. **Unmerged; not deployed.**
+
+- **Exactly two files, measured from git:** `git diff --name-only 20ad7cb...d8e7ccc -- src/` →
+  `src/turn-loop.test.ts` (+168 / −2), `src/turn-loop.ts` (+86 / −40). **`A9`: 18 added
+  non-comment production lines** of the 30 (every `+` line of `git diff -U0` minus comment and
+  blank lines; the 86 is mostly the three docblocks and the re-indented `A10b` comment).
+  `src/turn-loop.nfr.test.ts` byte-identical; the `TABLE` block and rows 14/17/18 untouched (the
+  test file's six hunks are the import, the dynamic import, the seam, `A3b`'s title, the appended
+  block).
+- **The shape, as `ADR-0021` clauses 2–5 rule it:** two union members (nine arms), `export const
+  QUIT_NOTICE = "quit"`, transition 17 after the `eof` branch (notice, no frame, `{ null, null,
+  0 }`), transition 18 before the `!== "move"` branch (`takeBack(history, plies)`, `messages`, fall
+  through to the ONE derive; the move path inside an `else`). No `plies` guard. Three docblocks
+  re-worded (`A10`: `grep -c "sixteen transitions"` 0, `grep -c "only on end-of-input"` 0,
+  `grep -ci "non-mutating"` 3; census SEVEN non-advancing / FIVE emit, both arms named).
+- **`A1`–`A5`, `A7`:** six rows in `src/turn-loop.test.ts`, three test-seam tokens (`quit`/`new`/
+  `undo` — not grammar; `src/command-input.ts` not imported). `A1` frames 2, derives 1, reads 2
+  (a third throws); `A3` `statuses[9].claimable` undefined, frames 10, derives 10, moves 0 /
+  `keyHistory` 1 / `repetitionCounts` {1}; `A4` frames 6, derives 6, `"took back 2"` on frame 4
+  only, `START_FEN` read INSIDE the seam at frame 4; `A5` frames 2, derives 2; `A7` ten reasons,
+  `"input ended"`, literal `0`, `Record<PromptOutcome["kind"], true>` with 9 keys.
+- **`A6`, watched RED in a copy outside the repo:** M1 (`takeBack` then `continue`, no derive) →
+  `A3` `expected { by: 'white', …(1) } to be undefined`, `A4` `expected 5 to be 6`, `A5`
+  `expected 1 to be 2`, **3 failed | 60 passed** — `A1`/`A2` green; M2 (`take-back` routed into
+  the 7/8/9 branch) → the same three rows, **3 failed | 60 passed**; control 63/63. Raw output:
+  `.grugops/context/ticket-to-pr-ABC-120/notes/`.
+- **Gates at the tip:** `npx biome check .` 76 files clean, `npx tsc --noEmit` 0 (typecheck and
+  build), `npx vitest run --dir src` **42 / 1297 / 0 skipped** (base 42 / 1291 / 0; +6 tests,
+  +0 files), JSON skip count 0, test-skip-integrity `No findings.` `self_fix_attempts` spent 0.
+- **`N8-LANE` / `NFR-008`:** in-file `+4 ms` (paired median of `tests` ms, n = 7, 57 → 63 rows),
+  **0 new files**. Whole-lane CPU (`/usr/bin/time -p`, n = 3, two sibling hops live): **before
+  17.88 s at load 3.1–7.4, after 18.25 s at load 13.5–20.8** — over 15 s in every run INCLUDING the
+  three before the change; the headroom re-measured at the delivery base is NEGATIVE, so this
+  reads as a lane breach that is the base's, REPORTED AS NON-CONFORMING, not ruled, nothing
+  trimmed; not a conforming `ADR-0019` reading. Handed up.
+- Production lines > 0: the zero-production-lines UAT waiver does NOT apply; the owner's word is
+  needed at `In UAT`. Board move (`In Development` → `In Review`) and the QE hop are the
+  Orchestrator's / QE's. Notes: `.grugops/context/ticket-to-pr-ABC-120/notes/`.

@@ -102,14 +102,24 @@ export type RenderSeam = (
 ) => readonly string[];
 
 /**
- * What a prompt returns. FOUR of these do not advance a ply, and that is the loop's most-travelled
- * edge — the epic's one-line specification does not contain it at all.
+ * What a prompt returns. SEVEN of these do not advance a ply — `rejected`, `ambiguous`, `command`,
+ * `claim`, `eof`, `quit` and `take-back` — and FIVE of the seven emit a frame (`eof` and `quit` go
+ * to `exiting` and emit a notice instead). That is the loop's most-travelled edge — the epic's
+ * one-line specification does not contain it at all.
  *
  * `rejected`, `ambiguous` and `command` reach `rendering` WITHOUT passing through
  * `evaluating-terminal`, which is the structural reason `A5`/`A6`'s "not re-evaluated" is a property
  * of the machine and not only of a spy. Their message items are the loop's only channel for a
  * rejection line or an ambiguity candidate list: those live in the frame's own message region and
  * there is no second output channel.
+ *
+ * `quit` and `take-back` are `ADR-0021`'s (transitions 17 and 18). `quit` ends the session with NO
+ * chess result — one notice, `QUIT_NOTICE`, and the same `LoopOutcome` as end-of-input. `take-back`
+ * is the one non-advancing outcome that MUTATES the game: the loop calls `takeBack(history, plies)`
+ * and then re-evaluates through the same single derive a ply uses, so the next frame's status is the
+ * rewound position's own and never the discarded game's. It carries `plies` and `messages` and no
+ * verdict: `new` and `undo` are `ABC-046`'s and `ABC-102`'s words; the loop guards nothing on
+ * `plies` because `takeBack` clamps at zero by its own floor.
  *
  * `game-over` is the transition `EPIC-006`'s `resign` and `ABC-021`'s `claim` both drive. `ABC-019`
  * OWNS ONLY THAT THE TRANSITION EXISTS — that `game-over` is reachable from `awaiting-human` at all.
@@ -129,6 +139,8 @@ export type PromptOutcome =
   | { readonly kind: "command"; readonly messages: readonly string[] }
   | { readonly kind: "claim" }
   | { readonly kind: "eof" }
+  | { readonly kind: "quit" }
+  | { readonly kind: "take-back"; readonly plies: number; readonly messages: readonly string[] }
   | { readonly kind: "game-over"; readonly result: FinalResult; readonly reason: TerminalReason };
 
 /** The human's turn. `EPIC-003` replaces it; the loop waits on it and never reads stdin itself. */
@@ -158,10 +170,11 @@ export interface LoopOutcome {
    * "white-wins"` reports the LOSER as the winner and satisfies every other clause of `A7`.
    *
    * `null` when the loop stopped without a chess outcome: stdin ended (`A8` — no terminal result at
-   * all), or the engine seam failed, which is not a chess outcome and must never be shown as one.
+   * all), the player quit (`ADR-0021` transition 17 — the same outcome, only the notice differs), or
+   * the engine seam failed, which is not a chess outcome and must never be shown as one.
    */
   readonly result: FinalResult | null;
-  /** `null` only on end-of-input. An engine failure has a reason but no result. */
+  /** `null` on end-of-input and on quit. An engine failure has a reason but no result. */
   readonly reason: TerminalReason | null;
   /**
    * Always 0, and the type says so. BA/PM's EOF ruling: a truncated script exits cleanly and the
@@ -174,6 +187,14 @@ export interface LoopOutcome {
 
 /** `A8`'s one-line notice. Exported so a caller asserts the line rather than restating it. */
 export const INPUT_ENDED_NOTICE = "input ended";
+
+/**
+ * Transition 17's one-line notice (`ADR-0021` clause 3). Exported so a caller asserts the constant
+ * rather than a substring, and NOT equal to `INPUT_ENDED_NOTICE`: the notice is the only place a
+ * quit and an end-of-input ever differ in the player's eyes. It names quitting and carries none of
+ * the ten `TerminalReason` words, because a quit is not a game ending.
+ */
+export const QUIT_NOTICE = "quit";
 
 const sideToMove = (history: GameHistory): "white" | "black" =>
   history.position.blackToMove ? "black" : "white";
@@ -244,21 +265,29 @@ function claimShortfall(history: GameHistory): string[] {
 }
 
 /**
- * Run the game to a stop. Eight states and sixteen transitions; the sixteenth,
- * `awaiting-human` → `game-over` via the `claim` verb, is `ABC-021`'s and is built below.
+ * Run the game to a stop. Eight states and eighteen transitions; the sixteenth,
+ * `awaiting-human` → `game-over` via the `claim` verb, is `ABC-021`'s, and the seventeenth and
+ * eighteenth — `quit` to `exiting`, `take-back` to `evaluating-terminal` — are `ADR-0021`'s. All
+ * three are built below.
  *
- * The render cadence is `1 + plies + RE-EMITTING non-advancing outcomes` frames, not one per ply:
- * the initial position is rendered BEFORE the first act — a loop that renders one frame per ply
- * prompts the human before any board has been shown — and the non-advancing outcomes that carry a
- * message re-emit a frame, because that is where the message goes. END-OF-INPUT RE-EMITS NOTHING:
- * transition 10 goes to `exiting`, not to `rendering`, and its notice is a `sink.write` rather than
- * a frame. FIVE outcomes are non-advancing and only four of them emit a frame, so the
- * count-every-outcome form of this sentence is satisfied by a build that emits a frame on EOF —
- * which is why `A2` now carries the exclusion as its own clause (`[D29]`).
+ * The render cadence is `1 + plies + take-backs + RE-EMITTING non-mutating outcomes` frames, not
+ * one per ply: the initial position is rendered BEFORE the first act — a loop that renders one
+ * frame per ply prompts the human before any board has been shown — and the non-advancing outcomes
+ * that carry a message re-emit a frame, because that is where the message goes. END-OF-INPUT AND
+ * QUIT RE-EMIT NOTHING: transitions 10 and 17 go to `exiting`, not to `rendering`, and their notice
+ * is a `sink.write` rather than a frame. SEVEN outcomes are non-advancing and only five of them
+ * emit a frame, so the count-every-outcome form of this sentence is satisfied by a build that emits
+ * a frame on EOF — which is why `A2` now carries the exclusion as its own clause (`[D29]`).
  *
- * THE FIFTH IS `ABC-021`'s REFUSED CLAIM and the count was THREE-of-FOUR until it landed: a claim
- * the rules core refuses is `rejected`'s path, message and all, while a claim it allows terminates.
- * One outcome, two edges, and which one is taken is `status.claimable`'s answer and never the seam's.
+ * A NON-MUTATING OUTCOME IS NOT RE-EVALUATED — transitions 7, 8, 9 and the refused claim go back to
+ * `rendering` on the status the ply already holds. A `take-back` is the one non-advancing outcome
+ * that IS re-evaluated, because it changed the position: it takes the same single derive a ply
+ * takes, and it is the only edge into `evaluating-terminal` that does not come from `applying`.
+ *
+ * THE REFUSED CLAIM is `ABC-021`'s and the non-advancing count was THREE-of-FOUR until it landed: a
+ * claim the rules core refuses is `rejected`'s path, message and all, while a claim it allows
+ * terminates. One outcome, two edges, and which one is taken is `status.claimable`'s answer and
+ * never the seam's.
  */
 export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome> {
   const { history, humanColour, render, input, engine, sink } = options;
@@ -313,6 +342,12 @@ export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome
         sink.write(`${INPUT_ENDED_NOTICE}\n`);
         return { result: null, reason: null, exitCode: 0 };
       }
+      if (outcome.kind === "quit") {
+        // Transition 17 — `exiting`, a sibling of transition 10: a different notice, NO frame, and
+        // the SAME outcome, because a quit is no more a chess result than an end-of-input is.
+        sink.write(`${QUIT_NOTICE}\n`);
+        return { result: null, reason: null, exitCode: 0 };
+      }
       if (outcome.kind === "game-over") {
         return { result: outcome.result, reason: outcome.reason, exitCode: 0 };
       }
@@ -339,29 +374,39 @@ export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome
         }
         return { result: "draw", reason: claimable.draws[0] as ClaimableDraw, exitCode: 0 };
       }
-      if (outcome.kind !== "move") {
-        // Transitions 7, 8, 9 — back to `rendering`, carrying the message, WITHOUT re-evaluating.
+      if (outcome.kind === "take-back") {
+        // Transition 18 — `evaluating-terminal`, NOT `rendering`: the position changed, so the
+        // status the next frame carries is derived below by the ONE line a ply already uses. Not
+        // routed through `applying` either — that state's trigger is a legal move being read, and
+        // a take-back is its inverse. No guard on `plies`: `takeBack` clamps at zero by its own
+        // floor, and the product boundary ("nothing to undo") is the seam's (`ADR-0021` clause 4).
+        takeBack(history, outcome.plies);
         messages = outcome.messages;
-        continue;
-      }
+      } else {
+        if (outcome.kind !== "move") {
+          // Transitions 7, 8, 9 — back to `rendering`, carrying the message, WITHOUT re-evaluating.
+          messages = outcome.messages;
+          continue;
+        }
 
-      // `A10b`. THE SAME GUARD AS TRANSITION 13, ON THE OTHER SEAM. `A10` named the engine seam and
-      // nothing else, so this loop played a move no generator produced straight onto the board:
-      // measured from the start position, `moves.length` 1 and a FEN no legal move can reach. The
-      // stub "returns a generator-owned `Move`" is a property of the TEST DOUBLE, not of the
-      // `InputSeam` contract `EPIC-003` replaces it under (`[D31]`, `[D42]`).
-      //
-      // THROWN, not terminated and not converted to `rejected`. A `{kind: "move"}` that is not legal
-      // is a PARSER BUG, not a user typo — a real parser reports the user's illegal move as
-      // `rejected` itself — so presenting it as a typo would hide a broken parser forever. A named
-      // terminal reason is worse: it would invent a tenth `A14` value and decide whether a parser bug
-      // ends the game, which is `EPIC-003`'s and `EPIC-006`'s question. Reusing `engine-failure`
-      // would report an input fault as an engine fault. This is `A9b`'s answer, and the two paths are
-      // now symmetric: the loop invents nothing and throws.
-      if (!wasGenerated(history, outcome.move)) {
-        throw new Error("input seam returned a move that is not in `legalMoves`");
+        // `A10b`. THE SAME GUARD AS TRANSITION 13, ON THE OTHER SEAM. `A10` named the engine seam
+        // and nothing else, so this loop played a move no generator produced straight onto the
+        // board: measured from the start position, `moves.length` 1 and a FEN no legal move can
+        // reach. The stub "returns a generator-owned `Move`" is a property of the TEST DOUBLE, not
+        // of the `InputSeam` contract `EPIC-003` replaces it under (`[D31]`, `[D42]`).
+        //
+        // THROWN, not terminated and not converted to `rejected`. A `{kind: "move"}` that is not
+        // legal is a PARSER BUG, not a user typo — a real parser reports the user's illegal move as
+        // `rejected` itself — so presenting it as a typo would hide a broken parser forever. A
+        // named terminal reason is worse: it would invent a tenth `A14` value and decide whether a
+        // parser bug ends the game, which is `EPIC-003`'s and `EPIC-006`'s question. Reusing
+        // `engine-failure` would report an input fault as an engine fault. This is `A9b`'s answer,
+        // and the two paths are now symmetric: the loop invents nothing and throws.
+        if (!wasGenerated(history, outcome.move)) {
+          throw new Error("input seam returned a move that is not in `legalMoves`");
+        }
+        playMove(history, outcome.move);
       }
-      playMove(history, outcome.move);
     } else {
       let move: Move;
       try {
@@ -384,9 +429,10 @@ export async function runTurnLoop(options: TurnLoopOptions): Promise<LoopOutcome
       playMove(history, move);
     }
 
-    // Transition 14 → 2: appended, then derived, then evaluated. One derive per ply, and none at all
-    // on a non-advancing outcome — `A3b`'s spied count, which is what binds `NFR-002` here, because
-    // a two-derives-per-ply build reads 93.58 µs against a 100 µs bar and MEETS it.
+    // Transition 14 → 2 (and 18 → 2): appended or rewound, then derived, then evaluated. One derive
+    // per ply, ONE per take-back, and none at all on a non-mutating outcome — `A3b`'s spied count,
+    // which is what binds `NFR-002` here, because a two-derives-per-ply build reads 93.58 µs
+    // against a 100 µs bar and MEETS it.
     status = gameStatusOf(history);
   }
 }

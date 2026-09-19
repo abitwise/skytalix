@@ -1,0 +1,28 @@
+{
+  "M1_no_reevaluation": {
+    "exit": 1,
+    "failed": 3,
+    "passed": 60,
+    "failedRows": [
+      "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+      "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+      "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else"
+    ]
+  },
+  "M2_routed_as_command": {
+    "exit": 1,
+    "failed": 3,
+    "passed": 60,
+    "failedRows": [
+      "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+      "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+      "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else"
+    ]
+  },
+  "M0_control": {
+    "exit": 0,
+    "failed": 0,
+    "passed": 63,
+    "failedRows": []
+  }
+}

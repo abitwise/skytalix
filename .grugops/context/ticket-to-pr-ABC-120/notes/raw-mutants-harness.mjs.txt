@@ -1,0 +1,57 @@
+// ABC-120 A6 mutant round. Copies the worktree's src/ into a scratch tree OUTSIDE the repo, plants
+// one mutant at a time in the COPY's src/turn-loop.ts, runs the file, and records the raw output.
+// src/ in the worktree is never touched. Usage: node mutants.mjs
+import { spawnSync } from "node:child_process";
+import { cpSync, rmSync, readFileSync, writeFileSync, mkdirSync, existsSync, symlinkSync } from "node:fs";
+
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/abc120";
+const W = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-afc9d16752c14b310";
+const T = `${S}/T`;
+
+const MUTANTS = {
+  // Shape (a)'s defect: take back and go straight back to `rendering` WITHOUT re-evaluating.
+  M1_no_reevaluation: {
+    from: "        takeBack(history, outcome.plies);\n        messages = outcome.messages;\n      } else {",
+    to: "        takeBack(history, outcome.plies);\n        messages = outcome.messages;\n        continue; // MUTANT M1\n      } else {",
+  },
+  // Route `take-back` into the transitions-7/8/9 branch: no takeBack, no derive, message only.
+  M2_routed_as_command: {
+    from: '      if (outcome.kind === "take-back") {',
+    to: "      if (false) { // MUTANT M2: take-back falls into the 7/8/9 branch",
+  },
+  // Control: the ruled build, copied unchanged — must be green.
+  M0_control: { from: "", to: "" },
+};
+
+const fresh = () => {
+  rmSync(T, { recursive: true, force: true });
+  mkdirSync(T, { recursive: true });
+  for (const p of ["src", "tools", "AGENTS.md", "biome.json", "package.json", "tsconfig.json", "vitest.config.ts"]) {
+    cpSync(`${W}/${p}`, `${T}/${p}`, { recursive: true });
+  }
+  symlinkSync("/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/node_modules", `${T}/node_modules`);
+};
+
+const results = {};
+for (const [name, m] of Object.entries(MUTANTS)) {
+  fresh();
+  const file = `${T}/src/turn-loop.ts`;
+  let text = readFileSync(file, "utf8");
+  if (m.from !== "") {
+    if (!text.includes(m.from)) throw new Error(`${name}: anchor not found`);
+    text = text.replace(m.from, m.to);
+    writeFileSync(file, text);
+  }
+  const r = spawnSync("npx", ["vitest", "run", "src/turn-loop.test.ts"], { cwd: T, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  const out = r.stdout + r.stderr;
+  writeFileSync(`${S}/logs/mutant-${name}.log`, out);
+  const failed = [...out.matchAll(/^\s*×\s+(.+)$/gm)].map((x) => x[1].replace(/\s+\d+ms$/, ""));
+  const tm = out.match(/^\s*Tests\s+(?:(\d+) failed \| )?(\d+) passed/m);
+  results[name] = { exit: r.status, failed: tm ? Number(tm[1] ?? 0) : "?", passed: tm ? Number(tm[2]) : "?", failedRows: failed };
+  console.log(`== ${name}: exit ${r.status}, ${results[name].failed} failed / ${results[name].passed} passed`);
+  for (const f of failed) console.log(`   × ${f}`);
+}
+writeFileSync(`${S}/mutants-summary.json`, JSON.stringify(results, null, 2));
+// Prove the worktree's src/ never carried a mutant.
+const g = spawnSync("grep", ["-rn", "MUTANT", `${W}/src`], { encoding: "utf8" });
+console.log(`worktree src/ grep MUTANT: exit ${g.status} (1 = none found)`, g.stdout.trim());
