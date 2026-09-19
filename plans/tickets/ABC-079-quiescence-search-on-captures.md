@@ -145,3 +145,37 @@ Column moves are the Orchestrator's.
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P0` |
 | 10 | no major unresolved blocker | **✅** *(was ⚠️)* the ≥ 20 position set still does not exist, and **that is scope, not a blocker: it is now ruled THIS ticket's to build** (2026-08-18, from the dependency graph — `ABC-084` needs `ABC-078`, which is unbuilt, so this ticket is the only one of the two that can land first). `ABC-084` extends and does not fork. The symmetric *"whichever lands first"* rule that decided nothing is replaced by a named owner. **Open follow-up, not gating: `ABC-084`'s page and row still carry the old symmetric wording** |
+
+## Delivery
+
+**Built 2026-09-19 by the Software Engineer** (task `wave-2026-09-19`, subtask `ticket-to-pr-ABC-079`,
+Workflow 04) on branch `grugops/ABC-079-quiescence` at `ead14eb`, from `grugops/wave-2026-09-19`
+(`4f0ef01`). **NOT merged. HANDED UP — this ticket's own `A5` stop condition tripped.**
+
+- **Delivered:** `src/quiescence.ts` (new — stand-pat lower bound, captures only, fail-soft
+  alpha-beta, `QUIESCENCE_MAX_PLY = 8` runaway guard, `visit(qply)` hook, unmake in `finally`);
+  `src/search.ts` (leaf calls `quiesce`; TEST-ONLY `searchWithoutQuiescence` door); `src/engine.ts`
+  (same leaf, `countNode` shared with the visitor so the abort lands inside a capture sequence);
+  `src/quiescence.test.ts` (`A1`–`A6`, 24-position hanging-piece corpus — `ABC-084` extends it —
+  two lanes, `SEARCH_DEEP=1`). `ABC-077`'s `A6` export list widened by the one door;
+  `QE-G1` gained its depthless-call case. `src/zobrist.ts` untouched (`ADR-0020` is `ABC-075`'s).
+- **`A1` MET** (0/24 losing with quiescence vs 24/24 without, depth 1, one test), **`A2` MET**,
+  **`A3` MET** (≥ 200 positions, cap 8 binds on a queens rig and is never exceeded), **`A4` MET**
+  (same score, move AND node count on quiet positions; the door reproduces `ABC-078`'s recorded
+  562 / 14 565 nodes on position-6), **`A6` MET** (0 mutated, throw path included).
+- **`A5` NOT MET — STOP.** Node-count multiplier, same depth, with vs without quiescence:
+  **kiwipete 702x, position-6 62x at depth 1**; 878x / 377x at depth 2; 1 483x / 120x at depth 3.
+  Stop level 4x, model 2.5x. Asserted and RED in the default lane, on purpose. A scratch
+  diagnostic (not shipped) shows MVV-LVA ordering (`ABC-080`'s) brings depth 2 to 33x / 17x —
+  still 4–8x over the level — and only a 2-ply cap (a budget, which the ticket forbids) reaches
+  ~5x. **Owner: Architect/Design (`NFR-005` trigger, named on this page).**
+- **NFR-004 holds; NFR-005 worsens; NFR-008 crossed.** All six perft roots return in
+  3 000–3 002 ms at the 3 s budget (load 7.98); completed depth 2 on kiwipete and position-6
+  (was 4 and 3). Default-lane CPU 16.95 s → 36.08 s median (loaded machine, both readings) —
+  `ADR-0019` trigger (a); the cost is the existing search/engine tests, not the new file.
+- **Collateral RED, left on purpose:** three `src/engine.test.ts` fixtures (`A2` node bound,
+  `A3` depth-2 premise) whose node assumptions the multiplier broke. Re-fixturing them around
+  1 500x is tuning the ticket to the number it says to stop on.
+- **Gates at `ead14eb`:** lint 0, typecheck 0, build 0, unit **RED** (41 files, 1 238 pass /
+  5 fail, 0 skipped; integrity `No findings.`). Numbers, commands and the deep lanes are in
+  `.grugops/context/ticket-to-pr-ABC-079/notes/`.
