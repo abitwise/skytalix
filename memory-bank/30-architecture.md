@@ -146,7 +146,9 @@ and `environments` is `["local"]`.
 incident machinery stays; the never-deploy limit in every role stays. *"We have no production"* is a
 fact about today, and those are rails for the day it changes — a rail costs nothing while unused.
 **How the CLI will eventually be distributed — npm, a binary, a clone — is UNDECIDED and belongs to
-`EPIC-006`.**
+`EPIC-006`.** **[DECIDED 2026-09-19 on the owner's word: `git clone` + `npm install` + `npm run chess`,
+"for now" — `50-decisions/ADR-0018`, superseding `ADR-0007` clause 5 only. Nothing else in this
+section moved.]**
 
 Why, the alternatives weighed (including why `environments` is `["local"]` and not `[]`), and what
 would falsify it: **`50-decisions/ADR-0007`**. What is true operationally — that there is nothing to

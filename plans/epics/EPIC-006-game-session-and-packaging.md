@@ -203,7 +203,10 @@ result screen at the end.
   criterion below is amended from *"six"* to *"eight"* — see `## Acceptance (epic level)` and the
   enumerated table on `ABC-044`. QE's ninth-reason condition is checked and does **not** hold: no draw
   offer is in any epic's scope and none is cut, so eight stands until one is.
-- Packaging: runs via `npx` with no install step and no global dependency.
+- Packaging: runs from a `git clone` via `npm install` + `npm run chess`, with no published package,
+  no built artifact and no global dependency beyond `git` and Node `>=22`. **[REPAIRED 2026-09-19 by
+  Architect/Design at `ABC-100` on the owner's word — was *"runs via `npx` with no install step"*;
+  the channel is ruled in `ADR-0018`, "for now".]**
 
 ## Out of scope
 
@@ -219,8 +222,12 @@ epic runs long.
 
 ## Acceptance (epic level)
 
-- **Given** `npx <package>` on a machine with Node installed and nothing else, **when** it
-  is run, **then** a playable game starts with no additional install step.
+- **Given** `git clone` of this repository on a machine with `git` and Node `>=22` installed and
+  nothing else, **when** `npm install` and then `npm run chess` are run in the clone, **then** a
+  playable game starts with no further install step. **[REPAIRED 2026-09-19 by Architect/Design at
+  `ABC-100` on the owner's word — was *"Given `npx <package>` … no additional install step"*; the
+  channel is ruled in `ADR-0018`. The script is `chess`, not `start`: `package.json` has no `start`
+  script and `ABC-100` `A6` forbade adding one.]**
 - **Given** a completed engine reply, **when** the player runs `undo`, **then** the position
   returns to before the player's own last move — two plies back, one command.
 - **Given** any of the **eight** terminal conditions, **when** the game ends, **then** the result
@@ -249,11 +256,14 @@ epic runs long.
 
 ## NFR triggers
 
-- `NFR-007` Cold-start time — `npx` invocation to first rendered board in **< 2 s** with a
-  warm npm cache. Architect seeds the row in `plans/nfr-catalog.md`.
+- `NFR-007` Cold-start time — `npm run chess` on a completed clone (after `npm install`) to first
+  rendered board in **< 2 s**. Architect seeds the row in `plans/nfr-catalog.md`. **[REPAIRED
+  2026-09-19 by Architect/Design at `ABC-100` — was *"`npx` invocation … with a warm npm cache"*;
+  the bar is unchanged, the denominator follows `ADR-0018` Decision 4.]**
 
 ## Test notes
 
-End-to-end test that drives a scripted game from `npx` invocation to a checkmate result
-screen through the real stdin/stdout interface. Undo test must assert the repetition
+End-to-end test that drives a scripted game from `npm run chess` invocation on a completed clone to a
+checkmate result screen through the real stdin/stdout interface. **[REPAIRED 2026-09-19 by
+Architect/Design at `ABC-100` — was *"from `npx` invocation"*; `ADR-0018`.]** Undo test must assert the repetition
 history is rewound too, not just the board.

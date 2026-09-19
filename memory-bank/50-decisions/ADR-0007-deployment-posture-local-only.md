@@ -6,6 +6,8 @@ id: ADR-0007
 
 ## Status
 
+**CLAUSE 5 SUPERSEDED 2026-09-19 by `ADR-0018` (`ADR-0018-distribution-channel-git-clone-npm-run-chess.md`) on the owner's word — the channel is `git clone` + `npm run chess`, "for now". Clauses 1–4 and 6 stand unamended; this file is otherwise byte-identical at that hop (`ABC-100` `A1`).**
+
 **accepted** — 2026-08-06 by Architect/Design at task `refinement-deploy-posture-2026-08-06`
 (subtask `architect-deploy-posture`), under the project owner's standing directive of 2026-08-03
 recorded in `memory-bank/60-progress.md` under **"Standing directive — who decides"**, which retired
