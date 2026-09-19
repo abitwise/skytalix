@@ -811,7 +811,7 @@ Checked against `plans/epics/**` (the `RISK-00x` definitions) and every accepted
 | `RISK-001` move-generation edge cases | **No** — retired 2026-07-24 | the perft harness |
 | `RISK-002` search throughput caps depth | **No** | **non-M3 target hardware** for its timeboxed spike — a machine, not an environment |
 | `RISK-003` strength is hard to verify | **No** | a reference opponent, a self-play ladder, a puzzle suite |
-| `RISK-004` opening-book source licensing | **No — distribution-dependent** | the licence must permit **redistribution**. **This is NOT made moot by "we deploy nowhere":** redistribution is triggered by the data reaching anyone at all, and a `git clone` distribution is still redistribution. Unchanged: resolve **before** copying any data, exactly as `EPIC-005` says |
+| `RISK-004` opening-book source licensing | **RESOLVED 2026-09-19** — `ADR-0023` ratified by the owner: `lichess-org/chess-openings`, CC0-1.0, no attribution required; provenance file `data/opening-book/ATTRIBUTION.md` owed by `ABC-093`. Was: **No — distribution-dependent** | the licence must permit **redistribution**. **This is NOT made moot by "we deploy nowhere":** redistribution is triggered by the data reaching anyone at all, and a `git clone` distribution is still redistribution. Unchanged: resolve **before** copying any data, exactly as `EPIC-005` says |
 | `RISK-005` terminal portability | **No** | other people's terminals (Windows Terminal, iTerm2, tmux). Its mitigation — the ASCII fallback built in from the start — is **local code and entirely unaffected**; only its *verification* needs machines this project cannot reach today |
 
 **Accepted risks — twelve enumerated across three gates, none deploy-dependent.** `ABC-011`'s first

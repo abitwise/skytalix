@@ -20,6 +20,8 @@ In one line each: **(1)** `ABC-100` channel = `git clone` + `npm start`, superse
 **(2)** `ABC-092` research authorised, ratification still owed; **(3)** `NFR-008` CPU level 13 s → 15 s, wall clause untouched, no file changes lane;
 **(4)** `ABC-075` ep hash component = "ep square set", supersedes `ADR-0005`'s legal-capture clause, threading still Architect/Design's;
 **(5)** `ABC-046` shape (b) — a real `quit` arm; `resign` (`ABC-045`) stays separate; **(6)** `ABC-107` Architect/Design picks and implements the best option.
+**Same day, after the six hops landed, two more sentences from the owner, verbatim:** *"1. you can merge ; 2. I ratify ADR-0023: the opening-book source is lichess-org/chess-openings under CC0 1.0. ; 3. i approve that you move board"* — the merge of the six ruling branches, `ADR-0023`'s `accepted` status and `RISK-004`'s resolution, and the six board moves in `plans/board.md`'s 2026-09-19 header all rest on that sentence.
+
 Carried by six subtasks under `.grugops/queue/` (`ruling-abc100-…`, `research-abc092-…`, `ruling-abc110-…`, `ruling-abc075-…`, `ruling-abc046-…`, `ruling-abc107-…`), ADR ids pre-assigned `ADR-0018`…`ADR-0023` to avoid a parallel-numbering collision.
 
 ## Standing directive — the branching model, and who turns the merge key. **This supersedes "a merge needs its own explicit instruction".**

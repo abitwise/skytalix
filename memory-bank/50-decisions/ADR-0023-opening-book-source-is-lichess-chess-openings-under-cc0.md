@@ -1,11 +1,13 @@
 ---
 kind: adr
 ---
-# ADR-0023: The opening-book source is `lichess-org/chess-openings` (CC0 1.0) — proposed, awaiting the owner's ratification
+# ADR-0023: The opening-book source is `lichess-org/chess-openings` (CC0 1.0) — RATIFIED by the owner 2026-09-19
 
 ## Status
 
-**proposed** — 2026-09-19 by Architect/Design at task `owner-rulings-2026-09-19`, subtask
+**accepted** — ratified by the project owner Olger Oeselg in session, 2026-09-19, verbatim: *"I ratify ADR-0023: the opening-book source is lichess-org/chess-openings under CC0 1.0."* Transcribed by the Orchestrator (`human_admission` is `off`; this is a hand-authored record of a human's word, not a stamp). `RISK-004` moved to *resolved* in the same commit (`A5`). `data/opening-book/ATTRIBUTION.md` (`A4`) is written by `ABC-093` at the moment it pins the upstream commit SHA — the file's own required content (the pinned SHA and read date) does not exist until the data is fetched, so writing it earlier would record a pin that was never made.
+
+**History — proposed** 2026-09-19 by Architect/Design at task `owner-rulings-2026-09-19`, subtask
 `research-abc092-book-source`, Workflow 07, on the owner's word *"2. i don't have preferred source,
 we can research that"* (`.grugops/context/owner-rulings-2026-09-19/notes/20260919T100000Z-orchestrator-decision-six-owner-rulings-verbatim-3c9e1f42.md`).
 
@@ -24,7 +26,7 @@ ratification, not this research.
 
 ### Ratification (the owner's, by name — blank until he writes it)
 
-> Ratified by: ______________________ (project owner)   Date: ____-__-__
+> Ratified by: **Olger Oeselg** (project owner)   Date: **2026-09-19**
 >
 > The sentence that ratifies, so nobody has to guess what counts: **"I ratify ADR-0023: the
 > opening-book source is `lichess-org/chess-openings` under CC0 1.0."** On that sentence the
