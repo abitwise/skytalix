@@ -277,3 +277,68 @@ hook; the recorded underlying commands were run.
 
 **Observed, not fixed (`ABC-033`'s):** a padded lowercase line (`"  qh5  "`) is never case-folded,
 because the variants transform the whole line and index 0 is a space; noted in an `observation`.
+
+
+## QE — 2026-09-19 (QE/E2E, task `wave-2026-09-19`, subtask `qe-ABC-034`)
+
+**Verdict at `aa9e49f` (branch `grugops/qe-ABC-034`, base `grugops/wave-2026-09-19` carrying the
+build): PASS.** Not a stamp, not a merge, not an acceptance — QE's recorded verdict for the
+`In Review` exit (`AGENTS.md § QE validation authority`). Security/NFR's hop is owed and the
+ticket's own threshold fired on its letter. Notes and raw output:
+`.grugops/context/qe-ABC-034/notes/`. Column moves are the Orchestrator's;
+`In Review → In Security/NFR` is recommended.
+
+**Gates, run here:** `biome check .` 76 files clean · `tsc --noEmit` clean (typecheck and build) ·
+`npx vitest run --dir src` **42 files / 1291 tests / 0 skipped** · test-skip-integrity `No
+findings.` · `PERFT_DEEP=1` **32/32**. Hash pins against `4f0ef01`: `src/legal.ts`, `src/moves.ts`,
+`src/san.ts`, `src/coordinate-move.ts`, `src/frame.ts`, `src/turn-loop.ts`, `src/search.ts`,
+`src/engine.ts` all unchanged. **This hop changed zero lines under `src/`.**
+
+**Mutants (18, full lane each, every one reverted and the tree checked clean):**
+
+| mutant | rows RED |
+|---|---|
+| (a) king SENTENCES swapped (Ma1) · origin SENTENCES swapped (Ma2) | **NONE / NONE** → G1 |
+| (a) king CODES swapped (Ma4) · origin CODES swapped (Ma3) | 8 (`A1` ×5, `A2`, `A3` ×2) / 2 (`A3` ×2) |
+| (b) set difference on the wrong side (Mb) | 9 (`A1` ×5, `A2`, `A3` ×2, texts-handoff) |
+| (c) fold variants not handed over (Mc) · handed over in reverse order (Mc2) | 2 (texts-handoff ×2) / **NONE** → G2 |
+| (d) `unreadable` for everything (Md) | 19 |
+| (e) call site places the old placeholder code (Me) · call site drops `legal` (Me2) | 21 / **NONE** → G3 |
+| origin/destination swapped (Mg) · colour inverted (Mh) · `no-legal-move-named` dropped (Ml) · readers asked against `legal` not the difference (Mo) · `unreadable` sentence bare (Mp) · a sentence at 23 columns (Mq) | 7 / 4 / 5 / 3 / 2 / 1 |
+| `sameMove` ignores promotion (Mb2) · echo untrimmed (Mn) | NONE (equivalent mutant) / **NONE** → G4 |
+
+Every criterion `A1`–`A8` has at least one killing mutant; `A2` is the discriminating criterion the
+page said it was (Mo dies on it and on two `A1` rows only).
+
+**The three readings, ruled:**
+
+| criterion | ruling |
+|---|---|
+| `A1` | The named FEN has **no pinned piece** — the queen on h4 checks e1 with g3 and f2 empty; measured `isInCheck` true, `legalMoves` = [e1f1]. The first disjunct is unsatisfiable as written; the build passes on the second (*any position with an absolutely pinned piece*) with `own-king-exposed` on a real pin, and asserts the named FEN as `must-address-check` per this page's own table. **PASS under the reading; the Engineer's reading was the only one consistent with the table. BA/PM: replace the FEN label** (`4r1k1/8/8/8/8/8/4N3/4K3 w - - 0 1` is a candidate) |
+| `A7` | **Letter NOT met**: `src/move-input.ts` 10/11 is in the numstat. **`## Scope` on this page requires that call site** (messages *travel as `PromptOutcome.rejected.messages`*; *the dispatcher calls it*). The unwired alternative satisfies the letter and delivers nothing. **PASS as read with `## Scope`**, deviation bounded to the one file, eight core files hash-pinned unchanged, 32/32, skip 0. **The security firing threshold fires on its letter** — Security/NFR's hop is not pre-empted |
+| `A8` | **PASS as written**: `e8=K` → `no-legal-move-named` (*no move e8=K here*), `O-O` → `unreadable` (*type e2e4 or Nf3*), seven codes, `e8=P` ≠ `e8=Q`, no table anywhere. The `## Scope` lean ("place them together") needs a promotion-letter table or a re-coding in `src/san.ts` — the first `A8` forbids, the second `## Scope` says is not re-opened. The Engineer's placement is the only one buildable under the constraint. Teaching cost measured for BA/PM: unavailable castling by `O-O` / `e1g1` / `Kg1` → *type e2e4 or Nf3* / *e1 cannot reach g1* / *no move Kg1 here* |
+
+**(f) `"  qh5  "`:** `qh5`, `QH5`, `"  Qh5  "`, `"  e2e5  "` all classify correctly; `"  qh5  "` and
+`"  nc3  "` → *type e2e4 or Nf3*. The classifier is right for the texts it is handed; the cause is
+`ABC-033`'s whole-line `CASE_VARIANTS`. No `ABC-034` criterion names a padded input — **`ABC-033`'s,
+BA/PM to rule whether the fold trims first.**
+
+**`A5` beyond the suite:** the nine sentences plus `Qa1xh8#` (20 columns, the grammar's longest
+echo) and a padded line, through the real `assembleFrame` in unicode/ascii × white-/black-bottom:
+**44/44 whole, hidden 0**, 23 rows. `ABC-107`'s overflow pin (25 rows) passes beside it.
+
+**False-sentence check (`ABC-114`):** every checkable claim in the four touched files' comments
+verified against the tree — castles never in the difference (`src/moves.ts:330` filters at
+generation; probed through- and into-check), SAN echo bound 7 (`PIECE_MOVE` / `PAWN_MOVE` + one
+`CHECK_SUFFIX`), `CHECK_FEN` only `Kf1`, `PERFT_FENS` byte-equal to `src/perft.test.ts`. No false
+sentence in this ticket's lines.
+
+**Gaps — test gaps, none falsifies a criterion, none fixed here (fence):** **G1** no row binds a
+code to ITS sentence (Ma1/Ma2 green; test note 5 unasserted — assertable by semantic anchor without
+typing a sentence twice); **G2** dispatcher order pinned only through the classifier with
+coordinate codes; **G3** the `NFR-003` one-derive claim is unasserted — the `ABC-033 A5` spy cannot
+see the classifier's own `legalMoves` import; **G4** no padded well-formed SAN row guards the
+`.trim()` on the echo. Owner's call whether G1 rides this ticket before merge or a sibling.
+
+**Not done:** no merge, no deploy, no self-sign; `NFR-008` not ruled; Security/NFR's review not
+done; `plans/board.md`, `AGENTS.md`, `plans/nfr-catalog.md` not opened.

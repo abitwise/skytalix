@@ -1,0 +1,87 @@
+const W = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ab9495ff50152542f/src";
+const { parseFen, toFen } = await import(`${W}/fen.ts`);
+const { assembleFrame, MESSAGE_ROWS, PROMPT_ROWS } = await import(`${W}/frame.ts`);
+const { gameStatusOf, newGame } = await import(`${W}/history.ts`);
+const { renderHistory } = await import(`${W}/history-pane.ts`);
+const { isInCheck, legalMoves } = await import(`${W}/legal.ts`);
+const { resolveMoveInput } = await import(`${W}/move-input.ts`);
+const { generateMoves } = await import(`${W}/moves.ts`);
+const { squareName } = await import(`${W}/position.ts`);
+const { classifyRejection, rejectionMessage } = await import(`${W}/rejection.ts`);
+const { renderBoard } = await import(`${W}/render.ts`);
+const { renderStatusPanel } = await import(`${W}/status-panel.ts`);
+const { parseSan } = await import(`${W}/san.ts`);
+const { parseCoordinateMove } = await import(`${W}/coordinate-move.ts`);
+
+const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const PIN = "4r1k1/8/8/8/8/8/4N3/4K3 w - - 0 1";
+const CHECK = "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP1BP/RNBQK1NR w KQkq - 1 4";
+const PROMO = "8/4P3/8/8/8/4k3/8/4K3 w - - 0 1";
+const NOCASTLE = "4k3/8/8/8/8/8/8/K6R w - - 0 1";
+const THROUGH = "5r1k/8/8/8/8/8/8/4K2R w K - 0 1"; // castle through f1 attacked by rook f8
+const INTO = "k5r1/8/8/8/8/8/8/4K2R w K - 0 1"; // castle INTO check on g1 (rook g8)
+
+const show = (label: string, fen: string, line: string) => {
+  const h = newGame(fen);
+  const before = toFen(h.position);
+  const out = resolveMoveInput(h, line);
+  const msgs = out.kind === "move" ? `[move ${squareName(out.move.from)}${squareName(out.move.to)}]` : JSON.stringify(out.messages);
+  const rej = out.kind === "rejected" ? classifyRejection(h.position, [line]).reason : "-";
+  console.log(`${label.padEnd(34)} ${JSON.stringify(line).padEnd(14)} -> ${out.kind.padEnd(9)} ${msgs}  classifier(raw)=${rej}  fenSame=${toFen(h.position) === before}`);
+};
+
+console.log("== (f) padded / case probes on START ==");
+for (const l of ["qh5", "  qh5  ", "  Qh5  ", "QH5", "Qh5 ", " Qh5", "\tQh5", "  e2e5  ", "  nc3  "]) show("padding", START, l);
+console.log("== longest echo through the SAN bound ==");
+for (const l of ["Qa1xh8#", "axb8=Q+", "Qa1xh8", "Ra1a8", "Qh5+", "Qh5#", "Qh5!!", "Nf3 e5"]) show("echo", START, l);
+console.log("== promotion coordinate edge on PROMO ==");
+for (const l of ["e7e8", "e7e8q", "e7e8k", "e7e8p", "e7e8Q", "e8=Q", "e8=K", "e8=P", "e8Q", "e8"]) show("promo", PROMO, l);
+console.log("== castle probes ==");
+for (const l of ["O-O", "o-o", "0-0", "e1g1", "Kg1"]) show("nocastle", NOCASTLE, l);
+for (const l of ["O-O", "e1g1", "Kg1", "Kf1", "e1f1"]) show("through-check", THROUGH, l);
+for (const l of ["O-O", "e1g1", "Kg1"]) show("into-check", INTO, l);
+console.log("== other-side / empty / king walks on PIN and CHECK ==");
+for (const l of ["e8e1", "e8a8", "a1a2", "e1e2", "Ke2", "Kd2", "Nc3", "e2c3"]) show("pin", PIN, l);
+for (const l of ["Kf1", "Ke2", "Nh3", "Bf1", "g4g5", "h2h3", "e1f1", "d1e2"]) show("check", CHECK, l);
+
+console.log("== Mc2 order matters? classifier called with the two orders ==");
+for (const [fen, a, b] of [[START, "Bxc4", "bxc4"], [START, "Bb5", "bb5"], [START, "Nb1", "nb1"]] as const) {
+  const p = parseFen(fen);
+  const r1 = classifyRejection(p, [a, b]);
+  const r2 = classifyRejection(p, [b, a]);
+  console.log(`  [${a},${b}] -> ${JSON.stringify(r1)} | reversed -> ${JSON.stringify(r2)} | san(${a})=${JSON.stringify(parseSan(p, a, legalMoves(p)))} san(${b})=${JSON.stringify(parseSan(p, b, legalMoves(p)))}`);
+}
+
+console.log("== docblock claims ==");
+{
+  const p = parseFen(CHECK);
+  const legal = legalMoves(p);
+  console.log(`  CHECK_FEN isInCheck=${isInCheck(p)} legal=${legal.map((m: any) => squareName(m.from) + squareName(m.to)).join(",")} generated=${generateMoves(p).length}`);
+}
+for (const [name, fen] of [["THROUGH", THROUGH], ["INTO", INTO], ["kiwipete", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"]] as const) {
+  const p = parseFen(fen);
+  const legal = legalMoves(p);
+  const gen = generateMoves(p);
+  const exposing = gen.filter((m: any) => !legal.some((o: any) => o.from === m.from && o.to === m.to && o.promotion === m.promotion));
+  const castlesInGen = gen.filter((m: any) => squareName(m.from) === "e1" && ["g1", "c1"].includes(squareName(m.to)) && (m.flags & 0xff) !== 0);
+  console.log(`  ${name}: gen=${gen.length} legal=${legal.length} exposing=${exposing.map((m: any) => squareName(m.from) + squareName(m.to)).join(",")} kingE1toGC1InGen=${gen.filter((m: any) => squareName(m.from) === "e1" && ["g1", "c1"].includes(squareName(m.to))).map((m: any) => squareName(m.to) + "/flags=" + m.flags).join(",")}`);
+}
+
+console.log("== A5 in ASCII mode and both orientations, all nine sentences, hidden count ==");
+const NINE: [string, string][] = [[START, "hello"], [START, "e3e4"], [START, "e7e5"], [START, "e2e5"], [PIN, "Nc3"], [CHECK, "Nh3"], [START, "Qh5"], [PROMO, "e8=K"], [NOCASTLE, "O-O"], [START, "Qa1xh8#"], [START, "  Qh5  "]];
+for (const glyphs of ["unicode", "ascii"] as const) {
+  for (const orient of ["white-bottom", "black-bottom"] as const) {
+    for (const [fen, line] of NINE) {
+      const h = newGame(fen);
+      const out = resolveMoveInput(h, line) as any;
+      const frame: string[] = assembleFrame(
+        { board: renderBoard(h.position, glyphs, orient), status: renderStatusPanel(h, gameStatusOf(h), false), history: renderHistory(h), messages: out.messages },
+        glyphs,
+      );
+      const region = frame.slice(frame.length - PROMPT_ROWS - MESSAGE_ROWS, frame.length - PROMPT_ROWS);
+      const hidden = /\(\+(\d+) more\)/.exec(region.join("\n"));
+      const whole = region.map((r) => r.trimEnd()).includes(out.messages[0]);
+      console.log(`  ${glyphs.padEnd(7)} ${orient.padEnd(12)} ${JSON.stringify(line).padEnd(10)} "${out.messages[0]}" (${out.messages[0].length} cols) hidden=${hidden ? hidden[1] : 0} whole=${whole} rows=${frame.length}`);
+    }
+  }
+}

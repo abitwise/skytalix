@@ -1,0 +1,28 @@
+import { spawnSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+const W = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ab9495ff50152542f";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad";
+const run = (name, cmd, args, env = {}) => {
+  const t0 = Date.now();
+  const r = spawnSync(cmd, args, { cwd: W, encoding: "utf8", env: { ...process.env, ...env }, maxBuffer: 1 << 28 });
+  const ms = Date.now() - t0;
+  writeFileSync(`${S}/gate-${name}.out.txt`, (r.stdout ?? "") + "\n--- STDERR ---\n" + (r.stderr ?? ""));
+  console.log(`[${name}] exit=${r.status} ${ms}ms`);
+  return r;
+};
+const lint = run("lint", "npx", ["biome", "check", "."]);
+console.log((lint.stdout + lint.stderr).split("\n").filter((l) => /Checked|error|warn/i.test(l)).slice(0, 5).join("\n"));
+const tsc = run("typecheck", "npx", ["tsc", "--noEmit"]);
+console.log("tsc output bytes:", (tsc.stdout + tsc.stderr).length);
+const unit = run("unit", "npx", ["vitest", "run", "--dir", "src"]);
+console.log((unit.stdout + unit.stderr).split("\n").filter((l) => /Test Files|Tests |Duration|FAIL/.test(l)).join("\n"));
+const json = run("unit-json", "npx", ["vitest", "run", "--dir", "src", "--reporter=json"]);
+try {
+  const j = JSON.parse(json.stdout.slice(json.stdout.indexOf("{")));
+  console.log(`json: files=${j.numTotalTestSuites} total=${j.numTotalTests} passed=${j.numPassedTests} failed=${j.numFailedTests} pending=${j.numPendingTests} todo=${j.numTodoTests} skip=${j.numPendingTests + j.numTodoTests}`);
+  const skip = j.numPendingTests + j.numTodoTests;
+  const ti = run("test-integrity", "node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(skip)]);
+  console.log("test-integrity:", (ti.stdout + ti.stderr).trim());
+} catch (e) {
+  console.log("json parse failed", e.message);
+}

@@ -1,0 +1,94 @@
+===== lint =====
+Checked 76 files in 101ms. No fixes applied.
+
+--- STDERR ---
+
+===== typecheck =====
+
+--- STDERR ---
+
+===== unit =====
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ab9495ff50152542f
+
+ ✓ src/turn-loop.nfr.test.ts (4 tests) 271ms
+ ✓ src/search.qe.test.ts (6 tests) 287ms
+ ✓ src/search.test.ts (28 tests) 307ms
+ ✓ src/san.qualifier.hardening.test.ts (20 tests) 405ms
+   ✓ ABC-025 A1 — the qualifier is the shortest ladder entry that names exactly one move > holds for every non-pawn, non-castle legal move of all 207 corpus positions, both call forms  321ms
+ ✓ src/zobrist.test.ts (23 tests) 124ms
+ ✓ src/history-pane.test.ts (26 tests) 343ms
+ ✓ src/san.test.ts (22 tests) 179ms
+ ✓ src/render-seam.test.ts (11 tests) 28ms
+ ✓ src/history-pane.nfr.test.ts (11 tests) 105ms
+ ✓ src/moves.enpassant.test.ts (58 tests) 19ms
+ ✓ src/moves.castling.hardening.test.ts (110 tests) 64ms
+ ✓ src/frame.test.ts (34 tests) 75ms
+ ✓ src/turn-loop.test.ts (57 tests) 93ms
+ ✓ src/rejection.test.ts (53 tests) 38ms
+ ✓ src/line-input.test.ts (29 tests) 37ms
+ ✓ src/moves.enpassant.hardening.test.ts (120 tests) 42ms
+ ✓ src/evaluate.test.ts (21 tests) 16ms
+ ✓ src/gameend.test.ts (45 tests) 29ms
+ ✓ src/perft.test.ts (24 tests) 1067ms
+   ✓ ABC-006 acceptance — exact perft counts > startpos perft(4) = 197281  313ms
+ ✓ src/render.test.ts (27 tests) 23ms
+ ✓ src/legal.test.ts (31 tests) 19ms
+ ✓ src/history.test.ts (12 tests) 26ms
+ ✓ src/result-screen.test.ts (13 tests) 22ms
+ ✓ src/move-input.test.ts (50 tests) 31ms
+ ✓ src/san.parse.test.ts (30 tests) 19ms
+ ✓ src/frame.overflow-bound.test.ts (25 tests) 15ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 15ms
+ ✓ src/command-input.test.ts (79 tests) 24ms
+ ✓ src/status-panel.test.ts (29 tests) 17ms
+ ✓ src/engine.test.ts (24 tests) 633ms
+   ✓ A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames  403ms
+ ✓ src/zobrist.nfr.test.ts (4 tests) 3ms
+ ✓ src/apply.test.ts (24 tests) 10ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 9ms
+ ✓ src/moves.castling.test.ts (33 tests) 8ms
+ ✓ src/gameend.nfr.test.ts (3 tests) 4ms
+ ✓ src/glyph-mode.test.ts (21 tests) 3ms
+ ✓ src/coordinate-move.test.ts (45 tests) 8ms
+ ✓ src/fen.test.ts (27 tests) 4ms
+ ✓ src/san.nfr.test.ts (5 tests) 2ms
+ ✓ src/moves.test.ts (33 tests) 6ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 34ms
+ ✓ src/cli.test.ts (61 tests) 28ms
+
+ Test Files  42 passed (42)
+      Tests  1291 passed (1291)
+   Start at  10:32:28
+   Duration  3.97s (transform 750ms, setup 0ms, collect 5.60s, tests 4.49s, environment 4ms, prepare 1.90s)
+
+
+--- STDERR ---
+
+===== test-integrity =====
+No findings.
+
+--- STDERR ---
+
+===== perft-deep =====
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ab9495ff50152542f
+
+ ✓ src/perft.test.ts (32 tests) 39270ms
+   ✓ ABC-006 acceptance — exact perft counts > startpos perft(5) = 4865609 [deep, PERFT_DEEP=1]  3950ms
+   ✓ ABC-006 acceptance — exact perft counts > kiwipete perft(4) = 4085603 [deep, PERFT_DEEP=1]  3477ms
+   ✓ ABC-006 acceptance — exact perft counts > position-3 perft(5) = 674624 [deep, PERFT_DEEP=1]  700ms
+   ✓ ABC-006 acceptance — exact perft counts > position-3 perft(6) = 11030083 [deep, PERFT_DEEP=1]  12134ms
+   ✓ ABC-006 acceptance — exact perft counts > position-4 perft(4) = 422333 [deep, PERFT_DEEP=1]  409ms
+   ✓ ABC-006 acceptance — exact perft counts > position-4 perft(5) = 15833292 [deep, PERFT_DEEP=1]  13268ms
+   ✓ ABC-006 acceptance — exact perft counts > position-5 perft(4) = 2103487 [deep, PERFT_DEEP=1]  1808ms
+   ✓ ABC-006 acceptance — exact perft counts > position-6 perft(4) = 3894594 [deep, PERFT_DEEP=1]  2981ms
+
+ Test Files  1 passed (1)
+      Tests  32 passed (32)
+   Start at  10:39:25
+   Duration  39.47s (transform 37ms, setup 0ms, collect 38ms, tests 39.27s, environment 0ms, prepare 36ms)
+
+
+--- STDERR ---
+
