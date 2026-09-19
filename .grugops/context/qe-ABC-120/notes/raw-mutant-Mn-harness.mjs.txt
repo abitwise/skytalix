@@ -1,0 +1,28 @@
+// Mn: `quit` swallowed — the arm exists but does `messages = []; continue;` (a frame, then the next read).
+// Exercises A1's throw-on-third-read guard, which Mh never reached (it died earlier on a TypeError).
+import { execFileSync, spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import os from "node:os";
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1";
+const LOGS = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/qe120/logs";
+const FILE = `${WT}/src/turn-loop.ts`;
+const git = (...a) => execFileSync("git", a, { cwd: WT, encoding: "utf8" });
+const clean = () => git("status", "--porcelain", "--", "src").trim();
+if (clean() !== "") throw new Error("src dirty before Mn");
+const original = readFileSync(FILE, "utf8");
+const find = "        sink.write(`${QUIT_NOTICE}\\n`);\n        return { result: null, reason: null, exitCode: 0 };";
+if (original.split(find).length - 1 !== 1) throw new Error("needle count != 1");
+writeFileSync(FILE, original.replace(find, "        messages = []; // MUTANT Mn: quit swallowed\n        continue;"));
+const load = os.loadavg().map((x) => x.toFixed(2)).join(" ");
+const t0 = process.hrtime.bigint();
+const r = spawnSync("npx", ["vitest", "run", "src/turn-loop.test.ts", "src/turn-loop.nfr.test.ts", "--reporter=json"], { cwd: WT, encoding: "utf8", maxBuffer: 64 << 20 });
+const secs = (Number(process.hrtime.bigint() - t0) / 1e9).toFixed(2);
+writeFileSync(`${LOGS}/mutant-Mn_quit_swallowed_continue.json`, r.stdout);
+git("checkout", "--", "src/turn-loop.ts");
+const restored = readFileSync(FILE, "utf8") === original && clean() === "";
+const j = JSON.parse(r.stdout.slice(r.stdout.indexOf("{")));
+const failedRows = [];
+for (const f of j.testResults ?? []) for (const a of f.assertionResults ?? []) if (a.status === "failed") failedRows.push({ row: a.fullName, msg: (a.failureMessages?.[0] ?? "").split("\n")[0].slice(0, 200) });
+const out = { Mn_quit_swallowed_continue: { inFile: { exit: r.status, secs, load, passed: j.numPassedTests, failed: j.numFailedTests, total: j.numTotalTests, failedRows }, revertedClean: restored } };
+writeFileSync(`${LOGS}/mutant-Mn-summary.json`, JSON.stringify(out, null, 2));
+console.log(JSON.stringify(out, null, 2));

@@ -1,0 +1,39 @@
+import { spawnSync } from "node:child_process";
+import { mkdirSync, writeFileSync } from "node:fs";
+import os from "node:os";
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1";
+const LOGS = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/qe120/logs";
+mkdirSync(LOGS, { recursive: true });
+const run = (name, cmd, args, extraEnv = {}) => {
+  const load = os.loadavg().map((x) => x.toFixed(2)).join(" ");
+  const t0 = process.hrtime.bigint();
+  const r = spawnSync(cmd, args, { cwd: WT, encoding: "utf8", env: { ...process.env, ...extraEnv }, maxBuffer: 64 * 1024 * 1024 });
+  const ms = Number(process.hrtime.bigint() - t0) / 1e6;
+  writeFileSync(`${LOGS}/gate-${name}.log`, (r.stdout ?? "") + "\n--- stderr ---\n" + (r.stderr ?? ""));
+  console.log(`[${name}] exit ${r.status} in ${(ms / 1000).toFixed(2)} s, load before ${load}`);
+  return { ...r, secs: (ms / 1000).toFixed(2), load };
+};
+const summary = {};
+let r = run("lint", "npx", ["biome", "check", "."]);
+summary.lint = { exit: r.status, secs: r.secs, load: r.load, tail: (r.stdout + r.stderr).trim().split("\n").slice(-2) };
+r = run("typecheck", "npx", ["tsc", "--noEmit"]);
+summary.typecheck = { exit: r.status, secs: r.secs, load: r.load, out: (r.stdout + r.stderr).trim().slice(0, 300) };
+r = run("build", "npx", ["tsc", "--noEmit"]);
+summary.build = { exit: r.status, secs: r.secs, load: r.load };
+r = run("unit", "npx", ["vitest", "run", "--dir", "src"]);
+const lines = (r.stdout + r.stderr).split("\n").filter((l) => /Test Files|Tests {2}|Duration/.test(l)).map((l) => l.trim());
+summary.unit = { exit: r.status, secs: r.secs, load: r.load, lines };
+r = run("unit-json", "npx", ["vitest", "run", "--dir", "src", "--reporter=json"]);
+try {
+  const j = JSON.parse(r.stdout.slice(r.stdout.indexOf("{")));
+  summary.skip = { pending: j.numPendingTests, todo: j.numTodoTests, failed: j.numFailedTests, passed: j.numPassedTests, total: j.numTotalTests, suites: j.numTotalTestSuites, skip: j.numPendingTests + j.numTodoTests, secs: r.secs, load: r.load };
+} catch (e) { summary.skip = { error: String(e), exit: r.status }; }
+const skip = summary.skip?.skip ?? "UNKNOWN";
+r = run("integrity", "node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(skip)]);
+summary.integrity = { exit: r.status, out: (r.stdout + r.stderr).trim() };
+r = run("file-alone", "npx", ["vitest", "run", "src/turn-loop.test.ts"]);
+summary.fileAlone = { exit: r.status, secs: r.secs, lines: (r.stdout + r.stderr).split("\n").filter((l) => /Test Files|Tests {2}|Duration/.test(l)).map((l) => l.trim()) };
+r = run("nfr-file", "npx", ["vitest", "run", "src/turn-loop.nfr.test.ts"]);
+summary.nfrFile = { exit: r.status, secs: r.secs, lines: (r.stdout + r.stderr).split("\n").filter((l) => /Test Files|Tests {2}|Duration/.test(l)).map((l) => l.trim()) };
+writeFileSync(`${LOGS}/gates-summary.json`, JSON.stringify(summary, null, 2));
+console.log(JSON.stringify(summary, null, 2));

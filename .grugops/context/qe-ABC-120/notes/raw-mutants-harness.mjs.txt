@@ -1,0 +1,111 @@
+// QE mutant round for ABC-120. Each mutant: exact-string edit(s) in the worktree's src/turn-loop.ts,
+// asserted to match EXACTLY ONCE; run src/turn-loop.test.ts + src/turn-loop.nfr.test.ts with the JSON
+// reporter; collect the failed row names; revert with `git checkout -- src/turn-loop.ts`; assert
+// `git status --porcelain -- src` is EMPTY. A mutant that survives the two files is re-run against the
+// whole lane (`--dir src`) so "NONE in the file" and "NONE anywhere" are told apart.
+import { execFileSync, spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import os from "node:os";
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1";
+const LOGS = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/qe120/logs";
+const FILE = `${WT}/src/turn-loop.ts`;
+const git = (...a) => execFileSync("git", a, { cwd: WT, encoding: "utf8" });
+
+const QUIT_WRITE = "        sink.write(`${QUIT_NOTICE}\\n`);\n        return { result: null, reason: null, exitCode: 0 };";
+const TB = "        takeBack(history, outcome.plies);\n        messages = outcome.messages;";
+
+const MUTANTS = {
+  M1_takeback_no_derive_continue: [
+    { find: TB, replace: `${TB}\n        continue; // MUTANT M1` },
+  ],
+  M2_takeback_routed_as_command_7_8_9: [
+    { find: '      if (outcome.kind === "take-back") {', replace: '      if ((outcome.kind as string) === "MUTANT-M2") {' },
+  ],
+  Ma_quit_renders_a_frame_before_exiting: [
+    { find: QUIT_WRITE, replace: `        writer(render(history, status, false, [])); // MUTANT Ma\n${QUIT_WRITE}` },
+  ],
+  Mb_quit_writes_INPUT_ENDED_NOTICE: [
+    { find: "        sink.write(`${QUIT_NOTICE}\\n`);", replace: "        sink.write(`${INPUT_ENDED_NOTICE}\\n`); // MUTANT Mb" },
+  ],
+  Mc_quit_exitCode_1: [
+    { find: QUIT_WRITE, replace: QUIT_WRITE.replace("exitCode: 0", "exitCode: 1 as unknown as 0 /* MUTANT Mc */") },
+  ],
+  Md_takeback_N_minus_1: [
+    { find: "        takeBack(history, outcome.plies);", replace: "        takeBack(history, outcome.plies - 1); // MUTANT Md" },
+  ],
+  Me_takeback_keyHistory_stale: [
+    {
+      find: "        takeBack(history, outcome.plies);",
+      replace:
+        "        const removed = history.moves.slice(history.moves.length - outcome.plies); // MUTANT Me\n        takeBack(history, outcome.plies);\n        (history.moves as Move[]).push(...removed); // MUTANT Me: position rewound, list/keys/counts stale",
+    },
+  ],
+  Mf_messages_dropped_on_takeback_render: [
+    { find: TB, replace: "        takeBack(history, outcome.plies); // MUTANT Mf: messages dropped" },
+  ],
+  Mg_derive_TWICE_on_takeback: [
+    { find: TB, replace: `${TB}\n        status = gameStatusOf(history); // MUTANT Mg: a second supplier` },
+  ],
+  Mh_quit_arm_removed_falls_into_7_8_9: [
+    { find: '      if (outcome.kind === "quit") {', replace: '      if ((outcome.kind as string) === "MUTANT-Mh") {' },
+  ],
+  Mi_QUIT_NOTICE_names_a_result_word: [
+    { find: 'export const QUIT_NOTICE = "quit";', replace: 'export const QUIT_NOTICE = "resigned"; // MUTANT Mi' },
+  ],
+  Mj_quit_returns_a_chess_result: [
+    { find: QUIT_WRITE, replace: QUIT_WRITE.replace("result: null, reason: null", 'result: "draw" as never, reason: null /* MUTANT Mj */') },
+  ],
+  Mk_takeback_plies_ignored_zero: [
+    { find: "        takeBack(history, outcome.plies);", replace: "        takeBack(history, 0); // MUTANT Mk" },
+  ],
+  Ml_QUIT_NOTICE_equals_INPUT_ENDED_NOTICE: [
+    { find: 'export const QUIT_NOTICE = "quit";', replace: 'export const QUIT_NOTICE = INPUT_ENDED_NOTICE; // MUTANT Ml' },
+  ],
+};
+
+const count = (hay, needle) => hay.split(needle).length - 1;
+const vitest = (name, files) => {
+  const load = os.loadavg().map((x) => x.toFixed(2)).join(" ");
+  const t0 = process.hrtime.bigint();
+  const r = spawnSync("npx", ["vitest", "run", ...files, "--reporter=json"], { cwd: WT, encoding: "utf8", maxBuffer: 64 << 20 });
+  const secs = (Number(process.hrtime.bigint() - t0) / 1e9).toFixed(2);
+  writeFileSync(`${LOGS}/mutant-${name}.json`, r.stdout);
+  writeFileSync(`${LOGS}/mutant-${name}.stderr.log`, r.stderr ?? "");
+  let j;
+  try { j = JSON.parse(r.stdout.slice(r.stdout.indexOf("{"))); } catch { return { exit: r.status, parse: "FAILED", secs, load, stderrTail: (r.stderr ?? "").slice(-600) }; }
+  const failedRows = [];
+  for (const f of j.testResults ?? []) for (const a of f.assertionResults ?? []) if (a.status === "failed") failedRows.push({ row: a.fullName, msg: (a.failureMessages?.[0] ?? "").split("\n")[0].slice(0, 160) });
+  return { exit: r.status, secs, load, passed: j.numPassedTests, failed: j.numFailedTests, total: j.numTotalTests, failedRows };
+};
+
+const original = readFileSync(FILE, "utf8");
+const results = {};
+const clean = () => git("status", "--porcelain", "--", "src").trim();
+if (clean() !== "") throw new Error(`src not clean before the round:\n${clean()}`);
+
+results.M0_control = vitest("M0_control", ["src/turn-loop.test.ts", "src/turn-loop.nfr.test.ts"]);
+console.log("M0_control", JSON.stringify(results.M0_control));
+
+for (const [name, edits] of Object.entries(MUTANTS)) {
+  let text = original;
+  for (const { find, replace } of edits) {
+    const n = count(text, find);
+    if (n !== 1) throw new Error(`${name}: needle matched ${n} times:\n${find}`);
+    text = text.replace(find, replace);
+  }
+  writeFileSync(FILE, text);
+  const inFile = vitest(name, ["src/turn-loop.test.ts", "src/turn-loop.nfr.test.ts"]);
+  let lane;
+  if (inFile.failed === 0) lane = vitest(`${name}-lane`, ["--dir", "src"]);
+  git("checkout", "--", "src/turn-loop.ts");
+  const after = clean();
+  const restored = readFileSync(FILE, "utf8") === original;
+  results[name] = { inFile, lane, revertedClean: after === "" && restored };
+  console.log(name, JSON.stringify({ failed: inFile.failed, passed: inFile.passed, rows: inFile.failedRows?.map((r) => r.row.replace(/^.*> /, "").slice(0, 60)), lane: lane ? { failed: lane.failed, passed: lane.passed } : undefined, revertedClean: results[name].revertedClean, secs: inFile.secs, load: inFile.load }));
+  if (!results[name].revertedClean) throw new Error(`${name}: revert left src dirty`);
+}
+const grep = spawnSync("grep", ["-rn", "MUTANT", `${WT}/src`], { encoding: "utf8" });
+results.final_grep_MUTANT_in_src = { exit: grep.status, out: grep.stdout.trim() };
+results.final_git_status_src = clean();
+writeFileSync(`${LOGS}/mutants-summary.json`, JSON.stringify(results, null, 2));
+console.log("final grep MUTANT exit", grep.status, "| git status src:", JSON.stringify(clean()));

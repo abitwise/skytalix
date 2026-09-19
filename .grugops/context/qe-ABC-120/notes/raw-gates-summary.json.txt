@@ -1,0 +1,64 @@
+{
+  "lint": {
+    "exit": 0,
+    "secs": "0.69",
+    "load": "4.29 4.93 5.63",
+    "tail": [
+      "Checked 76 files in 124ms. No fixes applied."
+    ]
+  },
+  "typecheck": {
+    "exit": 0,
+    "secs": "1.60",
+    "load": "4.29 4.93 5.63",
+    "out": ""
+  },
+  "build": {
+    "exit": 0,
+    "secs": "1.24",
+    "load": "4.51 4.96 5.64"
+  },
+  "unit": {
+    "exit": 0,
+    "secs": "5.51",
+    "load": "4.51 4.96 5.64",
+    "lines": [
+      "Test Files  42 passed (42)",
+      "Tests  1297 passed (1297)",
+      "Duration  5.04s (transform 961ms, setup 0ms, collect 7.25s, tests 6.86s, environment 4ms, prepare 2.29s)"
+    ]
+  },
+  "skip": {
+    "pending": 0,
+    "todo": 0,
+    "failed": 0,
+    "passed": 1297,
+    "total": 1297,
+    "suites": 263,
+    "skip": 0,
+    "secs": "5.01",
+    "load": "4.95 5.04 5.66"
+  },
+  "integrity": {
+    "exit": 0,
+    "out": "No findings."
+  },
+  "fileAlone": {
+    "exit": 0,
+    "secs": "0.73",
+    "lines": [
+      "Test Files  1 passed (1)",
+      "Tests  63 passed (63)",
+      "Duration  292ms (transform 95ms, setup 0ms, collect 105ms, tests 55ms, environment 0ms, prepare 30ms)"
+    ]
+  },
+  "nfrFile": {
+    "exit": 0,
+    "secs": "0.76",
+    "lines": [
+      "Test Files  1 passed (1)",
+      "Tests  4 passed (4)",
+      "Duration  338ms (transform 49ms, setup 0ms, collect 53ms, tests 158ms, environment 0ms, prepare 30ms)"
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+// A7 / A8 by hash and diff; A9 recount by QE's own method. Reads git objects only; writes nothing to the tree.
+import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1";
+const BASE = "20ad7cb";
+const git = (...a) => execFileSync("git", a, { cwd: WT, encoding: "utf8", maxBuffer: 64 << 20 });
+const sha = (s) => createHash("sha256").update(s).digest("hex").slice(0, 16);
+const show = (rev, path) => git("show", `${rev}:${path}`);
+const head = git("rev-parse", "--short", "HEAD").trim();
+
+const baseTs = show(BASE, "src/turn-loop.ts").split("\n");
+const headTs = show("HEAD", "src/turn-loop.ts").split("\n");
+const baseTest = show(BASE, "src/turn-loop.test.ts").split("\n");
+const headTest = show("HEAD", "src/turn-loop.test.ts").split("\n");
+
+// Extract a block by a start regex and an end regex (inclusive), from a line array.
+const block = (lines, startRe, endRe, from = 0) => {
+  const s = lines.findIndex((l, i) => i >= from && startRe.test(l));
+  if (s < 0) throw new Error(`start not found: ${startRe}`);
+  const e = lines.findIndex((l, i) => i >= s && endRe.test(l));
+  if (e < 0) throw new Error(`end not found: ${endRe}`);
+  return { text: lines.slice(s, e + 1).join("\n"), range: `${s + 1}-${e + 1}` };
+};
+const stripComments = (text) =>
+  text
+    .split("\n")
+    .filter((l) => {
+      const t = l.trim();
+      return t !== "" && !t.startsWith("*") && !t.startsWith("/**") && !t.startsWith("//") && !t.startsWith("*/");
+    })
+    .map((l) => l.replace(/\s+\/\/.*$/, ""))
+    .join("\n");
+
+const out = { head, base: BASE };
+// A7 — TerminalReason type, LoopOutcome body (comments stripped), INPUT_ENDED_NOTICE literal.
+const cmp = (name, b, h, strip = false) => {
+  const bt = strip ? stripComments(b.text) : b.text;
+  const ht = strip ? stripComments(h.text) : h.text;
+  out[name] = { base: `${b.range} ${sha(bt)}`, head: `${h.range} ${sha(ht)}`, identical: bt === ht };
+};
+cmp("A7_TerminalReason", block(baseTs, /^export type TerminalReason =/, /"engine-threw";/), block(headTs, /^export type TerminalReason =/, /"engine-threw";/));
+cmp("A7_LoopOutcome_body_noComments", block(baseTs, /^export interface LoopOutcome/, /^}/), block(headTs, /^export interface LoopOutcome/, /^}/), true);
+out.A7_LoopOutcome_body_raw_identical = block(baseTs, /^export interface LoopOutcome/, /^}/).text === block(headTs, /^export interface LoopOutcome/, /^}/).text;
+out.A7_INPUT_ENDED_NOTICE = { base: baseTs.find((l) => l.includes("export const INPUT_ENDED_NOTICE")), head: headTs.find((l) => l.includes("export const INPUT_ENDED_NOTICE")) };
+out.A7_exitCode_line = { base: baseTs.find((l) => /readonly exitCode:/.test(l))?.trim(), head: headTs.find((l) => /readonly exitCode:/.test(l))?.trim() };
+out.A7_PromptOutcome_members = { base: block(baseTs, /^export type PromptOutcome =/, /"game-over";.*};$/).text.split("\n").filter((l) => l.trim().startsWith("|")).length, head: block(headTs, /^export type PromptOutcome =/, /"game-over";.*};$/).text.split("\n").filter((l) => l.trim().startsWith("|")).length };
+out.A7_EVERY_TERMINAL_REASON = { base: block(baseTest, /^const EVERY_TERMINAL_REASON/, /\];/).text.split("\n").filter((l) => /^\s+"/.test(l)).length, head: block(headTest, /^const EVERY_TERMINAL_REASON/, /\];/).text.split("\n").filter((l) => /^\s+"/.test(l)).length };
+
+// A8 — TABLE block, rows 14/17/18, the nfr test file, every other src file.
+cmp("A8_TABLE_block", block(baseTest, /^const TABLE: readonly Row\[\] = \[/, /^\];/), block(headTest, /^const TABLE: readonly Row\[\] = \[/, /^\];/));
+const rowsStart = /Row 14 is not a `TABLE` row/;
+const rowsEnd = /^  \}\);$/;
+// rows 14, 17, 18: from the Row-14 comment through the third closing `});` after the Row-18 comment
+const rowsBlock = (lines) => {
+  const s = lines.findIndex((l) => rowsStart.test(l));
+  const r18 = lines.findIndex((l, i) => i > s && /Row 18 is the third row/.test(l));
+  const e = lines.findIndex((l, i) => i > r18 && rowsEnd.test(l));
+  return { text: lines.slice(s, e + 1).join("\n"), range: `${s + 1}-${e + 1}` };
+};
+cmp("A8_rows_14_17_18", rowsBlock(baseTest), rowsBlock(headTest));
+out.A8_nfr_test_blob = { base: git("rev-parse", `${BASE}:src/turn-loop.nfr.test.ts`).trim(), head: git("rev-parse", "HEAD:src/turn-loop.nfr.test.ts").trim() };
+out.A8_nfr_test_identical = out.A8_nfr_test_blob.base === out.A8_nfr_test_blob.head;
+out.A8_src_files_changed = git("diff", "--name-only", `${BASE}..HEAD`, "--", "src/").trim().split("\n");
+out.A8_A3b_title = { base: baseTest.find((l) => l.includes("A3b — one derive per ply")), head: headTest.find((l) => l.includes("A3b — one derive per ply")) };
+// A3b's body unchanged (comments aside): from the title line to the closing `});`
+const a3b = (lines) => { const s = lines.findIndex((l) => l.includes("A3b — one derive per ply")); const e = lines.findIndex((l, i) => i > s && /^  \}\);$/.test(l)); return { text: lines.slice(s + 1, e + 1).join("\n"), range: `${s + 2}-${e + 1}` }; };
+cmp("A8_A3b_body", a3b(baseTest), a3b(headTest));
+
+// A9 — QE's own recount. Method: every `+` line of `git diff -U0` on src/turn-loop.ts, minus lines
+// that are blank, or whose trimmed text begins with `*`, `/**`, `*/` or `//` (pure comment lines).
+// Then, separately: how many of the survivors are RE-INDENTED copies of a `-` line (moved, not new).
+const diff = git("diff", "-U0", `${BASE}..HEAD`, "--", "src/turn-loop.ts");
+const plus = diff.split("\n").filter((l) => l.startsWith("+") && !l.startsWith("+++")).map((l) => l.slice(1));
+const minus = diff.split("\n").filter((l) => l.startsWith("-") && !l.startsWith("---")).map((l) => l.slice(1));
+const isComment = (l) => { const t = l.trim(); return t === "" || t.startsWith("*") || t.startsWith("/**") || t.startsWith("//") || t.startsWith("*/"); };
+const addedCode = plus.filter((l) => !isComment(l));
+const minusTrim = new Set(minus.map((l) => l.trim()));
+const moved = addedCode.filter((l) => minusTrim.has(l.trim()));
+const genuinelyNew = addedCode.filter((l) => !minusTrim.has(l.trim()));
+out.A9 = { plusLines: plus.length, minusLines: minus.length, addedNonComment: addedCode.length, ofWhichReindentedMoves: moved.length, genuinelyNew: genuinelyNew.length, bound: 30, addedNonCommentList: addedCode, genuinelyNewList: genuinelyNew };
+// A10 greps
+const ts = headTs.join("\n");
+out.A10 = {
+  sixteen_transitions: (ts.match(/sixteen transitions/g) ?? []).length,
+  only_on_end_of_input: (ts.match(/only on end-of-input/g) ?? []).length,
+  non_mutating_ci: (ts.match(/non-mutating/gi) ?? []).length,
+  the_sixteenth: (ts.match(/the sixteenth/g) ?? []).length,
+};
+console.log(JSON.stringify(out, null, 2));

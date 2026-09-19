@@ -307,3 +307,51 @@ off `grugops/wave-2026-09-19` @ `20ad7cb`. **Unmerged; not deployed.**
 - Production lines > 0: the zero-production-lines UAT waiver does NOT apply; the owner's word is
   needed at `In UAT`. Board move (`In Development` → `In Review`) and the QE hop are the
   Orchestrator's / QE's. Notes: `.grugops/context/ticket-to-pr-ABC-120/notes/`.
+
+## QE
+
+**Validated 2026-09-19 by QE/E2E** (task `wave-2026-09-19`, subtask `qe-ABC-120`, Workflow 05) on
+branch `grugops/qe-ABC-120` off `grugops/wave-2026-09-19` @ `babc1b2` (carries `d8e7ccc`).
+**PASS. Zero defects. Zero tests added, zero lines under `src/` changed by QE** (every mutant reverted,
+`git status -- src` asserted empty after each). Load 4.3–7.5, two sibling hops live.
+
+- **Gates reproduced at the tip:** `npx biome check .` 76 files clean, `npx tsc --noEmit` 0
+  (typecheck and build), `npx vitest run --dir src` **42 / 1297 / 0 skipped** (5.04 s), JSON skip
+  count 0, test-skip-integrity `No findings.`, `src/turn-loop.test.ts` alone 63/63 (55 ms in-file),
+  `src/turn-loop.nfr.test.ts` 4/4.
+- **Mutants (15, each reverted, `src/` asserted clean after each):** the Engineer's `M1` (take-back,
+  no derive, `continue`) and `M2` (routed into 7/8/9) reproduced — **3 / 3 red**, `A3` on the stale
+  `{ by: 'white' }`, `A4` on 5 ≠ 6 derives (M2: 4 moves ≠ 2), `A5` on 1 ≠ 2, `A1`/`A2` green;
+  (a) `quit` renders a frame **2** (`A1` 3 ≠ 2 frames, `A3` 11 ≠ 10); (b) `quit` writes
+  `INPUT_ENDED_NOTICE` **1** (`A1`); (c) `exitCode: 1` **2**; (d) take-back N−1 **2** (`A3` outcome,
+  `A4` 1 ≠ 2; `A5` green because −1 clamps to a no-op at ply 0); (e) `moves`/`keyHistory`/
+  `repetitionCounts` left stale **2** (`A3` stale claim, `A4`); (f) `messages` dropped **1** (`A4`
+  `['', '']` lacks `took back 2`); (g) derive TWICE **3** (`A3` 11, `A4` 7, `A5` 3); `quit` arm
+  removed **2**; `QUIT_NOTICE = "resigned"` **1** (`A2`); `quit` returns `"draw"` **2**; `plies`
+  ignored **2**; `QUIT_NOTICE = INPUT_ENDED_NOTICE` **2** (`A1`, `A2`); `quit` swallowed as
+  `continue` **2** (`A1` by `Error: input seam read past \`quit\`` — the third-read guard watched
+  firing). **No survivor.**
+- **`A7`/`A8` by sha256 of the named blocks at `20ad7cb` vs the tip:** `TerminalReason`,
+  `LoopOutcome` body (comments stripped), the `TABLE` block, rows 14/17/18, `A3b`'s body — all
+  identical; `src/turn-loop.nfr.test.ts` blob byte-identical; `exitCode: 0` and
+  `INPUT_ENDED_NOTICE` unchanged; `git diff --name-only 20ad7cb..HEAD -- src/` → exactly the two
+  files. **MET.**
+- **`A9` recounted by QE's own filter: 18** added non-comment lines (10 genuinely new, 8 re-indented
+  moves of the move path into the `else`) — ≤ 30; `ADR-0021` NOT re-opened. **MET.**
+- **`A10`:** greps 0 / 0 / 3 ("the sixteenth" 1, allowed). **The "7 non-advancing / 5 emit" census that
+  excludes `game-over` is RIGHT under this criterion** — the number is `A10`'s own and `ADR-0021`
+  clause 5's, the convention is `ABC-019`'s FOUR / `ABC-021`'s FIVE before it, and the sentence is an
+  enumeration true of each arm it names. A plain-predicate count is 8 of 9 (`game-over` advances no
+  ply either): an imprecision of convention, **not a false sentence by the `ABC-114` standard**. **MET.**
+- **Two `G`-INFO imprecisions named, neither corrected by QE (`ABC-114`: the pen and the verdict
+  stay separate):** the census convention above; and `src/turn-loop.ts:285` "the only edge into
+  `evaluating-terminal` that does not come from `applying`" — `ABC-019` transition 1
+  (`initialising` → `evaluating-terminal`) is a second such edge; the words are `ADR-0021` clause 4's
+  verbatim, so the one-clause fix ("the only edge from a prompt") belongs to whoever next amends that
+  clause, with the docblock taken along.
+- **Not covered, by fence:** the real `quit`/`new`/`undo` tokens, the confirmation and the boundary
+  refusal are `ABC-046`'s and `ABC-102`'s; nothing end-to-end reaches transitions 17/18 until they
+  land. `NFR-008` not ruled (fence; lane 5.04 s wall here, data).
+- **Production lines > 0**, so the UAT waiver does not apply; the owner's word is needed at
+  `In UAT`. Not merged, not deployed; `plans/board.md` untouched — the `In Review` exit is the
+  Orchestrator's move. Notes: `.grugops/context/qe-ABC-120/notes/`.
