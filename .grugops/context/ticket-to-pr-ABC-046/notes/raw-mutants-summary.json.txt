@@ -1,0 +1,285 @@
+[
+  {
+    "id": "M1-flag-never-clears",
+    "file": "src/command-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "6 failed | 125 passed (131)",
+        "redRows": [
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / other / quit: an intervening COMMAND clears the confirmation",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / rejected line / quit: a line that is NOT a move clears it too",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop: quit / board / quit does NOT end the session",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session",
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > `new` does not disturb the `quit` flag's rule: quit / new / quit asks again"
+        ],
+        "redCount": 6
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 0,
+        "tests": "65 passed (65)",
+        "redRows": [],
+        "redCount": 0
+      }
+    ]
+  },
+  {
+    "id": "M2-first-quit-exits-no-confirmation",
+    "file": "src/command-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "11 failed | 120 passed (131)",
+        "redRows": [
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / quit: the first is the confirmation, the second is the exit, and the exit is payload-free",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / other / quit: an intervening COMMAND clears the confirmation",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / rejected line / quit: a line that is NOT a move clears it too",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — the flag is PER SESSION: a second resolver is not armed by the first",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop: one `quit` continues with a frame that asks; the second ends it and the next line is never read",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop: quit / board / quit does NOT end the session",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / EOF: one `quit` then end-of-input is `ABC-019`'s end-of-input, not a quit",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A7 — `quit` is classified before the grammars, on BOTH quits: neither resolver, no derive",
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > `new` does not disturb the `quit` flag's rule: quit / new / quit asks again"
+        ],
+        "redCount": 11
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 1,
+        "tests": "3 failed | 62 passed (65)",
+        "redRows": [
+          "ABC-046 — `quit` and `new` through the delivered entry point > A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0",
+          "ABC-046 — `quit` and `new` through the delivered entry point > A6 — `new` redraws the OPENING frame byte for byte: colour, glyph mode and orientation kept",
+          "ABC-046 — `quit` and `new` through the delivered entry point > A1 — quit / EOF: a single `quit` asks and does NOT end the session; end-of-input does"
+        ],
+        "redCount": 3
+      }
+    ]
+  },
+  {
+    "id": "M3-module-level-flag",
+    "file": "src/command-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "10 failed | 121 passed (131)",
+        "redRows": [
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / quit: the first is the confirmation, the second is the exit, and the exit is payload-free",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / other / quit: an intervening COMMAND clears the confirmation",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / rejected line / quit: a line that is NOT a move clears it too",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — the flag is PER SESSION: a second resolver is not armed by the first",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop: one `quit` continues with a frame that asks; the second ends it and the next line is never read",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop: quit / board / quit does NOT end the session",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / EOF: one `quit` then end-of-input is `ABC-019`'s end-of-input, not a quit",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A7 — `quit` is classified before the grammars, on BOTH quits: neither resolver, no derive"
+        ],
+        "redCount": 10
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 0,
+        "tests": "65 passed (65)",
+        "redRows": [],
+        "redCount": 0
+      }
+    ]
+  },
+  {
+    "id": "M4-new-takes-back-two",
+    "file": "src/command-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "2 failed | 129 passed (131)",
+        "redRows": [
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > A4 — the pure function: `take-back` of `moves.length` plies, nothing mutated HERE",
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > A4 — through the MERGED loop at ply 8 with a repeated position: FEN, moves, keys and counts rewind TOGETHER"
+        ],
+        "redCount": 2
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 0,
+        "tests": "65 passed (65)",
+        "redRows": [],
+        "redCount": 0
+      }
+    ]
+  },
+  {
+    "id": "M5-new-inert-command",
+    "file": "src/command-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "6 failed | 125 passed (131)",
+        "redRows": [
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > A4 — the pure function: `take-back` of `moves.length` plies, nothing mutated HERE",
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > A4 — through the MERGED loop at ply 8 with a repeated position: FEN, moves, keys and counts rewind TOGETHER",
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > A5 — on a CLAIMABLE position, the frame after `new` carries NO draw claim (transition 18 re-evaluates)",
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > A5 — the cost: exactly ONE extra derive for the take-back, none for the discarded game",
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > A7 — `new` is classified before the grammars: neither resolver, no derive",
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > `new` does not disturb the `quit` flag's rule: quit / new / quit asks again"
+        ],
+        "redCount": 6
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 1,
+        "tests": "1 failed | 64 passed (65)",
+        "redRows": [
+          "ABC-046 — `quit` and `new` through the delivered entry point > A6 — `new` redraws the OPENING frame byte for byte: colour, glyph mode and orientation kept"
+        ],
+        "redCount": 1
+      }
+    ]
+  },
+  {
+    "id": "M6-confirmation-over-17-columns",
+    "file": "src/command-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "2 failed | 129 passed (131)",
+        "redRows": [
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / quit: the first is the confirmation, the second is the exit, and the exit is payload-free",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > the confirmation fits the message region at the NARROWEST frame: hidden count exactly 0"
+        ],
+        "redCount": 2
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 1,
+        "tests": "2 failed | 63 passed (65)",
+        "redRows": [
+          "ABC-046 — `quit` and `new` through the delivered entry point > A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0",
+          "ABC-046 — `quit` and `new` through the delivered entry point > A1 — quit / EOF: a single `quit` asks and does NOT end the session; end-of-input does"
+        ],
+        "redCount": 2
+      }
+    ]
+  },
+  {
+    "id": "M7-only-commands-clear-the-flag",
+    "file": "src/command-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "3 failed | 128 passed (131)",
+        "redRows": [
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / rejected line / quit: a line that is NOT a move clears it too",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session"
+        ],
+        "redCount": 3
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 0,
+        "tests": "65 passed (65)",
+        "redRows": [],
+        "redCount": 0
+      }
+    ]
+  },
+  {
+    "id": "M8-no-confirmation-message-on-first-quit",
+    "file": "src/command-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "11 failed | 120 passed (131)",
+        "redRows": [
+          "ABC-035 fences — grammar only > `board` is payload-free; the pure function's `quit` is the confirmation and never an exit",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / quit: the first is the confirmation, the second is the exit, and the exit is payload-free",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / other / quit: an intervening COMMAND clears the confirmation",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / rejected line / quit: a line that is NOT a move clears it too",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — the flag is PER SESSION: a second resolver is not armed by the first",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop: one `quit` continues with a frame that asks; the second ends it and the next line is never read",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop: quit / board / quit does NOT end the session",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session",
+          "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A7 — `quit` is classified before the grammars, on BOTH quits: neither resolver, no derive",
+          "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > `new` does not disturb the `quit` flag's rule: quit / new / quit asks again"
+        ],
+        "redCount": 11
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 1,
+        "tests": "2 failed | 63 passed (65)",
+        "redRows": [
+          "ABC-046 — `quit` and `new` through the delivered entry point > A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0",
+          "ABC-046 — `quit` and `new` through the delivered entry point > A1 — quit / EOF: a single `quit` asks and does NOT end the session; end-of-input does"
+        ],
+        "redCount": 2
+      }
+    ]
+  },
+  {
+    "id": "M9-reader-calls-bare-resolvePromptLine",
+    "file": "src/line-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/line-input.test.ts",
+        "status": 0,
+        "tests": "29 passed (29)",
+        "redRows": [],
+        "redCount": 0
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 1,
+        "tests": "1 failed | 64 passed (65)",
+        "redRows": [
+          "ABC-046 — `quit` and `new` through the delivered entry point > A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0"
+        ],
+        "redCount": 1
+      }
+    ]
+  },
+  {
+    "id": "CONTROL-unmutated",
+    "file": "src/command-input.ts",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 0,
+        "tests": "131 passed (131)",
+        "redRows": [],
+        "redCount": 0
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 0,
+        "tests": "65 passed (65)",
+        "redRows": [],
+        "redCount": 0
+      }
+    ]
+  }
+]

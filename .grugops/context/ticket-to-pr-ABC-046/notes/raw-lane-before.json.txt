@@ -1,0 +1,44 @@
+{
+  "label": "before",
+  "runs": 3,
+  "medianCPU": 25.79,
+  "rangeCPU": [
+    25.5,
+    25.97
+  ],
+  "rows": [
+    {
+      "run": 1,
+      "load_before": "{ 6.77 6.97 6.86 }",
+      "real": 8.33,
+      "user": 23.19,
+      "sys": 2.6,
+      "cpu": 25.79,
+      "files": 42,
+      "tests": 1325,
+      "ok": "HARNESS_ERROR(status=0)"
+    },
+    {
+      "run": 2,
+      "load_before": "{ 8.55 7.36 7.00 }",
+      "real": 7.59,
+      "user": 22.99,
+      "sys": 2.51,
+      "cpu": 25.5,
+      "files": 42,
+      "tests": 1325,
+      "ok": "HARNESS_ERROR(status=0)"
+    },
+    {
+      "run": 3,
+      "load_before": "{ 8.35 7.34 7.00 }",
+      "real": 7.49,
+      "user": 23.48,
+      "sys": 2.49,
+      "cpu": 25.97,
+      "files": 42,
+      "tests": 1325,
+      "ok": "HARNESS_ERROR(status=0)"
+    }
+  ]
+}

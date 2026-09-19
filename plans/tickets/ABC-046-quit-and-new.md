@@ -253,3 +253,86 @@ pointer plus what changes on THIS page. Reasoning, alternatives and measurements
 
 **Column: unchanged on this page — the board move is the Orchestrator's.** Recommended pull order
 (`ADR-0021` § Consequences): `ABC-045` → the arm ticket → **this ticket** → `ABC-102`.
+
+## Delivery
+
+**Built 2026-09-20 by the Software Engineer** (task `wave-2026-09-19`, subtask
+`ticket-to-pr-ABC-046`, Workflow 04) on branch `grugops/ABC-046-quit-and-new` @ **`6cdde15`**, off
+`grugops/wave-2026-09-19` @ `d1d431f` — which carries `ABC-120`'s arms (transitions 17/18,
+`QUIT_NOTICE`) and `ABC-045`'s `resign`, so the one remaining DoR ⚠️ (the arm ticket landing first)
+was met at the pull. **Unmerged; not deployed.**
+
+- **Exactly four files, measured from git:** `git diff --name-only d1d431f...6cdde15 -- src/` →
+  `src/command-input.ts` (+99 / −22; **29 added non-comment production lines**),
+  `src/line-input.ts` (+12 / −9; **3 code lines**), `src/command-input.test.ts` (+402 / −18),
+  `src/cli.test.ts` (+108 / −5). **`A8`: `src/turn-loop.ts` byte-identical** (`git diff --stat`
+  empty), as are `turn-loop.test.ts`, `cli.ts`, `result-screen.ts`, `gameend.ts`, `history.ts`,
+  `line-input.test.ts`, `move-input.ts`, `rejection.ts`, `zobrist.ts`, `search.ts`,
+  `quiescence.ts`, `engine.ts`. 0 new test files.
+- **The shape (`ADR-0021` clauses 6–7, built literally):** `COMMAND_TABLE` gains
+  `{ token: "new", outcome: "take-back" }`; `CommandToken`, `CommandSpec.outcome` and
+  `PromptLineOutcome` widen; `resolvePromptLine` answers
+  `{ kind: "take-back", plies: history.moves.length, messages: [] }` for `new` and
+  `{ kind: "command", messages: QUIT_CONFIRMATION_MESSAGES }` for `quit` — ALWAYS, because it
+  stays a pure function over a string with no memory. `createPromptLineResolver(deps?)` is the
+  per-session wrapper holding the ONE flag: `quitArmed = classifyCommand(line)?.token === "quit"`
+  on every line (so any other line clears it), and `{ kind: "quit" }` when it was already armed.
+  `src/line-input.ts` creates one per seam (`const resolve = createPromptLineResolver(deps)`) and
+  calls it at the one call site. `QUIT_CONFIRMATION_MESSAGES = ["quit again to end"]` — one item,
+  17 columns, the clause-6 bound. `help` lists `quit` and `new` by construction — **the promise
+  `ABC-112` was cut over is TRUE from this commit; its cancel trigger has fired.**
+- **`A1`–`A5`, `A7`:** 33 rows in `src/command-input.test.ts` (two `describe("ABC-046 …")`
+  blocks), plus `new` in the spelling sweep, three non-tokens (`ne`, `newgame`, `renew`), the
+  no-argument fence (`new game`), and `new` OUT of `ABC-035` `A4`'s foreign list. The three
+  sequences: **quit/quit** → confirmation then `{ kind: "quit" }` (loop: renders 2, reads 2, the
+  next line never read, `{ null, null, 0 }`, last write `QUIT_NOTICE`); **quit/other/quit** →
+  confirmation again for `board`, `help`, a legal move `b4`, a rejected `zzz`, and `new` (loop:
+  reads 4, ends on `INPUT_ENDED_NOTICE`; with a first-legal opponent, `quit/e4/quit` → reads 4,
+  moves 2); **quit/EOF** → `INPUT_ENDED_NOTICE`, `QUIT_NOTICE` written nowhere. Two resolvers are
+  independent (a module-level flag reds). `A4` on `claimable()` (8 plies, third occurrence): FEN
+  = `SHUFFLE_FEN`, moves 0, `keyHistory` 1, `repetitionCounts` one entry of 1; the pure call
+  mutates nothing. `A5`: frame 1's `claimable` is `{ white, threefold }` (the Given), frame 2's is
+  undefined, the real panel shows no `may claim`, derives 2 for `new` + `board`. `A7`: 0 / 0 / 0 /
+  0 / 0 on both `quit`s and on `new`, control 1 / 1.
+- **`A2`, `A3`, `A6`:** two children in `src/cli.test.ts` — `quits` (`--colour white`,
+  `e4 / quit / quit / d4`, opponent `e5`): exit 0, stream ends `> quit\n`, frames 4 (1 + 2 plies +
+  the confirmation), nothing after the last frame but the prompt and the notice, `d4` never read,
+  no `did not finish`, `renderResultScreen({ null, null, 0 })` → `[]`; `renews` (`e4 / new /
+  quit`): frames 5, frame 4 byte-equal to frame 1 (board region, and whole), frame 3 ≠ frame 1,
+  the trailing single `quit`'s confirmation on frame 5, ends `> input ended\n`. Spawn pin
+  `17 + 7 + 1` → `17 + 7 + 1 + 2`, reason written.
+- **The `Done` assertions this ticket reds, exactly the two the ruling authorised:** `ABC-035`
+  `A4`'s foreign-list row for `new` (`new` joined the table) and the `ABC-035` fence row *"no
+  token carries an effect: `quit` and `board` are outcome-identical and payload-free"* — superseded
+  and re-written to what is still true of the pure function. `ABC-035`'s page is not opened.
+- **Three readings, recorded rather than hidden** (the sibling `decision` note has the reasoning):
+  (1) `A8`'s "one call-site line" in `src/line-input.ts` is THREE code lines — the import, the
+  per-seam declaration, the call — because a per-session flag needs a per-session binding; read as
+  "the reader binds the wrapper instead of bare `resolvePromptLine`". (2) **An over-cap
+  (> 1024-character) line between two `quit`s does NOT clear the flag** — the reader rejects it
+  before the wrapper sees it; every line the wrapper sees clears. Named for QE / BA/PM. (3) `new`
+  carries `messages: []` per the ADR's own clause 7 (the subtask wrote `[...]`).
+- **Mutants, 9 watched RED in place and reverted (sha-asserted), control 131 / 65 green:** flag
+  never clears, first `quit` exits, module-level flag, `new` → 2 plies, `new` inert, item over 17
+  columns, only commands clear, no confirmation message, and the reader bypassing the wrapper —
+  the last caught by `CHILDREN.quits` ONLY (`src/line-input.test.ts` has no confirmation row and
+  is outside this ticket's file list; named for QE).
+- **Gates at the tip:** `npx biome check .` 76 files clean, `npx tsc --noEmit` 0 (typecheck and
+  build), `npx vitest run --dir src` **42 / 1361 / 0 skipped** (base MEASURED 42 / 1325 / 0 at
+  `d1d431f` — the subtask's 1317 was `ABC-045`'s tip; +36 tests, +0 files), JSON skip count 0,
+  test-skip-integrity `No findings.` `self_fix_attempts` spent **1** (a literal-`0` type on one
+  test line).
+- **`N8-LANE` / `NFR-008`:** in-file `+8 ms` (`command-input.test.ts` 28 → 36 ms, n = 7, matched
+  load) and two collect-time children (the `cli.test.ts` in-file pair was taken at load 12–21 vs
+  9–14 and is noise; ~0.3–0.35 s CPU expected per `ABC-043`/`ABC-115`'s per-child figure);
+  **0 new files** — met on the number this ticket controls, the children reported rather than
+  netted. Whole-lane CPU (`/usr/bin/time -p`, n = 3, two sibling hops live): **before 25.79 s at
+  load 6.8–8.6, after 26.63 s at load 7.2–14.0** — over 15 s in every run INCLUDING the three
+  before the change; the headroom at the delivery base is NEGATIVE, so this reads as a lane
+  breach that is the base's, **REPORTED AS NON-CONFORMING, not ruled, nothing trimmed**; not a
+  conforming `ADR-0019` reading. The base reads ~7 s above `ABC-045`'s base one merge earlier
+  with `src/` unchanged between them — handed up as a number.
+- Production lines > 0: the zero-production-lines UAT waiver does NOT apply; the owner's word is
+  needed at `In UAT`. Board move (`In Development` → `In Review`), `ABC-112`'s cancellation and
+  the QE hop are the Orchestrator's / QE's. `ABC-102` inherits a `help` second row at 21 of 21
+  columns — zero headroom. Notes: `.grugops/context/ticket-to-pr-ABC-046/notes/`.
