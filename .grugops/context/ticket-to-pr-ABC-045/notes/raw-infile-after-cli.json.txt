@@ -1,0 +1,87 @@
+{
+  "label": "after-cli",
+  "file": "src/cli.test.ts",
+  "runs": 7,
+  "median_tests_ms": 29,
+  "median_duration_ms": 3210,
+  "median_cpu": 6.26,
+  "rows": [
+    {
+      "run": 1,
+      "load_before": "{ 11.96 7.25 6.23 }",
+      "tests_ms": 28,
+      "duration_ms": 3030,
+      "passed": 62,
+      "status": 0,
+      "real": 3.48,
+      "user": 5.19,
+      "sys": 0.91
+    },
+    {
+      "run": 2,
+      "load_before": "{ 11.64 7.26 6.24 }",
+      "tests_ms": 28,
+      "duration_ms": 3150,
+      "passed": 62,
+      "status": 0,
+      "real": 3.59,
+      "user": 5.22,
+      "sys": 0.95
+    },
+    {
+      "run": 3,
+      "load_before": "{ 11.03 7.21 6.23 }",
+      "tests_ms": 29,
+      "duration_ms": 3210,
+      "passed": 62,
+      "status": 0,
+      "real": 3.67,
+      "user": 5.34,
+      "sys": 0.99
+    },
+    {
+      "run": 4,
+      "load_before": "{ 11.03 7.21 6.23 }",
+      "tests_ms": 35,
+      "duration_ms": 3270,
+      "passed": 62,
+      "status": 0,
+      "real": 3.76,
+      "user": 5.49,
+      "sys": 0.98
+    },
+    {
+      "run": 5,
+      "load_before": "{ 10.71 7.21 6.23 }",
+      "tests_ms": 34,
+      "duration_ms": 3290,
+      "passed": 62,
+      "status": 0,
+      "real": 3.79,
+      "user": 5.61,
+      "sys": 1
+    },
+    {
+      "run": 6,
+      "load_before": "{ 10.17 7.15 6.22 }",
+      "tests_ms": 33,
+      "duration_ms": 3250,
+      "passed": 62,
+      "status": 0,
+      "real": 3.74,
+      "user": 5.29,
+      "sys": 0.97
+    },
+    {
+      "run": 7,
+      "load_before": "{ 9.60 7.08 6.20 }",
+      "tests_ms": 29,
+      "duration_ms": 3200,
+      "passed": 62,
+      "status": 0,
+      "real": 3.66,
+      "user": 5.25,
+      "sys": 0.96
+    }
+  ]
+}
