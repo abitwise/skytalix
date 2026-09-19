@@ -1,0 +1,37 @@
+// QE ABC-045 — the four gates + skip count + integrity, run from a node script (hook refuses npm run / $?).
+import { spawnSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+import { loadavg } from "node:os";
+
+const CWD = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a1d867186de329e93";
+const OUT = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad";
+
+function run(name, cmd, args, extraEnv = {}) {
+  const load = loadavg().map((n) => n.toFixed(2)).join(" ");
+  const t0 = process.hrtime.bigint();
+  const r = spawnSync(cmd, args, { cwd: CWD, encoding: "utf8", maxBuffer: 1 << 28, env: { ...process.env, ...extraEnv } });
+  const ms = Number(process.hrtime.bigint() - t0) / 1e6;
+  return { name, cmd: [cmd, ...args].join(" "), status: r.status, ms: Math.round(ms), load, stdout: r.stdout, stderr: r.stderr };
+}
+
+const results = [];
+results.push(run("lint", "npx", ["biome", "check", "."]));
+results.push(run("typecheck", "npx", ["tsc", "--noEmit"]));
+results.push(run("build", "npx", ["tsc", "--noEmit"]));
+results.push(run("unit", "npx", ["vitest", "run", "--dir", "src"]));
+const json = run("unit-json", "npx", ["vitest", "run", "--dir", "src", "--reporter=json"]);
+results.push(json);
+let skip = "UNKNOWN - verify";
+try {
+  const start = json.stdout.indexOf("{");
+  const parsed = JSON.parse(json.stdout.slice(start));
+  skip = { pending: parsed.numPendingTests, todo: parsed.numTodoTests, total: parsed.numTotalTests, passed: parsed.numPassedTests, failed: parsed.numFailedTests, files: parsed.numTotalTestSuites, sum: parsed.numPendingTests + parsed.numTodoTests };
+} catch (e) { skip = `UNKNOWN - verify (${e.message})`; }
+results.push(run("integrity", "node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(typeof skip === "object" ? skip.sum : 0)]));
+results.push(run("file-command-input", "npx", ["vitest", "run", "src/command-input.test.ts"]));
+results.push(run("file-cli", "npx", ["vitest", "run", "src/cli.test.ts"]));
+
+const summary = results.map((r) => ({ name: r.name, status: r.status, ms: r.ms, load: r.load, tail: (r.stdout + r.stderr).split("\n").filter((l) => /Test Files|Tests |Checked|No findings|error|Duration|failed/i.test(l)).slice(-6) }));
+writeFileSync(`${OUT}/gates-summary.json`, JSON.stringify({ skip, summary }, null, 2));
+writeFileSync(`${OUT}/gates-raw.txt`, results.map((r) => `### ${r.name} (${r.cmd}) exit ${r.status} ${r.ms} ms load ${r.load}\n${r.stdout}\n${r.stderr}`).join("\n\n"));
+console.log(JSON.stringify({ skip, summary }, null, 2));

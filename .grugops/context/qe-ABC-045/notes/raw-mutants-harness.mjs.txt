@@ -1,0 +1,100 @@
+// QE ABC-045 — mutants written INTO src/command-input.ts (and one into src/turn-loop.ts), the named
+// test files run with --reporter=json, the file restored from git and the restore asserted by sha256.
+import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { readFileSync, writeFileSync } from "node:fs";
+import { loadavg } from "node:os";
+
+const CWD = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a1d867186de329e93";
+const OUT = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad";
+const CI = `${CWD}/src/command-input.ts`;
+const TL = `${CWD}/src/turn-loop.ts`;
+const sha = (s) => createHash("sha256").update(s).digest("hex");
+const ORIGINAL = { [CI]: readFileSync(CI, "utf8"), [TL]: readFileSync(TL, "utf8") };
+
+const IMPORT_ANCHOR = 'import type { PromptOutcome } from "./turn-loop.ts";\n';
+const ROW = '  { token: "resign", outcome: "game-over" },\n';
+const TERNARY = 'result: history.position.blackToMove ? "white-wins" : "black-wins",';
+const REASON = 'reason: "resignation",';
+const BRANCH = '  if (spec.outcome === "game-over") {\n';
+const LOOKUP = 'const token = line.trim().toLowerCase();';
+const LOOP_GAMEOVER = '      if (outcome.kind === "game-over") {\n';
+
+function must(src, needle) {
+  if (!src.includes(needle)) throw new Error(`anchor missing: ${needle}`);
+  return src;
+}
+const rep = (src, a, b) => must(src, a).replace(a, b);
+
+const MUTANTS = [
+  { id: "M1", what: "result hardcoded black-wins (ternary dropped)", file: CI, files: ["src/command-input.test.ts"],
+    apply: (s) => rep(s, TERNARY, 'result: "black-wins",') },
+  { id: "M2", what: "ternary swapped", file: CI, files: ["src/command-input.test.ts"],
+    apply: (s) => rep(s, TERNARY, 'result: history.position.blackToMove ? "black-wins" : "white-wins",') },
+  { id: "M3", what: "row flipped to outcome command (resign inert)", file: CI, files: ["src/command-input.test.ts", "src/cli.test.ts"],
+    apply: (s) => rep(s, ROW, '  { token: "resign", outcome: "command" },\n') },
+  { id: "M4", what: "reason checkmate", file: CI, files: ["src/command-input.test.ts", "src/cli.test.ts"],
+    apply: (s) => rep(s, REASON, 'reason: "checkmate",') },
+  { id: "M5", what: "module-level armed flag: first resign -> command confirm, second -> game-over", file: CI, files: ["src/command-input.test.ts", "src/cli.test.ts"],
+    apply: (s) => rep(rep(s, IMPORT_ANCHOR, `${IMPORT_ANCHOR}let armed = false;\n`), BRANCH,
+      `${BRANCH}    if (!armed) {\n      armed = true;\n      return { kind: "command", messages: ["confirm"] };\n    }\n`) },
+  { id: "M5-isolated", what: "M5 again, A5's loop row run ALONE (-t filter) so no earlier row arms the flag", file: CI, files: ["src/command-input.test.ts"],
+    extra: ["-t", "A5 — no confirmation"],
+    apply: (s) => rep(rep(s, IMPORT_ANCHOR, `${IMPORT_ANCHOR}let armed = false;\n`), BRANCH,
+      `${BRANCH}    if (!armed) {\n      armed = true;\n      return { kind: "command", messages: ["confirm"] };\n    }\n`) },
+  { id: "M6", what: "legalMoves(history.position) called inside the resign branch (direct import)", file: CI, files: ["src/command-input.test.ts"],
+    apply: (s) => rep(rep(s, IMPORT_ANCHOR, `${IMPORT_ANCHOR}import { legalMoves } from "./legal.ts";\n`), BRANCH, `${BRANCH}    legalMoves(history.position);\n`) },
+  { id: "M7", what: "gameStatusOf(history) called inside the resign branch", file: CI, files: ["src/command-input.test.ts"],
+    apply: (s) => rep(rep(s, IMPORT_ANCHOR, `${IMPORT_ANCHOR}import { gameStatusOf } from "./history.ts";\n`), BRANCH, `${BRANCH}    gameStatusOf(history);\n`) },
+  { id: "M8", what: "row deleted from the table", file: CI, files: ["src/command-input.test.ts", "src/cli.test.ts"],
+    apply: (s) => rep(s, ROW, "") },
+  // QE's own
+  { id: "M9", what: "PER-GAME confirmation: WeakSet keyed on the history, first resign on a game -> command confirm", file: CI, files: ["src/command-input.test.ts", "src/cli.test.ts"],
+    apply: (s) => rep(rep(s, IMPORT_ANCHOR, `${IMPORT_ANCHOR}const armedFor = new WeakSet<GameHistory>();\n`), BRANCH,
+      `${BRANCH}    if (!armedFor.has(history)) {\n      armedFor.add(history);\n      return { kind: "command", messages: ["confirm"] };\n    }\n`) },
+  { id: "M10", what: "case-sensitive lookup (toLowerCase dropped) — edge (e)", file: CI, files: ["src/command-input.test.ts"],
+    apply: (s) => rep(s, LOOKUP, "const token = line.trim();") },
+  { id: "M11", what: "first word only (trailing text accepted: `resign now` resigns) — edge (d)", file: CI, files: ["src/command-input.test.ts"],
+    apply: (s) => rep(s, LOOKUP, 'const token = line.trim().toLowerCase().split(/\\s+/)[0] ?? "";') },
+  { id: "M12", what: "the LOOP renders one further frame on game-over before returning (A2's literal sentence) — src/turn-loop.ts", file: TL,
+    files: ["src/command-input.test.ts", "src/cli.test.ts", "src/turn-loop.test.ts"],
+    apply: (s) => rep(s, LOOP_GAMEOVER, `${LOOP_GAMEOVER}        writer(render(history, status, false, []));\n`) },
+  { id: "CONTROL", what: "unmutated", file: CI, files: ["src/command-input.test.ts", "src/cli.test.ts", "src/turn-loop.test.ts"], apply: (s) => s },
+];
+
+function restore() {
+  spawnSync("git", ["checkout", "--", "src/command-input.ts", "src/turn-loop.ts"], { cwd: CWD });
+  const ok = sha(readFileSync(CI, "utf8")) === sha(ORIGINAL[CI]) && sha(readFileSync(TL, "utf8")) === sha(ORIGINAL[TL]);
+  const status = spawnSync("git", ["status", "--porcelain", "--", "src"], { cwd: CWD, encoding: "utf8" }).stdout.trim();
+  return { restoredByteIdentical: ok, srcStatusEmpty: status === "" , status };
+}
+
+const rows = [];
+const raw = [];
+for (const m of MUTANTS) {
+  writeFileSync(m.file, m.apply(ORIGINAL[m.file]));
+  const load = loadavg().map((n) => n.toFixed(2)).join(" ");
+  const t0 = Date.now();
+  const r = spawnSync("npx", ["vitest", "run", ...m.files, "--reporter=json", ...(m.extra ?? [])], { cwd: CWD, encoding: "utf8", maxBuffer: 1 << 28 });
+  const ms = Date.now() - t0;
+  const rest = restore();
+  let parsed;
+  try { parsed = JSON.parse(r.stdout.slice(r.stdout.indexOf("{"))); } catch (e) { parsed = undefined; }
+  const failed = [];
+  const perFile = {};
+  if (parsed) {
+    for (const tr of parsed.testResults) {
+      const short = tr.name.replace(`${CWD}/`, "");
+      perFile[short] = { passed: tr.assertionResults.filter((a) => a.status === "passed").length, failed: tr.assertionResults.filter((a) => a.status === "failed").length, total: tr.assertionResults.length };
+      for (const a of tr.assertionResults) if (a.status === "failed") failed.push({ file: short, name: a.fullName, message: (a.failureMessages[0] ?? "").split("\n").slice(0, 3).join(" | ").slice(0, 300) });
+    }
+  }
+  const row = { id: m.id, what: m.what, exit: r.status, ms, load, perFile, numFailed: parsed?.numFailedTests ?? "UNKNOWN - verify", numPassed: parsed?.numPassedTests, failed, ...rest, stderrHead: parsed ? undefined : (r.stderr + r.stdout).slice(0, 2000) };
+  rows.push(row);
+  raw.push(`### ${m.id} — ${m.what}\nexit ${r.status} ${ms} ms load ${load}\n${r.stdout.slice(0, 200)}\n--- stderr ---\n${r.stderr.slice(0, 3000)}`);
+  console.log(JSON.stringify({ id: m.id, exit: r.status, ms, numFailed: row.numFailed, numPassed: row.numPassed, perFile, restored: rest.restoredByteIdentical, srcClean: rest.srcStatusEmpty, failed: failed.map((f) => f.name) }, null, 0));
+  if (!rest.restoredByteIdentical || !rest.srcStatusEmpty) { console.error("RESTORE FAILED", rest); process.exit(2); }
+}
+writeFileSync(`${OUT}/mutants-summary.json`, JSON.stringify(rows, null, 2));
+writeFileSync(`${OUT}/mutants-raw.txt`, raw.join("\n\n"));
+console.log("done; final", restore());

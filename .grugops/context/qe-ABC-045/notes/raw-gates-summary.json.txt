@@ -1,0 +1,87 @@
+{
+  "skip": {
+    "pending": 0,
+    "todo": 0,
+    "total": 1325,
+    "passed": 1325,
+    "failed": 0,
+    "files": 266,
+    "sum": 0
+  },
+  "summary": [
+    {
+      "name": "lint",
+      "status": 0,
+      "ms": 672,
+      "load": "4.88 6.61 6.66",
+      "tail": [
+        "Checked 76 files in 138ms. No fixes applied."
+      ]
+    },
+    {
+      "name": "typecheck",
+      "status": 0,
+      "ms": 1604,
+      "load": "4.88 6.61 6.66",
+      "tail": []
+    },
+    {
+      "name": "build",
+      "status": 0,
+      "ms": 1613,
+      "load": "4.73 6.55 6.64",
+      "tail": []
+    },
+    {
+      "name": "unit",
+      "status": 0,
+      "ms": 7429,
+      "load": "4.73 6.55 6.64",
+      "tail": [
+        " Test Files  42 passed (42)",
+        "      Tests  1325 passed (1325)",
+        "   Duration  6.83s (transform 1.41s, setup 0ms, collect 9.52s, tests 10.76s, environment 5ms, prepare 2.97s)"
+      ]
+    },
+    {
+      "name": "unit-json",
+      "status": 0,
+      "ms": 7485,
+      "load": "9.03 7.44 6.96",
+      "tail": [
+        "(JSON reporter payload omitted; the parsed counts are in \"skip\" above)"
+      ]
+    },
+    {
+      "name": "integrity",
+      "status": 0,
+      "ms": 37,
+      "load": "10.63 7.80 7.09",
+      "tail": [
+        "No findings."
+      ]
+    },
+    {
+      "name": "file-command-input",
+      "status": 0,
+      "ms": 914,
+      "load": "10.63 7.80 7.09",
+      "tail": [
+        " Test Files  1 passed (1)",
+        "      Tests  98 passed (98)",
+        "   Duration  362ms (transform 116ms, setup 0ms, collect 120ms, tests 24ms, environment 0ms, prepare 59ms)"
+      ]
+    },
+    {
+      "name": "file-cli",
+      "status": 0,
+      "ms": 4118,
+      "load": "10.63 7.80 7.09",
+      "tail": [
+        " Test Files  1 passed (1)",
+        "      Tests  62 passed (62)",
+        "   Duration  3.59s (transform 130ms, setup 0ms, collect 3.34s, tests 35ms, environment 0ms, prepare 59ms)"
+      ]
+    }
+  ]
+}

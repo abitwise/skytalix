@@ -1,0 +1,96 @@
+// QE ABC-045 — edge cases through the REAL entry point (node src/cli.ts as a child), engine substituted
+// with the same `--import` data-URL hook shape src/cli.test.ts uses. No repo file touched, no child added
+// to the suite's spawn pin: this is a scratch harness.
+import { spawnSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+const CWD = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a1d867186de329e93";
+const { PROMPT } = await import(`${CWD}/src/line-input.ts`);
+const { renderResultScreen } = await import(`${CWD}/src/result-screen.ts`);
+const { newGame, playMove } = await import(`${CWD}/src/history.ts`);
+const { legalMoves } = await import(`${CWD}/src/legal.ts`);
+const { squareName } = await import(`${CWD}/src/position.ts`);
+const { renderBoard } = await import(`${CWD}/src/render.ts`);
+const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const playedOut = (moves) => { const h = newGame(START_FEN); for (const w of moves) { const m = legalMoves(h.position).find((c) => `${squareName(c.from)}${squareName(c.to)}` === w); if (!m) throw new Error(w); playMove(h, m); } return h; };
+
+const substituting = (module, source) => `data:text/javascript,${encodeURIComponent([
+  'import { registerHooks } from "node:module";', "registerHooks({", "  load(url, context, nextLoad) {",
+  `    if (!url.endsWith(${JSON.stringify(`/src/${module}`)})) return nextLoad(url, context);`,
+  `    return { format: "module", shortCircuit: true, source: ${JSON.stringify(source)} };`, "  },", "});"].join("\n"))}`;
+const scriptedEngine = (moves) => `
+import { legalMoves } from "./legal.ts";
+import { squareName } from "./position.ts";
+export const DEFAULT_BUDGET_MS = 0;
+export function createEngine() {
+  const scripted = ${JSON.stringify(moves)};
+  let ply = 0;
+  return async (history) => {
+    const want = scripted[ply++];
+    const move = legalMoves(history.position).find((c) => squareName(c.from) + squareName(c.to) === want);
+    if (move === undefined) throw new Error("scripted engine: no legal move " + want);
+    return move;
+  };
+}`;
+const legendOf = (orientation) => { const b = renderBoard(newGame(START_FEN).position, "ascii", orientation); return b[b.length - 1].trimEnd(); };
+const framesIn = (stdout, orientation) => stdout.split("\n").filter((l) => l.trimEnd() === legendOf(orientation)).length;
+const prompts = (stdout) => stdout.split("\n").filter((l) => l.startsWith(PROMPT)).length;
+
+function play(args, input, engineMoves) {
+  const t0 = Date.now();
+  const child = spawnSync(process.execPath, ["--import", substituting("engine.ts", scriptedEngine(engineMoves)), "src/cli.ts", ...args], { cwd: CWD, encoding: "utf8", input, timeout: 30_000 });
+  return { status: child.status, signal: child.signal, stdout: child.stdout, stderr: child.stderr, ms: Date.now() - t0 };
+}
+const screenOf = (outcome, moves) => `${renderResultScreen(outcome, playedOut(moves)).join("\n")}\n`;
+const report = {};
+const check = (name, cond, detail) => { report[name] = { ok: !!cond, detail }; console.log(`${cond ? "OK  " : "FAIL"} ${name} :: ${JSON.stringify(detail).slice(0, 700)}`); };
+
+// (a) engine's turn — human black, `resign` typed as the FIRST line (sitting in stdin while the engine "thinks")
+{
+  const c = play(["--colour", "black"], "resign\nd7d5\n", ["e2e4"]);
+  const screen = screenOf({ result: "white-wins", reason: "resignation", exitCode: 0 }, ["e2e4"]);
+  check("(a) --colour black, `resign` first line: exit 0, stream ends with White-wins-by-resignation screen after 1. e4; 2 frames; 1 prompt", c.status === 0 && c.stdout.endsWith(screen) && framesIn(c.stdout, "black-bottom") === 2 && prompts(c.stdout) === 1, { status: c.status, ms: c.ms, frames: framesIn(c.stdout, "black-bottom"), prompts: prompts(c.stdout), tail: c.stdout.slice(-screen.length - 10), stderr: c.stderr });
+}
+// (b) ply 0 — human white, `resign` as the very first line
+{
+  const c = play(["--colour", "white"], "resign\n", []);
+  const screen = screenOf({ result: "black-wins", reason: "resignation", exitCode: 0 }, []);
+  check("(b) ply 0 as white: exit 0, Black-wins-by-resignation screen with an empty move list, 1 frame, 1 prompt", c.status === 0 && c.stdout.endsWith(screen) && framesIn(c.stdout, "white-bottom") === 1 && prompts(c.stdout) === 1, { status: c.status, ms: c.ms, screen, frames: framesIn(c.stdout, "white-bottom"), prompts: prompts(c.stdout) });
+}
+// (c) after game over — Fool's mate, then `resign` still on stdin
+{
+  const c = play(["--colour", "white"], "f3\ng4\nresign\n", ["e7e5", "d8h4"]);
+  const screen = screenOf({ result: "black-wins", reason: "checkmate", exitCode: 0 }, ["f2f3", "e7e5", "g2g4", "d8h4"]);
+  check("(c) mated then `resign` on stdin: the screen names checkmate, NOT resignation; exactly 2 prompts (the third line never read); 5 frames; exit 0", c.status === 0 && c.stdout.endsWith(screen) && !c.stdout.includes("resignation") && prompts(c.stdout) === 2 && framesIn(c.stdout, "white-bottom") === 5, { status: c.status, ms: c.ms, prompts: prompts(c.stdout), frames: framesIn(c.stdout, "white-bottom"), tail: c.stdout.slice(-200) });
+  const c2 = play(["--colour", "white"], "e4\nresign\nresign\nd4\n", ["e7e5"]);
+  check("(c') resign then more lines: 2 prompts only, resignation screen", c2.status === 0 && prompts(c2.stdout) === 2 && c2.stdout.endsWith(screenOf({ result: "black-wins", reason: "resignation", exitCode: 0 }, ["e2e4", "e7e5"])), { prompts: prompts(c2.stdout), ms: c2.ms });
+}
+// (d) trailing text — `resign now` at the real prompt
+{
+  const c = play(["--colour", "white"], "resign now\nresign\n", []);
+  const screen = screenOf({ result: "black-wins", reason: "resignation", exitCode: 0 }, []);
+  const secondFrameStart = c.stdout.indexOf(legendOf("white-bottom")) + 1;
+  check("(d) `resign now` at the real prompt: NOT a resignation — a second frame with a rejection line, then `resign` ends it; 2 prompts; exit 0", c.status === 0 && prompts(c.stdout) === 2 && framesIn(c.stdout, "white-bottom") === 2 && c.stdout.endsWith(screen), { status: c.status, prompts: prompts(c.stdout), frames: framesIn(c.stdout, "white-bottom"), ms: c.ms });
+  const secondFrame = c.stdout.split("\n").slice(24, 48).filter((l) => l.trim() !== "" && !/^[\s|+\-a-h1-8rnbqkpRNBQKP.]+$/.test(l));
+  check("(d) the second frame's non-board rows (message region shows the rejection)", secondFrame.length > 0, secondFrame);
+}
+// (e) case — `RESIGN` and `Resign` at the real prompt
+{
+  for (const line of ["RESIGN", "Resign", "  resign  "]) {
+    const c = play(["--colour", "white"], `e4\n${line}\n`, ["e7e5"]);
+    const screen = screenOf({ result: "black-wins", reason: "resignation", exitCode: 0 }, ["e2e4", "e7e5"]);
+    check(`(e) ${JSON.stringify(line)} at the real prompt resigns: exit 0, resignation screen, 2 prompts`, c.status === 0 && c.stdout.endsWith(screen) && prompts(c.stdout) === 2, { status: c.status, prompts: prompts(c.stdout), ms: c.ms });
+  }
+}
+// help through the real frame: `resign` listed, no `(+N more)` marker (hidden 0), both fixtures (start, and after e4 e5)
+{
+  for (const [label, input, eng] of [["start", "help\n", []], ["after e4 e5", "e4\nhelp\n", ["e7e5"]]]) {
+    const c = play(["--colour", "white"], input, eng);
+    const lines = c.stdout.split("\n");
+    const helpFrameRows = lines.filter((l) => /commands:|\bresign\b|\bhelp\b|\bboard\b|\bquit\b|\bclaim\b/.test(l));
+    check(`help (${label}) through the real frame: exit 0 (input ended), 'resign' present, no '(+' hidden marker`, c.status === 0 && c.stdout.includes("resign") && !c.stdout.includes("(+") && c.stdout.includes("commands:") && c.stdout.includes("input ended"), { status: c.status, rows: helpFrameRows, ms: c.ms });
+  }
+}
+const fails = Object.values(report).filter((r) => !r.ok).length;
+console.log(`\nSUMMARY: ${Object.keys(report).length} checks, ${fails} failed`);
+writeFileSync("/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/edges-cli-summary.json", JSON.stringify(report, null, 2));
+process.exit(fails === 0 ? 0 : 1);
