@@ -1,0 +1,55 @@
+== directed adversarial inputs through resolvePromptLine (AFTER tree) ==
+  "\u001b[2J"                        -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "\u001b[H"                         -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Nf3\u001b[2J"                     -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "\u001b[31mNf3"                    -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Nf3\n"                            -> move      [] bad=false maxLen=0 fenSame=true
+  "Nf3\r\n"                          -> move      [] bad=false maxLen=0 fenSame=true
+  "Nf3\u0000"                        -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Nf3"                             -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "\u0007Nf3"                        -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Qh5\u001b"                        -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Qh5 "                             -> rejected  ["no move Qh5 here"] bad=false maxLen=16 fenSame=true
+  "Qh5 "                             -> rejected  ["no move Qh5 here"] bad=false maxLen=16 fenSame=true
+  " Qh5 "                            -> rejected  ["no move Qh5 here"] bad=false maxLen=16 fenSame=true
+  "Qh5﻿"                             -> rejected  ["no move Qh5 here"] bad=false maxLen=16 fenSame=true
+  "﻿Qh5"                             -> rejected  ["no move Qh5 here"] bad=false maxLen=16 fenSame=true
+  "Qh5​"                             -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "e2e4\u001b[A"                     -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "e2e5\u001b"                       -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "e2 e5"                            -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "e2-e5"                            -> rejected  ["e2 cannot reach e5"] bad=false maxLen=18 fenSame=true
+  "E2-E5"                            -> rejected  ["e2 cannot reach e5"] bad=false maxLen=18 fenSame=true
+  "e2e5\u001b[K"                     -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Ｎｆ３"                              -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Ｑh5"                              -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Kh5"                              -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Qh5+"                             -> rejected  ["no move Qh5+ here"] bad=false maxLen=17 fenSame=true
+  "Qh5#"                             -> rejected  ["no move Qh5# here"] bad=false maxLen=17 fenSame=true
+  "Qh5+#"                            -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Qa1xh8#"                          -> rejected  ["no move Qa1xh8# here"] bad=false maxLen=20 fenSame=true
+  "axb8=Q+"                          -> rejected  ["no move axb8=Q+ here"] bad=false maxLen=20 fenSame=true
+  "bxa1=N#"                          -> rejected  ["no move bxa1=N# here"] bad=false maxLen=20 fenSame=true
+  "Qh5!!"                            -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Qh5 e5"                           -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "O-O\u001b"                        -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "0-0-0+"                           -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx…(1024)" -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ…(1024)" -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "Qh5                                     …(1024)" -> rejected  ["no move Qh5 here"] bad=false maxLen=16 fenSame=true
+  "e2e5                                    …(1024)" -> rejected  ["e2 cannot reach e5"] bad=false maxLen=18 fenSame=true
+  "Qh5\t\t\t"                        -> rejected  ["no move Qh5 here"] bad=false maxLen=16 fenSame=true
+  "\tQh5"                            -> rejected  ["no move Qh5 here"] bad=false maxLen=16 fenSame=true
+  "Qh5\u001b[2J\u001b[H"             -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "e2e5\u0000"                       -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "e2e5\u001b"                       -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "e7e8k"                            -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "e8=K\u001b"                       -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+  "e8=K+"                            -> rejected  ["no move e8=K+ here"] bad=false maxLen=18 fenSame=true
+  "\u001be8=K"                       -> rejected  ["type e2e4 or Nf3"] bad=false maxLen=16 fenSame=true
+directed: 288 prompts, sentences carrying a C0/DEL/non-ASCII code point: 0, longest sentence: 20
+fuzz: 120000 lines, 120000 rejected, sentences carrying a C0/DEL/non-ASCII code point: 0, longest sentence: 16 "type e2e4 or Nf3"
+fuzz reasons (raw line only): {"unreadable":120000}
+sentences OFF the seven shapes (directed + fuzz): 0
+grammar enumeration: 165888 SAN strings, longest echo sentence 20 columns: "no move Na1xa1+ here" (echo 7 chars)
+frames: 192 rendered across 4 modes × 6 positions × 8 sentences; not-whole-or-hidden: 0

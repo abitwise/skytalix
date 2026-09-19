@@ -1,0 +1,30 @@
+// Instruments the OUT-OF-TREE copies only (never the worktree): renames the exported function to an
+// `__impl` and re-exports a counting wrapper under the original name. Every replacement is asserted
+// to apply exactly once, so a silent no-op cannot masquerade as "zero calls".
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
+
+const SCRATCH = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad";
+const PATCHES = [
+  ["legal.ts", "legalMoves", "(position: Position): Move[]"],
+  ["legal.ts", "isInCheck", "(position: Position): boolean"],
+  ["moves.ts", "generateMoves", "(position: Position): Move[]"],
+  ["rejection.ts", "classifyRejection", null], // multi-line signature — handled below
+];
+
+for (const tree of ["before", "after"]) {
+  for (const [file, name, sig] of PATCHES) {
+    const path = `${SCRATCH}/${tree}/src/${file}`;
+    if (!existsSync(path)) { console.log(`${tree}/${file}: absent (expected for before/rejection.ts)`); continue; }
+    let text = readFileSync(path, "utf8");
+    const needle = `export function ${name}(`;
+    const count = text.split(needle).length - 1;
+    if (count !== 1) throw new Error(`${tree}/${file}: expected exactly one '${needle}', found ${count}`);
+    text = text.replace(needle, `function ${name}__impl(`);
+    const wrapper = sig
+      ? `\nexport function ${name}${sig} { (globalThis as any).__grugCounts.${name}++; return ${name}__impl(position); }\n`
+      : `\nexport function classifyRejection(position: Position, texts: readonly string[], legal?: readonly Move[]): Rejection { (globalThis as any).__grugCounts.classifyRejection++; return legal === undefined ? classifyRejection__impl(position, texts) : classifyRejection__impl(position, texts, legal); }\n`;
+    text += wrapper;
+    writeFileSync(path, text);
+    console.log(`${tree}/${file}: ${name} wrapped (1 replacement)`);
+  }
+}

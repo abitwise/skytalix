@@ -1,0 +1,58 @@
+// NFR-003 (QE G3): how many `legalMoves` / `generateMoves` / `isInCheck` calls does ONE prompt cost
+// through the PRODUCTION path (`resolvePromptLine`, no deps → the real imports), before vs after?
+// Usage: node probe-nfr003.mjs <tree-dir>
+const TREE = process.argv[2];
+globalThis.__grugCounts = { legalMoves: 0, isInCheck: 0, generateMoves: 0, classifyRejection: 0 };
+const { newGame } = await import(`${TREE}/src/history.ts`);
+const { toFen } = await import(`${TREE}/src/fen.ts`);
+const { resolvePromptLine } = await import(`${TREE}/src/command-input.ts`);
+const { resolveMoveInput } = await import(`${TREE}/src/move-input.ts`);
+
+const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const PIN = "4r1k1/8/8/8/8/8/4N3/4K3 w - - 0 1";
+const CHECK = "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP1BP/RNBQK1NR w KQkq - 1 4";
+const KIWI = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
+const PROMO = "8/4P3/8/8/8/4k3/8/4K3 w - - 0 1";
+
+const CASES = [
+  // [label, fen, line]  — expected outcome in the label
+  ["rejected unreadable", START, "hello"],
+  ["rejected unreadable (escape)", START, "\x1b[2J"],
+  ["rejected empty-square", START, "a3a4"],
+  ["rejected not-your-piece", START, "e7e5"],
+  ["rejected piece-cannot-reach", START, "e2e5"],
+  ["rejected no-legal-move-named", START, "Qh5"],
+  ["rejected own-king-exposed", PIN, "Nc3"],
+  ["rejected must-address-check", CHECK, "Nh3"],
+  ["rejected must-address-check (coord)", CHECK, "h2h3"],
+  ["rejected e8=K", PROMO, "e8=K"],
+  ["rejected O-O (no castle)", "4k3/8/8/8/8/8/8/K6R w - - 0 1", "O-O"],
+  ["rejected kiwipete typo", KIWI, "Nxg7"],
+  ["rejected padded lowercase", START, "  qh5  "],
+  ["move (SAN)", START, "Nf3"],
+  ["move (coord)", START, "e2e4"],
+  ["move (folded)", START, "nf3"],
+  ["ambiguous", PROMO, "e7e8"],
+  ["command help", START, "help"],
+];
+
+const reset = () => { for (const k of Object.keys(globalThis.__grugCounts)) globalThis.__grugCounts[k] = 0; };
+const snap = () => ({ ...globalThis.__grugCounts });
+
+console.log(`tree=${TREE}`);
+console.log("label".padEnd(38), "line".padEnd(12), "kind".padEnd(10), "legalMoves generateMoves isInCheck classify | via resolveMoveInput: legalMoves generateMoves | fenSame");
+let worst = { legalMoves: 0, generateMoves: 0 };
+for (const [label, fen, line] of CASES) {
+  const h = newGame(fen);
+  const before = toFen(h.position);
+  reset();
+  const out = resolvePromptLine(h, line);
+  const a = snap();
+  reset();
+  const out2 = resolveMoveInput(h, line);
+  const b = snap();
+  const same = toFen(h.position) === before;
+  if (out.kind === "rejected") { worst.legalMoves = Math.max(worst.legalMoves, a.legalMoves); worst.generateMoves = Math.max(worst.generateMoves, a.generateMoves); }
+  console.log(label.padEnd(38), JSON.stringify(line).padEnd(12), out.kind.padEnd(10), String(a.legalMoves).padStart(10), String(a.generateMoves).padStart(13), String(a.isInCheck).padStart(9), String(a.classifyRejection).padStart(8), " |", String(b.legalMoves).padStart(29), String(b.generateMoves).padStart(13), " |", same, out.kind === "rejected" ? JSON.stringify(out.messages) : "");
+}
+console.log(`WORST rejected prompt: legalMoves=${worst.legalMoves} generateMoves=${worst.generateMoves}`);

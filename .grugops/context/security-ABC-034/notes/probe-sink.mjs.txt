@@ -1,0 +1,115 @@
+// The sink: can user text carrying an escape byte, a control, or an unbounded length ever reach the
+// rejected-arm sentence? Probes through the PRODUCTION prompt path (`resolvePromptLine`) on the
+// AFTER tree, then through the real `assembleFrame`. Usage: node probe-sink.mjs <after-tree-dir>
+const TREE = process.argv[2];
+globalThis.__grugCounts = { legalMoves: 0, isInCheck: 0, generateMoves: 0, classifyRejection: 0 };
+const { newGame, gameStatusOf } = await import(`${TREE}/src/history.ts`);
+const { parseFen, toFen } = await import(`${TREE}/src/fen.ts`);
+const { resolvePromptLine } = await import(`${TREE}/src/command-input.ts`);
+const { classifyRejection, rejectionMessage } = await import(`${TREE}/src/rejection.ts`);
+const { makeRenderSeam } = await import(`${TREE}/src/render-seam.ts`);
+
+const FENS = [
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "4r1k1/8/8/8/8/8/4N3/4K3 w - - 0 1",
+  "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP1BP/RNBQK1NR w KQkq - 1 4",
+  "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "8/4P3/8/8/8/4k3/8/4K3 w - - 0 1",
+  "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1",
+];
+
+const bad = (s) => [...s].some((c) => { const p = c.codePointAt(0); return p < 0x20 || p === 0x7f || p > 0x7f; });
+// The seven sentence shapes, and nothing else, may leave the rejected arm.
+const SHAPE = /^(type e2e4 or Nf3|no piece on [a-h][1-8]|[a-h][1-8] is not yours|[a-h][1-8] cannot reach [a-h][1-8]|exposes your king|your king is in check|no move (?:[NBRQK][a-h]?[1-8]?x?[a-h][1-8]|(?:[a-h]x)?[a-h][1-8](?:=[NBRQK])?)[+#]? here)$/;
+let offShape = 0;
+const checkShape = (line, m) => { if (!SHAPE.test(m)) { offShape++; console.log(`  OFF-SHAPE ${JSON.stringify(line)} -> ${JSON.stringify(m)}`); } };
+const summarise = (s) => JSON.stringify(s.length > 40 ? `${s.slice(0, 40)}…(${s.length})` : s);
+
+// 1. Directed adversarial inputs — every one must come back as a bounded, printable sentence.
+const DIRECTED = [
+  "\x1b[2J", "\x1b[H", "Nf3\x1b[2J", "\x1b[31mNf3", "Nf3\n", "Nf3\r\n", "Nf3\x00", "Nf3\x7f", "\x07Nf3",
+  "Qh5\x1b", "Qh5 ", "Qh5 ", " Qh5 ", "Qh5﻿", "﻿Qh5", "Qh5​",
+  "e2e4\x1b[A", "e2e5\x1b", "e2 e5", "e2-e5", "E2-E5", "e2e5\x1b[K", "Ｎｆ３", "Ｑh5", "Kh5",
+  "Qh5+", "Qh5#", "Qh5+#", "Qa1xh8#", "axb8=Q+", "bxa1=N#", "Qh5!!", "Qh5 e5", "O-O\x1b", "0-0-0+",
+  "x".repeat(1024), "Q".repeat(1024), "Qh5".padEnd(1024), "e2e5".padEnd(1024), "Qh5\t\t\t", "\tQh5",
+  "Qh5\x1b[2J\x1b[H", "e2e5\x00", "e2e5\x1b", "e7e8k", "e8=K\x1b", "e8=K+", "\x1be8=K",
+];
+console.log("== directed adversarial inputs through resolvePromptLine (AFTER tree) ==");
+let directedBad = 0, directedMax = 0;
+for (const fen of FENS) {
+  for (const line of DIRECTED) {
+    const h = newGame(fen);
+    const f0 = toFen(h.position);
+    const out = resolvePromptLine(h, line);
+    const msgs = out.kind === "rejected" || out.kind === "ambiguous" || out.kind === "command" ? out.messages : [];
+    const anyBad = msgs.some(bad);
+    if (out.kind === "rejected") for (const m of msgs) checkShape(line, m);
+    const maxLen = Math.max(0, ...msgs.map((m) => m.length));
+    directedMax = Math.max(directedMax, maxLen);
+    if (anyBad) directedBad++;
+    if (fen === FENS[0] || anyBad) console.log(`  ${summarise(line).padEnd(34)} -> ${out.kind.padEnd(9)} ${JSON.stringify(msgs)} bad=${anyBad} maxLen=${maxLen} fenSame=${toFen(h.position) === f0}`);
+  }
+}
+console.log(`directed: ${DIRECTED.length * FENS.length} prompts, sentences carrying a C0/DEL/non-ASCII code point: ${directedBad}, longest sentence: ${directedMax}`);
+
+// 2. Fuzz: random lines over an alphabet that includes ESC, C0, DEL, NBSP, zero-width and grammar
+//    characters, lengths 1–12, through the production prompt path on six positions.
+const ALPHABET = ["\x1b", "[", "\x00", "\x07", "\x7f", "\n", "\r", "\t", " ", " ", "​", "﻿", " ",
+  "N", "B", "R", "Q", "K", "O", "0", "-", "x", "=", "+", "#", "a", "b", "c", "d", "e", "f", "g", "h", "1", "2", "3", "4", "5", "6", "7", "8", "q", "r", "n", "k", "p", "!", "?", "Ａ", "é"];
+let seed = 0x2f6e2b1;
+const rnd = (n) => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };
+const N = Number(process.argv[3] ?? 60000);
+let fuzzBad = 0, fuzzMax = 0, rejected = 0, longestSentence = "", byReason = {};
+for (let i = 0; i < N; i++) {
+  const len = 1 + rnd(12);
+  let line = "";
+  for (let j = 0; j < len; j++) line += ALPHABET[rnd(ALPHABET.length)];
+  const fen = FENS[i % FENS.length];
+  const h = newGame(fen);
+  const f0 = toFen(h.position);
+  const out = resolvePromptLine(h, line);
+  if (toFen(h.position) !== f0) throw new Error(`position mutated by ${JSON.stringify(line)}`);
+  if (out.kind !== "rejected") continue;
+  rejected++;
+  const r = classifyRejection(h.position, [line]);
+  byReason[r.reason] = (byReason[r.reason] ?? 0) + 1;
+  for (const m of out.messages) {
+    checkShape(line, m);
+    if (bad(m)) { fuzzBad++; console.log(`  BAD ${JSON.stringify(line)} -> ${JSON.stringify(m)}`); }
+    if (m.length > fuzzMax) { fuzzMax = m.length; longestSentence = m; }
+  }
+}
+console.log(`fuzz: ${N} lines, ${rejected} rejected, sentences carrying a C0/DEL/non-ASCII code point: ${fuzzBad}, longest sentence: ${fuzzMax} ${JSON.stringify(longestSentence)}`);
+console.log(`fuzz reasons (raw line only): ${JSON.stringify(byReason)}`);
+console.log(`sentences OFF the seven shapes (directed + fuzz): ${offShape}`);
+
+// 3. Exhaustive echo bound: every string PIECE_MOVE / PAWN_MOVE can accept, plus one check suffix,
+//    is enumerated from the grammar itself (not sampled) and the longest echo sentence measured.
+const files = "abcdefgh", ranks = "12345678", letters = "NBRQK";
+let maxEcho = 0, count = 0, longest = "";
+const consider = (san) => { count++; const s = `no move ${san} here`; if (s.length > maxEcho) { maxEcho = s.length; longest = s; } };
+for (const L of letters) for (const qf of ["", ...files]) for (const qr of ["", ...ranks]) for (const x of ["", "x"]) for (const f of files) for (const r of ranks) for (const sfx of ["", "+", "#"]) consider(`${L}${qf}${qr}${x}${f}${r}${sfx}`);
+for (const of of ["", ...files]) for (const f of files) for (const r of ranks) for (const p of ["", ..."NBRQK"]) for (const sfx of ["", "+", "#"]) consider(`${of === "" ? "" : `${of}x`}${f}${r}${p === "" ? "" : `=${p}`}${sfx}`);
+console.log(`grammar enumeration: ${count} SAN strings, longest echo sentence ${maxEcho} columns: ${JSON.stringify(longest)} (echo ${longest.length - "no move  here".length} chars)`);
+
+// 4. Through the real frame: the longest echo and every fixed sentence, all four modes.
+const seams = [["unicode", "white"], ["unicode", "black"], ["ascii", "white"], ["ascii", "black"]];
+let hiddenTotal = 0, frames = 0;
+const SENTENCES = ["type e2e4 or Nf3", "no piece on a3", "e7 is not yours", "e2 cannot reach e5", "exposes your king", "your king is in check", longest, "no move e8=K here"];
+for (const [mode, orient] of seams) {
+  const render = makeRenderSeam(mode, orient);
+  for (const fen of FENS) {
+    const h = newGame(fen);
+    const rows = render(h, gameStatusOf(h), false, SENTENCES.slice(0, 1));
+    for (const s of SENTENCES) {
+      const rows2 = render(h, gameStatusOf(h), false, [s]);
+      frames++;
+      const whole = rows2.some((row) => row.includes(s));
+      const hidden = rows2.some((row) => row.includes("more)"));
+      if (!whole || hidden) { hiddenTotal++; console.log(`  NOT WHOLE/HIDDEN ${mode}/${orient} ${JSON.stringify(s)}`); }
+      if (rows2.some((row) => bad(row) && mode === "ascii")) console.log(`  non-ASCII row in ascii mode`);
+    }
+    if (rows.length !== 23) console.log(`  frame rows ${rows.length} != 23`);
+  }
+}
+console.log(`frames: ${frames} rendered across 4 modes × 6 positions × 8 sentences; not-whole-or-hidden: ${hiddenTotal}`);

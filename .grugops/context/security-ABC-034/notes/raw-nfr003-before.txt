@@ -1,0 +1,21 @@
+tree=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/before
+label                                  line         kind       legalMoves generateMoves isInCheck classify | via resolveMoveInput: legalMoves generateMoves | fenSame
+rejected unreadable                    "hello"      rejected            1             1         0        0  |                             1             1  | true ["unreadable"]
+rejected unreadable (escape)           "\u001b[2J"  rejected            1             1         0        0  |                             1             1  | true ["unreadable"]
+rejected empty-square                  "a3a4"       rejected            1             1         0        0  |                             1             1  | true ["no-such-move"]
+rejected not-your-piece                "e7e5"       rejected            1             1         0        0  |                             1             1  | true ["no-such-move"]
+rejected piece-cannot-reach            "e2e5"       rejected            1             1         0        0  |                             1             1  | true ["no-such-move"]
+rejected no-legal-move-named           "Qh5"        rejected            1             1         0        0  |                             1             1  | true ["no-such-move"]
+rejected own-king-exposed              "Nc3"        rejected            1             1         0        0  |                             1             1  | true ["no-such-move"]
+rejected must-address-check            "Nh3"        rejected            1             1         0        0  |                             1             1  | true ["no-such-move"]
+rejected must-address-check (coord)    "h2h3"       rejected            1             1         0        0  |                             1             1  | true ["no-such-move"]
+rejected e8=K                          "e8=K"       rejected            1             1         0        0  |                             1             1  | true ["no-such-move"]
+rejected O-O (no castle)               "O-O"        rejected            1             1         0        0  |                             1             1  | true ["unreadable"]
+rejected kiwipete typo                 "Nxg7"       rejected            1             1         6        0  |                             1             1  | true ["no-such-move"]
+rejected padded lowercase              "  qh5  "    rejected            1             1         0        0  |                             1             1  | true ["unreadable"]
+move (SAN)                             "Nf3"        move                1             1         0        0  |                             1             1  | true 
+move (coord)                           "e2e4"       move                1             1         0        0  |                             1             1  | true 
+move (folded)                          "nf3"        move                1             1         0        0  |                             1             1  | true 
+ambiguous                              "e7e8"       ambiguous           3             3         4        0  |                             3             3  | true 
+command help                           "help"       command             0             0         0        0  |                             1             1  | true 
+WORST rejected prompt: legalMoves=1 generateMoves=1

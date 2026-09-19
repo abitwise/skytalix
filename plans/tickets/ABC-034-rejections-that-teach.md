@@ -342,3 +342,31 @@ see the classifier's own `legalMoves` import; **G4** no padded well-formed SAN r
 
 **Not done:** no merge, no deploy, no self-sign; `NFR-008` not ruled; Security/NFR's review not
 done; `plans/board.md`, `AGENTS.md`, `plans/nfr-catalog.md` not opened.
+
+
+## Security/NFR — 2026-09-19 (Security/NFR, task `wave-2026-09-19`, subtask `security-ABC-034`, Workflow 15 per-ticket review)
+
+**Verdict at the wave tip `1b431dc` (build `6ee7cde`, QE `aa9e49f`), branch
+`grugops/security-ABC-034`: PASS — zero required fixes, zero accepted risks (no `AR-` row added;
+`plans/nfr-catalog.md` not opened).** Not a stamp, not a merge, not an acceptance; the
+`In Security/NFR → Ready for UAT` move is the Orchestrator's. Notes, probe scripts and raw output:
+`.grugops/context/security-ABC-034/notes/`. `security.asvs_level` L1, `block_on` high,
+`compliance_regime` `[]`.
+
+**The threshold fired on its letter and every prong was answered by probe.** No direct stream
+write (grep 0 over both files; the only sink is `assembleFrame`'s `sanitize`, `src/frame.ts:202`).
+The second `src/` file is the one call site `## Scope` requires. No dependency: `package.json`,
+`package-lock.json`, `vitest.config.ts` blob-hash-identical to `main`.
+
+| probed | result |
+|---|---|
+| the sink (`ABC-018` bar) | 288 directed (ESC sequences, C0, DEL, NBSP, ZWSP, BOM, U+2028, fullwidth, 1,024-char lines) + 120,000 fuzzed prompts through the PRODUCTION prompt path (`resolvePromptLine`): **0** sentences with a C0/DEL/non-ASCII code point, **0** off the seven shapes; `toFen` identical on every prompt; 192 frames whole, hidden 0 |
+| the echo bound | verified from `PIECE_MOVE` / `PAWN_MOVE` / `CHECK_SUFFIX`, then **enumerated over all 165,888 strings the grammar accepts**: echo ≤ 7, longest sentence **20** columns; the castle path never echoes (`unreadable` at zero matches) |
+| `NFR-003` one-derive (QE G3) | production path, wrapper counters on an out-of-tree copy, positive control first: **`legalMoves` per rejected prompt 1 before → 1 after**; `generateMoves` 1 → 2 (the set difference); `isInCheck` +1 on the two king classes only. **No charge** — the ticket's cost claim is exactly the measurement. G3 stays a TEST gap on a true claim; recommended for the G1 follow-up, not required |
+| `NFR-002` per-frame path | `classifyRejection` **0 of 1,600 frames** through `makeRenderSeam` (positive control 1); no renderer imports the module. The 14–19 `legalMoves`/frame the probe counted at 40–272 plies are IDENTICAL before the build — pre-existing (`ADR-0004` history-pane `toSan`), handed to Architect/Design as data |
+| ASVS L1 | V1.2.1, V1.3.2, V2.1.1, V2.2.1, V5.2.1 PASS with evidence; the remaining 65 not applicable (no HTTP, browser, file, account, session, token, crypto, transport, component change); no failed requirement, no severity tagged |
+| `NFR-008` | **NOT ruled** (fence). The Engineer's `N8-LANE` +215 ms gross / +55 ms net WAS measured to the row's protocol (n = 8 interleaved, three conditions rotated, round 0 dropped, null −0.09% at 4/8, counts asserted, blob-hash pins); the absolute over-15 s readings under load are handed up unchanged |
+
+**Not done:** no merge, no deploy, no self-sign; suite not re-run (this hop changed zero lines
+under `src/`; QE's 42 / 1291 / 0 stands); `src/search.ts` / `src/turn-loop.ts` not touched. UAT is
+NOT waivable (production lines under `src/`); the owner's word is the signature.
