@@ -264,3 +264,65 @@ LIMIT OF THE INSTRUMENT authorised on the page, not an open question.**
 | 10 | no major unresolved blocker | **✅** none. The one edit this ticket may imply elsewhere (`AGENTS.md`) is named owed with its owner and deliberately not made — a disclosed hand-off, not a blocker |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+**Built 2026-09-19 by the Software Engineer** (task `wave-2026-09-19`, subtask
+`ticket-to-pr-ABC-118`, Workflow 04) on branch `grugops/ABC-118-lane-inventory` @ **`1d0ce2a`**,
+off `grugops/wave-2026-09-19` @ `129f53d`. **Unmerged; not deployed.** Full numbers, the raw
+transcripts and the argument are in `.grugops/context/ticket-to-pr-ABC-118/notes/`
+(`AGENTS.md` `## Process rules` 2); this section is the summary.
+
+- **One file, measured from git:** `tools/grugops/lane-inventory.js` (+93, `node:` builtins
+  only). `git diff --numstat 129f53d HEAD -- src/` is **empty** — zero production lines AND zero
+  test lines under `src/`. `vitest.config.ts`, `AGENTS.md`, `plans/nfr-catalog.md` byte-identical
+  to `main` (`A5`'s numstat, empty). No `package.json` change.
+- **The shape:** `node tools/grugops/lane-inventory.js` compares what vitest collects at the
+  repository root (`vitest list --filesOnly` — the `npm test` form, the one a `.claude/**` typo
+  inflates) with every `*.test.ts` git tracks (`git ls-files`). Exit 0 equal; exit 1 naming each
+  missing or extra path (paths only, never contents); exit 2 when git or vitest could not run.
+  **The recorded expectation is the git index, not a number** — so a merge bringing a new test
+  file (`ABC-079`'s `src/quiescence.test.ts`, unmerged today) brings it into both sets at once and
+  nothing goes stale; a new untracked test file is collected-but-untracked and goes red until it
+  is `git add`ed (`A3`, with the adding commit as the stated reason — the Orchestrator's
+  no-hard-coded-count instruction taken over this page's earlier wording, said rather than
+  silent).
+- **`A4` — THE RULING: OUT OF THE LANE.** Rejected in-lane on three grounds: (1) an in-lane guard
+  is removable by the glob it guards — BA/PM measured the silent exclusion at the cut, and a `.js`
+  under `tools/` is not collected by vitest, so no `test.exclude` entry reaches it (`M4` below is
+  the runnable demonstration); (2) a new lane file's ~370 ms floor cannot fit `A6`'s 0.30 s CPU
+  bound; (3) a test file cannot see the lane's inventory from inside an isolated worker without a
+  second vitest instance at about the same cost. **THE LIMIT, stated rather than smoothed: this
+  is a FIFTH step like `test-skip-integrity.js`, not one of `quality.mandatory_gates`. Under
+  `M1` and `M2` lint, typecheck and build stay 0/0/0; only this step, when run, goes red.** The
+  `AGENTS.md` `## Test integrity` line recording the command is **NAMED OWED** to the Scribe under
+  `ABC-109` and was not written.
+- **`A1`–`A3`, watched red in a copy outside the repository** (rsync without `.git`, re-initialised
+  as its own git repo, `node_modules` symlinked, config reverted and `git status --porcelain`
+  EMPTY after every round; `vitest.config.ts` here never edited): **`M1`** `exclude` +=
+  `"**/glyph-mode.nfr.test.ts"` → 42→**41**, RED naming `src/glyph-mode.nfr.test.ts`,
+  lint/typecheck/build 0/0/0. **`M2`** `".claude/**"`→`".cluade/**"` with a throwaway checkout of
+  42 files planted at `.claude/worktrees/probe/` → 42→**84**, RED naming all 42 foreign paths,
+  0/0/0; 84→42 with the checkout removed. **Live checkouts under `.claude/worktrees/` ARE present
+  in this repository at delivery** (`residual-gqe115-3` and 24 agent worktrees), measured and not
+  touched. **`M3`** untracked `src/zz-abc118-throwaway.test.ts` → 43/42 RED, GREEN after
+  `git add` (43/43). **`M4`** globs aimed at the guard (`"**/tools/**"`, `"**/lane-inventory*"`)
+  → still runs, still 42/42. `M5` (stock `node_modules` entry dropped) 42 — a control, NOT a
+  catch: the symlinked `node_modules` was not descended.
+- **`A5`:** both numstats empty. The hash of rows 28–35 reads
+  `b848732bcb13892fc1c25aba1cf9f54111597da3f27fde39f75fcc6991ac719f` on 8 rows, **not the pinned
+  `63f66795…`** — the pinned value reproduces at `565c623`; the rows moved on `main` by
+  `70a92f9` / `e40d160` / `258582f` / `569efbc` / `c9c5eb2` before this hop, and this hop wrote
+  zero bytes to the file. **Met in substance, unmeetable as pinned; the pin is BA/PM's to
+  refresh.**
+- **`A6` / NFR:** four gates at `1d0ce2a`: `npx biome check .` 76 files clean; `npx tsc --noEmit`
+  0; `npx vitest run --dir src` **42 / 1325 / 0 skipped** (9.1 s wall, 26.4 s CPU, load 9.95);
+  JSON skip **0**; `test-skip-integrity` `No findings.`. 5 interleaved paired runs vs `129f53d`:
+  median Δ wall **−0.04 s**, median Δ CPU **−0.32 s** (the lanes are byte-identical; the sign
+  rule holds 4/5 for CPU, 3/5 for wall — noise at load 12–22, recorded as such). **`N8-LANE`
+  0 ms, 0 files, no line claimed.** **`N8-SPAWN` 0 added children**; the instrument's own three
+  children run outside the lane. **`NFR-008` read 7.0–9.2 s wall / 25.7–27.0 s CPU under load
+  10–22 — REPORTED non-conforming to `ABC-108`, not ruled.**
+- **QE hop owed** before `In Review` is exited; QE is not UAT. UAT: the diff carries zero
+  production lines, so the 2026-08-17 waiver is expected to apply — measured from git at the
+  exit, never asserted here.

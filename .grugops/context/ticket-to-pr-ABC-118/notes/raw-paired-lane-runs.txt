@@ -1,0 +1,7 @@
+round 1 (base first): base exit=0 42/1325 wall=9.21 cpu=27.04 load=12.36 | tip exit=0 42/1325 wall=9.17 cpu=26.95 load=15.13 | dWall=-0.04 dCpu=-0.09
+round 2 (tip first): base exit=0 42/1325 wall=8.73 cpu=26.65 load=21.04 | tip exit=0 42/1325 wall=9.08 cpu=26.67 load=15.56 | dWall=0.35 dCpu=0.02
+round 3 (base first): base exit=0 42/1325 wall=7.46 cpu=26.06 load=20.19 | tip exit=0 42/1325 wall=7.04 cpu=25.74 load=21.01 | dWall=-0.42 dCpu=-0.32
+round 4 (tip first): base exit=0 42/1325 wall=7.25 cpu=26.29 load=21.19 | tip exit=0 42/1325 wall=7.33 cpu=25.95 load=19.73 | dWall=0.08 dCpu=-0.34
+round 5 (base first): base exit=0 42/1325 wall=7.47 cpu=26.79 load=18.78 | tip exit=0 42/1325 wall=7.14 cpu=25.71 load=21.76 | dWall=-0.33 dCpu=-1.08
+wall deltas -0.04 / 0.35 / -0.42 / 0.08 / -0.33 -> median -0.04; sign + 2, - 3, 0 0
+cpu deltas -0.09 / 0.02 / -0.32 / -0.34 / -1.08 -> median -0.32; sign + 1, - 4, 0 0

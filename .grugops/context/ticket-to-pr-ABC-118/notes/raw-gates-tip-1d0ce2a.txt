@@ -1,0 +1,17 @@
+== lint: npx biome check .
+   exit=0 real=0.65s user=0.81s sys=0.21s cpu=1.02s load(1/5/15 at start)=9.95 8.20 7.20
+   | Checked 76 files in 162ms. No fixes applied.
+== typecheck/build: npx tsc --noEmit
+   exit=0 real=2.04s user=3.43s sys=0.32s cpu=3.75s load(1/5/15 at start)=9.95 8.20 7.20
+== unit: npx vitest run --dir src
+   exit=0 real=9.1s user=23.65s sys=2.75s cpu=26.4s load(1/5/15 at start)=9.95 8.20 7.20
+   | Test Files  42 passed (42)
+   | Tests  1325 passed (1325)
+   | Duration  8.31s (transform 1.51s, setup 0ms, collect 12.66s, tests 13.36s, environment 12ms, prepare 4.32s)
+== skip-count: npx vitest run --dir src --reporter=json
+   exit=0 real=9.26s user=23.95s sys=2.66s cpu=26.61s load(1/5/15 at start)=12.39 8.79 7.42
+   numTotalTests=1325 passed=1325 failed=0 pending=0 todo=0 files=266
+== test-skip-integrity --skip-count 0
+   exit=0 real=0.07s user=0.03s sys=0s cpu=0.03s load(1/5/15 at start)=13.68 9.21 7.59
+   | No findings.
+skipCount=0

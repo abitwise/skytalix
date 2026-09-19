@@ -1,0 +1,60 @@
+// Gate harness for ABC-118. Runs the four gates plus test-skip-integrity from a given tree,
+// records exit codes, wall/CPU per gate, and the load average alongside each. Usage:
+//   node gates.mjs <treeRoot> [--lane-only]
+import { spawnSync } from "node:child_process";
+import { loadavg } from "node:os";
+
+const root = process.argv[2];
+const laneOnly = process.argv.includes("--lane-only");
+if (!root) {
+  console.error("usage: node gates.mjs <treeRoot> [--lane-only]");
+  process.exit(2);
+}
+
+function run(label, cmd, args, extraEnv = {}) {
+  const load = loadavg().map((n) => n.toFixed(2)).join(" ");
+  const r = spawnSync("/usr/bin/time", ["-p", cmd, ...args], {
+    cwd: root,
+    encoding: "utf8",
+    env: { ...process.env, ...extraEnv },
+    maxBuffer: 64 * 1024 * 1024,
+  });
+  const t = {};
+  for (const line of r.stderr.split("\n")) {
+    const m = /^(real|user|sys)\s+([\d.]+)$/.exec(line.trim());
+    if (m) t[m[1]] = Number(m[2]);
+  }
+  const cpu = (t.user ?? 0) + (t.sys ?? 0);
+  return { label, exit: r.status, real: t.real, user: t.user, sys: t.sys, cpu: Number(cpu.toFixed(2)), load, stdout: r.stdout, stderr: r.stderr };
+}
+
+const results = [];
+if (!laneOnly) {
+  results.push(run("lint: npx biome check .", "npx", ["biome", "check", "."]));
+  results.push(run("typecheck/build: npx tsc --noEmit", "npx", ["tsc", "--noEmit"]));
+}
+const lane = run("unit: npx vitest run --dir src", "npx", ["vitest", "run", "--dir", "src"]);
+results.push(lane);
+const json = run("skip-count: npx vitest run --dir src --reporter=json", "npx", ["vitest", "run", "--dir", "src", "--reporter=json"]);
+let skipCount = "UNKNOWN - verify";
+try {
+  const start = json.stdout.indexOf("{");
+  const parsed = JSON.parse(json.stdout.slice(start));
+  skipCount = parsed.numPendingTests + parsed.numTodoTests;
+  json.summary = `numTotalTests=${parsed.numTotalTests} passed=${parsed.numPassedTests} failed=${parsed.numFailedTests} pending=${parsed.numPendingTests} todo=${parsed.numTodoTests} files=${parsed.numTotalTestSuites}`;
+} catch (e) {
+  json.summary = `could not parse json reporter: ${e.message}`;
+}
+results.push(json);
+if (!laneOnly && typeof skipCount === "number") {
+  results.push(run(`test-skip-integrity --skip-count ${skipCount}`, "node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(skipCount)]));
+}
+
+for (const r of results) {
+  console.log(`== ${r.label}`);
+  console.log(`   exit=${r.exit} real=${r.real}s user=${r.user}s sys=${r.sys}s cpu=${r.cpu}s load(1/5/15 at start)=${r.load}`);
+  if (r.summary) console.log(`   ${r.summary}`);
+  const tail = (r.label.startsWith("skip-count") ? "" : r.stdout + r.stderr).trim().split("\n").filter((l) => /Test Files|Tests |Duration|Checked|error|Error|No findings|findings/.test(l));
+  for (const l of tail.slice(-6)) console.log(`   | ${l.trim()}`);
+}
+console.log(`skipCount=${skipCount}`);

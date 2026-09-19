@@ -1,0 +1,35 @@
+// A6: median of >= 5 interleaved paired runs of `npx vitest run --dir src`, base vs tip.
+import { spawnSync } from "node:child_process";
+import { loadavg } from "node:os";
+
+const [base, tip] = [process.argv[2], process.argv[3]];
+const rounds = Number(process.argv[4] ?? 5);
+function lane(root) {
+  const load = loadavg()[0].toFixed(2);
+  const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", "--dir", "src"], { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  const t = {};
+  for (const line of r.stderr.split("\n")) {
+    const m = /^(real|user|sys)\s+([\d.]+)$/.exec(line.trim());
+    if (m) t[m[1]] = Number(m[2]);
+  }
+  const files = /Test Files\s+(\d+) passed/.exec(r.stdout)?.[1];
+  const tests = /Tests\s+(\d+) passed/.exec(r.stdout)?.[1];
+  return { exit: r.status, wall: t.real, cpu: Number((t.user + t.sys).toFixed(2)), load, files, tests };
+}
+// discarded warm-up
+lane(base);
+const dWall = [];
+const dCpu = [];
+for (let i = 1; i <= rounds; i++) {
+  const first = i % 2 === 1 ? "base" : "tip";
+  const a = lane(first === "base" ? base : tip);
+  const b = lane(first === "base" ? tip : base);
+  const B = first === "base" ? a : b;
+  const T = first === "base" ? b : a;
+  dWall.push(Number((T.wall - B.wall).toFixed(2)));
+  dCpu.push(Number((T.cpu - B.cpu).toFixed(2)));
+  console.log(`round ${i} (${first} first): base exit=${B.exit} ${B.files}/${B.tests} wall=${B.wall} cpu=${B.cpu} load=${B.load} | tip exit=${T.exit} ${T.files}/${T.tests} wall=${T.wall} cpu=${T.cpu} load=${T.load} | dWall=${dWall.at(-1)} dCpu=${dCpu.at(-1)}`);
+}
+const med = (xs) => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor(s.length / 2)]; };
+console.log(`wall deltas ${dWall.join(" / ")} -> median ${med(dWall)}; sign + ${dWall.filter((x) => x > 0).length}, - ${dWall.filter((x) => x < 0).length}, 0 ${dWall.filter((x) => x === 0).length}`);
+console.log(`cpu deltas ${dCpu.join(" / ")} -> median ${med(dCpu)}; sign + ${dCpu.filter((x) => x > 0).length}, - ${dCpu.filter((x) => x < 0).length}, 0 ${dCpu.filter((x) => x === 0).length}`);
