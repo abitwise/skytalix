@@ -6,11 +6,12 @@
  * this module the only implementation was a scripted stub inside `src/turn-loop.test.ts`. This is the
  * real one, and it binds into `runTurnLoop({ input })` with no adapter and no cast.
  *
- * IT CONTAINS NO GRAMMAR AND NO TOKEN TABLE. One submitted line goes to `resolvePromptLine`
- * (`src/command-input.ts:129`), which consults `ABC-035`'s command table first and hands anything
- * else to `ABC-033`'s dispatcher. The classification ORDER is delegated, not duplicated: a second
- * copy of it here is a second thing to get wrong, and `A4` is asserted by spy for exactly that
- * reason.
+ * IT CONTAINS NO GRAMMAR AND NO TOKEN TABLE. One submitted line goes to the per-session resolver
+ * `createPromptLineResolver` returns (`src/command-input.ts`, `ABC-046` — it holds the `quit`
+ * confirmation flag and nothing else), which delegates to `resolvePromptLine`: `ABC-035`'s command
+ * table first, anything else to `ABC-033`'s dispatcher. The classification ORDER is delegated, not
+ * duplicated: a second copy of it here is a second thing to get wrong, and `A4` is asserted by spy
+ * for exactly that reason.
  *
  * IT CATCHES NOTHING, AND THAT IS THE TICKET'S RULING RATHER THAN AN OMISSION (`ABC-019` `[D31]`,
  * `EPIC-003`'s half). There is no `try` in this file. A throw from below is by construction a defect
@@ -53,7 +54,7 @@
  * the source, which is a process-level concern `EPIC-006` owns along with the rethrown parser bug.
  */
 
-import { resolvePromptLine } from "./command-input.ts";
+import { createPromptLineResolver } from "./command-input.ts";
 import type { GameHistory } from "./history.ts";
 import type { MoveInputDeps } from "./move-input.ts";
 import type { InputSeam, PromptOutcome } from "./turn-loop.ts";
@@ -130,8 +131,8 @@ export interface LineInputOptions {
   readonly source: LineSource;
   readonly output: PromptOutput;
   /**
-   * `ABC-033`'s test seam, passed straight through to `resolvePromptLine` and never called from
-   * this module. It is what lets `A4`, `A5` and `A7` spy a call count without a hoisted `vi.mock`,
+   * `ABC-033`'s test seam, passed straight through to the resolver and never called from this
+   * module. It is what lets `A4`, `A5` and `A7` spy a call count without a hoisted `vi.mock`,
    * which is what keeps this ticket at one test file.
    */
   readonly deps?: MoveInputDeps;
@@ -149,6 +150,8 @@ interface SubmittedLine {
  */
 export function createLineInputSeam(options: LineInputOptions): InputSeam {
   const { source, output, deps } = options;
+  // ONE per seam, so the `quit` confirmation is this session's and no other's (`ABC-046`).
+  const resolve = createPromptLineResolver(deps);
   const decoder = new TextDecoder("utf-8");
 
   /** Completed lines a chunk overshot by, in order. Bounded by one chunk — see the header. */
@@ -240,6 +243,6 @@ export function createLineInputSeam(options: LineInputOptions): InputSeam {
     const line = await readLine();
     if (line === null) return { kind: "eof" };
     if (line.overlong) return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };
-    return resolvePromptLine(history, line.text, deps);
+    return resolve(history, line.text);
   };
 }

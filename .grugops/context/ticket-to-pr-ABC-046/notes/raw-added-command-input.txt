@@ -1,0 +1,29 @@
++export type CommandToken = "help" | "board" | "quit" | "claim" | "resign" | "new";
++  readonly outcome: "command" | "claim" | "game-over" | "take-back";
++  { token: "new", outcome: "take-back" },
++export const QUIT_CONFIRMATION_MESSAGES: readonly string[] = ["quit again to end"];
++  {
++    readonly kind:
++      | "move"
++      | "rejected"
++      | "ambiguous"
++      | "command"
++      | "claim"
++      | "game-over"
++      | "quit"
++      | "take-back";
++  }
++  if (spec.outcome === "take-back") {
++    return { kind: "take-back", plies: history.moves.length, messages: [] };
++  }
++  if (spec.token === "quit") return { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
++export type PromptLineResolver = (history: GameHistory, line: string) => PromptLineOutcome;
++export function createPromptLineResolver(deps?: MoveInputDeps): PromptLineResolver {
++  let quitArmed = false;
++  return (history, line) => {
++    const wasArmed = quitArmed;
++    quitArmed = classifyCommand(line)?.token === "quit";
++    if (wasArmed && quitArmed) return { kind: "quit" };
++    return resolvePromptLine(history, line, deps);
++  };
++}

@@ -1,0 +1,25 @@
+// ABC-046 in-file timing: /usr/bin/time -p npx vitest run <file> N times, reading vitest's own
+// "tests Xms" line, the "Duration" line and the process CPU. Usage: node infile.mjs <label> <cwd> <runs> <file>
+import { spawnSync, execSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+const [label, cwd, runsArg, file] = process.argv.slice(2);
+const runs = Number(runsArg ?? 7);
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/abc046";
+const loadavg = () => execSync("sysctl -n vm.loadavg").toString().trim();
+const rows = [];
+for (let i = 1; i <= runs; i++) {
+  const lb = loadavg();
+  const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", file], { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  const out = r.stdout || "", err = r.stderr || "";
+  writeFileSync(`${S}/logs/infile-${label}-${i}.log`, out + "\n---stderr---\n" + err);
+  const tm = out.match(/tests (\d+)ms/); const dm = out.match(/Duration\s+([0-9.]+)(m?s)/);
+  const pm = out.match(/^\s*Tests\s+(\d+) passed/m);
+  const pick = (k) => { const m = err.match(new RegExp(`^${k}\\s+([0-9.]+)`, "m")); return m ? Number(m[1]) : NaN; };
+  const dur = dm ? (dm[2] === "s" ? Number(dm[1]) * 1000 : Number(dm[1])) : NaN;
+  const row = { run: i, load_before: lb, tests_ms: tm ? Number(tm[1]) : NaN, duration_ms: dur, passed: pm ? Number(pm[1]) : NaN, status: r.status, real: pick("real"), user: pick("user"), sys: pick("sys") };
+  rows.push(row); console.log(JSON.stringify(row));
+}
+const med = (a) => { const s = [...a].sort((x, y) => x - y); return s.length % 2 ? s[s.length >> 1] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2; };
+const summary = { label, file, runs, median_tests_ms: med(rows.map(r => r.tests_ms)), median_duration_ms: med(rows.map(r => r.duration_ms)), median_cpu: med(rows.map(r => +(r.user + r.sys).toFixed(2))), rows };
+writeFileSync(`${S}/infile-${label}-summary.json`, JSON.stringify(summary, null, 2));
+console.log(`SUMMARY ${label}: median tests ${summary.median_tests_ms} ms, duration ${summary.median_duration_ms} ms, cpu ${summary.median_cpu} s`);

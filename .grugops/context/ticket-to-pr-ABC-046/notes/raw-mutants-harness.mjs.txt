@@ -1,0 +1,63 @@
+// ABC-046 mutant round: mutate ONE production file in place, run the named test file(s), restore
+// the original, assert the restore is byte-identical. Usage: node mutants.mjs <cwd>
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+
+const cwd = process.argv[2];
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/abc046";
+const sha = (s) => createHash("sha256").update(s).digest("hex");
+const originals = {};
+for (const f of ["src/command-input.ts", "src/line-input.ts"]) originals[f] = readFileSync(`${cwd}/${f}`, "utf8");
+
+const ARM = 'quitArmed = classifyCommand(line)?.token === "quit";';
+const EXIT = 'if (wasArmed && quitArmed) return { kind: "quit" };';
+const NEW = 'return { kind: "take-back", plies: history.moves.length, messages: [] };';
+const MSG = 'export const QUIT_CONFIRMATION_MESSAGES: readonly string[] = ["quit again to end"];';
+const CONF = 'if (spec.token === "quit") return { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };';
+const LET = "let quitArmed = false;\n  return (history, line) => {";
+const CALL = "return resolve(history, line.text);";
+
+const CI = "src/command-input.ts";
+const LI = "src/line-input.ts";
+const BOTH = ["src/command-input.test.ts", "src/cli.test.ts"];
+const mutants = [
+  { id: "M1-flag-never-clears", file: CI, files: BOTH, apply: (s) => s.replace(ARM, 'quitArmed = quitArmed || classifyCommand(line)?.token === "quit";') },
+  { id: "M2-first-quit-exits-no-confirmation", file: CI, files: BOTH, apply: (s) => s.replace(EXIT, 'if (quitArmed) return { kind: "quit" };') },
+  { id: "M3-module-level-flag", file: CI, files: BOTH, apply: (s) => s.replace(LET, "return (history, line) => {").replace("export function createPromptLineResolver(", "let quitArmed = false;\nexport function createPromptLineResolver(") },
+  { id: "M4-new-takes-back-two", file: CI, files: BOTH, apply: (s) => s.replace(NEW, 'return { kind: "take-back", plies: 2, messages: [] };') },
+  { id: "M5-new-inert-command", file: CI, files: BOTH, apply: (s) => s.replace('{ token: "new", outcome: "take-back" },', '{ token: "new", outcome: "command" },') },
+  { id: "M6-confirmation-over-17-columns", file: CI, files: BOTH, apply: (s) => s.replace(MSG, 'export const QUIT_CONFIRMATION_MESSAGES: readonly string[] = ["are you sure? type quit again to end"];') },
+  { id: "M7-only-commands-clear-the-flag", file: CI, files: BOTH, apply: (s) => s.replace(ARM, 'const spec = classifyCommand(line);\n    quitArmed = spec === undefined ? wasArmed : spec.token === "quit";') },
+  { id: "M8-no-confirmation-message-on-first-quit", file: CI, files: BOTH, apply: (s) => s.replace(CONF, "") },
+  { id: "M9-reader-calls-bare-resolvePromptLine", file: LI, files: ["src/line-input.test.ts", "src/cli.test.ts"], apply: (s) => s.replace(CALL, "return resolvePromptLine(history, line.text, deps);").replace('import { createPromptLineResolver } from "./command-input.ts";', 'import { createPromptLineResolver, resolvePromptLine } from "./command-input.ts";') },
+  { id: "CONTROL-unmutated", file: CI, files: BOTH, apply: (s) => s },
+];
+
+const results = [];
+for (const m of mutants) {
+  const FILE = `${cwd}/${m.file}`;
+  const original = originals[m.file];
+  const mutated = m.apply(original);
+  if (m.id !== "CONTROL-unmutated" && mutated === original) { results.push({ id: m.id, error: "MUTANT DID NOT APPLY" }); continue; }
+  writeFileSync(FILE, mutated);
+  const perFile = [];
+  for (const f of m.files) {
+    const r = spawnSync("npx", ["vitest", "run", f], { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+    const out = r.stdout + r.stderr;
+    writeFileSync(`${S}/logs/mutant-${m.id}-${f.replace(/\//g, "_")}.log`, out);
+    const tm = out.match(/^\s*Tests\s+(.*)$/m);
+    const rows = [...out.matchAll(/^\s*[×✗]\s+(.*?)(?:\s+\d+ms)?$/gm)].map((x) => x[1].trim());
+    perFile.push({ file: f, status: r.status, tests: tm?.[1]?.trim(), redRows: rows.slice(0, 40), redCount: rows.length });
+  }
+  writeFileSync(FILE, original);
+  const restored = sha(readFileSync(FILE, "utf8")) === sha(original);
+  results.push({ id: m.id, file: m.file, restoredByteIdentical: restored, perFile });
+}
+writeFileSync(`${S}/mutants-summary.json`, JSON.stringify(results, null, 2));
+for (const r of results) {
+  console.log(`== ${r.id} (${r.file ?? ""}) restored=${r.restoredByteIdentical}`);
+  for (const p of r.perFile ?? []) console.log(`   ${p.file}: exit ${p.status} | ${p.tests} | red ${p.redCount}` + (p.redRows.length ? `\n      - ${p.redRows.join("\n      - ")}` : ""));
+  if (r.error) console.log("   " + r.error);
+}
+for (const f of Object.keys(originals)) console.log(`final ${f} sha matches original: ${sha(readFileSync(`${cwd}/${f}`, "utf8")) === sha(originals[f])}`);

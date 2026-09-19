@@ -1,0 +1,44 @@
+{
+  "label": "after",
+  "runs": 3,
+  "medianCPU": 26.63,
+  "rangeCPU": [
+    25.19,
+    27.33
+  ],
+  "rows": [
+    {
+      "run": 1,
+      "load_before": "{ 7.20 6.62 6.51 }",
+      "real": 7.51,
+      "user": 24,
+      "sys": 2.63,
+      "cpu": 26.63,
+      "files": 42,
+      "tests": 1361,
+      "ok": "ok"
+    },
+    {
+      "run": 2,
+      "load_before": "{ 9.12 7.05 6.67 }",
+      "real": 8.63,
+      "user": 24.58,
+      "sys": 2.75,
+      "cpu": 27.33,
+      "files": 42,
+      "tests": 1361,
+      "ok": "ok"
+    },
+    {
+      "run": 3,
+      "load_before": "{ 14.00 8.10 7.04 }",
+      "real": 7.73,
+      "user": 22.78,
+      "sys": 2.41,
+      "cpu": 25.19,
+      "files": 42,
+      "tests": 1361,
+      "ok": "ok"
+    }
+  ]
+}

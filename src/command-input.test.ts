@@ -2,22 +2,40 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   COMMAND_TABLE,
   classifyCommand,
+  createPromptLineResolver,
   helpMessages,
   type PromptLineOutcome,
+  QUIT_CONFIRMATION_MESSAGES,
   resolvePromptLine,
 } from "./command-input.ts";
 import { parseCoordinateMove } from "./coordinate-move.ts";
 import { toFen } from "./fen.ts";
 import { assembleFrame, type FrameSink, MESSAGE_ROWS, PROMPT_ROWS } from "./frame.ts";
-import { type GameHistory, gameStatusOf, newGame, playMove, repetitionCounts } from "./history.ts";
+import type { GameStatus } from "./gameend.ts";
+import {
+  type GameHistory,
+  gameStatusOf,
+  keyHistory,
+  newGame,
+  playMove,
+  repetitionCounts,
+} from "./history.ts";
 import { renderHistory } from "./history-pane.ts";
 import { legalMoves } from "./legal.ts";
 import type { MoveInputDeps } from "./move-input.ts";
 import type { Move } from "./moves.ts";
 import { renderBoard } from "./render.ts";
+import { renderResultScreen } from "./result-screen.ts";
 import { parseSan, toSan } from "./san.ts";
 import { renderStatusPanel } from "./status-panel.ts";
-import { type EngineSeam, type InputSeam, type RenderSeam, runTurnLoop } from "./turn-loop.ts";
+import {
+  type EngineSeam,
+  INPUT_ENDED_NOTICE,
+  type InputSeam,
+  QUIT_NOTICE,
+  type RenderSeam,
+  runTurnLoop,
+} from "./turn-loop.ts";
 
 /**
  * `A6`'s guard, and it is a HOISTED MODULE MOCK rather than a `vi.spyOn` over an imported binding
@@ -154,6 +172,10 @@ const TOKEN_SPELLINGS: ReadonlyArray<readonly [line: string, token: string]> = [
   ["resign", "resign"],
   ["RESIGN", "resign"],
   ["  Resign  ", "resign"],
+  // `ABC-046`'s row, the same way.
+  ["new", "new"],
+  ["NEW", "new"],
+  ["  New  ", "new"],
 ];
 
 /**
@@ -174,6 +196,9 @@ const NON_TOKENS: readonly string[] = [
   "cl",
   "resig",
   "resigns",
+  "ne",
+  "newgame",
+  "renew",
   "",
 ];
 
@@ -289,24 +314,38 @@ describe("ABC-035 A2 — a command never reaches a resolver", () => {
 interface LoopRun {
   readonly renders: number;
   readonly messagesPerFrame: readonly (readonly string[])[];
+  /** The status the loop handed the render seam, per frame — `ABC-046` `A5`'s claim cell. */
+  readonly statusPerFrame: readonly GameStatus[];
   readonly result: string | null;
   readonly reason: string | null;
   readonly exitCode: number;
   /** How many prompts the loop actually READ. `ABC-045` `A5`'s witness: the unconsumed next line. */
   readonly reads: number;
+  /** Every write to the sink — frames and notices alike. `ABC-046` `A3` reads the LAST one. */
+  readonly writes: readonly string[];
 }
 
-/** `ABC-045`'s two additions to the runner: the colour (`A1`, both directions) and an outcome probe (`A2`). */
+/**
+ * `ABC-045`'s two additions to the runner: the colour (`A1`, both directions) and an outcome probe
+ * (`A2`). `ABC-046`'s one: an opponent, for the row whose script advances a ply.
+ */
 interface RunOptions {
   readonly humanColour?: "white" | "black";
   /** Called the instant the seam has produced an outcome and before the loop acts on it. */
   readonly onOutcome?: (outcome: PromptLineOutcome) => void;
+  /** Absent, the engine seam THROWS — every row but `ABC-046` `A1`'s intervening-move one. */
+  readonly engine?: EngineSeam;
 }
 
 /**
  * Run the MERGED loop with this module bound as the `InputSeam`, one scripted line per prompt, then
  * end the input. The render seam is a stub of fixed rows: `A3` counts CALLS, and a real panel would
  * drag `gameStatusOf` into `A6`'s ply total for a reason that is not this module's.
+ *
+ * Bound through `createPromptLineResolver`, ONE per run — the resolver the delivered reader binds
+ * (`src/line-input.ts`), so the `quit` flag here is this run's and no other row's. Before
+ * `ABC-046` this called bare `resolvePromptLine`; every earlier row's outcome is unchanged by the
+ * wrapper, because it differs from the pure function on the second consecutive `quit` only.
  */
 async function runLines(
   history: GameHistory,
@@ -314,22 +353,32 @@ async function runLines(
   options: RunOptions = {},
 ): Promise<LoopRun> {
   const messagesPerFrame: string[][] = [];
-  const render: RenderSeam = (_history, _status, _thinking, messages) => {
+  const statusPerFrame: GameStatus[] = [];
+  const render: RenderSeam = (_history, status, _thinking, messages) => {
     messagesPerFrame.push([...messages]);
+    statusPerFrame.push(status);
     return ["row one", "row two"];
   };
   let next = 0;
+  const resolve = createPromptLineResolver();
   const input: InputSeam = async (current) => {
     const line = lines[next++];
     if (line === undefined) return { kind: "eof" };
-    const outcome = resolvePromptLine(current, line);
+    const outcome = resolve(current, line);
     options.onOutcome?.(outcome);
     return outcome;
   };
-  const engine: EngineSeam = () => {
-    throw new Error("the engine seam must not be reached: no scripted line advances a ply");
+  const engine: EngineSeam =
+    options.engine ??
+    (() => {
+      throw new Error("the engine seam must not be reached: no scripted line advances a ply");
+    });
+  const writes: string[] = [];
+  const sink: FrameSink = {
+    write: (text) => {
+      writes.push(text);
+    },
   };
-  const sink: FrameSink = { write: () => {} };
 
   const outcome = await runTurnLoop({
     history,
@@ -342,10 +391,12 @@ async function runLines(
   return {
     renders: messagesPerFrame.length,
     messagesPerFrame,
+    statusPerFrame,
     result: outcome.result,
     reason: outcome.reason,
     exitCode: outcome.exitCode,
     reads: next,
+    writes,
   };
 }
 
@@ -390,11 +441,14 @@ describe("ABC-035 A4 — `help` names every token in the table and no other", ()
 
   /**
    * The negative half. These are real tokens of the SAME prompt owned by OTHER tickets — `moves` is
-   * `ABC-036`, the rest are `EPIC-006`'s — so a help text that lists the epic's whole vocabulary
+   * `ABC-036`, `undo` is `ABC-102`'s — so a help text that lists the epic's whole vocabulary
    * instead of this table's is caught here rather than by a reader noticing. `resign` LEFT this
-   * list at `ABC-045`, which put it in the table; it is asserted present in the positive half above.
+   * list at `ABC-045` and `new` LEFT it at `ABC-046`, each when its ticket put it in the table;
+   * both are asserted present in the positive half above. `ABC-112` — the filter that would have
+   * hidden `quit` from `help` until it was honoured — is moot from `ABC-046` on: the table's
+   * promise is TRUE for every row in it.
    */
-  for (const foreign of ["moves", "undo", "new"]) {
+  for (const foreign of ["moves", "undo"]) {
     it(`does not name ${foreign}, which is not in this ticket's table`, () => {
       expect(COMMAND_TABLE.map((spec) => spec.token as string)).not.toContain(foreign);
       expect(helpMessages().join(" ")).not.toContain(foreign);
@@ -648,16 +702,25 @@ describe("ABC-045 — `resign` resolves to the EXISTING game-over arm with the r
 // ---------------------------------------------------------------------------
 
 describe("ABC-035 fences — grammar only", () => {
-  it("no token carries an effect: `quit` and `board` are outcome-identical and payload-free", () => {
+  /**
+   * SUPERSEDED AT `ABC-046`, in writing, on that ticket's page (`## Design ruling 2026-09-19`,
+   * "The `Done` assertion this ticket will red, authorised here"). The row that stood here said
+   * `quit` and `board` are outcome-identical and payload-free, and its own comment said it reds
+   * the day `EPIC-006` gives `quit` an effect. That day is `ABC-046`. What is STILL true of the
+   * pure function is asserted instead: `board` is payload-free, and `quit` carries the
+   * confirmation and NOTHING else — no exit from this function, ever.
+   */
+  it("`board` is payload-free; the pure function's `quit` is the confirmation and never an exit", () => {
     const history = newGame(RICH_FEN);
 
-    const quit = resolvePromptLine(history, "quit");
     const board = resolvePromptLine(history, "board");
+    const quit = resolvePromptLine(history, "quit");
+    const again = resolvePromptLine(history, "quit");
 
-    // `EPIC-006` owns what `quit` DOES. If a confirmation prompt or an exit ever appears here, the
-    // two stop being identical and this row is where it shows.
-    expect(quit).toEqual({ kind: "command", messages: [] });
-    expect(board).toEqual(quit);
+    expect(board).toEqual({ kind: "command", messages: [] });
+    expect(quit).toEqual({ kind: "command", messages: QUIT_CONFIRMATION_MESSAGES });
+    // No memory: the second call to the PURE function is the first call again.
+    expect(again).toEqual(quit);
   });
 
   /**
@@ -696,9 +759,330 @@ describe("ABC-035 fences — grammar only", () => {
 
   it("takes no argument: a token with anything after it is not a command", () => {
     const history = newGame(RICH_FEN);
-    for (const line of ["claim threefold", "quit now", "help claim", "board white", "resign now"]) {
+    for (const line of [
+      "claim threefold",
+      "quit now",
+      "help claim",
+      "board white",
+      "resign now",
+      "new game",
+    ]) {
       expect(classifyCommand(line)).toBeUndefined();
       expect(resolvePromptLine(history, line).kind).not.toBe("command");
+      expect(resolvePromptLine(history, line).kind).not.toBe("take-back");
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `ABC-046` — `quit` with confirmation, and `new`. A1-A7 here (A1's second `quit` and A3 through the
+// merged loop; A2/A3/A6 also as entry-point children in `src/cli.test.ts`); A8 is the gate's
+// `git diff --numstat`.
+// ---------------------------------------------------------------------------
+
+describe("ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else", () => {
+  /** The exact first-`quit` object. A payload added later (a flag, a second item) reds here. */
+  const CONFIRMATION = { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
+  /** The exact exit arm — `Object.keys` exactly `["kind"]`, as `claim`'s row asserts of `claim`. */
+  const QUIT = { kind: "quit" };
+  /** A first-legal-move opponent, for the ONE row whose script advances a ply. */
+  const firstLegal: EngineSeam = async (history) => legalMoves(history.position)[0] as Move;
+
+  it("A1 — quit / quit: the first is the confirmation, the second is the exit, and the exit is payload-free", () => {
+    const history = newGame(RICH_FEN);
+    const resolve = createPromptLineResolver();
+
+    const first = resolve(history, "quit");
+    const second = resolve(history, "quit");
+
+    expect(first).toEqual(CONFIRMATION);
+    expect(second).toEqual(QUIT);
+    expect(Object.keys(second)).toEqual(["kind"]);
+    // The confirmation fits the region's bound (`ADR-0021` clause 6: ≤ 17 columns), as ONE item.
+    expect(QUIT_CONFIRMATION_MESSAGES).toHaveLength(1);
+    expect((QUIT_CONFIRMATION_MESSAGES[0] as string).length).toBeLessThanOrEqual(17);
+    // And the classification is `ABC-035`'s: any tolerated spelling arms, any tolerated spelling ends.
+    const spelled = createPromptLineResolver();
+    expect(spelled(history, "QUIT")).toEqual(CONFIRMATION);
+    expect(spelled(history, "  Quit  ")).toEqual(QUIT);
+  });
+
+  it("A1 — quit / other / quit: an intervening COMMAND clears the confirmation", () => {
+    const history = newGame(RICH_FEN);
+    const resolve = createPromptLineResolver();
+
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    expect(resolve(history, "board")).toEqual({ kind: "command", messages: [] });
+    // The third line is a FIRST quit again, not a second.
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    // And so is the fourth after `help`, so a flag that merely counts quits is red here.
+    expect(resolve(history, "help").kind).toBe("command");
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    expect(resolve(history, "quit")).toEqual(QUIT);
+  });
+
+  it("A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)", () => {
+    const history = newGame(RICH_FEN);
+    const resolve = createPromptLineResolver();
+
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    expect(resolve(history, "b4").kind).toBe("move");
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+  });
+
+  it("A1 — quit / rejected line / quit: a line that is NOT a move clears it too", () => {
+    const history = newGame(RICH_FEN);
+    const resolve = createPromptLineResolver();
+
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    expect(resolve(history, "zzz").kind).toBe("rejected");
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+  });
+
+  it("A1 — the flag is PER SESSION: a second resolver is not armed by the first", () => {
+    const history = newGame(RICH_FEN);
+    const one = createPromptLineResolver();
+    const two = createPromptLineResolver();
+
+    expect(one(history, "quit")).toEqual(CONFIRMATION);
+    // A module-level flag — `ABC-045`'s M5 shape — ends `two`'s session on its FIRST quit.
+    expect(two(history, "quit")).toEqual(CONFIRMATION);
+    expect(one(history, "quit")).toEqual(QUIT);
+  });
+
+  it("A1 — through the MERGED loop: one `quit` continues with a frame that asks; the second ends it and the next line is never read", async () => {
+    const history = newGame(RICH_FEN);
+    const fen = toFen(history.position);
+
+    const run = await runLines(history, ["quit", "quit", "b4"]);
+
+    // The first `quit` re-emitted ONE frame carrying the confirmation (transition 9); the second
+    // re-emitted none (transition 17). Frames: the loop's own first, plus one.
+    expect(run.renders).toBe(2);
+    expect(run.messagesPerFrame).toEqual([[], QUIT_CONFIRMATION_MESSAGES]);
+    // The third scripted line — a legal move — was never read.
+    expect(run.reads).toBe(2);
+    expect(run.result).toBeNull();
+    expect(run.reason).toBeNull();
+    expect(run.exitCode).toBe(0);
+    expect(toFen(history.position)).toBe(fen);
+    expect(history.moves).toHaveLength(0);
+  });
+
+  it("A1 — through the MERGED loop: quit / board / quit does NOT end the session", async () => {
+    const run = await runLines(newGame(RICH_FEN), ["quit", "board", "quit"]);
+
+    // All three read, then end-of-input: the session ended on EOF, not on `quit`.
+    expect(run.reads).toBe(4);
+    expect(run.renders).toBe(4);
+    expect(run.messagesPerFrame).toEqual([
+      [],
+      QUIT_CONFIRMATION_MESSAGES,
+      [],
+      QUIT_CONFIRMATION_MESSAGES,
+    ]);
+    expect(run.writes[run.writes.length - 1]).toBe(`${INPUT_ENDED_NOTICE}\n`);
+  });
+
+  it("A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session", async () => {
+    const history = newGame(START_FEN);
+
+    const run = await runLines(history, ["quit", "e4", "quit"], { engine: firstLegal });
+
+    // `e4` advanced a ply, the opponent answered, and the third line was a FIRST quit again.
+    expect(run.reads).toBe(4);
+    expect(history.moves).toHaveLength(2);
+    expect(run.messagesPerFrame[run.messagesPerFrame.length - 1]).toEqual(
+      QUIT_CONFIRMATION_MESSAGES,
+    );
+    expect(run.writes[run.writes.length - 1]).toBe(`${INPUT_ENDED_NOTICE}\n`);
+    expect(run.result).toBeNull();
+  });
+
+  it("A1 — quit / EOF: one `quit` then end-of-input is `ABC-019`'s end-of-input, not a quit", async () => {
+    const run = await runLines(newGame(RICH_FEN), ["quit"]);
+
+    expect(run.reads).toBe(2);
+    expect(run.renders).toBe(2);
+    expect(run.writes[run.writes.length - 1]).toBe(`${INPUT_ENDED_NOTICE}\n`);
+    for (const write of run.writes) expect(write).not.toBe(`${QUIT_NOTICE}\n`);
+    expect(run.result).toBeNull();
+    expect(run.exitCode).toBe(0);
+  });
+
+  it("A2 — a session ended by `quit` records NO result: the screen has zero rows and the code is 0", async () => {
+    const history = played(START_FEN, ["e2e4", "e7e5"]);
+
+    const run = await runLines(history, ["quit", "quit"]);
+
+    expect(run.result).toBeNull();
+    expect(run.reason).toBeNull();
+    expect(run.exitCode).toBe(0);
+    // `ABC-044`'s own renderer, on the loop's own outcome: ZERO rows. The entry-point half — that
+    // nothing is written after the notice — is `CHILDREN.quits` in `src/cli.test.ts`. The literal
+    // `0` is the type's (`LoopOutcome.exitCode` is the literal); the line above proved the value.
+    expect(renderResultScreen({ result: null, reason: null, exitCode: 0 }, history)).toEqual([]);
+  });
+
+  it("A3 — the last line written names quitting and is NOT `INPUT_ENDED_NOTICE`", async () => {
+    const run = await runLines(newGame(RICH_FEN), ["quit", "quit"]);
+
+    const last = run.writes[run.writes.length - 1];
+    // Inequality against the two EXPORTED constants — never a substring of either (test note 4).
+    expect(last).toBe(`${QUIT_NOTICE}\n`);
+    expect(QUIT_NOTICE).not.toBe(INPUT_ENDED_NOTICE);
+    for (const write of run.writes) expect(write).not.toContain(INPUT_ENDED_NOTICE);
+  });
+
+  it("A7 — `quit` is classified before the grammars, on BOTH quits: neither resolver, no derive", () => {
+    const history = newGame(RICH_FEN);
+    const seam = spied(history);
+    const legalBefore = legalCalls();
+    const resolve = createPromptLineResolver(seam.deps);
+
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    expect(resolve(history, "quit")).toEqual(QUIT);
+
+    expect(seam.coordinateCalls()).toBe(0);
+    expect(seam.sanCalls()).toBe(0);
+    expect(seam.deriveCalls()).toBe(0);
+    expect(legalCalls() - legalBefore).toBe(0);
+    expect(derives()).toBe(0);
+  });
+
+  it("A7 control — the wrapper DOES hand a non-command to the resolvers, through the deps it was given", () => {
+    const history = newGame(RICH_FEN);
+    const seam = spied(history);
+    const resolve = createPromptLineResolver(seam.deps);
+
+    expect(resolve(history, "e1d1").kind).toBe("move");
+
+    expect(seam.coordinateCalls()).toBe(1);
+    expect(seam.sanCalls()).toBe(1);
+  });
+
+  it("the confirmation fits the message region at the NARROWEST frame: hidden count exactly 0", () => {
+    // `ABC-035` `A7`'s instrument, on this ticket's one item, at the start position — the narrowest
+    // frame this project draws.
+    const history = newGame(START_FEN);
+    const frame = assembleFrame(
+      {
+        board: renderBoard(history.position, "unicode", "white-bottom"),
+        status: renderStatusPanel(history, gameStatusOf(history), false),
+        history: renderHistory(history),
+        messages: QUIT_CONFIRMATION_MESSAGES,
+      },
+      "unicode",
+    );
+    const region = frame.slice(
+      frame.length - PROMPT_ROWS - MESSAGE_ROWS,
+      frame.length - PROMPT_ROWS,
+    );
+
+    expect(region.join("\n")).not.toContain("(+");
+    expect(region.join(" ")).toContain(QUIT_CONFIRMATION_MESSAGES[0] as string);
+  });
+});
+
+describe("ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together", () => {
+  it("A4 — the pure function: `take-back` of `moves.length` plies, nothing mutated HERE", () => {
+    const history = claimable();
+    const fen = toFen(history.position);
+
+    const outcome = resolvePromptLine(history, "new");
+
+    expect(outcome).toEqual({ kind: "take-back", plies: 8, messages: [] });
+    expect(Object.keys(outcome)).toEqual(["kind", "plies", "messages"]);
+    // The splice is the LOOP's (`ADR-0021` clause 4): this call changed nothing.
+    expect(history.moves).toHaveLength(8);
+    expect(toFen(history.position)).toBe(fen);
+    // And at ply 0 it is a take-back of zero — `takeBack` clamps, the seam does not guard.
+    expect(resolvePromptLine(newGame(START_FEN), "new")).toEqual({
+      kind: "take-back",
+      plies: 0,
+      messages: [],
+    });
+  });
+
+  it("A4 — through the MERGED loop at ply 8 with a repeated position: FEN, moves, keys and counts rewind TOGETHER", async () => {
+    const history = claimable();
+    expect(history.moves).toHaveLength(8);
+    expect(keyHistory(history)).toHaveLength(9);
+
+    await runLines(history, ["new"]);
+
+    // Test note 2: `repetitionCounts`, not just the FEN. A reset that rebuilds the position but
+    // keeps the key list passes the FEN check and corrupts the next draw detection.
+    expect(toFen(history.position)).toBe(SHUFFLE_FEN);
+    expect(history.moves).toHaveLength(0);
+    expect(keyHistory(history)).toHaveLength(1);
+    const counts = repetitionCounts(history);
+    expect(counts.size).toBe(1);
+    expect([...counts.values()]).toEqual([1]);
+  });
+
+  it("A5 — on a CLAIMABLE position, the frame after `new` carries NO draw claim (transition 18 re-evaluates)", async () => {
+    const history = claimable();
+
+    const run = await runLines(history, ["new"]);
+
+    // The GIVEN, asserted: the frame before `new` really did carry the claim.
+    expect(run.statusPerFrame[0]?.claimable).toEqual({
+      by: "white",
+      draws: ["threefold-repetition"],
+    });
+    // The frame after it is the rewound position's own status — shape (a)'s stale cell is absent.
+    expect(run.renders).toBe(2);
+    expect(run.statusPerFrame[1]?.claimable).toBeUndefined();
+    expect(run.statusPerFrame[1]?.result).toBe("in-progress");
+    // And the delivered PANEL, composed on that status, shows no claim cell.
+    const panel = renderStatusPanel(history, run.statusPerFrame[1] as GameStatus, false);
+    expect(panel.join("\n")).not.toContain("may claim");
+    expect(run.messagesPerFrame[1]).toEqual([]);
+  });
+
+  it("A5 — the cost: exactly ONE extra derive for the take-back, none for the discarded game", async () => {
+    const history = claimable();
+    vi.mocked(gameStatusOf).mockClear();
+
+    await runLines(history, ["new", "board"]);
+
+    // 1 before the first frame + 1 for the take-back + 0 for `board`.
+    expect(derives()).toBe(2);
+  });
+
+  it("A7 — `new` is classified before the grammars: neither resolver, no derive", () => {
+    const history = claimable();
+    const seam = spied(history);
+    const legalBefore = legalCalls();
+
+    const outcome = resolvePromptLine(history, "new", seam.deps);
+
+    expect(outcome.kind).toBe("take-back");
+    expect(seam.coordinateCalls()).toBe(0);
+    expect(seam.sanCalls()).toBe(0);
+    expect(seam.deriveCalls()).toBe(0);
+    expect(legalCalls() - legalBefore).toBe(0);
+    expect(derives()).toBe(0);
+  });
+
+  it("`new` does not disturb the `quit` flag's rule: quit / new / quit asks again", () => {
+    const history = played(START_FEN, ["e2e4", "e7e5"]);
+    const resolve = createPromptLineResolver();
+
+    expect(resolve(history, "quit").kind).toBe("command");
+    expect(resolve(history, "new").kind).toBe("take-back");
+    expect(resolve(history, "quit")).toEqual({
+      kind: "command",
+      messages: QUIT_CONFIRMATION_MESSAGES,
+    });
+  });
+
+  it("`help` now names BOTH — the promise `ABC-112` was cut over is TRUE, by construction", () => {
+    const messages = helpMessages();
+
+    expect(messages).toContain("quit");
+    expect(messages).toContain("new");
+    expect(messages).toHaveLength(COMMAND_TABLE.length + 1);
   });
 });

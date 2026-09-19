@@ -1,0 +1,3 @@
++import { createPromptLineResolver } from "./command-input.ts";
++  const resolve = createPromptLineResolver(deps);
++    return resolve(history, line.text);

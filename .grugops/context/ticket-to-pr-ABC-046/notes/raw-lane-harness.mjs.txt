@@ -1,0 +1,32 @@
+// ABC-046 whole-lane CPU sample: /usr/bin/time -p npx vitest run --dir src, N fresh processes,
+// load average sampled before each. Usage: node lane.mjs <label> <cwd> <runs> <expectFiles> <expectTests>
+import { spawnSync, execSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+
+const [label, cwd, runsArg, ef, et] = process.argv.slice(2);
+const runs = Number(runsArg ?? 3);
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/abc046";
+const loadavg = () => execSync("sysctl -n vm.loadavg").toString().trim();
+const rows = [];
+for (let i = 1; i <= runs; i++) {
+  const lb = loadavg();
+  const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", "--dir", "src"], {
+    cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024,
+  });
+  const stdout = r.stdout || "", stderr = r.stderr || "";
+  writeFileSync(`${S}/logs/lane-${label}-${i}.out.log`, stdout);
+  writeFileSync(`${S}/logs/lane-${label}-${i}.err.log`, stderr);
+  const pick = (k) => { const m = stderr.match(new RegExp(`^${k}\\s+([0-9.]+)`, "m")); return m ? Number(m[1]) : NaN; };
+  const real = pick("real"), user = pick("user"), sys = pick("sys");
+  const fm = stdout.match(/Test Files\s+(\d+) passed/); const tm = stdout.match(/^\s*Tests\s+(\d+) passed/m);
+  const files = fm ? Number(fm[1]) : NaN, tests = tm ? Number(tm[1]) : NaN;
+  const ok = r.status === 0 && files === Number(ef) && tests === Number(et) ? "ok" : `HARNESS_ERROR(status=${r.status})`;
+  const row = { run: i, load_before: lb, real, user, sys, cpu: +(user + sys).toFixed(2), files, tests, ok };
+  rows.push(row);
+  console.log(JSON.stringify(row));
+}
+const cpus = rows.map((r) => r.cpu).sort((a, b) => a - b);
+const med = cpus.length % 2 ? cpus[cpus.length >> 1] : (cpus[cpus.length / 2 - 1] + cpus[cpus.length / 2]) / 2;
+const summary = { label, runs, medianCPU: med, rangeCPU: [cpus[0], cpus[cpus.length - 1]], rows };
+writeFileSync(`${S}/lane-${label}-summary.json`, JSON.stringify(summary, null, 2));
+console.log(`SUMMARY ${label}: median CPU ${med.toFixed(2)} s, range ${cpus[0]}-${cpus[cpus.length - 1]}`);

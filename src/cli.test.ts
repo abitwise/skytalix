@@ -33,6 +33,7 @@ import { spawnSync } from "node:child_process";
 import { lstatSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import { ACCEPTED_ARGUMENTS, type ResolvedOptions, resolveOptions } from "./cli-options.ts";
+import { QUIT_CONFIRMATION_MESSAGES } from "./command-input.ts";
 import { frameHeight } from "./frame.ts";
 import * as glyphMode from "./glyph-mode.ts";
 import { type GameHistory, gameStatusOf, newGame, playMove } from "./history.ts";
@@ -44,7 +45,7 @@ import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
 import { makeRenderSeam } from "./render-seam.ts";
 import { renderResultScreen } from "./result-screen.ts";
 import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
-import { INPUT_ENDED_NOTICE, type TerminalReason } from "./turn-loop.ts";
+import { INPUT_ENDED_NOTICE, QUIT_NOTICE, type TerminalReason } from "./turn-loop.ts";
 
 const SOURCE_DIRECTORY = new URL(".", import.meta.url).pathname;
 const REPOSITORY = new URL("..", import.meta.url).pathname;
@@ -785,6 +786,29 @@ export function createEngine() {
    */
   resigns: play(["--colour", "white"], {
     input: "e4\nresign\nd4\n",
+    hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
+  }),
+
+  /**
+   * `ABC-046` `A2`/`A3` — the human quits after one move each: ONE `quit` asks, the SECOND ends
+   * the session, and the stream ends with `QUIT_NOTICE` and NO result screen. The FOURTH line,
+   * `d4`, is a legal move for White and must never be read: a build that needed a third `quit`,
+   * or that read `d4` as the confirmation, would play it, the opponent would run out of script,
+   * and the screen would say the game did not finish. Same rig as `resigns`.
+   */
+  quits: play(["--colour", "white"], {
+    input: "e4\nquit\nquit\nd4\n",
+    hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
+  }),
+
+  /**
+   * `ABC-046` `A6` — `new` after one move each redraws the OPENING frame, byte for byte, with the
+   * colour, glyph mode and orientation the session started with; and `A1`'s quit-then-EOF
+   * sequence rides the same child: the trailing single `quit` asks and does NOT end anything, so
+   * the stream ends on end-of-input — `INPUT_ENDED_NOTICE`, never `QUIT_NOTICE`.
+   */
+  renews: play(["--colour", "white"], {
+    input: "e4\nnew\nquit\n",
     hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
   }),
 
@@ -1722,7 +1746,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
     expect(child.status).not.toBe(0);
   });
 
-  it("N8-LANE — this file spawns TWENTY-FIVE children and no more", () => {
+  it("N8-LANE — this file spawns TWENTY-SEVEN children and no more", () => {
     // The budget, pinned mechanically. Every child is spawned once at module scope; a later hop
     // that adds one has to change this number and say why.
     //
@@ -1787,16 +1811,25 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // `src/command-input.test.ts` at zero spawn cost. The ticket names `N8-LANE` by name and no
     // `N8-SPAWN` figure; the child is reported to the lane measurement on that ticket, not netted.
     //
-    // TWENTY-FIVE IS A CEILING, NOT A TARGET.
+    // TWENTY-FIVE UNTIL `ABC-046`, which adds TWO, counted off its criteria: `A2`/`A3` need a
+    // session ENDED BY `quit` through the delivered entry point (no screen, `QUIT_NOTICE` last,
+    // exit 0) — `quits`; `A6` needs `new`'s redrawn frame byte-compared with the opening frame
+    // through the delivered entry point — `renews`, which also carries `A1`'s quit-then-EOF
+    // sequence. `A1`'s other sequences, `A4`, `A5` and `A7` are unit rows in
+    // `src/command-input.test.ts` at zero spawn cost. The ticket names `N8-LANE` by name and no
+    // `N8-SPAWN` figure; the two children are reported to the lane measurement on that ticket,
+    // not netted.
     //
-    // WRITTEN AS `17 + 7 + 1` AND NOT AS ITS VALUE. At `17 + 6` the form was FORCED: `A6`'s
+    // TWENTY-SEVEN IS A CEILING, NOT A TARGET.
+    //
+    // WRITTEN AS `17 + 7 + 1 + 2` AND NOT AS ITS VALUE. At `17 + 6` the form was FORCED: `A6`'s
     // `ADR-0009` clause 9a row bars any literal equal to a frame's height from this file's
     // executable code, the frame is 23 rows, and the budget was 23 children — two unrelated numbers
     // that happened to be equal, so a literal would have redded `A6`. AT 24 THE COLLISION WAS GONE
     // and the form is now a choice, kept because the derivation says what the value cannot: WHICH
     // ticket bought WHICH children. A hop that "tidies" it to a literal reds nothing today and loses
     // that, and the next raise may collide again.
-    const N8_SPAWN = 17 + 7 + 1;
+    const N8_SPAWN = 17 + 7 + 1 + 2;
     expect(spawned).toBe(N8_SPAWN);
     expect(Object.keys(CHILDREN)).toHaveLength(N8_SPAWN);
     // THE PIN ABOVE IS SELF-REFERENTIAL: `spawned` counts only children made through `childOf`, so
@@ -2852,6 +2885,76 @@ describe("ABC-045 — `resign` reaches the screen as reason 8", () => {
       "frames after the screen",
     ).toHaveLength(0);
     expect(child.stdout).not.toContain("did not finish");
+  });
+});
+
+describe("ABC-046 — `quit` and `new` through the delivered entry point", () => {
+  /** Both children's game before the command: one move each, as the engine names them. */
+  const PLIES = ["e2e4", "e7e5"];
+
+  it("A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0", () => {
+    const child = CHILDREN.quits;
+
+    // NON-VACUITY FIRST: the session ran, and it did not run out of script.
+    expect(child.status, `the quitting game failed: ${child.stderr}`).toBe(0);
+    expect(child.stdout, "the game ended on end-of-input").not.toContain(INPUT_ENDED_NOTICE);
+    expect(child.stdout).not.toContain("did not finish");
+
+    // `A3` — the LAST line names quitting: the prompt that read the second `quit`, then the
+    // notice, then nothing. Asserted on the exported constant and its inequality, never a
+    // substring (test note 4).
+    expect(child.stdout.endsWith(`${PROMPT}${QUIT_NOTICE}\n`)).toBe(true);
+    expect(QUIT_NOTICE).not.toBe(INPUT_ENDED_NOTICE);
+
+    // `A2` — ZERO result-screen rows: the notice is the last thing said, so what `ABC-044` writes
+    // for the outcome the loop returns on `quit` must be empty, and the stream must show it. The
+    // loop's outcome on a quit is `{ null, null, 0 }`, byte-identical to end-of-input's.
+    expect(
+      renderResultScreen({ result: null, reason: null, exitCode: 0 }, playedOut(PLIES)),
+    ).toEqual([]);
+    const frames = framesIn(child.stdout, "ascii", "white-bottom");
+    // 1 + 2 plies + ONE re-emit for the confirmation; the second `quit` re-emits nothing, and the
+    // fourth line (`d4`) was never read — a fifth frame or a "did not finish" screen would show it.
+    expect(frames).toHaveLength(1 + PLIES.length + 1);
+    const lastFrame = frames[frames.length - 1] as readonly string[];
+    expect(lastFrame.join("\n")).toContain(QUIT_CONFIRMATION_MESSAGES[0] as string);
+    // Nothing but the prompt and the notice follows the last frame.
+    const afterLastFrame = child.stdout.slice(child.stdout.lastIndexOf(lastFrame[0] as string));
+    expect(afterLastFrame.split("\n").filter((line) => line !== "")).toHaveLength(
+      lastFrame.filter((line) => line !== "").length + 1,
+    );
+  });
+
+  it("A6 — `new` redraws the OPENING frame byte for byte: colour, glyph mode and orientation kept", () => {
+    const child = CHILDREN.renews;
+
+    expect(child.status, `the renewing game failed: ${child.stderr}`).toBe(0);
+    const frames = framesIn(child.stdout, "ascii", "white-bottom");
+    // 1 + 2 plies + 1 for the take-back + 1 for the single `quit`'s confirmation.
+    expect(frames).toHaveLength(1 + PLIES.length + 2);
+    const opening = frames[0] as readonly string[];
+    const renewed = frames[3] as readonly string[];
+    // The two plies really happened: the frame before `new` is NOT the opening frame.
+    expect(frames[2]).not.toEqual(opening);
+    // The BOARD REGION, named by the criterion, then the whole frame — same colour, same glyphs,
+    // same orientation, same empty history pane, same status, no message.
+    const board = boardRegionOf("ascii", "white-bottom");
+    expect(renewed.slice(0, board.length)).toEqual(opening.slice(0, board.length));
+    expect(renewed).toEqual(opening);
+  });
+
+  it("A1 — quit / EOF: a single `quit` asks and does NOT end the session; end-of-input does", () => {
+    const child = CHILDREN.renews;
+
+    const frames = framesIn(child.stdout, "ascii", "white-bottom");
+    // The fifth frame is the confirmation the single `quit` re-emitted...
+    expect((frames[4] as readonly string[]).join("\n")).toContain(
+      QUIT_CONFIRMATION_MESSAGES[0] as string,
+    );
+    // ...and the session then ended on END-OF-INPUT, in `ABC-019`'s words, never in `quit`'s.
+    expect(child.stdout.endsWith(`${PROMPT}${INPUT_ENDED_NOTICE}\n`)).toBe(true);
+    expect(child.stdout.split(`${QUIT_NOTICE}\n`)).toHaveLength(1);
+    expect(child.status).toBe(0);
   });
 });
 
