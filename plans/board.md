@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-19 by the Orchestrator (task `wave-2026-09-19`, Workflow 05) — **`ABC-120` `In Development` → `In Review` (built, 18/30 lines, merged to the wave branch, lane 42 / 1297 / 0). `In Development` 0/3, `In Review` 1/3, `In Security/NFR` 1/2 (`ABC-034`), `Blocked` 2.**_
+
 _Updated: 2026-09-19 by the Orchestrator (task `wave-2026-09-19`, Workflow 04 → 07) — **`ABC-079` `In Development` → `Blocked`: its own `A5` stop tripped (quiescence node multiplier 62x–1 540x vs 4x); branch left UNMERGED and gated RED on purpose; Architect/Design ruling dispatched. `In Development` 1/3 (`ABC-120`), `Blocked` 2 (`ABC-074`, `ABC-079`).**_
 
 _Updated: 2026-09-19 by the Orchestrator (task `wave-2026-09-19`, Workflow 15) — **`ABC-034` `In Review` → `In Security/NFR` (QE PASS; the ticket's own threshold fired). `In Review` 0/3, `In Security/NFR` 1/2.**_
@@ -267,17 +269,17 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-
-- [ABC-120] The turn loop gains a `quit` arm and a `take-back` arm — transitions 17 and 18, the arm ticket `ADR-0021` clause 8 says lands FIRST  (BA/PM, **S, P1**, epic: EPIC-006, since: 2026-09-19, **DoR 10/10 — PULLABLE TODAY, NO BLOCKING DEPENDENCY, NO ⚠️: the ruling this work waited on since 2026-08-13 landed as `ADR-0021` on the owner's verbatim word *"5. b, resign should be separate"*.**) Cut from `ADR-0021` clauses 8–9. **Scope: `src/turn-loop.ts` (+~16 production lines, bounded ≤ 30 by `A9`) and `src/turn-loop.test.ts` rows ONLY — `PromptOutcome` gains `{ kind: "quit" }` and `{ kind: "take-back"; plies; messages }`, `export const QUIT_NOTICE = "quit"`, transitions 17 and 18; states stay 8, transitions 16 → 18; three docblocks re-worded (`A10`).** The arms alone red ZERO existing tests (measured out-of-tree at the ruling), so the ten criteria ARE the guard (`A6` watched-RED mutant). **`N8-LANE` ≤ 650 ms in the measured-then-clause-state form, 0 new files — and `NFR-008`'s 60 ms CPU headroom is the BINDING number, re-measured at the delivery base.** **THE ID IS 120, NOT 118: `ABC-118`/`ABC-119` live on the unmerged `grugops/cut-050-exclude-and-g06` (`81add97`).** Unblocks `ABC-046` and `ABC-102`; `ABC-045` independent; `ABC-112` cancels when `ABC-046` is pulled. Notes: `.grugops/context/cut-arm-ticket/notes/`.  **→ In Development 2026-09-19.** Pulled by the Orchestrator at task `wave-2026-09-19`, subtask `ticket-to-pr-ABC-120`, branch `grugops/ABC-120-turn-loop-arms`; base lane 42 / 1291 / 0; `A9` ≤ 30 production lines is a STOP, not a target.
+## In Development (WIP 0/3)
 
 
 
 
 
 
-## In Review (WIP 0/3)
 
+## In Review (WIP 1/3)
+
+- [ABC-120] The turn loop gains a `quit` arm and a `take-back` arm — transitions 17 and 18, the arm ticket `ADR-0021` clause 8 says lands FIRST  (BA/PM, **S, P1**, epic: EPIC-006, since: 2026-09-19, **DoR 10/10 — PULLABLE TODAY, NO BLOCKING DEPENDENCY, NO ⚠️: the ruling this work waited on since 2026-08-13 landed as `ADR-0021` on the owner's verbatim word *"5. b, resign should be separate"*.**) Cut from `ADR-0021` clauses 8–9. **Scope: `src/turn-loop.ts` (+~16 production lines, bounded ≤ 30 by `A9`) and `src/turn-loop.test.ts` rows ONLY — `PromptOutcome` gains `{ kind: "quit" }` and `{ kind: "take-back"; plies; messages }`, `export const QUIT_NOTICE = "quit"`, transitions 17 and 18; states stay 8, transitions 16 → 18; three docblocks re-worded (`A10`).** The arms alone red ZERO existing tests (measured out-of-tree at the ruling), so the ten criteria ARE the guard (`A6` watched-RED mutant). **`N8-LANE` ≤ 650 ms in the measured-then-clause-state form, 0 new files — and `NFR-008`'s 60 ms CPU headroom is the BINDING number, re-measured at the delivery base.** **THE ID IS 120, NOT 118: `ABC-118`/`ABC-119` live on the unmerged `grugops/cut-050-exclude-and-g06` (`81add97`).** Unblocks `ABC-046` and `ABC-102`; `ABC-045` independent; `ABC-112` cancels when `ABC-046` is pulled. Notes: `.grugops/context/cut-arm-ticket/notes/`.  **→ In Development 2026-09-19.** Pulled by the Orchestrator at task `wave-2026-09-19`, subtask `ticket-to-pr-ABC-120`, branch `grugops/ABC-120-turn-loop-arms`; base lane 42 / 1291 / 0; `A9` ≤ 30 production lines is a STOP, not a target.  **→ In Review 2026-09-19.** Built at `d8e7ccc` (`grugops/ABC-120-turn-loop-arms`, merged to the wave branch at `ec160b6`): exactly `src/turn-loop.ts` +86/−40 (**18 non-comment production lines vs `A9`'s 30**) and `src/turn-loop.test.ts` +168/−2; gates green **42 / 1297 / 0**; `A6` mutants M1/M2 WATCHED RED on `A3`–`A5`, green on `A1`/`A2`; N8-LANE +4 ms in-file. Lane CPU 17.9 → 18.3 s at load 3–21 — NON-CONFORMING, third hand-up today. Production lines > 0 → **UAT needs the owner's word.** QE hop `qe-ABC-120` dispatched.
 
 
 
