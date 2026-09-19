@@ -1,0 +1,53 @@
+load at start: 8.37 7.71 6.99
+
+== BASE
+  [base] instrument exit=0 :: The lane collects 42 test files; git tracks 42.
+      No findings.
+  [base] vitest list --filesOnly (root) -> 42 files, exit=0
+
+== M1 (A1, deletion): exclude += "**/glyph-mode.nfr.test.ts"
+  [M1] vitest list --filesOnly (root) -> 41 files, exit=0
+  [M1] instrument exit=1 :: The lane collects 41 test files; git tracks 42.
+      Tracked by git but NOT collected by the lane: src/glyph-mode.nfr.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+  [M1] lint exit=0 typecheck exit=0 build exit=0
+  reverted; git status --porcelain -> EMPTY
+
+== M2 (A2, inflation): ".claude/**" -> ".cluade/**" with a throwaway checkout planted at .claude/worktrees/probe/
+  planted 42 test files in the throwaway checkout
+  [M2 checkout planted, config UNTOUCHED] vitest list --filesOnly (root) -> 42 files, exit=0
+  [M2 checkout planted, config UNTOUCHED] instrument exit=0 :: The lane collects 42 test files; git tracks 42.
+      No findings.
+  [M2 typo] vitest list --filesOnly (root) -> 84 files, exit=0
+  [M2 typo] instrument exit=1 :: The lane collects 84 test files; git tracks 42.
+      Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/apply.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+      Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/cli.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+      Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/command-input.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+      ... (42 lines total)
+  [M2 typo] lint exit=0 typecheck exit=0 build exit=0
+  [M2 typo, checkout REMOVED] vitest list --filesOnly (root) -> 42 files, exit=0
+  [M2 typo, checkout REMOVED] instrument exit=0 :: The lane collects 42 test files; git tracks 42.
+      No findings.
+  reverted; git status --porcelain -> EMPTY
+
+== M3 (A3, new file): plant untracked src/zz-abc118-throwaway.test.ts
+  [M3 untracked] vitest list --filesOnly (root) -> 43 files, exit=0
+  [M3 untracked] instrument exit=1 :: The lane collects 43 test files; git tracks 42.
+      Collected by the lane but NOT tracked by git: src/zz-abc118-throwaway.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+  [M3 after git add (the expectation edited)] instrument exit=0 :: The lane collects 43 test files; git tracks 43.
+      No findings.
+  reverted; git status --porcelain -> EMPTY
+
+== M4 (A4, the guard-file trap): exclude += "**/tools/**", "**/lane-inventory*"
+  [M4] vitest list --filesOnly (root) -> 42 files, exit=0
+  [M4] instrument exit=0 :: The lane collects 42 test files; git tracks 42.
+      No findings.
+  reverted; git status --porcelain -> EMPTY
+
+== M5 (control): a stock entry dropped — "**/node_modules/**" removed
+  [M5] vitest list --filesOnly (root) -> 42 files, exit=0
+  [M5] instrument exit=0 :: The lane collects 42 test files; git tracks 42.
+      No findings.
+  reverted; git status --porcelain -> EMPTY
+
+load at end: 9.81 8.07 7.13
+final git status --porcelain: EMPTY

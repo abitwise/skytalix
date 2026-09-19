@@ -1,0 +1,105 @@
+// ABC-118 mutant probes. Runs ONLY inside the out-of-repository copy given as argv[2].
+import { spawnSync } from "node:child_process";
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { loadavg } from "node:os";
+import { join } from "node:path";
+
+const copy = process.argv[2];
+if (!copy || !copy.includes("scratchpad/copy")) {
+  console.error("refusing to run outside the scratchpad copy");
+  process.exit(2);
+}
+const cfg = join(copy, "vitest.config.ts");
+const original = readFileSync(cfg, "utf8");
+
+function sh(cmd, args) {
+  const r = spawnSync(cmd, args, { cwd: copy, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  return { exit: r.status, out: (r.stdout ?? "") + (r.stderr ?? "") };
+}
+function instrument(label) {
+  const r = sh("node", ["tools/grugops/lane-inventory.js"]);
+  const lines = r.out.trim().split("\n");
+  console.log(`  [${label}] instrument exit=${r.exit} :: ${lines[0]}`);
+  const named = lines.slice(1);
+  for (const l of named.slice(0, 3)) console.log(`      ${l}`);
+  if (named.length > 3) console.log(`      ... (${named.length} lines total)`);
+  return r;
+}
+function listCount(label) {
+  const r = sh("npx", ["vitest", "list", "--filesOnly"]);
+  const n = r.out.trim().split("\n").filter(Boolean).length;
+  console.log(`  [${label}] vitest list --filesOnly (root) -> ${n} files, exit=${r.exit}`);
+  return n;
+}
+function threeGates(label) {
+  const l = sh("npx", ["biome", "check", "."]);
+  const t = sh("npx", ["tsc", "--noEmit"]);
+  const b = sh("npm", ["run", "build", "--silent"]);
+  console.log(`  [${label}] lint exit=${l.exit} typecheck exit=${t.exit} build exit=${b.exit}`);
+}
+function revert() {
+  writeFileSync(cfg, original);
+  const s = sh("git", ["status", "--porcelain"]);
+  console.log(`  reverted; git status --porcelain -> ${s.out.trim() === "" ? "EMPTY" : `NOT EMPTY:\n${s.out}`}`);
+}
+function mutateExclude(entries) {
+  const marker = '"**/node_modules/**",';
+  if (!original.includes(marker)) throw new Error("marker missing");
+  writeFileSync(cfg, original.replace(marker, `${marker}\n      ${entries.map((e) => JSON.stringify(e)).join(",\n      ")},`));
+}
+console.log(`load at start: ${loadavg().map((n) => n.toFixed(2)).join(" ")}`);
+
+console.log("\n== BASE");
+instrument("base");
+listCount("base");
+
+console.log("\n== M1 (A1, deletion): exclude += \"**/glyph-mode.nfr.test.ts\"");
+mutateExclude(["**/glyph-mode.nfr.test.ts"]);
+listCount("M1");
+instrument("M1");
+threeGates("M1");
+revert();
+
+console.log("\n== M2 (A2, inflation): \".claude/**\" -> \".cluade/**\" with a throwaway checkout planted at .claude/worktrees/probe/");
+const plant = join(copy, ".claude", "worktrees", "probe");
+mkdirSync(plant, { recursive: true });
+cpSync(join(copy, "src"), join(plant, "src"), { recursive: true });
+console.log(`  planted ${sh("sh", ["-c", "ls .claude/worktrees/probe/src/*.test.ts | wc -l"]).out.trim()} test files in the throwaway checkout`);
+listCount("M2 checkout planted, config UNTOUCHED");
+instrument("M2 checkout planted, config UNTOUCHED");
+if (!original.includes('".claude/**"')) throw new Error("glob missing");
+writeFileSync(cfg, original.replace('".claude/**"', '".cluade/**"'));
+listCount("M2 typo");
+instrument("M2 typo");
+threeGates("M2 typo");
+rmSync(join(copy, ".claude", "worktrees"), { recursive: true, force: true });
+listCount("M2 typo, checkout REMOVED");
+instrument("M2 typo, checkout REMOVED");
+revert();
+
+console.log("\n== M3 (A3, new file): plant untracked src/zz-abc118-throwaway.test.ts");
+const throwaway = join(copy, "src", "zz-abc118-throwaway.test.ts");
+writeFileSync(throwaway, 'import { expect, it } from "vitest";\nit("throwaway", () => {\n  expect(1).toBe(1);\n});\n');
+listCount("M3 untracked");
+instrument("M3 untracked");
+sh("git", ["add", "src/zz-abc118-throwaway.test.ts"]);
+instrument("M3 after git add (the expectation edited)");
+sh("git", ["rm", "-q", "--cached", "src/zz-abc118-throwaway.test.ts"]);
+rmSync(throwaway);
+revert();
+
+console.log("\n== M4 (A4, the guard-file trap): exclude += \"**/tools/**\", \"**/lane-inventory*\"");
+mutateExclude(["**/tools/**", "**/lane-inventory*"]);
+listCount("M4");
+instrument("M4");
+revert();
+
+console.log("\n== M5 (control): a stock entry dropped — \"**/node_modules/**\" removed");
+writeFileSync(cfg, original.replace('      "**/node_modules/**",\n', ""));
+listCount("M5");
+instrument("M5");
+revert();
+
+console.log(`\nload at end: ${loadavg().map((n) => n.toFixed(2)).join(" ")}`);
+const final = sh("git", ["status", "--porcelain"]);
+console.log(`final git status --porcelain: ${final.out.trim() === "" ? "EMPTY" : final.out}`);
