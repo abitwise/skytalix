@@ -151,3 +151,28 @@ task); the other nine are MET.**
 | 8 | size assigned | **✅** `S`, with both re-size boundaries named |
 | 9 | priority assigned | **✅** `P1`, with the reason it is not `P0` |
 | 10 | no major unresolved blocker | **⚠️ ONE, and it is the ticket's subject.** The choice of source is the **owner's and Architect/Design's**, not an agent's. That does not block *pulling* this ticket — the research is the agent's — but it blocks *closing* it. **Named, not resolved.** |
+
+## Research done 2026-09-19 — what remains is ONE owner sentence
+
+> Architect/Design, task `owner-rulings-2026-09-19`, subtask `research-abc092-book-source`, on the
+> owner's word *"2. i don't have preferred source, we can research that"*. Notes:
+> `.grugops/context/research-abc092-book-source/notes/`.
+
+- **`ADR-0023` is drafted, `status: proposed`:**
+  `memory-bank/50-decisions/ADR-0023-opening-book-source-is-lichess-chess-openings-under-cc0.md`.
+  It recommends **`lichess-org/chess-openings` under `CC0-1.0`**, quotes the README sentence and
+  CC0 § 2 verbatim with URL and date (`A2`), lists **six** rejected candidates with their licence /
+  provenance / fitness reasons (`A3`), names the attribution path `data/opening-book/ATTRIBUTION.md`
+  and states "none required by the licence" explicitly (`A4`), and records the `NFR-006` figures —
+  388,052 B raw, 3,704 rows; compiled `UNKNOWN - verify` at `ABC-093`.
+- **Seven candidates were read on the licensors' own pages** (test note 2): Lichess
+  `chess-openings` (CC0), the Lichess games database (CC0, 2.57 TB), Stockfish `books` (CC0, no
+  names), Perfect 2023 Polyglot (non-commercial / no-modification), pgn-extract `eco.pgn` (terms
+  unpublished), Wikipedia (CC BY-SA — ShareAlike), hand-authored lines (no attributable source).
+- **`A6` measured from git on the delivered diff:** 0 files under `src/`, 0 data files, 0 test
+  files, 0 attribution file — the attribution file is written **on ratification, not before**.
+- **NOT done, and cannot be done by an agent:** `A1` (`accepted` + the owner's name) and `A5`
+  (`RISK-004` moves). `plans/nfr-catalog.md` is untouched. **The one sentence that closes both:**
+  *"I ratify ADR-0023: the opening-book source is `lichess-org/chess-openings` under CC0 1.0."*
+  On it, the Orchestrator flips the Status, fills the name and date, moves `RISK-004`, and writes
+  the attribution file. If the owner names a different source, `ADR-0023` is superseded, not edited.
