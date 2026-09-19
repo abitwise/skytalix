@@ -51,10 +51,11 @@
  * MOVE IDENTITY is inherited, not re-established: every `Move` returned here is an ELEMENT of that
  * one array, because both resolvers `filter` it and this module only ever selects from it.
  *
- * WORDING IS NOT HERE. A rejection carries `ABC-031`/`ABC-032`'s machine-readable REASON CODE, never
- * display copy — `ABC-034` owns the prose. The ambiguity messages ARE this module's, and they are
- * the candidates in SAN (`EPIC-003` acceptance #2), one item per candidate: the frame's message
- * region takes a LIST and places each item whole or not at all (`src/frame.ts` `FrameParts`).
+ * WORDING IS NOT HERE. A rejection's reason and its sentence are `src/rejection.ts`'s (`ABC-034`):
+ * this module hands it the texts it tried — the line and the variants — and places the one message
+ * it gets back. The ambiguity messages ARE this module's, and they are the candidates in SAN
+ * (`EPIC-003` acceptance #2), one item per candidate: the frame's message region takes a LIST and
+ * places each item whole or not at all (`src/frame.ts` `FrameParts`).
  */
 
 import { type CoordinateParseResult, parseCoordinateMove } from "./coordinate-move.ts";
@@ -62,6 +63,7 @@ import type { GameHistory } from "./history.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
+import { classifyRejection, rejectionMessage } from "./rejection.ts";
 import { parseSan, type SanParseResult, toSan } from "./san.ts";
 import type { PromptOutcome } from "./turn-loop.ts";
 
@@ -134,9 +136,6 @@ const CASE_VARIANTS: readonly ((line: string) => string)[] = [
   (line) => line.slice(0, -1).toLowerCase() + line.slice(-1).toUpperCase(),
 ];
 
-/** `no-such-move` outranks `unreadable`: the more specific of the codes any attempt produced. */
-type RejectReason = "unreadable" | "no-such-move";
-
 /**
  * Resolve one submitted line against the position `history` is at.
  *
@@ -153,7 +152,6 @@ export function resolveMoveInput(
 ): MoveInputOutcome {
   const position = history.position;
   const legal = deps.legalMoves(position);
-  const reasons: RejectReason[] = [];
 
   // 1. Exactly as typed: coordinate first — then `parseSan`. Coordinate-first is a real precedence
   //    and not a formality: a `B`-initial line can be read by both, and `attemptsOn` below says
@@ -162,7 +160,6 @@ export function resolveMoveInput(
     if (attempt.outcome === "move") return { kind: "move", move: attempt.move };
     if (attempt.outcome === "ambiguous")
       return ambiguous(position, attempt.candidates, legal, deps);
-    reasons.push(attempt.reason);
   }
 
   // 2. Both rejected, so retry case-folded — and take the UNION over the variants, because two
@@ -176,7 +173,6 @@ export function resolveMoveInput(
       if (attempt.outcome === "move") folded.add(attempt.move);
       else if (attempt.outcome === "ambiguous")
         for (const move of attempt.candidates) folded.add(move);
-      else reasons.push(attempt.reason);
     }
   }
 
@@ -186,9 +182,12 @@ export function resolveMoveInput(
   if (candidates.length === 1) return { kind: "move", move: candidates[0] as Move };
   if (candidates.length > 1) return ambiguous(position, candidates, legal, deps);
 
+  // 3. Nothing named a legal move. The classifier explains why, over every text tried above and in
+  //    that order — the line first, then the variants — against the one legal array in hand.
+  const tried = [...new Set([line, ...CASE_VARIANTS.map((variant) => variant(line))])];
   return {
     kind: "rejected",
-    messages: [reasons.includes("no-such-move") ? "no-such-move" : "unreadable"],
+    messages: [rejectionMessage(classifyRejection(position, tried, legal))],
   };
 }
 

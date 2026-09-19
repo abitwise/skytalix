@@ -1,0 +1,94 @@
+// Throwaway N8-LANE / NFR-008 harness for ABC-034. Lives OUTSIDE the repository, never committed.
+// Conditions: A = base (grugops/wave-2026-09-19 @ 4f0ef01), T = ticket tip, N = byte-identical twin of T.
+// Protocol (plans/nfr-catalog.md N8-LANE + NFR-008 row): CPU user+sys via /usr/bin/time -p, one fresh
+// OS process per run, order rotated every round, round 0 discarded, n = ROUNDS-1, identity null control
+// N-T recorded before any comparison to a level. No git is invoked anywhere in this file.
+import { spawnSync, execSync } from "node:child_process";
+import { writeFileSync, appendFileSync, readFileSync } from "node:fs";
+
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/abc034";
+const EXPECT = { A: [40, 1213], T: [41, 1266], N: [41, 1266] };
+const ROUNDS = 9;
+const OUT = `${S}/raw.tsv`;
+const LOAD = `${S}/load.txt`;
+const ORDERS = [["A", "T", "N"], ["T", "N", "A"], ["N", "A", "T"]];
+
+const loadavg = () => execSync("sysctl -n vm.loadavg").toString().trim();
+const load1 = () => loadavg().split(/\s+/)[1];
+
+writeFileSync(OUT, "round\tcond\twall\tuser\tsys\tcpu\tfiles\ttests\tload1_before\tload1_after\tcounts\n");
+writeFileSync(LOAD, "");
+
+for (let round = 0; round < ROUNDS; round++) {
+  const order = ORDERS[round % 3];
+  appendFileSync(LOAD, `ROUND ${round} loadavg_start=${loadavg()}\n`);
+  for (const c of order) {
+    const lb = load1();
+    const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", "--dir", "src"], {
+      cwd: `${S}/${c}`,
+      encoding: "utf8",
+      maxBuffer: 64 * 1024 * 1024,
+    });
+    const la = load1();
+    const stdout = r.stdout || "";
+    const stderr = r.stderr || "";
+    writeFileSync(`${S}/logs/out-${round}-${c}.log`, stdout);
+    writeFileSync(`${S}/logs/time-${round}-${c}.log`, stderr);
+    const pick = (k) => {
+      const m = stderr.match(new RegExp(`^${k}\\s+([0-9.]+)`, "m"));
+      return m ? Number(m[1]) : NaN;
+    };
+    const wall = pick("real");
+    const user = pick("user");
+    const sys = pick("sys");
+    const cpu = +(user + sys).toFixed(2);
+    const fm = stdout.match(/Test Files\s+(\d+) passed/);
+    const tm = stdout.match(/^\s*Tests\s+(\d+) passed/m);
+    const files = fm ? Number(fm[1]) : NaN;
+    const tests = tm ? Number(tm[1]) : NaN;
+    const [ef, et] = EXPECT[c];
+    const ok = files === ef && tests === et && r.status === 0 ? "ok" : "HARNESS_ERROR";
+    appendFileSync(OUT, [round, c, wall, user, sys, cpu, files, tests, lb, la, ok].join("\t") + "\n");
+    process.stdout.write(`${round} ${c} cpu=${cpu} wall=${wall} ${files}/${tests} ${ok}\n`);
+  }
+  appendFileSync(LOAD, `ROUND ${round} loadavg_end=${loadavg()}\n`);
+}
+
+const rows = readFileSync(OUT, "utf8").trim().split("\n").slice(1).map((l) => {
+  const [round, cond, wall, user, sys, cpu, files, tests, lb, la, ok] = l.split("\t");
+  return { round: +round, cond, wall: +wall, user: +user, sys: +sys, cpu: +cpu, files: +files, tests: +tests, lb: +lb, la: +la, ok };
+});
+const median = (xs) => {
+  const s = [...xs].sort((a, b) => a - b);
+  const m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+};
+const usable = rows.filter((r) => r.round >= 1);
+const summary = [];
+for (const c of ["A", "T", "N"]) {
+  const rs = usable.filter((r) => r.cond === c);
+  summary.push(`${c}: n=${rs.length} medianCPU=${median(rs.map((r) => r.cpu)).toFixed(3)} rangeCPU=${Math.min(...rs.map((r) => r.cpu))}-${Math.max(...rs.map((r) => r.cpu))} medianWALL=${median(rs.map((r) => r.wall)).toFixed(3)} rangeWALL=${Math.min(...rs.map((r) => r.wall))}-${Math.max(...rs.map((r) => r.wall))}`);
+}
+const pair = (x, y) => {
+  const d = [];
+  for (let round = 1; round < ROUNDS; round++) {
+    const a = usable.find((r) => r.round === round && r.cond === x);
+    const b = usable.find((r) => r.round === round && r.cond === y);
+    d.push(+(b.cpu - a.cpu).toFixed(2));
+  }
+  return d;
+};
+const mdT = median(usable.filter((r) => r.cond === "T").map((r) => r.cpu));
+const mdA = median(usable.filter((r) => r.cond === "A").map((r) => r.cpu));
+const nt = pair("T", "N");
+const ta = pair("A", "T");
+const nullMed = median(nt);
+const chargeMed = median(ta);
+summary.push(`NULL CONTROL N-T per round CPU (s): ${nt.join(" ")}  median=${nullMed.toFixed(3)} s (${((100 * nullMed) / mdT).toFixed(2)}%)  sign+ ${nt.filter((d) => d > 0).length}/${nt.length}`);
+summary.push(`CHARGE T-A per round CPU (s): ${ta.join(" ")}  median=${chargeMed.toFixed(3)} s (${((100 * chargeMed) / mdA).toFixed(2)}%)  sign+ ${ta.filter((d) => d > 0).length}/${ta.length}`);
+summary.push(`N8-LANE net of 1 file x 160 ms: ${(chargeMed * 1000 - 160).toFixed(0)} ms  (bar 650 ms)`);
+summary.push(`NFR-008 CPU: base median ${mdA.toFixed(3)} s, tip median ${mdT.toFixed(3)} s against 15 s (ADR-0019)`);
+summary.push(`loads before each run: min=${Math.min(...rows.map((r) => r.lb))} median=${median(rows.map((r) => r.lb)).toFixed(2)} max=${Math.max(...rows.map((r) => r.lb))}`);
+summary.push(`harness errors: ${rows.filter((r) => r.ok !== "ok").length} of ${rows.length}`);
+writeFileSync(`${S}/summary.txt`, summary.join("\n") + "\n");
+process.stdout.write(summary.join("\n") + "\n");
