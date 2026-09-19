@@ -5,17 +5,20 @@
  * kiwipete/startpos, "and the no-ep-square path, which is the overwhelming majority of nodes, is
  * not made slower at all." The second half is the half no other test in this repo can fail.
  *
- * Why a spied call count and not a key assertion. The ep component enters the key through
- * `position.epSquare !== NO_SQUARE && hasLegalEnPassant(position)`. Reordering those two operands,
- * or dropping the `epSquare` guard entirely, is behaviour-EQUIVALENT — `hasLegalEnPassant` returns
- * false for `NO_SQUARE` on its own, so every input still hashes to exactly the same key. Measured
- * at the ABC-011 QE gate: both mutations left all 189 tests green. What changes is only COST, and
- * only on the majority path — a make/test/unmake on every no-ep node, which is the sub-bar verbatim.
- * No assertion about a returned key can ever fail that, so the instrument is the call count.
+ * Under ADR-0005 the guard was a pair of spied call counts — `hasLegalEnPassant` called 0 times on
+ * a no-ep position and exactly once on an ep-set one — because the ep component entered the key
+ * through `epSquare !== NO_SQUARE && hasLegalEnPassant(position)` and only the call count could
+ * see a reordering of those operands. ADR-0020 Decision 1 (ABC-075) removed the conjunct: "the
+ * `hasLegalEnPassant(position)` conjunct is removed from the hash's definition" and `zobristKey`
+ * is "a pure read of the board again — no probe move, no transient mutation, no `legal.ts` edge".
+ * The no-ep guarantee is therefore STRUCTURAL now, and the spy rows became one: `zobristKey` calls
+ * the predicate zero times on EVERY input, ep square or not. The "exactly once when set" row went
+ * red under the ruling (0 calls, not 1) and was retired, not deleted from history — ADR-0020
+ * Consequences names it.
  *
  * This lives in its own file on purpose, following `src/gameend.nfr.test.ts` (ABC-020): a `vi.mock`
  * factory is hoisted to file scope, so putting this in `zobrist.test.ts` would re-route the module
- * graph for all 13 tests there to buy three assertions. Here it re-routes nothing else.
+ * graph for every test there to buy one assertion. Here it re-routes nothing else.
  *
  * These are CALL-COUNT and BYTE-IDENTITY bars only. Wall-clock cost is NOT asserted anywhere in
  * this suite — it is machine-dependent, and it is measured with its machine and recorded in
@@ -41,42 +44,28 @@ const NO_EP: [string, string][] = [
   ["a bare king-and-pawn ending", "4k3/8/8/8/8/8/p7/4K3 b - - 0 1"],
 ];
 
-/** Positions that DO carry an ep square — the only ones allowed to pay for the predicate. */
+/** Positions that DO carry an ep square — under ADR-0005 the only ones that paid for the predicate. */
 const WITH_EP: [string, string][] = [
   ["ep set, no capture at all", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"],
   ["ep set, capture available", "rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"],
   ["ep set, pseudo-legal only", "7k/8/8/K1Pp3r/8/8/8/8 w - d6 0 1"],
 ];
 
-describe("NFR-005 — the no-ep path costs exactly what it cost before ABC-011 (call counts, spied)", () => {
+describe("NFR-005 — zobristKey never consults hasLegalEnPassant (structural since ADR-0020, spied)", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("never asks whether an en-passant capture is legal when there is no ep square", () => {
-    // Kills the reorder `hasLegalEnPassant(p) && p.epSquare !== NO_SQUARE` and the outright
-    // removal of the `epSquare` guard. Both keep every key identical; both put a make/unmake
-    // on every node in this list.
-    for (const [label, fen] of NO_EP) {
+  it("asks nothing on any input, with or without an ep square", () => {
+    // The one row the two ADR-0005 spy rows became: the no-ep path runs exactly the code it ran
+    // before ABC-011, and so does the ep-set path. Kills any re-introduction of a probe move into
+    // the hash — the shape ADR-0020 removed and the audit called "the one place the current shape
+    // does not simply extend".
+    for (const [label, fen] of [...NO_EP, ...WITH_EP]) {
       vi.clearAllMocks();
       const position = parseFen(fen);
-      expect(position.epSquare, label).toBe(NO_SQUARE);
 
       zobristKey(position);
 
       expect(hasLegalEnPassant, label).toHaveBeenCalledTimes(0);
-    }
-  });
-
-  it("asks exactly once when an ep square IS set, and never more than once", () => {
-    // The other side of the same bar: the guard must not be so eager that the predicate stops
-    // being consulted where it decides the key, and the answer must not be recomputed.
-    for (const [label, fen] of WITH_EP) {
-      vi.clearAllMocks();
-      const position = parseFen(fen);
-      expect(position.epSquare, label).not.toBe(NO_SQUARE);
-
-      zobristKey(position);
-
-      expect(hasLegalEnPassant, label).toHaveBeenCalledTimes(1);
     }
   });
 });

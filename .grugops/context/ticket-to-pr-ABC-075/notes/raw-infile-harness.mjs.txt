@@ -1,0 +1,50 @@
+// ABC-075 N8-LANE in-file charge: the ticket's two files alone, base copy vs worktree tip,
+// paired rounds with alternating order, one fresh OS process per run. Parses vitest's own
+// "tests Nms" and "Duration" figures plus /usr/bin/time CPU (user+sys) of the whole process.
+import { spawnSync, execSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/abc075";
+const BASE = `${S}/base`;
+const TIP = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-af58ec263b5247fdc";
+const FILES = ["src/zobrist.test.ts", "src/zobrist.nfr.test.ts"];
+const ROUNDS = Number(process.argv[2] ?? 8); // round 0 discarded as warm-up
+const loadavg = () => execSync("sysctl -n vm.loadavg").toString().trim();
+
+function one(cwd) {
+  const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", ...FILES], { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  const so = r.stdout || "", se = r.stderr || "";
+  const pick = (k) => { const m = se.match(new RegExp(`^${k}\\s+([0-9.]+)`, "m")); return m ? Number(m[1]) : NaN; };
+  const tm = so.match(/Duration\s+([0-9.]+)(m?s) \([^)]*tests ([0-9.]+)(m?s)/);
+  const toMs = (v, u) => (u === "s" ? Number(v) * 1000 : Number(v));
+  const tests = so.match(/^\s*Tests\s+(\d+) passed/m)?.[1];
+  return { status: r.status, tests: Number(tests), testsMs: tm ? toMs(tm[3], tm[4]) : NaN, durationMs: tm ? toMs(tm[1], tm[2]) : NaN, cpu: +(pick("user") + pick("sys")).toFixed(2), real: pick("real") };
+}
+
+const rows = [];
+for (let round = 0; round < ROUNDS; round++) {
+  const lb = loadavg();
+  const order = round % 2 === 0 ? ["base", "tip"] : ["tip", "base"];
+  const res = {};
+  for (const which of order) res[which] = one(which === "base" ? BASE : TIP);
+  const row = { round, load: lb, order: order.join(">"), base: res.base, tip: res.tip };
+  rows.push(row);
+  console.log(JSON.stringify(row));
+}
+const used = rows.slice(1);
+const med = (xs) => { const s = [...xs].sort((a, b) => a - b); return s.length % 2 ? s[s.length >> 1] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2; };
+const dTests = used.map((r) => r.tip.testsMs - r.base.testsMs);
+const dCpu = used.map((r) => +(r.tip.cpu - r.base.cpu).toFixed(2));
+const dDur = used.map((r) => r.tip.durationMs - r.base.durationMs);
+const sign = (xs) => `${xs.filter((x) => x > 0).length}/${xs.length} positive`;
+const summary = {
+  rounds: ROUNDS, used: used.length,
+  base: { tests: used[0].base.tests, medianTestsMs: med(used.map((r) => r.base.testsMs)), medianCpu: med(used.map((r) => r.base.cpu)), medianDurationMs: med(used.map((r) => r.base.durationMs)) },
+  tip: { tests: used[0].tip.tests, medianTestsMs: med(used.map((r) => r.tip.testsMs)), medianCpu: med(used.map((r) => r.tip.cpu)), medianDurationMs: med(used.map((r) => r.tip.durationMs)) },
+  deltaTestsMs: { values: dTests, median: med(dTests), sign: sign(dTests) },
+  deltaCpuS: { values: dCpu, median: +med(dCpu).toFixed(2), sign: sign(dCpu) },
+  deltaDurationMs: { values: dDur, median: med(dDur), sign: sign(dDur) },
+  rows,
+};
+writeFileSync(`${S}/infile-summary.json`, JSON.stringify(summary, null, 2));
+console.log("SUMMARY " + JSON.stringify({ ...summary, rows: undefined }));

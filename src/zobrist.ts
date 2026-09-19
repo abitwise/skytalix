@@ -6,16 +6,15 @@
  * key XORs one random 64-bit number per (piece, square), plus one for black-to-move, the
  * castling rights, and the en-passant file, so exactly those four components decide equality.
  *
- * "Availability" is decided by `hasLegalEnPassant` in legal.ts, not by whether the position
- * carries an en-passant square (ABC-011, ADR-0005): FIDE 9.2.3 turns sameness on the possible
- * moves, so an ep square no legal capture can use does not distinguish two positions. One
- * consequence is worth knowing before calling this: on the ~2% of positions where an ep
- * capture is on the board, the key is NOT a pure read — the predicate plays that capture and
- * takes it back, so `zobristKey` transiently mutates the position it is given. That mutation is
- * bounded by the predicate's own precondition: it plays the capture only where the board holds
- * exactly the pawn the capture takes and the target square is empty, so the move it plays is
- * one `unmakeMove` can reverse exactly and the position comes back byte-identical on EVERY
- * input — invalid FENs included, not only positions reachable by play.
+ * The en-passant component enters the key iff the position CARRIES an ep square
+ * (`epSquare !== NO_SQUARE`) — ADR-0020, the owner's 2026-09-19 ruling, superseding ADR-0005
+ * clause 1. ADR-0005 had it enter only when a LEGAL ep capture existed, which made the key play a
+ * probe move through legal.ts and made the ep component impossible to XOR-update; under ADR-0020
+ * `zobristKey` is a pure read of the board again, and `zobristKeyAfterMove` below derives the key
+ * of the position after a move from the key before it in a bounded number of XORs. The price,
+ * recorded in ADR-0020 Decision 2: two positions that differ only in an ep square nobody can
+ * capture on hash DIFFERENTLY — a transposition-table miss and a repetition counted one occurrence
+ * late, never a wrong answer in either consumer.
  *
  * ABC-007 is the first ticket that needs it (repetition detection); EPIC-004's transposition
  * table is the second, which is why hashing is its own module rather than buried in game-end.
@@ -25,13 +24,16 @@
  * is deliberately avoided: a table that varied per run would make hashes unreproducible.
  */
 
-import { hasLegalEnPassant } from "./legal.ts";
+import type { UndoRecord } from "./apply.ts";
+import { FLAG_CASTLE, FLAG_EN_PASSANT, type Move } from "./moves.ts";
 import {
   CASTLE_BK,
   CASTLE_BQ,
   CASTLE_WK,
   CASTLE_WQ,
+  EMPTY,
   fileOf,
+  isBlack,
   isOnBoard,
   NO_SQUARE,
   type Position,
@@ -80,11 +82,65 @@ export function zobristKey(position: Position): bigint {
     if ((position.castling & (CASTLE_FLAGS[i] as number)) !== 0) key ^= CASTLE_KEYS[i] as bigint;
   }
 
-  // The NO_SQUARE guard comes first and short-circuits: the overwhelming majority of nodes
-  // carry no ep square at all and must run exactly the code they ran before ABC-011 (NFR-005).
-  if (position.epSquare !== NO_SQUARE && hasLegalEnPassant(position)) {
-    key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
+  if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
+
+  return key;
+}
+
+/** The square the en-passant-captured pawn stood on: one rank behind the target, same file. */
+const enPassantCaptureSquare = (move: Move): number => move.to + (isBlack(move.piece) ? 16 : -16);
+
+/**
+ * The key of `position` AFTER `makeMove(position, move)` returned `undo`, derived from the key it
+ * had BEFORE (ADR-0020 Decision 3). Pure; reads `position` and writes nothing. Invariant, asserted
+ * against the oracle over a depth-4 walk of the perft positions in `zobrist.test.ts`:
+ *   zobristKeyAfterMove(zobristKey(before), after, move, undo) === zobristKey(after)
+ *
+ * The six components the delta touches, in order: the mover leaves `from` and whatever now stands
+ * on `to` lands (the promoted piece on a promotion, read off the board rather than re-derived);
+ * the captured piece leaves `to` (or the ep capture square under FLAG_EN_PASSANT, where `to` was
+ * empty and `undo.captured` is EMPTY); the rook's leg under FLAG_CASTLE; every castling flag that
+ * changed; the ep file out if the position carried one before and in if it carries one now; and
+ * the side to move, always. The search keeps the per-ply array this feeds (ADR-0002 clause 3,
+ * ABC-081) — `unmakeMove` needs no key work because `keys[ply]` still holds the pre-move key.
+ */
+export function zobristKeyAfterMove(
+  keyBefore: bigint,
+  position: Position,
+  move: Move,
+  undo: UndoRecord,
+): bigint {
+  const board = position.board;
+  let key = keyBefore ^ BLACK_TO_MOVE;
+
+  key ^= PIECE_SQUARE[(move.piece << 7) | move.from] as bigint;
+  key ^= PIECE_SQUARE[((board[move.to] as number) << 7) | move.to] as bigint;
+
+  if ((move.flags & FLAG_EN_PASSANT) !== 0) {
+    key ^= PIECE_SQUARE[(move.captured << 7) | enPassantCaptureSquare(move)] as bigint;
+  } else if (undo.captured !== EMPTY) {
+    key ^= PIECE_SQUARE[(undo.captured << 7) | move.to] as bigint;
   }
+
+  if ((move.flags & FLAG_CASTLE) !== 0) {
+    // The king sits on `to`; the rook came from the corner beyond it and now stands beside it.
+    const kingside = fileOf(move.to) === 6;
+    const rookFrom = kingside ? move.to + 1 : move.to - 2;
+    const rookTo = kingside ? move.to - 1 : move.to + 1;
+    const rook = board[rookTo] as number;
+    key ^= PIECE_SQUARE[(rook << 7) | rookFrom] as bigint;
+    key ^= PIECE_SQUARE[(rook << 7) | rookTo] as bigint;
+  }
+
+  const castlingChanged = undo.castling ^ position.castling;
+  if (castlingChanged !== 0) {
+    for (let i = 0; i < CASTLE_FLAGS.length; i++) {
+      if ((castlingChanged & (CASTLE_FLAGS[i] as number)) !== 0) key ^= CASTLE_KEYS[i] as bigint;
+    }
+  }
+
+  if (undo.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(undo.epSquare)] as bigint;
+  if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
 
   return key;
 }

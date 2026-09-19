@@ -1,0 +1,225 @@
+{
+  "rounds": 8,
+  "used": 7,
+  "base": {
+    "tests": 27,
+    "medianTestsMs": 93,
+    "medianCpu": 1.52,
+    "medianDurationMs": 270
+  },
+  "tip": {
+    "tests": 35,
+    "medianTestsMs": 215,
+    "medianCpu": 1.68,
+    "medianDurationMs": 397
+  },
+  "deltaTestsMs": {
+    "values": [
+      121,
+      123,
+      117,
+      143,
+      115,
+      124,
+      132
+    ],
+    "median": 123,
+    "sign": "7/7 positive"
+  },
+  "deltaCpuS": {
+    "values": [
+      0.13,
+      0.08,
+      0.15,
+      0.18,
+      0.14,
+      0.16,
+      0.14
+    ],
+    "median": 0.14,
+    "sign": "7/7 positive"
+  },
+  "deltaDurationMs": {
+    "values": [
+      118,
+      123,
+      124,
+      143,
+      131,
+      127,
+      157
+    ],
+    "median": 127,
+    "sign": "7/7 positive"
+  },
+  "rows": [
+    {
+      "round": 0,
+      "load": "{ 4.45 4.89 5.26 }",
+      "order": "base>tip",
+      "base": {
+        "status": 0,
+        "tests": 27,
+        "testsMs": 89,
+        "durationMs": 274,
+        "cpu": 1.52,
+        "real": 0.89
+      },
+      "tip": {
+        "status": 0,
+        "tests": 35,
+        "testsMs": 201,
+        "durationMs": 369,
+        "cpu": 1.64,
+        "real": 0.76
+      }
+    },
+    {
+      "round": 1,
+      "load": "{ 4.33 4.86 5.25 }",
+      "order": "tip>base",
+      "base": {
+        "status": 0,
+        "tests": 27,
+        "testsMs": 91,
+        "durationMs": 271,
+        "cpu": 1.49,
+        "real": 0.68
+      },
+      "tip": {
+        "status": 0,
+        "tests": 35,
+        "testsMs": 212,
+        "durationMs": 389,
+        "cpu": 1.62,
+        "real": 0.8
+      }
+    },
+    {
+      "round": 2,
+      "load": "{ 4.33 4.86 5.25 }",
+      "order": "base>tip",
+      "base": {
+        "status": 0,
+        "tests": 27,
+        "testsMs": 97,
+        "durationMs": 270,
+        "cpu": 1.51,
+        "real": 0.68
+      },
+      "tip": {
+        "status": 0,
+        "tests": 35,
+        "testsMs": 220,
+        "durationMs": 393,
+        "cpu": 1.59,
+        "real": 0.8
+      }
+    },
+    {
+      "round": 3,
+      "load": "{ 4.33 4.86 5.25 }",
+      "order": "tip>base",
+      "base": {
+        "status": 0,
+        "tests": 27,
+        "testsMs": 93,
+        "durationMs": 273,
+        "cpu": 1.54,
+        "real": 0.68
+      },
+      "tip": {
+        "status": 0,
+        "tests": 35,
+        "testsMs": 210,
+        "durationMs": 397,
+        "cpu": 1.69,
+        "real": 0.8
+      }
+    },
+    {
+      "round": 4,
+      "load": "{ 4.55 4.90 5.26 }",
+      "order": "base>tip",
+      "base": {
+        "status": 0,
+        "tests": 27,
+        "testsMs": 97,
+        "durationMs": 266,
+        "cpu": 1.48,
+        "real": 0.67
+      },
+      "tip": {
+        "status": 0,
+        "tests": 35,
+        "testsMs": 240,
+        "durationMs": 409,
+        "cpu": 1.66,
+        "real": 0.82
+      }
+    },
+    {
+      "round": 5,
+      "load": "{ 4.55 4.90 5.26 }",
+      "order": "tip>base",
+      "base": {
+        "status": 0,
+        "tests": 27,
+        "testsMs": 100,
+        "durationMs": 281,
+        "cpu": 1.57,
+        "real": 0.69
+      },
+      "tip": {
+        "status": 0,
+        "tests": 35,
+        "testsMs": 215,
+        "durationMs": 412,
+        "cpu": 1.71,
+        "real": 0.84
+      }
+    },
+    {
+      "round": 6,
+      "load": "{ 4.55 4.90 5.26 }",
+      "order": "base>tip",
+      "base": {
+        "status": 0,
+        "tests": 27,
+        "testsMs": 91,
+        "durationMs": 259,
+        "cpu": 1.52,
+        "real": 0.66
+      },
+      "tip": {
+        "status": 0,
+        "tests": 35,
+        "testsMs": 215,
+        "durationMs": 386,
+        "cpu": 1.68,
+        "real": 0.8
+      }
+    },
+    {
+      "round": 7,
+      "load": "{ 5.06 5.00 5.29 }",
+      "order": "tip>base",
+      "base": {
+        "status": 0,
+        "tests": 27,
+        "testsMs": 93,
+        "durationMs": 265,
+        "cpu": 1.55,
+        "real": 0.67
+      },
+      "tip": {
+        "status": 0,
+        "tests": 35,
+        "testsMs": 225,
+        "durationMs": 422,
+        "cpu": 1.69,
+        "real": 0.85
+      }
+    }
+  ]
+}

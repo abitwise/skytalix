@@ -1,0 +1,6 @@
+ZOBRIST_DEEP walk: {"nodes":11024485,"mismatches":0,"drift":0,"epCaptures":2104,"castles":140151,"promotions":80444,"captures":1665166,"epSet":654732,"castlingChanged":1091068}
+      Tests  33 passed (33)
+   Duration  40.18s (transform 39ms, setup 0ms, collect 41ms, tests 40.00s, environment 0ms, prepare 35ms)
+real 40.61
+user 40.64
+sys 0.40
