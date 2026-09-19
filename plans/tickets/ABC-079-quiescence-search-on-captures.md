@@ -179,3 +179,52 @@ Workflow 04) on branch `grugops/ABC-079-quiescence` at `ead14eb`, from `grugops/
 - **Gates at `ead14eb`:** lint 0, typecheck 0, build 0, unit **RED** (41 files, 1 238 pass /
   5 fail, 0 skipped; integrity `No findings.`). Numbers, commands and the deep lanes are in
   `.grugops/context/ticket-to-pr-ABC-079/notes/`.
+
+## Ruling
+
+**Ruled 2026-09-19 by Architect/Design** (task `wave-2026-09-19`, subtask `ruling-abc079-multiplier`,
+Workflow 07) on the tripped `A5` — the owner this page names. **`ADR-0024` (proposed) carries the
+reasoning and the full table; `.grugops/context/ruling-abc079-multiplier/notes/` the probe rows and
+the limits.** Overturnable on the same evidence: the probe script is kept beside the notes.
+
+- **The build is not defective.** An independent textbook stand-pat quiescence reproduces
+  `src/quiescence.ts` to the node (totals and per-ply histograms, depths 1–3, both positions).
+  Stand-pat fires, `alpha` is raised, the window is right, `evaluate` is side-to-move-relative.
+- **The multiplier is UNORDERED captures, held only by the cap.** The capture tree grows with
+  capture ply (kiwipete depth 1: 75 q-nodes at ply 1, 14 851 at ply 8, 43% at the cap); uncapped the
+  same code reads 13 730x / 20 871x at depths 1–2. The `A3` cap was doing a budget's job.
+- **The fix is this ticket's, not `ABC-080`'s: MVV-LVA ordering of the capture list INSIDE
+  `quiesce`.** Lossless (same score, same move, every cell). Measured: kiwipete **120x / 33x / 45x /
+  26x**, position-6 **6.3x / 17x / 8.3x / 7.5x** at depths 1–4. Ordered, lifting the cap is a 1.2–1.7x
+  change — the cap is then honestly a guard. `ABC-080` reuses the exported key; it does NOT land
+  first.
+- **`ADR-0003`'s 2.5x is superseded on that one input.** It was a literature share-of-nodes figure
+  for an ordered engine with a table and SEE; no fix inside this ticket's fence reads 4x on kiwipete.
+
+**`A5` AS RE-STATED (replaces the 2.5x / 4x wording above; still a stop condition):** *Then* the
+same-depth node-count multiplier of `search()` over `searchWithoutQuiescence()`, with MVV-LVA-ordered
+captures, is reported on `kiwipete` and `position-6` and does not exceed **1.5x the figure recorded
+in `ADR-0024`** — kiwipete **≤ 180x** at depth 1 (default lane), **≤ 50x** at depth 2 and **≤ 70x**
+at depth 3 (deep lane); position-6 **≤ 10x / ≤ 26x / ≤ 13x**. Over the level: stop and report to
+Architect/Design. Do not tune the number to fit.
+
+**Re-hop (Software Engineer), and nothing beyond it:** (1) the MVV-LVA sort in `src/quiescence.ts`,
+key exported, header line corrected, cap 8 kept; (2) `A5` levels as above; (3) the three
+`src/engine.test.ts` fixtures re-fixtured against the ORDERED counts (kiwipete depth 1 = 5 888
+nodes, position-6 depth 2 = 9 804), not the 1 500x ones; (4) default lane green, all three deep
+lanes to completion with counts and wall, `NFR-008` / `N8-LANE` re-measured, `NFR-005` reached depth
+reported; (5) `A1`–`A4`, `A6` re-run, not re-argued.
+
+**Collateral rulings:** `searchWithoutQuiescence` test-only door **IN** (the `searchWithoutPruning`
+mechanism; rejected: an options parameter on `search()`). The unabortable first iteration carrying
+depth-1 quiescence is **an accepted bound once ordered** (5 888 nodes on kiwipete), not an `ABC-078`
+regression to re-structure — the `ENGINE_DEEP` 50 ms case must pass as written or be reported with
+its number. `SEARCH_DEEP=1` on `src/search.test.ts` must read **exit 0 at its existing per-case
+timeouts**; if the unpruned-oracle pair cannot, that case's depth drops by one on kiwipete only,
+recorded — the timeout is not raised first.
+
+**Out of scope stays out:** delta pruning (1.5x more, measured) and SEE-lite (largest cut, LOSSY —
+changes scores) are recorded as the next levers for `ABC-084`'s puzzle count to justify, not built.
+**`NFR-005`'s ratified levels do not move here**; the arithmetic consequence (depth 6 in 3 s needs
+~850k nodes/s with a factor of ~45, against a measured 200k–550k) is stated for the owner in
+`ADR-0024` decision 6.
