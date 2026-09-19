@@ -7,6 +7,7 @@ import { renderHistory } from "./history-pane.ts";
 import { legalMoves } from "./legal.ts";
 import { type MoveInputDeps, resolveMoveInput } from "./move-input.ts";
 import type { Move } from "./moves.ts";
+import { classifyRejection, type RejectionReason, rejectionMessage } from "./rejection.ts";
 import { renderBoard } from "./render.ts";
 import { parseSan, toSan } from "./san.ts";
 import { renderStatusPanel } from "./status-panel.ts";
@@ -523,20 +524,24 @@ describe("ABC-033 A6 — rejection does not advance and does not re-evaluate", (
    * This loop used to assert `stringMatching(/^(unreadable|no-such-move)$/)`, which pins "a code,
    * not prose" — worth having, and not enough. Because the regex accepts either, `unreadable` was
    * pinned to NO input in the whole suite: QE's mutant M6 returned `no-such-move` for every
-   * rejection, including `""` and `"hello"`, and all 40 tests passed. The code is not dead — it is
-   * what every one of these five lines actually produces — it was simply never asserted. The
-   * inverse mutant (always `unreadable`) already died on the `e2e5` row below, so with the exact
-   * codes here the rule `no-such-move` outranks `unreadable` is now asserted in BOTH directions.
+   * rejection, including `""` and `"hello"`, and all 40 tests passed. The exact codes fixed that.
+   *
+   * `ABC-034` moved the code out of `messages` — the loop places PROSE now, and the code is
+   * `src/rejection.ts`'s `classifyRejection` — so each row asserts two things: the classifier's
+   * code for the line (the `e2e5` row is the one that reds a classifier that cannot tell "read but
+   * not a move" from "not read"), and that the dispatcher's message IS the classifier's rendering
+   * for that line. No sentence is typed here (`ABC-034` test note 6); the wording is asserted as a
+   * set in `src/rejection.test.ts`.
    */
-  const REJECTIONS: ReadonlyArray<readonly [line: string, reason: string]> = [
+  const REJECTIONS: ReadonlyArray<readonly [line: string, reason: RejectionReason]> = [
     // Nothing in either grammar can read these at all: no reader got as far as a legality question.
     ["hello", "unreadable"],
     ["e9e9", "unreadable"],
     ["Qz9", "unreadable"],
     ["", "unreadable"],
     ["   ", "unreadable"],
-    // Read by the coordinate grammar, and no such move here — the more specific code wins.
-    ["e2e5", "no-such-move"],
+    // Read by the coordinate grammar, and the pawn on e2 has no such move — the specific code wins.
+    ["e2e5", "piece-cannot-reach"],
   ];
 
   for (const [line, reason] of REJECTIONS) {
@@ -548,21 +553,29 @@ describe("ABC-033 A6 — rejection does not advance and does not re-evaluate", (
       const outcome = resolveMoveInput(history, line, seam.deps);
 
       expect(outcome.kind).toBe("rejected");
-      // A CODE, never display copy — ABC-034 owns the wording — and THIS code, not either code.
-      expect((outcome as { messages: readonly string[] }).messages).toEqual([reason]);
+      const rejection = classifyRejection(history.position, [line], seam.legal);
+      expect(rejection.reason).toBe(reason);
+      // THE classifier's sentence for THIS line — display copy is ABC-034's, placed here unchanged.
+      expect((outcome as { messages: readonly string[] }).messages).toEqual([
+        rejectionMessage(rejection),
+      ]);
       expect(toFen(history.position)).toBe(before);
       expect(history.moves).toHaveLength(0);
       expect(seam.derives()).toBe(1);
     });
   }
 
-  it("a well-formed move that is not legal here is rejected as no-such-move, not unreadable", () => {
+  it("a well-formed move that is not legal here names the square that cannot make it", () => {
     const history = newGame(START_FEN);
 
     const outcome = resolveMoveInput(history, "e2e5");
 
     expect(outcome.kind).toBe("rejected");
-    expect((outcome as { messages: readonly string[] }).messages).toEqual(["no-such-move"]);
+    const [message] = (outcome as { messages: readonly string[] }).messages;
+    expect(message).toContain("e2");
+    expect(message).toBe(
+      rejectionMessage(classifyRejection(history.position, ["e2e5"], legalMoves(history.position))),
+    );
   });
 });
 
