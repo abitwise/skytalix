@@ -1,0 +1,22 @@
+      Tests  10 failed | 13 passed (23)
+   Start at  11:05:53
+   Duration  383ms (transform 38ms, setup 0ms, collect 40ms, tests 180ms, environment 0ms, prepare 37ms)
+
+
+--
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/zobrist.test.ts > ABC-011 — zobristKey where the board contradicts the ep square > omits the ep component and returns the position intact (no pawn to capture at all)
+AssertionError: 4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1: expected 8065547772798238524n to be 7032954216434971868n // Object.is equality
+
+ ❯ src/zobrist.test.ts:288:41
+ FAIL  src/zobrist.test.ts > ABC-011 — zobristKey where the board contradicts the ep square > omits the ep component and returns the position intact (a white pawn standing ON the ep target)
+ FAIL  src/zobrist.test.ts > ABC-011 — zobristKey where the board contradicts the ep square > omits the ep component and returns the position intact (a WHITE pawn where the captured black one should be)
+ FAIL  src/zobrist.test.ts > ABC-011 — zobristKey where the board contradicts the ep square > omits the ep component and returns the position intact (an ep square on the wrong rank for the side to move)
+ FAIL  src/zobrist.test.ts > ABC-011 — zobristKey where the board contradicts the ep square > omits the ep component and returns the position intact (no pawn to capture at all)
+ FAIL  src/zobrist.test.ts > ABC-011 — zobristKey where the board contradicts the ep square > omits the ep component and returns the position intact (the ep target occupied by an enemy knight)
+ FAIL  src/zobrist.test.ts > ABC-011 — zobristKey where the board contradicts the ep square > omits the ep component and returns the position intact (the same, mirrored)
+ FAIL  src/zobrist.test.ts > ABC-011 QE — zobristKey where the wrong piece contradicts the ep square > omits the ep component and returns the position intact (an enemy KNIGHT, not a pawn, on the ep capture square)
+ FAIL  src/zobrist.test.ts > ABC-011 QE — zobristKey where the wrong piece contradicts the ep square > omits the ep component and returns the position intact (an enemy ROOK, not a pawn, on the ep capture square)
+ FAIL  src/zobrist.test.ts > ABC-011 QE — zobristKey where the wrong piece contradicts the ep square > omits the ep component and returns the position intact (the mover's OWN knight standing on the ep target)
+ FAIL  src/zobrist.test.ts > ABC-011 QE — zobristKey where the wrong piece contradicts the ep square > omits the ep component and returns the position intact (the same, mirrored)

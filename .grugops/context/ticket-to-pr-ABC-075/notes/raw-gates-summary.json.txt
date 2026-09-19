@@ -1,0 +1,34 @@
+{
+  "lint": {
+    "status": 0,
+    "line": "Checked 76 files in 108ms. No fixes applied."
+  },
+  "typecheck": {
+    "status": 0,
+    "output": ""
+  },
+  "build": {
+    "status": 0,
+    "output": ""
+  },
+  "unit": {
+    "status": 0,
+    "files": "42",
+    "tests": "1305",
+    "duration": "4.66s (transform 901ms, setup 0ms, collect 6.63s, tests 6.09s, environment 4ms, prepare 2.05s)",
+    "failedLines": []
+  },
+  "skip": {
+    "pending": 0,
+    "todo": 0,
+    "failed": 0,
+    "passed": 1305,
+    "total": 1305,
+    "suites": 264,
+    "skipCount": 0
+  },
+  "integrity": {
+    "status": 0,
+    "output": "No findings."
+  }
+}

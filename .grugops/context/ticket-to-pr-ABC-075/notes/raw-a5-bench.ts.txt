@@ -1,0 +1,78 @@
+// ABC-075 A5 — per-node cost of zobristKeyAfterMove vs the full-scan zobristKey, interleaved in
+// ONE process (ticket test note 3). Sample: every (before-key, after-position, move, undo) tuple
+// reachable within 2 plies of the six perft positions, materialised once as position copies so
+// both functions read identical inputs. Rounds alternate function order; medians reported.
+// Usage: node bench.ts <worktree-src-dir>
+import { makeMove, unmakeMove } from "./apply.ts";
+import { parseFen } from "./fen.ts";
+import { legalMoves } from "./legal.ts";
+import type { Move } from "./moves.ts";
+import type { Position } from "./position.ts";
+import { zobristKey, zobristKeyAfterMove } from "./zobrist.ts";
+import type { UndoRecord } from "./apply.ts";
+
+const FENS = [
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1",
+  "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1",
+  "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8",
+  "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+];
+
+interface Sample { keyBefore: bigint; after: Position; move: Move; undo: UndoRecord }
+
+function clone(p: Position): Position {
+  return { board: Uint8Array.from(p.board), blackToMove: p.blackToMove, castling: p.castling, epSquare: p.epSquare, halfmoveClock: p.halfmoveClock, fullmoveNumber: p.fullmoveNumber };
+}
+
+const samples: Sample[] = [];
+function collect(position: Position, keyBefore: bigint, plies: number): void {
+  for (const move of legalMoves(position)) {
+    const undo = makeMove(position, move);
+    const k = zobristKeyAfterMove(keyBefore, position, move, undo);
+    samples.push({ keyBefore, after: clone(position), move, undo });
+    if (plies > 1) collect(position, k, plies - 1);
+    unmakeMove(position, move, undo);
+  }
+}
+for (const fen of FENS) { const p = parseFen(fen); collect(p, zobristKey(p), 2); }
+
+// Sanity: every sample agrees with the oracle before timing anything.
+let bad = 0;
+for (const s of samples) if (zobristKeyAfterMove(s.keyBefore, s.after, s.move, s.undo) !== zobristKey(s.after)) bad++;
+
+const N = samples.length;
+const REPS = Number(process.env.REPS ?? 20);
+const ROUNDS = Number(process.env.ROUNDS ?? 9);
+let sink = 0n;
+
+function timeFull(): number {
+  const t0 = process.hrtime.bigint();
+  for (let r = 0; r < REPS; r++) for (let i = 0; i < N; i++) sink ^= zobristKey((samples[i] as Sample).after);
+  return Number(process.hrtime.bigint() - t0) / (REPS * N);
+}
+function timeIncr(): number {
+  const t0 = process.hrtime.bigint();
+  for (let r = 0; r < REPS; r++) for (let i = 0; i < N; i++) { const s = samples[i] as Sample; sink ^= zobristKeyAfterMove(s.keyBefore, s.after, s.move, s.undo); }
+  return Number(process.hrtime.bigint() - t0) / (REPS * N);
+}
+
+// warm-up, discarded
+timeFull(); timeIncr(); timeFull(); timeIncr();
+
+const full: number[] = [], incr: number[] = [];
+for (let round = 0; round < ROUNDS; round++) {
+  if (round % 2 === 0) { full.push(timeFull()); incr.push(timeIncr()); }
+  else { incr.push(timeIncr()); full.push(timeFull()); }
+}
+const med = (xs: number[]) => { const s = [...xs].sort((a, b) => a - b); return s.length % 2 ? s[s.length >> 1] as number : ((s[s.length / 2 - 1] as number) + (s[s.length / 2] as number)) / 2; };
+const out = {
+  node: process.version, arch: process.arch, platform: process.platform,
+  samples: N, reps: REPS, rounds: ROUNDS, oracleMismatchesInSample: bad,
+  zobristKey_ns_median: +med(full).toFixed(1), zobristKey_ns_rounds: full.map((x) => +x.toFixed(1)),
+  zobristKeyAfterMove_ns_median: +med(incr).toFixed(1), zobristKeyAfterMove_ns_rounds: incr.map((x) => +x.toFixed(1)),
+  ratio: +(med(full) / med(incr)).toFixed(2),
+  sink: (sink & 0xffn).toString(),
+};
+console.log(JSON.stringify(out, null, 2));

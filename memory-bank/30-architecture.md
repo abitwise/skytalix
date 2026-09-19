@@ -1,4 +1,5 @@
 # Architecture
+_Updated: 2026-09-19 by the Software Engineer (task `wave-2026-09-19`, subtask `ticket-to-pr-ABC-075`, Workflow 04) — **the two edits ADR-0020 said fall due when `ABC-075` lands, and nothing else:** the module-table row for `zobrist.ts` (it no longer imports `legal.ts`; `zobristKeyAfterMove` added; its depth is now `UNKNOWN - verify` — the table was NOT re-measured at this hop) and the transient-mutation paragraph (`zobristKey` is a pure read again; the two-threads foreclosure is discharged per ADR-0020). Every other line is byte-identical._
 _Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask `audit-architecture`,
 Workflow 07) — **REWRITTEN TO AS-BUILT.** The previous revision described the tree *after `EPIC-001`*
 and was written before the whole `EPIC-002` render/loop stack landed; it said **eleven** production
@@ -50,7 +51,7 @@ measured below.
 | 4 | `legal.ts` | `legalMoves`, `isInCheck`, and `hasLegalEnPassant` — make/test/unmake (ADR-0003), and the en-passant oracle the hash asks (ADR-0005) |
 | 5 | `perft.ts` | node counting and per-first-move divide |
 | 5 | `san.ts` | `toSan`. `parseSan` is `EPIC-003`'s and lands in THIS file over the same tables — one grammar, both directions (ADR-0004 clause 2) |
-| 5 | `zobrist.ts` | 64-bit `bigint` key, fixed seed, **recomputed per call**; asks `legal.ts` whether an en-passant capture is real (ADR-0005), so it is not a leaf |
+| 5 | `zobrist.ts` | 64-bit `bigint` key, fixed seed. `zobristKey` is the full scan (seed and oracle); `zobristKeyAfterMove` derives the next key from the previous one in a bounded number of XORs (`ABC-075`, ADR-0020). Since ADR-0020 the ep component keys on `epSquare` being SET, so the module no longer imports `legal.ts` — it sits directly above `apply.ts` (a type-only `UndoRecord` import) and is a pure read of the board. Level 5 in this table is the pre-`ABC-075` depth; the post-change depth is `UNKNOWN - verify` until the table is re-measured |
 | 6 | `gameend.ts` | checkmate, stalemate, 50/75-move, repetition, insufficient material |
 | 6 | `perft-bench.ts` | `npm run perft`. **The only module that prints and the only one with zero exports** — it calls `main()` at module scope (`:114`). That is exactly `ADR-0011` clause 4's *entry point* |
 | 7 | `history.ts` | `GameHistory` — the move list is the authority (ADR-0002 clause 2); undo, keys and repetition counts derived by replay. Nothing in the rules core imports it |
@@ -87,13 +88,15 @@ measured below.
   and returns a four-field `UndoRecord` the **caller** owns; `unmakeMove` reverses it. Nothing
   clones a `Position` and **no clone function exists** (verified). A `Position` is a live object,
   never a snapshot — hold one across a move and it changes under you.
-- **Transient mutation behind pure-looking queries.** `legalMoves`, `gameStatus`, `perft`,
-  `zobristKey` (ADR-0005) and **`toSan`** all play moves and take them back internally, returning
-  the position as they found it. `zobristKey` is the one worth naming: it looks like a read and
-  mostly is one, but on the ~2% of nodes carrying an available en-passant capture it plays that
-  capture to test its legality. **Consequence: you cannot hash a `Position` you may not write to,
-  nor hash one from two threads at once** — which forecloses one shape of parallel search and is an
-  open input to `EPIC-004` (`UNKNOWN - verify`).
+- **Transient mutation behind pure-looking queries.** `legalMoves`, `gameStatus`, `perft` and
+  **`toSan`** all play moves and take them back internally, returning the position as they found
+  it. `zobristKey` was the one worth naming here until `ABC-075` (ADR-0020, 2026-09-19): under
+  ADR-0005 it played the en-passant capture on ~2% of nodes to test its legality, so you could not
+  hash a `Position` you might not write to, nor hash one from two threads at once. **That is gone:
+  the ep component now keys on `epSquare` being set, `zobristKey` is a pure read of the board, and
+  `zobristKeyAfterMove` writes nothing either.** The two-threads clause was the foreclosure on one
+  shape of parallel search that ADR-0005 `F6` guarded; ADR-0020 records it as discharged, not
+  tripped. Whether `EPIC-004` ever wants a parallel shape is still `UNKNOWN - verify`.
 - **The renderers replay; they never rewind the caller.** `history-pane.ts` and `status-panel.ts`
   call `parseFen` + `makeMove` on **their own fresh position** built from the anchor, never on the
   caller's. That is why they can be pure-looking without owning an undo.
