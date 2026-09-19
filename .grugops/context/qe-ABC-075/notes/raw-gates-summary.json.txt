@@ -1,0 +1,69 @@
+[
+  {
+    "name": "lint",
+    "cmd": "npx biome check .",
+    "exit": 0,
+    "ms": 588,
+    "load": "{ 7.18 6.86 6.18 }",
+    "tail": "Checked 76 files in 104ms. No fixes applied."
+  },
+  {
+    "name": "typecheck",
+    "cmd": "npx tsc --noEmit",
+    "exit": 0,
+    "ms": 1960,
+    "load": "{ 7.18 6.86 6.18 }",
+    "tail": ""
+  },
+  {
+    "name": "build",
+    "cmd": "npx tsc --noEmit",
+    "exit": 0,
+    "ms": 2014,
+    "load": "{ 7.18 6.86 6.18 }",
+    "tail": ""
+  },
+  {
+    "name": "unit",
+    "cmd": "npx vitest run --dir src",
+    "exit": 0,
+    "ms": 7058,
+    "load": "{ 7.17 6.86 6.18 }",
+    "tail": " ✓ src/cli.test.ts (61 tests) 32ms\n\n Test Files  42 passed (42)\n      Tests  1305 passed (1305)\n   Start at  11:21:26\n   Duration  6.50s (transform 1.22s, setup 0ms, collect 9.36s, tests 10.43s, environment 7ms, prepare 4.01s)"
+  },
+  {
+    "name": "unit-json",
+    "cmd": "npx vitest run --dir src --reporter=json --outputFile=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/qe075/raw-gate-unit.json",
+    "exit": 0,
+    "ms": 5749,
+    "load": "{ 16.04 8.70 6.84 }",
+    "tail": "JSON report written to /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/qe075/raw-gate-unit.json"
+  },
+  {
+    "name": "skip-count",
+    "numTotalTestSuites": 264,
+    "numTotalTests": 1305,
+    "numPassedTests": 1305,
+    "numFailedTests": 0,
+    "numPendingTests": 0,
+    "numTodoTests": 0,
+    "skip": 0,
+    "files": 42
+  },
+  {
+    "name": "integrity",
+    "cmd": "node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0",
+    "exit": 0,
+    "ms": 30,
+    "load": "{ 17.96 9.22 7.03 }",
+    "tail": "No findings."
+  },
+  {
+    "name": "zobrist-files",
+    "cmd": "npx vitest run src/zobrist.test.ts src/zobrist.nfr.test.ts",
+    "exit": 0,
+    "ms": 882,
+    "load": "{ 17.96 9.22 7.03 }",
+    "tail": " ✓ src/zobrist.test.ts (32 tests) 232ms\n\n Test Files  2 passed (2)\n      Tests  35 passed (35)\n   Start at  11:21:39\n   Duration  430ms (transform 89ms, setup 0ms, collect 112ms, tests 234ms, environment 0ms, prepare 78ms)"
+  }
+]

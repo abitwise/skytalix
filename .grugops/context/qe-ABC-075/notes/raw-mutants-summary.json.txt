@@ -1,0 +1,558 @@
+[
+  {
+    "id": "a",
+    "what": "ep component XORed in on the ep square being set ONLY when a capturer is adjacent (Stockfish-style normalisation inside the delta)",
+    "numstat": "13\t1\tsrc/zobrist.ts",
+    "load": "{ 8.99 8.75 7.09 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 1191,
+      "total": 35,
+      "passed": 31,
+      "failed": 4,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, no capture at all (1.e4)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, capture legal (d4xe3)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3 — the ep-capture delta itself was exercised on the class where the capture is legal",
+          "msg": "AssertionError: expected [ …(7) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "b",
+    "what": "castling-rights delta uses the rights BEFORE the move for both halves (undo.castling ^ undo.castling — no flag ever XORed)",
+    "numstat": "1\t1\tsrc/zobrist.ts",
+    "load": "{ 8.99 8.75 7.09 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 1015,
+      "total": 35,
+      "passed": 30,
+      "failed": 5,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, no capture at all (1.e4)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, capture legal (d4xe3)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: castling right survives a blocked rook",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3 — the ep-capture delta itself was exercised on the class where the capture is legal",
+          "msg": "AssertionError: expected [ Array(1) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "c",
+    "what": "captured pawn NOT XORed out on an ep capture (FLAG_EN_PASSANT branch emptied)",
+    "numstat": "1\t1\tsrc/zobrist.ts",
+    "load": "{ 10.67 9.10 7.23 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 977,
+      "total": 35,
+      "passed": 30,
+      "failed": 5,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ Array(1) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, capture legal (d4xe3)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, second capturer legal (e5xd6)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, both capturers legal, b-file",
+          "msg": "AssertionError: expected [ …(7) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3 — the ep-capture delta itself was exercised on the class where the capture is legal",
+          "msg": "AssertionError: expected [ Array(1) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "d",
+    "what": "promotion XORs the PAWN in on `to` instead of the promoted piece (move.piece, not board[to])",
+    "numstat": "1\t1\tsrc/zobrist.ts",
+    "load": "{ 10.67 9.10 7.23 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 1040,
+      "total": 35,
+      "passed": 34,
+      "failed": 1,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "e",
+    "what": "side-to-move toggle dropped",
+    "numstat": "1\t1\tsrc/zobrist.ts",
+    "load": "{ 10.67 9.10 7.23 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 1148,
+      "total": 35,
+      "passed": 26,
+      "failed": 9,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, no capture at all (1.e4)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, only capture illegal (pinned along rank 5)",
+          "msg": "AssertionError: expected [ …(6) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, capture legal (d4xe3)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, second capturer legal (e5xd6)",
+          "msg": "AssertionError: expected [ …(8) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, both capturers legal, b-file",
+          "msg": "AssertionError: expected [ …(8) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: castling right survives a blocked rook",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3 — the ep-capture delta itself was exercised on the class where the capture is legal",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A4 — hashes castling RIGHTS, not availability (ADR-0006), and the delta agrees",
+          "msg": "AssertionError: expected 11793289236348601331n to be 6344976365718358346n // Object.is equality"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "f",
+    "what": "keyBefore ignored — recomputed from scratch (correct but slow; A5's >= 5x bar is the only thing that can see it)",
+    "numstat": "1\t0\tsrc/zobrist.ts",
+    "load": "{ 10.67 9.10 7.23 }",
+    "twoFiles": {
+      "exit": 0,
+      "ms": 1350,
+      "total": 35,
+      "passed": 35,
+      "failed": 0,
+      "pending": 0,
+      "files": 2,
+      "red": []
+    },
+    "wholeLane": {
+      "exit": 0,
+      "ms": 7245,
+      "total": 1305,
+      "passed": 1305,
+      "failed": 0,
+      "pending": 0,
+      "files": 42,
+      "red": []
+    },
+    "revertedClean": true
+  },
+  {
+    "id": "g",
+    "what": "castling rook's leg NOT XORed (FLAG_CASTLE block emptied)",
+    "numstat": "2\t2\tsrc/zobrist.ts",
+    "load": "{ 10.56 9.13 7.26 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 1126,
+      "total": 35,
+      "passed": 33,
+      "failed": 2,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: castling right survives a blocked rook",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "h",
+    "what": "ep file going OUT dropped (undo.epSquare line removed — only the incoming ep file is XORed)",
+    "numstat": "0\t1\tsrc/zobrist.ts",
+    "load": "{ 10.56 9.13 7.26 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 1221,
+      "total": 35,
+      "passed": 28,
+      "failed": 7,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, no capture at all (1.e4)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, only capture illegal (pinned along rank 5)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, capture legal (d4xe3)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, second capturer legal (e5xd6)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, both capturers legal, b-file",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3 — the ep-capture delta itself was exercised on the class where the capture is legal",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "i",
+    "what": "ep capture square sign flipped (captured pawn XORed out one rank on the wrong side of `to`)",
+    "numstat": "1\t1\tsrc/zobrist.ts",
+    "load": "{ 10.56 9.13 7.26 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 1153,
+      "total": 35,
+      "passed": 30,
+      "failed": 5,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ Array(1) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, capture legal (d4xe3)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, second capturer legal (e5xd6)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, both capturers legal, b-file",
+          "msg": "AssertionError: expected [ …(7) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3 — the ep-capture delta itself was exercised on the class where the capture is legal",
+          "msg": "AssertionError: expected [ Array(1) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "j",
+    "what": "castling rook's leg computed for the WRONG wing (kingside test inverted)",
+    "numstat": "1\t1\tsrc/zobrist.ts",
+    "load": "{ 14.04 9.87 7.53 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 1332,
+      "total": 35,
+      "passed": 33,
+      "failed": 2,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: castling right survives a blocked rook",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "k",
+    "what": "ADR-0005 reading restored in zobristKey — the hasLegalEnPassant conjunct put back (Decision 1 reversed in the ORACLE only)",
+    "numstat": "2\t1\tsrc/zobrist.ts",
+    "load": "{ 14.04 9.87 7.53 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 955,
+      "total": 35,
+      "passed": 16,
+      "failed": 19,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.nfr.test.ts",
+          "name": "NFR-005 — zobristKey never consults hasLegalEnPassant (structural since ADR-0020, spied) asks nothing on any input, with or without an ep square",
+          "msg": "AssertionError: ep set, no capture at all: expected \"hasLegalEnPassant\" to be called +0 times, but got 1 times"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "zobristKey separates an ep square no capture can use — ABC-075 A3, the ep-set-no-capture class",
+          "msg": "AssertionError: expected 18311490354223382796n not to be 18311490354223382796n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "zobristKey separates an ep square whose only capture is illegal — ABC-075 A3, second case of the class",
+          "msg": "AssertionError: expected 285777158189409886n not to be 285777158189409886n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) holds at every node within 2 plies of every perft position",
+          "msg": "AssertionError: rnbqkbnr/1ppppppp/8/p7/8/2N5/PPPPPPPP/R1BQKBNR w KQkq a6 0 2 — ep square carried: true: expected true to be false // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the board contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (no pawn to capture at all)",
+          "msg": "AssertionError: 4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1: expected 7032954216434971868n not to be 7032954216434971868n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the board contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (a WHITE pawn where the captured black one should be)",
+          "msg": "AssertionError: 4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1: expected 12107736285341405624n not to be 12107736285341405624n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the board contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (an ep square on the wrong rank for the side to move)",
+          "msg": "AssertionError: 4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1: expected 1601043201872349599n not to be 1601043201872349599n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the board contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (a white pawn standing ON the ep target)",
+          "msg": "AssertionError: 4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1: expected 13686359221481935516n not to be 13686359221481935516n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the board contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (the ep target occupied by an enemy knight)",
+          "msg": "AssertionError: 4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1: expected 12128903790934113971n not to be 12128903790934113971n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the board contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (the same, mirrored)",
+          "msg": "AssertionError: 4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1: expected 9415160956196523168n not to be 9415160956196523168n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the wrong piece contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (an enemy KNIGHT, not a pawn, on the ep capture square)",
+          "msg": "AssertionError: 4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1: expected 10059371424605997077n not to be 10059371424605997077n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the wrong piece contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (an enemy ROOK, not a pawn, on the ep capture square)",
+          "msg": "AssertionError: k7/8/8/8/3pR3/8/8/4K3 b - e3 0 1: expected 4809113599202968435n not to be 4809113599202968435n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the wrong piece contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (the mover's OWN knight standing on the ep target)",
+          "msg": "AssertionError: 4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1: expected 5271945853490615451n not to be 5271945853490615451n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKey where the wrong piece contradicts the ep square (ADR-0020) carries the ep component and returns the position intact (the same, mirrored)",
+          "msg": "AssertionError: 7k/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1: expected 14665214235567811225n not to be 14665214235567811225n // Object.is equality"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, no capture at all (1.e4)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, only capture illegal (pinned along rank 5)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, capture legal (d4xe3)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3 — the ep-capture delta itself was exercised on the class where the capture is legal",
+          "msg": "AssertionError: expected [ …(7) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  },
+  {
+    "id": "l",
+    "what": "ordinary capture NOT XORed out (else-if branch emptied)",
+    "numstat": "1\t1\tsrc/zobrist.ts",
+    "load": "{ 14.04 9.87 7.53 }",
+    "twoFiles": {
+      "exit": 1,
+      "ms": 1261,
+      "total": 35,
+      "passed": 30,
+      "failed": 5,
+      "pending": 0,
+      "files": 2,
+      "red": [
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, no capture at all (1.e4)",
+          "msg": "AssertionError: expected [ …(6) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, capture legal (d4xe3)",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: ep set, second capturer legal (e5xd6)",
+          "msg": "AssertionError: expected [ …(8) ] to deeply equal []"
+        },
+        {
+          "file": "src/zobrist.test.ts",
+          "name": "ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A3/A4 — 0 mismatches and 0 drift within 2 plies of: castling right survives a blocked rook",
+          "msg": "AssertionError: expected [ …(10) ] to deeply equal []"
+        }
+      ]
+    },
+    "wholeLane": null,
+    "revertedClean": true
+  }
+]

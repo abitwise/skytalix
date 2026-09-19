@@ -1,0 +1,165 @@
+// QE ABC-075 — mutation campaign against src/zobrist.ts. Each mutant: exact-string patch, assert it
+// applied, run the two zobrist files with the JSON reporter, collect red rows; if NONE, also run the
+// whole default lane (--dir src) so a survivor is a survivor of everything. Revert via
+// `git checkout -- src/zobrist.ts`, assert `git status --porcelain -- src` is EMPTY after each.
+import { execFileSync, spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+
+const CWD = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a807dbf036c47213f";
+const OUT = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/qe075";
+const FILE = `${CWD}/src/zobrist.ts`;
+const only = process.argv.slice(2);
+
+const load = () => execFileSync("sysctl", ["-n", "vm.loadavg"], { encoding: "utf8" }).trim();
+const git = (...a) => execFileSync("git", a, { cwd: CWD, encoding: "utf8" });
+
+const MUTANTS = [
+  {
+    id: "a",
+    what: "ep component XORed in on the ep square being set ONLY when a capturer is adjacent (Stockfish-style normalisation inside the delta)",
+    edits: [
+      ["  fileOf,\n  isBlack,\n", "  fileOf,\n  isBlack,\n  PAWN,\n  pieceType,\n"],
+      [
+        "  if (undo.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(undo.epSquare)] as bigint;\n  if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;",
+        "  if (undo.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(undo.epSquare)] as bigint;\n  if (position.epSquare !== NO_SQUARE && capturerAdjacent(position)) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;",
+      ],
+      [
+        "export function zobristKeyAfterMove(",
+        "function capturerAdjacent(position: Position): boolean {\n  const pawnSq = position.blackToMove ? position.epSquare + 16 : position.epSquare - 16;\n  for (const sq of [pawnSq - 1, pawnSq + 1]) {\n    if (!isOnBoard(sq)) continue;\n    const p = position.board[sq] as number;\n    if (p !== EMPTY && pieceType(p) === PAWN && isBlack(p) === position.blackToMove) return true;\n  }\n  return false;\n}\n\nexport function zobristKeyAfterMove(",
+      ],
+    ],
+  },
+  {
+    id: "b",
+    what: "castling-rights delta uses the rights BEFORE the move for both halves (undo.castling ^ undo.castling — no flag ever XORed)",
+    edits: [["  const castlingChanged = undo.castling ^ position.castling;", "  const castlingChanged = undo.castling ^ undo.castling;"]],
+  },
+  {
+    id: "c",
+    what: "captured pawn NOT XORed out on an ep capture (FLAG_EN_PASSANT branch emptied)",
+    edits: [
+      [
+        "  if ((move.flags & FLAG_EN_PASSANT) !== 0) {\n    key ^= PIECE_SQUARE[(move.captured << 7) | enPassantCaptureSquare(move)] as bigint;\n  } else if",
+        "  if ((move.flags & FLAG_EN_PASSANT) !== 0) {\n    // mutant c: dropped\n  } else if",
+      ],
+    ],
+  },
+  {
+    id: "d",
+    what: "promotion XORs the PAWN in on `to` instead of the promoted piece (move.piece, not board[to])",
+    edits: [
+      [
+        "  key ^= PIECE_SQUARE[((board[move.to] as number) << 7) | move.to] as bigint;",
+        "  key ^= PIECE_SQUARE[(move.piece << 7) | move.to] as bigint;",
+      ],
+    ],
+  },
+  {
+    id: "e",
+    what: "side-to-move toggle dropped",
+    edits: [["  let key = keyBefore ^ BLACK_TO_MOVE;", "  let key = keyBefore;"]],
+  },
+  {
+    id: "f",
+    what: "keyBefore ignored — recomputed from scratch (correct but slow; A5's >= 5x bar is the only thing that can see it)",
+    edits: [
+      [
+        "  const board = position.board;\n  let key = keyBefore ^ BLACK_TO_MOVE;",
+        "  if (keyBefore === keyBefore) return zobristKey(position);\n  const board = position.board;\n  let key = keyBefore ^ BLACK_TO_MOVE;",
+      ],
+    ],
+  },
+  {
+    id: "g",
+    what: "castling rook's leg NOT XORed (FLAG_CASTLE block emptied)",
+    edits: [
+      [
+        "    const rook = board[rookTo] as number;\n    key ^= PIECE_SQUARE[(rook << 7) | rookFrom] as bigint;\n    key ^= PIECE_SQUARE[(rook << 7) | rookTo] as bigint;\n",
+        "    const rook = board[rookTo] as number;\n    void rook;\n    void rookFrom;\n",
+      ],
+    ],
+  },
+  // QE's own, beyond the minimum.
+  {
+    id: "h",
+    what: "ep file going OUT dropped (undo.epSquare line removed — only the incoming ep file is XORed)",
+    edits: [["  if (undo.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(undo.epSquare)] as bigint;\n", ""]],
+  },
+  {
+    id: "i",
+    what: "ep capture square sign flipped (captured pawn XORed out one rank on the wrong side of `to`)",
+    edits: [["move.to + (isBlack(move.piece) ? 16 : -16)", "move.to + (isBlack(move.piece) ? -16 : 16)"]],
+  },
+  {
+    id: "j",
+    what: "castling rook's leg computed for the WRONG wing (kingside test inverted)",
+    edits: [["    const kingside = fileOf(move.to) === 6;", "    const kingside = fileOf(move.to) !== 6;"]],
+  },
+  {
+    id: "k",
+    what: "ADR-0005 reading restored in zobristKey — the hasLegalEnPassant conjunct put back (Decision 1 reversed in the ORACLE only)",
+    edits: [
+      ["import type { UndoRecord } from \"./apply.ts\";", "import type { UndoRecord } from \"./apply.ts\";\nimport { hasLegalEnPassant } from \"./legal.ts\";"],
+      [
+        "  if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;\n\n  return key;\n}\n\n/** The square",
+        "  if (position.epSquare !== NO_SQUARE && hasLegalEnPassant(position)) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;\n\n  return key;\n}\n\n/** The square",
+      ],
+    ],
+  },
+  {
+    id: "l",
+    what: "ordinary capture NOT XORed out (else-if branch emptied)",
+    edits: [
+      [
+        "  } else if (undo.captured !== EMPTY) {\n    key ^= PIECE_SQUARE[(undo.captured << 7) | move.to] as bigint;\n  }",
+        "  } else if (undo.captured !== EMPTY) {\n    // mutant l: dropped\n  }",
+      ],
+    ],
+  },
+];
+
+function vitest(args, tag) {
+  const outFile = `${OUT}/raw-mutant-${tag}.json`;
+  const t0 = Date.now();
+  const r = spawnSync("npx", ["vitest", "run", ...args, "--reporter=json", `--outputFile=${outFile}`], {
+    cwd: CWD, encoding: "utf8", maxBuffer: 1 << 28,
+  });
+  const ms = Date.now() - t0;
+  let j;
+  try { j = JSON.parse(readFileSync(outFile, "utf8")); } catch (e) { return { exit: r.status, ms, parseError: String(e), stderr: (r.stderr ?? "").slice(-2000) }; }
+  const red = [];
+  for (const f of j.testResults) {
+    for (const a of f.assertionResults) {
+      if (a.status === "failed") red.push({ file: f.name.replace(`${CWD}/`, ""), name: a.fullName, msg: (a.failureMessages?.[0] ?? "").split("\n")[0].slice(0, 220) });
+    }
+  }
+  return { exit: r.status, ms, total: j.numTotalTests, passed: j.numPassedTests, failed: j.numFailedTests, pending: j.numPendingTests, files: j.testResults.length, red };
+}
+
+const original = readFileSync(FILE, "utf8");
+const results = [];
+for (const m of MUTANTS) {
+  if (only.length && !only.includes(m.id)) continue;
+  let src = original;
+  for (const [from, to] of m.edits) {
+    const n = src.split(from).length - 1;
+    if (n !== 1) throw new Error(`mutant ${m.id}: patch anchor matched ${n} times: ${from.slice(0, 60)}`);
+    src = src.replace(from, to);
+  }
+  if (src === original) throw new Error(`mutant ${m.id}: no change`);
+  writeFileSync(FILE, src);
+  const diff = git("diff", "--numstat", "--", "src/zobrist.ts").trim();
+  const l = load();
+  const two = vitest(["src/zobrist.test.ts", "src/zobrist.nfr.test.ts"], `${m.id}-two`);
+  let lane = null;
+  if (two.red && two.red.length === 0) lane = vitest(["--dir", "src"], `${m.id}-lane`);
+  git("checkout", "--", "src/zobrist.ts");
+  const clean = git("status", "--porcelain", "--", "src").trim();
+  if (clean !== "") throw new Error(`src not clean after mutant ${m.id}: ${clean}`);
+  if (readFileSync(FILE, "utf8") !== original) throw new Error(`mutant ${m.id}: revert did not restore bytes`);
+  const rec = { id: m.id, what: m.what, numstat: diff, load: l, twoFiles: two, wholeLane: lane, revertedClean: true };
+  results.push(rec);
+  console.log(`[${m.id}] ${diff} | two-files: ${two.failed} failed / ${two.passed} passed in ${two.ms} ms${lane ? ` | LANE: ${lane.failed} failed / ${lane.passed} passed` : ""}`);
+  for (const r of two.red ?? []) console.log(`    RED ${r.name} :: ${r.msg}`);
+}
+writeFileSync(`${OUT}/mutants-summary${only.length ? "-" + only.join("") : ""}.json`, JSON.stringify(results, null, 2));
