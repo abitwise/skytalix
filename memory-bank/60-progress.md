@@ -940,6 +940,20 @@ the same explicit instruction.
 
 ## Next action
 
+**2026-09-19 — session closed at the owner's word; read `plans/board.md`'s top header first.** In order:
+
+1. **Three QE hops** (`In Review`): `ABC-046` (`quit`/`new` — read `A8`'s "one line" vs three, the over-cap-line gap, M9), `ABC-118` (lane inventory — reproduce M1–M4 in a `git init`ed copy). Both builds are merged on `main`; QE branches off `main`.
+2. **Three owner words** (`Ready for UAT`): `ABC-045` (`resign` — playable now: `npm run chess`, a move, `resign`), `ABC-075` (engine-internal; QE + 11M-node oracle walk are the evidence), `ABC-120` (sign together with `ABC-046` once its QE passes — `quit`/`quit` and `new` are then reachable from the keyboard).
+3. **`ABC-079` ruling** (`Blocked`, Architect/Design): `SEARCH_DEEP=1 src/search.test.ts` reads exit 1 under ordered quiescence (4 timeouts; the unpruned oracle never raises alpha). Branch `grugops/ABC-079-quiescence` @ `fa80923`, default lane green, UNMERGED. Rule the oracle's shape, then QE, then merge.
+4. **NFR-008 quiet re-measure** — every hop today read 17–29 s CPU at load 5–22 with siblings live; none is a conforming `ADR-0019` reading. One hop, protocol n ≥ 7 with null control, on a quiet machine, before trigger (a) is called or not. QE's `OPT-1` (engine + perft → opt-in lane, 2.55 s) is the pre-sized remedy if it is.
+5. **AGENTS.md Scribe** (one hop, `ABC-109` byte cap): `ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts`; `node tools/grugops/lane-inventory.js` under `## Test integrity`; the `search.test.ts` deep-lane line is false on the `ABC-079` branch; no slot for `SEARCH_DEEP=1 … src/quiescence.test.ts`; § Deployment posture still says "undecided" (`ADR-0018` decided it).
+6. **BA/PM residuals** (cut or fold, owner's call): `ABC-034` G1–G4 + `A1` FEN relabel + padded-fold (`ABC-033`); `ABC-075` G1 (≥ 5x bar asserted by no lane), G2 (five stale zobrist test comments), G3 (`hasLegalEnPassant` has no production caller); `ABC-045` `A2` re-word; `ABC-118` `A5` hash pin refresh; `ABC-080`'s MVV-LVA arm reuses `mvvLvaKey` (one line on its page); `ADR-0021` clause 4 "only edge into `evaluating-terminal`" imprecision; `memory-bank/00-index.md` ADR census (24 now).
+7. Then `ABC-102` (`undo`, after `ABC-046`; note `help` row 2 is full), `ABC-093` (book compile — `ABC-092` ratified), `ABC-080`/`ABC-081` (after `ABC-079`).
+
+**Standing warnings:** the PreToolUse deploy guard refuses heredocs, `$(...)`, `$?`, `npm run`, `git mv` chains and `time` — every agent brief must say so; the sole scratchpad collision today was a shared commit-message filename — use unique names. Six `.claude/worktrees/agent-*` checkouts were left by this session's agents; `git worktree prune` after deleting them.
+
+---
+
 **2026-08-16 — the next action is UAT on `ABC-065` and `ABC-066`.** They have sat in `Ready for UAT`
 since 2026-08-16, they are the only work in any working column, and they block `ABC-067`/`ABC-071`.
 After UAT, `ABC-076` is the natural first pull on `EPIC-004`'s P0 critical path — it is the one page
