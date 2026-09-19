@@ -1,0 +1,177 @@
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+const W = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ab9495ff50152542f";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad";
+const only = process.argv.slice(2);
+
+const R = `${W}/src/rejection.ts`;
+const M = `${W}/src/move-input.ts`;
+
+const MUTANTS = [
+  {
+    id: "Ma1",
+    what: "swap the two KING sentences (own-king-exposed <-> must-address-check)",
+    file: R,
+    from: `    case "own-king-exposed":\n      return "exposes your king";\n    case "must-address-check":\n      return "your king is in check";`,
+    to: `    case "own-king-exposed":\n      return "your king is in check";\n    case "must-address-check":\n      return "exposes your king";`,
+  },
+  {
+    id: "Ma2",
+    what: "swap the two ORIGIN sentences (empty-square <-> not-your-piece)",
+    file: R,
+    from: `    case "empty-square":\n      return \`no piece on \${rejection.square}\`;\n    case "not-your-piece":\n      return \`\${rejection.square} is not yours\`;`,
+    to: `    case "empty-square":\n      return \`\${rejection.square} is not yours\`;\n    case "not-your-piece":\n      return \`no piece on \${rejection.square}\`;`,
+  },
+  {
+    id: "Ma3",
+    what: "swap the two CODES at classification (empty-square <-> not-your-piece)",
+    file: R,
+    from: `      if (piece === EMPTY) return { reason: "empty-square", square: from };\n      if (isBlack(piece) !== position.blackToMove)\n        return { reason: "not-your-piece", square: from };`,
+    to: `      if (piece === EMPTY) return { reason: "not-your-piece", square: from };\n      if (isBlack(piece) !== position.blackToMove)\n        return { reason: "empty-square", square: from };`,
+  },
+  {
+    id: "Ma4",
+    what: "swap the two KING codes at classification (exposed() ternary inverted)",
+    file: R,
+    from: `  isInCheck(position) ? { reason: "must-address-check" } : { reason: "own-king-exposed" };`,
+    to: `  isInCheck(position) ? { reason: "own-king-exposed" } : { reason: "must-address-check" };`,
+  },
+  {
+    id: "Mb",
+    what: "set difference on the wrong side: legal \\ generateMoves (always empty)",
+    file: R,
+    from: `  const exposing = generateMoves(position).filter(\n    (move) => !legal.some((other) => sameMove(other, move)),\n  );`,
+    to: `  const generated = generateMoves(position);\n  const exposing = legal.filter((move) => !generated.some((other) => sameMove(other, move)));`,
+  },
+  {
+    id: "Mb2",
+    what: "set difference compares from/to only (promotion ignored)",
+    file: R,
+    from: `  a.from === b.from && a.to === b.to && a.promotion === b.promotion;`,
+    to: `  a.from === b.from && a.to === b.to;`,
+  },
+  {
+    id: "Mc",
+    what: "dispatcher drops the case-fold variants from the texts handed to the classifier",
+    file: M,
+    from: `  const tried = [...new Set([line, ...CASE_VARIANTS.map((variant) => variant(line))])];`,
+    to: `  const tried = [line];`,
+  },
+  {
+    id: "Mc2",
+    what: "dispatcher hands the variants FIRST and the line LAST (order reversed)",
+    file: M,
+    from: `  const tried = [...new Set([line, ...CASE_VARIANTS.map((variant) => variant(line))])];`,
+    to: `  const tried = [...new Set([...CASE_VARIANTS.map((variant) => variant(line)).reverse(), line])];`,
+  },
+  {
+    id: "Md",
+    what: "classifier returns unreadable for everything",
+    file: R,
+    from: `): Rejection {\n  // The set difference`,
+    to: `): Rejection {\n  if (texts.length >= 0) return { reason: "unreadable" };\n  // The set difference`,
+  },
+  {
+    id: "Me",
+    what: "dispatcher call site broken: messages carries the old placeholder code",
+    file: M,
+    from: `    messages: [rejectionMessage(classifyRejection(position, tried, legal))],`,
+    to: `    messages: ["no-such-move"],`,
+  },
+  {
+    id: "Me2",
+    what: "dispatcher call site: classifier called on the RAW line only but message placed (variant of Me)",
+    file: M,
+    from: `    messages: [rejectionMessage(classifyRejection(position, tried, legal))],`,
+    to: `    messages: [rejectionMessage(classifyRejection(position, tried))],`,
+  },
+  {
+    id: "Mg",
+    what: "origin/destination swapped: the SECOND square named is taken as the origin",
+    file: R,
+    from: `      const [from = "", to = ""] = squaresNamed(text);`,
+    to: `      const [to = "", from = ""] = squaresNamed(text);`,
+  },
+  {
+    id: "Mh",
+    what: "colour test inverted (=== instead of !==)",
+    file: R,
+    from: `      if (isBlack(piece) !== position.blackToMove)`,
+    to: `      if (isBlack(piece) === position.blackToMove)`,
+  },
+  {
+    id: "Ml",
+    what: "no-legal-move-named arm dropped (well-formed SAN naming nothing falls to unreadable)",
+    file: R,
+    from: `    if (san.reason === "no-such-move") return { reason: "no-legal-move-named", text: text.trim() };`,
+    to: `    if (san.reason === "no-such-move") continue;`,
+  },
+  {
+    id: "Mn",
+    what: "echo is the RAW text, not trimmed",
+    file: R,
+    from: `    if (san.reason === "no-such-move") return { reason: "no-legal-move-named", text: text.trim() };`,
+    to: `    if (san.reason === "no-such-move") return { reason: "no-legal-move-named", text };`,
+  },
+  {
+    id: "Mo",
+    what: "king classes bypass the readers: any coordinate read against LEGAL (not exposing) returns exposed()",
+    file: R,
+    from: `    const coordinate = parseCoordinateMove(position, text, exposing);`,
+    to: `    const coordinate = parseCoordinateMove(position, text, legal);`,
+  },
+  {
+    id: "Mp",
+    what: "sentence unreadable loses its referent (a bare 'invalid')",
+    file: R,
+    from: `      return "type e2e4 or Nf3";`,
+    to: `      return "invalid move";`,
+  },
+  {
+    id: "Mq",
+    what: "sentence own-king-exposed padded past the frame width W=21 (23 columns)",
+    file: R,
+    from: `      return "exposes your king";`,
+    to: `      return "that exposes your king!";`,
+  },
+];
+
+const git = (args) => spawnSync("git", args, { cwd: W, encoding: "utf8" });
+const results = [];
+for (const m of MUTANTS) {
+  if (only.length && !only.includes(m.id)) continue;
+  const original = readFileSync(m.file, "utf8");
+  const count = original.split(m.from).length - 1;
+  if (count !== 1) {
+    console.log(`[${m.id}] ANCHOR MATCHED ${count} TIMES — skipped`);
+    results.push({ id: m.id, what: m.what, red: "ANCHOR-NOT-FOUND", failed: [] });
+    continue;
+  }
+  writeFileSync(m.file, original.replace(m.from, m.to));
+  const t0 = Date.now();
+  const r = spawnSync("npx", ["vitest", "run", "--dir", "src", "--reporter=json"], { cwd: W, encoding: "utf8", maxBuffer: 1 << 28 });
+  const ms = Date.now() - t0;
+  writeFileSync(`${S}/mutant-${m.id}.json.txt`, r.stdout + "\n--- STDERR ---\n" + r.stderr);
+  let failed = [];
+  let summary = "";
+  try {
+    const j = JSON.parse(r.stdout.slice(r.stdout.indexOf("{")));
+    summary = `files=${j.numTotalTestSuites} total=${j.numTotalTests} passed=${j.numPassedTests} failed=${j.numFailedTests} skip=${j.numPendingTests + j.numTodoTests}`;
+    for (const f of j.testResults) {
+      for (const a of f.assertionResults) {
+        if (a.status === "failed") failed.push(`${f.name.replace(W + "/", "")} :: ${a.fullName}`);
+      }
+    }
+  } catch (e) {
+    summary = `JSON PARSE FAILED exit=${r.status} (tsc/syntax?) stderr head: ${r.stderr.slice(0, 300)}`;
+  }
+  // revert and verify clean
+  git(["checkout", "--", m.file]);
+  const after = readFileSync(m.file, "utf8");
+  const clean = after === original ? "REVERTED-CLEAN" : "REVERT-FAILED";
+  const st = git(["status", "--short", "--", "src/"]).stdout.trim();
+  console.log(`[${m.id}] ${m.what}\n   exit=${r.status} ${ms}ms ${summary}\n   RED rows: ${failed.length === 0 ? "NONE" : failed.length}\n   ${clean}; git status src/: ${st === "" ? "(clean)" : st}`);
+  for (const f of failed) console.log(`     - ${f}`);
+  results.push({ id: m.id, what: m.what, summary, exit: r.status, red: failed.length, failed, clean, status: st });
+}
+writeFileSync(`${S}/mutant-results.json`, JSON.stringify(results, null, 2));

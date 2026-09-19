@@ -1,0 +1,155 @@
+[Ma1] swap the two KING sentences (own-king-exposed <-> must-address-check)
+   exit=0 4868ms files=262 total=1291 passed=1291 failed=0 skip=0
+   RED rows: NONE
+   REVERTED-CLEAN; git status src/: (clean)
+[Ma2] swap the two ORIGIN sentences (empty-square <-> not-your-piece)
+   exit=0 5440ms files=262 total=1291 passed=1291 failed=0 skip=0
+   RED rows: NONE
+   REVERTED-CLEAN; git status src/: (clean)
+[Ma3] swap the two CODES at classification (empty-square <-> not-your-piece)
+   exit=1 4963ms files=262 total=1291 passed=1289 failed=2 skip=0
+   RED rows: 2
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate from an empty square: "e3e4" is empty-square
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate of the other side's pawn: "e7e5" is not-your-piece
+[Ma4] swap the two KING codes at classification (exposed() ternary inverted)
+   exit=1 4955ms files=262 total=1291 passed=1283 failed=8 skip=0
+   RED rows: 8
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king Nc3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2c3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king Ng3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2g1 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king the named position is the same set difference WHILE IN CHECK, and still names the king
+     - src/rejection.test.ts :: ABC-034 A2 — the classification is a SET DIFFERENCE over the perft corpus, asserted every generateMoves \ legalMoves move is own-king-exposed or must-address-check
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture the pinned knight, not in check: "Nc3" is own-king-exposed
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a knight move while in check: "Nh3" is must-address-check
+[Mb] set difference on the wrong side: legal \ generateMoves (always empty)
+   exit=1 5314ms files=262 total=1291 passed=1282 failed=9 skip=0
+   RED rows: 9
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king Nc3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2c3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king Ng3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2g1 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king the named position is the same set difference WHILE IN CHECK, and still names the king
+     - src/rejection.test.ts :: ABC-034 A2 — the classification is a SET DIFFERENCE over the perft corpus, asserted every generateMoves \ legalMoves move is own-king-exposed or must-address-check
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture the pinned knight, not in check: "Nc3" is own-king-exposed
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a knight move while in check: "Nh3" is must-address-check
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains a case-folded line that the fold made readable is classified on the readable variant
+[Mb2] set difference compares from/to only (promotion ignored)
+   exit=0 4923ms files=262 total=1291 passed=1291 failed=0 skip=0
+   RED rows: NONE
+   REVERTED-CLEAN; git status src/: (clean)
+[Mc] dispatcher drops the case-fold variants from the texts handed to the classifier
+   exit=1 4743ms files=262 total=1291 passed=1289 failed=2 skip=0
+   RED rows: 2
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains a case-folded line that the fold made readable is classified on the readable variant
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains the echo in no-legal-move-named is the SAN the reader accepted, not the raw line
+[Mc2] dispatcher hands the variants FIRST and the line LAST (order reversed)
+   exit=0 4943ms files=262 total=1291 passed=1291 failed=0 skip=0
+   RED rows: NONE
+   REVERTED-CLEAN; git status src/: (clean)
+[Md] classifier returns unreadable for everything
+   exit=1 4952ms files=262 total=1291 passed=1272 failed=19 skip=0
+   RED rows: 19
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate rejects "e2e5" as piece-cannot-reach without touching the position
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king Nc3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2c3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king Ng3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2g1 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king the named position is the same set difference WHILE IN CHECK, and still names the king
+     - src/rejection.test.ts :: ABC-034 A2 — the classification is a SET DIFFERENCE over the perft corpus, asserted every generateMoves \ legalMoves move is own-king-exposed or must-address-check
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate from an empty square: "e3e4" is empty-square
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate of the other side's pawn: "e7e5" is not-your-piece
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate the pawn cannot make: "e2e5" is piece-cannot-reach
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture the pinned knight, not in check: "Nc3" is own-king-exposed
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a knight move while in check: "Nh3" is must-address-check
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture well-formed SAN naming nothing: "Qh5" is no-legal-move-named
+     - src/rejection.test.ts :: ABC-034 A4 — no bare rejection survives, asserted over the SET the seven messages are seven distinct strings
+     - src/rejection.test.ts :: ABC-034 A4 — no bare rejection survives, asserted over the SET the renderer is total by exhaustive mapping, not by a default branch
+     - src/rejection.test.ts :: ABC-034 A8 — the two ill-formed-SAN cases are placed inside the seven, at no eighth code e8=K, a promotion letter no move has, is well-formed SAN naming no move here
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains a case-folded line that the fold made readable is classified on the readable variant
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains the echo in no-legal-move-named is the SAN the reader accepted, not the raw line
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains classification is ordered — the first text that a grammar reads decides
+[Me] dispatcher call site broken: messages carries the old placeholder code
+   exit=1 5137ms files=262 total=1291 passed=1270 failed=21 skip=0
+   RED rows: 21
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate rejects "hello" as unreadable without touching the position
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate rejects "e9e9" as unreadable without touching the position
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate rejects "Qz9" as unreadable without touching the position
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate rejects "" as unreadable without touching the position
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate rejects "   " as unreadable without touching the position
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate rejects "e2e5" as piece-cannot-reach without touching the position
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate a well-formed move that is not legal here names the square that cannot make it
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king Nc3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2c3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king Ng3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2g1 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king the named position is the same set difference WHILE IN CHECK, and still names the king
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a word neither grammar reads: "hello" is unreadable
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate from an empty square: "e3e4" is empty-square
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate of the other side's pawn: "e7e5" is not-your-piece
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate the pawn cannot make: "e2e5" is piece-cannot-reach
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture the pinned knight, not in check: "Nc3" is own-king-exposed
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a knight move while in check: "Nh3" is must-address-check
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture well-formed SAN naming nothing: "Qh5" is no-legal-move-named
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains a case-folded line that the fold made readable is classified on the readable variant
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains the echo in no-legal-move-named is the SAN the reader accepted, not the raw line
+[Me2] dispatcher call site: classifier called on the RAW line only but message placed (variant of Me)
+   exit=0 4861ms files=262 total=1291 passed=1291 failed=0 skip=0
+   RED rows: NONE
+   REVERTED-CLEAN; git status src/: (clean)
+[Mg] origin/destination swapped: the SECOND square named is taken as the origin
+   exit=1 4911ms files=262 total=1291 passed=1284 failed=7 skip=0
+   RED rows: 7
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate rejects "e2e5" as piece-cannot-reach without touching the position
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate a well-formed move that is not legal here names the square that cannot make it
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate of the other side's pawn: "e7e5" is not-your-piece
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate the pawn cannot make: "e2e5" is piece-cannot-reach
+     - src/rejection.test.ts :: ABC-034 A4 — no bare rejection survives, asserted over the SET the seven messages are seven distinct strings
+     - src/rejection.test.ts :: ABC-034 A4 — no bare rejection survives, asserted over the SET the renderer is total by exhaustive mapping, not by a default branch
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains classification is ordered — the first text that a grammar reads decides
+[Mh] colour test inverted (=== instead of !==)
+   exit=1 5133ms files=262 total=1291 passed=1287 failed=4 skip=0
+   RED rows: 4
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/move-input.test.ts :: ABC-033 A6 — rejection does not advance and does not re-evaluate rejects "e2e5" as piece-cannot-reach without touching the position
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate of the other side's pawn: "e7e5" is not-your-piece
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture a coordinate the pawn cannot make: "e2e5" is piece-cannot-reach
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains classification is ordered — the first text that a grammar reads decides
+[Ml] no-legal-move-named arm dropped (well-formed SAN naming nothing falls to unreadable)
+   exit=1 4993ms files=262 total=1291 passed=1286 failed=5 skip=0
+   RED rows: 5
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/rejection.test.ts :: ABC-034 A3 — each of the seven classes is reached by a named fixture well-formed SAN naming nothing: "Qh5" is no-legal-move-named
+     - src/rejection.test.ts :: ABC-034 A4 — no bare rejection survives, asserted over the SET the seven messages are seven distinct strings
+     - src/rejection.test.ts :: ABC-034 A4 — no bare rejection survives, asserted over the SET the renderer is total by exhaustive mapping, not by a default branch
+     - src/rejection.test.ts :: ABC-034 A8 — the two ill-formed-SAN cases are placed inside the seven, at no eighth code e8=K, a promotion letter no move has, is well-formed SAN naming no move here
+     - src/rejection.test.ts :: ABC-034 — the texts the dispatcher tried are the texts the classifier explains the echo in no-legal-move-named is the SAN the reader accepted, not the raw line
+[Mn] echo is the RAW text, not trimmed
+   exit=0 4939ms files=262 total=1291 passed=1291 failed=0 skip=0
+   RED rows: NONE
+   REVERTED-CLEAN; git status src/: (clean)
+[Mo] king classes bypass the readers: any coordinate read against LEGAL (not exposing) returns exposed()
+   exit=1 4927ms files=262 total=1291 passed=1288 failed=3 skip=0
+   RED rows: 3
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2c3 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A1 — the pin: a move of an absolutely pinned piece names the player's own king e2g1 on the pinned knight is own-king-exposed and the message names the king
+     - src/rejection.test.ts :: ABC-034 A2 — the classification is a SET DIFFERENCE over the perft corpus, asserted every generateMoves \ legalMoves move is own-king-exposed or must-address-check
+[Mp] sentence unreadable loses its referent (a bare 'invalid')
+   exit=1 4928ms files=262 total=1291 passed=1289 failed=2 skip=0
+   RED rows: 2
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/rejection.test.ts :: ABC-034 A4 — no bare rejection survives, asserted over the SET each message names a concrete referent — a square, a piece, or the king
+     - src/rejection.test.ts :: ABC-034 A8 — the two ill-formed-SAN cases are placed inside the seven, at no eighth code O-O with no castle legal is unreadable — the SAN reader's own castle price, placed as such
+[Mq] sentence own-king-exposed padded past the frame width W=21 (23 columns)
+   exit=1 4946ms files=262 total=1291 passed=1290 failed=1 skip=0
+   RED rows: 1
+   REVERTED-CLEAN; git status src/: (clean)
+     - src/rejection.test.ts :: ABC-034 A5 — every message fits the frame's message region with hidden count 0 the pinned knight, not in check: the sentence is shown whole, nothing is hidden

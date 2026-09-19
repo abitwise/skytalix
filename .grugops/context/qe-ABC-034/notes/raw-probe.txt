@@ -1,0 +1,127 @@
+== (f) padded / case probes on START ==
+padding                            "qh5"          -> rejected  ["no move Qh5 here"]  classifier(raw)=unreadable  fenSame=true
+padding                            "  qh5  "      -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+padding                            "  Qh5  "      -> rejected  ["no move Qh5 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+padding                            "QH5"          -> rejected  ["no move Qh5 here"]  classifier(raw)=unreadable  fenSame=true
+padding                            "Qh5 "         -> rejected  ["no move Qh5 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+padding                            " Qh5"         -> rejected  ["no move Qh5 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+padding                            "\tQh5"        -> rejected  ["no move Qh5 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+padding                            "  e2e5  "     -> rejected  ["e2 cannot reach e5"]  classifier(raw)=piece-cannot-reach  fenSame=true
+padding                            "  nc3  "      -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+== longest echo through the SAN bound ==
+echo                               "Qa1xh8#"      -> rejected  ["no move Qa1xh8# here"]  classifier(raw)=no-legal-move-named  fenSame=true
+echo                               "axb8=Q+"      -> rejected  ["no move axb8=Q+ here"]  classifier(raw)=no-legal-move-named  fenSame=true
+echo                               "Qa1xh8"       -> rejected  ["no move Qa1xh8 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+echo                               "Ra1a8"        -> rejected  ["no move Ra1a8 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+echo                               "Qh5+"         -> rejected  ["no move Qh5+ here"]  classifier(raw)=no-legal-move-named  fenSame=true
+echo                               "Qh5#"         -> rejected  ["no move Qh5# here"]  classifier(raw)=no-legal-move-named  fenSame=true
+echo                               "Qh5!!"        -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+echo                               "Nf3 e5"       -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+== promotion coordinate edge on PROMO ==
+promo                              "e7e8"         -> ambiguous ["e8=Q+","e8=R+","e8=B","e8=N"]  classifier(raw)=-  fenSame=true
+promo                              "e7e8q"        -> move      [move e7e8]  classifier(raw)=-  fenSame=true
+promo                              "e7e8k"        -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+promo                              "e7e8p"        -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+promo                              "e7e8Q"        -> move      [move e7e8]  classifier(raw)=-  fenSame=true
+promo                              "e8=Q"         -> move      [move e7e8]  classifier(raw)=-  fenSame=true
+promo                              "e8=K"         -> rejected  ["no move e8=K here"]  classifier(raw)=no-legal-move-named  fenSame=true
+promo                              "e8=P"         -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+promo                              "e8Q"          -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+promo                              "e8"           -> ambiguous ["e8=Q+","e8=R+","e8=B","e8=N"]  classifier(raw)=-  fenSame=true
+== castle probes ==
+nocastle                           "O-O"          -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+nocastle                           "o-o"          -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+nocastle                           "0-0"          -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+nocastle                           "e1g1"         -> rejected  ["no piece on e1"]  classifier(raw)=empty-square  fenSame=true
+nocastle                           "Kg1"          -> rejected  ["no move Kg1 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+through-check                      "O-O"          -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+through-check                      "e1g1"         -> rejected  ["e1 cannot reach g1"]  classifier(raw)=piece-cannot-reach  fenSame=true
+through-check                      "Kg1"          -> rejected  ["no move Kg1 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+through-check                      "Kf1"          -> rejected  ["exposes your king"]  classifier(raw)=own-king-exposed  fenSame=true
+through-check                      "e1f1"         -> rejected  ["exposes your king"]  classifier(raw)=own-king-exposed  fenSame=true
+file:///Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ab9495ff50152542f/src/fen.ts:115
+    throw new FenError(`position must have exactly one black king, found ${blackKings}`);
+          ^
+
+FenError: position must have exactly one black king, found 0
+    at assertBothKingsPresent (file:///Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ab9495ff50152542f/src/fen.ts:115:11)
+    at parseFen (file:///Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ab9495ff50152542f/src/fen.ts:161:3)
+    at newGame (file:///Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ab9495ff50152542f/src/history.ts:74:45)
+    at show (file:///private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/probe.mts:25:13)
+    at file:///private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/probe.mts:42:41
+
+Node.js v24.12.0
+into-check                         "O-O"          -> rejected  ["type e2e4 or Nf3"]  classifier(raw)=unreadable  fenSame=true
+into-check                         "e1g1"         -> rejected  ["e1 cannot reach g1"]  classifier(raw)=piece-cannot-reach  fenSame=true
+into-check                         "Kg1"          -> rejected  ["no move Kg1 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+== other-side / empty / king walks on PIN and CHECK ==
+pin                                "e8e1"         -> rejected  ["e8 is not yours"]  classifier(raw)=not-your-piece  fenSame=true
+pin                                "e8a8"         -> rejected  ["e8 is not yours"]  classifier(raw)=not-your-piece  fenSame=true
+pin                                "a1a2"         -> rejected  ["no piece on a1"]  classifier(raw)=empty-square  fenSame=true
+pin                                "e1e2"         -> rejected  ["e1 cannot reach e2"]  classifier(raw)=piece-cannot-reach  fenSame=true
+pin                                "Ke2"          -> rejected  ["no move Ke2 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+pin                                "Kd2"          -> move      [move e1d2]  classifier(raw)=-  fenSame=true
+pin                                "Nc3"          -> rejected  ["exposes your king"]  classifier(raw)=own-king-exposed  fenSame=true
+pin                                "e2c3"         -> rejected  ["exposes your king"]  classifier(raw)=own-king-exposed  fenSame=true
+check                              "Kf1"          -> move      [move e1f1]  classifier(raw)=-  fenSame=true
+check                              "Ke2"          -> rejected  ["no move Ke2 here"]  classifier(raw)=no-legal-move-named  fenSame=true
+check                              "Nh3"          -> rejected  ["your king is in check"]  classifier(raw)=must-address-check  fenSame=true
+check                              "Bf1"          -> rejected  ["your king is in check"]  classifier(raw)=must-address-check  fenSame=true
+check                              "g4g5"         -> rejected  ["your king is in check"]  classifier(raw)=must-address-check  fenSame=true
+check                              "h2h3"         -> rejected  ["your king is in check"]  classifier(raw)=must-address-check  fenSame=true
+check                              "e1f1"         -> move      [move e1f1]  classifier(raw)=-  fenSame=true
+check                              "d1e2"         -> rejected  ["d1 cannot reach e2"]  classifier(raw)=piece-cannot-reach  fenSame=true
+== Mc2 order matters? classifier called with the two orders ==
+  [Bxc4,bxc4] -> {"reason":"no-legal-move-named","text":"Bxc4"} | reversed -> {"reason":"no-legal-move-named","text":"bxc4"} | san(Bxc4)={"outcome":"rejected","reason":"no-such-move"} san(bxc4)={"outcome":"rejected","reason":"no-such-move"}
+  [Bb5,bb5] -> {"reason":"no-legal-move-named","text":"Bb5"} | reversed -> {"reason":"no-legal-move-named","text":"Bb5"} | san(Bb5)={"outcome":"rejected","reason":"no-such-move"} san(bb5)={"outcome":"rejected","reason":"unreadable"}
+  [Nb1,nb1] -> {"reason":"no-legal-move-named","text":"Nb1"} | reversed -> {"reason":"no-legal-move-named","text":"Nb1"} | san(Nb1)={"outcome":"rejected","reason":"no-such-move"} san(nb1)={"outcome":"rejected","reason":"unreadable"}
+== docblock claims ==
+  CHECK_FEN isInCheck=true legal=e1f1 generated=20
+  THROUGH: gen=14 legal=12 exposing=e1f1,e1f2 kingE1toGC1InGen=
+  INTO: gen=14 legal=14 exposing= kingE1toGC1InGen=
+  kiwipete: gen=48 legal=48 exposing= kingE1toGC1InGen=g1/flags=2,c1/flags=2
+== A5 in ASCII mode and both orientations, all nine sentences, hidden count ==
+  unicode white-bottom "hello"    "type e2e4 or Nf3" (16 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "e3e4"     "no piece on e3" (14 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "e7e5"     "e7 is not yours" (15 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "e2e5"     "e2 cannot reach e5" (18 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "Nc3"      "exposes your king" (17 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "Nh3"      "your king is in check" (21 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "Qh5"      "no move Qh5 here" (16 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "e8=K"     "no move e8=K here" (17 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "O-O"      "type e2e4 or Nf3" (16 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "Qa1xh8#"  "no move Qa1xh8# here" (20 cols) hidden=0 whole=true rows=23
+  unicode white-bottom "  Qh5  "  "no move Qh5 here" (16 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "hello"    "type e2e4 or Nf3" (16 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "e3e4"     "no piece on e3" (14 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "e7e5"     "e7 is not yours" (15 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "e2e5"     "e2 cannot reach e5" (18 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "Nc3"      "exposes your king" (17 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "Nh3"      "your king is in check" (21 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "Qh5"      "no move Qh5 here" (16 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "e8=K"     "no move e8=K here" (17 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "O-O"      "type e2e4 or Nf3" (16 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "Qa1xh8#"  "no move Qa1xh8# here" (20 cols) hidden=0 whole=true rows=23
+  unicode black-bottom "  Qh5  "  "no move Qh5 here" (16 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "hello"    "type e2e4 or Nf3" (16 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "e3e4"     "no piece on e3" (14 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "e7e5"     "e7 is not yours" (15 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "e2e5"     "e2 cannot reach e5" (18 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "Nc3"      "exposes your king" (17 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "Nh3"      "your king is in check" (21 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "Qh5"      "no move Qh5 here" (16 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "e8=K"     "no move e8=K here" (17 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "O-O"      "type e2e4 or Nf3" (16 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "Qa1xh8#"  "no move Qa1xh8# here" (20 cols) hidden=0 whole=true rows=23
+  ascii   white-bottom "  Qh5  "  "no move Qh5 here" (16 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "hello"    "type e2e4 or Nf3" (16 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "e3e4"     "no piece on e3" (14 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "e7e5"     "e7 is not yours" (15 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "e2e5"     "e2 cannot reach e5" (18 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "Nc3"      "exposes your king" (17 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "Nh3"      "your king is in check" (21 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "Qh5"      "no move Qh5 here" (16 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "e8=K"     "no move e8=K here" (17 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "O-O"      "type e2e4 or Nf3" (16 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "Qa1xh8#"  "no move Qa1xh8# here" (20 cols) hidden=0 whole=true rows=23
+  ascii   black-bottom "  Qh5  "  "no move Qh5 here" (16 cols) hidden=0 whole=true rows=23
