@@ -222,3 +222,26 @@ Orchestrator's.**
 | 8 | size assigned | **✅** `XS` (1), calibrated against `ABC-045`, with the reason it is not `S` |
 | 9 | priority assigned | **✅** `P1`, argued from the promise/capability split rather than felt, with a pre-registered de-prioritisation trigger |
 | 10 | no major unresolved blocker | **⚠️ ONE, AND IT IS A CONSEQUENCE, NOT A QUESTION: delivering this ticket falsifies the four-token half of `ABC-035` `A4`, a `Done` and owner-accepted criterion.** It is superseded by the ruling on this page, the supersession is authorised here in writing, and `ABC-035`'s page, DoR and column are untouched. **It is marked rather than smoothed because an engineer editing a closed ticket's assertions must be able to point at the sentence that let them.** |
+
+## Design ruling 2026-09-19 — this ticket's own de-prioritisation trigger has FIRED
+
+**Architect/Design, task `owner-rulings-2026-09-19`, subtask `ruling-abc046-quit-arm`.** `ABC-046`'s
+ruling landed on the owner's word — *"5. b, resign should be separate"* (Olger Oeselg, 2026-09-19) —
+as `memory-bank/50-decisions/ADR-0021-the-turn-loop-gains-quit-and-take-back-arms.md`, and `ABC-046`
+is recommended for pull directly behind `ABC-045` and the arm ticket.
+
+**`## Size and priority rationale`'s pre-registered trigger reads, verbatim:** *"if `ABC-046`'s ruling
+lands and `ABC-046` is scheduled, this ticket drops to `P3` and should be cancelled, not delivered."*
+The first half is true today; the second is the Orchestrator's scheduling call.
+
+- **This ticket is now a ONE-LINE DEPENDENCY on `ABC-046`, not its own fix.** `ABC-046` makes `help`'s
+  `quit` true by giving the token its effect; no `honoured` flag, no filter and no `A3` reversibility
+  field is needed, because there will be nothing to reverse. Delivering this ticket first would red
+  the four-token half of `ABC-035` `A4` only for `ABC-046` to flip it back.
+- **Recommendation to the Orchestrator: cancel, not deliver, when `ABC-046` is pulled** — exactly what
+  this page's `## Dependencies` says (*"if `ABC-046` is pulled BEFORE this ticket, this ticket becomes
+  unnecessary and should be cancelled"*). If `ABC-046` is NOT scheduled inside the trigger's spirit —
+  the arm ticket is uncut and BA/PM's — this page's ruling (a) remains deliverable as written and its
+  `A3` flip is what `ABC-046` would then use. **The page is not re-cut; nothing above is edited.**
+- **DoR: unchanged at 9/10 ⚠️×1, and moot** — readiness is not the question the trigger asks.
+- **Column and priority: unchanged on this page — both moves are the Orchestrator's.**

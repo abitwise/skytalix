@@ -246,3 +246,40 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `S` (2), calibrated against `ABC-046` |
 | 9 | priority assigned | **✅** `P1`, on the measured fact that there is **no workaround** |
 | 10 | no major unresolved blocker | **⚠️⚠️ TWO.** **(a) THE CONTRACT RULING IS OPEN** — `undo` has no arm, three shapes are priced and **none is adopted here**; it is `ABC-046`'s ruling and should be made once for both. **(b) `EPIC-004` owes the engine reply** this command exists to take back; until it lands, `A1`/`A3`/`A4` are provable only against a stub. *(Three open ordering dependencies are counted under item 3, not double-counted here.)* |
+
+## Design ruling 2026-09-19 — shape (b) is RULED, once, for this ticket and `ABC-046`; the ruling is `ADR-0021`
+
+**Architect/Design, task `owner-rulings-2026-09-19`, subtask `ruling-abc046-quit-arm`, on the owner's
+word in session — *"5. b, resign should be separate"* (Olger Oeselg, 2026-09-19).** The authority is
+`memory-bank/50-decisions/ADR-0021-the-turn-loop-gains-quit-and-take-back-arms.md`; this section is a
+pointer plus what changes on THIS page.
+
+- **The first blocker in `## Dependencies` is CLOSED.** Shape (b): `PromptOutcome` gains
+  `{ kind: "take-back"; plies: number; messages: readonly string[] }` — transition 18,
+  `awaiting-human` → `evaluating-terminal`: the loop calls `takeBack(history, plies)`, **re-evaluates
+  once**, then renders carrying `messages`. **`A5` is met by that re-evaluation and needs no BA/PM
+  amendment.** The `command`-gains-a-flag form of (b) was rejected (`ADR-0021` § Alternatives 4).
+- **How `undo` hangs off it:** `history.moves.length ≥ 2` → `{ kind: "take-back", plies: 2, messages }`;
+  otherwise ruling 3's refusal as **`{ kind: "command", messages: [<refusal>] }`** — `command`, not
+  `rejected`, because the line IS a command and `rejected` is the parser's word for a non-move. The
+  refusal wording is this ticket's. The loop guards nothing at the boundary (`takeBack` clamps); the
+  guard is the seam's, exactly as `## The product rulings` 3 says.
+- **The second blocker in `## Dependencies` is ALSO CLOSED, by a merge that happened after the cut:**
+  `ABC-078` is `Done` and `src/cli.ts:175` wires the real `EngineSeam`
+  (`createEngine({ budgetMs: DEFAULT_BUDGET_MS })`). `A1`/`A3`/`A4` are still written against a stub
+  engine per `## Test notes` 5 — that stays correct unit coverage — and `A5` through the entry point
+  now has a real reply to take back.
+- **`A8` holds verbatim:** `src/turn-loop.ts` and `src/history.ts` byte-identical on this ticket; the
+  loop change is the arm ticket's (`ADR-0021` clause 8), which must land **before** this one.
+- **Nothing existing reds on this ticket** beyond the table row: `help` is folded from the table.
+
+### DoR re-check 2026-09-19 (Architect/Design) — **8 of 10 clean, 2 ⚠️, BOTH the same fact**
+
+| # | item | verdict |
+|---|---|---|
+| 1, 2, 4, 5, 6, 7, 8, 9 | unchanged | **✅** as scored 2026-08-16 |
+| 3 | INVEST-shaped | **⚠️** still **not independent** — `ABC-035`/`ABC-037`/`ABC-043` are ALL `Done` and `EPIC-004`'s engine reply exists (`ABC-078`); ONE ordering remains: **the arm ticket (uncut) must land first**. Sequenced after `ABC-046` on the shared `COMMAND_TABLE`, which is an ordering, not a dependency |
+| 10 | no major unresolved blocker | **⚠️ ONE (was two).** Ruling CLOSED; `EPIC-004` blocker CLOSED. **The arm ticket is not yet cut** — BA/PM's pen |
+
+**Column: unchanged on this page — the board move is the Orchestrator's.** Recommended pull order
+(`ADR-0021` § Consequences): `ABC-045` → the arm ticket → `ABC-046` → **this ticket**.

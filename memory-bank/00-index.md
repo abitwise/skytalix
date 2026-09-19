@@ -30,7 +30,13 @@ _Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask 
 > `0`; the entry point, not the write site, owns the stdout error arm) was written and ratified
 > 2026-08-20 by Architect/Design at `design-ABC-115-2026-08-20`, and this line was updated in the
 > SAME COMMIT — the count was RE-MEASURED by listing `50-decisions/` (sixteen `ADR-00*` files), not
-> incremented from the sentence above it.**
+> incremented from the sentence above it.** **`ADR-0021` (the turn loop gains a `quit` arm and a
+> `take-back` arm; `resign` stays its own command) was written and ratified 2026-09-19 by
+> Architect/Design at `owner-rulings-2026-09-19` / `ruling-abc046-quit-arm` on the owner's verbatim
+> word. THE COUNT LINE ABOVE IS DELIBERATELY NOT UPDATED HERE: `ADR-0018`, `ADR-0019`, `ADR-0020`,
+> `ADR-0022` and `ADR-0023` are reserved by five sibling hops of the same task on sibling branches,
+> so any number written on this branch is wrong at merge — re-measure by listing `50-decisions/`
+> after the task's branches land.**
 > The rest — `10-project-brief`, `20-product`, `40-contributing`, `80-glossary` — are still the
 > shipped empty templates. That is a real gap, not a hidden one; do not read them expecting content
 > and do not treat their silence as a decision. `plans/` carries the delivery state meanwhile.
