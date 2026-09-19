@@ -1,0 +1,38 @@
+# variant tip
+# load { 11.97 9.62 7.48 }
+# exit 0 in 839 ms
+{
+  "node": "v24.12.0",
+  "arch": "arm64",
+  "platform": "darwin",
+  "samples": 6637,
+  "reps": 20,
+  "rounds": 9,
+  "oracleMismatchesInSample": 0,
+  "zobristKey_ns_median": 454.1,
+  "zobristKey_ns_rounds": [
+    442.3,
+    442.1,
+    443.1,
+    494.6,
+    487.8,
+    463.4,
+    454.1,
+    470,
+    447.1
+  ],
+  "zobristKeyAfterMove_ns_median": 48.9,
+  "zobristKeyAfterMove_ns_rounds": [
+    48.9,
+    48.1,
+    51.1,
+    49.9,
+    57.4,
+    54.8,
+    48.6,
+    47.8,
+    48.9
+  ],
+  "ratio": 9.29,
+  "sink": "0"
+}

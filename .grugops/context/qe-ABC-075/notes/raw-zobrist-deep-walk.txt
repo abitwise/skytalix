@@ -1,0 +1,21 @@
+# ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts
+# load before { 15.91 9.07 7.00 }
+# load after { 12.12 9.18 7.16 }
+# exit 0 in 47352 ms
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a807dbf036c47213f
+
+stdout | src/zobrist.test.ts > ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node > A1/A2 at the criteria's depth — 0 mismatches, 0 drift within 4 plies of every perft position [deep, ZOBRIST_DEEP=1]
+ZOBRIST_DEEP walk: {"nodes":11024485,"mismatches":0,"drift":0,"epCaptures":2104,"castles":140151,"promotions":80444,"captures":1665166,"epSet":654732,"castlingChanged":1091068}
+
+ ✓ src/zobrist.test.ts (33 tests) 46706ms
+   ✓ ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node > A1/A2 at the criteria's depth — 0 mismatches, 0 drift within 4 plies of every perft position [deep, ZOBRIST_DEEP=1]  46490ms
+
+ Test Files  1 passed (1)
+      Tests  33 passed (33)
+   Start at  11:21:46
+   Duration  46.89s (transform 44ms, setup 0ms, collect 43ms, tests 46.71s, environment 0ms, prepare 46ms)
+
+real 47.34
+user 45.44
+sys 0.47

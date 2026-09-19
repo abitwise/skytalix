@@ -1,0 +1,32 @@
+// QE ABC-075 — the four gates + skip count + integrity, one fresh process each, from the worktree.
+import { execFileSync, spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+
+const CWD = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a807dbf036c47213f";
+const OUT = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/qe075";
+const load = () => execFileSync("sysctl", ["-n", "vm.loadavg"]).toString().trim();
+
+function run(name, cmd, args, env = {}) {
+  const t0 = Date.now();
+  const l = load();
+  const r = spawnSync(cmd, args, { cwd: CWD, env: { ...process.env, ...env }, encoding: "utf8", maxBuffer: 1 << 28 });
+  const ms = Date.now() - t0;
+  const out = (r.stdout ?? "") + (r.stderr ?? "");
+  writeFileSync(`${OUT}/raw-gate-${name}.txt`, `# ${cmd} ${args.join(" ")}\n# load ${l}\n# exit ${r.status} in ${ms} ms\n${out}`);
+  return { name, cmd: `${cmd} ${args.join(" ")}`, exit: r.status, ms, load: l, tail: out.trim().split("\n").slice(-6).join("\n") };
+}
+
+const results = [];
+results.push(run("lint", "npx", ["biome", "check", "."]));
+results.push(run("typecheck", "npx", ["tsc", "--noEmit"]));
+results.push(run("build", "npx", ["tsc", "--noEmit"]));
+results.push(run("unit", "npx", ["vitest", "run", "--dir", "src"]));
+const json = run("unit-json", "npx", ["vitest", "run", "--dir", "src", "--reporter=json", `--outputFile=${OUT}/raw-gate-unit.json`]);
+results.push(json);
+const j = JSON.parse(readFileSync(`${OUT}/raw-gate-unit.json`, "utf8"));
+const skip = j.numPendingTests + j.numTodoTests;
+results.push({ name: "skip-count", numTotalTestSuites: j.numTotalTestSuites, numTotalTests: j.numTotalTests, numPassedTests: j.numPassedTests, numFailedTests: j.numFailedTests, numPendingTests: j.numPendingTests, numTodoTests: j.numTodoTests, skip, files: j.testResults.length });
+results.push(run("integrity", "node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(skip)]));
+results.push(run("zobrist-files", "npx", ["vitest", "run", "src/zobrist.test.ts", "src/zobrist.nfr.test.ts"]));
+writeFileSync(`${OUT}/gates-summary.json`, JSON.stringify(results, null, 2));
+console.log(JSON.stringify(results, null, 2));

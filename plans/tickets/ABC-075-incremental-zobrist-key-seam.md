@@ -226,3 +226,30 @@ re-point and the raw harness outputs are in `.grugops/context/ticket-to-pr-ABC-0
 - **Owed by another hop:** `AGENTS.md` (fenced here) needs one `### Test` line for the new
   opt-in lane — `ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts` (RUN 2026-09-19 at `40b77ac`:
   exit 0, 33 passed, 40.2 s; unset, the deep case is NOT DEFINED, skip count stays 0).
+
+## QE — 2026-09-20, QE/E2E (task `wave-2026-09-19`, subtask `qe-ABC-075`, Workflow 05)
+
+**PASS on branch `grugops/qe-ABC-075` off `grugops/wave-2026-09-19` @ `8dda2ae` (carries `40b77ac`).
+Unmerged. Zero lines under `src/`. The `In Review` exit is the Orchestrator's move; the owner's word
+is needed at `In UAT` (production lines > 0, measured from git).** Raw harnesses, the mutant ledger
+and the sentence audit are in `.grugops/context/qe-ABC-075/notes/`, not here.
+
+- **The flagged re-point (the ten `:276`/`:308` rows) — RULED (a).** `ADR-0020` Decision 1 verbatim:
+  *"The en-passant component enters the key **if and only if** `position.epSquare !== NO_SQUARE`."*
+  The *if* half covers a contradicted-but-present ep square, and `parseFen` keeps one (the ADR's
+  Context: *"nothing has changed there"*). The Architect's "stay green" reasoning (*"trivially true
+  for a hash that only reads"*) priced the purity half of those rows and missed the key half. The
+  Engineer was right to re-point; proceeding under "any other red is a stop" was right BECAUSE it was
+  flagged in three places before any merge. Mutant (k) (the `ADR-0005` conjunct restored) reds all
+  ten — as `toBe` they would have been green under the superseded reading.
+- **Gates at the tip:** 76 files lint-clean, `tsc` 0, **42 / 1305 / 0**, JSON skip 0, integrity
+  `No findings.`. **`ZOBRIST_DEEP=1`:** 33 passed, **11,024,485 nodes, 0 mismatches, 0 drift**, every
+  tally identical to the build's, 47.3 s at load 15.9.
+- **12 mutants, 11 red on named rows** (a 4, b 5, c 5, d 1, e 9, g 2, h 7, i 5, j 2, k 19, l 5);
+  **(f) `keyBefore` ignored / recompute — GREEN on all 1305 tests, 0.98x on the bench.** `A5`'s
+  ≥ 5x bar is asserted by no lane — **`G1`**, Security/NFR's and BA/PM's, not fixed here.
+- **`A5` reproduced: 454.1 ns vs 48.9 ns = 9.29x** (Engineer 9.19x), one process, load 12.
+- **`G2`:** two FALSE comment sentences (`src/zobrist.test.ts:242–243`, `src/zobrist.nfr.test.ts:92–94`)
+  and three stale ones (`:226–229`, `:64–65`, `:255`) under `ABC-114`'s standard — named for BA/PM,
+  not corrected. **`G3`:** `hasLegalEnPassant` has zero production callers — BA/PM's one-liner.
+- `NFR-008` not ruled (fence). `AGENTS.md`'s `ZOBRIST_DEEP` line still owed by the Scribe.

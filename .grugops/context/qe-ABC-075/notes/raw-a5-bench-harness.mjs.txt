@@ -1,0 +1,37 @@
+// QE ABC-075 — A5 reproduction. Copies the Engineer's bench (raw-a5-bench.ts.txt) into src/ as a
+// temp file (it imports ./apply.ts etc.), runs it in ONE process, deletes it, asserts src/ clean.
+// With argv[2] === "f", first applies mutant (f) (keyBefore ignored, recompute) and reverts after.
+import { execFileSync, spawnSync } from "node:child_process";
+import { copyFileSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
+
+const CWD = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a807dbf036c47213f";
+const OUT = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/qe075";
+const SRC = `${CWD}/.grugops/context/ticket-to-pr-ABC-075/notes/raw-a5-bench.ts.txt`;
+const TMP = `${CWD}/src/zobrist-bench-qe075.tmp.ts`;
+const FILE = `${CWD}/src/zobrist.ts`;
+const git = (...a) => execFileSync("git", a, { cwd: CWD, encoding: "utf8" });
+const load = () => execFileSync("sysctl", ["-n", "vm.loadavg"], { encoding: "utf8" }).trim();
+const variant = process.argv[2] ?? "tip";
+
+const original = readFileSync(FILE, "utf8");
+try {
+  if (variant === "f") {
+    const from = "  const board = position.board;\n  let key = keyBefore ^ BLACK_TO_MOVE;";
+    const to = "  if (keyBefore === keyBefore) return zobristKey(position);\n  const board = position.board;\n  let key = keyBefore ^ BLACK_TO_MOVE;";
+    if (original.split(from).length !== 2) throw new Error("anchor");
+    writeFileSync(FILE, original.replace(from, to));
+  }
+  copyFileSync(SRC, TMP);
+  const l = load();
+  const t0 = Date.now();
+  const r = spawnSync("node", [TMP], { cwd: CWD, encoding: "utf8", maxBuffer: 1 << 26 });
+  const ms = Date.now() - t0;
+  const out = `# variant ${variant}\n# load ${l}\n# exit ${r.status} in ${ms} ms\n${r.stdout}${r.stderr}`;
+  writeFileSync(`${OUT}/raw-a5-bench-${variant}.txt`, out);
+  console.log(out);
+} finally {
+  try { unlinkSync(TMP); } catch {}
+  writeFileSync(FILE, original);
+  const clean = git("status", "--porcelain", "--", "src").trim();
+  console.log(`src clean after: ${clean === "" ? "YES" : "NO -> " + clean}`);
+}

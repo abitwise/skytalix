@@ -1,0 +1,16 @@
+// QE ABC-075 — the ZOBRIST_DEEP=1 lane, timed with /usr/bin/time -p, load sampled before.
+import { execFileSync, spawnSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+
+const CWD = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a807dbf036c47213f";
+const OUT = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/qe075";
+const load = execFileSync("sysctl", ["-n", "vm.loadavg"]).toString().trim();
+const t0 = Date.now();
+const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", "src/zobrist.test.ts"], {
+  cwd: CWD, env: { ...process.env, ZOBRIST_DEEP: "1" }, encoding: "utf8", maxBuffer: 1 << 28,
+});
+const ms = Date.now() - t0;
+const out = (r.stdout ?? "") + (r.stderr ?? "");
+writeFileSync(`${OUT}/raw-zobrist-deep-walk.txt`, `# ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts\n# load before ${load}\n# load after ${execFileSync("sysctl", ["-n", "vm.loadavg"]).toString().trim()}\n# exit ${r.status} in ${ms} ms\n${out}`);
+console.log(`exit ${r.status} in ${ms} ms, load before ${load}`);
+console.log(out.split("\n").filter((l) => /ZOBRIST_DEEP walk|Tests |Duration|^real|^user|^sys|Test Files/.test(l)).join("\n"));

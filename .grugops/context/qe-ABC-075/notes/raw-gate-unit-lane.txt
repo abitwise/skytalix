@@ -1,0 +1,63 @@
+# npx vitest run --dir src
+# load { 7.17 6.86 6.18 }
+# exit 0 in 7058 ms
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a807dbf036c47213f
+
+ ✓ src/turn-loop.nfr.test.ts (4 tests) 484ms
+ ✓ src/search.qe.test.ts (6 tests) 585ms
+ ✓ src/search.test.ts (28 tests) 751ms
+   ✓ A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1  317ms
+ ✓ src/san.qualifier.hardening.test.ts (20 tests) 961ms
+   ✓ ABC-025 A1 — the qualifier is the shortest ladder entry that names exactly one move > holds for every non-pawn, non-castle legal move of all 207 corpus positions, both call forms  714ms
+ ✓ src/history-pane.test.ts (26 tests) 849ms
+ ✓ src/turn-loop.test.ts (63 tests) 135ms
+ ✓ src/san.test.ts (22 tests) 452ms
+ ✓ src/moves.enpassant.hardening.test.ts (120 tests) 85ms
+ ✓ src/history.test.ts (12 tests) 54ms
+ ✓ src/frame.test.ts (34 tests) 150ms
+ ✓ src/zobrist.test.ts (32 tests) 733ms
+   ✓ ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) > holds at every node within 2 plies of every perft position  447ms
+ ✓ src/history-pane.nfr.test.ts (11 tests) 152ms
+ ✓ src/gameend.test.ts (45 tests) 65ms
+ ✓ src/evaluate.test.ts (21 tests) 37ms
+ ✓ src/moves.castling.hardening.test.ts (110 tests) 279ms
+ ✓ src/legal.test.ts (31 tests) 20ms
+ ✓ src/coordinate-move.test.ts (45 tests) 41ms
+ ✓ src/moves.enpassant.test.ts (58 tests) 29ms
+ ✓ src/render-seam.test.ts (11 tests) 170ms
+ ✓ src/perft.test.ts (24 tests) 2282ms
+   ✓ ABC-006 acceptance — exact perft counts > startpos perft(4) = 197281  527ms
+   ✓ ABC-006 acceptance — exact perft counts > kiwipete perft(3) = 97862  449ms
+   ✓ ABC-006 acceptance — exact perft counts > position-6 perft(3) = 89890  302ms
+   ✓ ABC-006 — perftDivide > splits Kiwipete depth 3 into one entry per legal first move that sums to the total  479ms
+ ✓ src/apply.test.ts (24 tests) 27ms
+ ✓ src/san.parse.test.ts (30 tests) 45ms
+ ✓ src/rejection.test.ts (53 tests) 119ms
+ ✓ src/line-input.test.ts (29 tests) 61ms
+ ✓ src/render.test.ts (27 tests) 159ms
+ ✓ src/result-screen.test.ts (13 tests) 108ms
+ ✓ src/frame.overflow-bound.test.ts (25 tests) 47ms
+ ✓ src/move-input.test.ts (50 tests) 40ms
+ ✓ src/command-input.test.ts (79 tests) 59ms
+ ✓ src/moves.test.ts (33 tests) 9ms
+ ✓ src/status-panel.test.ts (29 tests) 95ms
+ ✓ src/moves.castling.test.ts (33 tests) 45ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 20ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 17ms
+ ✓ src/fen.test.ts (27 tests) 5ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 3ms
+ ✓ src/engine.test.ts (24 tests) 1179ms
+   ✓ A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames  645ms
+   ✓ A4 — no fixed depth anywhere in the delivered engine > goes DEEPER than any small hard-coded ceiling would allow — the behavioural half  305ms
+ ✓ src/gameend.nfr.test.ts (3 tests) 11ms
+ ✓ src/glyph-mode.test.ts (21 tests) 4ms
+ ✓ src/san.nfr.test.ts (5 tests) 22ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 7ms
+ ✓ src/cli.test.ts (61 tests) 32ms
+
+ Test Files  42 passed (42)
+      Tests  1305 passed (1305)
+   Start at  11:21:26
+   Duration  6.50s (transform 1.22s, setup 0ms, collect 9.36s, tests 10.43s, environment 7ms, prepare 4.01s)
+
