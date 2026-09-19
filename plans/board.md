@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-19 by the Orchestrator (task `wave-2026-09-19`, Workflow 15) — **`ABC-034` `In Review` → `In Security/NFR` (QE PASS; the ticket's own threshold fired). `In Review` 0/3, `In Security/NFR` 1/2.**_
+
 _Updated: 2026-09-19 by the Orchestrator (task `wave-2026-09-19`, Workflows 05/04) — **`ABC-107` `In Review` → `Done` (QE PASS, zero production lines, UAT waived by measurement); `ABC-120` `Ready` → `In Development`. `Ready` 1/8 (`ABC-075`), `In Development` 2/3 (`ABC-079`, `ABC-120`), `In Review` 1/3 (`ABC-034`, QE live).**_
 
 _Updated: 2026-09-19 by the Orchestrator (task `wave-2026-09-19`, Workflow 05) — **`ABC-034` `In Development` → `In Review` (built, merged to the wave branch, lane 42 / 1291 / 0). `In Development` 1/3, `In Review` 2/3. TWO hops have now handed up an `NFR-008` > 15 s reading, BOTH at load ≥ 7 with siblings live — recorded as NON-CONFORMING; the Orchestrator owes one quiet re-measure after the wave before `ADR-0019` trigger (a) is called or not.**_
@@ -273,16 +275,16 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-
-- [ABC-034] Rejections that teach — a closed reason set computed from the generator  (BA/PM, M, P0, epic: EPIC-003, since: 2026-08-13, **DoR 10/10 — RE-SCORED 2026-08-18 by BA/PM against `main` HEAD `7ea9e1b`; was 9/10 ⚠️x2. Both ⚠️ were the same ordering fact and are DISCHARGED BY MEASUREMENT** — ABC-032 merged 2026-08-18, `SanRejectReason` exported at `src/san.ts:183` with the two arms this ticket widens; **`A8` re-read and UNCHANGED — it PLACES `e8=K` in this ticket's seven codes, it does NOT re-classify ABC-032's `no-such-move`, so `ABC-106`'s "re-classification assigned to ABC-034 A8" OVERSTATES it**; stale `turn-loop.ts:120` cite corrected to `:127`, 1 new test file)  **→ In Development 2026-09-19.** Pulled by the Orchestrator at task `wave-2026-09-19`, subtask `ticket-to-pr-ABC-034`, branch `grugops/ABC-034-rejections-that-teach`; DoR 10/10 on the record. `NFR-008` headroom is 60 ms (`ADR-0019`) — the hop measures its N8-LANE charge and hands up on a 15 s crossing rather than trimming.  **→ In Review 2026-09-19.** Built at `6ee7cde` (`grugops/ABC-034-rejections-that-teach`, merged to the wave branch at `f16c2a2`): `src/rejection.ts` +181, `src/rejection.test.ts` +345, `src/move-input.ts` +10/−11 (one call site), `src/move-input.test.ts` +24/−11; gates green 41 / 1266 / 0 alone, **42 / 1291 / 0 merged beside `ABC-107`**; N8-LANE +215 ms gross / +55 ms net of one file → MET. THREE CRITERIA INTERPRETED (`A1` FEN is a check, `A7` call site, `A8` placement) — QE rules each. **Security/NFR OWED** (a second `src/` file touched fires the ticket's own threshold). Lane CPU 16.9 → 17.3 s at load 7–19 — NON-CONFORMING, quiet re-measure owed. QE hop `qe-ABC-034` dispatched.
+## In Review (WIP 0/3)
 
 
 
 
 
-## In Security/NFR (WIP 0/2)
 
+## In Security/NFR (WIP 1/2)
+
+- [ABC-034] Rejections that teach — a closed reason set computed from the generator  (BA/PM, M, P0, epic: EPIC-003, since: 2026-08-13, **DoR 10/10 — RE-SCORED 2026-08-18 by BA/PM against `main` HEAD `7ea9e1b`; was 9/10 ⚠️x2. Both ⚠️ were the same ordering fact and are DISCHARGED BY MEASUREMENT** — ABC-032 merged 2026-08-18, `SanRejectReason` exported at `src/san.ts:183` with the two arms this ticket widens; **`A8` re-read and UNCHANGED — it PLACES `e8=K` in this ticket's seven codes, it does NOT re-classify ABC-032's `no-such-move`, so `ABC-106`'s "re-classification assigned to ABC-034 A8" OVERSTATES it**; stale `turn-loop.ts:120` cite corrected to `:127`, 1 new test file)  **→ In Development 2026-09-19.** Pulled by the Orchestrator at task `wave-2026-09-19`, subtask `ticket-to-pr-ABC-034`, branch `grugops/ABC-034-rejections-that-teach`; DoR 10/10 on the record. `NFR-008` headroom is 60 ms (`ADR-0019`) — the hop measures its N8-LANE charge and hands up on a 15 s crossing rather than trimming.  **→ In Review 2026-09-19.** Built at `6ee7cde` (`grugops/ABC-034-rejections-that-teach`, merged to the wave branch at `f16c2a2`): `src/rejection.ts` +181, `src/rejection.test.ts` +345, `src/move-input.ts` +10/−11 (one call site), `src/move-input.test.ts` +24/−11; gates green 41 / 1266 / 0 alone, **42 / 1291 / 0 merged beside `ABC-107`**; N8-LANE +215 ms gross / +55 ms net of one file → MET. THREE CRITERIA INTERPRETED (`A1` FEN is a check, `A7` call site, `A8` placement) — QE rules each. **Security/NFR OWED** (a second `src/` file touched fires the ticket's own threshold). Lane CPU 16.9 → 17.3 s at load 7–19 — NON-CONFORMING, quiet re-measure owed. QE hop `qe-ABC-034` dispatched.  **→ In Security/NFR 2026-09-19.** QE PASS at `ee97935` (`grugops/qe-ABC-034`, merged at `c9d39cc`): 18 mutants, every criterion `A1`–`A8` has a killer; three interpretations RULED (`A1` the named FEN has no pin — BA/PM to relabel; `A7` letter unmet, met as read with `## Scope`; `A8` as written). FOUR TEST GAPS, none falsifying: G1 no row binds a code to ITS sentence, G2 dispatcher order, G3 NFR-003 one-derive claim asserted by nothing (spy blind to the classifier's direct `legalMoves` import), G4 echo `.trim()` unguarded — **BA/PM to cut or fold at the owner's call.** Padded-lowercase fold (`"  qh5  "`) ruled `ABC-033`'s. Security/NFR hop `security-ABC-034` dispatched: sink bound, NFR-003 call count, NFR-002 path.
 
 
 
