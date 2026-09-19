@@ -1,0 +1,18 @@
+  | { readonly kind: "quit" }
+  | { readonly kind: "take-back"; readonly plies: number; readonly messages: readonly string[] }
+export const QUIT_NOTICE = "quit";
+      if (outcome.kind === "quit") {
+        sink.write(`${QUIT_NOTICE}\n`);
+        return { result: null, reason: null, exitCode: 0 };
+      }
+      if (outcome.kind === "take-back") {
+        takeBack(history, outcome.plies);
+      } else {
+        if (outcome.kind !== "move") {
+          messages = outcome.messages;
+          continue;
+        }
+        if (!wasGenerated(history, outcome.move)) {
+          throw new Error("input seam returned a move that is not in `legalMoves`");
+        }
+        playMove(history, outcome.move);
