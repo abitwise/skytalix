@@ -28,7 +28,12 @@ import { describe, expect, it } from "vitest";
 import { parseFen } from "./fen.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
-import { type SearchResult, search, searchWithoutPruning } from "./search.ts";
+import {
+  type SearchResult,
+  search,
+  searchWithoutPruning,
+  searchWithoutQuiescence,
+} from "./search.ts";
 
 const label = (move: Move | null): string =>
   move === null ? "null" : `${squareName(move.from)}${squareName(move.to)}`;
@@ -61,6 +66,10 @@ describe("QE-G1 — omitting the depth argument yields no move (RISK-002, by beh
 
   it("searchWithoutPruning(position) — with no depth — cannot return a move", () => {
     expect(label(moveWithoutDepth(searchWithoutPruning))).toBe("null");
+  });
+
+  it("searchWithoutQuiescence(position) — with no depth — cannot return a move (ABC-079's door)", () => {
+    expect(label(moveWithoutDepth(searchWithoutQuiescence))).toBe("null");
   });
 });
 

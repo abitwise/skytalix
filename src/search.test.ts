@@ -39,7 +39,13 @@ import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
 import * as searchModule from "./search.ts";
-import { MATE_SCORE, type SearchResult, search, searchWithoutPruning } from "./search.ts";
+import {
+  MATE_SCORE,
+  type SearchResult,
+  search,
+  searchWithoutPruning,
+  searchWithoutQuiescence,
+} from "./search.ts";
 
 /** The six perft positions, the corpus `A1`, `A2`, `A4` and `A7` are specified against. */
 const PERFT_CORPUS: ReadonlyArray<{ name: string; fen: string }> = [
@@ -441,10 +447,14 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
   });
 
   it("exports exactly the search core and nothing that picks a move on its own", () => {
+    // `searchWithoutQuiescence` joined the list at ABC-079: a TEST-ONLY door of the same shape
+    // as `searchWithoutPruning`, taking the same required depth. Still nothing here picks a
+    // move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "MATE_SCORE",
       "search",
       "searchWithoutPruning",
+      "searchWithoutQuiescence",
     ]);
   });
 
@@ -453,6 +463,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // anywhere in a signature drops this to 1 and fails here.
     expect(search.length).toBe(2);
     expect(searchWithoutPruning.length).toBe(2);
+    expect(searchWithoutQuiescence.length).toBe(2);
   });
 
   it("carries no default value for depth anywhere in the module", () => {
