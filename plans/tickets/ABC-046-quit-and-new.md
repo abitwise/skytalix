@@ -136,6 +136,7 @@ statement of what is open.
   genuinely cheap half of this ticket.
 - **Cross-epic check:** if `ABC-038` (tab-completion) has merged, `new` must be a completion target;
   `quit` already is.
+- **2026-09-19 (BA/PM, `cut-arm-ticket`): the arm ticket is CUT — `ABC-120` (`S`/`P1`, `Ready`) — and this ticket lands AFTER it;** `ABC-120` owns `src/turn-loop.ts`, `QUIT_NOTICE` (literal `"quit"`) and transitions 17/18; DoR item 3 / item 10's ⚠️ (*"the arm ticket is uncut"*) is now an ORDERING on a named id.
 
 ## Security / NFR triggers
 

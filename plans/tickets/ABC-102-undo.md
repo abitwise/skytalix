@@ -161,6 +161,7 @@ Coding rule 8, stated so nobody writes a branch for them:
 - **THE FIRST BLOCKER IS A RULING, NOT A TICKET: shape (a), (b) or (c). Owner: Architect/Design —
   and it is the SAME ruling `ABC-046` is blocked on.** Until it lands, `A5` is not satisfiable in
   merged code.
+- **2026-09-19 (BA/PM, `cut-arm-ticket`): the arm ticket is CUT — `ABC-120` (`S`/`P1`, `Ready`) — and this ticket lands AFTER it (and after `ABC-046` on the shared `COMMAND_TABLE`);** `ABC-120` owns `src/turn-loop.ts` and transition 18 (`{ kind: "take-back"; plies; messages }`); DoR item 3 / item 10's ⚠️ (*"the arm ticket is uncut"*) is now an ORDERING on a named id.
 - **THE SECOND BLOCKER IS `EPIC-004`, BY NAME AND BEHAVIOUR — NOT by ticket id.** *"Takes back the
   human move **and the engine reply**"* needs an engine reply to take back. **No `EngineSeam`
   implementation exists anywhere** (`ABC-043` records the same fact). Until one does, `A1`, `A3` and
