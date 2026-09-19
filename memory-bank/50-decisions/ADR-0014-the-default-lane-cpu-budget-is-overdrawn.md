@@ -2,8 +2,16 @@
 
 ## Status
 
-`accepted` — 2026-08-19, by Architect/Design at `ABC-108` (task `design-oq1-lane-budget-2026-08-19`),
-the owner of `NFR-008`.
+`superseded by ADR-0019` — **on the LEVEL of the CPU clause only**, 2026-09-19, exactly as
+`## Rollback` below prescribes: the owner moved the 13 s to 15 s in session (*"3. raise to 15s for
+now"*, Olger Oeselg, 2026-09-19) and `ADR-0019` records him. **Every other decision here — the
+measurement at `54cbb23`, the content attribution, the sizing of the alternatives, decision 4's
+form of words — stands as the record `ADR-0019` builds on.** Decision 4's rate-limit reading lapses
+by its own rollback clause on `ADR-0019`'s conforming reading (14.940 s ≤ 15 s), with 60 ms of
+headroom; see `ADR-0019` decision 5.
+
+Was: `accepted` — 2026-08-19, by Architect/Design at `ABC-108` (task
+`design-oq1-lane-budget-2026-08-19`), the owner of `NFR-008`.
 
 **Scope fence, first, because this ADR is about a level it does not touch.** `NFR-008`'s
 `≤ 3 s wall / ≤ 13 s CPU` level is **Olger Oeselg's**, ratified in person 2026-08-11. **This ADR
