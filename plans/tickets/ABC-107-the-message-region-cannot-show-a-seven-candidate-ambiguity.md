@@ -224,3 +224,27 @@ sentence standing longer than it needs to.
 | 10 | no major unresolved blocker | ~~**⚠️ ONE.** *What the frame does when a list does not fit* is an unmade design decision straddling `EPIC-002` and `EPIC-003`. **BA/PM does not take it** — taking it on a ticket page would be product deciding the frame's interaction — and no owner was invented: it is Architect/Design's by the same route `ADR-0012` took~~ **✅ RE-SCORED 2026-09-19:** ruled by Architect/Design at `ADR-0022` on the owner's delegation; no blocker remains |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+**Built 2026-09-19 by the Software Engineer** (task `wave-2026-09-19`, subtask
+`ticket-to-pr-ABC-107`, Workflow 04) on branch `grugops/ABC-107-overflow-bound` @ **`a5a9178`**,
+off `grugops/wave-2026-09-19` @ `475d559`. **Unmerged; not deployed.**
+
+- **One new file, zero production lines:** `src/frame.overflow-bound.test.ts` (+202 / −0), 25
+  rows. **`A4` measured from git:** `git diff --name-only a5a9178~1 a5a9178 | grep -v
+  '\.test\.ts$' | grep '^src/'` → empty; `src/move-input.ts` 0 changed lines.
+- **`A1'` / `A5`:** the 6-, 7-, 8-knight FENs above (plus `ADR-0022`'s 8-queen fixture) through
+  `newGame` → `resolveMoveInput` → `assembleFrame` with the delivered panels: hidden **0 / 2 / 3**
+  (/ 3), marker present exactly when hidden > 0; full-origin SAN and coordinate form each resolve
+  every candidate as a `move` — **6/6, 7/7, 8/8, 8/8**. **`A3`:** six shown in full, no marker.
+  **`A2`:** 23 rows on every fixture, equal to a two-candidate ambiguity's frame. Tripwire
+  watched red at `MESSAGE_ROWS` = 3 (7 of 25 fail) before shipping; reverted.
+- **Gates at the tip:** lint clean (74 files), typecheck 0, build 0, `npx vitest run --dir src`
+  **41 / 1238 / 0 skipped** (baseline 40 / 1213 / 0), test-skip-integrity `No findings.`
+- **`NFR-008` / `N8-LANE`:** in-file test content 15 ms. Whole-lane CPU (`/usr/bin/time -p`,
+  n = 3, load 2.6–6.0, two sibling hops live): **before 17.16 s, after 16.70 s** — above 15 s in
+  every run INCLUDING the three before the file existed; not a conforming `ADR-0019` reading.
+  Handed up, not trimmed. Numbers and the confounders:
+  `.grugops/context/ticket-to-pr-ABC-107/notes/`.
+- Board move, QE hop and the UAT waiver measurement are the Orchestrator's / QE's.
