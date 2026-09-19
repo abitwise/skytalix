@@ -1,0 +1,210 @@
+[
+  {
+    "id": "M1-hardcode-black-wins",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "2 failed | 96 passed (98)",
+        "redRows": [
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — the pure function: the side to move loses, in BOTH directions",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — through the MERGED loop: the human as black loses to white, and exits 0"
+        ],
+        "redCount": 2
+      }
+    ]
+  },
+  {
+    "id": "M2-swap-directions",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "6 failed | 92 passed (98)",
+        "redRows": [
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — the pure function: the side to move loses, in BOTH directions",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — through the MERGED loop: the human as white loses to black, and exits 0",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — through the MERGED loop: the human as black loses to white, and exits 0",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A2 — it ends the game on the ply it is typed: 0 legalMoves after the outcome, no frame after it",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A3 — classified before the grammars: neither resolver and no derive sees `resign`",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A5 — no confirmation: the game ends on the one line and the next line is NEVER read"
+        ],
+        "redCount": 6
+      }
+    ]
+  },
+  {
+    "id": "M3-resign-inert-command",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "7 failed | 91 passed (98)",
+        "redRows": [
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — the pure function: the side to move loses, in BOTH directions",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — through the MERGED loop: the human as white loses to black, and exits 0",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — through the MERGED loop: the human as black loses to white, and exits 0",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A2 — it ends the game on the ply it is typed: 0 legalMoves after the outcome, no frame after it",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A3 — classified before the grammars: neither resolver and no derive sees `resign`",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A5 — no confirmation: the game ends on the one line and the next line is NEVER read",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A5 — and it is a command like the other four: no message region, no second render"
+        ],
+        "redCount": 7
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 1,
+        "tests": "1 failed | 61 passed (62)",
+        "redRows": [
+          "ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0"
+        ],
+        "redCount": 1
+      }
+    ]
+  },
+  {
+    "id": "M4-reason-checkmate",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "6 failed | 92 passed (98)",
+        "redRows": [
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — the pure function: the side to move loses, in BOTH directions",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — through the MERGED loop: the human as white loses to black, and exits 0",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — through the MERGED loop: the human as black loses to white, and exits 0",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A2 — it ends the game on the ply it is typed: 0 legalMoves after the outcome, no frame after it",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A3 — classified before the grammars: neither resolver and no derive sees `resign`",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A5 — no confirmation: the game ends on the one line and the next line is NEVER read"
+        ],
+        "redCount": 6
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 1,
+        "tests": "1 failed | 61 passed (62)",
+        "redRows": [
+          "ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0"
+        ],
+        "redCount": 1
+      }
+    ]
+  },
+  {
+    "id": "M5-confirmation-read",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "1 failed | 97 passed (98)",
+        "redRows": [
+          "ABC-035 A1 — four tokens, case-insensitive, trimmed, EXACT > classifies \"resign\" as resign, advancing nothing"
+        ],
+        "redCount": 1
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 1,
+        "tests": "1 failed | 61 passed (62)",
+        "redRows": [
+          "ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0"
+        ],
+        "redCount": 1
+      }
+    ]
+  },
+  {
+    "id": "M6-direct-legalMoves-derive",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "1 failed | 97 passed (98)",
+        "redRows": [
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A3 — classified before the grammars: neither resolver and no derive sees `resign`"
+        ],
+        "redCount": 1
+      }
+    ]
+  },
+  {
+    "id": "M7-gameStatusOf-derive",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "4 failed | 94 passed (98)",
+        "redRows": [
+          "ABC-035 A6 — the parser adds ZERO derives: it does not ask > derives nothing for \"resign\"",
+          "ABC-035 A6 — the parser adds ZERO derives: it does not ask > derives nothing for \"RESIGN\"",
+          "ABC-035 A6 — the parser adds ZERO derives: it does not ask > derives nothing for \"  Resign  \"",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A3 — classified before the grammars: neither resolver and no derive sees `resign`"
+        ],
+        "redCount": 4
+      }
+    ]
+  },
+  {
+    "id": "M8-resign-removed-from-table",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 1,
+        "tests": "13 failed | 84 passed (97)",
+        "redRows": [
+          "ABC-035 A1 — four tokens, case-insensitive, trimmed, EXACT > classifies \"resign\" as resign, advancing nothing",
+          "ABC-035 A1 — four tokens, case-insensitive, trimmed, EXACT > classifies \"RESIGN\" as resign, advancing nothing",
+          "ABC-035 A1 — four tokens, case-insensitive, trimmed, EXACT > classifies \"  Resign  \" as resign, advancing nothing",
+          "ABC-035 A2 — a command never reaches a resolver > calls neither resolver for \"resign\"",
+          "ABC-035 A2 — a command never reaches a resolver > calls neither resolver for \"RESIGN\"",
+          "ABC-035 A2 — a command never reaches a resolver > calls neither resolver for \"  Resign  \"",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — the pure function: the side to move loses, in BOTH directions",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — through the MERGED loop: the human as white loses to black, and exits 0",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A1 — through the MERGED loop: the human as black loses to white, and exits 0",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A2 — it ends the game on the ply it is typed: 0 legalMoves after the outcome, no frame after it",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A3 — classified before the grammars: neither resolver and no derive sees `resign`",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A5 — no confirmation: the game ends on the one line and the next line is NEVER read",
+          "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A5 — and it is a command like the other four: no message region, no second render"
+        ],
+        "redCount": 13
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 1,
+        "tests": "1 failed | 61 passed (62)",
+        "redRows": [
+          "ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0"
+        ],
+        "redCount": 1
+      }
+    ]
+  },
+  {
+    "id": "CONTROL-unmutated",
+    "restoredByteIdentical": true,
+    "perFile": [
+      {
+        "file": "src/command-input.test.ts",
+        "status": 0,
+        "tests": "98 passed (98)",
+        "redRows": [],
+        "redCount": 0
+      },
+      {
+        "file": "src/cli.test.ts",
+        "status": 0,
+        "tests": "62 passed (62)",
+        "redRows": [],
+        "redCount": 0
+      }
+    ]
+  }
+]

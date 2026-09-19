@@ -776,6 +776,18 @@ export function createEngine() {
     hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
   }),
 
+  /**
+   * `ABC-045` `A4` — the human resigns after one move each, and the stream ends with `ABC-044`'s
+   * screen naming resignation. ONE child, the criterion's own ("a scripted game driven through the
+   * entry point"), on the same rig `mate` uses. The THIRD line, `d4`, is a legal move for White and
+   * must never be read (`A5`): a build that read a confirmation would play it, the opponent would
+   * run out of script, and the screen would say the game did not finish.
+   */
+  resigns: play(["--colour", "white"], {
+    input: "e4\nresign\nd4\n",
+    hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
+  }),
+
   // -------------------------------------------------------------------------------------------
   // `ABC-115`'s SEVEN, counted off the criteria on that ticket (`N8-SPAWN`, ceiling raised +5 -> +6
   // by BA/PM at the 2026-08-20 amendment and +6 -> +7 at the 2026-08-21 residual ruling, each with
@@ -1710,7 +1722,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
     expect(child.status).not.toBe(0);
   });
 
-  it("N8-LANE — this file spawns TWENTY-FOUR children and no more", () => {
+  it("N8-LANE — this file spawns TWENTY-FIVE children and no more", () => {
     // The budget, pinned mechanically. Every child is spawned once at module scope; a later hop
     // that adds one has to change this number and say why.
     //
@@ -1769,16 +1781,22 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // ticket's ~0.18 s per child is reported to it as a contribution, and `ABC-108`'s `OQ-1` still
     // has the lane's own total under open question.
     //
-    // TWENTY-FOUR IS A CEILING, NOT A TARGET.
+    // TWENTY-FOUR UNTIL `ABC-045`, which adds ONE: its `A4` is "a scripted game driven through the
+    // entry point where the human resigns", which no existing child plays, and `A5`'s unconsumed
+    // next line rides the same child. `A1`-`A3` and `A5`'s loop half are unit rows in
+    // `src/command-input.test.ts` at zero spawn cost. The ticket names `N8-LANE` by name and no
+    // `N8-SPAWN` figure; the child is reported to the lane measurement on that ticket, not netted.
     //
-    // WRITTEN AS `17 + 7` AND NOT AS ITS VALUE. At `17 + 6` the form was FORCED: `A6`'s `ADR-0009`
-    // clause 9a row bars any literal equal to a frame's height from this file's executable code,
-    // the frame is 23 rows, and the budget was 23 children — two unrelated numbers that happened to
-    // be equal, so a literal would have redded `A6`. AT 24 THE COLLISION IS GONE and the form is
-    // now a choice, kept because the derivation says what the value cannot: WHICH ticket bought
-    // WHICH children. A hop that "tidies" it to a literal reds nothing today and loses that, and
-    // the next raise may collide again.
-    const N8_SPAWN = 17 + 7;
+    // TWENTY-FIVE IS A CEILING, NOT A TARGET.
+    //
+    // WRITTEN AS `17 + 7 + 1` AND NOT AS ITS VALUE. At `17 + 6` the form was FORCED: `A6`'s
+    // `ADR-0009` clause 9a row bars any literal equal to a frame's height from this file's
+    // executable code, the frame is 23 rows, and the budget was 23 children — two unrelated numbers
+    // that happened to be equal, so a literal would have redded `A6`. AT 24 THE COLLISION WAS GONE
+    // and the form is now a choice, kept because the derivation says what the value cannot: WHICH
+    // ticket bought WHICH children. A hop that "tidies" it to a literal reds nothing today and loses
+    // that, and the next raise may collide again.
+    const N8_SPAWN = 17 + 7 + 1;
     expect(spawned).toBe(N8_SPAWN);
     expect(Object.keys(CHILDREN)).toHaveLength(N8_SPAWN);
     // THE PIN ABOVE IS SELF-REFERENTIAL: `spawned` counts only children made through `childOf`, so
@@ -2797,6 +2815,43 @@ describe("ABC-044 — the result screen reaches the player", () => {
       expect(child.status, `${name} exited non-zero: ${child.stderr}`).toBe(0);
       expect(child.stdout, `${name}: the screen is missing`).toContain("did not finish");
     }
+  });
+});
+
+describe("ABC-045 — `resign` reaches the screen as reason 8", () => {
+  /** `CHILDREN.resigns`'s game before the human resigned: one move each, as the engine names them. */
+  const PLIES = ["e2e4", "e7e5"];
+
+  it("A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0", () => {
+    const child = CHILDREN.resigns;
+
+    // NON-VACUITY FIRST: the session ran, and it did not run out of script.
+    expect(child.status, `the resigning game failed: ${child.stderr}`).toBe(0);
+    expect(child.stdout, "the game ended on end-of-input").not.toContain(INPUT_ENDED_NOTICE);
+
+    // THE SCREEN, composed from the merged renderer over the game the child played and the outcome
+    // the loop returns for a white resignation — never a transcription of the wording, which is
+    // `ABC-044`'s. `slice` rather than `endsWith` so a mismatch prints both strings.
+    const screen = renderResultScreen(
+      { result: "black-wins", reason: "resignation", exitCode: 0 },
+      playedOut(PLIES),
+    );
+    const written = `${screen.join("\n")}\n`;
+    expect(child.stdout.slice(-written.length)).toBe(written);
+    // And the two words the criterion names, so the row cannot pass on an empty screen.
+    expect(written).toContain("resignation");
+    expect(written).toContain("Black wins");
+
+    // `A5`'S ENTRY-POINT WITNESS: `1 + plies` frames and NOTHING after the screen. The script's
+    // third line is a legal move; a build that read it as a confirmation would have played it and
+    // either rendered a fourth frame or ended on `engine-threw` with a "did not finish" screen.
+    const frames = framesIn(child.stdout, "ascii", "white-bottom");
+    expect(frames).toHaveLength(1 + PLIES.length);
+    expect(
+      framesIn(child.stdout.slice(child.stdout.indexOf(written)), "ascii", "white-bottom"),
+      "frames after the screen",
+    ).toHaveLength(0);
+    expect(child.stdout).not.toContain("did not finish");
   });
 });
 

@@ -154,3 +154,66 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `XS` (1), calibrated |
 | 9 | priority assigned | **✅** `P1` |
 | 10 | no major unresolved blocker | **⚠️** **three ordering dependencies are OPEN** (`ABC-035`, `ABC-037`, `ABC-043`) and the last is itself blocked. **No contract question is open** — that is what separates this ticket from `ABC-046` |
+
+## Delivery
+
+**Built 2026-09-19 by the Software Engineer** (task `wave-2026-09-19`, subtask
+`ticket-to-pr-ABC-045`, Workflow 04) on branch `grugops/ABC-045-resign` @ **`b8afa30`**, off
+`grugops/wave-2026-09-19` @ `bd40d85`. **Unmerged; not deployed.** The three ⚠️ orderings
+(`ABC-035`, `ABC-037`, `ABC-043`) were all Done at the pull; `ADR-0021` re-checked this ticket as
+independent of the arm ticket (`ABC-120`, merged into the wave branch before this hop).
+
+- **Exactly three files, measured from git:** `git diff --name-only bd40d85...b8afa30 -- src/` →
+  `src/command-input.ts` (+38 / −18; **11 added non-comment production lines**),
+  `src/command-input.test.ts` (+171 / −6), `src/cli.test.ts` (+65 / −10). **`A6`:
+  `src/turn-loop.ts` and `src/gameend.ts` byte-identical** (`git diff --quiet`), as are
+  `line-input.ts`, `cli.ts`, `result-screen.ts`, `move-input.ts`, `rejection.ts`, `zobrist.ts`,
+  `search.ts`, `quiescence.ts`, `engine.ts`. 0 new test files.
+- **The shape:** `COMMAND_TABLE` gains `{ token: "resign", outcome: "game-over" }`;
+  `CommandToken`, `CommandSpec.outcome` and `PromptLineOutcome` widen by one member each;
+  `resolvePromptLine` returns `{ kind: "game-over", result: history.position.blackToMove ?
+  "white-wins" : "black-wins", reason: "resignation" }`. **`TerminalReason` `resign` maps to:
+  `"resignation"`** — the existing eighth value; no eleventh, `PromptOutcome` stays at nine arms.
+  The loser is read off ONE field of the borrowed position (the loop prompts only when the side to
+  move is the human's), never off `humanColour`, so the module stays a pure function over a string.
+  `help` lists `resign` by construction (`helpMessages()` folds the table); `A7`'s hidden count 0
+  at both fixtures re-run green; `quit` / `new` / `undo` wording untouched.
+- **`A1`–`A3`, `A5`:** 19 rows in `src/command-input.test.ts` (`describe("ABC-045 …")`), plus
+  `resign` in the spelling sweep (3 spellings), the non-token list (`resig`, `resigns`), the
+  no-argument fence (`resign now`), and OUT of `ABC-035` `A4`'s foreign list. `A1` both colours,
+  pure and through the merged loop, `exitCode` 0; `A2` at ply 4: `reads` 1, `legalMoves` spied at
+  the module boundary **0** after the outcome, derives **0** after it, `renders` **1**; `A3`
+  resolvers 0 / 0, seam derive 0, boundary `legalMoves` delta 0, `gameStatusOf` 0; `A5` `reads`
+  1 on a 2-line script, `messagesPerFrame` `[[]]`.
+- **`A4`:** one child `CHILDREN.resigns` in `src/cli.test.ts` (`--colour white`, script
+  `e4 / resign / d4`, opponent scripted `e5` only): exit 0, stream ends byte-for-byte with
+  `renderResultScreen({ result: "black-wins", reason: "resignation", exitCode: 0 }, …)`, contains
+  `resignation` and `Black wins`, frames **3** (= 1 + 2 plies), 0 frames after the screen, no
+  `INPUT_ENDED_NOTICE`, no `did not finish`. Spawn pin `17 + 7` → `17 + 7 + 1`, reason written.
+- **`A2` — ONE INTERPRETATION, recorded rather than hidden.** The criterion says "exactly one
+  further frame is written — the final one". The merged loop's `game-over` branch returns from
+  `awaiting-human` WITHOUT passing `rendering` (the same edge the allowed `claim` takes), so ZERO
+  frames follow the outcome; the frame before the prompt is the final one and the one further
+  write is the result screen (`A4`). Satisfying the sentence literally would edit
+  `src/turn-loop.ts`, which `A6` fences. Built as the loop behaves; QE / BA/PM may re-word or
+  reject.
+- **Mutants, 8 watched RED in place and reverted (sha-asserted), control 98 / 62 green:** hardcoded
+  direction, swapped direction, inert `command` row, `reason: "checkmate"`, a confirmation read
+  (module-level flag), a direct `legalMoves` derive in the resign path, a `gameStatusOf` derive,
+  the row deleted. Named caveat: the confirmation mutant is red on `A4`'s child and on the first
+  `resign` row in the file, NOT on `A5`'s loop row (module-level state, armed by an earlier row).
+- **Gates at the tip:** `npx biome check .` 76 files clean, `npx tsc --noEmit` 0 (typecheck and
+  build), `npx vitest run --dir src` **42 / 1317 / 0 skipped** (base 42 / 1297 / 0; +20 tests,
+  +0 files), JSON skip count 0, test-skip-integrity `No findings.` `self_fix_attempts` spent 0.
+- **`N8-LANE` / `NFR-008`:** in-file `+4 ms` (`command-input.test.ts` 17 → 21 ms, n = 7) and
+  `+0 ms` in-file for `cli.test.ts` (29 → 29) with the one child at **~+0.30 s process CPU /
+  +0.21 s wall** (collect-time spawn); **0 new files** — met on the number this ticket controls,
+  the child reported rather than netted (the ticket names no `N8-SPAWN` figure). Whole-lane CPU
+  (`/usr/bin/time -p`, n = 3, three sibling hops live): **before 18.58 s at load 7.3–7.9, after
+  20.29 s at load 5.6–10.0** — over 15 s in every run INCLUDING the three before the change; the
+  headroom at the delivery base is NEGATIVE, so this reads as a lane breach that is the base's,
+  **REPORTED AS NON-CONFORMING, not ruled, nothing trimmed**; not a conforming `ADR-0019` reading.
+  Handed up.
+- Production lines > 0: the zero-production-lines UAT waiver does NOT apply; the owner's word is
+  needed at `In UAT`. Board move (`In Development` → `In Review`) and the QE hop are the
+  Orchestrator's / QE's. Notes: `.grugops/context/ticket-to-pr-ABC-045/notes/`.

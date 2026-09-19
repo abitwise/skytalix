@@ -1,0 +1,56 @@
+// ABC-045 mutant round: mutate src/command-input.ts in place, run the named test file(s), restore
+// the original, assert the restore is byte-identical. Usage: node mutants.mjs <cwd>
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+
+const cwd = process.argv[2];
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/abc045";
+const FILE = `${cwd}/src/command-input.ts`;
+const original = readFileSync(FILE, "utf8");
+const sha = (s) => createHash("sha256").update(s).digest("hex");
+const originalSha = sha(original);
+
+const TERNARY = 'result: history.position.blackToMove ? "white-wins" : "black-wins",';
+const ROW = '{ token: "resign", outcome: "game-over" },';
+const REASON = 'reason: "resignation",';
+const GAMEOVER_IF = 'if (spec.outcome === "game-over") {';
+
+const mutants = [
+  { id: "M1-hardcode-black-wins", files: ["src/command-input.test.ts"], apply: (s) => s.replace(TERNARY, 'result: "black-wins",') },
+  { id: "M2-swap-directions", files: ["src/command-input.test.ts"], apply: (s) => s.replace(TERNARY, 'result: history.position.blackToMove ? "black-wins" : "white-wins",') },
+  { id: "M3-resign-inert-command", files: ["src/command-input.test.ts", "src/cli.test.ts"], apply: (s) => s.replace(ROW, '{ token: "resign", outcome: "command" },') },
+  { id: "M4-reason-checkmate", files: ["src/command-input.test.ts", "src/cli.test.ts"], apply: (s) => s.replace(REASON, 'reason: "checkmate",') },
+  { id: "M5-confirmation-read", files: ["src/command-input.test.ts", "src/cli.test.ts"], apply: (s) => s.replace(GAMEOVER_IF, 'if (spec.outcome === "game-over" && !armed) { armed = true; return { kind: "command", messages: ["confirm"] }; }\n  if (spec.outcome === "game-over") {').replace("export function resolvePromptLine(", "let armed = false;\nexport function resolvePromptLine(") },
+  { id: "M6-direct-legalMoves-derive", files: ["src/command-input.test.ts"], apply: (s) => s.replace(GAMEOVER_IF, 'if (spec.outcome === "game-over") {\n    legalMoves(history.position);').replace('import type { GameHistory } from "./history.ts";', 'import type { GameHistory } from "./history.ts";\nimport { legalMoves } from "./legal.ts";') },
+  { id: "M7-gameStatusOf-derive", files: ["src/command-input.test.ts"], apply: (s) => s.replace(GAMEOVER_IF, 'if (spec.outcome === "game-over") {\n    gameStatusOf(history);').replace('import type { GameHistory } from "./history.ts";', 'import { type GameHistory, gameStatusOf } from "./history.ts";') },
+  { id: "M8-resign-removed-from-table", files: ["src/command-input.test.ts", "src/cli.test.ts"], apply: (s) => s.replace(ROW, "") },
+  { id: "CONTROL-unmutated", files: ["src/command-input.test.ts", "src/cli.test.ts"], apply: (s) => s },
+];
+
+const results = [];
+for (const m of mutants) {
+  const mutated = m.apply(original);
+  if (m.id !== "CONTROL-unmutated" && mutated === original) { results.push({ id: m.id, error: "MUTANT DID NOT APPLY" }); continue; }
+  writeFileSync(FILE, mutated);
+  const perFile = [];
+  for (const f of m.files) {
+    const r = spawnSync("npx", ["vitest", "run", f], { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+    const out = r.stdout + r.stderr;
+    writeFileSync(`${S}/logs/mutant-${m.id}-${f.replace(/\//g, "_")}.log`, out);
+    const tm = out.match(/^\s*Tests\s+(.*)$/m);
+    const failed = [...out.matchAll(/^\s*(?:×|✗|FAIL)\s+(.*)$/gm)].map((x) => x[1].trim());
+    const rows = [...out.matchAll(/^\s*[×✗]\s+(.*?)(?:\s+\d+ms)?$/gm)].map((x) => x[1].trim());
+    perFile.push({ file: f, status: r.status, tests: tm?.[1]?.trim(), redRows: rows.slice(0, 40), redCount: rows.length });
+  }
+  writeFileSync(FILE, original);
+  const restored = sha(readFileSync(FILE, "utf8")) === originalSha;
+  results.push({ id: m.id, restoredByteIdentical: restored, perFile });
+}
+writeFileSync(`${S}/mutants-summary.json`, JSON.stringify(results, null, 2));
+for (const r of results) {
+  console.log(`== ${r.id} restored=${r.restoredByteIdentical}`);
+  for (const p of r.perFile ?? []) console.log(`   ${p.file}: exit ${p.status} | ${p.tests} | red ${p.redCount}` + (p.redRows.length ? `\n      - ${p.redRows.join("\n      - ")}` : ""));
+  if (r.error) console.log("   " + r.error);
+}
+console.log(`final file sha matches original: ${sha(readFileSync(FILE, "utf8")) === originalSha}`);

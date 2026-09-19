@@ -1,0 +1,31 @@
+// ABC-045 gates: lint, typecheck, build (same command), unit, json skip count, integrity.
+// Usage: node gates.mjs <cwd>
+import { spawnSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+const cwd = process.argv[2];
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/abc045";
+const run = (name, cmd, args) => {
+  const r = spawnSync(cmd, args, { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  writeFileSync(`${S}/logs/gate-${name}.log`, `$ ${cmd} ${args.join(" ")}\nexit ${r.status}\n--- stdout ---\n${r.stdout}\n--- stderr ---\n${r.stderr}`);
+  return r;
+};
+const out = {};
+let r = run("lint", "npx", ["biome", "check", "."]);
+out.lint = { exit: r.status, tail: (r.stdout + r.stderr).trim().split("\n").slice(-3) };
+r = run("typecheck", "npx", ["tsc", "--noEmit"]);
+out.typecheck = { exit: r.status, output: (r.stdout + r.stderr).trim().slice(0, 2000) };
+r = run("build", "npx", ["tsc", "--noEmit"]);
+out.build = { exit: r.status, output: (r.stdout + r.stderr).trim().slice(0, 2000) };
+r = run("unit", "npx", ["vitest", "run", "--dir", "src"]);
+const fm = r.stdout.match(/Test Files\s+(.*)/); const tm = r.stdout.match(/^\s*Tests\s+(.*)/m); const dm = r.stdout.match(/Duration\s+(.*)/);
+out.unit = { exit: r.status, files: fm?.[1]?.trim(), tests: tm?.[1]?.trim(), duration: dm?.[1]?.trim(), failed: (r.stdout.match(/FAIL /g) || []).length };
+if (r.status !== 0) out.unit.tail = (r.stdout + r.stderr).split("\n").filter((l) => /FAIL|×|AssertionError|expected/.test(l)).slice(0, 60);
+r = run("json", "npx", ["vitest", "run", "--dir", "src", "--reporter=json"]);
+try {
+  const j = JSON.parse(r.stdout.slice(r.stdout.indexOf("{")));
+  out.skip = { numPendingTests: j.numPendingTests, numTodoTests: j.numTodoTests, numFailedTests: j.numFailedTests, numPassedTests: j.numPassedTests, numTotalTestSuites: j.numTotalTestSuites, skipCount: j.numPendingTests + j.numTodoTests };
+} catch (e) { out.skip = { error: String(e), exit: r.status }; }
+r = run("integrity", "node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(out.skip.skipCount ?? "UNKNOWN")]);
+out.integrity = { exit: r.status, output: (r.stdout + r.stderr).trim() };
+writeFileSync(`${S}/gates-summary.json`, JSON.stringify(out, null, 2));
+console.log(JSON.stringify(out, null, 2));
