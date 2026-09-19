@@ -1,0 +1,310 @@
+{
+  "M0_control": {
+    "exit": 0,
+    "secs": "1.10",
+    "load": "4.88 4.82 5.45",
+    "passed": 67,
+    "failed": 0,
+    "total": 67,
+    "failedRows": []
+  },
+  "M1_takeback_no_derive_continue": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.99",
+      "load": "4.88 4.82 5.45",
+      "passed": 64,
+      "failed": 3,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "AssertionError: expected { by: 'white', …(1) } to be undefined"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+          "msg": "AssertionError: expected 5 to be 6 // Object.is equality"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else",
+          "msg": "AssertionError: expected 1 to be 2 // Object.is equality"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "M2_takeback_routed_as_command_7_8_9": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.95",
+      "load": "4.97 4.84 5.46",
+      "passed": 64,
+      "failed": 3,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "AssertionError: expected { by: 'white', …(1) } to be undefined"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+          "msg": "AssertionError: expected [ { from: 20, to: 52, …(4) }, …(3) ] to have a length of 2 but got 4"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else",
+          "msg": "AssertionError: expected 1 to be 2 // Object.is equality"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Ma_quit_renders_a_frame_before_exiting": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.98",
+      "load": "4.97 4.84 5.46",
+      "passed": 65,
+      "failed": 2,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read",
+          "msg": "AssertionError: expected [ …(3) ] to have a length of 2 but got 3"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "AssertionError: expected [ …(11) ] to have a length of 10 but got 11"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Mb_quit_writes_INPUT_ENDED_NOTICE": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.92",
+      "load": "4.97 4.84 5.46",
+      "passed": 66,
+      "failed": 1,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read",
+          "msg": "AssertionError: expected 'input ended\\n' to be 'quit\\n' // Object.is equality"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Mc_quit_exitCode_1": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.88",
+      "load": "4.97 4.84 5.46",
+      "passed": 65,
+      "failed": 2,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read",
+          "msg": "AssertionError: expected { result: null, reason: null, …(1) } to deeply equal { result: null, reason: null, …(1) }"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "AssertionError: expected { result: null, reason: null, …(1) } to deeply equal { result: null, reason: null, …(1) }"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Md_takeback_N_minus_1": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.84",
+      "load": "4.97 4.84 5.46",
+      "passed": 65,
+      "failed": 2,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "AssertionError: expected { result: null, …(2) } to deeply equal { result: null, reason: null, …(1) }"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+          "msg": "AssertionError: expected [ Array(1) ] to have a length of 2 but got 1"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Me_takeback_keyHistory_stale": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.84",
+      "load": "7.53 5.37 5.64",
+      "passed": 65,
+      "failed": 2,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "AssertionError: expected { by: 'white', …(1) } to be undefined"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+          "msg": "AssertionError: expected [ { from: 20, to: 52, …(4) }, …(3) ] to have a length of 2 but got 4"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Mf_messages_dropped_on_takeback_render": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.85",
+      "load": "7.53 5.37 5.64",
+      "passed": 66,
+      "failed": 1,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+          "msg": "AssertionError: expected [ '', '' ] to include 'took back 2'"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Mg_derive_TWICE_on_takeback": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.92",
+      "load": "7.53 5.37 5.64",
+      "passed": 64,
+      "failed": 3,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "AssertionError: expected 11 to be 10 // Object.is equality"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+          "msg": "AssertionError: expected 7 to be 6 // Object.is equality"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else",
+          "msg": "AssertionError: expected 3 to be 2 // Object.is equality"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Mh_quit_arm_removed_falls_into_7_8_9": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.89",
+      "load": "7.53 5.37 5.64",
+      "passed": 65,
+      "failed": 2,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read",
+          "msg": "TypeError: Cannot read properties of undefined (reading 'map')"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "TypeError: Cannot read properties of undefined (reading 'map')"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Mi_QUIT_NOTICE_names_a_result_word": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.85",
+      "load": "7.53 5.37 5.64",
+      "passed": 66,
+      "failed": 1,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A2 — `QUIT_NOTICE` is exported, is not `INPUT_ENDED_NOTICE`, is one line, and names no chess outcome",
+          "msg": "AssertionError: expected 'resigned' not to contain 'resign'"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Mj_quit_returns_a_chess_result": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.83",
+      "load": "7.41 5.38 5.64",
+      "passed": 65,
+      "failed": 2,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read",
+          "msg": "AssertionError: expected { result: 'draw', reason: null, …(1) } to deeply equal { result: null, reason: null, …(1) }"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "AssertionError: expected { result: 'draw', reason: null, …(1) } to deeply equal { result: null, reason: null, …(1) }"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Mk_takeback_plies_ignored_zero": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.88",
+      "load": "7.41 5.38 5.64",
+      "passed": 65,
+      "failed": 2,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+          "msg": "AssertionError: expected { by: 'white', …(1) } to be undefined"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+          "msg": "AssertionError: expected [ { from: 20, to: 52, …(4) }, …(3) ] to have a length of 2 but got 4"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "Ml_QUIT_NOTICE_equals_INPUT_ENDED_NOTICE": {
+    "inFile": {
+      "exit": 1,
+      "secs": "0.86",
+      "load": "7.41 5.38 5.64",
+      "passed": 65,
+      "failed": 2,
+      "total": 67,
+      "failedRows": [
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read",
+          "msg": "AssertionError: expected 'input ended\\n' not to contain 'input ended'"
+        },
+        {
+          "row": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A2 — `QUIT_NOTICE` is exported, is not `INPUT_ENDED_NOTICE`, is one line, and names no chess outcome",
+          "msg": "AssertionError: expected 'input ended' not to be 'input ended' // Object.is equality"
+        }
+      ]
+    },
+    "revertedClean": true
+  },
+  "final_grep_MUTANT_in_src": {
+    "exit": 0,
+    "out": "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1/src/line-input.test.ts:806:       * `process.memoryUsage().heapUsed` growth under 8 MiB and THREE MUTANTS SURVIVED IT — `M6`\n/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1/src/command-input.test.ts:499:   * ADDED AFTER A MUTANT SURVIVED, and it is the only guard in this file that was not written from\n/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1/src/frame.test.ts:743:// EACH TEST BELOW IS THE ONLY KILLER OF A MUTANT THAT SURVIVED ALL 297 DELIVERED TESTS. None of\n/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1/src/turn-loop.test.ts:1809:  // two `it` bodies and no `+160 ms` file. `A8` exists because a MUTANT SURVIVED the delivered\n/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1/src/cli.test.ts:1184:    // THE MUTANTS THIS BLOCK EXISTS TO KILL, both one word at `src/cli-options.ts:153`:\n/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1/src/cli.test.ts:2098:    // `next` is `undefined`, so the message names `--colour` itself. THE MUTANT IS `next as string`\n/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a959d1a948ed0c5a1/src/cli.test.ts:2973:    // WHAT THE MUTANT ACTUALLY DOES, because \"the branch is untested\" understates it: it writes no"
+  },
+  "final_git_status_src": ""
+}

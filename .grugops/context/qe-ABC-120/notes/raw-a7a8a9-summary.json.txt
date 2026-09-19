@@ -1,0 +1,105 @@
+{
+  "head": "babc1b2",
+  "base": "20ad7cb",
+  "A7_TerminalReason": {
+    "base": "78-83 8a2d06042d83cfdd",
+    "head": "78-83 8a2d06042d83cfdd",
+    "identical": true
+  },
+  "A7_LoopOutcome_body_noComments": {
+    "base": "155-173 a21798674b6be0ff",
+    "head": "167-186 a21798674b6be0ff",
+    "identical": true
+  },
+  "A7_LoopOutcome_body_raw_identical": false,
+  "A7_INPUT_ENDED_NOTICE": {
+    "base": "export const INPUT_ENDED_NOTICE = \"input ended\";",
+    "head": "export const INPUT_ENDED_NOTICE = \"input ended\";"
+  },
+  "A7_exitCode_line": {
+    "base": "readonly exitCode: 0;",
+    "head": "readonly exitCode: 0;"
+  },
+  "A7_PromptOutcome_members": {
+    "base": 7,
+    "head": 9
+  },
+  "A7_EVERY_TERMINAL_REASON": {
+    "base": 3,
+    "head": 3
+  },
+  "A8_TABLE_block": {
+    "base": "753-883 d65ce53bf9183148",
+    "head": "762-892 d65ce53bf9183148",
+    "identical": true
+  },
+  "A8_rows_14_17_18": {
+    "base": "895-941 b25bce1a8b4a4f2a",
+    "head": "904-950 b25bce1a8b4a4f2a",
+    "identical": true
+  },
+  "A8_nfr_test_blob": {
+    "base": "ab9bbdd17c554a7a3edfbe4c3216c4f70e53e750",
+    "head": "ab9bbdd17c554a7a3edfbe4c3216c4f70e53e750"
+  },
+  "A8_nfr_test_identical": true,
+  "A8_src_files_changed": [
+    "src/turn-loop.test.ts",
+    "src/turn-loop.ts"
+  ],
+  "A8_A3b_title": {
+    "base": "  it(\"A3b — one derive per ply, and ZERO on a non-advancing prompt outcome\", async () => {",
+    "head": "  it(\"A3b — one derive per ply, and ZERO on a non-mutating prompt outcome\", async () => {"
+  },
+  "A8_A3b_body": {
+    "base": "998-1032 955f3c2aa8a213c2",
+    "head": "1007-1041 955f3c2aa8a213c2",
+    "identical": true
+  },
+  "A9": {
+    "plusLines": 86,
+    "minusLines": 40,
+    "addedNonComment": 18,
+    "ofWhichReindentedMoves": 8,
+    "genuinelyNew": 10,
+    "bound": 30,
+    "addedNonCommentList": [
+      "  | { readonly kind: \"quit\" }",
+      "  | { readonly kind: \"take-back\"; readonly plies: number; readonly messages: readonly string[] }",
+      "export const QUIT_NOTICE = \"quit\";",
+      "      if (outcome.kind === \"quit\") {",
+      "        sink.write(`${QUIT_NOTICE}\\n`);",
+      "        return { result: null, reason: null, exitCode: 0 };",
+      "      }",
+      "      if (outcome.kind === \"take-back\") {",
+      "        takeBack(history, outcome.plies);",
+      "      } else {",
+      "        if (outcome.kind !== \"move\") {",
+      "          messages = outcome.messages;",
+      "          continue;",
+      "        }",
+      "        if (!wasGenerated(history, outcome.move)) {",
+      "          throw new Error(\"input seam returned a move that is not in `legalMoves`\");",
+      "        }",
+      "        playMove(history, outcome.move);"
+    ],
+    "genuinelyNewList": [
+      "  | { readonly kind: \"quit\" }",
+      "  | { readonly kind: \"take-back\"; readonly plies: number; readonly messages: readonly string[] }",
+      "export const QUIT_NOTICE = \"quit\";",
+      "      if (outcome.kind === \"quit\") {",
+      "        sink.write(`${QUIT_NOTICE}\\n`);",
+      "        return { result: null, reason: null, exitCode: 0 };",
+      "      if (outcome.kind === \"take-back\") {",
+      "        takeBack(history, outcome.plies);",
+      "      } else {",
+      "          messages = outcome.messages;"
+    ]
+  },
+  "A10": {
+    "sixteen_transitions": 0,
+    "only_on_end_of_input": 0,
+    "non_mutating_ci": 3,
+    "the_sixteenth": 1
+  }
+}
