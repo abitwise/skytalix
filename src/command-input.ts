@@ -1,11 +1,18 @@
 /**
  * ABC-035 — the command table, classified in front of `ABC-033`'s entry point.
  *
- * GRAMMAR ONLY. This module decides whether a submitted line IS one of four commands and nothing
+ * GRAMMAR ONLY. This module decides whether a submitted line IS one of five commands and nothing
  * about what any of them DOES. `help` carries the one message set this ticket owns; `board` and
  * `quit` carry none; `claim` is a REQUEST the loop adjudicates. There is no state change here, no
  * exit, no confirmation prompt, no second render and no availability test — `EPIC-006` owns what
  * `quit` does, `ABC-021` owns both edges of a claim, and this file owns the vocabulary.
+ *
+ * `resign` (`ABC-045`) IS THE ONE TOKEN THAT CARRIES A VERDICT, and it is still grammar: the row
+ * resolves to the EXISTING `game-over` arm (`src/turn-loop.ts`, `ABC-019`'s transition) with the
+ * resigner's loss and the merged `"resignation"` reason — no new arm, no new reason, no
+ * confirmation (BA/PM's ruling on that ticket: the modifier in the epic attaches to `quit`), and
+ * no derive. The loser is the side to move, read off ONE field of the borrowed position; the loop
+ * prompts only when that side is the human's, which is what makes the field the answer.
  *
  * THE BOUNDARY RULING IT IMPLEMENTS — BA/PM 2026-08-12, `ABC-035` `## The boundary ruling this
  * ticket implements`. `quit` is named by `EPIC-003` (the token) and by `EPIC-006` ("`quit` with
@@ -46,36 +53,37 @@ import type { GameHistory } from "./history.ts";
 import { type MoveInputDeps, resolveMoveInput } from "./move-input.ts";
 import type { PromptOutcome } from "./turn-loop.ts";
 
-/** The four tokens, and the type that makes a fifth a compile error rather than a string typo. */
-export type CommandToken = "help" | "board" | "quit" | "claim";
+/** The five tokens, and the type that makes a sixth a compile error rather than a string typo. */
+export type CommandToken = "help" | "board" | "quit" | "claim" | "resign";
 
 /**
  * One row of the table: the token, and WHICH arm of `PromptOutcome` classifying it produces.
  *
- * `outcome` is here because the four tokens do NOT share one arm. Three are `command` — the merged
- * non-advancing outcome (`src/turn-loop.ts:129`) — and `claim` is the dedicated payload-free
- * `{ kind: "claim" }` arm (`:130`). A parser that returned `command` for `claim` would never reach
- * transition 16 and the player's claim would silently become a redraw; the ticket page said exactly
- * that until it was repaired on 2026-08-13.
+ * `outcome` is here because the five tokens do NOT share one arm. Three are `command` — the merged
+ * non-advancing outcome (`src/turn-loop.ts:129`) — `claim` is the dedicated payload-free
+ * `{ kind: "claim" }` arm (`:130`), and `resign` is the `game-over` arm with a result. A parser
+ * that returned `command` for `claim` would never reach transition 16 and the player's claim would
+ * silently become a redraw; the ticket page said exactly that until it was repaired on 2026-08-13.
  */
 export interface CommandSpec {
   readonly token: CommandToken;
-  readonly outcome: "command" | "claim";
+  readonly outcome: "command" | "claim" | "game-over";
 }
 
 /**
  * The table. It is the single source of the vocabulary: `help`'s message set is folded out of it,
  * the classifier looks up in it, and `ABC-038`'s tab completion will read it rather than repeat it.
  *
- * `moves` is NOT here — it is `ABC-036`. `undo`, `resign` and `new` are NOT here — they are
- * `EPIC-006`'s command set. A token absent from this table is not a command, and the tests assert
- * that in both directions.
+ * `moves` is NOT here — it is `ABC-036`. `undo` and `new` are NOT here — they are `ABC-102`'s and
+ * `ABC-046`'s. `resign` IS here, `ABC-045`'s row. A token absent from this table is not a command,
+ * and the tests assert that in both directions.
  */
 export const COMMAND_TABLE: readonly CommandSpec[] = [
   { token: "help", outcome: "command" },
   { token: "board", outcome: "command" },
   { token: "quit", outcome: "command" },
   { token: "claim", outcome: "claim" },
+  { token: "resign", outcome: "game-over" },
 ];
 
 /** The heading item. It is not a token, and `help` naming it costs the message region nothing. */
@@ -106,10 +114,10 @@ export function classifyCommand(line: string): CommandSpec | undefined {
   return COMMAND_TABLE.find((spec) => spec.token === token);
 }
 
-/** The arms one submitted line can produce: `ABC-033`'s three, plus this ticket's two. */
+/** The arms one submitted line can produce: `ABC-033`'s three, `ABC-035`'s two, `ABC-045`'s one. */
 export type PromptLineOutcome = Extract<
   PromptOutcome,
-  { readonly kind: "move" | "rejected" | "ambiguous" | "command" | "claim" }
+  { readonly kind: "move" | "rejected" | "ambiguous" | "command" | "claim" | "game-over" }
 >;
 
 /**
@@ -119,10 +127,11 @@ export type PromptLineOutcome = Extract<
  * nothing to the history and reads no availability — on every arm `toFen(history.position)` is
  * byte-identical afterwards and `history.moves` is untouched.
  *
- * `history` is UNUSED on the command path and that is the point rather than an oversight: the four
- * tokens are classified without the position being consulted, so no derive can hide here. It is
- * taken so this function can stand in the `InputSeam` shape the loop already binds, and it is
- * handed to `resolveMoveInput` unchanged when the line is not a command.
+ * `history` is consulted on ONE command path and derived from on NONE: every token is classified
+ * without the position being asked anything, and `resign` then reads `position.blackToMove` — a
+ * field, not a derive — to name the loser, so no derive can hide here. It is taken so this
+ * function can stand in the `InputSeam` shape the loop already binds, and it is handed to
+ * `resolveMoveInput` unchanged when the line is not a command.
  *
  * `deps` is `ABC-033`'s test seam, passed straight through and never called from this module.
  */
@@ -138,5 +147,16 @@ export function resolvePromptLine(
     return resolveMoveInput(history, line, deps);
   }
   if (spec.outcome === "claim") return { kind: "claim" };
+  if (spec.outcome === "game-over") {
+    // `ABC-045` `A1`, both directions from ONE expression: the resigner is the side to move, and
+    // the opponent wins. `blackToMove` is read, never `humanColour` — the loop prompts only when
+    // the side to move is the human's (`src/turn-loop.ts`), so the field IS the human's colour on
+    // this path, and this module never learns the option.
+    return {
+      kind: "game-over",
+      result: history.position.blackToMove ? "white-wins" : "black-wins",
+      reason: "resignation",
+    };
+  }
   return { kind: "command", messages: spec.token === "help" ? helpMessages() : [] };
 }

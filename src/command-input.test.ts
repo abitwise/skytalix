@@ -3,6 +3,7 @@ import {
   COMMAND_TABLE,
   classifyCommand,
   helpMessages,
+  type PromptLineOutcome,
   resolvePromptLine,
 } from "./command-input.ts";
 import { parseCoordinateMove } from "./coordinate-move.ts";
@@ -43,12 +44,26 @@ vi.mock("./history.ts", async (importOriginal) => {
   };
 });
 
+/**
+ * `ABC-045` `A2`'s guard, the SAME shape as `A6`'s above and for the same reason: the loop imports
+ * `legalMoves` DIRECTLY from `./legal.ts` (`src/turn-loop.ts`, `wasGenerated`) and so does the
+ * rules core under `gameStatusOf`, so a spy on the test seam's `deps.legalMoves` sees neither. The
+ * criterion is "0 calls AFTER the outcome is produced", counted at the module boundary where every
+ * importer's call is visible. Calls through (`vi.fn(actual.legalMoves)`), so no behaviour changes.
+ */
+vi.mock("./legal.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./legal.ts")>();
+  return { ...actual, legalMoves: vi.fn(actual.legalMoves) };
+});
+
 const derives = (): number => vi.mocked(gameStatusOf).mock.calls.length;
 const repetitionDerives = (): number => vi.mocked(repetitionCounts).mock.calls.length;
+const legalCalls = (): number => vi.mocked(legalMoves).mock.calls.length;
 
 beforeEach(() => {
   vi.mocked(gameStatusOf).mockClear();
   vi.mocked(repetitionCounts).mockClear();
+  vi.mocked(legalMoves).mockClear();
 });
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -135,6 +150,10 @@ const TOKEN_SPELLINGS: ReadonlyArray<readonly [line: string, token: string]> = [
   ["claim", "claim"],
   ["CLAIM", "claim"],
   ["  Claim  ", "claim"],
+  // `ABC-045`'s row, under `ABC-035`'s merged tolerance: the same three shapes, no fourth rule.
+  ["resign", "resign"],
+  ["RESIGN", "resign"],
+  ["  Resign  ", "resign"],
 ];
 
 /**
@@ -153,6 +172,8 @@ const NON_TOKENS: readonly string[] = [
   "quitt",
   "claims",
   "cl",
+  "resig",
+  "resigns",
   "",
 ];
 
@@ -270,6 +291,16 @@ interface LoopRun {
   readonly messagesPerFrame: readonly (readonly string[])[];
   readonly result: string | null;
   readonly reason: string | null;
+  readonly exitCode: number;
+  /** How many prompts the loop actually READ. `ABC-045` `A5`'s witness: the unconsumed next line. */
+  readonly reads: number;
+}
+
+/** `ABC-045`'s two additions to the runner: the colour (`A1`, both directions) and an outcome probe (`A2`). */
+interface RunOptions {
+  readonly humanColour?: "white" | "black";
+  /** Called the instant the seam has produced an outcome and before the loop acts on it. */
+  readonly onOutcome?: (outcome: PromptLineOutcome) => void;
 }
 
 /**
@@ -277,7 +308,11 @@ interface LoopRun {
  * end the input. The render seam is a stub of fixed rows: `A3` counts CALLS, and a real panel would
  * drag `gameStatusOf` into `A6`'s ply total for a reason that is not this module's.
  */
-async function runLines(history: GameHistory, lines: readonly string[]): Promise<LoopRun> {
+async function runLines(
+  history: GameHistory,
+  lines: readonly string[],
+  options: RunOptions = {},
+): Promise<LoopRun> {
   const messagesPerFrame: string[][] = [];
   const render: RenderSeam = (_history, _status, _thinking, messages) => {
     messagesPerFrame.push([...messages]);
@@ -286,7 +321,10 @@ async function runLines(history: GameHistory, lines: readonly string[]): Promise
   let next = 0;
   const input: InputSeam = async (current) => {
     const line = lines[next++];
-    return line === undefined ? { kind: "eof" } : resolvePromptLine(current, line);
+    if (line === undefined) return { kind: "eof" };
+    const outcome = resolvePromptLine(current, line);
+    options.onOutcome?.(outcome);
+    return outcome;
   };
   const engine: EngineSeam = () => {
     throw new Error("the engine seam must not be reached: no scripted line advances a ply");
@@ -295,7 +333,7 @@ async function runLines(history: GameHistory, lines: readonly string[]): Promise
 
   const outcome = await runTurnLoop({
     history,
-    humanColour: "white",
+    humanColour: options.humanColour ?? "white",
     render,
     input,
     engine,
@@ -306,6 +344,8 @@ async function runLines(history: GameHistory, lines: readonly string[]): Promise
     messagesPerFrame,
     result: outcome.result,
     reason: outcome.reason,
+    exitCode: outcome.exitCode,
+    reads: next,
   };
 }
 
@@ -351,9 +391,10 @@ describe("ABC-035 A4 — `help` names every token in the table and no other", ()
   /**
    * The negative half. These are real tokens of the SAME prompt owned by OTHER tickets — `moves` is
    * `ABC-036`, the rest are `EPIC-006`'s — so a help text that lists the epic's whole vocabulary
-   * instead of this table's is caught here rather than by a reader noticing.
+   * instead of this table's is caught here rather than by a reader noticing. `resign` LEFT this
+   * list at `ABC-045`, which put it in the table; it is asserted present in the positive half above.
    */
-  for (const foreign of ["moves", "undo", "resign", "new"]) {
+  for (const foreign of ["moves", "undo", "new"]) {
     it(`does not name ${foreign}, which is not in this ticket's table`, () => {
       expect(COMMAND_TABLE.map((spec) => spec.token as string)).not.toContain(foreign);
       expect(helpMessages().join(" ")).not.toContain(foreign);
@@ -479,6 +520,130 @@ describe("ABC-035 A7 — `help` fits the message region: hidden count exactly 0"
 });
 
 // ---------------------------------------------------------------------------
+// `ABC-045` — `resign`: one row, one `game-over`, and the opponent wins. A1-A3, A5 here; A4 is the
+// entry-point child in `src/cli.test.ts`; A6 is the gate's `git diff --numstat`.
+// ---------------------------------------------------------------------------
+
+describe("ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss", () => {
+  /** The exact object, so a payload added later (a confirmation flag, a message) reds here. */
+  const RESIGNED_AS_WHITE = { kind: "game-over", result: "black-wins", reason: "resignation" };
+  const RESIGNED_AS_BLACK = { kind: "game-over", result: "white-wins", reason: "resignation" };
+
+  /** A game at ply 4, White to move, with every piece still on the board: plenty of legal moves. */
+  const atPlyFour = (): GameHistory => played(START_FEN, ["e2e4", "e7e5", "g1f3", "b8c6"]);
+
+  it("A1 — the pure function: the side to move loses, in BOTH directions", () => {
+    // Both, because a build that hardcodes one direction satisfies a single-direction row and
+    // reports the winner as the loser half the time (`ABC-019`'s `LoopOutcome` warning).
+    expect(resolvePromptLine(newGame(START_FEN), "resign")).toEqual(RESIGNED_AS_WHITE);
+    expect(resolvePromptLine(played(START_FEN, ["e2e4"]), "resign")).toEqual(RESIGNED_AS_BLACK);
+    // Exactly the arm's three fields — no confirmation flag, no message, nothing to read twice.
+    expect(Object.keys(resolvePromptLine(newGame(START_FEN), "resign"))).toEqual([
+      "kind",
+      "result",
+      "reason",
+    ]);
+  });
+
+  it("A1 — through the MERGED loop: the human as white loses to black, and exits 0", async () => {
+    const run = await runLines(newGame(START_FEN), ["resign"], { humanColour: "white" });
+
+    expect(run.result).toBe("black-wins");
+    expect(run.reason).toBe("resignation");
+    expect(run.exitCode).toBe(0);
+  });
+
+  it("A1 — through the MERGED loop: the human as black loses to white, and exits 0", async () => {
+    // Black to move after `e4`, so the loop's first prompt is the human's — the engine seam, which
+    // throws, is never reached; that throw is what proves the direction rather than the fixture.
+    const run = await runLines(played(START_FEN, ["e2e4"]), ["resign"], { humanColour: "black" });
+
+    expect(run.result).toBe("white-wins");
+    expect(run.reason).toBe("resignation");
+    expect(run.exitCode).toBe(0);
+  });
+
+  it("A2 — it ends the game on the ply it is typed: 0 legalMoves after the outcome, no frame after it", async () => {
+    const history = atPlyFour();
+    const legalBefore = legalMoves(history.position).length;
+    expect(legalBefore).toBeGreaterThan(0);
+    const fen = toFen(history.position);
+    let legalAtOutcome = -1;
+    let derivesAtOutcome = -1;
+
+    const run = await runLines(history, ["resign", "d2d4"], {
+      onOutcome: () => {
+        legalAtOutcome = legalCalls();
+        derivesAtOutcome = derives();
+      },
+    });
+
+    // The loop returned on THAT iteration: the second scripted line was never read.
+    expect(run.reads).toBe(1);
+    expect(run.result).toBe("black-wins");
+    expect(run.reason).toBe("resignation");
+    // `legalMoves` — spied at the module boundary, so the loop's own direct import is visible — is
+    // called ZERO times after the outcome is produced, and so is the derive.
+    expect(legalAtOutcome).toBeGreaterThanOrEqual(0);
+    expect(legalCalls() - legalAtOutcome).toBe(0);
+    expect(derives() - derivesAtOutcome).toBe(0);
+    // THE FRAME COUNT, READ AGAINST THE MERGED LOOP RATHER THAN THE TICKET'S SENTENCE. The
+    // criterion says "exactly one further frame is written — the final one". `game-over` returns
+    // from `awaiting-human` WITHOUT passing through `rendering` (`src/turn-loop.ts`, the same edge
+    // `ABC-021`'s allowed claim takes), so the frame rendered BEFORE the prompt is the final one
+    // and ZERO frames follow the outcome; the one further write is the result screen, which is the
+    // entry point's (`A4`, `src/cli.test.ts`). Asserted as the loop actually behaves: one frame in
+    // the whole session, none after `resign`.
+    expect(run.renders).toBe(1);
+    expect(toFen(history.position)).toBe(fen);
+    expect(history.moves).toHaveLength(4);
+  });
+
+  it("A2 control — the same legalMoves spy DOES count a real call on a line that is a move", () => {
+    const history = atPlyFour();
+    const before = legalCalls();
+
+    resolvePromptLine(history, "d2d4");
+
+    expect(legalCalls() - before).toBeGreaterThanOrEqual(1);
+  });
+
+  it("A3 — classified before the grammars: neither resolver and no derive sees `resign`", () => {
+    const history = atPlyFour();
+    const seam = spied(history);
+    const legalBefore = legalCalls();
+
+    const outcome = resolvePromptLine(history, "resign", seam.deps);
+
+    expect(outcome).toEqual(RESIGNED_AS_WHITE);
+    expect(seam.coordinateCalls()).toBe(0);
+    expect(seam.sanCalls()).toBe(0);
+    expect(seam.deriveCalls()).toBe(0);
+    // `NFR-002`'s "no derive is added", at the module boundary rather than the test seam: a
+    // `legalMoves` reached through a direct import inside the resign path is visible here and
+    // invisible to `seam.deriveCalls()`.
+    expect(legalCalls() - legalBefore).toBe(0);
+    expect(derives()).toBe(0);
+  });
+
+  it("A5 — no confirmation: the game ends on the one line and the next line is NEVER read", async () => {
+    // The witness is a stdin whose next line is never consumed: a build that read a confirmation
+    // nobody asked for would take `d2d4` as the answer and `reads` would be 2.
+    const run = await runLines(atPlyFour(), ["resign", "d2d4"]);
+
+    expect(run.reads).toBe(1);
+    expect(run.result).toBe("black-wins");
+    expect(run.reason).toBe("resignation");
+  });
+
+  it("A5 — and it is a command like the other four: no message region, no second render", async () => {
+    const run = await runLines(atPlyFour(), ["resign"]);
+
+    expect(run.messagesPerFrame).toEqual([[]]);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Fences — the things this ticket must NOT do.
 // ---------------------------------------------------------------------------
 
@@ -531,7 +696,7 @@ describe("ABC-035 fences — grammar only", () => {
 
   it("takes no argument: a token with anything after it is not a command", () => {
     const history = newGame(RICH_FEN);
-    for (const line of ["claim threefold", "quit now", "help claim", "board white"]) {
+    for (const line of ["claim threefold", "quit now", "help claim", "board white", "resign now"]) {
       expect(classifyCommand(line)).toBeUndefined();
       expect(resolvePromptLine(history, line).kind).not.toBe("command");
     }
