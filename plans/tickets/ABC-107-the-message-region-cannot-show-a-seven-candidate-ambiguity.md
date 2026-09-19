@@ -248,3 +248,34 @@ off `grugops/wave-2026-09-19` @ `475d559`. **Unmerged; not deployed.**
   Handed up, not trimmed. Numbers and the confounders:
   `.grugops/context/ticket-to-pr-ABC-107/notes/`.
 - Board move, QE hop and the UAT waiver measurement are the Orchestrator's / QE's.
+
+## QE
+
+**Validated 2026-09-19 by QE/E2E** (task `wave-2026-09-19`, subtask `qe-ABC-107`, Workflow 05) on
+branch `grugops/qe-ABC-107` off `grugops/wave-2026-09-19` @ `fb9a740` (carries `a5a9178`).
+**PASS. Zero defects. Zero tests added, zero production lines changed by QE.**
+
+- **Gates reproduced at the tip:** lint `Checked 74 files`, typecheck 0, build 0,
+  `npx vitest run --dir src` **41 / 1238 / 0 skipped**, JSON skip count 0, test-skip-integrity
+  `No findings.`, pin alone 25/25 (14 ms in-file), `SEARCH_DEEP=1` 41/41.
+- **Mutants (18, each reverted, `src/` asserted clean after each):** `MESSAGE_ROWS` 2→1 / 2→3
+  **9 / 9 red**; `markerFor` N+1 / N−1 **3 / 3**; marker suppressed **6**; the ambiguity list
+  truncated to 5 / 6 in `src/move-input.ts` (the failure `ABC-033` `A4` names) **7 / 9**; a
+  candidate (b3) dropped from the resolver **10** incl. all three knight reachability rows; last
+  candidate dropped **6**; frame W+1 / W+4 **6 / 9**; region W−1 / W−4 / W−6 **6** each, W−7
+  **9** (the six-knight requirement row reds there); separator removed **9**; an extra frame row
+  **5** (incl. the `A2` reference row). **One survivor in the pin: the marker moved to row 0 —
+  caught by `src/frame.test.ts` (2 red); the pin asserts no width by test note 2's fence.**
+- **Criteria:** `A1'` (hidden 0/2/3/3, marker iff hidden, full-origin SAN and coordinate form
+  6/6, 7/7, 8/8, 8/8), `A2` (23 rows on every fixture), `A3`, `A5` — each by a row whose full
+  name carries the id; `A4` re-measured from git → empty. **All MET.**
+- **Sentence audit (`ABC-114` standard):** three imprecisions, none a defect — "up to six SAN
+  items" is the bound for the 4–5-character items the fixtures render (7-character items fit four
+  per `ADR-0022`'s own table); "exactly as `src/move-input.test.ts` reads it" (that file only
+  asserts the marker's absence); "the only thing that holds it in place" is true of the 7→2 / 8→3
+  tripwire, while six-fits is also pinned by `src/frame.test.ts:376` and `move-input.test.ts` `A4`.
+- **Headroom, measured:** the tripwire is one-column and one-row sensitive both ways; the
+  requirement side (`= 0` at six) holds from W−1 through W−6 and reds at W−7 — six columns, not
+  the "one column" test note 4 carried from `ABC-033`'s six-queen case.
+- `NFR-008` not ruled here (fenced). Not merged, not deployed; the `In Review` exit is
+  recommended and the column move is the Orchestrator's. Notes: `.grugops/context/qe-ABC-107/notes/`.
