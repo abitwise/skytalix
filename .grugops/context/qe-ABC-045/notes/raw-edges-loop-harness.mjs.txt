@@ -1,0 +1,92 @@
+// QE ABC-045 — edge cases (a)-(e) through the MERGED loop, no repo file touched. Node runs .ts directly.
+const SRC = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a1d867186de329e93/src";
+const { runTurnLoop } = await import(`${SRC}/turn-loop.ts`);
+const { resolvePromptLine, classifyCommand, helpMessages } = await import(`${SRC}/command-input.ts`);
+const { newGame, playMove, gameStatusOf } = await import(`${SRC}/history.ts`);
+const { legalMoves } = await import(`${SRC}/legal.ts`);
+const { squareName } = await import(`${SRC}/position.ts`);
+const { toFen } = await import(`${SRC}/fen.ts`);
+
+const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const findMove = (history, wanted) => {
+  const m = legalMoves(history.position).find((c) => `${squareName(c.from)}${squareName(c.to)}` === wanted);
+  if (!m) throw new Error(`no legal ${wanted}`);
+  return m;
+};
+const played = (moves) => { const h = newGame(START_FEN); for (const w of moves) playMove(h, findMove(h, w)); return h; };
+
+async function run(history, lines, { humanColour = "white", engineMoves = [] } = {}) {
+  const events = [];
+  const messagesPerFrame = [];
+  const outcomes = [];
+  let next = 0;
+  let ply = 0;
+  const render = (_h, status, thinking, messages) => { messagesPerFrame.push([...messages]); events.push(`render(${status.result},thinking=${thinking})`); return ["row1", "row2"]; };
+  const input = async (h) => {
+    const line = lines[next++];
+    events.push(`read#${next}:${JSON.stringify(line)} sideToMove=${h.position.blackToMove ? "black" : "white"}`);
+    if (line === undefined) return { kind: "eof" };
+    const o = resolvePromptLine(h, line);
+    outcomes.push(o);
+    return o;
+  };
+  const engine = async (h) => { const w = engineMoves[ply++]; events.push(`engine:${w}`); if (w === undefined) throw new Error("engine out of script"); return findMove(h, w); };
+  const sink = { write: (t) => events.push(`sink.write(${JSON.stringify(t.slice(0, 20))})`) };
+  const outcome = await runTurnLoop({ history, humanColour, render, input, engine, sink });
+  return { outcome, reads: next, renders: messagesPerFrame.length, messagesPerFrame, events, outcomes, fen: toFen(history.position), moves: history.moves.length };
+}
+
+const report = {};
+const check = (name, cond, detail) => { report[name] = { ok: !!cond, detail }; console.log(`${cond ? "OK  " : "FAIL"} ${name} :: ${JSON.stringify(detail)}`); };
+
+// (a) resign while it is the ENGINE's turn: human is black, start position (white/engine to move).
+{
+  const r = await run(newGame(START_FEN), ["resign", "d7d5"], { humanColour: "black", engineMoves: ["e2e4"] });
+  check("(a) engine's turn: the prompt is NOT reached until the engine has moved; the read happens with black to move", r.events.findIndex((e) => e.startsWith("engine:e2e4")) !== -1 && r.events.findIndex((e) => e.startsWith("engine:e2e4")) < r.events.findIndex((e) => e.startsWith("read#1")) && r.events.find((e) => e.startsWith("read#1"))?.includes("sideToMove=black"), r.events);
+  check("(a) result: white-wins by resignation, reads 1, exit 0", r.outcome.result === "white-wins" && r.outcome.reason === "resignation" && r.reads === 1 && r.outcome.exitCode === 0, { outcome: r.outcome, reads: r.reads, renders: r.renders, moves: r.moves });
+  // The pure function called on a position where the side to move is NOT the human (what the loop never does):
+  const wrongSide = resolvePromptLine(newGame(START_FEN), "resign"); // white to move, but suppose the human is black
+  check("(a) the pure function names the SIDE TO MOVE as loser, not the human — safe only because the loop never prompts off-turn", wrongSide.result === "black-wins", wrongSide);
+}
+// (b) ply 0, both colours through the loop
+{
+  const w = await run(newGame(START_FEN), ["resign"], { humanColour: "white" });
+  check("(b) ply 0, human white: black-wins / resignation, reads 1, renders 1, 0 moves, FEN unchanged", w.outcome.result === "black-wins" && w.outcome.reason === "resignation" && w.reads === 1 && w.renders === 1 && w.moves === 0 && w.fen === START_FEN, { outcome: w.outcome, reads: w.reads, renders: w.renders, events: w.events });
+}
+// (c) resign after the game is already over: mated position (Fool's mate), then `resign` on the script
+{
+  const mated = played(["f2f3", "e7e5", "g2g4", "d8h4"]);
+  check("(c) fixture is checkmate", gameStatusOf(mated).reason === "checkmate", gameStatusOf(mated));
+  const r = await run(mated, ["resign", "resign"], { humanColour: "white" });
+  check("(c) after game over the line is NEVER read: reads 0, result black-wins/checkmate, renders 1 (the mated frame)", r.reads === 0 && r.outcome.result === "black-wins" && r.outcome.reason === "checkmate" && r.renders === 1, { outcome: r.outcome, reads: r.reads, renders: r.renders, events: r.events });
+  // and: a second resign after a resign — the loop has returned; the seam is never asked again
+  const r2 = await run(played(["e2e4", "e7e5"]), ["resign", "resign", "resign"], { humanColour: "white" });
+  check("(c') resign then resign: reads 1, the loop returned on the first", r2.reads === 1 && r2.outcome.reason === "resignation", { reads: r2.reads, outcome: r2.outcome });
+}
+// (d) trailing text
+{
+  const h = played(["e2e4", "e7e5", "g1f3", "b8c6"]);
+  const fen = toFen(h.position);
+  check("(d) classifyCommand('resign now') is undefined", classifyCommand("resign now") === undefined, classifyCommand("resign now"));
+  const r = await run(h, ["resign now", "resign"], { humanColour: "white" });
+  check("(d) `resign now` is not a command: rejected with a teaching message, the game goes on, FEN unchanged; the next `resign` ends it", r.outcomes[0].kind === "rejected" && r.reads === 2 && r.renders === 2 && r.messagesPerFrame[1].length > 0 && r.outcome.reason === "resignation" && toFen(h.position) === fen, { first: r.outcomes[0], reads: r.reads, renders: r.renders, messagesPerFrame: r.messagesPerFrame, outcome: r.outcome });
+  for (const line of ["resign!", "resign.", "resign\t", "resignation", " resign now "]) {
+    const o = resolvePromptLine(played(["e2e4", "e7e5"]), line);
+    check(`(d) ${JSON.stringify(line)} -> ${o.kind}`, (line.trim() === "resign") === (o.kind === "game-over"), o);
+  }
+}
+// (e) case and whitespace
+{
+  for (const line of ["RESIGN", "Resign", "  resign  ", "\tRESIGN\r", "rEsIgN"]) {
+    const r = await run(played(["e2e4"]), [line], { humanColour: "black" });
+    check(`(e) ${JSON.stringify(line)} as black -> white-wins/resignation, reads 1`, r.outcome.result === "white-wins" && r.outcome.reason === "resignation" && r.reads === 1, r.outcome);
+  }
+}
+// help lists resign (unit): the message set
+check("help lists resign, 6 items (heading + 5 tokens)", helpMessages().includes("resign") && helpMessages().length === 6, helpMessages());
+
+const fails = Object.values(report).filter((r) => !r.ok).length;
+console.log(`\nSUMMARY: ${Object.keys(report).length} checks, ${fails} failed`);
+import { writeFileSync } from "node:fs";
+writeFileSync("/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/edges-loop-summary.json", JSON.stringify(report, null, 2));
+process.exit(fails === 0 ? 0 : 1);

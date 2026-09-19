@@ -1,0 +1,207 @@
+{
+  "(a) engine's turn: the prompt is NOT reached until the engine has moved; the read happens with black to move": {
+    "ok": true,
+    "detail": [
+      "render(in-progress,thinking=true)",
+      "sink.write(\"row1\\nrow2\\n\")",
+      "engine:e2e4",
+      "render(in-progress,thinking=false)",
+      "sink.write(\"row1\\nrow2\\n\")",
+      "read#1:\"resign\" sideToMove=black"
+    ]
+  },
+  "(a) result: white-wins by resignation, reads 1, exit 0": {
+    "ok": true,
+    "detail": {
+      "outcome": {
+        "result": "white-wins",
+        "reason": "resignation",
+        "exitCode": 0
+      },
+      "reads": 1,
+      "renders": 2,
+      "moves": 1
+    }
+  },
+  "(a) the pure function names the SIDE TO MOVE as loser, not the human — safe only because the loop never prompts off-turn": {
+    "ok": true,
+    "detail": {
+      "kind": "game-over",
+      "result": "black-wins",
+      "reason": "resignation"
+    }
+  },
+  "(b) ply 0, human white: black-wins / resignation, reads 1, renders 1, 0 moves, FEN unchanged": {
+    "ok": true,
+    "detail": {
+      "outcome": {
+        "result": "black-wins",
+        "reason": "resignation",
+        "exitCode": 0
+      },
+      "reads": 1,
+      "renders": 1,
+      "events": [
+        "render(in-progress,thinking=false)",
+        "sink.write(\"row1\\nrow2\\n\")",
+        "read#1:\"resign\" sideToMove=white"
+      ]
+    }
+  },
+  "(c) fixture is checkmate": {
+    "ok": true,
+    "detail": {
+      "result": "black-wins",
+      "reason": "checkmate"
+    }
+  },
+  "(c) after game over the line is NEVER read: reads 0, result black-wins/checkmate, renders 1 (the mated frame)": {
+    "ok": true,
+    "detail": {
+      "outcome": {
+        "result": "black-wins",
+        "reason": "checkmate",
+        "exitCode": 0
+      },
+      "reads": 0,
+      "renders": 1,
+      "events": [
+        "render(black-wins,thinking=false)",
+        "sink.write(\"row1\\nrow2\\n\")"
+      ]
+    }
+  },
+  "(c') resign then resign: reads 1, the loop returned on the first": {
+    "ok": true,
+    "detail": {
+      "reads": 1,
+      "outcome": {
+        "result": "black-wins",
+        "reason": "resignation",
+        "exitCode": 0
+      }
+    }
+  },
+  "(d) classifyCommand('resign now') is undefined": {
+    "ok": true
+  },
+  "(d) `resign now` is not a command: rejected with a teaching message, the game goes on, FEN unchanged; the next `resign` ends it": {
+    "ok": true,
+    "detail": {
+      "first": {
+        "kind": "rejected",
+        "messages": [
+          "type e2e4 or Nf3"
+        ]
+      },
+      "reads": 2,
+      "renders": 2,
+      "messagesPerFrame": [
+        [],
+        [
+          "type e2e4 or Nf3"
+        ]
+      ],
+      "outcome": {
+        "result": "black-wins",
+        "reason": "resignation",
+        "exitCode": 0
+      }
+    }
+  },
+  "(d) \"resign!\" -> rejected": {
+    "ok": true,
+    "detail": {
+      "kind": "rejected",
+      "messages": [
+        "type e2e4 or Nf3"
+      ]
+    }
+  },
+  "(d) \"resign.\" -> rejected": {
+    "ok": true,
+    "detail": {
+      "kind": "rejected",
+      "messages": [
+        "type e2e4 or Nf3"
+      ]
+    }
+  },
+  "(d) \"resign\\t\" -> game-over": {
+    "ok": true,
+    "detail": {
+      "kind": "game-over",
+      "result": "black-wins",
+      "reason": "resignation"
+    }
+  },
+  "(d) \"resignation\" -> rejected": {
+    "ok": true,
+    "detail": {
+      "kind": "rejected",
+      "messages": [
+        "type e2e4 or Nf3"
+      ]
+    }
+  },
+  "(d) \" resign now \" -> rejected": {
+    "ok": true,
+    "detail": {
+      "kind": "rejected",
+      "messages": [
+        "type e2e4 or Nf3"
+      ]
+    }
+  },
+  "(e) \"RESIGN\" as black -> white-wins/resignation, reads 1": {
+    "ok": true,
+    "detail": {
+      "result": "white-wins",
+      "reason": "resignation",
+      "exitCode": 0
+    }
+  },
+  "(e) \"Resign\" as black -> white-wins/resignation, reads 1": {
+    "ok": true,
+    "detail": {
+      "result": "white-wins",
+      "reason": "resignation",
+      "exitCode": 0
+    }
+  },
+  "(e) \"  resign  \" as black -> white-wins/resignation, reads 1": {
+    "ok": true,
+    "detail": {
+      "result": "white-wins",
+      "reason": "resignation",
+      "exitCode": 0
+    }
+  },
+  "(e) \"\\tRESIGN\\r\" as black -> white-wins/resignation, reads 1": {
+    "ok": true,
+    "detail": {
+      "result": "white-wins",
+      "reason": "resignation",
+      "exitCode": 0
+    }
+  },
+  "(e) \"rEsIgN\" as black -> white-wins/resignation, reads 1": {
+    "ok": true,
+    "detail": {
+      "result": "white-wins",
+      "reason": "resignation",
+      "exitCode": 0
+    }
+  },
+  "help lists resign, 6 items (heading + 5 tokens)": {
+    "ok": true,
+    "detail": [
+      "commands:",
+      "help",
+      "board",
+      "quit",
+      "claim",
+      "resign"
+    ]
+  }
+}

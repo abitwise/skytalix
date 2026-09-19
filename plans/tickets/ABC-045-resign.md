@@ -217,3 +217,56 @@ independent of the arm ticket (`ABC-120`, merged into the wave branch before thi
 - Production lines > 0: the zero-production-lines UAT waiver does NOT apply; the owner's word is
   needed at `In UAT`. Board move (`In Development` → `In Review`) and the QE hop are the
   Orchestrator's / QE's. Notes: `.grugops/context/ticket-to-pr-ABC-045/notes/`.
+
+## QE
+
+**Validated 2026-09-20 by QE/E2E** (task `wave-2026-09-19`, subtask `qe-ABC-045`, Workflow 05) on
+branch `grugops/qe-ABC-045` off `grugops/wave-2026-09-19` @ `2a1d70a` (carries `b8afa30`).
+**PASS. Zero defects. Zero tests added, zero lines under `src/` changed by QE** (every mutant
+reverted, sha256 and `git status -- src` asserted after each of 14 rounds). Load 4.7–10.6, two
+sibling hops live.
+
+- **Gates reproduced at the tip:** `npx biome check .` 76 files clean, `npx tsc --noEmit` 0
+  (typecheck and build), `npx vitest run --dir src` **42 / 1325 / 0 skipped** (6.83 s) — 1325, not
+  the Delivery's 1317, because the wave tip also carries `ABC-075` (+8, `src/zobrist.*`), measured
+  from git; JSON skip count 0, test-skip-integrity `No findings.`; the two files alone **98 / 98**
+  and **62 / 62** (the Engineer's own figures).
+- **Ruling on `A2` "exactly one further frame is written — the final one": MET-AS-READ.** QE wrote
+  the literal sentence into `src/turn-loop.ts` as a mutant (`M12`, the `game-over` branch renders
+  once before returning): red on `A2`, `A5`, the `A4` child (4 frames ≠ 3) AND two `ABC-019` rows
+  in `src/turn-loop.test.ts`; `ABC-021`'s allowed claim takes the same edge with zero frames and
+  killed an extra-frame mutant on its own `A1`; `A6` on this page fences the file. The build is
+  right; **the last clause is BA/PM's to re-word** to `ABC-021` `A1`'s shape — *"no further frame is
+  written by the loop; the result screen (`ABC-044`) is the one further write"*.
+- **Ruling on `A5` and the confirmation mutant: GUARDED by its own row.** The Engineer's module-level
+  flag (`M5`) reproduced — `A5`'s loop row green in place, red on `ABC-035` `A1` and the `A4`
+  child. `M5-isolated` (the row run alone): **RED, `expected 2 to be 1`**. `M9` (QE: a PER-GAME
+  confirmation keyed on the history — the realistic shape): **`A5` red directly**, 10 + 1 rows in
+  all. The in-place masking is test-order coupling, and the one shape it masks is the one a child
+  process — one module instance, one game, the product's shape — cannot miss. `G1-INFO`, no row
+  added.
+- **Mutants: 13 + `M5-isolated`, no survivor.** The Engineer's eight reproduced to the row and
+  the count (2 / 6 / 7+1 / 6+1 / 1+1 / 1 / 4 / 13+1); QE's five: per-game confirmation 10+1,
+  case-sensitive lookup 18, first-word-wins 2 (the no-argument fence), the loop's extra frame 5,
+  and the isolated `A5` 1. Control 98 / 62 / 63.
+- **Five edge cases, each through the merged loop AND `node src/cli.ts` with the engine substituted
+  (scratch harnesses, 31 / 31; nothing added to the `17 + 7 + 1` pin):** (a) `resign` on the
+  ENGINE's turn — the human cannot reach the prompt off-turn (`humanToMove` gates `input`; the line
+  seam pauses the source between reads), so `blackToMove` is the human's colour on the only path
+  that reads it; `--colour black` + `resign` → `White wins by resignation` after `1. e4`, 1 prompt;
+  (b) ply 0 — `A1`; the real screen carries an empty move list; (c) after game over — the line is
+  NEVER read (reads 0 on a mated fixture; 2 prompts on the real frame; `resignation` absent) —
+  `ABC-019`'s exit-between-render-and-act, no `resign` row needed; (d) `resign now` — not a
+  command, `rejected` with `type e2e4 or Nf3`, the game goes on (the no-argument fence; `M11`);
+  (e) `RESIGN` / `Resign` — resign, same rule as the other four (`M10` reds 18 rows).
+- **`help` through the real frame:** `commands: help board` / `quit claim resign`, no `(+N more)`,
+  at the start and after `e4 e5`. Hidden 0.
+- **Docblock (`ABC-114`): no false sentence** in the amended `src/command-input.ts`. Two `G`-INFO
+  stale line cites, NOT corrected by QE: `:63-64` "`src/turn-loop.ts:129` / `:130`" → `:139` /
+  `:140` (a paragraph this ticket re-typed), `:41-42` "`:319-341` / `:234`" → `:354-376` /
+  `:255` (`ABC-120`'s +10 shift); and `src/cli.test.ts:278` "Ten" children (25), pre-existing.
+- **Not ruled / not covered:** `NFR-008` (fence; lane 6.83 s wall here, data). `src/search.*`,
+  `src/quiescence.*`, `src/engine.*`, `src/zobrist.*` not opened.
+- **Production lines > 0**, so the UAT waiver does not apply; the owner's word is needed at
+  `In UAT`. Not merged, not deployed; `plans/board.md` untouched — the `In Review` exit is the
+  Orchestrator's move. Notes: `.grugops/context/qe-ABC-045/notes/`.
