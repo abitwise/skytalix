@@ -195,3 +195,34 @@ Items 1–4 and 6–9 unchanged from BA/PM's 2026-08-16 assessment. **Result: 10
 `Blocked` → `Ready`** (DoR 10/10; `Ready` WIP 8, this hop did not open the board to count it —
 the Orchestrator's move, and `Backlog` if `Ready` is at limit). Zero `src/` bytes were written at
 this hop.
+
+## Delivery — 2026-09-19, Software Engineer (task `wave-2026-09-19`, subtask `ticket-to-pr-ABC-075`, Workflow 04)
+
+**Branch `grugops/ABC-075-incremental-zobrist` @ `40b77ac`, off `grugops/wave-2026-09-19` @
+`b65f5f1`. Unmerged, undeployed; the `In Review` move is the Orchestrator's; QE's hop is owed.**
+Built inside `ADR-0020`'s fixed seam, nothing re-decided. Measurements, the assertion-by-assertion
+re-point and the raw harness outputs are in `.grugops/context/ticket-to-pr-ABC-075/notes/`
+(one `decision`, one `claim`, one `observation`, one `artifact-ref`, nine `raw-*.txt`), not here.
+
+- **Diff (`git diff --numstat b65f5f1 40b77ac -- src/`):** `src/zobrist.ts` +71/−15,
+  `src/zobrist.test.ts` +250/−64, `src/zobrist.nfr.test.ts` +19/−30. Nothing else under `src/`.
+  Production lines > 0, so the 2026-08-17 UAT waiver does NOT apply.
+- **`A1`/`A2`** — 0 mismatches, 0 drift at depth 2 in the default lane and at the criteria's
+  depth 4 under `ZOBRIST_DEEP=1` (**11,024,485 nodes**, 40 s), the walk feeding each node's
+  incremental key to its children. **`A3`** — both classes, post-ruling oracle, `:49`/`:73`
+  flipped to `not.toBe` as § "Ruling applied" item 2 says. **`A4`** — rights, not availability,
+  asserted directly and through the delta. **`A5`** — `zobristKey` **340.7 ns** vs
+  `zobristKeyAfterMove` **37.1 ns**, interleaved in one process, darwin arm64 / Node v24.12.0,
+  **9.19x** (bar ≥ 5x). **`A6`** — `src/legal.ts` byte-identical, `zobristKey` signature
+  unchanged, `42 / 1305 / 0` (base `42 / 1297 / 0`), `test-skip-integrity` `No findings.`
+- **`N8-LANE`** +123 ms in-file (paired median, n = 7, sign 7/7), 0 new files. **`NFR-008`** lane
+  CPU **19.70 s before / 20.49 s after** under sibling load at n = 3 — over 15 s before the diff
+  existed; REPORTED non-conforming, not ruled, nothing trimmed.
+- **One interpretation, flagged, not absorbed:** the ten `it.each` rows at `src/zobrist.test.ts:276`/`:308`
+  ("omits the ep component…") also go RED under Decision 1 — `parseFen` keeps a contradicted ep
+  square and the component now keys on the field. `ADR-0020`'s Consequences listed them as
+  "stay green"; that is true of their purity half only. Re-pointed to "carries the ep component",
+  purity assertion unchanged, watched red then green. Named for QE.
+- **Owed by another hop:** `AGENTS.md` (fenced here) needs one `### Test` line for the new
+  opt-in lane — `ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts` (RUN 2026-09-19 at `40b77ac`:
+  exit 0, 33 passed, 40.2 s; unset, the deep case is NOT DEFINED, skip count stays 0).
