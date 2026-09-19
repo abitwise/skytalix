@@ -1,0 +1,48 @@
+// NFR-002: does any classifier work run on the per-FRAME path? Counts classifyRejection /
+// legalMoves / generateMoves during the production render seam, frames carrying rejection
+// sentences, across ply counts 0 / 40 / 120 / 300. Usage: node probe-nfr002.mjs <after-tree-dir>
+const TREE = process.argv[2];
+globalThis.__grugCounts = { legalMoves: 0, isInCheck: 0, generateMoves: 0, classifyRejection: 0 };
+const { newGame, playMove, gameStatusOf } = await import(`${TREE}/src/history.ts`);
+const { legalMoves } = await import(`${TREE}/src/legal.ts`);
+const { makeRenderSeam } = await import(`${TREE}/src/render-seam.ts`);
+const { resolvePromptLine } = await import(`${TREE}/src/command-input.ts`);
+
+const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const reset = () => { for (const k of Object.keys(globalThis.__grugCounts)) globalThis.__grugCounts[k] = 0; };
+
+// A deterministic LCG game (the shape src/history.test.ts plays), to reach the three ply counts.
+let seed = 12345;
+const rnd = (n) => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };
+const gameTo = (plies) => {
+  const h = newGame(START);
+  for (let i = 0; i < plies; i++) {
+    const legal = legalMoves(h.position);
+    if (legal.length === 0 || gameStatusOf(h).result !== "in-progress") break;
+    playMove(h, legal[rnd(legal.length)]);
+  }
+  return h;
+};
+
+console.log(`tree=${TREE}`);
+console.log("plies  mode/orient   frames  classifyRejection legalMoves generateMoves isInCheck   (counts DURING render only)");
+for (const plies of [0, 40, 120, 300]) {
+  const h = gameTo(plies);
+  const realised = h.moves.length;
+  // A real rejection first, so the messages are the classifier's own sentence.
+  const out = resolvePromptLine(h, "a3a4");
+  const messages = out.kind === "rejected" ? out.messages : ["type e2e4 or Nf3"];
+  const status = gameStatusOf(h);
+  for (const [mode, orient] of [["unicode", "white"], ["ascii", "black"]]) {
+    const render = makeRenderSeam(mode, orient);
+    reset();
+    const FRAMES = 200;
+    for (let i = 0; i < FRAMES; i++) render(h, status, false, messages);
+    const c = globalThis.__grugCounts;
+    console.log(String(realised).padStart(5), ` ${mode}/${orient}`.padEnd(15), String(FRAMES).padStart(6), String(c.classifyRejection).padStart(18), String(c.legalMoves).padStart(11), String(c.generateMoves).padStart(14), String(c.isInCheck).padStart(10), JSON.stringify(messages));
+  }
+}
+// Positive control: the counter is live — one rejected prompt must register.
+reset();
+resolvePromptLine(newGame(START), "a3a4");
+console.log(`positive control (one rejected prompt): ${JSON.stringify(globalThis.__grugCounts)}`);

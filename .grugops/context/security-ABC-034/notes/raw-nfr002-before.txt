@@ -1,0 +1,11 @@
+tree=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4633eeb0-5a64-4573-8cf0-ba3fb1835c91/scratchpad/before
+plies  mode/orient   frames  classifyRejection legalMoves generateMoves isInCheck   (counts DURING render only)
+    0  unicode/white     200                  0           0              0        200 ["no-such-move"]
+    0  ascii/black       200                  0           0              0        200 ["no-such-move"]
+   40  unicode/white     200                  0        2800           2800       3600 ["no-such-move"]
+   40  ascii/black       200                  0        2800           2800       3600 ["no-such-move"]
+  120  unicode/white     200                  0        3400           3400       3600 ["type e2e4 or Nf3"]
+  120  ascii/black       200                  0        3400           3400       3600 ["type e2e4 or Nf3"]
+  272  unicode/white     200                  0        3800           3800       3600 ["no-such-move"]
+  272  ascii/black       200                  0        3800           3800       3600 ["no-such-move"]
+positive control (one rejected prompt): {"legalMoves":1,"isInCheck":0,"generateMoves":1,"classifyRejection":0}
