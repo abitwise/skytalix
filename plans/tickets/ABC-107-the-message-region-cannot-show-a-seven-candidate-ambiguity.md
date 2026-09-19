@@ -3,7 +3,7 @@ id: ABC-107
 title: The message region cannot show a 7-candidate ambiguity — decide what the frame does when a list does not fit, without truncating it and without widening the frame
 status: backlog
 column: Backlog
-size: M
+size: XS
 priority: P2
 epic: EPIC-002
 feature: —
@@ -16,6 +16,21 @@ feature: —
 > other; this page copies them and derives nothing new.**
 > `.grugops/context/quality-gate-ABC-033-qe-2026-08-18/notes/` (`G1`) and
 > `.grugops/context/repair-ABC-033-2026-08-18/notes/`.
+
+> **RULED 2026-09-19 by Architect/Design — `ADR-0022`, option 4 (documented, tested bound).**
+> On the owner's word *"6. implement best guess for now"* (delegation, verbatim in
+> `.grugops/context/owner-rulings-2026-09-19/notes/`). **Measured at this hop through the real
+> pipeline:** `W` = 21; the current rendering fits **6** (hidden 0), **7 → hidden 2**, **8 → hidden
+> 3**; and **every candidate of every fixture is reachable by typing its full-origin SAN (`Nb3d4`)
+> or coordinate form (`b3d4`) — 8/8 — without reading the list.** Seven of one piece needs five
+> promotions. Option 3 (`Nb3`) would fit 10 but makes the everyday two-candidate list non-retypeable
+> and must be built in `src/move-input.ts` against `A4`; priced and rejected in the ADR with 1 and 2.
+> **Consequences on this page:** size `M` → **`XS`**; `A1` → **`A1'`** below; DoR items 3 and 10
+> re-scored (**10/10, PULLABLE**); `A2`–`A5` unchanged. **Nothing under `src/` changes for the
+> build except ONE new test file** — the `A5` fixtures through `resolveMoveInput` → `assembleFrame`
+> with the delivered panels, asserting hidden **0 / 2 / 3**. Zero production lines, so the
+> 2026-08-17 UAT waiver applies once measured from git; QE's hop is still owed. Falsifiers that
+> flip the ruling are in `ADR-0022` `## Consequences` (F1–F4).
 
 ## Problem
 
@@ -95,10 +110,17 @@ silent truncation, and widening the frame.
 Written to hold under options 1-3. **If Architect/Design rules option 4, `A1` is replaced by a
 documented-bound criterion and this page is re-scored — that is a re-scope, not a pass.**
 
-- **`A1` (nothing is hidden without a way to reach it).** **Given** the 7-knight and 8-knight FENs
+- ~~**`A1` (nothing is hidden without a way to reach it).** **Given** the 7-knight and 8-knight FENs
   above with `Nd4` submitted, **when** the frame is assembled at the width the delivered panels
   set, **then** every one of the 7 / 8 candidates is reachable by the player, and the number of
-  candidates that are unreachable is **0**.
+  candidates that are unreachable is **0**.~~ **REPLACED 2026-09-19 by `ADR-0022` (option 4):**
+- **`A1'` (the bound is written and every candidate stays reachable by typing).** **Given** the
+  6-, 7- and 8-knight FENs above with `Nd4` submitted, **when** the frame is assembled at the width
+  the delivered panels set, **then** the hidden count is exactly **0 / 2 / 3**, the `(+N more)`
+  marker is present exactly when hidden > 0, **and** for every one of the 6 / 7 / 8 candidates,
+  submitting its full-origin SAN (`N<from>d4`) AND its coordinate form (`<from>d4`) each resolve to
+  that candidate as a `move` — measured 8/8 at the ruling hop, to be pinned by the same test file
+  `A5` names. The bound (6 at `W` = 21) is stated on `ADR-0022` and nowhere else.
 - **`A2` (the frame's row count does not move).** **Given** the same two positions, **when** the
   frame renders in every state the answer introduces (first page, later page, exhausted), **then**
   the emitted frame's row count is **identical** to the row count of a frame with a 2-candidate
@@ -115,8 +137,9 @@ documented-bound criterion and this page is re-scored — that is a re-scope, no
 
 ## Dependencies
 
-- **Architect/Design must rule the shape before this is estimable.** See above. **No ADR id is
-  guessed here; none exists yet.**
+- ~~**Architect/Design must rule the shape before this is estimable.** See above. **No ADR id is
+  guessed here; none exists yet.**~~ **RULED — `ADR-0022`, 2026-09-19, option 4.** No open
+  dependency remains; option 2's input-side trigger did not fire.
 - **`ABC-018` (`assembleFrame`) and `ABC-033` are merged instruments.** This ticket changes the
   first and must not change the second.
 - **Not blocked by `ABC-034`, `ABC-035`, `ABC-037` or `ABC-043`.** If the ruling is option 2 (a
@@ -148,11 +171,16 @@ documented-bound criterion and this page is re-scored — that is a re-scope, no
 
 ## Size and priority rationale
 
-**Size `M`.** One decision to consume, one change inside the frame's packing, a state the frame did
+~~**Size `M`.** One decision to consume, one change inside the frame's packing, a state the frame did
 not previously have, and a fixture set across two modules' tests. **Not `S`** — under options 1 and
 2 the region stops being a pure function of its items. **Re-size trigger, named: if Architect/Design
 rules option 4 (accepted risk), this drops to `XS`** (a documented bound plus `A5`'s guard test) and
-must be re-scored, not silently absorbed.
+must be re-scored, not silently absorbed.~~
+
+**Size `XS` — RE-SCORED 2026-09-19 by Architect/Design, the trigger above having fired (`ADR-0022`,
+option 4).** One new test file, four named fixtures through the delivered pipeline, zero production
+lines. `A4`'s "0 changed lines in `src/move-input.ts`" now holds trivially. The size rationale of
+the struck paragraph was correct for options 1–3 and is kept for the record.
 
 **Priority `P2`, and this is the number I most expect to be argued with.**
 
@@ -173,20 +201,26 @@ reaches.
 ## Definition of Ready
 
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-18**. **Result: 8 of 10 — items 3 and 10 carry a ⚠️. NOT READY TO PULL, and the two ⚠️ are
-the same fact: the shape is unruled.**
+**2026-08-18**. ~~**Result: 8 of 10 — items 3 and 10 carry a ⚠️. NOT READY TO PULL, and the two ⚠️ are
+the same fact: the shape is unruled.**~~ **RE-SCORED 2026-09-19 by Architect/Design against
+`ADR-0022`: 10 of 10, 0 ⚠️ — PULLABLE.** Items 3 and 10 are re-scored in place below (the original
+verdict struck, not deleted); items 1, 2, 4–9 were not re-assessed and stand as BA/PM scored them.
+Item 4's `A1` replacement, named in advance there, is now `A1'`. **Recommendation to the
+Orchestrator: pull now, not behind `ABC-034`** — the build touches no wording, no production line
+and no module `ABC-034` will change; parking it buys nothing and leaves `ABC-033` `A4`'s falsified
+sentence standing longer than it needs to.
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** user, pain and value stated; three FENs, two independent reproductions, threshold at 7 |
 | 2 | scope and out-of-scope clear | **✅** four fences, two shapes ruled out before design starts |
-| 3 | INVEST-shaped | **⚠️ NOT estimable with confidence.** Valuable, negotiable, small and testable — but the size spans `XS` to `M` across four live shapes, and the re-size trigger is named rather than averaged away |
+| 3 | INVEST-shaped | ~~**⚠️ NOT estimable with confidence.** Valuable, negotiable, small and testable — but the size spans `XS` to `M` across four live shapes, and the re-size trigger is named rather than averaged away~~ **✅ RE-SCORED 2026-09-19:** one shape (`ADR-0022`, option 4), one size (`XS`), one test file; the span collapsed exactly as the named trigger said it would |
 | 4 | acceptance testable and measurable | **✅** five: unreachable count **0**, identical row count, hidden **0** at six, **0** changed lines in `src/move-input.ts`, three pinned fixtures. `A1`'s replacement under option 4 is named in advance |
 | 5 | dependencies known | **✅** the unmade decision is named **with an owner** — Architect/Design at `In Design`; two merged instruments named; the one dependency option 2 would add is named as a trigger |
 | 6 | security/NFR triggers with a measurable target | **✅** `NFR-002` < 16 ms; `ADR-0009` `= 23` / `≤ 24`; `N8-LANE` ≤ 650 ms; security firing threshold falsifiable |
 | 7 | test notes present | **✅** four, with the fixture set ready to paste |
 | 8 | size assigned | **✅** `M`, conditional, with the re-size trigger written down |
 | 9 | priority assigned | **✅** `P2`, with the reasons it is neither `P1` nor `P3` |
-| 10 | no major unresolved blocker | **⚠️ ONE.** *What the frame does when a list does not fit* is an unmade design decision straddling `EPIC-002` and `EPIC-003`. **BA/PM does not take it** — taking it on a ticket page would be product deciding the frame's interaction — and no owner was invented: it is Architect/Design's by the same route `ADR-0012` took |
+| 10 | no major unresolved blocker | ~~**⚠️ ONE.** *What the frame does when a list does not fit* is an unmade design decision straddling `EPIC-002` and `EPIC-003`. **BA/PM does not take it** — taking it on a ticket page would be product deciding the frame's interaction — and no owner was invented: it is Architect/Design's by the same route `ADR-0012` took~~ **✅ RE-SCORED 2026-09-19:** ruled by Architect/Design at `ADR-0022` on the owner's delegation; no blocker remains |
 
 Column moves are the Orchestrator's.
