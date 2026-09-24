@@ -326,3 +326,51 @@ transcripts and the argument are in `.grugops/context/ticket-to-pr-ABC-118/notes
 - **QE hop owed** before `In Review` is exited; QE is not UAT. UAT: the diff carries zero
   production lines, so the 2026-08-17 waiver is expected to apply — measured from git at the
   exit, never asserted here.
+
+## QE
+
+**QE/E2E, 2026-09-24** (task `wave-2026-09-24`, subtask `qe-ABC-118`, Workflow 05 step). Branch
+`grugops/qe-ABC-118` off `grugops/wave-2026-09-24` @ `162b2bd`; **unmerged, not deployed.** The
+full record is in `.grugops/context/qe-ABC-118/notes/` (4 notes + 6 raw files); this section is the
+summary. **NOT A STAMP** (`human_admission` `off`).
+
+**VERDICT: PASS.** `ABC-118` may leave `In Review`; the column move is the Orchestrator's.
+
+| criterion | ruling |
+|---|---|
+| `A1` | **MET**: `E-M1` reproduced (42→41, RED, named, lint/typecheck/build 0/0/0); QE's `"src/perft.test.ts"` also RED, 0/0/0 |
+| `A2` | **MET**: 42→84→42 reproduced, RED naming 42 foreign paths, 0/0/0; **27 live checkouts** under `.claude/worktrees/` at this hop (counted, not opened) |
+| `A3` | **MET-AS-READ**: index as the expectation, the commit as the reason; `E-M3` 43/42 RED, 43/43 after `git add` |
+| `A4` | **MET**: `M4` alone is not discriminating (a removed guard would also read 42/42); **QE's `A4-X` (guard-aimed globs + the deletion glob) reads RED 41/42** |
+| `A5` | **MET-AS-READ**: `129f53d..75e7357` numstat EMPTY over `src/`, `vitest.config.ts`, `AGENTS.md`, `plans/nfr-catalog.md`, `package.json`; rows 28–35 hash `b848732b…` at base, build and tip (unchanged by this ticket), `63f66795…` only at `565c623`; the pin is BA/PM's to refresh |
+| `A6` | **MET-AS-READ**: skip 0, 42 / 1361 / 0 at the tip (+0 from this ticket); every lane input is byte-identical, so the paired delta is noise and the wall sign rule cannot hold for a null change |
+
+**Gates at `162b2bd`:** `npx biome check .` 76 files clean; `npx tsc --noEmit` 0 (typecheck, build);
+`npx vitest run --dir src` **42 / 1361 / 0 skipped**; JSON skip 0; `test-skip-integrity` `No
+findings.`; instrument `42 … git tracks 42. No findings.`
+
+**The instrument is unreachable from `test.exclude` (the property `A4` wanted) and today it is
+UNREACHED BY ANY RUNNER (G1).** Workflow 05 names `test-skip-integrity.js` and not this instrument.
+`AGENTS.md` has 0 hits, and there is no script, CI job or hook. The instrument runs only when
+someone who read this page runs it by hand. The limit was stated at delivery, so it does not fail
+a criterion. **But the `## Problem`'s "one assertion that turns a silent inventory change into a
+red line" is not live until the `ABC-109` Scribe line lands.**
+
+**Other gaps, all NAMED and NOT corrected by QE:**
+
+- **G2 `Q1b`:** `exclude += "perft.test.ts"` drops the file from the unit gate's `--dir src` form
+  (42→41) and not from the root form. The instrument reads GREEN.
+- **G3 `Q3d`:** a committed `git mv` to `src/fen.tests.ts` shrinks both sets, 41/41 GREEN.
+- **G4:** a tracked `.spec.ts` or `.test.mjs` reds with the false text "NOT tracked by git".
+- **G5 `Q2`:** a tracked docs `*.test.ts` reds while it is correctly excluded, and goes GREEN when
+  the glob that excludes it is removed.
+- **G6 `Q3b`:** "a `test.exclude` glob … is dropping it" is printed for a file moved on disk.
+- **G7:** the header and this page have no false sentence. "like `test-skip-integrity.js`" is an
+  imprecision. **One FALSE sentence is in the Engineer's `decision` note:** "That is exactly
+  `test-skip-integrity.js`'s position: the gate runner has to call it." Ground (2)'s ~370 ms floor
+  against the config's recorded 138.9 ms/file slope is `UNKNOWN - verify`, and the ruling rests on
+  ground (1).
+
+**UAT:** zero production lines, measured from git, so the 2026-08-17 waiver applies. QE wrote
+nothing under `src/` or `tools/`. It did not open `plans/board.md`, `AGENTS.md` or
+`plans/nfr-catalog.md`, and it did not rule NFR-008.

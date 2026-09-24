@@ -1,0 +1,52 @@
+// QE ABC-118 extra: (1) A5 hash of rows 28-35 at four commits, printed as hashes only (the file's
+// text is never printed); (2) the A4 discriminating probe in the scratchpad copy: the globs aimed at
+// the guard PLUS a deletion glob, which a removed guard would read green and a live guard must read red;
+// (3) the live checkouts under .claude/worktrees/ in the main checkout, counted, not opened.
+import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
+const repo = process.argv[2];
+const copy = process.argv[3];
+const main = process.argv[4];
+if (!copy.includes("/scratchpad/qe118-copy")) throw new Error("refusing: copy must be the scratchpad copy");
+const sh = (cmd, args, cwd) => {
+  const r = spawnSync(cmd, args, { cwd, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 });
+  return { exit: r.status, stdout: r.stdout ?? "", out: (r.stdout ?? "") + (r.stderr ?? "") };
+};
+
+console.log("== A5 hash: sed -n '28,35p' plans/nfr-catalog.md | shasum -a 256, per commit");
+for (const rev of ["565c623", "129f53d", "75e7357", "HEAD"]) {
+  const text = sh("git", ["show", `${rev}:plans/nfr-catalog.md`], repo).stdout;
+  const rows = text.split("\n").slice(27, 35).join("\n") + "\n";
+  console.log(`  ${rev}: ${createHash("sha256").update(rows).digest("hex")}  (${rows.split("\n").length - 1} rows)`);
+}
+
+console.log("\n== A4 discriminating probe (copy): exclude += \"**/tools/**\", \"**/lane-inventory*\", \"**/glyph-mode.nfr.test.ts\"");
+const cfg = join(copy, "vitest.config.ts");
+const original = readFileSync(cfg, "utf8");
+const marker = '"**/node_modules/**",';
+writeFileSync(cfg, original.replace(marker, `${marker}\n      "**/tools/**",\n      "**/lane-inventory*",\n      "**/glyph-mode.nfr.test.ts",`));
+const r = sh("node", ["tools/grugops/lane-inventory.js"], copy);
+console.log(`  instrument exit=${r.exit}`);
+for (const l of r.out.trim().split("\n")) console.log(`      | ${l}`);
+writeFileSync(cfg, original);
+const s = sh("git", ["status", "--porcelain"], copy).stdout.trim();
+console.log(`  REVERT: config==original:${readFileSync(cfg, "utf8") === original} porcelain=${s === "" ? "EMPTY" : s}`);
+
+console.log("\n== A2 live checkouts under the main checkout's .claude/worktrees/ at this hop (names counted, never opened)");
+const wt = join(main, ".claude", "worktrees");
+const names = readdirSync(wt);
+let withSrc = 0;
+for (const n of names) {
+  try {
+    const t = readdirSync(join(wt, n, "src")).filter((f) => f.endsWith(".test.ts")).length;
+    if (t > 0) withSrc++;
+  } catch {}
+}
+console.log(`  entries: ${names.length}; entries with src/*.test.ts: ${withSrc}; residual-gqe115-3 present: ${names.includes("residual-gqe115-3")}`);
+console.log("\n== The instrument at the MAIN checkout's own root (the real config, live worktrees present)");
+const m = sh("node", ["tools/grugops/lane-inventory.js"], main);
+console.log(`  instrument exit=${m.exit}`);
+for (const l of m.out.trim().split("\n").slice(0, 4)) console.log(`      | ${l}`);
