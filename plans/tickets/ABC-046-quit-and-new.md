@@ -415,3 +415,46 @@ reasoning is not restated here; it is in `.grugops/context/qe-ABC-046/notes/`.
   opened. Not merged, not deployed.
 - **Column:** the move back to `In Development` is the Orchestrator's. Production lines > 0, so
   the UAT waiver does not apply.
+
+## Ruling (clause 6) 2026-09-24: the over-cap line is a line; the `disarm` is licensed; `A8` amended a second time
+
+**Architect/Design, task `wave-2026-09-24`, subtask `ruling-abc046-clause6`**, on QE's reading (2).
+This section is a pointer and records what changes on THIS page. The reasoning and measurements live
+in `.grugops/context/ruling-abc046-clause6/notes/` and are not repeated here.
+
+- **`ADR-0021` clause 6 stands as written, and is neither superseded nor edited.** "Cleared by any
+  other line" includes a line the reader refuses at the cap. The player's last frame said
+  `line too long`, not `quit again to end`, so the next `quit` is a first `quit`. The rule is that
+  every submitted line either reaches the wrapper's resolve or calls its `disarm`. `eof` is exempt.
+- **Probed out of tree** (session scratchpad, not this repo), measured on the licensed shape:
+  - production diff +14 / −3;
+  - `tsc` and `biome` pass;
+  - existing lane **1361 / 1361, 0 skipped**; with the three rows below, **1364 / 1364**;
+  - `ABC-037` security bar 2 green in the default lane and in the deep lane (33 / 33). The same 3 +
+    3 rows are red under `Q9`;
+  - through the real entry point, `quit` / 1025×`x` / `quit` / EOF gives 2 confirmations and ends
+    on `input ended`.
+- **`A8` IS AMENDED, a second time.** The file list is now exactly the list below. Everything else
+  under `src/` stays byte-identical, `src/turn-loop.ts` and `src/cli.test.ts` included. There are
+  0 new files and 0 new children.
+  1. `src/command-input.ts`:
+     - **D1** (`:4-5`) and **D2** (`:222-223`) prose repairs;
+     - `PromptLineResolver` gains `readonly disarm: () => void`;
+     - `createPromptLineResolver` returns its unchanged closure with `disarm` attached. `disarm`
+       sets `quitArmed = false` and does nothing else;
+     - the wrapper docblock says, truly, what `disarm` does and who calls it.
+  2. `src/line-input.ts`:
+     - `:245`: the over-cap branch calls `resolve.disarm()` and then returns the same `rejected`
+       outcome;
+     - one true sentence in the cap docblock (`:85-88`).
+  3. `src/command-input.test.ts`, two rows:
+     - **`G1`**: `quit` / `quit now` / `quit` asks again. This kills `Q3`;
+     - the **`disarm` unit row**: it clears, it is harmless when unarmed, and the spies read 0.
+  4. **`src/line-input.test.ts`**, new to the list, one row:
+     - `quit` / 1025×`z` / `quit` / `quit` through `createLineInputSeam` answers confirmation,
+       `rejected`, confirmation, then `{ kind: "quit" }`, and no resolver is told;
+     - one import name is added;
+     - this also closes QE's `G2-INFO`.
+- **`A1`–`A7` are unchanged.** The new row enforces `ADR-0021` clause 6 and is not a new criterion.
+- **Column: unchanged on this page.** The board move and scheduling the re-hop and the delta re-QE
+  are the Orchestrator's.
