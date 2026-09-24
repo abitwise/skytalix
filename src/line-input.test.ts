@@ -80,7 +80,7 @@
 import { readFileSync } from "node:fs";
 import { PassThrough } from "node:stream";
 import { describe, expect, it, vi } from "vitest";
-import { helpMessages } from "./command-input.ts";
+import { helpMessages, QUIT_CONFIRMATION_MESSAGES } from "./command-input.ts";
 import { parseCoordinateMove } from "./coordinate-move.ts";
 import { toFen } from "./fen.ts";
 import { assembleFrame, type FrameSink } from "./frame.ts";
@@ -756,6 +756,27 @@ describe("ABC-037 — the production InputSeam", () => {
       source.write(`${"z".repeat(MAX_LINE_LENGTH + 1)}\ne4\n`);
       expect((await seam(history)).kind).toBe("rejected");
       expect((await seam(history)).kind).toBe("move");
+    });
+
+    /**
+     * `ADR-0021` clause 6 through the reader: the over-cap line is a line, so it clears the `quit`
+     * confirmation — by `disarm`, never by handing its text to a resolver. The fourth line is the
+     * witness that the reader binds the wrapper and not the bare `resolvePromptLine`.
+     */
+    it("clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends", async () => {
+      const source = new PassThrough();
+      const { deps, texts } = spiedDeps();
+      const seam = createLineInputSeam({ source, output: recordingOutput(), deps });
+      const history = newGame(START_FEN);
+      const confirmation = { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
+
+      source.write(`quit\n${"z".repeat(MAX_LINE_LENGTH + 1)}\nquit\nquit\n`);
+      expect(await seam(history)).toEqual(confirmation);
+      expect(await seam(history)).toEqual({ kind: "rejected", messages: LINE_TOO_LONG_MESSAGES });
+      expect(await seam(history)).toEqual(confirmation);
+      expect(await seam(history)).toEqual({ kind: "quit" });
+      expect(texts).toEqual([]);
+      expect(deps.legalMoves).toHaveBeenCalledTimes(0);
     });
   });
 

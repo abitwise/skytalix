@@ -1,0 +1,133 @@
+// ABC-046 re-hop: mutants Q3 X1 X2 X3 M9 against the committed tree, bar 2 in both lanes, and the
+// real entry point. Every mutant is written into the worktree, measured, then the pristine bytes
+// are written back and the sha256 asserted equal. Usage: node mutants.mjs <worktree>
+import { spawnSync, execSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { readFileSync, writeFileSync } from "node:fs";
+
+const DIR = process.argv[2];
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/abc046-rehop";
+const CI = `${DIR}/src/command-input.ts`;
+const LI = `${DIR}/src/line-input.ts`;
+const sha = (s) => createHash("sha256").update(s).digest("hex");
+const pristine = { [CI]: readFileSync(CI, "utf8"), [LI]: readFileSync(LI, "utf8") };
+const pristineSha = Object.fromEntries(Object.entries(pristine).map(([k, v]) => [k, sha(v)]));
+const loadavg = () => execSync("sysctl -n vm.loadavg").toString().trim();
+
+function once(src, from, to, label) {
+  const n = src.split(from).length - 1;
+  if (n !== 1) throw new Error(`anchor ${label}: found ${n} times`);
+  return src.replace(from, to);
+}
+
+const ARM = `quitArmed = classifyCommand(line)?.token === "quit";`;
+const DISARM = `    disarm: (): void => {
+      quitArmed = false;
+    },`;
+const READER_CALL = `      resolve.disarm();\n`;
+const M9_RET = `    return resolve(history, line.text);`;
+const M9_IMPORT = `import { createPromptLineResolver } from "./command-input.ts";`;
+
+const MUTANTS = {
+  control: {},
+  Q3: { ci: (s) => once(s, ARM, `quitArmed = line.trim().toLowerCase().startsWith("quit");`, "arm") },
+  X1: { ci: (s) => once(s, DISARM, `    disarm: (): void => {
+      /* no-op */
+    },`, "disarm") },
+  X2: { li: (s) => once(s, READER_CALL, "", "reader-call") },
+  X3: { ci: (s) => once(s, DISARM, `    disarm: (): void => {
+      quitArmed = true;
+    },`, "disarm") },
+  M9: {
+    li: (s) =>
+      once(
+        once(s, M9_RET, `    return resolvePromptLine(history, line.text, deps);`, "m9"),
+        M9_IMPORT,
+        `import { createPromptLineResolver, resolvePromptLine } from "./command-input.ts";`,
+        "m9-import",
+      ),
+  },
+};
+
+function vitest(files, env = {}) {
+  const r = spawnSync("npx", ["vitest", "run", ...files, "--reporter=json"], {
+    cwd: DIR, encoding: "utf8", env: { ...process.env, ...env }, maxBuffer: 64 * 1024 * 1024, timeout: 600_000,
+  });
+  const out = r.stdout;
+  try {
+    const j = JSON.parse(out.slice(out.indexOf("{"), out.lastIndexOf("}") + 1));
+    const all = j.testResults.flatMap((t) => t.assertionResults.map((a) => ({ file: t.name.replace(`${DIR}/`, ""), name: a.fullName, status: a.status })));
+    return {
+      status: r.status, total: j.numTotalTests, passed: j.numPassedTests, failed: j.numFailedTests,
+      skipped: j.numPendingTests + j.numTodoTests,
+      failedNames: all.filter((a) => a.status === "failed").map((a) => `${a.file} :: ${a.name}`),
+      all,
+    };
+  } catch (e) {
+    return { status: r.status, parseError: String(e), tail: (r.stdout + r.stderr).slice(-1500) };
+  }
+}
+
+const out = { startedAt: new Date().toISOString(), pristineSha, mutants: {}, restored: {} };
+const FILES = ["src/command-input.test.ts", "src/line-input.test.ts", "src/cli.test.ts"];
+for (const [name, m] of Object.entries(MUTANTS)) {
+  const ci = m.ci ? m.ci(pristine[CI]) : pristine[CI];
+  const li = m.li ? m.li(pristine[LI]) : pristine[LI];
+  writeFileSync(CI, ci);
+  writeFileSync(LI, li);
+  const load = loadavg();
+  const tsc = spawnSync("npx", ["tsc", "--noEmit"], { cwd: DIR, encoding: "utf8" });
+  const v = vitest(FILES);
+  writeFileSync(CI, pristine[CI]);
+  writeFileSync(LI, pristine[LI]);
+  const { all, ...rest } = v;
+  out.mutants[name] = { load, tsc: tsc.status, ...rest };
+  console.log(name, "load", load, "tsc", tsc.status, "total", v.total, "failed", v.failed, JSON.stringify(v.failedNames ?? v.tail));
+}
+out.restored = Object.fromEntries(Object.keys(pristine).map((k) => [k, sha(readFileSync(k, "utf8")) === pristineSha[k]]));
+out.gitStatusSrc = execSync("git status --short -- src", { cwd: DIR }).toString();
+console.log("restored", JSON.stringify(out.restored), "git status src:", JSON.stringify(out.gitStatusSrc));
+
+// ---------- ABC-037 security bar 2, both lanes ----------
+const bar2 = (env) => {
+  const v = vitest(["src/line-input.test.ts"], env);
+  const rows = (v.all ?? []).filter((a) => a.name.includes("security bar 2") || a.name.includes("breadth") || a.name.includes("16 MiB") || a.name.includes("10,000"));
+  return { status: v.status, total: v.total, passed: v.passed, failed: v.failed, skipped: v.skipped, rows: rows.map((a) => `${a.status} :: ${a.name}`) };
+};
+out.bar2 = { default: bar2({}), deep: bar2({ INPUT_DEEP: "1", NODE_OPTIONS: "--expose-gc" }) };
+for (const lane of ["default", "deep"]) {
+  const b = out.bar2[lane];
+  console.log(`bar2 ${lane}: file ${b.passed}/${b.total} failed ${b.failed} skipped ${b.skipped}`);
+  for (const r of b.rows) console.log("   ", r);
+}
+
+// ---------- the real entry point, engine scripted (the entry point never asks it on these inputs) ----------
+const substituting = (module, source) => `data:text/javascript,${encodeURIComponent(['import { registerHooks } from "node:module";', "registerHooks({", "  load(url, context, nextLoad) {", `    if (!url.endsWith(${JSON.stringify(`/src/${module}`)})) return nextLoad(url, context);`, `    return { format: "module", shortCircuit: true, source: ${JSON.stringify(source)} };`, "  },", "});"].join("\n"))}`;
+const scriptedEngine = `
+import { legalMoves } from "./legal.ts";
+export const DEFAULT_BUDGET_MS = 0;
+export function createEngine() {
+  return async (history) => { throw new Error("scripted engine: asked for a move"); };
+}`;
+const { PROMPT, LINE_TOO_LONG_MESSAGES } = await import(`${DIR}/src/line-input.ts`);
+const { QUIT_NOTICE, INPUT_ENDED_NOTICE } = await import(`${DIR}/src/turn-loop.ts`);
+const { QUIT_CONFIRMATION_MESSAGES } = await import(`${DIR}/src/command-input.ts`);
+const CONF = QUIT_CONFIRMATION_MESSAGES[0];
+const play = (input) => spawnSync(process.execPath, ["--import", substituting("engine.ts", scriptedEngine), "src/cli.ts", "--colour", "white", "--ascii"], { cwd: DIR, encoding: "utf8", input, timeout: 30_000 });
+const over = "x".repeat(1025);
+const describe = (c) => ({
+  status: c.status,
+  stderr: c.stderr,
+  confirmations: c.stdout.split(CONF).length - 1,
+  lineTooLong: c.stdout.split(LINE_TOO_LONG_MESSAGES[0]).length - 1,
+  prompts: c.stdout.split(PROMPT).length - 1,
+  endsQuit: c.stdout.endsWith(`${PROMPT}${QUIT_NOTICE}\n`),
+  endsEof: c.stdout.endsWith(`${PROMPT}${INPUT_ENDED_NOTICE}\n`),
+});
+const a = play(`quit\n${over}\nquit\n`);
+const b = play(`quit\n${over}\nquit\nquit\n`);
+writeFileSync(`${S}/entry-quit-over-quit-EOF.stdout.txt`, a.stdout);
+writeFileSync(`${S}/entry-quit-over-quit-quit.stdout.txt`, b.stdout);
+out.entry = { "quit/1025x/quit/EOF": describe(a), "quit/1025x/quit/quit": describe(b) };
+console.log("entry", JSON.stringify(out.entry, null, 2));
+writeFileSync(`${S}/mutants-summary.json`, JSON.stringify(out, null, 2));

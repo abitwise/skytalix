@@ -1,8 +1,8 @@
 /**
  * ABC-035 — the command table, classified in front of `ABC-033`'s entry point.
  *
- * GRAMMAR, PLUS ONE FLAG. This module decides whether a submitted line IS one of seven commands
- * and, for six of them, nothing about what any of them DOES beyond naming the arm. `help` carries
+ * GRAMMAR, PLUS ONE FLAG. This module decides whether a submitted line IS one of six commands
+ * and, for five of them, nothing about what any of them DOES beyond naming the arm. `help` carries
  * the one message set `ABC-035` owns; `board` carries none; `claim` is a REQUEST the loop
  * adjudicates. There is no exit here, no second render and no availability test — `ABC-021` owns
  * both edges of a claim, and this file owns the vocabulary.
@@ -213,15 +213,25 @@ export function resolvePromptLine(
 }
 
 /** What `createPromptLineResolver` returns: `resolvePromptLine`'s shape with `deps` bound. */
-export type PromptLineResolver = (history: GameHistory, line: string) => PromptLineOutcome;
+export type PromptLineResolver = ((history: GameHistory, line: string) => PromptLineOutcome) & {
+  /** Clear the `quit` flag without resolving a line: the reader's over-cap branch (`ADR-0021` clause 6). */
+  readonly disarm: () => void;
+};
 
 /**
  * The stateful wrapper `ABC-037`'s reader binds — ONE per session, holding the `quit` flag
  * (`ADR-0021` clause 6). It reads the token off `classifyCommand` and nothing else off the line:
  * a `quit` in any of `ABC-035`'s tolerated spellings arms it, and ANY other line — a move, a
  * rejection, another command — clears it. Armed and asked again, it answers `{ kind: "quit" }`
- * and never consults the table; otherwise it delegates to `resolvePromptLine` unchanged, so every
- * pure property asserted of that function holds of this one on every line but the second `quit`.
+ * without calling `resolvePromptLine` or reading the row's `outcome`, though it has still
+ * classified the line through `COMMAND_TABLE` by `classifyCommand`, as it does every line.
+ * Otherwise it delegates to `resolvePromptLine` unchanged, so every pure property asserted of that
+ * function holds of this one on every line but the second `quit`.
+ *
+ * The wrapper does not see every line. A line the reader refuses before resolving it — today only
+ * the over-cap line (`src/line-input.ts`, `MAX_LINE_LENGTH`) — never reaches it, so the reader
+ * calls `disarm` instead. `disarm` sets the flag to false and does nothing else: it takes no line,
+ * returns nothing and calls no resolver.
  *
  * Why here and not in the loop: the loop is the mechanism and confirmation is product policy
  * (`ADR-0021` clause 6). Why not a module-level flag: two seams in one process — two tests, or a
@@ -230,10 +240,15 @@ export type PromptLineResolver = (history: GameHistory, line: string) => PromptL
  */
 export function createPromptLineResolver(deps?: MoveInputDeps): PromptLineResolver {
   let quitArmed = false;
-  return (history, line) => {
+  const resolve = (history: GameHistory, line: string): PromptLineOutcome => {
     const wasArmed = quitArmed;
     quitArmed = classifyCommand(line)?.token === "quit";
     if (wasArmed && quitArmed) return { kind: "quit" };
     return resolvePromptLine(history, line, deps);
   };
+  return Object.assign(resolve, {
+    disarm: (): void => {
+      quitArmed = false;
+    },
+  });
 }
