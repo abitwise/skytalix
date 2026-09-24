@@ -1,0 +1,662 @@
+{
+  "startedAt": "2026-09-24T19:48:47.144Z",
+  "probeDir": "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/probe",
+  "pristineSha": {
+    "src/command-input.ts": "4eb49f40873c2c5fd9754aef4243e8dfa7404891dfe93c762c919ebb1aeddb73",
+    "src/line-input.ts": "6b8ee29823cd08aa34f34f703c82726e17bff41be4fe9372a57af224d260aff5",
+    "src/command-input.test.ts": "67207fc01b572b5cb36b9e41af1dd334b6dd05eecd222403a73844ac7d73bf3e",
+    "src/line-input.test.ts": "139dd83000b9229c731118ecb49cc5cbaadde69b7db217d386faf2b9baee9300"
+  },
+  "shapes": {
+    "delivered": {
+      "tscExisting": 0,
+      "existing": {
+        "command-input": {
+          "status": 0,
+          "total": 131,
+          "passed": 131,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 0,
+          "total": 29,
+          "passed": 29,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input[INPUT_DEEP=1]": {
+          "status": 0,
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "cli": {
+          "status": 0,
+          "total": 65,
+          "passed": 65,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      },
+      "tscWithProbeRows": 2,
+      "withProbeRows": {
+        "command-input": {
+          "status": 1,
+          "total": 133,
+          "passed": 132,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — the wrapper clause 6 — disarm clears an armed flag, is a no-op unarmed, and calls no resolver"
+          ]
+        },
+        "line-input": {
+          "status": 1,
+          "total": 30,
+          "passed": 29,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — through the reader clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+          ]
+        }
+      },
+      "biomeProduction": {
+        "status": 0,
+        "tail": "Checked 2 files in 29ms. No fixes applied.\n\n"
+      },
+      "realEntryPoint": {
+        "quit/1025x/quit/EOF": {
+          "status": 0,
+          "stderrEmpty": true,
+          "confirmations": 1,
+          "lineTooLong": 1,
+          "prompts": 3,
+          "endsQuit": true,
+          "endsEof": false
+        },
+        "quit/1025x/quit/quit": {
+          "status": 0,
+          "stderrEmpty": true,
+          "confirmations": 1,
+          "lineTooLong": 1,
+          "prompts": 3,
+          "endsQuit": true,
+          "endsEof": false
+        }
+      },
+      "fullSuiteExisting": {
+        "status": 0,
+        "total": 1361,
+        "passed": 1361,
+        "failed": 0,
+        "skipped": 0,
+        "failedNames": []
+      },
+      "fullSuiteWithProbeRows": {
+        "status": 1,
+        "total": 1364,
+        "passed": 1362,
+        "failed": 2,
+        "skipped": 0,
+        "failedNames": [
+          "PROBE ruling-abc046-clause6 — the wrapper clause 6 — disarm clears an armed flag, is a no-op unarmed, and calls no resolver",
+          "PROBE ruling-abc046-clause6 — through the reader clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+        ]
+      }
+    },
+    "LICENSED-disarm": {
+      "tscExisting": 0,
+      "existing": {
+        "command-input": {
+          "status": 0,
+          "total": 131,
+          "passed": 131,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 0,
+          "total": 29,
+          "passed": 29,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input[INPUT_DEEP=1]": {
+          "status": 0,
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "cli": {
+          "status": 0,
+          "total": 65,
+          "passed": 65,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      },
+      "tscWithProbeRows": 0,
+      "withProbeRows": {
+        "command-input": {
+          "status": 0,
+          "total": 133,
+          "passed": 133,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 0,
+          "total": 30,
+          "passed": 30,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      },
+      "biomeProduction": {
+        "status": 0,
+        "tail": "Checked 2 files in 32ms. No fixes applied.\n\n"
+      },
+      "realEntryPoint": {
+        "quit/1025x/quit/EOF": {
+          "status": 0,
+          "stderrEmpty": true,
+          "confirmations": 2,
+          "lineTooLong": 1,
+          "prompts": 4,
+          "endsQuit": false,
+          "endsEof": true
+        },
+        "quit/1025x/quit/quit": {
+          "status": 0,
+          "stderrEmpty": true,
+          "confirmations": 2,
+          "lineTooLong": 1,
+          "prompts": 4,
+          "endsQuit": true,
+          "endsEof": false
+        }
+      },
+      "fullSuiteExisting": {
+        "status": 0,
+        "total": 1361,
+        "passed": 1361,
+        "failed": 0,
+        "skipped": 0,
+        "failedNames": []
+      },
+      "fullSuiteWithProbeRows": {
+        "status": 0,
+        "total": 1364,
+        "passed": 1364,
+        "failed": 0,
+        "skipped": 0,
+        "failedNames": []
+      },
+      "diff": "--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/probe/../pristine-command-input.ts\t2026-09-24 22:49:25\n+++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/probe/../licensed-command-input.ts\t2026-09-24 22:49:25\n@@ -213,7 +213,10 @@\n }\n \n /** What `createPromptLineResolver` returns: `resolvePromptLine`'s shape with `deps` bound. */\n-export type PromptLineResolver = (history: GameHistory, line: string) => PromptLineOutcome;\n+export type PromptLineResolver = ((history: GameHistory, line: string) => PromptLineOutcome) & {\n+  /** Clear the `quit` flag without resolving a line: the reader's over-cap branch (`ADR-0021` clause 6). */\n+  readonly disarm: () => void;\n+};\n \n /**\n  * The stateful wrapper `ABC-037`'s reader binds — ONE per session, holding the `quit` flag\n@@ -230,10 +233,15 @@\n  */\n export function createPromptLineResolver(deps?: MoveInputDeps): PromptLineResolver {\n   let quitArmed = false;\n-  return (history, line) => {\n+  const resolve = (history: GameHistory, line: string): PromptLineOutcome => {\n     const wasArmed = quitArmed;\n     quitArmed = classifyCommand(line)?.token === \"quit\";\n     if (wasArmed && quitArmed) return { kind: \"quit\" };\n     return resolvePromptLine(history, line, deps);\n   };\n+  return Object.assign(resolve, {\n+    disarm: (): void => {\n+      quitArmed = false;\n+    },\n+  });\n }\n--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/probe/../pristine-line-input.ts\t2026-09-24 22:49:25\n+++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/probe/../licensed-line-input.ts\t2026-09-24 22:49:25\n@@ -242,7 +242,10 @@\n     output.write(PROMPT);\n     const line = await readLine();\n     if (line === null) return { kind: \"eof\" };\n-    if (line.overlong) return { kind: \"rejected\", messages: LINE_TOO_LONG_MESSAGES };\n+    if (line.overlong) {\n+      resolve.disarm();\n+      return { kind: \"rejected\", messages: LINE_TOO_LONG_MESSAGES };\n+    }\n     return resolve(history, line.text);\n   };\n }\n"
+    },
+    "X1-disarm-noop": {
+      "tscExisting": 0,
+      "existing": {
+        "command-input": {
+          "status": 0,
+          "total": 131,
+          "passed": 131,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 0,
+          "total": 29,
+          "passed": 29,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input[INPUT_DEEP=1]": {
+          "status": 0,
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "cli": {
+          "status": 0,
+          "total": 65,
+          "passed": 65,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      },
+      "tscWithProbeRows": 0,
+      "withProbeRows": {
+        "command-input": {
+          "status": 1,
+          "total": 133,
+          "passed": 132,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — the wrapper clause 6 — disarm clears an armed flag, is a no-op unarmed, and calls no resolver"
+          ]
+        },
+        "line-input": {
+          "status": 1,
+          "total": 30,
+          "passed": 29,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — through the reader clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+          ]
+        }
+      }
+    },
+    "X2-disarm-unwired": {
+      "tscExisting": 0,
+      "existing": {
+        "command-input": {
+          "status": 0,
+          "total": 131,
+          "passed": 131,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 0,
+          "total": 29,
+          "passed": 29,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input[INPUT_DEEP=1]": {
+          "status": 0,
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "cli": {
+          "status": 0,
+          "total": 65,
+          "passed": 65,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      },
+      "tscWithProbeRows": 0,
+      "withProbeRows": {
+        "command-input": {
+          "status": 0,
+          "total": 133,
+          "passed": 133,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 1,
+          "total": 30,
+          "passed": 29,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — through the reader clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+          ]
+        }
+      }
+    },
+    "X3-disarm-arms": {
+      "tscExisting": 0,
+      "existing": {
+        "command-input": {
+          "status": 0,
+          "total": 131,
+          "passed": 131,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 0,
+          "total": 29,
+          "passed": 29,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input[INPUT_DEEP=1]": {
+          "status": 0,
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "cli": {
+          "status": 0,
+          "total": 65,
+          "passed": 65,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      },
+      "tscWithProbeRows": 0,
+      "withProbeRows": {
+        "command-input": {
+          "status": 1,
+          "total": 133,
+          "passed": 132,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — the wrapper clause 6 — disarm clears an armed flag, is a no-op unarmed, and calls no resolver"
+          ]
+        },
+        "line-input": {
+          "status": 1,
+          "total": 30,
+          "passed": 29,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — through the reader clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+          ]
+        }
+      }
+    },
+    "Q9a-resolve-empty-then-reject": {
+      "tscExisting": 0,
+      "existing": {
+        "command-input": {
+          "status": 0,
+          "total": 131,
+          "passed": 131,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 1,
+          "total": 29,
+          "passed": 26,
+          "failed": 3,
+          "skipped": 0,
+          "failedNames": [
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame"
+          ]
+        },
+        "line-input[INPUT_DEEP=1]": {
+          "status": 1,
+          "total": 33,
+          "passed": 27,
+          "failed": 6,
+          "skipped": 0,
+          "failedNames": [
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame",
+            "ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] survives a 16 MiB unterminated flood, rejects it, tells no resolver, and recovers",
+            "ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] retains no more than one chunk across a 16 MiB flood [needs NODE_OPTIONS=--expose-gc]",
+            "ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] stays total on a 10,000-character line — the cap answers before the resolvers do"
+          ]
+        },
+        "cli": {
+          "status": 0,
+          "total": 65,
+          "passed": 65,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      },
+      "tscWithProbeRows": 2,
+      "withProbeRows": {
+        "command-input": {
+          "status": 1,
+          "total": 133,
+          "passed": 132,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — the wrapper clause 6 — disarm clears an armed flag, is a no-op unarmed, and calls no resolver"
+          ]
+        },
+        "line-input": {
+          "status": 1,
+          "total": 30,
+          "passed": 26,
+          "failed": 4,
+          "skipped": 0,
+          "failedNames": [
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame",
+            "PROBE ruling-abc046-clause6 — through the reader clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+          ]
+        }
+      }
+    },
+    "Q9b-return-resolve-empty": {
+      "tscExisting": 0,
+      "existing": {
+        "command-input": {
+          "status": 0,
+          "total": 131,
+          "passed": 131,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 1,
+          "total": 29,
+          "passed": 26,
+          "failed": 3,
+          "skipped": 0,
+          "failedNames": [
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame"
+          ]
+        },
+        "line-input[INPUT_DEEP=1]": {
+          "status": 1,
+          "total": 33,
+          "passed": 27,
+          "failed": 6,
+          "skipped": 0,
+          "failedNames": [
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame",
+            "ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] survives a 16 MiB unterminated flood, rejects it, tells no resolver, and recovers",
+            "ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] retains no more than one chunk across a 16 MiB flood [needs NODE_OPTIONS=--expose-gc]",
+            "ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] stays total on a 10,000-character line — the cap answers before the resolvers do"
+          ]
+        },
+        "cli": {
+          "status": 0,
+          "total": 65,
+          "passed": 65,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      },
+      "tscWithProbeRows": 2,
+      "withProbeRows": {
+        "command-input": {
+          "status": 1,
+          "total": 133,
+          "passed": 132,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — the wrapper clause 6 — disarm clears an armed flag, is a no-op unarmed, and calls no resolver"
+          ]
+        },
+        "line-input": {
+          "status": 1,
+          "total": 30,
+          "passed": 26,
+          "failed": 4,
+          "skipped": 0,
+          "failedNames": [
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+            "ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame",
+            "PROBE ruling-abc046-clause6 — through the reader clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+          ]
+        }
+      }
+    },
+    "Q3-prefix-arm-on-licensed": {
+      "tscExisting": 0,
+      "existing": {
+        "command-input": {
+          "status": 0,
+          "total": 131,
+          "passed": 131,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 0,
+          "total": 29,
+          "passed": 29,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input[INPUT_DEEP=1]": {
+          "status": 0,
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "cli": {
+          "status": 0,
+          "total": 65,
+          "passed": 65,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      },
+      "tscWithProbeRows": 0,
+      "withProbeRows": {
+        "command-input": {
+          "status": 1,
+          "total": 133,
+          "passed": 132,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — the wrapper G1 — trailing text does not arm: quit / quit now / quit asks AGAIN, and quit now twice never exits"
+          ]
+        },
+        "line-input": {
+          "status": 0,
+          "total": 30,
+          "passed": 30,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        }
+      }
+    },
+    "M9-bare-resolver-on-licensed": {
+      "tscExisting": 0,
+      "existing": {
+        "command-input": {
+          "status": 0,
+          "total": 131,
+          "passed": 131,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 0,
+          "total": 29,
+          "passed": 29,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input[INPUT_DEEP=1]": {
+          "status": 0,
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "cli": {
+          "status": 1,
+          "total": 65,
+          "passed": 64,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "ABC-046 — `quit` and `new` through the delivered entry point A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0"
+          ]
+        }
+      },
+      "tscWithProbeRows": 0,
+      "withProbeRows": {
+        "command-input": {
+          "status": 0,
+          "total": 133,
+          "passed": 133,
+          "failed": 0,
+          "skipped": 0,
+          "failedNames": []
+        },
+        "line-input": {
+          "status": 1,
+          "total": 30,
+          "passed": 29,
+          "failed": 1,
+          "skipped": 0,
+          "failedNames": [
+            "PROBE ruling-abc046-clause6 — through the reader clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+          ]
+        }
+      }
+    }
+  },
+  "restored": {
+    "src/command-input.ts": true,
+    "src/line-input.ts": true,
+    "src/command-input.test.ts": true,
+    "src/line-input.test.ts": true
+  }
+}

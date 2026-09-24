@@ -1,0 +1,283 @@
+// ruling-abc046-clause6 — out-of-tree probe of the licensed `disarm` shape against ADR-0021 clause 6.
+// Runs ONLY in a scratch copy of src/ (argv[2]); never in the repository worktree.
+// Usage: node probe-harness.mjs <probe-dir> <out-json>
+import { execFileSync, spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+
+const DIR = process.argv[2];
+const OUT = process.argv[3];
+const f = (p) => `${DIR}/${p}`;
+const FILES = ["src/command-input.ts", "src/line-input.ts", "src/command-input.test.ts", "src/line-input.test.ts"];
+const pristine = Object.fromEntries(FILES.map((p) => [p, readFileSync(f(p), "utf8")]));
+const sha = (s) => createHash("sha256").update(s).digest("hex");
+const pristineSha = Object.fromEntries(FILES.map((p) => [p, sha(pristine[p])]));
+
+function replaceOnce(src, from, to, label) {
+  const n = src.split(from).length - 1;
+  if (n !== 1) throw new Error(`anchor ${label}: found ${n} times`);
+  return src.replace(from, to);
+}
+
+// ---------- production shapes ----------
+const WRAPPER_OLD = `export type PromptLineResolver = (history: GameHistory, line: string) => PromptLineOutcome;`;
+const WRAPPER_NEW = `export type PromptLineResolver = ((history: GameHistory, line: string) => PromptLineOutcome) & {
+  /** Clear the \`quit\` flag without resolving a line: the reader's over-cap branch (\`ADR-0021\` clause 6). */
+  readonly disarm: () => void;
+};`;
+const BODY_OLD = `  let quitArmed = false;
+  return (history, line) => {
+    const wasArmed = quitArmed;
+    quitArmed = classifyCommand(line)?.token === "quit";
+    if (wasArmed && quitArmed) return { kind: "quit" };
+    return resolvePromptLine(history, line, deps);
+  };`;
+const bodyNew = (disarmBody, armExpr = `classifyCommand(line)?.token === "quit"`) => `  let quitArmed = false;
+  const resolve = (history: GameHistory, line: string): PromptLineOutcome => {
+    const wasArmed = quitArmed;
+    quitArmed = ${armExpr};
+    if (wasArmed && quitArmed) return { kind: "quit" };
+    return resolvePromptLine(history, line, deps);
+  };
+  return Object.assign(resolve, {
+    disarm: (): void => {
+      ${disarmBody}
+    },
+  });`;
+const READER_OLD = `    if (line.overlong) return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };`;
+const READER_DISARM = `    if (line.overlong) {
+      resolve.disarm();
+      return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };
+    }`;
+const READER_Q9 = `    if (line.overlong) {
+      resolve(history, "");
+      return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };
+    }`;
+const Q9_ORIGINAL = `    if (line.overlong) return resolve(history, "");`; // QE's Q9 as described is ambiguous; we test BOTH readings
+const M9_OLD = `    return resolve(history, line.text);`;
+const M9_NEW = `    return resolvePromptLine(history, line.text, deps);`;
+
+function shape(name) {
+  let ci = pristine["src/command-input.ts"];
+  let li = pristine["src/line-input.ts"];
+  const withDisarm = (body = "quitArmed = false;", arm) => {
+    ci = replaceOnce(ci, WRAPPER_OLD, WRAPPER_NEW, "wrapper-type");
+    ci = replaceOnce(ci, BODY_OLD, bodyNew(body, arm), "wrapper-body");
+  };
+  switch (name) {
+    case "delivered":
+      break;
+    case "LICENSED-disarm":
+      withDisarm();
+      li = replaceOnce(li, READER_OLD, READER_DISARM, "reader");
+      break;
+    case "X1-disarm-noop":
+      withDisarm("/* no-op */");
+      li = replaceOnce(li, READER_OLD, READER_DISARM, "reader");
+      break;
+    case "X2-disarm-unwired":
+      withDisarm();
+      break;
+    case "X3-disarm-arms":
+      withDisarm("quitArmed = true;");
+      li = replaceOnce(li, READER_OLD, READER_DISARM, "reader");
+      break;
+    case "Q9a-resolve-empty-then-reject":
+      li = replaceOnce(li, READER_OLD, READER_Q9, "reader");
+      break;
+    case "Q9b-return-resolve-empty":
+      li = replaceOnce(li, READER_OLD, Q9_ORIGINAL, "reader");
+      break;
+    case "Q3-prefix-arm-on-licensed":
+      withDisarm(undefined, `line.trim().toLowerCase().startsWith("quit")`);
+      li = replaceOnce(li, READER_OLD, READER_DISARM, "reader");
+      break;
+    case "M9-bare-resolver-on-licensed":
+      withDisarm();
+      li = replaceOnce(li, READER_OLD, READER_DISARM, "reader");
+      li = replaceOnce(li, M9_OLD, M9_NEW, "m9");
+      li = replaceOnce(li, `import { createPromptLineResolver } from "./command-input.ts";`, `import { createPromptLineResolver, resolvePromptLine } from "./command-input.ts";`, "m9-import");
+      break;
+    default:
+      throw new Error(name);
+  }
+  return { ci, li };
+}
+
+// ---------- probe rows (appended in the scratch copy only) ----------
+const CI_ROWS = `
+
+describe("PROBE ruling-abc046-clause6 — the wrapper", () => {
+  const CONFIRMATION = { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
+  it("G1 — trailing text does not arm: quit / quit now / quit asks AGAIN, and quit now twice never exits", () => {
+    const history = newGame(RICH_FEN);
+    const resolve = createPromptLineResolver();
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    expect(resolve(history, "quit now").kind).toBe("rejected");
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    const fresh = createPromptLineResolver();
+    expect(fresh(history, "quit now").kind).toBe("rejected");
+    expect(fresh(history, "quit now").kind).toBe("rejected");
+  });
+  it("clause 6 — disarm clears an armed flag, is a no-op unarmed, and calls no resolver", () => {
+    const history = newGame(RICH_FEN);
+    const deps: MoveInputDeps = {
+      legalMoves: vi.fn(legalMoves),
+      parseCoordinateMove: vi.fn(parseCoordinateMove),
+      parseSan: vi.fn(parseSan),
+      toSan: vi.fn(toSan),
+    };
+    const resolve = createPromptLineResolver(deps);
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    resolve.disarm();
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    expect(resolve(history, "quit")).toEqual({ kind: "quit" });
+    const unarmed = createPromptLineResolver(deps);
+    unarmed.disarm();
+    expect(unarmed(history, "quit")).toEqual(CONFIRMATION);
+    expect(unarmed(history, "quit")).toEqual({ kind: "quit" });
+    for (const spy of Object.values(deps)) expect(spy).toHaveBeenCalledTimes(0);
+  });
+});
+`;
+const LI_ROWS = `
+
+describe("PROBE ruling-abc046-clause6 — through the reader", () => {
+  it("clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends", async () => {
+    const source = new PassThrough();
+    const { deps, texts } = spiedDeps();
+    const seam = createLineInputSeam({ source, output: recordingOutput(), deps });
+    const history = newGame(START_FEN);
+    const confirmation = { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
+    source.write(\`quit\\n\${"z".repeat(MAX_LINE_LENGTH + 1)}\\nquit\\nquit\\n\`);
+    expect(await seam(history)).toEqual(confirmation);
+    expect(await seam(history)).toEqual({ kind: "rejected", messages: LINE_TOO_LONG_MESSAGES });
+    expect(await seam(history)).toEqual(confirmation);
+    expect(await seam(history)).toEqual({ kind: "quit" });
+    expect(texts).toEqual([]);
+    expect(deps.legalMoves).toHaveBeenCalledTimes(0);
+  });
+});
+`;
+const ciTest = pristine["src/command-input.test.ts"] + CI_ROWS;
+const liTest =
+  replaceOnce(
+    pristine["src/line-input.test.ts"],
+    `import { helpMessages } from "./command-input.ts";`,
+    `import { helpMessages, QUIT_CONFIRMATION_MESSAGES } from "./command-input.ts";`,
+    "li-import",
+  ) + LI_ROWS;
+
+// ---------- runners ----------
+function run(cmd, args, env = {}) {
+  const r = spawnSync(cmd, args, { cwd: DIR, encoding: "utf8", env: { ...process.env, ...env }, timeout: 300_000 });
+  return { status: r.status, out: `${r.stdout}\n${r.stderr}` };
+}
+function vitest(file, env) {
+  const r = run("npx", ["vitest", "run", file, "--reporter=json"], env);
+  const start = r.out.indexOf("{");
+  let j;
+  try {
+    j = JSON.parse(r.out.slice(start, r.out.lastIndexOf("}") + 1));
+  } catch {
+    return { status: r.status, parseError: true, tail: r.out.slice(-800) };
+  }
+  const failed = j.testResults.flatMap((t) => t.assertionResults.filter((a) => a.status === "failed").map((a) => a.fullName));
+  return { status: r.status, total: j.numTotalTests, passed: j.numPassedTests, failed: j.numFailedTests, skipped: j.numPendingTests + j.numTodoTests, failedNames: failed };
+}
+
+// real entry point
+const substituting = (module, source) => `data:text/javascript,${encodeURIComponent(['import { registerHooks } from "node:module";', "registerHooks({", "  load(url, context, nextLoad) {", `    if (!url.endsWith(${JSON.stringify(`/src/${module}`)})) return nextLoad(url, context);`, `    return { format: "module", shortCircuit: true, source: ${JSON.stringify(source)} };`, "  },", "});"].join("\n"))}`;
+const scriptedEngine = (moves) => `
+import { legalMoves } from "./legal.ts";
+import { squareName } from "./position.ts";
+export const DEFAULT_BUDGET_MS = 0;
+export function createEngine() {
+  const scripted = ${JSON.stringify(moves)};
+  let ply = 0;
+  return async (history) => {
+    const want = scripted[ply++];
+    const move = legalMoves(history.position).find((c) => squareName(c.from) + squareName(c.to) === want);
+    if (move === undefined) throw new Error("scripted engine: no legal move " + want);
+    return move;
+  };
+}`;
+async function cliProbe() {
+  const { PROMPT, LINE_TOO_LONG_MESSAGES } = await import(`${DIR}/src/line-input.ts?${Date.now()}`);
+  const { QUIT_NOTICE, INPUT_ENDED_NOTICE } = await import(`${DIR}/src/turn-loop.ts`);
+  const CONF = "quit again to end";
+  const play = (input) => spawnSync(process.execPath, ["--import", substituting("engine.ts", scriptedEngine([])), "src/cli.ts", "--colour", "white", "--ascii"], { cwd: DIR, encoding: "utf8", input, timeout: 30_000 });
+  const over = "x".repeat(1025);
+  const a = play(`quit\n${over}\nquit\n`);
+  const b = play(`quit\n${over}\nquit\nquit\n`);
+  const describe = (c) => ({
+    status: c.status,
+    stderrEmpty: c.stderr === "",
+    confirmations: c.stdout.split(CONF).length - 1,
+    lineTooLong: c.stdout.split(LINE_TOO_LONG_MESSAGES[0]).length - 1,
+    prompts: c.stdout.split("\n").filter((l) => l.startsWith(PROMPT)).length,
+    endsQuit: c.stdout.endsWith(`${PROMPT}${QUIT_NOTICE}\n`),
+    endsEof: c.stdout.endsWith(`${PROMPT}${INPUT_ENDED_NOTICE}\n`),
+  });
+  return { "quit/1025x/quit/EOF": describe(a), "quit/1025x/quit/quit": describe(b) };
+}
+
+const SHAPES = ["delivered", "LICENSED-disarm", "X1-disarm-noop", "X2-disarm-unwired", "X3-disarm-arms", "Q9a-resolve-empty-then-reject", "Q9b-return-resolve-empty", "Q3-prefix-arm-on-licensed", "M9-bare-resolver-on-licensed"];
+const results = { startedAt: new Date().toISOString(), probeDir: DIR, pristineSha, shapes: {} };
+try {
+  for (const name of SHAPES) {
+    const { ci, li } = shape(name);
+    writeFileSync(f("src/command-input.ts"), ci);
+    writeFileSync(f("src/line-input.ts"), li);
+    const r = {};
+    // (A) pristine tests against the shape: do EXISTING rows stay green?
+    writeFileSync(f("src/command-input.test.ts"), pristine["src/command-input.test.ts"]);
+    writeFileSync(f("src/line-input.test.ts"), pristine["src/line-input.test.ts"]);
+    r.tscExisting = run("npx", ["tsc", "--noEmit"]).status;
+    r.existing = {
+      "command-input": vitest("src/command-input.test.ts"),
+      "line-input": vitest("src/line-input.test.ts"),
+      "line-input[INPUT_DEEP=1]": vitest("src/line-input.test.ts", { INPUT_DEEP: "1", NODE_OPTIONS: "--expose-gc" }),
+      cli: vitest("src/cli.test.ts"),
+    };
+    // (B) with the probe rows appended
+    writeFileSync(f("src/command-input.test.ts"), ciTest);
+    writeFileSync(f("src/line-input.test.ts"), liTest);
+    r.tscWithProbeRows = run("npx", ["tsc", "--noEmit"]).status;
+    r.withProbeRows = { "command-input": vitest("src/command-input.test.ts"), "line-input": vitest("src/line-input.test.ts") };
+    if (name === "LICENSED-disarm" || name === "delivered") {
+      r.biomeProduction = run("npx", ["biome", "check", "src/command-input.ts", "src/line-input.ts"]);
+      r.biomeProduction = { status: r.biomeProduction.status, tail: r.biomeProduction.out.slice(-600) };
+      r.realEntryPoint = await cliProbe();
+      writeFileSync(f("src/command-input.test.ts"), pristine["src/command-input.test.ts"]);
+      writeFileSync(f("src/line-input.test.ts"), pristine["src/line-input.test.ts"]);
+      r.fullSuiteExisting = vitest("--dir=src");
+      writeFileSync(f("src/command-input.test.ts"), ciTest);
+      writeFileSync(f("src/line-input.test.ts"), liTest);
+      r.fullSuiteWithProbeRows = vitest("--dir=src");
+      if (name === "LICENSED-disarm") {
+        const diff = (a, b) => {
+          try {
+            execFileSync("diff", ["-u", a, b], { encoding: "utf8" });
+            return "";
+          } catch (e) {
+            return e.stdout;
+          }
+        };
+        writeFileSync(`${DIR}/../licensed-command-input.ts`, ci);
+        writeFileSync(`${DIR}/../licensed-line-input.ts`, li);
+        writeFileSync(`${DIR}/../pristine-command-input.ts`, pristine["src/command-input.ts"]);
+        writeFileSync(`${DIR}/../pristine-line-input.ts`, pristine["src/line-input.ts"]);
+        r.diff = diff(`${DIR}/../pristine-command-input.ts`, `${DIR}/../licensed-command-input.ts`) + diff(`${DIR}/../pristine-line-input.ts`, `${DIR}/../licensed-line-input.ts`);
+      }
+    }
+    results.shapes[name] = r;
+    const brief = (v) => (v.parseError ? "PARSE-ERR" : `${v.passed}/${v.total} red ${v.failed}`);
+    console.log(name, "tsc", r.tscExisting, "/", r.tscWithProbeRows, Object.entries(r.existing).map(([k, v]) => `${k}:${brief(v)}`).join(" "), "| probe:", Object.entries(r.withProbeRows).map(([k, v]) => `${k}:${brief(v)} ${JSON.stringify(v.failedNames ?? [])}`).join(" "));
+  }
+} finally {
+  for (const p of FILES) writeFileSync(f(p), pristine[p]);
+  results.restored = Object.fromEntries(FILES.map((p) => [p, sha(readFileSync(f(p), "utf8")) === pristineSha[p]]));
+  writeFileSync(OUT, JSON.stringify(results, null, 2));
+  console.log("restored", results.restored);
+}
