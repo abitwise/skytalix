@@ -1,0 +1,259 @@
+// QE ABC-118 probes. Builds a copy of the tree OUTSIDE the repository (argv[3] = source worktree,
+// argv[2] = destination inside the session scratchpad), re-initialises it as its own git repository,
+// then plants each mutant, reads the instrument, reverts to the base commit and asserts a clean tree.
+// Refuses to run against any destination that is not under the scratchpad.
+import { spawnSync } from "node:child_process";
+import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, symlinkSync, writeFileSync, appendFileSync } from "node:fs";
+import { loadavg } from "node:os";
+import { join } from "node:path";
+
+const copy = process.argv[2];
+const source = process.argv[3];
+if (!copy || !copy.includes("/scratchpad/qe118-copy")) {
+  console.error("refusing: destination must be the scratchpad copy");
+  process.exit(2);
+}
+if (!source) throw new Error("usage: node qe118-probes.mjs <copy> <source-worktree>");
+
+function sh(cmd, args, cwd = copy) {
+  const r = spawnSync(cmd, args, { cwd, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 });
+  return { exit: r.status, stdout: r.stdout ?? "", stderr: r.stderr ?? "", out: (r.stdout ?? "") + (r.stderr ?? "") };
+}
+function must(r, what) {
+  if (r.exit !== 0) throw new Error(`${what} failed: ${r.out}`);
+  return r;
+}
+
+// ---------- setup ----------
+rmSync(copy, { recursive: true, force: true });
+must(sh("rsync", ["-a", "--exclude", ".git", "--exclude", "node_modules", "--exclude", ".claude", `${source}/`, `${copy}/`], "/"), "rsync");
+must(sh("git", ["init", "-q"]), "git init");
+must(sh("git", ["config", "user.email", "qe@example.invalid"]), "cfg");
+must(sh("git", ["config", "user.name", "qe-e2e probe"]), "cfg");
+appendFileSync(join(copy, ".git", "info", "exclude"), "node_modules\n");
+symlinkSync(join(source, "node_modules"), join(copy, "node_modules"));
+must(sh("git", ["add", "-A"]), "add");
+must(sh("git", ["commit", "-q", "-m", "base copy"]), "commit");
+const baseSha = sh("git", ["rev-parse", "HEAD"]).stdout.trim();
+const cfg = join(copy, "vitest.config.ts");
+const original = readFileSync(cfg, "utf8");
+const trackedTests = sh("git", ["ls-files", "--", "*.test.ts"]).stdout.trim().split("\n").filter(Boolean).length;
+console.log(`copy: ${copy}`);
+console.log(`base commit in copy: ${baseSha}; tracked *.test.ts: ${trackedTests}; porcelain: ${sh("git", ["status", "--porcelain"]).stdout.trim() === "" ? "EMPTY" : "NOT EMPTY"}`);
+console.log(`load at start: ${loadavg().map((n) => n.toFixed(2)).join(" ")}`);
+
+// ---------- helpers ----------
+function instrument(label) {
+  const r = sh("node", ["tools/grugops/lane-inventory.js"]);
+  const lines = r.out.trim().split("\n");
+  console.log(`  [${label}] instrument exit=${r.exit}`);
+  for (const l of lines.slice(0, 6)) console.log(`      | ${l}`);
+  if (lines.length > 6) console.log(`      | ... (${lines.length} lines total)`);
+  return r;
+}
+function listCount(label) {
+  const r = sh("node", ["node_modules/vitest/vitest.mjs", "list", "--filesOnly"]);
+  const n = r.stdout.trim().split("\n").filter(Boolean).length;
+  console.log(`  [${label}] vitest list --filesOnly (root) -> ${n} files, exit=${r.exit}`);
+  return n;
+}
+function srcLaneCount(label) {
+  const r = sh("node", ["node_modules/vitest/vitest.mjs", "list", "--filesOnly", "--dir", "src"]);
+  const n = r.stdout.trim().split("\n").filter(Boolean).length;
+  console.log(`  [${label}] vitest list --filesOnly --dir src (the unit gate's form) -> ${n} files, exit=${r.exit}`);
+  return n;
+}
+function threeGates(label) {
+  const l = sh("npx", ["biome", "check", "."]);
+  const t = sh("npx", ["tsc", "--noEmit"]);
+  const b = sh("npx", ["tsc", "--noEmit"]);
+  console.log(`  [${label}] lint exit=${l.exit} typecheck exit=${t.exit} build(tsc --noEmit) exit=${b.exit}`);
+}
+function mutateExclude(entries) {
+  const marker = '"**/node_modules/**",';
+  if (!original.includes(marker)) throw new Error("marker missing");
+  writeFileSync(cfg, original.replace(marker, `${marker}\n      ${entries.map((e) => JSON.stringify(e)).join(",\n      ")},`));
+}
+function replaceInConfig(from, to) {
+  if (!original.includes(from)) throw new Error(`config lacks ${from}`);
+  writeFileSync(cfg, original.replace(from, to));
+}
+function commitAll(msg) {
+  must(sh("git", ["add", "-A"]), "add");
+  must(sh("git", ["commit", "-q", "-m", msg]), "commit");
+}
+function revert() {
+  must(sh("git", ["reset", "-q", "--hard", baseSha]), "reset");
+  must(sh("git", ["clean", "-q", "-fd"]), "clean");
+  rmSync(join(copy, ".claude"), { recursive: true, force: true });
+  const s = sh("git", ["status", "--porcelain"]).stdout.trim();
+  const head = sh("git", ["rev-parse", "HEAD"]).stdout.trim();
+  const same = readFileSync(cfg, "utf8") === original;
+  const inst = sh("node", ["tools/grugops/lane-inventory.js"]);
+  console.log(`  REVERT: HEAD=${head === baseSha ? "base" : head} porcelain=${s === "" ? "EMPTY" : `NOT EMPTY\n${s}`} config==original:${same} instrument exit=${inst.exit} (${inst.out.trim().split("\n")[0]})`);
+}
+const T = (name) => `import { describe, expect, it } from "vitest";\n\ndescribe("${name}", () => {\n  it("runs", () => {\n    expect(1).toBe(1);\n  });\n});\n`;
+
+// ---------- the Engineer's five rounds, reproduced ----------
+console.log("\n== BASE");
+listCount("base");
+srcLaneCount("base");
+instrument("base");
+
+console.log('\n== E-M1 (A1, deletion): exclude += "**/glyph-mode.nfr.test.ts"');
+mutateExclude(["**/glyph-mode.nfr.test.ts"]);
+listCount("E-M1");
+srcLaneCount("E-M1");
+instrument("E-M1");
+threeGates("E-M1");
+revert();
+
+console.log('\n== E-M2 (A2, inflation): ".claude/**" -> ".cluade/**" with a throwaway checkout at .claude/worktrees/probe/');
+const plant = join(copy, ".claude", "worktrees", "probe");
+mkdirSync(plant, { recursive: true });
+cpSync(join(copy, "src"), join(plant, "src"), { recursive: true });
+console.log(`  planted checkout; git status --porcelain (gitignored?) -> ${sh("git", ["status", "--porcelain"]).stdout.trim() === "" ? "EMPTY (ignored)" : "NOT EMPTY"}`);
+listCount("E-M2 pre: checkout planted, config untouched");
+instrument("E-M2 pre");
+replaceInConfig('".claude/**"', '".cluade/**"');
+listCount("E-M2 typo");
+srcLaneCount("E-M2 typo");
+instrument("E-M2 typo");
+threeGates("E-M2 typo");
+rmSync(join(copy, ".claude"), { recursive: true, force: true });
+listCount("E-M2 post: typo kept, checkout removed");
+instrument("E-M2 post");
+revert();
+
+console.log("\n== E-M3 (A3): untracked src/zz-abc118-throwaway.test.ts");
+writeFileSync(join(copy, "src", "zz-abc118-throwaway.test.ts"), T("throwaway"));
+listCount("E-M3");
+instrument("E-M3 untracked");
+must(sh("git", ["add", "src/zz-abc118-throwaway.test.ts"]), "add");
+instrument("E-M3 after git add (index edited)");
+revert();
+
+console.log('\n== E-M4 (A4): exclude += "**/tools/**", "**/lane-inventory*"');
+mutateExclude(["**/tools/**", "**/lane-inventory*"]);
+listCount("E-M4");
+instrument("E-M4");
+revert();
+
+console.log('\n== E-M5 (control): stock "**/node_modules/**" removed');
+replaceInConfig('      "**/node_modules/**",\n', "");
+listCount("E-M5");
+instrument("E-M5");
+revert();
+
+// ---------- QE's own rounds ----------
+console.log('\n== Q1 exclude glob removing exactly one file, repo-relative form (no **): exclude += "src/perft.test.ts"');
+mutateExclude(["src/perft.test.ts"]);
+listCount("Q1");
+srcLaneCount("Q1");
+instrument("Q1");
+threeGates("Q1");
+revert();
+
+console.log('\n== Q1b the same one file removed with the directory-relative form the unit gate sees: exclude += "perft.test.ts"');
+mutateExclude(["perft.test.ts"]);
+listCount("Q1b");
+srcLaneCount("Q1b");
+instrument("Q1b");
+revert();
+
+console.log("\n== Q2 a glob that ADDS a file outside src/");
+console.log("  Q2 setup: a TRACKED docs file memory-bank/zz-illustrative.test.ts committed (the exclude list keeps memory-bank/** out today)");
+writeFileSync(join(copy, "memory-bank", "zz-illustrative.test.ts"), T("illustrative"));
+commitAll("plant tracked docs test file");
+listCount("Q2 setup (config untouched)");
+instrument("Q2 setup (config untouched)");
+replaceInConfig('      "memory-bank/**",\n', "");
+listCount('Q2 "memory-bank/**" dropped');
+srcLaneCount('Q2 "memory-bank/**" dropped');
+instrument('Q2 "memory-bank/**" dropped');
+threeGates('Q2 "memory-bank/**" dropped');
+revert();
+
+console.log("\n== Q2b a glob that ADDS an UNTRACKED file outside src/: untracked plans/zz-note.test.ts planted, then \"plans/**\" dropped");
+writeFileSync(join(copy, "plans", "zz-note.test.ts"), T("note"));
+listCount("Q2b planted (config untouched)");
+instrument("Q2b planted (config untouched)");
+replaceInConfig('      "plans/**",\n', "");
+listCount('Q2b "plans/**" dropped');
+instrument('Q2b "plans/**" dropped');
+revert();
+
+console.log("\n== Q2c a TRACKED non-.ts test file outside src/ that the default include collects: tools/grugops/zz.test.mjs committed");
+writeFileSync(join(copy, "tools", "grugops", "zz.test.mjs"), T("mjs"));
+commitAll("plant tracked mjs test file");
+listCount("Q2c");
+instrument("Q2c");
+revert();
+
+console.log("\n== Q3 a renamed test file");
+must(sh("git", ["mv", "src/fen.test.ts", "src/fen-renamed.test.ts"]), "mv");
+commitAll("rename a");
+listCount("Q3a git mv -> *.test.ts, committed");
+instrument("Q3a git mv -> *.test.ts, committed");
+revert();
+renameSync(join(copy, "src", "fen.test.ts"), join(copy, "src", "fen-renamed.test.ts"));
+listCount("Q3b plain mv (no git), not committed");
+instrument("Q3b plain mv (no git), not committed");
+revert();
+must(sh("git", ["mv", "src/fen.test.ts", "src/fen.spec.ts"]), "mv");
+commitAll("rename c");
+listCount("Q3c git mv -> .spec.ts, committed");
+srcLaneCount("Q3c");
+instrument("Q3c git mv -> .spec.ts, committed");
+revert();
+must(sh("git", ["mv", "src/fen.test.ts", "src/fen.tests.ts"]), "mv");
+commitAll("rename d");
+listCount("Q3d git mv -> .tests.ts (a name the lane does not collect), committed");
+srcLaneCount("Q3d");
+instrument("Q3d git mv -> .tests.ts, committed");
+threeGates("Q3d");
+revert();
+
+console.log("\n== Q4 an untracked test file");
+writeFileSync(join(copy, "spike", "zz-untracked.test.ts"), T("spike"));
+listCount("Q4a untracked spike/zz-untracked.test.ts");
+srcLaneCount("Q4a");
+instrument("Q4a untracked spike/zz-untracked.test.ts");
+revert();
+writeFileSync(join(copy, "src", "zz-untracked.spec.ts"), T("spec"));
+listCount("Q4b untracked src/zz-untracked.spec.ts");
+instrument("Q4b untracked src/zz-untracked.spec.ts");
+revert();
+
+console.log("\n== Q5 a .skip-only file, committed: src/zz-skip-only.test.ts (describe.skip around one it)");
+writeFileSync(
+  join(copy, "src", "zz-skip-only.test.ts"),
+  'import { describe, expect, it } from "vitest";\n\ndescribe.skip("skip-only", () => {\n  it("never runs", () => {\n    expect(1).toBe(2);\n  });\n});\n',
+);
+commitAll("plant skip-only");
+listCount("Q5");
+instrument("Q5");
+{
+  const out = join(copy, "..", "qe118-q5.json");
+  const r = sh("node", ["node_modules/vitest/vitest.mjs", "run", "--dir", "src", "--reporter=json", `--outputFile=${out}`]);
+  const j = JSON.parse(readFileSync(out, "utf8"));
+  rmSync(out);
+  const skip = j.numPendingTests + j.numTodoTests;
+  console.log(`  [Q5] unit lane exit=${r.exit} files=${j.testResults.length} total=${j.numTotalTests} passed=${j.numPassedTests} pending=${j.numPendingTests} todo=${j.numTodoTests} -> skip count ${skip}`);
+  const ti = sh("node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(skip)]);
+  console.log(`  [Q5] test-skip-integrity --skip-count ${skip} exit=${ti.exit}`);
+  for (const l of ti.out.trim().split("\n").slice(0, 6)) console.log(`      | ${l}`);
+}
+revert();
+
+console.log("\n== Q6 the instrument run where it cannot look: a copy with no .git");
+const nogit = `${copy}-nogit`;
+rmSync(nogit, { recursive: true, force: true });
+must(sh("rsync", ["-a", "--exclude", ".git", "--exclude", "node_modules", `${copy}/`, `${nogit}/`], "/"), "rsync");
+{
+  const r = sh("node", ["tools/grugops/lane-inventory.js"], nogit);
+  console.log(`  [Q6] instrument exit=${r.exit}`);
+  for (const l of r.out.trim().split("\n").slice(0, 4)) console.log(`      | ${l}`);
+}
+rmSync(nogit, { recursive: true, force: true });
+console.log(`\n== FINAL: porcelain ${sh("git", ["status", "--porcelain"]).stdout.trim() === "" ? "EMPTY" : "NOT EMPTY"}; HEAD ${sh("git", ["rev-parse", "HEAD"]).stdout.trim() === baseSha ? "= base" : "MOVED"}; load at end: ${loadavg().map((n) => n.toFixed(2)).join(" ")}; nogit copy removed: ${!existsSync(nogit)}`);

@@ -1,0 +1,171 @@
+copy: /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe118-copy
+base commit in copy: 8976f419163c26181e0cdb936a3af1b388dba9e6; tracked *.test.ts: 42; porcelain: EMPTY
+load at start: 5.10 4.34 3.94
+
+== BASE
+  [base] vitest list --filesOnly (root) -> 42 files, exit=0
+  [base] vitest list --filesOnly --dir src (the unit gate's form) -> 42 files, exit=0
+  [base] instrument exit=0
+      | The lane collects 42 test files; git tracks 42.
+      | No findings.
+
+== E-M1 (A1, deletion): exclude += "**/glyph-mode.nfr.test.ts"
+  [E-M1] vitest list --filesOnly (root) -> 41 files, exit=0
+  [E-M1] vitest list --filesOnly --dir src (the unit gate's form) -> 41 files, exit=0
+  [E-M1] instrument exit=1
+      | The lane collects 41 test files; git tracks 42.
+      | Tracked by git but NOT collected by the lane: src/glyph-mode.nfr.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+  [E-M1] lint exit=0 typecheck exit=0 build(tsc --noEmit) exit=0
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== E-M2 (A2, inflation): ".claude/**" -> ".cluade/**" with a throwaway checkout at .claude/worktrees/probe/
+  planted checkout; git status --porcelain (gitignored?) -> EMPTY (ignored)
+  [E-M2 pre: checkout planted, config untouched] vitest list --filesOnly (root) -> 42 files, exit=0
+  [E-M2 pre] instrument exit=0
+      | The lane collects 42 test files; git tracks 42.
+      | No findings.
+  [E-M2 typo] vitest list --filesOnly (root) -> 84 files, exit=0
+  [E-M2 typo] vitest list --filesOnly --dir src (the unit gate's form) -> 42 files, exit=0
+  [E-M2 typo] instrument exit=1
+      | The lane collects 84 test files; git tracks 42.
+      | Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/apply.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+      | Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/cli.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+      | Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/command-input.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+      | Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/coordinate-move.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+      | Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/engine.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+      | ... (43 lines total)
+  [E-M2 typo] lint exit=0 typecheck exit=0 build(tsc --noEmit) exit=0
+  [E-M2 post: typo kept, checkout removed] vitest list --filesOnly (root) -> 42 files, exit=0
+  [E-M2 post] instrument exit=0
+      | The lane collects 42 test files; git tracks 42.
+      | No findings.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== E-M3 (A3): untracked src/zz-abc118-throwaway.test.ts
+  [E-M3] vitest list --filesOnly (root) -> 43 files, exit=0
+  [E-M3 untracked] instrument exit=1
+      | The lane collects 43 test files; git tracks 42.
+      | Collected by the lane but NOT tracked by git: src/zz-abc118-throwaway.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+  [E-M3 after git add (index edited)] instrument exit=0
+      | The lane collects 43 test files; git tracks 43.
+      | No findings.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== E-M4 (A4): exclude += "**/tools/**", "**/lane-inventory*"
+  [E-M4] vitest list --filesOnly (root) -> 42 files, exit=0
+  [E-M4] instrument exit=0
+      | The lane collects 42 test files; git tracks 42.
+      | No findings.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== E-M5 (control): stock "**/node_modules/**" removed
+  [E-M5] vitest list --filesOnly (root) -> 42 files, exit=0
+  [E-M5] instrument exit=0
+      | The lane collects 42 test files; git tracks 42.
+      | No findings.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== Q1 exclude glob removing exactly one file, repo-relative form (no **): exclude += "src/perft.test.ts"
+  [Q1] vitest list --filesOnly (root) -> 41 files, exit=0
+  [Q1] vitest list --filesOnly --dir src (the unit gate's form) -> 42 files, exit=0
+  [Q1] instrument exit=1
+      | The lane collects 41 test files; git tracks 42.
+      | Tracked by git but NOT collected by the lane: src/perft.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+  [Q1] lint exit=0 typecheck exit=0 build(tsc --noEmit) exit=0
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== Q1b the same one file removed with the directory-relative form the unit gate sees: exclude += "perft.test.ts"
+  [Q1b] vitest list --filesOnly (root) -> 42 files, exit=0
+  [Q1b] vitest list --filesOnly --dir src (the unit gate's form) -> 41 files, exit=0
+  [Q1b] instrument exit=0
+      | The lane collects 42 test files; git tracks 42.
+      | No findings.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== Q2 a glob that ADDS a file outside src/
+  Q2 setup: a TRACKED docs file memory-bank/zz-illustrative.test.ts committed (the exclude list keeps memory-bank/** out today)
+  [Q2 setup (config untouched)] vitest list --filesOnly (root) -> 42 files, exit=0
+  [Q2 setup (config untouched)] instrument exit=1
+      | The lane collects 42 test files; git tracks 43.
+      | Tracked by git but NOT collected by the lane: memory-bank/zz-illustrative.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+  [Q2 "memory-bank/**" dropped] vitest list --filesOnly (root) -> 43 files, exit=0
+  [Q2 "memory-bank/**" dropped] vitest list --filesOnly --dir src (the unit gate's form) -> 42 files, exit=0
+  [Q2 "memory-bank/**" dropped] instrument exit=0
+      | The lane collects 43 test files; git tracks 43.
+      | No findings.
+  [Q2 "memory-bank/**" dropped] lint exit=0 typecheck exit=0 build(tsc --noEmit) exit=0
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== Q2b a glob that ADDS an UNTRACKED file outside src/: untracked plans/zz-note.test.ts planted, then "plans/**" dropped
+  [Q2b planted (config untouched)] vitest list --filesOnly (root) -> 42 files, exit=0
+  [Q2b planted (config untouched)] instrument exit=0
+      | The lane collects 42 test files; git tracks 42.
+      | No findings.
+  [Q2b "plans/**" dropped] vitest list --filesOnly (root) -> 43 files, exit=0
+  [Q2b "plans/**" dropped] instrument exit=1
+      | The lane collects 43 test files; git tracks 42.
+      | Collected by the lane but NOT tracked by git: plans/zz-note.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== Q2c a TRACKED non-.ts test file outside src/ that the default include collects: tools/grugops/zz.test.mjs committed
+  [Q2c] vitest list --filesOnly (root) -> 43 files, exit=0
+  [Q2c] instrument exit=1
+      | The lane collects 43 test files; git tracks 42.
+      | Collected by the lane but NOT tracked by git: tools/grugops/zz.test.mjs — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== Q3 a renamed test file
+  [Q3a git mv -> *.test.ts, committed] vitest list --filesOnly (root) -> 42 files, exit=0
+  [Q3a git mv -> *.test.ts, committed] instrument exit=0
+      | The lane collects 42 test files; git tracks 42.
+      | No findings.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+  [Q3b plain mv (no git), not committed] vitest list --filesOnly (root) -> 42 files, exit=0
+  [Q3b plain mv (no git), not committed] instrument exit=1
+      | The lane collects 42 test files; git tracks 42.
+      | Tracked by git but NOT collected by the lane: src/fen.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+      | Collected by the lane but NOT tracked by git: src/fen-renamed.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+  [Q3c git mv -> .spec.ts, committed] vitest list --filesOnly (root) -> 42 files, exit=0
+  [Q3c] vitest list --filesOnly --dir src (the unit gate's form) -> 42 files, exit=0
+  [Q3c git mv -> .spec.ts, committed] instrument exit=1
+      | The lane collects 42 test files; git tracks 41.
+      | Collected by the lane but NOT tracked by git: src/fen.spec.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+  [Q3d git mv -> .tests.ts (a name the lane does not collect), committed] vitest list --filesOnly (root) -> 41 files, exit=0
+  [Q3d] vitest list --filesOnly --dir src (the unit gate's form) -> 41 files, exit=0
+  [Q3d git mv -> .tests.ts, committed] instrument exit=0
+      | The lane collects 41 test files; git tracks 41.
+      | No findings.
+  [Q3d] lint exit=0 typecheck exit=0 build(tsc --noEmit) exit=0
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== Q4 an untracked test file
+  [Q4a untracked spike/zz-untracked.test.ts] vitest list --filesOnly (root) -> 43 files, exit=0
+  [Q4a] vitest list --filesOnly --dir src (the unit gate's form) -> 42 files, exit=0
+  [Q4a untracked spike/zz-untracked.test.ts] instrument exit=1
+      | The lane collects 43 test files; git tracks 42.
+      | Collected by the lane but NOT tracked by git: spike/zz-untracked.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+  [Q4b untracked src/zz-untracked.spec.ts] vitest list --filesOnly (root) -> 43 files, exit=0
+  [Q4b untracked src/zz-untracked.spec.ts] instrument exit=1
+      | The lane collects 43 test files; git tracks 42.
+      | Collected by the lane but NOT tracked by git: src/zz-untracked.spec.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== Q5 a .skip-only file, committed: src/zz-skip-only.test.ts (describe.skip around one it)
+  [Q5] vitest list --filesOnly (root) -> 43 files, exit=0
+  [Q5] instrument exit=0
+      | The lane collects 43 test files; git tracks 43.
+      | No findings.
+  [Q5] unit lane exit=0 files=43 total=1362 passed=1361 pending=1 todo=0 -> skip count 1
+  [Q5] test-skip-integrity --skip-count 1 exit=1
+      | Unjustified skips: the runner reported 1 skipped tests but only 0 are justified.
+  REVERT: HEAD=base porcelain=EMPTY config==original:true instrument exit=0 (The lane collects 42 test files; git tracks 42.)
+
+== Q6 the instrument run where it cannot look: a copy with no .git
+  [Q6] instrument exit=2
+      | Error: `git rev-parse --show-toplevel` failed with exit 128.
+      | fatal: not a git repository (or any of the parent directories): .git
+
+== FINAL: porcelain EMPTY; HEAD = base; load at end: 11.58 5.77 4.46; nogit copy removed: true
