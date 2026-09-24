@@ -33,10 +33,18 @@
   "quality": {
     "coverage_threshold": 0.8,
     "self_fix_attempts": 2,
-    "mandatory_gates": ["lint", "typecheck", "unit", "build"],
+    "mandatory_gates": [
+      "lint",
+      "typecheck",
+      "unit",
+      "build"
+    ],
     "ui_e2e": "ui-or-critical-path",
     "tdd": "encouraged",
-    "lint": { "strict": false, "autofix": true },
+    "lint": {
+      "strict": false,
+      "autofix": true
+    },
     "test_integrity": "warn",
     "gate_enforcement": "blocking"
   },
@@ -60,7 +68,31 @@
     "stale_ttl_minutes": 30
   },
   "compliance_regime": [],
-  "environments": ["local"],
+  "environments": [
+    "local"
+  ],
   "production_requires_human_confirmation": true,
-  "blocked_escalation_days": 2
+  "blocked_escalation_days": 2,
+  "models": {
+    "preset": "none",
+    "roles": {
+      "orchestrator": "opus",
+      "software-engineer": "opus",
+      "architect-design": "opus",
+      "security-nfr": "opus",
+      "incident-responder": "opus",
+      "system-analyst": "opus",
+      "ba-pm": "opus",
+      "frontend-ui": "opus",
+      "qe-e2e": "opus",
+      "uat-planner": "opus",
+      "brownfield-mapper": "opus",
+      "greenfield-mapper": "opus",
+      "compliance-officer": "opus",
+      "agents-md-scribe": "opus",
+      "factory-coach": "opus",
+      "release-manager": "opus",
+      "installer": "opus"
+    }
+  }
 }
