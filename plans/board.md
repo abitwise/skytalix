@@ -433,6 +433,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Blocked (visible, time-tracked)
 
+_2026-09-24: ONE ticket blocked — `ABC-074` (no non-M3 machine). `ABC-079` left Blocked on its oracle ruling (`b324cb6`). The line below is the prior state, kept for the record._
+
 _TWO tickets blocked: `ABC-074` (no non-M3 machine) and `ABC-079` (Architect/Design ruling on the unpruned oracle under quiescence, since 2026-09-19). Two tickets blocked from the moment they were cut, both on an input no agent can supply. Rule applied by the Orchestrator at `decompose-epics-2026-08-16`: **blocked on an EXTERNAL input (a human, hardware, an unmade ruling) → `Blocked`, time-tracked and escalated at `blocked_escalation_days` = 2; blocked only on ORDERING within the plan → stays in `Backlog`.** That is why `ABC-095` and the `ABC-100`-dependent packaging work are NOT here._
 
 - [ABC-074] SPIKE — depth-in-budget on non-M3 target hardware  (EPIC-004, S, P0, DoR 7/10, BLOCKED: no non-M3 machine)
