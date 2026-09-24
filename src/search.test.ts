@@ -9,11 +9,12 @@
  * the 160 ms per-file floor). Every criterion `A1`-`A7` is answered in the DEFAULT lane; the
  * expensive REPETITIONS of it — greater depth, broader corpus, the criterion's own position
  * where that position is the costly one — run under `SEARCH_DEEP=1`, on the `PERFT_DEEP`
- * precedent. The whole file in one lane costs ~8.7 s under the runner; the default lane as
- * split costs 194 ms of test time, and the paired lane delta measures 625 ms CPU (median of 8
- * interleaved rounds, sign 8/8, identity null control 5 ms at 4/8) = 465 ms net of the floor.
+ * precedent. At `ABC-077`'s tip, before the quiescence leaf, the whole file in one lane cost
+ * ~8.7 s under the runner; the default lane as split cost 194 ms of test time, and the paired
+ * lane delta measured 625 ms CPU (median of 8 interleaved rounds, sign 8/8, identity null
+ * control 5 ms at 4/8) = 465 ms net of the floor. Those are that tip's figures, not this one's.
  *
- * What went to the deep lane, measured under the runner:
+ * What went to the deep lane, measured under the runner at `ABC-077`'s tip:
  *
  *   the depth-3 pair on five of the six corpus positions   194-700 ms each
  *   `A2`'s own case, kiwipete depth 3 (99 950 nodes)       ~700 ms
@@ -22,7 +23,24 @@
  *
  * The depth-3 differential is NOT dropped from the default lane — dropping it would trade
  * `A1`'s only window-bug detector for a stopwatch — it is kept on `position-3`, the corpus
- * position whose depth-3 pair is cheap (~58 ms), with the other five in the deep lane.
+ * position whose depth-3 pair is cheap (~58 ms), with the rest in the deep lane.
+ *
+ * WHICH LEAF EACH DEPTH RUNS ON (ABC-079 oracle ruling, `.grugops/context/ruling-abc079-oracle/`).
+ * `search` scores its leaves with the quiescence search. The unpruned oracle never raises
+ * `alpha`, so it opens a full-window capture search at every leaf. At depth 3 on the four
+ * capture-dense positions that one pair cost 23 s to 1 016 s under the runner, against a 30 s
+ * timeout. So:
+ *
+ *   depth 2, all six positions                 quiescence leaf (`search` vs `searchWithoutPruning`)
+ *   depth 3, `position-3` and `startpos` only  quiescence leaf, as above
+ *   depth 3, all six positions (deep lane)     BARE leaf (`searchWithoutQuiescence` vs
+ *                                              `searchWithoutPruningOrQuiescence`)
+ *
+ * The bare-leaf depth-3 pair is `ABC-077`'s `A1`/`A2` on the search they were written for, and
+ * `A2`'s kiwipete case reads its recorded 99 950 unpruned nodes. What no case proves any more is
+ * the combination: a depth-3 window reaching a quiescence leaf on a capture-dense board. Each
+ * half is still proved on its own. Neither leaf brute-forces quiescence's own alpha-beta; that
+ * is `src/quiescence.test.ts`'s to cover.
  *
  * `A1` IS A DIFFERENTIAL ORACLE AND BOTH ITS SIDES CALL THE SAME `evaluate()`. Green here says
  * alpha-beta changed the WORK and not the VALUE. It says NOTHING about whether the evaluation
@@ -39,7 +57,14 @@ import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
 import * as searchModule from "./search.ts";
-import { MATE_SCORE, type SearchResult, search, searchWithoutPruning } from "./search.ts";
+import {
+  MATE_SCORE,
+  type SearchResult,
+  search,
+  searchWithoutPruning,
+  searchWithoutPruningOrQuiescence,
+  searchWithoutQuiescence,
+} from "./search.ts";
 
 /** The six perft positions, the corpus `A1`, `A2`, `A4` and `A7` are specified against. */
 const PERFT_CORPUS: ReadonlyArray<{ name: string; fen: string }> = [
@@ -62,10 +87,20 @@ const PERFT_CORPUS: ReadonlyArray<{ name: string; fen: string }> = [
 const DEFAULT_LANE_AT_DEPTH_2 = new Set(["startpos", "position-3", "position-4"]);
 
 /**
- * The one corpus position whose depth-3 pair fits the default lane (~58 ms under the runner).
- * The others cost 194-700 ms each and run under `SEARCH_DEEP=1`.
+ * The one corpus position whose depth-3 pair fits the default lane (~58 ms under the runner at
+ * `ABC-077`'s tip). It runs on the quiescence leaf, and it is `A1`'s and `A7`'s default-lane
+ * depth-3 case.
  */
 const DEFAULT_LANE_AT_DEPTH_3 = "position-3";
+
+/**
+ * The corpus positions whose depth-3 pair still runs on the QUIESCENCE leaf: `position-3` in the
+ * default lane and `startpos` under `SEARCH_DEEP=1`. On the other four the unpruned side opens a
+ * full-window capture search at every leaf and the pair costs 23 s to 1 016 s under the runner.
+ * Those four are retired at depth 3 by the ABC-079 oracle ruling, and their depth-3 pair runs on
+ * the bare leaf instead.
+ */
+const QUIESCENCE_AT_DEPTH_3 = new Set([DEFAULT_LANE_AT_DEPTH_3, "startpos"]);
 
 /**
  * `SEARCH_DEEP=1` registers the full depth-3 sweep and the depth-7 mate case. Unset, those
@@ -111,24 +146,35 @@ interface SearchPair {
 }
 
 /**
- * The pruned and unpruned search of one position at one depth, run once on ONE position object
- * and memoised. `A1` reads the scores off it, `A2` the node counts, `A7` the byte-identity of
- * the position afterwards — three criteria, three separate assertions, one measurement, because
- * the searches are the whole cost of this file's default lane.
+ * Which leaf a pair runs on. `"quiescence"` is the shipped leaf: `search` against
+ * `searchWithoutPruning`. `"bare"` is the static evaluation: `searchWithoutQuiescence` against
+ * `searchWithoutPruningOrQuiescence`, the leaf `ABC-077`'s depth-3 criteria were written on.
+ */
+type Leaf = "quiescence" | "bare";
+
+/**
+ * The pruned and unpruned search of one position at one depth on one leaf, run once on ONE
+ * position object and memoised. `A1` reads the scores off it, `A2` the node counts, `A7` the
+ * byte-identity of the position afterwards — three criteria, three separate assertions, one
+ * measurement, because the searches are the whole cost of this file.
  */
 const searchPairs = new Map<string, SearchPair>();
 
-function searchPair(fen: string, depth: number): SearchPair {
-  const key = `${depth}|${fen}`;
+function searchPair(fen: string, depth: number, leaf: Leaf): SearchPair {
+  const key = `${leaf}|${depth}|${fen}`;
   const cached = searchPairs.get(key);
   if (cached !== undefined) return cached;
 
   const position = parseFen(fen);
   const before = snapshot(position);
 
-  const pruned = search(position, depth);
+  const pruned =
+    leaf === "quiescence" ? search(position, depth) : searchWithoutQuiescence(position, depth);
   const intactAfterPruned = matchesSnapshot(position, before);
-  const unpruned = searchWithoutPruning(position, depth);
+  const unpruned =
+    leaf === "quiescence"
+      ? searchWithoutPruning(position, depth)
+      : searchWithoutPruningOrQuiescence(position, depth);
 
   const pair: SearchPair = {
     pruned,
@@ -308,7 +354,9 @@ describe("A5 — stalemate scores exactly 0, not a loss", () => {
 
 describe("A1 — pruned and unpruned scores are identical", () => {
   for (const { name, fen } of PERFT_CORPUS) {
+    // The quiescence leaf: depth 2 on all six, depth 3 where the unpruned side is affordable.
     for (const depth of [2, 3]) {
+      if (depth === 3 && !QUIESCENCE_AT_DEPTH_3.has(name)) continue; // retired, see the header
       const deep =
         depth === 2 ? !DEFAULT_LANE_AT_DEPTH_2.has(name) : name !== DEFAULT_LANE_AT_DEPTH_3;
       if (deep && !RUN_DEEP) continue; // absent in the default run, not skipped
@@ -316,11 +364,19 @@ describe("A1 — pruned and unpruned scores are identical", () => {
       it(
         `${name} at depth ${depth}${deep ? " [deep, SEARCH_DEEP=1]" : ""}`,
         () => {
-          const { pruned, unpruned } = searchPair(fen, depth);
+          const { pruned, unpruned } = searchPair(fen, depth, "quiescence");
           expect(pruned.score).toBe(unpruned.score);
         },
         deep ? 30_000 : undefined,
       );
+    }
+
+    // The bare leaf: depth 3 on all six, which is `ABC-077`'s merged depth-3 differential.
+    if (RUN_DEEP) {
+      it(`${name} at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]`, () => {
+        const { pruned, unpruned } = searchPair(fen, 3, "bare");
+        expect(pruned.score).toBe(unpruned.score);
+      }, 30_000);
     }
   }
 });
@@ -333,21 +389,21 @@ describe("A2 — alpha-beta visits under 40% of the unpruned nodes", () => {
   const KIWIPETE = PERFT_CORPUS[1]?.fen as string;
   const STARTPOS = PERFT_CORPUS[0]?.fen as string;
 
-  // The criterion names kiwipete at depth 3, and that pair alone costs ~700 ms under the runner
-  // — the single most expensive thing this file can do. It runs in the deep lane; the default
-  // lane holds startpos at depth 2, where the same failure (a window computed and never applied)
-  // shows up just as plainly: the measured ratio there is 27.1%, against 9.0% for the criterion's
-  // own case. Reported with both figures, never with only the cheap one.
+  // The criterion names kiwipete at depth 3. That pair runs in the deep lane, on the bare leaf
+  // (see the header), where it reads 9 016 / 99 950 nodes = 9.02%. The default lane holds startpos
+  // at depth 2 on the quiescence leaf, where the same failure (a window computed and never
+  // applied) shows up just as plainly: 122 / 470 nodes = 25.96%. Reported with both figures,
+  // never with only the cheap one.
   it("startpos at depth 2 — the default lane's cheap standing guard", () => {
-    const { pruned, unpruned } = searchPair(STARTPOS, 2);
+    const { pruned, unpruned } = searchPair(STARTPOS, 2, "quiescence");
 
     expect(unpruned.nodes).toBeGreaterThan(0);
     expect(pruned.nodes / unpruned.nodes).toBeLessThan(0.4);
   });
 
   if (RUN_DEEP) {
-    it("kiwipete at depth 3 — the criterion's own position and depth [deep, SEARCH_DEEP=1]", () => {
-      const { pruned, unpruned } = searchPair(KIWIPETE, 3);
+    it("kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]", () => {
+      const { pruned, unpruned } = searchPair(KIWIPETE, 3, "bare");
 
       expect(pruned.nodes / unpruned.nodes).toBeLessThan(0.4);
     }, 30_000);
@@ -441,10 +497,15 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
   });
 
   it("exports exactly the search core and nothing that picks a move on its own", () => {
+    // `searchWithoutQuiescence` joined the list at ABC-079, and `searchWithoutPruningOrQuiescence`
+    // at its oracle ruling. Both are TEST-ONLY doors of the same shape as `searchWithoutPruning`,
+    // taking the same required depth. Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "MATE_SCORE",
       "search",
       "searchWithoutPruning",
+      "searchWithoutPruningOrQuiescence",
+      "searchWithoutQuiescence",
     ]);
   });
 
@@ -453,6 +514,8 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // anywhere in a signature drops this to 1 and fails here.
     expect(search.length).toBe(2);
     expect(searchWithoutPruning.length).toBe(2);
+    expect(searchWithoutQuiescence.length).toBe(2);
+    expect(searchWithoutPruningOrQuiescence.length).toBe(2);
   });
 
   it("carries no default value for depth anywhere in the module", () => {
@@ -481,7 +544,7 @@ describe("A7 — the searched position is unchanged on return", () => {
     // The same pair `A1` scores at depth 3, checked for mutation instead of for its score.
     const entry = PERFT_CORPUS.find(({ name }) => name === DEFAULT_LANE_AT_DEPTH_3);
 
-    expect(searchPair((entry as { fen: string }).fen, 3).intact).toBe(true);
+    expect(searchPair((entry as { fen: string }).fen, 3, "quiescence").intact).toBe(true);
   });
 
   if (RUN_DEEP) {
@@ -489,12 +552,17 @@ describe("A7 — the searched position is unchanged on return", () => {
       expect(corpusRun("default", 2).mutated).toEqual([]);
       expect(corpusRun("broad", 2).mutated).toEqual([]);
 
-      for (const { fen } of PERFT_CORPUS) {
+      // The unpruned depth-3 half runs on the bare leaf (the oracle ruling). The unpruned
+      // QUIESCENCE leaf is checked on every root at depth 2 instead, read off the pairs `A1`
+      // already ran, so it adds no searches when `A1` runs first.
+      for (const { name, fen } of PERFT_CORPUS) {
+        expect(searchPair(fen, 2, "quiescence").intact, name).toBe(true);
+
         const position = parseFen(fen);
         const before = snapshot(position);
         search(position, 3);
         expect(snapshot(position)).toEqual(before);
-        searchWithoutPruning(position, 3);
+        searchWithoutPruningOrQuiescence(position, 3);
         expect(snapshot(position)).toEqual(before);
       }
     }, 120_000);

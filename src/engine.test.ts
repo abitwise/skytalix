@@ -254,12 +254,15 @@ describe("A2 — a budget far below one iteration's cost still returns a move, a
     // iterations, and BOTH numbers below are measured on THIS fixture at the branch tip rather
     // than transcribed from another one — the previous pair were not (`G1`).
     //
-    //   delivered build (in-recursion check present):       depth 2,     3 120 nodes
-    //   in-recursion check DELETED (QE's `M1`):             depth 5, 1 280 509 nodes
+    //   delivered build (in-recursion check present):       depth 1,      9 973 nodes
+    //   in-recursion check DELETED (QE's `M1`):             depth 5, 36 951 122 nodes
     //
-    // The mutant sees time remaining at every iteration boundary — virtual time advances per
-    // consultation — so it enters depth 3, 4 and 5 and finishes them, two orders of magnitude
-    // above the bound. The delivered build enters depth 3 and is stopped INSIDE it.
+    // Re-measured at `ABC-079` (`ADR-0024`): the UNABORTABLE depth-1 iteration now carries an
+    // MVV-LVA-ordered quiescence (5 878 nodes on kiwipete, was 49 bare), so the delivered
+    // build is stopped INSIDE depth 2 by the fourth in-recursion consultation, 267 nodes under
+    // the bound. The mutant sees time remaining at every iteration boundary — virtual time
+    // advances per consultation — so it finishes depths 2 to 5, three orders of magnitude
+    // above the bound. The bound itself is unchanged; it held, so it was not moved.
     expect(choice.nodes).toBeLessThanOrEqual(10 * NODES_PER_CLOCK_CHECK);
   });
 });
@@ -268,12 +271,26 @@ describe("A2 — a budget far below one iteration's cost still returns a move, a
 // A3 — a partial iteration is DISCARDED, and the fixture is one where that changes the answer.
 // ---------------------------------------------------------------------------
 
+/**
+ * `A3`'s fixture: the position after 1. g4 d5, white to move. Its best move CHANGES with depth
+ * under the delivered leaf — e2e3 at depths 1 and 2, g4g5 at depth 3 — so a build that kept an
+ * aborted depth-3 iteration's best-so-far can be told apart from one that discarded it, which a
+ * fixture with a stable best move cannot do.
+ *
+ * RE-FIXTURED at `ABC-079` (`ADR-0024`): `position-6` carried this role until quiescence, but
+ * with a quiescence leaf its best move is c3d5 at depths 1, 2 AND 3 — the premise, not just the
+ * node count, was gone. Chosen from a scan of the six perft roots, their one-ply children, two
+ * plies under `startpos` and `position-3`, and the endgame corpus: measured at this branch tip
+ * depth 1 = 38 nodes, depth 2 = 382, depth 3 = 9 871, so ten in-recursion consultations fall
+ * inside depth 3 and every budget from 3 to 12 on a 1 ms tick completes depth 2 and aborts
+ * inside depth 3; 8 is the middle of that window. An emulated keep-the-best-so-far mutant was
+ * caught at all ten abort points (its best-so-far is never e2e3 at −80).
+ */
+const A3_FEN = "rnbqkbnr/ppp1pppp/8/3p4/6P1/8/PPPPPP1P/RNBQKBNR w KQkq d6 0 2";
+
 describe("A3 — an aborted iteration's move is discarded, not returned", () => {
-  // `position-6` is the corpus position whose best move CHANGES with depth: g5f6 at depths 1 and
-  // 2, c3d5 at depth 3. So a build that kept an aborted depth-3 iteration's best-so-far can be
-  // told apart from one that discarded it, which a fixture with a stable best move cannot do.
-  const position = () => parseFen(fenOf("position-6"));
-  const choice = chooseMove(position(), { budgetMs: 5, now: tickingClock(1) }) as {
+  const position = () => parseFen(A3_FEN);
+  const choice = chooseMove(position(), { budgetMs: 8, now: tickingClock(1) }) as {
     move: Move;
     score: number;
     depth: number;
@@ -282,24 +299,24 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
 
   it("aborts INSIDE depth 3 — the run really did enter the iteration it discards", () => {
     expect(choice.depth).toBe(2);
-    // Depths 1 and 2 cost 47 + 562 nodes; anything above that was spent inside the aborted
+    // Depths 1 and 2 cost 38 + 382 nodes; anything above that was spent inside the aborted
     // depth-3 iteration. Without this the criterion is satisfiable by never deepening at all.
     expect(choice.nodes).toBeGreaterThan(search(position(), 1).nodes + search(position(), 2).nodes);
   });
 
   it("returns the completed depth-2 move, which is NOT the depth-3 move", () => {
     // The MOVE half of the coupling, at this one fixture. The SCORE half, and the breadth that
-    // makes either of them bite, are the identity sweep below: `position-6` is a quiet
-    // middlegame with no mate or stalemate inside a depth-2 horizon, so a scoring drift in the
-    // mate/stalemate branch agrees with `search` here completely (`ABC-078` QE, gap `G4`).
+    // makes either of them bite, are the identity sweep below: an opening position with no mate
+    // or stalemate inside a depth-2 horizon, so a scoring drift in the mate/stalemate branch
+    // agrees with `search` here completely (`ABC-078` QE, gap `G4`).
     const reference = search(position(), 2) as { move: Move | null; score: number };
     expect(label(choice.move)).toBe(label(reference.move as Move));
     expect(choice.score).toBe(reference.score);
-    // `search(position-6, 3).move` is `c3d5`, measured at this branch tip (14 565 nodes, ~500 ms
-    // under the runner). It is a LITERAL here rather than a call because that one call is most
-    // of this file's lane budget; the computed form of this same assertion runs in the deep lane
+    // `search(A3_FEN, 3).move` is `g4g5`, measured at this branch tip (9 871 nodes, ~50 ms
+    // under the runner). It is a LITERAL here rather than a call so the default lane pays for
+    // the aborted run only; the computed form of this same assertion runs in the deep lane
     // below, so a drift between the literal and the search is red there rather than unnoticed.
-    expect(label(choice.move)).not.toBe("c3d5");
+    expect(label(choice.move)).not.toBe("g4g5");
   });
 });
 
@@ -832,8 +849,8 @@ if (RUN_DEEP) {
   });
 
   describe("A3 — the depth-3 move the default lane carries as a literal [deep, ENGINE_DEEP=1]", () => {
-    it("computes search(position-6, 3).move and confirms it is c3d5", () => {
-      expect(label(search(parseFen(fenOf("position-6")), 3).move as Move)).toBe("c3d5");
+    it("computes search(A3_FEN, 3).move and confirms it is g4g5", () => {
+      expect(label(search(parseFen(A3_FEN), 3).move as Move)).toBe("g4g5");
     }, 30_000);
   });
 
