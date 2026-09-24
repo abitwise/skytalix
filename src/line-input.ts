@@ -86,7 +86,9 @@ export const PROMPT = "> ";
  * resolver as if the player had typed it, and a 1024-character prefix of a flood can be a legal
  * move. It never reaches a resolver and it never grows the frame — `rejected` is one of `ABC-019`'s
  * four non-advancing outcomes and its messages travel through `assembleFrame`'s sanitizer
- * (`src/frame.ts:123`) inside the bounded message region.
+ * (`src/frame.ts:123`) inside the bounded message region. It is still a line the player submitted,
+ * so it clears the `quit` confirmation (`ADR-0021` clause 6) through the wrapper's `disarm`, which
+ * takes no line — the over-cap text still reaches no resolver.
  */
 export const MAX_LINE_LENGTH = 1024;
 
@@ -242,7 +244,10 @@ export function createLineInputSeam(options: LineInputOptions): InputSeam {
     output.write(PROMPT);
     const line = await readLine();
     if (line === null) return { kind: "eof" };
-    if (line.overlong) return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };
+    if (line.overlong) {
+      resolve.disarm();
+      return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };
+    }
     return resolve(history, line.text);
   };
 }
