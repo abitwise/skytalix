@@ -325,3 +325,33 @@ quoted. This ruling can be overturned on that evidence.
   the new run, and say that depth 3 runs on the bare leaf.
 - Add a `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` entry (37 passed, 13.7 s at
   `700730b`). Note that the two files share the variable.
+
+## Delivery (re-hop 2)
+
+**Re-hopped 2026-09-24 by the Software Engineer** (task `wave-2026-09-24`, subtask
+`ticket-to-pr-ABC-079-rehop2`, Workflow 04) on the oracle ruling. Code commit **`33b9a02`**, on
+**`grugops/ABC-079-quiescence-rehop2`**. That branch is a strict fast-forward of
+`grugops/ABC-079-quiescence` over `b324cb6`; the named branch is held by two other worktrees and
+was not moved. **NOT merged.** Three files, 106/−30: `src/search.ts` 14/−0, `src/search.test.ts`
+87/−30, `src/search.qe.test.ts` 5/−0. Nothing else under `src/`; `plans/board.md`, `AGENTS.md`,
+the NFR bars and `ADR-0024` untouched.
+
+- **Delivered per the ruling:**
+  - The TEST-ONLY door `searchWithoutPruningOrQuiescence(position, depth)`.
+  - `A1` gains a bare-leaf depth-3 pair on all six (deep). The quiescence-on depth-3 pair is
+    kept on `startpos` (deep) and `position-3` (default); the other four cells are deleted.
+  - `A2` deep reads the bare-leaf kiwipete pair: **9 016 / 99 950 = 9.02%**.
+  - `A7` deep takes its unpruned half from the door and checks `.intact` on the depth-2 pairs.
+  - `A6` and `QE-G1` gain the door; the header is corrected.
+  - Timeouts unchanged. The bare-leaf counts reproduce the ruling's probe to the node.
+- **`SEARCH_DEEP=1` on `src/search.test.ts`: exit 0, 43 passed, 125.5 s** (load 3.9–7.9). It was
+  exit 1 at 2 678 s. **One case is over 50% of its timeout: `A4`'s deep case, 73.6 s of 120 s
+  (61%)**, which this hop does not touch. Next closest: kiwipete's quiescence-on depth-2 pair at
+  11.9 s of 30 s (40%).
+- **Other lanes:** `SEARCH_DEEP=1` quiescence 37/37, exit 0, 13.2 s. `ENGINE_DEEP=1` 33/33, exit
+  0, 133.3 s (50 ms case at 85 ms). Default lane 41 files / **1 244** pass / 0 skip, exit 0.
+  Integrity `No findings.` Lint, typecheck and build all exit 0.
+- **`NFR-008`:** non-conforming on both arms (median CPU 24.6 s before `fa80923`, 26.5 s after,
+  against 15 s), at load 17–35. The two touched files alone: +0.20 s CPU median paired.
+  `N8-LANE` is not claimed. Notes: `.grugops/context/ticket-to-pr-ABC-079/notes/` (eight re-hop 2
+  notes).
