@@ -1,0 +1,129 @@
+// qe-ABC-046 — edge cases through the REAL entry point (node src/cli.ts as a child), the engine
+// substituted with the same `--import` data-URL hook shape src/cli.test.ts uses. Scratch only: no
+// repo file touched, no child added to the suite's spawn pin. Usage: node edges-cli.mjs <worktree>
+import { spawnSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+const CWD = process.argv[2];
+const { PROMPT, LINE_TOO_LONG_MESSAGES, MAX_LINE_LENGTH } = await import(`${CWD}/src/line-input.ts`);
+const { QUIT_NOTICE, INPUT_ENDED_NOTICE } = await import(`${CWD}/src/turn-loop.ts`);
+const { QUIT_CONFIRMATION_MESSAGES } = await import(`${CWD}/src/command-input.ts`);
+const { renderResultScreen } = await import(`${CWD}/src/result-screen.ts`);
+const { newGame, playMove } = await import(`${CWD}/src/history.ts`);
+const { legalMoves } = await import(`${CWD}/src/legal.ts`);
+const { squareName } = await import(`${CWD}/src/position.ts`);
+const { renderBoard } = await import(`${CWD}/src/render.ts`);
+const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const playedOut = (moves) => { const h = newGame(START_FEN); for (const w of moves) { const m = legalMoves(h.position).find((c) => `${squareName(c.from)}${squareName(c.to)}` === w); if (!m) throw new Error(w); playMove(h, m); } return h; };
+
+const substituting = (module, source) => `data:text/javascript,${encodeURIComponent([
+  'import { registerHooks } from "node:module";', "registerHooks({", "  load(url, context, nextLoad) {",
+  `    if (!url.endsWith(${JSON.stringify(`/src/${module}`)})) return nextLoad(url, context);`,
+  `    return { format: "module", shortCircuit: true, source: ${JSON.stringify(source)} };`, "  },", "});"].join("\n"))}`;
+const scriptedEngine = (moves) => `
+import { legalMoves } from "./legal.ts";
+import { squareName } from "./position.ts";
+export const DEFAULT_BUDGET_MS = 0;
+export function createEngine() {
+  const scripted = ${JSON.stringify(moves)};
+  let ply = 0;
+  return async (history) => {
+    const want = scripted[ply++];
+    const move = legalMoves(history.position).find((c) => squareName(c.from) + squareName(c.to) === want);
+    if (move === undefined) throw new Error("scripted engine: no legal move " + want);
+    return move;
+  };
+}`;
+const legendOf = (mode, orientation) => { const b = renderBoard(newGame(START_FEN).position, mode, orientation); return b[b.length - 1].trimEnd(); };
+/** Frames split on the legend line: each frame = the lines from after the previous frame's end up to (and incl.) this legend + the rows that follow until the next PROMPT. */
+const frameStarts = (stdout, mode, orientation) => { const L = legendOf(mode, orientation); const lines = stdout.split("\n"); return lines.map((l, i) => (l.trimEnd() === L ? i : -1)).filter((i) => i >= 0); };
+const framesIn = (stdout, mode, orientation) => frameStarts(stdout, mode, orientation).length;
+/** The message-region text of each frame: the lines between a legend and the next prompt. */
+const tailsOf = (stdout, mode, orientation) => { const lines = stdout.split("\n"); const s = frameStarts(stdout, mode, orientation); return s.map((i, k) => lines.slice(i + 1, s[k + 1] ?? lines.length).join("\n")); };
+const boardBlocks = (stdout, mode, orientation) => { const lines = stdout.split("\n"); const h = renderBoard(newGame(START_FEN).position, mode, orientation).length; return frameStarts(stdout, mode, orientation).map((i) => lines.slice(i - h + 1, i + 1).map((l) => (l.startsWith(PROMPT) ? l.slice(PROMPT.length) : l)).join("\n")); };
+const prompts = (stdout) => stdout.split("\n").filter((l) => l.startsWith(PROMPT)).length;
+
+function play(args, input, engineMoves) {
+  const t0 = Date.now();
+  const child = spawnSync(process.execPath, ["--import", substituting("engine.ts", scriptedEngine(engineMoves)), "src/cli.ts", ...args], { cwd: CWD, encoding: "utf8", input, timeout: 30_000 });
+  return { status: child.status, signal: child.signal, stdout: child.stdout, stderr: child.stderr, ms: Date.now() - t0 };
+}
+const screenOf = (outcome, moves) => `${renderResultScreen(outcome, playedOut(moves)).join("\n")}\n`;
+const endsQuit = (c) => c.stdout.endsWith(`${PROMPT}${QUIT_NOTICE}\n`) && !c.stdout.includes(INPUT_ENDED_NOTICE);
+const endsEof = (c) => c.stdout.endsWith(`${PROMPT}${INPUT_ENDED_NOTICE}\n`) && !c.stdout.split("\n").includes(QUIT_NOTICE);
+const CONF = QUIT_CONFIRMATION_MESSAGES[0];
+const report = {};
+const raw = {};
+const check = (name, cond, detail) => { report[name] = { ok: !!cond, detail }; console.log(`${cond ? "OK  " : "FAIL"} ${name} :: ${String(JSON.stringify(detail ?? null)).slice(0, 700)}`); };
+
+// (1) ply 0
+{
+  const c = play(["--colour", "white", "--ascii"], "quit\nquit\ne4\n", []);
+  raw.ply0quit = c.stdout;
+  check("(1a) ply 0 quit/quit, real entry point: exit 0, ends `> quit`, 2 frames, 2 prompts, stderr empty, no result-screen text", c.status === 0 && endsQuit(c) && framesIn(c.stdout, "ascii", "white-bottom") === 2 && prompts(c.stdout) === 2 && c.stderr === "" && !/wins|draw|did not finish/.test(c.stdout), { status: c.status, frames: framesIn(c.stdout, "ascii", "white-bottom"), prompts: prompts(c.stdout), stderr: c.stderr, ms: c.ms });
+  const n = play(["--colour", "white", "--ascii"], "new\n", []);
+  const b = boardBlocks(n.stdout, "ascii", "white-bottom");
+  check("(1b) ply 0 new: exit 0, 2 frames, the second board byte-equal to the first, ends on end-of-input", n.status === 0 && b.length === 2 && b[0] === b[1] && endsEof(n), { status: n.status, frames: b.length, equal: b[0] === b[1], ms: n.ms });
+}
+// (2) new / new
+{
+  const c = play(["--colour", "white", "--ascii"], "e4\nNf3\nnew\nnew\n", ["e7e5", "b8c6"]);
+  const b = boardBlocks(c.stdout, "ascii", "white-bottom");
+  check("(2) e4 Nf3 new new: exit 0, 1 + 4 plies + 2 take-backs = 7 frames; frames 6 and 7 byte-equal to frame 1; EOF", c.status === 0 && b.length === 7 && b[5] === b[0] && b[6] === b[0] && b[4] !== b[0] && endsEof(c), { status: c.status, frames: b.length, ms: c.ms });
+}
+// (3) after game over
+{
+  const c = play(["--colour", "white", "--ascii"], "f3\ng4\nquit\nquit\nnew\n", ["e7e5", "d8h4"]);
+  const screen = screenOf({ result: "black-wins", reason: "checkmate", exitCode: 0 }, ["f2f3", "e7e5", "g2g4", "d8h4"]);
+  check("(3) mated, then quit/quit/new on stdin: the checkmate screen, 2 prompts (none of the three lines read), no QUIT_NOTICE line, exit 0", c.status === 0 && c.stdout.endsWith(screen) && prompts(c.stdout) === 2 && !c.stdout.split("\n").includes(QUIT_NOTICE) && !c.stdout.includes(CONF), { status: c.status, prompts: prompts(c.stdout), tail: c.stdout.slice(-160), ms: c.ms });
+}
+// (4) trailing text
+{
+  const c = play(["--colour", "white", "--ascii"], "quit\nquit now\nquit\n", []);
+  const t = tailsOf(c.stdout, "ascii", "white-bottom");
+  check("(4a) quit / quit now / quit: 4 frames; frame 2 asks, frame 3 is a REJECTION (not the confirmation), frame 4 asks AGAIN; ends on EOF, exit 0", c.status === 0 && t.length === 4 && t[1].includes(CONF) && !t[2].includes(CONF) && t[3].includes(CONF) && endsEof(c), { status: c.status, frames: t.length, tails: t.map((x) => x.split("\n").filter((l) => l.trim()).slice(0, 4)) });
+  const g = play(["--colour", "white", "--ascii"], "e4\nnew game\n", ["e7e5"]);
+  const b = boardBlocks(g.stdout, "ascii", "white-bottom");
+  check("(4b) e4 / new game: REJECTED — 4 frames, frame 4's board == frame 3's (nothing rewound), != frame 1; EOF", g.status === 0 && b.length === 4 && b[3] === b[2] && b[3] !== b[0] && endsEof(g), { status: g.status, frames: b.length });
+}
+// (5) mixed case
+{
+  const c = play(["--colour", "white", "--ascii"], "e4\nQUIT\nQuit\nd4\n", ["e7e5"]);
+  check("(5a) QUIT / Quit at the real prompt: ends `> quit` after 4 frames, d4 never read, exit 0", c.status === 0 && endsQuit(c) && framesIn(c.stdout, "ascii", "white-bottom") === 4 && prompts(c.stdout) === 3, { status: c.status, frames: framesIn(c.stdout, "ascii", "white-bottom"), prompts: prompts(c.stdout) });
+  const n = play(["--colour", "white", "--ascii"], "e4\nNEW\n", ["e7e5"]);
+  const b = boardBlocks(n.stdout, "ascii", "white-bottom");
+  check("(5b) NEW at the real prompt: frame 4's board byte-equal to frame 1", n.status === 0 && b.length === 4 && b[3] === b[0], { status: n.status, frames: b.length });
+}
+// (6) new while it is the engine's turn — human black; `new` is the FIRST line, sitting in stdin while the engine plays
+{
+  const c = play(["--colour", "black", "--ascii"], "new\nquit\nquit\n", ["e2e4", "d2d4"]);
+  const b = boardBlocks(c.stdout, "ascii", "black-bottom");
+  const e4 = boardBlocks(play(["--colour", "black", "--ascii"], "", ["e2e4"]).stdout, "ascii", "black-bottom");
+  check("(6) --colour black, `new` first: the prompt is reached only after e4; new takes back the ENGINE's ply; the engine plays AGAIN (d4); quit/quit ends; frames 1 (start) + e4 + take-back + d4 + confirmation = 5; frame 3 == frame 1 (black-bottom); exit 0", c.status === 0 && b.length === 5 && b[2] === b[0] && b[1] === e4[1] && b[3] !== b[1] && endsQuit(c), { status: c.status, frames: b.length, f3eqf1: b[2] === b[0], stderr: c.stderr, ms: c.ms });
+}
+// (7) reading (2): an OVER-CAP line between two quits does NOT clear the flag
+{
+  const long = "x".repeat(MAX_LINE_LENGTH + 1);
+  const c = play(["--colour", "white", "--ascii"], `quit\n${long}\nquit\ne4\n`, []);
+  const t = tailsOf(c.stdout, "ascii", "white-bottom");
+  raw.overcap = { frames: t.length, tails: t.map((x) => x.split("\n").filter((l) => l.trim())), end: c.stdout.slice(-40) };
+  check("(7) quit / <1025 x> / quit — PRODUCT BEHAVIOUR: the session ENDS on `> quit` after 3 frames; the frame the player saw last carried the LINE-TOO-LONG message, NOT the confirmation; e4 never read", c.status === 0 && endsQuit(c) && t.length === 3 && t[1].includes(CONF) && !t[2].includes(CONF) && t[2].includes(LINE_TOO_LONG_MESSAGES[0]), { status: c.status, frames: t.length, lastFrameMessages: t[2]?.split("\n").filter((l) => l.trim()), ms: c.ms });
+  const ctl = play(["--colour", "white", "--ascii"], `quit\n${"x".repeat(MAX_LINE_LENGTH)}\nquit\n`, []);
+  check("(7-control) quit / <1024 x> / quit: the at-cap line reaches the resolver, is rejected, CLEARS the flag; the third quit asks again; EOF", ctl.status === 0 && endsEof(ctl), { status: ctl.status, end: ctl.stdout.slice(-40) });
+}
+// (8) help through the real frame, both glyph modes, start position (the narrowest frame) and after e4 e5
+{
+  for (const mode of ["ascii", "unicode"]) {
+    for (const [label, input, eng, frames] of [["start", "help\n", [], 2], ["after e4 e5", "e4\nhelp\n", ["e7e5"], 4]]) {
+      const c = play(["--colour", "white", `--${mode}`], input, eng);
+      const t = tailsOf(c.stdout, mode, "white-bottom");
+      const last = t[t.length - 1] ?? "";
+      const words = last.split(/\s+/);
+      raw[`help-${mode}-${label}`] = last.split("\n");
+      check(`(8) help, ${mode}, ${label}: the help frame lists quit AND new (and all 6 tokens + heading), no '(+' hidden marker, ${frames} frames`, c.status === 0 && t.length === frames && ["commands:", "help", "board", "quit", "claim", "resign", "new"].every((w) => words.includes(w)) && !c.stdout.includes("(+"), { status: c.status, frames: t.length, helpRows: last.split("\n").filter((l) => /commands:|quit|new/.test(l)) });
+    }
+  }
+}
+const fails = Object.values(report).filter((r) => !r.ok).length;
+console.log(`\nSUMMARY: ${Object.keys(report).length} checks, ${fails} failed`);
+writeFileSync("/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe046/edges-cli-summary.json", JSON.stringify({ report, raw }, null, 2));
+process.exit(fails === 0 ? 0 : 1);

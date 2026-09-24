@@ -336,3 +336,82 @@ was met at the pull. **Unmerged; not deployed.**
   needed at `In UAT`. Board move (`In Development` → `In Review`), `ABC-112`'s cancellation and
   the QE hop are the Orchestrator's / QE's. `ABC-102` inherits a `help` second row at 21 of 21
   columns — zero headroom. Notes: `.grugops/context/ticket-to-pr-ABC-046/notes/`.
+
+## QE
+
+**Validated 2026-09-24 by QE/E2E** (task `wave-2026-09-24`, subtask `qe-ABC-046`, Workflow 05) on
+branch `grugops/qe-ABC-046` off `grugops/wave-2026-09-24` @ `162b2bd`, which carries `6cdde15` via
+`8b5114c`; `git diff --stat 6cdde15 HEAD -- src` is empty.
+
+**FAIL. The behaviour meets `A1`–`A8`; the FAIL is two false sentences in the delivered docblock.**
+QE added zero tests and changed zero lines under `src/`. Every mutant was reverted, and sha256 plus
+`git status --porcelain -- src` were asserted after each of 19 rounds. Load was 3.9–10.2. The
+reasoning is not restated here; it is in `.grugops/context/qe-ABC-046/notes/`.
+
+- **D1: `src/command-input.ts:4-5`** says *"one of **seven** commands and, for **six** of them"*.
+  `COMMAND_TABLE` has **6** rows, and the same file says "six tokens" at `:69` and `:75`.
+- **D2: `src/command-input.ts:222-223`** says the wrapper, armed and asked again, *"never consults
+  the table"*. With the `quit` row removed from `COMMAND_TABLE`, `quit`/`quit` answers
+  `rejected`/`rejected`, so the exit path reads the table through `classifyCommand`.
+- **The repair for both is prose only**, and it is the Engineer's (`ABC-114`: QE does not author
+  the replacement). The re-QE is a delta: the two sentences plus the four gates.
+- **Gates at the tip, reproduced with no difference:**
+  - `npx biome check .`: 76 files.
+  - `npx tsc --noEmit`: 0 (typecheck and build).
+  - `npx vitest run --dir src`: **42 / 1361 / 0 skipped**.
+  - JSON skip count: 0.
+  - `test-skip-integrity`: `No findings.`
+  - Spawn pin `N8_SPAWN = 17 + 7 + 1 + 2` confirmed; `spawnSync` still has one call site.
+- **Ruling 1: the three readings.**
+  - **(1)** `A8`'s "one call-site line" built as three lines: **MATCHES**. The literal one-line build
+    (`Q1`, a fresh wrapper per line) fails `A1`–`A3` in the product. The module-scope build (`Q2`)
+    is `M3`'s shape. Clause 6's "one line" cannot be met under its own per-session rule.
+  - **(2)** An over-cap line does not clear the flag: **DOES NOT MATCH `ADR-0021` clause 6**
+    (*"cleared by any other line"*). `quit` / 1025 chars / `quit` ENDS the session, and the last
+    frame shows `line too long`, not the confirmation. No row fails because none exists, and this
+    page's `A1` is MET as written ("an intervening command", "a legal move").
+    - The cheap fix (`Q9`, ask the resolver on the over-cap branch) reds 3 of `ABC-037`'s
+      security-bar-2 rows. A compliant fix therefore needs a `disarm` on the wrapper, which is
+      outside `A8`'s licence.
+    - **Routed to Architect/Design:** either narrow clause 6, or license the disarm. It is not a
+      FAIL cause.
+  - **(3)** `messages: []`, and the two `ABC-035` supersessions: **MATCHES**.
+- **Ruling 2: `M9` is caught only by `CHILDREN.quits`, and that is ENOUGH.** The child is
+  deterministic, runs the product's own wiring, and also catches `Q1`. `src/line-input.test.ts` is
+  outside `A8`'s file list.
+  - `G2-INFO`: that child is a single point. One `src/line-input.test.ts` row (`quit` twice through
+    `createLineInputSeam` → `{ kind: "quit" }`) is recommended at the next ticket licensed to touch
+    that file.
+- **Mutants:** the Engineer's nine were reproduced to the row and the count. QE's nine more:
+  - `Q1` one-line reader: cli 1.
+  - `Q2` module-scope reader: line-input 8.
+  - **`Q3` prefix arm (`quit now` arms): 0 of 225, SURVIVES.** Recorded as `G1`: one row closes it
+    in `src/command-input.test.ts`, no licence change needed.
+  - `Q4` case-sensitive: 1.
+  - `Q5` commands do not clear: 3.
+  - `Q6` `new` ply-0 guard: 4.
+  - `Q7` `new` message: 2 + the `A6` child.
+  - `Q8` wrapper drops `deps`: 1 + 8.
+  - `Q9` shape probe: 3.
+  - Control: 131 / 29 / 65.
+- **Edges, through the loop (24/24) and through `node src/cli.ts` (15/15):**
+  - `quit` and `new` at ply 0: rows exist.
+  - `new` straight after `new`: take-back 4, then 0. There is no row for the sequence, but each
+    step is guarded.
+  - `quit`/`new` after the game is over: never read, and the checkmate screen stands. This holds by
+    the loop's structure.
+  - `quit now` / `new game`: rejected, and `quit now` clears the flag. Wrapper arming has no row
+    (`G1`).
+  - Mixed case (`QUIT`/`Quit`, `NEW`): rows exist.
+  - `new` on the engine's turn: the prompt cannot be reached then. As Black, a queued `new` is read
+    after the engine's move, takes back that ply, and the engine opens again. The redrawn frame
+    equals the opening frame. No row covers it (`G3-INFO`, `A6` is White-only).
+- **`help` through the real frame** (ascii and unicode, at the start and after `e4 e5`): shows
+  `commands: help board` / `quit claim resign new`, with no `(+` marker (hidden 0).
+- **Named, not corrected:** `G4-INFO`, test comment "A1-A7 here … A2/A3/A6 also": there is no `A6`
+  row in `src/command-input.test.ts`.
+- **Not done at this hop:** `NFR-008` not ruled. `plans/board.md`, `AGENTS.md` and
+  `plans/nfr-catalog.md` not opened. `src/search.*`, `src/quiescence.*` and `src/engine.*` not
+  opened. Not merged, not deployed.
+- **Column:** the move back to `In Development` is the Orchestrator's. Production lines > 0, so
+  the UAT waiver does not apply.
