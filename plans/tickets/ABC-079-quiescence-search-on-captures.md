@@ -267,3 +267,61 @@ under `src/`; `plans/board.md`, `AGENTS.md`, `plans/nfr-catalog.md`, `ADR-0024`'
   **0.61 s gross / ≈ 0.45 s net** (0.30–1.37 s across pairs; low confidence, not claimed MET).
 - **Gates at `700730b`:** lint 0, typecheck 0, build 0, unit 0 (0 skipped; integrity `No findings.`).
   Numbers, transcripts and limits are in `.grugops/context/ticket-to-pr-ABC-079/notes/` (six re-hop notes).
+
+## Ruling (oracle)
+
+**Ruled 2026-09-24 by Architect/Design** (task `wave-2026-09-24`, subtask `ruling-abc079-oracle`,
+Workflow 07) on the red `SEARCH_DEEP=1 npx vitest run src/search.test.ts`. The notes are in
+`.grugops/context/ruling-abc079-oracle/notes/`. The probe sits beside them and was checked to
+reproduce `src/` to the node, and to within 1% on wall time under vitest, before any number was
+quoted. This ruling can be overturned on that evidence.
+
+- **The depth-3 oracle runs on the BARE leaf, on both sides (option a).** `A1` depth 3 on all six
+  perft positions, `A2` kiwipete depth 3 and `A7`'s unpruned depth-3 sweep compare
+  `searchWithoutQuiescence` against a new test-only door, **`searchWithoutPruningOrQuiescence`**.
+  That is `ABC-077`'s merged `A1`/`A2` on the search they were written for. Kiwipete reads
+  **99 950 unpruned nodes and 9.02%**. Under the runner every pair takes ≤ 3.4 s against its
+  30 s timeout, and `A7` takes 16.1 s against 120 s.
+- **The quiescence leaf stays under the oracle where that is affordable.** It runs at depth 2 on
+  all six positions (worst: kiwipete, 11.0 s) and at depth 3 on `startpos` and `position-3`. The
+  quiescence-on depth-3 cells for kiwipete, `position-4`, `position-5` and `position-6` are
+  retired. They cost 23 s to 1 016 s each, because the unpruned tree opens a full-window
+  quiescence at every leaf. `position-4` is included because it reads 22.9 s against its 30 s
+  timeout.
+- **What this stops proving:** the conjunction of an inherited depth-3 window reaching a
+  quiescence leaf on a capture-dense board. Each half is still proved separately. The oracle
+  never brute-forced quiescence's own inner alpha-beta under any option; that is covered in
+  `src/quiescence.test.ts`.
+- **Rejected:**
+  - (b) depth −1: it deletes `ABC-077`'s merged depth-3 `A1` cells on four boards and `A2`'s
+    own case.
+  - (c) capped quiescence: cap 2 already takes 31.6 s against 30 s, it compares a sibling
+    search rather than the shipped one, and it needs a production signature change.
+  - (d) timeout: ≥ 1 016 s for one pair and a ~45-minute lane.
+- **Owner: `ABC-079`. No new ticket.** This ticket's leaf change made the lane red. Its own
+  § Ruling requires the lane to read exit 0, and it has already edited `src/search.test.ts`,
+  `src/search.qe.test.ts` and `ABC-078`'s `src/engine.test.ts` on the same principle.
+
+**Next hop (Software Engineer), three files and nothing beyond them:**
+
+1. `src/search.ts` gains the door, with the same doc shape as its siblings.
+2. `src/search.test.ts` changes as follows:
+   - `A1` gets bare-leaf depth-3 pairs on all six (deep lane).
+   - The quiescence-on depth-3 pair is kept on `startpos` (deep) and `position-3` (default,
+     unchanged); the other four depth-3 cells are deleted.
+   - `A2`'s deep case reads the bare-leaf kiwipete pair.
+   - `A7`'s deep case keeps `search(position, 3)`, takes its unpruned half from the door, and
+     reads `.intact` off the memoised depth-2 pairs.
+   - The `A6` list gains the door; the header is corrected.
+   - Timeouts do not move.
+3. `src/search.qe.test.ts`: `QE-G1` gains one case.
+4. Re-run the deep lane to completion (exit 0, count, wall, load, and every case's share of its
+   timeout; name any case above 50%, with `A4`'s deep case as the one to watch), plus the
+   default lane and the gates.
+
+**`AGENTS.md` (the Scribe's, after that hop):**
+
+- Amend the `SEARCH_DEEP` `search.test.ts` entry: its 23.0 s record is false at this tip. Record
+  the new run, and say that depth 3 runs on the bare leaf.
+- Add a `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` entry (37 passed, 13.7 s at
+  `700730b`). Note that the two files share the variable.
