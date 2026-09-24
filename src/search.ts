@@ -223,3 +223,17 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
 export function searchWithoutQuiescence(position: Position, depth: number): SearchResult {
   return searchRoot(position, depth, { prune: true, quiescence: false });
 }
+
+/**
+ * TEST-ONLY. The same search with BOTH switches off: brute-force negamax over the whole tree,
+ * with the bare static evaluation at every leaf. It is the unpruned partner of
+ * `searchWithoutQuiescence`.
+ *
+ * It exists so `ABC-077`'s depth-3 differential (`A1`, `A2`, `A7` in `src/search.test.ts`) can
+ * run on the leaf it was written for. With quiescence on, the unpruned tree opens a full-window
+ * capture search at every leaf and costs minutes a pair (ABC-079 oracle ruling). Not an engine
+ * option; nothing in production calls it.
+ */
+export function searchWithoutPruningOrQuiescence(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, { prune: false, quiescence: false });
+}

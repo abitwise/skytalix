@@ -32,6 +32,7 @@ import {
   type SearchResult,
   search,
   searchWithoutPruning,
+  searchWithoutPruningOrQuiescence,
   searchWithoutQuiescence,
 } from "./search.ts";
 
@@ -70,6 +71,10 @@ describe("QE-G1 — omitting the depth argument yields no move (RISK-002, by beh
 
   it("searchWithoutQuiescence(position) — with no depth — cannot return a move (ABC-079's door)", () => {
     expect(label(moveWithoutDepth(searchWithoutQuiescence))).toBe("null");
+  });
+
+  it("searchWithoutPruningOrQuiescence(position) — with no depth — cannot return a move (the oracle's bare-leaf door)", () => {
+    expect(label(moveWithoutDepth(searchWithoutPruningOrQuiescence))).toBe("null");
   });
 });
 
