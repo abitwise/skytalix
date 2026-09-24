@@ -1,0 +1,98 @@
+{
+ "head": "6b7b2c858804be79d1b8656f83869db75bd89f8a",
+ "lint": {
+  "exit": 0,
+  "secs": 0.635,
+  "load": [
+   4.24,
+   7.45,
+   9.08
+  ],
+  "tail": [
+   "Checked 78 files in 94ms. No fixes applied."
+  ]
+ },
+ "typecheck": {
+  "exit": 0,
+  "secs": 1.055,
+  "load": [
+   4.24,
+   7.45,
+   9.08
+  ],
+  "tail": [
+   ""
+  ]
+ },
+ "build": {
+  "exit": 0,
+  "secs": 0.988,
+  "load": [
+   4.24,
+   7.45,
+   9.08
+  ],
+  "tail": [
+   ""
+  ]
+ },
+ "unit": {
+  "label": "default-lane",
+  "env": {},
+  "args": [
+   "--dir",
+   "src",
+   "--reporter=json",
+   "--outputFile.json=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079/logs/default-lane.vitest.json"
+  ],
+  "exit": 0,
+  "signal": null,
+  "wall_s": 5.377,
+  "real_s": 5.37,
+  "user_s": 19.37,
+  "sys_s": 1.88,
+  "cpu_s": 21.25,
+  "loadBefore": [
+   4.24,
+   7.45,
+   9.08
+  ],
+  "loadAfter": [
+   5.51,
+   7.66,
+   9.15
+  ],
+  "tests": 1392,
+  "pass": 1392,
+  "fail": 0,
+  "skip": 0,
+  "summaryLines": [
+   "Test Files  43 passed (43)",
+   "Tests  1392 passed (1392)",
+   "Duration  4.91s (transform 1.04s, setup 0ms, collect 8.46s, tests 6.57s, environment 4ms, prepare 1.94s)"
+  ],
+  "over50": [],
+  "failed": []
+ },
+ "skipCount": {
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "skip": 0,
+  "passed": 1392,
+  "failed": 0,
+  "total": 1392,
+  "files": 43
+ },
+ "integrity": {
+  "exit": 0,
+  "secs": 0.026,
+  "load": [
+   5.51,
+   7.66,
+   9.15
+  ],
+  "tail": [
+   "No findings."
+  ]
+ }
+}

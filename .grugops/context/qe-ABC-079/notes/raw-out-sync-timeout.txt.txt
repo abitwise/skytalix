@@ -1,0 +1,30 @@
+
+ RUN  v3.2.7 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079/syncto
+
+ ❯ sync-timeout.test.mjs (2 tests | 1 failed) 353ms
+   × sync, 300 ms of work against a 100 ms timeout 303ms
+     → Test timed out in 100ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+   ✓ sync, 50 ms of work against a 100 ms timeout 50ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  sync-timeout.test.mjs > sync, 300 ms of work against a 100 ms timeout
+Error: Test timed out in 100ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ sync-timeout.test.mjs:6:3
+      4| const busy = (ms) => { const end = Date.now() + ms; let x = 0; while (…
+      5| 
+      6| it("sync, 300 ms of work against a 100 ms timeout", () => {
+       |   ^
+      7|   expect(busy(300)).toBeGreaterThan(0);
+      8| }, 100);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  00:41:55
+   Duration  585ms (transform 12ms, setup 0ms, collect 8ms, tests 353ms, environment 0ms, prepare 47ms)
+

@@ -1,0 +1,294 @@
+# node src/cli.ts --colour black   (load 4.33 3.88 3.90)
+1 .R:N.B:K.Q:B.N:R   
+2 :P.P:P.P:P.P:P.P   
+3 ..::..::..::..::   
+4 ::..::..::..::..   
+5 ..::..::..::..::   
+6 ::..::..::..::..   
+7 .p:p.p:p.p:p.p:p   
+8 :r.n:b.k:q.b:n.r   
+   h g f e d c b a   
+White to move  1.    
+material: 0          
+thinking...          
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+
+1 .R:N.B:K.Q:B..:R    
+2 :P.P:P.P:P.P:P.P    
+3 ..::..::..:N..::    
+4 ::..::..::..::..    
+5 ..::..::..::..::    
+6 ::..::..::..::..    
+7 .p:p.p:p.p:p.p:p    
+8 :r.n:b.k:q.b:n.r    
+   h g f e d c b a    
+Black to move  1...   
+last: Nc3  material: 0
+                      
+   1. Nc3             
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+
+> 
+[3.066 s] >>> e7e5
+1 .R:N.B:K.Q:B..:R   
+2 :P.P:P.P:P.P:P.P   
+3 ..::..::..:N..::   
+4 ::..::..::..::..   
+5 ..::..:p..::..::   
+6 ::..::..::..::..   
+7 .p:p.p::.p:p.p:p   
+8 :r.n:b.k:q.b:n.r   
+   h g f e d c b a   
+White to move  2.    
+last: e5  material: 0
+thinking...          
+   1. Nc3     e5     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+
+1 .R::.B:K.Q:B..:R    
+2 :P.P:P.P:P.P:P.P    
+3 ..::.N::..:N..::    
+4 ::..::..::..::..    
+5 ..::..:p..::..::    
+6 ::..::..::..::..    
+7 .p:p.p::.p:p.p:p    
+8 :r.n:b.k:q.b:n.r    
+   h g f e d c b a    
+Black to move  2...   
+last: Nf3  material: 0
+                      
+   1. Nc3     e5      
+   2. Nf3             
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+
+> 
+[6.067 s] >>> b8c6
+1 .R::.B:K.Q:B..:R    
+2 :P.P:P.P:P.P:P.P    
+3 ..::.N::..:N..::    
+4 ::..::..::..::..    
+5 ..::..:p..::..::    
+6 ::..::..::.n::..    
+7 .p:p.p::.p:p.p:p    
+8 :r.n:b.k:q.b::.r    
+   h g f e d c b a    
+White to move  3.     
+last: Nc6  material: 0
+thinking...           
+   1. Nc3     e5      
+   2. Nf3     Nc6     
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+
+1 .R::.B:K.Q:B..:R   
+2 :P.P:P.P::.P:P.P   
+3 ..::.N::..:N..::   
+4 ::..::..:P..::..   
+5 ..::..:p..::..::   
+6 ::..::..::.n::..   
+7 .p:p.p::.p:p.p:p   
+8 :r.n:b.k:q.b::.r   
+   h g f e d c b a   
+Black to move  3...  
+last: d4  material: 0
+                     
+   1. Nc3     e5     
+   2. Nf3     Nc6    
+   3. d4             
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+
+> 
+[9.070 s] >>> g8f6
+1 .R::.B:K.Q:B..:R    
+2 :P.P:P.P::.P:P.P    
+3 ..::.N::..:N..::    
+4 ::..::..:P..::..    
+5 ..::..:p..::..::    
+6 ::..:n..::.n::..    
+7 .p:p.p::.p:p.p:p    
+8 :r..:b.k:q.b::.r    
+   h g f e d c b a    
+White to move  4.     
+last: Nf6  material: 0
+thinking...           
+   1. Nc3     e5      
+   2. Nf3     Nc6     
+   3. d4      Nf6     
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+
+1 .R::.B:K.Q:B..:R      
+2 :P.P:P.P::.P:P.P      
+3 ..::.N::..:N..::      
+4 ::..::..::..::..      
+5 ..::..:P..::..::      
+6 ::..:n..::.n::..      
+7 .p:p.p::.p:p.p:p      
+8 :r..:b.k:q.b::.r      
+   h g f e d c b a      
+Black to move  4...     
+last: dxe5  material: +1
+                        
+   1. Nc3     e5        
+   2. Nf3     Nc6       
+   3. d4      Nf6       
+   4. dxe5              
+                        
+                        
+                        
+                        
+                        
+                        
+
+> 
+[12.073 s] >>> f8c5
+1 .R::.B:K.Q:B..:R     
+2 :P.P:P.P::.P:P.P     
+3 ..::.N::..:N..::     
+4 ::..::..::..::..     
+5 ..::..:P..:b..::     
+6 ::..:n..::.n::..     
+7 .p:p.p::.p:p.p:p     
+8 :r..::.k:q.b::.r     
+   h g f e d c b a     
+White to move  5.      
+last: Bc5  material: +1
+thinking...            
+   1. Nc3     e5       
+   2. Nf3     Nc6      
+   3. d4      Nf6      
+   4. dxe5    Bc5      
+                       
+                       
+                       
+                       
+                       
+                       
+
+1 .R::.B:K.Q:B..:R      
+2 :P.P:P.P::.P:P.P      
+3 ..::.N::..:N..::      
+4 ::..::..::..::..      
+5 ..::..::..:b..::      
+6 ::..:P..::.n::..      
+7 .p:p.p::.p:p.p:p      
+8 :r..::.k:q.b::.r      
+   h g f e d c b a      
+Black to move  5...     
+last: exf6  material: +4
+                        
+   1. Nc3     e5        
+   2. Nf3     Nc6       
+   3. d4      Nf6       
+   4. dxe5    Bc5       
+   5. exf6              
+                        
+                        
+                        
+                        
+                        
+
+> 
+[15.073 s] >>> d7d6
+1 .R::.B:K.Q:B..:R    
+2 :P.P:P.P::.P:P.P    
+3 ..::.N::..:N..::    
+4 ::..::..::..::..    
+5 ..::..::..:b..::    
+6 ::..:P..:p.n::..    
+7 .p:p.p::..:p.p:p    
+8 :r..::.k:q.b::.r    
+   h g f e d c b a    
+White to move  6.     
+last: d6  material: +4
+thinking...           
+   1. Nc3     e5      
+   2. Nf3     Nc6     
+   3. d4      Nf6     
+   4. dxe5    Bc5     
+   5. exf6    d6      
+                      
+                      
+                      
+                      
+                      
+
+1 .R::.B:K.Q:B..:R      
+2 :P.P:P.P::.P:P.P      
+3 ..::.N::..:N..::      
+4 ::..::..::..::..      
+5 ..::..::..:b..::      
+6 ::..::..:p.n::..      
+7 .p:P.p::..:p.p:p      
+8 :r..::.k:q.b::.r      
+   h g f e d c b a      
+Black to move  6...     
+last: fxg7  material: +5
+                        
+   1. Nc3     e5        
+   2. Nf3     Nc6       
+   3. d4      Nf6       
+   4. dxe5    Bc5       
+   5. exf6    d6        
+   6. fxg7              
+                        
+                        
+                        
+                        
+
+> 
+[18.075 s] >>> (stdin closed)
+input ended
+
+[18.083 s] exit 0
+
+# summary {"args":["--colour","black"],"exit":0,"signal":null,"firstPromptMs":3065.9,"totalS":18.083,"replies":[{"move":"e7e5","replyMs":3000.9},{"move":"b8c6","replyMs":3003.5},{"move":"g8f6","replyMs":3002.3},{"move":"f8c5","replyMs":3000.3},{"move":"d7d6","replyMs":3001.6}],"maxReplyMs":3003.5}

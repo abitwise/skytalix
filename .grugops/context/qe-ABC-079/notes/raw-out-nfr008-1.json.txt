@@ -1,0 +1,146 @@
+{
+ "label": "nfr008-1",
+ "env": {},
+ "args": [
+  "--dir",
+  "src"
+ ],
+ "exit": 0,
+ "signal": null,
+ "wall_s": 6.285,
+ "real_s": 6.28,
+ "user_s": 21.25,
+ "sys_s": 2.04,
+ "cpu_s": 23.29,
+ "loadBefore": [
+  4.22,
+  4.06,
+  3.97
+ ],
+ "loadAfter": [
+  6.44,
+  4.53,
+  4.14
+ ],
+ "tests": 1392,
+ "pass": 1392,
+ "fail": 0,
+ "skip": 0,
+ "summaryLines": [
+  "Test Files  43 passed (43)",
+  "Tests  1392 passed (1392)",
+  "Duration  5.61s (transform 1.11s, setup 0ms, collect 9.59s, tests 8.76s, environment 7ms, prepare 2.28s)"
+ ],
+ "over50": [],
+ "failed": [],
+ "top": [
+  {
+   "file": "src/search.test.ts",
+   "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1",
+   "state": "pass",
+   "ms": 770,
+   "timeout": 5000,
+   "share": 0.154,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 2",
+   "state": "pass",
+   "ms": 709,
+   "timeout": 5000,
+   "share": 0.142,
+   "errors": []
+  },
+  {
+   "file": "src/perft.test.ts",
+   "name": "ABC-006 acceptance — exact perft counts > startpos perft(4) = 197281",
+   "state": "pass",
+   "ms": 435,
+   "timeout": 5000,
+   "share": 0.087,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3",
+   "state": "pass",
+   "ms": 395,
+   "timeout": 5000,
+   "share": 0.079,
+   "errors": []
+  },
+  {
+   "file": "src/san.qualifier.hardening.test.ts",
+   "name": "ABC-025 A1 — the qualifier is the shortest ladder entry that names exactly one move > holds for every non-pawn, non-castle legal move of all 207 corpus positions, both call forms",
+   "state": "pass",
+   "ms": 376,
+   "timeout": 5000,
+   "share": 0.075,
+   "errors": []
+  },
+  {
+   "file": "src/zobrist.test.ts",
+   "name": "ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) > holds at every node within 2 plies of every perft position",
+   "state": "pass",
+   "ms": 349,
+   "timeout": 5000,
+   "share": 0.07,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded",
+   "state": "pass",
+   "ms": 291,
+   "timeout": 5000,
+   "share": 0.058,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames",
+   "state": "pass",
+   "ms": 278,
+   "timeout": 5000,
+   "share": 0.056,
+   "errors": []
+  },
+  {
+   "file": "src/search.qe.test.ts",
+   "name": "QE-G1 — omitting the depth argument yields no move (RISK-002, by behaviour) > search(position) — with no depth — cannot return a move",
+   "state": "pass",
+   "ms": 255,
+   "timeout": 5000,
+   "share": 0.051,
+   "errors": []
+  },
+  {
+   "file": "src/turn-loop.nfr.test.ts",
+   "name": "NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives EXACTLY once per ply at 300 plies",
+   "state": "pass",
+   "ms": 189,
+   "timeout": 5000,
+   "share": 0.038,
+   "errors": []
+  },
+  {
+   "file": "src/history-pane.test.ts",
+   "name": "ABC-017 acceptance > A9 — the caller's moves array is not mutated AT ANY POINT DURING a render",
+   "state": "pass",
+   "ms": 168,
+   "timeout": 5000,
+   "share": 0.034,
+   "errors": []
+  },
+  {
+   "file": "src/perft.test.ts",
+   "name": "ABC-006 acceptance — exact perft counts > kiwipete perft(3) = 97862",
+   "state": "pass",
+   "ms": 169,
+   "timeout": 5000,
+   "share": 0.034,
+   "errors": []
+  }
+ ]
+}

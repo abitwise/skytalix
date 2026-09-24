@@ -1,0 +1,81 @@
+{
+ "corpusRows": 24,
+ "loadStart": [
+  4.31,
+  4,
+  3.94
+ ],
+ "arms": {
+  "quiescence d1": {
+   "losing": 0,
+   "of": 24,
+   "rows": []
+  },
+  "bare d1": {
+   "losing": 24,
+   "of": 24,
+   "rows": [
+    "Q takes a pawn a rook defends",
+    "R takes a pawn the king defends",
+    "B takes a pawn a pawn defends",
+    "N takes a pawn a pawn defends",
+    "Q takes a knight a rook defends",
+    "R takes a knight a pawn defends",
+    "Q takes a rook the king defends",
+    "Q takes a bishop a knight defends",
+    "R takes a bishop a pawn defends",
+    "R takes a pawn a bishop defends",
+    "Q takes a pawn a knight defends",
+    "B takes a pawn a rook defends",
+    "mirror: q takes a pawn a rook defends",
+    "mirror: r takes a pawn the king defends",
+    "mirror: b takes a pawn a pawn defends",
+    "mirror: n takes a pawn a pawn defends",
+    "mirror: q takes a knight a rook defends",
+    "mirror: r takes a knight a pawn defends",
+    "mirror: q takes a rook the king defends",
+    "mirror: q takes a bishop a knight defends",
+    "mirror: r takes a bishop a pawn defends",
+    "mirror: r takes a pawn a bishop defends",
+    "mirror: q takes a pawn a knight defends",
+    "mirror: b takes a pawn a rook defends"
+   ]
+  },
+  "quiescence d2": {
+   "losing": 0,
+   "of": 24,
+   "rows": []
+  },
+  "bare d2": {
+   "losing": 0,
+   "of": 24,
+   "rows": []
+  },
+  "quiescence d3": {
+   "losing": 0,
+   "of": 24,
+   "rows": []
+  },
+  "bare d3": {
+   "losing": 0,
+   "of": 24,
+   "rows": []
+  }
+ },
+ "engineDefaultBudget": {
+  "budgetMs": 3000,
+  "losing": 0,
+  "of": 24,
+  "depths": [
+   5,
+   6,
+   7,
+   8
+  ]
+ },
+ "loadEnd": [
+  4.22,
+  4.06,
+  3.97
+ ]
+}

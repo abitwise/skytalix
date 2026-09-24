@@ -355,3 +355,74 @@ the NFR bars and `ADR-0024` untouched.
   against 15 s), at load 17–35. The two touched files alone: +0.20 s CPU median paired.
   `N8-LANE` is not claimed. Notes: `.grugops/context/ticket-to-pr-ABC-079/notes/` (eight re-hop 2
   notes).
+
+## QE
+
+**QE by QE/E2E, 2026-09-24** (task `wave-2026-09-24`, subtask `qe-ABC-079`, Workflow 05 step).
+The branch is `grugops/qe-ABC-079`, created from `grugops/int-ABC-079` @ `6b7b2c8`. The whole
+ticket was tested against `4f0ef01`, all three hops together. The seven delivered files are
+byte-identical to `33b9a02`. QE wrote zero `src/` lines. **NOT A STAMP.** Notes:
+`.grugops/context/qe-ABC-079/notes/`.
+
+**Verdict: FAIL, and the repair is prose only.** No criterion is red. The FAIL comes from four
+false sentences in `src/search.ts`, judged by the `ABC-114` standard, on the precedent of
+`ABC-046`'s QE the same day.
+
+- **Criteria:**
+  - **`A1` MET-AS-READ.** 0/24 vs 24/24 at depth 1. At depths 2–3, and at the 3 s budget, both
+    arms read 0/24, so the baseline is worse at depth 1 only.
+  - **`A2`, `A3`, `A4`, `A6` MET.**
+  - **`A5` MET.** Kiwipete 119.96x / 32.74x / 45.02x, position-6 6.32x / 17.44x / 8.26x, all
+    under the `ADR-0024` levels.
+- **Gates:** lint 0, `tsc` 0 (twice), **43 files / 1392 passed / 0 skipped**, JSON skip count
+  0, integrity `No findings.`
+- **Deep lanes, all exit 0:**
+  - `SEARCH_DEEP` `search.test.ts`: 43 passed, 110.7 s. **`A4` deep is at 55.8%** of its 120 s
+    timeout; the next case is kiwipete d2 at 36.9%.
+  - `SEARCH_DEEP` `quiescence.test.ts`: 37 passed, 10.6 s.
+  - `ENGINE_DEEP`: 33 passed, 120.5 s. The 50 ms case read 79 ms against its 100 ms bar.
+- **D1–D4, false, NOT corrected by QE:**
+  - **D1:** `Switches`, *"each has one export that turns it off"*. Since `33b9a02` each switch
+    has two exports that turn it off.
+  - **D2:** the module header calls `searchWithoutQuiescence` *"the"* door to the bare leaf,
+    but there are two.
+  - **D3:** `searchWithoutPruning` is described as *"brute-force negamax over the whole tree"*.
+  - **D4:** `negamax` says `prune` false is *"plain brute-force"*.
+  - D3 and D4 are false since `ead14eb`. Measured: position-3 d1 visits 46 nodes shipped
+    against 63 with `quiesce`'s cutoffs removed, so the "unpruned" search still prunes inside
+    its leaves.
+  - D1 and D2 were frozen by the oracle ruling's fence, so the repair hop needs a licence to
+    touch them.
+- **G1, to Architect/Design (oracle ruling, rule 2): the conjunction is a REAL gap.**
+  - Seeded window slips that fire only at an inherited depth-3 window on a capture-dense
+    quiescence leaf change the shipped depth-3 result: kiwipete **e2a6 → e5g6**, position-4
+    **c4c5 → g1h1**, position-6 30 → 120.
+  - Two of them (`R2b` in the leaf, `R2c` inside `quiesce`) **survive every lane**: 1392/1392,
+    80/80, 33/33.
+  - The ungated `R2a` is caught only by `ENGINE_DEEP`'s cross-implementation identity sweep.
+  - The engine completes depth 3 on these boards at the default budget.
+- **G2, to Architect/Design (rule 3):**
+  - `A4` deep read 50–56% across three runs at load 4–10. Crossing needs about 1.8x: a
+    load-17-plus day, or a quiescence cost regression (`Q1` crossed at 245.9 s).
+  - **`A7` deep reads 77.4% when run without `A4` warming its memo.**
+  - A sync overrun reds after the case completes; it does not hang the lane.
+- **Mutants in `quiesce`:**
+  - Q1 no stand-pat cutoff: RED (`A5` levels, engine `A2`, and the `A4` deep timeout).
+  - Q2 stand-pat not raising alpha: RED on one row (`A5` pos-6 d1).
+  - Q3 capture order reversed: RED.
+  - Q4 cap off by one: RED at +1 and at −1.
+  - Q5 non-captures: RED (17 and 25 rows).
+  - Q6 promotion key: **negated RED, dropped NONE (G4)**.
+  - Q7 door with quiescence on: **NONE in the default lane**. RED in the deep lane only after
+    the ~1 016 s kiwipete pair (G5).
+  - Every revert left `src` porcelain empty.
+- **G3:** the `A1` corpus is one-ply tactics, so extending it is `ABC-084`'s work.
+- **NFR:** `NFR-004` holds (3 s budget: 2 999.5–3 003.6 ms on all six roots; eleven CLI replies
+  at 3 000.3–3 005.1 ms). `NFR-005` reaches depth 3 on both kiwipete and position-6 in node, and
+  2 on kiwipete under vitest.
+- **`NFR-008` NOT RULED (fence):** default lane median 6.32 s wall and 23.5 s CPU at load
+  4.2–9.8.
+- **End to end:** `node src/cli.ts` played two games (6 moves as white, 5 as black), exit 0 both
+  times, nothing on stderr.
+- **Production lines > 0, so the UAT waiver does not apply.** Not merged, not deployed.
+  `plans/board.md` is untouched; the board move is the Orchestrator's.

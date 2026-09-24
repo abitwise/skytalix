@@ -1,0 +1,30 @@
+// Ruling 4 evidence for D3/D4: is `searchWithoutPruning` "brute-force negamax over the whole tree"?
+// Count its nodes on the six roots at depth 1 on the shipped tree, then with BOTH of quiesce's
+// cutoffs removed (stand-pat >= beta return, and the in-loop alpha >= beta break) — i.e. a quiescence
+// that really is brute force. Equal counts would make the sentence true; any difference means the
+// "unpruned" search still prunes inside its leaves. src/ is reverted and asserted clean afterwards.
+import { execFileSync, spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079";
+const child = `
+const { parseFen } = await import("${WT}/src/fen.ts");
+const { searchWithoutPruning } = await import("${WT}/src/search.ts");
+const P = { startpos: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "position-3": "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1" };
+const out = {}; for (const [n, f] of Object.entries(P)) { const r = searchWithoutPruning(parseFen(f), 1); out[n] = r.score + " / " + r.nodes; } console.log(JSON.stringify(out));`;
+const run = () => spawnSync("node", ["--input-type=module", "-e", child], { cwd: WT, encoding: "utf8", timeout: 120000 }).stdout.trim();
+const clean = JSON.parse(run());
+const F = `${WT}/src/quiescence.ts`;
+const src = readFileSync(F, "utf8");
+const a = "  if (standPat >= beta) return standPat; // standing still already refutes the opponent's line\n";
+const b = "    if (alpha >= beta) break;\n";
+if (src.split(a).length !== 2 || src.split(b).length !== 2) throw new Error("anchors not unique");
+writeFileSync(F, src.replace(a, "").replace(b, ""));
+let brute;
+try { brute = JSON.parse(run()); } finally {
+  execFileSync("git", ["checkout", "--", "src/quiescence.ts"], { cwd: WT });
+}
+const dirty = execFileSync("git", ["status", "--porcelain", "--", "src"], { cwd: WT, encoding: "utf8" }).trim();
+const res = { note: "searchWithoutPruning(p, 1): score / nodes", shipped: clean, quiesceWithBothCutoffsRemoved: brute, srcCleanAfterRevert: dirty === "" };
+writeFileSync(`${S}/logs/bruteprobe.json`, JSON.stringify(res, null, 1));
+console.log(JSON.stringify(res, null, 1));

@@ -1,0 +1,6 @@
+startpos d3: bare 50 vs quiescence 50 -> EQUAL (row stays green by assertion)
+kiwipete d3: bare 400 vs quiescence 50 -> DIFFER (row red by assertion)
+position-3 d3: bare 130 vs quiescence 110 -> DIFFER (row red by assertion)
+position-4 d3: bare -205 vs quiescence -375 -> DIFFER (row red by assertion)
+position-5 d3: bare 560 vs quiescence 560 -> EQUAL (row stays green by assertion)
+position-6 d3: bare 240 vs quiescence 30 -> DIFFER (row red by assertion)

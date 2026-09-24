@@ -1,0 +1,159 @@
+{
+ "label": "a4alone-1",
+ "env": {
+  "SEARCH_DEEP": "1"
+ },
+ "args": [
+  "src/search.test.ts",
+  "-t",
+  "A4 — the returned root move is legal"
+ ],
+ "exit": 0,
+ "signal": null,
+ "wall_s": 66.213,
+ "real_s": 66.21,
+ "user_s": 66.29,
+ "sys_s": 0.46,
+ "cpu_s": 66.75,
+ "loadBefore": [
+  9.77,
+  5.38,
+  4.45
+ ],
+ "loadAfter": [
+  5.75,
+  5.06,
+  4.39
+ ],
+ "tests": 43,
+ "pass": 2,
+ "fail": 0,
+ "skip": 41,
+ "summaryLines": [
+  "Test Files  1 passed (1)",
+  "Tests  2 passed | 41 skipped (43)",
+  "Duration  65.63s (transform 50ms, setup 0ms, collect 53ms, tests 65.45s, environment 0ms, prepare 28ms)"
+ ],
+ "over50": [
+  {
+   "file": "src/search.test.ts",
+   "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2, and in the broad corpus at depths 1 and 2 [deep, SEARCH_DEEP=1]",
+   "state": "pass",
+   "ms": 65207,
+   "timeout": 120000,
+   "share": 0.543,
+   "errors": []
+  }
+ ],
+ "failed": [],
+ "top": [
+  {
+   "file": "src/search.test.ts",
+   "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2, and in the broad corpus at depths 1 and 2 [deep, SEARCH_DEEP=1]",
+   "state": "pass",
+   "ms": 65207,
+   "timeout": 120000,
+   "share": 0.543,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1",
+   "state": "pass",
+   "ms": 241,
+   "timeout": 5000,
+   "share": 0.048,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 0",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 1",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 2",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 3",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 0",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 1",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 2",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 3",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 0",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  },
+  {
+   "file": "src/search.test.ts",
+   "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 1",
+   "state": "skip",
+   "ms": null,
+   "timeout": 5000,
+   "share": null,
+   "errors": []
+  }
+ ]
+}

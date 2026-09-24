@@ -1,0 +1,20 @@
+// QE ABC-079 post-mutant readings, strictly sequential on the clean tree:
+// end-to-end CLI games, NFR-004/005 at the default budget, the A1 hanging corpus at depths 1-3 and at
+// the default budget, NFR-008 default lane x3, and A4's deep case in isolation x2.
+import { spawnSync } from "node:child_process";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079";
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const step = (label, args) => {
+  const t0 = Date.now();
+  const r = spawnSync("node", args, { cwd: WT, stdio: "inherit" });
+  console.log(`== ${label} exit ${r.status} (${((Date.now() - t0) / 1000).toFixed(1)} s)`);
+};
+const git = spawnSync("git", ["status", "--porcelain", "--", "src"], { cwd: WT, encoding: "utf8" }).stdout.trim();
+if (git !== "") throw new Error(`src not clean: ${git}`);
+step("e2e white", [`${S}/e2e.mjs`, `${S}/logs/e2e-white`, "-", "e2e4", "g1f3", "f1c4", "d2d3", "b1c3", "c1e3"]);
+step("e2e black", [`${S}/e2e.mjs`, `${S}/logs/e2e-black`, "--colour,black", "e7e5", "b8c6", "g8f6", "f8c5", "d7d6"]);
+step("nfr004/005", [`${S}/nfr.mjs`, "3", `${S}/logs/nfr.json`]);
+step("hanging", [`${S}/hanging.mjs`, `${S}/logs/hanging.json`]);
+for (const i of [1, 2, 3]) step(`nfr008 default lane ${i}`, [`${S}/lane.mjs`, `nfr008-${i}`, "-", "--dir", "src"]);
+for (const i of [1, 2]) step(`A4 deep alone ${i}`, [`${S}/lane.mjs`, `a4alone-${i}`, "SEARCH_DEEP=1", "src/search.test.ts", "-t", "A4 — the returned root move is legal"]);
+console.log("POST DONE");

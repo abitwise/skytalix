@@ -1,0 +1,12 @@
+{
+ "note": "searchWithoutPruning(p, 1): score / nodes",
+ "shipped": {
+  "startpos": "50 / 21",
+  "position-3": "90 / 46"
+ },
+ "quiesceWithBothCutoffsRemoved": {
+  "startpos": "50 / 21",
+  "position-3": "90 / 63"
+ },
+ "srcCleanAfterRevert": true
+}
