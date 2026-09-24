@@ -1,0 +1,370 @@
+{
+  "startedAt": "2026-09-24T20:03:48.039Z",
+  "lane": {
+    "before": [],
+    "after": []
+  },
+  "infile": {
+    "src/command-input.test.ts": {
+      "before": [
+        {
+          "load": "{ 15.84 18.03 12.47 }",
+          "status": 0,
+          "files": 1,
+          "passed": 131,
+          "tests_ms": 24,
+          "real": 0.96,
+          "user": 1.14,
+          "sys": 0.3,
+          "cpu": 1.44
+        },
+        {
+          "load": "{ 15.84 18.03 12.47 }",
+          "status": 0,
+          "files": 1,
+          "passed": 131,
+          "tests_ms": 24,
+          "real": 0.64,
+          "user": 1.15,
+          "sys": 0.27,
+          "cpu": 1.42
+        },
+        {
+          "load": "{ 15.84 18.03 12.47 }",
+          "status": 0,
+          "files": 1,
+          "passed": 131,
+          "tests_ms": 27,
+          "real": 0.69,
+          "user": 1.12,
+          "sys": 0.28,
+          "cpu": 1.4
+        },
+        {
+          "load": "{ 15.93 18.01 12.49 }",
+          "status": 0,
+          "files": 1,
+          "passed": 131,
+          "tests_ms": 25,
+          "real": 0.71,
+          "user": 1.21,
+          "sys": 0.28,
+          "cpu": 1.49
+        },
+        {
+          "load": "{ 15.93 18.01 12.49 }",
+          "status": 0,
+          "files": 1,
+          "passed": 131,
+          "tests_ms": 27,
+          "real": 0.67,
+          "user": 1.19,
+          "sys": 0.29,
+          "cpu": 1.48
+        },
+        {
+          "load": "{ 15.93 18.01 12.49 }",
+          "status": 0,
+          "files": 1,
+          "passed": 131,
+          "tests_ms": 26,
+          "real": 0.7,
+          "user": 1.24,
+          "sys": 0.28,
+          "cpu": 1.52
+        },
+        {
+          "load": "{ 14.90 17.76 12.44 }",
+          "status": 0,
+          "files": 1,
+          "passed": 131,
+          "tests_ms": 26,
+          "real": 0.72,
+          "user": 1.2,
+          "sys": 0.3,
+          "cpu": 1.5
+        }
+      ],
+      "after": [
+        {
+          "load": "{ 15.84 18.03 12.47 }",
+          "status": 0,
+          "files": 1,
+          "passed": 133,
+          "tests_ms": 23,
+          "real": 0.65,
+          "user": 1.13,
+          "sys": 0.27,
+          "cpu": 1.4
+        },
+        {
+          "load": "{ 15.84 18.03 12.47 }",
+          "status": 0,
+          "files": 1,
+          "passed": 133,
+          "tests_ms": 23,
+          "real": 0.68,
+          "user": 1.17,
+          "sys": 0.26,
+          "cpu": 1.43
+        },
+        {
+          "load": "{ 15.93 18.01 12.49 }",
+          "status": 0,
+          "files": 1,
+          "passed": 133,
+          "tests_ms": 24,
+          "real": 0.68,
+          "user": 1.17,
+          "sys": 0.28,
+          "cpu": 1.45
+        },
+        {
+          "load": "{ 15.93 18.01 12.49 }",
+          "status": 0,
+          "files": 1,
+          "passed": 133,
+          "tests_ms": 25,
+          "real": 0.7,
+          "user": 1.18,
+          "sys": 0.28,
+          "cpu": 1.46
+        },
+        {
+          "load": "{ 15.93 18.01 12.49 }",
+          "status": 0,
+          "files": 1,
+          "passed": 133,
+          "tests_ms": 25,
+          "real": 0.67,
+          "user": 1.19,
+          "sys": 0.28,
+          "cpu": 1.47
+        },
+        {
+          "load": "{ 15.93 18.01 12.49 }",
+          "status": 0,
+          "files": 1,
+          "passed": 133,
+          "tests_ms": 27,
+          "real": 0.72,
+          "user": 1.23,
+          "sys": 0.31,
+          "cpu": 1.54
+        },
+        {
+          "load": "{ 14.90 17.76 12.44 }",
+          "status": 0,
+          "files": 1,
+          "passed": 133,
+          "tests_ms": 26,
+          "real": 0.71,
+          "user": 1.22,
+          "sys": 0.32,
+          "cpu": 1.54
+        }
+      ]
+    },
+    "src/line-input.test.ts": {
+      "before": [
+        {
+          "load": "{ 14.90 17.76 12.44 }",
+          "status": 0,
+          "files": 1,
+          "passed": 29,
+          "tests_ms": 16,
+          "real": 0.64,
+          "user": 1.13,
+          "sys": 0.27,
+          "cpu": 1.4
+        },
+        {
+          "load": "{ 14.90 17.76 12.44 }",
+          "status": 0,
+          "files": 1,
+          "passed": 29,
+          "tests_ms": 16,
+          "real": 0.65,
+          "user": 1.13,
+          "sys": 0.29,
+          "cpu": 1.42
+        },
+        {
+          "load": "{ 14.90 17.76 12.44 }",
+          "status": 0,
+          "files": 1,
+          "passed": 29,
+          "tests_ms": 15,
+          "real": 0.69,
+          "user": 1.12,
+          "sys": 0.27,
+          "cpu": 1.39
+        },
+        {
+          "load": "{ 14.11 17.55 12.40 }",
+          "status": 0,
+          "files": 1,
+          "passed": 29,
+          "tests_ms": 16,
+          "real": 0.7,
+          "user": 1.13,
+          "sys": 0.29,
+          "cpu": 1.42
+        },
+        {
+          "load": "{ 14.11 17.55 12.40 }",
+          "status": 0,
+          "files": 1,
+          "passed": 29,
+          "tests_ms": 16,
+          "real": 0.69,
+          "user": 1.13,
+          "sys": 0.28,
+          "cpu": 1.41
+        },
+        {
+          "load": "{ 13.38 17.34 12.35 }",
+          "status": 0,
+          "files": 1,
+          "passed": 29,
+          "tests_ms": 15,
+          "real": 0.61,
+          "user": 1.08,
+          "sys": 0.25,
+          "cpu": 1.33
+        },
+        {
+          "load": "{ 13.38 17.34 12.35 }",
+          "status": 0,
+          "files": 1,
+          "passed": 29,
+          "tests_ms": 16,
+          "real": 0.78,
+          "user": 1.21,
+          "sys": 0.3,
+          "cpu": 1.51
+        }
+      ],
+      "after": [
+        {
+          "load": "{ 14.90 17.76 12.44 }",
+          "status": 0,
+          "files": 1,
+          "passed": 30,
+          "tests_ms": 17,
+          "real": 0.64,
+          "user": 1.1,
+          "sys": 0.27,
+          "cpu": 1.37
+        },
+        {
+          "load": "{ 14.90 17.76 12.44 }",
+          "status": 0,
+          "files": 1,
+          "passed": 30,
+          "tests_ms": 15,
+          "real": 0.62,
+          "user": 1.11,
+          "sys": 0.28,
+          "cpu": 1.39
+        },
+        {
+          "load": "{ 14.11 17.55 12.40 }",
+          "status": 0,
+          "files": 1,
+          "passed": 30,
+          "tests_ms": 16,
+          "real": 0.71,
+          "user": 1.13,
+          "sys": 0.29,
+          "cpu": 1.42
+        },
+        {
+          "load": "{ 14.11 17.55 12.40 }",
+          "status": 0,
+          "files": 1,
+          "passed": 30,
+          "tests_ms": 19,
+          "real": 0.88,
+          "user": 1.2,
+          "sys": 0.33,
+          "cpu": 1.53
+        },
+        {
+          "load": "{ 14.11 17.55 12.40 }",
+          "status": 0,
+          "files": 1,
+          "passed": 30,
+          "tests_ms": 17,
+          "real": 0.67,
+          "user": 1.1,
+          "sys": 0.27,
+          "cpu": 1.37
+        },
+        {
+          "load": "{ 14.11 17.55 12.40 }",
+          "status": 0,
+          "files": 1,
+          "passed": 30,
+          "tests_ms": 18,
+          "real": 0.68,
+          "user": 1.14,
+          "sys": 0.25,
+          "cpu": 1.39
+        },
+        {
+          "load": "{ 13.38 17.34 12.35 }",
+          "status": 0,
+          "files": 1,
+          "passed": 30,
+          "tests_ms": 16,
+          "real": 0.65,
+          "user": 1.16,
+          "sys": 0.27,
+          "cpu": 1.43
+        }
+      ]
+    }
+  },
+  "gitStatus": "",
+  "summary": {
+    "lane": {
+      "before": {
+        "medianCPU": null,
+        "cpus": [],
+        "counts": []
+      },
+      "after": {
+        "medianCPU": null,
+        "cpus": [],
+        "counts": []
+      }
+    },
+    "infile": {
+      "src/command-input.test.ts": {
+        "before": {
+          "median_tests_ms": 26,
+          "median_cpu": 1.48,
+          "passed": 131
+        },
+        "after": {
+          "median_tests_ms": 25,
+          "median_cpu": 1.46,
+          "passed": 133
+        }
+      },
+      "src/line-input.test.ts": {
+        "before": {
+          "median_tests_ms": 16,
+          "median_cpu": 1.41,
+          "passed": 29
+        },
+        "after": {
+          "median_tests_ms": 17,
+          "median_cpu": 1.39,
+          "passed": 30
+        }
+      }
+    }
+  }
+}

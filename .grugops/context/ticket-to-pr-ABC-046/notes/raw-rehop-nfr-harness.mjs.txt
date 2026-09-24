@@ -1,0 +1,65 @@
+// ABC-046 re-hop NFR: N8-LANE in-file charge and paired whole-lane CPU, BEFORE (the four files at
+// 5d0fdb0) and AFTER (HEAD) INTERLEAVED run by run so both see the same load. /usr/bin/time -p,
+// one fresh process per run, load sampled before each. Restores HEAD and asserts `git status` clean.
+// Usage: node nfr.mjs <worktree> <laneRuns> <infileRuns>
+import { execSync, spawnSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+
+const [DIR, laneArg, infileArg] = process.argv.slice(2);
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/abc046-rehop";
+const FOUR = ["src/command-input.ts", "src/line-input.ts", "src/command-input.test.ts", "src/line-input.test.ts"];
+const sh = (c) => execSync(c, { cwd: DIR }).toString();
+const setTree = (label) => {
+  for (const f of FOUR) writeFileSync(`${DIR}/${f}`, execSync(`git show ${label === "before" ? "5d0fdb0" : "HEAD"}:${f}`, { cwd: DIR, maxBuffer: 16 << 20 }));
+};
+const loadavg = () => sh("sysctl -n vm.loadavg").trim();
+const timed = (args) => {
+  const load = loadavg();
+  const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", ...args], { cwd: DIR, encoding: "utf8", maxBuffer: 64 << 20 });
+  const out = r.stdout || "", err = r.stderr || "";
+  const pick = (k) => { const m = err.match(new RegExp(`^${k}\\s+([0-9.]+)`, "m")); return m ? Number(m[1]) : NaN; };
+  const tm = out.match(/tests ([0-9.]+)(m?s)[,)]/);
+  const fm = out.match(/Test Files\s+(\d+) passed/);
+  const pm = out.match(/^\s*Tests\s+(\d+) passed/m);
+  const user = pick("user"), sys = pick("sys");
+  return {
+    load, status: r.status, files: fm ? Number(fm[1]) : NaN, passed: pm ? Number(pm[1]) : NaN,
+    tests_ms: tm ? (tm[2] === "s" ? Number(tm[1]) * 1000 : Number(tm[1])) : NaN,
+    real: pick("real"), user, sys, cpu: +(user + sys).toFixed(2),
+  };
+};
+const med = (a) => { const s = [...a].sort((x, y) => x - y); return s.length % 2 ? s[s.length >> 1] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2; };
+
+const out = { startedAt: new Date().toISOString(), lane: { before: [], after: [] }, infile: {} };
+const laneRuns = Number(laneArg ?? 3), infileRuns = Number(infileArg ?? 5);
+try {
+  for (const file of ["src/command-input.test.ts", "src/line-input.test.ts"]) {
+    out.infile[file] = { before: [], after: [] };
+    for (let i = 0; i < infileRuns; i++) {
+      for (const label of i % 2 ? ["after", "before"] : ["before", "after"]) {
+        setTree(label);
+        const row = timed([file]);
+        out.infile[file][label].push(row);
+        console.log("infile", file, label, JSON.stringify(row));
+      }
+    }
+  }
+  for (let i = 0; i < laneRuns; i++) {
+    for (const label of i % 2 ? ["after", "before"] : ["before", "after"]) {
+      setTree(label);
+      const row = timed(["--dir", "src"]);
+      out.lane[label].push(row);
+      console.log("lane", label, JSON.stringify(row));
+    }
+  }
+} finally {
+  setTree("after");
+  out.gitStatus = sh("git status --short -- src");
+  console.log("restored; git status src:", JSON.stringify(out.gitStatus));
+}
+out.summary = {
+  lane: Object.fromEntries(["before", "after"].map((l) => [l, { medianCPU: med(out.lane[l].map((r) => r.cpu)), cpus: out.lane[l].map((r) => r.cpu), counts: out.lane[l].map((r) => `${r.files}/${r.passed}`) }])),
+  infile: Object.fromEntries(Object.entries(out.infile).map(([f, v]) => [f, Object.fromEntries(["before", "after"].map((l) => [l, { median_tests_ms: med(v[l].map((r) => r.tests_ms)), median_cpu: med(v[l].map((r) => r.cpu)), passed: v[l][0].passed }]))])),
+};
+console.log(JSON.stringify(out.summary, null, 2));
+writeFileSync(`${S}/nfr-summary.json`, JSON.stringify(out, null, 2));

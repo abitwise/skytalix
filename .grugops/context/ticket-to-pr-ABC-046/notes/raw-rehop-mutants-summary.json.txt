@@ -1,0 +1,147 @@
+{
+  "startedAt": "2026-09-24T20:01:02.487Z",
+  "pristineSha": {
+    "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a66b20af68a0622bd/src/command-input.ts": "4b19e7e8eacc97b8b7fd04458b4261b756dbcbac424d63ca48c6fdf1486add19",
+    "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a66b20af68a0622bd/src/line-input.ts": "f15dd6c75e6c1e95405be4b12e971eb10dc0f6ba2f2edd8e229c264114e29fda"
+  },
+  "mutants": {
+    "control": {
+      "load": "{ 21.11 16.74 10.77 }",
+      "tsc": 0,
+      "status": 0,
+      "total": 228,
+      "passed": 228,
+      "failed": 0,
+      "skipped": 0,
+      "failedNames": []
+    },
+    "Q3": {
+      "load": "{ 19.74 16.53 10.73 }",
+      "tsc": 0,
+      "status": 1,
+      "total": 228,
+      "passed": 227,
+      "failed": 1,
+      "skipped": 0,
+      "failedNames": [
+        "src/command-input.test.ts :: ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else G1 — trailing text does not arm: quit / quit now / quit asks AGAIN, and quit now twice never exits"
+      ]
+    },
+    "X1": {
+      "load": "{ 21.84 17.06 10.99 }",
+      "tsc": 0,
+      "status": 1,
+      "total": 228,
+      "passed": 226,
+      "failed": 2,
+      "skipped": 0,
+      "failedNames": [
+        "src/command-input.test.ts :: ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else clause 6 — `disarm` clears an armed flag, is harmless unarmed, and calls no resolver",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "X2": {
+      "load": "{ 21.77 17.13 11.04 }",
+      "tsc": 0,
+      "status": 1,
+      "total": 228,
+      "passed": 227,
+      "failed": 1,
+      "skipped": 0,
+      "failedNames": [
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "X3": {
+      "load": "{ 23.85 17.76 11.34 }",
+      "tsc": 0,
+      "status": 1,
+      "total": 228,
+      "passed": 226,
+      "failed": 2,
+      "skipped": 0,
+      "failedNames": [
+        "src/command-input.test.ts :: ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else clause 6 — `disarm` clears an armed flag, is harmless unarmed, and calls no resolver",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "M9": {
+      "load": "{ 25.34 18.26 11.59 }",
+      "tsc": 0,
+      "status": 1,
+      "total": 228,
+      "passed": 226,
+      "failed": 2,
+      "skipped": 0,
+      "failedNames": [
+        "src/cli.test.ts :: ABC-046 — `quit` and `new` through the delivered entry point A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    }
+  },
+  "restored": {
+    "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a66b20af68a0622bd/src/command-input.ts": true,
+    "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a66b20af68a0622bd/src/line-input.ts": true
+  },
+  "gitStatusSrc": "",
+  "bar2": {
+    "default": {
+      "status": 0,
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "rows": [
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters states the cap as 1024",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters passes a line of exactly 1024 units to the resolver on LF — the boundary is not off by one, on EITHER terminator",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters passes a line of exactly 1024 units to the resolver on CRLF — the boundary is not off by one, on EITHER terminator",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters recovers on the very next line — an over-cap line poisons nothing",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "deep": {
+      "status": 0,
+      "total": 34,
+      "passed": 34,
+      "failed": 0,
+      "skipped": 0,
+      "rows": [
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters states the cap as 1024",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters passes a line of exactly 1024 units to the resolver on LF — the boundary is not off by one, on EITHER terminator",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters passes a line of exactly 1024 units to the resolver on CRLF — the boundary is not off by one, on EITHER terminator",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters recovers on the very next line — an over-cap line poisons nothing",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends",
+        "passed :: ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] survives a 16 MiB unterminated flood, rejects it, tells no resolver, and recovers",
+        "passed :: ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] retains no more than one chunk across a 16 MiB flood [needs NODE_OPTIONS=--expose-gc]",
+        "passed :: ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] reads the same three lines however the chunk boundaries fall",
+        "passed :: ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] stays total on a 10,000-character line — the cap answers before the resolvers do"
+      ]
+    }
+  },
+  "entry": {
+    "quit/1025x/quit/EOF": {
+      "status": 0,
+      "stderr": "",
+      "confirmations": 2,
+      "lineTooLong": 1,
+      "prompts": 4,
+      "endsQuit": false,
+      "endsEof": true
+    },
+    "quit/1025x/quit/quit": {
+      "status": 0,
+      "stderr": "",
+      "confirmations": 2,
+      "lineTooLong": 1,
+      "prompts": 4,
+      "endsQuit": true,
+      "endsEof": false
+    }
+  }
+}

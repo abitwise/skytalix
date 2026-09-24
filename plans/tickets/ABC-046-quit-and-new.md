@@ -458,3 +458,67 @@ in `.grugops/context/ruling-abc046-clause6/notes/` and are not repeated here.
 - **`A1`–`A7` are unchanged.** The new row enforces `ADR-0021` clause 6 and is not a new criterion.
 - **Column: unchanged on this page.** The board move and scheduling the re-hop and the delta re-QE
   are the Orchestrator's.
+
+## Delivery (re-hop) 2026-09-24
+
+**Built by the Software Engineer** (task `wave-2026-09-24`, subtask `ticket-to-pr-ABC-046-rehop`,
+Workflow 04 re-hop) on branch `grugops/ABC-046-rehop` @ **`85b66c6`**, off
+`grugops/wave-2026-09-24` @ `5d0fdb0`. **It is unmerged and not deployed.** This section is a
+pointer. The numbers live in the four `20260924T20…` notes in
+`.grugops/context/ticket-to-pr-ABC-046/notes/`.
+
+- **The change is exactly the ruling's list, and nothing else.** `git diff --numstat 5d0fdb0 85b66c6`:
+
+  | file | added | removed |
+  | --- | --- | --- |
+  | `src/command-input.ts` | 21 | 6 |
+  | `src/line-input.ts` | 7 | 2 |
+  | `src/command-input.test.ts` | 35 | 0 |
+  | `src/line-input.test.ts` | 22 | 1 |
+
+  - Non-comment production lines: +12 / −3.
+  - Byte-identical: `src/turn-loop.ts`, `src/cli.test.ts` (spawn pin `17 + 7 + 1 + 2`),
+    `src/search.*`, `src/quiescence.*`, `src/engine.*` and `src/zobrist.*`.
+  - 0 new files, 0 new children.
+- **D1** now reads "one of six commands and, for five of them".
+- **D2** now says the armed second `quit` skips `resolvePromptLine` and the row's `outcome`, but the
+  line is still classified through `COMMAND_TABLE` by `classifyCommand`.
+- **The disarm:**
+  - `PromptLineResolver` gains `readonly disarm: () => void`, attached by
+    `Object.assign(resolve, { disarm })`.
+  - `disarm` only sets `quitArmed = false`.
+  - The over-cap branch in `src/line-input.ts` calls `resolve.disarm()` and returns the same
+    `rejected` outcome.
+  - Both docblocks say so, and the wrapper's docblock no longer implies it sees every line.
+- **Rows:**
+  - `src/command-input.test.ts`: `G1` and the disarm unit row.
+  - `src/line-input.test.ts`: the clause-6 reader row (`quit` / 1025×`z` / `quit` / `quit`). Its
+    import gains `QUIT_CONFIRMATION_MESSAGES`.
+- **Gates:** all green on the first run, so `self_fix_attempts` 0 of 2.
+  - lint: 76 files, exit 0;
+  - `tsc` 0, build 0;
+  - unit **42 / 1364 / 0**, skip 0;
+  - integrity `No findings.`
+- **Mutants.** Each one was watched red and then reverted, and `git status -- src` was clean after:
+
+  | mutant | rows it turns red |
+  | --- | --- |
+  | `Q3` | `G1` |
+  | `X1` | the disarm row, the reader row |
+  | `X2` | the reader row only |
+  | `X3` | the disarm row, the reader row |
+  | `M9` | the reader row, `cli.test.ts` `A2/A3` |
+
+  - The control was 0 red of 228.
+  - QE's `G2-INFO` is closed in-file.
+- **`ABC-037` bar 2 is green in both lanes:**
+  - default lane: the file is 30 / 30;
+  - deep lane (`INPUT_DEEP=1 NODE_OPTIONS=--expose-gc`): the file is 34 / 34.
+- **Real entry point:** `quit` / 1025×`x` / `quit` / EOF shows 4 prompts, 2 confirmations and 1
+  `line too long`, then ends on `> input ended`. Exit 0, stderr empty.
+- **NFR:**
+  - `N8-LANE`: +3 rows, 0 files, 0 children. The in-file charge is within 1 ms.
+  - `NFR-008` lane CPU: 20.68 s before and 20.07 s after (n = 3 interleaved, load 20–27). That is
+    over 15 s both ways. It is reported as non-conforming, not ruled, and nothing was trimmed.
+- **Column: unchanged on this page.** The delta re-QE and the board move are the Orchestrator's.
+  Production lines > 0, so the owner's word is still needed at `In UAT`.
