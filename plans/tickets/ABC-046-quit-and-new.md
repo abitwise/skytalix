@@ -522,3 +522,66 @@ pointer. The numbers live in the four `20260924T20…` notes in
     over 15 s both ways. It is reported as non-conforming, not ruled, and nothing was trimmed.
 - **Column: unchanged on this page.** The delta re-QE and the board move are the Orchestrator's.
   Production lines > 0, so the owner's word is still needed at `In UAT`.
+
+## QE (delta) 2026-09-24
+
+**Validated by QE/E2E** (task `wave-2026-09-24`, subtask `qe-ABC-046-delta`, Workflow 05, delta
+re-QE after the FAIL) on branch `grugops/qe-ABC-046-delta` off `grugops/wave-2026-09-24` @
+`9aec523`, which carries re-hop `85b66c6` via `d8de765`. This section is a pointer. The reasoning and
+numbers live in the three `20260924T201…` notes in `.grugops/context/qe-ABC-046/notes/`. The
+`decision` supersedes the first-pass FAIL.
+
+**PASS.** QE added zero tests and changed zero lines under `src/`. There were 14 rounds, each
+restored, with sha256 and `git status --porcelain -- src` asserted.
+
+- **Ruling 1: D1 and D2 are TRUE.**
+  - D1: "one of six commands and, for five of them". `COMMAND_TABLE` has 6 rows.
+  - D2: probed three ways. Dropping the `quit` row changes the answer, so the path does classify
+    through the table. On the second `quit`, a counter reads 0 calls to `resolvePromptLine` and 1 to
+    `classifyCommand`. Changing the `quit` row's `outcome` still gives `{ kind: "quit" }`, so the
+    outcome is not read.
+  - Every new docblock sentence (the type, the wrapper and the cap) reads true.
+- **Ruling 2: the `disarm` is exactly as licensed.**
+  - Its body is `quitArmed = false` and nothing else.
+  - Its one production caller is `src/line-input.ts:248`, inside the over-cap branch.
+  - `A8` holds: exactly the 4 ruled files, and `src/turn-loop.ts` and `src/cli.test.ts` are
+    byte-identical.
+  - `G5-INFO`: the non-comment production diff is **+13 / −3**, not the +12 / −3 in the Delivery
+    (re-hop) section above. It is a paper count only, and the licence names edits, not lines.
+- **Ruling 3: PASS on the whole ticket.**
+- **Gates:**
+  - biome: 76 files.
+  - `tsc`: 0 and 0.
+  - vitest: **42 / 1364 / 0 skipped**.
+  - JSON skip count: 0.
+  - integrity: `No findings.`
+- **Mutants** (red rows of 228):
+  - The ruled five reproduce row for row: `Q3` 1, `X1` 2, `X2` 1, `X3` 2, `M9` 2.
+  - QE's `X4`, the disarm before the length check: 2 red (the reader row and `cli` `A2/A3`).
+  - `X5`, the disarm before the null check: 2.
+  - `X7`, a disarm plus a resolver call: 4 (3 bar-2 rows + the reader row).
+  - `X8`, a toggling disarm: 1.
+  - `X6` is equivalent: 0 red, and no gap.
+  - Control: 0.
+- **Sequences:**
+  - `quit` / over-cap / `new` ends by `new` clearing the flag. No row plays it, and every mutant that
+    changes it is red elsewhere.
+  - Over-cap / `quit` / `quit` gives `line too long`, a confirmation, then `quit`. It is RED under
+    `X3` and `X8`.
+- **`ABC-037` bar 2:** default 30 / 30 (8 bar-2 rows). Deep (`INPUT_DEEP=1 NODE_OPTIONS=--expose-gc`):
+  34 / 34 (8 + 4 breadth rows).
+- **The real entry point:**
+  - `quit` / 1025×`x` / `quit` / EOF: 4 prompts, **2 confirmations**, 1 `line too long`, ends
+    `> input ended`, exit 0, stderr empty.
+  - The same input with a trailing `quit` ends `> quit`.
+- **Still open, INFO only:**
+  - `G3-INFO`: `A6` is White-only.
+  - `G4-INFO`: the stale "A2/A3/A6 also" and "four tokens" test comments.
+  - `G1` and `G2-INFO` are closed.
+- **Not done at this hop:**
+  - `NFR-008` was not ruled.
+  - `plans/board.md`, `AGENTS.md`, `plans/nfr-catalog.md`, `src/search.*`, `src/quiescence.*` and
+    `src/engine.*` were not opened.
+  - Nothing was merged or deployed.
+- **Column:** the move out of `In Review` is the Orchestrator's. Production lines are > 0, so the
+  owner's word is still needed at `In UAT`.

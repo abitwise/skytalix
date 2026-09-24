@@ -1,0 +1,1060 @@
+{
+  "startedAt": "2026-09-24T20:12:54.781Z",
+  "pristineSha": {
+    "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a76cdf305fe631f84/src/command-input.ts": "4b19e7e8eacc97b8b7fd04458b4261b756dbcbac424d63ca48c6fdf1486add19",
+    "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-a76cdf305fe631f84/src/line-input.ts": "f15dd6c75e6c1e95405be4b12e971eb10dc0f6ba2f2edd8e229c264114e29fda"
+  },
+  "docblock": {
+    "D1": {
+      "sentence": "* GRAMMAR, PLUS ONE FLAG. This module decides whether a submitted line IS one of six commands * and, for five of them, nothing about what any of them DOES beyond naming the arm. `help` carries",
+      "tableRows": 6,
+      "tokens": [
+        "help",
+        "board",
+        "quit",
+        "claim",
+        "resign",
+        "new"
+      ],
+      "helpItems": 7,
+      "outcomes": [
+        "help:command",
+        "board:command",
+        "quit:command",
+        "claim:claim",
+        "resign:game-over",
+        "new:take-back"
+      ]
+    },
+    "D2_delivered_counted": {
+      "first": {
+        "kind": "command",
+        "messages": [
+          "quit again to end"
+        ]
+      },
+      "firstCounts": {
+        "rpl": 1,
+        "cls": 2
+      },
+      "second": {
+        "kind": "quit"
+      },
+      "secondCounts": {
+        "rpl": 0,
+        "cls": 1
+      },
+      "third_zzz": {
+        "kind": "rejected"
+      },
+      "thirdCounts": {
+        "rpl": 1,
+        "cls": 2
+      }
+    },
+    "D2_quitRowRemoved": {
+      "first": {
+        "kind": "rejected",
+        "messages": [
+          "type e2e4 or Nf3"
+        ]
+      },
+      "firstCounts": {
+        "rpl": 0,
+        "cls": 0
+      },
+      "second": {
+        "kind": "rejected",
+        "messages": [
+          "type e2e4 or Nf3"
+        ]
+      },
+      "secondCounts": {
+        "rpl": 0,
+        "cls": 0
+      },
+      "third_zzz": {
+        "kind": "rejected"
+      },
+      "thirdCounts": {
+        "rpl": 0,
+        "cls": 0
+      }
+    },
+    "D2_quitRowOutcomeChanged": {
+      "first": {
+        "kind": "take-back",
+        "messages": [],
+        "plies": 0
+      },
+      "firstCounts": {
+        "rpl": 1,
+        "cls": 2
+      },
+      "second": {
+        "kind": "quit"
+      },
+      "secondCounts": {
+        "rpl": 0,
+        "cls": 1
+      },
+      "third_zzz": {
+        "kind": "rejected"
+      },
+      "thirdCounts": {
+        "rpl": 1,
+        "cls": 2
+      }
+    }
+  },
+  "mutants": {
+    "control": {
+      "load": "{ 4.40 7.18 8.92 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 0,
+      "total": 228,
+      "passed": 228,
+      "failed": 0,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 0
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 0
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 0
+        }
+      },
+      "failedNames": []
+    },
+    "Q3": {
+      "load": "{ 4.36 7.13 8.89 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 1,
+      "total": 228,
+      "passed": 227,
+      "failed": 1,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 0
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 1
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 0
+        }
+      },
+      "failedNames": [
+        "src/command-input.test.ts :: ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else G1 — trailing text does not arm: quit / quit now / quit asks AGAIN, and quit now twice never exits"
+      ]
+    },
+    "X1": {
+      "load": "{ 4.33 7.08 8.86 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 1,
+      "total": 228,
+      "passed": 226,
+      "failed": 2,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 0
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 1
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 1
+        }
+      },
+      "failedNames": [
+        "src/command-input.test.ts :: ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else clause 6 — `disarm` clears an armed flag, is harmless unarmed, and calls no resolver",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "X2": {
+      "load": "{ 4.63 7.09 8.86 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 1,
+      "total": 228,
+      "passed": 227,
+      "failed": 1,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 0
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 0
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 1
+        }
+      },
+      "failedNames": [
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "X3": {
+      "load": "{ 4.50 7.02 8.82 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 1,
+      "total": 228,
+      "passed": 226,
+      "failed": 2,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 0
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 1
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 1
+        }
+      },
+      "failedNames": [
+        "src/command-input.test.ts :: ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else clause 6 — `disarm` clears an armed flag, is harmless unarmed, and calls no resolver",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "M9": {
+      "load": "{ 5.10 7.11 8.84 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 1,
+      "total": 228,
+      "passed": 226,
+      "failed": 2,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 1
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 0
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 1
+        }
+      },
+      "failedNames": [
+        "src/cli.test.ts :: ABC-046 — `quit` and `new` through the delivered entry point A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "X4": {
+      "load": "{ 5.25 7.10 8.83 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 1,
+      "total": 228,
+      "passed": 226,
+      "failed": 2,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 1
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 0
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 1
+        }
+      },
+      "failedNames": [
+        "src/cli.test.ts :: ABC-046 — `quit` and `new` through the delivered entry point A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "X5": {
+      "load": "{ 5.07 7.04 8.79 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 1,
+      "total": 228,
+      "passed": 226,
+      "failed": 2,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 1
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 0
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 1
+        }
+      },
+      "failedNames": [
+        "src/cli.test.ts :: ABC-046 — `quit` and `new` through the delivered entry point A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "X6": {
+      "load": "{ 4.98 6.99 8.77 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 0,
+      "total": 228,
+      "passed": 228,
+      "failed": 0,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 0
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 0
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 0
+        }
+      },
+      "failedNames": []
+    },
+    "X7": {
+      "load": "{ 5.15 6.99 8.76 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 1,
+      "total": 228,
+      "passed": 224,
+      "failed": 4,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 0
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 0
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 4
+        }
+      },
+      "failedNames": [
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame",
+        "src/line-input.test.ts :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "X8": {
+      "load": "{ 5.29 6.99 8.74 }",
+      "tsc": 0,
+      "tscOut": "",
+      "status": 1,
+      "total": 228,
+      "passed": 227,
+      "failed": 1,
+      "skipped": 0,
+      "perFile": {
+        "src/cli.test.ts": {
+          "total": 65,
+          "failed": 0
+        },
+        "src/command-input.test.ts": {
+          "total": 133,
+          "failed": 1
+        },
+        "src/line-input.test.ts": {
+          "total": 30,
+          "failed": 0
+        }
+      },
+      "failedNames": [
+        "src/command-input.test.ts :: ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else clause 6 — `disarm` clears an armed flag, is harmless unarmed, and calls no resolver"
+      ]
+    }
+  },
+  "sequences": {
+    "control": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "quit"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "Q3": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "quit"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "X1": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "quit"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "X2": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "quit"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "X3": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "quit"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "quit"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "M9": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "X4": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "X5": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "command:quit again to end",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "X6": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "quit"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "X7": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "quit"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    },
+    "X8": {
+      "S0 quit/quit": [
+        "command:quit again to end",
+        "quit"
+      ],
+      "S1 quit/over/quit/EOF": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "eof"
+      ],
+      "S2 quit/over/quit/quit (ruled row)": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S3 quit/over/new/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "take-back:0",
+        "command:quit again to end",
+        "quit"
+      ],
+      "S4 over/quit/quit (disarm unarmed)": [
+        "rejected:line too long",
+        "quit"
+      ],
+      "S5 quit/over/over/quit/quit": [
+        "command:quit again to end",
+        "rejected:line too long",
+        "rejected:line too long",
+        "quit"
+      ],
+      "S6 quit/1024/quit (at-cap control)": [
+        "command:quit again to end",
+        "rejected:type e2e4 or Nf3",
+        "command:quit again to end",
+        "eof"
+      ]
+    }
+  },
+  "restores": [
+    {
+      "after": "D2 counted",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "D2 quit row removed",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "D2 quit row outcome -> take-back",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "control",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "Q3",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "X1",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "X2",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "X3",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "M9",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "X4",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "X5",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "X6",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "X7",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    },
+    {
+      "after": "X8",
+      "sha256Equal": true,
+      "gitStatusSrc": ""
+    }
+  ],
+  "bar2": {
+    "default": {
+      "status": 0,
+      "total": 30,
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0,
+      "rows": [
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters states the cap as 1024",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters passes a line of exactly 1024 units to the resolver on LF — the boundary is not off by one, on EITHER terminator",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters passes a line of exactly 1024 units to the resolver on CRLF — the boundary is not off by one, on EITHER terminator",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters recovers on the very next line — an over-cap line poisons nothing",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends"
+      ]
+    },
+    "deep": {
+      "status": 0,
+      "total": 34,
+      "passed": 34,
+      "failed": 0,
+      "skipped": 0,
+      "rows": [
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters states the cap as 1024",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters passes a line of exactly 1024 units to the resolver on LF — the boundary is not off by one, on EITHER terminator",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters passes a line of exactly 1024 units to the resolver on CRLF — the boundary is not off by one, on EITHER terminator",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on LF — the terminator does not buy the writer a unit either",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 units on CRLF — the terminator does not buy the writer a unit either",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters rejects a line of 1025 characters, never passes it to a resolver, and never grows the frame",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters recovers on the very next line — an over-cap line poisons nothing",
+        "passed :: ABC-037 — the production InputSeam security bar 2 — unbounded input is bounded. The cap is 1024 characters clause 6 — quit / over-cap / quit asks AGAIN, the over-cap line reaches no resolver, and quit / quit then ends",
+        "passed :: ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] survives a 16 MiB unterminated flood, rejects it, tells no resolver, and recovers",
+        "passed :: ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] retains no more than one chunk across a 16 MiB flood [needs NODE_OPTIONS=--expose-gc]",
+        "passed :: ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] reads the same three lines however the chunk boundaries fall",
+        "passed :: ABC-037 — the production InputSeam breadth [deep, INPUT_DEEP=1] stays total on a 10,000-character line — the cap answers before the resolvers do"
+      ]
+    }
+  },
+  "entry": {
+    "quit/1025x/quit/EOF": {
+      "status": 0,
+      "stderr": "",
+      "lines": 93,
+      "confirmations": 2,
+      "lineTooLong": 1,
+      "prompts": 4,
+      "endsQuit": false,
+      "endsEof": true,
+      "tail": [
+        "",
+        "> input ended",
+        ""
+      ],
+      "messageLines": [
+        "24: > 8 .r:n.b:q.k:b.n:r   ",
+        "44: quit again to end    ",
+        "47: > 8 .r:n.b:q.k:b.n:r   ",
+        "67: line too long        ",
+        "70: > 8 .r:n.b:q.k:b.n:r   ",
+        "90: quit again to end    ",
+        "93: > input ended"
+      ]
+    },
+    "quit/1025x/quit/quit": {
+      "status": 0,
+      "stderr": "",
+      "lines": 93,
+      "confirmations": 2,
+      "lineTooLong": 1,
+      "prompts": 4,
+      "endsQuit": true,
+      "endsEof": false,
+      "tail": [
+        "",
+        "> quit",
+        ""
+      ],
+      "messageLines": [
+        "24: > 8 .r:n.b:q.k:b.n:r   ",
+        "44: quit again to end    ",
+        "47: > 8 .r:n.b:q.k:b.n:r   ",
+        "67: line too long        ",
+        "70: > 8 .r:n.b:q.k:b.n:r   ",
+        "90: quit again to end    ",
+        "93: > quit"
+      ]
+    },
+    "QUIT_NOTICE": "quit",
+    "INPUT_ENDED_NOTICE": "input ended"
+  },
+  "finalRestore": {
+    "sha256Equal": true,
+    "gitStatusSrc": ""
+  },
+  "finishedAt": "2026-09-24T20:13:49.331Z"
+}
