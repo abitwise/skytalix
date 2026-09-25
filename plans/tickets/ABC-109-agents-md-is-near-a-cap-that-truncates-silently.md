@@ -4,7 +4,7 @@ title: "`AGENTS.md` is inside three edits of a 32,768-byte cap that truncates SI
 status: backlog
 column: Backlog
 size: M
-priority: P1
+priority: P0
 epic: —
 feature: —
 ---
@@ -309,7 +309,18 @@ file is one page with a known consumer. **Re-size trigger, named:** if the Scrib
 budget cannot be met without amending what a directive SAYS, **stop and re-cut** — amending a
 directive is the owner's and is fenced out of this page by `## Out of scope`.
 
-**Priority `P1`.**
+**Priority `P0` — RAISED 2026-09-26, task `rescore-abc109`.** Was `P1` at cut time
+(2026-08-19); this page's own **named promotion trigger fired**: *"if `AGENTS.md` is measured at
+> 31,000 bytes on any branch... this becomes `P0`."* Measured this hop, in this worktree:
+**`wc -c AGENTS.md` = 32,565 bytes, 203 bytes of headroom against the 32,768 cap (0.62%)** — up
+from 29,749 (9.2% headroom) at cut time. At the ticket's own measured rate of **1,159 B/edit**,
+203 B is **0.18 of one edit**: the *next* ordinary `AGENTS.md` commit of any real length is
+expected to cross the cap, not the fourth or fifth as read at cut time. The original argument
+below (`NOT P0` / `NOT P2`) is kept as the historical reasoning that held until this measurement
+superseded it — not deleted, because the trigger it names is exactly what fired.
+
+<details>
+<summary>Original priority argument, 2026-08-19 (superseded 2026-09-26 by the promotion trigger firing)</summary>
 
 **NOT `P0`.** Nothing is truncated today: `main` sits at **29,749 with 3,019 bytes still under the
 cap** and the file is whole. Putting this ahead of the `EPIC-004` chain would be
@@ -327,7 +338,64 @@ today, so the next documentation commit is as free to add 1,700 bytes as `b58480
 branch, or if any role reports a read of it that is missing `## When uncertain`, this becomes
 **`P0`**.
 
+</details>
+
+## Who executes, and one ticket or two — decided 2026-09-26, task `rescore-abc109`
+
+**Problem, scope and acceptance (`A1`–`A8`) are re-read against today's fact and are STILL
+RIGHT — nothing here amends them.** `A1`'s test note already required re-measuring the base at
+pull time rather than trusting the cut-time figure (29,749), so today's 32,565 is not a gap in
+the ticket, it is the ticket's own designed-for case arriving early. The Orchestrator's
+recommended direction — move the long per-command `<!-- RUN … -->` provenance comments out of
+`AGENTS.md` into a linked file, keep each command line one line, land a byte-margin guard — is
+**weighed, not imposed**, per the header's standing rule that the remedy's shape is the Scribe's
+call: it is already named as available raw material on this page (**16 HTML comment blocks, 4,657
+B, 16.8% of the file** — "what that means for the remedy is the Scribe's to decide"), and it is
+compatible with `A1`–`A4`/`A7`/`A8` as written — no scope edit is needed to accommodate it.
+
+**Executors — two roles, sequenced, one ticket.**
+- **`AGENTS.md` Scribe** owns `A1`–`A4` and `A6`–`A8`: the restructure itself (moving/re-pointing
+  prose, picking the extraction target, landing the final byte budget constant) and the file
+  `AGENTS.md` is the Scribe's alone to author (`agent-factory/roles/agents-md-scribe.md`).
+- **Engineer** owns `A5`, the byte-count guard: it lives in `src/cli.test.ts`, a `src/` file
+  outside the Scribe's `AGENTS.md`-only output boundary, and the guard's assertion needs the
+  Scribe's final budget constant as an input, so it is sequenced **after** the Scribe's pass
+  lands, not in parallel with it.
+
+**One ticket, not two.** Splitting `A5` into its own ticket would separate an assertion from the
+one number (the chosen byte budget) it exists to check, adding a hand-off with nothing gained —
+`A5` is one assertion in a file that already exists (`## The guard is OWED...` below), not a
+`SPLIT_REQUIRED`-shaped body of work, and the ticket's own re-size trigger (stop and re-cut only
+if the budget cannot be met without amending a directive's content) does not fire here. Size `M`
+is unchanged; INVEST's "small" and "independent" both still hold across a two-role, one-ticket
+sequence — this project has run that shape before (Scribe substrate edits followed by an
+Engineer-owned test/guard line).
+
 ## Definition of Ready
+
+**Re-scored by BA/PM, 2026-09-26** (task `rescore-abc109`, Workflow 07 — re-score against
+today's facts: `AGENTS.md` measured in this worktree at **32,565 B, 203 B headroom** against the
+32,768 cap, versus **29,749 B, 3,019 B headroom** at cut time). **Result: 9 of 10, 1 ⚠️ →
+discharged in the same hop by editing this page → 10 of 10, 0 ⚠️ — READY.** Supersedes the
+2026-08-19 score below, not deleted, kept as history.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅, and stronger than at cut time.** Same user and pain shape, now measured at 203 B headroom (0.62%) rather than 3,019 B (9.2%) — the failure this page exists to prevent moved from "several edits away" to "the next edit of any real length" |
+| 2 | scope and out-of-scope clear | **✅ unchanged.** Re-read against today's fact and still right: `A1`'s own test note already required re-measuring the base at pull time rather than trusting 29,749, so today's number is the designed-for case, not a gap. The Orchestrator's recommended direction (extract the `<!-- RUN … -->` comments, one-line commands, a margin guard) fits inside the existing scope without edit — see `## Who executes...` above |
+| 3 | INVEST-shaped | **✅ unchanged** — independent, estimable (remedy shape is the Scribe's, executors now named), small (0 production lines), testable |
+| 4 | acceptance testable and measurable | **✅ unchanged** — `A1`–`A8` re-read against today's fact and left as written; `A1`'s ≤ 24,576 B target and 1,159 B/edit rate are still the right numbers to re-measure at pull time |
+| 5 | dependencies known | **✅, and one new one named.** `ABC-121` (`In Development`) names `ABC-109` as a dependency **for its own Scribe follow-up** ("any deep-lane line of any real length will overflow that headroom, so the Scribe hop that writes it needs `ABC-109` landed first" — `ABC-121` `## Dependencies`). Not a blocker on `ABC-109`'s own build; recorded so the urgency is traceable to a named consumer, not just a number |
+| 6 | security/NFR triggers marked | **✅ unchanged** — none apply; no production surface |
+| 7 | test notes present | **✅ unchanged** — six, including the re-measure-at-pull-time trap this hop's own re-score exercised |
+| 8 | size assigned | **✅ unchanged** — `M`, argued above under `## Who executes...` as still right for a two-role, one-ticket sequence |
+| 9 | priority assigned | **⚠️ → ✅, discharged in this hop by editing the page.** Scored first as `P1` (the header's stale value): the ticket's own named promotion trigger — *"if `AGENTS.md` is measured at > 31,000 bytes... this becomes `P0`"* — **has fired** (32,565 > 31,000), so `P1` no longer matches this page's own rule applied to today's measurement. Discharged by raising the header and rationale to `P0` in this hop, with the original `P1` argument kept as superseded history rather than deleted |
+| 10 | no major unresolved blocker | **✅ unchanged** — owner named, remedy shape is the Scribe's, guard question ruled, executors and one-vs-two-tickets now also ruled |
+
+Column moves are the Orchestrator's.
+
+<details>
+<summary>Prior score, 2026-08-19, task <code>cut-agents-md-cap-2026-08-19</code> (10/10, 0 ⚠️) — superseded above</summary>
 
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
 **2026-08-19**. **Result: 10 of 10, 0 ⚠️ — READY.**
@@ -344,12 +412,10 @@ nothing.
 | 1 | problem clear | **✅** the user is every role on the project, the pain is 3,019 bytes of headroom against a cap whose overflow is silent and tail-first, and the value is stated against two prior recorded failures of the same species |
 | 2 | scope and out-of-scope clear | **✅** six in scope, six fenced out including the remedy's shape, the directives' content, the kit as a destination, and the Scribe's owed trace row |
 | 3 | INVEST-shaped | **✅** independent of every ticket in flight; estimable because the remedy shape is the Scribe's and the preservation list is enumerated; small (0 production lines); **testable — every criterion is a byte count, a resolved pointer, an unmodified diff region, or an observed failure message** |
-| 4 | acceptance testable and measurable | **✅** eight: **≤ 24,576 bytes** measured on the integrated tree with headroom stated in edits at **1,159 B/edit**; a **nine-row minimum** before/after pointer table verified by opening each destination; three tail anchors with byte offsets; four named assertion sites in `src/cli.test.ts` unmodified; a guard **watched RED** with its message recorded; `grep '^src/'` **empty** with **0** new test files and **≤ 2** new tests; every destination named with its reader; the cap recorded as inherited |
 | 4 | acceptance testable and measurable | **✅** eight: **≤ 24,576 bytes** measured on the live tree with headroom stated in edits at **1,159 B/edit**; a **nine-row minimum** before/after pointer table verified by opening each destination; three tail anchors with byte offsets; four named assertion sites in `src/cli.test.ts` unmodified; a guard **watched RED** with its message recorded; `grep '^src/'` **empty** with **0** new test files and **≤ 2** new tests; every destination named with its reader; the cap recorded as inherited |
 | 5 | dependencies known | **✅, and it was a ⚠️ until it was measured.** The ordering hazard — two unmerged branches carrying **+2,059 bytes** of this file into `### Test` — **is DISCHARGED: both merged mid-hop (`3032622`, `c5dc3d2`) and `main:AGENTS.md` re-measured at 29,749.** No unmerged edit to this file is outstanding. The standing obligation that replaces it is on the page: **re-measure the base at pull time.** The rest were known from the start — the `src/cli.test.ts` structural coupling with four line anchors, `agent-factory/` as read-only KIT and therefore never a destination, and the inherited cap |
-| 7 | test notes present | **✅** six, including the integrated-tree measurement trap, the two-document copy hazard for out-of-tree lane readings, the in-memory red-path pattern, and one found-but-deliberately-not-cut item |
 | 7 | test notes present | **✅** six, including the re-measure-at-pull-time trap (this file moved +2,059 bytes during the cutting hop), the two-document copy hazard for out-of-tree lane readings, the in-memory red-path pattern, and one found-but-deliberately-not-cut item |
 | 9 | priority assigned | **✅** `P1`, with not-`P0` and not-`P2` both argued from measured numbers and a named promotion trigger at **31,000 bytes** |
 | 10 | no major unresolved blocker | **✅** the owner is named, the remedy shape is explicitly the owner's to choose, the guard question is **RULED on this page** rather than left open, and no environmental precondition is needed — the work is one editorial pass and one assertion |
 
-Column moves are the Orchestrator's.
+</details>
