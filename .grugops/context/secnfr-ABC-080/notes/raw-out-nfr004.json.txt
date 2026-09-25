@@ -1,0 +1,404 @@
+{
+ "summary": {
+  "n": 40,
+  "budgetMs": 3000,
+  "ceilingMs": 5000,
+  "p50": 3001.6,
+  "p95": 3004.3,
+  "max": 3006.1,
+  "overBudget": 36,
+  "depthByName": {
+   "startpos": [
+    6
+   ],
+   "kiwipete": [
+    6
+   ],
+   "position-3": [
+    8
+   ],
+   "position-4": [
+    6
+   ],
+   "position-5": [
+    6
+   ],
+   "position-6": [
+    5
+   ],
+   "mid-16caps": [
+    6,
+    5
+   ],
+   "worst-first-iter": [
+    5
+   ]
+  },
+  "load1": [
+   3.66,
+   5.08
+  ]
+ },
+ "rows": [
+  {
+   "round": 1,
+   "name": "startpos",
+   "wallMs": 3004.9,
+   "depth": 6,
+   "nodes": 663572,
+   "move": "b1c3",
+   "load1": 3.7
+  },
+  {
+   "round": 1,
+   "name": "kiwipete",
+   "wallMs": 3001,
+   "depth": 6,
+   "nodes": 904970,
+   "move": "e2a6",
+   "load1": 3.7
+  },
+  {
+   "round": 1,
+   "name": "position-3",
+   "wallMs": 2999.8,
+   "depth": 8,
+   "nodes": 1034254,
+   "move": "b4f4",
+   "load1": 3.72
+  },
+  {
+   "round": 1,
+   "name": "position-4",
+   "wallMs": 3000.1,
+   "depth": 6,
+   "nodes": 1042361,
+   "move": "c4c5",
+   "load1": 3.66
+  },
+  {
+   "round": 1,
+   "name": "position-5",
+   "wallMs": 3003.3,
+   "depth": 6,
+   "nodes": 726087,
+   "move": "d7c8",
+   "load1": 3.66
+  },
+  {
+   "round": 1,
+   "name": "position-6",
+   "wallMs": 3002.4,
+   "depth": 5,
+   "nodes": 889118,
+   "move": "c3d5",
+   "load1": 3.69
+  },
+  {
+   "round": 1,
+   "name": "mid-16caps",
+   "wallMs": 3001.9,
+   "depth": 6,
+   "nodes": 1381462,
+   "move": "f2f1",
+   "load1": 3.69
+  },
+  {
+   "round": 1,
+   "name": "worst-first-iter",
+   "wallMs": 3000.5,
+   "depth": 5,
+   "nodes": 929222,
+   "move": "b4c5",
+   "load1": 3.79
+  },
+  {
+   "round": 2,
+   "name": "startpos",
+   "wallMs": 3003.4,
+   "depth": 6,
+   "nodes": 686100,
+   "move": "b1c3",
+   "load1": 3.81
+  },
+  {
+   "round": 2,
+   "name": "kiwipete",
+   "wallMs": 3001.7,
+   "depth": 6,
+   "nodes": 915210,
+   "move": "e2a6",
+   "load1": 3.81
+  },
+  {
+   "round": 2,
+   "name": "position-3",
+   "wallMs": 3001.4,
+   "depth": 8,
+   "nodes": 1017870,
+   "move": "b4f4",
+   "load1": 4.79
+  },
+  {
+   "round": 2,
+   "name": "position-4",
+   "wallMs": 3006.1,
+   "depth": 6,
+   "nodes": 1070009,
+   "move": "c4c5",
+   "load1": 4.79
+  },
+  {
+   "round": 2,
+   "name": "position-5",
+   "wallMs": 3004.2,
+   "depth": 6,
+   "nodes": 744519,
+   "move": "d7c8",
+   "load1": 4.64
+  },
+  {
+   "round": 2,
+   "name": "position-6",
+   "wallMs": 3002.3,
+   "depth": 5,
+   "nodes": 900382,
+   "move": "c3d5",
+   "load1": 4.43
+  },
+  {
+   "round": 2,
+   "name": "mid-16caps",
+   "wallMs": 3000.1,
+   "depth": 6,
+   "nodes": 1378390,
+   "move": "f2f1",
+   "load1": 4.43
+  },
+  {
+   "round": 2,
+   "name": "worst-first-iter",
+   "wallMs": 3001.1,
+   "depth": 5,
+   "nodes": 940486,
+   "move": "b4c5",
+   "load1": 4.32
+  },
+  {
+   "round": 3,
+   "name": "startpos",
+   "wallMs": 3001.4,
+   "depth": 6,
+   "nodes": 689172,
+   "move": "b1c3",
+   "load1": 4.32
+  },
+  {
+   "round": 3,
+   "name": "kiwipete",
+   "wallMs": 3001.8,
+   "depth": 6,
+   "nodes": 900874,
+   "move": "e2a6",
+   "load1": 4.21
+  },
+  {
+   "round": 3,
+   "name": "position-3",
+   "wallMs": 3001.7,
+   "depth": 8,
+   "nodes": 1036302,
+   "move": "b4f4",
+   "load1": 4.11
+  },
+  {
+   "round": 3,
+   "name": "position-4",
+   "wallMs": 3000.5,
+   "depth": 6,
+   "nodes": 1053625,
+   "move": "c4c5",
+   "load1": 4.11
+  },
+  {
+   "round": 3,
+   "name": "position-5",
+   "wallMs": 3004.3,
+   "depth": 6,
+   "nodes": 743495,
+   "move": "d7c8",
+   "load1": 4.42
+  },
+  {
+   "round": 3,
+   "name": "position-6",
+   "wallMs": 3000.9,
+   "depth": 5,
+   "nodes": 883998,
+   "move": "c3d5",
+   "load1": 4.42
+  },
+  {
+   "round": 3,
+   "name": "mid-16caps",
+   "wallMs": 3002.5,
+   "depth": 6,
+   "nodes": 1379414,
+   "move": "f2f1",
+   "load1": 4.23
+  },
+  {
+   "round": 3,
+   "name": "worst-first-iter",
+   "wallMs": 3001.1,
+   "depth": 5,
+   "nodes": 948678,
+   "move": "b4c5",
+   "load1": 4.13
+  },
+  {
+   "round": 4,
+   "name": "startpos",
+   "wallMs": 2999.9,
+   "depth": 6,
+   "nodes": 682004,
+   "move": "b1c3",
+   "load1": 4.13
+  },
+  {
+   "round": 4,
+   "name": "kiwipete",
+   "wallMs": 3003.2,
+   "depth": 6,
+   "nodes": 927498,
+   "move": "e2a6",
+   "load1": 5.08
+  },
+  {
+   "round": 4,
+   "name": "position-3",
+   "wallMs": 3000,
+   "depth": 8,
+   "nodes": 1007630,
+   "move": "b4f4",
+   "load1": 5.08
+  },
+  {
+   "round": 4,
+   "name": "position-4",
+   "wallMs": 3001.6,
+   "depth": 6,
+   "nodes": 1036217,
+   "move": "c4c5",
+   "load1": 4.83
+  },
+  {
+   "round": 4,
+   "name": "position-5",
+   "wallMs": 3001.9,
+   "depth": 6,
+   "nodes": 734279,
+   "move": "d7c8",
+   "load1": 4.69
+  },
+  {
+   "round": 4,
+   "name": "position-6",
+   "wallMs": 3000.5,
+   "depth": 5,
+   "nodes": 871710,
+   "move": "c3d5",
+   "load1": 4.69
+  },
+  {
+   "round": 4,
+   "name": "mid-16caps",
+   "wallMs": 2999.9,
+   "depth": 5,
+   "nodes": 1305686,
+   "move": "f2f1",
+   "load1": 4.47
+  },
+  {
+   "round": 4,
+   "name": "worst-first-iter",
+   "wallMs": 3001,
+   "depth": 5,
+   "nodes": 806342,
+   "move": "b4c5",
+   "load1": 4.47
+  },
+  {
+   "round": 5,
+   "name": "startpos",
+   "wallMs": 3003.6,
+   "depth": 6,
+   "nodes": 670740,
+   "move": "b1c3",
+   "load1": 4.51
+  },
+  {
+   "round": 5,
+   "name": "kiwipete",
+   "wallMs": 3000.2,
+   "depth": 6,
+   "nodes": 900874,
+   "move": "e2a6",
+   "load1": 4.55
+  },
+  {
+   "round": 5,
+   "name": "position-3",
+   "wallMs": 3000.1,
+   "depth": 8,
+   "nodes": 1016846,
+   "move": "b4f4",
+   "load1": 4.55
+  },
+  {
+   "round": 5,
+   "name": "position-4",
+   "wallMs": 3003.4,
+   "depth": 6,
+   "nodes": 1068985,
+   "move": "c4c5",
+   "load1": 4.27
+  },
+  {
+   "round": 5,
+   "name": "position-5",
+   "wallMs": 3003,
+   "depth": 6,
+   "nodes": 743495,
+   "move": "d7c8",
+   "load1": 4.27
+  },
+  {
+   "round": 5,
+   "name": "position-6",
+   "wallMs": 3002.6,
+   "depth": 5,
+   "nodes": 867614,
+   "move": "c3d5",
+   "load1": 4.73
+  },
+  {
+   "round": 5,
+   "name": "mid-16caps",
+   "wallMs": 3002.9,
+   "depth": 6,
+   "nodes": 1380438,
+   "move": "f2f1",
+   "load1": 4.51
+  },
+  {
+   "round": 5,
+   "name": "worst-first-iter",
+   "wallMs": 3000.7,
+   "depth": 5,
+   "nodes": 954822,
+   "move": "b4c5",
+   "load1": 4.51
+  }
+ ]
+}

@@ -1,0 +1,4 @@
+{"arm":"A","name":"worst-first-iter","depth":1,"nodes":5574,"minMs":17.7,"maxMs":29.2}
+{"arm":"A","name":"queens-rig","depth":1,"nodes":19585,"minMs":65.3,"maxMs":66.6}
+{"arm":"B","name":"worst-first-iter","depth":1,"nodes":32980,"minMs":92.8,"maxMs":110.4}
+{"arm":"B","name":"queens-rig","depth":1,"nodes":87231,"minMs":263.8,"maxMs":269.2}
