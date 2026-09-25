@@ -171,3 +171,46 @@ depth-6 arithmetic are in `.grugops/context/rescore-abc080-081/notes/` — not r
 **Pullable today: NO.** Size `M`, priority `P0`, unchanged. **Recommended routing: send the two
 open Architect/Design rulings ahead of a pull, in parallel with (not blocking) `ABC-080`'s own
 path forward.**
+
+## § Ruling — 2026-09-25 (Architect/Design, task `wave-2026-09-24`, subtask `ruling-abc080-081`)
+
+The reasoning and the probe are in `.grugops/context/ruling-abc080-081/notes/` (rulings
+`…23e0307f`, `…a937c4bd` and `…4dd1bbaa`; observations `…11853121` and `…30cea5d2`) and are not
+restated here.
+
+- **Item 5a, `ADR-0006`'s inherited caveat: UNCHANGED, so this ticket proceeds as written and
+  `ABC-075` does not move.** For a table, the rights key is *required*, not merely safe.
+  - On `ADR-0006`'s own `knight-g1` pair (same placement and same current moves, one unusable
+    right) the subtrees differ: perft 3 reads 1 335 vs 1 320 and `search` d3 reads 850 vs 830.
+  - An availability key would return a wrong score.
+  - Recorded as a dated amendment to `ADR-0006`, with falsifier `G6`.
+- **Item 5b, table storage vs the `ADR-0020` per-ply key array: SEPARATE** (`ADR-0025`, proposed).
+  - The table shares the key value read from `keys[ply]`, never the array's storage, seeding or
+    lifetime.
+  - The table is a fixed-size typed-array module that verifies the full 64-bit key. The design
+    point is 2^18 × 16 B = 4 MiB.
+  - It is cleared at every `chooseMove` / `search()` entry and spans the iterations of one move.
+    It is not carried across moves.
+  - Only full-width nodes probe and store it. Both recursions use it, and `search.ts` gains one
+    test-only door, `searchWithoutTable`.
+  - The key array gets a capacity guard, a runaway guard and not a depth budget.
+- **Item 10, the memory row: DRAFTED, NOT PLACED.** `NFR-009` (draft, in the ruling note) says:
+  - search-held memory is fixed at ≤ 16 MiB;
+  - `heapUsed` and `arrayBuffers` each move ≤ 1 MiB between a 1 s and a 3 s search, read after
+    `gc()`;
+  - the `heapUsed` read is the one that catches a growing `Map`, and it must be watched going RED
+    first.
+
+  Security/NFR places it, on the owner's word. **Item 10 stays ⚠️ until then.**
+- **NEW, for BA/PM: `A3` as written reads 80.4% (kiwipete) and 81.2% (position-6) at fixed
+  depth 5, and FAILS ≤ 70%.**
+  - In the engine's shape (iterative deepening, cumulative nodes to d5, table + hash move vs no
+    table) it reads **63.2% and 49.7%**.
+  - Recommended: re-state `A3` in that shape, and make `ABC-080` a prerequisite for `A3`'s
+    measurement. Hit rate `A2`: 19.0% / 18.2% at fixed d5 and 50–59% under iterative deepening.
+    ≥ 15% holds either way.
+- **`ABC-078` `A3` identity sweep:** scores stay exact (0 of 48 mismatches, d1–d4). The root hash
+  move flipped 1 of 48 *tied* moves, so the move comparison must accept an equal-scored move.
+  That amendment belongs to this ticket's build hop.
+- **Expected effect on `NFR-005`, with `ABC-080` in:** depth **6 / 6** at 3 s, margins 1.93x /
+  1.51x. A prototype reading, not a verdict.

@@ -1,0 +1,2 @@
+kiwipete {"order":2,"ttCut":true} 6 id
+position-6 {"order":2,"ttCut":true} 6 id

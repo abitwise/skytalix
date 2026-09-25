@@ -242,3 +242,29 @@ tests too.
 | **G3** | **the sharp one** — a position pair with identical placement, identical side to move, identical castling **rights**, and different castling **legality**. If one exists, reason 2 collapses and the whole ruling is re-openable | `addCastlingMoves` reads only `castling`, `board` and the side to move (`src/moves.ts:299-319`); the falsifier is any future change that gives it a fourth input |
 | **G4** | a reachable position carrying a **stale** castling right (the rook gone or moved, the bit still set) | walk the perft table checking, at each node with a right set, that the king and matching rook are on their home squares — **run at this hop: 368,344 nodes with a right, 0 stale**; a non-zero count later means `apply.ts`'s `CASTLE_LOSS` table has lost a square |
 | **G5** | a measurement showing an availability-based castling hash is *cheaper* than the rights hash on the majority path | benchmark it; the rights hash is four bit tests and at most four XORs |
+
+## Amendment — 2026-09-25: the transposition-table question, answered (`ABC-081`)
+
+*Added by Architect/Design at task `wave-2026-09-24`, subtask `ruling-abc080-081`. No clause of
+the Decision changes. This answers the question the Status section says "will be asked again by
+whoever builds `EPIC-004`'s transposition table". Evidence:
+`.grugops/context/ruling-abc080-081/notes/…30cea5d2` (probe) and `…23e0307f` (ruling).*
+
+**The answer is "unchanged". For a transposition table, the rights key is REQUIRED, not merely
+the safe direction.** Reason 3 above argued for repetition, where "the same position" means the
+same position now. A table entry stores the value of a **subtree**, and a right that is blocked
+now can become usable a few plies later. Measured on this ADR's own `knight-g1` pair:
+
+- identical placement, side to move and current move list (15 / 15);
+- perft 3 reads 1 335 vs 1 320;
+- `search` reads 850 vs 830 at depth 3.
+
+An availability key would collide the two, and the table would return a wrong score. So the
+"Consequences" bullet "`EPIC-004` inherits this" resolves as follows. The table keys on rights.
+Pairs whose unusable right can never become usable (the in-check and f1-attacked pairs read
+identical subtrees to depth 4) cost one wasted entry and never a wrong answer. `ABC-081` and
+`ABC-075` proceed unchanged.
+
+| # | what would falsify it | how to check |
+|---|---|---|
+| **G6** | a table-on search scoring differently from the table-off search at the same depth, on a pair differing only in castling rights | `ABC-081` `A1` (table on vs off, identical scores) |

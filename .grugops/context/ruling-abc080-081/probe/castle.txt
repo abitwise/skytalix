@@ -1,0 +1,4 @@
+startpos keys-differ=true d1 moves 20 20 perft2 400 400 perft3 8902 8902
+knight-g1 keys-differ=true d1 moves 15 15 perft2 70 70 perft3 1335 1320 perft4 8072 7982 search3 850 830 search4 830 820
+in-check keys-differ=true d1 moves 3 3 perft2 57 57 perft3 951 951 perft4 15899 15899 search3 -480 -480 search4 -480 -480
+f1-attacked keys-differ=true d1 moves 12 12 perft2 232 232 perft3 3671 3671 perft4 62874 62874 search3 5 5 search4 0 0

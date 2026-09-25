@@ -158,3 +158,28 @@ depth-6 arithmetic and the `NFR-008` lane-realism check are in
   plainly for the owner; no criterion re-leveled.
 
 **Pullable today: NO.** Size `M`, priority `P0`, unchanged.
+
+## § Ruling — 2026-09-25 (Architect/Design, task `wave-2026-09-24`, subtask `ruling-abc080-081`)
+
+The reasoning and the probe are in `.grugops/context/ruling-abc080-081/notes/` (ruling `…f7e66060`,
+observations `…e18c1093` and `…29d67423`) and are not restated here. **The wording of the
+criteria stays BA/PM's. This section gives the numbers the wording should carry.**
+
+- **DoR item 10 is discharged by measurement.** A faithful out-of-tree prototype of this ticket's
+  comparator (MVV-LVA via `mvvLvaKey` + two killers per ply; the hash arm dormant) at fixed
+  depth 4, against the unordered search, reads **2.64% on kiwipete (26 175 / 990 122) and 2.10%
+  on position-6 (34 885 / 1 663 808)**. Scores are identical. The prototype reproduces
+  `search.ts` to the node at d1–d3.
+- **`A3`'s bar becomes ≤ 4%** on each position at depth 4: 1.5x the larger reading, `ADR-0024`
+  decision 3's headroom rule. The old ≤ 40% would pass a build that had lost most of its
+  ordering.
+- **`A4` also reads at depth 5 on BOTH positions, and the delete rule is judged there.** At
+  kiwipete d4 killers read −0.2%, which would falsely condemn them. At d5 they read −5.7%
+  (kiwipete) and −20.5% (position-6).
+- **The ordering goes into both recursions** (`src/search.ts` and `src/engine.ts`), so
+  `ABC-078`'s identity sweep keeps comparing one algorithm. Ordering alone flipped 0 of 48 root
+  moves against `search()`.
+- **Expected effect on `NFR-005`:** depth **5 / 5** at 3 s on kiwipete and position-6 (from 3 / 3),
+  a prototype reading, not a verdict. `A7` measures the real one.
+- **Sequencing:** land this before `ABC-081`. `ABC-081`'s ≤ 70% bar is met only with this
+  ticket's hash arm live (ruling 3).
