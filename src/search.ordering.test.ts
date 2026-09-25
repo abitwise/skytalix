@@ -327,6 +327,40 @@ describe("A1 — ordered and unordered scores are identical", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Scope — BOTH recursions consume the comparator, the root included (ruling `…f7e66060`, R1.3).
+// ---------------------------------------------------------------------------
+
+describe("Scope — the engine orders its root exactly as search() does", () => {
+  /**
+   * position-6 after 1. Bxf7+, black to move: Rxf7 and Qxf7 both take the bishop and tie at 230
+   * at depth 1. Generation order tries Qxf7 first; MVV-LVA tries the LEAST valuable attacker
+   * first, Rxf7 — and the incumbent of a tie is whichever is searched first. So an engine whose
+   * root list were unordered would return a different move from `search()` here, with the same
+   * score, which is exactly the drift the move-and-score identity sweep exists to catch and which
+   * none of its positions can show (ABC-080 mutant M11 survived them all).
+   */
+  const TIE_FEN = "r4rk1/1pp1qBpp/p1np1n2/2b1p1B1/4P1b1/P1NP1N2/1PP1QPPP/R4RK1 b - - 0 10";
+
+  it("the fixture bites: ordered and unordered depth-1 searches break the tie differently", () => {
+    const ordered = search(parseFen(TIE_FEN), 1);
+    const unordered = searchWithoutOrdering(parseFen(TIE_FEN), 1);
+    expect(label(ordered.move as Move)).toBe("f8f7");
+    expect(label(unordered.move as Move)).toBe("e7f7");
+    expect(ordered.score).toBe(unordered.score);
+  });
+
+  it("chooseMove's completed depth-1 iteration returns search()'s move, f8f7", () => {
+    let ticks = 0;
+    const choice = chooseMove(parseFen(TIE_FEN), { budgetMs: 1, now: () => ticks++ }) as {
+      move: Move;
+      depth: number;
+    };
+    expect(choice.depth).toBe(1);
+    expect(label(choice.move)).toBe("f8f7");
+  });
+});
+
+// ---------------------------------------------------------------------------
 // A3 — it prunes materially harder: <= 4% of the unordered nodes at depth 4.
 // ---------------------------------------------------------------------------
 
