@@ -1,0 +1,8 @@
+PASS  A2 pass-through, exit 0  —  status 0/0, stdout 9/9 B, stderr 6/6 B (direct/wrapped)
+PASS  A2 pass-through, exit 3  —  status 3/3, stdout 9/9 B, stderr 6/6 B (direct/wrapped)
+PASS  A3 exit code is the wrapper's timeout code  —  exit 124
+PASS  A1/A3 bounded: exit within 500 + 250 ms  —  526.8 ms from spawn to exit, including the wrapper's own start-up
+PASS  A1 one stderr line naming the bound and the command  —  "run-bounded: timed out after 500 ms, killed the process tree of: /usr/local/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-122-gate-hardening/tools/grugops/run-bounded.hang-fixture.js"
+PASS  A3 armed: fixture, grandchild and their group seen alive before the kill  —  {"fixture":48527,"grandchild":48529,"armed":true}
+PASS  A1/A3 no process from the spawn alive 250 ms after exit  —  group, fixture and grandchild all ESRCH
+darwin v24.12.0: all rows held

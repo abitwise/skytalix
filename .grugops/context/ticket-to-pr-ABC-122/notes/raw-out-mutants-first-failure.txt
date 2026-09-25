@@ -1,0 +1,12 @@
+S1 search: guard removed: exit=1 signal=null 891ms tests=2 passed=1 failed=1
+   RED: src/search.capacity.test.ts :: TypeError: Cannot mix BigInt and other types, use explicit conversions
+S2 search: >= weakened to >: exit=1 signal=null 808ms tests=2 passed=1 failed=1
+   RED: src/search.capacity.test.ts :: AssertionError: expected 129 to be 128 // Object.is equality
+S3 search: over-strict >= CAP-1: exit=1 signal=null 847ms tests=2 passed=1 failed=1
+   RED: src/search.capacity.test.ts :: AssertionError: expected -1605 to be -1595 // Object.is equality
+E1 engine: guard removed: exit=1 signal=null 841ms tests=2 passed=1 failed=1
+   RED: src/engine.capacity.test.ts :: TypeError: Cannot mix BigInt and other types, use explicit conversions
+E2 engine: >= weakened to >: exit=1 signal=null 882ms tests=2 passed=1 failed=1
+   RED: src/engine.capacity.test.ts :: AssertionError: expected 129 to be 128 // Object.is equality
+E3 engine: over-strict >= CAP-1: exit=1 signal=null 791ms tests=2 passed=1 failed=1
+   RED: src/engine.capacity.test.ts :: AssertionError: expected -1605 to be -1595 // Object.is equality

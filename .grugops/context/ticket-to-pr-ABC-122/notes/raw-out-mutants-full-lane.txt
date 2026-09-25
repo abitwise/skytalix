@@ -1,0 +1,12 @@
+S1 search: guard removed: exit=1 signal=null 6549ms tests=1446 passed=1445 failed=1
+   RED: src/search.capacity.test.ts :: ABC-122 A6: src/search.ts's KEY_ARRAY_CAPACITY guard, reached through search() ends a depth-200 line at ply 128 with a leaf's score: no child past it, no key written past it
+S2 search: >= weakened to >: exit=1 signal=null 5776ms tests=1446 passed=1445 failed=1
+   RED: src/search.capacity.test.ts :: ABC-122 A6: src/search.ts's KEY_ARRAY_CAPACITY guard, reached through search() ends a depth-200 line at ply 128 with a leaf's score: no child past it, no key written past it
+S3 search: over-strict >= CAP-1: exit=1 signal=null 5869ms tests=1446 passed=1445 failed=1
+   RED: src/search.capacity.test.ts :: ABC-122 A6: src/search.ts's KEY_ARRAY_CAPACITY guard, reached through search() ends a depth-200 line at ply 128 with a leaf's score: no child past it, no key written past it
+E1 engine: guard removed: exit=1 signal=null 6021ms tests=1446 passed=1445 failed=1
+   RED: src/engine.capacity.test.ts :: ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it
+E2 engine: >= weakened to >: exit=1 signal=null 6237ms tests=1446 passed=1445 failed=1
+   RED: src/engine.capacity.test.ts :: ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it
+E3 engine: over-strict >= CAP-1: exit=1 signal=null 5751ms tests=1446 passed=1445 failed=1
+   RED: src/engine.capacity.test.ts :: ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it

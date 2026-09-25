@@ -1,0 +1,40 @@
+OK    N=""  —  {"exit":2,"ms":26.3,"stderr":"usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]"}
+OK    N="0"  —  {"exit":2,"ms":23.4,"stderr":"usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]"}
+OK    N="-5"  —  {"exit":2,"ms":22.9,"stderr":"usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]"}
+OK    N="abc"  —  {"exit":2,"ms":22.6,"stderr":"usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]"}
+OK    N="1.5"  —  {"exit":2,"ms":22.4,"stderr":"usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]"}
+OK    N="NaN"  —  {"exit":2,"ms":22.9,"stderr":"usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]"}
+OK    N="Infinity"  —  {"exit":2,"ms":26.7,"stderr":"usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]"}
+OK    N="1e3"  —  {"exit":0,"ms":360.5,"stderr":""}
+OK    N="0x3e8"  —  {"exit":0,"ms":364.1,"stderr":""}
+OK    N=" 1000 "  —  {"exit":0,"ms":386.1,"stderr":""}
+OK    N="1000.0"  —  {"exit":0,"ms":383.1,"stderr":""}
+OK    N="0b1111101000"  —  {"exit":0,"ms":382.6,"stderr":""}
+OK    N="2147483647"  —  {"exit":0,"ms":388.2,"stderr":""}
+OK    N="2147483648"  —  {"exit":124,"ms":50.7,"stderr":"(node:70748) TimeoutOverflowWarning: 2147483648 does not fit into a 32-bit signed integer.\nTimeout duration was set to 1.\n(Use `node --trace-warnings ...` to sh"}
+OK    N="99999999999"  —  {"exit":124,"ms":29,"stderr":"(node:70750) TimeoutOverflowWarning: 99999999999 does not fit into a 32-bit signed integer.\nTimeout duration was set to 1.\n(Use `node --trace-warnings ...` to s"}
+OK    N="9007199254740993"  —  {"exit":124,"ms":24.1,"stderr":"(node:70752) TimeoutOverflowWarning: 9007199254740992 does not fit into a 32-bit signed integer.\nTimeout duration was set to 1.\n(Use `node --trace-warnings ...`"}
+OK    no args  —  {"exit":2,"stderr":"usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]"}
+OK    N only, no command  —  {"exit":2,"stderr":"usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]"}
+OK    missing command  —  {"exit":2,"stderr":"run-bounded: could not start definitely-not-a-command-xyz: spawn definitely-not-a-command-xyz ENOENT"}
+OK    shell metacharacters in argv are literal  —  {"exit":0,"markerCreated":false,"echoed":true}
+OK    a whole command line as argv[0] is NOT split by a shell  —  {"exit":2,"markerCreated":false,"stderr":"run-bounded: could not start touch /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/secnfr122/INJECTED: spawn touch /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/secnfr122/INJECTED ENOENT"}
+OK    exit map: child exit 0  —  {"exit":0,"want":0,"stderr":""}
+OK    exit map: child exit 7  —  {"exit":7,"want":7,"stderr":""}
+OK    exit map: child exit 124 by itself (collides with timeout code)  —  {"exit":124,"want":124,"stderr":""}
+OK    exit map: child dies of its own SIGABRT  —  {"exit":134,"want":134,"stderr":""}
+OK    exit map: child dies of its own SIGSEGV-equivalent SIGBUS  —  {"exit":138,"want":138,"stderr":""}
+OK    signal: SIGINT to wrapper pid  —  {"wrapperExit":130,"wrapperSignal":null,"ms":352.8,"survivors":[],"stderr":""}
+OK    signal: SIGTERM to wrapper pid  —  {"wrapperExit":143,"wrapperSignal":null,"ms":349.2,"survivors":[],"stderr":""}
+NOTE  signal: SIGHUP to wrapper pid (terminal closed)  —  {"wrapperExit":null,"wrapperSignal":"SIGHUP","ms":350.3,"survivors":["fixture","grandchild","group"],"stderr":""}
+NOTE    ...same case, 5 s later (past the wrapper's 4 s bound)  —  {"stillAlive":["fixture","grandchild"]}
+NOTE  signal: SIGQUIT to wrapper pid (Ctrl-\)  —  {"wrapperExit":null,"wrapperSignal":"SIGQUIT","ms":349.9,"survivors":["fixture","grandchild","group"],"stderr":""}
+NOTE    ...same case, 5 s later (past the wrapper's 4 s bound)  —  {"stillAlive":["fixture","grandchild"]}
+NOTE  signal: SIGKILL to wrapper pid  —  {"wrapperExit":null,"wrapperSignal":"SIGKILL","ms":355.1,"survivors":["fixture","grandchild","group"],"stderr":""}
+NOTE    ...same case, 5 s later (past the wrapper's 4 s bound)  —  {"stillAlive":["fixture","grandchild"]}
+OK    signal: outer supervisor SIGTERM to the wrapper's GROUP  —  {"wrapperExit":143,"wrapperSignal":null,"ms":353.4,"survivors":[],"stderr":""}
+NOTE  signal: outer supervisor SIGKILL to the wrapper's GROUP  —  {"wrapperExit":null,"wrapperSignal":"SIGKILL","ms":348.4,"survivors":["fixture","grandchild","group"],"stderr":""}
+NOTE    ...same case, 5 s later (past the wrapper's 4 s bound)  —  {"stillAlive":["fixture","grandchild"]}
+NOTE  child exits 0 leaving a grandchild in its group  —  {"wrapperExit":0,"ms":48.4,"grandchildAliveAfter":true}
+OK    child is its own pgid leader, distinct group from the wrapper  —  {"exit":0,"child":[72316,72314,72316,0],"wrapper":[72314,70620,72314,0],"cols":"pid ppid pgid sess"}
+SWEEP: alive before sweep []; alive after sweep []

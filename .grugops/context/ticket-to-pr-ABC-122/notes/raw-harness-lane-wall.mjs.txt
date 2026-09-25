@@ -1,0 +1,18 @@
+// ABC-122 A4: median default-lane wall, n runs of `npx vitest run` at the worktree root, each a
+// fresh process under /usr/bin/time -p, each bounded by spawnSync's own timeout.
+import { execSync, spawnSync } from "node:child_process";
+const W = process.argv[2];
+const N = Number(process.argv[3] ?? 7);
+const load = () => execSync("sysctl -n vm.loadavg").toString().trim();
+const walls = [];
+for (let i = 0; i < N; i++) {
+  const lb = load();
+  const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run"], { cwd: W, encoding: "utf8", timeout: 180_000, killSignal: "SIGKILL", maxBuffer: 64 << 20 });
+  const pick = (k) => Number((r.stderr.match(new RegExp(`^${k}\\s+([0-9.]+)`, "m")) ?? [])[1]);
+  const files = (r.stdout.match(/Test Files\s+(\d+) passed/) ?? [])[1];
+  const tests = (r.stdout.match(/^\s*Tests\s+(\d+) passed/m) ?? [])[1];
+  walls.push(pick("real"));
+  console.log(`run ${i + 1}: exit ${r.status} wall ${pick("real")} s cpu ${(pick("user") + pick("sys")).toFixed(2)} s files ${files} tests ${tests} load ${lb}`);
+}
+const s = [...walls].sort((a, b) => a - b);
+console.log(`median wall ${s[s.length >> 1]} s (n=${N}, sorted ${s.join(" ")})`);

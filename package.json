@@ -9,7 +9,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "node tools/grugops/run-bounded.js 60000 vitest run",
     "test:watch": "vitest",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",

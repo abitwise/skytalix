@@ -1658,7 +1658,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
     ];
     const SCRIPTS_AT_HEAD = {
       typecheck: "tsc --noEmit",
-      test: "vitest run",
+      test: "node tools/grugops/run-bounded.js 60000 vitest run",
       "test:watch": "vitest",
       lint: "biome check .",
       "lint:fix": "biome check --write .",

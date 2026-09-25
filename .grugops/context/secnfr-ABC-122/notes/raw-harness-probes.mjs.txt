@@ -1,0 +1,148 @@
+// secnfr-ABC-122 kill-surface probes against tools/grugops/run-bounded.js at ca9f42d (arm A copy).
+// Every probe runs under this script's own outer bound (PROBE_BOUND_MS per probe, SIGKILL to every
+// group and pid it has seen), and a final sweep kills and REPORTS any survivor. Lives outside the
+// repository.
+import { spawn } from "node:child_process";
+import { setTimeout as sleep } from "node:timers/promises";
+
+const ARM = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/secnfr122/arms/A";
+const WRAPPER = `${ARM}/tools/grugops/run-bounded.js`;
+const FIXTURE = `${ARM}/tools/grugops/run-bounded.hang-fixture.js`;
+const NODE = process.execPath;
+const PROBE_BOUND_MS = 8_000;
+const seen = new Set(); // pids and -pgids to sweep
+
+function alive(pid) {
+  try { process.kill(pid, 0); return true; } catch (e) { if (e.code === "ESRCH") return false; if (e.code === "EPERM") return true; throw e; }
+}
+import { execFileSync } from "node:child_process";
+// Kills ONLY processes whose command line is one of this probe's own (wrapper, fixture, or the
+// probe's inline -e children), so a reused pid can never be hit. Groups are expanded to members.
+const MINE = [WRAPPER_MARK(), "run-bounded.hang-fixture.js", "setInterval(()=>{},1000)", "setInterval(() => {}, 1000)", "setTimeout(()=>{},300)"];
+function WRAPPER_MARK() { return "tools/grugops/run-bounded.js"; }
+function members(pid) {
+  const rows = execFileSync("ps", ["-axo", "pid=,pgid=,command="]).toString().trim().split("\n").map((l) => { const m = l.trim().match(/^(\d+)\s+(\d+)\s+(.*)$/); return m ? { pid: +m[1], pgid: +m[2], cmd: m[3] } : null; }).filter(Boolean);
+  const pick = pid < 0 ? rows.filter((r) => r.pgid === -pid) : rows.filter((r) => r.pid === pid);
+  return pick.filter((r) => MINE.some((k) => r.cmd.includes(k)));
+}
+function kill(pid, sig = "SIGKILL") { for (const r of members(pid)) { try { process.kill(r.pid, sig); } catch {} } }
+// signal() is the PROBE STIMULUS (sent to a pid this probe just spawned and is watching live).
+function signal(pid, sig) { try { process.kill(pid, sig); } catch {} }
+
+// Runs the wrapper as the leader of ITS OWN group (detached), so the probe can model an outer
+// supervisor that kills by group, and can always sweep it.
+function runWrapper(args, { onLine, env } = {}) {
+  const started = performance.now();
+  const w = spawn(NODE, [WRAPPER, ...args], { detached: true, stdio: ["ignore", "pipe", "pipe"], env: env ?? process.env });
+  seen.add(w.pid); seen.add(-w.pid);
+  let out = ""; let err = "";
+  w.stdout.on("data", (c) => { out += c; if (onLine && out.includes("\n")) { const l = out.split("\n")[0]; if (!w._fired) { w._fired = true; onLine(JSON.parse(l), w); } } });
+  w.stderr.on("data", (c) => { err += c; });
+  const done = new Promise((resolve) => {
+    const outer = setTimeout(() => { kill(-w.pid); kill(w.pid); resolve({ code: "OUTER_BOUND", signal: null }); }, PROBE_BOUND_MS);
+    w.on("exit", (code, signal) => { clearTimeout(outer); resolve({ code, signal }); });
+  });
+  return { w, started, done: done.then((r) => ({ ...r, ms: +(performance.now() - started).toFixed(1), out, err: err.trim() })) };
+}
+
+const results = [];
+const rec = (name, ok, reading) => { results.push({ name, ok, reading }); console.log(`${ok ? "OK  " : "NOTE"}  ${name}  —  ${JSON.stringify(reading)}`); };
+
+// ---------- 1. malformed / edge N ----------
+// target: exits 0 after 300 ms. A well-formed bound must let it pass (exit 0); a rejected one exits 2.
+const T300 = [NODE, "-e", "setTimeout(()=>{},300)"];
+for (const n of ["", "0", "-5", "abc", "1.5", "NaN", "Infinity", "1e3", "0x3e8", " 1000 ", "1000.0", "0b1111101000", "2147483647", "2147483648", "99999999999", "9007199254740993"]) {
+  const { done } = runWrapper([n, ...T300]);
+  const r = await done;
+  rec(`N=${JSON.stringify(n)}`, true, { exit: r.code, ms: r.ms, stderr: r.err.slice(0, 160) });
+}
+{ const r = await runWrapper([]).done; rec("no args", r.code === 2, { exit: r.code, stderr: r.err }); }
+{ const r = await runWrapper(["1000"]).done; rec("N only, no command", r.code === 2, { exit: r.code, stderr: r.err }); }
+{ const r = await runWrapper(["1000", "definitely-not-a-command-xyz"]).done; rec("missing command", r.code === 2, { exit: r.code, stderr: r.err }); }
+
+// ---------- 2. no shell: metacharacters stay literal ----------
+{
+  const marker = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/secnfr122/INJECTED";
+  const hostile = `x; touch ${marker}; $(touch ${marker}) \`touch ${marker}\` | touch ${marker}`;
+  const r = await runWrapper(["5000", NODE, "-e", "process.stdout.write(JSON.stringify(process.argv.slice(1)))", hostile]).done;
+  const { existsSync } = await import("node:fs");
+  rec("shell metacharacters in argv are literal", r.code === 0 && !existsSync(marker) && r.out === JSON.stringify([hostile]), { exit: r.code, markerCreated: existsSync(marker), echoed: r.out === JSON.stringify([hostile]) });
+  const r2 = await runWrapper(["5000", `touch ${marker}`]).done;
+  rec("a whole command line as argv[0] is NOT split by a shell", r2.code === 2 && !existsSync(marker), { exit: r2.code, markerCreated: existsSync(marker), stderr: r2.err });
+}
+
+// ---------- 3. exit-code mapping ----------
+for (const [label, script, want] of [
+  ["child exit 0", "process.exit(0)", 0],
+  ["child exit 7", "process.exit(7)", 7],
+  ["child exit 124 by itself (collides with timeout code)", "process.exit(124)", 124],
+  ["child dies of its own SIGABRT", "process.kill(process.pid,'SIGABRT')", 134],
+  ["child dies of its own SIGSEGV-equivalent SIGBUS", "process.kill(process.pid,'SIGBUS')", 138],
+]) {
+  const r = await runWrapper(["5000", NODE, "-e", script]).done;
+  rec(`exit map: ${label}`, r.code === want, { exit: r.code, want, stderr: r.err.slice(0, 120) });
+}
+
+// ---------- 4. signals delivered to the WRAPPER while the fixture tree hangs ----------
+// Each case: wrapper at a 4 s bound around the hang fixture (fixture + grandchild in the child's
+// new session/group). Signal the wrapper 300 ms after the fixture reports its pids, then look at
+// what is alive 500 ms after the wrapper is gone.
+for (const [label, how] of [
+  ["SIGINT to wrapper pid", (w) => signal(w.pid, "SIGINT")],
+  ["SIGTERM to wrapper pid", (w) => signal(w.pid, "SIGTERM")],
+  ["SIGHUP to wrapper pid (terminal closed)", (w) => signal(w.pid, "SIGHUP")],
+  ["SIGQUIT to wrapper pid (Ctrl-\\)", (w) => signal(w.pid, "SIGQUIT")],
+  ["SIGKILL to wrapper pid", (w) => signal(w.pid, "SIGKILL")],
+  ["outer supervisor SIGTERM to the wrapper's GROUP", (w) => signal(-w.pid, "SIGTERM")],
+  ["outer supervisor SIGKILL to the wrapper's GROUP", (w) => signal(-w.pid, "SIGKILL")],
+]) {
+  let pids = null;
+  const { w, done } = runWrapper(["4000", NODE, FIXTURE], {
+    onLine: (p) => { pids = p; seen.add(p.fixture); seen.add(-p.fixture); seen.add(p.grandchild); setTimeout(() => how(w), 300); },
+  });
+  const r = await done;
+  await sleep(500);
+  const armed = pids !== null;
+  const survivors = armed ? [["fixture", pids.fixture], ["grandchild", pids.grandchild], ["group", -pids.fixture]].filter(([, p]) => alive(p) && members(p).length > 0).map(([n]) => n) : ["unarmed"];
+  rec(`signal: ${label}`, survivors.length === 0, { wrapperExit: r.code, wrapperSignal: r.signal, ms: r.ms, survivors, stderr: r.err.slice(0, 140) });
+  if (armed) {
+    if (survivors.length) {
+      // how long would they live? the wrapper's own bound was 4 s; wait past it and look again.
+      await sleep(4_500);
+      const still = [["fixture", pids.fixture], ["grandchild", pids.grandchild]].filter(([, p]) => alive(p) && members(p).length > 0).map(([n]) => n);
+      rec(`  ...same case, 5 s later (past the wrapper's 4 s bound)`, still.length === 0, { stillAlive: still });
+    }
+    kill(-pids.fixture); kill(pids.fixture); kill(pids.grandchild);
+  }
+}
+
+// ---------- 5. the child exits normally but leaves a same-group grandchild behind ----------
+{
+  const script = `const {spawn}=require('node:child_process');const g=spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:'ignore'});g.unref();process.stdout.write(JSON.stringify({fixture:process.pid,grandchild:g.pid})+'\\n',()=>process.exit(0));`;
+  let pids = null;
+  const { done } = runWrapper(["4000", NODE, "-e", script], { onLine: (p) => { pids = p; seen.add(p.grandchild); seen.add(-p.fixture); } });
+  const r = await done;
+  await sleep(500);
+  const gAlive = pids ? alive(pids.grandchild) : null;
+  rec("child exits 0 leaving a grandchild in its group", gAlive === false, { wrapperExit: r.code, ms: r.ms, grandchildAliveAfter: gAlive });
+  if (pids) { kill(-pids.fixture); kill(pids.grandchild); }
+}
+
+// ---------- 6. mis-targeting: which pgid does the wrapper signal? ----------
+// The wrapper's child must be the leader of a group/session distinct from the wrapper's.
+{
+  let info = null;
+  const { done } = runWrapper(["3000", NODE, "-e", "const {execSync}=require('node:child_process');process.stdout.write(JSON.stringify({pid:process.pid,ppid:process.ppid,ps:execSync('ps -o pid=,ppid=,pgid=,sess= -p '+process.pid+','+process.ppid).toString()})+'\\n',()=>process.exit(0))"], { onLine: (p) => { info = p; } });
+  const r = await done;
+  const rows = (info?.ps ?? "").trim().split("\n").map((l) => l.trim().split(/\s+/).map(Number));
+  const child = rows.find((x) => x[0] === info?.pid); const wrap = rows.find((x) => x[0] === info?.ppid);
+  rec("child is its own pgid leader, distinct group from the wrapper", !!child && child[2] === child[0] && wrap && wrap[2] !== child[2], { exit: r.code, child, wrapper: wrap, cols: "pid ppid pgid sess" });
+}
+
+// ---------- final sweep ----------
+await sleep(300);
+const left = [...seen].filter((p) => members(p).length > 0);
+for (const p of left) kill(p);
+await sleep(200);
+const after = [...seen].filter((p) => members(p).length > 0);
+console.log(`SWEEP: alive before sweep ${JSON.stringify(left)}; alive after sweep ${JSON.stringify(after)}`);

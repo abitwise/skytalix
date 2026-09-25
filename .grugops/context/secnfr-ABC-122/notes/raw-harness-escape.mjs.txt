@@ -1,0 +1,33 @@
+// secnfr-ABC-122: does the real `npm test` tree escape an OUTER supervisor's group SIGKILL?
+// Supervisor = GNU timeout(1) (Homebrew; it signals its own process group). 2 s bound, SIGKILL.
+// Arm A = ca9f42d (npm test = run-bounded.js 60000 vitest run); arm B = 0bc31e1 (npm test = vitest run).
+// 1.5 s after the supervisor returns, list vitest processes whose CWD is the arm dir (so another
+// agent's vitest on this machine is never counted or killed), then kill them and record it.
+import { execFileSync, spawnSync } from "node:child_process";
+import { setTimeout as sleep } from "node:timers/promises";
+
+const ARMS = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/secnfr122/arms";
+function vitestIn(dir) {
+  const rows = execFileSync("ps", ["-axo", "pid=,ppid=,pgid=,command="]).toString().trim().split("\n");
+  const out = [];
+  for (const l of rows) {
+    const m = l.trim().match(/^(\d+)\s+(\d+)\s+(\d+)\s+(.*)$/);
+    if (!m || !/vitest|run-bounded/.test(m[4])) continue;
+    let cwd = "";
+    try { cwd = execFileSync("lsof", ["-a", "-d", "cwd", "-p", m[1], "-Fn"]).toString().split("\n").find((x) => x.startsWith("n"))?.slice(1) ?? ""; } catch {}
+    if (cwd === dir) out.push({ pid: +m[1], ppid: +m[2], pgid: +m[3], cmd: m[4].slice(0, 80) });
+  }
+  return out;
+}
+for (const arm of ["B", "A"]) {
+  const dir = `${ARMS}/${arm}`;
+  const t0 = performance.now();
+  const r = spawnSync("/opt/homebrew/bin/timeout", ["-s", "KILL", "2", "npm", "test", "--silent"], { cwd: dir, stdio: "ignore", timeout: 30_000, killSignal: "SIGKILL" });
+  const ms = +(performance.now() - t0).toFixed(0);
+  await sleep(300);
+  const left = vitestIn(dir);
+  console.log(JSON.stringify({ arm, supervisorExit: r.status, supervisorSignal: r.signal, ms, survivors300ms: left }));
+  for (const p of left) { try { process.kill(p.pid, "SIGKILL"); } catch {} }
+  await sleep(300);
+  console.log(JSON.stringify({ arm, afterCleanup: vitestIn(dir) }));
+}

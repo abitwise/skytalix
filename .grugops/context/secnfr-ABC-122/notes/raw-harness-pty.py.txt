@@ -1,0 +1,65 @@
+# secnfr-ABC-122: `npm test` on a REAL controlling terminal (pty.fork), arm A (wrapped) vs B (plain).
+# ctrl=0: run to completion; ctrl=1: write 0x03 to the pty master 2.5 s in (the line discipline
+# sends SIGINT to the terminal's FOREGROUND group only). ctrl=2: close the pty master 2.5 s in
+# (terminal window closed -> SIGHUP to the session's foreground group).
+# Outer bound 40 s -> SIGKILL the pty child's group. Survivors are vitest/run-bounded processes
+# whose cwd is the arm dir; they are killed and reported.
+import os, pty, re, select, signal, subprocess, sys, time, json
+
+ARMS = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/secnfr122/arms"
+
+def mine(d):
+    out = []
+    for l in subprocess.run(["ps", "-axo", "pid=,ppid=,pgid=,stat=,command="], capture_output=True, text=True).stdout.splitlines():
+        m = re.match(r"\s*(\d+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(.*)$", l)
+        if not m or not re.search(r"vitest|run-bounded", m.group(5)): continue
+        r = subprocess.run(["lsof", "-a", "-d", "cwd", "-p", m.group(1), "-Fn"], capture_output=True, text=True).stdout
+        cwd = next((x[1:] for x in r.splitlines() if x.startswith("n")), "")
+        if cwd == d: out.append({"pid": int(m.group(1)), "ppid": int(m.group(2)), "pgid": int(m.group(3)), "stat": m.group(4), "cmd": m.group(5)[:50]})
+    return out
+
+def run(arm, ctrl):
+    d = f"{ARMS}/{arm}"
+    t0 = time.time()
+    pid, fd = pty.fork()
+    if pid == 0:
+        os.chdir(d)
+        os.execvp("npm", ["npm", "test"])
+    buf = b""; during = None; fired = False; closed = False
+    status = None
+    while True:
+        el = time.time() - t0
+        if ctrl and not fired and el > 2.5:
+            during = mine(d); fired = True
+            if ctrl == 1: os.write(fd, b"\x03")
+            else: os.close(fd); closed = True
+        if el > 40:
+            try: os.killpg(pid, signal.SIGKILL)
+            except Exception: pass
+        if not closed:
+            r, _, _ = select.select([fd], [], [], 0.05)
+            if r:
+                try:
+                    chunk = os.read(fd, 65536)
+                    buf += chunk
+                except OSError:
+                    pass
+        else:
+            time.sleep(0.05)
+        w, st = os.waitpid(pid, os.WNOHANG)
+        if w == pid:
+            status = st; break
+    ms = round((time.time() - t0) * 1000)
+    time.sleep(0.5)
+    left = mine(d)
+    for q in left:
+        try: os.kill(q["pid"], signal.SIGKILL)
+        except Exception: pass
+    txt = re.sub(rb"\x1b\[[0-9;?]*[A-Za-z]", b"", buf).decode("utf8", "replace")
+    tail = [s.strip() for s in re.split(r"\r?\n", txt) if s.strip()][-3:]
+    code = os.waitstatus_to_exitcode(status)
+    print(json.dumps({"arm": arm, "ctrl": ["none", "ctrl-c", "close-terminal"][ctrl], "exit": code, "ms": ms, "during": during, "survivors500ms": left, "tail": tail}), flush=True)
+
+for ctrl in (0, 1, 2):
+    for arm in ("B", "A"):
+        run(arm, ctrl)

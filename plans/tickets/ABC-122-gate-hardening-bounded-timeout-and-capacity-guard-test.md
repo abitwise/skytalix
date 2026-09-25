@@ -121,7 +121,11 @@ guards.
   script invokes the wrapper around `vitest run` (forwarding any further CLI args unchanged).
   The default timeout is a number **N ms**, stated and justified on the delivering page:
   **N ≥ 5 × the median default-lane wall time measured at delivery**, and **N ≤ 120,000** (two
-  minutes) so a real hang is diagnosed promptly rather than merely "eventually caught."
+  minutes) so a real hang is diagnosed promptly rather than merely "eventually caught." **The
+  identical literal string is mirrored, in the same commit, into `src/cli.test.ts`'s
+  `SCRIPTS_AT_HEAD.test`** (`ABC-042` `A10`'s own pin) — that one-line pin update is the exact
+  widening `A11` now names below; no other key of `SCRIPTS_AT_HEAD` changes, and `A10`'s test
+  stays green against the new literal, unchanged in kind.
 - **`A5` (portability stated, not assumed).** The wrapper depends on `node:` built-ins only —
   **no** `timeout(1)`, `pkill`, or any other external binary. The delivering page states the
   Node version and OS the criteria above were run on, and that no platform-specific API (e.g. a
@@ -149,10 +153,18 @@ guards.
 
 **Both halves**
 
-- **`A11` (the fence, checkable from git).** `git diff --numstat <base>...HEAD -- src/` touches
-  only `src/search.ts`, `src/engine.ts`, and the test file(s) this ticket adds under `src/`.
-  Any wrapper file is confined to `tools/grugops/`, plus the one line in `package.json`.
-  `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md` and every ADR are byte-identical.
+- **`A11` (the fence, checkable from git).** *Amended 2026-09-25 by BA/PM (`amend-abc122-a4-pin`)
+  to widen the fence by exactly one pin — the ruling and its reasoning are in
+  `.grugops/context/amend-abc122-a4-pin/notes/`.* `git diff --numstat <base>...HEAD -- src/`
+  touches only `src/search.ts`, `src/engine.ts`, the test file(s) this ticket adds under `src/`,
+  **and exactly one line of `src/cli.test.ts`: `SCRIPTS_AT_HEAD.test`'s value** (`ABC-042` `A10`'s
+  own pin, `src/cli.test.ts:1661`), changed **literally**, byte-for-byte, from `"vitest run"` to
+  the same wrapped string `A4` wires into `package.json`'s `scripts.test` — no other key of
+  `SCRIPTS_AT_HEAD` changes, and `A10`'s own test (the exact-match pin over every `package.json`
+  script) stays green against the new literal, asserting the same thing it always asserted: the
+  committed script is what the pin says it is. Any wrapper file is confined to `tools/grugops/`,
+  plus the one line in `package.json`. `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md` and
+  every ADR are byte-identical.
 - **`A12` (gates and lane, reported together).** `npm run lint`, `npm run typecheck` and
   `npm run build` each exit 0. The default lane (run **through** the new wrapper, proving `A4`
   end-to-end) is green, skip count 0, with **exactly 2 new test files, both under `src/`**
@@ -242,3 +254,145 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 10 | no major unresolved blocker | **⚠️ ONE, and it is a DESIGN CALL left open on purpose, not a blocker.** `A4`'s default timeout is a **formula** (`≥ 5× median lane wall`, `≤ 120 s`), not a fixed constant BA/PM can supply today — the "5x" multiplier and the two-minute ceiling are this page's own judgment calls, not measured on this codebase's wrapper (which does not exist yet). **Not smoothed to ✅**: a page scoring 10/10 here would be asserting a number it cannot yet measure. The formula is falsifiable and boundable either way, so it does not block the pull — it is a delivery-time measurement, the same shape `ABC-105`'s own DoR ⚠️ used for a self-authorship ceiling that did not block that ticket either. |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+**2026-09-25, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-122`). Branch
+`grugops/ABC-122-gate-hardening`, code commit `43565e7` from `66a45d1`. Not merged, not pushed.
+Run on macOS 26.5.2 / Node v24.12.0. Readings, mutants and raw files are in
+`.grugops/context/ticket-to-pr-ABC-122/notes/`, not restated here.
+
+**PARTIAL: 11 of 12 criteria met. `A4` is HANDED UP.** `package.json` is unchanged, because its
+one line reds `src/cli.test.ts`'s `ABC-042` `A10` row, which pins `scripts.test = "vitest run"`.
+That file is outside `A11`'s fence. The two-line patch and its reading are in claim `7883fd4a`.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | exit 124; the tree killed with process-group SIGKILL, in 527–536 ms at a 500 ms bound; one stderr line naming the bound and the command |
+| `A2` | MET | stdout, stderr and exit byte-identical, direct vs wrapped, for exit 0 and exit 3 |
+| `A3` | MET | `node tools/grugops/run-bounded.proof.js` exits 0. The orphan check is ARMED: fixture, grandchild and group seen alive, then ESRCH 250 ms after the exit. The proof reds on a child-only kill and on no kill. It runs OUTSIDE the lane (decision `621c1465` D4). |
+| `A4` | **NOT MET — handed up** | Constant chosen: **60000 ms** = 8.1× the median lane wall of 7.45 s (n = 7, load 13.6–23.5); 5× is 37.3 s, and the ceiling is 120 s. Wired temporarily and reverted: the lane was green 47 / 1446, and the reverted root depth guard gave exit 124 at 60.23 s. |
+| `A5` | MET | `node:child_process` / `os` / `timers` only. The Windows fallback (`child.kill`, direct child only) is stated and was not exercised. |
+| `A6` / `A8` | MET | The real `search(pos, 200)` and `chooseMove` are driven to ply 128 along a single-move line, with `legalMoves` and `zobristKeyAfterMove` mocked in-file. Asserted on the score, the key-write count (= 128) and the node count. No test door: one would red the existing export-set rows (decision `621c1465` D1). |
+| `A7` / `A9` | MET | 6 mutants: guard removed, `>` for `>=`, and `>= CAP-1`, in each file. Each reds only its own row; the other 1445 tests stay green. |
+| `A10` | MET | `src/search.ts` and `src/engine.ts` are byte-identical to base: zero production lines. 1444 earlier tests green, plus 2 new rows. |
+| `A11` | MET | Under `src/`, only 2 new test files (+114, +94). `tools/grugops/` +96 / +18 / +141. `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md` and the ADRs are untouched. |
+| `A12` | MET | lint, typecheck and build exit 0 through the wrapper. Lane 47 files / 1446 passed, skips 0, skip-integrity `No findings.` Exactly 2 new files, 1 test each. `N8-LANE`: +475 ms gross, ≈ +155 ms net of the 320 ms floor, against 650 ms. The null is +0.66 % (5/8) and the load median is 17, so confidence is medium. `N8-SPAWN`: 0 ms, nothing spawned in the lane. |
+
+**Owed:** `AGENTS.md` `### Test` to the Scribe once `A4` lands (claim `7883fd4a`); a QE hop.
+`lane-inventory.js` is red at this tree on a pre-existing tracked file,
+`.grugops/context/ruling-abc079-oracle/…/oracle.test.ts`. That is not this ticket's.
+
+### Re-hop 2026-09-25 (Software Engineer, subtask `ticket-to-pr-ABC-122-rehop`): `A4` landed, **12 of 12 met**
+
+The code commit is `ca9f42d`. It is the two lines the amendment below permits, and nothing else:
+`package.json` `scripts.test` and `src/cli.test.ts:1661`'s `SCRIPTS_AT_HEAD.test`. Both now read
+`"node tools/grugops/run-bounded.js 60000 vitest run"`, byte-identical. The branch is not merged
+and not pushed. The readings are in observation `5d2b7e91` under
+`.grugops/context/ticket-to-pr-ABC-122/notes/`.
+
+| # | verdict | reading |
+|---|---|---|
+| `A4` | MET | `npm test` runs through the wrapper with N = 60000. The pin is armed: the stale pin reds only the A10 row (1 of 65). |
+| `A11` | MET | Against the wave merge-base `0bc31e1`, the diff is `package.json` 1/1, `src/cli.test.ts` 1/1, the 2 new test files and the 3 `tools/grugops/` files. `search.ts` and `engine.ts` have 0 lines. The fenced docs have no ticket-owned change. Their difference from `66a45d1` came in through wave merge `11744f9`, which is not this ticket's. |
+| `A12` | MET | lint, typecheck and build exit 0. `npm test` exits 0: 47 files, 1446 tests passed, 0 skipped. Skip-integrity: `No findings.` |
+
+The hang through `npm test` itself was re-run with the root depth guard reverted: exit 124 at
+60.17 s, and no process from this worktree survived. The guard was restored before the commit.
+Still owed: the `AGENTS.md` `### Test` line (Scribe), and a QE hop.
+
+## Amendment 2026-09-25 (BA/PM, `amend-abc122-a4-pin`) — the `A4` stop ruled
+
+**Ruling: widen `A11` by exactly one pin — `src/cli.test.ts:1661`'s `SCRIPTS_AT_HEAD.test`
+value, updated literally to the same wrapped string `A4` wires — not re-cut `A4`.** `A4`'s
+acceptance text above and `A11`'s fence text above carry the amended wording directly; this
+section is the record of the decision, not a second copy of the criteria.
+
+**Why the whole wrapped string, not "the wrapped command plus the bound" as a pattern/range
+check:** `SCRIPTS_AT_HEAD` pins every `package.json` script to a literal value via one `toEqual`
+(`src/cli.test.ts:1650–1671`); `A10`'s purpose (`ABC-042`: the committed script is what the pin
+says it is) is an exact-match discipline applied uniformly across all nine keys. Special-casing
+`test` to a formula/range check would (a) break that uniform comparison, needing a second
+comparison path for one key only — a single-use abstraction for one row, and (b) let a future
+re-tuning of `N` pass silently within the `A4` formula's bounds without updating the pin,
+weakening the exact guard the row exists to be. The literal string costs the same one-line edit
+either way; it does not cost re-deriving the bound's formula reasoning, which stays on `A4`
+above, unchanged and unweakened — only the *value* pinned changes, from `"vitest run"` to the
+delivered wrapped command.
+
+**Why not re-cut `A4` (ruled out explicitly, per the queue task's own instruction):** re-cutting
+leaves the ticket's own reason to exist (K4, closing `ABC-081`'s "the gate can hang instead of
+failing red" gap) open, and the two-line patch is already measured green (47/1446, the reverted
+root-depth-guard mutant giving exit 124 at 60.23 s) — re-cutting would discard a working,
+verified fix over a one-line pin-widening decision that fits `A11`'s own purpose. No unresolved
+design question remains: the wired string, the bound and its justification were all already on
+the page from the build hop.
+
+**Also recorded (facts, not scope changes — owed onward per the queue task):**
+- The `*_DEEP` lanes (`SEARCH_DEEP`, `ENGINE_DEEP`, `ZOBRIST_DEEP`, `INPUT_DEEP`) must **not** be
+  run through `npm test`/the wrapper — `ENGINE_DEEP` alone measures ≈ 98.7 s (`AGENTS.md`),
+  above the wrapper's 60 000 ms (`A4`) bound. They are invoked directly via `npx vitest run
+  <file>` with their env var, never via `npm test`. Owed to the Scribe's `Test (all)` follow-up
+  (already named on this page, above) so that line does not imply the deep lanes run under the
+  bound.
+- `tools/grugops/lane-inventory.js` exits 1 on a tracked file,
+  `.grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts` (present since `b324cb6`,
+  pre-existing at this ticket's base). Not this ticket's — named here for QE's hop so it is not
+  attributed to `ABC-122`'s own delivery.
+
+Full ruling, the two options weighed, and the trace are in
+`.grugops/context/amend-abc122-a4-pin/notes/`.
+
+## QE 2026-09-25 (QE/E2E, `qe-ABC-122`, Workflow 05): PASS WITH FINDINGS
+
+All 12 criteria independently reproduced and MET at code commit `ca9f42d`. 6 hostile cases
+against the wrapper (SIGTERM-ignoring child, grandchild-only hang, fast non-zero exit, 3 MiB
+output with no trailing newline, args with spaces/quotes, SIGINT to the wrapper itself) all
+passed, each under its own outer hard bound; no orphan process survived any of them. 2 of the 6
+claimed guard mutants (one per file) were re-applied by hand and matched the build hop's reported
+failure signatures exactly. The `A11` base question is **ruled: the wave merge-base (`0bc31e1`),
+not the ticket's original cut-time base (`66a45d1`)** — confirmed from git history, since every
+commit between those two points is a Scribe/Architect/Orchestrator commit unrelated to `ABC-122`.
+`lane-inventory.js`'s exit-1 finding is confirmed pre-existing at commit `b324cb6`, before this
+branch existed — not this ticket's.
+
+**Findings named (none reopens a criterion):** `run-bounded.js`'s own header comment is stale
+("NOT YET WIRED IN", post-`A4`); `N8-LANE`/process-kill are Security/NFR's to rule, not
+re-measured here; `A6`/`A8` were not test-first (disclosed by the build, substituted by watched-red
+mutants); Windows/Linux remain unexercised; `AGENTS.md`'s `### Test` line is still owed to the
+Scribe.
+
+Recommend `In Review → In Security/NFR` (Orchestrator's move). Full readings:
+`.grugops/context/qe-ABC-122/notes/`.
+
+## Security/NFR 2026-09-25 (`secnfr-ABC-122`, Workflow 15, ASVS L1, block on high): PASS-WITH-ACCEPTED-RISK
+
+The gate reviewed `0bc31e1...ca9f42d -- tools package.json src` at review tip `9db8f2a`. There is
+no high finding and no ASVS L1 failure, and **no fix is required before exit.** Readings are in
+`.grugops/context/secnfr-ABC-122/notes/` (decision `2749a2e6`), not restated here.
+
+- **`N8-LANE`: MET.** +670 ms gross CPU, **+350 ms net** of the 320 ms floor, against 650. Sign
+  8/8, null −0.09 %, n = 8, load median 11.8.
+  - The build's +475 / +155 is corrected upward.
+  - **The wrapper is not charged.** It is not a lane file. It was measured anyway: W−A is −10 ms
+    and its isolated cost is about 10 ms, so it is +355 net if charged. MET either way.
+  - `N8-SPAWN` is 0.
+- **K3: CLOSED. K4: CLOSED for its scope.** `npm test` now fails red at exit 124 within 60 s.
+- **The kill surface.**
+  - The only target is the child's own pgid, and there is no pid-reuse window.
+  - Argv spawn with no shell, measured (V1.2.5).
+  - Exit codes hold: 124 / 130 / 143 / 128+n / pass-through / 2.
+- **R1 (LOW): accepted risk, owner Olger Oeselg, word owed.** The child runs in a new session.
+  So SIGHUP, SIGQUIT, a SIGKILL to the wrapper, or a supervisor's group SIGKILL leaves the tree
+  running with no bound.
+  - Measured on the real `npm test`: 0 survivors before this change, 1 surviving `vitest`
+    after it.
+  - The partial fix is to forward SIGHUP and SIGQUIT. The SIGKILL paths are the residual.
+  - Until then, stop `npm test` with SIGTERM.
+- **R2 (LOW): accepted note.** `N` > 2^31−1 is clamped by Node to 1 ms, which gives a false red.
+- **R3 (LOW) = QE gap 1: required fix, non-blocking.** The header is stale, and it calls a new
+  session a new process group.
+- **Who does what.** R2 and R3 go to the Software Engineer at the next touch of `tools/grugops/`.
+  The Orchestrator schedules that touch.
+- **Flagged for the Orchestrator:** the UAT waiver's literal `^src/` measurement comes back empty
+  for this diff.
