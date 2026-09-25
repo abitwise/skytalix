@@ -317,3 +317,32 @@ to this build.
 
 8/10, 2 ⚠️, NOT MET.
 </details>
+
+## Delivery
+
+**Built 2026-09-25 by the Software Engineer** (task `wave-2026-09-25`, subtask
+`ticket-to-pr-ABC-121`, Workflow 04) on branch `grugops/ABC-121-pvs-lmr`, off
+`grugops/wave-2026-09-25` @ `15c6eb0`, in two commits per R3: **`8e54b13`** (PVS, the four doors,
+every work-row re-point, the PVS identity link) and **`9823c27`** (the predicate, LMR, `A1`–`A5`,
+`src/search.mate-corpus.ts`). **Unmerged; not pushed; not deployed.** This section is a pointer;
+the figures live in `.grugops/context/ticket-to-pr-ABC-121/notes/`.
+
+- **`A1` MET:**
+  - drift at d5, both recursions: 99.47% within 25 cp, max 45 cp;
+  - mate floor d4 → d5 on the 287: 0 of 180 violated;
+  - 190-corpus mate flips: 0 (a report).
+- **`A2` MET:** plain node 7 / 7 against 6 / 6, both for the door and for the base, 3/3 rounds.
+  Companion to d7: 532 363 / 467 461 nodes.
+- **`A3` MET**, **`A4` MET** (null-window re-search shown, in `search()` and `chooseMove`),
+  **`A5` MET** (80.2% / 70.8%), **`A6` MET**.
+- **Re-pointed rows:** every merged row re-pointed, one line each, in note `…d9a84a04`. No bar
+  moved.
+- **Planted variants:** 23 of 23 red (`…7f29f842`).
+- **Handed up, not decided here:**
+  1. **`N8-LANE` NOT MET:** +1 670 ms net against 650. Deep-lane placement is proposed in
+     `…24e3648a`; nothing was trimmed.
+  2. **The G6 knight pair is re-pointed** under `ADR-0026` decision 4 rather than kept on the
+     shipped path per decision 7: LMR moves `knight-g1 w -` 820 → 830 at d4. Architect/Design to
+     ratify or overrule (`…0da3f1a5`).
+- **Owed later (fenced here):** the `AGENTS.md` deep-lane lines for
+  `src/search.pvs-lmr.test.ts` (`SEARCH_DEEP`, `ENGINE_DEEP`). A Scribe pass, behind `ABC-109`.
