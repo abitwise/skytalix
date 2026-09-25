@@ -6,9 +6,20 @@ id: ADR-0026
 
 ## Status
 
-**proposed**. The owner accepts it or not. Written 2026-09-25 by Architect/Design at task
-`wave-2026-09-25`, subtask `ruling-abc121-lmr-oracle` (Workflow 07, a design ruling owed to
-`ABC-121`'s DoR before BA/PM re-scores it).
+**accepted** 2026-09-25 by the owner (Olger Oeselg), **with the independent review's four
+amendments**. Owner's word, verbatim: *"4. accept"* (recorded in
+`20260925T234000Z-orchestrator-decision-6a63f2b7`). The review is
+`20260925T145700Z-architect-design-decision-adr0026-accept-with-amendments-9a3f6e21`
+(`.grugops/context/validate-adr0026/notes/`); its decision 5 is the one-door alternative.
+
+- Written 2026-09-25 by Architect/Design at task `wave-2026-09-25`, subtask
+  `ruling-abc121-lmr-oracle` (Workflow 07, a design ruling owed to `ABC-121`'s DoR before BA/PM
+  re-scores it). Proposed at that hop.
+- Amended 2026-09-25 at subtask `amend-adr0026`. The amended text is decision 6 (the predicate's
+  contract), decision 9 (depth, both recursions, the mate floor, the oracle's scope), the `A4`
+  consequence, and the one-door alternative. Each is marked *(amended 2026-09-25)*. Decisions
+  1–5, 7, 8 and 10 and the Rollback are unchanged.
+- BA/PM folds the amendments into `ABC-121` `A1` / `A3` / `A4`. This ADR does not edit the ticket.
 
 - It builds on `ADR-0024` decision 7 and `ADR-0025` decision 6 (the test-only door precedent and
   the ladder rule) and amends neither.
@@ -115,6 +126,19 @@ position one move away, and six endgames.
 
    The rule cannot drift between the recursions. It is tested as a pure function plus a source
    assertion that both recursions call it. No production counter or hook is added.
+
+   *(amended 2026-09-25)* **The predicate's contract:**
+   - **It returns the reduction in PLIES: 0 or 1.** Each recursion subtracts exactly the
+     returned value from the remaining depth, never a literal. So "reduce by one ply" lives in
+     one place, and the table test that pins "exactly 1" also pins what the recursions do.
+   - **It classifies the move itself.** From the position and the move it is given, it derives
+     every tactical fact it tests: capture, promotion, gives check, and side to move in check.
+   - **The caller passes only three facts:** remaining depth, move index (0-based in the
+     ordered list) and whether the node is the root.
+   - *Why:* an LMR that reduces tactical moves, or reduces by 2, passes the drift bars at
+     depths 4 and 5 (`…7c1d05ab`, variants `tactical` and `r2`). Only the predicate's table test
+     can red those two bugs, and it can red a mis-wired tactical fact only if the recursion
+     cannot supply that fact itself.
 7. **VALUE and behaviour rows on the shipped path stay where they are, with PVS and LMR on.**
    - Examples: mate found, shorter mate preferred (the depth-5 and depth-7 mate rows already
      exercise LMR), stalemate and repetition exactly 0, legal root move, position unchanged, the
@@ -130,14 +154,49 @@ position one move away, and six endgames.
    - `searchWithoutPvsOrReductions` ≡ every old door and the unpruned search.
 
    Every link is a test.
-9. **With LMR on, the oracle is bounded, never identity.** It is measured at a fixed depth
-   against `searchWithoutReductions`:
-   - a centipawn-drift bound on the corpus;
-   - a hard floor of zero mate-status flips;
-   - every mate row on the shipped search green;
-   - depth-in-budget.
+9. **With LMR on, the oracle is bounded, never identity.** *(amended 2026-09-25)* Its clauses:
+   - **Centipawn drift at depth 5, in BOTH recursions,** on the 190 corpus:
+     - `search()` vs `searchWithoutReductions` at a fixed depth 5;
+     - `chooseMove` vs `chooseMoveWithoutReductions`, each iterated to depth 5.
+     - The bars are `ABC-121` `A1`'s: at least 95% of non-mate positions within 25 cp, none
+       beyond 75 cp.
+     - *Why depth 5:* at depth 4 alone, an LMR with no re-search at all (`noResearch`) reads
+       96.79% / 65 cp and stays green. Depth 5 reds it at 89.30% (`…7c1d05ab`).
+   - **A one-extra-ply mate floor on the mate-rich corpus** (named below). For every position
+     that `searchWithoutReductions` scores as a mate at depth d = 4, the shipped `search()`
+     scores a mate of the same sign, no longer, at depth d + 1 = 5.
+     - *Measured:* the correct rule flips 0 of 180 (d4→5) and 0 of 205 (d5→6). A 2-ply reduction
+       (`r2`) flips 17 / 16, `gross` flips 19 / 24, and a PVS window bug flips 3 / 4.
+     - *Why not the same depth:* a correct LMR loses 15–16 horizon mates at equal depth, and finds
+       every one of them one ply later. That ply is what LMR buys, so a same-depth floor would
+       fail the correct build.
+   - **"0 mate-status flips on the 190 corpus" is a REPORT, not a bar.** That corpus holds 3
+     mates, and the clause held for every wrong variant tried, `gross` included. The test prints
+     the count and does not fail on it.
+   - **Every mate row on the shipped search stays green,** and depth-in-budget holds (unchanged).
+   - **Scope, said plainly: this bounded oracle is a regression net for gross drift and window
+     bugs. It is NOT a proof that the reduction rule is correct.** Three of six deliberately
+     wrong LMRs pass the drift bars at both depths (`tactical`, `r2`, `noLmrResearch`). The rule's
+     correctness rests on decision 6's predicate table and on `ABC-121` `A4`'s re-search row
+     (Consequences). Do not tighten the centipawn bars to chase rule bugs: correct and wrong
+     builds overlap (the correct max is 50 cp at d4; wrong builds read 35–70 cp).
 
-   The numbers are `ABC-121`'s criteria, and BA/PM writes them from this hop's readings.
+   **The mate-rich corpus is a checked-in fixture: `src/search.mate-corpus.ts`.** The Engineer
+   owns it and builds it under `ABC-121`; this ADR only names it.
+   - It is a test-only data module. It is not named `*.test.ts`, so vitest does not collect it.
+     It sits under `src/`, so `tsconfig.json` and `biome.json` already typecheck and lint it.
+     No production module imports it.
+   - It holds the seven seed FENs: the five mate-row FENs already in the suite plus the ruling's
+     KQK/KRK endgames. It also holds, as a frozen literal list, every in-progress position within
+     two plies of those seeds, deduplicated on the first four FEN fields. The review's probe
+     (`.grugops/context/validate-adr0026/probe/matecorpus.ts`) is the reference derivation. It
+     read 287 positions.
+   - Frozen, not generated at test time, so that a move-generator change cannot silently shrink
+     the net. A pin on the list's length guards it.
+   - Its lane is `UNKNOWN - verify`. The probe paid 11–19 s per depth pair under load, so it is
+     deep-lane work unless the Engineer measures otherwise.
+
+   The numbers are `ABC-121`'s criteria. BA/PM writes them from these readings.
 10. **The next value-changing heuristic follows the same pattern.** That includes `C2` null move.
     It gets a switch, a pair of doors, and joins the "off in every older door" set, and it is
     judged by a bounded oracle. It cites this ADR rather than re-deriving it.
@@ -158,6 +217,17 @@ position one move away, and six endgames.
 - **Rely on "LMR cannot fire below depth 4" and compare `search()` at depth <= 3 instead of
   adding a door.** Rejected. Every row's meaning would hang silently on one threshold constant.
 - **An options parameter on `search()` / `chooseMove`.** Rejected, as in `ADR-0024` decision 7.
+  That reason is about options on the SHIPPED entry points, which would become an engine option
+  in production. It does not cover a separate test-only door, so that case has its own entry
+  below.
+- *(amended 2026-09-25)* **One test-only door per recursion that takes an options record**, for
+  example `searchWith(position, depth, { pvs, reductions })`. It has the same number of
+  configurations as the four named doors and fewer names. **Rejected**, for three reasons:
+  - It admits `{ pvs: false, reductions: true }`, which decision 1 declares invalid. Two named
+    doors cannot express that state.
+  - It breaks the pattern of named doors already in `src/search.ts`.
+  - `ABC-077` `A6` and `ABC-078` `A4` pin export NAMES. An options record would move the door's
+    configurations out of those lists and out of their reach.
 
 ## Consequences
 
@@ -173,6 +243,18 @@ position one move away, and six endgames.
   depth 7 costs 755 013 nodes with LMR and no PVS, and 467 461 with both.
 - **LMR's effect on playing strength is BOUNDED, not proven neutral.** `ABC-084` is unbuilt. The
   drift row and the mate rows are the best oracle this codebase has today.
+- *(amended 2026-09-25)* **`ABC-121` `A4`'s constructed fail-high must happen at a NULL-WINDOW
+  node, where alpha + 1 = beta.**
+  - At a PV node, PVS's own full-width re-search hides a missing LMR re-search whenever the score
+    stays below beta. So an `A4` built at a PV node passes on a build with no LMR re-search.
+  - `noLmrResearch` passes every drift bar at depths 4 and 5 and the mate floor (`…7c1d05ab`).
+    `A4` at a null-window node is the only row that reds it.
+  - So the reduction rule is guarded by the rows, not by the oracle:
+    - decision 6's predicate table reds `tactical`, `early` and `r2`;
+    - `A4` reds `noLmrResearch` and `noResearch`;
+    - the depth-5 drift bars red `noResearch`, `early`, `gross` and PVS window bugs;
+    - the one-extra-ply mate floor reds `r2`, `gross` and PVS window bugs.
+  - Each wrong LMR the review planted is red in at least one row.
 - **Some pruned trees get BIGGER under PVS.** Position-4 at depth 4 reads 9 054 nodes base,
   12 227 with PVS and 9 581 with PVS+LMR. Any "nodes fall" row is scoped to named positions,
   never "every position".
