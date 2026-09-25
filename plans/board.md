@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`) — **Scribe `scribe-deep-lanes-081` done, merged at `9efe2e7`**: `AGENTS.md` gains the `transposition.test.ts` (`SEARCH_DEEP`/`ENGINE_DEEP`), `ZOBRIST_DEEP` and quiescence (`SEARCH_DEEP`) deep-lane lines, each run green before recording. Owed item discharged. **`AGENTS.md` is now 32 062 B against `ABC-109`'s 32 768 B cap (706 B margin)** — the `ABC-122` `Test (all)` follow-up must fit or compress; `ABC-109` is now live._
+
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`, Workflow 04) — **`ABC-122` cut (DoR 9/10, ⚠️ non-blocking, merged) → pulled into `In Development`; Engineer hop `ticket-to-pr-ABC-122` dispatched.** `In Development` 1/3. Architect/Design `ruling-abc121-lmr-oracle` and Scribe `scribe-deep-lanes-081` still running._
 
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`) — **parallel flows on the owner's word, verbatim *"i would set up second parallel flow if possible"*: Architect/Design `ruling-abc121-lmr-oracle` (LMR's test oracle; `ABC-121` build still waits for `ABC-122`) and Scribe `scribe-deep-lanes-081` (owed deep-lane lines; `Test (all)` line waits for `ABC-122`) dispatched alongside BA/PM `cut-abc122-gate-hardening`.** No file overlap between the three hops._
