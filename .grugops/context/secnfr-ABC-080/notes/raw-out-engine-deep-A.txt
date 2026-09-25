@@ -1,0 +1,27 @@
+
+ RUN  v3.2.7 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/secnfr080/arms/A
+
+stdout | src/engine.test.ts > A1 — 30 positions at the default budget, on a real clock [deep, ENGINE_DEEP=1] > returns within the 5 s hard ceiling every time, and reports the worst case
+A1 worst case: position-4 3024 ms at completed depth 5; over 3 s: 28/30
+
+stdout | src/engine.test.ts > NFR-005 — depth-in-budget, MEASURED and reported [deep, ENGINE_DEEP=1] > records the completed depth on kiwipete and position-6 at the 3 s budget
+NFR-005 kiwipete: completed depth 4, 153354 nodes, 3008 ms
+NFR-005 position-6: completed depth 4, 147742 nodes, 3022 ms
+
+stdout | src/engine.test.ts > A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A2 — a 50 ms budget returns inside 100 ms in the middlegame position
+A2 real clock: 50 ms at completed depth 2
+
+ ✓ src/engine.test.ts (33 tests) 116831ms
+   ✓ A1 — 30 positions at the default budget, on a real clock [deep, ENGINE_DEEP=1] > returns within the 5 s hard ceiling every time, and reports the worst case  90299ms
+   ✓ NFR-005 — depth-in-budget, MEASURED and reported [deep, ENGINE_DEEP=1] > records the completed depth on kiwipete and position-6 at the 3 s budget  6030ms
+   ✓ A5 — the fine-grained repetition, on a 100 ms step [deep, ENGINE_DEEP=1] > still never goes shallower as the budget grows, at a tenth of the lane's step  609ms
+   ✓ A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1] > agrees with search() on move and score over the whole endgame corpus  1871ms
+   ✓ A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1] > agrees with search() on move and score over the six benchmark roots and their children  16381ms
+   ✓ A4 — the behavioural depth guard, further out [deep, ENGINE_DEEP=1] > keeps deepening well past any small ceiling on the sparse endgame  371ms
+   ✓ A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A7 — a 1 ms budget returns a legal move in every corpus position  854ms
+
+ Test Files  1 passed (1)
+      Tests  33 passed (33)
+   Start at  12:20:55
+   Duration  117.98s (transform 63ms, setup 0ms, collect 996ms, tests 116.83s, environment 0ms, prepare 41ms)
+

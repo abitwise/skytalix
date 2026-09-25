@@ -1,0 +1,22 @@
+// secnfr-ABC-080: the UNABORTABLE first iteration (AR-QS-ITER1-079's revisit trigger: > 500 ms),
+// head A vs base B, on secnfr-ABC-079's worst reachable and worst constructed boards. budgetMs 0
+// means only iteration 1 runs. Best of 5 and worst of 5 per arm. argv: armsDir
+const ARMS = process.argv[2];
+const SET = [
+  ["worst-first-iter", "5bn1/2rbk2r/3p1p1p/ppp1p1p1/PPPPPP1P/R7/1B1NBK2/1Q4NR w - - 0 25"],
+  ["queens-rig", "q1q1q1qk/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K7 w - - 0 1"],
+];
+for (const arm of ["A", "B"]) {
+  const { parseFen } = await import(`${ARMS}/${arm}/src/fen.ts`);
+  const { chooseMove } = await import(`${ARMS}/${arm}/src/engine.ts`);
+  for (const [name, fen] of SET) {
+    const ms = [];
+    let c;
+    for (let i = 0; i < 5; i++) {
+      const t0 = performance.now();
+      c = chooseMove(parseFen(fen), { budgetMs: 0 });
+      ms.push(performance.now() - t0);
+    }
+    console.log(JSON.stringify({ arm, name, depth: c.depth, nodes: c.nodes, minMs: +Math.min(...ms).toFixed(1), maxMs: +Math.max(...ms).toFixed(1) }));
+  }
+}

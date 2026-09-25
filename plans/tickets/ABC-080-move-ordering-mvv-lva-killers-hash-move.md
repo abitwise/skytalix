@@ -283,3 +283,43 @@ and the design calls are in `.grugops/context/ticket-to-pr-ABC-080/notes/`, and 
   `No findings.`, `SEARCH_DEEP=1` 57/57, `ENGINE_DEEP=1` 33/33.
 - **`ABC-080` MAY LEAVE `In Review`.** The board move (toward `In Security/NFR`,
   `NFR-005`/`N8-LANE` triggered) is the Orchestrator's — fenced from this hop.
+
+## § Security/NFR — 2026-09-25 (Security/NFR, task `wave-2026-09-24`, subtask `secnfr-ABC-080`, Workflow 15)
+
+**PASS_WITH_RISKS. No security finding and no required fix.** The measurements, harnesses and
+reasoning are in `.grugops/context/secnfr-ABC-080/notes/` and are not restated here. This is not a
+stamp: `human_admission` is `off`.
+
+- **`A7`: MET, measured by this gate.** Both builds ran in one process for 5 rounds.
+  - Plain node: kiwipete 3 → **6**, position-6 3 → **5**.
+  - Vitest: 2 → 4 and 3 → 4.
+- **`NFR-005`: reported, not ruled.**
+  - Plain node reads **6 / 5**. Vitest reads **4 / 4**.
+  - The floor stays 6 on the owner's word. The verdict is due at `ABC-081`'s close.
+  - **Owner question: which runner binds `NFR-005`?** The catalogue row names none, and the same
+    build reads 6 vs 4 on kiwipete. This gate recommends plain node, since the product runs as
+    `node src/cli.ts`.
+- **`NFR-004`: holds.**
+  - Plain node, n = 40: p95 3 004.3 ms, max 3 006.1 ms.
+  - The ceiling reads 5 000.6–5 002.6 ms.
+  - Vitest `A1`: 3 024 ms, against the base's 3 021 ms.
+  - `AR-NFR004-A` is inherited. One QE reading (40 ms) sits outside its 31 ms denomination. It is
+    not attributable to this ticket and is recorded for that risk's owner.
+- **`N8-LANE`: MET, with no measurable charge.**
+  - The paired charge is −0.25 s CPU, against an admissible null control. The Engineer's +10 ms
+    net is confirmed as "inside the noise".
+  - The new file costs +955 ms of test time, and ordering makes the existing search files
+    509 ms cheaper.
+  - The lane is still about 23.7 s against 15 s (`AR-N8LANE-079`, owner-accepted). It is
+    inherited.
+- **Security (ASVS L1).**
+  - The killer table is bounded by iteration depth, which the 5 s clamp bounds. The measured
+    worst is 15 slots × 2.
+  - `at()` is range-safe.
+  - Each call builds one table, and it is collected afterwards. Nothing grows across calls.
+  - There is allocation at every ordered node (4.2% of nodes). That is a performance cost, not a
+    security issue.
+  - The unabortable iteration 1 got **4–6x cheaper** (`AR-QS-ITER1-079` shrank).
+  - No new input path, dynamic code or dependency.
+- **UAT:** production lines > 0, so the waiver does not apply. The `In Security/NFR` →
+  `Ready for UAT` move is the Orchestrator's.
