@@ -376,3 +376,31 @@ Comment-only, `src/transposition.test.ts` +4/−2. **Unmerged; not pushed.**
   `ADR-0006` erratum).
 - Gates: `npm test` 48 / 1 466 / 0 skipped, integrity `No findings.`, lint + typecheck clean
   (`…5c2e91b4`).
+
+## QE
+
+**QE gate run, 2026-09-26, by QE/E2E** (subtask `qe-ABC-121`, Workflow 05), on branch
+`grugops/qe-ABC-121`, worktree `.claude/worktrees/qe-ABC-121`, off `67207b4` (the G6-comment
+tip, `312a188`). **Verdict: PASS WITH FINDINGS.** Zero `src/` lines; not merged; not pushed.
+
+- **`A1`–`A6` independently reproduced**, all MET, every figure matching the build's own
+  exactly (drift 99.47% / max 45 cp both recursions; mate floor 0/180, 0/205; `A5` 80.2% /
+  70.8%; `A2` 7/7 vs 6/6 on plain node, own script, 3 rounds, own load).
+- **The d5 drift and d7 companion rows the lane re-hop had not re-run — re-run here**
+  (`SEARCH_DEEP=1 npx vitest run src/search.pvs-lmr.test.ts`, 29/29 green, 882.8 s), figures
+  matching the build to the exact number.
+- **5 of 23 planted variants re-applied by hand** (`tactical`, `r2`, `noLmrResearch`,
+  `pvsNoResearch`, `noResearch`) — each confirmed red exactly as ledgered, each reverted
+  byte-for-byte; `git status --short -- src` clean after every revert and at the end.
+- **Re-pointed rows spot-checked against the tree** (promotion-capture pin, G6 knight pair, the
+  rook-ending split); the G6 comment matches `ruling-abc121-g6` `…ea306e58` §4 verbatim.
+- **The `A4` `chooseMove` saving (`…9bdce84b`) ruled SAFE — does not weaken detection of
+  `noLmrResearch-engine-only` / `noResearch-engine-only`** (the literal pin is the actual
+  detector, not the reference-equality check). **Not applied** — QE reports on test behavior,
+  never changes it.
+- **`N8-LANE` handed to Security/NFR, report only**, per this subtask's fence.
+- Gates: `npm test` 48 / 1 466 / 0 skipped, integrity `No findings.`, lint + typecheck clean.
+- Gaps named honestly: 18 of 23 planted variants not independently re-applied (relies on the
+  build's own two ledgers); the depth re-measurement is one machine, one hop, lower load than
+  either build reading; the bare-`mkdir` queue-claim caveat is inherited, not new.
+- Notes: `.grugops/context/qe-ABC-121/notes/`.
