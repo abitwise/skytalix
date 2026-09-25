@@ -23,9 +23,11 @@
  * LANES (`N8-LANE`, measured at this build, plain node, reported in the ticket's context notes):
  * the depth-4 PVS identity pass (21 s), the depth-5 drift in both recursions (54 s fixed), the mate
  * floor (1 s + 4 s), and the depth-7 clock-free companion run under `SEARCH_DEEP=1`; `A2`'s
- * wall-clock reading runs under `ENGINE_DEEP=1`. The default lane holds `A3`, `A4`, `A5`, the corpus
- * pins and a cheap subset of each deep pass. Unset, the deep cases are NOT DEFINED rather than
- * skipped, so the gate's skip count stays 0.
+ * wall-clock reading runs under `ENGINE_DEEP=1`. The default lane holds `A3`, `A4`, `A5`'s
+ * position-3 guard, the corpus pins, the one-position PVS identity guard and the two door bites;
+ * every planted variant stays red in it (the `N8-LANE` re-hop's default-lane ledger). The mate
+ * floor has no default-lane row: its seven-seed subset reddened nothing no other default row did.
+ * Unset, the deep cases are NOT DEFINED rather than skipped, so the gate's skip count stays 0.
  */
 
 import { readFileSync } from "node:fs";
@@ -191,8 +193,15 @@ describe("PVS identity — searchWithoutReductions scores what searchWithoutPvsO
     expect(corpus()).toHaveLength(190);
   });
 
-  it("the six endgames and position-3 at depth 4 — the default lane's standing guard", () => {
-    const positions = [...ENDGAMES, ROOTS[2] as { name: string; fen: string }];
+  /**
+   * kp-vs-k is the one position of the former seven-position guard (the six endgames and
+   * position-3, all in the 190 below) on which a REDUCING `searchWithoutReductions` scores apart
+   * from `searchWithoutPvsOrReductions` (130 against 110), so it alone reds mutant
+   * `door-withoutReductions-reduces`. The other six moved to the deep lane at the `N8-LANE` re-hop.
+   */
+  it("kp-vs-k at depth 4 — the default lane's standing guard", () => {
+    const positions = ENDGAMES.filter(({ name }) => name === "kp-vs-k");
+    expect(positions).toHaveLength(1);
     expect(pvsDivergences(positions, 4)).toEqual([]);
   });
 
@@ -582,13 +591,18 @@ describe("A1 — the mate-rich corpus is frozen, and the mate floor holds one pl
     for (const seed of MATE_CORPUS_SEEDS) expect(MATE_CORPUS).toContain(seed);
   });
 
-  it("the seven seeds at depth 4 — the default lane's standing guard", () => {
-    const { mates, violations } = mateFloor(MATE_CORPUS_SEEDS, 4);
-    expect(mates).toBeGreaterThanOrEqual(3); // not vacuous: the three mate-row seeds are mates at 4
-    expect(violations).toEqual([]);
-  });
-
   if (RUN_DEEP) {
+    /**
+     * Deep since the `N8-LANE` re-hop: in the default lane it reddened no planted variant that
+     * another default row does not (only `no-unmake-in-predicate`, which `A3` reds), and never
+     * `r2` — the 287 below is what reds that.
+     */
+    it("the seven seeds at depth 4 [deep, SEARCH_DEEP=1]", () => {
+      const { mates, violations } = mateFloor(MATE_CORPUS_SEEDS, 4);
+      expect(mates).toBeGreaterThanOrEqual(3); // not vacuous: the three mate-row seeds are mates at 4
+      expect(violations).toEqual([]);
+    });
+
     it("all 287: every mate searchWithoutReductions sees at depth 4, search() sees at depth 5, same sign, no longer [deep, SEARCH_DEEP=1]", () => {
       const { mates, violations } = mateFloor(MATE_CORPUS, 4);
       console.log(`ABC-121 A1 mate floor d4 -> d5: ${violations.length} of ${mates} violated`);
