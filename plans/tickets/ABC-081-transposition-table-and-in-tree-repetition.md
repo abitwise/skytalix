@@ -145,3 +145,29 @@ Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P0` |
 | 10 | no major unresolved blocker | **⚠️** **there is no memory NFR row in `plans/nfr-catalog.md`** and this is the first component that needs one. `A7` binds the ticket to a stated bound, but **no project-level bar exists to check it against.** Owner: Architect/Design + Security/NFR. Not BA/PM's, and not edited |
+
+## § DoR re-score — 2026-09-25 (BA/PM, task `rescore-abc080-081`, Workflow 07)
+
+**8 of 10 clean, 2 ⚠️ — still NOT met; stays in `Backlog`.** Re-scored against the CURRENT wave
+tree (`grugops/wave-2026-09-24` @ `e12452e`), not the page. Full reasoning and the `NFR-005`
+depth-6 arithmetic are in `.grugops/context/rescore-abc080-081/notes/` — not restated here.
+
+- **Item 3 (INVEST-shaped) flips ⚠️ → ✅.** `ABC-075` (the incremental key this ticket
+  consumes) and `ABC-077` are both `Done`. `ABC-080` remains not a blocker in either direction.
+- **Item 5 (dependencies known) stays ⚠️, and a second open ruling is named.** `ADR-0006`'s
+  inherited caveat (castling rights vs. availability in the hash) is re-checked and still
+  open — no note answers it for `EPIC-004`. **New, previously implicit in the ticket's own
+  scope prose, now named as its own open item:** whether the TT's own storage shares
+  allocation/seeding with the `ADR-0020` per-ply key array, or is a second, independently
+  persisted structure. Both are Architect/Design's; neither ruled here.
+- **Item 10 stays ⚠️, unchanged.** `plans/nfr-catalog.md` re-checked directly (`NFR-001`–
+  `NFR-008`, none a memory bound) — the gap is unchanged since 2026-08-16.
+- **The owner's word (2026-09-25) keeps the `NFR-005` depth-6 floor; not re-leveled here.**
+  `A2`/`A3` as written are hit-rate/ratio claims, not depth claims. Combined with `ABC-080`'s
+  own bars, the two tickets' written criteria commit to roughly a 3.6x node-count reduction at
+  a fixed depth — short of what three additional plies (depth 3 → 6) plausibly cost. Named
+  plainly for the owner; no criterion re-leveled.
+
+**Pullable today: NO.** Size `M`, priority `P0`, unchanged. **Recommended routing: send the two
+open Architect/Design rulings ahead of a pull, in parallel with (not blocking) `ABC-080`'s own
+path forward.**

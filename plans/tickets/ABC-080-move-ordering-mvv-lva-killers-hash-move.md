@@ -130,3 +130,31 @@ Assessed by BA/PM, **2026-08-16**. **Result: 8 of 10 clean, 2 ⚠️ — NOT met
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P0` |
 | 10 | no major unresolved blocker | **⚠️** **the `≤ 40%` bar in `A3` is a conservative generic figure, not one measured on this codebase.** It is falsifiable and honest, but if the real figure is far better the bar will not detect a regression. **Re-set it from `A4`'s measured baseline at the ticket's own gate** — flagged so it is not left as a permanently loose guard |
+
+## § DoR re-score — 2026-09-25 (BA/PM, task `rescore-abc080-081`, Workflow 07)
+
+**9 of 10 clean, 1 ⚠️ — still NOT met; stays in `Backlog`.** Re-scored against the CURRENT wave
+tree (`grugops/wave-2026-09-24` @ `e12452e`), not the page. Full reasoning, the `NFR-005`
+depth-6 arithmetic and the `NFR-008` lane-realism check are in
+`.grugops/context/rescore-abc080-081/notes/` — not restated here.
+
+- **Item 3 (INVEST-shaped) flips ⚠️ → ✅.** `ABC-077` and `ABC-078` are both `Done`. `ABC-081`
+  remains deliberately not a blocker (`A5`).
+- **Item 10 stays ⚠️, unchanged.** The `A3` ≤ 40% bar is still self-flagged generic and
+  unmeasured on this codebase; it resolves only at the ticket's own build-time gate, not here.
+- **`ABC-079` landed since the last score, checked for overlap, no scope change needed.**
+  `ABC-079` ships production MVV-LVA ordering inside `quiesce` (`src/quiescence.ts`,
+  `mvvLvaKey`); this ticket's full-width comparator is a separate concern and already reuses
+  that exported key rather than writing a second one.
+- **QE's `G4` on `ABC-079`'s delta gate (the `mvvLvaKey` promotion term, `+ 0` for
+  `ORDER_VALUE[promotion]`, is currently unguarded by any test) is pointed here.** `A4`'s
+  per-heuristic node-count measurement is the natural place to close it with a
+  promotion-bearing capture fixture — recorded as a test-notes addition for the build hop, not
+  a new criterion and not a DoR defect.
+- **The owner's word (2026-09-25) keeps the `NFR-005` depth-6 floor; not re-leveled here.**
+  `A3`/`A7` as written are ratio/floor claims, not depth claims. Combined with `ABC-081`'s own
+  bars, the two tickets' written criteria commit to roughly a 3.6x node-count reduction at a
+  fixed depth — short of what three additional plies (depth 3 → 6) plausibly cost. Named
+  plainly for the owner; no criterion re-leveled.
+
+**Pullable today: NO.** Size `M`, priority `P0`, unchanged.
