@@ -259,3 +259,27 @@ and the design calls are in `.grugops/context/ticket-to-pr-ABC-080/notes/`, and 
   18/18 mutants killed.
 - **Column:** still `In Development` on the page. The `In Review` move and the QE and
   Security/NFR hops are the Orchestrator's to schedule. This hop was fenced from `plans/board.md`.
+
+## § QE — 2026-09-25 (QE/E2E, task `wave-2026-09-24`, subtask `qe-ABC-080`, Workflow 05)
+
+**PASS WITH FINDINGS.** Reasoning, gate reproduction, mutant ledger and the numbers are in
+`.grugops/context/qe-ABC-080/notes/` and are not restated here.
+
+- `A1`–`A6` and `ABC-079` QE's `G4` re-read against the ticket and reproduced independently,
+  MET. `A7` **UNKNOWN — verify** (not independently re-run across two builds this hop; the
+  in-tree half reproduces the build's own reading).
+- **Three flagged calls ruled:** the `quiescence.test.ts` re-pin is IN LICENCE (both recursions
+  share the comparator by Scope; moves unchanged); `engine.test.ts` `A3`'s budget 8 → 4 is SOUND
+  (node counts reproduce exactly); killers kept across one `chooseMove` call's iterations is
+  ACCEPTED AS READ (the ticket's "cleared between searches" is ambiguous on the unit of
+  "search"; flagged for BA/PM to firm up the wording, not a code gap).
+- **Mutants:** the build's 18/18 default-lane reproduces as claimed on inspection, not re-run.
+  Two new QE mutants on the comparator and the killer-update rule KILLED; **one, applied to
+  `src/engine.ts`'s killer-update rule, SURVIVED the full default lane and `ENGINE_DEEP=1`
+  (112/112, 33/33) — `G1`, a named non-blocking mutation-coverage gap** (the code is correct;
+  no test would catch a regression of that one `if (alpha >= beta)` guard specifically inside
+  `src/engine.ts`). Owner: Software Engineer, next licensed touch.
+- **Gates reproduced:** lint 0, typecheck 0, build 0, unit 44/1 418/0 skip, skip-integrity
+  `No findings.`, `SEARCH_DEEP=1` 57/57, `ENGINE_DEEP=1` 33/33.
+- **`ABC-080` MAY LEAVE `In Review`.** The board move (toward `In Security/NFR`,
+  `NFR-005`/`N8-LANE` triggered) is the Orchestrator's — fenced from this hop.
