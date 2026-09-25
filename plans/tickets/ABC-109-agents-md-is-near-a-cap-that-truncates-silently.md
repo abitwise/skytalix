@@ -449,6 +449,43 @@ Built 2026-09-25 (host clock), task `ticket-to-pr-ABC-109-a5`, on `grugops/ABC-1
 
 Note: `.grugops/context/ticket-to-pr-ABC-109-a5/notes/`.
 
+### Delivery (QE half) — verdict: PASS WITH FINDINGS
+
+Built 2026-09-25 (host clock), task `qe-ABC-109`, on `grugops/qe-ABC-109` (own worktree
+`.claude/worktrees/qe-ABC-109`, branched off `0e132ee` — tip of `grugops/ABC-109-agents-md-cap`).
+Independently reproduced `A1`–`A8`. **Unmerged, not pushed.**
+
+- **`A1`/`A3`:** independently re-measured — 32,565 B → 21,786 B; tail byte offsets (`Definition of
+  Ready:` 20,963 / `Definition of Done:` 21,036 / `## When uncertain` 21,695) match the Scribe's
+  figures exactly.
+- **`A2`:** spot-checked 8 of the Scribe's 13 table rows' cited `memory-bank/60-progress.md` line
+  numbers — every one resolves to the claimed heading. Kit-override count reads THREE before and
+  after; the "reader who counts four is wrong" sentence survives verbatim. One historical sentence
+  (pre-`ABC-042` UAT deferral) dropped from the condensed `## Test and UAT authority` with no
+  designed pointer — not a directive, so not scored as an `A2` gap; recorded as an observation.
+- **`A4`:** `npm test` 47/47, 1447/1447, exit 0; `src/cli.test.ts` diff is a pure append after
+  line 2130, so the four `Dev / run` assertion sites are unmodified by construction; typecheck and
+  lint clean.
+- **`A5` — NOT MET TO THE LETTER.** The shipped assertion is sound (byte-based, one `it`, no new
+  test file), but the red path was watched by padding the real `AGENTS.md` file, which directly
+  contradicts `A5`'s own wording ("rather than by writing the real file"). Traced to the
+  Orchestrator's `ticket-to-pr-ABC-109-a5` queue task, which itself prescribed the real-file-pad
+  method. **The one extra row that closes it:** a throwaway, never-shipped in-memory mutant-number
+  check (e.g. `24577 <= 24576` fed directly, no file write), run once and discarded — confirmed
+  trivially exercisable in this worktree without touching `AGENTS.md`. Also confirms this gate's
+  own criterion 4: `readFileSync` with no encoding returns a `Buffer`, whose `.length` is bytes,
+  not characters (reproduced with a throwaway multi-byte UTF-8 fixture).
+- **`A6`/`A7`/`A8`:** independently confirmed — `src/` diff is `src/cli.test.ts` only; test count
+  1446 → 1447 (+1, ≤ 2); `memory-bank/90-agents-md-command-log.md` holds the relocated receipts
+  verbatim-in-substance and is indexed in `memory-bank/00-index.md`; nothing moved into
+  `agent-factory/`; the cap-provenance line opens the file as specified.
+- **Commands:** default lane green (`npm test`/`typecheck`/`lint`). Two deep lanes spot-checked:
+  `ZOBRIST_DEEP` — 33 passed, matches its receipt exactly; `INPUT_DEEP` — 34 passed vs. the
+  documented "33 is the whole lane" receipt, a pre-existing one-test drift unrelated to this
+  ticket's diff (recorded as an observation, not an `A2`/`A4` finding).
+
+Full notes: `.grugops/context/qe-ABC-109/notes/`.
+
 <details>
 <summary>Prior score, 2026-08-19, task <code>cut-agents-md-cap-2026-08-19</code> (10/10, 0 ⚠️) — superseded above</summary>
 
