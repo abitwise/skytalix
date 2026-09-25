@@ -63,7 +63,7 @@ import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
 import { type QuiescenceVisitor, quiesce } from "./quiescence.ts";
-import { MATE_SCORE } from "./search.ts";
+import { KillerTable, MATE_SCORE, orderMoves } from "./search.ts";
 import type { EngineSeam } from "./turn-loop.ts";
 
 /**
@@ -137,6 +137,12 @@ interface Budget {
   nextCheck: number;
   /** `countNode` on this budget, handed to the quiescence search so its nodes are clocked too. */
   readonly visit: QuiescenceVisitor;
+  /**
+   * This move's killer table (`ABC-080`): one per `chooseMove` call, kept across its iterations
+   * — a killer found at ply `n` of depth 4 is still a good first quiet move at ply `n` of depth 5
+   * — and never across calls.
+   */
+  readonly killers: KillerTable;
 }
 
 /**
@@ -172,7 +178,8 @@ function leafScore(
 
 /**
  * `src/search.ts`'s negamax with ONE addition: the abort check, and it sits at the node rather
- * than at the iteration.
+ * than at the iteration. The move ordering is that module's, by the same `orderMoves` and the
+ * same `KillerTable` (`ABC-080`).
  *
  * The made move is unmade in a `finally`, so an abort thrown anywhere in the subtree still
  * leaves the caller's position byte-identical. The turn loop BORROWS `history.position`
@@ -195,7 +202,7 @@ function negamax(
   if (moves.length === 0) return isInCheck(position) ? 0 - (MATE_SCORE - ply) : 0;
 
   let best = Number.NEGATIVE_INFINITY;
-  for (const move of moves) {
+  for (const move of orderMoves(moves, budget.killers.at(ply), null)) {
     const undo = makeMove(position, move);
     let score: number;
     try {
@@ -206,7 +213,10 @@ function negamax(
 
     if (score > best) best = score;
     if (best > alpha) alpha = best;
-    if (alpha >= beta) break;
+    if (alpha >= beta) {
+      budget.killers.record(ply, move);
+      break;
+    }
   }
 
   return best;
@@ -221,13 +231,15 @@ interface Iteration {
 /**
  * One iteration of the deepening: score every root move and keep the best, or throw `ABORTED`.
  *
- * Move order, window and tie-breaking are `src/search.ts`'s `searchRoot` exactly — first legal
- * move as the incumbent, strict `>` to displace it — which is what makes `A3`'s "the returned
- * move equals `search(position, n-1).move`" an identity rather than a coincidence.
+ * Move order, window and tie-breaking are `src/search.ts`'s `searchRoot` exactly — the root list
+ * in `orderMoves` order with no killer (the root never cuts off, so none is ever recorded there),
+ * first move as the incumbent, strict `>` to displace it — which is what makes `A3`'s "the
+ * returned move equals `search(position, n-1).move`" an identity rather than a coincidence.
  *
- * The root move list is passed IN and generated once for the whole deepening: the position is
- * byte-identical between iterations, so regenerating it per iteration buys nothing and costs a
- * `legalMoves` call — which is half the work of the depth-1 iteration `A7` runs 209 times.
+ * The root move list is passed IN, generated and ordered once for the whole deepening: the
+ * position is byte-identical between iterations, so regenerating it per iteration buys nothing
+ * and costs a `legalMoves` call — which is half the work of the depth-1 iteration `A7` runs 209
+ * times.
  */
 function runIteration(
   position: Position,
@@ -280,9 +292,10 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     // Disarmed for the first iteration: depth 1 always completes, so a move always exists.
     nextCheck: Number.POSITIVE_INFINITY,
     visit: () => countNode(budget),
+    killers: new KillerTable(),
   };
 
-  const rootMoves = legalMoves(position);
+  const rootMoves = orderMoves(legalMoves(position), budget.killers.at(0), null);
   if (rootMoves.length === 0) return null;
 
   let best = runIteration(position, rootMoves, 1, budget);

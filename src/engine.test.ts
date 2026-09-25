@@ -285,12 +285,17 @@ describe("A2 — a budget far below one iteration's cost still returns a move, a
  * inside depth 3 and every budget from 3 to 12 on a 1 ms tick completes depth 2 and aborts
  * inside depth 3; 8 is the middle of that window. An emulated keep-the-best-so-far mutant was
  * caught at all ten abort points (its best-so-far is never e2e3 at −80).
+ *
+ * RE-MEASURED at `ABC-080` (move ordering): the premise holds — e2e3 at depths 1 and 2, g4g5 at
+ * depth 3 — but ordering made depth 3 cheaper: depth 1 = 38 nodes, depth 2 = 153, depth 3 =
+ * 2 551. Only budgets 3 and 4 on a 1 ms tick now complete depth 2 and abort inside depth 3
+ * (budget 5 completes depth 3), so the fixture's budget moved from 8 to 4.
  */
 const A3_FEN = "rnbqkbnr/ppp1pppp/8/3p4/6P1/8/PPPPPP1P/RNBQKBNR w KQkq d6 0 2";
 
 describe("A3 — an aborted iteration's move is discarded, not returned", () => {
   const position = () => parseFen(A3_FEN);
-  const choice = chooseMove(position(), { budgetMs: 8, now: tickingClock(1) }) as {
+  const choice = chooseMove(position(), { budgetMs: 4, now: tickingClock(1) }) as {
     move: Move;
     score: number;
     depth: number;
@@ -299,7 +304,7 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
 
   it("aborts INSIDE depth 3 — the run really did enter the iteration it discards", () => {
     expect(choice.depth).toBe(2);
-    // Depths 1 and 2 cost 38 + 382 nodes; anything above that was spent inside the aborted
+    // Depths 1 and 2 cost 38 + 153 nodes; anything above that was spent inside the aborted
     // depth-3 iteration. Without this the criterion is satisfiable by never deepening at all.
     expect(choice.nodes).toBeGreaterThan(search(position(), 1).nodes + search(position(), 2).nodes);
   });
@@ -312,8 +317,8 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
     const reference = search(position(), 2) as { move: Move | null; score: number };
     expect(label(choice.move)).toBe(label(reference.move as Move));
     expect(choice.score).toBe(reference.score);
-    // `search(A3_FEN, 3).move` is `g4g5`, measured at this branch tip (9 871 nodes, ~50 ms
-    // under the runner). It is a LITERAL here rather than a call so the default lane pays for
+    // `search(A3_FEN, 3).move` is `g4g5`, measured at the ABC-080 branch tip (2 551 nodes; 9 871
+    // before ordering). It is a LITERAL here rather than a call so the default lane pays for
     // the aborted run only; the computed form of this same assertion runs in the deep lane
     // below, so a drift between the literal and the search is red there rather than unnoticed.
     expect(label(choice.move)).not.toBe("g4g5");

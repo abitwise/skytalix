@@ -412,17 +412,21 @@ describe("A4 — a position with no capture anywhere near the leaves scores exac
     // `src/engine.test.ts` recorded the merged (pre-quiescence) search on position-6 at depth 2
     // as 562 nodes choosing g5f6, measured at the ABC-078 branch tip. The door must reproduce
     // both, or "identical to the pre-quiescence build" is being asserted against nothing.
+    // RE-MEASURED at ABC-080: the door orders its moves like `search` (it must — `A4` above
+    // compares their node counts), so the same search reads 136 nodes and the SAME move, g5f6.
+    // 562 is the unordered figure and nothing in the tree reproduces it any more.
     const result = searchWithoutQuiescence(parseFen(fenOf("position-6")), 2);
 
-    expect(result.nodes).toBe(562);
+    expect(result.nodes).toBe(136);
     expect(label(result.move)).toBe("g5f6");
   });
 
   if (RUN_DEEP) {
-    it("position-6 at depth 3 reproduces the recorded 14 565 nodes and c3d5 [deep, SEARCH_DEEP=1]", () => {
+    it("position-6 at depth 3 reproduces the recorded 2 273 nodes and c3d5 [deep, SEARCH_DEEP=1]", () => {
+      // 14 565 unordered; 2 273 ordered at ABC-080, the same move.
       const result = searchWithoutQuiescence(parseFen(fenOf("position-6")), 3);
 
-      expect(result.nodes).toBe(14_565);
+      expect(result.nodes).toBe(2_273);
       expect(label(result.move)).toBe("c3d5");
     }, 30_000);
   }

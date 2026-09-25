@@ -537,10 +537,17 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
   it("exports exactly the search core and nothing that picks a move on its own", () => {
     // `searchWithoutQuiescence` joined the list at ABC-079, and `searchWithoutPruningOrQuiescence`
     // at its oracle ruling. Both are TEST-ONLY doors of the same shape as `searchWithoutPruning`,
-    // taking the same required depth. Still nothing here picks a move without being told how deep.
+    // taking the same required depth. ABC-080 added two more of that shape
+    // (`searchWithoutOrdering`, `searchWithoutKillers`) and the move-ordering pair both
+    // recursions share: `orderMoves` ORDERS a list it is handed and `KillerTable` holds moves —
+    // neither picks one. Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
+      "KillerTable",
       "MATE_SCORE",
+      "orderMoves",
       "search",
+      "searchWithoutKillers",
+      "searchWithoutOrdering",
       "searchWithoutPruning",
       "searchWithoutPruningOrQuiescence",
       "searchWithoutQuiescence",
@@ -554,6 +561,8 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     expect(searchWithoutPruning.length).toBe(2);
     expect(searchWithoutQuiescence.length).toBe(2);
     expect(searchWithoutPruningOrQuiescence.length).toBe(2);
+    expect(searchModule.searchWithoutOrdering.length).toBe(2);
+    expect(searchModule.searchWithoutKillers.length).toBe(2);
   });
 
   it("carries no default value for depth anywhere in the module", () => {
