@@ -292,3 +292,7 @@ restated here.
 first (10/10, Ready) — it both stands on its own and discharges this ticket's item-3 blocker.
 Item 10 (`NFR-009` placement) routes to Security/NFR in parallel; it does not gate `ABC-080`'s
 pull and did not gate this ticket's item-3 resolution.**
+
+## DoR item 10
+
+**2026-09-25, Security/NFR (task `wave-2026-09-24`, subtask `place-nfr009`): the memory row now EXISTS.** `NFR-009` is placed in `plans/nfr-catalog.md` on the owner's word (*"16MiB sounds small in todays standards, if more is needed you can extend it to 128MiB. I approve otherwise."*). The level is **16 MiB total** search-held memory, with **≤ 1 MiB** growth in `heapUsed` and in `arrayBuffers` between a 1 s and a 3 s search, read after `gc()`. 128 MiB is the ceiling of any re-level, not the level. `A7` now checks against `NFR-009`. Two points for the build hop, both written into the row. First, a 2^20-entry table (16.00 MiB alone) breaks the total; 2^19 fits. Second, `ABC-080`'s `KillerTable` has no `byteLength`, so the `heapUsed` read (c) counts it. **This page's item 10 is NOT re-scored here. BA/PM re-scores it.**
