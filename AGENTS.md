@@ -82,7 +82,12 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 ### Test
 
-- Test (all): `npm test` <!-- vitest run -->
+- Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122).
+  RUN 2026-09-25: exit 0, 47 files, 1446 tests, 5.45 s. A hung lane exits 124 within the 60 s bound
+  — stop it with Ctrl-C/SIGTERM, never SIGKILL (owner-accepted R1: SIGKILL/SIGHUP can orphan a hung
+  vitest). `*_DEEP` lanes below run via `npx vitest run` directly, never through `npm test`
+  (`ENGINE_DEEP` alone is ~99 s, over the bound). Wrapper's own proof: `node
+  tools/grugops/run-bounded.proof.js` (RUN 2026-09-25: exit 0, all rows held). -->
 - Search deep lane (opt-in slow suite, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts`
   <!-- RUN 2026-08-17 at the ABC-077 branch tip: exit 0, 41 passed (28 in the default lane), 23.0 s.
   Unset, the deep cases are NOT DEFINED rather than skipped, so the gate's skip count stays 0 —
