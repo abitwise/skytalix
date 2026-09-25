@@ -31,6 +31,7 @@ import {
   search,
   searchWithoutKillers,
   searchWithoutOrdering,
+  searchWithoutTable,
 } from "./search.ts";
 
 const RUN_DEEP = process.env.SEARCH_DEEP === "1";
@@ -297,6 +298,9 @@ function measure(
 const none = (name: string, depth: number) => measure(searchWithoutOrdering, "none", name, depth);
 const mvvLva = (name: string, depth: number) => measure(searchWithoutKillers, "mvv", name, depth);
 const full = (name: string, depth: number) => measure(search, "full", name, depth);
+/** `ABC-080`'s own full ordering — killers, no hash move — which is `ABC-081`'s table-off door. */
+const killers = (name: string, depth: number) =>
+  measure(searchWithoutTable, "killers", name, depth);
 
 // ---------------------------------------------------------------------------
 // A1 — ordering changes the WORK and not the VALUE.
@@ -416,16 +420,22 @@ describe("A4 — each heuristic's node count, and the delete rule", () => {
    * where a capturing promotion competes with a queen capture, the promotion term in the shared
    * `mvvLvaKey` decides which is searched first, in the full-width tree and in `quiesce` alike.
    * Measured at the ABC-080 branch tip: 275 nodes at depth 3. Dropping the term moves it.
+   *
+   * RE-MEASURED at `ABC-081`: 261. The table saves 14 nodes here, and it is a real transposition,
+   * found by listing every ply-2 key: bxa8=Q, =R, =B and =N each answered by ...Qxa8 reach ONE
+   * position four ways. The promotion term still decides what is searched first; the mutant
+   * ledger at `ABC-081` re-ran the dropped-term mutant against this pin.
    */
-  it("the promotion-capture fixture at depth 3 visits 275 nodes (ABC-079 QE G4)", () => {
-    expect(search(parseFen(PROMOTION_CAPTURE_FEN), 3).nodes).toBe(275);
+  it("the promotion-capture fixture at depth 3 visits 261 nodes (ABC-079 QE G4)", () => {
+    expect(search(parseFen(PROMOTION_CAPTURE_FEN), 3).nodes).toBe(261);
   });
 
   if (RUN_DEEP) {
     /**
      * The criterion's reading, at depths 4 and 5 on both positions. The hash-move configuration
-     * needs a table, which is `ABC-081`'s: NOT YET MEASURABLE, as the ticket provides, and printed
-     * as such rather than left out.
+     * needed a table, which `ABC-081` built: it is `search()` now, and `+ killers` — `ABC-080`'s
+     * own full ordering, with no hash move — is `searchWithoutTable`. The three lower rungs carry
+     * no table, so each column is one lever more than the one before it.
      *
      * THE UNORDERED SEARCH IS NOT RUN AT DEPTH 5 IN THE SUITE: kiwipete alone is 35 538 933 nodes
      * and 85.6 s under plain node (ABC-080 branch tip, Apple M3), which would take this lane from
@@ -438,25 +448,27 @@ describe("A4 — each heuristic's node count, and the delete rule", () => {
       it(`${name} at depths 4 and 5, per configuration; the delete rule on depth 5 [deep, SEARCH_DEEP=1]`, () => {
         console.log(
           `ABC-080 A4 ${name} d4: none ${none(name, 4).nodes} / MVV-LVA ${mvvLva(name, 4).nodes}` +
-            ` / + killers ${full(name, 4).nodes} / + hash move NOT YET MEASURABLE (ABC-081)`,
+            ` / + killers ${killers(name, 4).nodes} / + hash move (ABC-081's table) ` +
+            `${full(name, 4).nodes}`,
         );
         console.log(
           `ABC-080 A4 ${name} d5: none (not run in-suite, see the context notes) / MVV-LVA ` +
-            `${mvvLva(name, 5).nodes} / + killers ${full(name, 5).nodes} / + hash move NOT YET ` +
-            "MEASURABLE (ABC-081)",
+            `${mvvLva(name, 5).nodes} / + killers ${killers(name, 5).nodes} / + hash move ` +
+            `(ABC-081's table) ${full(name, 5).nodes}`,
         );
         expect(mvvLva(name, 4).nodes).toBeLessThan(none(name, 4).nodes);
-        expect(full(name, 5).score).toBe(mvvLva(name, 5).score);
-        expect(full(name, 5).nodes).toBeLessThan(mvvLva(name, 5).nodes); // the delete rule
+        expect(killers(name, 5).score).toBe(mvvLva(name, 5).score);
+        expect(killers(name, 5).nodes).toBeLessThan(mvvLva(name, 5).nodes); // the delete rule
       }, 120_000);
     }
   }
 });
 
 // ---------------------------------------------------------------------------
-// A5 — correct with no hash move. There is no table until ABC-081, so every search in this
-// file IS that case: both recursions pass `null` as the hash move, and A1 and A3 above run on
-// exactly that; A2 runs the comparator with no hash move and with one. Nothing more to add.
+// A5 — correct with no hash move. Written when there was no table, so every search here was that
+// case. Since ABC-081 it is every door below `search()` — `searchWithoutOrdering`,
+// `searchWithoutKillers` and `searchWithoutTable` — and ABC-081's own `A1` asserts `search()`
+// scores what `searchWithoutTable` scores. A2 runs the comparator with no hash move and with one.
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -570,5 +582,31 @@ describe("A6 — a killer is offered only at the ply it was recorded at, and onl
     expect(strayOffers(events)).toEqual([]);
     expect(offeredAt(events).size).toBeGreaterThanOrEqual(2);
     expect(new Set(events.map((event) => event.table)).size).toBe(2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// G1 (ABC-080 QE) — the ENGINE records a killer on a beta cutoff only. Closed at ABC-081.
+// ---------------------------------------------------------------------------
+
+describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
+  /**
+   * QE's mutant `N3` moved `budget.killers.record(ply, move)` in `src/engine.ts` out of the cutoff
+   * guard, so every move tried was recorded, and it survived both lanes: `A6` above asserts every
+   * offered killer was recorded at its ply, not that it caused a cutoff, and the identity sweep
+   * cannot see a lossless reordering. The same rule IS caught in `src/search.ts` by node-count pins,
+   * and this is that pin for the engine: an exact node count at a fixed injected-clock budget.
+   * MEASURED at the `ABC-081` build: position-3 at 3 ticks completes depth 3 in 358 nodes; `N3`
+   * reads 355. The count moves with any change to the engine's tree, which is the point — re-pin
+   * it from a measurement, never from the failure message alone.
+   */
+  it("position-3 at 3 injected ticks: depth 3 in exactly 358 nodes", () => {
+    let ticks = 0;
+    const choice = chooseMove(parseFen(fenOf("position-3")), {
+      budgetMs: 3,
+      now: () => ticks++,
+    }) as { depth: number; nodes: number };
+    expect(choice.depth).toBe(3);
+    expect(choice.nodes).toBe(358);
   });
 });

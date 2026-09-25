@@ -51,6 +51,13 @@
  * same mechanism and same ≤ 31 ms bound as the ≤ 3 s clause. No safety margin is applied, because
  * a margin would make the sentence true by making `budgetMs` a lie.
  *
+ * THE TRANSPOSITION TABLE AND IN-TREE REPETITION (`ABC-081`) are `src/search.ts`'s, node for node:
+ * this call's own per-ply key array, seeded with the root's key, and the one table
+ * (`src/transposition.ts`, `ADR-0025`), cleared at this call's entry and kept across its
+ * iterations — so iteration `n`'s best moves are iteration `n + 1`'s hash moves, the root's
+ * included. The session's history is not read: the seam hands in a `GameHistory` and only its
+ * `position` is searched (`ADR-0002` clause 3).
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows, null-move pruning, late-move reductions
  * and threading (none requested; `ADR-0005` F6 leaves threading to Architect/Design).
@@ -58,13 +65,34 @@
 
 import { makeMove, unmakeMove } from "./apply.ts";
 import { gameStatus } from "./gameend.ts";
-import type { GameHistory } from "./history.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
 import { type QuiescenceVisitor, quiesce } from "./quiescence.ts";
-import { KillerTable, MATE_SCORE, orderMoves } from "./search.ts";
+import {
+  KEY_ARRAY_CAPACITY,
+  KillerTable,
+  MATE_SCORE,
+  orderMoves,
+  repeatsInPath,
+} from "./search.ts";
+import {
+  BOUND_EXACT,
+  boundOf,
+  clearTable,
+  entryMove,
+  probeTable,
+  storeEntry,
+  tableCutoff,
+} from "./transposition.ts";
 import type { EngineSeam } from "./turn-loop.ts";
+import { zobristKey, zobristKeyAfterMove } from "./zobrist.ts";
+
+/**
+ * The game the seam is handed — named off `EngineSeam` rather than imported from
+ * `src/history.ts`, so no search module imports the session's history (`ABC-081` `A6`).
+ */
+type SeamGame = Parameters<EngineSeam>[0];
 
 /**
  * A source of milliseconds. `Date.now` satisfies it; a test supplies virtual time instead.
@@ -143,6 +171,11 @@ interface Budget {
    * — and never across calls.
    */
   readonly killers: KillerTable;
+  /**
+   * This move's per-ply key array (`ABC-081`, `ADR-0002` clause 3): allocated once per
+   * `chooseMove` call, `keys[0]` the root's key, each child's key derived from its parent's.
+   */
+  readonly keys: BigUint64Array;
 }
 
 /**
@@ -179,7 +212,8 @@ function leafScore(
 /**
  * `src/search.ts`'s negamax with ONE addition: the abort check, and it sits at the node rather
  * than at the iteration. The move ordering is that module's, by the same `orderMoves` and the
- * same `KillerTable` (`ABC-080`).
+ * same `KillerTable` (`ABC-080`); the repetition scan, the capacity guard and the table probe,
+ * cutoff and store are that module's too, in the same order (`ABC-081`).
  *
  * The made move is unmade in a `finally`, so an abort thrown anywhere in the subtree still
  * leaves the caller's position byte-identical. The turn loop BORROWS `history.position`
@@ -196,22 +230,40 @@ function negamax(
 ): number {
   countNode(budget);
 
-  if (remaining <= 0) return leafScore(position, ply, alpha, beta, budget);
+  const keys = budget.keys;
+  if (repeatsInPath(keys, ply, position.halfmoveClock)) return 0;
+  if (remaining <= 0 || ply >= KEY_ARRAY_CAPACITY) {
+    return leafScore(position, ply, alpha, beta, budget);
+  }
+  const key = keys[ply] as bigint;
+
+  const slot = probeTable(key);
+  if (slot !== -1) {
+    const settled = tableCutoff(slot, remaining, alpha, beta, ply);
+    if (settled !== null) return settled;
+  }
 
   const moves = legalMoves(position);
   if (moves.length === 0) return isInCheck(position) ? 0 - (MATE_SCORE - ply) : 0;
 
+  const alphaIn = alpha;
+  const hashMove = slot === -1 ? null : entryMove(slot, moves);
   let best = Number.NEGATIVE_INFINITY;
-  for (const move of orderMoves(moves, budget.killers.at(ply), null)) {
+  let bestMove = moves[0] as Move;
+  for (const move of orderMoves(moves, budget.killers.at(ply), hashMove)) {
     const undo = makeMove(position, move);
     let score: number;
     try {
+      keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
       score = 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, ply + 1, budget);
     } finally {
       unmakeMove(position, move, undo);
     }
 
-    if (score > best) best = score;
+    if (score > best) {
+      best = score;
+      bestMove = move;
+    }
     if (best > alpha) alpha = best;
     if (alpha >= beta) {
       budget.killers.record(ply, move);
@@ -219,6 +271,9 @@ function negamax(
     }
   }
 
+  // Never reached by an aborted subtree: the abort throws past this line, so a partial result
+  // is never stored.
+  storeEntry(key, remaining, boundOf(best, alphaIn, beta), best, ply, bestMove);
   return best;
 }
 
@@ -236,10 +291,13 @@ interface Iteration {
  * first move as the incumbent, strict `>` to displace it — which is what makes `A3`'s "the
  * returned move equals `search(position, n-1).move`" an identity rather than a coincidence.
  *
- * The root move list is passed IN, generated and ordered once for the whole deepening: the
- * position is byte-identical between iterations, so regenerating it per iteration buys nothing
- * and costs a `legalMoves` call — which is half the work of the depth-1 iteration `A7` runs 209
- * times.
+ * The root move list is passed IN, generated once for the whole deepening: the position is
+ * byte-identical between iterations, so regenerating it per iteration buys nothing and costs a
+ * `legalMoves` call — which is half the work of the depth-1 iteration `A7` runs 209 times. It is
+ * ORDERED per iteration, because the hash move changes: the table's root entry is the previous
+ * completed iteration's best move (`ABC-081`), tried first. That is the one place this search
+ * may break a tie differently from `search()`, which starts from an empty table — among moves
+ * of EQUAL score only, and `A3`'s identity sweep accepts exactly that.
  */
 function runIteration(
   position: Position,
@@ -247,14 +305,22 @@ function runIteration(
   remaining: number,
   budget: Budget,
 ): Iteration {
+  const rootKey = budget.keys[0] as bigint;
+  const slot = probeTable(rootKey);
+  const rootMoves = orderMoves(
+    moves,
+    budget.killers.at(0),
+    slot === -1 ? null : entryMove(slot, moves),
+  );
   let alpha = Number.NEGATIVE_INFINITY;
   let best = Number.NEGATIVE_INFINITY;
-  let bestMove = moves[0] as Move;
+  let bestMove = rootMoves[0] as Move;
 
-  for (const move of moves) {
+  for (const move of rootMoves) {
     const undo = makeMove(position, move);
     let score: number;
     try {
+      budget.keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
       score = 0 - negamax(position, remaining - 1, Number.NEGATIVE_INFINITY, 0 - alpha, 1, budget);
     } finally {
       unmakeMove(position, move, undo);
@@ -267,6 +333,7 @@ function runIteration(
     if (best > alpha) alpha = best;
   }
 
+  storeEntry(rootKey, remaining, BOUND_EXACT, best, 0, bestMove);
   return { move: bestMove, score: best };
 }
 
@@ -293,9 +360,12 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     nextCheck: Number.POSITIVE_INFINITY,
     visit: () => countNode(budget),
     killers: new KillerTable(),
+    keys: new BigUint64Array(KEY_ARRAY_CAPACITY + 1),
   };
+  budget.keys[0] = zobristKey(position);
+  clearTable();
 
-  const rootMoves = orderMoves(legalMoves(position), budget.killers.at(0), null);
+  const rootMoves = legalMoves(position);
   if (rootMoves.length === 0) return null;
 
   let best = runIteration(position, rootMoves, 1, budget);
@@ -338,7 +408,7 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
  * the loop already has a named reason for it (`engine-threw`) rather than a chess outcome.
  */
 export function createEngine(options: EngineOptions): EngineSeam {
-  return async (history: GameHistory): Promise<Move> => {
+  return async (history: SeamGame): Promise<Move> => {
     const choice = chooseMove(history.position, options);
     if (choice === null) throw new Error("engine: asked to move in a position with no legal move");
     return choice.move;

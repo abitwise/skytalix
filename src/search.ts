@@ -17,8 +17,16 @@
  *  default, and do not add an export that picks a move without being told how deep.
  * ===========================================================================================
  *
- * Deliberately absent, each owned elsewhere and each measurable on top of this: the
- * transposition table and in-tree repetition (ABC-081).
+ * THE TRANSPOSITION TABLE AND IN-TREE REPETITION ARE HERE (ABC-081), off ONE per-ply key array
+ * per search (`ADR-0002` clause 3, `ADR-0020` Decision 3): `keys[0]` is the root's Zobrist key,
+ * seeded once at the search's entry, and every child's key is derived from its parent's by
+ * `zobristKeyAfterMove`. Two consumers read it. The repetition scan (`repeatsInPath`) scores a
+ * position that repeats within the search path as a draw, exactly 0. The table
+ * (`src/transposition.ts`, `ADR-0025`) is probed and stored at the key VALUE `keys[ply]` — its
+ * own fixed-size structure, cleared at every `search()` entry. The session's history
+ * (`src/history.ts`) is NOT imported: the search does not share that structure, deliberately.
+ * One TEST-ONLY door reaches the table-free search `ABC-081`'s `A1` compares against:
+ * `searchWithoutTable`.
  *
  * MOVES ARE ORDERED (ABC-080) by ONE comparator, `orderMoves`, at every full-width node and at
  * the root: the hash move first, then captures and promotions most-valuable-victim first (the
@@ -26,7 +34,7 @@
  * order. Ordering changes the WORK and never the VALUE: it only decides which refutation is found
  * first. The abortable copy in `src/engine.ts` consumes the same comparator and the same killer
  * table, so `ABC-078`'s identity sweep keeps comparing one algorithm (ruling `…f7e66060`, R1).
- * The hash-move arm is DORMANT until `ABC-081` builds a table: both recursions pass `null`.
+ * The hash move is the table's best move for the node (`ABC-081`); with no entry it is `null`.
  * Two TEST-ONLY doors reach the less-ordered searches `ABC-080`'s `A1`/`A3`/`A4` compare against:
  * `searchWithoutOrdering` (generation order) and `searchWithoutKillers` (MVV-LVA alone).
  *
@@ -44,6 +52,16 @@ import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, type Position } from "./position.ts";
 import { mvvLvaKey, quiesce } from "./quiescence.ts";
+import {
+  BOUND_EXACT,
+  boundOf,
+  clearTable,
+  entryMove,
+  probeTable,
+  storeEntry,
+  tableCutoff,
+} from "./transposition.ts";
+import { zobristKey, zobristKeyAfterMove } from "./zobrist.ts";
 
 /**
  * The score of being checkmated AT THE ROOT, negated: a side mated `ply` plies from the root
@@ -69,6 +87,30 @@ interface NodeCounter {
 }
 
 const NO_KILLERS: readonly Move[] = [];
+
+/**
+ * The per-ply key array's length, and so the deepest ply a full-width node can sit at: a node at
+ * this ply is scored as a leaf. A RUNAWAY GUARD, NOT A DEPTH BUDGET — the same shape as
+ * `QUIESCENCE_MAX_PLY` (`ADR-0025` Decision 7). It decides no move: the engine deepens against the
+ * clock alone (`RISK-002`, `ABC-078` `A4`), and this only bounds an array a search allocates once.
+ * Sized far above any depth a real position reaches in `NFR-004`'s 5 s ceiling.
+ */
+export const KEY_ARRAY_CAPACITY = 128;
+
+/**
+ * True when the position at `ply` already stood earlier on this search path — a draw. Only every
+ * second ply can hold it (the side to move must match), the nearest is four plies back, and no
+ * position older than the last capture or pawn move (`halfmoveClock` plies back) can repeat.
+ * Scans the search's own key array and nothing else (`ADR-0002` clause 3).
+ */
+export function repeatsInPath(keys: BigUint64Array, ply: number, halfmoveClock: number): boolean {
+  const key = keys[ply] as bigint;
+  const oldest = Math.max(0, ply - halfmoveClock);
+  for (let earlier = ply - 4; earlier >= oldest; earlier -= 2) {
+    if (keys[earlier] === key) return true;
+  }
+  return false;
+}
 
 /**
  * Same squares and same promotion. A killer is recorded in one position and offered in a SIBLING,
@@ -150,9 +192,18 @@ interface Switches {
   /**
    * How the move list is ordered (`ABC-080`). `"full"` on every shipped call; `"none"` is
    * generation order — `searchWithoutOrdering`; `"mvv-lva"` drops the killers —
-   * `searchWithoutKillers`. The hash-move arm has no switch: it is dormant until `ABC-081`.
+   * `searchWithoutKillers`. The hash move is part of `"full"` only.
    */
   readonly ordering: "none" | "mvv-lva" | "full";
+  /**
+   * The transposition table (`ABC-081`): probed, cut on and stored at every full-width node.
+   * False on `searchWithoutTable`; on the two unpruned doors, because a table cutoff IS a
+   * main-tree cutoff and they decline cutoffs; and on `ABC-080`'s two ordering doors, because
+   * the hash move is the top rung of the ladder they measure (none → MVV-LVA → + killers →
+   * + hash move), so the table that supplies it is off on every rung below it. In-tree repetition
+   * has no switch: it is correctness, not work, and every door detects it.
+   */
+  readonly table: boolean;
 }
 
 /** The move list in the order `switches.ordering` asks for, at `ply`. */
@@ -161,9 +212,11 @@ function ordered(
   ply: number,
   switches: Switches,
   killers: KillerTable,
+  hashMove: Move | null,
 ): readonly Move[] {
   if (switches.ordering === "none") return moves;
-  return orderMoves(moves, switches.ordering === "full" ? killers.at(ply) : NO_KILLERS, null);
+  if (switches.ordering === "mvv-lva") return orderMoves(moves, NO_KILLERS, null);
+  return orderMoves(moves, killers.at(ply), hashMove);
 }
 
 /**
@@ -174,8 +227,8 @@ function ordered(
  * optional for — a bare call is legitimate here and costs one legal-move generation, the same
  * one an interior node pays for its own move list. It catches the drawn terminal states an
  * empty move list does not (dead position by material, the seventy-five-move rule) as well as
- * mate and stalemate. Repetition is NOT detected: no counts map is passed, because in-tree
- * repetition is ABC-081's along with the key array it shares.
+ * mate and stalemate. No counts map is passed: repetition is decided before this is reached,
+ * off the search's own key array (`repeatsInPath`), never off the session's history.
  */
 function leafScore(
   position: Position,
@@ -211,6 +264,10 @@ function leafScore(
  * capture cutoffs. It is still `A1`/`A2`'s differential oracle for the main tree, and it is
  * TEST-ONLY: no shipped call passes false,
  * and `searchWithoutPruning` exists to be the test's door rather than a configurable engine.
+ *
+ * `keys[ply]` is this node's Zobrist key, written by the parent. The order at entry is the
+ * order of authority: a repetition is a draw whatever the table says, and the table is consulted
+ * before any move is generated.
  */
 function negamax(
   position: Position,
@@ -221,11 +278,23 @@ function negamax(
   switches: Switches,
   counter: NodeCounter,
   killers: KillerTable,
+  keys: BigUint64Array,
 ): number {
   counter.nodes++;
 
-  if (depth <= 0) return leafScore(position, ply, alpha, beta, switches, counter);
+  // In-tree repetition (`ABC-081` `A5`): EXACTLY 0, a literal, never a negated `-0`.
+  if (repeatsInPath(keys, ply, position.halfmoveClock)) return 0;
+  if (depth <= 0 || ply >= KEY_ARRAY_CAPACITY) {
+    return leafScore(position, ply, alpha, beta, switches, counter);
+  }
   const prune = switches.prune;
+  const key = keys[ply] as bigint;
+
+  const slot = switches.table ? probeTable(key) : -1;
+  if (slot !== -1) {
+    const settled = tableCutoff(slot, depth, alpha, beta, ply);
+    if (settled !== null) return settled;
+  }
 
   const moves = legalMoves(position);
   if (moves.length === 0) {
@@ -235,14 +304,22 @@ function negamax(
     return isInCheck(position) ? 0 - (MATE_SCORE - ply) : 0;
   }
 
+  const alphaIn = alpha;
+  const hashMove = slot === -1 ? null : entryMove(slot, moves);
   let best = Number.NEGATIVE_INFINITY;
-  for (const move of ordered(moves, ply, switches, killers)) {
+  let bestMove = moves[0] as Move;
+  for (const move of ordered(moves, ply, switches, killers, hashMove)) {
     const undo = makeMove(position, move);
+    keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
     const score =
-      0 - negamax(position, depth - 1, 0 - beta, 0 - alpha, ply + 1, switches, counter, killers);
+      0 -
+      negamax(position, depth - 1, 0 - beta, 0 - alpha, ply + 1, switches, counter, killers, keys);
     unmakeMove(position, move, undo);
 
-    if (score > best) best = score;
+    if (score > best) {
+      best = score;
+      bestMove = move;
+    }
     if (!prune) continue;
     if (best > alpha) alpha = best;
     if (alpha >= beta) {
@@ -251,6 +328,7 @@ function negamax(
     }
   }
 
+  if (switches.table) storeEntry(key, depth, boundOf(best, alphaIn, beta), best, ply, bestMove);
   return best;
 }
 
@@ -260,13 +338,24 @@ function negamax(
  * The root window is infinite and the root never cuts off (`alpha < beta` always holds here),
  * so the returned score is exact and the returned move is the one that achieves it. The first
  * legal move is kept as the incumbent, so a root with any legal move always returns one.
+ *
+ * The per-ply key array is allocated HERE, once per search and never per node, and seeded with
+ * the root's key (`ADR-0002` clause 3); the table is cleared here (`ADR-0025` Decision 4). The
+ * root probes the table for its hash move only — it never cuts, it must return a move — and on
+ * a fresh table finds none; the root's own entry is stored so both recursions store alike.
  */
 function searchRoot(position: Position, depth: number, switches: Switches): SearchResult {
   const counter: NodeCounter = { nodes: 1 };
   const prune = switches.prune;
   const killers = new KillerTable();
+  const keys = new BigUint64Array(KEY_ARRAY_CAPACITY + 1);
+  keys[0] = zobristKey(position);
+  if (switches.table) clearTable();
 
-  if (depth < 1) {
+  // `!(depth >= 1)` and not `depth < 1`: a depth-less call's `NaN` must land here too. Before the
+  // key array it recursed until the stack overflowed; `KEY_ARRAY_CAPACITY` now stops that
+  // recursion at a leaf, which would turn a missing depth into a depth-128 search (`QE-G1`).
+  if (!(depth >= 1)) {
     const infinity = Number.POSITIVE_INFINITY;
     const score = leafScore(position, 0, 0 - infinity, infinity, switches, counter);
     return { score, move: null, nodes: counter.nodes };
@@ -277,13 +366,17 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
     return { score: isInCheck(position) ? 0 - MATE_SCORE : 0, move: null, nodes: counter.nodes };
   }
 
+  const rootKey = keys[0] as bigint;
+  const slot = switches.table ? probeTable(rootKey) : -1;
+  const hashMove = slot === -1 ? null : entryMove(slot, moves);
   let alpha = Number.NEGATIVE_INFINITY;
   let best = Number.NEGATIVE_INFINITY;
-  const rootMoves = ordered(moves, 0, switches, killers);
+  const rootMoves = ordered(moves, 0, switches, killers, hashMove);
   let bestMove = rootMoves[0] as Move;
 
   for (const move of rootMoves) {
     const undo = makeMove(position, move);
+    keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
     const score =
       0 -
       negamax(
@@ -295,6 +388,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
         switches,
         counter,
         killers,
+        keys,
       );
     unmakeMove(position, move, undo);
 
@@ -305,6 +399,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
     if (prune && best > alpha) alpha = best;
   }
 
+  if (switches.table) storeEntry(rootKey, depth, BOUND_EXACT, best, 0, bestMove);
   return { score: best, move: bestMove, nodes: counter.nodes };
 }
 
@@ -314,7 +409,12 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
  * The position is byte-identical on return: every move made is unmade (`A7`).
  */
 export function search(position: Position, depth: number): SearchResult {
-  return searchRoot(position, depth, { prune: true, quiescence: true, ordering: "full" });
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+  });
 }
 
 /**
@@ -328,7 +428,12 @@ export function search(position: Position, depth: number): SearchResult {
  * exponentially slower; if you are reaching for it outside a test, you want `search`.
  */
 export function searchWithoutPruning(position: Position, depth: number): SearchResult {
-  return searchRoot(position, depth, { prune: false, quiescence: true, ordering: "full" });
+  return searchRoot(position, depth, {
+    prune: false,
+    quiescence: true,
+    ordering: "full",
+    table: false,
+  });
 }
 
 /**
@@ -340,7 +445,12 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
  * measure the node-count multiplier. Not an engine option; nothing in production calls it.
  */
 export function searchWithoutQuiescence(position: Position, depth: number): SearchResult {
-  return searchRoot(position, depth, { prune: true, quiescence: false, ordering: "full" });
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: false,
+    ordering: "full",
+    table: true,
+  });
 }
 
 /**
@@ -354,24 +464,54 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
  * option; nothing in production calls it.
  */
 export function searchWithoutPruningOrQuiescence(position: Position, depth: number): SearchResult {
-  return searchRoot(position, depth, { prune: false, quiescence: false, ordering: "full" });
+  return searchRoot(position, depth, {
+    prune: false,
+    quiescence: false,
+    ordering: "full",
+    table: false,
+  });
 }
 
 /**
- * TEST-ONLY. The shipped search with the move list in GENERATION ORDER — the pre-`ABC-080`
- * search exactly. It exists so `ABC-080`'s `A1` can assert ordering changes the work and not the
+ * TEST-ONLY. The shipped search with the move list in GENERATION ORDER and no table — the
+ * pre-`ABC-080` search exactly. It exists so `ABC-080`'s `A1` can assert ordering changes the work and not the
  * value, and `A3`/`A4` can count what it saved. Not an engine option; nothing in production calls
  * it (the ticket's test note 3).
  */
 export function searchWithoutOrdering(position: Position, depth: number): SearchResult {
-  return searchRoot(position, depth, { prune: true, quiescence: true, ordering: "none" });
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "none",
+    table: false,
+  });
 }
 
 /**
- * TEST-ONLY. The shipped search with MVV-LVA ordering but NO killer moves — `ABC-080` `A4`'s
- * second configuration, so the killers' own increment can be measured and, if it is nothing,
+ * TEST-ONLY. The shipped search with MVV-LVA ordering but NO killer moves and no table — `ABC-080`
+ * `A4`'s second configuration, so the killers' own increment can be measured and, if it is nothing,
  * deleted. Not an engine option; nothing in production calls it.
  */
 export function searchWithoutKillers(position: Position, depth: number): SearchResult {
-  return searchRoot(position, depth, { prune: true, quiescence: true, ordering: "mvv-lva" });
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "mvv-lva",
+    table: false,
+  });
+}
+
+/**
+ * TEST-ONLY. The shipped search with the TRANSPOSITION TABLE OFF — no probe, no cutoff, no store,
+ * no hash move — and everything else on, in-tree repetition included (`ADR-0025` Decision 6). It
+ * exists so `ABC-081`'s `A1` can assert the table changes the work and not the value, and `A2`/`A3`
+ * can count what it saved. Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutTable(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: false,
+  });
 }

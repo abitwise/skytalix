@@ -52,7 +52,7 @@ import { type GameHistory, newGame } from "./history.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
-import { search } from "./search.ts";
+import { MATE_SCORE, search } from "./search.ts";
 import {
   type EngineSeam,
   type InputSeam,
@@ -290,12 +290,19 @@ describe("A2 — a budget far below one iteration's cost still returns a move, a
  * depth 3 — but ordering made depth 3 cheaper: depth 1 = 38 nodes, depth 2 = 153, depth 3 =
  * 2 551. Only budgets 3 and 4 on a 1 ms tick now complete depth 2 and abort inside depth 3
  * (budget 5 completes depth 3), so the fixture's budget moved from 8 to 4.
+ *
+ * RE-MEASURED at `ABC-081` (the transposition table): the premise holds — `search` still reads
+ * e2e3 at depths 1 and 2 and g4g5 at depth 3, at the same 38 / 153 / 2 551 nodes, because a
+ * fresh-table search this shallow has no transposition to use. The ENGINE got cheaper: it keeps
+ * the table across iterations, so each iteration opens on the previous one's hash moves, and
+ * budget 4 now completes depth 3 (1 408 nodes). Only budget 3 completes depth 2 (131 nodes) and
+ * aborts inside depth 3 (at 1 061), so the fixture's budget moved from 4 to 3.
  */
 const A3_FEN = "rnbqkbnr/ppp1pppp/8/3p4/6P1/8/PPPPPP1P/RNBQKBNR w KQkq d6 0 2";
 
 describe("A3 — an aborted iteration's move is discarded, not returned", () => {
   const position = () => parseFen(A3_FEN);
-  const choice = chooseMove(position(), { budgetMs: 4, now: tickingClock(1) }) as {
+  const choice = chooseMove(position(), { budgetMs: 3, now: tickingClock(1) }) as {
     move: Move;
     score: number;
     depth: number;
@@ -346,6 +353,12 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
  * WHY SEVERAL BUDGETS: the two survivors show at different horizons. A stalemate scored as a
  * loss diverges once the stalemate leaf is inside the horizon; a lost mate distance diverges
  * only when the MATE sits exactly at the leaf, which is one ply shallower here.
+ *
+ * AMENDED AT `ABC-081`, the move half only (ticket test note 6, `ADR-0025` Consequences): the
+ * engine keeps its table across iterations, so its root tries the previous iteration's best move
+ * first, where `search()` starts from an empty table. Among moves of EQUAL score that can pick a
+ * different one — the first in order wins a tie. So a different move is accepted when, and only
+ * when, its OWN score at that depth equals `search()`'s score. The score half is NOT relaxed.
  */
 function identityDivergences(
   corpus: ReadonlyArray<{ name: string; fen: string }>,
@@ -362,7 +375,13 @@ function identityDivergences(
       const reference = search(parseFen(fen), choice.depth) as { move: Move | null; score: number };
       const at = `${name} @ depth ${choice.depth}`;
       if (label(choice.move) !== label(reference.move as Move)) {
-        out.push(`${at}: move ${label(choice.move)} vs search ${label(reference.move as Move)}`);
+        const own = rootMoveScore(fen, choice.move, choice.depth);
+        if (own !== reference.score) {
+          out.push(
+            `${at}: move ${label(choice.move)} (scores ${own}) vs search ` +
+              `${label(reference.move as Move)} (scores ${reference.score})`,
+          );
+        }
       }
       if (choice.score !== reference.score) {
         out.push(`${at}: score ${choice.score} vs search ${reference.score}`);
@@ -370,6 +389,20 @@ function identityDivergences(
     }
   }
   return out;
+}
+
+/**
+ * The score `move` earns at the root of `fen` searched to `depth`, in `search()`'s convention: the
+ * negated score of the position after it, searched one ply less. A mate `n` plies below that
+ * position is `n + 1` below the root, so a mate score steps one ply further from zero.
+ */
+function rootMoveScore(fen: string, move: Move, depth: number): number {
+  const position = parseFen(fen);
+  makeMove(position, legalMoves(position).find((candidate) => sameMove(candidate, move)) as Move);
+  const score = 0 - search(position, depth - 1).score;
+  if (score > MATE_SCORE - 1_000) return score - 1;
+  if (score < 0 - (MATE_SCORE - 1_000)) return score + 1;
+  return score;
 }
 
 describe("A3 (identity) — the completed iteration equals search() in move AND score", () => {

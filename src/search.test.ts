@@ -540,17 +540,24 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // taking the same required depth. ABC-080 added two more of that shape
     // (`searchWithoutOrdering`, `searchWithoutKillers`) and the move-ordering pair both
     // recursions share: `orderMoves` ORDERS a list it is handed and `KillerTable` holds moves —
-    // neither picks one. Still nothing here picks a move without being told how deep.
+    // neither picks one. ABC-081 added one more door of that shape (`searchWithoutTable`,
+    // `ADR-0025` Decision 6) and the per-ply key array's two pieces both recursions share:
+    // `KEY_ARRAY_CAPACITY`, a runaway guard on an array's length and not a depth budget, and
+    // `repeatsInPath`, which answers "is this a repetition" and picks nothing. Still nothing here
+    // picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
+      "KEY_ARRAY_CAPACITY",
       "KillerTable",
       "MATE_SCORE",
       "orderMoves",
+      "repeatsInPath",
       "search",
       "searchWithoutKillers",
       "searchWithoutOrdering",
       "searchWithoutPruning",
       "searchWithoutPruningOrQuiescence",
       "searchWithoutQuiescence",
+      "searchWithoutTable",
     ]);
   });
 
@@ -563,6 +570,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     expect(searchWithoutPruningOrQuiescence.length).toBe(2);
     expect(searchModule.searchWithoutOrdering.length).toBe(2);
     expect(searchModule.searchWithoutKillers.length).toBe(2);
+    expect(searchModule.searchWithoutTable.length).toBe(2);
   });
 
   it("carries no default value for depth anywhere in the module", () => {
