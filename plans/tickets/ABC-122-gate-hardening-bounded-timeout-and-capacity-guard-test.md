@@ -342,3 +342,25 @@ the page from the build hop.
 
 Full ruling, the two options weighed, and the trace are in
 `.grugops/context/amend-abc122-a4-pin/notes/`.
+
+## QE 2026-09-25 (QE/E2E, `qe-ABC-122`, Workflow 05): PASS WITH FINDINGS
+
+All 12 criteria independently reproduced and MET at code commit `ca9f42d`. 6 hostile cases
+against the wrapper (SIGTERM-ignoring child, grandchild-only hang, fast non-zero exit, 3 MiB
+output with no trailing newline, args with spaces/quotes, SIGINT to the wrapper itself) all
+passed, each under its own outer hard bound; no orphan process survived any of them. 2 of the 6
+claimed guard mutants (one per file) were re-applied by hand and matched the build hop's reported
+failure signatures exactly. The `A11` base question is **ruled: the wave merge-base (`0bc31e1`),
+not the ticket's original cut-time base (`66a45d1`)** — confirmed from git history, since every
+commit between those two points is a Scribe/Architect/Orchestrator commit unrelated to `ABC-122`.
+`lane-inventory.js`'s exit-1 finding is confirmed pre-existing at commit `b324cb6`, before this
+branch existed — not this ticket's.
+
+**Findings named (none reopens a criterion):** `run-bounded.js`'s own header comment is stale
+("NOT YET WIRED IN", post-`A4`); `N8-LANE`/process-kill are Security/NFR's to rule, not
+re-measured here; `A6`/`A8` were not test-first (disclosed by the build, substituted by watched-red
+mutants); Windows/Linux remain unexercised; `AGENTS.md`'s `### Test` line is still owed to the
+Scribe.
+
+Recommend `In Review → In Security/NFR` (Orchestrator's move). Full readings:
+`.grugops/context/qe-ABC-122/notes/`.
