@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`, Workflow 04) — **`ABC-122` cut (DoR 9/10, ⚠️ non-blocking, merged) → pulled into `In Development`; Engineer hop `ticket-to-pr-ABC-122` dispatched.** `In Development` 1/3. Architect/Design `ruling-abc121-lmr-oracle` and Scribe `scribe-deep-lanes-081` still running._
+
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`) — **parallel flows on the owner's word, verbatim *"i would set up second parallel flow if possible"*: Architect/Design `ruling-abc121-lmr-oracle` (LMR's test oracle; `ABC-121` build still waits for `ABC-122`) and Scribe `scribe-deep-lanes-081` (owed deep-lane lines; `Test (all)` line waits for `ABC-122`) dispatched alongside BA/PM `cut-abc122-gate-hardening`.** No file overlap between the three hops._
 
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`, Workflow 07) — **new wave `grugops/wave-2026-09-25` off `main` @ `0541844`, on the owner's word, verbatim *"go, cut the hardening ticket and run it through"*.** BA/PM hop `cut-abc122-gate-hardening` dispatched: one S ticket bundling `ABC-081`'s K4 (Node-based process timeout on `npm test`) and K3 (direct capacity-guard test), to land before `ABC-121`. Then: Scribe `AGENTS.md` pass; `ABC-121` re-score with an Architect/Design ruling on LMR's test oracle. `upstream` not yet set up (owner) — no push expected._
@@ -343,7 +345,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-122] Gate hardening — bounded test timeout + capacity-guard tests  (EPIC-004, S, P1)  **CUT 2026-09-25 by BA/PM at `a6fb854` (`cut-abc122-gate-hardening`): DoR 9/10, one ⚠️ — item 10: `A4`'s timeout is a formula (≥ 5× median lane wall, ≤ 120 s) fixed at delivery.** The Orchestrator reads that ⚠️ as non-blocking (the item is "no major unresolved blocker"; the formula is measurable with a hard ceiling) — recorded, not smoothed to 10/10. Bundles `ABC-081`'s K4 (Node-builtins wrapper bounding `npm test`, tree kill, distinct exit code, synthetic-hang proof) and K3 (direct tests of `KEY_ARRAY_CAPACITY` in `search.ts` and `engine.ts`, each mutant watched red). Lands before `ABC-121`. Owes a Scribe follow-up for `AGENTS.md`'s `Test (all)` line.  **→ Ready → In Development 2026-09-25**; Engineer hop `ticket-to-pr-ABC-122`, branch `grugops/ABC-122-gate-hardening`.
 
 
 
