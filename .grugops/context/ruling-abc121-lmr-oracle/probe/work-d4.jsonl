@@ -1,0 +1,6 @@
+{"name":"startpos","d":4,"base":[0,2385],"pvs":[0,2470],"pvsLmr":[50,1612],"orderingRatioBase":0.323,"tableOffPvsNodes":2865}
+{"name":"kiwipete","d":4,"base":[50,22323],"pvs":[50,18773],"pvsLmr":[50,17911],"orderingRatioBase":0.0225,"tableOffPvsNodes":21824}
+{"name":"position-3","d":4,"base":[90,1123],"pvs":[90,758],"pvsLmr":[90,758],"orderingRatioBase":0.2724,"tableOffPvsNodes":864}
+{"name":"position-4","d":4,"base":[-375,9054],"pvs":[-375,12227],"pvsLmr":[-375,9581],"orderingRatioBase":0.1286,"tableOffPvsNodes":14128}
+{"name":"position-5","d":4,"base":[515,8783],"pvs":[515,8832],"pvsLmr":[515,8829],"orderingRatioBase":0.0095,"tableOffPvsNodes":12305}
+{"name":"position-6","d":4,"base":[30,28829],"pvs":[30,21430],"pvsLmr":[30,20402],"orderingRatioBase":0.0173,"tableOffPvsNodes":24316}

@@ -1,0 +1,5 @@
+{"name":"mate-in-2","d":4,"want":29997,"base":29997,"base-deepen":29997,"pvs":29997,"pvs-deepen":29997,"lmr":29997,"lmr-deepen":29997,"plain":29997,"plain-deepen":29997,"lmrKeepsIt":true}
+{"name":"mate-in-1","d":4,"want":29999,"base":29999,"base-deepen":29999,"pvs":29999,"pvs-deepen":29999,"lmr":29999,"lmr-deepen":29999,"plain":29999,"plain-deepen":29999,"lmrKeepsIt":true}
+{"name":"mate-in-2","d":5,"want":29997,"base":29997,"base-deepen":29997,"pvs":29997,"pvs-deepen":29997,"lmr":29997,"lmr-deepen":29997,"plain":29997,"plain-deepen":29997,"lmrKeepsIt":true}
+{"name":"mate-in-2","d":7,"want":29997,"base":29997,"base-deepen":29997,"pvs":29997,"pvs-deepen":29997,"lmr":29997,"lmr-deepen":29997,"plain":29997,"plain-deepen":29997,"lmrKeepsIt":true}
+{"name":"rook-ending-b","d":10,"want":-29992,"base":-29992,"base-deepen":-29992,"pvs":-29992,"pvs-deepen":-29992,"lmr":-29992,"lmr-deepen":-29992,"plain":-29992,"plain-deepen":-29992,"lmrKeepsIt":true}
