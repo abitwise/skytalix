@@ -1,0 +1,128 @@
+{
+ "mode": "mutants",
+ "head": "9d2306c",
+ "cores": 8,
+ "srcCleanBefore": true,
+ "mutants": [
+  {
+   "name": "R2b_leaf_slip_at_ply3_capture_dense",
+   "K": 5,
+   "diff": "2\t1\tsrc/search.ts",
+   "exit": 1,
+   "wall_s": 6.8,
+   "counts": {
+    "total": 37,
+    "passed": 4,
+    "failed": 2,
+    "skipped": 31
+   },
+   "red": [
+    {
+     "file": "src/quiescence.test.ts",
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 50 / e2a6 [deep, SEARCH_DEEP=1]",
+     "error": "expected 205 to be 50 // Object.is equality"
+    },
+    {
+     "file": "src/quiescence.test.ts",
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 30 / c3d5 [deep, SEARCH_DEEP=1]",
+     "error": "expected 120 to be 30 // Object.is equality"
+    }
+   ],
+   "a5Rows": [
+    {
+     "name": "A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip"
+    },
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1]",
+     "state": "skip"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > position-6 at depth 3 reproduces the recorded 14 565 nodes and c3d5 [deep, SEARCH_DEEP=1]",
+     "state": "skip"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]",
+     "state": "pass"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 50 / e2a6 [deep, SEARCH_DEEP=1]",
+     "state": "fail"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=1]",
+     "state": "pass"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 30 / c3d5 [deep, SEARCH_DEEP=1]",
+     "state": "fail"
+    },
+    {
+     "name": "A6 — the searched position is unchanged on return > leaves the broad corpus byte-identical [deep, SEARCH_DEEP=1]",
+     "state": "skip"
+    }
+   ],
+   "srcCleanAfterRevert": true
+  },
+  {
+   "name": "R2c_quiesce_slip_black_leaf_finite_window_capture_dense",
+   "K": 5,
+   "diff": "1\t0\tsrc/quiescence.ts",
+   "exit": 1,
+   "wall_s": 6.7,
+   "counts": {
+    "total": 37,
+    "passed": 4,
+    "failed": 2,
+    "skipped": 31
+   },
+   "red": [
+    {
+     "file": "src/quiescence.test.ts",
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 50 / e2a6 [deep, SEARCH_DEEP=1]",
+     "error": "expected 205 to be 50 // Object.is equality"
+    },
+    {
+     "file": "src/quiescence.test.ts",
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 30 / c3d5 [deep, SEARCH_DEEP=1]",
+     "error": "expected 120 to be 30 // Object.is equality"
+    }
+   ],
+   "a5Rows": [
+    {
+     "name": "A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip"
+    },
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1]",
+     "state": "skip"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > position-6 at depth 3 reproduces the recorded 14 565 nodes and c3d5 [deep, SEARCH_DEEP=1]",
+     "state": "skip"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]",
+     "state": "pass"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 50 / e2a6 [deep, SEARCH_DEEP=1]",
+     "state": "fail"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=1]",
+     "state": "pass"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 30 / c3d5 [deep, SEARCH_DEEP=1]",
+     "state": "fail"
+    },
+    {
+     "name": "A6 — the searched position is unchanged on return > leaves the broad corpus byte-identical [deep, SEARCH_DEEP=1]",
+     "state": "skip"
+    }
+   ],
+   "srcCleanAfterRevert": true
+  }
+ ]
+}

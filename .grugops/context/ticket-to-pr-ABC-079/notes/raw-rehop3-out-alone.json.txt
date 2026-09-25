@@ -1,0 +1,1751 @@
+{
+ "mode": "alone",
+ "head": "9d2306c",
+ "cores": 8,
+ "alone": [
+  {
+   "name": "leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+   "exit": 0,
+   "wall_s": 2,
+   "loadBefore": 3.76,
+   "loadAfter": 3.76,
+   "counts": {
+    "total": 57,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 56
+   },
+   "rows": [
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "pass",
+     "ms": 1151,
+     "share": 0.01
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    }
+   ]
+  },
+  {
+   "name": "leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+   "exit": 0,
+   "wall_s": 0.6,
+   "loadBefore": 3.76,
+   "loadAfter": 3.76,
+   "counts": {
+    "total": 57,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 56
+   },
+   "rows": [
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "pass",
+     "ms": 81,
+     "share": 0.001
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    }
+   ]
+  },
+  {
+   "name": "leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+   "exit": 0,
+   "wall_s": 45.9,
+   "loadBefore": 3.76,
+   "loadAfter": 3.53,
+   "counts": {
+    "total": 57,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 56
+   },
+   "rows": [
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "pass",
+     "ms": 45307,
+     "share": 0.378
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    }
+   ]
+  },
+  {
+   "name": "leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+   "exit": 0,
+   "wall_s": 0.8,
+   "loadBefore": 3.53,
+   "loadAfter": 3.53,
+   "counts": {
+    "total": 57,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 56
+   },
+   "rows": [
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "pass",
+     "ms": 58,
+     "share": 0
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    }
+   ]
+  },
+  {
+   "name": "leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+   "exit": 0,
+   "wall_s": 0.9,
+   "loadBefore": 3.53,
+   "loadAfter": 3.53,
+   "counts": {
+    "total": 57,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 56
+   },
+   "rows": [
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "pass",
+     "ms": 362,
+     "share": 0.003
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    }
+   ]
+  },
+  {
+   "name": "leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+   "exit": 0,
+   "wall_s": 4,
+   "loadBefore": 3.53,
+   "loadAfter": 3.41,
+   "counts": {
+    "total": 57,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 56
+   },
+   "rows": [
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "pass",
+     "ms": 3449,
+     "share": 0.029
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    }
+   ]
+  },
+  {
+   "name": "leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+   "exit": 0,
+   "wall_s": 9.8,
+   "loadBefore": 3.41,
+   "loadAfter": 3.04,
+   "counts": {
+    "total": 57,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 56
+   },
+   "rows": [
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "pass",
+     "ms": 9200,
+     "share": 0.077
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    }
+   ]
+  },
+  {
+   "name": "leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+   "exit": 0,
+   "wall_s": 31.8,
+   "loadBefore": 3.04,
+   "loadAfter": 3.74,
+   "counts": {
+    "total": 57,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 56
+   },
+   "rows": [
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+     "state": "skip",
+     "ms": null,
+     "share": null
+    },
+    {
+     "file": "src/search.test.ts",
+     "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+     "state": "pass",
+     "ms": 31172,
+     "share": 0.26
+    }
+   ]
+  }
+ ]
+}

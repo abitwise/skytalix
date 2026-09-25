@@ -1,0 +1,287 @@
+{
+ "mode": "deep",
+ "head": "9d2306c",
+ "cores": 8,
+ "deep": {
+  "tag": "deep-both",
+  "exit": 0,
+  "wall_s": 109.2,
+  "loadBefore": 3.02,
+  "loadAfter": 3.99,
+  "tail": [
+   " Test Files  2 passed (2)",
+   "      Tests  94 passed (94)",
+   "   Start at  09:22:16",
+   "   Duration  108.75s (transform 66ms, setup 0ms, collect 94ms, tests 119.10s, environment 0ms, prepare 61ms)"
+  ],
+  "counts": {
+   "total": 94,
+   "passed": 94,
+   "failed": 0,
+   "skipped": 0
+  },
+  "deep": [
+   {
+    "file": "src/quiescence.test.ts",
+    "name": "A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 569,
+    "share": 0.009
+   },
+   {
+    "file": "src/quiescence.test.ts",
+    "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 607,
+    "share": 0.01
+   },
+   {
+    "file": "src/quiescence.test.ts",
+    "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > position-6 at depth 3 reproduces the recorded 14 565 nodes and c3d5 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 422,
+    "share": 0.014
+   },
+   {
+    "file": "src/quiescence.test.ts",
+    "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 168,
+    "share": 0.001
+   },
+   {
+    "file": "src/quiescence.test.ts",
+    "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 50 / e2a6 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 5928,
+    "share": 0.049
+   },
+   {
+    "file": "src/quiescence.test.ts",
+    "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 186,
+    "share": 0.002
+   },
+   {
+    "file": "src/quiescence.test.ts",
+    "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 30 / c3d5 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 2328,
+    "share": 0.019
+   },
+   {
+    "file": "src/quiescence.test.ts",
+    "name": "A6 — the searched position is unchanged on return > leaves the broad corpus byte-identical [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 0,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 376,
+    "share": 0.013
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 187,
+    "share": 0.006
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 11486,
+    "share": 0.383
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 3547,
+    "share": 0.118
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 55,
+    "share": 0.002
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 381,
+    "share": 0.013
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 1211,
+    "share": 0.04
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 2000,
+    "share": 0.067
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 3074,
+    "share": 0.102
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 3118,
+    "share": 0.104
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 3,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 64,
+    "share": 0.002
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 1432,
+    "share": 0.048
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 1239,
+    "share": 0.01
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 1160,
+    "share": 0.01
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 68,
+    "share": 0.001
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 48086,
+    "share": 0.401
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 52,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 370,
+    "share": 0.003
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 3660,
+    "share": 0.031
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 9475,
+    "share": 0.079
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 0,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 0,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 0,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 0,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 0,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 0,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 0,
+    "share": 0
+   },
+   {
+    "file": "src/search.test.ts",
+    "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+    "state": "pass",
+    "ms": 16700,
+    "share": 0.139
+   }
+  ],
+  "red": [],
+  "over50": []
+ }
+}

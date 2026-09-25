@@ -474,3 +474,37 @@ Workflow 07) on QE's routed readings G1 and G2. Branch `grugops/ruling-abc079-g1
   - a `search.ts` diff whose every changed line is a comment.
 - **For the Scribe, after the hop:** the owed `Quiescence deep lane` `AGENTS.md` entry also
   names `A5`'s depth-3 oracle pins.
+
+## Delivery (re-hop 3)
+
+**Re-hopped 2026-09-25 by the Software Engineer** (task `wave-2026-09-24`, subtask
+`ticket-to-pr-ABC-079-rehop3`, Workflow 04) under the G1/G2 licence. Code commit **`9d2306c`**
+on **`grugops/ABC-079-quiescence-rehop3`**, parent `9a7e549`. **NOT merged, NOT pushed.** Three
+files, 119/−30: `src/search.ts` 21/−8 (comments only), `src/search.test.ts` 60/−14,
+`src/quiescence.test.ts` 38/−8. Every hunk falls inside the licensed ranges. `src/quiescence.ts`,
+`src/engine.*`, `src/evaluate.ts`, `src/search.qe.test.ts`, `plans/board.md`, `AGENTS.md` and
+the NFR bars are untouched. No timeout changed.
+
+- **D1–D4:** `src/search.ts` now names both bare-leaf doors. It names both exports per switch.
+  It says `prune: false` is brute force above the horizon only, because `quiesce` keeps its own
+  cutoffs, and `searchWithoutPruning` is described the same way. **The `git diff -U0` has 29
+  changed lines, all comments. The TypeScript token stream is identical (808 = 808).**
+- **G1:** `A5`'s depth-3 deep rows pin kiwipete **`50` / `e2a6`** and position-6 **`30` /
+  `c3d5`**. The pin reads the same `search()` call as the ratio. The docblock gives the re-pin
+  rule.
+- **G2:** `A4` and `A7` deep have one case per slice: `default` d2, `broad` d1, and the broad
+  corpus at d2 per root, plus `A7`'s one roots case. The `broad` d1 case asserts that the six
+  slices are exactly the broad corpus, by names in order and by size.
+- **`SEARCH_DEEP=1` on both files: exit 0, 94/94 (search 57, quiescence 37), 109.2 s, load
+  3.0–4.0. No case is over 50%.** The worst is `A4`'s kiwipete slice at 48.1 s (40.1%). `A4` deep
+  was 52–56% before this hop.
+- **Each `A7` case alone, cold:** the worst is kiwipete's slice at 45.3 s (37.8%). The roots case
+  is 31.2 s (26.0%), and the rest are ≤ 7.7%. Before this hop, `A7` alone was 77–83%.
+- **The pins bite:** under both `R2b` and `R2c` (K = 5), the kiwipete and position-6 depth-3
+  rows go red, *expected 205 to be 50* and *expected 120 to be 30*. Both were reverted, and
+  `git status --porcelain -- src` was empty after each.
+- **Gates:** default lane 43 files / **1392** pass / 0 skip, exit 0. Integrity `No findings.`
+  Lint, typecheck and build all exit 0.
+- Notes: `.grugops/context/ticket-to-pr-ABC-079/notes/` (three re-hop 3 notes plus
+  `raw-rehop3-*`). Next: a delta re-QE, and the Scribe's `AGENTS.md` entry. Both are the
+  Orchestrator's to schedule.

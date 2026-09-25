@@ -1,0 +1,27 @@
+// ABC-079 re-hop 3: one row per test — state, duration, its own timeout (read from the runner),
+// and the share of that timeout used. Adapted from QE's raw-harness-share-reporter.
+import { writeFileSync } from "node:fs";
+
+export default class ShareReporter {
+  onFinished(files) {
+    const rows = [];
+    const walk = (t, path) => {
+      if (t.type === "test") {
+        const d = t.result?.duration ?? null;
+        const timeout = t.timeout ?? 5000;
+        rows.push({
+          file: t.file?.name,
+          name: [...path, t.name].join(" > "),
+          state: t.result?.state ?? t.mode,
+          ms: d == null ? null : Math.round(d),
+          timeout,
+          share: d == null ? null : +(d / timeout).toFixed(3),
+          errors: (t.result?.errors ?? []).map((e) => String(e.message).slice(0, 300)),
+        });
+      }
+      for (const c of t.tasks ?? []) walk(c, t.type === "suite" ? [...path, t.name] : path);
+    };
+    for (const f of files) for (const c of f.tasks) walk(c, []);
+    if (process.env.SHARE_OUT) writeFileSync(process.env.SHARE_OUT, JSON.stringify(rows, null, 1));
+  }
+}
