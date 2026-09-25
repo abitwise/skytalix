@@ -2130,6 +2130,20 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
   });
 });
 
+describe("ABC-109 — AGENTS.md stays inside its byte budget", () => {
+  /** `ABC-109` `A1`'s target: a quarter under the inherited 32,768 B reader cap, which truncates silently from the tail. */
+  const AGENTS_MD_BUDGET_BYTES = 24_576;
+
+  it("A5 — AGENTS.md's size on disk, in BYTES, is at most the budget", () => {
+    // Bytes, not characters (`## Test notes` 1): no encoding, so `.length` is the `wc -c` figure.
+    // A byte count against a budget and nothing else — no hash, no line count (`ABC-059`).
+    expect(
+      readFileSync(`${REPOSITORY}AGENTS.md`).length,
+      `AGENTS.md bytes against its ${AGENTS_MD_BUDGET_BYTES} B budget (ABC-109)`,
+    ).toBeLessThanOrEqual(AGENTS_MD_BUDGET_BYTES);
+  });
+});
+
 describe("ABC-062 — the two command lines that reach the refusal path untested", () => {
   it("A1/A2/A7 — `--colour` alone and a bare `white` are each refused, naming their own token and their own reason", () => {
     // A NEW BLOCK OF ITS OWN, deliberately: the near-miss family at `:554` is COMPLETE OVER POSITION
