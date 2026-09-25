@@ -1,0 +1,3 @@
+clean {"kiwipete":{"score":50,"move":"e2a6","nodes":405945},"position-4":{"score":-375,"move":"c4c5","nodes":14727},"position-6":{"score":30,"move":"c3d5","nodes":120239}}
+R2b {"kiwipete":{"score":205,"move":"e5g6","nodes":295106},"position-4":{"score":-285,"move":"g1h1","nodes":14043},"position-6":{"score":120,"move":"c3d5","nodes":45659}}
+R2c {"kiwipete":{"score":205,"move":"e5g6","nodes":295106},"position-4":{"score":-285,"move":"g1h1","nodes":14043},"position-6":{"score":120,"move":"c3d5","nodes":45659}}

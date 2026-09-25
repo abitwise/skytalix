@@ -426,3 +426,51 @@ false sentences in `src/search.ts`, judged by the `ABC-114` standard, on the pre
   times, nothing on stderr.
 - **Production lines > 0, so the UAT waiver does not apply.** Not merged, not deployed.
   `plans/board.md` is untouched; the board move is the Orchestrator's.
+
+## Ruling (G1/G2)
+
+**Ruled 2026-09-25 by Architect/Design** (task `wave-2026-09-24`, subtask `ruling-abc079-g1g2`,
+Workflow 07) on QE's routed readings G1 and G2. Branch `grugops/ruling-abc079-g1g2` off
+`grugops/int-ABC-079` @ `9b4dd68`. Notes and probes are in
+`.grugops/context/ruling-abc079-g1g2/notes/`. This ruling can be overturned on that evidence.
+**NOT A STAMP.**
+
+- **G1 is closed in this ticket and not routed.**
+  - `A5`'s deep depth-3 rows in `src/quiescence.test.ts` pin `{score, move}`: kiwipete
+    **`50` / `e2a6`**, position-6 **`30` / `c3d5`**. They add zero searches.
+  - The values are **oracle answers, not only a fingerprint.** This ruling ran the retired
+    unpruned quiescence oracle offline (`searchWithoutPruning(p, 3)`, 161.9 s and 28.0 s in
+    plain node). It equals `search(p, 3)` on score and move on all six roots.
+  - `R2b` and `R2c` move those answers to 205 / e5g6 and 120, so both surviving mutants go red.
+  - Node counts are not pinned; the `A5` levels keep governing cost.
+  - Re-pin only after the oracle is re-run and agrees.
+- **G2 is closed in this ticket.**
+  - The deep cost is one slice: the broad corpus at depth 2, 62.5 s cold (52%). QE's
+    per-corpus-run split would leave that slice at 52%.
+  - The remedy: every `A4` and `A7` deep case pays at most ONE slice, and the broad corpus at
+    depth 2 is split by root. The worst case is then kiwipete's 49 positions at 45.7 s (38%).
+  - `A7` run alone read 99.8 s (83%) today. It stops depending on `A4` running first.
+  - Timeouts do not move.
+- **The licence for the ONE repair hop** (lines at `9b4dd68`; everything else stays
+  byte-identical):
+  - `src/search.ts`, **comment lines only**: `:24–27` (D2), `:61–69` (D1, plus D4 at `:66`),
+    `:112–114` (D4), `:204–209` (D3). The door's docblock `:227–236` is true and stays.
+  - `src/search.test.ts`:
+    - `:37–43`: the header's "no case proves the combination", now false.
+    - `:352`: the `A1` banner, "brute force", the same fact as D3/D4.
+    - `:236–289`: a per-root broad slice and its memo key.
+    - `:475–482`: `A4` deep, one case per slice, plus the check that the slices cover the
+      corpus.
+    - `:550–568`: `A7` deep, one case per slice plus one roots case.
+  - `src/quiescence.test.ts` `:436–475`: `A5`, the depth-3 pins and their docblock.
+  - `src/quiescence.ts`, `src/engine.*`, `src/evaluate.ts` and `src/search.qe.test.ts` do not
+    change.
+- **The hop re-runs and reports:**
+  - both `SEARCH_DEEP` files to exit 0, with every deep case's share of its timeout (any case
+    over 50% named);
+  - each `A7` slice run alone, under 50%;
+  - `R2b`/`R2c` re-applied, showing the pins go red, then reverted;
+  - the default lane and the gates;
+  - a `search.ts` diff whose every changed line is a comment.
+- **For the Scribe, after the hop:** the owed `Quiescence deep lane` `AGENTS.md` entry also
+  names `A5`'s depth-3 oracle pins.

@@ -1,0 +1,50 @@
+// G2 probe builder: the REAL src/search.test.ts, imports pointed at the worktree's src/, plus
+// appended probe cases that time each deep-lane component COLD (both memos cleared first).
+import { readFileSync, writeFileSync, appendFileSync } from "node:fs";
+const [SRC, DIR] = process.argv.slice(2);
+let text = readFileSync(`${SRC}/search.test.ts`, "utf8");
+text = text.replace(/from "\.\/([a-z.-]+\.ts)"/g, `from "${SRC}/$1"`);
+text = text.replace('new URL("./search.ts", import.meta.url)', `new URL("file://${SRC}/search.ts")`);
+text += `
+// ---- G2 PROBE (out of tree) ----
+import { loadavg as __load } from "node:os";
+const __OUT = ${JSON.stringify(`${DIR}/g2-results.jsonl`)};
+function __probe(name: string, body: () => void) {
+  it(\`probe:\${name}\`, () => {
+    corpusRuns.clear();
+    searchPairs.clear();
+    const l0 = __load()[0].toFixed(2);
+    const t = performance.now();
+    body();
+    const ms = Math.round(performance.now() - t);
+    const { appendFileSync: a } = require("node:fs");
+    a(__OUT, JSON.stringify({ name, ms, shareOf120s: +(ms / 1200).toFixed(1), load: [l0, __load()[0].toFixed(2)] }) + "\\n");
+  }, 900_000);
+}
+__probe("default2", () => { corpusRun("default", 2); });
+__probe("broad1", () => { corpusRun("broad", 1); });
+__probe("broad2", () => { corpusRun("broad", 2); });
+__probe("q2pairs", () => { for (const { fen } of PERFT_CORPUS) searchPair(fen, 2, "quiescence"); });
+__probe("d3sweep", () => {
+  for (const { fen } of PERFT_CORPUS) {
+    const position = parseFen(fen);
+    search(position, 3);
+    searchWithoutPruningOrQuiescence(position, 3);
+  }
+});
+`;
+writeFileSync(`${DIR}/search.probe.test.ts`, text.replace('import { readFileSync } from "node:fs";', 'import { readFileSync } from "node:fs";\nimport { createRequire } from "node:module";\nconst require = createRequire(import.meta.url);'));
+writeFileSync(`${DIR}/vitest.config.ts`, 'import { defineConfig } from "vitest/config";\nexport default defineConfig({ test: { pool: "threads", include: ["search.probe.test.ts"] } });\n');
+// Appended to search.probe.test.ts after g2-build.mjs, for the per-root broad depth-2 split:
+  __probe(`broad2root:${__root}`, () => {
+    const corpus = inProgress([{ name: __root, position: parseFen(__fen) }, ...expandFrom(__root, parseFen(__fen), 1)]);
+    for (const { position } of corpus) {
+      const before = snapshot(position);
+      const result = search(position, 2);
+      if (result.move === null) throw new Error("null move");
+      if (!matchesSnapshot(position, before)) throw new Error("mutated");
+    }
+    const { appendFileSync: a } = require("node:fs");
+    a(__OUT, JSON.stringify({ root: __root, positions: corpus.length }) + "\n");
+  });
+}

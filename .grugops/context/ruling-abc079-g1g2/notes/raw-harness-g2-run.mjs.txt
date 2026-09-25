@@ -1,0 +1,15 @@
+// Run each G2 case in its OWN vitest process (cold module, cold memo), sequentially.
+import { spawnSync } from "node:child_process";
+import { loadavg } from "node:os";
+const DIR = process.argv[2];
+const VITEST = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/node_modules/.bin/vitest";
+const CASES = process.argv.slice(3);
+for (const t of CASES) {
+  const l0 = loadavg()[0].toFixed(2);
+  const start = Date.now();
+  const r = spawnSync(VITEST, ["run", "--root", DIR, "--reporter", "verbose", "-t", t], {
+    cwd: DIR, env: { ...process.env, SEARCH_DEEP: "1" }, encoding: "utf8", timeout: 1_200_000,
+  });
+  const rows = `${r.stdout}\n${r.stderr}`.split("\n").filter((x) => /✓|×|Tests |Error|FAIL/.test(x)).map((x) => x.trim());
+  console.log(JSON.stringify({ filter: t, status: r.status, wallMs: Date.now() - start, load: [l0, loadavg()[0].toFixed(2)], rows }));
+}
