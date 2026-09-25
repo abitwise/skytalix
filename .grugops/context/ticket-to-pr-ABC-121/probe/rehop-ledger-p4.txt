@@ -1,0 +1,25 @@
+__baseline__	SURVIVED	0 default rows
+tactical	RED	4 default rows
+r2	RED	3 default rows
+noLmrResearch	RED	1 default rows
+noResearch	RED	1 default rows
+early	RED	3 default rows
+gross	RED	15 default rows
+pvsNoResearch	RED	7 default rows
+noLmrResearch-engine-only	SURVIVED	0 default rows
+noLmrResearch-search-only	RED	1 default rows
+pvsNoResearch-engine-only	RED	3 default rows
+pvsNoResearch-search-only	RED	4 default rows
+noResearch-engine-only	SURVIVED	0 default rows
+reduces-at-root	RED	4 default rows
+ignores-in-check	RED	1 default rows
+ignores-gives-check	RED	1 default rows
+ignores-promotion	RED	1 default rows
+no-unmake-in-predicate	RED	6 default rows
+search-literal-reduction	RED	1 default rows
+engine-bypasses-predicate	RED	1 default rows
+door-withoutReductions-reduces	RED	1 default rows
+door-pre121-has-pvs	RED	12 default rows
+engine-door-pre121-has-pvs	RED	2 default rows
+engine-door-withoutReductions-reduces	SURVIVED	0 default rows
+20 of 23 red in the default lane alone; survivors: noLmrResearch-engine-only, noResearch-engine-only, engine-door-withoutReductions-reduces

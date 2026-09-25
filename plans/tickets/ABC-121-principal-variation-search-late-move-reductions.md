@@ -346,3 +346,22 @@ the figures live in `.grugops/context/ticket-to-pr-ABC-121/notes/`.
      ratify or overrule (`…0da3f1a5`).
 - **Owed later (fenced here):** the `AGENTS.md` deep-lane lines for
   `src/search.pvs-lmr.test.ts` (`SEARCH_DEEP`, `ENGINE_DEEP`). A Scribe pass, behind `ABC-109`.
+
+**`N8-LANE` re-hop, 2026-09-25, by the Software Engineer** (subtask `ticket-to-pr-ABC-121-lane`),
+on branch `grugops/ABC-121-lane` @ **`6c1e895`**, off `66afd16`. Test-only, +25/−11.
+**Unmerged; not pushed.** The figures live in the notes.
+
+- **The unattributed ≈ 1 s is test-body CPU, not import cost** (`…e1e4a69f`).
+  - Import, module-level work and collect cost ≈ 45 ms above the per-file floor.
+  - The bodies' 0.93 s of CPU reads ≈ 1.7 s in the lane on this 4P+4E machine under load.
+- **Moved:** the seven-seed mate-floor guard, to `SEARCH_DEEP`.
+- **Narrowed:** the PVS identity guard, to kp-vs-k; the other six positions run in the deep 190.
+- **Kept, because each is its variant's only default guard:** `A4`'s `chooseMove` row and the
+  engine-doors bite (`…9bdce84b`).
+- **Default-lane planted variants:** 23 / 23 red. The four-row proposal would leave 20 / 23
+  (`…17a0830d`).
+- **`N8-LANE` still NOT MET:** +1 575 ms gross, **+1 415 ms net** against 650.
+  - Null control 0.19%. Load1 median 22.8.
+  - The placement removes ≈ 30% of the charge (`…e4d6fcc8`).
+  - The residual is for Security/NFR to rate; the owner decides.
+- **The G6 row is untouched** (Architect/Design's ruling is pending).

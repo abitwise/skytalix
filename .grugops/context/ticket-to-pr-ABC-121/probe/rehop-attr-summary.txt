@@ -1,0 +1,15 @@
+arms B,A,S,M,T,N rounds 9 (round 0 discarded)
+B: n=8 files/tests=47/1446 medianCPU=24.740 rangeCPU=23.78-25.85 medianWALL=6.270
+A: n=8 files/tests=48/1467 medianCPU=26.750 rangeCPU=25.17-28.08 medianWALL=6.380
+S: n=8 files/tests=47/1446 medianCPU=25.175 rangeCPU=24.39-26.83 medianWALL=6.160
+M: n=8 files/tests=47/1446 medianCPU=25.170 rangeCPU=24.26-26.32 medianWALL=6.160
+T: n=8 files/tests=48/1447 medianCPU=25.140 rangeCPU=24.27-26.66 medianWALL=6.060
+N: n=8 files/tests=48/1467 medianCPU=26.570 rangeCPU=25.44-27.71 medianWALL=6.210
+A - B CPU per round: 0.59 1.71 1.23 2.4 3.03 1.09 2.78 3.75 median=2.055 (8.31% of B) sign+ 8/8
+S - B CPU per round: -0.03 0.85 -0.11 1.15 0.42 -0.29 0.73 0.22 median=0.320 (1.29% of B) sign+ 5/8
+M - B CPU per round: -0.15 0.62 0.11 -0.31 1.24 0.47 0.51 0.09 median=0.290 (1.17% of B) sign+ 6/8
+T - B CPU per round: 0.34 0.89 -0.21 -0.42 1.76 0.21 0.54 0.1 median=0.275 (1.11% of B) sign+ 6/8
+N - B CPU per round: 1.24 2.28 1.25 1.06 2.1 1.86 1.66 1.99 median=1.760 (7.11% of B) sign+ 8/8
+N - A CPU per round: 0.65 0.57 0.02 -1.34 -0.93 0.77 -1.12 -1.76 median=-0.455 (-1.84% of B) sign+ 4/8
+load1 before each run: min=4.21 median=22.59 max=29.73
+harness errors: 0 of 54
