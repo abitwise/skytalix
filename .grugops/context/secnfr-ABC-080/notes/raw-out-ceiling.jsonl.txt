@@ -1,0 +1,3 @@
+{"name":"kiwipete","budgetMs":"Infinity","wallMs":5001.3,"depth":6,"nodes":1529610}
+{"name":"position-4","budgetMs":"1000000000","wallMs":5000.6,"depth":6,"nodes":1879993}
+{"name":"queens-rig","budgetMs":"Infinity","wallMs":5002.6,"depth":6,"nodes":1088641}

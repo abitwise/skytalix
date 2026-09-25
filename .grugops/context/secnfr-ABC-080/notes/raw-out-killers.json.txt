@@ -1,0 +1,174 @@
+{
+ "budgetMs": 5000,
+ "bounds": [
+  {
+   "name": "startpos",
+   "depth": 7,
+   "nodes": 1163284,
+   "wallMs": 5002.1,
+   "tablesThisCall": 1,
+   "maxRecordPly": 7,
+   "maxAtPly": 7,
+   "tables": [
+    {
+     "slotsLength": 8,
+     "filled": 7,
+     "maxSlot": 2
+    }
+   ]
+  },
+  {
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 1482506,
+   "wallMs": 5001.9,
+   "tablesThisCall": 1,
+   "maxRecordPly": 6,
+   "maxAtPly": 6,
+   "tables": [
+    {
+     "slotsLength": 7,
+     "filled": 4,
+     "maxSlot": 2
+    }
+   ]
+  },
+  {
+   "name": "position-3",
+   "depth": 8,
+   "nodes": 1690638,
+   "wallMs": 5000.7,
+   "tablesThisCall": 1,
+   "maxRecordPly": 8,
+   "maxAtPly": 8,
+   "tables": [
+    {
+     "slotsLength": 9,
+     "filled": 8,
+     "maxSlot": 2
+    }
+   ]
+  },
+  {
+   "name": "position-6",
+   "depth": 6,
+   "nodes": 1423646,
+   "wallMs": 5003.3,
+   "tablesThisCall": 1,
+   "maxRecordPly": 6,
+   "maxAtPly": 6,
+   "tables": [
+    {
+     "slotsLength": 7,
+     "filled": 5,
+     "maxSlot": 2
+    }
+   ]
+  },
+  {
+   "name": "KPvK",
+   "depth": 12,
+   "nodes": 3225607,
+   "wallMs": 5001.4,
+   "tablesThisCall": 1,
+   "maxRecordPly": 12,
+   "maxAtPly": 12,
+   "tables": [
+    {
+     "slotsLength": 13,
+     "filled": 12,
+     "maxSlot": 2
+    }
+   ]
+  },
+  {
+   "name": "locked-pawns-KvK",
+   "depth": 14,
+   "nodes": 3321861,
+   "wallMs": 5000.5,
+   "tablesThisCall": 1,
+   "maxRecordPly": 14,
+   "maxAtPly": 14,
+   "tables": [
+    {
+     "slotsLength": 15,
+     "filled": 14,
+     "maxSlot": 2
+    }
+   ]
+  },
+  {
+   "name": "KRvK",
+   "depth": 9,
+   "nodes": 2922512,
+   "wallMs": 5003.3,
+   "tablesThisCall": 1,
+   "maxRecordPly": 9,
+   "maxAtPly": 9,
+   "tables": [
+    {
+     "slotsLength": 10,
+     "filled": 9,
+     "maxSlot": 2
+    }
+   ]
+  },
+  {
+   "name": "mate-in-1-only",
+   "depth": 8,
+   "nodes": 2861082,
+   "wallMs": 5000,
+   "tablesThisCall": 1,
+   "maxRecordPly": 7,
+   "maxAtPly": 8,
+   "tables": [
+    {
+     "slotsLength": 8,
+     "filled": 4,
+     "maxSlot": 2
+    }
+   ]
+  },
+  {
+   "name": "queens-rig",
+   "depth": 6,
+   "nodes": 1049729,
+   "wallMs": 5000.9,
+   "tablesThisCall": 1,
+   "maxRecordPly": 6,
+   "maxAtPly": 6,
+   "tables": [
+    {
+     "slotsLength": 7,
+     "filled": 5,
+     "maxSlot": 2
+    }
+   ]
+  }
+ ],
+ "growth": {
+  "calls": 12,
+  "heapUsedMiBAfterEachCall": [
+   8.56,
+   8.57,
+   8.57,
+   8.57,
+   8.57,
+   8.58,
+   8.58,
+   8.58,
+   8.6,
+   8.61,
+   8.62,
+   8.62
+  ],
+  "tablesCollectedOf12": 11
+ },
+ "alloc": {
+  "position": "kiwipete",
+  "depth": 5,
+  "nodes": 157042,
+  "orderMovesCalls": 6560,
+  "note": "every orderMoves call on the full ordering path is preceded by exactly one KillerTable.at call"
+ }
+}

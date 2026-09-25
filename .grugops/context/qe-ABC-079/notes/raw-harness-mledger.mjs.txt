@@ -1,0 +1,27 @@
+// Render the mutant ledger: per mutant, probe verdict, each stage's red rows with first error line,
+// and for killed stages the last rows that finished (so "which row was running" is inferable).
+import { readFileSync, writeFileSync } from "node:fs";
+const L = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079/logs";
+let txt = "";
+const p = (s) => (txt += `${s}\n`);
+for (const tag of ["r2", "q"]) {
+  const r = JSON.parse(readFileSync(`${L}/mutants-${tag}.json`, "utf8"));
+  for (const [name, v] of Object.entries(r)) {
+    p(`## ${name}${v.K ? ` (K=${v.K})` : ""}   src clean after revert: ${v.srcCleanAfterRevert}`);
+    p(`   probe: exit ${v.P.exit}${v.P.killedAtS ? ` KILLED@${v.P.killedAtS}s` : ""}, ${v.P.wall_s.toFixed(1)} s, score/move changed: ${v.P.realDefect}`);
+    for (const d of v.P.diffs) p(`     ${d.pos} ${d.d}: ${d.clean} -> ${d.mutant}${d.scoreOrMoveChanged ? "   <-- SCORE/MOVE" : ""}`);
+    for (const [k, label] of [["A", "A default lane, 4 files"], ["B", "B SEARCH_DEEP=1 quiescence+search"], ["C_default", "C1 whole default lane --dir src"], ["C_engineDeep", "C2 ENGINE_DEEP=1 engine.test.ts"]]) {
+      const s = v[k];
+      if (!s) continue;
+      p(`   ${label}: ${s.red.length} red / ${s.finished} finished, ${s.pass} pass, exit ${s.exit}${s.killedAtS ? `, KILLED@${s.killedAtS}s` : ""}, ${s.wall_s.toFixed(1)} s, load ${s.loadBefore.join("/")}`);
+      for (const x of s.red) p(`     RED ${x.ms} ms  ${x.name.slice(0, 150)}\n         ${String(x.error).split("\n")[0].slice(0, 200)}`);
+      if (s.killedAtS) {
+        const stream = readFileSync(`${L}/${tag}-${name}-${k === "A" ? "A" : k === "B" ? "B" : k === "C_default" ? "C1" : "C2"}.shares.json.stream`, "utf8").trim().split("\n").map((l) => JSON.parse(l));
+        p(`     last finished before the kill: ${stream.slice(-2).map((x) => `${x.name.slice(0, 110)} (${x.ms} ms)`).join(" | ")}`);
+      }
+    }
+    p("");
+  }
+}
+writeFileSync(`${L}/mutant-ledger.txt`, txt);
+console.log(txt);

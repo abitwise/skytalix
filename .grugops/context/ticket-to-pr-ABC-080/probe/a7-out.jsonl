@@ -1,0 +1,13 @@
+node v24.12.0 load { 3.05 3.31 3.37 }
+{"round":0,"build":"base","name":"kiwipete","depth":3,"nodes":1086197,"ms":3000,"score":50,"load":"{ 2.96 3.29 3.36 }"}
+{"round":0,"build":"head","name":"kiwipete","depth":6,"nodes":907018,"ms":3000,"score":35,"load":"{ 2.96 3.29 3.36 }"}
+{"round":0,"build":"base","name":"position-6","depth":3,"nodes":966952,"ms":3000,"score":30,"load":"{ 2.89 3.26 3.35 }"}
+{"round":0,"build":"head","name":"position-6","depth":5,"nodes":888094,"ms":3002,"score":35,"load":"{ 2.89 3.26 3.35 }"}
+{"round":1,"build":"head","name":"kiwipete","depth":6,"nodes":915210,"ms":3000,"score":35,"load":"{ 2.82 3.24 3.34 }"}
+{"round":1,"build":"base","name":"kiwipete","depth":3,"nodes":1122037,"ms":3002,"score":50,"load":"{ 2.75 3.22 3.33 }"}
+{"round":1,"build":"head","name":"position-6","depth":5,"nodes":889118,"ms":3000,"score":35,"load":"{ 2.75 3.22 3.33 }"}
+{"round":1,"build":"base","name":"position-6","depth":3,"nodes":980264,"ms":3001,"score":30,"load":"{ 2.69 3.20 3.33 }"}
+{"round":2,"build":"base","name":"kiwipete","depth":3,"nodes":1122037,"ms":3001,"score":50,"load":"{ 2.69 3.20 3.33 }"}
+{"round":2,"build":"head","name":"kiwipete","depth":6,"nodes":928522,"ms":3002,"score":35,"load":"{ 2.63 3.18 3.32 }"}
+{"round":2,"build":"base","name":"position-6","depth":3,"nodes":967976,"ms":3001,"score":30,"load":"{ 2.74 3.19 3.32 }"}
+{"round":2,"build":"head","name":"position-6","depth":5,"nodes":907550,"ms":3001,"score":35,"load":"{ 2.74 3.19 3.32 }"}

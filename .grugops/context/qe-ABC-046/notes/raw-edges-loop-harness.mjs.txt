@@ -1,0 +1,110 @@
+// qe-ABC-046 — edge cases through the MERGED loop with the DELIVERED per-session wrapper bound
+// exactly as the reader binds it (one createPromptLineResolver per run). No repo file touched.
+// Node runs .ts directly. Usage: node edges-loop.mjs <worktree>
+import { writeFileSync } from "node:fs";
+const SRC = `${process.argv[2]}/src`;
+const { runTurnLoop, QUIT_NOTICE, INPUT_ENDED_NOTICE } = await import(`${SRC}/turn-loop.ts`);
+const { createPromptLineResolver, classifyCommand, QUIT_CONFIRMATION_MESSAGES } = await import(`${SRC}/command-input.ts`);
+const { newGame, playMove, gameStatusOf, keyHistory, repetitionCounts } = await import(`${SRC}/history.ts`);
+const { legalMoves } = await import(`${SRC}/legal.ts`);
+const { squareName } = await import(`${SRC}/position.ts`);
+const { toFen } = await import(`${SRC}/fen.ts`);
+
+const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const findMove = (history, wanted) => {
+  const m = legalMoves(history.position).find((c) => `${squareName(c.from)}${squareName(c.to)}` === wanted);
+  if (!m) throw new Error(`no legal ${wanted}`);
+  return m;
+};
+const played = (moves) => { const h = newGame(START_FEN); for (const w of moves) playMove(h, findMove(h, w)); return h; };
+
+async function run(history, lines, { humanColour = "white", engineMoves = [] } = {}) {
+  const events = [];
+  const messagesPerFrame = [];
+  const outcomes = [];
+  const writes = [];
+  let next = 0;
+  let ply = 0;
+  const resolve = createPromptLineResolver();
+  const render = (_h, status, thinking, messages) => { messagesPerFrame.push([...messages]); events.push(`render(claimable=${status.claimable ? "yes" : "no"},thinking=${thinking})`); return ["row1", "row2"]; };
+  const input = async (h) => {
+    const line = lines[next++];
+    events.push(`read#${next}:${JSON.stringify(line)} sideToMove=${h.position.blackToMove ? "black" : "white"} moves=${h.moves.length}`);
+    if (line === undefined) return { kind: "eof" };
+    const o = resolve(h, line);
+    outcomes.push(o);
+    return o;
+  };
+  const engine = async (h) => { const w = engineMoves[ply++]; events.push(`engine:${w}`); if (w === undefined) throw new Error("engine out of script"); return findMove(h, w); };
+  const sink = { write: (t) => { writes.push(t); events.push(`sink.write(${JSON.stringify(t.slice(0, 24))})`); } };
+  const outcome = await runTurnLoop({ history, humanColour, render, input, engine, sink });
+  return { outcome, reads: next, renders: messagesPerFrame.length, messagesPerFrame, events, outcomes, writes, fen: toFen(history.position), moves: history.moves.length, keys: keyHistory(history).length, reps: [...repetitionCounts(history).values()] };
+}
+const endedOnQuit = (r) => r.writes[r.writes.length - 1] === `${QUIT_NOTICE}\n` && !r.writes.some((w) => w.includes(INPUT_ENDED_NOTICE));
+const endedOnEof = (r) => r.writes[r.writes.length - 1] === `${INPUT_ENDED_NOTICE}\n` && !r.writes.includes(`${QUIT_NOTICE}\n`);
+
+const report = {};
+const check = (name, cond, detail) => { report[name] = { ok: !!cond, detail }; console.log(`${cond ? "OK  " : "FAIL"} ${name} :: ${String(JSON.stringify(detail ?? null)).slice(0, 900)}`); };
+
+// (1) ply 0 — quit / quit, and new, both colours where reachable
+{
+  const r = await run(newGame(START_FEN), ["quit", "quit", "e4"]);
+  check("(1a) ply 0, quit/quit: renders 2 (opening + confirmation), reads 2, ends on QUIT_NOTICE, {null,null,0}, moves 0", r.renders === 2 && r.reads === 2 && endedOnQuit(r) && r.outcome.result === null && r.outcome.reason === null && r.outcome.exitCode === 0 && r.moves === 0 && r.fen === START_FEN, { outcome: r.outcome, renders: r.renders, reads: r.reads, messagesPerFrame: r.messagesPerFrame, writes: r.writes });
+  const n = await run(newGame(START_FEN), ["new"]);
+  check("(1b) ply 0, new: take-back of 0, one extra frame with NO message, FEN/moves/keys/reps unchanged, then EOF", n.outcomes[0]?.kind === "take-back" && n.outcomes[0]?.plies === 0 && n.renders === 2 && JSON.stringify(n.messagesPerFrame) === "[[],[]]" && n.fen === START_FEN && n.moves === 0 && n.keys === 1 && JSON.stringify(n.reps) === "[1]" && endedOnEof(n), { first: n.outcomes[0], renders: n.renders, messagesPerFrame: n.messagesPerFrame, keys: n.keys, reps: n.reps });
+}
+// (2) new straight after new — mid-game
+{
+  const r = await run(played(["e2e4", "e7e5", "g1f3", "b8c6"]), ["new", "new"]);
+  check("(2) new / new at ply 4: first take-back 4, second take-back 0; renders 3; start FEN, moves 0, keys 1, one rep of 1; EOF", r.outcomes.map((o) => `${o.kind}:${o.plies}`).join(",") === "take-back:4,take-back:0" && r.renders === 3 && r.fen === START_FEN && r.moves === 0 && r.keys === 1 && JSON.stringify(r.reps) === "[1]" && endedOnEof(r), { outcomes: r.outcomes, renders: r.renders, fen: r.fen });
+  const q = await run(played(["e2e4", "e7e5"]), ["quit", "new", "new", "quit", "quit"]);
+  check("(2') quit / new / new / quit / quit: new clears the flag; the last pair ends the session on QUIT_NOTICE", q.reads === 5 && endedOnQuit(q) && q.moves === 0 && q.renders === 5, { reads: q.reads, renders: q.renders, messagesPerFrame: q.messagesPerFrame, outcomes: q.outcomes.map((o) => o.kind) });
+}
+// (3) after the game is over — Fool's mate reached by the human's lines, then quit / new still on the script
+{
+  const r = await run(newGame(START_FEN), ["f3", "g4", "quit", "quit", "new"], { engineMoves: ["e7e5", "d8h4"] });
+  check("(3a) mated, then quit/quit/new on the script: reads 2 (never asked again), result black-wins/checkmate, no QUIT_NOTICE, no take-back", r.reads === 2 && r.outcome.result === "black-wins" && r.outcome.reason === "checkmate" && !r.writes.includes(`${QUIT_NOTICE}\n`) && r.outcomes.every((o) => o.kind === "move"), { outcome: r.outcome, reads: r.reads, renders: r.renders, writes: r.writes });
+  const mated = played(["f2f3", "e7e5", "g2g4", "d8h4"]);
+  const m = await run(mated, ["new", "quit", "quit"]);
+  check("(3b) loop handed an already-mated history: reads 0, new is never seen, checkmate stands, FEN unchanged", m.reads === 0 && m.outcome.reason === "checkmate" && m.moves === 4, { outcome: m.outcome, reads: m.reads, renders: m.renders });
+  // quit armed, then the game ends by a move — the flag cannot outlive the game because the loop returns.
+  const a = await run(newGame(START_FEN), ["f3", "quit", "g4", "quit"], { engineMoves: ["e7e5", "d8h4"] });
+  check("(3c) quit / mating reply ends the game: the armed flag never fires, result checkmate, reads 3", a.reads === 3 && a.outcome.reason === "checkmate" && !a.writes.includes(`${QUIT_NOTICE}\n`), { outcome: a.outcome, reads: a.reads });
+}
+// (4) trailing text
+{
+  for (const line of ["quit now", "new game", "quit!", "quit.", "quitnow", "newgame"]) check(`(4) classifyCommand(${JSON.stringify(line)}) is undefined`, classifyCommand(line) === undefined, classifyCommand(line));
+  const r = await run(newGame(START_FEN), ["quit now", "quit now"]);
+  check("(4a) quit now / quit now: both REJECTED (not commands), never arms, session ends on EOF", r.outcomes.every((o) => o.kind === "rejected") && endedOnEof(r) && r.renders === 3, { outcomes: r.outcomes, renders: r.renders, messagesPerFrame: r.messagesPerFrame });
+  const c = await run(newGame(START_FEN), ["quit", "quit now", "quit"]);
+  check("(4b) quit / quit now / quit: `quit now` is a rejected line and CLEARS the flag; the third is a FIRST quit (confirmation), EOF", c.outcomes.map((o) => o.kind).join(",") === "command,rejected,command" && endedOnEof(c), { outcomes: c.outcomes.map((o) => [o.kind, o.messages]), writes: c.writes });
+  const g = await run(played(["e2e4", "e7e5"]), ["new game"]);
+  check("(4c) new game at ply 2: REJECTED, nothing rewound (moves 2)", g.outcomes[0].kind === "rejected" && g.moves === 2, { first: g.outcomes[0], moves: g.moves });
+}
+// (5) mixed case and whitespace
+{
+  for (const [a, b] of [["QUIT", "Quit"], ["  quit ", "\tQUIT\r"], ["qUiT", "quit"]]) {
+    const r = await run(newGame(START_FEN), [a, b]);
+    check(`(5) ${JSON.stringify(a)} then ${JSON.stringify(b)}: confirmation then QUIT_NOTICE`, r.outcomes[0].kind === "command" && JSON.stringify(r.outcomes[0].messages) === JSON.stringify(QUIT_CONFIRMATION_MESSAGES) && endedOnQuit(r), { outcomes: r.outcomes, writes: r.writes });
+  }
+  for (const line of ["NEW", "New", "  nEw  "]) {
+    const r = await run(played(["e2e4", "e7e5"]), [line]);
+    check(`(5) ${JSON.stringify(line)} at ply 2: take-back 2, start FEN`, r.outcomes[0].kind === "take-back" && r.outcomes[0].plies === 2 && r.fen === START_FEN, r.outcomes[0]);
+  }
+}
+// (6) new while it is the ENGINE's turn — human black; the first line sits in the script while the engine moves
+{
+  const r = await run(newGame(START_FEN), ["new", "d7d5"], { humanColour: "black", engineMoves: ["e2e4", "d2d4"] });
+  const firstRead = r.events.find((e) => e.startsWith("read#1"));
+  check("(6) human black, `new` as the first line: the prompt is reached ONLY after the engine's e4 (black to move, moves 1); new takes back 1 ply — the ENGINE's — and the engine moves AGAIN (d4); game continues", r.events.indexOf("engine:e2e4") < r.events.indexOf(firstRead) && firstRead.includes("sideToMove=black") && firstRead.includes("moves=1") && r.outcomes[0].kind === "take-back" && r.outcomes[0].plies === 1 && r.events.includes("engine:d2d4"), { events: r.events, outcome: r.outcome });
+}
+// help lists both (unit side)
+{
+  const { helpMessages } = await import(`${SRC}/command-input.ts`);
+  check("help lists quit and new: heading + 6 tokens", helpMessages().includes("quit") && helpMessages().includes("new") && helpMessages().length === 7, helpMessages());
+}
+
+const fails = Object.values(report).filter((r) => !r.ok).length;
+console.log(`\nSUMMARY: ${Object.keys(report).length} checks, ${fails} failed`);
+writeFileSync("/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe046/edges-loop-summary.json", JSON.stringify(report, null, 2));
+process.exit(fails === 0 ? 0 : 1);

@@ -1,0 +1,17 @@
+// secnfr-ABC-080: heap drift across consecutive chooseMove calls, head A vs base B (which has no
+// killer table), so a drift that belongs to the process and not to ABC-080 is visible as such.
+// Run with --expose-gc. argv: armDir calls budgetMs label
+const [ARM, CALLS, BUDGET, LABEL] = process.argv.slice(2);
+const { parseFen } = await import(`${ARM}/src/fen.ts`);
+const { chooseMove } = await import(`${ARM}/src/engine.ts`);
+const kiwi = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
+const heap = [];
+for (let i = 0; i < Number(CALLS); i++) {
+  chooseMove(parseFen(kiwi), { budgetMs: Number(BUDGET) });
+  globalThis.gc();
+  await new Promise((r) => setTimeout(r, 10));
+  globalThis.gc();
+  heap.push(+(process.memoryUsage().heapUsed / 1048576).toFixed(2));
+}
+const at = (k) => heap[k];
+console.log(JSON.stringify({ arm: LABEL, calls: heap.length, first: at(0), at10: at(9), at20: at(19), last: heap.at(-1), max: Math.max(...heap) }));

@@ -1,0 +1,18 @@
+// secnfr-ABC-080: build the arms outside the repository. A = cb8ca55 (ABC-080 as QE reviewed it);
+// N = byte-identical copy of A (null control); B = 4f74acc (the base, pre-ordering). The two trees
+// differ under src/ in exactly the six ticket files. node_modules symlinked from the main checkout.
+import { execFileSync } from "node:child_process";
+import { mkdirSync, rmSync, symlinkSync } from "node:fs";
+
+const S = process.argv[2];
+const W = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/secnfr-ABC-080";
+const NM = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/node_modules";
+const git = (...a) => execFileSync("git", ["-C", W, ...a], { maxBuffer: 256 * 1024 * 1024 });
+
+for (const [arm, rev] of [["A", "cb8ca55"], ["N", "cb8ca55"], ["B", "4f74acc"]]) {
+  rmSync(`${S}/${arm}`, { recursive: true, force: true });
+  mkdirSync(`${S}/${arm}`, { recursive: true });
+  execFileSync("tar", ["-x", "-C", `${S}/${arm}`], { input: git("archive", rev) });
+  symlinkSync(NM, `${S}/${arm}/node_modules`);
+}
+console.log("built");

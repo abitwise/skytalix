@@ -1,0 +1,105 @@
+// secnfr-ABC-080 security probe (ASVS L1 scope, resource bounds). Run with --expose-gc.
+// argv: armsDir budgetMs outJson
+// 1. Killer-table bounds: wrap KillerTable.prototype.record/at to capture every table a chooseMove
+//    call builds, and read its REAL storage (`slots`, private in TS only) after the call: highest
+//    ply recorded, highest ply queried, slots.length, the largest slot, tables per call.
+// 2. Growth across calls: 12 consecutive chooseMove calls on one position; heapUsed after a forced
+//    gc between calls; every table registered with a FinalizationRegistry to see it collected.
+// 3. Allocation per node: orderMoves calls and elements handed to it per chooseMove, and the
+//    node rate A vs B at the same budget (the price of ordering, per node).
+import { writeFileSync } from "node:fs";
+
+const [ARMS, BUDGET, OUT] = process.argv.slice(2);
+const budgetMs = Number(BUDGET);
+const A = `${ARMS}/A`;
+const { parseFen } = await import(`${A}/src/fen.ts`);
+const search = await import(`${A}/src/search.ts`);
+const { chooseMove } = await import(`${A}/src/engine.ts`);
+const { legalMoves } = await import(`${A}/src/legal.ts`);
+const { KillerTable } = search;
+
+let tables = [];
+let maxRecordPly = -1;
+let maxAtPly = -1;
+const origRecord = KillerTable.prototype.record;
+const origAt = KillerTable.prototype.at;
+KillerTable.prototype.record = function (ply, move) {
+  if (!tables.includes(this)) tables.push(this);
+  if (ply > maxRecordPly) maxRecordPly = ply;
+  return origRecord.call(this, ply, move);
+};
+KillerTable.prototype.at = function (ply) {
+  if (!tables.includes(this)) tables.push(this);
+  if (ply > maxAtPly) maxAtPly = ply;
+  return origAt.call(this, ply);
+};
+
+const SET = [
+  ["startpos", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"],
+  ["kiwipete", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"],
+  ["position-3", "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"],
+  ["position-6", "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"],
+  ["KPvK", "8/8/8/4k3/8/8/4P3/4K3 w - - 0 1"],
+  ["locked-pawns-KvK", "8/8/3k4/p1p1p1p1/P1P1P1P1/3K4/8/8 w - - 0 1"],
+  ["KRvK", "8/8/8/4k3/8/8/8/R3K3 w Q - 0 1"],
+  ["mate-in-1-only", "7k/5Q2/6K1/8/8/8/8/8 w - - 0 1"],
+  ["queens-rig", "q1q1q1qk/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K7 w - - 0 1"],
+];
+
+const bounds = [];
+for (const [name, fen] of SET) {
+  tables = [];
+  maxRecordPly = -1;
+  maxAtPly = -1;
+  const t0 = performance.now();
+  const c = chooseMove(parseFen(fen), { budgetMs });
+  const wallMs = +(performance.now() - t0).toFixed(1);
+  const t = tables.map((k) => ({
+    slotsLength: k.slots.length,
+    filled: k.slots.filter((s) => s !== undefined).length,
+    maxSlot: Math.max(0, ...k.slots.filter((s) => s !== undefined).map((s) => s.length)),
+  }));
+  const row = { name, depth: c.depth, nodes: c.nodes, wallMs, tablesThisCall: tables.length, maxRecordPly, maxAtPly, tables: t };
+  bounds.push(row);
+  console.log(JSON.stringify(row));
+}
+
+// 2. growth across calls
+tables = [];
+let collected = 0;
+const reg = new FinalizationRegistry(() => { collected++; });
+const heap = [];
+const kiwi = SET[1][1];
+for (let i = 0; i < 12; i++) {
+  const before = tables.length;
+  chooseMove(parseFen(kiwi), { budgetMs: 1000 });
+  for (const k of tables.slice(before)) reg.register(k, i);
+  tables = [];
+  globalThis.gc();
+  await new Promise((r) => setTimeout(r, 20));
+  globalThis.gc();
+  heap.push(+(process.memoryUsage().heapUsed / 1048576).toFixed(2));
+}
+await new Promise((r) => setTimeout(r, 50));
+globalThis.gc();
+await new Promise((r) => setTimeout(r, 50));
+const growth = { calls: 12, heapUsedMiBAfterEachCall: heap, tablesCollectedOf12: collected };
+console.log(JSON.stringify(growth));
+
+// 3. allocation per node: orderMoves is imported by engine.ts as a live binding, so it cannot be
+// wrapped from outside; count it by re-deriving: one orderMoves call per interior node (plus one at
+// the root), each allocating one wrapper object per move plus two arrays. Measure interior nodes
+// and moves per interior node by an instrumented unordered-list count at a fixed depth via
+// search() (same comparator, same call shape), with legalMoves counted by call.
+KillerTable.prototype.record = origRecord;
+KillerTable.prototype.at = origAt;
+let atCalls = 0;
+KillerTable.prototype.at = function (ply) { atCalls++; return origAt.call(this, ply); };
+const d = 5;
+const r = search.search(parseFen(kiwi), d);
+const alloc = { position: "kiwipete", depth: d, nodes: r.nodes, orderMovesCalls: atCalls, note: "every orderMoves call on the full ordering path is preceded by exactly one KillerTable.at call" };
+console.log(JSON.stringify(alloc));
+KillerTable.prototype.at = origAt;
+
+writeFileSync(OUT, JSON.stringify({ budgetMs, bounds, growth, alloc }, null, 1));
+void legalMoves;

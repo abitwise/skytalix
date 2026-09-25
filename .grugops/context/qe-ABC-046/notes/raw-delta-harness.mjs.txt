@@ -1,0 +1,210 @@
+// qe-ABC-046-delta: docblock probe (D1, D2 re-worded), mutants on the ruled rows plus QE's own,
+// sequence probes through createLineInputSeam under every mutant, ABC-037 bar 2 in both lanes, and
+// the real entry point. Every mutant/probe edit is written INTO the worktree, measured, and the
+// pristine bytes written back with sha256 asserted; `git status --porcelain -- src` after each round.
+// Usage: node delta.mjs <worktree>
+import { spawnSync, execSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { readFileSync, writeFileSync } from "node:fs";
+
+const DIR = process.argv[2];
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe046d";
+const CI = `${DIR}/src/command-input.ts`;
+const LI = `${DIR}/src/line-input.ts`;
+const sha = (s) => createHash("sha256").update(s).digest("hex");
+const pristine = { [CI]: readFileSync(CI, "utf8"), [LI]: readFileSync(LI, "utf8") };
+const pristineSha = Object.fromEntries(Object.entries(pristine).map(([k, v]) => [k, sha(v)]));
+const loadavg = () => execSync("sysctl -n vm.loadavg").toString().trim();
+const gitSrc = () => execSync("git status --porcelain -- src", { cwd: DIR }).toString();
+const restore = () => {
+  writeFileSync(CI, pristine[CI]);
+  writeFileSync(LI, pristine[LI]);
+  const ok = sha(readFileSync(CI, "utf8")) === pristineSha[CI] && sha(readFileSync(LI, "utf8")) === pristineSha[LI];
+  const g = gitSrc();
+  if (!ok || g !== "") throw new Error(`restore failed: ok=${ok} git=${JSON.stringify(g)}`);
+  return { sha256Equal: ok, gitStatusSrc: g };
+};
+function once(src, from, to, label) {
+  const n = src.split(from).length - 1;
+  if (n !== 1) throw new Error(`anchor ${label}: found ${n} times`);
+  return src.replace(from, to);
+}
+const out = { startedAt: new Date().toISOString(), pristineSha, docblock: {}, mutants: {}, sequences: {}, restores: [] };
+
+// ---------------------------------------------------------------- sequence probe (child process)
+const SEQS = {
+  "S0 quit/quit": ["quit", "quit"],
+  "S1 quit/over/quit/EOF": ["quit", "OVER", "quit"],
+  "S2 quit/over/quit/quit (ruled row)": ["quit", "OVER", "quit", "quit"],
+  "S3 quit/over/new/quit/quit": ["quit", "OVER", "new", "quit", "quit"],
+  "S4 over/quit/quit (disarm unarmed)": ["OVER", "quit", "quit"],
+  "S5 quit/over/over/quit/quit": ["quit", "OVER", "OVER", "quit", "quit"],
+  "S6 quit/1024/quit (at-cap control)": ["quit", "AT", "quit"],
+};
+const seqProbe = () => {
+  const code = `
+import { PassThrough } from "node:stream";
+const { createLineInputSeam } = await import(${JSON.stringify(`${DIR}/src/line-input.ts`)});
+const { newGame } = await import(${JSON.stringify(`${DIR}/src/history.ts`)});
+const SEQS = ${JSON.stringify(SEQS)};
+const res = {};
+for (const [name, lines] of Object.entries(SEQS)) {
+  const source = new PassThrough();
+  let resolverTexts = 0;
+  const seam = createLineInputSeam({ source, output: { write() {} } });
+  const h = newGame("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+  source.end(lines.map((l) => (l === "OVER" ? "z".repeat(1025) : l === "AT" ? "z".repeat(1024) : l)).join("\\n") + "\\n");
+  const got = [];
+  for (let i = 0; i <= lines.length; i++) {
+    const o = await seam(h);
+    got.push(o.kind === "command" || o.kind === "rejected" ? o.kind + ":" + (o.messages[0] ?? "") : o.kind === "take-back" ? "take-back:" + o.plies : o.kind);
+    if (o.kind === "quit" || o.kind === "eof") break;
+  }
+  res[name] = got;
+}
+console.log(JSON.stringify(res));`;
+  const r = spawnSync(process.execPath, ["--input-type=module", "-e", code], { cwd: DIR, encoding: "utf8", timeout: 60_000 });
+  try { return JSON.parse(r.stdout.trim()); } catch { return { error: (r.stdout + r.stderr).slice(0, 1500) }; }
+};
+
+// ---------------------------------------------------------------- docblock probe
+const lines = pristine[CI].split("\n");
+const { COMMAND_TABLE, helpMessages } = await import(`${CI}?t=orig`);
+out.docblock.D1 = {
+  sentence: lines.slice(3, 5).join(" ").replace(/\s+/g, " ").trim(),
+  tableRows: COMMAND_TABLE.length,
+  tokens: COMMAND_TABLE.map((r) => r.token),
+  helpItems: helpMessages().length,
+  outcomes: COMMAND_TABLE.map((r) => `${r.token}:${r.outcome}`),
+};
+const d2Child = () => {
+  const code = `const m = await import(${JSON.stringify(CI)}); const { newGame } = await import(${JSON.stringify(`${DIR}/src/history.ts`)});
+const h = newGame("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+globalThis.__rpl = 0; globalThis.__cls = 0;
+const r = m.createPromptLineResolver(); const a = r(h, "quit"); const c1 = { rpl: globalThis.__rpl, cls: globalThis.__cls };
+const b = r(h, "quit"); const c2 = { rpl: globalThis.__rpl - c1.rpl, cls: globalThis.__cls - c1.cls };
+const z = r(h, "zzz"); const c3 = { rpl: globalThis.__rpl - c1.rpl - c2.rpl, cls: globalThis.__cls - c1.cls - c2.cls };
+console.log(JSON.stringify({ first: { kind: a.kind, messages: a.messages, plies: a.plies }, firstCounts: c1, second: { kind: b.kind, messages: b.messages }, secondCounts: c2, third_zzz: { kind: z.kind }, thirdCounts: c3 }));`;
+  const res = spawnSync(process.execPath, ["--input-type=module", "-e", code], { cwd: DIR, encoding: "utf8" });
+  try { return JSON.parse(res.stdout.trim()); } catch { return { exit: res.status, stderr: res.stderr.slice(0, 600) }; }
+};
+// counters: one line at the top of resolvePromptLine and one at the top of classifyCommand (probe only)
+const counted = (s) => {
+  let t = once(s, "export function resolvePromptLine(", "export function resolvePromptLine(", "rpl-sig");
+  t = t.replace(/(export function resolvePromptLine\([\s\S]*?\)[^{]*\{)/, "$1\n  (globalThis as any).__rpl = ((globalThis as any).__rpl ?? 0) + 1;");
+  t = t.replace(/(export function classifyCommand\([\s\S]*?\)[^{]*\{)/, "$1\n  (globalThis as any).__cls = ((globalThis as any).__cls ?? 0) + 1;");
+  if (!t.includes("__rpl") || !t.includes("__cls")) throw new Error("counter anchors missing");
+  return t;
+};
+writeFileSync(CI, counted(pristine[CI]));
+out.docblock.D2_delivered_counted = d2Child();
+out.restores.push({ after: "D2 counted", ...restore() });
+writeFileSync(CI, once(pristine[CI], '  { token: "quit", outcome: "command" },\n', "", "quit-row"));
+out.docblock.D2_quitRowRemoved = d2Child();
+out.restores.push({ after: "D2 quit row removed", ...restore() });
+writeFileSync(CI, counted(once(pristine[CI], '  { token: "quit", outcome: "command" },\n', '  { token: "quit", outcome: "take-back" },\n', "quit-row-outcome")));
+out.docblock.D2_quitRowOutcomeChanged = d2Child();
+out.restores.push({ after: "D2 quit row outcome -> take-back", ...restore() });
+console.log("docblock", JSON.stringify(out.docblock, null, 2));
+
+// ---------------------------------------------------------------- mutants
+const ARM = `quitArmed = classifyCommand(line)?.token === "quit";`;
+const DISARM = `    disarm: (): void => {
+      quitArmed = false;
+    },`;
+const READER_CALL = `      resolve.disarm();\n`;
+const OVER_BLOCK = `    if (line.overlong) {
+      resolve.disarm();
+      return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };
+    }`;
+const NULL_CHECK = `    if (line === null) return { kind: "eof" };\n`;
+const RET = `    return resolve(history, line.text);`;
+const IMPORT = `import { createPromptLineResolver } from "./command-input.ts";`;
+
+const MUTANTS = {
+  control: {},
+  // ---- ruled five, anchors as the Engineer's re-hop harness ----
+  Q3: { ci: (s) => once(s, ARM, `quitArmed = line.trim().toLowerCase().startsWith("quit");`, "arm") },
+  X1: { ci: (s) => once(s, DISARM, "    disarm: (): void => {\n      /* no-op */\n    },", "disarm") },
+  X2: { li: (s) => once(s, READER_CALL, "", "reader-call") },
+  X3: { ci: (s) => once(s, DISARM, "    disarm: (): void => {\n      quitArmed = true;\n    },", "disarm") },
+  M9: { li: (s) => once(once(s, RET, "    return resolvePromptLine(history, line.text, deps);", "m9"), IMPORT, `import { createPromptLineResolver, resolvePromptLine } from "./command-input.ts";`, "m9-import") },
+  // ---- QE's own ----
+  // X4: disarm BEFORE the length check, i.e. on every submitted line, then the unchanged branch.
+  X4: { li: (s) => once(s, OVER_BLOCK, `    resolve.disarm();\n    if (line.overlong) {\n      return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };\n    }`, "x4") },
+  // X5: disarm BEFORE the null check too (eof disarms) — expected equivalent: the session ends on eof.
+  X5: { li: (s) => once(once(s, NULL_CHECK, `    resolve.disarm();\n${NULL_CHECK}`, "x5"), READER_CALL, "", "x5-inner") },
+  // X6: disarm also runs the resolver's arm on the empty string — a disarm that consults the table.
+  X6: { ci: (s) => once(s, DISARM, "    disarm: (): void => {\n      quitArmed = classifyCommand(\"\")?.token === \"quit\";\n    },", "disarm") },
+  // X7: the over-cap branch disarms AND hands the text to the resolver (bar 2's "reaches no resolver").
+  X7: { li: (s) => once(s, OVER_BLOCK, `    if (line.overlong) {\n      resolve.disarm();\n      resolve(history, line.text);\n      return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };\n    }`, "x7") },
+  // X8: disarm TOGGLES the flag (a plausible wrong "clear").
+  X8: { ci: (s) => once(s, DISARM, "    disarm: (): void => {\n      quitArmed = !quitArmed;\n    },", "disarm") },
+};
+function vitest(files, env = {}) {
+  const r = spawnSync("npx", ["vitest", "run", ...files, "--reporter=json"], { cwd: DIR, encoding: "utf8", env: { ...process.env, ...env }, maxBuffer: 64 * 1024 * 1024, timeout: 600_000 });
+  const o = r.stdout;
+  try {
+    const j = JSON.parse(o.slice(o.indexOf("{"), o.lastIndexOf("}") + 1));
+    const all = j.testResults.flatMap((t) => t.assertionResults.map((a) => ({ file: t.name.replace(`${DIR}/`, ""), name: a.fullName, status: a.status })));
+    const perFile = {};
+    for (const a of all) { perFile[a.file] ??= { total: 0, failed: 0 }; perFile[a.file].total++; if (a.status === "failed") perFile[a.file].failed++; }
+    return { status: r.status, total: j.numTotalTests, passed: j.numPassedTests, failed: j.numFailedTests, skipped: j.numPendingTests + j.numTodoTests, perFile, failedNames: all.filter((a) => a.status === "failed").map((a) => `${a.file} :: ${a.name}`), all };
+  } catch (e) { return { status: r.status, parseError: String(e), tail: (r.stdout + r.stderr).slice(-1500) }; }
+}
+const FILES = ["src/command-input.test.ts", "src/line-input.test.ts", "src/cli.test.ts"];
+for (const [name, m] of Object.entries(MUTANTS)) {
+  writeFileSync(CI, m.ci ? m.ci(pristine[CI]) : pristine[CI]);
+  writeFileSync(LI, m.li ? m.li(pristine[LI]) : pristine[LI]);
+  const load = loadavg();
+  const tsc = spawnSync("npx", ["tsc", "--noEmit"], { cwd: DIR, encoding: "utf8" });
+  const v = vitest(FILES);
+  const seq = seqProbe();
+  out.restores.push({ after: name, ...restore() });
+  const { all, ...rest } = v;
+  out.mutants[name] = { load, tsc: tsc.status, tscOut: (tsc.stdout + tsc.stderr).slice(0, 600), ...rest };
+  out.sequences[name] = seq;
+  console.log(name, "load", load, "tsc", tsc.status, "total", v.total, "failed", v.failed, JSON.stringify(v.perFile), JSON.stringify(v.failedNames ?? v.tail));
+}
+console.log("sequences", JSON.stringify(out.sequences, null, 1));
+
+// ---------------------------------------------------------------- ABC-037 bar 2, both lanes
+const bar2 = (env) => {
+  const v = vitest(["src/line-input.test.ts"], env);
+  const rows = (v.all ?? []).filter((a) => a.name.includes("security bar 2") || a.name.includes("breadth"));
+  return { status: v.status, total: v.total, passed: v.passed, failed: v.failed, skipped: v.skipped, rows: rows.map((a) => `${a.status} :: ${a.name}`) };
+};
+out.bar2 = { default: bar2({}), deep: bar2({ INPUT_DEEP: "1", NODE_OPTIONS: "--expose-gc" }) };
+for (const lane of ["default", "deep"]) {
+  const b = out.bar2[lane];
+  console.log(`bar2 ${lane}: file ${b.passed}/${b.total} failed ${b.failed} skipped ${b.skipped} bar2/breadth rows ${b.rows.length}`);
+  for (const r of b.rows) console.log("   ", r);
+}
+
+// ---------------------------------------------------------------- the real entry point
+const substituting = (module, source) => `data:text/javascript,${encodeURIComponent(['import { registerHooks } from "node:module";', "registerHooks({", "  load(url, context, nextLoad) {", `    if (!url.endsWith(${JSON.stringify(`/src/${module}`)})) return nextLoad(url, context);`, `    return { format: "module", shortCircuit: true, source: ${JSON.stringify(source)} };`, "  },", "});"].join("\n"))}`;
+const scriptedEngine = `
+export const DEFAULT_BUDGET_MS = 0;
+export function createEngine() {
+  return async () => { throw new Error("scripted engine: asked for a move"); };
+}`;
+const { PROMPT, LINE_TOO_LONG_MESSAGES } = await import(`${LI}?t=entry`);
+const { QUIT_NOTICE, INPUT_ENDED_NOTICE } = await import(`${DIR}/src/turn-loop.ts`);
+const { QUIT_CONFIRMATION_MESSAGES } = await import(`${CI}?t=entry`);
+const CONF = QUIT_CONFIRMATION_MESSAGES[0];
+const play = (input) => spawnSync(process.execPath, ["--import", substituting("engine.ts", scriptedEngine), "src/cli.ts", "--colour", "white", "--ascii"], { cwd: DIR, encoding: "utf8", input, timeout: 30_000 });
+const over = "x".repeat(1025);
+const describeRun = (c) => {
+  const msgLines = c.stdout.split("\n").map((l, i) => [i + 1, l]).filter(([, l]) => l.includes(CONF) || l.includes(LINE_TOO_LONG_MESSAGES[0]) || l.startsWith(PROMPT) || l.includes(QUIT_NOTICE) || l.includes(INPUT_ENDED_NOTICE)).map(([i, l]) => `${i}: ${l.length > 60 ? `${l.slice(0, 60)}…(${l.length})` : l}`);
+  return { status: c.status, stderr: c.stderr, lines: c.stdout.split("\n").length - 1, confirmations: c.stdout.split(CONF).length - 1, lineTooLong: c.stdout.split(LINE_TOO_LONG_MESSAGES[0]).length - 1, prompts: c.stdout.split(PROMPT).length - 1, endsQuit: c.stdout.endsWith(`${PROMPT}${QUIT_NOTICE}\n`), endsEof: c.stdout.endsWith(`${PROMPT}${INPUT_ENDED_NOTICE}\n`), tail: c.stdout.split("\n").slice(-3), messageLines: msgLines };
+};
+const a = play(`quit\n${over}\nquit\n`);
+const b = play(`quit\n${over}\nquit\nquit\n`);
+writeFileSync(`${S}/entry-quit-over-quit-EOF.stdout.txt`, a.stdout);
+writeFileSync(`${S}/entry-quit-over-quit-quit.stdout.txt`, b.stdout);
+out.entry = { "quit/1025x/quit/EOF": describeRun(a), "quit/1025x/quit/quit": describeRun(b), QUIT_NOTICE, INPUT_ENDED_NOTICE };
+console.log("entry", JSON.stringify(out.entry, null, 2));
+out.finalRestore = restore();
+out.finishedAt = new Date().toISOString();
+writeFileSync(`${S}/delta-summary.json`, JSON.stringify(out, null, 2));
+console.log("final", JSON.stringify(out.finalRestore));

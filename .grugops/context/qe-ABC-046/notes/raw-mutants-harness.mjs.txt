@@ -1,0 +1,91 @@
+// qe-ABC-046 mutant round. The Engineer's nine (M1-M9, reproduced verbatim from
+// raw-mutants-harness.mjs.txt) plus QE's own (Q1-Q9). Each mutant is written INTO the named
+// production file in the worktree, THREE test files are run (command-input, line-input, cli),
+// the original is restored and the restore asserted by sha256; `git status --porcelain -- src`
+// is captured after every round. Usage: node mutants.mjs <cwd>
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+
+const cwd = process.argv[2];
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe046";
+const sha = (s) => createHash("sha256").update(s).digest("hex");
+const originals = {};
+for (const f of ["src/command-input.ts", "src/line-input.ts"]) originals[f] = readFileSync(`${cwd}/${f}`, "utf8");
+
+const ARM = 'quitArmed = classifyCommand(line)?.token === "quit";';
+const EXIT = 'if (wasArmed && quitArmed) return { kind: "quit" };';
+const NEW = 'return { kind: "take-back", plies: history.moves.length, messages: [] };';
+const MSG = 'export const QUIT_CONFIRMATION_MESSAGES: readonly string[] = ["quit again to end"];';
+const CONF = 'if (spec.token === "quit") return { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };';
+const LET = "let quitArmed = false;\n  return (history, line) => {";
+const CALL = "return resolve(history, line.text);";
+const DECL = "const resolve = createPromptLineResolver(deps);";
+const OVER = "if (line.overlong) return { kind: \"rejected\", messages: LINE_TOO_LONG_MESSAGES };";
+const DELEG = "return resolvePromptLine(history, line, deps);";
+const IMPORT = 'import { createPromptLineResolver } from "./command-input.ts";';
+
+const CI = "src/command-input.ts";
+const LI = "src/line-input.ts";
+const ALL = ["src/command-input.test.ts", "src/line-input.test.ts", "src/cli.test.ts"];
+const mutants = [
+  // ---- the Engineer's nine, verbatim ----
+  { id: "M1-flag-never-clears", file: CI, apply: (s) => s.replace(ARM, 'quitArmed = quitArmed || classifyCommand(line)?.token === "quit";') },
+  { id: "M2-first-quit-exits-no-confirmation", file: CI, apply: (s) => s.replace(EXIT, 'if (quitArmed) return { kind: "quit" };') },
+  { id: "M3-module-level-flag", file: CI, apply: (s) => s.replace(LET, "return (history, line) => {").replace("export function createPromptLineResolver(", "let quitArmed = false;\nexport function createPromptLineResolver(") },
+  { id: "M4-new-takes-back-two", file: CI, apply: (s) => s.replace(NEW, 'return { kind: "take-back", plies: 2, messages: [] };') },
+  { id: "M5-new-inert-command", file: CI, apply: (s) => s.replace('{ token: "new", outcome: "take-back" },', '{ token: "new", outcome: "command" },') },
+  { id: "M6-confirmation-over-17-columns", file: CI, apply: (s) => s.replace(MSG, 'export const QUIT_CONFIRMATION_MESSAGES: readonly string[] = ["are you sure? type quit again to end"];') },
+  { id: "M7-only-commands-clear-the-flag", file: CI, apply: (s) => s.replace(ARM, 'const spec = classifyCommand(line);\n    quitArmed = spec === undefined ? wasArmed : spec.token === "quit";') },
+  { id: "M8-no-confirmation-message-on-first-quit", file: CI, apply: (s) => s.replace(CONF, "") },
+  { id: "M9-reader-calls-bare-resolvePromptLine", file: LI, apply: (s) => s.replace(CALL, "return resolvePromptLine(history, line.text, deps);").replace(IMPORT, 'import { createPromptLineResolver, resolvePromptLine } from "./command-input.ts";') },
+  // ---- QE's own ----
+  // Q1: the LITERAL one-call-site-line build of A8's amendment — a fresh wrapper per line (flag never persists).
+  { id: "Q1-one-line-reader-fresh-wrapper-per-line", file: LI, apply: (s) => s.replace(CALL, "return createPromptLineResolver(deps)(history, line.text);").replace(`  ${DECL}\n`, "") },
+  // Q2: the other two-line build — ONE wrapper at MODULE scope in the reader (shared by every seam).
+  { id: "Q2-reader-module-scope-wrapper", file: LI, apply: (s) => s.replace(`  // ONE per seam, so the \`quit\` confirmation is this session's and no other's (\`ABC-046\`).\n  ${DECL}\n`, "").replace(IMPORT, `${IMPORT}\nconst resolve = createPromptLineResolver();`) },
+  // Q3: a PREFIX arm — `quit now` arms, and ends an armed session.
+  { id: "Q3-prefix-arm-quit-now-counts", file: CI, apply: (s) => s.replace(ARM, 'quitArmed = line.trim().toLowerCase().startsWith("quit");') },
+  // Q4: case-sensitive arm — `QUIT` / `Quit` never reach the exit.
+  { id: "Q4-case-sensitive-arm", file: CI, apply: (s) => s.replace(ARM, 'quitArmed = line.trim() === "quit";') },
+  // Q5: COMMANDS do not clear (only moves / rejected lines do) — the inverse of M7.
+  { id: "Q5-commands-do-not-clear", file: CI, apply: (s) => s.replace(ARM, 'const spec = classifyCommand(line);\n    quitArmed = spec === undefined ? false : spec.token === "quit" || wasArmed;') },
+  // Q6: `new` at ply 0 guarded into an inert command (ADR-0021 clause 4: the seam must NOT guard).
+  { id: "Q6-new-at-ply-0-guarded-to-command", file: CI, apply: (s) => s.replace(NEW, 'if (history.moves.length === 0) return { kind: "command", messages: [] };\n    ' + NEW) },
+  // Q7: `new` carries a message (ADR-0021 clause 7: messages: []).
+  { id: "Q7-new-carries-a-message", file: CI, apply: (s) => s.replace(NEW, 'return { kind: "take-back", plies: history.moves.length, messages: ["new game"] };') },
+  // Q8: the wrapper drops `deps` when it delegates.
+  { id: "Q8-wrapper-drops-deps", file: CI, apply: (s) => s.replace(DELEG, "return resolvePromptLine(history, line);") },
+  // Q9: NOT a defect — the ADR-literal shape of reading (2): an over-cap line CLEARS the flag.
+  //     Run to show whether ANY row distinguishes the delivered build from it.
+  { id: "Q9-overcap-line-clears-flag-ADR-literal-shape", file: LI, apply: (s) => s.replace(OVER, 'if (line.overlong) {\n      resolve(history, "");\n      return { kind: "rejected", messages: LINE_TOO_LONG_MESSAGES };\n    }') },
+  { id: "CONTROL-unmutated", file: CI, apply: (s) => s },
+];
+
+const results = [];
+for (const m of mutants) {
+  const FILE = `${cwd}/${m.file}`;
+  const original = originals[m.file];
+  const mutated = m.apply(original);
+  if (m.id !== "CONTROL-unmutated" && mutated === original) { results.push({ id: m.id, error: "MUTANT DID NOT APPLY" }); console.log(`!! ${m.id} DID NOT APPLY`); continue; }
+  writeFileSync(FILE, mutated);
+  const tsc = spawnSync("npx", ["tsc", "--noEmit"], { cwd, encoding: "utf8" });
+  const perFile = [];
+  for (const f of ALL) {
+    const r = spawnSync("npx", ["vitest", "run", f], { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+    const out = r.stdout + r.stderr;
+    writeFileSync(`${S}/logs/mutant-${m.id}-${f.replace(/\//g, "_")}.log`, out);
+    const tm = out.match(/^\s*Tests\s+(.*)$/m);
+    const rows = [...out.matchAll(/^\s*[×✗]\s+(.*?)(?:\s+\d+ms)?$/gm)].map((x) => x[1].trim());
+    perFile.push({ file: f, status: r.status, tests: tm?.[1]?.trim(), redRows: rows.slice(0, 40), redCount: rows.length });
+  }
+  writeFileSync(FILE, original);
+  const restored = sha(readFileSync(FILE, "utf8")) === sha(original);
+  const gs = spawnSync("git", ["status", "--porcelain", "--", "src"], { cwd, encoding: "utf8" }).stdout.trim();
+  results.push({ id: m.id, file: m.file, tscExit: tsc.status, tscOut: (tsc.stdout + tsc.stderr).trim().slice(0, 600), restoredByteIdentical: restored, gitStatusSrcAfter: gs, perFile });
+  const r = results[results.length - 1];
+  console.log(`== ${r.id} (${r.file}) tsc=${r.tscExit} restored=${r.restoredByteIdentical} gitStatusSrc=${JSON.stringify(gs)}`);
+  for (const p of r.perFile) console.log(`   ${p.file}: exit ${p.status} | ${p.tests} | red ${p.redCount}` + (p.redRows.length ? `\n      - ${p.redRows.join("\n      - ")}` : ""));
+}
+writeFileSync(`${S}/mutants-summary.json`, JSON.stringify(results, null, 2));
+for (const f of Object.keys(originals)) console.log(`final ${f} sha matches original: ${sha(readFileSync(`${cwd}/${f}`, "utf8")) === sha(originals[f])}`);

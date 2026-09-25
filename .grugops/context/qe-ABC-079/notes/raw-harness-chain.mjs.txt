@@ -1,0 +1,16 @@
+// QE ABC-079: gates, then the three deep lanes, strictly one after another (no self-contention).
+import { spawnSync } from "node:child_process";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079";
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const step = (args) => {
+  const r = spawnSync("node", args, { cwd: WT, stdio: "inherit" });
+  console.log(`== ${args.slice(1, 3).join(" ")} exit ${r.status}`);
+};
+const which = process.argv[2] ?? "all";
+if (which === "all" || which === "gates") step([`${S}/gates.mjs`]);
+if (which === "all" || which === "deep") {
+  step([`${S}/lane.mjs`, "deep-search", "SEARCH_DEEP=1", "src/search.test.ts"]);
+  step([`${S}/lane.mjs`, "deep-quiescence", "SEARCH_DEEP=1", "src/quiescence.test.ts"]);
+  step([`${S}/lane.mjs`, "deep-engine", "ENGINE_DEEP=1", "src/engine.test.ts"]);
+}
+console.log("CHAIN DONE");

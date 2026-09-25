@@ -1,0 +1,347 @@
+{
+  "(1a) ply 0, quit/quit: renders 2 (opening + confirmation), reads 2, ends on QUIT_NOTICE, {null,null,0}, moves 0": {
+    "ok": true,
+    "detail": {
+      "outcome": {
+        "result": null,
+        "reason": null,
+        "exitCode": 0
+      },
+      "renders": 2,
+      "reads": 2,
+      "messagesPerFrame": [
+        [],
+        [
+          "quit again to end"
+        ]
+      ],
+      "writes": [
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "quit\n"
+      ]
+    }
+  },
+  "(1b) ply 0, new: take-back of 0, one extra frame with NO message, FEN/moves/keys/reps unchanged, then EOF": {
+    "ok": true,
+    "detail": {
+      "first": {
+        "kind": "take-back",
+        "plies": 0,
+        "messages": []
+      },
+      "renders": 2,
+      "messagesPerFrame": [
+        [],
+        []
+      ],
+      "keys": 1,
+      "reps": [
+        1
+      ]
+    }
+  },
+  "(2) new / new at ply 4: first take-back 4, second take-back 0; renders 3; start FEN, moves 0, keys 1, one rep of 1; EOF": {
+    "ok": true,
+    "detail": {
+      "outcomes": [
+        {
+          "kind": "take-back",
+          "plies": 4,
+          "messages": []
+        },
+        {
+          "kind": "take-back",
+          "plies": 0,
+          "messages": []
+        }
+      ],
+      "renders": 3,
+      "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    }
+  },
+  "(2') quit / new / new / quit / quit: new clears the flag; the last pair ends the session on QUIT_NOTICE": {
+    "ok": true,
+    "detail": {
+      "reads": 5,
+      "renders": 5,
+      "messagesPerFrame": [
+        [],
+        [
+          "quit again to end"
+        ],
+        [],
+        [],
+        [
+          "quit again to end"
+        ]
+      ],
+      "outcomes": [
+        "command",
+        "take-back",
+        "take-back",
+        "command",
+        "quit"
+      ]
+    }
+  },
+  "(3a) mated, then quit/quit/new on the script: reads 2 (never asked again), result black-wins/checkmate, no QUIT_NOTICE, no take-back": {
+    "ok": true,
+    "detail": {
+      "outcome": {
+        "result": "black-wins",
+        "reason": "checkmate",
+        "exitCode": 0
+      },
+      "reads": 2,
+      "renders": 5,
+      "writes": [
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "row1\nrow2\n"
+      ]
+    }
+  },
+  "(3b) loop handed an already-mated history: reads 0, new is never seen, checkmate stands, FEN unchanged": {
+    "ok": true,
+    "detail": {
+      "outcome": {
+        "result": "black-wins",
+        "reason": "checkmate",
+        "exitCode": 0
+      },
+      "reads": 0,
+      "renders": 1
+    }
+  },
+  "(3c) quit / mating reply ends the game: the armed flag never fires, result checkmate, reads 3": {
+    "ok": true,
+    "detail": {
+      "outcome": {
+        "result": "black-wins",
+        "reason": "checkmate",
+        "exitCode": 0
+      },
+      "reads": 3
+    }
+  },
+  "(4) classifyCommand(\"quit now\") is undefined": {
+    "ok": true
+  },
+  "(4) classifyCommand(\"new game\") is undefined": {
+    "ok": true
+  },
+  "(4) classifyCommand(\"quit!\") is undefined": {
+    "ok": true
+  },
+  "(4) classifyCommand(\"quit.\") is undefined": {
+    "ok": true
+  },
+  "(4) classifyCommand(\"quitnow\") is undefined": {
+    "ok": true
+  },
+  "(4) classifyCommand(\"newgame\") is undefined": {
+    "ok": true
+  },
+  "(4a) quit now / quit now: both REJECTED (not commands), never arms, session ends on EOF": {
+    "ok": true,
+    "detail": {
+      "outcomes": [
+        {
+          "kind": "rejected",
+          "messages": [
+            "type e2e4 or Nf3"
+          ]
+        },
+        {
+          "kind": "rejected",
+          "messages": [
+            "type e2e4 or Nf3"
+          ]
+        }
+      ],
+      "renders": 3,
+      "messagesPerFrame": [
+        [],
+        [
+          "type e2e4 or Nf3"
+        ],
+        [
+          "type e2e4 or Nf3"
+        ]
+      ]
+    }
+  },
+  "(4b) quit / quit now / quit: `quit now` is a rejected line and CLEARS the flag; the third is a FIRST quit (confirmation), EOF": {
+    "ok": true,
+    "detail": {
+      "outcomes": [
+        [
+          "command",
+          [
+            "quit again to end"
+          ]
+        ],
+        [
+          "rejected",
+          [
+            "type e2e4 or Nf3"
+          ]
+        ],
+        [
+          "command",
+          [
+            "quit again to end"
+          ]
+        ]
+      ],
+      "writes": [
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "input ended\n"
+      ]
+    }
+  },
+  "(4c) new game at ply 2: REJECTED, nothing rewound (moves 2)": {
+    "ok": true,
+    "detail": {
+      "first": {
+        "kind": "rejected",
+        "messages": [
+          "type e2e4 or Nf3"
+        ]
+      },
+      "moves": 2
+    }
+  },
+  "(5) \"QUIT\" then \"Quit\": confirmation then QUIT_NOTICE": {
+    "ok": true,
+    "detail": {
+      "outcomes": [
+        {
+          "kind": "command",
+          "messages": [
+            "quit again to end"
+          ]
+        },
+        {
+          "kind": "quit"
+        }
+      ],
+      "writes": [
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "quit\n"
+      ]
+    }
+  },
+  "(5) \"  quit \" then \"\\tQUIT\\r\": confirmation then QUIT_NOTICE": {
+    "ok": true,
+    "detail": {
+      "outcomes": [
+        {
+          "kind": "command",
+          "messages": [
+            "quit again to end"
+          ]
+        },
+        {
+          "kind": "quit"
+        }
+      ],
+      "writes": [
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "quit\n"
+      ]
+    }
+  },
+  "(5) \"qUiT\" then \"quit\": confirmation then QUIT_NOTICE": {
+    "ok": true,
+    "detail": {
+      "outcomes": [
+        {
+          "kind": "command",
+          "messages": [
+            "quit again to end"
+          ]
+        },
+        {
+          "kind": "quit"
+        }
+      ],
+      "writes": [
+        "row1\nrow2\n",
+        "row1\nrow2\n",
+        "quit\n"
+      ]
+    }
+  },
+  "(5) \"NEW\" at ply 2: take-back 2, start FEN": {
+    "ok": true,
+    "detail": {
+      "kind": "take-back",
+      "plies": 2,
+      "messages": []
+    }
+  },
+  "(5) \"New\" at ply 2: take-back 2, start FEN": {
+    "ok": true,
+    "detail": {
+      "kind": "take-back",
+      "plies": 2,
+      "messages": []
+    }
+  },
+  "(5) \"  nEw  \" at ply 2: take-back 2, start FEN": {
+    "ok": true,
+    "detail": {
+      "kind": "take-back",
+      "plies": 2,
+      "messages": []
+    }
+  },
+  "(6) human black, `new` as the first line: the prompt is reached ONLY after the engine's e4 (black to move, moves 1); new takes back 1 ply — the ENGINE's — and the engine moves AGAIN (d4); game continues": {
+    "ok": true,
+    "detail": {
+      "events": [
+        "render(claimable=no,thinking=true)",
+        "sink.write(\"row1\\nrow2\\n\")",
+        "engine:e2e4",
+        "render(claimable=no,thinking=false)",
+        "sink.write(\"row1\\nrow2\\n\")",
+        "read#1:\"new\" sideToMove=black moves=1",
+        "render(claimable=no,thinking=true)",
+        "sink.write(\"row1\\nrow2\\n\")",
+        "engine:d2d4",
+        "render(claimable=no,thinking=false)",
+        "sink.write(\"row1\\nrow2\\n\")",
+        "read#2:\"d7d5\" sideToMove=black moves=1",
+        "render(claimable=no,thinking=true)",
+        "sink.write(\"row1\\nrow2\\n\")",
+        "engine:undefined"
+      ],
+      "outcome": {
+        "result": null,
+        "reason": "engine-threw",
+        "exitCode": 0
+      }
+    }
+  },
+  "help lists quit and new: heading + 6 tokens": {
+    "ok": true,
+    "detail": [
+      "commands:",
+      "help",
+      "board",
+      "quit",
+      "claim",
+      "resign",
+      "new"
+    ]
+  }
+}

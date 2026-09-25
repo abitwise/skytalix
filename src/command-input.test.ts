@@ -839,6 +839,41 @@ describe("ABC-046 — `quit` asks once, ends on the second consecutive `quit`, a
     expect(resolve(history, "quit")).toEqual(CONFIRMATION);
   });
 
+  it("G1 — trailing text does not arm: quit / quit now / quit asks AGAIN, and quit now twice never exits", () => {
+    const history = newGame(RICH_FEN);
+    const resolve = createPromptLineResolver();
+
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    expect(resolve(history, "quit now").kind).toBe("rejected");
+    // A flag armed by any line that merely STARTS with `quit` ends the session here.
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    const fresh = createPromptLineResolver();
+    expect(fresh(history, "quit now").kind).toBe("rejected");
+    expect(fresh(history, "quit now").kind).toBe("rejected");
+  });
+
+  it("clause 6 — `disarm` clears an armed flag, is harmless unarmed, and calls no resolver", () => {
+    const history = newGame(RICH_FEN);
+    const deps: MoveInputDeps = {
+      legalMoves: vi.fn(legalMoves),
+      parseCoordinateMove: vi.fn(parseCoordinateMove),
+      parseSan: vi.fn(parseSan),
+      toSan: vi.fn(toSan),
+    };
+    const resolve = createPromptLineResolver(deps);
+
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    resolve.disarm();
+    // The flag was cleared: this `quit` is a FIRST quit again, and only the next one ends.
+    expect(resolve(history, "quit")).toEqual(CONFIRMATION);
+    expect(resolve(history, "quit")).toEqual(QUIT);
+    const unarmed = createPromptLineResolver(deps);
+    unarmed.disarm();
+    expect(unarmed(history, "quit")).toEqual(CONFIRMATION);
+    expect(unarmed(history, "quit")).toEqual(QUIT);
+    for (const spy of Object.values(deps)) expect(spy).toHaveBeenCalledTimes(0);
+  });
+
   it("A1 — the flag is PER SESSION: a second resolver is not armed by the first", () => {
     const history = newGame(RICH_FEN);
     const one = createPromptLineResolver();

@@ -1,0 +1,95 @@
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4
+
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 0
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 1
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 2
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 3
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 0
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 1
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 2
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 3
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 0
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 1
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 2
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 3
+ ↓ src/search.test.ts > A5 — stalemate scores exactly 0, not a loss > does not play into a stalemate one ply inside the tree
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > startpos at depth 2
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-3 at depth 2
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-3 at depth 3
+ × src/search.test.ts > A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1] 182ms
+   → expected 130 to be 110 // Object.is equality
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-4 at depth 2
+ × src/search.test.ts > A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1] 22401ms
+   → expected -205 to be -375 // Object.is equality
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A2 — alpha-beta visits under 40% of the unpruned nodes > startpos at depth 2 — the default lane's cheap standing guard
+ ↓ src/search.test.ts > A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A3 — mate is found and the shorter mate preferred > returns the mating move and a score above any non-mate score, at depth 4
+ ↓ src/search.test.ts > A3 — mate is found and the shorter mate preferred > prefers the mate in 1 over the mate in 2 and the mate in 3 in the same position
+ ↓ src/search.test.ts > A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1
+ ↓ src/search.test.ts > A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2, and in the broad corpus at depths 1 and 2 [deep, SEARCH_DEEP=1]
+ ↓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > reads the delivered module — src/search.ts, not nothing
+ ↓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > exports exactly the search core and nothing that picks a move on its own
+ ↓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > gives every exported function a REQUIRED depth parameter
+ ↓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > carries no default value for depth anywhere in the module
+ ↓ src/search.test.ts > A6 — no move is selected without a caller-supplied depth > carries no clock — the time budget is ABC-078's, not this module's
+ ↓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves every position in the 200+ corpus byte-identical after a depth-1 search
+ ↓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves position-3 byte-identical after a depth-3 search, pruned and unpruned
+ ↓ src/search.test.ts > A7 — the searched position is unchanged on return > leaves both corpora byte-identical at depth 2, and every perft root at depth 3 [deep, SEARCH_DEEP=1]
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 41 skipped (43)
+   Start at  00:34:40
+   Duration  22.78s (transform 48ms, setup 0ms, collect 49ms, tests 22.58s, environment 0ms, prepare 36ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/search.test.ts > A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]
+AssertionError: expected 130 to be 110 // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 110[39m
+[31m+ 130[39m
+
+ ❯ src/search.test.ts:378:30
+    376|       it(`${name} at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]`, …
+    377|         const { pruned, unpruned } = searchPair(fen, 3, "bare");
+    378|         expect(pruned.score).toBe(unpruned.score);
+       |                              ^
+    379|       }, 30_000);
+    380|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/search.test.ts > A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]
+AssertionError: expected -205 to be -375 // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- -375[39m
+[31m+ -205[39m
+
+ ❯ src/search.test.ts:378:30
+    376|       it(`${name} at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]`, …
+    377|         const { pruned, unpruned } = searchPair(fen, 3, "bare");
+    378|         expect(pruned.score).toBe(unpruned.score);
+       |                              ^
+    379|       }, 30_000);
+    380|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

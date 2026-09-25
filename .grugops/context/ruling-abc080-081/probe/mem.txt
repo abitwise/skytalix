@@ -1,0 +1,6 @@
+after-import rss 79.11 heapUsed 7.48 external 7.34 arrayBuffers 0.01
+depth 3 nodes 1111797 ms 3002
+after-3s-search rss 92.02 heapUsed 7.98 external 7.51 arrayBuffers 0.01
+after-TT-2^18-entries-4.00MiB rss 92.03 heapUsed 7.95 external 11.51 arrayBuffers 4.01
+clear ms 0.046625
+alloc ms 0.021459 true

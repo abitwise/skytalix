@@ -1,0 +1,389 @@
+[
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 0",
+  "state": "pass",
+  "ms": 1,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 1",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 2",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 3",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 0",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 1",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 2",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 3",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 0",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 1",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 2",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 3",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > does not play into a stalemate one ply inside the tree",
+  "state": "pass",
+  "ms": 3,
+  "timeout": 5000,
+  "share": 0.001,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > startpos at depth 2",
+  "state": "pass",
+  "ms": 20,
+  "timeout": 5000,
+  "share": 0.004,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 358,
+  "timeout": 30000,
+  "share": 0.012,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 185,
+  "timeout": 30000,
+  "share": 0.006,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 11081,
+  "timeout": 30000,
+  "share": 0.369,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 3473,
+  "timeout": 30000,
+  "share": 0.116,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 2",
+  "state": "pass",
+  "ms": 12,
+  "timeout": 5000,
+  "share": 0.002,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3",
+  "state": "pass",
+  "ms": 190,
+  "timeout": 5000,
+  "share": 0.038,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 54,
+  "timeout": 30000,
+  "share": 0.002,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 2",
+  "state": "pass",
+  "ms": 330,
+  "timeout": 5000,
+  "share": 0.066,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 374,
+  "timeout": 30000,
+  "share": 0.012,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 1152,
+  "timeout": 30000,
+  "share": 0.038,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 1848,
+  "timeout": 30000,
+  "share": 0.062,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 2922,
+  "timeout": 30000,
+  "share": 0.097,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 2998,
+  "timeout": 30000,
+  "share": 0.1,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > startpos at depth 2 — the default lane's cheap standing guard",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 30000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A3 — mate is found and the shorter mate preferred > returns the mating move and a score above any non-mate score, at depth 4",
+  "state": "pass",
+  "ms": 20,
+  "timeout": 5000,
+  "share": 0.004,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 1 over the mate in 2 and the mate in 3 in the same position",
+  "state": "pass",
+  "ms": 15,
+  "timeout": 5000,
+  "share": 0.003,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 60,
+  "timeout": 30000,
+  "share": 0.002,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 1379,
+  "timeout": 30000,
+  "share": 0.046,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1",
+  "state": "pass",
+  "ms": 200,
+  "timeout": 5000,
+  "share": 0.04,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2, and in the broad corpus at depths 1 and 2 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 66949,
+  "timeout": 120000,
+  "share": 0.558,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > reads the delivered module — src/search.ts, not nothing",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > exports exactly the search core and nothing that picks a move on its own",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > gives every exported function a REQUIRED depth parameter",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > carries no default value for depth anywhere in the module",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > carries no clock — the time budget is ABC-078's, not this module's",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves every position in the 200+ corpus byte-identical after a depth-1 search",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves position-3 byte-identical after a depth-3 search, pruned and unpruned",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves both corpora byte-identical at depth 2, and every perft root at depth 3 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 16499,
+  "timeout": 120000,
+  "share": 0.137,
+  "errors": []
+ }
+]

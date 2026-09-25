@@ -1,0 +1,30 @@
+{
+  "S1": {
+    "sentence": "* GRAMMAR, PLUS ONE FLAG. This module decides whether a submitted line IS one of seven commands * and, for six of them, nothing about what any of them DOES beyond naming the arm. `help` carries",
+    "tableRows": 6,
+    "tokens": [
+      "help",
+      "board",
+      "quit",
+      "claim",
+      "resign",
+      "new"
+    ],
+    "helpItems": 7,
+    "typeLine": "/** The six tokens, and the type that makes a seventh a compile error rather than a string typo. */"
+  },
+  "S2_control": {
+    "label": "delivered",
+    "exit": 0,
+    "stdout": "{\"first\":{\"kind\":\"command\",\"messages\":[\"quit again to end\"]},\"second\":{\"kind\":\"quit\"}}",
+    "stderr": ""
+  },
+  "S2_quitRowRemoved": {
+    "label": "quit row removed from COMMAND_TABLE",
+    "exit": 0,
+    "stdout": "{\"first\":{\"kind\":\"rejected\",\"messages\":[\"type e2e4 or Nf3\"]},\"second\":{\"kind\":\"rejected\",\"messages\":[\"type e2e4 or Nf3\"]}}",
+    "stderr": ""
+  },
+  "restoredByteIdentical": true,
+  "gitStatusSrc": ""
+}

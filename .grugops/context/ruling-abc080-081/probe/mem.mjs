@@ -1,0 +1,13 @@
+const SRC = "/Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ruling-abc080-081/src/";
+const { chooseMove } = await import(SRC + "engine.ts");
+const { parseFen } = await import(SRC + "fen.ts");
+const MiB = (b) => (b / 1048576).toFixed(2);
+const snap = (l) => { global.gc(); const m = process.memoryUsage(); console.log(l, "rss", MiB(m.rss), "heapUsed", MiB(m.heapUsed), "external", MiB(m.external), "arrayBuffers", MiB(m.arrayBuffers)); };
+snap("after-import");
+const c = chooseMove(parseFen("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"), { budgetMs: 3000 });
+console.log("depth", c.depth, "nodes", c.nodes, "ms", c.elapsedMs);
+snap("after-3s-search");
+const E = 1 << 18; const keys = new BigUint64Array(E), data = new Uint32Array(E * 2);
+snap(`after-TT-2^18-entries-${MiB(keys.byteLength + data.byteLength)}MiB`);
+keys.fill(0n); data.fill(0); const t = process.hrtime.bigint(); keys.fill(0n); data.fill(0); console.log("clear ms", Number(process.hrtime.bigint() - t) / 1e6);
+const t2 = process.hrtime.bigint(); const k2 = new BigUint64Array(E), d2 = new Uint32Array(E * 2); console.log("alloc ms", Number(process.hrtime.bigint() - t2) / 1e6, k2.length + d2.length > 0);

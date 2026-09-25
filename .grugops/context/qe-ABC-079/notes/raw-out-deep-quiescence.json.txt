@@ -1,0 +1,147 @@
+{
+ "label": "deep-quiescence",
+ "env": {
+  "SEARCH_DEEP": "1"
+ },
+ "args": [
+  "src/quiescence.test.ts"
+ ],
+ "exit": 0,
+ "signal": null,
+ "wall_s": 10.633,
+ "real_s": 10.62,
+ "user_s": 10.87,
+ "sys_s": 0.32,
+ "cpu_s": 11.19,
+ "loadBefore": [
+  5.08,
+  6.75,
+  8.59
+ ],
+ "loadAfter": [
+  4.97,
+  6.67,
+  8.54
+ ],
+ "tests": 37,
+ "pass": 37,
+ "fail": 0,
+ "skip": 0,
+ "summaryLines": [
+  "Test Files  1 passed (1)",
+  "Tests  37 passed (37)",
+  "Duration  10.03s (transform 48ms, setup 0ms, collect 51ms, tests 9.84s, environment 0ms, prepare 32ms)"
+ ],
+ "over50": [],
+ "failed": [],
+ "top": [
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x [deep, SEARCH_DEEP=1]",
+   "state": "pass",
+   "ms": 5538,
+   "timeout": 120000,
+   "share": 0.046,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded",
+   "state": "pass",
+   "ms": 142,
+   "timeout": 5000,
+   "share": 0.028,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x [deep, SEARCH_DEEP=1]",
+   "state": "pass",
+   "ms": 2190,
+   "timeout": 120000,
+   "share": 0.018,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+   "state": "pass",
+   "ms": 77,
+   "timeout": 5000,
+   "share": 0.015,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > position-6 at depth 3 reproduces the recorded 14 565 nodes and c3d5 [deep, SEARCH_DEEP=1]",
+   "state": "pass",
+   "ms": 393,
+   "timeout": 30000,
+   "share": 0.013,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]",
+   "state": "pass",
+   "ms": 529,
+   "timeout": 60000,
+   "share": 0.009,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1]",
+   "state": "pass",
+   "ms": 552,
+   "timeout": 60000,
+   "share": 0.009,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap",
+   "state": "pass",
+   "ms": 26,
+   "timeout": 5000,
+   "share": 0.005,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > both arms at depth 1 — with quiescence the losing move is avoided, without it it is played",
+   "state": "pass",
+   "ms": 15,
+   "timeout": 5000,
+   "share": 0.003,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint",
+   "state": "pass",
+   "ms": 15,
+   "timeout": 5000,
+   "share": 0.003,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A6 — the searched position is unchanged on return > leaves every hanging-piece position byte-identical after a depth-1 search, both arms",
+   "state": "pass",
+   "ms": 10,
+   "timeout": 5000,
+   "share": 0.002,
+   "errors": []
+  },
+  {
+   "file": "src/quiescence.test.ts",
+   "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count",
+   "state": "pass",
+   "ms": 3,
+   "timeout": 5000,
+   "share": 0.001,
+   "errors": []
+  }
+ ]
+}

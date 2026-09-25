@@ -1,0 +1,39 @@
+// QE ABC-118 gates harness: runs the four gates, the JSON skip count, test-skip-integrity and the
+// instrument in the directory given as argv[2]; prints raw output for each.
+import { spawnSync } from "node:child_process";
+import { loadavg } from "node:os";
+import { readFileSync, rmSync } from "node:fs";
+
+const cwd = process.argv[2];
+if (!cwd) throw new Error("usage: node qe118-gates.mjs <tree>");
+const jsonOut = `${process.env.TMPDIR ?? "/tmp"}/qe118-vitest-${process.pid}.json`;
+
+function run(label, cmd, args) {
+  const t0 = Date.now();
+  const l0 = loadavg()[0].toFixed(2);
+  const r = spawnSync("/usr/bin/time", ["-p", cmd, ...args], { cwd, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 });
+  const wall = ((Date.now() - t0) / 1000).toFixed(2);
+  console.log(`\n===== ${label}: ${cmd} ${args.join(" ")}`);
+  console.log(`exit=${r.status} wall=${wall}s load_at_start=${l0}`);
+  const out = (r.stdout ?? "").trimEnd();
+  const lines = out.split("\n");
+  console.log(lines.length > 40 ? [...lines.slice(0, 5), `... (${lines.length - 25} lines elided) ...`, ...lines.slice(-20)].join("\n") : out);
+  const err = (r.stderr ?? "").trimEnd().split("\n");
+  console.log("--- stderr (tail):");
+  console.log(err.slice(-8).join("\n"));
+  return r;
+}
+
+run("lint", "npx", ["biome", "check", "."]);
+run("typecheck", "npx", ["tsc", "--noEmit"]);
+run("build (same command as typecheck)", "npx", ["tsc", "--noEmit"]);
+run("unit", "npx", ["vitest", "run", "--dir", "src"]);
+run("unit json", "npx", ["vitest", "run", "--dir", "src", "--reporter=json", `--outputFile=${jsonOut}`]);
+const j = JSON.parse(readFileSync(jsonOut, "utf8"));
+rmSync(jsonOut);
+console.log(
+  `JSON: files=${j.testResults.length} total=${j.numTotalTests} passed=${j.numPassedTests} failed=${j.numFailedTests} pending=${j.numPendingTests} todo=${j.numTodoTests} skipcount=${j.numPendingTests + j.numTodoTests}`,
+);
+run("test integrity", "node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(j.numPendingTests + j.numTodoTests)]);
+run("instrument", "node", ["tools/grugops/lane-inventory.js"]);
+run("root lane list (npm test form) count", "node", ["node_modules/vitest/vitest.mjs", "list", "--filesOnly"]);

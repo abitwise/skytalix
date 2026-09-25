@@ -1,0 +1,106 @@
+// ABC-079 re-hop 3 harness. Usage: node harness.mjs <gates|deep|alone|mutants>
+// Every run is a child process in the worktree; the load (1-min) is read before and after each run.
+import { execFileSync, spawnSync } from "node:child_process";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import os from "node:os";
+
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-079-rehop3";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad";
+const LOGS = `${S}/logs`;
+mkdirSync(LOGS, { recursive: true });
+const REPORTER = `${S}/share-reporter.mjs`;
+const git = (...a) => execFileSync("git", a, { cwd: WT, encoding: "utf8" });
+const load = () => +os.loadavg()[0].toFixed(2);
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+function run(tag, cmd, args, env = {}) {
+  const loadBefore = load();
+  const t0 = Date.now();
+  const r = spawnSync(cmd, args, { cwd: WT, encoding: "utf8", env: { ...process.env, ...env }, maxBuffer: 256 * 1024 * 1024 });
+  const wall_s = +((Date.now() - t0) / 1000).toFixed(1);
+  writeFileSync(`${LOGS}/${tag}.log`, `${r.stdout ?? ""}\n--- stderr ---\n${r.stderr ?? ""}`);
+  return { tag, exit: r.status, wall_s, loadBefore, loadAfter: load(), tail: `${r.stdout ?? ""}${r.stderr ?? ""}`.trim().split("\n").slice(-4) };
+}
+
+function vitest(tag, files, env = {}, extra = []) {
+  const out = `${LOGS}/${tag}.shares.json`;
+  const res = run(tag, "npx", ["vitest", "run", ...files, "--reporter=dot", `--reporter=${REPORTER}`, ...extra], { ...env, SHARE_OUT: out });
+  let rows = [];
+  try { rows = JSON.parse(readFileSync(out, "utf8")); } catch {}
+  res.counts = {
+    total: rows.length,
+    passed: rows.filter((r) => r.state === "pass").length,
+    failed: rows.filter((r) => r.state === "fail").length,
+    skipped: rows.filter((r) => r.state === "skip" || r.state === "todo").length,
+  };
+  res.deep = rows.filter((r) => r.name.includes("[deep")).map((r) => ({ file: r.file, name: r.name, state: r.state, ms: r.ms, share: r.share }));
+  res.red = rows.filter((r) => r.state === "fail").map((r) => ({ file: r.file, name: r.name, error: r.errors[0] }));
+  res.over50 = rows.filter((r) => r.share !== null && r.share > 0.5).map((r) => r.name);
+  return res;
+}
+
+const mode = process.argv[2];
+const summary = { mode, head: git("rev-parse", "--short", "HEAD").trim(), cores: os.cpus().length };
+
+if (mode === "gates") {
+  summary.lint = run("gate-lint", "npx", ["biome", "check", "."]);
+  summary.typecheck = run("gate-typecheck", "npx", ["tsc", "--noEmit"]);
+  summary.build = run("gate-build", "npx", ["tsc", "--noEmit"]);
+  const json = `${LOGS}/default-lane.vitest.json`;
+  summary.defaultLane = run("gate-default-lane", "npx", ["vitest", "run", "--reporter=json", `--outputFile.json=${json}`]);
+  const j = JSON.parse(readFileSync(json, "utf8"));
+  summary.defaultLane.counts = { files: j.testResults.length, total: j.numTotalTests, passed: j.numPassedTests, failed: j.numFailedTests, skip: j.numPendingTests + j.numTodoTests };
+  summary.integrity = run("gate-integrity", "node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(summary.defaultLane.counts.skip)]);
+}
+
+if (mode === "deep") {
+  summary.deep = vitest("deep-both", ["src/search.test.ts", "src/quiescence.test.ts"], { SEARCH_DEEP: "1" });
+}
+
+if (mode === "alone") {
+  const names = ["leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]"];
+  for (const root of ["startpos", "kiwipete", "position-3", "position-4", "position-5", "position-6"]) {
+    names.push(`leaves the broad corpus byte-identical at depth 2 — ${root}'s slice [deep, SEARCH_DEEP=1]`);
+  }
+  names.push("leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]");
+  summary.alone = names.map((n, i) => {
+    const r = vitest(`alone-a7-${i}`, ["src/search.test.ts"], { SEARCH_DEEP: "1" }, ["-t", esc(n)]);
+    return { name: n, exit: r.exit, wall_s: r.wall_s, loadBefore: r.loadBefore, loadAfter: r.loadAfter, counts: r.counts, rows: r.deep };
+  });
+}
+
+if (mode === "mutants") {
+  const K = 5;
+  const LEAF = "    return quiesce(position, alpha, beta, 0, () => counter.nodes++);";
+  const GATE3 = "ply >= 3 && Number.isFinite(alpha) && Number.isFinite(beta)";
+  const CAPS = (pos) => `legalMoves(${pos}).filter((m) => m.captured !== 0).length >= ${K}`;
+  // QE's exact edits, from .grugops/context/qe-ABC-079/notes/raw-harness-mutants.mjs.txt.
+  const MUTANTS = {
+    R2b_leaf_slip_at_ply3_capture_dense: [
+      ["src/search.ts", LEAF, `    const slip = ${GATE3} && ${CAPS("position")}; // MUTANT R2b K=${K}\n    return quiesce(position, alpha, slip ? alpha + 1 : beta, 0, () => counter.nodes++);`],
+    ],
+    R2c_quiesce_slip_black_leaf_finite_window_capture_dense: [
+      ["src/quiescence.ts", "  if (qply > 0) visit(qply);\n", `  if (qply > 0) visit(qply);\n  if (qply === 0 && position.blackToMove && Number.isFinite(alpha) && Number.isFinite(beta) && ${CAPS("position")}) beta = alpha + 1; // MUTANT R2c K=${K}\n`],
+    ],
+  };
+  summary.srcCleanBefore = git("status", "--porcelain", "--", "src").trim() === "";
+  summary.mutants = [];
+  for (const [name, edits] of Object.entries(MUTANTS)) {
+    for (const [file, find, replace] of edits) {
+      const src = readFileSync(`${WT}/${file}`, "utf8");
+      if (src.split(find).length !== 2) throw new Error(`${name}: edit does not match exactly once in ${file}`);
+      writeFileSync(`${WT}/${file}`, src.replace(find, replace));
+    }
+    const diff = git("diff", "--numstat", "--", "src").trim();
+    let res;
+    try {
+      res = vitest(`mutant-${name}`, ["src/quiescence.test.ts"], { SEARCH_DEEP: "1" }, ["-t", "A5"]);
+    } finally {
+      for (const [file] of edits) git("checkout", "--", file);
+    }
+    summary.mutants.push({ name, K, diff, exit: res.exit, wall_s: res.wall_s, counts: res.counts, red: res.red, a5Rows: res.deep.map(({ name: n, state }) => ({ name: n, state })), srcCleanAfterRevert: git("status", "--porcelain", "--", "src").trim() === "" });
+  }
+}
+
+writeFileSync(`${LOGS}/summary-${mode}.json`, JSON.stringify(summary, null, 1));
+console.log(JSON.stringify(summary, null, 1));

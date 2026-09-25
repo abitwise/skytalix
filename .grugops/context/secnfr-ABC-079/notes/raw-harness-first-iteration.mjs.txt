@@ -1,0 +1,102 @@
+// secnfr-ABC-079 probe 1: the UNABORTABLE first iteration (depth 1 + quiescence leaf) on
+// reachable positions. Seeded random legal playouts from the start position (a SUPERSET of what
+// a CLI user can reach: the user controls one side, the playout controls both). For each sampled
+// position, chooseMove(budgetMs: 0) runs depth 1 only (the deadline is already spent, the first
+// iteration is disarmed). Wall is measured outside the engine. Also: the queens rig from A3, and
+// the deepest quiescence ply seen via quiesce's own visitor. Writes JSON to argv[3].
+import os from "node:os";
+import { writeFileSync } from "node:fs";
+
+const WT = process.argv[2];
+const { parseFen, toFen } = await import(`${WT}/src/fen.ts`);
+const { chooseMove } = await import(`${WT}/src/engine.ts`);
+const { legalMoves } = await import(`${WT}/src/legal.ts`);
+const { makeMove } = await import(`${WT}/src/apply.ts`);
+const { gameStatus } = await import(`${WT}/src/gameend.ts`);
+const { quiesce, QUIESCENCE_MAX_PLY } = await import(`${WT}/src/quiescence.ts`);
+const { EMPTY } = await import(`${WT}/src/position.ts`);
+
+let seed = 0x079c0de;
+const rnd = () => { // mulberry32
+  seed = (seed + 0x6d2b79f5) >>> 0;
+  let t = seed;
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+const pieces = (p) => p.board.reduce((n, v) => n + (v !== EMPTY ? 1 : 0), 0);
+const captures = (p) => legalMoves(p).filter((m) => m.captured !== EMPTY).length;
+
+const SAMPLES = Number(process.env.SAMPLES ?? 3000);
+const rows = [];
+const seen = new Set();
+const measure = (fen, origin) => {
+  if (seen.has(fen)) return;
+  seen.add(fen);
+  const p = parseFen(fen);
+  if (gameStatus(p).result !== "in-progress" || legalMoves(p).length === 0) return;
+  const t0 = performance.now();
+  const c = chooseMove(parseFen(fen), { budgetMs: 0 });
+  const wall = performance.now() - t0;
+  let deepest = 0;
+  quiesce(parseFen(fen), -1e9, 1e9, 0, (q) => { if (q > deepest) deepest = q; });
+  rows.push({ origin, fen, pieces: pieces(p), caps: captures(p), depth: c.depth, nodes: c.nodes, wallMs: +wall.toFixed(2), qDeepestFullWindow: deepest });
+};
+const ROOTS = [
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1",
+  "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1",
+  "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8",
+  "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+];
+for (const r of ROOTS) {
+  measure(r, "root");
+  const p = parseFen(r);
+  for (const m of legalMoves(p)) { const q = parseFen(r); makeMove(q, m); measure(toFen(q), "child"); }
+}
+for (let s = 0; s < SAMPLES; s++) {
+  const p = parseFen(START);
+  const plies = 12 + Math.floor(rnd() * 40);
+  let ok = true;
+  for (let i = 0; i < plies; i++) {
+    const ms = legalMoves(p);
+    if (ms.length === 0) { ok = false; break; }
+    makeMove(p, ms[Math.floor(rnd() * ms.length)]);
+  }
+  if (!ok) continue;
+  measure(toFen(p), "playout");
+}
+const byWall = [...rows].sort((a, b) => b.wallMs - a.wallMs);
+const byNodes = [...rows].sort((a, b) => b.nodes - a.nodes);
+const pct = (arr, q) => arr[Math.min(arr.length - 1, Math.floor(q * arr.length))];
+const walls = rows.map((r) => r.wallMs).sort((a, b) => a - b);
+const nodes = rows.map((r) => r.nodes).sort((a, b) => a - b);
+// capture-dense middlegame: >= 24 pieces, most legal captures
+const mid = rows.filter((r) => r.pieces >= 24).sort((a, b) => b.caps - a.caps)[0];
+
+const rig = "q1q1q1qk/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K7 w - - 0 1";
+const t0 = performance.now();
+const rc = chooseMove(parseFen(rig), { budgetMs: 0 });
+const rigWall = performance.now() - t0;
+let rigDeepest = 0;
+quiesce(parseFen(rig), -1e9, 1e9, 0, (q) => { if (q > rigDeepest) rigDeepest = q; });
+
+const out = {
+  machine: `${os.cpus()[0].model} x${os.cpus().length} ${process.version}`,
+  load1: os.loadavg()[0],
+  samples: rows.length,
+  cap: QUIESCENCE_MAX_PLY,
+  firstIteration: {
+    wallMs: { p50: pct(walls, 0.5), p95: pct(walls, 0.95), p99: pct(walls, 0.99), max: walls.at(-1) },
+    nodes: { p50: pct(nodes, 0.5), p95: pct(nodes, 0.95), p99: pct(nodes, 0.99), max: nodes.at(-1) },
+    worstByWall: byWall.slice(0, 5),
+    worstByNodes: byNodes.slice(0, 3),
+    maxQDeepestFullWindow: Math.max(...rows.map((r) => r.qDeepestFullWindow)),
+  },
+  captureDenseMiddlegame: mid,
+  queensRig: { fen: rig, depth: rc.depth, nodes: rc.nodes, wallMs: +rigWall.toFixed(2), qDeepestFullWindow: rigDeepest },
+};
+console.log(JSON.stringify(out, null, 1));
+writeFileSync(process.argv[3], JSON.stringify({ ...out, rows }, null, 1));

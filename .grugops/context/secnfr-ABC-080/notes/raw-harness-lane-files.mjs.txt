@@ -1,0 +1,27 @@
+// secnfr-ABC-080 (re-pointed: arms dir only; nothing else changed): per-file test-time attribution, arms A and B, 3 alternating rounds each.
+// Test time (sum of case durations per file, vitest JSON) — an indicator, not CPU.
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/secnfr080/arms";
+const acc = { A: {}, B: {} };
+for (let round = 0; round < 3; round++) {
+  for (const c of round % 2 ? ["B", "A"] : ["A", "B"]) {
+    const f = `${S}/files-${c}-${round}.json`;
+    spawnSync("npx", ["vitest", "run", "--dir", "src", "--reporter=json", `--outputFile=${f}`], { cwd: `${S}/${c}`, encoding: "utf8" });
+    const j = JSON.parse(readFileSync(f, "utf8"));
+    for (const t of j.testResults) {
+      const name = t.name.split("/src/")[1];
+      const ms = t.assertionResults.reduce((n, a) => n + (a.duration ?? 0), 0);
+      (acc[c][name] ??= []).push(ms);
+    }
+  }
+}
+const med = (xs) => [...xs].sort((a, b) => a - b)[xs.length >> 1];
+const names = new Set([...Object.keys(acc.A), ...Object.keys(acc.B)]);
+const rows = [...names].map((n) => ({ file: n, A: acc.A[n] ? Math.round(med(acc.A[n])) : null, B: acc.B[n] ? Math.round(med(acc.B[n])) : null }))
+  .map((r) => ({ ...r, delta: (r.A ?? 0) - (r.B ?? 0) }))
+  .filter((r) => Math.abs(r.delta) >= 50)
+  .sort((a, b) => b.delta - a.delta);
+console.log(JSON.stringify(rows, null, 1));
+writeFileSync(`${S}/files-summary.json`, JSON.stringify(rows, null, 1));

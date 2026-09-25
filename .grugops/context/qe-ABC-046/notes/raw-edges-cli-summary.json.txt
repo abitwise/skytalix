@@ -1,0 +1,284 @@
+{
+  "report": {
+    "(1a) ply 0 quit/quit, real entry point: exit 0, ends `> quit`, 2 frames, 2 prompts, stderr empty, no result-screen text": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 2,
+        "prompts": 2,
+        "stderr": "",
+        "ms": 80
+      }
+    },
+    "(1b) ply 0 new: exit 0, 2 frames, the second board byte-equal to the first, ends on end-of-input": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 2,
+        "equal": true,
+        "ms": 79
+      }
+    },
+    "(2) e4 Nf3 new new: exit 0, 1 + 4 plies + 2 take-backs = 7 frames; frames 6 and 7 byte-equal to frame 1; EOF": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 7,
+        "ms": 68
+      }
+    },
+    "(3) mated, then quit/quit/new on stdin: the checkmate screen, 2 prompts (none of the three lines read), no QUIT_NOTICE line, exit 0": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "prompts": 2,
+        "tail": "           \n                        \n                        \n                        \n                        \n\n\nBlack wins by checkmate.\n\n1. f3 e5\n2. g4 Qh4#\n",
+        "ms": 73
+      }
+    },
+    "(4a) quit / quit now / quit: 4 frames; frame 2 asks, frame 3 is a REJECTION (not the confirmation), frame 4 asks AGAIN; ends on EOF, exit 0": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 4,
+        "tails": [
+          [
+            "White to move  1.    ",
+            "material: 0          ",
+            "> 8 .r:n.b:q.k:b.n:r   ",
+            "7 :p.p:p.p:p.p:p.p   "
+          ],
+          [
+            "White to move  1.    ",
+            "material: 0          ",
+            "quit again to end    ",
+            "> 8 .r:n.b:q.k:b.n:r   "
+          ],
+          [
+            "White to move  1.    ",
+            "material: 0          ",
+            "type e2e4 or Nf3     ",
+            "> 8 .r:n.b:q.k:b.n:r   "
+          ],
+          [
+            "White to move  1.    ",
+            "material: 0          ",
+            "quit again to end    ",
+            "> input ended"
+          ]
+        ]
+      }
+    },
+    "(4b) e4 / new game: REJECTED — 4 frames, frame 4's board == frame 3's (nothing rewound), != frame 1; EOF": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 4
+      }
+    },
+    "(5a) QUIT / Quit at the real prompt: ends `> quit` after 4 frames, d4 never read, exit 0": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 4,
+        "prompts": 3
+      }
+    },
+    "(5b) NEW at the real prompt: frame 4's board byte-equal to frame 1": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 4
+      }
+    },
+    "(6) --colour black, `new` first: the prompt is reached only after e4; new takes back the ENGINE's ply; the engine plays AGAIN (d4); quit/quit ends; frames 1 (start) + e4 + take-back + d4 + confirmation = 5; frame 3 == frame 1 (black-bottom); exit 0": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 5,
+        "f3eqf1": true,
+        "stderr": "",
+        "ms": 63
+      }
+    },
+    "(7) quit / <1025 x> / quit — PRODUCT BEHAVIOUR: the session ENDS on `> quit` after 3 frames; the frame the player saw last carried the LINE-TOO-LONG message, NOT the confirmation; e4 never read": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 3,
+        "lastFrameMessages": [
+          "White to move  1.    ",
+          "material: 0          ",
+          "line too long        ",
+          "max 1024 chars       ",
+          "> quit"
+        ],
+        "ms": 63
+      }
+    },
+    "(7-control) quit / <1024 x> / quit: the at-cap line reaches the resolver, is rejected, CLEARS the flag; the third quit asks again; EOF": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "end": "  \n                     \n\n> input ended\n"
+      }
+    },
+    "(8) help, ascii, start: the help frame lists quit AND new (and all 6 tokens + heading), no '(+' hidden marker, 2 frames": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 2,
+        "helpRows": [
+          "commands: help board ",
+          "quit claim resign new"
+        ]
+      }
+    },
+    "(8) help, ascii, after e4 e5: the help frame lists quit AND new (and all 6 tokens + heading), no '(+' hidden marker, 4 frames": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 4,
+        "helpRows": [
+          "commands: help board ",
+          "quit claim resign new"
+        ]
+      }
+    },
+    "(8) help, unicode, start: the help frame lists quit AND new (and all 6 tokens + heading), no '(+' hidden marker, 2 frames": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 2,
+        "helpRows": [
+          "commands: help board ",
+          "quit claim resign new"
+        ]
+      }
+    },
+    "(8) help, unicode, after e4 e5: the help frame lists quit AND new (and all 6 tokens + heading), no '(+' hidden marker, 4 frames": {
+      "ok": true,
+      "detail": {
+        "status": 0,
+        "frames": 4,
+        "helpRows": [
+          "commands: help board ",
+          "quit claim resign new"
+        ]
+      }
+    }
+  },
+  "raw": {
+    "ply0quit": "8 .r:n.b:q.k:b.n:r   \n7 :p.p:p.p:p.p:p.p   \n6 ..::..::..::..::   \n5 ::..::..::..::..   \n4 ..::..::..::..::   \n3 ::..::..::..::..   \n2 .P:P.P:P.P:P.P:P   \n1 :R.N:B.Q:K.B:N.R   \n   a b c d e f g h   \nWhite to move  1.    \nmaterial: 0          \n                     \n                     \n                     \n                     \n                     \n                     \n                     \n                     \n                     \n                     \n                     \n\n> 8 .r:n.b:q.k:b.n:r   \n7 :p.p:p.p:p.p:p.p   \n6 ..::..::..::..::   \n5 ::..::..::..::..   \n4 ..::..::..::..::   \n3 ::..::..::..::..   \n2 .P:P.P:P.P:P.P:P   \n1 :R.N:B.Q:K.B:N.R   \n   a b c d e f g h   \nWhite to move  1.    \nmaterial: 0          \n                     \n                     \n                     \n                     \n                     \n                     \n                     \n                     \n                     \nquit again to end    \n                     \n\n> quit\n",
+    "overcap": {
+      "frames": 3,
+      "tails": [
+        [
+          "White to move  1.    ",
+          "material: 0          ",
+          "> 8 .r:n.b:q.k:b.n:r   ",
+          "7 :p.p:p.p:p.p:p.p   ",
+          "6 ..::..::..::..::   ",
+          "5 ::..::..::..::..   ",
+          "4 ..::..::..::..::   ",
+          "3 ::..::..::..::..   ",
+          "2 .P:P.P:P.P:P.P:P   ",
+          "1 :R.N:B.Q:K.B:N.R   "
+        ],
+        [
+          "White to move  1.    ",
+          "material: 0          ",
+          "quit again to end    ",
+          "> 8 .r:n.b:q.k:b.n:r   ",
+          "7 :p.p:p.p:p.p:p.p   ",
+          "6 ..::..::..::..::   ",
+          "5 ::..::..::..::..   ",
+          "4 ..::..::..::..::   ",
+          "3 ::..::..::..::..   ",
+          "2 .P:P.P:P.P:P.P:P   ",
+          "1 :R.N:B.Q:K.B:N.R   "
+        ],
+        [
+          "White to move  1.    ",
+          "material: 0          ",
+          "line too long        ",
+          "max 1024 chars       ",
+          "> quit"
+        ]
+      ],
+      "end": "g        \nmax 1024 chars       \n\n> quit\n"
+    },
+    "help-ascii-start": [
+      "White to move  1.    ",
+      "material: 0          ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "commands: help board ",
+      "quit claim resign new",
+      "",
+      "> input ended",
+      ""
+    ],
+    "help-ascii-after e4 e5": [
+      "White to move  2.    ",
+      "last: e5  material: 0",
+      "                     ",
+      "   1. e4      e5     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "commands: help board ",
+      "quit claim resign new",
+      "",
+      "> input ended",
+      ""
+    ],
+    "help-unicode-start": [
+      "White to move  1.    ",
+      "material: 0          ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "commands: help board ",
+      "quit claim resign new",
+      "",
+      "> input ended",
+      ""
+    ],
+    "help-unicode-after e4 e5": [
+      "White to move  2.    ",
+      "last: e5  material: 0",
+      "                     ",
+      "   1. e4      e5     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "                     ",
+      "commands: help board ",
+      "quit claim resign new",
+      "",
+      "> input ended",
+      ""
+    ]
+  }
+}

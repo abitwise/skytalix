@@ -1,0 +1,40 @@
+// qe-ABC-046 docblock probe. Two sentences in src/command-input.ts are checked against the code:
+//  S1 (:4-5)   "one of seven commands and, for six of them" — counted off COMMAND_TABLE.
+//  S2 (:222-223) "Armed and asked again, it answers { kind: "quit" } and never consults the table" —
+//      falsified if removing the `quit` ROW from COMMAND_TABLE changes what the second `quit` answers.
+// The file is mutated in place for S2, the probe run in a child, the original restored and its
+// sha256 asserted. Usage: node docblock-probe.mjs <worktree>
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+const cwd = process.argv[2];
+const FILE = `${cwd}/src/command-input.ts`;
+const sha = (s) => createHash("sha256").update(s).digest("hex");
+const original = readFileSync(FILE, "utf8");
+const out = {};
+
+const { COMMAND_TABLE, helpMessages } = await import(`${FILE}?t=orig`);
+out.S1 = {
+  sentence: original.split("\n").slice(3, 5).join(" ").replace(/\s+/g, " ").trim(),
+  tableRows: COMMAND_TABLE.length,
+  tokens: COMMAND_TABLE.map((r) => r.token),
+  helpItems: helpMessages().length,
+  typeLine: original.split("\n").find((l) => l.includes("The six tokens")),
+};
+
+const child = (label) => {
+  const probe = `const m = await import(${JSON.stringify(FILE)}); const { newGame } = await import(${JSON.stringify(`${cwd}/src/history.ts`)});
+const h = newGame("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+const r = m.createPromptLineResolver(); const a = r(h, "quit"); const b = r(h, "quit");
+console.log(JSON.stringify({ first: a, second: { kind: b.kind, messages: b.messages } }));`;
+  const res = spawnSync(process.execPath, ["--input-type=module", "-e", probe], { cwd, encoding: "utf8" });
+  return { label, exit: res.status, stdout: res.stdout.trim(), stderr: res.stderr.trim().slice(0, 400) };
+};
+out.S2_control = child("delivered");
+writeFileSync(FILE, original.replace('  { token: "quit", outcome: "command" },\n', ""));
+out.S2_quitRowRemoved = child("quit row removed from COMMAND_TABLE");
+writeFileSync(FILE, original);
+out.restoredByteIdentical = sha(readFileSync(FILE, "utf8")) === sha(original);
+out.gitStatusSrc = spawnSync("git", ["status", "--porcelain", "--", "src"], { cwd, encoding: "utf8" }).stdout.trim();
+console.log(JSON.stringify(out, null, 2));
+writeFileSync("/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe046/docblock-probe-summary.json", JSON.stringify(out, null, 2));

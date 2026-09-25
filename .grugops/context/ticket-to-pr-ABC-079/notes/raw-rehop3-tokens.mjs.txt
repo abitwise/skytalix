@@ -1,0 +1,26 @@
+// Compare the non-trivia token stream of src/search.ts at a base ref against the working tree.
+import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+
+const root = process.argv[2];
+const base = process.argv[3] ?? "HEAD";
+const require = createRequire(`${root}/package.json`);
+const ts = require("typescript");
+
+function tokens(text) {
+  const scanner = ts.createScanner(ts.ScriptTarget.Latest, true, ts.LanguageVariant.Standard, text);
+  const out = [];
+  for (let kind = scanner.scan(); kind !== ts.SyntaxKind.EndOfFileToken; kind = scanner.scan()) {
+    out.push(`${kind}:${scanner.getTokenText()}`);
+  }
+  return out;
+}
+
+const before = execFileSync("git", ["-C", root, "show", `${base}:src/search.ts`], { encoding: "utf8" });
+const after = readFileSync(`${root}/src/search.ts`, "utf8");
+const a = tokens(before);
+const b = tokens(after);
+const same = a.length === b.length && a.every((t, i) => t === b[i]);
+console.log(JSON.stringify({ base, tokensBefore: a.length, tokensAfter: b.length, identical: same }));
+process.exit(same ? 0 : 1);

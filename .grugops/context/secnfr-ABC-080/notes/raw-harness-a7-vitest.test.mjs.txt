@@ -1,0 +1,14 @@
+// secnfr-ABC-080 A7 UNDER VITEST: the same core as a7-node.mjs, inside one vitest test, so the
+// runner's cost is read on the same code. env: ARMS, ROUNDS, OUT.
+import { writeFileSync } from "node:fs";
+import { expect, test } from "vitest";
+import { loadBuilds, run, summarise } from "../a7-core.mjs";
+
+test("A7 under vitest", async () => {
+  const builds = await loadBuilds({ base: `${process.env.ARMS}/B`, head: `${process.env.ARMS}/A` });
+  const rows = run(builds, Number(process.env.ROUNDS), "vitest", (l) => process.stdout.write(`${l}\n`));
+  const summary = summarise(rows);
+  process.stdout.write(`${JSON.stringify(summary, null, 1)}\n`);
+  writeFileSync(process.env.OUT, JSON.stringify({ summary, rows }, null, 1));
+  expect(rows.length).toBe(Number(process.env.ROUNDS) * 4);
+}, 600_000);

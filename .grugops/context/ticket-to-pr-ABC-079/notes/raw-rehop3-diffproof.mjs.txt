@@ -1,0 +1,12 @@
+// Save `git diff -U0 <base> <head> -- src/search.ts` and classify every changed line.
+import { execFileSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+
+const [root, base, head, out] = process.argv.slice(2);
+const git = (...a) => execFileSync("git", ["-C", root, ...a], { encoding: "utf8" });
+const diff = git("diff", "-U0", base, head, "--", "src/search.ts");
+writeFileSync(out, diff);
+const changed = diff.split("\n").filter((l) => /^[+-]/.test(l) && !/^(\+\+\+|---)/.test(l));
+const nonComment = changed.filter((l) => !/^[+-]\s*(\*|\/\*\*|\/\/)/.test(l));
+console.log(JSON.stringify({ changedLines: changed.length, added: changed.filter((l) => l[0] === "+").length, removed: changed.filter((l) => l[0] === "-").length, nonCommentLines: nonComment }));
+console.log(git("diff", "--numstat", base, head));

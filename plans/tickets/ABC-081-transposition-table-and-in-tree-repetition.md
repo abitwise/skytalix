@@ -40,6 +40,12 @@ will happily 'win' by repeating"* — it will evaluate a drawn repetition as a w
 - A **preallocated per-ply key array**, seeded once per search — `ADR-0002` clause 3, verbatim.
 - **In-tree repetition detection** off that same array: a position repeating within the search path
   scores as a draw.
+- **The table is its own fixed-size module, separate from the per-ply key array** — `ADR-0025`
+  (proposed, Architect/Design ruling `…a937c4bd`, R3). It shares the key **value** read from
+  `keys[ply]`, never the array's storage, seeding or lifetime. It is cleared at every
+  `chooseMove` / `search()` entry, spans all iterative-deepening iterations of one move, and is
+  **not** carried across moves. Only full-width nodes probe and store it; quiescence does
+  neither. Design point: 2^18 entries × 16 B = 4 MiB.
 
 ## Out of scope
 
@@ -59,6 +65,15 @@ alike"* under that rule. The ADR also says the question *"will be asked again by
 Architect/Design.** If the answer is "unchanged", this ticket proceeds as written; if the hash
 changes, `ABC-075` changes with it. **A ratified ADR is not re-opened by a ticket.**
 
+**Ruled 2026-09-25 (Architect/Design, ruling `…23e0307f`, R2): UNCHANGED — and for a table the
+rights key is *required*, not merely safe.** This ticket proceeds as written; `ABC-075` does not
+move. On `ADR-0006`'s own `knight-g1` pair (same placement, same current moves, one unusable
+right) the subtrees differ: perft 3 reads 1 335 vs 1 320, `search` at depth 3 reads 850 vs 830.
+An availability key would return a wrong score, not merely waste a probe. `ADR-0006` gains a
+dated amendment section and falsifier `G6`: a TT-keyed search reporting a score that differs
+from the table-off search at the same depth, on a pair differing only in castling rights, is a
+FAIL — checked by this ticket's own `A1`.
+
 ## Acceptance (Given/When/Then)
 
 - **`A1` (the table changes work, not value).** **Given** the perft corpus at depth 4, **when**
@@ -68,8 +83,15 @@ changes, `ABC-075` changes with it. **A ratified ADR is not re-opened by a ticke
 - **`A2` (it hits, and the hit rate is reported).** **Given** `kiwipete` and `position-6` at depth 5,
   **then** the table hit rate is reported and is **≥ 15%**. *(A table that never hits is a
   memory leak with a lookup.)*
-- **`A3` (node count falls).** **Given** the same runs, **then** node count is **≤ 70%** of the
-  no-table build's. Report the actual figure.
+- **`A3` (node count falls, measured in the engine's shape).** **Given** `kiwipete` and
+  `position-6`, **when** searched by iterative deepening to depth 5 with `ABC-080`'s ordering
+  and hash move plus this ticket's table on, **then** cumulative node count is **≤ 70%** of the
+  same iterative-deepening search with the table off (ordering still on). Report the actual
+  figure. *(Re-stated 2026-09-25 by Architect/Design ruling `…a937c4bd` (R3): as originally
+  written — fixed depth 5, table only — this reads 80.4% (kiwipete) / 81.2% (position-6) and
+  FAILS ≤ 70%. In the engine's cumulative-iterative-deepening shape, with `ABC-080`'s hash move
+  live, it reads 63.2% / 49.7% and passes. `ABC-080` is therefore a prerequisite for this
+  criterion's measurement — see Dependencies.)*
 - **`A4` (mate scores are stored correctly relative to the root).** **Given** a mate-in-2 position
   reached at two different plies of the same search, **then** the reported mate distance is correct
   at **both**. *(Storing a root-relative mate score in a depth-relative table is the classic TT bug
@@ -88,12 +110,19 @@ changes, `ABC-075` changes with it. **A ratified ADR is not re-opened by a ticke
 
 ## Dependencies
 
-- **`ABC-075` must land first — OPEN and itself blocked** on Architect/Design's ep ruling. **A
-  per-node full-scan key at ~295–304 ns would make this table cost more than it saves.**
-- **`ABC-077` must land first — OPEN.**
-- **`ABC-080` is NOT a blocker** in either direction; the two are complementary and `ABC-080`'s
-  `A5` makes the empty-table case a criterion.
-- **Architect/Design's ruling on `ADR-0006`'s inherited caveat — OPEN**, named above.
+- **`ABC-075` and `ABC-077` — `Done`** (confirmed against `grugops/wave-2026-09-24`, re-score
+  2026-09-25).
+- **`ABC-080` must land first, for `A3`'s measurement — changed 2026-09-25.** `A3`'s ≤ 70% bar
+  is met only with `ABC-080`'s ordering and hash move live (ruling `…a937c4bd`, R3): the
+  fixed-depth-5, table-only reading FAILS at 80.4% / 81.2%; the iterative-deepening,
+  hash-move-live reading passes at 63.2% / 49.7%. `A1`, `A2`, `A4`–`A8` do not need `ABC-080` —
+  `ABC-080`'s own `A5` makes the empty-table case a criterion there, so this ticket is not
+  blocked on `ABC-080` for anything but `A3`.
+- **`ADR-0006`'s inherited caveat — RULED 2026-09-25, unchanged.** Named above; this ticket
+  proceeds as written (ruling `…23e0307f`, R2).
+- **Whether the table's storage sits with, or separate from, the `ADR-0020` per-ply key array —
+  RULED 2026-09-25: SEPARATE** (`ADR-0025`, proposed; ruling `…a937c4bd`, R3). Named in Scope
+  above.
 
 ## Security / NFR triggers
 
@@ -105,7 +134,26 @@ changes, `ABC-075` changes with it. **A ratified ADR is not re-opened by a ticke
 - **Memory — `A7`'s stated fixed bound.** This is the first component in the project that holds
   meaningful memory, and there is **no memory NFR row in `plans/nfr-catalog.md`**. *(Recorded as a
   gap; setting one is Architect/Design's and Security/NFR's, not BA/PM's. `A7` binds the ticket to a
-  stated bound regardless.)*
+  stated bound regardless.)* **`NFR-009` is now PLACED, 2026-09-25** (Security/NFR, task
+  `wave-2026-09-24`, subtask `place-nfr009`, `plans/nfr-catalog.md` row `NFR-009`), on the owner's
+  word: search-held memory **≤ 16 MiB total** (the transposition table, the per-ply key array and
+  `ABC-080`'s killer table, together), with `heapUsed` and `arrayBuffers` each **≤ 1 MiB** growth
+  between a 1 s and a 3 s search, read after `gc()`. **128 MiB is the ceiling of any re-level, not
+  the level** — a re-level needs a measured need on record. **Build-hop note carried from the
+  row:** a 2^20-entry table alone is 16.00 MiB and breaks the total on its own; **2^19 entries
+  (8 MiB) fits.** `A7` now checks against `NFR-009`, not against nothing.
+  - **Open, named for the owner, not decided here (Security/NFR's recommendation on `ABC-080`'s
+    page): which runner `NFR-005` binds — plain node or vitest.** The two read a different depth
+    on the same code (plain node kiwipete 3 → 6 / position-6 3 → 5; vitest 2 → 4 / 3 → 4).
+    Security/NFR recommends plain node, matching how `npm run chess` runs; the owner's word
+    ratifies it, not this re-score. `NFR-005`'s depth-6 verdict is due at this ticket's close and
+    is not re-leveled here.
+  - **Fold-in, named for the Engineer (QE `ABC-080` `G1`, non-blocking):** a mutant on the
+    killer-update-on-cutoff-only rule survives in `src/engine.ts`'s `negamax` (the same rule IS
+    caught in `src/search.ts`'s recursion). This ticket touches `src/engine.ts`, so it is the next
+    licensed touch — close `G1` here with one exact node-count pin at a fixed injected-clock
+    budget, the same shape as the existing `A3` fixture (QE's estimate, not re-measured by this
+    re-score).
 - **Security — not triggered.** No input surface.
 
 ## Test notes
@@ -116,6 +164,15 @@ changes, `ABC-075` changes with it. **A ratified ADR is not re-opened by a ticke
 3. **`A5`'s position must be constructed, not found.** Write the repetition line explicitly.
 4. **Do not test the session's threefold rule here.** `src/gameend.ts` owns it and `A6` forbids the
    import.
+5. **`ADR-0006`'s falsifier `G6`.** A TT-keyed search reporting a score that differs from the
+   table-off search at the same depth, on a pair differing only in castling rights, is a FAIL.
+   Name the fixture pair explicitly (`ADR-0006`'s `knight-g1` pair or an equivalent) inside
+   `A1`'s table-on/off comparison — no separate test required.
+6. **`ABC-078`'s `A3` identity sweep needs one amendment this ticket's build hop owes.** The
+   hash move flips 1 of 48 *tied* root moves against unordered `search()` (0 of 48 score
+   mismatches, d1–d4) — the move comparison in `ABC-078`'s identity sweep must accept a root
+   move of equal score. Recorded here so the build hop inherits it rather than re-deriving it;
+   not a new criterion on this ticket.
 
 ## Size and priority rationale
 
@@ -145,3 +202,142 @@ Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P0` |
 | 10 | no major unresolved blocker | **⚠️** **there is no memory NFR row in `plans/nfr-catalog.md`** and this is the first component that needs one. `A7` binds the ticket to a stated bound, but **no project-level bar exists to check it against.** Owner: Architect/Design + Security/NFR. Not BA/PM's, and not edited |
+
+## § DoR re-score — 2026-09-25 (BA/PM, task `rescore-abc080-081`, Workflow 07)
+
+**8 of 10 clean, 2 ⚠️ — still NOT met; stays in `Backlog`.** Re-scored against the CURRENT wave
+tree (`grugops/wave-2026-09-24` @ `e12452e`), not the page. Full reasoning and the `NFR-005`
+depth-6 arithmetic are in `.grugops/context/rescore-abc080-081/notes/` — not restated here.
+
+- **Item 3 (INVEST-shaped) flips ⚠️ → ✅.** `ABC-075` (the incremental key this ticket
+  consumes) and `ABC-077` are both `Done`. `ABC-080` remains not a blocker in either direction.
+- **Item 5 (dependencies known) stays ⚠️, and a second open ruling is named.** `ADR-0006`'s
+  inherited caveat (castling rights vs. availability in the hash) is re-checked and still
+  open — no note answers it for `EPIC-004`. **New, previously implicit in the ticket's own
+  scope prose, now named as its own open item:** whether the TT's own storage shares
+  allocation/seeding with the `ADR-0020` per-ply key array, or is a second, independently
+  persisted structure. Both are Architect/Design's; neither ruled here.
+- **Item 10 stays ⚠️, unchanged.** `plans/nfr-catalog.md` re-checked directly (`NFR-001`–
+  `NFR-008`, none a memory bound) — the gap is unchanged since 2026-08-16.
+- **The owner's word (2026-09-25) keeps the `NFR-005` depth-6 floor; not re-leveled here.**
+  `A2`/`A3` as written are hit-rate/ratio claims, not depth claims. Combined with `ABC-080`'s
+  own bars, the two tickets' written criteria commit to roughly a 3.6x node-count reduction at
+  a fixed depth — short of what three additional plies (depth 3 → 6) plausibly cost. Named
+  plainly for the owner; no criterion re-leveled.
+
+**Pullable today: NO.** Size `M`, priority `P0`, unchanged. **Recommended routing: send the two
+open Architect/Design rulings ahead of a pull, in parallel with (not blocking) `ABC-080`'s own
+path forward.**
+
+## § Ruling — 2026-09-25 (Architect/Design, task `wave-2026-09-24`, subtask `ruling-abc080-081`)
+
+The reasoning and the probe are in `.grugops/context/ruling-abc080-081/notes/` (rulings
+`…23e0307f`, `…a937c4bd` and `…4dd1bbaa`; observations `…11853121` and `…30cea5d2`) and are not
+restated here.
+
+- **Item 5a, `ADR-0006`'s inherited caveat: UNCHANGED, so this ticket proceeds as written and
+  `ABC-075` does not move.** For a table, the rights key is *required*, not merely safe.
+  - On `ADR-0006`'s own `knight-g1` pair (same placement and same current moves, one unusable
+    right) the subtrees differ: perft 3 reads 1 335 vs 1 320 and `search` d3 reads 850 vs 830.
+  - An availability key would return a wrong score.
+  - Recorded as a dated amendment to `ADR-0006`, with falsifier `G6`.
+- **Item 5b, table storage vs the `ADR-0020` per-ply key array: SEPARATE** (`ADR-0025`, proposed).
+  - The table shares the key value read from `keys[ply]`, never the array's storage, seeding or
+    lifetime.
+  - The table is a fixed-size typed-array module that verifies the full 64-bit key. The design
+    point is 2^18 × 16 B = 4 MiB.
+  - It is cleared at every `chooseMove` / `search()` entry and spans the iterations of one move.
+    It is not carried across moves.
+  - Only full-width nodes probe and store it. Both recursions use it, and `search.ts` gains one
+    test-only door, `searchWithoutTable`.
+  - The key array gets a capacity guard, a runaway guard and not a depth budget.
+- **Item 10, the memory row: DRAFTED, NOT PLACED.** `NFR-009` (draft, in the ruling note) says:
+  - search-held memory is fixed at ≤ 16 MiB;
+  - `heapUsed` and `arrayBuffers` each move ≤ 1 MiB between a 1 s and a 3 s search, read after
+    `gc()`;
+  - the `heapUsed` read is the one that catches a growing `Map`, and it must be watched going RED
+    first.
+
+  Security/NFR places it, on the owner's word. **Item 10 stays ⚠️ until then.**
+- **NEW, for BA/PM: `A3` as written reads 80.4% (kiwipete) and 81.2% (position-6) at fixed
+  depth 5, and FAILS ≤ 70%.**
+  - In the engine's shape (iterative deepening, cumulative nodes to d5, table + hash move vs no
+    table) it reads **63.2% and 49.7%**.
+  - Recommended: re-state `A3` in that shape, and make `ABC-080` a prerequisite for `A3`'s
+    measurement. Hit rate `A2`: 19.0% / 18.2% at fixed d5 and 50–59% under iterative deepening.
+    ≥ 15% holds either way.
+- **`ABC-078` `A3` identity sweep:** scores stay exact (0 of 48 mismatches, d1–d4). The root hash
+  move flipped 1 of 48 *tied* moves, so the move comparison must accept an equal-scored move.
+  That amendment belongs to this ticket's build hop.
+- **Expected effect on `NFR-005`, with `ABC-080` in:** depth **6 / 6** at 3 s, margins 1.93x /
+  1.51x. A prototype reading, not a verdict.
+
+## § DoR re-score — 2026-09-25 (BA/PM, task `refine-abc080-081-cut-c1`, Workflow 07)
+
+**8 of 10 clean, 2 ⚠️ — still NOT MET; stays in `Backlog`.**
+
+- **Item 5 (dependencies known) flips ⚠️ → ✅.** Both open Architect/Design rulings the
+  2026-09-25 re-score named are now answered: `ADR-0006`'s inherited caveat is unchanged
+  (ruling `…23e0307f`), and the table's storage is ruled separate from the per-ply key array
+  (`ADR-0025`, proposed, ruling `…a937c4bd`). Both are folded into Scope, the inherited-caveat
+  section and Dependencies above; no ruling stays open.
+- **Item 3 (INVEST-shaped) flips ✅ → ⚠️ — a new blocker, honestly named.** The 2026-09-25
+  re-score held this ✅ because "`ABC-080` remains not a blocker in either direction." That is
+  no longer true: the same ruling that answers item 5 also re-states `A3` in a shape that needs
+  `ABC-080`'s hash move live to pass (63.2% / 49.7% vs. a failing 80.4% / 81.2% without it) —
+  see the re-stated `A3` and the changed Dependencies entry above. `ABC-080` is `Backlog`, not
+  `Done`, as of this cut. This ticket is **not independent of `ABC-080` for `A3`'s measurement**,
+  the same shape of gap that held item 3 open against `ABC-075`/`ABC-077` before they landed.
+  `A1`, `A2`, `A4`–`A8` remain buildable without `ABC-080`.
+- **Item 10 stays ⚠️, per this subtask's own fence.** `NFR-009` is now drafted (R4,
+  `…4dd1bbaa`) but **not placed** in `plans/nfr-catalog.md` — that pen is Security/NFR's, on the
+  owner's word, and is explicitly out of this subtask's scope. `A7` binds the ticket to a stated
+  bound with nothing to check it against until `NFR-009` is placed.
+- **Net score is unchanged at 8/10** — one item closed (5), one opened (3), one held open by
+  fence (10). This is not a wash dressed as progress: the two open items are now different in
+  kind. Item 3's blocker (`ABC-080` landing) is schedule-bound and resolves the moment `ABC-080`
+  is `Done` — and `ABC-080` re-scores **10/10, Ready** at this same cut (see its own page).
+  Item 10's blocker (an owner ratification of a drafted NFR row) is not schedule-bound to this
+  wave at all.
+- **`NFR-005`'s depth-6 floor — owner's word kept, not re-leveled.** Same arithmetic as the
+  2026-09-25 re-score: `A2`/`A3` are hit-rate/ratio claims, not depth claims. The traceability
+  row for this cut records the fuller depth-6/7 path (`ABC-080` → `ABC-081` → `C1`/`ABC-121`).
+
+**Pullable today: NO.** Size `M`, priority `P0`, unchanged. **Recommended routing: pull `ABC-080`
+first (10/10, Ready) — it both stands on its own and discharges this ticket's item-3 blocker.
+Item 10 (`NFR-009` placement) routes to Security/NFR in parallel; it does not gate `ABC-080`'s
+pull and did not gate this ticket's item-3 resolution.**
+
+## DoR item 10
+
+**2026-09-25, Security/NFR (task `wave-2026-09-24`, subtask `place-nfr009`): the memory row now EXISTS.** `NFR-009` is placed in `plans/nfr-catalog.md` on the owner's word (*"16MiB sounds small in todays standards, if more is needed you can extend it to 128MiB. I approve otherwise."*). The level is **16 MiB total** search-held memory, with **≤ 1 MiB** growth in `heapUsed` and in `arrayBuffers` between a 1 s and a 3 s search, read after `gc()`. 128 MiB is the ceiling of any re-level, not the level. `A7` now checks against `NFR-009`. Two points for the build hop, both written into the row. First, a 2^20-entry table (16.00 MiB alone) breaks the total; 2^19 fits. Second, `ABC-080`'s `KillerTable` has no `byteLength`, so the `heapUsed` read (c) counts it. **This page's item 10 is NOT re-scored here. BA/PM re-scores it.**
+
+## § DoR re-score — 2026-09-25 (BA/PM, task `wave-2026-09-24`, subtask `rescore-abc081`, Workflow 07)
+
+**10 of 10 clean — MET. `ABC-081` is Ready.** Re-scored against the current wave tree
+(`grugops/wave-2026-09-24` @ `d585ece`), not the page.
+
+- **Item 3 (INVEST-shaped) flips ⚠️ → ✅.** The open question was whether `ABC-080`'s code being
+  on the build base discharges it, and it does: `A3`'s ≤ 70% bar needs `ABC-080`'s ordering and
+  hash move **live at build time**, not a signed-off `ABC-080`. `ABC-080`'s code merged onto the
+  wave at `caabd13`/`d585ece` (QE PASS WITH FINDINGS, Security/NFR PASS_WITH_RISKS), and this is
+  the branch `ABC-081`'s own build hop starts from — so the hash move is live on the base this
+  ticket builds against, independent of `ABC-080`'s own `Ready for UAT` / owner's-word status.
+  Independence for `INVEST` asks whether this ticket can be built and its acceptance measured
+  without waiting on another ticket's own board progress; the code dependency it actually needed
+  is satisfied now.
+- **Item 10 (no major unresolved blocker) flips ⚠️ → ✅.** `NFR-009` is placed in
+  `plans/nfr-catalog.md` (Security/NFR, subtask `place-nfr009`, 2026-09-25, on the owner's word):
+  ≤ 16 MiB total, ≤ 1 MiB growth in `heapUsed`/`arrayBuffers` between a 1 s and a 3 s search.
+  `A7` now has a stated project-level bar to check against. Folded into Security/NFR triggers
+  above, with the build-hop note (2^19 fits, 2^20 does not) carried forward.
+- **Items 1, 2, 4–9 unchanged, all clean** — re-checked, no regression against the current tree.
+- **Also folded in, per this subtask (not DoR items, but criteria/scope inputs the build hop
+  inherits):** QE `ABC-080` `G1` (close the surviving `engine.ts` killer-update mutant here, since
+  this ticket touches `engine.ts`) and the owner's open, undecided question on which runner
+  `NFR-005` binds (Security/NFR recommends plain node) — both above, under Security/NFR triggers.
+  The `ABC-080`-page wording QE asked BA/PM to firm up (killers cleared between `chooseMove` calls,
+  not between iterations) is fixed on `ABC-080`'s own page, `A6`, not here.
+
+**Pullable today: YES.** Size `M`, priority `P0`, unchanged. **Recommended routing: pull
+`ABC-081` into `Ready` — the Orchestrator's board move, out of this subtask's fence.**

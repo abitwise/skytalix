@@ -1,0 +1,5 @@
+{ 3.00 3.36 3.40 }
+{"name":"kiwipete","d":5,"none":{"nodes":35538933,"score":50,"ms":85614},"mvv-lva":{"nodes":166490,"score":50,"ms":756},"+killers":{"nodes":157042,"score":50,"ms":734}}
+{ 3.66 3.39 3.40 }
+{"name":"position-6","d":5,"none":{"nodes":19426355,"score":35,"ms":56877},"mvv-lva":{"nodes":177146,"score":35,"ms":860},"+killers":{"nodes":140781,"score":35,"ms":726}}
+{ 3.62 3.43 3.41 }

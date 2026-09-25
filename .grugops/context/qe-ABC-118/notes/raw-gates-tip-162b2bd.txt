@@ -1,0 +1,116 @@
+
+===== lint: npx biome check .
+exit=0 wall=0.62s load_at_start=5.61
+Checked 76 files in 114ms. No fixes applied.
+--- stderr (tail):
+real 0.61
+user 0.55
+sys 0.18
+
+===== typecheck: npx tsc --noEmit
+exit=0 wall=1.21s load_at_start=5.61
+
+--- stderr (tail):
+real 1.21
+user 2.09
+sys 0.20
+
+===== build (same command as typecheck): npx tsc --noEmit
+exit=0 wall=1.07s load_at_start=5.61
+
+--- stderr (tail):
+real 1.07
+user 2.14
+sys 0.18
+
+===== unit: npx vitest run --dir src
+exit=0 wall=5.27s load_at_start=5.40
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ac80decc1d7f47c22
+
+ ✓ src/search.test.ts (28 tests) 363ms
+ ✓ src/zobrist.test.ts (32 tests) 432ms
+... (29 lines elided) ...
+ ✓ src/apply.test.ts (24 tests) 15ms
+ ✓ src/evaluate.test.ts (21 tests) 70ms
+ ✓ src/fen.test.ts (27 tests) 6ms
+ ✓ src/moves.castling.test.ts (33 tests) 10ms
+ ✓ src/moves.test.ts (33 tests) 9ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 43ms
+ ✓ src/glyph-mode.test.ts (21 tests) 5ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 8ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 2ms
+ ✓ src/gameend.nfr.test.ts (3 tests) 11ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 6ms
+ ✓ src/san.nfr.test.ts (5 tests) 6ms
+ ✓ src/engine.test.ts (24 tests) 1057ms
+   ✓ A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames  693ms
+ ✓ src/cli.test.ts (65 tests) 28ms
+
+ Test Files  42 passed (42)
+      Tests  1361 passed (1361)
+   Start at  22:29:09
+   Duration  4.80s (transform 946ms, setup 0ms, collect 6.98s, tests 6.14s, environment 3ms, prepare 2.53s)
+--- stderr (tail):
+real 5.26
+user 16.29
+sys 1.85
+
+===== unit json: npx vitest run --dir src --reporter=json --outputFile=/var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T//qe118-vitest-93557.json
+exit=0 wall=5.32s load_at_start=5.37
+JSON report written to /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/qe118-vitest-93557.json
+--- stderr (tail):
+real 5.31
+user 16.25
+sys 1.84
+JSON: files=42 total=1361 passed=1361 failed=0 pending=0 todo=0 skipcount=0
+
+===== test integrity: node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0
+exit=0 wall=0.03s load_at_start=5.10
+No findings.
+--- stderr (tail):
+real 0.02
+user 0.02
+sys 0.00
+
+===== instrument: node tools/grugops/lane-inventory.js
+exit=0 wall=0.24s load_at_start=5.10
+The lane collects 42 test files; git tracks 42.
+No findings.
+--- stderr (tail):
+real 0.24
+user 0.24
+sys 0.09
+
+===== root lane list (npm test form) count: node node_modules/vitest/vitest.mjs list --filesOnly
+exit=0 wall=0.19s load_at_start=5.10
+src/apply.test.ts
+src/cli.test.ts
+src/command-input.test.ts
+src/coordinate-move.test.ts
+src/engine.test.ts
+... (17 lines elided) ...
+src/moves.enpassant.test.ts
+src/moves.test.ts
+src/perft.test.ts
+src/rejection.test.ts
+src/render-seam.test.ts
+src/render.test.ts
+src/result-screen.test.ts
+src/san.nfr.test.ts
+src/san.parse.test.ts
+src/san.qualifier.hardening.test.ts
+src/san.suffix.hardening.test.ts
+src/san.test.ts
+src/search.qe.test.ts
+src/search.test.ts
+src/status-panel.nfr.test.ts
+src/status-panel.test.ts
+src/turn-loop.nfr.test.ts
+src/turn-loop.test.ts
+src/zobrist.nfr.test.ts
+src/zobrist.test.ts
+--- stderr (tail):
+real 0.18
+user 0.20
+sys 0.07

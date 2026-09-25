@@ -1,0 +1,50 @@
+// QE ABC-079 end to end: `node src/cli.ts [args]` on a pipe, playing scripted moves. Each move is
+// written only after the prompt `> ` appears; the reply time is from the write to the NEXT prompt
+// (engine think + render). The full transcript (stdout+stderr, timestamps) goes to <out>.txt.
+// Usage: node e2e.mjs <out-prefix> <cli args joined by ,|-> <move> <move> ...
+import { spawn } from "node:child_process";
+import { writeFileSync } from "node:fs";
+import os from "node:os";
+
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const [outPrefix, argSpec, ...moves] = process.argv.slice(2);
+const cliArgs = argSpec === "-" ? [] : argSpec.split(",");
+const t0 = performance.now();
+const stamp = () => ((performance.now() - t0) / 1000).toFixed(3);
+const child = spawn("node", ["src/cli.ts", ...cliArgs], { cwd: WT, stdio: ["pipe", "pipe", "pipe"] });
+let transcript = `# node src/cli.ts ${cliArgs.join(" ")}   (load ${os.loadavg().map((x) => x.toFixed(2)).join(" ")})\n`;
+let buf = "";
+let i = 0;
+let wroteAt = null;
+const replies = [];
+let firstPromptAt = null;
+const onPrompt = () => {
+  const now = performance.now();
+  if (firstPromptAt === null) firstPromptAt = now - t0;
+  if (wroteAt !== null) { replies.push({ move: moves[i - 1], replyMs: +(now - wroteAt).toFixed(1) }); wroteAt = null; }
+  if (i < moves.length) {
+    const m = moves[i++];
+    transcript += `\n[${stamp()} s] >>> ${m}\n`;
+    wroteAt = performance.now();
+    child.stdin.write(`${m}\n`);
+  } else {
+    transcript += `\n[${stamp()} s] >>> (stdin closed)\n`;
+    child.stdin.end();
+  }
+};
+child.stdout.on("data", (d) => {
+  const s = d.toString();
+  transcript += s;
+  buf += s;
+  // A prompt is `> ` at the end of the buffered output.
+  if (buf.endsWith("> ")) { buf = ""; onPrompt(); }
+});
+child.stderr.on("data", (d) => (transcript += `[stderr] ${d}`));
+child.on("close", (code, signal) => {
+  transcript += `\n[${stamp()} s] exit ${code}${signal ? ` signal ${signal}` : ""}\n`;
+  const summary = { args: cliArgs, exit: code, signal, firstPromptMs: firstPromptAt === null ? null : +firstPromptAt.toFixed(1), totalS: +stamp(), replies, maxReplyMs: Math.max(...replies.map((r) => r.replyMs), 0) };
+  transcript += `\n# summary ${JSON.stringify(summary)}\n`;
+  writeFileSync(`${outPrefix}.txt`, transcript);
+  writeFileSync(`${outPrefix}.json`, JSON.stringify(summary, null, 1));
+  console.log(JSON.stringify(summary));
+});

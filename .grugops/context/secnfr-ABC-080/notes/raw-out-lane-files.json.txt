@@ -1,0 +1,44 @@
+[
+ {
+  "file": "search.ordering.test.ts",
+  "A": 955,
+  "B": null,
+  "delta": 955
+ },
+ {
+  "file": "engine.test.ts",
+  "A": 456,
+  "B": 398,
+  "delta": 58
+ },
+ {
+  "file": "history-pane.test.ts",
+  "A": 335,
+  "B": 394,
+  "delta": -59
+ },
+ {
+  "file": "zobrist.test.ts",
+  "A": 310,
+  "B": 382,
+  "delta": -72
+ },
+ {
+  "file": "search.qe.test.ts",
+  "A": 580,
+  "B": 717,
+  "delta": -137
+ },
+ {
+  "file": "quiescence.test.ts",
+  "A": 440,
+  "B": 601,
+  "delta": -161
+ },
+ {
+  "file": "search.test.ts",
+  "A": 1260,
+  "B": 1471,
+  "delta": -211
+ }
+]

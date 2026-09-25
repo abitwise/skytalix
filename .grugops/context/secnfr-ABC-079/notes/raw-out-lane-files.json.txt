@@ -1,0 +1,44 @@
+[
+ {
+  "file": "search.test.ts",
+  "A": 1541,
+  "B": 343,
+  "delta": 1198
+ },
+ {
+  "file": "quiescence.test.ts",
+  "A": 656,
+  "B": null,
+  "delta": 656
+ },
+ {
+  "file": "search.qe.test.ts",
+  "A": 647,
+  "B": 316,
+  "delta": 331
+ },
+ {
+  "file": "zobrist.test.ts",
+  "A": 446,
+  "B": 372,
+  "delta": 74
+ },
+ {
+  "file": "san.test.ts",
+  "A": 205,
+  "B": 276,
+  "delta": -71
+ },
+ {
+  "file": "turn-loop.nfr.test.ts",
+  "A": 219,
+  "B": 291,
+  "delta": -72
+ },
+ {
+  "file": "engine.test.ts",
+  "A": 401,
+  "B": 942,
+  "delta": -541
+ }
+]

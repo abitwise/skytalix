@@ -1,0 +1,19 @@
+== A5 hash: sed -n '28,35p' plans/nfr-catalog.md | shasum -a 256, per commit
+  565c623: 63f667958eeabcaa884d45b18b513c7bbe9855266c4959dfd16f87b0802eca31  (8 rows)
+  129f53d: b848732bcb13892fc1c25aba1cf9f54111597da3f27fde39f75fcc6991ac719f  (8 rows)
+  75e7357: b848732bcb13892fc1c25aba1cf9f54111597da3f27fde39f75fcc6991ac719f  (8 rows)
+  HEAD: b848732bcb13892fc1c25aba1cf9f54111597da3f27fde39f75fcc6991ac719f  (8 rows)
+
+== A4 discriminating probe (copy): exclude += "**/tools/**", "**/lane-inventory*", "**/glyph-mode.nfr.test.ts"
+  instrument exit=1
+      | The lane collects 41 test files; git tracks 42.
+      | Tracked by git but NOT collected by the lane: src/glyph-mode.nfr.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+  REVERT: config==original:true porcelain=EMPTY
+
+== A2 live checkouts under the main checkout's .claude/worktrees/ at this hop (names counted, never opened)
+  entries: 27; entries with src/*.test.ts: 27; residual-gqe115-3 present: true
+
+== The instrument at the MAIN checkout's own root (the real config, live worktrees present)
+  instrument exit=0
+      | The lane collects 42 test files; git tracks 42.
+      | No findings.
