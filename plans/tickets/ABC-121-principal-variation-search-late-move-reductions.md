@@ -365,3 +365,14 @@ on branch `grugops/ABC-121-lane` @ **`6c1e895`**, off `66afd16`. Test-only, +25/
   - The placement removes ≈ 30% of the charge (`…e4d6fcc8`).
   - The residual is for Security/NFR to rate; the owner decides.
 - **The G6 row is untouched** (Architect/Design's ruling is pending).
+
+**G6 ruling applied, 2026-09-25, by the Software Engineer** (subtask
+`ticket-to-pr-ABC-121-g6-comment`), on branch `grugops/ABC-121-pvs-lmr` @ **`01d258f`**.
+Comment-only, `src/transposition.test.ts` +4/−2. **Unmerged; not pushed.**
+
+- The re-point comment's last-but-one sentence is replaced with `ruling-abc121-g6` `…ea306e58` §4's
+  text, verbatim. No assertion, identifier or literal changed.
+- The `KNIGHT_G1_PAIR` docstring is left as it is (flagged by the ruling; it waits for the
+  `ADR-0006` erratum).
+- Gates: `npm test` 48 / 1 466 / 0 skipped, integrity `No findings.`, lint + typecheck clean
+  (`…5c2e91b4`).
