@@ -1,0 +1,102 @@
+
+> cli-chess@0.0.0 test
+> node tools/grugops/run-bounded.js 60000 vitest run
+
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-122-gate-hardening
+
+ ✓ src/zobrist.test.ts (32 tests) 401ms
+ ✓ src/san.qualifier.hardening.test.ts (20 tests) 429ms
+   ✓ ABC-025 A1 — the qualifier is the shortest ladder entry that names exactly one move > holds for every non-pawn, non-castle legal move of all 207 corpus positions, both call forms  348ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 779 nodes with quiescence / 49 without = 15.90x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 287 nodes with quiescence / 47 without = 6.11x
+
+ ❯ src/quiescence.test.ts (29 tests | 4 failed) 493ms
+   × A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly 7ms
+     → expected 140 to be 120 // Object.is equality
+   × A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly 3ms
+     → expected 50 to be +0 // Object.is equality
+   × A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly 1ms
+     → expected -500 to be 380 // Object.is equality
+   × A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly 2ms
+     → expected 5 to be -5 // Object.is equality
+   ✓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a hanging pawn makes the quiescence value STRICTLY greater than the static evaluation 7ms
+   ✓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined 1ms
+   ✓ A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > carries at least 20 positions, none of them in check for the side to move 5ms
+   ✓ A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > both arms at depth 1 — with quiescence the losing move is avoided, without it it is played 56ms
+   ✓ A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap 75ms
+   ✓ A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded 251ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 1: same score, same move, same node count 0ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 2: same score, same move, same node count 1ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 3: same score, same move, same node count 1ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 4: same score, same move, same node count 9ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count 0ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count 0ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count 1ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count 4ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count 0ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count 0ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count 1ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count 2ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count 1ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint 5ms
+   ✓ A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x 32ms
+   ✓ A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x 12ms
+   ✓ A6 — the searched position is unchanged on return > leaves every one of the 200+ corpus positions byte-identical after a quiescence search 0ms
+   ✓ A6 — the searched position is unchanged on return > leaves every hanging-piece position byte-identical after a depth-1 search, both arms 12ms
+   ✓ A6 — the searched position is unchanged on return > leaves the position byte-identical when the visitor THROWS mid-sequence — the engine's abort path 0ms
+ ✓ src/turn-loop.nfr.test.ts (4 tests) 223ms
+ ✓ src/transposition.test.ts (25 tests) 958ms
+   ✓ A5 — the only non-losing line repeats, and it scores exactly 0 > search(), depth 4: the perpetual scores exactly 0 and is played — in 7 241 nodes  333ms
+ ✓ src/search.ordering.test.ts (24 tests) 899ms
+   ✓ A3 — ordered search visits a small fraction of the unordered nodes > position-6 at depth 2 — the default lane's standing guard  387ms
+ ✓ src/perft.test.ts (24 tests) 1031ms
+   ✓ ABC-006 acceptance — exact perft counts > startpos perft(4) = 197281  315ms
+ ✓ src/history-pane.test.ts (26 tests) 381ms
+ ✓ src/engine.capacity.test.ts (1 test) 329ms
+   ✓ ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() > ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it  329ms
+ ✓ src/frame.test.ts (34 tests) 83ms
+ ✓ src/moves.enpassant.hardening.test.ts (120 tests) 59ms
+ ✓ src/turn-loop.test.ts (63 tests) 123ms
+ ✓ src/search.test.ts (28 tests) 1457ms
+   ✓ A1 — pruned and unpruned scores are identical > position-4 at depth 2  609ms
+   ✓ A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1  392ms
+ ✓ src/history-pane.nfr.test.ts (11 tests) 129ms
+ ✓ src/san.test.ts (22 tests) 305ms
+ ✓ src/moves.castling.hardening.test.ts (110 tests) 89ms
+ ✓ src/rejection.test.ts (53 tests) 31ms
+ ✓ src/render-seam.test.ts (11 tests) 48ms
+ ✓ src/history.test.ts (12 tests) 90ms
+ ✓ src/render.test.ts (27 tests) 29ms
+ ✓ src/line-input.test.ts (30 tests) 29ms
+ ✓ src/command-input.test.ts (133 tests) 136ms
+ ✓ src/frame.overflow-bound.test.ts (25 tests) 26ms
+ ✓ src/legal.test.ts (31 tests) 14ms
+ ✓ src/san.parse.test.ts (30 tests) 31ms
+ ✓ src/moves.enpassant.test.ts (58 tests) 26ms
+ ✓ src/move-input.test.ts (50 tests) 66ms
+ ✓ src/status-panel.test.ts (29 tests) 44ms
+ ✓ src/gameend.test.ts (45 tests) 89ms
+ ✓ src/result-screen.test.ts (13 tests) 50ms
+ ✓ src/evaluate.test.ts (21 tests) 15ms
+ ✓ src/apply.test.ts (24 tests) 31ms
+ ✓ src/search.capacity.test.ts (1 test) 68ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 14ms
+ ✓ src/coordinate-move.test.ts (45 tests) 9ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 22ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 4ms
+ ✓ src/moves.castling.test.ts (33 tests) 10ms
+ ✓ src/fen.test.ts (27 tests) 5ms
+ ✓ src/moves.test.ts (33 tests) 47ms
+ ✓ src/gameend.nfr.test.ts (3 tests) 9ms
+ ✓ src/glyph-mode.test.ts (21 tests) 8ms
+ ✓ src/san.nfr.test.ts (5 tests) 4ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 2ms
+ ✓ src/engine.test.ts (24 tests) 331ms
+ ✓ src/cli.test.ts (65 tests) 46ms
+
+--- stderr ---
+run-bounded: timed out after 60000 ms, killed the process tree of: vitest run

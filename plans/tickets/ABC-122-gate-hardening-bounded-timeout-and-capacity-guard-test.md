@@ -283,6 +283,24 @@ That file is outside `A11`'s fence. The two-line patch and its reading are in cl
 `lane-inventory.js` is red at this tree on a pre-existing tracked file,
 `.grugops/context/ruling-abc079-oracle/…/oracle.test.ts`. That is not this ticket's.
 
+### Re-hop 2026-09-25 (Software Engineer, subtask `ticket-to-pr-ABC-122-rehop`): `A4` landed, **12 of 12 met**
+
+The code commit is `ca9f42d`. It is the two lines the amendment below permits, and nothing else:
+`package.json` `scripts.test` and `src/cli.test.ts:1661`'s `SCRIPTS_AT_HEAD.test`. Both now read
+`"node tools/grugops/run-bounded.js 60000 vitest run"`, byte-identical. The branch is not merged
+and not pushed. The readings are in observation `5d2b7e91` under
+`.grugops/context/ticket-to-pr-ABC-122/notes/`.
+
+| # | verdict | reading |
+|---|---|---|
+| `A4` | MET | `npm test` runs through the wrapper with N = 60000. The pin is armed: the stale pin reds only the A10 row (1 of 65). |
+| `A11` | MET | Against the wave merge-base `0bc31e1`, the diff is `package.json` 1/1, `src/cli.test.ts` 1/1, the 2 new test files and the 3 `tools/grugops/` files. `search.ts` and `engine.ts` have 0 lines. The fenced docs have no ticket-owned change. Their difference from `66a45d1` came in through wave merge `11744f9`, which is not this ticket's. |
+| `A12` | MET | lint, typecheck and build exit 0. `npm test` exits 0: 47 files, 1446 tests passed, 0 skipped. Skip-integrity: `No findings.` |
+
+The hang through `npm test` itself was re-run with the root depth guard reverted: exit 124 at
+60.17 s, and no process from this worktree survived. The guard was restored before the commit.
+Still owed: the `AGENTS.md` `### Test` line (Scribe), and a QE hop.
+
 ## Amendment 2026-09-25 (BA/PM, `amend-abc122-a4-pin`) — the `A4` stop ruled
 
 **Ruling: widen `A11` by exactly one pin — `src/cli.test.ts:1661`'s `SCRIPTS_AT_HEAD.test`
