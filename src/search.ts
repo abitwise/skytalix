@@ -23,8 +23,9 @@
  *
  * Quiescence (ABC-079) is HERE, at the leaf: an in-progress leaf is scored by
  * `src/quiescence.ts`'s capture search rather than by the bare static evaluation, so the
- * horizon does not fall in the middle of a trade. `searchWithoutQuiescence` is the TEST-ONLY
- * door to the pre-quiescence leaf, the same shape as `searchWithoutPruning`.
+ * horizon does not fall in the middle of a trade. Two TEST-ONLY doors reach the pre-quiescence
+ * (bare) leaf: `searchWithoutQuiescence` (pruned) and `searchWithoutPruningOrQuiescence`
+ * (unpruned).
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
@@ -60,12 +61,19 @@ interface NodeCounter {
 
 /**
  * The two test-only switches threaded through the recursion. Both are true on every shipped
- * call; each has one export that turns it off so a test can measure what it changed.
+ * call; each is turned off by TWO exports — its own door and `searchWithoutPruningOrQuiescence`,
+ * which turns off both — so a test can measure what it changed.
  */
 interface Switches {
-  /** Alpha-beta cutoffs. False is brute-force negamax — `searchWithoutPruning`. */
+  /**
+   * The MAIN TREE's alpha-beta cutoffs. False declines them only; a quiescence leaf still runs
+   * `quiesce` with its own cutoffs — `searchWithoutPruning`, `searchWithoutPruningOrQuiescence`.
+   */
   readonly prune: boolean;
-  /** The capture search at the leaf. False is the bare evaluation — `searchWithoutQuiescence`. */
+  /**
+   * The capture search at the leaf. False is the bare evaluation — `searchWithoutQuiescence`,
+   * `searchWithoutPruningOrQuiescence`.
+   */
   readonly quiescence: boolean;
 }
 
@@ -109,8 +117,10 @@ function leafScore(
  * returned score is EXACT — that is what makes `A1` (identical to the unpruned search) a
  * property of alpha-beta rather than a coincidence of these positions.
  *
- * `prune` false makes it a plain brute-force negamax by declining both halves of the cutoff.
- * That is `A1`/`A2`'s differential oracle and it is TEST-ONLY: no shipped call passes false,
+ * `prune` false declines both halves of the MAIN-TREE cutoff. That makes it brute force above
+ * the horizon only: a quiescence leaf still runs `quiesce`, which keeps its own stand-pat and
+ * capture cutoffs. It is still `A1`/`A2`'s differential oracle for the main tree, and it is
+ * TEST-ONLY: no shipped call passes false,
  * and `searchWithoutPruning` exists to be the test's door rather than a configurable engine.
  */
 function negamax(
@@ -202,7 +212,10 @@ export function search(position: Position, depth: number): SearchResult {
 }
 
 /**
- * TEST-ONLY. The same search with pruning DISABLED — brute-force negamax over the whole tree.
+ * TEST-ONLY. The same search with the MAIN TREE's alpha-beta cutoffs DISABLED. Its leaves still
+ * run `quiesce` with that function's own cutoffs, so it is NOT brute force below the horizon
+ * (measured by ABC-079's QE: position-3 at depth 1 visits 46 nodes here, 63 with `quiesce`'s
+ * cutoffs removed).
  *
  * It exists so `A1` can assert alpha-beta changes the WORK and not the VALUE, and so `A2` can
  * count what it saved. It is not an engine option, nothing in production calls it, and it is

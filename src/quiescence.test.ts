@@ -446,7 +446,30 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
   const stopLevel = (name: string, depth: number): number =>
     (STOP_LEVEL[name] as readonly number[])[depth] as number;
 
-  function multiplier(name: string, depth: number): number {
+  /**
+   * The depth-3 ANSWER on both boards, pinned beside the ratio (ABC-079 G1/G2 ruling,
+   * `.grugops/context/ruling-abc079-g1g2/`). These are the retired unpruned quiescence oracle's
+   * answers: that ruling ran `searchWithoutPruning(p, 3)` offline and it equals `search(p, 3)` on
+   * score AND move on both boards. They close QE's G1 — a depth-3 window reaching a quiescence
+   * leaf on a capture-dense board — which no differential row covers: the seeded window slips
+   * `R2b`/`R2c` move kiwipete to e5g6 / 205 and position-6 to 120 and red nothing else. Like
+   * that oracle, they check the main tree and the window it hands the leaf, not `quiesce`'s own
+   * inner alpha-beta. Node counts are deliberately NOT pinned: the levels above govern cost and
+   * tolerate evaluator drift on purpose. These values WILL legitimately move on an evaluator or
+   * move-generation change. Then re-run `searchWithoutPruning(parseFen(<fen>), 3)` in plain node
+   * (~160 s kiwipete, ~28 s position-6) and re-pin ONLY when it equals `search()` on both score
+   * and move. Re-pinning to whatever `search()` says, with no oracle run, is a defect.
+   */
+  const ORACLE_AT_DEPTH_3: Readonly<Record<string, { score: number; move: string }>> = {
+    kiwipete: { score: 50, move: "e2a6" },
+    "position-6": { score: 30, move: "c3d5" },
+  };
+
+  /** One `search()` per call: the ratio, and the result the depth-3 pin reads off it. */
+  function multiplier(
+    name: string,
+    depth: number,
+  ): { ratio: number; result: ReturnType<typeof search> } {
     const position = parseFen(fenOf(name));
     const bareLeaf = searchWithoutQuiescence(position, depth);
     const withQuiescence = search(position, depth);
@@ -455,22 +478,29 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
       `A5 ${name} depth ${depth}: ${withQuiescence.nodes} nodes with quiescence / ` +
         `${bareLeaf.nodes} without = ${ratio.toFixed(2)}x`,
     );
-    return ratio;
+    return { ratio, result: withQuiescence };
   }
 
   for (const name of ["kiwipete", "position-6"]) {
     it(`${name} at depth 1 — the default lane's cheap reading, level ${stopLevel(name, 1)}x`, () => {
-      expect(multiplier(name, 1)).toBeLessThanOrEqual(stopLevel(name, 1));
+      expect(multiplier(name, 1).ratio).toBeLessThanOrEqual(stopLevel(name, 1));
     });
   }
 
   if (RUN_DEEP) {
     for (const name of ["kiwipete", "position-6"]) {
-      for (const depth of [2, 3]) {
-        it(`${name} at depth ${depth}, level ${stopLevel(name, depth)}x [deep, SEARCH_DEEP=1]`, () => {
-          expect(multiplier(name, depth)).toBeLessThanOrEqual(stopLevel(name, depth));
-        }, 120_000);
-      }
+      it(`${name} at depth 2, level ${stopLevel(name, 2)}x [deep, SEARCH_DEEP=1]`, () => {
+        expect(multiplier(name, 2).ratio).toBeLessThanOrEqual(stopLevel(name, 2));
+      }, 120_000);
+
+      const oracle = ORACLE_AT_DEPTH_3[name] as { score: number; move: string };
+      it(`${name} at depth 3, level ${stopLevel(name, 3)}x, and the oracle-checked answer ${oracle.score} / ${oracle.move} [deep, SEARCH_DEEP=1]`, () => {
+        const { ratio, result } = multiplier(name, 3);
+
+        expect(ratio).toBeLessThanOrEqual(stopLevel(name, 3));
+        expect(result.score).toBe(oracle.score);
+        expect(label(result.move)).toBe(oracle.move);
+      }, 120_000);
     }
   }
 });

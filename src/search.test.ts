@@ -37,10 +37,12 @@
  *                                              `searchWithoutPruningOrQuiescence`)
  *
  * The bare-leaf depth-3 pair is `ABC-077`'s `A1`/`A2` on the search they were written for, and
- * `A2`'s kiwipete case reads its recorded 99 950 unpruned nodes. What no case proves any more is
- * the combination: a depth-3 window reaching a quiescence leaf on a capture-dense board. Each
- * half is still proved on its own. Neither leaf brute-forces quiescence's own alpha-beta; that
- * is `src/quiescence.test.ts`'s to cover.
+ * `A2`'s kiwipete case reads its recorded 99 950 unpruned nodes. The combination — a depth-3
+ * window reaching a quiescence leaf on a capture-dense board — is not differenced here. It is
+ * covered on kiwipete and position-6 at depth 3 by `A5`'s pinned `{score, move}` in
+ * `src/quiescence.test.ts`, values the retired unpruned quiescence oracle was run offline to
+ * check (ABC-079 G1/G2 ruling, `.grugops/context/ruling-abc079-g1g2/`). Neither leaf
+ * brute-forces quiescence's own alpha-beta; that is `src/quiescence.test.ts`'s to cover.
  *
  * `A1` IS A DIFFERENTIAL ORACLE AND BOTH ITS SIDES CALL THE SAME `evaluate()`. Green here says
  * alpha-beta changed the WORK and not the VALUE. It says NOTHING about whether the evaluation
@@ -246,6 +248,20 @@ function broadCorpus(): { name: string; position: Position }[] {
   );
 }
 
+/**
+ * One root's slice of the broad corpus: that root and every position one legal move from it,
+ * under the same filter. The deep `A4`/`A7` cases search the broad corpus at depth 2 one slice
+ * per case, so that no case pays for more than one slice and none depends on another having run
+ * first (ABC-079 G1/G2 ruling: the whole depth-2 pass was one 62 s case, kiwipete's slice 46 s).
+ */
+function broadSlice(root: string): { name: string; position: Position }[] {
+  const { fen } = PERFT_CORPUS.find(({ name }) => name === root) as { name: string; fen: string };
+  return inProgress([
+    { name: root, position: parseFen(fen) },
+    ...expandFrom(root, parseFen(fen), 1),
+  ]);
+}
+
 interface CorpusRun {
   /** How many positions were searched — `A4`'s denominator, asserted rather than trusted. */
   readonly size: number;
@@ -263,14 +279,19 @@ const corpusRuns = new Map<string, CorpusRun>();
  * searches are the cost and running them twice buys nothing — the two criteria stay separate
  * assertions on the same measurement, which is what a shared fixture is.
  */
-function corpusRun(kind: "default" | "broad", depth: number): CorpusRun {
+function corpusRun(kind: "default" | "broad" | `broad:${string}`, depth: number): CorpusRun {
   const key = `${kind}|${depth}`;
   const cached = corpusRuns.get(key);
   if (cached !== undefined) return cached;
 
   const illegal: string[] = [];
   const mutated: string[] = [];
-  const corpus = kind === "default" ? defaultCorpus() : broadCorpus();
+  const corpus =
+    kind === "default"
+      ? defaultCorpus()
+      : kind === "broad"
+        ? broadCorpus()
+        : broadSlice(kind.slice("broad:".length));
 
   for (const { name, position } of corpus) {
     const before = snapshot(position);
@@ -349,7 +370,7 @@ describe("A5 — stalemate scores exactly 0, not a loss", () => {
 });
 
 // ---------------------------------------------------------------------------
-// A1 — alpha-beta returns the SAME score as brute force. The only window-bug detector.
+// A1 — alpha-beta returns the SAME score as the unpruned main tree. The only window-bug detector.
 // ---------------------------------------------------------------------------
 
 describe("A1 — pruned and unpruned scores are identical", () => {
@@ -473,12 +494,29 @@ describe("A4 — the returned root move is legal in every corpus position", () =
   });
 
   if (RUN_DEEP) {
-    it("returns a legal move in the same 200+ positions at depth 2, and in the broad corpus at depths 1 and 2 [deep, SEARCH_DEEP=1]", () => {
-      for (const run of [corpusRun("default", 2), corpusRun("broad", 1), corpusRun("broad", 2)]) {
-        expect(run.size).toBeGreaterThanOrEqual(100);
-        expect(run.illegal).toEqual([]);
-      }
+    // One corpus slice per case (ABC-079 G1/G2 ruling), so each case's share of its timeout is
+    // its own slice's cost, whatever ran before it.
+    it("returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]", () => {
+      expect(corpusRun("default", 2).illegal).toEqual([]);
     }, 120_000);
+
+    it("returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]", () => {
+      const run = corpusRun("broad", 1);
+
+      expect(run.size).toBeGreaterThanOrEqual(100);
+      expect(run.illegal).toEqual([]);
+
+      // Generated, not searched: the depth-2 slices below must cover the broad corpus exactly.
+      const slices = PERFT_CORPUS.map(({ name }) => broadSlice(name));
+      expect(slices.reduce((sum, slice) => sum + slice.length, 0)).toBe(run.size);
+      expect(slices.flat().map(({ name }) => name)).toEqual(broadCorpus().map(({ name }) => name));
+    }, 120_000);
+
+    for (const { name } of PERFT_CORPUS) {
+      it(`returns a legal move in the broad corpus at depth 2 — ${name}'s slice [deep, SEARCH_DEEP=1]`, () => {
+        expect(corpusRun(`broad:${name}`, 2).illegal).toEqual([]);
+      }, 120_000);
+    }
   }
 });
 
@@ -548,10 +586,18 @@ describe("A7 — the searched position is unchanged on return", () => {
   });
 
   if (RUN_DEEP) {
-    it("leaves both corpora byte-identical at depth 2, and every perft root at depth 3 [deep, SEARCH_DEEP=1]", () => {
+    // The same one-slice-per-case split as `A4` (ABC-079 G1/G2 ruling), sharing its memo keys.
+    it("leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]", () => {
       expect(corpusRun("default", 2).mutated).toEqual([]);
-      expect(corpusRun("broad", 2).mutated).toEqual([]);
+    }, 120_000);
 
+    for (const { name } of PERFT_CORPUS) {
+      it(`leaves the broad corpus byte-identical at depth 2 — ${name}'s slice [deep, SEARCH_DEEP=1]`, () => {
+        expect(corpusRun(`broad:${name}`, 2).mutated).toEqual([]);
+      }, 120_000);
+    }
+
+    it("leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]", () => {
       // The unpruned depth-3 half runs on the bare leaf (the oracle ruling). The unpruned
       // QUIESCENCE leaf is checked on every root at depth 2 instead, read off the pairs `A1`
       // already ran, so it adds no searches when `A1` runs first.
