@@ -121,6 +121,21 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   and the guard itself are in .grugops/context/quality-gate-ABC-037-qe-2026-08-19/notes/ and its
   repair-ABC-037-2026-08-19/ sibling, not restated here. The rule this cost us: never ship a memory
   guard you have not watched go RED. -->
+- Transposition deep lanes (ABC-081, `src/transposition.test.ts`): `SEARCH_DEEP=1 npx vitest run
+  src/transposition.test.ts` <!-- RUN 2026-09-25 at `54565e8`: exit 0, 40 passed (25 default), 47.7 s.
+  Holds A1/A2/A3/A4/A5's depth-4/5 hit-rate, node-savings and mate-reuse pins. --> and `ENGINE_DEEP=1
+  npx vitest run src/transposition.test.ts` <!-- RUN 2026-09-25 at `54565e8`: exit 0, 26 passed
+  (25 default), 4.8 s. Holds A7's 1 s vs 3 s heapUsed/arrayBuffers growth reading. Same two vars as
+  `src/search.test.ts` / `src/engine.test.ts` above, applied to this file; unset, NOT DEFINED rather
+  than skipped, same shape as PERFT_DEEP. -->
+- Zobrist deep lane (ABC-075): `ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts` <!-- RUN 2026-09-25
+  at `54565e8`: exit 0, 33 passed (32 default), 37.0 s. Unset, NOT DEFINED rather than skipped, same
+  shape as PERFT_DEEP. Holds A1/A2's zobristKeyAfterMove-vs-full-scan-oracle walk (11,024,485 nodes,
+  0 mismatches, 0 drift) within 4 plies of every perft position. -->
+- Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- RUN
+  2026-09-25 at `54565e8`: exit 0, 37 passed (29 default), 1.8 s. Same var as `src/search.test.ts` /
+  `src/transposition.test.ts` above, applied to this file. Holds A3's 200+-position corpus sweep under
+  the `QUIESCENCE_MAX_PLY` cap and A5's depth-2/3 node-count-multiplier pins (kiwipete, position-6). -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- RUN 2026-08-15 at `daa20c4` (this hop changed no code):
   exit 0, 856/856 on 30 files. `@vitest/coverage-v8` is in `devDependencies`; no npm script and no
