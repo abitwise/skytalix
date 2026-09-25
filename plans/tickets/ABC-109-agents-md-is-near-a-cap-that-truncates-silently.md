@@ -394,6 +394,41 @@ discharged in the same hop by editing this page → 10 of 10, 0 ⚠️ — READY
 
 Column moves are the Orchestrator's.
 
+## Delivery (Scribe half — `A1`–`A4`, `A6`–`A8`)
+
+Built 2026-09-26, task `scribe-abc109-restructure`, on `grugops/ABC-109-agents-md-cap` @ `b9a6861`
+(worktree `.claude/worktrees/ABC-109-agents-md-cap`, branched off `0bf562f`). **Unmerged, not
+pushed** — the Engineer's `A5` lands on this same branch next.
+
+- **`A1`:** base re-measured at pull time (not the page's stale 29,749): **32,565 B**. After:
+  **21,786 B**. Cut **10,779 B (33.1%)**. Headroom against the 32,768 B cap: **10,982 B ≈ 9.5
+  edits** at the measured 1,159 B/edit rate. 2,790 B under the ticket's own ≤ 24,576 B target.
+- **`A2`:** nine-plus-row before/after preservation table, every destination opened and confirmed
+  to resolve — full table in `.grugops/context/scribe-abc109-restructure/notes/`
+  (`20260926T023100Z-agents-md-scribe-observation-5dd1fcd9.md`). Kit overrides: still **three**,
+  still named, the "reader who counts four is wrong" sentence survives verbatim.
+- **`A3`:** `## When uncertain`, the DoR pointer and the DoD pointer all present, at byte offsets
+  20,930 / 20,963 / 21,036 / 21,695 of the 21,786 B file — all inside budget.
+- **`A4`:** `npm test` 47/47 files, 1446/1446 tests, exit 0 — identical counts to the
+  pre-restructure receipt. No `src/` file touched (`git diff --name-only 0bf562f HEAD` = `AGENTS.md`,
+  `memory-bank/00-index.md`, `memory-bank/90-agents-md-command-log.md` only), so the four named
+  `src/cli.test.ts` assertion sites are unmodified by construction and the `- Dev / run:` slot's
+  separator form, options and colour values remain inside its comment, which still closes before
+  the next list item.
+- **`A6`:** `git diff --name-only 0bf562f HEAD -- 'src/*' | grep -v '\.test\.ts$'` — empty. 0 new
+  test files, 0 new spawns, Δ0 default-lane tests, no wall-clock cost added (prose-only change).
+- **`A7`:** the only new destination is `memory-bank/90-agents-md-command-log.md` (repo state,
+  indexed in `memory-bank/00-index.md`), read by the Scribe before touching Commands and by any
+  role chasing a receipt's full history. `memory-bank/60-progress.md` and `ADR-0007` (pre-existing,
+  unmodified) are read on start by every role. Nothing moved into `agent-factory/`.
+- **`A8`:** `AGENTS.md` now opens with its own byte budget and the cap's inherited provenance
+  (2026-08-19 Scribe observation), stated in one line after `## Mission`.
+
+**The constant for the Engineer's `A5`: `24576` (bytes)** — this ticket's own `A1` target, which
+the restructure lands 2,790 B under.
+
+Full measurements, the A2 table and the shape decision: `.grugops/context/scribe-abc109-restructure/notes/`.
+
 <details>
 <summary>Prior score, 2026-08-19, task <code>cut-agents-md-cap-2026-08-19</code> (10/10, 0 ⚠️) — superseded above</summary>
 
