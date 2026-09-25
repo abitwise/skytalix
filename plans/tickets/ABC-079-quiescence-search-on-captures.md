@@ -588,3 +588,15 @@ before merge.**
   - No I/O, no dynamic code, no new dependency.
 - The board move is the Orchestrator's. `plans/board.md`, `AGENTS.md` and the NFR bars were not
   touched. Nothing was merged or pushed.
+
+**`AR-NFR005-079` CLOSED, 2026-09-25** (Security/NFR, task `wave-2026-09-24`, subtask
+`place-nfr005-runner`, on the owner's word *"3. use recommendation"*, Orchestrator note `…aa98a05d`
+item 3b). The entry above is left as written; this line closes it.
+
+- **Reason:** its condition, *"`NFR-005` below its floor"*, no longer holds on the owner-ruled
+  runner. Plain `node` binds (now placed in `plans/nfr-catalog.md`'s `NFR-005` row), and on it
+  `ABC-081`'s Security/NFR gate read kiwipete **6** and position-6 **6**, 5 of 5 rounds, against
+  the floor of 6 (decision `…48e9e17c`).
+- **Not closed with it:** the depth-7 WARN (still PROVISIONAL) was never part of this risk. Its
+  home is `ABC-121` and the `EPIC-004` spike.
+- No level moved and no re-measurement was made at this hop.
