@@ -1,0 +1,10 @@
+// Print a lane summary and every case with a non-default timeout or > 10% share, sorted by share.
+import { readFileSync } from "node:fs";
+const L = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079/logs";
+for (const f of process.argv.slice(2)) {
+  const s = JSON.parse(readFileSync(`${L}/${f}.json`, "utf8"));
+  console.log(`${s.label} exit ${s.exit} tests ${s.tests} pass ${s.pass} fail ${s.fail} skip ${s.skip} wall ${s.wall_s} s cpu ${s.cpu_s} s (user ${s.user_s} sys ${s.sys_s}) load ${s.loadBefore.join("/")} -> ${s.loadAfter.join("/")}`);
+  const rows = JSON.parse(readFileSync(`${L}/${f}.shares.json`, "utf8"));
+  for (const x of rows.filter((x) => x.timeout > 5000 || x.share > 0.1).sort((a, b) => b.share - a.share))
+    console.log(`   ${String(x.ms).padStart(7)} / ${String(x.timeout).padStart(6)} ${(x.share * 100).toFixed(1).padStart(5)}% ${x.state} ${x.name.slice(0, 120)}`);
+}

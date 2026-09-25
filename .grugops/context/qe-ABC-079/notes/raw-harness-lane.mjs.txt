@@ -1,0 +1,41 @@
+// QE ABC-079 lane runner. Usage: node lane.mjs <label> <ENV=VAL|-> <vitest args...>
+// Runs `npx vitest run <args>` under /usr/bin/time -p (CPU of the whole process tree incl. worker
+// threads), with the share reporter AND the default reporter, and writes <label>.json + .log.
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import os from "node:os";
+
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079";
+const [label, envSpec, ...args] = process.argv.slice(2);
+const extraEnv = {};
+if (envSpec !== "-") for (const kv of envSpec.split(",")) { const [k, v] = kv.split("="); extraEnv[k] = v; }
+const shareOut = `${S}/logs/${label}.shares.json`;
+const loadBefore = os.loadavg().map((x) => +x.toFixed(2));
+const t0 = Date.now();
+const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", ...args, "--reporter=default", `--reporter=${S}/share-reporter.mjs`], {
+  cwd: WT,
+  encoding: "utf8",
+  env: { ...process.env, ...extraEnv, SHARE_OUT: shareOut },
+  maxBuffer: 256 * 1024 * 1024,
+});
+const wall = (Date.now() - t0) / 1000;
+const loadAfter = os.loadavg().map((x) => +x.toFixed(2));
+const out = (r.stdout ?? "") + "\n--- stderr ---\n" + (r.stderr ?? "");
+writeFileSync(`${S}/logs/${label}.log`, out);
+const t = (k) => { const m = (r.stderr ?? "").match(new RegExp(`^${k}\\s+([0-9.]+)`, "m")); return m ? +m[1] : null; };
+let rows = [];
+try { rows = JSON.parse(readFileSync(shareOut, "utf8")); } catch {}
+const count = (s) => rows.filter((x) => x.state === s).length;
+const summary = {
+  label, env: extraEnv, args, exit: r.status, signal: r.signal, wall_s: wall,
+  real_s: t("real"), user_s: t("user"), sys_s: t("sys"), cpu_s: +((t("user") ?? 0) + (t("sys") ?? 0)).toFixed(2),
+  loadBefore, loadAfter,
+  tests: rows.length, pass: count("pass"), fail: count("fail"), skip: count("skip") + count("todo"),
+  summaryLines: out.split("\n").filter((l) => /Test Files|Tests {2}|Duration/.test(l)).map((l) => l.trim()),
+  over50: rows.filter((x) => x.share != null && x.share > 0.5),
+  failed: rows.filter((x) => x.state === "fail"),
+  top: [...rows].sort((a, b) => (b.share ?? 0) - (a.share ?? 0)).slice(0, 12),
+};
+writeFileSync(`${S}/logs/${label}.json`, JSON.stringify(summary, null, 1));
+console.log(JSON.stringify(summary, null, 1));

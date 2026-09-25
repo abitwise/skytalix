@@ -1,0 +1,14 @@
+// Wait up to <secs> for <file> to contain <needle>; print the file's lines as they arrive.
+import { existsSync, readFileSync } from "node:fs";
+const [file, needle, secs] = process.argv.slice(2);
+const end = Date.now() + Number(secs) * 1000;
+let seen = 0;
+const tick = () => {
+  const txt = existsSync(file) ? readFileSync(file, "utf8") : "";
+  const lines = txt.split("\n");
+  for (const l of lines.slice(seen, -1)) console.log(l);
+  seen = Math.max(seen, lines.length - 1);
+  if (txt.includes(needle) || Date.now() > end) { console.log(txt.includes(needle) ? "[found]" : "[timeout]"); process.exit(0); }
+  setTimeout(tick, 5000);
+};
+tick();

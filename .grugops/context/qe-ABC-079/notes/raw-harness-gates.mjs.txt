@@ -1,0 +1,32 @@
+// QE ABC-079 gates: lint, typecheck, build (AGENTS.md slots), then the default lane via lane.mjs
+// with the JSON reporter for the skip count, then the test-skip-integrity checker.
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+import os from "node:os";
+
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079";
+const run = (name, cmd, args) => {
+  const load = os.loadavg().map((x) => +x.toFixed(2));
+  const t0 = Date.now();
+  const r = spawnSync(cmd, args, { cwd: WT, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 });
+  const secs = (Date.now() - t0) / 1000;
+  writeFileSync(`${S}/logs/gate-${name}.log`, (r.stdout ?? "") + "\n--- stderr ---\n" + (r.stderr ?? ""));
+  return { exit: r.status, secs, load, tail: ((r.stdout ?? "") + (r.stderr ?? "")).trim().split("\n").slice(-3) };
+};
+const summary = { head: spawnSync("git", ["rev-parse", "HEAD"], { cwd: WT, encoding: "utf8" }).stdout.trim() };
+summary.lint = run("lint", "npx", ["biome", "check", "."]);
+summary.typecheck = run("typecheck", "npx", ["tsc", "--noEmit"]);
+summary.build = run("build", "npx", ["tsc", "--noEmit"]);
+const jsonOut = `${S}/logs/default-lane.vitest.json`;
+const lane = spawnSync("node", [`${S}/lane.mjs`, "default-lane", "-", "--dir", "src", "--reporter=json", `--outputFile.json=${jsonOut}`], { cwd: WT, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 });
+summary.unit = JSON.parse(readFileSync(`${S}/logs/default-lane.json`, "utf8"));
+delete summary.unit.top;
+try {
+  const j = JSON.parse(readFileSync(jsonOut, "utf8"));
+  summary.skipCount = { numPendingTests: j.numPendingTests, numTodoTests: j.numTodoTests, skip: j.numPendingTests + j.numTodoTests, passed: j.numPassedTests, failed: j.numFailedTests, total: j.numTotalTests, files: j.testResults.length };
+} catch (e) { summary.skipCount = { error: String(e), laneExit: lane.status }; }
+const n = summary.skipCount?.skip;
+summary.integrity = n === undefined ? { result: "UNKNOWN - verify" } : run("integrity", "node", ["tools/grugops/test-skip-integrity.js", ".grugops/test-skips.md", "--skip-count", String(n)]);
+writeFileSync(`${S}/logs/gates-summary.json`, JSON.stringify(summary, null, 1));
+console.log(JSON.stringify(summary, null, 1));

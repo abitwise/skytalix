@@ -1,0 +1,164 @@
+[
+ {
+  "round": 1,
+  "name": "startpos",
+  "wallMs": 3002.4,
+  "depth": 6,
+  "nodes": 733204,
+  "move": "b1c3",
+  "load1": 4.69
+ },
+ {
+  "round": 1,
+  "name": "kiwipete",
+  "wallMs": 3000.2,
+  "depth": 3,
+  "nodes": 1082101,
+  "move": "e2a6",
+  "load1": 4.69
+ },
+ {
+  "round": 1,
+  "name": "position-3",
+  "wallMs": 3003.6,
+  "depth": 6,
+  "nodes": 944146,
+  "move": "b4f4",
+  "load1": 4.56
+ },
+ {
+  "round": 1,
+  "name": "position-4",
+  "wallMs": 3000.2,
+  "depth": 4,
+  "nodes": 1120185,
+  "move": "c4c5",
+  "load1": 4.56
+ },
+ {
+  "round": 1,
+  "name": "position-5",
+  "wallMs": 3001.3,
+  "depth": 3,
+  "nodes": 749912,
+  "move": "d7c8",
+  "load1": 4.51
+ },
+ {
+  "round": 1,
+  "name": "position-6",
+  "wallMs": 3000.8,
+  "depth": 3,
+  "nodes": 941352,
+  "move": "c3d5",
+  "load1": 4.55
+ },
+ {
+  "round": 2,
+  "name": "startpos",
+  "wallMs": 3002.3,
+  "depth": 6,
+  "nodes": 753684,
+  "move": "b1c3",
+  "load1": 4.55
+ },
+ {
+  "round": 2,
+  "name": "kiwipete",
+  "wallMs": 3001.9,
+  "depth": 3,
+  "nodes": 1073909,
+  "move": "e2a6",
+  "load1": 4.35
+ },
+ {
+  "round": 2,
+  "name": "position-3",
+  "wallMs": 3000.8,
+  "depth": 6,
+  "nodes": 940050,
+  "move": "b4f4",
+  "load1": 4.35
+ },
+ {
+  "round": 2,
+  "name": "position-4",
+  "wallMs": 3000.5,
+  "depth": 4,
+  "nodes": 1125305,
+  "move": "c4c5",
+  "load1": 4.4
+ },
+ {
+  "round": 2,
+  "name": "position-5",
+  "wallMs": 3002.2,
+  "depth": 3,
+  "nodes": 742744,
+  "move": "d7c8",
+  "load1": 4.45
+ },
+ {
+  "round": 2,
+  "name": "position-6",
+  "wallMs": 3001.4,
+  "depth": 3,
+  "nodes": 933160,
+  "move": "c3d5",
+  "load1": 4.45
+ },
+ {
+  "round": 3,
+  "name": "startpos",
+  "wallMs": 3002.4,
+  "depth": 6,
+  "nodes": 736276,
+  "move": "b1c3",
+  "load1": 4.41
+ },
+ {
+  "round": 3,
+  "name": "kiwipete",
+  "wallMs": 3003.2,
+  "depth": 3,
+  "nodes": 1065717,
+  "move": "e2a6",
+  "load1": 4.41
+ },
+ {
+  "round": 3,
+  "name": "position-3",
+  "wallMs": 3000.3,
+  "depth": 6,
+  "nodes": 928786,
+  "move": "b4f4",
+  "load1": 4.38
+ },
+ {
+  "round": 3,
+  "name": "position-4",
+  "wallMs": 3002.9,
+  "depth": 4,
+  "nodes": 1119161,
+  "move": "c4c5",
+  "load1": 4.43
+ },
+ {
+  "round": 3,
+  "name": "position-5",
+  "wallMs": 3003.5,
+  "depth": 3,
+  "nodes": 737624,
+  "move": "d7c8",
+  "load1": 4.43
+ },
+ {
+  "round": 3,
+  "name": "position-6",
+  "wallMs": 2999.5,
+  "depth": 3,
+  "nodes": 929064,
+  "move": "c3d5",
+  "load1": 4.31
+ }
+]

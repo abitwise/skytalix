@@ -1,0 +1,28 @@
+// QE ABC-079 A1 probe: the 24-row hanging corpus, parsed out of src/quiescence.test.ts (not copied
+// by hand), run through search() and searchWithoutQuiescence() at depths 1-3, and through the
+// engine's chooseMove at DEFAULT_BUDGET_MS ("default strength"). Counts rows choosing the losing move.
+import { readFileSync, writeFileSync } from "node:fs";
+import os from "node:os";
+
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const { parseFen } = await import(`${WT}/src/fen.ts`);
+const { search, searchWithoutQuiescence } = await import(`${WT}/src/search.ts`);
+const { chooseMove, DEFAULT_BUDGET_MS } = await import(`${WT}/src/engine.ts`);
+const { squareName } = await import(`${WT}/src/position.ts`);
+const src = readFileSync(`${WT}/src/quiescence.test.ts`, "utf8");
+const block = src.slice(src.indexOf("const HANGING_CORPUS"), src.indexOf("];", src.indexOf("const HANGING_CORPUS")));
+const rows = [...block.matchAll(/\{ name: "([^"]+)", fen: "([^"]+)", losing: "([a-h][1-8][a-h][1-8])" \}/g)].map((m) => ({ name: m[1], fen: m[2], losing: m[3] }));
+const label = (mv) => (mv ? `${squareName(mv.from)}${squareName(mv.to)}` : "null");
+const out = { corpusRows: rows.length, loadStart: os.loadavg().map((x) => +x.toFixed(2)), arms: {} };
+for (const d of [1, 2, 3]) {
+  for (const [armName, fn] of [["quiescence", search], ["bare", searchWithoutQuiescence]]) {
+    const losing = rows.filter((r) => label(fn(parseFen(r.fen), d).move) === r.losing).map((r) => r.name);
+    out.arms[`${armName} d${d}`] = { losing: losing.length, of: rows.length, rows: losing };
+  }
+}
+const withBudget = (budgetMs) => rows.map((r) => { const c = chooseMove(parseFen(r.fen), { budgetMs }); return { name: r.name, move: label(c.move), depth: c.depth, losing: label(c.move) === r.losing }; });
+const eng = withBudget(Number(process.argv[3] ?? DEFAULT_BUDGET_MS));
+out.engineDefaultBudget = { budgetMs: Number(process.argv[3] ?? DEFAULT_BUDGET_MS), losing: eng.filter((e) => e.losing).length, of: eng.length, depths: [...new Set(eng.map((e) => e.depth))].sort((a, b) => a - b) };
+out.loadEnd = os.loadavg().map((x) => +x.toFixed(2));
+writeFileSync(process.argv[2], JSON.stringify(out, null, 1));
+console.log(JSON.stringify(out, null, 1));

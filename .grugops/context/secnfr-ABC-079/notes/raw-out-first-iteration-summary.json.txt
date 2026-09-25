@@ -1,0 +1,122 @@
+{
+ "machine": "Apple M3 x8 v24.12.0",
+ "load1": 3.7578125,
+ "samples": 20096,
+ "cap": 8,
+ "firstIteration": {
+  "wallMs": {
+   "p50": 0.63,
+   "p95": 4.14,
+   "p99": 10.16,
+   "max": 129.51
+  },
+  "nodes": {
+   "p50": 189,
+   "p95": 1573,
+   "p99": 3993,
+   "max": 32980
+  },
+  "worstByWall": [
+   {
+    "origin": "playout",
+    "fen": "q1bk2n1/rp2pp2/2n2Ppb/2pp3P/1PP4P/P4P2/2QP1K2/R1B2BNR w - - 1 20",
+    "pieces": 28,
+    "caps": 5,
+    "depth": 1,
+    "nodes": 23870,
+    "wallMs": 129.51,
+    "qDeepestFullWindow": 8
+   },
+   {
+    "origin": "playout",
+    "fen": "5bn1/2rbk2r/3p1p1p/ppp1p1p1/PPPPPP1P/R7/1B1NBK2/1Q4NR w - - 0 25",
+    "pieces": 29,
+    "caps": 9,
+    "depth": 1,
+    "nodes": 32980,
+    "wallMs": 93.63,
+    "qDeepestFullWindow": 8
+   },
+   {
+    "origin": "playout",
+    "fen": "rnbq2nr/4p3/5bk1/pppp3p/P1PPPpP1/NP4PN/R4Q1P/2B1KB1R w K - 2 15",
+    "pieces": 31,
+    "caps": 11,
+    "depth": 1,
+    "nodes": 19530,
+    "wallMs": 58.27,
+    "qDeepestFullWindow": 8
+   },
+   {
+    "origin": "playout",
+    "fen": "r3k1nr/p3qbb1/2p1pp1p/1Bppn3/PP1PPP1P/2N2p2/6PR/R1B1KQ2 w Qkq - 6 24",
+    "pieces": 30,
+    "caps": 9,
+    "depth": 1,
+    "nodes": 24604,
+    "wallMs": 54.07,
+    "qDeepestFullWindow": 8
+   },
+   {
+    "origin": "playout",
+    "fen": "r3k2r/1p1b1ppp/p3p1nq/2p1P2P/4P2b/PK1R3Q/1P2NPP1/1RB2B2 b k - 12 23",
+    "pieces": 28,
+    "caps": 4,
+    "depth": 1,
+    "nodes": 315,
+    "wallMs": 52.14,
+    "qDeepestFullWindow": 5
+   }
+  ],
+  "worstByNodes": [
+   {
+    "origin": "playout",
+    "fen": "5bn1/2rbk2r/3p1p1p/ppp1p1p1/PPPPPP1P/R7/1B1NBK2/1Q4NR w - - 0 25",
+    "pieces": 29,
+    "caps": 9,
+    "depth": 1,
+    "nodes": 32980,
+    "wallMs": 93.63,
+    "qDeepestFullWindow": 8
+   },
+   {
+    "origin": "playout",
+    "fen": "r3k1nr/p3qbb1/2p1pp1p/1Bppn3/PP1PPP1P/2N2p2/6PR/R1B1KQ2 w Qkq - 6 24",
+    "pieces": 30,
+    "caps": 9,
+    "depth": 1,
+    "nodes": 24604,
+    "wallMs": 54.07,
+    "qDeepestFullWindow": 8
+   },
+   {
+    "origin": "playout",
+    "fen": "q1bk2n1/rp2pp2/2n2Ppb/2pp3P/1PP4P/P4P2/2QP1K2/R1B2BNR w - - 1 20",
+    "pieces": 28,
+    "caps": 5,
+    "depth": 1,
+    "nodes": 23870,
+    "wallMs": 129.51,
+    "qDeepestFullWindow": 8
+   }
+  ],
+  "maxQDeepestFullWindow": 8
+ },
+ "captureDenseMiddlegame": {
+  "origin": "playout",
+  "fen": "rnb1k1r1/1pp2pp1/P4n2/B2Pp3/3P1P2/b7/PQ2Pq1p/RNK2BNR b q - 2 16",
+  "pieces": 28,
+  "caps": 16,
+  "depth": 1,
+  "nodes": 396,
+  "wallMs": 1,
+  "qDeepestFullWindow": 6
+ },
+ "queensRig": {
+  "fen": "q1q1q1qk/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K7 w - - 0 1",
+  "depth": 1,
+  "nodes": 87231,
+  "wallMs": 276.97,
+  "qDeepestFullWindow": 8
+ }
+}

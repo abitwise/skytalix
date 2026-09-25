@@ -1,0 +1,37 @@
+// G1 probe: do R2b / R2c (QE's surviving conjunction mutants, K=5) change the shipped depth-3
+// {score, move} on the A5 boards? Mutates a SCRATCH COPY of src/, never the worktree.
+import { cpSync, readFileSync, writeFileSync, rmSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+const [SRC, OUT] = process.argv.slice(2);
+const K = 5;
+const LEAF = "    return quiesce(position, alpha, beta, 0, () => counter.nodes++);";
+const GATE3 = "ply >= 3 && Number.isFinite(alpha) && Number.isFinite(beta)";
+const CAPS = (pos) => `legalMoves(${pos}).filter((m) => m.captured !== 0).length >= ${K}`;
+const MUT = {
+  R2b: ["search.ts", LEAF, `    const slip = ${GATE3} && ${CAPS("position")};\n    return quiesce(position, alpha, slip ? alpha + 1 : beta, 0, () => counter.nodes++);`],
+  R2c: ["quiescence.ts", "  if (qply > 0) visit(qply);\n", `  if (qply > 0) visit(qply);\n  if (qply === 0 && position.blackToMove && Number.isFinite(alpha) && Number.isFinite(beta) && ${CAPS("position")}) beta = alpha + 1;\n`],
+};
+const PROBE = `
+import { parseFen } from "./fen.ts"; import { squareName } from "./position.ts"; import { search } from "./search.ts";
+const C = { kiwipete: "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+ "position-4": "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1",
+ "position-6": "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10" };
+const out = {}; for (const [n, f] of Object.entries(C)) { const r = search(parseFen(f), 3);
+ out[n] = { score: r.score, move: squareName(r.move.from) + squareName(r.move.to), nodes: r.nodes }; }
+console.log(JSON.stringify(out));`;
+for (const name of ["clean", ...Object.keys(MUT)]) {
+  const dir = `${OUT}/${name}`;
+  rmSync(dir, { recursive: true, force: true });
+  cpSync(SRC, dir, { recursive: true, filter: (p) => !p.endsWith(".test.ts") });
+  if (name !== "clean") {
+    const [file, from, to] = MUT[name];
+    const text = readFileSync(`${dir}/${file}`, "utf8");
+    if (text.split(from).length !== 2) throw new Error(`${name}: edit must match exactly once`);
+    let next = text.replace(from, to);
+    const imports = next.split("\n").filter((l) => l.startsWith("import")).join("\n");
+    if (file === "quiescence.ts" && !/legalMoves/.test(imports)) next = `import { legalMoves } from "./legal.ts";\n${next}`;
+    writeFileSync(`${dir}/${file}`, next);
+  }
+  writeFileSync(`${dir}/probe.ts`, PROBE);
+  console.log(name, execFileSync("node", [`${dir}/probe.ts`], { encoding: "utf8" }).trim());
+}

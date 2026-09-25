@@ -1,0 +1,146 @@
+// QE ABC-079 mutant round. Each mutant: exact-string edit(s) in src/, each asserted to match
+// EXACTLY ONCE; then stages, each a killable child run (process group SIGKILL on timeout) whose
+// finished rows stream to a file, so a run the harness kills still names the rows that went red:
+//   P  probe.mjs — the shipped search() on the six roots d1-d3 vs the clean reference (is the
+//      mutant a REAL defect — score/move changed — or cost-only — nodes changed?)
+//   A  default lane of the four ABC-079 test files
+//   B  SEARCH_DEEP=1 on src/quiescence.test.ts + src/search.test.ts
+//   C  (only when A and B are all green) the whole default lane, and ENGINE_DEEP=1 engine.test.ts
+// Revert with `git checkout -- <file>` and assert `git status --porcelain -- src` EMPTY after each.
+// Usage: node mutants.mjs <out-tag> <mutant names...|all>   (env K=<n> for the R2b/R2c gate)
+import { execFileSync, spawn } from "node:child_process";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import os from "node:os";
+
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079";
+const git = (...a) => execFileSync("git", a, { cwd: WT, encoding: "utf8" });
+const K = Number(process.env.K ?? 4);
+const Q = "src/quiescence.ts";
+const SR = "src/search.ts";
+
+const LEAF = "    return quiesce(position, alpha, beta, 0, () => counter.nodes++);";
+const GATE3 = "ply >= 3 && Number.isFinite(alpha) && Number.isFinite(beta)";
+const CAPS = (pos) => `legalMoves(${pos}).filter((m) => m.captured !== 0).length >= ${K}`;
+
+export const MUTANTS = {
+  Q1_no_stand_pat_cutoff: [
+    [Q, "  if (standPat >= beta) return standPat; // standing still already refutes the opponent's line\n", ""],
+  ],
+  Q2_stand_pat_not_raising_alpha: [
+    [Q, "  let best = standPat;\n  if (best > alpha) alpha = best;\n", "  let best = standPat; // MUTANT Q2\n"],
+  ],
+  Q3_capture_order_reversed: [
+    [Q, "captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));", "captures.sort((a, b) => mvvLvaKey(a) - mvvLvaKey(b)); // MUTANT Q3"],
+  ],
+  Q4a_cap_plus_one: [
+    [Q, "if (qply >= QUIESCENCE_MAX_PLY) return standPat;", "if (qply > QUIESCENCE_MAX_PLY) return standPat; // MUTANT Q4a"],
+  ],
+  Q4b_cap_minus_one: [
+    [Q, "if (qply >= QUIESCENCE_MAX_PLY) return standPat;", "if (qply >= QUIESCENCE_MAX_PLY - 1) return standPat; // MUTANT Q4b"],
+  ],
+  Q5a_quiet_moves_at_the_leaf: [
+    [Q, "if (move.captured !== EMPTY) captures.push(move);", "if (move.captured !== EMPTY || qply === 0) captures.push(move); // MUTANT Q5a"],
+  ],
+  Q5b_quiet_moves_everywhere: [
+    [Q, "if (move.captured !== EMPTY) captures.push(move);", "captures.push(move); // MUTANT Q5b"],
+  ],
+  Q6a_promotion_term_dropped: [
+    [Q, "    (ORDER_VALUE[pieceType(move.captured)] as number) +\n    (ORDER_VALUE[move.promotion] as number) -", "    (ORDER_VALUE[pieceType(move.captured)] as number) + // MUTANT Q6a\n    0 -"],
+  ],
+  Q6b_promotion_term_negated: [
+    [Q, "    (ORDER_VALUE[pieceType(move.captured)] as number) +\n    (ORDER_VALUE[move.promotion] as number) -", "    (ORDER_VALUE[pieceType(move.captured)] as number) - // MUTANT Q6b\n    (ORDER_VALUE[move.promotion] as number) -"],
+  ],
+  Q7_door_with_quiescence_on: [
+    [SR, "  return searchRoot(position, depth, { prune: false, quiescence: false });", "  return searchRoot(position, depth, { prune: false, quiescence: true }); // MUTANT Q7"],
+  ],
+  // Ruling 2: defects that live ONLY where an inherited depth-3 window reaches a quiescence leaf.
+  R2a_leaf_null_window_slip_at_ply3: [
+    [SR, LEAF, `    const slip = ${GATE3}; // MUTANT R2a\n    return quiesce(position, alpha, slip ? alpha + 1 : beta, 0, () => counter.nodes++);`],
+  ],
+  R2b_leaf_slip_at_ply3_capture_dense: [
+    [SR, LEAF, `    const slip = ${GATE3} && ${CAPS("position")}; // MUTANT R2b K=${K}\n    return quiesce(position, alpha, slip ? alpha + 1 : beta, 0, () => counter.nodes++);`],
+  ],
+  R2c_quiesce_slip_black_leaf_finite_window_capture_dense: [
+    [Q, "  if (qply > 0) visit(qply);\n", `  if (qply > 0) visit(qply);\n  if (qply === 0 && position.blackToMove && Number.isFinite(alpha) && Number.isFinite(beta) && ${CAPS("position")}) beta = alpha + 1; // MUTANT R2c K=${K}\n`],
+  ],
+};
+
+function apply(edits) {
+  for (const [file, find, replace] of edits) {
+    const path = `${WT}/${file}`;
+    const src = readFileSync(path, "utf8");
+    const n = src.split(find).length - 1;
+    if (n !== 1) throw new Error(`${file}: expected exactly 1 match, found ${n} for ${JSON.stringify(find.slice(0, 60))}`);
+    writeFileSync(path, src.replace(find, () => replace));
+  }
+}
+function revert(edits) {
+  for (const f of new Set(edits.map((e) => e[0]))) git("checkout", "--", f);
+  const dirty = git("status", "--porcelain", "--", "src").trim();
+  if (dirty !== "") throw new Error(`src NOT clean after revert:\n${dirty}`);
+}
+
+function runKillable(label, cmd, args, env, killAfterS) {
+  return new Promise((resolve) => {
+    const stream = `${S}/logs/${label}.shares.json.stream`;
+    if (existsSync(stream)) rmSync(stream);
+    const t0 = Date.now();
+    const loadBefore = os.loadavg().map((x) => +x.toFixed(2));
+    const child = spawn(cmd, args, { cwd: WT, env: { ...process.env, ...env, SHARE_OUT: `${S}/logs/${label}.shares.json` }, detached: true });
+    let out = "";
+    child.stdout.on("data", (d) => (out += d));
+    child.stderr.on("data", (d) => (out += d));
+    let killed = false;
+    const timer = setTimeout(() => { killed = true; try { process.kill(-child.pid, "SIGKILL"); } catch {} }, killAfterS * 1000);
+    child.on("close", (code, signal) => {
+      clearTimeout(timer);
+      writeFileSync(`${S}/logs/${label}.log`, out);
+      const rows = existsSync(stream) ? readFileSync(stream, "utf8").trim().split("\n").filter(Boolean).map((l) => JSON.parse(l)) : [];
+      resolve({ exit: code, signal, killedAtS: killed ? killAfterS : null, wall_s: (Date.now() - t0) / 1000, loadBefore, finished: rows.length, pass: rows.filter((r) => r.state === "passed").length, red: rows.filter((r) => r.state === "failed").map((r) => ({ name: r.name, ms: r.ms, error: r.errors[0] })), out });
+    });
+  });
+}
+
+const vitest = (files, extra = []) => ["vitest", "run", ...files, "--reporter=dot", `--reporter=${S}/share-reporter.mjs`, ...extra];
+const FOUR = ["src/quiescence.test.ts", "src/search.test.ts", "src/search.qe.test.ts", "src/engine.test.ts"];
+const tag = process.argv[2];
+let names = process.argv.slice(3);
+if (names[0] === "all") names = Object.keys(MUTANTS);
+const onlyStages = process.env.STAGES ?? "PABC";
+const clean = JSON.parse(readFileSync(`${S}/logs/probe-clean.json`, "utf8"));
+const results = {};
+for (const name of names) {
+  const edits = MUTANTS[name];
+  const res = { name, K: name.startsWith("R2b") || name.startsWith("R2c") ? K : undefined, edits: edits.map(([f, , r]) => ({ file: f, replace: r })) };
+  apply(edits);
+  res.diff = git("diff", "--", "src");
+  try {
+    if (onlyStages.includes("P")) {
+      const p = await runKillable(`${tag}-${name}-P`, "node", [`${S}/probe.mjs`, `${S}/logs/${tag}-${name}-probe.json`, "3"], {}, 240);
+      let probe = null;
+      try { probe = JSON.parse(readFileSync(`${S}/logs/${tag}-${name}-probe.json`, "utf8")); } catch {}
+      res.P = { exit: p.exit, killedAtS: p.killedAtS, wall_s: p.wall_s, diffs: [] };
+      if (probe) for (const [pos, ds] of Object.entries(clean)) for (const [d, c] of Object.entries(ds)) {
+        const m = probe[pos][d];
+        if (m.score !== c.score || m.move !== c.move || m.nodes !== c.nodes) res.P.diffs.push({ pos, d, clean: `${c.score} ${c.move} ${c.nodes}`, mutant: `${m.score} ${m.move} ${m.nodes}`, scoreOrMoveChanged: m.score !== c.score || m.move !== c.move });
+      }
+      res.P.realDefect = res.P.diffs.some((x) => x.scoreOrMoveChanged);
+    }
+    if (onlyStages.includes("A")) { const a = await runKillable(`${tag}-${name}-A`, "npx", vitest(FOUR), {}, Number(process.env.KILL_A ?? 300)); delete a.out; res.A = a; }
+    if (onlyStages.includes("B")) { const b = await runKillable(`${tag}-${name}-B`, "npx", vitest(["src/quiescence.test.ts", "src/search.test.ts"]), { SEARCH_DEEP: "1" }, Number(process.env.KILL_B ?? 600)); delete b.out; res.B = b; }
+    const allGreen = [res.A, res.B].every((s) => !s || (s.red.length === 0 && s.killedAtS === null));
+    if (onlyStages.includes("C") && (allGreen || process.env.FORCE_C)) {
+      const c1 = await runKillable(`${tag}-${name}-C1`, "npx", vitest([], ["--dir", "src"]), {}, 300); delete c1.out; res.C_default = c1;
+      const c2 = await runKillable(`${tag}-${name}-C2`, "npx", vitest(["src/engine.test.ts"]), { ENGINE_DEEP: "1" }, 600); delete c2.out; res.C_engineDeep = c2;
+    }
+  } finally {
+    revert(edits);
+    res.srcCleanAfterRevert = git("status", "--porcelain", "--", "src").trim() === "";
+  }
+  results[name] = res;
+  writeFileSync(`${S}/logs/mutants-${tag}.json`, JSON.stringify(results, null, 1));
+  const brief = (s) => (s ? `${s.red.length} red / ${s.finished} finished${s.killedAtS ? ` KILLED@${s.killedAtS}s` : ""} (${s.wall_s.toFixed(1)} s)` : "-");
+  console.log(`${name}: P real=${res.P?.realDefect} diffs=${res.P?.diffs.length} | A ${brief(res.A)} | B ${brief(res.B)} | C ${brief(res.C_default)} / ${brief(res.C_engineDeep)} | clean=${res.srcCleanAfterRevert}`);
+}
+console.log("MUTANTS DONE");

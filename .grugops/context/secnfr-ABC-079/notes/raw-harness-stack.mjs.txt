@@ -1,0 +1,13 @@
+// secnfr-ABC-079 probe 4: recursion depth = completed full-width depth + (<= QUIESCENCE_MAX_PLY).
+// Sparse endgames go deepest under iterative deepening; compare with Node's frame budget.
+const WT = process.argv[2];
+const { parseFen } = await import(`${WT}/src/fen.ts`);
+const { chooseMove } = await import(`${WT}/src/engine.ts`);
+const { QUIESCENCE_MAX_PLY } = await import(`${WT}/src/quiescence.ts`);
+let frames = 0; const dive = () => { frames++; dive(); };
+try { dive(); } catch { /* RangeError: the frame budget */ }
+for (const [name, fen] of [["KPvK", "8/8/8/4k3/8/8/4P3/4K3 w - - 0 1"], ["KvK+N", "8/8/8/4k3/8/8/8/4K1N1 w - - 0 1"], ["KRvK", "8/8/8/4k3/8/8/8/R3K3 w - - 0 1"]]) {
+  const t0 = performance.now();
+  const c = chooseMove(parseFen(fen), { budgetMs: 5000 });
+  console.log(JSON.stringify({ name, wallMs: +(performance.now() - t0).toFixed(1), completedDepth: c.depth, maxRecursion: c.depth + 1 + QUIESCENCE_MAX_PLY, nodes: c.nodes, nodeFrameBudgetTrivialFn: frames }));
+}

@@ -1,0 +1,3 @@
+{"name":"KPvK","wallMs":5000.4,"completedDepth":12,"maxRecursion":21,"nodes":3280903,"nodeFrameBudgetTrivialFn":10387}
+{"name":"KvK+N","wallMs":5000.5,"completedDepth":11,"maxRecursion":20,"nodes":3681288,"nodeFrameBudgetTrivialFn":10387}
+{"name":"KRvK","wallMs":5000.6,"completedDepth":8,"maxRecursion":17,"nodes":2896911,"nodeFrameBudgetTrivialFn":10387}

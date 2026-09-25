@@ -1,0 +1,848 @@
+[
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly",
+  "state": "pass",
+  "ms": 1,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a hanging pawn makes the quiescence value STRICTLY greater than the static evaluation",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > carries at least 20 positions, none of them in check for the side to move",
+  "state": "pass",
+  "ms": 2,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > both arms at depth 1 — with quiescence the losing move is avoided, without it it is played",
+  "state": "pass",
+  "ms": 19,
+  "timeout": 5000,
+  "share": 0.004,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 569,
+  "timeout": 60000,
+  "share": 0.009,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap",
+  "state": "pass",
+  "ms": 23,
+  "timeout": 5000,
+  "share": 0.005,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded",
+  "state": "pass",
+  "ms": 151,
+  "timeout": 5000,
+  "share": 0.03,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 607,
+  "timeout": 60000,
+  "share": 0.01,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 1: same score, same move, same node count",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 2: same score, same move, same node count",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 3: same score, same move, same node count",
+  "state": "pass",
+  "ms": 1,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 4: same score, same move, same node count",
+  "state": "pass",
+  "ms": 2,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count",
+  "state": "pass",
+  "ms": 1,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count",
+  "state": "pass",
+  "ms": 4,
+  "timeout": 5000,
+  "share": 0.001,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count",
+  "state": "pass",
+  "ms": 1,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count",
+  "state": "pass",
+  "ms": 3,
+  "timeout": 5000,
+  "share": 0.001,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count",
+  "state": "pass",
+  "ms": 1,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint",
+  "state": "pass",
+  "ms": 17,
+  "timeout": 5000,
+  "share": 0.003,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > position-6 at depth 3 reproduces the recorded 14 565 nodes and c3d5 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 422,
+  "timeout": 30000,
+  "share": 0.014,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+  "state": "pass",
+  "ms": 84,
+  "timeout": 5000,
+  "share": 0.017,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+  "state": "pass",
+  "ms": 7,
+  "timeout": 5000,
+  "share": 0.001,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 168,
+  "timeout": 120000,
+  "share": 0.001,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 50 / e2a6 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 5928,
+  "timeout": 120000,
+  "share": 0.049,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 186,
+  "timeout": 120000,
+  "share": 0.002,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 30 / c3d5 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 2328,
+  "timeout": 120000,
+  "share": 0.019,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A6 — the searched position is unchanged on return > leaves every one of the 200+ corpus positions byte-identical after a quiescence search",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A6 — the searched position is unchanged on return > leaves every hanging-piece position byte-identical after a depth-1 search, both arms",
+  "state": "pass",
+  "ms": 11,
+  "timeout": 5000,
+  "share": 0.002,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A6 — the searched position is unchanged on return > leaves the position byte-identical when the visitor THROWS mid-sequence — the engine's abort path",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/quiescence.test.ts",
+  "name": "A6 — the searched position is unchanged on return > leaves the broad corpus byte-identical [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 60000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 0",
+  "state": "pass",
+  "ms": 1,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 1",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 2",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+Q smothering the lone king scores 0 at depth 3",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 0",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 1",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 2",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > the classic blocked-board stalemate scores 0 at depth 3",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 0",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 1",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 2",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 3",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A5 — stalemate scores exactly 0, not a loss > does not play into a stalemate one ply inside the tree",
+  "state": "pass",
+  "ms": 3,
+  "timeout": 5000,
+  "share": 0.001,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > startpos at depth 2",
+  "state": "pass",
+  "ms": 22,
+  "timeout": 5000,
+  "share": 0.004,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 376,
+  "timeout": 30000,
+  "share": 0.013,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 187,
+  "timeout": 30000,
+  "share": 0.006,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 11486,
+  "timeout": 30000,
+  "share": 0.383,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 3547,
+  "timeout": 30000,
+  "share": 0.118,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 2",
+  "state": "pass",
+  "ms": 12,
+  "timeout": 5000,
+  "share": 0.002,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3",
+  "state": "pass",
+  "ms": 184,
+  "timeout": 5000,
+  "share": 0.037,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 55,
+  "timeout": 30000,
+  "share": 0.002,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 2",
+  "state": "pass",
+  "ms": 339,
+  "timeout": 5000,
+  "share": 0.068,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 381,
+  "timeout": 30000,
+  "share": 0.013,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 1211,
+  "timeout": 30000,
+  "share": 0.04,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 2000,
+  "timeout": 30000,
+  "share": 0.067,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 3074,
+  "timeout": 30000,
+  "share": 0.102,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A1 — pruned and unpruned scores are identical > position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 3118,
+  "timeout": 30000,
+  "share": 0.104,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > startpos at depth 2 — the default lane's cheap standing guard",
+  "state": "pass",
+  "ms": 3,
+  "timeout": 5000,
+  "share": 0.001,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A2 — alpha-beta visits under 40% of the unpruned nodes > kiwipete at depth 3 on the bare leaf — the criterion's own position and depth [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 3,
+  "timeout": 30000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A3 — mate is found and the shorter mate preferred > returns the mating move and a score above any non-mate score, at depth 4",
+  "state": "pass",
+  "ms": 21,
+  "timeout": 5000,
+  "share": 0.004,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 1 over the mate in 2 and the mate in 3 in the same position",
+  "state": "pass",
+  "ms": 16,
+  "timeout": 5000,
+  "share": 0.003,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 3 at depth 5 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 64,
+  "timeout": 30000,
+  "share": 0.002,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A3 — mate is found and the shorter mate preferred > prefers the mate in 2 over the mate in 4, at depth 7 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 1432,
+  "timeout": 30000,
+  "share": 0.048,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1",
+  "state": "pass",
+  "ms": 211,
+  "timeout": 5000,
+  "share": 0.042,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 1239,
+  "timeout": 120000,
+  "share": 0.01,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 1, whose six per-root slices are exactly that corpus [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 1160,
+  "timeout": 120000,
+  "share": 0.01,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 68,
+  "timeout": 120000,
+  "share": 0.001,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 48086,
+  "timeout": 120000,
+  "share": 0.401,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 52,
+  "timeout": 120000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 370,
+  "timeout": 120000,
+  "share": 0.003,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 3660,
+  "timeout": 120000,
+  "share": 0.031,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the broad corpus at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 9475,
+  "timeout": 120000,
+  "share": 0.079,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > reads the delivered module — src/search.ts, not nothing",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > exports exactly the search core and nothing that picks a move on its own",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > gives every exported function a REQUIRED depth parameter",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > carries no default value for depth anywhere in the module",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A6 — no move is selected without a caller-supplied depth > carries no clock — the time budget is ABC-078's, not this module's",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves every position in the 200+ corpus byte-identical after a depth-1 search",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves position-3 byte-identical after a depth-3 search, pruned and unpruned",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 5000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves the 200+ corpus byte-identical at depth 2 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 120000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — startpos's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 120000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — kiwipete's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 120000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-3's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 120000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-4's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 120000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-5's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 120000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves the broad corpus byte-identical at depth 2 — position-6's slice [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 0,
+  "timeout": 120000,
+  "share": 0,
+  "errors": []
+ },
+ {
+  "file": "src/search.test.ts",
+  "name": "A7 — the searched position is unchanged on return > leaves every perft root byte-identical at depth 2 and depth 3 [deep, SEARCH_DEEP=1]",
+  "state": "pass",
+  "ms": 16700,
+  "timeout": 120000,
+  "share": 0.139,
+  "errors": []
+ }
+]

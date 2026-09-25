@@ -1,0 +1,1826 @@
+{
+ "Q1_no_stand_pat_cutoff": {
+  "name": "Q1_no_stand_pat_cutoff",
+  "edits": [
+   {
+    "file": "src/quiescence.ts",
+    "replace": ""
+   }
+  ],
+  "diff": "diff --git a/src/quiescence.ts b/src/quiescence.ts\nindex 6cb4b1c..e3fd974 100644\n--- a/src/quiescence.ts\n+++ b/src/quiescence.ts\n@@ -98,7 +98,6 @@ export function quiesce(\n   if (qply > 0) visit(qply);\n \n   const standPat = evaluate(position);\n-  if (standPat >= beta) return standPat; // standing still already refutes the opponent's line\n   if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand\n \n   let best = standPat;\n",
+  "P": {
+   "exit": 0,
+   "killedAtS": null,
+   "wall_s": 7.544,
+   "diffs": [
+    {
+     "pos": "startpos",
+     "d": "d2",
+     "clean": "0 b1c3 122",
+     "mutant": "0 b1c3 129",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "startpos",
+     "d": "d3",
+     "clean": "50 b1c3 1003",
+     "mutant": "50 b1c3 1171",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d1",
+     "clean": "145 e2a6 5878",
+     "mutant": "145 e2a6 13460",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d2",
+     "clean": "70 e2a6 10249",
+     "mutant": "70 e2a6 26346",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d3",
+     "clean": "50 e2a6 405945",
+     "mutant": "50 e2a6 838058",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-3",
+     "d": "d1",
+     "clean": "90 b4f4 19",
+     "mutant": "90 b4f4 43",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-3",
+     "d": "d2",
+     "clean": "90 b4f4 159",
+     "mutant": "90 b4f4 187",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-3",
+     "d": "d3",
+     "clean": "110 b4f4 892",
+     "mutant": "110 b4f4 1592",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d1",
+     "clean": "-375 c4c5 954",
+     "mutant": "-375 c4c5 2126",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d2",
+     "clean": "-375 c4c5 2298",
+     "mutant": "-375 c4c5 7081",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d3",
+     "clean": "-375 c4c5 14727",
+     "mutant": "-375 c4c5 46229",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d1",
+     "clean": "560 d7c8 345",
+     "mutant": "560 d7c8 874",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d2",
+     "clean": "560 d7c8 5523",
+     "mutant": "560 d7c8 9083",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d3",
+     "clean": "560 d7c8 42542",
+     "mutant": "560 d7c8 96452",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d1",
+     "clean": "10 c3d5 297",
+     "mutant": "10 c3d5 1067",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d2",
+     "clean": "30 c3d5 9804",
+     "mutant": "30 c3d5 21643",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d3",
+     "clean": "30 c3d5 120239",
+     "mutant": "30 c3d5 332463",
+     "scoreOrMoveChanged": false
+    }
+   ],
+   "realDefect": false
+  },
+  "A": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 8.458,
+   "loadBefore": [
+    5.79,
+    6.4,
+    6.9
+   ],
+   "finished": 89,
+   "pass": 86,
+   "red": [
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+     "ms": 577,
+     "error": "expected 274.6938775510204 to be less than or equal to 180"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 52,
+     "error": "expected 22.70212765957447 to be less than or equal to 10"
+    },
+    {
+     "name": "A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the in-recursion check",
+     "ms": 3,
+     "error": "expected 17555 to be less than or equal to 10240"
+    }
+   ]
+  },
+  "B": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 383.968,
+   "loadBefore": [
+    6.71,
+    6.58,
+    6.96
+   ],
+   "finished": 80,
+   "pass": 72,
+   "red": [
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+     "ms": 416,
+     "error": "expected 274.6938775510204 to be less than or equal to 180"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 35,
+     "error": "expected 22.70212765957447 to be less than or equal to 10"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]",
+     "ms": 909,
+     "error": "expected 84.17252396166134 to be less than or equal to 50"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x [deep, SEARCH_DEEP=1]",
+     "ms": 26942,
+     "error": "expected 92.95230700976043 to be less than or equal to 70"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=1]",
+     "ms": 698,
+     "error": "expected 38.51067615658363 to be less than or equal to 26"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x [deep, SEARCH_DEEP=1]",
+     "ms": 11569,
+     "error": "expected 22.82615859938208 to be less than or equal to 13"
+    },
+    {
+     "name": "A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+     "ms": 58448,
+     "error": "Test timed out in 30000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    },
+    {
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2, and in the broad corpus at depths 1 and 2 [deep, SEARCH_DEEP=1]",
+     "ms": 245900,
+     "error": "Test timed out in 120000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    }
+   ]
+  },
+  "srcCleanAfterRevert": true
+ },
+ "Q2_stand_pat_not_raising_alpha": {
+  "name": "Q2_stand_pat_not_raising_alpha",
+  "edits": [
+   {
+    "file": "src/quiescence.ts",
+    "replace": "  let best = standPat; // MUTANT Q2\n"
+   }
+  ],
+  "diff": "diff --git a/src/quiescence.ts b/src/quiescence.ts\nindex 6cb4b1c..dc4f69c 100644\n--- a/src/quiescence.ts\n+++ b/src/quiescence.ts\n@@ -101,8 +101,7 @@ export function quiesce(\n   if (standPat >= beta) return standPat; // standing still already refutes the opponent's line\n   if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand\n \n-  let best = standPat;\n-  if (best > alpha) alpha = best;\n+  let best = standPat; // MUTANT Q2\n \n   const captures: Move[] = [];\n   for (const move of legalMoves(position)) {\n",
+  "P": {
+   "exit": 0,
+   "killedAtS": null,
+   "wall_s": 2.075,
+   "diffs": [
+    {
+     "pos": "startpos",
+     "d": "d3",
+     "clean": "50 b1c3 1003",
+     "mutant": "50 b1c3 1004",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d1",
+     "clean": "145 e2a6 5878",
+     "mutant": "145 e2a6 6121",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d2",
+     "clean": "70 e2a6 10249",
+     "mutant": "70 e2a6 10959",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d3",
+     "clean": "50 e2a6 405945",
+     "mutant": "50 e2a6 417357",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-3",
+     "d": "d1",
+     "clean": "90 b4f4 19",
+     "mutant": "90 b4f4 22",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-3",
+     "d": "d2",
+     "clean": "90 b4f4 159",
+     "mutant": "90 b4f4 168",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-3",
+     "d": "d3",
+     "clean": "110 b4f4 892",
+     "mutant": "110 b4f4 922",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d1",
+     "clean": "-375 c4c5 954",
+     "mutant": "-375 c4c5 964",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d2",
+     "clean": "-375 c4c5 2298",
+     "mutant": "-375 c4c5 2518",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d3",
+     "clean": "-375 c4c5 14727",
+     "mutant": "-375 c4c5 15878",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d1",
+     "clean": "560 d7c8 345",
+     "mutant": "560 d7c8 359",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d2",
+     "clean": "560 d7c8 5523",
+     "mutant": "560 d7c8 5823",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d3",
+     "clean": "560 d7c8 42542",
+     "mutant": "560 d7c8 51889",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d1",
+     "clean": "10 c3d5 297",
+     "mutant": "10 c3d5 556",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d2",
+     "clean": "30 c3d5 9804",
+     "mutant": "30 c3d5 11660",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d3",
+     "clean": "30 c3d5 120239",
+     "mutant": "30 c3d5 134270",
+     "scoreOrMoveChanged": false
+    }
+   ],
+   "realDefect": false
+  },
+  "A": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 3.576,
+   "loadBefore": [
+    8.51,
+    6.97,
+    6.92
+   ],
+   "finished": 89,
+   "pass": 88,
+   "red": [
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 25,
+     "error": "expected 11.829787234042554 to be less than or equal to 10"
+    }
+   ]
+  },
+  "B": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 138.498,
+   "loadBefore": [
+    8.31,
+    6.95,
+    6.92
+   ],
+   "finished": 80,
+   "pass": 79,
+   "red": [
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 16,
+     "error": "expected 11.829787234042554 to be less than or equal to 10"
+    }
+   ]
+  },
+  "srcCleanAfterRevert": true
+ },
+ "Q3_capture_order_reversed": {
+  "name": "Q3_capture_order_reversed",
+  "edits": [
+   {
+    "file": "src/quiescence.ts",
+    "replace": "captures.sort((a, b) => mvvLvaKey(a) - mvvLvaKey(b)); // MUTANT Q3"
+   }
+  ],
+  "diff": "diff --git a/src/quiescence.ts b/src/quiescence.ts\nindex 6cb4b1c..dd3256a 100644\n--- a/src/quiescence.ts\n+++ b/src/quiescence.ts\n@@ -109,7 +109,7 @@ export function quiesce(\n     if (move.captured !== EMPTY) captures.push(move);\n   }\n   // Stable sort: equal keys keep generation order, so the count is deterministic.\n-  captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));\n+  captures.sort((a, b) => mvvLvaKey(a) - mvvLvaKey(b)); // MUTANT Q3\n \n   for (const move of captures) {\n     const undo = makeMove(position, move);\n",
+  "P": {
+   "exit": null,
+   "killedAtS": 240,
+   "wall_s": 240.015,
+   "diffs": [],
+   "realDefect": false
+  },
+  "A": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 242.64,
+   "loadBefore": [
+    3.79,
+    5.22,
+    6.12
+   ],
+   "finished": 89,
+   "pass": 84,
+   "red": [
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+     "ms": 40117,
+     "error": "expected 73453.24489795919 to be less than or equal to 180"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 364,
+     "error": "expected 595.3617021276596 to be less than or equal to 10"
+    },
+    {
+     "name": "A1 — pruned and unpruned scores are identical > position-4 at depth 2",
+     "ms": 66406,
+     "error": "Test timed out in 5000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    },
+    {
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1",
+     "ms": 41887,
+     "error": "Test timed out in 5000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    },
+    {
+     "name": "A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the in-recursion check",
+     "ms": 4,
+     "error": "expected 3603304 to be less than or equal to 10240"
+    }
+   ]
+  },
+  "B": {
+   "exit": null,
+   "signal": "SIGKILL",
+   "killedAtS": 600,
+   "wall_s": 600.044,
+   "loadBefore": [
+    3.8,
+    4.79,
+    5.74
+   ],
+   "finished": 45,
+   "pass": 42,
+   "red": [
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1]",
+     "ms": 107114,
+     "error": "Test timed out in 60000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+     "ms": 37751,
+     "error": "expected 73453.24489795919 to be less than or equal to 180"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 345,
+     "error": "expected 595.3617021276596 to be less than or equal to 10"
+    }
+   ]
+  },
+  "srcCleanAfterRevert": true
+ },
+ "Q4a_cap_plus_one": {
+  "name": "Q4a_cap_plus_one",
+  "edits": [
+   {
+    "file": "src/quiescence.ts",
+    "replace": "if (qply > QUIESCENCE_MAX_PLY) return standPat; // MUTANT Q4a"
+   }
+  ],
+  "diff": "diff --git a/src/quiescence.ts b/src/quiescence.ts\nindex 6cb4b1c..49f3c59 100644\n--- a/src/quiescence.ts\n+++ b/src/quiescence.ts\n@@ -99,7 +99,7 @@ export function quiesce(\n \n   const standPat = evaluate(position);\n   if (standPat >= beta) return standPat; // standing still already refutes the opponent's line\n-  if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand\n+  if (qply > QUIESCENCE_MAX_PLY) return standPat; // MUTANT Q4a // the runaway guard: stand pat, do not expand\n \n   let best = standPat;\n   if (best > alpha) alpha = best;\n",
+  "P": {
+   "exit": 0,
+   "killedAtS": null,
+   "wall_s": 1.858,
+   "diffs": [
+    {
+     "pos": "kiwipete",
+     "d": "d1",
+     "clean": "145 e2a6 5878",
+     "mutant": "70 e2a6 10653",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d2",
+     "clean": "70 e2a6 10249",
+     "mutant": "70 e2a6 12077",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d3",
+     "clean": "50 e2a6 405945",
+     "mutant": "50 e2a6 346038",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d1",
+     "clean": "-375 c4c5 954",
+     "mutant": "-375 c4c5 669",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d2",
+     "clean": "-375 c4c5 2298",
+     "mutant": "-375 c4c5 2313",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d3",
+     "clean": "-375 c4c5 14727",
+     "mutant": "-375 c4c5 12985",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d2",
+     "clean": "560 d7c8 5523",
+     "mutant": "560 d7c8 5518",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d3",
+     "clean": "560 d7c8 42542",
+     "mutant": "560 d7c8 42667",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d1",
+     "clean": "10 c3d5 297",
+     "mutant": "10 c3d5 302",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d2",
+     "clean": "30 c3d5 9804",
+     "mutant": "30 c3d5 10649",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d3",
+     "clean": "30 c3d5 120239",
+     "mutant": "30 c3d5 117340",
+     "scoreOrMoveChanged": false
+    }
+   ],
+   "realDefect": true
+  },
+  "A": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 4.372,
+   "loadBefore": [
+    4.6,
+    4.72,
+    5.27
+   ],
+   "finished": 89,
+   "pass": 85,
+   "red": [
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap",
+     "ms": 51,
+     "error": "expected 9 to be less than or equal to 8"
+    },
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded",
+     "ms": 689,
+     "error": "expected 9 to be 8 // Object.is equality"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+     "ms": 222,
+     "error": "expected 217.40816326530611 to be less than or equal to 180"
+    },
+    {
+     "name": "A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the in-recursion check",
+     "ms": 3,
+     "error": "expected 14748 to be less than or equal to 10240"
+    }
+   ]
+  },
+  "B": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 116.856,
+   "loadBefore": [
+    4.63,
+    4.72,
+    5.27
+   ],
+   "finished": 80,
+   "pass": 76,
+   "red": [
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap",
+     "ms": 39,
+     "error": "expected 9 to be less than or equal to 8"
+    },
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded",
+     "ms": 499,
+     "error": "expected 9 to be 8 // Object.is equality"
+    },
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1]",
+     "ms": 568,
+     "error": "expected 9 to be less than or equal to 8"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+     "ms": 173,
+     "error": "expected 217.40816326530611 to be less than or equal to 180"
+    }
+   ]
+  },
+  "srcCleanAfterRevert": true
+ },
+ "Q4b_cap_minus_one": {
+  "name": "Q4b_cap_minus_one",
+  "edits": [
+   {
+    "file": "src/quiescence.ts",
+    "replace": "if (qply >= QUIESCENCE_MAX_PLY - 1) return standPat; // MUTANT Q4b"
+   }
+  ],
+  "diff": "diff --git a/src/quiescence.ts b/src/quiescence.ts\nindex 6cb4b1c..ced179b 100644\n--- a/src/quiescence.ts\n+++ b/src/quiescence.ts\n@@ -99,7 +99,7 @@ export function quiesce(\n \n   const standPat = evaluate(position);\n   if (standPat >= beta) return standPat; // standing still already refutes the opponent's line\n-  if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand\n+  if (qply >= QUIESCENCE_MAX_PLY - 1) return standPat; // MUTANT Q4b // the runaway guard: stand pat, do not expand\n \n   let best = standPat;\n   if (best > alpha) alpha = best;\n",
+  "P": {
+   "exit": 0,
+   "killedAtS": null,
+   "wall_s": 1.328,
+   "diffs": [
+    {
+     "pos": "kiwipete",
+     "d": "d1",
+     "clean": "145 e2a6 5878",
+     "mutant": "70 e2a6 6157",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d2",
+     "clean": "70 e2a6 10249",
+     "mutant": "145 e2a6 8184",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d3",
+     "clean": "50 e2a6 405945",
+     "mutant": "50 e2a6 219049",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d1",
+     "clean": "-375 c4c5 954",
+     "mutant": "-375 c4c5 489",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d2",
+     "clean": "-375 c4c5 2298",
+     "mutant": "-375 c4c5 2560",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d3",
+     "clean": "-375 c4c5 14727",
+     "mutant": "-375 c4c5 10876",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d2",
+     "clean": "560 d7c8 5523",
+     "mutant": "560 d7c8 5570",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d3",
+     "clean": "560 d7c8 42542",
+     "mutant": "560 d7c8 41965",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d1",
+     "clean": "10 c3d5 297",
+     "mutant": "10 c3d5 290",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d2",
+     "clean": "30 c3d5 9804",
+     "mutant": "30 c3d5 8947",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d3",
+     "clean": "30 c3d5 120239",
+     "mutant": "30 c3d5 114855",
+     "scoreOrMoveChanged": false
+    }
+   ],
+   "realDefect": true
+  },
+  "A": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 2.887,
+   "loadBefore": [
+    3.44,
+    4.28,
+    5.02
+   ],
+   "finished": 89,
+   "pass": 87,
+   "red": [
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded",
+     "ms": 222,
+     "error": "expected 7 to be 8 // Object.is equality"
+    },
+    {
+     "name": "A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the in-recursion check",
+     "ms": 2,
+     "error": "expected 10252 to be less than or equal to 10240"
+    }
+   ]
+  },
+  "B": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 83.319,
+   "loadBefore": [
+    3.32,
+    4.24,
+    5
+   ],
+   "finished": 80,
+   "pass": 79,
+   "red": [
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded",
+     "ms": 203,
+     "error": "expected 7 to be 8 // Object.is equality"
+    }
+   ]
+  },
+  "srcCleanAfterRevert": true
+ },
+ "Q5a_quiet_moves_at_the_leaf": {
+  "name": "Q5a_quiet_moves_at_the_leaf",
+  "edits": [
+   {
+    "file": "src/quiescence.ts",
+    "replace": "if (move.captured !== EMPTY || qply === 0) captures.push(move); // MUTANT Q5a"
+   }
+  ],
+  "diff": "diff --git a/src/quiescence.ts b/src/quiescence.ts\nindex 6cb4b1c..349ecba 100644\n--- a/src/quiescence.ts\n+++ b/src/quiescence.ts\n@@ -106,7 +106,7 @@ export function quiesce(\n \n   const captures: Move[] = [];\n   for (const move of legalMoves(position)) {\n-    if (move.captured !== EMPTY) captures.push(move);\n+    if (move.captured !== EMPTY || qply === 0) captures.push(move); // MUTANT Q5a\n   }\n   // Stable sort: equal keys keep generation order, so the count is deterministic.\n   captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));\n",
+  "P": {
+   "exit": 0,
+   "killedAtS": null,
+   "wall_s": 2.262,
+   "diffs": [
+    {
+     "pos": "startpos",
+     "d": "d1",
+     "clean": "50 b1c3 21",
+     "mutant": "0 b1c3 106",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "startpos",
+     "d": "d2",
+     "clean": "0 b1c3 122",
+     "mutant": "50 b1c3 1374",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "startpos",
+     "d": "d3",
+     "clean": "50 b1c3 1003",
+     "mutant": "0 b1c3 6128",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d1",
+     "clean": "145 e2a6 5878",
+     "mutant": "145 e2a6 6016",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d2",
+     "clean": "70 e2a6 10249",
+     "mutant": "70 e2a6 14440",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d3",
+     "clean": "50 e2a6 405945",
+     "mutant": "50 e2a6 420224",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-3",
+     "d": "d1",
+     "clean": "90 b4f4 19",
+     "mutant": "90 b4f4 71",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-3",
+     "d": "d2",
+     "clean": "90 b4f4 159",
+     "mutant": "110 b4f4 542",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "position-3",
+     "d": "d3",
+     "clean": "110 b4f4 892",
+     "mutant": "90 b4f4 1828",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "position-4",
+     "d": "d1",
+     "clean": "-375 c4c5 954",
+     "mutant": "-375 c4c5 1132",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d2",
+     "clean": "-375 c4c5 2298",
+     "mutant": "-375 c4c5 2668",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d3",
+     "clean": "-375 c4c5 14727",
+     "mutant": "-375 c4c5 20810",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d1",
+     "clean": "560 d7c8 345",
+     "mutant": "560 d7c8 487",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d2",
+     "clean": "560 d7c8 5523",
+     "mutant": "560 d7c8 8064",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d3",
+     "clean": "560 d7c8 42542",
+     "mutant": "515 d7c8 61680",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "position-6",
+     "d": "d1",
+     "clean": "10 c3d5 297",
+     "mutant": "10 c3d5 1742",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d2",
+     "clean": "30 c3d5 9804",
+     "mutant": "30 c3d5 21936",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d3",
+     "clean": "30 c3d5 120239",
+     "mutant": "30 c3d5 333179",
+     "scoreOrMoveChanged": false
+    }
+   ],
+   "realDefect": true
+  },
+  "A": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 3.062,
+   "loadBefore": [
+    3.04,
+    3.98,
+    4.83
+   ],
+   "finished": 89,
+   "pass": 72,
+   "red": [
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 5,
+     "error": "expected 140 to be 120 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 1,
+     "error": "expected 50 to be +0 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 0,
+     "error": "expected 3 to be +0 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 0,
+     "error": "expected 5 to be -5 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined",
+     "ms": 0,
+     "error": "expected 285 to be 260 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 90 to be 100 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 100 to be 90 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 128 to be 69 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count",
+     "ms": 6,
+     "error": "expected 120 to be 100 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 10 to be 5 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 36 to be 13 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 128 to be 48 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count",
+     "ms": 3,
+     "error": "expected 286 to be 158 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected +0 to be 50 // Object.is equality"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 25,
+     "error": "expected 37.06382978723404 to be less than or equal to 10"
+    },
+    {
+     "name": "A3 — an aborted iteration's move is discarded, not returned > returns the completed depth-2 move, which is NOT the depth-3 move",
+     "ms": 67,
+     "error": "expected 'g4g5' not to be 'g4g5' // Object.is equality"
+    },
+    {
+     "name": "A4 — no fixed depth anywhere in the delivered engine > goes DEEPER than any small hard-coded ceiling would allow — the behavioural half",
+     "ms": 37,
+     "error": "expected 5 to be greater than or equal to 6"
+    }
+   ]
+  },
+  "B": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 127.774,
+   "loadBefore": [
+    3.12,
+    3.98,
+    4.83
+   ],
+   "finished": 80,
+   "pass": 63,
+   "red": [
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 5,
+     "error": "expected 140 to be 120 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 1,
+     "error": "expected 50 to be +0 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 0,
+     "error": "expected 3 to be +0 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 0,
+     "error": "expected 5 to be -5 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined",
+     "ms": 0,
+     "error": "expected 285 to be 260 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 90 to be 100 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 100 to be 90 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 128 to be 69 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count",
+     "ms": 6,
+     "error": "expected 120 to be 100 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 10 to be 5 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 36 to be 13 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 128 to be 48 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count",
+     "ms": 3,
+     "error": "expected 286 to be 158 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected +0 to be 50 // Object.is equality"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 25,
+     "error": "expected 37.06382978723404 to be less than or equal to 10"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=1]",
+     "ms": 323,
+     "error": "expected 39.03202846975089 to be less than or equal to 26"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x [deep, SEARCH_DEEP=1]",
+     "ms": 5136,
+     "error": "expected 22.875317542052866 to be less than or equal to 13"
+    }
+   ]
+  },
+  "srcCleanAfterRevert": true
+ },
+ "Q5b_quiet_moves_everywhere": {
+  "name": "Q5b_quiet_moves_everywhere",
+  "edits": [
+   {
+    "file": "src/quiescence.ts",
+    "replace": "captures.push(move); // MUTANT Q5b"
+   }
+  ],
+  "diff": "diff --git a/src/quiescence.ts b/src/quiescence.ts\nindex 6cb4b1c..0b9aaac 100644\n--- a/src/quiescence.ts\n+++ b/src/quiescence.ts\n@@ -106,7 +106,7 @@ export function quiesce(\n \n   const captures: Move[] = [];\n   for (const move of legalMoves(position)) {\n-    if (move.captured !== EMPTY) captures.push(move);\n+    captures.push(move); // MUTANT Q5b\n   }\n   // Stable sort: equal keys keep generation order, so the count is deterministic.\n   captures.sort((a, b) => mvvLvaKey(b) - mvvLvaKey(a));\n",
+  "P": {
+   "exit": 0,
+   "killedAtS": null,
+   "wall_s": 13.725,
+   "diffs": [
+    {
+     "pos": "startpos",
+     "d": "d1",
+     "clean": "50 b1c3 21",
+     "mutant": "40 b1c3 79058",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "startpos",
+     "d": "d2",
+     "clean": "0 b1c3 122",
+     "mutant": "0 b1c3 2459508",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "startpos",
+     "d": "d3",
+     "clean": "50 b1c3 1003",
+     "mutant": "30 b1c3 3823775",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d1",
+     "clean": "145 e2a6 5878",
+     "mutant": "145 e2a6 54009",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d2",
+     "clean": "70 e2a6 10249",
+     "mutant": "70 e2a6 94812",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d3",
+     "clean": "50 e2a6 405945",
+     "mutant": "60 e2a6 2644218",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "position-3",
+     "d": "d1",
+     "clean": "90 b4f4 19",
+     "mutant": "90 b4f4 409",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-3",
+     "d": "d2",
+     "clean": "90 b4f4 159",
+     "mutant": "100 b4f4 10937",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "position-3",
+     "d": "d3",
+     "clean": "110 b4f4 892",
+     "mutant": "100 b4f4 42995",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "position-4",
+     "d": "d1",
+     "clean": "-375 c4c5 954",
+     "mutant": "-365 c4c5 8276",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "position-4",
+     "d": "d2",
+     "clean": "-375 c4c5 2298",
+     "mutant": "-375 c4c5 35037",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d3",
+     "clean": "-375 c4c5 14727",
+     "mutant": "-370 c4c5 200478",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "position-5",
+     "d": "d1",
+     "clean": "560 d7c8 345",
+     "mutant": "560 d7c8 39537",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d2",
+     "clean": "560 d7c8 5523",
+     "mutant": "550 d7c8 965729",
+     "scoreOrMoveChanged": true
+    },
+    {
+     "pos": "position-5",
+     "d": "d3",
+     "clean": "560 d7c8 42542",
+     "mutant": "560 d7c8 3536524",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d1",
+     "clean": "10 c3d5 297",
+     "mutant": "10 c3d5 14969",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d2",
+     "clean": "30 c3d5 9804",
+     "mutant": "30 c3d5 269663",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d3",
+     "clean": "30 c3d5 120239",
+     "mutant": "30 c3d5 3033023",
+     "scoreOrMoveChanged": false
+    }
+   ],
+   "realDefect": true
+  },
+  "A": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 241.673,
+   "loadBefore": [
+    2.72,
+    3.51,
+    4.51
+   ],
+   "finished": 89,
+   "pass": 64,
+   "red": [
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 16,
+     "error": "expected 125 to be 120 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 622,
+     "error": "expected 122886 to be +0 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 0,
+     "error": "expected 3 to be +0 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 1,
+     "error": "expected +0 to be -5 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined",
+     "ms": 1,
+     "error": "expected 280 to be 260 // Object.is equality"
+    },
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap",
+     "ms": 8963,
+     "error": "Test timed out in 5000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 37 to be 7 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 100 to be 90 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count",
+     "ms": 2,
+     "error": "expected 159 to be 69 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count",
+     "ms": 9,
+     "error": "expected 120 to be 100 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 10 to be 5 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 36 to be 13 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 147 to be 48 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count",
+     "ms": 4,
+     "error": "expected 540 to be 158 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count",
+     "ms": 395,
+     "error": "expected 40 to be 50 // Object.is equality"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+     "ms": 240,
+     "error": "expected 1102.2244897959183 to be less than or equal to 180"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 57,
+     "error": "expected 318.48936170212767 to be less than or equal to 10"
+    },
+    {
+     "name": "A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the in-recursion check",
+     "ms": 4,
+     "error": "expected 58104 to be less than or equal to 10240"
+    },
+    {
+     "name": "A3 — an aborted iteration's move is discarded, not returned > aborts INSIDE depth 3 — the run really did enter the iteration it discards",
+     "ms": 1,
+     "error": "expected 1 to be 2 // Object.is equality"
+    },
+    {
+     "name": "A3 — an aborted iteration's move is discarded, not returned > returns the completed depth-2 move, which is NOT the depth-3 move",
+     "ms": 6969,
+     "error": "expected 'g4g5' to be 'e2e3' // Object.is equality"
+    },
+    {
+     "name": "A4 — no fixed depth anywhere in the delivered engine > goes DEEPER than any small hard-coded ceiling would allow — the behavioural half",
+     "ms": 27,
+     "error": "expected 3 to be greater than or equal to 6"
+    },
+    {
+     "name": "A5 — the completed depth is monotonically non-decreasing in the budget > actually goes deeper somewhere across the three budgets",
+     "ms": 0,
+     "error": "expected 1 to be greater than 1"
+    },
+    {
+     "name": "A1 — pruned and unpruned scores are identical > startpos at depth 2",
+     "ms": 206513,
+     "error": "Test timed out in 5000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    },
+    {
+     "name": "A1 — pruned and unpruned scores are identical > position-3 at depth 3",
+     "ms": 6003,
+     "error": "Test timed out in 5000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    },
+    {
+     "name": "A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1",
+     "ms": 26121,
+     "error": "Test timed out in 5000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    }
+   ]
+  },
+  "B": {
+   "exit": null,
+   "signal": "SIGKILL",
+   "killedAtS": 600,
+   "wall_s": 600.036,
+   "loadBefore": [
+    4.15,
+    3.96,
+    4.46
+   ],
+   "finished": 50,
+   "pass": 29,
+   "red": [
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 7,
+     "error": "expected 125 to be 120 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 534,
+     "error": "expected 122886 to be +0 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 0,
+     "error": "expected 3 to be +0 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly",
+     "ms": 1,
+     "error": "expected +0 to be -5 // Object.is equality"
+    },
+    {
+     "name": "A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined",
+     "ms": 1,
+     "error": "expected 280 to be 260 // Object.is equality"
+    },
+    {
+     "name": "A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap",
+     "ms": 8456,
+     "error": "Test timed out in 5000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\"."
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 37 to be 7 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 100 to be 90 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 159 to be 69 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count",
+     "ms": 9,
+     "error": "expected 120 to be 100 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 10 to be 5 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count",
+     "ms": 0,
+     "error": "expected 36 to be 13 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count",
+     "ms": 1,
+     "error": "expected 147 to be 48 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count",
+     "ms": 4,
+     "error": "expected 540 to be 158 // Object.is equality"
+    },
+    {
+     "name": "A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count",
+     "ms": 385,
+     "error": "expected 40 to be 50 // Object.is equality"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x",
+     "ms": 264,
+     "error": "expected 1102.2244897959183 to be less than or equal to 180"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x",
+     "ms": 56,
+     "error": "expected 318.48936170212767 to be less than or equal to 10"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]",
+     "ms": 459,
+     "error": "expected 302.91373801916933 to be less than or equal to 50"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x [deep, SEARCH_DEEP=1]",
+     "ms": 12279,
+     "error": "expected 293.28061224489795 to be less than or equal to 70"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=1]",
+     "ms": 1034,
+     "error": "expected 479.8274021352313 to be less than or equal to 26"
+    },
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x [deep, SEARCH_DEEP=1]",
+     "ms": 11838,
+     "error": "expected 208.2405080672846 to be less than or equal to 13"
+    }
+   ]
+  },
+  "srcCleanAfterRevert": true
+ },
+ "Q6a_promotion_term_dropped": {
+  "name": "Q6a_promotion_term_dropped",
+  "edits": [
+   {
+    "file": "src/quiescence.ts",
+    "replace": "    (ORDER_VALUE[pieceType(move.captured)] as number) + // MUTANT Q6a\n    0 -"
+   }
+  ],
+  "diff": "diff --git a/src/quiescence.ts b/src/quiescence.ts\nindex 6cb4b1c..5f90c10 100644\n--- a/src/quiescence.ts\n+++ b/src/quiescence.ts\n@@ -62,8 +62,8 @@ const ORDER_VALUE: readonly number[] = [0, 100, 320, 330, 500, 900, 0];\n  */\n export function mvvLvaKey(move: Move): number {\n   return (\n-    (ORDER_VALUE[pieceType(move.captured)] as number) +\n-    (ORDER_VALUE[move.promotion] as number) -\n+    (ORDER_VALUE[pieceType(move.captured)] as number) + // MUTANT Q6a\n+    0 -\n     (ORDER_VALUE[pieceType(move.piece)] as number) / 1000\n   );\n }\n",
+  "P": {
+   "exit": 0,
+   "killedAtS": null,
+   "wall_s": 1.735,
+   "diffs": [
+    {
+     "pos": "kiwipete",
+     "d": "d1",
+     "clean": "145 e2a6 5878",
+     "mutant": "145 e2a6 5888",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d2",
+     "clean": "70 e2a6 10249",
+     "mutant": "70 e2a6 10382",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d3",
+     "clean": "50 e2a6 405945",
+     "mutant": "50 e2a6 405922",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d3",
+     "clean": "-375 c4c5 14727",
+     "mutant": "-375 c4c5 14632",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d2",
+     "clean": "560 d7c8 5523",
+     "mutant": "560 d7c8 5531",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d3",
+     "clean": "560 d7c8 42542",
+     "mutant": "560 d7c8 43338",
+     "scoreOrMoveChanged": false
+    }
+   ],
+   "realDefect": false
+  },
+  "A": {
+   "exit": 0,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 3.018,
+   "loadBefore": [
+    4.09,
+    4.2,
+    4.32
+   ],
+   "finished": 89,
+   "pass": 89,
+   "red": []
+  },
+  "B": {
+   "exit": 0,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 108.687,
+   "loadBefore": [
+    4.48,
+    4.28,
+    4.35
+   ],
+   "finished": 80,
+   "pass": 80,
+   "red": []
+  },
+  "C_default": {
+   "exit": 0,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 5.527,
+   "loadBefore": [
+    3.16,
+    3.91,
+    4.19
+   ],
+   "finished": 1392,
+   "pass": 1392,
+   "red": []
+  },
+  "C_engineDeep": {
+   "exit": 0,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 120.37,
+   "loadBefore": [
+    3.07,
+    3.88,
+    4.18
+   ],
+   "finished": 33,
+   "pass": 33,
+   "red": []
+  },
+  "srcCleanAfterRevert": true
+ },
+ "Q6b_promotion_term_negated": {
+  "name": "Q6b_promotion_term_negated",
+  "edits": [
+   {
+    "file": "src/quiescence.ts",
+    "replace": "    (ORDER_VALUE[pieceType(move.captured)] as number) - // MUTANT Q6b\n    (ORDER_VALUE[move.promotion] as number) -"
+   }
+  ],
+  "diff": "diff --git a/src/quiescence.ts b/src/quiescence.ts\nindex 6cb4b1c..1aa1dbd 100644\n--- a/src/quiescence.ts\n+++ b/src/quiescence.ts\n@@ -62,7 +62,7 @@ const ORDER_VALUE: readonly number[] = [0, 100, 320, 330, 500, 900, 0];\n  */\n export function mvvLvaKey(move: Move): number {\n   return (\n-    (ORDER_VALUE[pieceType(move.captured)] as number) +\n+    (ORDER_VALUE[pieceType(move.captured)] as number) - // MUTANT Q6b\n     (ORDER_VALUE[move.promotion] as number) -\n     (ORDER_VALUE[pieceType(move.piece)] as number) / 1000\n   );\n",
+  "P": {
+   "exit": 0,
+   "killedAtS": null,
+   "wall_s": 2.13,
+   "diffs": [
+    {
+     "pos": "kiwipete",
+     "d": "d1",
+     "clean": "145 e2a6 5878",
+     "mutant": "145 e2a6 7289",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d2",
+     "clean": "70 e2a6 10249",
+     "mutant": "70 e2a6 22098",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "kiwipete",
+     "d": "d3",
+     "clean": "50 e2a6 405945",
+     "mutant": "50 e2a6 524175",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d1",
+     "clean": "-375 c4c5 954",
+     "mutant": "-375 c4c5 2244",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-4",
+     "d": "d3",
+     "clean": "-375 c4c5 14727",
+     "mutant": "-375 c4c5 15211",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d1",
+     "clean": "560 d7c8 345",
+     "mutant": "560 d7c8 570",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d2",
+     "clean": "560 d7c8 5523",
+     "mutant": "560 d7c8 8882",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-5",
+     "d": "d3",
+     "clean": "560 d7c8 42542",
+     "mutant": "560 d7c8 55859",
+     "scoreOrMoveChanged": false
+    },
+    {
+     "pos": "position-6",
+     "d": "d3",
+     "clean": "30 c3d5 120239",
+     "mutant": "30 c3d5 120318",
+     "scoreOrMoveChanged": false
+    }
+   ],
+   "realDefect": false
+  },
+  "A": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 3.253,
+   "loadBefore": [
+    3.41,
+    3.83,
+    4.12
+   ],
+   "finished": 89,
+   "pass": 88,
+   "red": [
+    {
+     "name": "A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the in-recursion check",
+     "ms": 3,
+     "error": "expected 11384 to be less than or equal to 10240"
+    }
+   ]
+  },
+  "B": {
+   "exit": 1,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 124.008,
+   "loadBefore": [
+    3.7,
+    3.88,
+    4.14
+   ],
+   "finished": 80,
+   "pass": 79,
+   "red": [
+    {
+     "name": "A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]",
+     "ms": 342,
+     "error": "expected 70.60063897763578 to be less than or equal to 50"
+    }
+   ]
+  },
+  "srcCleanAfterRevert": true
+ },
+ "Q7_door_with_quiescence_on": {
+  "name": "Q7_door_with_quiescence_on",
+  "edits": [
+   {
+    "file": "src/search.ts",
+    "replace": "  return searchRoot(position, depth, { prune: false, quiescence: true }); // MUTANT Q7"
+   }
+  ],
+  "diff": "diff --git a/src/search.ts b/src/search.ts\nindex 3131a6f..7ce5ac4 100644\n--- a/src/search.ts\n+++ b/src/search.ts\n@@ -235,5 +235,5 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear\n  * option; nothing in production calls it.\n  */\n export function searchWithoutPruningOrQuiescence(position: Position, depth: number): SearchResult {\n-  return searchRoot(position, depth, { prune: false, quiescence: false });\n+  return searchRoot(position, depth, { prune: false, quiescence: true }); // MUTANT Q7\n }\n",
+  "P": {
+   "exit": 0,
+   "killedAtS": null,
+   "wall_s": 1.848,
+   "diffs": [],
+   "realDefect": false
+  },
+  "A": {
+   "exit": 0,
+   "signal": null,
+   "killedAtS": null,
+   "wall_s": 2.904,
+   "loadBefore": [
+    2.99,
+    3.54,
+    3.96
+   ],
+   "finished": 89,
+   "pass": 89,
+   "red": []
+  },
+  "B": {
+   "exit": null,
+   "signal": "SIGKILL",
+   "killedAtS": 600,
+   "wall_s": 600.016,
+   "loadBefore": [
+    3.31,
+    3.6,
+    3.98
+   ],
+   "finished": 54,
+   "pass": 54,
+   "red": []
+  },
+  "srcCleanAfterRevert": true
+ }
+}

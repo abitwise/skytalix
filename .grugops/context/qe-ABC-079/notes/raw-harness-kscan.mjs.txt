@@ -1,0 +1,20 @@
+// QE ABC-079 ruling 2: scan the capture-density gate K for R2b / R2c with the probe only (stage P),
+// to find where the defect stops showing on the RETAINED quiescence-on depth-3 cells (startpos,
+// position-3) while it still changes a capture-dense board's depth-3 score.
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079";
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const out = {};
+const runOne = (tag, name, K) => {
+  spawnSync("node", [`${S}/mutants.mjs`, tag, name], { cwd: WT, env: { ...process.env, K: String(K ?? 4), STAGES: "P" }, stdio: "inherit" });
+  const r = JSON.parse(readFileSync(`${S}/logs/mutants-${tag}.json`, "utf8"))[name];
+  return r.P.diffs.map((d) => `${d.pos} ${d.d}: ${d.clean} -> ${d.mutant}${d.scoreOrMoveChanged ? " SCORE/MOVE" : ""}`);
+};
+out.R2a = runOne("kscan-R2a", "R2a_leaf_null_window_slip_at_ply3");
+for (const K of [1, 2, 3, 4, 5, 6, 8]) {
+  out[`R2b K=${K}`] = runOne(`kscan-R2b-${K}`, "R2b_leaf_slip_at_ply3_capture_dense", K);
+  out[`R2c K=${K}`] = runOne(`kscan-R2c-${K}`, "R2c_quiesce_slip_black_leaf_finite_window_capture_dense", K);
+}
+writeFileSync(`${S}/logs/kscan.json`, JSON.stringify(out, null, 1));
+console.log(JSON.stringify(out, null, 1));

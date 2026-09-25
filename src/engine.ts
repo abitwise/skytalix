@@ -57,12 +57,12 @@
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
-import { evaluate } from "./evaluate.ts";
 import { gameStatus } from "./gameend.ts";
 import type { GameHistory } from "./history.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
+import { type QuiescenceVisitor, quiesce } from "./quiescence.ts";
 import { MATE_SCORE } from "./search.ts";
 import type { EngineSeam } from "./turn-loop.ts";
 
@@ -135,12 +135,37 @@ interface Budget {
   nodes: number;
   /** The node count at which the clock is next consulted. `Infinity` disarms the abort. */
   nextCheck: number;
+  /** `countNode` on this budget, handed to the quiescence search so its nodes are clocked too. */
+  readonly visit: QuiescenceVisitor;
 }
 
-/** The score of a position the search will not look past — `src/search.ts`'s `leafScore`. */
-function leafScore(position: Position, ply: number): number {
+/**
+ * One node visited: count it, and every `NODES_PER_CLOCK_CHECK` nodes consult the clock. The
+ * abort check sits at the NODE — full-width and quiescence nodes alike — never at the iteration.
+ */
+function countNode(budget: Budget): void {
+  budget.nodes++;
+  if (budget.nodes >= budget.nextCheck) {
+    budget.nextCheck = budget.nodes + NODES_PER_CLOCK_CHECK;
+    if (budget.now() >= budget.deadline) throw ABORTED;
+  }
+}
+
+/**
+ * The score of a position the search will not look past — `src/search.ts`'s `leafScore`, with
+ * the same capture search at an in-progress leaf (`ABC-079`). The quiescence nodes go through
+ * `budget.visit`, so an abort can land inside a capture sequence; `quiesce` unmakes on the way
+ * out, so the position is byte-identical either way.
+ */
+function leafScore(
+  position: Position,
+  ply: number,
+  alpha: number,
+  beta: number,
+  budget: Budget,
+): number {
   const status = gameStatus(position);
-  if (status.result === "in-progress") return evaluate(position);
+  if (status.result === "in-progress") return quiesce(position, alpha, beta, 0, budget.visit);
   if (status.reason === "checkmate") return 0 - (MATE_SCORE - ply);
   return 0;
 }
@@ -162,13 +187,9 @@ function negamax(
   ply: number,
   budget: Budget,
 ): number {
-  budget.nodes++;
-  if (budget.nodes >= budget.nextCheck) {
-    budget.nextCheck = budget.nodes + NODES_PER_CLOCK_CHECK;
-    if (budget.now() >= budget.deadline) throw ABORTED;
-  }
+  countNode(budget);
 
-  if (remaining <= 0) return leafScore(position, ply);
+  if (remaining <= 0) return leafScore(position, ply, alpha, beta, budget);
 
   const moves = legalMoves(position);
   if (moves.length === 0) return isInCheck(position) ? 0 - (MATE_SCORE - ply) : 0;
@@ -258,6 +279,7 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     nodes: 0,
     // Disarmed for the first iteration: depth 1 always completes, so a move always exists.
     nextCheck: Number.POSITIVE_INFINITY,
+    visit: () => countNode(budget),
   };
 
   const rootMoves = legalMoves(position);

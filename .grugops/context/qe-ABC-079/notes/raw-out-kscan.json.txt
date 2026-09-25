@@ -1,0 +1,102 @@
+{
+ "R2a": [
+  "startpos d3: 50 b1c3 1003 -> 50 b1c3 999",
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293498 SCORE/MOVE",
+  "position-3 d3: 110 b4f4 892 -> 110 b4f4 743",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 31162",
+  "position-6 d3: 30 c3d5 120239 -> 145 c3d5 37032 SCORE/MOVE"
+ ],
+ "R2b K=1": [
+  "startpos d3: 50 b1c3 1003 -> 50 b1c3 999",
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293498 SCORE/MOVE",
+  "position-3 d3: 110 b4f4 892 -> 110 b4f4 743",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 31162",
+  "position-6 d3: 30 c3d5 120239 -> 145 c3d5 37032 SCORE/MOVE"
+ ],
+ "R2c K=1": [
+  "startpos d3: 50 b1c3 1003 -> 50 b1c3 999",
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293498 SCORE/MOVE",
+  "position-3 d3: 110 b4f4 892 -> 110 b4f4 743",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 31162",
+  "position-6 d3: 30 c3d5 120239 -> 145 c3d5 37032 SCORE/MOVE"
+ ],
+ "R2b K=2": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293546 SCORE/MOVE",
+  "position-3 d3: 110 b4f4 892 -> 110 b4f4 765",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 30020",
+  "position-6 d3: 30 c3d5 120239 -> 145 c3d5 37078 SCORE/MOVE"
+ ],
+ "R2c K=2": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293546 SCORE/MOVE",
+  "position-3 d3: 110 b4f4 892 -> 110 b4f4 765",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 30020",
+  "position-6 d3: 30 c3d5 120239 -> 145 c3d5 37078 SCORE/MOVE"
+ ],
+ "R2b K=3": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293546 SCORE/MOVE",
+  "position-3 d3: 110 b4f4 892 -> 110 b4f4 811",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 34621",
+  "position-6 d3: 30 c3d5 120239 -> 145 c3d5 37133 SCORE/MOVE"
+ ],
+ "R2c K=3": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293546 SCORE/MOVE",
+  "position-3 d3: 110 b4f4 892 -> 110 b4f4 811",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 34621",
+  "position-6 d3: 30 c3d5 120239 -> 145 c3d5 37133 SCORE/MOVE"
+ ],
+ "R2b K=4": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293546 SCORE/MOVE",
+  "position-3 d3: 110 b4f4 892 -> 110 b4f4 875",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 27020",
+  "position-6 d3: 30 c3d5 120239 -> 145 c3d5 40201 SCORE/MOVE"
+ ],
+ "R2c K=4": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293546 SCORE/MOVE",
+  "position-3 d3: 110 b4f4 892 -> 110 b4f4 875",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 27020",
+  "position-6 d3: 30 c3d5 120239 -> 145 c3d5 40201 SCORE/MOVE"
+ ],
+ "R2b K=5": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 295106 SCORE/MOVE",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 32258",
+  "position-6 d3: 30 c3d5 120239 -> 120 c3d5 45659 SCORE/MOVE"
+ ],
+ "R2c K=5": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 295106 SCORE/MOVE",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 32258",
+  "position-6 d3: 30 c3d5 120239 -> 120 c3d5 45659 SCORE/MOVE"
+ ],
+ "R2b K=6": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 345869 SCORE/MOVE",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 36264",
+  "position-6 d3: 30 c3d5 120239 -> 100 c3d5 56195 SCORE/MOVE"
+ ],
+ "R2c K=6": [
+  "kiwipete d3: 50 e2a6 405945 -> 205 e5g6 345869 SCORE/MOVE",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-5 d3: 560 d7c8 42542 -> 560 d7c8 36264",
+  "position-6 d3: 30 c3d5 120239 -> 100 c3d5 56195 SCORE/MOVE"
+ ],
+ "R2b K=8": [
+  "kiwipete d3: 50 e2a6 405945 -> 60 e2a6 324490 SCORE/MOVE",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-6 d3: 30 c3d5 120239 -> 30 c3d5 95084"
+ ],
+ "R2c K=8": [
+  "kiwipete d3: 50 e2a6 405945 -> 60 e2a6 324490 SCORE/MOVE",
+  "position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043 SCORE/MOVE",
+  "position-6 d3: 30 c3d5 120239 -> 30 c3d5 95084"
+ ]
+}

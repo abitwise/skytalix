@@ -1,0 +1,38 @@
+// QE ABC-079: custom vitest reporter. One record per test: state, duration, its OWN timeout
+// (task.timeout, read from the runner, not guessed from source), and the share of it used.
+import { appendFileSync, writeFileSync } from "node:fs";
+
+export default class ShareReporter {
+  // Streaming: one line per finished test, so a run killed by the harness still names its rows.
+  onTestCaseResult(testCase) {
+    if (!process.env.SHARE_OUT) return;
+    const r = testCase.result();
+    const d = testCase.diagnostic?.()?.duration ?? null;
+    appendFileSync(
+      `${process.env.SHARE_OUT}.stream`,
+      `${JSON.stringify({ name: testCase.fullName, state: r.state, ms: d == null ? null : Math.round(d), timeout: testCase.options?.timeout ?? null, errors: (r.errors ?? []).map((e) => String(e.message).slice(0, 300)) })}\n`,
+    );
+  }
+
+  onFinished(files) {
+    const rows = [];
+    const walk = (t, path) => {
+      if (t.type === "test") {
+        const d = t.result?.duration ?? null;
+        const timeout = t.timeout ?? 5000;
+        rows.push({
+          file: t.file?.name,
+          name: [...path, t.name].join(" > "),
+          state: t.result?.state ?? t.mode,
+          ms: d == null ? null : Math.round(d),
+          timeout,
+          share: d == null ? null : +(d / timeout).toFixed(3),
+          errors: (t.result?.errors ?? []).map((e) => String(e.message).slice(0, 400)),
+        });
+      }
+      for (const c of t.tasks ?? []) walk(c, t.type === "suite" ? [...path, t.name] : path);
+    };
+    for (const f of files) for (const c of f.tasks) walk(c, []);
+    writeFileSync(process.env.SHARE_OUT, JSON.stringify(rows, null, 1));
+  }
+}

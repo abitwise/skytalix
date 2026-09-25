@@ -1,0 +1,21 @@
+// Q7 follow-up in the runner: apply Q7, run ONLY the bare-leaf depth-3 rows for position-3 and
+// position-4 under SEARCH_DEEP=1 (-t filter), revert, assert src clean.
+import { execFileSync, spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/agent-ae4e87bedf6be5ad4";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/4a13bf6c-4052-47a2-8271-2ab8ee0b5cbb/scratchpad/qe079";
+const F = `${WT}/src/search.ts`;
+const find = "  return searchRoot(position, depth, { prune: false, quiescence: false });";
+const src = readFileSync(F, "utf8");
+if (src.split(find).length !== 2) throw new Error("Q7 anchor not unique");
+writeFileSync(F, src.replace(find, "  return searchRoot(position, depth, { prune: false, quiescence: true }); // MUTANT Q7"));
+try {
+  const r = spawnSync("npx", ["vitest", "run", "src/search.test.ts", "-t", "(position-3|position-4) at depth 3 on the bare leaf", "--reporter=verbose"], { cwd: WT, encoding: "utf8", env: { ...process.env, SEARCH_DEEP: "1" }, timeout: 300000 });
+  const out = (r.stdout ?? "") + (r.stderr ?? "");
+  writeFileSync(`${S}/logs/q7row.log`, out);
+  console.log(out.split("\n").filter((l) => /✓|×|FAIL|expected|Tests /.test(l)).join("\n"));
+} finally {
+  execFileSync("git", ["checkout", "--", "src/search.ts"], { cwd: WT });
+  const dirty = execFileSync("git", ["status", "--porcelain", "--", "src"], { cwd: WT, encoding: "utf8" }).trim();
+  console.log(`src clean after revert: ${dirty === ""}`);
+}

@@ -1,0 +1,428 @@
+## R2a_leaf_null_window_slip_at_ply3   src clean after revert: true
+   probe: exit 0, 1.2 s, score/move changed: true
+     startpos d3: 50 b1c3 1003 -> 50 b1c3 999
+     kiwipete d3: 50 e2a6 405945 -> 205 e5g6 293498   <-- SCORE/MOVE
+     position-3 d3: 110 b4f4 892 -> 110 b4f4 743
+     position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043   <-- SCORE/MOVE
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 31162
+     position-6 d3: 30 c3d5 120239 -> 145 c3d5 37032   <-- SCORE/MOVE
+   A default lane, 4 files: 0 red / 89 finished, 89 pass, exit 0, 2.8 s, load 4.59/5.63/7.69
+   B SEARCH_DEEP=1 quiescence+search: 0 red / 80 finished, 80 pass, exit 0, 105.4 s, load 4.63/5.62/7.68
+   C1 whole default lane --dir src: 0 red / 1392 finished, 1392 pass, exit 0, 5.8 s, load 3.25/4.91/7.16
+   C2 ENGINE_DEEP=1 engine.test.ts: 2 red / 33 finished, 31 pass, exit 1, 121.0 s, load 6.59/5.58/7.39
+     RED 17377 ms  A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1] > agrees with search() on move and score over the six benchmark roots and their chi
+         expected [ …(21) ] to deeply equal []
+     RED 194 ms  A3 — the depth-3 move the default lane carries as a literal [deep, ENGINE_DEEP=1] > computes search(A3_FEN, 3).move and confirms it is g4g5
+         expected 'e2e3' to be 'g4g5' // Object.is equality
+
+## R2b_leaf_slip_at_ply3_capture_dense (K=5)   src clean after revert: true
+   probe: exit 0, 1.6 s, score/move changed: true
+     kiwipete d3: 50 e2a6 405945 -> 205 e5g6 295106   <-- SCORE/MOVE
+     position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043   <-- SCORE/MOVE
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 32258
+     position-6 d3: 30 c3d5 120239 -> 120 c3d5 45659   <-- SCORE/MOVE
+   A default lane, 4 files: 0 red / 89 finished, 89 pass, exit 0, 3.2 s, load 4.99/5.29/7.02
+   B SEARCH_DEEP=1 quiescence+search: 0 red / 80 finished, 80 pass, exit 0, 127.5 s, load 4.99/5.29/7.02
+   C1 whole default lane --dir src: 0 red / 1392 finished, 1392 pass, exit 0, 6.9 s, load 5.59/5.35/6.8
+   C2 ENGINE_DEEP=1 engine.test.ts: 0 red / 33 finished, 33 pass, exit 0, 123.0 s, load 7.14/5.68/6.9
+
+## R2c_quiesce_slip_black_leaf_finite_window_capture_dense (K=5)   src clean after revert: true
+   probe: exit 0, 1.6 s, score/move changed: true
+     kiwipete d3: 50 e2a6 405945 -> 205 e5g6 295106   <-- SCORE/MOVE
+     position-4 d3: -375 c4c5 14727 -> -285 g1h1 14043   <-- SCORE/MOVE
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 32258
+     position-6 d3: 30 c3d5 120239 -> 120 c3d5 45659   <-- SCORE/MOVE
+   A default lane, 4 files: 0 red / 89 finished, 89 pass, exit 0, 3.4 s, load 8.89/6.87/7.21
+   B SEARCH_DEEP=1 quiescence+search: 0 red / 80 finished, 80 pass, exit 0, 100.0 s, load 8.98/6.92/7.22
+   C1 whole default lane --dir src: 0 red / 1392 finished, 1392 pass, exit 0, 6.8 s, load 6.31/6.36/6.96
+   C2 ENGINE_DEEP=1 engine.test.ts: 0 red / 33 finished, 33 pass, exit 0, 129.4 s, load 6.29/6.35/6.95
+
+## Q1_no_stand_pat_cutoff   src clean after revert: true
+   probe: exit 0, 7.5 s, score/move changed: false
+     startpos d2: 0 b1c3 122 -> 0 b1c3 129
+     startpos d3: 50 b1c3 1003 -> 50 b1c3 1171
+     kiwipete d1: 145 e2a6 5878 -> 145 e2a6 13460
+     kiwipete d2: 70 e2a6 10249 -> 70 e2a6 26346
+     kiwipete d3: 50 e2a6 405945 -> 50 e2a6 838058
+     position-3 d1: 90 b4f4 19 -> 90 b4f4 43
+     position-3 d2: 90 b4f4 159 -> 90 b4f4 187
+     position-3 d3: 110 b4f4 892 -> 110 b4f4 1592
+     position-4 d1: -375 c4c5 954 -> -375 c4c5 2126
+     position-4 d2: -375 c4c5 2298 -> -375 c4c5 7081
+     position-4 d3: -375 c4c5 14727 -> -375 c4c5 46229
+     position-5 d1: 560 d7c8 345 -> 560 d7c8 874
+     position-5 d2: 560 d7c8 5523 -> 560 d7c8 9083
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 96452
+     position-6 d1: 10 c3d5 297 -> 10 c3d5 1067
+     position-6 d2: 30 c3d5 9804 -> 30 c3d5 21643
+     position-6 d3: 30 c3d5 120239 -> 30 c3d5 332463
+   A default lane, 4 files: 3 red / 89 finished, 86 pass, exit 1, 8.5 s, load 5.79/6.4/6.9
+     RED 577 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap readi
+         expected 274.6938775510204 to be less than or equal to 180
+     RED 52 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 22.70212765957447 to be less than or equal to 10
+     RED 3 ms  A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the i
+         expected 17555 to be less than or equal to 10240
+   B SEARCH_DEEP=1 quiescence+search: 8 red / 80 finished, 72 pass, exit 1, 384.0 s, load 6.71/6.58/6.96
+     RED 416 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap readi
+         expected 274.6938775510204 to be less than or equal to 180
+     RED 35 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 22.70212765957447 to be less than or equal to 10
+     RED 909 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]
+         expected 84.17252396166134 to be less than or equal to 50
+     RED 26942 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x [deep, SEARCH_DEEP=1]
+         expected 92.95230700976043 to be less than or equal to 70
+     RED 698 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=
+         expected 38.51067615658363 to be less than or equal to 26
+     RED 11569 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x [deep, SEARCH_DEEP=
+         expected 22.82615859938208 to be less than or equal to 13
+     RED 58448 ms  A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1]
+         Test timed out in 30000ms.
+     RED 245900 ms  A4 — the returned root move is legal in every corpus position > returns a legal move in the same 200+ positions at depth 2, and in the broad corpus at
+         Test timed out in 120000ms.
+
+## Q2_stand_pat_not_raising_alpha   src clean after revert: true
+   probe: exit 0, 2.1 s, score/move changed: false
+     startpos d3: 50 b1c3 1003 -> 50 b1c3 1004
+     kiwipete d1: 145 e2a6 5878 -> 145 e2a6 6121
+     kiwipete d2: 70 e2a6 10249 -> 70 e2a6 10959
+     kiwipete d3: 50 e2a6 405945 -> 50 e2a6 417357
+     position-3 d1: 90 b4f4 19 -> 90 b4f4 22
+     position-3 d2: 90 b4f4 159 -> 90 b4f4 168
+     position-3 d3: 110 b4f4 892 -> 110 b4f4 922
+     position-4 d1: -375 c4c5 954 -> -375 c4c5 964
+     position-4 d2: -375 c4c5 2298 -> -375 c4c5 2518
+     position-4 d3: -375 c4c5 14727 -> -375 c4c5 15878
+     position-5 d1: 560 d7c8 345 -> 560 d7c8 359
+     position-5 d2: 560 d7c8 5523 -> 560 d7c8 5823
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 51889
+     position-6 d1: 10 c3d5 297 -> 10 c3d5 556
+     position-6 d2: 30 c3d5 9804 -> 30 c3d5 11660
+     position-6 d3: 30 c3d5 120239 -> 30 c3d5 134270
+   A default lane, 4 files: 1 red / 89 finished, 88 pass, exit 1, 3.6 s, load 8.51/6.97/6.92
+     RED 25 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 11.829787234042554 to be less than or equal to 10
+   B SEARCH_DEEP=1 quiescence+search: 1 red / 80 finished, 79 pass, exit 1, 138.5 s, load 8.31/6.95/6.92
+     RED 16 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 11.829787234042554 to be less than or equal to 10
+
+## Q3_capture_order_reversed   src clean after revert: true
+   probe: exit null KILLED@240s, 240.0 s, score/move changed: false
+   A default lane, 4 files: 5 red / 89 finished, 84 pass, exit 1, 242.6 s, load 3.79/5.22/6.12
+     RED 40117 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap readi
+         expected 73453.24489795919 to be less than or equal to 180
+     RED 364 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 595.3617021276596 to be less than or equal to 10
+     RED 66406 ms  A1 — pruned and unpruned scores are identical > position-4 at depth 2
+         Test timed out in 5000ms.
+     RED 41887 ms  A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1
+         Test timed out in 5000ms.
+     RED 4 ms  A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the i
+         expected 3603304 to be less than or equal to 10240
+   B SEARCH_DEEP=1 quiescence+search: 3 red / 45 finished, 42 pass, exit null, KILLED@600s, 600.0 s, load 3.8/4.79/5.74
+     RED 107114 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the ca
+         Test timed out in 60000ms.
+     RED 37751 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap readi
+         expected 73453.24489795919 to be less than or equal to 180
+     RED 345 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 595.3617021276596 to be less than or equal to 10
+     last finished before the kill: A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at  (37751 ms) | A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 a (345 ms)
+
+## Q4a_cap_plus_one   src clean after revert: true
+   probe: exit 0, 1.9 s, score/move changed: true
+     kiwipete d1: 145 e2a6 5878 -> 70 e2a6 10653   <-- SCORE/MOVE
+     kiwipete d2: 70 e2a6 10249 -> 70 e2a6 12077
+     kiwipete d3: 50 e2a6 405945 -> 50 e2a6 346038
+     position-4 d1: -375 c4c5 954 -> -375 c4c5 669
+     position-4 d2: -375 c4c5 2298 -> -375 c4c5 2313
+     position-4 d3: -375 c4c5 14727 -> -375 c4c5 12985
+     position-5 d2: 560 d7c8 5523 -> 560 d7c8 5518
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 42667
+     position-6 d1: 10 c3d5 297 -> 10 c3d5 302
+     position-6 d2: 30 c3d5 9804 -> 30 c3d5 10649
+     position-6 d3: 30 c3d5 120239 -> 30 c3d5 117340
+   A default lane, 4 files: 4 red / 89 finished, 85 pass, exit 1, 4.4 s, load 4.6/4.72/5.27
+     RED 51 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense root
+         expected 9 to be less than or equal to 8
+     RED 689 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating
+         expected 9 to be 8 // Object.is equality
+     RED 222 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap readi
+         expected 217.40816326530611 to be less than or equal to 180
+     RED 3 ms  A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the i
+         expected 14748 to be less than or equal to 10240
+   B SEARCH_DEEP=1 quiescence+search: 4 red / 80 finished, 76 pass, exit 1, 116.9 s, load 4.63/4.72/5.27
+     RED 39 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense root
+         expected 9 to be less than or equal to 8
+     RED 499 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating
+         expected 9 to be 8 // Object.is equality
+     RED 568 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the ca
+         expected 9 to be less than or equal to 8
+     RED 173 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap readi
+         expected 217.40816326530611 to be less than or equal to 180
+
+## Q4b_cap_minus_one   src clean after revert: true
+   probe: exit 0, 1.3 s, score/move changed: true
+     kiwipete d1: 145 e2a6 5878 -> 70 e2a6 6157   <-- SCORE/MOVE
+     kiwipete d2: 70 e2a6 10249 -> 145 e2a6 8184   <-- SCORE/MOVE
+     kiwipete d3: 50 e2a6 405945 -> 50 e2a6 219049
+     position-4 d1: -375 c4c5 954 -> -375 c4c5 489
+     position-4 d2: -375 c4c5 2298 -> -375 c4c5 2560
+     position-4 d3: -375 c4c5 14727 -> -375 c4c5 10876
+     position-5 d2: 560 d7c8 5523 -> 560 d7c8 5570
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 41965
+     position-6 d1: 10 c3d5 297 -> 10 c3d5 290
+     position-6 d2: 30 c3d5 9804 -> 30 c3d5 8947
+     position-6 d3: 30 c3d5 120239 -> 30 c3d5 114855
+   A default lane, 4 files: 2 red / 89 finished, 87 pass, exit 1, 2.9 s, load 3.44/4.28/5.02
+     RED 222 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating
+         expected 7 to be 8 // Object.is equality
+     RED 2 ms  A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the i
+         expected 10252 to be less than or equal to 10240
+   B SEARCH_DEEP=1 quiescence+search: 1 red / 80 finished, 79 pass, exit 1, 83.3 s, load 3.32/4.24/5
+     RED 203 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating
+         expected 7 to be 8 // Object.is equality
+
+## Q5a_quiet_moves_at_the_leaf   src clean after revert: true
+   probe: exit 0, 2.3 s, score/move changed: true
+     startpos d1: 50 b1c3 21 -> 0 b1c3 106   <-- SCORE/MOVE
+     startpos d2: 0 b1c3 122 -> 50 b1c3 1374   <-- SCORE/MOVE
+     startpos d3: 50 b1c3 1003 -> 0 b1c3 6128   <-- SCORE/MOVE
+     kiwipete d1: 145 e2a6 5878 -> 145 e2a6 6016
+     kiwipete d2: 70 e2a6 10249 -> 70 e2a6 14440
+     kiwipete d3: 50 e2a6 405945 -> 50 e2a6 420224
+     position-3 d1: 90 b4f4 19 -> 90 b4f4 71
+     position-3 d2: 90 b4f4 159 -> 110 b4f4 542   <-- SCORE/MOVE
+     position-3 d3: 110 b4f4 892 -> 90 b4f4 1828   <-- SCORE/MOVE
+     position-4 d1: -375 c4c5 954 -> -375 c4c5 1132
+     position-4 d2: -375 c4c5 2298 -> -375 c4c5 2668
+     position-4 d3: -375 c4c5 14727 -> -375 c4c5 20810
+     position-5 d1: 560 d7c8 345 -> 560 d7c8 487
+     position-5 d2: 560 d7c8 5523 -> 560 d7c8 8064
+     position-5 d3: 560 d7c8 42542 -> 515 d7c8 61680   <-- SCORE/MOVE
+     position-6 d1: 10 c3d5 297 -> 10 c3d5 1742
+     position-6 d2: 30 c3d5 9804 -> 30 c3d5 21936
+     position-6 d3: 30 c3d5 120239 -> 30 c3d5 333179
+   A default lane, 4 files: 17 red / 89 finished, 72 pass, exit 1, 3.1 s, load 3.04/3.98/4.83
+     RED 5 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the stati
+         expected 140 to be 120 // Object.is equality
+     RED 1 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static e
+         expected 50 to be +0 // Object.is equality
+     RED 0 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS
+         expected 3 to be +0 // Object.is equality
+     RED 0 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quies
+         expected 5 to be -5 // Object.is equality
+     RED 0 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the
+         expected 285 to be 260 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, sam
+         expected 90 to be 100 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, sam
+         expected 100 to be 90 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, sam
+         expected 128 to be 69 // Object.is equality
+     RED 6 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, sam
+         expected 120 to be 100 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node c
+         expected 10 to be 5 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node c
+         expected 36 to be 13 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node c
+         expected 128 to be 48 // Object.is equality
+     RED 3 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node c
+         expected 286 to be 158 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node co
+         expected +0 to be 50 // Object.is equality
+     RED 25 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 37.06382978723404 to be less than or equal to 10
+     RED 67 ms  A3 — an aborted iteration's move is discarded, not returned > returns the completed depth-2 move, which is NOT the depth-3 move
+         expected 'g4g5' not to be 'g4g5' // Object.is equality
+     RED 37 ms  A4 — no fixed depth anywhere in the delivered engine > goes DEEPER than any small hard-coded ceiling would allow — the behavioural half
+         expected 5 to be greater than or equal to 6
+   B SEARCH_DEEP=1 quiescence+search: 17 red / 80 finished, 63 pass, exit 1, 127.8 s, load 3.12/3.98/4.83
+     RED 5 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the stati
+         expected 140 to be 120 // Object.is equality
+     RED 1 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static e
+         expected 50 to be +0 // Object.is equality
+     RED 0 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS
+         expected 3 to be +0 // Object.is equality
+     RED 0 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quies
+         expected 5 to be -5 // Object.is equality
+     RED 0 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the
+         expected 285 to be 260 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, sam
+         expected 90 to be 100 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, sam
+         expected 100 to be 90 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, sam
+         expected 128 to be 69 // Object.is equality
+     RED 6 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, sam
+         expected 120 to be 100 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node c
+         expected 10 to be 5 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node c
+         expected 36 to be 13 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node c
+         expected 128 to be 48 // Object.is equality
+     RED 3 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node c
+         expected 286 to be 158 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node co
+         expected +0 to be 50 // Object.is equality
+     RED 25 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 37.06382978723404 to be less than or equal to 10
+     RED 323 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=
+         expected 39.03202846975089 to be less than or equal to 26
+     RED 5136 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x [deep, SEARCH_DEEP=
+         expected 22.875317542052866 to be less than or equal to 13
+
+## Q5b_quiet_moves_everywhere   src clean after revert: true
+   probe: exit 0, 13.7 s, score/move changed: true
+     startpos d1: 50 b1c3 21 -> 40 b1c3 79058   <-- SCORE/MOVE
+     startpos d2: 0 b1c3 122 -> 0 b1c3 2459508
+     startpos d3: 50 b1c3 1003 -> 30 b1c3 3823775   <-- SCORE/MOVE
+     kiwipete d1: 145 e2a6 5878 -> 145 e2a6 54009
+     kiwipete d2: 70 e2a6 10249 -> 70 e2a6 94812
+     kiwipete d3: 50 e2a6 405945 -> 60 e2a6 2644218   <-- SCORE/MOVE
+     position-3 d1: 90 b4f4 19 -> 90 b4f4 409
+     position-3 d2: 90 b4f4 159 -> 100 b4f4 10937   <-- SCORE/MOVE
+     position-3 d3: 110 b4f4 892 -> 100 b4f4 42995   <-- SCORE/MOVE
+     position-4 d1: -375 c4c5 954 -> -365 c4c5 8276   <-- SCORE/MOVE
+     position-4 d2: -375 c4c5 2298 -> -375 c4c5 35037
+     position-4 d3: -375 c4c5 14727 -> -370 c4c5 200478   <-- SCORE/MOVE
+     position-5 d1: 560 d7c8 345 -> 560 d7c8 39537
+     position-5 d2: 560 d7c8 5523 -> 550 d7c8 965729   <-- SCORE/MOVE
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 3536524
+     position-6 d1: 10 c3d5 297 -> 10 c3d5 14969
+     position-6 d2: 30 c3d5 9804 -> 30 c3d5 269663
+     position-6 d3: 30 c3d5 120239 -> 30 c3d5 3033023
+   A default lane, 4 files: 25 red / 89 finished, 64 pass, exit 1, 241.7 s, load 2.72/3.51/4.51
+     RED 16 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the stati
+         expected 125 to be 120 // Object.is equality
+     RED 622 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static e
+         expected 122886 to be +0 // Object.is equality
+     RED 0 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS
+         expected 3 to be +0 // Object.is equality
+     RED 1 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quies
+         expected +0 to be -5 // Object.is equality
+     RED 1 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the
+         expected 280 to be 260 // Object.is equality
+     RED 8963 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense root
+         Test timed out in 5000ms.
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, sam
+         expected 37 to be 7 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, sam
+         expected 100 to be 90 // Object.is equality
+     RED 2 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, sam
+         expected 159 to be 69 // Object.is equality
+     RED 9 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, sam
+         expected 120 to be 100 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node c
+         expected 10 to be 5 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node c
+         expected 36 to be 13 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node c
+         expected 147 to be 48 // Object.is equality
+     RED 4 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node c
+         expected 540 to be 158 // Object.is equality
+     RED 395 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node co
+         expected 40 to be 50 // Object.is equality
+     RED 240 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap readi
+         expected 1102.2244897959183 to be less than or equal to 180
+     RED 57 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 318.48936170212767 to be less than or equal to 10
+     RED 4 ms  A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the i
+         expected 58104 to be less than or equal to 10240
+     RED 1 ms  A3 — an aborted iteration's move is discarded, not returned > aborts INSIDE depth 3 — the run really did enter the iteration it discards
+         expected 1 to be 2 // Object.is equality
+     RED 6969 ms  A3 — an aborted iteration's move is discarded, not returned > returns the completed depth-2 move, which is NOT the depth-3 move
+         expected 'g4g5' to be 'e2e3' // Object.is equality
+     RED 27 ms  A4 — no fixed depth anywhere in the delivered engine > goes DEEPER than any small hard-coded ceiling would allow — the behavioural half
+         expected 3 to be greater than or equal to 6
+     RED 0 ms  A5 — the completed depth is monotonically non-decreasing in the budget > actually goes deeper somewhere across the three budgets
+         expected 1 to be greater than 1
+     RED 206513 ms  A1 — pruned and unpruned scores are identical > startpos at depth 2
+         Test timed out in 5000ms.
+     RED 6003 ms  A1 — pruned and unpruned scores are identical > position-3 at depth 3
+         Test timed out in 5000ms.
+     RED 26121 ms  A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1
+         Test timed out in 5000ms.
+   B SEARCH_DEEP=1 quiescence+search: 21 red / 50 finished, 29 pass, exit null, KILLED@600s, 600.0 s, load 4.15/3.96/4.46
+     RED 7 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the stati
+         expected 125 to be 120 // Object.is equality
+     RED 534 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static e
+         expected 122886 to be +0 // Object.is equality
+     RED 0 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS
+         expected 3 to be +0 // Object.is equality
+     RED 1 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quies
+         expected +0 to be -5 // Object.is equality
+     RED 1 ms  A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the
+         expected 280 to be 260 // Object.is equality
+     RED 8456 ms  A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense root
+         Test timed out in 5000ms.
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, sam
+         expected 37 to be 7 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, sam
+         expected 100 to be 90 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, sam
+         expected 159 to be 69 // Object.is equality
+     RED 9 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, sam
+         expected 120 to be 100 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node c
+         expected 10 to be 5 // Object.is equality
+     RED 0 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node c
+         expected 36 to be 13 // Object.is equality
+     RED 1 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node c
+         expected 147 to be 48 // Object.is equality
+     RED 4 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node c
+         expected 540 to be 158 // Object.is equality
+     RED 385 ms  A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node co
+         expected 40 to be 50 // Object.is equality
+     RED 264 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap readi
+         expected 1102.2244897959183 to be less than or equal to 180
+     RED 56 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap rea
+         expected 318.48936170212767 to be less than or equal to 10
+     RED 459 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]
+         expected 302.91373801916933 to be less than or equal to 50
+     RED 12279 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x [deep, SEARCH_DEEP=1]
+         expected 293.28061224489795 to be less than or equal to 70
+     RED 1034 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=
+         expected 479.8274021352313 to be less than or equal to 26
+     RED 11838 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x [deep, SEARCH_DEEP=
+         expected 208.2405080672846 to be less than or equal to 13
+     last finished before the kill: A5 — stalemate scores exactly 0, not a loss > K+P vs K, the king boxed in scores 0 at depth 3 (0 ms) | A5 — stalemate scores exactly 0, not a loss > does not play into a stalemate one ply inside the tree (3 ms)
+
+## Q6a_promotion_term_dropped   src clean after revert: true
+   probe: exit 0, 1.7 s, score/move changed: false
+     kiwipete d1: 145 e2a6 5878 -> 145 e2a6 5888
+     kiwipete d2: 70 e2a6 10249 -> 70 e2a6 10382
+     kiwipete d3: 50 e2a6 405945 -> 50 e2a6 405922
+     position-4 d3: -375 c4c5 14727 -> -375 c4c5 14632
+     position-5 d2: 560 d7c8 5523 -> 560 d7c8 5531
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 43338
+   A default lane, 4 files: 0 red / 89 finished, 89 pass, exit 0, 3.0 s, load 4.09/4.2/4.32
+   B SEARCH_DEEP=1 quiescence+search: 0 red / 80 finished, 80 pass, exit 0, 108.7 s, load 4.48/4.28/4.35
+   C1 whole default lane --dir src: 0 red / 1392 finished, 1392 pass, exit 0, 5.5 s, load 3.16/3.91/4.19
+   C2 ENGINE_DEEP=1 engine.test.ts: 0 red / 33 finished, 33 pass, exit 0, 120.4 s, load 3.07/3.88/4.18
+
+## Q6b_promotion_term_negated   src clean after revert: true
+   probe: exit 0, 2.1 s, score/move changed: false
+     kiwipete d1: 145 e2a6 5878 -> 145 e2a6 7289
+     kiwipete d2: 70 e2a6 10249 -> 70 e2a6 22098
+     kiwipete d3: 50 e2a6 405945 -> 50 e2a6 524175
+     position-4 d1: -375 c4c5 954 -> -375 c4c5 2244
+     position-4 d3: -375 c4c5 14727 -> -375 c4c5 15211
+     position-5 d1: 560 d7c8 345 -> 560 d7c8 570
+     position-5 d2: 560 d7c8 5523 -> 560 d7c8 8882
+     position-5 d3: 560 d7c8 42542 -> 560 d7c8 55859
+     position-6 d3: 30 c3d5 120239 -> 30 c3d5 120318
+   A default lane, 4 files: 1 red / 89 finished, 88 pass, exit 1, 3.3 s, load 3.41/3.83/4.12
+     RED 3 ms  A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the i
+         expected 11384 to be less than or equal to 10240
+   B SEARCH_DEEP=1 quiescence+search: 1 red / 80 finished, 79 pass, exit 1, 124.0 s, load 3.7/3.88/4.14
+     RED 342 ms  A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]
+         expected 70.60063897763578 to be less than or equal to 50
+
+## Q7_door_with_quiescence_on   src clean after revert: true
+   probe: exit 0, 1.8 s, score/move changed: false
+   A default lane, 4 files: 0 red / 89 finished, 89 pass, exit 0, 2.9 s, load 2.99/3.54/3.96
+   B SEARCH_DEEP=1 quiescence+search: 0 red / 54 finished, 54 pass, exit null, KILLED@600s, 600.0 s, load 3.31/3.6/3.98
+     last finished before the kill: A6 — the searched position is unchanged on return > leaves the broad corpus byte-identical [deep, SEARCH_DEEP= (0 ms) | A1 — pruned and unpruned scores are identical > kiwipete at depth 2 [deep, SEARCH_DEEP=1] (13131 ms)
+

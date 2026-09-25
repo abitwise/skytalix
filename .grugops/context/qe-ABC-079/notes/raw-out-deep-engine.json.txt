@@ -1,0 +1,147 @@
+{
+ "label": "deep-engine",
+ "env": {
+  "ENGINE_DEEP": "1"
+ },
+ "args": [
+  "src/engine.test.ts"
+ ],
+ "exit": 0,
+ "signal": null,
+ "wall_s": 120.467,
+ "real_s": 120.46,
+ "user_s": 120.24,
+ "sys_s": 0.62,
+ "cpu_s": 120.86,
+ "loadBefore": [
+  4.97,
+  6.67,
+  8.54
+ ],
+ "loadAfter": [
+  4.03,
+  5.87,
+  7.98
+ ],
+ "tests": 33,
+ "pass": 33,
+ "fail": 0,
+ "skip": 0,
+ "summaryLines": [
+  "Test Files  1 passed (1)",
+  "Tests  33 passed (33)",
+  "Duration  119.90s (transform 57ms, setup 0ms, collect 1.56s, tests 118.20s, environment 0ms, prepare 30ms)"
+ ],
+ "over50": [],
+ "failed": [],
+ "top": [
+  {
+   "file": "src/engine.test.ts",
+   "name": "A1 — 30 positions at the default budget, on a real clock [deep, ENGINE_DEEP=1] > returns within the 5 s hard ceiling every time, and reports the worst case",
+   "state": "pass",
+   "ms": 90302,
+   "timeout": 300000,
+   "share": 0.301,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "NFR-005 — depth-in-budget, MEASURED and reported [deep, ENGINE_DEEP=1] > records the completed depth on kiwipete and position-6 at the 3 s budget",
+   "state": "pass",
+   "ms": 6007,
+   "timeout": 60000,
+   "share": 0.1,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1] > agrees with search() on move and score over the six benchmark roots and their children",
+   "state": "pass",
+   "ms": 16783,
+   "timeout": 300000,
+   "share": 0.056,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames",
+   "state": "pass",
+   "ms": 224,
+   "timeout": 5000,
+   "share": 0.045,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A5 — the fine-grained repetition, on a 100 ms step [deep, ENGINE_DEEP=1] > still never goes shallower as the budget grows, at a tenth of the lane's step",
+   "state": "pass",
+   "ms": 725,
+   "timeout": 30000,
+   "share": 0.024,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1] > agrees with search() on move and score over the whole endgame corpus",
+   "state": "pass",
+   "ms": 2035,
+   "timeout": 120000,
+   "share": 0.017,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A2 — a 50 ms budget returns inside 100 ms in the middlegame position",
+   "state": "pass",
+   "ms": 79,
+   "timeout": 5000,
+   "share": 0.016,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A4 — the behavioural depth guard, further out [deep, ENGINE_DEEP=1] > keeps deepening well past any small ceiling on the sparse endgame",
+   "state": "pass",
+   "ms": 427,
+   "timeout": 30000,
+   "share": 0.014,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A4 — no fixed depth anywhere in the delivered engine > goes DEEPER than any small hard-coded ceiling would allow — the behavioural half",
+   "state": "pass",
+   "ms": 67,
+   "timeout": 5000,
+   "share": 0.013,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A7 — a 1 ms budget returns a legal move in every corpus position",
+   "state": "pass",
+   "ms": 1262,
+   "timeout": 120000,
+   "share": 0.011,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A3 — the depth-3 move the default lane carries as a literal [deep, ENGINE_DEEP=1] > computes search(A3_FEN, 3).move and confirms it is g4g5",
+   "state": "pass",
+   "ms": 232,
+   "timeout": 30000,
+   "share": 0.008,
+   "errors": []
+  },
+  {
+   "file": "src/engine.test.ts",
+   "name": "A6 — the implementation IS an EngineSeam, and runTurnLoop drives it > plays a scripted game to end-of-input with the loop driving it",
+   "state": "pass",
+   "ms": 16,
+   "timeout": 5000,
+   "share": 0.003,
+   "errors": []
+  }
+ ]
+}

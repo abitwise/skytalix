@@ -1,0 +1,62 @@
+{
+ "mode": "gates",
+ "head": "9d2306c",
+ "cores": 8,
+ "lint": {
+  "tag": "gate-lint",
+  "exit": 0,
+  "wall_s": 0.6,
+  "loadBefore": 2.16,
+  "loadAfter": 2.16,
+  "tail": [
+   "Checked 78 files in 111ms. No fixes applied."
+  ]
+ },
+ "typecheck": {
+  "tag": "gate-typecheck",
+  "exit": 0,
+  "wall_s": 1.1,
+  "loadBefore": 2.16,
+  "loadAfter": 2.16,
+  "tail": [
+   ""
+  ]
+ },
+ "build": {
+  "tag": "gate-build",
+  "exit": 0,
+  "wall_s": 1,
+  "loadBefore": 2.16,
+  "loadAfter": 2.16,
+  "tail": [
+   ""
+  ]
+ },
+ "defaultLane": {
+  "tag": "gate-default-lane",
+  "exit": 0,
+  "wall_s": 5.3,
+  "loadBefore": 2.16,
+  "loadAfter": 3.11,
+  "tail": [
+   "JSON report written to /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/logs/default-lane.vitest.json"
+  ],
+  "counts": {
+   "files": 43,
+   "total": 1392,
+   "passed": 1392,
+   "failed": 0,
+   "skip": 0
+  }
+ },
+ "integrity": {
+  "tag": "gate-integrity",
+  "exit": 0,
+  "wall_s": 0,
+  "loadBefore": 3.11,
+  "loadAfter": 3.11,
+  "tail": [
+   "No findings."
+  ]
+ }
+}

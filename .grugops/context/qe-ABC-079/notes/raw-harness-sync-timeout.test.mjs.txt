@@ -1,0 +1,12 @@
+// Does vitest 3.2.7 fail a SYNCHRONOUS test that runs past its own timeout? (A4's deep case is sync.)
+import { expect, it } from "vitest";
+
+const busy = (ms) => { const end = Date.now() + ms; let x = 0; while (Date.now() < end) x++; return x; };
+
+it("sync, 300 ms of work against a 100 ms timeout", () => {
+  expect(busy(300)).toBeGreaterThan(0);
+}, 100);
+
+it("sync, 50 ms of work against a 100 ms timeout", () => {
+  expect(busy(50)).toBeGreaterThan(0);
+}, 100);

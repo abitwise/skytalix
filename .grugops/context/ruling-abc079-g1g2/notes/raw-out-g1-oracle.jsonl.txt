@@ -1,0 +1,8 @@
+# startpos, position-3 (smoke run, load 2.97)
+{"name":"startpos","depth":3,"shipped":{"score":50,"move":"b1c3","nodes":1003,"ms":15},"oracle":{"score":50,"move":"b1c3","nodes":11835,"ms":76},"scoreEqual":true,"moveEqual":true,"load":["2.97","2.97"]}
+{"name":"position-3","depth":3,"shipped":{"score":110,"move":"b4f4","nodes":892,"ms":3},"oracle":{"score":110,"move":"b4f4","nodes":10249,"ms":30},"scoreEqual":true,"moveEqual":true,"load":["2.97","2.97"]}
+# capture-dense boards
+{"name":"position-4","depth":3,"shipped":{"score":-375,"move":"c4c5","nodes":14727,"ms":54},"oracle":{"score":-375,"move":"c4c5","nodes":2103430,"ms":4025},"scoreEqual":true,"moveEqual":true,"load":["2.90","2.82"]}
+{"name":"position-6","depth":3,"shipped":{"score":30,"move":"c3d5","nodes":120239,"ms":345},"oracle":{"score":30,"move":"c3d5","nodes":11261137,"ms":28044},"scoreEqual":true,"moveEqual":true,"load":["2.82","2.79"]}
+{"name":"position-5","depth":3,"shipped":{"score":560,"move":"d7c8=5","nodes":42542,"ms":171},"oracle":{"score":560,"move":"d7c8=5","nodes":2462223,"ms":8294},"scoreEqual":true,"moveEqual":true,"load":["2.79","2.83"]}
+{"name":"kiwipete","depth":3,"shipped":{"score":50,"move":"e2a6","nodes":405945,"ms":1039},"oracle":{"score":50,"move":"e2a6","nodes":62706867,"ms":161896},"scoreEqual":true,"moveEqual":true,"load":["2.83","5.55"]}
