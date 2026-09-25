@@ -242,3 +242,31 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 10 | no major unresolved blocker | **⚠️ ONE, and it is a DESIGN CALL left open on purpose, not a blocker.** `A4`'s default timeout is a **formula** (`≥ 5× median lane wall`, `≤ 120 s`), not a fixed constant BA/PM can supply today — the "5x" multiplier and the two-minute ceiling are this page's own judgment calls, not measured on this codebase's wrapper (which does not exist yet). **Not smoothed to ✅**: a page scoring 10/10 here would be asserting a number it cannot yet measure. The formula is falsifiable and boundable either way, so it does not block the pull — it is a delivery-time measurement, the same shape `ABC-105`'s own DoR ⚠️ used for a self-authorship ceiling that did not block that ticket either. |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+**2026-09-25, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-122`). Branch
+`grugops/ABC-122-gate-hardening`, code commit `43565e7` from `66a45d1`. Not merged, not pushed.
+Run on macOS 26.5.2 / Node v24.12.0. Readings, mutants and raw files are in
+`.grugops/context/ticket-to-pr-ABC-122/notes/`, not restated here.
+
+**PARTIAL: 11 of 12 criteria met. `A4` is HANDED UP.** `package.json` is unchanged, because its
+one line reds `src/cli.test.ts`'s `ABC-042` `A10` row, which pins `scripts.test = "vitest run"`.
+That file is outside `A11`'s fence. The two-line patch and its reading are in claim `7883fd4a`.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | exit 124; the tree killed with process-group SIGKILL, in 527–536 ms at a 500 ms bound; one stderr line naming the bound and the command |
+| `A2` | MET | stdout, stderr and exit byte-identical, direct vs wrapped, for exit 0 and exit 3 |
+| `A3` | MET | `node tools/grugops/run-bounded.proof.js` exits 0. The orphan check is ARMED: fixture, grandchild and group seen alive, then ESRCH 250 ms after the exit. The proof reds on a child-only kill and on no kill. It runs OUTSIDE the lane (decision `621c1465` D4). |
+| `A4` | **NOT MET — handed up** | Constant chosen: **60000 ms** = 8.1× the median lane wall of 7.45 s (n = 7, load 13.6–23.5); 5× is 37.3 s, and the ceiling is 120 s. Wired temporarily and reverted: the lane was green 47 / 1446, and the reverted root depth guard gave exit 124 at 60.23 s. |
+| `A5` | MET | `node:child_process` / `os` / `timers` only. The Windows fallback (`child.kill`, direct child only) is stated and was not exercised. |
+| `A6` / `A8` | MET | The real `search(pos, 200)` and `chooseMove` are driven to ply 128 along a single-move line, with `legalMoves` and `zobristKeyAfterMove` mocked in-file. Asserted on the score, the key-write count (= 128) and the node count. No test door: one would red the existing export-set rows (decision `621c1465` D1). |
+| `A7` / `A9` | MET | 6 mutants: guard removed, `>` for `>=`, and `>= CAP-1`, in each file. Each reds only its own row; the other 1445 tests stay green. |
+| `A10` | MET | `src/search.ts` and `src/engine.ts` are byte-identical to base: zero production lines. 1444 earlier tests green, plus 2 new rows. |
+| `A11` | MET | Under `src/`, only 2 new test files (+114, +94). `tools/grugops/` +96 / +18 / +141. `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md` and the ADRs are untouched. |
+| `A12` | MET | lint, typecheck and build exit 0 through the wrapper. Lane 47 files / 1446 passed, skips 0, skip-integrity `No findings.` Exactly 2 new files, 1 test each. `N8-LANE`: +475 ms gross, ≈ +155 ms net of the 320 ms floor, against 650 ms. The null is +0.66 % (5/8) and the load median is 17, so confidence is medium. `N8-SPAWN`: 0 ms, nothing spawned in the lane. |
+
+**Owed:** `AGENTS.md` `### Test` to the Scribe once `A4` lands (claim `7883fd4a`); a QE hop.
+`lane-inventory.js` is red at this tree on a pre-existing tracked file,
+`.grugops/context/ruling-abc079-oracle/…/oracle.test.ts`. That is not this ticket's.

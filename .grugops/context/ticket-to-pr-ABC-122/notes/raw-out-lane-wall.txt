@@ -1,0 +1,8 @@
+run 1: exit 0 wall 7.77 s cpu 25.80 s files 47 tests 1446 load { 13.59 9.07 7.08 }
+run 2: exit 0 wall 7.16 s cpu 26.05 s files 47 tests 1446 load { 17.07 9.87 7.38 }
+run 3: exit 0 wall 7.45 s cpu 26.30 s files 47 tests 1446 load { 20.07 10.78 7.73 }
+run 4: exit 0 wall 7.88 s cpu 26.72 s files 47 tests 1446 load { 21.50 11.24 7.91 }
+run 5: exit 0 wall 7.51 s cpu 26.37 s files 47 tests 1446 load { 20.40 11.34 7.99 }
+run 6: exit 0 wall 7.22 s cpu 26.03 s files 47 tests 1446 load { 23.49 12.13 8.28 }
+run 7: exit 0 wall 7.38 s cpu 27.65 s files 47 tests 1446 load { 21.96 12.19 8.35 }
+median wall 7.45 s (n=7, sorted 7.16 7.22 7.38 7.45 7.51 7.77 7.88)

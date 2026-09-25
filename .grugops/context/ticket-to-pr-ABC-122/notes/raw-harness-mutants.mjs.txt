@@ -1,0 +1,32 @@
+// ABC-122 A7/A9 mutant harness. Each mutant: apply, run full default lane (JSON reporter) with a
+// hard spawnSync timeout, record failing test names, restore the file byte-for-byte.
+import { spawnSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
+const W = process.argv[2];
+const GUARD_S = "if (depth <= 0 || ply >= KEY_ARRAY_CAPACITY) {";
+const GUARD_E = "if (remaining <= 0 || ply >= KEY_ARRAY_CAPACITY) {";
+const M = [
+  ["S1 search: guard removed", "src/search.ts", GUARD_S, "if (depth <= 0) {"],
+  ["S2 search: >= weakened to >", "src/search.ts", GUARD_S, "if (depth <= 0 || ply > KEY_ARRAY_CAPACITY) {"],
+  ["S3 search: over-strict >= CAP-1", "src/search.ts", GUARD_S, "if (depth <= 0 || ply >= KEY_ARRAY_CAPACITY - 1) {"],
+  ["E1 engine: guard removed", "src/engine.ts", GUARD_E, "if (remaining <= 0) {"],
+  ["E2 engine: >= weakened to >", "src/engine.ts", GUARD_E, "if (remaining <= 0 || ply > KEY_ARRAY_CAPACITY) {"],
+  ["E3 engine: over-strict >= CAP-1", "src/engine.ts", GUARD_E, "if (remaining <= 0 || ply >= KEY_ARRAY_CAPACITY - 1) {"],
+];
+for (const [name, file, from, to] of M) {
+  const path = `${W}/${file}`;
+  const orig = readFileSync(path, "utf8");
+  if (orig.split(from).length !== 2) throw new Error(`anchor not unique in ${file}`);
+  try {
+    writeFileSync(path, orig.replace(from, to));
+    const t0 = Date.now();
+    const r = spawnSync("npx", ["vitest", "run", "--reporter=json"], { cwd: W, encoding: "utf8", timeout: 240_000, maxBuffer: 256 * 1024 * 1024, killSignal: "SIGKILL" });
+    const ms = Date.now() - t0;
+    let j; try { j = JSON.parse(r.stdout); } catch { j = null; }
+    const failed = j ? j.testResults.flatMap((f) => f.assertionResults.filter((a) => a.status === "failed").map((a) => `${f.name.replace(W + "/", "")} :: ${a.fullName}`)) : [`NO JSON (status ${r.status} signal ${r.signal})`];
+    console.log(`${name}: exit=${r.status} signal=${r.signal} ${ms}ms tests=${j?.numTotalTests} passed=${j?.numPassedTests} failed=${j?.numFailedTests}`);
+    for (const f of failed) console.log(`   RED: ${f}`);
+  } finally {
+    writeFileSync(path, orig);
+  }
+}

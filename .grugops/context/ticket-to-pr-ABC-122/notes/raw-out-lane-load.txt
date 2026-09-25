@@ -1,0 +1,9 @@
+ROUND 0 start { 4.55 8.92 8.27 } order ANB
+ROUND 1 start { 15.15 11.13 9.07 } order NBA
+ROUND 2 start { 16.31 11.59 9.28 } order BAN
+ROUND 3 start { 15.14 11.65 9.36 } order ANB
+ROUND 4 start { 19.25 12.71 9.78 } order NBA
+ROUND 5 start { 22.89 13.82 10.24 } order BAN
+ROUND 6 start { 21.58 14.19 10.45 } order ANB
+ROUND 7 start { 19.76 14.13 10.50 } order NBA
+ROUND 8 start { 17.52 14.02 10.54 } order BAN
