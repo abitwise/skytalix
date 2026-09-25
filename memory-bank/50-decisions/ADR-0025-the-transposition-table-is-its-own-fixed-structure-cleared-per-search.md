@@ -6,7 +6,12 @@ id: ADR-0025
 
 ## Status
 
-**proposed**. Written 2026-09-25 by Architect/Design at task `wave-2026-09-24`, subtask
+**accepted** 2026-09-25, on the owner's delegated word, verbatim *"ADR-0025 I trust your
+judgement there, select best option to move forward."* The Orchestrator selected the option
+this ADR already rules (a separate fixed-size table, cleared per search), with no change. The
+memory bound is `NFR-009`: the owner approved 16 MiB and licensed up to 128 MiB if needed.
+
+Was **proposed**. Written 2026-09-25 by Architect/Design at task `wave-2026-09-24`, subtask
 `ruling-abc080-081` (Workflow 07, a design ruling owed to `ABC-081`'s DoR item 5b).
 
 - It builds on `ADR-0002` clause 3 and `ADR-0020` Decision 3 and amends neither.
