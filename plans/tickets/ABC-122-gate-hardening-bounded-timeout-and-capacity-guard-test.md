@@ -121,7 +121,11 @@ guards.
   script invokes the wrapper around `vitest run` (forwarding any further CLI args unchanged).
   The default timeout is a number **N ms**, stated and justified on the delivering page:
   **N ≥ 5 × the median default-lane wall time measured at delivery**, and **N ≤ 120,000** (two
-  minutes) so a real hang is diagnosed promptly rather than merely "eventually caught."
+  minutes) so a real hang is diagnosed promptly rather than merely "eventually caught." **The
+  identical literal string is mirrored, in the same commit, into `src/cli.test.ts`'s
+  `SCRIPTS_AT_HEAD.test`** (`ABC-042` `A10`'s own pin) — that one-line pin update is the exact
+  widening `A11` now names below; no other key of `SCRIPTS_AT_HEAD` changes, and `A10`'s test
+  stays green against the new literal, unchanged in kind.
 - **`A5` (portability stated, not assumed).** The wrapper depends on `node:` built-ins only —
   **no** `timeout(1)`, `pkill`, or any other external binary. The delivering page states the
   Node version and OS the criteria above were run on, and that no platform-specific API (e.g. a
@@ -149,10 +153,18 @@ guards.
 
 **Both halves**
 
-- **`A11` (the fence, checkable from git).** `git diff --numstat <base>...HEAD -- src/` touches
-  only `src/search.ts`, `src/engine.ts`, and the test file(s) this ticket adds under `src/`.
-  Any wrapper file is confined to `tools/grugops/`, plus the one line in `package.json`.
-  `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md` and every ADR are byte-identical.
+- **`A11` (the fence, checkable from git).** *Amended 2026-09-25 by BA/PM (`amend-abc122-a4-pin`)
+  to widen the fence by exactly one pin — the ruling and its reasoning are in
+  `.grugops/context/amend-abc122-a4-pin/notes/`.* `git diff --numstat <base>...HEAD -- src/`
+  touches only `src/search.ts`, `src/engine.ts`, the test file(s) this ticket adds under `src/`,
+  **and exactly one line of `src/cli.test.ts`: `SCRIPTS_AT_HEAD.test`'s value** (`ABC-042` `A10`'s
+  own pin, `src/cli.test.ts:1661`), changed **literally**, byte-for-byte, from `"vitest run"` to
+  the same wrapped string `A4` wires into `package.json`'s `scripts.test` — no other key of
+  `SCRIPTS_AT_HEAD` changes, and `A10`'s own test (the exact-match pin over every `package.json`
+  script) stays green against the new literal, asserting the same thing it always asserted: the
+  committed script is what the pin says it is. Any wrapper file is confined to `tools/grugops/`,
+  plus the one line in `package.json`. `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md` and
+  every ADR are byte-identical.
 - **`A12` (gates and lane, reported together).** `npm run lint`, `npm run typecheck` and
   `npm run build` each exit 0. The default lane (run **through** the new wrapper, proving `A4`
   end-to-end) is green, skip count 0, with **exactly 2 new test files, both under `src/`**
@@ -270,3 +282,45 @@ That file is outside `A11`'s fence. The two-line patch and its reading are in cl
 **Owed:** `AGENTS.md` `### Test` to the Scribe once `A4` lands (claim `7883fd4a`); a QE hop.
 `lane-inventory.js` is red at this tree on a pre-existing tracked file,
 `.grugops/context/ruling-abc079-oracle/…/oracle.test.ts`. That is not this ticket's.
+
+## Amendment 2026-09-25 (BA/PM, `amend-abc122-a4-pin`) — the `A4` stop ruled
+
+**Ruling: widen `A11` by exactly one pin — `src/cli.test.ts:1661`'s `SCRIPTS_AT_HEAD.test`
+value, updated literally to the same wrapped string `A4` wires — not re-cut `A4`.** `A4`'s
+acceptance text above and `A11`'s fence text above carry the amended wording directly; this
+section is the record of the decision, not a second copy of the criteria.
+
+**Why the whole wrapped string, not "the wrapped command plus the bound" as a pattern/range
+check:** `SCRIPTS_AT_HEAD` pins every `package.json` script to a literal value via one `toEqual`
+(`src/cli.test.ts:1650–1671`); `A10`'s purpose (`ABC-042`: the committed script is what the pin
+says it is) is an exact-match discipline applied uniformly across all nine keys. Special-casing
+`test` to a formula/range check would (a) break that uniform comparison, needing a second
+comparison path for one key only — a single-use abstraction for one row, and (b) let a future
+re-tuning of `N` pass silently within the `A4` formula's bounds without updating the pin,
+weakening the exact guard the row exists to be. The literal string costs the same one-line edit
+either way; it does not cost re-deriving the bound's formula reasoning, which stays on `A4`
+above, unchanged and unweakened — only the *value* pinned changes, from `"vitest run"` to the
+delivered wrapped command.
+
+**Why not re-cut `A4` (ruled out explicitly, per the queue task's own instruction):** re-cutting
+leaves the ticket's own reason to exist (K4, closing `ABC-081`'s "the gate can hang instead of
+failing red" gap) open, and the two-line patch is already measured green (47/1446, the reverted
+root-depth-guard mutant giving exit 124 at 60.23 s) — re-cutting would discard a working,
+verified fix over a one-line pin-widening decision that fits `A11`'s own purpose. No unresolved
+design question remains: the wired string, the bound and its justification were all already on
+the page from the build hop.
+
+**Also recorded (facts, not scope changes — owed onward per the queue task):**
+- The `*_DEEP` lanes (`SEARCH_DEEP`, `ENGINE_DEEP`, `ZOBRIST_DEEP`, `INPUT_DEEP`) must **not** be
+  run through `npm test`/the wrapper — `ENGINE_DEEP` alone measures ≈ 98.7 s (`AGENTS.md`),
+  above the wrapper's 60 000 ms (`A4`) bound. They are invoked directly via `npx vitest run
+  <file>` with their env var, never via `npm test`. Owed to the Scribe's `Test (all)` follow-up
+  (already named on this page, above) so that line does not imply the deep lanes run under the
+  bound.
+- `tools/grugops/lane-inventory.js` exits 1 on a tracked file,
+  `.grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts` (present since `b324cb6`,
+  pre-existing at this ticket's base). Not this ticket's — named here for QE's hop so it is not
+  attributed to `ABC-122`'s own delivery.
+
+Full ruling, the two options weighed, and the trace are in
+`.grugops/context/amend-abc122-a4-pin/notes/`.
