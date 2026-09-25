@@ -1,0 +1,8 @@
+{"arm":"B","supervisorExit":null,"supervisorSignal":"SIGKILL","ms":2040,"survivors1500ms":[]}
+{"arm":"B","afterCleanup":[]}
+{"arm":"A","supervisorExit":null,"supervisorSignal":"SIGKILL","ms":5078,"survivors1500ms":[]}
+{"arm":"A","afterCleanup":[]}
+{"arm":"B","supervisorExit":null,"supervisorSignal":"SIGKILL","ms":2015,"survivors300ms":[]}
+{"arm":"B","afterCleanup":[]}
+{"arm":"A","supervisorExit":null,"supervisorSignal":"SIGKILL","ms":2009,"survivors300ms":[{"pid":77850,"ppid":1,"pgid":77850,"cmd":"node (vitest)"}]}
+{"arm":"A","afterCleanup":[]}

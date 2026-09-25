@@ -364,3 +364,35 @@ Scribe.
 
 Recommend `In Review → In Security/NFR` (Orchestrator's move). Full readings:
 `.grugops/context/qe-ABC-122/notes/`.
+
+## Security/NFR 2026-09-25 (`secnfr-ABC-122`, Workflow 15, ASVS L1, block on high): PASS-WITH-ACCEPTED-RISK
+
+The gate reviewed `0bc31e1...ca9f42d -- tools package.json src` at review tip `9db8f2a`. There is
+no high finding and no ASVS L1 failure, and **no fix is required before exit.** Readings are in
+`.grugops/context/secnfr-ABC-122/notes/` (decision `2749a2e6`), not restated here.
+
+- **`N8-LANE`: MET.** +670 ms gross CPU, **+350 ms net** of the 320 ms floor, against 650. Sign
+  8/8, null −0.09 %, n = 8, load median 11.8.
+  - The build's +475 / +155 is corrected upward.
+  - **The wrapper is not charged.** It is not a lane file. It was measured anyway: W−A is −10 ms
+    and its isolated cost is about 10 ms, so it is +355 net if charged. MET either way.
+  - `N8-SPAWN` is 0.
+- **K3: CLOSED. K4: CLOSED for its scope.** `npm test` now fails red at exit 124 within 60 s.
+- **The kill surface.**
+  - The only target is the child's own pgid, and there is no pid-reuse window.
+  - Argv spawn with no shell, measured (V1.2.5).
+  - Exit codes hold: 124 / 130 / 143 / 128+n / pass-through / 2.
+- **R1 (LOW): accepted risk, owner Olger Oeselg, word owed.** The child runs in a new session.
+  So SIGHUP, SIGQUIT, a SIGKILL to the wrapper, or a supervisor's group SIGKILL leaves the tree
+  running with no bound.
+  - Measured on the real `npm test`: 0 survivors before this change, 1 surviving `vitest`
+    after it.
+  - The partial fix is to forward SIGHUP and SIGQUIT. The SIGKILL paths are the residual.
+  - Until then, stop `npm test` with SIGTERM.
+- **R2 (LOW): accepted note.** `N` > 2^31−1 is clamped by Node to 1 ms, which gives a false red.
+- **R3 (LOW) = QE gap 1: required fix, non-blocking.** The header is stale, and it calls a new
+  session a new process group.
+- **Who does what.** R2 and R3 go to the Software Engineer at the next touch of `tools/grugops/`.
+  The Orchestrator schedules that touch.
+- **Flagged for the Orchestrator:** the UAT waiver's literal `^src/` measurement comes back empty
+  for this diff.
