@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-24`, Workflow 05) — **`ABC-080` `In Development` → `In Review` (build fast-forwarded onto the wave at `cb8ca55`, gates 44 / 1418 / 0); QE hop `qe-ABC-080` dispatched.** `In Development` 0/3, `In Review` 1/3._
+
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-24`, Workflow 04) — **Architect/Design R1–R5 merged at `38300d3` (prototype: `ABC-080` + `ABC-081` reach depth 6 in 3 s on both roots). BA/PM refinement merged at `34d98d6`: `ABC-080` 10/10 → pulled into `In Development`; `ABC-081` 8/10 (waits on `ABC-080` + `NFR-009`); `ABC-121` (PVS + LMR) cut into Backlog.** Owner's word owed: `ADR-0025` acceptance, `NFR-009` placement, the wave → `main` merge._
 
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-24`) — **BA/PM re-score merged at `4bee7ef`: `ABC-080` 9/10, `ABC-081` 8/10, neither Ready. BA/PM names for the owner: the two tickets' bars together are ~3.6x fewer nodes at fixed depth, short of what depth 3 → 6 plausibly costs — they contribute to the kept `NFR-005` floor but are not sufficient. Architect/Design ruling hop `ruling-abc080-081` dispatched (both tickets' open items + the depth-6 path).**_
@@ -320,9 +322,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-
-- [ABC-080] Move ordering — MVV-LVA, killers, hash move  (EPIC-004, M, P0, DoR 8/10, needs ABC-078)  **RE-SCORED 2026-09-25 by BA/PM at `4bee7ef` (`rescore-abc080-081`): 8/10 → 9/10, ⚠️x1 — NOT Ready.** ⚠️(3) discharged (`ABC-077`/`ABC-078` Done). Open ⚠️(10): `A3`'s ≤ 40% node bar is a generic figure, never measured here — routed to Architect/Design (`ruling-abc080-081`) to measure a baseline and re-level or confirm. No overlap with `ABC-079`'s in-`quiesce` MVV-LVA; `ABC-079` QE G4 (promotion term unguarded) lands in `A4`'s test notes. Size M, P0.  **REFINED 2026-09-25 by BA/PM at `34d98d6`: 10/10, MET.** R1 folded: `A3` ≤ 4% (measured 2.64% / 2.10%), `A4` read at d4 AND d5 (delete rule on d5), scope `src/search.ts` + `src/engine.ts`, `ABC-079` QE G4 in test notes.  **→ Ready → In Development 2026-09-25.** Pulled by the Orchestrator at task `wave-2026-09-24`, subtask `ticket-to-pr-ABC-080`, branch `grugops/ABC-080-move-ordering`; DoR 10/10 on the record. Architect prototype predicts depth 5 on both benchmark roots; the build's own reading is the verdict. `NFR-008` lane is 22.29 s against 15 s — the hop measures its `N8-LANE` charge and reports, does not trim.
+## In Development (WIP 0/3)
 
 
 
@@ -333,7 +333,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+
+## In Review (WIP 1/3)
+
+- [ABC-080] Move ordering — MVV-LVA, killers, hash move  (EPIC-004, M, P0, DoR 8/10, needs ABC-078)  **RE-SCORED 2026-09-25 by BA/PM at `4bee7ef` (`rescore-abc080-081`): 8/10 → 9/10, ⚠️x1 — NOT Ready.** ⚠️(3) discharged (`ABC-077`/`ABC-078` Done). Open ⚠️(10): `A3`'s ≤ 40% node bar is a generic figure, never measured here — routed to Architect/Design (`ruling-abc080-081`) to measure a baseline and re-level or confirm. No overlap with `ABC-079`'s in-`quiesce` MVV-LVA; `ABC-079` QE G4 (promotion term unguarded) lands in `A4`'s test notes. Size M, P0.  **REFINED 2026-09-25 by BA/PM at `34d98d6`: 10/10, MET.** R1 folded: `A3` ≤ 4% (measured 2.64% / 2.10%), `A4` read at d4 AND d5 (delete rule on d5), scope `src/search.ts` + `src/engine.ts`, `ABC-079` QE G4 in test notes.  **→ Ready → In Development 2026-09-25.** Pulled by the Orchestrator at task `wave-2026-09-24`, subtask `ticket-to-pr-ABC-080`, branch `grugops/ABC-080-move-ordering`; DoR 10/10 on the record. Architect prototype predicts depth 5 on both benchmark roots; the build's own reading is the verdict. `NFR-008` lane is 22.29 s against 15 s — the hop measures its `N8-LANE` charge and reports, does not trim.  **→ In Review 2026-09-25.** Built at `a437b11`/`ac5215c` (`grugops/ABC-080-move-ordering`, fast-forwarded onto the wave at `cb8ca55`): `src/search.ts` +140/−15, `src/engine.ts` +24/−11, new `src/search.ordering.test.ts` +574, three test files re-pinned; gates 44 / 1418 / 0 (re-run by the Orchestrator on the wave tip). `A1`–`A7` MET; no stop fired; scores identical to unordered at d3–d5. `A3` 2.64% / 2.10% (≤ 4%). Depth in 3 s (plain node): kiwipete 3 → 6, position-6 3 → 5; under vitest 4 / 4. N8-LANE +10 ms net (inside the null control). 18/18 mutants killed; thin coverage named on M7–M10 and M15–M17. **FOR QE TO RULE:** (1) `src/quiescence.test.ts` re-pin outside the two named test companions (bare-leaf door node counts 562 → 136, 14 565 → 2 273, moves unchanged); (2) `engine.test.ts` `A3` fixture budget 8 → 4; (3) killers kept across one `chooseMove`'s iterations. Hash-move arm dormant until `ABC-081`. QE hop `qe-ABC-080` dispatched; Security/NFR (`NFR-005`, `N8-LANE`) follows.
 
 
 
