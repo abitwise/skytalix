@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — **`ADR-0026` ACCEPTED with amendments (merged, `2543f5c`); Scribe `Test (all)` line merged (`4498226`). `AGENTS.md` now 32 565 B of 32 768 B — 203 B headroom; `ABC-109` is due before the next `AGENTS.md` line.** BA/PM `refold-abc121-adr0026` dispatched. Merged hop branches and worktrees removed._
+
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`) on the owner's word (decision `…6a63f2b7`) — **`ABC-122` → `Done`, merged to `main`. `ADR-0026` ACCEPTED with the review's four amendments** (Architect/Design writes them; BA/PM folds them into `ABC-121`). **Standing owner instruction: UAT test runs are delegated to the Engineer or QE, not routed to the owner.**_
 
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`, Workflow 15) — **`ABC-122` `In Security/NFR` → `Ready for UAT` (PASS-WITH-ACCEPTED-RISK, `5237ef3`). Owed from the owner: UAT word, R1, the `main` merge; `ADR-0026` + amendments.**_
