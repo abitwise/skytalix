@@ -330,8 +330,10 @@ describe("A1 — table-on and table-off scores are identical", () => {
    * RE-POINTED at `ABC-121` to the pre-`ABC-121` search, with both literals unchanged — `ABC-081`
    * `A1`'s row, so `ADR-0026` decision 4's. Decision 7 listed this pair as a shipped-path VALUE row,
    * but at depth 4 the late-move reductions move `knight-g1 w -` from 820 to 830, in this build and
-   * in the ruling's own reference recursion. The pair then reads 830 twice on `search()`, which is
-   * exactly the equality G6 exists to forbid, so the falsifier has no bite on the shipped path.
+   * in the ruling's own reference recursion. The pair then reads 830 twice on `search()`, so it
+   * re-points under decision 4 (ruling `ruling-abc121-g6`, which strikes it from decision 7). G6's
+   * bite was never this score pair, because the table lives one search. It is the key row below
+   * and `zobrist.test.ts`'s castling-rights rows, which no search switch reaches.
    * Measured, not argued: `.grugops/context/ticket-to-pr-ABC-121/probe/g6.ts`.
    */
   for (const { name, fen, score } of KNIGHT_G1_PAIR) {
