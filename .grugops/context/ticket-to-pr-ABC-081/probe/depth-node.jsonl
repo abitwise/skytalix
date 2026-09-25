@@ -1,0 +1,12 @@
+{"runner":"node","round":0,"arm":"A","name":"kiwipete","depth":6,"nodes":925450,"ms":3001,"load1":4.86}
+{"runner":"node","round":0,"arm":"B","name":"kiwipete","depth":6,"nodes":922378,"ms":3001,"load1":5.03}
+{"runner":"node","round":0,"arm":"A","name":"position-6","depth":6,"nodes":866590,"ms":3003,"load1":5.03}
+{"runner":"node","round":0,"arm":"B","name":"position-6","depth":5,"nodes":904478,"ms":3000,"load1":4.95}
+{"runner":"node","round":1,"arm":"B","name":"kiwipete","depth":6,"nodes":933642,"ms":3001,"load1":4.95}
+{"runner":"node","round":1,"arm":"A","name":"kiwipete","depth":6,"nodes":934666,"ms":3002,"load1":4.95}
+{"runner":"node","round":1,"arm":"B","name":"position-6","depth":5,"nodes":868638,"ms":3001,"load1":5.12}
+{"runner":"node","round":1,"arm":"A","name":"position-6","depth":6,"nodes":866590,"ms":3003,"load1":5.12}
+{"runner":"node","round":2,"arm":"A","name":"kiwipete","depth":6,"nodes":940810,"ms":3001,"load1":4.87}
+{"runner":"node","round":2,"arm":"B","name":"kiwipete","depth":6,"nodes":931594,"ms":3003,"load1":4.87}
+{"runner":"node","round":2,"arm":"A","name":"position-6","depth":6,"nodes":866590,"ms":3004,"load1":4.8}
+{"runner":"node","round":2,"arm":"B","name":"position-6","depth":5,"nodes":908574,"ms":3002,"load1":4.65}

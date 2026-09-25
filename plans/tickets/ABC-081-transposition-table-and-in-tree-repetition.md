@@ -341,3 +341,56 @@ pull and did not gate this ticket's item-3 resolution.**
 
 **Pullable today: YES.** Size `M`, priority `P0`, unchanged. **Recommended routing: pull
 `ABC-081` into `Ready` — the Orchestrator's board move, out of this subtask's fence.**
+
+## § Delivery — 2026-09-25 (Software Engineer, task `wave-2026-09-24`, subtask `ticket-to-pr-ABC-081`, Workflow 04)
+
+**Built on `grugops/ABC-081-transposition-table`**, off `grugops/wave-2026-09-24` @ `6033d05`:
+the code is at `318c11a`, and three default-lane rows were added at `0076e6a`. **NOT merged, NOT
+pushed.** The measurements, mutants, lane and design calls are in
+`.grugops/context/ticket-to-pr-ABC-081/notes/`, with the probes in `probe/` beside them. They are
+not restated here.
+
+- **Delivered.**
+  - `src/transposition.ts` (new, `ADR-0025`): 2^18 × 16 B = 4 MiB of typed arrays; the full key
+    is verified; always-replace; cleared at every `search()` / `chooseMove` entry; mate scores
+    are stored relative to the node.
+  - **A table entry settles a node only at the depth it was searched to.** This makes `A1`
+    exact by construction. `stored ≥ needed` measured identical in the middlegame and is left
+    unpulled.
+  - One per-ply key array per search, with `repeatsInPath` (a repetition scores exactly 0) and
+    `KEY_ARRAY_CAPACITY` (a runaway guard, not a depth budget). Both recursions use the table.
+  - The hash move is woken in both recursions, the engine's root included.
+  - Test-only door `searchWithoutTable`. New `src/transposition.test.ts`.
+- **`A1` MET** (six roots at depth 4, and `G6`'s `knight-g1` pair 830 / 820, table on = off).
+  **`A2` MET, narrowly: 15.95% / 15.38%** at fixed depth 5. **`A3` MET: 63.94% / 49.90%.**
+  **`A4` MET** (at the table for a mate-in-2 at two plies; in the search on a depth-10 engine
+  case; see the claim note). **`A5` MET** (exactly 0, table on). **`A6` MET. `A7` MET:
+  `NFR-009` `heapUsed` +0.01 MiB, `arrayBuffers` +0.00 MiB between 1 s and 3 s, seen RED
+  against a `Map` first.** **`A8` MET.**
+- **Depth in 3 s, this build vs the base, 3/3 rounds:**
+  - plain node: kiwipete 6 → **6**, position-6 5 → **6**;
+  - vitest: 4 → **5**, 4 → **5**.
+
+  `NFR-005`'s verdict, and which runner binds it, are not this hop's.
+- **Also changed, each flagged in the decision note:**
+  - `search.ts`: `!(depth >= 1)`, which keeps `QE-G1` from hanging under the capacity guard.
+  - `engine.ts`: its `history.ts` type import is replaced by `Parameters<EngineSeam>[0]`
+    (`A6`).
+  - `ABC-080`'s ordering doors keep the table off, so its `A4` ladder stays one lever per rung.
+  - `ABC-077` `A6` export list +3.
+- **Re-measured, scores unchanged:**
+  - `ABC-080` G4 pin 275 → 261 (a real underpromotion transposition);
+  - `ABC-078` `A3` fixture budget 4 → 3;
+  - `ABC-078` `A3` identity sweep: accepts an EQUAL-scored root move (6 of 368 pairs; 0 score
+    divergences).
+- **QE `ABC-080` `G1` closed** by the exact `chooseMove` pin (358 vs 355 nodes).
+- **`N8-LANE` MET:** +60 ms net (+220 ms gross, of the order of the null control's noise). The
+  lane is still over `NFR-008`'s 15 s, which is inherited.
+- **Gates at `0076e6a`:**
+  - lint 0, typecheck 0, build 0;
+  - unit **45 files / 1 444 passed / 0 skipped**; integrity `No findings.`;
+  - `SEARCH_DEEP=1` 177/177 (+40/40 at the tip); `ENGINE_DEEP=1` 33/33 + 26/26;
+  - mutants: 27, of which 25 killed; K3 (the capacity guard) survives; K4 hangs the lane.
+- **Column:** still `In Development` on the page. The `In Review` move and the QE and
+  Security/NFR hops are the Orchestrator's to schedule. This hop was fenced from
+  `plans/board.md`.

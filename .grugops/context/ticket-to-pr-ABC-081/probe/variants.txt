@@ -1,0 +1,22 @@
+Scratch variants the probes in this directory import. Each is `cp -R src` of the build (318c11a
+production code, identical at 0076e6a) plus ONE patch, outside the repository. None was committed.
+
+eq     src/transposition.ts: probeTable counts probes and verified hits into an exported STATS;
+       STATS.off makes every probe miss and every store a no-op; STATS.onStore(ply, depth) is
+       called on every store (the root store, ply 0, marks a completed iteration).
+       Used by measure.mjs (a1 / a2 / a3) and guards.mjs.
+ge     eq, plus tableCutoff's `entryDepth(slot) !== depth` -> `entryDepth(slot) < depth`
+       (the conventional "stored >= needed" rule). measure.mjs A/B against eq.
+xeq    the build plus a per-slot stored-ply array; tableCutoff counts cuts where the stored ply
+       differs from the probing ply (XS.cross) and those on a mate score (XS.crossMate).
+       Used by xscan.mjs, xscan2.mjs, xscan3.mjs.
+xge    xeq plus the ge rule. xscan.mjs.
+nomate the build with entryScore and storeEntry's mate adjustment removed (stored and read raw).
+       matescan.mjs, matecmp.mjs, xscan3.mjs.
+norep  the build with repeatsInPath returning false. a5c.mjs.
+g1     the build with engine.ts's killers.record moved out of the cutoff guard (QE ABC-080 N3).
+       g1scan.mjs.
+mS1 / mR2 / mS3 / mE3 / mR3   the mutants of the same ids in mutants.mjs, as trees, for
+       newrows.mjs and eng4.mjs (choosing the default-lane rows that kill them).
+armA / armB   `git archive 318c11a src` / `git archive 6033d05 src` — depth.mjs and
+       depth-vitest.test.mjs (the depth reading, this build vs the base).

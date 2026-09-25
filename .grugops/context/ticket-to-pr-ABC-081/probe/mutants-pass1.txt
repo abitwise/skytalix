@@ -1,0 +1,80 @@
+T1 KILLED (134 passed / 2 failed) — mate scores stored and read raw (no ±ply)
+    transposition.test.ts :: A4 — a mate score is correct at every ply the position is reached at a mate-in-2 stored at ply 1 reads MATE_SCORE - 4 at ply 1 and MATE_SCORE - 6 at ply 3
+    transposition.test.ts :: A4 — a mate score is correct at every ply the position is reached at a mated-in-2 stored at ply 2 reads -(MATE_SCORE - 6) at ply 2 and -(MATE_SCORE - 8) at ply 4
+T2 KILLED (134 passed / 2 failed) — mate adjusted the wrong way at store
+    transposition.test.ts :: A4 — a mate score is correct at every ply the position is reached at a mate-in-2 stored at ply 1 reads MATE_SCORE - 4 at ply 1 and MATE_SCORE - 6 at ply 3
+    transposition.test.ts :: A4 — a mate score is correct at every ply the position is reached at a mated-in-2 stored at ply 2 reads -(MATE_SCORE - 6) at ply 2 and -(MATE_SCORE - 8) at ply 4
+T3 KILLED (135 passed / 1 failed) — cutoff at any stored depth >= needed (the conventional rule)
+    transposition.test.ts :: the table — verified keys, always-replace, cutoffs only at the stored depth settles a node only at the depth the entry was searched to
+T4 KILLED (130 passed / 6 failed) — cutoff at any stored depth at all
+    engine.test.ts :: A3 — an aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards
+    engine.test.ts :: A3 (identity) — the completed iteration equals search() in move AND score agrees with search() on move and score across the mate/stalemate endgames
+    search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search chooseMove(): one table per call, kept across its iterations, never across calls
+    search.ordering.test.ts :: G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 358 nodes
+    transposition.test.ts :: the table — verified keys, always-replace, cutoffs only at the stored depth settles a node only at the depth the entry was searched to
+    transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 white to move: the engine plays the perpetual and scores it exactly 0
+T5 KILLED (135 passed / 1 failed) — every bound cuts as if exact
+    transposition.test.ts :: the table — verified keys, always-replace, cutoffs only at the stored depth cuts on a lower bound only at or above beta, on an upper bound only at or below alpha
+T6 KILLED (135 passed / 1 failed) — lower and upper bounds swapped at store
+    transposition.test.ts :: the table — verified keys, always-replace, cutoffs only at the stored depth classifies a fail-soft result against the window the node was entered with
+T7 KILLED (134 passed / 2 failed) — full key not verified (index only)
+    transposition.test.ts :: the table — verified keys, always-replace, cutoffs only at the stored depth finds an entry by its own key, and not by another key that shares its slot
+    transposition.test.ts :: the table — verified keys, always-replace, cutoffs only at the stored depth always replaces: a second position in the slot evicts the first
+T8 KILLED (124 passed / 12 failed) — clearTable does not clear
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 2: same score, same move, same node count
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 3: same score, same move, same node count
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 4: same score, same move, same node count
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 2: same score, same move, same node count
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 3: same score, same move, same node count
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 4: same score, same move, same node count
+    ... 6 more
+T9 KILLED (132 passed / 4 failed) — hash move never returned
+    search.ordering.test.ts :: G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 358 nodes
+    transposition.test.ts :: the table — verified keys, always-replace, cutoffs only at the stored depth returns the stored best move from the node's own list, underpromotion kept distinct
+    transposition.test.ts :: A3 — iterative deepening with the table visits <= 70% of the nodes it visits without position-3 deepened to depth 4 — the default lane's standing guard
+    transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 white to move: the engine plays the perpetual and scores it exactly 0
+T10 KILLED (135 passed / 1 failed) — promotion dropped from the packed move
+    transposition.test.ts :: the table — verified keys, always-replace, cutoffs only at the stored depth returns the stored best move from the node's own list, underpromotion kept distinct
+R1 KILLED (135 passed / 1 failed) — search.ts: no in-tree repetition
+    transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 white to move: the engine plays the perpetual and scores it exactly 0
+R2 SURVIVED (136 passed / 0 failed) — repetition scores a loss, not 0
+R3 KILLED (135 passed / 1 failed) — engine.ts: no in-tree repetition
+    transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 white to move: the engine plays the perpetual and scores it exactly 0
+R4 KILLED (135 passed / 1 failed) — repetition scan starts at ply-6 (misses the nearest)
+    transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 white to move: the engine plays the perpetual and scores it exactly 0
+K1 KILLED (135 passed / 1 failed) — search.ts: key array allocated per node, not per search
+    transposition.test.ts :: A6 — the per-ply key array is the search's own search() allocates ONE key array per call, whatever the depth and node count
+K2 KILLED (135 passed / 1 failed) — engine.ts: key array allocated per iteration
+    transposition.test.ts :: A6 — the per-ply key array is the search's own chooseMove() allocates ONE key array per call, across all its iterations
+K3 SURVIVED (136 passed / 0 failed) — capacity guard removed (search.ts)
+K4 SURVIVED (no JSON (status 143, signal null)) — NaN depth back to `depth < 1`
+E1 KILLED (111 passed / 1 failed) — engine.ts: table not cleared per chooseMove
+    search.ordering.test.ts :: G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 358 nodes
+E2 KILLED (133 passed / 3 failed) — engine.ts: interior never stores
+    search.ordering.test.ts :: G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 358 nodes
+    transposition.test.ts :: A3 — iterative deepening with the table visits <= 70% of the nodes it visits without position-3 deepened to depth 4 — the default lane's standing guard
+    transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 white to move: the engine plays the perpetual and scores it exactly 0
+E3 KILLED (135 passed / 1 failed) — engine.ts: root not re-ordered by its hash move
+    transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 white to move: the engine plays the perpetual and scores it exactly 0
+E4 KILLED (134 passed / 2 failed) — engine.ts: interior hash move ignored
+    search.ordering.test.ts :: G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 358 nodes
+    transposition.test.ts :: A3 — iterative deepening with the table visits <= 70% of the nodes it visits without position-3 deepened to depth 4 — the default lane's standing guard
+S1 SURVIVED (136 passed / 0 failed) — search.ts: interior hash move ignored
+S2 KILLED (99 passed / 37 failed) — search.ts: search() does not clear the table
+    quiescence.test.ts :: A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse both arms at depth 1 — with quiescence the losing move is avoided, without it it is played
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 1: same score, same move, same node count
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 2: same score, same move, same node count
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 3: same score, same move, same node count
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 4: same score, same move, same node count
+    quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 1: same score, same move, same node count
+    ... 31 more
+S3 SURVIVED (136 passed / 0 failed) — search.ts: the table-off door uses the table
+G1 KILLED (135 passed / 1 failed) — QE ABC-080 N3: engine records a killer on every move tried
+    search.ordering.test.ts :: G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 358 nodes
+M13 KILLED (130 passed / 6 failed) — ABC-080 M13: mvvLvaKey promotion term dropped
+    search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order orders a capturing promotion by its victim PLUS the piece it becomes (ABC-079 QE G4)
+    search.ordering.test.ts :: Scope — the engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently
+    search.ordering.test.ts :: Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, f8f7
+    search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467
+    search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 261 nodes (ABC-079 QE G4)
+    search.ordering.test.ts :: G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 358 nodes
