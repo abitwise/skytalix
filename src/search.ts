@@ -43,6 +43,14 @@
  * horizon does not fall in the middle of a trade. Two TEST-ONLY doors reach the pre-quiescence
  * (bare) leaf: `searchWithoutQuiescence` (pruned) and `searchWithoutPruningOrQuiescence`
  * (unpruned).
+ *
+ * PRINCIPAL-VARIATION SEARCH (ABC-121, `ADR-0026`) is HERE and in `src/engine.ts`, in the same
+ * shape (`searchMove` in each): every move after a node's first is searched with the null window
+ * `(alpha, alpha + 1)`, and one that fails high inside `(alpha, beta)` is searched again with the
+ * full window. It changes the WORK and not the VALUE, but it shrinks the weaker side of every
+ * work ratio, so every door older than `ABC-121` turns it OFF and reproduces its pre-`ABC-121`
+ * self node for node (`ADR-0026` decision 3). Two TEST-ONLY doors reach the pre-PVS searches:
+ * `searchWithoutPvsOrReductions` (the pre-`ABC-121` `search()`) and `searchWithoutReductions`.
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
@@ -204,6 +212,13 @@ interface Switches {
    * has no switch: it is correctness, not work, and every door detects it.
    */
   readonly table: boolean;
+  /**
+   * Principal-variation search (`ABC-121`): the null window for every move after a node's first,
+   * and the full-window re-search on a fail-high. True on `search()` and
+   * `searchWithoutReductions`; false on every door older than `ABC-121` (`ADR-0026` decision 3),
+   * and on the two unpruned doors because a null window IS a cutoff.
+   */
+  readonly pvs: boolean;
 }
 
 /** The move list in the order `switches.ordering` asks for, at `ply`. */
@@ -308,13 +323,24 @@ function negamax(
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
+  let index = 0;
   for (const move of ordered(moves, ply, switches, killers, hashMove)) {
     const undo = makeMove(position, move);
     keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
-    const score =
-      0 -
-      negamax(position, depth - 1, 0 - beta, 0 - alpha, ply + 1, switches, counter, killers, keys);
+    const score = searchMove(
+      position,
+      depth,
+      alpha,
+      beta,
+      ply,
+      index,
+      switches,
+      counter,
+      killers,
+      keys,
+    );
     unmakeMove(position, move, undo);
+    index++;
 
     if (score > best) {
       best = score;
@@ -330,6 +356,46 @@ function negamax(
 
   if (switches.table) storeEntry(key, depth, boundOf(best, alphaIn, beta), best, ply, bestMove);
   return best;
+}
+
+/**
+ * The score of the move just made at a node of `depth` searched with window `(alpha, beta)`, from
+ * that node's side — the ONE place the child is searched, at the root and below.
+ *
+ * The node's first move (`index` 0), and every move with `pvs` off, is searched with the node's
+ * own window, exactly as before `ABC-121`. With `pvs` on, a later move is searched first with the
+ * null window `(alpha, alpha + 1)`: it only has to prove it is no better than `alpha`. One that
+ * fails high inside `(alpha, beta)` is searched again with the full window for its exact score.
+ * At a null-window node (`alpha + 1 === beta`) no score is strictly between them, so nothing is
+ * searched twice there.
+ */
+function searchMove(
+  position: Position,
+  depth: number,
+  alpha: number,
+  beta: number,
+  ply: number,
+  index: number,
+  switches: Switches,
+  counter: NodeCounter,
+  killers: KillerTable,
+  keys: BigUint64Array,
+): number {
+  const child = ply + 1;
+  if (index === 0 || !switches.pvs) {
+    return (
+      0 - negamax(position, depth - 1, 0 - beta, 0 - alpha, child, switches, counter, killers, keys)
+    );
+  }
+  let score =
+    0 -
+    negamax(position, depth - 1, 0 - alpha - 1, 0 - alpha, child, switches, counter, killers, keys);
+  if (score > alpha && score < beta) {
+    score =
+      0 -
+      negamax(position, depth - 1, 0 - beta, 0 - alpha, child, switches, counter, killers, keys);
+  }
+  return score;
 }
 
 /**
@@ -374,23 +440,24 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
   const rootMoves = ordered(moves, 0, switches, killers, hashMove);
   let bestMove = rootMoves[0] as Move;
 
+  let index = 0;
   for (const move of rootMoves) {
     const undo = makeMove(position, move);
     keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
-    const score =
-      0 -
-      negamax(
-        position,
-        depth - 1,
-        Number.NEGATIVE_INFINITY,
-        0 - alpha,
-        1,
-        switches,
-        counter,
-        killers,
-        keys,
-      );
+    const score = searchMove(
+      position,
+      depth,
+      alpha,
+      Number.POSITIVE_INFINITY,
+      0,
+      index,
+      switches,
+      counter,
+      killers,
+      keys,
+    );
     unmakeMove(position, move, undo);
+    index++;
 
     if (score > best) {
       best = score;
@@ -414,6 +481,7 @@ export function search(position: Position, depth: number): SearchResult {
     quiescence: true,
     ordering: "full",
     table: true,
+    pvs: true,
   });
 }
 
@@ -433,6 +501,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     quiescence: true,
     ordering: "full",
     table: false,
+    pvs: false,
   });
 }
 
@@ -450,6 +519,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     quiescence: false,
     ordering: "full",
     table: true,
+    pvs: false,
   });
 }
 
@@ -469,6 +539,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     quiescence: false,
     ordering: "full",
     table: false,
+    pvs: false,
   });
 }
 
@@ -484,6 +555,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     quiescence: true,
     ordering: "none",
     table: false,
+    pvs: false,
   });
 }
 
@@ -498,6 +570,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     quiescence: true,
     ordering: "mvv-lva",
     table: false,
+    pvs: false,
   });
 }
 
@@ -513,5 +586,38 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     quiescence: true,
     ordering: "full",
     table: false,
+    pvs: false,
+  });
+}
+
+/**
+ * TEST-ONLY. The shipped search with every `ABC-121` heuristic that changes the VALUE turned off,
+ * and principal-variation search kept on. It is the reference the bounded drift oracle compares
+ * `search()` against, and the pruned side of `ABC-077`'s `A1` (`ADR-0026` decision 5). Not an
+ * engine option; nothing in production calls it.
+ */
+export function searchWithoutReductions(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+  });
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-121` `search()`, node for node: principal-variation search and the
+ * reductions both off, everything else on. Every existing WORK reading — a node count, ratio or
+ * hit rate — reads its shipped side off this door (`ADR-0026` decision 4). Not an engine option;
+ * nothing in production calls it.
+ */
+export function searchWithoutPvsOrReductions(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: false,
   });
 }

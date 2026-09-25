@@ -65,7 +65,9 @@ import {
   search,
   searchWithoutPruning,
   searchWithoutPruningOrQuiescence,
+  searchWithoutPvsOrReductions,
   searchWithoutQuiescence,
+  searchWithoutReductions,
 } from "./search.ts";
 
 /** The six perft positions, the corpus `A1`, `A2`, `A4` and `A7` are specified against. */
@@ -148,9 +150,14 @@ interface SearchPair {
 }
 
 /**
- * Which leaf a pair runs on. `"quiescence"` is the shipped leaf: `search` against
+ * Which leaf a pair runs on. `"quiescence"` is the shipped leaf: `searchWithoutReductions` against
  * `searchWithoutPruning`. `"bare"` is the static evaluation: `searchWithoutQuiescence` against
  * `searchWithoutPruningOrQuiescence`, the leaf `ABC-077`'s depth-3 criteria were written on.
+ *
+ * RE-POINTED at `ABC-121` (`ADR-0026` decision 5): the quiescence pair's pruned side is
+ * `searchWithoutReductions`, not `search()`, so principal-variation search sits under `A1` — the
+ * only window-bug detector, and PVS is a window change — while the late-move reductions, which
+ * change the VALUE, do not. `search()` itself is held to it by `src/search.pvs-lmr.test.ts`.
  */
 type Leaf = "quiescence" | "bare";
 
@@ -171,7 +178,9 @@ function searchPair(fen: string, depth: number, leaf: Leaf): SearchPair {
   const before = snapshot(position);
 
   const pruned =
-    leaf === "quiescence" ? search(position, depth) : searchWithoutQuiescence(position, depth);
+    leaf === "quiescence"
+      ? searchWithoutReductions(position, depth)
+      : searchWithoutQuiescence(position, depth);
   const intactAfterPruned = matchesSnapshot(position, before);
   const unpruned =
     leaf === "quiescence"
@@ -415,8 +424,12 @@ describe("A2 — alpha-beta visits under 40% of the unpruned nodes", () => {
   // at depth 2 on the quiescence leaf, where the same failure (a window computed and never
   // applied) shows up just as plainly: 122 / 470 nodes = 25.96%. Reported with both figures,
   // never with only the cheap one.
+  //
+  // RE-POINTED at `ABC-121` (`ADR-0026` decision 4): the pruned side is the pre-`ABC-121` search,
+  // `searchWithoutPvsOrReductions` — a work reading, and not one bar in it moved.
   it("startpos at depth 2 — the default lane's cheap standing guard", () => {
-    const { pruned, unpruned } = searchPair(STARTPOS, 2, "quiescence");
+    const { unpruned } = searchPair(STARTPOS, 2, "quiescence");
+    const pruned = searchWithoutPvsOrReductions(parseFen(STARTPOS), 2);
 
     expect(unpruned.nodes).toBeGreaterThan(0);
     expect(pruned.nodes / unpruned.nodes).toBeLessThan(0.4);
@@ -543,8 +556,9 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // neither picks one. ABC-081 added one more door of that shape (`searchWithoutTable`,
     // `ADR-0025` Decision 6) and the per-ply key array's two pieces both recursions share:
     // `KEY_ARRAY_CAPACITY`, a runaway guard on an array's length and not a depth budget, and
-    // `repeatsInPath`, which answers "is this a repetition" and picks nothing. Still nothing here
-    // picks a move without being told how deep.
+    // `repeatsInPath`, which answers "is this a repetition" and picks nothing. ABC-121 added two
+    // more doors of the same shape (`searchWithoutReductions`, `searchWithoutPvsOrReductions`,
+    // `ADR-0026` decision 2). Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
       "KillerTable",
@@ -556,7 +570,9 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "searchWithoutOrdering",
       "searchWithoutPruning",
       "searchWithoutPruningOrQuiescence",
+      "searchWithoutPvsOrReductions",
       "searchWithoutQuiescence",
+      "searchWithoutReductions",
       "searchWithoutTable",
     ]);
   });
@@ -571,6 +587,8 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     expect(searchModule.searchWithoutOrdering.length).toBe(2);
     expect(searchModule.searchWithoutKillers.length).toBe(2);
     expect(searchModule.searchWithoutTable.length).toBe(2);
+    expect(searchWithoutReductions.length).toBe(2);
+    expect(searchWithoutPvsOrReductions.length).toBe(2);
   });
 
   it("carries no default value for depth anywhere in the module", () => {
@@ -596,10 +614,16 @@ describe("A7 — the searched position is unchanged on return", () => {
   });
 
   it("leaves position-3 byte-identical after a depth-3 search, pruned and unpruned", () => {
-    // The same pair `A1` scores at depth 3, checked for mutation instead of for its score.
+    // The same pair `A1` scores at depth 3, checked for mutation instead of for its score. Since
+    // `ABC-121` that pair's pruned side is a door, so the shipped `search()` is checked here too.
     const entry = PERFT_CORPUS.find(({ name }) => name === DEFAULT_LANE_AT_DEPTH_3);
+    const fen = (entry as { fen: string }).fen;
 
-    expect(searchPair((entry as { fen: string }).fen, 3, "quiescence").intact).toBe(true);
+    expect(searchPair(fen, 3, "quiescence").intact).toBe(true);
+    const position = parseFen(fen);
+    const before = snapshot(position);
+    search(position, 3);
+    expect(matchesSnapshot(position, before)).toBe(true);
   });
 
   if (RUN_DEEP) {

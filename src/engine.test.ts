@@ -40,6 +40,8 @@ import * as engineModule from "./engine.ts";
 import {
   type Clock,
   chooseMove,
+  chooseMoveWithoutPvsOrReductions,
+  chooseMoveWithoutReductions,
   createEngine,
   DEFAULT_BUDGET_MS,
   HARD_CEILING_MS,
@@ -52,7 +54,7 @@ import { type GameHistory, newGame } from "./history.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
-import { MATE_SCORE, search } from "./search.ts";
+import { MATE_SCORE, searchWithoutReductions } from "./search.ts";
 import {
   type EngineSeam,
   type InputSeam,
@@ -313,7 +315,11 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
     expect(choice.depth).toBe(2);
     // Depths 1 and 2 cost 38 + 153 nodes; anything above that was spent inside the aborted
     // depth-3 iteration. Without this the criterion is satisfiable by never deepening at all.
-    expect(choice.nodes).toBeGreaterThan(search(position(), 1).nodes + search(position(), 2).nodes);
+    // The reference is `searchWithoutReductions` since `ABC-121` (`ADR-0026` decision 5): the
+    // engine side stays the shipped `chooseMove`, whose abort this row is about.
+    expect(choice.nodes).toBeGreaterThan(
+      searchWithoutReductions(position(), 1).nodes + searchWithoutReductions(position(), 2).nodes,
+    );
   });
 
   it("returns the completed depth-2 move, which is NOT the depth-3 move", () => {
@@ -321,7 +327,10 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
     // makes either of them bite, are the identity sweep below: an opening position with no mate
     // or stalemate inside a depth-2 horizon, so a scoring drift in the mate/stalemate branch
     // agrees with `search` here completely (`ABC-078` QE, gap `G4`).
-    const reference = search(position(), 2) as { move: Move | null; score: number };
+    const reference = searchWithoutReductions(position(), 2) as {
+      move: Move | null;
+      score: number;
+    };
     expect(label(choice.move)).toBe(label(reference.move as Move));
     expect(choice.score).toBe(reference.score);
     // `search(A3_FEN, 3).move` is `g4g5`, measured at the ABC-080 branch tip (2 551 nodes; 9 871
@@ -359,6 +368,12 @@ describe("A3 — an aborted iteration's move is discarded, not returned", () => 
  * first, where `search()` starts from an empty table. Among moves of EQUAL score that can pick a
  * different one — the first in order wins a tie. So a different move is accepted when, and only
  * when, its OWN score at that depth equals `search()`'s score. The score half is NOT relaxed.
+ *
+ * RE-POINTED at `ABC-121` (`ADR-0026` decision 5): both sides are the `…WithoutReductions` doors —
+ * `chooseMoveWithoutReductions` against `searchWithoutReductions` — so principal-variation search
+ * sits under this sweep in both recursions, while the late-move reductions, which make the value
+ * depend on move order and so on the warm table, do not. Every `search()` above and below in this
+ * sweep reads `searchWithoutReductions`.
  */
 function identityDivergences(
   corpus: ReadonlyArray<{ name: string; fen: string }>,
@@ -367,12 +382,18 @@ function identityDivergences(
   const out: string[] = [];
   for (const { name, fen } of corpus) {
     for (const budgetMs of budgets) {
-      const choice = chooseMove(parseFen(fen), { budgetMs, now: tickingClock(1) }) as {
+      const choice = chooseMoveWithoutReductions(parseFen(fen), {
+        budgetMs,
+        now: tickingClock(1),
+      }) as {
         move: Move;
         score: number;
         depth: number;
       };
-      const reference = search(parseFen(fen), choice.depth) as { move: Move | null; score: number };
+      const reference = searchWithoutReductions(parseFen(fen), choice.depth) as {
+        move: Move | null;
+        score: number;
+      };
       const at = `${name} @ depth ${choice.depth}`;
       if (label(choice.move) !== label(reference.move as Move)) {
         const own = rootMoveScore(fen, choice.move, choice.depth);
@@ -399,7 +420,7 @@ function identityDivergences(
 function rootMoveScore(fen: string, move: Move, depth: number): number {
   const position = parseFen(fen);
   makeMove(position, legalMoves(position).find((candidate) => sameMove(candidate, move)) as Move);
-  const score = 0 - search(position, depth - 1).score;
+  const score = 0 - searchWithoutReductions(position, depth - 1).score;
   if (score > MATE_SCORE - 1_000) return score - 1;
   if (score < 0 - (MATE_SCORE - 1_000)) return score + 1;
   return score;
@@ -442,16 +463,22 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
   });
 
   it("exports the two entry points and the two named values, and nothing that takes a depth", () => {
+    // `ABC-121` added two TEST-ONLY doors of `chooseMove`'s own shape (`ADR-0026` decision 2):
+    // a position and options, a TIME budget, no depth.
     expect(Object.keys(engineModule).sort()).toEqual([
       "DEFAULT_BUDGET_MS",
       "HARD_CEILING_MS",
       "NODES_PER_CLOCK_CHECK",
       "chooseMove",
+      "chooseMoveWithoutPvsOrReductions",
+      "chooseMoveWithoutReductions",
       "createEngine",
     ]);
     // `Function.length` counts parameters before the first defaulted one: a third, defaulted
     // depth parameter cannot hide behind these numbers.
     expect(chooseMove.length).toBe(2);
+    expect(chooseMoveWithoutReductions.length).toBe(2);
+    expect(chooseMoveWithoutPvsOrReductions.length).toBe(2);
     expect(createEngine.length).toBe(1);
     expect(source).not.toMatch(/export function \w+\([^)]*depth/i);
   });
@@ -888,7 +915,7 @@ if (RUN_DEEP) {
 
   describe("A3 — the depth-3 move the default lane carries as a literal [deep, ENGINE_DEEP=1]", () => {
     it("computes search(A3_FEN, 3).move and confirms it is g4g5", () => {
-      expect(label(search(parseFen(A3_FEN), 3).move as Move)).toBe("g4g5");
+      expect(label(searchWithoutReductions(parseFen(A3_FEN), 3).move as Move)).toBe("g4g5");
     }, 30_000);
   });
 

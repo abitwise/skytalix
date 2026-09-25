@@ -58,6 +58,12 @@
  * included. The session's history is not read: the seam hands in a `GameHistory` and only its
  * `position` is searched (`ADR-0002` clause 3).
  *
+ * PRINCIPAL-VARIATION SEARCH (`ABC-121`, `ADR-0026`) is `src/search.ts`'s too, in the same shape
+ * (`searchMove`). Two TEST-ONLY doors turn it off: `chooseMoveWithoutPvsOrReductions` is the
+ * pre-`ABC-121` `chooseMove`, node for node, and every existing work reading of the engine reads
+ * it; `chooseMoveWithoutReductions` is the engine side of `A3`'s identity sweep. Neither takes a
+ * depth (`A4`).
+ *
  * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
  * budget-to-level mapping (`ABC-087`), aspiration windows, null-move pruning, late-move reductions
  * and threading (none requested; `ADR-0005` F6 leaves threading to Architect/Design).
@@ -176,6 +182,11 @@ interface Budget {
    * `chooseMove` call, `keys[0]` the root's key, each child's key derived from its parent's.
    */
   readonly keys: BigUint64Array;
+  /**
+   * Principal-variation search (`ABC-121`): true on `chooseMove` and `chooseMoveWithoutReductions`,
+   * false on `chooseMoveWithoutPvsOrReductions` — `src/search.ts`'s `pvs` switch, the same rule.
+   */
+  readonly pvs: boolean;
 }
 
 /**
@@ -250,15 +261,17 @@ function negamax(
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
+  let index = 0;
   for (const move of orderMoves(moves, budget.killers.at(ply), hashMove)) {
     const undo = makeMove(position, move);
     let score: number;
     try {
       keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
-      score = 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, ply + 1, budget);
+      score = searchMove(position, remaining, alpha, beta, ply, index, budget);
     } finally {
       unmakeMove(position, move, undo);
     }
+    index++;
 
     if (score > best) {
       best = score;
@@ -275,6 +288,32 @@ function negamax(
   // is never stored.
   storeEntry(key, remaining, boundOf(best, alphaIn, beta), best, ply, bestMove);
   return best;
+}
+
+/**
+ * `src/search.ts`'s `searchMove`, the same rule: the score of the move just made at a node of
+ * `remaining` depth with window `(alpha, beta)`. The first move, and every move with `pvs` off,
+ * gets the node's own window; with `pvs` on a later move gets the null window first, and the full
+ * window again only when it fails high inside `(alpha, beta)`.
+ */
+function searchMove(
+  position: Position,
+  remaining: number,
+  alpha: number,
+  beta: number,
+  ply: number,
+  index: number,
+  budget: Budget,
+): number {
+  const child = ply + 1;
+  if (index === 0 || !budget.pvs) {
+    return 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget);
+  }
+  let score = 0 - negamax(position, remaining - 1, 0 - alpha - 1, 0 - alpha, child, budget);
+  if (score > alpha && score < beta) {
+    score = 0 - negamax(position, remaining - 1, 0 - beta, 0 - alpha, child, budget);
+  }
+  return score;
 }
 
 /** One completed iteration: the root move it chose and that move's exact score. */
@@ -316,15 +355,17 @@ function runIteration(
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = rootMoves[0] as Move;
 
+  let index = 0;
   for (const move of rootMoves) {
     const undo = makeMove(position, move);
     let score: number;
     try {
       budget.keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
-      score = 0 - negamax(position, remaining - 1, Number.NEGATIVE_INFINITY, 0 - alpha, 1, budget);
+      score = searchMove(position, remaining, alpha, Number.POSITIVE_INFINITY, 0, index, budget);
     } finally {
       unmakeMove(position, move, undo);
     }
+    index++;
 
     if (score > best) {
       best = score;
@@ -347,6 +388,36 @@ function runIteration(
  * The position is byte-identical on return, aborted iteration or not.
  */
 export function chooseMove(position: Position, options: EngineOptions): EngineChoice | null {
+  return deepen(position, options, true);
+}
+
+/**
+ * TEST-ONLY. `chooseMove` with the `ABC-121` heuristics that change the VALUE turned off and
+ * principal-variation search kept on — the engine side of `ABC-078`'s `A3` identity sweep and of
+ * the bounded drift oracle (`ADR-0026` decision 5). Not an engine option; nothing in production
+ * calls it.
+ */
+export function chooseMoveWithoutReductions(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, true);
+}
+
+/**
+ * TEST-ONLY. The pre-`ABC-121` `chooseMove`, node for node: principal-variation search and the
+ * reductions both off. Every existing work reading of the engine reads it (`ADR-0026` decision
+ * 4). Not an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutPvsOrReductions(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, false);
+}
+
+/** The deepening loop behind `chooseMove` and its two doors; `pvs` is the one switch they differ in. */
+function deepen(position: Position, options: EngineOptions, pvs: boolean): EngineChoice | null {
   const now = options.now ?? Date.now;
   const start = now();
   const budget: Budget = {
@@ -361,6 +432,7 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     visit: () => countNode(budget),
     killers: new KillerTable(),
     keys: new BigUint64Array(KEY_ARRAY_CAPACITY + 1),
+    pvs,
   };
   budget.keys[0] = zobristKey(position);
   clearTable();

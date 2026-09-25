@@ -33,7 +33,7 @@ import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
 import { QUIESCENCE_MAX_PLY, quiesce } from "./quiescence.ts";
-import { search, searchWithoutQuiescence } from "./search.ts";
+import { search, searchWithoutPvsOrReductions, searchWithoutQuiescence } from "./search.ts";
 
 /** The six perft positions — `src/search.test.ts`'s corpus, the capture-dense ones included. */
 const PERFT_CORPUS: ReadonlyArray<{ name: string; fen: string }> = [
@@ -318,8 +318,11 @@ describe("A1 — the losing capture is not chosen in >= 19 of 20, and the bare l
     expect(withQuiescence.losing, withQuiescence.chosen.join("\n")).toBeLessThanOrEqual(
       Math.floor(size / 20),
     );
-    // The baseline must be STRICTLY worse, or the number above says nothing about the change.
-    expect(bareLeaf.losing).toBeGreaterThan(withQuiescence.losing);
+    // The baseline must be STRICTLY worse, or the number above says nothing about the change. A
+    // comparison of the shipped path with a door, so since `ABC-121` its quiescence side is the
+    // pre-`ABC-121` search (`ADR-0026` decision 4); the count above stays on `search()`.
+    const preAbc121 = hangingArm(searchWithoutPvsOrReductions, 1);
+    expect(bareLeaf.losing).toBeGreaterThan(preAbc121.losing);
     // Measured at this branch tip: 24 of 24 for the bare leaf, 0 of 24 with quiescence. The
     // bare leaf takes the material in EVERY row — the horizon effect in its purest form.
     expect(bareLeaf.losing).toBeGreaterThanOrEqual(size - Math.floor(size / 20));
@@ -397,8 +400,9 @@ describe("A4 — a position with no capture anywhere near the leaves scores exac
 
   for (const { name, fen, depths } of QUIET) {
     for (const depth of depths) {
+      // The pre-`ABC-121` search since `ABC-121`: a node-count row (`ADR-0026` decision 4).
       it(`${name} at depth ${depth}: same score, same move, same node count`, () => {
-        const withQuiescence = search(parseFen(fen), depth);
+        const withQuiescence = searchWithoutPvsOrReductions(parseFen(fen), depth);
         const bareLeaf = searchWithoutQuiescence(parseFen(fen), depth);
 
         expect(withQuiescence.score).toBe(bareLeaf.score);
@@ -469,14 +473,18 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
     "position-6": { score: 30, move: "c3d5" },
   };
 
-  /** One `search()` per call: the ratio, and the result the depth-3 pin reads off it. */
+  /**
+   * One search per call: the ratio, and the result the depth-3 pin reads off it. Since `ABC-121`
+   * the quiescence side is the pre-`ABC-121` search, `searchWithoutPvsOrReductions` (`ADR-0026`
+   * decision 4) — the search the levels and the oracle-checked answers were measured on.
+   */
   function multiplier(
     name: string,
     depth: number,
   ): { ratio: number; result: ReturnType<typeof search> } {
     const position = parseFen(fenOf(name));
     const bareLeaf = searchWithoutQuiescence(position, depth);
-    const withQuiescence = search(position, depth);
+    const withQuiescence = searchWithoutPvsOrReductions(position, depth);
     const ratio = withQuiescence.nodes / bareLeaf.nodes;
     console.log(
       `A5 ${name} depth ${depth}: ${withQuiescence.nodes} nodes with quiescence / ` +
