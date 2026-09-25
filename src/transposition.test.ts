@@ -199,17 +199,33 @@ describe("A4 — a mate score is correct at every ply the position is reached at
      * 182 endgame positions and four budgets where the dropped adjustment changed the answer, and
      * the reused entry there is a mate-in-ONE position; no reused mate-in-2 entry changed a root
      * score in that scan, so the mate-in-2 wording of the criterion is answered at the table, above.
+     *
+     * SPLIT at `ABC-121`, as `ADR-0026` decision 7 names this row: the depth reached at 160 ticks is
+     * a node count in disguise, so the measurement above — depth 10, the door comparison — reads the
+     * pre-`ABC-121` engine, unchanged. The LITERAL stays on the shipped `chooseMove`, which now
+     * completes depth 11 at the same budget (fewer nodes per iteration) and still reads −29 992.
      */
     it("reports the table-free mate distance where the engine reuses a mate score at a second ply [deep, SEARCH_DEEP=1]", () => {
       const fen = "k7/8/8/K7/8/8/8/1R6 b - - 1 1";
       let ticks = 0;
-      const choice = chooseMove(parseFen(fen), { budgetMs: 160, now: () => ticks++ }) as {
+      const choice = chooseMoveWithoutPvsOrReductions(parseFen(fen), {
+        budgetMs: 160,
+        now: () => ticks++,
+      }) as {
         depth: number;
         score: number;
       };
       expect(choice.depth).toBe(10);
       expect(choice.score).toBe(searchWithoutTable(parseFen(fen), 10).score);
       expect(choice.score).toBe(0 - (MATE_SCORE - 8));
+
+      ticks = 0;
+      const shipped = chooseMove(parseFen(fen), { budgetMs: 160, now: () => ticks++ }) as {
+        depth: number;
+        score: number;
+      };
+      expect(shipped.depth).toBeGreaterThanOrEqual(10);
+      expect(shipped.score).toBe(0 - (MATE_SCORE - 8));
     }, 60_000);
   }
 });
@@ -310,9 +326,17 @@ describe("A1 — table-on and table-off scores are identical", () => {
     }
   }
 
+  /**
+   * RE-POINTED at `ABC-121` to the pre-`ABC-121` search, with both literals unchanged — `ABC-081`
+   * `A1`'s row, so `ADR-0026` decision 4's. Decision 7 listed this pair as a shipped-path VALUE row,
+   * but at depth 4 the late-move reductions move `knight-g1 w -` from 820 to 830, in this build and
+   * in the ruling's own reference recursion. The pair then reads 830 twice on `search()`, which is
+   * exactly the equality G6 exists to forbid, so the falsifier has no bite on the shipped path.
+   * Measured, not argued: `.grugops/context/ticket-to-pr-ABC-121/probe/g6.ts`.
+   */
   for (const { name, fen, score } of KNIGHT_G1_PAIR) {
     it(`${name} at depth 4 — G6: ${score} with the table on and off`, () => {
-      expect(search(parseFen(fen), 4).score).toBe(score);
+      expect(searchWithoutPvsOrReductions(parseFen(fen), 4).score).toBe(score);
       expect(searchWithoutTable(parseFen(fen), 4).score).toBe(score);
     });
   }

@@ -558,11 +558,14 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // `KEY_ARRAY_CAPACITY`, a runaway guard on an array's length and not a depth budget, and
     // `repeatsInPath`, which answers "is this a repetition" and picks nothing. ABC-121 added two
     // more doors of the same shape (`searchWithoutReductions`, `searchWithoutPvsOrReductions`,
-    // `ADR-0026` decision 2). Still nothing here picks a move without being told how deep.
+    // `ADR-0026` decision 2) and the reduction rule both recursions share, `lateMoveReduction`
+    // (decision 6), which answers "how many plies shallower" for a move it is handed and picks
+    // nothing. Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
       "KillerTable",
       "MATE_SCORE",
+      "lateMoveReduction",
       "orderMoves",
       "repeatsInPath",
       "search",
@@ -589,6 +592,8 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     expect(searchModule.searchWithoutTable.length).toBe(2);
     expect(searchWithoutReductions.length).toBe(2);
     expect(searchWithoutPvsOrReductions.length).toBe(2);
+    // The predicate's depth is the node's remaining depth, required like every other.
+    expect(searchModule.lateMoveReduction.length).toBe(5);
   });
 
   it("carries no default value for depth anywhere in the module", () => {

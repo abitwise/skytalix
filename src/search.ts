@@ -51,6 +51,12 @@
  * work ratio, so every door older than `ABC-121` turns it OFF and reproduces its pre-`ABC-121`
  * self node for node (`ADR-0026` decision 3). Two TEST-ONLY doors reach the pre-PVS searches:
  * `searchWithoutPvsOrReductions` (the pre-`ABC-121` `search()`) and `searchWithoutReductions`.
+ *
+ * LATE-MOVE REDUCTIONS (ABC-121) sit inside that frame: a late quiet move's null-window search
+ * runs one ply shallower, and one that fails high is searched again at full depth before PVS's own
+ * re-search. The rule is ONE pure predicate, `lateMoveReduction`, which both recursions call and
+ * whose returned plies they subtract. Reductions change the VALUE, so `search()` is held to
+ * `searchWithoutReductions` by a bounded oracle, not an identity (`ADR-0026` decisions 6 and 9).
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
@@ -219,6 +225,44 @@ interface Switches {
    * and on the two unpruned doors because a null window IS a cutoff.
    */
   readonly pvs: boolean;
+  /**
+   * Late-move reductions (`ABC-121`), by `lateMoveReduction`. True on `search()` only. They live
+   * inside PVS's null-window frame, so they act only where `pvs` is on (`ADR-0026` decision 1).
+   */
+  readonly reductions: boolean;
+}
+
+/** The least remaining depth, and the least 0-based index in the ordered list, a reduced move has. */
+const REDUCTION_MIN_DEPTH = 3;
+const REDUCTION_MIN_INDEX = 3;
+
+/**
+ * THE late-move reduction rule (`ABC-121`, `ADR-0026` decision 6): how many plies shallower `move`
+ * is searched, 0 or 1, at a node of remaining `depth` where it stands at `index` (0-based) in the
+ * ordered move list. Both recursions call it and subtract exactly what it returns.
+ *
+ * One ply when every condition holds: not the root; remaining depth at least 3; index at least 3
+ * (R5's "move 4 onwards"); the move neither captures nor promotes; the side to move is not in
+ * check; and the move does not give check. The tactical facts are derived HERE, from the position
+ * and the move, and never supplied by the caller — so a recursion cannot mis-wire one of them.
+ *
+ * Pure: it decides and picks no move. It plays `move` on `position` to see whether it gives check
+ * and takes it back, so the position is byte-identical on return.
+ */
+export function lateMoveReduction(
+  position: Position,
+  move: Move,
+  depth: number,
+  index: number,
+  atRoot: boolean,
+): number {
+  if (atRoot || depth < REDUCTION_MIN_DEPTH || index < REDUCTION_MIN_INDEX) return 0;
+  if (move.captured !== EMPTY || move.promotion !== EMPTY) return 0;
+  if (isInCheck(position)) return 0;
+  const undo = makeMove(position, move);
+  const givesCheck = isInCheck(position);
+  unmakeMove(position, move, undo);
+  return givesCheck ? 0 : 1;
 }
 
 /** The move list in the order `switches.ordering` asks for, at `ply`. */
@@ -325,6 +369,9 @@ function negamax(
   let bestMove = moves[0] as Move;
   let index = 0;
   for (const move of ordered(moves, ply, switches, killers, hashMove)) {
+    const reduction = switches.reductions
+      ? lateMoveReduction(position, move, depth, index, false)
+      : 0;
     const undo = makeMove(position, move);
     keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
     const score = searchMove(
@@ -334,6 +381,7 @@ function negamax(
       beta,
       ply,
       index,
+      reduction,
       switches,
       counter,
       killers,
@@ -368,6 +416,11 @@ function negamax(
  * fails high inside `(alpha, beta)` is searched again with the full window for its exact score.
  * At a null-window node (`alpha + 1 === beta`) no score is strictly between them, so nothing is
  * searched twice there.
+ *
+ * `reduction` is `lateMoveReduction`'s answer for this move, 0 when reductions are off. The
+ * null-window search runs that many plies shallower; if it fails high anyway, the move is searched
+ * again with the same null window at FULL depth before anything else is believed. That re-search
+ * is the line every LMR bug skips, and at a null-window node nothing else would repeat it (`A4`).
  */
 function searchMove(
   position: Position,
@@ -376,6 +429,7 @@ function searchMove(
   beta: number,
   ply: number,
   index: number,
+  reduction: number,
   switches: Switches,
   counter: NodeCounter,
   killers: KillerTable,
@@ -389,7 +443,32 @@ function searchMove(
   }
   let score =
     0 -
-    negamax(position, depth - 1, 0 - alpha - 1, 0 - alpha, child, switches, counter, killers, keys);
+    negamax(
+      position,
+      depth - 1 - reduction,
+      0 - alpha - 1,
+      0 - alpha,
+      child,
+      switches,
+      counter,
+      killers,
+      keys,
+    );
+  if (score > alpha && reduction > 0) {
+    score =
+      0 -
+      negamax(
+        position,
+        depth - 1,
+        0 - alpha - 1,
+        0 - alpha,
+        child,
+        switches,
+        counter,
+        killers,
+        keys,
+      );
+  }
   if (score > alpha && score < beta) {
     score =
       0 -
@@ -442,6 +521,9 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
 
   let index = 0;
   for (const move of rootMoves) {
+    const reduction = switches.reductions
+      ? lateMoveReduction(position, move, depth, index, true)
+      : 0;
     const undo = makeMove(position, move);
     keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
     const score = searchMove(
@@ -451,6 +533,7 @@ function searchRoot(position: Position, depth: number, switches: Switches): Sear
       Number.POSITIVE_INFINITY,
       0,
       index,
+      reduction,
       switches,
       counter,
       killers,
@@ -482,6 +565,7 @@ export function search(position: Position, depth: number): SearchResult {
     ordering: "full",
     table: true,
     pvs: true,
+    reductions: true,
   });
 }
 
@@ -502,6 +586,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     ordering: "full",
     table: false,
     pvs: false,
+    reductions: false,
   });
 }
 
@@ -520,6 +605,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     ordering: "full",
     table: true,
     pvs: false,
+    reductions: false,
   });
 }
 
@@ -540,6 +626,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     ordering: "full",
     table: false,
     pvs: false,
+    reductions: false,
   });
 }
 
@@ -556,6 +643,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     ordering: "none",
     table: false,
     pvs: false,
+    reductions: false,
   });
 }
 
@@ -571,6 +659,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     ordering: "mvv-lva",
     table: false,
     pvs: false,
+    reductions: false,
   });
 }
 
@@ -587,6 +676,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     ordering: "full",
     table: false,
     pvs: false,
+    reductions: false,
   });
 }
 
@@ -603,6 +693,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     ordering: "full",
     table: true,
     pvs: true,
+    reductions: false,
   });
 }
 
@@ -619,5 +710,6 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     ordering: "full",
     table: true,
     pvs: false,
+    reductions: false,
   });
 }
