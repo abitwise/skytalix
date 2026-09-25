@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`, Workflow 05) — **`ABC-122` `In Development` → `In Review` (12/12, own branch at `0be1fd2`, NOT on the wave); QE `qe-ABC-122` dispatched.** Architect/Design `validate-adr0026` (independent review, owner's word *"let architect validate ADR-0026 for me, describe the LMR drift"*) running._
+
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`) — **`ABC-122` build stopped on `A4` (fence vs an `ABC-042` pin); BA/PM amendment `amend-abc122-a4-pin` dispatched, then an Engineer re-hop.**_
 
 _Updated: 2026-09-25 by the Orchestrator (task `wave-2026-09-25`) — **`ABC-121` re-scored 8/10 (merged, `b920613`), stays `Backlog`: waits on `ABC-122` Done and the owner's `ADR-0026` word.**_
@@ -353,9 +355,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-
-- [ABC-122] Gate hardening — bounded test timeout + capacity-guard tests  (EPIC-004, S, P1)  **CUT 2026-09-25 by BA/PM at `a6fb854` (`cut-abc122-gate-hardening`): DoR 9/10, one ⚠️ — item 10: `A4`'s timeout is a formula (≥ 5× median lane wall, ≤ 120 s) fixed at delivery.** The Orchestrator reads that ⚠️ as non-blocking (the item is "no major unresolved blocker"; the formula is measurable with a hard ceiling) — recorded, not smoothed to 10/10. Bundles `ABC-081`'s K4 (Node-builtins wrapper bounding `npm test`, tree kill, distinct exit code, synthetic-hang proof) and K3 (direct tests of `KEY_ARRAY_CAPACITY` in `search.ts` and `engine.ts`, each mutant watched red). Lands before `ABC-121`. Owes a Scribe follow-up for `AGENTS.md`'s `Test (all)` line.  **→ Ready → In Development 2026-09-25**; Engineer hop `ticket-to-pr-ABC-122`, branch `grugops/ABC-122-gate-hardening`.  **BUILT 2026-09-25 at `4f3e1c0` (own branch `grugops/ABC-122-gate-hardening`, NOT on the wave): 11/12 MET, `A4` STOPPED** — wrapping `npm test` reds `src/cli.test.ts:1661` (`ABC-042` `A10` pins `scripts.test`), outside `A11`'s fence; two-line patch measured green and reverted. Wrapper `tools/grugops/run-bounded.js`, bound 60 000 ms (median lane wall 7.45 s; 8.1x); synthetic hang exit 124 in ~530 ms, tree killed; K3 rows in both recursions, 6/6 mutants red; 0 production lines; gates 47 / 1446 / 0; N8-LANE ≈ +155 ms net. Stays `In Development`; BA/PM `amend-abc122-a4-pin` dispatched.
+## In Development (WIP 0/3)
 
 
 
@@ -368,7 +368,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-122] Gate hardening — bounded test timeout + capacity-guard tests  (EPIC-004, S, P1)  **CUT 2026-09-25 by BA/PM at `a6fb854` (`cut-abc122-gate-hardening`): DoR 9/10, one ⚠️ — item 10: `A4`'s timeout is a formula (≥ 5× median lane wall, ≤ 120 s) fixed at delivery.** The Orchestrator reads that ⚠️ as non-blocking (the item is "no major unresolved blocker"; the formula is measurable with a hard ceiling) — recorded, not smoothed to 10/10. Bundles `ABC-081`'s K4 (Node-builtins wrapper bounding `npm test`, tree kill, distinct exit code, synthetic-hang proof) and K3 (direct tests of `KEY_ARRAY_CAPACITY` in `search.ts` and `engine.ts`, each mutant watched red). Lands before `ABC-121`. Owes a Scribe follow-up for `AGENTS.md`'s `Test (all)` line.  **→ Ready → In Development 2026-09-25**; Engineer hop `ticket-to-pr-ABC-122`, branch `grugops/ABC-122-gate-hardening`.  **BUILT 2026-09-25 at `4f3e1c0` (own branch `grugops/ABC-122-gate-hardening`, NOT on the wave): 11/12 MET, `A4` STOPPED** — wrapping `npm test` reds `src/cli.test.ts:1661` (`ABC-042` `A10` pins `scripts.test`), outside `A11`'s fence; two-line patch measured green and reverted. Wrapper `tools/grugops/run-bounded.js`, bound 60 000 ms (median lane wall 7.45 s; 8.1x); synthetic hang exit 124 in ~530 ms, tree killed; K3 rows in both recursions, 6/6 mutants red; 0 production lines; gates 47 / 1446 / 0; N8-LANE ≈ +155 ms net. Stays `In Development`; BA/PM `amend-abc122-a4-pin` dispatched.  **`A4` AMENDED 2026-09-25 by BA/PM at `cf740ef` (`amend-abc122-a4-pin`): `A11` widened by exactly the `ABC-042` `A10` pin; `A4` not re-cut.**  **→ In Review 2026-09-25 — re-hop at `0be1fd2` (`ca9f42d`: `package.json` 1/1 + `src/cli.test.ts` 1/1): 12/12 MET.** `npm test` = `node tools/grugops/run-bounded.js 60000 vitest run`, 47 / 1446 / 0; reverted root guard → `npm test` exit 124 at 60.17 s. QE hop `qe-ABC-122` dispatched. Owed after: Scribe `Test (all)` line (+ `*_DEEP` lanes never through `npm test`), within `AGENTS.md`'s 706 B margin.
 
 
 
