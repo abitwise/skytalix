@@ -1,0 +1,13 @@
+// secnfr-ABC-079 probe 3: the 5 s hard ceiling still binds with the abort now landing inside quiesce.
+const WT = process.argv[2];
+const { parseFen } = await import(`${WT}/src/fen.ts`);
+const { chooseMove } = await import(`${WT}/src/engine.ts`);
+for (const [name, fen, b] of [
+  ["kiwipete", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1", Infinity],
+  ["position-4", "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1", 1e9],
+  ["queens-rig", "q1q1q1qk/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K7 w - - 0 1", Infinity],
+]) {
+  const t0 = performance.now();
+  const c = chooseMove(parseFen(fen), { budgetMs: b });
+  console.log(JSON.stringify({ name, budgetMs: String(b), wallMs: +(performance.now() - t0).toFixed(1), depth: c.depth, nodes: c.nodes }));
+}

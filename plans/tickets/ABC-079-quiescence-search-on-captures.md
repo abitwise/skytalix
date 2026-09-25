@@ -549,3 +549,42 @@ ticket. **QE wrote zero `src/` lines** (four mutant rounds, each applied then re
   per its scope (verify the delta). `NFR-008` not remeasured (fenced). `AGENTS.md`,
   `plans/board.md` and the NFR bars were not opened. Production lines > 0, so the UAT waiver
   does not apply. Nothing merged, nothing deployed — the board move is the Orchestrator's.
+
+## Security/NFR
+
+**Gate by Security/NFR, 2026-09-25** (task `wave-2026-09-24`, subtask `secnfr-ABC-079`, Workflow 15,
+`In Security/NFR`). Branch `grugops/secnfr-ABC-079` off `grugops/int-ABC-079` @ `cb5540d`. The
+review covers this ticket's four commits and seven `src` files. The subtask's `4f0ef01..cb5540d`
+range also carries seven other tickets' merges, which were not reviewed here. **Zero `src/` lines
+written. NOT A STAMP.** Notes, probes and raw rows: `.grugops/context/secnfr-ABC-079/notes/`.
+
+**Result: PASS_WITH_RISKS. No required fix. No security finding. One risk needs the owner's word
+before merge.**
+
+- **`NFR-004` HOLDS.**
+  - Measured n = 40 across the six roots, a capture-dense middlegame and the worst first-iteration
+    board.
+  - **p95 3 003.5 ms**, max 3 004.0 ms. The ≤ 4 ms overshoot sits inside `AR-NFR004-A`.
+  - The 5 s ceiling binds through `quiesce` (4 999.8–5 002.1 ms at unbounded budgets).
+  - `perf_p95_ms` (300) does not apply to this search.
+- **`NFR-005`: kiwipete depth 3, position-6 depth 3** at 3 s, against a FAIL floor of 6.
+  - **For the owner:** keep the floor as `ABC-080` / `ABC-081` / c1's target, or re-level it on
+    `ADR-0024` decision 6 (Architect/Design drafts, the owner ratifies).
+  - Not re-levelled here (`AR-NFR005-079`).
+- **`NFR-008` NON-CONFORMING.** Paired n = 8, null control admissible, load median 4.43 (max 13.3).
+  - The lane reads **22.29 s CPU with this ticket and 18.61 s without it**, against 15 s. The
+    headroom was spent before this ticket arrived, so **`ADR-0019` trigger (a) has fired**.
+  - This ticket charges **+3.625 s CPU** (8 of 8 rounds), which is **3.465 s net = 5.3x
+    `N8-LANE`**. Most of it is the existing search tests paying a quiescence leaf.
+  - **`AR-N8LANE-079` is NOT accepted by the gate.** Owner: **Olger Oeselg**. He is asked to
+    accept it, to take a lane lever first (`OPT-1` needs re-sizing), or to hold the ticket.
+    **Recommend no merge before his word.**
+- **Security (ASVS L1): no finding.**
+  - The `quiesce` recursion is capped at 8, and the stack peaks at about 21 frames.
+  - The abort is reachable after iteration 1. The unabortable iteration 1 costs at most 32 980
+    nodes / 129.5 ms on 20 096 reachable positions, and 277 ms on the queens rig
+    (`AR-QS-ITER1-079`, low, owner Architect/Design).
+  - No CLI path supplies a FEN or a budget.
+  - No I/O, no dynamic code, no new dependency.
+- The board move is the Orchestrator's. `plans/board.md`, `AGENTS.md` and the NFR bars were not
+  touched. Nothing was merged or pushed.
