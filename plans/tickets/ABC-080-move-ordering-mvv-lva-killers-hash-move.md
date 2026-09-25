@@ -79,8 +79,14 @@ depth"* — it buys **depth**, which is exactly the live target.
   on the TT and must not break when the TT misses — which is the common case.)*
 - **`A6` (killers are per-ply and do not leak).** **Given** an instrumented run, **then** a killer
   recorded at ply `n` is offered only at ply `n` of the same search, and the killer table is
-  **cleared or invalidated between searches** — asserted, because a stale killer is a quiet move
-  tried first for no reason.
+  **cleared between `chooseMove` calls, not between the iterative-deepening iterations inside one
+  `chooseMove` call** — asserted, because a stale killer carried across different moves is a quiet
+  move tried first for no reason, while a killer found at one iteration's depth is still a good
+  first quiet move to try at the same ply of the next iteration. *(Firmed 2026-09-25 by BA/PM, task
+  `wave-2026-09-24`, subtask `rescore-abc081`, Workflow 07: QE's `qe-ABC-080` hop read the original
+  "cleared or invalidated between searches" as ambiguous on the unit of "search" — one
+  `chooseMove` call, or one iteration — and ACCEPTED the build's reading, one `chooseMove` call, as
+  read. This wording states that reading; no behavior changed.)*
 - **`A7` (depth in budget improves).** **Given** a fixed 3 s budget on `kiwipete` and `position-6`,
   **then** the completed depth is **≥** the pre-ordering build's on the same machine in the same
   process. Report both.

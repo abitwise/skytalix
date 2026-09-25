@@ -134,11 +134,26 @@ FAIL — checked by this ticket's own `A1`.
 - **Memory — `A7`'s stated fixed bound.** This is the first component in the project that holds
   meaningful memory, and there is **no memory NFR row in `plans/nfr-catalog.md`**. *(Recorded as a
   gap; setting one is Architect/Design's and Security/NFR's, not BA/PM's. `A7` binds the ticket to a
-  stated bound regardless.)* **A draft row exists as of 2026-09-25** — `NFR-009` (DRAFT,
-  Architect/Design ruling `…4dd1bbaa`, R4): search-held memory ≤ 16 MiB fixed, `heapUsed` and
-  `arrayBuffers` each ≤ 1 MiB growth between a 1 s and a 3 s search. **Not placed** —
-  `plans/nfr-catalog.md` is not edited here (fence); Security/NFR drafts it in, the owner's word
-  ratifies it. `A7` checks against `NFR-009` once placed, against nothing until then.
+  stated bound regardless.)* **`NFR-009` is now PLACED, 2026-09-25** (Security/NFR, task
+  `wave-2026-09-24`, subtask `place-nfr009`, `plans/nfr-catalog.md` row `NFR-009`), on the owner's
+  word: search-held memory **≤ 16 MiB total** (the transposition table, the per-ply key array and
+  `ABC-080`'s killer table, together), with `heapUsed` and `arrayBuffers` each **≤ 1 MiB** growth
+  between a 1 s and a 3 s search, read after `gc()`. **128 MiB is the ceiling of any re-level, not
+  the level** — a re-level needs a measured need on record. **Build-hop note carried from the
+  row:** a 2^20-entry table alone is 16.00 MiB and breaks the total on its own; **2^19 entries
+  (8 MiB) fits.** `A7` now checks against `NFR-009`, not against nothing.
+  - **Open, named for the owner, not decided here (Security/NFR's recommendation on `ABC-080`'s
+    page): which runner `NFR-005` binds — plain node or vitest.** The two read a different depth
+    on the same code (plain node kiwipete 3 → 6 / position-6 3 → 5; vitest 2 → 4 / 3 → 4).
+    Security/NFR recommends plain node, matching how `npm run chess` runs; the owner's word
+    ratifies it, not this re-score. `NFR-005`'s depth-6 verdict is due at this ticket's close and
+    is not re-leveled here.
+  - **Fold-in, named for the Engineer (QE `ABC-080` `G1`, non-blocking):** a mutant on the
+    killer-update-on-cutoff-only rule survives in `src/engine.ts`'s `negamax` (the same rule IS
+    caught in `src/search.ts`'s recursion). This ticket touches `src/engine.ts`, so it is the next
+    licensed touch — close `G1` here with one exact node-count pin at a fixed injected-clock
+    budget, the same shape as the existing `A3` fixture (QE's estimate, not re-measured by this
+    re-score).
 - **Security — not triggered.** No input surface.
 
 ## Test notes
@@ -296,3 +311,33 @@ pull and did not gate this ticket's item-3 resolution.**
 ## DoR item 10
 
 **2026-09-25, Security/NFR (task `wave-2026-09-24`, subtask `place-nfr009`): the memory row now EXISTS.** `NFR-009` is placed in `plans/nfr-catalog.md` on the owner's word (*"16MiB sounds small in todays standards, if more is needed you can extend it to 128MiB. I approve otherwise."*). The level is **16 MiB total** search-held memory, with **≤ 1 MiB** growth in `heapUsed` and in `arrayBuffers` between a 1 s and a 3 s search, read after `gc()`. 128 MiB is the ceiling of any re-level, not the level. `A7` now checks against `NFR-009`. Two points for the build hop, both written into the row. First, a 2^20-entry table (16.00 MiB alone) breaks the total; 2^19 fits. Second, `ABC-080`'s `KillerTable` has no `byteLength`, so the `heapUsed` read (c) counts it. **This page's item 10 is NOT re-scored here. BA/PM re-scores it.**
+
+## § DoR re-score — 2026-09-25 (BA/PM, task `wave-2026-09-24`, subtask `rescore-abc081`, Workflow 07)
+
+**10 of 10 clean — MET. `ABC-081` is Ready.** Re-scored against the current wave tree
+(`grugops/wave-2026-09-24` @ `d585ece`), not the page.
+
+- **Item 3 (INVEST-shaped) flips ⚠️ → ✅.** The open question was whether `ABC-080`'s code being
+  on the build base discharges it, and it does: `A3`'s ≤ 70% bar needs `ABC-080`'s ordering and
+  hash move **live at build time**, not a signed-off `ABC-080`. `ABC-080`'s code merged onto the
+  wave at `caabd13`/`d585ece` (QE PASS WITH FINDINGS, Security/NFR PASS_WITH_RISKS), and this is
+  the branch `ABC-081`'s own build hop starts from — so the hash move is live on the base this
+  ticket builds against, independent of `ABC-080`'s own `Ready for UAT` / owner's-word status.
+  Independence for `INVEST` asks whether this ticket can be built and its acceptance measured
+  without waiting on another ticket's own board progress; the code dependency it actually needed
+  is satisfied now.
+- **Item 10 (no major unresolved blocker) flips ⚠️ → ✅.** `NFR-009` is placed in
+  `plans/nfr-catalog.md` (Security/NFR, subtask `place-nfr009`, 2026-09-25, on the owner's word):
+  ≤ 16 MiB total, ≤ 1 MiB growth in `heapUsed`/`arrayBuffers` between a 1 s and a 3 s search.
+  `A7` now has a stated project-level bar to check against. Folded into Security/NFR triggers
+  above, with the build-hop note (2^19 fits, 2^20 does not) carried forward.
+- **Items 1, 2, 4–9 unchanged, all clean** — re-checked, no regression against the current tree.
+- **Also folded in, per this subtask (not DoR items, but criteria/scope inputs the build hop
+  inherits):** QE `ABC-080` `G1` (close the surviving `engine.ts` killer-update mutant here, since
+  this ticket touches `engine.ts`) and the owner's open, undecided question on which runner
+  `NFR-005` binds (Security/NFR recommends plain node) — both above, under Security/NFR triggers.
+  The `ABC-080`-page wording QE asked BA/PM to firm up (killers cleared between `chooseMove` calls,
+  not between iterations) is fixed on `ABC-080`'s own page, `A6`, not here.
+
+**Pullable today: YES.** Size `M`, priority `P0`, unchanged. **Recommended routing: pull
+`ABC-081` into `Ready` — the Orchestrator's board move, out of this subtask's fence.**
