@@ -429,6 +429,26 @@ the restructure lands 2,790 B under.
 
 Full measurements, the A2 table and the shape decision: `.grugops/context/scribe-abc109-restructure/notes/`.
 
+### Delivery (Engineer half — `A5`)
+
+Built 2026-09-25 (host clock), task `ticket-to-pr-ABC-109-a5`, on `grugops/ABC-109-agents-md-cap`
+@ `7dd353b`. **Unmerged, not pushed.**
+
+- **`A5` — MET.** One assertion in `src/cli.test.ts` (already reads `AGENTS.md` from disk; no new
+  test file): `readFileSync(AGENTS.md).length` (bytes) `≤ AGENTS_MD_BUDGET_BYTES = 24_576`.
+  **Watched RED:** `AGENTS.md` padded to 24,577 B (budget + 1) reds this row alone with
+  `AGENTS.md bytes against its 24576 B budget (ABC-109): expected 24577 to be less than or equal to 24576`;
+  green at exactly 24,576 B; restored byte-for-byte (sha256 `08bda29f…` before and after).
+  *Deviation recorded:* the red was watched by temporarily padding the real file (the contract's
+  method, since only one assertion may ship), not by a shipped in-memory mutant row.
+- **`A6` (Engineer's share):** `src/` non-`.test.ts` changes = none; 0 new test files (47 → 47);
+  0 new spawns; **+1 test** (1446 → 1447, ≤ 2 allowed); row cost ~1 ms, lane wall change within
+  run-to-run noise. `N8-LANE` not quoted, per the page; the falsifiable zeroes hold.
+- **Gates:** `npm test` 47/47 files, 1447/1447, exit 0; `tsc --noEmit` clean; `biome check .` clean.
+  Existing `AGENTS.md` rows (`ABC-042`/`065`/`067`/`071`) green — no stop fired.
+
+Note: `.grugops/context/ticket-to-pr-ABC-109-a5/notes/`.
+
 <details>
 <summary>Prior score, 2026-08-19, task <code>cut-agents-md-cap-2026-08-19</code> (10/10, 0 ⚠️) — superseded above</summary>
 
