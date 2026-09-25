@@ -74,3 +74,4 @@ _Updated: 2026-08-12 by Architect/Design (task `arch-audit-2026-08-12`, subtask 
 | `60-progress.md` | running plan-of-record: what works, what's left, known issues |
 | `70-runbook.md` | how to operate, deploy, and roll back in production |
 | `80-glossary.md` | shorthand, acronyms, domain terms |
+| `90-agents-md-command-log.md` | `AGENTS.md` § Commands' full RUN receipts (`ABC-109`, 2026-09-26) |
