@@ -35,6 +35,10 @@ depth"* — it buys **depth**, which is exactly the live target.
 - **Killer moves** — two per ply, quiet moves that caused a beta cutoff at that ply.
 - **Hash move first** — the best move from a transposition-table hit, tried before everything.
 - One comparator, applied at each node before iterating the move list.
+- **Both full-width recursions consume the same comparator** — `src/search.ts` and
+  `src/engine.ts` (the abortable copy `ABC-078` built). Ordering one without the other would
+  make `ABC-078`'s `A3` identity sweep compare two different algorithms (Architect/Design
+  ruling `…f7e66060`, R1).
 
 ## Out of scope
 
@@ -56,12 +60,20 @@ depth"* — it buys **depth**, which is exactly the live target.
   members — **200/200**. *(A comparator that loses one move is a search that cannot find one move,
   and it is invisible until it matters.)*
 - **`A3` (it prunes materially harder).** **Given** `kiwipete` and `position-6` at depth 4, **then**
-  ordered search visits **≤ 40%** of the nodes the unordered search visits. *(Bar set from the
-  generic alpha-beta result, deliberately conservative; report the actual figure.)*
-- **`A4` (each heuristic earns its place).** **Then** the node count on `kiwipete` at depth 4 is
-  reported for **four configurations** — none / MVV-LVA / +killers / +hash move. **A heuristic whose
-  configuration does not reduce the node count is reported as such and is a candidate for
-  deletion**, not kept because it is conventional.
+  ordered search visits **≤ 4%** of the nodes the unordered search visits. *(Re-leveled 2026-09-25
+  from the generic ≤ 40% by Architect/Design ruling `…f7e66060` (R1): a faithful out-of-tree
+  prototype of this comparator reads 2.64% on kiwipete and 2.10% on position-6, scores identical.
+  The new bar is 1.5x the larger reading — `ADR-0024` decision 3's headroom rule — so it absorbs a
+  legitimate evaluator change without passing a build that lost most of its ordering. Report the
+  actual figure.)*
+- **`A4` (each heuristic earns its place).** **Then** the node count on `kiwipete` **and
+  `position-6`** is reported at **depth 4** for **four configurations** — none / MVV-LVA /
+  +killers / +hash move — **and again at depth 5 on both positions**. **The delete rule is
+  judged on the depth-5 reading**, not the depth-4 one: a heuristic whose depth-5 configuration
+  does not reduce the node count is reported as such and is a candidate for deletion, not kept
+  because it is conventional. *(Re-leveled 2026-09-25 by the same ruling, R1 point 2: at
+  kiwipete depth 4, killers read −0.2%, which would falsely condemn them; at depth 5 they read
+  −5.7% (kiwipete) and −20.5% (position-6). Depth 4 alone is not a fair delete-rule reading.)*
 - **`A5` (correct with no hash move available).** **Given** an empty transposition table, or
   `ABC-081` not yet landed, **then** `A1`, `A2` and `A3` all hold. *(This ticket must not be blocked
   on the TT and must not break when the TT misses — which is the common case.)*
@@ -102,6 +114,12 @@ depth"* — it buys **depth**, which is exactly the live target.
    configurability option nobody asked for — coding rule 7.
 4. **Do not re-test `src/moves.ts`.** Its order is arbitrary and that is fine; `A2` asserts the
    permutation property, not a generation order.
+5. **Close `ABC-079` QE's surviving `G4` inside `A4`'s own measurement.** The mutant dropping
+   `+ 0` for `ORDER_VALUE[promotion]` inside the shared `mvvLvaKey` currently kills nothing in
+   any lane (`.grugops/context/qe-ABC-079/notes/20260924T215100Z-...-5d8a0f37.md`). `A4`'s
+   per-heuristic node-count measurement is the natural place to close it: include a
+   promotion-bearing capture fixture whose node count changes when the promotion term is
+   dropped. Carried from the 2026-09-25 re-score; a test-notes addition, not a new criterion.
 
 ## Size and priority rationale
 
@@ -183,3 +201,29 @@ criteria stays BA/PM's. This section gives the numbers the wording should carry.
   a prototype reading, not a verdict. `A7` measures the real one.
 - **Sequencing:** land this before `ABC-081`. `ABC-081`'s ≤ 70% bar is met only with this
   ticket's hash arm live (ruling 3).
+
+## § DoR re-score — 2026-09-25 (BA/PM, task `refine-abc080-081-cut-c1`, Workflow 07)
+
+**10 of 10 clean, 0 ⚠️ — MET. Ready to pull.** The Architect's ruling above discharges the one
+remaining item.
+
+- **Item 10 flips ⚠️ → ✅.** The `A3` bar is no longer a generic, unmeasured figure — it is
+  set from this codebase's own measurement (ruling `…f7e66060`, R1): ≤ 4%, 1.5x the larger of
+  2.64% / 2.10%. `A4` now reads at depth 5 on both positions so the delete rule is not judged on
+  a depth-4 reading that can falsely condemn a heuristic (killers: −0.2% at d4, −5.7%/−20.5% at
+  d5).
+- **Scope** now names both consuming recursions (`src/search.ts`, `src/engine.ts`) explicitly,
+  per the ruling's point 3 — `ABC-078`'s identity sweep stays a comparison of one algorithm.
+- **Test notes** gain `ABC-079` QE's surviving `G4` (the unguarded promotion term in
+  `mvvLvaKey`), pointed at `A4`'s own measurement — carried forward from the 2026-09-25
+  re-score, still a test-notes item, not a criterion.
+- **Every other item is unchanged from the 2026-09-25 re-score** (`.grugops/context/rescore-abc080-081/notes/20260925T120500Z-...-40536c8e.md`): problem, scope/out-of-scope,
+  INVEST-independence (both blockers `Done`), acceptance testable/measurable, dependencies
+  known, `NFR-005`/`N8-LANE` triggers, size `M`, priority `P0`.
+- **Not re-leveled:** `NFR-005`'s depth-6 floor (owner's word), `A7`'s non-decreasing-depth
+  floor, `N8-LANE`'s shape. The depth-6-path arithmetic — combined `ABC-080` + `ABC-081` +
+  `C1` (cut as `ABC-121`) reaching depth 6/7 on this machine's probe — is recorded on the
+  traceability row, not restated here.
+
+**Pullable today: YES.** Size `M`, priority `P0`, unchanged. The Orchestrator makes the
+`Backlog → Ready` board move.
