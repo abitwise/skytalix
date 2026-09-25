@@ -486,6 +486,21 @@ Independently reproduced `A1`–`A8`. **Unmerged, not pushed.**
 
 Full notes: `.grugops/context/qe-ABC-109/notes/`.
 
+### Delivery (Engineer re-hop — `A5` as worded)
+
+2026-09-25 (host clock), task `ticket-to-pr-ABC-109-a5-proof`, on `grugops/ABC-109-agents-md-cap`.
+**Unmerged, not pushed. Nothing new ships** — `src/cli.test.ts` unchanged.
+
+- **`A5` red on an in-memory number — closed as worded.** The shipped row ran unchanged under a
+  throwaway (scratchpad-only) vitest setup file that `vi.mock`s `node:fs` so the no-encoding
+  `readFileSync(AGENTS.md)` returns an in-memory `Buffer`. At **24,577 B**: exit 1,
+  `AGENTS.md bytes against its 24576 B budget (ABC-109): expected 24577 to be less than or equal to 24576`
+  at `src/cli.test.ts:2143:7`. At **24,576 B**: exit 0, the row green.
+- `AGENTS.md` never written: sha256 `08bda29f…7086fef` before and after; `npm test` 47/47,
+  1447/1447, exit 0 on the real file.
+
+Note (both outputs verbatim): `.grugops/context/ticket-to-pr-ABC-109-a5/notes/20260925T203924Z-software-engineer-observation-abc109a5-inmemory.md`.
+
 <details>
 <summary>Prior score, 2026-08-19, task <code>cut-agents-md-cap-2026-08-19</code> (10/10, 0 ⚠️) — superseded above</summary>
 
