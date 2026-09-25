@@ -508,3 +508,44 @@ the NFR bars are untouched. No timeout changed.
 - Notes: `.grugops/context/ticket-to-pr-ABC-079/notes/` (three re-hop 3 notes plus
   `raw-rehop3-*`). Next: a delta re-QE, and the Scribe's `AGENTS.md` entry. Both are the
   Orchestrator's to schedule.
+
+## QE (delta)
+
+**Delta re-QE by QE/E2E, 2026-09-25** (task `wave-2026-09-24`, subtask `qe-ABC-079-delta`,
+Workflow 05 step). Branch `grugops/qe-ABC-079-delta` off `grugops/int-ABC-079` @ `c6b528d`,
+worktree `.claude/worktrees/qe-ABC-079-delta`. Verifies commit `9d2306c` (re-hop 3) against
+the prior FAIL (`qe-ABC-079`, 2026-09-24) and the G1/G2 ruling — the DELTA, not the whole
+ticket. **QE wrote zero `src/` lines** (four mutant rounds, each applied then reverted,
+`git status --porcelain -- src` asserted empty each time). **NOT A STAMP.** Notes:
+`.grugops/context/qe-ABC-079/notes/` (two 2026-09-25T09:00–09:05Z notes).
+
+**Verdict: PASS.**
+
+- **D1–D4, now TRUE:** re-confirmed the `search.ts` diff is 29 lines, all comments
+  (independently re-run token-stream check: 808 tokens before and after, identical). No new
+  false sentence found. D3's cited measurement (position-3 depth 1, 46 nodes via
+  `searchWithoutPruning`) was independently reproduced to the node.
+- **G1 CLOSED, and independently re-derived beyond the repair hop's own check:** QE
+  re-applied all three seeded window-slip mutants from the original FAIL decision —
+  `R2a` (ungated), `R2b` (capture-dense, K=5) and `R2c` (inside `quiesce`, K=5) — one at a
+  time against the delivered tree. **All three red both `A5` depth-3 pins**
+  (kiwipete `205`≠`50`, position-6 `120`/`145`≠`30`). This includes `R2a`, which re-hop 3's
+  own limits note flagged as NOT re-tested at the repair tip; QE's re-test closes that gap.
+  No survivor in the class was found.
+- **G2 CLOSED:** mutated `broadSlice("startpos")` to drop one position — the "six slices are
+  exactly the broad corpus" check reds (`expected 183 to be 184`), confirming the coverage
+  check is a real guard. Re-ran `SEARCH_DEEP=1` on both files: exit 0, 94/94, worst case
+  (`A4` broad d2, kiwipete's slice) at 42.8% of its 120 s timeout on this machine (the
+  engineer's reading was 40.1%, machine-load variance). The same slice run alone via `-t`
+  reads 37.8%, matching the engineer's reading. Both stay under the ruling's 50% line.
+- **Gates, all re-run and green:** lint (`biome check .`, 78 files, no fixes), `tsc --noEmit`
+  ×2 (typecheck, build), default lane **43 files / 1392 passed / 0 skipped**, skip-integrity
+  `No findings.` at count 0, and `ENGINE_DEEP=1` **33/33** (licence item 5's one-time check).
+- **Licence conformance:** `src/quiescence.ts`, `src/engine.*`, `src/evaluate.ts` and
+  `src/search.qe.test.ts` are byte-identical to the frozen base (`git diff --stat` empty).
+  Every `src/search.ts` hunk falls inside the licensed comment ranges.
+- **Not covered / fences held:** the offline oracle (`searchWithoutPruning(p,3)`, ~160 s /
+  ~28 s) was not re-run by QE — the ruling already ran it and this delta trusts that record,
+  per its scope (verify the delta). `NFR-008` not remeasured (fenced). `AGENTS.md`,
+  `plans/board.md` and the NFR bars were not opened. Production lines > 0, so the UAT waiver
+  does not apply. Nothing merged, nothing deployed — the board move is the Orchestrator's.
