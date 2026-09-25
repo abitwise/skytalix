@@ -288,20 +288,14 @@ const KNIGHT_G1_PAIR = [
   { name: "knight-g1 w -", fen: "4k3/8/8/8/8/8/8/4K1NR w - - 0 1", score: 820 },
 ];
 
-/** The perft positions cheap enough at depth 4 for the default lane; the rest are deep. */
-const DEFAULT_LANE_AT_DEPTH_4 = new Set(["position-3"]);
-
 describe("A1 — table-on and table-off scores are identical", () => {
-  for (const { name, fen } of PERFT_CORPUS) {
-    const deep = !DEFAULT_LANE_AT_DEPTH_4.has(name);
-    if (deep && !RUN_SEARCH_DEEP) continue; // absent in the default run, not skipped
-    it(
-      `${name} at depth 4${deep ? " [deep, SEARCH_DEEP=1]" : ""}`,
-      () => {
+  if (RUN_SEARCH_DEEP) {
+    // position-3 is in the default lane, in the node-count row at the end of this block.
+    for (const { name, fen } of PERFT_CORPUS.filter(({ name }) => name !== "position-3")) {
+      it(`${name} at depth 4 [deep, SEARCH_DEEP=1]`, () => {
         expect(search(parseFen(fen), 4).score).toBe(searchWithoutTable(parseFen(fen), 4).score);
-      },
-      deep ? 60_000 : undefined,
-    );
+      }, 60_000);
+    }
   }
 
   for (const { name, fen, score } of KNIGHT_G1_PAIR) {
@@ -314,6 +308,19 @@ describe("A1 — table-on and table-off scores are identical", () => {
   it("G6 bites: the knight-g1 pair keys differently — the scores above differ, so they must", () => {
     const [withRight, without] = KNIGHT_G1_PAIR.map(({ fen }) => zobristKey(parseFen(fen)));
     expect(withRight).not.toBe(without);
+  });
+
+  /**
+   * The other half of "changes the work": it DOES change it, and the door really is table-free.
+   * Exact, measured at this ticket's build: position-3 at depth 4 visits 1 123 nodes with the
+   * table and 1 299 without it. A table-off door that quietly used the table reads 1 123 twice.
+   */
+  it("position-3 at depth 4 — the same score, and the work changes: 1 123 nodes with the table, 1 299 without", () => {
+    const on = search(parseFen(fenOf("position-3")), 4);
+    const off = searchWithoutTable(parseFen(fenOf("position-3")), 4);
+    expect(on.score).toBe(off.score);
+    expect(on.nodes).toBe(1_123);
+    expect(off.nodes).toBe(1_299);
   });
 });
 
@@ -401,12 +408,22 @@ describe("A3 — iterative deepening with the table visits <= 70% of the nodes i
 // ---------------------------------------------------------------------------
 
 /**
- * CONSTRUCTED, not found (test note 3). White is a rook and two pawns down and has one saving line,
- * a perpetual: 1. Qf8+ Kh7 2. Qf7+ Kh8 3. Qf8+ — the position after 1. Qf8+ stands again at ply 5,
- * and Black's king has no other square and no piece that can block or take. Every other White
- * move scores −485 or worse at depth 5 (measured at this ticket's build). The twin is the same
- * position with the colours flipped, Black to move: "a win for EITHER side" is asserted from both.
+ * CONSTRUCTED, not found (test note 3): generated, then kept only where the search itself said
+ * exactly one White move saves the game. White is a rook and two pawns down and has one saving
+ * line, a perpetual on the black king boxed in by its own pawns: Qf8+ Kh7, Qf7+ Kh8, Qf8+ … —
+ * the king has no other square and no black piece can block or take.
+ *
+ * `REPEATS_AT_PLY_4` starts INSIDE the cycle, queen already on f7: 1. Qf8+ Kh7 2. Qf7+ Kh8 is
+ * the root again at ply 4, so depth 4 sees it and depth 3 does not (−470). Measured at this
+ * ticket's build: depth 4 scores 0 with Qf8+ in 7 241 nodes; every other White move scores −490
+ * or worse; a search that scores a repetition as a loss reads −475.
+ *
+ * `PERPETUAL` starts one move OUTSIDE it (queen on a3): the position after 1. Qf8+ stands again
+ * at ply 5. Every other White move scores −485 or worse at depth 5. The twin is the same position
+ * with the colours flipped, Black to move: "a win for EITHER side" is asserted from both.
  */
+const REPEATS_AT_PLY_4 = "7k/5Q2/6pp/qr6/8/8/6PP/7K w - - 0 1";
+
 const PERPETUAL = [
   { name: "white to move", fen: "7k/8/6pp/qr6/8/Q7/6PP/7K w - - 0 1", saving: "a3f8" },
   { name: "black to move", fen: "7k/6pp/q7/8/QR6/6PP/8/7K b - - 0 1", saving: "a6f1" },
@@ -414,25 +431,52 @@ const PERPETUAL = [
 
 describe("A5 — the only non-losing line repeats, and it scores exactly 0", () => {
   /**
-   * The DEFAULT lane: the engine, table ON (the ruling's condition — a table can carry a
-   * repetition's 0 to a path where it is not one), on the White-to-move fixture. Measured at this
-   * ticket's build: depth 5 at 10 injected ticks, score 0, Qf8+. A search blind to repetition reads
-   * −390 here at depth 5 — the rook down, scored at the leaf where the position repeats.
+   * The DEFAULT lane, table ON in both recursions (the ruling's condition — a table can carry a
+   * repetition's 0 to a path where it is not one). The node count is pinned too: it is the
+   * cheapest detector of `search()` dropping the hash move, which changes no score here.
    */
-  it("white to move: the engine plays the perpetual and scores it exactly 0", () => {
-    const { fen, saving } = PERPETUAL[0] as (typeof PERPETUAL)[number];
+  it("search(), depth 4: the perpetual scores exactly 0 and is played — in 7 241 nodes", () => {
+    const result = search(parseFen(REPEATS_AT_PLY_4), 4);
+    expect(result.score).toBe(0); // `toBe` is Object.is: a -0 fails here
+    expect(label(result.move)).toBe("f7f8");
+    expect(result.nodes).toBe(7_241);
+  });
+
+  it("the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows", () => {
+    expect(search(parseFen(REPEATS_AT_PLY_4), 3).score).toBe(-470);
+  });
+
+  /**
+   * The engine's own repetition line and its root hash move, on the same fixture. Measured at this
+   * ticket's build: depth 4 at 6 injected ticks, score 0, Qf8+. An engine blind to repetition
+   * reads −390; one whose root ignores the hash move is still at depth 3 (−470) at this budget.
+   */
+  it("chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0", () => {
     let ticks = 0;
-    const choice = chooseMove(parseFen(fen), { budgetMs: 10, now: () => ticks++ }) as {
+    const choice = chooseMove(parseFen(REPEATS_AT_PLY_4), { budgetMs: 6, now: () => ticks++ }) as {
       move: Move;
       score: number;
       depth: number;
     };
-    expect(choice.depth).toBeGreaterThanOrEqual(5);
-    expect(choice.score).toBe(0); // `toBe` is Object.is: a -0 fails here
-    expect(label(choice.move)).toBe(saving);
+    expect(choice.depth).toBe(4);
+    expect(choice.score).toBe(0);
+    expect(label(choice.move)).toBe("f7f8");
   });
 
   if (RUN_SEARCH_DEEP) {
+    it("white to move, one move outside the cycle: the engine reaches depth 5 and scores 0 [deep, SEARCH_DEEP=1]", () => {
+      const { fen, saving } = PERPETUAL[0] as (typeof PERPETUAL)[number];
+      let ticks = 0;
+      const choice = chooseMove(parseFen(fen), { budgetMs: 10, now: () => ticks++ }) as {
+        move: Move;
+        score: number;
+        depth: number;
+      };
+      expect(choice.depth).toBeGreaterThanOrEqual(5);
+      expect(choice.score).toBe(0);
+      expect(label(choice.move)).toBe(saving);
+    });
+
     for (const { name, fen, saving } of PERPETUAL) {
       it(`${name}: 0 at depths 5 and 6, table on and off, and the saving move played [deep, SEARCH_DEEP=1]`, () => {
         for (const depth of [5, 6]) {
