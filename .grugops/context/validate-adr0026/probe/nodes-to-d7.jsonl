@@ -1,0 +1,8 @@
+{"cfg":"base","name":"kiwipete","depth":7,"cumulativeNodes":[[1,778],[2,3549],[3,10479],[4,30030],[5,123920],[6,455301],[7,1922235]],"score":30,"move":"e2a6"}
+{"cfg":"base","name":"position-6","depth":7,"cumulativeNodes":[[1,286],[2,1262],[3,3839],[4,31696],[5,91420],[6,623200],[7,1923320]],"score":15,"move":"c3d5"}
+{"cfg":"pvs","name":"kiwipete","depth":7,"cumulativeNodes":[[1,764],[2,3501],[3,9079],[4,27260],[5,101767],[6,410147],[7,1640040]],"score":30,"move":"e2a6"}
+{"cfg":"pvs","name":"position-6","depth":7,"cumulativeNodes":[[1,425],[2,1499],[3,4140],[4,17936],[5,75740],[6,392358],[7,1452406]],"score":15,"move":"c3d5"}
+{"cfg":"lmrPlain","name":"kiwipete","depth":7,"cumulativeNodes":[[1,778],[2,3549],[3,10479],[4,28959],[5,68156],[6,240038],[7,580389]],"score":30,"move":"e2a6"}
+{"cfg":"lmrPlain","name":"position-6","depth":7,"cumulativeNodes":[[1,286],[2,1262],[3,3839],[4,31444],[5,45406],[6,346536],[7,755013]],"score":15,"move":"c3d5"}
+{"cfg":"pvsLmr","name":"kiwipete","depth":7,"cumulativeNodes":[[1,764],[2,3501],[3,9079],[4,26189],[5,56936],[6,208499],[7,532363]],"score":30,"move":"e2a6"}
+{"cfg":"pvsLmr","name":"position-6","depth":7,"cumulativeNodes":[[1,425],[2,1499],[3,4140],[4,17684],[5,30829],[6,165716],[7,467461]],"score":15,"move":"c3d5"}
