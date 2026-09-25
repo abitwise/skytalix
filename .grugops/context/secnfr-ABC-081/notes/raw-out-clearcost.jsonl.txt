@@ -1,0 +1,4 @@
+{"firstCallMs":0.051,"clearMs":{"p50":0.0076,"p99":0.01,"max":0.0568},"keyArrayAllocUs":0.273,"tableBytes":4194304}
+{"firstCallMs":0.05,"clearMs":{"p50":0.0076,"p99":0.0099,"max":0.0573},"keyArrayAllocUs":0.257,"tableBytes":4194304}
+{"firstCallMs":0.055,"clearMs":{"p50":0.0079,"p99":0.0092,"max":0.0616},"keyArrayAllocUs":0.68,"tableBytes":4194304}
+{"dirtyClearMs":[0.015,0.0159,0.0167,0.0205,0.0186,0.0179,0.0132,0.0155],"max":0.0205}

@@ -1,0 +1,12 @@
+{"arm":"A","name":"KPvK","depth":15,"score":120,"nodes":4856839,"wallMs":5001.2,"legal":true}
+{"arm":"A","name":"locked-pawns-KvK","depth":18,"score":0,"nodes":5946373,"wallMs":4999.8,"legal":true}
+{"arm":"A","name":"locked-pawns-hmc90","depth":18,"score":0,"nodes":5960709,"wallMs":4999.8,"legal":true}
+{"arm":"A","name":"KRvK","depth":12,"score":550,"nodes":4322320,"wallMs":5000.1,"legal":true}
+{"arm":"A","name":"KQvK","depth":10,"score":950,"nodes":4390933,"wallMs":4999.5,"legal":true}
+{"arm":"A","name":"mate-in-1-only","depth":11,"score":29999,"nodes":4565018,"wallMs":5000,"legal":true}
+{"arm":"A","name":"KBNvK","depth":12,"score":680,"nodes":3488783,"wallMs":5000.1,"legal":true}
+{"arm":"A","name":"corner-KvKP-btm","depth":16,"score":29991,"nodes":3594246,"wallMs":4999.8,"legal":true}
+{"arm":"A","name":"kings-and-blocked-pawn","depth":15,"score":0,"nodes":4918277,"wallMs":5000.3,"legal":true}
+{"arm":"A","name":"perpetual-check-rig","depth":11,"score":29999,"nodes":2940955,"wallMs":5000,"legal":true}
+{"arm":"A","name":"startpos","depth":7,"score":35,"nodes":1222676,"wallMs":5003,"legal":true}
+{"arm":"A","name":"kiwipete","depth":6,"score":35,"nodes":1236746,"wallMs":5001,"legal":true}

@@ -1,0 +1,42 @@
+// secnfr-ABC-081 (re-pointed again from secnfr-ABC-080; comment line only), secnfr-ABC-080 (re-pointed, unchanged below this line; was secnfr-ABC-079 probe 2): NFR-004 / NFR-005. chooseMove at DEFAULT_BUDGET_MS on a real clock,
+// plain node, the six perft roots + a capture-dense middlegame + the worst first-iteration
+// position from probe 1. Wall measured OUTSIDE the engine (performance.now). argv: worktree, rounds, out.
+import os from "node:os";
+import { writeFileSync } from "node:fs";
+
+const WT = process.argv[2];
+const { parseFen } = await import(`${WT}/src/fen.ts`);
+const { chooseMove, DEFAULT_BUDGET_MS, HARD_CEILING_MS } = await import(`${WT}/src/engine.ts`);
+const { squareName } = await import(`${WT}/src/position.ts`);
+const SET = [
+  ["startpos", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"],
+  ["kiwipete", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"],
+  ["position-3", "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"],
+  ["position-4", "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"],
+  ["position-5", "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"],
+  ["position-6", "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"],
+  ["mid-16caps", "rnb1k1r1/1pp2pp1/P4n2/B2Pp3/3P1P2/b7/PQ2Pq1p/RNK2BNR b q - 2 16"],
+  ["worst-first-iter", "5bn1/2rbk2r/3p1p1p/ppp1p1p1/PPPPPP1P/R7/1B1NBK2/1Q4NR w - - 0 25"],
+];
+const rounds = Number(process.argv[3] ?? 5);
+const rows = [];
+for (let r = 0; r < rounds; r++) {
+  for (const [name, fen] of SET) {
+    const load = os.loadavg()[0];
+    const t0 = performance.now();
+    const c = chooseMove(parseFen(fen), { budgetMs: DEFAULT_BUDGET_MS });
+    const wall = performance.now() - t0;
+    rows.push({ round: r + 1, name, wallMs: +wall.toFixed(1), depth: c.depth, nodes: c.nodes, move: `${squareName(c.move.from)}${squareName(c.move.to)}`, load1: +load.toFixed(2) });
+    console.log(JSON.stringify(rows.at(-1)));
+  }
+}
+const w = rows.map((x) => x.wallMs).sort((a, b) => a - b);
+const pct = (q) => w[Math.min(w.length - 1, Math.ceil(q * w.length) - 1)];
+const summary = {
+  n: w.length, budgetMs: DEFAULT_BUDGET_MS, ceilingMs: HARD_CEILING_MS,
+  p50: pct(0.5), p95: pct(0.95), max: w.at(-1), overBudget: w.filter((x) => x > DEFAULT_BUDGET_MS).length,
+  depthByName: Object.fromEntries(SET.map(([n]) => [n, [...new Set(rows.filter((x) => x.name === n).map((x) => x.depth))]])),
+  load1: [Math.min(...rows.map((x) => x.load1)), Math.max(...rows.map((x) => x.load1))],
+};
+console.log(JSON.stringify(summary));
+writeFileSync(process.argv[4], JSON.stringify({ summary, rows }, null, 1));

@@ -1,0 +1,44 @@
+[
+ {
+  "file": "transposition.test.ts",
+  "A": 891,
+  "B": null,
+  "delta": 891
+ },
+ {
+  "file": "engine.test.ts",
+  "A": 580,
+  "B": 387,
+  "delta": 193
+ },
+ {
+  "file": "search.test.ts",
+  "A": 1346,
+  "B": 1404,
+  "delta": -58
+ },
+ {
+  "file": "zobrist.test.ts",
+  "A": 318,
+  "B": 396,
+  "delta": -78
+ },
+ {
+  "file": "search.ordering.test.ts",
+  "A": 996,
+  "B": 1087,
+  "delta": -91
+ },
+ {
+  "file": "perft.test.ts",
+  "A": 1001,
+  "B": 1123,
+  "delta": -122
+ },
+ {
+  "file": "search.qe.test.ts",
+  "A": 45,
+  "B": 807,
+  "delta": -762
+ }
+]

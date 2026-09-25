@@ -1,0 +1,77 @@
+// secnfr-ABC-081 security probe, part 3: random kings + 2..8 random pawns (ranks 2..7), both
+// sides with <= 2 legal moves, not in check. Evaluate the 300 lowest-branching distinct boards at
+// a 30 ms budget and report the deepest. A board reaching ~ hundreds of plies in 30 ms is one
+// whose tree dies out, which is what KEY_ARRAY_CAPACITY / the 13-bit depth field would meet.
+// argv: armsDir arm budgetMs samples
+const [ARMS, ARM, BUDGET, SAMPLES] = process.argv.slice(2);
+const R = `${ARMS}/${ARM}`;
+const { parseFen } = await import(`${R}/src/fen.ts`);
+const { chooseMove } = await import(`${R}/src/engine.ts`);
+const { legalMoves, isInCheck } = await import(`${R}/src/legal.ts`);
+let seed = 987654;
+const rnd = (n) => {
+  seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+  return seed % n;
+};
+function fenOf(b, stm) {
+  return `${b
+    .map((r) => {
+      let s = "";
+      let e = 0;
+      for (const c of r) {
+        if (c === null) e++;
+        else {
+          if (e) s += e;
+          e = 0;
+          s += c;
+        }
+      }
+      return s + (e ? e : "");
+    })
+    .join("/")} ${stm} - - 0 1`;
+}
+const seen = new Set();
+const cands = [];
+for (let i = 0; i < Number(SAMPLES); i++) {
+  const b = Array.from({ length: 8 }, () => Array(8).fill(null));
+  const np = 2 + rnd(7);
+  for (let k = 0; k < np; k++) b[1 + rnd(6)][rnd(8)] = rnd(2) ? "P" : "p";
+  const put = (pc) => {
+    for (;;) {
+      const r = rnd(8);
+      const f = rnd(8);
+      if (b[r][f] === null) {
+        b[r][f] = pc;
+        return [r, f];
+      }
+    }
+  };
+  const a = put("K");
+  const c = put("k");
+  if (Math.abs(a[0] - c[0]) <= 1 && Math.abs(a[1] - c[1]) <= 1) continue;
+  const fw = fenOf(b, "w");
+  const fb = fenOf(b, "b");
+  let p;
+  let q;
+  try {
+    p = parseFen(fw);
+    q = parseFen(fb);
+  } catch {
+    continue;
+  }
+  if (isInCheck(p) || isInCheck(q)) continue;
+  const nw = legalMoves(p).length;
+  const nb = legalMoves(q).length;
+  if (nw === 0 || nb === 0 || nw > 2 || nb > 2) continue;
+  if (seen.has(fw)) continue;
+  seen.add(fw);
+  cands.push({ fen: fw, nw, nb });
+}
+cands.sort((x, y) => x.nw * x.nb - y.nw * y.nb);
+const hits = [];
+for (const c of cands.slice(0, 300)) {
+  const ch = chooseMove(parseFen(c.fen), { budgetMs: Number(BUDGET) });
+  hits.push({ ...c, depth: ch.depth, nodes: ch.nodes, score: ch.score });
+}
+hits.sort((x, y) => y.depth - x.depth);
+console.log(JSON.stringify({ arm: ARM, samples: Number(SAMPLES), distinct: cands.length, evaluated: Math.min(300, cands.length), top: hits.slice(0, 6) }, null, 1));

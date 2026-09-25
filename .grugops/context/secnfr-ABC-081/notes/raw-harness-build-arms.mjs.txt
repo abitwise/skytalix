@@ -1,0 +1,19 @@
+// secnfr-ABC-081: build the arms outside the repository. A = 504f046 (ABC-081 as QE reviewed it;
+// src byte-identical to c9d65a0/ff28ae5); N = byte-identical copy of A (null control);
+// B = 6033d05 (the base). node_modules symlinked from the main checkout.
+// Re-pointed from secnfr-ABC-080's raw-harness-build-arms (worktree path + revisions only).
+import { execFileSync } from "node:child_process";
+import { mkdirSync, rmSync, symlinkSync } from "node:fs";
+
+const S = process.argv[2];
+const W = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/secnfr-ABC-081";
+const NM = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/node_modules";
+const git = (...a) => execFileSync("git", ["-C", W, ...a], { maxBuffer: 256 * 1024 * 1024 });
+
+for (const [arm, rev] of [["A", "504f046"], ["N", "504f046"], ["B", "6033d05"]]) {
+  rmSync(`${S}/${arm}`, { recursive: true, force: true });
+  mkdirSync(`${S}/${arm}`, { recursive: true });
+  execFileSync("tar", ["-x", "-C", `${S}/${arm}`], { input: git("archive", rev) });
+  symlinkSync(NM, `${S}/${arm}/node_modules`);
+}
+console.log("built");

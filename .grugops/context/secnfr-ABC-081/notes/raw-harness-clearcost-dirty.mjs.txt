@@ -1,0 +1,15 @@
+// secnfr-ABC-081 NFR-004: clearTable() cost on a DIRTY table — timed straight after a real
+// 300 ms chooseMove filled it, 8 times. argv: armDir
+const [ARM] = process.argv.slice(2);
+const tt = await import(`${ARM}/src/transposition.ts`);
+const { parseFen } = await import(`${ARM}/src/fen.ts`);
+const { chooseMove } = await import(`${ARM}/src/engine.ts`);
+const kiwi = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
+const xs = [];
+for (let i = 0; i < 8; i++) {
+  chooseMove(parseFen(kiwi), { budgetMs: 300 });
+  const t0 = performance.now();
+  tt.clearTable();
+  xs.push(+(performance.now() - t0).toFixed(4));
+}
+console.log(JSON.stringify({ dirtyClearMs: xs, max: Math.max(...xs) }));

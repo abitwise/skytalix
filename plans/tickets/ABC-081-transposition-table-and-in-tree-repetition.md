@@ -342,6 +342,38 @@ pull and did not gate this ticket's item-3 resolution.**
 **Pullable today: YES.** Size `M`, priority `P0`, unchanged. **Recommended routing: pull
 `ABC-081` into `Ready` — the Orchestrator's board move, out of this subtask's fence.**
 
+## § Security/NFR — 2026-09-25 (Security/NFR, task `wave-2026-09-24`, subtask `secnfr-ABC-081`, Workflow 15)
+
+**PASS_WITH_RISKS.** Reviewed `6033d05..504f046 -- src`. The measurements, harnesses and
+reasoning are in `.grugops/context/secnfr-ABC-081/notes/` and are not restated here. **Not a
+stamp.**
+
+- **`NFR-005`: MET on the binding runner.** Plain node reads kiwipete **6** and position-6
+  **6** in 5 of 5 rounds (base 6 / 5), with load 3.6–4.6. Depth 6 completes by 2.0 s.
+  - **Depth 7 is not reached, so it stays WARN (PROVISIONAL).**
+  - Vitest reads 5 / 5. That is reported, not the verdict.
+- **`NFR-009`: MET.** The total is about 4.00 MiB against 16 MiB. `arrayBuffers` grew +0.000 MiB
+  from 1 s to 3 s and across 30 calls. **There is no measured need for more:** 2^16, 2^18 and
+  2^20 tables all read depth 6.
+- **`NFR-004`: HOLDS.** Plain-node p95 is 3 004.3 ms and the ceiling reads 4 999.8–5 008.8 ms.
+  The clear per search costs ≤ 0.062 ms.
+- **`N8-LANE`: MET.** The charge is +360 ms CPU gross, +200 ms net, against an admissible null.
+  The build's +220 / +60 is confirmed and corrected upward in size.
+- **Security (ASVS L1): no finding.**
+  - The table is index-safe and every hit is verified on the full 64-bit key.
+  - No stored move is replayed without legality: the hash move is matched only inside the node's
+    own legal list.
+  - The capacity guard is unreached in play. The deepest iteration found at 5 s is 40, against
+    128.
+- **Two LOW risks, each with an owner.**
+  - K4's hang class, plus the lack of an OS-level timeout on `npm test`. It is test-API-only and
+    fails closed. **Owner: the Orchestrator.**
+  - K3: the capacity guard is untested. **Owner: the Software Engineer.**
+- **For the owner:**
+  - ratify the proposed `NFR-005` "Runner: plain `node`" wording (decision note § 6);
+  - close `AR-NFR005-079`;
+  - UAT needs your word, because production lines are more than 0.
+
 ## § QE — 2026-09-25 (QE/E2E, task `wave-2026-09-24`, subtask `qe-ABC-081`, Workflow 05)
 
 **PASS WITH FINDINGS.** Reviewed at `504f046`. Full reasoning, every reproduced figure and the

@@ -1,0 +1,21 @@
+// secnfr-ABC-081 NFR-005 margin, plain node: the depth chooseMove completes at budgets below
+// 3 s, on the head arm, so the depth-6 reading carries its headroom (and depth 7's distance).
+// argv: armsDir arm
+import os from "node:os";
+const [ARMS, ARM] = process.argv.slice(2);
+const R = `${ARMS}/${ARM}`;
+const { parseFen } = await import(`${R}/src/fen.ts`);
+const { chooseMove } = await import(`${R}/src/engine.ts`);
+const FENS = {
+  kiwipete: "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "position-6": "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+};
+for (const round of [0, 1]) {
+  for (const budgetMs of [1000, 1500, 2000, 2500, 5000]) {
+    for (const [name, fen] of Object.entries(FENS)) {
+      const load1 = +os.loadavg()[0].toFixed(2);
+      const c = chooseMove(parseFen(fen), { budgetMs });
+      console.log(JSON.stringify({ arm: ARM, round, budgetMs, name, depth: c.depth, nodes: c.nodes, load1 }));
+    }
+  }
+}

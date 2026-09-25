@@ -1,0 +1,37 @@
+// secnfr-ABC-081 security probe: how deep does chooseMove's unbounded deepening loop go with the
+// table + in-tree repetition, at the 5 s ceiling, on low-branching boards? Two limits are at
+// stake: KEY_ARRAY_CAPACITY (128, a node at that ply becomes a leaf) and the 13-bit depth field
+// of the packed table word (depth << 19 in a Uint32: depth >= 8192 would overflow into nothing).
+// argv: armsDir arm budgetMs
+const [ARMS, ARM, BUDGET] = process.argv.slice(2);
+const R = `${ARMS}/${ARM}`;
+const { parseFen } = await import(`${R}/src/fen.ts`);
+const { chooseMove } = await import(`${R}/src/engine.ts`);
+const { legalMoves } = await import(`${R}/src/legal.ts`);
+const { makeMove } = await import(`${R}/src/apply.ts`);
+const { gameStatus } = await import(`${R}/src/gameend.ts`);
+
+const SET = [
+  ["KPvK", "8/8/8/4k3/8/8/4P3/4K3 w - - 0 1"],
+  ["locked-pawns-KvK", "8/8/3k4/p1p1p1p1/P1P1P1P1/3K4/8/8 w - - 0 1"],
+  ["locked-pawns-hmc90", "8/8/3k4/p1p1p1p1/P1P1P1P1/3K4/8/8 w - - 90 1"],
+  ["KRvK", "8/8/8/4k3/8/8/8/R3K3 w Q - 0 1"],
+  ["KQvK", "8/8/8/4k3/8/8/8/3QK3 w - - 0 1"],
+  ["mate-in-1-only", "7k/5Q2/6K1/8/8/8/8/8 w - - 0 1"],
+  ["KBNvK", "8/8/8/4k3/8/8/8/2B1KN2 w - - 0 1"],
+  ["corner-KvKP-btm", "8/8/8/8/8/1k6/1p6/1K6 b - - 0 1"],  // the w-to-move twin is stalemate (null move), replaced
+  ["kings-and-blocked-pawn", "8/8/8/3k4/3p4/3P4/3K4/8 w - - 0 1"],
+  ["perpetual-check-rig", "6k1/5ppp/8/8/8/8/q4PPP/1Q4K1 w - - 0 1"],
+  ["startpos", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"],
+  ["kiwipete", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"],
+];
+for (const [name, fen] of SET) {
+  const p = parseFen(fen);
+  const t0 = performance.now();
+  const c = chooseMove(p, { budgetMs: Number(BUDGET) });
+  const wallMs = +(performance.now() - t0).toFixed(1);
+  const legal = legalMoves(parseFen(fen)).some(
+    (m) => m.from === c.move.from && m.to === c.move.to && m.promotion === c.move.promotion,
+  );
+  console.log(JSON.stringify({ arm: ARM, name, depth: c.depth, score: c.score, nodes: c.nodes, wallMs, legal }));
+}

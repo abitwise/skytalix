@@ -1,0 +1,54 @@
+// secnfr-ABC-081 NFR-009: search-held memory, measured per the catalogue row's own method —
+// node --expose-gc, every read after gc(). Extends secnfr-ABC-080's raw-harness-drift.
+//  (a) tableByteLength() (the typed-array table) + the key array's byteLength (129 x 8 B).
+//  (b)/(c) arrayBuffers and heapUsed after a 1 s and after a 3 s chooseMove on the same position.
+//  Growth ACROSS repeated calls: 30 consecutive chooseMove calls (500 ms), alternating kiwipete /
+//  position-6, arrayBuffers + heapUsed after gc after each; the same run on base B (no table),
+//  so drift that belongs to the process is visible as such.
+//  Plus: rss/external before the first call and after the last (the table's pages are real).
+// argv: armDir label   (run with --expose-gc)
+const [ARM, LABEL] = process.argv.slice(2);
+const { parseFen } = await import(`${ARM}/src/fen.ts`);
+const { chooseMove } = await import(`${ARM}/src/engine.ts`);
+let tt = null;
+try {
+  tt = await import(`${ARM}/src/transposition.ts`);
+} catch {}
+const FENS = [
+  "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+];
+const MiB = (b) => +(b / 1048576).toFixed(3);
+async function read() {
+  globalThis.gc();
+  await new Promise((r) => setTimeout(r, 10));
+  globalThis.gc();
+  const m = process.memoryUsage();
+  return { heapUsed: MiB(m.heapUsed), arrayBuffers: MiB(m.arrayBuffers), external: MiB(m.external), rss: MiB(m.rss) };
+}
+const out = { arm: LABEL };
+out.before = await read();
+out.tableBytesBefore = tt ? tt.tableByteLength() : null;
+const c1 = chooseMove(parseFen(FENS[0]), { budgetMs: 1000 });
+out.after1s = { depth: c1.depth, ...(await read()) };
+const c3 = chooseMove(parseFen(FENS[0]), { budgetMs: 3000 });
+out.after3s = { depth: c3.depth, ...(await read()) };
+out.tableBytes = tt ? tt.tableByteLength() : null;
+out.keyArrayBytes = (128 + 1) * 8;
+out.growth1to3 = {
+  heapUsed: +(out.after3s.heapUsed - out.after1s.heapUsed).toFixed(3),
+  arrayBuffers: +(out.after3s.arrayBuffers - out.after1s.arrayBuffers).toFixed(3),
+};
+const series = [];
+for (let i = 0; i < 30; i++) {
+  chooseMove(parseFen(FENS[i % 2]), { budgetMs: 500 });
+  series.push(await read());
+}
+out.repeated = {
+  calls: 30,
+  heapUsed: { first: series[0].heapUsed, at10: series[9].heapUsed, last: series[29].heapUsed, max: Math.max(...series.map((s) => s.heapUsed)) },
+  arrayBuffers: { first: series[0].arrayBuffers, last: series[29].arrayBuffers, max: Math.max(...series.map((s) => s.arrayBuffers)) },
+  rss: { first: series[0].rss, last: series[29].rss },
+};
+out.tableBytesEnd = tt ? tt.tableByteLength() : null;
+console.log(JSON.stringify(out));

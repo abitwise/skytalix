@@ -1,0 +1,403 @@
+{
+ "summary": {
+  "n": 40,
+  "budgetMs": 3000,
+  "ceilingMs": 5000,
+  "p50": 3001.4,
+  "p95": 3004.3,
+  "max": 3005.8,
+  "overBudget": 30,
+  "depthByName": {
+   "startpos": [
+    7
+   ],
+   "kiwipete": [
+    6
+   ],
+   "position-3": [
+    10
+   ],
+   "position-4": [
+    7
+   ],
+   "position-5": [
+    6
+   ],
+   "position-6": [
+    6
+   ],
+   "mid-16caps": [
+    6
+   ],
+   "worst-first-iter": [
+    6
+   ]
+  },
+  "load1": [
+   4.08,
+   5.47
+  ]
+ },
+ "rows": [
+  {
+   "round": 1,
+   "name": "startpos",
+   "wallMs": 3001.4,
+   "depth": 7,
+   "nodes": 698388,
+   "move": "e2e4",
+   "load1": 4.65
+  },
+  {
+   "round": 1,
+   "name": "kiwipete",
+   "wallMs": 3002.3,
+   "depth": 6,
+   "nodes": 900874,
+   "move": "e2a6",
+   "load1": 4.65
+  },
+  {
+   "round": 1,
+   "name": "position-3",
+   "wallMs": 3000.7,
+   "depth": 10,
+   "nodes": 1109006,
+   "move": "b4f4",
+   "load1": 4.6
+  },
+  {
+   "round": 1,
+   "name": "position-4",
+   "wallMs": 3002.4,
+   "depth": 7,
+   "nodes": 769977,
+   "move": "c4c5",
+   "load1": 4.6
+  },
+  {
+   "round": 1,
+   "name": "position-5",
+   "wallMs": 3000.8,
+   "depth": 6,
+   "nodes": 659527,
+   "move": "d7c8",
+   "load1": 4.47
+  },
+  {
+   "round": 1,
+   "name": "position-6",
+   "wallMs": 3003.2,
+   "depth": 6,
+   "nodes": 860446,
+   "move": "c3d5",
+   "load1": 4.27
+  },
+  {
+   "round": 1,
+   "name": "mid-16caps",
+   "wallMs": 3001,
+   "depth": 6,
+   "nodes": 1000534,
+   "move": "f2f1",
+   "load1": 4.27
+  },
+  {
+   "round": 1,
+   "name": "worst-first-iter",
+   "wallMs": 3001.8,
+   "depth": 6,
+   "nodes": 890310,
+   "move": "b4c5",
+   "load1": 4.41
+  },
+  {
+   "round": 2,
+   "name": "startpos",
+   "wallMs": 3001,
+   "depth": 7,
+   "nodes": 714772,
+   "move": "e2e4",
+   "load1": 4.41
+  },
+  {
+   "round": 2,
+   "name": "kiwipete",
+   "wallMs": 3001.6,
+   "depth": 6,
+   "nodes": 917258,
+   "move": "e2a6",
+   "load1": 4.3
+  },
+  {
+   "round": 2,
+   "name": "position-3",
+   "wallMs": 2999.9,
+   "depth": 10,
+   "nodes": 1092622,
+   "move": "b4f4",
+   "load1": 4.19
+  },
+  {
+   "round": 2,
+   "name": "position-4",
+   "wallMs": 3002.5,
+   "depth": 7,
+   "nodes": 752569,
+   "move": "c4c5",
+   "load1": 4.19
+  },
+  {
+   "round": 2,
+   "name": "position-5",
+   "wallMs": 3003,
+   "depth": 6,
+   "nodes": 657479,
+   "move": "d7c8",
+   "load1": 4.34
+  },
+  {
+   "round": 2,
+   "name": "position-6",
+   "wallMs": 3005.8,
+   "depth": 6,
+   "nodes": 854302,
+   "move": "c3d5",
+   "load1": 4.34
+  },
+  {
+   "round": 2,
+   "name": "mid-16caps",
+   "wallMs": 3001.7,
+   "depth": 6,
+   "nodes": 982102,
+   "move": "f2f1",
+   "load1": 4.31
+  },
+  {
+   "round": 2,
+   "name": "worst-first-iter",
+   "wallMs": 3000,
+   "depth": 6,
+   "nodes": 881094,
+   "move": "b4c5",
+   "load1": 4.21
+  },
+  {
+   "round": 3,
+   "name": "startpos",
+   "wallMs": 3002.9,
+   "depth": 7,
+   "nodes": 701460,
+   "move": "e2e4",
+   "load1": 4.21
+  },
+  {
+   "round": 3,
+   "name": "kiwipete",
+   "wallMs": 2999.6,
+   "depth": 6,
+   "nodes": 907018,
+   "move": "e2a6",
+   "load1": 4.11
+  },
+  {
+   "round": 3,
+   "name": "position-3",
+   "wallMs": 3001,
+   "depth": 10,
+   "nodes": 1089550,
+   "move": "b4f4",
+   "load1": 4.11
+  },
+  {
+   "round": 3,
+   "name": "position-4",
+   "wallMs": 3002.8,
+   "depth": 7,
+   "nodes": 755641,
+   "move": "c4c5",
+   "load1": 4.18
+  },
+  {
+   "round": 3,
+   "name": "position-5",
+   "wallMs": 3001.8,
+   "depth": 6,
+   "nodes": 658503,
+   "move": "d7c8",
+   "load1": 4.08
+  },
+  {
+   "round": 3,
+   "name": "position-6",
+   "wallMs": 2999.4,
+   "depth": 6,
+   "nodes": 853278,
+   "move": "c3d5",
+   "load1": 4.08
+  },
+  {
+   "round": 3,
+   "name": "mid-16caps",
+   "wallMs": 3000,
+   "depth": 6,
+   "nodes": 980054,
+   "move": "f2f1",
+   "load1": 4.56
+  },
+  {
+   "round": 3,
+   "name": "worst-first-iter",
+   "wallMs": 3002.2,
+   "depth": 6,
+   "nodes": 879046,
+   "move": "b4c5",
+   "load1": 4.56
+  },
+  {
+   "round": 4,
+   "name": "startpos",
+   "wallMs": 3003.5,
+   "depth": 7,
+   "nodes": 699412,
+   "move": "e2e4",
+   "load1": 5.47
+  },
+  {
+   "round": 4,
+   "name": "kiwipete",
+   "wallMs": 3000.2,
+   "depth": 6,
+   "nodes": 886538,
+   "move": "e2a6",
+   "load1": 5.28
+  },
+  {
+   "round": 4,
+   "name": "position-3",
+   "wallMs": 3000.2,
+   "depth": 10,
+   "nodes": 1092622,
+   "move": "b4f4",
+   "load1": 5.28
+  },
+  {
+   "round": 4,
+   "name": "position-4",
+   "wallMs": 2999.6,
+   "depth": 7,
+   "nodes": 723897,
+   "move": "c4c5",
+   "load1": 5.01
+  },
+  {
+   "round": 4,
+   "name": "position-5",
+   "wallMs": 3004.1,
+   "depth": 6,
+   "nodes": 667719,
+   "move": "d7c8",
+   "load1": 5.01
+  },
+  {
+   "round": 4,
+   "name": "position-6",
+   "wallMs": 2999.9,
+   "depth": 6,
+   "nodes": 851230,
+   "move": "c3d5",
+   "load1": 4.85
+  },
+  {
+   "round": 4,
+   "name": "mid-16caps",
+   "wallMs": 3004.3,
+   "depth": 6,
+   "nodes": 981078,
+   "move": "f2f1",
+   "load1": 4.62
+  },
+  {
+   "round": 4,
+   "name": "worst-first-iter",
+   "wallMs": 3002.1,
+   "depth": 6,
+   "nodes": 880070,
+   "move": "b4c5",
+   "load1": 4.62
+  },
+  {
+   "round": 5,
+   "name": "startpos",
+   "wallMs": 3004.5,
+   "depth": 7,
+   "nodes": 690196,
+   "move": "e2e4",
+   "load1": 4.49
+  },
+  {
+   "round": 5,
+   "name": "kiwipete",
+   "wallMs": 3002.2,
+   "depth": 6,
+   "nodes": 891658,
+   "move": "e2a6",
+   "load1": 4.49
+  },
+  {
+   "round": 5,
+   "name": "position-3",
+   "wallMs": 3001.1,
+   "depth": 10,
+   "nodes": 1081358,
+   "move": "b4f4",
+   "load1": 4.37
+  },
+  {
+   "round": 5,
+   "name": "position-4",
+   "wallMs": 2999.7,
+   "depth": 7,
+   "nodes": 735161,
+   "move": "c4c5",
+   "load1": 4.42
+  },
+  {
+   "round": 5,
+   "name": "position-5",
+   "wallMs": 3001,
+   "depth": 6,
+   "nodes": 661575,
+   "move": "d7c8",
+   "load1": 4.42
+  },
+  {
+   "round": 5,
+   "name": "position-6",
+   "wallMs": 2999.2,
+   "depth": 6,
+   "nodes": 843038,
+   "move": "c3d5",
+   "load1": 4.39
+  },
+  {
+   "round": 5,
+   "name": "mid-16caps",
+   "wallMs": 3000,
+   "depth": 6,
+   "nodes": 973910,
+   "move": "f2f1",
+   "load1": 4.39
+  },
+  {
+   "round": 5,
+   "name": "worst-first-iter",
+   "wallMs": 3002.5,
+   "depth": 6,
+   "nodes": 872902,
+   "move": "b4c5",
+   "load1": 4.44
+  }
+ ]
+}

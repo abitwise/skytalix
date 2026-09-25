@@ -1,0 +1,55 @@
+// secnfr-ABC-081 NFR-005 core (re-pointed from secnfr-ABC-080 raw-harness-a7-core; comment lines only changed): completed depth at DEFAULT_BUDGET_MS (3 s, real
+// clock) on kiwipete and position-6, base B (6033d05) vs head A (504f046), SAME
+// PROCESS, build order alternated per round. Wall is measured OUTSIDE the engine
+// (performance.now). The 1-minute load average is read before every call. Shared by the plain-node
+// runner and the vitest runner so the two readings come from one piece of code.
+import os from "node:os";
+
+export const FENS = {
+  kiwipete: "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "position-6": "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+};
+
+export async function loadBuilds(arms) {
+  const out = {};
+  for (const [name, dir] of Object.entries(arms)) {
+    out[name] = { fen: await import(`${dir}/src/fen.ts`), engine: await import(`${dir}/src/engine.ts`) };
+  }
+  return out;
+}
+
+export function run(builds, rounds, runner, log) {
+  const rows = [];
+  for (let round = 0; round < rounds; round++) {
+    const order = round % 2 ? ["head", "base"] : ["base", "head"];
+    for (const name of Object.keys(FENS)) {
+      for (const b of order) {
+        const { fen, engine } = builds[b];
+        const load1 = +os.loadavg()[0].toFixed(2);
+        const t0 = performance.now();
+        const c = engine.chooseMove(fen.parseFen(FENS[name]), { budgetMs: engine.DEFAULT_BUDGET_MS });
+        const wallMs = +(performance.now() - t0).toFixed(1);
+        const row = { runner, round, build: b, name, depth: c.depth, nodes: c.nodes, wallMs, score: c.score, load1 };
+        rows.push(row);
+        log(JSON.stringify(row));
+      }
+    }
+  }
+  return rows;
+}
+
+export function summarise(rows) {
+  const s = {};
+  for (const b of ["base", "head"]) {
+    for (const name of Object.keys(FENS)) {
+      const rs = rows.filter((r) => r.build === b && r.name === name);
+      s[`${b}/${name}`] = {
+        depths: rs.map((r) => r.depth).join(","),
+        nodesRange: [Math.min(...rs.map((r) => r.nodes)), Math.max(...rs.map((r) => r.nodes))],
+        wallMax: Math.max(...rs.map((r) => r.wallMs)),
+      };
+    }
+  }
+  s.load1 = [Math.min(...rows.map((r) => r.load1)), Math.max(...rows.map((r) => r.load1))];
+  return s;
+}

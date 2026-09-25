@@ -1,0 +1,14 @@
+// secnfr-ABC-081: the caged-kings boards the hunt found, at real budgets, both arms.
+// argv: armsDir arm budgetMs
+const [ARMS, ARM, BUDGET] = process.argv.slice(2);
+const R = `${ARMS}/${ARM}`;
+const { parseFen } = await import(`${R}/src/fen.ts`);
+const { chooseMove } = await import(`${R}/src/engine.ts`);
+for (const fen of [
+  "K7/8/k7/p1p1p1p1/P1P1P1P1/8/8/8 w - - 0 1",
+  "8/8/8/p1p1p1p1/P1P1P1P1/K7/8/k7 w - - 0 1",
+]) {
+  const t0 = performance.now();
+  const c = chooseMove(parseFen(fen), { budgetMs: Number(BUDGET) });
+  console.log(JSON.stringify({ arm: ARM, budgetMs: Number(BUDGET), fen, depth: c.depth, score: c.score, nodes: c.nodes, wallMs: +(performance.now() - t0).toFixed(1) }));
+}

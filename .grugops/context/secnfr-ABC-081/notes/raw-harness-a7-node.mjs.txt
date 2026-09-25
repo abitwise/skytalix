@@ -1,0 +1,11 @@
+// secnfr-ABC-081 NFR-005 under PLAIN NODE. argv: armsDir rounds outJson
+import { writeFileSync } from "node:fs";
+import { loadBuilds, run, summarise } from "./a7-core.mjs";
+
+const [ARMS, ROUNDS, OUT] = process.argv.slice(2);
+const builds = await loadBuilds({ base: `${ARMS}/B`, head: `${ARMS}/A` });
+console.log("node", process.version);
+const rows = run(builds, Number(ROUNDS), "node", console.log);
+const summary = summarise(rows);
+console.log(JSON.stringify(summary, null, 1));
+writeFileSync(OUT, JSON.stringify({ summary, rows }, null, 1));

@@ -1,0 +1,262 @@
+{
+ "summary": {
+  "base/kiwipete": {
+   "depths": "6,6,6,6,6",
+   "nodesRange": [
+    904970,
+    933642
+   ],
+   "wallMax": 3002.2
+  },
+  "base/position-6": {
+   "depths": "5,5,5,5,5",
+   "nodesRange": [
+    887070,
+    920862
+   ],
+   "wallMax": 3002
+  },
+  "head/kiwipete": {
+   "depths": "6,6,6,6,6",
+   "nodesRange": [
+    923402,
+    934666
+   ],
+   "wallMax": 3003.6
+  },
+  "head/position-6": {
+   "depths": "6,6,6,6,6",
+   "nodesRange": [
+    855326,
+    865566
+   ],
+   "wallMax": 3006.1
+  },
+  "load1": [
+   3.58,
+   4.62
+  ]
+ },
+ "rows": [
+  {
+   "runner": "node",
+   "round": 0,
+   "build": "base",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 917258,
+   "wallMs": 3001.5,
+   "score": 35,
+   "load1": 4.33
+  },
+  {
+   "runner": "node",
+   "round": 0,
+   "build": "head",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 923402,
+   "wallMs": 3002.5,
+   "score": 35,
+   "load1": 4.62
+  },
+  {
+   "runner": "node",
+   "round": 0,
+   "build": "base",
+   "name": "position-6",
+   "depth": 5,
+   "nodes": 920862,
+   "wallMs": 3002,
+   "score": 35,
+   "load1": 4.49
+  },
+  {
+   "runner": "node",
+   "round": 0,
+   "build": "head",
+   "name": "position-6",
+   "depth": 6,
+   "nodes": 858398,
+   "wallMs": 3005,
+   "score": 25,
+   "load1": 4.49
+  },
+  {
+   "runner": "node",
+   "round": 1,
+   "build": "head",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 929546,
+   "wallMs": 3000.5,
+   "score": 35,
+   "load1": 4.21
+  },
+  {
+   "runner": "node",
+   "round": 1,
+   "build": "base",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 922378,
+   "wallMs": 2999.7,
+   "score": 35,
+   "load1": 4.21
+  },
+  {
+   "runner": "node",
+   "round": 1,
+   "build": "head",
+   "name": "position-6",
+   "depth": 6,
+   "nodes": 855326,
+   "wallMs": 3006.1,
+   "score": 25,
+   "load1": 4.51
+  },
+  {
+   "runner": "node",
+   "round": 1,
+   "build": "base",
+   "name": "position-6",
+   "depth": 5,
+   "nodes": 899358,
+   "wallMs": 3001.5,
+   "score": 35,
+   "load1": 4.47
+  },
+  {
+   "runner": "node",
+   "round": 2,
+   "build": "base",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 904970,
+   "wallMs": 3000.6,
+   "score": 35,
+   "load1": 4.47
+  },
+  {
+   "runner": "node",
+   "round": 2,
+   "build": "head",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 924426,
+   "wallMs": 3000.5,
+   "score": 35,
+   "load1": 4.52
+  },
+  {
+   "runner": "node",
+   "round": 2,
+   "build": "base",
+   "name": "position-6",
+   "depth": 5,
+   "nodes": 887070,
+   "wallMs": 3001.5,
+   "score": 35,
+   "load1": 4.52
+  },
+  {
+   "runner": "node",
+   "round": 2,
+   "build": "head",
+   "name": "position-6",
+   "depth": 6,
+   "nodes": 861470,
+   "wallMs": 3001.2,
+   "score": 25,
+   "load1": 4.23
+  },
+  {
+   "runner": "node",
+   "round": 3,
+   "build": "head",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 934666,
+   "wallMs": 3003,
+   "score": 35,
+   "load1": 4.13
+  },
+  {
+   "runner": "node",
+   "round": 3,
+   "build": "base",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 924426,
+   "wallMs": 3002.2,
+   "score": 35,
+   "load1": 4.13
+  },
+  {
+   "runner": "node",
+   "round": 3,
+   "build": "head",
+   "name": "position-6",
+   "depth": 6,
+   "nodes": 865566,
+   "wallMs": 3002,
+   "score": 25,
+   "load1": 3.96
+  },
+  {
+   "runner": "node",
+   "round": 3,
+   "build": "base",
+   "name": "position-6",
+   "depth": 5,
+   "nodes": 916766,
+   "wallMs": 2999.6,
+   "score": 35,
+   "load1": 3.96
+  },
+  {
+   "runner": "node",
+   "round": 4,
+   "build": "base",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 933642,
+   "wallMs": 3002,
+   "score": 35,
+   "load1": 3.81
+  },
+  {
+   "runner": "node",
+   "round": 4,
+   "build": "head",
+   "name": "kiwipete",
+   "depth": 6,
+   "nodes": 933642,
+   "wallMs": 3003.6,
+   "score": 35,
+   "load1": 3.58
+  },
+  {
+   "runner": "node",
+   "round": 4,
+   "build": "base",
+   "name": "position-6",
+   "depth": 5,
+   "nodes": 909598,
+   "wallMs": 3000.2,
+   "score": 35,
+   "load1": 3.58
+  },
+  {
+   "runner": "node",
+   "round": 4,
+   "build": "head",
+   "name": "position-6",
+   "depth": 6,
+   "nodes": 863518,
+   "wallMs": 3004.5,
+   "score": 25,
+   "load1": 3.69
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+// secnfr-ABC-081 NFR-004: the table's own per-search cost, read directly. clearTable() is called
+// inside chooseMove AFTER `start = now()`, so its cost is spent from the budget. First call =
+// the one-per-process 4 MiB allocation; later calls = words.fill(0) over 2^18 Uint32 (1 MiB).
+// Also the key-array allocation (BigUint64Array(129)) per search. argv: armDir
+const [ARM] = process.argv.slice(2);
+const tt = await import(`${ARM}/src/transposition.ts`);
+let t0 = performance.now();
+tt.clearTable();
+const firstMs = performance.now() - t0;
+const xs = [];
+for (let i = 0; i < 2000; i++) {
+  t0 = performance.now();
+  tt.clearTable();
+  xs.push(performance.now() - t0);
+}
+xs.sort((a, b) => a - b);
+t0 = performance.now();
+for (let i = 0; i < 2000; i++) new BigUint64Array(129);
+const keyArrUs = ((performance.now() - t0) / 2000) * 1000;
+console.log(JSON.stringify({ firstCallMs: +firstMs.toFixed(3), clearMs: { p50: +xs[1000].toFixed(4), p99: +xs[1980].toFixed(4), max: +xs.at(-1).toFixed(4) }, keyArrayAllocUs: +keyArrUs.toFixed(3), tableBytes: tt.tableByteLength() }));

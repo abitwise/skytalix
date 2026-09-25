@@ -1,0 +1,25 @@
+// secnfr-ABC-081 NFR-009 "measured need?" probe (ADR-0025 T2 shape), plain node, same process:
+// the shipped 2^18 table (A) vs scratch copies at 2^16 (T16) and 2^20 (T20) — TABLE_BITS the one
+// changed line, outside the repository. Completed depth and nodes at 3 s on kiwipete and
+// position-6, 3 rounds, arm order rotated. A need exists only if a larger table buys a ply.
+// argv: armsDir
+import os from "node:os";
+const [ARMS] = process.argv.slice(2);
+const arms = {};
+for (const a of ["A", "T16", "T20"]) {
+  arms[a] = { fen: await import(`${ARMS}/${a}/src/fen.ts`), engine: await import(`${ARMS}/${a}/src/engine.ts`) };
+}
+const FENS = {
+  kiwipete: "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "position-6": "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+};
+const orders = [["A", "T16", "T20"], ["T20", "A", "T16"], ["T16", "T20", "A"]];
+for (let round = 0; round < 3; round++) {
+  for (const [name, fen] of Object.entries(FENS)) {
+    for (const a of orders[round]) {
+      const load1 = +os.loadavg()[0].toFixed(2);
+      const c = arms[a].engine.chooseMove(arms[a].fen.parseFen(fen), { budgetMs: 3000 });
+      console.log(JSON.stringify({ round, arm: a, name, depth: c.depth, nodes: c.nodes, score: c.score, load1 }));
+    }
+  }
+}
