@@ -1,0 +1,197 @@
+[
+ {
+  "name": "M1 comparator does not sort (sort(() => 0))",
+  "killed": true,
+  "failed": [
+   "quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order puts every capture and promotion ahead of every quiet move, most valuable victim first",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order puts the killers first among the quiet moves, most recent first, and after every capture",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order matches a killer by squares and promotion, not by object — killers come from siblings",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order puts the hash move before everything, captures included",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order orders a capturing promotion by its victim PLUS the piece it becomes (ABC-079 QE G4)",
+   "search.ordering.test.ts :: Scope — the engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently",
+   "search.ordering.test.ts :: Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, f8f7",
+   "search.ordering.test.ts :: A3 — ordered search visits a small fraction of the unordered nodes position-6 at depth 2 — the default lane's standing guard",
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467",
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 275 nodes (ABC-079 QE G4)"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M2 comparator sorts ascending",
+  "killed": true,
+  "failed": [
+   "engine.test.ts :: A2 — a budget far below one iteration's cost still returns a move, and stops near it visits only a bounded number of nodes past the deadline — the in-recursion check",
+   "engine.test.ts :: A4 — no fixed depth anywhere in the delivered engine goes DEEPER than any small hard-coded ceiling would allow — the behavioural half",
+   "quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order puts every capture and promotion ahead of every quiet move, most valuable victim first",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order puts the killers first among the quiet moves, most recent first, and after every capture",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order matches a killer by squares and promotion, not by object — killers come from siblings",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order puts the hash move before everything, captures included",
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order orders a capturing promotion by its victim PLUS the piece it becomes (ABC-079 QE G4)",
+   "search.ordering.test.ts :: Scope — the engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently",
+   "search.ordering.test.ts :: Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, f8f7",
+   "search.ordering.test.ts :: A3 — ordered search visits a small fraction of the unordered nodes position-6 at depth 2 — the default lane's standing guard",
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467",
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 275 nodes (ABC-079 QE G4)"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M3 search.ts never offers killers",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467",
+   "search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search search(): every killer offered was recorded at that ply of that search, and killers ARE offered"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M4 search.ts offers killers of ply+1",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467",
+   "search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search search(): every killer offered was recorded at that ply of that search, and killers ARE offered"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M5 search.ts records killers at ply+1",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467",
+   "search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search search(): every killer offered was recorded at that ply of that search, and killers ARE offered"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M6 search.ts one killer table shared by every search",
+  "killed": true,
+  "failed": [
+   "quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 3: same score, same move, same node count",
+   "quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 4: same score, same move, same node count",
+   "quiescence.test.ts :: A4 — a position with no capture anywhere near the leaves scores exactly as before two far-apart pawns at depth 3: same score, same move, same node count",
+   "search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search search(): every killer offered was recorded at that ply of that search, and killers ARE offered",
+   "search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search search(): each search starts from its own, empty table"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M7 engine.ts interior unordered",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search chooseMove(): one table per call, kept across its iterations, never across calls"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M8 engine.ts MVV-LVA only (no killers)",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search chooseMove(): one table per call, kept across its iterations, never across calls"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M9 engine.ts offers killers of ply+1",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search chooseMove(): one table per call, kept across its iterations, never across calls"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M10 engine.ts one killer table shared across calls",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search chooseMove(): one table per call, kept across its iterations, never across calls"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M11 engine.ts root unordered",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, f8f7"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M12 killers ranked above captures",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467",
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 275 nodes (ABC-079 QE G4)"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M13 mvvLvaKey promotion term dropped (ABC-079 QE G4)",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order orders a capturing promotion by its victim PLUS the piece it becomes (ABC-079 QE G4)",
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 275 nodes (ABC-079 QE G4)"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M14 KillerTable records captures and promotions",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: KillerTable — two quiet killers per ply, most recent first does not record a capture or a promotion — MVV-LVA already orders those",
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M15 hash move ignored by the comparator",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order puts the hash move before everything, captures included"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M16 KillerTable duplicate check removed",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: KillerTable — two quiet killers per ply, most recent first keeps the two most recent, newest first, and never the same move twice"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M17 KillerTable keeps one killer, not two",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: KillerTable — two quiet killers per ply, most recent first keeps the two most recent, newest first, and never the same move twice"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ },
+ {
+  "name": "M18 killer slots offered oldest first",
+  "killed": true,
+  "failed": [
+   "search.ordering.test.ts :: the comparator — hash move, then MVV-LVA, then killers, then generation order puts the killers first among the quiet moves, most recent first, and after every capture",
+   "search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467"
+  ],
+  "suiteErrors": [],
+  "total": 112
+ }
+]

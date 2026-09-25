@@ -227,3 +227,35 @@ remaining item.
 
 **Pullable today: YES.** Size `M`, priority `P0`, unchanged. The Orchestrator makes the
 `Backlog → Ready` board move.
+
+## § Delivery — 2026-09-25 (Software Engineer, task `wave-2026-09-24`, subtask `ticket-to-pr-ABC-080`, Workflow 04)
+
+**Built on `grugops/ABC-080-move-ordering`** (`a437b11` code + tests, `ac5215c` tied-root guard),
+off `grugops/wave-2026-09-24` @ `4f74acc`. **NOT merged, NOT pushed.** Measurements, mutants, lane
+and the design calls are in `.grugops/context/ticket-to-pr-ABC-080/notes/`, and the probes are in
+`probe/` beside them. They are not restated here.
+
+- **Delivered.** One comparator, `orderMoves`, and a two-slot-per-ply `KillerTable`, both in
+  `src/search.ts` and consumed by **both** recursions, the root included (`src/engine.ts`). The
+  order is: hash move, then captures/promotions by `mvvLvaKey`, then killers, then generation
+  order. Test-only doors are `searchWithoutOrdering` and `searchWithoutKillers`. The hash-move
+  arm is **dormant**: both recursions pass `null` until `ABC-081`. New
+  `src/search.ordering.test.ts` carries `A1`–`A6`.
+- **`A1` MET** (six roots, d3 + d4, scores identical). **`A2` MET** (375 positions × 4 inputs).
+  **`A3` MET: kiwipete 2.64%, position-6 2.10%** at d4 (bar ≤ 4%).
+  **`A4` MET for MVV-LVA and killers**, and the hash move is not yet measurable. d5 delete rule:
+  killers −5.7% / −20.5%, so neither heuristic is a deletion candidate. **`A5` MET.**
+  **`A6` MET** (instrumented run). **`A7` MET: kiwipete 3 → 6, position-6 3 → 5** at 3 s, same
+  process, plain node. `ABC-079` QE's `G4` is closed.
+- **Re-measured pins, moves and scores unchanged:**
+  - `engine.test.ts` `A3` fixture budget 8 → 4;
+  - `quiescence.test.ts` bare-leaf fingerprint 562 → 136 and 14 565 → 2 273 (flagged: a test
+    file outside the Scope's two production files);
+  - `search.test.ts` `A6` export list +4.
+- **`N8-LANE` MET:** +10 ms net (+170 ms gross, inside the null control's spread). The lane is
+  still over `NFR-008`'s 15 s, which is inherited.
+- **Gates at `ac5215c`:** lint 0, typecheck 0, build 0, unit **44 files / 1 418 passed / 0
+  skipped**, integrity `No findings.` `SEARCH_DEEP=1` 137/137 and `ENGINE_DEEP=1` 33/33.
+  18/18 mutants killed.
+- **Column:** still `In Development` on the page. The `In Review` move and the QE and
+  Security/NFR hops are the Orchestrator's to schedule. This hop was fenced from `plans/board.md`.
