@@ -342,6 +342,41 @@ pull and did not gate this ticket's item-3 resolution.**
 **Pullable today: YES.** Size `M`, priority `P0`, unchanged. **Recommended routing: pull
 `ABC-081` into `Ready` — the Orchestrator's board move, out of this subtask's fence.**
 
+## § QE — 2026-09-25 (QE/E2E, task `wave-2026-09-24`, subtask `qe-ABC-081`, Workflow 05)
+
+**PASS WITH FINDINGS.** Reviewed at `504f046`. Full reasoning, every reproduced figure and the
+mutant re-sample table are in `.grugops/context/qe-ABC-081/notes/` — not restated here.
+
+- **`A1`–`A8` all MET, independently reproduced** (gates, `SEARCH_DEEP` 40/40, `ENGINE_DEEP`
+  26/26+33/33, all re-run in full, not sampled). `A2`'s narrow margin (15.95% / 15.38% vs 15%)
+  is checked and confirmed **stable, not a coin-flip** — three re-runs return byte-identical
+  percentages — but it stays thin; a fragility note, not a defect.
+- **`A4`'s literal search-level mate-in-2 wording still has no fixture.** A second, independent
+  225-combination scan (non-overlapping with the build's own 728) again found no reused
+  mate-in-two root-score flip. The correctness claim rests on the table's own unit tests, which
+  are generic in distance and pass. Non-blocking, named for whoever next touches
+  `src/transposition.ts`.
+- **Six design calls ruled, all ACCEPTED**, with reasoning: exact-depth-only cutoff,
+  always-replace, `ABC-080`'s ordering doors keeping the table off, the three new exports, the
+  two forced edits, and the three re-measured pins.
+- **Mutant ledger re-sampled (8/27), all reproduce exactly.** K3 (capacity guard) genuinely
+  survives, traced to being unreachable while `search.ts`'s `!(depth >= 1)` root guard stands —
+  not a live gap today. **K4 surfaces an operational finding the build's own note did not:** the
+  hang it triggers is synchronous CPU-bound work vitest's `testTimeout` cannot interrupt, and
+  plain `npm test` carries no OS-level timeout wrapper — a future regression of that class would
+  hang the gate itself rather than fail red. Named for the next licensed touch of `src/search.ts`
+  or `AGENTS.md`'s Test slot.
+- **Game-level smoke test added:** `npx tsx src/cli.ts --colour white` scripted through the CLI
+  ran clean (2 human + 2 engine plies, resignation), no crash. A session-level
+  fivefold-repetition game was not additionally scripted — out of this ticket's own scope
+  (test note 4) and `A8` already shows the session-repetition files untouched.
+- **`NFR-005`/`NFR-009`/`N8-LANE` reported, not ruled**, per this subtask's fence. `NFR-005`
+  (plain-node depth 6/6) and `NFR-009` (heapUsed/arrayBuffers growth) independently re-measured
+  and match the build; `N8-LANE` recorded as the build reported it (not independently re-run).
+
+**`ABC-081` MAY LEAVE `In Review`; the board move (toward `In Security/NFR`) is the
+Orchestrator's.**
+
 ## § Delivery — 2026-09-25 (Software Engineer, task `wave-2026-09-24`, subtask `ticket-to-pr-ABC-081`, Workflow 04)
 
 **Built on `grugops/ABC-081-transposition-table`**, off `grugops/wave-2026-09-24` @ `6033d05`:
