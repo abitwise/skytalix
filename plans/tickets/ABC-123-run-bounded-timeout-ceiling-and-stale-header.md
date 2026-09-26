@@ -272,3 +272,42 @@ outputs beside them). Board and frontmatter moves are the Orchestrator's. **Reco
 - **Proof cost outside the lane:** 1.53 s real in one run.
 - **ASVS firing threshold not fired:** argv spawns only, no `shell: true`.
 - **R1 is untouched.** No signal forwarding was added.
+
+## QE — QE/E2E, 2026-09-26 (task `qe-ABC-123`, Workflow 05)
+
+**Result: PASS WITH FINDINGS.** Worked inside the existing worktree
+`.claude/worktrees/ABC-123-run-bounded-r2r3` (branch `grugops/ABC-123-run-bounded-r2r3`, HEAD
+`3028933`). Every acceptance criterion below was independently re-derived — not re-trusted from
+the Software Engineer's own delivery section or notes — including a fresh `A1` red reproduction
+against a clean `e57da89` copy of the wrapper and four planted mutants run against the committed
+proof. Notes: `.grugops/context/qe-ABC-123/notes/` (`…d651a68b` plan, `…0fc1e1b3` readings,
+`…58925283` result). No merge, no push, no reset performed. `node_modules` was missing in the
+worktree; symlinked temporarily from the main checkout and removed again after every command,
+never staged.
+
+| AC | QE result | evidence |
+|---|---|---|
+| `A1` | **MET, reproduced red then green.** | Pre-fix copy (`git show e57da89:tools/grugops/run-bounded.js`, piped through `tee` — a direct `>` redirect on a `git` command is blocked by this install's own prod-deploy command-pattern guard) plus the unmodified fixture and proof, in a scratch directory: proof exit `1`, exactly the three `A1` rows FAILED, each exit `124` with the `TimeoutOverflowWarning`. HEAD's own wrapper: proof exit `0`, all 26 rows PASS, the three `A1` values reading exit `2`, usage-line stderr, empty stdout. |
+| `A2` | **MET.** | `N=2147483647`: exit `0`, marker on stdout, empty stderr — reproduced on both the pre-fix scratch copy and HEAD. |
+| `A3` | **MET, unchanged.** | All 13 rows (7 rejected malformed, the no-argument case, 5 lenient-accepted) PASS identically on both runs. |
+| `A4` | **MET.** | `grep -c "NOT YET WIRED IN" tools/grugops/run-bounded.js` → `0`. |
+| `A5` | **MET.** | `grep -ni session` → lines 38, 41, 44, 49, matching the delivery's own line numbers and quotes; read by eye, states `setsid()`, names R1, states the Ctrl-C/SIGTERM-never-SIGKILL rule. |
+| `A6` | **MET.** | `git diff e57da89 HEAD -- tools/grugops/run-bounded.js`, every `+`/`-` line re-read by eye: only two non-`//` lines in the whole diff, both R2's own guard (`const MAX_TIMEOUT_MS ...` and the widened `if`). |
+| `A7` | **MET, plus one non-blocking finding.** | `npm test`: exit implied 0, 48 files / 1467 tests, 0 skipped. `lint`/`typecheck`/`build`: exit 0 each. **Finding:** `biome.json`'s `files.includes` (`src/**/*.ts`, `spike/**/*.ts`, `*.json`, `vitest.config.ts`) has no `tools/**` entry, so the linter's exit-`0`, 85-file run structurally never reads either changed file — a pre-existing, repo-wide gap (also present at `ABC-122`'s own delivery on the same file), not introduced or fixable inside this ticket's own fence. Does not block `A7` (which asks only whether the command exits `0`); recorded so the next hop inherits it rather than reading a green lint line as coverage it is not. |
+| `A8` | **MET.** | `git diff --numstat e57da89...HEAD`: only the two `tools/grugops/` files, this ticket page, one `plans/traceability.md` row and the `ticket-to-pr-ABC-123` notes directory. No `src/`, `package.json`, `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md`, ADR or `run-bounded.hang-fixture.js` line. |
+
+**Mutation testing (not an acceptance criterion; a check on the proof's own discriminating
+power).** Four mutants, each a copy of the fixed wrapper in its own scratch directory alongside
+unmodified fixture/proof copies: an off-by-one (`>` → `>=` at the boundary), the R2 clause dropped
+entirely, a wrong `2 ** 32 - 1` ceiling, and the validation `if` moved to after `spawn(...)`. **All
+four independently turn the committed proof RED** (exit `1` in every case) — the off-by-one breaks
+`A2`'s row, the dropped clause and the wrong ceiling both break `A1`'s rows (via `TimeoutOverflowWarning`),
+and the after-spawn placement breaks 11 rows because the target's stdout marker is already written
+(stdio is inherited directly, not proxied through the wrapper) before the wrapper's own `exit(2)`
+runs.
+
+**R1** confirmed untouched (no signal-forwarding line in the diff). `N8-LANE`/`N8-SPAWN` readings
+are Security/NFR's own to confirm, not re-derived by QE.
+
+**Recommend `In Security/NFR`** (`tools/grugops/` is the gate's own surface, per the ticket's own
+dependency note). Board and column moves are the Orchestrator's.
