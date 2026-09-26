@@ -20,6 +20,15 @@ amendments**. Owner's word, verbatim: *"4. accept"* (recorded in
   consequence, and the one-door alternative. Each is marked *(amended 2026-09-25)*. Decisions
   1–5, 7, 8 and 10 and the Rollback are unchanged.
 - BA/PM folds the amendments into `ABC-121` `A1` / `A3` / `A4`. This ADR does not edit the ticket.
+- Amended 2026-09-26 at subtask `adr-amend-0026-0006`, on the owner's word (Olger Oeselg,
+  2026-09-26, verbatim: *"3. accept"*, recorded in `20260926T201000Z-orchestrator-decision-52aaf5f3`).
+  These are the clarifying amendments proposed in `ruling-abc121-g6`
+  (`…0a3528d1`, `…ea306e58`, `…408249af`), applied as proposed. The amended text is decision 7
+  (a row belongs to the decision its assertion matches; the `G6` knight pair is struck from its
+  examples), a note in decision 9's mate-floor clause (the PVS figures), and the Consequences
+  guard list (the drift and the mate floor overclaimed PVS window bugs). Each is marked
+  *(amended 2026-09-26, `ruling-abc121-g6`)*. No other decision changes. The status stays
+  **accepted**.
 
 - It builds on `ADR-0024` decision 7 and `ADR-0025` decision 6 (the test-only door precedent and
   the ladder rule) and amends neither.
@@ -142,11 +151,22 @@ position one move away, and six endgames.
 7. **VALUE and behaviour rows on the shipped path stay where they are, with PVS and LMR on.**
    - Examples: mate found, shorter mate preferred (the depth-5 and depth-7 mate rows already
      exercise LMR), stalemate and repetition exactly 0, legal root move, position unchanged, the
-     `G6` knight pair, `QE-G2`/`QE-G3`, the quiescence hanging-piece count, and the engine's
-     clock, abort and budget rows. They bind the engine the player gets.
+     ~~`G6` knight pair,~~ *(struck 2026-09-26, see below)* `QE-G2`/`QE-G3`, the quiescence
+     hanging-piece count, and the engine's clock, abort and budget rows. They bind the engine the player gets.
    - Where one row asserts both a literal value and a door comparison, the literal half may stay
      on the shipped path. An example is `transposition.test.ts`'s depth-10 rook ending: the
      probe reads -29 992 under every configuration.
+   - *(amended 2026-09-26, `ruling-abc121-g6`)* **A row belongs to the decision that matches its
+     assertion, not its name.** A row that compares a search or the engine with a test-only door
+     belongs to decision 4, or to decision 5 for the two drift detectors. That holds for identity,
+     ratio, hit rate and node pin alike, and it holds even when the row also pins a value. Decision
+     7 covers only assertions made on the shipped path alone. **The `G6` knight pair is struck from
+     the examples above.** It is `ABC-081` `A1`'s table-on-vs-off identity, and at depth 4 LMR moves
+     `knight-g1 w -` from 820 to 830, so it re-points under decision 4. `G6`'s guarantee does not
+     rest on it. The table lives one search (`ADR-0025` decision 4), so the score pair reds no
+     castling-key bug on any path. The guarantee rests on the key rows (`transposition.test.ts` "G6
+     bites", `zobrist.test.ts`'s castling-rights rows), which no search switch reaches
+     (`ruling-abc121-g6` `…0a3528d1`, `…ea306e58`).
 8. **The identity chain covers what decision 4 moved off the shipped search.** The chain is:
    - `search()` ≈ `searchWithoutReductions`, bounded (decision 9);
    - `searchWithoutReductions` ≡ `searchWithoutPvsOrReductions`, a score-identity row
@@ -167,6 +187,11 @@ position one move away, and six endgames.
      scores a mate of the same sign, no longer, at depth d + 1 = 5.
      - *Measured:* the correct rule flips 0 of 180 (d4→5) and 0 of 205 (d5→6). A 2-ply reduction
        (`r2`) flips 17 / 16, `gross` flips 19 / 24, and a PVS window bug flips 3 / 4.
+     - *(amended 2026-09-26, `ruling-abc121-g6`)* Those PVS figures come from the review's probe,
+       whose reference had no PVS. As decided, the floor's reference is `searchWithoutReductions`,
+       which carries PVS (decision 5). A PVS window bug therefore breaks both sides of the floor,
+       and the floor does not detect it (measured on `pvsNoResearch`: the floor over the 287 stays
+       green).
      - *Why not the same depth:* a correct LMR loses 15–16 horizon mates at equal depth, and finds
        every one of them one ply later. That ply is what LMR buys, so a same-depth floor would
        fail the correct build.
@@ -252,8 +277,17 @@ position one move away, and six endgames.
   - So the reduction rule is guarded by the rows, not by the oracle:
     - decision 6's predicate table reds `tactical`, `early` and `r2`;
     - `A4` reds `noLmrResearch` and `noResearch`;
-    - the depth-5 drift bars red `noResearch`, `early`, `gross` and PVS window bugs;
-    - the one-extra-ply mate floor reds `r2`, `gross` and PVS window bugs.
+    - the depth-5 drift bars red `noResearch`, `early` and `gross`. They also redded
+      `pvsNoResearch` in the build, but only incidentally: their reference carries PVS;
+    - the one-extra-ply mate floor reds `r2` and `gross`;
+    - PVS window bugs are red by construction on the rows that compare a PVS search with one that
+      has none: `ABC-077` `A1` (default lane) and decision 8's `searchWithoutReductions` ≡
+      `searchWithoutPvsOrReductions` link (its deep 190 row; the default guard is blind to
+      `pvsNoResearch`) (`ruling-abc121-g6` `…408249af`).
+    - *(amended 2026-09-26, `ruling-abc121-g6`: the three sub-bullets above replace two that read
+      "the depth-5 drift bars red `noResearch`, `early`, `gross` and PVS window bugs;" and "the
+      one-extra-ply mate floor reds `r2`, `gross` and PVS window bugs." Both overclaimed: the
+      reference of each carries PVS.)*
   - Each wrong LMR the review planted is red in at least one row.
 - **Some pruned trees get BIGGER under PVS.** Position-4 at depth 4 reads 9 054 nodes base,
   12 227 with PVS and 9 581 with PVS+LMR. Any "nodes fall" row is scoped to named positions,

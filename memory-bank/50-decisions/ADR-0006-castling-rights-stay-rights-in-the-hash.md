@@ -267,4 +267,14 @@ identical subtrees to depth 4) cost one wasted entry and never a wrong answer. `
 
 | # | what would falsify it | how to check |
 |---|---|---|
-| **G6** | a table-on search scoring differently from the table-off search at the same depth, on a pair differing only in castling rights | `ABC-081` `A1` (table on vs off, identical scores) |
+| **G6** | a table-on search scoring differently from the table-off search at the same depth, on a pair differing only in castling rights | `ABC-081`'s key row "G6 bites: the knight-g1 pair keys differently" and `zobrist.test.ts`'s castling-rights rows (`ABC-075` `A4`). The `ABC-081` `A1` score pair (830 vs 820 at depth 4 on the pre-`ABC-121` search) records the premise that the subtrees differ; it does not detect a key bug, because the table lives one search. *(amended 2026-09-26)* |
+
+*Erratum to the `G6` "how to check" cell, 2026-09-26 (Architect/Design, subtask
+`adr-amend-0026-0006`), on the owner's word (Olger Oeselg, 2026-09-26, verbatim: *"3. accept"*,
+`20260926T201000Z-orchestrator-decision-52aaf5f3`). Proposed in `ruling-abc121-g6` (`…ea306e58`
+§3, evidence `…0a3528d1`). The cell read: "`ABC-081` `A1` (table on vs off, identical scores)".
+That row never had bite: with a castling-key bug planted (rights dropped from the key, or a stale
+incremental key), the score pair reads the same as clean on every configuration, the
+pre-`ABC-121` door included, because `clearTable` runs at every `search()` (`ADR-0025` decision
+4) and the two roots never share a table. No clause of the Decision changes, and the `G6`
+falsifier itself (the middle column) is unchanged.*
