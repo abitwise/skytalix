@@ -56,3 +56,7 @@ the text himself.
   uses that reading. The mismatch comes from upstream timestamps. It was not re-derived here.
 - `UNKNOWN - verify` still stands, as the erratum says: nobody measured whether any foreign
   cutoff was wrong for its node.
+- Date corrected: on the Orchestrator's instruction, the two `ADR-0006` date stamps (the
+  `*(amended …)*` marker and the erratum heading) now read `2026-09-26`, matching the real clock.
+  The `2026-09-27` in "What was applied" above records what was first written. The note-id
+  reference `20260927T001000Z-orchestrator-decision-8c8aa8a9` is unchanged.
