@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — **owner delegated routine decisions, verbatim *"i will delegate these decisions to you. Contact me when big decision is needed or input context for your session goes over 500k"* (note `…8c8aa8a9`; main moves, deploy, UAT acceptance and big decisions stay with the owner).** Under it: ADR-0006 collision-sentence rescope ACCEPTED (Architect applying, `adr0006-apply-sentence`); `ABC-123` pulled → `In Development` (Engineer, `ticket-to-pr-ABC-123`)._
+
 _Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — `ABC-123` cut (BA/PM, `5a26dca`) → `Backlog`, DoR 9/10. `adr0006-amend-sentence` proposal merged as notes only (`23bc500`) — the ADR is unchanged until the owner's word. No hop running._
 
 _Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — **items 1–3 merged into the wave:** `scribe-abc121-lanes` (`ea68a2d`, `AGENTS.md` 22,451 B), `knight-g1-docstring` (`b28953a`, comment only), `nfr-depth7-catalog` (`d7165a5`, NFR-005 depth 7 reached, PROVISIONAL). Wave `npm test` 48/1,467. Branches and worktrees removed. No hop running. Local `main` @ `652ed49` — the wave is ahead with docs/comment only; moving `main` up awaits the owner's word. Still unscheduled: R2 + R3 in `tools/grugops/run-bounded.js` (needs a ticket); ADR-0006 2026-09-25 amendment sentence (needs its own proposal)._
@@ -327,8 +329,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 
-- [ABC-123] run-bounded.js — reject N above the timer's 2^31−1 ceiling (R2) and correct the stale process-model header (R3)  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-09-26, DoR 9/10 ⚠️x1 — PULLABLE; the ⚠️ is item 10, A5's exact header prose left to the delivering hop, not a blocker.) Cut from Security/NFR's ABC-122 gate note (`…2749a2e6`) on the owner's word ("both", note `…c99c5919`). R1 stays the owner's separately accepted risk, not discharged here. **Orchestrator note: `A7`'s baseline counts (47/1,446) are stale — the wave reads 48/1,467 since ABC-121; the delivering hop measures against the current count.**
-
 
 - [ABC-119] No automated test anywhere spawns the delivered CLI and lets the REAL engine choose a move — the product's strongest end-to-end evidence is a transcript  (BA/PM, **M, P2**, epic: EPIC-006, since: 2026-08-21, **DoR 9/10 ⚠️x1 — PULLABLE TODAY; the ⚠️ is item 5 and it is a DISCLOSED CONDITIONAL HAND-OFF with a named stop, not an open question.**) `G-06`, cut from QE/E2E's gap register at `quality-gate-ABC-043-qe-2026-08-19` and handed forward unchanged by a second QE hop at `qe-ABC-043-review-exit-2026-08-20` — **two QE hops named it, neither cut it, and this is the first BA/PM hop to see it.** **`ABC-043` IS NOT RE-OPENED AND IS NOT DEFECTIVE — it declared and fenced this exclusion in three places before any gate ran.** **`ENGINE_DEEP` does NOT close it** (it drives `chooseMove`/`createEngine` in-process as a unit and never spawns the CLI). **PRICED, which is what made it cuttable:** a real-engine child re-measured here at **3.09/3.07/3.07 s wall, 3.19 s user** breaches `N8-SPAWN`'s in-force per-child CPU clause **~10.6x** and its added-wall clause **1.5x**, into a count already AT its `17 + 7 = 24` ceiling and a lane already over `NFR-008` (read here at ~4.1–4.3 s wall / ~16.5–17.3 s CPU). **RULED: an opt-in lane on the four-lane precedent, priced OUT of the default lane at a MEASURED +0.09 s wall / +0.06 s CPU** (median of 5 interleaved paired rounds, sign 4/5, skip count 0). **Two construction traps MEASURED at the cut so the obvious build is not attempted twice: `describe.runIf` REPORTS A SKIP (moves the gate's count off 0, and `.grugops/test-skips.md` is human-owned), and a new file registering nothing when the variable is unset FAILS the default lane with `No test suite found in file`.** `A3` bars any assertion naming a move, score, depth or node count. **NAMING TRAP: `G6` (no hyphen) is a DIFFERENT and CLOSED item; `G-QE115-1..5` are unrelated.**
 
@@ -400,7 +400,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-123] run-bounded.js — reject N above the timer's 2^31−1 ceiling (R2) and correct the stale process-model header (R3)  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-09-26, DoR 9/10 ⚠️x1 — PULLABLE; the ⚠️ is item 10, A5's exact header prose left to the delivering hop, not a blocker.) Cut from Security/NFR's ABC-122 gate note (`…2749a2e6`) on the owner's word ("both", note `…c99c5919`). R1 stays the owner's separately accepted risk, not discharged here. **Orchestrator note: `A7`'s baseline counts (47/1,446) are stale — the wave reads 48/1,467 since ABC-121; the delivering hop measures against the current count.**  **→ In Development 2026-09-27 — pulled by the Orchestrator under the owner's delegation (note `…8c8aa8a9`); branch `grugops/ABC-123-run-bounded-r2r3`.**
 
 
 
