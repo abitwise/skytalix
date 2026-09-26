@@ -311,3 +311,21 @@ are Security/NFR's own to confirm, not re-derived by QE.
 
 **Recommend `In Security/NFR`** (`tools/grugops/` is the gate's own surface, per the ticket's own
 dependency note). Board and column moves are the Orchestrator's.
+
+## Security/NFR — 2026-09-26 (task secnfr-ABC-123, Workflow 05/15)
+
+_Folded verbatim by the Orchestrator from `secnfr-ABC-123` note `…9cbd8b67` (the role wrote it on its own branch while QE edited this page)._
+
+**Result: PASS.** ASVS L1, `block_on: high`. No required fixes. No new accepted risk. `ABC-122`
+R1 remains the owner's standing accepted risk, unchanged.
+
+| item | ruling | evidence |
+|---|---|---|
+| R2 | **Discharged.** `2147483648`, `99999999999` and `9007199254740993` give exit 2, usage only, and 0 `spawn()` calls (unfixed: exit 124, overflow, target killed). `2147483647` is still accepted. 6 more values above the ceiling are rejected, and lenient spellings of the ceiling are still accepted | `secnfr-ABC-123` `9bf35cdd` |
+| R3 | **Discharged.** The header now says new **session** (`setsid()`) and names it as R1's cause. Measured: the child's `sid = pgid = pid`, distinct from the wrapper's. The comment-only rule holds: the only code lines are R2's | `9bf35cdd` |
+| R1 | **The header is accurate; not widened.** Signal, kill and spawn code is byte-identical to `ca9f42d`. SIGINT gives 130 and SIGTERM 143 on HEAD, with 0 survivors | `9bf35cdd`, `ABC-122` `284db7df` |
+| `N8-LANE` | **0 ms of 650 ms.** 0 new `src/` files; the lane is 48 / 1467 at HEAD | `9bf35cdd` |
+| `N8-SPAWN` | **0 ms, confirmed.** No child runs in the lane. 23 per proof run (26 unfixed), all outside the lane | `9cbd8b67` |
+| ASVS | V1.2.5, V1.3.2, V2.2.1 and V15.2.1 **PASS**; the rest are n/a | `9cbd8b67` |
+
+**Recommend `In Security/NFR → Ready for UAT`.** The UAT-waiver measurement is empty.
