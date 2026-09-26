@@ -394,6 +394,148 @@ discharged in the same hop by editing this page → 10 of 10, 0 ⚠️ — READY
 
 Column moves are the Orchestrator's.
 
+## Delivery (Scribe half — `A1`–`A4`, `A6`–`A8`)
+
+Built 2026-09-26, task `scribe-abc109-restructure`, on `grugops/ABC-109-agents-md-cap` @ `b9a6861`
+(worktree `.claude/worktrees/ABC-109-agents-md-cap`, branched off `0bf562f`). **Unmerged, not
+pushed** — the Engineer's `A5` lands on this same branch next.
+
+- **`A1`:** base re-measured at pull time (not the page's stale 29,749): **32,565 B**. After:
+  **21,786 B**. Cut **10,779 B (33.1%)**. Headroom against the 32,768 B cap: **10,982 B ≈ 9.5
+  edits** at the measured 1,159 B/edit rate. 2,790 B under the ticket's own ≤ 24,576 B target.
+- **`A2`:** nine-plus-row before/after preservation table, every destination opened and confirmed
+  to resolve — full table in `.grugops/context/scribe-abc109-restructure/notes/`
+  (`20260926T023100Z-agents-md-scribe-observation-5dd1fcd9.md`). Kit overrides: still **three**,
+  still named, the "reader who counts four is wrong" sentence survives verbatim.
+- **`A3`:** `## When uncertain`, the DoR pointer and the DoD pointer all present, at byte offsets
+  20,930 / 20,963 / 21,036 / 21,695 of the 21,786 B file — all inside budget.
+- **`A4`:** `npm test` 47/47 files, 1446/1446 tests, exit 0 — identical counts to the
+  pre-restructure receipt. No `src/` file touched (`git diff --name-only 0bf562f HEAD` = `AGENTS.md`,
+  `memory-bank/00-index.md`, `memory-bank/90-agents-md-command-log.md` only), so the four named
+  `src/cli.test.ts` assertion sites are unmodified by construction and the `- Dev / run:` slot's
+  separator form, options and colour values remain inside its comment, which still closes before
+  the next list item.
+- **`A6`:** `git diff --name-only 0bf562f HEAD -- 'src/*' | grep -v '\.test\.ts$'` — empty. 0 new
+  test files, 0 new spawns, Δ0 default-lane tests, no wall-clock cost added (prose-only change).
+- **`A7`:** the only new destination is `memory-bank/90-agents-md-command-log.md` (repo state,
+  indexed in `memory-bank/00-index.md`), read by the Scribe before touching Commands and by any
+  role chasing a receipt's full history. `memory-bank/60-progress.md` and `ADR-0007` (pre-existing,
+  unmodified) are read on start by every role. Nothing moved into `agent-factory/`.
+- **`A8`:** `AGENTS.md` now opens with its own byte budget and the cap's inherited provenance
+  (2026-08-19 Scribe observation), stated in one line after `## Mission`.
+
+**The constant for the Engineer's `A5`: `24576` (bytes)** — this ticket's own `A1` target, which
+the restructure lands 2,790 B under.
+
+Full measurements, the A2 table and the shape decision: `.grugops/context/scribe-abc109-restructure/notes/`.
+
+### Delivery (Engineer half — `A5`)
+
+Built 2026-09-25 (host clock), task `ticket-to-pr-ABC-109-a5`, on `grugops/ABC-109-agents-md-cap`
+@ `7dd353b`. **Unmerged, not pushed.**
+
+- **`A5` — MET.** One assertion in `src/cli.test.ts` (already reads `AGENTS.md` from disk; no new
+  test file): `readFileSync(AGENTS.md).length` (bytes) `≤ AGENTS_MD_BUDGET_BYTES = 24_576`.
+  **Watched RED:** `AGENTS.md` padded to 24,577 B (budget + 1) reds this row alone with
+  `AGENTS.md bytes against its 24576 B budget (ABC-109): expected 24577 to be less than or equal to 24576`;
+  green at exactly 24,576 B; restored byte-for-byte (sha256 `08bda29f…` before and after).
+  *Deviation recorded:* the red was watched by temporarily padding the real file (the contract's
+  method, since only one assertion may ship), not by a shipped in-memory mutant row.
+- **`A6` (Engineer's share):** `src/` non-`.test.ts` changes = none; 0 new test files (47 → 47);
+  0 new spawns; **+1 test** (1446 → 1447, ≤ 2 allowed); row cost ~1 ms, lane wall change within
+  run-to-run noise. `N8-LANE` not quoted, per the page; the falsifiable zeroes hold.
+- **Gates:** `npm test` 47/47 files, 1447/1447, exit 0; `tsc --noEmit` clean; `biome check .` clean.
+  Existing `AGENTS.md` rows (`ABC-042`/`065`/`067`/`071`) green — no stop fired.
+
+Note: `.grugops/context/ticket-to-pr-ABC-109-a5/notes/`.
+
+### Delivery (QE half) — verdict: PASS WITH FINDINGS
+
+Built 2026-09-25 (host clock), task `qe-ABC-109`, on `grugops/qe-ABC-109` (own worktree
+`.claude/worktrees/qe-ABC-109`, branched off `0e132ee` — tip of `grugops/ABC-109-agents-md-cap`).
+Independently reproduced `A1`–`A8`. **Unmerged, not pushed.**
+
+- **`A1`/`A3`:** independently re-measured — 32,565 B → 21,786 B; tail byte offsets (`Definition of
+  Ready:` 20,963 / `Definition of Done:` 21,036 / `## When uncertain` 21,695) match the Scribe's
+  figures exactly.
+- **`A2`:** spot-checked 8 of the Scribe's 13 table rows' cited `memory-bank/60-progress.md` line
+  numbers — every one resolves to the claimed heading. Kit-override count reads THREE before and
+  after; the "reader who counts four is wrong" sentence survives verbatim. One historical sentence
+  (pre-`ABC-042` UAT deferral) dropped from the condensed `## Test and UAT authority` with no
+  designed pointer — not a directive, so not scored as an `A2` gap; recorded as an observation.
+- **`A4`:** `npm test` 47/47, 1447/1447, exit 0; `src/cli.test.ts` diff is a pure append after
+  line 2130, so the four `Dev / run` assertion sites are unmodified by construction; typecheck and
+  lint clean.
+- **`A5` — NOT MET TO THE LETTER.** The shipped assertion is sound (byte-based, one `it`, no new
+  test file), but the red path was watched by padding the real `AGENTS.md` file, which directly
+  contradicts `A5`'s own wording ("rather than by writing the real file"). Traced to the
+  Orchestrator's `ticket-to-pr-ABC-109-a5` queue task, which itself prescribed the real-file-pad
+  method. **The one extra row that closes it:** a throwaway, never-shipped in-memory mutant-number
+  check (e.g. `24577 <= 24576` fed directly, no file write), run once and discarded — confirmed
+  trivially exercisable in this worktree without touching `AGENTS.md`. Also confirms this gate's
+  own criterion 4: `readFileSync` with no encoding returns a `Buffer`, whose `.length` is bytes,
+  not characters (reproduced with a throwaway multi-byte UTF-8 fixture).
+- **`A6`/`A7`/`A8`:** independently confirmed — `src/` diff is `src/cli.test.ts` only; test count
+  1446 → 1447 (+1, ≤ 2); `memory-bank/90-agents-md-command-log.md` holds the relocated receipts
+  verbatim-in-substance and is indexed in `memory-bank/00-index.md`; nothing moved into
+  `agent-factory/`; the cap-provenance line opens the file as specified.
+- **Commands:** default lane green (`npm test`/`typecheck`/`lint`). Two deep lanes spot-checked:
+  `ZOBRIST_DEEP` — 33 passed, matches its receipt exactly; `INPUT_DEEP` — 34 passed vs. the
+  documented "33 is the whole lane" receipt, a pre-existing one-test drift unrelated to this
+  ticket's diff (recorded as an observation, not an `A2`/`A4` finding).
+
+Full notes: `.grugops/context/qe-ABC-109/notes/`.
+
+### Delivery (Engineer re-hop — `A5` as worded)
+
+2026-09-25 (host clock), task `ticket-to-pr-ABC-109-a5-proof`, on `grugops/ABC-109-agents-md-cap`.
+**Unmerged, not pushed. Nothing new ships** — `src/cli.test.ts` unchanged.
+
+- **`A5` red on an in-memory number — closed as worded.** The shipped row ran unchanged under a
+  throwaway (scratchpad-only) vitest setup file that `vi.mock`s `node:fs` so the no-encoding
+  `readFileSync(AGENTS.md)` returns an in-memory `Buffer`. At **24,577 B**: exit 1,
+  `AGENTS.md bytes against its 24576 B budget (ABC-109): expected 24577 to be less than or equal to 24576`
+  at `src/cli.test.ts:2143:7`. At **24,576 B**: exit 0, the row green.
+- `AGENTS.md` never written: sha256 `08bda29f…7086fef` before and after; `npm test` 47/47,
+  1447/1447, exit 0 on the real file.
+
+Note (both outputs verbatim): `.grugops/context/ticket-to-pr-ABC-109-a5/notes/20260925T203924Z-software-engineer-observation-abc109a5-inmemory.md`.
+
+## UAT run — verdict: ACCEPT (owner's word still required)
+
+Run 2026-09-26 (host clock), task `uat-run-ABC-109`, on `grugops/ABC-109-agents-md-cap` @
+`748fa89`, own worktree `.claude/worktrees/ABC-109-agents-md-cap`. On the owner's standing word
+("you can ask engineer or qe to run tests, no need to send this to me") — the owner still gives the
+acceptance word himself; this section is evidence for that word, not a substitute for it.
+**Unmerged, not pushed.**
+
+- **`A1`–`A4`, `A6`–`A8`:** independently re-verified against the delivered `AGENTS.md` (21,786 B,
+  sha256 `08bda29f…`) and the diff against `main`. All PASS, figures match the Scribe's and the
+  prior QE gate's exactly (32,565 B → 21,786 B; tail offsets 20,963 / 21,036 / 21,695; kit-override
+  count THREE before and after).
+- **`A5` — PASS, the prior gap closed.** The prior QE gate (`qe-ABC-109`) ruled `A5` NOT MET TO THE
+  LETTER because the watched-red proof padded the real `AGENTS.md` file. This pass independently
+  re-derived the in-memory red/green proof from a fresh scratch harness (`vi.mock("node:fs")`
+  feeding the shipped `readFileSync` call an in-memory `Buffer`): RED at 24,577 B
+  (`expected 24577 to be less than or equal to 24576`), GREEN at 24,576 B, `AGENTS.md` sha256
+  unchanged throughout, `git status --short` empty. The Engineer's own prior closure
+  (`ticket-to-pr-ABC-109-a5-proof`) is confirmed to hold under an independent harness, not merely
+  trusted.
+- **`npm test`:** 47/47 files, 1447/1447 tests, exit 0 (bounded 60 s wrapper,
+  `node tools/grugops/run-bounded.js 60000 vitest run`).
+- **Zero-production-lines UAT waiver — AVAILABLE, not invoked to skip this run.**
+  `git diff --stat main...HEAD` and `git diff --name-only main...HEAD -- 'src/*' | grep -v
+  '\.test\.ts$'` (empty) confirm the delivered diff touches no production `src/` line — the
+  2026-08-17 standing waiver qualifies, consistent with `A6`'s own framing. Not exercised here: the
+  owner asked QE to run the tests this hop, and this section records that run.
+- **Two non-blocking gaps carried forward** (both already named by the prior QE gate, neither
+  rescored as new): a pre-`ABC-042` historical UAT-deferral sentence dropped from `AGENTS.md`
+  without a designed pointer (no directive content, outside `A2`'s minimum); the `INPUT_DEEP` deep
+  lane's "33 is the whole lane" receipt drifted to 34 on a prior spot-check, pre-existing and
+  orthogonal to this ticket's diff.
+
+Full notes: `.grugops/context/uat-run-ABC-109/notes/`.
+
 <details>
 <summary>Prior score, 2026-08-19, task <code>cut-agents-md-cap-2026-08-19</code> (10/10, 0 ⚠️) — superseded above</summary>
 

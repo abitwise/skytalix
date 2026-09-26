@@ -4,6 +4,10 @@
 
 This repo runs a file-based agent factory for software delivery. One Orchestrator (the head grug) routes work through the full lifecycle; a few single-job grug agents execute within hard limits. The role is the intelligence. The workflow is the guardrail. The shared verified context is the memory. The board is the state. The gate is the backpressure. Humans decide; agents execute.
 
+**Byte budget: this file targets ≤ 24,576 B.** The 32,768-byte reader cap it guards against is
+**inherited** — sourced from the AGENTS.md Scribe's 2026-08-19 observation, not measured in this
+repository — and its overflow is silent and eats the file from the tail (`ABC-109`).
+
 ## How to work here
 
 All work starts with the Orchestrator: `agent-factory/roles/orchestrator.md`.
@@ -59,99 +63,48 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 ### Development
 
-- Dev / run: `npm run chess` <!-- verified 2026-08-14 at ABC-042: prints the start position (23
-  rows) on stdout and exits 0. Optional arguments, and the complete set: `--colour white|black|random`,
-  `--ascii`, `--unicode`.
-  IT PLAYS A GAME as of ABC-043 (2026-08-19) — the line above described a board-printer and is kept
-  for the row count and the option set, which are unchanged. It prints the board, prompts with `> `,
-  reads one line per turn and answers with the merged engine, which occupies UP TO 3 SECONDS PER
-  MOVE (`DEFAULT_BUDGET_MS`): `--colour black` opens with the engine, so the first board sits there
-  thinking before the prompt appears, and that is the product working. RUN 2026-08-19 at the ABC-043
-  branch tip: `node src/cli.ts` on a closed stdin prints one board, the prompt and `input ended`,
-  and exits 0 (real 0.07 s); `--colour black` on a closed stdin prints two boards and exits 0
-  (real 3.09 s, one engine ply). EXIT CODES: 0 when the session ran, 1 for a refused command line,
-  70 for an internal error — a bug that ended the session, which is never a chess result.
-  Pass an option AFTER `--`: `npm run chess -- --colour black` — RUN 2026-08-15 at `4e9ed1d`, exit 0,
-  black-bottom board. The separator is load-bearing; do not tidy this example away. Without it npm
-  keeps the flag: `npm run chess --ascii` (RUN 2026-08-15 at `4e9ed1d`, npm 11.7.0) warns `Unknown
-  cli config "--ascii"` on stderr, runs `node src/cli.ts` with NO arguments, prints the DEFAULT board
-  and exits 0 — the option is silently discarded and stdout looks like success. -->
+- Dev / run: `npm run chess` <!-- prints the board and plays a full game against the merged engine
+  (up to 3 s/move, `DEFAULT_BUDGET_MS`). Options: `--colour white|black|random`, `--ascii`,
+  `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
+  load-bearing; without it npm silently drops the flag and runs with defaults. Exit 0 normal
+  session, 1 refused command line, 70 internal error. Full receipts (RUN dates, byte-exact
+  before/after the `--` trap): `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
 - Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft`
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 npx vitest run src/perft.test.ts`
 - Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
 
 ### Test
 
-- Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122).
-  RUN 2026-09-25: exit 0, 47 files, 1446 tests, 5.45 s. A hung lane exits 124 within the 60 s bound
-  — stop it with Ctrl-C/SIGTERM, never SIGKILL (owner-accepted R1: SIGKILL/SIGHUP can orphan a hung
-  vitest). `*_DEEP` lanes below run via `npx vitest run` directly, never through `npm test`
-  (`ENGINE_DEEP` alone is ~99 s, over the bound). Wrapper's own proof: `node
-  tools/grugops/run-bounded.proof.js` (RUN 2026-09-25: exit 0, all rows held). -->
-- Search deep lane (opt-in slow suite, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts`
-  <!-- RUN 2026-08-17 at the ABC-077 branch tip: exit 0, 41 passed (28 in the default lane), 23.0 s.
-  Unset, the deep cases are NOT DEFINED rather than skipped, so the gate's skip count stays 0 —
-  the same shape as PERFT_DEEP. It holds the expensive REPETITIONS of A1-A7 (the depth-3 sweep on
-  five of the six perft positions, A2's own kiwipete-depth-3 case, the 204-position broad corpus,
-  and the depth-7 mate-in-2-vs-mate-in-4 case); every criterion is also answered in the default
-  lane. Run it at the QE hop and after any change to src/search.ts. -->
-- Engine deep lane (opt-in slow suite, ABC-078): `ENGINE_DEEP=1 npx vitest run src/engine.test.ts`
-  <!-- RUN 2026-08-18 at the ABC-078 branch tip: exit 0, 23 passed (17 in the default lane),
-  98.7 s. Unset, the deep cases are NOT DEFINED rather than skipped, so the gate's skip count
-  stays 0 — the same shape as PERFT_DEEP and SEARCH_DEEP. It holds every WALL-CLOCK case, which
-  is why it is opt-in: `plans/nfr-catalog.md`'s standing rule keeps wall-clock assertions out of
-  the default lane, and the default lane runs entirely on an INJECTED clock. It carries `A1`'s
-  30-position run at the 3 s budget (90.4 s of the 98.7), `NFR-005`'s depth-in-budget
-  measurement, and the real-clock repetitions of `A2`, `A3`, `A5` and `A7`. Run it after any
-  change to `src/engine.ts`. -->
-- Input-seam deep lane (opt-in slow suite, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
-  <!-- RUN 2026-08-19 at `298bb95`: exit 0, 33 passed, 0.28 s. COUNT YOUR RUN: 33 is the whole lane;
-  32 means NODE_OPTIONS was dropped and the external-memory retention guard did not run — it exits 0
-  either way, so the count is the only signal. 29 is the default lane. Unset, the deep cases are NOT
-  DEFINED rather than skipped, so the gate's skip count stays 0 — the same shape as PERFT_DEEP,
-  SEARCH_DEEP and ENGINE_DEEP. It holds the BREADTH plus that guard: a 16 MiB unterminated-flood
-  survival row, the chunk-boundary permutation sweep, the 10,000-character totality row. Every
-  ACCEPTANCE criterion is answered in the default lane. It is opt-in because ABC-108 has the default
-  lane at or over NFR-008's 13 s CPU clause, so this ticket did not claim N8-LANE's 650 ms. Run it
-  after any change to src/line-input.ts — QE 2026-08-19 measured two mutants that die in this lane
-  and in nothing else. TRAP, and read all of it: heapUsed must never be how a memory bound gets
-  asserted here. A build retaining a 16,777,216-character line reports 0.01 MiB of heapUsed growth,
-  so a heapUsed row is green whichever build it runs against; one was written, watched NOT fail, and
-  DELETED rather than shipped green — do not put it back. But the bound IS testable, and heapUsed is
-  not blind to cons-strings: it accounts a FLATTENED 16 MiB string in full. An unflattened rope does
-  read ~0.02 MiB, so that account was HALF TRUE, and half-true aimed at the wrong field is worse than
-  wrong: it ends the search. The retained leaves are EXTERNAL string data, and
-  process.memoryUsage().external after a gc() separates the builds 0.00 vs 32.00 MiB (33,554,472 B,
-  reproduced to the byte from a second tree) — which is why --expose-gc is in the command. Numbers
-  and the guard itself are in .grugops/context/quality-gate-ABC-037-qe-2026-08-19/notes/ and its
-  repair-ABC-037-2026-08-19/ sibling, not restated here. The rule this cost us: never ship a memory
-  guard you have not watched go RED. -->
+Full RUN receipts for every command below (dates, exit codes, counts, traps): `memory-bank/90-agents-md-command-log.md`.
+
+- Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
+  2026-09-25: exit 0, 47 files, 1446 tests, 5.45 s. A hung lane exits 124 within the 60 s bound —
+  stop with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run
+  via `npx vitest run` directly, never through `npm test`. -->
+- Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
+  41 passed (28 default), 23.0 s. Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
+  QE and after any src/search.ts change. -->
+- Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 npx vitest run src/engine.test.ts` <!-- exit 0,
+  23 passed (17 default), 98.7 s — every WALL-CLOCK case; default lane runs on an injected clock.
+  Run after any src/engine.ts change. -->
+- Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
+  <!-- exit 0, 33 passed, 0.28 s — 33 is the whole lane; 32 means NODE_OPTIONS was dropped and the
+  external-memory retention guard did not run (exits 0 either way). TRAP: never assert this guard on
+  heapUsed — it is blind to an unflattened rope (0.00 vs 32.00 MiB via process.memoryUsage().external
+  after gc(), the field that is NOT blind). Run after any src/line-input.ts change. -->
 - Transposition deep lanes (ABC-081, `src/transposition.test.ts`): `SEARCH_DEEP=1 npx vitest run
-  src/transposition.test.ts` <!-- RUN 2026-09-25 at `54565e8`: exit 0, 40 passed (25 default), 47.7 s.
-  Holds A1/A2/A3/A4/A5's depth-4/5 hit-rate, node-savings and mate-reuse pins. --> and `ENGINE_DEEP=1
-  npx vitest run src/transposition.test.ts` <!-- RUN 2026-09-25 at `54565e8`: exit 0, 26 passed
-  (25 default), 4.8 s. Holds A7's 1 s vs 3 s heapUsed/arrayBuffers growth reading. Same two vars as
-  `src/search.test.ts` / `src/engine.test.ts` above, applied to this file; unset, NOT DEFINED rather
-  than skipped, same shape as PERFT_DEEP. -->
-- Zobrist deep lane (ABC-075): `ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts` <!-- RUN 2026-09-25
-  at `54565e8`: exit 0, 33 passed (32 default), 37.0 s. Unset, NOT DEFINED rather than skipped, same
-  shape as PERFT_DEEP. Holds A1/A2's zobristKeyAfterMove-vs-full-scan-oracle walk (11,024,485 nodes,
-  0 mismatches, 0 drift) within 4 plies of every perft position. -->
-- Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- RUN
-  2026-09-25 at `54565e8`: exit 0, 37 passed (29 default), 1.8 s. Same var as `src/search.test.ts` /
-  `src/transposition.test.ts` above, applied to this file. Holds A3's 200+-position corpus sweep under
-  the `QUIESCENCE_MAX_PLY` cap and A5's depth-2/3 node-count-multiplier pins (kiwipete, position-6). -->
+  src/transposition.test.ts` <!-- exit 0, 40 passed (25 default), 47.7 s --> and `ENGINE_DEEP=1 npx
+  vitest run src/transposition.test.ts` <!-- exit 0, 26 passed (25 default), 4.8 s -->
+- Zobrist deep lane (ABC-075): `ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts` <!-- exit 0,
+  33 passed (32 default), 37.0 s -->
+- Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- exit 0,
+  37 passed (29 default), 1.8 s -->
 - Test (single file): `npx vitest run <path>`
-- Coverage: `npx vitest run --coverage` <!-- RUN 2026-08-15 at `daa20c4` (this hop changed no code):
-  exit 0, 856/856 on 30 files. `@vitest/coverage-v8` is in `devDependencies`; no npm script and no
-  `vitest.config.ts` key invokes it, and `coverage` is NOT in `quality.mandatory_gates` — a
-  measurement you run, not a gate that runs you. Figures, and which denominator decides whether this
-  project meets `quality.coverage_threshold` (`0.8`), are in
-  `.grugops/context/owner-grants-2026-08-15/notes/` — read them before quoting a number. TRAP from
-  that note: `src/cli.ts`'s tests SPAWN it as a child process and v8 coverage does not cross a
-  process boundary, so it reads uncovered while being thoroughly tested. -->
-- Coverage (`src/` only — the other denominator; neither is the agreed one):
-  `npx vitest run --coverage --coverage.include='src/**'` <!-- RUN 2026-08-15 at `daa20c4`: exit 0. -->
+- Coverage: `npx vitest run --coverage` <!-- exit 0, 856/856 on 30 files. Not in
+  `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
+  child process and v8 coverage does not cross a process boundary, so it reads uncovered while
+  thoroughly tested. -->
+- Coverage (`src/` only — the other denominator; neither is agreed): `npx vitest run --coverage --coverage.include='src/**'` <!-- exit 0 -->
 
 ### Acceptance
 
@@ -159,9 +112,9 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 ### Test integrity
 
-- Skip-count capture: `npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified 2026-07-22: returns an integer (0 with no tests). Requires jq, confirmed present. --> <!-- the host runner's reported skipped-test COUNT (an integer) for the gate's test-integrity step. Examples by runner — verify against yours, never fabricate: vitest `vitest run --reporter=json | jq '.numPendingTests + .numTodoTests'`; jest `jest --json | jq '.numPendingTests'`; pytest `pytest --json-report --json-report-file=- | jq '.summary.skipped'`; go `go test -json ./... | jq -s '[.[]|select(.Action=="skip")]|length'` — examples only, never a hard command. If the count cannot be determined, record `UNKNOWN - verify`, never a silent 0. -->
+- Skip-count capture: `npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Other runners: jest `jest --json | jq '.numPendingTests'`; pytest `pytest --json-report --json-report-file=- | jq '.summary.skipped'`; go `go test -json ./... | jq -s '[.[]|select(.Action=="skip")]|length'` — examples only. Undeterminable → `UNKNOWN - verify`, never a silent 0. -->
 
-- Test-integrity check (the gate's step): `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` <!-- verified 2026-08-13: `No findings.`, exit 0, at skip count 0. `.grugops/test-skips.md` is HUMAN-OWNED (kit: "the agent may not self-author a justification to clear its own gate") — an agent may READ it and RUN this, never write a row into it. Created by the owner 2026-08-13, discharging `H2`; before that this step exited 2 (could not run) on every gate. -->
+- Test-integrity check (the gate's step): `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` <!-- verified: `No findings.`, exit 0, at skip count 0. `.grugops/test-skips.md` is HUMAN-OWNED — an agent may READ and RUN this, never write a row into it. -->
 
 ### Lint
 
@@ -171,15 +124,13 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 ### Typecheck
 
-- Typecheck (single file): `UNKNOWN - verify` <!-- tsc is project-wide; there is no
-  single-file mode. Use the project-wide command below. -->
+- Typecheck (single file): `UNKNOWN - verify` <!-- tsc is project-wide; no single-file mode. -->
 - Typecheck (project): `npm run typecheck` <!-- tsc --noEmit -->
 
 ### Build
 
-- Build (use sparingly): `npm run build` <!-- currently `tsc --noEmit`: the project is
-  type-checked but emits nothing, because nothing is published until EPIC-006 packaging.
-  Honest naming — this is a typecheck wearing the build slot's name, not a real bundle. -->
+- Build (use sparingly): `npm run build` <!-- currently `tsc --noEmit` — type-checked, nothing
+  published until EPIC-006. Honest naming: a typecheck wearing the build slot's name. -->
 - Docs build / link-check: `UNKNOWN - verify`
 - Clean / reset: `UNKNOWN - verify`
 
@@ -188,11 +139,8 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 - E2E: `UNKNOWN - verify` <!-- no runnable game until EPIC-006; `quality.ui_e2e` is
   `ui-or-critical-path` and this project has no UI surface yet -->
 
-<!--
-  Command slots filled 2026-07-22 during ABC-008. Every command above was RUN before being
-  recorded here. Slots that are still `UNKNOWN - verify` are genuinely unknown — nothing was
-  guessed to make the table look complete.
--->
+<!-- Command slots filled 2026-07-22 (ABC-008); every command was RUN before being recorded. A slot
+  still `UNKNOWN - verify` is genuinely unknown — nothing was guessed. -->
 
 ### Stack
 
@@ -207,191 +155,132 @@ files directly via built-in type stripping, so there is no bundler or transpile 
 
 ## Process rules (this project)
 
-Two rules the owner adopted 2026-08-13, in this order. Evidence and the full controls live in the
-delivery audit's notes (`.grugops/context/audit-delivery/notes/`) — read them there, not here.
+Two rules the owner adopted 2026-08-13, in this order. Full evidence and controls:
+`.grugops/context/audit-delivery/notes/`.
 
-**1. Criteria review happens at the `Ready for Dev` exit, not at a gate.** The Orchestrator owns that
-exit: before a ticket enters `In Development`, re-read its acceptance criteria against the built tree
-and record the gaps found there. Not a Definition of Ready re-run — DoR asks whether criteria are well
-formed; this asks whether they still match what exists. **Control: gaps found at QE fall below 3 per
-ticket for five consecutive tickets and backward moves below 0.5 per ticket, while gaps recorded at
-the `Ready for Dev` exit RISE.** If gaps fall at both ends the rule is not working — it is hiding.
+**1. Criteria review happens at the `Ready for Dev` exit, not at a gate.** The Orchestrator re-reads
+acceptance criteria against the built tree before a ticket enters `In Development` — not a DoR
+re-run (DoR asks if criteria are well formed; this asks if they still match what exists). **Control:**
+QE-found gaps < 3/ticket and backward moves < 0.5/ticket for five consecutive tickets, while
+`Ready for Dev`-exit gaps RISE. Falling at both ends means the rule is hiding, not working.
 
 **2. Ticket prose has a size budget; overflow goes to context notes.** Acceptance criteria, scope and
-risks stay in the ticket; measurements, rejected alternatives and gate narration go to
-`.grugops/context/<task>/notes/` (Workflow 16). This is `plans/board.md`'s one-line rule applied to
-`plans/tickets/`. **Control: median length of the next ten cut tickets ≤ 300 lines (720 today) and
-criterion gaps at QE do not rise.** Shorter tickets bought with worse gaps mean the budget cut rigour
-instead of prose — revert it.
+risks stay in the ticket; measurements, alternatives and gate narration go to
+`.grugops/context/<task>/notes/` (Workflow 16). **Control:** median of the next ten cut tickets
+≤ 300 lines, criterion gaps at QE do not rise. Shorter tickets bought with worse gaps mean the
+budget cut rigour, not prose — revert it.
 
-**Precedence, so nobody has to guess.** The kit is silent on both: no kit workflow re-reads criteria
-against the built tree at that exit, and no kit file budgets ticket prose (its `size` is effort,
-`XS`–`XL`, not lines). These rules ADD a project step and contradict nothing in the kit — which is
-read-only and cannot carry them.
+**Precedence.** The kit is silent on both — no re-read step, no ticket-prose budget. These ADD a
+project step; they contradict nothing in the read-only kit.
 
 ## Branching model
 
-Trunk-based. `main` is the single long-lived branch. Work happens on a short-lived
-`grugops/<task>` branch — the only place a gate can run RED without `main` ever being red — and
-merges to `main` as soon as it is green. No `develop`, no release branches, no long-lived feature
-branches.
+Trunk-based: `main` is the only long-lived branch. Work happens on a short-lived `grugops/<task>`
+branch and merges to `main` as soon as it is green. No `develop`, no release branches.
 
-The project owner authorized merges to `main` standing (2026-08-06), and on 2026-08-15 made merge
-and test explicitly the agent's **per ticket**. Of the three limits the 2026-08-06 directive set,
-**one is retired and two stand**: deploy is no longer excluded — see `## Deployment posture`, which
-is where that grant and its own limits live — while the gate still binds and the authority is still
-the owner's and revocable. Both directives, with their words, reading and limits, are in
-`memory-bank/60-progress.md` §§ "Standing directive — the branching model, and who turns the merge
-key" and "Standing directive — deploy is ALLOWED and NOT NEEDED; merge, test and UAT are the
-agent's, per ticket. 2026-08-15." **Those sections are the authority; this is a pointer to them.**
+The owner authorized merges to `main` standing (2026-08-06) and made merge/test explicitly the
+agent's **per ticket** (2026-08-15) — the gate still binds and the authority is his and revocable.
+Full text, the authority: `memory-bank/60-progress.md` §§ "Standing directive — the branching model,
+and who turns the merge key" and "Standing directive — deploy is ALLOWED and NOT NEEDED; merge, test
+and UAT are the agent's, per ticket. 2026-08-15." — this is a pointer to them.
 
-The commit-side branch guard in `agent-factory/_commit-convention.md` still holds — commit on the
-`grugops/<task>` branch, never directly on `main`. What the owner changed is what happens *after*
-the gate is green, not how work is produced.
+The commit-side branch guard in `agent-factory/_commit-convention.md` still holds: commit on
+`grugops/<task>`, never `main` directly.
 
-**Precedence, so nobody has to guess.** The kit is shared and project-agnostic, so it still reads
-"agents never merge" (`_commit-convention.md` §(c), workflows 04, 05, 12). It is read-only and
-cannot carry a project override. Merge to main is allowed, deploys are currently not implemented.
-Merge to `main` in THIS project only when all tests pass and ticket is done, never before.
+**Kit override 1 of 3** (count and the "reader who counts four" line: `## QE validation authority`).
+The kit says "agents never merge" (`_commit-convention.md` §(c), workflows 04/05/12) — read-only,
+cannot carry a project override. Merge to `main` in THIS project is allowed once all tests pass and
+the ticket is done, never before.
 
-**Config trap.** `.grugops/factory.config.json` says `autonomy: "pr"`, which the kit defines as
-"branch + open a PR (agents never merge)". The dial allows only `diff`/`branch`/`pr` and there is
-no `branching_model` key, so no value can express "agents may merge" — the config was left alone
-rather than given a fake dial nothing reads, and `memory-bank/60-progress.md` is where the merge
-authority actually lives. This repo also has no git remote, so `pr` has always meant "branch +
-gate" here: nothing is pushed and no PR is opened.
+**Config trap.** `.grugops/factory.config.json`'s `autonomy: "pr"` has no dial for "agents may
+merge" — left alone rather than faked; the merge authority lives in `memory-bank/60-progress.md`. No
+git remote, so `pr` has always meant "branch + gate": nothing is pushed, no PR opened.
 
 ## Test and UAT authority
 
-Running a ticket's tests and conducting its UAT are the agent's, granted standing by the owner
-(2026-08-15) alongside the per-ticket merge authority above. The same two limits apply: the gate
-still binds, and the authority is the owner's and revocable. Tickets closed before `ABC-042` all
-deferred UAT to `EPIC-006` because nothing was exercisable; `npm run chess` ended that reason.
+Running a ticket's tests and conducting its UAT are the agent's, standing since 2026-08-15 alongside
+the per-ticket merge authority above — gate still binds, authority is the owner's and revocable.
 
-**An agent-run UAT executes the business scenarios against a real build and reports the result. It
-is NOT a named human's acceptance signature.** `context.human_admission` is `off` and no `finding`
-is admissible here, so a UAT result is recorded as `decision` / `observation` like every other
-result and carries no stamp. Write it so "UAT passed" can never later be read as a human having
-accepted the work.
+**An agent-run UAT is not a human's signature.** `context.human_admission` is `off`; no `finding` is
+admissible, so a UAT result is a `decision`/`observation`, never a stamp.
 
-**The signature question was put to the owner directly on 2026-08-16 and he answered it: his word in
-session IS this project's `In UAT` exit signature.** He was offered three options — his word, a file
-he writes himself, or a redefinition of the exit — and was told explicitly that a green agent report
-would NOT be treated as his acceptance. On the same word he accepted `ABC-065` and `ABC-066`.
+**2026-08-16 — the owner's word in session IS the `In UAT` signature.** Offered his word, a
+self-written file, or a redefinition of the exit; chose his word, and a green agent report does NOT
+count as his acceptance (`ABC-065`, `ABC-066` accepted this way). **NOT a kit override** — it
+satisfies `agent-factory/workflows/06-uat-pack.md`'s named-human-signoff requirement; the owner IS
+that human.
 
-**A whole class of tickets no longer needs signing at all, since 2026-08-17.** A ticket whose
-**delivered diff carries zero production lines** has its UAT **waived standing** — `Ready for UAT` →
-`Done`, no UAT conducted, no per-ticket asking. **The criterion is measured from git, never
-asserted:** `git diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'`
-must come back **empty**. **ANY production line and the rule does not apply** — not "mostly test",
-not "one trivial line"; then the owner's word is needed as before. **A waiver is not a signature:** a
-waived ticket has had NO UAT and carries NO human acceptance, so `Done` under this rule means
-*merged and gated*, never *accepted by a human*. It waives UAT and nothing else, and it is the
-owner's and revocable. **It does NOT supersede the 2026-08-16 ruling — they compose:** that one says
-who signs a UAT that is conducted, this one says which tickets need no signing. **Unlike 2026-08-16,
-this one IS a kit override** — the kit's UAT stage is unconditional and carries no waiver — and it is
-the third, alongside the branching model and the deployment posture. Authority, reasoning and the
-2026-08-17 close-out (`ABC-063` by his named word, `ABC-064` by the rule applied to a measurement):
-`memory-bank/60-progress.md` § "Standing directive — a ticket whose delivered diff carries ZERO
-PRODUCTION LINES has its UAT WAIVED, standing. 2026-08-17."
+**2026-08-17 — a ticket whose delivered diff carries ZERO PRODUCTION LINES has UAT WAIVED, standing.**
+`Ready for UAT` → `Done`, no UAT run. Measured from git, never asserted:
+`git diff --name-only <delivered>~1 <delivered> | grep -v '\.test\.ts$' | grep '^src/'` must be
+**empty** — any production line and the rule does not apply. **A waiver is not a signature:** `Done`
+here means merged and gated, never human-accepted. Composes with, does not supersede, 2026-08-16.
+**This IS a kit override — the third** (with the branching model and the deployment posture); the
+kit's UAT stage is unconditional. Close-out: `ABC-063` by his named word, `ABC-064` by the rule
+applied to a measurement.
 
-**The 2026-08-16 answer SATISFIES the kit's requirement; it does not override it.**
-`agent-factory/workflows/06-uat-pack.md` and `agent-factory/roles/uat-planner.md` make the `In UAT`
-→ `Ready to Release` exit a **named human's signoff** and forbid an agent self-signing. **The owner
-IS that named human and he gave it.** What was missing was never his authority — only a mechanism to
-record it. So this is NOT one of this project's kit overrides; do not list it with the branching
-model or the deployment posture. **The 2026-08-17 waiver above IS one — different case, and the
-reasoning for the split is in `memory-bank/60-progress.md`, not to be re-derived here.**
+**Two misreadings to refuse in advance:** an agent still may **not** self-sign — the ruling is the
+owner's word signs, never a green report; and the recorded acceptance is an agent's
+**transcription** of that word (`human_admission` is still `off`, no `human:<name>` stamp exists),
+never a stamp.
 
-**Two things follow, and both are the misreadings to expect.**
-
-- **An agent still may not self-sign.** The ruling is that the **owner's word** signs. It does not
-  say a green agent report signs, and it licenses no agent to sign on his behalf. Conduct the UAT,
-  report the result, never self-sign.
-- **The recorded acceptance is an agent's transcription, not a stamp.**
-  `context.human_admission` is still `off` and the owner did NOT flip it, so no `human:<name>` stamp
-  exists and no `finding` is admissible. His acceptance is carried as a hand-authored `decision` note
-  in git. Record that fidelity level honestly, and do not read this ruling as having moved the flag.
-
-Scope is the `In UAT` exit signature only. `quality.gate_enforcement` is still `blocking`,
-`production_requires_human_confirmation` is still `true`, and the merge/deploy posture is unchanged.
-
-The authority is `memory-bank/60-progress.md` §§ "Standing directive — deploy is ALLOWED and NOT
-NEEDED; merge, test and UAT are the agent's, per ticket. 2026-08-15.", "Standing directive — the
-owner's word in session IS the `In UAT` signature. 2026-08-16." and "Standing directive — a ticket
-whose delivered diff carries ZERO PRODUCTION LINES has its UAT WAIVED, standing. 2026-08-17."
-**Those sections are the authority; this is a pointer to them.**
+Scope is the `In UAT` exit signature only — `quality.gate_enforcement` stays `blocking`,
+`production_requires_human_confirmation` stays `true`. Authority: `memory-bank/60-progress.md` §§
+"Standing directive — deploy is ALLOWED and NOT NEEDED... 2026-08-15.", "...the owner's word in
+session IS the `In UAT` signature. 2026-08-16." and "...ZERO PRODUCTION LINES has its UAT WAIVED,
+standing. 2026-08-17." — this is a pointer to them, not the text itself.
 
 ## QE validation authority
 
-**Every ticket gets a `qe-e2e` hop and QE's recorded verdict before it may leave `In Review`. No
-ticket reaches `Done` without one.** The owner's, 2026-08-17, standing and revocable.
+**Every ticket gets a `qe-e2e` hop and QE's recorded verdict before leaving `In Review`; none reaches
+`Done` without one.** Owner's, 2026-08-17, standing and revocable.
 
-**It is forward-only.** `ABC-068`, `ABC-061`, `ABC-062`, `ABC-063` and `ABC-064` were gated and
-merged with no QE hop; the owner declined a retro pass over them and they stay closed. The residual
-exposure that accepts is named, not glossed: **+435/−11 lines of assertions in `src/cli.test.ts`
-were never reviewed by QE.**
+**Forward-only.** `ABC-068`, `ABC-061`–`ABC-064` were gated and merged with no QE hop and stay closed
+(no retro pass); the residual exposure is named: +435/−11 lines of `src/cli.test.ts` assertions
+never reviewed by QE.
 
-**QE IS NOT UAT, and conflating them is the misreading to refuse in advance** — it is exactly what
-let QE go missing for five consecutive tickets. The 2026-08-17 zero-production-lines waiver waives
-**UAT and nothing else** and stands **completely unamended**: a test-only ticket still skips UAT,
-and now still gets QE. The 2026-08-16 signature ruling stands unamended too.
+**QE is NOT UAT** — conflating them is what let QE go missing for five tickets. The zero-production-
+lines waiver (`## Test and UAT authority`) waives UAT only, completely unamended; a test-only ticket
+still gets QE, and the 2026-08-16 signature ruling stands unamended too.
 
-**Precedence, so nobody has to guess. This is NOT a kit override.**
-`agent-factory/workflows/04-ticket-to-pr.md` **step 5** already required this hop, so this
-RE-AFFIRMS a rule that was already binding rather than adding one — the same shape as the 2026-08-16
-ruling, which satisfied a kit requirement. **This project's kit overrides remain THREE**: the
-branching model, the deployment posture, and the zero-production-lines UAT waiver. A reader who
-counts four is wrong.
+**NOT a kit override** — `agent-factory/workflows/04-ticket-to-pr.md` step 5 already required this
+hop; this re-affirms, not adds — the same shape as the 2026-08-16 ruling. **This project's kit
+overrides remain THREE: the branching model, the deployment posture, and the zero-production-lines
+UAT waiver. A reader who counts four is wrong.**
 
-No config value changed. `quality.mandatory_gates` is unchanged — QE's hop is a workflow step, not a
-gate command. The authority is `memory-bank/60-progress.md` § "Standing directive — EVERY ticket
-passes through QE's validation. QE dispatch resumes. 2026-08-17." **That section is the authority;
-this is a pointer to it.**
+`quality.mandatory_gates` is unchanged — QE's hop is a workflow step, not a gate command. Authority:
+`memory-bank/60-progress.md` § "Standing directive — EVERY ticket passes through QE's validation. QE
+dispatch resumes. 2026-08-17."
 
 ## Deployment posture
 
-This project deploys nowhere. It runs locally, from source on a developer's machine. There is no
-container, no manifest, no CI, no git remote, and no release has ever been cut — that absence was
-measured, not assumed. There IS a CLI entry point as of `ABC-042` (2026-08-14) — `Dev / run` above
-is `npm run chess` — and it changes none of the above: it runs `src/cli.ts` from source, in place.
-**Runnable is not deployable.** `package.json` is still `private: true` with no `bin`, `main`,
-`exports` or `files`; nothing is built, emitted, published or installable.
+This project deploys nowhere; it runs locally, from source. No container, manifest, CI or git
+remote, and no release has ever been cut. A CLI entry point exists since `ABC-042` (`Dev / run` =
+`npm run chess`) but changes none of this — it runs `src/cli.ts` from source, in place. **Runnable
+is not deployable**: `package.json` is `private: true`, no `bin`/`main`/`exports`/`files`.
 
-This is **present posture and explicitly revisitable** — the owner said "currently" and "for now"
-(2026-08-06). The revisit trigger is named: `EPIC-006` (packaging). **How the CLI will eventually be
-distributed — npm, a binary, a `git clone` — is undecided, and `EPIC-006` decides it.** Do not fill
-that in.
+**Present posture, explicitly revisitable** — owner said "currently"/"for now" (2026-08-06); revisit
+trigger `EPIC-006` (packaging) decides HOW it is eventually distributed (npm, binary, `git clone` —
+undecided). Ruling, evidence, what's preserved for that day:
+`memory-bank/50-decisions/ADR-0007-deployment-posture-local-only.md` — the authority; this is a
+pointer.
 
-The ruling, the evidence behind it, and what is deliberately preserved for the day it changes are in
-`memory-bank/50-decisions/ADR-0007-deployment-posture-local-only.md`. **That ADR is the authority on
-the posture; this is a pointer to it.**
+**Who holds the deploy key changed 2026-08-15; where anything runs did not.** The owner granted
+deploy authority to the agent AND re-affirmed no deploy is needed, in one sentence — both his.
+Authority: `memory-bank/60-progress.md` § "Standing directive — deploy is ALLOWED and NOT NEEDED;
+merge, test and UAT are the agent's, per ticket. 2026-08-15." `ADR-0007` is Architect/Design's to
+amend under it. Config: `default_stack.deploy` is `none-local-only`, `environments` is `["local"]`.
 
-**Who holds the deploy key changed on 2026-08-15, and where anything runs did not.** The owner
-granted the deploy authority to the agent and in the same breath re-affirmed that this project does
-not need deploying and stays local, naming a condition of his own for when that ends. **Both halves
-are his**, so this section is confirmed by that grant, not weakened by it. The authority is
-`memory-bank/60-progress.md` § "Standing directive — deploy is ALLOWED and NOT NEEDED; merge, test
-and UAT are the agent's, per ticket. 2026-08-15."; `ADR-0007` is Architect/Design's to amend under
-it. The config carries the fact: `default_stack.deploy` is `none-local-only` and `environments` is
-`["local"]`.
+**Nothing here relaxes anything.** `production_requires_human_confirmation` stays `true` — the grant
+deliberately did not flip it; moving it is the owner's word, never an inference from the grant.
+"Deploys nowhere today" is not "decided never"; "may deploy" is not "has anything to deploy" — no
+release machinery was added or removed.
 
-**Nothing here relaxes anything.** `production_requires_human_confirmation` is still `true` — the
-2026-08-15 grant **deliberately did NOT flip it**, and `ADR-0007` carries a detection row for that
-flag being found `false` or argued obsolete. Record its real state and leave it alone; do not read
-the deploy grant as having moved it, and do not argue it obsolete because nothing deploys today. The
-branching model's 2026-08-06 deploy limit is the one thing that DID move, and it moved by a later
-grant of the owner's, not by this posture. "Deploys nowhere today" is not "decided never to deploy",
-and "may deploy" is not "has anything to deploy": no release machinery, board column or workflow was
-removed, and none was added.
-
-**Precedence, so nobody has to guess.** The kit is shared and project-agnostic, so it still hardcodes
-a `dev → staging → prod` promotion path (`agent-factory/workflows/12-release.md` step 3;
-`agent-factory/roles/release-manager.md`'s release-record template). It is read-only and cannot carry
-a project override. On this project's deployment posture — and, since 2026-08-15, on who may turn
-the key — `.grugops/factory.config.json`, `ADR-0007` and `memory-bank/` win; the kit's never-deploy
-line is overridden HERE and nowhere else, and everything else in those files — the
-human-confirmation requirement above all — stands unchanged.
+**Kit override 2 of 3** (see `## QE validation authority` for the count and its "reader who counts
+four" line). The kit hardcodes a `dev → staging → prod` path (`agent-factory/workflows/12-release.md`
+step 3; `agent-factory/roles/release-manager.md`) — read-only, cannot carry a project override.
+`.grugops/factory.config.json`, `ADR-0007` and `memory-bank/` win here; the human-confirmation
+requirement stands unchanged.
 
 ## Safety rules
 
