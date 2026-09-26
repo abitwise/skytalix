@@ -438,5 +438,38 @@ before the owner's word.** The figures live in `.grugops/context/secnfr-ABC-121/
 - **Info:** `lateMoveReduction`'s make/unmake has no `try/finally`. The throw is unreachable today.
 - **Not verified:** other hardware, and a quiet-machine lane reading. The deep lane was not re-run
   here; QE re-ran it at `312a188`.
-- **Owner's word owed on `AR-N8LANE-121`** (Olger Oeselg). Zero `src/` lines were changed by this
-  hop. Not merged, not pushed.
+- **`AR-N8LANE-121` ACCEPTED by the owner, 2026-09-26, verbatim *"2. accept the extra"*** (Olger
+  Oeselg; Orchestrator note `20260926T201000Z-orchestrator-decision-52aaf5f3`, on the wave). Recorded
+  as drafted above — accepted, not re-worded. Zero `src/` lines were changed by this hop. Not
+  merged, not pushed.
+
+## UAT run 2026-09-26 (`uat-run-ABC-121`, Workflow 06/`AGENTS.md` § Test and UAT authority — running the ticket's UAT is the agent's, standing; the owner's own word is still the `In UAT` signature)
+
+Reviewed `grugops/ABC-121-pvs-lmr` at **`6570343`** (Security/NFR's tip, `src/` unchanged since).
+Hand-authored, unsealed — no `finding` is admissible on this install; this is a `decision`/
+`observation`, never a stamp. **Recommendation: ACCEPT.** Figures in
+`.grugops/context/uat-run-ABC-121/notes/`.
+
+- **`A1`–`A6` all PASS**, independently reproduced: bounded drift 99.47% (both recursions), max
+  45 cp, 0/180 mate-status violations; depth floor 7/7 vs the door's 6/6 on plain node, 3 rounds;
+  clock-free companion 532363/467461 vs 1922235/1923320 nodes; `A3`/`A4` green in the default
+  lane; `A5` 80.2%/70.8%; `A6` inherited from Security/NFR's `NFR-009` MET.
+- **Business-facing CLI play-through, three games, non-interactive/piped**: every engine reply
+  legal; the engine plays sensibly and tactically (attacks a queen with tempo; captures a hung
+  queen outright after a Scholar's-Mate-style blunder). No move broke `AR-NFR004-A`'s band across
+  nine engine moves. The CLI has no FEN-loading option, so "from a tactical position" is read as
+  reaching one through play, not loading one.
+- **Test-only doors independently confirmed unreachable from `src/cli.ts`** — matches Security/
+  NFR's `…76eb826c` finding, reproduced rather than taken on trust.
+- **Full gate green, figure-identical to every prior hop**: `npm test` 48/1466/0 skipped; lint
+  clean (85 files); typecheck exit 0; skip-integrity "No findings."; `SEARCH_DEEP=1 npx vitest
+  run src/search.pvs-lmr.test.ts` 29/29, exit 0, 926.18 s wall — scoped to this ticket's own deep
+  file (the other `SEARCH_DEEP` files carry no code this ticket touched).
+- **`N8-LANE`**: not re-measured (Security/NFR's instrument, out of this hop's fence); recorded
+  as fact that `AR-N8LANE-121` is owner-accepted (above), not re-judged.
+- **Gaps named honestly**: `A3`/`A4` taken on the default-lane pass/fail plus QE's prior row
+  check, not independently re-derived by hand here; per-move timing measured as a game average,
+  not per individual move; other hardware and a quiet-machine reading remain unverified.
+
+**The owner's own word is still the `In UAT` exit signature.** This run is the report that word
+answers, not the acceptance itself. Notes: `.grugops/context/uat-run-ABC-121/notes/`.
