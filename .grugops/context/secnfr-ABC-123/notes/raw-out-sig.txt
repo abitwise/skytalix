@@ -1,0 +1,2 @@
+{"stimulus":"SIGINT -> wrapper","wrapperExit":130,"wrapperSignal":null,"msToExit":3,"pids":{"fixture":81042,"grandchild":81043},"survivors500ms":[]}
+{"stimulus":"SIGTERM -> wrapper","wrapperExit":143,"wrapperSignal":null,"msToExit":3,"pids":{"fixture":81098,"grandchild":81099},"survivors500ms":[]}

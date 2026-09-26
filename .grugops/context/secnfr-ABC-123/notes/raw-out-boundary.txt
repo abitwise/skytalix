@@ -1,0 +1,18 @@
+N	unfixed: exit,spawns,target,overflow	fixed: exit,spawns,target,stderr
+"2147483646"	0,1,ran,-	0,1,ran,empty
+"2147483647"	0,1,ran,-	0,1,ran,empty
+"2147483647.0"	0,1,ran,-	0,1,ran,empty
+"0x7fffffff"	0,1,ran,-	0,1,ran,empty
+"2.147483647e9"	0,1,ran,-	0,1,ran,empty
+"2147483648"	124,1,-,OVERFLOW	2,0,-,usage-only
+"2147483649"	124,1,-,OVERFLOW	2,0,-,usage-only
+"0x80000000"	124,1,-,OVERFLOW	2,0,-,usage-only
+"2.147483648e9"	124,1,-,OVERFLOW	2,0,-,usage-only
+"2147483647.5"	2,0,-,-	2,0,-,usage-only
+"4294967296"	124,1,-,OVERFLOW	2,0,-,usage-only
+"4294967297"	124,1,-,OVERFLOW	2,0,-,usage-only
+"99999999999"	124,1,-,OVERFLOW	2,0,-,usage-only
+"9007199254740993"	124,1,-,OVERFLOW	2,0,-,usage-only
+"1e21"	124,1,-,OVERFLOW	2,0,-,usage-only
+"-0"	2,0,-,-	2,0,-,usage-only
+"-2147483648"	2,0,-,-	2,0,-,usage-only

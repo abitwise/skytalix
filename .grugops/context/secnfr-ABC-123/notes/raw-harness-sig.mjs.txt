@@ -1,0 +1,33 @@
+// secnfr-ABC-123 probe 3: the header's operating rule ("Stop npm test with Ctrl-C or SIGTERM") on
+// the HEAD wrapper. Wrapper at a 4000 ms bound around the ABC-122 hang fixture (fixture + idle
+// grandchild). 300 ms after the fixture reports its pids, send SIGINT or SIGTERM to the WRAPPER
+// only. Read the wrapper's exit and whether the fixture/grandchild are alive 500 ms later.
+// Stimuli are SIGINT and SIGTERM only. Any survivor is stopped with SIGTERM by exact pid, after
+// its command line is checked.
+import { spawn, execFileSync } from "node:child_process";
+import { setTimeout as sleep } from "node:timers/promises";
+const [wrapper, fixture] = process.argv.slice(2);
+
+const alive = (pid) => { try { process.kill(pid, 0); return true; } catch { return false; } };
+const cmd = (pid) => { try { return execFileSync("ps", ["-p", String(pid), "-o", "command="], { encoding: "utf8" }).trim(); } catch { return ""; } };
+
+for (const sig of ["SIGINT", "SIGTERM"]) {
+  const w = spawn(process.execPath, [wrapper, "4000", process.execPath, fixture], { stdio: ["ignore", "pipe", "pipe"] });
+  let out = "";
+  const pids = await new Promise((res) => {
+    w.stdout.on("data", (d) => { out += d; const m = out.match(/\{.*\}/); if (m) res(JSON.parse(m[0])); });
+    setTimeout(() => res(null), 3000);
+  });
+  const exited = new Promise((res) => w.on("exit", (code, s) => res({ code, s })));
+  await sleep(300);
+  const t0 = Date.now();
+  w.kill(sig);
+  const ex = await exited;
+  const ms = Date.now() - t0;
+  await sleep(500);
+  const surv = pids ? [pids.fixture, pids.grandchild].filter(alive) : ["NO PIDS"];
+  console.log(JSON.stringify({ stimulus: `${sig} -> wrapper`, wrapperExit: ex.code, wrapperSignal: ex.s, msToExit: ms, pids, survivors500ms: surv }));
+  for (const p of surv) {
+    if (typeof p === "number" && /run-bounded|setInterval/.test(cmd(p))) { process.kill(p, "SIGTERM"); console.log(`cleanup: SIGTERM ${p}`); }
+  }
+}
