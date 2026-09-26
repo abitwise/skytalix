@@ -1,0 +1,24 @@
+# secnfr-ABC-123 probe 2: what `detached: true` does, on the HEAD wrapper.
+# The wrapper's target is THIS script with arg "child": it reports its own pid/pgid/sid and the
+# wrapper's (its parent's) pid/pgid/sid, then exits 0. No long-lived process.
+import os, subprocess, sys, json
+
+if len(sys.argv) > 1 and sys.argv[1] == "child":
+    me, parent = os.getpid(), os.getppid()
+    print(json.dumps({
+        "child": {"pid": me, "pgid": os.getpgid(0), "sid": os.getsid(0)},
+        "wrapper": {"pid": parent, "pgid": os.getpgid(parent), "sid": os.getsid(parent)},
+    }), flush=True)
+    # Does the child have a controlling terminal? /dev/tty opens only if it does.
+    try:
+        fd = os.open("/dev/tty", os.O_RDONLY); os.close(fd); print(json.dumps({"child_has_ctty": True}))
+    except OSError as e:
+        print(json.dumps({"child_has_ctty": False, "errno": e.errno}))
+    sys.exit(0)
+
+wrapper = sys.argv[1]
+r = subprocess.run(["node", wrapper, "5000", sys.executable, os.path.abspath(__file__), "child"],
+                   capture_output=True, text=True, timeout=15)
+print(json.dumps({"harness": {"pid": os.getpid(), "pgid": os.getpgid(0), "sid": os.getsid(0)}}))
+print(r.stdout, end="")
+print(json.dumps({"wrapper_exit": r.returncode, "stderr": r.stderr}))

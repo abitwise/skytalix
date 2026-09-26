@@ -1,0 +1,8 @@
+// Preload: counts child_process.spawn calls in the wrapper process; prints the count on exit.
+const cp = require("node:child_process");
+const { syncBuiltinESMExports } = require("node:module");
+const real = cp.spawn;
+let calls = 0;
+cp.spawn = (...a) => { calls++; return real(...a); };
+syncBuiltinESMExports();
+process.on("exit", () => { require("node:fs").writeSync(2, `SPY=${calls}\n`); });
