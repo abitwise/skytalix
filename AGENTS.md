@@ -77,6 +77,10 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 Full RUN receipts for every command below (dates, exit codes, counts, traps): `memory-bank/90-agents-md-command-log.md`.
 
+**Never wait on a lane with `pgrep -f "<text>"` / `until ! pgrep -f …`** — the pattern matches the
+waiting shell's own command line and never exits. Wait on the PID you started or the tool's
+completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
+
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
   2026-09-25: exit 0, 47 files, 1446 tests, 5.45 s. A hung lane exits 124 within the 60 s bound —
   stop with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run
@@ -88,10 +92,11 @@ Full RUN receipts for every command below (dates, exit codes, counts, traps): `m
   23 passed (17 default), 98.7 s — every WALL-CLOCK case; default lane runs on an injected clock.
   Run after any src/engine.ts change. -->
 - Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
-  <!-- exit 0, 33 passed, 0.28 s — 33 is the whole lane; 32 means NODE_OPTIONS was dropped and the
-  external-memory retention guard did not run (exits 0 either way). TRAP: never assert this guard on
-  heapUsed — it is blind to an unflattened rope (0.00 vs 32.00 MiB via process.memoryUsage().external
-  after gc(), the field that is NOT blind). Run after any src/line-input.ts change. -->
+  <!-- RUN 2026-09-26: exit 0, 34 passed, 0.34 s — 34 is the whole lane; 33 means NODE_OPTIONS was
+  dropped and the external-memory retention guard did not run (exits 0 either way). TRAP: never
+  assert this guard on heapUsed — it is blind to an unflattened rope (0.00 vs 32.00 MiB via
+  process.memoryUsage().external after gc(), the field that is NOT blind). Run after any
+  src/line-input.ts change. -->
 - Transposition deep lanes (ABC-081, `src/transposition.test.ts`): `SEARCH_DEEP=1 npx vitest run
   src/transposition.test.ts` <!-- exit 0, 40 passed (25 default), 47.7 s --> and `ENGINE_DEEP=1 npx
   vitest run src/transposition.test.ts` <!-- exit 0, 26 passed (25 default), 4.8 s -->

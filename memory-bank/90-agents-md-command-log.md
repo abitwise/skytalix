@@ -66,10 +66,12 @@ measurement, and the real-clock repetitions of A2, A3, A5 and A7. Run it after a
 
 ## Input-seam deep lane (`ABC-037`) — `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
 
-RUN 2026-08-19 at `298bb95`: exit 0, 33 passed, 0.28 s. COUNT YOUR RUN: 33 is the whole lane; 32
-means `NODE_OPTIONS` was dropped and the external-memory retention guard did not run — it exits 0
-either way, so the count is the only signal. 29 is the default lane. Unset, NOT DEFINED rather than
-skipped, same shape as `PERFT_DEEP`, `SEARCH_DEEP` and `ENGINE_DEEP`. It holds the BREADTH plus that
+RUN 2026-08-19 at `298bb95`: exit 0, 33 passed, 0.28 s. RE-MEASURED 2026-09-26 in this worktree: exit
+0, 34 passed, 0.34 s — a test was added to the file between those two runs. COUNT YOUR RUN: 34 is now
+the whole lane; 33 means `NODE_OPTIONS` was dropped and the external-memory retention guard did not
+run — it exits 0 either way, so the count is the only signal. 30 is the default lane (re-measured
+2026-09-26; the 2026-08-19 run recorded 29). Unset, NOT DEFINED rather than skipped, same shape as
+`PERFT_DEEP`, `SEARCH_DEEP` and `ENGINE_DEEP`. It holds the BREADTH plus that
 guard: a 16 MiB unterminated-flood survival row, the chunk-boundary permutation sweep, the
 10,000-character totality row. Every ACCEPTANCE criterion is answered in the default lane. It is
 opt-in because `ABC-108` has the default lane at or over `NFR-008`'s 13 s CPU clause, so this ticket
