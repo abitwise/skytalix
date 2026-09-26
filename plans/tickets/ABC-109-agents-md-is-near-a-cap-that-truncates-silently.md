@@ -501,6 +501,41 @@ Full notes: `.grugops/context/qe-ABC-109/notes/`.
 
 Note (both outputs verbatim): `.grugops/context/ticket-to-pr-ABC-109-a5/notes/20260925T203924Z-software-engineer-observation-abc109a5-inmemory.md`.
 
+## UAT run — verdict: ACCEPT (owner's word still required)
+
+Run 2026-09-26 (host clock), task `uat-run-ABC-109`, on `grugops/ABC-109-agents-md-cap` @
+`748fa89`, own worktree `.claude/worktrees/ABC-109-agents-md-cap`. On the owner's standing word
+("you can ask engineer or qe to run tests, no need to send this to me") — the owner still gives the
+acceptance word himself; this section is evidence for that word, not a substitute for it.
+**Unmerged, not pushed.**
+
+- **`A1`–`A4`, `A6`–`A8`:** independently re-verified against the delivered `AGENTS.md` (21,786 B,
+  sha256 `08bda29f…`) and the diff against `main`. All PASS, figures match the Scribe's and the
+  prior QE gate's exactly (32,565 B → 21,786 B; tail offsets 20,963 / 21,036 / 21,695; kit-override
+  count THREE before and after).
+- **`A5` — PASS, the prior gap closed.** The prior QE gate (`qe-ABC-109`) ruled `A5` NOT MET TO THE
+  LETTER because the watched-red proof padded the real `AGENTS.md` file. This pass independently
+  re-derived the in-memory red/green proof from a fresh scratch harness (`vi.mock("node:fs")`
+  feeding the shipped `readFileSync` call an in-memory `Buffer`): RED at 24,577 B
+  (`expected 24577 to be less than or equal to 24576`), GREEN at 24,576 B, `AGENTS.md` sha256
+  unchanged throughout, `git status --short` empty. The Engineer's own prior closure
+  (`ticket-to-pr-ABC-109-a5-proof`) is confirmed to hold under an independent harness, not merely
+  trusted.
+- **`npm test`:** 47/47 files, 1447/1447 tests, exit 0 (bounded 60 s wrapper,
+  `node tools/grugops/run-bounded.js 60000 vitest run`).
+- **Zero-production-lines UAT waiver — AVAILABLE, not invoked to skip this run.**
+  `git diff --stat main...HEAD` and `git diff --name-only main...HEAD -- 'src/*' | grep -v
+  '\.test\.ts$'` (empty) confirm the delivered diff touches no production `src/` line — the
+  2026-08-17 standing waiver qualifies, consistent with `A6`'s own framing. Not exercised here: the
+  owner asked QE to run the tests this hop, and this section records that run.
+- **Two non-blocking gaps carried forward** (both already named by the prior QE gate, neither
+  rescored as new): a pre-`ABC-042` historical UAT-deferral sentence dropped from `AGENTS.md`
+  without a designed pointer (no directive content, outside `A2`'s minimum); the `INPUT_DEEP` deep
+  lane's "33 is the whole lane" receipt drifted to 34 on a prior spot-check, pre-existing and
+  orthogonal to this ticket's diff.
+
+Full notes: `.grugops/context/uat-run-ABC-109/notes/`.
+
 <details>
 <summary>Prior score, 2026-08-19, task <code>cut-agents-md-cap-2026-08-19</code> (10/10, 0 ⚠️) — superseded above</summary>
 
