@@ -243,3 +243,32 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 10 | no major unresolved blocker | **⚠️ ONE, and it is a DELIBERATE OPEN JUDGMENT CALL, not a blocker.** `A5`'s exact replacement prose for the header's process-model sentence is not supplied on this page — the acceptance names the checkable facts (the word "session" present, R1's reason named) but leaves the exact wording to the delivering hop, the same shape `ABC-122`'s own DoR ⚠️ used for `A4`'s formula-not-constant default. **Not smoothed to ✅**: BA/PM does not author production (or documentation) prose; supplying exact replacement text here would be designing the fix, not scoping it. Falsifiable either way, so it does not block the pull. |
 
 Column moves are the Orchestrator's.
+
+## Delivery — Software Engineer, 2026-09-26 (task `ticket-to-pr-ABC-123`, Workflow 04)
+
+Pulled by the Orchestrator under the owner's delegation (`…8c8aa8a9`). Branch
+`grugops/ABC-123-run-bounded-r2r3` from `e57da89`, **NOT merged, NOT pushed**. Readings in
+`.grugops/context/ticket-to-pr-ABC-123/notes/` (`…02e24867` decisions, `…35a5af66` readings, raw
+outputs beside them). Board and frontmatter moves are the Orchestrator's. **Recommend `In Review`**
+(QE hop owed, then Security/NFR: `tools/grugops/` is the gate's own surface).
+
+| AC | result | evidence |
+|---|---|---|
+| `A1` | **MET, red then green.** | **RED** on the unfixed wrapper (byte-identical to `e57da89`): the proof exited 1 with exactly the three A1 rows FAILED. At `2147483648`, `99999999999` and `9007199254740993` each gave exit 124, a `TimeoutOverflowWarning … set to 1`, and the healthy target killed. **GREEN** after the fix: all rows held. The three A1 values give exit 2, stderr exactly the usage line, and no target output. A `spawn()`-count probe (not committed) read 1/1/1 unfixed and **0/0/0 fixed**. |
+| `A2` | **MET.** | `N=2147483647` gives exit 0, the target's output, and an empty stderr (no overflow warning). Same on the unfixed and the fixed wrapper. |
+| `A3` | **MET, unchanged.** | Rejected with exit 2 and the usage line: `""`, `0`, `-5`, `abc`, `1.5`, `NaN`, `Infinity`, and no arguments. Accepted with exit 0 and the target's output: `1e3`, `0x3e8`, `" 1000 "`, `1000.0`, `0b1111101000`. Identical on both runs, and now committed as proof rows. |
+| `A4` | **MET.** | `grep -c "NOT YET WIRED IN" tools/grugops/run-bounded.js` gives `0`. |
+| `A5` | **MET.** | "session" appears on 4 header lines (38, 41, 44, 49) of the `detached` paragraph. Quoted: *"The command is spawned `detached: true`. On POSIX that calls setsid(), so the child becomes the leader of a NEW SESSION, not merely a new process group."* and *"THIS SESSION IS WHY `ABC-122`'s R1 EXISTS (an accepted risk, owner Olger Oeselg). A SIGKILL-class stop of the WRAPPER leaves the tree running with no bound …"* |
+| `A6` | **MET.** | Every changed line in the header hunks (old lines 9–14 and 38–42) starts with `//`. The only non-comment lines in the whole diff are R2's `const MAX_TIMEOUT_MS = 2 ** 31 - 1;` and the widened validation `if`. The Contract comment's `exit 2` line names the new ceiling as part of R2. |
+| `A7` | **MET, against the current baseline.** | The ticket's 47/1446 is stale. The wave has been at 48/1467 since `ABC-121`, per the Orchestrator's pull note. `npm test` (through the wrapper, 60000): exit 0, **48 files / 1467 tests, 0 skipped**. The proof is not a vitest file, so it adds 0 rows. `lint`, `typecheck` and `build` all exit 0. **Lint does not cover `tools/`** (Biome `files.includes`), so it did not read the changed files. |
+| `A8` | **MET.** | Code changes only in `tools/grugops/run-bounded.js` and `tools/grugops/run-bounded.proof.js`. The rest of the diff is this page, one `plans/traceability.md` row and the notes directory. No `src/`, `package.json`, `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md`, ADR or `run-bounded.hang-fixture.js` line. |
+
+**NFR / security at delivery:**
+- **`N8-LANE`: not engaged, 0 ms of 650 ms.** There are 0 new `src/` files, and the lane is still
+  48 files.
+- **Children the new proof rows force: 23 per run** (26 on the unfixed wrapper). A1 forces 3
+  wrappers, A2 forces 1 wrapper and 1 target, and A3 forces 13 wrappers and 5 targets. **The
+  `N8-SPAWN` charge is 0 ms**, because none of them runs in the lane. Security/NFR to confirm.
+- **Proof cost outside the lane:** 1.53 s real in one run.
+- **ASVS firing threshold not fired:** argv spawns only, no `shell: true`.
+- **R1 is untouched.** No signal forwarding was added.
