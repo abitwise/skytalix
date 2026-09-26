@@ -1,0 +1,15 @@
+rehop-cpu-ratio.mjs output, 2026-09-25, Apple M3 (hw.perflevel0 4 Performance, hw.perflevel1 4 Efficiency), arm A (66afd16)
+
+## unconstrained (load averages 14.89 16.33 10.92 before, 15.38 16.41 10.98 after)
+run 0: cpu during bodies 945 ms, wall of bodies 837 ms, sum of per-test wall 835 ms, ratio 1.13
+run 1: cpu during bodies 917 ms, wall of bodies 813 ms, sum of per-test wall 811 ms, ratio 1.13
+run 2: cpu during bodies 930 ms, wall of bodies 823 ms, sum of per-test wall 821 ms, ratio 1.13
+run 3: cpu during bodies 945 ms, wall of bodies 828 ms, sum of per-test wall 826 ms, ratio 1.14
+run 4: cpu during bodies 929 ms, wall of bodies 820 ms, sum of per-test wall 819 ms, ratio 1.13
+median: cpu 930 ms, wall 823 ms, per-test sum 821 ms, cpu/wall 1.13
+
+## ROUNDS=3 taskpolicy -b (background clamp: Efficiency cores, reduced clock — an UPPER bound)
+run 0: cpu during bodies 4209 ms, wall of bodies 4576 ms, sum of per-test wall 4567 ms, ratio 0.92
+run 1: cpu during bodies 3793 ms, wall of bodies 5982 ms, sum of per-test wall 5969 ms, ratio 0.63
+run 2: cpu during bodies 3893 ms, wall of bodies 4199 ms, sum of per-test wall 4194 ms, ratio 0.93
+median: cpu 3893 ms, wall 4576 ms, per-test sum 4567 ms, cpu/wall 0.92

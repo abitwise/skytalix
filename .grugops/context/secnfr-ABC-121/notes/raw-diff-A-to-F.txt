@@ -1,0 +1,10 @@
+446d445
+<     const reference = searchWithoutReductions(parseFen(A4_FEN), A4_DEPTH);
+452,453d450
+<     expect(shipped.score).toBe(reference.score);
+<     expect(label(shipped.move as Move)).toBe(label(reference.move as Move));
+462d458
+<     const reference = deepenTo(chooseMoveWithoutReductions, parseFen(A4_FEN), A4_DEPTH);
+469,470d464
+<     expect(shipped.score).toBe(reference.score);
+<     expect(label(shipped.move)).toBe(label(reference.move));

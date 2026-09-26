@@ -1,0 +1,121 @@
+ABC-121 planted variants at 9823c27 (engine-door-withoutReductions-reduces and door-withoutReductions-reduces re-run after the bite row): 23 of 23 killed
+
+tactical  KILLED  (4 default, 1 deep A1)
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a capture: a1a5 at depth 9, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a promotion: b7b82 at depth 9, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a checking move: a1e1 at depth 9, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a move made while in check: g1g2 at depth 9, index 30 -> 0
+    deep A1: search.pvs-lmr.test.ts > A1 drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] chooseMove iterated to depth 5 o
+r2  KILLED  (4 default, 1 deep A1)
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched the allowed case, at the thresholds: g1h1 at depth 3, index 3 -> 1
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched the allowed case, far above them — still exactly one ply: g1h1 at depth 9, inde
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+    deep A1: search.pvs-lmr.test.ts > A1 mate-rich corpus is frozen, and the mate floor holds one ply deeper all 287: every mate searchWithoutReductions sees at depth 4, search() sees at depth 5
+noLmrResearch  KILLED  (2 default, 0 deep A1)
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+noResearch  KILLED  (2 default, 2 deep A1)
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+    deep A1: search.pvs-lmr.test.ts > A1 drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] search() at fixed depth 5 on the
+    deep A1: search.pvs-lmr.test.ts > A1 drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] chooseMove iterated to depth 5 o
+early  KILLED  (4 default, 2 deep A1)
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched move index 2, below 3: g1h1 at depth 9, index 2 -> 0
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched remaining depth 2, below 3: g1h1 at depth 2, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+    deep A1: search.pvs-lmr.test.ts > A1 drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] search() at fixed depth 5 on the
+    deep A1: search.pvs-lmr.test.ts > A1 drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] chooseMove iterated to depth 5 o
+gross  KILLED  (16 default, 3 deep A1)
+    default: engine.test.ts > A3 aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards
+    default: engine.test.ts > A3 aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move
+    default: search.ordering.test.ts > A6 killer is offered only at the ply it was recorded at, and only in its own search search(): every killer offered was recorded at that ply of that search,
+    default: search.ordering.test.ts > A6 killer is offered only at the ply it was recorded at, and only in its own search chooseMove(): one table per call, kept across its iterations, never acr
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched the allowed case, at the thresholds: g1h1 at depth 3, index 3 -> 1
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched the allowed case, far above them — still exactly one ply: g1h1 at depth 9, inde
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a capture: a1a5 at depth 9, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a promotion: b7b82 at depth 9, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a checking move: a1e1 at depth 9, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a move made while in check: g1g2 at depth 9, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched move index 2, below 3: g1h1 at depth 9, index 2 -> 0
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched remaining depth 2, below 3: g1h1 at depth 2, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+    default: transposition.test.ts > A5 only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 241 nodes
+    default: transposition.test.ts > A5 only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0
+    deep A1: search.pvs-lmr.test.ts > A1 mate-rich corpus is frozen, and the mate floor holds one ply deeper all 287: every mate searchWithoutReductions sees at depth 4, search() sees at depth 5
+    deep A1: search.pvs-lmr.test.ts > A1 drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] search() at fixed depth 5 on the
+    deep A1: search.pvs-lmr.test.ts > A1 drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] chooseMove iterated to depth 5 o
+pvsNoResearch  KILLED  (8 default, 2 deep A1)
+    default: engine.test.ts > A3 aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards
+    default: engine.test.ts > A3 aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move
+    default: search.ordering.test.ts > Scope engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently
+    default: search.ordering.test.ts > Scope engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, f8f7
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+    default: search.test.ts > A1 and unpruned scores are identical position-4 at depth 2
+    default: transposition.test.ts > A5 only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 241 nodes
+    deep A1: search.pvs-lmr.test.ts > A1 drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] search() at fixed depth 5 on the
+    deep A1: search.pvs-lmr.test.ts > A1 drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] chooseMove iterated to depth 5 o
+noLmrResearch-engine-only  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+noLmrResearch-search-only  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+pvsNoResearch-engine-only  KILLED  (4 default, - deep A1)
+    default: engine.test.ts > A3 aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards
+    default: engine.test.ts > A3 aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move
+    default: search.ordering.test.ts > Scope engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, f8f7
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+pvsNoResearch-search-only  KILLED  (4 default, - deep A1)
+    default: search.ordering.test.ts > Scope engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+    default: search.test.ts > A1 and unpruned scores are identical position-4 at depth 2
+    default: transposition.test.ts > A5 only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 241 nodes
+noResearch-engine-only  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+reduces-at-root  KILLED  (5 default, - deep A1)
+    default: engine.test.ts > A3 aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards
+    default: engine.test.ts > A3 aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched the root: g1h1 at depth 9, index 30, root -> 0
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+ignores-in-check  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a move made while in check: g1g2 at depth 9, index 30 -> 0
+ignores-gives-check  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a checking move: a1e1 at depth 9, index 30 -> 0
+ignores-promotion  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a promotion: b7b82 at depth 9, index 30 -> 0
+no-unmake-in-predicate  KILLED  (8 default, - deep A1)
+    default: engine.test.ts > A4 fixed depth anywhere in the delivered engine goes DEEPER than any small hard-coded ceiling would allow — the behavioural half
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched the allowed case, at the thresholds: g1h1 at depth 3, index 3 -> 1
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched the allowed case, far above them — still exactly one ply: g1h1 at depth 9, inde
+    default: search.pvs-lmr.test.ts > A3 one ply for a late quiet move, and never for a move that must be searched a checking move: a1e1 at depth 9, index 30 -> 0
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-hig
+    default: search.pvs-lmr.test.ts > A4 reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dept
+    default: search.pvs-lmr.test.ts > A1 mate-rich corpus is frozen, and the mate floor holds one ply deeper the seven seeds at depth 4 — the default lane's standing guard
+    default: transposition.test.ts > A5 only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 241 nodes
+search-literal-reduction  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > A3 recursions route every reduction through the predicate, subtracting what it returns ./search.ts: calls lateMoveReduction and subtracts its value, never a
+engine-bypasses-predicate  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > A3 recursions route every reduction through the predicate, subtracting what it returns ./engine.ts: calls lateMoveReduction and subtracts its value, never a
+door-withoutReductions-reduces  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > PVS identity scores what searchWithoutPvsOrReductions scores the six endgames and position-3 at depth 4 — the default lane's standing guard
+door-pre121-has-pvs  KILLED  (12 default, - deep A1)
+    default: quiescence.test.ts > A4 position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 1: same score, same move, same node count
+    default: quiescence.test.ts > A4 position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 2: same score, same move, same node count
+    default: quiescence.test.ts > A4 position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 3: same score, same move, same node count
+    default: quiescence.test.ts > A4 position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 4: same score, same move, same node count
+    default: quiescence.test.ts > A4 position with no capture anywhere near the leaves scores exactly as before two far-apart pawns at depth 3: same score, same move, same node count
+    default: quiescence.test.ts > A4 position with no capture anywhere near the leaves scores exactly as before two far-apart pawns at depth 4: same score, same move, same node count
+    default: search.ordering.test.ts > A4 heuristic's node count, and the delete rule position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467
+    default: search.ordering.test.ts > A4 heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 261 nodes (ABC-079 QE G4)
+    default: search.pvs-lmr.test.ts > PVS identity scores what searchWithoutPvsOrReductions scores the default-lane guard bites: PVS really does change the work at depth 4
+    default: search.pvs-lmr.test.ts > A5 visits fewer nodes than searchWithoutPvsOrReductions at depth 4 position-3 at depth 4 — the default lane's standing guard
+    default: transposition.test.ts > A1 and table-off scores are identical position-3 at depth 4 — the same score, and the work changes: 1 123 nodes with the table, 1 299 without
+    default: transposition.test.ts > A5 only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 241 nodes
+engine-door-pre121-has-pvs  KILLED  (2 default, - deep A1)
+    default: search.ordering.test.ts > G1 records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 358 nodes
+    default: transposition.test.ts > A3 deepening with the table visits <= 70% of the nodes it visits without position-3 deepened to depth 4 — the default lane's standing guard
+engine-door-withoutReductions-reduces  KILLED  (1 default, - deep A1)
+    default: search.pvs-lmr.test.ts > PVS identity scores what searchWithoutPvsOrReductions scores the engine doors bite: chooseMoveWithoutReductions is the unreduced engine, not chooseMove

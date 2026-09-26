@@ -1,0 +1,10 @@
+arms B,G,NG,A rounds 13 (round 0 discarded)
+B: n=12 files/tests=47/1446 medianCPU=25.085 rangeCPU=24.31-28.72 medianWALL=6.330
+G: n=12 files/tests=48/1464 medianCPU=26.485 rangeCPU=25.02-32.02 medianWALL=6.295
+NG: n=12 files/tests=48/1464 medianCPU=26.020 rangeCPU=24.85-32.26 medianWALL=6.345
+A: n=12 files/tests=48/1466 medianCPU=26.590 rangeCPU=25.4-31.93 medianWALL=6.305
+G - B CPU per round: 0.71 0.35 0.78 0.81 1.91 1.15 0.91 2.01 3.3 0.39 1.57 1.57 median=1.030 (4.11% of B) sign+ 12/12
+NG - B CPU per round: 0.54 0.65 0.68 1 0.93 1.12 0.75 4.2 2.44 1.89 0.96 0.97 median=0.965 (3.85% of B) sign+ 12/12
+A - B CPU per round: 1.09 0.82 0.95 0.92 1.69 1.48 1.41 3.87 2.57 1.18 2.18 1.97 median=1.445 (5.76% of B) sign+ 12/12
+load1 before each run: min=7.13 median=17.90 max=25.51
+harness errors: 0 of 52

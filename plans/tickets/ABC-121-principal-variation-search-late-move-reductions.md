@@ -317,3 +317,159 @@ to this build.
 
 8/10, 2 ⚠️, NOT MET.
 </details>
+
+## Delivery
+
+**Built 2026-09-25 by the Software Engineer** (task `wave-2026-09-25`, subtask
+`ticket-to-pr-ABC-121`, Workflow 04) on branch `grugops/ABC-121-pvs-lmr`, off
+`grugops/wave-2026-09-25` @ `15c6eb0`, in two commits per R3: **`8e54b13`** (PVS, the four doors,
+every work-row re-point, the PVS identity link) and **`9823c27`** (the predicate, LMR, `A1`–`A5`,
+`src/search.mate-corpus.ts`). **Unmerged; not pushed; not deployed.** This section is a pointer;
+the figures live in `.grugops/context/ticket-to-pr-ABC-121/notes/`.
+
+- **`A1` MET:**
+  - drift at d5, both recursions: 99.47% within 25 cp, max 45 cp;
+  - mate floor d4 → d5 on the 287: 0 of 180 violated;
+  - 190-corpus mate flips: 0 (a report).
+- **`A2` MET:** plain node 7 / 7 against 6 / 6, both for the door and for the base, 3/3 rounds.
+  Companion to d7: 532 363 / 467 461 nodes.
+- **`A3` MET**, **`A4` MET** (null-window re-search shown, in `search()` and `chooseMove`),
+  **`A5` MET** (80.2% / 70.8%), **`A6` MET**.
+- **Re-pointed rows:** every merged row re-pointed, one line each, in note `…d9a84a04`. No bar
+  moved.
+- **Planted variants:** 23 of 23 red (`…7f29f842`).
+- **Handed up, not decided here:**
+  1. **`N8-LANE` NOT MET:** +1 670 ms net against 650. Deep-lane placement is proposed in
+     `…24e3648a`; nothing was trimmed.
+  2. **The G6 knight pair is re-pointed** under `ADR-0026` decision 4 rather than kept on the
+     shipped path per decision 7: LMR moves `knight-g1 w -` 820 → 830 at d4. Architect/Design to
+     ratify or overrule (`…0da3f1a5`).
+- **Owed later (fenced here):** the `AGENTS.md` deep-lane lines for
+  `src/search.pvs-lmr.test.ts` (`SEARCH_DEEP`, `ENGINE_DEEP`). A Scribe pass, behind `ABC-109`.
+
+**`N8-LANE` re-hop, 2026-09-25, by the Software Engineer** (subtask `ticket-to-pr-ABC-121-lane`),
+on branch `grugops/ABC-121-lane` @ **`6c1e895`**, off `66afd16`. Test-only, +25/−11.
+**Unmerged; not pushed.** The figures live in the notes.
+
+- **The unattributed ≈ 1 s is test-body CPU, not import cost** (`…e1e4a69f`).
+  - Import, module-level work and collect cost ≈ 45 ms above the per-file floor.
+  - The bodies' 0.93 s of CPU reads ≈ 1.7 s in the lane on this 4P+4E machine under load.
+- **Moved:** the seven-seed mate-floor guard, to `SEARCH_DEEP`.
+- **Narrowed:** the PVS identity guard, to kp-vs-k; the other six positions run in the deep 190.
+- **Kept, because each is its variant's only default guard:** `A4`'s `chooseMove` row and the
+  engine-doors bite (`…9bdce84b`).
+- **Default-lane planted variants:** 23 / 23 red. The four-row proposal would leave 20 / 23
+  (`…17a0830d`).
+- **`N8-LANE` still NOT MET:** +1 575 ms gross, **+1 415 ms net** against 650.
+  - Null control 0.19%. Load1 median 22.8.
+  - The placement removes ≈ 30% of the charge (`…e4d6fcc8`).
+  - The residual is for Security/NFR to rate; the owner decides.
+- **The G6 row is untouched** (Architect/Design's ruling is pending).
+
+**G6 ruling applied, 2026-09-25, by the Software Engineer** (subtask
+`ticket-to-pr-ABC-121-g6-comment`), on branch `grugops/ABC-121-pvs-lmr` @ **`01d258f`**.
+Comment-only, `src/transposition.test.ts` +4/−2. **Unmerged; not pushed.**
+
+- The re-point comment's last-but-one sentence is replaced with `ruling-abc121-g6` `…ea306e58` §4's
+  text, verbatim. No assertion, identifier or literal changed.
+- The `KNIGHT_G1_PAIR` docstring is left as it is (flagged by the ruling; it waits for the
+  `ADR-0006` erratum).
+- Gates: `npm test` 48 / 1 466 / 0 skipped, integrity `No findings.`, lint + typecheck clean
+  (`…5c2e91b4`).
+
+## QE
+
+**QE gate run, 2026-09-26, by QE/E2E** (subtask `qe-ABC-121`, Workflow 05), on branch
+`grugops/qe-ABC-121`, worktree `.claude/worktrees/qe-ABC-121`, off `67207b4` (the G6-comment
+tip, `312a188`). **Verdict: PASS WITH FINDINGS.** Zero `src/` lines; not merged; not pushed.
+
+- **`A1`–`A6` independently reproduced**, all MET, every figure matching the build's own
+  exactly (drift 99.47% / max 45 cp both recursions; mate floor 0/180, 0/205; `A5` 80.2% /
+  70.8%; `A2` 7/7 vs 6/6 on plain node, own script, 3 rounds, own load).
+- **The d5 drift and d7 companion rows the lane re-hop had not re-run — re-run here**
+  (`SEARCH_DEEP=1 npx vitest run src/search.pvs-lmr.test.ts`, 29/29 green, 882.8 s), figures
+  matching the build to the exact number.
+- **5 of 23 planted variants re-applied by hand** (`tactical`, `r2`, `noLmrResearch`,
+  `pvsNoResearch`, `noResearch`) — each confirmed red exactly as ledgered, each reverted
+  byte-for-byte; `git status --short -- src` clean after every revert and at the end.
+- **Re-pointed rows spot-checked against the tree** (promotion-capture pin, G6 knight pair, the
+  rook-ending split); the G6 comment matches `ruling-abc121-g6` `…ea306e58` §4 verbatim.
+- **The `A4` `chooseMove` saving (`…9bdce84b`) ruled SAFE — does not weaken detection of
+  `noLmrResearch-engine-only` / `noResearch-engine-only`** (the literal pin is the actual
+  detector, not the reference-equality check). **Not applied** — QE reports on test behavior,
+  never changes it.
+- **`N8-LANE` handed to Security/NFR, report only**, per this subtask's fence.
+- Gates: `npm test` 48 / 1 466 / 0 skipped, integrity `No findings.`, lint + typecheck clean.
+- Gaps named honestly: 18 of 23 planted variants not independently re-applied (relies on the
+  build's own two ledgers); the depth re-measurement is one machine, one hop, lower load than
+  either build reading; the bare-`mkdir` queue-claim caveat is inherited, not new.
+- Notes: `.grugops/context/qe-ABC-121/notes/`.
+
+## Security/NFR 2026-09-26 (`secnfr-ABC-121`, Workflow 15, ASVS L1, block on high): PASS_WITH_RISKS
+
+Reviewed `main...grugops/ABC-121-pvs-lmr` at **`ada4093`** (`src/` byte-identical to QE's
+`312a188`). The gate was re-run green: `npm test` 48 / 1 466 / 0 skipped, lint clean (85 files),
+typecheck exit 0, integrity `No findings.`. **No security finding. No required fix.** One LOW risk
+is proposed for the owner. **It is not accepted by this gate, and the recommendation is no merge
+before the owner's word.** The figures live in `.grugops/context/secnfr-ABC-121/notes/`.
+
+- **`N8-LANE` NOT MET (LOW), for the owner: `AR-N8LANE-121` drafted** (`…d25a224c`).
+  - This gate's three runs read **+910 / +1 035 / +1 285 ms CPU net** against 650. Two of them
+    carry an admissible identity null: +0.41% and −0.52%. Sign 12/12 in every run.
+  - The build read +1 415 / +1 670 (`…2db5faac`).
+  - **No placement that keeps every planted variant red reaches 650:**
+    - dropping both `A4` reference searches (arm F): 23 / 23 red, **+785 net**;
+    - also moving the PVS bite and `A5` (arm G): 23 / 23 red, **+870 net**, and it leaves
+      `searchWithoutReductions`-loses-PVS unguarded. That variant was planted and survived.
+  - **Optional, not blocking:** apply F. It is guard-neutral and saves ≈ 0.2 s. Do not apply G.
+- **`NFR-005` floor MET** on plain node: kiwipete 7/7/7 and position-6 7/7/7, against the
+  pre-`ABC-121` door's 6/6/6.
+  - **Depth-7 WARN is reached on M3.** It stays PROVISIONAL.
+  - The catalog's *"Depth 7 not reached"* status sentence goes stale at merge. That is a
+    catalog-owner follow-up, not edited here.
+- **`NFR-004`:** worst 3 005.3 ms over 24 calls at 3 s; a 10 s budget returns at 5 000.6 ms. Both
+  are inside `AR-NFR004-A`.
+- **`NFR-009` MET:** `arrayBuffers` 4.01 MiB flat. `heapUsed` moves ≤ 0.023 MiB across
+  1 s → 3 s → 3 s. The `ABC-081` `A7` deep row is green.
+- **The test-only doors are unreachable from the CLI** (`…76eb826c`):
+  - `cli.ts` → `createEngine` → `chooseMove` → literal `{ pvs: true, reductions: true }`;
+  - `options` is never spread into the budget;
+  - no non-test file names a door.
+- **Info:** `lateMoveReduction`'s make/unmake has no `try/finally`. The throw is unreachable today.
+- **Not verified:** other hardware, and a quiet-machine lane reading. The deep lane was not re-run
+  here; QE re-ran it at `312a188`.
+- **`AR-N8LANE-121` ACCEPTED by the owner, 2026-09-26, verbatim *"2. accept the extra"*** (Olger
+  Oeselg; Orchestrator note `20260926T201000Z-orchestrator-decision-52aaf5f3`, on the wave). Recorded
+  as drafted above — accepted, not re-worded. Zero `src/` lines were changed by this hop. Not
+  merged, not pushed.
+
+## UAT run 2026-09-26 (`uat-run-ABC-121`, Workflow 06/`AGENTS.md` § Test and UAT authority — running the ticket's UAT is the agent's, standing; the owner's own word is still the `In UAT` signature)
+
+Reviewed `grugops/ABC-121-pvs-lmr` at **`6570343`** (Security/NFR's tip, `src/` unchanged since).
+Hand-authored, unsealed — no `finding` is admissible on this install; this is a `decision`/
+`observation`, never a stamp. **Recommendation: ACCEPT.** Figures in
+`.grugops/context/uat-run-ABC-121/notes/`.
+
+- **`A1`–`A6` all PASS**, independently reproduced: bounded drift 99.47% (both recursions), max
+  45 cp, 0/180 mate-status violations; depth floor 7/7 vs the door's 6/6 on plain node, 3 rounds;
+  clock-free companion 532363/467461 vs 1922235/1923320 nodes; `A3`/`A4` green in the default
+  lane; `A5` 80.2%/70.8%; `A6` inherited from Security/NFR's `NFR-009` MET.
+- **Business-facing CLI play-through, three games, non-interactive/piped**: every engine reply
+  legal; the engine plays sensibly and tactically (attacks a queen with tempo; captures a hung
+  queen outright after a Scholar's-Mate-style blunder). No move broke `AR-NFR004-A`'s band across
+  nine engine moves. The CLI has no FEN-loading option, so "from a tactical position" is read as
+  reaching one through play, not loading one.
+- **Test-only doors independently confirmed unreachable from `src/cli.ts`** — matches Security/
+  NFR's `…76eb826c` finding, reproduced rather than taken on trust.
+- **Full gate green, figure-identical to every prior hop**: `npm test` 48/1466/0 skipped; lint
+  clean (85 files); typecheck exit 0; skip-integrity "No findings."; `SEARCH_DEEP=1 npx vitest
+  run src/search.pvs-lmr.test.ts` 29/29, exit 0, 926.18 s wall — scoped to this ticket's own deep
+  file (the other `SEARCH_DEEP` files carry no code this ticket touched).
+- **`N8-LANE`**: not re-measured (Security/NFR's instrument, out of this hop's fence); recorded
+  as fact that `AR-N8LANE-121` is owner-accepted (above), not re-judged.
+- **Gaps named honestly**: `A3`/`A4` taken on the default-lane pass/fail plus QE's prior row
+  check, not independently re-derived by hand here; per-move timing measured as a game average,
+  not per individual move; other hardware and a quiet-machine reading remain unverified.
+
+**The owner's own word is still the `In UAT` exit signature.** This run is the report that word
+answers, not the acceptance itself. Notes: `.grugops/context/uat-run-ABC-121/notes/`.

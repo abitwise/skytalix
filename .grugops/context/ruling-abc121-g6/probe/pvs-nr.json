@@ -1,0 +1,38 @@
+{
+ "variant": "pvsNoResearch",
+ "s": 1188,
+ "total": 86,
+ "failed": [
+  "search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores all 190 positions at depth 4 [deep, SEARCH_DEEP=1]",
+  "search.pvs-lmr.test.ts :: A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]",
+  "search.pvs-lmr.test.ts :: A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] chooseMove iterated to depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]",
+  "search.test.ts :: A1 — pruned and unpruned scores are identical position-4 at depth 2",
+  "search.test.ts :: A1 — pruned and unpruned scores are identical position-6 at depth 2 [deep, SEARCH_DEEP=1]"
+ ],
+ "watched": [
+  "passed  search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores the corpus is the ruling's 190 positions",
+  "passed  search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores the six endgames and position-3 at depth 4 — the default lane's standing guard",
+  "passed  search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores the default-lane guard bites: PVS really does change the work at depth 4",
+  "passed  search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores the engine doors bite: chooseMoveWithoutReductions is the unreduced engine, not chooseMove",
+  "failed  search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores all 190 positions at depth 4 [deep, SEARCH_DEEP=1]",
+  "passed  search.pvs-lmr.test.ts :: A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper src/search.mate-corpus.ts holds 287 positions, the seven seeds among them — the length pin",
+  "passed  search.pvs-lmr.test.ts :: A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper the seven seeds at depth 4 — the default lane's standing guard",
+  "passed  search.pvs-lmr.test.ts :: A1 — the mate-rich corpus is frozen, and the mate floor holds one ply deeper all 287: every mate searchWithoutReductions sees at depth 4, search() sees at depth 5, same sign, no longer [deep, SEARCH_DEEP=1]",
+  "failed  search.pvs-lmr.test.ts :: A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]",
+  "failed  search.pvs-lmr.test.ts :: A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] chooseMove iterated to depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical startpos at depth 2",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical startpos at depth 3 [deep, SEARCH_DEEP=1]",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical startpos at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical kiwipete at depth 2 [deep, SEARCH_DEEP=1]",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical kiwipete at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical position-3 at depth 2",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical position-3 at depth 3",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical position-3 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "failed  search.test.ts :: A1 — pruned and unpruned scores are identical position-4 at depth 2",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical position-4 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical position-5 at depth 2 [deep, SEARCH_DEEP=1]",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical position-5 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]",
+  "failed  search.test.ts :: A1 — pruned and unpruned scores are identical position-6 at depth 2 [deep, SEARCH_DEEP=1]",
+  "passed  search.test.ts :: A1 — pruned and unpruned scores are identical position-6 at depth 3 on the bare leaf [deep, SEARCH_DEEP=1]"
+ ]
+}

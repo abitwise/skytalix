@@ -1,0 +1,8 @@
+rehop-pvs-subset.ts output, 2026-09-25, at 66afd16 (plain node, warm pass reported)
+kq-corner	guard cost 7.5 ms	identity holds	mutant (reducing door) 29997 vs 29997: green
+kr-corner	guard cost 3.8 ms	identity holds	mutant (reducing door) 29997 vs 29997: green
+kqk-h8	guard cost 7.4 ms	identity holds	mutant (reducing door) 29997 vs 29997: green
+kp-vs-k	guard cost 1.1 ms	identity holds	mutant (reducing door) 130 vs 110: RED
+krk-a-file	guard cost 1.5 ms	identity holds	mutant (reducing door) 560 vs 560: green
+pawn-race	guard cost 0.7 ms	identity holds	mutant (reducing door) 35 vs 35: green
+position-3	guard cost 7.8 ms	identity holds	mutant (reducing door) 90 vs 90: green

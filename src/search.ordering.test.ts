@@ -19,7 +19,7 @@
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { chooseMove } from "./engine.ts";
+import { chooseMove, chooseMoveWithoutPvsOrReductions } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
@@ -31,6 +31,7 @@ import {
   search,
   searchWithoutKillers,
   searchWithoutOrdering,
+  searchWithoutPvsOrReductions,
   searchWithoutTable,
 } from "./search.ts";
 
@@ -297,7 +298,13 @@ function measure(
 }
 const none = (name: string, depth: number) => measure(searchWithoutOrdering, "none", name, depth);
 const mvvLva = (name: string, depth: number) => measure(searchWithoutKillers, "mvv", name, depth);
-const full = (name: string, depth: number) => measure(search, "full", name, depth);
+/**
+ * The full ordering, hash move included — read off the pre-`ABC-121` search since `ABC-121`
+ * (`ADR-0026` decision 4): principal-variation search saves more on the weaker side of every ratio
+ * here, so with it on this row would measure PVS rather than ordering.
+ */
+const full = (name: string, depth: number) =>
+  measure(searchWithoutPvsOrReductions, "full", name, depth);
 /** `ABC-080`'s own full ordering — killers, no hash move — which is `ABC-081`'s table-off door. */
 const killers = (name: string, depth: number) =>
   measure(searchWithoutTable, "killers", name, depth);
@@ -427,13 +434,15 @@ describe("A4 — each heuristic's node count, and the delete rule", () => {
    * ledger at `ABC-081` re-ran the dropped-term mutant against this pin.
    */
   it("the promotion-capture fixture at depth 3 visits 261 nodes (ABC-079 QE G4)", () => {
-    expect(search(parseFen(PROMOTION_CAPTURE_FEN), 3).nodes).toBe(261);
+    // The pre-`ABC-121` search since `ABC-121` (`ADR-0026` decision 4); the pin is unchanged.
+    expect(searchWithoutPvsOrReductions(parseFen(PROMOTION_CAPTURE_FEN), 3).nodes).toBe(261);
   });
 
   if (RUN_DEEP) {
     /**
      * The criterion's reading, at depths 4 and 5 on both positions. The hash-move configuration
-     * needed a table, which `ABC-081` built: it is `search()` now, and `+ killers` — `ABC-080`'s
+     * needed a table, which `ABC-081` built: it is `search()` as of `ABC-081` (read off
+     * `searchWithoutPvsOrReductions` since `ABC-121`), and `+ killers` — `ABC-080`'s
      * own full ordering, with no hash move — is `searchWithoutTable`. The three lower rungs carry
      * no table, so each column is one lever more than the one before it.
      *
@@ -601,8 +610,9 @@ describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
    * it from a measurement, never from the failure message alone.
    */
   it("position-3 at 3 injected ticks: depth 3 in exactly 358 nodes", () => {
+    // The pre-`ABC-121` engine since `ABC-121` (`ADR-0026` decision 4); the pin is unchanged.
     let ticks = 0;
-    const choice = chooseMove(parseFen(fenOf("position-3")), {
+    const choice = chooseMoveWithoutPvsOrReductions(parseFen(fenOf("position-3")), {
       budgetMs: 3,
       now: () => ticks++,
     }) as { depth: number; nodes: number };

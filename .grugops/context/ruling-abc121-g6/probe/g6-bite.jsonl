@@ -1,0 +1,12 @@
+{"variant":"clean","d":3,"w K":{"search":850,"pre121":850,"withoutReductions":850,"withoutTable":850},"w -":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830}}
+{"variant":"clean","d":4,"w K":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830},"w -":{"search":830,"pre121":820,"withoutReductions":820,"withoutTable":820}}
+{"variant":"clean","d":5,"w K":{"search":840,"pre121":840,"withoutReductions":840,"withoutTable":840},"w -":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830}}
+{"variant":"clean","d":6,"w K":{"search":840,"pre121":840,"withoutReductions":840,"withoutTable":840},"w -":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830}}
+{"variant":"drop-rights","d":3,"w K":{"search":850,"pre121":850,"withoutReductions":850,"withoutTable":850},"w -":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830}}
+{"variant":"drop-rights","d":4,"w K":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830},"w -":{"search":830,"pre121":820,"withoutReductions":820,"withoutTable":820}}
+{"variant":"drop-rights","d":5,"w K":{"search":840,"pre121":840,"withoutReductions":840,"withoutTable":840},"w -":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830}}
+{"variant":"drop-rights","d":6,"w K":{"search":840,"pre121":840,"withoutReductions":840,"withoutTable":840},"w -":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830}}
+{"variant":"delta-ignores-rights","d":3,"w K":{"search":850,"pre121":850,"withoutReductions":850,"withoutTable":850},"w -":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830}}
+{"variant":"delta-ignores-rights","d":4,"w K":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830},"w -":{"search":830,"pre121":820,"withoutReductions":820,"withoutTable":820}}
+{"variant":"delta-ignores-rights","d":5,"w K":{"search":840,"pre121":840,"withoutReductions":840,"withoutTable":840},"w -":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830}}
+{"variant":"delta-ignores-rights","d":6,"w K":{"search":840,"pre121":840,"withoutReductions":840,"withoutTable":840},"w -":{"search":830,"pre121":830,"withoutReductions":830,"withoutTable":830}}

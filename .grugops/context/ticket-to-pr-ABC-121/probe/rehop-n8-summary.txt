@@ -1,0 +1,10 @@
+arms X,NX,A,B rounds 13 (round 0 discarded)
+X: n=12 files/tests=48/1466 medianCPU=31.670 rangeCPU=30.52-33.93 medianWALL=7.225
+NX: n=12 files/tests=48/1466 medianCPU=31.540 rangeCPU=29.29-33.74 medianWALL=7.190
+A: n=12 files/tests=48/1467 medianCPU=32.525 rangeCPU=30.93-33.54 medianWALL=7.515
+B: n=12 files/tests=47/1446 medianCPU=30.055 rangeCPU=29.18-31.7 medianWALL=7.080
+NX - X CPU per round: -3.05 -0.63 0.06 -0.71 0.39 0.45 0.78 0.06 -0.12 0.07 -0.24 0.77 median=0.060 (0.19% of X) sign+ 7/12
+A - X CPU per round: -1.41 -0.58 -0.38 0.59 0.76 2.6 1.07 1.03 1.82 1.16 0.48 0.92 median=0.840 (2.65% of X) sign+ 9/12
+B - X CPU per round: -2.76 -2.23 -2.15 -2.57 -1.25 -1.22 -1.52 -0.84 -1.63 -1.4 -2.04 0.5 median=-1.575 (-4.97% of X) sign+ 1/12
+load1 before each run: min=16.14 median=22.82 max=32.14
+harness errors: 0 of 52

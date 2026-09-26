@@ -1,0 +1,8 @@
+208c208
+<   it("the default-lane guard bites: PVS really does change the work at depth 4", () => {
+---
+>   if (RUN_DEEP) it("the default-lane guard bites: PVS really does change the work at depth 4", () => {
+473c473
+< describe("A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4", () => {
+---
+> if (RUN_DEEP) describe("A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4", () => {

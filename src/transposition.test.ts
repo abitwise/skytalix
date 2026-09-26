@@ -24,13 +24,19 @@
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { chooseMove, DEFAULT_BUDGET_MS } from "./engine.ts";
+import { chooseMove, chooseMoveWithoutPvsOrReductions, DEFAULT_BUDGET_MS } from "./engine.ts";
 import { parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, squareName } from "./position.ts";
 import { QUIESCENCE_MAX_PLY } from "./quiescence.ts";
-import { KEY_ARRAY_CAPACITY, MATE_SCORE, search, searchWithoutTable } from "./search.ts";
+import {
+  KEY_ARRAY_CAPACITY,
+  MATE_SCORE,
+  search,
+  searchWithoutPvsOrReductions,
+  searchWithoutTable,
+} from "./search.ts";
 import {
   BOUND_EXACT,
   BOUND_LOWER,
@@ -109,13 +115,16 @@ const label = (move: Move | null): string =>
  * until the root of iteration `depth` is stored, then reads far past any deadline, so the deepening
  * loop's next check stops it. Node counts are therefore the engine's own cumulative
  * iterative-deepening counts to exactly that depth — `A3`'s shape — on every machine.
+ *
+ * Since `ABC-121` it runs the pre-`ABC-121` engine, `chooseMoveWithoutPvsOrReductions`: every row
+ * that reads it is a work reading (`ADR-0026` decision 4), and not one bar moved.
  */
 function deepenTo(fen: string, depth: number): { nodes: number; depth: number; score: number } {
   let done = false;
   seen.onRootStore = (stored) => {
     if (stored === depth) done = true;
   };
-  const choice = chooseMove(parseFen(fen), {
+  const choice = chooseMoveWithoutPvsOrReductions(parseFen(fen), {
     budgetMs: 1_000,
     now: () => (done ? Number.MAX_SAFE_INTEGER : 0),
   }) as { nodes: number; depth: number; score: number };
@@ -190,17 +199,33 @@ describe("A4 — a mate score is correct at every ply the position is reached at
      * 182 endgame positions and four budgets where the dropped adjustment changed the answer, and
      * the reused entry there is a mate-in-ONE position; no reused mate-in-2 entry changed a root
      * score in that scan, so the mate-in-2 wording of the criterion is answered at the table, above.
+     *
+     * SPLIT at `ABC-121`, as `ADR-0026` decision 7 names this row: the depth reached at 160 ticks is
+     * a node count in disguise, so the measurement above — depth 10, the door comparison — reads the
+     * pre-`ABC-121` engine, unchanged. The LITERAL stays on the shipped `chooseMove`, which now
+     * completes depth 11 at the same budget (fewer nodes per iteration) and still reads −29 992.
      */
     it("reports the table-free mate distance where the engine reuses a mate score at a second ply [deep, SEARCH_DEEP=1]", () => {
       const fen = "k7/8/8/K7/8/8/8/1R6 b - - 1 1";
       let ticks = 0;
-      const choice = chooseMove(parseFen(fen), { budgetMs: 160, now: () => ticks++ }) as {
+      const choice = chooseMoveWithoutPvsOrReductions(parseFen(fen), {
+        budgetMs: 160,
+        now: () => ticks++,
+      }) as {
         depth: number;
         score: number;
       };
       expect(choice.depth).toBe(10);
       expect(choice.score).toBe(searchWithoutTable(parseFen(fen), 10).score);
       expect(choice.score).toBe(0 - (MATE_SCORE - 8));
+
+      ticks = 0;
+      const shipped = chooseMove(parseFen(fen), { budgetMs: 160, now: () => ticks++ }) as {
+        depth: number;
+        score: number;
+      };
+      expect(shipped.depth).toBeGreaterThanOrEqual(10);
+      expect(shipped.score).toBe(0 - (MATE_SCORE - 8));
     }, 60_000);
   }
 });
@@ -292,15 +317,28 @@ describe("A1 — table-on and table-off scores are identical", () => {
   if (RUN_SEARCH_DEEP) {
     // position-3 is in the default lane, in the node-count row at the end of this block.
     for (const { name, fen } of PERFT_CORPUS.filter(({ name }) => name !== "position-3")) {
+      // The pre-`ABC-121` search since `ABC-121` (`ADR-0026` decision 4): LMR changes the value.
       it(`${name} at depth 4 [deep, SEARCH_DEEP=1]`, () => {
-        expect(search(parseFen(fen), 4).score).toBe(searchWithoutTable(parseFen(fen), 4).score);
+        expect(searchWithoutPvsOrReductions(parseFen(fen), 4).score).toBe(
+          searchWithoutTable(parseFen(fen), 4).score,
+        );
       }, 60_000);
     }
   }
 
+  /**
+   * RE-POINTED at `ABC-121` to the pre-`ABC-121` search, with both literals unchanged — `ABC-081`
+   * `A1`'s row, so `ADR-0026` decision 4's. Decision 7 listed this pair as a shipped-path VALUE row,
+   * but at depth 4 the late-move reductions move `knight-g1 w -` from 820 to 830, in this build and
+   * in the ruling's own reference recursion. The pair then reads 830 twice on `search()`, so it
+   * re-points under decision 4 (ruling `ruling-abc121-g6`, which strikes it from decision 7). G6's
+   * bite was never this score pair, because the table lives one search. It is the key row below
+   * and `zobrist.test.ts`'s castling-rights rows, which no search switch reaches.
+   * Measured, not argued: `.grugops/context/ticket-to-pr-ABC-121/probe/g6.ts`.
+   */
   for (const { name, fen, score } of KNIGHT_G1_PAIR) {
     it(`${name} at depth 4 — G6: ${score} with the table on and off`, () => {
-      expect(search(parseFen(fen), 4).score).toBe(score);
+      expect(searchWithoutPvsOrReductions(parseFen(fen), 4).score).toBe(score);
       expect(searchWithoutTable(parseFen(fen), 4).score).toBe(score);
     });
   }
@@ -316,7 +354,8 @@ describe("A1 — table-on and table-off scores are identical", () => {
    * table and 1 299 without it. A table-off door that quietly used the table reads 1 123 twice.
    */
   it("position-3 at depth 4 — the same score, and the work changes: 1 123 nodes with the table, 1 299 without", () => {
-    const on = search(parseFen(fenOf("position-3")), 4);
+    // The pre-`ABC-121` search since `ABC-121` (`ADR-0026` decision 4); both pins are unchanged.
+    const on = searchWithoutPvsOrReductions(parseFen(fenOf("position-3")), 4);
     const off = searchWithoutTable(parseFen(fenOf("position-3")), 4);
     expect(on.score).toBe(off.score);
     expect(on.nodes).toBe(1_123);
@@ -333,8 +372,11 @@ describe("A2 — the hit rate is reported and is at least 15%", () => {
    * The DEFAULT lane's standing guard: position-3 at fixed depth 4, measured at this ticket's
    * build at 21.8% of probes finding a verified entry. A table that never hits reads 0.
    */
+  // The pre-`ABC-121` search since `ABC-121` (`ADR-0026` decision 4), here and in the deep rows.
   it("position-3 at depth 4 — the default lane's standing guard", () => {
-    expect(hitRate(() => search(parseFen(fenOf("position-3")), 4))).toBeGreaterThanOrEqual(0.15);
+    expect(
+      hitRate(() => searchWithoutPvsOrReductions(parseFen(fenOf("position-3")), 4)),
+    ).toBeGreaterThanOrEqual(0.15);
   });
 
   if (RUN_SEARCH_DEEP) {
@@ -346,7 +388,7 @@ describe("A2 — the hit rate is reported and is at least 15%", () => {
      */
     for (const name of ["kiwipete", "position-6"]) {
       it(`${name} at depth 5 [deep, SEARCH_DEEP=1]`, () => {
-        const fixed = hitRate(() => search(parseFen(fenOf(name)), 5));
+        const fixed = hitRate(() => searchWithoutPvsOrReductions(parseFen(fenOf(name)), 5));
         const deepened = hitRate(() => deepenTo(fenOf(name), 5));
         console.log(
           `ABC-081 A2 ${name}: fixed depth 5 ${(100 * fixed).toFixed(2)}%, ` +
@@ -439,7 +481,9 @@ describe("A5 — the only non-losing line repeats, and it scores exactly 0", () 
     const result = search(parseFen(REPEATS_AT_PLY_4), 4);
     expect(result.score).toBe(0); // `toBe` is Object.is: a -0 fails here
     expect(label(result.move)).toBe("f7f8");
-    expect(result.nodes).toBe(7_241);
+    // The node pin is a work reading: the pre-`ABC-121` search since `ABC-121` (`ADR-0026`
+    // decisions 4 and 7), unchanged. The score and the move stay on the shipped search.
+    expect(searchWithoutPvsOrReductions(parseFen(REPEATS_AT_PLY_4), 4).nodes).toBe(7_241);
   });
 
   it("the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows", () => {
