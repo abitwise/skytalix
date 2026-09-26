@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — `ABC-123` → `Ready for UAT` (QE PASS WITH FINDINGS, Security/NFR PASS). No hop running. Owed from the owner: `ABC-123` UAT acceptance; moving `main` up to the wave. Follow-up candidate (unscheduled): extend Biome lint to `tools/`._
+
 _Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — `ABC-123` `In Development` → `In Review` at `3028933`; QE and Security/NFR dispatched in parallel. ADR-0006 collision-sentence rescope merged into the wave (dates corrected to 2026-09-26). The two earlier `_Updated_` lines stamped 2026-09-27 were in fact 2026-09-26 (clock note `…beb298d8`)._
 
 _Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — **owner delegated routine decisions, verbatim *"i will delegate these decisions to you. Contact me when big decision is needed or input context for your session goes over 500k"* (note `…8c8aa8a9`; main moves, deploy, UAT acceptance and big decisions stay with the owner).** Under it: ADR-0006 collision-sentence rescope ACCEPTED (Architect applying, `adr0006-apply-sentence`); `ABC-123` pulled → `In Development` (Engineer, `ticket-to-pr-ABC-123`)._
@@ -415,9 +417,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-
-- [ABC-123] run-bounded.js — reject N above the timer's 2^31−1 ceiling (R2) and correct the stale process-model header (R3)  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-09-26, DoR 9/10 ⚠️x1 — PULLABLE; the ⚠️ is item 10, A5's exact header prose left to the delivering hop, not a blocker.) Cut from Security/NFR's ABC-122 gate note (`…2749a2e6`) on the owner's word ("both", note `…c99c5919`). R1 stays the owner's separately accepted risk, not discharged here. **Orchestrator note: `A7`'s baseline counts (47/1,446) are stale — the wave reads 48/1,467 since ABC-121; the delivering hop measures against the current count.**  **→ In Development 2026-09-27 — pulled by the Orchestrator under the owner's delegation (note `…8c8aa8a9`); branch `grugops/ABC-123-run-bounded-r2r3`.**  **Built 2026-09-26 at `3028933` (on `grugops/ABC-123-run-bounded-r2r3`, NOT on the wave): `A1`–`A8` MET; `A1` watched RED on the unfixed wrapper (exit 124 at 2^31, 99999999999, 2^53+1) then GREEN (exit 2, usage line, 0 spawns); `npm test` 48/1,467; lint/typecheck/build clean; N8-LANE 0 ms (proof not in the vitest lane).**  **→ In Review 2026-09-26; QE `qe-ABC-123` and Security/NFR `secnfr-ABC-123` dispatched in parallel (Security/NFR on its own branch `grugops/ABC-123-secnfr`).** Correction to the earlier line: the pull was on 2026-09-26, not 2026-09-27 (clock note `…beb298d8`).
+## In Review (WIP 0/3)
 
 
 
@@ -439,7 +439,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+
+- [ABC-123] run-bounded.js — reject N above the timer's 2^31−1 ceiling (R2) and correct the stale process-model header (R3)  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-09-26, DoR 9/10 ⚠️x1 — PULLABLE; the ⚠️ is item 10, A5's exact header prose left to the delivering hop, not a blocker.) Cut from Security/NFR's ABC-122 gate note (`…2749a2e6`) on the owner's word ("both", note `…c99c5919`). R1 stays the owner's separately accepted risk, not discharged here. **Orchestrator note: `A7`'s baseline counts (47/1,446) are stale — the wave reads 48/1,467 since ABC-121; the delivering hop measures against the current count.**  **→ In Development 2026-09-27 — pulled by the Orchestrator under the owner's delegation (note `…8c8aa8a9`); branch `grugops/ABC-123-run-bounded-r2r3`.**  **Built 2026-09-26 at `3028933` (on `grugops/ABC-123-run-bounded-r2r3`, NOT on the wave): `A1`–`A8` MET; `A1` watched RED on the unfixed wrapper (exit 124 at 2^31, 99999999999, 2^53+1) then GREEN (exit 2, usage line, 0 spawns); `npm test` 48/1,467; lint/typecheck/build clean; N8-LANE 0 ms (proof not in the vitest lane).**  **→ In Review 2026-09-26; QE `qe-ABC-123` and Security/NFR `secnfr-ABC-123` dispatched in parallel (Security/NFR on its own branch `grugops/ABC-123-secnfr`).** Correction to the earlier line: the pull was on 2026-09-26, not 2026-09-27 (clock note `…beb298d8`).  **QE PASS WITH FINDINGS at `ce2cb33`:** `A1`–`A8` re-derived; `A1` red on the pre-fix wrapper, green at HEAD; 4 planted variants (`>=` off-by-one, clause dropped, 2^32 ceiling, check after spawn) each turn the proof red. Finding (non-blocking, pre-existing): Biome lint does not cover `tools/`. **Security/NFR PASS at `4d0e0c5`** (folded at `874a4bb`): R2 and R3 discharged, R1 not widened, N8-LANE 0 ms, N8-SPAWN 0 ms, no new AR.  **→ Ready for UAT 2026-09-26 at `874a4bb` (on `grugops/ABC-123-run-bounded-r2r3`, NOT on the wave). Owner's acceptance word owed; the zero-production-lines waiver is available (no `src/` line).**
 
 
 
