@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — owner's word, verbatim *"run items 1-3"*. Three hops dispatched in parallel, each on its own branch off the wave @ `652ed49`: `scribe-abc121-lanes` (Scribe — ABC-121 deep-lane lines in `AGENTS.md`), `knight-g1-docstring` (Engineer — `KNIGHT_G1_PAIR` comment per `ruling-abc121-g6` §4, no logic change), `nfr-depth7-catalog` (Security/NFR — NFR-005 "Depth 7 not reached" line in `plans/nfr-catalog.md`)._
+
 _Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — **owner's word (note `…f072707c`): `ABC-121` accepted and merged into the wave; local `main` fast-forwarded to the wave (no remote, nothing pushed).** `ABC-121`, `ABC-109` → `Done`. Owed, unscheduled: Scribe `AGENTS.md` ABC-121 deep-lane lines; `KNIGHT_G1_PAIR` docstring (Engineer, per `ruling-abc121-g6` §4); R2 + R3 in `tools/grugops/run-bounded.js` (needs a ticket); NFR catalog "Depth 7 not reached" now stale; ADR-0006 2026-09-25 amendment sentence (needs its own proposal)._
 
 _Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — ADR-0026/ADR-0006 amendments merged into the wave (`26db9a8`); Scribe wait-loop rule + `INPUT_DEEP` receipt 34 merged (`AGENTS.md` 22,090 B). `uat-run-ABC-121` returned ACCEPT at `60da5e4`. No hop running. Owed from the owner: `ABC-121` UAT accept, then wave → `main`._
