@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — `ABC-123` `In Development` → `In Review` at `3028933`; QE and Security/NFR dispatched in parallel. ADR-0006 collision-sentence rescope merged into the wave (dates corrected to 2026-09-26). The two earlier `_Updated_` lines stamped 2026-09-27 were in fact 2026-09-26 (clock note `…beb298d8`)._
+
 _Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — **owner delegated routine decisions, verbatim *"i will delegate these decisions to you. Contact me when big decision is needed or input context for your session goes over 500k"* (note `…8c8aa8a9`; main moves, deploy, UAT acceptance and big decisions stay with the owner).** Under it: ADR-0006 collision-sentence rescope ACCEPTED (Architect applying, `adr0006-apply-sentence`); `ABC-123` pulled → `In Development` (Engineer, `ticket-to-pr-ABC-123`)._
 
 _Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — `ABC-123` cut (BA/PM, `5a26dca`) → `Backlog`, DoR 9/10. `adr0006-amend-sentence` proposal merged as notes only (`23bc500`) — the ADR is unchanged until the owner's word. No hop running._
@@ -400,9 +402,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-
-- [ABC-123] run-bounded.js — reject N above the timer's 2^31−1 ceiling (R2) and correct the stale process-model header (R3)  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-09-26, DoR 9/10 ⚠️x1 — PULLABLE; the ⚠️ is item 10, A5's exact header prose left to the delivering hop, not a blocker.) Cut from Security/NFR's ABC-122 gate note (`…2749a2e6`) on the owner's word ("both", note `…c99c5919`). R1 stays the owner's separately accepted risk, not discharged here. **Orchestrator note: `A7`'s baseline counts (47/1,446) are stale — the wave reads 48/1,467 since ABC-121; the delivering hop measures against the current count.**  **→ In Development 2026-09-27 — pulled by the Orchestrator under the owner's delegation (note `…8c8aa8a9`); branch `grugops/ABC-123-run-bounded-r2r3`.**
+## In Development (WIP 0/3)
 
 
 
@@ -415,7 +415,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-123] run-bounded.js — reject N above the timer's 2^31−1 ceiling (R2) and correct the stale process-model header (R3)  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-09-26, DoR 9/10 ⚠️x1 — PULLABLE; the ⚠️ is item 10, A5's exact header prose left to the delivering hop, not a blocker.) Cut from Security/NFR's ABC-122 gate note (`…2749a2e6`) on the owner's word ("both", note `…c99c5919`). R1 stays the owner's separately accepted risk, not discharged here. **Orchestrator note: `A7`'s baseline counts (47/1,446) are stale — the wave reads 48/1,467 since ABC-121; the delivering hop measures against the current count.**  **→ In Development 2026-09-27 — pulled by the Orchestrator under the owner's delegation (note `…8c8aa8a9`); branch `grugops/ABC-123-run-bounded-r2r3`.**  **Built 2026-09-26 at `3028933` (on `grugops/ABC-123-run-bounded-r2r3`, NOT on the wave): `A1`–`A8` MET; `A1` watched RED on the unfixed wrapper (exit 124 at 2^31, 99999999999, 2^53+1) then GREEN (exit 2, usage line, 0 spawns); `npm test` 48/1,467; lint/typecheck/build clean; N8-LANE 0 ms (proof not in the vitest lane).**  **→ In Review 2026-09-26; QE `qe-ABC-123` and Security/NFR `secnfr-ABC-123` dispatched in parallel (Security/NFR on its own branch `grugops/ABC-123-secnfr`).** Correction to the earlier line: the pull was on 2026-09-26, not 2026-09-27 (clock note `…beb298d8`).
 
 
 
