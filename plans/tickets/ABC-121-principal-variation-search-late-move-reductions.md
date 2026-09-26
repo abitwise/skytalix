@@ -404,3 +404,39 @@ tip, `312a188`). **Verdict: PASS WITH FINDINGS.** Zero `src/` lines; not merged;
   build's own two ledgers); the depth re-measurement is one machine, one hop, lower load than
   either build reading; the bare-`mkdir` queue-claim caveat is inherited, not new.
 - Notes: `.grugops/context/qe-ABC-121/notes/`.
+
+## Security/NFR 2026-09-26 (`secnfr-ABC-121`, Workflow 15, ASVS L1, block on high): PASS_WITH_RISKS
+
+Reviewed `main...grugops/ABC-121-pvs-lmr` at **`ada4093`** (`src/` byte-identical to QE's
+`312a188`). The gate was re-run green: `npm test` 48 / 1 466 / 0 skipped, lint clean (85 files),
+typecheck exit 0, integrity `No findings.`. **No security finding. No required fix.** One LOW risk
+is proposed for the owner. **It is not accepted by this gate, and the recommendation is no merge
+before the owner's word.** The figures live in `.grugops/context/secnfr-ABC-121/notes/`.
+
+- **`N8-LANE` NOT MET (LOW), for the owner: `AR-N8LANE-121` drafted** (`…d25a224c`).
+  - This gate's three runs read **+910 / +1 035 / +1 285 ms CPU net** against 650. Two of them
+    carry an admissible identity null: +0.41% and −0.52%. Sign 12/12 in every run.
+  - The build read +1 415 / +1 670 (`…2db5faac`).
+  - **No placement that keeps every planted variant red reaches 650:**
+    - dropping both `A4` reference searches (arm F): 23 / 23 red, **+785 net**;
+    - also moving the PVS bite and `A5` (arm G): 23 / 23 red, **+870 net**, and it leaves
+      `searchWithoutReductions`-loses-PVS unguarded. That variant was planted and survived.
+  - **Optional, not blocking:** apply F. It is guard-neutral and saves ≈ 0.2 s. Do not apply G.
+- **`NFR-005` floor MET** on plain node: kiwipete 7/7/7 and position-6 7/7/7, against the
+  pre-`ABC-121` door's 6/6/6.
+  - **Depth-7 WARN is reached on M3.** It stays PROVISIONAL.
+  - The catalog's *"Depth 7 not reached"* status sentence goes stale at merge. That is a
+    catalog-owner follow-up, not edited here.
+- **`NFR-004`:** worst 3 005.3 ms over 24 calls at 3 s; a 10 s budget returns at 5 000.6 ms. Both
+  are inside `AR-NFR004-A`.
+- **`NFR-009` MET:** `arrayBuffers` 4.01 MiB flat. `heapUsed` moves ≤ 0.023 MiB across
+  1 s → 3 s → 3 s. The `ABC-081` `A7` deep row is green.
+- **The test-only doors are unreachable from the CLI** (`…76eb826c`):
+  - `cli.ts` → `createEngine` → `chooseMove` → literal `{ pvs: true, reductions: true }`;
+  - `options` is never spread into the budget;
+  - no non-test file names a door.
+- **Info:** `lateMoveReduction`'s make/unmake has no `try/finally`. The throw is unreachable today.
+- **Not verified:** other hardware, and a quiet-machine lane reading. The deep lane was not re-run
+  here; QE re-ran it at `312a188`.
+- **Owner's word owed on `AR-N8LANE-121`** (Olger Oeselg). Zero `src/` lines were changed by this
+  hop. Not merged, not pushed.

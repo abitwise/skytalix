@@ -1,0 +1,37 @@
+// secnfr-ABC-121: N8-LANE arms, built OUTSIDE the repository (git archive; no .git in any arm).
+//   A = ada4093 (the reviewed tip)            N = byte-identical copy of A (identity null control)
+//   B = ada4093 with src/ replaced by main (26c0fe0) src/ — the lane without this ticket; every
+//       non-src file (AGENTS.md, which cli.test.ts reads) identical to A
+//   F = A with BOTH A4 rows' reference search + the two reference-equality expects removed (the
+//       literal pin [95, "h5e5"] and the re-search assertion kept) — the candidate cheapest fix
+// node_modules symlinked from the main checkout (same disclosed deviation as every prior reading).
+import { execFileSync } from "node:child_process";
+import { mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/secnfr121";
+const W = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-121-pvs-lmr";
+const NM = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/node_modules";
+const git = (...a) => execFileSync("git", ["-C", W, ...a], { maxBuffer: 256 * 1024 * 1024 });
+const arm = (name, rev) => {
+  rmSync(`${S}/${name}`, { recursive: true, force: true });
+  mkdirSync(`${S}/${name}`, { recursive: true });
+  execFileSync("tar", ["-x", "-C", `${S}/${name}`], { input: git("archive", rev) });
+  symlinkSync(NM, `${S}/${name}/node_modules`);
+};
+for (const [n, r] of [["A", "ada4093"], ["N", "ada4093"], ["B", "ada4093"], ["F", "ada4093"]]) arm(n, r);
+rmSync(`${S}/B/src`, { recursive: true, force: true });
+mkdirSync(`${S}/B/src`);
+execFileSync("tar", ["-x", "-C", `${S}/B`], { input: git("archive", "26c0fe0", "src") });
+
+const F = `${S}/F/src/search.pvs-lmr.test.ts`;
+let t = readFileSync(F, "utf8");
+const cut = (s) => {
+  if (t.split(s).length !== 2) throw new Error(`not exactly once: ${s.slice(0, 60)}`);
+  t = t.replace(s, "");
+};
+cut("    const reference = searchWithoutReductions(parseFen(A4_FEN), A4_DEPTH);\n");
+cut("    const reference = deepenTo(chooseMoveWithoutReductions, parseFen(A4_FEN), A4_DEPTH);\n");
+cut("    expect(shipped.score).toBe(reference.score);\n    expect(label(shipped.move as Move)).toBe(label(reference.move as Move));\n");
+cut("    expect(shipped.score).toBe(reference.score);\n    expect(label(shipped.move)).toBe(label(reference.move));\n");
+writeFileSync(F, t);
+console.log("built A N B F");
