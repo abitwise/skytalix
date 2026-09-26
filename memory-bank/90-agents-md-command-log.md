@@ -115,6 +115,23 @@ RUN 2026-09-25 at `54565e8`: exit 0, 37 passed (29 default), 1.8 s. Same var as
 200+-position corpus sweep under the `QUIESCENCE_MAX_PLY` cap and A5's depth-2/3 node-count-multiplier
 pins (kiwipete, position-6).
 
+## PVS/LMR deep lane (`ABC-121`, `src/search.pvs-lmr.test.ts`) — `SEARCH_DEEP=1 npx vitest run src/search.pvs-lmr.test.ts`
+
+RUN 2026-09-26 (default lane, this worktree, HEAD `652ed49`): exit 0, 20 passed, 0.6 s. Deep lane
+NOT re-run here — QE's UAT run (`SEARCH_DEEP=1 npx vitest run src/search.pvs-lmr.test.ts`, 2026-09-26,
+worktree `.claude/worktrees/ABC-121-pvs-lmr`, HEAD `6570343`) took 926.18 s wall under load, over the
+10-minute bound this role works under; its receipt is cited instead:
+`.grugops/context/uat-run-ABC-121/notes/20260926T220000Z-qe-e2e-observation-gate-and-a1-a5-deep-lane-reproduced-77854a65.md`
+— exit 0, 29/29 passed (20 default), every figure (`A1` mate floor, `A1` `search()`/`chooseMove`
+depth-5 corpus, `A2` node-count companions, `A5` kiwipete/position-6 node-savings) reproduced to the
+exact number against the build's and QE's own earlier runs. Same var as `src/search.test.ts` /
+`src/transposition.test.ts` / `src/quiescence.test.ts` above; unset, NOT DEFINED rather than skipped.
+Only `src/search.pvs-lmr.test.ts` moved rows under `ABC-121` — `src/search.test.ts`,
+`src/quiescence.test.ts` and `src/transposition.test.ts` were NOT touched by this ticket's diff (the
+software-engineer's `…9bdce84b` decision moved two of four proposed rows into this file's
+`SEARCH_DEEP` gate and kept two default; the ledger proof is `…17a0830d`), so their deep lanes above
+are unchanged and were not re-run for this entry.
+
 ## Coverage — `npx vitest run --coverage`
 
 RUN 2026-08-15 at `daa20c4` (this hop changed no code): exit 0, 856/856 on 30 files.

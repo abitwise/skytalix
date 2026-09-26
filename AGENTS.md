@@ -104,6 +104,10 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   33 passed (32 default), 37.0 s -->
 - Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- exit 0,
   37 passed (29 default), 1.8 s -->
+- PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 npx vitest run
+  src/search.pvs-lmr.test.ts` <!-- exit 0, 29 passed (20 default). RUN 2026-09-26 (default): 0.6 s.
+  Deep 926.2 s wall — cited from UAT (`uat-run-ABC-121#77854a65`), not re-run here (over 10 min).
+  Run after any PVS/LMR change to src/search.ts or src/engine.ts. -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- exit 0, 856/856 on 30 files. Not in
   `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
