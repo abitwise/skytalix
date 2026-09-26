@@ -259,7 +259,12 @@ now can become usable a few plies later. Measured on this ADR's own `knight-g1` 
 - perft 3 reads 1 335 vs 1 320;
 - `search` reads 850 vs 830 at depth 3.
 
-An availability key would collide the two, and the table would return a wrong score. So the
+An availability key would give the two the same key. They never share a table, because the
+table lives one search (`ADR-0025` decision 4), so the pair's own two scores are never
+confused. Inside one search, though, positions that differ only in such a right recur as
+interior nodes. A table keyed on availability hands such a node the other position's entry
+and cuts on it, which the rights key never does. That was measured on this pair, kiwipete and
+position-5, and no root score moved on the readings taken. *(amended 2026-09-27)* So the
 "Consequences" bullet "`EPIC-004` inherits this" resolves as follows. The table keys on rights.
 Pairs whose unusable right can never become usable (the in-check and f1-attacked pairs read
 identical subtrees to depth 4) cost one wasted entry and never a wrong answer. `ABC-081` and
@@ -278,3 +283,17 @@ incremental key), the score pair reads the same as clean on every configuration,
 pre-`ABC-121` door included, because `clearTable` runs at every `search()` (`ADR-0025` decision
 4) and the two roots never share a table. No clause of the Decision changes, and the `G6`
 falsifier itself (the middle column) is unchanged.*
+
+*Erratum to the amendment's collision sentence, 2026-09-27 (Architect/Design, subtask
+`adr0006-amend-sentence`), on the owner's word as delegated (Olger Oeselg, 2026-09-26, verbatim:
+"i will delegate these decisions to you. Contact me when big decision is needed or input context
+for your session goes over 500k"; the text accepted under that delegation by the Orchestrator,
+`20260927T001000Z-orchestrator-decision-8c8aa8a9`). Proposed in `adr0006-amend-sentence`
+(`…9c4d2b18`, evidence `…5e1a7c30`). The sentence read: "An availability key would collide the
+two, and the table would return a wrong score." The first half holds for the keys only. The two
+roots never share a table, because `clearTable` runs at every `search()` (the `G6` erratum
+above). The second half holds only inside one search. There an availability-keyed table cut on
+another position's entry 3–8 times per search from `knight-g1 w K` at depths 4–6, 17 times on
+kiwipete and twice on position-5 at depth 4. No root score changed on any of the 32 readings.
+Whether any of those cutoffs was wrong for its node is `UNKNOWN - verify`. No clause of the
+Decision changes, the table still keys on rights, and `G6` is unchanged.*
