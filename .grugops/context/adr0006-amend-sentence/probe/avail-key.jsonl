@@ -1,0 +1,32 @@
+{"name":"knight-g1 w K","d":3,"door":"search","clean":850,"avail":850,"same":true,"hits":12,"foreignHits":0,"foreignCutoffs":0}
+{"name":"knight-g1 w K","d":3,"door":"pre121","clean":850,"avail":850,"same":true,"hits":0,"foreignHits":0,"foreignCutoffs":0}
+{"name":"knight-g1 w K","d":4,"door":"search","clean":830,"avail":830,"same":true,"hits":175,"foreignHits":4,"foreignCutoffs":4}
+{"name":"knight-g1 w K","d":4,"door":"pre121","clean":830,"avail":830,"same":true,"hits":121,"foreignHits":3,"foreignCutoffs":3}
+{"name":"knight-g1 w K","d":5,"door":"search","clean":840,"avail":840,"same":true,"hits":329,"foreignHits":8,"foreignCutoffs":8}
+{"name":"knight-g1 w K","d":5,"door":"pre121","clean":840,"avail":840,"same":true,"hits":194,"foreignHits":3,"foreignCutoffs":3}
+{"name":"knight-g1 w K","d":6,"door":"search","clean":840,"avail":840,"same":true,"hits":990,"foreignHits":3,"foreignCutoffs":3}
+{"name":"knight-g1 w K","d":6,"door":"pre121","clean":840,"avail":840,"same":true,"hits":2131,"foreignHits":3,"foreignCutoffs":3}
+{"name":"knight-g1 w -","d":3,"door":"search","clean":830,"avail":830,"same":true,"hits":6,"foreignHits":0,"foreignCutoffs":0}
+{"name":"knight-g1 w -","d":3,"door":"pre121","clean":830,"avail":830,"same":true,"hits":0,"foreignHits":0,"foreignCutoffs":0}
+{"name":"knight-g1 w -","d":4,"door":"search","clean":830,"avail":830,"same":true,"hits":134,"foreignHits":0,"foreignCutoffs":0}
+{"name":"knight-g1 w -","d":4,"door":"pre121","clean":820,"avail":820,"same":true,"hits":101,"foreignHits":0,"foreignCutoffs":0}
+{"name":"knight-g1 w -","d":5,"door":"search","clean":830,"avail":830,"same":true,"hits":191,"foreignHits":0,"foreignCutoffs":0}
+{"name":"knight-g1 w -","d":5,"door":"pre121","clean":830,"avail":830,"same":true,"hits":163,"foreignHits":0,"foreignCutoffs":0}
+{"name":"knight-g1 w -","d":6,"door":"search","clean":830,"avail":830,"same":true,"hits":927,"foreignHits":0,"foreignCutoffs":0}
+{"name":"knight-g1 w -","d":6,"door":"pre121","clean":830,"avail":830,"same":true,"hits":1834,"foreignHits":0,"foreignCutoffs":0}
+{"name":"startpos","d":3,"door":"search","clean":50,"avail":50,"same":true,"hits":3,"foreignHits":0,"foreignCutoffs":0}
+{"name":"startpos","d":3,"door":"pre121","clean":50,"avail":50,"same":true,"hits":0,"foreignHits":0,"foreignCutoffs":0}
+{"name":"startpos","d":4,"door":"search","clean":50,"avail":50,"same":true,"hits":67,"foreignHits":0,"foreignCutoffs":0}
+{"name":"startpos","d":4,"door":"pre121","clean":0,"avail":0,"same":true,"hits":69,"foreignHits":0,"foreignCutoffs":0}
+{"name":"kiwipete","d":3,"door":"search","clean":50,"avail":50,"same":true,"hits":0,"foreignHits":0,"foreignCutoffs":0}
+{"name":"kiwipete","d":3,"door":"pre121","clean":50,"avail":50,"same":true,"hits":0,"foreignHits":0,"foreignCutoffs":0}
+{"name":"kiwipete","d":4,"door":"search","clean":50,"avail":50,"same":true,"hits":335,"foreignHits":17,"foreignCutoffs":17}
+{"name":"kiwipete","d":4,"door":"pre121","clean":50,"avail":50,"same":true,"hits":358,"foreignHits":17,"foreignCutoffs":17}
+{"name":"position-4","d":3,"door":"search","clean":-375,"avail":-375,"same":true,"hits":139,"foreignHits":0,"foreignCutoffs":0}
+{"name":"position-4","d":3,"door":"pre121","clean":-375,"avail":-375,"same":true,"hits":0,"foreignHits":0,"foreignCutoffs":0}
+{"name":"position-4","d":4,"door":"search","clean":-375,"avail":-375,"same":true,"hits":282,"foreignHits":0,"foreignCutoffs":0}
+{"name":"position-4","d":4,"door":"pre121","clean":-375,"avail":-375,"same":true,"hits":9,"foreignHits":0,"foreignCutoffs":0}
+{"name":"position-5","d":3,"door":"search","clean":560,"avail":560,"same":true,"hits":2,"foreignHits":0,"foreignCutoffs":0}
+{"name":"position-5","d":3,"door":"pre121","clean":560,"avail":560,"same":true,"hits":1,"foreignHits":0,"foreignCutoffs":0}
+{"name":"position-5","d":4,"door":"search","clean":515,"avail":515,"same":true,"hits":557,"foreignHits":2,"foreignCutoffs":2}
+{"name":"position-5","d":4,"door":"pre121","clean":515,"avail":515,"same":true,"hits":543,"foreignHits":2,"foreignCutoffs":2}
