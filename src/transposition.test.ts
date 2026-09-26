@@ -305,8 +305,12 @@ describe("the table — verified keys, always-replace, cutoffs only at the store
 /**
  * `ADR-0006`'s `knight-g1` pair (test note 5): the same placement and the same legal moves NOW, one
  * castling right apart — unusable now, usable once the knight leaves g1. Their subtrees differ, so
- * their scores differ (830 vs 820 at depth 4). A key that hashed castling AVAILABILITY would give
- * both the same key, and the table would hand one the other's score: `G6`'s FAIL.
+ * their scores differ (830 vs 820 at depth 4 on the pre-`ABC-121` search). That is all the score
+ * pair records: the premise that the subtrees differ. It does not detect a key bug, because the
+ * table lives one search (`ADR-0025` decision 4), so the two roots never share a table. `G6`'s
+ * guard is the key rows, which no search switch reaches: "G6 bites" below, and `zobrist.test.ts`'s
+ * castling-rights rows ("depends on castling rights"; `ABC-075` `A4`). See the `ADR-0006` `G6`
+ * erratum of 2026-09-26 (`ruling-abc121-g6` `…ea306e58` §3–§4).
  */
 const KNIGHT_G1_PAIR = [
   { name: "knight-g1 w K", fen: "4k3/8/8/8/8/8/8/4K1NR w K - 0 1", score: 830 },
