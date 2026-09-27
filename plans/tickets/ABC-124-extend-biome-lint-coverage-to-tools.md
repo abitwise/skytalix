@@ -301,3 +301,53 @@ Security/NFR at its own discretion, because `tools/grugops/` is the gate's own s
   A future re-install from an upstream copy that still has the old three lines would bring back the
   1 warning and 2 infos. Biome exits 0 on warnings and infos, so only the lint summary would show
   them. Fixing it upstream is kit work.
+
+## QE — QE/E2E, 2026-09-27 (task `qe-ABC-124`, Workflow 05)
+
+**Result: PASS WITH FINDINGS.** Notes: `.grugops/context/qe-ABC-124/notes/` (decision `…f1a2b3c4`,
+observation `…a1b2c3d4`, artifact-ref `…e5f6a7b8`). Every AC re-derived independently against the
+delivered `biome.json` / `tools/grugops/uat-spec-integrity.js`, not read off the build hop's own
+transcript, plus three adversarial config variants planted and reverted against the delivered
+config.
+
+| AC | QE verdict | independent evidence |
+|---|---|---|
+| `A1` | **MET, reproduced.** | `npx biome check tools/` → `Checked 7 files in 48ms. No fixes applied.` No "ignored" block. |
+| `A2` | **MET, reproduced with a different file and different rules.** | Planted `export const __qePlantA2 = (1 == 1);` in `tools/grugops/reference-check.js` (not the build's `lane-inventory.js`). **RED** with `tools/**/*.js` removed from `files.includes`: `Checked 85 files`, 0 diagnostics. **GREEN** with the delivered config: `noSelfCompare` and `noDoubleEquals` both reported, `Checked 92 files … Found 2 errors.` Reverted; worktree confirmed byte-equal to HEAD after. |
+| `A3` | **MET, reproduced.** | `npx biome check .` → `Checked 92 files in 124ms. No fixes applied.` No `Found` line: 0/0/0. |
+| `A4` | **MET IN SUBSTANCE, not in the ticket's literal wording.** | `npx biome check --write tools/` → `Checked 7 files … No fixes applied.` Biome 2.5.5 does not print `Fixed 0 files`; confirmed via `npx biome --version` and the same reading the build hop made. `git diff --numstat` empty across the run — the zero-rewrite guarantee holds regardless of the exact string. Ruled: ticket-text gap, not a delivery gap. |
+| `A5` | **MET, reproduced.** | `git diff --numstat ddcebc5..HEAD -- tsconfig.json` empty. |
+| `A6` | **MET, reproduced.** | `git diff --numstat ddcebc5..HEAD` touches only `biome.json`, this ticket page, `plans/traceability.md`, `tools/grugops/uat-spec-integrity.js` (plus the notes tree). |
+| `A7` | **MET, independently re-derived by reading the diff, not by re-running the build's full harness.** | Both removed `continue;` statements are the syntactic last statement of their block (confirmed by reading `frameworkSurface`'s outer `catch` and `resolveBinding`'s tie branch), so falling through is identical to the removed `continue`. Direct run: `node tools/grugops/uat-spec-integrity.js .` → loud skip, exit 2, matches the build's own reading. The build's full 9-argument-set harness and in-process probe were not independently re-executed this hop — `UNKNOWN - verify` if a future hop wants that specific harness re-run. |
+| `A8` | **MET, reproduced.** | `npx tsc --noEmit` exit 0 (== `typecheck` == `build`). `npx biome check .`: `Checked 92 files … No fixes applied.` `node tools/grugops/run-bounded.js 60000 vitest run`: **48 files / 1,467 tests passed, 0 skipped**, 6.06s. |
+
+**Config variants planted against the delivered `biome.json` (each reverted, none staged):**
+
+1. Drop `"tools/**/*.js"` from `files.includes` → `Checked 85 files`, `tools/` unread. **Caught by
+   `A1`/`A2`.**
+2. Scope the `overrides` glob one level shallow (`"tools/*.js"`) → the formatter fence stops
+   matching `tools/grugops/*.js`; `npx biome check --write tools/` reformatted 6 files (~3,000
+   lines in `uat-spec-integrity.js` alone). **Caught by `A4` only** — `A1`/`A3` see no difference
+   (the linter half of the override is untouched by this typo).
+3. Widen `overrides` to also set `linter.enabled: false` for `tools/**/*.js` → re-planting the `A2`
+   violation and re-checking against this widened config still reports `Checked 92 files … No fixes
+   applied.` — the plant is invisible. **Caught only by `A2`'s live red/green plant discipline**;
+   `A1`/`A3`'s summary-line reading alone cannot tell "0 findings because clean" from "0 findings
+   because the linter is off."
+
+**Findings (non-blocking):**
+1. `A4`'s literal `Fixed 0 files` wording is stale against Biome 2.5.5's actual `No fixes applied` —
+   a ticket-text correction, not a code fix.
+2. Carried forward, not re-actioned (`…63b1276a`): a future kit re-install could silently
+   reintroduce the 3 fixed findings in the materialized `uat-spec-integrity.js`; only the lint
+   summary line, not the exit code, would show it.
+3. New: `A1`/`A3` alone cannot distinguish a clean lint pass from a linter silently disabled by a
+   mis-scoped `overrides` entry (variant 3 above) — only a live `A2`-style plant catches that class.
+   Named for whoever next touches the `overrides` entry to re-verify with a live plant, not a clean
+   summary line alone.
+
+**Environment:** `node_modules` was missing in the worktree; symlinked from the main checkout
+(git-ignored, never staged), removed at the end of this hop. Worktree confirmed clean
+(`git status --short` empty, `git diff --quiet HEAD` succeeds) after every revert and at the end.
+
+**Recommendation:** `ABC-124` may leave `In Review`. Board move is the Orchestrator's.
