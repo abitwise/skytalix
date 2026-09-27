@@ -1,0 +1,95 @@
+[
+ {
+  "args": [
+   "."
+  ],
+  "status": 2,
+  "signal": null,
+  "stdout": "",
+  "stderr": "UAT spec integrity: the walk SKIPPED directory entries by name: tools=1 — these directory names are the walk's input boundary, so nothing under them is in the derived total this run reports. Each number is a count of DIRECTORY ENTRIES the walk refused to descend into, never a count of uat specs hidden under them; the walk did not look inside, so it does not know that number.\nUAT spec integrity: ZERO uat specs were visited (0 derived) — this check was NOT performed. A pass line here would state a check that did not run.\n"
+ },
+ {
+  "args": [
+   ".",
+   "--json"
+  ],
+  "status": 2,
+  "signal": null,
+  "stdout": "",
+  "stderr": "UAT spec integrity: the walk SKIPPED directory entries by name: tools=1 — these directory names are the walk's input boundary, so nothing under them is in the derived total this run reports. Each number is a count of DIRECTORY ENTRIES the walk refused to descend into, never a count of uat specs hidden under them; the walk did not look inside, so it does not know that number.\nUAT spec integrity: ZERO uat specs were visited (0 derived) — this check was NOT performed. A pass line here would state a check that did not run.\n"
+ },
+ {
+  "args": [
+   ".",
+   "--check-browser"
+  ],
+  "status": 2,
+  "signal": null,
+  "stdout": "",
+  "stderr": "SKIPPED: no usable browser lane — UAT specs NOT exercised; the UAT status stays pending (stage 1: @playwright/test could not be resolved from the target repository)\n"
+ },
+ {
+  "args": [
+   ".",
+   "--json",
+   "--check-browser"
+  ],
+  "status": 2,
+  "signal": null,
+  "stdout": "",
+  "stderr": "SKIPPED: no usable browser lane — UAT specs NOT exercised; the UAT status stays pending (stage 1: @playwright/test could not be resolved from the target repository)\n"
+ },
+ {
+  "args": [],
+  "status": 2,
+  "signal": null,
+  "stdout": "",
+  "stderr": "Error: no repository root was provided. Usage: node uat-spec-integrity.js <repo-root> [--json] [--check-browser]\n"
+ },
+ {
+  "args": [
+   "/nonexistent-path"
+  ],
+  "status": 2,
+  "signal": null,
+  "stdout": "",
+  "stderr": "Error: the repository root is not a readable directory: /nonexistent-path\n"
+ },
+ {
+  "args": [
+   "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/fixture"
+  ],
+  "status": 1,
+  "signal": null,
+  "stdout": "UAT spec integrity: 2 finding(s) over 1/1 uat specs checked\ntests/uat/a.uat.spec.ts:4: banned modifier call — `expect.configure` decides which scenarios the quality gate re-runs and how their results are read, so a green lane could certify a scenario nobody exercised or one whose acceptance criterion failed.\ntests/uat/a.uat.spec.ts:5: banned modifier call — `test.skip` decides which scenarios the quality gate re-runs and how their results are read, so a green lane could certify a scenario nobody exercised or one whose acceptance criterion failed.\n",
+  "stderr": ""
+ },
+ {
+  "args": [
+   "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/fixture",
+   "--json"
+  ],
+  "status": 1,
+  "signal": null,
+  "stdout": "{\"ok\":false,\"findings\":[\"tests/uat/a.uat.spec.ts:4: banned modifier call — `expect.configure` decides which scenarios the quality gate re-runs and how their results are read, so a green lane could certify a scenario nobody exercised or one whose acceptance criterion failed.\",\"tests/uat/a.uat.spec.ts:5: banned modifier call — `test.skip` decides which scenarios the quality gate re-runs and how their results are read, so a green lane could certify a scenario nobody exercised or one whose acceptance criterion failed.\"]}\n",
+  "stderr": ""
+ },
+ {
+  "args": [
+   "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad/fixture",
+   "--check-browser"
+  ],
+  "status": 2,
+  "signal": null,
+  "stdout": "",
+  "stderr": "SKIPPED: no usable browser lane — UAT specs NOT exercised; the UAT status stays pending (stage 1: @playwright/test could not be resolved from the target repository)\n"
+ },
+ {
+  "args": [
+   "<probe>"
+  ],
+  "status": 0,
+  "stdout": "[[\"iBMC\",null,null,false],[\"iBMC\",null,[],false],[\"iBMC\",null,[\"soft\"],false],[\"iBMC\",null,[\"other\"],false],[\"iBMC\",\"expect.configure\",null,false],[\"iBMC\",\"expect.configure\",[],false],[\"iBMC\",\"expect.configure\",[\"soft\"],true],[\"iBMC\",\"expect.configure\",[\"other\"],false],[\"iBMC\",\"expect.soft\",null,true],[\"iBMC\",\"expect.soft\",[],true],[\"iBMC\",\"expect.soft\",[\"soft\"],true],[\"iBMC\",\"expect.soft\",[\"other\"],true],[\"iBMC\",\"test.skip\",null,true],[\"iBMC\",\"test.skip\",[],true],[\"iBMC\",\"test.skip\",[\"soft\"],true],[\"iBMC\",\"test.skip\",[\"other\"],true],[\"iBMC\",\"toString\",null,false],[\"iBMC\",\"toString\",[],false],[\"iBMC\",\"toString\",[\"soft\"],false],[\"iBMC\",\"toString\",[\"other\"],false],[\"iBMC\",\"constructor\",null,false],[\"iBMC\",\"constructor\",[],false],[\"iBMC\",\"constructor\",[\"soft\"],false],[\"iBMC\",\"constructor\",[\"other\"],false],[\"iBMC\",\"__proto__\",null,false],[\"iBMC\",\"__proto__\",[],false],[\"iBMC\",\"__proto__\",[\"soft\"],false],[\"iBMC\",\"__proto__\",[\"other\"],false],[\"iBMC\",\"hasOwnProperty\",null,false],[\"iBMC\",\"hasOwnProperty\",[],false],[\"iBMC\",\"hasOwnProperty\",[\"soft\"],false],[\"iBMC\",\"hasOwnProperty\",[\"other\"],false],[\"iBMC\",\"expect.configure.x\",null,false],[\"iBMC\",\"expect.configure.x\",[],false],[\"iBMC\",\"expect.configure.x\",[\"soft\"],false],[\"iBMC\",\"expect.configure.x\",[\"other\"],false],[\"iBMC\",\"expect\",null,false],[\"iBMC\",\"expect\",[],false],[\"iBMC\",\"expect\",[\"soft\"],false],[\"iBMC\",\"expect\",[\"other\"],false],[\"iBMC\",\"\",null,false],[\"iBMC\",\"\",[],false],[\"iBMC\",\"\",[\"soft\"],false],[\"iBMC\",\"\",[\"other\"],false],[\"rB\",\"a\",5,null],[\"rB\",\"a\",5,1],[\"rB\",\"a\",10,null],[\"rB\",\"a\",0,1],[\"rB\",\"a\",5,2],[\"rB\",\"a\",5,2],[\"rB\",\"a\",5,2],[\"rB\",\"a\",5,2],[\"rB\",\"a\",5,1],[\"rB\",\"a\",5,3],[\"rB\",\"a\",10,3]]\n",
+  "stderr": ""
+ }
+]

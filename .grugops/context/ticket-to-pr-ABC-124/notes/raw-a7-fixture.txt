@@ -1,0 +1,40 @@
+A7 scratch fixture (scratchpad only, never committed). Layout:
+
+fixture/
+  tsconfig.json
+  tests/uat/a.uat.spec.ts
+  node_modules/typescript  -> symlink to the main checkout's node_modules/typescript (5.x)
+  node_modules/@playwright/test/package.json + index.d.ts  (a minimal declaration stub; Playwright is not installed in this repo)
+
+--- tsconfig.json ---
+{"compilerOptions":{"strict":true,"module":"esnext","target":"es2022","moduleResolution":"bundler","noEmit":true},"include":["tests/**/*.ts"]}
+
+--- tests/uat/a.uat.spec.ts ---
+import { expect, test } from "@playwright/test";
+
+test("a", async ({ page }) => {
+  expect.configure({ soft: true });
+  test.skip();
+  await page.goto("about:blank");
+});
+
+--- node_modules/@playwright/test/package.json ---
+{"name":"@playwright/test","version":"0.0.0-stub","types":"index.d.ts","main":"index.js"}
+
+--- node_modules/@playwright/test/index.d.ts ---
+export interface Page { goto(url: string): Promise<void>; }
+export interface TestInfo { title: string; skip(): void; }
+export interface TestType {
+  (title: string, body: (args: { page: Page }, info: TestInfo) => Promise<void> | void): void;
+  skip(condition?: boolean): void;
+  fixme(condition?: boolean): void;
+  only: TestType;
+  describe: { (title: string, body: () => void): void; skip(title: string, body: () => void): void };
+}
+export interface Expect {
+  (value: unknown): { toBe(v: unknown): void };
+  soft(value: unknown): { toBe(v: unknown): void };
+  configure(opts: { soft?: boolean; timeout?: number }): Expect;
+}
+export declare const test: TestType;
+export declare const expect: Expect;

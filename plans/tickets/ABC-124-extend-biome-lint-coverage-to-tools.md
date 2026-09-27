@@ -271,3 +271,33 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 10 | no major unresolved blocker | **✅** none. The one open judgment call this page carries — the exact file chosen to host `A2`'s planted violation, and `A7`'s exact re-derived invocation of `uat-spec-integrity.js` — is left to the delivering hop by design (BA/PM does not author the fix or re-derive a fact only the delivering hop can measure fresh), the same shape `ABC-123`'s own DoR item 10 used, and it is falsifiable either way, so it does not block the pull |
 
 Column moves are the Orchestrator's.
+
+## Delivery — Software Engineer, 2026-09-27 (task `ticket-to-pr-ABC-124`, Workflow 04)
+
+Pulled by the Orchestrator under the owner's delegation (`…8c8aa8a9`). Branch
+`grugops/ABC-124-lint-tools` from `ddcebc5`. **NOT merged, NOT pushed.** The readings are in
+`.grugops/context/ticket-to-pr-ABC-124/notes/`: decisions in `…3da01ce6`, readings in `…18bca91a`,
+the re-install risk in `…63b1276a`, and the A7 raw harness and outputs beside them. Board and
+frontmatter moves are the Orchestrator's. **Recommend `In Review`**: the QE hop is owed, and
+Security/NFR at its own discretion, because `tools/grugops/` is the gate's own surface.
+
+| AC | result | evidence |
+|---|---|---|
+| `A1` | **MET.** | Before: `npx biome check tools/` printed `Checked 0 files … These paths were provided but ignored: - tools/` (exit 1). After: `Checked 7 files in 50ms. No fixes applied.` |
+| `A2` | **MET, red then green.** | The plant was one appended line in `tools/grugops/lane-inventory.js:94`: `Object.prototype.hasOwnProperty.call({}, "x")`. **RED** with `biome.json` at HEAD: `npm run lint` printed `Checked 85 files … No fixes applied.` and no diagnostic. **GREEN** with the delivered `biome.json` and the same plant: `lane-inventory.js:94:26 lint/suspicious/noPrototypeBuiltins FIXABLE` was reported, with the summary `Checked 92 files … Found 2 warnings. Found 2 infos.` The plant was reverted with `git checkout --` straight after, and never staged. |
+| `A3` | **MET, read from the summary line.** | Before the autofix: `Checked 7 files … Found 1 warning. Found 2 infos.` (603:10 `noPrototypeBuiltins`; 1214:13 and 2384:13 `noUselessContinue`). `biome check --write` on the one file, with no `--unsafe`, printed `Fixed 1 file`, +1/−3. After: `Checked 7 files … No fixes applied.` No `Found` line was printed, so 0/0/0. Infos did print by default before, so their absence is a real zero. |
+| `A4` | **MET. The wording differs; the fact is the same.** | After delivery, `npx biome check --write tools/` printed `Checked 7 files … No fixes applied.` Biome 2.5.5 prints this where the ticket expected `Fixed 0 files`. `git diff --numstat` was unchanged by that run. `biome format tools/` now reports `tools/` as ignored, so the formatter is off for that glob. `biome format .` checks 85 files before and after, so `src/` coverage is unchanged. |
+| `A5` | **MET.** | `tsconfig.json` is absent from `git diff --numstat ddcebc5`, so it is byte-identical. |
+| `A6` | **MET.** | Code and config changes: `biome.json` (+17/−1: one `includes` line and one `overrides` entry) and `tools/grugops/uat-spec-integrity.js` (+1/−3). The rest is this page, one `plans/traceability.md` row, and the notes directory. There is no line in `src/`, `package.json`, `tsconfig.json`, `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md`, any ADR, or the other six `tools/grugops/` files. |
+| `A7` | **MET, re-derived and identical.** | Nothing in `package.json`, `AGENTS.md` or the repo's code invokes it. The file's own D-12 contract is `node tools/grugops/uat-spec-integrity.js <repo-root> [--json] [--check-browser]`. It ran with 9 argument sets. `.` in 4 flag forms: exit 2 each (loud skip, no uat specs in this repo). No arguments: exit 2, usage. A bad path: exit 2. A scratch fixture with one uat spec: exit 1 with 2 findings, human and `--json`, and exit 2 with `--check-browser`. An in-process probe also ran `isBannedModifierCall` on 44 inputs and `resolveBinding` on 11 tables. The before capture (HEAD file) and the after capture (autofixed file) are **byte-identical** (`cmp` OK). **Limit:** the `frameworkSurface` outer-`catch` `continue` is not reached by any input, because it fires only when the checker throws. It was the last statement of the loop body, so the unchanged behavior there is argued, not measured. |
+| `A8` | **MET.** | `npm test` (wrapper, 60000): exit 0, **48 files / 1,467 tests passed, 0 skipped**. `npm run lint`: `Checked 92 files … No fixes applied.`, exit 0, 0 findings. That is 85 files before, plus exactly the 7 `tools/` files, so there are 0 new `src/` findings. `npm run typecheck` and `npm run build`: exit 0. |
+
+**NFR / security at delivery:**
+- **`N8-LANE`: not engaged, 0 ms.** No `src/` file was added, and the lane is still 48 files.
+- **`N8-SPAWN`: not engaged.** No test spawns anything new. The A7 harness ran by hand, outside any
+  lane.
+- **ASVS:** no new spawn shape, shell or input path.
+- **Named risk, not actioned** (`…63b1276a`): `uat-spec-integrity.js` is materialized from the kit.
+  A future re-install from an upstream copy that still has the old three lines would bring back the
+  1 warning and 2 infos. Biome exits 0 on warnings and infos, so only the lint summary would show
+  them. Fixing it upstream is kit work.
