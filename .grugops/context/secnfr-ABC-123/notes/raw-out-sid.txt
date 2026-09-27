@@ -1,0 +1,4 @@
+{"harness": {"pid": 81033, "pgid": 81033, "sid": 81031}}
+{"child": {"pid": 81038, "pgid": 81038, "sid": 81038}, "wrapper": {"pid": 81036, "pgid": 81033, "sid": 81031}}
+{"child_has_ctty": false, "errno": 6}
+{"wrapper_exit": 0, "stderr": ""}

@@ -1,0 +1,25 @@
+N=2147483648:
+(node:63954) TimeoutOverflowWarning: 2147483648 does not fit into a 32-bit signed integer.
+Timeout duration was set to 1.
+(Use `node --trace-warnings ...` to show where the warning was created)
+run-bounded: timed out after 2147483648 ms, killed the process tree of: node -e process.stdout.write("ran\n")
+SPY spawn() calls: 1
+  exit 124
+N=99999999999:
+(node:63967) TimeoutOverflowWarning: 99999999999 does not fit into a 32-bit signed integer.
+Timeout duration was set to 1.
+(Use `node --trace-warnings ...` to show where the warning was created)
+run-bounded: timed out after 99999999999 ms, killed the process tree of: node -e process.stdout.write("ran\n")
+SPY spawn() calls: 1
+  exit 124
+N=9007199254740993:
+(node:63980) TimeoutOverflowWarning: 9007199254740992 does not fit into a 32-bit signed integer.
+Timeout duration was set to 1.
+(Use `node --trace-warnings ...` to show where the warning was created)
+run-bounded: timed out after 9007199254740992 ms, killed the process tree of: node -e process.stdout.write("ran\n")
+SPY spawn() calls: 1
+  exit 124
+N=2147483647:
+ran
+SPY spawn() calls: 1
+  exit 0

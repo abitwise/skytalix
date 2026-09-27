@@ -1,6 +1,7 @@
 // run-bounded.proof.js — the committed proof for `ABC-122` `A1`–`A3`: the wrapper passes a
 // finished command through untouched, and it really kills a live hang, tree and all, in bounded
-// time. This is demonstrated here, not claimed.
+// time. This is demonstrated here, not claimed. `ABC-123` A1–A3 add the rows for which `N` it
+// takes: nothing above 2^31 − 1, the ceiling itself, and the old malformed and lenient cases.
 //
 //   node tools/grugops/run-bounded.proof.js
 //     exit 0 -> every row held      exit 1 -> a row failed; each row prints its reading
@@ -65,6 +66,48 @@ for (const exitCode of [0, 3]) {
     `status ${direct.status}/${wrapped.status}, stdout ${direct.stdout.length}/${wrapped.stdout.length} B, stderr ${direct.stderr.length}/${wrapped.stderr.length} B (direct/wrapped)`,
   );
 }
+
+// `ABC-123` A1–A3: which `N` the wrapper takes. Each row runs the wrapper on a fast target that
+// prints one marker line, and asserts the whole outcome.
+//   REJECTED: exit 2, exactly the usage line on stderr, and no marker on stdout. No marker is
+//   the reading for "the target was never spawned".
+//   ACCEPTED: exit 0, the marker on stdout, and nothing on stderr, so a TimeoutOverflowWarning
+//   would fail the row too.
+// `ABC-123` A1 is the three values above setTimeout's own ceiling of 2^31 − 1 ms (Node clamps
+// them to 1 ms), as `ABC-122`'s Security/NFR gate measured them. A2 is the ceiling itself. A3 is
+// every malformed and lenient `N` that gate measured, re-run so neither side of the check moves.
+const USAGE = "usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]\n";
+const MARKER = "run-bounded proof target ran\n";
+const TARGET = [process.execPath, "-e", `process.stdout.write(${JSON.stringify(MARKER)})`];
+const nCases = [
+  ["ABC-123 A1", "2147483648", false],
+  ["ABC-123 A1", "99999999999", false],
+  ["ABC-123 A1", "9007199254740993", false],
+  ["ABC-123 A2", "2147483647", true],
+  ...["", "0", "-5", "abc", "1.5", "NaN", "Infinity"].map((n) => ["ABC-123 A3", n, false]),
+  ...["1e3", "0x3e8", " 1000 ", "1000.0", "0b1111101000"].map((n) => ["ABC-123 A3", n, true]),
+];
+for (const [id, n, accepted] of nCases) {
+  const run = spawnSync(process.execPath, [WRAPPER, n, ...TARGET], {
+    encoding: "utf8",
+    timeout: 10_000,
+  });
+  const ok = accepted
+    ? run.status === 0 && run.stdout === MARKER && run.stderr === ""
+    : run.status === 2 && run.stdout === "" && run.stderr === USAGE;
+  row(
+    `${id} N=${JSON.stringify(n)} ${accepted ? "accepted" : "rejected before spawn"}`,
+    ok,
+    `exit ${run.status}, stdout ${JSON.stringify(run.stdout)}, stderr ${JSON.stringify(run.stderr)}`,
+  );
+}
+// A missing `N`: no argument at all.
+const bare = spawnSync(process.execPath, [WRAPPER], { encoding: "utf8", timeout: 10_000 });
+row(
+  "ABC-123 A3 no arguments rejected",
+  bare.status === 2 && bare.stdout === "" && bare.stderr === USAGE,
+  `exit ${bare.status}, stderr ${JSON.stringify(bare.stderr)}`,
+);
 
 // A1 + A3: the synthetic hang, killed as a tree, in bounded time.
 let pids = null;

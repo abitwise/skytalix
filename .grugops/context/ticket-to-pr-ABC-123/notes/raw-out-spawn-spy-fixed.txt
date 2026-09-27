@@ -1,0 +1,16 @@
+N=2147483648:
+usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]
+SPY spawn() calls: 0
+  exit 2
+N=99999999999:
+usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]
+SPY spawn() calls: 0
+  exit 2
+N=9007199254740993:
+usage: node tools/grugops/run-bounded.js <timeoutMs> <command> [args...]
+SPY spawn() calls: 0
+  exit 2
+N=2147483647:
+ran
+SPY spawn() calls: 1
+  exit 0
