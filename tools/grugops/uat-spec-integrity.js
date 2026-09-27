@@ -600,7 +600,7 @@ export function isBannedModifierCall(dottedPath, enabledOptions) {
     // local, and both positions read that local — so the two cannot drift apart when this function is
     // next edited, which is the only way the comment above could stop being true.
     const normalised = stripRoutingLinks(dottedPath);
-    if (!Object.prototype.hasOwnProperty.call(BANNED_CONFIGURED_PATHS, normalised)) {
+    if (!Object.hasOwn(BANNED_CONFIGURED_PATHS, normalised)) {
         return false;
     }
     return enabledOptions.has(BANNED_CONFIGURED_PATHS[normalised]);
@@ -1211,7 +1211,6 @@ export function frameworkSurface(ts, program, checker, moduleSymbol) {
             // call signature, dropped while the walk carried on as if it had run. MEASURED before this
             // line: `truncated: null`, `paths: 1`.
             truncated ??= "surface-unreadable";
-            continue;
         }
     }
     return { files, typePaths, truncated };
@@ -2381,7 +2380,6 @@ export function resolveBinding(bindings, name, position) {
             continue;
         if (binding.end < nearest.end) {
             nearest = binding;
-            continue;
         }
         // AN EXACT TIE OF BOTH ENDS. D-27 decided it in the ban's safe direction by preferring the
         // NON-suppressing record; D-30 (5) deleted the only non-suppressing record there was, so the two

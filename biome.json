@@ -6,6 +6,7 @@
       "spike/**/*.ts",
       "*.json",
       "vitest.config.ts",
+      "tools/**/*.js",
       "!.claude",
       "!.gemini",
       "!.github",
@@ -26,5 +27,20 @@
     "rules": {
       "preset": "recommended"
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["tools/**/*.js"],
+      "formatter": {
+        "enabled": false
+      },
+      "assist": {
+        "actions": {
+          "source": {
+            "organizeImports": "off"
+          }
+        }
+      }
+    }
+  ]
 }

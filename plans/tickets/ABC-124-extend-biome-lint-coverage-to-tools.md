@@ -271,3 +271,83 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 10 | no major unresolved blocker | **✅** none. The one open judgment call this page carries — the exact file chosen to host `A2`'s planted violation, and `A7`'s exact re-derived invocation of `uat-spec-integrity.js` — is left to the delivering hop by design (BA/PM does not author the fix or re-derive a fact only the delivering hop can measure fresh), the same shape `ABC-123`'s own DoR item 10 used, and it is falsifiable either way, so it does not block the pull |
 
 Column moves are the Orchestrator's.
+
+## Delivery — Software Engineer, 2026-09-27 (task `ticket-to-pr-ABC-124`, Workflow 04)
+
+Pulled by the Orchestrator under the owner's delegation (`…8c8aa8a9`). Branch
+`grugops/ABC-124-lint-tools` from `ddcebc5`. **NOT merged, NOT pushed.** The readings are in
+`.grugops/context/ticket-to-pr-ABC-124/notes/`: decisions in `…3da01ce6`, readings in `…18bca91a`,
+the re-install risk in `…63b1276a`, and the A7 raw harness and outputs beside them. Board and
+frontmatter moves are the Orchestrator's. **Recommend `In Review`**: the QE hop is owed, and
+Security/NFR at its own discretion, because `tools/grugops/` is the gate's own surface.
+
+| AC | result | evidence |
+|---|---|---|
+| `A1` | **MET.** | Before: `npx biome check tools/` printed `Checked 0 files … These paths were provided but ignored: - tools/` (exit 1). After: `Checked 7 files in 50ms. No fixes applied.` |
+| `A2` | **MET, red then green.** | The plant was one appended line in `tools/grugops/lane-inventory.js:94`: `Object.prototype.hasOwnProperty.call({}, "x")`. **RED** with `biome.json` at HEAD: `npm run lint` printed `Checked 85 files … No fixes applied.` and no diagnostic. **GREEN** with the delivered `biome.json` and the same plant: `lane-inventory.js:94:26 lint/suspicious/noPrototypeBuiltins FIXABLE` was reported, with the summary `Checked 92 files … Found 2 warnings. Found 2 infos.` The plant was reverted with `git checkout --` straight after, and never staged. |
+| `A3` | **MET, read from the summary line.** | Before the autofix: `Checked 7 files … Found 1 warning. Found 2 infos.` (603:10 `noPrototypeBuiltins`; 1214:13 and 2384:13 `noUselessContinue`). `biome check --write` on the one file, with no `--unsafe`, printed `Fixed 1 file`, +1/−3. After: `Checked 7 files … No fixes applied.` No `Found` line was printed, so 0/0/0. Infos did print by default before, so their absence is a real zero. |
+| `A4` | **MET. The wording differs; the fact is the same.** | After delivery, `npx biome check --write tools/` printed `Checked 7 files … No fixes applied.` Biome 2.5.5 prints this where the ticket expected `Fixed 0 files`. `git diff --numstat` was unchanged by that run. `biome format tools/` now reports `tools/` as ignored, so the formatter is off for that glob. `biome format .` checks 85 files before and after, so `src/` coverage is unchanged. |
+| `A5` | **MET.** | `tsconfig.json` is absent from `git diff --numstat ddcebc5`, so it is byte-identical. |
+| `A6` | **MET.** | Code and config changes: `biome.json` (+17/−1: one `includes` line and one `overrides` entry) and `tools/grugops/uat-spec-integrity.js` (+1/−3). The rest is this page, one `plans/traceability.md` row, and the notes directory. There is no line in `src/`, `package.json`, `tsconfig.json`, `AGENTS.md`, `plans/nfr-catalog.md`, `plans/board.md`, any ADR, or the other six `tools/grugops/` files. |
+| `A7` | **MET, re-derived and identical.** | Nothing in `package.json`, `AGENTS.md` or the repo's code invokes it. The file's own D-12 contract is `node tools/grugops/uat-spec-integrity.js <repo-root> [--json] [--check-browser]`. It ran with 9 argument sets. `.` in 4 flag forms: exit 2 each (loud skip, no uat specs in this repo). No arguments: exit 2, usage. A bad path: exit 2. A scratch fixture with one uat spec: exit 1 with 2 findings, human and `--json`, and exit 2 with `--check-browser`. An in-process probe also ran `isBannedModifierCall` on 44 inputs and `resolveBinding` on 11 tables. The before capture (HEAD file) and the after capture (autofixed file) are **byte-identical** (`cmp` OK). **Limit:** the `frameworkSurface` outer-`catch` `continue` is not reached by any input, because it fires only when the checker throws. It was the last statement of the loop body, so the unchanged behavior there is argued, not measured. |
+| `A8` | **MET.** | `npm test` (wrapper, 60000): exit 0, **48 files / 1,467 tests passed, 0 skipped**. `npm run lint`: `Checked 92 files … No fixes applied.`, exit 0, 0 findings. That is 85 files before, plus exactly the 7 `tools/` files, so there are 0 new `src/` findings. `npm run typecheck` and `npm run build`: exit 0. |
+
+**NFR / security at delivery:**
+- **`N8-LANE`: not engaged, 0 ms.** No `src/` file was added, and the lane is still 48 files.
+- **`N8-SPAWN`: not engaged.** No test spawns anything new. The A7 harness ran by hand, outside any
+  lane.
+- **ASVS:** no new spawn shape, shell or input path.
+- **Named risk, not actioned** (`…63b1276a`): `uat-spec-integrity.js` is materialized from the kit.
+  A future re-install from an upstream copy that still has the old three lines would bring back the
+  1 warning and 2 infos. Biome exits 0 on warnings and infos, so only the lint summary would show
+  them. Fixing it upstream is kit work.
+
+## QE — QE/E2E, 2026-09-27 (task `qe-ABC-124`, Workflow 05)
+
+**Result: PASS WITH FINDINGS.** Notes: `.grugops/context/qe-ABC-124/notes/` (decision `…f1a2b3c4`,
+observation `…a1b2c3d4`, artifact-ref `…e5f6a7b8`). Every AC re-derived independently against the
+delivered `biome.json` / `tools/grugops/uat-spec-integrity.js`, not read off the build hop's own
+transcript, plus three adversarial config variants planted and reverted against the delivered
+config.
+
+| AC | QE verdict | independent evidence |
+|---|---|---|
+| `A1` | **MET, reproduced.** | `npx biome check tools/` → `Checked 7 files in 48ms. No fixes applied.` No "ignored" block. |
+| `A2` | **MET, reproduced with a different file and different rules.** | Planted `export const __qePlantA2 = (1 == 1);` in `tools/grugops/reference-check.js` (not the build's `lane-inventory.js`). **RED** with `tools/**/*.js` removed from `files.includes`: `Checked 85 files`, 0 diagnostics. **GREEN** with the delivered config: `noSelfCompare` and `noDoubleEquals` both reported, `Checked 92 files … Found 2 errors.` Reverted; worktree confirmed byte-equal to HEAD after. |
+| `A3` | **MET, reproduced.** | `npx biome check .` → `Checked 92 files in 124ms. No fixes applied.` No `Found` line: 0/0/0. |
+| `A4` | **MET IN SUBSTANCE, not in the ticket's literal wording.** | `npx biome check --write tools/` → `Checked 7 files … No fixes applied.` Biome 2.5.5 does not print `Fixed 0 files`; confirmed via `npx biome --version` and the same reading the build hop made. `git diff --numstat` empty across the run — the zero-rewrite guarantee holds regardless of the exact string. Ruled: ticket-text gap, not a delivery gap. |
+| `A5` | **MET, reproduced.** | `git diff --numstat ddcebc5..HEAD -- tsconfig.json` empty. |
+| `A6` | **MET, reproduced.** | `git diff --numstat ddcebc5..HEAD` touches only `biome.json`, this ticket page, `plans/traceability.md`, `tools/grugops/uat-spec-integrity.js` (plus the notes tree). |
+| `A7` | **MET, independently re-derived by reading the diff, not by re-running the build's full harness.** | Both removed `continue;` statements are the syntactic last statement of their block (confirmed by reading `frameworkSurface`'s outer `catch` and `resolveBinding`'s tie branch), so falling through is identical to the removed `continue`. Direct run: `node tools/grugops/uat-spec-integrity.js .` → loud skip, exit 2, matches the build's own reading. The build's full 9-argument-set harness and in-process probe were not independently re-executed this hop — `UNKNOWN - verify` if a future hop wants that specific harness re-run. |
+| `A8` | **MET, reproduced.** | `npx tsc --noEmit` exit 0 (== `typecheck` == `build`). `npx biome check .`: `Checked 92 files … No fixes applied.` `node tools/grugops/run-bounded.js 60000 vitest run`: **48 files / 1,467 tests passed, 0 skipped**, 6.06s. |
+
+**Config variants planted against the delivered `biome.json` (each reverted, none staged):**
+
+1. Drop `"tools/**/*.js"` from `files.includes` → `Checked 85 files`, `tools/` unread. **Caught by
+   `A1`/`A2`.**
+2. Scope the `overrides` glob one level shallow (`"tools/*.js"`) → the formatter fence stops
+   matching `tools/grugops/*.js`; `npx biome check --write tools/` reformatted 6 files (~3,000
+   lines in `uat-spec-integrity.js` alone). **Caught by `A4` only** — `A1`/`A3` see no difference
+   (the linter half of the override is untouched by this typo).
+3. Widen `overrides` to also set `linter.enabled: false` for `tools/**/*.js` → re-planting the `A2`
+   violation and re-checking against this widened config still reports `Checked 92 files … No fixes
+   applied.` — the plant is invisible. **Caught only by `A2`'s live red/green plant discipline**;
+   `A1`/`A3`'s summary-line reading alone cannot tell "0 findings because clean" from "0 findings
+   because the linter is off."
+
+**Findings (non-blocking):**
+1. `A4`'s literal `Fixed 0 files` wording is stale against Biome 2.5.5's actual `No fixes applied` —
+   a ticket-text correction, not a code fix.
+2. Carried forward, not re-actioned (`…63b1276a`): a future kit re-install could silently
+   reintroduce the 3 fixed findings in the materialized `uat-spec-integrity.js`; only the lint
+   summary line, not the exit code, would show it.
+3. New: `A1`/`A3` alone cannot distinguish a clean lint pass from a linter silently disabled by a
+   mis-scoped `overrides` entry (variant 3 above) — only a live `A2`-style plant catches that class.
+   Named for whoever next touches the `overrides` entry to re-verify with a live plant, not a clean
+   summary line alone.
+
+**Environment:** `node_modules` was missing in the worktree; symlinked from the main checkout
+(git-ignored, never staged), removed at the end of this hop. Worktree confirmed clean
+(`git status --short` empty, `git diff --quiet HEAD` succeeds) after every revert and at the end.
+
+**Recommendation:** `ABC-124` may leave `In Review`. Board move is the Orchestrator's.

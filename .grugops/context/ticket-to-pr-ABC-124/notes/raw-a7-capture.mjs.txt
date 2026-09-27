@@ -1,0 +1,22 @@
+// A7 capture: run uat-spec-integrity.js the way it is invoked (node <path> <repo-root> [--json] [--check-browser])
+// over a fixed set of inputs, plus the in-process probe of the two touched functions; write one JSON file.
+import { spawnSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+const [, , label] = process.argv;
+const WT = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-124-lint-tools";
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/cc8144c4-cb23-42b5-90b8-44bcbd8a2345/scratchpad";
+const FIX = `${S}/fixture`;
+const TOOL = "tools/grugops/uat-spec-integrity.js";
+const cases = [
+  ["."], [".", "--json"], [".", "--check-browser"], [".", "--json", "--check-browser"],
+  [], ["/nonexistent-path"],
+  [FIX], [FIX, "--json"], [FIX, "--check-browser"],
+];
+const results = cases.map((args) => {
+  const r = spawnSync(process.execPath, [TOOL, ...args], { cwd: WT, encoding: "utf8" });
+  return { args, status: r.status, signal: r.signal, stdout: r.stdout, stderr: r.stderr };
+});
+const probe = spawnSync(process.execPath, [`${S}/probe.mjs`, `${WT}/${TOOL}`], { encoding: "utf8" });
+results.push({ args: ["<probe>"], status: probe.status, stdout: probe.stdout, stderr: probe.stderr });
+writeFileSync(`${S}/a7-${label}.json`, `${JSON.stringify(results, null, 1)}\n`);
+for (const r of results) console.log(JSON.stringify(r.args), "exit", r.status, "out", r.stdout.length, "err", r.stderr.length);
