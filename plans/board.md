@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — `ABC-124` cut (BA/PM, `2bca1f0`, DoR 10/10) and pulled → `In Development` under the owner's delegation; Engineer `ticket-to-pr-ABC-124` dispatched._
+
 _Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — **owner's word (note `…e8061413`): `ABC-123` accepted → `Done`; local `main` fast-forwarded to the wave (no remote, nothing pushed); lint-`tools/` ticket authorised.** Dispatched: `ticket-lint-tools` (BA/PM)._
 
 _Updated: 2026-09-26 by the Orchestrator (task `wave-2026-09-25`) — `ABC-123` → `Ready for UAT` (QE PASS WITH FINDINGS, Security/NFR PASS). No hop running. Owed from the owner: `ABC-123` UAT acceptance; moving `main` up to the wave. Follow-up candidate (unscheduled): extend Biome lint to `tools/`._
@@ -406,7 +408,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-124] Extend Biome lint coverage to `tools/grugops/*.js` (typecheck stays out of scope)  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-09-27, **DoR 10/10**.) Cut on the owner's word ("lint ticket ok", note `…e8061413`) from QE finding `qe-ABC-123` `…58925283`. Measured today: lint checks 0 files in `tools/`; pointed at it, 8 errors (6 formatting, 2 import order), 1 warning, 2 infos — the ticket fences formatting off via `overrides` and fixes the 3 real findings in `uat-spec-integrity.js`.  **→ In Development 2026-09-27 — pulled under the owner's delegation (note `…8c8aa8a9`); branch `grugops/ABC-124-lint-tools`.**
 
 
 
