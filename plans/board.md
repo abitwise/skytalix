@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — `ABC-124` → `Ready for UAT` (QE PASS WITH FINDINGS). No hop running. Owed from the owner: `ABC-124` acceptance; moving `main` up._
+
 _Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — `ABC-124` → `In Review` at `da259b3`; QE dispatched._
 
 _Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — `ABC-124` cut (BA/PM, `2bca1f0`, DoR 10/10) and pulled → `In Development` under the owner's delegation; Engineer `ticket-to-pr-ABC-124` dispatched._
@@ -423,9 +425,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-
-- [ABC-124] Extend Biome lint coverage to `tools/grugops/*.js` (typecheck stays out of scope)  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-09-27, **DoR 10/10**.) Cut on the owner's word ("lint ticket ok", note `…e8061413`) from QE finding `qe-ABC-123` `…58925283`. Measured today: lint checks 0 files in `tools/`; pointed at it, 8 errors (6 formatting, 2 import order), 1 warning, 2 infos — the ticket fences formatting off via `overrides` and fixes the 3 real findings in `uat-spec-integrity.js`.  **→ In Development 2026-09-27 — pulled under the owner's delegation (note `…8c8aa8a9`); branch `grugops/ABC-124-lint-tools`.**  **Built 2026-09-27 at `da259b3` (on `grugops/ABC-124-lint-tools`, NOT on the wave): `A1`–`A8` met (`A4` met in substance — Biome 2.5.5 prints `No fixes applied`, not the ticket's literal `Fixed 0 files`); `A2` red→green on a planted `noPrototypeBuiltins` in `lane-inventory.js`; lint now 92 files (85 + 7 `tools/`), 0 findings; `npm test` 48/1,467. Named risk: a kit re-install could restore the old `uat-spec-integrity.js` lines.**  **→ In Review 2026-09-27; QE `qe-ABC-124` dispatched. Security/NFR not triggered (lint config + safe autofix in a dev-only script; no risk-bearing surface).**
+## In Review (WIP 0/3)
 
 
 
@@ -447,7 +447,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+
+- [ABC-124] Extend Biome lint coverage to `tools/grugops/*.js` (typecheck stays out of scope)  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-09-27, **DoR 10/10**.) Cut on the owner's word ("lint ticket ok", note `…e8061413`) from QE finding `qe-ABC-123` `…58925283`. Measured today: lint checks 0 files in `tools/`; pointed at it, 8 errors (6 formatting, 2 import order), 1 warning, 2 infos — the ticket fences formatting off via `overrides` and fixes the 3 real findings in `uat-spec-integrity.js`.  **→ In Development 2026-09-27 — pulled under the owner's delegation (note `…8c8aa8a9`); branch `grugops/ABC-124-lint-tools`.**  **Built 2026-09-27 at `da259b3` (on `grugops/ABC-124-lint-tools`, NOT on the wave): `A1`–`A8` met (`A4` met in substance — Biome 2.5.5 prints `No fixes applied`, not the ticket's literal `Fixed 0 files`); `A2` red→green on a planted `noPrototypeBuiltins` in `lane-inventory.js`; lint now 92 files (85 + 7 `tools/`), 0 findings; `npm test` 48/1,467. Named risk: a kit re-install could restore the old `uat-spec-integrity.js` lines.**  **→ In Review 2026-09-27; QE `qe-ABC-124` dispatched. Security/NFR not triggered (lint config + safe autofix in a dev-only script; no risk-bearing surface).**  **QE PASS WITH FINDINGS at `f4a31ca`:** `A1`–`A8` re-derived; `A2` red→green with a different file and rules (`noSelfCompare`, `noDoubleEquals` in `reference-check.js`); 3 config variants planted — dropped include caught by `A1`/`A2`, shallow override glob caught only by `A4`, linter-off override caught only by `A2`'s live plant. Findings (non-blocking): `A4` text says `Fixed 0 files`, Biome 2.5.5 prints `No fixes applied`; kit re-install could restore the old `uat-spec-integrity.js` lines; a clean summary line alone can't prove the linter is on — re-plant when touching `overrides`.  **→ Ready for UAT 2026-09-27 at `f4a31ca` (on `grugops/ABC-124-lint-tools`, NOT on the wave). Owner's acceptance word owed; zero-production-lines waiver available.**
 
 
 
