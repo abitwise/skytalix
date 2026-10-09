@@ -1,0 +1,8 @@
+{"row":"r1","none":9319,"mvvLva":3286,"full":2429}
+{"row":"r2","nodes":261}
+{"row":"r3","depth":3,"nodes":360}
+{"row":"r4","on":1319,"off":1474,"scoreOn":80,"scoreOff":80}
+{"row":"r5","score":0,"move":"f7f8","nodesPre121":7251,"d3":-470}
+{"row":"r6","d2nodes":136,"d2move":"g5f6","d3nodes":2273,"d3move":"c3d5"}
+{"row":"r8","searchRowB":[10,"b1c1"],"reference":[10,"b1c1"],"oldFixtureOnSearch":[95,"h5e5"]}
+{"row":"r12","b5":4,"b10":6,"b40":9}

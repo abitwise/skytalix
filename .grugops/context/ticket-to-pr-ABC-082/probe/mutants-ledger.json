@@ -1,0 +1,104 @@
+{
+ "__baseline__": {
+  "red": false,
+  "failed": [],
+  "ms": 1929
+ },
+ "N3": {
+  "red": true,
+  "failed": [
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 360 nodes :: AssertionError: expected 357 to be 360 // Object.is equality"
+  ],
+  "ms": 1347
+ },
+ "noLmrResearch": {
+  "red": true,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1407
+ },
+ "noResearch": {
+  "red": true,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1376
+ },
+ "keepBestSoFar": {
+  "red": true,
+  "failed": [
+   "engine.test.ts > A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move :: AssertionError: expected -65 to be -80 // Object.is equality",
+   "engine.test.ts > A3 (identity) — the completed iteration equals search() in move AND score agrees with search() on move and score across the mate/stalemate endgames :: AssertionError: expected [ Array(1) ] to deeply equal []"
+  ],
+  "ms": 2327
+ },
+ "M11": {
+  "red": true,
+  "failed": [
+   "search.ordering.test.ts > Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, f8f7 :: AssertionError: expected 'e7f7' to be 'f8f7' // Object.is equality",
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 360 nodes :: AssertionError: expected 635 to be 360 // Object.is equality"
+  ],
+  "ms": 1397
+ },
+ "ceiling4": {
+  "red": true,
+  "failed": [
+   "engine.test.ts > A4 — no fixed depth anywhere in the delivered engine goes DEEPER than any small hard-coded ceiling would allow — the behavioural half :: AssertionError: expected 4 to be greater than 4"
+  ],
+  "ms": 2342
+ },
+ "repetitionBlind": {
+  "red": true,
+  "failed": [
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0 :: AssertionError: expected -380 to be +0 // Object.is equality"
+  ],
+  "ms": 1523
+ },
+ "rootIgnoresHashMove": {
+  "red": true,
+  "failed": [
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0 :: AssertionError: expected 3 to be 4 // Object.is equality"
+  ],
+  "ms": 1688
+ },
+ "noLmrResearch-search-only": {
+  "red": true,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1624
+ },
+ "noLmrResearch-engine-only": {
+  "red": true,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1346
+ },
+ "noResearch-search-only": {
+  "red": true,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1440
+ },
+ "noResearch-engine-only": {
+  "red": true,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1409
+ },
+ "M1": {
+  "red": true,
+  "failed": [
+   "engine.test.ts > A2 — a budget far below one iteration's cost still returns a move, and stops near it visits only a bounded number of nodes past the deadline — the in-recursion check :: AssertionError: expected 67176 to be less than or equal to 10240",
+   "engine.test.ts > A3 — an aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards :: AssertionError: expected 3 to be 2 // Object.is equality",
+   "engine.test.ts > A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move :: AssertionError: expected 'g4g5' to be 'e2e3' // Object.is equality"
+  ],
+  "ms": 6438
+ }
+}

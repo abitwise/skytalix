@@ -1,0 +1,41 @@
+## date 2026-10-09T16:46:22Z load 2.06 2.53 3.91
+## RULING 1: ABC-079 A1 with the red pair replaced (C2: + black g7 / mirror + white g2), branch bef7d43
+# whole file, SEARCH_DEEP=1
+A1 depth 3: losing capture chosen 0/24 with quiescence, 0/24 without
+      Tests  37 passed (37)
+# mutant: A1's with-quiescence arms call searchWithoutQuiescence (no quiescence)
+      Tests  1 failed | 2 passed | 34 skipped (37)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+A1 depth 3: losing capture chosen 0/24 with quiescence, 0/24 without
+mirror: b takes a pawn a rook defends: b8e5: expected 24 to be less than or equal to 1
+## RULING 2: ABC-081 A2 hit rates (position-3 default guard printed by an added console.log)
+# base 5ebe1d8
+ABC-081 A2 position-3 d4 21.80%
+ABC-081 A2 kiwipete: fixed depth 5 15.95%, iterative deepening to 5 39.58%
+ABC-081 A2 position-6: fixed depth 5 15.38%, iterative deepening to 5 45.08%
+      Tests  3 passed | 37 skipped (40)
+# branch bef7d43
+ABC-081 A2 position-3 d4 16.22%
+ABC-081 A2 kiwipete: fixed depth 5 15.63%, iterative deepening to 5 40.54%
+ABC-081 A2 position-6: fixed depth 5 14.46%, iterative deepening to 5 44.98%
+     → expected 0.144617032672737 to be greater than or equal to 0.15
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 0.144617032672737 to be greater than or equal to 0.15
+      Tests  1 failed | 2 passed | 37 skipped (40)
+# mutant on branch: search.ts interior never stores (line 'if (switches.table) storeEntry(key, ...')
+ABC-081 A2 position-3 d4 0.00%
+ABC-081 A2 kiwipete: fixed depth 5 0.00%, iterative deepening to 5 40.54%
+ABC-081 A2 position-6: fixed depth 5 0.00%, iterative deepening to 5 44.98%
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  3 failed | 37 skipped (40)
+## RULING 3: ABC-121 A4 search() row, (b) A4_SEARCH_FEN [10, b1c1] vs (a) A4_FEN [95, h5e5]
+# (b) clean
+      Tests  20 passed (20)
+# (b) mutant: search.ts runs the LMR full-depth re-search and DISCARDS its result
+      Tests  1 failed | 19 passed (20)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected -20 to be 10 // Object.is equality
+# (a) clean
+      Tests  20 passed (20)
+# (a) mutant: search.ts runs the LMR full-depth re-search and DISCARDS its result
+      Tests  20 passed (20)

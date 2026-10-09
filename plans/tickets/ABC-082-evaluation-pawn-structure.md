@@ -284,3 +284,146 @@ Assessed by BA/PM, **2026-08-16**. **Result: 9 of 10 clean, 1 ⚠️ — NOT met
 | 8 | size assigned | **✅** `M` (3), re-sized from `S`, with the reason given |
 | 9 | priority assigned | **✅** `P1`, unchanged |
 | 10 | no major unresolved blocker | **✅** none. One reading is recorded, not left open: `ADR-0026` decision 10 does not reach an evaluation term (Out of scope). Architect/Design can overrule it. If they do, Scope and Size change and this score must be redone |
+
+## Delivery
+
+**Built 2026-10-09 by the Software Engineer** (task `wave-2026-09-25`, subtask
+`ticket-to-pr-ABC-082`, Workflow 04) on branch `grugops/ABC-082-pawn-structure` @ **`34c9c02`**,
+off `grugops/wave-2026-09-25` @ `5ebe1d8`. **Unmerged; not pushed. STOPPED on the page's own
+stop rule: two class-R levels are red on the deep lanes. Architect/Design rules.** This section is
+a pointer; the figures live in `.grugops/context/ticket-to-pr-ABC-082/notes/`.
+
+- **`A1`–`A5`, `A7` MET** (`src/evaluate.pawns.test.ts`, new):
+  - the mirror corpus is the 184 plus 36 pawn FENs;
+  - `A5` passes 25/25;
+  - `A3` and `A4` add equal-material rows that are red without the term.
+- **`A7`:** the lift went to `src/evaluate.mirror-corpus.ts` (test-only; no production
+  importer). `src/evaluate.test.ts` imports from it.
+- **`A6`:** purity green; cost **385–394 ns** (≤ 1,100 MET).
+  - `NFR-005` depth, plain node, three rounds: no FAIL.
+  - **WARN: kiwipete reached depth 7 in 1 of 3 rounds** (base 3/3). Position-6 reached 7 in 3/3.
+  - Cause: the tree, not the evaluator's speed. Cumulative nodes to depth 7 on kiwipete went
+    532 363 → 610 179; the node rate is unchanged. Load 7.7–12.9.
+- **`N8-LANE` MET**, about +130 ms net. **`NFR-008` second-order:** about +0.6 s CPU (reported).
+- **Gate:** lint, typecheck and build all exit 0. `npm test` 49 / 1504 / 0 skipped. Integrity
+  `No findings.`
+
+**`A8` re-pin ledger** (each value measured on base and branch by `probe/rows.ts`, never taken
+from a failure message):
+
+| # | file:row | old → new | measured by | lane |
+|---|---|---|---|---|
+| 1 | `search.ordering.test.ts` `A4` d2 | 9 804 / 3 391 / 2 467 → **9 319 / 3 286 / 2 429** | `rows.ts` r1 | default |
+| 2 | `search.ordering.test.ts` `G4` | 261 → 261 | `rows.ts` r2 | default |
+| 3 | `search.ordering.test.ts` `G1` | 358 → **360**. Bite: `N3` reads 357, red | `rows.ts` r3; `mutants.mjs N3` | default |
+| 4 | `transposition.test.ts` `A1` d4 | 1 123 / 1 299 → **1 319 / 1 474** | `rows.ts` r4 | default |
+| 5 | `transposition.test.ts` `A5` | 7 241 → **7 251**. 0 / f7f8 and −470 unchanged | `rows.ts` r5 | default |
+| 6 | `quiescence.test.ts` `A4` | 136 / g5f6; 2 273 / c3d5 → unchanged | `rows.ts` r6 | default / `SEARCH_DEEP` |
+| 7 | `quiescence.test.ts` `A5` oracle | 50 / e2a6 → **55 / e2a6**; 30 / c3d5 → **55 / c3d5**. Oracle re-run, equal on both | `oracle.ts` (282 s / 38 s) | `SEARCH_DEEP` |
+| 8 | `search.pvs-lmr.test.ts` `A4` | `search()` row → **new fixture `A4_SEARCH_FEN`, `[10, "b1c1"]`**. `chooseMove` row `[95, "h5e5"]` unchanged. Bite: 6 / 6 re-search variants red | `a4scan.ts`, `a4engine082.ts`, `mutants.mjs` | default |
+| 9 | `engine.test.ts` `A3` | premise holds (e2e3 / e2e3 / g4g5; budget 3 aborts inside d3). Bite: keep-best-so-far reads −65, red | `rows.ts` r9; `mutants.mjs` | default |
+| 10 | `search.ordering.test.ts` tie | holds. Bite: `M11` red | `rows.ts` r10; `mutants.mjs` | default |
+| 11 | `engine.test.ts` `A2` | 3 666 ≤ 10 240. Bite: `M1` reads 67 176, red | `rows.ts` r11; `mutants.mjs` | default |
+| 12 | `engine.test.ts` `A4` | 4 / 6 / 9 (base 5 / 7 / 10). **The 10-tick reading is at the `≥ 6` bound.** Bite: ceiling-4 red | `rows.ts` r12; `mutants.mjs` | default / `ENGINE_DEEP` |
+| 13 | `transposition.test.ts` `A5` ticks | holds. Bite: repetition-blind (−380) and root-ignores-hash (depth 3) both red | `rows.ts` r13; `mutants.mjs` | default / `SEARCH_DEEP` |
+| 8 (ruled) | `search.pvs-lmr.test.ts` `A4` | **reading (b) upheld** by Architect/Design; the `A4_SEARCH_FEN` hunk stands, nothing changed | ruling `…4fdb96bc` | default |
+| 17 | `transposition.test.ts` `A2` `:384`, `:402` | **≥ 15% → ≥ 10% under `ADR-0028`, PENDING OWNER WORD** (`ADR-0028` proposed). Readings at the branch: position-3 16.22% (ruling), kiwipete 15.63%, position-6 14.46% (re-hop run) | ruling `…8c0fee21`; re-hop `SEARCH_DEEP` run | default / `SEARCH_DEEP` |
+| 21 | `quiescence.test.ts` `A1` `HANGING_CORPUS` `:208`, `:220` | **fixture re-found, level unchanged** (≤ 1/24): "R takes a pawn a bishop defends" + black g7, mirror + white g2. Margins 370 / 280 cp (base / branch). Depth 3 reads **0/24** | `…d25a0383`, `…f0115510`; re-hop `SEARCH_DEEP` run | `SEARCH_DEEP` |
+
+**Class R:** no literal edited. **Two are RED, so the build STOPPED:**
+- **Row 21:** `ABC-079` `A1` at depth 3 reads **2/24** against a level of ≤ 1. The red pair is
+  "R takes a pawn a bishop defends" and its mirror: the engine gives the exchange for a K+B v K
+  draw against a 7th-rank passer.
+- **Row 17:** `ABC-081` `A2` position-6 at depth 5 reads **14.46%** against ≥ 15% (base 15.38%).
+- Re-weighting does not clear either one (sensitivity measured on scratch copies, not applied).
+- Every other R row is green: `ADR-0024` stops, `ABC-080` `A3` and the delete rule, `ABC-077`
+  `A2`, `ABC-081` `A3`, `ABC-121` drift / mate floor / doors, `QE-G3`.
+
+**Handed up, not decided here:**
+1. **Architect/Design:** rule on rows 21 and 17 (`…9bdc69b3`).
+2. **QE / Architect/Design:** row 8's `search()`-row re-fixture is a reading (b) over (a).
+   Overrule by reverting one hunk (`…7040acad`).
+3. **Security/NFR, then the owner:** `NFR-005`'s kiwipete depth-7 WARN (`…a00b6aaa`).
+
+**Re-hop 2026-10-09 by the Software Engineer** (subtask `ticket-to-pr-ABC-082-rehop`, on the
+ruling `ruling-abc082-levels` at `71b140d`). Two commits, nothing wider:
+- **Commit 1, row 21:** the two `HANGING_CORPUS` FENs swapped as ruled, with a pointer comment.
+  Names, `losing` moves and the level are unchanged.
+- **Commit 2 (the tip), row 17, `test(ABC-081): PENDING OWNER WORD —`:** the two A2 literals
+  `0.15` → `0.1`, the describe text says "at least 10%", and the A2 comments carry the new readings
+  and a pointer to `ADR-0028`. **If the owner refuses `ADR-0028`, revert that one commit;
+  `ABC-082` then stays Blocked on row 17.**
+- **Row 8:** nothing.
+- **Gate (both trees):** lint, typecheck and build exit 0; `npm test` 49 files / 1504 tests /
+  0 skipped; integrity `No findings.`
+- **Deep lanes:** `SEARCH_DEEP` quiescence is **37 / 37** (A1 depth 3 0/24). `SEARCH_DEEP`
+  transposition is **39 / 40 without commit 2** (the one red is row 17: position-6 14.46% vs
+  ≥ 15%) and **40 / 40 with it**.
+- The other five deep lanes were not re-run: no file they read changed.
+- **Status:** row 21 is cleared. Row 17 is staged and waits on the owner's word. `ABC-082` does
+  not leave `In Review` toward merge until the owner accepts `ADR-0028`.
+- Notes: `.grugops/context/ticket-to-pr-ABC-082/notes/` (the `…rehop…` notes).
+
+## § QE — 2026-10-09 (QE/E2E, task `wave-2026-09-25`, subtask `qe-ABC-082`, Workflow 05)
+
+**PASS WITH FINDINGS** at `873911d`. The tip commit merges only on the owner's acceptance of
+`ADR-0028`. Every figure was re-measured by QE with its own probes. The reasoning and raw output
+live in `.grugops/context/qe-ABC-082/` (notes and `probe/`) and are not restated here.
+
+- **`A1`–`A8` MET at `873911d`.** Gate: lint, typecheck and build exit 0. `npm test` 49 / 1504 /
+  0 skipped. Integrity `No findings.` All seven deep lanes green, run one at a time with load
+  recorded. `search.pvs-lmr` deep 29 / 29 in 1 091 s.
+- **The terms, hand-scored.** 20 hand-built positions match the hand sums exactly. They cover
+  doubled, tripled, adjacent-file blocker, pawn behind, pawn beside, both edges, promotion rank
+  and both colours.
+- **Symmetry beyond the corpus.** 47 954 extra positions (random legal games plus random pawn
+  boards). Colour mirror, file reflection and an independent reference of the term all agree
+  47 954 / 47 954.
+- **`A8` re-measured.** QE's own script re-read 8 pin rows on base and branch. All match the
+  ledger. The row-7 oracle was re-run: 55 / e2a6 and 55 / c3d5, equal to `search()`.
+- **Mutants re-planted.**
+  - Five named F-class mutants are red: `N3`, `M11`, `M1`, `ceiling4`, `repetitionBlind`.
+  - Row 21's new pair bites its mutant (bare leaf plays it at d1; margin 370 / 280).
+  - Row 8 (b) bites the Architect's discard mutant.
+  - The `engine.ts` discard twin, which the ruling did not plant, is red on the `chooseMove`
+    row.
+- **`873911d` judged on its own.** The ≥ 10% bar still reds a table that never stores (0.00% on
+  all three rows). The cost is measured: the default-lane guard passes a half-storing table
+  (10.62%). The deep A2 rows and two exact node pins still red it. Without the tip, row 17 is
+  red, reproduced.
+- **Gaps:**
+  - **G-QE-1 (LOW–MEDIUM, test gap).** An isolation check that reads only one neighbouring file
+    survives both ticket suites. Only class-P node pins catch it. The code is correct. Remedy:
+    one one-sided-neighbour `A3` relation row, for the next licensed touch.
+  - **G-QE-2 (LOW, inherited).** `ABC-078` `A4` sits at its `≥ 6` bound.
+  - **G-QE-3 (LOW).** The A2 default guard now passes a half-storing table.
+- **`NFR-005` / `N8-LANE` / `NFR-008` are Security/NFR's.** QE reports their readings only.
+
+**`ABC-082` may leave `In Review` toward Security/NFR. It does not go toward merge until the owner
+accepts `ADR-0028`, or refuses it and `873911d` is reverted, which re-blocks the ticket on row 17.
+The board move is the Orchestrator's.**
+
+## Security/NFR 2026-10-09 (`secnfr-ABC-082`, Workflow 05 Security/NFR step, ASVS L1, block on high): PASS_WITH_RISKS
+
+Reviewed `5ebe1d8..873911d -- src` (one production file, `src/evaluate.ts`). The gate was re-run green at `873911d`:
+`npm test` 49 / 1 504 / 0 skipped, lint 0, typecheck 0, build 0, integrity `No findings.`.
+**No security finding. No required fix.** One LOW risk is proposed for the owner. **It is not accepted
+by this gate, and the recommendation is no merge before the owner's word.** The figures live in
+`.grugops/context/secnfr-ABC-082/notes/` (decision `…c04abe30`).
+
+- **`NFR-005` floor (depth 6) MET:** 64 / 64 plain-node runs, two sessions of 8 rounds, fresh process
+  per run, base and branch alternating (load1 2.7–17.5 and 3.8–4.6).
+- **`NFR-005` depth 7, kiwipete: WARN (LOW), for the owner: `AR-NFR005-082` drafted.**
+  - Reached 15 / 16 here and 1 / 3 at the build. Base was 15 / 16 here.
+  - The misses come at load spikes.
+  - Nodes to complete depth 7 went **532 363 → 610 179 (+14.6%)**. That is deterministic, and two instruments agree.
+  - The depth-7 margin fell from about 1.2x to **1.05–1.12x**.
+  - Position-6 reached 16 / 16, margin 1.39–1.43x.
+  - Trigger: `ABC-083` repeats the read.
+- **`A6` MET:** 357.8–366.1 ns mean, worst cell 465.0 ns (load1 3.6–4.1), against ≤ 1 100.
+- **`N8-LANE` MET:** +0.13 / +0.14 s gross, ≈ 0 net, with admissible nulls (load1 13–23).
+- **`NFR-008` second order:** +0.76 / +0.84 s CPU, reported and not ruled. The absolute base
+  total is flagged to `ADR-0019`'s owner as `UNKNOWN - verify`.
+- **`NFR-004`:** 3 000–3 006 ms over 64 runs, inside `AR-NFR004-A`. **`NFR-009`:** not triggered.
+- **Security:** reads are in bounds, loops are bounded, no I/O and no allocation. "Not triggered" is confirmed.
+- **Owner's word owed:** accept, refuse, or re-level for `AR-NFR005-082` (`…c04abe30`). This is separate from `ADR-0028`.

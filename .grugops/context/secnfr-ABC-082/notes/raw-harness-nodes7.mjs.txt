@@ -1,0 +1,24 @@
+// Clock-free NFR-005 companion: the work chooseMove needs to COMPLETE depth D (default 7).
+// A virtual clock ticks 1 per consultation, i.e. once per NODES_PER_CLOCK_CHECK nodes, so a budget
+// of b "ms" is ~b*1024 nodes. Binary-search the smallest b whose result has depth >= D; report
+// that run's node count (an upper bound on nodes-to-depth-D, resolution one check = 1024 nodes).
+// Deterministic: load cannot move it. Usage: node nodes7.mjs <tree-root> <pos> [D]
+const [root, name, D = "7"] = process.argv.slice(2);
+const FEN = {
+  kiwipete: "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+  "position-6": "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10",
+};
+const { chooseMove } = await import(`${root}/src/engine.ts`);
+const { parseFen } = await import(`${root}/src/fen.ts`);
+const run = (b) => { let t = 0; return chooseMove(parseFen(FEN[name]), { budgetMs: b, now: () => t++ }); };
+let lo = 1, hi = 4999; // depth(lo) < D assumed; depth(hi) >= D checked
+const top = run(hi);
+if (top.depth < Number(D)) throw new Error(`depth ${top.depth} at ceiling`);
+let best = top;
+while (hi - lo > 1) {
+  const mid = (lo + hi) >> 1;
+  const c = run(mid);
+  if (c.depth >= Number(D)) { hi = mid; best = c; } else lo = mid;
+}
+const below = run(lo);
+console.log(JSON.stringify({ tree: root.split("/").slice(-1)[0], name, D: Number(D), minBudgetTicks: hi, nodesAtMin: best.nodes, nodesOneTickLess: below.nodes, depthOneTickLess: below.depth, move: best.move }));

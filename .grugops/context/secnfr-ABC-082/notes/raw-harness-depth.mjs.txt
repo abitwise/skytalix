@@ -1,0 +1,16 @@
+// NFR-005 part 2: fresh plain-node process per run; arms alternate order every round.
+// Usage: node depth.mjs <rounds> <branchRoot> <baseRoot> > out.jsonl
+import { execFileSync } from "node:child_process";
+import { loadavg } from "node:os";
+const [rounds, branch, base] = [Number(process.argv[2]), process.argv[3], process.argv[4]];
+const one = new URL("./one.mjs", import.meta.url).pathname;
+const ARMS = [["branch", branch], ["base", base]];
+for (let r = 1; r <= rounds; r++) {
+  const arms = r % 2 ? ARMS : [...ARMS].reverse();
+  for (const pos of ["kiwipete", "position-6"]) {
+    for (const [arm, root] of arms) {
+      const out = JSON.parse(execFileSync(process.execPath, [one, root, pos], { encoding: "utf8" }));
+      console.log(JSON.stringify({ round: r, arm, ...out, load5: loadavg()[1].toFixed(2), at: new Date().toISOString() }));
+    }
+  }
+}
