@@ -1,0 +1,4 @@
+{"label":"ticking(1) budget 5000 (= ceiling)","ceiling":5000,"depth":8,"nodes":5112572,"reads":5002,"nodesPerRead":1022,"wallMs":27839}
+{"label":"ticking(1) budget 1e9 (clamped)","ceiling":5000,"depth":8,"nodes":5112572,"reads":5002,"nodesPerRead":1022,"wallMs":25516}
+{"label":"ticking(4) budget 3000","ceiling":5000,"depth":7,"nodes":761596,"reads":752,"nodesPerRead":1013,"wallMs":3499}
+{"label":"Date.now budget 3000 (real, load-dependent)","depth":7,"nodes":616188,"wallMs":3001}
