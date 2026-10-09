@@ -1,0 +1,542 @@
+ok   S1 shape: plies at each prompt
+ok   S1 0-ply undo refused, nothing changed, next frame carries the refusal
+ok   S1 help at the start position (real frame, unicode, white-bottom): hidden 0
+ok   S1 undo after a REAL engine reply: 2 → 0, FEN = start, counts = fresh
+ok   S1 undo at 0 after a successful undo: refused
+ok   S1 help mid-game at ply 6 (real frame): hidden 0
+ok   S1 undo ×3 from ply 6: each exactly two plies, lands on START_FEN
+ok   S1 fourth undo at the floor: refused
+ok   S1 the engine was asked exactly 4 times (one per human move, none per undo)
+ok   S1 ended on EOF, no result
+ok   S2 shape: plies at each prompt
+ok   S2 1-ply undo (human Black, engine opened): refused, nothing changed
+ok   S2 help at Black's first prompt (black-bottom): hidden 0
+ok   S2 undo at 3 plies: → 1, the engine's opening move is the SAME object, FEN byte-identical
+ok   S2 undo at 1 after a take-back: refused
+ok   S2 undo ×2 from 5 to the floor, third refused
+ok   S2 the engine moved 1 + 3 times — never after a take-back
+ok   S3 given: the first frame carries a claim (fixture live)
+ok   S3 help with a claim on offer (real frame): hidden 0
+ok   S3 undo on the claimable position: 8 → 6, next frame's claimable undefined
+ok   S3 claim after undo is refused (non-terminal, a message), state unchanged
+ok   S3 replaying the undone plies restores the claim, and claiming then draws by threefold
+ok   S4 shape
+ok   S4 undo right after `new`: refused
+ok   S4 undo after new + one exchange: → 0 = START_FEN, then refused
+ok   S5 shape: quit/undo/quit never exits early
+ok   S5 quit (armed) → undo takes back 2 → frame messages [] (not a quit)
+ok   S5 quit after undo asks AGAIN (the flag was cleared by undo)
+ok   S5 quit → REFUSED undo (ply 0) also clears the flag; quit asks again
+ok   S5 quit quit ends the session (exit 0, no result, the notice)
+ok   S6a undo of O-O restores KQkq and the halfmove/fullmove counters byte-for-byte
+ok   S6b undo of an en-passant capture restores the pawn AND the e.p. square byte-for-byte
+ok   S7 "UNDO\n" → undo
+ok   S7 " undo \n" → undo
+ok   S7 "undo\t\n" → undo
+ok   S7 "undo\r\n" → undo
+ok   S7 "\tUnDo\r\n" → undo
+ok   S7 "undo2\n" → not
+ok   S7 "un do\n" → not
+ok   S7 "undo 2\n" → not
+ok   S7 "und\n" → not
+ok   S7 "undoo\n" → not
+ok   S7 "u\n" → not
+ok   S7 "undo!\n" → not
+ok   S8 SAN Nc3 is not a command
+ok   S8 SAN Na3 is not a command
+ok   S8 SAN Nh3 is not a command
+ok   S8 SAN Nf3 is not a command
+ok   S8 SAN a3 is not a command
+ok   S8 SAN a4 is not a command
+ok   S8 SAN b3 is not a command
+ok   S8 SAN b4 is not a command
+ok   S8 SAN c3 is not a command
+ok   S8 SAN c4 is not a command
+ok   S8 SAN d3 is not a command
+ok   S8 SAN d4 is not a command
+ok   S8 SAN e3 is not a command
+ok   S8 SAN e4 is not a command
+ok   S8 SAN f3 is not a command
+ok   S8 SAN f4 is not a command
+ok   S8 SAN g3 is not a command
+ok   S8 SAN g4 is not a command
+ok   S8 SAN h3 is not a command
+ok   S8 SAN h4 is not a command
+ok   S8 resolveMoveInput("undo") @ rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 is not a move
+ok   S8 resolveMoveInput("UNDO") @ rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 is not a move
+ok   S8 resolveMoveInput("undo2") @ rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 is not a move
+ok   S8 resolveMoveInput("un do") @ rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 is not a move
+ok   S8 resolveMoveInput("u") @ rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 is not a move
+ok   S8 resolveMoveInput("und") @ rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 is not a move
+ok   S8 SAN Nc3 is not a command
+ok   S8 SAN Na3 is not a command
+ok   S8 SAN Qe2 is not a command
+ok   S8 SAN Ke2 is not a command
+ok   S8 SAN Kf1 is not a command
+ok   S8 SAN Rg1 is not a command
+ok   S8 SAN Rf1 is not a command
+ok   S8 SAN a3 is not a command
+ok   S8 SAN a4 is not a command
+ok   S8 SAN b3 is not a command
+ok   S8 SAN b4 is not a command
+ok   S8 SAN c3 is not a command
+ok   S8 SAN d3 is not a command
+ok   S8 SAN d4 is not a command
+ok   S8 SAN g3 is not a command
+ok   S8 SAN g4 is not a command
+ok   S8 SAN h3 is not a command
+ok   S8 SAN h4 is not a command
+ok   S8 SAN Ng5 is not a command
+ok   S8 SAN Nxe5 is not a command
+ok   S8 SAN Nh4 is not a command
+ok   S8 SAN Nd4 is not a command
+ok   S8 SAN Ng1 is not a command
+ok   S8 SAN Bd5 is not a command
+ok   S8 SAN Be6 is not a command
+ok   S8 SAN Bxf7+ is not a command
+ok   S8 SAN Bb5 is not a command
+ok   S8 SAN Ba6 is not a command
+ok   S8 SAN Bd3 is not a command
+ok   S8 SAN Be2 is not a command
+ok   S8 SAN Bf1 is not a command
+ok   S8 SAN Bb3 is not a command
+ok   S8 SAN O-O is not a command
+ok   S8 resolveMoveInput("undo") @ r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4 is not a move
+ok   S8 resolveMoveInput("UNDO") @ r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4 is not a move
+ok   S8 resolveMoveInput("undo2") @ r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4 is not a move
+ok   S8 resolveMoveInput("un do") @ r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4 is not a move
+ok   S8 resolveMoveInput("u") @ r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4 is not a move
+ok   S8 resolveMoveInput("und") @ r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4 is not a move
+ok   S8 SAN Nc3 is not a command
+ok   S8 SAN Na3 is not a command
+ok   S8 SAN Qe2 is not a command
+ok   S8 SAN Qf3 is not a command
+ok   S8 SAN Qg4 is not a command
+ok   S8 SAN Qh5 is not a command
+ok   S8 SAN Ke2 is not a command
+ok   S8 SAN Be2 is not a command
+ok   S8 SAN Bd3 is not a command
+ok   S8 SAN Bc4 is not a command
+ok   S8 SAN Bb5+ is not a command
+ok   S8 SAN Bxa6 is not a command
+ok   S8 SAN Nh3 is not a command
+ok   S8 SAN Nf3 is not a command
+ok   S8 SAN Ne2 is not a command
+ok   S8 SAN a3 is not a command
+ok   S8 SAN a4 is not a command
+ok   S8 SAN b3 is not a command
+ok   S8 SAN b4 is not a command
+ok   S8 SAN c3 is not a command
+ok   S8 SAN c4 is not a command
+ok   S8 SAN d3 is not a command
+ok   S8 SAN d4 is not a command
+ok   S8 SAN f3 is not a command
+ok   S8 SAN f4 is not a command
+ok   S8 SAN g3 is not a command
+ok   S8 SAN g4 is not a command
+ok   S8 SAN h3 is not a command
+ok   S8 SAN h4 is not a command
+ok   S8 SAN e6 is not a command
+ok   S8 SAN exd6 is not a command
+ok   S8 resolveMoveInput("undo") @ rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3 is not a move
+ok   S8 resolveMoveInput("UNDO") @ rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3 is not a move
+ok   S8 resolveMoveInput("undo2") @ rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3 is not a move
+ok   S8 resolveMoveInput("un do") @ rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3 is not a move
+ok   S8 resolveMoveInput("u") @ rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3 is not a move
+ok   S8 resolveMoveInput("und") @ rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3 is not a move
+ok   S8 SAN Re2 is not a command
+ok   S8 SAN Re3 is not a command
+ok   S8 SAN Re4 is not a command
+ok   S8 SAN Re5 is not a command
+ok   S8 SAN Re6 is not a command
+ok   S8 SAN Re7 is not a command
+ok   S8 SAN Re8# is not a command
+ok   S8 SAN Rf1 is not a command
+ok   S8 SAN Rd1 is not a command
+ok   S8 SAN Rc1 is not a command
+ok   S8 SAN Rb1 is not a command
+ok   S8 SAN Ra1 is not a command
+ok   S8 SAN Kh1 is not a command
+ok   S8 SAN Kf1 is not a command
+ok   S8 SAN f3 is not a command
+ok   S8 SAN f4 is not a command
+ok   S8 SAN g3 is not a command
+ok   S8 SAN g4 is not a command
+ok   S8 SAN h3 is not a command
+ok   S8 SAN h4 is not a command
+ok   S8 resolveMoveInput("undo") @ 6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 4 3 is not a move
+ok   S8 resolveMoveInput("UNDO") @ 6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 4 3 is not a move
+ok   S8 resolveMoveInput("undo2") @ 6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 4 3 is not a move
+ok   S8 resolveMoveInput("un do") @ 6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 4 3 is not a move
+ok   S8 resolveMoveInput("u") @ 6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 4 3 is not a move
+ok   S8 resolveMoveInput("und") @ 6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 4 3 is not a move
+ok   S8 SAN Nc3 is not a command
+ok   S8 SAN Na3 is not a command
+ok   S8 SAN Nd2 is not a command
+ok   S8 SAN Ke2 is not a command
+ok   S8 SAN Kf1 is not a command
+ok   S8 SAN Kd1 is not a command
+ok   S8 SAN Kf2 is not a command
+ok   S8 SAN Kd2 is not a command
+ok   S8 SAN a8=Q is not a command
+ok   S8 SAN a8=R is not a command
+ok   S8 SAN a8=B is not a command
+ok   S8 SAN a8=N is not a command
+ok   S8 SAN axb8=Q+ is not a command
+ok   S8 SAN axb8=R+ is not a command
+ok   S8 SAN axb8=B is not a command
+ok   S8 SAN axb8=N is not a command
+ok   S8 SAN h8=Q+ is not a command
+ok   S8 SAN h8=R+ is not a command
+ok   S8 SAN h8=B is not a command
+ok   S8 SAN h8=N is not a command
+ok   S8 resolveMoveInput("undo") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 w - - 0 1 is not a move
+ok   S8 resolveMoveInput("UNDO") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 w - - 0 1 is not a move
+ok   S8 resolveMoveInput("undo2") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 w - - 0 1 is not a move
+ok   S8 resolveMoveInput("un do") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 w - - 0 1 is not a move
+ok   S8 resolveMoveInput("u") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 w - - 0 1 is not a move
+ok   S8 resolveMoveInput("und") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 w - - 0 1 is not a move
+ok   S8 SAN a1=Q is not a command
+ok   S8 SAN a1=R is not a command
+ok   S8 SAN a1=B is not a command
+ok   S8 SAN a1=N is not a command
+ok   S8 SAN axb1=Q+ is not a command
+ok   S8 SAN axb1=R+ is not a command
+ok   S8 SAN axb1=B is not a command
+ok   S8 SAN axb1=N is not a command
+ok   S8 SAN h1=Q+ is not a command
+ok   S8 SAN h1=R+ is not a command
+ok   S8 SAN h1=B is not a command
+ok   S8 SAN h1=N is not a command
+ok   S8 SAN Nd7 is not a command
+ok   S8 SAN Nc6 is not a command
+ok   S8 SAN Na6 is not a command
+ok   S8 SAN Kf8 is not a command
+ok   S8 SAN Kd8 is not a command
+ok   S8 SAN Ke7 is not a command
+ok   S8 SAN Kf7 is not a command
+ok   S8 SAN Kd7 is not a command
+ok   S8 resolveMoveInput("undo") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 b - - 0 1 is not a move
+ok   S8 resolveMoveInput("UNDO") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 b - - 0 1 is not a move
+ok   S8 resolveMoveInput("undo2") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 b - - 0 1 is not a move
+ok   S8 resolveMoveInput("un do") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 b - - 0 1 is not a move
+ok   S8 resolveMoveInput("u") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 b - - 0 1 is not a move
+ok   S8 resolveMoveInput("und") @ 1n2k3/P6P/8/8/8/8/p6p/1N2K3 b - - 0 1 is not a move
+ok   S8 help order (= table order) is help board quit claim resign new undo
+ok   S8 `new` still takes back ALL plies at ply 6 (undo's branch did not capture it)
+ok   S9 help hidden 0 on the real frame: unicode/white-bottom/start
+ok   S9 help hidden 0 on the real frame: unicode/white-bottom/ply1
+ok   S9 help hidden 0 on the real frame: unicode/white-bottom/ply6
+ok   S9 help hidden 0 on the real frame: unicode/white-bottom/claimable
+ok   S9 help hidden 0 on the real frame: unicode/black-bottom/start
+ok   S9 help hidden 0 on the real frame: unicode/black-bottom/ply1
+ok   S9 help hidden 0 on the real frame: unicode/black-bottom/ply6
+ok   S9 help hidden 0 on the real frame: unicode/black-bottom/claimable
+ok   S9 help hidden 0 on the real frame: ascii/white-bottom/start
+ok   S9 help hidden 0 on the real frame: ascii/white-bottom/ply1
+ok   S9 help hidden 0 on the real frame: ascii/white-bottom/ply6
+ok   S9 help hidden 0 on the real frame: ascii/white-bottom/claimable
+ok   S9 help hidden 0 on the real frame: ascii/black-bottom/start
+ok   S9 help hidden 0 on the real frame: ascii/black-bottom/ply1
+ok   S9 help hidden 0 on the real frame: ascii/black-bottom/ply6
+ok   S9 help hidden 0 on the real frame: ascii/black-bottom/claimable
+
+242/242 checks passed, 0 failed
+{
+ "S1": {
+  "plies": [
+   0,
+   0,
+   0,
+   2,
+   0,
+   0,
+   2,
+   4,
+   6,
+   6,
+   4,
+   2,
+   0,
+   0
+  ],
+  "engineCalls": 4,
+  "outcome": {
+   "result": null,
+   "reason": null,
+   "exitCode": 0
+  }
+ },
+ "S2": {
+  "plies": [
+   1,
+   1,
+   1,
+   3,
+   1,
+   1,
+   3,
+   5,
+   3,
+   1,
+   1
+  ],
+  "engineCalls": 4
+ },
+ "S3": {
+  "plies": [
+   8,
+   8,
+   6,
+   6,
+   8
+  ],
+  "outcome": {
+   "result": "draw",
+   "reason": "threefold-repetition",
+   "exitCode": 0
+  },
+  "claimMsgs": [
+   "repetition 2 of 3",
+   "50-move 6 of 100"
+  ]
+ },
+ "S4": {
+  "plies": [
+   0,
+   2,
+   4,
+   0,
+   0,
+   2,
+   0,
+   0
+  ]
+ },
+ "S5": {
+  "plies": [
+   0,
+   2,
+   2,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "msgs": [
+   [],
+   [],
+   [
+    "quit again to end"
+   ],
+   [],
+   [
+    "quit again to end"
+   ],
+   [
+    "nothing to undo"
+   ],
+   [
+    "quit again to end"
+   ],
+   [],
+   [
+    "quit again to end"
+   ]
+  ],
+  "outcome": {
+   "result": null,
+   "reason": null,
+   "exitCode": 0
+  }
+ },
+ "S6": {
+  "castleFen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+  "epBefore": "rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3",
+  "epAfter": "rnbqkbnr/1pp1pppp/p7/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3"
+ },
+ "S7": {
+  "\"UNDO\\n\"": {
+   "plies": 0,
+   "messages": []
+  },
+  "\" undo \\n\"": {
+   "plies": 0,
+   "messages": []
+  },
+  "\"undo\\t\\n\"": {
+   "plies": 0,
+   "messages": []
+  },
+  "\"undo\\r\\n\"": {
+   "plies": 0,
+   "messages": []
+  },
+  "\"\\tUnDo\\r\\n\"": {
+   "plies": 0,
+   "messages": []
+  },
+  "\"undo2\\n\"": {
+   "plies": 2,
+   "messages": [
+    "type e2e4 or Nf3"
+   ]
+  },
+  "\"un do\\n\"": {
+   "plies": 2,
+   "messages": [
+    "type e2e4 or Nf3"
+   ]
+  },
+  "\"undo 2\\n\"": {
+   "plies": 2,
+   "messages": [
+    "type e2e4 or Nf3"
+   ]
+  },
+  "\"und\\n\"": {
+   "plies": 2,
+   "messages": [
+    "type e2e4 or Nf3"
+   ]
+  },
+  "\"undoo\\n\"": {
+   "plies": 2,
+   "messages": [
+    "type e2e4 or Nf3"
+   ]
+  },
+  "\"u\\n\"": {
+   "plies": 2,
+   "messages": [
+    "type e2e4 or Nf3"
+   ]
+  },
+  "\"undo!\\n\"": {
+   "plies": 2,
+   "messages": [
+    "type e2e4 or Nf3"
+   ]
+  }
+ },
+ "S8": {
+  "positions": 6,
+  "sansChecked": 144
+ },
+ "S9": {
+  "unicode/white-bottom/start": {
+   "width": 21,
+   "region": [
+    "help board quit claim",
+    "resign new undo      "
+   ]
+  },
+  "unicode/white-bottom/ply1": {
+   "width": 21,
+   "region": [
+    "help board quit claim",
+    "resign new undo      "
+   ]
+  },
+  "unicode/white-bottom/ply6": {
+   "width": 22,
+   "region": [
+    "help board quit claim ",
+    "resign new undo       "
+   ]
+  },
+  "unicode/white-bottom/claimable": {
+   "width": 50,
+   "region": [
+    "help board quit claim resign new undo             ",
+    "                                                  "
+   ]
+  },
+  "unicode/black-bottom/start": {
+   "width": 21,
+   "region": [
+    "help board quit claim",
+    "resign new undo      "
+   ]
+  },
+  "unicode/black-bottom/ply1": {
+   "width": 21,
+   "region": [
+    "help board quit claim",
+    "resign new undo      "
+   ]
+  },
+  "unicode/black-bottom/ply6": {
+   "width": 22,
+   "region": [
+    "help board quit claim ",
+    "resign new undo       "
+   ]
+  },
+  "unicode/black-bottom/claimable": {
+   "width": 50,
+   "region": [
+    "help board quit claim resign new undo             ",
+    "                                                  "
+   ]
+  },
+  "ascii/white-bottom/start": {
+   "width": 21,
+   "region": [
+    "help board quit claim",
+    "resign new undo      "
+   ]
+  },
+  "ascii/white-bottom/ply1": {
+   "width": 21,
+   "region": [
+    "help board quit claim",
+    "resign new undo      "
+   ]
+  },
+  "ascii/white-bottom/ply6": {
+   "width": 22,
+   "region": [
+    "help board quit claim ",
+    "resign new undo       "
+   ]
+  },
+  "ascii/white-bottom/claimable": {
+   "width": 50,
+   "region": [
+    "help board quit claim resign new undo             ",
+    "                                                  "
+   ]
+  },
+  "ascii/black-bottom/start": {
+   "width": 21,
+   "region": [
+    "help board quit claim",
+    "resign new undo      "
+   ]
+  },
+  "ascii/black-bottom/ply1": {
+   "width": 21,
+   "region": [
+    "help board quit claim",
+    "resign new undo      "
+   ]
+  },
+  "ascii/black-bottom/ply6": {
+   "width": 22,
+   "region": [
+    "help board quit claim ",
+    "resign new undo       "
+   ]
+  },
+  "ascii/black-bottom/claimable": {
+   "width": 50,
+   "region": [
+    "help board quit claim resign new undo             ",
+    "                                                  "
+   ]
+  }
+ }
+}

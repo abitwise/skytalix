@@ -1,0 +1,231 @@
+8 .r:n.b:q.k:b.n:r   
+7 :p.p:p.p:p.p:p.p   
+6 ..::..::..::..::   
+5 ::..::..::..::..   
+4 ..::..::..::..::   
+3 ::..::..::..::..   
+2 .P:P.P:P.P:P.P:P   
+1 :R.N:B.Q:K.B:N.R   
+   a b c d e f g h   
+White to move  1.    
+material: 0          
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+
+> 8 .r:n.b:q.k:b.n:r   
+7 :p.p:p.p:p.p:p.p   
+6 ..::..::..::..::   
+5 ::..::..::..::..   
+4 ..::..::..::..::   
+3 ::..::..::..::..   
+2 .P:P.P:P.P:P.P:P   
+1 :R.N:B.Q:K.B:N.R   
+   a b c d e f g h   
+White to move  1.    
+material: 0          
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+nothing to undo      
+                     
+
+> 8 .r:n.b:q.k:b.n:r   
+7 :p.p:p.p:p.p:p.p   
+6 ..::..::..::..::   
+5 ::..::..::..::..   
+4 ..::..::..::..::   
+3 ::..::..::..::..   
+2 .P:P.P:P.P:P.P:P   
+1 :R.N:B.Q:K.B:N.R   
+   a b c d e f g h   
+White to move  1.    
+material: 0          
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+help board quit claim
+resign new undo      
+
+> 8 .r:n.b:q.k:b.n:r   
+7 :p.p:p.p:p.p:p.p   
+6 ..::..::..::..::   
+5 ::..::..::..::..   
+4 ..::..::.P::..::   
+3 ::..::..::..::..   
+2 .P:P.P:P..:P.P:P   
+1 :R.N:B.Q:K.B:N.R   
+   a b c d e f g h   
+Black to move  1...  
+last: e4  material: 0
+thinking...          
+   1. e4             
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+
+8 .r::.b:q.k:b.n:r    
+7 :p.p:p.p:p.p:p.p    
+6 ..::.n::..::..::    
+5 ::..::..::..::..    
+4 ..::..::.P::..::    
+3 ::..::..::..::..    
+2 .P:P.P:P..:P.P:P    
+1 :R.N:B.Q:K.B:N.R    
+   a b c d e f g h    
+White to move  2.     
+last: Nc6  material: 0
+                      
+   1. e4      Nc6     
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+
+> 8 .r:n.b:q.k:b.n:r   
+7 :p.p:p.p:p.p:p.p   
+6 ..::..::..::..::   
+5 ::..::..::..::..   
+4 ..::..::..::..::   
+3 ::..::..::..::..   
+2 .P:P.P:P.P:P.P:P   
+1 :R.N:B.Q:K.B:N.R   
+   a b c d e f g h   
+White to move  1.    
+material: 0          
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+
+> 8 .r:n.b:q.k:b.n:r   
+7 :p.p:p.p:p.p:p.p   
+6 ..::..::..::..::   
+5 ::..::..::..::..   
+4 ..::..::..::..::   
+3 ::..::..::..::..   
+2 .P:P.P:P.P:P.P:P   
+1 :R.N:B.Q:K.B:N.R   
+   a b c d e f g h   
+White to move  1.    
+material: 0          
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+nothing to undo      
+                     
+
+> 8 .r:n.b:q.k:b.n:r   
+7 :p.p:p.p:p.p:p.p   
+6 ..::..::..::..::   
+5 ::..::..::..::..   
+4 ..::..::..::..::   
+3 ::..::..::..::..   
+2 .P:P.P:P.P:P.P:P   
+1 :R.N:B.Q:K.B:N.R   
+   a b c d e f g h   
+White to move  1.    
+material: 0          
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+quit again to end    
+                     
+
+> 8 .r:n.b:q.k:b.n:r   
+7 :p.p:p.p:p.p:p.p   
+6 ..::..::..::..::   
+5 ::..::..::..::..   
+4 ..::..::..::..::   
+3 ::..::..::..::..   
+2 .P:P.P:P.P:P.P:P   
+1 :R.N:B.Q:K.B:N.R   
+   a b c d e f g h   
+White to move  1.    
+material: 0          
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+nothing to undo      
+                     
+
+> 8 .r:n.b:q.k:b.n:r   
+7 :p.p:p.p:p.p:p.p   
+6 ..::..::..::..::   
+5 ::..::..::..::..   
+4 ..::..::..::..::   
+3 ::..::..::..::..   
+2 .P:P.P:P.P:P.P:P   
+1 :R.N:B.Q:K.B:N.R   
+   a b c d e f g h   
+White to move  1.    
+material: 0          
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+quit again to end    
+                     
+
+> quit

@@ -1,0 +1,173 @@
+[
+ {
+  "name": "M1 guard >= 1 (unguarded two-ply take-back at ply 1)",
+  "testRowsRed": 2,
+  "total": 151,
+  "failed": [
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the pure function refuses at exactly 1 ply (human Black, the engine has opened)",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — through the MERGED loop at exactly 1 ply (human Black, the engine has opened): the refusal is shown, nothing changes, zero extra derives"
+  ],
+  "probeRed": 5,
+  "probeFails": [
+   "S2 1-ply undo (human Black, engine opened): refused, nothing changed",
+   "S2 undo at 3 plies: → 1, the engine's opening move is the SAME object, FEN byte-identical",
+   "S2 undo at 1 after a take-back: refused",
+   "S2 undo ×2 from 5 to the floor, third refused",
+   "S2 the engine moved 1 + 3 times — never after a take-back"
+  ]
+ },
+ {
+  "name": "M3 heading kept",
+  "testRowsRed": 4,
+  "total": 151,
+  "failed": [
+   "ABC-035 A4 — `help` names every token in the table and no other carries one item per table row and no heading — no row is folded away",
+   "ABC-035 A7 — `help` fits the message region: hidden count exactly 0 hides nothing at the start position",
+   "ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together `help` now names BOTH — the promise `ABC-112` was cut over is TRUE, by construction",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A8 — `help` names every row including `undo`, with NO heading item"
+  ],
+  "probeRed": 16,
+  "probeFails": [
+   "S1 help at the start position (real frame, unicode, white-bottom): hidden 0",
+   "S1 help mid-game at ply 6 (real frame): hidden 0",
+   "S2 help at Black's first prompt (black-bottom): hidden 0",
+   "S8 help order (= table order) is help board quit claim resign new undo",
+   "S9 help hidden 0 on the real frame: unicode/white-bottom/start",
+   "S9 help hidden 0 on the real frame: unicode/white-bottom/ply1"
+  ]
+ },
+ {
+  "name": "Q1 undo branch AFTER new's take-back branch (undo takes ALL plies)",
+  "testRowsRed": 12,
+  "total": 151,
+  "failed": [
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A1 — the pure function at ply 4: exactly the two-ply take-back, nothing mutated HERE",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A1 — through the MERGED loop: the human's move and the reply go, byte-identical to before the human moved",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the pure function refuses at 0 plies",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — through the MERGED loop at 0 plies: the refusal is shown, nothing changes, zero extra derives",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the pure function refuses at exactly 1 ply (human Black, the engine has opened)",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — through the MERGED loop at exactly 1 ply (human Black, the engine has opened): the refusal is shown, nothing changes, zero extra derives",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the refusal is ONE item that fits the region's bound (`ADR-0021` clause 6: ≤ 17 columns)",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A3 — repeatable: three `undo`s from ply 6 land on the start position exactly, and a fourth is refused",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A4 — the derived state rewinds with it: repetition counts equal a fresh replay, ENTRY FOR ENTRY",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A6 — classified before the grammars, in each tolerated spelling: neither resolver, no derive",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A7 — no confirmation: the take-back lands on its own line, before the next line is read",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A7 — `undo` clears an armed `quit`: quit / undo / quit asks again"
+  ],
+  "probeRed": 19,
+  "probeFails": [
+   "S1 shape: plies at each prompt",
+   "S1 0-ply undo refused, nothing changed, next frame carries the refusal",
+   "S1 undo at 0 after a successful undo: refused",
+   "S1 undo ×3 from ply 6: each exactly two plies, lands on START_FEN",
+   "S1 fourth undo at the floor: refused",
+   "S2 shape: plies at each prompt"
+  ]
+ },
+ {
+  "name": "Q2 refusal as `rejected`, not `command`",
+  "testRowsRed": 2,
+  "total": 151,
+  "failed": [
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the pure function refuses at 0 plies",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the pure function refuses at exactly 1 ply (human Black, the engine has opened)"
+  ],
+  "probeRed": 0,
+  "probeFails": []
+ },
+ {
+  "name": "Q3 heading kept AND undo dropped from help (length unchanged — the superseded rows' blind spot)",
+  "testRowsRed": 2,
+  "total": 151,
+  "failed": [
+   "ABC-035 A4 — `help` names every token in the table and no other names every token, derived from COMMAND_TABLE",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A8 — `help` names every row including `undo`, with NO heading item"
+  ],
+  "probeRed": 1,
+  "probeFails": [
+   "S8 help order (= table order) is help board quit claim resign new undo"
+  ]
+ },
+ {
+  "name": "Q4 guard > 2 (refuses at exactly 2 plies)",
+  "testRowsRed": 1,
+  "total": 151,
+  "failed": [
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A3 — repeatable: three `undo`s from ply 6 land on the start position exactly, and a fourth is refused"
+  ],
+  "probeRed": 13,
+  "probeFails": [
+   "S1 shape: plies at each prompt",
+   "S1 undo after a REAL engine reply: 2 → 0, FEN = start, counts = fresh",
+   "S1 undo ×3 from ply 6: each exactly two plies, lands on START_FEN",
+   "S1 the engine was asked exactly 4 times (one per human move, none per undo)",
+   "S4 shape",
+   "S4 undo after new + one exchange: → 0 = START_FEN, then refused"
+  ]
+ },
+ {
+  "name": "Q5 success carries the refusal text (ruling 7)",
+  "testRowsRed": 5,
+  "total": 151,
+  "failed": [
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A1 — the pure function at ply 4: exactly the two-ply take-back, nothing mutated HERE",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A3 — repeatable: three `undo`s from ply 6 land on the start position exactly, and a fourth is refused",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A6 — classified before the grammars, in each tolerated spelling: neither resolver, no derive",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A7 — no confirmation: the take-back lands on its own line, before the next line is read",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A7 — `undo` clears an armed `quit`: quit / undo / quit asks again"
+  ],
+  "probeRed": 14,
+  "probeFails": [
+   "S1 undo after a REAL engine reply: 2 → 0, FEN = start, counts = fresh",
+   "S1 undo ×3 from ply 6: each exactly two plies, lands on START_FEN",
+   "S2 undo at 3 plies: → 1, the engine's opening move is the SAME object, FEN byte-identical",
+   "S2 undo ×2 from 5 to the floor, third refused",
+   "S3 undo on the claimable position: 8 → 6, next frame's claimable undefined",
+   "S4 undo after new + one exchange: → 0 = START_FEN, then refused"
+  ]
+ },
+ {
+  "name": "Q6 refusal as a zero-ply take-back (no change, but a derive)",
+  "testRowsRed": 4,
+  "total": 151,
+  "failed": [
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the pure function refuses at 0 plies",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — through the MERGED loop at 0 plies: the refusal is shown, nothing changes, zero extra derives",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the pure function refuses at exactly 1 ply (human Black, the engine has opened)",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — through the MERGED loop at exactly 1 ply (human Black, the engine has opened): the refusal is shown, nothing changes, zero extra derives"
+  ],
+  "probeRed": 0,
+  "probeFails": []
+ },
+ {
+  "name": "Q7 refusal wording drift",
+  "testRowsRed": 5,
+  "total": 151,
+  "failed": [
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the pure function refuses at 0 plies",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — through the MERGED loop at 0 plies: the refusal is shown, nothing changes, zero extra derives",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — the pure function refuses at exactly 1 ply (human Black, the engine has opened)",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A2 — through the MERGED loop at exactly 1 ply (human Black, the engine has opened): the refusal is shown, nothing changes, zero extra derives",
+   "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A3 — repeatable: three `undo`s from ply 6 land on the start position exactly, and a fourth is refused"
+  ],
+  "probeRed": 9,
+  "probeFails": [
+   "S1 0-ply undo refused, nothing changed, next frame carries the refusal",
+   "S1 undo at 0 after a successful undo: refused",
+   "S1 fourth undo at the floor: refused",
+   "S2 1-ply undo (human Black, engine opened): refused, nothing changed",
+   "S2 undo at 1 after a take-back: refused",
+   "S2 undo ×2 from 5 to the floor, third refused"
+  ]
+ },
+ {
+  "name": "Q8 undo row moved FIRST in the table (help order changes)",
+  "testRowsRed": 0,
+  "total": 151,
+  "failed": [],
+  "probeRed": 1,
+  "probeFails": [
+   "S8 help order (= table order) is help board quit claim resign new undo"
+  ]
+ }
+]
