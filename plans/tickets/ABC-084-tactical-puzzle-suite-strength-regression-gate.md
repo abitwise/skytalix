@@ -299,3 +299,19 @@ restated here.
   54 / 31 / 24. The median is under 650 and run 1 is over. Nothing was trimmed.
 - **Found:** two of ABC-079's rows start in check (observation `…26f28829`). They are reported, not
   changed.
+
+## Security/NFR
+
+**2026-10-09, Security/NFR** (task `wave-2026-09-25`, subtask `secnfr-ABC-084`, Workflow 05).
+Reviewed `7b54dae..e426e91 -- src`; ASVS L1, block on `high`. **Result: PASS_WITH_RISKS.** Notes
+are in `.grugops/context/secnfr-ABC-084/notes/` (`…c3a91e57` decision, `…7f3b2d61` readings,
+`…5e1c0a84` security) and are not restated here.
+
+| item | reading | disposition |
+|---|---|---|
+| `N8-LANE` ≤ 650 ms net | **+85 / +210 ms** on two admissible sessions (nulls +0.62 / +1.42 %, load1 median about 7.5). A third session was inadmissible (null 1.64 %). The file alone costs **+280 ms**, 12/12 | **MET** |
+| `A6` oracle → `PUZZLE_DEEP` | It would save about 195 ms. `A6` would lose the default lane's only rules-only proof of the mate keys | **Not required; keep it in the default lane** |
+| `A5` ≤ 60 s | 12.5 / 12.7 s at load1 ≈ 7. 48.9 s at 36–49. 79.4 s at 49–54. `A3` 49.3 s at 54–61 | **MET** at the recorded conditions |
+| **`F1`** (MEDIUM) | The gate row's 60 s vitest timeout went **red with 40/40 solved** at load1 49–54. Under option B that red is a QE FAIL | **Required fix, non-blocking.** Make the timeout a hang guard (300 s), drop "in <= 60 s" from the row name, and keep `A5` as the printed and recorded reading. If not taken, `AR-PUZZLE-TIMEOUT` waits on Olger Oeselg's word |
+| `NFR-008` total | Base lane 24.9–26.0 s CPU on Node v26.11.0. This ticket adds +0.25–0.37 s gross | Reported to Architect/Design (`ADR-0019`), not ruled |
+| Security | Static data, one fixed-path read of a checked-in file, no production importer, no dependency | **No finding** |

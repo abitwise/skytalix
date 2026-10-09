@@ -1,0 +1,23 @@
+# PUZZLE_DEEP=1, arm A, three concurrent lane loops. start 22:32:08Z load {48.87 22.49 14.45}; after {53.64 30.34 18.17}. The gate row fails on the 60 s TIMEOUT with 40/40 solved.
+PUZZLES shipped: solved 40/40, baseline 40/40, budget 25 step 1, wall 79.40 s
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > holds >= 40 puzzles: >= 10 mate-in-2, >= 6 win-material, >= 20 do-not-hang 1ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > every row names its source and its moves are legal; no added row starts in check 6ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2  304ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > the do-not-hang class starts with ABC-079's 24 rows, and ABC-079 still reads exactly those 24 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0.049: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 2, step 0.001: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step NaN: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > the bound itself (step = budgetMs / 1 000) is accepted and searches 0ms
+   × the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline, in <= 60 s (A5) 79506ms
+     → Test timed out in 60000ms.
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > A1 — every mate in 2 is found (10/10 or better) 0ms
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > A2 — the losing move is not played in >= 19 of 20 do-not-hang rows 0ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline, in <= 60 s (A5)
+Error: Test timed out in 60000ms.
+ Test Files  1 failed (1)
+      Tests  1 failed | 11 passed (12)
+real 81.43
+user 33.38
+sys 0.84
