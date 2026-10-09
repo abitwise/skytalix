@@ -402,3 +402,28 @@ live in `.grugops/context/qe-ABC-082/` (notes and `probe/`) and are not restated
 **`ABC-082` may leave `In Review` toward Security/NFR. It does not go toward merge until the owner
 accepts `ADR-0028`, or refuses it and `873911d` is reverted, which re-blocks the ticket on row 17.
 The board move is the Orchestrator's.**
+
+## Security/NFR 2026-10-09 (`secnfr-ABC-082`, Workflow 05 Security/NFR step, ASVS L1, block on high): PASS_WITH_RISKS
+
+Reviewed `5ebe1d8..873911d -- src` (one production file, `src/evaluate.ts`). The gate was re-run green at `873911d`:
+`npm test` 49 / 1 504 / 0 skipped, lint 0, typecheck 0, build 0, integrity `No findings.`.
+**No security finding. No required fix.** One LOW risk is proposed for the owner. **It is not accepted
+by this gate, and the recommendation is no merge before the owner's word.** The figures live in
+`.grugops/context/secnfr-ABC-082/notes/` (decision `…c04abe30`).
+
+- **`NFR-005` floor (depth 6) MET:** 64 / 64 plain-node runs, two sessions of 8 rounds, fresh process
+  per run, base and branch alternating (load1 2.7–17.5 and 3.8–4.6).
+- **`NFR-005` depth 7, kiwipete: WARN (LOW), for the owner: `AR-NFR005-082` drafted.**
+  - Reached 15 / 16 here and 1 / 3 at the build. Base was 15 / 16 here.
+  - The misses come at load spikes.
+  - Nodes to complete depth 7 went **532 363 → 610 179 (+14.6%)**. That is deterministic, and two instruments agree.
+  - The depth-7 margin fell from about 1.2x to **1.05–1.12x**.
+  - Position-6 reached 16 / 16, margin 1.39–1.43x.
+  - Trigger: `ABC-083` repeats the read.
+- **`A6` MET:** 357.8–366.1 ns mean, worst cell 465.0 ns (load1 3.6–4.1), against ≤ 1 100.
+- **`N8-LANE` MET:** +0.13 / +0.14 s gross, ≈ 0 net, with admissible nulls (load1 13–23).
+- **`NFR-008` second order:** +0.76 / +0.84 s CPU, reported and not ruled. The absolute base
+  total is flagged to `ADR-0019`'s owner as `UNKNOWN - verify`.
+- **`NFR-004`:** 3 000–3 006 ms over 64 runs, inside `AR-NFR004-A`. **`NFR-009`:** not triggered.
+- **Security:** reads are in bounds, loops are bounded, no I/O and no allocation. "Not triggered" is confirmed.
+- **Owner's word owed:** accept, refuse, or re-level for `AR-NFR005-082` (`…c04abe30`). This is separate from `ADR-0028`.
