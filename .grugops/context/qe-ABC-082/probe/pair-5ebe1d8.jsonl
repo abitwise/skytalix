@@ -1,0 +1,4 @@
+{"row":"new  R takes a pawn a bishop defends (+g7)","inCheck":false,"losingLegal":true,"d1":"e1f1","bareD1":"b1b2","d3":"e1f1","bareD3":"e1f1","losingD3":-430,"bestOtherD3":-60,"margin":370}
+{"row":"new  mirror (+g2)","inCheck":false,"losingLegal":true,"d1":"e8f8","bareD1":"b8b7","d3":"e8f8","bareD3":"e8f8","losingD3":-430,"bestOtherD3":-60,"margin":370}
+{"row":"old  R takes a pawn a bishop defends","inCheck":false,"losingLegal":true,"d1":"e1f1","bareD1":"b1b2","d3":"e1f1","bareD3":"e1f1","losingD3":0,"bestOtherD3":50,"margin":50}
+{"row":"old  mirror","inCheck":false,"losingLegal":true,"d1":"e8f8","bareD1":"b8b7","d3":"e8f8","bareD3":"e8f8","losingD3":0,"bestOtherD3":50,"margin":50}
