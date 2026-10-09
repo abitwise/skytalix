@@ -145,10 +145,13 @@ decided there or here)*:
 
 ## Dependencies
 
-- **`ABC-078` must land first — OPEN.** Budgets need the deepening loop.
-- **`ABC-086` must land first — OPEN.** *(Re-pointed 2026-10-09.)* `A7`, `A9` and `A10` run on its
-  virtual clock (deterministic mode). The seed is no longer `ABC-086`'s: it is this ticket's own.
-- **`ABC-084` must land first — OPEN.** `A3` uses its puzzle suite.
+- ~~**`ABC-078` must land first — OPEN.**~~ **`ABC-078` — `Done`** (status corrected 2026-10-09,
+  `cut-followups-2026-10-09`). Budgets need the deepening loop, and it exists.
+- ~~**`ABC-086` must land first — OPEN.**~~ **`ABC-086` — `Done`** (merged `3f26e21`; status
+  corrected 2026-10-09). *(Re-pointed 2026-10-09.)* `A7`, `A9` and `A10` run on its virtual clock
+  (deterministic mode). The seed is no longer `ABC-086`'s: it is this ticket's own.
+- **`ABC-084` must land first — OPEN (In Development at `7b54dae`).** `A3` uses its puzzle
+  suite.
 - **Architect/Design's ruling on the blunder construction — OPEN.** Named above; not resolved here.
 - **`EPIC-006` consumes this table.** *(Cross-epic, and the direction matters: `EPIC-006` reads the
   level names this ticket publishes. **If `EPIC-006`'s decomposition — running concurrently with
@@ -216,6 +219,10 @@ move. It is still 7 of 10, with the same three ⚠️ items.** What the fold tou
 - **Item 10** is widened. The blunder construction must now also answer the PVS-bound fact.
 - **Items 3 and 5 are unchanged by the fold.** Their cells below are as of 2026-08-16 and are not
   refreshed here.
+
+**Status correction, 2026-10-09** (subtask `cut-followups-2026-10-09`). **Not re-scored; still 7
+of 10.** `ABC-078` and `ABC-086` now read `Done` in § Dependencies. Item 3 stays ⚠️, because
+`ABC-084` and the blunder-construction ruling are still open.
 
 Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met; stays in `Backlog`.**
 

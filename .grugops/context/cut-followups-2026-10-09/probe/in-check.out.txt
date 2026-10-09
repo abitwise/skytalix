@@ -1,0 +1,7 @@
+IN CHECK: R takes a bishop a pawn defends | 4k3/8/1p6/b7/8/8/8/R3K3 w - - 0 1
+IN CHECK: mirror: r takes a bishop a pawn defends | r3k3/8/8/8/B7/1P6/8/4K3 b - - 0 1
+corpus rows 24, in check 2
+shipped | check true | capture legal true | legal 5 | q d1 e1f1/95 | bare d1 a1a5/400 | q d3 e1f1/85 | bare d3 e1f1/100
+shipped mirror | check true | capture legal true | legal 5 | q d1 e8f8/95 | bare d1 a8a4/400 | q d3 e8f8/85 | bare d3 e8f8/100
+candidate K f1 | check false | capture legal true | legal 12 | q d1 f1g1/115 | bare d1 a1a5/410 | q d3 a1b1/105 | bare d3 a1b1/175
+candidate mirror K f8 | check false | capture legal true | legal 12 | q d1 f8g8/115 | bare d1 a8a4/410 | q d3 a8b8/105 | bare d3 a8b8/175

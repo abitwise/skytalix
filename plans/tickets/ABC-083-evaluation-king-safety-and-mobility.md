@@ -16,6 +16,12 @@ feature: —
 > is the only evaluation term that calls the move generator, which makes it the only one with a real
 > cost risk — and that risk belongs in one ticket where it can be measured, not spread across
 > three.**
+>
+> **Folded 2026-10-09 by BA/PM** (task `wave-2026-09-25`, subtask `cut-followups-2026-10-09`,
+> Workflow 07). Two criteria were added. `A8` is QE's `ABC-082` gap G-QE-1, the one-sided
+> isolated-pawn check. `A9` is the trigger of the accepted risk `AR-NFR005-082`, put on the page as
+> a criterion. The Dependencies section now records that all three dependencies are `Done`. The
+> routing note is `.grugops/context/cut-followups-2026-10-09/notes/`.
 
 ## Problem
 
@@ -81,19 +87,50 @@ term.**
 - **`A7` (depth does not regress).** **Given** a 3 s budget on `kiwipete` and `position-6`, **then**
   completed depth is **≥** the pre-`ABC-083` build's, same machine, same process. *(A leaf term is
   paid at every leaf; this is the criterion that notices.)*
+- **`A8` (the isolated-pawn neighbour check reads BOTH adjacent files; added 2026-10-09).** This
+  is QE's `ABC-082` gap G-QE-1 (`…9b4e2d61`, mutants `E8`/`E9` in `…5c1e7a20`). **Given**
+  `src/evaluate.pawns.test.ts`, **then** it carries a row in the style of `ABC-082`'s `A3` in which a
+  white pawn's only friendly neighbour stands on **one** adjacent file. There is one such case per
+  side, left and right. **And** with QE's `E8` planted (the isolation check sees only the right-hand
+  file), at least one of those rows is **red**, and likewise with `E9` (left-hand file only). Both
+  are on the default lane of that file, and both rows are green with the mutant removed. The PR
+  note records each mutant run: the command, the exit code and the red row. *(A red only on the
+  class-P exact node pins elsewhere does not count. Those pins move with every evaluator change.)*
+- **`A9` (`AR-NFR005-082`'s trigger, the owner's accepted risk; added 2026-10-09).** **Given**
+  this ticket's build and its base, **then** the PR note carries two readings.
+  - **Plain-node depth.** Repeat `ABC-082` `A6`'s read: `chooseMove` at `DEFAULT_BUDGET_MS` on
+    `kiwipete` and `position-6`, on plain `node`, a fresh process per run, three rounds
+    alternating with the base build, with the machine, the Node version and the 1-minute load
+    recorded.
+  - **Clock-free nodes to depth 7 on `kiwipete`.** Report the cumulative nodes to complete depth
+    7, on base and on branch. The `ABC-082` reading was 532 363 → 610 179.
+
+  **Depth below 6 on either position is FAIL: stop.** If `kiwipete` does not reach depth 7 on an
+  uncontended reference machine, **stop and report to Security/NFR**. **The owner decides whether
+  depth 7 stays a level** (`AR-NFR005-082`, accepted 2026-10-09, note `…8e3f0b17`). Do not tune
+  around it. *`A7` reads the same runs. A `kiwipete` drop from 7 to 6 reds `A7`, and that drop is
+  exactly this trigger. It is routed here, and `A7` is not re-levelled on this page.*
 
 ## Dependencies
 
-- **`ABC-076` must land first — OPEN.**
-- **`ABC-082` should land first — OPEN.** Not strictly required, but `A5`'s combined-cost bar and
-  `A1`'s shared corpus both assume it; running this first means measuring a bar twice.
-- **`ABC-078` must land first for `A7` — OPEN.** A 3 s budget needs the deepening loop.
+- ~~**`ABC-076` must land first — OPEN.**~~ **`ABC-076` — `Done`** (merged 2026-08-17).
+- ~~**`ABC-082` should land first — OPEN.**~~ **`ABC-082` — `Done`** (accepted 2026-10-09, merged
+  `0de4a93`). `A5`'s combined-cost bar and `A1`'s shared corpus (`src/evaluate.mirror-corpus.ts`)
+  are on the base. Its evaluator reads **357.8–366.1 ns** (Security/NFR, `…c04abe30`), which leaves
+  this ticket roughly 735 ns of `A5`'s 1,100.
+- ~~**`ABC-078` must land first for `A7` — OPEN.**~~ **`ABC-078` — `Done`.** The deepening loop
+  exists.
+- **`ABC-084`'s trigger applies.** This ticket changes `src/evaluate*.ts`, so QE runs the puzzle
+  suite at review, and a red result is a QE FAIL (`ABC-084` § The trigger, once it merges).
 
 ## Security / NFR triggers
 
 - **`NFR-005` — this is the ticket most likely to break it.** `A5`'s **≤ 1,100 ns** total leaf cost
   and `A7`'s **non-decreasing completed depth** are both hard bars with a named owner
   (Architect/Design) for the overrun.
+- **`NFR-005`, depth (added 2026-10-09).** `A9` carries `AR-NFR005-082`'s trigger. Depth 6 is the
+  FAIL floor and depth 7 the WARN level (PROVISIONAL), read on plain `node`. Security/NFR
+  adjudicates the reading, and only the owner moves a level.
 - **`NFR-001`** — if mobility calls `legalMoves`, the per-node call count rises. **Report the
   measured calls per leaf**; the existing `gameend.nfr.test.ts` call-count guards must stay green.
 - **`N8-LANE` — ≤ 650 ms CPU.** `A7`'s 3 s runs are **opt-in**, not default lane.
@@ -108,6 +145,16 @@ term.**
 3. **Extend the existing corpus and mirror helper. Third ticket, same helper, no fork.**
 4. **`A4`'s ±100 cp ceiling is a guard, not a target.** Assert the bound and the ordering, not the
    value.
+5. **`A8`: a strict ordering may not separate the mutant** *(added 2026-10-09)*. Under `E8`/`E9`
+   the one-sided pair still scores one isolated pawn fewer than a fully isolated pair at equal
+   material, so "scores higher" can stay green. QE's exact hand row `H20` (`a4` + `b2`, neither
+   isolated, +25) is red under both mutants. A relation that only the isolated term can decide
+   (like `A3`'s `a3`/`g3` row) works too. Prove the row with the mutants; do not rely on reading
+   it.
+6. **`A9` needs a quiet machine** *(added 2026-10-09)*. At a 1.05x margin, load alone moves
+   `kiwipete` across depth 7 (Security/NFR read it lost under a spike on base too). Record the load
+   with every round. The nodes-to-depth-7 read does not depend on the clock, so it is the number
+   that does not move with load.
 
 ## Size and priority rationale
 
@@ -120,6 +167,20 @@ hard-stop criteria does not make a ticket bigger, it makes it honest.
 **Priority `P1`.** Same reason as `ABC-082`: the engine plays sound chess without it.
 
 ## Definition of Ready
+
+**Fold re-read, 2026-10-09** (subtask `cut-followups-2026-10-09`, wave tip `7b54dae`). This hop
+re-read the items the fold touched. **Result: 9 of 10, 1 ⚠️, NOT met; stays in `Backlog`.**
+- **Item 3, ⚠️ → ✅.** All three dependencies are `Done` (§ Dependencies), so the ticket is
+  independent.
+- **Item 4 stays ✅.** It now has nine criteria. `A8` is a mutant-kill check, red under `E8` and
+  under `E9`. `A9` repeats the depth read with a FAIL at depth 6 and an owner stop at depth 7.
+- **Item 5 stays ✅.** `ABC-084`'s trigger is now named.
+- **Item 6 stays ✅,** and now covers `NFR-005` depth.
+- **Item 7 stays ✅,** with six test notes.
+- **Item 10 stays ⚠️, and it is wider now.** It is still unknown whether mobility is affordable.
+  `AR-NFR005-082` adds a second likely stop: at a 1.05x margin, `kiwipete` depth 7 will very likely
+  be lost. Both stops are written as criteria (`A5`, `A9`) with named owners. Neither fallback is
+  decided in advance.
 
 Assessed by BA/PM, **2026-08-16**. **Result: 8 of 10 clean, 2 ⚠️ — NOT met; stays in `Backlog`.**
 
