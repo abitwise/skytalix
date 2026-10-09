@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-084` `In Development` → `In Review` at `e426e91`; QE, Security/NFR (`N8-LANE` ruling) and the Scribe (`A8` line) dispatched in parallel._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — **`ABC-125` → `Done` under the zero-production-lines UAT waiver** (measured empty; merged `99fb7ad`; gates green 1531/1531); local `main` fast-forwarded (no remote). `ABC-085` now has `ABC-125` behind it. Running: `ABC-084` build._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-125` `In Development` → `In Review` at `ca3ca0f`; QE dispatched._
@@ -461,10 +463,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-
-
-- [ABC-084] Tactical puzzle suite as a strength regression gate  (EPIC-004, M, P0, **DoR 10/10, 0 ⚠️ — re-scored 2026-10-09 by BA/PM at `0ebe63f` (`fold-abc084-gate-b`) on the owner's option B** (QE runs it at review on engine-touching tickets; red = QE FAIL); deterministic mode per `ADR-0027`; shared corpus extended, not forked; pulled by the Orchestrator; Engineer `ticket-to-pr-ABC-084` on `grugops/ABC-084-puzzle-suite`)
+## In Development (WIP 0/3)
 
 
 
@@ -481,7 +480,11 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+
+
+## In Review (WIP 1/3)
+
+- [ABC-084] Tactical puzzle suite as a strength regression gate  (EPIC-004, M, P0, **DoR 10/10, 0 ⚠️ — re-scored 2026-10-09 by BA/PM at `0ebe63f` (`fold-abc084-gate-b`) on the owner's option B** (QE runs it at review on engine-touching tickets; red = QE FAIL); deterministic mode per `ADR-0027`; shared corpus extended, not forked; pulled by the Orchestrator; BUILT `b3321f0` (+ baseline `a287461`, docs `e426e91`) on `grugops/ABC-084-puzzle-suite` — gates 1539/1539; suite 40/40 ×3 processes identical; weakened engine 10/40 exit 1; baseline 40/40 @ budget 25; `N8-LANE` readings disagree (+790 @ load 54 / +400 / +120) → Security/NFR rules; QE + Security/NFR + Scribe (`A8` line) dispatched. **UAT waiver does NOT apply** (`src/puzzle-corpus.ts`, baseline JSON are non-test `src/` files) → owner acceptance owed)
 
 
 
