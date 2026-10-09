@@ -121,3 +121,22 @@ MET.** The page is left at `Backlog`; the `Ready` move is the Orchestrator's on 
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P1`, with the reason |
 | 10 | no major unresolved blocker | **✅** none: the expected value is measured, and the mutant and runner exist |
+
+## Delivery
+
+**2026-10-09, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-125`).
+Branch `grugops/ABC-125-two-clocks` from `928c83b`, code in `6a25164`. Not merged, not pushed.
+Readings and raw files: `.grugops/context/ticket-to-pr-ABC-125/notes/`.
+
+**Criteria: 3 of 3 met.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | One default-lane row in the `ABC-086 A6` describe: `[0, 0, 1, 0.5, 2, 1]` by `toEqual`, 0 ms |
+| `A2` | MET | `M5` planted in the shipped module: `npx vitest run src/engine.test.ts` exit 1, 1 failed / 32 passed, this row red (received `[0, 0, 0.5, 0.5, 1, 1]`). Reverted: exit 0, 33 passed. `src/` status afterwards: `src/engine.test.ts` only |
+| `A3` | MET | numstat `src/engine.test.ts` +8/−0 only; `src/virtual-clock.ts` byte-identical. Lint, typecheck, build exit 0; `npm test` 49 files / 1531 passed / 0 skipped; integrity `No findings.` |
+
+**`N8-LANE`: −350 ms net (−0.97 %, sign 4/8), MET.** Null −0.40 %, 4/8, so the run is
+admissible. 0 new files. M3 under load1 24–45.
+
+**Owed:** the QE hop, the `In Review` move (Orchestrator) and the merge.

@@ -1,0 +1,22 @@
+diff --git a/src/virtual-clock.ts b/src/virtual-clock.ts
+index 22e3ffd..90fa5d6 100644
+--- a/src/virtual-clock.ts
++++ b/src/virtual-clock.ts
+@@ -24,14 +24,16 @@ import type { Clock } from "./engine.ts";
+  * deepening loop terminate (the `Clock` contract), so a harness typo must fail loudly rather
+  * than hang. A fractional step is allowed.
+  */
++let sharedStep = 1;
+ export function virtualClock(stepMs: number): Clock {
+   if (!(Number.isFinite(stepMs) && stepMs > 0)) {
+     throw new RangeError(`virtualClock: step must be finite and > 0, got ${stepMs}`);
+   }
++  sharedStep = stepMs;
+   let reading = 0;
+   return () => {
+     const current = reading;
+-    reading += stepMs;
++    reading += sharedStep;
+     return current;
+   };
+ }

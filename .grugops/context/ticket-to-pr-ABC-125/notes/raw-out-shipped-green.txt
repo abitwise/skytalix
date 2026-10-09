@@ -1,0 +1,11 @@
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-125-two-clocks
+
+ ✓ src/engine.test.ts (33 tests) 416ms
+
+ Test Files  1 passed (1)
+      Tests  33 passed (33)
+   Start at  00:20:43
+   Duration  2.11s (transform 119ms, setup 0ms, collect 1.53s, tests 416ms, environment 0ms, prepare 54ms)
+
+exit=0
