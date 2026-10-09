@@ -1,0 +1,75 @@
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-125-two-clocks
+
+ ❯ src/engine.test.ts (33 tests | 1 failed) 442ms
+   ✓ A2 — a budget far below one iteration's cost still returns a move, and stops near it > returns a legal move at a 50 ms budget in the middlegame position 1ms
+   ✓ A2 — a budget far below one iteration's cost still returns a move, and stops near it > stops within 2x the budget on the clock it was given 0ms
+   ✓ A2 — a budget far below one iteration's cost still returns a move, and stops near it > visits only a bounded number of nodes past the deadline — the in-recursion check 0ms
+   ✓ A3 — an aborted iteration's move is discarded, not returned > aborts INSIDE depth 3 — the run really did enter the iteration it discards 10ms
+   ✓ A3 — an aborted iteration's move is discarded, not returned > returns the completed depth-2 move, which is NOT the depth-3 move 5ms
+   ✓ A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames 192ms
+   ✓ A4 — no fixed depth anywhere in the delivered engine > reads the delivered module — src/engine.ts, not nothing 0ms
+   ✓ A4 — no fixed depth anywhere in the delivered engine > exports the two entry points and the two named values, and nothing that takes a depth 0ms
+   ✓ A4 — no fixed depth anywhere in the delivered engine > takes a TIME budget, in milliseconds, and requires it 0ms
+   ✓ A4 — no fixed depth anywhere in the delivered engine > carries no depth default and no depth constant 0ms
+   ✓ A4 — no fixed depth anywhere in the delivered engine > is driven by the clock and not by a ceiling — the deepening loop has no upper bound 0ms
+   ✓ A4 — no fixed depth anywhere in the delivered engine > goes DEEPER than any small hard-coded ceiling would allow — the behavioural half 67ms
+   ✓ RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > names the ceiling as an exported constant 0ms
+   ✓ RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > stops at start + HARD_CEILING_MS when handed twice that budget 3ms
+   ✓ RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > makes any budget above the ceiling indistinguishable from the ceiling itself 6ms
+   ✓ RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > terminates on an infinite budget — the module's only unbounded path, closed 6ms
+   ✓ RF-1 — a budget above the hard ceiling is CAPPED at it, not honoured > leaves every degenerate budget exactly as it was — Math.min, not an if 2ms
+   ✓ A5 — the completed depth is monotonically non-decreasing in the budget > never goes shallower as the budget grows 0ms
+   ✓ A5 — the completed depth is monotonically non-decreasing in the budget > actually goes deeper somewhere across the three budgets 0ms
+   ✓ A6 — the implementation IS an EngineSeam, and runTurnLoop drives it > is assignable to EngineSeam and answers with a Promise<Move> 3ms
+   ✓ A6 — the implementation IS an EngineSeam, and runTurnLoop drives it > plays a scripted game to end-of-input with the loop driving it 11ms
+   ✓ A7 — a legal move comes back at a budget with nothing left in it > covers 200+ positions — the denominator, asserted rather than trusted 0ms
+   ✓ A7 — a legal move comes back at a budget with nothing left in it > returns a legal move in every one of them — never null, never a throw 0ms
+   ✓ A7 — a legal move comes back at a budget with nothing left in it > leaves every searched position byte-identical, aborted iteration or not 0ms
+   ✓ ABC-086 A1 — the same position, budget and fresh virtual clock choose the same move > is identical 2/2 on 15 positions, each completing root depth >= 2 — 30/30, 15/15 127ms
+   ✓ ABC-086 A5 — the virtual clock stays off the shipped path > (i) the shipped construction passes a budget and no clock 0ms
+   ✓ ABC-086 A5 — the virtual clock stays off the shipped path > (ii) src/cli.ts does not import the virtual-clock module, directly or transitively 3ms
+   ✓ ABC-086 A6 — each virtual clock keeps its own state > keeps each clock's state in its own instance — a second clock starts at 0 0ms
+   × ABC-086 A6 — each virtual clock keeps its own state > keeps each clock's own step — two live clocks at steps 1 and 0.5, read interleaved (ABC-125) 5ms
+     → expected [ +0, +0, 0.5, 0.5, 1, 1 ] to deeply equal [ +0, +0, 1, 0.5, 2, 1 ]
+   ✓ ABC-086 A7 — the step guard and the reading shape, asserted at the factory > throws on a step that is not finite or not greater than 0 — 5/5 0ms
+   ✓ ABC-086 A7 — the step guard and the reading shape, asserted at the factory > reads exactly 0, 0.5, 1 at a step of 0.5 0ms
+   ✓ ABC-086 A7 — the step guard and the reading shape, asserted at the factory > reads exactly 0, 1, 2 at a step of 1 0ms
+   ✓ ABC-086 A4 — the virtual-clock module reads no real clock and no entropy > carries no real-clock read and no entropy source 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine.test.ts > ABC-086 A6 — each virtual clock keeps its own state > keeps each clock's own step — two live clocks at steps 1 and 0.5, read interleaved (ABC-125)
+AssertionError: expected [ +0, +0, 0.5, 0.5, 1, 1 ] to deeply equal [ +0, +0, 1, 0.5, 2, 1 ]
+
+- Expected
++ Received
+
+  [
+    0,
+    0,
+-   1,
+    0.5,
+-   2,
++   0.5,
++   1,
+    1,
+  ]
+
+ ❯ src/engine.test.ts:896:44
+    894|     const a = virtualClock(1);
+    895|     const b = virtualClock(0.5);
+    896|     expect([a(), b(), a(), b(), a(), b()]).toEqual([0, 0, 1, 0.5, 2, 1…
+       |                                            ^
+    897|   });
+    898| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 32 passed (33)
+   Start at  00:20:35
+   Duration  2.01s (transform 118ms, setup 0ms, collect 1.43s, tests 442ms, environment 0ms, prepare 45ms)
+
+exit=1

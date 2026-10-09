@@ -1,0 +1,8 @@
+ ✓ src/engine.test.ts (33 tests) 510ms
+ ✓ src/cli.test.ts (66 tests) 28ms
+
+ Test Files  49 passed (49)
+      Tests  1531 passed (1531)
+   Start at  00:21:03
+   Duration  7.52s (transform 1.04s, setup 0ms, collect 10.27s, tests 13.56s, environment 5ms, prepare 2.22s)
+

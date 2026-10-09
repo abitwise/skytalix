@@ -121,3 +121,44 @@ MET.** The page is left at `Backlog`; the `Ready` move is the Orchestrator's on 
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P1`, with the reason |
 | 10 | no major unresolved blocker | **✅** none: the expected value is measured, and the mutant and runner exist |
+
+## Delivery
+
+**2026-10-09, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-125`).
+Branch `grugops/ABC-125-two-clocks` from `928c83b`, code in `6a25164`. Not merged, not pushed.
+Readings and raw files: `.grugops/context/ticket-to-pr-ABC-125/notes/`.
+
+**Criteria: 3 of 3 met.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | One default-lane row in the `ABC-086 A6` describe: `[0, 0, 1, 0.5, 2, 1]` by `toEqual`, 0 ms |
+| `A2` | MET | `M5` planted in the shipped module: `npx vitest run src/engine.test.ts` exit 1, 1 failed / 32 passed, this row red (received `[0, 0, 0.5, 0.5, 1, 1]`). Reverted: exit 0, 33 passed. `src/` status afterwards: `src/engine.test.ts` only |
+| `A3` | MET | numstat `src/engine.test.ts` +8/−0 only; `src/virtual-clock.ts` byte-identical. Lint, typecheck, build exit 0; `npm test` 49 files / 1531 passed / 0 skipped; integrity `No findings.` |
+
+**`N8-LANE`: −350 ms net (−0.97 %, sign 4/8), MET.** Null −0.40 %, 4/8, so the run is
+admissible. 0 new files. M3 under load1 24–45.
+
+**Owed:** the QE hop, the `In Review` move (Orchestrator) and the merge.
+
+## § QE — 2026-10-09 (QE/E2E, task `wave-2026-09-25`, subtask `qe-ABC-125`, Workflow 05)
+
+**PASS** at `ca3ca0f`. QE re-ran every criterion in its own worktree. The verdict and the readings are in
+`.grugops/context/qe-ABC-125/notes/` (`…285261fb` decision, `…ed9e7ff5` observation). Probes are in
+`probe/`.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | Default-lane row, `toEqual([0,0,1,0.5,2,1])`. Green in the whole file (33/33) and when run alone |
+| `A2` | MET | QE re-planted `M5`: exit 1, this row red (`[0,0,0.5,0.5,1,1]`). Reverted: exit 0. `src/` clean |
+| `A3` | MET | numstat `src/engine.test.ts` +8/−0 only; `virtual-clock.ts` byte-identical. lint, typecheck, build exit 0; `npm test` 49 / 1531 / 0 skipped; integrity `No findings.` |
+
+**Mutants, 5 of 5 red:** `M5` (last call wins), `M5b` (first call wins, which closes the build's
+`UNKNOWN - verify`), `Q1` (shared reading counter, per-clock step), `Q2` (shared reading reset per
+factory) and `Q3` (step captured at first read). `M5` and `Q3` are killed by this row only. **`toEqual` is
+exact**, and safe here because 1 and 0.5 are dyadic.
+
+**Gaps, advisory:** QE-125-a: a non-dyadic step (0.1) breaks exact equality, so `ABC-085`/`ABC-087` rows
+should keep dyadic steps or use `toBeCloseTo`. QE-125-b: the row never calls the factory between reads of a
+clock that is already live; no surviving mutant was found for that shape. QE did not re-run the
+`N8-LANE` timing (the row takes ≈ 0 ms).
