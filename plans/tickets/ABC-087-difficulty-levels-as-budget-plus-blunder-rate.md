@@ -24,6 +24,13 @@ feature: —
 > already consistent with merged code: `src/turn-loop.ts` takes a **resolved** `humanColour` and the
 > architecture audit's entry-point table lists *"the resolved colour, difficulty, flags"* as
 > `EPIC-006`'s **new** work.
+>
+> **Folded 2026-10-09 by BA/PM** (task `wave-2026-09-25`, subtask `fold-abc086-adr0027`) from the
+> accepted `ADR-0027` (list `…f3caccd1`). **The seed moved here from `ABC-086`:** the seed bullet in
+> Scope, `A9` (formerly `ABC-086` `A3`), `A10` (the seed half of `ABC-086` `A6`), test notes 5–6,
+> and the generator's limits. The PVS-bound fact is carried into § The design question. `A7` is
+> re-pointed, and the size is re-estimated. **The DoR was not re-scored and did not move** (see
+> § Definition of Ready).
 
 ## Problem
 
@@ -43,7 +50,15 @@ level*, not about maximum strength.
   *easiest* — `ABC-085` `A1` requires the endpoints to be named).
 - Each level is **data**: a per-move time budget and a blunder rate.
 - The **blunder mechanism**: with probability *p*, play a move that is not the best — chosen from
-  the searched move list, **seeded** per `ABC-086`.
+  the searched move list, **seeded here** (next bullet).
+- **The seed** *(moved from `ABC-086` 2026-10-09)*. An injected seed drives every random choice:
+  this ticket's blunder draw, and `ABC-085`'s seeded opening choice, which reuses the same
+  generator. The generator's limits come from `ADR-0027` decision 2, and its shape is this
+  ticket's to choose within them:
+  - it is a small seeded generator with **no new dependency**;
+  - its state is **per instance and passed in, never module-level**;
+  - it lives outside `src/engine.ts` and `src/search.ts`, which hold no PRNG and no seed
+    (decision 1).
 - The **default level's budget is 3 s** — `NFR-004`, and `NFR-005`'s levels are defined "at default
   difficulty", so the default is what those bars measure.
 
@@ -56,6 +71,10 @@ level*, not about maximum strength.
 - **Elo calibration of the levels.** `UNKNOWN - verify` per the epic. Levels are **relatively**
   ordered (`ABC-085` `A2`); no level claims an Elo number.
 - **Verifying the ladder.** `ABC-085`. This ticket defines levels; that one proves they are ordered.
+- **Choosing the PRNG.** Any small seeded generator will do, and the choice is not worth a ticket.
+  *(Moved from `ABC-086`.)*
+- **Seeding the engine's own tie breaking.** `ADR-0027` decision 1 ruled it out by measurement.
+  The seed reaches the blunder draw, never the search.
 
 ## The design question I am NOT answering
 
@@ -65,6 +84,22 @@ satisfied by a uniform blunder draw.** A uniform random blunder occasionally thr
 epic's "without being random" wording is a strength-design decision. Owner: Architect/Design.** `A3`
 is written so either construction can satisfy it, and `A4` is the criterion that would catch the
 degenerate version. **I have not picked one.**
+
+**The PVS fact either construction meets** *(carried from `ADR-0027` Consequences 2026-10-09; not
+decided there or here)*:
+
+- Under PVS, only the first root move gets an exact score. **Every root move after the first has
+  only a bound** (`src/engine.ts:320-331`), so a move that ties or trails the best fails low and
+  looks the same as a worse one.
+- **The root therefore does not hold the scores a blunder draw needs.** Picking "the *n*-th best",
+  or obeying `A4`'s "never the worst-scoring move", both need per-move scores.
+- **Widening the root window to get those scores is the change `ADR-0027` measured and rejected
+  for tie breaking.** With LMR on it is value-changing, and it costs +3.3–5.2% nodes. A
+  construction that does it falls under `ADR-0026` decision 10: a switch, doors and a bounded
+  oracle.
+- **A construction that scores candidate moves separately**, without touching the root search,
+  avoids that. But it spends nodes from the same per-move budget (`NFR-004`).
+- **Owner: Architect/Design**, as part of this section's open question.
 
 ## Acceptance (Given/When/Then)
 
@@ -87,17 +122,32 @@ degenerate version. **I have not picked one.**
   **any** difficulty, and "hardest" is where it is most likely to be broken.)*
 - **`A6` (the default is the 3 s level).** **Then** the default level's budget is **3 s**, and
   `NFR-005`'s depth measurements on `kiwipete` and `position-6` are taken at that level.
-- **`A7` (seeded, per `ABC-086`).** **Given** a fixed seed and deterministic mode, **then** the
-  blunder decisions are identical across runs — consumed from `ABC-086`, not re-implemented.
+- **`A7` (seeded, in deterministic mode).** **Given** a fixed seed and deterministic mode, **then**
+  the blunder decisions are identical across runs. *(Re-pointed 2026-10-09.)* Deterministic mode is
+  `ABC-086`'s virtual clock, consumed and not re-implemented. The seed is this ticket's own.
 - **`A8` (no user interface — the epic boundary as a criterion).** **Then** `git diff --numstat`
   shows **no change to `src/cli.ts`, `src/cli-options.ts` or `src/turn-loop.ts`**, and the delivered
   diff contains **no argv parsing and no prompt string**. *(The boundary is asserted, not trusted —
   which is what the last decomposition hop's rewrite was about.)*
+- **`A9` (different seeds actually differ)** *(moved from `ABC-086` `A3`, 2026-10-09, re-aimed at
+  the blunder draw)*. **Given** the easiest level, deterministic mode and the same **≥ 30**
+  positions, **when** they are played under **≥ 5** different seeds, **then** at least two seeds
+  produce different blunder-decision sequences. A blunder-decision sequence is, per position,
+  whether a blunder was played and which move it was. *(A "seeded" draw that ignores its seed passes
+  `A7` perfectly.)* No tie fixture is needed: the draw is random by design.
+- **`A10` (the seed is threaded, not global)** *(the seed half of `ABC-086` `A6`, moved
+  2026-10-09)*. **Given** two level instances with **different seeds**, each with its own virtual
+  clock, **when** they are called interleaved in one process (A, B, A, B, …) over **≥ 10**
+  positions, **then** each instance's played moves are identical to the same instance run alone:
+  **10/10 for each.** The generator's state lives in the instance and is passed in, never held at
+  module level (`ADR-0027` decision 2). This is asserted because `ABC-085`'s ladder runs exactly
+  that configuration.
 
 ## Dependencies
 
 - **`ABC-078` must land first — OPEN.** Budgets need the deepening loop.
-- **`ABC-086` must land first — OPEN.** `A7` consumes its seed.
+- **`ABC-086` must land first — OPEN.** *(Re-pointed 2026-10-09.)* `A7`, `A9` and `A10` run on its
+  virtual clock (deterministic mode). The seed is no longer `ABC-086`'s: it is this ticket's own.
 - **`ABC-084` must land first — OPEN.** `A3` uses its puzzle suite.
 - **Architect/Design's ruling on the blunder construction — OPEN.** Named above; not resolved here.
 - **`EPIC-006` consumes this table.** *(Cross-epic, and the direction matters: `EPIC-006` reads the
@@ -112,7 +162,9 @@ degenerate version. **I have not picked one.**
 - **`NFR-005` — `A6` fixes the level the depth bars are measured at.** Without it "default
   difficulty" in `NFR-005`'s target has no referent.
 - **`N8-LANE` — ≤ 650 ms CPU.** `A2`/`A5`'s wall-clock runs are **opt-in**; `A1`, `A4`, `A7` and
-  `A8` are fast and machine-independent and stay in the default lane.
+  `A8` are fast and machine-independent and stay in the default lane. *(2026-10-09.)* `A9` and
+  `A10` also run on the virtual clock and are machine-independent. Their CPU is measured against
+  the bar, not assumed: `A9` alone is ≥ 150 searches.
 - **Security — not triggered.** No input surface — `A8` guarantees it, since the only surface would
   be the argv parsing this ticket is forbidden to add.
 
@@ -123,15 +175,31 @@ degenerate version. **I have not picked one.**
 2. **`A4`'s "never the worst move" is the one that means something.** A blunder rate alone is
    satisfiable by an engine that occasionally plays a random legal move, which is exactly what the
    epic says not to build.
-3. **`A2`'s ±20% must use the injected clock** from `ABC-086`, or it becomes a load-sensitive test.
+3. **`A2`'s ±20% must use the injected clock** (`ABC-086`'s virtual-clock module), or it becomes a
+   load-sensitive test.
 4. **Do not tune the levels to make `ABC-085` `A1` pass.** That is measuring the ruler with the
    thing it measures; if the ladder does not reach 90%, report it.
+5. **`A9` before `A7`** *(moved from `ABC-086`)*. A draw that ignores its seed passes `A7` trivially.
+6. **Do not add a PRNG dependency** *(moved from `ABC-086`)*. A dozen lines of xorshift is enough,
+   and `AGENTS.md` says not to add dependencies without reason.
 
 ## Size and priority rationale
 
-**Size `M` (3).** A level table, a blunder draw wired to an existing seed, and eight criteria of
-which three are boundary or NFR guards. **Not `L`:** the budget plumbing is `ABC-078`'s, the seed is
-`ABC-086`'s, and the verification is `ABC-084`'s and `ABC-085`'s.
+**Size `M` (3).** A level table, a blunder draw ~~wired to an existing seed~~ *with its own seed
+(2026-10-09)*, and ~~eight~~ ten criteria, of which three are boundary or NFR guards. **Not `L`:**
+the budget plumbing is `ABC-078`'s, ~~the seed is `ABC-086`'s~~ deterministic mode is `ABC-086`'s,
+and the verification is `ABC-084`'s and `ABC-085`'s.
+
+*(Re-estimated 2026-10-09, after the seed moved here.)* **`M` (3) holds, and it is now conditional.**
+
+- **What the seed adds is small.** The generator is about a dozen lines, plus `A9`, `A10` and two
+  test notes. That alone stays within `M`.
+- **What can move the size is the PVS fact** (§ The design question).
+  - If Architect/Design's construction scores candidate moves without touching the root search,
+    the size stays `M`.
+  - If the construction changes the root search, it is a switch, doors and an oracle under
+    `ADR-0026` decision 10. The size is then re-estimated at that point, and likely `L`. It is not
+    guessed now.
 
 **Not `XL`. No `SPLIT_REQUIRED`.**
 
@@ -139,6 +207,15 @@ which three are boundary or NFR guards. **Not `L`:** the budget plumbing is `ABC
 tickets. **It is a hard blocker for `ABC-085`**, which is also `P1`, so the pair is consistent.
 
 ## Definition of Ready
+
+**Fold note, 2026-10-09** (subtask `fold-abc086-adr0027`): **not re-scored, and the score did not
+move. It is still 7 of 10, with the same three ⚠️ items.** What the fold touched:
+
+- **Item 4** gains `A9` and `A10`, and `A7` is re-pointed. It stays ✅.
+- **Item 8:** `M` is now conditional on item 10 (§ Size).
+- **Item 10** is widened. The blunder construction must now also answer the PVS-bound fact.
+- **Items 3 and 5 are unchanged by the fold.** Their cells below are as of 2026-08-16 and are not
+  refreshed here.
 
 Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met; stays in `Backlog`.**
 

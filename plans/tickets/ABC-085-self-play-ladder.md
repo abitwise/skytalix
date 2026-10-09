@@ -44,7 +44,8 @@ at least 90%."*
 - **Playing an external engine** (Stockfish, UCI). The epic's **permanent non-goal**.
 - **Opening variety via an opening book.** **The book is `EPIC-005`'s and is not cut here.**
   Openings are diversified by a seeded random choice among the first few plies — see `A5` — which is
-  a test-harness concern, not a book. **If `EPIC-005`'s book later changes what the engine plays
+  a test-harness concern, not a book. *(2026-10-09: that choice reuses `ABC-087`'s seeded generator,
+  per `ADR-0027` decision 2. It is not a second PRNG.)* **If `EPIC-005`'s book later changes what the engine plays
   from the start position, this harness's baselines are invalidated and must be re-measured. Named
   as a cross-epic dependency and not resolved.**
 - **Tuning the levels to make the number pass.** If `A1` fails, that is `ABC-087`'s finding.
@@ -68,6 +69,10 @@ at least 90%."*
   and the same build, **when** the ladder runs twice, **then** the game move lists are **identical**
   and the score is **identical**. *(This is also the harness's own opening-diversity mechanism: the
   seed selects among early moves, so games differ from each other and not from run to run.)*
+  *(Re-pointed 2026-10-09 on the accepted `ADR-0027`.)* Both engines run in deterministic mode, each
+  on its **own** instance of `ABC-086`'s virtual clock. The seed, and the generator that both the
+  blunder draws and the opening choice consume, are `ABC-087`'s. This harness consumes both and
+  re-implements neither.
 - **`A6` (cost is reported and the run mode is honest).** **Then** the wall clock for the full
   100-game run at the default budget is reported. **A short mode — fewer games, reduced budget —
   is the one that runs routinely, and the report states which mode produced any quoted number.**
@@ -75,8 +80,10 @@ at least 90%."*
 ## Dependencies
 
 - **`ABC-087` must land first — OPEN.** There are no difficulty levels to ladder without it.
-- **`ABC-086` must land first — OPEN.** `A5`'s seeded reproducibility is that ticket's contract;
-  this one **consumes** it and does not re-implement it.
+  *(2026-10-09.)* It also owns the seed and the seeded generator that `A5` consumes.
+- **`ABC-086` must land first — OPEN.** `A5`'s ~~seeded reproducibility~~ deterministic mode, the
+  virtual clock, is that ticket's contract *(re-pointed 2026-10-09; the seed moved to `ABC-087`)*.
+  This one **consumes** it and does not re-implement it.
 - **`ABC-078`, `ABC-077`, `ABC-076` — OPEN** (transitively).
 - **`src/gameend.ts`, `src/history.ts`, `src/apply.ts`, `src/legal.ts` — MERGED** and used as-is.
 - **`EPIC-005`'s opening book — cross-epic, named and NOT resolved** (see `## Out of scope`).
@@ -118,6 +125,15 @@ overruled on:** if the owner wants the epic's first criterion treated as `P0`, t
 change.
 
 ## Definition of Ready
+
+**Fold note, 2026-10-09** (task `wave-2026-09-25`, subtask `fold-abc086-adr0027`, accepted
+`ADR-0027`, list `…f3caccd1`). **Not re-scored, and the score did not move: still 7 of 10, the same
+three ⚠️.**
+
+- `A5` and Dependencies are re-pointed: the virtual clock is `ABC-086`'s, and the seed and
+  generator are `ABC-087`'s.
+- `A5`'s criterion is unchanged.
+- The ticket still waits on both `ABC-086` and `ABC-087`, so item 3 stays ⚠️.
 
 Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met; stays in `Backlog`.**
 
