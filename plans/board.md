@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` re-cut XS on accepted `ADR-0027`, DoR 10/10 (`28d4e5b`, merged `c910b44`) → `Ready` → `In Development` (1/3); Engineer dispatched. BA/PM follow-ups (unscheduled): `ABC-084` `A4` still says "same seed" (→ deterministic mode); `ABC-087` Dependencies still list `ABC-078` OPEN; `ABC-087`/`ABC-085` stay 7/10._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — **owner's word (note `…5d2a9c74`): `ABC-102` accepted → `Done`, merged `8e49e23`, local `main` fast-forwarded (no remote); `ADR-0027` and `ADR-0028` accepted.** `ABC-086` fold dispatched to BA/PM. Still owed: `ABC-082` acceptance + `AR-NFR005-082`; `ABC-084` gate owner._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` `In Review` → `Ready for UAT` (QE PASS WITH FINDINGS `c802815`, Security/NFR PASS_WITH_RISKS `bf410b0`). **No hop running.** Owed from the owner: `ABC-102` acceptance; `ABC-082` acceptance + `ADR-0028` + `AR-NFR005-082`; `ADR-0027` (unblocks `ABC-086` fold); `ABC-084` gate owner._
@@ -405,7 +407,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-083] Evaluation — king safety and mobility  (EPIC-004, S, P1, DoR 8/10, needs ABC-076/082/078)
 - [ABC-084] Tactical puzzle suite — strength regression gate  (EPIC-004, M, P0, DoR 8/10, needs ABC-078)
 - [ABC-085] Self-play ladder — ≥ 90% over 100 games  (EPIC-004, M, P1, DoR 7/10, needs ABC-087 + ABC-086; ~5 h opt-in run)
-- [ABC-086] Deterministic move selection under a fixed seed  (EPIC-004, S, P0, DoR 8/10, needs ABC-078)
 - [ABC-087] Difficulty levels — mechanism only, choosing is EPIC-006's  (EPIC-004, M, P1, DoR 7/10, needs ABC-078/086/084)
 - [ABC-093] Compile the opening lines into one static, data-only, reproducible book artifact  (BA/PM, M, P1, epic: EPIC-005, since: 2026-08-16, DoR 8/10 ⚠️ HARD-BLOCKED on ABC-092's ADR; ⚠️ format is Architect/Design's at In Design; NFR-006 ≤ 1,048,576 bytes on an instrument that runs TODAY; needs nothing from EPIC-004)
 - [ABC-094] Book probe — lookup, weighted seeded choice, and no crash on a missing or corrupt file  (BA/PM, M, P1, epic: EPIC-005, since: 2026-08-16, DoR 8/10 ⚠️ ordering on ABC-093 only; **the largest thing EPIC-005 can deliver while EPIC-004 is unbuilt**; introduces the project's FIRST production randomness seam — see G4)
@@ -438,7 +439,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-086] Deterministic mode — the shipped engine on a virtual clock  (EPIC-004, **XS** — from S, P0, **DoR 10/10, 0 ⚠️ — folded `ADR-0027` (accepted 2026-10-09) and RE-SCORED by BA/PM at `28d4e5b`**; seed moved to `ABC-087`; pulled 2026-10-09 by the Orchestrator; Engineer `ticket-to-pr-ABC-086` on `grugops/ABC-086-virtual-clock`)
 
 
 
