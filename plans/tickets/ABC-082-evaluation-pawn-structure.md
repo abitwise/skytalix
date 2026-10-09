@@ -326,6 +326,9 @@ from a failure message):
 | 11 | `engine.test.ts` `A2` | 3 666 ≤ 10 240. Bite: `M1` reads 67 176, red | `rows.ts` r11; `mutants.mjs` | default |
 | 12 | `engine.test.ts` `A4` | 4 / 6 / 9 (base 5 / 7 / 10). **The 10-tick reading is at the `≥ 6` bound.** Bite: ceiling-4 red | `rows.ts` r12; `mutants.mjs` | default / `ENGINE_DEEP` |
 | 13 | `transposition.test.ts` `A5` ticks | holds. Bite: repetition-blind (−380) and root-ignores-hash (depth 3) both red | `rows.ts` r13; `mutants.mjs` | default / `SEARCH_DEEP` |
+| 8 (ruled) | `search.pvs-lmr.test.ts` `A4` | **reading (b) upheld** by Architect/Design; the `A4_SEARCH_FEN` hunk stands, nothing changed | ruling `…4fdb96bc` | default |
+| 17 | `transposition.test.ts` `A2` `:384`, `:402` | **≥ 15% → ≥ 10% under `ADR-0028`, PENDING OWNER WORD** (`ADR-0028` proposed). Readings at the branch: position-3 16.22% (ruling), kiwipete 15.63%, position-6 14.46% (re-hop run) | ruling `…8c0fee21`; re-hop `SEARCH_DEEP` run | default / `SEARCH_DEEP` |
+| 21 | `quiescence.test.ts` `A1` `HANGING_CORPUS` `:208`, `:220` | **fixture re-found, level unchanged** (≤ 1/24): "R takes a pawn a bishop defends" + black g7, mirror + white g2. Margins 370 / 280 cp (base / branch). Depth 3 reads **0/24** | `…d25a0383`, `…f0115510`; re-hop `SEARCH_DEEP` run | `SEARCH_DEEP` |
 
 **Class R:** no literal edited. **Two are RED, so the build STOPPED:**
 - **Row 21:** `ABC-079` `A1` at depth 3 reads **2/24** against a level of ≤ 1. The red pair is
@@ -341,3 +344,22 @@ from a failure message):
 2. **QE / Architect/Design:** row 8's `search()`-row re-fixture is a reading (b) over (a).
    Overrule by reverting one hunk (`…7040acad`).
 3. **Security/NFR, then the owner:** `NFR-005`'s kiwipete depth-7 WARN (`…a00b6aaa`).
+
+**Re-hop 2026-10-09 by the Software Engineer** (subtask `ticket-to-pr-ABC-082-rehop`, on the
+ruling `ruling-abc082-levels` at `71b140d`). Two commits, nothing wider:
+- **Commit 1, row 21:** the two `HANGING_CORPUS` FENs swapped as ruled, with a pointer comment.
+  Names, `losing` moves and the level are unchanged.
+- **Commit 2 (the tip), row 17, `test(ABC-081): PENDING OWNER WORD —`:** the two A2 literals
+  `0.15` → `0.1`, the describe text says "at least 10%", and the A2 comments carry the new readings
+  and a pointer to `ADR-0028`. **If the owner refuses `ADR-0028`, revert that one commit;
+  `ABC-082` then stays Blocked on row 17.**
+- **Row 8:** nothing.
+- **Gate (both trees):** lint, typecheck and build exit 0; `npm test` 49 files / 1504 tests /
+  0 skipped; integrity `No findings.`
+- **Deep lanes:** `SEARCH_DEEP` quiescence is **37 / 37** (A1 depth 3 0/24). `SEARCH_DEEP`
+  transposition is **39 / 40 without commit 2** (the one red is row 17: position-6 14.46% vs
+  ≥ 15%) and **40 / 40 with it**.
+- The other five deep lanes were not re-run: no file they read changed.
+- **Status:** row 21 is cleared. Row 17 is staged and waits on the owner's word. `ABC-082` does
+  not leave `In Review` toward merge until the owner accepts `ADR-0028`.
+- Notes: `.grugops/context/ticket-to-pr-ABC-082/notes/` (the `…rehop…` notes).

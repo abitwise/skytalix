@@ -203,7 +203,9 @@ const HANGING_CORPUS: ReadonlyArray<{ name: string; fen: string; losing: string 
   { name: "Q takes a rook the king defends", fen: "k7/r7/8/8/8/8/8/Q3K3 w - - 0 1", losing: "a1a7" },
   { name: "Q takes a bishop a knight defends", fen: "4k3/8/8/8/8/3n4/1b6/Q4K2 w - - 0 1", losing: "a1b2" },
   { name: "R takes a bishop a pawn defends", fen: "4k3/8/1p6/b7/8/8/8/R3K3 w - - 0 1", losing: "a1a5" },
-  { name: "R takes a pawn a bishop defends", fen: "4k3/8/8/8/8/b7/1p6/1R2K3 w - - 0 1", losing: "b1b2" },
+  // Re-found at ABC-082 (ruling …f0115510, ADR-0028 decision 2): +g7 / mirror +g2, so the recapture
+  // is not a K+B v K dead draw a pawn-aware search prefers. Margin 370 / 280 cp. Level unchanged.
+  { name: "R takes a pawn a bishop defends", fen: "4k3/6p1/8/8/8/b7/1p6/1R2K3 w - - 0 1", losing: "b1b2" },
   { name: "Q takes a pawn a knight defends", fen: "4k3/8/8/8/2n5/8/1p6/Q3K3 w - - 0 1", losing: "a1b2" },
   { name: "B takes a pawn a rook defends", fen: "4r1k1/8/8/8/4p3/8/8/1B2K3 w - - 0 1", losing: "b1e4" },
   { name: "mirror: q takes a pawn a rook defends", fen: "q3k3/8/8/8/4P3/8/4R3/4K3 b - - 0 1", losing: "a8e4" },
@@ -215,7 +217,7 @@ const HANGING_CORPUS: ReadonlyArray<{ name: string; fen: string; losing: string 
   { name: "mirror: q takes a rook the king defends", fen: "q3k3/8/8/8/8/8/R7/K7 b - - 0 1", losing: "a8a2" },
   { name: "mirror: q takes a bishop a knight defends", fen: "q4k2/1B6/3N4/8/8/8/8/4K3 b - - 0 1", losing: "a8b7" },
   { name: "mirror: r takes a bishop a pawn defends", fen: "r3k3/8/8/8/B7/1P6/8/4K3 b - - 0 1", losing: "a8a4" },
-  { name: "mirror: r takes a pawn a bishop defends", fen: "1r2k3/1P6/B7/8/8/8/8/4K3 b - - 0 1", losing: "b8b7" },
+  { name: "mirror: r takes a pawn a bishop defends", fen: "1r2k3/1P6/B7/8/8/8/6P1/4K3 b - - 0 1", losing: "b8b7" },
   { name: "mirror: q takes a pawn a knight defends", fen: "q3k3/1P6/8/2N5/8/8/8/4K3 b - - 0 1", losing: "a8b7" },
   { name: "mirror: b takes a pawn a rook defends", fen: "1b2k3/8/8/4P3/8/8/8/4R1K1 b - - 0 1", losing: "b8e5" },
 ];
