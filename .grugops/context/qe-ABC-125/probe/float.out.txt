@@ -1,0 +1,6 @@
+shipped six: [0,0,1,0.5,2,1] every reading === expected: true
+off by 1 ulp (2 -> 2+eps*2): toEqual FAIL
+string '1' for 1: toEqual FAIL
+-0 for 0: toEqual FAIL
+seventh reading appended: toEqual FAIL
+non-dyadic step 0.1, four reads: [0,0.1,0.2,0.30000000000000004] 4th === 0.3: false
