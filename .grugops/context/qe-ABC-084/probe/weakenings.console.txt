@@ -1,0 +1,21 @@
+W1-quiescence-off	exit 0	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	15.1s	load { 7.78 10.63 16.53 }
+W2-quiescence-1ply	exit 0	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	17.0s	load { 7.45 10.42 16.36 }
+W3-depth-cap-2	exit 1	solved 31/40	{"mate-in-2":9,"win-material":0,"do-not-hang":0}	1.4s	load { 11.41 11.19 16.53 }
+W4-depth-cap-3	exit 0	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	1.7s	load { 11.41 11.19 16.53 }
+W5-depth-cap-4	exit 0	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	2.6s	load { 11.70 11.25 16.52 }
+W6-swap-knight-rook-values	exit 1	solved 38/40	{"mate-in-2":0,"win-material":0,"do-not-hang":2}	16.0s	load { 11.70 11.25 16.52 }
+W7-queen-valued-300	exit 1	solved 33/40	{"mate-in-2":0,"win-material":1,"do-not-hang":6}	15.9s	load { 10.28 10.96 16.32 }
+W8-pawn-valued-300	exit 1	solved 37/40	{"mate-in-2":0,"win-material":0,"do-not-hang":3}	35.9s	load { 11.27 11.09 16.24 }
+W9-eval-sign-ignores-side	exit 1	solved 38/40	{"mate-in-2":0,"win-material":0,"do-not-hang":2}	20.4s	load { 29.75 16.05 17.86 }
+W10-pst-off	exit 0	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	14.0s	load { 25.49 16.04 17.82 }
+W11-mate-score-ignores-ply	exit 0	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	14.8s	load { 20.83 15.47 17.58 }
+W12-interior-mate-as-stalemate	exit 1	solved 32/40	{"mate-in-2":8,"win-material":0,"do-not-hang":0}	14.1s	load { 16.96 14.88 17.33 }
+W13-lmr-reduces-checks	exit 0	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	13.6s	load { 14.89 14.50 17.17 }
+W14-lmr-reduces-by-2	exit 0	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	14.7s	load { 12.63 14.02 16.95 }
+W15-tt-accepts-shallower	exit 1	solved 31/40	{"mate-in-2":9,"win-material":0,"do-not-hang":0}	1.2s	load { 10.86 13.56 16.74 }
+W16-ordering-off	exit 0	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	18.3s	load { 10.86 13.56 16.74 }
+src clean: true
+exit 0
+W1b-engine-leaf-quiescence-off	exit 0	12 passed (12)	solved 40/40	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	8.1s	load { 9.76 12.78 16.23 }
+src clean: true
+exit 0

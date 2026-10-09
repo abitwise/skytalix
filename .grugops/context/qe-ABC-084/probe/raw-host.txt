@@ -1,0 +1,5 @@
+repository UNKNOWN - verify — the repository endpoint did not name the repository it answered for (full_name), so the check cannot say which repository it inspected; it answered gh returned no readable HTTP status
+branch (default branch): UNKNOWN - verify — the repository endpoint did not name the repository it answered for (full_name), so the check cannot say which repository it inspected; it answered gh returned no readable HTTP status
+environment local: UNKNOWN - verify — not checked by design: this check does not read the production environment (decision 33.1 D-31); confirm each production line of the git-host setup checklist in install/README.md §5 in the environment's settings yourself; a release still needs the named human's confirmation, whatever this line says; environment name from the last "environments" entry of .grugops/factory.config.json
+HOST-PROTECTION: 0 protected, 0 unprotected, 1 UNKNOWN - verify; production environment not checked (UNKNOWN - verify by design)
+exit 2

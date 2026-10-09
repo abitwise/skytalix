@@ -299,3 +299,33 @@ restated here.
   54 / 31 / 24. The median is under 650 and run 1 is over. Nothing was trimmed.
 - **Found:** two of ABC-079's rows start in check (observation `…26f28829`). They are reported, not
   changed.
+
+## § QE — 2026-10-09 (QE/E2E, task `wave-2026-09-25`, subtask `qe-ABC-084`, Workflow 05)
+
+**PASS** at `e426e91` for `A1`–`A7`, each re-run in QE's own worktree. **`A8` is owed:** the `AGENTS.md`
+line has not landed (Scribe, `scribe-abc084-lane`), so re-check it with `grep` and `wc -c` after it lands.
+The verdict, the readings and the gaps are in `.grugops/context/qe-ABC-084/notes/` (`…927320d8` decision,
+`…80be6044` observation). Probes are in `probe/`.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | 10/10 mates, in 3 processes |
+| `A2` | MET | 0/24 losing; win-material 6/6 |
+| `A3` | MET | weakened 10/40, gate row red, exit 1, 12.5 s |
+| `A4` | MET | 3 processes `cmp`-identical, and identical to the build's rows. Plain `node` gives the same rows. Steps 0.25–5 at budget 25 stay inside the bars |
+| `A5` | MET | 13.65–14.53 s, load1 8–10 |
+| `A6` | MET | QE's independent oracle (own move generator, perft-checked, 0 `src/` imports) confirms all 40 keys. No mate in 1 anywhere, no duplicate position |
+| `A7` | MET | `a287461` touches only the baseline file and states a reason; 0 trigger-list files in the diff |
+| `A8` | OWED | not on the branch (Scribe's) |
+
+**The gate's resolution, measured:** of 17 planted weakenings, 7 go red: depth 2, mate detection, TT depth,
+three piece values, and the side-to-move sign. **10 survive**, including quiescence off, depth caps 3 and 4,
+PST off, LMR changes and ordering off. The default lane catches those only through exact pins. The suite
+saturates at about 5 virtual readings per move.
+
+**Gaps, advisory:**
+- QE-084-a MEDIUM: low resolution.
+- QE-084-b MEDIUM: the baseline is at 40/40, the ceiling, so the suite cannot show an improvement.
+- QE-084-c LOW: the win-material keys are re-proven in no lane.
+- QE-084-d LOW: about 24 themes across 40 rows; no black-to-move win-material row.
+- QE-084-e LOW, inherited: two rows start in check, against the comment.

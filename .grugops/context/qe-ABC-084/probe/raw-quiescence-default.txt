@@ -1,0 +1,17 @@
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/qe-ABC-084
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 595 nodes with quiescence / 49 without = 12.14x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 292 nodes with quiescence / 47 without = 6.21x
+
+ ✓ src/quiescence.test.ts (29 tests) 275ms
+
+ Test Files  1 passed (1)
+      Tests  29 passed (29)
+   Start at  00:54:18
+   Duration  429ms (transform 49ms, setup 0ms, collect 54ms, tests 275ms, environment 0ms, prepare 24ms)
+
+exit 0

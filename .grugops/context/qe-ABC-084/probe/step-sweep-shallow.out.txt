@@ -1,0 +1,166 @@
+Fri Oct  9 21:53:27 UTC 2026
+SOLVED	mate-in-2	f6f7	d3	n1046	K+R: king steps up, rook mates
+SOLVED	mate-in-2	d5g8	d3	n1196	smothered: Qg8+ Rxg8 Nf7#
+SOLVED	mate-in-2	e2e8	d3	n1049	back rank: Re8+ Rxe8 Rxe8#
+SOLVED	mate-in-2	b1b7	d3	n1124	two-rook ladder
+SOLVED	mate-in-2	h1h7	d3	n1052	K+Q against the cornered king
+MISSED	mate-in-2	e7d5	d2	n2099	Anastasia: Qxh7+ Kxh7 Rh3#
+SOLVED	mate-in-2	e7e1	d3	n1183	mirror: back rank, Re1+ Rxe1 Rxe1#
+SOLVED	mate-in-2	d4g1	d3	n1352	mirror: smothered, Qg1+ Rxg1 Nf2#
+SOLVED	mate-in-2	f3f2	d3	n1046	mirror: K+R, king steps up
+SOLVED	mate-in-2	a7a2	d3	n1133	mirror: two-rook ladder
+SOLVED	win-material	d5e7	d4	n728	knight fork: Ne7+ wins the queen
+SOLVED	win-material	e4e5	d4	n493	pawn fork: e5 hits knight and rook
+SOLVED	win-material	a1e1	d4	n867	pin: Re1 pins the queen to the king
+SOLVED	win-material	a1a6	d3	n1050	skewer: Ra6+ and Rxh6
+SOLVED	win-material	d4e5	d3	n1065	discovered check: the bishop moves, Rxd8
+SOLVED	win-material	d1d5	d3	n1051	queen fork: Qd5+ and Qxa8
+SOLVED	do-not-hang	a1a8	d3	n1047	Q takes a pawn a rook defends
+SOLVED	do-not-hang	e1f1	d4	n918	R takes a pawn the king defends
+SOLVED	do-not-hang	e1f2	d4	n514	B takes a pawn a pawn defends
+SOLVED	do-not-hang	e1e2	d4	n499	N takes a pawn a pawn defends
+SOLVED	do-not-hang	a1a6	d3	n1043	Q takes a knight a rook defends
+SOLVED	do-not-hang	f1g2	d4	n699	R takes a knight a pawn defends
+SOLVED	do-not-hang	a1f6	d3	n1055	Q takes a rook the king defends
+SOLVED	do-not-hang	a1b1	d3	n1042	Q takes a bishop a knight defends
+SOLVED	do-not-hang	e1f1	d4	n506	R takes a bishop a pawn defends
+SOLVED	do-not-hang	e1f1	d3	n1037	R takes a pawn a bishop defends
+SOLVED	do-not-hang	a1a8	d4	n824	Q takes a pawn a knight defends
+SOLVED	do-not-hang	b1a2	d4	n534	B takes a pawn a rook defends
+SOLVED	do-not-hang	a8a1	d3	n1048	mirror: q takes a pawn a rook defends
+SOLVED	do-not-hang	e8f8	d4	n998	mirror: r takes a pawn the king defends
+SOLVED	do-not-hang	e8f7	d4	n556	mirror: b takes a pawn a pawn defends
+SOLVED	do-not-hang	e8e7	d4	n551	mirror: n takes a pawn a pawn defends
+SOLVED	do-not-hang	a8b8	d3	n1045	mirror: q takes a knight a rook defends
+SOLVED	do-not-hang	f8g7	d4	n698	mirror: r takes a knight a pawn defends
+SOLVED	do-not-hang	a8f3	d3	n1051	mirror: q takes a rook the king defends
+SOLVED	do-not-hang	a8b8	d3	n1043	mirror: q takes a bishop a knight defends
+SOLVED	do-not-hang	e8f8	d4	n547	mirror: r takes a bishop a pawn defends
+SOLVED	do-not-hang	e8f8	d3	n1037	mirror: r takes a pawn a bishop defends
+SOLVED	do-not-hang	a8a1	d4	n846	mirror: q takes a pawn a knight defends
+SOLVED	do-not-hang	b8a7	d4	n449	mirror: b takes a pawn a rook defends
+STEP 6.25 (readings/move 4): solved 39/40, mates 9/10, losing 0/24, OUTSIDE the bars, wall 0.15 s
+SOLVED	mate-in-2	f6f7	d3	n1046	K+R: king steps up, rook mates
+SOLVED	mate-in-2	d5g8	d3	n1196	smothered: Qg8+ Rxg8 Nf7#
+SOLVED	mate-in-2	e2e8	d3	n1049	back rank: Re8+ Rxe8 Rxe8#
+SOLVED	mate-in-2	b1b7	d3	n1124	two-rook ladder
+SOLVED	mate-in-2	h1h7	d3	n1052	K+Q against the cornered king
+MISSED	mate-in-2	e7d5	d2	n2099	Anastasia: Qxh7+ Kxh7 Rh3#
+SOLVED	mate-in-2	e7e1	d3	n1183	mirror: back rank, Re1+ Rxe1 Rxe1#
+SOLVED	mate-in-2	d4g1	d3	n1352	mirror: smothered, Qg1+ Rxg1 Nf2#
+SOLVED	mate-in-2	f3f2	d3	n1046	mirror: K+R, king steps up
+SOLVED	mate-in-2	a7a2	d3	n1133	mirror: two-rook ladder
+SOLVED	win-material	d5e7	d4	n728	knight fork: Ne7+ wins the queen
+SOLVED	win-material	e4e5	d4	n493	pawn fork: e5 hits knight and rook
+SOLVED	win-material	a1e1	d4	n867	pin: Re1 pins the queen to the king
+SOLVED	win-material	a1a6	d3	n1050	skewer: Ra6+ and Rxh6
+SOLVED	win-material	d4e5	d3	n1065	discovered check: the bishop moves, Rxd8
+SOLVED	win-material	d1d5	d3	n1051	queen fork: Qd5+ and Qxa8
+SOLVED	do-not-hang	a1a8	d3	n1047	Q takes a pawn a rook defends
+SOLVED	do-not-hang	e1f1	d4	n918	R takes a pawn the king defends
+SOLVED	do-not-hang	e1f2	d4	n514	B takes a pawn a pawn defends
+SOLVED	do-not-hang	e1e2	d4	n499	N takes a pawn a pawn defends
+SOLVED	do-not-hang	a1a6	d3	n1043	Q takes a knight a rook defends
+SOLVED	do-not-hang	f1g2	d4	n699	R takes a knight a pawn defends
+SOLVED	do-not-hang	a1f6	d3	n1055	Q takes a rook the king defends
+SOLVED	do-not-hang	a1b1	d3	n1042	Q takes a bishop a knight defends
+SOLVED	do-not-hang	e1f1	d4	n506	R takes a bishop a pawn defends
+SOLVED	do-not-hang	e1f1	d3	n1037	R takes a pawn a bishop defends
+SOLVED	do-not-hang	a1a8	d4	n824	Q takes a pawn a knight defends
+SOLVED	do-not-hang	b1a2	d4	n534	B takes a pawn a rook defends
+SOLVED	do-not-hang	a8a1	d3	n1048	mirror: q takes a pawn a rook defends
+SOLVED	do-not-hang	e8f8	d4	n998	mirror: r takes a pawn the king defends
+SOLVED	do-not-hang	e8f7	d4	n556	mirror: b takes a pawn a pawn defends
+SOLVED	do-not-hang	e8e7	d4	n551	mirror: n takes a pawn a pawn defends
+SOLVED	do-not-hang	a8b8	d3	n1045	mirror: q takes a knight a rook defends
+SOLVED	do-not-hang	f8g7	d4	n698	mirror: r takes a knight a pawn defends
+SOLVED	do-not-hang	a8f3	d3	n1051	mirror: q takes a rook the king defends
+SOLVED	do-not-hang	a8b8	d3	n1043	mirror: q takes a bishop a knight defends
+SOLVED	do-not-hang	e8f8	d4	n547	mirror: r takes a bishop a pawn defends
+SOLVED	do-not-hang	e8f8	d3	n1037	mirror: r takes a pawn a bishop defends
+SOLVED	do-not-hang	a8a1	d4	n846	mirror: q takes a pawn a knight defends
+SOLVED	do-not-hang	b8a7	d4	n449	mirror: b takes a pawn a rook defends
+STEP 8.33 (readings/move 3.0012004801920766): solved 39/40, mates 9/10, losing 0/24, OUTSIDE the bars, wall 0.13 s
+MISSED	mate-in-2	a1a8	d2	n66	K+R: king steps up, rook mates
+MISSED	mate-in-2	h6f5	d2	n180	smothered: Qg8+ Rxg8 Nf7#
+MISSED	mate-in-2	e2e7	d2	n122	back rank: Re8+ Rxe8 Rxe8#
+MISSED	mate-in-2	a2a8	d2	n99	two-rook ladder
+MISSED	mate-in-2	h1f3	d2	n79	K+Q against the cornered king
+MISSED	mate-in-2	e7d5	d2	n266	Anastasia: Qxh7+ Kxh7 Rh3#
+MISSED	mate-in-2	e7e2	d2	n110	mirror: back rank, Re1+ Rxe1 Rxe1#
+MISSED	mate-in-2	h3f4	d2	n176	mirror: smothered, Qg1+ Rxg1 Nf2#
+SOLVED	mate-in-2	f3f2	d2	n69	mirror: K+R, king steps up
+MISSED	mate-in-2	a7g7	d2	n97	mirror: two-rook ladder
+SOLVED	win-material	d5e7	d2	n297	knight fork: Ne7+ wins the queen
+SOLVED	win-material	e4e5	d2	n120	pawn fork: e5 hits knight and rook
+SOLVED	win-material	a1e1	d2	n144	pin: Re1 pins the queen to the king
+SOLVED	win-material	a1a6	d2	n137	skewer: Ra6+ and Rxh6
+SOLVED	win-material	d4e5	d2	n168	discovered check: the bishop moves, Rxd8
+SOLVED	win-material	d1d5	d2	n138	queen fork: Qd5+ and Qxa8
+SOLVED	do-not-hang	a1a4	d2	n84	Q takes a pawn a rook defends
+SOLVED	do-not-hang	e1f1	d2	n81	R takes a pawn the king defends
+SOLVED	do-not-hang	e1e2	d2	n68	B takes a pawn a pawn defends
+SOLVED	do-not-hang	e1e2	d2	n66	N takes a pawn a pawn defends
+SOLVED	do-not-hang	a1a6	d2	n136	Q takes a knight a rook defends
+SOLVED	do-not-hang	f1g1	d2	n52	R takes a knight a pawn defends
+SOLVED	do-not-hang	a1c3	d2	n103	Q takes a rook the king defends
+SOLVED	do-not-hang	a1b1	d2	n173	Q takes a bishop a knight defends
+SOLVED	do-not-hang	e1f1	d2	n27	R takes a bishop a pawn defends
+SOLVED	do-not-hang	e1f1	d2	n91	R takes a pawn a bishop defends
+SOLVED	do-not-hang	a1a4	d2	n58	Q takes a pawn a knight defends
+SOLVED	do-not-hang	b1a2	d2	n55	B takes a pawn a rook defends
+SOLVED	do-not-hang	a8a5	d2	n102	mirror: q takes a pawn a rook defends
+SOLVED	do-not-hang	e8f8	d2	n71	mirror: r takes a pawn the king defends
+SOLVED	do-not-hang	e8e7	d2	n85	mirror: b takes a pawn a pawn defends
+SOLVED	do-not-hang	e8e7	d2	n90	mirror: n takes a pawn a pawn defends
+SOLVED	do-not-hang	a8b8	d2	n165	mirror: q takes a knight a rook defends
+SOLVED	do-not-hang	f8g8	d2	n65	mirror: r takes a knight a pawn defends
+SOLVED	do-not-hang	a8c6	d2	n103	mirror: q takes a rook the king defends
+SOLVED	do-not-hang	a8b8	d2	n177	mirror: q takes a bishop a knight defends
+SOLVED	do-not-hang	e8f8	d2	n42	mirror: r takes a bishop a pawn defends
+SOLVED	do-not-hang	e8f8	d2	n69	mirror: r takes a pawn a bishop defends
+SOLVED	do-not-hang	a8a5	d2	n61	mirror: q takes a pawn a knight defends
+SOLVED	do-not-hang	b8a7	d2	n73	mirror: b takes a pawn a rook defends
+STEP 12.5 (readings/move 2): solved 31/40, mates 1/10, losing 0/24, OUTSIDE the bars, wall 0.02 s
+MISSED	mate-in-2	a1a7	d1	n22	K+R: king steps up, rook mates
+MISSED	mate-in-2	h6f5	d1	n51	smothered: Qg8+ Rxg8 Nf7#
+MISSED	mate-in-2	e2e7	d1	n25	back rank: Re8+ Rxe8 Rxe8#
+SOLVED	mate-in-2	b1b7	d1	n32	two-rook ladder
+MISSED	mate-in-2	h1f3	d1	n28	K+Q against the cornered king
+MISSED	mate-in-2	e7d5	d1	n51	Anastasia: Qxh7+ Kxh7 Rh3#
+MISSED	mate-in-2	e7e2	d1	n24	mirror: back rank, Re1+ Rxe1 Rxe1#
+MISSED	mate-in-2	h3f4	d1	n39	mirror: smothered, Qg1+ Rxg1 Nf2#
+MISSED	mate-in-2	a8d8	d1	n22	mirror: K+R, king steps up
+SOLVED	mate-in-2	a7a2	d1	n32	mirror: two-rook ladder
+MISSED	win-material	d5f4	d1	n33	knight fork: Ne7+ wins the queen
+SOLVED	win-material	e4e5	d1	n22	pawn fork: e5 hits knight and rook
+MISSED	win-material	a1d1	d1	n18	pin: Re1 pins the queen to the king
+MISSED	win-material	a1a7	d1	n26	skewer: Ra6+ and Rxh6
+MISSED	win-material	h2h4	d1	n41	discovered check: the bishop moves, Rxd8
+MISSED	win-material	d1d3	d1	n27	queen fork: Qd5+ and Qxa8
+SOLVED	do-not-hang	a1c3	d1	n23	Q takes a pawn a rook defends
+SOLVED	do-not-hang	e1f1	d1	n19	R takes a pawn the king defends
+SOLVED	do-not-hang	b1c2	d1	n12	B takes a pawn a pawn defends
+SOLVED	do-not-hang	e1f1	d1	n14	N takes a pawn a pawn defends
+SOLVED	do-not-hang	a1a5	d1	n19	Q takes a knight a rook defends
+SOLVED	do-not-hang	f1g1	d1	n14	R takes a knight a pawn defends
+SOLVED	do-not-hang	a1c3	d1	n31	Q takes a rook the king defends
+SOLVED	do-not-hang	a1a4	d1	n18	Q takes a bishop a knight defends
+SOLVED	do-not-hang	e1f1	d1	n8	R takes a bishop a pawn defends
+SOLVED	do-not-hang	e1f1	d1	n13	R takes a pawn a bishop defends
+SOLVED	do-not-hang	a1a4	d1	n18	Q takes a pawn a knight defends
+SOLVED	do-not-hang	b1c2	d1	n12	B takes a pawn a rook defends
+SOLVED	do-not-hang	a8c6	d1	n24	mirror: q takes a pawn a rook defends
+SOLVED	do-not-hang	e8f8	d1	n18	mirror: r takes a pawn the king defends
+SOLVED	do-not-hang	b8c7	d1	n12	mirror: b takes a pawn a pawn defends
+SOLVED	do-not-hang	e8f8	d1	n16	mirror: n takes a pawn a pawn defends
+SOLVED	do-not-hang	a8a4	d1	n21	mirror: q takes a knight a rook defends
+SOLVED	do-not-hang	f8g8	d1	n18	mirror: r takes a knight a pawn defends
+SOLVED	do-not-hang	a8c6	d1	n27	mirror: q takes a rook the king defends
+SOLVED	do-not-hang	a8a5	d1	n19	mirror: q takes a bishop a knight defends
+SOLVED	do-not-hang	e8f8	d1	n7	mirror: r takes a bishop a pawn defends
+SOLVED	do-not-hang	e8f8	d1	n13	mirror: r takes a pawn a bishop defends
+SOLVED	do-not-hang	a8a5	d1	n19	mirror: q takes a pawn a knight defends
+SOLVED	do-not-hang	b8c7	d1	n12	mirror: b takes a pawn a rook defends
+STEP 25 (readings/move 1): solved 27/40, mates 2/10, losing 0/24, OUTSIDE the bars, wall 0.00 s
+exit 0

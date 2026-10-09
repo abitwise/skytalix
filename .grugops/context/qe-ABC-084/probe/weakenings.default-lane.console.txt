@@ -1,0 +1,12 @@
+W1-quiescence-off	exit 1	15 failed | 1524 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	6.9s	load { 9.54 12.64 16.14 }
+W1b-engine-leaf-quiescence-off	exit 1	5 failed | 1534 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	7.3s	load { 11.50 13.00 16.24 }
+W2-quiescence-1ply	exit 1	10 failed | 1529 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	8.3s	load { 10.12 12.65 16.08 }
+W4-depth-cap-3	exit 1	7 failed | 1532 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	9.9s	load { 13.67 13.35 16.29 }
+W5-depth-cap-4	exit 1	3 failed | 1536 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	11.6s	load { 22.34 15.23 16.92 }
+W10-pst-off	exit 1	13 failed | 1526 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	11.5s	load { 29.33 17.00 17.53 }
+W11-mate-score-ignores-ply	exit 1	1 failed | 1538 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	12.8s	load { 32.46 18.12 17.93 }
+W13-lmr-reduces-checks	exit 1	1 failed | 1538 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	10.9s	load { 44.21 21.48 19.13 }
+W14-lmr-reduces-by-2	exit 1	4 failed | 1535 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	8.9s	load { 41.98 21.77 19.27 }
+W16-ordering-off	exit 1	20 failed | 1519 passed (1539)	solved null/null	{"mate-in-2":0,"win-material":0,"do-not-hang":0}	10.0s	load { 38.19 21.65 19.25 }
+src clean: true
+exit 0

@@ -1,0 +1,5 @@
+--- a287461 test(ABC-084): grug scratch first baseline on puzzle rock — 40/40 at budget 25, step 1
+
+src/puzzle-suite.baseline.json
+
+trigger-list files in 7b54dae..e426e91: none

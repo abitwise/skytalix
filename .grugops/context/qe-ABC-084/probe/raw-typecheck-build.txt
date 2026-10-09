@@ -1,0 +1,11 @@
+Fri Oct  9 21:41:45 UTC 2026
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+exit 0
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+exit 0
