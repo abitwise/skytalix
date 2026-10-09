@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-102` `In Development` → `In Review` at `53fd3d2` (build branch, not merged); QE `qe-ABC-102` dispatched. In Development 1/3, In Review 1/3._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` re-scored 10/10 by BA/PM (`5bd065d`, merged `a03b064`), re-sized S→M → `Ready` → `In Development` (2/3); Engineer `ticket-to-pr-ABC-082` dispatched. Merge order vs `ABC-086`: whichever merges second re-measures the other's pins._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` re-scored 9/10 by BA/PM (`4e44656`, merged `9b35cfd`), **stays in `Backlog`**: ⚠️(10) narrowed to two Architect/Design questions (Q1 seed reaches move selection?, Q2 deterministic budget); `ruling-abc086-seed` dispatched. `ABC-102` building; `ABC-082` re-score running._
@@ -420,11 +422,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 
 - [ABC-082] Evaluation — pawn structure  (EPIC-004, **M** — re-sized from S, P1, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `5bd065d` (`rescore-abc082`)**; pulled 2026-10-09 by the Orchestrator; Engineer `ticket-to-pr-ABC-082` on `grugops/ABC-082-pawn-structure`; 23 merged pins/levels named on the page with who re-levels each; a red LEVEL stops the build → Architect/Design)
 
-- [ABC-102] `undo` — two plies back in one command, and the take-back arm `ABC-120` built for it  (BA/PM, S, P1, epic: EPIC-006, since: 2026-08-16, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `d155f04` (`rescore-abc102`)**; pulled 2026-10-09 by the Orchestrator; Engineer `ticket-to-pr-ABC-102` on `grugops/ABC-102-undo`; diff fenced to `src/command-input.ts` + its test)
 
 
 
@@ -437,7 +438,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-102] `undo` — two plies back in one command, and the take-back arm `ABC-120` built for it  (BA/PM, S, P1, epic: EPIC-006, since: 2026-08-16, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `d155f04` (`rescore-abc102`)**; pulled 2026-10-09; BUILT `53fd3d2` (+`7caead3` docs) on `grugops/ABC-102-undo` — 4 gates green, 1485/1485, 0 skips; QE `qe-ABC-102` dispatched; diff fenced to `src/command-input.ts` + its test)
 
 
 
