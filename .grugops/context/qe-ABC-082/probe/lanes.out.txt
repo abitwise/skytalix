@@ -1,0 +1,44 @@
+### SEARCH_DEEP quiescence (tip) | 2026-10-09T17:12:00Z | exit 0 | wall 3 s | load1 3.42 -> 3.87
+A1 depth 3: losing capture chosen 0/24 with quiescence, 0/24 without
+ Test Files  1 passed (1)
+      Tests  37 passed (37)
+### SEARCH_DEEP transposition (tip) | 2026-10-09T17:12:03Z | exit 0 | wall 52 s | load1 3.87 -> 2.92
+ABC-081 A2 kiwipete: fixed depth 5 15.63%, iterative deepening to 5 40.54%
+ABC-081 A2 position-6: fixed depth 5 14.46%, iterative deepening to 5 44.98%
+ABC-081 A3 kiwipete to depth 5: 136105 / 224605 = 60.60%
+ABC-081 A3 position-6 to depth 5: 92216 / 192240 = 47.97%
+ Test Files  1 passed (1)
+      Tests  40 passed (40)
+### SEARCH_DEEP transposition A2 only (720b92d, no tip) | 2026-10-09T17:12:55Z | exit 1 | wall 13 s | load1 2.92 -> 5.12
+ABC-081 A2 kiwipete: fixed depth 5 15.63%, iterative deepening to 5 40.54%
+ABC-081 A2 position-6: fixed depth 5 14.46%, iterative deepening to 5 44.98%
+   × A2 — the hit rate is reported and is at least 15% > position-6 at depth 5 [deep, SEARCH_DEEP=1] 5535ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/transposition.test.ts > A2 — the hit rate is reported and is at least 15% > position-6 at depth 5 [deep, SEARCH_DEEP=1]
+AssertionError: expected 0.144617032672737 to be greater than or equal to 0.15
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed | 37 skipped (40)
+### ENGINE_DEEP transposition (tip) | 2026-10-09T17:13:08Z | exit 0 | wall 5 s | load1 5.12 -> 4.79
+ Test Files  1 passed (1)
+      Tests  26 passed (26)
+### SEARCH_DEEP search (tip) | 2026-10-09T17:13:13Z | exit 0 | wall 43 s | load1 4.79 -> 3.92
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+### SEARCH_DEEP search.ordering (tip) | 2026-10-09T17:13:56Z | exit 0 | wall 130 s | load1 3.92 -> 3.98
+ Test Files  1 passed (1)
+      Tests  38 passed (38)
+### ENGINE_DEEP engine (tip) | 2026-10-09T17:16:06Z | exit 0 | wall 124 s | load1 3.98 -> 4.37
+ Test Files  1 passed (1)
+      Tests  33 passed (33)
+### oracle position-6 (tip) | 2026-10-09T17:18:10Z | load1 4.37
+{"name":"position-6","search":{"score":55,"move":"c3d5","nodes":6197,"s":0.1},"searchWithoutPvsOrReductions":{"score":55,"move":"c3d5","nodes":6601,"s":0},"searchWithoutPruning":{"score":55,"move":"c3d5","nodes":11799948,"s":37.7}}
+### oracle kiwipete (tip) | 2026-10-09T17:18:48Z | load1 3.58
+{"name":"kiwipete","search":{"score":55,"move":"e2a6","nodes":12723,"s":0.1},"searchWithoutPvsOrReductions":{"score":55,"move":"e2a6","nodes":12238,"s":0.1},"searchWithoutPruning":{"score":55,"move":"e2a6","nodes":76949007,"s":304.7}}
+### SEARCH_DEEP search.pvs-lmr (tip) | 2026-10-09T17:23:52Z | exit 0 | wall 1091 s | load1 16.88 -> 3.00
+stdout | src/search.pvs-lmr.test.ts > A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] > search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]
+stdout | src/search.pvs-lmr.test.ts > A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] > chooseMove iterated to depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]
+   ✓ A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] > search() at fixed depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]  432676ms
+   ✓ A1 — bounded drift, search() against searchWithoutReductions and chooseMove against chooseMoveWithoutReductions [deep, SEARCH_DEEP=1] > chooseMove iterated to depth 5 on the 190: >= 95% within 25 cp, none beyond 75 cp [deep, SEARCH_DEEP=1]  338211ms
+ Test Files  1 passed (1)
+      Tests  29 passed (29)
+### done | 2026-10-09T17:42:03Z

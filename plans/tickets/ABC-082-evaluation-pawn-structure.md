@@ -363,3 +363,42 @@ ruling `ruling-abc082-levels` at `71b140d`). Two commits, nothing wider:
 - **Status:** row 21 is cleared. Row 17 is staged and waits on the owner's word. `ABC-082` does
   not leave `In Review` toward merge until the owner accepts `ADR-0028`.
 - Notes: `.grugops/context/ticket-to-pr-ABC-082/notes/` (the `…rehop…` notes).
+
+## § QE — 2026-10-09 (QE/E2E, task `wave-2026-09-25`, subtask `qe-ABC-082`, Workflow 05)
+
+**PASS WITH FINDINGS** at `873911d`. The tip commit merges only on the owner's acceptance of
+`ADR-0028`. Every figure was re-measured by QE with its own probes. The reasoning and raw output
+live in `.grugops/context/qe-ABC-082/` (notes and `probe/`) and are not restated here.
+
+- **`A1`–`A8` MET at `873911d`.** Gate: lint, typecheck and build exit 0. `npm test` 49 / 1504 /
+  0 skipped. Integrity `No findings.` All seven deep lanes green, run one at a time with load
+  recorded. `search.pvs-lmr` deep 29 / 29 in 1 091 s.
+- **The terms, hand-scored.** 20 hand-built positions match the hand sums exactly. They cover
+  doubled, tripled, adjacent-file blocker, pawn behind, pawn beside, both edges, promotion rank
+  and both colours.
+- **Symmetry beyond the corpus.** 47 954 extra positions (random legal games plus random pawn
+  boards). Colour mirror, file reflection and an independent reference of the term all agree
+  47 954 / 47 954.
+- **`A8` re-measured.** QE's own script re-read 8 pin rows on base and branch. All match the
+  ledger. The row-7 oracle was re-run: 55 / e2a6 and 55 / c3d5, equal to `search()`.
+- **Mutants re-planted.**
+  - Five named F-class mutants are red: `N3`, `M11`, `M1`, `ceiling4`, `repetitionBlind`.
+  - Row 21's new pair bites its mutant (bare leaf plays it at d1; margin 370 / 280).
+  - Row 8 (b) bites the Architect's discard mutant.
+  - The `engine.ts` discard twin, which the ruling did not plant, is red on the `chooseMove`
+    row.
+- **`873911d` judged on its own.** The ≥ 10% bar still reds a table that never stores (0.00% on
+  all three rows). The cost is measured: the default-lane guard passes a half-storing table
+  (10.62%). The deep A2 rows and two exact node pins still red it. Without the tip, row 17 is
+  red, reproduced.
+- **Gaps:**
+  - **G-QE-1 (LOW–MEDIUM, test gap).** An isolation check that reads only one neighbouring file
+    survives both ticket suites. Only class-P node pins catch it. The code is correct. Remedy:
+    one one-sided-neighbour `A3` relation row, for the next licensed touch.
+  - **G-QE-2 (LOW, inherited).** `ABC-078` `A4` sits at its `≥ 6` bound.
+  - **G-QE-3 (LOW).** The A2 default guard now passes a half-storing table.
+- **`NFR-005` / `N8-LANE` / `NFR-008` are Security/NFR's.** QE reports their readings only.
+
+**`ABC-082` may leave `In Review` toward Security/NFR. It does not go toward merge until the owner
+accepts `ADR-0028`, or refuses it and `873911d` is reverted, which re-blocks the ticket on row 17.
+The board move is the Orchestrator's.**
