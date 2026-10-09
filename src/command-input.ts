@@ -1,8 +1,8 @@
 /**
  * ABC-035 — the command table, classified in front of `ABC-033`'s entry point.
  *
- * GRAMMAR, PLUS ONE FLAG. This module decides whether a submitted line IS one of six commands
- * and, for five of them, nothing about what any of them DOES beyond naming the arm. `help` carries
+ * GRAMMAR, PLUS ONE FLAG. This module decides whether a submitted line IS one of seven commands
+ * and, for six of them, nothing about what any of them DOES beyond naming the arm. `help` carries
  * the one message set `ABC-035` owns; `board` carries none; `claim` is a REQUEST the loop
  * adjudicates. There is no exit here, no second render and no availability test — `ABC-021` owns
  * both edges of a claim, and this file owns the vocabulary.
@@ -18,7 +18,11 @@
  *
  * `new` (`ABC-046`) is the one token whose effect MUTATES the game, and this module still mutates
  * nothing: the row resolves to `ADR-0021`'s `take-back` arm carrying `plies: moves.length`, and the
- * LOOP calls `takeBack` and re-evaluates (transition 18). `undo` is `ABC-102`'s and is not here.
+ * LOOP calls `takeBack` and re-evaluates (transition 18). `undo` (`ABC-102`) rides the same arm
+ * with `plies: 2` — the human's move and the engine's reply — and below two plies it is REFUSED as
+ * a `command` carrying `UNDO_REFUSAL_MESSAGES`: `takeBack` clamps, so an unguarded two-ply
+ * take-back at ply 1 would silently reset the game, and that boundary is this seam's (`ADR-0021`
+ * clause 4).
  *
  * `resign` (`ABC-045`) IS THE ONE TOKEN THAT CARRIES A VERDICT, and it is still grammar: the row
  * resolves to the EXISTING `game-over` arm (`src/turn-loop.ts`, `ABC-019`'s transition) with the
@@ -66,21 +70,23 @@ import type { GameHistory } from "./history.ts";
 import { type MoveInputDeps, resolveMoveInput } from "./move-input.ts";
 import type { PromptOutcome } from "./turn-loop.ts";
 
-/** The six tokens, and the type that makes a seventh a compile error rather than a string typo. */
-export type CommandToken = "help" | "board" | "quit" | "claim" | "resign" | "new";
+/** The seven tokens, and the type that makes an eighth a compile error rather than a string typo. */
+export type CommandToken = "help" | "board" | "quit" | "claim" | "resign" | "new" | "undo";
 
 /**
  * One row of the table: the token, and WHICH arm of `PromptOutcome` classifying it produces.
  *
- * `outcome` is here because the six tokens do NOT share one arm. Three are `command` — the merged
+ * `outcome` is here because the seven tokens do NOT share one arm. Three are `command` — the merged
  * non-advancing outcome (`src/turn-loop.ts`) — `claim` is the dedicated payload-free
- * `{ kind: "claim" }` arm, `resign` is the `game-over` arm with a result, and `new` is the
- * `take-back` arm with a ply count. A parser that returned `command` for `claim` would never reach
+ * `{ kind: "claim" }` arm, `resign` is the `game-over` arm with a result, and `new` and `undo` are
+ * the `take-back` arm with a ply count. A parser that returned `command` for `claim` would never reach
  * transition 16 and the player's claim would silently become a redraw; the ticket page said
  * exactly that until it was repaired on 2026-08-13.
  *
  * `quit` is `command` here because CLASSIFYING it produces the confirmation; the `{ kind: "quit" }`
- * arm is produced by the session flag in `createPromptLineResolver`, not by a row.
+ * arm is produced by the session flag in `createPromptLineResolver`, not by a row. `undo` is the
+ * same in the other direction: its row is `take-back`, and below two plies the resolver answers
+ * `command` with the refusal instead — the boundary is product policy, not a second row.
  */
 export interface CommandSpec {
   readonly token: CommandToken;
@@ -91,8 +97,8 @@ export interface CommandSpec {
  * The table. It is the single source of the vocabulary: `help`'s message set is folded out of it,
  * the classifier looks up in it, and `ABC-038`'s tab completion will read it rather than repeat it.
  *
- * `moves` is NOT here — it is `ABC-036`. `undo` is NOT here — it is `ABC-102`'s. `resign` IS here,
- * `ABC-045`'s row, and `new` IS here, `ABC-046`'s. A token absent from this table is not a command,
+ * `moves` is NOT here — it is `ABC-036`. `resign` IS here, `ABC-045`'s row, `new` IS here,
+ * `ABC-046`'s, and `undo` IS here, `ABC-102`'s. A token absent from this table is not a command,
  * and the tests assert that in both directions.
  */
 export const COMMAND_TABLE: readonly CommandSpec[] = [
@@ -102,10 +108,8 @@ export const COMMAND_TABLE: readonly CommandSpec[] = [
   { token: "claim", outcome: "claim" },
   { token: "resign", outcome: "game-over" },
   { token: "new", outcome: "take-back" },
+  { token: "undo", outcome: "take-back" },
 ];
-
-/** The heading item. It is not a token, and `help` naming it costs the message region nothing. */
-const HELP_HEADING = "commands:";
 
 /**
  * What the FIRST `quit` says. One item, 17 columns — the message region's bound (`W` is 18 at the
@@ -116,16 +120,24 @@ const HELP_HEADING = "commands:";
 export const QUIT_CONFIRMATION_MESSAGES: readonly string[] = ["quit again to end"];
 
 /**
+ * What `undo` says with fewer than two plies played (`ABC-102` ruling 3). One item, 15 columns —
+ * within the same 17-column bound as the `quit` confirmation. True at ply 0, and at ply 1, where
+ * the human is always Black and has not yet moved.
+ */
+export const UNDO_REFUSAL_MESSAGES: readonly string[] = ["nothing to undo"];
+
+/**
  * `help`'s message set, FOLDED OUT OF THE TABLE — never a second copy of the vocabulary.
  *
- * One item per token, plus the heading. The frame's message region takes a LIST and places each
+ * One item per token and nothing else: the `commands:` heading was dropped at `ABC-102` (ruling 6)
+ * so the seventh token fits the two rows at the narrowest frame. The frame's message region takes a LIST and places each
  * item whole or not at all (`src/frame.ts` `layoutMessageRegion`), so short items are what makes
  * `A7`'s hidden count 0 reachable at all: the delivered panel width is 21 columns at the start
  * position, and one prose sentence per command would not fit in the two rows the region has.
  * `A7`'s instruction on that collision is explicit — shorten the help, never widen the frame.
  */
 export function helpMessages(): readonly string[] {
-  return [HELP_HEADING, ...COMMAND_TABLE.map((spec) => spec.token)];
+  return COMMAND_TABLE.map((spec) => spec.token);
 }
 
 /**
@@ -166,10 +178,11 @@ export type PromptLineOutcome = Extract<
  * nothing to the history and reads no availability — on every arm `toFen(history.position)` is
  * byte-identical afterwards and `history.moves` is untouched.
  *
- * `history` is consulted on TWO command paths and derived from on NONE: every token is classified
+ * `history` is consulted on THREE command paths and derived from on NONE: every token is classified
  * without the position being asked anything; `resign` then reads `position.blackToMove` — a
- * field, not a derive — to name the loser, and `new` reads `moves.length` — a field, not a
- * derive — to name the ply count, so no derive can hide here. It is taken so this function can
+ * field, not a derive — to name the loser, `new` reads `moves.length` — a field, not a
+ * derive — to name the ply count, and `undo` reads the same field to choose between the two-ply
+ * take-back and the refusal, so no derive can hide here. It is taken so this function can
  * stand in the `InputSeam` shape the loop already binds, and it is handed to `resolveMoveInput`
  * unchanged when the line is not a command.
  *
@@ -190,6 +203,14 @@ export function resolvePromptLine(
     return resolveMoveInput(history, line, deps);
   }
   if (spec.outcome === "claim") return { kind: "claim" };
+  if (spec.token === "undo") {
+    // `ABC-102` rulings 1 and 3: two plies — the human's move and the engine's reply — or, below
+    // two, the refusal. `takeBack` clamps, so this guard is what stops ply 1 from silently
+    // resetting the game. `moves.length` is read and nothing is mutated; the loop splices.
+    return history.moves.length >= 2
+      ? { kind: "take-back", plies: 2, messages: [] }
+      : { kind: "command", messages: UNDO_REFUSAL_MESSAGES };
+  }
   if (spec.outcome === "take-back") {
     // `ABC-046` `A4`: ALL plies, so the loop's `takeBack` replays nothing and the position, the
     // key list and the repetition counts rewind together (`ADR-0002`). Nothing is mutated HERE —

@@ -199,6 +199,9 @@ const NON_TOKENS: readonly string[] = [
   "ne",
   "newgame",
   "renew",
+  // `ABC-102`'s row, the same way: no prefix, no overrun.
+  "und",
+  "undoo",
   "",
 ];
 
@@ -440,23 +443,28 @@ describe("ABC-035 A4 — `help` names every token in the table and no other", ()
   });
 
   /**
-   * The negative half. These are real tokens of the SAME prompt owned by OTHER tickets — `moves` is
-   * `ABC-036`, `undo` is `ABC-102`'s — so a help text that lists the epic's whole vocabulary
-   * instead of this table's is caught here rather than by a reader noticing. `resign` LEFT this
-   * list at `ABC-045` and `new` LEFT it at `ABC-046`, each when its ticket put it in the table;
-   * both are asserted present in the positive half above. `ABC-112` — the filter that would have
+   * The negative half. `moves` is a real token of the SAME prompt owned by ANOTHER ticket —
+   * `ABC-036` — so a help text that lists the epic's whole vocabulary instead of this table's is
+   * caught here rather than by a reader noticing. `resign` LEFT this list at `ABC-045`, `new` LEFT
+   * it at `ABC-046` and `undo` LEFT it at `ABC-102`, each when its ticket put it in the table; all
+   * three are asserted present in the positive half above. `ABC-112` — the filter that would have
    * hidden `quit` from `help` until it was honoured — is moot from `ABC-046` on: the table's
    * promise is TRUE for every row in it.
    */
-  for (const foreign of ["moves", "undo"]) {
+  for (const foreign of ["moves"]) {
     it(`does not name ${foreign}, which is not in this ticket's table`, () => {
       expect(COMMAND_TABLE.map((spec) => spec.token as string)).not.toContain(foreign);
       expect(helpMessages().join(" ")).not.toContain(foreign);
     });
   }
 
-  it("carries one item per table row, plus the heading — no row is folded away", () => {
-    expect(helpMessages()).toHaveLength(COMMAND_TABLE.length + 1);
+  /**
+   * SUPERSEDED AT `ABC-102`, by name (ruling 6 on that ticket's page): the row that stood here
+   * said "plus the heading". The heading was dropped so a seventh token fits the narrowest frame's
+   * two message rows (`A7` below); `help` is now exactly one item per row and nothing else.
+   */
+  it("carries one item per table row and no heading — no row is folded away", () => {
+    expect(helpMessages()).toHaveLength(COMMAND_TABLE.length);
   });
 });
 
@@ -766,6 +774,7 @@ describe("ABC-035 fences — grammar only", () => {
       "board white",
       "resign now",
       "new game",
+      "undo 2",
     ]) {
       expect(classifyCommand(line)).toBeUndefined();
       expect(resolvePromptLine(history, line).kind).not.toBe("command");
@@ -1118,6 +1127,230 @@ describe("ABC-046 — `new` is a take-back of every ply, and the loop rewinds al
 
     expect(messages).toContain("quit");
     expect(messages).toContain("new");
-    expect(messages).toHaveLength(COMMAND_TABLE.length + 1);
+    // `COMMAND_TABLE.length + 1` until `ABC-102`'s ruling 6 dropped the heading — superseded there.
+    expect(messages).toHaveLength(COMMAND_TABLE.length);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `ABC-102` — `undo`: two plies back in one command, on `ADR-0021`'s merged `take-back` arm, and
+// refused below two plies. A1-A8 here; A9 is the gate's `git diff --name-only`.
+// ---------------------------------------------------------------------------
+
+describe("ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses", () => {
+  /** The exact successful outcome (rulings 1 and 7). A payload added later reds here. */
+  const UNDONE = { kind: "take-back", plies: 2, messages: [] };
+  /** The exact refusal (ruling 3): `command`, not `rejected` — the line IS a command. */
+  const REFUSED = { kind: "command", messages: ["nothing to undo"] };
+
+  /** Ply 4, White (the human) to move. */
+  const atPlyFour = (): GameHistory => played(START_FEN, ["e2e4", "e7e5", "g1f3", "b8c6"]);
+  /** Ply 6, White (the human) to move. */
+  const atPlySix = (): GameHistory =>
+    played(START_FEN, ["e2e4", "e7e5", "g1f3", "b8c6", "f1c4", "g8f6"]);
+
+  /** A SCRIPTED opponent: plays these coordinate moves in order, never the real engine. */
+  function scripted(replies: readonly string[]): EngineSeam {
+    let next = 0;
+    return async (history) => {
+      const parsed = parseCoordinateMove(history.position, replies[next++] as string);
+      return (parsed as { move: Move }).move;
+    };
+  }
+
+  it("A1 — the pure function at ply 4: exactly the two-ply take-back, nothing mutated HERE", () => {
+    const history = atPlyFour();
+    const fen = toFen(history.position);
+
+    const outcome = resolvePromptLine(history, "undo");
+
+    expect(outcome).toEqual(UNDONE);
+    expect(Object.keys(outcome)).toEqual(["kind", "plies", "messages"]);
+    // The splice is the LOOP's (`ADR-0021` clause 4).
+    expect(history.moves).toHaveLength(4);
+    expect(toFen(history.position)).toBe(fen);
+  });
+
+  it("A1 — through the MERGED loop: the human's move and the reply go, byte-identical to before the human moved", async () => {
+    const history = atPlyFour();
+    // Test note 3: captured BEFORE the human's own last move, so a build that takes back two
+    // DIFFERENT plies (or one) is red on the bytes, not just on a count.
+    const beforeHumanMove = toFen(history.position);
+    const lengths: number[] = [];
+
+    const run = await runLines(history, ["d2d4", "undo"], {
+      engine: scripted(["d7d5"]),
+      onOutcome: () => lengths.push(history.moves.length),
+    });
+
+    // `d2d4` was read at ply 4, the reply made it 6, `undo` was read at 6 — and the game ends at 4.
+    expect(lengths).toEqual([4, 6]);
+    expect(history.moves).toHaveLength(4);
+    expect(toFen(history.position)).toBe(beforeHumanMove);
+    expect(run.result).toBeNull();
+  });
+
+  // `A2` — THE ONE THAT CATCHES THE CLAMP. 0 and 1 ply separately (test note 1): an unguarded
+  // `takeBack(history, 2)` at ply 1 silently resets the game and looks like it worked.
+  for (const [name, history, humanColour] of [
+    ["0 plies", () => newGame(START_FEN), "white"],
+    [
+      "exactly 1 ply (human Black, the engine has opened)",
+      () => played(START_FEN, ["e2e4"]),
+      "black",
+    ],
+  ] as ReadonlyArray<readonly [string, () => GameHistory, "white" | "black"]>) {
+    it(`A2 — the pure function refuses at ${name}`, () => {
+      const history_ = history();
+      const fen = toFen(history_.position);
+      const length = history_.moves.length;
+
+      const outcome = resolvePromptLine(history_, "undo");
+
+      expect(outcome).toEqual(REFUSED);
+      expect(history_.moves).toHaveLength(length);
+      expect(toFen(history_.position)).toBe(fen);
+    });
+
+    it(`A2 — through the MERGED loop at ${name}: the refusal is shown, nothing changes, zero extra derives`, async () => {
+      const history_ = history();
+      const fen = toFen(history_.position);
+      const length = history_.moves.length;
+      vi.mocked(gameStatusOf).mockClear();
+
+      const run = await runLines(history_, ["undo"], { humanColour });
+
+      // Transition 9: the refusal re-emits ONE frame carrying the message, without re-evaluating.
+      expect(run.renders).toBe(2);
+      expect(run.messagesPerFrame[1]).toEqual(["nothing to undo"]);
+      expect(history_.moves).toHaveLength(length);
+      expect(toFen(history_.position)).toBe(fen);
+      // The loop's own derive before the first frame, and nothing for the refusal.
+      expect(derives()).toBe(1);
+    });
+  }
+
+  it("A2 — the refusal is ONE item that fits the region's bound (`ADR-0021` clause 6: ≤ 17 columns)", () => {
+    const outcome = resolvePromptLine(newGame(START_FEN), "undo") as {
+      messages: readonly string[];
+    };
+
+    expect(outcome.messages).toHaveLength(1);
+    expect((outcome.messages[0] as string).length).toBeLessThanOrEqual(17);
+  });
+
+  it("A3 — repeatable: three `undo`s from ply 6 land on the start position exactly, and a fourth is refused", async () => {
+    const history = atPlySix();
+
+    const run = await runLines(history, ["undo", "undo", "undo", "undo"]);
+
+    expect(history.moves).toHaveLength(0);
+    expect(keyHistory(history)).toHaveLength(1);
+    expect(toFen(history.position)).toBe(START_FEN);
+    expect(run.messagesPerFrame).toEqual([[], [], [], [], ["nothing to undo"]]);
+  });
+
+  it("A4 — the derived state rewinds with it: repetition counts equal a fresh replay, ENTRY FOR ENTRY", async () => {
+    // Ply 8 with the start position occurring three times; after `undo`, ply 6 with it twice.
+    const history = claimable();
+
+    await runLines(history, ["undo"]);
+
+    expect(history.moves).toHaveLength(6);
+    const fresh = played(SHUFFLE_FEN, [...SHUFFLE_CYCLE, ...SHUFFLE_CYCLE.slice(0, 2)]);
+    // Test note 2: entries, not sizes — a stale key list can have the right size.
+    expect([...repetitionCounts(history).entries()]).toEqual([
+      ...repetitionCounts(fresh).entries(),
+    ]);
+    expect(Math.max(...repetitionCounts(history).values())).toBe(2);
+    expect(keyHistory(history)).toHaveLength(history.moves.length + 1);
+    expect(keyHistory(history)).toEqual(keyHistory(fresh));
+  });
+
+  it("A5 — on a CLAIMABLE position, the frame after `undo` has no claim, for exactly ONE derive", async () => {
+    const history = claimable();
+    vi.mocked(gameStatusOf).mockClear();
+
+    const run = await runLines(history, ["undo"]);
+
+    // The GIVEN, asserted: the frame before `undo` really did carry the claim.
+    expect(run.statusPerFrame[0]?.claimable).toBeDefined();
+    expect(run.renders).toBe(2);
+    expect(run.statusPerFrame[1]?.claimable).toBeUndefined();
+    // 1 before the first frame + exactly 1 for the take-back (transition 18).
+    expect(derives()).toBe(2);
+  });
+
+  it("A6 — classified before the grammars, in each tolerated spelling: neither resolver, no derive", () => {
+    for (const line of ["undo", " UNDO ", "Undo"]) {
+      const history = atPlyFour();
+      const seam = spied(history);
+      const legalBefore = legalCalls();
+
+      const outcome = resolvePromptLine(history, line, seam.deps);
+
+      expect(classifyCommand(line)?.token).toBe("undo");
+      expect(outcome).toEqual(UNDONE);
+      expect(seam.coordinateCalls()).toBe(0);
+      expect(seam.sanCalls()).toBe(0);
+      expect(seam.deriveCalls()).toBe(0);
+      expect(legalCalls() - legalBefore).toBe(0);
+    }
+  });
+
+  it("A6 — `und`, `undoo` and `undo 2` are not commands and fall through to the resolvers", () => {
+    for (const line of ["und", "undoo", "undo 2"]) {
+      const history = atPlyFour();
+      const seam = spied(history);
+
+      expect(classifyCommand(line)).toBeUndefined();
+      const outcome = resolvePromptLine(history, line, seam.deps);
+
+      expect(outcome.kind).toBe("rejected");
+      expect(seam.coordinateCalls()).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it("A6 — the module derives NOTHING on either path: take-back and refusal", () => {
+    resolvePromptLine(atPlyFour(), "undo");
+    resolvePromptLine(newGame(START_FEN), "undo");
+    resolvePromptLine(played(START_FEN, ["e2e4"]), "undo");
+
+    expect(derives()).toBe(0);
+    expect(repetitionDerives()).toBe(0);
+  });
+
+  it("A7 — no confirmation: the take-back lands on its own line, before the next line is read", async () => {
+    const history = atPlyFour();
+    const lengths: number[] = [];
+
+    const run = await runLines(history, ["undo", "board"], {
+      onOutcome: () => lengths.push(history.moves.length),
+    });
+
+    // `board` was read at ply 2: the take-back had already happened, with nothing asked.
+    expect(lengths).toEqual([4, 2]);
+    expect(run.renders).toBe(3);
+    expect(run.messagesPerFrame).toEqual([[], [], []]);
+  });
+
+  it("A7 — `undo` clears an armed `quit`: quit / undo / quit asks again", () => {
+    const history = atPlyFour();
+    const resolve = createPromptLineResolver();
+
+    expect(resolve(history, "quit").kind).toBe("command");
+    expect(resolve(history, "undo")).toEqual(UNDONE);
+    expect(resolve(history, "quit")).toEqual({
+      kind: "command",
+      messages: QUIT_CONFIRMATION_MESSAGES,
+    });
+  });
+
+  it("A8 — `help` names every row including `undo`, with NO heading item", () => {
+    const messages = helpMessages();
+
+    expect(messages).toContain("undo");
+    expect(messages).toEqual(COMMAND_TABLE.map((spec) => spec.token));
+    expect(messages).not.toContain("commands:");
   });
 });
