@@ -28,6 +28,17 @@ feature: —
 > The title changed. It was "Deterministic move selection under a fixed seed", and the seed half is
 > now `ABC-087`'s. **Size `S` → `XS`. DoR 10/10 — Ready.** The fold record is in
 > `.grugops/context/fold-abc086-adr0027/`.
+>
+> **Lane re-cut 2026-10-09 by BA/PM** (task `wave-2026-09-25`, subtask `recut-abc086-lane`,
+> Workflow 07). The build stopped on `N8-LANE` at +1 070 ms net against 650 (claim `…3bb7069b`).
+> `N8-LANE` now holds by a re-cut, so no owner breach is needed:
+> - `A1`'s default slice shrinks from 30 × 2 to **15 × 2** at the same budget (2), with a
+>   **depth ≥ 2 floor asserted on all 15**.
+> - `A6`'s 10/10 row moves to `ENGINE_DEEP`.
+> - `A1`'s 300/300 and `A6`'s 10/10 are unchanged.
+>
+> The estimated default charge is **≈ 160–240 ms** CPU, measured in vitest. **Size `XS` and DoR
+> 10/10 are unchanged.** The record is in `.grugops/context/recut-abc086-lane/`.
 
 ## Problem
 
@@ -122,7 +133,19 @@ constraint**, and this ticket must not be read as a licence to do it.
   - The rows import the clock from the shipped module, never from a test-local helper.
   - The full 300 runs belong in the **`ENGINE_DEEP=1` lane**, at a budget where at least half the
     positions complete root depth ≥ 4, so that LMR acts.
-  - The default lane carries a 30 × 2 slice (see `N8-LANE`).
+  - **The default lane carries a 15 × 2 slice** *(re-cut 2026-10-09, `recut-abc086-lane`; see
+    `N8-LANE`)*.
+    - **Given** the `startpos`, `position-3` and `position-5` families of the same 30 (each root
+      plus its first four children: opening, endgame, tactical middlegame),
+    - with a fresh shipped clock per run, at a budget of **2** virtual ms and a step of 1,
+    - **when** each position is searched twice, **then two things hold:**
+      - the chosen move is identical **30/30** (2/2 on each of the 15);
+      - every one of the 15 completes root depth **≥ 2: 15/15, asserted**.
+    - The depth floor is what makes this guard more than depth 1. The rejected budget-1 slice
+      stopped at depth 1 everywhere.
+    - The 30 × 2 slice it replaces is **not carried** into either lane, because the deep 300/300
+      runs the same 30. The dropped families cost ~80 % of that slice (`kiwipete`, `position-4`,
+      `position-6`), and 7 of their 15 positions reached only depth 1 at budget 2.
   - The merged engine already passes this with a test-local clock. So `A1` is a regression guard
     on the shipped engine. It also proves that the module is reachable from outside a test file.
 - **`A2` (the honest claim under a real clock).** **Given** the same position and budget under the
@@ -161,6 +184,9 @@ constraint**, and this ticket must not be read as a licence to do it.
   - The clock's state is per instance (a closure), never module state. This ticket adds no
     module-level state.
   - This is asserted because `ABC-085`'s ladder runs exactly that configuration.
+  - **Lane** *(re-cut 2026-10-09)*: the 10/10 interleaved row runs in **`ENGINE_DEEP=1`**,
+    unchanged. It cost 0.3–0.4 s in the default lane. The per-instance clock-state row (a second
+    clock reads 0 first, about 0 ms) **stays in the default lane**.
   - The transposition table is module-level (`src/transposition.ts:70-72`). It is still safe,
     because each call clears it (`src/engine.ts:469`) and the seam runs `chooseMove` synchronously
     (`:515`).
@@ -185,6 +211,20 @@ constraint**, and this ticket must not be read as a licence to do it.
   - The tie fixture that a change to the evaluation could break left with `A3`.
   - `A1` and `A6` assert run-to-run identity, not a pinned move.
   - `A1`'s depth-floor budget is chosen against whichever tree the Engineer builds on.
+- **The build branch predates `ABC-082`'s merge** *(re-cut 2026-10-09)*.
+  - `grugops/ABC-086-virtual-clock` is based on `1d74693`. `ABC-082` (evaluation) merged into the
+    wave after that, at `3858e3c` (wave tip `1c86e9d`).
+  - **The re-hop merges the wave tip and re-reads `A1` there:**
+    - the 300/300;
+    - the deep depth-4 floor (≥ 15/30);
+    - the default slice's 15/15 at depth ≥ 2;
+    - the `N8-LANE` net.
+  - A probe pre-read the wave tip `1c86e9d` with an identical inline clock. This is **not the
+    merged tree and not a pass**:
+    - the 15 × 2 slice reached depth 2 on 15/15 and cost 193–199 ms;
+    - the deep budget of 24 reached depth ≥ 4 on **24/30** (the build tree read 27/30), and 60/60
+      runs were identical;
+    - the old 30 × 2 slice fell to 20/30 at depth ≥ 2 there, against 23/30 at the build tree.
 - **Blocks `ABC-085`** (`A5` there runs on the virtual clock) **and `ABC-087`** (`A7`, `A9` and
   `A10` there run on it). **Strengthens `ABC-084`** (`A4` there).
 
@@ -196,11 +236,36 @@ constraint**, and this ticket must not be read as a licence to do it.
   depth reached under a virtual budget is not an `NFR-005` reading.
 - **`N8-LANE` — ≤ 650 ms net CPU, the standing bar.** The rows go in `src/engine.test.ts`, so there
   is no new test file and no 160 ms floor.
-  - The full `A1` and `A2` go in the `ENGINE_DEEP=1` lane.
-  - The default lane carries `A1`'s 30 × 2 slice, measured at 246–256 ms gross
-    (`rescore-abc086`). It also carries `A6` and `A7`.
-  - The Engineer reports the net figure with the standing instrument. If the default lane comes in
-    over the bar, `A6` moves to the deep lane with a default-lane slice. Measure it; do not assume.
+  - *Re-cut 2026-10-09 (`recut-abc086-lane`).* The build read **+1 070 ms net** (sign 8/8, null
+    −0.04 %, load1 about 11). In vitest, the `A1` 30 × 2 slice cost 0.7–0.9 s and `A6` cost
+    0.3–0.4 s. The earlier "246–256 ms" for that slice was a plain-`node` figure and read the lane
+    3–4× low. The earlier fallback (move only `A6` to the deep lane) does not reach the bar.
+  - **`ENGINE_DEEP=1`:** the full `A1` (300/300 and its depth-4 floor), `A2`, and `A6`'s 10/10
+    interleaved row.
+  - **Default lane:** `A1`'s 15 × 2 slice with its depth ≥ 2 floor, `A6`'s clock-state row, `A7`,
+    `A5` (i) and (ii), and `A4`'s module row.
+  - **Estimated default charge: ≈ 160–240 ms net CPU.** The target is ≤ ~450 ms, which leaves
+    room for load under the 650 ms bar. All readings were taken **in vitest**: an M3, Node
+    v26.11.0, `--pool threads`, load1 4–6, raw files in `.grugops/context/recut-abc086-lane/notes/`.
+    - **Per position** (one process, 2 runs each): the families kept cost `startpos` 56.1 +
+      `position-3` 25.2 + `position-5` 63.3 = **144.6 ms**. The families dropped cost `kiwipete`
+      333.5 + `position-4` 130.4 + `position-6` 198.4 = 662.3 ms. The whole 30 × 2 is 806.9 ms
+      (the build read 713–903).
+    - **Whole slice, a fresh process per reading, 5 rotated rounds:** 15 × 2 read 180 / 185 / 195
+      / 211 / 229 ms, median 195. The 30 × 2 read 848–1 030 ms, median 895. The ratio is 0.218.
+    - **Scaled to the build's in-lane attribution:** 0.218 × 713–903 = **155–197 ms**.
+    - **Plus the rows that stay** (`A4`, `A5` ×2, `A6` state, `A7` ×3), each ≤ 3 ms in the build:
+      ≤ ~10 ms.
+    - **So:** about 160 ms (155 + ~5) at the low end, and 240 ms (the worst fresh reading, 229, +
+      10) at the high end. A fresh process is cold, so this errs high: in the lane, the
+      `ABC-078` rows run first and warm the engine.
+  - **The Engineer reports the net figure** with the standing instrument, on the merged tree.
+    - **≤ 450 ms:** done.
+    - **450–650 ms:** within the bar. The Engineer may take the pre-measured fallback: drop the
+      `position-5` family, giving 10 × 2. That read 92–104 ms, with 10/10 at depth 2. The floor
+      becomes 10/10. Report which slice shipped.
+    - **> 650 ms:** stop and hand up, as before. Do not trim further without a cut.
+  - **Size every default-lane row from an in-vitest reading, never from a plain-`node` one.**
 - **Security — not triggered.** There is no input surface, and `A4` forbids ambient entropy, which
   is the only thing here that could resemble one.
 
@@ -218,6 +283,12 @@ constraint**, and this ticket must not be read as a licence to do it.
    budgets or steps, so that equal output is not the trivial case.
 5. **`A7`'s rows assert the throw at the factory.** Never hand the engine a zero step to "see what
    happens": a frozen clock hangs the lane instead of failing it.
+6. **`A1`'s default slice asserts its own depth floor (15/15 at depth ≥ 2)** *(re-cut
+   2026-10-09)*.
+   - Without the floor, an engine or evaluation change that leaves the slice at depth 1 keeps it
+     green while it guards almost nothing.
+   - Build the slice by filtering the shared `thirtyPositions()` to the three families. A second
+     hand-listed corpus can drift from the deep lane's.
 
 *Moved to `ABC-087` with the seed: the old note 2 (seed before identity) and note 4 (no PRNG
 dependency). The old note 5 (certifying the tie fixture) left with `A3`, and is not carried over,
@@ -235,6 +306,28 @@ algorithm, no search change and no new export. The thinking is in `ADR-0027`.
 deterministic mode.
 
 ## Definition of Ready
+
+**Re-scored by BA/PM, 2026-10-09, after the lane re-cut** (task `wave-2026-09-25`, subtask
+`recut-abc086-lane`, Workflow 07). This was done against the build `339f940` and a read of the wave
+tip `1c86e9d`. It supersedes the scores below, which are kept as history. **Result: 10 of 10
+clean, no ⚠️ — MET.** The ticket stays where the board has it; the board is the Orchestrator's.
+Only items 4, 6 and 10 were re-read; the rest stand as scored after the fold.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** unchanged |
+| 2 | scope and out-of-scope clear | **✅** unchanged. No row is added: `A6`'s row moves lanes and `A1`'s slice shrinks |
+| 3 | INVEST-shaped | **✅** unchanged. The re-hop's merge of the wave tip is a build step, not a dependency |
+| 4 | acceptance testable and measurable | **✅ re-read.** `A1`'s default slice is 15 × 2 at budget 2: identical 30/30, with depth ≥ 2 on 15/15 asserted. `A1`'s 300/300 and `A6`'s 10/10 are unchanged and now run in `ENGINE_DEEP` |
+| 5 | dependencies known | **✅** The build predates `ABC-082`'s merge. The re-hop merges the wave tip and re-reads `A1`, and a probe of the wave tip read 15/15 and 24/30 |
+| 6 | security/NFR triggers with a measurable target | **✅ re-read.** `N8-LANE` is ≤ 650 ms net. The estimate is ≈ 160–240 ms from in-vitest readings, with the arithmetic stated. There is a pre-measured 10 × 2 fallback (92–104 ms), and a stop above 650 |
+| 7 | test notes present | **✅** six (adds the slice's depth floor) |
+| 8 | size assigned | **✅** `XS` (1). The re-cut changes one row and moves one row |
+| 9 | priority assigned | **✅** `P0`, unchanged |
+| 10 | no major unresolved blocker | **✅ re-read.** The `N8-LANE` stop is resolved by the re-cut, so no owner breach is needed. The estimate is `UNKNOWN - verify` until the standing instrument reads it on the merged tree. That reading is the re-hop's normal work, not a blocker |
+
+<details>
+<summary>Re-score 2026-10-09, after the fold (subtask <code>fold-abc086-adr0027</code>) — superseded above</summary>
 
 **Re-scored by BA/PM, 2026-10-09, after the fold** (task `wave-2026-09-25`, subtask
 `fold-abc086-adr0027`, Workflow 07). This was done against `ADR-0027` (accepted) and the wave tip
@@ -254,6 +347,8 @@ this subtask's fence).
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P0`, unchanged |
 | 10 | no major unresolved blocker | **✅ (was ⚠️) — discharged.** `ADR-0027` was accepted by the owner 2026-10-09 (`…5d2a9c74`) and is folded here as `…f3caccd1` lists |
+
+</details>
 
 <details>
 <summary>Re-score 2026-10-09, before the ruling (subtask <code>rescore-abc086</code>) — superseded above</summary>
@@ -296,3 +391,99 @@ Assessed by BA/PM, **2026-08-16**. **Result: 8 of 10 clean, 2 ⚠️ — NOT met
 | 10 | no major unresolved blocker | **⚠️** **the deterministic-mode construction is BA/PM's reading of the epic's criterion, and the search architecture is Architect/Design's.** The criteria are written to survive a different construction, but **the construction itself is not ratified** |
 
 </details>
+
+## Delivery
+
+**2026-10-09, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-086`).
+Branch `grugops/ABC-086-virtual-clock` from `1d74693`. Code is in `1ae5284`, plus `f9d58ee`, which
+renames the `A4` row title only. Not merged, not pushed. The decisions, the readings and the raw
+files are in `.grugops/context/ticket-to-pr-ABC-086/notes/` and are not restated here.
+
+**Criteria: 6 of 6 live criteria met. `N8-LANE` is NOT met, and it is handed up.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | 300/300 in `ENGINE_DEEP`, at a virtual budget of 24 and step 1. Depth ≥ 4 on ≥ 15/30 is asserted; the probe read 27/30. The default slice is 60/60. Every row imports `src/virtual-clock.ts` |
+| `A2` | MET | kiwipete × 10 at `DEFAULT_BUDGET_MS` on the wall clock. Every move is legal and every depth is reported. Identity is deliberately not asserted, and the reason is in the file |
+| `A4` | MET | The delivered `src/` diff grep gives 0 lines. The single `Date.now` is now `src/engine.ts:457` (it was `:452`) |
+| `A5` | MET | (i) The `cli.ts` construction is pinned. (ii) The import walk reaches `engine.ts` and not the module. (iii) The `engine.ts` diff is comment lines only, and the `ABC-078` `A4` pin is green, unamended |
+| `A6` | MET | 10/10 per engine, interleaved against alone. Engines at budget 1 and budget 3 differ on 3/10 positions. Per-instance clock state is checked |
+| `A7` | MET | 5/5 throws; exact readings `[0, 0.5, 1]` and `[0, 1, 2]` |
+
+**`N8-LANE`: +1 070 ms CPU net, against a bar of 650 ms.** This is a stop condition in the brief,
+so nothing was trimmed. The `A1` default slice costs 0.7–0.9 s in vitest. That is 3–4× the
+plain-`node` figure this page cites, so the stated `A6` fallback does not reach the bar on its own.
+The options are in claim `…3bb7069b`.
+
+**Owed:**
+- the `AGENTS.md` `ENGINE_DEEP` line, now 45 (33 default) and 269 s, to the Scribe;
+- a QE hop;
+- the `N8-LANE` ruling.
+
+**Lane re-cut 2026-10-09, BA/PM** (subtask `recut-abc086-lane`). `N8-LANE` is resolved by a
+re-cut, not a breach; see `A1`, `A6` and § Security / NFR triggers. **Owed by the Engineer's
+re-hop:**
+- merge the wave tip, which carries `ABC-082`;
+- replace the 30 × 2 default row with the 15 × 2 slice and its depth ≥ 2 floor;
+- move `A6`'s 10/10 row under `ENGINE_DEEP`;
+- re-read `A1` (the 300/300 and the depth-4 floor) on the merged tree;
+- report the `N8-LANE` net with the standing instrument.
+
+The `AGENTS.md` line and the QE hop are still owed, as above.
+
+**Re-hop 2026-10-09, Software Engineer** (subtask `ticket-to-pr-ABC-086-rehop`). The wave tip
+`b0a3ba9` (with `ABC-082`) is merged at `54540e5`; the re-cut rows are at `a4d8633`, in
+`src/engine.test.ts` only. Not merged into the wave, not pushed. Readings in observation
+`…457ba6b8`, owed items in claim `…ae1c2c15`.
+
+- **Slice shipped: 15 × 2** (no fallback). `A1`'s default row is the three families filtered from
+  `thirtyPositions()`, identical 30/30, depth ≥ 2 on 15/15 asserted. `A6`'s 10/10 interleaved row
+  is in `ENGINE_DEEP`, unchanged; the clock-state row stays default.
+- **Gates on the merged tree:** lint (after one safe format autofix), typecheck and build exit 0;
+  `npm test` 49 files / 1530 passed (wave tip 1522), 0 skipped, skip-integrity `No findings.`
+- **`ENGINE_DEEP` on the merged tree:** exit 0, 45 passed (32 default), 314.8 s. `A1` 300/300
+  green; depth-4 floor green (24/30, floor 15); `A6` 10/10 green; `A2` 10/10 legal, reported.
+- **`N8-LANE`: +35 ms net** (median of 8 paired rounds, sign 4/8; null 0.00 %, 4/8; load1 median
+  22.9), under 450. A second run was inadmissible (null −2.22 %) and is not used. In vitest, the new
+  `A1` row costs 106–109 ms and every other row ≤ 1 ms.
+- `src/engine.ts` and `src/search.ts` are untouched by the re-hop.
+
+**Still owed:** the `AGENTS.md` `ENGINE_DEEP` and `npm test` lines (Scribe), the QE hop and the
+board move (Orchestrator).
+
+## § QE — 2026-10-09 (QE/E2E, task `wave-2026-09-25`, subtask `qe-ABC-086`, Workflow 05)
+
+**PASS WITH FINDINGS** at `82cccba`. QE's own probes re-measured every figure. The reasoning and
+raw output are in `.grugops/context/qe-ABC-086/` (`notes/` and `probe/`) and are not restated here.
+
+- **`A1`, `A2`, `A4`–`A7` MET as written.**
+  - Gate: lint, typecheck and build exit 0. `npm test` 49 / 1530 / 0 skipped. Integrity
+    `No findings.`
+  - `ENGINE_DEEP`: exit 0, 45 passed, 291.9 s. `A1` 300/300, depth ≥ 4 on 24/30, `A6` 10/10,
+    `A2` `e2a6@d5` ×10, all legal.
+  - `A5` (ii) was checked independently with the compiler's own module graph: `cli.ts` reaches
+    29 modules, none of them `virtual-clock.ts`.
+- **Determinism across separate processes holds.** 450 rows agree on move, score, depth and nodes.
+  The rows cover 5 budget/step configurations, 30 positions, and 3 processes (forward, reverse
+  order, and after warm-up searches).
+- **The default slice's floor is also its ceiling.** At budget 2 / step 1 the depth is 1 or 2 by
+  construction, and iteration 2 has a margin of 635–985 nodes. It is a real guard: a clock that
+  jumps the budget in one read reds the floor and nothing else. The slice never reaches LMR
+  depths; only the deep 300/300 does.
+- **12 QE mutants:** 9 killed, 2 equivalent, and 1 survives every row (a module-level step).
+- **Gaps:**
+  - **G-QE-1 (LOW–MEDIUM, test gap; the code is correct).** No row runs two live clocks at
+    different steps, so a module-level step survives both lanes. The `A6` interleaved row is
+    blind to clock state by construction. Remedy, verified (green on the shipped module, red on
+    the mutant): one ≈ 0 ms default row, `virtualClock(1)` and `virtualClock(0.5)` read
+    interleaved = `[0, 0, 1, 0.5, 2, 1]`.
+  - **G-QE-2 (LOW, design limit).** The guard stops the five named steps, not a small positive
+    one. `virtualClock(0.001)` takes 13.8 s per search at budget 2. A step below about
+    1e-16 × budget freezes. A reused clock with a non-dyadic step shifts node counts by one
+    interval. This is a harness note for `ABC-084`, `ABC-085` and `ABC-087`.
+  - **G-QE-3 (LOW).** `A4` is a spelling grep. It misses destructuring, bracket access,
+    `new Date()`, an aliased `perf_hooks` import, `process.uptime`, `crypto` and `Temporal.Now`.
+    Mitigated by the 37-line module being read by eye.
+- **Security/NFR not triggered** (no shipped-path change). `N8-LANE` is the Engineer's reading.
+
+**`ABC-086` may leave `In Review`. G-QE-1 is not a blocker. The board move is the Orchestrator's.**

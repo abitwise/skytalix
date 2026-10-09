@@ -1,0 +1,2 @@
+budget 2 all30 d>=2: 20 d>=4: 0 | slice15 d>=2: 15 slice depths: 222222222222222 | 10x2 (no position-5) d>=2: 10
+budget 24 all30 d>=2: 30 d>=4: 24 | slice15 d>=2: 15 slice depths: 555557767755555 | 10x2 (no position-5) d>=2: 10

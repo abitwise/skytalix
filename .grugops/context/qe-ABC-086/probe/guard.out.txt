@@ -1,0 +1,58 @@
+0 | exit 0
+    {"input":"0","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got 0"}
+-0 | exit 0
+    {"input":"-0","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got 0"}
+-1 | exit 0
+    {"input":"-1","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got -1"}
+NaN | exit 0
+    {"input":"NaN","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got NaN"}
+Infinity | exit 0
+    {"input":"Infinity","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got Infinity"}
+-Infinity | exit 0
+    {"input":"-Infinity","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got -Infinity"}
+Number.MIN_VALUE | HANG(>20000 ms, killed SIGTERM)
+    {"input":"Number.MIN_VALUE","factory":"accepted","firstFourReadings":["0","5e-324","1e-323","1.5e-323"]}
+1e-17 | HANG(>20000 ms, killed SIGTERM)
+    {"input":"1e-17","factory":"accepted","firstFourReadings":["0","1e-17","2e-17","3e-17"]}
+Number.EPSILON | HANG(>20000 ms, killed SIGTERM)
+    {"input":"Number.EPSILON","factory":"accepted","firstFourReadings":["0","2.220446049250313e-16","4.440892098500626e-16","6.661338147750939e-16"]}
+1e-9 | HANG(>20000 ms, killed SIGTERM)
+    {"input":"1e-9","factory":"accepted","firstFourReadings":["0","1e-9","2e-9","3.0000000000000004e-9"]}
+1e-4 | HANG(>20000 ms, killed SIGTERM)
+    {"input":"1e-4","factory":"accepted","firstFourReadings":["0","0.0001","0.0002","0.00030000000000000003"]}
+0.001 | HANG(>20000 ms, killed SIGTERM)
+    {"input":"0.001","factory":"accepted","firstFourReadings":["0","0.001","0.002","0.003"]}
+0.1 | exit 0
+    {"input":"0.1","factory":"accepted","firstFourReadings":["0","0.1","0.2","0.30000000000000004"]}
+    {"input":"0.1","engine":"returned","first":{"depth":3,"nodes":18002,"elapsedMs":"2.1000000000000005"},"secondOnSameClock":{"depth":3,"nodes":18002,"elapsedMs":"2.1"},"wallMs":150}
+2**53 | exit 0
+    {"input":"2**53","factory":"accepted","firstFourReadings":["0","9007199254740992","18014398509481984","27021597764222976"]}
+    {"input":"2**53","engine":"returned","first":{"depth":1,"nodes":594,"elapsedMs":"18014398509481984"},"secondOnSameClock":{"depth":1,"nodes":594,"elapsedMs":"18014398509481984"},"wallMs":16}
+1e300 | exit 0
+    {"input":"1e300","factory":"accepted","firstFourReadings":["0","1e+300","2e+300","3e+300"]}
+    {"input":"1e300","engine":"returned","first":{"depth":1,"nodes":594,"elapsedMs":"2e+300"},"secondOnSameClock":{"depth":1,"nodes":594,"elapsedMs":"2e+300"},"wallMs":16}
+Number.MAX_VALUE | exit 0
+    {"input":"Number.MAX_VALUE","factory":"accepted","firstFourReadings":["0","1.7976931348623157e+308","Infinity","Infinity"]}
+    {"input":"Number.MAX_VALUE","engine":"returned","first":{"depth":1,"nodes":594,"elapsedMs":"Infinity"},"secondOnSameClock":{"depth":1,"nodes":594,"elapsedMs":"NaN"},"wallMs":16}
+"1" (string) | exit 0
+    {"input":"\"1\" (string)","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got 1"}
+"abc" (string) | exit 0
+    {"input":"\"abc\" (string)","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got abc"}
+undefined | exit 0
+    {"input":"undefined","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got undefined"}
+null | exit 0
+    {"input":"null","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got null"}
+true | exit 0
+    {"input":"true","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got true"}
+1n (bigint) | exit 0
+    {"input":"1n (bigint)","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got 1"}
+new Number(1) | exit 0
+    {"input":"new Number(1)","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got 1"}
+{ valueOf: () => 1 } | exit 0
+    {"input":"{ valueOf: () => 1 }","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got [object Object]"}
+[1] | exit 0
+    {"input":"[1]","factory":"threw","error":"RangeError","message":"virtualClock: step must be finite and > 0, got 1"}
+Symbol() | exit 0
+    {"input":"Symbol()","factory":"threw","error":"TypeError","message":"Cannot convert a Symbol value to a string"}
+Object.create(null) | exit 0
+    {"input":"Object.create(null)","factory":"threw","error":"TypeError","message":"Cannot convert object to primitive value"}

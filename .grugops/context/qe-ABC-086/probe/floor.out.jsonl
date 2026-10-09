@@ -1,0 +1,34 @@
+{"name":"startpos","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":3,"depth1Nodes":20,"iter2Nodes":88,"marginTo1023":935}
+{"name":"startpos/b1c3","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":3,"depth1Nodes":27,"iter2Nodes":67,"marginTo1023":956}
+{"name":"startpos/b1a3","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":3,"depth1Nodes":23,"iter2Nodes":67,"marginTo1023":956}
+{"name":"startpos/g1h3","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":3,"depth1Nodes":23,"iter2Nodes":63,"marginTo1023":960}
+{"name":"startpos/g1f3","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":3,"depth1Nodes":23,"iter2Nodes":61,"marginTo1023":962}
+{"name":"kiwipete","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":2,"depthAt4":2,"depth1Nodes":594,"iter2Nodes":null,"marginTo1023":null}
+{"name":"kiwipete/a1b1","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":1,"depthAt4":2,"depth1Nodes":571,"iter2Nodes":null,"marginTo1023":null}
+{"name":"kiwipete/a1c1","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":1,"depthAt4":2,"depth1Nodes":534,"iter2Nodes":null,"marginTo1023":null}
+{"name":"kiwipete/a1d1","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":1,"depthAt4":2,"depth1Nodes":572,"iter2Nodes":null,"marginTo1023":null}
+{"name":"kiwipete/e1f1","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":1,"depthAt4":1,"depth1Nodes":600,"iter2Nodes":null,"marginTo1023":null}
+{"name":"position-3","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":3,"depth1Nodes":14,"iter2Nodes":83,"marginTo1023":940}
+{"name":"position-3/e2e3","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":3,"depth1Nodes":57,"iter2Nodes":60,"marginTo1023":963}
+{"name":"position-3/e2e4","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":3,"depth1Nodes":28,"iter2Nodes":139,"marginTo1023":884}
+{"name":"position-3/g2g3","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":4,"depth1Nodes":6,"iter2Nodes":38,"marginTo1023":985}
+{"name":"position-3/g2g4","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":3,"depthAt4":4,"depth1Nodes":21,"iter2Nodes":64,"marginTo1023":959}
+{"name":"position-4","slice":false,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":2,"depth1Nodes":1603,"iter2Nodes":752,"marginTo1023":271}
+{"name":"position-4/f1f2","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":2,"depthAt4":2,"depth1Nodes":132,"iter2Nodes":null,"marginTo1023":null}
+{"name":"position-4/g1h1","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":2,"depthAt4":2,"depth1Nodes":198,"iter2Nodes":null,"marginTo1023":null}
+{"name":"position-4/d2d4","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":2,"depthAt4":2,"depth1Nodes":193,"iter2Nodes":null,"marginTo1023":null}
+{"name":"position-4/f3d4","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":1,"depthAt4":2,"depth1Nodes":223,"iter2Nodes":null,"marginTo1023":null}
+{"name":"position-5","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":2,"depth1Nodes":67,"iter2Nodes":388,"marginTo1023":635}
+{"name":"position-5/b1c3","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":3,"depth1Nodes":55,"iter2Nodes":210,"marginTo1023":813}
+{"name":"position-5/b1a3","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":3,"depth1Nodes":64,"iter2Nodes":242,"marginTo1023":781}
+{"name":"position-5/b1d2","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":3,"depth1Nodes":50,"iter2Nodes":195,"marginTo1023":828}
+{"name":"position-5/c1d2","slice":true,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":3,"depth1Nodes":50,"iter2Nodes":200,"marginTo1023":823}
+{"name":"position-6","slice":false,"depthAt1":1,"depthAt2":1,"depthAt3":2,"depthAt4":2,"depth1Nodes":430,"iter2Nodes":null,"marginTo1023":null}
+{"name":"position-6/a1a2","slice":false,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":2,"depth1Nodes":439,"iter2Nodes":922,"marginTo1023":101}
+{"name":"position-6/a1b1","slice":false,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":2,"depth1Nodes":387,"iter2Nodes":936,"marginTo1023":87}
+{"name":"position-6/a1c1","slice":false,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":2,"depth1Nodes":387,"iter2Nodes":924,"marginTo1023":99}
+{"name":"position-6/a1d1","slice":false,"depthAt1":1,"depthAt2":2,"depthAt3":2,"depthAt4":2,"depth1Nodes":394,"iter2Nodes":726,"marginTo1023":297}
+SLICE(15): depth@2 {"2":15}  depth@3 {"2":5,"3":10}  depth@4 {"2":1,"3":12,"4":2}
+SLICE(15): iteration-2 margin to 1023 nodes: min 635 median 940 max 985  sorted 635 781 813 823 828 884 935 940 956 956 959 960 962 963 985
+ALL(30):   depth@2 {"1":10,"2":20}  depth@3 {"1":5,"2":15,"3":10}  depth@4 {"1":1,"2":15,"3":12,"4":2}
+ANY depth@2 > 2: false

@@ -1,0 +1,17 @@
+R2-tt-not-wiped-between-calls (src/transposition.ts: words.fill(0) removed), WHOLE default lane `npx vitest run --dir src` on a scratch copy, 20:28Z:
+passed 1515 failed 15
+RED quiescence.test.ts | A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 2: same score, same move, same node count
+RED quiescence.test.ts | A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 3: same score, same move, same node count
+RED quiescence.test.ts | A4 — a position with no capture anywhere near the leaves scores exactly as before bare kings at depth 4: same score, same move, same node count
+RED quiescence.test.ts | A4 — a position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 2: same score, same move, same node count
+RED quiescence.test.ts | A4 — a position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 3: same score, same move, same node count
+RED quiescence.test.ts | A4 — a position with no capture anywhere near the leaves scores exactly as before king and pawn vs a far king at depth 4: same score, same move, same node count
+RED quiescence.test.ts | A4 — a position with no capture anywhere near the leaves scores exactly as before two far-apart pawns at depth 2: same score, same move, same node count
+RED quiescence.test.ts | A4 — a position with no capture anywhere near the leaves scores exactly as before two far-apart pawns at depth 3: same score, same move, same node count
+RED quiescence.test.ts | A4 — a position with no capture anywhere near the leaves scores exactly as before two far-apart pawns at depth 4: same score, same move, same node count
+RED search.ordering.test.ts | A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 9 319, MVV-LVA 3 286, + killers 2 429
+RED search.ordering.test.ts | G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 360 nodes
+RED search.pvs-lmr.test.ts | A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 position-3 at depth 4 — the default lane's standing guard
+RED transposition.test.ts | the table — verified keys, always-replace, cutoffs only at the stored depth is empty after clearTable
+RED transposition.test.ts | A1 — table-on and table-off scores are identical position-3 at depth 4 — the same score, and the work changes: 1 319 nodes with the table, 1 474 without
+RED transposition.test.ts | A5 — the only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 251 nodes

@@ -1,0 +1,6 @@
+wave r1 load1=4.08 COND sub15 budget 2 n=15x2 depth>=2: 15/15 cpu-ms 193
+wave r1 load1=4.08 COND full budget 2 n=30x2 depth>=2: 20/30 cpu-ms 939
+wave r2 load1=4.15 COND sub15 budget 2 n=15x2 depth>=2: 15/15 cpu-ms 199
+wave r2 load1=4.15 COND full budget 2 n=30x2 depth>=2: 20/30 cpu-ms 955
+wave r3 load1=4.15 COND sub15 budget 2 n=15x2 depth>=2: 15/15 cpu-ms 193
+wave r3 load1=4.15 COND full budget 2 n=30x2 depth>=2: 20/30 cpu-ms 960

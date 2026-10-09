@@ -1,0 +1,18 @@
+{"variant":"Date.now() (control)","row":"CAUGHT (red)","ticketGrep":"CAUGHT (1)","live":"readings 0,1,2"}
+{"variant":"globalThis.Date.now()","row":"CAUGHT (red)","ticketGrep":"CAUGHT (1)","live":"readings 0,1,2"}
+{"variant":"const n = Date.now; n()","row":"CAUGHT (red)","ticketGrep":"CAUGHT (1)","live":"readings 0,1,2"}
+{"variant":"const { now } = Date; now()","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"Date[\"now\"]()","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"new Date().getTime()","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"+new Date()","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"performance.now() (global, control)","row":"CAUGHT (red)","ticketGrep":"CAUGHT (1)","live":"readings 0,1,2"}
+{"variant":"import { performance as p } from \"node:perf_hooks\"; p.now()","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"import { performance } from \"node:perf_hooks\"; const { now: pn } = performance","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"performance[\"now\"]()","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"process.hrtime.bigint()","row":"CAUGHT (red)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"process.uptime()","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"Math.random() (control)","row":"CAUGHT (red)","ticketGrep":"CAUGHT (1)","live":"readings 0,1,2"}
+{"variant":"Math[\"random\"]()","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"crypto.getRandomValues","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"import { randomInt } from \"node:crypto\"","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}
+{"variant":"Temporal.Now (if present)","row":"MISSED (green)","ticketGrep":"MISSED (0)","live":"readings 0,1,2"}

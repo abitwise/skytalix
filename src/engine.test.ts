@@ -44,6 +44,7 @@ import {
   chooseMoveWithoutReductions,
   createEngine,
   DEFAULT_BUDGET_MS,
+  type EngineChoice,
   HARD_CEILING_MS,
   NODES_PER_CLOCK_CHECK,
 } from "./engine.ts";
@@ -62,6 +63,7 @@ import {
   type RenderSeam,
   runTurnLoop,
 } from "./turn-loop.ts";
+import { virtualClock } from "./virtual-clock.ts";
 
 /**
  * `ENGINE_DEEP=1` registers the real-clock lane. Unset, those cases are not defined at all —
@@ -211,6 +213,17 @@ function broadCorpus(): { name: string; position: Position }[] {
     ({ position }) => gameStatus(position).result === "in-progress",
   );
 }
+
+/**
+ * `A1`'s 30: the six roots plus the first four children of each — opening, middlegame, endgame.
+ * Shared by `ABC-078` `A1` (deep lane) and `ABC-086` `A1` (both lanes), so it lives outside the
+ * deep block.
+ */
+const thirtyPositions = (): { name: string; position: Position }[] =>
+  PERFT_CORPUS.flatMap(({ name, fen }) => [
+    { name, position: parseFen(fen) },
+    ...childrenOf(name, parseFen(fen)).slice(0, 4),
+  ]);
 
 // ---------------------------------------------------------------------------
 // A2 — the budget is honoured under an adversarial clock. The criterion that
@@ -774,17 +787,140 @@ describe("A7 — a legal move comes back at a budget with nothing left in it", (
 });
 
 // ---------------------------------------------------------------------------
+// ABC-086 — deterministic mode: the shipped engine on the SHIPPED virtual clock
+// (`src/virtual-clock.ts`, `ADR-0027`). Every row here imports that module, never `tickingClock`
+// above — a test-local clock proves nothing about what the `ABC-084`/`ABC-085`/`ABC-087`
+// harnesses can reach. The full `A1`, `A2` and `A6`'s interleaved row are in the deep lane at the
+// bottom of this file.
+// ---------------------------------------------------------------------------
+
+/**
+ * `ABC-086` `A1`: `runs` searches of each position, each on a FRESH clock from the shipped module,
+ * keeping the chosen move and the completed root depth of every run.
+ */
+function deterministicRuns(
+  positions: { name: string; position: Position }[],
+  budgetMs: number,
+  runs: number,
+): { name: string; moves: string[]; depths: number[] }[] {
+  return positions.map(({ name, position }) => {
+    const choices = Array.from({ length: runs }, () =>
+      chooseMove(parseFen(toFen(position)), { budgetMs, now: virtualClock(1) }),
+    );
+    return {
+      name,
+      moves: choices.map((choice) =>
+        choice === null ? "null" : `${label(choice.move)}${choice.move.promotion ?? ""}`,
+      ),
+      depths: choices.map((choice) => (choice === null ? 0 : choice.depth)),
+    };
+  });
+}
+
+/** The positions of `ABC-086` `A1` whose runs did not all choose the same move. */
+function nonIdentical(results: { name: string; moves: string[] }[]): string[] {
+  return results
+    .filter(({ moves }) => moves.some((move) => move !== moves[0]))
+    .map(({ name, moves }) => `${name}: ${moves.join(" ")}`);
+}
+
+describe("ABC-086 A1 — the same position, budget and fresh virtual clock choose the same move", () => {
+  /**
+   * The default-lane slice of the deep 300/300 (re-cut `recut-abc086-lane`, `N8-LANE`): the three
+   * families of the shared 30 where every member completes root depth 2 at budget 2, and the
+   * cheapest. Filtered from `thirtyPositions()`, never hand-listed, so it cannot drift from the
+   * deep lane's corpus. The depth floor is ASSERTED — without it an engine or evaluation change
+   * that leaves the slice at depth 1 keeps it green while it guards almost nothing.
+   */
+  const SLICE_FAMILIES = ["startpos", "position-3", "position-5"];
+
+  it("is identical 2/2 on 15 positions, each completing root depth >= 2 — 30/30, 15/15", () => {
+    const slice = thirtyPositions().filter(({ name }) =>
+      SLICE_FAMILIES.includes(name.split("/")[0] as string),
+    );
+    expect(slice).toHaveLength(15);
+    const results = deterministicRuns(slice, 2, 2);
+    expect(nonIdentical(results)).toEqual([]);
+    const shallow = results
+      .filter(({ depths }) => depths.some((depth) => depth < 2))
+      .map(({ name, depths }) => `${name}: d${depths.join(" d")}`);
+    expect(shallow).toEqual([]);
+  });
+});
+
+describe("ABC-086 A5 — the virtual clock stays off the shipped path", () => {
+  const cliSource = readFileSync(new URL("./cli.ts", import.meta.url), "utf8");
+
+  it("(i) the shipped construction passes a budget and no clock", () => {
+    expect(cliSource).toContain("createEngine({ budgetMs: DEFAULT_BUDGET_MS })");
+  });
+
+  it("(ii) src/cli.ts does not import the virtual-clock module, directly or transitively", () => {
+    // Every relative specifier in a static import/export, a type-only one, or a dynamic import —
+    // over-inclusive on purpose: a type-only edge counted here can only make this stricter.
+    const specifier = /(?:\bfrom\s*|\bimport\s*\(?\s*)["'](\.{1,2}\/[^"']+)["']/g;
+    const reached = new Set<string>();
+    const queue = [new URL("./cli.ts", import.meta.url).href];
+    while (queue.length > 0) {
+      const href = queue.pop() as string;
+      if (reached.has(href)) continue;
+      reached.add(href);
+      for (const match of readFileSync(new URL(href), "utf8").matchAll(specifier)) {
+        queue.push(new URL(match[1] as string, href).href);
+      }
+    }
+    const names = [...reached].map((href) => href.slice(href.lastIndexOf("/") + 1));
+    // The denominator: the walk really reached the engine, so an empty walk cannot pass.
+    expect(names).toContain("engine.ts");
+    expect(names).not.toContain("virtual-clock.ts");
+  });
+});
+
+describe("ABC-086 A6 — each virtual clock keeps its own state", () => {
+  // The 10/10 interleaved row is in the deep lane at the bottom of this file (re-cut
+  // `recut-abc086-lane`, `N8-LANE`); this per-instance row costs about 0 ms and stays here.
+  it("keeps each clock's state in its own instance — a second clock starts at 0", () => {
+    const first = virtualClock(1);
+    first();
+    first();
+    const second = virtualClock(1);
+    expect(second()).toBe(0);
+    expect(first()).toBe(2);
+  });
+});
+
+describe("ABC-086 A7 — the step guard and the reading shape, asserted at the factory", () => {
+  // Never at the engine: a frozen clock hangs the lane instead of failing it (ticket note 5).
+  it("throws on a step that is not finite or not greater than 0 — 5/5", () => {
+    for (const step of [0, -1, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]) {
+      expect(() => virtualClock(step), `step ${step}`).toThrow(RangeError);
+    }
+  });
+
+  it("reads exactly 0, 0.5, 1 at a step of 0.5", () => {
+    const clock = virtualClock(0.5);
+    expect([clock(), clock(), clock()]).toEqual([0, 0.5, 1]);
+  });
+
+  it("reads exactly 0, 1, 2 at a step of 1", () => {
+    const clock = virtualClock(1);
+    expect([clock(), clock(), clock()]).toEqual([0, 1, 2]);
+  });
+});
+
+describe("ABC-086 A4 — the virtual-clock module reads no real clock and no entropy", () => {
+  it("carries no real-clock read and no entropy source", () => {
+    const source = readFileSync(new URL("./virtual-clock.ts", import.meta.url), "utf8");
+    expect(source).toContain("export function virtualClock(");
+    expect(source).not.toMatch(/Math\.random|Date\.now|performance\.now|hrtime/);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // A1 and NFR-005 — the real clock. OPT-IN: `ENGINE_DEEP=1`.
 // ---------------------------------------------------------------------------
 
 if (RUN_DEEP) {
-  /** `A1`'s 30: the six roots plus the first four children of each — opening, middlegame, endgame. */
-  const thirtyPositions = (): { name: string; position: Position }[] =>
-    PERFT_CORPUS.flatMap(({ name, fen }) => [
-      { name, position: parseFen(fen) },
-      ...childrenOf(name, parseFen(fen)).slice(0, 4),
-    ]);
-
   /**
    * WHAT THIS LANE MEASURED AT THE `ABC-078` BRANCH TIP, on Apple M3 (Mac15,13) — true of that
    * machine and of nothing else (`ABC-074` owns the off-machine generalisation and is `Blocked`):
@@ -940,6 +1076,90 @@ if (RUN_DEEP) {
         }
       }
       expect(failures).toEqual([]);
+    }, 120_000);
+  });
+
+  describe("ABC-086 A1 — 30 positions x 10 fresh virtual clocks: 300/300 [deep, ENGINE_DEEP=1]", () => {
+    /**
+     * 24 virtual ms at a 1 ms step: the criterion needs at least half the positions to complete
+     * root depth >= 4, so that LMR acts. Measured 27/30 at the `ABC-086` base (15/30 at 8, 16/30
+     * at 16), and the floor is ASSERTED below rather than trusted.
+     */
+    const BUDGET_MS = 24;
+
+    it("completes root depth >= 4 on at least 15 of the 30 positions", () => {
+      const deep = thirtyPositions().filter(
+        ({ position }) =>
+          (chooseMove(position, { budgetMs: BUDGET_MS, now: virtualClock(1) }) as { depth: number })
+            .depth >= 4,
+      );
+      expect(deep.length).toBeGreaterThanOrEqual(15);
+    }, 60_000);
+
+    it("chooses the identical move in all 10 runs of every position — 300/300", () => {
+      expect(nonIdentical(deterministicRuns(thirtyPositions(), BUDGET_MS, 10))).toEqual([]);
+    }, 300_000);
+  });
+
+  describe("ABC-086 A6 — two engines on their own virtual clocks, interleaved [deep, ENGINE_DEEP=1]", () => {
+    /**
+     * Different BUDGETS, so equal output is not the trivial case: on this corpus the two disagree
+     * on some positions (three at the `ABC-086` base: `position-3/e2e4`, `position-4/d2d4`,
+     * `position-4/f3d4`), asserted below. Moved here from the default lane by the `N8-LANE`
+     * re-cut (`recut-abc086-lane`), unchanged.
+     */
+    const corpus = [PERFT_CORPUS[2], PERFT_CORPUS[3]].flatMap((entry) => {
+      const { name, fen } = entry as { name: string; fen: string };
+      return [{ name, position: parseFen(fen) }, ...childrenOf(name, parseFen(fen)).slice(0, 4)];
+    });
+    const makeA = () => createEngine({ budgetMs: 1, now: virtualClock(1) });
+    const makeB = () => createEngine({ budgetMs: 3, now: virtualClock(1) });
+
+    it("each engine chooses 10/10 what it chooses alone", async () => {
+      expect(corpus).toHaveLength(10);
+      const alone = async (engine: EngineSeam) => {
+        const moves: string[] = [];
+        for (const { position } of corpus)
+          moves.push(label(await engine(newGame(toFen(position)))));
+        return moves;
+      };
+      const aloneA = await alone(makeA());
+      const aloneB = await alone(makeB());
+
+      const engineA = makeA();
+      const engineB = makeB();
+      const interleavedA: string[] = [];
+      const interleavedB: string[] = [];
+      for (const { position } of corpus) {
+        interleavedA.push(label(await engineA(newGame(toFen(position)))));
+        interleavedB.push(label(await engineB(newGame(toFen(position)))));
+      }
+
+      expect(aloneA.filter((move, index) => move !== aloneB[index]).length).toBeGreaterThan(0);
+      expect(interleavedA).toEqual(aloneA);
+      expect(interleavedB).toEqual(aloneB);
+    });
+  });
+
+  describe("ABC-086 A2 — the shipped wall clock: legal, depth reported [deep, ENGINE_DEEP=1]", () => {
+    /**
+     * THIS ROW DOES NOT ASSERT AN IDENTICAL MOVE, AND MUST NEVER BE "STRENGTHENED" TO. On the
+     * wall clock the depth reached depends on machine load, so the move can differ between runs;
+     * asserting identity would pass on an idle machine and fail on a loaded one — the class of
+     * test `plans/nfr-catalog.md` forbids. Reproducibility is a property of deterministic mode
+     * (`ABC-086` `A1`, the virtual clock), never of the shipped default (`ADR-0027`).
+     */
+    it("returns a legal move in each of 10 runs at the default budget, and reports each depth", () => {
+      const position = parseFen(fenOf("kiwipete"));
+      const reports: string[] = [];
+      for (let run = 0; run < 10; run++) {
+        const choice = chooseMove(position, { budgetMs: DEFAULT_BUDGET_MS });
+        expect(choice).not.toBeNull();
+        const { move, depth, elapsedMs } = choice as EngineChoice;
+        expect(legalMoves(position).some((candidate) => sameMove(candidate, move))).toBe(true);
+        reports.push(`${label(move)}@d${depth}/${elapsedMs}ms`);
+      }
+      console.log(`ABC-086 A2 kiwipete x10 on the wall clock: ${reports.join(" ")}`);
     }, 120_000);
   });
 }

@@ -1,0 +1,6 @@
+step 1 | {"step":1,"depth":1,"nodes":1618,"readingsToDeadline":2,"wallMs":60}
+step 0.1 | {"step":0.1,"depth":3,"nodes":18002,"readingsToDeadline":20,"wallMs":143}
+step 0.03 | {"step":0.03,"depth":4,"nodes":65106,"readingsToDeadline":66.66666666666667,"wallMs":897}
+step 0.01 | {"step":0.01,"depth":5,"nodes":200274,"readingsToDeadline":200,"wallMs":1892}
+step 0.003 | {"step":0.003,"depth":7,"nodes":676434,"readingsToDeadline":666.6666666666666,"wallMs":6092}
+step 0.001 | {"step":0.001,"depth":8,"nodes":2041426,"readingsToDeadline":2000,"wallMs":13815}

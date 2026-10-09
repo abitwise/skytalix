@@ -1,0 +1,9 @@
+A: n=8 files/tests=48/1494 medianCPU=24.855 rangeCPU=24.49-27.3 medianWALL=6.515 rangeWALL=6.23-10.06
+N: n=8 files/tests=48/1494 medianCPU=25.010 rangeCPU=24.4-26.01 medianWALL=6.595 rangeWALL=6.33-7.75
+B: n=8 files/tests=48/1485 medianCPU=23.765 rangeCPU=23.39-24.55 medianWALL=6.710 rangeWALL=6.14-7.18
+NULL CONTROL N-A CPU per round: -0.09 0.15 0.13 -0.06 0.26 -0.26 0.04 -1.29 median=-0.010 (-0.04% of A) sign+ 4/8
+NULL CONTROL N-A WALL per round: 0.02 0.12 0.01 0.19 0.26 -0.16 0.24 -2.31 median=0.070
+CHARGE A-B (ABC-086) CPU per round: 0.81 0.77 1.05 1.09 1.48 1.53 0.77 2.75 median=1.070 (4.30% of A) sign+ 8/8
+CHARGE A-B (ABC-086) WALL per round: 0.07 -0.22 -0.2 -0.2 0.09 0.2 -0.17 2.88 median=-0.050
+load1 before each run: min=2.56 median=11.27 max=14.99
+harness errors: 0 of 27
