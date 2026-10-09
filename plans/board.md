@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-125` `In Development` → `In Review` at `ca3ca0f`; QE dispatched._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — review follow-ups cut by BA/PM (`f7a525d`, merged `5c93eb2`): **`ABC-125`** (XS, P1, 10/10) cut → pulled to `In Development` (2/3); **`ABC-126`** (XS, P2, 9/10, after `ABC-084`) in Backlog; folds onto `ABC-083`/`085`/`087`/`036`/`038`/`079`. Carried: 33 ticket files' frontmatter `column:` disagrees with this board (board is authoritative) — housekeeping item for BA/PM._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-084` re-scored 10/10 (merged `16846ee`) → `Ready` → `In Development` (1/3); Engineer dispatched. BA/PM `cut-followups-2026-10-09` dispatched for the review gaps._
@@ -457,9 +459,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 
-- [ABC-125] Two live virtual clocks at different steps — the row that kills the module-level-step mutant  (BA/PM, XS, P1, epic: EPIC-004, since: 2026-10-10, **DoR 10/10, 0 ⚠️**; cut from QE `ABC-086` G-QE-1; hard prerequisite of `ABC-085`; pulled 2026-10-10 by the Orchestrator; Engineer `ticket-to-pr-ABC-125` on `grugops/ABC-125-two-clocks`)
 
 - [ABC-084] Tactical puzzle suite as a strength regression gate  (EPIC-004, M, P0, **DoR 10/10, 0 ⚠️ — re-scored 2026-10-09 by BA/PM at `0ebe63f` (`fold-abc084-gate-b`) on the owner's option B** (QE runs it at review on engine-touching tickets; red = QE FAIL); deterministic mode per `ADR-0027`; shared corpus extended, not forked; pulled by the Orchestrator; Engineer `ticket-to-pr-ABC-084` on `grugops/ABC-084-puzzle-suite`)
 
@@ -478,7 +479,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-125] Two live virtual clocks at different steps — the row that kills the module-level-step mutant  (BA/PM, XS, P1, epic: EPIC-004, since: 2026-10-10, **DoR 10/10, 0 ⚠️**; cut from QE `ABC-086` G-QE-1; hard prerequisite of `ABC-085`; pulled 2026-10-10 by the Orchestrator; BUILT `6a25164` (+`ca3ca0f`) on `grugops/ABC-125-two-clocks` — +8 test lines, M5 reds the row, 1531/1531, `N8-LANE` met; QE `qe-ABC-125` dispatched)
 
 
 
