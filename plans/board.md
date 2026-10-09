@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — **`ABC-082` accepted → `Done`** (note `…4c7d2e91`): merged-tip gates + 7 deep lanes green; local `main` fast-forwarded. `ABC-086` re-hop running. Owed from the owner: `ABC-084` gate owner (options A–D put 2026-10-09)._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` merged into the wave on the owner's word (`0de4a93`; fast gates green 1522/1522); deep lanes running, `main` NOT yet moved. `ABC-086` built, stopped on `N8-LANE`; BA/PM re-cut dispatched. Scribe follow-up: `AGENTS.md` `ENGINE_DEEP` and `npm test` lane lines are stale._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — owner accepted `AR-NFR005-082` ("accepting it"); `ABC-082` now owes only UAT acceptance. `ABC-083` carries the depth-7 re-read trigger._
@@ -485,9 +487,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 1/4)
+## Ready for UAT (WIP 0/4)
 
-- [ABC-082] Evaluation — pawn structure  (EPIC-004, **M** — re-sized from S, P1, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `5bd065d` (`rescore-abc082`)**; pulled 2026-10-09; BUILT `34c9c02` (+`bef7d43`) on `grugops/ABC-082-pawn-structure`, gates green 1504/1504 — **BLOCKED 2026-10-09: two LEVEL rows red on `SEARCH_DEEP` (`ABC-079` `A1` 2/24 vs ≤ 1; `ABC-081` `A2` 14.46% vs ≥ 15%)**, no level edited; **UNBLOCKED same day by Architect/Design `71b140d`**: row 21 mis-labelled fixture → re-found (no level moved); row 17 (`ABC-081` `A2`) re-level to ≥ 10% **owner word owed via `ADR-0028` (proposed)**; row 8 swap upheld. re-hop `720b92d` + `873911d` (row-17 commit, PENDING OWNER WORD) — gates green 1504/1504, deep lanes green; **QE PASS WITH FINDINGS** at `c802815` — A1–A8 met at the tip, 7 deep lanes green, ledger re-measured 8/8, 15 own mutants (2 survive: one-sided isolation check → G-QE-1 LOW–MED, test gap for `ABC-083`); **Security/NFR PASS_WITH_RISKS** at `bf410b0` — no security finding, no required fix; `NFR-005` floor 64/64, kiwipete depth-7 WARN (margin ~1.2x → 1.05–1.12x, +14.6% nodes); **`AR-NFR005-082` (LOW) ACCEPTED by the owner 2026-10-09** (trigger: `ABC-083` re-reads depth). **`ADR-0028` ACCEPTED 2026-10-09** (`873911d` no longer pending). **Owed from the owner to merge: UAT acceptance only.**; `NFR-005` kiwipete depth-7 WARN (1/3) owed to Security/NFR then owner; 23 merged pins/levels named on the page with who re-levels each; a red LEVEL stops the build → Architect/Design)
 
 
 
@@ -502,6 +503,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+
+- [ABC-082] Evaluation — pawn structure  (EPIC-004, **M** — re-sized from S, P1, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `5bd065d` (`rescore-abc082`)**; pulled 2026-10-09; BUILT `34c9c02` (+`bef7d43`) on `grugops/ABC-082-pawn-structure`, gates green 1504/1504 — **BLOCKED 2026-10-09: two LEVEL rows red on `SEARCH_DEEP` (`ABC-079` `A1` 2/24 vs ≤ 1; `ABC-081` `A2` 14.46% vs ≥ 15%)**, no level edited; **UNBLOCKED same day by Architect/Design `71b140d`**: row 21 mis-labelled fixture → re-found (no level moved); row 17 (`ABC-081` `A2`) re-level to ≥ 10% **owner word owed via `ADR-0028` (proposed)**; row 8 swap upheld. re-hop `720b92d` + `873911d` (row-17 commit, PENDING OWNER WORD) — gates green 1504/1504, deep lanes green; **QE PASS WITH FINDINGS** at `c802815` — A1–A8 met at the tip, 7 deep lanes green, ledger re-measured 8/8, 15 own mutants (2 survive: one-sided isolation check → G-QE-1 LOW–MED, test gap for `ABC-083`); **Security/NFR PASS_WITH_RISKS** at `bf410b0` — no security finding, no required fix; `NFR-005` floor 64/64, kiwipete depth-7 WARN (margin ~1.2x → 1.05–1.12x, +14.6% nodes); **`AR-NFR005-082` (LOW) ACCEPTED by the owner 2026-10-09** (trigger: `ABC-083` re-reads depth). **`ADR-0028` ACCEPTED 2026-10-09** (`873911d` no longer pending). **ACCEPTED by the owner 2026-10-09** (note `…4c7d2e91`); merged `0de4a93`; merged-tip gates green 1522/1522, all 7 engine deep lanes green; local `main` fast-forwarded.; `NFR-005` kiwipete depth-7 WARN (1/3) owed to Security/NFR then owner; 23 merged pins/levels named on the page with who re-levels each; a red LEVEL stops the build → Architect/Design)
 
 - [ABC-102] `undo` — two plies back in one command, and the take-back arm `ABC-120` built for it  (BA/PM, S, P1, epic: EPIC-006, since: 2026-08-16, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `d155f04` (`rescore-abc102`)**; pulled 2026-10-09; BUILT `53fd3d2` (+`7caead3` docs) on `grugops/ABC-102-undo` — 4 gates green, 1485/1485, 0 skips; **QE PASS WITH FINDINGS** at `b62d458` (`grugops/qe-ABC-102`) — A1–A9 met, 10 mutants, real loop 242/242; G1/G2 low (G2 → BA/PM: help row 21/21 cols, hits `ABC-036`/`ABC-038`). **ACCEPTED by the owner 2026-10-09** (*"accept ADR-0027 and ADR-0028, accept ABC-102"*, note `…5d2a9c74`); merged into the wave `8e49e23`, gates on the merged tip green (1485/1485, 0 skips); local `main` fast-forwarded; diff fenced to `src/command-input.ts` + its test)
 
