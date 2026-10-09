@@ -104,9 +104,11 @@ import { zobristKey, zobristKeyAfterMove } from "./zobrist.ts";
 type SeamGame = Parameters<EngineSeam>[0];
 
 /**
- * A source of milliseconds. `Date.now` satisfies it; a test supplies virtual time instead.
+ * A source of milliseconds: the wall clock in the shipped construction, a virtual clock
+ * (`src/virtual-clock.ts`) in deterministic mode — which a test or a deterministic-mode harness
+ * supplies (`ADR-0027`).
  *
- * CONTRACT: real-time and NON-DECREASING. The deepening loop terminates because successive
+ * CONTRACT: ADVANCING and NON-DECREASING. The deepening loop terminates because successive
  * readings advance towards the deadline — a frozen clock or one that runs backwards does not
  * terminate, and nothing here defends against that.
  */
@@ -145,7 +147,10 @@ export interface EngineOptions {
    * iteration, so depth 1 comes back either way.
    */
   readonly budgetMs: number;
-  /** The clock. Defaults to `Date.now`; a test injects virtual time so nothing waits. */
+  /**
+   * The clock. Defaults to the wall clock; a test or a deterministic-mode harness injects a
+   * virtual one.
+   */
   readonly now?: Clock;
 }
 
