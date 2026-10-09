@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` `Blocked` → `In Development` (Architect/Design ruling `71b140d`, fast-forwarded onto the build branch, not the wave); Engineer re-hop dispatched. **Owner words now owed: `ADR-0027` (ABC-086), `ADR-0028` (ABC-082 row 17 / ABC-081 A2 → ≥ 10%), `ABC-102` acceptance.**_
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` `In Development` → `Blocked` (Engineer stop condition: two LEVEL rows red; ruling owed by Architect/Design, dispatched). In Development 0/3._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` ruling in (`d5fb200`): Q1 (b) seed does NOT reach move selection (measured: (a) moves scores under LMR, +3.3–5.2% nodes); Q2 deterministic budget = existing `Clock` on a virtual clock module. **`ADR-0027` PROPOSED — owner acceptance owed**, then BA/PM folds and re-scores (size → XS). `ABC-086` stays `Backlog`._
@@ -428,7 +430,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-082] Evaluation — pawn structure  (EPIC-004, **M** — re-sized from S, P1, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `5bd065d` (`rescore-abc082`)**; pulled 2026-10-09; BUILT `34c9c02` (+`bef7d43`) on `grugops/ABC-082-pawn-structure`, gates green 1504/1504 — **BLOCKED 2026-10-09: two LEVEL rows red on `SEARCH_DEEP` (`ABC-079` `A1` 2/24 vs ≤ 1; `ABC-081` `A2` 14.46% vs ≥ 15%)**, no level edited; **UNBLOCKED same day by Architect/Design `71b140d`**: row 21 mis-labelled fixture → re-found (no level moved); row 17 (`ABC-081` `A2`) re-level to ≥ 10% **owner word owed via `ADR-0028` (proposed)**; row 8 swap upheld. Engineer re-hop `ticket-to-pr-ABC-082-rehop` dispatched; `NFR-005` kiwipete depth-7 WARN (1/3) owed to Security/NFR then owner; 23 merged pins/levels named on the page with who re-levels each; a red LEVEL stops the build → Architect/Design)
 
 
 
@@ -599,7 +603,6 @@ _2026-09-24: ONE ticket blocked — `ABC-074` (no non-M3 machine). `ABC-079` lef
 
 _TWO tickets blocked: `ABC-074` (no non-M3 machine) and `ABC-079` (Architect/Design ruling on the unpruned oracle under quiescence, since 2026-09-19). Two tickets blocked from the moment they were cut, both on an input no agent can supply. Rule applied by the Orchestrator at `decompose-epics-2026-08-16`: **blocked on an EXTERNAL input (a human, hardware, an unmade ruling) → `Blocked`, time-tracked and escalated at `blocked_escalation_days` = 2; blocked only on ORDERING within the plan → stays in `Backlog`.** That is why `ABC-095` and the `ABC-100`-dependent packaging work are NOT here._
 
-- [ABC-082] Evaluation — pawn structure  (EPIC-004, **M** — re-sized from S, P1, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `5bd065d` (`rescore-abc082`)**; pulled 2026-10-09; BUILT `34c9c02` (+`bef7d43`) on `grugops/ABC-082-pawn-structure`, gates green 1504/1504 — **BLOCKED 2026-10-09: two LEVEL rows red on `SEARCH_DEEP` (`ABC-079` `A1` 2/24 vs ≤ 1; `ABC-081` `A2` 14.46% vs ≥ 15%)**, no level edited; Architect/Design `ruling-abc082-levels` dispatched; `NFR-005` kiwipete depth-7 WARN (1/3) owed to Security/NFR then owner; 23 merged pins/levels named on the page with who re-levels each; a red LEVEL stops the build → Architect/Design)
 - [ABC-074] SPIKE — depth-in-budget on non-M3 target hardware  (EPIC-004, S, P0, DoR 7/10, BLOCKED: no non-M3 machine)
 
 ## Conventions
