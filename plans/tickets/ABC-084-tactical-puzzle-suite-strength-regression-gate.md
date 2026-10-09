@@ -299,3 +299,10 @@ restated here.
   54 / 31 / 24. The median is under 650 and run 1 is over. Nothing was trimmed.
 - **Found:** two of ABC-079's rows start in check (observation `…26f28829`). They are reported, not
   changed.
+
+**2026-10-09, Software Engineer — Security/NFR `F1` applied** (subtask `ticket-to-pr-ABC-084-f1`,
+decision `…c3a91e57`). `src/puzzle-suite.test.ts` only, 3 lines: the gate row and the `A3` row take
+a `300_000` ms hang guard (was `60_000`), and the gate row's name drops "in <= 60 s (A5)". `A5`
+stays a printed and recorded reading, never an assertion. Baseline untouched. Re-runs:
+`PUZZLE_DEEP=1` 12 passed, 40/40, 12.09 s; `PUZZLE_DEEP=weakened` exit 1, 10/40, red on the count;
+default 9 passed; `npm test` 50 / 1539; lint and typecheck 0 (artifact-ref `…7f3f319e`).
