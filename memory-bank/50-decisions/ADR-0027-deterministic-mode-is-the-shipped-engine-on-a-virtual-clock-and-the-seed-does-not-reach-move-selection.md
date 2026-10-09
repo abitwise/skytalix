@@ -6,7 +6,7 @@ id: ADR-0027
 
 ## Status
 
-**proposed** 2026-10-09 by Architect/Design. Acceptance is the owner's.
+**accepted** 2026-10-09 by the owner (Olger Oeselg), verbatim: *"accept ADR-0027 and ADR-0028, accept ABC-102"*. Proposed the same day by Architect/Design.
 
 - Written at task `wave-2026-09-25`, subtask `ruling-abc086-seed` (Workflow 07). It is the design
   ruling owed to `ABC-086`'s DoR item 10. BA/PM's re-score is `rescore-abc086`
