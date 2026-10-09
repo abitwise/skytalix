@@ -11,6 +11,11 @@ enqueued_at: 2026-10-09T16:59:33Z
 branch: grugops/qe-ABC-082
 base: grugops/ABC-082-pawn-structure @ 873911d
 diff_under_review: 5ebe1d8...873911d (code 34c9c02 + re-hop 720b92d; 873911d = PENDING OWNER WORD, ADR-0028)
+worktree: .claude/worktrees/qe-ABC-082
+result_commit: grugops/qe-ABC-082 @ c802815
+done_at: 2026-10-09T17:44:57Z
+done_by: qe-e2e
+result: PASS WITH FINDINGS
 ---
 
 # Subtask: QE gate for `ABC-082` (pawn-structure evaluation)

@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` `In Review` → `Ready for UAT` (QE PASS WITH FINDINGS `c802815`, Security/NFR PASS_WITH_RISKS `bf410b0`). **No hop running.** Owed from the owner: `ABC-102` acceptance; `ABC-082` acceptance + `ADR-0028` + `AR-NFR005-082`; `ADR-0027` (unblocks `ABC-086` fold); `ABC-084` gate owner._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` Security/NFR PASS_WITH_RISKS (`bf410b0`); owner words for ABC-082 merge: `ADR-0028` + `AR-NFR005-082`. QE still running._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` `In Development` → `In Review` at `873911d`; QE and Security/NFR dispatched in parallel. `ADR-0028` owner word still gates its merge._
@@ -450,9 +452,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-082] Evaluation — pawn structure  (EPIC-004, **M** — re-sized from S, P1, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `5bd065d` (`rescore-abc082`)**; pulled 2026-10-09; BUILT `34c9c02` (+`bef7d43`) on `grugops/ABC-082-pawn-structure`, gates green 1504/1504 — **BLOCKED 2026-10-09: two LEVEL rows red on `SEARCH_DEEP` (`ABC-079` `A1` 2/24 vs ≤ 1; `ABC-081` `A2` 14.46% vs ≥ 15%)**, no level edited; **UNBLOCKED same day by Architect/Design `71b140d`**: row 21 mis-labelled fixture → re-found (no level moved); row 17 (`ABC-081` `A2`) re-level to ≥ 10% **owner word owed via `ADR-0028` (proposed)**; row 8 swap upheld. re-hop `720b92d` + `873911d` (row-17 commit, PENDING OWNER WORD) — gates green 1504/1504, deep lanes green; QE `qe-ABC-082` running; **Security/NFR PASS_WITH_RISKS** at `bf410b0` — no security finding, no required fix; `NFR-005` floor 64/64, kiwipete depth-7 WARN (margin ~1.2x → 1.05–1.12x, +14.6% nodes); **`AR-NFR005-082` (LOW) drafted, owner word owed**; `NFR-005` kiwipete depth-7 WARN (1/3) owed to Security/NFR then owner; 23 merged pins/levels named on the page with who re-levels each; a red LEVEL stops the build → Architect/Design)
 
 
 
@@ -475,7 +476,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 1/4)
+## Ready for UAT (WIP 2/4)
+
+- [ABC-082] Evaluation — pawn structure  (EPIC-004, **M** — re-sized from S, P1, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `5bd065d` (`rescore-abc082`)**; pulled 2026-10-09; BUILT `34c9c02` (+`bef7d43`) on `grugops/ABC-082-pawn-structure`, gates green 1504/1504 — **BLOCKED 2026-10-09: two LEVEL rows red on `SEARCH_DEEP` (`ABC-079` `A1` 2/24 vs ≤ 1; `ABC-081` `A2` 14.46% vs ≥ 15%)**, no level edited; **UNBLOCKED same day by Architect/Design `71b140d`**: row 21 mis-labelled fixture → re-found (no level moved); row 17 (`ABC-081` `A2`) re-level to ≥ 10% **owner word owed via `ADR-0028` (proposed)**; row 8 swap upheld. re-hop `720b92d` + `873911d` (row-17 commit, PENDING OWNER WORD) — gates green 1504/1504, deep lanes green; **QE PASS WITH FINDINGS** at `c802815` — A1–A8 met at the tip, 7 deep lanes green, ledger re-measured 8/8, 15 own mutants (2 survive: one-sided isolation check → G-QE-1 LOW–MED, test gap for `ABC-083`); **Security/NFR PASS_WITH_RISKS** at `bf410b0` — no security finding, no required fix; `NFR-005` floor 64/64, kiwipete depth-7 WARN (margin ~1.2x → 1.05–1.12x, +14.6% nodes); **`AR-NFR005-082` (LOW) drafted, owner word owed**. **Owed from the owner to merge: `ADR-0028` + `AR-NFR005-082` + UAT acceptance.** If `ADR-0028` refused → `git revert 873911d`, back to Blocked; `NFR-005` kiwipete depth-7 WARN (1/3) owed to Security/NFR then owner; 23 merged pins/levels named on the page with who re-levels each; a red LEVEL stops the build → Architect/Design)
 
 - [ABC-102] `undo` — two plies back in one command, and the take-back arm `ABC-120` built for it  (BA/PM, S, P1, epic: EPIC-006, since: 2026-08-16, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `d155f04` (`rescore-abc102`)**; pulled 2026-10-09; BUILT `53fd3d2` (+`7caead3` docs) on `grugops/ABC-102-undo` — 4 gates green, 1485/1485, 0 skips; **QE PASS WITH FINDINGS** at `b62d458` (`grugops/qe-ABC-102`) — A1–A9 met, 10 mutants, real loop 242/242; G1/G2 low (G2 → BA/PM: help row 21/21 cols, hits `ABC-036`/`ABC-038`). **Owed from the owner: UAT acceptance.** Build branch not merged; diff fenced to `src/command-input.ts` + its test)
 
