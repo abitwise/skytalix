@@ -1,0 +1,16 @@
+ABC-082 — the two class-R reds, measured (plain node / vitest on scratch copies; nothing applied to the branch)
+
+Row 21 ABC-079 A1 deep (quiescence.test.ts, search(p, 3) on HANGING_CORPUS, level <= floor(24/20) = 1):
+  base 5ebe1d8: 0/24   branch 34c9c02: 2/24   (node hanging.ts <tree>)
+  red rows: "R takes a pawn a bishop defends"  4k3/8/8/8/8/b7/1p6/1R2K3 w - - 0 1   chose b1b2, score 0
+            "mirror: r takes a pawn a bishop defends"  1r2k3/1P6/B7/8/8/8/8/4K3 b - - 0 1  chose b8b7, score 0
+  root moves at depth 3 (branch): b1b2 0, e1f1 -40, e1e2 -60, e1f2 -60. Static eval -60.
+  Reading: black's b2 is a passer on its 7th rank; Rxb2 Bxb2 reaches K+B v K, scored 0 (insufficient material).
+Row 17 ABC-081 A2 deep (transposition.test.ts, fixed depth 5 hit rate, level >= 15%):
+  base: kiwipete 15.95%, position-6 15.38%   branch: kiwipete 15.63%, position-6 14.46%
+
+Sensitivity (scratch copies of the branch, PASSED_PAWN_BONUS[6] varied; doubled/isolated unchanged):
+  bonus[6]=80 : hanging 2/24, hit rate 15.63% / 14.46%
+  bonus[6]=60 : hanging 2/24, hit rate 15.63% / 14.46%
+  passed off  : hanging 0/24, hit rate 15.63% / 14.46%
+  => row 21 is the passed term itself; row 17 is the doubled/isolated terms moving position-6's tree.
