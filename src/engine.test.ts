@@ -911,7 +911,7 @@ describe("ABC-086 A7 — the step guard and the reading shape, asserted at the f
 });
 
 describe("ABC-086 A4 — the virtual-clock module reads no real clock and no entropy", () => {
-  it("carries no Math.random, Date.now, performance.now or hrtime", () => {
+  it("carries no real-clock read and no entropy source", () => {
     const source = readFileSync(new URL("./virtual-clock.ts", import.meta.url), "utf8");
     expect(source).toContain("export function virtualClock(");
     expect(source).not.toMatch(/Math\.random|Date\.now|performance\.now|hrtime/);
