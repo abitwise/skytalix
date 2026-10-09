@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` `In Review` → `Ready for UAT` (QE PASS WITH FINDINGS `7c8fd3c`). **No hop running.** Owed from the owner: `ABC-086` acceptance; `ABC-084` gate owner (A–D)._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` `In Development` → `In Review` at `82cccba`; QE dispatched._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — **`ABC-082` accepted → `Done`** (note `…4c7d2e91`): merged-tip gates + 7 deep lanes green; local `main` fast-forwarded. `ABC-086` re-hop running. Owed from the owner: `ABC-084` gate owner (options A–D put 2026-10-09)._
@@ -464,9 +466,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-086] Deterministic mode — the shipped engine on a virtual clock  (EPIC-004, **XS** — from S, P0, **DoR 10/10, 0 ⚠️ — folded `ADR-0027` (accepted 2026-10-09) and RE-SCORED by BA/PM at `28d4e5b`**; seed moved to `ABC-087`; pulled 2026-10-09 by the Orchestrator; BUILT `1ae5284` (+`f9d58ee`, `339f940`) on `grugops/ABC-086-virtual-clock` — gates green 1494/1494, `ENGINE_DEEP` 45/45, `A1` 300/300; `N8-LANE` stop (+1,070 ms) → BA/PM re-cut `c16447c` → re-hop on the merged tree `82cccba`: gates 1530/1530, `ENGINE_DEEP` 45/45, `N8-LANE` +35 ms; QE `qe-ABC-086` dispatched (Security/NFR not triggered: no shipped-path change))
 
 
 
@@ -490,7 +491,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+
+- [ABC-086] Deterministic mode — the shipped engine on a virtual clock  (EPIC-004, **XS** — from S, P0, **DoR 10/10, 0 ⚠️ — folded `ADR-0027` (accepted 2026-10-09) and RE-SCORED by BA/PM at `28d4e5b`**; seed moved to `ABC-087`; pulled 2026-10-09 by the Orchestrator; BUILT `1ae5284` (+`f9d58ee`, `339f940`) on `grugops/ABC-086-virtual-clock` — gates green 1494/1494, `ENGINE_DEEP` 45/45, `A1` 300/300; `N8-LANE` stop (+1,070 ms) → BA/PM re-cut `c16447c` → re-hop on the merged tree `82cccba`: gates 1530/1530, `ENGINE_DEEP` 45/45, `N8-LANE` +35 ms; **QE PASS WITH FINDINGS** at `7c8fd3c` (`grugops/qe-ABC-086`) — A1/A2/A4–A7 met, 450/450 cross-process identical, 12 mutants (1 survivor → G-QE-1 LOW–MED: no row runs two clocks at different steps; G-QE-2 LOW: tiny steps like 0.001 pass the guard and cost ~14 s/move — harnesses for `ABC-084`/`085`/`087` must bound the step; G-QE-3 LOW: A4 grep misses aliased clock reads). Security/NFR not triggered. **Owed from the owner: UAT acceptance.** Build branch not merged)
 
 
 

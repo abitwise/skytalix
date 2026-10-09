@@ -11,6 +11,11 @@ enqueued_at: 2026-10-09T20:11:55Z
 branch: grugops/qe-ABC-086
 base: grugops/ABC-086-virtual-clock @ 82cccba
 diff_under_review: 1eae90c...82cccba (src: virtual-clock.ts new, engine.ts comments only, engine.test.ts)
+worktree: .claude/worktrees/qe-ABC-086
+result_commit: grugops/qe-ABC-086 @ 7c8fd3c
+done_at: 2026-10-09T20:37:48Z
+done_by: qe-e2e
+result: PASS WITH FINDINGS
 ---
 
 # Subtask: QE gate for `ABC-086` (deterministic mode on a virtual clock)
