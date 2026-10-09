@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — **kit reinstall output committed (`1674f74`); `biome.json` excludes kit-installed `tools/grugops/host-protection.js` from lint on the owner's word (note `…7c41e9a2`); gates green; local `main` fast-forwarded to the wave (no remote).** `ABC-120` was already `Done` (2026-09-25) — not re-pulled. No hop running. Unscheduled: kit upstream lint fix for `host-protection.js` (then drop the exclusion), plus the three items below._
+
 _Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — **`ABC-124` accepted → `Done`; local `main` fast-forwarded to the wave (no remote).** No hop running. Unscheduled: `ABC-124` `A4` ticket-text fix (`Fixed 0 files` → `No fixes applied`); kit upstream fix for `uat-spec-integrity.js`; `tools/` typecheck spike (separate tsconfig)._
 
 _Updated: 2026-09-27 by the Orchestrator (task `wave-2026-09-25`) — `ABC-124` → `Ready for UAT` (QE PASS WITH FINDINGS). No hop running. Owed from the owner: `ABC-124` acceptance; moving `main` up._
