@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` re-scored 10/10 by BA/PM (`5bd065d`, merged `a03b064`), re-sized S→M → `Ready` → `In Development` (2/3); Engineer `ticket-to-pr-ABC-082` dispatched. Merge order vs `ABC-086`: whichever merges second re-measures the other's pins._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` re-scored 9/10 by BA/PM (`4e44656`, merged `9b35cfd`), **stays in `Backlog`**: ⚠️(10) narrowed to two Architect/Design questions (Q1 seed reaches move selection?, Q2 deterministic budget); `ruling-abc086-seed` dispatched. `ABC-102` building; `ABC-082` re-score running._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-102` re-scored 10/10 by BA/PM (`d155f04`, merged `8e67f24`) → `Ready` → `In Development` (1/3); Engineer `ticket-to-pr-ABC-102` dispatched. `ABC-086`, `ABC-082` re-scores running (note `…3b8e51d0`)._
@@ -382,7 +384,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-072] `ABC-041` clause (b) is written as a STATE predicate, its instrument covers one of three limbs, and its stated prediction is falsified  (BA/PM, S, P1, epic: —, since: 2026-08-16, DoR 9/10 ⚠️x1 — **the STATE-vs-DELTA ruling is Architect/Design's**, precedent `ABC-053`/`ABC-054`; Security/NFR `S1` (MEDIUM) + `S2` (LOW) deduped into one subject; measured on `main` @ `5cf86d3`: **7 of 20 production files read `process.`** while the printed instrument (`node:` grep) reads **0** and has since `ABC-042` merged — **the clause has already produced two contradictory routing answers in two days**; 0 files under `src/`, 0 new spawns)
 - [ABC-073] Eight ticket pages restate clause (b) and not one uses the test the clause states — two carry no fail-safe sentence  (BA/PM, S, **P1**, epic: —, since: 2026-08-16, DoR 9/10 ⚠️x1 — ordering on `ABC-072`; the residual risk `S1` named is **already realised**: `ABC-061` (`P1`, `DoR 10/10`, pullable) and merged `ABC-065` carry the file-touch wording with **no** "it fires and the gate resolves it"; 7 live pages, 3 of them byte-identical; **PROMOTED TO `P1` 2026-08-17: the trigger FIRED — `ABC-061` is pulled**; 0 files under `src/`)
 
-- [ABC-082] Evaluation — pawn structure  (EPIC-004, S, P1, DoR 9/10, needs ABC-076)
 - [ABC-083] Evaluation — king safety and mobility  (EPIC-004, S, P1, DoR 8/10, needs ABC-076/082/078)
 - [ABC-084] Tactical puzzle suite — strength regression gate  (EPIC-004, M, P0, DoR 8/10, needs ABC-078)
 - [ABC-085] Self-play ladder — ≥ 90% over 100 games  (EPIC-004, M, P1, DoR 7/10, needs ABC-087 + ABC-086; ~5 h opt-in run)
@@ -419,7 +420,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
+
+- [ABC-082] Evaluation — pawn structure  (EPIC-004, **M** — re-sized from S, P1, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `5bd065d` (`rescore-abc082`)**; pulled 2026-10-09 by the Orchestrator; Engineer `ticket-to-pr-ABC-082` on `grugops/ABC-082-pawn-structure`; 23 merged pins/levels named on the page with who re-levels each; a red LEVEL stops the build → Architect/Design)
 
 - [ABC-102] `undo` — two plies back in one command, and the take-back arm `ABC-120` built for it  (BA/PM, S, P1, epic: EPIC-006, since: 2026-08-16, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `d155f04` (`rescore-abc102`)**; pulled 2026-10-09 by the Orchestrator; Engineer `ticket-to-pr-ABC-102` on `grugops/ABC-102-undo`; diff fenced to `src/command-input.ts` + its test)
 
