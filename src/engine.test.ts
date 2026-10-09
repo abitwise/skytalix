@@ -887,6 +887,14 @@ describe("ABC-086 A6 — each virtual clock keeps its own state", () => {
     expect(second()).toBe(0);
     expect(first()).toBe(2);
   });
+
+  it("keeps each clock's own step — two live clocks at steps 1 and 0.5, read interleaved (ABC-125)", () => {
+    // Different STEPS, not just budgets: a step held in module state (QE's `M5`) reads
+    // [0, 0, 0.5, 0.5, 1, 1] here. Dyadic steps, so the readings are exact.
+    const a = virtualClock(1);
+    const b = virtualClock(0.5);
+    expect([a(), b(), a(), b(), a(), b()]).toEqual([0, 0, 1, 0.5, 2, 1]);
+  });
 });
 
 describe("ABC-086 A7 — the step guard and the reading shape, asserted at the factory", () => {
