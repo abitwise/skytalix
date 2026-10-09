@@ -253,3 +253,23 @@ it.
   `EPIC-004` closed; the arm ticket uncut (cut the same day as `ABC-120`).
 
 </details>
+
+## Delivery
+
+**Built 2026-10-09 by the Software Engineer** (task `wave-2026-09-25`, subtask
+`ticket-to-pr-ABC-102`, Workflow 04) on branch `grugops/ABC-102-undo` @ **`53fd3d2`**, off
+`grugops/wave-2026-09-25` @ `4c5eddc`. **Unmerged; not deployed.** This section is a pointer; the
+numbers live in the three `20261009T17…` notes in `.grugops/context/ticket-to-pr-ABC-102/notes/`.
+
+- **`A9`, measured:** `git diff --name-only 4c5eddc -- src/` → exactly `src/command-input.ts`
+  (+40 / −19) and `src/command-input.test.ts` (+242 / −9). No stop condition hit.
+- **Shape:** the `undo` row (`take-back`); one guarded branch ahead of `new`'s; the refusal
+  `UNDO_REFUSAL_MESSAGES = ["nothing to undo"]`; `helpMessages()` is the bare token list (ruling 6).
+- **Tests:** 18 new rows (133 → 151), `A1`–`A8`; the three rows this page named are superseded by
+  name in comments. Red first, then green; four mutants red (incl. the unguarded ply-1 take-back and
+  the heading kept, which reds `ABC-035` `A7` at the start position).
+- **Gates:** lint 0 (one format self-fix), typecheck 0, build 0, `npm test` 48 files / 1485 passed /
+  0 skips; test integrity `No findings.`
+- **`N8-LANE`:** +6 ms vitest test time / +60 ms process CPU in-file, 0 files, 0 children — within
+  650 ms.
+- **Next:** the `qe-e2e` hop; the board move `In Development → In Review` is the Orchestrator's.
