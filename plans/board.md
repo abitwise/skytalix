@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — **`ABC-125` → `Done` under the zero-production-lines UAT waiver** (measured empty; merged `99fb7ad`; gates green 1531/1531); local `main` fast-forwarded (no remote). `ABC-085` now has `ABC-125` behind it. Running: `ABC-084` build._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-125` `In Development` → `In Review` at `ca3ca0f`; QE dispatched._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — review follow-ups cut by BA/PM (`f7a525d`, merged `5c93eb2`): **`ABC-125`** (XS, P1, 10/10) cut → pulled to `In Development` (2/3); **`ABC-126`** (XS, P2, 9/10, after `ABC-084`) in Backlog; folds onto `ABC-083`/`085`/`087`/`036`/`038`/`079`. Carried: 33 ticket files' frontmatter `column:` disagrees with this board (board is authoritative) — housekeeping item for BA/PM._
@@ -479,9 +481,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-125] Two live virtual clocks at different steps — the row that kills the module-level-step mutant  (BA/PM, XS, P1, epic: EPIC-004, since: 2026-10-10, **DoR 10/10, 0 ⚠️**; cut from QE `ABC-086` G-QE-1; hard prerequisite of `ABC-085`; pulled 2026-10-10 by the Orchestrator; BUILT `6a25164` (+`ca3ca0f`) on `grugops/ABC-125-two-clocks` — +8 test lines, M5 reds the row, 1531/1531, `N8-LANE` met; QE `qe-ABC-125` dispatched)
 
 
 
@@ -523,6 +524,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+
+- [ABC-125] Two live virtual clocks at different steps — the row that kills the module-level-step mutant  (BA/PM, XS, P1, epic: EPIC-004, since: 2026-10-10, **DoR 10/10, 0 ⚠️**; cut from QE `ABC-086` G-QE-1; hard prerequisite of `ABC-085`; pulled 2026-10-10 by the Orchestrator; BUILT `6a25164` (+`ca3ca0f`) on `grugops/ABC-125-two-clocks` — +8 test lines, M5 reds the row, 1531/1531, `N8-LANE` met; QE PASS `a705c57` (5/5 mutants red; advisories QE-125-a/b LOW); **UAT WAIVED on zero production lines** (standing rule 2026-08-17; measured `git diff --name-only 6a25164~1 6a25164 | grep -v '\.test\.ts$' | grep '^src/'` → empty) — **waived is not accepted: merged and gated, no human signature**; merged `99fb7ad`, gates green 1531/1531; local `main` fast-forwarded)
 
 - [ABC-086] Deterministic mode — the shipped engine on a virtual clock  (EPIC-004, **XS** — from S, P0, **DoR 10/10, 0 ⚠️ — folded `ADR-0027` (accepted 2026-10-09) and RE-SCORED by BA/PM at `28d4e5b`**; seed moved to `ABC-087`; pulled 2026-10-09 by the Orchestrator; BUILT `1ae5284` (+`f9d58ee`, `339f940`) on `grugops/ABC-086-virtual-clock` — gates green 1494/1494, `ENGINE_DEEP` 45/45, `A1` 300/300; `N8-LANE` stop (+1,070 ms) → BA/PM re-cut `c16447c` → re-hop on the merged tree `82cccba`: gates 1530/1530, `ENGINE_DEEP` 45/45, `N8-LANE` +35 ms; **QE PASS WITH FINDINGS** at `7c8fd3c` (`grugops/qe-ABC-086`) — A1/A2/A4–A7 met, 450/450 cross-process identical, 12 mutants (1 survivor → G-QE-1 LOW–MED: no row runs two clocks at different steps; G-QE-2 LOW: tiny steps like 0.001 pass the guard and cost ~14 s/move — harnesses for `ABC-084`/`085`/`087` must bound the step; G-QE-3 LOW: A4 grep misses aliased clock reads). Security/NFR not triggered. **ACCEPTED by the owner 2026-10-09** (note `…b61e0d35`); merged `3f26e21`; merged-tip gates green 1530/1530, `ENGINE_DEEP` engine 45/45 (20:55–21:00Z, load1 60 — passed under heavy load); local `main` fast-forwarded)
 
