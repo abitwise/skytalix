@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` ruling in (`d5fb200`): Q1 (b) seed does NOT reach move selection (measured: (a) moves scores under LMR, +3.3–5.2% nodes); Q2 deterministic budget = existing `Clock` on a virtual clock module. **`ADR-0027` PROPOSED — owner acceptance owed**, then BA/PM folds and re-scores (size → XS). `ABC-086` stays `Backlog`._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-102` `In Review` → `Ready for UAT` (QE PASS WITH FINDINGS, `b62d458`). Owed from the owner: `ABC-102` acceptance. Clock note: the `enqueued_at` stamps the Orchestrator wrote today from 16:05Z on run ~1 h ahead of the real clock (QE `G5`); the commits carry the true time._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-102` `In Development` → `In Review` at `53fd3d2` (build branch, not merged); QE `qe-ABC-102` dispatched. In Development 1/3, In Review 1/3._
