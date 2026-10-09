@@ -790,29 +790,61 @@ describe("A7 — a legal move comes back at a budget with nothing left in it", (
 // ABC-086 — deterministic mode: the shipped engine on the SHIPPED virtual clock
 // (`src/virtual-clock.ts`, `ADR-0027`). Every row here imports that module, never `tickingClock`
 // above — a test-local clock proves nothing about what the `ABC-084`/`ABC-085`/`ABC-087`
-// harnesses can reach. The full `A1` and `A2` are in the deep lane at the bottom of this file.
+// harnesses can reach. The full `A1`, `A2` and `A6`'s interleaved row are in the deep lane at the
+// bottom of this file.
 // ---------------------------------------------------------------------------
 
-/** `ABC-086` `A1`: `runs` searches of one position, each on a FRESH clock from the shipped module. */
-function deterministicRuns(position: Position, budgetMs: number, runs: number): string[] {
-  return Array.from({ length: runs }, () => {
-    const choice = chooseMove(parseFen(toFen(position)), { budgetMs, now: virtualClock(1) });
-    return choice === null ? "null" : `${label(choice.move)}${choice.move.promotion ?? ""}`;
+/**
+ * `ABC-086` `A1`: `runs` searches of each position, each on a FRESH clock from the shipped module,
+ * keeping the chosen move and the completed root depth of every run.
+ */
+function deterministicRuns(
+  positions: { name: string; position: Position }[],
+  budgetMs: number,
+  runs: number,
+): { name: string; moves: string[]; depths: number[] }[] {
+  return positions.map(({ name, position }) => {
+    const choices = Array.from({ length: runs }, () =>
+      chooseMove(parseFen(toFen(position)), { budgetMs, now: virtualClock(1) }),
+    );
+    return {
+      name,
+      moves: choices.map((choice) =>
+        choice === null ? "null" : `${label(choice.move)}${choice.move.promotion ?? ""}`,
+      ),
+      depths: choices.map((choice) => (choice === null ? 0 : choice.depth)),
+    };
   });
 }
 
 /** The positions of `ABC-086` `A1` whose runs did not all choose the same move. */
-function nonIdentical(budgetMs: number, runs: number): string[] {
-  return thirtyPositions()
-    .map(({ name, position }) => ({ name, moves: deterministicRuns(position, budgetMs, runs) }))
+function nonIdentical(results: { name: string; moves: string[] }[]): string[] {
+  return results
     .filter(({ moves }) => moves.some((move) => move !== moves[0]))
     .map(({ name, moves }) => `${name}: ${moves.join(" ")}`);
 }
 
 describe("ABC-086 A1 — the same position, budget and fresh virtual clock choose the same move", () => {
-  it("is identical 2/2 over the 30 positions — the default-lane slice of the deep 300/300", () => {
-    expect(thirtyPositions()).toHaveLength(30);
-    expect(nonIdentical(2, 2)).toEqual([]);
+  /**
+   * The default-lane slice of the deep 300/300 (re-cut `recut-abc086-lane`, `N8-LANE`): the three
+   * families of the shared 30 where every member completes root depth 2 at budget 2, and the
+   * cheapest. Filtered from `thirtyPositions()`, never hand-listed, so it cannot drift from the
+   * deep lane's corpus. The depth floor is ASSERTED — without it an engine or evaluation change
+   * that leaves the slice at depth 1 keeps it green while it guards almost nothing.
+   */
+  const SLICE_FAMILIES = ["startpos", "position-3", "position-5"];
+
+  it("is identical 2/2 on 15 positions, each completing root depth >= 2 — 30/30, 15/15", () => {
+    const slice = thirtyPositions().filter(({ name }) =>
+      SLICE_FAMILIES.includes(name.split("/")[0] as string),
+    );
+    expect(slice).toHaveLength(15);
+    const results = deterministicRuns(slice, 2, 2);
+    expect(nonIdentical(results)).toEqual([]);
+    const shallow = results
+      .filter(({ depths }) => depths.some((depth) => depth < 2))
+      .map(({ name, depths }) => `${name}: d${depths.join(" d")}`);
+    expect(shallow).toEqual([]);
   });
 });
 
@@ -844,43 +876,9 @@ describe("ABC-086 A5 — the virtual clock stays off the shipped path", () => {
   });
 });
 
-describe("ABC-086 A6 — two engines on their own virtual clocks, interleaved, do not interfere", () => {
-  /**
-   * Different BUDGETS, so equal output is not the trivial case: on this corpus the two disagree
-   * on three positions (`position-3/e2e4`, `position-4/d2d4`, `position-4/f3d4`), asserted below.
-   * Cheap families on purpose — the default lane is `N8-LANE`'s.
-   */
-  const corpus = [PERFT_CORPUS[2], PERFT_CORPUS[3]].flatMap((entry) => {
-    const { name, fen } = entry as { name: string; fen: string };
-    return [{ name, position: parseFen(fen) }, ...childrenOf(name, parseFen(fen)).slice(0, 4)];
-  });
-  const makeA = () => createEngine({ budgetMs: 1, now: virtualClock(1) });
-  const makeB = () => createEngine({ budgetMs: 3, now: virtualClock(1) });
-
-  it("each engine chooses 10/10 what it chooses alone", async () => {
-    expect(corpus).toHaveLength(10);
-    const alone = async (engine: EngineSeam) => {
-      const moves: string[] = [];
-      for (const { position } of corpus) moves.push(label(await engine(newGame(toFen(position)))));
-      return moves;
-    };
-    const aloneA = await alone(makeA());
-    const aloneB = await alone(makeB());
-
-    const engineA = makeA();
-    const engineB = makeB();
-    const interleavedA: string[] = [];
-    const interleavedB: string[] = [];
-    for (const { position } of corpus) {
-      interleavedA.push(label(await engineA(newGame(toFen(position)))));
-      interleavedB.push(label(await engineB(newGame(toFen(position)))));
-    }
-
-    expect(aloneA.filter((move, index) => move !== aloneB[index]).length).toBeGreaterThan(0);
-    expect(interleavedA).toEqual(aloneA);
-    expect(interleavedB).toEqual(aloneB);
-  });
-
+describe("ABC-086 A6 — each virtual clock keeps its own state", () => {
+  // The 10/10 interleaved row is in the deep lane at the bottom of this file (re-cut
+  // `recut-abc086-lane`, `N8-LANE`); this per-instance row costs about 0 ms and stays here.
   it("keeps each clock's state in its own instance — a second clock starts at 0", () => {
     const first = virtualClock(1);
     first();
@@ -1099,8 +1097,48 @@ if (RUN_DEEP) {
     }, 60_000);
 
     it("chooses the identical move in all 10 runs of every position — 300/300", () => {
-      expect(nonIdentical(BUDGET_MS, 10)).toEqual([]);
+      expect(nonIdentical(deterministicRuns(thirtyPositions(), BUDGET_MS, 10))).toEqual([]);
     }, 300_000);
+  });
+
+  describe("ABC-086 A6 — two engines on their own virtual clocks, interleaved [deep, ENGINE_DEEP=1]", () => {
+    /**
+     * Different BUDGETS, so equal output is not the trivial case: on this corpus the two disagree
+     * on some positions (three at the `ABC-086` base: `position-3/e2e4`, `position-4/d2d4`,
+     * `position-4/f3d4`), asserted below. Moved here from the default lane by the `N8-LANE`
+     * re-cut (`recut-abc086-lane`), unchanged.
+     */
+    const corpus = [PERFT_CORPUS[2], PERFT_CORPUS[3]].flatMap((entry) => {
+      const { name, fen } = entry as { name: string; fen: string };
+      return [{ name, position: parseFen(fen) }, ...childrenOf(name, parseFen(fen)).slice(0, 4)];
+    });
+    const makeA = () => createEngine({ budgetMs: 1, now: virtualClock(1) });
+    const makeB = () => createEngine({ budgetMs: 3, now: virtualClock(1) });
+
+    it("each engine chooses 10/10 what it chooses alone", async () => {
+      expect(corpus).toHaveLength(10);
+      const alone = async (engine: EngineSeam) => {
+        const moves: string[] = [];
+        for (const { position } of corpus)
+          moves.push(label(await engine(newGame(toFen(position)))));
+        return moves;
+      };
+      const aloneA = await alone(makeA());
+      const aloneB = await alone(makeB());
+
+      const engineA = makeA();
+      const engineB = makeB();
+      const interleavedA: string[] = [];
+      const interleavedB: string[] = [];
+      for (const { position } of corpus) {
+        interleavedA.push(label(await engineA(newGame(toFen(position)))));
+        interleavedB.push(label(await engineB(newGame(toFen(position)))));
+      }
+
+      expect(aloneA.filter((move, index) => move !== aloneB[index]).length).toBeGreaterThan(0);
+      expect(interleavedA).toEqual(aloneA);
+      expect(interleavedB).toEqual(aloneB);
+    });
   });
 
   describe("ABC-086 A2 — the shipped wall clock: legal, depth reported [deep, ENGINE_DEEP=1]", () => {
