@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-102` `In Review` → `Ready for UAT` (QE PASS WITH FINDINGS, `b62d458`). Owed from the owner: `ABC-102` acceptance. Clock note: the `enqueued_at` stamps the Orchestrator wrote today from 16:05Z on run ~1 h ahead of the real clock (QE `G5`); the commits carry the true time._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-102` `In Development` → `In Review` at `53fd3d2` (build branch, not merged); QE `qe-ABC-102` dispatched. In Development 1/3, In Review 1/3._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` re-scored 10/10 by BA/PM (`5bd065d`, merged `a03b064`), re-sized S→M → `Ready` → `In Development` (2/3); Engineer `ticket-to-pr-ABC-082` dispatched. Merge order vs `ABC-086`: whichever merges second re-measures the other's pins._
@@ -438,9 +440,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-102] `undo` — two plies back in one command, and the take-back arm `ABC-120` built for it  (BA/PM, S, P1, epic: EPIC-006, since: 2026-08-16, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `d155f04` (`rescore-abc102`)**; pulled 2026-10-09; BUILT `53fd3d2` (+`7caead3` docs) on `grugops/ABC-102-undo` — 4 gates green, 1485/1485, 0 skips; QE `qe-ABC-102` dispatched; diff fenced to `src/command-input.ts` + its test)
 
 
 
@@ -462,7 +463,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+
+- [ABC-102] `undo` — two plies back in one command, and the take-back arm `ABC-120` built for it  (BA/PM, S, P1, epic: EPIC-006, since: 2026-08-16, **DoR 10/10, 0 ⚠️ — RE-SCORED 2026-10-09 by BA/PM at `d155f04` (`rescore-abc102`)**; pulled 2026-10-09; BUILT `53fd3d2` (+`7caead3` docs) on `grugops/ABC-102-undo` — 4 gates green, 1485/1485, 0 skips; **QE PASS WITH FINDINGS** at `b62d458` (`grugops/qe-ABC-102`) — A1–A9 met, 10 mutants, real loop 242/242; G1/G2 low (G2 → BA/PM: help row 21/21 cols, hits `ABC-036`/`ABC-038`). **Owed from the owner: UAT acceptance.** Build branch not merged; diff fenced to `src/command-input.ts` + its test)
 
 
 
