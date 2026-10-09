@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-084` re-scored 10/10 (merged `16846ee`) → `Ready` → `In Development` (1/3); Engineer dispatched. BA/PM `cut-followups-2026-10-09` dispatched for the review gaps._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — **`ABC-086` accepted → `Done`**: `ENGINE_DEEP` green on the merged tip; local `main` fast-forwarded (no remote). Running: BA/PM `fold-abc084-gate-b`._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — owner's word (note `…b61e0d35`): `ABC-086` accepted, merged `3f26e21` (fast gates green 1530/1530; `ENGINE_DEEP` re-run before `main` moves); `ABC-084` gate ruled option B, BA/PM fold dispatched._
@@ -419,7 +421,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-073] Eight ticket pages restate clause (b) and not one uses the test the clause states — two carry no fail-safe sentence  (BA/PM, S, **P1**, epic: —, since: 2026-08-16, DoR 9/10 ⚠️x1 — ordering on `ABC-072`; the residual risk `S1` named is **already realised**: `ABC-061` (`P1`, `DoR 10/10`, pullable) and merged `ABC-065` carry the file-touch wording with **no** "it fires and the gate resolves it"; 7 live pages, 3 of them byte-identical; **PROMOTED TO `P1` 2026-08-17: the trigger FIRED — `ABC-061` is pulled**; 0 files under `src/`)
 
 - [ABC-083] Evaluation — king safety and mobility  (EPIC-004, S, P1, DoR 8/10, needs ABC-076/082/078)
-- [ABC-084] Tactical puzzle suite — strength regression gate  (EPIC-004, M, P0, DoR 8/10, needs ABC-078) **2026-10-09: ⚠️(10) RULED by the owner — option B (QE runs the suite at review on engine-touching tickets; red = FAIL); BA/PM fold + re-score `fold-abc084-gate-b` dispatched.**
 - [ABC-085] Self-play ladder — ≥ 90% over 100 games  (EPIC-004, M, P1, DoR 7/10, needs ABC-087 + ABC-086; ~5 h opt-in run)
 - [ABC-087] Difficulty levels — mechanism only, choosing is EPIC-006's  (EPIC-004, M, P1, DoR 7/10, needs ABC-078/086/084)
 - [ABC-093] Compile the opening lines into one static, data-only, reproducible book artifact  (BA/PM, M, P1, epic: EPIC-005, since: 2026-08-16, DoR 8/10 ⚠️ HARD-BLOCKED on ABC-092's ADR; ⚠️ format is Architect/Design's at In Design; NFR-006 ≤ 1,048,576 bytes on an instrument that runs TODAY; needs nothing from EPIC-004)
@@ -453,7 +454,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-084] Tactical puzzle suite as a strength regression gate  (EPIC-004, M, P0, **DoR 10/10, 0 ⚠️ — re-scored 2026-10-09 by BA/PM at `0ebe63f` (`fold-abc084-gate-b`) on the owner's option B** (QE runs it at review on engine-touching tickets; red = QE FAIL); deterministic mode per `ADR-0027`; shared corpus extended, not forked; pulled by the Orchestrator; Engineer `ticket-to-pr-ABC-084` on `grugops/ABC-084-puzzle-suite`)
 
 
 
