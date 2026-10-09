@@ -1,0 +1,9 @@
+# session 2026-10-09 17:03:33Z-17:11:50Z; deterministic (virtual clock), load irrelevant
+{"tree":"secnfr-ABC-082","name":"kiwipete","D":7,"minBudgetTicks":602,"nodesAtMin":610179,"nodesOneTickLess":609874,"depthOneTickLess":6,"move":{"from":20,"to":80,"piece":3,"captured":11,"flags":0,"promotion":0}}
+{"tree":"base","name":"kiwipete","D":7,"minBudgetTicks":526,"nodesAtMin":532363,"nodesOneTickLess":532220,"depthOneTickLess":6,"move":{"from":20,"to":80,"piece":3,"captured":11,"flags":0,"promotion":0}}
+{"tree":"secnfr-ABC-082","name":"kiwipete","D":6,"minBudgetTicks":255,"nodesAtMin":256581,"nodesOneTickLess":255570,"depthOneTickLess":5,"move":{"from":67,"to":84,"piece":1,"captured":9,"flags":0,"promotion":0}}
+{"tree":"base","name":"kiwipete","D":6,"minBudgetTicks":208,"nodesAtMin":208499,"nodesOneTickLess":207612,"depthOneTickLess":5,"move":{"from":20,"to":80,"piece":3,"captured":11,"flags":0,"promotion":0}}
+{"tree":"secnfr-ABC-082","name":"position-6","D":7,"minBudgetTicks":458,"nodesAtMin":462871,"nodesOneTickLess":462254,"depthOneTickLess":6,"move":{"from":34,"to":67,"piece":2,"captured":0,"flags":0,"promotion":0}}
+{"tree":"base","name":"position-6","D":7,"minBudgetTicks":463,"nodesAtMin":467461,"nodesOneTickLess":467369,"depthOneTickLess":6,"move":{"from":34,"to":67,"piece":2,"captured":0,"flags":0,"promotion":0}}
+{"tree":"secnfr-ABC-082","name":"position-6","D":6,"minBudgetTicks":171,"nodesAtMin":170202,"nodesOneTickLess":169390,"depthOneTickLess":5,"move":{"from":34,"to":67,"piece":2,"captured":0,"flags":0,"promotion":0}}
+{"tree":"base","name":"position-6","D":6,"minBudgetTicks":167,"nodesAtMin":165716,"nodesOneTickLess":165289,"depthOneTickLess":5,"move":{"from":34,"to":67,"piece":2,"captured":0,"flags":0,"promotion":0}}
