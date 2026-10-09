@@ -1,0 +1,27 @@
+import { makeMove, unmakeMove } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/apply.ts";
+import { chooseMove } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/engine.ts";
+import { parseFen, toFen } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/fen.ts";
+import { legalMoves } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/legal.ts";
+import { squareName } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/position.ts";
+const ROOTS = [
+  ["startpos", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"],
+  ["kiwipete", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"],
+  ["position-3", "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"],
+  ["position-4", "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"],
+  ["position-5", "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"],
+  ["position-6", "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"],
+];
+const lbl = (m) => squareName(m.from) + squareName(m.to) + (m.promotion ?? "");
+const tick = (s) => { let t = 0; return () => { const r = t; t += s; return r; }; };
+const corpus = [];
+for (const [name, fen] of ROOTS) {
+  corpus.push({ name, fen });
+  const p = parseFen(fen);
+  for (const m of legalMoves(p).slice(0, 4)) { const u = makeMove(p, m); corpus.push({ name: name + "/" + lbl(m), fen: toFen(p) }); unmakeMove(p, m, u); }
+}
+for (const [b, s] of process.argv.slice(2).map((x) => x.split(":").map(Number))) {
+  const c0 = process.cpuUsage(); let d4 = 0; const moves = [];
+  for (const { fen } of corpus) { const c = chooseMove(parseFen(fen), { budgetMs: b, now: tick(s) }); if (c.depth >= 4) d4++; moves.push(lbl(c.move) + "@" + c.depth); }
+  const cu = process.cpuUsage(c0);
+  console.log("budget", b, "step", s, "depth>=4:", d4 + "/30", "cpu-ms per 30:", ((cu.user + cu.system) / 1000).toFixed(0), moves.slice(0, 12).join(" "));
+}

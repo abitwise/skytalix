@@ -296,3 +296,31 @@ Assessed by BA/PM, **2026-08-16**. **Result: 8 of 10 clean, 2 ⚠️ — NOT met
 | 10 | no major unresolved blocker | **⚠️** **the deterministic-mode construction is BA/PM's reading of the epic's criterion, and the search architecture is Architect/Design's.** The criteria are written to survive a different construction, but **the construction itself is not ratified** |
 
 </details>
+
+## Delivery
+
+**2026-10-09, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-086`).
+Branch `grugops/ABC-086-virtual-clock` from `1d74693`. Code is in `1ae5284`, plus `f9d58ee`, which
+renames the `A4` row title only. Not merged, not pushed. The decisions, the readings and the raw
+files are in `.grugops/context/ticket-to-pr-ABC-086/notes/` and are not restated here.
+
+**Criteria: 6 of 6 live criteria met. `N8-LANE` is NOT met, and it is handed up.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | 300/300 in `ENGINE_DEEP`, at a virtual budget of 24 and step 1. Depth ≥ 4 on ≥ 15/30 is asserted; the probe read 27/30. The default slice is 60/60. Every row imports `src/virtual-clock.ts` |
+| `A2` | MET | kiwipete × 10 at `DEFAULT_BUDGET_MS` on the wall clock. Every move is legal and every depth is reported. Identity is deliberately not asserted, and the reason is in the file |
+| `A4` | MET | The delivered `src/` diff grep gives 0 lines. The single `Date.now` is now `src/engine.ts:457` (it was `:452`) |
+| `A5` | MET | (i) The `cli.ts` construction is pinned. (ii) The import walk reaches `engine.ts` and not the module. (iii) The `engine.ts` diff is comment lines only, and the `ABC-078` `A4` pin is green, unamended |
+| `A6` | MET | 10/10 per engine, interleaved against alone. Engines at budget 1 and budget 3 differ on 3/10 positions. Per-instance clock state is checked |
+| `A7` | MET | 5/5 throws; exact readings `[0, 0.5, 1]` and `[0, 1, 2]` |
+
+**`N8-LANE`: +1 070 ms CPU net, against a bar of 650 ms.** This is a stop condition in the brief,
+so nothing was trimmed. The `A1` default slice costs 0.7–0.9 s in vitest. That is 3–4× the
+plain-`node` figure this page cites, so the stated `A6` fallback does not reach the bar on its own.
+The options are in claim `…3bb7069b`.
+
+**Owed:**
+- the `AGENTS.md` `ENGINE_DEEP` line, now 45 (33 default) and 269 s, to the Scribe;
+- a QE hop;
+- the `N8-LANE` ruling.
