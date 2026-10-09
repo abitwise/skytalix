@@ -1,0 +1,32 @@
+SAME startpos b1c3 s=0 d=2 n=108
+SAME startpos/b1c3 b8c6 s=-50 d=2 n=94
+SAME startpos/b1a3 b8c6 s=-10 d=2 n=90
+SAME startpos/g1h3 b8c6 s=-10 d=2 n=86
+SAME startpos/g1f3 b8c6 s=-50 d=2 n=84
+SAME kiwipete e2a6 s=145 d=1 n=1788
+SAME kiwipete/a1b1 b4c3 s=240 d=1 n=1807
+SAME kiwipete/a1c1 b4c3 s=240 d=1 n=1788
+SAME kiwipete/a1d1 b4c3 s=235 d=1 n=1818
+SAME kiwipete/e1f1 b4c3 s=230 d=1 n=2026
+SAME position-3 b4f4 s=90 d=2 n=96
+SAME position-3/e2e3 h4g3 s=-10 d=2 n=132
+SAME position-3/e2e4 c7c6 s=-10 d=2 n=268
+SAME position-3/g2g3 h4g3 s=110 d=2 n=45
+SAME position-3/g2g4 h4g4 s=80 d=2 n=90
+SAME position-4 c4c5 s=-375 d=2 n=1290
+SAME position-4/f1f2 b2a1 s=735 d=2 n=843
+SAME position-4/g1h1 b2a1 s=550 d=2 n=862
+SAME position-4/d2d4 a3e3 s=520 d=2 n=994
+SAME position-4/f3d4 b2a1 s=590 d=1 n=1257
+SAME position-5 d7c8 s=560 d=2 n=455
+SAME position-5/b1c3 f2d1 s=285 d=2 n=267
+SAME position-5/b1a3 f2d1 s=325 d=2 n=287
+SAME position-5/b1d2 f2d1 s=290 d=2 n=247
+SAME position-5/c1d2 f2d1 s=325 d=2 n=252
+SAME position-6 c3d5 s=10 d=1 n=1449
+SAME position-6/a1a2 c6d4 s=35 d=2 n=1309
+SAME position-6/a1b1 c6d4 s=30 d=2 n=1297
+SAME position-6/a1c1 c6d4 s=30 d=2 n=1286
+SAME position-6/a1d1 c6d4 s=105 d=2 n=1101
+A1-shape: 300/300 identical (30 positions x 10, budget 2 ticks, ticking(1))
+cpu-ms: 835
