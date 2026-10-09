@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-084` `In Review` → `Ready for UAT` (QE PASS `b40e024`, Security/NFR PASS_WITH_RISKS `ffc3bdd` with `F1` fixed at `17fd55e`). **No hop running.** Owed from the owner: `ABC-084` acceptance._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-084` Security/NFR PASS_WITH_RISKS (`ffc3bdd`); fix `F1` (timeout false red) taken rather than an owner risk; Engineer re-hop dispatched. Carried to Architect/Design: `NFR-008` total lane 24.9–26.0 s CPU vs 15 s (reported at `ABC-082` too)._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-084` QE PASS (`b40e024`), Scribe `A8` landed (`5a15fb4`); Security/NFR `N8-LANE` ruling still running._
@@ -486,9 +488,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-084] Tactical puzzle suite as a strength regression gate  (EPIC-004, M, P0, **DoR 10/10, 0 ⚠️ — re-scored 2026-10-09 by BA/PM at `0ebe63f` (`fold-abc084-gate-b`) on the owner's option B** (QE runs it at review on engine-touching tickets; red = QE FAIL); deterministic mode per `ADR-0027`; shared corpus extended, not forked; pulled by the Orchestrator; BUILT `b3321f0` (+ baseline `a287461`, docs `e426e91`) on `grugops/ABC-084-puzzle-suite` — gates 1539/1539; suite 40/40 ×3 processes identical; weakened engine 10/40 exit 1; baseline 40/40 @ budget 25; `N8-LANE` readings disagree (+790 @ load 54 / +400 / +120) → Security/NFR rules; **QE PASS** `b40e024` (A1–A7; all 40 answers confirmed by an independent oracle; 17 subtler weakenings: 7 red / 10 survive → QE-084-a/b MEDIUM: gate is coarse and baseline sits at the 40/40 ceiling); Scribe `A8` line landed `5a15fb4` (AGENTS.md 23 464 B); **Security/NFR PASS_WITH_RISKS** `ffc3bdd` — `N8-LANE` MET (+85 / +210 ms net; content +280 ms, `A6` oracle +195 ms — stays in the default lane); no security finding; **`F1` (MEDIUM): the gate row's 60 s vitest timeout gives a FALSE RED under load (40/40 solved, timed out at load1 49–54)** → Engineer `ticket-to-pr-ABC-084-f1` applying the 300 s hang guard (no owner risk sought). **UAT waiver does NOT apply** (`src/puzzle-corpus.ts`, baseline JSON are non-test `src/` files) → owner acceptance owed)
 
 
 
@@ -514,7 +515,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+
+- [ABC-084] Tactical puzzle suite as a strength regression gate  (EPIC-004, M, P0, **DoR 10/10, 0 ⚠️ — re-scored 2026-10-09 by BA/PM at `0ebe63f` (`fold-abc084-gate-b`) on the owner's option B** (QE runs it at review on engine-touching tickets; red = QE FAIL); deterministic mode per `ADR-0027`; shared corpus extended, not forked; pulled by the Orchestrator; BUILT `b3321f0` (+ baseline `a287461`, docs `e426e91`) on `grugops/ABC-084-puzzle-suite` — gates 1539/1539; suite 40/40 ×3 processes identical; weakened engine 10/40 exit 1; baseline 40/40 @ budget 25; `N8-LANE` readings disagree (+790 @ load 54 / +400 / +120) → Security/NFR rules; **QE PASS** `b40e024` (A1–A7; all 40 answers confirmed by an independent oracle; 17 subtler weakenings: 7 red / 10 survive → QE-084-a/b MEDIUM: gate is coarse and baseline sits at the 40/40 ceiling); Scribe `A8` line landed `5a15fb4` (AGENTS.md 23 464 B); **Security/NFR PASS_WITH_RISKS** `ffc3bdd` — `N8-LANE` MET (+85 / +210 ms net; content +280 ms, `A6` oracle +195 ms — stays in the default lane); no security finding; **`F1` (MEDIUM): the gate row's 60 s vitest timeout gives a FALSE RED under load (40/40 solved, timed out at load1 49–54)** → **FIXED `17fd55e`** (300 s hang guard on gate + `A3` rows, "≤ 60 s" out of the row name; `A5` a recorded reading; 3 lines, Orchestrator-verified diff; suite 40/40, weakened 10/40 red on the COUNT not a timeout). **Owed from the owner: UAT acceptance** (waiver N/A: non-test `src/` files). Branches to merge: build `17fd55e`, QE `b40e024`, Security/NFR `ffc3bdd`, Scribe `5a15fb4`. **UAT waiver does NOT apply** (`src/puzzle-corpus.ts`, baseline JSON are non-test `src/` files) → owner acceptance owed)
 
 
 
