@@ -253,3 +253,41 @@ it.
   `EPIC-004` closed; the arm ticket uncut (cut the same day as `ABC-120`).
 
 </details>
+
+## Delivery
+
+**Built 2026-10-09 by the Software Engineer** (task `wave-2026-09-25`, subtask
+`ticket-to-pr-ABC-102`, Workflow 04) on branch `grugops/ABC-102-undo` @ **`53fd3d2`**, off
+`grugops/wave-2026-09-25` @ `4c5eddc`. **Unmerged; not deployed.** This section is a pointer; the
+numbers live in the three `20261009T17…` notes in `.grugops/context/ticket-to-pr-ABC-102/notes/`.
+
+- **`A9`, measured:** `git diff --name-only 4c5eddc -- src/` → exactly `src/command-input.ts`
+  (+40 / −19) and `src/command-input.test.ts` (+242 / −9). No stop condition hit.
+- **Shape:** the `undo` row (`take-back`); one guarded branch ahead of `new`'s; the refusal
+  `UNDO_REFUSAL_MESSAGES = ["nothing to undo"]`; `helpMessages()` is the bare token list (ruling 6).
+- **Tests:** 18 new rows (133 → 151), `A1`–`A8`; the three rows this page named are superseded by
+  name in comments. Red first, then green; four mutants red (incl. the unguarded ply-1 take-back and
+  the heading kept, which reds `ABC-035` `A7` at the start position).
+- **Gates:** lint 0 (one format self-fix), typecheck 0, build 0, `npm test` 48 files / 1485 passed /
+  0 skips; test integrity `No findings.`
+- **`N8-LANE`:** +6 ms vitest test time / +60 ms process CPU in-file, 0 files, 0 children — within
+  650 ms.
+- **Next:** the `qe-e2e` hop; the board move `In Development → In Review` is the Orchestrator's.
+
+## QE
+
+**Gated 2026-10-09 by QE/E2E** (task `wave-2026-09-25`, subtask `qe-ABC-102`, Workflow 05) on
+`grugops/qe-ABC-102` off `grugops/ABC-102-undo` @ `7caead3`. **Verdict: PASS WITH FINDINGS —
+nothing blocking.** Pointer only; the readings are in `.grugops/context/qe-ABC-102/notes/`.
+
+- **`A1`–`A9` MET**, reproduced independently; gates green (48 files / 1485 / 0 skips, integrity
+  clean); `src/command-input.ts` 100% covered by its file.
+- **Through the real loop, reader, render seam and engine:** 242/242 checks — 0/1/2/3 plies, after
+  an engine reply, on a claimable position, after `new`, after `quit`, repeated to the floor (White
+  0, **Black 1**), castling and e.p. restored byte-for-byte. Real entry point, both colours: exit 0.
+- **Mutants:** M1, M3 re-applied, red as ledgered; 8 of QE's own, 7 red, Q8 (table order)
+  equivalent. The three superseded rows each have an equivalent guard (mutant Q3).
+- **Findings:** G1 low — one ~120-column docblock line (`src/command-input.ts:133`). G2 low — the
+  `help` region is full at the narrowest frame: an eighth token fits at zero headroom, a ninth hides
+  three (`ABC-036`, `ABC-038`). G3–G6 info. `N8-LANE`: +6 ms in-file, readings only.
+- **Next:** the board move out of `In Review` is the Orchestrator's. No Security/NFR trigger fired.

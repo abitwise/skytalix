@@ -1,0 +1,13 @@
+{
+ "total": 10080,
+ "hiding": 0,
+ "examples": [],
+ "eighthTokenMoves": [
+  "help board quit claim",
+  "resign new undo moves"
+ ],
+ "ninthToken": [
+  "help board quit claim",
+  "resign new (+3 more) "
+ ]
+}
