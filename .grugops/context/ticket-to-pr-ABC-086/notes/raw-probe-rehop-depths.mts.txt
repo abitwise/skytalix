@@ -1,0 +1,14 @@
+import { makeMove, unmakeMove } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/apply.ts";
+import { chooseMove } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/engine.ts";
+import { parseFen, toFen } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/fen.ts";
+import { legalMoves } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/legal.ts";
+import { squareName } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/position.ts";
+import { virtualClock } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-086-virtual-clock/src/virtual-clock.ts";
+const C = [["startpos","rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"],["kiwipete","r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"],["position-3","8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1"],["position-4","r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"],["position-5","rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"],["position-6","r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"]];
+const lab = (m: any) => squareName(m.from) + squareName(m.to);
+const thirty = C.flatMap(([n, f]) => { const p = parseFen(f); const kids = legalMoves(p).slice(0, 4).map((m) => { const u = makeMove(p, m); const k = { name: n + "/" + lab(m), fen: toFen(p) }; unmakeMove(p, m, u); return k; }); return [{ name: n, fen: f }, ...kids]; });
+for (const b of [2, 24]) {
+  const d = thirty.map(({ name, fen }) => ({ name, d: (chooseMove(parseFen(fen), { budgetMs: b, now: virtualClock(1) }) as any).depth }));
+  const slice = d.filter(({ name }) => ["startpos","position-3","position-5"].includes(name.split("/")[0]));
+  console.log("budget", b, "all30 d>=2:", d.filter(x=>x.d>=2).length, "d>=4:", d.filter(x=>x.d>=4).length, "| slice15 d>=2:", slice.filter(x=>x.d>=2).length, "slice depths:", slice.map(x=>x.d).join(""), "| 10x2 (no position-5) d>=2:", slice.filter(x=>!x.name.startsWith("position-5")&&x.d>=2).length);
+}

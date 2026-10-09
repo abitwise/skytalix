@@ -430,3 +430,23 @@ re-hop:**
 - report the `N8-LANE` net with the standing instrument.
 
 The `AGENTS.md` line and the QE hop are still owed, as above.
+
+**Re-hop 2026-10-09, Software Engineer** (subtask `ticket-to-pr-ABC-086-rehop`). The wave tip
+`b0a3ba9` (with `ABC-082`) is merged at `54540e5`; the re-cut rows are at `a4d8633`, in
+`src/engine.test.ts` only. Not merged into the wave, not pushed. Readings in observation
+`…457ba6b8`, owed items in claim `…ae1c2c15`.
+
+- **Slice shipped: 15 × 2** (no fallback). `A1`'s default row is the three families filtered from
+  `thirtyPositions()`, identical 30/30, depth ≥ 2 on 15/15 asserted. `A6`'s 10/10 interleaved row
+  is in `ENGINE_DEEP`, unchanged; the clock-state row stays default.
+- **Gates on the merged tree:** lint (after one safe format autofix), typecheck and build exit 0;
+  `npm test` 49 files / 1530 passed (wave tip 1522), 0 skipped, skip-integrity `No findings.`
+- **`ENGINE_DEEP` on the merged tree:** exit 0, 45 passed (32 default), 314.8 s. `A1` 300/300
+  green; depth-4 floor green (24/30, floor 15); `A6` 10/10 green; `A2` 10/10 legal, reported.
+- **`N8-LANE`: +35 ms net** (median of 8 paired rounds, sign 4/8; null 0.00 %, 4/8; load1 median
+  22.9), under 450. A second run was inadmissible (null −2.22 %) and is not used. In vitest, the new
+  `A1` row costs 106–109 ms and every other row ≤ 1 ms.
+- `src/engine.ts` and `src/search.ts` are untouched by the re-hop.
+
+**Still owed:** the `AGENTS.md` `ENGINE_DEEP` and `npm test` lines (Scribe), the QE hop and the
+board move (Orchestrator).
