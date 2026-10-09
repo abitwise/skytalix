@@ -266,3 +266,36 @@ Assessed by BA/PM, **2026-08-16**. **Result: 8 of 10 clean, 2 ⚠️ — NOT met
 | 10 | no major unresolved blocker | **⚠️** **an opt-in gate is a gate nobody runs.** The mechanism is decided; **who runs it, and at which board transition, is not** — and it is not BA/PM's to add to `quality.mandatory_gates`. Owner: the Orchestrator with the project owner. **Without that decision this ticket ships an instrument with no trigger** |
 
 </details>
+
+## Delivery
+
+**2026-10-09, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-084`).
+Branch `grugops/ABC-084-puzzle-suite` from `7b54dae`. The code is in `b3321f0` and the baseline in
+`a287461`, in its own commit. Not merged, not pushed. Decisions, readings and raw files are in
+`.grugops/context/ticket-to-pr-ABC-084/notes/` (`…99ac852f`, `…26f28829`, `…a9bf6ab2`) and are not
+restated here.
+
+**Criteria: `A1`–`A7` met. `A8` is the Scribe's; its line is drafted in claim `…a9bf6ab2`.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | 10/10 mate-in-2 rows found (`PUZZLE_DEEP=1`) |
+| `A2` | MET | 0/24 losing on the do-not-hang rows; win-material 6/6 |
+| `A3` | MET | `PUZZLE_DEEP=weakened` (`evaluate` mocked to 0, no `src/` door): 10/40 solved, the gate row red, exit 1, 10.4–10.7 s |
+| `A4` | MET | three separate processes, all 40 per-puzzle move/depth/node lines `cmp`-identical. The step guard refuses before any search |
+| `A5` | MET | 12.2–13.2 s at budget 25, step 1 |
+| `A6` | MET | every row records FEN, move(s), class and source. The mate keys are re-proven by an exhaustive search in the default lane; the win-material keys come from a material-only oracle probe |
+| `A7` | MET | `src/puzzle-suite.baseline.json` holds 40/40 at `b3321f0`, with machine, load and wall. Its commit touches only that file |
+
+- **Files.** The corpus is `src/puzzle-corpus.ts`: `HANGING_CORPUS` (24 rows, byte-identical,
+  imported back by `src/quiescence.test.ts`) and `PUZZLES` (40 rows).
+- **Lane.** The suite is `src/puzzle-suite.test.ts`, run with
+  `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`.
+- **Trigger list.** `src/engine.ts`, `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts` and
+  `src/transposition.ts`: 0 lines.
+- **Gate.** `npm test` is 50 files / 1539 passed / 0 skipped (base 49 / 1530). Lint, typecheck and
+  build exit 0. Skip integrity reads `No findings.` `SEARCH_DEEP` quiescence: 37 passed (29 default).
+- **`N8-LANE`, handed up.** Three admissible runs read +790 / +400 / +120 ms net at load1
+  54 / 31 / 24. The median is under 650 and run 1 is over. Nothing was trimmed.
+- **Found:** two of ABC-079's rows start in check (observation `…26f28829`). They are reported, not
+  changed.
