@@ -406,6 +406,18 @@ describe("A3 — both recursions route every reduction through the predicate, su
 const A4_FEN = "8/2p5/3p4/KP5r/5p1k/8/4P1P1/1R6 b - - 1 1";
 const A4_DEPTH = 4;
 
+/**
+ * RE-FOUND at `ABC-082` for the `search()` row only. The pawn-structure term moved the tree: at
+ * fixed depth 4 on `A4_FEN`, `noLmrResearch` now reads the correct 95 / h5e5 (`noResearch` still
+ * reads 50 / d6d5), so the fixed shape no longer needs the reduced-move re-search to be right there.
+ * The deepened shape still does (both variants read 50 / d6d5), so `A4_FEN` keeps the `chooseMove`
+ * row. The same probe (`a4scan.ts` at depth 4, 467 positions, 4 hits; `a4engine.ts` for both shapes)
+ * found no position that bites both variants in BOTH shapes on this build. This one, position-3
+ * after 1. Rb1 Rh6, white to move, bites both at fixed depth 4: the correct rule and PVS alone read
+ * 10 with b1c1, and `noLmrResearch` and `noResearch` both read −20 with b1b4.
+ */
+const A4_SEARCH_FEN = "8/2p5/3p3r/KP6/5p1k/8/4P1P1/1R6 w - - 2 2";
+
 type Store = (typeof trace.stores)[number];
 
 /**
@@ -440,10 +452,10 @@ function nullWindowReSearches(stores: readonly Store[]): string[] {
 describe("A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one", () => {
   it("search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions", () => {
     trace.on = true;
-    const shipped = search(parseFen(A4_FEN), A4_DEPTH);
+    const shipped = search(parseFen(A4_SEARCH_FEN), A4_DEPTH);
     trace.on = false;
     const reSearches = nullWindowReSearches(trace.stores);
-    const reference = searchWithoutReductions(parseFen(A4_FEN), A4_DEPTH);
+    const reference = searchWithoutReductions(parseFen(A4_SEARCH_FEN), A4_DEPTH);
 
     expect(
       reSearches.length,
@@ -451,7 +463,7 @@ describe("A4 — the reduced move fails high at a null-window node, is re-search
     ).toBeGreaterThan(0);
     expect(shipped.score).toBe(reference.score);
     expect(label(shipped.move as Move)).toBe(label(reference.move as Move));
-    expect([shipped.score, label(shipped.move as Move)]).toEqual([95, "h5e5"]);
+    expect([shipped.score, label(shipped.move as Move)]).toEqual([10, "b1c1"]);
   });
 
   it("chooseMove(): the same, deepened to depth 4 in the engine's own recursion", () => {

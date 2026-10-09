@@ -467,10 +467,15 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
    * move-generation change. Then re-run `searchWithoutPruning(parseFen(<fen>), 3)` in plain node
    * (~160 s kiwipete, ~28 s position-6) and re-pin ONLY when it equals `search()` on both score
    * and move. Re-pinning to whatever `search()` says, with no oracle run, is a defect.
+   *
+   * RE-PINNED at `ABC-082` (the pawn-structure term, an evaluator change) by that rule: the oracle
+   * was re-run in plain node on the build and equals `searchWithoutPvsOrReductions` AND `search()`
+   * on score and move on both boards — kiwipete 55 / e2a6 (was 50; 282 s), position-6 55 / c3d5
+   * (was 30; 38 s). The moves did not change.
    */
   const ORACLE_AT_DEPTH_3: Readonly<Record<string, { score: number; move: string }>> = {
-    kiwipete: { score: 50, move: "e2a6" },
-    "position-6": { score: 30, move: "c3d5" },
+    kiwipete: { score: 55, move: "e2a6" },
+    "position-6": { score: 55, move: "c3d5" },
   };
 
   /**
