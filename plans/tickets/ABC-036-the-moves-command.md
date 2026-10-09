@@ -121,6 +121,18 @@ shape `EPIC-002` `[A1]`/`2c` flagged for a human and shipped anyway.
 - **`A6` (no production change outside this ticket's module).** `git diff --numstat` shows this
   ticket's module and test file(s) and nothing else under `src/` — **`src/frame.ts` in particular is
   byte-identical** — suite green, skip **0**, `PERFT_DEEP=1` **32/32**.
+- **`A7` (`help` still shows every command; added 2026-10-09 from QE `ABC-102` G2, `…f7b21e38`).**
+  **Given** the delivered command table with `moves` as its **eighth** token, **then** the merged
+  rows `ABC-035 A7 — help fits the message region: hidden count exactly 0`
+  (`src/command-input.test.ts:548`, start position and a claimable mid-game) are **green and
+  unedited**. They fold `help` out of the table, so they see `moves` without any new copy. No
+  `(+N more)` appears, and every token is shown whole. *(QE measured the table after `ABC-102` at 7
+  tokens. Row 1, `help board quit claim`, is **21/21** columns at the start position, the narrowest
+  frame, in all 16 glyph-set × colour × position renders. An eighth token as long as `moves` fits
+  at exactly zero headroom on both rows. So this criterion is met by a margin of 0, and the
+  order of the table matters.)* **If those rows go red, stop and report.** Do not widen the frame,
+  change `MESSAGE_ROWS`, or edit the rows (`ABC-035` `A7`'s own rule: shorten the help, never widen
+  the frame).
 
 ## Dependencies
 
@@ -139,6 +151,10 @@ shape `EPIC-002` `[A1]`/`2c` flagged for a human and shipped anyway.
   make and this ticket is re-cut at `M` or `L`. **The DoR score below is NOT re-scored here — that is
   BA/PM's at pull time.** The Orchestrator ruled the blocker, not the checklist; re-scoring another
   role's ⚠️ is precisely how a recorded gap gets smoothed away.
+- **The `help` region is full after this ticket** *(added 2026-10-09, QE `ABC-102` G2)*. With
+  `moves`, both `help` rows are at 21/21 on the start-position frame. **A ninth token hides three**
+  (measured: `resign new (+3 more)`). Any later ticket that adds a command token inherits a full
+  region and must answer it first. Ticket order is the Orchestrator's.
 - **`EPIC-006` supplies the runtime frame width** (the render-seam closure, `ADR-0009` clause 9b), which
   is why `A3`'s `N > 0` is asserted against the delivered panels rather than against a number typed
   here.
@@ -195,6 +211,11 @@ and dropping the command would leave that criterion unmet with nothing recorded,
 mode this page exists to avoid.
 
 ## Definition of Ready
+
+**Fold note, 2026-10-09** (task `wave-2026-09-25`, subtask `cut-followups-2026-10-09`). **Not
+re-scored; the score below does not move.** Item 4 gains `A7`, a hidden count of 0 checked through
+the real frame. Item 5 gains the full-region note. The re-score is BA/PM's at pull time, as this
+page already says.
 
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
 **2026-08-12**. **Result: 8 of 10 clean, 2 recorded ⚠️ — the Definition of Ready is NOT met and this

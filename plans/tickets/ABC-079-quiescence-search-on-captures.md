@@ -83,9 +83,13 @@ ordering *"where most of the strength-per-line-of-code lives"*, and quiescence i
   built — so this ticket is the only one of the two that CAN land first. `ABC-084`'s own page already
   says *"`ABC-079` should land first"*. **So: `ABC-079` builds the corpus; `ABC-084` extends it and
   does not fork it.** The cost was already priced into `S` (see `## Size and priority rationale`,
-  which names the curated position set as this ticket's main cost). **`ABC-084`'s page and board row
+  which names the curated position set as this ticket's main cost). ~~**`ABC-084`'s page and board row
   still carry the symmetric wording and need the one-line follow-up; that is the Orchestrator's to
-  route, and it does not gate this ticket.**
+  route, and it does not gate this ticket.**~~ **CLOSED 2026-10-09** (`cut-followups-2026-10-09`):
+  `ABC-084`'s fold (`0ebe63f`, `fold-abc084-gate-b`) retired the symmetric wording. Its page now
+  says that `ABC-079` built the corpus, that `ABC-084` moves its 24 rows byte-identical into a data
+  module and extends them there, and that `A1` keeps reading exactly those 24. The `ABC-084` board
+  row no longer carries the old wording.
 
 ## Security / NFR triggers
 
@@ -144,7 +148,7 @@ Column moves are the Orchestrator's.
 | 7 | test notes present | **✅** four |
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P0` |
-| 10 | no major unresolved blocker | **✅** *(was ⚠️)* the ≥ 20 position set still does not exist, and **that is scope, not a blocker: it is now ruled THIS ticket's to build** (2026-08-18, from the dependency graph — `ABC-084` needs `ABC-078`, which is unbuilt, so this ticket is the only one of the two that can land first). `ABC-084` extends and does not fork. The symmetric *"whichever lands first"* rule that decided nothing is replaced by a named owner. **Open follow-up, not gating: `ABC-084`'s page and row still carry the old symmetric wording** |
+| 10 | no major unresolved blocker | **✅** *(was ⚠️)* the ≥ 20 position set still does not exist, and **that is scope, not a blocker: it is now ruled THIS ticket's to build** (2026-08-18, from the dependency graph — `ABC-084` needs `ABC-078`, which is unbuilt, so this ticket is the only one of the two that can land first). `ABC-084` extends and does not fork. The symmetric *"whichever lands first"* rule that decided nothing is replaced by a named owner. ~~**Open follow-up, not gating: `ABC-084`'s page and row still carry the old symmetric wording**~~ **Follow-up closed 2026-10-09 by `ABC-084`'s fold (`0ebe63f`); see § Dependencies** |
 
 ## Delivery
 

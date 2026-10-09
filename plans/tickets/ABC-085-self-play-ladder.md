@@ -81,10 +81,16 @@ at least 90%."*
 
 - **`ABC-087` must land first — OPEN.** There are no difficulty levels to ladder without it.
   *(2026-10-09.)* It also owns the seed and the seeded generator that `A5` consumes.
-- **`ABC-086` must land first — OPEN.** `A5`'s ~~seeded reproducibility~~ deterministic mode, the
-  virtual clock, is that ticket's contract *(re-pointed 2026-10-09; the seed moved to `ABC-087`)*.
-  This one **consumes** it and does not re-implement it.
-- **`ABC-078`, `ABC-077`, `ABC-076` — OPEN** (transitively).
+- ~~**`ABC-086` must land first — OPEN.**~~ **`ABC-086` — `Done`** (merged `3f26e21`; status
+  corrected 2026-10-09). `A5`'s ~~seeded reproducibility~~ deterministic mode, the virtual clock, is
+  that ticket's contract *(re-pointed 2026-10-09; the seed moved to `ABC-087`)*. This one
+  **consumes** it and does not re-implement it.
+- **`ABC-125` must land first — OPEN** *(added 2026-10-09, `cut-followups-2026-10-09`)*. `A5`
+  runs two engines, each on its own virtual clock, and the levels may use different steps. No
+  merged row runs two live clocks at different steps. QE's mutant `M5` (the step held at module
+  level) survives every row (`ABC-086` G-QE-1). `ABC-125` adds the row that kills it.
+- ~~**`ABC-078`, `ABC-077`, `ABC-076` — OPEN** (transitively).~~ **All `Done`** (status corrected
+  2026-10-09).
 - **`src/gameend.ts`, `src/history.ts`, `src/apply.ts`, `src/legal.ts` — MERGED** and used as-is.
 - **`EPIC-005`'s opening book — cross-epic, named and NOT resolved** (see `## Out of scope`).
 
@@ -134,6 +140,10 @@ three ⚠️.**
   generator are `ABC-087`'s.
 - `A5`'s criterion is unchanged.
 - The ticket still waits on both `ABC-086` and `ABC-087`, so item 3 stays ⚠️.
+
+**Fold note, 2026-10-09** (subtask `cut-followups-2026-10-09`). **Not re-scored; still 7 of 10.**
+`ABC-086` is now `Done`, and `ABC-125` (the two-step clock row) has been added as an XS
+prerequisite. `ABC-087` is still open, so item 3 stays ⚠️.
 
 Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met; stays in `Backlog`.**
 

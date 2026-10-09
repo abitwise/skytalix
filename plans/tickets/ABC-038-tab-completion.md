@@ -48,6 +48,9 @@ promise in the epic holds without it.
 - **Any change to `ABC-037`'s reader beyond attaching the completer**, and any change to `src/frame.ts`.
 - **`EPIC-006`'s command tokens** (`undo`, `resign`, `new`). They are not in `ABC-035`'s table, so they
   are not completion targets here; `EPIC-006` adds them to the table and inherits completion for free.
+  *(Premise outdated, 2026-10-09: all three are now in `COMMAND_TABLE`, `src/command-input.ts:105`–`:111`,
+  seven tokens. Completion reads the table, so they are completion targets as this bullet
+  predicted. Nothing here adds or edits a token; see `A6`.)*
 
 ## Acceptance (Given/When/Then)
 
@@ -78,7 +81,12 @@ promise in the epic holds without it.
 - **`A6` (no production change outside this ticket's module and one attachment point).** `git diff
   --numstat` shows this ticket's module, its test file(s), and at most the one line in `ABC-037`'s
   reader that attaches the completer; **`src/frame.ts`, `src/turn-loop.ts` and `src/san.ts`
-  byte-identical**; suite green, skip **0**, `PERFT_DEEP=1` **32/32**.
+  byte-identical**; suite green, skip **0**, `PERFT_DEEP=1` **32/32**. **And (added 2026-10-09, QE
+  `ABC-102` G2, `…f7b21e38`) `src/command-input.ts` is byte-identical: this ticket adds no command
+  token.** The merged `ABC-035 A7` rows (`src/command-input.test.ts:548`, `help` hides 0 tokens) stay
+  green and unedited. *(The `help` region has no room for another token. With seven tokens, row 1
+  is 21/21 at the start position. With `ABC-036`'s `moves` it is 21/21 on both rows, and a ninth
+  token hides three.)*
 
 ## Dependencies
 
@@ -134,6 +142,11 @@ question and is re-prioritised then — **checked at this cut: NOT FIRED**, beca
 happened and there is no runnable product to test with.
 
 ## Definition of Ready
+
+**Fold note, 2026-10-09** (task `wave-2026-09-25`, subtask `cut-followups-2026-10-09`). **Not
+re-scored; the score below does not move.** Item 4's `A6` now also requires
+`src/command-input.ts` to be byte-identical, which means no new token. The stale premise of one
+out-of-scope bullet is marked.
 
 Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
 **2026-08-12**. **Result: 9 of 10 clean, 1 recorded ⚠️ — NOT fully met; stays in `Backlog`.**
