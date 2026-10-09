@@ -1,0 +1,15 @@
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/fold-abc084-gate-b
+
+stdout | .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts > constant evaluator: hanging corpus losing count and the mate in 2
+CONST-EVAL corpus: nodes=2220356 nodes/move=92515 depths=8,9,11,12,8,10,8,8,10,10,10,10,8,9,12,12,8,11,8,9,11,10,10,10 wall=32.69s
+CONST-EVAL budget=100 step=1: losing=24/24 mate_in_2_move=f6f7 score=29997
+
+ ✓ .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts (1 test) 33595ms
+   ✓ constant evaluator: hanging corpus losing count and the mate in 2  33594ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  00:00:46
+   Duration  34.01s (transform 99ms, setup 0ms, collect 135ms, tests 33.59s, environment 0ms, prepare 48ms)
+
