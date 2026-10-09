@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` merged into the wave on the owner's word (`0de4a93`; fast gates green 1522/1522); deep lanes running, `main` NOT yet moved. `ABC-086` built, stopped on `N8-LANE`; BA/PM re-cut dispatched. Scribe follow-up: `AGENTS.md` `ENGINE_DEEP` and `npm test` lane lines are stale._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — owner accepted `AR-NFR005-082` ("accepting it"); `ABC-082` now owes only UAT acceptance. `ABC-083` carries the depth-7 re-read trigger._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` re-cut XS on accepted `ADR-0027`, DoR 10/10 (`28d4e5b`, merged `c910b44`) → `Ready` → `In Development` (1/3); Engineer dispatched. BA/PM follow-ups (unscheduled): `ABC-084` `A4` still says "same seed" (→ deterministic mode); `ABC-087` Dependencies still list `ABC-078` OPEN; `ABC-087`/`ABC-085` stay 7/10._
@@ -443,7 +445,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## In Development (WIP 1/3)
 
-- [ABC-086] Deterministic mode — the shipped engine on a virtual clock  (EPIC-004, **XS** — from S, P0, **DoR 10/10, 0 ⚠️ — folded `ADR-0027` (accepted 2026-10-09) and RE-SCORED by BA/PM at `28d4e5b`**; seed moved to `ABC-087`; pulled 2026-10-09 by the Orchestrator; Engineer `ticket-to-pr-ABC-086` on `grugops/ABC-086-virtual-clock`)
+- [ABC-086] Deterministic mode — the shipped engine on a virtual clock  (EPIC-004, **XS** — from S, P0, **DoR 10/10, 0 ⚠️ — folded `ADR-0027` (accepted 2026-10-09) and RE-SCORED by BA/PM at `28d4e5b`**; seed moved to `ABC-087`; pulled 2026-10-09 by the Orchestrator; BUILT `1ae5284` (+`f9d58ee`, `339f940`) on `grugops/ABC-086-virtual-clock` — gates green 1494/1494, `ENGINE_DEEP` 45/45, `A1` 300/300; **STOP: `N8-LANE` +1,070 ms vs ≤ 650 ms** → BA/PM `recut-abc086-lane` (cheap default slice, full `A1`/`A6` to `ENGINE_DEEP`); no owner breach sought)
 
 
 
