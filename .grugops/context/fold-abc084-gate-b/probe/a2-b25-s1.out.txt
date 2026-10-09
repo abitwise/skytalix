@@ -1,0 +1,26 @@
+Q takes a pawn a rook defends	a1a4	ok	d6	n19479	90ms
+R takes a pawn the king defends	e1f1	ok	d7	n18451	47ms
+B takes a pawn a pawn defends	e1f2	ok	d7	n18444	54ms
+N takes a pawn a pawn defends	c2a1	ok	d7	n18446	48ms
+Q takes a knight a rook defends	a1a6	ok	d6	n19475	87ms
+R takes a knight a pawn defends	d1d2	ok	d7	n18446	61ms
+Q takes a rook the king defends	a1e5	ok	d6	n19487	78ms
+Q takes a bishop a knight defends	a1b1	ok	d6	n19474	91ms
+R takes a bishop a pawn defends	e1f1	ok	d7	n18440	68ms
+R takes a pawn a bishop defends	e1d1	ok	d8	n18123	70ms
+Q takes a pawn a knight defends	a1a8	ok	d7	n18450	83ms
+B takes a pawn a rook defends	b1a2	ok	d8	n17420	64ms
+mirror: q takes a pawn a rook defends	a8a5	ok	d6	n19480	71ms
+mirror: r takes a pawn the king defends	e8f7	ok	d7	n18450	42ms
+mirror: b takes a pawn a pawn defends	e8f7	ok	d7	n18444	49ms
+mirror: n takes a pawn a pawn defends	c7a8	ok	d8	n17424	42ms
+mirror: q takes a knight a rook defends	a8a3	ok	d6	n19477	86ms
+mirror: r takes a knight a pawn defends	d8d7	ok	d7	n18450	62ms
+mirror: q takes a rook the king defends	a8e4	ok	d6	n19483	77ms
+mirror: q takes a bishop a knight defends	a8b8	ok	d6	n19475	82ms
+mirror: r takes a bishop a pawn defends	e8f8	ok	d7	n18439	64ms
+mirror: r takes a pawn a bishop defends	e8d8	ok	d8	n17421	57ms
+mirror: q takes a pawn a knight defends	a8a1	ok	d7	n18451	84ms
+mirror: b takes a pawn a rook defends	b8a7	ok	d8	n17420	61ms
+MATE_IN_2 (search.test.ts A3)	f6f7	MATE-OK	d7	n18876	44ms	score=29997
+SUMMARY budget=25 step=1 readings/move=25 rows=24 losing=0/24 mate=1/1 nodes=465425 nodes/move=18617 wall=1.66s wall/move=66ms
