@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` re-scored 9/10 by BA/PM (`4e44656`, merged `9b35cfd`), **stays in `Backlog`**: ⚠️(10) narrowed to two Architect/Design questions (Q1 seed reaches move selection?, Q2 deterministic budget); `ruling-abc086-seed` dispatched. `ABC-102` building; `ABC-082` re-score running._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-102` re-scored 10/10 by BA/PM (`d155f04`, merged `8e67f24`) → `Ready` → `In Development` (1/3); Engineer `ticket-to-pr-ABC-102` dispatched. `ABC-086`, `ABC-082` re-scores running (note `…3b8e51d0`)._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — **kit reinstall output committed (`1674f74`); `biome.json` excludes kit-installed `tools/grugops/host-protection.js` from lint on the owner's word (note `…7c41e9a2`); gates green; local `main` fast-forwarded to the wave (no remote).** `ABC-120` was already `Done` (2026-09-25) — not re-pulled. No hop running. Unscheduled: kit upstream lint fix for `host-protection.js` (then drop the exclusion), plus the three items below._
