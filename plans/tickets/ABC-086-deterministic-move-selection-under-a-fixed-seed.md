@@ -450,3 +450,40 @@ The `AGENTS.md` line and the QE hop are still owed, as above.
 
 **Still owed:** the `AGENTS.md` `ENGINE_DEEP` and `npm test` lines (Scribe), the QE hop and the
 board move (Orchestrator).
+
+## § QE — 2026-10-09 (QE/E2E, task `wave-2026-09-25`, subtask `qe-ABC-086`, Workflow 05)
+
+**PASS WITH FINDINGS** at `82cccba`. QE's own probes re-measured every figure. The reasoning and
+raw output are in `.grugops/context/qe-ABC-086/` (`notes/` and `probe/`) and are not restated here.
+
+- **`A1`, `A2`, `A4`–`A7` MET as written.**
+  - Gate: lint, typecheck and build exit 0. `npm test` 49 / 1530 / 0 skipped. Integrity
+    `No findings.`
+  - `ENGINE_DEEP`: exit 0, 45 passed, 291.9 s. `A1` 300/300, depth ≥ 4 on 24/30, `A6` 10/10,
+    `A2` `e2a6@d5` ×10, all legal.
+  - `A5` (ii) was checked independently with the compiler's own module graph: `cli.ts` reaches
+    29 modules, none of them `virtual-clock.ts`.
+- **Determinism across separate processes holds.** 450 rows agree on move, score, depth and nodes.
+  The rows cover 5 budget/step configurations, 30 positions, and 3 processes (forward, reverse
+  order, and after warm-up searches).
+- **The default slice's floor is also its ceiling.** At budget 2 / step 1 the depth is 1 or 2 by
+  construction, and iteration 2 has a margin of 635–985 nodes. It is a real guard: a clock that
+  jumps the budget in one read reds the floor and nothing else. The slice never reaches LMR
+  depths; only the deep 300/300 does.
+- **12 QE mutants:** 9 killed, 2 equivalent, and 1 survives every row (a module-level step).
+- **Gaps:**
+  - **G-QE-1 (LOW–MEDIUM, test gap; the code is correct).** No row runs two live clocks at
+    different steps, so a module-level step survives both lanes. The `A6` interleaved row is
+    blind to clock state by construction. Remedy, verified (green on the shipped module, red on
+    the mutant): one ≈ 0 ms default row, `virtualClock(1)` and `virtualClock(0.5)` read
+    interleaved = `[0, 0, 1, 0.5, 2, 1]`.
+  - **G-QE-2 (LOW, design limit).** The guard stops the five named steps, not a small positive
+    one. `virtualClock(0.001)` takes 13.8 s per search at budget 2. A step below about
+    1e-16 × budget freezes. A reused clock with a non-dyadic step shifts node counts by one
+    interval. This is a harness note for `ABC-084`, `ABC-085` and `ABC-087`.
+  - **G-QE-3 (LOW).** `A4` is a spelling grep. It misses destructuring, bracket access,
+    `new Date()`, an aliased `perf_hooks` import, `process.uptime`, `crypto` and `Temporal.Now`.
+    Mitigated by the 37-line module being read by eye.
+- **Security/NFR not triggered** (no shipped-path change). `N8-LANE` is the Engineer's reading.
+
+**`ABC-086` may leave `In Review`. G-QE-1 is not a blocker. The board move is the Orchestrator's.**

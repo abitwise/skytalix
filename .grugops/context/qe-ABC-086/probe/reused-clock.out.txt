@@ -1,0 +1,11 @@
+step 1: k=1: 0/30 differ, k=37: 0/30 differ, k=1000: 0/30 differ, k=123457: 0/30 differ
+step 0.5: k=1: 0/30 differ, k=37: 0/30 differ, k=1000: 0/30 differ, k=123457: 0/30 differ
+  step 0.1 k=1000 startpos: fresh d2d40 d8 n237588 | reused d2d40 d8 n238612
+  step 0.1 k=1000 startpos/b1c3: fresh d7d50 d7 n238619 | reused d7d50 d7 n239643
+  step 0.1 k=1000 startpos/b1a3: fresh e7e60 d7 n238615 | reused e7e60 d7 n239639
+step 0.1: k=1: 0/30 differ, k=37: 0/30 differ, k=1000: 30/30 differ, k=123457: 0/30 differ
+step 0.3: k=1: 0/30 differ, k=37: 0/30 differ, k=1000: 0/30 differ, k=123457: 0/30 differ
+  step 0.3333333333333333 k=123457 startpos: fresh d2d40 d6 n68628 | reused d2d40 d6 n67604
+  step 0.3333333333333333 k=123457 startpos/b1c3: fresh b8c60 d6 n68635 | reused b8c60 d6 n67611
+  step 0.3333333333333333 k=123457 startpos/b1a3: fresh d7d50 d6 n68631 | reused d7d50 d6 n67607
+step 0.3333333333333333: k=1: 0/30 differ, k=37: 0/30 differ, k=1000: 0/30 differ, k=123457: 30/30 differ

@@ -1,0 +1,2 @@
+step 0.1 k=1000: move differs 0/30, depth differs 0/30, nodes differ 30/30 
+step 0.3333333333333333 k=123457: move differs 0/30, depth differs 0/30, nodes differ 30/30 

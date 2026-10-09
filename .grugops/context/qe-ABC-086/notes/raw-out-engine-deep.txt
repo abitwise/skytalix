@@ -1,0 +1,42 @@
+Fri Oct  9 20:14:51 UTC 2026
+23:14  up 7 days,  1:26, 10 users, load averages: 6.75 9.52 10.67
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/qe-ABC-086
+
+stdout | src/engine.test.ts > A1 — 30 positions at the default budget, on a real clock [deep, ENGINE_DEEP=1] > returns within the 5 s hard ceiling every time, and reports the worst case
+A1 worst case: position-5/b1d2 3024 ms at completed depth 7; over 3 s: 30/30
+
+stdout | src/engine.test.ts > NFR-005 — depth-in-budget, MEASURED and reported [deep, ENGINE_DEEP=1] > records the completed depth on kiwipete and position-6 at the 3 s budget
+NFR-005 kiwipete: completed depth 5, 156242 nodes, 3016 ms
+NFR-005 position-6: completed depth 5, 140718 nodes, 3006 ms
+
+stdout | src/engine.test.ts > A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A2 — a 50 ms budget returns inside 100 ms in the middlegame position
+A2 real clock: 57 ms at completed depth 2
+
+stdout | src/engine.test.ts > ABC-086 A2 — the shipped wall clock: legal, depth reported [deep, ENGINE_DEEP=1] > returns a legal move in each of 10 runs at the default budget, and reports each depth
+ABC-086 A2 kiwipete x10 on the wall clock: e2a6@d5/3028ms e2a6@d5/3015ms e2a6@d5/3012ms e2a6@d5/3024ms e2a6@d5/3021ms e2a6@d5/3024ms e2a6@d5/3004ms e2a6@d5/3002ms e2a6@d5/3008ms e2a6@d5/3023ms
+
+ ✓ src/engine.test.ts (45 tests) 290145ms
+   ✓ A1 — 30 positions at the default budget, on a real clock [deep, ENGINE_DEEP=1] > returns within the 5 s hard ceiling every time, and reports the worst case  90316ms
+   ✓ NFR-005 — depth-in-budget, MEASURED and reported [deep, ENGINE_DEEP=1] > records the completed depth on kiwipete and position-6 at the 3 s budget  6022ms
+   ✓ A5 — the fine-grained repetition, on a 100 ms step [deep, ENGINE_DEEP=1] > still never goes shallower as the budget grows, at a tenth of the lane's step  705ms
+   ✓ A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1] > agrees with search() on move and score over the whole endgame corpus  1810ms
+   ✓ A3 (identity) — the full sweep, with breadth [deep, ENGINE_DEEP=1] > agrees with search() on move and score over the six benchmark roots and their children  19318ms
+   ✓ A4 — the behavioural depth guard, further out [deep, ENGINE_DEEP=1] > keeps deepening well past any small ceiling on the sparse endgame  303ms
+   ✓ A2/A7 on the real clock [deep, ENGINE_DEEP=1] > A7 — a 1 ms budget returns a legal move in every corpus position  962ms
+   ✓ ABC-086 A1 — 30 positions x 10 fresh virtual clocks: 300/300 [deep, ENGINE_DEEP=1] > completes root depth >= 4 on at least 15 of the 30 positions  11046ms
+   ✓ ABC-086 A1 — 30 positions x 10 fresh virtual clocks: 300/300 [deep, ENGINE_DEEP=1] > chooses the identical move in all 10 runs of every position — 300/300  128548ms
+   ✓ ABC-086 A6 — two engines on their own virtual clocks, interleaved [deep, ENGINE_DEEP=1] > each engine chooses 10/10 what it chooses alone  495ms
+   ✓ ABC-086 A2 — the shipped wall clock: legal, depth reported [deep, ENGINE_DEEP=1] > returns a legal move in each of 10 runs at the default budget, and reports each depth  30164ms
+
+ Test Files  1 passed (1)
+      Tests  45 passed (45)
+   Start at  23:14:52
+   Duration  291.38s (transform 63ms, setup 0ms, collect 1.11s, tests 290.15s, environment 0ms, prepare 28ms)
+
+real 291.94
+user 284.29
+sys 1.38
+exit 0
+Fri Oct  9 20:19:43 UTC 2026
+23:19  up 7 days,  1:31, 10 users, load averages: 8.12 7.55 9.29
