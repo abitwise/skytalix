@@ -1,4 +1,6 @@
 # Board
+_Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-086` `In Development` → `In Review` at `82cccba`; QE dispatched._
+
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — **`ABC-082` accepted → `Done`** (note `…4c7d2e91`): merged-tip gates + 7 deep lanes green; local `main` fast-forwarded. `ABC-086` re-hop running. Owed from the owner: `ABC-084` gate owner (options A–D put 2026-10-09)._
 
 _Updated: 2026-10-09 by the Orchestrator (task `wave-2026-09-25`) — `ABC-082` merged into the wave on the owner's word (`0de4a93`; fast gates green 1522/1522); deep lanes running, `main` NOT yet moved. `ABC-086` built, stopped on `N8-LANE`; BA/PM re-cut dispatched. Scribe follow-up: `AGENTS.md` `ENGINE_DEEP` and `npm test` lane lines are stale._
@@ -445,9 +447,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-
-- [ABC-086] Deterministic mode — the shipped engine on a virtual clock  (EPIC-004, **XS** — from S, P0, **DoR 10/10, 0 ⚠️ — folded `ADR-0027` (accepted 2026-10-09) and RE-SCORED by BA/PM at `28d4e5b`**; seed moved to `ABC-087`; pulled 2026-10-09 by the Orchestrator; BUILT `1ae5284` (+`f9d58ee`, `339f940`) on `grugops/ABC-086-virtual-clock` — gates green 1494/1494, `ENGINE_DEEP` 45/45, `A1` 300/300; **STOP: `N8-LANE` +1,070 ms vs ≤ 650 ms** → BA/PM `recut-abc086-lane` (cheap default slice, full `A1`/`A6` to `ENGINE_DEEP`); no owner breach sought)
+## In Development (WIP 0/3)
 
 
 
@@ -463,7 +463,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+
+## In Review (WIP 1/3)
+
+- [ABC-086] Deterministic mode — the shipped engine on a virtual clock  (EPIC-004, **XS** — from S, P0, **DoR 10/10, 0 ⚠️ — folded `ADR-0027` (accepted 2026-10-09) and RE-SCORED by BA/PM at `28d4e5b`**; seed moved to `ABC-087`; pulled 2026-10-09 by the Orchestrator; BUILT `1ae5284` (+`f9d58ee`, `339f940`) on `grugops/ABC-086-virtual-clock` — gates green 1494/1494, `ENGINE_DEEP` 45/45, `A1` 300/300; `N8-LANE` stop (+1,070 ms) → BA/PM re-cut `c16447c` → re-hop on the merged tree `82cccba`: gates 1530/1530, `ENGINE_DEEP` 45/45, `N8-LANE` +35 ms; QE `qe-ABC-086` dispatched (Security/NFR not triggered: no shipped-path change))
 
 
 
