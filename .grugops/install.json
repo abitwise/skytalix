@@ -2,5 +2,322 @@
   "kitVersion": "2.1.0",
   "grugopsHome": "/Users/olgeroeselg/.grugops",
   "kitRoot": "/Users/olgeroeselg/.grugops/agent-factory",
-  "installMode": "copy"
+  "installMode": "copy",
+  "target": "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example",
+  "ledger": [
+    {
+      "path": ".claude/agents/grugops-agents-md-scribe.md",
+      "kind": "file",
+      "content": "sha256:015beec8264a948ec7553f821b1928d689ed6043685c35edb8bfb21dd840f6f5;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-agents-md-scribe.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-agents-md-scribe.md",
+      "content": "sha256:ba3fe2b051ffd3647f80317ce6f7e16e71e01ca961c3f7aac9d568b5a2c012c9;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-architect-design.md",
+      "kind": "file",
+      "content": "sha256:3defe9eaac0fb9aca827bd52a6d72d120e0683b85cb95105d4b996f0355f0f42;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-architect-design.md.grugops-edited-2026-10-09T15-26-36.878Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-architect-design.md",
+      "content": "sha256:d245d3ce1985c5ab6bef967213f07b36db7799608db38f325671496322a92dad;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-ba-pm.md",
+      "kind": "file",
+      "content": "sha256:ffb718922077a28f425032bb0ef06a8bb770e9dbcaa17398f9913a7cccd2ecef;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-ba-pm.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-ba-pm.md",
+      "content": "sha256:749f81d46749ce7f04621b02b947836c87bbb860664a6a929d36dd5345d71e23;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-brownfield-mapper.md",
+      "kind": "file",
+      "content": "sha256:e34271133d4fb0ac05fc25146394fc1ffbfd142ccae54f6c6b4f54e95dcfc42e;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-brownfield-mapper.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-brownfield-mapper.md",
+      "content": "sha256:7a7642f7a8bb280b9e16a1f12662605e9642aca7552f2bd29177484a03998a6b;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-compliance-officer.md",
+      "kind": "file",
+      "content": "sha256:a9fd2b2b838b9b2d3399f58e9468fcdcba28de9e15dc41f773dedaa59eb4e9f2;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-compliance-officer.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-compliance-officer.md",
+      "content": "sha256:902e183e7a75c565dd4d449526f514c6f1cfbebd23e8a3e5f4a3942631d335ba;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-factory-coach.md",
+      "kind": "file",
+      "content": "sha256:7f576abc923ba42fcf7f0fe2d4ddd0f27271ca57a4768efd6a2cc22b90e5a6c9;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-factory-coach.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-factory-coach.md",
+      "content": "sha256:26a26c78e319eea5a6eacf71d1e4487eefa6a07cad2cad1a074b7473e41fdcde;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-frontend-ui.md",
+      "kind": "file",
+      "content": "sha256:9bd49ab0ffb9398ef624ecec3394a811fac8adfcd8fe3e62b5a8a95ec7057eac;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-frontend-ui.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-frontend-ui.md",
+      "content": "sha256:b40d76ea60afec314d1ef1a754913a87fe66ec90d89e4c04a067b7630f18bd01;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-greenfield-mapper.md",
+      "kind": "file",
+      "content": "sha256:158d67c70e8156521deb6a4618fb8fe0cd86b8c0cfce2ecf479e968b5a0ecd71;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-greenfield-mapper.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-greenfield-mapper.md",
+      "content": "sha256:2852ae476c639a3df485687f0cfc03c665d488129af5af1027962cb48a3a100f;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-incident-responder.md",
+      "kind": "file",
+      "content": "sha256:1117ae64400aae41198a2a3037a510de7c1172f976e6171d1bb71149316f7fff;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-incident-responder.md.grugops-edited-2026-10-09T15-26-36.878Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-incident-responder.md",
+      "content": "sha256:0de5ac617aa2d3a59399c3287ec866cc8bd1e864a03f2beff92f997f9f3aed3d;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-installer.md",
+      "kind": "file",
+      "content": "sha256:31558ed612660819e9c3e775d7c242a4cf402ed5466a4408e9a0e4a717174cc1;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-installer.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-installer.md",
+      "content": "sha256:50b379b7b400fa9761247c38ca207b5a172ab0f99e9bfb1a98f34ef48933fe80;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-orchestrator.md",
+      "kind": "file",
+      "content": "sha256:105e00a72a472c3a7bf1726ecba1fdd1f529be82aca0747b128a773499176eac;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-orchestrator.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-orchestrator.md",
+      "content": "sha256:8fc75690cf97ce634d35775c763587ba8412c75808ae6d37f622c3fc77b9e2a4;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-qe-e2e.md",
+      "kind": "file",
+      "content": "sha256:12f1f6e6162d417116394ca3861464cd6f4bfe838cca1cddcae6bd7e6279327e;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-qe-e2e.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-qe-e2e.md",
+      "content": "sha256:e319776f98a11e7e407766981afdb435e0f3f5943437432ead6c57b7a4dea15c;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-release-manager.md",
+      "kind": "file",
+      "content": "sha256:c31e5645b40708f57d2b9fe5389d94ffdda9fb60f83455fd77a789a14806d92f;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-release-manager.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-release-manager.md",
+      "content": "sha256:d9a6bb2bf748eebf97834823ad4685158615781086dfaf4ed19a16c3116f8bb0;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-security-nfr.md",
+      "kind": "file",
+      "content": "sha256:45e9437151320e7a5c7a3ef6a4f1f555b939a9348f79868767410f6082250a73;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-security-nfr.md.grugops-edited-2026-10-09T15-26-36.878Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-security-nfr.md",
+      "content": "sha256:74e36642fa0fa6ce0dbe727f610727a6596991a2298645032b4b50917ebcbe48;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-software-engineer.md",
+      "kind": "file",
+      "content": "sha256:6bee171f9e42fb3bea9c6c8073c9e2cd88cdfacff9618aea382e6714998a2e1c;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-software-engineer.md.grugops-edited-2026-10-09T15-26-36.878Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-software-engineer.md",
+      "content": "sha256:8d86b728df0de3402c6463ac20a6c749af4475aa47e6228196bb054d2e27dedd;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-system-analyst.md",
+      "kind": "file",
+      "content": "sha256:28be6dee94140ce9170e4564b832d8a0260bdb1532701a3e7274f00444e41dc9;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-system-analyst.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-system-analyst.md",
+      "content": "sha256:40c65a27a253324bb6944a3ecadadf467d1575e8e673ac5b5e3edbfe8ad15a63;mode=0644"
+    },
+    {
+      "path": ".claude/agents/grugops-uat-planner.md",
+      "kind": "file",
+      "content": "sha256:b6d2595ed9f119e7b2e99b531bc3f99202fc88502ec9b485d858a3d94df4d8b6;mode=0644",
+      "kit": true
+    },
+    {
+      "path": ".claude/agents/grugops-uat-planner.md.grugops-edited-2026-10-09T14-45-43.993Z",
+      "kind": "backup",
+      "origin": "edited-kit-file",
+      "of": ".claude/agents/grugops-uat-planner.md",
+      "content": "sha256:e753ac49c958b81ebd05ac8dd3fb4da7818c3bb5926981a498cdc3b2f18c4f0c;mode=0644"
+    },
+    {
+      "path": ".claude/settings.json",
+      "kind": "ask-rules",
+      "added": [
+        "Bash(aws * deploy *)",
+        "Bash(aws * deploy)",
+        "Bash(aws * sync *)",
+        "Bash(aws * sync)",
+        "Bash(aws deploy *)",
+        "Bash(aws sync *)",
+        "Bash(fly * deploy *)",
+        "Bash(fly * deploy)",
+        "Bash(fly deploy *)",
+        "Bash(flyctl * deploy *)",
+        "Bash(flyctl * deploy)",
+        "Bash(flyctl deploy *)",
+        "Bash(gcloud * deploy *)",
+        "Bash(gcloud * deploy)",
+        "Bash(gcloud deploy *)",
+        "Bash(gh * pr merge *)",
+        "Bash(gh * pr merge)",
+        "Bash(gh pr merge *)",
+        "Bash(git * push *)",
+        "Bash(git * push)",
+        "Bash(git push *)",
+        "Bash(helm * install *)",
+        "Bash(helm * install)",
+        "Bash(helm * upgrade *)",
+        "Bash(helm * upgrade)",
+        "Bash(helm install *)",
+        "Bash(helm upgrade *)",
+        "Bash(kubectl * apply *)",
+        "Bash(kubectl * apply)",
+        "Bash(kubectl * delete *)",
+        "Bash(kubectl * delete)",
+        "Bash(kubectl * rollout *)",
+        "Bash(kubectl * rollout)",
+        "Bash(kubectl apply *)",
+        "Bash(kubectl delete *)",
+        "Bash(kubectl rollout *)",
+        "Bash(npm * publish *)",
+        "Bash(npm * publish)",
+        "Bash(npm publish *)",
+        "Bash(pnpm * publish *)",
+        "Bash(pnpm * publish)",
+        "Bash(pnpm publish *)",
+        "Bash(serverless * deploy *)",
+        "Bash(serverless * deploy)",
+        "Bash(serverless deploy *)",
+        "Bash(sls * deploy *)",
+        "Bash(sls * deploy)",
+        "Bash(sls deploy *)",
+        "Bash(terraform * apply *)",
+        "Bash(terraform * apply)",
+        "Bash(terraform apply *)",
+        "Bash(vercel *--prod*)",
+        "Bash(yarn * publish *)",
+        "Bash(yarn * publish)",
+        "Bash(yarn publish *)"
+      ],
+      "createdFile": false,
+      "createdPermissions": true,
+      "createdAsk": true,
+      "askContent": "sha256:b04d762067e9e45b73638e1dc2511380585f0702e085d622d1b4f0234584741a"
+    },
+    {
+      "path": ".gemini/settings.json",
+      "kind": "gemini",
+      "createdFile": false,
+      "addedEntry": false,
+      "noEntryReason": "already-listed",
+      "fileNameContent": "sha256:19114806066d11edafa301865149a841f5afd2060b4337d796db6bd66bf90812"
+    },
+    {
+      "path": ".pi",
+      "kind": "dir"
+    },
+    {
+      "path": ".pi/prompts",
+      "kind": "dir"
+    },
+    {
+      "path": ".pi/prompts/grugops.md",
+      "kind": "file",
+      "content": "sha256:65326b4adb87339b67fb528857e6c4cadaf61f49361acbb780217997a0647d85;mode=0644",
+      "kit": false
+    },
+    {
+      "path": "tools/grugops/host-protection.js",
+      "kind": "file",
+      "content": "sha256:7b72cc88025b5eef99e6fdf14f1f3b7b2a6d71602aa0cfc2b85ee13100485c5d;mode=0644",
+      "kit": false
+    }
+  ]
 }

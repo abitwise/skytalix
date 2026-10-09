@@ -80,7 +80,7 @@
       "software-engineer": "opus",
       "architect-design": "opus",
       "security-nfr": "opus",
-      "incident-responder": "opus",
+      "incident-responder": "sonnet",
       "system-analyst": "opus",
       "ba-pm": "opus",
       "frontend-ui": "opus",
@@ -89,10 +89,32 @@
       "brownfield-mapper": "opus",
       "greenfield-mapper": "opus",
       "compliance-officer": "opus",
-      "agents-md-scribe": "opus",
-      "factory-coach": "opus",
+      "agents-md-scribe": "sonnet",
+      "factory-coach": "sonnet",
       "release-manager": "opus",
-      "installer": "opus"
+      "installer": "haiku"
+    },
+    "effort": {
+      "preset": "none",
+      "roles": {
+        "orchestrator": "high",
+        "software-engineer": "medium",
+        "architect-design": "high",
+        "security-nfr": "high",
+        "incident-responder": "high",
+        "system-analyst": "high",
+        "ba-pm": "high",
+        "frontend-ui": "medium",
+        "brownfield-mapper": "medium",
+        "greenfield-mapper": "high",
+        "compliance-officer": "high",
+        "agents-md-scribe": "high",
+        "factory-coach": "high",
+        "release-manager": "medium",
+        "installer": "max",
+        "qe-e2e": "high",
+        "uat-planner": "medium"
+      }
     }
   }
 }
