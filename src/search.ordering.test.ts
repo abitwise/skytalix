@@ -415,11 +415,14 @@ describe("A4 — each heuristic's node count, and the delete rule", () => {
    * cheapest detector of a comparator or killer drift that stays lossless (which `A1` cannot
    * see). The killers earn 27% here; at kiwipete depth 2 they earn nothing (2 772 either way),
    * which is exactly why the delete rule is not judged at a shallow depth.
+   *
+   * RE-MEASURED at `ABC-082` (the pawn-structure term changes leaf values, so the tree moves):
+   * 9 804 / 3 391 / 2 467 became 9 319 / 3 286 / 2 429, read by a node script on the build.
    */
-  it("position-6 at depth 2: none 9 804, MVV-LVA 3 391, + killers 2 467", () => {
-    expect(none("position-6", 2).nodes).toBe(9_804);
-    expect(mvvLva("position-6", 2).nodes).toBe(3_391);
-    expect(full("position-6", 2).nodes).toBe(2_467);
+  it("position-6 at depth 2: none 9 319, MVV-LVA 3 286, + killers 2 429", () => {
+    expect(none("position-6", 2).nodes).toBe(9_319);
+    expect(mvvLva("position-6", 2).nodes).toBe(3_286);
+    expect(full("position-6", 2).nodes).toBe(2_429);
   });
 
   /**
@@ -608,8 +611,11 @@ describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
    * MEASURED at the `ABC-081` build: position-3 at 3 ticks completes depth 3 in 358 nodes; `N3`
    * reads 355. The count moves with any change to the engine's tree, which is the point — re-pin
    * it from a measurement, never from the failure message alone.
+   *
+   * RE-MEASURED at `ABC-082` (the pawn-structure term moves the tree): depth 3 in 360 nodes, and
+   * `N3`, re-planted on that build, reads 357 — the pin still tells the two apart.
    */
-  it("position-3 at 3 injected ticks: depth 3 in exactly 358 nodes", () => {
+  it("position-3 at 3 injected ticks: depth 3 in exactly 360 nodes", () => {
     // The pre-`ABC-121` engine since `ABC-121` (`ADR-0026` decision 4); the pin is unchanged.
     let ticks = 0;
     const choice = chooseMoveWithoutPvsOrReductions(parseFen(fenOf("position-3")), {
@@ -617,6 +623,6 @@ describe("G1 — chooseMove records a killer only on a beta cutoff", () => {
       now: () => ticks++,
     }) as { depth: number; nodes: number };
     expect(choice.depth).toBe(3);
-    expect(choice.nodes).toBe(358);
+    expect(choice.nodes).toBe(360);
   });
 });

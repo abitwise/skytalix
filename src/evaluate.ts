@@ -1,5 +1,5 @@
 /**
- * Static evaluation — material plus piece-square tables (ABC-076).
+ * Static evaluation — material plus piece-square tables (ABC-076), plus pawn structure (ABC-082).
  *
  * One pure function: a position in, a centipawn score out, in the NEGAMAX convention —
  * positive is good for the SIDE TO MOVE, never "good for white". The search (ABC-077) can
@@ -13,7 +13,16 @@
  * never totals — the one exception being the start position, which is exactly 0 by symmetry.
  */
 
-import { EMPTY, isBlack, type Position, pieceType } from "./position.ts";
+import {
+  BLACK,
+  EMPTY,
+  fileOf,
+  isBlack,
+  PAWN,
+  type Position,
+  pieceType,
+  rankOf,
+} from "./position.ts";
 
 /**
  * Centipawn value per piece type, indexed by `pieceType` (PAWN=1 … KING=6). Index 0 is EMPTY
@@ -121,6 +130,90 @@ const PIECE_SQUARE_TABLE: readonly (readonly number[])[] = [
 ];
 
 /**
+ * ABC-082's three pawn terms, in centipawns. The epic names exactly these three; backward pawns,
+ * chains, connected passers and storms are fenced out. Hand-tuned like everything above.
+ *
+ * DOUBLED: per pawn beyond the first on a file. ISOLATED: per pawn with no friendly pawn on
+ * either adjacent file. Together they stay inside `A2`'s 50 cp cap for two pawns doubled on one
+ * file (15 + 2 x 10 = 35): a structural term must not outweigh material.
+ *
+ * PASSED: by how far the pawn has come, indexed by rank counted from its OWN side (1 = its
+ * starting rank, 6 = one step from promotion). Kept modest on the early ranks: a large bonus
+ * there would eat `QE-G3`'s queen-for-a-pawn margin, where both black pawns are passed.
+ */
+const DOUBLED_PAWN_PENALTY = 15;
+const ISOLATED_PAWN_PENALTY = 10;
+const PASSED_PAWN_BONUS: readonly number[] = [0, 5, 10, 20, 35, 60, 100, 0];
+
+const BLACK_PAWN = PAWN | BLACK;
+
+/**
+ * True when no ENEMY pawn stands ahead of the pawn on `square` on its own file or an adjacent
+ * one — "ahead" in the pawn's own direction of travel. An enemy pawn behind it, or beside it on
+ * the same rank, cannot stop it; nor can a piece. `square` must hold a pawn.
+ */
+export function isPassedPawn(board: Uint8Array, square: number): boolean {
+  const pawn = board[square] as number;
+  const enemyPawn = pawn ^ BLACK;
+  const step = isBlack(pawn) ? -1 : 1;
+  const file = fileOf(square);
+  const fromFile = file === 0 ? 0 : file - 1;
+  const toFile = file === 7 ? 7 : file + 1;
+
+  // Pawns never stand on the first or last rank, so ranks 1..6 are the only ones to look at.
+  for (let rank = rankOf(square) + step; rank >= 1 && rank <= 6; rank += step) {
+    for (let f = fromFile; f <= toFile; f++) {
+      if (board[rank * 16 + f] === enemyPawn) return false;
+    }
+  }
+  return true;
+}
+
+/** The files either side of `file`, as a bitmask over files a..h (bit 0 = a). */
+const adjacentFiles = (file: number): number => (((1 << file) << 1) | ((1 << file) >> 1)) & 0xff;
+
+/**
+ * The three pawn terms from WHITE's point of view. Two passes over the six ranks a pawn can
+ * stand on: the first finds which files each side has a pawn on (and counts the extra pawns that
+ * make a file doubled), the second needs those complete file sets to judge isolation.
+ */
+function pawnStructure(board: Uint8Array): number {
+  let whiteFiles = 0;
+  let blackFiles = 0;
+  let score = 0;
+
+  for (let rank = 1; rank <= 6; rank++) {
+    for (let file = 0; file < 8; file++) {
+      const piece = board[rank * 16 + file];
+      const bit = 1 << file;
+      if (piece === PAWN) {
+        if ((whiteFiles & bit) !== 0) score -= DOUBLED_PAWN_PENALTY;
+        whiteFiles |= bit;
+      } else if (piece === BLACK_PAWN) {
+        if ((blackFiles & bit) !== 0) score += DOUBLED_PAWN_PENALTY;
+        blackFiles |= bit;
+      }
+    }
+  }
+
+  for (let rank = 1; rank <= 6; rank++) {
+    for (let file = 0; file < 8; file++) {
+      const square = rank * 16 + file;
+      const piece = board[square];
+      if (piece === PAWN) {
+        if ((whiteFiles & adjacentFiles(file)) === 0) score -= ISOLATED_PAWN_PENALTY;
+        if (isPassedPawn(board, square)) score += PASSED_PAWN_BONUS[rank] as number;
+      } else if (piece === BLACK_PAWN) {
+        if ((blackFiles & adjacentFiles(file)) === 0) score += ISOLATED_PAWN_PENALTY;
+        if (isPassedPawn(board, square)) score -= PASSED_PAWN_BONUS[7 - rank] as number;
+      }
+    }
+  }
+
+  return score;
+}
+
+/**
  * Score of a position from WHITE's point of view: white's material and placement minus
  * black's. Kept separate from the negamax flip so the sign convention lives in exactly one
  * place and the tables are read exactly once per piece.
@@ -146,7 +239,7 @@ function whiteMinusBlack(position: Position): number {
     }
   }
 
-  return score;
+  return score + pawnStructure(board);
 }
 
 /**
