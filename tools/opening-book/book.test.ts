@@ -19,13 +19,13 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { afterAll, describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it, vi } from "vitest";
 import { makeMove } from "../../src/apply.ts";
 import { parseFen } from "../../src/fen.ts";
 import { legalMoves } from "../../src/legal.ts";
 import type { Position } from "../../src/position.ts";
 import { zobristKey } from "../../src/zobrist.ts";
-import { SOURCE_FILES, toUci, writeBook } from "./compile.ts";
+import { SOURCE_COMMIT, SOURCE_FILES, toUci, writeBook } from "./compile.ts";
 
 const BOOK_DIR = fileURLToPath(new URL("../../data/opening-book/", import.meta.url));
 const BOOK_PATH = join(BOOK_DIR, "book.json");
@@ -77,6 +77,41 @@ describe("A1 — two compiles of the same source are byte-identical", () => {
     expect(a.equals(b)).toBe(true);
     expect(a.toString("utf8")).not.toContain(scratch);
   });
+
+  // QE (ABC-093): the sorts in D1(e) were unguarded — removing either kept the test above green,
+  // because insertion order is deterministic for one row order. Leading with the 1. d4 row
+  // inserts both the start position's moves and the entries in a different order.
+  it("emits the same bytes whatever order the source rows arrive in", () => {
+    const forward = fixture("a1-forward", `${HEADER}\n${GOOD_ROWS.join("\n")}\n`);
+    const reordered = fixture(
+      "a1-reordered",
+      `${HEADER}\n${[...GOOD_ROWS].sort().reverse().join("\n")}\n`,
+    );
+    const first = join(scratch, "a1-forward.json");
+    const second = join(scratch, "a1-reordered.json");
+    writeBook(forward, first, "0".repeat(40));
+    writeBook(reordered, second, "0".repeat(40));
+    expect(readFileSync(first).equals(readFileSync(second))).toBe(true);
+  });
+});
+
+// QE (ABC-093): D1(f)'s sixth refusal cannot be built from real chess, so a stub key that maps
+// every position to one value builds it. Scoped to this test: doMock + a fresh module registry.
+describe("D1(f) — a key carrying two different positions is refused", () => {
+  it("refuses the compile and writes no artifact", async () => {
+    vi.resetModules();
+    vi.doMock("../../src/zobrist.ts", () => ({ zobristKey: () => 0n }));
+    try {
+      const stubbed = await import("./compile.ts");
+      const dir = fixture("d1f-collision", `${HEADER}\n${GOOD_ROWS[0]}\n`);
+      const out = join(scratch, "d1f-collision.json");
+      expect(() => stubbed.writeBook(dir, out, "0".repeat(40))).toThrow(/carries two positions/);
+      expect(existsSync(out)).toBe(false);
+    } finally {
+      vi.doUnmock("../../src/zobrist.ts");
+      vi.resetModules();
+    }
+  });
 });
 
 describe("A8 — a malformed source never ships", () => {
@@ -86,6 +121,12 @@ describe("A8 — a malformed source never ships", () => {
     [
       "a SAN that does not resolve to exactly one move",
       `${HEADER}\nC20\tBroken\t1. e4 e5 2. Ke3\n`,
+      /"Ke3" is rejected/,
+    ],
+    [
+      // QE (ABC-093): D1(f) says EVERY SAN, and the book keeps only 12 plies. Ply 13 here.
+      "a SAN past maxPly that does not resolve",
+      `${HEADER}\nC54\tBroken\t1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+ 7. Ke3\n`,
       /"Ke3" is rejected/,
     ],
     [
@@ -188,5 +229,31 @@ describe("the delivered artifact (data/opening-book/book.json)", () => {
     expect(book.attribution).toBe("ATTRIBUTION.md");
     expect(readFileSync(attribution, "utf8")).toContain(book.source.commit);
     expect(readdirSync(BOOK_DIR).filter((name) => /\.(c|m)?(t|j)s$/.test(name))).toEqual([]);
+  });
+
+  // QE (ABC-093): D1(e)'s shape rules, read on the real file. Properties only (test note 3).
+  it("D1(e) — sorted keys and moves, no empty unnamed entry, no control byte, the pinned commit", () => {
+    const unsortedMoves = entries.filter((key) => {
+      const ucis = book.positions[key]?.m.map(([uci]) => uci) ?? [];
+      return ucis.some((uci, i) => i > 0 && (ucis[i - 1] as string) >= uci);
+    });
+    const emptyUnnamed = entries.filter(
+      (key) => book.positions[key]?.m.length === 0 && book.positions[key]?.n === undefined,
+    );
+    const controlNames = entries.filter((key) =>
+      [...(book.positions[key]?.n ?? "")].some(
+        (c) => c.charCodeAt(0) < 0x20 || c.charCodeAt(0) === 0x7f,
+      ),
+    );
+    expect(book.format).toBe(1);
+    expect(book.source.commit).toBe(SOURCE_COMMIT);
+    expect(
+      entries.every(
+        (key, i) => /^[0-9a-f]{16}$/.test(key) && (i === 0 || (entries[i - 1] as string) < key),
+      ),
+    ).toBe(true);
+    expect(unsortedMoves).toEqual([]);
+    expect(emptyUnnamed).toEqual([]);
+    expect(controlNames).toEqual([]);
   });
 });
