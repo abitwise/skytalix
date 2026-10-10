@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-036` `In Development` → `In Review` (built `a261966`); QE `qe-ABC-036` dispatched._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `ruling-abc053-abc054` merged `3c841b0`: `ADR-0029` (`ABC-053`) and `ADR-0030` (`ABC-054`) PROPOSED, owner acceptance owed. Architect `ruling-abc083-abc087` (R1/R3) dispatched._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — board audit merged `f8ca2eb`; BA/PM six-ticket re-score merged `d9c5fdc`: `ABC-126`, `ABC-010` → Ready; `ABC-036` → Ready → **In Development** (pulled, non-overlapping with `ABC-127`). Rulings owed: Architect R1 (`ABC-083`), R3 (`ABC-087`); owner R2 (`ABC-083`, optional), R4 (`ABC-038`). Architect `ruling-abc053-abc054` running. Stale claims `qe-ABC-080`/`rescore-abc081` closed `46b6a0f`._
@@ -477,10 +479,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 
 - [ABC-127] Harder puzzles — catch the weakenings ABC-084's suite misses, and leave headroom below the ceiling  (EPIC-004, M, P1, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3, `A3`'s ≥ 6-of-10 bar, read non-blocking by the Orchestrator: measurable, with a stop rule) **→ In Development 2026-10-10.** Cut by BA/PM on the owner's word (`…e47a1c08`; `cut-harder-puzzles`, note `…5fefe3f1`, merged `ab87d8a`); pulled by the Orchestrator at `f9689e7` (subtask `ticket-to-pr-ABC-127`, branch `grugops/ABC-127-harder-puzzles`). `ABC-126` follows it.
-- [ABC-036] The `moves` command — the count is exact, and the frame cannot show the list  (BA/PM, S, P1, epic: EPIC-003, since: 2026-08-13, **DoR 8/10 ⚠️x3; the third was a reduced user-facing promise awaiting a named human and is now RULED — see `memory-bank/60-progress.md` § Standing directives. BA/PM re-scores at pull; the Orchestrator does not re-score another role's DoR**, 1 new test file) **2026-10-10: `A7` — `moves` is the 8th help token at 0 columns spare; the help region is FULL after it (QE ABC-102 G2).** **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; `A4` re-anchored to one `legalMoves` per `moves` line.** **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-036`, branch `grugops/ABC-036-moves-command`).
 
 
 
@@ -498,7 +499,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-036] The `moves` command — the count is exact, and the frame cannot show the list  (BA/PM, S, P1, epic: EPIC-003, since: 2026-08-13, **DoR 8/10 ⚠️x3; the third was a reduced user-facing promise awaiting a named human and is now RULED — see `memory-bank/60-progress.md` § Standing directives. BA/PM re-scores at pull; the Orchestrator does not re-score another role's DoR**, 1 new test file) **2026-10-10: `A7` — `moves` is the 8th help token at 0 columns spare; the help region is FULL after it (QE ABC-102 G2).** **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; `A4` re-anchored to one `legalMoves` per `moves` line.** **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-036`, branch `grugops/ABC-036-moves-command`). **→ In Review 2026-10-10**: built on `grugops/ABC-036-moves-command` @ `a261966` (A1–A7 MET, gates green, 1573 tests, N8-LANE +130 ms ≤ 650). QE `qe-ABC-036` dispatched. UAT not waived (production lines). Owner note: start position shows 3 of 20 moves (`legal moves: 20` takes 15/21 columns).
 
 
 
