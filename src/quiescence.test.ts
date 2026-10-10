@@ -29,7 +29,7 @@ import { makeMove, unmakeMove } from "./apply.ts";
 import { evaluate } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
-import { legalMoves } from "./legal.ts";
+import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
 import { HANGING_CORPUS } from "./puzzle-corpus.ts";
@@ -269,7 +269,9 @@ describe("A1 — the losing capture is not chosen in >= 19 of 20, and the bare l
   it("carries at least 20 positions, none of them in check for the side to move", () => {
     expect(HANGING_CORPUS.length).toBeGreaterThanOrEqual(20);
     for (const { name, fen, losing } of HANGING_CORPUS) {
-      const legal = legalMoves(parseFen(fen)).map((move) => label(move));
+      const position = parseFen(fen);
+      expect(isInCheck(position), `${name}: the side to move must not be in check`).toBe(false);
+      const legal = legalMoves(position).map((move) => label(move));
       expect(legal, `${name}: the losing capture ${losing} must be legal`).toContain(losing);
     }
   });

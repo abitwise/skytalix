@@ -91,7 +91,9 @@ export const HANGING_CORPUS: ReadonlyArray<{ name: string; fen: string; losing: 
   { name: "R takes a knight a pawn defends", fen: "4k3/8/8/8/2p5/3n4/8/3R1K2 w - - 0 1", losing: "d1d3" },
   { name: "Q takes a rook the king defends", fen: "k7/r7/8/8/8/8/8/Q3K3 w - - 0 1", losing: "a1a7" },
   { name: "Q takes a bishop a knight defends", fen: "4k3/8/8/8/8/3n4/1b6/Q4K2 w - - 0 1", losing: "a1b2" },
-  { name: "R takes a bishop a pawn defends", fen: "4k3/8/1p6/b7/8/8/8/R3K3 w - - 0 1", losing: "a1a5" },
+  // Re-found at ABC-126: the old FEN (4k3/8/1p6/b7/8/8/8/R3K3 w) started in check, Ba5+ on e1. King
+  // to f1, off the diagonal; 8 non-king moves. Depth-3 margin 185 cp. Level unchanged.
+  { name: "R takes a bishop a pawn defends", fen: "4k3/8/1p6/b7/8/8/8/R4K2 w - - 0 1", losing: "a1a5" },
   // Re-found at ABC-082 (ruling …f0115510, ADR-0028 decision 2): +g7 / mirror +g2, so the recapture
   // is not a K+B v K dead draw a pawn-aware search prefers. Margin 370 / 280 cp. Level unchanged.
   { name: "R takes a pawn a bishop defends", fen: "4k3/6p1/8/8/8/b7/1p6/1R2K3 w - - 0 1", losing: "b1b2" },
@@ -105,7 +107,9 @@ export const HANGING_CORPUS: ReadonlyArray<{ name: string; fen: string; losing: 
   { name: "mirror: r takes a knight a pawn defends", fen: "3r1k2/8/3N4/2P5/8/8/8/4K3 b - - 0 1", losing: "d8d6" },
   { name: "mirror: q takes a rook the king defends", fen: "q3k3/8/8/8/8/8/R7/K7 b - - 0 1", losing: "a8a2" },
   { name: "mirror: q takes a bishop a knight defends", fen: "q4k2/1B6/3N4/8/8/8/8/4K3 b - - 0 1", losing: "a8b7" },
-  { name: "mirror: r takes a bishop a pawn defends", fen: "r3k3/8/8/8/B7/1P6/8/4K3 b - - 0 1", losing: "a8a4" },
+  // Re-found at ABC-126: the old FEN (r3k3/8/8/8/B7/1P6/8/4K3 b) started in check, Ba4+ on e8. King
+  // to f8, off the diagonal; 8 non-king moves. Depth-3 margin 185 cp. Level unchanged.
+  { name: "mirror: r takes a bishop a pawn defends", fen: "r4k2/8/8/8/B7/1P6/8/4K3 b - - 0 1", losing: "a8a4" },
   { name: "mirror: r takes a pawn a bishop defends", fen: "1r2k3/1P6/B7/8/8/8/6P1/4K3 b - - 0 1", losing: "b8b7" },
   { name: "mirror: q takes a pawn a knight defends", fen: "q3k3/1P6/8/2N5/8/8/8/4K3 b - - 0 1", losing: "a8b7" },
   { name: "mirror: b takes a pawn a rook defends", fen: "1b2k3/8/8/4P3/8/8/8/4R1K1 b - - 0 1", losing: "b8e5" },
@@ -132,9 +136,13 @@ export const PUZZLES: readonly Puzzle[] = [
   { name: "mirror: two-rook ladder", fen: "1r4k1/r7/8/8/8/8/8/7K b - - 0 1", kind: "mate-in-2", accept: ["a7a2", "b8b2"], source: MATE },
   { name: "knight fork: Ne7+ wins the queen", fen: "6k1/5ppp/2q5/3N4/8/8/5PPP/6K1 w - - 0 1", kind: "win-material", accept: ["d5e7"], source: `${WIN} +9` },
   { name: "pawn fork: e5 hits knight and rook", fen: "6k1/6pp/3n1r2/8/3PP3/2P5/6PP/6K1 w - - 0 1", kind: "win-material", accept: ["e4e5"], source: `${WIN} +2` },
-  { name: "pin: Re1 pins the queen to the king", fen: "4k2p/8/8/4q3/8/1P6/P2K4/R7 w - - 0 1", kind: "win-material", accept: ["a1e1"], source: `${WIN} +4` },
+  // Re-authored at ABC-126 (via ABC-010's re-cut, ADR-0033): the old FEN (4k2p/…) had a black pawn
+  // on h8. Pawn to h7; the material oracle's keys [a1e1] and gain +4 are unchanged.
+  { name: "pin: Re1 pins the queen to the king", fen: "4k3/7p/8/4q3/8/1P6/P2K4/R7 w - - 0 1", kind: "win-material", accept: ["a1e1"], source: `${WIN} +4` },
   { name: "skewer: Ra6+ and Rxh6", fen: "8/7p/3k3q/8/8/8/6PP/R5K1 w - - 0 1", kind: "win-material", accept: ["a1a6"], source: `${WIN} +10` },
-  { name: "discovered check: the bishop moves, Rxd8", fen: "3q4/6k1/8/8/3B4/8/6PP/3R2K1 w - - 0 1", kind: "win-material", accept: ["d4e5", "d4c3", "d4b2", "d4a1"], source: `${WIN} +6` },
+  // Re-authored at ABC-126 (via ABC-010's re-cut, ADR-0033): the old FEN (3q4/6k1/…) had black in
+  // check from Bd4 with white to move. King to f8; Bc5+ / Bg7+ unmask Rd1. Oracle gain +4 (was +6).
+  { name: "discovered check: the bishop moves, Rxd8", fen: "3q1k2/8/8/8/3B4/8/6PP/3R2K1 w - - 0 1", kind: "win-material", accept: ["d4g7", "d4c5"], source: `${WIN} +4` },
   { name: "queen fork: Qd5+ and Qxa8", fen: "r5k1/6pp/8/8/8/8/6PP/3Q2K1 w - - 0 1", kind: "win-material", accept: ["d1d5"], source: `${WIN} +5` },
   ...HANGING_CORPUS.map((row) => ({ ...row, kind: "do-not-hang" as const, source: HANG })),
   { name: "mate in 3, seed 1: black Q+R against N", fen: "8/7K/8/8/1k6/8/8/q1r2N2 b - - 0 1", kind: "mate-in-3", accept: ["a1a6", "a1f6", "c1c6"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 1` },
