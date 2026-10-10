@@ -30,12 +30,12 @@
  *
  * `src/history.ts` IS NOT IMPORTED, NOT EVEN AS A TYPE. The `GameHistory` this seam reads
  * `.position` off arrives through `RenderSeam`'s own parameter types, so the house's type-only
- * import is not needed and the strongest form of `A7` is the one that costs nothing. As of this
- * ticket this module IS a frame producer and is DECLARED as one in
- * `src/history-pane.nfr.test.ts`'s `FRAME_PRODUCERS` (`ADR-0011` clause 2: the frame path is
- * declared, not derived). The one runtime edge that could breach the premise is the seam type's own
- * module — `turn-loop.ts` imports `history.ts` at runtime — so the `import type` below must STAY
- * `import type`. The probe rooted here is what holds that, on every run, and it is armed.
+ * import is not needed and the strongest form of `A7` is the one that costs nothing. This module IS
+ * the declared `COMPOSITION_ROOT` in `src/history-pane.nfr.test.ts`, and the frame path is DERIVED
+ * from it (`ADR-0029`: the root's load closure plus every module a frame call loads). The one
+ * runtime edge that could breach the premise is the seam type's own module — `turn-loop.ts`
+ * imports `history.ts` at runtime — so the `import type` below must STAY `import type`. The
+ * probe rooted here is what holds that, on every run, and it is armed.
  */
 
 import { assembleFrame } from "./frame.ts";

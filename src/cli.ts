@@ -5,9 +5,10 @@
  *
  * IT EXPORTS NOTHING (`ADR-0011` clause 4, `A2`). Nothing can import a binding from it, so it is
  * never on the frame path and never a probe root, and the census moves exactly as clause 4 predicted:
- * production 18 -> 20, entry points 1 -> 2, frame producers 6 unchanged. Everything that could be
- * unit-tested was moved OUT, into `src/cli-options.ts`; what is left is composition, and composition
- * is proved by running the command as a child (`A1`).
+ * production 18 -> 20, entry points 1 -> 2 (`ABC-042`'s reading). The frame path is no longer a
+ * counted list: `ADR-0029` derives it from one declared root. Everything that could be unit-tested
+ * was moved OUT, into `src/cli-options.ts`; what is left is composition, and composition is proved
+ * by running the command as a child (`A1`).
  *
  * `ABC-043` — IT NOW PLAYS A GAME. The sentence that stood here said it prints a board and does not
  * play one; `runTurnLoop` (`ABC-019`), the production `InputSeam` (`ABC-037`) and the real
