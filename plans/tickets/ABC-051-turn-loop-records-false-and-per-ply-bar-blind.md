@@ -1,8 +1,8 @@
 ---
 id: ABC-051
 title: `ABC-021` left the turn loop's per-ply bar file false in three places and its transition count without a rule — and the bar cannot see the derive the loop now makes
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: S
 priority: P2
 epic: EPIC-002
