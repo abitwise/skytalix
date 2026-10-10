@@ -1,8 +1,8 @@
 ---
 id: ABC-083
 title: Evaluation — king safety and mobility
-status: backlog
-column: Backlog
+status: in-development
+column: In Development
 size: M
 priority: P1
 epic: EPIC-004
