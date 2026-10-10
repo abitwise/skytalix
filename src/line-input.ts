@@ -2,9 +2,10 @@
  * ABC-037 — the production `InputSeam`: read one line, ask the dispatcher, answer the loop.
  *
  * THE HOLE `ABC-019` SHIPPED. `InputSeam = (history: GameHistory) => Promise<PromptOutcome>` is
- * published in merged code (`src/turn-loop.ts:135`) with the comment "`EPIC-003` replaces it"; until
- * this module the only implementation was a scripted stub inside `src/turn-loop.test.ts`. This is the
- * real one, and it binds into `runTurnLoop({ input })` with no adapter and no cast.
+ * published in merged code (`src/turn-loop.ts` `InputSeam`) with the comment
+ * "`EPIC-003` replaces it"; until this module the only implementation was a scripted stub inside
+ * `src/turn-loop.test.ts`. This is the real one, and it binds into `runTurnLoop({ input })` with no
+ * adapter and no cast.
  *
  * IT CONTAINS NO GRAMMAR AND NO TOKEN TABLE. One submitted line goes to the per-session resolver
  * `createPromptLineResolver` returns (`src/command-input.ts`, `ABC-046` — it holds the `quit`
@@ -18,8 +19,8 @@
  * — `parseSan` is total by `ADR-0004` (2a) and `ABC-031` `A4` requires the same of the coordinate
  * reader — so catching it and returning `rejected` would teach the player a false rule and hide a
  * real bug, and catching it and terminating would be byte-identical to `A8`'s clean end-of-input.
- * The loop's `A9b` repair (`src/turn-loop.ts:291-309`) runs on the way out and rethrows; what the
- * top-level handler prints is `EPIC-006`'s half and is not decided here.
+ * The loop's `A9b` repair (`src/turn-loop.ts`, `runTurnLoop`'s `A9b` arm) runs on the way out and
+ * rethrows; what the top-level handler prints is `EPIC-006`'s half and is not decided here.
  *
  * IT REACHES FOR NOTHING. No `process`, no `console`, no Node builtin import, no dynamic import, no
  * `eval`, no `Function`, no `globalThis`. The source stream and the prompt's output are PARAMETERS,
@@ -46,8 +47,8 @@
  * EOF IS AN OUTCOME, NEVER AN ERROR, AND A TRAILING PARTIAL LINE IS NOT A SUBMISSION. `A3` requires
  * `{ kind: "eof" }` for BOTH end shapes — ended with no trailing newline, and ended mid-line — so
  * text held when the stream ends is discarded rather than resolved. The player never pressed Enter
- * on it. The loop then writes `INPUT_ENDED_NOTICE` (`src/turn-loop.ts:176`) and returns
- * `exitCode: 0`, which `ABC-019` ruled and this module does not re-decide.
+ * on it. The loop then writes `INPUT_ENDED_NOTICE` (`src/turn-loop.ts` `INPUT_ENDED_NOTICE`) and
+ * returns `exitCode: 0`, which `ABC-019` ruled and this module does not re-decide.
  *
  * WHAT IS DELIBERATELY ABSENT: tab completion (`ABC-038`), raw mode, arrow keys and input-history
  * recall (`EPIC-003` § Out of scope, and coding rules 5 and 7); any handling of an `error` event on

@@ -27,14 +27,14 @@
  * opponent ships, and none is needed now that a real one exists).
  *
  * THE ONE `try`/`catch` IN THIS PRODUCT is below, around the whole session. `ABC-019`'s input arm
- * repairs the borrowed board and RETHROWS (`turn-loop.ts:293-309`), and `ABC-037` catches nothing,
- * so a parser bug arrives here — `ABC-019` `[D31]`'s second half, ruled on this ticket: it ends the
- * game, loudly, as an internal error that is never a chess outcome, and the process exits NON-ZERO.
- * EXIT CODES, once for the whole product: `LoopOutcome.exitCode` verbatim for everything the loop
- * returns (the type is `0` and only `0`, `engine-threw` and `engine-failure` INCLUDED — the loop
- * handled those, and what distinguishes them from a real game is the message, `ABC-044`'s `A3`);
- * non-zero for exactly two things, a usage error before the game starts and an exception that never
- * became a `LoopOutcome`.
+ * repairs the borrowed board and RETHROWS (`turn-loop.ts`, `runTurnLoop`'s `A9b` arm), and
+ * `ABC-037` catches nothing, so a parser bug arrives here — `ABC-019` `[D31]`'s second half, ruled
+ * on this ticket: it ends the game, loudly, as an internal error that is never a chess outcome, and
+ * the process exits NON-ZERO. EXIT CODES, once for the whole product: `LoopOutcome.exitCode`
+ * verbatim for everything the loop returns (the type is `0` and only `0`, `engine-threw` and
+ * `engine-failure` INCLUDED — the loop handled those, and what distinguishes them from a real game
+ * is the message, `ABC-044`'s `A3`); non-zero for exactly two things, a usage error before the game
+ * starts and an exception that never became a `LoopOutcome`.
  *
  * THE HANDLES, AND THE RULE THEY OBEY. Only this module may acquire `process.stdout`,
  * `process.stderr` or `process.stdin`, and `process.stdout` is passed onward twice — as the loop's
@@ -178,9 +178,10 @@ async function main(): Promise<void> {
 
     // `ABC-044` — THE RESULT SCREEN, AFTER THE LAST FRAME, IN ONE WRITE. It is NOT a frame: it goes
     // to the same sink the loop wrote its frames to, with no session, no height and no padding, and
-    // `INPUT_ENDED_NOTICE` (`src/turn-loop.ts:312`) is the merged precedent for that. The renderer
-    // returns ZERO rows on end of input, and the guard turns that into ZERO BYTES rather than a
-    // stray newline — the loop has already written the notice and a second line would double-report.
+    // `INPUT_ENDED_NOTICE` (`src/turn-loop.ts` `INPUT_ENDED_NOTICE`) is the merged precedent for
+    // that. The renderer returns ZERO rows on end of input, and the guard turns that into ZERO
+    // BYTES rather than a stray newline — the loop has already written the notice and a second line
+    // would double-report.
     const screen = renderResultScreen(outcome, history);
     if (screen.length > 0) sink.write(`${screen.join("\n")}\n`);
 

@@ -409,8 +409,9 @@ describe("ABC-035 A3 — `board` carries no message and triggers no second rende
 
     const run = await runLines(history, ["board", "board", "board"]);
 
-    // `1 + one per non-advancing outcome` (`src/turn-loop.ts:246`). A `board` that redrew for
-    // itself would add a fourth, a fifth and a sixth.
+    // `1 + one per non-advancing outcome` (`src/turn-loop.ts`, `runTurnLoop`'s docblock,
+    // "The render cadence"). A `board` that redrew for itself would add a fourth, a fifth and a
+    // sixth.
     expect(run.renders).toBe(4);
     for (const messages of run.messagesPerFrame) expect(messages).toEqual([]);
     expect(toFen(history.position)).toBe(RICH_FEN);
@@ -530,7 +531,8 @@ describe("ABC-035 A6 — the parser adds ZERO derives: it does not ask", () => {
     vi.mocked(gameStatusOf).mockClear();
 
     // Four prompt cycles, four non-advancing outcomes, no ply. The loop evaluates once before the
-    // first frame and never again on this path (`src/turn-loop.ts:269`).
+    // first frame and never again on this path (`src/turn-loop.ts`, `runTurnLoop`'s
+    // "Transition 1 → 2").
     await runLines(history, ["help", "board", "quit", "claim"]);
 
     expect(derives()).toBe(1);

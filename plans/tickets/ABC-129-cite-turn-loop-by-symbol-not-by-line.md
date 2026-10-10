@@ -235,3 +235,73 @@ production diff counts as "zero production lines" (`QE-051-d`).
   identity `ABC-104` used is the stronger one.
 - **If he rules NO (or has not ruled):** `Ready for UAT` waits for his word. One word can cover this
   ticket and `ABC-132`, which owes the same.
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-129`).
+- Branch `grugops/ABC-129-turn-loop-cites-by-symbol`, from `dc90f42d`. The code is `ed402c1e`.
+- Not merged, not pushed.
+- The decision and readings are in `.grugops/context/ticket-to-pr-ABC-129/notes/` (`…0ec65506`
+  decision, `…7c970961` readings) and are not restated here.
+
+**The premise held at `dc90f42d`.** `A1`'s grep printed 15 lines. #1 and #2 had moved to
+`src/cli.test.ts:590`/`:749` (`ABC-133`), and every anchor resolved. `A3`'s line still said "the seven
+tokens … Three are `command`" against 8 rows and 4 `command`. **No stop condition fired.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | `git grep -nE 'turn-loop\.ts:[0-9]' -- src`: 15 on base, **0** at `ed402c1e` |
+| `A2` | MET, ONE DEVIATION | `grep -cF` in `src/turn-loop.ts`: `wasGenerated` 3, `INPUT_ENDED_NOTICE` 3, `claimShortfall` 2, `EngineSeam` 2, `PromptOutcome` 3, `` `A9b` `` 2, and the quoted phrases "TRANSITION 16", "The render cadence", "Transition 1 → 2" and "OWNS ONLY THAT THE TRANSITION EXISTS" 1 each. **#10 names `InputSeam` (3), not the table's `PromptOutcome`.** At the commit that wrote the cite (`69bb1e38`), `:135` was `InputSeam`, and the sentence quotes `InputSeam`'s own comment. Decision note `…0ec65506` §3 holds the evidence. QE/BA/PM rule on it |
+| `A3` | MET | `grep -c 'the seven tokens' src/command-input.ts` = 0. The docblock says "eight … Four are `command`", and importing the module gives `COMMAND_TABLE.length` 8 and 4 `command` rows |
+| `A4` | MET | numstat lists 9 files, all of them site files. The non-comment pipeline is **empty**. Base and tip both run 52 files / 1608 passed. lint, typecheck and build exit 0; skips 0; integrity `No findings.` |
+
+**Exit (owner Q4 ruling, `…5c8e2a17`): both measurements hold for all 6 production files.**
+- Every changed line is a comment line.
+- `transpileModule` with `removeComments: true` emits byte-identical output at `dc90f42d` and
+  `ed402c1e` for `src/cli.ts`, `command-input.ts`, `engine.ts`, `line-input.ts`, `move-input.ts` and
+  `result-screen.ts`. The three test files are identical too.
+- **On that ruling, UAT is WAIVED** (waived is not accepted). The waiver is applied at `Done` by the
+  Orchestrator and is not self-applied here.
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-129`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `dc90f42d..0ee6424e`, with code at `ed402c1e`. Every reading is QE's own, taken in QE's
+worktree. The SE's notes served only as pointers. **`A1`–`A4` are MET. QE added no test and made
+no comment fix, because no cite was wrong.** Readings are in
+`.grugops/context/qe-ABC-129/notes/` (`…20af9428` decision, `…1d84da40` readings, `…83afd95b` gaps)
+and are not restated here.
+
+- **`A1`**: 15 at base, **0** at the tip. Other line-cite shapes also read 0.
+- **`A2`**: every anchor is ≥ 1, and each quoted phrase is exactly 1. Each cite was traced to the
+  commit that wrote it, and each anchor carries its sentence's claim.
+- **`A3`**: `grep -c` reads 0. The docblock says "eight … Four". The imported `COMMAND_TABLE` has 8
+  rows, 4 of them `command`.
+- **`A4`**: 9 site files. The non-comment pipeline is empty. Base and tip both run 52 files / 1608.
+  The added `cli.ts` words contain 0 barred tokens.
+- **Gates**: lint, typecheck and build exit 0. `npm test` runs 52 / 1608 with skip 0. Integrity reads
+  `No findings.` and `lane-inventory.js` reports no findings. `CLI_DEEP` passes 7, and `PUZZLE_DEEP`
+  passes 17 at 58/62 (= baseline).
+
+**Site #10: ACCEPTED as `InputSeam`. This is a table erratum.** At `69bb1e38`, which wrote the cite,
+`:135` was `export type InputSeam`. The sentence also quotes `InputSeam`'s own comment ("`EPIC-003`
+replaces it", `src/turn-loop.ts:146`). The table's "`PromptOutcome` (`:135`, right today)" was a
+drift coincidence, so all 15 cites were stale, not 14. Read row #10's "means" column as
+`InputSeam`.
+
+**Exit (owner Q4): the measurement HOLDS on all 6 production files.** Every changed line is a
+comment, by the regex and by the TS AST. The `transpileModule` `removeComments` emit is
+byte-identical at base and tip, and so is the comment-stripped TS print. The negative controls go
+red. UAT is therefore WAIVED (waived is not accepted), applied by the Orchestrator at `Done`.
+
+**Gaps (none blocks):**
+- **`QE-129-a` LOW**: #5's quoted formula `1 + one per non-advancing outcome` is the
+  count-every-outcome form that its anchor paragraph disowns. This is pre-existing wording and is
+  fenced out here. BA/PM may cut a one-line follow-up.
+- **`QE-129-b` INFO**: each Q4 measure has a blind spot. The emit identity misses type-only edits,
+  and the regex misses a `//` line inside a template literal. Keep the conjunction.
+- **`QE-129-c` INFO**: `plans/traceability.md` has an append conflict with the wave tip. Keep both
+  sides.
+- **`QE-129-d` INFO**: `` `A9b` `` hits 2 lines, and #6's anchor carries half of its sentence. Both
+  are unchanged from the original reach.
+- **`QE-129-e` INFO**: AGENTS.md's `ENGINE_DEEP` count is stale (45 recorded, 46 collected). This
+  ticket did not cause it.

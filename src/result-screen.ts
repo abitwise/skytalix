@@ -9,10 +9,11 @@
  * IT IS NOT A FRAME, and that is a scope decision rather than a formatting one. It is written after
  * the final frame, through the same `FrameSink`, in ONE write. It has no constant height, it is not
  * bounded by `MESSAGE_ROWS`, it does not go through `assembleFrame`'s width padding, and it pads no
- * row to a column. `INPUT_ENDED_NOTICE` (`src/turn-loop.ts:312`) is the merged precedent for a
- * non-frame write to the sink. It is therefore NOT a frame producer and is deliberately NOT declared
- * in `src/history-pane.nfr.test.ts`'s `FRAME_PRODUCERS` (`ADR-0011` clause 2, and the ticket states
- * the consequence in both directions so the count moves deliberately rather than by drift).
+ * row to a column. `INPUT_ENDED_NOTICE` (`src/turn-loop.ts` `INPUT_ENDED_NOTICE`) is the merged
+ * precedent for a non-frame write to the sink. It is therefore NOT a frame producer and is
+ * deliberately NOT declared in `src/history-pane.nfr.test.ts`'s `FRAME_PRODUCERS` (`ADR-0011`
+ * clause 2, and the ticket states the consequence in both directions so the count moves
+ * deliberately rather than by drift).
  *
  * IT DERIVES NO GAME STATE. A pure function of `LoopOutcome` and `GameHistory`, returning rows.
  * `history.ts` is imported as a TYPE ONLY, so this module adds no runtime importer of it and

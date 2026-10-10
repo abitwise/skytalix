@@ -504,7 +504,7 @@ function deepen(
 }
 
 /**
- * The `EngineSeam` `src/turn-loop.ts:138` has been waiting on since `ABC-019`, bound to a budget.
+ * The `src/turn-loop.ts` `EngineSeam` has been waiting on since `ABC-019`, bound to a budget.
  *
  * `async` because the seam is asynchronous BY CONTRACT and not because anything here awaits: the
  * search is pure CPU and occupies the turn for its budget. The loop is shaped that way so a
