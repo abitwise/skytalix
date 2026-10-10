@@ -150,3 +150,32 @@ and no stop condition fired.** No test was added, and no other `src/` file was t
 
 **UAT cost, as § Size and priority predicted:** this ticket is **not** waived, so the owner's word is
 needed at `In UAT` for one docblock paragraph.
+
+## QE
+
+**2026-10-10, QE/E2E** (task `wave-2026-09-25`, subtask `qe-ABC-104`, Workflow 04 review exit). QE read
+`b7cffc52..76237852` in its own worktree, `.claude/worktrees/qe-ABC-104`.
+
+**Result: PASS_WITH_GAPS. `A1`–`A3` MET, and none of the gaps blocks.** The readings, gaps and probe are
+in `.grugops/context/qe-ABC-104/` (`…1ad3f484` verdict, `…f3d29d14` readings, `…df369a19` gaps,
+`probe/qe-probe.mts`). They are not restated here.
+
+| # | verdict | QE's own reading |
+|---|---|---|
+| `A1` | MET | `:30` reads "TOTAL OVER `text`", and `:32` reads "over `text` ONLY". "TOTAL function" has 0 hits. `:33` states the caller obligation on `position` and `legal` |
+| `A2` | MET | QE's own probe: `(null,"e2e4")` and `(startpos,"e2e4",42)` each throw `TypeError`, and the control returns `move`. 0 of 38 hostile `text` calls threw |
+| `A3` | MET | One file and one hunk, `@@ -30,3 +30,8 @@`, inside `1–33`. Every changed line is a ` *` line. The comment-stripped emit is byte-identical between base and tip. 51 files / 1583 passed, skips 0, integrity `No findings.` |
+
+**Gaps.** All three LOW gaps are in the same docblock. The repaired paragraph still differs from the
+behaviour, or from the source it cites, by a small margin:
+- **QE-104-a.** The "ONE CALLER OBLIGATION" heading at `:25` now disagrees with `:33-35`. Both
+  obligations are "not validated here", so the Engineer's argument that "ONE" is still accurate does not
+  hold. `src/san.ts:18` counts the same obligations as "TWO".
+- **QE-104-b.** `ADR-0004` clause 2 states no "real `Position`" obligation.
+- **QE-104-c.** "A wrong type throws" is unconditional, but 6 measured wrong-type calls return without
+  throwing.
+
+**Recommended:** one SE fix-forward on this branch before `In UAT`, which is about three comment lines.
+**UAT is NOT waived (measured);** the owner signs this paragraph.
+
+Not merged, not pushed.
