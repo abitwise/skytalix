@@ -1,0 +1,33 @@
+base NONE exit=0 files=2 tests=67 passed=67 failed=0 skipped=0
+M9 planted at line 384: keyHistory(history);
+base M9 exit=0 files=2 tests=67 passed=67 failed=0 skipped=0
+M9b planted at line 383: keyHistory(history);
+base M9b exit=0 files=2 tests=67 passed=67 failed=0 skipped=0
+M9c planted at line 384: if (outcome.plies > 0) keyHistory(history);
+base M9c exit=0 files=2 tests=67 passed=67 failed=0 skipped=0
+M10 planted at line 375: keyHistory(history);
+base M10 exit=1 files=2 tests=67 passed=66 failed=1 skipped=0
+  FAIL ABC-021 acceptance — transition 16, the draw claim A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+M11 planted at line 409: keyHistory(history);
+base M11 exit=1 files=2 tests=67 passed=66 failed=1 skipped=0
+  FAIL ABC-021 acceptance — transition 16, the draw claim A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected "keyHistory" to be called +0 times, but got 4 times
+M12 planted at line 430: keyHistory(history);
+base M12 exit=1 files=2 tests=67 passed=66 failed=1 skipped=0
+  FAIL ABC-021 acceptance — transition 16, the draw claim A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected "keyHistory" to be called +0 times, but got 4 times
+M13 planted at line 372: keyHistory(history);
+base M13 exit=1 files=2 tests=67 passed=66 failed=1 skipped=0
+  FAIL ABC-021 acceptance — transition 16, the draw claim A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected "keyHistory" to be called 1 times, but got 2 times
+M14 planted at line 388: keyHistory(history);
+base M14 exit=0 files=2 tests=67 passed=67 failed=0 skipped=0
+M15 planted at line 348: keyHistory(history);
+base M15 exit=0 files=2 tests=67 passed=67 failed=0 skipped=0
+M16 planted at line 342: keyHistory(history);
+base M16 exit=1 files=2 tests=67 passed=66 failed=1 skipped=0
+  FAIL ABC-021 acceptance — transition 16, the draw claim A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+M17 planted at line 352: keyHistory(history);
+base M17 exit=0 files=2 tests=67 passed=67 failed=0 skipped=0
