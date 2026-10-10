@@ -168,3 +168,50 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `35ad336b`. **Res
 stay ✅: `ABC-136` is a merge-order predecessor on the same file with no open design question, so it
 sets a pull order, not a dependency on a decision (`ABC-083`/`ABC-131` precedent). Test note 1 gains
 one line. No criterion, size, priority or column moved.
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-134`).
+- Branch `grugops/ABC-134-frame-probe-prose`, from `7f7e6b84`. The code is `a42b59e3`
+  (`src/history-pane.nfr.test.ts` +26/−13, comment lines only).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-134/` (`…1f2b70bf`,
+  `…d5b9d74c`, `probe/`) and are not restated here.
+
+**`A1`–`A5` are met.**
+- The premise held at `7f7e6b84`: all five phrases counted 1, and only the in-test sites had moved
+  (because of `ABC-136`).
+- `ABC-136`'s four pinned literals and six of `ABC-057`'s seven spans are byte-identical.
+- **One fence reading to note:** the `probe-it` span contains the settle comment (`A3`'s site), so its
+  raw hash moves. With its `//` lines dropped it is identical.
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-134`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `7f7e6b84..4d6b019a` (code `a42b59e3`). Each new sentence was judged against the code it describes by
+planting what it names, in an out-of-worktree `git archive` tree. Decision `…5ec48998`, readings `…048ac24a`, gaps
+`…5761436a`, raw files in `.grugops/context/qe-ABC-134/probe/`.
+
+**`A1`–`A5` are MET at `4cac6911`. No test was added. QE made one comment-only fix inside `A3`'s site.**
+
+- **`A1`**: the phrase goes 1 → 0 and the four words are present. The five dimensions named are the seam's whole input.
+  Loads conditional on `unicode`, `black-bottom`, `thinking`, a message, more than 40 plies or an ended game are GREEN 3/3,
+  and the `ascii` / `white-bottom` controls are RED.
+- **`A2`**: the phrase goes 1 → 0. A `gameStatus` rebuild reds `ABC-041` `A2`. A replay rebuild that rides the pane's
+  walk, or sits in the seam, is GREEN on the full lane (1608/1608). Other placements are caught only incidentally
+  (`QE-134-b`, INFO).
+- **`A3`**: the phrase goes 1 → 0, and "3 turns" equals `turn < 3`. A `setImmediate` chain 3 deep is RED 10/10 and
+  4 deep is GREEN 10/10.
+  - **"a timer of any delay, is NOT seen" was false**: 0 and 1 ms timers are RED 10/10, 5 ms 1/10, 50 ms 0/10.
+  - **Fixed in `4cac6911`, comment only (`QE-134-a`, LOW).** The comment now says a timer is NOT reliably seen and
+    is a race with the clock. The criterion's premise ("never a timer", from `QE-053-d`) was wrong for short timers.
+- **`A4`**: both phrases go 1 → 0, and both sites name the two spellings, "AT LEAST" and "not exhaustive". The four
+  named spellings are uncounted and lint-clean. Five more are also uncounted, so the list is truly not exhaustive
+  (`QE-134-c`, INFO). The count agrees with `ADR-0029`'s pointer.
+- **`A5`**: `7f7e6b84..4cac6911` touches one `src/` path (+28/−13) and the filter prints nothing.
+  - The comment-free AST is identical at base and at both tips. 1608 tests, equal to base.
+  - `ABC-136`'s four pins count 1. Six of `ABC-057`'s spans are identical; `probe-it` is identical with its `//` lines
+    dropped.
+- **Gates** at `4d6b019a` and `4cac6911`: lint, typecheck and build exit 0; `npm test` 52 files / 1608 passed; skip
+  count 0; integrity `No findings.`; `lane-inventory.js` no findings.
+- **Next.** The board move is the Orchestrator's. UAT is WAIVED by rule (0 production lines, measured). A second reader on
+  `QE-134-a`'s sentence is optional (`QE-134-d`). Not merged, not pushed.

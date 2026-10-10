@@ -1,0 +1,10 @@
+mutant	runs	red	green	statement
+ASCII-ONLY(control)	3	3	0	if (mode === "ascii") void import("./history.ts");
+WHITE-BOTTOM-ONLY(control)	3	3	0	if (orientation === "white-bottom") void import("./history.ts");
+UNICODE-ONLY	3	0	3	if (mode === "unicode") void import("./history.ts");
+BLACK-BOTTOM-ONLY	3	0	3	if (orientation === "black-bottom") void import("./history.ts");
+THINKING-ONLY	3	0	3	if (thinking) void import("./history.ts");
+MESSAGES-ONLY	3	0	3	if (messages.length > 0) void import("./history.ts");
+NOT-ONGOING-ONLY	3	3	0	if (status.kind !== "ongoing") void import("./history.ts");
+PLIES-GT-40-ONLY	3	0	3	if (history.moves.length > 40) void import("./history.ts");
+NOTE	-	-	-	the NOT-ONGOING-ONLY row above is VOID: GameStatus has no `kind`, so the condition was always true. Its valid replacement, `status.result !== "in-progress"`, is the last line of ledger-A2.txt (ENDED-GAME-ONLY, red 0/3)

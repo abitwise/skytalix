@@ -1,0 +1,13 @@
+mutant	runs	red	green	statement
+NOOP	10	0	10	void 0;
+SYNC	10	10	0	void import("./history.ts");
+MICRO	10	10	0	queueMicrotask(() => void import("./history.ts"));
+IMM1	10	10	0	setImmediate(() => void import("./history.ts"));
+IMM2	10	10	0	setImmediate(() => setImmediate(() => void import("./history.ts")));
+IMM3	10	10	0	setImmediate(() => setImmediate(() => setImmediate(() => void import("./history.ts"))));
+IMM4	10	0	10	setImmediate(() => setImmediate(() => setImmediate(() => setImmediate(() => void import("./history.ts")))));
+IMM5	10	0	10	setImmediate(() => setImmediate(() => setImmediate(() => setImmediate(() => setImmediate(() => void import("./history.ts"))))));
+TIMER0	10	10	0	setTimeout(() => void import("./history.ts"), 0);
+TIMER1	10	10	0	setTimeout(() => void import("./history.ts"), 1);
+TIMER5	10	1	9	setTimeout(() => void import("./history.ts"), 5);
+TIMER50	10	0	10	setTimeout(() => void import("./history.ts"), 50);

@@ -1,0 +1,6 @@
+mutant(settle=0)	runs	red	green
+NOOP	5	0	5
+SYNC	5	5	0
+MICRO	5	0	5
+IMM1	5	0	5
+TIMER0	5	0	5
