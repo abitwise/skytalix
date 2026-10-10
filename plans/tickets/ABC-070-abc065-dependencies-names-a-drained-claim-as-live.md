@@ -152,3 +152,22 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with the promotion trigger and the close-unstarted condition both named |
 | 10 | no major unresolved blocker | **✅** nothing open. The only decision anyone else holds — whether to fold `G6` in — is stated as a recommendation and does not block the bullet |
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: READY. DoR 10/10. `XS` and `P3` kept.** `column`/`status` are not moved here.
+
+**Premise re-measured at `39d87491`, and it HOLDS.** `ABC-065`'s page, line **130**, still reads *"`AGENTS.md`
+IS CLAIMED RIGHT NOW BY ANOTHER HOP"*, so `A1` is still at 2, not 0. `ABC-065` is now `Done`.
+
+**Amendments:**
+- The `## Dependencies` *"`ABC-065` sits in `Ready for UAT`"* courtesy is void: it is `Done`, so no UAT
+  hop holds the page.
+- The `G6` fold recommendation stands, and it is still the Orchestrator's to take or leave. `A6`'s
+  *"**two paths**"* wording is at `ABC-065` `:124–125`. **Not re-derived here:** what `G6` found wrong
+  with it is `UNKNOWN - verify` at this hop.
+- The cheapest route (test note 4) still stands. If a hop already in the file repairs the bullet, close
+  this one unstarted.
+
+All ten DoR rows are unchanged from the cut and re-read true. Row 5 is lighter now that the `Ready for
+UAT` courtesy is void.

@@ -236,3 +236,40 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` (**10 items**
 | 8 | size assigned | **✅** `M` (5), with the five pieces that make it `M` and the condition that makes it `L` |
 | 9 | priority assigned | **✅** `P2`, with the argument for `P1` stated rather than hidden |
 | 10 | no major unresolved blocker | **⚠️** **The owner should acknowledge the stated ceiling before this is built.** He said yes to "the QE detector"; this ticket rules that the achievable detector is a *completeness check on the record*, not proof the hop ran, and that `by: qe-e2e` is self-declarable. If he understood "detector" to mean a control an agent cannot satisfy by writing its own note, **this ticket does not deliver that and no amount of building it will** — it needs an external signal and a different, larger ticket. Buildable as written either way; the risk is a mismatch between what ships and what was agreed. |
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: STAYS `Backlog`. DoR 9/10, the ⚠️ is still item 10 (the owner's acknowledgement of the
+ceiling). `M` and `P2` kept.** `column`/`status` are not moved here.
+
+**Premise re-checked. The failure it watches for HAS RECURRED in a recorded form.**
+- `tools/grugops/qe-hop-integrity.js` does not exist at the tip.
+- A rough sweep (folder names the ticket + `by: qe-e2e` + `kind: decision`; this is **not** the tool's
+  four-condition rule) over the 112 `Done` rows finds **7** tickets from `ABC-069` up with no QE verdict.
+  - **Five are explained:** `ABC-071` was closed 2026-08-16, before the cutover. `ABC-074`, `ABC-092`,
+    `ABC-100` and `ABC-112` are owner-word closes or cancellations with no delivered diff.
+  - **Two are not:** `ABC-072` and `ABC-073` reached `Done` **2026-10-10** with no `qe-e2e` hop. The
+    `ABC-072` row says Security/NFR re-verified `A1`–`A6` *"in place of a separate QE hop
+    (Orchestrator routing: docs-only ruling ticket)"*, and `ABC-073` was delivered inside that hop.
+- **So it was not silent drift.** It was a recorded routing call. But it **departs from the owner's
+  2026-08-17 rule** (*"Every ticket gets a `qe-e2e` hop … none reaches `Done` without one"*). This tool
+  would flag both. That is the argument for `P2` and against `P3`. It is not `P1` because the departure
+  was recorded and not silent.
+
+**Amendments:**
+- **`A4`'s 38** and the 1288 / 223 note counts are history. The page already lets the builder
+  re-measure at build time.
+- **`## Security / NFR triggers`, `N8-LANE`, re-read** under `ADR-0035`:
+  - the new test file's cost is read on its **narrow set**, against the placeholder arm, with `R`
+    reported (decisions 1–2);
+  - the provisional `F` is 16 % of its base CPU; the 650 ms holds only at or above `F`;
+  - 1 file, 0 spawns is the count pin.
+  - **A file under `tools/` runs only in the `npm test` root lane**, not in `--dir src` (`QE-093-d`).
+- **NEW dependency, `AGENTS.md` bytes.** `A7` adds an `AGENTS.md` paragraph. Main's file is
+  **23,216 B of a 24,576 B target**, so **1,360 B** are left (`QE-093-a`), and `QE-093-a`'s regeneration
+  line also wants some. The paragraph has to fit the remainder or go by pointer. That is the Scribe's
+  call at the pull.
+
+**DoR item 10 stays ⚠️, and it is the owner's.** His *"yes to the QE detector"* (2026-08-17) has not
+been squared with the stated ceiling: a completeness check on the record, not proof that a hop ran. See
+Owner questions in `.grugops/context/bapm-rescore-backlog-r1-2026-10-10/notes/`.

@@ -225,3 +225,47 @@ true and unread; a document that is read and false is the same failure with the 
   found in the same two files.
 - **`P3` DEMOTION TRIGGER:** `ABC-043`'s UAT or follow-up repairs S4 in place, leaving three sites and no
   harness work.
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: READY. DoR 10/10. `S` and `P2` kept.** `column`/`status` are not moved here.
+
+**Premise re-measured at `39d87491`, and all four sites plus both page sentences are STILL FALSE ON
+DISK:**
+- **S1/S2:** `src/cli.test.ts:2674–2675`, the `D3`/`M9` block with *"with both of those rows still
+  green"*.
+- **S3:** `src/result-screen.test.ts:182`, *"ALONE is unconstructible"*.
+- **S4:** `src/cli.test.ts:2742`, *"NEVER PLAYS THE MOVE"*.
+- **`ABC-113` page:** `:64` (*"closes `D3`"*) and `:106` (*"unconstructible"*).
+
+**The `P3`/`XS` demotion trigger did NOT fire.** `ABC-043` is `Done`, and S4 is still on disk, so its
+UAT did not repair it. `A4` stays live, and so does `S`.
+
+**Amendments:**
+- **`A6` and test notes, the lane:** read `npx vitest run --dir src` as **`npm test`** (52 vs 53 files
+  since `ABC-093`). The *"`AGENTS.md` `## Test notes` 5"* cite is gone. **`A1`–`A3`'s planted-build runs**
+  may stay on the narrow file. They compare a row's state, not a lane total.
+- **`## NFR / security`, `N8-LANE`:** comment-only, so **the count is the pin** (`ADR-0035` decision
+  3): 0 files, 0 tests, 0 spawns, no timing bound. The *"`ABC-108` open / BREACHED"* sentence is
+  history.
+- **Dependencies:** `ABC-043` is `Done`, so the ordering note is void. `ABC-060` was dropped on the
+  owner's word on 2026-10-10, so the `## Risks` mention is void. `ABC-116` and `ABC-117` share
+  `src/cli.test.ts` but sit in disjoint regions (`:319`/`:336`, `:3342`). Whichever lands second
+  rebases.
+- **`A7` (author ≠ validator)** is met by the owner's standing QE hop, which re-plants the builds
+  itself. Nothing extra is owed.
+
+**DoR. The page had no table, though the board quoted 9/10; this is the first one on the page.**
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** six false sentences re-located on disk today |
+| 2 | scope and out-of-scope clear | **✅** unchanged |
+| 3 | INVEST-shaped | **✅** independent; `S` justified by `A4`'s harness, with the `XS` trigger pre-registered |
+| 4 | acceptance testable and measurable | **✅** planted builds, red/green counts, a comment-line-only diff predicate |
+| 5 | dependencies known | **✅** re-read above |
+| 6 | security/NFR triggers with a measurable target | **✅** count pin 0/0/0 |
+| 7 | test notes present | **✅** lane re-pointed |
+| 8 | size assigned | **✅** `S` |
+| 9 | priority assigned | **✅** `P2`; neither trigger fired |
+| 10 | no major unresolved blocker | **✅** — *the board's ⚠️.* `A7`'s separate validator is the standing QE hop, so no human decision is owed |

@@ -4,7 +4,7 @@ title: Settle the warm/cold measurement protocol for `NFR-008`'s wall clause —
 status: backlog
 column: Backlog
 size: M
-priority: P1
+priority: P3
 epic: —
 feature: —
 ---
@@ -301,3 +301,34 @@ can be estimated to deliver, not about whether the ticket can start.**
 | 10 | no major unresolved blocker | **✅** and it is the point of this ticket: **there is no human decision and no environmental precondition here.** `ABC-110` waits on the owner; this does not. **The machine's failure to go quiet is sized rather than blocking** (`A1` reuses the sizing shape, not the quiet threshold) |
 
 Column moves are the Orchestrator's.
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: DROP — close as SUPERSEDED, once `NFR-008`'s row carries the re-open trigger below.** Until
+then it stays in `Backlog` at **`P3`** (frontmatter moved `P1` → `P3` at this hop) so the trigger keeps
+a carrier. `column`/`status` are not moved here.
+
+**Why: this page's own DEMOTION TRIGGER fired, on the owner's word.** It reads *"if the owner moves the
+3 s level … this drops to `P2` pending re-derivation against his new level, on his words and their
+date."* He did: 2026-10-10, *"2. accept"* on `ADR-0035`, mapped by the Orchestrator to **R-1 — wall ≤ 10 s
+at load1 ≤ 8** (note `…6a1f3d92`; the mapping is flagged to him, see Owner question). **Re-derived
+here against W = 10 s:**
+
+| quantity | value | source |
+|---|---|---|
+| cooled/warm wall factor | 5.291 ÷ 4.637 = **1.141** | this page, 2026-08-19 ratios (39 files, Node v24.12.0) |
+| today's conforming wall | **6.52 s / 7.16 s** | `ADR-0035` § Context (`ABC-084` runs 1 and 3) |
+| today, projected cold | **7.44 s / 8.17 s** | × 1.141 — **a projection, not a reading** |
+| warm wall at which the protocol choice could flip W | 10 ÷ 1.141 = **8.76 s** | arithmetic |
+
+**The warm/cold choice cannot move a verdict against 10 s today.** Both states land under it with
+≥ 1.83 s to spare, even on the projection. `ADR-0035` decision 5 says the same in words. The consumer
+this ticket served, `ABC-110` `A6`, is `Done`.
+
+**What survives — one trigger, not a ticket.** *Re-open the warm/cold protocol question when a
+conforming warm `npm test` wall median reaches **8.76 s**, or any cooled reading exceeds **10 s**.*
+**Carrier: the `NFR-008` row, owner Security/NFR / Architect/Design** — recommended for its next catalog
+hop. **Caveat on the factor:** it was measured on v24.12.0 at 39 files; on re-open, re-measure it rather
+than reuse it.
+
+**DoR: not re-scored — a dropped ticket is not pulled.**
