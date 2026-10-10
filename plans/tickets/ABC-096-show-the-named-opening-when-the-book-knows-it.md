@@ -85,6 +85,9 @@ book-supplied opening name is the same class of input arriving through a new doo
 
 - **`ABC-093` — HARD BLOCKER.** The name must be in the artifact. **If `ABC-093`'s format decision
   omits the name field, this ticket is unbuildable** — flagged there in its § Dependencies.
+  *(2026-10-10: discharged. `ADR-0037` D1(d) carries the name inline as `n`, on the entry where a
+  source line ends, at ≤ 12 plies. 1,012 of 3,865 source names belong to lines past 12 plies and are
+  not in the artifact. This page's "does not infer" rule already shows nothing there.)*
 - **`ABC-094` — HARD BLOCKER.** The lookup path.
 - **`ABC-092` — transitive**, and with an extra edge: **opening names may themselves be part of what
   the source licence covers.** Named here so it is not discovered at the gate.
@@ -103,7 +106,8 @@ book-supplied opening name is the same class of input arriving through a new doo
   invented. **The C1 finding recorded there applies and must not be misread**: a clean unicode frame
   already carries 64 C1-range bytes from the module's own glyph table, so **do not "fix" C1 by
   stripping it** — that ruling calls it theatre, and the control that makes unicode mode safe is
-  mode selection (`src/glyph-mode.ts`), not sanitization.
+  mode selection (`src/glyph-mode.ts`), not sanitization. *(2026-10-10: `ADR-0037` D1(f)'s compiler
+  refuses a C0, DEL or ESC byte in a name. That is defence in depth only; `A3` still binds here.)*
 - **`NFR-002` — < 16 ms per full frame. TRIGGERED.** This ticket adds text to the frame path.
   `A4`'s bound is what keeps it met; the delivering hop measures the frame with the name present
   and records the figure with its machine.
@@ -113,6 +117,8 @@ book-supplied opening name is the same class of input arriving through a new doo
 - **`NFR-006`, `NFR-004`, `NFR-005`, `NFR-007` — not triggered.** No artifact size change, no
   search, no startup path. *(If the name is stored as a per-entry string rather than a side table,
   it does change the artifact's size — that is `ABC-093` `A5`'s bar, not this ticket's.)*
+  *(2026-10-10: inline names cost about 144,925 B of the 356,295 B estimate, 211,370 B without them
+  (`ADR-0037`), inside that bar.)*
 
 ## Test notes
 
@@ -146,10 +152,22 @@ dependency, and the fences are all documented and testable.
 downstream waits on it. **Promote to `P2` if `ABC-093`'s format decision would have to be re-opened
 to add the name later** — retrofitting a field into a shipped artifact format is the one thing that
 makes this expensive, and that trigger is the reason it is cut now rather than later.
+*(2026-10-10: the trigger does not fire. The format carries the name (`ADR-0037` D1(d)). `P3`
+holds.)*
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
+**RE-SCORED 2026-10-10 by BA/PM at the fold** (task `wave-2026-09-25`, subtask
+`bapm-fold-book-chain-2026-10-10`, at `4768b3b0`; `ADR-0037` folded per `…d06f5ba8`). **Result: 9 of
+10, ⚠️x1 (item 10). It stays in `Backlog`.** Readings:
+`.grugops/context/bapm-fold-book-chain-2026-10-10/notes/`.
+
+- **Item 5 ⚠️ → ✅.** The format carries the name inline (`ADR-0037` D1(d)).
+- **Item 10 ⚠️ STANDS, ordering only.** `ABC-093` and `ABC-094` are unbuilt. **Re-score trigger:
+  `ABC-094`'s merge.**
+- **Size `S` and `P3` hold.** The promotion trigger does not fire.
+
+**History.** Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
 **2026-08-16**. **Result: 8 of 10 — items 5 and 10 carry a ⚠️; the other eight are MET.**
 
 | # | item | verdict |

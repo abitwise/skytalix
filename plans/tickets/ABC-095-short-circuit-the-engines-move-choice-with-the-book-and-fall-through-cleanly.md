@@ -47,7 +47,8 @@ placing the short-circuit and proving the fall-through is invisible.
   `engine: createEngine({ budgetMs: DEFAULT_BUDGET_MS })` today. This ticket wraps that value with
   the decorator. **Without that line, no player's game ever consults the book**, and the Problem
   above says this ticket is the only one a player can perceive. The seed binding comes with the
-  line (`ADR-0012` clause 3(b)), and where a per-session seed comes from is unruled (§ DoR).
+  line (`ADR-0012` clause 3(b)). Its source is **RULED 2026-10-10 (`ADR-0037` D3)**: there is no
+  session seed, and the root builds the probe with `random: Math.random`.
 
 ## Out of scope — read this before writing a line
 
@@ -93,8 +94,10 @@ placing the short-circuit and proving the fall-through is invisible.
   reworded. **This criterion is the subject boundary, written as a test.**
 - **`A7` (a real session consults the book)** *(added 2026-10-10)*. **Given** the delivered
   `src/cli.ts`, **then** its `engine:` value is the decorator wrapping
-  `createEngine({ budgetMs: DEFAULT_BUDGET_MS })`, and that is the only changed expression in the
-  `runTurnLoop({ … })` call. **And given** the book present and a real `node src/cli.ts` child in
+  `createEngine({ budgetMs: DEFAULT_BUDGET_MS })` with a probe built with `random: Math.random`
+  (`ADR-0037` D3), and `engine:` is the only changed property inside the `runTurnLoop({ … })` call.
+  *(Folded 2026-10-10: a probe built in a `const` above the call is allowed. It is not inside the
+  call.)* **And given** the book present and a real `node src/cli.ts` child in
   which the human plays `e2e4`, **then** the engine's reply is one of the book's entries for the
   position after `1. e4`. That is one row in the `CLI_DEEP` lane (`src/cli.real-engine.test.ts`),
   never in the default lane.
@@ -146,10 +149,14 @@ placing the short-circuit and proving the fall-through is invisible.
   `position-6`) is out of book anyway. Recorded because it is an easy and attractive mistake.
 - **`NFR-008` (lane ≤ 3 s wall / ≤ 13 s CPU; per-ticket ≤ 650 ms CPU).** **Target: ≤ 1 new test
   file, 0 new spawned processes, ≤ 650 ms CPU.** `A5`'s full game and `A2`'s timing run **outside**
-  the default lane.
+  the default lane. *(2026-10-10: the CPU level is 15 s (`ADR-0019`). Under `ADR-0035` (accepted,
+  owner option R-1) the counts — ≤ 1 file, 0 spawns — are the pins.)*
 - **Security: no new surface.** No file is parsed here that `ABC-094` does not already parse; no
   network; no manifest change. `ABC-041`'s clauses are answered at the delivering hop against the
-  real diff, which cannot be enumerated before `EPIC-004` exists.
+  real diff, which cannot be enumerated before `EPIC-004` exists. *(2026-10-10: superseded for
+  routing. `ADR-0036` (b2) fires through the new edge to the probe, or (b1) if `src/cli.ts` holds the
+  read (`ADR-0037` § Consequences' injected-reader option). D3's `Math.random` is not a limb: ASVS
+  `V11.5.1` is L2, outside the active L1 set, the same reasoning as `src/cli-options.ts:103`.)*
 
 ## Test notes
 
@@ -184,7 +191,21 @@ move interface lands, this becomes the cheapest visible win on the board.
 
 ## Definition of Ready
 
-**RE-SCORED 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
+**RE-SCORED 2026-10-10 by BA/PM at the fold** (task `wave-2026-09-25`, subtask
+`bapm-fold-book-chain-2026-10-10`, at `4768b3b0`; `ADR-0037` folded per `…d06f5ba8`). **Result: 8 of
+10, ⚠️x2 (items 3 and 10). It stays in `Backlog`, last of the chain.** Readings:
+`.grugops/context/bapm-fold-book-chain-2026-10-10/notes/`.
+
+- **Item 5 ⚠️ → ✅.** The seed source is ruled (`ADR-0037` D3). `A7` names the probe's `random`.
+- **Items 3 and 10 ⚠️ STAND**, on `ABC-093` and `ABC-094`, both unbuilt. **Re-score trigger:
+  `ABC-094`'s merge.**
+- **Size `S` and `P1` hold.**
+- **Production and UAT.** **The owner's UAT word** (a decorator module, and `src/cli.ts`).
+  `In Security/NFR` through (b2), or (b1) if `src/cli.ts` holds the read. D3 adds no limb.
+- **`ABC-101` overlap.** Its integer seed for `createLevel` comes from the same root read,
+  `Math.floor(Math.random() * 2 ** 32)` (D3). Its wiring is its own. Owner question 5 is unchanged.
+
+**History. Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
 at `aaa88263`). **Result: 7 of 10, ⚠️x3. It stays in `Backlog`, last of the four.** Readings:
 `.grugops/context/rescore-p1-backlog-2026-10-10/notes/`.
 
@@ -193,8 +214,8 @@ at `aaa88263`). **Result: 7 of 10, ⚠️x3. It stays in `Backlog`, last of the 
 - **Item 5 ✅ → ⚠️, and this is the cost of the wiring line now in scope.** For "games vary between
   sessions" (`EPIC-005`), the composition root needs a seed that differs per session. **No production
   module has a session seed source today.** `createEngine` takes none, and `src/levels.ts` takes a
-  caller's seed. Whether that seed comes from `Date.now`, `crypto` or something else is
-  Architect/Design's. Put it in the same `In Design` hop as `ABC-093`'s format and `ABC-094`'s `G4`.
+  caller's seed. **Ruled 2026-10-10 (`ADR-0037` D3): there is no session seed; `src/cli.ts` binds
+  `Math.random`.**
   **If the Orchestrator reverses the wiring call,** the score returns to 8/10 and the wiring line
   needs its own XS ticket.
 - **Size `S` holds**: one wiring expression, plus one `CLI_DEEP` row. **`P1` holds.**
