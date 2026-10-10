@@ -21,6 +21,10 @@ feature: —
 > **ORDERED AFTER `ABC-036` AND `ABC-051` MERGE.** `ABC-036` edits `src/command-input.ts` and
 > `src/command-input.test.ts`, which carry 4 of the cites. `ABC-051` edits `src/turn-loop.ts`,
 > the file every cite points into.
+>
+> **Re-scored 2026-10-10 by BA/PM** (subtask `bapm-owed-batch-2026-10-10`) at wave tip `35ad336b`:
+> **DoR 10/10.** Both merged, so item 3 is discharged. The table was re-measured and holds. See
+> `## Re-score — 2026-10-10`.
 
 ## Problem
 
@@ -114,9 +118,19 @@ On `ABC-036`'s tip, #7/#8 sit at `:59`/`:60` and #6 at `:533`. Re-read the table
 
 - **⚠️ `ABC-036` must merge first.** It is in Ready for UAT, and the owner's acceptance is owed.
   It edits `src/command-input.ts` and its test (sites #5–#8, and `A3`'s line).
+  *(2026-10-10: **merged** `4a745a77`, owner word. Discharged.)*
 - **⚠️ `ABC-051` must merge first.** It is in Ready for UAT, and the owner's acceptance is owed. It
   re-numbers `src/turn-loop.ts` after `:271`, and `A2` resolves anchors in that file.
+  *(2026-10-10: **merged** `a154d306`, owner word. Discharged.)*
 - **`ABC-128`** edits `src/turn-loop.test.ts` (other lines). Prefer it first. The second one rebases.
+  *(2026-10-10: **merged** `34d9ea70`. Discharged.)*
+- **`ABC-132` (Ready) — PAIRED, NEVER IN PARALLEL.** It edits `src/result-screen.ts:13-15` and
+  `src/cli.ts:7-8`, adjacent to sites #14, #3 and #4. Either order works, and the second one rebases.
+  *(Added 2026-10-10.)*
+- **`ABC-059` merged** (`4c33b72b`) and added 76 lines to `src/cli.test.ts` at `:2138`. Sites #1/#2
+  did not move (`:588`, `:747`, re-read at `9128e7a3`). **`ABC-133` is now `In Development`** on the
+  same file. Do not build `ABC-129` while `ABC-133` is open on `src/cli.test.ts`; whichever lands
+  second rebases. *(Added 2026-10-10.)*
 - **`ABC-126`, `ABC-127`: no overlap.** They touch puzzle files and `src/quiescence.test.ts`.
 - **Merge-order only, all in `Backlog`, comment lines:** ~~`ABC-038` (`src/line-input.ts`, one
   attach line)~~ *(dropped 2026-10-10 on the owner's word; no longer a merge-order neighbour)*,
@@ -142,6 +156,10 @@ On `ABC-036`'s tip, #7/#8 sit at `:59`/`:60` and #6 at `:533`. Re-read the table
 3. **#3/#11 and #7.** The arms are comments inside `runTurnLoop` and are not exported symbols. Cite
    the label the comment carries (`` `A9b` ``, `TRANSITION 16`) with `runTurnLoop`, so that
    `grep -F` finds it.
+4. **`src/cli.ts` is read RAW, comments included** (added 2026-10-10). `src/cli.test.ts`
+   "bar 1" (`:1703`) bars `eval`, `Function(`, `child_process`, `import(`, `fetch`, `WebSocket` and
+   `XMLHttpRequest` anywhere in `cli.ts`, so a new word in sites #3/#4 can red it ("evaluated"
+   contains `eval`). The anchors in the table contain none of these. Run the whole suite.
 
 ## Size and priority rationale
 
@@ -170,3 +188,50 @@ becomes ✅ by that fact, and the page meets the bar after the table is re-read.
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with the reason |
 | 10 | no major unresolved blocker | **✅** the owner's comment-only ruling decides whether UAT is waived, and it does not block the build |
+
+## Re-score — 2026-10-10
+
+BA/PM, subtask `bapm-owed-batch-2026-10-10`, at wave tip `35ad336b`, re-read at `9128e7a3`
+(after `ABC-059` merged; all 15 sites unmoved). **Result: 10 of 10, 0 ⚠️ — MET.** The cut table above is history and is left standing.
+
+**This hop does not change the page's `status`/`column`.** Its fence forbids column changes on
+existing tickets. `Backlog → Ready` is the Orchestrator's to make with the board row.
+
+**Re-measured, not inherited:**
+- `A1`'s grep prints **15** lines, the same 15 sites. `src/turn-loop.ts` last changed at `54513238`
+  (`ABC-051`).
+- **Every anchor resolves on the line the "means" column names**: `wasGenerated` `:212`,
+  `INPUT_ENDED_NOTICE` `:189`, `claimShortfall` `:255`, `EngineSeam` `:150`, `PromptOutcome`
+  `:135`, `` `A9b` `` `:329`.
+- The four quoted phrases each match exactly 1 line: "TRANSITION 16" `:361`, "The render cadence"
+  `:279`, "Transition 1 → 2" `:303`, "OWNS ONLY THAT THE TRANSITION EXISTS" `:125`.
+- **Two site lines moved, and the anchors did not:** #2 is now `src/cli.test.ts:747` (was `:744`), and
+  #6 is `src/command-input.test.ts:533`. #7/#8 are at `src/command-input.ts:59`/`:60`. The test
+  note 1 instruction stands: re-read the table at the `Ready for Dev` exit.
+- **`A3` is NOT met by `ABC-036`'s merge.** `src/command-input.ts:91` still says "the seven tokens …
+  Three are `command`". `COMMAND_TABLE` has **8** rows, and **4** have `outcome: "command"`.
+  `A3` stands as written.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** unchanged; 15 cites re-measured, `A3`'s comment re-read |
+| 2 | scope and out-of-scope clear | **✅** unchanged |
+| 3 | INVEST-shaped | **✅** independent now: `ABC-036` and `ABC-051` merged. `ABC-132` is a pairing and `ABC-133` (in development, `src/cli.test.ts`) an ordering. Neither is built in parallel with this one |
+| 4 | acceptance testable and measurable | **✅** unchanged; every anchor resolves today |
+| 5 | dependencies known | **✅** the three predecessors are discharged with their SHAs; `ABC-132` and `ABC-133` are added, and `ABC-059` is merged |
+| 6 | security/NFR triggers with a measurable target | **✅** unchanged |
+| 7 | test notes present | **✅** four (note 4 added: `cli.ts` bar 1 reads comments) |
+| 8 | size assigned | **✅** `XS` (1), kept |
+| 9 | priority assigned | **✅** `P3`, kept |
+| 10 | no major unresolved blocker | **✅** the owner's comment-only ruling decides the exit, not the start |
+
+**Which way the owner's open ruling moves this ticket.** The question is whether a comment-only
+production diff counts as "zero production lines" (`QE-051-d`).
+- **It moves the EXIT only.** In both cases DoR stays 10/10, size `XS`, priority `P3`, and the QE hop
+  applies.
+- **If he rules YES:** after QE, `Ready for UAT → Done`, UAT WAIVED. This holds only if the ruling
+  names a measurement. The 2026-08-17 git test lists **6 production files** for this diff and cannot
+  tell a comment from code. `A4`'s pipeline is one candidate measurement. The stripped-compile
+  identity `ABC-104` used is the stronger one.
+- **If he rules NO (or has not ruled):** `Ready for UAT` waits for his word. One word can cover this
+  ticket and `ABC-132`, which owes the same.

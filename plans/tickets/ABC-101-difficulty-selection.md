@@ -198,6 +198,20 @@ deliberately instead of meeting them at the gate:
   `printableOf`. **Firing threshold: it fires if the level is parsed anywhere other than
   `resolveOptions`, or if the accepted set becomes open (a regex or a `parseInt` range instead of an
   enumeration).**
+- **FORWARD NOTE (2026-10-10, BA/PM, `bapm-owed-batch-2026-10-10`; from Security/NFR's `ABC-087`
+  ruling 7, `.grugops/context/secnfr-ABC-087/notes/…3f1974f5`, on `grugops/ABC-087-difficulty-levels`
+  until it merges).** It binds whichever hop first indexes `ABC-087`'s `LEVELS` table with a user's
+  choice. That may be this ticket, if `A8` is ever relaxed, or the `EPIC-006` wiring hop.
+  - **Look up only by the validated own integer key** that `resolveOptions` returned, with
+    `Object.hasOwn(LEVELS, level)`, and refuse anything else.
+  - **Why:** `LEVELS["constructor"]` and `LEVELS["__proto__"]` return prototype members, and
+    `createLevel` turns them into an always-blunder level without throwing. Re-measured here on a
+    frozen object of the same shape: `hasOwn` is `false` for both, and `true` for `3`.
+  - `A3`'s closed set already refuses those tokens at the flag. This rule covers any other route to
+    the table.
+  - **Also re-read `AR-NFR004-A`** (Security/NFR's) the first time a played move goes through a
+    level.
+  - **DoR not re-scored** by this note.
 
 ## Test notes
 
