@@ -1,0 +1,60 @@
+# RUN log — ticket-to-pr-ABC-134, base 7f7e6b84, code a42b59e3, 2026-10-10T15:09:30Z, v26.11.0, Apple Silicon
+
+$ node ../../bapm-owed-batch-2026-10-10/probe/phrases.mjs <file> <five A1-A4 phrases>   # base, then head
+base 1 | CONDITIONAL on a game state the frames do not reach
+base 1 | only `ABC-041` `A2`'s synchronous spies see that
+base 1 | so it is not load-bearing on Node v26.11.0
+base 1 | so two static value imports are NOT counted
+base 1 | A comment ahead of the name inside the brace, and a default binding, are value imports it does not count
+head 0 | CONDITIONAL on a game state the frames do not reach
+head 0 | only `ABC-041` `A2`'s synchronous spies see that
+head 0 | so it is not load-bearing on Node v26.11.0
+head 0 | so two static value imports are NOT counted
+head 0 | A comment ahead of the name inside the brace, and a default binding, are value imports it does not count
+
+$ python3 probe/check.py <base>
+probe-it code-only (// lines dropped)	 9536c4f9835a2cfd
+whole file code-only (comment lines dropped)	 2b417f409edf32c0
+turn literal: ['3']
+ABC-136 pin 0 raw count	 1 	hash 6ab1361ef343a9da
+ABC-136 pin 1 raw count	 1 	hash 409d8b25794730be
+ABC-136 pin 2 raw count	 1 	hash 48644b043c20d093
+ABC-136 pin 3 raw count	 1 	hash 919467a544b67db4
+first LICENSED_DRIVERS decl line: 258  first COMPOSITION_ROOT decl: 210
+
+$ python3 probe/check.py <head>
+probe-it code-only (// lines dropped)	 9536c4f9835a2cfd
+whole file code-only (comment lines dropped)	 2b417f409edf32c0
+turn literal: ['3']
+A1 bullet: {'unicode': True, 'black-bottom': True, 'thinking': True, 'message': True}
+A2 bullet: {'gameStatus': True, 'replay': True, 'seen by no instrument': True}
+A3 settle: {'3 `setImmediate` turns': True, 'at most 3 deep': True, 'timer': True, 'deeper `setImmediate` chain': True, 'NOT seen': True}
+A4 docblock: {'string-named specifier': True, 'comment containing `;`': True, 'AT LEAST': True, 'not exhaustive': True}
+A4 in-test: {'string-named specifier': True, 'comment containing `;`': True, 'AT LEAST': True, 'not exhaustive': True}
+ABC-136 pin 0 raw count	 1 	hash 6ab1361ef343a9da
+ABC-136 pin 1 raw count	 1 	hash 409d8b25794730be
+ABC-136 pin 2 raw count	 1 	hash 48644b043c20d093
+ABC-136 pin 3 raw count	 1 	hash 919467a544b67db4
+first LICENSED_DRIVERS decl line: 266  first COMPOSITION_ROOT decl: 218
+
+$ python3 ../../qe-ABC-057/probe/spansqe.py <file>   # base -> head; /usr/bin/diff spans-base.txt spans-head.txt
+7c7
+< probe-it	115 lines	051ea712d8d7c1e5
+---
+> probe-it	118 lines	ee38882f84500ef0
+(the other six rows and the three counts are identical; probe-it holds the settle comment, A3's site)
+
+$ git diff --name-only 7f7e6b84..a42b59e3
+src/history-pane.nfr.test.ts
+$ git diff -U0 7f7e6b84..a42b59e3 -- src | grep -E "^[+-][^+-]" | grep -vE "^[+-][[:space:]]*(\*|/\*\*|\*/|//)"   # A5, expect nothing
+(grep exit 1)
+$ git diff --numstat 7f7e6b84..a42b59e3 -- src
+26	13	src/history-pane.nfr.test.ts
+
+# Gate at a42b59e3 (worktree, run before commit on the identical tree)
+npm run lint: Checked 100 files in 204ms. No fixes applied. lint exit 0 
+npm run typecheck: typecheck exit 0
+npm run build: build exit 0
+npm test:  Test Files 52 passed (52)  Tests 1608 passed (1608)  test exit 0
+test-skip-integrity --skip-count 0: No findings. (exit 0)
+lane-inventory: The lane collects 52 test files; git tracks 52. No findings. (exit 0)

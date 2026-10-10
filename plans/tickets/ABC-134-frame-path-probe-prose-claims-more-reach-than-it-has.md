@@ -168,3 +168,19 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `35ad336b`. **Res
 stay ✅: `ABC-136` is a merge-order predecessor on the same file with no open design question, so it
 sets a pull order, not a dependency on a decision (`ABC-083`/`ABC-131` precedent). Test note 1 gains
 one line. No criterion, size, priority or column moved.
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-134`).
+- Branch `grugops/ABC-134-frame-probe-prose`, from `7f7e6b84`. The code is `a42b59e3`
+  (`src/history-pane.nfr.test.ts` +26/−13, comment lines only).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-134/` (`…1f2b70bf`,
+  `…d5b9d74c`, `probe/`) and are not restated here.
+
+**`A1`–`A5` are met.**
+- The premise held at `7f7e6b84`: all five phrases counted 1, and only the in-test sites had moved
+  (because of `ABC-136`).
+- `ABC-136`'s four pinned literals and six of `ABC-057`'s seven spans are byte-identical.
+- **One fence reading to note:** the `probe-it` span contains the settle comment (`A3`'s site), so its
+  raw hash moves. With its `//` lines dropped it is identical.
