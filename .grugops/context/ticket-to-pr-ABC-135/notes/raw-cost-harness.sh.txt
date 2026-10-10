@@ -1,0 +1,19 @@
+#!/bin/bash
+# ABC-135 narrow-set cost (ADR-0035 dec 2). A=base 5c17d1ed, B=tip b09d880, N=diff -r twin of A.
+# CPU = user+sys (incl. children), one fresh process per run, rotated order, counts asserted, load1 logged.
+SP=$1; ROUNDS=$2; SET=src/render-seam.test.ts
+conds=(A B N); want() { [ "$1" = B ] && echo 13 || echo 12; }
+echo "round cond load1 user sys cpu tests"
+for r in $(seq 0 $ROUNDS); do
+  off=$((r % 3))
+  for k in 0 1 2; do
+    c=${conds[$(((k+off)%3))]}
+    cd $SP/$c
+    l1=$(sysctl -n vm.loadavg | awk '{print $2}')
+    out=$( { /usr/bin/time -p sh -c "npx vitest run $SET > $SP/last-$c.txt 2>&1" ; } 2>&1 )
+    n=$(grep -E '^ +Tests ' $SP/last-$c.txt | grep -oE '[0-9]+ passed' | grep -oE '[0-9]+')
+    [ "$n" = "$(want $c)" ] || { echo "COUNT MISMATCH $c $n"; exit 1; }
+    t=$(echo "$out" | awk '/^user/{u=$2}/^sys/{s=$2}END{printf "%s %s %.2f", u, s, u+s}')
+    echo "$r $c $l1 $t $n"
+  done
+done

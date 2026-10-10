@@ -1,0 +1,12 @@
+#!/bin/bash
+# ABC-135 mutants. usage: mutants.sh <scratch> <repo> <rev> <label>
+S=$1; R=$2; REV=$3; L=$4
+mk() { d=$S/mut-$L-$1; rm -rf $d; mkdir -p $d; git -C $R archive $REV | tar -x -C $d; ln -s $R/node_modules $d/node_modules; echo $d; }
+run() { d=$1; name=$2; ( cd $d && npx vitest run src/render-seam.test.ts 2>&1 ) > $S/out-$L-$name.txt; echo "== $L $name exit=$? :: $(grep -E '^ +Tests ' $S/out-$L-$name.txt | tr -s ' ')"; grep -E '^ FAIL ' $S/out-$L-$name.txt | sed 's/.*> //' | sort -u; grep -E '^AssertionError' $S/out-$L-$name.txt | sort -u; }
+F=src/render-seam.test.ts
+d=$(mk pristine); run $d pristine
+d=$(mk single-line); perl -0pi -e 's/\(\[\^;"\]\*\?\)/([^;"\\\\n]*?)/ or die "anchor"' $d/$F && grep -c '\[^;"\\\\n\]\*?' $d/$F && run $d M-SINGLE-LINE
+d=$(mk first-only); perl -0pi -e 's/\]\.some\(\(\[, clause/].slice(0, 1).some(([, clause/ or die "anchor"' $d/$F && grep -c 'slice(0, 1).some' $d/$F && run $d M-FIRST-STATEMENT-ONLY
+if grep -q 'withoutComments(source).matchAll' $d/$F; then
+  d=$(mk no-strip); perl -0pi -e 's/withoutComments\(source\)\.matchAll/source.matchAll/ or die "anchor"' $d/$F && run $d M-NO-STRIP
+fi

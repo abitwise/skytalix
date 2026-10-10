@@ -1,0 +1,27 @@
+// ABC-135 A3: extract bindsAValueFrom (and withoutComments if present) VERBATIM from a render-seam.test.ts,
+// run it over every ordered pair of production modules in <srcDir>, print the consumer map.
+// usage: node a3-map.mjs <render-seam.test.ts> <srcDir> <outModuleDir>
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+const [file, dir, out] = process.argv.slice(2);
+const text = readFileSync(file, "utf8");
+const grab = (name) => {
+  const start = text.indexOf(`const ${name} =`);
+  if (start < 0) return "";
+  const end = text.indexOf(";\n\n", start);
+  return text.slice(start, end + 2);
+};
+const mod = `${grab("withoutComments")}\n${grab("bindsAValueFrom")}\nexport { bindsAValueFrom };\n`;
+const path = `${out}/instrument-${Date.now()}.ts`;
+writeFileSync(path, mod);
+const { bindsAValueFrom } = await import(path);
+const prod = readdirSync(dir).filter((f) => f.endsWith(".ts") && !f.endsWith(".test.ts")).sort();
+const lines = [];
+let pairs = 0, consumers = 0;
+for (const t of prod) for (const f of prod) if (f !== t) {
+  pairs++;
+  const v = bindsAValueFrom(readFileSync(`${dir}/${f}`, "utf8"), t);
+  if (v) consumers++;
+  lines.push(`${f} -> ${t} ${v}`);
+}
+console.log(lines.join("\n"));
+console.error(JSON.stringify({ file, productionModules: prod.length, orderedPairs: pairs, consumers, hasStrip: grab("withoutComments") !== "" }));
