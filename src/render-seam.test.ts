@@ -9,8 +9,8 @@
  *
  * `A7` AND `A9` ARE NOT ASSERTED HERE AS A MEASUREMENT — they are the MERGED probe's, in
  * `src/history-pane.nfr.test.ts`, which this ticket adds exactly one root line to. What this file
- * holds instead is the DECLARATION's own guard (`A9` below): that the new module is in
- * `FRAME_PRODUCERS` and is NOT in `LICENSED_DRIVERS`. That second half is mechanical because the
+ * holds instead is the DECLARATION's own guard (`A9` below): that the new module is the probe's
+ * `COMPOSITION_ROOT` and is NOT in `LICENSED_DRIVERS`. That second half is mechanical because the
  * Orchestrator's `In Development`-entry criteria review recorded it as a one-keystroke wrong move —
  * a module whose `history.ts` import went runtime would trip the licence guard, and adding itself to
  * the licence would satisfy that guard while quietly widening `ADR-0011` clause 3 from one licensed
@@ -308,7 +308,7 @@ describe("ABC-041 — the render seam", () => {
     }
   });
 
-  it("A9 — declared in FRAME_PRODUCERS, and deliberately NOT in LICENSED_DRIVERS", () => {
+  it("A9 — the declared COMPOSITION_ROOT, and deliberately NOT in LICENSED_DRIVERS", () => {
     const probe = sourceOf("history-pane.nfr.test.ts");
     const declaredList = (name: string): string => {
       const match = probe.match(
@@ -318,9 +318,9 @@ describe("ABC-041 — the render seam", () => {
       return match[1] as string;
     };
 
-    // `ADR-0011` clause 2 — the frame path is DECLARED, and this is the first new frame producer
-    // since the probe was written.
-    expect(declaredList("FRAME_PRODUCERS")).toContain('"render-seam.ts"');
+    // `ADR-0029` decision 2 — the frame path is DERIVED from ONE declared composition root, and
+    // this module is it (`ADR-0009` clause 9b).
+    expect(probe).toMatch(/^const COMPOSITION_ROOT = "render-seam\.ts";$/m);
     // `ADR-0011` clause 3 — the licence is about RUNTIME imports of `history.ts` and this module
     // holds none. If the licence guard ever fires for this module the repair is the import; adding
     // the module here would silence a real red and widen the licence to two drivers.
