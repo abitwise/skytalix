@@ -1,0 +1,11 @@
+# commit 82104f70 variant esm node v26.11.0 2026-10-10T14:22:46Z
+# round load1 load_ms total_ms specifiers resolved tests
+0 9.55 276.156 366.222 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+1 9.18 204.231 266.61 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+2 8.69 204.137 269.588 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+3 8.15 202.294 263.463 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+4 8.06 204.487 266.425 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+5 7.49 197.667 265.808 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+6 7.49 219.717 290.184 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+7 7.13 211.428 279.25 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+8 6.88 208.995 275.679 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)

@@ -1,0 +1,49 @@
+control (unmutated)                                                  | base GREEN 67 passed         | head GREEN 67 passed    | load1 5.30
+Q11 REAL call after a "//" string on the same line                   | base GREEN 67 passed         | head RED 1 failed | 66 (ii) 1929 | load1 5.30
+Q12 REAL call between "/*" and "*/" strings                          | base GREEN 67 passed         | head RED 1 failed | 66 (ii) 1931 | load1 5.20
+Q13 MS2 + call hidden after "//" string                              | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1918 | load1 4.94
+P1 namespace import + cp.execSync (a shell child)                    | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1918 | load1 4.71
+P2 real spawnSync after a URL string (SecNFR)                        | base GREEN 67 passed         | head RED 1 failed | 66 (ii) 1928 | load1 4.49
+P-DYN module-level dynamic import                                    | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1916 | load1 4.29
+E-MS1 direct spawnSync child                                         | base RED 1 failed | 66 OTHER:expected [ 'spawnSync(', 'spawnSync(' ] to have a length of 1 but got 2 | head RED 1 failed | 66 (ii) 1929 | load1 4.27
+E-MS2 namespace import                                               | base RED 1 failed | 66 OTHER:expected [] to deeply equal [ 'spawnSync' ] | head RED 1 failed | 66 (i) 1916 | load1 4.27
+E-A1 prose docblock names `spawnSync(`                               | base GREEN 67 passed         | head GREEN 67 passed    | load1 5.05
+S-CTRL string control, no call                                       | base GREEN 67 passed         | head GREEN 67 passed    | load1 5.20
+Q14 REAL call through an alias (out of scope)                        | base GREEN 67 passed         | head GREEN 67 passed    | load1 5.59
+Q8 template-literal TEXT `spawnSync(` (not a call)                   | base RED 1 failed | 66 OTHER:expected [ 'spawnSync(', 'spawnSync(' ] to have a length of 1 but got 2 | head GREEN 67 passed    | load1 5.54
+Q9 REAL call inside a template interpolation                         | base RED 1 failed | 66 OTHER:expected [ 'spawnSync(', 'spawnSync(' ] to have a length of 1 but got 2 | head RED 1 failed | 66 (ii) 1929 | load1 5.50
+Q10 // line comment names `spawnSync(`                               | base GREEN 67 passed         | head GREEN 67 passed    | load1 5.54
+X1 second import, BARE spelling + execSync                           | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1918 | load1 5.25
+X2 DEFAULT import + cp.execSync                                      | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1918 | load1 10.20
+X2b default+named in one import                                      | base RED 1 failed | 66 OTHER:expected [] to deeply equal [ 'spawnSync' ] | head RED 1 failed | 66 (i) 1915 | load1 10.02
+X2c rename the one import (spawnSync as run)                         | base                  ERR:The "args" argument must be of type object. Received type string ('white') | head                  ERR:The "args" argument must be of type object. Received type string ('white') 657 | load1 9.46
+X3 require() with a TEMPLATE LITERAL specifier                       | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1917 | load1 9.46
+X3b require() bare string                                            | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1917 | load1 9.18
+X3c import() with a TEMPLATE LITERAL                                 | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1917 | load1 13.89
+X4 RE-EXPORT named (export { execSync } from)                        | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1916 | load1 16.58
+X4b RE-EXPORT star (export * from)                                   | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1916 | load1 15.97
+X4c RE-EXPORT namespace (export * as cpx from)                       | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1916 | load1 15.01
+X5 createRequire(import.meta.url)("node:child_process") inline       | base GREEN 67 passed         | head GREEN 67 passed    | load1 18.84
+X5b const req = createRequire(...); req("child_process")             | base GREEN 67 passed         | head GREEN 67 passed    | load1 17.89
+X6 process.getBuiltinModule("node:child_process")                    | base GREEN 67 passed         | head GREEN 67 passed    | load1 17.89
+X7 vi.importActual("node:child_process")                             | base GREEN 67 passed         | head GREEN 67 passed    | load1 16.62
+X8 import TYPE from child_process (no runtime binding)               | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1918 | load1 15.53
+X8b inline type specifier in the one import                          | base RED 1 failed | 66 OTHER:expected [ 'spawnSync, type SpawnSyncReturns' ] to deeply equal [ 'spawnSync' ] | head RED 1 failed | 66 (i) 1915 | load1 15.24
+X8c typeof import("node:child_process") in a TYPE position only      | base GREEN 67 passed         | head GREEN 67 passed    | load1 14.58
+X9 import() then member call                                         | base GREEN 67 passed         | head RED 1 failed | 66 (i) 1917 | load1 14.38
+C1 optional call spawnSync?.()                                       | base GREEN 67 passed         | head RED 1 failed | 66 (ii) 1929 | load1 13.94
+C2 spawnSync.call                                                    | base GREEN 67 passed         | head RED 1 failed | 66 (ii) 1929 | load1 13.15
+C3 spawnSync.apply                                                   | base GREEN 67 passed         | head RED 1 failed | 66 (ii) 1929 | load1 12.42
+C3b spawnSync?.call (optional member)                                | base GREEN 67 passed         | head RED 1 failed | 66 (ii) 1929 | load1 11.82
+C4 COMPUTED member spawnSync["call"]                                 | base GREEN 67 passed         | head RED 1 failed | 66 (ii) 1929 | load1 11.44
+C5 PARENTHESISED callee (spawnSync)()                                | base GREEN 67 passed         | head GREEN 67 passed    | load1 11.00
+C6 COMMA callee (0, spawnSync)()                                     | base GREEN 67 passed         | head GREEN 67 passed    | load1 10.36
+C7 NON-NULL callee spawnSync!()                                      | base GREEN 67 passed         | head GREEN 67 passed    | load1 10.17
+C8 AS-cast callee (spawnSync as typeof spawnSync)()                  | base GREEN 67 passed         | head GREEN 67 passed    | load1 9.92
+C9 TAGGED TEMPLATE spawnSync`x`                                      | base GREEN 67 passed         | head GREEN 67 passed    | load1 9.44
+C10 Reflect.apply(spawnSync, ...)                                    | base GREEN 67 passed         | head GREEN 67 passed    | load1 9.17
+C11 call nested in a callback (.map), outside childOf                | base RED 1 failed | 66 OTHER:expected [ 'spawnSync(', 'spawnSync(' ] to have a length of 1 but got 2 | head RED 1 failed | 66 (ii) 1929 | load1 8.83
+C12 SHADOWED local named spawnSync (false-red check)                 | base RED 1 failed | 66 OTHER:expected [ 'spawnSync(', 'spawnSync(' ] to have a length of 1 but got 2 | head RED 1 failed | 66 (ii) 1929 | load1 8.44
+C13 RegExp.exec + local object .execSync (false-red control)         | base GREEN 67 passed         | head GREEN 67 passed    | load1 8.01
+C14 "child_process" string NOT a specifier (array/arg)               | base GREEN 67 passed         | head GREEN 67 passed    | load1 7.77
+C15 import of a lookalike path ./child_process (not the module)      | base GREEN 67 passed         | head GREEN 67 passed    | load1 7.71

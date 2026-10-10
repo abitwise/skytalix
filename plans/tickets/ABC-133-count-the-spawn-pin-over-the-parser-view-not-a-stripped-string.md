@@ -228,3 +228,45 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `9ddd6e80`. **Res
   - QE's hop.
   - The Security/NFR hop the page recommends (`V1.2.5`'s instrument changed).
   - The UAT waiver applies if zero production lines holds (measured 0).
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-133`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `8be650e6..82104f70`, code `cd594b5f`. Every reading is QE's own, taken in fresh
+`git archive` trees with QE's own plants. **`A1`–`A5` are MET. No test was added.**
+
+- **`A1`**: `Q11`, `Q12`, `Q13`, `P1` and `P-DYN` are GREEN 67/67 at base and RED 1/67 at head.
+  The red is the `N8-LANE` row alone, on the pin's own assertions. Soft re-runs show `P1` and `Q13`
+  red both counts.
+- **`A2`**: the unmutated file is green, and count (i) reads 1 of 2 literals (`:32`, `:1708`).
+  `E-MS1`/`E-MS2` are RED. The prose plant and the string control are GREEN.
+- **`A3`**: `Q14` is GREEN. The comment names the variable alias (`:1853-1854`).
+- **`A4`**: timed in situ on the delivered pin, n = 8 of 9 fresh vitest processes. The median is
+  **173.2 ms** CPU at load1 median 10.1, against 250. The ESM form would read 268.1 ms.
+- **`A5`**: one path, 0 manifest bytes, 0 files added, 0 production lines, 67 `it`, and
+  `N8_SPAWN` 27.
+- **Plants**: 49 on head and base, plus 6 soft re-runs. Every `child_process` spelling and call
+  shape the brief named reds, except those in the gaps below. There is no false count on
+  `RegExp.exec`, a local `.execSync`, value strings or a lookalike path.
+- **The engineer's decisions** are **endorsed**: binding-list specifiers, callee resolution, and
+  `createRequire` inside the `it`. The ESM gap is now partly explained: +41 ms of it shows up in
+  plain node, and the remaining ~+67 ms only under vitest. The mechanism is `UNKNOWN - verify`. It
+  does not matter here, because the choice rests on the `A4` measurement.
+- **Gates**: lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. Skip is 0,
+  integrity reads `No findings.`, and `lane-inventory.js` reports no findings.
+
+**Gaps (none fails a criterion; every hole was green at base too, so no kill was traded):**
+- **`QE-133-a` LOW.** Count (i) recognises only `import` and `require` as loaders.
+  `createRequire(import.meta.url)("node:child_process")` (the shape this ticket's own load line
+  uses), `process.getBuiltinModule(…)` and `vi.importActual(…)` stay green.
+- **`QE-133-b` LOW.** Count (ii) does not unwrap a callee. `(spawnSync)()`, `(0, spawnSync)()`,
+  `spawnSync!()` and `(spawnSync as …)()` stay green. `!` and `as` are named nowhere.
+- **`QE-133-c` INFO.** `Reflect.apply` is the alias class. A tagged template cannot spawn.
+- **`QE-133-d` INFO, fail-loud.** `import type … from "node:child_process"` now reds, while
+  `typeof import(…)` does not.
+- **`QE-133-e` INFO, fail-loud.** A shadowed `spawnSync` reds, as stated.
+- **`QE-133-f` INFO.** `A4` has ~31 % headroom. One single round read 254.4 ms. Nothing in the file
+  guards the load form except the comment.
+
+The board move is the Orchestrator's. The Security/NFR hop is recommended by the page. Readings are
+in `.grugops/context/qe-ABC-133/notes/` (`…27801a15` decision, `…71511fc2` readings, `…f589327d`
+gaps) and `probe/`.

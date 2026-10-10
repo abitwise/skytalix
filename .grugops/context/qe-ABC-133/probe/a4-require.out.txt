@@ -1,0 +1,11 @@
+# commit 82104f70 variant require node v26.11.0 2026-10-10T14:21:58Z
+# round load1 load_ms total_ms specifiers resolved tests
+0 8.94 129.111 225.285 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+1 9.83 145.396 254.43 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+2 11.08 96.963 185.717 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+3 10.51 88.706 160.384 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+4 10.31 98.39 184.265 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+5 10.21 88.625 173.61 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+6 9.95 90.456 152.848 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+7 9.95 94.973 169.49 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+8 10.03 96.804 172.883 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
