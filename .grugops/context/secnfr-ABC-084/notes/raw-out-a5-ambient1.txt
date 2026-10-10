@@ -1,0 +1,9 @@
+# PUZZLE_DEEP=1, arm A (= e426e91, out of tree). start 22:29:57Z load {7.83 8.22 9.02}, 7 foreign vitest procs; after {7.19 8.06 8.95}
+PUZZLES shipped: solved 40/40, baseline 40/40, budget 25 step 1, wall 12.46 s
+ ✓ src/puzzle-suite.test.ts (12 tests) 12641ms
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline, in <= 60 s (A5)  12482ms
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+real 13.43
+user 13.59
+sys 0.33

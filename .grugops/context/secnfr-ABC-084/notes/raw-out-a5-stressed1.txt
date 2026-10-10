@@ -1,0 +1,9 @@
+# PUZZLE_DEEP=1, arm A, with THREE concurrent 'npx vitest run --dir src' loops (arm B) started 45 s before. start 22:31:18Z load {36.05 15.78 11.73}; after {48.87 22.49 14.45}
+PUZZLES shipped: solved 40/40, baseline 40/40, budget 25 step 1, wall 48.94 s
+ ✓ src/puzzle-suite.test.ts (12 tests) 49271ms
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline, in <= 60 s (A5)  49000ms
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+real 50.25
+user 19.86
+sys 0.54

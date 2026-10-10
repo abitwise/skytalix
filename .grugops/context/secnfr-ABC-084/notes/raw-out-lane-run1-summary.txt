@@ -1,0 +1,15 @@
+A: n=10 files/tests=50/1539 medianCPU=25.125 rangeCPU=23.97-34.18 medianWALL=6.650 rangeWALL=6.33-12.06
+N: n=10 files/tests=50/1539 medianCPU=24.930 rangeCPU=24.04-35.63 medianWALL=6.585 rangeWALL=6.23-12.54
+B: n=10 files/tests=49/1530 medianCPU=24.855 rangeCPU=23.65-36.08 medianWALL=6.520 rangeWALL=6.16-13.94
+R: n=10 files/tests=50/1538 medianCPU=24.770 rangeCPU=23.83-34.71 medianWALL=6.405 rangeWALL=6.16-11.86
+NULL CONTROL N-A CPU per round: 1.45 0.94 0.63 0.06 -0.69 -1.06 -0.42 0.99 -0.85 0.25 median=0.155 (0.62% of A) sign+ 6/10
+NULL CONTROL N-A WALL per round: 1.86 0.48 0.19 0.93 0.41 -0.24 -0.32 -0.07 -0.1 -0.19 median=0.060
+CHARGE A-B (ABC-084 as built) CPU per round: -1.9 2.75 -0.04 -1.28 1.04 2.35 0.34 -0.82 0.15 0.93 median=0.245 (0.98% of A) sign+ 6/10
+CHARGE A-B (ABC-084 as built) WALL per round: -4.07 0.41 0.09 -0.67 -0.06 0.25 0.03 0.17 0.02 0.26 median=0.060
+CHARGE R-B (A6 oracle row moved to PUZZLE_DEEP) CPU per round: -1.37 0.75 -0.92 0.61 0.43 0.66 -1.09 -0.05 0.06 0.59 median=0.245 (0.98% of A) sign+ 6/10
+CHARGE R-B (A6 oracle row moved to PUZZLE_DEEP) WALL per round: -2.08 -0.6 0.61 0.13 -0.14 0 -0.34 0.18 -0.16 0.2 median=-0.070
+ORACLE ROW A-R CPU per round: -0.53 2 0.88 -1.89 0.61 1.69 1.43 -0.77 0.09 0.34 median=0.475 (1.89% of A) sign+ 7/10
+ORACLE ROW A-R WALL per round: -1.99 1.01 -0.52 -0.8 0.08 0.25 0.37 -0.01 0.18 0.06 median=0.070
+load1 before each run: min=5.44 median=7.39 max=44.14
+foreign vitest processes before each run: runs with >0 = 20 of 44
+harness errors: 0 of 44
