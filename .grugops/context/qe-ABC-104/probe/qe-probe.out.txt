@@ -1,0 +1,57 @@
+== A2: the two documented throws + control
+A2.1 (null, 'e2e4')                          THREW TypeError: Cannot read properties of null (reading 'blackToMove')
+A2.2 (p, 'e2e4', 42)                         THREW TypeError: (legal ?? legalMoves(...)).filter is not a function
+A2.c control (p, 'e2e4')                     RETURNED move
+A2.c control (p, 'e2e4', L)                  RETURNED move
+== 'a wrong type throws' boundary
+B1 (null, 'hello')                           RETURNED rejected/unreadable
+B2 (undefined, '')                           RETURNED rejected/unreadable
+B3 (p, 'hello', 42)                          RETURNED rejected/unreadable
+B4 (null, 'e2e4', L)  position unread        RETURNED move
+B5 (42, 'e2e4', L)                           RETURNED move
+B6 (p, 'e2e4', null) falls back via ??       RETURNED move
+B7 (p, 'e2e4', 'abc')                        THREW TypeError: (legal ?? legalMoves(...)).filter is not a function
+B8 (p, 'e2e4', {})                           THREW TypeError: (legal ?? legalMoves(...)).filter is not a function
+B9 ({}, 'e2e4')                              THREW TypeError: Cannot read properties of undefined (reading '0')
+B10 (p, 'e2e4', [42])                        RETURNED rejected/no-such-move
+B11 (p, 'e2e4', [null])                      THREW TypeError: Cannot read properties of null (reading 'from')
+== text totality (valid position), with and without legal
+T null                                       RETURNED rejected/unreadable
+T null +L                                    RETURNED rejected/unreadable
+T undefined                                  RETURNED rejected/unreadable
+T undefined +L                               RETURNED rejected/unreadable
+T 42                                         RETURNED rejected/unreadable
+T 42 +L                                      RETURNED rejected/unreadable
+T NaN                                        RETURNED rejected/unreadable
+T NaN +L                                     RETURNED rejected/unreadable
+T BigInt                                     RETURNED rejected/unreadable
+T BigInt +L                                  RETURNED rejected/unreadable
+T Symbol                                     RETURNED rejected/unreadable
+T Symbol +L                                  RETURNED rejected/unreadable
+T throwing toString                          RETURNED rejected/unreadable
+T throwing toString +L                       RETURNED rejected/unreadable
+T throwing Proxy                             RETURNED rejected/unreadable
+T throwing Proxy +L                          RETURNED rejected/unreadable
+T array ['e2e4']                             RETURNED rejected/unreadable
+T array ['e2e4'] +L                          RETURNED rejected/unreadable
+T String object                              RETURNED rejected/unreadable
+T String object +L                           RETURNED rejected/unreadable
+T lone surrogate                             RETURNED rejected/unreadable
+T lone surrogate +L                          RETURNED rejected/unreadable
+T RTL override                               RETURNED rejected/unreadable
+T RTL override +L                            RETURNED rejected/unreadable
+T 10M chars                                  RETURNED rejected/unreadable
+T 10M chars +L                               RETURNED rejected/unreadable
+T 10M then e2e4                              RETURNED move
+T 10M then e2e4 +L                           RETURNED move
+T 'E2-E4 '                                   RETURNED move
+T 'E2-E4 ' +L                                RETURNED move
+T 'e7e8q' startpos                           RETURNED rejected/no-such-move
+T 'e7e8q' startpos +L                        RETURNED rejected/no-such-move
+T 'e2e4q'                                    RETURNED rejected/no-such-move
+T 'e2e4q' +L                                 RETURNED rejected/no-such-move
+T 'e2--e4'                                   RETURNED rejected/unreadable
+T 'e2--e4' +L                                RETURNED rejected/unreadable
+T ''                                         RETURNED rejected/unreadable
+T '' +L                                      RETURNED rejected/unreadable
+text-domain throws: 0 of 38

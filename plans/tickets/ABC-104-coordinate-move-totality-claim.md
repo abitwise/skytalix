@@ -130,3 +130,71 @@ another ticket that already needs his word, or as a ride-along.
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with the UAT cost named |
 | 10 | no major unresolved blocker | **✅** none. The UAT word is a cost, not a blocker |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-104`).
+- Branch `grugops/ABC-104-coordinate-move-docblock`, from `b7cffc52`. The code is `7707f61f`.
+- Not merged, not pushed.
+- The decision, readings and probe are in `.grugops/context/ticket-to-pr-ABC-104/` (`…30823a98`,
+  `…a2addac5`, `probe/probe.mts`) and are not restated here.
+
+**The premise held at `b7cffc52`.** Both throws were re-measured before the edit. **`A1`–`A3` are met,
+and no stop condition fired.** No test was added, and no other `src/` file was touched.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | `:30-37` reads "TOTAL OVER `text`", "Totality is over `text` ONLY", and "`position` and `legal` are a caller obligation, in the same terms `ADR-0004` clause 2 states for `toSan` and `parseSan`". The phrase "TOTAL function" is gone |
+| `A2` | MET | After the edit, `parseCoordinateMove(null, "e2e4")` still throws `TypeError` (reading `'blackToMove'`), and `(position, "e2e4", 42)` still throws `TypeError` (`.filter is not a function`). The docblock names both calls as the contract |
+| `A3` | MET | `git diff -U0 7707f61f~1 7707f61f`: only `src/coordinate-move.ts`, one hunk `@@ -30,3 +30,8 @@`, inside lines 1–33. The header at base is identical to the one at `f76e041`. numstat `8 3`, all ` *` lines. lint/typecheck/build exit 0; `npm test` 51 files / 1583 passed; skips 0; `test-skip-integrity` `No findings.` |
+
+**UAT cost, as § Size and priority predicted:** this ticket is **not** waived, so the owner's word is
+needed at `In UAT` for one docblock paragraph.
+
+**Fix-forward, 2026-10-10, Software Engineer** (subtask `fix-ABC-104`, QE-104-a/b/c).
+- The code commit is `82180eae`. It is comment-only, in the header docblock only, and is not merged or
+  pushed.
+- The decision and readings are in `.grugops/context/fix-ABC-104/notes/` (`…2e7fbb75`, `…c73ed93e`) and
+  are not restated here.
+
+What changed:
+- **a.** `:25` now reads "TWO CALLER OBLIGATIONS".
+- **b.** Only the `legal`-list obligation is attributed to `ADR-0004` clause 2. "A real `Position`" is
+  marked as this module's own.
+- **c.** "a wrong type throws" became "CAN throw, and need not", with the read conditions and a quoted
+  non-throwing call. The two throwing calls are unchanged.
+
+Status:
+- **`A1`–`A3` still MET.** QE's probe output is identical after the edit.
+- The comment-stripped emit is byte-identical to `b7cffc52`.
+- Gate: 51 files / 1583 passed, skips 0, integrity `No findings.`
+- **UAT is still not waived.**
+
+## QE
+
+**2026-10-10, QE/E2E** (task `wave-2026-09-25`, subtask `qe-ABC-104`, Workflow 04 review exit). QE read
+`b7cffc52..76237852` in its own worktree, `.claude/worktrees/qe-ABC-104`.
+
+**Result: PASS_WITH_GAPS. `A1`–`A3` MET, and none of the gaps blocks.** The readings, gaps and probe are
+in `.grugops/context/qe-ABC-104/` (`…1ad3f484` verdict, `…f3d29d14` readings, `…df369a19` gaps,
+`probe/qe-probe.mts`). They are not restated here.
+
+| # | verdict | QE's own reading |
+|---|---|---|
+| `A1` | MET | `:30` reads "TOTAL OVER `text`", and `:32` reads "over `text` ONLY". "TOTAL function" has 0 hits. `:33` states the caller obligation on `position` and `legal` |
+| `A2` | MET | QE's own probe: `(null,"e2e4")` and `(startpos,"e2e4",42)` each throw `TypeError`, and the control returns `move`. 0 of 38 hostile `text` calls threw |
+| `A3` | MET | One file and one hunk, `@@ -30,3 +30,8 @@`, inside `1–33`. Every changed line is a ` *` line. The comment-stripped emit is byte-identical between base and tip. 51 files / 1583 passed, skips 0, integrity `No findings.` |
+
+**Gaps.** All three LOW gaps are in the same docblock. The repaired paragraph still differs from the
+behaviour, or from the source it cites, by a small margin:
+- **QE-104-a.** The "ONE CALLER OBLIGATION" heading at `:25` now disagrees with `:33-35`. Both
+  obligations are "not validated here", so the Engineer's argument that "ONE" is still accurate does not
+  hold. `src/san.ts:18` counts the same obligations as "TWO".
+- **QE-104-b.** `ADR-0004` clause 2 states no "real `Position`" obligation.
+- **QE-104-c.** "A wrong type throws" is unconditional, but 6 measured wrong-type calls return without
+  throwing.
+
+**Recommended:** one SE fix-forward on this branch before `In UAT`, which is about three comment lines.
+**UAT is NOT waived (measured);** the owner signs this paragraph.
+
+Not merged, not pushed.
