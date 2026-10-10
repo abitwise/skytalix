@@ -1,6 +1,6 @@
 {
-  "solved": 58,
-  "total": 62,
+  "solved": 54,
+  "total": 58,
   "budgetMs": 25,
   "stepMs": 1,
   "unsolved": [
@@ -9,11 +9,11 @@
     "mate in 3, seed 288: white Q+B against a bare king",
     "mate in 3, seed 580: white Q+B against a bare king"
   ],
-  "measuredAt": "e1f5732 (grugops/ABC-127-harder-puzzles; descends from the wave tip f9689e7 via 4a64dd9, docs only)",
-  "measuredOn": "2026-10-10T08:33:04Z to 08:37:50Z, three separate processes, identical per-puzzle move, depth and nodes",
+  "measuredAt": "506d80c (grugops/ABC-131-drop-edge-puzzles; the four rows dropped on the wave tip 679e847)",
+  "measuredOn": "2026-10-10T14:23:59Z to 14:25:32Z, three separate processes, identical per-puzzle move, depth and nodes, no NEWLY-MISSED or NEWLY-SOLVED line",
   "machine": "Apple M3, 8 cores, 16 GiB, macOS 26.5.2, Node v26.11.0",
-  "load": "load1 7.8 / 7.4 / 7.4 at start (7.4 / 14.4 / 9.9 at end; 5-min 38 / 34 / 22, other lanes running)",
-  "wallSeconds": "26.02 / 28.97 / 33.50 for the gating run in vitest",
-  "laneWallSeconds": "40.85 / 54.64 / 47.21 for the whole PUZZLE_DEEP=1 run in vitest, the gating run plus the A2 oracle rows (mate-in-3 8.28 / 17.62 / 7.88 s, win-material 5.99 / 7.48 / 5.20 s); 41.6 / 55.5 / 47.8 s process real",
-  "reason": "ABC-127: 22 harder rows appended (A1), so the recorded total moves 40 -> 62 and the solved count 40 -> 58. Not a lowering under ABC-084 A7: the count rises. The four unsolved rows are the headroom (A4), each solved at 4x the readings. Raising this is QE's; lowering it needs the owner's word."
+  "load": "load1 7.73 / 7.98 / 6.04 at start (7.98 / 6.04 / 5.04 at end; other lanes running)",
+  "wallSeconds": "23.94 / 19.21 / 19.93 for the gating run in vitest",
+  "laneWallSeconds": "28.24 / 33.45 / 28.97 for the whole PUZZLE_DEEP=1 run in vitest, the gating run plus the oracle rows (mate-in-3 4.20 / 4.18 / 4.25 s, win-material 4.51 / 4.51 / 4.46 s); 34.84 / 28.74 / 29.51 s process real",
+  "reason": "ABC-131: four budget-edge rows dropped (seeds 1982, 1008, 1424, 1075), so the recorded total moves 62 -> 58 and the solved count 58 -> 54. This IS a lowering under ABC-084 A7, taken on the owner's word, 2026-10-10: \"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x\" (ADR-0034 decision 5). Budget, step and the four headroom rows are unchanged. Raising this is QE's; lowering it needs the owner's word."
 }
