@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-131` → `In Review` (`96f3168d`); QE `qe-ABC-131` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-133` → `In Security/NFR` (QE PASS_WITH_GAPS `e542c574`); `ABC-072` (+`ABC-073` fold) pulled → `In Development` (Architect)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Security/NFR `secnfr-catalog-abc087-2026-10-10` merged: `AR-NFR004-A` re-accepted with its number; NFR-004 level-layer wording landed (5 s ceiling per move played; A2 ±20 % on the injected clock only); R1 clamp pin delivered (`1160b063`). No row hash moved._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-followups-2026-10-10` merged (`9bff1385`): `ABC-072` Backlog → `Ready` (10/10, ADR-0036), `ABC-073` folds into it; new `ABC-136` → `Ready` (before `ABC-134`); `ABC-083` pointer; QE-059-a/b/c no ticket (re-open triggers in note `…f9ef24db`); ABC-087 A2 real-clock note for the owner (information only)._
@@ -599,8 +600,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
-- [ABC-131] Drop the four puzzle rows that sit on the budget edge — 58/62 → 54/58, so every gating row keeps a 0.8x readings margin  (BA/PM, XS, P1, epic: EPIC-004, since: 2026-10-10, **DoR 10/10**; `ADR-0034` (b) @0.8x on the owner's word; baseline re-recorded in its own commit; folds QE-127-e; after `ABC-126`, before `ABC-083`; owner UAT word owed — `puzzle-corpus.ts` non-test) **2026-10-10 (`postmerge-followups-2026-10-10`): QE-126-b folded as A8 (source gain = oracle gain; 16/16 match today).** **→ In Development 2026-10-10**, pulled after `ABC-126` merged (`f8aa31cf`) by the Orchestrator (subtask `ticket-to-pr-ABC-131`, branch `grugops/ABC-131-drop-edge-puzzles`).
+## In Development (WIP 1/3)
 - [ABC-072] `ABC-041` clause (b) is written as a STATE predicate, its instrument covers one of three limbs, and its stated prediction is falsified  (BA/PM, S, P1, epic: —, since: 2026-08-16, DoR 9/10 ⚠️x1 — **the STATE-vs-DELTA ruling is Architect/Design's**, precedent `ABC-053`/`ABC-054`; Security/NFR `S1` (MEDIUM) + `S2` (LOW) deduped into one subject; measured on `main` @ `5cf86d3`: **7 of 20 production files read `process.`** while the printed instrument (`node:` grep) reads **0** and has since `ABC-042` merged — **the clause has already produced two contradictory routing answers in two days**; 0 files under `src/`, 0 new spawns) **2026-10-10 re-score (`rescore-batch-2-2026-10-10`): DoR 9/10, P1→P2; limb counts re-measured (0 / 3 files / 0); item 10 Architect/Design STATE vs DELTA ruling owed.** **2026-10-10 re-score (`bapm-followups-2026-10-10`, merged `9bff1385`) under ADR-0036 (DELTA): DoR 10/10 → Ready; S, P2; pull goes to Architect/Design (A2–A5). `ABC-073` folds into this hop (live set = ABC-055 only).** **→ In Development 2026-10-10** (Architect/Design builds — docs-only ticket; `ABC-073` folds in), pulled by the Orchestrator (subtask `design-ABC-072`, branch `grugops/ABC-072-clause-b-delta`).
 
 
@@ -629,7 +629,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-131] Drop the four puzzle rows that sit on the budget edge — 58/62 → 54/58, so every gating row keeps a 0.8x readings margin  (BA/PM, XS, P1, epic: EPIC-004, since: 2026-10-10, **DoR 10/10**; `ADR-0034` (b) @0.8x on the owner's word; baseline re-recorded in its own commit; folds QE-127-e; after `ABC-126`, before `ABC-083`; owner UAT word owed — `puzzle-corpus.ts` non-test) **2026-10-10 (`postmerge-followups-2026-10-10`): QE-126-b folded as A8 (source gain = oracle gain; 16/16 match today).** **→ In Development 2026-10-10**, pulled after `ABC-126` merged (`f8aa31cf`) by the Orchestrator (subtask `ticket-to-pr-ABC-131`, branch `grugops/ABC-131-drop-edge-puzzles`). **→ In Review 2026-10-10**: built on `grugops/ABC-131-drop-edge-puzzles` @ `96f3168d` (A1–A8 MET, gates green, 52/1608; PUZZLE_DEEP 54/58 = new baseline, 18 passed; 0.8x margin holds at step 1.25 with one clock reading to spare — step 1.35 loses mate-in-3 seeds 1/69/1163). QE `qe-ABC-131` dispatched. Production (`src/puzzle-corpus.ts`, baseline) → owner UAT word owed. Owed after merge: Scribe PUZZLE_DEEP receipt 54/58 + 18 passed; Security/NFR RISK-003 figure.
 
 
 
