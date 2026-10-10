@@ -1,8 +1,8 @@
 ---
 id: ABC-108
 title: The default test lane sits at or over `NFR-008`'s 13 s CPU clause and it did so BEFORE `ABC-078` arrived — re-measure on a quiet machine and rule
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P1
 epic: —

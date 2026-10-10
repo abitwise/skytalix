@@ -6,7 +6,10 @@ id: ADR-0038
 
 ## Status
 
-**proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-085`, Workflow 02
+**accepted** 2026-10-10 by Olger Oeselg (owner), verbatim "levels 4 and 5 run as specified, step 4, keep P1,
+accept ADR-0038" (note `.grugops/context/wave-2026-09-25/notes/20261010T192920Z-orchestrator-decision-owner-word-six-answers-b7c41e09.md`). Owner menu: question 1 → option (a); question 2 → step 4; question 3 → P1.
+
+Previously **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-085`, Workflow 02
 In Design hop and Workflow 07). It is D4, owed to `ABC-085`'s DoR item 4 by BA/PM's re-score
 (`20261010T172705Z-ba-pm-decision-p1-backlog-two-in-design-two-backlog-0e4da324`).
 
