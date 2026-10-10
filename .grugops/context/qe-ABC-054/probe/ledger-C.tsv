@@ -1,0 +1,43 @@
+# QE ABC-054 ledger C (sorted placement, NO autofix: the gate as it runs), 2026-10-10T12:55:16Z, node v26.11.0
+b85f1d82	QX3b	exit=1	load1=4.36	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-TYPEONLY	exit=1	load1=4.49	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-MULTILINE	exit=1	load1=4.49	 Tests 2 failed | 22 passed (24)	tsc=0 biome=1	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-BARE	exit=1	load1=4.53	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O1-BLOCKCOMMENT	exit=1	load1=4.53	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O2-LINECOMMENT	exit=1	load1=4.57	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O6-COMMENTED-SPECIFIER	exit=1	load1=4.53	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O3-TYPE-NOSPACE	exit=1	load1=4.53	 Tests 1 failed | 23 passed (24)	tsc=0 biome=1	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O4-COMMENTED-IMPORT	exit=1	load1=4.40	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QC1-VOID	exit=1	load1=4.40	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+68dd87ac	QX3b	exit=1	load1=4.93	 Tests 1 failed | 22 passed (23)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    no bindsAValueFrom in tree (base?)

@@ -1,0 +1,93 @@
+# QE ABC-054 ledger D (instrument mutants; plant.py controls; tripwire spellings), 2026-10-10T12:56:09Z, node v26.11.0
+b85f1d82	M-NO-CLAUSE-TYPE	exit=1	load1=3.99	 Tests 1 failed | 23 passed (24)		FAILED:ABC-041 — the render seam > A8's instrument — ADR-0030's eight spellings: exactly four bind a value, four do not|
+    consumers render.ts ["cli-options.ts","frame.ts","glyph-mode.ts","render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-NO-SPEC-TYPE	exit=1	load1=3.99	 Tests 1 failed | 23 passed (24)		FAILED:ABC-041 — the render seam > A8's instrument — ADR-0030's eight spellings: exactly four bind a value, four do not|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-NO-OUTSIDE	exit=1	load1=3.99	 Tests 1 failed | 23 passed (24)		FAILED:ABC-041 — the render seam > A8's instrument — ADR-0030's eight spellings: exactly four bind a value, four do not|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-EVERY	exit=1	load1=3.99	 Tests 2 failed | 22 passed (24)		FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A8's instrument — ADR-0030's eight spellings: exactly four bind a value, four do not|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-FIRST-STATEMENT-ONLY	exit=0	load1=3.99	 Tests 24 passed (24)		FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-SINGLE-LINE	exit=0	load1=3.99	 Tests 24 passed (24)		FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-ALLOW-EXPORT	exit=1	load1=3.99	 Tests 1 failed | 23 passed (24)		FAILED:ABC-041 — the render seam > A8's instrument — ADR-0030's eight spellings: exactly four bind a value, four do not|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-NO-TRIM	exit=1	load1=3.99	 Tests 1 failed | 23 passed (24)		FAILED:ABC-041 — the render seam > A8's instrument — ADR-0030's eight spellings: exactly four bind a value, four do not|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-TYPE-NO-WS	exit=0	load1=3.99	 Tests 24 passed (24)		FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-OLD-REGEX	exit=1	load1=3.99	 Tests 1 failed | 23 passed (24)		FAILED:ABC-041 — the render seam > A8's instrument — ADR-0030's eight spellings: exactly four bind a value, four do not|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	M-A8-SELF	exit=0	load1=3.99	 Tests 24 passed (24)		FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O4b-TYPEONLY-COMMENTED-IMPORT	exit=1	load1=3.99	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	SECOND-COMPOSER	exit=1	load1=4.07	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > the composer tripwire: assembleFrame's value-importers EQUAL the one composition root|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	Q-COMPOSER-REEXPORT	exit=0	load1=4.07	 Tests 24 passed (24)	tsc=0 biome=0	FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	Q-COMPOSER-DYNAMIC	exit=0	load1=3.98	 Tests 24 passed (24)	tsc=0 biome=0	FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	Q-COMPOSER-NAMESPACE	exit=1	load1=3.98	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > the composer tripwire: assembleFrame's value-importers EQUAL the one composition root|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	Q-COMPOSER-ALIAS	exit=1	load1=3.90	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > the composer tripwire: assembleFrame's value-importers EQUAL the one composition root|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	Q-COMPOSER-MULTILINE	exit=1	load1=3.90	 Tests 1 failed | 23 passed (24)	tsc=0 biome=1	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > the composer tripwire: assembleFrame's value-importers EQUAL the one composition root|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	Q-COMPOSER-NEG-ALLTYPE	exit=0	load1=3.83	 Tests 24 passed (24)	tsc=0 biome=0	FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	INLINE-TYPE	exit=1	load1=3.83	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	X5b	exit=1	load1=3.93	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	Q-CTRL-DEAF-AFTER-LOAD+X5b	exit=1	load1=3.93	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	Q-CTRL-ARMING-FIRST+DEAF+X5b	exit=0	load1=3.69	 Tests 24 passed (24)	tsc=0 biome=0	FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]

@@ -1,0 +1,21 @@
+# ABC-054 SE ledger, 2026-10-10T12:42:07Z, node v26.11.0
+9989f28c	BASE+PRINT	exit=0	load1=3.60	 Tests 24 passed (24)	FAILED:
+    A4-LIST history-pane.ts ["render-seam.ts"]
+    A4-LIST render.ts ["render-seam.ts"]
+    A4-LIST status-panel.ts ["render-seam.ts"]
+9989f28c	X3b+PRINT	exit=1	load1=3.60	 Tests 2 failed | 22 passed (24)	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+        331|       console.log("A4-LIST", target, JSON.stringify(runtimeConsumersOf…
+    A4-LIST render.ts []
+9989f28c	SECOND-COMPOSER	exit=1	load1=3.60	 Tests 1 failed | 23 passed (24)	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > the composer tripwire: assembleFrame's value-importers EQUAL the one composition root|
+9989f28c	Q-COMPOSER-REEXPORT	exit=0	load1=3.60	 Tests 24 passed (24)	FAILED:
+9989f28c	Q-COMPOSER-DYNAMIC	exit=0	load1=3.47	 Tests 24 passed (24)	FAILED:
+9989f28c	Q-CTRL-DEAF-AFTER-LOAD+X5b	exit=1	load1=3.47	 Tests 1 failed | 23 passed (24)	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched|
+9989f28c	Q-CTRL-ARMING-FIRST+DEAF+X5b	exit=0	load1=3.47	 Tests 24 passed (24)	FAILED:
+68dd87ac	BASE+PRINT	exit=0	load1=3.47	 Tests 23 passed (23)	FAILED:
+    A4-LIST history-pane.ts ["render-seam.ts"]
+    A4-LIST render.ts ["render-seam.ts"]
+    A4-LIST status-panel.ts ["render-seam.ts"]
+68dd87ac	X3b+PRINT	exit=1	load1=3.47	 Tests 1 failed | 22 passed (23)	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    A4-LIST history-pane.ts ["render-seam.ts"]
+    A4-LIST render.ts ["render-seam.ts"]
+    A4-LIST status-panel.ts ["render-seam.ts"]

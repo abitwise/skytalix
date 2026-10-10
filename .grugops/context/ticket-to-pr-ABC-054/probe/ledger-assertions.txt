@@ -1,0 +1,18 @@
+9989f28c-X3b+PRINT: A4-LIST render.ts []
+9989f28c-X3b+PRINT: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+9989f28c-X3b+PRINT: AssertionError: production runtime consumers of render.ts: expected [] to include 'render-seam.ts'
+9989f28c-X3b+PRINT:     331|       console.log("A4-LIST", target, JSON.stringify(runtimeConsumersOf…
+9989f28c-X3b+PRINT: AssertionError: renderBoard: expected "renderBoard" to be called 1 times, but got 0 times
+9989f28c-X3b+PRINT:       Tests  2 failed | 22 passed (24)
+68dd87ac-X3b+PRINT: A4-LIST render.ts ["render-seam.ts"]
+68dd87ac-X3b+PRINT: A4-LIST status-panel.ts ["render-seam.ts"]
+68dd87ac-X3b+PRINT: A4-LIST history-pane.ts ["render-seam.ts"]
+68dd87ac-X3b+PRINT: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+68dd87ac-X3b+PRINT: AssertionError: renderBoard: expected "renderBoard" to be called 1 times, but got 0 times
+68dd87ac-X3b+PRINT:       Tests  1 failed | 22 passed (23)
+9989f28c-Q-CTRL-DEAF-AFTER-LOAD+X5b: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+9989f28c-Q-CTRL-DEAF-AFTER-LOAD+X5b: AssertionError: the probe is ARMED: expected [] to include 'history.ts'
+9989f28c-Q-CTRL-DEAF-AFTER-LOAD+X5b:       Tests  1 failed | 23 passed (24)
+9989f28c-SECOND-COMPOSER: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+9989f28c-SECOND-COMPOSER: AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 'render-seam.ts' ]
+9989f28c-SECOND-COMPOSER:       Tests  1 failed | 23 passed (24)
