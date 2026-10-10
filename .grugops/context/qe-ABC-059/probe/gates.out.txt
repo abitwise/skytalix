@@ -1,0 +1,12 @@
+load1 3.56 at 2026-10-10T13:42:37Z
+npm run lint -> exit 0 | > biome check .  Checked 98 files in 110ms. No fixes applied. 
+npm run typecheck -> exit 0 | > cli-chess@0.0.0 typecheck > tsc --noEmit  
+npm run build -> exit 0 | > cli-chess@0.0.0 build > tsc --noEmit  
+npm test -> exit 0 |  Test Files 51 passed (51)  Tests 1584 passed (1584)  Duration 6.11s (transform 1.29s, setup 0ms, collect 8.61s, tests 9.23s, environment 5ms, prepare 1.80s) 
+skip count: 0
+No findings.
+skip-integrity exit 0
+The lane collects 51 test files; git tracks 51.
+No findings.
+lane-inventory exit 0
+load1 7.49 at 2026-10-10T13:42:53Z

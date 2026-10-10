@@ -192,3 +192,73 @@ this claim now.
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P2`, promoted on the page's own trigger, with the evidence |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-059`).
+- Branch `grugops/ABC-059-runnability-guard`, from `0b6e1c25`. The code is `14c940ff`
+  (`src/cli.test.ts` +76/−0, one hunk after `ABC-065`'s `describe`).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-059/` (`…084a3e0b`,
+  `…53346fff`, `probe/`) and are not restated here.
+
+**`A1`–`A6` are met. No stop condition fired.** `AR-058-STRIP` did not fire: no `//` or `/*`
+literal was added, and no second `node:child_process` form. `N8_SPAWN` did not move, and no
+production file was touched.
+
+| # | verdict | reading (mutants rebuilt out of tree; before `0b6e1c25` → after `14c940ff`) |
+|---|---|---|
+| `A1` | MET | 3 occurrences; 0/3 spans with `UNKNOWN - verify`; 2/2 command spans name `npm run chess`; the pointer names none. The span ends at `.`/`!`/`?` + space |
+| `A2` | MET | `Q13` with its line break at the head, the tail and § Deployment posture, plus a one-line variant: GREEN 66/66 → **RED 1/67**, this row alone. A re-pointed prose command reds too |
+| `A3` | MET | The unmutated file is green with its 8 `UNKNOWN - verify` |
+| `A4` | MET | The script is the one `package.json` key whose value runs `ENTRY_POINT`'s path; no added literal spells it |
+| `A5` | MET | `ABC-042`'s `A1` row and `ABC-065`'s `describe` hash identically; the new block is `ABC-059 — …` |
+| `A6` | MET | `git diff --name-only 14c940ff~1 14c940ff` = `src/cli.test.ts`; 0 production lines; 0 children; skip 0 |
+
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. The skip count
+  is 0, and integrity reads `No findings.` `lane-inventory.js` is exit 0 with no findings.
+- **`ABC-087`'s `AGENTS.md`** (`8330651d`) reads 3 / 0-of-3 / 2-of-2 / 8, and with it swapped in,
+  `src/cli.test.ts` is 67/67 green.
+- **Cost (`ADR-0035`, proposed; narrow set `src/cli.test.ts`, twin control, n = 8).** Both sets
+  are **inadmissible**: the twin reads −5.87 % and +3.47 %, at load1 median 19.7 and 34.4. No
+  `N8-LANE` state is written. The block's own `it` runs in 2–3.4 ms (vitest's per-test duration,
+  which is not the ADR's instrument).
+- **Next.** QE's hop. The UAT waiver applies if zero production lines holds (measured 0).
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-059`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `0b6e1c25..4230d3ab`, code `14c940ff`. Every reading is QE's own, taken in fresh
+`git archive` trees with QE's own mutants. **`A1`–`A6` are MET. No test was added.**
+
+- **`A1`**: 3 / 0-of-3 / 2-of-2, recounted.
+- **`A2`**: `Q13` with its line break reds the row at 8 positions (head, tail, § Deployment
+  posture, one-line, CRLF, list item, inside an HTML comment, mid-sentence). All 8 are green at
+  base. The real pre-repair file (`bf685784~1`) reds the row at head, and the old row stays green
+  on it at base.
+- **`A3`**: green with 8 `UNKNOWN - verify`. `ABC-087`'s `AGENTS.md` is 67/67 green.
+- **`A4`**: renaming the script alone reds the row. Renaming the script and the docs together
+  keeps it green.
+- **`A5`**: hashes are identical.
+- **`A6`**: one path, 0 production lines, 0 spawns, skip 0.
+- **Mutants**: 31 on head and 15 on base.
+- **The engineer's decisions**: the span rule and the floors-not-counts choice are **endorsed**.
+  The strict `A1`(ii) reading is accepted, with its cost named.
+- **`N8-LANE`** (narrow set, `ADR-0035` *proposed*): both sets are **admissible** (twin −0.02 % /
+  −0.74 %, R 0.086 / 0.129 s, load1 3.6 / 4.1). Head − base is +0.047 / −0.063 s against 650 ms,
+  so **MET** on the proposed protocol. `N8_SPAWN` is 27.
+- **Gates**: lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. Skip is 0,
+  integrity reads `No findings.`, and `lane-inventory.js` reports no findings.
+
+**Gaps (none fails a criterion):**
+- **`QE-059-a` LOW.** An abbreviation dot, a `?` before the claim, or a claim in the next sentence
+  ends the span early, and the claim goes unseen.
+- **`QE-059-b` LOW.** The guard still pins three spellings: the token `Dev / run`, the phrase
+  `UNKNOWN - verify`, and the command form `npm run `.
+- **`QE-059-c` LOW, fail-loud.** A slot comment without a `. ` lets the span run into the next list
+  items, and the strict (ii) reds a correct contrastive sentence.
+- **`QE-059-d` INFO.** The in-file `A2` witness is synthetic.
+- **`QE-059-e` INFO.** A stray empty `probe/x` is committed, and `RUN.txt` indexes uncommitted
+  logs.
+
+The board move is the Orchestrator's. Readings are in `.grugops/context/qe-ABC-059/notes/`
+(`…ce5cf723` decision, `…4abec244` readings, `…80ff0753` gaps) and `probe/`.

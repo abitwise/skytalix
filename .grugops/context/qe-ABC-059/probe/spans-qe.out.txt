@@ -1,0 +1,4 @@
+== AGENTS.md
+occ 3 | UNKNOWN spans 0 | spans with npm run 2 all name npm run chess only: true | UNKNOWN - verify in file 8 | bytes 24433
+== <scratchpad>/agents.abc087.md
+occ 3 | UNKNOWN spans 0 | spans with npm run 2 all name npm run chess only: true | UNKNOWN - verify in file 8 | bytes 24162

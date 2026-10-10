@@ -1,0 +1,35 @@
+=== pkg-rename-runner load1=4.37
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: spans naming npm run play: expected 0 to be greater than or equal to 1
+      Tests  1 failed | 66 skipped (67)
+=== pkg-rename-both load1=4.10
+      Tests  1 passed | 66 skipped (67)
+=== file-prerepair load1=4.17
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: AGENTS.md spans that disagree with package.json: expected [ Array(1) ] to deeply equal []
+- Expected
++ Received
++   "Dev / run` above is `UNKNOWN - verify` and stays that way.",
+      Tests  1 failed | 66 skipped (67)
+=== edge-slot-comment-short load1=4.17
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: AGENTS.md spans that disagree with package.json: expected [ Array(1) ] to deeply equal []
+- Expected
++ Received
++   "Dev / run: `npm run chess` <!-- the game --> - Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft` - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 npx vitest run src/perft.test.ts` - Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]` ### Test Full RUN receipts for every command below (dates, exit codes, counts, traps): `memory-bank/90-agents-md-command-log.md`.",
+      Tests  1 failed | 66 skipped (67)
+=== edge-two-npm-correct load1=4.08
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: AGENTS.md spans that disagree with package.json: expected [ Array(1) ] to deeply equal []
+- Expected
++ Received
++   "Dev / run` is `npm run chess`, not `npm run perft`.",
+      Tests  1 failed | 66 skipped (67)
+=== pkg-second-runner load1=4.07
+     → package.json scripts that run src/cli.ts: expected [ 'chess', 'chess:watch' ] to have a length of 1 but got 2
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: package.json scripts that run src/cli.ts: expected [ 'chess', 'chess:watch' ] to have a length of 1 but got 2
+- Expected
++ Received
+    2178|     expect(runners, `package.json scripts that run ${entry}`).toHaveLe…
+      Tests  1 failed | 66 skipped (67)

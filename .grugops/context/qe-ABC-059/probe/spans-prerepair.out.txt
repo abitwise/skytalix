@@ -1,0 +1,3 @@
+"Dev / run: `npm run chess` <!-- verified 2026-08-14 at ABC-042: prints the start position (23 rows) on stdout and exits 0."
+"Dev / run` above is `UNKNOWN - verify` and stays that way."
+occ 2 unknown 1 cmd 1 UNKNOWN in file 9
