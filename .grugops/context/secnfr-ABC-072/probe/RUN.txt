@@ -1,0 +1,27 @@
+secnfr-ABC-072 — what was run, from where, and where the output is. 2026-10-10, Node v26.11.0, TypeScript 5.9.3.
+Worktree .claude/worktrees/secnfr-ABC-072 on grugops/ABC-072-clause-b-delta @ 5f48753f (delivered 088e48db).
+QE was running deep puzzle lanes in parallel; load1 is logged in every output file.
+
+1. The delivered instrument, as delivered, on the three A3 fixtures, ABC-065's merge, the delivered commit and the branch
+   (6 pairs x 3 limbs; /usr/bin/time -p per limb, 0.54-0.96 s wall each; load1 13.50 at the end):
+     for pair in "dbaf972f^ dbaf972f" "34c9c026^ 34c9c026" "4c33b72b^1 4c33b72b" "460b9f58^1 460b9f58" \
+                 "088e48db~1 088e48db" "6bfc7b29 5f48753f"; do set -- $pair; for l in 1 2 3; do
+       node .grugops/context/design-ABC-072/probe/clause-b.mjs $1 $2 $l; done; done
+   -> fixtures.delivered.out.txt
+   Baseline at f76e041 (35 files) with the delivered instrument: `node …/clause-b.mjs f76e041 f76e041 <1|2|3>` -> 0 / 3 / 0
+   (recorded in the observation note; same three holders).
+
+2. Security/NFR's 13 plants (S1-S13), in a `git clone --shared` under the private scratchpad; the repo is never written:
+     .grugops/context/secnfr-ABC-072/probe/sec-mutants.sh <repo> 5f48753f <scratch> <abs path to clause-b.mjs>
+   against the delivered instrument  -> sec-mutants.out.txt
+   against the patched copy (step 3) -> sec-mutants.widened.out.txt (also re-runs the Architect's nine, mutants.sh @ 6bfc7b29)
+
+3. The limb ruling, demonstrated (NOT the instrument; ADR-0036's instrument stays Architect/Design's):
+     cp .grugops/context/design-ABC-072/probe/clause-b.mjs <tmp inside the repo>/demo.mjs
+     patch -p0 <tmp>/demo.mjs < .grugops/context/secnfr-ABC-072/probe/limb-ruling.patch
+   (the copy must sit inside the repo so `typescript` resolves from node_modules; it was deleted after the runs)
+   then the 7 pairs of step 1 plus `f76e041 f76e041`                   -> fixtures.widened.out.txt
+   then step 2 against it                                              -> sec-mutants.widened.out.txt
+
+4. Gates at 5f48753f, in this worktree (node_modules symlinked): npm run lint (exit 0); npm test (exit 0, 52 files, 1608
+   passed, 12.22 s at load1 21.55-26.40); vitest JSON skip capture 0; test-skip-integrity --skip-count 0 -> "No findings.".

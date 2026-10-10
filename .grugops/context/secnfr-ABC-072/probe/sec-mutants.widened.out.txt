@@ -1,0 +1,88 @@
+# 2026-10-10T14:59:24Z load { 15.47 14.83 11.57 } — instrument: design-ABC-072/probe/clause-b.mjs + secnfr-ABC-072/probe/limb-ruling.patch (DEMONSTRATION of the limb ruling, not the instrument)
+tip 5f48753f
+S1 unprefixed builtin "fs"         limb 1  b1=1 b2=0 words=0 unresolved=0  FIRES
+S1 unprefixed builtin "fs"         limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S1 unprefixed builtin "fs"         limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S1 unprefixed builtin "fs": clause (b) FIRES (limbs: L1)
+S2 const { argv } = process        limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S2 const { argv } = process        limb 2  b1=1 b2=0 words=0 unresolved=0  FIRES
+S2 const { argv } = process        limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S2 const { argv } = process: clause (b) FIRES (limbs: L2)
+S3 process["env"]                  limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S3 process["env"]                  limb 2  b1=1 b2=0 words=0 unresolved=0  FIRES
+S3 process["env"]                  limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S3 process["env"]: clause (b) FIRES (limbs: L2)
+S4 globalThis.process.env          limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S4 globalThis.process.env          limb 2  b1=1 b2=0 words=0 unresolved=0  FIRES
+S4 globalThis.process.env          limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S4 globalThis.process.env: clause (b) FIRES (limbs: L2)
+S5 Function() without new          limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S5 Function() without new          limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S5 Function() without new          limb 3  b1=1 b2=0 words=0 unresolved=0  FIRES
+  => S5 Function() without new: clause (b) FIRES (limbs: L3)
+S6 global WebSocket                limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S6 global WebSocket                limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S6 global WebSocket                limb 3  b1=1 b2=0 words=0 unresolved=0  FIRES
+  => S6 global WebSocket: clause (b) FIRES (limbs: L3)
+S7 new src/*.mjs with execSync     limb 1  b1=1 b2=0 words=0 unresolved=0  FIRES
+S7 new src/*.mjs with execSync     limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S7 new src/*.mjs with execSync     limb 3  b1=1 b2=0 words=1 unresolved=0  FIRES
+  => S7 new src/*.mjs with execSync: clause (b) FIRES (limbs: L1 L3)
+S8 .ts edge into that .mjs (B8..)  limb 1  b1=0 b2=1 words=0 unresolved=0  FIRES
+S8 .ts edge into that .mjs (B8..)  limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S8 .ts edge into that .mjs (B8..)  limb 3  b1=0 b2=1 words=0 unresolved=0  FIRES
+  => S8 .ts edge into that .mjs (B8..): clause (b) FIRES (limbs: L1 L3)
+S9 bare package import             limb 1  b1=1 b2=0 words=0 unresolved=0  FIRES
+S9 bare package import             limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S9 bare package import             limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S9 bare package import: clause (b) FIRES (limbs: L1)
+  -    "true",
+  +    "rm",
+S10 spawn arg line edited (B10..)  limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S10 spawn arg line edited (B10..)  limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S10 spawn arg line edited (B10..)  limb 3  b1=1 b2=0 words=0 unresolved=0  FIRES
+  => S10 spawn arg line edited (B10..): clause (b) FIRES (limbs: L3)
+S11 non-literal import()           limb 1  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+S11 non-literal import()           limb 2  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+S11 non-literal import()           limb 3  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+  => S11 non-literal import(): clause (b) FIRES (limbs: L1 L2 L3)
+S12 Worker via node:worker_threads limb 1  b1=1 b2=0 words=0 unresolved=0  FIRES
+S12 Worker via node:worker_threads limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S12 Worker via node:worker_threads limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S12 Worker via node:worker_threads: clause (b) FIRES (limbs: L1)
+S13 indirect (0, eval)             limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S13 indirect (0, eval)             limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S13 indirect (0, eval)             limb 3  b1=0 b2=0 words=1 unresolved=0  does not fire
+  => S13 indirect (0, eval): clause (b) does not fire
+--- the Architect's nine (design-ABC-072/probe/mutants.sh at 6bfc7b29), same widened copy:
+tip 6bfc7b29
+M1 node:fs import            limb 1  b1=1 b2=0 words=0  FIRES
+M1 node:fs import            limb 2  b1=0 b2=0 words=0  does not fire
+M1 node:fs import            limb 3  b1=0 b2=0 words=0  does not fire
+M2 cp.execSync, new file     limb 1  b1=1 b2=0 words=0  FIRES
+M2 cp.execSync, new file     limb 2  b1=0 b2=0 words=0  does not fire
+M2 cp.execSync, new file     limb 3  b1=1 b2=0 words=0  FIRES
+M3 words only                limb 1  b1=0 b2=0 words=0  does not fire
+M3 words only                limb 2  b1=0 b2=0 words=2  does not fire
+M3 words only                limb 3  b1=0 b2=0 words=2  does not fire
+M4 value edge -> holder      limb 1  b1=0 b2=0 words=0  does not fire
+M4 value edge -> holder      limb 2  b1=0 b2=1 words=0  FIRES
+M4 value edge -> holder      limb 3  b1=0 b2=0 words=0  does not fire
+M5 import type -> holder     limb 1  b1=0 b2=0 words=0  does not fire
+M5 import type -> holder     limb 2  b1=0 b2=0 words=0  does not fire
+M5 import type -> holder     limb 3  b1=0 b2=0 words=0  does not fire
+M6 inline type -> holder     limb 1  b1=0 b2=0 words=0  does not fire
+M6 inline type -> holder     limb 2  b1=0 b2=1 words=0  FIRES
+M6 inline type -> holder     limb 3  b1=0 b2=0 words=0  does not fire
+M7 transitive reach (B7..M7) limb 1  b1=0 b2=0 words=0  does not fire
+M7 transitive reach (B7..M7) limb 2  b1=0 b2=1 words=0  FIRES
+M7 transitive reach (B7..M7) limb 3  b1=0 b2=0 words=0  does not fire
+  -    isTTY: Boolean(process.stdout.isTTY),
+  +    isTTY: Boolean(process.stdout.isTTY), // edited in place
+M8 holder line edited        limb 1  b1=0 b2=0 words=0  does not fire
+M8 holder line edited        limb 2  b1=1 b2=0 words=0  FIRES
+M8 holder line edited        limb 3  b1=0 b2=0 words=0  does not fire
+M9 comment in a holder       limb 1  b1=0 b2=0 words=0  does not fire
+M9 comment in a holder       limb 2  b1=0 b2=0 words=0  does not fire
+M9 comment in a holder       limb 3  b1=0 b2=0 words=0  does not fire
+# end 2026-10-10T15:00:47Z load { 13.26 14.45 11.74 }

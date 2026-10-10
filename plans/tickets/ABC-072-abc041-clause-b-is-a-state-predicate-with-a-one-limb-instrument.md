@@ -341,3 +341,42 @@ edit.
   - § Alternatives 3's `cli-options.ts` example is corrected.
 - **Next:** Security/NFR confirms the limb list at the gate. The owner's veto on `ADR-0036` stays
   open (`…95c73721`).
+
+## Security/NFR 2026-10-10 (`secnfr-ABC-072`, Workflow 05 Security/NFR gate; also this docs-only ticket's review exit): PASS_WITH_RISKS
+
+Reviewed `6bfc7b29..5f48753f`, delivered commit `088e48db`. ASVS L1, `block_on` high. Every reading is
+this hop's own, in its own worktree. **Nothing blocks. No fix is required on this branch.** DELTA vs
+STATE is not ruled here; every ruling below holds under either reading. Decision `…29849eeb`;
+readings `…6dd88c01` under `.grugops/context/secnfr-ABC-072/`.
+
+- **`A1`–`A6` MET on this page, and `ABC-073` `A1`–`A3`, `A5`, `A6` MET (`A4` VOID).**
+  - The three fixtures, `ABC-065`'s merge and the delivered commit all reproduce their recorded
+    answers. The baseline is **0 / 3 / 0** at 36 files and at 35.
+  - The four fenced blobs are equal on `main`.
+  - `ABC-055`'s single hunk sits inside its Security section, and its Acceptance is byte-identical.
+- **The limb list is NOT confirmed as written. It is WIDENED** (`F-072-1`, MEDIUM, owner
+  Architect/Design). Of 13 plants, 8 pass **silently** today.
+  - **Bare `process`: count.** Any value reference to the global, including `globalThis.process`.
+  - **Non-`node:` builtins: count**, and go wider: any non-local import, including packages. Biome
+    reports an unprefixed builtin as info, exit 0.
+  - **`Worker`: no separate entry.** It has no global; limb 1 counts `worker_threads`.
+  - **Also add** `Function(…)` without `new`, the global `WebSocket`, the whole call span, every
+    JS/TS source under `src/`, and "unresolved = fires (disputed)".
+  - **The widening is cheap.** It is demonstrated by `probe/limb-ruling.patch`: the baseline and all
+    21 fixture rows are unchanged, M1–M9 are byte-identical, and S1–S12 fire.
+- **Both of the Architect's readings are UPHELD.**
+  - **(b2) as the runtime closure:** widening only, no answer moves, and the only runtime edge into
+    a holder is `cli.ts:71`.
+  - **The § Alternatives 3 example → `glyph-mode.ts`:** `cli-options.ts` has only `import type`
+    edges and a docblock "spawn".
+- **Accepted risks.**
+  - **`AR-072-LIMBS`** (MEDIUM until `F-072-1` lands), owner the Orchestrator. Ruling 1's forms are
+    on the record as disputes, so they fire under the fail-safe. Promote to HIGH if one of them is
+    routed past this column before the fix.
+  - **`AR-072-WORDHIT`** (LOW), owner Security/NFR. Computed eval forms stay listed word hits.
+  - **`ADR-0036` §3 residual:** concurred, unchanged.
+- **`V1.2.5 [L1]` / `V1.3.2 [L1]`** are MET: 0 sites in production under either count. The MEDIUM is
+  a trigger-reach gap, not a control failure; the reason is stated in `…29849eeb`.
+- **NFR.** `N8-LANE` is zero and `NFR-002` is not triggered. The catalog is not opened.
+- **Gate:** lint exit 0. `npm test` is 52 files / 1608, 12.22 s at load1 21.55–26.40. Skip is 0,
+  and integrity reads `No findings.` The UAT waiver measures 0 production lines.
