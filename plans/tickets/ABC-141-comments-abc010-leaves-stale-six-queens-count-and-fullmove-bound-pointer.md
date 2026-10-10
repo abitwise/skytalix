@@ -1,8 +1,8 @@
 ---
 id: ABC-141
 title: Comments ABC-010 leaves stale — the six-queens derive count says six (it measures seven) at two sites, and the history pane names ABC-010 as the move-number bound it does not deliver
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: XS
 priority: P3
 epic: —
