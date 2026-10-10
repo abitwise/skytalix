@@ -184,9 +184,12 @@ const productionModulesIn = (directory: string): readonly string[] =>
  *   game longer than the history window, settles a bounded number of macrotask turns (no clock),
  *   and `history.ts` is not among the modules those frames loaded.
  *
- * IT FAILS CLOSED ON A SECOND COMPOSER THAT BINDS `assembleFrame` BY A STATIC VALUE IMPORT, and on
- * no wider set: the production modules holding a static value-binding import (`ADR-0030` decision
- * 2) of `assembleFrame` from `./frame.ts` must EQUAL `[COMPOSITION_ROOT]`.
+ * IT FAILS CLOSED ON A SECOND COMPOSER THAT BINDS `assembleFrame` BY A STATIC VALUE IMPORT THE
+ * TRIPWIRE READS, and on no wider set: the production modules holding a static value-binding import
+ * (`ADR-0030` decision 2) of `assembleFrame` from `./frame.ts` must EQUAL `[COMPOSITION_ROOT]`. It
+ * reads that import as a namespace binding or a brace specifier that BEGINS with the name, so two
+ * static value imports are NOT counted (`QE-054-b`): a comment ahead of the name inside the brace,
+ * and a default binding (`import assembleFrame from`, `{ default as assembleFrame }`).
  *
  * WHAT NEITHER PHASE COVERS, stated so it is not read as more:
  * - a derive DEFERRED past the settle, for example behind a timer;
@@ -209,17 +212,30 @@ const COMPOSITION_ROOT = "render-seam.ts";
 /**
  * `ADR-0011` CLAUSE 3 — THE DECLARED LICENCE, which is the regex guard's one named rule about the
  * same set. `ADR-0002` clause 4: "`gameStatus`'s `positionCounts` gets exactly one supplier: the
- * history module. No other caller constructs that map." A production module may hold a runtime
- * import of the history module only if it is the game-owning driver that rule requires.
+ * history module. No other caller constructs that map." THE ADMISSION TEST (`ADR-0011` clause 3 as
+ * amended 2026-08-15): a production module may hold a runtime import of `src/history.ts` only if
+ * BOTH hold, and its citation below must show both:
+ * - (i) NECESSITY. Its runtime import is unavoidable given what the module must do: it constructs
+ *   or advances the game. A module that can take a `GameHistory` as a TYPE, or receive one
+ *   INJECTED, is NOT licensable, so an entry owes an argument for why neither is available to it.
+ * - (ii) THE SINGLE SUPPLIER IS INTACT. It never constructs a `positionCounts` map; where it needs
+ *   a status it calls `gameStatusOf(history)` — never a bare `gameStatus`, never a status literal.
+ * Being off the frame path is NOT part of this test; that is clause 2's property and the probe's.
+ * REFUSED BY NAME: "a module that does not itself construct a `positionCounts` map" is true of every
+ * production module but `history.ts` and licenses `WLAUNDER`. Part (i) is the entire gate.
  *
- * ONE entry, carrying its citation: `turn-loop.ts` is `ABC-019`'s loop, whose `A3` names
- * `gameStatusOf(history)` as the single repetition-derive site — the loop is where the quantity
- * belongs, and `NFR-002`'s row says so in its own words.
+ * TWO entries, each carrying its citation. `turn-loop.ts` is `ABC-019`'s loop. (i) It ADVANCES the
+ * game, which is what a loop is: it calls `playMove` and `takeBack` and evaluates with
+ * `gameStatusOf` and `keyHistory`. A type import cannot call them, and the `GameHistory` it already
+ * receives injected is the data, not the operations that advance it. (ii) `ABC-019`'s `A3` names
+ * `gameStatusOf(history)` at every evaluation, never a bare `gameStatus`, and it never constructs a
+ * `positionCounts` map.
  *
- * `cli.ts` is the composition root (`ABC-042`). It calls `newGame` once to construct the game and,
- * if it needs a status, `gameStatusOf(history)` — never bare `gameStatus`, and it never constructs a
- * `positionCounts` map. `ADR-0002` clause 4's single-supplier rule is therefore untouched, which is
- * the same construction `ABC-019`'s `A3` requires of `turn-loop.ts`. `ADR-0011` clause 4: it exports
+ * `cli.ts` is the composition root (`ABC-042`). (i) It CONSTRUCTS the game: `newGame` is the only
+ * constructor and is called, so a type import is unavailable. Nothing can inject one, because it is
+ * the root: `render-seam.ts` is guarded against importing `history.ts`, and a third module was out
+ * of `ABC-042`'s scope. (ii) If it needs a status it calls `gameStatusOf(history)`, never a bare
+ * `gameStatus`, and it never constructs a `positionCounts` map. `ADR-0011` clause 4: it exports
  * nothing, so it is never on the frame path and never a probe root.
  *
  * THE LICENCE IS FILTERED TO THE ENTRIES THAT EXIST, so a driver that has not been built yet is
@@ -463,6 +479,12 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
 
     expect(instrument, "the guard above runs the expression the witnesses below run").toContain(
       `/${WITNESSED_EXPRESSION.source}/${WITNESSED_EXPRESSION.flags}.test(`,
+    );
+    // `ADR-0011` `R5` — the guard's OPERATOR, pinned the same way: an EQUALITY, not a containment
+    // in either direction (QE's `M15`). Not tamper-proof; a weakening just has to show in the diff.
+    // The leading newline and indent are load-bearing: without them this literal matches itself.
+    expect(instrument, "the licence guard compares with an EQUALITY").toContain(
+      "\n    expect(runtimeImporters).toEqual(production.filter((file) => LICENSED_DRIVERS.includes(file)));\n",
     );
   });
 
