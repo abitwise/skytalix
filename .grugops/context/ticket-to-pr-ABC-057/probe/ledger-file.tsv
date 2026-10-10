@@ -1,0 +1,48 @@
+079284d9	file	CONTROL	exit=0	load1=3.39	 Test Files 1 passed (1)	 Tests 12 passed (12)	FAILED:
+079284d9	file	M15	exit=0	load1=3.39	 Test Files 1 passed (1)	 Tests 12 passed (12)	FAILED:
+079284d9	file	M15-SUB	exit=0	load1=3.39	 Test Files 1 passed (1)	 Tests 12 passed (12)	FAILED:
+079284d9	file	WLAUNDER	exit=1	load1=3.39	 Test Files 1 failed (1)	 Tests 3 failed | 9 passed (12)	FAILED:   × A11 — the pane derives nothing, and this is a CALL COUNT > A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar|   × A11 — the pane derives nothing, and this is a CALL COUNT > A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set|   × A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts', 'turn-loop.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+    AssertionError: the unmutated control: expected true to be false // Object.is equality
+    AssertionError: the witness is not matching every export line: expected true to be false // Object.is equality
+079284d9	file	WPERFT-STATIC	exit=1	load1=3.44	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	FAILED:   × A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+079284d9	file	WSTALELICENCE	exit=1	load1=3.44	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	FAILED:   × A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts' ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+079284d9	file	Q-CTRL-DEAF-AFTER-LOAD+X5b	exit=1	load1=3.44	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	FAILED:   × A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched|
+    AssertionError: the probe is ARMED: expected [] to include 'history.ts'
+079284d9	file	Q-CTRL-ARMING-FIRST+DEAF+X5b	exit=0	load1=3.44	 Test Files 1 passed (1)	 Tests 12 passed (12)	FAILED:
+404934f3	file	CONTROL	exit=0	load1=3.80	 Test Files 1 passed (1)	 Tests 12 passed (12)	FAILED:
+Traceback (most recent call last):
+  File "<scratchpad>/ABC-057/bin/plant057.py", line 15, in <module>
+    elif b == "M15": m15()
+                     ~~~^^
+  File "<scratchpad>/ABC-057/bin/plant057.py", line 13, in m15
+    edit(P, GUARD, "    expect(production.filter((file) => LICENSED_DRIVERS.includes(file))).toEqual(expect.arrayContaining(runtimeImporters));")
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<scratchpad>/ABC-057/bin/plant057.py", line 10, in edit
+    assert s.count(old) == 1, (b, rel, old[:70], s.count(old))
+           ^^^^^^^^^^^^^^^^^
+AssertionError: ('M15', 'history-pane.nfr.test.ts', '    expect(runtimeImporters).toEqual(production.filter((file) => LICEN', 2)
+404934f3	M15	PLANT-FAILED
+Traceback (most recent call last):
+  File "<scratchpad>/ABC-057/bin/plant057.py", line 17, in <module>
+    edit(P, GUARD, "    expect(runtimeImporters).toEqual(expect.arrayContaining(production.filter((file) => LICENSED_DRIVERS.includes(file))));")
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<scratchpad>/ABC-057/bin/plant057.py", line 10, in edit
+    assert s.count(old) == 1, (b, rel, old[:70], s.count(old))
+           ^^^^^^^^^^^^^^^^^
+AssertionError: ('M15-SUB', 'history-pane.nfr.test.ts', '    expect(runtimeImporters).toEqual(production.filter((file) => LICEN', 2)
+404934f3	M15-SUB	PLANT-FAILED
+404934f3	file	NAIVE+M15	exit=0	load1=3.80	 Test Files 1 passed (1)	 Tests 12 passed (12)	FAILED:
+404934f3	file	WLAUNDER	exit=1	load1=3.80	 Test Files 1 failed (1)	 Tests 3 failed | 9 passed (12)	FAILED:   × A11 — the pane derives nothing, and this is a CALL COUNT > A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar|   × A11 — the pane derives nothing, and this is a CALL COUNT > A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set|   × A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts', 'turn-loop.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+    AssertionError: the unmutated control: expected true to be false // Object.is equality
+    AssertionError: the witness is not matching every export line: expected true to be false // Object.is equality
+404934f3	file	WPERFT-STATIC	exit=1	load1=3.80	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	FAILED:   × A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+404934f3	file	WSTALELICENCE	exit=1	load1=4.94	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	FAILED:   × A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts' ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+404934f3	file	Q-CTRL-DEAF-AFTER-LOAD+X5b	exit=1	load1=4.94	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	FAILED:   × A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched| FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched|
+    AssertionError: the probe is ARMED: expected [] to include 'history.ts'
+404934f3	file	Q-CTRL-ARMING-FIRST+DEAF+X5b	exit=0	load1=4.94	 Test Files 1 passed (1)	 Tests 12 passed (12)	FAILED:

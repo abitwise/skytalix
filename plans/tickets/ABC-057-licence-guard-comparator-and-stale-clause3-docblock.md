@@ -191,3 +191,40 @@ cut (2026-08-16); the one ⚠️ was the `ABC-042` ordering, and it is discharge
 | 8 | size assigned | **✅** `XS` (1), unchanged |
 | 9 | priority assigned | **✅** `P2`, unchanged: no hop has opened the file since `e140355`, and `ABC-043` merged without a third licence entry, so `R5`'s promotion trigger has not fired |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-057`).
+- Branch `grugops/ABC-057-licence-guard`, from `079284d9`. The code is `404934f3`.
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-057/` (`…b4c2a298`,
+  `…4d731ea3`, `probe/`) and are not restated here.
+
+**`A1`–`A5` are met, and no stop condition fired.** 0 production lines. The licence regex lines, the
+composer tripwire's code and the sibling tripwire are byte-identical. Re-anchored at `079284d9`:
+struck sentence `:212-213`, `LICENSED_DRIVERS` `:242`, comparator `:358`, tripwire block `:458-467` (head: comparator `:374`).
+
+| # | verdict | reading (builds out of tree on `404934f3`) |
+|---|---|---|
+| `A1` | MET | `M15` is RED, and the only failure is the new assertion (whole lane: 1 failed / 1582 passed). On base `079284d9`, `M15` survives 1583/1583. `M15-SUB` (the other direction) behaves the same |
+| `A2` | MET | `WLAUNDER`, `WPERFT-STATIC` and `WSTALELICENCE` give the same reds on base and head. The sibling tripwire is byte-identical |
+| `A3` | MET | 0 `game-owning driver`. (i) and (ii) are stated in the amendment's words, along with the refused wide reading |
+| `A4` | MET | 2/2. Each entry names why a type import and an injected history are unavailable, and that it never constructs `positionCounts` |
+| `A5` | MET | One path, `src/history-pane.nfr.test.ts`, +34/−12. 3 executable lines. 0 new files and 0 spawns |
+
+- **Deviation from the scope's literal shape, measured.** A bare `toContain("<comparator text>")` matches
+  its own string literal, so `M15` stays green (`NAIVE+M15`, 12/12). The delivered literal carries its
+  leading `\n` and indent, and a comment at the site says why.
+- **Fold-in `QE-054-b`.** The composer docblock now claims only what the tripwire reads, and it names
+  the comment-ahead and default-binding spellings. The tripwire is untouched.
+- **Test note 5.** `Q-CTRL-DEAF-AFTER-LOAD+X5b` is RED. `Q-CTRL-ARMING-FIRST+DEAF+X5b` is GREEN (by
+  construction).
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 51 files / 1583 passed (load1 8.16 → 7.67).
+  The skip count is 0, integrity reads `No findings.`, and `lane-inventory.js` is exit 0.
+- **Cost (`ADR-0035`, proposed; narrow set = the one file, twin control).** Set 2 is **MET** (twin
+  +1.07 %, R 0.058 s, head −0.027 s, load1 6.4–7.2). Set 1 is inadmissible (twin −1.97 %, load1
+  7.3–8.4).
+- **Flagged, not taken.** The in-test comment at head `:541` still makes the wide composer claim. The licence
+  docblock's "this tree has no `turn-loop.ts`" is stale. `turn-loop.ts`'s (i) adds to the ADR's words
+  (it receives the history injected; injection is data, not the operations), for Architect to confirm.
+- **Next.** QE's hop. The board move is the Orchestrator's.

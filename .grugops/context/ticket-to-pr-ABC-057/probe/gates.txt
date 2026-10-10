@@ -1,0 +1,31 @@
+== npm run lint load1=8.52
+> biome check .
+
+Checked 98 files in 101ms. No fixes applied.
+exit=0
+== npm run typecheck load1=8.52
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+exit=0
+== npm run build load1=8.16
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+exit=0
+== npm test load1=8.16
+ Test Files  51 passed (51)
+      Tests  1583 passed (1583)
+   Start at  16:08:52
+   Duration  5.93s (transform 1.06s, setup 0ms, collect 8.22s, tests 9.33s, environment 5ms, prepare 1.69s)
+
+exit=0 load1-after=7.67
+== skip count
+0
+== skip integrity
+No findings.
+exit=0
+== lane inventory
+The lane collects 51 test files; git tracks 51.
+No findings.
+exit=0
