@@ -102,18 +102,22 @@ some row — a reading worth the owner's time, not a false alarm. **This must la
 
 ## Dependencies
 
-- **`ABC-126` must merge first — ordering, no open question.** It is `In Review` (QE hop running) and
-  edits `src/puzzle-corpus.ts` and `src/puzzle-suite.test.ts` (other rows: the hanging pair, `pin`,
+- **`ABC-126` must merge first — ordering, no open design question.** It is `Ready for UAT` (QE
+  PASS_WITH_GAPS `b22f6e16`); **the owner's UAT word is owed** because `src/puzzle-corpus.ts` is a
+  non-test file (Orchestrator, 2026-10-10). It edits `src/puzzle-corpus.ts` and `src/puzzle-suite.test.ts` (other rows: the hanging pair, `pin`,
   `discovered check`). Its own `A4` re-reads 58/62. This ticket's baseline and its `A3` margin are
   measured on the tree **with** `ABC-126`'s rows, which the 0.8x rule covers too.
-- **The owner's word — given** (2026-10-10). Nothing else is owed before the build.
+- **The owner's word on the lowering — given** (2026-10-10). Nothing else is owed before the build.
+  *If the Orchestrator wants this built before `ABC-126`'s UAT word, branch from
+  `grugops/ABC-126-corpus-repairs` and merge in that order; the measurements then hold as written.*
 - **`ABC-083` is ordered after this ticket** (`ADR-0034` decision 5). `ABC-087` is not: its `A3` compares
   two levels on whatever suite is in the tree.
 - **After merge, owed by others (not this ticket's criteria):**
   - **AGENTS.md Scribe** — the `PUZZLE_DEEP` comment's `58/62` → `54/58`, and the whole-lane count
     `17 passed` → `18 passed` (`A6`'s row). Both are same-length substitutions, so **0 B**; `AGENTS.md`
     is **24,433 / 24,576 B** (143 B headroom, measured at `246ddfc`). Any added prose spends that headroom.
-  - **Security/NFR** — `RISK-003`'s "count gate records its budget margin" wording with the 0.8x figure.
+  - **Security/NFR** — `RISK-003`'s "count gate records its budget margin" wording with the 0.8x figure
+    (already enqueued as `secnfr-catalog-2026-10-10`).
 
 ## Security / NFR triggers
 
@@ -124,7 +128,8 @@ some row — a reading worth the owner's time, not a false alarm. **This must la
 - **`NFR-004`, `NFR-005` — not triggered.** No engine line.
 - **Security — not triggered.** Static test data and one test row.
 - **UAT.** The waiver's literal git test lists `src/puzzle-corpus.ts` and the baseline file (data, not
-  `*.test.ts`). As at `ABC-084` and `ABC-127`, that call is the Orchestrator's. The QE hop applies.
+  `*.test.ts`), so **the owner's UAT word is owed**, as the Orchestrator ruled for `ABC-126` on the same
+  file (2026-10-10). The owner can give it together with `ABC-126`'s. The QE hop applies.
 
 ## Test notes
 
@@ -156,9 +161,9 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `246ddfc`. **Resu
 |---|---|---|
 | 1 | problem clear | **✅** four named rows at −4 / −8 / −8 / −12 % readings; four of five planted terms red on them |
 | 2 | scope and out-of-scope clear | **✅** four deletions, one baseline commit, two measurements, one folded LOW gap; six fences |
-| 3 | INVEST-shaped | **✅** small and testable; the `ABC-126` order is a merge order on a ticket with no open question |
+| 3 | INVEST-shaped | **✅** small and testable; the `ABC-126` order is a merge order on a built, QE-passed ticket waiting only on the owner's UAT word (the `ABC-059`/`ABC-127` precedent at `rescore-batch-2`) |
 | 4 | acceptance testable and measurable | **✅** 58 rows; 54/58 ×3 processes; 54/58 at step 1.25; 14/17 and ≥ 6/10 with four named; > 54 at 4×; `54 + 4 = 58`; three paths |
-| 5 | dependencies known | **✅** `ABC-126` first; owner word given; `ABC-083` after; Scribe and Security/NFR owed after |
+| 5 | dependencies known | **✅** `ABC-126` first; owner word on the lowering given, UAT word owed; `ABC-083` after; Scribe and Security/NFR (`secnfr-catalog-2026-10-10`, enqueued) owed after |
 | 6 | security/NFR triggers with a measurable target | **✅** `RISK-003` at 0.8x; `N8-LANE` 0 files / 0 default rows |
 | 7 | test notes present | **✅** four |
 | 8 | size assigned | **✅** `XS` (1) |

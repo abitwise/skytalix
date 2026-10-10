@@ -181,7 +181,7 @@ the route is in `A5`.**
   review, and a red result is a QE FAIL, classed per `ADR-0034` (`A10`).
 - **File overlap (2026-10-10).** `A10` re-pins rows in `src/quiescence.test.ts`, the file `ABC-126`
   edits. Do not build them in parallel. `ABC-126` goes first, so that this ledger reads the re-found
-  rows. *(Its size is `S`, re-sized at its fold; it is `In Review`.)*
+  rows. *(Its size is `S`, re-sized at its fold; it is `Ready for UAT`, owner word owed.)*
 - **`ABC-131` must merge before this ticket enters `In Development`** *(added 2026-10-10;
   `ADR-0034` decision 5)*. It drops the four puzzle rows that sit on the budget edge (58/62 → 54/58),
   so a drift red on this ticket means > 25 % tree growth, not 4 %. It is ordered after `ABC-126`. **Pull
@@ -254,8 +254,9 @@ MET → `Ready`.** Pull after `ABC-126` and `ABC-131` merge.
 - **Item 10, ⚠️ → ✅.** Question 1 is ruled and accepted (`ADR-0031`). Question 2 is answered by the
   owner: depth 7 stays a level, and `A9` carries the route. Security/NFR's `R1` (how a puzzle red is
   read) is ruled and accepted (`ADR-0034`). Nothing is owed before the build.
-- **Item 3 stays ✅.** `ABC-126` (`In Review`) and `ABC-131` (`Ready`) are merge-order predecessors with
-  no open question in either, so this is a pull order, not a dependency on a decision.
+- **Item 3 stays ✅.** `ABC-126` (`Ready for UAT`, owner's UAT word owed) and `ABC-131` (`Ready`) are
+  merge-order predecessors with no open design question in either, so this is a pull order, not a
+  dependency on a decision.
 - **Item 4 stays ✅, folded.** `A5` gains its route (three forms, a two-session read near the bar, the
   cut condition); `A9` gains the ruled R2 route; `A10`'s stale "40/40" is replaced by the gate's own
   rule (`≥` the recorded baseline, `total` equal) and the per-row classification.
