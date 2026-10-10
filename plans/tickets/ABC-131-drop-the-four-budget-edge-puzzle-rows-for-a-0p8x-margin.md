@@ -1,8 +1,8 @@
 ---
 id: ABC-131
 title: Drop the four puzzle rows that sit on the budget edge — 58/62 → 54/58, so every gating row keeps a 0.8x readings margin
-status: in-review
-column: In Review
+status: ready-for-uat
+column: Ready for UAT
 size: XS
 priority: P1
 epic: EPIC-004
