@@ -1,0 +1,18 @@
+## tip test file + M9
+2
+   × ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together 8ms
+   × ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it 1ms
+   × ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else 0ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/turn-loop.test.ts > ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together
+AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+ FAIL  src/turn-loop.test.ts > ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it
+AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+ FAIL  src/turn-loop.test.ts > ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else
+AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+ Test Files  1 failed | 1 passed (2)
+      Tests  3 failed | 64 passed (67)
+## tip test file, M9 reverted (turn-loop.ts restored from worktree)
+identical
+ Test Files  2 passed (2)
+      Tests  67 passed (67)

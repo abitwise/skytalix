@@ -134,3 +134,23 @@ the bar for `Ready`. The page stays `Backlog` until the Orchestrator moves it on
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with the reason |
 | 10 | no major unresolved blocker | **✅** the candidate is measured; no ruling is owed |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-128`).
+Branch `grugops/ABC-128-take-back-guard` from `fcbf06b`, code in `00187b8`. Not merged, not pushed.
+Readings and raw files: `.grugops/context/ticket-to-pr-ABC-128/notes/`.
+
+**Criteria: 3 of 3 met.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | `M9` on the base: 67/67 green (it survives). With the 3 new lines and `M9`: 3 failed / 64 passed, exactly `A3`, `A4`, `A5`, each `expected "keyHistory" to be called +0 times, but got 1 times`. Reverted: 67/67 green. Run in a scratch `git archive` copy, never in the worktree |
+| `A2` | MET | `grep -c 'nowhere else' src/turn-loop.test.ts` prints 0. New name: "`A8` — … `keyHistory` fires on the REFUSED claim, and on no advancing ply, allowed claim or take-back (`ABC-120` `A3`-`A5`)". Every named edge has an assertion: `A8` (i)–(iv) and `ABC-120` `A3`–`A5` |
+| `A3` | MET | numstat `src/turn-loop.test.ts` +6/−1 only. 50 files / 1540 tests, the same as the base. Lint, typecheck, build exit 0; `npm test` exit 0; skip count 0; integrity `No findings.` |
+
+**`N8-LANE`: 0 new files, so 0 ms net by the catalog's scope.** The full-lane paired run was
+inadmissible (null +1.76 %, sign 6/7, load1 17→44). On the touched file only, tip +30 ms and
+null +30 ms. Apple M3.
+
+**Owed:** the QE hop, the `In Review` move (Orchestrator) and the merge.

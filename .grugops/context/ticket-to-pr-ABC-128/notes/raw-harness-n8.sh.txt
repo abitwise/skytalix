@@ -1,0 +1,14 @@
+#!/bin/bash
+# N8-LANE harness: full default lane (npx vitest run, PERFT_DEEP unset), CPU user+sys incl. children.
+SP=$1; ROUNDS=$2
+conds=(A B N)
+echo "round cond user sys cpu"
+for r in $(seq 0 $ROUNDS); do
+  off=$((r % 3))
+  for k in 0 1 2; do
+    c=${conds[$(((k+off)%3))]}
+    cd $SP/$c
+    t=$( /usr/bin/time -p sh -c 'npx vitest run >/dev/null 2>&1' 2>&1 | awk '/^user/{u=$2}/^sys/{s=$2}END{print u, s, u+s}')
+    echo "$r $c $t"
+  done
+done
