@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-058` → `In Review` (built `fb914ded`); QE `qe-ABC-058` dispatched._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-126` `In Review` → `Ready for UAT` (QE PASS_WITH_GAPS `b22f6e16`); owner acceptance owed (puzzle-corpus.ts is a non-test file)._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `ruling-timing-protocol` merged: `ADR-0035` PROPOSED (timing bounds checked only above the instrument floor; per-ticket cost on the narrowest file set); **`NFR-008` CPU and WALL both BREACHED — owner word owed (R-1 recommended: wall ≤ 10 s, CPU reported).** `ABC-058` pulled → `In Development`._
@@ -547,9 +549,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-
-- [ABC-058] Three security-bar instruments cannot observe their own clauses  (BA/PM, S, P2, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ same ordering; `S1`/`Q5`, `S4`, `S5` — **all Security/NFR's findings about its OWN bar text**, six mutants, zero production lines, `A7` pins `spawned` at 10 so it cannot move `G1`) **2026-10-10 audit: same ordering met — `ABC-042` Done 2026-08-15.** **2026-10-10 re-score: DoR 10/10 → Ready; S1 already fixed (cut, A3/A4 struck); S→XS. Before ABC-059 (shared `src/cli.test.ts`).** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-058`, branch `grugops/ABC-058-security-bar-instruments`).
+## In Development (WIP 0/3)
 
 
 
@@ -572,7 +572,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+
+## In Review (WIP 1/3)
+
+- [ABC-058] Three security-bar instruments cannot observe their own clauses  (BA/PM, S, P2, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ same ordering; `S1`/`Q5`, `S4`, `S5` — **all Security/NFR's findings about its OWN bar text**, six mutants, zero production lines, `A7` pins `spawned` at 10 so it cannot move `G1`) **2026-10-10 audit: same ordering met — `ABC-042` Done 2026-08-15.** **2026-10-10 re-score: DoR 10/10 → Ready; S1 already fixed (cut, A3/A4 struck); S→XS. Before ABC-059 (shared `src/cli.test.ts`).** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-058`, branch `grugops/ABC-058-security-bar-instruments`). **→ In Review 2026-10-10**: built on `grugops/ABC-058-security-bar-instruments` @ `fb914ded` (`src/cli.test.ts` +12/−7; A1/A2/A5–A8 met; M3h now red; N8_SPAWN 27 unchanged). Cost on the narrow set: one MET, one UNRESOLVED (≤ +0.107 s). QE `qe-ABC-058` dispatched; Security/NFR clause (c) read owed after.
 
 
 
