@@ -1,0 +1,43 @@
+{"name": "wm-7", "fen": "1K6/8/7R/3q4/k7/2p3N1/8/8 b - - 0 1", "kind": "win-material", "accept": ["d5g8"], "quietKey": false, "seed": 7, "gain": 5, "pool": "pools/wm.jsonl"}
+{"name": "wm-27", "fen": "5B2/6b1/5P2/3p4/R1R1qk2/K6p/7N/6n1 b - - 0 1", "kind": "win-material", "accept": ["g7f8"], "quietKey": false, "seed": 27, "gain": 5, "pool": "pools/wm.jsonl"}
+{"name": "wm-71", "fen": "1r6/8/8/1P6/n1p2n2/5P2/1R1K3Q/k7 w - - 0 1", "kind": "win-material", "accept": ["b2b4"], "quietKey": true, "seed": 71, "gain": 3, "pool": "pools/wm.jsonl"}
+{"name": "wm-93", "fen": "6n1/7R/1Qn4P/1p6/1B4K1/p3r3/2B5/2k5 w - - 0 1", "kind": "win-material", "accept": ["b6e3"], "quietKey": false, "seed": 93, "gain": 5, "pool": "pools/wm.jsonl"}
+{"name": "wm-103", "fen": "8/8/8/7k/R1qP4/1B6/4n3/3n3K b - - 0 1", "kind": "win-material", "accept": ["c4b3", "e2g3"], "quietKey": false, "seed": 103, "gain": 3, "pool": "pools/wm.jsonl"}
+{"name": "wm-111", "fen": "8/R7/7K/R3q1P1/1p2k3/1B6/r4b2/8 b - - 0 1", "kind": "win-material", "accept": ["a2a5"], "quietKey": false, "seed": 111, "gain": 5, "pool": "pools/wm.jsonl"}
+{"name": "wm-125", "fen": "3n4/n2N4/3Pb3/8/P5k1/8/5q2/2K3B1 w - - 0 1", "kind": "win-material", "accept": ["g1f2"], "quietKey": false, "seed": 125, "gain": 8, "pool": "pools/wm.jsonl"}
+{"name": "wm-175", "fen": "4K3/n7/6P1/8/7k/8/1pQ5/8 w - - 0 1", "kind": "win-material", "accept": ["g6g7"], "quietKey": true, "seed": 175, "gain": 9, "pool": "pools/wm.jsonl"}
+{"name": "wm-204", "fen": "3R4/3R3b/3P4/1K6/3p2N1/8/7n/rk6 w - - 0 1", "kind": "win-material", "accept": ["g4h2"], "quietKey": false, "seed": 204, "gain": 3, "pool": "pools/wm.jsonl"}
+{"name": "wm-215", "fen": "3n4/6K1/8/5qp1/3N1B2/8/1P2N3/2b1k3 b - - 0 1", "kind": "win-material", "accept": ["f5d7", "f5f7"], "quietKey": false, "seed": 215, "gain": 3, "pool": "pools/wm.jsonl"}
+{"name": "wm-218", "fen": "2N5/1p6/2p2P2/4K3/6r1/2p4P/6P1/4k3 w - - 0 1", "kind": "win-material", "accept": ["h3g4"], "quietKey": false, "seed": 218, "gain": 5, "pool": "pools/wm.jsonl"}
+{"name": "wm-228", "fen": "n7/8/8/7P/5k2/1n6/6B1/7K w - - 0 1", "kind": "win-material", "accept": ["h5h6"], "quietKey": true, "seed": 228, "gain": 8, "pool": "pools/wm.jsonl"}
+{"name": "wm-235", "fen": "8/3B4/4pk2/8/3P3K/2p5/7N/6r1 b - - 0 1", "kind": "win-material", "accept": ["c3c2"], "quietKey": true, "seed": 235, "gain": 7, "pool": "pools/wm.jsonl"}
+{"name": "wm-279", "fen": "8/7N/3p2pp/8/1N2R3/3P1K2/8/q2k4 b - - 0 1", "kind": "win-material", "accept": ["a1g7"], "quietKey": true, "seed": 279, "gain": 2, "pool": "pools/wm.jsonl"}
+{"name": "wm-346", "fen": "8/8/2pp4/8/2P2nk1/pP6/3K2PP/8 b - - 0 1", "kind": "win-material", "accept": ["a3a2"], "quietKey": true, "seed": 346, "gain": 7, "pool": "pools/wm.jsonl"}
+{"name": "wm-369", "fen": "8/1qk5/8/P1Bb4/8/6K1/8/8 b - - 0 1", "kind": "win-material", "accept": ["b7b3"], "quietKey": false, "seed": 369, "gain": 3, "pool": "pools/wm.jsonl"}
+{"name": "wm-375", "fen": "8/4p3/8/4P3/p3P3/2k5/4K3/8 b - - 0 1", "kind": "win-material", "accept": ["a4a3"], "quietKey": true, "seed": 375, "gain": 8, "pool": "pools/wm.jsonl"}
+{"name": "wm-1563", "fen": "6R1/1K6/5p2/3rR1rP/p1pP2k1/8/3p2P1/5N2 w - - 0 1", "kind": "win-material", "accept": ["g8g5"], "quietKey": false, "seed": 1563, "gain": 4, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-1700", "fen": "8/7B/6r1/1P2b1p1/1k6/3p2N1/2nK4/N5B1 b - - 0 1", "kind": "win-material", "accept": ["g6g7", "g6h6"], "quietKey": true, "seed": 1700, "gain": 2, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-1706", "fen": "8/7r/2k5/p4K2/2P5/1q6/P1Q2p2/R7 w - - 0 1", "kind": "win-material", "accept": ["c2e4"], "quietKey": false, "seed": 1706, "gain": 8, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-1792", "fen": "8/4k2K/3N2P1/8/8/6n1/6b1/8 b - - 0 1", "kind": "win-material", "accept": ["e7d6"], "quietKey": false, "seed": 1792, "gain": 3, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-1811", "fen": "6n1/1k5b/5bP1/3K1p2/2NR4/3p4/4P3/5R2 w - - 0 1", "kind": "win-material", "accept": ["c4d6"], "quietKey": false, "seed": 1811, "gain": 3, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-1813", "fen": "8/6r1/2KP3P/P7/8/1n3p1P/2p5/2k5 b - - 0 1", "kind": "win-material", "accept": ["c1b1", "c1b2", "c1d1", "c1d2", "f3f2"], "quietKey": true, "seed": 1813, "gain": 3, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-1881", "fen": "8/8/1p6/6P1/2k1Bp1P/8/3Kb3/8 w - - 0 1", "kind": "win-material", "accept": ["d2e2"], "quietKey": false, "seed": 1881, "gain": 3, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-1917", "fen": "8/1R6/2Q5/3rk3/7r/7P/5K2/5n2 w - - 0 1", "kind": "win-material", "accept": ["b7e7"], "quietKey": false, "seed": 1917, "gain": 5, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-2014", "fen": "1K6/8/8/8/8/1R6/5kp1/1nR5 w - - 0 1", "kind": "win-material", "accept": ["b3b1", "b3b2", "c1c2"], "quietKey": false, "seed": 2014, "gain": 3, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-2031", "fen": "8/2nK4/8/7q/7P/8/7k/N7 b - - 0 1", "kind": "win-material", "accept": ["c7a6", "c7a8"], "quietKey": true, "seed": 2031, "gain": 3, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-2046", "fen": "K7/1p4Np/1Q6/7b/4N2r/R3p3/1B1R1r2/7k b - - 0 1", "kind": "win-material", "accept": ["f2d2", "h4e4"], "quietKey": false, "seed": 2046, "gain": 2, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-2063", "fen": "2K5/5r1P/3B4/4n2b/2P3R1/3r3p/5RnN/6k1 b - - 0 1", "kind": "win-material", "accept": ["h5g4"], "quietKey": false, "seed": 2063, "gain": 2, "pool": "pools/wm-w1a.jsonl"}
+{"name": "wm-5030", "fen": "8/5k1K/8/1R6/3P1n2/2R5/2r1p3/8 w - - 0 1", "kind": "win-material", "accept": ["b5f5"], "quietKey": false, "seed": 5030, "gain": 5, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5061", "fen": "8/nk1p3q/4b3/5P2/1P2P3/3r4/6NP/b4KB1 w - - 0 1", "kind": "win-material", "accept": ["f5e6", "g1a7"], "quietKey": false, "seed": 5061, "gain": 2, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5147", "fen": "7k/6n1/7B/1Q6/1b6/5K2/8/8 w - - 0 1", "kind": "win-material", "accept": ["b5b4", "b5b8", "h6g7"], "quietKey": false, "seed": 5147, "gain": 3, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5152", "fen": "7k/6qr/3R4/Q7/2K3p1/3P4/r4P2/8 b - - 0 1", "kind": "win-material", "accept": ["a2a5"], "quietKey": false, "seed": 5152, "gain": 5, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5180", "fen": "8/1p5N/6kr/3K4/1B5n/8/8/3Q4 b - - 0 1", "kind": "win-material", "accept": ["h6h7"], "quietKey": false, "seed": 5180, "gain": 3, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5184", "fen": "4k3/4N3/2p5/8/3q4/5NPp/bP2K1R1/4b3 b - - 0 1", "kind": "win-material", "accept": ["d4e4"], "quietKey": false, "seed": 5184, "gain": 7, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5244", "fen": "6n1/4p2K/2p2B2/4Q2B/8/8/8/7k w - - 0 1", "kind": "win-material", "accept": ["e5e4"], "quietKey": false, "seed": 5244, "gain": 3, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5429", "fen": "1k6/4q1b1/1B3p2/K4B2/7p/2p4P/2P4P/8 b - - 0 1", "kind": "win-material", "accept": ["e7e5"], "quietKey": false, "seed": 5429, "gain": 3, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5439", "fen": "3n4/2p4N/3P4/2kb4/p2R4/6p1/N3K3/1B6 b - - 0 1", "kind": "win-material", "accept": ["c5d4"], "quietKey": false, "seed": 5439, "gain": 4, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5464", "fen": "8/8/3B1K1N/8/k7/2p5/8/4b3 b - - 0 1", "kind": "win-material", "accept": ["e1d2"], "quietKey": true, "seed": 5464, "gain": 3, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-5527", "fen": "k2r1N1b/4n3/2R1N2K/7b/3P4/1p4PP/4n3/8 b - - 0 1", "kind": "win-material", "accept": ["e7c6"], "quietKey": false, "seed": 5527, "gain": 3, "pool": "pools/wm-w1b.jsonl"}
+{"name": "wm-h145", "fen": "4Q3/4P3/2n4r/7p/1P1B4/3r2P1/8/n1k1K3 b - - 0 1", "kind": "win-material", "accept": ["a1c2", "c6d4", "d3d1", "h6e6"], "quietKey": false, "seed": 145, "gain": 3, "pool": "pools/wmh.jsonl"}
+{"name": "wm-h209", "fen": "3N4/1B2n3/3pK2n/3r2Q1/8/1k3p2/7N/6R1 b - - 0 1", "kind": "win-material", "accept": ["d5g5"], "quietKey": false, "seed": 209, "gain": 3, "pool": "pools/wmh.jsonl"}
+{"name": "wm-h356", "fen": "5N2/4K3/8/8/2P5/3p4/2n5/4k3 b - - 0 1", "kind": "win-material", "accept": ["c2a1", "c2a3", "c2e3", "d3d2", "e1f1", "e1f2"], "quietKey": true, "seed": 356, "gain": 8, "pool": "pools/wmh.jsonl"}

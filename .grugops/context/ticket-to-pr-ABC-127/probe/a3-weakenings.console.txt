@@ -1,0 +1,18 @@
+W1-quiescence-off	exit 1	solved 47/62 (baseline 58)	newly-missed 11 newly-solved 0	A5 exact	34.6s	load { 7.34 18.74 30.81 }
+W1b-engine-leaf-quiescence-off	exit 1	solved 41/62 (baseline 58)	newly-missed 17 newly-solved 0	A5 exact	27.6s	load { 5.72 17.09 29.72 }
+W2-quiescence-1ply	exit 1	solved 53/62 (baseline 58)	newly-missed 5 newly-solved 0	A5 exact	36.7s	load { 5.37 15.91 28.86 }
+W3-depth-cap-2	exit 1	solved 35/62 (baseline 58)	newly-missed 23 newly-solved 0	A5 exact	13.3s	load { 5.73 14.91 27.97 }
+W4-depth-cap-3	exit 1	solved 44/62 (baseline 58)	newly-missed 14 newly-solved 0	A5 exact	13.8s	load { 5.12 14.32 27.54 }
+W5-depth-cap-4	exit 1	solved 48/62 (baseline 58)	newly-missed 10 newly-solved 0	A5 exact	16.3s	load { 5.42 13.94 27.17 }
+W6-swap-knight-rook-values	exit 1	solved 54/62 (baseline 58)	newly-missed 4 newly-solved 0	A5 exact	35.8s	load { 5.10 13.46 26.77 }
+W7-queen-valued-300	exit 1	solved 50/62 (baseline 58)	newly-missed 8 newly-solved 0	A5 exact	33.0s	load { 5.27 12.59 25.91 }
+W8-pawn-valued-300	exit 1	solved 53/62 (baseline 58)	newly-missed 5 newly-solved 0	A5 exact	35.9s	load { 4.88 11.68 25.04 }
+W9-eval-sign-ignores-side	exit 1	solved 46/62 (baseline 58)	newly-missed 12 newly-solved 0	A5 exact	38.4s	load { 4.44 10.81 24.19 }
+W10-pst-off	exit 0	solved 58/62 (baseline 58)	newly-missed 0 newly-solved 0	A5 exact	41.4s	load { 3.53 9.88 23.31 }
+W11-mate-score-ignores-ply	exit 0	solved 58/62 (baseline 58)	newly-missed 0 newly-solved 0	A5 exact	35.1s	load { 13.63 11.23 23.09 }
+W12-interior-mate-as-stalemate	exit 1	solved 48/62 (baseline 58)	newly-missed 10 newly-solved 0	A5 exact	36.1s	load { 9.29 10.41 22.31 }
+W13-lmr-reduces-checks	exit 1	solved 55/62 (baseline 58)	newly-missed 3 newly-solved 0	A5 exact	37.8s	load { 8.02 9.98 21.67 }
+W14-lmr-reduces-by-2	exit 1	solved 56/62 (baseline 58)	newly-missed 2 newly-solved 0	A5 exact	36.5s	load { 7.66 9.64 21.07 }
+W15-tt-accepts-shallower	exit 1	solved 35/62 (baseline 58)	newly-missed 23 newly-solved 0	A5 exact	13.2s	load { 6.69 9.20 20.39 }
+W16-ordering-off	exit 1	solved 48/62 (baseline 58)	newly-missed 10 newly-solved 0	A5 exact	45.9s	load { 6.45 9.06 20.21 }
+src clean: true

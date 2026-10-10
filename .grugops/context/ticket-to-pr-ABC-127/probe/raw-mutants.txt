@@ -1,0 +1,15 @@
+# ABC-127 build: the new rows' checks, mutated (curation/mutants.py, run 2026-10-10 ~08:33Z on the
+# uncommitted tree that became e1f5732; corpus restored, cmp-identical, after every run).
+# Deep (PUZZLE_DEEP=1, -t "ABC-127 A2") and default (-t <row>) lanes.
+m3 accept gains a non-mating move        exit 1 Failed Tests 1
+m3 accept loses a mating move            exit 1 Failed Tests 1
+m3 row that mates in 2                   exit 1 Failed Tests 1
+wm accept loses one of two best          exit 1 Failed Tests 1
+ABC-084 wm row accept widened            exit 1 Failed Tests 1
+quiet-key on a capture key               exit 1 Failed Tests 1
+new row is a colour mirror               exit 0 Tests 1 passed | 11 skipped (12)   <- MUTANT WAS WRONG: it mirrored the row it replaced, so no other row matched
+only 3 black-to-move win rows            exit 1 Failed Tests 1
+# corrected mirror mutant: seed-7 row's FEN replaced by the colour mirror of ABC-084's "knight fork" row
+# (6k1/5ppp/8/8/3n4/2Q5/5PPP/6K1 b - - 0 1):
+#   -> win material, seed 7: black Q+P against R+N: expected true to be false // Object.is equality
+#      Tests  1 failed | 11 skipped (12)

@@ -1,0 +1,10 @@
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+typecheck exit 0
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+build exit 0
