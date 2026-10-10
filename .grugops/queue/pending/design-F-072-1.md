@@ -26,6 +26,16 @@ Security/NFR (MEDIUM, P2) ruled clause (b)'s limb list wider at ABC-072's gate. 
 3. Prove it: baseline 0/3/0 unchanged on the current tip; the 21 fixture rows and the Architect's nine
    mutants unchanged; Security/NFR's S1–S12 fire; computed eval forms stay listed word hits.
 
+4. **Also in this hop (separate rulings, own notes):**
+   - **QE-136-a / QE-136-b** (LOW, from `.grugops/context/qe-ABC-136/notes/…f3fd60a0` on branch
+     `grugops/ABC-136-licence-operands`, merged to the wave next): a `splice` after the pinned importer
+     statement, and narrowing the unpinned `productionModulesIn` helper, both stay gate-clean and green.
+     Rule: accepted residual (with trigger) or a ticket (say what it pins; mind `ABC-134`, comment-only on
+     the same file, which is being built now — sequence any new pin after it).
+   - **QE-104-d** (INFO, `.grugops/context/qe-ABC-104/notes/…df369a19`): `ADR-0004` (2a) at `:206` makes
+     an unscoped totality claim for `parseSan`, the same over-reach ABC-104 fixed in `coordinate-move.ts`.
+     Amend ADR-0004 with a dated pointer if it over-claims (re-measure first).
+
 ADR-0036's DELTA ruling and the owner's open veto are not in scope.
 
 ## Fences
