@@ -10,10 +10,10 @@
  * the final frame, through the same `FrameSink`, in ONE write. It has no constant height, it is not
  * bounded by `MESSAGE_ROWS`, it does not go through `assembleFrame`'s width padding, and it pads no
  * row to a column. `INPUT_ENDED_NOTICE` (`src/turn-loop.ts` `INPUT_ENDED_NOTICE`) is the merged
- * precedent for a non-frame write to the sink. It is therefore NOT a frame producer and is
- * deliberately NOT declared in `src/history-pane.nfr.test.ts`'s `FRAME_PRODUCERS` (`ADR-0011`
- * clause 2, and the ticket states the consequence in both directions so the count moves
- * deliberately rather than by drift).
+ * precedent for a non-frame write to the sink. It is therefore NOT on the frame path, by
+ * `ADR-0029`'s membership rule: it is neither in the load closure of
+ * `src/history-pane.nfr.test.ts`'s `COMPOSITION_ROOT` nor loaded by a frame call (of the production
+ * modules, only `src/cli.ts` imports it).
  *
  * IT DERIVES NO GAME STATE. A pure function of `LoopOutcome` and `GameHistory`, returning rows.
  * `history.ts` is imported as a TYPE ONLY, so this module adds no runtime importer of it and
