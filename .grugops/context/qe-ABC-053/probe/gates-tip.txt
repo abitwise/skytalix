@@ -1,0 +1,9 @@
+# gates on 57251578 (worktree), Node v26.11.0
+lint/typecheck/build/test load1=5.89; skip/integrity/lane load1=7.98
+
+Checked 98 files in 142ms. No fixes applied.
+ Test Files  51 passed (51)
+      Tests  1582 passed (1582)
+skip-count=0 (jq numPendingTests+numTodoTests)
+test-skip-integrity: No findings. exit 0
+lane-inventory: The lane collects 51 test files; git tracks 51. No findings. exit 0

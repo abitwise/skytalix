@@ -1,0 +1,11 @@
+BASE	bin-v26.11.0	exit=0	load1=2.58	 Tests 23 passed (23)	
+X5b	bin-v26.11.0	exit=1	load1=2.58	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-CONDITIONAL	bin-v26.11.0	exit=1	load1=2.69	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-query	bin-v26.11.0	exit=1	load1=2.69	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-computed	bin-v26.11.0	exit=1	load1=2.69	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5c	bin-v26.11.0	exit=1	load1=2.69	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+WDYNIMP	bin-v26.11.0	exit=1	load1=2.72	 Tests 1 failed | 22 passed (23)	AssertionError: AT LOAD: history.ts was evaluated on the frame path: expected [ 'render-seam.ts', 'frame.ts', …(12) ] to not include 'history.ts'|
+WINDIRECT	bin-v26.11.0	exit=1	load1=2.72	 Tests 1 failed | 22 passed (23)	AssertionError: expected [ 'cli.ts', 'glyph-mode.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-|
+WGLYPH-DYN	bin-v26.11.0	exit=0	load1=2.72	 Tests 23 passed (23)	
+INLINE-TYPE	bin-v26.11.0	exit=1	load1=2.72	 Tests 2 failed | 21 passed (23)	AssertionError: AT LOAD: history.ts was evaluated on the frame path: expected [ 'render-seam.ts', 'frame.ts', …(12) ] to not include 'history.ts'|AssertionError: expected [ 'cli.ts', 'history-pane.ts', …(1) ] to deeply equal [ 'cli.ts', 'tur|
+SECOND-COMPOSER	bin-v26.11.0	exit=1	load1=2.90	 Tests 1 failed | 22 passed (23)	AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 'render-seam.|

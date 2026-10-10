@@ -156,7 +156,7 @@ const renderedPliesOf = (rows: readonly string[]): number =>
  *
  * No exclusions, no exceptions, no filenames. `history.ts` is one, `perft-bench.ts` is one, and on
  * `ABC-019`'s branch `turn-loop.ts` is one. Each guard then applies exactly ONE named rule about
- * this set — `FRAME_PRODUCERS` for the probe, `LICENSED_DRIVERS` for the regex — and the two rules
+ * this set — `COMPOSITION_ROOT` for the probe, `LICENSED_DRIVERS` for the regex — and the two rules
  * differ because THE TWO GUARDS HOLD DIFFERENT PROPERTIES. Being a production module is not the
  * same as being in scope for `NFR-002`, and conflating those two was the defect `ABC-029` fixed.
  */
@@ -164,34 +164,42 @@ const productionModulesIn = (directory: string): readonly string[] =>
   readdirSync(directory).filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"));
 
 /**
- * `ADR-0011` CLAUSE 2 — THE DECLARED FRAME PATH, which is the probe's one named rule about the set
- * above. `NFR-002`'s premise is: `src/history.ts`'s module body is never evaluated in the closure
- * of the frame's producers. No other module set is in scope for that row.
+ * `ADR-0029` — THE FRAME PATH IS DERIVED FROM ONE DECLARED COMPOSITION ROOT, which is the probe's
+ * one named rule about the set above (it supersedes `ADR-0011` clause 2's "declared, not derived" in
+ * part). `NFR-002`'s premise is: `src/history.ts`'s module body is never evaluated on the frame path.
+ * No other module set is in scope for that row.
  *
- * IT IS DECLARED, NOT DERIVED, and that is forced rather than chosen: `src/frame.ts` imports
- * NOTHING — its runtime closure is exactly itself — because a frame is composed by INJECTION,
- * `frame.ts` taking rows as data, and nothing in `src/` imports a renderer at all. So no closure of
- * any single module yields the frame path and there is nothing to derive from the module graph.
+ * THE ROOT IS `render-seam.ts`, and that is `ADR-0009` clause 9b: frame composition lives entirely
+ * behind the one render seam. Nothing else is declared. The frame path is the root's LOAD CLOSURE
+ * plus every module a CALL of the root's seam loads, so a new panel reaches a frame only by being
+ * imported by the seam, and that puts it on the path with no list to edit.
  *
- * The five entries are the producers of the frame `plans/nfr-catalog.md`'s `NFR-002` row
- * enumerates — board and labels, status panel, history pane, message region — plus the glyph mode
- * the board renders through. Check this list by READING it against that row's `Applies to` cell.
+ * THE MEMBERSHIP RULE: a module is on the frame path IF AND ONLY IF it is in the root's load closure
+ * or is loaded by a frame call. `glyph-mode.ts` is neither and is NOT a root: the entry point calls
+ * its session once, before the loop, and the mode reaches the seam as a value (`ABC-019` `[D30]`).
  *
- * IT FAILS OPEN, and that is recorded rather than discovered: a renderer added without being
- * declared here is silently unguarded. `ADR-0009`'s frame-height identity is a PARTIAL tripwire (a
- * renderer that adds no rows would not trip it) and is not claimed as more. Owner: Architect/Design,
- * at the next hop that adds a frame producer. Dated expiry: `EPIC-006`, where the entry point
- * assembles a frame, composition becomes an import, and this declaration is replaced by
- * `closure(<assembly module>)` and DELETED.
+ * THE PROBE MEASURES IN TWO PHASES, both by module LOADS, not by derive calls, in one child:
+ * - AT LOAD: `history.ts` is not among the modules loaded when the root is imported;
+ * - PER FRAME: the child builds a seam, clears the recorder, draws frames of the empty game and of a
+ *   game longer than the history window, settles a bounded number of macrotask turns (no clock),
+ *   and `history.ts` is not among the modules those frames loaded.
+ *
+ * IT FAILS CLOSED ON A SECOND COMPOSER: the production modules holding a value-binding import
+ * (`ADR-0030` decision 2) of `assembleFrame` from `./frame.ts` must EQUAL `[COMPOSITION_ROOT]`.
+ *
+ * WHAT NEITHER PHASE COVERS, stated so it is not read as more:
+ * - a derive DEFERRED past the settle, for example behind a timer;
+ * - a lazy load CONDITIONAL on a game state the frames do not reach (the two states bound this; they
+ *   do not close it);
+ * - a renderer that rebuilds the derive from modules OTHER than `history.ts` (`gameend.ts` plus its
+ *   own counts) — only `ABC-041` `A2`'s synchronous spies see that, a pre-existing limit;
+ * - a second composer that never calls `assembleFrame`, which would itself breach `ADR-0009` 9b.
+ *
+ * THE RECORDED LOSS is `WGLYPH-DYN`: a module-scope `void import("./history.ts")` in `glyph-mode.ts`
+ * is GREEN here since that module left the root set. It runs once per session, off the frame path,
+ * and calls no derive — `ADR-0011` `R4`'s class. `ADR-0011` `R1`'s dated expiry is DISCHARGED.
  */
-const FRAME_PRODUCERS: readonly string[] = [
-  "frame.ts",
-  "glyph-mode.ts",
-  "history-pane.ts",
-  "render-seam.ts",
-  "render.ts",
-  "status-panel.ts",
-];
+const COMPOSITION_ROOT = "render-seam.ts";
 
 /**
  * `ADR-0011` CLAUSE 3 — THE DECLARED LICENCE, which is the regex guard's one named rule about the
@@ -491,6 +499,32 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
       expect(WITNESSED_EXPRESSION.test(prependedToZobrist(build)), build).toBe(true);
   });
 
+  it("the composer tripwire: assembleFrame's value-importers EQUAL the one composition root", () => {
+    // `ADR-0029` decision 2 — what makes deriving the path from ONE root fail CLOSED. A second
+    // module that composes frames is a second root, and its closure would go unmeasured; a root that
+    // stops composing is no longer the root. "Value-binding import" is `ADR-0030` decision 2's: a
+    // brace specifier NOT prefixed `type`, or a namespace binding. `import type`, an all-`type`
+    // brace list, a bare import and an `export … from` re-export bind no value and do not count.
+    // BOUND, stated: a module that writes frame rows WITHOUT calling `assembleFrame` is not seen.
+    const directory = new URL(".", import.meta.url).pathname;
+    const bindsAssembleFrame = (source: string): boolean =>
+      [...source.matchAll(/^import\s+(?!type\b)([^;]*?)\s*from\s+"\.\/frame\.ts";/gm)].some(
+        ([, clause = ""]) =>
+          /\*\s*as\s+\w+/.test(clause) ||
+          (clause.match(/\{([^}]*)\}/)?.[1] ?? "")
+            .split(",")
+            .some((specifier) => /^assembleFrame\b/.test(specifier.trim())),
+      );
+    const composers = productionModulesIn(directory).filter((file) =>
+      bindsAssembleFrame(readFileSync(`${directory}${file}`, "utf8")),
+    );
+
+    expect(
+      composers,
+      "a second frame composer: make it import the seam, or declare it as the root",
+    ).toEqual([COMPOSITION_ROOT]);
+  });
+
   /**
    * `NFR-002`'s OWN property, MEASURED rather than pattern-matched — a DIFFERENT property from the
    * guard above, over a DIFFERENT set. Neither is a weaker version of the other and neither may be
@@ -498,9 +532,9 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
    *
    * The guard above holds `ADR-0002` clause 4's whole-tree licence EQUALITY over every production
    * module. This one holds `NFR-002`'s frame-scoped premise — `history.ts`'s module body is never
-   * evaluated in the closure of the DECLARED frame producers. Each catches builds the other cannot,
-   * in BOTH directions, and that is a consequence of the properties rather than a coincidence of
-   * coverage:
+   * evaluated on the frame path DERIVED from `COMPOSITION_ROOT`, at load or per frame. Each catches
+   * builds the other cannot, in BOTH directions, and that is a consequence of the properties rather
+   * than a coincidence of coverage:
    *
    * - a static pull in `perft-bench.ts` or `zobrist.ts` — off the frame path, unlicensed — is RED
    *   above and green here, because it breaches the licence and not the premise;
@@ -539,19 +573,23 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
    * `vi.mock` + `importOriginal()` at `:43-44` and the `await import` at `:58-60`, which this
    * file's own spies and `A7`'s `takeBack` require — so a probe phrased as "`history.ts` never
    * loads in this process" would fail in the very file that holds it. A child process rooted at
-   * the declared frame producers is that scoping made mechanical.
+   * the declared composition root is that scoping made mechanical.
    */
   it("evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched", () => {
     const directory = new URL(".", import.meta.url);
     const production = productionModulesIn(directory.pathname);
-    // The one named rule (`ADR-0011` clause 2): root at the DECLARED frame path. The two
-    // hand-maintained filename exclusions that stood here are DELETED, not replaced, and NO THIRD
-    // ONE IS CREATED — `history.ts` is not a frame producer, so rooting it is not something that
-    // has to be refused by name; `perft-bench.ts` exports nothing (`ADR-0011` clause 4) so nothing
-    // can import a binding from it and it can never be on this path; and `ABC-019`'s
-    // `turn-loop.ts` never appears here at all, which is why the loop is green BY THE PROPERTY
-    // rather than by an exemption.
-    const roots = production.filter((file) => FRAME_PRODUCERS.includes(file));
+    // The one named rule (`ADR-0029` decision 2): root at the ONE DECLARED composition root and
+    // derive the rest. The two hand-maintained filename exclusions that stood here are DELETED, not
+    // replaced, and NO THIRD ONE IS CREATED — `history.ts` is not the root, so rooting it is not
+    // something that has to be refused by name; `perft-bench.ts` exports nothing (`ADR-0011`
+    // clause 4) so nothing can import a binding from it and it can never be on this path; and
+    // `ABC-019`'s `turn-loop.ts` never appears here at all, which is why the loop is green BY THE
+    // PROPERTY rather than by an exemption.
+    expect(production, "the declared composition root exists").toContain(COMPOSITION_ROOT);
+    const root = new URL(COMPOSITION_ROOT, directory).href;
+    // The longer per-frame game: past the pane's window, so its windowing branch is taken.
+    const LONG_FRAME_PLIES = 40;
+    expect(LONG_FRAME_PLIES, "the long frame passes the window").toBeGreaterThan(2 * HISTORY_ROWS);
     // The arming control is a root whose closure DOES contain `history.ts`, reached the same way a
     // real regression would reach it — as a DEPENDENCY of the root, not as the root itself.
     //
@@ -570,29 +608,48 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     // `is not valid JSON` — a symptom in the wrong place, reported by the guard that exists to stop
     // symptoms appearing in the wrong place. The trigger is dated, not hypothetical: `EPIC-006`'s
     // CLI entry point is the first module that will print at import.
+    //
+    // THE PER-FRAME PHASE (`ADR-0029` decision 1) runs between the load phase and the arming phase,
+    // on the same recorder. Its game is built from `history.ts?fixture` — a DISTINCT module instance,
+    // the `?arming` technique again — so the real `newGame` / `playMove` / `gameStatusOf` build it,
+    // this file holds no copy of `GameHistory`'s shape, and the plain `history.ts` URL stays unloaded:
+    // a frame that loads it produces a fresh load event. Two states, because the pane's window
+    // branches at `2 x HISTORY_ROWS` plies and a lazy edge behind that branch never fires on an empty
+    // game. The settle is a bounded count of macrotask turns and NEVER a clock: the load hook fires
+    // when an import is ISSUED, so it is not load-bearing on Node v26.11.0, and it stays because
+    // `package.json` admits Node >= 22. If this phase ever flakes, look at the settle first.
     const probe = `import { registerHooks } from "node:module";
       import { writeSync } from "node:fs";
       let loaded = [];
       registerHooks({ load(url, context, nextLoad) { loaded.push(url); return nextLoad(url, context); } });
       const seen = () => loaded.filter((url) => url.startsWith("file:")).map((url) => url.slice(url.lastIndexOf("/") + 1).replace(/\\?.*$/, ""));
-      const [arming, ...roots] = process.argv.slice(1);
-      for (const root of roots) await import(root);
+      const [arming, root, startFen, longPlies] = process.argv.slice(1);
+      const { makeRenderSeam } = await import(root);
       const closure = seen();
+      const { gameStatusOf, newGame, playMove } = await import(new URL("history.ts?fixture", root).href);
+      const { legalMoves } = await import(new URL("legal.ts", root).href);
+      const games = [{ history: newGame(startFen), plies: 0 }, { history: newGame(startFen), plies: 0 }];
+      for (let seed = 0x2f6e2b1; games[1].plies < Number(longPlies); games[1].plies++) {
+        const moves = legalMoves(games[1].history.position);
+        if (moves.length === 0) break;
+        seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+        playMove(games[1].history, moves[seed % moves.length]);
+      }
+      const statuses = games.map(({ history }) => gameStatusOf(history));
+      const seam = makeRenderSeam("ascii", "white-bottom");
+      loaded = [];
+      const frames = games.map(({ history, plies }, index) => ({ plies, rows: seam(history, statuses[index], false, []).length }));
+      for (let turn = 0; turn < 3; turn++) await new Promise((resolve) => setImmediate(resolve));
+      const perFrame = seen();
       loaded = [];
       await import(arming);
-      writeSync(3, JSON.stringify({ closure, armed: seen() }));`;
+      writeSync(3, JSON.stringify({ closure, perFrame, frames, armed: seen() }));`;
 
     // stderr stays PIPED and is surfaced below rather than swallowed, and nothing on it is parsed —
     // so module-scope `console.error` stays correctly invisible and nothing over-reaches onto it.
     const child = spawnSync(
       process.execPath,
-      [
-        "--input-type=module",
-        "-e",
-        probe,
-        armingRoot,
-        ...roots.map((file) => new URL(file, directory).href),
-      ],
+      ["--input-type=module", "-e", probe, armingRoot, root, START_FEN, String(LONG_FRAME_PLIES)],
       { encoding: "utf8", stdio: ["ignore", "ignore", "pipe", "pipe"] },
     );
     // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK. `execFileSync` used to throw this for us; a
@@ -602,19 +659,34 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     if (child.status !== 0)
       throw new Error(`probe child failed (${child.status}): ${child.stderr}`);
 
-    const { closure, armed } = JSON.parse(child.output[3] as string) as {
+    const { closure, perFrame, frames, armed } = JSON.parse(child.output[3] as string) as {
       closure: string[];
+      perFrame: string[];
+      frames: { plies: number; rows: number }[];
       armed: string[];
     };
 
     // POSITIVE control: the recorder sees what it should, so an empty closure cannot pass here.
     expect(closure, "the probe loaded the pane").toContain("history-pane.ts");
     expect(closure, "the probe loaded the pane's own dependencies").toContain("san.ts");
-    // ARMING (negative) control: a zero is worthless without it. The recorder is NOT blind to
-    // `history.ts` — when a root's closure contains it, it is reported.
+    // The per-frame phase's controls (`ADR-0029` decision 1): it DREW frames — a child that never
+    // called the seam reports nothing and cannot pass — and it drew them on both required states.
+    expect(
+      frames.map(({ plies }) => plies),
+      "frames drawn: the empty game, then one longer than the history window",
+    ).toEqual([0, LONG_FRAME_PLIES]);
+    for (const { plies, rows } of frames)
+      expect(rows, `rows the frame at ${plies} plies returned`).toBeGreaterThan(0);
+    // ARMING (negative) control, LAST and on the same recorder: a zero is worthless without it.
+    // The recorder is NOT blind to `history.ts` — when a root's closure contains it, it is reported.
     expect(armed, "the probe is ARMED").toContain("history.ts");
 
-    // The measurement itself.
-    expect(closure, "history.ts was evaluated on the frame path").not.toContain("history.ts");
+    // The measurement itself, one assertion per phase.
+    expect(closure, "AT LOAD: history.ts was evaluated on the frame path").not.toContain(
+      "history.ts",
+    );
+    expect(perFrame, "PER FRAME: history.ts was loaded by a frame call").not.toContain(
+      "history.ts",
+    );
   });
 });

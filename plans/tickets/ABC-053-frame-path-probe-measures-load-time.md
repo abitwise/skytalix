@@ -238,3 +238,35 @@ MET → `Ready`.**
 | 8 | size assigned | **✅** `S` (2), with the re-size trigger named |
 | 9 | priority assigned | **✅** `P1` |
 | 10 | no major unresolved blocker | ~~**⚠️ NOT MET**~~ **✅ 2026-10-10 — see the re-score above.** Was: the ruling itself is the unresolved question, and it is **Architect/Design's**, not BA/PM's. This ticket is Ready to be *assigned*, not Ready to be *built*: an engineer pulling it today would be choosing what `ADR-0011` measures, which is exactly the wrong decider. **→ RULED 2026-10-10 by Architect/Design in [`ADR-0029`](../../memory-bank/50-decisions/ADR-0029-the-frame-path-guard-measures-load-and-per-frame-from-one-composition-root.md) (`proposed`, owner acceptance owed).** It covers both phases, measured by module loads, from one declared root; `glyph-mode.ts` is off the path. Not re-scored: the verdict is BA/PM's |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-053`).
+- Branch `grugops/ABC-053-frame-path-per-frame`, from `e15eb31d`. The code is `c9509031`.
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-053/` (`…9594aafe`,
+  `…3a8f5aa3`, `probe/`) and are not restated here.
+
+**`A2`–`A5` are met; `A1` was discharged by `ADR-0029`. No stop condition fired.** No production file
+was touched; security clause (d) fires as named in advance.
+
+| # | verdict | reading (builds out of tree on `c9509031`) |
+|---|---|---|
+| `A2` | MET | 0 × `FRAME_PRODUCERS` in the file. The docblock names both phases, the one root `render-seam.ts`, and the four uncovered cases |
+| `A3` | MET | **9 of 9 RED, BASE green.** `X5b`, `X5b-CONDITIONAL`, `X5b-query`, `X5b-computed`, `X5c`: per frame. `WDYNIMP`, `INLINE-TYPE`: at load. `WINDIRECT`: regex. `SECOND-COMPOSER`: tripwire. `WGLYPH-DYN` is green and named as the loss |
+| `A3b` | MET | No frame drawn → RED (rows; frames list). Empty game only → RED (frames list), and `X5b-CONDITIONAL` is green without the 40-ply state. Arming runs last on the same recorder |
+| `A4` | MET | `glyph-mode.ts` is not a root; the membership rule is stated in the docblock |
+| `A5` | MET | `src/` diff = `src/history-pane.nfr.test.ts` (+124/−52) and `src/render-seam.test.ts` (+6/−6). 0 production lines, 0 new files, 1 → 1 `spawnSync(`. `A9` asserts the root; `LICENSED_DRIVERS` is byte-identical |
+
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 51 files / 1582 passed (load1 9.51). The
+  skip count is 0 (measured), and integrity reads `No findings.` `lane-inventory.js` is exit 0 with
+  no findings.
+- **Cost (`ADR-0035`, proposed; narrow set = the two files, twin control).**
+  - Set 1 (n = 8) is inadmissible: twin +8.55 %.
+  - Set 2 (n = 12): twin R 0.052 s, head **+0.008 s CPU** (interval −0.023..+0.068), load1 median 11.3.
+  - `N8-LANE` has no added file in scope. No `NFR-008` verdict is claimed.
+- **Owed `XS` follow-up (BA/PM, at merge).** These production docblocks are stale on landing:
+  `src/render-seam.ts:34-36`, `src/result-screen.ts:13-15`, `src/cli.ts:8` (the "frame producers 6"
+  census).
+- **Next.** QE's hop, then Security/NFR resolves clause (d). After merge, `ABC-054` and then
+  `ABC-057` start from this file.

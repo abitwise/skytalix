@@ -1,0 +1,5 @@
+== write: permission: 'FileSystemWrite' 
+== net: bad port 
+== net2: ERR_ACCESS_DENIED Access to this API has been restricted permission: 'Net' 
+== spawn: permission: 'ChildProcess' 
+== readout: permission: 'FileSystemRead' 

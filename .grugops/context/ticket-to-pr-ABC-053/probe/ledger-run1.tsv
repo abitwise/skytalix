@@ -1,0 +1,11 @@
+BASE	exit=0	load1=4.88	 Tests 23 passed (23)	
+X5b	exit=1	load1=4.88	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-CONDITIONAL	exit=1	load1=4.97	 Tests 2 failed | 21 passed (23)	AssertionError: expected '\n\nimport { assembleFrame } from "./…' not to match /\d/|AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-query	exit=1	load1=4.97	 Tests 2 failed | 21 passed (23)	AssertionError: expected '\n\nimport { assembleFrame } from "./…' not to match /\d/|AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-computed	exit=1	load1=4.97	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5c	exit=1	load1=4.97	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+WDYNIMP	exit=1	load1=4.81	 Tests 1 failed | 22 passed (23)	AssertionError: AT LOAD: history.ts was evaluated on the frame path: expected [ 'render-seam.ts', 'frame.ts', …(12) ] to not include 'hist|
+INLINE-TYPE	exit=1	load1=4.81	 Tests 2 failed | 21 passed (23)	AssertionError: AT LOAD: history.ts was evaluated on the frame path: expected [ 'render-seam.ts', 'frame.ts', …(12) ] to not include 'hist|AssertionError: expected [ 'cli.ts', 'history-pane.ts', …(1) ] to deeply equal [ 'cli|
+WINDIRECT	exit=1	load1=4.81	 Tests 1 failed | 22 passed (23)	AssertionError: expected [ 'cli.ts', 'glyph-mode.ts', …(1) ] to deeply equal [ 'cli.t|
+SECOND-COMPOSER	exit=1	load1=5.15	 Tests 1 failed | 22 passed (23)	AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 're|
+WGLYPH-DYN	exit=0	load1=5.15	 Tests 23 passed (23)	

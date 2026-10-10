@@ -1,0 +1,5 @@
+n = 8, k = 2, load1 median 6.74 (min 6.44, max 6.88)
+cpu twin - base: median -0.004 s (-0.29 %), sign 3/8, interval -0.018..0.035, R 0.035 s
+cpu head - base: median +0.031 s (2.25 %), sign 6/8, interval -0.010..0.059, R 0.059 s
+wall twin - base: median +0.002 s (0.35 %), sign 4/8, interval -0.012..0.013, R 0.013 s
+wall head - base: median +0.011 s (1.90 %), sign 5/8, interval -0.010..0.019, R 0.019 s

@@ -1,0 +1,11 @@
+BASE	bin-v24.12.0	exit=0	load1=6.49	 Tests 23 passed (23)	
+X5b	bin-v24.12.0	exit=1	load1=6.49	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-CONDITIONAL	bin-v24.12.0	exit=1	load1=6.45	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5c	bin-v24.12.0	exit=1	load1=6.45	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-ZERO-SETTLE+X5b	bin-v24.12.0	exit=1	load1=6.65	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-SETTLE-IMM1+ZERO	bin-v24.12.0	exit=0	load1=6.65	 Tests 23 passed (23)	
+Q-SETTLE-IMM3	bin-v24.12.0	exit=1	load1=6.65	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-SETTLE-IMM4	bin-v24.12.0	exit=0	load1=6.52	 Tests 23 passed (23)	
+Q-SETTLE-TIMEOUT-NODELAY	bin-v24.12.0	exit=1	load1=6.52	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+SECOND-COMPOSER	bin-v24.12.0	exit=1	load1=6.52	 Tests 1 failed | 22 passed (23)	AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 'render-seam.|
+WDYNIMP	bin-v24.12.0	exit=1	load1=6.80	 Tests 1 failed | 22 passed (23)	AssertionError: AT LOAD: history.ts was evaluated on the frame path: expected [ 'render-seam.ts', 'frame.ts', …(12) ] to not include 'history.ts'|
