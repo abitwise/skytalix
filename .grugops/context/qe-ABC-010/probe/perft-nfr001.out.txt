@@ -1,0 +1,73 @@
+perft start 16:42:51Z load1 21.75
+ABC-006 perft harness — move-generation correctness + throughput
+================================================================
+node       v26.11.0
+platform   darwin/arm64
+
+Node counts (leaf nodes of the legal move tree):
+  startpos     perft(4) =      197,281   0.067 s   2,964,317/sec
+  kiwipete     perft(4) =    4,085,603   1.109 s   3,685,121/sec
+  position-3   perft(5) =      674,624   0.194 s   3,475,798/sec
+  position-4   perft(4) =      422,333   0.127 s   3,316,445/sec
+  position-5   perft(4) =    2,103,487   0.623 s   3,374,908/sec
+  position-6   perft(4) =    3,894,594   1.203 s   3,237,905/sec
+
+perftDivide — kiwipete depth 3 (per first move; the counts sum to 97,862):
+  a1b1: 1,969
+  a1c1: 1,968
+  a1d1: 1,885
+  e1f1: 1,855
+  e1d1: 1,894
+  h1g1: 2,013
+  h1f1: 1,929
+  a2a3: 2,186
+  a2a4: 2,149
+  b2b3: 1,964
+  d2e3: 2,136
+  d2f4: 2,000
+  d2g5: 2,134
+  d2h6: 2,019
+  d2c1: 1,963
+  e2d3: 2,050
+  e2c4: 2,082
+  e2b5: 2,057
+  e2a6: 1,907
+  e2f1: 2,060
+  e2d1: 1,733
+  g2g3: 1,882
+  g2g4: 1,843
+  g2h3: 1,970
+  c3b5: 2,138
+  c3a4: 2,203
+  c3d1: 2,040
+  c3b1: 2,038
+  f3f4: 2,132
+  f3f5: 2,396
+  f3f6: 2,111
+  f3g3: 2,214
+  f3h3: 2,360
+  f3e3: 2,174
+  f3d3: 2,005
+  f3g4: 2,169
+  f3h5: 2,267
+  d5d6: 1,991
+  d5e6: 2,241
+  e5f7: 2,080
+  e5d7: 2,124
+  e5g6: 1,997
+  e5c6: 2,027
+  e5g4: 1,878
+  e5c4: 1,880
+  e5d3: 1,803
+  e1g1: 2,059
+  e1c1: 1,887
+  ---- 48 moves, sum 97,862
+
+Throughput   11,377,922 nodes in 3.323 s  =>  3,424,249/sec
+NFR-001      >= 1,000,000 nodes/sec  AT OR ABOVE target
+
+Caveat (see the ABC-008 spike): this is CLASSIC perft — a leaf at depth 0 returns 1
+without generating, so most counted nodes did no work and the rate is INFLATED
+relative to real engine throughput. The spike's search-shaped metric is the one that
+maps onto engine strength; NFR-005 is read against that, not against this figure.
+rc 0 end load1 20.49

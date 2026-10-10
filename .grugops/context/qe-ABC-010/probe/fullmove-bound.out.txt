@@ -1,0 +1,6 @@
+fullmove 10000: ACCEPTED as 10000
+fullmove 999999: ACCEPTED as 999999
+fullmove 9007199254740993: rejected: fullmove number "9007199254740993" does not round-trip: it reads back as "9007199254740992"
+fullmove 99999999999999999999: rejected: fullmove number "99999999999999999999" does not round-trip: it reads back as "100000000000000000000"
+fullmove 100000000000000000000: ACCEPTED as 100000000000000000000
+fullmove 999999999999999999999: rejected: fullmove number "999999999999999999999" does not round-trip: it reads back as "1e+21"

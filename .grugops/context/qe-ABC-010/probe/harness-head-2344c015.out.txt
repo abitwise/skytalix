@@ -1,0 +1,15 @@
+start 16:33:40Z load1 16.05
+== A hand-picked table
+A rejects matched 40/40; accepts held 25/25
+== B non-string inputs
+B FenError on 22 of 22 (entry x input)
+== C differential fuzz
+C 200000 random FENs (seed 20261010); oracle buckets: accept 38565, castling 37265, en-passant 12403, grammar 89110, pawn 2889, side 19768; accepted+round-tripped 38565
+== D positive corpus by play
+D 300 games, 69625 positions (68494 distinct boards), ep set 944, castling held 4693, side to move in check 3997
+== E production corpora
+E 92/92 corpus FENs accepted and round-tripped
+== RESULT PASS
+real 3.81
+user 3.96
+sys 0.08

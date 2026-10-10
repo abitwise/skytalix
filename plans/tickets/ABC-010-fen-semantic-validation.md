@@ -381,3 +381,49 @@ board move is the Orchestrator's, and so is the `ABC-083` sequencing in § Depen
   - The rank-1/8 pawn scan uses raw 0x88 squares. With `squareAt`, `ABC-016` `A13`'s spy counts rose by 16.
 - **`memory-bank/30-architecture.md`:** the `fen.ts` row moved to level 3 (owed by `ADR-0033` § Consequences).
 - **UAT is owed** (production file): the owner's word at `In UAT`.
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-010`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `be37e222..2344c015` (code `1304cc2c`). Every reading is QE's own, taken on its own harness, in its own
+worktree or in out-of-tree `git archive` trees. The committed probe scripts were not refused, and 9(d)'s scan
+reproduced the SE's output byte for byte. Readings, mutants, fixture review and gaps:
+`.grugops/context/qe-ABC-010/notes/` (`…40ccc992` verdict, `…d22743e3` readings, `…2c22980f` gaps, `…57554fd2`
+artifacts). Raw files: `probe/RUN.txt`.
+
+**Every acceptance row and 9(a)–(f) MET.**
+- **The harness** (its own FEN reader and attack oracle, no `moves.ts`):
+  - 40/40 rejections carry the exact message, and 25/25 legal FENs are accepted;
+  - 22/22 non-string inputs throw `FenError` on both entries;
+  - a 200 k fuzz, run with 2 seeds, shows 0 disagreements with `ADR-0033`'s first-fault order;
+  - 69,625 positions reached by play are accepted and round-trip;
+  - the production corpora pass 92/92.
+
+  It is red on base.
+- **The deep lanes** exit 0 on all five: puzzle (58/62 against a baseline of 58/62), perft 32/32, quiescence, zobrist
+  and levels. load1 is logged per lane.
+- **`NFR-002`:** 2.677 µs against 2.476 µs (bar 10 µs). **`NFR-001`:** 3.42 M nodes/sec.
+- **The fixtures** keep their names and their points. `SIX_QUEENS_FEN` is now legal, and its candidate list is one
+  character wider. The `A4` rename is accurate. The `30-architecture.md` edit is what `ADR-0033` requires.
+
+**What QE added (test-only).** Six of 30 mutants of `src/fen.ts` survived the whole suite:
+- drop right `Q`;
+- drop right `k`;
+- a castling rook or king of either colour;
+- an ep pushed pawn of either colour;
+- ep rules for white to move only.
+
+QE added one `describe` to `src/fen.test.ts`, with 16 rejection rows and 6 accept controls, 0 lines deleted and 0 new
+files. All six mutants are now red, and the 16 rows are red on base (`QE-010-a`, MEDIUM, CLOSED). Gates: lint,
+typecheck and build exit 0. `npm test` passes 52 files / **1,663** tests with skip 0. Integrity and lane inventory are
+clean.
+
+**Gaps, none blocking:**
+- **`QE-010-b`** (LOW, to the Orchestrator): derives per six-queens prompt went 6 → 7. Two comments still say six, and
+  one of them is in production `src/move-input.ts:48`.
+- **`QE-010-c`** (LOW, to BA/PM): `src/history-pane.ts:55` names `ABC-010` as the ticket that would bound the move
+  number. It does not: fullmove 1e20 parses.
+- **`QE-010-d`** (LOW, to Architect/Design): the guard's blind spots are a subdirectory, a `.mts` file and a computed
+  member. All are outside `ADR-0033`'s wording, and none exists today.
+
+**Next:** recommend `Ready for UAT`; the board move is the Orchestrator's. **UAT is owed, not waived**: the owner's
+word at `In UAT`. Not merged, not pushed.
