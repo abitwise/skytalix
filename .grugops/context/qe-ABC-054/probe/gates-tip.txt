@@ -1,0 +1,30 @@
+# QE ABC-054 gates at b85f1d82, 2026-10-10T12:49:31Z, node v26.11.0
+## npm run lint exit=0 load1_before=2.54 load1_after=2.54
+
+> cli-chess@0.0.0 lint
+> biome check .
+
+Checked 98 files in 107ms. No fixes applied.
+## npm run typecheck exit=0 load1_before=2.54 load1_after=2.54
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+## npm run build exit=0 load1_before=2.54 load1_after=2.57
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+## npm test exit=0 load1_before=2.57 load1_after=2.45
+
+ Test Files  51 passed (51)
+      Tests  1583 passed (1583)
+   Start at  15:49:34
+   Duration  6.01s (transform 1.15s, setup 0ms, collect 8.32s, tests 9.10s, environment 5ms, prepare 1.86s)
+
+## skip-count=0 load1=2.45
+No findings.
+integrity exit=0
+The lane collects 51 test files; git tracks 51.
+No findings.
+lane-inventory exit=0

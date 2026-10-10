@@ -1,0 +1,53 @@
+# QE ABC-054 ledger B (AUTOFIX = biome check --write src after plant), 2026-10-10T12:53:53Z, node v26.11.0
+b85f1d82	QX3b+AUTOFIX	exit=1	load1=2.93	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-MULTILINE+AUTOFIX	exit=1	load1=2.93	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-BARE+AUTOFIX	exit=1	load1=2.85	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O1-BLOCKCOMMENT+AUTOFIX	exit=1	load1=2.85	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O2-LINECOMMENT+AUTOFIX	exit=1	load1=3.67	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O6-COMMENTED-SPECIFIER+AUTOFIX	exit=1	load1=3.85	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O3-TYPE-NOSPACE+AUTOFIX	exit=1	load1=3.85	 Tests 2 failed | 22 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer|ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts []
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QX3b-O4-COMMENTED-IMPORT+AUTOFIX	exit=1	load1=3.94	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QC1-VOID+AUTOFIX	exit=1	load1=3.94	 Tests 1 failed | 23 passed (24)	tsc=0 biome=0	FAILED:ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented|
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QOK-ALIAS+AUTOFIX	exit=0	load1=5.79	 Tests 24 passed (24)	tsc=0 biome=0	FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QOK-MULTILINE+AUTOFIX	exit=0	load1=6.13	 Tests 24 passed (24)	tsc=0 biome=0	FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QF-COMMENT+AUTOFIX	exit=0	load1=6.13	 Tests 24 passed (24)	tsc=0 biome=0	FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
+b85f1d82	QF-DEFAULT+EXPORT+AUTOFIX	exit=0	load1=6.04	 Tests 24 passed (24)	tsc=0 biome=0	FAILED:
+    consumers render.ts ["render-seam.ts"]
+    consumers status-panel.ts ["render-seam.ts"]
+    consumers history-pane.ts ["render-seam.ts"]
