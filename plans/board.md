@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-132` → `In Review` (`9f8db35a`); QE `qe-ABC-132` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-129` → `Done` (UAT WAIVED, comment-only per owner Q4; merged `3730f28e`); `ABC-132` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-F-072-1` merged: ADR-0036 widened limbs landed (dated block); canonical clause (b) instrument is now `.grugops/context/design-F-072-1/probe/clause-b.mjs` (four Architect additions beyond the ruling, all widen-only — Security/NFR to look at the next clause (b) gate). **`AR-072-LIMBS` CLOSED** — route clause (b) with the canonical instrument. QE-136-a accepted residual (trigger: code edits between guard importer and `toEqual`); QE-136-b → ADR-0011 `R5c` ticket (BA/PM to cut, after ABC-134 — now Done); ADR-0004 (2a) scoped to `text` (QE-104-d)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-134` → `Done` (UAT WAIVED)._
@@ -607,8 +608,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-132] Three production docblocks cite the deleted FRAME_PRODUCERS list  (BA/PM, XS, P3, epic: —, since: 2026-10-10, **DoR 10/10**; cut at `postmerge-followups-2026-10-10`; comment-only in `src/render-seam.ts`/`result-screen.ts`/`cli.ts` → owner UAT word (pair with ABC-129); never in parallel with ABC-129) **→ In Development 2026-10-10**, pulled after `ABC-129` merged (`3730f28e`) by the Orchestrator (subtask `ticket-to-pr-ABC-132`, branch `grugops/ABC-132-stale-docblocks`).
+## In Development (WIP 0/3)
 
 
 
@@ -636,7 +636,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-132] Three production docblocks cite the deleted FRAME_PRODUCERS list  (BA/PM, XS, P3, epic: —, since: 2026-10-10, **DoR 10/10**; cut at `postmerge-followups-2026-10-10`; comment-only in `src/render-seam.ts`/`result-screen.ts`/`cli.ts` → owner UAT word (pair with ABC-129); never in parallel with ABC-129) **→ In Development 2026-10-10**, pulled after `ABC-129` merged (`3730f28e`) by the Orchestrator (subtask `ticket-to-pr-ABC-132`, branch `grugops/ABC-132-stale-docblocks`). **→ In Review 2026-10-10**: built on `grugops/ABC-132-stale-docblocks` @ `9f8db35a` (A1–A4 MET; `cli.ts`/`render-seam.ts`/`result-screen.ts` comments only, 14+/13−; both owner Q4 measures hold on all three with negative controls; gates + CLI_DEEP green). QE `qe-ABC-132` dispatched.
 
 
 

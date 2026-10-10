@@ -1,8 +1,8 @@
 ---
 id: ABC-132
 title: Three production docblocks still cite the deleted `FRAME_PRODUCERS` list and the superseded "declared, not derived" rule — comment-only, three files
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P3
 epic: —
