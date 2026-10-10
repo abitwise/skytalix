@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-owed-rulings-2026-10-10` merged (`9525b9bb`): ADR-0011 pointers P1–P5 (R5b registered from QE-057-a — BA/PM to cut XS ticket), ADR-0029/0030 pointers, ADR-0034 scope-test reading, ADR-0035 per-set floor (still PROPOSED), **ADR-0036 ACCEPTED by Architect/Design (ABC-041 clause (b) = DELTA; owner may veto)**. Routing on the delta test from here, citing ADR-0036._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-059` → `Done` (UAT WAIVED; merged `4c33b72b`); `ABC-133` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-104` → `Ready for UAT` (`328e77e8`); owner word owed._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-104` QE PASS_WITH_GAPS; docblock fix-forward `fix-ABC-104` dispatched (stays `In Review`)._
