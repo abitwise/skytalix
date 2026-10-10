@@ -1,8 +1,8 @@
 ---
 id: ABC-053
 title: The frame-path probe measures LOAD-time closure, and `NFR-002`'s premise is the PER-FRAME path — the two stopped matching at `ABC-041`
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: S
 priority: P1
 epic: —
