@@ -19,6 +19,10 @@ _Reconciled 2026-10-10 by the AGENTS.md Scribe (task `scribe-command-log-2026-10
 -- AGENTS.md` since this file's last touch (`ea68a2d8`, 2026-09-26): four commits, each with its entry
 below and a row in § "Reconciliation ledger, 2026-10-10" at the end._
 
+_Headroom pass 2026-10-10 by the AGENTS.md Scribe (task `scribe-headroom-2026-10-10`), after `ABC-087`
+merged (`25f6d92d`): stale counts refreshed at the wave tip `5d55cc48`, the Levels deep lane given its
+entry, two prose cuts to `AGENTS.md`. See § "Headroom pass, 2026-10-10" at the end._
+
 ## Dev / run — `npm run chess`
 
 Verified 2026-08-14 at `ABC-042`: prints the start position (23 rows) on stdout and exits 0.
@@ -74,6 +78,13 @@ added its rows. `AGENTS.md` still reads 50/1539 and is one lane-count stale; the
 Scribe edit of `AGENTS.md` (this hop may not touch it — `ABC-087` is in UAT with its own edit). Not a
 gate on the count: only the exit code and 0 failed are.
 
+RE-MEASURED once more, 2026-10-10, `scribe-headroom-2026-10-10`, wave tip `5d55cc48`, load1 ~11 at
+start: exit 0, **52 files, 1608 tests, 7.84 s**. `ABC-087`'s merge (`25f6d92d`) had already refreshed
+`AGENTS.md` to 52/1603 (its own branch reading, 5.9 s); the five-test difference is test rows from
+other tickets merged into the wave since (`ABC-133`, `ABC-135`, `ABC-136` touched tests; not attributed row by row). `AGENTS.md` now reads 52/1608, 7.8 s (a loaded
+reading; the quiet ones are 5.5-6.7 s). Moving figure: 47/1446 -> 50/1539 -> 51/1584 -> 52/1603 -> 52/1608.
+`ABC-131`'s own branch will move it again when it merges (not applied: unmerged).
+
 ## Search deep lane (`ABC-077`) — `SEARCH_DEEP=1 npx vitest run src/search.test.ts`
 
 RUN 2026-08-17 at the `ABC-077` branch tip: exit 0, 41 passed (28 in the default lane), 23.0 s.
@@ -107,6 +118,38 @@ start -> 4.8 at end: exit 0, **46 passed (33 default), 291.55 s** vitest duratio
 different steps, interleaved") added a row to `src/engine.test.ts`. `AGENTS.md` still says "45
 passed (32 default)" — stale by one; owed to the next Scribe edit of `AGENTS.md`. COUNT YOUR RUN: 46
 is the whole lane now. The wall figure is load-dependent and is not a gate.
+
+RE-MEASURED 2026-10-10 (`scribe-headroom-2026-10-10`, wave tip `5d55cc48`, load1 12.7 at start -> 11.6
+at end, i.e. a LOADED machine): exit 0, **46 passed (33 default), 310.93 s**. That sits inside the
+292-319 s range `AGENTS.md` carries, so the time stays; the count correction (45 -> 46 passed, 32 -> 33
+default) that was owed above is now made in `AGENTS.md`, and its RUN date moves to 2026-10-10.
+
+## Levels deep lane (`ABC-087`, `src/levels.test.ts`) — `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`
+
+`ABC-087` (difficulty levels, `src/levels.ts`) landed this line in `AGENTS.md` at `25f6d92d`; this is
+its entry (the Levels section did not exist in this file before). Opt-in: unset, the deep cases are
+NOT DEFINED, not skipped (same shape as `PERFT_DEEP`/`SEARCH_DEEP`), so the gate's skip count stays 0.
+What the 28 hold beyond the 22 default: `A4`'s evidence over two corpora (the ENDGAMES set, 204 moves,
+and the perft + puzzles set, 246 moves: easiest level never plays the worst move, plays the strict
+second-best, blunder rate within +/-5 pp of 40 %), `A2` on a virtual clock, `A3` (the easiest level
+solves strictly fewer puzzles than the default, counted on one run of the suite in the tree) and
+`A5` (the hardest level, 30 positions, every move <= 5 s on the REAL clock — 135 s of the lane, the
+reason it is opt-in).
+
+Receipts. (1) `ABC-087` Engineer, 2026-10-10, at `1160b063`: exit 0, 28 passed (22 default), 202.0 s at
+load1 8.86 -> 8.35; `A4` 39.7 % / 39.4 %, `A5` 30/30 max 4,521 ms, `A3` 35 vs 58 of 62. (2)
+`scribe-headroom-2026-10-10`, 2026-10-10, wave tip `5d55cc48` (no byte of `src/levels*.ts`,
+`src/engine.ts`, `src/virtual-clock.ts` differs from `1160b063`), load1 10.2 -> 9.3: exit 0, **28
+passed (22 default), 224.95 s**; `A4` 39.7 % (80 blunders + 1 no-candidate / 204) and 39.4 % (97 / 246),
+`A5` 30/30 max 4,541 ms, 135.4 s, `A3` **36** vs 58 of 62. So `AGENTS.md` says "202-225 s" and "A3
+(35-36 vs 58 of 62)": the time and the easiest level's puzzle count are both load- and wall-clock-
+dependent, and are not gates; the gate is the exit code and 28 passed. COUNT YOUR RUN: 28 is the whole
+lane. Trigger: run it after any change to `src/levels.ts`, `src/engine.ts` or `src/virtual-clock.ts`.
+
+OWED, not applied (unmerged): `ABC-131` (`grugops/ABC-131-drop-edge-puzzles`, awaiting the owner's UAT
+word) changes the figures this entry quotes — `PUZZLE_DEEP` 54/58 and 18 passed, levels `A4` 242 moves
+(not 246), `A3` 35 vs 54 of 58 (not 58 of 62). Per `QE-131-c`. When it merges, refresh this entry, the
+Puzzle-suite entry and `AGENTS.md` together.
 
 ## Input-seam deep lane (`ABC-037`) — `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
 
@@ -349,3 +392,25 @@ Owed after `ABC-087` merges (its branch carries its own `AGENTS.md` edit and a `
 line, `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`, not on the wave yet): re-reconcile this
 file against that merge, and decide the two stale counts above with the headroom proposal in
 `.grugops/context/scribe-command-log-2026-10-10/notes/`.
+
+## Headroom pass, 2026-10-10
+
+Task `scribe-headroom-2026-10-10`, wave tip `5d55cc48`, after `ABC-087` merged. `AGENTS.md` 24,162 B ->
+**23,633 B** (cap 24,576 B, `ABC-109`; headroom 414 -> **943 B**). Ranks 1 and 2 of the headroom proposal
+(`.grugops/context/scribe-command-log-2026-10-10/notes/`, `…a023cfcd`); rank 3 is HELD (it rewrites the
+owner's 2026-08-15 wording, no answer); ranks 4 and 5 stay in reserve.
+
+| change to `AGENTS.md` | bytes | what it dropped / kept |
+|---|---:|---|
+| Rank 1: deleted the "Drafted by BA/PM at `home-the-gaps-2026-08-13`…" paragraph under § Role / workflow files; folded its one behavioural fact into the blockquote as one sentence ("Restoring the writer is an install-level fix (`node install/install.js --check`) escalated to the owner, not a ticket.") | -228 | dropped the story (who drafted it, who placed it, "eight consecutive hops re-derived it") — provenance, kept in the `home-the-gaps-2026-08-13` notes; the rule ("Do not re-derive this; do not invent a stamp.") and the install-level-fix fact stay. The paragraph was already 70 B tighter than the proposal measured (`ABC-087`'s pass), and the fold costs ~110 B, so the saving is below the proposal's 350 B |
+| Rank 2: deleted the "> **Kit vs state invariant:**" blockquote at the end of § Kit vs state | -308 | it restated the four bullets directly above it, near-verbatim; the bullets are the clear-voice copy |
+| `Test (all)` RUN: 52 files / 1603 tests / 5.9 s -> 52 / **1608** / 7.8 s | +0 | re-measured, see § Test (all) |
+| `Engine deep lane`: RUN 2026-10-09, 45 passed (32 default) -> RUN 2026-10-10, **46 passed (33 default)** | +0 | re-measured, see § Engine deep lane |
+| `Levels deep lane`: 202 s -> **202-225 s**; A3 "35" -> "**35-36**" | +7 | re-measured, see § Levels deep lane |
+
+Net: 24,162 -> 23,633 B (-529 B). Guards read green: `src/cli.test.ts` (`ABC-109` byte cap, `ABC-059`
+runnability, `ABC-065`/`ABC-069` `Dev / run` slot rules); the `Dev / run` slot and the `PUZZLE_DEEP`
+`TRIGGER` text are byte-identical to the before-file.
+
+Resolved by this pass: the two stale counts and the `Levels deep lane` entry that the ledger above
+left owed. Still owed: `ABC-131`'s figures (see § Levels deep lane), when it merges.
