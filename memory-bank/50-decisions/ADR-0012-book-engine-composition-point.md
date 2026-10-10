@@ -18,6 +18,10 @@ the question BA/PM raised at `refinement-p0-chain-2026-08-18`. It is `G3` on the
 What this hop adds is the signature, the falsifiers the ratifying role owes, clause 9's **discharge**,
 and two re-measurements.
 
+**2026-10-10, `design-ABC-093`:** § Consequences' **`G4` is CLOSED** by `ADR-0037` D2. The probe takes
+an injected `() => number`; `seededRandom` stays in `src/levels.ts`; a production session binds
+`Math.random` at the root (D3). Clause 3(b) holds as written. Nothing else in this file changes.
+
 ### Why it is ratified here, when the proposing hop declined
 
 That hop left it `proposed` on two named grounds. The first is a misreading and is corrected; the
