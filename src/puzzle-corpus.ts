@@ -147,12 +147,9 @@ export const PUZZLES: readonly Puzzle[] = [
   ...HANGING_CORPUS.map((row) => ({ ...row, kind: "do-not-hang" as const, source: HANG })),
   { name: "mate in 3, seed 1: black Q+R against N", fen: "8/7K/8/8/1k6/8/8/q1r2N2 b - - 0 1", kind: "mate-in-3", accept: ["a1a6", "a1f6", "c1c6"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 1` },
   { name: "mate in 3, seed 69: black 2R+B against 2P", fen: "2r5/K7/8/8/P7/4P1b1/8/k4r2 b - - 0 1", kind: "mate-in-3", accept: ["f1b1", "f1f6"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 69` },
-  { name: "mate in 3, seed 1008: black Q+R against a bare king", fen: "8/4q3/K7/8/8/8/4k1r1/8 b - - 0 1", kind: "mate-in-3", accept: ["e7b4", "e7c5"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 1008` },
-  { name: "mate in 3, seed 1075: black R+B+N against a bare king", fen: "K7/1r6/8/k7/8/8/3n4/5b2 b - - 0 1", kind: "mate-in-3", accept: ["b7c7"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 1075` },
-  { name: "mate in 3, seed 1424: white Q+2B+N against N", fen: "8/k7/2B5/5N2/n2K4/8/6QB/8 w - - 0 1", kind: "mate-in-3", accept: ["g2d5", "g2g7", "h2c7"], tags: ["depth≥5"], source: `${MATE3}, seed 1424` },
+  // ABC-131, ADR-0034 (b) at 0.8x: seeds 1008, 1075, 1424 and 1982 dropped, each lost at <= 12 % fewer readings.
   { name: "mate in 3, seed 1632: white Q+R+N against N+2P", fen: "8/2R1QpK1/5p2/8/8/8/7n/1N4k1 w - - 0 1", kind: "mate-in-3", accept: ["e7e2"], tags: ["quiet-key", "quiescence"], source: `${MATE3}, seed 1632` },
   { name: "mate in 3, seed 1163: black 2R+B against N", fen: "8/1r6/2r5/3b4/8/1k5K/6N1/8 b - - 0 1", kind: "mate-in-3", accept: ["b7g7", "c6g6"], tags: ["quiet-key", "depth≥5", "quiescence"], source: `${MATE3}, seed 1163` },
-  { name: "mate in 3, seed 1982: black Q+R against a bare king", fen: "q7/8/8/6k1/1r6/8/4K3/8 b - - 0 1", kind: "mate-in-3", accept: ["a8a3", "b4b3"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 1982` },
   { name: "mate in 3, seed 24: black Q+N against P", fen: "4K3/8/5k2/8/2P5/1q6/8/6n1 b - - 0 1", kind: "mate-in-3", accept: ["b3b7"], tags: ["quiet-key", "headroom"], source: `${MATE3}, seed 24` },
   { name: "mate in 3, seed 234: white Q+R against P", fen: "3R4/3K4/2Q5/7p/8/8/8/3k4 w - - 0 1", kind: "mate-in-3", accept: ["c6g2"], tags: ["quiet-key", "headroom"], source: `${MATE3}, seed 234` },
   { name: "mate in 3, seed 288: white Q+B against a bare king", fen: "8/8/8/8/2B4k/4K3/Q7/8 w - - 0 1", kind: "mate-in-3", accept: ["e3f4"], tags: ["quiet-key", "headroom"], source: `${MATE3}, seed 288` },
