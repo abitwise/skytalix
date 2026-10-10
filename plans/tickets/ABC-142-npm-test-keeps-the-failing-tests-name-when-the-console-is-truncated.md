@@ -157,3 +157,22 @@ BA/PM, 2026-10-10. Re-scored after the `A5` amendment. **Result: 10 of 10.** The
 | 10 | no major unresolved blocker | **✅** none; the A5-vs-A10 conflict the SE stopped on is resolved by this amendment |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-10. Branch `grugops/ABC-142-test-result-file`, code commit `41abc389`, base
+`086185d9`. The full readings are in `.grugops/context/ticket-to-pr-ABC-142/notes/`.
+
+- **Mechanism.** Vitest's built-in JSON reporter is added next to the default reporter:
+  `--reporter=default --reporter=json --outputFile.json=.test-results/last-run.json`. The path is
+  fixed per checkout and git-ignored. Failed tests are the `assertionResults` entries with
+  `status == "failed"`; the totals are `numFailedTests`, `numPassedTests` and `numTotalTests`.
+- **Read it.** `jq -r '.testResults[] | .name as $f | .assertionResults[] | select(.status=="failed")
+  | "\($f)  \(.fullName)"' .test-results/last-run.json`
+- **Concurrency limit.** Two `npm test` runs in one checkout at once overwrite each other's file.
+  Agent hops use separate worktrees. This is not engineered around.
+- **Console delta.** The output gains exactly one line after the summary:
+  `JSON report written to <absolute path>`. Vitest prints it and no flag removes it. Every other line
+  is equal to the base once timings are normalized. The exit codes are unchanged.
+- **Not covered.** On an exit 124 (bound crossed), the tree is SIGKILLed before the reporter writes,
+  so no file is written and a stale file from an earlier run can remain.
