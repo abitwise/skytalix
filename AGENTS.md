@@ -70,6 +70,10 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 - Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft`
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 npx vitest run src/perft.test.ts`
 - Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
+- Regenerate the opening book (ABC-093): `node tools/opening-book/compile.ts <dir>` <!-- RUN 2026-10-10:
+  exit 0, 0.4 s; rewrites `data/opening-book/book.json` IN PLACE, `cmp` 0 against the committed file.
+  `<dir>` = the five source files `a.tsv`..`e.tsv` fetched OUTSIDE the repo at the pinned CC0 commit
+  (URLs, sha256: `data/opening-book/ATTRIBUTION.md`). No `<dir>`: usage, exit 1. -->
 
 ### Test
 
@@ -80,7 +84,7 @@ waiting shell's own command line and never exits. Wait on the PID you started or
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
-  2026-10-10: exit 0, 52 files, 1663 tests, 6.5 s. A hung lane exits 124 at the 60 s bound — stop
+  2026-10-10: exit 0, 53 files, 1680 tests, 8.1 s. A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
