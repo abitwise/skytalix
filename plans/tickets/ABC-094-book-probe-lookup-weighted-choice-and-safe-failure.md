@@ -70,6 +70,9 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
   **when** the probe is called on the start position, **then** it returns a move that is in
   `legalMoves(startpos)` and is one of the artifact's entries for that position; **when** it is
   called on a position not in the book, **then** it returns **nothing** and **throws 0 exceptions**.
+  *(Folded 2026-10-10 at the re-score, on the merged artifact: "not in the book" has **two** shapes,
+  and the test covers both. One is a key that is absent. The other is a key that is present with an
+  empty `m`. The delivered `book.json` has **1,764** entries of the second shape, kept for their `n`.)*
 - **`A2` (deterministic under a fixed seed).** **Given** the same position, the same artifact and
   the same seed, **when** the probe is called **100** times in two separate processes, **then** the
   two sequences of 100 chosen moves are **identical, element for element**.
@@ -77,7 +80,12 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
   position after `1. e4` and **ten** distinct seeds, **when** the probe is called once per seed,
   **then** the number of **distinct** replies across the ten calls is **≥ 3**. *(The data half is
   `ABC-093` `A4`; this criterion fails honestly if the picker collapses onto one move even with a
-  rich entry.)*
+  rich entry.)* *(Folded 2026-10-10 at the re-score: **the ten seeds are the integers 1 to 10**,
+  named here so that nobody can shop for seeds. On the merged artifact the line-count weights give
+  `e7e5` 50.9% of the 19 replies. A correct picker then reads fewer than 3 distinct replies on about
+  **4.7%** of ten-seed blocks (BA/PM probe, 10,000 disjoint blocks). A cumulative picker that walks
+  `m` in file order reads **4** distinct replies on seeds 1 to 10. If a correct picker reads fewer
+  than 3 on these seeds, record it and route it to BA/PM. Do not swap the seeds.)*
 - **`A4` (the weights are actually used).** **Given** a fixture entry with weights in ratio
   **8 : 1 : 1**, **when** 1,000 draws are taken from a named fixed seed, **then** each move's share
   is within **±5 percentage points** of its weight. *(Deterministic given the seed, so this is an
@@ -106,6 +114,20 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
 - **`ABC-093` — HARD BLOCKER for `A1`–`A4`.** There is no artifact to read until it lands. **`A5`
   and `A6` are the exception**: they are about the *absence* of a good artifact and can be written
   first — see test note 2.
+  - **2026-10-10 re-score: SATISFIED.** `ABC-093` merged at `ac83c3fd` (QE `PASS_WITH_GAPS`; none of
+    its gaps touches this ticket). At `a7e25407` the artifact is `data/opening-book/book.json`,
+    356,526 B, sha256 `3802f52f…41d`. The compiler writes only that path
+    (`tools/opening-book/compile.ts:145`). Every premise above matches the file:
+    - `format` 1, `maxPly` 12, and `attribution` `"ATTRIBUTION.md"`;
+    - 5,390 keys, all 16 lowercase hex digits;
+    - entries carry only `m` and `n`;
+    - 5,825 `[uci, weight]` pairs, all positive safe integers;
+    - 3,626 entries in book and 2,853 named;
+    - the start position has 20 entries, all in `legalMoves`;
+    - after `1. e4` there are 19 replies, and the entry's `n` is "King's Pawn Game".
+  - **UCI text.** The only `toUci` is in `tools/opening-book/compile.ts`. That file imports `node:fs`
+    and is not production. **The probe must not import it.** Format UCI from `src/position.ts`'s
+    `squareName` instead, or match against `legalMoves`.
 - **`EPIC-001` — satisfied** (`legalMoves`, `zobristKey`, `parseFen` on `main`, read at this hop).
 - **`EPIC-004` — NOT a dependency.** This ticket is pullable, buildable and closable with no engine
   in existence. **That is the point of the split and it should not be undone by folding this into
@@ -162,6 +184,14 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
     warn sink instead. Then `src/cli.ts` binds the read, the holder set stays at three, (b) fires on
     `ABC-095` instead, and `A5`/`A6` run in memory. Either way the chain passes `In Security/NFR`
     once. D2 adds no limb.
+  - *2026-10-10 re-score, at `a7e25407`.* There are still **0** production `node:fs` importers, and
+    the limb holders in code are still `cli.ts`, `glyph-mode.ts` and `perft-bench.ts`. **`node:fs`
+    is not the only limb that matters here.** `ADR-0036` (b1) fires on *any* Node builtin import
+    and on any `process.` token. So these also make the probe a holder:
+    - `process.stderr.write` for `A5`'s warning;
+    - `node:url` or `node:path` to resolve the artifact's path.
+    `console.error` and `new URL(…, import.meta.url)` hold no limb token. **The injected-reader
+    branch keeps the probe limb-free only if the warn sink is injected too.**
 - **`NFR-008` (lane ≤ 3 s wall / ≤ 13 s CPU; per-ticket ≤ 650 ms CPU).** `A2` asks for **two
   processes**, which is the expensive shape — `plans/nfr-catalog.md` measures a test file at
   159–179 ms CPU and this project already spawns 10 children. **Target: ≤ 2 new test files, ≤ 2 new
@@ -189,6 +219,17 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
    suite, on the reference machine, and recorded in the ticket's notes with their machine.
 5. **`A3` is not a randomness test.** Ten fixed seeds, ten deterministic answers, one distinct-count
    assertion. If it ever flakes, the seam is leaking real entropy and that is the defect.
+6. **(2026-10-10 re-score) Do not pin literal picks from the shipped book.** The owner's
+   `WEIGHT_POLICY` veto (`ADR-0037` D1(c)) is open. If he flips it, the book is regenerated and every
+   weight changes. Rules that keep the probe's lane green through that flip:
+   - `A2` compares two runs with each other, not with a recorded list;
+   - `A3` asserts the distinct count only;
+   - `A4` runs on its own fixture.
+   Under uniform weights `A3` only gets easier: 7 distinct replies on seeds 1 to 10, and 0% of
+   blocks fail.
+7. **(2026-10-10 re-score) Avoid the puzzle-suite trigger list.** Name the module outside
+   `src/search*.ts` and `src/evaluate*.ts` (for example `src/book.ts`) and touch no engine file. Then
+   `AGENTS.md`'s `PUZZLE_DEEP` trigger does not fire at QE.
 
 ## Lane cost — how many test FILES this ticket implies
 
@@ -209,7 +250,37 @@ stands**. **Not `P0`**: no user sees it until `ABC-095`.
 
 ## Definition of Ready
 
-**RE-SCORED 2026-10-10 by BA/PM at the fold** (task `wave-2026-09-25`, subtask
+**RE-SCORED 2026-10-10 by BA/PM after `ABC-093`'s merge** (task `wave-2026-09-25`, subtask
+`bapm-rescore-abc094-2026-10-10`, at `a7e25407`). **Result: 10 of 10. Recommended column: `Ready`.**
+The board move is the Orchestrator's. Readings are in
+`.grugops/context/bapm-rescore-abc094-2026-10-10/notes/`.
+
+- **Item 10 ⚠️ → ✅.** `ABC-093` is merged (`ac83c3fd`). Every premise was re-read against the
+  delivered file, and all of them hold (§ Dependencies): the key format, the weights, `maxPly` 12,
+  `n`, and 356,526 B.
+- **Items 1–9 stay ✅.** Three clarifications were folded, and none of them changes the scope:
+  - `A1` names its two out-of-book shapes;
+  - `A3` names its seeds as 1 to 10;
+  - test notes 6 and 7 were added.
+- **Size `M` and `P1` hold.** The parse of non-human-authored data and the five-case hostile matrix
+  are unchanged.
+- **No `In Design` hop is owed.** D1 and D2 are ruled. Where the read sits (an injected reader, or
+  the probe's own read) is the Engineer's call (`ADR-0037` § Consequences).
+- **Gates.**
+  - **UAT:** the owner's word, because the ticket adds a new `src/` module.
+  - **`In Security/NFR`:** fires here under (b1) if the probe holds any limb (§ Security / NFR,
+    re-score bullet). With an injected reader **and** an injected warn sink it fires on `ABC-095`
+    instead.
+  - **`PUZZLE_DEEP`:** not triggered if test note 7 holds.
+- **The owner's `WEIGHT_POLICY` veto stays open, and this ticket does NOT depend on the answer.**
+  This holds as long as test note 6 is kept.
+- **Overlap with `ABC-083` (In Development):** none by file. `ABC-083` touches `src/evaluate*` and
+  search/transposition test files. This ticket adds one new module and one or two new test files.
+  The only files both touch are the appended `plans/traceability.md` and the board.
+- *Informative, not the bar:* reading and parsing the real artifact took 4.2 ms. 1,000 lookups and
+  picks took 14.5 ms. Node v26.11.0, M3, load1 about 9.
+
+**History. RE-SCORED 2026-10-10 by BA/PM at the fold** (task `wave-2026-09-25`, subtask
 `bapm-fold-book-chain-2026-10-10`, at `4768b3b0`; `ADR-0037` folded per `…d06f5ba8`). **Result: 9 of
 10, ⚠️x1 (item 10). It stays in `Backlog`.** Readings:
 `.grugops/context/bapm-fold-book-chain-2026-10-10/notes/`.
