@@ -1,0 +1,4 @@
+{"label":"branch-79248602","name":"kiwipete","depth":6,"budgetTicks":231,"nodes":231536,"reached":6,"oneTickLess":5,"move":[20,80],"score":13}
+{"label":"branch-79248602","name":"kiwipete","depth":7,"budgetTicks":559,"nodes":566233,"reached":7,"oneTickLess":6,"move":[20,80],"score":-22}
+{"label":"branch-79248602","name":"position-6","depth":6,"budgetTicks":171,"nodes":169685,"reached":6,"oneTickLess":5,"move":[34,67],"score":86}
+{"label":"branch-79248602","name":"position-6","depth":7,"budgetTicks":635,"nodes":644469,"reached":7,"oneTickLess":6,"move":[34,67],"score":75}

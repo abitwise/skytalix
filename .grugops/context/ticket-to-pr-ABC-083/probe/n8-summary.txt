@@ -1,0 +1,4 @@
+cpu: n=8 base median 11.23s; twin-base median -0.064s (-0.57%), sign + 2/8, R 0.316s; head-base median +1.083s, interval x(2)..x(n-1) +0.923..+1.410, sign + 8/8
+real: n=8 base median 2.67s; twin-base median -0.029s (-1.11%), sign + 3/8, R 0.169s; head-base median +0.306s, interval x(2)..x(n-1) +0.255..+0.495, sign + 8/8
+passed/failed per arm: {'base': [('263', '0')], 'head': [('272', '1')], 'twin': [('263', '0')]}
+load1 range: 5.1 8.18

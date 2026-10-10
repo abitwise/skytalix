@@ -1,0 +1,17 @@
+== SEARCH_DEEP src/search.ordering.test.ts start 2026-10-10T19:43:54Z load { 5.49 8.07 9.54 }
+   exit 1 wall 146s       Tests  1 failed | 37 passed (38)
+== SEARCH_DEEP src/quiescence.test.ts start 2026-10-10T19:46:20Z load { 3.61 6.19 8.53 }
+   exit 1 wall 3s       Tests  1 failed | 36 passed (37)
+== SEARCH_DEEP src/transposition.test.ts start 2026-10-10T19:46:23Z load { 3.56 6.14 8.50 }
+   exit 0 wall 59s       Tests  40 passed (40)
+== ENGINE_DEEP src/transposition.test.ts start 2026-10-10T19:47:22Z load { 3.21 5.55 8.12 }
+   exit 0 wall 5s       Tests  26 passed (26)
+== SEARCH_DEEP src/search.test.ts start 2026-10-10T19:47:27Z load { 3.27 5.53 8.09 }
+   exit 0 wall 51s       Tests  57 passed (57)
+== ENGINE_DEEP src/engine.test.ts start 2026-10-10T19:48:18Z load { 2.86 5.08 7.78 }
+   exit 0 wall 287s       Tests  46 passed (46)
+== SEARCH_DEEP src/search.pvs-lmr.test.ts start 2026-10-10T19:53:05Z load { 2.94 3.84 6.42 }
+   exit 0 wall 1117s       Tests  29 passed (29)
+== PUZZLE_DEEP src/puzzle-suite.test.ts start 2026-10-10T20:11:42Z load { 3.79 3.29 4.02 }
+   exit 1 wall 29s       Tests  1 failed | 17 passed (18)
+DONE

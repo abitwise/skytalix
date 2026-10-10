@@ -322,3 +322,58 @@ Assessed by BA/PM, **2026-08-16**. **Result: 8 of 10 clean, 2 ⚠️ — NOT met
 | 8 | size assigned | **✅** `S` (2), with the volume-vs-risk reasoning stated |
 | 9 | priority assigned | **✅** `P1` |
 | 10 | no major unresolved blocker | **⚠️** **whether mobility is affordable at all is genuinely unknown** — 2 × `legalMoves` per leaf is 4–10x over the modelled budget. `A5` makes it a stop rather than a surprise, **but the fallback (a cheaper proxy, or dropping the term) is not pre-decided and is Architect/Design's if the bar is missed** |
+
+## Delivery
+
+**Built 2026-10-10 by the Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-083`,
+Workflow 04) on `grugops/ABC-083-king-safety-mobility` @ **`79248602`** (code), off
+`grugops/wave-2026-09-25` @ `489c549e`. **Unmerged; not pushed. STOPPED: two class-R levels red, and
+`PUZZLE_DEEP` red. Architect/Design rules the R rows; QE classes the puzzle row.** A pointer only: the
+figures are in `.grugops/context/ticket-to-pr-ABC-083/notes/` and the raw output is in `probe/`.
+
+- **Terms:**
+  - King safety: shelter, plus a half-open or open file, over the king's file ±1.
+  - Mobility in its attack-map form: non-pawn reach, 4 cp per square, clamped to ±100.
+  - Weights are `ADR-0031`'s prototype, untuned.
+  - One test-only door: `evaluateWithoutMobility`.
+  - No new import edge.
+- **`A1`–`A4`, `A6` MET** (`src/evaluate.king-mobility.test.ts`, new). There are 20 new positions.
+  `A2`/`A3`/`A4` each carry an equal-material row that is red without the term, and each term's own
+  mutant reds its row.
+- **`A5` MET:** 775.8 ns, the mean of two sessions run in reverse order (1,100 bar), and 636 ns at
+  `79248602`. The pseudo-legal form reads 1,574–1,767 ns and the legal form 10,057–10,861 ns; both
+  miss. King safety alone reads 445–463 ns and base 346–383 ns. 0 generator calls per leaf
+  (`NFR-001`). `ADR-0031`'s cut does not fire.
+- **`A7`/`A9`:**
+  - Depth 7 on 17 of 18 branch runs. kiwipete is 9/9; position-6 is 8/9, with one depth 6 in a
+    load spike (load1 → 43.8). No depth below 6.
+  - Nodes to depth 7 on kiwipete: 610 179 → 566 233. On position-6: **462 871 → 644 469 (+39%)**.
+  - The position-6 margin is about 1.05x. **For Security/NFR.**
+- **`A8` MET** (`src/evaluate.pawns.test.ts`, which the page does not name): the LEFT and RIGHT
+  one-sided-neighbour rows. E8 and E9 each exit 1 with both rows red; both are green unmutated.
+- **`A10`:**
+  - The P rows are re-pinned from measurements.
+  - Fixtures are re-found where the property was lost: pvs-lmr `A4`, the ordering tie, engine
+    `A3`, the quiescence cap rig, and `ABC-082` `A2`'s kings (`ADR-0028` decision 2).
+  - Every named mutant is red. The G6 pair is re-pinned. The hanging corpus margins are 160 → 173 cp.
+  - **NOT MET: row 15** (`ABC-080` `A3` d2 guard, 43.56% against ≤ 40.5%) **and row 14** (`ABC-079`
+    `A5` position-6 d2, 28.46x against ≤ 26x). Both are untouched. Both levels already carry their
+    1.5x headroom: `ADR-0028` decision 4 applies, so this is a stop. The cause is one: mobility.
+    King safety alone reads 27.66% and 18.29x.
+  - **`PUZZLE_DEEP` 53/58 against 54/58:** seed 5061 is missed at d5 on every rung up to +25%.
+    The scope command prints `src/evaluate.ts` only, so it reads as L. King safety alone also misses
+    it.
+- **Gate** (`79248602`):
+  - lint, typecheck and build exit 0;
+  - `npm test`: 53 files, 1 673 passed / **1 failed (row 15)**;
+  - skip count 0; integrity `No findings.`.
+- **Deep lanes at `79248602`:**
+  - `SEARCH_DEEP` ordering 37/38 (row 15) and quiescence 36/37 (row 14);
+  - `SEARCH_DEEP` transposition 40/40 and search 57/57;
+  - `ENGINE_DEEP` transposition 26/26 and engine 46/46;
+  - pvs-lmr 29/29 (1 117 s; drift 97.33% / 97.86%, max 51 cp; mate floor 0 / 180);
+  - `PUZZLE_DEEP` **53/58, exit 1** (seed 5061).
+- **Cost (`ADR-0035`):** on the 15-file narrow set, `N8-LANE` is **NOT MET**: +1.08 s CPU
+  (+0.92..+1.41, R 0.316 s, admissible).
+- **Clause (b) (`ADR-0036`) does not fire** on any limb. Production: `src/evaluate.ts` +137/−5. The
+  owner's UAT word is owed.
