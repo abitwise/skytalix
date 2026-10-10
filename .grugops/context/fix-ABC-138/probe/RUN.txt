@@ -1,0 +1,14 @@
+SE fix-ABC-138 probe index. <repo> = the main checkout; <scratch> = the SE's private scratchpad. Trees are `git archive`
+copies with node_modules symlinked. Ticket base 2946e22a; prior tip 1759e14c (code 84edfb46); fix code 33e54f70.
+Machine Apple M3, Node v26.11.0. Other agents ran in parallel; load1 is logged beside every run.
+The committed probe scripts were NOT refused: all ran as committed.
+
+plants-fix.out.txt      ticket-to-pr-ABC-138/probe/plants.sh <repo> 33e54f70 fix <scratch>   (the engineer's 25-row table + control)
+qe-plants-fix.out.txt   qe-ABC-138/probe/qe-plants.sh <repo> 33e54f70 fix <scratch> tc     (QE's 22 plants, tsc + biome per plant)
+live-fix.out.txt        qe-ABC-138/probe/live.sh <repo> 33e54f70 <scratch>                  (W5 / W6 LIVE, formatted)
+own-controls.sh/.out    own-controls.sh <repo> 33e54f70 <scratch> qe-ABC-133/probe/mutate.cjs  (G1-G3: bound name in the TYPE
+                        ARGUMENTS of class extends / interface extends / implements stays type-only)
+a5.out.txt              ticket-to-pr-ABC-138/probe/a4.sh <repo> 2946e22a 33e54f70 11 <scratch> <out>
+a5-summary.txt          node qe-ABC-138/probe/a5-summary.mjs a5.out.txt
+a6.out.txt              diffs, manifest numstat, production-lines grep, it( count, N8_SPAWN, load/parse count, A4 phrase, loader-scan.mjs
+gates.txt               the six gates at 33e54f70 in the SE's worktree

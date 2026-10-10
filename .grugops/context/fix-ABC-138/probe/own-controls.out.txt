@@ -1,0 +1,21 @@
+== G1  load1 15.26
+60:class ListG1 extends Array<ReturnType<typeof spawnSync>> {}
+61:void ListG1;
+62-
+      Tests  67 passed (67)
+   typecheck exit 0
+   biome check exit 0
+== G2  load1 16.34
+60:interface ShapeG2 extends Pick<ReturnType<typeof spawnSync>, "status"> {}
+61:const noneG2: ShapeG2 | undefined = undefined;
+62:void noneG2;
+      Tests  67 passed (67)
+   typecheck exit 0
+   biome check exit 0
+== G3  load1 15.22
+60:class ImplG3 implements Pick<ReturnType<typeof spawnSync>, "status"> {
+61-  status = 0;
+--
+      Tests  67 passed (67)
+   typecheck exit 0
+   biome check exit 0

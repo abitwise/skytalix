@@ -1,0 +1,16 @@
+# A6 at 33e54f70 2026-10-10T16:46:39Z
+-- fix diff 1759e14c..33e54f70 name-only + numstat
+src/cli.test.ts
+13	3	src/cli.test.ts
+-- ticket diff 2946e22a..33e54f70 src/ + manifests
+src/cli.test.ts
+40	13	src/cli.test.ts
+manifest numstat: []
+added/deleted src files: []
+production lines grep: []
+it( count base/head: 67 / 67
+1838:    const N8_SPAWN = 17 + 7 + 1 + 2;
+createSourceFile: 1  typescript load: 1
+phrase 'resolving it needs data flow' collapsed: 0
+-- loader-scan
+{"file":"src/cli.test.ts","childProcessArgCalls":[],"createRequireSites":["createRequire(import.meta.url)(\"typescript\")@1876","createRequire(import.meta.url)@1876"],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@343"]}

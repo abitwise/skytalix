@@ -268,3 +268,18 @@ The board move is the Orchestrator's, including whether to bounce `QE-138-a`'s o
 should not discharge `AR-133-WRAP` as closed while `QE-138-a` stands. Readings are in
 `.grugops/context/qe-ABC-138/notes/` (`…6ef45921` decision, `…9cdaa822` readings, `…d5a380ba`
 gaps) and `.grugops/context/qe-ABC-138/probe/`. Not merged, not pushed.
+
+## Delivery addendum 2026-10-10 (Software Engineer, fix-forward `fix-ABC-138`)
+
+Code `33e54f70`, `src/cli.test.ts` +13/−3 only. Not merged, not pushed. Readings are in
+`.grugops/context/fix-ABC-138/` (`…4c39f4c1` decision, `…3133420f` readings, `probe/`).
+- **`QE-138-a` / `QE-138-d` closed.** Count (iii) now counts a reference inside
+  `ExpressionWithTypeArguments`. `W5` and `W6` go GREEN → RED on (iii); `W5` LIVE reds the suite.
+  Type arguments in `extends` / `implements` stay type-only (own controls `G1`–`G3`, GREEN).
+- **`QE-138-b` (comment).** The bound now names a literal that is not a call's first argument
+  (`getBuiltinModule.call`, `Reflect.apply`). Count (i) is not widened; `L3c` and `L5` stay GREEN.
+- **`A1`–`A6` still MET.** The engineer's 25-row table and QE's other 20 plants read as at `84edfb46`.
+  `A5`: 174.5 ms median at load1 8.87 (base 170.6 ms). `A6`: one path; 0 production lines, files, `it`
+  or manifest bytes; `N8_SPAWN` 27; `loader-scan` `[]`, one site, two references.
+- **Gate.** Lint, typecheck and build exit 0; `npm test` 52 / 1608; skip 0; integrity and
+  `lane-inventory.js` report no findings.

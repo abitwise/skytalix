@@ -1,0 +1,143 @@
+commit 33e54f70  node v26.11.0  2026-10-10T16:38:34Z
+== control (unmutated)   load1 30.48  16:38:34Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== L1 renamed createRequire: const mk = createRequire; mk(...)("node:child_process")   load1 37.61  16:38:51Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== L2 require alias: const r = createRequire(...); const load = r; load("child_process")   load1 38.29  16:39:04Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 0 errors 
+   biome exit 1  format 
+== L3a getBuiltinModule via a variable callee: const gbm = process.getBuiltinModule; gbm("node:child_process")   load1 34.37  16:39:17Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== L3b getBuiltinModule with the NAME in a const (the comment's own spelling)   load1 36.32  16:39:29Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== L3c getBuiltinModule.call(process, "node:child_process") literal NOT first arg   load1 35.28  16:39:40Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 1  format 
+== L4 no-substitution template getBuiltinModule(`node:child_process`)   load1 35.65  16:39:51Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== L5 Reflect.apply(createRequire(...), undefined, ["child_process"]) literal in array   load1 35.85  16:40:02Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 1  format 
+== L6 vi.doMock("child_process")   load1 33.26  16:40:12Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== L7 export * from "node:child_process"   load1 30.34  16:40:23Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 0 errors 
+   biome exit 1  lint/suspicious/noExportsInTest 
+== L8 re-export the binding: export { spawnSync }   load1 31.44  16:40:34Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 0 errors 
+   biome exit 1  lint/suspicious/noExportsInTest 
+== W1 satisfies callee (spawnSync satisfies typeof spawnSync)()   load1 34.58  16:40:46Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== W2 array-index callee [spawnSync][0]()   load1 30.70  16:40:55Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== W3 shorthand object { spawnSync }.spawnSync()   load1 28.80  16:41:02Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(3) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== W4 new (spawnSync as ...)()   load1 24.99  16:41:08Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 0 errors 
+   biome exit 1  format 
+== W5 class EXTENDS (spawnSync as ...) + new  [ExpressionWithTypeArguments]   load1 23.07  16:41:15Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== W6 instantiation-expression alias (spawnSync as <T>…)<object> [ExpressionWithTypeArguments]   load1 25.61  16:41:29Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 0 errors 
+   biome exit 1  format 
+== W7 destructure from a local array: const [s] = [spawnSync]; s()   load1 30.46  16:41:46Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== F1 logger, name first arg: console.log("child_process")  [stated class]   load1 30.92  16:41:59Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== F1b logger, name SECOND arg: console.info("module", "child_process")   load1 31.19  16:42:11Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== F2 type-only reference: type R = ReturnType<typeof spawnSync>   load1 29.68  16:42:23Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== F2b type-only reference in a param annotation: Parameters<typeof spawnSync>[0]   load1 27.63  16:42:31Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== F3 JSDoc {@link spawnSync}   load1 24.68  16:42:39Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== F4 expect(text).not.toContain("child_process")  [stated class]   load1 22.95  16:42:46Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== F5 import type { SpawnSyncReturns } (type-only import, pre-existing behaviour)   load1 20.49  16:42:54Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], …(1) ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 0 errors 
+   biome exit 1  
+== F6 typeof import("node:child_process") type (ImportType, no runtime load)   load1 19.41  16:43:02Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 0  
+== F7 lookalike name in a string, not exact: describe-style "child_process loader"   load1 16.89  16:43:08Z
+      Tests  67 passed (67)
+   typecheck exit 0 0 errors 
+   biome exit 0  
