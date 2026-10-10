@@ -63,11 +63,11 @@ back to `P1`".
 
 - **`A1` (the derive count is the measured one, at both sites).** **Given** the delivered tree, **when** an
   independent counter counts `legalMoves` calls in one `resolveMoveInput(newGame(SIX_QUEENS_FEN), "Qxd4")` on that
-  tree, **then** both comments state that number (**7** at `f9d1ff4b`), and the two agree. **And**
-  `grep -c 'cost six of those' src/move-input.ts` and `grep -c 'measured six' src/move-input.test.ts` each print
-  **0** (**1** each at `75dcc0f5` and `f9d1ff4b`).
+  tree, **then** both comments state that number (**7** at `f9d1ff4b` and at `4768b3b0`), and the two agree.
+  **And** `grep -c 'cost six of those' src/move-input.ts` and `grep -c 'measured six' src/move-input.test.ts`
+  each print **0** (**1** each at `75dcc0f5`, `f9d1ff4b` and `4768b3b0`).
 - **`A2` (the history pane names no undelivered bound).** **Then** `` grep -cF '`ABC-010` is the ticket that would'
-  src/history-pane.ts `` prints **0** (**1** at `75dcc0f5`). **And** the paragraph still states that `parseFen`
+  src/history-pane.ts `` prints **0** (**1** at `75dcc0f5` and `4768b3b0`). **And** the paragraph still states that `parseFen`
   accepts a fullmove above 9,999. Check: a delivered-tree `parseFen("4k3/8/8/8/8/8/8/4K3 w - - 0 10000")`
   returns `fullmoveNumber` 10000. The paragraph names no ticket as delivering a bound unless that ticket's scope
   contains one.
@@ -86,12 +86,18 @@ back to `P1`".
 
 - **`ABC-010` merged to `main` — HARD.** At `75dcc0f5` the count is 6 and site 1–2's comments are true. The
   premise exists only on `ABC-010`'s tree. `ABC-010` awaits the owner's UAT word (production `src/fen.ts`).
+  - **DISCHARGED 2026-10-10.** `ABC-010` merged (`8a2d41a8`, UAT accepted by the owner). Re-measured at
+    `4768b3b0` on BA/PM's own counter (`git archive` copy, `legalMoves` spliced, anchor x1): **derives = 7**,
+    `SIX_QUEENS_FEN` unchanged. The three files are byte-identical to `f9d1ff4b`, and `parseFen` still accepts
+    fullmove `10000`. The premise holds as cut.
   - **Re-score when `ABC-010` merges.** Re-measure `A1`'s number at that base. If `ABC-010` is re-cut and
     `SIX_QUEENS_FEN` changes again, use the new count.
   - If `ABC-010` is dropped, sites 1–2 fall away. Site 3 stands alone, because the pointer is already false at
     `75dcc0f5`, and the page is re-cut to it.
 - **Never in parallel with another hop on `src/move-input.ts`, `src/move-input.test.ts` or `src/history-pane.ts`.**
   At `75dcc0f5`, `ABC-010` is the only open ticket that edits any of them (`src/move-input.test.ts`).
+  At `4768b3b0` no in-flight hop touches them: `ABC-083`'s page names none of the three, and neither its branch
+  nor `design-ABC-085`'s has a commit yet.
 - **Not amended onto `ABC-010`'s branch:** that would move the sha under the owner's UAT.
 
 ## Security / NFR triggers
@@ -116,7 +122,12 @@ measurement (Q4) and one hop.
 
 ## Definition of Ready
 
-Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `75dcc0f5`. **Result: 9 of 10, ⚠️ item 3 → stays
+**RE-SCORED 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-fold-book-chain-2026-10-10`, at
+`4768b3b0`). **Result: 10 of 10. Item 3 ⚠️ → ✅: `ABC-010` is merged (`8a2d41a8`) and the count re-measured 7.
+Recommended column: `Ready`, pullable at once** (the Orchestrator moves it). Size `XS` and `P3` hold. UAT is
+waived if `A3` holds; QE still hops. Readings: `.grugops/context/bapm-fold-book-chain-2026-10-10/notes/`.
+
+**History.** Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `75dcc0f5`. **Result: 9 of 10, ⚠️ item 3 → stays
 in `Backlog`.** Re-score when `ABC-010` merges.
 
 | # | item | verdict |

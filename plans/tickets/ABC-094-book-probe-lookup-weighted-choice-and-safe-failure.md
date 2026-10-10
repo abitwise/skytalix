@@ -37,15 +37,22 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
 
 - **A book-probe module** exposing, at minimum: *is this position in the book*, and *give me a book
   move for this position* — returning **nothing** (not an exception, not a sentinel move) when the
-  position is out of book.
+  position is out of book. *(Folded 2026-10-10, `ADR-0037` D1: the lookup key is 16 hex digits of
+  `zobristKey(position)`, or the last element of `keyHistory(history)`. "In book" means the entry's
+  `m` is non-empty.)*
 - **Weighted random selection** among the book's moves for that position, driven by an **injected**
   randomness source so a fixed seed makes the choice reproducible (`EPIC-005` § Test notes:
-  *"assert book lookup is deterministic under a fixed seed"*).
+  *"assert book lookup is deterministic under a fixed seed"*). *(Folded 2026-10-10, `ADR-0037` D2:
+  the factory takes `random: () => number`, values in [0, 1), and the module imports no generator.
+  Tests build it from `seededRandom(seed)` (`src/levels.ts:61`). No book generator of its own, in
+  production or in tests.)*
 - **Loading the artifact**, including the decision of *when* it is loaded (see § Security / NFR —
   `N-LOAD`).
 - **Safe degradation**: file missing, unreadable, truncated, empty, or structurally wrong → the
   probe reports *no book* and **warns exactly once per process**, and every subsequent call is
   silent and still returns nothing.
+- **Optional** *(folded 2026-10-10)*: a read-only name accessor for `ABC-096`, reading the entry's
+  `n` (`ADR-0037` D1(d)).
 
 ## Out of scope
 
@@ -85,7 +92,11 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
   structure with a move that is **illegal** in its keyed position, and a file **larger** than
   `NFR-006`'s 1 MB bar — **when** the probe is constructed and called, **then** for **each** input
   it throws **0** exceptions, returns nothing or only legal moves, and emits **exactly 1** warning.
-  **The illegal-move case must never be handed onward as a move.**
+  **The illegal-move case must never be handed onward as a move.** *(Folded 2026-10-10, shapes under
+  `ADR-0037`'s JSON format. "Truncated mid-record" is JSON text cut mid-entry, so `JSON.parse` fails.
+  "Valid container, garbage payload" is valid JSON that fails the schema, for example a key that is
+  not 16 hex digits, or an `m` that is not a list of `[uci, positive integer]` pairs. "Illegal move"
+  is a schema-valid UCI that is not in `legalMoves`.)*
 - **`A7` (nothing is executed and nothing is fetched).** **Given** the delivered module, **then**
   it contains **0** occurrences of `eval`, `new Function`, and dynamic `import()`/`require()` of the
   artifact path, and makes **0** network calls. Asserted structurally, not by inspection.
@@ -112,11 +123,10 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
     `ADR-0012` clause 3(b) makes the decorator's RNG a factory parameter bound at the composition
     root. Security/NFR rules the generator not a CSPRNG and of no security relevance for move choice
     (`secnfr-ABC-087` `…3f1974f5` row 5). **So the "two RNGs" risk is now avoidable rather than
-    open.** `G4` is still not ruled, and `ADR-0012` § Consequences keeps it Architect/Design's,
-    "owed before … `ABC-094` … enters `In Development`". The question is narrower now: should the
-    probe take an injected `() => number` built from `seededRandom`, or should `seededRandom` move
-    out of `EPIC-004`'s `src/levels.ts` first? Rule it in the same `In Design` hop as `ABC-093`'s
-    format.
+    open.**
+  - **`G4` RULED 2026-10-10 (`ADR-0037` D2, `accepted`).** The probe takes an injected
+    `random: () => number`. `seededRandom` stays in `src/levels.ts`. No second generator is written
+    for the book. `G4` is closed.
 
 ## Security / NFR triggers
 
@@ -129,7 +139,9 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
   elsewhere.** Either satisfies it; the engineer picks and **measures**, and `ABC-015`'s
   zero-filesystem bar is the precedent for the first form. *(2026-10-10: `NFR-007`'s denominator is
   now "`npm run chess` on a completed clone" (`ADR-0018`), not `npx`. The 2 s bar and this 100 ms
-  derivation are unchanged.)*
+  derivation are unchanged.)* *(2026-10-10, informative: `JSON.parse` of the Architect's candidate
+  artifact took about 3.5 ms, one reading on a loaded host (`ADR-0037`). The bar is still this
+  ticket's to measure.)*
 - **Probe cost against `NFR-004`.** The engine's budget is ≤ 3 s (5 s ceiling). **Bar: a book hit
   returns in ≤ 30 ms — 1% of the 3 s default budget — on the reference machine.** *(Derived from
   the ratified `NFR-004` target, not invented. The epic's "well under the search time budget" is
@@ -143,12 +155,20 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
     probe's read is the first, and it fires `ADR-0036` clause (b1), so expect an `In Security/NFR`
     hop. `ADR-0012` clause 3(a) adds a second line of defence: the turn loop's `wasGenerated` refuses
     an illegal engine move.
+  - *2026-10-10 fold.* At `4768b3b0` there are still 0 production `node:fs` importers. A probe that
+    imports `node:fs` fires (b1) **and** becomes the fourth limb holder (after `cli.ts`,
+    `glyph-mode.ts` and `perft-bench.ts`), which hits `ADR-0036` § Decision 3's trigger. **Engineer's
+    choice, recorded unruled in `ADR-0037` § Consequences:** the probe may take an injected reader and
+    warn sink instead. Then `src/cli.ts` binds the read, the holder set stays at three, (b) fires on
+    `ABC-095` instead, and `A5`/`A6` run in memory. Either way the chain passes `In Security/NFR`
+    once. D2 adds no limb.
 - **`NFR-008` (lane ≤ 3 s wall / ≤ 13 s CPU; per-ticket ≤ 650 ms CPU).** `A2` asks for **two
   processes**, which is the expensive shape — `plans/nfr-catalog.md` measures a test file at
   159–179 ms CPU and this project already spawns 10 children. **Target: ≤ 2 new test files, ≤ 2 new
   spawned processes, ≤ 650 ms CPU added.** `A2` may instead be satisfied in-process by two fresh
   module instances if the seam allows — **cheaper and equally strong; prefer it.** *(2026-10-10:
-  the CPU level is 15 s (`ADR-0019`). Under `ADR-0035` (proposed), the cost is read on the narrow set.
+  the CPU level is 15 s (`ADR-0019`). Under `ADR-0035` (accepted 2026-10-10, owner option R-1), the
+  cost is read on the narrow set.
   The counts (≤ 2 files, ≤ 2 spawns) are the pins that hold either way.)*
 - **`NFR-002`, `NFR-003` — not triggered.** No frame, no prompt.
 
@@ -189,7 +209,19 @@ stands**. **Not `P0`**: no user sees it until `ABC-095`.
 
 ## Definition of Ready
 
-**RE-SCORED 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
+**RE-SCORED 2026-10-10 by BA/PM at the fold** (task `wave-2026-09-25`, subtask
+`bapm-fold-book-chain-2026-10-10`, at `4768b3b0`; `ADR-0037` folded per `…d06f5ba8`). **Result: 9 of
+10, ⚠️x1 (item 10). It stays in `Backlog`.** Readings:
+`.grugops/context/bapm-fold-book-chain-2026-10-10/notes/`.
+
+- **Item 5 ⚠️ → ✅.** `G4` is ruled (`ADR-0037` D2), and the format gives `A6`'s matrix its shapes.
+- **Item 10 ⚠️ STANDS, ordering only.** `ABC-093` is unbuilt, so `A1`–`A4` have nothing to read.
+  **Re-score trigger: `ABC-093`'s merge.** Nothing else is open.
+- **Items 1–4 and 6–9 stay ✅.** Size `M` and `P1` hold.
+- **Production and UAT.** A new `src/` module, so **the owner's UAT word**. `In Security/NFR` fires
+  here through (b1) if the probe reads the file itself, or on `ABC-095` if it takes an injected reader.
+
+**History. Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
 at `aaa88263`). **Result: 8 of 10, ⚠️x2. The score is unchanged and both ⚠️ narrowed. It stays in
 `Backlog`.** Readings: `.grugops/context/rescore-p1-backlog-2026-10-10/notes/`.
 
