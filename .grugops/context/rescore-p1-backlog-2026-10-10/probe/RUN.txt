@@ -1,0 +1,24 @@
+BA/PM probe, subtask rescore-p1-backlog-2026-10-10, task wave-2026-09-25. Tree: aaa88263 (unmodified src/).
+BA/PM's own harness. No QE or engineer script was executed or refused. Nothing under src/ was written.
+
+levels-345-depth.mjs <step> [stride]
+  Imports the merged modules read-only: src/evaluate.mirror-corpus.ts (buildCorpus: 6 perft roots
+  + every child, 184 positions; stride 4 keeps the 6 roots + every 4th entry = 50 positions),
+  src/levels.ts (createLevel, LEVELS), src/virtual-clock.ts (virtualClock).
+  For each position, levels 3, 4 and 5 (rate 0; 3000 / 4000 / 4500 ms) each choose once on a FRESH
+  virtualClock(step). This is ABC-085 A5's mode: one step for both sides, so levels differ by budget only.
+  Counts: positions where the completed depth differs, and where the chosen move differs, for 3v4 and 4v5.
+  An aborted iteration is discarded (src/engine.ts runIteration/chooseMove) and the TT is cleared per
+  search (ADR-0025), so an equal completed depth means an identical move. A pair that picks the same move
+  on every position plays the same game from both chairs.
+  Also: real wall ms per virtual reading (one reading ~ 1 024 nodes, ADR-0027 Context). It prices
+  ABC-085's run per step. The host was LOADED: other agents were running; load1 is logged per step.
+  Wall figures are diagnostic, never a bar.
+
+Invocation (from this directory):
+  for s in 120 30 10 4; do node levels-345-depth.mjs $s 4; done > levels-345-depth.out.txt
+Machine: Apple M3, macOS (Darwin 25.5.0), Node v26.11.0.
+
+A first step-120 run, made directly before the scripted one (load1 6.65), read the same counts
+(9/50, 2/50) at 3.569 ms per reading. The counts are deterministic and the wall figure is not.
+Results: levels-345-depth.out.txt (steps 120, 30, 10, 4). Step 4 ran ~13.5 min.
