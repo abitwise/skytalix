@@ -1,0 +1,123 @@
+# QE ABC-139 readings, 2026-10-10T16:24:43Z, base e7641dea, code 0d22d9d6, tip daa5184a, Node v26.11.0, arm64
+# worktree .claude/worktrees/qe-ABC-139 (QE's own), node_modules symlinked
+
+## Gates at daa5184a (raw tails)
+$ npm run lint
+
+> cli-chess@0.0.0 lint
+> biome check .
+
+Checked 100 files in 223ms. No fixes applied.
+exit 0
+$ npm run typecheck
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+exit 0
+$ npm run build
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+exit 0
+$ npm test
+
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Start at  19:22:14
+   Duration  11.62s (transform 1.55s, setup 0ms, collect 19.98s, tests 28.28s, environment 6ms, prepare 4.84s)
+
+exit 0
+$ skip count (vitest json)
+{
+  "files": 348,
+  "tests": 1608,
+  "passed": 1608,
+  "failed": 0,
+  "skip": 0
+}
+$ node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0
+No findings.
+exit 0
+$ node tools/grugops/lane-inventory.js
+The lane collects 52 test files; git tracks 52.
+No findings.
+exit 0
+(note: .numTotalTestSuites above counts describe blocks; files = 52 per npm test)
+lane-inventory exit re-read directly: 0
+
+## A1 grep -cF '1 + one per non-advancing outcome' src/command-input.test.ts
+  b98fb419: 1
+  e7641dea: 1
+  0d22d9d6: 0
+  daa5184a: 0
+  src/command-input.test.ts b98fb419..e7641dea: unchanged
+  src/turn-loop.ts b98fb419..daa5184a: unchanged
+
+## A2 block = src/command-input.test.ts:412-416 at 0d22d9d6, directly above :417 expect(run.renders).toBe(4)
+  non-// lines in block: 0
+  RE-EMITTING: 1; "The render cadence": 1; runTurnLoop's docblock: 1
+  formula verbatim (comment markers collapsed): 1; in src/turn-loop.ts: 1 (:279)
+
+## A3 git diff --name-only e7641dea..0d22d9d6 -- src
+  src/command-input.test.ts
+  numstat: 5	3	src/command-input.test.ts
+  e7641dea..daa5184a -- src: src/command-input.test.ts
+  zero-production-lines measure (git diff --name-only e7641dea daa5184a | grep -v '\.test\.ts$' | grep '^src/' | wc -l): 0
+
+$ node .grugops/context/qe-ABC-139/probe/qe139-q4.mjs <worktree> e7641dea 0d22d9d6 src/command-input.test.ts <scratch>
+REAL e7641dea..0d22d9d6 src/command-input.test.ts
+  changed 8 (-3/+5), not-comment-only 0 -> (a) HOLDS; (b) print IDENTICAL; (c) tokens IDENTICAL => Q4 HOLDS
+ctl POS reword a line in the block
+  changed 2 (-1/+1), not-comment-only 0 -> (a) HOLDS; (b) print IDENTICAL; (c) tokens IDENTICAL => Q4 HOLDS
+ctl POS insert /* */ line in the block
+  changed 1 (-0/+1), not-comment-only 0 -> (a) HOLDS; (b) print IDENTICAL; (c) tokens IDENTICAL => Q4 HOLDS
+ctl POS insert // line in the block
+  changed 1 (-0/+1), not-comment-only 0 -> (a) HOLDS; (b) print IDENTICAL; (c) tokens IDENTICAL => Q4 HOLDS
+ctl NEG toBe(4)->toBe(5) on A3's assertion
+  changed 2 (-1/+1), not-comment-only 2 [-417,+417] -> (a) FAILS; (b) print DIFFERENT; (c) tokens DIFFERENT => Q4 FAILS
+ctl NEG ' // x' inside the it() title string
+  changed 2 (-1/+1), not-comment-only 2 [-407,+407] -> (a) FAILS; (b) print DIFFERENT; (c) tokens DIFFERENT => Q4 FAILS
+ctl NEG type-only: renders: number -> number | undefined
+  changed 2 (-1/+1), not-comment-only 2 [-318,+318] -> (a) FAILS; (b) print DIFFERENT; (c) tokens DIFFERENT => Q4 FAILS
+ctl NEG-for-(a)-alone: /* ... */ comments OUT the assertion
+  changed 2 (-0/+2), not-comment-only 0 -> (a) HOLDS; (b) print DIFFERENT; (c) tokens DIFFERENT => Q4 FAILS
+ctl BOUNDARY trailing // on the assertion line
+  changed 2 (-1/+1), not-comment-only 2 [-417,+417] -> (a) FAILS; (b) print IDENTICAL; (c) tokens IDENTICAL => Q4 FAILS
+exit 0
+
+$ node .grugops/context/ticket-to-pr-ABC-139/probe/q4-abc139.mjs <worktree> e7641dea 0d22d9d6 src/command-input.test.ts   (SE harness, re-run by QE; NOT refused)
+REAL  changed 8 (-3/+5), non-comment 0 -> HOLDS; stripped print IDENTICAL => Q4 HOLDS
+ctl POS // line:  changed 1 (-0/+1), non-comment 0 -> HOLDS; stripped print IDENTICAL => Q4 HOLDS
+ctl NEG 4->5:  changed 2 (-1/+1), non-comment 2 -> FAILS; stripped print DIFFERENT => Q4 FAILS
+ctl NEG code after //:  changed 2 (-0/+2), non-comment 1 -> FAILS; stripped print DIFFERENT => Q4 FAILS
+exit 0
+
+$ node .grugops/context/qe-ABC-132/probe/exit132.mjs <worktree> e7641dea 0d22d9d6 src/command-input.test.ts   (re-run by QE; NOT refused; REAL rows only)
+REAL src/command-input.test.ts
+  (i)  changed 8 / ticket-regex 0 / scanner-comment 8 -> HOLDS
+  (ii) emit repo-tsconfig 49f5f1b78b96cf9a (50392 B) IDENTICAL; esnext 49f5f1b78b96cf9a (50392 B) IDENTICAL -> HOLDS
+  (iii) token stream IDENTICAL   => Q4 conjunction HOLDS
+
+$ bash .grugops/context/qe-ABC-139/probe/qe139-cadence-mutants.sh <worktree>   (TRANSIENT src/turn-loop.ts mutants, restored from HEAD, nothing committed)
+== M0 none
+Tests  1 passed | 187 skipped (188)
+   restored: src/turn-loop.ts clean
+   M1 applied lines: 1
+== M1 eof-emits-a-frame
+→ expected 5 to be 4 // Object.is equality
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 5 to be 4 // Object.is equality
+Tests  1 failed | 187 skipped (188)
+   restored: src/turn-loop.ts clean
+   M2 applied lines: 1
+== M2 board-redraws-for-itself
+→ expected 7 to be 4 // Object.is equality
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 7 to be 4 // Object.is equality
+Tests  1 failed | 187 skipped (188)
+   restored: src/turn-loop.ts clean
+exit 0
+(the '187 skipped' are the -t row filter, not skips; full-suite skip count is 0 above)
+git status after: ?? .grugops/context/qe-ABC-139/ 

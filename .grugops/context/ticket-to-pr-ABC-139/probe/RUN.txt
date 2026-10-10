@@ -1,0 +1,21 @@
+# ABC-139 SE readings, 2026-10-10T16:18:37Z, base e7641dea, code 0d22d9d6, Node v26.11.0, arm64
+$ node .grugops/context/qe-ABC-132/probe/exit132.mjs <worktree> e7641dea 0d22d9d6 src/command-input.test.ts
+REAL src/command-input.test.ts
+  (i)  changed 8 / ticket-regex 0 / scanner-comment 8 -> HOLDS
+  (ii) emit repo-tsconfig 49f5f1b78b96cf9a (50392 B) IDENTICAL; esnext 49f5f1b78b96cf9a (50392 B) IDENTICAL -> HOLDS
+  (iii) token stream IDENTICAL   => Q4 conjunction HOLDS
+  ctl NEG-exec (append `export const __qeNeg = 1;`):  | (i)  changed 2 / ticket-regex 1 / scanner-comment 1 -> FAILS | (ii) emit repo-tsconfig 49f5f1b78b96cf9a (50392 B) DIFFERENT->203125cce8a9caf5; esnext 49f5f1b78b96cf9a (50392 B) DIFFERENT->203125cce8a9caf5 -> FAILS | (iii) token stream DIFFERENT   => Q4 conjunction FAILS
+  ctl NEG-type-only (append `export type __QeNeg = 1;`):  | (i)  changed 2 / ticket-regex 1 / scanner-comment 1 -> FAILS | (ii) emit repo-tsconfig 49f5f1b78b96cf9a (50392 B) IDENTICAL; esnext 49f5f1b78b96cf9a (50392 B) IDENTICAL -> HOLDS | (iii) token stream DIFFERENT   => Q4 conjunction FAILS
+  ctl NEG-template-slashslash (append template whose line starts `//`):  | (i)  changed 4 / ticket-regex 1 / scanner-comment 1 -> FAILS | (ii) emit repo-tsconfig 49f5f1b78b96cf9a (50392 B) DIFFERENT->37963320b035f578; esnext 49f5f1b78b96cf9a (50392 B) DIFFERENT->37963320b035f578 -> FAILS | (iii) token stream DIFFERENT   => Q4 conjunction FAILS
+  ctl NEG-code-behind-comment (`/* x */ export const __qeC = 2;`):  | (i)  changed 2 / ticket-regex 1 / scanner-comment 1 -> FAILS | (ii) emit repo-tsconfig 49f5f1b78b96cf9a (50392 B) DIFFERENT->3663debb31ebc616; esnext 49f5f1b78b96cf9a (50392 B) DIFFERENT->3663debb31ebc616 -> FAILS | (iii) token stream DIFFERENT   => Q4 conjunction FAILS
+  ctl POS-comment-only (insert ` * QE control sentence.` in header):  | (i)  changed 1 / ticket-regex 1 / scanner-comment 0 -> FAILS | (ii) emit repo-tsconfig 49f5f1b78b96cf9a (50392 B) DIFFERENT->e6e73abdec672b3c; esnext 49f5f1b78b96cf9a (50392 B) DIFFERENT->90f94dbbb34d18bf -> FAILS | (iii) token stream DIFFERENT   => Q4 conjunction FAILS
+exit 0
+$ node .grugops/context/ticket-to-pr-ABC-139/probe/q4-abc139.mjs <worktree> e7641dea 0d22d9d6 src/command-input.test.ts
+REAL  changed 8 (-3/+5), non-comment 0 -> HOLDS; stripped print IDENTICAL => Q4 HOLDS
+ctl POS // line:  changed 1 (-0/+1), non-comment 0 -> HOLDS; stripped print IDENTICAL => Q4 HOLDS
+ctl NEG 4->5:  changed 2 (-1/+1), non-comment 2 -> FAILS; stripped print DIFFERENT => Q4 FAILS
+ctl NEG code after //:  changed 2 (-0/+2), non-comment 1 -> FAILS; stripped print DIFFERENT => Q4 FAILS
+exit 0
+$ git diff --numstat e7641dea 0d22d9d6 -- src
+5	3	src/command-input.test.ts
+A1 grep -cF tip/base: 0 / 1
