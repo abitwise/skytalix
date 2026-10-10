@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-069` pulled → `In Development` (Scribe `scribe-ABC-069`; `AGENTS.md` only, no overlap)._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-051` `In Review` → `Ready for UAT` (fix-forward `a9ed126`); owner acceptance owed for `ABC-036` and `ABC-051`._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-051` QE PASS_WITH_GAPS; stays `In Review` for the one-line QE-051-a fix-forward._
@@ -456,7 +458,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-060] Four `EPIC-006` tickets copy `A12`'s diff-scoping clause without naming the diff  (BA/PM, XS, P2, epic: EPIC-006, since: 2026-08-16, **DoR 10/10 MET — the only one of the four NOT blocked on `ABC-042`**; `Q12`) **2026-10-10 audit: `ABC-042` Done 2026-08-15 — none of the four is blocked on it now.**
 
 
-- [ABC-069] The `Dev / run` slot's guard requires two rendering conventions of `AGENTS.md` and neither is written where a Scribe would see it  (BA/PM, XS, P3, epic: —, since: 2026-08-16, **DoR 10/10**; QE `Q9`, mutants `N15`/`N16` — honest documentation reds the suite; **loosening the guard is REFUSED on QE's reasoning and fenced on the page**; `AGENTS.md` Scribe's pen, 0 files under `src/`; promote to P1 when `EPIC-006` adds or renames an option)
 - [ABC-070] `ABC-065` § Dependencies still names a drained claim as live and forbids pulling a ticket that merged  (BA/PM, XS, P3, epic: —, since: 2026-08-16, **DoR 10/10**; `G12`, confirmed by three separate hops as notes and still on the page; **the page contradicts its own DoR row 10**; recommends folding `G6`/`A6` in before it is pulled, and says to close it unstarted if the sentence is repaired in place instead)
 - [ABC-072] `ABC-041` clause (b) is written as a STATE predicate, its instrument covers one of three limbs, and its stated prediction is falsified  (BA/PM, S, P1, epic: —, since: 2026-08-16, DoR 9/10 ⚠️x1 — **the STATE-vs-DELTA ruling is Architect/Design's**, precedent `ABC-053`/`ABC-054`; Security/NFR `S1` (MEDIUM) + `S2` (LOW) deduped into one subject; measured on `main` @ `5cf86d3`: **7 of 20 production files read `process.`** while the printed instrument (`node:` grep) reads **0** and has since `ABC-042` merged — **the clause has already produced two contradictory routing answers in two days**; 0 files under `src/`, 0 new spawns)
 - [ABC-073] Eight ticket pages restate clause (b) and not one uses the test the clause states — two carry no fail-safe sentence  (BA/PM, S, **P1**, epic: —, since: 2026-08-16, DoR 9/10 ⚠️x1 — ordering on `ABC-072`; the residual risk `S1` named is **already realised**: `ABC-061` (`P1`, `DoR 10/10`, pullable) and merged `ABC-065` carry the file-touch wording with **no** "it fires and the gate resolves it"; 7 live pages, 3 of them byte-identical; **PROMOTED TO `P1` 2026-08-17: the trigger FIRED — `ABC-061` is pulled**; 0 files under `src/`)
@@ -494,9 +495,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
 
 - [ABC-127] Harder puzzles — catch the weakenings ABC-084's suite misses, and leave headroom below the ceiling  (EPIC-004, M, P1, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3, `A3`'s ≥ 6-of-10 bar, read non-blocking by the Orchestrator: measurable, with a stop rule) **→ In Development 2026-10-10.** Cut by BA/PM on the owner's word (`…e47a1c08`; `cut-harder-puzzles`, note `…5fefe3f1`, merged `ab87d8a`); pulled by the Orchestrator at `f9689e7` (subtask `ticket-to-pr-ABC-127`, branch `grugops/ABC-127-harder-puzzles`). `ABC-126` follows it.
+- [ABC-069] The `Dev / run` slot's guard requires two rendering conventions of `AGENTS.md` and neither is written where a Scribe would see it  (BA/PM, XS, P3, epic: —, since: 2026-08-16, **DoR 10/10**; QE `Q9`, mutants `N15`/`N16` — honest documentation reds the suite; **loosening the guard is REFUSED on QE's reasoning and fenced on the page**; `AGENTS.md` Scribe's pen, 0 files under `src/`; promote to P1 when `EPIC-006` adds or renames an option) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `scribe-ABC-069`, branch `grugops/ABC-069-agents-md-conventions`); DoR dates from 2026-08-16 — the hop re-verifies first and stops if the premise moved.
 
 
 

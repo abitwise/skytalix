@@ -1,8 +1,8 @@
 ---
 id: ABC-069
 title: The `Dev / run` slot's guard requires two rendering conventions of `AGENTS.md` and neither is written where a Scribe would see it — honest, correct documentation reds the suite
-status: backlog
-column: Backlog
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: —
