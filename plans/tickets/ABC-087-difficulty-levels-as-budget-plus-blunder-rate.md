@@ -337,3 +337,41 @@ Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P1`, consistent with `ABC-085` |
 | 10 | no major unresolved blocker | **⚠️** **the blunder construction is genuinely open and is Architect/Design's.** `A4` is written to accept either candidate and to reject the degenerate one, but **which construction satisfies "beatable without being random" is not decided** |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-087`). Branch
+`grugops/ABC-087-difficulty-levels` from `94cf5e6b`: code `659215a3`, test refinements `3a133d26`,
+docs on top. Not merged, not pushed. Decisions, readings and drafts are in
+`.grugops/context/ticket-to-pr-ABC-087/notes/` (`…4e5f0323`, `…25962b19`, `…53ebd6d1`), with raw files
+in `probe/`. They are not restated here.
+
+**Criteria: `A1`-`A10` met. One NFR bar is NOT MET: `N8-LANE` reads +0.825 s CPU against 650 ms.
+It is reported, not lowered. No stop condition fired on the engine: `src/engine.ts` and
+`src/search.ts` are untouched, and 0 trigger-list files changed.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | `LEVELS` 1-5, frozen: 100 ms/0.40, 500/0.20, **3000/0**, 4000/0, 4500/0. Easiest 1, default 3, hardest 5 |
+| `A2` | MET | Virtual clock: shipped path +2.0 % at every level; blunder path at the easiest level 101.3/100 over 20 and over 43 children; all ≤ 5 000 |
+| `A3` | MET (measurement) | Easiest **35/62**, default **58/62**, `ABC-084`'s rule at one step (120 virtual ms) for both. Baseline untouched |
+| `A4` | MET | Default lane 80/(204 − 1) = **39.4 %**; deep (perft + puzzles) 97/(246 − 0) = **39.4 %**. All legal. Never the worst, the strict second-best, on every blunder's own list |
+| `A5` | MET | Hardest, real clock: **30/30 ≤ 5 s, max 4,527 ms**. The rate is 0, so the blunder clause does not apply (asserted) |
+| `A6` | MET | Default = 3000 = `DEFAULT_BUDGET_MS`, rate 0. Identical to `chooseMove` reading-for-reading |
+| `A7` | MET | Same seed, same decisions over 30 positions (with blunders) |
+| `A8` | MET | `src/` diff: `levels.ts` +182/−0 and `levels.test.ts` +484/−0 only. The import set is asserted (no `virtual-clock.ts`), and no argv or prompt |
+| `A9` | MET | 5 seeds → 5 distinct sequences over 30 positions |
+| `A10` | MET | Interleaved A/B, seeds 11/12: **10/10 each**, and A ≠ B |
+
+- **Gate at `3a133d26`.** Lint, typecheck and build exit 0. `npm test` is 52 files / 1601 passed / 0
+  skipped. Skip integrity reads `No findings.`, and the lane inventory is 52 = 52.
+  `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`: 25 passed, 199 s at load1 5.8 → 4.0.
+- **`N8-LANE`** (`ADR-0035` narrow set, twin R 0.060 s): **+0.825 s (0.78-0.85), NOT MET.** Options
+  (a) move the default-lane `A4` run to deep, (b) a criterion change, or (c) accept. Routed in
+  `…53ebd6d1`; the Engineer took none.
+- **Raised, not acted on:**
+  - `A4`'s folded frequency is biased low by p(1 − q)/(1 − pq) when no-candidate positions are
+    common. It reads exact on the shipped corpora.
+  - Levels 3/4/5 differ by budget only, a risk to `ABC-085` `A2`.
+  - `NFR-004` wording is drafted for Security/NFR.
+  - The `AGENTS.md` lane line is drafted for the Scribe.
