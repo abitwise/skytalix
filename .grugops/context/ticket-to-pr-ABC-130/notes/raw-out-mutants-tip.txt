@@ -1,0 +1,46 @@
+---- [fixed] S0 baseline
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0
+glob-count-in-config=0
+---- [fixed] A2 glob removed
+The lane collects 54 test files; git tracks 50.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/ticket-to-pr-ABC-081/probe/depth-vitest.test.mjs — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+EXIT=1
+---- [fixed] A2 glob restored
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0
+m1-entry-count=1
+---- [fixed] M1 src/perft.test.ts excluded
+The lane collects 49 test files; git tracks 50.
+Tracked by git but NOT collected by the lane: src/perft.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1
+m2-typo-count=1
+---- [fixed] M2 .claude typo + planted checkout
+The lane collects 100 test files; git tracks 50.
+Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/apply.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/cli.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/command-input.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/coordinate-move.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1
+(lines total: 53)
+---- [fixed] M2 restored
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0
+---- [fixed] M3 untracked src/zz.test.ts
+The lane collects 51 test files; git tracks 50.
+Collected by the lane but NOT tracked by git: src/zz.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1
+---- [fixed] M3 after git add
+The lane collects 51 test files; git tracks 51.
+No findings.
+EXIT=0
+---- [fixed] A4 committed new .grugops probe
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0

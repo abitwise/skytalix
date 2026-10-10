@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# ABC-130 mutant harness. Usage: harness.sh <tree-ish> <label>
+# Every mutant runs in a git-archive copy outside the repository; the repo's own config is never edited.
+set -u
+REPO=/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example
+WT=$REPO/.claude/worktrees/ABC-130-lane-inventory-probes
+SP=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/ABC-130
+TREE=$1; LABEL=$2
+C=$SP/copy-$LABEL
+rm -rf "$C"; mkdir -p "$C"
+git -C "$WT" archive "$TREE" | tar -x -C "$C"
+ln -s "$REPO/node_modules" "$C/node_modules"
+cd "$C" || exit 9
+git init -q && git add -A && git -c user.name=h -c user.email=h@h commit -qm base
+CFG_ORIG=$(cat vitest.config.ts)
+
+run() { # name
+  echo "---- [$LABEL] $1"
+  node tools/grugops/lane-inventory.js; echo "EXIT=$?"
+}
+restore() { printf '%s\n' "$CFG_ORIG" > vitest.config.ts; }
+
+run "S0 baseline"
+
+# A2: drop the .grugops/** glob (replacement config, not --exclude)
+printf '%s\n' "$CFG_ORIG" | grep -v '^      ".grugops/\*\*",$' > vitest.config.ts
+grep -c '.grugops/\*\*' vitest.config.ts | sed 's/^/glob-count-in-config=/'
+run "A2 glob removed"
+restore
+run "A2 glob restored"
+
+# M1: exclude gains src/perft.test.ts
+printf '%s\n' "$CFG_ORIG" | sed 's|^      "plans/\*\*",$|      "plans/**",\n      "src/perft.test.ts",|' > vitest.config.ts
+grep -c 'src/perft.test.ts' vitest.config.ts | sed 's/^/m1-entry-count=/'
+run "M1 src/perft.test.ts excluded"
+restore
+
+# M2: foreign checkout under .claude/worktrees/probe/ + .claude/** typo'd
+mkdir -p .claude/worktrees/probe
+git -C "$WT" archive "$TREE" src | tar -x -C .claude/worktrees/probe
+printf '%s\n' "$CFG_ORIG" | sed 's|^      ".claude/\*\*",$|      ".claud/**",|' > vitest.config.ts
+grep -c '".claud/\*\*"' vitest.config.ts | sed 's/^/m2-typo-count=/'
+run "M2 .claude typo + planted checkout" | awk 'NR<=6 || /EXIT=/ {print} END {print "(lines total: " NR ")"}'
+restore
+rm -rf .claude
+run "M2 restored"
+
+# M3: untracked src/zz.test.ts, then git add
+printf 'import { it } from "vitest";\nit("zz", () => {});\n' > src/zz.test.ts
+run "M3 untracked src/zz.test.ts"
+git add src/zz.test.ts
+run "M3 after git add"
+git rm -q --cached src/zz.test.ts; rm src/zz.test.ts
+
+# A4: commit a new .grugops probe
+mkdir -p .grugops/context/zz/probe
+printf 'import { it } from "vitest";\nit("zz", () => {});\n' > .grugops/context/zz/probe/new.test.ts
+git add -A && git -c user.name=h -c user.email=h@h commit -qm probe
+run "A4 committed new .grugops probe"

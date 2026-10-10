@@ -177,3 +177,27 @@ Assessed by BA/PM at the cut, **2026-10-10**, at `ba20d25`. **Result: 10 of 10, 
 | 10 | no major unresolved blocker | **✅** None |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-130`).
+Branch `grugops/ABC-130-lane-inventory-probes` from `b62d1b6`, code in `adff124`. Not merged, not pushed.
+Readings and raw files: `.grugops/context/ticket-to-pr-ABC-130/notes/`. Every mutant ran in a
+`git archive` copy outside the repository. The repository's `vitest.config.ts` was never edited.
+
+**Criteria: 6 of 6 met.** Red first: the unfixed tool reproduced the page's `A1`, `A2` and `A4` readings exactly.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | Tip: `The lane collects 50 test files; git tracks 50.` / `No findings.`, exit 0. `git ls-files -- '*.test.ts' ':!.grugops/' \| wc -l` = 50. No `.grugops/` path appears in the output. Base: 50 / 53, exit 1 |
+| `A2` | MET | With `".grugops/**"` removed, the tool reads 54 / 50 and exits 1. All four paths are named: three `.ts` and `ticket-to-pr-ABC-081/probe/depth-vitest.test.mjs`. Each line is `Collected by the lane from .grugops/, which is factory state the lane must exclude: …`, and 0 of them contain `NOT tracked by git`. With the glob restored, exit 0. Unfixed: only the `.mjs`, with the false text |
+| `A3` | MET | M1: `src/perft.test.ts` is named, 49 / 50, exit 1. M2 (replacement config `.claud/**`, `src` planted under `.claude/worktrees/probe/`): 100 / 50, 50 paths named, exit 1; restored, exit 0. M3: `src/zz.test.ts` is named, exit 1; after `git add`, 51 / 51, exit 0 |
+| `A4` | MET | After committing `.grugops/context/zz/probe/new.test.ts`: 50 / 50, exit 0. Unfixed: 4 findings, exit 1 |
+| `A5` | MET | numstat `<wave>...HEAD` on the fence paths: `26 4 tools/grugops/lane-inventory.js` only. Probe pathspec: empty |
+| `A6` | MET | lint, typecheck and build exit 0. `npm test` exit 0, 50 files / 1540 passed / 0 skipped. `test-skip-integrity.js --skip-count 0`: `No findings.` |
+
+**`N8-LANE`: 0 ms, 0 files under `src/`. `N8-SPAWN`: 0.** No test file was added. The tool is
+outside the lane by design, and the page names no test.
+
+**Owed:** the QE hop, the `In Review` move (Orchestrator) and the merge. Once this merges,
+`ABC-119` `A2`(i) reads as the literal exit 0.
