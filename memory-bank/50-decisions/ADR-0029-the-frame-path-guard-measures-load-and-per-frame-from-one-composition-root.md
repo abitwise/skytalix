@@ -22,6 +22,12 @@ hop. A one-line pointer in `ADR-0011` is owed at acceptance.
 
 **Zero production lines.** The guard change goes to the Engineer. This ADR rules it and does not write it.
 
+**POINTERS 2026-10-10 (`design-owed-rulings-2026-10-10`).**
+- The owed `ADR-0011` pointer is written: `ADR-0011` § "Pointers 2026-10-10", P1–P3.
+- A pointer under decision 2 records that the borrowed `ADR-0030` definition fails OPEN for this
+  equality, and gives the pre-ruled fix for `AR-053-COMPOSER`'s trigger.
+- No decision changes.
+
 ## Context
 
 `NFR-002`'s structural premise, in the catalog's words: *"If a renderer ever pulls the repetition derive
@@ -109,6 +115,44 @@ That module would itself breach `ADR-0009` 9b.
 
 **`ADR-0011` `R1`'s dated expiry is DISCHARGED**, not re-dated. Its trigger was *"the composition becomes an
 import"*, and `ABC-041` made it one.
+
+> **[POINTER 2026-10-10 at task `wave-2026-09-25`, subtask `design-owed-rulings-2026-10-10`: the BORROWED
+> definition fails OPEN in this tripwire. The borrowing is kept. No decision above changes.]**
+>
+> - **Where the borrowed argument stops holding.** `ADR-0030` decision 2 excludes `export … from`
+>   re-exports from its definition, and a dynamic `import()` binds nothing. It argues that "an
+>   under-count … fails safe". That is true for `A8`'s claim, which is "at least one consumer": an
+>   under-count reds it. **It inverts for this tripwire, which is an EQUALITY against a one-member set:**
+>   - under-counting the root gives `[]`, which is RED (safe);
+>   - under-counting a **second** composer leaves `[root]`, which is GREEN (open).
+> - **Measured.** Security/NFR at `ABC-053` (`secnfr-ABC-053` `…91ac4dd3`, R3) placed a re-export
+>   hop, then a dynamic `import("./frame.ts")`, in `result-screen.ts`. Each one passed lint,
+>   typecheck and the full lane.
+> - **Four static spellings that the reader also misses:** a comment ahead of the name; a default
+>   binding (`QE-054-b`); a string-named specifier; a comment that holds `;` (`QE-057-b`).
+> - **So decision 2's "A second module that composes frames reds it" reads:** *a second module that
+>   binds `assembleFrame` by a static value import the tripwire reads, reds it.* The probe's
+>   docblock already says this (`ABC-054` `A6`, narrowed again by `ABC-057`).
+>
+> **Ruled: the definition is NOT widened now.**
+> - The reach is bounded. A second composer reaches the live loop only through the pinned wiring
+>   line in `src/cli.ts` (`ABC-043` `A1`; `S-WRAP-CLI` is RED) or through `turn-loop.ts`, which is a
+>   licensed driver.
+> - Production holds 0 such spellings at `37ca6ae2`.
+> - `ABC-054` declined option 1 by name.
+> - The risk stays `AR-053-COMPOSER` (LOW, owner BA/PM).
+>
+> **Pre-ruled for that risk's promotion trigger.** The trigger is a non-empty promotion grep
+> (`secnfr-ABC-053` `…8deff3d6`, Ruling 3), or an edit of the pinned `render:` line. When it fires:
+> - the fix is **option 1**: the tripwire counts a re-export of `assembleFrame` from `./frame.ts` one
+>   hop deep, and counts `import("./frame.ts")`;
+> - it lands in or before that diff, and it needs no new ADR.
+>
+> The same production `import(` also fires `ADR-0011` `R4` (`ADR-0011` P3).
+>
+> **For the next borrower:** a definition built for an at-least-one claim can be borrowed by an
+> equality only if the forms it excludes are listed as fail-open, as they are here. `ADR-0030` carries
+> the same line beside `C2`.
 
 ### 3. `glyph-mode.ts` is NOT on the frame path, and the membership rule says why
 

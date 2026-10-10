@@ -6,6 +6,10 @@
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.
 
+**Proposal text amended 2026-10-10 (`design-owed-rulings-2026-10-10`).** Decision 3's `F` is keyed
+per narrow set (the block under decision 3). The status is still `proposed`, and the owner's question
+is unchanged.
+
 **Decisions 1–5 are this role's.** They cover the protocol, the instrument, the cut rule, and the clause
 state on the row's own protocol. They take effect when this ADR is accepted. **Decision 6 is a
 recommendation.** The level of `NFR-008` (15 s CPU / 3 s wall) is **Olger Oeselg's**, and nothing here
@@ -144,6 +148,53 @@ instrument for `NFR-008`'s TOTAL only, which is a ~2x question.**
 - **A bound the cut cannot place above any floor is written as a count, or not at all.**
 - **Owner of `F`:** Architect/Design, from the R that every reading now reports. BA/PM reads it at the
   cut, and Security/NFR checks it at the gate.
+
+> **[AMENDED 2026-10-10 while `proposed` (task `wave-2026-09-25`, subtask
+> `design-owed-rulings-2026-10-10`): `F` is keyed PER NARROW SET, not one figure for every single
+> file. Still `proposed`. The owner has not ruled.]**
+>
+> **Why.** QE (`qe-ABC-058` `…904bdd2d`) and Security/NFR (`secnfr-ABC-058` `…ae61a3cb`) routed
+> this. `src/cli.test.ts` spawns 27 children. Its twin R read 0.254 s and 1.097 s, which is above the
+> one-file `F` of 0.17 s. That `F` came from lighter files.
+>
+> **The rule:**
+> - **A set with readings.** A narrow set's `F` comes from **that set's own admissible readings**, by
+>   the rule above: the median R of its three most recent, or the largest if it has fewer than three.
+> - **A set with none.** It takes a provisional `F` of **16 % of its base CPU** (one run of the
+>   harness). Its first admissible reading replaces it.
+> - **Why 16 %.** It is the largest R ÷ base CPU on record: `src/cli.test.ts` set 2, 1.097 ÷ 6.95 s.
+> - **Inadmissible sets.** Their R is listed but not used. Decision 1 gives them no state.
+>
+> **Why per set and not per "child-heavy" class: on the record, the spread follows the set's CPU,
+> not its child count.**
+>
+> | narrow set | children | base CPU | admissible twin R | R ÷ CPU |
+> |---|---|---|---|---|
+> | `src/cli.test.ts` (`ABC-058` sets 1 and 2) | 27 | 7.99 s / 6.95 s | 0.254 s / 1.097 s | 3.2 % / 15.8 % |
+> | `src/history-pane.nfr.test.ts` (`ABC-057` set 2) | 1 | 1.120 s | 0.058 s | 5.2 % |
+> | `history-pane.nfr` + `render-seam.test` (QE `ABC-054`) | 1 | 1.371 s | 0.038 s | 2.8 % |
+> | `ABC-128`'s file / `ABC-127`'s file (the table above) | 0 | ~2.01 s / ~1.51 s | 0.17 s / 0.13 s | 8.5 % / 8.6 % |
+>
+> - The one-child file reads a **smaller** ratio than the child-free files. A class keyed on children
+>   would misfile it.
+> - `ABC-059`'s two `src/cli.test.ts` sets were inadmissible (R 1.126 s and 0.662 s). Counted
+>   anyway, they would not move that file's `F`: the median of the three most recent is still
+>   1.097 s.
+>
+> **Floors today, per set:**
+> - **`src/cli.test.ts`: `F` = 1.097 s.** A 650 ms `N8-LANE` reading on that file alone is refused
+>   at the cut. Two other ways to bound it are already in use, and they stay:
+>   - the pin is the count: `N8_SPAWN` 27 and the file count, as `ABC-058` `A7` does;
+>   - or the content is timed directly, in process: `ABC-058`'s 0.154 ms, and `ABC-133` `A4`'s
+>     ≤ 250 ms. "Only the content is timed" (decision 2).
+> - **`src/history-pane.nfr.test.ts`:** `F` = 0.058 s.
+> - **The two-file `history-pane.nfr` + `render-seam.test` set:** `F` = 0.038 s, the median of
+>   0.052, 0.035 and 0.038 (`ABC-053` and `ABC-054`).
+> - **The one-file row of the table above** (0.17 s) stays as the record of the two files it was
+>   measured on.
+>
+> **Unchanged:** decision 1. Every reading still states its own R and is MET, NOT MET or UNRESOLVED
+> on that R. This amendment changes only which bounds a cut may write.
 
 **4. `QE-119-a` is ANSWERED, forward-only.**
 - Under decision 1, `ABC-119` `A2`(ii) reads **UNRESOLVED at 0.30 s in both sets**. Set A's R is

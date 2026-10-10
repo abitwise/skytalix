@@ -1,0 +1,54 @@
+# design-owed-rulings-2026-10-10 probe — run 2026-10-10T13:47:46Z at 37ca6ae2 (worktree of grugops/wave-2026-09-25)
+
+## Item 1/P3 — production dynamic import( (ADR-0011 R4 trigger; AR-053-COMPOSER dynamic half)
+$ for f in src/*.ts (non-.test.ts): grep -Hn "import(" — count:
+       0
+$ AR-053-COMPOSER promotion grep (re-export from / dynamic import of ./frame.ts in production):
+(lines above; none = empty)
+
+## Item 4 — ADR-0034 decision 2 scope, literal vs ruled
+### 3858e3c (merge(ABC-082): grug merge pawn-structure evaluation into the wave on )
+literal:
+  src/evaluate.mirror-corpus.ts
+  src/evaluate.pawns.test.ts
+  src/evaluate.test.ts
+  src/evaluate.ts
+  src/search.ordering.test.ts
+  src/search.pvs-lmr.test.ts
+ruled (adr0034-scope.sh):
+  src/evaluate.ts
+### 5b5a0a36 (merge(ABC-121): grug merge PVS + LMR into the wave on owner word)
+literal:
+  src/engine.ts
+  src/search.mate-corpus.ts
+  src/search.ordering.test.ts
+  src/search.pvs-lmr.test.ts
+  src/search.test.ts
+  src/search.ts
+ruled (adr0034-scope.sh):
+  src/engine.ts
+  src/search.ts
+### 4a79c812 (merge(ABC-079): grug merge grugops/int-ABC-079 into the wave on owner )
+literal:
+  src/engine.ts
+  src/quiescence.ts
+  src/search.qe.test.ts
+  src/search.test.ts
+  src/search.ts
+ruled (adr0034-scope.sh):
+  src/engine.ts
+  src/quiescence.ts
+  src/search.ts
+### test-only fixtures under the globs (non-.test.ts, imported only by tests):
+src/search.mate-corpus.ts importers: src/search.pvs-lmr.test.ts 
+src/evaluate.mirror-corpus.ts importers: src/evaluate.pawns.test.ts src/evaluate.test.ts 
+
+## Item 6 — ABC-041 clause (b) limbs, state baseline, comment lines stripped (rough strip: // tails and lines starting * or /*)
+production files: 35
+limb 1 (from "node:): 0 files
+limb 2 (process.) in code:
+  src/cli.ts
+  src/glyph-mode.ts
+  src/perft-bench.ts
+limb 3 call sites in code (spawn|spawnSync|exec|execSync|execFile|fork|fetch|eval|new Function, excluding .exec( method calls):
+  (none above = 0)
