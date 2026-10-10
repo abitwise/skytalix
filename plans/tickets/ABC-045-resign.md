@@ -1,8 +1,8 @@
 ---
 id: ABC-045
 title: `resign` — the one session command the merged loop can already express exactly
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P1
 epic: EPIC-006

@@ -1,8 +1,8 @@
 ---
 id: ABC-122
 title: Gate hardening — a bounded-time test command (K4) and a direct capacity-guard test (K3)
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-004

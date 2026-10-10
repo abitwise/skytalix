@@ -1,8 +1,8 @@
 ---
 id: ABC-123
 title: run-bounded.js — reject N above the timer's 2^31−1 ceiling (R2) and correct the stale process-model header (R3)
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-004

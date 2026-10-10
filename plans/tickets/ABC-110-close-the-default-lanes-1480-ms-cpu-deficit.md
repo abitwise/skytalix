@@ -1,8 +1,8 @@
 ---
 id: ABC-110
 title: Close the default lane's 1.480 s CPU deficit — `NFR-008` is BREACHED, and both levers that can close it change something the owner ruled
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: L
 priority: P0
 epic: —

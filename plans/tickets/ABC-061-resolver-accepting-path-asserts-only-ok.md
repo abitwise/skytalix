@@ -1,8 +1,8 @@
 ---
 id: ABC-061
 title: The resolver's accepting path is asserted by `.ok` alone — `--ascii` reaches the renderer through no assertion, and a one-word mutation ships 856/856 green
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: —

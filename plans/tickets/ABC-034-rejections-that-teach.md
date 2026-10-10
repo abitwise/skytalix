@@ -1,8 +1,8 @@
 ---
 id: ABC-034
 title: Rejections that teach — a closed reason set, computed from the generator, never a bare "invalid"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-003

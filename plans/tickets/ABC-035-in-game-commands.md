@@ -1,8 +1,8 @@
 ---
 id: ABC-035
 title: In-game commands — `help`, `board`, `quit`, `claim`: the grammar, the tolerance, and the teaching rejection
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-003

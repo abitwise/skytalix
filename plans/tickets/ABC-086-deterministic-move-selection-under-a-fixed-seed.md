@@ -1,8 +1,8 @@
 ---
 id: ABC-086
 title: Deterministic mode — the shipped engine on a virtual clock
-status: ready
-column: Ready
+status: done
+column: Done
 size: XS
 priority: P0
 epic: EPIC-004

@@ -1,8 +1,8 @@
 ---
 id: ABC-033
 title: One prompt, both formats, no mode switch — and the ambiguity outcome that fits the frame
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: S
 priority: P0
 epic: EPIC-003

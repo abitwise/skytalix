@@ -1,8 +1,8 @@
 ---
 id: ABC-079
 title: Quiescence search on captures — the horizon fix
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P0
 epic: EPIC-004

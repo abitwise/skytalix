@@ -1,8 +1,8 @@
 ---
 id: ABC-102
 title: `undo` — two plies back in one command, on the merged `take-back` arm
-status: ready
-column: Ready
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-006

@@ -1,8 +1,8 @@
 ---
 id: ABC-046
 title: `quit` with confirmation, and `new` — the two session commands the merged `PromptOutcome` has no arm for
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P2
 epic: EPIC-006

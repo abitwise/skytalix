@@ -1,8 +1,8 @@
 ---
 id: ABC-109
 title: "`AGENTS.md` is inside three edits of a 32,768-byte cap that truncates SILENTLY from the tail — restructure it under budget without losing a directive"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P0
 epic: —

@@ -1,8 +1,8 @@
 ---
 id: ABC-115
 title: A piped session dies on `write EPIPE` with a raw Node stack and exits `1` — the code the product reserves for a refused command line
-status: ready-for-dev
-column: Ready for Dev
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-006
