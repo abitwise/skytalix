@@ -1,0 +1,18 @@
+readings 25	start	d5	n20500	135 ms
+readings 25	kiwipete	d3	n23122	83 ms
+readings 25	perft-pos3	d7	n18446	69 ms
+readings 25	perft-pos4	d4	n23107	76 ms
+readings 25	perft-pos5	d5	n20547	96 ms
+readings 25: 5 moves, 459 ms plain node
+readings 100	start	d7	n95252	497 ms
+readings 100	kiwipete	d5	n97874	435 ms
+readings 100	perft-pos3	d9	n93198	303 ms
+readings 100	perft-pos4	d6	n97859	357 ms
+readings 100	perft-pos5	d6	n96323	503 ms
+readings 100: 5 moves, 2094 ms plain node
+readings 200	start	d8	n196628	1005 ms
+readings 200	kiwipete	d5	n200274	896 ms
+readings 200	perft-pos3	d10	n194574	636 ms
+readings 200	perft-pos4	d7	n199235	725 ms
+readings 200	perft-pos5	d6	n198723	890 ms
+readings 200: 5 moves, 4151 ms plain node
