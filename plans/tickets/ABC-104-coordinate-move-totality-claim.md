@@ -1,8 +1,8 @@
 ---
 id: ABC-104
 title: `src/coordinate-move.ts`'s header claims total, and it is total over `text` only
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: XS
 priority: P3
 epic: EPIC-003
@@ -14,6 +14,16 @@ feature: —
 > **Cut 2026-08-17 by BA/PM** (task `refinement-abc031-qe-repairs-2026-08-17`) from `ABC-031`'s QE
 > gap **5**, `OPEN`, severity **low**. **A ticket rather than a page repair because the defect is a
 > comment in production code**, and neither QE nor BA/PM edits `src/`.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2-2026-10-10`)
+> at wave tip `f76e041`. **The premise holds; nothing fixed it.** `src/coordinate-move.ts` has one
+> commit (`c59e1e8`, 2026-08-17), and the sentence is still at `:30`. Both throws were re-run on
+> Node v26.11.0: `null` position → `TypeError`, `legal = 42` → `TypeError`. **The audience has
+> moved:** the two "next parser" tickets are `Done`. `ABC-032`'s `src/san.ts:219-221` scoped its
+> own totality to `text` correctly without copying this sentence, so the harm the page predicted
+> did not happen. The remaining reader is a maintainer. `A3`'s build clause was vacuous
+> (`npm run build` is `tsc --noEmit` and emits nothing) and is re-worded. **DoR 10/10 → `Ready`,
+> `P3`, and pull it LAST.** See § Size and priority for the UAT cost.
 
 ## Problem
 
@@ -59,14 +69,17 @@ qualifies it for a careful reader, which is why this is a precision defect and n
   **Given** the repaired module, **when** `parseCoordinateMove(null, "e2e4")` and
   `parseCoordinateMove(position, "e2e4", 42)` are called, **then** each still **throws** — the
   contract is unchanged — and the docblock is consistent with that.
-- **`A3` (comment-only).** **Given** the delivered diff, **when** `git diff --numstat` is read,
-  **then** the only file changed is `src/coordinate-move.ts`, **no executable line changed**
-  (`npm run build` output is byte-identical, or the diff is visibly inside the docblock), the suite
-  is green with a skip count of **0**, and `PERFT_DEEP=1` is **32/32** exact.
+- **`A3` (comment-only; re-worded 2026-10-10).** **Given** the delivered commit, **when**
+  `git diff -U0 <commit>~1 <commit>` is read, **then** the only file changed is
+  `src/coordinate-move.ts`, **every hunk lies inside the module header docblock** (lines 1–33 at
+  `f76e041`), the suite is green, and the skip count is **0**. *(Was: "`npm run build` output is
+  byte-identical", but that command is `tsc --noEmit` and emits nothing. Also "`PERFT_DEEP=1`
+  32/32", but a docblock in an input parser cannot move a perft count. Both dropped as vacuous.)*
 
 ## Dependencies
 
-**Blocked on `ABC-031` merging.** The module does not exist on `main` until it does.
+~~**Blocked on `ABC-031` merging.**~~ **`ABC-031` — `Done`.** None open. No in-flight branch and no
+open ticket touches `src/coordinate-move.ts` (checked 2026-10-10, including `ABC-129`'s 15 sites).
 
 ## Security / NFR triggers
 
@@ -90,24 +103,30 @@ qualifies it for a careful reader, which is why this is a precision defect and n
 *should* be total over `position` too — that is a contract change and belongs in an ADR, not here.
 
 **Priority `P3`.** Documentation precision on a correct function, with no user-visible effect and no
-suite signal. **It is not `P4`/dropped** because the audience is the next parser author and this repo
-has already paid twice for prose that was read as a guarantee. **It should ride the next touch of
-this file** rather than be pulled on its own.
+suite signal. **It is not `P4`/dropped:** the sentence is still false as written, and this repo has
+already paid twice for prose that was read as a guarantee. The "next parser author" it was written
+for has come and gone (2026-10-10), which is why it does not rise. **It should ride the next touch
+of this file** rather than be pulled on its own.
+
+**UAT cost, stated before anyone pulls it (2026-10-10).** The standing zero-production-lines waiver
+is measured as `git diff --name-only … | grep -v '\.test\.ts$' | grep '^src/'`, which must be empty.
+That command lists `src/coordinate-move.ts` even for a comment-only diff. **So this ticket is NOT
+waived: it needs the owner's word at `In UAT` for one docblock sentence.** Pull it only alongside
+another ticket that already needs his word, or as a ride-along.
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM, **2026-08-17**.
-**Result: 10 of 10 MET. Requesting `Backlog`.**
+**Re-scored 2026-10-10 by BA/PM at `f76e041`. Result: 10 of 10 — MET → `Ready` (`P3`, pull last).**
 
 | # | item | verdict |
 |---|---|---|
-| 1 | problem clear | **✅** the next parser's author; two measured throws under an unqualified claim |
-| 2 | scope and out-of-scope clear | **✅** one docblock; behaviour explicitly fenced out |
-| 3 | INVEST-shaped | **✅** independent once `ABC-031` merges, small, testable by reading and by two calls |
-| 4 | acceptance testable and measurable | **✅** three criteria; `A3` is diff-shaped with numbers |
-| 5 | dependencies known | **✅** one, named and blocking: `ABC-031` merge |
-| 6 | security/NFR triggers | **✅** `N8-LANE` zero-file with expected effect zero; security not triggered |
-| 7 | test notes present | **✅** two, including an explicit *do not add a test* |
-| 8 | size assigned | **✅** `XS` (1), with the condition that would grow it |
-| 9 | priority assigned | **✅** `P3`, with the reason it is not dropped |
-| 10 | no major unresolved blocker | **✅** none |
+| 1 | problem clear | **✅** the sentence at `:30` is unchanged; both throws re-measured; the audience is now a maintainer, stated |
+| 2 | scope and out-of-scope clear | **✅** one docblock; behaviour fenced out |
+| 3 | INVEST-shaped | **✅** independent (`ABC-031` `Done`, no overlap with any open or in-flight work), small, testable |
+| 4 | acceptance testable and measurable | **✅** `A3` re-worded to a hunk-location check; the two vacuous clauses dropped |
+| 5 | dependencies known | **✅** none open |
+| 6 | security/NFR triggers | **✅** `N8-LANE` zero files and zero effect; security not triggered |
+| 7 | test notes present | **✅** two, including *do not add a test* |
+| 8 | size assigned | **✅** `XS` (1) |
+| 9 | priority assigned | **✅** `P3`, with the UAT cost named |
+| 10 | no major unresolved blocker | **✅** none. The UAT word is a cost, not a blocker |

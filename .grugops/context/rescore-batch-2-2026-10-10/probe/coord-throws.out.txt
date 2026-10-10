@@ -1,0 +1,5 @@
+null position -> THROWS TypeError Cannot read properties of null (reading 'blackToMove')
+legal=42 -> THROWS TypeError (legal ?? legalMoves(...)).filter is not a function
+control -> move
+text=null -> rejected
+node v26.11.0

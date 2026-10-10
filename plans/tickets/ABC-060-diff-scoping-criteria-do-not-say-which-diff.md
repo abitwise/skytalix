@@ -16,6 +16,19 @@ feature: —
 > it** (`ticket-to-pr-ABC-042`, 2026-08-15), which closed the `ABC-042` instance and said in its own
 > words: *"The wording genuinely would be better if it said WHICH diff — that is a BA/PM item."*
 > **This is that item. `ABC-042`'s page is not edited: its `A12` is gated, MET and frozen.**
+>
+> **RE-SCORED 2026-10-10 by BA/PM — RECOMMENDED DROP: THE PROBLEM NO LONGER EXISTS** (task
+> `wave-2026-09-25`, subtask `rescore-batch-2-2026-10-10`, at wave tip `f76e041`). All four pages
+> this ticket repairs are now **`Done`**: `ABC-043`, `ABC-044`, `ABC-045` and `ABC-046`. Each was
+> gated against the wording it has today. By this page's own doctrine (§ Out of scope, first fence)
+> a gated page is not edited, so the scope is empty. The time-box ("before `ABC-043` exits
+> `Ready for Dev`") also passed in August. The harm did not happen: the delivered hops named their
+> diffs themselves. `ABC-045` measured `git diff --name-only bd40d85...b8afa30 -- src/` (page
+> `:166`), and `ABC-046` measured `d1d431f...6cdde15` (`:265`) and `5d0fdb0 85b66c6` (`:470`).
+> **One live instance of the clause remains, outside this ticket's four:** `ABC-101` `A9` (`:152`,
+> Backlog, DoR 7/10). It should be folded into `ABC-101`'s next re-score as one sentence, not homed
+> here. `status` stays `backlog` so that page and board agree; the board disposition is the
+> Orchestrator's.
 
 ## Problem
 
@@ -145,18 +158,8 @@ which is what it cost on `ABC-042`. **Promote to `P1` when `ABC-043` is pulled t
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-16**. **Result: 10 of 10 — MET.**
-
-| # | item | verdict |
-|---|---|---|
-| 1 | problem clear | **✅** two readings, measured (six paths vs eight), a ruling that lives in a note, and four criteria about to inherit the ambiguity |
-| 2 | scope and out-of-scope clear | **✅** four named criteria at four named line numbers; five fences, first of which is `ABC-042`'s frozen page and second is the Orchestrator's own half of `Q12` |
-| 3 | INVEST-shaped | **✅** independent (no dependency on `ABC-042`'s merge), small, testable by reading four sentences and one `git diff` |
-| 4 | acceptance testable and measurable | **✅** **4 of 4** naming a diff (today 0 of 4), the exception stated per criterion, **0** file-list entries moved, **0** lines changed in `ABC-042` |
-| 5 | dependencies known | **✅** none; the `ABC-043` ordering named as sequencing with the rule-1 exit that would otherwise catch it |
-| 6 | security/NFR triggers with a measurable target | **✅** `N8-LANE` **0** files and **0** spawns, `NFR-002` untriggered, four security clauses answered |
-| 7 | test notes present | **✅** four, including the differing verb and the DoR re-score |
-| 8 | size assigned | **✅** `XS` (1) |
-| 9 | priority assigned | **✅** `P2`, time-boxed by `ABC-043` with the promotion trigger named |
-| 10 | no major unresolved blocker | **✅** nothing open, nothing decided by anyone else — the ruling this depends on is already made and recorded |
+**Re-scored 2026-10-10 by BA/PM at `f76e041`. Result: NOT SCORED — RECOMMENDED DROP.** Was 10/10
+(2026-08-16). Item 1 fails first: the four Backlog criteria it describes no longer exist as Backlog
+criteria. All four tickets are `Done` and their pages are frozen by the doctrine in § Out of scope.
+There is no residual scope to score. The one open instance (`ABC-101` `A9`) belongs to that page's
+own re-score.

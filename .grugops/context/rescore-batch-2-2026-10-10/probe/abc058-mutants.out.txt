@@ -1,0 +1,21 @@
+== control
+      Tests  66 passed (66)
+== MS4 shell:true on the one spawnSync
+349:      shell: true,
+   × ABC-042 — the resolved colour reaches the board > A4 — the running entry point draws each colour from the human's side 7ms
+   × ABC-064 — the frame's shape and the status panel, on the three non-default children > A1 — each non-default child writes the reference frame's row count, and one newline after its last row 1ms
+   × ABC-064 — the frame's shape and the status panel, on the three non-default children > A4 — `random` is resolved before anything can see it: the word occurs zero times on the child's whole stdout 0ms
+   × ABC-043 — the live session > A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0 0ms
+   × ABC-043 — the live session > A3 — a parser bug ends the game as an INTERNAL ERROR, never as a chess outcome, and exits non-zero 1ms
+   × ABC-043 — the live session > A4 — end-of-input is the CLEAN path, and it is distinguishable from A3 by message and by code 0ms
+== S5 docblock names spawnSync(
+ * Prose only: a later hop never adds a second `spawnSync(` call site.
+ * `ABC-042` — the entry point and its argv resolver: `A1`…`A10` and `A12`'s structural halves, plus
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more 6ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+      Tests  1 failed | 65 passed (66)
+== M3h printableOf narrowed
+    if (code < 0x20 && code !== 0x7f) continue;
+      Tests  66 passed (66)
+      Tests  18 failed | 48 passed (66)

@@ -1,0 +1,39 @@
+# at base f76e041 (git archive copy)
+done ABC-041 restates failsafe 
+backlog ABC-053 restates failsafe 
+backlog ABC-054 restates failsafe 
+backlog ABC-055 restates failsafe 
+backlog ABC-056 - failsafe 
+backlog ABC-057 restates failsafe 
+backlog ABC-058 restates failsafe (per-line grep disagrees)
+backlog ABC-059 restates failsafe (per-line grep disagrees)
+done ABC-061 restates NO-failsafe 
+done ABC-063 restates NO-failsafe 
+done ABC-064 restates NO-failsafe 
+done ABC-065 restates NO-failsafe 
+done ABC-067 restates NO-failsafe 
+backlog ABC-072 restates failsafe 
+backlog ABC-073 restates failsafe 
+done ABC-082 restates NO-failsafe 
+# after this re-score (branch tip, pages only)
+done ABC-041 restates failsafe 
+backlog ABC-053 restates failsafe 
+backlog ABC-054 restates failsafe 
+ready ABC-055 - failsafe (per-line grep disagrees)
+backlog ABC-056 - failsafe 
+ready ABC-057 - failsafe (per-line grep disagrees)
+ready ABC-058 - failsafe (per-line grep disagrees)
+ready ABC-059 - failsafe 
+done ABC-061 restates NO-failsafe 
+done ABC-063 restates NO-failsafe 
+done ABC-064 restates NO-failsafe 
+done ABC-065 restates NO-failsafe 
+done ABC-067 restates NO-failsafe 
+backlog ABC-072 restates failsafe 
+backlog ABC-073 restates failsafe 
+done ABC-082 restates NO-failsafe 
+# pages carrying the interim dual-reading form
+ABC-058
+ABC-055
+ABC-057
+ABC-059
