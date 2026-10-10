@@ -671,8 +671,11 @@ const CHILDREN = {
   shortFlag: run("-x"),
   badColour: run("--colour", "purple"),
   bareWord: run("foo"),
-  /** Security bar 3 — one spawn, one token carrying a literal escape sequence. */
-  escape: run("--colour", "\u001b[2Jpurple"),
+  /**
+   * Security bar 3 — one spawn, one token carrying ONE MEMBER OF EACH CLASS THE BAR FORBIDS: a C0
+   * (`BEL`), a literal escape sequence (`ESC`, itself a C0) and `U+007F` (`ABC-058` `S4`).
+   */
+  escape: run("--colour", "\u0007\u001b[2Jpurple\u007f"),
 
   // -------------------------------------------------------------------------------------------
   // `ABC-043`'s SEVEN, counted off the criteria at the cut (`N8-SPAWN`, on the ticket) and not one
@@ -1833,11 +1836,13 @@ describe("ABC-042 — the shape of what was delivered", () => {
     expect(spawned).toBe(N8_SPAWN);
     expect(Object.keys(CHILDREN)).toHaveLength(N8_SPAWN);
     // THE PIN ABOVE IS SELF-REFERENTIAL: `spawned` counts only children made through `childOf`, so
-    // a direct `spawnSync` adds an eleventh child the counter never sees, and that build was green.
-    // `N8-LANE` is breached and escalated, which makes this the instrument the owner's decision
-    // rests on — so the count is closed at its source rather than at the wrapper: `spawnSync` is
-    // the ONLY name this file takes from `node:child_process`, and it has exactly one call site.
-    const self = sourceOf("cli.test.ts");
+    // a direct `spawnSync` adds a child the counter never sees, and that build was green. The child
+    // count is the instrument the spawn account rests on (no `N8-LANE` line is claimed in this
+    // file — see above) — so the count is closed at its source rather than at the wrapper:
+    // `spawnSync` is the ONLY name this file takes from `node:child_process`, and it has exactly
+    // one call site. Both are counted over EXECUTABLE CODE, COMMENTS STRIPPED (`ABC-058` `S5`), so
+    // a comment that names the call in prose cannot red a correct file.
+    const self = executableCodeOf("cli.test.ts");
     const imported = [...self.matchAll(/import\s*\{([^}]*)\}\s*from\s*"node:child_process"/g)].map(
       (match) => (match[1] as string).trim(),
     );
