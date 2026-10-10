@@ -1,4 +1,5 @@
 # NFR Catalog
+_Updated: 2026-10-10 by Security/NFR (task `wave-2026-09-25`, subtask `secnfr-catalog-abc087-2026-10-10`, after `ABC-087` was accepted by the owner and merged as `b696d8e8`, Orchestrator note `…owner-word-uat-q4-5c8e2a17` item 2): **NO LEVEL, BAR, TARGET OR MEASURED FIGURE MOVED. NO TABLE ROW TOUCHED: `NFR-001`–`NFR-009` BYTE-IDENTICAL, each row hashed before and after.** It lands the two items `secnfr-ABC-087` decision `…3f1974f5` owed to this file, both transcribed and not paraphrased, inside the `NFR-004` section. (1) **`AR-NFR004-A` re-accepted with its number** (level 3 = `DEFAULT_BUDGET_MS`: +12 ms max, 24/30 over, real clock). This is the risk's own discharge route; the "~2 900 ms" route is closed by `ABC-087` `A6`. (2) **New sub-section, "THE LEVEL LAYER":** the 5 s ceiling binds per move PLAYED, and the level clamps its own total; the clamp bounds the deadline, not the return. It also records three things. The clamp pin owed as `R1` is **delivered** (`1160b063`; `M4` re-planted here, red on that row only). `ABC-087` `A2`'s ±20 % is an **injected-clock** property (BA/PM `…f9ef24db` item 5; wording, not a bar). The readings are on Node v26.11.0, off the reference runtime. **The `NFR-004` `Verified by` cell is not moved.** `ADR-0035` is not applied; `NFR-005`'s `PROVISIONAL` marker, `NFR-008` and `RISK-003` (its 0.8x margin stays `UNKNOWN - verify`) are untouched._
 _Updated: 2026-10-10 by Security/NFR (task `wave-2026-09-25`, subtask `secnfr-catalog-2026-10-10`, on the owner's two words of 2026-10-10, Orchestrator notes `…owner-word-d7a1c3e5` item 4 and `…owner-word-adrs-91c4e7a0` item 4): **NO LEVEL, BAR, TARGET OR MEASURED FIGURE MOVED. TWO TABLE ROWS EDITED: `NFR-005` (two stale phrases struck through and kept, one dated note added) and `NFR-003` (*"and tab-completion"* struck through and kept, one dated note added; item 3). `NFR-001`, `NFR-002`, `NFR-004` and `NFR-006`–`NFR-009` BYTE-IDENTICAL, each row hashed before and after.** (1) **`ABC-074` dropped** (*"ABC-074 - rule the test out"*): the "Any non-M3 machine" open item is closed on its hardware half. Every target in this file now holds on the **Apple M3 reference machine only**, and off it `UNKNOWN - verify` is a scope statement, no longer an owed measurement. The four places that named the spike as still coming carry a dated note. The Node-version half stays open. (2) **`ADR-0034` accepted with (b) at 0.8x**: two rules are added under `RISK-003` for the puzzle suite: the hang guard is sized from the printed wall × 6.3, and the count gate records its budget margin (0.8x once the puzzle-edge re-cut lands; −4 % today). (3) **`ABC-038` dropped** (*"R4: drop it"*, added to this hop at the Orchestrator's request): `NFR-003`'s `< 100 ms` bar now covers the `moves` command alone, and the bar itself is unchanged. **`ADR-0035`'s proposed wording is NOT applied, and `NFR-008` is not touched.** The three new sections are at the end of this file._
 _Updated: 2026-09-26 by Security/NFR (task `nfr-depth7-catalog`, on the owner's word *"run items 1-3"*): **`NFR-005` ONLY, VERIFIED-BY COLUMN ONLY, NO THRESHOLD OR LEVEL MOVED.** The status sentence *"Depth 7 not reached (WARN, still PROVISIONAL)"* placed at `ABC-081` went stale when `ABC-121` merged; it is struck through (kept as history) and followed by the post-`ABC-121` status: floor (depth 6) MET, depth 7 (WARN level) REACHED on the Apple M3 reference machine, still PROVISIONAL — single machine, loaded host. Evidence cited, not re-measured: `secnfr-ABC-121` `…76eb826c` / `…d25a224c` and `uat-run-ABC-121` `A2` `…80a5e0a0` (plain `node`, the binding runner, 7/7/7 vs door 6/6/6 on both positions). The engine source is unchanged since those runs (`git diff ada4093 652ed49 -- src` touches only `src/cli.test.ts`), so the catalog's precedent (`place-nfr005-runner`: "No re-measurement at this hop") holds. The depth 6 FAIL floor, the depth 7 WARN level, the 3 s budget and 5 s ceiling are unchanged. `NFR-001`–`NFR-004` and `NFR-006`–`NFR-009` are BYTE-IDENTICAL, each row hashed before and after._
 _Updated: 2026-09-25 by Security/NFR (task `wave-2026-09-24`, subtask `place-nfr005-runner`, Workflow 15, on the owner's word *"3. use recommendation"*, Orchestrator note `…aa98a05d`): **`NFR-005` ONLY, TWO INSERTIONS, NO LEVEL MOVED.** The Target column gains the runner sentence (plain `node` binds; vitest is reported, never the verdict) immediately after *"Node rate is a **diagnostic, not the target**"*. The Verified-by column gains the status *"FLOOR MET at `ABC-081`'s close … Depth 7 not reached (WARN, still PROVISIONAL)"*. Both texts are the ones proposed verbatim in `secnfr-ABC-081` decision `…48e9e17c` § 6 (a)/(b), joined onto one line for the table cell. The depth 6 FAIL floor, the depth 7 WARN level and its PROVISIONAL marker are unchanged. `NFR-001`–`NFR-004` and `NFR-006`–`NFR-009` are BYTE-IDENTICAL, each row hashed before and after. No re-measurement at this hop._
@@ -1288,6 +1289,30 @@ class, same treatment, and the repair is a census correction rather than a rulin
 > **Discharge:** that hop either passes ~2 900 ms, making the clause literally true at zero cost, or re-accepts this risk in writing with its number. **It may NOT be discharged by editing this row.**
 > **Scope of the acceptance:** it is denominated in a measured 1.03% on named positions on ONE machine. **A later reading materially worse than that is a NEW question and is not covered here**, and ~~`ABC-074`'s off-M3 measurement is still owed~~ (true until 2026-10-10). **2026-10-10: it is no longer owed, because `ABC-074` was dropped on the owner's word.** This acceptance stays one machine, the M3 reference, and that is now its whole scope. The discharge clause above is unchanged.
 
+**2026-10-10 — `AR-NFR004-A` IS RE-ACCEPTED AT `ABC-087`, WITH ITS NUMBER. That is this risk's own discharge route ("re-accepts this risk in writing with its number"); the row is not edited.** `ABC-087` landed before `EPIC-006`'s difficulty hop, so it was the hop named above. Security/NFR re-accepted the risk at that ticket's gate (`secnfr-ABC-087` decision `20261010T130030Z-…-3f1974f5`, readings in observation `…231d41c8`). The ticket was accepted by the owner and merged as `b696d8e8` (Orchestrator note `20261010T141247Z-orchestrator-decision-owner-word-uat-q4-5c8e2a17` item 2). The block below is **transcribed from that decision, not paraphrased**. Its last bullet is the decision's own words and is discharged by this transcription (subtask `secnfr-catalog-abc087-2026-10-10`).
+
+> **Re-accepted 2026-10-10 by Security/NFR at `ABC-087` (`secnfr-ABC-087`).**
+> - **Clause A at the delivered default** (`LEVELS[3]` = `DEFAULT_BUDGET_MS` = 3 000 ms, rate 0, the
+>   shipped engine): **24/30 calls over 3 000 ms, max +12 ms (0.40 %), median +2 ms**, on the six
+>   standing positions, real clock, load1 4.0–5.4, Apple M3 / Node v26.11.0.
+> - **The ceiling residual through the level layer:** 5 000–5 015 ms at a 20 s level (8 readings).
+> - **Same mechanism and the same ≤ 31 ms bound as recorded at `ABC-078`.** Not materially worse.
+> - **Outside this acceptance, by its own scope rule:** the single +90 ms first-call reading at
+>   4 500 ms. It missed no clause. **If a level-3 move ever reads it, that is a NEW question**, and
+>   whether one can is `UNKNOWN - verify`.
+> - **Owner: Security/NFR**, as the catalog names it. **Next reading:** the `EPIC-006` hop that first
+>   routes a played move through a level. Today `src/cli.ts:175` builds
+>   `createEngine({ budgetMs: DEFAULT_BUDGET_MS })` and no production file imports `levels.ts`, so
+>   live exposure is unchanged from `ABC-078`.
+> - **Discharge by ~2 900 ms is closed by `A6`.** Reopening it is BA/PM's criterion, with the owner's
+>   word.
+> - **Not written into the catalog by this hop.** It is transcribed by whichever hop next holds
+>   `plans/nfr-catalog.md`.
+
+**Read at transcription (2026-10-10, wave tip `5a4c53c2`; no figure in the block moves):**
+- **The live-exposure sentence still holds.** `src/cli.ts:175` still builds `createEngine({ budgetMs: DEFAULT_BUDGET_MS })`, and no production file under `src/` imports `levels.ts` (only `src/levels.test.ts` does).
+- **The runtime.** The block's figures were taken on Node v26.11.0, which is not the catalog's reference Node, v24.12.0 (see the `ABC-074` section, "Still open: the Node-version half"). They sit inside the ≤ 31 ms bound that was recorded on v24.12.0, so neither runtime's reading is materially worse. **The re-acceptance does not re-base the reference runtime.**
+
 ### CLAUSE B — "hard ceiling 5 s at any difficulty": **BREACHED. Enforcement RULED OWED BY `ABC-078`, and a REQUIRED FIX is specified.**
 
 **Measured twice, independently.** QE: `budgetMs = 4999` → 5 003 ms. This gate, real clock, `kiwipete`: 3 000 → 3 006 ms; **4 999 → 5 000 ms; 5 000 → 5 002 ms; 6 000 → 6 004 ms.** The exact tipping budget moves by a millisecond between runs and **the structure does not: `chooseMove` computes `deadline = start + options.budgetMs` and contains NO reference to 5 000 of any kind.** Elapsed tracks the budget upward without limit — `budgetMs = 600000` would return at ten minutes. **The ceiling holds today only because every caller in existence passes 3 000.**
@@ -1309,11 +1334,58 @@ class, same treatment, and the repair is a census correction rather than a rulin
 
 **THE RESIDUAL AFTER THE FIX, recorded now so it is not discovered later as a surprise.** With the clamp, a caller passing 10 s returns at **~5 003 ms — still ~3 ms over a "hard" ceiling.** That residual is `AR-NFR004-A` above: same mechanism, same ≤ 31 ms bound, same owner. **A margin to hide it is refused at this gate.** The engineer declined to invent one, QE recorded that refusal as correct, and this gate agrees: a margin makes the sentence true by making `budgetMs` a lie. **If this project wants the 5 s ceiling literally true to the millisecond, that is a decision to take at `EPIC-006` alongside the budget choice, with its cost visible — not something to slip into a repair hop.**
 
+### THE LEVEL LAYER (`ABC-087`) — the 5 s ceiling binds PER MOVE PLAYED. Added 2026-10-10 by Security/NFR (task `wave-2026-09-25`, subtask `secnfr-catalog-abc087-2026-10-10`). **NO TARGET, BAR, LEVEL OR MEASURED FIGURE MOVED, AND NO TABLE ROW WAS TOUCHED.**
+
+**Where this comes from.** Security/NFR ruled `NFR-004` for the level layer at `ABC-087`'s gate (`secnfr-ABC-087` decision `20261010T130030Z-…-3f1974f5`, rulings 1–2; readings in observation `…231d41c8`). Its "Proposed `NFR-004` catalog wording" was left for the hop that holds this file. `ABC-087` was then accepted by the owner and merged as `b696d8e8` (Orchestrator note `…owner-word-uat-q4-5c8e2a17` item 2). The block below is **transcribed from that decision, not paraphrased**. The notes after it record what changed between the ruling and this transcription.
+
+> **THE LEVEL LAYER (`ABC-087`, 2026-10-10, Security/NFR).** The 5 s ceiling binds **per move played**,
+> not per engine call. The engine clamps each `chooseMove` call (`RF-1`), and that does not bound a
+> SUM of calls.
+> - **A caller that makes several engine calls for one move clamps its own total.** `ABC-087`'s
+>   blunder path makes one call per legal root move (`ADR-0032` d1). It uses
+>   `B = min(level budget, HARD_CEILING_MS)` and one shared deadline `start + B·(i+1)/N`.
+> - **The clamp bounds the DEADLINE, not the return.** The return carries the single-call abort
+>   residual (`AR-NFR004-A`). Real clock, 20 s level: 5 000–5 015 ms over 8 readings, 6–48 children.
+> - **The shared deadline cannot carry a move past the ceiling while the sum of the children's
+>   unabortable depth-1 searches stays under it.** Measured ≤ 589 ms on the 246-position deep corpus.
+> - **"At default difficulty" means `LEVELS[3]`**, which is `DEFAULT_BUDGET_MS` at rate 0: the shipped
+>   engine (`ABC-087` `A6`). Clause A there read +12 ms max on 24/30 calls (`AR-NFR004-A`,
+>   re-accepted).
+> - **Verified by:**
+>   - `ABC-087` `A2`: the blunder total on the injected clock, 101.3 / 100;
+>   - `A5`: the hardest level, real clock, 30/30 ≤ 5 s, max 4 526–4 590 ms over six runs;
+>   - and the clamp pin owed as `R1`.
+> - **A table or harness that puts a BLUNDERING level near or above the ceiling** re-reads `A5`'s
+>   blunder clause on the real clock. A virtual reading cannot stand in: the virtual clock does not
+>   charge depth 1.
+
+**1. The clamp pin "owed as `R1`" is DELIVERED. Nothing of `R1` is still owed.**
+- **What landed.** `1160b063` (Software Engineer, observation `ticket-to-pr-ABC-087` `…14ec8ea7`) adds the row `Security/NFR R1 (QE-087-c) — the level clamps its own total to HARD_CEILING_MS` to `src/levels.test.ts`, in the default lane. It is in `b696d8e8`, so it is on the wave tip.
+- **Its shape is the ruling's shape:** a `{ budgetMs: 20 000, blunderRate: 1 }` level on `6k1/8/8/8/8/8/1R6/6K1 b` (5 legal moves), `virtualClock(250)`, asserting `elapsedMs ≤ HARD_CEILING_MS + 4·step`. It adds one more assertion: the move must not be an engine move, so the blunder path is the one exercised.
+- **It turns the clamp's removal red.**
+  - The Engineer's reading: `M4` red on that row only (20 750), pristine 22/22, about 6 ms of default lane.
+  - Re-planted by this hop, out of tree on a `git archive 5a4c53c2` copy, `npx vitest run src/levels.test.ts`:
+    - pristine: exit 0, 22/22 (load1 5.8);
+    - `M4` (`Math.min(level.budgetMs, HARD_CEILING_MS)` → `level.budgetMs` at `src/levels.ts:123`): exit 1, 1 failed / 22, the `R1` row only, *"expected 20750 to be less than or equal to 6000"* (load1 7.7).
+- **Not done.** No QE note reviews `1160b063` by name. QE's notes predate it. The row is in the tree the owner accepted.
+
+**2. `A2`'s ±20 % is an injected-clock property. This is wording, not a new bar.** This is BA/PM's item 5 (`bapm-followups-2026-10-10` decision `…f9ef24db`), placed here by the Orchestrator's enqueue of this subtask (as catalog wording, not a bar).
+- **What `A2` says.** Its words are *"the wall clock used matches that level's budget within ±20%"*. Its test note 3 binds that to the injected clock, and every gate measured it there (101.3 / 100). That is how the block's *"Verified by"* cites it.
+- **On the real clock it does not hold at level 1** (`secnfr-ABC-087` ruling 8, `…231d41c8` § 4). Blunder moves read median 101 ms, p90 164, max 498–589 ms. **17.9 %** exceed +20 %. Two causes: the engine's depth 1 is unabortable, and the virtual clock does not charge it.
+- **No `NFR` row is touched.** `NFR-004`'s clauses are real-clock clauses, and they hold: 589 ms ≪ 3 s, and `A5` reads 30/30 ≤ 5 s. **No row in this catalog has a per-level budget-fidelity target, and this section does not add one.** A real-clock ±20 % at 100 ms would need an abortable depth 1. That is an engine change and the owner's word (BA/PM owner question 1 in `…f9ef24db`, recommendation "no").
+- **Read the block's `A2` citation accordingly:** `A2` verifies the level layer's budget accounting, and it does not verify real thinking time.
+- **Forward.** The hop that wires levels to a user (`ABC-101` / `EPIC-006`) states the budget's clock in its own criterion. Owners: BA/PM at `ABC-101`'s next refinement, and `ABC-085`'s Engineer if any ladder reading is timed on the real clock (`RR-LEVEL1-REALCLOCK`).
+
+**3. What did not change.**
+- **The block's figures were taken on Node v26.11.0** (`…231d41c8`, stack line), which is off the catalog's reference runtime. See the note under `AR-NFR004-A` above.
+- **`R1`'s "If it is not taken by then" escalation cannot fire,** because the row was taken before merge.
+- **The ruling's degenerate-input note (ruling 7)** stays with its owners: `EPIC-006` / `ABC-101` look up `LEVELS` by a validated own integer key. It is not an `NFR` and is not written here.
+
 ### THE FENCE ON THIS SECTION
 
 **The row's TARGET is untouched and was never in question.** `≤ 3 s at default difficulty` and `hard ceiling 5 s at any difficulty` stand exactly as written. **This section rules the row; it does not edit it, and a gate could not.**
 
-**The `Verified by` cell still says `UNKNOWN - verify` and that is CORRECT, not an oversight.** The row is now measured on **one machine** and is enforced by **nothing** until `RF-1` lands. ~~The cell moves when the off-M3 obligation (`ABC-074`, `Blocked`) reports — not when a gate takes a reading on an M3.~~ (true until 2026-10-10). **2026-10-10: that trigger can no longer fire, because `ABC-074` was dropped on the owner's word. The cell now moves at the next Security/NFR hop that rules `NFR-004` on the M3 reference. `RF-1` has landed (`HARD_CEILING_MS` in `src/engine.ts`). The cell is not moved at this hop, and nothing was measured here.**
+**The `Verified by` cell still says `UNKNOWN - verify` and that is CORRECT, not an oversight.** The row is now measured on **one machine** and is enforced by **nothing** until `RF-1` lands. ~~The cell moves when the off-M3 obligation (`ABC-074`, `Blocked`) reports — not when a gate takes a reading on an M3.~~ (true until 2026-10-10). **2026-10-10: that trigger can no longer fire, because `ABC-074` was dropped on the owner's word. The cell now moves at the next Security/NFR hop that rules `NFR-004` on the M3 reference. `RF-1` has landed (`HARD_CEILING_MS` in `src/engine.ts`). The cell is not moved at this hop, and nothing was measured here.** **2026-10-10, later (subtask `secnfr-catalog-abc087-2026-10-10`): the cell is still not moved.** `secnfr-ABC-087` ruled `NFR-004` for the level layer on the M3. But it ruled on Node v26.11.0, which is off the reference runtime, and its own proposal kept this cell out of scope. Whether a v26.11.0 ruling counts as "on the M3 reference" waits on the open re-basing question in the `ABC-074` section. Until that is answered, the trigger stands as written above.
 
 **Every number in this section is true of Apple M3 (Mac15,13) / Darwin 25.5.0 arm64 / Node v24.12.0 and of nothing else.** No production file was modified to take any of these readings: the ceiling and degenerate-budget probes are throwaway scripts outside the repository that IMPORT `src/engine.ts`, and the deep lane ran on an out-of-tree copy. `src/` is byte-identical across this hop.
 
