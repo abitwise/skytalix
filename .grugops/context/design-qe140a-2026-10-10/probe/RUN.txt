@@ -1,0 +1,41 @@
+Architect/Design — subtask design-qe140a-2026-10-10 — readings for QE-140-a
+Rev: bb73aebb1f8a2d52d9ddf0fe856e565fc43f4a47 (wave tip; ABC-140 merged). Node v26.11.0, Apple M3.
+One fresh `git archive` tree per build, node_modules symlinked; per build: vitest JSON, biome check src, tsc --noEmit.
+
+1. QE's COMMITTED runner + planter (.grugops/context/qe-ABC-140/probe/qe140-ledger.sh, qe140-plant.mjs),
+   run unchanged at 2026-10-10T17:24:47Z. The permission layer refused nothing.
+     Q-WSC                        exit=1  11/12  composer tripwire "a second frame composer"   lint=0 tsc=0
+     Q-RETURN-BETWEEN+FMT+Q-WSC   exit=0  12/12                                               lint=0 tsc=0
+   QE's QE-140-a survivor reproduces at the wave tip.
+
+2. The Architect's OWN runner + planter (arch-ledger.sh, arch-plant.mjs, this directory). Components apply left to
+   right; A-* by arch-plant.mjs, Q-*/FMT by QE's committed qe140-plant.mjs (sha256 87416eb8…1348, unchanged).
+     file scope  2026-10-10T17:25:37Z..17:27:02Z -> ledger-file.tsv (19 builds)
+     suite scope 2026-10-10T17:27:12Z..17:27:46Z -> ledger-suite.tsv (3 builds)
+   No row printed PLANT-FAILED.
+
+   New spellings (Architect's):
+     A-RETURN-BEFORE      `if (readdirSync(directory).includes("perft-bench.ts")) return;` inserted ABOVE the composer
+                          tripwire's pinned scan statement (between the predicate and the scan).
+     A-LIC-RETURN-BEFORE  the same line inserted ABOVE the licence guard's pinned scan pair: QE-136-a's twin, outside
+                          QE-136-a's trigger span (importer statement .. toEqual).
+     A-CONTIG             PROTOTYPE of option (b): R5d's two literals merged into ONE contiguous literal
+                          (architect-option-b-prototype.patch). Keeps the one existing biome-ignore; adds none.
+                          Unformatted it is lint 1 (line length); +FMT it is lint 0.
+
+   Results:
+     at bb73aebb (no prototype)
+       Q-MUTATE-BETWEEN / Q-RETURN-BETWEEN / A-RETURN-BEFORE / Q-LOCAL-SHADOW (+FMT+Q-WSC)  all exit 0, 12/12
+       A-LIC-RETURN-BEFORE+FMT+Q-WPS                                                        exit 0, 12/12
+     with the option (b) prototype (A-CONTIG+...)
+       CONTROL, +FMT                                         exit 0, 12/12
+       +Q-WSC                                                exit 1, composer tripwire (armed)
+       +Q-N-TAIL / +Q-C-SLICE (+FMT+Q-WSC)                   exit 1, drift tripwire, merged pin
+       +Q-MUTATE-BETWEEN / +Q-RETURN-BETWEEN (+FMT+Q-WSC)    exit 1, drift tripwire, merged pin   <- (b) closes these
+       +A-RETURN-BEFORE / +Q-LOCAL-SHADOW (+FMT+Q-WSC)       exit 0, 12/12                        <- (b) does not
+     whole suite (52 files)
+       A-RETURN-BEFORE+FMT+Q-WSC                             exit 0, 1608/1608, lint 0, tsc 0
+       A-CONTIG+A-RETURN-BEFORE+FMT+Q-WSC                    exit 0, 1608/1608, lint 0, tsc 0
+       A-LIC-RETURN-BEFORE+FMT+Q-WPS                         exit 0, 1608/1608, lint 0, tsc 0
+
+Re-run: arch-ledger.sh <main checkout> bb73aebb <scratch dir> file|suite <build...>

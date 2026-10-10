@@ -1,0 +1,19 @@
+bb73aebb	file	CONTROL	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	Q-WSC	exit=1	files=1	total=12	passed=11	failed=1	FAILED:the composer tripwire: assembleFrame's value <a second frame composer>	lint=0	tsc=0
+bb73aebb	file	Q-WPS	exit=1	files=1	total=12	passed=11	failed=1	FAILED:licenses src/history.ts's runtime importers: <expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]>	lint=0	tsc=0
+bb73aebb	file	Q-MUTATE-BETWEEN+FMT+Q-WSC	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	Q-RETURN-BETWEEN+FMT+Q-WSC	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	A-RETURN-BEFORE+FMT	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	A-RETURN-BEFORE+FMT+Q-WSC	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	Q-LOCAL-SHADOW+FMT+Q-WSC	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	A-LIC-RETURN-BEFORE+FMT	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	A-LIC-RETURN-BEFORE+FMT+Q-WPS	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	A-CONTIG	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=1	tsc=0
+bb73aebb	file	A-CONTIG+FMT	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	A-CONTIG+Q-WSC	exit=1	files=1	total=12	passed=11	failed=1	FAILED:the composer tripwire: assembleFrame's value <a second frame composer>	lint=1	tsc=0
+bb73aebb	file	A-CONTIG+Q-N-TAIL+FMT+Q-WSC	exit=1	files=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire scans EVERY production module and compares with an EQUALITY>	lint=0	tsc=0
+bb73aebb	file	A-CONTIG+Q-C-SLICE+FMT+Q-WSC	exit=1	files=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire scans EVERY production module and compares with an EQUALITY>	lint=0	tsc=0
+bb73aebb	file	A-CONTIG+Q-MUTATE-BETWEEN+FMT+Q-WSC	exit=1	files=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire scans EVERY production module and compares with an EQUALITY>	lint=0	tsc=0
+bb73aebb	file	A-CONTIG+Q-RETURN-BETWEEN+FMT+Q-WSC	exit=1	files=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire scans EVERY production module and compares with an EQUALITY>	lint=0	tsc=0
+bb73aebb	file	A-CONTIG+A-RETURN-BEFORE+FMT+Q-WSC	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+bb73aebb	file	A-CONTIG+Q-LOCAL-SHADOW+FMT+Q-WSC	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
