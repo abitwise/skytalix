@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-qe010d-2026-10-10` merged (`0aad5cac`): QE-010-d → three accepted LOW residuals on ADR-0033's guard (`AR-033-NESTED`, `AR-033-EXT`, `AR-033-COMPUTED`), alignment fix rides the triggering hop. BA/PM `rescore-p1-backlog-2026-10-10` dispatched (ABC-085, ABC-093, ABC-094, ABC-095)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-r5d-qe139a-2026-10-10` merged (`72b9fa4b`): new `ABC-140` (R5d) pulled → `In Development`; new `ABC-141` → `Backlog` (waits ABC-010). Declined with triggers: QE-139-a (next ticket editing 'The render cadence' paragraph carries it), fullmove bound (first FEN-input ticket)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Security/NFR` (`a4802fc0`); `secnfr-ABC-138` dispatched. Architect `design-qe010d-2026-10-10` dispatched (QE-010-d)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` → `Ready for UAT` (`f9d1ff4b`; owner word owed)._
