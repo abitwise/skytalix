@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-127` `In Development` → `In Review` (built `a7e1128`); QE `qe-ABC-127` dispatched._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `recut-abc010` merged `d24e740`: `ABC-010` DoR 8/10 (waits ADR-0033 + ABC-126); the two defective puzzle rows fold into `ABC-126` (now S). Scribe `scribe-ABC-069` running._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-069` pulled → `In Development` (Scribe `scribe-ABC-069`; `AGENTS.md` only, no overlap)._
@@ -497,9 +499,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 
-- [ABC-127] Harder puzzles — catch the weakenings ABC-084's suite misses, and leave headroom below the ceiling  (EPIC-004, M, P1, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3, `A3`'s ≥ 6-of-10 bar, read non-blocking by the Orchestrator: measurable, with a stop rule) **→ In Development 2026-10-10.** Cut by BA/PM on the owner's word (`…e47a1c08`; `cut-harder-puzzles`, note `…5fefe3f1`, merged `ab87d8a`); pulled by the Orchestrator at `f9689e7` (subtask `ticket-to-pr-ABC-127`, branch `grugops/ABC-127-harder-puzzles`). `ABC-126` follows it.
 - [ABC-069] The `Dev / run` slot's guard requires two rendering conventions of `AGENTS.md` and neither is written where a Scribe would see it  (BA/PM, XS, P3, epic: —, since: 2026-08-16, **DoR 10/10**; QE `Q9`, mutants `N15`/`N16` — honest documentation reds the suite; **loosening the guard is REFUSED on QE's reasoning and fenced on the page**; `AGENTS.md` Scribe's pen, 0 files under `src/`; promote to P1 when `EPIC-006` adds or renames an option) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `scribe-ABC-069`, branch `grugops/ABC-069-agents-md-conventions`); DoR dates from 2026-08-16 — the hop re-verifies first and stops if the premise moved.
 
 
@@ -518,7 +519,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+
+- [ABC-127] Harder puzzles — catch the weakenings ABC-084's suite misses, and leave headroom below the ceiling  (EPIC-004, M, P1, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3, `A3`'s ≥ 6-of-10 bar, read non-blocking by the Orchestrator: measurable, with a stop rule) **→ In Development 2026-10-10.** Cut by BA/PM on the owner's word (`…e47a1c08`; `cut-harder-puzzles`, note `…5fefe3f1`, merged `ab87d8a`); pulled by the Orchestrator at `f9689e7` (subtask `ticket-to-pr-ABC-127`, branch `grugops/ABC-127-harder-puzzles`). `ABC-126` follows it. **→ In Review 2026-10-10**: built on `grugops/ABC-127-harder-puzzles` @ `a7e1128` (22 new rows, 40 old byte-identical; baseline re-recorded alone at `47433c5` → 58/62; A3 8 of 10 survivors red incl. W1/W1b/W4/W5; headroom 4 rows; determinism cmp-identical ×3; A7 gating 20–21 s / lane 32–34 s; all new rows pass ADR-0033). QE `qe-ABC-127` dispatched; Security/NFR (A7/A8/N8-LANE) and Scribe (A9 line drafted) follow. UAT not waived (non-test `src/puzzle-corpus.ts`).
 
 
 
