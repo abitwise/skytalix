@@ -1,0 +1,13 @@
+== S-REEXPORT
+   × ABC-042 — the accepted set is closed > A6(i) — the enumeration is the ONLY argv literal in the delivered resolver 5ms
+AssertionError: bare literal ./frame.ts: expected [ '--ascii', '--unicode', …(8) ] to include './frame.ts'
+== S-DYNAMIC
+   × ABC-042 — the accepted set is closed > A6(i) — the enumeration is the ONLY argv literal in the delivered resolver 5ms
+   × ABC-042 — the shape of what was delivered > bar 1 — the production modules treat arguments as data, never as code 3ms
+AssertionError: bare literal ./frame.ts: expected [ '--ascii', '--unicode', …(8) ] to include './frame.ts'
+AssertionError: cli-options.ts contains import(: expected '/**\n * `ABC-042` — the argv resolver…' not to contain 'import('
+== S-WRAP-CLI
+   × ABC-043 — the live session > A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter 4ms
+AssertionError: expected '\n\nimport { resolveOptions } from ".…' to match /render:\s*makeRenderSeam\(mode,\s*ori…/
+== S-REEXPORT-RS
+== S-DYNAMIC-RS

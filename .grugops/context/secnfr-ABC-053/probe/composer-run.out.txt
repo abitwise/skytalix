@@ -1,0 +1,16 @@
+build	step	exit	load1	summary
+S-REEXPORT	lint	0	10.78	Checked 98 files in 107ms. No fixes applied. 
+S-REEXPORT	typecheck	0	10.78	
+S-REEXPORT	lane	1	10.32	 Test Files 1 failed | 50 passed (51)  Tests 1 failed | 1581 passed (1582) 
+S-DYNAMIC	lint	0	9.81	Checked 98 files in 96ms. No fixes applied. 
+S-DYNAMIC	typecheck	0	9.81	
+S-DYNAMIC	lane	1	9.81	 Test Files 1 failed | 50 passed (51)  Tests 2 failed | 1580 passed (1582) 
+S-WRAP-CLI	lint	0	11.27	Checked 98 files in 113ms. No fixes applied. 
+S-WRAP-CLI	typecheck	0	11.27	
+S-WRAP-CLI	lane	1	10.77	 Test Files 1 failed | 50 passed (51)  Tests 1 failed | 1581 passed (1582) 
+S-REEXPORT-RS	lint	0	8.10	Checked 98 files in 127ms. No fixes applied. 
+S-REEXPORT-RS	typecheck	0	8.10	
+S-REEXPORT-RS	lane	0	7.93	 Test Files 51 passed (51)  Tests 1582 passed (1582) 
+S-DYNAMIC-RS	lint	0	7.53	Checked 98 files in 90ms. No fixes applied. 
+S-DYNAMIC-RS	typecheck	0	7.53	
+S-DYNAMIC-RS	lane	0	7.53	 Test Files 51 passed (51)  Tests 1582 passed (1582) 
