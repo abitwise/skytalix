@@ -163,3 +163,22 @@ at `3159ab68`. **Result: 10 of 10, 0 ⚠️ — MET → `Ready`.** The board mov
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with a promotion trigger |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-137`).
+- Branch `grugops/ABC-137-helper-pin`, from `2946e22a`. The code is `54280bc8`
+  (`src/history-pane.nfr.test.ts` +12/−4: one framed helper pin and the reach comment).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-137/` (`…3c71e0a4`,
+  `…9e4b2d17`, `probe/`) and are not restated here.
+
+**`A1`–`A4` are met. No stop condition fired.**
+- The premise held at `2946e22a`, where the file is byte-identical to `5d55cc48`: both `XHELPER-NARROW` builds
+  were green 12/12.
+- On the delivered tree, both builds exit 1 on the drift tripwire ("clause 1's one expression is unchanged"). The
+  rest of the ledger is unchanged by test name. Every span, `ABC-136`'s three pins and the helper hash identically.
+- Cost: both `ADR-0035` sets are admissible (twin +0.04 % / −0.15 %), and `N8-LANE` is MET.
+- **Deviation:** the planters are an SE port. QE's scripts could not be executed on this host. The planted
+  readings use `probe/plant137.mjs`, a line-for-line port with the same anchors. The port reproduces BA/PM's
+  `5d55cc48` ledger row for row. QE should re-run `A1`/`A2` with its own unchanged scripts.

@@ -1,0 +1,12 @@
+54280bc8	CONTROL	load1=10.18	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+54280bc8	WPERFT-STATIC	load1=10.18	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+54280bc8	XHELPER-NARROW+FMT	load1=10.18	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+54280bc8	XHELPER-NARROW+FMT+WPERFT-STATIC	load1=11.77	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+54280bc8	XHELPER-NARROW	load1=12.59	exit=1	 Tests 1 failed | 11 passed (12)	lint=1 Found 1 error 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+54280bc8	XSHADOW-HELPER+FMT+WPERFT-STATIC	load1=12.59	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+54280bc8	QSCAN-NARROW+FMT+WPERFT-STATIC	load1=12.59	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+54280bc8	QLHS-INTERSECT+FMT+WPERFT-STATIC	load1=11.98	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+54280bc8	M15+FMT	load1=11.98	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+54280bc8	M15SUB+FMT	load1=11.98	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+54280bc8	WLAUNDER	load1=11.58	exit=1	 Tests 3 failed | 9 passed (12)	lint=1 Found 1 error 	FAILED:A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar|A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set|licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+54280bc8	WSTALELICENCE	load1=11.58	exit=1	 Tests 1 failed | 11 passed (12)	lint=1 Found 1 error 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|

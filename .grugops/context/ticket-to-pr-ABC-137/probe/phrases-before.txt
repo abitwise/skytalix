@@ -1,0 +1,3 @@
+1 | it pins four spans of the guard by TEXT
+0 | R5c
+6 | productionModulesIn
