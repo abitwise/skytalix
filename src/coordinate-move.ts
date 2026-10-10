@@ -22,19 +22,21 @@
  * `captured` back OFF the `Move` during a take-back, so a fabricated field puts a wrong piece on
  * the board during `EPIC-006`'s `undo`, with nothing thrown and nothing logged.
  *
- * ONE CALLER OBLIGATION, not validated here — the same one `ADR-0004` clause 2 states for `toSan`
- * and `parseSan`: a supplied `legal` list must be the legal moves of the supplied position. Supply
- * another position's list and the answer is silently wrong. That is the price of the parameter and
- * it is paid by the caller.
+ * TWO CALLER OBLIGATIONS, neither of them validated here. `position` must be a real `Position`;
+ * that one is this module's own, and `ADR-0004` clause 2 does not state it. A supplied `legal` list
+ * must be the legal moves of that same position; that one is the obligation `ADR-0004` clause 2
+ * states for `toSan` and `parseSan`. Supply another position's list and the answer is silently
+ * wrong. That is the price of the parameter and it is paid by the caller.
  *
  * It is TOTAL OVER `text` — no value of `text` makes it throw — deliberately unlike `parseFen`
  * (`ADR-0004` (2a)): a coordinate arrives on every line a human types, on the loop's most-travelled
- * edge, and exceptions as control flow there is the wrong shape. Totality is over `text` ONLY.
- * `position` and `legal` are a caller obligation, in the same terms `ADR-0004` clause 2 states for
- * `toSan` and `parseSan`: a real `Position`, and, when supplied, the legal move array of that
- * position. Neither is validated here, and a wrong type throws: `parseCoordinateMove(null, "e2e4")`
- * and `parseCoordinateMove(position, "e2e4", 42)` each throw `TypeError` (`ABC-104`). That is the
- * contract, not a defect.
+ * edge, and exceptions as control flow there is the wrong shape. Totality is over `text` ONLY;
+ * `position` and `legal` are the two caller obligations above. A wrong type there CAN throw, and
+ * need not: `legal` is read only when `text` parses, and `position` only when `text` parses and
+ * `legal` is nullish. `parseCoordinateMove(null, "e2e4")` and
+ * `parseCoordinateMove(position, "e2e4", 42)` each throw `TypeError` (`ABC-104`), while
+ * `parseCoordinateMove(null, "hello")` returns `rejected` / `unreadable`. Those two throws are the
+ * contract, not a defect, and not a guard: do not rely on one to catch a wrong type.
  */
 
 import { legalMoves } from "./legal.ts";
