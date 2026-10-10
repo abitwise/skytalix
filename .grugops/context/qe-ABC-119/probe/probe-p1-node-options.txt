@@ -1,0 +1,9 @@
+== P1: CLI_DEEP=1 NODE_OPTIONS=--import=<marker> npx vitest run src/cli.real-engine.test.ts
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-119-r2/src/cli.ts --colour black --ascii <<< "" — wall 3146 ms, exit 0, signal null
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-119-r2/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3170 ms, exit 0, signal null
+      Tests  7 passed (7)
+marker.mjs:
+import { appendFileSync } from "node:fs";
+appendFileSync("<scratch>/probe-hook/seen.log", `pid=${process.pid} argv1=${process.argv[1] ?? "-"}\n`);
+result: marker loaded in npx, vitest and tinypool workers (10 hits); 0 hits with argv[1] = src/cli.ts
+armed control: NODE_OPTIONS=--import=<marker> node src/cli.ts --colour black --ascii </dev/null -> 1 hit with argv[1] = src/cli.ts

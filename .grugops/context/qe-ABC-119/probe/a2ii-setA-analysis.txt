@@ -1,0 +1,18 @@
+scored rounds n=10; base median CPU 33.87 s, wall 9.82 s
+round  load1(b/h/t)        dCPU head  dCPU twin  dWall head dWall twin
+    1  16.04/12.46/12.72       -4.28      -0.69      -4.63      -0.70
+    2  19.69/20.22/17.05       -1.45       3.12      -1.26       3.25
+    3  22.04/19.86/19.79       -0.30      -0.99      -0.01       0.21
+    4  22.49/19.64/19.39        1.21       0.61       0.34      -0.01
+    5  23.39/22.63/21.42        0.25       0.76       0.08       0.23
+    6  21.61/19.85/21.15        2.57       3.31       3.34       3.33
+    7  30.47/29.00/31.51       -0.74      -2.44       0.51      -1.73
+    8  26.68/26.44/28.10       -1.13      -1.16       0.31      -0.61
+    9  26.05/25.40/25.07       -0.83      -0.25      -0.39      -0.11
+   10  29.05/27.52/29.18       -0.69       0.03      -4.50       0.47
+twin-base cpu: median -0.110 s (-0.32 % of base), sign +5/-5 of 10, two-sided p=1.000
+twin-base wall: median +0.100 s (+1.02 % of base), sign +5/-5 of 10, two-sided p=1.000
+head-base cpu: median -0.715 s (-2.11 % of base), sign +3/-7 of 10, two-sided p=0.344
+head-base wall: median +0.035 s (+0.36 % of base), sign +5/-5 of 10, two-sided p=1.000
+load1 range over scored runs: 12.46–31.51
+every run (incl. round 0): rc=0, cli_deep_lines=0

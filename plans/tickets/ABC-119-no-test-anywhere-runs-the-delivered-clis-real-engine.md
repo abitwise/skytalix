@@ -140,15 +140,42 @@ deep cases are undefined when the variable is unset was measured as **median +0.
   point **with no `--import`, no substitution hook and no double**, the child's own wall time is
   **≥ 1.0 s** (an instant reply proves a double leaked in), it **exits 0**, and the recorded run
   states the measured wall and the command verbatim.
-- **`A2` (the default lane pays nothing, and both traps are cleared).** **Given** the variable
-  **unset**, **then** the default lane is **green**; the skip count from
-  `npx vitest run --reporter=json | jq '.numPendingTests + .numTodoTests'` is **0**; the new lane
-  contributes **zero spawned children**; `node tools/grugops/lane-inventory.js` **exits 0** with the
-  new file tracked (`ABC-118`'s control); and the wall and CPU deltas against the base are the
-  **median of ≥ 5 interleaved paired runs** (warm-up round discarded, `node_modules` symlinked, both
-  trees outside the repository), each **≤ 0.30 s**, sign agreeing on **≥ 4 of 5**. *Read at the cut
-  for a placeholder of this shape: +0.09 s wall, +0.06 s CPU.* **If it disagrees, THIS hop's number
-  is recorded and the disagreement is written down** — `ABC-114` `A3`'s discipline.
+- **`A2` (the default lane pays nothing, and both traps are cleared).** *Two clauses re-worded
+  2026-10-10 by BA/PM (subtask `rule-abc119-a2`). Neither bound moved. Ruling:
+  `.grugops/context/rule-abc119-a2/notes/`.* `<base>` is `git merge-base <wave> HEAD`, which is
+  `A5`'s three-dot base. **Given** the variable **unset**, **then** the default lane is **green**;
+  the skip count from `npx vitest run --reporter=json | jq '.numPendingTests + .numTodoTests'` is
+  **0**; the new lane contributes **zero spawned children**; and:
+  - **(i) Inventory — `ABC-118`'s control, read as a delta.** `node tools/grugops/lane-inventory.js`
+    is run on `<base>` and on `HEAD`. **Every finding `HEAD` prints is also printed on `<base>`.**
+    `HEAD`'s collected and tracked counts are each **exactly one** higher than `<base>`'s, and the new
+    file appears in neither finding list. **When `<base>` exits 0, this is exactly "`HEAD` exits 0".**
+    `ABC-130` is the predecessor of that literal reading; this ticket does not wait for it.
+  - **(ii) Paired cost — read under `plans/nfr-catalog.md`'s `N8-LANE` protocol.** QE runs the
+    default lane in **three** trees outside the repository, with `node_modules` symlinked:
+    - `<base>`;
+    - `HEAD`;
+    - a `cmp`-verified byte-identical twin of `<base>`, which is the **identity null control**.
+
+    The protocol is **n ≥ 7** interleaved rounds, the order rotated every round, one fresh process
+    per run, and round 0 discarded. load1 is logged beside every run, and the runner command is
+    stated.
+    - **Admissible only if** the twin's median CPU delta against `<base>` is **≤ 1.5 %** of `<base>`'s
+      CPU **and** its sign is at chance (two-sided sign test p ≥ 0.05; for n = 7 or 8, anything but
+      0/n or n/n).
+    - **On an admissible reading:** the median paired `HEAD − <base>` delta is **≤ 0.30 s CPU** with
+      its sign reported, **and** **≤ 0.30 s wall**.
+    - **No sign-agreement rule applies.** The catalog measures a per-file wall delta as
+      indistinguishable from zero, so a wall sign rule is a coin flip. The null twin is what says the
+      reading is not noise.
+    - **An inadmissible set is re-run and read as neither pass nor fail.** After two inadmissible
+      sets, QE stops and hands up to Security/NFR.
+    - The same admissible reading, net of the 160 ms per-file floor, is this ticket's `N8-LANE` line.
+
+  *Read at the cut: +0.09 s wall, +0.06 s CPU. At `ba20d25`, three sets with no null twin
+  (inadmissible either way): pooled +0.02 s wall, +0.115 s CPU.* **If QE's admissible reading
+  disagrees, QE's number is recorded and the disagreement is written down** — `ABC-114` `A3`'s
+  discipline.
 - **`A3` (deterministic assertions against a non-deterministic opponent — the criterion that makes
   this lane worth having).** **Then** every assertion is on a property the real search cannot
   legally violate, and **no assertion names a specific move, score, depth or node count**:
@@ -223,6 +250,11 @@ deep cases are undefined when the variable is unset was measured as **median +0.
 - **The new file brings its own spawn.** `src/cli.test.ts`'s one-call-site pin is local to that
   file and is not touched. Follow its discipline (fixed argv, fixed stdin, `timeout`, the
   `child.error` guard) by reading it, not by importing from it.
+- **`A2`'s two readings (ruled 2026-10-10).** The inventory delta runs the tool twice: once in a
+  checkout at `<base>`, once at `HEAD`. Diff the finding lines. **This machine cannot be made quiet**
+  (`nfr-catalog.md`, `ABC-108` `A1`), so load1 is logged and never gates. **The identity twin is
+  what gates.** For the twin, use `git archive <base>` twice and `diff -r` them before the first
+  round. One harness reading serves `A2`(ii), `N8-LANE` and Security/NFR's check.
 - Mandatory gates are `npm run lint`, `npm run typecheck`, `npm run build` and unit. Run all four on
   the branch tip before merge and on `main` after, and record both. **The new lane is NOT a mandatory
   gate**, on the precedent of every existing deep lane. It runs at the QE hop and after any change to
@@ -278,22 +310,53 @@ and nothing is blocked.
 
 ## Definition of Ready
 
-Re-assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the re-cut,
-**2026-10-10**, at `2287959`. **Result: 10 of 10, 0 ⚠️.** The cut scored 9 of 10 (⚠️ item 5, the
-`N8-SPAWN` conditional), and the placement ruling closes that ⚠️. No fix here needs an NFR-catalog or
-ADR change.
+**Re-scored 2026-10-10 by BA/PM (subtask `rule-abc119-a2`) at `ba20d25`, after the `A2` ruling.
+Result: 10 of 10, 0 ⚠️.** Items 4, 5, 6 and 7 are re-written below; the rest are unchanged.
+**The re-cut's 10 of 10 was wrong on item 4.** Its line *"No criterion is red by construction"*
+was false at `2287959`, on two counts:
+- `lane-inventory.js` had exited 1 on every tree since `b324cb6` (2026-09-24), and `ABC-122` had
+  named that twice. The re-cut did not run the tool.
+- A wall sign rule on a near-null delta is a coin flip.
+
+The build found both of these, not the cut.
+
+*Re-cut, kept as history:* re-assessed against `agent-factory/checklists/definition-of-ready.md` at
+`2287959`, **10 of 10**. The cut scored 9 of 10 (⚠️ item 5, the `N8-SPAWN` conditional), and the
+placement ruling closed that ⚠️. No fix here needs an NFR-catalog or ADR change.
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** The user, the pain and the value are re-derived at `2287959`: four substitutions and one source regex at `:2512`. This is coverage, not a repair, and no bug is alleged |
 | 2 | scope and out-of-scope clear | **✅** One new file. `src/cli.test.ts` is fenced in full. `ENGINE_DEEP` is explicitly not the fix, and the transcript is explicitly not promotable. Two documents are named owed, each with its owner |
 | 3 | INVEST-shaped | **✅** One hop, one agent, one file. `ABC-118` is `Done`, so it is no longer even an ordering. The `XL` rule is answered in `## Size` |
-| 4 | acceptance testable and measurable | **✅** `A1`: a wall floor and an exit code. `A2`: a skip count, a spawn count, an inventory exit code, and a paired-run bound with a sign rule. `A3`: four properties, including a 5 s ceiling that leaves ~1.8 s of headroom, with literals banned. `A4`: a before/after equality. `A5`: three git predicates. `A6`: a watched RED **and** a watched GREEN. No criterion is red by construction, and none says "works" |
-| 5 | dependencies known | **✅** `ABC-118` is satisfied. `ABC-108`/`ABC-111` are ordering only. `AR-NFR004-A` is explicitly not a dependency. The Scribe line is owed. **The cut's conditional `N8-SPAWN` hand-off no longer exists**: no placement can reach the pin |
-| 6 | security/NFR triggers with a measurable target | **✅** `A2`: ≤ 0.30 s wall AND CPU. `A1`: ≥ 1.0 s. `A3`(ii): ≤ 5 s, against `NFR-004` clause B. `N8-LANE`: ≤ 650 ms CPU, in `ADR-0019`'s form. `N8-SPAWN`: 0 by construction. ASVS L1 on the spawn |
-| 7 | test notes present | **✅** Seven notes, covering both traps, the out-of-repo mutants, the file's own spawn discipline, deep lanes as non-gates, the human-owned skips file, the QE hop, and the waiver as measured |
+| 4 | acceptance testable and measurable | **✅** `A1`: a wall floor and an exit code. `A2`: a skip count, a spawn count, an inventory finding-set delta with exact +1 counts, and a paired bound (≤ 0.30 s CPU and wall) on a reading that an identity twin admits, with a numeric admissibility rule. `A3`: four properties, including a 5 s ceiling that leaves ~1.8 s of headroom, with literals banned. `A4`: a before/after equality. `A5`: three git predicates. `A6`: a watched RED **and** a watched GREEN. Re-checked against the built tree at `ba20d25`: `A2`(i) reads met there (50→51 collected, 53→54 tracked, the same three findings). No criterion is red by construction, and none says "works" |
+| 5 | dependencies known | **✅** `ABC-118` is satisfied. **`ABC-130`** is the predecessor of the literal "`lane-inventory.js` exits 0" and **does not block**: `A2`(i)'s delta reading is equivalent to it once `ABC-130` merges. `ABC-108`/`ABC-111` are ordering only. `AR-NFR004-A` is explicitly not a dependency. The Scribe line is owed. No placement can reach the `N8-SPAWN` pin |
+| 6 | security/NFR triggers with a measurable target | **✅** `A2`(ii): ≤ 0.30 s CPU AND wall, admissible only with null ≤ 1.5 % and its sign at chance. `A1`: ≥ 1.0 s. `A3`(ii): ≤ 5 s, against `NFR-004` clause B. `N8-LANE`: ≤ 650 ms CPU net, from the same reading, in `ADR-0019`'s form. `N8-SPAWN`: 0 by construction. ASVS L1 on the spawn |
+| 7 | test notes present | **✅** Eight notes, covering both traps, the out-of-repo mutants, the file's own spawn discipline, `A2`'s two readings and the twin, deep lanes as non-gates, the human-owned skips file, the QE hop, and the waiver as measured |
 | 8 | size assigned | **✅** `M`, with comparables and the not-`S` / not-`L` arguments |
 | 9 | priority assigned | **✅** `P2`, argued both ways, with both triggers re-checked and not fired |
 | 10 | no major unresolved blocker | **✅** None. The owed `NFR-008` wording is pre-existing and Architect/Design's. The `AGENTS.md` line is the Scribe's |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-119-r2`).
+Branch `grugops/ABC-119-r2` from `242b624`, code in `d45ca68`. Not merged, not pushed. Lane:
+`CLI_DEEP=1 npx vitest run src/cli.real-engine.test.ts`. Readings and raw files:
+`.grugops/context/ticket-to-pr-ABC-119-r2/notes/`.
+
+**Criteria: 5 of 6 met. `A2` is not met as written, and BA/PM rules it.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | Two hook-free children with an empty environment, 3098–3108 ms, exit 0. The command and wall time are logged on every run |
+| `A2` | **NOT MET as written** | Met: lane green (51 / 1541), skip count 0, 0 spawned children. Not met: `lane-inventory.js` **exits 1 on the base too**, because of three tracked `.grugops/context/` probe files; the new file is tracked and collected. Paired medians: pooled +0.02 s wall / +0.115 s CPU (n=18). Set 2 read **+0.79 s CPU** at load1 up to 26, and the sign rule fails in every set. Recorded and handed up, not claimed |
+| `A3` | MET | (i) The reply is one of `legalMoves(start)` by `toSan`, and the board read back equals `toFen` after `makeMove`. (ii) 3.10 s ≤ 5 s. (iii) The side changes and the ply is +1. (iv) No stack trace, exit 0 |
+| `A4` | MET | After `zz9`: same side, ply and board, `rejectionMessage(unreadable)` shown, back to the prompt, ends on `input ended`, exit 0 |
+| `A5` | MET | The first two predicates are empty. `-- src/` names only `src/cli.real-engine.test.ts` (+244/−0) |
+| `A6` | MET | M2 (`DEFAULT_BUDGET_MS` rebound in the import, line 175 untouched): new lane **RED** at `A1` (120 ms), default lane **GREEN** 1541/1541. M1 (a double) reds both lanes |
+
+**`N8-LANE`: +115 ms CPU pooled, not cleanly read** (set 2 alone exceeds 650 ms).
+**`N8-SPAWN`:** `T1`/`T2` not fired. **Owed:** BA/PM's ruling on `A2`, the Scribe's `AGENTS.md`
+line (drafted in `…2409b286`), the QE hop, and the `In Review` move (Orchestrator).

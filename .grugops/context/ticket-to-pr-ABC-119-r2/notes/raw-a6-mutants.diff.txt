@@ -1,0 +1,27 @@
+[1;33mdiff --git a/head/src/cli.ts b/mut1/src/cli.ts[m
+[1;33mindex 503d9d4..93e6c5b 100644[m
+[1;33m--- a/head/src/cli.ts[m
+[1;33m+++ b/mut1/src/cli.ts[m
+[1;35m@@ -67,7 +67,9 @@[m
+ */[m
+
+import { resolveOptions } from "./cli-options.ts";[m
+import {[31mcreateEngine,[m DEFAULT_BUDGET_MS } from "./engine.ts";
+[32mimport { legalMoves } from "./legal.ts";[m
+[32mconst createEngine = (_options: { budgetMs: number }) => async (h: { position: Parameters<typeof legalMoves>[0] }) => legalMoves(h.position)[0];[m
+import { beginGlyphModeSession } from "./glyph-mode.ts";[m
+import { newGame } from "./history.ts";[m
+import { createLineInputSeam } from "./line-input.ts";[m
+[1;33mdiff --git a/head/src/cli.ts b/mut2/src/cli.ts[m
+[1;33mindex 503d9d4..994d10c 100644[m
+[1;33m--- a/head/src/cli.ts[m
+[1;33m+++ b/mut2/src/cli.ts[m
+[1;35m@@ -67,7 +67,8 @@[m
+ */[m
+
+import { resolveOptions } from "./cli-options.ts";[m
+import { [31mcreateEngine, DEFAULT_BUDGET_MS[m[32mcreateEngine[m } from "./engine.ts";
+[32mconst DEFAULT_BUDGET_MS = undefined as never;[m
+import { beginGlyphModeSession } from "./glyph-mode.ts";[m
+import { newGame } from "./history.ts";[m
+import { createLineInputSeam } from "./line-input.ts";[m

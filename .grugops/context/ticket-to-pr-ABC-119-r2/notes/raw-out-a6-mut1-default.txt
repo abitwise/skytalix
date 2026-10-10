@@ -1,0 +1,23 @@
+# filtered: FAIL / assertion / summary lines only (full output 472 lines, not kept)
+     → the game ended on end-of-input: expected '8 .r:n.b:q.k:b.n:r   \n7 :p.p:p.p:p.p…' not to contain 'input ended'
+     → engine-threw: frames: expected [ …(2) ] to have a length of 1 but got 2
+     → expected [ …(4) ] to deeply equal [ …(4) ]
+     → expected '         \n                     \n\n>…' to be '\nBlack wins by checkmate.\n\n1. f3 e…' // Object.is equality
+     → engine-threw: the screen is missing: expected '1 .R:N.B:K.Q:B.N:R   \n2 :P.P:P.P:P.P…' to contain 'did not finish'
+     → expected '\nBlack wins by resignation.\n\n1. e4…' to be '\nBlack wins by resignation.\n\n1. e4…' // Object.is equality
+ FAIL  src/cli.test.ts > ABC-043 — the live session > A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0
+AssertionError: the game ended on end-of-input: expected '8 .r:n.b:q.k:b.n:r   \n7 :p.p:p.p:p.p…' not to contain 'input ended'
+ FAIL  src/cli.test.ts > ABC-043 — the live session > A5 — an engine fault is not a chess outcome: both faulty seams exit 0 and name nothing
+AssertionError: engine-threw: frames: expected [ …(2) ] to have a length of 1 but got 2
+ FAIL  src/cli.test.ts > ABC-043 — the live session > A7 — the human's colour decides who moves first, in BOTH directions
+AssertionError: expected [ …(4) ] to deeply equal [ …(4) ]
+    2750|         expectedFrames(script, humanColour, "ascii", orientation).map(…
+ FAIL  src/cli.test.ts > ABC-044 — the result screen reaches the player > A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0
+AssertionError: expected '         \n                     \n\n>…' to be '\nBlack wins by checkmate.\n\n1. f3 e…' // Object.is equality
+ FAIL  src/cli.test.ts > ABC-044 — the result screen reaches the player > A3 — a faulty engine gets a screen that is not a chess outcome, and says the game did not finish
+AssertionError: engine-threw: the screen is missing: expected '1 .R:N.B:K.Q:B.N:R   \n2 :P.P:P.P:P.P…' to contain 'did not finish'
+ FAIL  src/cli.test.ts > ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0
+AssertionError: expected '\nBlack wins by resignation.\n\n1. e4…' to be '\nBlack wins by resignation.\n\n1. e4…' // Object.is equality
+ Test Files  1 failed | 50 passed (51)
+      Tests  6 failed | 1535 passed (1541)
+   Duration  6.61s (transform 1.11s, setup 0ms, collect 8.74s, tests 11.00s, environment 5ms, prepare 1.84s)
