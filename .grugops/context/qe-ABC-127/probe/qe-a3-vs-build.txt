@@ -1,0 +1,18 @@
+W1   QE 47 eng 47 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline
+W1b  QE 41 eng 41 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline
+W2   QE 53 eng 53 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline
+W3   QE 35 eng 35 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline ; A1 — every mate in 2 is found (10/10 or better)
+W4   QE 44 eng 44 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline
+W5   QE 48 eng 48 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline
+W6   QE 54 eng 54 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline ; A2 — the losing move is not played in >= 19 of 20 do-not-hang rows
+W7   QE 50 eng 50 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline ; A2 — the losing move is not played in >= 19 of 20 do-not-hang rows
+W8   QE 53 eng 53 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline ; A2 — the losing move is not played in >= 19 of 20 do-not-hang rows
+W9   QE 46 eng 46 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline ; A2 — the losing move is not played in >= 19 of 20 do-not-hang rows
+W10  QE 58 eng 58 exit 0 0 missed-set identical | failed: 
+W11  QE 58 eng 58 exit 0 0 missed-set identical | failed: 
+W12  QE 48 eng 48 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline ; A1 — every mate in 2 is found (10/10 or better)
+W13  QE 55 eng 55 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline
+W14  QE 56 eng 56 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline
+W15  QE 35 eng 35 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline ; A1 — every mate in 2 is found (10/10 or better)
+W16  QE 48 eng 48 exit 1 1 missed-set identical | failed: the gate: solved >= the recorded baseline
+identical on solved+exit+missed set: 17 / 17

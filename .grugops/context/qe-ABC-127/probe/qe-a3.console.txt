@@ -1,0 +1,20 @@
+W1	exit 1	solved 47/62 (summary agrees)	RED	newly-missed 11 newly-solved 0	A5 exact	failed [1]	tag truth 11/11	44.3s	load { 24.86 13.41 13.81 }
+W1b	exit 1	solved 41/62 (summary agrees)	RED	newly-missed 17 newly-solved 0	A5 exact	failed [1]	28.9s	load { 18.70 13.59 13.87 }
+W2	exit 1	solved 53/62 (summary agrees)	RED	newly-missed 5 newly-solved 0	A5 exact	failed [1]	39.5s	load { 12.90 12.68 13.53 }
+W3	exit 1	solved 35/62 (summary agrees)	RED	newly-missed 23 newly-solved 0	A5 exact	failed [2]	16.1s	load { 8.65 11.60 13.10 }
+W4	exit 1	solved 44/62 (summary agrees)	RED	newly-missed 14 newly-solved 0	A5 exact	failed [1]	21s	load { 7.61 11.23 12.94 }
+W5	exit 1	solved 48/62 (summary agrees)	RED	newly-missed 10 newly-solved 0	A5 exact	failed [1]	tag truth 10/10	17.4s	load { 10.96 11.75 13.08 }
+W6	exit 1	solved 54/62 (summary agrees)	RED	newly-missed 4 newly-solved 0	A5 exact	failed [2]	61.6s	load { 10.01 11.50 12.97 }
+W7	exit 1	solved 50/62 (summary agrees)	RED	newly-missed 8 newly-solved 0	A5 exact	failed [2]	68.2s	load { 22.33 14.59 14.00 }
+W8	exit 1	solved 53/62 (summary agrees)	RED	newly-missed 5 newly-solved 0	A5 exact	failed [2]	74.4s	load { 22.35 15.58 14.38 }
+W9	exit 1	solved 46/62 (summary agrees)	RED	newly-missed 12 newly-solved 0	A5 exact	failed [2]	124.1s	load { 22.97 17.49 15.22 }
+W10	exit 0	solved 58/62 (summary agrees)	survives	newly-missed 0 newly-solved 0	A5 exact	failed [0]	100.8s	load { 52.56 28.97 19.96 }
+W11	exit 0	solved 58/62 (summary agrees)	survives	newly-missed 0 newly-solved 0	A5 exact	failed [0]	79.5s	load { 38.16 33.45 22.91 }
+W12	exit 1	solved 48/62 (summary agrees)	RED	newly-missed 10 newly-solved 0	A5 exact	failed [2]	53.6s	load { 33.97 34.75 24.45 }
+W13	exit 1	solved 55/62 (summary agrees)	RED	newly-missed 3 newly-solved 0	A5 exact	failed [1]	41.6s	load { 18.83 30.37 23.46 }
+W14	exit 1	solved 56/62 (summary agrees)	RED	newly-missed 2 newly-solved 0	A5 exact	failed [1]	42.9s	load { 13.69 27.59 22.76 }
+W15	exit 1	solved 35/62 (summary agrees)	RED	newly-missed 23 newly-solved 0	A5 exact	failed [2]	13.8s	load { 9.27 24.48 21.86 }
+W16	exit 1	solved 48/62 (summary agrees)	RED	newly-missed 10 newly-solved 0	A5 exact	failed [1]	40.1s	load { 8.80 23.62 21.60 }
+src clean: true
+harness exit 0
+src clean (git diff --quiet)

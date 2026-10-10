@@ -1,0 +1,62 @@
+SOLVED	mate-in-2	f6f7	d6	n19477	K+R: king steps up, rook mates
+SOLVED	mate-in-2	d5g8	d6	n19987	smothered: Qg8+ Rxg8 Nf7#
+SOLVED	mate-in-2	e2e8	d6	n19479	back rank: Re8+ Rxe8 Rxe8#
+SOLVED	mate-in-2	b1b7	d5	n20511	two-rook ladder
+SOLVED	mate-in-2	h1h7	d6	n19481	K+Q against the cornered king
+SOLVED	mate-in-2	h5h7	d5	n20527	Anastasia: Qxh7+ Kxh7 Rh3#
+SOLVED	mate-in-2	e7e1	d6	n19479	mirror: back rank, Re1+ Rxe1 Rxe1#
+SOLVED	mate-in-2	d4g1	d6	n19490	mirror: smothered, Qg1+ Rxg1 Nf2#
+SOLVED	mate-in-2	f3g3	d6	n19477	mirror: K+R, king steps up
+SOLVED	mate-in-2	a7a2	d5	n20511	mirror: two-rook ladder
+SOLVED	win-material	d5e7	d9	n16409	knight fork: Ne7+ wins the queen
+SOLVED	win-material	e4e5	d8	n17430	pawn fork: e5 hits knight and rook
+SOLVED	win-material	a1e1	d7	n18449	pin: Re1 pins the queen to the king
+SOLVED	win-material	a1a6	d7	n18453	skewer: Ra6+ and Rxh6
+SOLVED	win-material	d4a1	d7	n19235	discovered check: the bishop moves, Rxd8
+SOLVED	win-material	d1d5	d6	n19482	queen fork: Qd5+ and Qxa8
+SOLVED	do-not-hang	a1a4	d6	n19477	Q takes a pawn a rook defends
+SOLVED	do-not-hang	a1a2	d7	n18448	R takes a pawn the king defends
+SOLVED	do-not-hang	e1e2	d8	n17419	B takes a pawn a pawn defends
+SOLVED	do-not-hang	e1e2	d8	n17420	N takes a pawn a pawn defends
+SOLVED	do-not-hang	a1a2	d6	n19473	Q takes a knight a rook defends
+SOLVED	do-not-hang	d1d2	d7	n18443	R takes a knight a pawn defends
+SOLVED	do-not-hang	a1b1	d6	n19484	Q takes a rook the king defends
+SOLVED	do-not-hang	a1b1	d7	n18449	Q takes a bishop a knight defends
+SOLVED	do-not-hang	e1e2	d8	n17415	R takes a bishop a pawn defends
+SOLVED	do-not-hang	e1d1	d8	n17836	R takes a pawn a bishop defends
+SOLVED	do-not-hang	a1a8	d7	n18449	Q takes a pawn a knight defends
+SOLVED	do-not-hang	b1a2	d8	n17419	B takes a pawn a rook defends
+SOLVED	do-not-hang	a8a5	d6	n19477	mirror: q takes a pawn a rook defends
+SOLVED	do-not-hang	a8a7	d7	n18448	mirror: r takes a pawn the king defends
+SOLVED	do-not-hang	e8e7	d8	n17419	mirror: b takes a pawn a pawn defends
+SOLVED	do-not-hang	e8e7	d8	n17420	mirror: n takes a pawn a pawn defends
+SOLVED	do-not-hang	a8b8	d6	n19473	mirror: q takes a knight a rook defends
+SOLVED	do-not-hang	d8d7	d8	n17425	mirror: r takes a knight a pawn defends
+SOLVED	do-not-hang	a8b8	d6	n19479	mirror: q takes a rook the king defends
+SOLVED	do-not-hang	a8b8	d7	n18449	mirror: q takes a bishop a knight defends
+SOLVED	do-not-hang	e8f8	d8	n17415	mirror: r takes a bishop a pawn defends
+SOLVED	do-not-hang	e8d8	d8	n17420	mirror: r takes a pawn a bishop defends
+SOLVED	do-not-hang	a8a1	d7	n18449	mirror: q takes a pawn a knight defends
+SOLVED	do-not-hang	b8a7	d8	n17419	mirror: b takes a pawn a rook defends
+SOLVED	mate-in-3	a1a6	d5	n20514	mate in 3, seed 1: black Q+R against N
+SOLVED	mate-in-3	f1f6	d5	n20519	mate in 3, seed 69: black 2R+B against 2P
+SOLVED	mate-in-3	e7c5	d5	n20518	mate in 3, seed 1008: black Q+R against a bare king
+SOLVED	mate-in-3	b7c7	d6	n19504	mate in 3, seed 1075: black R+B+N against a bare king
+SOLVED	mate-in-3	g2g7	d5	n21115	mate in 3, seed 1424: white Q+2B+N against N
+SOLVED	mate-in-3	e7e2	d5	n20517	mate in 3, seed 1632: white Q+R+N against N+2P
+SOLVED	mate-in-3	c6g6	d5	n20522	mate in 3, seed 1163: black 2R+B against N
+SOLVED	mate-in-3	b4b3	d5	n20523	mate in 3, seed 1982: black Q+R against a bare king
+MISSED	mate-in-3	b3c4	d5	n20508	mate in 3, seed 24: black Q+N against P
+MISSED	mate-in-3	c6h6	d5	n20516	mate in 3, seed 234: white Q+R against P
+MISSED	mate-in-3	a2a3	d5	n20514	mate in 3, seed 288: white Q+B against a bare king
+MISSED	mate-in-3	f1f2	d5	n20520	mate in 3, seed 580: white Q+B against a bare king
+SOLVED	win-material	d5g8	d5	n20513	win material, seed 7: black Q+P against R+N
+SOLVED	win-material	a2a5	d5	n20535	win material, seed 111: black Q+R+B+P against 2R+B+P
+SOLVED	win-material	g6g7	d5	n20654	win material, seed 1700: black R+B+N+2P against 2B+2N+P
+SOLVED	win-material	c2e4	d6	n19486	win material, seed 1706: white Q+R+2P against Q+R+2P
+SOLVED	win-material	c4d6	d5	n20528	win material, seed 1811: white 2R+N+2P against 2B+N+2P
+SOLVED	win-material	h6h7	d6	n19467	win material, seed 5180: black R+N+P against Q+B+N
+SOLVED	win-material	e1d2	d7	n18441	win material, seed 5464: black B+P against B+N
+SOLVED	win-material	f5e6	d5	n20509	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+SOLVED	win-material	e7c6	d5	n20541	win material, seed 5527: black R+2B+2N+P against R+2N+3P
+SOLVED	win-material	a1g7	d6	n19484	win material, seed 279: black Q+3P against R+2N+P
