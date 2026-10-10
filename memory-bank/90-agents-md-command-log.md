@@ -15,6 +15,10 @@ the full history behind a command's exit code beyond the one-line summary `AGENT
 Not read on every hop — `AGENTS.md` § Commands is the one-line-per-command index every role reads;
 this file is its footnoted detail.
 
+_Reconciled 2026-10-10 by the AGENTS.md Scribe (task `scribe-command-log-2026-10-10`) against `git log
+-- AGENTS.md` since this file's last touch (`ea68a2d8`, 2026-09-26): four commits, each with its entry
+below and a row in § "Reconciliation ledger, 2026-10-10" at the end._
+
 ## Dev / run — `npm run chess`
 
 Verified 2026-08-14 at `ABC-042`: prints the start position (23 rows) on stdout and exits 0.
@@ -36,6 +40,22 @@ keeps the flag: `npm run chess --ascii` (RUN 2026-08-15 at `4e9ed1d`, npm 11.7.0
 config "--ascii"` on stderr, runs `node src/cli.ts` with NO arguments, prints the DEFAULT board and
 exits 0 — the option is silently discarded and stdout looks like success.
 
+WRITING RULES for this slot (`ABC-069`, commit `6117a2a4`, 2026-10-10; comment-only, `AGENTS.md`
+23,464 -> 23,879 B, collected option set unchanged at three tokens, 0 files under `src/`, guard not
+touched). `ABC-065`'s block in `src/cli.test.ts` reads the slot's RAW text, so it binds how the slot
+is written as well as what it says, and until `ABC-069` neither coupling was written where a Scribe
+would see it. (1) Keep the invocation inside backticks: the guard strips the fence with
+`.split("`")[0]`, so a separator example written without backticks runs past the invocation and eats
+the prose after it (QE's `N15`, red at `A1`). (2) Name an option in the slot only if the program
+accepts it, even to say it does not: the collector cannot tell "documented as available" from "named
+as unavailable", so "There is no `--help`." reds `A3` (QE's `N16`); write that sentence elsewhere in
+`AGENTS.md`. The same block requires exactly ONE `- Dev / run:` slot (`ABC-071`, counted, so a
+duplicate reds wherever it sits) and a comment that closes before the next top-level list item
+(`ABC-067`). The guard was NOT loosened — QE's ruling at `ABC-065` (ticket `ABC-069`'s fence) was "the cost of
+the coupling is a diagnosable false red once; the cost of relaxing it is a silent pass forever", and
+`ABC-069` documents the cost instead of removing it. `AGENTS.md`
+carries the rules in the slot's own comment; this entry is their receipt.
+
 ## Test (all) — `npm test`
 
 `node tools/grugops/run-bounded.js 60000 vitest run` (`ABC-122`). RUN 2026-09-25: exit 0, 47 files,
@@ -44,6 +64,15 @@ SIGKILL (owner-accepted R1: SIGKILL/SIGHUP can orphan a hung vitest). `*_DEEP` l
 vitest run` directly, never through `npm test` (`ENGINE_DEEP` alone is ~99 s, over the bound).
 Wrapper's own proof: `node tools/grugops/run-bounded.proof.js` (RUN 2026-09-25: exit 0, all rows
 held).
+
+RE-MEASURED, twice since. (1) 2026-10-09, `ABC-084` `A8` (commit `5a15fb4f`, Scribe branch
+`grugops/scribe-abc084-lane` @ `e426e91` base): exit 0, 50 files, 1539 tests, 6.66 s — the figure
+`AGENTS.md` carries today. (2) 2026-10-10, this hop, wave tip `9128e7a3`, load1 8.2 at start: exit 0,
+**51 files, 1584 tests, 5.52 s**. The count is a moving figure: 47/1446 (09-25) -> 50/1539 (10-09) ->
+51/1584 (10-10); `ABC-119`'s own Scribe hop read 51/1541 on its branch, before the `ABC-127` merge
+added its rows. `AGENTS.md` still reads 50/1539 and is one lane-count stale; the refresh is owed to the next
+Scribe edit of `AGENTS.md` (this hop may not touch it — `ABC-087` is in UAT with its own edit). Not a
+gate on the count: only the exit code and 0 failed are.
 
 ## Search deep lane (`ABC-077`) — `SEARCH_DEEP=1 npx vitest run src/search.test.ts`
 
@@ -63,6 +92,21 @@ assertions out of the default lane, and the default lane runs entirely on an INJ
 carries A1's 30-position run at the 3 s budget (90.4 s of the 98.7), `NFR-005`'s depth-in-budget
 measurement, and the real-clock repetitions of A2, A3, A5 and A7. Run it after any change to
 `src/engine.ts`.
+
+REFRESHED 2026-10-09 (`ABC-084` `A8`, `AGENTS.md` commit `5a15fb4f`): the "98.7 s" above went stale
+when `ABC-086` shipped the virtual clock (`1ae52841`) and added 300-run virtual-clock cases to the
+lane. Exit 0, **45 passed (32 default), 318.6 s wall** at load1 10.0 -> 7.6 (QE and Security/NFR were
+running tests on the machine at the same time); `ABC-086`'s QE receipts at load1 ~7-8 read **291.9 s**
+(user 284.3 s, load1 6.8 -> 8.1) and 291.4 s. The lane is about FIVE MINUTES, not ~100 s, and the
+`AGENTS.md` line records both the loaded and the quiet reading. The trigger gained
+`src/virtual-clock.ts`: run the lane after any change to it as well as to `src/engine.ts`.
+
+RE-MEASURED 2026-10-10, this hop, wave tip `9128e7a3`, worktree alone on the lane, load1 13.1 at
+start -> 4.8 at end: exit 0, **46 passed (33 default), 291.55 s** vitest duration (292.0 s real, user
+285.3 s). The count moved by ONE since the 2026-10-09 line: `ABC-125` (`6a25164c`, "two live clocks at
+different steps, interleaved") added a row to `src/engine.test.ts`. `AGENTS.md` still says "45
+passed (32 default)" — stale by one; owed to the next Scribe edit of `AGENTS.md`. COUNT YOUR RUN: 46
+is the whole lane now. The wall figure is load-dependent and is not a gate.
 
 ## Input-seam deep lane (`ABC-037`) — `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
 
@@ -132,6 +176,90 @@ software-engineer's `…9bdce84b` decision moved two of four proposed rows into 
 `SEARCH_DEEP` gate and kept two default; the ledger proof is `…17a0830d`), so their deep lanes above
 are unchanged and were not re-run for this entry.
 
+## Puzzle-suite strength gate (`ABC-084`, `ABC-127`) — `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`
+
+Added to `AGENTS.md` by `5a15fb4f` (2026-10-09, `ABC-084` `A8`); its receipt widened by `f063ebce`
+(2026-10-10, `ABC-127` `A9`, merged into the wave by `d45a0261` on the owner's word, UAT accepted
+2026-10-10). Unset, NOT DEFINED rather than skipped, same shape as the other `*_DEEP` lanes.
+
+**What it is.** A regression gate on the engine's tactical strength: a corpus of puzzle rows
+(`src/puzzle-corpus.ts`), a recorded baseline (`src/puzzle-suite.baseline.json`), and a run that
+fails when the engine solves fewer rows than the baseline. A run prints `NEWLY-MISSED` /
+`NEWLY-SOLVED` per row that differs from the baseline. `PUZZLE_DEEP=weakened` is the red
+demonstration — it runs a weakened engine against the gate and EXITS 1 BY DESIGN (RUN 2026-10-09:
+10/40, 1 failed and 10 passed, 20.9 s); a red from it is the lane working.
+
+**Trigger (the owner's, option B, 2026-10-09, verbatim list).** QE runs it during review when the
+change touches engine code: `src/engine.ts`, `src/search*.ts`, `src/evaluate*.ts`,
+`src/quiescence.ts`, `src/transposition.ts`, move ordering. **Red = QE FAIL.** It is NOT a
+`quality.mandatory_gates` entry. Source: orchestrator decision `…b61e0d35` in
+`.grugops/context/wave-2026-09-25/notes/`.
+
+**Baseline rule.** The baseline moves only in its own commit with a stated reason, never in a commit
+that also changes engine code (no trigger-list file in it). RAISING it is QE's; LOWERING it needs the
+owner's word. The 2026-10-10 move 40/40 -> 58/62 (`ABC-127`, 22 rows appended) is a raise in the
+denominator, not a lowering. The four unsolved rows are the recorded headroom, each solved at 4x the
+readings: mate in 3 seed 24 (black Q+N against P), seed 234 (white Q+R against P), seed 288 and seed
+580 (white Q+B against a bare king). Budget 25, step 1.
+
+**Receipts.**
+- 2026-10-09, `ABC-084` (Scribe base `e426e91`), 40 rows: exit 0, 12 passed (9 default), 17.3 s at
+  load1 ~11 (Engineer: ~13 s quiet).
+- 2026-10-10, `ABC-127`, 62 rows: exit 0, **17 passed (12 default), 32-36 s** whole lane, **20-24 s**
+  for the gating run, at load1 4-8. The range is the union of every conforming reading from two hops:
+  the Engineer's 32.1 / 32.2 / 33.5 s (gating 20.3 / 20.4 / 20.8 s) and Security/NFR's 32.9 / 34.5 /
+  36.2 s (gating 20.4 / 21.4 / 24.3 s, load1 3.8-5.4). The Engineer's draft read "32-34 s / 20-21 s";
+  the Scribe widened it (`f063ebce`) because Security/NFR's quiet readings fell outside it. Notes:
+  `.grugops/context/scribe-ABC-127-a9/notes/…c82bebe0`, `secnfr-ABC-127/` (`…6a3b6274`).
+- RE-MEASURED 2026-10-10, this hop, wave tip `9128e7a3`, load1 4.3: exit 0, **17 passed**, 36.05 s
+  vitest duration (36.5 s real); the gating run 22.4 s (mate-in-3 oracle rows 8.5 s, win-material
+  4.8 s). Default lane, `npx vitest run src/puzzle-suite.test.ts src/cli.real-engine.test.ts`: 13
+  passed in 2 files (12 + the 1 `cli.real-engine` default test, matching each file's stated default
+  count). Inside both ranges.
+- `ABC-127` `A7` reads the lane's wall as <= 90 s and the gating run's as <= 45 s, NEVER ASSERTED;
+  the only wall assertions are four `300_000` ms hang guards. A reading above 90 / 45 s at load1 > 8
+  is load, not a breach.
+
+**Not recorded in `AGENTS.md` on purpose** (outside `A9`; routed by the Orchestrator): Security/NFR's
+`R1` / `AR-PUZZLE-EDGE` — at 4% fewer readings the budget edge goes red — which is a fact about the
+engine's budget margin, not a `PUZZLE_DEEP` command fact.
+
+## Real-engine CLI lane (`ABC-119`, `src/cli.real-engine.test.ts`) — `CLI_DEEP=1 npx vitest run src/cli.real-engine.test.ts`
+
+Added to `AGENTS.md` by `46c986f7` (2026-10-10; Scribe branch `grugops/scribe-ABC-119-lane`, from
+`f76e041d`). It closes QE's `QE-119-b` (LOW): the lane's only watcher is a human remembering to run
+it — rows `M2` and `M3c` are green on the default lane and red only under `CLI_DEEP=1`, the lane is
+not a mandatory gate, and before this line nobody reading `AGENTS.md` learned the lane existed.
+
+**What it holds.** Two REAL children of `node src/cli.ts --colour black --ascii` against the real
+engine (not a double), with an EMPTY child environment (`env: {}`) so a parent
+`NODE_OPTIONS=--import=…` (for example from an `INPUT_DEEP` shell) cannot reach the child and slip
+in a double. `played`: empty stdin, covers `A1`/`A3` (the reply is legal — the `last:` SAN is one of
+`legalMoves(start).map(toSan)`, and the printed board equals `toFen` after `makeMove` — and the ply
+advances by one). `rejected`: one `zz9` line, covers `A1`/`A4` (the refusal message comes from the
+merged `rejectionMessage`, then the prompt returns and the session ends on `INPUT_ENDED_NOTICE`,
+exit 0). Gated with `if (RUN_DEEP) { describe(...) }`; `describe.runIf` / `it.skipIf` / `.skip` are
+never used, so unset is NOT DEFINED and the gate's skip count stays 0. The one DEFAULT-lane test
+spawns nothing and can fail: it reds if anyone adds `--import` or a hook to the deep child's argv or
+environment. Hang guard 4 x `HARD_CEILING_MS` (20 s).
+
+**Trigger (written where a reader of `AGENTS.md` finds it, per `QE-119-b`).** Run at QE and after any
+change to `src/cli.ts` or `src/engine.ts`.
+
+**Receipts.**
+- 2026-10-10, Scribe hop on `46c986f7`'s branch, load1 ~4.4: exit 0, **7 passed (1 default)**, 6.36 s;
+  children 3099 and 3103 ms. QE (`…bc7d8341`): 6.3-6.5 s at load1 15-18, children 3116-3147 ms. Each
+  child is one engine move at `DEFAULT_BUDGET_MS` (3 s) plus start-up, so ~3.1 s per child is the
+  product working, and the lane's floor is ~6.2 s.
+- RE-MEASURED 2026-10-10, this hop, wave tip `9128e7a3`, load1 4.5: exit 0, **7 passed**, 6.36 s;
+  children 3097 and 3106 ms. COUNT YOUR RUN: 7 is the whole lane, 1 is the default lane.
+- `node tools/grugops/lane-inventory.js`, RE-RUN 2026-10-10 this hop: exit 0, "The lane collects 51
+  test files; git tracks 51. No findings." — the file is collected (`ABC-119`'s hop read the same 51).
+
+Still owed elsewhere, not here: `NFR-008`'s variable list (six names missing, `CLI_DEEP` added) is
+Architect/Design's. Notes: `.grugops/context/scribe-ABC-119-lane/notes/…61a7510f`,
+`qe-ABC-119/`, `ticket-to-pr-ABC-119-r2/` (`…75c1c46a` for the lane shape).
+
 ## Coverage — `npx vitest run --coverage`
 
 RUN 2026-08-15 at `daa20c4` (this hop changed no code): exit 0, 856/856 on 30 files.
@@ -194,3 +322,30 @@ this project has no UI surface yet.
 Command slots filled 2026-07-22 during `ABC-008`. Every command was RUN before being recorded.
 Slots that are still `UNKNOWN - verify` are genuinely unknown — nothing was guessed to make the
 table look complete.
+
+## Reconciliation ledger, 2026-10-10
+
+Every `AGENTS.md` change since this file's last touch (`ea68a2d8`, 2026-09-26), from `git log --
+AGENTS.md` on the wave. Nothing earlier than `ea68a2d8` is owed: its two predecessors (`a84948ce`,
+`ea68a2d8`) already have their entries (INPUT_DEEP 34; PVS/LMR).
+
+| commit | date | ticket | what it did to `AGENTS.md` | entry here |
+|---|---|---|---|---|
+| `5a15fb4f` | 2026-10-09 | `ABC-084` `A8` (+ `ABC-086` receipts) | added the `PUZZLE_DEEP` line (owner's trigger list, red = QE FAIL, baseline rule); refreshed `Test (all)` to 50 files / 1539; corrected `ENGINE_DEEP` to 45 passed, 318.6 s, trigger gains `src/virtual-clock.ts`. 22,451 -> 23,464 B | § Puzzle-suite; § Test (all); § Engine deep lane |
+| `6117a2a4` | 2026-10-10 | `ABC-069` | the `Dev / run` slot's two WRITING RULES (backticks; name only accepted options) with the enforcer cited, plus the `ABC-071` / `ABC-067` closure rules. Comment only, 23,464 -> 23,879 B | § Dev / run |
+| `f063ebce` | 2026-10-10 | `ABC-127` `A9` | `PUZZLE_DEEP` receipt: 17 passed (12 default), wall 32-36 s / 20-24 s, baseline 58/62. +169 B. Merged by `d45a0261` | § Puzzle-suite |
+| `46c986f7` | 2026-10-10 | `ABC-119` (closes `QE-119-b`) | the `CLI_DEEP` real-engine CLI lane line with its QE trigger. 23,879 -> 24,264 B | § Real-engine CLI lane |
+| `d45a0261` | 2026-10-10 | `ABC-127` | merge commit, no `AGENTS.md` change of its own beyond `f063ebce` | — |
+
+**Result on the wave tip `9128e7a3`:** `AGENTS.md` is 24,433 B against the 24,576 B cap (143 B of
+headroom). Two receipts in it are one count stale against re-measurement today and are NOT corrected
+here (this hop does not edit `AGENTS.md`): `Test (all)` reads 50 files / 1539, the tree is 51 / 1584;
+`ENGINE_DEEP` reads 45 passed (32 default), the tree is 46 (33 default).
+
+Not a command slot, so no receipt is owed: the `pgrep -f` wait-loop rule (`a84948ce`, 2026-09-26) is a
+prose safety rule in `AGENTS.md` § Test and is complete there.
+
+Owed after `ABC-087` merges (its branch carries its own `AGENTS.md` edit and a `Levels deep lane`
+line, `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`, not on the wave yet): re-reconcile this
+file against that merge, and decide the two stale counts above with the headroom proposal in
+`.grugops/context/scribe-command-log-2026-10-10/notes/`.
