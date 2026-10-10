@@ -1,0 +1,45 @@
+2026-10-10T15:22:59Z
+v26.11.0
+4cac6911597b3aabca29c5ed231365e0e6284551
+## npm run lint
+
+> cli-chess@0.0.0 lint
+> biome check .
+
+Checked 100 files in 208ms. No fixes applied.
+exit 0
+## npm run typecheck
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+exit 0
+## npm run build
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+exit 0
+## npm run test
+
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Start at  18:23:04
+   Duration  7.32s (transform 1.49s, setup 0ms, collect 11.01s, tests 14.13s, environment 5ms, prepare 2.31s)
+
+exit 0
+## skip count / total
+0
+1608
+## integrity
+No findings.
+exit 0
+## lane
+The lane collects 52 test files; git tracks 52.
+No findings.
+exit 0
+## base total (7f7e6b84 extracted)
+1608
+0
+true
+2026-10-10T15:23:28Z

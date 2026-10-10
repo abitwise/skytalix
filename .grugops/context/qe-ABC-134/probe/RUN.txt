@@ -1,0 +1,54 @@
+# RUN log — qe-ABC-134 (QE/E2E), base 7f7e6b84, SE code a42b59e3, SE tip 4d6b019a, QE fix 4cac6911
+# Node v26.11.0, Apple Silicon. Every mutant ran in an out-of-worktree `git archive` copy of 4d6b019a
+# (src/ restored and cmp-checked after each); the QE worktree held only the comment fix.
+
+## A1-A5 text readings (qe134.mjs, the ticket's "collapsed text"; comment-free AST via the TS printer)
+$ node qe134.mjs <base> ; node qe134.mjs <tip>
+  five phrases                     base 1/1/1/1/1  ->  4d6b019a 0/0/0/0/0  ->  4cac6911 0/0/0/0/0
+  A1 bullet words unicode/black-bottom/thinking/message    base false x4  -> tip true x4
+  A2 bullet words gameStatus/replay/"no instrument"         base false x3  -> tip true x3
+  A3 settle: "3 `setImmediate` turns" = code literal turn < 3 (one literal in the file)
+  A4 docblock + in-test: string-named / comment containing `;` / AT LEAST / not exhaustive: true x4 each
+  AST(no comments) sha 098d230788c505dc   base = 4d6b019a = 4cac6911
+  template literals 24, sha 7f9d6164440d8033 base = tip ; it( count 12 base = tip
+  first `const LICENSED_DRIVERS: readonly string[] = [` line 258 -> 266 ; first `^const COMPOSITION_ROOT = ` 210 -> 218 (both still the real declarations)
+
+## A5
+$ git diff --name-only 7f7e6b84..4cac6911 | grep '^src/'      -> src/history-pane.nfr.test.ts
+$ git diff -U0 7f7e6b84..4cac6911 -- src | grep -E '^[+-][^+-]' | grep -vE '^[+-][[:space:]]*(\*|/\*\*|\*/|//)'   -> (nothing, grep exit 1)
+$ git diff --numstat 7f7e6b84..4cac6911 -- src                 -> 28 13 src/history-pane.nfr.test.ts
+$ git diff --name-only 7f7e6b84..4cac6911 | grep -v '\.test\.ts$' | grep '^src/'   -> (empty: 0 production lines)
+  test count: base tree 1608 (vitest json, success true, skip 0) = tip 1608
+
+## ABC-136 pins (pins.mjs: the four toContain literals EVALUATED from the file, then counted raw)
+  pin 0..3 raw count 1/1/1/1 at base, 4d6b019a and 4cac6911 (len 75/101/113/209)
+## ABC-057 spans (qe-ABC-057/probe/spansqe.py, unchanged)
+  six rows identical base -> 4cac6911 ; probe-it 115 lines 051ea712d8d7c1e5 -> 120 lines 98312bbf8a2ccbea (A3's site)
+  probe-it with `//` lines dropped: 0ad1227bef852bc2 base = 0ad1227bef852bc2 tip
+## New + lines quoting a raw-reader target (LICENSED_DRIVERS|COMPOSITION_ROOT|runtimeImporters|const production|WITNESSED_EXPRESSION|toEqual|history\.ts): none
+
+## A3 ledger (plant.py into makeRenderSeam's call; probe test only; 10 runs each) -> ledger-A3.tsv
+  NOOP 0/10 red ; SYNC 10 ; MICRO 10 ; IMM1 10 ; IMM2 10 ; IMM3 10 ; IMM4 0 ; IMM5 0
+  TIMER0 10/10 RED ; TIMER1 10/10 RED ; TIMER5 1/10 RED ; TIMER50 0/10 RED     <- QE-134-a
+  RED reason (TIMER0): "PER FRAME: history.ts was loaded by a frame call"
+  settle removed (turn < 0, 5 runs) -> ledger-A3-nosettle.tsv: SYNC 5/5 RED ; MICRO, IMM1, TIMER0 0/5 RED
+## A1 ledger (3 runs each) -> ledger-A1.tsv (+ last line of ledger-A2.txt)
+  controls ASCII-ONLY, WHITE-BOTTOM-ONLY RED 3/3 ; UNICODE-ONLY, BLACK-BOTTOM-ONLY, THINKING-ONLY, MESSAGES-ONLY,
+  PLIES-GT-40-ONLY, ENDED-GAME-ONLY GREEN 3/3
+## A2 ledger (full npm test each) -> ledger-A2.txt
+  REPLAY in pane with its OWN extra parseFen     RED 1 (A11 "parses the anchor AT MOST ONCE")   incidental
+  GAMESTATUS-CALL control                         RED 4 incl. render-seam ABC-041 A2              as the sentence says
+  REPLAY-PANE-REUSE (rides the pane's walk)       GREEN 52 files / 1608
+  REPLAY-SEAM (first try)                         RED render-seam A3 = a digit in the module      incidental, not detection
+  REPLAY-SEAM digit-free                          GREEN 52 files / 1608
+  REPLAY-STATUS                                   RED 3 (ABC-016 A13 replay/scan counts)          incidental
+## A4 ledger (zz-qe-*.ts production modules planted in src/, composer tripwire test only)
+  c1 comment-ahead, c2 default, c3 {default as}, c4 string-named, c5 `;`-comment, x1 single quote,
+  x2 no semicolon, x3 `import{`  together: tripwire PASS (exit 0) -> all uncounted
+  + x4 leading space, x5 `with {}` attributes: still uncounted
+  + controls k1 brace, k2 namespace, k3 `{ type X, assembleFrame as compose }`: counted, exactly those three
+  biome check (ledger-A4-biome.tsv): c1 c2 c4 c5 lint-clean; x1-x4 rejected by the formatter
+
+## Gate (gate-4d6b019a.txt, gate-4cac6911.txt) — identical at both
+  lint 0 (100 files) ; typecheck 0 ; build 0 ; npm test 52 files / 1608 passed ; skip 0 ;
+  test-skip-integrity --skip-count 0 "No findings." ; lane-inventory 52/52 "No findings."

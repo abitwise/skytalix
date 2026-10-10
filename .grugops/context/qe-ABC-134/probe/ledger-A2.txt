@@ -1,0 +1,37 @@
+== REPLAY (parseFen+makeMove+zobristKey, no gameStatus) — full npm test
+   × A11 — the pane derives nothing, and this is a CALL COUNT > parses the anchor AT MOST ONCE per render, on an empty history and on a 2,000-ply one 4ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > parses the anchor AT MOST ONCE per render, on an empty history and on a 2,000-ply one
+ Test Files  1 failed | 51 passed (52)
+      Tests  1 failed | 1607 passed (1608)
+exit 1
+== GAMESTATUS-CALL control (replay then gameStatus) — full npm test
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > never derives: gameStatusOf / repetitionCounts / keyHistory / gameStatus are 0 at every length
+ FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > parses the anchor AT MOST ONCE per render, on an empty history and on a 2,000-ply one
+ FAIL  src/render-seam.test.ts > ABC-041 — the render seam > A2 — derives NOTHING: gameStatus / gameStatusOf / legalMoves are 0 over three calls
+ FAIL  src/turn-loop.test.ts > ADR-0009 clause 9f — the loop against the REAL panels, both of them > the WIRING: the real panels derive nothing, and the status, the thinking flag and the messages are the LOOP's
+ Test Files  3 failed | 49 passed (52)
+      Tests  4 failed | 1604 passed (1608)
+exit 1
+== A1 ENDED-GAME-ONLY (status.result !== in-progress): red 0 / 3
+== REPLAY-PANE-REUSE — full npm test
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+exit 0
+== REPLAY-SEAM — full npm test
+ FAIL  src/render-seam.test.ts > ABC-041 — the render seam > A3 — one height across 10 cases, equal to frameHeight, with no row count in the module
+ Test Files  1 failed | 51 passed (52)
+      Tests  1 failed | 1607 passed (1608)
+exit 1
+== REPLAY-STATUS — full npm test
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > scans the 64 squares exactly once, whatever the board holds and however deep the game
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > replays the history exactly once for the last move, and never twice
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > pays no replay at all before the first move
+ Test Files  1 failed | 51 passed (52)
+      Tests  3 failed | 1605 passed (1608)
+exit 1
+== REPLAY-SEAM (digit-free) — full npm test
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+exit 0
