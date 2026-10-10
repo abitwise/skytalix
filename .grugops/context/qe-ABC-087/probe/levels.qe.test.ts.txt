@@ -1,0 +1,370 @@
+/**
+ * QE's own harness for `ABC-087` (`qe-ABC-087`). NOT shipped: it runs only inside `git archive`
+ * copies in QE's scratchpad, copied to `src/levels.qe.test.ts` there. It re-proves `ADR-0032` /
+ * `ADR-0027` invariants from OUTSIDE the module, by wrapping the real `chooseMove` and recording
+ * every call the level module makes — it does not trust the returned list, it checks it.
+ *
+ *   I1  the seed never reaches `chooseMove`: every call is `{ budgetMs, now }` and nothing else,
+ *       `now` is the caller's own clock, the engine path's budget is the level's for every seed,
+ *       and the blunder path's child budget is exactly `start + B·(i+1)/N − now()`.
+ *   I2  one draw per move: move k is non-engine  <=>  seededRandom(seed)'s k-th value < rate,
+ *       terminal positions included (a null still consumes its one draw).
+ *   I3  every blunder is the STRICT second-best of its own list, and the list is HONEST: one
+ *       child per legal move, in `legalMoves` order, each child searched on the right position,
+ *       score = −(child's real score), or MATE_SCORE − 1 / 0 for a mated / stalemated child.
+ *   I4  never a worst-class move.
+ *   I5  the level total clamps to `HARD_CEILING_MS` (a 20 s and an Infinity level).
+ *   I6  level 3 IS `chooseMove` at `DEFAULT_BUDGET_MS`: one call, same move/depth/nodes/elapsed,
+ *       same number of clock readings, for every seed.
+ *   F   A4's frequency clause across 20 seeds on the page's own corpus shape (a reading).
+ *
+ * QE_REAL=1 adds I5 on the real clock (two positions, ~5 s each).
+ */
+
+import { describe, expect, it, vi } from "vitest";
+import { makeMove, unmakeMove } from "./apply.ts";
+import type * as EngineModule from "./engine.ts";
+import { parseFen, toFen } from "./fen.ts";
+import { gameStatus } from "./gameend.ts";
+import { legalMoves } from "./legal.ts";
+import type { Move } from "./moves.ts";
+import type { Position } from "./position.ts";
+import { squareName } from "./position.ts";
+import { MATE_SCORE } from "./search.ts";
+import { virtualClock } from "./virtual-clock.ts";
+
+interface Call {
+  fen: string;
+  options: Record<string, unknown>;
+  lastReading: number | undefined;
+  result: { move: Move; score: number; depth: number; nodes: number } | null;
+}
+const calls: Call[] = [];
+let lastReading: number | undefined;
+
+vi.mock("./engine.ts", async (importOriginal) => {
+  const real = await importOriginal<typeof EngineModule>();
+  return {
+    ...real,
+    chooseMove: (position: Position, options: EngineModule.EngineOptions) => {
+      const entry: Call = {
+        fen: toFen(position),
+        options: { ...options },
+        lastReading,
+        result: null,
+      };
+      const result = real.chooseMove(position, options);
+      entry.result = result;
+      calls.push(entry);
+      return result;
+    },
+  };
+});
+
+const engine = await vi.importActual<typeof EngineModule>("./engine.ts");
+const { DEFAULT_BUDGET_MS, HARD_CEILING_MS } = engine;
+const { createLevel, LEVELS, seededRandom } = await import("./levels.ts");
+type Level = (typeof LEVELS)[1];
+type LevelChoice = NonNullable<ReturnType<ReturnType<typeof createLevel>>>;
+const { buildCorpus } = await import("./evaluate.mirror-corpus.ts");
+const { PUZZLES } = await import("./puzzle-corpus.ts");
+
+const label = (m: Move): string => `${squareName(m.from)}${squareName(m.to)}`;
+
+/** A clock that records its last reading, so a recorded call knows the reading just before it. */
+function recordingClock(step: number): { now: () => number; reads: () => number } {
+  const inner = virtualClock(step);
+  let reads = 0;
+  return {
+    now: () => {
+      reads++;
+      lastReading = inner();
+      return lastReading;
+    },
+    reads: () => reads,
+  };
+}
+
+function withChildren(roots: readonly string[]): string[] {
+  const fens: string[] = [];
+  for (const root of roots) {
+    const p = parseFen(root);
+    fens.push(root);
+    for (const m of legalMoves(p)) {
+      const u = makeMove(p, m);
+      if (legalMoves(p).length > 0) fens.push(toFen(p));
+      unmakeMove(p, m, u);
+    }
+  }
+  return fens;
+}
+
+/** The page's default-lane corpus shape (`src/levels.test.ts`'s 14 roots, copied verbatim). */
+const ENDGAMES = withChildren([
+  "8/8/4k3/8/8/4K3/4P3/8 w - - 0 1",
+  "8/8/8/3k4/8/8/8/R3K3 w - - 0 1",
+  "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
+  "8/5k2/8/8/8/2B5/3N4/4K3 w - - 0 1",
+  "8/1p3k2/8/8/8/8/1P3K2/3R4 w - - 0 1",
+  "8/8/2k5/8/8/8/3Q4/4K3 w - - 0 1",
+  "8/pp3k2/8/8/8/8/PP3K2/8 w - - 0 1",
+  "8/8/8/4k3/8/8/2PPP3/4K3 w - - 0 1",
+  "6k1/8/8/8/8/8/1R6/6K1 b - - 0 1",
+  "8/3k4/8/2n5/8/5B2/3K4/8 w - - 0 1",
+  "8/p4k2/1p6/8/8/1P6/P4K2/8 w - - 0 1",
+  "8/5pk1/6p1/8/8/6P1/5PK1/8 b - - 0 1",
+  "8/8/4k3/8/2b5/8/4PK2/8 w - - 0 1",
+  "8/4k3/8/3n4/8/2P5/3K4/8 w - - 0 1",
+]);
+const PERFT = buildCorpus().map((e) => toFen(e.position));
+/** QE's own mixed corpus: light endgames, every 6th perft position, every 4th puzzle, two terminals. */
+const MATED = "R5k1/5ppp/8/8/8/8/5PPP/6K1 b - - 0 1";
+const STALEMATED = "7k/5Q2/6K1/8/8/8/8/8 b - - 0 1";
+const MIXED = [
+  ...ENDGAMES.filter((_, i) => i % 3 === 0),
+  ...PERFT.filter((_, i) => i % 6 === 0),
+  ...PUZZLES.filter((_, i) => i % 4 === 0).map((p) => p.fen),
+];
+
+const ALWAYS = 0.999_999;
+
+/** I1 on every recorded call since `from`: `{ budgetMs, now }` only, and `now` is the caller's clock. */
+function assertCallShape(from: number, now: () => number): void {
+  for (const c of calls.slice(from)) {
+    expect(Object.keys(c.options).sort()).toEqual(["budgetMs", "now"]);
+    expect(c.options.now).toBe(now);
+  }
+}
+
+/** I3 + I4 + I1's child-budget formula on one blunder-path choice and the calls it made. */
+function assertHonestBlunder(
+  fen: string,
+  choice: LevelChoice,
+  made: Call[],
+  start: number,
+  B: number,
+): void {
+  const position = parseFen(fen);
+  const legal = legalMoves(position);
+  expect(choice.scored).not.toBeNull();
+  const scored = choice.scored ?? [];
+  // One child per legal move, in legalMoves order.
+  expect(scored.map((s) => label(s.move))).toEqual(legal.map(label));
+  expect(made).toHaveLength(legal.length);
+  legal.forEach((m, i) => {
+    const u = makeMove(position, m);
+    const childFen = toFen(position);
+    const childStatus = gameStatus(position);
+    unmakeMove(position, m, u);
+    const call = made[i] as Call;
+    expect(call.fen).toBe(childFen);
+    // The shared deadline: start + B(i+1)/N − (the reading just before the call).
+    expect(call.options.budgetMs).toBeCloseTo(
+      start + (B * (i + 1)) / legal.length - (call.lastReading as number),
+      9,
+    );
+    const expected =
+      call.result === null
+        ? childStatus.reason === "checkmate"
+          ? MATE_SCORE - 1
+          : 0
+        : -call.result.score;
+    expect(scored[i]?.score).toBe(expected);
+  });
+  const scores = scored.map((s) => s.score);
+  const [min, max] = [Math.min(...scores), Math.max(...scores)];
+  const played = scored.find((s) => s.move === choice.move);
+  expect(played).toBeDefined();
+  if (min < max) expect(played?.score).toBeGreaterThan(min); // I4
+  // I3, re-derived independently: highest score strictly inside (min, max), first on ties.
+  let want: (typeof scored)[number] | undefined;
+  for (const s of scored) if (s.score < max && s.score > min && (!want || s.score > want.score)) want = s;
+  if (want) {
+    expect(choice.kind).toBe("blunder");
+    expect(played).toBe(want);
+  } else {
+    expect(choice.kind).toBe("no-candidate");
+    expect(new Set(scores).size).toBeLessThan(3);
+    expect(played).toBe(scored.find((s) => s.score === max));
+  }
+}
+
+/** Runs one blunder-path move on a recording clock and checks it honestly. */
+function blunderOnce(level: Level, fen: string, step: number, seed = 1) {
+  const clock = recordingClock(step);
+  const from = calls.length;
+  const choose = createLevel(level, { seed, now: clock.now });
+  const position = parseFen(fen);
+  // The draw happens first and touches no clock, so the blunder's `start` is reading 0.
+  const choice = choose(position);
+  expect(toFen(position)).toBe(fen);
+  const made = calls.slice(from);
+  assertCallShape(from, clock.now);
+  return { choice, made, clock };
+}
+
+describe("I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst", () => {
+  it("coarse clock (depth-1 children) on QE's mixed corpus", () => {
+    const level: Level = { budgetMs: 100, blunderRate: ALWAYS };
+    let [blunders, none, ties] = [0, 0, 0];
+    for (const fen of MIXED) {
+      const { choice, made } = blunderOnce(level, fen, 100);
+      expect(choice).not.toBeNull();
+      assertHonestBlunder(fen, choice as LevelChoice, made, 0, 100);
+      if (choice?.kind === "blunder") blunders++;
+      else none++;
+      const s = (choice?.scored ?? []).map((x) => x.score);
+      if (s.filter((x) => x === Math.max(...s)).length > 1) ties++;
+    }
+    console.log(
+      `I3/I4 coarse: ${MIXED.length} positions, ${blunders} blunder, ${none} no-candidate, ${ties} with a tied best`,
+    );
+    expect(blunders).toBeGreaterThan(MIXED.length / 2);
+  }, 300_000);
+
+  it("fine clock (deeper children, varied depths) on 12 perft/puzzle positions", () => {
+    const level: Level = { budgetMs: 1_000, blunderRate: ALWAYS };
+    const fens = [...PERFT.filter((_, i) => i % 23 === 0), ...PUZZLES.slice(0, 4).map((p) => p.fen)];
+    const depths: number[] = [];
+    for (const fen of fens) {
+      const { choice, made } = blunderOnce(level, fen, 1_000 / 300);
+      assertHonestBlunder(fen, choice as LevelChoice, made, 0, 1_000);
+      depths.push(Math.max(...made.map((c) => c.result?.depth ?? 0)));
+    }
+    console.log(`I3 fine: ${fens.length} positions, deepest child per move ${depths}`);
+  }, 300_000);
+});
+
+describe("I1 — the seed never reaches chooseMove", () => {
+  it("engine path: one call, { budgetMs: level budget, now }, identical result for 20 seeds", () => {
+    const level = LEVELS[1];
+    const fen = PERFT[30] as string;
+    const seeds = [...Array(400).keys()].filter((s) => seededRandom(s)() >= level.blunderRate).slice(0, 20);
+    expect(seeds).toHaveLength(20);
+    const seen = new Set<string>();
+    for (const seed of seeds) {
+      const clock = recordingClock(level.budgetMs / 20);
+      const from = calls.length;
+      const choice = createLevel(level, { seed, now: clock.now })(parseFen(fen));
+      expect(choice?.kind).toBe("engine");
+      expect(calls.length - from).toBe(1);
+      assertCallShape(from, clock.now);
+      expect(calls[from]?.options.budgetMs).toBe(level.budgetMs);
+      seen.add(JSON.stringify([label(choice?.move as Move), choice?.depth, choice?.nodes, choice?.elapsedMs, clock.reads()]));
+    }
+    expect(seen.size).toBe(1);
+  }, 120_000);
+
+  it("blunder path: child budgets are the deadline formula and nothing seed-shaped, for 10 seeds", () => {
+    const level = LEVELS[1];
+    const fen = PERFT[60] as string;
+    const seeds = [...Array(400).keys()].filter((s) => seededRandom(s)() < level.blunderRate).slice(0, 10);
+    const lists = new Set<string>();
+    for (const seed of seeds) {
+      const { choice, made } = blunderOnce(level, fen, level.budgetMs / 50, seed);
+      assertHonestBlunder(fen, choice as LevelChoice, made, 0, level.budgetMs);
+      lists.add(JSON.stringify((choice?.scored ?? []).map((s) => [label(s.move), s.score])));
+    }
+    // Same position, same clock: the seed changed nothing about the scored list.
+    expect(lists.size).toBe(1);
+  }, 120_000);
+});
+
+describe("I2 — one draw per move", () => {
+  it("move k is non-engine iff the k-th draw < rate, terminals included, 5 seeds", () => {
+    const level = LEVELS[1];
+    const seq = [...ENDGAMES.slice(0, 40), MATED, ...ENDGAMES.slice(40, 60), STALEMATED, ...ENDGAMES.slice(60, 80)];
+    for (const seed of [3, 17, 87, 2026, 4_000_000_000]) {
+      const choose = createLevel(level, { seed, now: virtualClock(level.budgetMs) });
+      const g = seededRandom(seed);
+      seq.forEach((fen, k) => {
+        const draw = g();
+        const choice = choose(parseFen(fen));
+        if (fen === MATED || fen === STALEMATED) {
+          expect(choice, `k=${k}`).toBeNull();
+          return;
+        }
+        expect(choice?.kind === "engine", `seed ${seed} k=${k}`).toBe(draw >= level.blunderRate);
+      });
+    }
+  }, 120_000);
+});
+
+describe("I5 — the level total clamps to HARD_CEILING_MS", () => {
+  for (const budgetMs of [20_000, Number.POSITIVE_INFINITY]) {
+    it(`a ${budgetMs} ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000`, () => {
+      const level: Level = { budgetMs, blunderRate: ALWAYS };
+      for (const fen of [PERFT[0], PERFT[12], ENDGAMES[0]] as string[]) {
+        const step = HARD_CEILING_MS / 100;
+        const { choice, made } = blunderOnce(level, fen, step);
+        assertHonestBlunder(fen, choice as LevelChoice, made, 0, HARD_CEILING_MS);
+        const last = made[made.length - 1] as Call;
+        expect((last.lastReading as number) + (last.options.budgetMs as number)).toBeCloseTo(HARD_CEILING_MS, 9);
+        console.log(`I5 ${budgetMs}: ${made.length} children, elapsed ${choice?.elapsedMs} (step ${step})`);
+        // The engine's own residual is a few readings past its deadline (AR-NFR004-A).
+        expect(choice?.elapsedMs).toBeLessThanOrEqual(HARD_CEILING_MS + 6 * step);
+      }
+    }, 120_000);
+  }
+
+  if (process.env.QE_REAL === "1") {
+    it("REAL clock: a 20 s blundering level returns within the ceiling (+31 ms, AR-NFR004-A)", () => {
+      const level: Level = { budgetMs: 20_000, blunderRate: ALWAYS };
+      for (const fen of [PERFT[0], PERFT[1]] as string[]) {
+        const t0 = Date.now();
+        const choice = createLevel(level, { seed: 1 })(parseFen(fen));
+        const wall = Date.now() - t0;
+        console.log(`I5 real: ${choice?.kind}, ${choice?.scored?.length} children, ${wall} ms wall, ${choice?.elapsedMs} ms reported`);
+        expect(wall).toBeLessThanOrEqual(HARD_CEILING_MS + 31);
+      }
+    }, 60_000);
+  }
+});
+
+describe("I6 — level 3 IS chooseMove at DEFAULT_BUDGET_MS", () => {
+  it("one call, same move/depth/nodes/elapsed and clock readings, 3 seeds × 16 positions", () => {
+    const level = LEVELS[3];
+    expect(level.budgetMs).toBe(DEFAULT_BUDGET_MS);
+    const fens = [...PERFT.filter((_, i) => i % 15 === 0), ...PUZZLES.filter((_, i) => i % 20 === 0).map((p) => p.fen)];
+    const step = DEFAULT_BUDGET_MS / 25;
+    for (const fen of fens) {
+      const ref = recordingClock(step);
+      const want = engine.chooseMove(parseFen(fen), { budgetMs: DEFAULT_BUDGET_MS, now: ref.now });
+      for (const seed of [0, 87, 123_456]) {
+        const clock = recordingClock(step);
+        const from = calls.length;
+        const got = createLevel(level, { seed, now: clock.now })(parseFen(fen));
+        expect(calls.length - from).toBe(1);
+        assertCallShape(from, clock.now);
+        expect(calls[from]?.options.budgetMs).toBe(DEFAULT_BUDGET_MS);
+        expect(got?.kind).toBe("engine");
+        expect([label(got?.move as Move), got?.depth, got?.nodes, got?.elapsedMs, clock.reads()]).toEqual([
+          label(want?.move as Move),
+          want?.depth,
+          want?.nodes,
+          want?.elapsedMs,
+          ref.reads(),
+        ]);
+      }
+    }
+    console.log(`I6: ${fens.length} positions × 3 seeds identical to chooseMove`);
+  }, 300_000);
+});
+
+if (process.env.QE_FREQ === "1") {
+  describe("F — A4's ±5 pp clause across 20 seeds (a reading, not an invariant)", () => {
+    it("ENDGAMES, coarse clock", () => {
+      const level = LEVELS[1];
+      const rows: string[] = [];
+      let outside = 0;
+      for (let seed = 1; seed <= 20; seed++) {
+        const choose = createLevel(level, { seed, now: virtualClock(level.budgetMs) });
+        const kinds = ENDGAMES.map((fen) => (choose(parseFen(fen)) as LevelChoice).kind);
+        const fired = kinds.filter((k) => k !== "engine").length / kinds.length;
+        if (Math.abs(fired - level.blunderRate) > 0.05) outside++;
+        rows.push(`${seed}:${(fired * 100).toFixed(1)}`);
+      }
+      console.log(`F: ${ENDGAMES.length} moves/seed; outside ±5 pp on ${outside}/20 seeds; ${rows.join(" ")}`);
+    }, 300_000);
+  });
+}

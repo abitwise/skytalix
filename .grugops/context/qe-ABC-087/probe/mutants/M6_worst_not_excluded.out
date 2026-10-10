@@ -1,0 +1,24 @@
+M6_worst_not_excluded: planted 1 edit(s) in <qe-scratch>/mut/M6_worst_not_excluded/src/levels.ts
+ .../scratchpad/qe-ABC-087/head/src => src}/levels.ts                     | 1 -
+ 1 file changed, 1 deletion(-)
+== M6_worst_not_excluded default load1 { 5.00 4.61 4.93 } 12:21:25
+exit 1  1 s  load1 { 6.04 4.84 5.01 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  1 failed | 18 passed (19)
+      1  FAIL  src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+      1 AssertionError: expected -80 to be greater than -80
+== M6_worst_not_excluded qe load1 { 6.04 4.84 5.01 } 12:21:26
+exit 1  87 s  load1 { 4.54 4.70 4.94 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  1 failed | 7 passed (8)
+      1  FAIL  src/levels.qe.test.ts > I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst > coarse clock (depth-1 children) on QE's mixed corpus
+      1 AssertionError: expected -935 to be greater than -935
+== M6_worst_not_excluded deep load1 { 4.54 4.70 4.94 } 12:22:53
+exit 1  67 s  load1 { 5.30 4.78 4.94 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  1 failed | 5 passed | 19 skipped (25)
+      1  FAIL  src/levels.test.ts > A4 — the easiest level over ≥ 200 moves [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best [deep]
+      1 AssertionError: expected -935 to be greater than -935

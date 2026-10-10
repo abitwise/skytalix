@@ -1,0 +1,28 @@
+M1_nonstrict_second: planted 1 edit(s) in <qe-scratch>/mut/M1_nonstrict_second/src/levels.ts
+ .../scratchpad/qe-ABC-087/head/src => src}/levels.ts        | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
+== M1_nonstrict_second default load1 { 3.35 4.31 4.90 } 12:18:53
+exit 1  1 s  load1 { 3.35 4.31 4.90 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  1 failed | 18 passed (19)
+      1  FAIL  src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+      1 AssertionError: expected { …(2) } to be undefined // Object.is equality
+== M1_nonstrict_second qe load1 { 3.35 4.31 4.90 } 12:18:54
+exit 1  56 s  load1 { 4.63 4.56 4.96 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  4 failed | 4 passed (8)
+      1  FAIL  src/levels.qe.test.ts > I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst > coarse clock (depth-1 children) on QE's mixed corpus
+      1  FAIL  src/levels.qe.test.ts > I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst > fine clock (deeper children, varied depths) on 12 perft/puzzle positions
+      1  FAIL  src/levels.qe.test.ts > I5 — the level total clamps to HARD_CEILING_MS > a 20000 ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000
+      1  FAIL  src/levels.qe.test.ts > I5 — the level total clamps to HARD_CEILING_MS > a Infinity ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000
+      3 AssertionError: expected { …(2) } to be { …(2) } // Object.is equality
+== M1_nonstrict_second deep load1 { 4.63 4.56 4.96 } 12:19:50
+exit 1  65 s  load1 { 4.54 4.52 4.91 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  2 failed | 4 passed | 19 skipped (25)
+      1  FAIL  src/levels.test.ts > A4 — the easiest level over ≥ 200 moves [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best [deep]
+      1  FAIL  src/levels.test.ts > A4 — the easiest level over the perft corpus and the puzzles [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best
+      2 AssertionError: expected { …(2) } to be { …(2) } // Object.is equality
