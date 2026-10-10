@@ -1,0 +1,15 @@
+vitest readings 25	start	d5	n20500	502 ms
+vitest readings 25	kiwipete	d3	n23122	384 ms
+vitest readings 25	perft-pos3	d7	n18446	325 ms
+vitest readings 25	perft-pos4	d4	n23107	365 ms
+vitest readings 25	perft-pos5	d5	n20547	414 ms
+vitest readings 25: 5 moves, 1989 ms
+vitest readings 100	start	d7	n95252	2257 ms
+vitest readings 100	kiwipete	d5	n97874	2044 ms
+vitest readings 100	perft-pos3	d9	n93198	1590 ms
+vitest readings 100	perft-pos4	d6	n97859	1766 ms
+vitest readings 100	perft-pos5	d6	n96323	2234 ms
+vitest readings 100: 5 moves, 9891 ms
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Duration  12.19s (transform 74ms, setup 0ms, collect 79ms, tests 11.88s, environment 0ms, prepare 71ms)
