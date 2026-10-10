@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-140` → `In Review` (`dcc8dcca`); QE `qe-ABC-140` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-qe010d-2026-10-10` merged (`0aad5cac`): QE-010-d → three accepted LOW residuals on ADR-0033's guard (`AR-033-NESTED`, `AR-033-EXT`, `AR-033-COMPUTED`), alignment fix rides the triggering hop. BA/PM `rescore-p1-backlog-2026-10-10` dispatched (ABC-085, ABC-093, ABC-094, ABC-095)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-r5d-qe139a-2026-10-10` merged (`72b9fa4b`): new `ABC-140` (R5d) pulled → `In Development`; new `ABC-141` → `Backlog` (waits ABC-010). Declined with triggers: QE-139-a (next ticket editing 'The render cadence' paragraph carries it), fullmove bound (first FEN-input ticket)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Security/NFR` (`a4802fc0`); `secnfr-ABC-138` dispatched. Architect `design-qe010d-2026-10-10` dispatched (QE-010-d)._
@@ -639,8 +640,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-140] The composer tripwire's call and comparator are unpinned (ADR-0011 R5d)  (BA/PM, XS, P3, since: 2026-10-10, DoR 10/10; from QE-137-a via `design-qe137-2026-10-10`; two whole-statement literals, reach comment 5 → 7 spans, clause 1 docblock criterion; test-only `src/history-pane.nfr.test.ts` → UAT waiver; never in parallel on that file) **→ In Development 2026-10-10** (pass-through `Ready` → `Ready for Dev` → `In Development` at pull), subtask `ticket-to-pr-ABC-140`, branch `grugops/ABC-140-composer-tripwire-pins`.
+## In Development (WIP 0/3)
 
 
 
@@ -668,7 +668,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-140] The composer tripwire's call and comparator are unpinned (ADR-0011 R5d)  (BA/PM, XS, P3, since: 2026-10-10, DoR 10/10; from QE-137-a via `design-qe137-2026-10-10`; two whole-statement literals, reach comment 5 → 7 spans, clause 1 docblock criterion; test-only `src/history-pane.nfr.test.ts` → UAT waiver; never in parallel on that file) **→ In Development 2026-10-10** (pass-through `Ready` → `Ready for Dev` → `In Development` at pull), subtask `ticket-to-pr-ABC-140`, branch `grugops/ABC-140-composer-tripwire-pins`. **→ In Review 2026-10-10**: built on `grugops/ABC-140-composer-tripwire-pins` @ `dcc8dcca` (A1–A6 MET; five survivors green → red on the drift tripwire, other kills unchanged, existing pins identical; `src/history-pane.nfr.test.ts` +32/−13; N8-LANE MET, both cost sets admissible). QE `qe-ABC-140` dispatched.
 
 
 
