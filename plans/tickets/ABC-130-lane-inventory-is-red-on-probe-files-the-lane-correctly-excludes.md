@@ -1,8 +1,8 @@
 ---
 id: ABC-130
 title: "`lane-inventory.js` has been red on every tree since 2026-09-24 — it expects tracked `.grugops/context/` probe files that the lane excludes on purpose"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P2
 epic: —
