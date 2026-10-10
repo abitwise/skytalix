@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-F-072-1` merged: ADR-0036 widened limbs landed (dated block); canonical clause (b) instrument is now `.grugops/context/design-F-072-1/probe/clause-b.mjs` (four Architect additions beyond the ruling, all widen-only — Security/NFR to look at the next clause (b) gate). **`AR-072-LIMBS` CLOSED** — route clause (b) with the canonical instrument. QE-136-a accepted residual (trigger: code edits between guard importer and `toEqual`); QE-136-b → ADR-0011 `R5c` ticket (BA/PM to cut, after ABC-134 — now Done); ADR-0004 (2a) scoped to `text` (QE-104-d)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-134` → `Done` (UAT WAIVED)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-129` → `In Review` (`0ee6424e`); QE `qe-ABC-129` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-134` → `In Review` (`4d6b019a`); QE `qe-ABC-134` dispatched._
