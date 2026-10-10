@@ -1,8 +1,8 @@
 ---
 id: ABC-055
 title: `plans/board.md` defines 13 columns and renders 11 — `In Analysis` and `In Design` have no heading, so two WIP limits are unenforceable by reading the single source of WIP truth (was 10 of 13 at the cut)
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P1
 epic: —

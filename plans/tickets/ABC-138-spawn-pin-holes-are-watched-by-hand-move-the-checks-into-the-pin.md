@@ -1,8 +1,8 @@
 ---
 id: ABC-138
 title: The spawn pin's two accepted holes are watched by a hand-run check on every hop that touches `src/cli.test.ts` — move both checks into the pin (F-133-1 (a)+(b); `QE-133-a`, `QE-133-b`)
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: S
 priority: P3
 epic: —
