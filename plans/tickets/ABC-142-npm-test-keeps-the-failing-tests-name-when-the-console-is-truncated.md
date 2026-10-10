@@ -157,3 +157,48 @@ BA/PM, 2026-10-10. Re-scored after the `A5` amendment. **Result: 10 of 10.** The
 | 10 | no major unresolved blocker | **✅** none; the A5-vs-A10 conflict the SE stopped on is resolved by this amendment |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-10. Branch `grugops/ABC-142-test-result-file`, code commit `41abc389`, base
+`086185d9`. The full readings are in `.grugops/context/ticket-to-pr-ABC-142/notes/`.
+
+- **Mechanism.** Vitest's built-in JSON reporter is added next to the default reporter:
+  `--reporter=default --reporter=json --outputFile.json=.test-results/last-run.json`. The path is
+  fixed per checkout and git-ignored. Failed tests are the `assertionResults` entries with
+  `status == "failed"`; the totals are `numFailedTests`, `numPassedTests` and `numTotalTests`.
+- **Read it.** `jq -r '.testResults[] | .name as $f | .assertionResults[] | select(.status=="failed")
+  | "\($f)  \(.fullName)"' .test-results/last-run.json`
+- **Concurrency limit.** Two `npm test` runs in one checkout at once overwrite each other's file.
+  Agent hops use separate worktrees. This is not engineered around.
+- **Console delta.** The output gains exactly one line after the summary:
+  `JSON report written to <absolute path>`. Vitest prints it and no flag removes it. Every other line
+  is equal to the base once timings are normalized. The exit codes are unchanged.
+- **Not covered.** On an exit 124 (bound crossed), the tree is SIGKILLed before the reporter writes,
+  so no file is written and a stale file from an earlier run can remain.
+
+## QE
+
+**2026-10-10, QE/E2E** (subtask `qe-ABC-142`).
+- Range: base `086185d9`, code `41abc389`, reviewed tip `ab8d0088`.
+- Every reading is QE's own. The detail is in `.grugops/context/qe-ABC-142/notes/`: `…1828962c`
+  (verdict), `…298ed173` (readings), `…e8b64469` (console consumers), `…68f78a28` (gaps). It is not
+  restated here.
+
+**PASS_WITH_GAPS.**
+- `A1`: QE's own plant in `src/fen.test.ts:54` gave exit 1. The file names
+  `FEN field parsing parses the side to move`, with failed 1.
+- `A2`: the same red under `| tail -3` gave exit 1, and the file names it.
+- `A3`: green gave exit 0, 1680 / 1680, failed 0.
+- `A4`: porcelain empty and `check-ignore` matches. 53 / 1680, as at base.
+- `A5`: four paths, `numstat` `1 1 src/cli.test.ts`, `run-bounded.js` unchanged apart from line 10, and
+  skip-count `0`.
+- `A6`: the pin is byte-equal to the script, and appending one character turns `A10` red.
+- **Console line.** No consumer breaks or reads a different number. `| tail -N` windows show one line
+  fewer. That is ruling input; the ruling is the Orchestrator's.
+- Gaps: `QE-142-a` MEDIUM (an unhandled-error red leaves a file reading `success: true`), `QE-142-b`
+  LOW (the read query misses a suite-level red), `QE-142-c` LOW (exit 124 leaves a stale file,
+  confirmed). `QE-142-d`/`e`/`f` are INFO. None of them is a criterion, so none blocks.
+- Gates: lint, typecheck and build exit 0. `npm test` exit 0. Skip-integrity and lane-inventory print
+  `No findings.` `CLI_DEEP` 7 passed. `host-protection` exit 2 (`UNKNOWN - verify`).
+- On QE's reading, the UAT waiver applies (WAIVED, not accepted). The Orchestrator applies it at `Done`.
