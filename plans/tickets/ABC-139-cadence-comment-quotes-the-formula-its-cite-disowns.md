@@ -1,8 +1,8 @@
 ---
 id: ABC-139
 title: A `command-input` test comment quotes `1 + one per non-advancing outcome`, the cadence formula its own cite calls wrong
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
