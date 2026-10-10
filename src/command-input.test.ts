@@ -409,9 +409,11 @@ describe("ABC-035 A3 — `board` carries no message and triggers no second rende
 
     const run = await runLines(history, ["board", "board", "board"]);
 
-    // `1 + one per non-advancing outcome` (`src/turn-loop.ts`, `runTurnLoop`'s docblock,
-    // "The render cadence"). A `board` that redrew for itself would add a fourth, a fifth and a
-    // sixth.
+    // `1 + plies + take-backs + RE-EMITTING non-mutating outcomes` (`src/turn-loop.ts`,
+    // `runTurnLoop`'s docblock, "The render cadence"). Here that is 1 initial frame + 0 plies +
+    // 0 take-backs + 3 re-emitting `board` outcomes = 4. The `eof` after the third line re-emits
+    // nothing: it goes to `exiting`, not to `rendering`. A `board` that redrew for itself would
+    // add one more frame per `board`, three in all.
     expect(run.renders).toBe(4);
     for (const messages of run.messagesPerFrame) expect(messages).toEqual([]);
     expect(toFen(history.position)).toBe(RICH_FEN);
