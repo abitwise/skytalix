@@ -1,0 +1,85 @@
+plant CONTROL  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:52:03Z  load1 3.94
+--- diff vs archive (src only)
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 0   Test Files 52 passed (52) |  Tests 1663 passed (1663)
+lint exit 0  Checked 100 files in 91ms. No fixes applied.
+tsc exit 0  
+plant POS-flat-ts  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:52:17Z  load1 4.21
+--- diff vs archive (src only)
+  touched-or-new: src/history.ts
+guard exit 1   Tests 1 failed | 81 skipped (82)
+suite exit 1   Test Files 1 failed | 51 passed (52) |  Tests 1 failed | 1662 passed (1663)
+  red: × parseFenGrammarOnly guard — no production module names it > is absent from every src/*.ts except fen.ts and the tests 5ms
+  red: FAIL  src/fen.test.ts > parseFenGrammarOnly guard — no production module names it > is absent from every src/*.ts except fen.ts and the tests
+lint exit 0  Checked 100 files in 126ms. No fixes applied.
+tsc exit 0  
+plant N1-nested-ts  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:52:26Z  load1 5.43
+--- diff vs archive (src only)
+  touched-or-new: src/qeplant/x.ts
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 1   Test Files 1 failed | 51 passed (52) |  Tests 1 failed | 1662 passed (1663)
+  red: × ABC-042 — the shape of what was delivered > A3 — the entry point is flat in src/, where the licence guard can see it 5ms
+  red: FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > A3 — the entry point is flat in src/, where the licence guard can see it
+lint exit 0  Checked 101 files in 100ms. No fixes applied.
+tsc exit 0  
+plant N1-nested-ts-live  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:52:36Z  load1 7.74
+--- diff vs archive (src only)
+  touched-or-new: src/history.ts
+  touched-or-new: src/qeplant/x.ts
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 1   Test Files 1 failed | 51 passed (52) |  Tests 1 failed | 1662 passed (1663)
+  red: × ABC-042 — the shape of what was delivered > A3 — the entry point is flat in src/, where the licence guard can see it 6ms
+  red: FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > A3 — the entry point is flat in src/, where the licence guard can see it
+lint exit 0  Checked 101 files in 108ms. No fixes applied.
+tsc exit 0  
+plant N1-nested-mts  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:52:45Z  load1 9.54
+--- diff vs archive (src only)
+  touched-or-new: src/qeplant/x.mts
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 0   Test Files 52 passed (52) |  Tests 1663 passed (1663)
+lint exit 0  Checked 100 files in 111ms. No fixes applied.
+tsc exit 0  
+plant N2-flat-mts  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:52:54Z  load1 10.45
+--- diff vs archive (src only)
+  touched-or-new: src/qeplant.mts
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 0   Test Files 52 passed (52) |  Tests 1663 passed (1663)
+lint exit 0  Checked 100 files in 102ms. No fixes applied.
+tsc exit 0  
+plant N2-flat-mts-live  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:53:05Z  load1 13.22
+--- diff vs archive (src only)
+  touched-or-new: src/history.ts
+  touched-or-new: src/qeplant.mts
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 0   Test Files 52 passed (52) |  Tests 1663 passed (1663)
+lint exit 0  Checked 100 files in 181ms. No fixes applied.
+tsc exit 0  
+plant N2-flat-js-live  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:53:18Z  load1 16.62
+--- diff vs archive (src only)
+  touched-or-new: src/history.ts
+  touched-or-new: src/qeplant.js
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 0   Test Files 52 passed (52) |  Tests 1663 passed (1663)
+lint exit 0  Checked 100 files in 162ms. No fixes applied.
+tsc exit 2  src/history.ts(156,27): error TS7016: Could not find a declaration file for module './qeplant.js'. '<trees>/N2-flat-js-live/src/qeplant.js' implicitly has an 'any' type. 
+plant N3-concat  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:53:33Z  load1 25.96
+--- diff vs archive (src only)
+  touched-or-new: src/history.ts
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 0   Test Files 52 passed (52) |  Tests 1663 passed (1663)
+lint exit 0  Checked 100 files in 175ms. No fixes applied.
+tsc exit 0  
+plant N3-template  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:53:48Z  load1 31.96
+--- diff vs archive (src only)
+  touched-or-new: src/history.ts
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 0   Test Files 52 passed (52) |  Tests 1663 passed (1663)
+lint exit 0  Checked 100 files in 146ms. No fixes applied.
+tsc exit 0  
+plant N3-escape  sha f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a  at 2026-10-10T16:54:04Z  load1 29.65
+--- diff vs archive (src only)
+  touched-or-new: src/history.ts
+guard exit 0   Tests 1 passed | 81 skipped (82)
+suite exit 0   Test Files 52 passed (52) |  Tests 1663 passed (1663)
+lint exit 0  Checked 100 files in 148ms. No fixes applied.
+tsc exit 0  
