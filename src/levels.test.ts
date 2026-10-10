@@ -12,10 +12,12 @@
  * the positions a game actually reaches.
  *
  * LANES, on the `ENGINE_DEEP` precedent (`N8-LANE`):
- * - DEFAULT (`npm test`): `A1`, `A4`, `A6`, `A7`, `A8`, `A9`, `A10` on `ENDGAMES`, on a virtual
- *   clock with a COARSE step (one reading per level budget, so every search is depth 1). None of
- *   these is about budget fidelity; the step is the dial.
- * - `ENGINE_DEEP=1`: `A4` again on the perft + puzzle corpus; `A2` (budget fidelity on a FINE
+ * - DEFAULT (`npm test`, 19 tests): `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, `A4`'s byte-identity row
+ *   and the edge cases, on `ENDGAMES` with a virtual clock on a COARSE step (one reading per level
+ *   budget, so every search is depth 1). `A9`'s moves also carry `A4`'s per-move clauses (test
+ *   note 7), a guard and not `A4`'s evidence.
+ * - `ENGINE_DEEP=1`: `A4`'s ≥ 200-move `ENDGAMES` run (moved here, `rule-abc087-cost` option (a),
+ *   for `N8-LANE`) and `A4` on the perft + puzzle corpus; `A2` (budget fidelity on a FINE
  *   virtual step — test note 3, never the wall clock); `A5` (the hardest level on the REAL clock,
  *   `NFR-004`'s 5 s); `A3` (easiest vs default on `ABC-084`'s puzzles, deterministic). Unset, those
  *   cases are NOT DEFINED, not skipped, so the gate's skip count stays 0.
@@ -103,51 +105,60 @@ function playAll(level: Level, seed: number, fens: readonly string[]): LevelChoi
 const decisions = (choices: readonly LevelChoice[]): string[] =>
   choices.map((c) => (c.kind === "blunder" ? `B:${label(c.move)}` : `-:${c.kind}`));
 
-/** `A4`, every clause, on one run of the easiest level over `fens`. */
-function assertA4(lane: string, fens: readonly string[], choices: readonly LevelChoice[]): void {
-  // ≥ 200 moves, every one legal.
-  expect(choices.length).toBeGreaterThanOrEqual(200);
+/**
+ * `A4`'s per-move clauses on every move of one run (test note 7 reuses this on `A9`'s moves): legal;
+ * a non-engine move's list is every legal root move in `legalMoves` order; never the worst class of
+ * that list; a blunder is the STRICT second-best (ties to the first scored); a no-candidate move's
+ * list has fewer than three distinct scores and the first best is played.
+ */
+function assertPerMove(fens: readonly string[], choices: readonly LevelChoice[]): void {
   fens.forEach((fen, i) => {
     const choice = choices[i] as LevelChoice;
     const legal = legalMoves(parseFen(fen)).map(label);
     expect(legal).toContain(label(choice.move));
-    // The scored list is every legal root move, in `legalMoves` order.
-    if (choice.kind !== "engine") expect(choice.scored?.map((s) => label(s.move))).toEqual(legal);
-  });
-
-  // The rate ±5 pp: blunders played ÷ moves, no-candidate moves out of the denominator.
-  const blunders = choices.filter((c) => c.kind === "blunder").length;
-  const noCandidate = choices.filter((c) => c.kind === "no-candidate").length;
-  const frequency = blunders / (choices.length - noCandidate);
-  console.log(
-    `A4 [${lane}]: ${blunders} blunders / (${choices.length} moves - ${noCandidate} ` +
-      `no-candidate) = ${(frequency * 100).toFixed(1)}% against ${easiest.blunderRate * 100}%`,
-  );
-  expect(blunders).toBeGreaterThan(0);
-  expect(Math.abs(frequency - easiest.blunderRate)).toBeLessThanOrEqual(0.05);
-
-  for (const choice of choices) {
     if (choice.kind === "engine") {
       // A non-blunder move carries no list; the clause does not apply.
       expect(choice.scored).toBeNull();
-      continue;
+      return;
     }
     const scored = choice.scored ?? [];
+    expect(scored.map((s) => label(s.move))).toEqual(legal);
     const scores = scored.map((s) => s.score);
     const [min, max] = [Math.min(...scores), Math.max(...scores)];
     const played = scored.find((s) => s.move === choice.move);
     // Never the worst class of that move's own list (when the list is not all one score).
     if (min < max) expect(played?.score).toBeGreaterThan(min);
-    // The STRICT second-best, ties to the first scored; no candidate → the first best.
     const between = scored.filter((s) => s.score < max && s.score > min);
     if (choice.kind === "blunder") {
       const second = Math.max(...between.map((s) => s.score));
       expect(played).toBe(between.find((s) => s.score === second));
     } else {
+      // The label must be true by the move's own list, so a skipped blunder cannot hide under it.
+      expect(new Set(scores).size).toBeLessThan(3);
       expect(between).toEqual([]);
       expect(played).toBe(scored.find((s) => s.score === max));
     }
-  }
+  });
+}
+
+/** `A4`, every clause, on one run of the easiest level over `fens`. */
+function assertA4(lane: string, fens: readonly string[], choices: readonly LevelChoice[]): void {
+  expect(choices.length).toBeGreaterThanOrEqual(200);
+  assertPerMove(fens, choices);
+
+  // The rate ±5 pp (re-worded 2026-10-10, `rule-abc087-cost`): every move whose draw fired,
+  // (blunder + no-candidate) ÷ moves. Blunders played ÷ moves is reported beside it.
+  const blunders = choices.filter((c) => c.kind === "blunder").length;
+  const noCandidate = choices.filter((c) => c.kind === "no-candidate").length;
+  const frequency = (blunders + noCandidate) / choices.length;
+  const played = blunders / choices.length;
+  console.log(
+    `A4 [${lane}]: (${blunders} blunders + ${noCandidate} no-candidate) / ${choices.length} moves = ` +
+      `${(frequency * 100).toFixed(1)}% against ${easiest.blunderRate * 100}%; ` +
+      `blunders played / moves = ${(played * 100).toFixed(1)}%`,
+  );
+  expect(blunders).toBeGreaterThan(0);
+  expect(Math.abs(frequency - easiest.blunderRate)).toBeLessThanOrEqual(0.05);
 }
 
 // ---------------------------------------------------------------------------
@@ -224,10 +235,6 @@ describe("A6 — the default level", () => {
 // ---------------------------------------------------------------------------
 
 describe("A4 — the easiest level over ≥ 200 moves", () => {
-  it("every move legal; rate ±5 pp; never the worst; the strict second-best", () => {
-    assertA4("default lane, ENDGAMES", ENDGAMES, playAll(easiest, 87, ENDGAMES));
-  });
-
   it("hands the borrowed position back byte-identical after a blunder", () => {
     const always: Level = { budgetMs: 100, blunderRate: 0.999_999 };
     for (const fen of ENDGAMES.slice(0, 20)) {
@@ -297,9 +304,12 @@ describe("seededRandom — the generator", () => {
 describe("A9 — different seeds actually differ", () => {
   it("≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences", () => {
     expect(THIRTY).toHaveLength(30);
-    const sequences = [1, 2, 3, 4, 5].map((seed) =>
-      decisions(playAll(easiest, seed, THIRTY)).join(),
-    );
+    const sequences = [1, 2, 3, 4, 5].map((seed) => {
+      const choices = playAll(easiest, seed, THIRTY);
+      // Test note 7: `A4`'s per-move clauses on the moves already played. No new search.
+      assertPerMove(THIRTY, choices);
+      return decisions(choices).join();
+    });
     console.log(`A9: ${new Set(sequences).size} distinct sequences over 5 seeds`);
     expect(new Set(sequences).size).toBeGreaterThanOrEqual(2);
   });
@@ -372,6 +382,13 @@ if (RUN_DEEP) {
     ...buildCorpus().map((entry) => toFen(entry.position)),
     ...PUZZLES.map((puzzle) => puzzle.fen),
   ];
+
+  describe("A4 — the easiest level over ≥ 200 moves [deep]", () => {
+    // Moved from the default lane unchanged (`rule-abc087-cost`, option (a)): `N8-LANE`.
+    it("every move legal; rate ±5 pp; never the worst; the strict second-best [deep]", () => {
+      assertA4("default lane, ENDGAMES", ENDGAMES, playAll(easiest, 87, ENDGAMES));
+    });
+  });
 
   describe("A4 — the easiest level over the perft corpus and the puzzles [deep]", () => {
     it("every move legal; rate ±5 pp; never the worst; the strict second-best", () => {
