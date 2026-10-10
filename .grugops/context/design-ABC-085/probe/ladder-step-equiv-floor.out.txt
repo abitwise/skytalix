@@ -1,0 +1,7 @@
+# 2026-10-10T18:16:51Z load:  2.74 4.80 5.68 
+{"mode":"equiv","arms":[[3000,120],[750,30],[300,12]],"positions":50,"identicalMoveDepthNodes":50}
+# 2026-10-10T18:17:05Z load:  2.78 4.74 5.64 
+{"mode":"floor","step":120,"b100":{"readings":1,"medianDepth":1,"atDepth1":50,"realMsPerMove":1.4},"b500":{"readings":5,"medianDepth":3,"atDepth1":3,"realMsPerMove":12.9}}
+{"mode":"floor","step":30,"b100":{"readings":4,"medianDepth":2,"atDepth1":6,"realMsPerMove":9.7},"b500":{"readings":17,"medianDepth":4,"atDepth1":0,"realMsPerMove":61.1}}
+{"mode":"floor","step":10,"b100":{"readings":10,"medianDepth":3,"atDepth1":0,"realMsPerMove":32},"b500":{"readings":50,"medianDepth":5,"atDepth1":0,"realMsPerMove":218.4}}
+{"mode":"floor","step":4,"b100":{"readings":25,"medianDepth":5,"atDepth1":0,"realMsPerMove":95.9},"b500":{"readings":125,"medianDepth":6,"atDepth1":0,"realMsPerMove":1325.2}}

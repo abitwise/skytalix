@@ -1,0 +1,23 @@
+# 2026-10-10T18:18:45Z load:  65.85 27.99 14.61 
+{"mode":"games","step":120,"pair":"5v1","whiteId":5,"blackId":1,"seed":1,"plies":45,"result":"white-wins","reason":"checkmate","wallS":4.1,"hiScore":1}
+{"mode":"games","step":120,"pair":"5v1","whiteId":1,"blackId":5,"seed":1,"plies":43,"result":"draw","reason":"threefold-repetition","wallS":3.1,"hiScore":0.5}
+{"mode":"games","step":120,"pair":"5v1","seed":1,"sameGameBothChairs":false}
+{"mode":"games","step":120,"pair":"5v1","whiteId":5,"blackId":1,"seed":2,"plies":41,"result":"white-wins","reason":"checkmate","wallS":3.7,"hiScore":1}
+{"mode":"games","step":120,"pair":"5v1","whiteId":1,"blackId":5,"seed":2,"plies":34,"result":"black-wins","reason":"checkmate","wallS":3.1,"hiScore":1}
+{"mode":"games","step":120,"pair":"5v1","seed":2,"sameGameBothChairs":false}
+{"mode":"games","step":120,"pair":"4v3","whiteId":4,"blackId":3,"seed":1,"plies":123,"result":"draw","reason":"threefold-repetition","wallS":12.8,"hiScore":0.5}
+{"mode":"games","step":120,"pair":"4v3","whiteId":3,"blackId":4,"seed":1,"plies":122,"result":"draw","reason":"threefold-repetition","wallS":13.2,"hiScore":0.5}
+{"mode":"games","step":120,"pair":"4v3","seed":1,"sameGameBothChairs":false}
+{"mode":"games","step":120,"pair":"4v3","whiteId":4,"blackId":3,"seed":2,"plies":119,"result":"white-wins","reason":"checkmate","wallS":13.3,"hiScore":1}
+{"mode":"games","step":120,"pair":"4v3","whiteId":3,"blackId":4,"seed":2,"plies":115,"result":"draw","reason":"insufficient-material","wallS":12.8,"hiScore":0.5}
+{"mode":"games","step":120,"pair":"4v3","seed":2,"sameGameBothChairs":false}
+{"mode":"games","step":120,"pair":"5v4","whiteId":5,"blackId":4,"seed":1,"plies":67,"result":"draw","reason":"threefold-repetition","wallS":10.5,"hiScore":0.5}
+{"mode":"games","step":120,"pair":"5v4","whiteId":4,"blackId":5,"seed":1,"plies":112,"result":"draw","reason":"threefold-repetition","wallS":16.5,"hiScore":0.5}
+{"mode":"games","step":120,"pair":"5v4","seed":1,"sameGameBothChairs":false}
+{"mode":"games","step":120,"pair":"5v4","whiteId":5,"blackId":4,"seed":2,"plies":113,"result":"white-wins","reason":"checkmate","wallS":14.3,"hiScore":1}
+{"mode":"games","step":120,"pair":"5v4","whiteId":4,"blackId":5,"seed":2,"plies":98,"result":"draw","reason":"threefold-repetition","wallS":14.6,"hiScore":0.5}
+{"mode":"games","step":120,"pair":"5v4","seed":2,"sameGameBothChairs":false}
+real 122.14
+user 121.86
+sys 0.34
+# end 2026-10-10T18:20:47Z load:  11.65 19.81 13.17 

@@ -1,0 +1,11 @@
+# 2026-10-10T18:20:54Z load:  10.96 19.53 13.11 
+{"mode":"games","step":30,"pair":"5v4","whiteId":5,"blackId":4,"seed":1,"plies":90,"result":"draw","reason":"threefold-repetition","wallS":58.5,"hiScore":0.5}
+{"mode":"games","step":30,"pair":"5v4","whiteId":4,"blackId":5,"seed":1,"plies":90,"result":"draw","reason":"threefold-repetition","wallS":57.2,"hiScore":0.5}
+{"mode":"games","step":30,"pair":"5v4","seed":1,"sameGameBothChairs":true}
+{"mode":"games","step":30,"pair":"5v4","whiteId":5,"blackId":4,"seed":2,"plies":103,"result":"white-wins","reason":"checkmate","wallS":68.8,"hiScore":1}
+{"mode":"games","step":30,"pair":"5v4","whiteId":4,"blackId":5,"seed":2,"plies":153,"result":"white-wins","reason":"checkmate","wallS":82,"hiScore":0}
+{"mode":"games","step":30,"pair":"5v4","seed":2,"sameGameBothChairs":false}
+real 266.68
+user 265.49
+sys 0.64
+# end rc=0 2026-10-10T18:25:21Z load:  4.36 10.60 10.76 
