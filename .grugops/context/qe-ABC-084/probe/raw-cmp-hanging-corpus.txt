@@ -1,0 +1,6 @@
+# cmp: git show 7b54dae:src/quiescence.test.ts lines 197-222 vs git show e426e91:src/puzzle-corpus.ts the 26 lines after 'export const HANGING_CORPUS'
+cmp exit 0: identical (26 lines = 24 rows + the ADR-0028 comment pair)
+62cf37716683510374757ad224bab8f84c4cc117
+62cf37716683510374757ad224bab8f84c4cc117
+declaration: base 'const HANGING_CORPUS: ReadonlyArray<{ na…' -> tip 'export const HANGING_CORPUS…' (only 'export' added)
+doc comment (10 lines above): identical

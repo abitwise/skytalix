@@ -1,0 +1,36 @@
+Fri Oct  9 21:54:14 UTC 2026
+{ 9.75 16.41 17.49 }
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/qe-ABC-084
+
+stdout | src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > with quiescence the losing move is still avoided at depth 3 [deep, SEARCH_DEEP=1]
+A1 depth 3: losing capture chosen 0/24 with quiescence, 0/24 without
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 595 nodes with quiescence / 49 without = 12.14x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 292 nodes with quiescence / 47 without = 6.21x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 2, level 50x [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 2: 1547 nodes with quiescence / 132 without = 11.72x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 55 / e2a6 [deep, SEARCH_DEEP=1]
+A5 kiwipete depth 3: 12238 nodes with quiescence / 2265 without = 5.40x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 2, level 26x [deep, SEARCH_DEEP=1]
+A5 position-6 depth 2: 2429 nodes with quiescence / 136 without = 17.86x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 3, level 13x, and the oracle-checked answer 55 / c3d5 [deep, SEARCH_DEEP=1]
+A5 position-6 depth 3: 6601 nodes with quiescence / 2273 without = 2.90x
+
+ ✓ src/quiescence.test.ts (37 tests) 2062ms
+   ✓ A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on the six roots and every one-ply child, under the cap [deep, SEARCH_DEEP=1]  807ms
+   ✓ A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 3, level 70x, and the oracle-checked answer 55 / e2a6 [deep, SEARCH_DEEP=1]  317ms
+
+ Test Files  1 passed (1)
+      Tests  37 passed (37)
+   Start at  00:54:15
+   Duration  2.23s (transform 59ms, setup 0ms, collect 61ms, tests 2.06s, environment 0ms, prepare 36ms)
+
+exit 0

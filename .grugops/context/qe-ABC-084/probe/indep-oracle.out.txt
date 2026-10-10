@@ -1,0 +1,47 @@
+PERFT OK  d3 8902 (want 8902) rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1
+PERFT OK  d4 197281 (want 197281) rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1
+PERFT OK  d4 43238 (want 43238) 8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1
+PERFT OK  d5 674624 (want 674624) 8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1
+ROWS 40: mate-in-2 10, win-material 6, do-not-hang 24
+DISTINCT positions 40 of 40
+do-not-hang	OK  losing=a1e5:-8 best=a1b1:0 deficit=8 mate1=[] mate2=[]	118ms	Q takes a pawn a rook defends
+do-not-hang	OK  losing=a1a7:-4 best=a1b1:0 deficit=4 mate1=[] mate2=[]	18ms	R takes a pawn the king defends
+do-not-hang	OK  losing=b1e4:-2 best=b1a2:0 deficit=2 mate1=[] mate2=[]	22ms	B takes a pawn a pawn defends
+do-not-hang	OK  losing=c2d4:-2 best=e1f1:0 deficit=2 mate1=[] mate2=[]	16ms	N takes a pawn a pawn defends
+do-not-hang	OK  losing=a1b2:-6 best=a1b1:0 deficit=6 mate1=[] mate2=[]	182ms	Q takes a knight a rook defends
+do-not-hang	OK  losing=d1d3:-2 best=d1b1:0 deficit=2 mate1=[] mate2=[]	32ms	R takes a knight a pawn defends
+do-not-hang	OK  losing=a1a7:-4 best=a1b1:0 deficit=4 mate1=[] mate2=[]	81ms	Q takes a rook the king defends
+do-not-hang	OK  losing=a1b2:-6 best=a1b1:3 deficit=9 mate1=[] mate2=[]	189ms	Q takes a bishop a knight defends
+do-not-hang	OK  losing=a1a5:-2 best=e1f1:0 deficit=2 mate1=[] mate2=[] IN-CHECK	10ms	R takes a bishop a pawn defends
+do-not-hang	OK  losing=b1b2:-4 best=b1d1:0 deficit=4 mate1=[] mate2=[]	71ms	R takes a pawn a bishop defends
+do-not-hang	OK  losing=a1b2:-8 best=a1b1:0 deficit=8 mate1=[] mate2=[]	108ms	Q takes a pawn a knight defends
+do-not-hang	OK  losing=b1e4:-2 best=b1a2:0 deficit=2 mate1=[] mate2=[]	23ms	B takes a pawn a rook defends
+do-not-hang	OK  losing=a8e4:-8 best=a8b8:0 deficit=8 mate1=[] mate2=[]	122ms	mirror: q takes a pawn a rook defends
+do-not-hang	OK  losing=a8a2:-4 best=a8b8:0 deficit=4 mate1=[] mate2=[]	11ms	mirror: r takes a pawn the king defends
+do-not-hang	OK  losing=b8e5:-2 best=b8c7:0 deficit=2 mate1=[] mate2=[]	27ms	mirror: b takes a pawn a pawn defends
+do-not-hang	OK  losing=c7d5:-2 best=c7a8:0 deficit=2 mate1=[] mate2=[]	23ms	mirror: n takes a pawn a pawn defends
+do-not-hang	OK  losing=a8b7:-6 best=a8b8:0 deficit=6 mate1=[] mate2=[]	292ms	mirror: q takes a knight a rook defends
+do-not-hang	OK  losing=d8d6:-2 best=d8b8:0 deficit=2 mate1=[] mate2=[]	39ms	mirror: r takes a knight a pawn defends
+do-not-hang	OK  losing=a8a2:-4 best=a8b8:0 deficit=4 mate1=[] mate2=[]	151ms	mirror: q takes a rook the king defends
+do-not-hang	OK  losing=a8b7:-6 best=a8b8:3 deficit=9 mate1=[] mate2=[]	440ms	mirror: q takes a bishop a knight defends
+do-not-hang	OK  losing=a8a4:-2 best=e8f8:0 deficit=2 mate1=[] mate2=[] IN-CHECK	17ms	mirror: r takes a bishop a pawn defends
+do-not-hang	OK  losing=b8b7:-4 best=b8d8:0 deficit=4 mate1=[] mate2=[]	94ms	mirror: r takes a pawn a bishop defends
+do-not-hang	OK  losing=a8b7:-8 best=a8b8:0 deficit=8 mate1=[] mate2=[]	401ms	mirror: q takes a pawn a knight defends
+do-not-hang	OK  losing=b8e5:-2 best=b8c7:0 deficit=2 mate1=[] mate2=[]	94ms	mirror: b takes a pawn a rook defends
+mate-in-2	OK  mate1=[] mate2=[f6f7,f6g6] accept=[f6f7,f6g6]	18ms	K+R: king steps up, rook mates
+mate-in-2	OK  mate1=[] mate2=[d5g8] accept=[d5g8]	582ms	smothered: Qg8+ Rxg8 Nf7#
+mate-in-2	OK  mate1=[] mate2=[e2e8] accept=[e2e8]	379ms	back rank: Re8+ Rxe8 Rxe8#
+mate-in-2	OK  mate1=[] mate2=[a2a7,b1b7] accept=[a2a7,b1b7]	36ms	two-rook ladder
+mate-in-2	OK  mate1=[] mate2=[c6b6,c6c7,h1b1,h1h7] accept=[c6b6,c6c7,h1b1,h1h7]	35ms	K+Q against the cornered king
+mate-in-2	OK  mate1=[] mate2=[e7g6,h5h7] accept=[e7g6,h5h7]	1667ms	Anastasia: Qxh7+ Kxh7 Rh3#
+mate-in-2	OK  mate1=[] mate2=[e7e1] accept=[e7e1]	645ms	mirror: back rank, Re1+ Rxe1 Rxe1#
+mate-in-2	OK  mate1=[] mate2=[d4g1] accept=[d4g1]	822ms	mirror: smothered, Qg1+ Rxg1 Nf2#
+mate-in-2	OK  mate1=[] mate2=[f3f2,f3g3] accept=[f3f2,f3g3]	12ms	mirror: K+R, king steps up
+mate-in-2	OK  mate1=[] mate2=[a7a2,b8b2] accept=[a7a2,b8b2]	57ms	mirror: two-rook ladder
+win-material	OK  best=+9 top=[d5e7] accept=[d5e7] next=d5e3:0 mate1=[] mate2=[]	441ms	knight fork: Ne7+ wins the queen
+win-material	OK  best=+2 top=[e4e5] accept=[e4e5] next=g2g3:-1 mate1=[] mate2=[]	87ms	pawn fork: e5 hits knight and rook
+win-material	OK  best=+4 top=[a1e1] accept=[a1e1] next=a1b1:-1 mate1=[] mate2=[]	663ms	pin: Re1 pins the queen to the king
+win-material	OK  best=+10 top=[a1a6] accept=[a1a6] next=a1b1:0 mate1=[] mate2=[]	493ms	skewer: Ra6+ and Rxh6
+win-material	OK  best=+6 top=[d4a1,d4b2,d4c3,d4e5] accept=[d4a1,d4b2,d4c3,d4e5] next=d1d2:0 mate1=[] mate2=[]	464ms	discovered check: the bishop moves, Rxd8
+win-material	OK  best=+5 top=[d1d5] accept=[d1d5] next=d1e1:0 mate1=[] mate2=[]	439ms	queen fork: Qd5+ and Qxa8
+RESULT ALL OK over 40 rows
