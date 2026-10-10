@@ -1578,3 +1578,68 @@ describe("ABC-036 A5 — `moves` is non-advancing and re-evaluates nothing", () 
     expect(derives()).toBe(1);
   });
 });
+
+// ---------------------------------------------------------------------------
+// `ABC-036` QE (`qe-ABC-036`): the three cases the build hop left without a row. Zero legal moves,
+// `moves` clearing an armed `quit`, and the ASCII glyph set.
+// ---------------------------------------------------------------------------
+
+describe("ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set", () => {
+  // White mated (fool's mate) and Black stalemated. The loop ends the game before it prompts in
+  // either, so only the pure function reaches them. A1's count still binds there.
+  for (const [name, fen] of [
+    ["checkmate", "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3"],
+    ["stalemate", "7k/5Q2/6K1/8/8/8/8/8 b - - 0 1"],
+  ] as const) {
+    it(`states 0 and lists nothing at ${name}: one derive, no toSan`, () => {
+      const history = newGame(fen);
+      const seam = movesSpied();
+      expect(toFen(history.position)).toBe(fen);
+
+      expect(movesOf(history, seam.deps)).toEqual(["legal moves: 0"]);
+      expect(seam.derive).toHaveBeenCalledTimes(1);
+      expect(seam.san).not.toHaveBeenCalled();
+    });
+  }
+
+  it("quit / moves / quit: `moves` clears an armed quit and still answers its listing", () => {
+    const history = newGame(START_FEN);
+    const resolve = createPromptLineResolver();
+    const confirmation = { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
+
+    expect(resolve(history, "quit")).toEqual(confirmation);
+    const listed = resolve(history, "moves");
+    expect(listed.kind).toBe("command");
+    expect(statedCount((listed as { messages: readonly string[] }).messages)).toBe(20);
+    // The third line is a FIRST quit again, not a second.
+    expect(resolve(history, "quit")).toEqual(confirmation);
+  });
+
+  it("A3 and A7 hold in ASCII: `moves` keeps its count over N > 0 hidden, `help` hides nothing", () => {
+    const history = newGame(START_FEN);
+    const regionIn = (messages: readonly string[]): string => {
+      const frame = assembleFrame(
+        {
+          board: renderBoard(history.position, "ascii", "white-bottom"),
+          status: renderStatusPanel(history, gameStatusOf(history), false),
+          history: renderHistory(history),
+          messages,
+        },
+        "ascii",
+      );
+      return frame
+        .slice(frame.length - PROMPT_ROWS - MESSAGE_ROWS, frame.length - PROMPT_ROWS)
+        .join("\n");
+    };
+
+    const moves = regionIn(movesOf(history));
+    const marker = /\(\+(\d+) more\)/.exec(moves);
+    expect(marker).not.toBeNull();
+    expect(Number((marker as RegExpExecArray)[1])).toBeGreaterThan(0);
+    expect(moves).toContain("legal moves: 20");
+
+    const help = regionIn(helpMessages());
+    expect(help).not.toContain("(+");
+    for (const token of helpMessages()) expect(help).toContain(token);
+  });
+});
