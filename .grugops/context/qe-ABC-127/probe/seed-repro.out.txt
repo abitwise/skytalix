@@ -1,0 +1,23 @@
+REPRODUCED	mate-in-3	seed 1	8/7K/8/8/1k6/8/8/q1r2N2 b - - 0 1
+REPRODUCED	mate-in-3	seed 69	2r5/K7/8/8/P7/4P1b1/8/k4r2 b - - 0 1
+REPRODUCED	mate-in-3	seed 1008	8/4q3/K7/8/8/8/4k1r1/8 b - - 0 1
+REPRODUCED	mate-in-3	seed 1075	K7/1r6/8/k7/8/8/3n4/5b2 b - - 0 1
+REPRODUCED	mate-in-3	seed 1424	8/k7/2B5/5N2/n2K4/8/6QB/8 w - - 0 1
+REPRODUCED	mate-in-3	seed 1632	8/2R1QpK1/5p2/8/8/8/7n/1N4k1 w - - 0 1
+REPRODUCED	mate-in-3	seed 1163	8/1r6/2r5/3b4/8/1k5K/6N1/8 b - - 0 1
+REPRODUCED	mate-in-3	seed 1982	q7/8/8/6k1/1r6/8/4K3/8 b - - 0 1
+REPRODUCED	mate-in-3	seed 24	4K3/8/5k2/8/2P5/1q6/8/6n1 b - - 0 1
+REPRODUCED	mate-in-3	seed 234	3R4/3K4/2Q5/7p/8/8/8/3k4 w - - 0 1
+REPRODUCED	mate-in-3	seed 288	8/8/8/8/2B4k/4K3/Q7/8 w - - 0 1
+REPRODUCED	mate-in-3	seed 580	8/4K3/8/8/7k/2B5/8/5Q2 w - - 0 1
+REPRODUCED	win-material	seed 7	1K6/8/7R/3q4/k7/2p3N1/8/8 b - - 0 1
+REPRODUCED	win-material	seed 111	8/R7/7K/R3q1P1/1p2k3/1B6/r4b2/8 b - - 0 1
+REPRODUCED	win-material	seed 1700	8/7B/6r1/1P2b1p1/1k6/3p2N1/2nK4/N5B1 b - - 0 1
+REPRODUCED	win-material	seed 1706	8/7r/2k5/p4K2/2P5/1q6/P1Q2p2/R7 w - - 0 1
+REPRODUCED	win-material	seed 1811	6n1/1k5b/5bP1/3K1p2/2NR4/3p4/4P3/5R2 w - - 0 1
+REPRODUCED	win-material	seed 5180	8/1p5N/6kr/3K4/1B5n/8/8/3Q4 b - - 0 1
+REPRODUCED	win-material	seed 5464	8/8/3B1K1N/8/k7/2p5/8/4b3 b - - 0 1
+REPRODUCED	win-material	seed 5061	8/nk1p3q/4b3/5P2/1P2P3/3r4/6NP/b4KB1 w - - 0 1
+REPRODUCED	win-material	seed 5527	k2r1N1b/4n3/2R1N2K/7b/3P4/1p4PP/4n3/8 b - - 0 1
+REPRODUCED	win-material	seed 279	8/7N/3p2pp/8/1N2R3/3P1K2/8/q2k4 b - - 0 1
+SEEDS reproduced 22/22

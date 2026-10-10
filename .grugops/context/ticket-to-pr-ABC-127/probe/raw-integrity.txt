@@ -1,0 +1,3 @@
+skip-count capture: 0
+No findings.
+exit 0

@@ -1,0 +1,3 @@
+old row 12 FAILS: pawn on rank 1/8 — pin: Re1 pins the queen to the king
+old row 14 FAILS: side not to move in check — discovered check: the bishop moves, Rxd8
+new rows 22: ALL PASS the six rules

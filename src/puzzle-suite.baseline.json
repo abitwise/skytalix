@@ -1,12 +1,19 @@
 {
-  "solved": 40,
-  "total": 40,
+  "solved": 58,
+  "total": 62,
   "budgetMs": 25,
   "stepMs": 1,
-  "measuredAt": "b3321f0 (grugops/ABC-084-puzzle-suite; descends from ABC-082's merge 0de4a93)",
-  "measuredOn": "2026-10-09T21:18:44Z to 21:19:25Z, three separate processes, identical per-puzzle move, depth and nodes",
+  "unsolved": [
+    "mate in 3, seed 24: black Q+N against P",
+    "mate in 3, seed 234: white Q+R against P",
+    "mate in 3, seed 288: white Q+B against a bare king",
+    "mate in 3, seed 580: white Q+B against a bare king"
+  ],
+  "measuredAt": "e1f5732 (grugops/ABC-127-harder-puzzles; descends from the wave tip f9689e7 via 4a64dd9, docs only)",
+  "measuredOn": "2026-10-10T08:33:04Z to 08:37:50Z, three separate processes, identical per-puzzle move, depth and nodes",
   "machine": "Apple M3, 8 cores, 16 GiB, macOS 26.5.2, Node v26.11.0",
-  "load": "load1 3.9 to 4.3 (5-min 5.2 to 5.3)",
-  "wallSeconds": "13.20 / 13.01 / 12.23 for the gating run in vitest (14.2 / 13.9 / 13.2 s process real)",
-  "reason": "First recording, at the ABC-084 build. Every puzzle solved by the shipped engine in ADR-0027 deterministic mode at 25 virtual readings per move. Raising this is QE's; lowering it needs the owner's word (ABC-084 A7)."
+  "load": "load1 7.8 / 7.4 / 7.4 at start (7.4 / 14.4 / 9.9 at end; 5-min 38 / 34 / 22, other lanes running)",
+  "wallSeconds": "26.02 / 28.97 / 33.50 for the gating run in vitest",
+  "laneWallSeconds": "40.85 / 54.64 / 47.21 for the whole PUZZLE_DEEP=1 run in vitest, the gating run plus the A2 oracle rows (mate-in-3 8.28 / 17.62 / 7.88 s, win-material 5.99 / 7.48 / 5.20 s); 41.6 / 55.5 / 47.8 s process real",
+  "reason": "ABC-127: 22 harder rows appended (A1), so the recorded total moves 40 -> 62 and the solved count 40 -> 58. Not a lowering under ABC-084 A7: the count rises. The four unsolved rows are the headroom (A4), each solved at 4x the readings. Raising this is QE's; lowering it needs the owner's word."
 }

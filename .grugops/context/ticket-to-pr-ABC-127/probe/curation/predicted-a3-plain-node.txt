@@ -1,0 +1,19 @@
+total 62 baseline 58 unsolved 4 4x 62
+W1   solved  47 RED drop  11  new-missed 11 new-gained 0 
+W1b  solved  41 RED drop  17  new-missed 17 new-gained 0 
+W2   solved  53 RED drop   5  new-missed  5 new-gained 0 
+W3   solved  35 RED drop  23  new-missed 14 new-gained 0 
+W4   solved  44 RED drop  14  new-missed 14 new-gained 0 
+W5   solved  48 RED drop  10  new-missed 10 new-gained 0 
+W6   solved  54 RED drop   4  new-missed  2 new-gained 0 
+W7   solved  50 RED drop   8  new-missed  1 new-gained 0 
+W8   solved  53 RED drop   5  new-missed  2 new-gained 0 
+W9   solved  46 RED drop  12  new-missed 10 new-gained 0 
+W10  solved  58 green drop   0  new-missed  0 new-gained 0 
+W11  solved  58 green drop   0  new-missed  0 new-gained 0 
+W12  solved  48 RED drop  10  new-missed  2 new-gained 0 
+W13  solved  55 RED drop   3  new-missed  3 new-gained 0 
+W14  solved  56 RED drop   2  new-missed  2 new-gained 0 
+W15  solved  35 RED drop  23  new-missed 14 new-gained 0 
+W16  solved  48 RED drop  10  new-missed 10 new-gained 0 
+4x lost: [] gained ['m3-h24', 'm3-h234', 'm3-h288', 'm3-h580']

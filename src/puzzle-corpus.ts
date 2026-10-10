@@ -25,19 +25,43 @@
  * - do-not-hang: ABC-079's rows, each a capture of a defended piece by a more valuable one,
  *   labelled by hand.
  *
+ * ABC-127's rows (after those 40, each with `tags`) are SELECTED by the engine and ANSWERED by the
+ * rules. Seeded random placements were kept when QE's planted weakenings (ABC-084's 17) play a
+ * different move from the shipped engine, or when the shipped engine needs 4× the readings; the
+ * tags record which (`PuzzleTag`). Their accepted moves are never the engine's output:
+ * - mate-in-3: EXACTLY the first moves an exhaustive search over the legal moves finds to mate
+ *   in 3, with no mate in 2 or fewer;
+ * - win-material: EXACTLY the moves the material-only search above ranks best, with a gain of
+ *   >= 2 and every other move >= 2 behind.
+ * Both are re-proven in `PUZZLE_DEEP=1` (ABC-127 `A2`), the six win-material rows above included,
+ * and were derived first by an oracle with its own move generator. The generator, the seeds and
+ * the measurements: `.grugops/context/ticket-to-pr-ABC-127/`.
+ *
  * Not named `*.test.ts`, so vitest does not collect it; under `src/`, so `tsc` and Biome check
  * it. No production module imports it.
  */
+
+/**
+ * Why an ABC-127 row is in the suite (`A1`). `quiet-key`: every accepted move is neither a capture,
+ * a check nor a promotion — checked in the default lane. The other three are ENGINE MEASUREMENTS
+ * recorded with ABC-127's `A3` table, never answers: `depth≥5` — the shipped engine solves the row
+ * at the recorded config and, with the depth capped at 4 (QE's `W5`), does not; `quiescence` —
+ * likewise with quiescence off (`W1`); `headroom` — the shipped engine does NOT solve it at the
+ * recorded config and does at 4× the readings, so a stronger engine can show it.
+ */
+export type PuzzleTag = "quiet-key" | "depth≥5" | "quiescence" | "headroom";
 
 /** A puzzle: a position, its class, the move(s) that solve it — or the one that loses — and its source. */
 export type Puzzle =
   | {
       readonly name: string;
       readonly fen: string;
-      readonly kind: "mate-in-2" | "win-material";
+      readonly kind: "mate-in-2" | "mate-in-3" | "win-material";
       /** Solved when the chosen move is one of these. */
       readonly accept: readonly string[];
       readonly source: string;
+      /** ABC-127's rows only: why the row is here (`PuzzleTag`). */
+      readonly tags?: readonly PuzzleTag[];
     }
   | {
       readonly name: string;
@@ -90,6 +114,9 @@ export const HANGING_CORPUS: ReadonlyArray<{ name: string; fen: string; losing: 
 const MATE = "ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1";
 const WIN = "ABC-084, hand-built; keys = material-only 4-ply search, gain";
 const HANG = "ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled";
+const MATE3 =
+  "ABC-127, seeded random placement; keys = exhaustive mate-in-3 search, no mate in <= 2";
+const WIN3 = "ABC-127, seeded random placement; keys = material-only 4-ply search, gain";
 
 // biome-ignore format: one position per row keeps the corpus readable as a table
 export const PUZZLES: readonly Puzzle[] = [
@@ -110,4 +137,26 @@ export const PUZZLES: readonly Puzzle[] = [
   { name: "discovered check: the bishop moves, Rxd8", fen: "3q4/6k1/8/8/3B4/8/6PP/3R2K1 w - - 0 1", kind: "win-material", accept: ["d4e5", "d4c3", "d4b2", "d4a1"], source: `${WIN} +6` },
   { name: "queen fork: Qd5+ and Qxa8", fen: "r5k1/6pp/8/8/8/8/6PP/3Q2K1 w - - 0 1", kind: "win-material", accept: ["d1d5"], source: `${WIN} +5` },
   ...HANGING_CORPUS.map((row) => ({ ...row, kind: "do-not-hang" as const, source: HANG })),
+  { name: "mate in 3, seed 1: black Q+R against N", fen: "8/7K/8/8/1k6/8/8/q1r2N2 b - - 0 1", kind: "mate-in-3", accept: ["a1a6", "a1f6", "c1c6"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 1` },
+  { name: "mate in 3, seed 69: black 2R+B against 2P", fen: "2r5/K7/8/8/P7/4P1b1/8/k4r2 b - - 0 1", kind: "mate-in-3", accept: ["f1b1", "f1f6"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 69` },
+  { name: "mate in 3, seed 1008: black Q+R against a bare king", fen: "8/4q3/K7/8/8/8/4k1r1/8 b - - 0 1", kind: "mate-in-3", accept: ["e7b4", "e7c5"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 1008` },
+  { name: "mate in 3, seed 1075: black R+B+N against a bare king", fen: "K7/1r6/8/k7/8/8/3n4/5b2 b - - 0 1", kind: "mate-in-3", accept: ["b7c7"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 1075` },
+  { name: "mate in 3, seed 1424: white Q+2B+N against N", fen: "8/k7/2B5/5N2/n2K4/8/6QB/8 w - - 0 1", kind: "mate-in-3", accept: ["g2d5", "g2g7", "h2c7"], tags: ["depth≥5"], source: `${MATE3}, seed 1424` },
+  { name: "mate in 3, seed 1632: white Q+R+N against N+2P", fen: "8/2R1QpK1/5p2/8/8/8/7n/1N4k1 w - - 0 1", kind: "mate-in-3", accept: ["e7e2"], tags: ["quiet-key", "quiescence"], source: `${MATE3}, seed 1632` },
+  { name: "mate in 3, seed 1163: black 2R+B against N", fen: "8/1r6/2r5/3b4/8/1k5K/6N1/8 b - - 0 1", kind: "mate-in-3", accept: ["b7g7", "c6g6"], tags: ["quiet-key", "depth≥5", "quiescence"], source: `${MATE3}, seed 1163` },
+  { name: "mate in 3, seed 1982: black Q+R against a bare king", fen: "q7/8/8/6k1/1r6/8/4K3/8 b - - 0 1", kind: "mate-in-3", accept: ["a8a3", "b4b3"], tags: ["quiet-key", "depth≥5"], source: `${MATE3}, seed 1982` },
+  { name: "mate in 3, seed 24: black Q+N against P", fen: "4K3/8/5k2/8/2P5/1q6/8/6n1 b - - 0 1", kind: "mate-in-3", accept: ["b3b7"], tags: ["quiet-key", "headroom"], source: `${MATE3}, seed 24` },
+  { name: "mate in 3, seed 234: white Q+R against P", fen: "3R4/3K4/2Q5/7p/8/8/8/3k4 w - - 0 1", kind: "mate-in-3", accept: ["c6g2"], tags: ["quiet-key", "headroom"], source: `${MATE3}, seed 234` },
+  { name: "mate in 3, seed 288: white Q+B against a bare king", fen: "8/8/8/8/2B4k/4K3/Q7/8 w - - 0 1", kind: "mate-in-3", accept: ["e3f4"], tags: ["quiet-key", "headroom"], source: `${MATE3}, seed 288` },
+  { name: "mate in 3, seed 580: white Q+B against a bare king", fen: "8/4K3/8/8/7k/2B5/8/5Q2 w - - 0 1", kind: "mate-in-3", accept: ["e7f6"], tags: ["quiet-key", "headroom"], source: `${MATE3}, seed 580` },
+  { name: "win material, seed 7: black Q+P against R+N", fen: "1K6/8/7R/3q4/k7/2p3N1/8/8 b - - 0 1", kind: "win-material", accept: ["d5g8"], tags: ["quiescence"], source: `${WIN3} +5, seed 7` },
+  { name: "win material, seed 111: black Q+R+B+P against 2R+B+P", fen: "8/R7/7K/R3q1P1/1p2k3/1B6/r4b2/8 b - - 0 1", kind: "win-material", accept: ["a2a5"], tags: ["quiescence"], source: `${WIN3} +5, seed 111` },
+  { name: "win material, seed 1700: black R+B+N+2P against 2B+2N+P", fen: "8/7B/6r1/1P2b1p1/1k6/3p2N1/2nK4/N5B1 b - - 0 1", kind: "win-material", accept: ["g6g7", "g6h6"], tags: ["quiet-key", "quiescence"], source: `${WIN3} +2, seed 1700` },
+  { name: "win material, seed 1706: white Q+R+2P against Q+R+2P", fen: "8/7r/2k5/p4K2/2P5/1q6/P1Q2p2/R7 w - - 0 1", kind: "win-material", accept: ["c2e4"], tags: ["quiescence"], source: `${WIN3} +8, seed 1706` },
+  { name: "win material, seed 1811: white 2R+N+2P against 2B+N+2P", fen: "6n1/1k5b/5bP1/3K1p2/2NR4/3p4/4P3/5R2 w - - 0 1", kind: "win-material", accept: ["c4d6"], tags: ["quiescence"], source: `${WIN3} +3, seed 1811` },
+  { name: "win material, seed 5180: black R+N+P against Q+B+N", fen: "8/1p5N/6kr/3K4/1B5n/8/8/3Q4 b - - 0 1", kind: "win-material", accept: ["h6h7"], tags: ["depth≥5", "quiescence"], source: `${WIN3} +3, seed 5180` },
+  { name: "win material, seed 5464: black B+P against B+N", fen: "8/8/3B1K1N/8/k7/2p5/8/4b3 b - - 0 1", kind: "win-material", accept: ["e1d2"], tags: ["quiet-key", "depth≥5", "quiescence"], source: `${WIN3} +3, seed 5464` },
+  { name: "win material, seed 5061: white B+N+4P against Q+R+2B+N+P", fen: "8/nk1p3q/4b3/5P2/1P2P3/3r4/6NP/b4KB1 w - - 0 1", kind: "win-material", accept: ["f5e6", "g1a7"], tags: ["quiescence"], source: `${WIN3} +2, seed 5061` },
+  { name: "win material, seed 5527: black R+2B+2N+P against R+2N+3P", fen: "k2r1N1b/4n3/2R1N2K/7b/3P4/1p4PP/4n3/8 b - - 0 1", kind: "win-material", accept: ["e7c6"], tags: ["depth≥5", "quiescence"], source: `${WIN3} +3, seed 5527` },
+  { name: "win material, seed 279: black Q+3P against R+2N+P", fen: "8/7N/3p2pp/8/1N2R3/3P1K2/8/q2k4 b - - 0 1", kind: "win-material", accept: ["a1g7"], tags: ["quiet-key"], source: `${WIN3} +2, seed 279` },
 ];

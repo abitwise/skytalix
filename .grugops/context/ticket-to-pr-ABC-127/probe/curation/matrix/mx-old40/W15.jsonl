@@ -1,0 +1,40 @@
+{"name":"K+R: king steps up, rook mates","move":"a1a8","depth":25,"nodes":549,"solved":false}
+{"name":"smothered: Qg8+ Rxg8 Nf7#","move":"h6f5","depth":25,"nodes":962,"solved":false}
+{"name":"back rank: Re8+ Rxe8 Rxe8#","move":"e2e7","depth":25,"nodes":651,"solved":false}
+{"name":"two-rook ladder","move":"a2a8","depth":25,"nodes":812,"solved":false}
+{"name":"K+Q against the cornered king","move":"h1f3","depth":25,"nodes":654,"solved":false}
+{"name":"Anastasia: Qxh7+ Kxh7 Rh3#","move":"e7d5","depth":24,"nodes":1256,"solved":false}
+{"name":"mirror: back rank, Re1+ Rxe1 Rxe1#","move":"e7e2","depth":25,"nodes":639,"solved":false}
+{"name":"mirror: smothered, Qg1+ Rxg1 Nf2#","move":"h3f4","depth":25,"nodes":958,"solved":false}
+{"name":"mirror: K+R, king steps up","move":"f3f2","depth":25,"nodes":552,"solved":true}
+{"name":"mirror: two-rook ladder","move":"a7g7","depth":25,"nodes":810,"solved":false}
+{"name":"knight fork: Ne7+ wins the queen","move":"d5e7","depth":25,"nodes":665,"solved":true}
+{"name":"pawn fork: e5 hits knight and rook","move":"e4e5","depth":25,"nodes":304,"solved":true}
+{"name":"pin: Re1 pins the queen to the king","move":"a1e1","depth":25,"nodes":466,"solved":true}
+{"name":"skewer: Ra6+ and Rxh6","move":"a1a6","depth":25,"nodes":574,"solved":true}
+{"name":"discovered check: the bishop moves, Rxd8","move":"d4e5","depth":25,"nodes":743,"solved":true}
+{"name":"queen fork: Qd5+ and Qxa8","move":"d1d5","depth":25,"nodes":736,"solved":true}
+{"name":"Q takes a pawn a rook defends","move":"a1a4","depth":25,"nodes":521,"solved":true}
+{"name":"R takes a pawn the king defends","move":"e1f1","depth":25,"nodes":403,"solved":true}
+{"name":"B takes a pawn a pawn defends","move":"e1e2","depth":25,"nodes":275,"solved":true}
+{"name":"N takes a pawn a pawn defends","move":"e1e2","depth":25,"nodes":296,"solved":true}
+{"name":"Q takes a knight a rook defends","move":"a1a6","depth":25,"nodes":481,"solved":true}
+{"name":"R takes a knight a pawn defends","move":"f1g1","depth":25,"nodes":259,"solved":true}
+{"name":"Q takes a rook the king defends","move":"a1c3","depth":25,"nodes":586,"solved":true}
+{"name":"Q takes a bishop a knight defends","move":"a1b1","depth":25,"nodes":518,"solved":true}
+{"name":"R takes a bishop a pawn defends","move":"e1f1","depth":25,"nodes":142,"solved":true}
+{"name":"R takes a pawn a bishop defends","move":"e1f1","depth":25,"nodes":298,"solved":true}
+{"name":"Q takes a pawn a knight defends","move":"a1a4","depth":25,"nodes":403,"solved":true}
+{"name":"B takes a pawn a rook defends","move":"b1a2","depth":25,"nodes":262,"solved":true}
+{"name":"mirror: q takes a pawn a rook defends","move":"a8a5","depth":25,"nodes":539,"solved":true}
+{"name":"mirror: r takes a pawn the king defends","move":"e8f8","depth":25,"nodes":393,"solved":true}
+{"name":"mirror: b takes a pawn a pawn defends","move":"e8e7","depth":25,"nodes":292,"solved":true}
+{"name":"mirror: n takes a pawn a pawn defends","move":"e8e7","depth":25,"nodes":320,"solved":true}
+{"name":"mirror: q takes a knight a rook defends","move":"a8b8","depth":25,"nodes":510,"solved":true}
+{"name":"mirror: r takes a knight a pawn defends","move":"f8g8","depth":25,"nodes":272,"solved":true}
+{"name":"mirror: q takes a rook the king defends","move":"a8c6","depth":25,"nodes":586,"solved":true}
+{"name":"mirror: q takes a bishop a knight defends","move":"a8b8","depth":25,"nodes":522,"solved":true}
+{"name":"mirror: r takes a bishop a pawn defends","move":"e8f8","depth":25,"nodes":157,"solved":true}
+{"name":"mirror: r takes a pawn a bishop defends","move":"e8f8","depth":25,"nodes":276,"solved":true}
+{"name":"mirror: q takes a pawn a knight defends","move":"a8a5","depth":25,"nodes":406,"solved":true}
+{"name":"mirror: b takes a pawn a rook defends","move":"b8a7","depth":25,"nodes":280,"solved":true}

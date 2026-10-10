@@ -1,0 +1,6 @@
+A: files 50 tests 1543 median cpu 27.625 s wall 8.525 s
+N: files 50 tests 1543 median cpu 27.810000000000002 s wall 10.120000000000001 s
+B: files 50 tests 1540 median cpu 27.29 s wall 8.5 s
+null N-A median -0.14 %
+A-B gross median 435 ms, sign 6/8
+load1 before runs: min 5.63 median 15.125 max 59.57; harness errors 0

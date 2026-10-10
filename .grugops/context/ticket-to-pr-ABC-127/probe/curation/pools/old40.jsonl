@@ -1,0 +1,40 @@
+{"name":"K+R: king steps up, rook mates","fen":"7k/8/5K2/8/8/8/8/R7 w - - 0 1","kind":"mate-in-2","accept":["f6f7","f6g6"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1; ABC-077 search.test.ts A3's MATE_IN_2"}
+{"name":"smothered: Qg8+ Rxg8 Nf7#","fen":"5r1k/6pp/7N/3Q4/8/8/8/6K1 w - - 0 1","kind":"mate-in-2","accept":["d5g8"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1"}
+{"name":"back rank: Re8+ Rxe8 Rxe8#","fen":"2r3k1/5ppp/8/8/8/8/4R3/4R1K1 w - - 0 1","kind":"mate-in-2","accept":["e2e8"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1"}
+{"name":"two-rook ladder","fen":"7k/8/8/8/8/8/R7/1R4K1 w - - 0 1","kind":"mate-in-2","accept":["b1b7","a2a7"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1"}
+{"name":"K+Q against the cornered king","fen":"k7/8/2K5/8/8/8/8/7Q w - - 0 1","kind":"mate-in-2","accept":["h1h7","h1b1","c6c7","c6b6"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1"}
+{"name":"Anastasia: Qxh7+ Kxh7 Rh3#","fen":"r6k/4N1pp/8/7Q/8/3R4/8/6K1 w - - 0 1","kind":"mate-in-2","accept":["h5h7","e7g6"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1"}
+{"name":"mirror: back rank, Re1+ Rxe1 Rxe1#","fen":"4r1k1/4r3/8/8/8/8/5PPP/2R3K1 b - - 0 1","kind":"mate-in-2","accept":["e7e1"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1"}
+{"name":"mirror: smothered, Qg1+ Rxg1 Nf2#","fen":"6k1/8/8/8/3q4/7n/6PP/5R1K b - - 0 1","kind":"mate-in-2","accept":["d4g1"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1"}
+{"name":"mirror: K+R, king steps up","fen":"r7/8/8/8/8/5k2/8/7K b - - 0 1","kind":"mate-in-2","accept":["f3g3","f3f2"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1"}
+{"name":"mirror: two-rook ladder","fen":"1r4k1/r7/8/8/8/8/8/7K b - - 0 1","kind":"mate-in-2","accept":["a7a2","b8b2"],"source":"ABC-084, hand-built; keys = exhaustive mate-in-2 search, no mate in 1"}
+{"name":"knight fork: Ne7+ wins the queen","fen":"6k1/5ppp/2q5/3N4/8/8/5PPP/6K1 w - - 0 1","kind":"win-material","accept":["d5e7"],"source":"ABC-084, hand-built; keys = material-only 4-ply search, gain +9"}
+{"name":"pawn fork: e5 hits knight and rook","fen":"6k1/6pp/3n1r2/8/3PP3/2P5/6PP/6K1 w - - 0 1","kind":"win-material","accept":["e4e5"],"source":"ABC-084, hand-built; keys = material-only 4-ply search, gain +2"}
+{"name":"pin: Re1 pins the queen to the king","fen":"4k2p/8/8/4q3/8/1P6/P2K4/R7 w - - 0 1","kind":"win-material","accept":["a1e1"],"source":"ABC-084, hand-built; keys = material-only 4-ply search, gain +4"}
+{"name":"skewer: Ra6+ and Rxh6","fen":"8/7p/3k3q/8/8/8/6PP/R5K1 w - - 0 1","kind":"win-material","accept":["a1a6"],"source":"ABC-084, hand-built; keys = material-only 4-ply search, gain +10"}
+{"name":"discovered check: the bishop moves, Rxd8","fen":"3q4/6k1/8/8/3B4/8/6PP/3R2K1 w - - 0 1","kind":"win-material","accept":["d4e5","d4c3","d4b2","d4a1"],"source":"ABC-084, hand-built; keys = material-only 4-ply search, gain +6"}
+{"name":"queen fork: Qd5+ and Qxa8","fen":"r5k1/6pp/8/8/8/8/6PP/3Q2K1 w - - 0 1","kind":"win-material","accept":["d1d5"],"source":"ABC-084, hand-built; keys = material-only 4-ply search, gain +5"}
+{"name":"Q takes a pawn a rook defends","fen":"4k3/4r3/8/4p3/8/8/8/Q3K3 w - - 0 1","losing":"a1e5","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"R takes a pawn the king defends","fen":"k7/p7/8/8/8/8/8/R3K3 w - - 0 1","losing":"a1a7","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"B takes a pawn a pawn defends","fen":"4k3/8/8/3p4/4p3/8/8/1B2K3 w - - 0 1","losing":"b1e4","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"N takes a pawn a pawn defends","fen":"4k3/8/8/4p3/3p4/8/2N5/4K3 w - - 0 1","losing":"c2d4","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"Q takes a knight a rook defends","fen":"1r2k3/8/8/8/8/8/1n6/Q3K3 w - - 0 1","losing":"a1b2","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"R takes a knight a pawn defends","fen":"4k3/8/8/8/2p5/3n4/8/3R1K2 w - - 0 1","losing":"d1d3","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"Q takes a rook the king defends","fen":"k7/r7/8/8/8/8/8/Q3K3 w - - 0 1","losing":"a1a7","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"Q takes a bishop a knight defends","fen":"4k3/8/8/8/8/3n4/1b6/Q4K2 w - - 0 1","losing":"a1b2","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"R takes a bishop a pawn defends","fen":"4k3/8/1p6/b7/8/8/8/R3K3 w - - 0 1","losing":"a1a5","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"R takes a pawn a bishop defends","fen":"4k3/6p1/8/8/8/b7/1p6/1R2K3 w - - 0 1","losing":"b1b2","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"Q takes a pawn a knight defends","fen":"4k3/8/8/8/2n5/8/1p6/Q3K3 w - - 0 1","losing":"a1b2","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"B takes a pawn a rook defends","fen":"4r1k1/8/8/8/4p3/8/8/1B2K3 w - - 0 1","losing":"b1e4","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: q takes a pawn a rook defends","fen":"q3k3/8/8/8/4P3/8/4R3/4K3 b - - 0 1","losing":"a8e4","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: r takes a pawn the king defends","fen":"r3k3/8/8/8/8/8/P7/K7 b - - 0 1","losing":"a8a2","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: b takes a pawn a pawn defends","fen":"1b2k3/8/8/4P3/3P4/8/8/4K3 b - - 0 1","losing":"b8e5","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: n takes a pawn a pawn defends","fen":"4k3/2n5/8/3P4/4P3/8/8/4K3 b - - 0 1","losing":"c7d5","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: q takes a knight a rook defends","fen":"q3k3/1N6/8/8/8/8/8/1R2K3 b - - 0 1","losing":"a8b7","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: r takes a knight a pawn defends","fen":"3r1k2/8/3N4/2P5/8/8/8/4K3 b - - 0 1","losing":"d8d6","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: q takes a rook the king defends","fen":"q3k3/8/8/8/8/8/R7/K7 b - - 0 1","losing":"a8a2","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: q takes a bishop a knight defends","fen":"q4k2/1B6/3N4/8/8/8/8/4K3 b - - 0 1","losing":"a8b7","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: r takes a bishop a pawn defends","fen":"r3k3/8/8/8/B7/1P6/8/4K3 b - - 0 1","losing":"a8a4","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: r takes a pawn a bishop defends","fen":"1r2k3/1P6/B7/8/8/8/6P1/4K3 b - - 0 1","losing":"b8b7","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: q takes a pawn a knight defends","fen":"q3k3/1P6/8/2N5/8/8/8/4K3 b - - 0 1","losing":"a8b7","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}
+{"name":"mirror: b takes a pawn a rook defends","fen":"1b2k3/8/8/4P3/8/8/8/4R1K1 b - - 0 1","losing":"b8e5","kind":"do-not-hang","source":"ABC-079 HANGING_CORPUS (quiescence A1), hand-labelled"}

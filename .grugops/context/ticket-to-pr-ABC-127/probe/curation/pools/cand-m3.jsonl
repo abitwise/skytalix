@@ -1,0 +1,119 @@
+{"name": "m3-1", "fen": "8/7K/8/8/1k6/8/8/q1r2N2 b - - 0 1", "kind": "mate-in-3", "accept": ["a1a6", "a1f6", "c1c6"], "quietKey": true, "seed": 1, "pool": "pools/m3.jsonl"}
+{"name": "m3-10", "fen": "1R6/7p/8/1Kpk4/8/6n1/1Q6/8 w - - 0 1", "kind": "mate-in-3", "accept": ["b8e8"], "quietKey": true, "seed": 10, "pool": "pools/m3.jsonl"}
+{"name": "m3-37", "fen": "8/8/3R4/k7/2n5/1pK4Q/5n2/8 w - - 0 1", "kind": "mate-in-3", "accept": ["h3f5", "h3h5"], "quietKey": false, "seed": 37, "pool": "pools/m3.jsonl"}
+{"name": "m3-68", "fen": "3K4/5q2/1k6/N7/8/r1N5/8/r7 b - - 0 1", "kind": "mate-in-3", "accept": ["a1d1", "a3a5"], "quietKey": false, "seed": 68, "pool": "pools/m3.jsonl"}
+{"name": "m3-69", "fen": "2r5/K7/8/8/P7/4P1b1/8/k4r2 b - - 0 1", "kind": "mate-in-3", "accept": ["f1b1", "f1f6"], "quietKey": true, "seed": 69, "pool": "pools/m3.jsonl"}
+{"name": "m3-73", "fen": "8/6p1/8/6p1/Q7/4K3/R2p2NN/6k1 w - - 0 1", "kind": "mate-in-3", "accept": ["h2f3"], "quietKey": false, "seed": 73, "pool": "pools/m3.jsonl"}
+{"name": "m3-74", "fen": "8/K7/7q/3r4/2k5/4R3/8/3B4 b - - 0 1", "kind": "mate-in-3", "accept": ["d5d7"], "quietKey": false, "seed": 74, "pool": "pools/m3.jsonl"}
+{"name": "m3-154", "fen": "2k5/2p2K2/8/3p4/8/Q7/8/4R3 w - - 0 1", "kind": "mate-in-3", "accept": ["a3a6", "a3a7", "a3a8"], "quietKey": false, "seed": 154, "pool": "pools/m3.jsonl"}
+{"name": "m3-155", "fen": "2k5/8/6q1/8/7K/3N4/3n4/8 b - - 0 1", "kind": "mate-in-3", "accept": ["d2e4"], "quietKey": true, "seed": 155, "pool": "pools/m3.jsonl"}
+{"name": "m3-177", "fen": "6Q1/8/4K3/8/8/2B4k/8/8 w - - 0 1", "kind": "mate-in-3", "accept": ["c3e1", "c3e5"], "quietKey": true, "seed": 177, "pool": "pools/m3.jsonl"}
+{"name": "m3-210", "fen": "8/1K4Q1/8/8/8/1p5k/8/3N4 w - - 0 1", "kind": "mate-in-3", "accept": ["d1e3"], "quietKey": true, "seed": 210, "pool": "pools/m3.jsonl"}
+{"name": "m3-248", "fen": "6k1/4p3/7p/5Q2/K5P1/8/R7/8 w - - 0 1", "kind": "mate-in-3", "accept": ["f5g6"], "quietKey": false, "seed": 248, "pool": "pools/m3.jsonl"}
+{"name": "m3-317", "fen": "K1R1N3/8/8/2P5/7P/7n/4qk2/3r4 b - - 0 1", "kind": "mate-in-3", "accept": ["d1b1", "e2a6"], "quietKey": false, "seed": 317, "pool": "pools/m3.jsonl"}
+{"name": "m3-340", "fen": "8/8/pK1n4/3QR3/6p1/8/7p/5k2 w - - 0 1", "kind": "mate-in-3", "accept": ["d5d3"], "quietKey": false, "seed": 340, "pool": "pools/m3.jsonl"}
+{"name": "m3-344", "fen": "8/5N2/KP6/8/3P4/8/3Q4/k7 w - - 0 1", "kind": "mate-in-3", "accept": ["b6b7", "f7d6", "f7e5"], "quietKey": true, "seed": 344, "pool": "pools/m3.jsonl"}
+{"name": "m3-357", "fen": "1K6/1p6/8/8/R7/8/7k/1R6 w - - 0 1", "kind": "mate-in-3", "accept": ["a4a3", "b1b3"], "quietKey": true, "seed": 357, "pool": "pools/m3.jsonl"}
+{"name": "m3-424", "fen": "8/8/4b2q/8/8/3k4/8/6K1 b - - 0 1", "kind": "mate-in-3", "accept": ["h6d2"], "quietKey": true, "seed": 424, "pool": "pools/m3.jsonl"}
+{"name": "m3-433", "fen": "7k/8/8/4p3/6Q1/5NK1/8/8 w - - 0 1", "kind": "mate-in-3", "accept": ["f3e5", "f3h4", "g4g6"], "quietKey": false, "seed": 433, "pool": "pools/m3.jsonl"}
+{"name": "m3-449", "fen": "8/K7/5k2/8/8/3n1q2/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["f3c6"], "quietKey": true, "seed": 449, "pool": "pools/m3.jsonl"}
+{"name": "m3-463", "fen": "K7/2r5/8/8/2k5/4b3/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["c4b5", "c4c5", "c4d5"], "quietKey": true, "seed": 463, "pool": "pools/m3.jsonl"}
+{"name": "m3-464", "fen": "2K2k1q/8/7P/8/7r/8/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["h4c4", "h8c3", "h8h7"], "quietKey": false, "seed": 464, "pool": "pools/m3.jsonl"}
+{"name": "m3-470", "fen": "1k6/8/r7/5P2/5PK1/3B4/2r4q/2R5 b - - 0 1", "kind": "mate-in-3", "accept": ["h2g2"], "quietKey": false, "seed": 470, "pool": "pools/m3.jsonl"}
+{"name": "m3-499", "fen": "7B/8/4p3/1K6/7Q/3Rn3/2p5/1b3k2 w - - 0 1", "kind": "mate-in-3", "accept": ["d3d2"], "quietKey": true, "seed": 499, "pool": "pools/m3.jsonl"}
+{"name": "m3-546", "fen": "8/8/8/2n1R3/8/8/7k/1BK3R1 w - - 0 1", "kind": "mate-in-3", "accept": ["g1g6", "g1g7", "g1g8"], "quietKey": true, "seed": 546, "pool": "pools/m3.jsonl"}
+{"name": "m3-558", "fen": "5q1r/2K5/8/8/P7/k7/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["f8f6", "h8h6"], "quietKey": true, "seed": 558, "pool": "pools/m3.jsonl"}
+{"name": "m3-601", "fen": "8/1p2n3/2p5/2N5/p4K2/8/2Q5/k7 w - - 0 1", "kind": "mate-in-3", "accept": ["c5a4"], "quietKey": false, "seed": 601, "pool": "pools/m3.jsonl"}
+{"name": "m3-648", "fen": "4R3/5qk1/8/8/8/8/6N1/K2n4 b - - 0 1", "kind": "mate-in-3", "accept": ["f7f6"], "quietKey": false, "seed": 648, "pool": "pools/m3.jsonl"}
+{"name": "m3-652", "fen": "3k4/4n2q/3r4/8/7B/8/7K/8 b - - 0 1", "kind": "mate-in-3", "accept": ["d6g6"], "quietKey": true, "seed": 652, "pool": "pools/m3.jsonl"}
+{"name": "m3-673", "fen": "4k3/8/8/8/7p/8/7K/1q6 b - - 0 1", "kind": "mate-in-3", "accept": ["b1g6"], "quietKey": true, "seed": 673, "pool": "pools/m3.jsonl"}
+{"name": "m3-702", "fen": "K1NN4/7n/1P3k2/6R1/6q1/8/2b5/5r2 b - - 0 1", "kind": "mate-in-3", "accept": ["g4c8"], "quietKey": false, "seed": 702, "pool": "pools/m3.jsonl"}
+{"name": "m3-707", "fen": "8/8/4K1N1/k7/2Q5/3N4/8/8 w - - 0 1", "kind": "mate-in-3", "accept": ["c4b4"], "quietKey": false, "seed": 707, "pool": "pools/m3.jsonl"}
+{"name": "m3-752", "fen": "k5q1/8/1b6/8/3p4/8/Pn5K/8 b - - 0 1", "kind": "mate-in-3", "accept": ["b2d1", "b2d3", "b6c7"], "quietKey": false, "seed": 752, "pool": "pools/m3.jsonl"}
+{"name": "m3-841", "fen": "8/5Q2/1n3R2/8/4K3/7P/8/2k4n w - - 0 1", "kind": "mate-in-3", "accept": ["f7a2"], "quietKey": true, "seed": 841, "pool": "pools/m3.jsonl"}
+{"name": "m3-848", "fen": "2k1q3/8/8/8/8/8/1P5p/7K b - - 0 1", "kind": "mate-in-3", "accept": ["e8e2"], "quietKey": true, "seed": 848, "pool": "pools/m3.jsonl"}
+{"name": "m3-855", "fen": "7k/8/Q6r/7R/8/4K3/4n3/4N3 w - - 0 1", "kind": "mate-in-3", "accept": ["a6f6", "a6h6", "h5h6"], "quietKey": false, "seed": 855, "pool": "pools/m3.jsonl"}
+{"name": "m3-864", "fen": "5n2/kNp5/bR6/8/8/2RQ4/5K1b/8 w - - 0 1", "kind": "mate-in-3", "accept": ["b6a6", "d3a6"], "quietKey": false, "seed": 864, "pool": "pools/m3.jsonl"}
+{"name": "m3-871", "fen": "2K5/2b3q1/3R4/7k/8/4P3/8/N7 b - - 0 1", "kind": "mate-in-3", "accept": ["c7d6"], "quietKey": false, "seed": 871, "pool": "pools/m3.jsonl"}
+{"name": "m3-883", "fen": "8/7K/8/6k1/8/8/8/3q4 b - - 0 1", "kind": "mate-in-3", "accept": ["d1d4", "d1d7", "g5f6"], "quietKey": false, "seed": 883, "pool": "pools/m3.jsonl"}
+{"name": "m3-895", "fen": "1k6/3b4/q7/8/8/8/8/6K1 b - - 0 1", "kind": "mate-in-3", "accept": ["a6e2"], "quietKey": true, "seed": 895, "pool": "pools/m3.jsonl"}
+{"name": "m3-930", "fen": "q1k5/8/8/8/8/R7/n5b1/K1n5 b - - 0 1", "kind": "mate-in-3", "accept": ["a8a3"], "quietKey": false, "seed": 930, "pool": "pools/m3.jsonl"}
+{"name": "m3-962", "fen": "nk6/3Q4/8/2K5/8/3R4/8/8 w - - 0 1", "kind": "mate-in-3", "accept": ["c5c6", "d3b3", "d7c6"], "quietKey": false, "seed": 962, "pool": "pools/m3.jsonl"}
+{"name": "m3-987", "fen": "3R4/4n3/K3pN1n/8/8/3Q4/1p6/k7 w - - 0 1", "kind": "mate-in-3", "accept": ["d3a3", "d8b8"], "quietKey": false, "seed": 987, "pool": "pools/m3.jsonl"}
+{"name": "m3-1008", "fen": "8/4q3/K7/8/8/8/4k1r1/8 b - - 0 1", "kind": "mate-in-3", "accept": ["e7b4", "e7c5"], "quietKey": true, "seed": 1008, "pool": "pools/m3.jsonl"}
+{"name": "m3-1013", "fen": "4N3/7n/6Nn/8/8/8/2Q4K/4k3 w - - 0 1", "kind": "mate-in-3", "accept": ["g6f4", "h2g2"], "quietKey": true, "seed": 1013, "pool": "pools/m3.jsonl"}
+{"name": "m3-1022", "fen": "3K4/4n3/8/2k5/8/3p4/5r2/8 b - - 0 1", "kind": "mate-in-3", "accept": ["c5d6"], "quietKey": true, "seed": 1022, "pool": "pools/m3.jsonl"}
+{"name": "m3-1049", "fen": "8/5Q2/K7/5R2/8/4n3/8/7k w - - 0 1", "kind": "mate-in-3", "accept": ["f5f2", "f5g5"], "quietKey": true, "seed": 1049, "pool": "pools/m3.jsonl"}
+{"name": "m3-1051", "fen": "8/4Q3/8/8/4N3/7p/k2N4/6K1 w - - 0 1", "kind": "mate-in-3", "accept": ["e7b4", "e7b7"], "quietKey": true, "seed": 1051, "pool": "pools/m3.jsonl"}
+{"name": "m3-1061", "fen": "8/5k2/2B5/2K5/7P/8/8/2Q5 w - - 0 1", "kind": "mate-in-3", "accept": ["c1h6"], "quietKey": true, "seed": 1061, "pool": "pools/m3.jsonl"}
+{"name": "m3-1075", "fen": "K7/1r6/8/k7/8/8/3n4/5b2 b - - 0 1", "kind": "mate-in-3", "accept": ["b7c7"], "quietKey": true, "seed": 1075, "pool": "pools/m3.jsonl"}
+{"name": "m3-1091", "fen": "4q3/8/8/n7/8/Nk6/3B4/K7 b - - 0 1", "kind": "mate-in-3", "accept": ["e8e5", "e8h8"], "quietKey": false, "seed": 1091, "pool": "pools/m3.jsonl"}
+{"name": "m3-1104", "fen": "8/R4q2/3B2r1/8/8/8/2k5/K1N5 b - - 0 1", "kind": "mate-in-3", "accept": ["f7a7", "f7f6"], "quietKey": false, "seed": 1104, "pool": "pools/m3.jsonl"}
+{"name": "m3-1108", "fen": "8/8/8/2K3Q1/1B6/8/k7/8 w - - 0 1", "kind": "mate-in-3", "accept": ["g5c1", "g5d2", "g5g2"], "quietKey": false, "seed": 1108, "pool": "pools/m3.jsonl"}
+{"name": "m3-1135", "fen": "7k/1b6/3q4/8/8/8/K7/8 b - - 0 1", "kind": "mate-in-3", "accept": ["d6b4"], "quietKey": true, "seed": 1135, "pool": "pools/m3.jsonl"}
+{"name": "m3-1151", "fen": "Q2B4/7b/N7/4K3/8/1B6/8/1k6 w - - 0 1", "kind": "mate-in-3", "accept": ["a6c5", "a8g2"], "quietKey": true, "seed": 1151, "pool": "pools/m3.jsonl"}
+{"name": "m3-1152", "fen": "K7/5PN1/8/8/4r3/8/5kN1/2q5 b - - 0 1", "kind": "mate-in-3", "accept": ["c1c6", "e4a4"], "quietKey": false, "seed": 1152, "pool": "pools/m3.jsonl"}
+{"name": "m3-1163", "fen": "8/1r6/2r5/3b4/8/1k5K/6N1/8 b - - 0 1", "kind": "mate-in-3", "accept": ["b7g7", "c6g6"], "quietKey": true, "seed": 1163, "pool": "pools/m3.jsonl"}
+{"name": "m3-1166", "fen": "6k1/8/5Ppp/8/Q3p2b/8/8/K7 w - - 0 1", "kind": "mate-in-3", "accept": ["a4e8"], "quietKey": false, "seed": 1166, "pool": "pools/m3.jsonl"}
+{"name": "m3-1173", "fen": "8/k6b/8/K7/8/5q2/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["f3b7", "f3c3"], "quietKey": false, "seed": 1173, "pool": "pools/m3.jsonl"}
+{"name": "m3-1199", "fen": "5k2/2Q5/n7/K7/4r3/1R3r2/8/n5R1 w - - 0 1", "kind": "mate-in-3", "accept": ["b3f3"], "quietKey": false, "seed": 1199, "pool": "pools/m3.jsonl"}
+{"name": "m3-1214", "fen": "4k1N1/8/1K6/8/2B5/8/8/R7 w - - 0 1", "kind": "mate-in-3", "accept": ["a1a7", "b6c6", "c4e6"], "quietKey": true, "seed": 1214, "pool": "pools/m3.jsonl"}
+{"name": "m3-1232", "fen": "6k1/8/8/7b/6q1/3N4/5N2/3n3K b - - 0 1", "kind": "mate-in-3", "accept": ["g4g3"], "quietKey": true, "seed": 1232, "pool": "pools/m3.jsonl"}
+{"name": "m3-1236", "fen": "1Q6/8/8/1K6/8/8/8/k7 w - - 0 1", "kind": "mate-in-3", "accept": ["b5c4"], "quietKey": true, "seed": 1236, "pool": "pools/m3.jsonl"}
+{"name": "m3-1249", "fen": "2Q1r3/8/8/3N4/2nR3K/6N1/8/2k5 w - - 0 1", "kind": "mate-in-3", "accept": ["d4c4"], "quietKey": false, "seed": 1249, "pool": "pools/m3.jsonl"}
+{"name": "m3-1250", "fen": "8/1q6/7n/3n2k1/8/K7/8/5B2 b - - 0 1", "kind": "mate-in-3", "accept": ["b7b4"], "quietKey": false, "seed": 1250, "pool": "pools/m3.jsonl"}
+{"name": "m3-1392", "fen": "2q5/1P1n4/2r5/7N/3P4/KP5r/6k1/8 b - - 0 1", "kind": "mate-in-3", "accept": ["c6a6"], "quietKey": false, "seed": 1392, "pool": "pools/m3.jsonl"}
+{"name": "m3-1397", "fen": "8/6p1/8/8/p4K2/1pQ5/6r1/5B1k w - - 0 1", "kind": "mate-in-3", "accept": ["c3c6", "c3f3"], "quietKey": true, "seed": 1397, "pool": "pools/m3.jsonl"}
+{"name": "m3-1405", "fen": "8/N7/1q6/4n1k1/4p3/6P1/5N2/6K1 b - - 0 1", "kind": "mate-in-3", "accept": ["e5g4"], "quietKey": true, "seed": 1405, "pool": "pools/m3.jsonl"}
+{"name": "m3-1424", "fen": "8/k7/2B5/5N2/n2K4/8/6QB/8 w - - 0 1", "kind": "mate-in-3", "accept": ["g2d5", "g2g7", "h2c7"], "quietKey": false, "seed": 1424, "pool": "pools/m3.jsonl"}
+{"name": "m3-1438", "fen": "8/K6p/2r2R2/k6P/6N1/q7/1n6/8 b - - 0 1", "kind": "mate-in-3", "accept": ["a3c5", "a3e7"], "quietKey": false, "seed": 1438, "pool": "pools/m3.jsonl"}
+{"name": "m3-1446", "fen": "6q1/2rpr3/7k/8/4P3/1P1N4/8/K7 b - - 0 1", "kind": "mate-in-3", "accept": ["c7c2", "g8b3"], "quietKey": false, "seed": 1446, "pool": "pools/m3.jsonl"}
+{"name": "m3-1447", "fen": "8/4p2k/8/8/2N5/6QK/p7/8 w - - 0 1", "kind": "mate-in-3", "accept": ["c4e5"], "quietKey": true, "seed": 1447, "pool": "pools/m3.jsonl"}
+{"name": "m3-1473", "fen": "8/8/7k/8/QK6/5N2/8/1R6 w - - 0 1", "kind": "mate-in-3", "accept": ["a4d7", "b1g1"], "quietKey": true, "seed": 1473, "pool": "pools/m3.jsonl"}
+{"name": "m3-1488", "fen": "7n/8/k7/3nq3/6pK/8/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["e5f4"], "quietKey": true, "seed": 1488, "pool": "pools/m3.jsonl"}
+{"name": "m3-1490", "fen": "K7/8/8/5q2/2b3P1/B7/8/3k4 b - - 0 1", "kind": "mate-in-3", "accept": ["f5b5", "f5c8", "f5d7"], "quietKey": false, "seed": 1490, "pool": "pools/m3.jsonl"}
+{"name": "m3-1531", "fen": "k3K3/5r2/8/6p1/3N4/1Q6/8/8 w - - 0 1", "kind": "mate-in-3", "accept": ["b3f7", "d4c6"], "quietKey": false, "seed": 1531, "pool": "pools/m3.jsonl"}
+{"name": "m3-1546", "fen": "3k4/8/8/2Q5/5R2/K7/4p3/8 w - - 0 1", "kind": "mate-in-3", "accept": ["c5d6", "f4d4", "f4f7"], "quietKey": false, "seed": 1546, "pool": "pools/m3.jsonl"}
+{"name": "m3-1586", "fen": "7K/8/n5P1/N7/2Pn3k/P2q4/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["d3g6", "d4e6"], "quietKey": false, "seed": 1586, "pool": "pools/m3.jsonl"}
+{"name": "m3-1603", "fen": "K7/8/7N/5P2/n2k4/8/1q5N/8 b - - 0 1", "kind": "mate-in-3", "accept": ["a4c5"], "quietKey": true, "seed": 1603, "pool": "pools/m3.jsonl"}
+{"name": "m3-1606", "fen": "2k5/8/4N3/8/8/8/6Q1/7K w - - 0 1", "kind": "mate-in-3", "accept": ["g2c6"], "quietKey": false, "seed": 1606, "pool": "pools/m3.jsonl"}
+{"name": "m3-1610", "fen": "8/3K4/8/3Q4/8/PB6/8/6k1 w - - 0 1", "kind": "mate-in-3", "accept": ["d5d2", "d5f3"], "quietKey": true, "seed": 1610, "pool": "pools/m3.jsonl"}
+{"name": "m3-1632", "fen": "8/2R1QpK1/5p2/8/8/8/7n/1N4k1 w - - 0 1", "kind": "mate-in-3", "accept": ["e7e2"], "quietKey": true, "seed": 1632, "pool": "pools/m3.jsonl"}
+{"name": "m3-1643", "fen": "8/8/5k2/8/K7/4b3/8/n6q b - - 0 1", "kind": "mate-in-3", "accept": ["h1b1", "h1b7", "h1d5"], "quietKey": true, "seed": 1643, "pool": "pools/m3.jsonl"}
+{"name": "m3-1650", "fen": "8/2Q1r3/8/7N/6B1/8/8/3K3k w - - 0 1", "kind": "mate-in-3", "accept": ["g4f3"], "quietKey": false, "seed": 1650, "pool": "pools/m3.jsonl"}
+{"name": "m3-1672", "fen": "1k6/7K/8/8/2n4b/q7/b7/8 b - - 0 1", "kind": "mate-in-3", "accept": ["a3e7", "a3f8", "a3g3"], "quietKey": false, "seed": 1672, "pool": "pools/m3.jsonl"}
+{"name": "m3-1683", "fen": "8/4Rp2/1bp5/8/7Q/k7/2r5/3K4 w - - 0 1", "kind": "mate-in-3", "accept": ["d1c2"], "quietKey": false, "seed": 1683, "pool": "pools/m3.jsonl"}
+{"name": "m3-1710", "fen": "3RQ3/3p4/7k/8/b6K/8/8/4n2R w - - 0 1", "kind": "mate-in-3", "accept": ["e8f7", "h4g4"], "quietKey": false, "seed": 1710, "pool": "pools/m3.jsonl"}
+{"name": "m3-1730", "fen": "8/8/8/8/k7/8/7R/6KQ w - - 0 1", "kind": "mate-in-3", "accept": ["h1b7", "h2b2"], "quietKey": true, "seed": 1730, "pool": "pools/m3.jsonl"}
+{"name": "m3-1735", "fen": "3B4/p4Q2/7k/8/2K5/8/3P4/8 w - - 0 1", "kind": "mate-in-3", "accept": ["d8f6"], "quietKey": true, "seed": 1735, "pool": "pools/m3.jsonl"}
+{"name": "m3-1755", "fen": "8/4r3/8/k7/2K5/4P3/6nq/8 b - - 0 1", "kind": "mate-in-3", "accept": ["e7d7", "g2e3"], "quietKey": false, "seed": 1755, "pool": "pools/m3.jsonl"}
+{"name": "m3-1767", "fen": "1kr5/4K3/7P/3p4/n1R1n3/8/8/5Q2 w - - 0 1", "kind": "mate-in-3", "accept": ["f1b1"], "quietKey": false, "seed": 1767, "pool": "pools/m3.jsonl"}
+{"name": "m3-1771", "fen": "8/3R4/6K1/8/6Q1/n5p1/1r6/2n2k2 w - - 0 1", "kind": "mate-in-3", "accept": ["g4f3"], "quietKey": false, "seed": 1771, "pool": "pools/m3.jsonl"}
+{"name": "m3-1772", "fen": "3K4/8/5n2/6k1/8/4q3/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["e3a7", "e3b6"], "quietKey": false, "seed": 1772, "pool": "pools/m3.jsonl"}
+{"name": "m3-1807", "fen": "6K1/8/5qR1/8/8/7P/8/1b1k4 b - - 0 1", "kind": "mate-in-3", "accept": ["b1g6"], "quietKey": false, "seed": 1807, "pool": "pools/m3.jsonl"}
+{"name": "m3-1809", "fen": "4b3/8/8/8/8/8/5K2/1q5k b - - 0 1", "kind": "mate-in-3", "accept": ["b1d3"], "quietKey": true, "seed": 1809, "pool": "pools/m3.jsonl"}
+{"name": "m3-1839", "fen": "8/4q1k1/8/2p2R2/8/r7/8/3K4 b - - 0 1", "kind": "mate-in-3", "accept": ["a3a2"], "quietKey": true, "seed": 1839, "pool": "pools/m3.jsonl"}
+{"name": "m3-1840", "fen": "8/8/8/5Q2/1K4p1/8/k7/8 w - - 0 1", "kind": "mate-in-3", "accept": ["b4c3", "f5c2", "f5f2"], "quietKey": false, "seed": 1840, "pool": "pools/m3.jsonl"}
+{"name": "m3-1869", "fen": "8/n6k/8/7K/3n4/8/8/5q2 b - - 0 1", "kind": "mate-in-3", "accept": ["d4e2", "f1g1", "f1g2"], "quietKey": true, "seed": 1869, "pool": "pools/m3.jsonl"}
+{"name": "m3-1897", "fen": "8/8/3N4/8/7k/4Q3/5K2/8 w - - 0 1", "kind": "mate-in-3", "accept": ["d6e4", "d6f5", "d6f7"], "quietKey": false, "seed": 1897, "pool": "pools/m3.jsonl"}
+{"name": "m3-1902", "fen": "2N5/8/4b3/1K3Q2/N7/8/3p1p2/3k4 w - - 0 1", "kind": "mate-in-3", "accept": ["a4c3"], "quietKey": false, "seed": 1902, "pool": "pools/m3.jsonl"}
+{"name": "m3-1936", "fen": "Q7/8/N4p2/5N2/2K5/7k/8/8 w - - 0 1", "kind": "mate-in-3", "accept": ["a8f3"], "quietKey": false, "seed": 1936, "pool": "pools/m3.jsonl"}
+{"name": "m3-1964", "fen": "8/8/2R5/4n2p/7k/8/5K2/4Q3 w - - 0 1", "kind": "mate-in-3", "accept": ["e1e5", "f2g2"], "quietKey": false, "seed": 1964, "pool": "pools/m3.jsonl"}
+{"name": "m3-1982", "fen": "q7/8/8/6k1/1r6/8/4K3/8 b - - 0 1", "kind": "mate-in-3", "accept": ["a8a3", "b4b3"], "quietKey": true, "seed": 1982, "pool": "pools/m3.jsonl"}
+{"name": "m3-1985", "fen": "6N1/6B1/3r4/K7/5P2/n7/2q5/2k3N1 b - - 0 1", "kind": "mate-in-3", "accept": ["c2c5", "c2c7"], "quietKey": false, "seed": 1985, "pool": "pools/m3.jsonl"}
+{"name": "m3-h16", "fen": "2Q5/6N1/8/8/3K4/8/8/k7 w - - 0 1", "kind": "mate-in-3", "accept": ["c8b7", "c8b8", "d4c3"], "quietKey": true, "seed": 16, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h24", "fen": "4K3/8/5k2/8/2P5/1q6/8/6n1 b - - 0 1", "kind": "mate-in-3", "accept": ["b3b7"], "quietKey": true, "seed": 24, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h75", "fen": "6n1/8/1B6/p2N3K/k7/8/6Q1/5R2 w - - 0 1", "kind": "mate-in-3", "accept": ["g2b2", "g2c2"], "quietKey": false, "seed": 75, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h234", "fen": "3R4/3K4/2Q5/7p/8/8/8/3k4 w - - 0 1", "kind": "mate-in-3", "accept": ["c6g2"], "quietKey": true, "seed": 234, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h266", "fen": "8/2K5/8/8/8/Bk6/5Q2/8 w - - 0 1", "kind": "mate-in-3", "accept": ["f2c5"], "quietKey": true, "seed": 266, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h288", "fen": "8/8/8/8/2B4k/4K3/Q7/8 w - - 0 1", "kind": "mate-in-3", "accept": ["e3f4"], "quietKey": true, "seed": 288, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h295", "fen": "7k/3p4/8/8/8/7n/K2b4/7q b - - 0 1", "kind": "mate-in-3", "accept": ["h1b7"], "quietKey": true, "seed": 295, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h376", "fen": "8/5nq1/8/K7/8/8/4kr2/8 b - - 0 1", "kind": "mate-in-3", "accept": ["g7b2"], "quietKey": true, "seed": 376, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h456", "fen": "3Q4/3K3k/8/8/8/4N3/8/3N4 w - - 0 1", "kind": "mate-in-3", "accept": ["d8f6", "d8g5"], "quietKey": true, "seed": 456, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h466", "fen": "8/4N3/8/5Q2/5K2/P4N2/2p5/3k4 w - - 0 1", "kind": "mate-in-3", "accept": ["f5d3"], "quietKey": false, "seed": 466, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h481", "fen": "1k1K4/8/8/p7/6n1/1q6/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["b3b7"], "quietKey": true, "seed": 481, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h501", "fen": "6k1/8/8/8/3N4/8/5K1Q/8 w - - 0 1", "kind": "mate-in-3", "accept": ["h2c7"], "quietKey": true, "seed": 501, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h529", "fen": "6K1/8/7N/8/1r2q2n/8/8/4k3 b - - 0 1", "kind": "mate-in-3", "accept": ["e4g6"], "quietKey": false, "seed": 529, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h534", "fen": "2N2q2/K2k4/n4p2/8/8/8/3P1N2/3r4 b - - 0 1", "kind": "mate-in-3", "accept": ["f8c8"], "quietKey": false, "seed": 534, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h564", "fen": "r6k/8/4P3/5b2/1K6/6q1/8/8 b - - 0 1", "kind": "mate-in-3", "accept": ["g3c7"], "quietKey": true, "seed": 564, "pool": "pools/m3h.jsonl"}
+{"name": "m3-h580", "fen": "8/4K3/8/8/7k/2B5/8/5Q2 w - - 0 1", "kind": "mate-in-3", "accept": ["e7f6"], "quietKey": true, "seed": 580, "pool": "pools/m3h.jsonl"}

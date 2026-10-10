@@ -215,3 +215,34 @@ pullable today.
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P1`, with a promotion trigger |
 | 10 | no major unresolved blocker | **✅** no ruling owed. The baseline reading (a count that does not fall is not a lowering) is stated in `A5` |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-127`).
+Branch `grugops/ABC-127-harder-puzzles` from `4a64dd9` (the brief's `f9689e7` plus one docs-only
+commit). Rows and runner are in `e1f5732`. The baseline is in `47433c5`, its own commit. Not merged,
+not pushed. Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-127/`
+(`…558e9520`, `…eee7be49`, `…6341cc47`) and are not restated here.
+
+**Criteria: `A1`–`A8` met as readings. `A9` belongs to the Scribe, and its line is drafted in claim
+`…6341cc47`. No stop rule fired.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | 22 new rows: 12 mate-in-3 and 10 win-material (7 black to move). Tags: quiet-key 14, depth≥5 10, quiescence 11, headroom 4. No repeat or colour mirror. The 40 old rows are byte-identical |
+| `A2` | MET | Two `PUZZLE_DEEP=1` oracle rows (`legalMoves`/`makeMove` only): 12 mate-in-3 sets exact with no shorter mate, and 16 win-material sets exact (the 6 old rows included) |
+| `A3` | MET | 15/17 red: all 7 old reds, plus 8 of the 10 survivors (`W1`, `W1b`, `W2`, `W4`, `W5`, `W13`, `W14`, `W16`). Survivors: `W10` (not required) and `W11` |
+| `A4` | MET | 58/62, so total − 4. The old 40 read 40/40, mates 10/10, 0/24 losing, and `weakened` is red (19/62). 4× readings: **62/62** |
+| `A5` | MET | `47433c5` touches the baseline only, gives a reason and lists `unsolved` (4). `NEWLY-MISSED` is exact under every red weakening |
+| `A6` | MET | Three processes `cmp`-identical on all 62 rows. The step guard is green |
+| `A7` | MET (readings) | Gating 20.3–20.8 s, whole lane 32.1–33.5 s at load1 4–8. Under load 26–34 s / 41–55 s. Nothing asserted, 300 s guards |
+| `A8` | MET (readings) | 0 new test files. Lane +435 ms gross = net (sign 6/8, contended); the file alone +30 ms. The bar is Security/NFR's to read |
+
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 50 files / 1543 passed / 0 skipped (base
+  50 / 1540). Skip integrity reads `No findings.` The host check is exit 2 (`UNKNOWN - verify`).
+- **Trigger list.** 0 lines. The `src/` diff is `puzzle-corpus.ts` +50/−1, `puzzle-suite.test.ts`
+  +202/−2 and `puzzle-suite.baseline.json` +14/−7.
+- **`ADR-0033`.** All 22 new rows pass the six `parseFen` rules. The probe flags only the two
+  pre-existing rows already routed to BA/PM.
+- **Stated for QE.** The rows are seeded random placements, selected by the weakenings and answered
+  by oracles. They are not named motifs (decision `…558e9520` D1).

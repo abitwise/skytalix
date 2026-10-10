@@ -1,0 +1,44 @@
+== commits 4a64dd9..a7e1128 (numstat per commit, src only)
+-- e1f5732 test(ABC-127): grug add harder puzzle rocks — 22 tagged rows, oracle rows in the deep lane, per-row swap lines
+50	1	src/puzzle-corpus.ts
+202	2	src/puzzle-suite.test.ts
+   files outside src: 0
+-- 47433c5 test(ABC-127): grug re-scratch puzzle baseline — 58/62 at budget 25, step 1, four headroom rows named
+14	7	src/puzzle-suite.baseline.json
+   files outside src: 0
+-- a7e1128 docs(ABC-127,trace,context): grug write down harder puzzle rocks — 15/17 weakenings red, 58/62, 4x reads 62/62
+   files outside src: 122
+== 47433c5 full file list
+src/puzzle-suite.baseline.json
+== 47433c5 message
+test(ABC-127): grug re-scratch puzzle baseline — 58/62 at budget 25, step 1, four headroom rows named
+
+Reason: ABC-127 appended 22 harder rows (A1), so the recorded total moves
+40 -> 62 and the solved count 40 -> 58. Under ABC-084 A7 this is not a
+lowering: the count rises. The four unsolved rows are the headroom ABC-127
+A4 asks for, and the file now names them (`unsolved`, A5), so a gating run
+prints NEWLY-MISSED / NEWLY-SOLVED for every row that differs.
+
+Measured at e1f5732 with the shipped engine in ADR-0027 deterministic mode,
+a fresh virtualClock(1) per move, budget 25: 58/62 in three separate
+processes, every per-puzzle move, depth and node count identical. Gating run
+26.0 / 29.0 / 33.5 s in vitest, whole PUZZLE_DEEP=1 run 40.9 / 54.6 /
+47.2 s (A7 caps 45 / 90 s), Apple M3, load1 7.4-7.8 at start with other
+lanes running.
+
+This commit touches only the baseline file and no file on the trigger list.
+Raising the baseline is QE's; lowering it needs the owner's word.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+== trigger-list lines over the whole branch
+       0
+== old 40 rows + HANGING_CORPUS byte identity
+HANGING_CORPUS block identical: true 2918 bytes
+old PUZZLES block lines 18 ; prefix of new block identical: true
+old rows (lines with name:) 16 ; spread line kept: true
+new lines appended: 22
+== removed lines in corpus diff
+-      readonly kind: "mate-in-2" | "win-material";
+== HANGING_CORPUS rows count
+26

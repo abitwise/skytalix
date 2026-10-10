@@ -1,0 +1,11 @@
+UTC 2026-10-10T09:36:05Z arm a7e1128 (git archive, out of tree) with stepMs 1.25 (0.8x readings) load { 45.92 36.64 24.71 }
+exit 1
+NEWLY-MISSED	mate-in-3	e2f2	mate in 3, seed 1008: black Q+R against a bare king
+NEWLY-MISSED	mate-in-3	b7b2	mate in 3, seed 1075: black R+B+N against a bare king
+NEWLY-MISSED	mate-in-3	h2g3	mate in 3, seed 1424: white Q+2B+N against N
+NEWLY-MISSED	mate-in-3	a8g2	mate in 3, seed 1982: black Q+R against a bare king
+PUZZLES shipped: solved 54/62, baseline 58/62, budget 25 step 1.25, wall 28.39 s
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: expected 54 to be greater than or equal to 58
+      Tests  1 failed | 16 skipped (17)
+UTC end 2026-10-10T09:36:35Z load { 33.97 34.75 24.45 }

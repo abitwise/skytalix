@@ -1,0 +1,4 @@
+A: files 1 tests 12 median cpu 1.4449999999999998 s wall 0.83 s
+B: files 1 tests 9 median cpu 1.42 s wall 0.825 s
+A-B gross median 30 ms, sign 7/12
+load1 before runs: min 7.52 median 7.58 max 9.32; harness errors 0

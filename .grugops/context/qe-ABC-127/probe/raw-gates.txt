@@ -1,0 +1,41 @@
+UTC 2026-10-10T09:21:31Z head a7e1128 load { 6.56 8.95 13.11 }
+== npm run lint
+
+> cli-chess@0.0.0 lint
+> biome check .
+
+Checked 97 files in 152ms. No fixes applied.
+exit 0
+== npm run typecheck
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+exit 0
+== npm run build
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+exit 0
+== npm test
+ ✓ src/cli.test.ts (66 tests) 31ms
+
+ Test Files  50 passed (50)
+      Tests  1543 passed (1543)
+   Start at  12:21:35
+   Duration  7.99s (transform 1.34s, setup 0ms, collect 10.84s, tests 13.88s, environment 6ms, prepare 2.07s)
+
+exit 0
+== skip count
+skip count 0
+== integrity
+No findings.
+exit 0
+== host
+repository UNKNOWN - verify — the repository endpoint did not name the repository it answered for (full_name), so the check cannot say which repository it inspected; it answered gh returned no readable HTTP status
+branch (default branch): UNKNOWN - verify — the repository endpoint did not name the repository it answered for (full_name), so the check cannot say which repository it inspected; it answered gh returned no readable HTTP status
+environment local: UNKNOWN - verify — not checked by design: this check does not read the production environment (decision 33.1 D-31); confirm each production line of the git-host setup checklist in install/README.md §5 in the environment's settings yourself; a release still needs the named human's confirmation, whatever this line says; environment name from the last "environments" entry of .grugops/factory.config.json
+HOST-PROTECTION: 0 protected, 0 unprotected, 1 UNKNOWN - verify; production environment not checked (UNKNOWN - verify by design)
+exit 2
+UTC end 2026-10-10T09:21:53Z load { 9.15 9.41 13.18 }
