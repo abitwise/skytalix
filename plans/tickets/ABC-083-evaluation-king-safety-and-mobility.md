@@ -1,8 +1,8 @@
 ---
 id: ABC-083
 title: Evaluation — king safety and mobility
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: M
 priority: P1
 epic: EPIC-004
@@ -31,6 +31,14 @@ feature: —
 > trigger is live. **DoR 9/10, item 10 ⚠️: one Architect/Design ruling is owed before `Ready`, and
 > one owner question may be answered now or kept for the reading.** Reasoning:
 > `.grugops/context/rescore-batch-2026-10-10/notes/`.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `owner-adrs-followups`) on three
+> owner rulings of the same day: **`ADR-0031` accepted** (R1: if no mobility form meets `A5`, king safety
+> ships alone and mobility is re-cut), **R2 answered: keep depth 7** (note `…owner-word-d7a1c3e5`), and
+> **`ADR-0034` accepted with (b) at 0.8x** (how a puzzle red is classed; four edge rows dropped by
+> `ABC-131`). `A4`, `A5`, `A9`, `A10` and § Dependencies are folded; the stale "40/40" and the stale
+> `ABC-126` size are fixed. **DoR 10/10 → `Ready`; pull after `ABC-126` and `ABC-131` merge.** Reasoning:
+> `.grugops/context/owner-adrs-followups/notes/`.
 
 ## Problem
 
@@ -73,7 +81,8 @@ this epic rests on would stop holding.** `A5` makes this a hard stop rather than
 **A cheaper mobility proxy (pseudo-legal counts, or attack-map counts) may be required; choosing one
 is a design decision inside this ticket's own module, but if the answer is that mobility cannot be
 afforded at all, that is Architect/Design's call and this ticket reports rather than drops the
-term.**
+term.** **→ Ruled 2026-10-10 (`ADR-0031`, accepted): king safety ships alone and mobility is re-cut;
+the route is in `A5`.**
 
 ## Acceptance (Given/When/Then)
 
@@ -87,12 +96,24 @@ term.**
 - **`A4` (mobility, and it is bounded).** **Given** a position where white has substantially more
   available moves than black and material is equal, **then** white scores **strictly higher**, and
   the total mobility contribution never exceeds **±100 centipawns** — mobility must not outvote a
-  minor piece.
+  minor piece. *(2026-10-10: if `ADR-0031`'s cut fires, `A4` leaves with mobility.)*
 - **`A5` (the cost stop — the criterion this ticket exists to enforce).** **Then** the measured mean
   cost of the **complete** evaluation (`ABC-076` + `ABC-082` + this) is reported with machine and
   Node version and is **≤ 1,100 ns**. **Above 1,100 ns: STOP and report to Architect/Design.** Do
   not ship an evaluation that invalidates `ADR-0003`'s depth model and do not re-derive the model to
   fit the code.
+  **The route on a miss — `ADR-0031`, accepted 2026-10-10:**
+  - **Three mobility forms are measured**, each as the **complete** evaluation and each in its cheapest
+    honest implementation: legal count (`legalMoves` ×2), pseudo-legal count (`generateMoves` ×2) and
+    attack-map count (squares reached on the board, no `Move` objects, no make/unmake). A piece subset, a
+    cross-call cache, lazy evaluation or make/unmake-carried state is **not** a fourth form.
+  - **Near the bar:** the base build is read in the same session; a mean in **990–1,210 ns** is read again
+    in a second session in reverse order, and the verdict is the mean of the two sessions.
+  - **If every form misses:** king safety ships alone **only if** the king-safety-only evaluation is
+    **≤ 1,100 ns** and `A1`–`A3`, `A6`–`A10` are green on that build. Mobility is re-cut to `Backlog` by
+    BA/PM from the PR note, which records all three forms, the king-safety-only reading and the base,
+    from one session. **If king safety alone misses: nothing ships**, stop to Architect/Design.
+  - **Nothing is re-derived:** `A5`'s level stays 1,100 ns, and `ADR-0003` is not reopened.
 - **`A6` (purity).** **Then** the position is byte-identical after evaluation, over the whole corpus
   — asserted, because a mobility term is the most likely place in this epic to call something that
   make/unmakes.
@@ -118,10 +139,13 @@ term.**
     7, on base and on branch. The `ABC-082` reading was 532 363 → 610 179.
 
   **Depth below 6 on either position is FAIL: stop.** If `kiwipete` does not reach depth 7 on an
-  uncontended reference machine, **stop and report to Security/NFR**. **The owner decides whether
-  depth 7 stays a level** (`AR-NFR005-082`, accepted 2026-10-09, note `…8e3f0b17`). Do not tune
-  around it. *`A7` reads the same runs. A `kiwipete` drop from 7 to 6 reds `A7`, and that drop is
-  exactly this trigger. It is routed here, and `A7` is not re-levelled on this page.*
+  uncontended reference machine, **stop and report to Security/NFR**. ~~**The owner decides whether
+  depth 7 stays a level**~~ **Ruled 2026-10-10 by the owner (R2): depth 7 STAYS a level.** The route,
+  `ADR-0031` decision 5: **mobility is cut first** (as in `A5`'s route); the depth reads are repeated
+  with **king safety alone**; if king safety alone still loses depth 7, **nothing ships** and it goes
+  back to the owner. Do not tune around it. *`A7` reads the same runs. A `kiwipete` drop from 7 to 6
+  reds `A7`, and that drop is exactly this trigger. It is routed here, and `A7` is not re-levelled on
+  this page.*
 
 - **`A10` (the re-pin ledger; added 2026-10-10).** This is `ABC-082` `A8` applied here, with the
   same classes (**P** re-pinned from a measurement, **F** bite re-checked or fixture re-found, **R**
@@ -133,8 +157,15 @@ term.**
     the `ABC-081` `G6` knight pair and the depth-10 rook ending;
   - `ABC-079` `A1`'s hanging-corpus margins (on the corpus in the tree, including any rows
     `ABC-126` re-found).
-  **And** `ABC-084`'s puzzle suite reads **40/40**. Its baseline is not touched in this ticket's
-  commits, and lowering it is the owner's word (`ABC-084` `A7`).
+  **And** `ABC-084`'s puzzle gate is green: `PUZZLE_DEEP=1` reads `solved ≥` the recorded baseline
+  with `total` equal to the recorded total — **54/58 once `ABC-131` lands** *(was "40/40", stale since
+  `ABC-127` recorded 58/62)*. The baseline file is not touched in this ticket's commits, and lowering it
+  is the owner's word (`ABC-084` `A7`). **A red is a QE FAIL, read per `ADR-0034`:** QE classes each
+  `NEWLY-MISSED` row on the readings ladder (+5 / +10 / +25 %) as **D** (budget drift → the owner, with
+  `A9`'s nodes to depth 7 and `A7`'s depth reading beside it), **L** (label margin → re-found under
+  `ADR-0028` decision 2, in its own commit, no owner word) or **B** (behaviour → the Engineer), worked in
+  the order B, L, D. **A puzzle red never fires `A5`'s mobility cut and never licenses re-weighting**
+  (`ADR-0034` decision 6).
 
 ## Dependencies
 
@@ -147,10 +178,23 @@ term.**
   exists.
 - **`ABC-084`'s trigger applies — live since 2026-10-10** (`ABC-084` merged `e634bc1`). This ticket
   changes `src/evaluate*.ts`, so QE runs `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts` at
-  review, and a red result is a QE FAIL.
+  review, and a red result is a QE FAIL, classed per `ADR-0034` (`A10`).
 - **File overlap (2026-10-10).** `A10` re-pins rows in `src/quiescence.test.ts`, the file `ABC-126`
-  edits. Do not build them in parallel. `ABC-126` (`XS`) goes first, so that this ledger reads the
-  re-found rows.
+  edits. Do not build them in parallel. `ABC-126` goes first, so that this ledger reads the re-found
+  rows. *(Its size is `S`, re-sized at its fold; it is `In Review`.)*
+- **`ABC-131` must merge before this ticket enters `In Development`** *(added 2026-10-10;
+  `ADR-0034` decision 5)*. It drops the four puzzle rows that sit on the budget edge (58/62 → 54/58),
+  so a drift red on this ticket means > 25 % tree growth, not 4 %. It is ordered after `ABC-126`. **Pull
+  order: `ABC-126` → `ABC-131` → this ticket.**
+- **`ADR-0031`, `ADR-0034` accepted; R2 answered (keep depth 7)** — all 2026-10-10. No ruling is owed.
+- **One reading for Architect/Design, not blocking** *(2026-10-10)*. `ADR-0034` decision 2 gives a drift
+  class only when every **trigger-list file** the diff touches is `src/evaluate*.ts`. Read literally,
+  `AGENTS.md`'s glob `src/search*.ts` also matches **test** files (`src/search.ordering.test.ts`,
+  `src/search.pvs-lmr.test.ts`), and `A10`'s re-pins may touch them, as `ABC-082`'s merge did. Under
+  that reading every missed row is class B. BA/PM reads "trigger-list file" as production engine code
+  (`AGENTS.md`: "touches engine code"), so re-pinned test files do not count. **`UNKNOWN - verify`;
+  owner: Architect/Design (`ADR-0034`).** Not a blocker: under either reading a red still has a route
+  (B → `ADR-0028` decision 1's proofs → read again → the owner).
 
 ## Security / NFR triggers
 
@@ -204,6 +248,23 @@ that is fully expressed as two hard-stop criteria does not make a ticket bigger,
 **Priority `P1`.** Same reason as `ABC-082`: the engine plays sound chess without it.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM** (`owner-adrs-followups`, wave tip `246ddfc`). **Result: 10 of 10 —
+MET → `Ready`.** Pull after `ABC-126` and `ABC-131` merge.
+- **Item 10, ⚠️ → ✅.** Question 1 is ruled and accepted (`ADR-0031`). Question 2 is answered by the
+  owner: depth 7 stays a level, and `A9` carries the route. Security/NFR's `R1` (how a puzzle red is
+  read) is ruled and accepted (`ADR-0034`). Nothing is owed before the build.
+- **Item 3 stays ✅.** `ABC-126` (`In Review`) and `ABC-131` (`Ready`) are merge-order predecessors with
+  no open question in either, so this is a pull order, not a dependency on a decision.
+- **Item 4 stays ✅, folded.** `A5` gains its route (three forms, a two-session read near the bar, the
+  cut condition); `A9` gains the ruled R2 route; `A10`'s stale "40/40" is replaced by the gate's own
+  rule (`≥` the recorded baseline, `total` equal) and the per-row classification.
+- **Item 5 stays ✅.** `ABC-131` added as predecessor; `ABC-126`'s size corrected (`S`). One reading
+  question for Architect/Design is named in § Dependencies and is not blocking.
+- **Items 1, 2, 6–9 stay ✅.** `M` (`ADR-0031`: no re-size; smaller if the cut fires), `P1`.
+- **The likelier stop is `A9`, not `A5`** (`ADR-0031` § Consequences: the attack-map form plus king
+  safety adds about 8–11 % of node time, against a depth-7 margin of 1.05–1.12x). That stop now has a
+  defined route, so it does not hold `Ready`.
 
 **Re-scored 2026-10-10 by BA/PM** (`rescore-batch-2026-10-10`, wave tip `71be48b`). **Result: 9 of 10,
 1 ⚠️ — NOT met; stays in `Backlog`.**

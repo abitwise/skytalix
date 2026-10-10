@@ -111,6 +111,12 @@ without a mutation harness this repository does not have.
   it and it does not constrain `ABC-054`. **It is the only other open ticket that edits this file**
   (checked 2026-10-10). No in-flight branch touches it, so the two cannot be built in parallel, but
   either order works.
+- **Superseded 2026-10-10 — the order is now fixed: `ABC-053` → `ABC-054` → `ABC-057`**
+  (Orchestrator; BA/PM `owner-adrs-followups`). `ADR-0029` makes `ABC-053` a third ticket on this file,
+  and `ADR-0030` found that `ABC-054`'s licence prose and this ticket's `A3` are **one paragraph**.
+  **Pull this ticket last, after `ABC-054` merges.** Every line anchor on this page moves when those two
+  land; test note 3's "re-read before editing" binds. **`R5`'s trigger fires when `ABC-053` is pulled**
+  (the next hop that opens the file): promote this ticket to `P1` then, not before.
 
 ## Security / NFR triggers
 

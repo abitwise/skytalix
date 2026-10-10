@@ -1,0 +1,9 @@
+Probes for subtask owner-adrs-followups, BA/PM, 2026-10-10. Tree: grugops/wave-2026-09-25 @ 246ddfc7.
+
+drop-recount.sh <qe-ABC-127/probe dir>  -> drop-recount.out.txt
+  ABC-131 A4's expectation, recomputed from QE's committed per-row files (qe-ABC-127/probe/raw-deep-process1.rows.txt
+  and a3/W*.rows.txt) with seeds 1982/1008/1424/1075 removed (ADR-0034 (b)). Columns: run, SOLVED/lines before,
+  SOLVED/lines after, verdict against the re-cut baseline 54. The "lines" figure counts NEWLY-MISSED echo lines too,
+  so only the SOLVED figure is meaningful. Result: base 58 -> 54 (green); 14/17 weakenings red; of ABC-127 A3's ten
+  survivors, W1 W1b W2 W4 W5 W13 W16 red (7/10), W10 W11 W14 green. Matches ruling-puzzle-edge/probe/classify.out.txt
+  on all 17 solved counts. Arithmetic over QE's files, not a re-run: ABC-131 A4 is the re-run.

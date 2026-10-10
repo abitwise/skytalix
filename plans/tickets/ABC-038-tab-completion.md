@@ -11,6 +11,13 @@ feature: —
 
 # ABC-038 — tab-completion, and the one clause that keeps it from breaking the prompt it sits in
 
+> **DROPPED 2026-10-10 on the owner's word — not delivered.** Owner (Olger Oeselg): *"R4: drop it"*,
+> option (b) of § The blocker's ruling (note `…owner-word-r4-6b2f90e4`). The line-mode reader never sees
+> a Tab before Enter, and a raw-mode keystroke reader was judged not worth its size and its
+> terminal-restore risk. `ABC-036`'s `moves` covers the discovery need. `EPIC-003`'s scope line is
+> amended to record the drop (BA/PM, `owner-adrs-followups`). **Nothing below is a live promise; do not
+> pull this page.** Re-opening it is option (a), a new cut at `M` or `L` with an Architect/Design pass.
+
 > **Cut 2026-08-12 by BA/PM** (task `post-abc030-2026-08-12`, subtask `refinement-post-abc030`,
 > Workflow 03) at `EPIC-003`'s decomposition. **This is the epic's negotiable slice** — the ticket to
 > cut first if the epic runs long. The drop condition is named under `## Size and priority rationale`
