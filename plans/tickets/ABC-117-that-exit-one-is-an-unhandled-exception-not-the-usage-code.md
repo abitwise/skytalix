@@ -4,7 +4,7 @@ title: The record says a failed non-`EPIPE` stdout write exits `1` = `USAGE_EXIT
 status: backlog
 column: Backlog
 size: XS
-priority: P3
+priority: P2
 epic: EPIC-006
 feature: —
 ---
@@ -311,3 +311,58 @@ ORDERING HAZARD with a named fallback, not an open question.**
 | 10 | no major unresolved blocker | **✅** none. The product change this correction implies is **named, sized (`S`), shape-forced and deliberately NOT cut**, and it is flagged as needing the owner's word before it is cut at all — a disclosed hand-off, not a blocker |
 
 Column moves are the Orchestrator's.
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: READY. DoR 10/10. `XS` kept; priority `P3` → `P2`, because this page's own `P2` trigger
+FIRED.** `column`/`status` are not moved here.
+
+**The mechanism was re-measured, not inherited, on Node v26.11.0 at `39d87491`:**
+`node src/cli.ts 1</dev/null </dev/null` → **exit 1**, `Usage` lines **0**, `internal error` lines
+**0**, `EBADF` thrown from **`src/cli.ts:160`** (was `:159`; the arm is unchanged). **CLAIM B is still
+false on the current runtime.**
+
+**THE `P2` TRIGGER FIRED.** The trigger reads *"any second site of the same clause found outside this
+inventory"*.
+- `plans/board.md`'s **`ABC-115` row** says *"on that path the delivered build still exits `1` =
+  `USAGE_EXIT_CODE`"*.
+- That row is now `:791`. It was **`:279` at the cut's own commit `fcf12c1`**, added at `3b2ac088`
+  (2026-08-20).
+- **The cut missed it.** It becomes **S9**, in the same append-only class as S6, under `A4`.
+
+**Site lines re-located at `39d87491` (they drifted; the content did not):**
+- **S6:** board `:588`.
+- **S7:** `ABC-115` page `:302`, unmoved.
+- **S8:** `src/cli.test.ts:3342`.
+- **S9:** board `:791` (new).
+- **S1–S5:** all five note files present.
+
+**Amendments:**
+- **`A4`** covers S9: only added lines in `plans/board.md`, each naming the clause it corrects.
+- **`A5`, re-read:** `ABC-115` is now **`Done`**, so the ordering hazard on its page is **gone**. Keep
+  the CLAIM-A fence (no CLAIM-A line, `ADR-0016` untouched, no wider arm proposed). Drop the clauses
+  about "moving" `ABC-115` or "describing it as accepted": they guarded an unsigned ticket that is now
+  closed.
+- **`A6`'s hash pin is VOID**, for the same cause as `ABC-116` `A5`. Read it as: the 8-line hash is
+  **identical at base and tip**, both recorded (`c74e7426…0d3b` at `39d87491`).
+- **`A7` and test notes, the lane:** read `npx vitest run --dir src` as **`npm test`** (52 vs 53 files
+  since `ABC-093`). The *"`AGENTS.md` `## Test notes` 5"* cite is gone.
+- **`## NFR / security`, `N8-LANE`:** comment-only, so **the count is the pin** (`ADR-0035` decision
+  3): 0 files, 0 tests, 0 spawns, no timing bound. The *"`ABC-108` open / BREACHED 1.480 s"* sentence is
+  history.
+
+**Unchanged:** the `P1` trigger has not fired; no ticket closes the non-`EPIPE` residual. `ABC-114` and
+`ABC-116` share `src/cli.test.ts`, and whichever lands second rebases.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** re-measured on v26.11.0 |
+| 2 | scope and out-of-scope clear | **✅** S9 added to the same append-only class |
+| 3 | INVEST-shaped | **✅** still one record, one ticket |
+| 4 | acceptance testable and measurable | **✅** hash pin re-read as base = tip |
+| 5 | dependencies known | **✅** — *was ⚠️.* The ordering hazard was `ABC-115` unsigned, and `ABC-115` is `Done` |
+| 6 | security/NFR triggers with a measurable target | **✅** count pin 0/0/0 |
+| 7 | test notes present | **✅** lane re-pointed |
+| 8 | size assigned | **✅** `XS`. One extra board append does not move it |
+| 9 | priority assigned | **✅** `P2`, by the page's own trigger |
+| 10 | no major unresolved blocker | **✅** none |
