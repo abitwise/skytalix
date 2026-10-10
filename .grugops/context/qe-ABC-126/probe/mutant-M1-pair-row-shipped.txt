@@ -1,0 +1,103 @@
+MUTANT M1-pair-row-shipped  2026-10-10T11:06:51Z load1 5.72 6.00 7.53
+
+ RUN  v3.2.7 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe-ABC-126/mutants/M1-pair-row-shipped
+
+ ❯ src/puzzle-suite.test.ts (12 tests | 1 failed) 238ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > holds >= 40 puzzles: >= 10 mate-in-2, >= 6 win-material, >= 20 do-not-hang 1ms
+   × A6 — every puzzle carries its provenance, and the mates are the rules' answer > every row names its source and its moves are legal; no added row starts in check 16ms
+     → R takes a bishop a pawn defends: expected true to be false // Object.is equality
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2 216ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > the do-not-hang class starts with ABC-079's 24 rows, and ABC-079 still reads exactly those 24 0ms
+   ✓ ABC-127 A1 — the harder rows > >= 16 rows after ABC-084's 40, each tagged: >= 6 mate-in-3, >= 6 win-material (>= 3 black to move), >= 4 quiet-key, >= 4 depth≥5, >= 4 quiescence 0ms
+   ✓ ABC-127 A1 — the harder rows > every quiet-key row's accepted moves are neither a capture, a check nor a promotion 2ms
+   ✓ ABC-127 A1 — the harder rows > no new row repeats, or is the colour mirror of, any row of the corpus 1ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0.049: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 2, step 0.001: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step NaN: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > the bound itself (step = budgetMs / 1 000) is accepted and searches 0ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 595 nodes with quiescence / 49 without = 12.14x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 292 nodes with quiescence / 47 without = 6.21x
+
+ ❯ src/quiescence.test.ts (29 tests | 1 failed) 405ms
+   ✓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly 4ms
+   ✓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly 1ms
+   ✓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly 1ms
+   ✓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly 1ms
+   ✓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a hanging pawn makes the quiescence value STRICTLY greater than the static evaluation 1ms
+   ✓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined 0ms
+   × A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > carries at least 20 positions, none of them in check for the side to move 6ms
+     → R takes a bishop a pawn defends: the side to move must not be in check: expected true to be false // Object.is equality
+   ✓ A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > both arms at depth 1 — with quiescence the losing move is avoided, without it it is played 49ms
+   ✓ A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap 39ms
+   ✓ A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded 225ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 1: same score, same move, same node count 0ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 2: same score, same move, same node count 1ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 3: same score, same move, same node count 2ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 4: same score, same move, same node count 3ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count 0ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count 1ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count 2ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count 6ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count 0ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count 0ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count 1ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count 3ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count 1ms
+   ✓ A4 — a position with no capture anywhere near the leaves scores exactly as before > the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint 6ms
+   ✓ A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x 19ms
+   ✓ A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x 10ms
+   ✓ A6 — the searched position is unchanged on return > leaves every one of the 200+ corpus positions byte-identical after a quiescence search 0ms
+   ✓ A6 — the searched position is unchanged on return > leaves every hanging-piece position byte-identical after a depth-1 search, both arms 19ms
+   ✓ A6 — the searched position is unchanged on return > leaves the position byte-identical when the visitor THROWS mid-sequence — the engine's abort path 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/puzzle-suite.test.ts > A6 — every puzzle carries its provenance, and the mates are the rules' answer > every row names its source and its moves are legal; no added row starts in check
+AssertionError: R takes a bishop a pawn defends: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ src/puzzle-suite.test.ts:228:48
+    226|       expect(puzzle.source.length, puzzle.name).toBeGreaterThan(0);
+    227|       const position = parseFen(puzzle.fen);
+    228|       expect(isInCheck(position), puzzle.name).toBe(false);
+       |                                                ^
+    229|       const legal = legalMoves(position).map(label);
+    230|       const named = puzzle.kind === "do-not-hang" ? [puzzle.losing] : …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > carries at least 20 positions, none of them in check for the side to move
+AssertionError: R takes a bishop a pawn defends: the side to move must not be in check: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ src/quiescence.test.ts:273:85
+    271|     for (const { name, fen, losing } of HANGING_CORPUS) {
+    272|       const position = parseFen(fen);
+    273|       expect(isInCheck(position), `${name}: the side to move must not …
+       |                                                                                     ^
+    274|       const legal = legalMoves(position).map((move) => label(move));
+    275|       expect(legal, `${name}: the losing capture ${losing} must be leg…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 39 passed (41)
+   Start at  14:06:52
+   Duration  700ms (transform 173ms, setup 0ms, collect 218ms, tests 643ms, environment 0ms, prepare 85ms)
+
+EXIT 1

@@ -1,0 +1,54 @@
+MUTANT M10-dc-accept-subset  2026-10-10T11:07:56Z load1 6.88 6.24 7.51
+
+ RUN  v3.2.7 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe-ABC-126/mutants/M10-dc-accept-subset
+
+ ❯ src/puzzle-suite.test.ts (17 tests | 1 failed | 16 skipped) 703ms
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > holds >= 40 puzzles: >= 10 mate-in-2, >= 6 win-material, >= 20 do-not-hang
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > every row names its source and its moves are legal; no added row starts in check
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > the do-not-hang class starts with ABC-079's 24 rows, and ABC-079 still reads exactly those 24
+   ↓ ABC-127 A1 — the harder rows > >= 16 rows after ABC-084's 40, each tagged: >= 6 mate-in-3, >= 6 win-material (>= 3 black to move), >= 4 quiet-key, >= 4 depth≥5, >= 4 quiescence
+   ↓ ABC-127 A1 — the harder rows > every quiet-key row's accepted moves are neither a capture, a check nor a promotion
+   ↓ ABC-127 A1 — the harder rows > no new row repeats, or is the colour mirror of, any row of the corpus
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0.049: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 2, step 0.001: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step NaN: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > the bound itself (step = budgetMs / 1 000) is accepted and searches
+   ↓ the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline
+   ↓ the gating run [deep, PUZZLE_DEEP=1] > A1 — every mate in 2 is found (10/10 or better)
+   ↓ the gating run [deep, PUZZLE_DEEP=1] > A2 — the losing move is not played in >= 19 of 20 do-not-hang rows
+   ↓ the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each mate-in-3 row has no mate in <= 2, and its accepted moves are EXACTLY the moves that mate in 3
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain 703ms
+     → discovered check: the bishop moves, Rxd8: expected [ 'd4c5', 'd4g7' ] to deeply equal [ 'd4c5' ]
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain
+AssertionError: discovered check: the bishop moves, Rxd8: expected [ 'd4c5', 'd4g7' ] to deeply equal [ 'd4c5' ]
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "d4c5",[22m
+[31m+   "d4g7",[39m
+[2m  ][22m
+
+ ❯ src/puzzle-suite.test.ts:447:45
+    445|           const { gain, moves } = materialBest(puzzle.fen);
+    446|           expect(gain, puzzle.name).toBeGreaterThan(0);
+    447|           expect(moves.sort(), puzzle.name).toEqual([...puzzle.accept]…
+       |                                             ^
+    448|         }
+    449|         const wall = (performance.now() - started) / 1_000;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 16 skipped (17)
+   Start at  14:07:56
+   Duration  979ms (transform 97ms, setup 0ms, collect 97ms, tests 703ms, environment 0ms, prepare 58ms)
+
+EXIT 1

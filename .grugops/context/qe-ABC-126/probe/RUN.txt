@@ -1,0 +1,22 @@
+QE probe for ABC-126, task wave-2026-09-25, subtask qe-ABC-126, 2026-10-10 11:00-11:09Z.
+Review tip efcda60d on grugops/ABC-126-corpus-repairs (base d6aceeb5). Apple M3, Node v26.11.0.
+Other agents (BA/PM pages, an Architect ruling) were running in parallel; load1 is beside every timed reading.
+<tip>/<base> = `git archive efcda60d` / `git archive d6aceeb5` copies in QE's private scratchpad, never the worktree.
+Every plant was made in a fresh archive copy (mutants/<name>/); the worktree's src/ was never edited.
+
+  node oracle.mjs <tree> scan      -> oracle-base-scan.txt (base: flags exactly the four shipped defects)
+                                      tip: "SCAN 62 rows: stm in check 0, ADR-0033 rejected 0" (in static-checks.txt notes)
+  node oracle.mjs <tree> perft     -> oracle-perft.txt   the oracle's own generator, 5/5 reference perft counts exact
+  EXTRA=<shipped pair> node oracle.mjs <tip> focus -> oracle-tip-focus.txt
+        oracle.mjs imports NOTHING from src/: own FEN grammar, ADR-0033's six rules in decision 3's order, own
+        legal-move generator and attack test, and both material oracles re-implemented from their semantics
+        (ABC-084 raw-probe: depth 4 + capture-only qs; ABC-127 A2: 3 plies + 8 capture plies with evasions).
+        It reads src/puzzle-corpus.ts as TEXT (line regex), never imports it.
+  node a3-engine.mts <tip>         -> a3-engine-tip.txt  A3 engine readings (reads search.ts on purpose; not the oracle)
+  gates (worktree, tip)            -> gates.txt
+  PUZZLE_DEEP=1 x3 (worktree)      -> puzzle-deep-{1,2,3}.txt, rows-{1,2,3}.txt (62 SOLVED/MISSED lines each; cmp-identical)
+  PUZZLE_DEEP=weakened (worktree)  -> puzzle-weakened.txt (exit 1 by design)
+  SEARCH_DEEP=1 quiescence (worktree) -> search-deep-quiescence.txt
+  rules-only.mts, numstat, names/kinds md5, baseline log -> static-checks.txt
+  mutant.sh <name> <file> <json> <cmd...>  (plant.mjs: exact single-occurrence replacement, refuses otherwise)
+        -> mutant-M*.txt   M1-M5 default lanes of quiescence + puzzle-suite; M7b-M11 PUZZLE_DEEP=1 -t "each win-material row"

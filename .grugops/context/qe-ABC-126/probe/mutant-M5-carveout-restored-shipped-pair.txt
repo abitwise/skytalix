@@ -1,0 +1,12 @@
+MUTANT M5-carveout-restored-shipped-pair  2026-10-10T11:07:22Z load1 5.79 6.01 7.48
+
+ RUN  v3.2.7 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe-ABC-126/mutants/M5-carveout-restored-shipped-pair
+
+ ✓ src/puzzle-suite.test.ts (12 tests) 251ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  14:07:23
+   Duration  480ms (transform 81ms, setup 0ms, collect 82ms, tests 251ms, environment 0ms, prepare 50ms)
+
+EXIT 0

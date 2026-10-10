@@ -1,0 +1,16 @@
+MUTANT M11-pin-pawn-h6  2026-10-10T11:07:58Z load1 6.88 6.24 7.51
+
+ RUN  v3.2.7 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe-ABC-126/mutants/M11-pin-pawn-h6
+
+stdout | src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain
+ORACLE win-material: 16 rows, wall 5.91 s
+
+ ✓ src/puzzle-suite.test.ts (17 tests | 16 skipped) 5915ms
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain  5914ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 16 skipped (17)
+   Start at  14:07:59
+   Duration  6.16s (transform 78ms, setup 0ms, collect 79ms, tests 5.91s, environment 0ms, prepare 41ms)
+
+EXIT 0
