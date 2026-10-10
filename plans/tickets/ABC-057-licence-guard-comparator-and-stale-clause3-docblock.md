@@ -149,6 +149,12 @@ without a mutation harness this repository does not have.
    `positionCounts` map"* is true of every production module but `history.ts`; it licenses
    `WLAUNDER` in one sentence. **Part (i) is the entire gate and it is the part a hop in a hurry
    drops.**
+5. **`AR-053-ORDER` (added 2026-10-10 by BA/PM, `postmerge-followups-2026-10-10`): the same note
+   `ABC-054` carries as its test note 5.** Re-run QE's `Q-CTRL-DEAF-AFTER-LOAD+X5b` (must be RED)
+   and `Q-CTRL-ARMING-FIRST+DEAF+X5b` (`.grugops/context/qe-ABC-053/probe/plant.py`) on the delivered
+   tree. A diff that moves the probe's `await import(arming)` or either `loaded = []` clear owes the
+   phase-label assertion. Test note 3's anchors moved when `ABC-053` landed (+8 lines from the licence
+   docblock down, at `9ddd6e80`) and move again when `ABC-054` lands.
 
 ## Lane cost — how many test FILES this ticket implies
 
