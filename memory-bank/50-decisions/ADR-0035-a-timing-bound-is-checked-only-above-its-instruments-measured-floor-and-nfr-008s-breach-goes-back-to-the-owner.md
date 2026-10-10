@@ -2,7 +2,12 @@
 
 ## Status
 
-`proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25`, subtask `ruling-timing-protocol`),
+`accepted` — 2026-10-10, by Olger Oeselg (owner), verbatim "2. accept" (note
+`.grugops/context/wave-2026-09-25/notes/20261010T173005Z-orchestrator-decision-owner-word-eight-answers-6a1f3d92.md`).
+Decision 6 is taken as **option R-1** for `NFR-008`: wall ≤ 10 s is the gate; CPU is reported, not gated.
+The catalog wording is applied by the `NFR-008` row's owner (Security/NFR) in its next catalog hop.
+
+Previously `proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25`, subtask `ruling-timing-protocol`),
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.
 
