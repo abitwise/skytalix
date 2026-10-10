@@ -1,8 +1,8 @@
 ---
 id: ABC-087
 title: Difficulty levels — the MECHANISM (search budget + blunder rate). The CHOOSING is EPIC-006's.
-status: in-review
-column: In Review
+status: in-security-nfr
+column: In Security/NFR
 size: M
 priority: P1
 epic: EPIC-004
