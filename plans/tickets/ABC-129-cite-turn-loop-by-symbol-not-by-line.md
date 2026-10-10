@@ -1,8 +1,8 @@
 ---
 id: ABC-129
 title: Fourteen of fifteen `turn-loop.ts:<line>` cites point at the wrong lines — cite by symbol, and fix the "seven tokens" comment
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: XS
 priority: P3
 epic: —

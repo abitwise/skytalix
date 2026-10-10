@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-owed-batch-2026-10-10` merged (`36a4c5b3`): `ABC-129` Backlog → `Ready` (10/10); new `ABC-134`, `ABC-135` → `Ready` (10/10, XS); page notes on ABC-041 A8 and ABC-101 (own-integer-key lookup) `ABC-135` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-owed-rulings-2026-10-10` merged (`9525b9bb`): ADR-0011 pointers P1–P5 (R5b registered from QE-057-a — BA/PM to cut XS ticket), ADR-0029/0030 pointers, ADR-0034 scope-test reading, ADR-0035 per-set floor (still PROPOSED), **ADR-0036 ACCEPTED by Architect/Design (ABC-041 clause (b) = DELTA; owner may veto)**. Routing on the delta test from here, citing ADR-0036._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-059` → `Done` (UAT WAIVED; merged `4c33b72b`); `ABC-133` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-104` → `Ready for UAT` (`328e77e8`); owner word owed._
@@ -442,7 +443,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   trigger fires (the columns still exist; they just stay empty).
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 2/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
 
@@ -450,7 +451,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 2/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -529,7 +530,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 
-- [ABC-129] Cite `turn-loop.ts` by symbol, not by line — 14 of 15 cites stale (+ ABC-036 G1 "seven tokens" comment)  (BA/PM, XS, P3, epic: —, since: 2026-10-10, DoR 9/10 ⚠️ item 3 — ordering: `ABC-036` AND `ABC-051` merge first; preferably after `ABC-128`; UAT owed unless the owner rules comment-only diffs zero-production-lines) **2026-10-10: ⚠️ item 3 discharged (ABC-036 + ABC-051 Done) — BA/PM re-score due.**
 - [ABC-010] FEN semantic validation  (BA/PM, M, P1, epic: EPIC-003, since: 2026-07-29, **DoR re-verified 2026-08-13: 9/10, NOT the 10/10 the page claimed — NOT promoted.** Its page says `src/fen.ts` has exactly ONE production consumer and is off any hot path; measured FOUR — `perft-bench`, `history.ts:117` (once per ply), `status-panel.ts:156` and `history-pane.ts:121` (once per FRAME). Item 6 omits NFR-002 and its <1 ms bar is wrong-sized. Acceptance and the P1 argument unaffected; needs one short BA/PM + Architect pass) **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; P1 → P2 (no epic accepts a user FEN; back to P1 on any FEN-input ticket or a FEN-carrying book format); routes via In Design on pull.** **2026-10-10: pulled into its design hop — Architect `design-abc010` (open design question, page § "Open design question") dispatched; stays in `Ready` here until `In Design` has a heading (`ABC-055`).** **2026-10-10 design hop (`design-abc010`, merged `5a613d1`): `ADR-0033` PROPOSED (check via `moves.ts`; test-only `parseFenGrammarOnly`). NOT Ready for Dev — criterion 9 cannot hold (rules reject 186 fixture occurrences across 16 files, incl. 2 `src/puzzle-corpus.ts` rows); overlaps `ABC-127`/`ABC-126`/`ABC-083`. → back to Backlog; BA/PM `recut-abc010` dispatched.** **2026-10-10 re-cut (`recut-abc010`, merged `d24e740`): DoR 8/10, M, P2 — criterion 9 re-worded (a)–(f); 15 `src/` files. ⚠️ item 3: waits `ABC-126` merge; ⚠️ item 10: waits owner acceptance of `ADR-0033`. Then straight to Ready for Dev. Never build in parallel with `ABC-083` (shared `src/quiescence.test.ts`; ABC-083 first if both pullable).** **2026-10-10: `ADR-0033` ACCEPTED by the owner — ⚠️ item 10 cleared; still waits `ABC-126` (⚠️ item 3).**
 
 
@@ -578,21 +578,24 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-005] Opening book  (owner: BA/PM, **size: M — corrected from `S`; the cutter stopped at `M` deliberately, refusing the M→XL/M→L precedent as "a pattern, not evidence", since `L` would claim the book is the size of `EPIC-004`'s whole engine**, priority: P1, since: 2026-07-22, **DECOMPOSED 2026-08-16 into `ABC-092`…`ABC-096`. The WORK is pullable today — 4 of 5 tickets need nothing from `EPIC-004` — but the VALUE is not deliverable until `EPIC-004` lands; collapsing those two is how a board lies.** `EPIC-001`'s dependency verified DISCHARGED by reading the tree, not the front matter; `ABC-095` is the only hard blocker. Largest ticket `M`, no `SPLIT_REQUIRED`)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 3/8)
+## Ready (WIP 5/8)
 
 - [ABC-132] Three production docblocks cite the deleted FRAME_PRODUCERS list  (BA/PM, XS, P3, epic: —, since: 2026-10-10, **DoR 10/10**; cut at `postmerge-followups-2026-10-10`; comment-only in `src/render-seam.ts`/`result-screen.ts`/`cli.ts` → owner UAT word (pair with ABC-129); never in parallel with ABC-129)
 
 - [ABC-131] Drop the four puzzle rows that sit on the budget edge — 58/62 → 54/58, so every gating row keeps a 0.8x readings margin  (BA/PM, XS, P1, epic: EPIC-004, since: 2026-10-10, **DoR 10/10**; `ADR-0034` (b) @0.8x on the owner's word; baseline re-recorded in its own commit; folds QE-127-e; after `ABC-126`, before `ABC-083`; owner UAT word owed — `puzzle-corpus.ts` non-test) **2026-10-10 (`postmerge-followups-2026-10-10`): QE-126-b folded as A8 (source gain = oracle gain; 16/16 match today).**
 
 - [ABC-055] This board defines 13 columns and renders 10 — In Analysis, In Design and Ready for Dev have no heading  (BA/PM, S, P2, epic: —, since: 2026-08-13, **DoR 10/10**; three WIP limits — 2, 2, 6 — unenforceable by reading the single source of WIP truth, and **Ready for Dev is where AGENTS.md rule 1 puts the criteria review**. Nothing has overflowed them. Moves NO ticket; 0 files under src/) **2026-10-10 audit: `Ready for Dev` now has a heading; `In Analysis` and `In Design` still have none — left to this ticket.** **2026-10-10 re-score (`rescore-batch-2-2026-10-10`): DoR 10/10 → Ready; S→XS, P2→P1 (ABC-010 routes via In Design). Edits `plans/board.md` — build only while the Orchestrator holds board writes.**
+- [ABC-129] Cite `turn-loop.ts` by symbol, not by line — 14 of 15 cites stale (+ ABC-036 G1 "seven tokens" comment)  (BA/PM, XS, P3, epic: —, since: 2026-10-10, DoR 9/10 ⚠️ item 3 — ordering: `ABC-036` AND `ABC-051` merge first; preferably after `ABC-128`; UAT owed unless the owner rules comment-only diffs zero-production-lines) **2026-10-10: ⚠️ item 3 discharged (ABC-036 + ABC-051 Done) — BA/PM re-score due.** **2026-10-10 re-score (`bapm-owed-batch-2026-10-10`, merged `36a4c5b3`): DoR 10/10, 0 ⚠️ → Ready.** XS, P3. Pairs with `ABC-132`; never in parallel with `ABC-133` (same `src/cli.test.ts`). Exit depends on the owner's comment-only ruling.
+- [ABC-134] The frame-path probe's prose claims more reach than the probe has — four wording gaps in one file, comment-only  (BA/PM, XS, P3, since: 2026-10-10, DoR 10/10; cut from QE-053-b/c/d + QE-057-b in `bapm-owed-batch-2026-10-10`; `src/history-pane.nfr.test.ts` comments only → UAT waiver applies; ADR-0011 R5b (Architect, same file) is not cut yet — fold-in or sequence decided at pull)
 
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
 - [ABC-133] Count the spawn pin over the parser view, not a stripped string  (BA/PM, S, P3 → P1 if AR-058-STRIP fires, epic: —, since: 2026-10-10, **DoR 10/10**; F-058-1 + P1 folded; ~176 ms parse cost, A4 ≤ 250 ms; after ABC-059, same file) **→ In Development 2026-10-10**, pulled after `ABC-059` merged (`4c33b72b`) by the Orchestrator (subtask `ticket-to-pr-ABC-133`, branch `grugops/ABC-133-spawn-pin-parser-view`).
+- [ABC-135] `A8`'s consumer instrument reads a comment as a specifier, and two properties it has are pinned by no test — test-only, one file  (BA/PM, XS, P3 → P2 on ADR-0030 C1's trigger, since: 2026-10-10, DoR 10/10; cut from QE-054-a/c in `bapm-owed-batch-2026-10-10`; `src/render-seam.test.ts` only → UAT waiver applies) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-135`, branch `grugops/ABC-135-a8-comment-specifiers`).
 
 
 
