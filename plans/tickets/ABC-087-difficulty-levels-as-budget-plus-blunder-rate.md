@@ -435,3 +435,23 @@ The Engineer changes `src/levels.test.ts` only. `src/levels.ts` is not touched.
   - An inadmissible twin is re-run within `self_fix_attempts` (2).
   - **NOT MET or UNRESOLVED → stop.** That is option (c), the owner's word, with both readings.
     BA/PM moves no other criterion out of the default lane.
+
+**2026-10-10, Software Engineer re-hop** (option (a) applied, `src/levels.test.ts` only, `f61ad6b1`).
+I applied the ruling's four items exactly. The moved `A4` run's body is unchanged, including its now
+stale `"default lane, ENDGAMES"` log label. Readings are in `…69fa98d1`, which supersedes `…25962b19`
+for the gate and the cost.
+
+- **Gate:**
+  - lint, typecheck and build: exit 0;
+  - `npm test`: **52 files / 1600 / 0 skipped**;
+  - integrity `No findings.`;
+  - lane inventory 52 = 52.
+- **`ENGINE_DEEP=1`:** **25 passed (19 default)**, 200.8 s at load1 6.9 → 3.7.
+  - `A4`: `ENDGAMES` (80 + 1)/204 = **39.7 %**; perft + puzzles (97 + 0)/246 = **39.4 %**, both within
+    ±5 pp. Blunders played ÷ moves are 39.2 % and 39.4 %.
+  - `A5`: max 4,590 ms.
+  - `A3`: 35/62 vs 58/62.
+- **`N8-LANE`: MET.** The reading is +0.535 s CPU (0.50-0.62, sign 8/8), with an admissible twin
+  (+0.31 %, 4/8) and R 0.030 s, at load1 6.42-6.85. The verdict rests on `ADR-0035` (`proposed`).
+- **The `AGENTS.md` lane line** is re-drafted with "19 default" in `…53ebd6d1`. It is the Scribe's,
+  owed before merge.
