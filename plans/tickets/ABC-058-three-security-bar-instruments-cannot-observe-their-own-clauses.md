@@ -1,9 +1,9 @@
 ---
 id: ABC-058
-title: Three of `ABC-042`'s security-bar instruments cannot observe their own clauses — `shell:`/concatenation asserted by nothing, a `U+007F` clause whose probe carries no `U+007F`, and a spawn pin a docblock sentence can red
-status: backlog
-column: Backlog
-size: S
+title: Two of `ABC-042`'s security-bar instruments cannot observe their own clauses — a `U+007F` clause whose probe carries no `U+007F`, and a spawn pin a docblock sentence can red (the third, `S1`, closed by the tree since)
+status: ready
+column: Ready
+size: XS
 priority: P2
 epic: —
 feature: —
@@ -17,6 +17,18 @@ feature: —
 > found by the bars' author attacking its own bar text**. `Q5` / `B4` is the same instrument as `S1`
 > and rides with it. **`ABC-042`'s page is NOT edited by this ticket** — see § How the wording is
 > repaired without touching a gated page.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2-2026-10-10`)
+> against wave tip `f76e041`. `src/cli.test.ts` has grown from ~800 to 3174 lines, and the child
+> pin from 10 to 27 (`ABC-043` +7, `ABC-115` +7, `ABC-045` +1, `ABC-046` +2). Every mutant was
+> rebuilt on a `git archive` copy (control 66/66).
+> **`S5` holds:** a prose `` `spawnSync(` `` reds the correct file (1 of 66 red).
+> **`S4` holds:** `M3h` ships 66/66 green.
+> **`S1` is CUT, because the tree moved:** `MS4` (`shell: true` on the one `spawnSync`) is now
+> **RED, 18 of 66**, because the `/bin/sh -c` children `ABC-115` added break under a second shell.
+> `ABC-115` also amended the concatenation clause at the site (`:19-29`, `:404-409`).
+> `A3`/`A4` are struck, and the size goes `S` → `XS`. **DoR 10/10 → `Ready`.** Evidence:
+> `.grugops/context/rescore-batch-2-2026-10-10/`.
 
 ## Problem
 
@@ -28,15 +40,16 @@ instruments that report that are blind or brittle in ways their own text does no
 
 | # | the instrument | what it cannot see | the mutant that proves it |
 |---|---|---|---|
-| **`S1`** | bar 1b has **no in-suite row of its own**. The spawn-pin row catches an added `execSync` import and call site as a side effect | **a `shell:` key on the one spawn, and an argv built by string concatenation, are asserted by nothing** | **`MS4`** (`shell:` added, import list and call count unchanged) — **survives 29/29** |
-| **`S4`** | bar 3's probe spawns **once**, with a token containing a literal `\x1b[2J` — **ESC only**. The bar's clause (ii) forbids C0, `U+007F` **and** ESC | **the `U+007F` clause cannot fire**: no `U+007F` ever enters the child's argv | **`M3h`** (`printableOf` narrowed to `code < 0x20 && code !== 0x7f`, **the same two numeric literals**, ESC still stripped) — **ships 29/29 GREEN while `U+007F` reaches the terminal** |
-| **`S5`** | the spawn pin at `:787` reads **raw source** (`sourceOf("cli.test.ts")`) and then counts `/\bspawnSync\s*\(/` | **a legal docblock sentence naming `` `spawnSync(` `` reds a correct file** — the exact shape this file's own docblock already uses for `` `exec(` `` | measured by Security/NFR at the re-check: **RED on a correct build** |
+| ~~**`S1`**~~ | ~~bar 1b has no in-suite row of its own~~ | **CLOSED BY THE TREE, 2026-10-10.** `MS4` is now RED 18/66 as a side effect of `ABC-115`'s `/bin/sh` children, the same kind of side-effect kill the page accepted for `execSync`. The concatenation half was amended at the site by `ABC-115`: the `-c` scripts are built from `process.execPath`, `ENTRY_POINT` and literals, quoted by `shellWord` | ~~`MS4` survives~~ → **RED 18/66** |
+| **`S4`** | bar 3's probe spawns **once** (`CHILDREN.escape`, `:675`), with a token containing a literal `\x1b[2J` — **ESC only**. The bar's clause (ii) forbids C0, `U+007F` **and** ESC | **the `U+007F` clause cannot fire**: no `U+007F` ever enters the child's argv | **`M3h`** (`printableOf`, `src/cli.ts:125`, narrowed to `code < 0x20 && code !== 0x7f`, **the same two numeric literals**, ESC still stripped) — **ships 66/66 GREEN, re-measured 2026-10-10** |
+| **`S5`** | the spawn pin (`:1840-1845`) reads **raw source** (`sourceOf("cli.test.ts")`) and then counts `/\bspawnSync\s*\(/` | **a legal docblock sentence naming `` `spawnSync(` `` reds a correct file**. `ABC-115`'s comments avoid the paren by luck (`:21-22`, `:393`) | **RED on a correct build: 1 of 66, re-measured 2026-10-10** |
 
-*Value*: **`S5` is the sharp one.** That row's own comment says it is *"the instrument the owner's
-decision rests on"* — `N8-LANE` is breached at 2.00× and escalated, and a **false RED** on the child
-counter reads as *"an eleventh child appeared"* on a ticket held at the merge over a spawn-driven
-bar. `S1` and `S4` are drift guards: the build is correct today, and the cheapest moment to arm them
-is while the reasoning is written down.
+*Value*: **`S5` is the sharp one.** That row's own comment still says it is *"the instrument the
+owner's decision rests on"* (`:1837-1838`). A **false RED** on the child counter reads as *"a child
+was added past the ceiling"*, and four tickets have raised that ceiling with a written derivation
+(10 → 27). `S4` is a drift guard, as `S1` was: the build is correct today, and the cheapest moment
+to arm it is while the reasoning is written down. *(Value re-stated 2026-10-10. The 2.00× breach
+and the `G1` hold it cited are history.)*
 
 **Nothing here is a control failure.** `V1.2.5 [L1]` is MET by measurement, `V1.3.3` (terminal
 escapes) is **L2 and above the active L1 floor**, and two of the three ways to weaken the byte filter
@@ -46,21 +59,24 @@ ticket.
 
 ## Scope
 
-Three sites, one file — `src/cli.test.ts` — **zero production lines and zero new child processes.**
+Two sites, one file — `src/cli.test.ts` — **zero production lines and zero new child processes.**
+*(Line numbers re-measured 2026-10-10 at `f76e041`.)*
 
-- **`S5` — one identifier.** `sourceOf("cli.test.ts")` → `executableCodeOf("cli.test.ts")` at `:787`.
-  The helper is defined at `:45-48` and this file already calls it at **seven** sites.
-- **`S1` — two assertions appended to the row that already reads the file** (`N8-LANE` pin,
-  `:775-793`), over `executableCodeOf`: **`/shell\s*:/` count 0**, and **no `+` inside the
-  `spawnSync` argument text**. Not a new `it` block.
-- **`S4` — the probe token, in place.** `CHILDREN.escape` at `:158` is
+- **`S5` — one identifier.** `const self = sourceOf("cli.test.ts")` → `executableCodeOf(...)` at
+  `:1840`. Both the import-list match (`:1841`) and the call-site count (`:1845`) read `self`. The
+  helper is defined at `:58-61`.
+- ~~**`S1`**~~ — cut 2026-10-10; see the re-score note at the top.
+- **`S4` — the probe token, in place.** `CHILDREN.escape` at `:675` is
   `run("--colour", "\u001b[2Jpurple")`. Put **`\x7f` and one further C0** into the **same argv
-  token**, keeping the `[2Jpurple` substring the row locates by intact, and keep bar 3's existing
-  assertion at `:769` (`code < 0x20 || code === 0x7f`) unchanged — it is already correct; it has
-  simply never been fed a `U+007F`.
-- **The corrected bar wording, carried at the sites.** Bar 1b's regexes say **which text they apply
-  to** (the delivered test file's **executable code, comments stripped**), and bar 3's spawn clause
-  says the probe token carries **one member of each class it forbids**.
+  token**, and keep the `[2Jpurple` substring that the row locates by (`:1731`, `:1736`) intact.
+  Keep bar 3's existing assertion at `:1741` (`code < 0x20 || code === 0x7f`) unchanged. It is
+  already correct; it has simply never been fed a `U+007F`.
+- **The corrected bar wording, carried at the sites.** The spawn pin's comment says it counts over
+  **executable code, comments stripped**, and bar 3's spawn clause says the probe token carries
+  **one member of each class it forbids**. The pin's comment also says "an eleventh child"
+  (`:1836`) and "`N8-LANE` is breached and escalated" (`:1837`), and the same block says no
+  `N8-LANE` line is claimed (`:1758`, `:1803`). That is `ABC-114`'s defect class, in the two lines
+  this ticket edits, so correct both to what is true at the build.
 
 ## How the wording is repaired without touching a gated page — read this before objecting
 
@@ -79,86 +95,88 @@ cheaper than a gate that means nothing.**
 - **`ABC-042`, its page, its criteria, its verdicts and its hold.** Not re-opened. Nothing here
   changes a bar's **verdict**: all four were MET at `d011df4` and stay MET.
 - **`G1` / `N8-LANE`.** Not re-opened, not re-measured, not re-graded. **Zero new spawns** is a hard
-  constraint of this ticket precisely because `G1` is live and with the owner.
-- **`A8`'s number transcription row** (`numbersIn("cli.ts")` equals `["0","0x20","0x7f","1","2"]`).
+  constraint of this ticket: the pin at 27 is `ABC-115`'s ceiling, and a child that no criterion
+  names is a finding (the pin's comment, `:1749-1832`).
+- **`A8`'s number transcription row** (`numbersIn("cli.ts")` equals `["0","0x20","0x7f","1","2","70"]`
+  at `:1637`, 2026-10-10).
   It is the compensating control that kills `M3f`/`M3g`. **Do not touch it.**
 - **Widening bar 1b beyond `shell:` and concatenation**, and **C1/CSI** (`AR-1`, `L2`, outside the
   active set, owner BA/PM, standing ruling — requiring it here is gold-plating).
-- **Any production module.** All 18 merged modules and the two delivered ones stay byte-identical.
+- **Any production module.** Every production module stays byte-identical (35 at `f76e041`).
 
 ## Acceptance (Given/When/Then)
 
 - **`A1` (`S5` — the pin survives prose).** **Given** a docblock sentence added to
   `src/cli.test.ts` that names `` `spawnSync(` `` in prose, **when** the suite runs, **then** it is
   **GREEN**. *(Today: RED.)*
-- **`A2` (`S5` — no kill traded).** **Given** `MS1` (an eleventh child via a direct `spawnSync`) and
+- **`A2` (`S5` — no kill traded).** **Given** `MS1` (one more child via a direct `spawnSync`, which `spawned` never counts) and
   `MS2` (a namespace import of `node:child_process`), **then** both are **RED**, each attributed to
   the pin. **Rebuilt and run, not reasoned about.**
-- **`A3` (`S1` — the two unguarded clauses are guarded).** **Given** `MS4` (`shell: true` added to
-  the one `spawnSync` call, import list and call count unchanged), **then** the suite is **RED**;
-  and **given** a build whose argv token is assembled with `+`, **then** RED. *(Today: `MS4`
-  survives 29/29.)*
-- **`A4` (`S1` — the assertions run over the right text).** **Given** the delivered, correct file,
-  **then** the new assertions read **`executableCodeOf`**, and over that text `shell:` counts **0**
-  while over **raw** source it counts **1** — the file's own docblock. **The two numbers are both
-  asserted, so the test states why raw would be wrong.**
+- ~~**`A3`**, **`A4`** (`S1`)~~ — **struck 2026-10-10.** `MS4` is already RED (18/66), and
+  `ABC-115` amended the concatenation clause. The ids are kept so that no criterion is renumbered.
 - **`A5` (`S4` — the clause can fire).** **Given** the single probe child, **when** `M3h`
   (`printableOf` narrowed to `code < 0x20 && code !== 0x7f`) is rebuilt, **then** the suite is
-  **RED**. *(Today: 29/29 green while `U+007F` reaches the terminal.)*
+  **RED**. *(Re-measured 2026-10-10: 66/66 green while `U+007F` reaches the terminal.)*
 - **`A6` (`S4` — the compensating control is intact).** **Given** `M3f` and `M3g`, **then** both are
-  still **RED** and still attributed to `A8`'s number transcription, which is **byte-identical**.
-- **`A7` (the lane pin does not move).** **Given** the delivered file, **then** `spawned` is **10**
-  and `Object.keys(CHILDREN)` has length **10** — **no new child** — and **this diff adds no new
-  `it` block**, so the file's test count is whatever it was before this ticket, unchanged by it.
-  *(Stated as a delta, not as the absolute `29`: `ABC-059` may add a block to the same file and the
-  two tickets must not red each other.)* The bar-3 row still locates its token by whitespace split
-  and still asserts over every occurrence.
+  still **RED** and still attributed to the number-transcription row, which is **byte-identical**.
+  *(2026-10-10: that row is now `:1637` and reads `["0", "0x20", "0x7f", "1", "2", "70"]`. `ABC-043`
+  added `70`.)*
+- **`A7` (the lane pin does not move).** **Given** the delivered file, **then** `N8_SPAWN` is still
+  `17 + 7 + 1 + 2`, `spawned` equals it (**27** at `f76e041`), `Object.keys(CHILDREN)` has the same
+  length — **no new child** — and **this diff adds no new `it` block**. *(Stated as a delta: the
+  control was 66 tests at `f76e041`. `ABC-059` adds a block to the same file, and the two must not
+  red each other.)* The bar-3 row still locates its token by whitespace split and still asserts
+  over every occurrence.
 - **`A8` (nothing else changed).** `git diff --name-only <the delivered commit>~1 <the delivered
-  commit>` shows **exactly** `src/cli.test.ts` — **one path.** All 20 production modules
-  byte-identical by blob SHA. Suite green, skip **0**.
+  commit>` shows **exactly** `src/cli.test.ts` — **one path.** Every production module (35 at
+  `f76e041`) byte-identical by blob SHA. Suite green, skip **0**.
 
 ## Dependencies
 
-- **`ABC-042` must merge first — OPEN and HELD.** `src/cli.test.ts` **does not exist on `main`**
-  (verified); it is delivered by `ABC-042`, which is **held at the merge on `G1`, with the project
-  owner**. Not this ticket's to move.
+- ~~**`ABC-042` must merge first — OPEN and HELD.**~~ **`ABC-042` — `Done`** (`dbaf972`,
+  2026-08-15). `G1` was answered the same day.
 - **No dependency on `ABC-057`.** Different file, different guard; either order works.
+- **Same file, so not in parallel (2026-10-10):** `ABC-059` (one new block), and the Backlog
+  tickets `ABC-114` (comments) and `ABC-129` (cites at `:588`/`:744`). None of them is in flight.
+  `ABC-129`'s sites and `ABC-114`'s comments do not overlap these two sites.
 
 ## Security / NFR triggers
 
-- **Security IS the subject** — `V1.2.5 [L1]` (bar 1b) and `V1.3.3 [L2]` (bar 3). **Both are MET on
-  the delivered build and this ticket does not change that**; it arms the instruments that report it.
-  **Falsifiable firing threshold**: the diff touches the file that spawns, so **Security/NFR reads
-  it** — and it fires on any of `ABC-041`'s four clauses: **(a)** manifest touch — none, **(b)** a
-  non-`.test.ts` file under `src/` gaining a builtin / `process.` read / `spawn` / `exec` / `fetch` /
-  `eval` — none, **(c)** a test file adding network, a write outside a temp dir, or a **new** spawn —
-  **no new spawn**, and the argv change is inside an **existing array literal** with no
-  concatenation, **(d)** blast radius beyond one path — none. **On a disputed reading it fires and
+- **Security IS the subject** — `V1.2.5 [L1]` (bar 1b, the spawn pin) and `V1.3.3 [L2]` (bar 3).
+  **Both are MET on the delivered build and this ticket does not change that**; it arms the
+  instruments that report it. **Falsifiable firing threshold**: the diff touches the file that
+  spawns, so **Security/NFR reads it**. Against `ABC-041`'s four clauses: **(a)** no manifest touch.
+  **(b)** The reading is unruled (`ABC-072`). Under STATE it fires: 3 production files read
+  `process.` in executable code (`cli.ts`, `glyph-mode.ts`, `perft-bench.ts`), unchanged here.
+  Under DELTA it does not: no non-test file is touched. **(c)** A test file adding network, a write
+  outside a temp dir, or a **new** spawn: **no new spawn**, and the argv change is inside an
+  **existing array literal** with no concatenation. **(d)** No blast radius beyond one path. **On a disputed reading it fires and
   the gate resolves it: (c) is arguable because the bytes handed to a child change, and that argument
   should be had at the gate, not pre-empted here.**
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**. **0 new test files, 0 new files under `src/`,
-  and 0 new child processes — the pin at ten is a criterion (`A7`).** The added work is two regex
-  scans over already-read strings and two extra bytes in one argv token. **`N8-LANE` is currently
-  NOT MET at 2.00× and that figure is the owner's; this ticket must not move it, and `A7` is how
-  that is checked rather than asserted.**
+  and 0 new child processes — the pin at 27 is a criterion (`A7`).** The added work is one regex
+  scan over an already-read string and two extra bytes in one argv token. The pin's own comment
+  says no `N8-LANE` line is claimed in this file (`ABC-108`'s `OQ-1`), so this ticket claims none
+  either; `A7` is how "it does not move" is checked rather than asserted.
 - **`NFR-002` not triggered.** No frame path; no production module opened.
 
 ## Test notes
 
-1. **Six mutants, all specified by their author, none invented here**: `MS1`, `MS2`, `MS4`, `M3f`,
-   `M3g`, `M3h`. **Rebuild and run each — Security/NFR explicitly said to re-run `MS1`/`MS2` "rather
-   than taking my reasoning".** Run a control first: the unmutated tree must be **29/29** before any
-   mutant verdict counts.
-2. **`S1` cannot be written over raw source and this is measured, not argued**: `shell:` occurs
-   exactly once in the file's own docblock, so a raw-text row asserting zero **cannot be green on the
-   correct file**. That is also the whole of `Q5`.
+1. **Five mutants, all specified by their author, none invented here**: `MS1`, `MS2`, `M3f`, `M3g`,
+   `M3h` (`MS4` left with `S1`). **Rebuild and run each — Security/NFR explicitly said to re-run
+   `MS1`/`MS2` "rather than taking my reasoning".** Run a control first: the unmutated file must be
+   all green (**66/66** at `f76e041`) before any mutant verdict counts. One `src/cli.test.ts` run
+   took a few seconds on 2026-10-10.
+2. **`executableCodeOf` strips `//` to end of line, including inside string literals.** Check that
+   the import line and the `spawnSync(` call survive the strip before trusting the pin's new
+   counts.
 3. **The `S4` token must keep `[2Jpurple` intact** — bar 3 locates the echoed token with
    `.includes("[2Jpurple")` and the non-vacuity assertion depends on it. Choose the added bytes so
    the located substring survives, and re-check the non-vacuity assertion still passes on the correct
    build **before** trusting any absence assertion.
 4. **`S4`'s fix costs zero new spawns and that is the point.** Both extra bytes go into the **same
    argv token** of the existing `CHILDREN.escape` child. If a proposed implementation needs a second
-   child, it is the wrong implementation while `G1` is unanswered.
+   child, it is the wrong implementation: the pin at 27 is a ceiling.
 5. **Do not confuse these `S4`/`S5` with the Scribe's.** The `AGENTS.md` Scribe published its own
    `S4`/`S5` at `agents-md-ABC-042-dev-run` (an E2E justification comment, and `ADR-0007`'s `D2`
    headline). **Different findings, same labels, different author.** The ones in this ticket are
@@ -170,30 +188,31 @@ cheaper than a gate that means nothing.**
 
 ## Size and priority rationale
 
-**Size `S` (2).** The edits are ~10 lines across three sites in one file — `XS` of typing. The `S` is
-the verification: six mutants rebuilt and run against a green control, plus the two-number assertion
-in `A4` that has to be got right in both directions. **Not `M`: nothing is designed here, every
-mechanism and site is named by the role that found it.**
+**Size `XS` (1), re-sized 2026-10-10 from `S`.** Two sites in one file. `S1`'s two-number assertion,
+the hardest part, has left. Five mutants remain, each a one-line edit and a single-file run.
+**Not `M`: nothing is designed here.**
 
-**Priority `P2`.** No live defect and nothing blocks: the delivered build is correct on all three
-counts. **Promotion triggers, named**: **(a)** any hop that opens `src/cli.test.ts` for another
-reason — `S5`'s one-identifier fix should ride along with it; **(b)** the moment `G1` comes back with
-an answer that touches the child set, because `S5`'s false RED lands hardest exactly there.
+**Priority `P2`, kept.** Both of the 2026-08-16 triggers fired: about ten hops opened this file,
+and `G1` was answered while the child set grew from 10 to 27. No hop rode the fix along. **They are
+not used to promote:** in 55 days the false RED never happened, the tree closed `S1` by itself, and
+Security/NFR rated all three findings LOW. **New trigger:** promote to `P1` if any open ticket's
+diff would add a `` `spawnSync(` `` in prose to this file. Pull this ticket with `ABC-059`, back to
+back on the same file.
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-16**. **Result: 9 of 10 — NOT MET.** ⚠️×1, and the ⚠️ is an ordering, not an unknown.
+**Re-scored 2026-10-10 by BA/PM at `f76e041`. Result: 10 of 10 — MET → `Ready`.** Was 9/10 at the
+cut; the ⚠️ (`ABC-042` held on `G1`) is discharged. `S1` is cut, because the tree closed it.
 
 | # | item | verdict |
 |---|---|---|
-| 1 | problem clear | **✅** three instruments, three named mutants, two of them measured green on builds that misbehave and one measured red on a build that does not |
-| 2 | scope and out-of-scope clear | **✅** three sites in one file; five fences, including `A8`'s number row and `G1` explicitly |
-| 3 | INVEST-shaped | **✅** small, testable by six existing mutant specs; the three share a file, an author and one review |
-| 4 | acceptance testable and measurable | **✅** `M3h`/`MS4` RED, `MS1`/`MS2`/`M3f`/`M3g` still RED, `shell:` **0** stripped vs **1** raw, `spawned` **10**, `it` count **29**, **1** path in the diff |
-| 5 | dependencies known | **✅** `ABC-042` first (the file does not exist on `main` — verified), independent of `ABC-057` |
-| 6 | security/NFR triggers with a measurable target | **✅** the subject; two ASVS rows named with levels, four clauses answered individually, `N8-LANE` ≤ 650 ms with the spawn pin asserted at **10** |
-| 7 | test notes present | **✅** five, including the control run, the located-substring trap, and the `S4`/`S5` label collision with the Scribe's findings |
-| 8 | size assigned | **✅** `S` (2), with the reason it is not `XS` (six mutants) and not `M` (nothing designed) |
-| 9 | priority assigned | **✅** `P2` with two named promotion triggers |
-| 10 | no major unresolved blocker | **⚠️** `ABC-042` must merge first and is **held on `G1`, with the project owner**. Real, external, and not this ticket's to resolve — scored as a blocker rather than written off |
+| 1 | problem clear | **✅** two instruments, each re-measured today: `M3h` green 66/66, and the prose `` `spawnSync(` `` red 1/66 on a correct file |
+| 2 | scope and out-of-scope clear | **✅** two sites in one file; `A8`'s number row and the spawn count are fenced |
+| 3 | INVEST-shaped | **✅** small and testable by five existing mutant specs; serial with `ABC-059` on the same file, but neither depends on the other |
+| 4 | acceptance testable and measurable | **✅** `M3h` RED; `MS1`/`MS2`/`M3f`/`M3g` still RED; `N8_SPAWN` unchanged (27); 0 new `it`; **1** path |
+| 5 | dependencies known | **✅** `ABC-042` `Done`; same-file neighbours named (`ABC-059`, `ABC-114`, `ABC-129`) |
+| 6 | security/NFR triggers with a measurable target | **✅** the subject; two ASVS rows with levels; four clauses answered, (b) under both readings; 0 new children |
+| 7 | test notes present | **✅** five, including the control count and the strip caveat |
+| 8 | size assigned | **✅** `XS` (1), was `S` |
+| 9 | priority assigned | **✅** `P2`, with the fired triggers named and a new trigger |
+| 10 | no major unresolved blocker | **✅** none |

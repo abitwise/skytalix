@@ -1,0 +1,11 @@
+Probes for subtask rescore-batch-2-2026-10-10, BA/PM, 2026-10-10. Tree: grugops/wave-2026-09-25 @ f76e041.
+Machine: Apple M3, Node v26.11.0. Mutants run in a `git archive HEAD` copy with node_modules symlinked; nothing under src/ was edited in any worktree.
+
+clause-b-limbs.mjs  <tree>   ABC-072 A3: the three clause-(b) limbs; code = comments stripped.       -> clause-b-limbs.out.txt
+clause-b-copies.py  <tree>   ABC-073: restating pages + fail-safe, whitespace-normalized (python3 -I) -> clause-b-copies.out.txt (base and after)
+dev-run-spans.py    <tree>   ABC-059 A1: `Dev / run` spans in AGENTS.md (python3 -I)                 -> dev-run-spans.out.txt
+coord-throws.mjs    <tree>   ABC-104: parseCoordinateMove(null,..) / (pos,..,42) still throw          -> coord-throws.out.txt
+m15.out.txt                  ABC-057: M15 (QE's exact text) at :335; file run and whole `npx vitest run --dir src`
+abc058-mutants.out.txt       ABC-058 on src/cli.test.ts: control 66/66; MS4 (`shell: true,` after the stdio line in childOf) 18 red;
+                             S5 (prose line ` * ... `spawnSync(` ...` inserted at line 2) 1 red (N8-LANE pin); M3h (src/cli.ts:125 `||` -> `&& code !== 0x7f`) 66/66 green.
+                             (The MS4 line appears last: the first MS4 run's summary was cut by `head`, and it was re-run for the count.)

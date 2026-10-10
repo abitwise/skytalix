@@ -1,0 +1,24 @@
+{
+ "production": 35,
+ "limb1_node_import": [],
+ "limb2_process_raw": [
+  "src/cli.ts",
+  "src/frame.ts",
+  "src/glyph-mode.ts",
+  "src/line-input.ts",
+  "src/perft-bench.ts",
+  "src/render.ts",
+  "src/status-panel.ts",
+  "src/transposition.ts",
+  "src/turn-loop.ts"
+ ],
+ "limb2_process_code": [
+  "src/cli.ts",
+  "src/glyph-mode.ts",
+  "src/perft-bench.ts"
+ ],
+ "limb3_calls_code": [
+  "src/coordinate-move.ts: exec(",
+  "src/san.ts: exec(,exec("
+ ]
+}

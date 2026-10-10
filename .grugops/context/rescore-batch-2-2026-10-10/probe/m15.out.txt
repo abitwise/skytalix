@@ -1,0 +1,19 @@
+# ABC-057 M15 at f76e041 (git archive copy, node_modules symlinked)
+## control: npx vitest run src/history-pane.nfr.test.ts
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  13:44:53
+   Duration  361ms (transform 65ms, setup 0ms, collect 148ms, tests 114ms, environment 0ms, prepare 30ms)
+
+## M15: line 335 -> expect(production.filter((file) => LICENSED_DRIVERS.includes(file))).toEqual(expect.arrayContaining(runtimeImporters));
+      Tests  11 passed (11)
+   Start at  13:44:59
+   Duration  334ms (transform 48ms, setup 0ms, collect 107ms, tests 117ms, environment 0ms, prepare 36ms)
+
+--- whole src lane:
+
+ Test Files  51 passed (51)
+      Tests  1541 passed (1541)
+   Start at  13:45:00
+   Duration  6.55s (transform 1.18s, setup 0ms, collect 9.01s, tests 10.90s, environment 5ms, prepare 1.94s)
+

@@ -3,8 +3,8 @@ id: ABC-073
 title: 'Eight ticket pages restate `ABC-041` clause (b) and not one uses the test the clause states — six answer a file-touch or a delta, and two carry no fail-safe sentence at all'
 status: backlog
 column: Backlog
-size: S
-priority: P2
+size: XS
+priority: P3
 epic: —
 feature: —
 ---
@@ -16,6 +16,19 @@ feature: —
 > **without** its closing sentence and cuts a ticket that argues the gate away."* **Measured at the
 > cut: that risk is already realised on two pages.** The clause's own shape is `ABC-072`; this ticket
 > is the copies.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2-2026-10-10`)
+> at wave tip `f76e041`. **The table moved, and the risk that made this `P1` is not live on any
+> open page.** It was re-measured over whitespace-normalized text: the per-line grep in test note 1
+> reports `ABC-058`/`ABC-059` as missing the fail-safe, but their sentence is wrapped across lines.
+> `ABC-061` merged on 2026-08-17 without the fail-safe; that is the ordering hazard below, and it
+> fired. **Live restaters: 6** (`ABC-053`, `054`, `055`, `057`, `058`, `059`). **The fail-safe is
+> on 6 of 6**, so `A2` is already met. No page cut since August restates clause (b). The
+> page/board disagreement is closed: the page said `P2` and the board said `P1` (promoted
+> 2026-08-17 when `ABC-061` was pulled). **→ `P3`, `S` → `XS`.** DoR 9/10, the ⚠️ is still
+> `ABC-072`. On 2026-10-10 this re-score already rewrote the (b) answer on `ABC-055`/`057`/`058`/
+> `059` to state both readings with each page's own facts. That is an interim form, not a ruled
+> one: no wording was guessed.
 
 ## Problem
 
@@ -54,13 +67,18 @@ right contradicts itself in the same bullet.**
 
 ## Scope
 
-**Seven Backlog ticket pages, one bullet each. Zero files under `src/`, zero tests, zero new spawns.**
+**The Backlog pages that still restate clause (b), one bullet each. Zero files under `src/`, zero
+tests, zero new spawns.** *(Re-scoped 2026-10-10: six pages, not seven, because `ABC-061` merged.
+Any of `ABC-055`/`057`/`058`/`059` merged before this hop leaves the set too.)*
 
-- **Repair the (b) clause on**: `ABC-053`, `ABC-054`, `ABC-055`, `ABC-057`, `ABC-058`, `ABC-059`,
-  `ABC-061` — each to `ABC-072`'s canonical wording, **cited by name rather than re-copied in full**.
-- **Restore the fail-safe sentence** — *"Whichever way a reading is disputed, it fires and the gate
-  resolves it"* — on the pages missing it (`ABC-061` today; re-measure at the hop, the set may have
-  grown).
+- **Repair the (b) clause on**: `ABC-053`, `ABC-054`, `ABC-055`, `ABC-057`, `ABC-058`, `ABC-059` —
+  each to `ABC-072`'s canonical wording, **cited by name rather than re-copied in full**. **The set
+  is the union of two greps** (2026-10-10). The first is the restating grep in test note 1, which
+  finds `053`/`054`. The second is `` grep -l 'reading is unruled (`ABC-072`)' plans/tickets/ ``,
+  which finds the four pages this re-score rewrote: their interim text no longer quotes the
+  clause's subject phrase.
+- **Keep the fail-safe sentence** — *"Whichever way a reading is disputed, it fires and the gate
+  resolves it"* — on every page in the set (6 of 6 carry it at `f76e041`; re-measure at the hop).
 - **Each page keeps its own honest ANSWER.** This is a wording repair, not a verdict repair: a page
   that touches no production file still says so, in the vocabulary the ruling establishes. **Copying
   one answer onto seven pages is the failure mode this ticket exists to end.**
@@ -84,23 +102,26 @@ right contradicts itself in the same bullet.**
 ## Acceptance (Given/When/Then)
 
 - **`A1` (every live copy matches the ruling).** **Given** the delivered commit, **when**
-  `grep -l 'non-\`.test.ts\` file under' plans/tickets/` is run, **then** every Backlog page it
-  returns states clause (b) in `ABC-072`'s ruled form, and **`ABC-041`, `ABC-065` and `ABC-066` are
-  the only pages left carrying the old wording** — each because it is merged.
+  `grep -l 'non-\`.test.ts\` file under' plans/tickets/` and the "unruled" grep in § Scope are run,
+  **then** every non-`Done` page that either returns states clause (b) in `ABC-072`'s ruled form, and
+  the "unruled" grep returns **0** pages, and **every page left carrying the old
+  wording is `Done`** (at `f76e041`: `ABC-041`, `ABC-061`, `ABC-063`, `ABC-064`, `ABC-065`, `ABC-067`,
+  `ABC-082`), each because it is merged.
 - **`A2` (the fail-safe is universal on live pages).** **Given** the delivered commit, **then** every
-  Backlog page that restates clause (b) also carries the fail-safe sentence. **Count today: 6 of 7.
-  After: 7 of 7.** *(`ABC-061` is the one; re-measure before trusting this number.)*
-- **`A3` (no verdict was copied).** **Given** the seven pages, **then** each (b) answer still names
+  Backlog page that restates clause (b) also carries the fail-safe sentence, counted over
+  whitespace-normalized text. **6 of 6 at `f76e041`, and still n of n after the hop.**
+- **`A3` (no verdict was copied).** **Given** the pages in the set, **then** each (b) answer still names
   **that page's own** measured facts — its own path count, its own file list — and **no two pages
   carry an identical (b) answer**. *(`ABC-055`, `ABC-057` and `ABC-059` are identical today; that is
   the symptom.)*
 - **`A4` (the self-contradiction is gone).** **Given** `ABC-053`, **then** its Security bullet's
   heading and its (b) answer agree: it does not quote a firing clause under a "not triggered" header.
-- **`A5` (nothing else on those pages moved).** **Given** the delivered commit, **then** for each of
-  the seven pages the diff touches **only** lines inside the `## Security / NFR triggers` section —
+- **`A5` (nothing else on those pages moved).** **Given** the delivered commit, **then** for each
+  page in the set the diff touches **only** lines inside the `## Security / NFR triggers` section —
   and every `## Acceptance` block is **byte-identical** by blob-level comparison of the section text.
 - **`A6` (nothing else changed).** **Given** the delivered commit, `git diff --name-only <commit>~1
-  <commit>` shows **exactly seven** `plans/tickets/ABC-0*.md` paths and **nothing else** — **0 paths
+  <commit>` shows **exactly** the set's `plans/tickets/ABC-0*.md` paths (6 at `f76e041`) and
+  **nothing else** — **0 paths
   under `src/`**, 0 new files. Suite green, skip **0**.
 
 ## Dependencies
@@ -129,48 +150,49 @@ right contradicts itself in the same bullet.**
 
 ## Test notes
 
-1. **Re-measure the eight-row table before editing anything.** It was measured on `main` @ `5cf86d3`
+1. **Re-measure the table before editing anything.** It was measured on `main` @ `5cf86d3`
    with `grep -rln 'non-\`.test.ts\` file under' plans/tickets/` and
    `grep -rln 'it fires and the gate resolves it' plans/tickets/`. Tickets merge; the set moves.
+   **Measure over whitespace-normalized text** (2026-10-10). The per-line grep misses a sentence
+   wrapped across a line break, as on `ABC-058`/`ABC-059`. That is `ABC-059`'s defect class, met
+   here.
 2. **The two greps are not interchangeable.** The first finds pages that restate the clause; the
    second finds pages carrying the fail-safe. `ABC-056` and `ABC-066` carry the fail-safe **without**
    restating (b) — do not read the second list as the first.
 3. **Resist the copy.** The fastest way to close `A1` is one paragraph pasted seven times, which
    fails `A3` and reproduces the defect in a new spelling. Each page's answer is its own measurement.
-4. **`ABC-058` is one of the seven and it is also mid-flight in the Backlog** — its own dependency
-   block is stale (it says `src/cli.test.ts` does not exist on `main`; it does, and `ABC-042` merged).
-   **That is a separate repair, owned by whoever next opens that page — do not silently ride it in
-   here**, and if it has already been fixed, say so rather than re-fixing it.
+4. **`ABC-058`'s stale dependency block was repaired on 2026-10-10** by the BA/PM re-score (it is
+   now `Ready`). Do not re-fix it here.
 5. **Label collision**: `ABC-058` carries a different `S1`/`S4`/`S5` (Security/NFR's `ABC-042`
    re-check). The `S1`/`S2` behind this ticket are `security-nfr-ABC-066`'s. Same labels, different
    authors.
 
 ## Size and priority rationale
 
-**Size `S` (2).** Seven bullets is `XS` of typing; the `S` is `A3` — writing seven **different**
-honest answers instead of one, and re-measuring the table first. **Not `M`**: nothing is designed and
-no code moves.
+**Size `XS` (1), re-sized 2026-10-10 from `S`.** At most six bullets, and four of those pages
+already state both readings with their own facts. The set shrinks with every pull of `ABC-055`/
+`057`/`058`/`059`. **Not `S`:** `A3`'s "different honest answers" are mostly written already.
 
-**Priority `P2`.** Nothing is broken today and every live page still routes through the Orchestrator
-regardless of what its page says. **Promotion triggers, named: (a)** promote to **`P1`** the moment
-`ABC-061` is pulled — it is the page with the file-touch wording and no fail-safe; **(b)** promote if
-a second page is found to have lost the fail-safe sentence, because the residual risk `S1` bounded on
-"the sentence surviving in both places" is then unbounded.
+**Priority `P3` — re-set 2026-10-10.** The page said `P2` and the board `P1`, from trigger (a),
+2026-08-17. Trigger (a) has spent itself: `ABC-061` merged. The fail-safe is on 6 of 6 live pages,
+and no new page restates the clause. **Promote to `P2`** if a live page loses the fail-safe, or if a
+newly cut page restates clause (b). If `ABC-072` rules while this is still `P3`, the Orchestrator may
+fold this ticket into `ABC-072`'s hop. That needs `ABC-072` `A6` amended to allow these paths.
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-16**. **Result: 9 of 10 — NOT MET.** ⚠️×1, an ordering on `ABC-072`.
+**Re-scored 2026-10-10 by BA/PM at `f76e041`. Result: 9 of 10 — NOT MET, unchanged.** The ⚠️ is
+still the ordering on `ABC-072`.
 
 | # | item | verdict |
 |---|---|---|
-| 1 | problem clear | **✅** eight pages tabulated by grep with their exact wording class and fail-safe state; two pages measured missing the sentence, one of them `P1` and pullable |
-| 2 | scope and out-of-scope clear | **✅** seven pages, one bullet each; five fences including every merged page, `ABC-060`'s four, and the rejected guard |
-| 3 | INVEST-shaped | **✅** one subject, one file type, one reviewer; deliverable in one hop once `ABC-072` rules |
-| 4 | acceptance testable and measurable | **✅** two named greps, **6 of 7 → 7 of 7** on the fail-safe, no two identical (b) answers, section-only diffs, **exactly 7** paths, **0** under `src/` |
-| 5 | dependencies known | **✅** `ABC-072` first (⚠️); `ABC-042` measured merged and NOT a dependency; the "a page may merge out of the set" hazard named |
-| 6 | security/NFR triggers with a measurable target | **✅** all four clauses answered, (b) answered **under both readings** with the 7-file measurement, fail-safe carried; `N8-LANE` ≤ 650 ms, lane cost zero |
-| 7 | test notes present | **✅** five, including the two-greps-are-not-the-same trap and the `ABC-058` stale-dependency warning |
-| 8 | size assigned | **✅** `S` (2), with the reason it is not `XS` |
-| 9 | priority assigned | **✅** `P2` with two named promotion triggers |
-| 10 | no major unresolved blocker | **⚠️** `ABC-072`'s ruling must land first. Real, internal, and this ticket is deliberately **not** written to guess the outcome |
+| 1 | problem clear | **✅** re-measured over normalized text: 6 live restaters, 6/6 with the fail-safe; the wording is still mixed: `053` faithful but self-contradicting, `054` delta, and `055`/`057`/`058`/`059` dual-stated as an interim form since this re-score |
+| 2 | scope and out-of-scope clear | **✅** the live set, re-measured at the hop; merged pages fenced |
+| 3 | INVEST-shaped | **✅** one subject, one file type; deliverable in one hop once `ABC-072` rules |
+| 4 | acceptance testable and measurable | **✅** `A1` names today's merged set; `A2` 6/6 counted over normalized text; `A6` path count = the set |
+| 5 | dependencies known | **✅** `ABC-072` first (⚠️); the shrinking-set hazard named and realised once (`ABC-061`) |
+| 6 | security/NFR triggers with a measurable target | **✅** unchanged; lane cost zero |
+| 7 | test notes present | **✅** five; note 1 now requires normalized text |
+| 8 | size assigned | **✅** `XS` (1), was `S` |
+| 9 | priority assigned | **✅** `P3` (page `P2` / board `P1` reconciled), with triggers |
+| 10 | no major unresolved blocker | **⚠️** `ABC-072`'s ruling must land first |

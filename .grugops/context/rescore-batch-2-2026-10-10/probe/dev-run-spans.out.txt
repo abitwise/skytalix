@@ -1,0 +1,13 @@
+scripts running src/cli.ts: ['chess']
+'Dev / run: `npm run chess` <!-- prints the board and plays a full game against the merged engine (up'  | npm run
+'Dev / run".'  
+'Dev / run` = `npm run chess`) but changes none of this — it runs `src/cli.'  | npm run
+Q13 sentence appended -> spans with UNKNOWN: 1
+UNKNOWN - verify occurrences: 8
+# re-run at 14a1d2a (after scribe-ABC-119-lane and ABC-127 merged)
+scripts running src/cli.ts: ['chess']
+'Dev / run: `npm run chess` <!-- prints the board and plays a full game against the merged engine (up'  | npm run
+'Dev / run".'  
+'Dev / run` = `npm run chess`) but changes none of this — it runs `src/cli.'  | npm run
+Q13 sentence appended -> spans with UNKNOWN: 1
+UNKNOWN - verify occurrences: 8

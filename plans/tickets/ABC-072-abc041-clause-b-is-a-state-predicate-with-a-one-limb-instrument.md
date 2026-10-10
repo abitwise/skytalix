@@ -4,7 +4,7 @@ title: '`ABC-041` clause (b) is written as a STATE predicate, its instrument cov
 status: backlog
 column: Backlog
 size: S
-priority: P1
+priority: P2
 epic: —
 feature: —
 ---
@@ -16,6 +16,18 @@ feature: —
 > edited by this ticket** — it is merged, gated and `Done`; see § Where the corrected wording lands.
 > **`ABC-066`'s page is not edited either**, for the same reason, so `S1`'s "one sentence on
 > `ABC-066` § Security" is discharged HERE instead — stated so it is not read as dropped.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2-2026-10-10`)
+> at wave tip `f76e041`. **The premise holds: no ruling exists.** No ADR in
+> `memory-bank/50-decisions/` rules STATE vs DELTA, and clause (b) at `ABC-041` `:220-224` is
+> unchanged. **The numbers moved, and the August "7" was itself a word-hit count.** Today there are
+> 35 production files. Limb 1 → **0**. Limb 2 → **3** files reading `process.` in executable code
+> (`cli.ts`, `glyph-mode.ts`, `perft-bench.ts`), but **9** by raw `grep`. 4 of the August 7 hold the
+> word only in comments today. Limb 3 → **0** call sites, plus **3** `RegExp.prototype.exec(` word
+> hits (`coordinate-move.ts:84`, `san.ts:233`, `:249`), test note 2's trap made concrete.
+> **The pressure has dropped:** `ABC-061` merged on 2026-08-17, and **no page cut since August
+> restates clause (b)**. Recent pages write "Security — not triggered. <reason>" and cite nothing.
+> **P1 → P2.** DoR 9/10, ⚠️ still the Architect/Design ruling.
 
 ## Problem
 
@@ -36,12 +48,12 @@ The clause, verbatim (`plans/tickets/ABC-041-render-seam-closure.md:220-224`):
 > zero, and **`ABC-042` is the hop that ends it**, deliberately rather than by surprise.)*
 
 **Three defects in one paragraph, each measured on `main` @ `5cf86d3` (20 production files, 50 `.ts`
-total):**
+total); re-measured 2026-10-10 at `f76e041` (35 production files, 86 `.ts`) in the italic notes:**
 
 | # | defect | measurement |
 |---|---|---|
-| **1** | the body is a **state** test — *"Fires if any … file … reads `process.`"*, present tense, no delta language anywhere | **7 production files read `process.`**: `cli.ts`, `frame.ts`, `glyph-mode.ts`, `perft-bench.ts`, `render.ts`, `status-panel.ts`, `turn-loop.ts`. Under the words as written, **(b) fires on every ticket, forever** |
-| **2** | the parenthetical **instrument** tests the FIRST limb only (`from "node:`) of a three-limb body | `grep -rlE 'from "node:' src/ \| grep -v '\.test\.ts'` → **0 files**, still, today. Limb 2 → **7**. Limb 3 (`spawn`/`exec`/`fetch`/`eval`/`new Function` call sites) → **0** |
+| **1** | the body is a **state** test — *"Fires if any … file … reads `process.`"*, present tense, no delta language anywhere | **7 production files read `process.`**: `cli.ts`, `frame.ts`, `glyph-mode.ts`, `perft-bench.ts`, `render.ts`, `status-panel.ts`, `turn-loop.ts`. Under the words as written, **(b) fires on every ticket, forever**. *(2026-10-10: **3** in executable code (`cli.ts`, `glyph-mode.ts`, `perft-bench.ts`); **9** by raw word hit. `frame.ts`, `render.ts`, `status-panel.ts` and `turn-loop.ts` hold the word only in comments today. Still > 0, so the conclusion stands.)* |
+| **2** | the parenthetical **instrument** tests the FIRST limb only (`from "node:`) of a three-limb body | `grep -rlE 'from "node:' src/ \| grep -v '\.test\.ts'` → **0 files**, still, today. Limb 2 → **7**. Limb 3 (`spawn`/`exec`/`fetch`/`eval`/`new Function` call sites) → **0**. *(2026-10-10: 0 / 3 in code (9 raw) / 0 call sites; the 3 `exec(` hits are `RegExp.prototype.exec`.)* |
 | **3** | the parenthetical **predicts** *"`ABC-042` is the hop that ends it"* | **`ABC-042` merged 2026-08-15 @ `dbaf972` and did NOT end it** — it added `process.` reads, not a `node:` import. The instrument's baseline of zero is intact and the body fires anyway |
 
 *Value*: **this has already cost a routing decision, and the next one is queued.**
@@ -57,7 +69,9 @@ total):**
   that skip was consistent with the reading it cited is an open question and it belongs to the
   Orchestrator; this ticket records it rather than answering it** (see `A5`).
 - **`ABC-061` is `P1`, `DoR 10/10` and next in line, and its clause-(b) paragraph is the
-  file-touched form with NO fail-safe sentence.** The propagation is `ABC-073`.
+  file-touched form with NO fail-safe sentence.** The propagation is `ABC-073`. *(2026-10-10:
+  `ABC-061` merged 2026-08-17 with that wording. No page cut since restates the clause. Six
+  August-era Backlog pages still do; see `ABC-073`.)*
 
 **What is NOT wrong here:** no control was bypassed and no merged verdict moves. `ABC-066`'s (b)
 fired and was **cleared on the merits** (capability surface of `src/cli.ts` byte-identical either
@@ -133,13 +147,16 @@ its un-clarified wording permanently, and the record of why is this section.
   cite. **Observable:** a later ticket's Security paragraph can reference it with a path and an id
   instead of a copied sentence.
 - **`A3` (the instrument covers the body).** **Given** the corrected text, **then** its instrument is
-  **three** commands, one per limb, and each is RUN and its output recorded at the hop. **On `main`
-  today the three return: `node:` imports → 0 files; `process.` readers → 7 files, named; dangerous
-  call sites (`spawn`/`exec`/`fetch`/`eval`/`new Function`) → 0.** A hop that reports a limb without
-  running its command fails this row.
+  **three** commands, one per limb, and each is RUN and its output recorded at the hop. Each command
+  **says whether it counts call sites or word hits, and limbs 2 and 3 count over executable code
+  (comments stripped)**. **At `f76e041` the three return: `node:` imports → 0 files; `process.`
+  readers → 3 files (`cli.ts`, `glyph-mode.ts`, `perft-bench.ts`); dangerous call sites → 0**
+  (`RegExp.prototype.exec` is not `child_process.exec`). A hop that reports a limb without running
+  its command fails this row.
 - **`A4` (the falsified prediction is retired).** **Given** the corrected text, **then** it does NOT
   carry *"`ABC-042` is the hop that ends it"*, and it states the measured fact instead: `ABC-042`
-  merged @ `dbaf972` and the `node:` grep is **still 0 across all 20 production files**.
+  merged @ `dbaf972` and the `node:` grep is **still 0 across all production files** (35 at
+  `f76e041`).
 - **`A5` (the live consequence is answered, not buried).** **Given** the ruling in `A1`, **then** the
   artifact answers, in one sentence, **whether clause (b) fired on `ABC-065`** under that reading —
   and states either way that **`ABC-065`'s merge is not re-opened** (it touched 0 production files;
@@ -183,7 +200,9 @@ its un-clarified wording permanently, and the record of why is this section.
 2. **The `process.` limb has a known false-positive class**: `grep -rl 'process\.'` matches prose in
    doc comments. Security/NFR hit exactly that on limb 3 — `src/cli-options.ts:7-8` contains the
    *words* "spawning"/"spawn" and **0 call sites**. Report call sites, not word hits, and say which
-   you counted.
+   you counted. *(2026-10-10: the cut's own "7" was a word-hit count. Today 9 raw vs 3 in code.
+   Limb 3's raw `exec(` hits are 3 `RegExp.prototype.exec` calls. The commands BA/PM ran are in
+   `.grugops/context/rescore-batch-2-2026-10-10/probe/`.)*
 3. **Do not "fix" the clause by making the instrument match the body without ruling `A1` first.** A
    three-limb instrument under a state body means every ticket fires; that is a scheduling
    consequence, not a wording tidy-up, and it is the Orchestrator's to absorb knowingly.
@@ -201,25 +220,28 @@ recorded, and the two-reading argument that has to survive a reviewer who prefer
 **Not `XS`**: it needs another role's decision. **Not `M`**: nothing is designed, no code moves, and
 both readings are already written out here.
 
-**Priority `P1`.** No live defect and nothing is broken today — but the threshold decides **whether
-the security gate runs at all**, it has already produced two contradictory routing answers in two
-days, and `ABC-061` (`P1`, `DoR 10/10`) will inherit the paragraph with no fail-safe. **Not `P0`:
-nothing is unmergeable and no user is harmed.**
+**Priority `P2` — DEMOTED 2026-10-10 from `P1`.** Two of the three P1 reasons have expired.
+`ABC-061` merged on 2026-08-17. Since then no page has restated clause (b), so the copy-forward risk
+stopped by itself. What remains is real but slower: the threshold still decides **whether the
+security gate runs at all**, and six Backlog pages still carry an unruled clause (`ABC-073`).
+**Promote back to `P1`** if a newly cut page restates clause (b), or if a routing decision cites it.
+**Not `P3`:** no other written trigger for the `In Security/NFR` column exists.
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-16**. **Result: 9 of 10 — NOT MET.** ⚠️×1, and the ⚠️ is a required ruling by another role.
+**Re-scored 2026-10-10 by BA/PM at `f76e041`. Result: 9 of 10 — NOT MET, unchanged.** The ⚠️ is
+still the Architect/Design ruling. Its pull goes to Architect/Design, not to development: `A1`–`A5`
+are a decision artifact.
 
 | # | item | verdict |
 |---|---|---|
-| 1 | problem clear | **✅** three defects in one paragraph, each measured on `main` @ `5cf86d3`; two routing decisions already taken on contradictory readings, both cited by path |
-| 2 | scope and out-of-scope clear | **✅** one decision, one paragraph, 0 files under `src/`; five fences including the three merged pages and `ABC-073` |
-| 3 | INVEST-shaped | **✅** independent of every other ticket; the propagation repair is split out so this one delivers alone |
-| 4 | acceptance testable and measurable | **✅** an artifact that exists and names STATE or DELTA; three commands returning **0 / 7 / 0** today; a blob-SHA fence over four merged pages; **0** paths under `src/` |
-| 5 | dependencies known | **✅** Architect/Design's ruling (open); `ABC-073` depends on this; `ABC-042`'s merge measured and NOT a dependency |
-| 6 | security/NFR triggers with a measurable target | **✅** the subject — all four clauses answered, (b) answered **twice, once per reading**, with the fail-safe sentence carried; `N8-LANE` ≤ 650 ms with a measured lane cost of zero |
-| 7 | test notes present | **✅** five, including the word-hit-vs-call-site trap and the `S1` label collision with `ABC-058` |
-| 8 | size assigned | **✅** `S` (2), with the reason it is neither `XS` nor `M` |
-| 9 | priority assigned | **✅** `P1`, with the reason it is not `P0` |
-| 10 | no major unresolved blocker | **⚠️** the STATE-vs-DELTA ruling is Architect/Design's and is not made. Real, external, named — **and deliberately NOT resolved by inference at the cut**, which is this task's stop condition |
+| 1 | problem clear | **✅** re-measured: limbs **0 / 3 / 0** in code; the clause is still unruled and still state-worded |
+| 2 | scope and out-of-scope clear | **✅** one decision, one paragraph, 0 files under `src/` |
+| 3 | INVEST-shaped | **✅** independent; `ABC-073` is split out |
+| 4 | acceptance testable and measurable | **✅** `A3` now names its counting rule and today's **0 / 3 / 0**; `A4` is no longer tied to "20" |
+| 5 | dependencies known | **✅** the Architect/Design ruling (open); `ABC-073` depends on this |
+| 6 | security/NFR triggers with a measurable target | **✅** the subject; answered under both readings |
+| 7 | test notes present | **✅** five; note 2 now carries the measured word-hit trap |
+| 8 | size assigned | **✅** `S` (2) |
+| 9 | priority assigned | **✅** `P2` (was `P1`), with the trigger back to `P1` |
+| 10 | no major unresolved blocker | **⚠️** the STATE-vs-DELTA ruling is Architect/Design's and is still not made (no ADR or note found at `f76e041`) |

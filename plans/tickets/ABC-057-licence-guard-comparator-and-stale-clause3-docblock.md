@@ -1,8 +1,8 @@
 ---
 id: ABC-057
 title: The merged licence guard's comparator is unwitnessed, and its docblock still states the sentence `ADR-0011` clause 3 struck — two sites, one file, zero production lines
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: XS
 priority: P2
 epic: —
@@ -16,6 +16,13 @@ feature: —
 > `design-ABC-042-adr0011-clause3` — registered in `ADR-0011` as `R5` and as the third amendment's
 > "two sites, one file, and NEITHER IS TAKEN HERE". **`ABC-042`'s `A12` bars that file, so this is a
 > new ticket and not a repair to a gated one.** `ABC-042`'s page is not touched by this ticket.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2-2026-10-10`)
+> against wave tip `f76e041`. **Premise holds; nothing fixed it.** `src/history-pane.nfr.test.ts` is
+> unchanged since `ABC-042` (`e140355`), so every anchor below is exact today. `M15` was rebuilt on a
+> `git archive` copy: the whole `src` lane stays green, 51 files and 1541 tests. `A1` now names QE's
+> exact mutant. `ABC-042` is `Done` (`dbaf972`, 2026-08-15). **DoR 10/10 → `Ready`.** Evidence:
+> `.grugops/context/rescore-batch-2-2026-10-10/`.
 
 ## Problem
 
@@ -76,8 +83,11 @@ without a mutation harness this repository does not have.
 
 - **`A1` (the operator is pinned).** **Given** the tripwire block that already reads the file,
   **then** it asserts the comparator's **literal text** at `:335` is present — and **when** `M15` is
-  rebuilt (`toEqual` → `toContain`/`toMatchObject` at that site, nothing else changed), the suite is
-  **RED**, attributed to this assertion. *(Today: `M15` survives.)*
+  rebuilt, the suite is **RED**, attributed to this assertion. `M15` is QE's mutant as written at
+  `quality-gate-ABC-042`: `:335` becomes
+  `expect(production.filter((file) => LICENSED_DRIVERS.includes(file))).toEqual(expect.arrayContaining(runtimeImporters))`
+  and nothing else changes. *(Re-measured 2026-10-10: `M15` survives the whole `src` lane, 51 files
+  and 1541 tests. The earlier wording, "`toContain`/`toMatchObject`", was not QE's mutant.)*
 - **`A2` (no kill is traded).** **Given** the unchanged guard, **then** `WLAUNDER`,
   `WPERFT-STATIC` and `WSTALELICENCE` still red exactly as they do today, and the sibling tripwire at
   `:441-442` is **byte-identical**.
@@ -94,13 +104,13 @@ without a mutation harness this repository does not have.
 
 ## Dependencies
 
-- **`ABC-042`'s line must merge first — OPEN and HELD.** The `ADR-0011` third amendment and the
-  second licence entry (`cli.ts`) both live on that line; until it lands, the docblock matches the
-  live ADR and half of `A3`/`A4` has nothing to correct. **`ABC-042` is held at the merge on `G1`,
-  which is with the project owner and is not this ticket's to move.**
+- ~~**`ABC-042`'s line must merge first — OPEN and HELD.**~~ **`ABC-042` — `Done`** (`dbaf972`,
+  2026-08-15). The third amendment is in `ADR-0011`, and `cli.ts` is the second entry at `:219`.
 - **`ABC-054` is orthogonal, checked.** It may repair the shared **regex**, which the sibling
   tripwire pins by design. A comparator tripwire pins a **different line**: `ABC-054` does not red
-  it and it does not constrain `ABC-054`.
+  it and it does not constrain `ABC-054`. **It is the only other open ticket that edits this file**
+  (checked 2026-10-10). No in-flight branch touches it, so the two cannot be built in parallel, but
+  either order works.
 
 ## Security / NFR triggers
 
@@ -109,10 +119,13 @@ without a mutation harness this repository does not have.
   added cost is a `String.includes` over an already-resident string. **This is not a lane reading and
   must not be quoted as one.**
 - **`NFR-002` not triggered.** Nothing on the frame path; the guard asserts over source text.
-- **Security: not triggered.** `ABC-041`'s repaired four clauses: **(a)** no manifest touch,
-  **(b)** no non-`.test.ts` file under `src/` touched at all, **(c)** the one test file touched adds
-  no network, no write, and **no spawn**, **(d)** blast radius is one path. **On a disputed reading
-  it fires and the gate resolves it.**
+- **Security: not triggered.** `ABC-041`'s repaired four clauses: **(a)** no manifest touch.
+  **(b)** The reading is unruled (`ABC-072`), so both answers are given. Under STATE it fires: 3
+  production files read `process.` in executable code at `f76e041` (`cli.ts`, `glyph-mode.ts`,
+  `perft-bench.ts`), and this ticket does not change that. Under DELTA it does not: 0 non-test files
+  under `src/` are touched. **(c)** The one test file touched adds no network, no write and **no
+  spawn**. **(d)** The blast radius is one path. **On a disputed reading it fires and the gate
+  resolves it.**
 
 ## Test notes
 
@@ -122,11 +135,10 @@ without a mutation harness this repository does not have.
 2. **It is not tamper-proof and must not be sold as such.** A hop can change the comparator and the
    tripwire together. Its value is that the weakening becomes **deliberate and visible in the diff**
    instead of silent — exactly what this file already claims for its sibling.
-3. **Line numbers are the merged tree's**, verified by QE at `quality-gate-ABC-042-regate` and
-   re-measured here: docblock `:196-200` (Architect cited the block as `:196-199`; the struck
-   sentence's last line is `:200`), `LICENSED_DRIVERS` `:219`, comparator `:335`, tripwire block
-   `:435-443`. **On `main` today they are `:196-200`, `:213`, `:329`, `:429-437`** — the licence edit
-   shifts them by six. Re-read before editing; do not trust either set blind.
+3. **Line numbers re-measured 2026-10-10 at `f76e041`** (the file is unchanged since `e140355`):
+   docblock `:196-200`, with the struck sentence on `:199-200` (Architect cited the block as
+   `:196-199`); `LICENSED_DRIVERS` `:219`; comparator `:335`; tripwire block `:435-443`, with the
+   sibling regex tripwire at `:441-443`. Re-read before editing.
 4. **The temptation the docblock must refuse, by name.** *"A module that does not itself construct a
    `positionCounts` map"* is true of every production module but `history.ts`; it licenses
    `WLAUNDER` in one sentence. **Part (i) is the entire gate and it is the part a hop in a hurry
@@ -152,18 +164,18 @@ moment either is pulled.**
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-16**. **Result: 9 of 10 — NOT MET.** ⚠️×1, and the ⚠️ is an ordering, not an unknown.
+**Re-scored 2026-10-10 by BA/PM at `f76e041`. Result: 10 of 10 — MET → `Ready`.** Was 9/10 at the
+cut (2026-08-16); the one ⚠️ was the `ABC-042` ordering, and it is discharged.
 
 | # | item | verdict |
 |---|---|---|
-| 1 | problem clear | **✅** an operator nothing watches (`M15` survives, measured) and a struck rule still stated at the declaration site |
-| 2 | scope and out-of-scope clear | **✅** two sites in one file; five fences, first of which is "do not touch the guard's expression" |
-| 3 | INVEST-shaped | **✅** small, testable by one rebuilt mutant and one `grep`; the two halves share a file, a block and a review |
-| 4 | acceptance testable and measurable | **✅** `M15` RED and attributed, three named builds still red, **0** occurrences of `game-owning driver`, **2/2** citations discharging both parts, **1** path in the diff |
-| 5 | dependencies known | **✅** `ABC-042`'s line first — named, with the reason and the current holder of the hold; `ABC-054` checked as orthogonal |
-| 6 | security/NFR triggers with a measurable target | **✅** `N8-LANE` ≤ 650 ms with **0** new files and **0** spawns, `NFR-002` untriggered with the structural reason, four security clauses each answered |
-| 7 | test notes present | **✅** four, including both sets of line numbers and the widening the docblock must refuse by name |
-| 8 | size assigned | **✅** `XS` (1), priced by Architect/Design at the routing hop |
-| 9 | priority assigned | **✅** `P2` with `ADR-0011` `R5`'s own promotion trigger |
-| 10 | no major unresolved blocker | **⚠️** `ABC-042` must merge first and is **held on `G1`, with the project owner**. Not a defect in this ticket and not this ticket's to resolve — but it is a real ordering blocker and is scored as one |
+| 1 | problem clear | **✅** `M15` re-measured surviving today (51 files, 1541 tests); the struck sentence is still at `:199-200` |
+| 2 | scope and out-of-scope clear | **✅** two sites in one file; five fences, the first being "do not touch the guard's expression" |
+| 3 | INVEST-shaped | **✅** independent of all in-flight work; small; testable by one rebuilt mutant and one `grep` |
+| 4 | acceptance testable and measurable | **✅** `M15` RED and attributed (now QE's exact text); three named builds still red; **0** `game-owning driver`; **2/2** citations; **1** path |
+| 5 | dependencies known | **✅** `ABC-042` `Done`; `ABC-054` is the only other ticket on this file, orthogonal |
+| 6 | security/NFR triggers with a measurable target | **✅** `N8-LANE` ≤ 650 ms, 0 new files, 0 spawns; `NFR-002` untriggered; (b) answered under both readings |
+| 7 | test notes present | **✅** four, with the line numbers re-measured |
+| 8 | size assigned | **✅** `XS` (1), unchanged |
+| 9 | priority assigned | **✅** `P2`, unchanged: no hop has opened the file since `e140355`, and `ABC-043` merged without a third licence entry, so `R5`'s promotion trigger has not fired |
+| 10 | no major unresolved blocker | **✅** none |
