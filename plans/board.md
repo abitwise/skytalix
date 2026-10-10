@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Security/NFR` (`a4802fc0`); `secnfr-ABC-138` dispatched. Architect `design-qe010d-2026-10-10` dispatched (QE-010-d)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` → `Ready for UAT` (`f9d1ff4b`; owner word owed)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-qe137-2026-10-10` merged: QE-137-a → ADR-0011 `R5d` (ticket owed; also the composer tripwire's comparator, found unpinned; clause 1 docblock rides with it); QE-137-b accepted residual (trigger: `node:fs` import change, module-scope `readdirSync`, `vi.mock`/`vi.spyOn` of `node:fs`). BA/PM `bapm-r5d-qe139a-2026-10-10` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` QE PASS_WITH_GAPS; fix-forward `fix-ABC-138` dispatched (stays `In Review`)._
@@ -663,8 +664,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-138] The spawn pin's holes are watched by hand — move the AR-133-LOADER / AR-133-WRAP checks into the pin (F-133-1 (a)+(b))  (BA/PM, S, P3, since: 2026-10-10, DoR 10/10; test-only `src/cli.test.ts` → UAT waiver; reverses ABC-133's 'Q14 out'; C14 control split for Security/NFR to confirm at its gate) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-138`, branch `grugops/ABC-138-spawn-pin-in-suite`). **→ In Review 2026-10-10**: built on `grugops/ABC-138-spawn-pin-in-suite` @ `7e5c9c74` (A1–A6 MET; 12 holes GREEN → RED on the pin row, all kills/controls as the page predicts, C14 the one stated false red; `src/cli.test.ts` +30/−13; A4 in-file cost 164.8 ms ≤ 250, head−base −0.3 ms; N8_SPAWN 27; AR-058-STRIP not fired). QE `qe-ABC-138` dispatched; Security/NFR (C14 split, AR-133-LOADER/WRAP discharge) after QE. **2026-10-10 QE `qe-ABC-138` PASS_WITH_GAPS (`1759e14c`; A1–A6 met, 25 + 22 plants, A5 cost 170.3 ms ≤ 250).** QE-138-a (LOW: `class … extends (spawnSync as …)` hides a real spawn from count (iii) — one-line fix verified by QE) and the QE-138-b comment inaccuracy → engineer fix-forward `fix-ABC-138` before the Security/NFR gate; QE-138-b/c residuals → Security/NFR at the AR-133-LOADER ruling.
+## In Review (WIP 0/3)
 
 
 
@@ -688,7 +688,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-138] The spawn pin's holes are watched by hand — move the AR-133-LOADER / AR-133-WRAP checks into the pin (F-133-1 (a)+(b))  (BA/PM, S, P3, since: 2026-10-10, DoR 10/10; test-only `src/cli.test.ts` → UAT waiver; reverses ABC-133's 'Q14 out'; C14 control split for Security/NFR to confirm at its gate) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-138`, branch `grugops/ABC-138-spawn-pin-in-suite`). **→ In Review 2026-10-10**: built on `grugops/ABC-138-spawn-pin-in-suite` @ `7e5c9c74` (A1–A6 MET; 12 holes GREEN → RED on the pin row, all kills/controls as the page predicts, C14 the one stated false red; `src/cli.test.ts` +30/−13; A4 in-file cost 164.8 ms ≤ 250, head−base −0.3 ms; N8_SPAWN 27; AR-058-STRIP not fired). QE `qe-ABC-138` dispatched; Security/NFR (C14 split, AR-133-LOADER/WRAP discharge) after QE. **2026-10-10 QE `qe-ABC-138` PASS_WITH_GAPS (`1759e14c`; A1–A6 met, 25 + 22 plants, A5 cost 170.3 ms ≤ 250).** QE-138-a (LOW: `class … extends (spawnSync as …)` hides a real spawn from count (iii) — one-line fix verified by QE) and the QE-138-b comment inaccuracy → engineer fix-forward `fix-ABC-138` before the Security/NFR gate; QE-138-b/c residuals → Security/NFR at the AR-133-LOADER ruling. **→ In Security/NFR 2026-10-10**: fix-forward `fix-ABC-138` (`a4802fc0`; count (iii) now counts class `extends` / instantiation-expression references — QE-138-a/-d plants GREEN → RED, type-only plants stay green; QE-138-b comment fixed; A5 174.5 ms ≤ 250; gates green). Security/NFR `secnfr-ABC-138` dispatched (C14 split; AR-133-LOADER / AR-133-WRAP discharge; QE-138-b/c residuals).
 
 
 
