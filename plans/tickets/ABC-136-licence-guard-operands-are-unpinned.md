@@ -118,8 +118,9 @@ exactly that. "Collapsed text" is `ABC-134`'s definition (`bapm-owed-batch-2026-
     follows. The order serves the file; it is not a blocker.
 - **`ABC-030` (Backlog)** edits `:115` of this file. Merge order only; the second one rebases.
 - **No unmerged branch touches this file** (checked at `71418879` over every `grugops/*` branch).
-  `ABC-133` (`src/cli.test.ts`) and `ABC-135` (`src/render-seam.test.ts`) are in development and
-  disjoint, so this can run in parallel with them.
+  `ABC-133` (`src/cli.test.ts`, `In Review` at `679e847d`) and `ABC-135`
+  (`src/render-seam.test.ts`, merged `b826075a`) are disjoint, so this can run in parallel with
+  `ABC-133`.
 
 ## Security / NFR triggers
 
