@@ -195,6 +195,8 @@ the route is in `A5`.**
   (`AGENTS.md`: "touches engine code"), so re-pinned test files do not count. **`UNKNOWN - verify`;
   owner: Architect/Design (`ADR-0034`).** Not a blocker: under either reading a red still has a route
   (B → `ADR-0028` decision 1's proofs → read again → the owner).
+  **Answered: `ADR-0034` reading 2026-10-10** (decision 2's block). The scope test counts only
+  engine-loadable files, the run trigger stays literal, and QE runs the ADR's scope command at review.
 
 ## Security / NFR triggers
 

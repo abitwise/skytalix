@@ -28,6 +28,17 @@ feature: —
 > **The pressure has dropped:** `ABC-061` merged on 2026-08-17, and **no page cut since August
 > restates clause (b)**. Recent pages write "Security — not triggered. <reason>" and cite nothing.
 > **P1 → P2.** DoR 9/10, ⚠️ still the Architect/Design ruling.
+>
+> **Re-scored 2026-10-10 by BA/PM** (subtask `bapm-followups-2026-10-10`) at wave tip `71418879`.
+> **The ruling exists: `ADR-0036`, DELTA, accepted by Architect/Design. `A1` is met, and DoR item
+> 10's ⚠️ clears → 10/10.**
+> - **Re-measured.** The STATE baseline is unchanged: 35 production files, limbs **0 / 3 / 0** in
+>   code.
+> - **`A3` gains three DELTA fixtures,** each with a known answer.
+> - **`ABC-073` is recommended to FOLD into this hop.** Its live set is one page. `A6` now allows
+>   those paths.
+> - **Size and priority are unchanged** (`S`, `P2`). Reasoning:
+>   `.grugops/context/bapm-followups-2026-10-10/notes/`.
 
 ## Problem
 
@@ -153,6 +164,17 @@ its un-clarified wording permanently, and the record of why is this section.
   readers → 3 files (`cli.ts`, `glyph-mode.ts`, `perft-bench.ts`); dangerous call sites → 0**
   (`RegExp.prototype.exec` is not `child_process.exec`). A hop that reports a limb without running
   its command fails this row.
+  *(2026-10-10, under `ADR-0036` DELTA.)*
+  - **What the commands run on.** They run on a `<base>..<head>` diff: (b1) the `+` lines of
+    production files, in executable code; (b2) new value or bare import edges into a module that
+    holds a limb at `<head>`. The 0 / 3 / 0 state counts are recorded beside them as the baseline.
+  - **Three fixtures, each RUN and recorded with the answer below**
+    (`bapm-followups-2026-10-10/probe/RUN.txt` holds BA/PM's rough reading):
+    - `dbaf972f^..dbaf972f` (`ABC-042`) **FIRES**. (b1) holds 4 `process.` code lines, and (b2)
+      adds edges to `glyph-mode.ts`.
+    - `34c9c026^..34c9c026` (`ABC-082`) does **NOT** fire. It touches 2 production files, with 0
+      limb lines and 3 new edges, all to limb-free modules.
+    - `4c33b72b^1..4c33b72b` (`ABC-059`) does **NOT** fire. It touches 0 production files.
 - **`A4` (the falsified prediction is retired).** **Given** the corrected text, **then** it does NOT
   carry *"`ABC-042` is the hop that ends it"*, and it states the measured fact instead: `ABC-042`
   merged @ `dbaf972` and the `node:` grep is **still 0 across all production files** (35 at
@@ -167,6 +189,12 @@ its un-clarified wording permanently, and the record of why is this section.
   <commit>~1 <commit>` shows **only** this ticket's page and the decision artifact — **0 paths under
   `src/`**, and `plans/tickets/ABC-041-*.md`, `ABC-042-*.md`, `ABC-065-*.md`, `ABC-066-*.md`
   **byte-identical by blob SHA**. Suite green, skip **0**.
+  *(2026-10-10.)* `ADR-0036` is "the decision artifact", whether `A2` lands there as a dated block
+  or in a decision note.
+  - **If `ABC-073` is folded into this hop,** the list also allows `plans/tickets/ABC-073-*.md`
+    and that ticket's live set. At `71418879` the live set is `plans/tickets/ABC-055-*.md` only;
+    drop it if `ABC-055` is `Done` at the hop.
+  - **Still fenced:** every other page, including the merged pages carrying the interim text.
 
 ## Dependencies
 
@@ -174,6 +202,9 @@ its un-clarified wording permanently, and the record of why is this section.
   this board: `ABC-053` and `ABC-054` are both held the same way, on rulings the ADR's own words give
   to Architect/Design. **BA/PM cannot rule on the shape of a security threshold; that is the whole
   reason clause (b) says the implementer is "structurally the wrong decider".**
+  *(2026-10-10: **made.** `ADR-0036` rules DELTA, accepted by Architect/Design under the owner's
+  2026-08-03 delegation, so the ⚠️ is cleared. The owner may still veto; his question is in
+  `…95c73721`. A veto changes what `A2` says, to STATE, but not the shape of this ticket.)*
 - **`ABC-073` depends on THIS ticket** — the copies cannot be repaired to one wording until the
   wording is decided. Not the other way round.
 - **No dependency on `ABC-042`'s merge.** It merged 2026-08-15 @ `dbaf972`, measured.
@@ -243,6 +274,14 @@ security gate runs at all**, and six Backlog pages still carry an unruled clause
 **Promote back to `P1`** if a newly cut page restates clause (b), or if a routing decision cites it.
 **Not `P3`:** no other written trigger for the `In Security/NFR` column exists.
 
+*2026-10-10 (`bapm-followups-2026-10-10`):* **still `S` and `P2`.**
+- **Why still `S`.** The ruling is done, which alone would make this `XS`. What is left is not
+  trivial: (b2) needs an import-edge reading, not a grep; `A3` now has three fixtures; and the fold
+  adds `ABC-073`'s page work.
+- **Why still `P2`.** The Orchestrator now routes every ticket on (b1)/(b2), citing `ADR-0036`.
+  `A3`'s commands are what make that routing reproducible. Until they exist, each routing is a
+  reading.
+
 ## Definition of Ready
 
 **Re-scored 2026-10-10 by BA/PM at `f76e041`. Result: 9 of 10 — NOT MET, unchanged.** The ⚠️ is
@@ -261,3 +300,12 @@ are a decision artifact.
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P2` (was `P1`), with the trigger back to `P1` |
 | 10 | no major unresolved blocker | **⚠️** the STATE-vs-DELTA ruling is Architect/Design's and is still not made (no ADR or note found at `f76e041`) |
+
+**Re-scored 2026-10-10 by BA/PM** (`bapm-followups-2026-10-10`, wave tip `71418879`). **Result: 10 of
+10, 0 ⚠️ — MET → `Ready`.** The board move is the Orchestrator's. The pull goes to Architect/Design,
+which owes `A2`–`A5` (`ADR-0036` § Consequences).
+- **Item 10 → ✅.** `ADR-0036` (DELTA) is accepted. The owner's veto stays open and is not a blocker,
+  because either answer leaves `A2`–`A6` buildable.
+- **Item 4 stays ✅, extended.** `A3` gains three fixtures with known answers. `A1` is met by the ADR.
+- **Item 5 stays ✅.** `ABC-073` is recommended to fold into this hop, and `A6` allows its paths.
+- **Items 1–3 and 6–9 stay ✅.** The baseline was re-measured, unchanged, at 0 / 3 / 0. `S`, `P2`.

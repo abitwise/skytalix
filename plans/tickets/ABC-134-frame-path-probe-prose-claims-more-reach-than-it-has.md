@@ -65,7 +65,8 @@ The wording is the Engineer's. Every other sentence is kept.
 - **Re-pointing the composer tripwire at `bindsAValueFrom`.** That would close `QE-057-b`, but it is
   out by name: `ADR-0029` names the site, and it is Architect/Design's.
 - **`QE-053-e`/`-f`/`-g` (INFO, owner "none")** and **`QE-057-a`/`-c`** (routed to Architect/Design,
-  subtask `design-owed-rulings-2026-10-10`).
+  subtask `design-owed-rulings-2026-10-10`). *(2026-10-10: `QE-057-a` is now `ABC-136`; `-c` is
+  ruled with no follow-up.)*
 - **`ABC-030`'s line** in this file (`:115`, a sibling-count cite) and every other file.
 
 ## Acceptance (Given/When/Then)
@@ -102,6 +103,13 @@ run collapsed to one space. The instrument and base readings are under
 - **`ABC-030` (Backlog)** edits `:115` of this file. Merge-order only; the second one rebases.
 - **No unmerged branch touches this file** (checked at `35ad336b` over every `grugops/*` branch).
 - **`ABC-135` touches `src/render-seam.test.ts` only.** Disjoint, so it can run in parallel.
+- **`ABC-136` (`ADR-0011` `R5b`, cut 2026-10-10 at `bapm-followups-2026-10-10`) touches this same
+  file. SEQUENCE, do not fold: `ABC-136` first, then this ticket. Never in parallel.**
+  - **Why not fold.** This ticket's `A5` is a comment-only filter. `ABC-136` adds executable pins
+    and is proven by a mutant ledger.
+  - **Why `ABC-136` first.** `R5`'s trigger is "the next hop that opens the file". If this ticket
+    is already pulled when `ABC-136` reaches `Ready`, this one finishes first. The order serves the
+    file; it is not a blocker.
 
 ## Security / NFR triggers
 
@@ -121,6 +129,8 @@ run collapsed to one space. The instrument and base readings are under
    - The licence pin (`:478-488`) uses `toContain` on this file's own text. A comment that quotes the
      guard's `expect(runtimeImporters)…` line, or the witnessed expression, would keep it green after
      the code changed (`QE-057-f`).
+   - *(2026-10-10)* Once `ABC-136` lands, the guard's `const production = …` line and its
+     `runtimeImporters` statement are pinned the same way. Do not quote either one in new prose.
 2. **The composer tripwire's expression and the licence guard's lines stay byte-identical.** Keep
    new words out of the tripwire span except in its `//` comment.
 3. **Spell the `QE-057-b` examples in backticks inside a comment.** The tripwire reads production
@@ -153,3 +163,8 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `35ad336b`. **Res
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with the reason |
 | 10 | no major unresolved blocker | **✅** none |
+
+*2026-10-10, BA/PM (`bapm-followups-2026-10-10`, `71418879`):* **DoR stays 10/10.** Items 5 and 10
+stay ✅: `ABC-136` is a merge-order predecessor on the same file with no open design question, so it
+sets a pull order, not a dependency on a decision (`ABC-083`/`ABC-131` precedent). Test note 1 gains
+one line. No criterion, size, priority or column moved.
