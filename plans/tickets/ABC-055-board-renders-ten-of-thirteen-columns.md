@@ -19,7 +19,7 @@ feature: —
 >
 > **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2-2026-10-10`)
 > at wave tip `f76e041`. **Partly fixed by the board's own traffic.** `## Ready for Dev (WIP 0/6)`
-> now exists (`:531`), and `ABC-115` sat in it on 2026-08-20. **`In Analysis` and `In Design` still
+> now exists, and `ABC-115` sat in it on 2026-08-20. **`In Analysis` and `In Design` still
 > have no heading**: 11 of 13 are rendered. **This page's `P1` trigger has fired.** This morning's
 > re-score routes `ABC-010`'s pull to `In Design`
 > (`.grugops/context/rescore-batch-2026-10-10/notes/`), and `ABC-072` is waiting on an
@@ -33,8 +33,8 @@ feature: —
 *User*: every role that reads the board, and the Orchestrator most of all — the board is grugops's
 **single source of WIP truth** and the file says so about itself.
 
-*Pain*: **the columns table lists 13 columns** (`plans/board.md:426-440` at `f76e041`; it was
-`:73-87` at the cut, and the prepended headers move it). **The file renders 11 column H2 headings**
+*Pain*: **the columns table lists 13 columns** (under `## Columns (spec §6.1)`; it was `:73-87` at
+the cut, and every prepended header moves it, so cite the heading, not a line). **The file renders 11 column H2 headings**
 (10 at the cut):
 
 ```
@@ -43,8 +43,8 @@ Ready for UAT  In UAT  Ready to Release  Done  Blocked
 ```
 
 **Missing: `In Analysis`, `In Design`.** *(`Ready for Dev` was missing at the cut and has had its
-heading since; it was used by `ABC-115` on 2026-08-20.)* The board's own FORMAT comment (`:380-383`
-at `f76e041`) says each column is an H2 heading carrying its live/limit WIP count. Two columns cannot
+heading since; it was used by `ABC-115` on 2026-08-20.)* The FORMAT comment's `HEADING FORMAT (spec
+§6.1)` clause says each column is an H2 heading carrying its live/limit WIP count. Two columns cannot
 carry a count they have no heading for, so **two WIP limits — 2 and 2 — are unenforceable by reading
 the file** (three at the cut: 2, 2 and 6).
 

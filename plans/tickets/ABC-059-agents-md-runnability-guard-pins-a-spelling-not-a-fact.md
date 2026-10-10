@@ -123,13 +123,14 @@ sentence.
   (`scribe-ABC-119-lane`) and `ABC-127` (+169 B, Ready for UAT). Neither touches `Dev / run` or
   `UNKNOWN - verify`: `ABC-127`'s diff was measured, and the Scribe's line goes under `### Test`.
   **Pull after both merge**, so that `A1`/`A3`'s counts are taken on a settled file. This is
-  sequencing, not a blocker.
+  sequencing, not a blocker. **Met:** both merged at `14a1d2a` (`c8a0614`, `d45a026`), and the
+  counts were re-measured there unchanged (3 occurrences, 0/3, 2/2, 8).
 
 ## Security / NFR triggers
 
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**. **0 new test files, 0 new files under `src/`,
   0 new child processes.** The added work is two `readFileSync` calls the file already makes in the
-  neighbouring rows, plus a whitespace collapse over a 23,879-byte markdown file. The spawn pin
+  neighbouring rows, plus a whitespace collapse over a 24,433-byte markdown file (at `14a1d2a`). The spawn pin
   (`N8_SPAWN`, 27) must not move.
 - **`NFR-002` not triggered.** No frame path, no production module opened.
 - **Security: not triggered.** `ABC-041`'s four clauses: **(a)** no manifest touch; `package.json`

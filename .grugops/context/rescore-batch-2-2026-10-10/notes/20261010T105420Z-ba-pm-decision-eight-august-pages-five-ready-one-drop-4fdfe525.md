@@ -132,3 +132,14 @@ Not done here (fences): no `src/`, no `plans/board.md`, no ADR, no page outside 
 `epic:` reads `—` for `ABC-057`/`058`/`059` while the board rows say `EPIC-006`; this is left for
 the Orchestrator. No `finding` is admissible on this install (`AGENTS.md`); this note is a hand-authored
 `decision` with no seal, as every note in this repository is.
+
+Addendum, same hop, after a rebase onto wave tip `14a1d2a`. The wave moved again during this hop:
+`ABC-036`, `ABC-051` and `ABC-127` merged and are `Done`, the Scribe's `ABC-119` lane line landed,
+and `ADR-0034` was proposed. None of those commits touched a file or page this batch cites:
+`src/cli.test.ts`, `src/history-pane.nfr.test.ts`, `src/coordinate-move.ts`, `src/cli.ts` and the
+eight pages are all byte-identical between `f76e041` and `14a1d2a`. The only conflict was the
+append at the end of `plans/traceability.md`; both row sets are kept, these eight last.
+`ABC-059`'s sequencing is now **met**: on the merged `AGENTS.md` (24,433 B) the counts are unchanged
+at 3 occurrences, 0/3, 2/2 and 8. `ABC-055`'s board anchors are re-cited by heading rather than
+line, because the board grows with every hop. So the pull order loses the "after the Scribe and
+`ABC-127`" condition, and `ABC-058` → `ABC-059` can go now.
