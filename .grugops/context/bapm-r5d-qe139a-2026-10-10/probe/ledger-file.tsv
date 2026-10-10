@@ -1,0 +1,23 @@
+CONTROL	file	16:46:03Z..16:46:06Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=7.41
+WSC	file	16:46:07Z..16:46:10Z	lint=0	tsc=0	vitest=1	1 files	11/12	the composer tripwire: assembleFrame's value-impor :: AssertionError: a second frame composer: make it import the seam, or declare it 	load1=7.54
+WPS	file	16:46:11Z..16:46:13Z	lint=0	tsc=0	vitest=1	1 files	11/12	licenses src/history.ts's runtime importers: the s :: AssertionError: expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 	load1=7.81
+N591-HEAD+FMT+WSC	file	16:46:14Z..16:46:17Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=7.81
+N591-TAIL+FMT+WSC	file	16:46:18Z..16:46:22Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=8.15
+N591-WRAP+FMT+WSC	file	16:46:23Z..16:46:26Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=8.38
+C-CONTAIN+FMT+WSC	file	16:46:26Z..16:46:29Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=8.11
+C-OPERAND+FMT+WSC	file	16:46:30Z..16:46:32Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=8.11
+N653-NARROW+FMT	file	16:46:32Z..16:46:35Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=7.78
+H-SHADOW+FMT+WPS	file	16:46:36Z..16:46:38Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=7.63
+H-FSMOCK+FMT+WPS	file	16:46:39Z..16:46:42Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=7.63
+PIN	file	16:46:43Z..16:46:45Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=8.46
+PIN+FMT	file	16:46:46Z..16:46:48Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=10.35
+PIN+WSC	file	16:46:49Z..16:46:53Z	lint=0	tsc=0	vitest=1	1 files	11/12	the composer tripwire: assembleFrame's value-impor :: AssertionError: a second frame composer: make it import the seam, or declare it 	load1=10.35
+PIN+WPS	file	16:46:54Z..16:47:00Z	lint=0	tsc=0	vitest=1	1 files	11/12	licenses src/history.ts's runtime importers: the s :: AssertionError: expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 	load1=13.99
+PIN+N591-HEAD+FMT+WSC	file	16:47:01Z..16:47:05Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire :: AssertionError: the composer tripwire scans EVERY production module: expected '/	load1=13.43
+PIN+N591-TAIL+FMT+WSC	file	16:47:06Z..16:47:13Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire :: AssertionError: the composer tripwire scans EVERY production module: expected '/	load1=15.09
+PIN+N591-WRAP+FMT+WSC	file	16:47:14Z..16:47:17Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire :: AssertionError: the composer tripwire scans EVERY production module: expected '/	load1=15.09
+PIN+C-CONTAIN+FMT+WSC	file	16:47:18Z..16:47:20Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire :: AssertionError: the composer tripwire compares with an EQUALITY: expected '/**\n	load1=14.60
+PIN+C-OPERAND+FMT+WSC	file	16:47:21Z..16:47:23Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire :: AssertionError: the composer tripwire compares with an EQUALITY: expected '/**\n	load1=14.87
+PIN+N653-NARROW+FMT	file	16:47:24Z..16:47:26Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=14.87
+PIN+H-SHADOW+FMT+WPS	file	16:47:27Z..16:47:30Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=14.24
+PIN+H-FSMOCK+FMT+WPS	file	16:47:31Z..16:47:33Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=13.50

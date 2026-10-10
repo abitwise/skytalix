@@ -1,0 +1,8 @@
+75dcc0f5 derives=6 kind=ambiguous messages=["Q1xd4#","Q2xd4#","Qaxd4#","Qhxd4#","Q6xd4#","Q8xd4"]
+75dcc0f5 fullmove 9999: ACCEPTED 9999
+75dcc0f5 fullmove 10000: ACCEPTED 10000
+75dcc0f5 fullmove 100000000000000000000: ACCEPTED 100000000000000000000
+f9d1ff4b derives=7 kind=ambiguous messages=["Q1xd4#","Q2xd4#","Qaxd4#","Qhxd4#","Q6xd4#","Q8xd4#"]
+f9d1ff4b fullmove 9999: ACCEPTED 9999
+f9d1ff4b fullmove 10000: ACCEPTED 10000
+f9d1ff4b fullmove 100000000000000000000: ACCEPTED 100000000000000000000
