@@ -1,8 +1,8 @@
 ---
 id: ABC-038
 title: Tab-completion of legal moves and commands — one derive per prompt, and the epic's negotiable slice
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P2
 epic: EPIC-003
