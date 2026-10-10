@@ -12,8 +12,8 @@
  * row to a column. `INPUT_ENDED_NOTICE` (`src/turn-loop.ts` `INPUT_ENDED_NOTICE`) is the merged
  * precedent for a non-frame write to the sink. It is therefore NOT on the frame path, by
  * `ADR-0029`'s membership rule: it is neither in the load closure of
- * `src/history-pane.nfr.test.ts`'s `COMPOSITION_ROOT` nor loaded by a frame call (only `src/cli.ts`
- * imports it).
+ * `src/history-pane.nfr.test.ts`'s `COMPOSITION_ROOT` nor loaded by a frame call (of the production
+ * modules, only `src/cli.ts` imports it).
  *
  * IT DERIVES NO GAME STATE. A pure function of `LoopOutcome` and `GameHistory`, returning rows.
  * `history.ts` is imported as a TYPE ONLY, so this module adds no runtime importer of it and
