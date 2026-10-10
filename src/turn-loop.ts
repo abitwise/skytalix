@@ -265,10 +265,16 @@ function claimShortfall(history: GameHistory): string[] {
 }
 
 /**
- * Run the game to a stop. Eight states and eighteen transitions; the sixteenth,
+ * Run the game to a stop. Eight states and eighteen NUMBERED transitions; the sixteenth,
  * `awaiting-human` → `game-over` via the `claim` verb, is `ABC-021`'s, and the seventeenth and
  * eighteenth — `quit` to `exiting`, `take-back` to `evaluating-terminal` — are `ADR-0021`'s. All
  * three are built below.
+ *
+ * THE COUNT IS THE ENUMERATION'S, NOT ONE ROW PER TRIGGER: `ABC-019` `## Scope`'s numbered rows 1-15,
+ * `ABC-021`'s 16 and `ADR-0021` clause 5's 17 and 18. THE REFUSED CLAIM'S EDGE, back to `rendering`
+ * on `rejected`'s path, IS NOT ONE OF THE EIGHTEEN: `ADR-0021` clause 5 lists it beside 7, 8 and 9
+ * with no number of its own. Counting it as its own row gives 19 — a different counting rule over
+ * the same machine, and adopting it would amend that clause.
  *
  * The render cadence is `1 + plies + take-backs + RE-EMITTING non-mutating outcomes` frames, not
  * one per ply: the initial position is rendered BEFORE the first act — a loop that renders one

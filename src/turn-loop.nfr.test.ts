@@ -19,9 +19,14 @@
  * asserted below is what the timing at each of those points is the cost OF.
  *
  * The honest limit on the spies is the one `turn-loop.test.ts` states: `gameStatusOf` calls
- * `repetitionCounts` INSIDE `history.ts`, where a module-boundary spy cannot see it. So
- * `repetitionCounts` at 0 proves the loop derives nothing on its own, and the derive the bar is
- * about is counted by `gameStatus`, which `history.ts:152` calls exactly once per `gameStatusOf`.
+ * `repetitionCounts` INSIDE `history.ts`, where a module-boundary spy cannot see it. So the derive
+ * the bar is about is counted by `gameStatus`, which `history.ts:153` calls exactly once per
+ * `gameStatusOf`, and `repetitionCounts` and `keyHistory` at 0 prove the loop adds no replay of its
+ * own to a PLY. The loop DOES make one derive of its own — `keyHistory`, in `claimShortfall`, on a
+ * claim the rules core refused — but that is priced per command and never per ply, and it is
+ * ledgered by merged `A8` in `turn-loop.test.ts`, not here. `keyHistory` is spied here because a
+ * build that called it on every ply would leave `gameStatus` at `plies + 1` and `repetitionCounts`
+ * at 0, and without its zero this file would be green on the one cost `NFR-002` forbids.
  */
 import { describe, expect, it, vi } from "vitest";
 import { assembleFrame } from "./frame.ts";
@@ -39,11 +44,15 @@ vi.mock("./gameend.ts", async (importOriginal) => {
 
 vi.mock("./history.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./history.ts")>();
-  return { ...actual, repetitionCounts: vi.fn(actual.repetitionCounts) };
+  return {
+    ...actual,
+    keyHistory: vi.fn(actual.keyHistory),
+    repetitionCounts: vi.fn(actual.repetitionCounts),
+  };
 });
 
 const { gameStatus } = await import("./gameend.ts");
-const { newGame, repetitionCounts } = await import("./history.ts");
+const { keyHistory, newGame, repetitionCounts } = await import("./history.ts");
 const { runTurnLoop } = await import("./turn-loop.ts");
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -128,17 +137,20 @@ describe("NFR-002 — the loop derives once per ply, spied at A17's three ply co
       // first frame is shown. A two-derives-per-ply build reads `2 * (plies + 1)` here and MEETS the
       // timing bar at 120.
       expect(vi.mocked(gameStatus)).toHaveBeenCalledTimes(plies + 1);
-      // The loop derives nothing on its own: every evaluation went through `gameStatusOf`.
+      // No replay of the loop's own on an advancing ply: every evaluation went through
+      // `gameStatusOf`, and the loop's one direct `keyHistory` call (the refused claim) never ran.
       expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
+      expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
     });
   }
 
-  it("derives ZERO times on a non-advancing prompt outcome", async () => {
+  it("derives ZERO times on a `rejected` prompt outcome", async () => {
     await play(40, 12);
 
     // Twelve rejected prompts before the first ply, and the count is unmoved: transitions 7, 8 and 9
     // reach `rendering` without passing through `evaluating-terminal`.
     expect(vi.mocked(gameStatus)).toHaveBeenCalledTimes(41);
     expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
+    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
   });
 });
