@@ -26,6 +26,12 @@ DoR item 10. Through `ABC-072`, it also clears the ordering ⚠️ on `ABC-073`.
   permanently (`ABC-072` § Where the corrected wording lands).
 - **2026-10-10, `design-ABC-072`:** § Canonical clause (b) is added below. It answers `ABC-072`
   `A2`–`A5`. § Decision is unchanged; the block settles two readings of it, stated there.
+- **2026-10-10, `design-F-072-1`:** the limb list is **widened** by Security/NFR's ruling at
+  `ABC-072`'s gate (`F-072-1`). See `### Widened limbs — 2026-10-10 (F-072-1)` at the end of
+  § Canonical clause (b). The production-file set, the three limbs, (b1)'s unit and the unresolved
+  rule there take precedence over the narrower words in this Status, in § Decision 2 and in the
+  quoted clause. DELTA, (b2), the baseline rule and the fail-safe are unchanged. The canonical
+  instrument moves to `.grugops/context/design-F-072-1/probe/clause-b.mjs`.
 
 ## Context
 
@@ -129,9 +135,9 @@ surface is no longer small, and Security/NFR should rule whether (b2) needs a ca
 |---|---|---|
 | 1 | **STATE**, as worded. (b) fires on every ticket while the tree holds 3 `process.` readers | **Rejected.** A trigger that is always on carries no information. It moves every real filter into "fires, then cleared on the merits", which is noise at every gate. The board has never honoured it either: tickets go to Security/NFR on what their diff adds. Writing STATE down would make the record disagree with every routing since August |
 | 2 | **File-touch**: fires if any production file is touched | **Rejected as the test; kept as the shortcut.** It is right whenever it says "not touched". It over-fires on every comment-only or logic-only production edit, which is most of them |
-| 3 | **DELTA on (b1) alone**, with no edge rule | **Rejected.** It drops *"or any module in its runtime closure"* entirely. A module that starts importing `cli-options.ts` or `perft-bench.ts` gains a capability without writing a token |
+| 3 | **DELTA on (b1) alone**, with no edge rule | **Rejected.** It drops *"or any module in its runtime closure"* entirely. A module that starts importing `cli-options.ts` or `perft-bench.ts` gains a capability without writing a token. *(2026-10-10: the `cli-options.ts` example is wrong and the verdict is unchanged. See the correction in § Canonical clause (b) › "Two readings this block settles": `glyph-mode.ts` is the example that fits.)* |
 | 4 | **DELTA with a full call-graph reach** (any new call path to a capability) | **Rejected on cost (coding rule 7).** It needs a parser and a resolver for a 3-file surface. Section 3 names the trigger at which it should be reconsidered |
-| 5 | **Widen the limbs** (for example, the bare identifier `process` to catch `const p = process`, or `Worker`, or `node:` builtins named without the prefix) | **Not ruled here.** The limbs are a security bar. Recorded for Security/NFR at `ABC-072`'s gate. Widening would over-fire, which is the safe direction |
+| 5 | **Widen the limbs** (for example, the bare identifier `process` to catch `const p = process`, or `Worker`, or `node:` builtins named without the prefix) | **Not ruled here.** The limbs are a security bar. Recorded for Security/NFR at `ABC-072`'s gate. Widening would over-fire, which is the safe direction. *(2026-10-10: ruled WIDEN by Security/NFR; see § Canonical clause (b) › "Widened limbs — 2026-10-10 (F-072-1)".)* |
 
 ## Consequences
 
@@ -190,7 +196,16 @@ its own counts. Copying another page's answer is the failure `ABC-073` exists to
 > enough for "does not fire". **Whichever way a reading is disputed, it fires and the gate resolves
 > it.**
 
+*2026-10-10 (`F-072-1`): read the quote above with the substitutions in "Widened limbs — 2026-10-10
+(F-072-1)" below. Those substitutions cover the production files, the three limbs, (b1)'s unit and the
+unresolved rule. The quote itself is kept as written, so the clause text still occurs once.*
+
 ### The instrument (`A3`): three commands, one per limb
+
+*2026-10-10 (`F-072-1`): the commands below run `ABC-072`'s instrument. That instrument is kept
+unchanged as the record of the readings in this section. **Route with the canonical instrument
+instead:** `.grugops/context/design-F-072-1/probe/clause-b.mjs`, in "Widened limbs — 2026-10-10
+(F-072-1)" below.*
 
 Run from the repository root. Each command reads git objects only, so any commit pair works.
 
@@ -258,3 +273,75 @@ row "production files touched". This is a record. No Security/NFR verdict is re-
 
 `ABC-042`'s paragraph applied STATE and was right under the text it was gated on. It is not
 re-opened (§ 4; `ABC-072` test note 4).
+
+### Widened limbs — 2026-10-10 (`F-072-1`)
+
+Added by Architect/Design at `design-F-072-1` (branch `grugops/design-F-072-1`, from wave tip
+`7f7e6b84`). It lands Security/NFR's Ruling 1 at `ABC-072`'s gate (PASS_WITH_RISKS, `F-072-1`
+MEDIUM): `.grugops/context/secnfr-ABC-072/notes/…29849eeb`.
+- **What it changes:** **what counts**, not when (b) fires. DELTA, (b2) and its closure reading, the
+  baseline rule, the 0-production-files shortcut and the fail-safe sentence are unchanged.
+- **Under STATE too.** The ruling holds under STATE as well, so the owner's open veto does not
+  touch it.
+- **Why widen.** As first written, 8 of Security/NFR's 13 plausible forms passed **silently**: no
+  count, no word hit, nothing unresolved. An unseen form cannot be disputed.
+
+**Read § The clause (`A2`) with these substitutions.** Cite this block beside it; do not copy either.
+
+| element | as quoted above | reads now |
+|---|---|---|
+| production files | `.ts` under `src/`, not `.test.ts` | **every JS/TS source under `src/`**: `.ts .mts .cts .js .mjs .cjs`. Excluded: tests (`.test.<ext>`) and declaration files (`.d.ts .d.mts .d.cts`). An `.mjs` escapes Biome and `tsc` but not this clause |
+| limb (1) | a `node:` specifier | **any import whose specifier is not local** (does not start with `.`): a Node builtin with or without `node:`, or any package. Static, `export … from`, literal `import()`, and literal `require()`. `import type` / `export type` do not count. The repository has 0 runtime dependencies, so any package import from production is new reach |
+| limb (2) | a `process.` read | **any value reference to the global `process`**: member read, element access, destructuring, aliasing, shorthand, and `globalThis.process`. A declaration, property name or type position spelled `process` is not a reference |
+| limb (3) | `spawn` / `exec` / `fetch` / `eval` / `new Function`, plus the `child_process` family | **adds `Function(…)` without `new`** (the same as `new Function`, `V1.3.2`) **and `new WebSocket`** (network with no import, the same class as `fetch`). Bare, or through `globalThis.`. A `child_process` function counts through any binding: an `import`, a `require()`, or an `await import()` |
+| (b1)'s unit | the callee line | **the whole span** of a counted occurrence. Editing an argument line of an existing `spawn`/`exec`/`fetch` call fires (`V1.2.5`; (b1)'s "edited in place") |
+| unresolved | listed, while the verdict could still say "does not fire" | **FIRES (disputed)**. Scoped to the diff: a non-literal `import()`/`require()` in a file the diff touches, or a **new** edge to a local path that is not a production file at `<head>`. **The verdict never says "does not fire" while anything is disputed** |
+| `Worker` | (§ Alternatives 5's question) | **no separate entry.** Node has no global `Worker`; it is reachable only through `worker_threads`, which limb (1) counts |
+| word hits | listed, never a trigger | **unchanged.** Computed forms stay listed word hits and are not counted: `(0, eval)(…)`, `globalThis["eval"]`, `Reflect.apply(eval, …)` (`AR-072-WORDHIT`, Security/NFR's, with its trigger) |
+
+**Four instrument points beyond the ruling's words, inside its intent.** Each one only over-fires,
+the safe direction. Each has its own plant, and the plants are in the readings below:
+- **`require()` counts as an import (F1–F3).** The ruling made `.cjs`/`.cts` production, and
+  `require()` is how those files import. In ESM, `createRequire` makes it a real import too.
+- **A `child_process` binding made by `require()` or `await import()` (F5, F6)** is tracked the way an
+  ESM import binding already was.
+- **`new globalThis.WebSocket(…)` (F4)** is the global `new WebSocket`. This mirrors the ruling's
+  `globalThis.process`.
+- **`.d.mts`/`.d.cts` are declaration files (F8)**, as `.d.ts` already was.
+
+#### The instrument, canonical from this date
+
+```sh
+node .grugops/context/design-F-072-1/probe/clause-b.mjs <base> <head> 1  # counts non-local import statements in code
+node .grugops/context/design-F-072-1/probe/clause-b.mjs <base> <head> 2  # counts references to the global process in code
+node .grugops/context/design-F-072-1/probe/clause-b.mjs <base> <head> 3  # counts capability call spans in code
+```
+
+- **What it is built from.** It is `design-ABC-072/probe/clause-b.mjs` with Security/NFR's
+  `limb-ruling.patch` applied, plus `probe/architect-delta.patch` (the four points above, and a
+  verdict line that reads one variable).
+- **The old path stays.** It is unchanged, as `ABC-072`'s record, so its readings above stay
+  reproducible.
+- **Pair choice and output are unchanged.** It takes about 1.0 s per limb at load1 ≈ 6.
+
+#### What it read at this hop (`.grugops/context/design-F-072-1/probe/RUN.txt`)
+
+| run | result |
+|---|---|
+| baseline at `7f7e6b84` (wave tip), 36 production files | **0 / 3 / 0**, with the same holders: `cli.ts`, `glyph-mode.ts`, `perft-bench.ts`. Raw word hits are 3 / **11** / 6. Limb 2's regex is now `\bprocess\b`, so its raw count rises from 9 |
+| baseline at `f76e041`, 35 files | **0 / 3 / 0**, the same holders |
+| the 7 recorded pairs × 3 limbs (`ABC-042`, `ABC-082`, `ABC-059`, `ABC-065`, `088e48db`, `6bfc7b29..5f48753f`, `f76e041`) | **21 of 21 rows unchanged** against the `ABC-072` instrument: the same verdict, (b1), edge count, (b2) and holders. Only limb 2's raw word count moves |
+| the Architect's nine (`design-ABC-072/probe/mutants.sh` at `6bfc7b29`) | **byte-identical** to `design-ABC-072/probe/mutants.out.txt` (sha-256 `9ca110f1…`). Verdicts are the same at `7f7e6b84` |
+| Security/NFR's 13 (`sec-mutants.sh` at `5f48753f`, and again at `7f7e6b84`) | **S1–S12 FIRE**, and S11 reads "FIRES (disputed …)". **S13 is a listed word hit.** At `5f48753f` this is byte-identical to Security/NFR's demonstration (`sec-mutants.widened.out.txt`) |
+| this hop's plants F1–F9 (`probe/f-mutants.sh` at `7f7e6b84`) | **F1–F6 FIRE** where the demonstration is silent or lists a word hit. **F7a does not fire:** a dispute in a file the diff does not touch is not inherited. **F7b FIRES (disputed).** **F8 and F9 do not fire** (a declaration file; a type-only package import, listed as a word hit) |
+| every output file of this hop | **0 rows** read "unresolved > 0" together with "does not fire" |
+
+#### What this leaves, and who owns it
+
+- **`AR-072-LIMBS`** (MEDIUM until `F-072-1` lands; owner the Orchestrator). Its condition is met
+  when this block merges. The Orchestrator records the close.
+- **`AR-072-WORDHIT`** (LOW; owner Security/NFR). Unchanged.
+- **§ Decision 3's residual** (a new call over an existing edge; LOW; owner Architect/Design).
+  Unchanged. The widened limbs leave the holders at the same 3 files, so its trigger does not move.
+- **`O-072-a`.** Closed: § Alternatives row 3 now points at the correction.
+- **Rollback.** Strike this block and route with the old path. Nothing else is built on it.

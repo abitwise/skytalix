@@ -1,0 +1,50 @@
+# 2026-10-10T15:11:11Z load { 5.64 7.32 9.10 } node v26.11.0 — OLD=design-ABC-072/probe/clause-b.mjs NEW=design-F-072-1/probe/clause-b.mjs
+dbaf972f^..dbaf972f    L1 OLD b1=0|edges=5 b2=0|20 production files; 0 hold this limb in code; 0 by raw word hit|limb 1: does not fire
+dbaf972f^..dbaf972f    L1 NEW b1=0|edges=5 b2=0|20 production files; 0 hold this limb in code; 0 by raw word hit|limb 1: does not fire
+dbaf972f^..dbaf972f    L2 OLD b1=4|edges=5 b2=1|20 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 7 by raw word hit|limb 2: FIRES
+dbaf972f^..dbaf972f    L2 NEW b1=4|edges=5 b2=1|20 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 7 by raw word hit|limb 2: FIRES
+dbaf972f^..dbaf972f    L3 OLD b1=0|edges=5 b2=0|20 production files; 0 hold this limb in code; 1 by raw word hit|limb 3: does not fire
+dbaf972f^..dbaf972f    L3 NEW b1=0|edges=5 b2=0|20 production files; 0 hold this limb in code; 1 by raw word hit|limb 3: does not fire
+34c9c026^..34c9c026    L1 OLD b1=0|edges=4 b2=0|33 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+34c9c026^..34c9c026    L1 NEW b1=0|edges=4 b2=0|33 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+34c9c026^..34c9c026    L2 OLD b1=0|edges=4 b2=0|33 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit|limb 2: does not fire
+34c9c026^..34c9c026    L2 NEW b1=0|edges=4 b2=0|33 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 11 by raw word hit|limb 2: does not fire
+34c9c026^..34c9c026    L3 OLD b1=0|edges=4 b2=0|33 production files; 0 hold this limb in code; 5 by raw word hit|limb 3: does not fire
+34c9c026^..34c9c026    L3 NEW b1=0|edges=4 b2=0|33 production files; 0 hold this limb in code; 5 by raw word hit|limb 3: does not fire
+4c33b72b^1..4c33b72b   L1 OLD b1=0|edges=0 b2=0|35 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+4c33b72b^1..4c33b72b   L1 NEW b1=0|edges=0 b2=0|35 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+4c33b72b^1..4c33b72b   L2 OLD b1=0|edges=0 b2=0|35 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit|limb 2: does not fire
+4c33b72b^1..4c33b72b   L2 NEW b1=0|edges=0 b2=0|35 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 11 by raw word hit|limb 2: does not fire
+4c33b72b^1..4c33b72b   L3 OLD b1=0|edges=0 b2=0|35 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+4c33b72b^1..4c33b72b   L3 NEW b1=0|edges=0 b2=0|35 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+460b9f58^1..460b9f58   L1 OLD b1=0|edges=0 b2=0|20 production files; 0 hold this limb in code; 0 by raw word hit|limb 1: does not fire
+460b9f58^1..460b9f58   L1 NEW b1=0|edges=0 b2=0|20 production files; 0 hold this limb in code; 0 by raw word hit|limb 1: does not fire
+460b9f58^1..460b9f58   L2 OLD b1=0|edges=0 b2=0|20 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 7 by raw word hit|limb 2: does not fire
+460b9f58^1..460b9f58   L2 NEW b1=0|edges=0 b2=0|20 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 7 by raw word hit|limb 2: does not fire
+460b9f58^1..460b9f58   L3 OLD b1=0|edges=0 b2=0|20 production files; 0 hold this limb in code; 1 by raw word hit|limb 3: does not fire
+460b9f58^1..460b9f58   L3 NEW b1=0|edges=0 b2=0|20 production files; 0 hold this limb in code; 1 by raw word hit|limb 3: does not fire
+088e48db~1..088e48db   L1 OLD b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+088e48db~1..088e48db   L1 NEW b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+088e48db~1..088e48db   L2 OLD b1=0|edges=0 b2=0|36 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit|limb 2: does not fire
+088e48db~1..088e48db   L2 NEW b1=0|edges=0 b2=0|36 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 11 by raw word hit|limb 2: does not fire
+088e48db~1..088e48db   L3 OLD b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+088e48db~1..088e48db   L3 NEW b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+6bfc7b29..5f48753f     L1 OLD b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+6bfc7b29..5f48753f     L1 NEW b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+6bfc7b29..5f48753f     L2 OLD b1=0|edges=0 b2=0|36 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit|limb 2: does not fire
+6bfc7b29..5f48753f     L2 NEW b1=0|edges=0 b2=0|36 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 11 by raw word hit|limb 2: does not fire
+6bfc7b29..5f48753f     L3 OLD b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+6bfc7b29..5f48753f     L3 NEW b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+f76e041..f76e041       L1 OLD b1=0|edges=0 b2=0|35 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+f76e041..f76e041       L1 NEW b1=0|edges=0 b2=0|35 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+f76e041..f76e041       L2 OLD b1=0|edges=0 b2=0|35 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit|limb 2: does not fire
+f76e041..f76e041       L2 NEW b1=0|edges=0 b2=0|35 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 11 by raw word hit|limb 2: does not fire
+f76e041..f76e041       L3 OLD b1=0|edges=0 b2=0|35 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+f76e041..f76e041       L3 NEW b1=0|edges=0 b2=0|35 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+7f7e6b84..7f7e6b84     L1 OLD b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+7f7e6b84..7f7e6b84     L1 NEW b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 3 by raw word hit|limb 1: does not fire
+7f7e6b84..7f7e6b84     L2 OLD b1=0|edges=0 b2=0|36 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit|limb 2: does not fire
+7f7e6b84..7f7e6b84     L2 NEW b1=0|edges=0 b2=0|36 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 11 by raw word hit|limb 2: does not fire
+7f7e6b84..7f7e6b84     L3 OLD b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+7f7e6b84..7f7e6b84     L3 NEW b1=0|edges=0 b2=0|36 production files; 0 hold this limb in code; 6 by raw word hit|limb 3: does not fire
+# end 2026-10-10T15:11:57Z

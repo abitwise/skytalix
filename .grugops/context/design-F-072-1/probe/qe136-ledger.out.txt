@@ -1,0 +1,22 @@
+# design-F-072-1 — QE-136-a / QE-136-b re-measured at the wave tip 7f7e6b84 (ABC-136 merged at f87f0b6f), Node v26.11.0.
+# Runner: .grugops/context/qe-ABC-136/probe/ledger.sh UNCHANGED; planters qe-ABC-136/probe/plantqe136.py and
+# qe-ABC-057/probe/plantqe057.py copied unchanged into the private scratchpad bin/ (the runner's layout).
+# One fresh `git archive` per build, node_modules symlinked; nothing planted in any checkout.
+# Columns: sha, build, load1, vitest exit on src/history-pane.nfr.test.ts, tests, biome check src, failed tests.
+# 2026-10-10T15:20:55Z load { 10.21 9.03 9.08 }
+7f7e6b84	CONTROL	load1=10.21	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+7f7e6b84	WPERFT-STATIC	load1=9.71	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+7f7e6b84	XSPLICE+WPERFT-STATIC	load1=9.71	exit=0	 Tests 12 passed (12)	lint=1 Found 1 error 	FAILED:
+7f7e6b84	XSPLICE+FMT+WPERFT-STATIC	load1=14.30	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+7f7e6b84	XHELPER-NARROW+WPERFT-STATIC	load1=14.30	exit=0	 Tests 12 passed (12)	lint=1 Found 1 error 	FAILED:
+7f7e6b84	XHELPER-NARROW+FMT+WPERFT-STATIC	load1=13.47	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+7f7e6b84	QSCAN-NARROW+FMT+WPERFT-STATIC	load1=13.47	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+7f7e6b84	QLHS-INTERSECT+FMT+WPERFT-STATIC	load1=13.47	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+
+# Full suite on the XHELPER-NARROW+FMT+WPERFT-STATIC tree (helper at :165 reads `… && file !== "perft-bench.ts",`):
+# `node tools/grugops/run-bounded.js 120000 node_modules/.bin/vitest run`, 2026-10-10T15:21:19Z load { 11.87 9.59 9.29 }
+#  Test Files  52 passed (52)
+#       Tests  1608 passed (1608)
+#  rc=0
+# Reading: both survivors reproduce at the tip — gate-clean after FMT, green on the file and (helper) on the whole suite,
+# while WPERFT-STATIC alone is RED on the licence guard and the two R5b controls are RED on the drift tripwire.
