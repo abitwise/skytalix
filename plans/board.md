@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 0/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-132` → `Done` (UAT WAIVED, comment-only per owner Q4; merged `529c66db`); `ABC-055` pulled → `In Development`; board writes HELD until it merges._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Scribe `scribe-headroom-2026-10-10` merged: AGENTS.md 24,162 → 23,633 B (headroom 943 B; ranks 1–2; rank 3 held for the owner); receipts refreshed (52/1608; ENGINE_DEEP 46; levels lane 202–225 s). ABC-131's figures owed on its merge._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-132` → `In Review` (`9f8db35a`); QE `qe-ABC-132` dispatched._
@@ -460,15 +461,19 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   Orchestrator refuses to pull new work past a WIP limit without a written reason.
 
   WIP NUMBERS COME FROM CONFIG. The per-column limits shown in each heading are the lean
-  DEFAULTS, sourced from `agent-factory/config/factory.config.json#wip_limits`. Edit the dial,
+  DEFAULTS, sourced from this repo's dial `.grugops/factory.config.json#wip_limits`. Edit the dial,
   not this file, to change a limit — then update the heading to match. The two must agree.
-  In lean mode the In Security/NFR and Ready to Release columns may be skipped unless a
-  trigger fires (the columns still exist; they just stay empty).
+  SKIPPABLE COLUMNS (stated here, and only here): In Analysis is skipped when a ticket's behavior
+  needs no mapping, and In Design when it needs no structure/ADR decision. In lean mode the
+  In Security/NFR and Ready to Release columns may be skipped unless a trigger fires. These four
+  may be skipped. A skipped column still exists, with its heading. It just stays empty.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
   e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
+  INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
+  same order. Add, remove or rename a column in both places at once, never in one.
 
   TICKET ROWS: this board ships EMPTY — column structure only, ZERO live ticket rows. It is a
   clean append target. Roles append a one-line ticket row under the matching column as work
@@ -604,6 +609,12 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
+
+
+## In Analysis (WIP 0/2)
+
+
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
