@@ -1,8 +1,8 @@
 ---
 id: ABC-072
 title: '`ABC-041` clause (b) is written as a STATE predicate, its instrument covers one of its three limbs, and its stated prediction is falsified — decide which test binds, then write an instrument that can see it'
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P2
 epic: —
