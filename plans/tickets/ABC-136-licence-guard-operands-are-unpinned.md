@@ -195,3 +195,58 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `71418879`. **Res
   is unchanged by test name, and `ABC-057`'s spans hash identically.
 - Cost: both `ADR-0035` sets were inadmissible under parallel load (twin over 1.5 %). The readings are
   reported in the observation note, with no claim made against the floor.
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-136`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `c715b3c2..520fa185` (code `b50b0e2b`). Every reading is QE's own, taken in a fresh `git archive` tree per
+build. The planter is QE-057's, unchanged; QE's own narrowings are in `plantqe136.py`.
+
+**`A1`–`A5` are MET. No test was added.**
+
+- **`A1`**: `QSCAN-NARROW+FMT` exits 0 with 12/12 at base and exits 1 at head on the tripwire ("scans EVERY
+  production module"). The same holds with `+WPERFT-STATIC`.
+- **`A2`**: `QLHS-INTERSECT+FMT` behaves the same way, with and without `+WPERFT-STATIC`.
+  - Under `+FMT` the scan pin fires first, because Biome rewraps the statement.
+  - With the scan pin deleted, the importer pin alone still reds both builds. Each pin carries its own kill.
+- **`A3`**: `CONTROL` runs 12 tests, the same as base. `M15` and `M15SUB` red on the tripwire. `WLAUNDER`,
+  `WSTALELICENCE` and `WPERFT-STATIC` fail 3, 1 and 1 tests, the same tests by name. No build of 54 printed
+  `PLANT-FAILED`, and every anchor counts 1.
+- **`A4`**: the phrase count goes from 1 to 0. The tripwire's `//` comment names `R5b`, `productionModulesIn` and
+  `runtimeImporters`, and says the pin is "not tamper-proof".
+- **`A5`**:
+  - The diff touches one path, +16/−2. Six added lines are executable.
+  - The guard's three framed statements each count 1 at base and at head.
+  - `ABC-057`'s seven spans hash identically, and match QE-057's recorded hashes.
+- **`biome-ignore`: endorsed.**
+  - Removing it gives exactly 1 warning, on the pinned literal.
+  - It does not leak: a second `${` string in the same `it` is still flagged.
+- **Gates** at `520fa185`:
+  - lint, typecheck and build exit 0 (lint printed no diagnostics);
+  - `npm test`: 52 files / 1608 passed;
+  - skip count 0; integrity `No findings.`;
+  - `lane-inventory.js`: 52 = 52, `No findings.`
+- **Gaps:**
+  - **`QE-136-a` LOW → Architect/Design.** An in-place `runtimeImporters.splice(…)` placed after the pinned
+    statement is gate-clean and green across the whole suite with `WPERFT-STATIC`. That is inside `R5b`'s ruled
+    property ("any gate-clean edit between … and the comparator"), so the two pins do not deliver all of it.
+  - **`QE-136-b` LOW → Architect/Design.** Narrowing clause 1's helper `productionModulesIn` (`:163-164`) is
+    gate-clean and drops the kill. No test pins the helper's text. The new comment and the message read wider than
+    the call-site pin does.
+  - **`QE-136-c`–`-e` INFO:**
+    - shadowed `productionModulesIn` and `readFileSync`, a verbatim dead copy, and the licence pushed in place:
+      the accepted residual class;
+    - the masked importer pin under `+FMT`;
+    - a stale header comment in the Software Engineer's `timing.sh`.
+- **Cost: UNKNOWN - verify.** Both `ADR-0035` sets were inadmissible:
+
+  | set | twin | load1 median |
+  |---|---|---|
+  | 1 | +1.73 % | 14.50 |
+  | 2 | +1.92 % | 13.26 |
+
+  No claim is made against the 0.058 s floor. The two added scans take 0.37 µs (observation only). One admissible
+  reading is owed when load allows.
+- **Readings and notes:** `.grugops/context/qe-ABC-136/`: `…b5b3f575` (decision), `…2f217343` (readings),
+  `…f3fd60a0` (gaps), and `probe/`.
+- **UAT** is WAIVED by the standing rule (0 production lines, measured).
+- **Not merged, not pushed.**

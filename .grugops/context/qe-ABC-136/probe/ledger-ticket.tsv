@@ -1,0 +1,26 @@
+c715b3c2	CONTROL	load1=4.21	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+c715b3c2	QSCAN-NARROW+FMT	load1=4.19	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+c715b3c2	QSCAN-NARROW+FMT+WPERFT-STATIC	load1=4.19	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+c715b3c2	QLHS-INTERSECT+FMT	load1=4.19	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+c715b3c2	QLHS-INTERSECT+FMT+WPERFT-STATIC	load1=4.19	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+c715b3c2	M15+FMT	load1=3.93	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+c715b3c2	M15SUB+FMT	load1=3.93	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+c715b3c2	WLAUNDER	load1=3.93	exit=1	 Tests 3 failed | 9 passed (12)	lint=1 Found 1 error 	FAILED:A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar|A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set|licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+c715b3c2	WSTALELICENCE	load1=4.02	exit=1	 Tests 1 failed | 11 passed (12)	lint=1 Found 1 error 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+c715b3c2	WPERFT-STATIC	load1=4.02	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+c715b3c2	QSCAN-NARROW	load1=4.02	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+c715b3c2	QLHS-INTERSECT	load1=5.38	exit=0	 Tests 12 passed (12)	lint=1 Found 1 error 	FAILED:
+c715b3c2	QMOVE-COMMENTED-M15	load1=5.38	exit=0	 Tests 12 passed (12)	lint=1 Found 1 error 	FAILED:
+520fa185	CONTROL	load1=5.38	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	QSCAN-NARROW+FMT	load1=5.27	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	QSCAN-NARROW+FMT+WPERFT-STATIC	load1=5.27	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	QLHS-INTERSECT+FMT	load1=5.27	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	QLHS-INTERSECT+FMT+WPERFT-STATIC	load1=5.25	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	M15+FMT	load1=5.25	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	M15SUB+FMT	load1=5.31	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	WLAUNDER	load1=5.31	exit=1	 Tests 3 failed | 9 passed (12)	lint=1 Found 1 error 	FAILED:A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar|A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set|licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+520fa185	WSTALELICENCE	load1=5.52	exit=1	 Tests 1 failed | 11 passed (12)	lint=1 Found 1 error 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+520fa185	WPERFT-STATIC	load1=5.52	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+520fa185	QSCAN-NARROW	load1=5.52	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	QLHS-INTERSECT	load1=5.64	exit=1	 Tests 1 failed | 11 passed (12)	lint=1 Found 1 error 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	QMOVE-COMMENTED-M15	load1=5.64	exit=0	 Tests 12 passed (12)	lint=1 Found 1 error 	FAILED:
