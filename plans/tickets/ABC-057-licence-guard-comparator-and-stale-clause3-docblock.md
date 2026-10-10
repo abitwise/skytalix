@@ -195,7 +195,7 @@ cut (2026-08-16); the one ⚠️ was the `ABC-042` ordering, and it is discharge
 ## Delivery
 
 **2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-057`).
-- Branch `grugops/ABC-057-licence-guard`, from `079284d9`. The code is `404934f3`.
+- Branch `grugops/ABC-057-licence-guard`, from `079284d9`. The code is `404934f3` + `d2920d60`.
 - Not merged, not pushed.
 - Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-057/` (`…b4c2a298`,
   `…4d731ea3`, `probe/`) and are not restated here.
@@ -224,7 +224,11 @@ struck sentence `:212-213`, `LICENSED_DRIVERS` `:242`, comparator `:358`, tripwi
 - **Cost (`ADR-0035`, proposed; narrow set = the one file, twin control).** Set 2 is **MET** (twin
   +1.07 %, R 0.058 s, head −0.027 s, load1 6.4–7.2). Set 1 is inadmissible (twin −1.97 %, load1
   7.3–8.4).
-- **Flagged, not taken.** The in-test comment at head `:541` still makes the wide composer claim. The licence
-  docblock's "this tree has no `turn-loop.ts`" is stale. `turn-loop.ts`'s (i) adds to the ADR's words
-  (it receives the history injected; injection is data, not the operations), for Architect to confirm.
+- **Fix-forward `d2920d60` (coordinator's word), comment-only, +8/−6.** The in-test composer comment now
+  makes the docblock's narrowed claim (`QE-054-b`). The stale "this tree has no `turn-loop.ts`" is gone.
+  Spans are byte-identical. Lint exit 0, `npm test` 51 / 1583 passed (load1 3.09 → 2.92). `M15` and
+  `M15-SUB` are still RED on `d2920d60`, attributed to the new assertion only. `A5` over
+  `079284d9..d2920d60`: one path, +42/−18. Note `…c225fb9c`.
+- **Flagged, with Architect/Design.** `turn-loop.ts`'s (i) adds to the ADR's words (it receives the
+  history injected; injection is data, not the operations).
 - **Next.** QE's hop. The board move is the Orchestrator's.
