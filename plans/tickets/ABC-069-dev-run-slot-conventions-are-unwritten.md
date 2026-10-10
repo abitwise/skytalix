@@ -167,3 +167,26 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3` with two named, dated promotion triggers and the reason it is not `P2` today |
 | 10 | no major unresolved blocker | **✅** the one open question — *loosen the guard or document around it?* — is **ruled in `## Out of scope`**, by QE at the gate and adopted here |
+
+## Delivery
+
+**2026-10-10, `AGENTS.md` Scribe** (task `wave-2026-09-25`, subtask `scribe-ABC-069`, Workflow 04).
+Branch `grugops/ABC-069-agents-md-conventions` from `85d0139`, change in `6117a2a`. Not merged, not
+pushed. Readings: `.grugops/context/scribe-ABC-069/notes/`.
+
+**Re-verified first:** both couplings still hold in `src/cli.test.ts`'s `ABC-065` block (`.split("`")[0]`;
+the `--`-token collector), both were unwritten. The `Q8` lane has since landed (`ABC-071` uniqueness,
+`ABC-067` closure) — named in the same sentence, as § Dependencies foresaw. Guard not touched.
+
+**Criteria: 6 of 6 met.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | backtick rule and vocabulary rule both in the slot's comment, 2 of 2 |
+| `A2` | MET | "write that sentence elsewhere in `AGENTS.md`" |
+| `A3` | MET | cites `ABC-065`'s block in `src/cli.test.ts` |
+| `A4` | MET | collected set `--ascii`, `--colour`, `--unicode` before and after; 0 tokens added; the rule is written with no example |
+| `A5` | MET | `npm test` 1540 passed / 0 skipped before and after (50 files); integrity `No findings.`; lint, typecheck, build exit 0 |
+| `A6` | MET | `AGENTS.md` one path, one hunk (`@@ -70,2 +70,6 @@`) inside the slot's comment; 0 files under `src/`; 0 new spawns |
+
+`AGENTS.md` 23,464 B -> 23,879 B (cap 24,576). Test-count receipts deliberately not refreshed.
