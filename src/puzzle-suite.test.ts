@@ -456,6 +456,10 @@ if (MODE === "1" || MODE === "weakened") {
       it("ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total", () => {
         const names = new Set(PUZZLES.map((p) => p.name));
         for (const name of baseline.unsolved) expect(names.has(name), name).toBe(true);
+        // QE-131-a: |unsolved| is a set — a repeated name would keep the sum and hide a dropped one.
+        expect(new Set(baseline.unsolved).size, "unsolved names are distinct").toBe(
+          baseline.unsolved.length,
+        );
         expect(baseline.solved + baseline.unsolved.length).toBe(baseline.total);
       });
     }
