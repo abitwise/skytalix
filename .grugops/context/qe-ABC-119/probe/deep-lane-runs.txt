@@ -1,0 +1,27 @@
+== CLI_DEEP=1 run 1
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-119-r2/src/cli.ts --colour black --ascii <<< "" — wall 3131 ms, exit 0, signal null
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-119-r2/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3116 ms, exit 0, signal null
+ ✓ src/cli.real-engine.test.ts (7 tests) 6254ms
+      Tests  7 passed (7)
+   Duration  6.46s (transform 68ms, setup 0ms, collect 76ms, tests 6.25s, environment 0ms, prepare 35ms)
+real 7.15
+user 7.69
+sys 0.43
+== CLI_DEEP=1 run 2
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-119-r2/src/cli.ts --colour black --ascii <<< "" — wall 3137 ms, exit 0, signal null
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-119-r2/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3145 ms, exit 0, signal null
+ ✓ src/cli.real-engine.test.ts (7 tests) 6288ms
+      Tests  7 passed (7)
+   Duration  6.54s (transform 95ms, setup 0ms, collect 106ms, tests 6.29s, environment 0ms, prepare 43ms)
+real 7.28
+user 7.84
+sys 0.44
+== CLI_DEEP=1 run 3
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-119-r2/src/cli.ts --colour black --ascii <<< "" — wall 3147 ms, exit 0, signal null
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-119-r2/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3132 ms, exit 0, signal null
+ ✓ src/cli.real-engine.test.ts (7 tests) 6285ms
+      Tests  7 passed (7)
+   Duration  6.72s (transform 128ms, setup 0ms, collect 148ms, tests 6.29s, environment 0ms, prepare 57ms)
+real 7.41
+user 7.97
+sys 0.48

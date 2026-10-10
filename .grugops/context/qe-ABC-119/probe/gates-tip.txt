@@ -1,0 +1,10 @@
+tip a6453bc4f1817a935017732a80166a3db150c702 status-porcelain-lines=0
+npm run lint -> exit 0 (load1 16.15) | Checked 98 files in 141ms. No fixes applied. 
+npm run typecheck -> exit 0 (load1 16.15) | 
+npm run build -> exit 0 (load1 15.26) | 
+npm test -> exit 0 (load1 15.26) |  Test Files 51 passed (51)  Tests 1541 passed (1541)  Duration 11.07s (transform 1.72s, setup 0ms, collect 15.09s, tests 26.17s, environment 9ms, prepare 3.47s) 
+[CLI_DEEP] lines in npm test output: 0
+skip count (json reporter) = 0 (load1 17.03)
+No findings.
+integrity exit 0
+post-gates porcelain lines: 0

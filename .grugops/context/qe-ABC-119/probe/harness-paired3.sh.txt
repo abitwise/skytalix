@@ -1,0 +1,23 @@
+#!/bin/bash
+# usage: paired3.sh <scratch> <set-label> <scored-rounds>
+# Three conditions (base, head, twin), round 0 discarded as warm-up, order ROTATED every round,
+# one fresh OS process per run, load1 logged before each run. Runner (stated):
+#   env -u CLI_DEEP /usr/bin/time -p node node_modules/vitest/vitest.mjs run --dir src
+# CPU = user + sys from /usr/bin/time -p (rusage of the waited-for process tree).
+S=$1; SET=$2; N=$3; OUT=$S/runs/$SET; mkdir -p $OUT
+ORDERS=("base head twin" "head twin base" "twin base head")
+run() { # tree round
+  local load=$(sysctl -n vm.loadavg | awk '{print $2}')
+  ( cd $S/trees/$1 && env -u CLI_DEEP /usr/bin/time -p node node_modules/vitest/vitest.mjs run --dir src > $OUT/out-$1-$2.txt 2> $OUT/err-$1-$2.txt; echo "rc=$?" >> $OUT/out-$1-$2.txt )
+  local load_after=$(sysctl -n vm.loadavg | awk '{print $2}')
+  local real=$(awk '/^real/{print $2}' $OUT/err-$1-$2.txt) user=$(awk '/^user/{print $2}' $OUT/err-$1-$2.txt) sys=$(awk '/^sys/{print $2}' $OUT/err-$1-$2.txt)
+  local files=$(grep -E '^ +Test Files ' $OUT/out-$1-$2.txt | tr -s ' ')
+  local tests=$(grep -E '^ +Tests ' $OUT/out-$1-$2.txt | tr -s ' ')
+  local deep=$(grep -c '\[CLI_DEEP\]' $OUT/out-$1-$2.txt)
+  echo "round=$2 tree=$1 real=$real user=$user sys=$sys load1_before=$load load1_after=$load_after $(grep rc= $OUT/out-$1-$2.txt) cli_deep_lines=$deep |$files |$tests" | tee -a $OUT/log.txt
+}
+echo "# set=$SET start=$(date -u +%FT%TZ) rounds=0..$N (0 discarded)" | tee -a $OUT/log.txt
+for r in $(seq 0 $N); do
+  for t in ${ORDERS[$((r % 3))]}; do run $t $r; done
+done
+echo "# set=$SET end=$(date -u +%FT%TZ)" | tee -a $OUT/log.txt

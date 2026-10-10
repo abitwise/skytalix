@@ -1,0 +1,20 @@
+== lane-inventory.js on base
+The lane collects 50 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+exit=1
+== lane-inventory.js on head
+The lane collects 51 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+exit=1
+== lane-inventory.js on worktree
+The lane collects 51 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+exit=1
+== HEAD findings not on base (comm -13):
+(none above = 0 new)

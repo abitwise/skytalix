@@ -1,0 +1,155 @@
+== M0 (line 175 matches: 1)
+  deep:    rc=0 load1_before=11.47 | Tests 7 passed (7) | wall 3111 ms, exit 0;wall 3133 ms, exit 0;
+  default: rc=0 load1_before=10.47 | Test Files 51 passed (51) | Tests 1541 passed (1541)
+== M2 (line 175 matches: 1)
+   -import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +import { createEngine } from "./engine.ts";
+   +const DEFAULT_BUDGET_MS = undefined as never;
+  deep:    rc=1 load1_before=17.14 | Tests 1 failed | 6 passed (7) | wall 141 ms, exit 0;wall 141 ms, exit 0;
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A1 — the real search answered: the child took at least 1 s and exited 0
+  default: rc=0 load1_before=17.14 | Test Files 51 passed (51) | Tests 1541 passed (1541)
+== M3 (line 175 matches: 1)
+   -import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +import { createEngine, HARD_CEILING_MS } from "./engine.ts";
+   +const DEFAULT_BUDGET_MS = 2 * HARD_CEILING_MS;
+  deep:    rc=1 load1_before=16.63 | Tests 1 failed | 6 passed (7) | wall 5148 ms, exit 0;wall 5133 ms, exit 0;
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(ii) — the whole child, spawn to exit, stays inside NFR-004's 5 s hard ceiling (clause B)
+  default: rc=1 load1_before=14.69 | Test Files 1 failed | 50 passed (51) | Tests 13 failed | 1528 passed (1541)
+    RED: ABC-042 — the resolved colour reaches the board > A4 — the running entry point draws each colour from the human's side
+    RED: ABC-043 — the live session > A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0
+    RED: ABC-043 — the live session > A5 — an engine fault is not a chess outcome: both faulty seams exit 0 and name nothing
+    RED: ABC-043 — the live session > A6 — one frame session, one writer, and no row count is named on either side of the diff
+    RED: ABC-043 — the live session > A7 — the human's colour decides who moves first, in BOTH directions
+    RED: ABC-044 — the result screen reaches the player > A3 — a faulty engine gets a screen that is not a chess outcome, and says the game did not finish
+    RED: ABC-044 — the result screen reaches the player > A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0
+    RED: ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0
+    RED: ABC-046 — `quit` and `new` through the delivered entry point > A1 — quit / EOF: a single `quit` asks and does NOT end the session; end-of-input does
+    RED: ABC-046 — `quit` and `new` through the delivered entry point > A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0
+    RED: ABC-046 — `quit` and `new` through the delivered entry point > A6 — `new` redraws the OPENING frame byte for byte: colour, glyph mode and orientation kept
+    RED: ABC-064 — the frame's shape and the status panel, on the three non-default children > A1 — each non-default child writes the reference frame's row count, and one newline after its last row
+    RED: ABC-064 — the frame's shape and the status panel, on the three non-default children > A4 — `random` is resolved before anything can see it: the word occurs zero times on the child's whole stdout
+== M3b (line 175 matches: 1)
+   -import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +import { createEngine } from "./engine.ts";
+   +const DEFAULT_BUDGET_MS = 4_500;
+  deep:    rc=0 load1_before=15.65 | Tests 7 passed (7) | wall 4643 ms, exit 0;wall 4624 ms, exit 0;
+  default: rc=1 load1_before=14.16 | Test Files 1 failed | 50 passed (51) | Tests 1 failed | 1540 passed (1541)
+    RED: ABC-042 — the shape of what was delivered > A8 — neither delivered module names a row count
+== M3c (line 175 matches: 1)
+   -import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +import { createEngine, DEFAULT_BUDGET_MS as MERGED_BUDGET_MS } from "./engine.ts";
+   +const DEFAULT_BUDGET_MS = MERGED_BUDGET_MS + MERGED_BUDGET_MS;
+  deep:    rc=1 load1_before=17.32 | Tests 1 failed | 6 passed (7) | wall 5154 ms, exit 0;wall 5198 ms, exit 0;
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(ii) — the whole child, spawn to exit, stays inside NFR-004's 5 s hard ceiling (clause B)
+  default: rc=0 load1_before=16.77 | Test Files 51 passed (51) | Tests 1541 passed (1541)
+== M4 (line 175 matches: 1)
+   -import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +import { createEngine as createRealEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +const createEngine = (options: { budgetMs: number }) => {
+   +  const real = createRealEngine(options);
+   +  return async (history: Parameters<typeof real>[0]) => { const move = await real(history); return { ...move, from: move.to, to: move.from }; };
+   +};
+  deep:    rc=1 load1_before=20.63 | Tests 3 failed | 4 passed (7) | wall 3221 ms, exit 0;wall 3136 ms, exit 0;
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(i) — the reply is a legal move in the position it was played in, by the project's own generator
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iii) — the session advances: the side to move and the ply number both change
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues
+  default: rc=1 load1_before=20.90 | Test Files 1 failed | 50 passed (51) | Tests 9 failed | 1532 passed (1541)
+    RED: ABC-043 — the live session > A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter
+    RED: ABC-043 — the live session > A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0
+    RED: ABC-043 — the live session > A6 — one frame session, one writer, and no row count is named on either side of the diff
+    RED: ABC-043 — the live session > A7 — the human's colour decides who moves first, in BOTH directions
+    RED: ABC-044 — the result screen reaches the player > A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0
+    RED: ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0
+    RED: ABC-046 — `quit` and `new` through the delivered entry point > A1 — quit / EOF: a single `quit` asks and does NOT end the session; end-of-input does
+    RED: ABC-046 — `quit` and `new` through the delivered entry point > A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0
+    RED: ABC-046 — `quit` and `new` through the delivered entry point > A6 — `new` redraws the OPENING frame byte for byte: colour, glyph mode and orientation kept
+== M4b (line 175 matches: 1)
+   -import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +import { createEngine as createRealEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +const createEngine = (options: { budgetMs: number }) => {
+   +  const real = createRealEngine(options);
+   +  return async (history: Parameters<typeof real>[0]) => { const move = await real(history); return { ...move, to: move.to + 16 }; };
+   +};
+   -      if (!wasGenerated(history, move)) {
+   +      if (false && !wasGenerated(history, move)) {
+  deep:    rc=1 load1_before=23.89 | Tests 1 failed | 6 passed (7) | wall 3157 ms, exit 0;wall 3115 ms, exit 0;
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(i) — the reply is a legal move in the position it was played in, by the project's own generator
+  default: rc=1 load1_before=22.38 | Test Files 2 failed | 49 passed (51) | Tests 10 failed | 1531 passed (1541)
+    RED: ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property > row 13 — engine returns a foreign move
+    RED: ABC-019 acceptance > A10 — a foreign move is not applied, and its reason is no chess outcome
+    RED: ABC-042 — the shape of what was delivered > A8 — neither delivered module names a row count
+    RED: ABC-043 — the live session > A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter
+    RED: ABC-043 — the live session > A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0
+    RED: ABC-043 — the live session > A5 — an engine fault is not a chess outcome: both faulty seams exit 0 and name nothing
+    RED: ABC-043 — the live session > A7 — the human's colour decides who moves first, in BOTH directions
+    RED: ABC-044 — the result screen reaches the player > A3 — a faulty engine gets a screen that is not a chess outcome, and says the game did not finish
+    RED: ABC-044 — the result screen reaches the player > A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0
+    RED: ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0
+== M5a (line 175 matches: 1)
+   -import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +import { createEngine as createRealEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+   +const createEngine = (options: { budgetMs: number }) => {
+   +  const real = createRealEngine(options);
+   +  return async (history: Parameters<typeof real>[0]) => { const move = await real(history); process.stderr.write(`${new Error("search diagnostics").stack}\n`); return move; };
+   +};
+  deep:    rc=1 load1_before=28.50 | Tests 2 failed | 5 passed (7) | wall 3141 ms, exit 0;wall 3123 ms, exit 0;
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iv) — no stack trace on stderr, and the exit code is 0, never 70
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues
+  default: rc=1 load1_before=24.89 | Test Files 1 failed | 50 passed (51) | Tests 2 failed | 1539 passed (1541)
+    RED: ABC-042 — the shape of what was delivered > A9 — process.argv occurs EXACTLY once and only as the resolver's argument
+    RED: ABC-043 — the live session > A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter
+== M5b (line 175 matches: 1)
+   -import { renderResultScreen } from "./result-screen.ts";
+   +const renderResultScreen = (..._args: unknown[]): string[] => { throw new Error("result screen broke"); };
+  deep:    rc=1 load1_before=30.04 | Tests 3 failed | 4 passed (7) | wall 3312 ms, exit 70;wall 3186 ms, exit 70;
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A1 — the real search answered: the child took at least 1 s and exited 0
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iv) — no stack trace on stderr, and the exit code is 0, never 70
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues
+  default: rc=1 load1_before=32.68 | Test Files 1 failed | 50 passed (51) | Tests 21 failed | 1520 passed (1541)
+    RED: ABC-042 — a human can run it > A1 — `npm run chess` writes the start position and exits 0
+    RED: ABC-042 — a human can run it > A7 — `--unicode` on a pipe puts real chess glyphs in the board region
+    RED: ABC-042 — a human can run it > A7 — no flags on a pipe: zero code points above U+007F on the emitted stream
+    RED: ABC-042 — the resolved colour reaches the board > A4 — the running entry point draws each colour from the human's side
+    RED: ABC-043 — the live session > A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0
+    RED: ABC-043 — the live session > A4 — end-of-input is the CLEAN path, and it is distinguishable from A3 by message and by code
+    RED: ABC-043 — the live session > A5 — an engine fault is not a chess outcome: both faulty seams exit 0 and name nothing
+    RED: ABC-043 — the live session > A7 — the human's colour decides who moves first, in BOTH directions
+    RED: ABC-044 — the result screen reaches the player > A3 — a faulty engine gets a screen that is not a chess outcome, and says the game did not finish
+    RED: ABC-044 — the result screen reaches the player > A4 — end of input writes ZERO BYTES for the screen: the notice is still the last thing said
+    RED: ABC-044 — the result screen reaches the player > A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0
+    RED: ABC-045 — `resign` reaches the screen as reason 8 > A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0
+    RED: ABC-046 — `quit` and `new` through the delivered entry point > A1 — quit / EOF: a single `quit` asks and does NOT end the session; end-of-input does
+    RED: ABC-046 — `quit` and `new` through the delivered entry point > A2/A3 — quit / quit ends the session on `QUIT_NOTICE`, writes NO result screen, exit 0
+    RED: ABC-046 — `quit` and `new` through the delivered entry point > A6 — `new` redraws the OPENING frame byte for byte: colour, glyph mode and orientation kept
+    RED: ABC-064 — the frame's shape and the status panel, on the three non-default children > A1 — each non-default child writes the reference frame's row count, and one newline after its last row
+    RED: ABC-064 — the frame's shape and the status panel, on the three non-default children > A4 — `random` is resolved before anything can see it: the word occurs zero times on the child's whole stdout
+    RED: ABC-115 — a reader that closes early ends the session quietly, at the right code > A1 — the player is shown NO stack, no `write EPIPE`, no checkout path, no crash claim
+    RED: ABC-115 — a reader that closes early ends the session quietly, at the right code > A2 — it exits 0, and independently of that it is neither a refusal nor a crash
+    RED: ABC-115 — a reader that closes early ends the session quietly, at the right code > A3 — the trigger is the RULE: any reader that closes before the session's last write
+    RED: ABC-115 — a reader that closes early ends the session quietly, at the right code > A4 — the arm swallows NO real failure: 70 still means a crash and 1 still means a refusal
+== M6a (line 175 matches: 1)
+   -import { createLineInputSeam } from "./line-input.ts";
+   +import { createLineInputSeam as createRealSeam } from "./line-input.ts";
+   +const createLineInputSeam = (options: Parameters<typeof createRealSeam>[0]) => { const seam = createRealSeam(options); return async (history: Parameters<typeof seam>[0]) => { const outcome = await seam(history); return outcome.kind === "rejected" ? ({ kind: "eof" } as const) : outcome; }; };
+  deep:    rc=1 load1_before=38.93 | Tests 1 failed | 6 passed (7) | wall 3156 ms, exit 0;wall 3117 ms, exit 0;
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues
+  default: rc=1 load1_before=37.49 | Test Files 1 failed | 50 passed (51) | Tests 4 failed | 1537 passed (1541)
+    RED: ABC-043 — the live session > A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter
+    RED: ABC-043 — the live session > A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0
+    RED: ABC-043 — the live session > A6 — one frame session, one writer, and no row count is named on either side of the diff
+    RED: ABC-044 — the result screen reaches the player > A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0
+== M6b (line 175 matches: 1)
+   -import { createLineInputSeam } from "./line-input.ts";
+   +import { createLineInputSeam as createRealSeam } from "./line-input.ts";
+   +const createLineInputSeam = (options: Parameters<typeof createRealSeam>[0]) => { const seam = createRealSeam(options); return async (history: Parameters<typeof seam>[0]) => { const outcome = await seam(history); return outcome.kind === "rejected" ? { ...outcome, messages: [] } : outcome; }; };
+  deep:    rc=1 load1_before=32.94 | Tests 1 failed | 6 passed (7) | wall 3095 ms, exit 0;wall 3099 ms, exit 0;
+    RED: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues
+  default: rc=1 load1_before=30.55 | Test Files 1 failed | 50 passed (51) | Tests 1 failed | 1540 passed (1541)
+    RED: ABC-043 — the live session > A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter
+
+M3 default-lane reds are an artifact: 16 x "does not provide an export named 'HARD_CEILING_MS'" (the hook's engine double exports no such name).
+M3b default-lane red is ABC-042 A8's numeric-literal guard:
+     → expected [ '0', '0x20', '0x7f', '1', '2', …(3) ] to deeply equal [ '0', '0x20', '0x7f', '1', '2', '70' ]
+M4b A3(i) failure:
+     → expected [] to have a length of 1 but got +0
+ ❯ src/cli.real-engine.test.ts:203:23

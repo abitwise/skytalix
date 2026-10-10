@@ -1,0 +1,47 @@
+// usage: node mutate.js <tree> <mutant-id>  — exact-string edits; refuses if an anchor is missing.
+const fs = require("node:fs");
+const [tree, id] = process.argv.slice(2);
+const ENGINE_IMPORT = 'import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";';
+const INPUT_IMPORT = 'import { createLineInputSeam } from "./line-input.ts";';
+const RESULT_IMPORT = 'import { renderResultScreen } from "./result-screen.ts";';
+const wrapEngine = (body) =>
+  'import { createEngine as createRealEngine, DEFAULT_BUDGET_MS } from "./engine.ts";\n' +
+  "const createEngine = (options: { budgetMs: number }) => {\n" +
+  "  const real = createRealEngine(options);\n" +
+  `  return async (history: Parameters<typeof real>[0]) => { const move = await real(history); ${body} };\n` +
+  "};";
+const M = {
+  M0: [], // unmutated control copy
+  // Engineer's M2, re-planted: the merged budget no longer reaches the engine; :175 untouched.
+  M2: [["src/cli.ts", ENGINE_IMPORT, 'import { createEngine } from "./engine.ts";\nconst DEFAULT_BUDGET_MS = undefined as never;']],
+  // A3(ii): budget raised past clause B; the engine clamps at HARD_CEILING_MS.
+  M3: [["src/cli.ts", ENGINE_IMPORT, 'import { createEngine, HARD_CEILING_MS } from "./engine.ts";\nconst DEFAULT_BUDGET_MS = 2 * HARD_CEILING_MS;']],
+  // A3(ii), watched pair: budget doubled through the merged binding (no literal, no new import name);
+  // 6 s requested, clamped at HARD_CEILING_MS by the engine. :175 untouched.
+  M3c: [["src/cli.ts", ENGINE_IMPORT, 'import { createEngine, DEFAULT_BUDGET_MS as MERGED_BUDGET_MS } from "./engine.ts";\nconst DEFAULT_BUDGET_MS = MERGED_BUDGET_MS + MERGED_BUDGET_MS;']],
+  // A3(ii) blind band the page accepts: 4.5 s budget.
+  M3b: [["src/cli.ts", ENGINE_IMPORT, 'import { createEngine } from "./engine.ts";\nconst DEFAULT_BUDGET_MS = 4_500;']],
+  // A3(i)/(iii): the real search runs, then a FOREIGN move is handed to the loop (from/to swapped).
+  M4: [["src/cli.ts", ENGINE_IMPORT, wrapEngine("return { ...move, from: move.to, to: move.from };")]],
+  // A3(i) generator check proper: the real move pushed one rank on (0x88 +16) AND the loop's
+  // transition-13 guard disabled, so an illegal move is actually played and printed.
+  M4b: [
+    ["src/cli.ts", ENGINE_IMPORT, wrapEngine("return { ...move, to: move.to + 16 };")],
+    ["src/turn-loop.ts", "      if (!wasGenerated(history, move)) {\n        return { result: null, reason: \"engine-failure\"", "      if (false && !wasGenerated(history, move)) {\n        return { result: null, reason: \"engine-failure\""],
+  ],
+  // A3(iv): a stack trace reaches stderr after the engine's ply; exit stays 0.
+  M5a: [["src/cli.ts", ENGINE_IMPORT, wrapEngine('process.stderr.write(`${new Error("search diagnostics").stack}\\n`); return move;')]],
+  // A3(iv): an exception that never became a LoopOutcome -> INTERNAL_ERROR, exit 70.
+  M5b: [["src/cli.ts", RESULT_IMPORT, 'const renderResultScreen = (..._args: unknown[]): string[] => { throw new Error("result screen broke"); };']],
+  // A4 "continues": a rejected line ENDS the session (rejected -> eof).
+  M6a: [["src/cli.ts", INPUT_IMPORT, 'import { createLineInputSeam as createRealSeam } from "./line-input.ts";\nconst createLineInputSeam = (options: Parameters<typeof createRealSeam>[0]) => { const seam = createRealSeam(options); return async (history: Parameters<typeof seam>[0]) => { const outcome = await seam(history); return outcome.kind === "rejected" ? ({ kind: "eof" } as const) : outcome; }; };']],
+  // A4 "carries a message": a rejected line is refused SILENTLY (messages dropped).
+  M6b: [["src/cli.ts", INPUT_IMPORT, 'import { createLineInputSeam as createRealSeam } from "./line-input.ts";\nconst createLineInputSeam = (options: Parameters<typeof createRealSeam>[0]) => { const seam = createRealSeam(options); return async (history: Parameters<typeof seam>[0]) => { const outcome = await seam(history); return outcome.kind === "rejected" ? { ...outcome, messages: [] } : outcome; }; };']],
+};
+for (const [file, from, to] of M[id] ?? (() => { throw new Error(`unknown mutant ${id}`); })()) {
+  const path = `${tree}/${file}`;
+  const text = fs.readFileSync(path, "utf8");
+  if (text.split(from).length !== 2) throw new Error(`${id}: anchor not found exactly once in ${file}`);
+  fs.writeFileSync(path, text.replace(from, to));
+}
+console.log(`${id} planted in ${tree}`);

@@ -1,0 +1,17 @@
+#!/bin/bash
+# usage: run-mutant.sh <scratch> <mutant-id> — fresh git-archive copy of HEAD, plant, run deep + default lanes.
+S=$1; ID=$2; R=/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example; T=$S/mut/$ID; O=$S/mut/out-$ID
+rm -rf $T; mkdir -p $T $O; git -C $R archive a6453bc | tar -x -C $T; ln -s $R/node_modules $T/node_modules
+node $S/bin/mutate.js $T $ID || exit 3
+/usr/bin/diff -ru -x node_modules $S/trees/head/src $T/src > $O/mutant.diff
+grep -c 'engine: createEngine({ budgetMs: DEFAULT_BUDGET_MS })' $T/src/cli.ts > $O/line175-count.txt
+L=$(sysctl -n vm.loadavg | awk '{print $2}')
+( cd $T && CLI_DEEP=1 node node_modules/vitest/vitest.mjs run src/cli.real-engine.test.ts > $O/deep.txt 2>&1; echo "rc=$? load1_before=$L" >> $O/deep.txt )
+L=$(sysctl -n vm.loadavg | awk '{print $2}')
+( cd $T && env -u CLI_DEEP node node_modules/vitest/vitest.mjs run --dir src > $O/default.txt 2>&1; echo "rc=$? load1_before=$L" >> $O/default.txt )
+echo "== $ID  (line-175 matches: $(cat $O/line175-count.txt))"
+echo "deep:    $(tail -1 $O/deep.txt) | $(grep -E '^ +Tests ' $O/deep.txt | tr -s ' ')"
+grep -E '^\[CLI_DEEP\]' $O/deep.txt | sed 's/^/   /'
+grep -E '^ +(×|✓|✗) |FAIL .*>' $O/deep.txt | sed 's/^/   /' | head -12
+echo "default: $(tail -1 $O/default.txt) | $(grep -E '^ +Test Files ' $O/default.txt | tr -s ' ') | $(grep -E '^ +Tests ' $O/default.txt | tr -s ' ')"
+grep -E 'FAIL ' $O/default.txt | sort -u | sed 's/^/   /' | head -12

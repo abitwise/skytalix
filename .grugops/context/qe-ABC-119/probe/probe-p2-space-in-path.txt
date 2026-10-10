@@ -1,0 +1,6 @@
+== default-lane case in a checkout path containing a space (copy of HEAD at '.../space probe/tree')
+   × ABC-119 — the real-engine lane's child is the delivered composition (default lane; spawns nothing) > the deep child runs the delivered entry point with no --import, loader or hook, and an empty environment 3ms
+     → ENOENT: no such file or directory, lstat '<scratch>/space%20probe/tree/src/cli.ts'
+== same path, src/cli.test.ts (pre-existing, same idiom at :51-52)
+ Test Files  1 failed (1)
+      Tests  no tests
