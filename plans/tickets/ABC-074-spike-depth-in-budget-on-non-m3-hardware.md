@@ -1,8 +1,8 @@
 ---
 id: ABC-074
 title: SPIKE — depth-in-budget on non-M3 target hardware (lifts NFR-005's PROVISIONAL marker)
-status: blocked
-column: Blocked
+status: dropped
+column: Done
 size: S
 priority: P0
 epic: EPIC-004

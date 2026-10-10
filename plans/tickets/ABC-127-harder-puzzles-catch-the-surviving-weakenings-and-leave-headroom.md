@@ -1,8 +1,8 @@
 ---
 id: ABC-127
 title: Harder puzzles — catch the weakenings ABC-084's suite misses, and leave headroom below the ceiling
-status: ready-for-uat
-column: Ready for UAT
+status: done
+column: Done
 size: M
 priority: P1
 epic: EPIC-004

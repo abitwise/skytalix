@@ -1,8 +1,8 @@
 ---
 id: ABC-036
 title: The `moves` command — the count is exact, and the frame cannot show the list
-status: in-development
-column: In Development
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-003

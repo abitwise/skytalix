@@ -6,7 +6,9 @@ id: ADR-0033
 
 ## Status
 
-**proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `design-abc010`). It answers
+**accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"Accept ABC-036, ABC-051, ABC-127; accept ADR-0029, ADR-0033 ; Explain R4 ; R2 - keep depth 7 ; ABC-074 - rule the test out ; Worktree cleanup - yes"*
+
+Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `design-abc010`). It answers
 `ABC-010`'s "Open design question" (where the side-not-to-move-in-check rule lives). It also answers the
 question the page did not ask but its criterion 9 depends on: how the suite still builds the impossible boards
 that the rules core's hardening tests exist to feed. **Owner acceptance owed.** No agent moves an ADR to

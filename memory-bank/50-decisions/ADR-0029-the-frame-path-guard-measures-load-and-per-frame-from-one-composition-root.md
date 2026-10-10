@@ -6,7 +6,9 @@ id: ADR-0029
 
 ## Status
 
-**proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-abc053-abc054`), ruling
+**accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"Accept ABC-036, ABC-051, ABC-127; accept ADR-0029, ADR-0033 ; Explain R4 ; R2 - keep depth 7 ; ABC-074 - rule the test out ; Worktree cleanup - yes"*
+
+Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-abc053-abc054`), ruling
 `ABC-053`. **Owner acceptance owed.**
 
 `ADR-0011` makes Architect/Design the owner of this question (`R1`), and it says no owner ratification is
