@@ -1,0 +1,7 @@
+// A6 red-first: misspell one unsolved name in the copied baseline only.
+import { readFileSync, writeFileSync } from "node:fs";
+const f = `${process.argv[2]}/src/puzzle-suite.baseline.json`;
+const t = readFileSync(f, "utf8");
+const from = '"mate in 3, seed 288: white Q+B against a bare king"';
+if (t.split(from).length !== 2) throw new Error("A6 anchor not exactly once");
+writeFileSync(f, t.replace(from, '"mate in 3, seed 288: white Q+B againts a bare king"'));

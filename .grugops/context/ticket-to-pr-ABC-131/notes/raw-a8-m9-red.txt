@@ -1,0 +1,59 @@
+RUN a8-m9-red UTC 2026-10-10T14:22:02Z load { 8.94 9.62 8.57 } wt-head 679e847d PUZZLE_DEEP=1 filter=each win-material row
+
+ RUN  v3.2.7 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/abc131/copies/a8-m9-red
+
+ ❯ src/puzzle-suite.test.ts (18 tests | 1 failed | 17 skipped) 865ms
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > holds >= 40 puzzles: >= 10 mate-in-2, >= 6 win-material, >= 20 do-not-hang
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > every row names its source and its moves are legal; no added row starts in check
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > the do-not-hang class starts with ABC-079's 24 rows, and ABC-079 still reads exactly those 24
+   ↓ ABC-127 A1 — the harder rows > >= 16 rows after ABC-084's 40, each tagged: >= 6 mate-in-3, >= 6 win-material (>= 3 black to move), >= 4 quiet-key, >= 4 depth≥5, >= 4 quiescence
+   ↓ ABC-127 A1 — the harder rows > every quiet-key row's accepted moves are neither a capture, a check nor a promotion
+   ↓ ABC-127 A1 — the harder rows > no new row repeats, or is the colour mirror of, any row of the corpus
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0.049: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 2, step 0.001: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step NaN: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > the bound itself (step = budgetMs / 1 000) is accepted and searches
+   ↓ the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline
+   ↓ the gating run [deep, PUZZLE_DEEP=1] > A1 — every mate in 2 is found (10/10 or better)
+   ↓ the gating run [deep, PUZZLE_DEEP=1] > A2 — the losing move is not played in >= 19 of 20 do-not-hang rows
+   ↓ the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each mate-in-3 row has no mate in <= 2, and its accepted moves are EXACTLY the moves that mate in 3
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain 864ms
+     → discovered check: the bishop moves, Rxd8: expected [ 6 ] to deeply equal [ 4 ]
+   ↓ the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain
+AssertionError: discovered check: the bishop moves, Rxd8: expected [ 6 ] to deeply equal [ 4 ]
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   4,[39m
+[31m+   6,[39m
+[2m  ][22m
+
+ ❯ src/puzzle-suite.test.ts:450:39
+    448|           // ABC-131 A8 (QE-126-b): the `+N` the row's source states i…
+    449|           const stated = [...puzzle.source.matchAll(/\+(\d+)/g)].map((…
+    450|           expect(stated, puzzle.name).toEqual([gain]);
+       |                                       ^
+    451|         }
+    452|         const wall = (performance.now() - started) / 1_000;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 17 skipped (18)
+   Start at  17:22:02
+   Duration  1.20s (transform 110ms, setup 0ms, collect 120ms, tests 865ms, environment 0ms, prepare 45ms)
+
+real 2.06
+user 2.26
+sys 0.43
+EXIT 1
+END UTC 2026-10-10T14:22:04Z load { 9.83 9.79 8.64 }

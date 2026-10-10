@@ -1,0 +1,230 @@
+id	solved	exit	load1@start	recount	eng	missed-set==eng
+W1	43/58	1	7.51	43	43	True
+W1b	41/58	1	5.74	41	41	True
+W2	50/58	1	5.07	50	50	True
+W3	35/58	1	4.15	35	35	True
+W4	44/58	1	4.17	44	44	True
+W5	48/58	1	5.85	48	48	True
+W6	50/58	1	5.23	50	50	True
+W7	46/58	1	8.56	46	46	True
+W8	49/58	1	12.67	49	49	True
+W9	44/58	1	13.83	45	44	True
+W10	54/58	0	16.08	54	54	True
+W11	54/58	0	12.04	54	54	True
+W12	46/58	1	8.93	46	46	True
+W13	52/58	1	7.26	52	52	True
+W14	54/58	0	7.34	54	54	True
+W15	35/58	1	7.08	35	35	True
+W16	47/58	1	7.09	47	47	True
+red 14/17; survivors red 7/10: ['W1', 'W1b', 'W2', 'W4', 'W5', 'W13', 'W16']
+## a4-W1: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:50:16Z load { 7.51 9.06 8.82 }
+mate in 3, seed 1632: white Q+R+N against N+2P
+mate in 3, seed 1163: black 2R+B against N
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 7: black Q+P against R+N
+win material, seed 111: black Q+R+B+P against 2R+B+P
+win material, seed 1700: black R+B+N+2P against 2B+2N+P
+win material, seed 1706: white Q+R+2P against Q+R+2P
+win material, seed 1811: white 2R+N+2P against 2B+N+2P
+win material, seed 5180: black R+N+P against Q+B+N
+win material, seed 5464: black B+P against B+N
+win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+win material, seed 5527: black R+2B+2N+P against R+2N+3P
+## a4-W1b: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:50:46Z load { 5.74 8.48 8.62 }
+mate in 3, seed 1: black Q+R against N
+mate in 3, seed 69: black 2R+B against 2P
+mate in 3, seed 1632: white Q+R+N against N+2P
+mate in 3, seed 1163: black 2R+B against N
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 7: black Q+P against R+N
+win material, seed 111: black Q+R+B+P against 2R+B+P
+win material, seed 1700: black R+B+N+2P against 2B+2N+P
+win material, seed 1706: white Q+R+2P against Q+R+2P
+win material, seed 1811: white 2R+N+2P against 2B+N+2P
+win material, seed 5180: black R+N+P against Q+B+N
+win material, seed 5464: black B+P against B+N
+win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+win material, seed 5527: black R+2B+2N+P against R+2N+3P
+## a4-W2: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:51:08Z load { 5.07 8.15 8.50 }
+mate in 3, seed 1632: white Q+R+N against N+2P
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 5180: black R+N+P against Q+B+N
+win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+win material, seed 279: black Q+3P against R+2N+P
+## a4-W3: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:51:39Z load { 4.15 7.63 8.30 }
+K+R: king steps up, rook mates
+smothered: Qg8+ Rxg8 Nf7#
+back rank: Re8+ Rxe8 Rxe8#
+two-rook ladder
+K+Q against the cornered king
+Anastasia: Qxh7+ Kxh7 Rh3#
+mirror: back rank, Re1+ Rxe1 Rxe1#
+mirror: smothered, Qg1+ Rxg1 Nf2#
+mirror: two-rook ladder
+mate in 3, seed 1: black Q+R against N
+mate in 3, seed 69: black 2R+B against 2P
+mate in 3, seed 1632: white Q+R+N against N+2P
+mate in 3, seed 1163: black 2R+B against N
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 7: black Q+P against R+N
+win material, seed 1706: white Q+R+2P against Q+R+2P
+win material, seed 1811: white 2R+N+2P against 2B+N+2P
+win material, seed 5180: black R+N+P against Q+B+N
+win material, seed 5464: black B+P against B+N
+win material, seed 5527: black R+2B+2N+P against R+2N+3P
+## a4-W4: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:51:52Z load { 4.17 7.46 8.23 }
+mate in 3, seed 1: black Q+R against N
+mate in 3, seed 69: black 2R+B against 2P
+mate in 3, seed 1632: white Q+R+N against N+2P
+mate in 3, seed 1163: black 2R+B against N
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 7: black Q+P against R+N
+win material, seed 1706: white Q+R+2P against Q+R+2P
+win material, seed 1811: white 2R+N+2P against 2B+N+2P
+win material, seed 5180: black R+N+P against Q+B+N
+win material, seed 5464: black B+P against B+N
+win material, seed 5527: black R+2B+2N+P against R+2N+3P
+## a4-W5: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:52:05Z load { 5.85 7.70 8.30 }
+mate in 3, seed 1: black Q+R against N
+mate in 3, seed 69: black 2R+B against 2P
+mate in 3, seed 1163: black 2R+B against N
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 5180: black R+N+P against Q+B+N
+win material, seed 5464: black B+P against B+N
+win material, seed 5527: black R+2B+2N+P against R+2N+3P
+## a4-W6: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:43:21Z load { 5.23 7.04 7.74 }
+R takes a knight a pawn defends
+mirror: r takes a knight a pawn defends
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 1700: black R+B+N+2P against 2B+2N+P
+win material, seed 5180: black R+N+P against Q+B+N
+## a4-W7: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:44:07Z load { 8.56 7.73 7.96 }
+pin: Re1 pins the queen to the king
+Q takes a rook the king defends
+Q takes a bishop a knight defends
+Q takes a pawn a knight defends
+mirror: q takes a rook the king defends
+mirror: q takes a bishop a knight defends
+mirror: q takes a pawn a knight defends
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+## a4-W8: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:45:02Z load { 12.67 8.75 8.30 }
+B takes a pawn a rook defends
+mirror: n takes a pawn a pawn defends
+mirror: b takes a pawn a rook defends
+mate in 3, seed 1632: white Q+R+N against N+2P
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+## a4-W9: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:46:06Z load { 13.83 10.13 8.87 }
+discovered check: the bishop moves, Rxd8
+B takes a pawn a pawn defends
+N takes a pawn a pawn defends
+mate in 3, seed 1632: white Q+R+N against N+2P
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 111: black Q+R+B+P against 2R+B+P
+win material, seed 1700: black R+B+N+2P against 2B+2N+P
+win material, seed 1706: white Q+R+2P against Q+R+2P
+win material, seed 5180: black R+N+P against Q+B+N
+win material, seed 5464: black B+P against B+N
+win material, seed 279: black Q+3P against R+2N+P
+## a4-W10: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:46:48Z load { 16.08 11.54 9.47 }
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+## a4-W11: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:47:23Z load { 12.04 11.06 9.38 }
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+## a4-W12: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:47:57Z load { 8.93 10.39 9.20 }
+K+R: king steps up, rook mates
+smothered: Qg8+ Rxg8 Nf7#
+back rank: Re8+ Rxe8 Rxe8#
+two-rook ladder
+Anastasia: Qxh7+ Kxh7 Rh3#
+mirror: back rank, Re1+ Rxe1 Rxe1#
+mirror: smothered, Qg1+ Rxg1 Nf2#
+mirror: two-rook ladder
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+## a4-W13: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:48:32Z load { 7.26 9.79 9.03 }
+mate in 3, seed 1: black Q+R against N
+mate in 3, seed 69: black 2R+B against 2P
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+## a4-W14: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:49:09Z load { 7.34 9.51 8.96 }
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+## a4-W15: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:49:47Z load { 7.08 9.18 8.86 }
+K+R: king steps up, rook mates
+smothered: Qg8+ Rxg8 Nf7#
+back rank: Re8+ Rxe8 Rxe8#
+two-rook ladder
+K+Q against the cornered king
+Anastasia: Qxh7+ Kxh7 Rh3#
+mirror: back rank, Re1+ Rxe1 Rxe1#
+mirror: smothered, Qg1+ Rxg1 Nf2#
+mirror: two-rook ladder
+mate in 3, seed 1: black Q+R against N
+mate in 3, seed 69: black 2R+B against 2P
+mate in 3, seed 1632: white Q+R+N against N+2P
+mate in 3, seed 1163: black 2R+B against N
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 7: black Q+P against R+N
+win material, seed 1706: white Q+R+2P against Q+R+2P
+win material, seed 1811: white 2R+N+2P against 2B+N+2P
+win material, seed 5180: black R+N+P against Q+B+N
+win material, seed 5464: black B+P against B+N
+win material, seed 5527: black R+2B+2N+P against R+2N+3P
+## a4-W16: PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:50:03Z load { 7.09 9.07 8.83 }
+mate in 3, seed 1: black Q+R against N
+mate in 3, seed 69: black 2R+B against 2P
+mate in 3, seed 1163: black 2R+B against N
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king
+win material, seed 1811: white 2R+N+2P against 2B+N+2P
+win material, seed 5180: black R+N+P against Q+B+N
+win material, seed 5464: black B+P against B+N
+win material, seed 5527: black R+2B+2N+P against R+2N+3P

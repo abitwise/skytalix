@@ -206,3 +206,80 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `246ddfc`. **Resu
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P1`, tied to `ABC-083` |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-131`).
+Branch `grugops/ABC-131-drop-edge-puzzles` from `679e847d`. Commits: tests `7cf74d43`, the drop
+`506d80c6`, the baseline `51fb4ca9` (its own commit, that file only). Not merged, not pushed. Readings and
+raw files: `.grugops/context/ticket-to-pr-ABC-131/notes/`. Every ladder, mutant and weakening run was in a
+copy outside the repository. The worktree's `git status --porcelain src` was empty after each one.
+
+**Premise re-verified at `679e847d`:** the four rows are present, and `A6` and `A8` are absent.
+`PUZZLE_DEEP=1` read 58/62, exit 0, 17 passed (load1 8.75). **Criteria: 8 of 8 met.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | `PUZZLES` has 58 rows, none for seeds 1982/1008/1424/1075. `src/puzzle-corpus.ts` numstat is 1/4 (one comment line). Tagged rows 18; mate-in-3 8; quiet-key 11; `depth≥5` 6; `quiescence` 11 |
+| `A2` | MET | Baseline 54/58, budget 25, step 1, `unsolved` byte-identical. The `reason` quotes the owner and cites `ADR-0034` decision 5 and `ABC-084` `A7`. `51fb4ca9` touches only that file. Three processes each gave 54/58, exit 0, 18 passed, identical per-row lines and no NEWLY line (load1 7.73 / 7.98 / 6.04; gating wall 23.94 / 19.21 / 19.93 s) |
+| `A3` | MET | Step 1.25 out of tree: 54/58, 0 NEWLY-MISSED, exit 0. Sweep: 1.3 still 54/58 (the same 19 readings); 1.35 loses seeds 1, 69 and 1163 (51/58). **0.8x holds with one reading of slack** |
+| `A4` | MET | 17 weakenings on `51fb4ca9`: **14/17 red**. Survivors red **7 of 10** (`W1`, `W1b`, `W2`, `W4`, `W5`, `W13`, `W16`); `W10`, `W11` and `W14` green. Table below. One count differs from the recount: `W9` 44 vs 45, from `ABC-126`'s re-authored `discovered check` row. Red either way |
+| `A5` | MET | The four headroom rows are unsolved at 1x. 4x (step 0.25) reads **58/58**. `ABC-084` `A1`/`A2` are green in every 1x run. `PUZZLE_DEEP=weakened` exits **1** (15/58) |
+| `A6` | MET | The new deep row is green: 54 + 4 = 58. Red first: one misspelt `unsolved` name in a copied baseline is RED and names the entry |
+| `A7` | MET | `src/` diff = the three named files (+18/−12). Lint, typecheck and build exit 0. `npm test` 52 / 1608 at base and tip (+0 files, +0 rows), 0 skips. Integrity `No findings.`; inventory 52/52 |
+| `A8` | MET | Green on all 16 win-material rows in every `A2` process. Red first: QE's M9 (`+4` → `+6`) is RED, `discovered check: the bishop moves, Rxd8: expected [ 6 ] to deeply equal [ 4 ]` |
+
+`A4` table (solved / 58, exit): `W1` 43 1 · `W1b` 41 1 · `W2` 50 1 · `W3` 35 1 · `W4` 44 1 · `W5` 48 1 ·
+`W6` 50 1 · `W7` 46 1 · `W8` 49 1 · `W9` 44 1 · `W10` 54 0 · `W11` 54 0 · `W12` 46 1 · `W13` 52 1 ·
+`W14` 54 0 · `W15` 35 1 · `W16` 47 1. Missed rows per weakening: `raw-a4-weakenings.jsonl`.
+
+**`N8-LANE`:** the default lane gains 0 files and 0 rows. The deep lane gets faster: gating wall 25.52 s
+at base vs 19.2–23.9 s at tip, and the mate-in-3 oracle 8.70 s vs 4.18–5.34 s. Printed, not asserted.
+**Owed:** the QE hop, the `In Review` move (Orchestrator) and the merge. **The owner's UAT word is owed**
+(`src/puzzle-corpus.ts` and the baseline are non-test files). After merge: the Scribe and Security/NFR
+(`RISK-003`: 0.8x holds; first loss at 0.74x nominal on seeds 1, 69 and 1163).
+
+## QE
+
+**2026-10-10, QE/E2E** (task `wave-2026-09-25`, subtask `qe-ABC-131`, Workflow 04 review exit).
+**Result: PASS_WITH_GAPS. `A1`–`A8` are MET and no gap blocks it.** QE re-derived every criterion in
+`git archive` copies with its own scripts, logging load1 for each run. It re-planted all 17 weakenings
+itself. It added one test-only commit, `f994c724` (+4 in `src/puzzle-suite.test.ts`, inside the `A6` row,
+0 production lines). Notes: `.grugops/context/qe-ABC-131/notes/` (decision `…7090a211`, observations
+`…07d83577` and `…5e358534`, artifact-ref `…476bdc8f`).
+
+| # | QE verdict | independent evidence |
+|---|---|---|
+| `A1` | MET | 58 rows, no seed 1982/1008/1424/1075. Corpus numstat 1/4 (the four rows, one comment). Shape 18 / 8 / 11 / 6 / 11 |
+| `A2` | MET | Baseline 54/58, 25, 1. `unsolved` byte-identical; owner quote verbatim; `51fb4ca9` touches only that file. Three processes: 54/58, exit 0, 18 passed, no NEWLY line, per-row sha1 `11326e1c` ×3 (load1 10.58 / 7.50 / 6.82). Base: 58/62, 17 passed (load1 3.68) |
+| `A3` | MET | Step 1.25 (19 of 24 readings): 54/58, 0 NEWLY-MISSED (load1 5.23). 1.3: the same. 1.35 (18 readings): 51/58, losing seeds 1, 69 and 1163 |
+| `A4` | MET | 14/17 red; survivors red 7 of 10 (`W1`, `W1b`, `W2`, `W4`, `W5`, `W13`, `W16`); `W10`, `W11` and `W14` green. All 17 missed-row sets equal the engineer's. `W9` 44 vs the recount's 45 is confirmed to be `ABC-126`'s `discovered check` re-author |
+| `A5` | MET | Headroom rows MISSED at 1x. 4x reads 58/58. `ABC-084` `A1`/`A2` green. `weakened` exit 1 (15/58) |
+| `A6` | MET | Red first on misspelt, dropped-row and sum mutants. `QE-131-a` closed in the same row |
+| `A7` | MET | `src/` diff = the three named files, no trigger-list file. Lint, typecheck, build exit 0. `npm test` 52 / 1608 (base 52 / 1608), skip 0, integrity and inventory `No findings.` |
+| `A8` | MET | Green on 16 rows ×3. `M9` RED naming `discovered check: the bishop moves, Rxd8` (`[ 6 ]` vs `[ 4 ]`). Also red on `+N` removed, duplicated and lowered |
+
+**Gaps.**
+- `QE-131-a` (LOW): **closed** by `f994c724`. A repeated `unsolved` name kept the `A6` sum and the whole lane green. Now RED (`expected 3 to be 4`).
+- `QE-131-b` (LOW): the baseline's `laneWallSeconds` has processes 1 and 2 swapped (`28.24 / 33.45` should be `33.45 / 28.24`, per the raw `Duration` lines). It is provenance only. The fix belongs to the next baseline-only commit, since QE is fenced from `src/` production files.
+- `QE-131-c` (LOW): AGENTS.md's levels-lane comment ("246 moves", "35 vs 58 of 62") goes stale at merge. `src/levels.test.ts` reads `PUZZLES`, and at the tip the lane is green with 242 moves and 35/58 vs 54/58. The fix is 0 B, and it belongs to the Scribe with the `PUZZLE_DEEP` update.
+- INFO:
+  - `QE-131-d`: `A6` does not assert the run's misses (by design).
+  - `QE-131-e`: `measuredAt` `506d80c` is red as committed, but its rows equal the tip's.
+  - `QE-131-f`: the margin model is ≥ 26 % / ≤ 33 % growth on the tightest rows.
+  - `QE-131-g`: `ABC-087` `A5` read a maximum of 4,780 ms of 5,000 under load.
+
+**Owed:** the Orchestrator's board move and the merge. **The owner's UAT word** (non-test `src/`:
+`src/puzzle-corpus.ts`, `src/puzzle-suite.baseline.json`). After merge, the AGENTS.md Scribe (`PUZZLE_DEEP`
+and `QE-131-c`) and Security/NFR (`RISK-003`, `QE-131-f`).
+
+### Delivery addendum: fix-forward `QE-131-b`
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `fix-ABC-131`). Commit `b31ce2bb` on
+`grugops/ABC-131-drop-edge-puzzles` touches only `src/puzzle-suite.baseline.json`, and in it only `laneWallSeconds`:
+`28.24 / 33.45 / 28.97` → `33.45 / 28.24 / 28.97`, matching the raw `Duration` lines for processes 1, 2 and 3.
+The oracle-row and process-real figures in that field were already in order and are unchanged. A key-by-key
+JSON diff shows every other key byte-identical. Gates at `b31ce2bb`: lint, typecheck and build exit 0;
+`npm test` 52/1608, 0 skipped; integrity `No findings.`. `PUZZLE_DEEP=1` once (load1 12.95 → 9.78): 54/58,
+18 passed, exit 0, no NEWLY line, per-row sha1 `11326e1c`. **`A1`–`A8` still hold.** Not merged, not pushed.
+Notes: `.grugops/context/fix-ABC-131/notes/`.

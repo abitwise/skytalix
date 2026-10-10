@@ -1,0 +1,7 @@
+// Readings strictly below the deadline after the start reading, per step, on the real virtualClock.
+const { virtualClock } = await import(`${process.argv[2]}/src/virtual-clock.ts`);
+for (const step of [0.25, 1, 1.2, 1.25, 1.3, 1.35, 1.4, 1.5]) {
+  const now = virtualClock(step); const start = now(); const deadline = start + 25; let n = 0;
+  while (now() < deadline) n++;
+  console.log(`step ${step}\treadings<25 ${n}\tratio ${(n / 24).toFixed(3)}`);
+}

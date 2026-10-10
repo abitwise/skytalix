@@ -1,0 +1,58 @@
+== deep-base: EXIT 0 | Tests 17 passed (17) | PUZZLES shipped: solved 58/62, baseline 58/62, budget 25 step 1, wall 33.26 s | real 49.60 | start { 3.68 6.71 7.69 } | NEWLY 0
+== deep-tip-p1: EXIT 0 | Tests 18 passed (18) | PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 21.54 s | real 32.79 | start { 10.58 8.24 8.21 } | NEWLY 0
+== deep-tip-p2: EXIT 0 | Tests 18 passed (18) | PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 23.04 s | real 32.98 | start { 7.50 7.71 8.02 } | NEWLY 0
+== deep-tip-p3: EXIT 0 | Tests 18 passed (18) | PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 20.00 s | real 30.24 | start { 6.82 7.56 7.95 } | NEWLY 0
+## deep-base: RUN deep-base commit 679e847d plant - PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:40:42Z load { 3.68 6.71 7.69 }
+PUZZLES shipped: solved 58/62, baseline 58/62, budget 25 step 1, wall 33.26 s
+ORACLE mate-in-3: 12 rows, wall 10.48 s
+ORACLE win-material: 16 rows, wall 4.87 s
+      Tests  17 passed (17)
+real 49.60
+EXIT 0
+END UTC 2026-10-10T14:41:31Z load { 10.58 8.24 8.21 }
+rows sha1 f0a8e57d3307
+## deep-tip-p1: RUN deep-tip-p1 commit 96f3168d plant - PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:41:31Z load { 10.58 8.24 8.21 }
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 21.54 s
+ORACLE mate-in-3: 8 rows, wall 4.96 s
+ORACLE win-material: 16 rows, wall 5.42 s
+      Tests  18 passed (18)
+real 32.79
+EXIT 0
+END UTC 2026-10-10T14:42:04Z load { 7.50 7.71 8.02 }
+rows sha1 11326e1cdde4
+## deep-tip-p2: RUN deep-tip-p2 commit 96f3168d plant - PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:42:04Z load { 7.50 7.71 8.02 }
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 23.04 s
+ORACLE mate-in-3: 8 rows, wall 4.20 s
+ORACLE win-material: 16 rows, wall 4.51 s
+      Tests  18 passed (18)
+real 32.98
+EXIT 0
+END UTC 2026-10-10T14:42:37Z load { 6.82 7.56 7.95 }
+rows sha1 11326e1cdde4
+## deep-tip-p3: RUN deep-tip-p3 commit 96f3168d plant - PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:42:37Z load { 6.82 7.56 7.95 }
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 20.00 s
+ORACLE mate-in-3: 8 rows, wall 4.54 s
+ORACLE win-material: 16 rows, wall 4.83 s
+      Tests  18 passed (18)
+real 30.24
+EXIT 0
+END UTC 2026-10-10T14:43:08Z load { 5.98 7.27 7.83 }
+rows sha1 11326e1cdde4
+## at-506d80c: RUN at-506d80c commit 506d80c6 plant - PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:48:15Z load { 7.61 9.99 9.08 }
+PUZZLES shipped: solved 54/58, baseline 58/62, budget 25 step 1, wall 25.55 s
+ORACLE mate-in-3: 8 rows, wall 5.40 s
+ORACLE win-material: 16 rows, wall 5.97 s
+      Tests  1 failed | 17 passed (18)
+real 38.13
+EXIT 1
+END UTC 2026-10-10T14:48:53Z load { 7.28 9.63 8.99 }
+rows sha1 11326e1cdde4
+## deep-qetip: RUN deep-qetip commit f994c724 plant - PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:53:21Z load { 4.02 6.73 7.88 }
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 25.00 s
+ORACLE mate-in-3: 8 rows, wall 5.83 s
+ORACLE win-material: 16 rows, wall 5.29 s
+      Tests  18 passed (18)
+real 37.17
+EXIT 0
+END UTC 2026-10-10T14:53:59Z load { 5.51 6.84 7.88 }
+rows sha1 11326e1cdde4

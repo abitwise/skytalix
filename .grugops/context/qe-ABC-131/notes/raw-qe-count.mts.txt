@@ -1,0 +1,5 @@
+const dir = process.argv[2];
+const { PUZZLES } = await import(`${dir}/src/puzzle-corpus.ts`);
+const t = (tag: string) => PUZZLES.filter((p: any) => p.tags?.includes(tag)).length;
+const answered = PUZZLES.filter((p: any) => p.kind !== "do-not-hang" && p.tags !== undefined);
+console.log(JSON.stringify({ total: PUZZLES.length, added: answered.length, mate3: answered.filter((p: any) => p.kind === "mate-in-3").length, win: PUZZLES.filter((p: any) => p.kind === "win-material").length, winTaggedBlack: answered.filter((p: any) => p.kind === "win-material" && p.fen.split(" ")[1] === "b").length, quietKey: t("quiet-key"), depth5: t("depth≥5"), quiescence: t("quiescence"), headroom: t("headroom"), seedHits: PUZZLES.filter((p: any) => /seed (1982|1008|1424|1075)\b/.test(p.name)).map((p: any) => p.name), names: new Set(PUZZLES.map((p: any) => p.name)).size }));

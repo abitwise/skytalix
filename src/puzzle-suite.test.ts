@@ -445,10 +445,23 @@ if (MODE === "1" || MODE === "weakened") {
           const { gain, moves } = materialBest(puzzle.fen);
           expect(gain, puzzle.name).toBeGreaterThan(0);
           expect(moves.sort(), puzzle.name).toEqual([...puzzle.accept].sort());
+          // ABC-131 A8 (QE-126-b): the `+N` the row's source states is the oracle's gain.
+          const stated = [...puzzle.source.matchAll(/\+(\d+)/g)].map((m) => Number(m[1]));
+          expect(stated, puzzle.name).toEqual([gain]);
         }
         const wall = (performance.now() - started) / 1_000;
         console.log(`ORACLE win-material: ${rows.length} rows, wall ${wall.toFixed(2)} s`);
       }, 300_000);
+
+      it("ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total", () => {
+        const names = new Set(PUZZLES.map((p) => p.name));
+        for (const name of baseline.unsolved) expect(names.has(name), name).toBe(true);
+        // QE-131-a: |unsolved| is a set — a repeated name would keep the sum and hide a dropped one.
+        expect(new Set(baseline.unsolved).size, "unsolved names are distinct").toBe(
+          baseline.unsolved.length,
+        );
+        expect(baseline.solved + baseline.unsolved.length).toBe(baseline.total);
+      });
     }
 
     if (MODE === "weakened") {

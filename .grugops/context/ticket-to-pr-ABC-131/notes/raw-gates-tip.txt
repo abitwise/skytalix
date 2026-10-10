@@ -1,0 +1,19 @@
+UTC 2026-10-10T14:34:32Z load { 9.25 8.94 8.35 } head 51fb4ca9
+Checked 100 files in 126ms. No fixes applied.
+lint exit 0
+typecheck exit 0
+build exit 0
+ ✓ src/engine.test.ts (33 tests) 555ms
+ ✓ src/cli.test.ts (67 tests) 28ms
+
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Start at  17:34:35
+   Duration  7.11s (transform 1.28s, setup 0ms, collect 11.28s, tests 13.39s, environment 6ms, prepare 2.50s)
+
+test exit 0
+No findings.
+integrity exit 0
+The lane collects 52 test files; git tracks 52.
+No findings.
+inventory exit 0

@@ -1,0 +1,62 @@
+// ABC-131 A4: QE-084's 17 weakenings (the `M` table read verbatim from weakenings.mjs), each planted
+// ALONE in a fresh `git archive` copy of the delivered commit, PUZZLE_DEEP=1, out of tree.
+// Solved/total are recounted from the per-row lines and must agree with the runner's summary line.
+// usage: node a4-weakenings.mjs <commit> [concurrency]
+import { execFileSync, spawn } from "node:child_process";
+import { mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync, appendFileSync } from "node:fs";
+
+const REPO = "/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example";
+const WT = `${REPO}/.claude/worktrees/ticket-to-pr-ABC-131`;
+const S = "/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/abc131";
+const [commit, conc = "3"] = process.argv.slice(2);
+const text = readFileSync(`${REPO}/.grugops/context/qe-ABC-084/probe/weakenings.mjs`, "utf8");
+const from = text.indexOf("const M = [");
+const M = new Function(`${text.slice(from, text.indexOf("];", from) + 2)}; return M;`)();
+if (M.length !== 17) throw new Error(`expected 17 weakenings, read ${M.length}`);
+const OUT = `${S}/out/a4.jsonl`;
+rmSync(OUT, { force: true });
+mkdirSync(`${S}/out/a4`, { recursive: true });
+const load = () => execFileSync("sysctl", ["-n", "vm.loadavg"], { encoding: "utf8" }).trim();
+
+async function one([id, file, find, replace, count]) {
+  const short = id.split("-")[0];
+  const D = `${S}/copies/a4-${short}`;
+  rmSync(D, { recursive: true, force: true });
+  mkdirSync(D, { recursive: true });
+  execFileSync("sh", ["-c", `git -C "${WT}" archive ${commit} src package.json tsconfig.json vitest.config.ts | tar -x -C "${D}"`]);
+  symlinkSync(`${REPO}/node_modules`, `${D}/node_modules`);
+  const original = readFileSync(`${D}/${file}`, "utf8");
+  const hits = original.split(find).length - 1;
+  if (hits !== count) throw new Error(`${id}: expected ${count} match(es), found ${hits}`);
+  const planted = original.split(find).join(replace);
+  if (planted === original) throw new Error(`${id}: plant changed nothing`);
+  writeFileSync(`${D}/${file}`, planted);
+  const loadBefore = load();
+  const t0 = performance.now();
+  const out = await new Promise((resolve) => {
+    const p = spawn("npx", ["vitest", "run", "src/puzzle-suite.test.ts"], { cwd: D, env: { ...process.env, PUZZLE_DEEP: "1" } });
+    let buf = "";
+    p.stdout.on("data", (d) => (buf += d));
+    p.stderr.on("data", (d) => (buf += d));
+    p.on("close", (code) => resolve({ buf, code }));
+  });
+  const wallS = Number(((performance.now() - t0) / 1000).toFixed(1));
+  const rows = [...out.buf.matchAll(/^(SOLVED|MISSED)\t(\S+)\t(\S+)\td(\d+)\tn(\d+)\t(.+)$/gm)];
+  writeFileSync(`${S}/out/a4/${short}.rows.txt`, rows.map((m) => m[0]).join("\n") + "\n");
+  const solved = rows.filter((m) => m[1] === "SOLVED").length;
+  const summary = out.buf.match(/PUZZLES shipped: solved (\d+)\/(\d+)/);
+  const agree = summary !== null && Number(summary[1]) === solved && Number(summary[2]) === rows.length;
+  const missed = rows.filter((m) => m[1] === "MISSED").map((m) => m[6]);
+  const newlyMissed = [...out.buf.matchAll(/^NEWLY-MISSED\t\S+\t\S+\t(.+)$/gm)].map((m) => m[1]);
+  const tests = out.buf.match(/Tests {2}(.+)/)?.[1]?.trim() ?? null;
+  const rec = { id: short, loadBefore, wallS, exit: out.code, solved, total: rows.length, agree, tests, newlyMissed, missed };
+  appendFileSync(OUT, `${JSON.stringify(rec)}\n`);
+  console.log(`${short}\texit ${out.code}\t${solved}/${rows.length}\t${agree ? "summary-agrees" : "SUMMARY-DISAGREES"}\tnewly-missed ${newlyMissed.length}\t${tests}\t${wallS}s\tload ${loadBefore}`);
+  rmSync(D, { recursive: true, force: true });
+}
+
+const queue = [...M];
+await Promise.all(Array.from({ length: Number(conc) }, async () => {
+  while (queue.length > 0) await one(queue.shift());
+}));
+console.log("worktree src clean:", execFileSync("git", ["-C", WT, "status", "--porcelain", "src"], { encoding: "utf8" }).trim() === "");

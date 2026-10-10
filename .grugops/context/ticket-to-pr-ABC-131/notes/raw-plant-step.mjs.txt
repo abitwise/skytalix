@@ -1,0 +1,7 @@
+// Change ONLY stepMs in the copied baseline: node plant-step.mjs <dir> (STEP env)
+import { readFileSync, writeFileSync } from "node:fs";
+const f = `${process.argv[2]}/src/puzzle-suite.baseline.json`;
+const t = readFileSync(f, "utf8");
+const from = '"stepMs": 1,';
+if (t.split(from).length !== 2) throw new Error("stepMs anchor not exactly once");
+writeFileSync(f, t.replace(from, `"stepMs": ${process.env.STEP},`));
