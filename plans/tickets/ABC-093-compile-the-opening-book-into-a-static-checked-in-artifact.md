@@ -279,3 +279,21 @@ at the cutting hop. **Result: 8 of 10 — items 5 and 10 carry a ⚠️; the oth
 | 8 | size assigned | **✅** `M`, with both re-size boundaries named |
 | 9 | priority assigned | **✅** `P1`, with the reason it is not `P0` |
 | 10 | no major unresolved blocker | **⚠️ ONE, HARD.** `ABC-092`'s ADR must be `accepted` first — a licence question with a human on the critical path. **This ticket is not pullable until that lands, and no part of it may be started "just the compiler, without data" if that means fetching the data to test against.** |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-093`).
+- Branch `grugops/ABC-093-opening-book-artifact`, from `e34fbc6f`. One commit: `tools/opening-book/compile.ts`,
+  `tools/opening-book/book.test.ts`, `data/opening-book/book.json`, `data/opening-book/ATTRIBUTION.md`, and the
+  two config includes `ADR-0037` D1(g) names. **0 lines under `src/`.** Not merged, not pushed.
+- Readings and calls live in `.grugops/context/ticket-to-pr-ABC-093/` (`…79cc28a5`, `…02e9031a`, `…a6cb510f`,
+  `probe/`) and are not restated here.
+
+**`A1`–`A8` are met on the delivered tree. No stop condition fired.**
+- Pinned upstream `a6189a30dc273ccb21fc2536a9a2fefd5592a67a`. The artifact is 356,526 B (34.0%) with 5,390
+  entries. `A2` examined 5,390 of 5,390 entries, with 0 illegal moves. Three full-source compiles were
+  byte-identical (`cmp` exit 0).
+- Weights are line-count behind the one constant `WEIGHT_POLICY`. **The owner's veto stays open.**
+- Cost (`ADR-0035`, narrow set by path): +0.375 s CPU, R 0.06 s. That is MET against 650 ms, with 1 file.
+- **Owed, and not done here:** the `AGENTS.md` regeneration line. The queue fence forbade `AGENTS.md`, and the
+  command has been RUN (`…a6cb510f`).

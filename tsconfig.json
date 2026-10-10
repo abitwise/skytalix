@@ -18,5 +18,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts", "spike/**/*.ts", "vitest.config.ts"]
+  "include": ["src/**/*.ts", "spike/**/*.ts", "tools/opening-book/**/*.ts", "vitest.config.ts"]
 }
