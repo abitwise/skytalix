@@ -42,6 +42,12 @@ placing the short-circuit and proving the fall-through is invisible.
 - **On a book hit: return the book move and do not enter the search at all.**
 - **On a book miss, or on no book: enter the search exactly as if this ticket did not exist.**
 - **Prove the fall-through is invisible** at the ply the game leaves book.
+- **The one wiring line at the composition root** *(added 2026-10-10 by BA/PM, drawing the boundary
+  that `ADR-0012` clause 6 left to this role)*. `src/cli.ts:176` reads
+  `engine: createEngine({ budgetMs: DEFAULT_BUDGET_MS })` today. This ticket wraps that value with
+  the decorator. **Without that line, no player's game ever consults the book**, and the Problem
+  above says this ticket is the only one a player can perceive. The seed binding comes with the
+  line (`ADR-0012` clause 3(b)), and where a per-session seed comes from is unruled (§ DoR).
 
 ## Out of scope — read this before writing a line
 
@@ -85,6 +91,13 @@ placing the short-circuit and proving the fall-through is invisible.
   **0** — or, if the seam genuinely cannot be consumed without a change there, **the ticket stops
   and the change is raised against `EPIC-004`**, and this criterion fails rather than being
   reworded. **This criterion is the subject boundary, written as a test.**
+- **`A7` (a real session consults the book)** *(added 2026-10-10)*. **Given** the delivered
+  `src/cli.ts`, **then** its `engine:` value is the decorator wrapping
+  `createEngine({ budgetMs: DEFAULT_BUDGET_MS })`, and that is the only changed expression in the
+  `runTurnLoop({ … })` call. **And given** the book present and a real `node src/cli.ts` child in
+  which the human plays `e2e4`, **then** the engine's reply is one of the book's entries for the
+  position after `1. e4`. That is one row in the `CLI_DEEP` lane (`src/cli.real-engine.test.ts`),
+  never in the default lane.
 
 ## Dependencies
 
@@ -95,7 +108,9 @@ placing the short-circuit and proving the fall-through is invisible.
   can wrap from outside, or a loop this ticket would have to reach into — **if the latter, `A6`
   fires and this ticket stops**; (c) whether the entry point is spy-able, which `A1` requires.
   **Whoever pulls this ticket reads `EPIC-004`'s delivered tickets first and records the real id
-  here.**
+  here.** *(2026-10-10: `ABC-078` is `Done` (2026-08-20). `createEngine` is at `src/engine.ts:518`.
+  `EngineSeam` has moved to `src/turn-loop.ts:150` (it was `:138`). `ABC-043`'s composition root
+  exists at `src/cli.ts:176`.)*
 - **`ABC-094` — HARD BLOCKER.** No probe, nothing to place.
 - **`ABC-093` — transitively required.**
 - **`EPIC-002` / the frame path — needed by `A4` only.** `src/frame.ts`, `src/render.ts` and
@@ -169,8 +184,31 @@ move interface lands, this becomes the cheapest visible win on the board.
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-16**. **Result: 7 of 10 — items 3, 5 and 10 carry a ⚠️. THE SCORE IS NOT INFLATED AND
+**RE-SCORED 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
+at `aaa88263`). **Result: 7 of 10, ⚠️x3. It stays in `Backlog`, last of the four.** Readings:
+`.grugops/context/rescore-p1-backlog-2026-10-10/notes/`.
+
+- **The `ABC-078` half of item 10 is DISCHARGED.** It is `Done` and the seam it supplies is merged.
+  **Items 3 and 10 STAND** on `ABC-093` and `ABC-094`, both unbuilt.
+- **Item 5 ✅ → ⚠️, and this is the cost of the wiring line now in scope.** For "games vary between
+  sessions" (`EPIC-005`), the composition root needs a seed that differs per session. **No production
+  module has a session seed source today.** `createEngine` takes none, and `src/levels.ts` takes a
+  caller's seed. Whether that seed comes from `Date.now`, `crypto` or something else is
+  Architect/Design's. Put it in the same `In Design` hop as `ABC-093`'s format and `ABC-094`'s `G4`.
+  **If the Orchestrator reverses the wiring call,** the score returns to 8/10 and the wiring line
+  needs its own XS ticket.
+- **Size `S` holds**: one wiring expression, plus one `CLI_DEEP` row. **`P1` holds.**
+- **Production and UAT.** It adds a new decorator module (`ADR-0012` clause 8: flat in `src/`) and
+  changes `src/cli.ts`, so it **needs the owner's UAT word**. The new `src/cli.ts` import edge
+  reaches `ABC-094`'s `node:fs` read, which fires `ADR-0036` (b2), so expect `In Security/NFR`.
+  `CLI_DEEP` runs at QE (`AGENTS.md`: after any `src/cli.ts` change).
+- **Overlaps.** `ABC-101` (P2, Backlog) rewrites the same `engine:` expression to wire a level. The
+  second of the two to land composes onto the first. Owner question: does a book hit bypass a weak
+  level's blunders? `ABC-138` merged (`497d3b2f`) into `src/cli.test.ts`, which this ticket does not
+  need to edit. No file overlap with `ABC-083`, `ABC-010`, `ABC-131` or `ABC-141`.
+
+**History. Assessed 2026-08-16** against `agent-factory/checklists/definition-of-ready.md` by BA/PM
+at the cutting hop. **Result: 7 of 10 — items 3, 5 and 10 carry a ⚠️. THE SCORE IS NOT INFLATED AND
 THIS TICKET IS NOT READY TO PULL; it is honestly cut, honestly blocked, and it says so.**
 
 **RE-SCORED 2026-08-18 by BA/PM** (task `cut-frame-overflow-2026-08-18`), on `ADR-0012` being

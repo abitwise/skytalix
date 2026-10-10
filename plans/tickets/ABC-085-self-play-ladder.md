@@ -47,7 +47,11 @@ at least 90%."*
   a test-harness concern, not a book. *(2026-10-09: that choice reuses `ABC-087`'s seeded generator,
   per `ADR-0027` decision 2. It is not a second PRNG.)* **If `EPIC-005`'s book later changes what the engine plays
   from the start position, this harness's baselines are invalidated and must be re-measured. Named
-  as a cross-epic dependency and not resolved.**
+  as a cross-epic dependency and not resolved.** *(2026-10-10: **resolved by construction.**
+  `ADR-0012` puts the book in a decorator of `EngineSeam`, `(history) => Promise<Move>`, wired only
+  at `src/cli.ts`'s composition root. This harness drives `createLevel`, `(position) => LevelChoice`
+  (`src/levels.ts:110`), which no book wraps. **The ladder measures the levels without the book**,
+  and a ladder through the book is not this ticket.)*
 - **Tuning the levels to make the number pass.** If `A1` fails, that is `ABC-087`'s finding.
 
 ## Acceptance (Given/When/Then)
@@ -79,8 +83,11 @@ at least 90%."*
 
 ## Dependencies
 
-- **`ABC-087` must land first — OPEN.** There are no difficulty levels to ladder without it.
-  *(2026-10-09.)* It also owns the seed and the seeded generator that `A5` consumes.
+- ~~**`ABC-087` must land first — OPEN.**~~ **`ABC-087` — `Done`** (merged `b696d8e8`, owner UAT
+  accepted; status corrected 2026-10-10). There are no difficulty levels to ladder without it.
+  *(2026-10-09.)* It also owns the seed and the seeded generator that `A5` consumes: `seededRandom`
+  and `createLevel` are exported from `src/levels.ts`. Security/NFR's `R1` (the level clamp pin,
+  owed "before `ABC-085` enters `In Development`") is delivered at `src/levels.test.ts:323`.
   - **Named risk to `A2`** *(2026-10-10, BA/PM, `rule-abc087-cost`)*. `ABC-087`'s built table puts
     **levels 3, 4 and 5 at 3 s, 4 s and 4.5 s, all at blunder rate 0**, so they differ by budget
     alone: 1.33x and 1.125x.
@@ -89,6 +96,22 @@ at least 90%."*
       (`ADR-0032` § Context).
     - **The prediction.** The 3/4 and 4/5 pairs may score about 50 %, not > 50 %.
       `UNKNOWN - verify`; the ladder measures it, and the levels are not tuned for it (test note 4).
+    - **Measured 2026-10-10 (BA/PM probe, not a game run).** On a virtual clock, an aborted
+      iteration is discarded and the TT is cleared per search. So two rate-0 levels that complete
+      the same depth play the **same move**, and a pair that agrees on every move plays the same
+      game from both chairs. On 50 corpus positions, one step for both levels, the count of
+      positions where the chosen move differs:
+
+      | virtual step | 3 vs 4 | 4 vs 5 | median depth | real ms per L3 move (loaded host) |
+      |---:|---:|---:|---:|---:|
+      | 120 | 9 / 50 | 2 / 50 | 5 | ~110 |
+      | 30 | 2 / 50 | 0 / 50 | 6 | ~550 |
+      | 10 | 2 / 50 | 0 / 50 | 7 | ~1 600 |
+      | 4 | 4 / 50 | 0 / 50 | 8 | ~4 400 (about real time here) |
+
+      **Below step 120, level 5 never chose a different move from level 4 (0 of 50 at steps 30,
+      10 and 4), and level 4 differed from level 3 on only 2–4 of 50.** This is evidence for the
+      risk, not the verdict: `A2` is a game score.
     - **If `A2` fails there,** it is `ABC-087`'s finding, routed to BA/PM.
     - **Every fix found so far is a product call, and none is taken here.** Fewer levels above the
       default changes `ABC-101`'s vocabulary, which `EPIC-006` reads. A blunder rate at the default
@@ -98,7 +121,8 @@ at least 90%."*
   corrected 2026-10-09). `A5`'s ~~seeded reproducibility~~ deterministic mode, the virtual clock, is
   that ticket's contract *(re-pointed 2026-10-09; the seed moved to `ABC-087`)*. This one
   **consumes** it and does not re-implement it.
-- **`ABC-125` must land first — OPEN** *(added 2026-10-09, `cut-followups-2026-10-09`)*. `A5`
+- **`ABC-125` — `Done`** (merged `99fb7ad1`; status corrected 2026-10-10). Was: must land first
+  *(added 2026-10-09, `cut-followups-2026-10-09`)*. `A5`
   runs two engines, each on its own virtual clock, and the levels may use different steps. No
   merged row runs two live clocks at different steps. QE's mutant `M5` (the step held at module
   level) survives every row (`ABC-086` G-QE-1). `ABC-125` adds the row that kills it.
@@ -116,6 +140,14 @@ at least 90%."*
   out. **Ruling: OPT-IN ONLY, `PERFT_DEEP`'s established shape, never in `npm test`.** A short mode
   (e.g. 10 games at a millisecond budget) may run in the default lane **only if it is measured to
   fit the 650 ms per-ticket bar** — measure, do not assume.
+  - *2026-10-10 re-score: the 5 hours was priced on the REAL clock.* `A5` puts the ladder on a
+    virtual clock, where a move costs `budget ÷ step` readings at about 4.4–5.5 ms real each (probe,
+    loaded host). **The step sets the cost and also what is measured.** At step 120 the levels run
+    at about 1/27 of a real level-3 move. At step 10, level 3 still runs at only about half of one,
+    and step 4 is about real time on this host (probe table above). Neither is the shipped 3 s engine (`ADR-0027`: "a virtual millisecond is
+    not a real one"). No ruling names the step. Until one does, "the default budget" in `A1` and
+    `A6` has no reproducible meaning. The `N8-LANE` 650 ms is refused at the cut under `ADR-0035`
+    (proposed); the short mode, if any, is pinned by a count.
 - **`NFR-004` — not triggered.** The harness sets its own budget.
 - **Security — not triggered.** No input surface.
 
@@ -146,6 +178,34 @@ overruled on:** if the owner wants the epic's first criterion treated as `P0`, t
 change.
 
 ## Definition of Ready
+
+**RE-SCORED 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
+at `aaa88263`). **Result: 8 of 10, ⚠️x2 (was 7). Recommended column: `In Design`.** Readings:
+`.grugops/context/rescore-p1-backlog-2026-10-10/notes/` and `../probe/`.
+
+- **Item 3 ⚠️ → ✅.** Every dependency is `Done` (`ABC-087` `b696d8e8`, `ABC-125` `99fb7ad1`,
+  `ABC-086`, `ABC-076`–`ABC-078`), and Security/NFR's `R1` is delivered.
+- **Item 5 ⚠️ → ✅.** The book dependency is resolved by construction (§ Out of scope).
+- **Item 4 ✅ → ⚠️ (new).** `A1` and `A6` say "the default budget", but `A5` runs on a virtual clock
+  whose step is unnamed. The probe shows the step changes the answer: at step 120, 4 vs 5 differ on
+  2/50 moves, and at steps 30, 10 and 4 on 0/50. A criterion whose verdict depends on an unstated
+  dial is not yet measurable. **Architect/Design** names the step (or steps) and states what a
+  virtual-clock verdict claims about the shipped real-clock levels. `ADR-0027` decision 6 calls
+  the step "the dial". BA/PM folds the ruling into `A1`/`A2`/`A6`.
+- **Item 10 ⚠️ STANDS, changed in kind.** The run no longer has to be "5 hours with no home". At a
+  coarse step it is a deep lane of the kind the board already runs (`PUZZLE_DEEP` at QE on the
+  owner's option B; `ENGINE_DEEP` ~5 min). Near real time it is hours again. **The step decides
+  the home, and the cost-versus-fidelity trade is the owner's** (owner question in the note).
+- **Size `M` holds. Priority `P1` holds.** The P0 argument is stronger now: this is the only thing
+  left that can prove `EPIC-004`'s first criterion. It stays the owner's call, as written below.
+- **Production and UAT.** If the harness lives only in a `*.test.ts` file (`ABC-087` `A3`'s
+  precedent), the diff has zero production lines and UAT is waived by measurement. A non-test
+  harness module under `src/` would need the owner's word.
+- **Overlaps.** No file overlap with `ABC-083`, `ABC-131`, `ABC-141`, `ABC-138` or `ABC-140`.
+  `ABC-010` (unmerged) edits one fixture in `src/levels.test.ts` (`:351`). If this harness goes in
+  that file, build after `ABC-010` merges. **By value, `ABC-083` changes the evaluation every level
+  uses.** A ladder verdict taken before `ABC-083` merges is a verdict on the old engine. Run the
+  verdict after `ABC-083` merges, or re-run it then.
 
 **Fold note, 2026-10-10** (subtask `rule-abc087-cost`). **Not re-scored; still 7 of 10.** A named
 risk to `A2` (§ Dependencies) and test note 5 are added. No criterion changed. Item 3 stays ⚠️

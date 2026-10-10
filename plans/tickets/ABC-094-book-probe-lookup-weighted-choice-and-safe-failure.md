@@ -106,6 +106,17 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
   it is flagged rather than taken here** — `EPIC-004` § Scope has *"difficulty levels that map to a
   search budget plus a blunder rate"* and *"reproducible under a fixed seed"*, so **two epics want
   one seam**. Recorded, not resolved. See § gaps in my notes.
+  - **2026-10-10 re-score: the premise is STALE.** `ABC-087` merged (`b696d8e8`) the project's first
+    production generator. It is `seededRandom(seed): () => number` (mulberry32) at
+    `src/levels.ts:61`, with per-instance state and no module-level state (`ADR-0027` decision 2).
+    `ADR-0012` clause 3(b) makes the decorator's RNG a factory parameter bound at the composition
+    root. Security/NFR rules the generator not a CSPRNG and of no security relevance for move choice
+    (`secnfr-ABC-087` `…3f1974f5` row 5). **So the "two RNGs" risk is now avoidable rather than
+    open.** `G4` is still not ruled, and `ADR-0012` § Consequences keeps it Architect/Design's,
+    "owed before … `ABC-094` … enters `In Development`". The question is narrower now: should the
+    probe take an injected `() => number` built from `seededRandom`, or should `seededRandom` move
+    out of `EPIC-004`'s `src/levels.ts` first? Rule it in the same `In Design` hop as `ABC-093`'s
+    format.
 
 ## Security / NFR triggers
 
@@ -116,7 +127,9 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
   measured load time of the delivered artifact is ≤ 100 ms (5% of `NFR-007`'s 2 s) on the reference
   machine Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64, `UNKNOWN - verify`
   elsewhere.** Either satisfies it; the engineer picks and **measures**, and `ABC-015`'s
-  zero-filesystem bar is the precedent for the first form.
+  zero-filesystem bar is the precedent for the first form. *(2026-10-10: `NFR-007`'s denominator is
+  now "`npm run chess` on a completed clone" (`ADR-0018`), not `npx`. The 2 s bar and this 100 ms
+  derivation are unchanged.)*
 - **Probe cost against `NFR-004`.** The engine's budget is ≤ 3 s (5 s ceiling). **Bar: a book hit
   returns in ≤ 30 ms — 1% of the 3 s default budget — on the reference machine.** *(Derived from
   the ratified `NFR-004` target, not invented. The epic's "well under the search time budget" is
@@ -126,11 +139,17 @@ seam**. When `EPIC-004` lands, `ABC-095` is a wiring hop rather than a design ho
   `A6`'s matrix is the input fuzz. **A book move must be re-validated against `legalMoves` before it
   is returned** — `ABC-093` `A2` proves the *shipped* book is clean, which is not the same as the
   *file on this disk right now* being clean.
+  - *2026-10-10.* At `aaa88263`, **no production module under `src/` imports `node:fs`**. This
+    probe's read is the first, and it fires `ADR-0036` clause (b1), so expect an `In Security/NFR`
+    hop. `ADR-0012` clause 3(a) adds a second line of defence: the turn loop's `wasGenerated` refuses
+    an illegal engine move.
 - **`NFR-008` (lane ≤ 3 s wall / ≤ 13 s CPU; per-ticket ≤ 650 ms CPU).** `A2` asks for **two
   processes**, which is the expensive shape — `plans/nfr-catalog.md` measures a test file at
   159–179 ms CPU and this project already spawns 10 children. **Target: ≤ 2 new test files, ≤ 2 new
   spawned processes, ≤ 650 ms CPU added.** `A2` may instead be satisfied in-process by two fresh
-  module instances if the seam allows — **cheaper and equally strong; prefer it.**
+  module instances if the seam allows — **cheaper and equally strong; prefer it.** *(2026-10-10:
+  the CPU level is 15 s (`ADR-0019`). Under `ADR-0035` (proposed), the cost is read on the narrow set.
+  The counts (≤ 2 files, ≤ 2 spawns) are the pins that hold either way.)*
 - **`NFR-002`, `NFR-003` — not triggered.** No frame, no prompt.
 
 ## Test notes
@@ -170,8 +189,26 @@ stands**. **Not `P0`**: no user sees it until `ABC-095`.
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-16**. **Result: 8 of 10 — items 5 and 10 carry a ⚠️; the other eight are MET.**
+**RE-SCORED 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
+at `aaa88263`). **Result: 8 of 10, ⚠️x2. The score is unchanged and both ⚠️ narrowed. It stays in
+`Backlog`.** Readings: `.grugops/context/rescore-p1-backlog-2026-10-10/notes/`.
+
+- **Item 5 ⚠️ STANDS, narrowed.** The generator exists (`src/levels.ts:61`). What is left is `G4`'s
+  one placement question (§ Dependencies). It goes to Architect/Design in the same `In Design` hop
+  as `ABC-093`'s format. `A6`'s corrupt matrix ("truncated mid-record", "valid container") also
+  takes its shape from that format.
+- **Item 10 ⚠️ STANDS.** `ABC-093` is unbuilt, so `A1`–`A4` have nothing to read. `A5` can still be
+  written first (test note 2). `A6` waits for the format, not for the artifact.
+- **Items 1–4 and 6–9 stay ✅.** Size **`M` holds**, even though one of its "two firsts" (the
+  randomness seam) has gone. The first production file parse and the first production `node:fs`
+  read remain, along with the five-case hostile matrix. **`P1` holds.**
+- **Production and UAT.** It adds a new non-test module under `src/`, so it **needs the owner's UAT
+  word**. Expect an `In Security/NFR` hop (`ADR-0036` (b1)).
+- **Overlaps.** None by file with `ABC-083`, `ABC-010`, `ABC-131`, `ABC-141`, `ABC-138` or
+  `ABC-140`.
+
+**History. Assessed 2026-08-16** against `agent-factory/checklists/definition-of-ready.md` by BA/PM
+at the cutting hop. **Result: 8 of 10 — items 5 and 10 carry a ⚠️; the other eight are MET.**
 
 | # | item | verdict |
 |---|---|---|

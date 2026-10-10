@@ -85,16 +85,23 @@ epic. It is buildable **today** — `parseFen` / `toFen` (`src/fen.ts`), `legalM
 - **`A6` (the licence obligation ships with the data).** **Given** the delivered diff, **then** the
   attribution file `ABC-092`'s ADR names is present at the path that ADR names, and the artifact or
   its directory carries a pointer to it. **If `ABC-092`'s ADR is not `accepted`, this ticket cannot
-  be delivered.**
+  be delivered.** *(2026-10-10: it is accepted. The ADR is `ADR-0023`, the path is
+  `data/opening-book/ATTRIBUTION.md`, and its five required contents are `ADR-0023` decision 3's list.
+  The pinned upstream SHA is chosen and written by this ticket.)*
 - **`A7` (nothing was smuggled in).** **Given** the delivered diff, **then** `package.json`'s
   `dependencies` is still `{}` — the compiler uses Node built-ins and this repository's own modules
-  — and the artifact is not a `.ts` or `.js` file.
+  — and the artifact is not a `.ts` or `.js` file. *(2026-10-10: at `aaa88263`, `package.json` has
+  **no `dependencies` key**. Read the bar as "the diff adds no `dependencies` key and does not change
+  `devDependencies`".)*
 
 ## Dependencies
 
-- **`ABC-092` — HARD BLOCKER.** No byte of source data may be copied before its ADR is `accepted`
-  (`RISK-004`, `plans/nfr-catalog.md`: *"resolve BEFORE copying any data"*). **This ticket must not
-  be pulled into `In Development` while `ABC-092` is open.**
+- ~~**`ABC-092` — HARD BLOCKER.**~~ **DISCHARGED 2026-09-19.** `ABC-092` is `Done` and `ADR-0023`
+  is `accepted` on the owner's word. *(Was: no byte of source data may be copied before its ADR is
+  `accepted`, `RISK-004`.)* The source is `lichess-org/chess-openings` under CC0. It is five TSVs
+  (`eco`, `name`, `pgn`), 388,052 bytes raw and 3,704 rows. **It carries no weights, so the compiler
+  assigns them** (`ADR-0023` decision 5: uniform is enough for `A4`). Lines run past 12 plies, so the
+  compiler truncates. **The SAN reader is merged**: `parseSan` at `src/san.ts:223`.
 - **`EPIC-001` — satisfied, and verified by reading the tree at this hop, not assumed.**
   `src/fen.ts` (`parseFen`, `toFen`), `src/legal.ts` (`legalMoves`), `src/apply.ts`, `src/san.ts`
   and `src/zobrist.ts` (`zobristKey(position): bigint`) are all present on `main`. `EPIC-005`'s
@@ -127,6 +134,11 @@ epic. It is buildable **today** — `parseFen` / `toFen` (`src/fen.ts`), `legalM
   `PERFT_DEEP`** — precedent: `PERFT_DEEP=1 npx vitest run src/perft.test.ts` — and the default
   lane keeps a sampled walk with a **stated sample size**. *A silently sampled check that reports
   itself as complete fails `A2`.*
+  - *2026-10-10 re-score.* The CPU level is **15 s** (`ADR-0019`), not 13 s. Under `ADR-0035`
+    (**proposed**), a full-lane per-ticket bound below 1.72 s CPU is refused at the cut. The cost is
+    then read on the **narrow set** (the files this ticket adds, against a placeholder). **The pin
+    that holds under either reading is the count: ≤ 2 new test files.** The 650 ms is read per
+    whichever protocol is in force at the build hop.
 - **`NFR-001` — not triggered.** The compiler calls `legalMoves` heavily, but at build time and off
   the search hot path. No production module changes.
 - **`NFR-002`, `NFR-003`, `NFR-004`, `NFR-007` — not triggered.** No frame, no prompt, no search.
@@ -172,8 +184,35 @@ remaining ticket. **Not `P0`**: `EPIC-004` is the product's critical path and th
 
 ## Definition of Ready
 
-Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at the cutting hop,
-**2026-08-16**. **Result: 8 of 10 — items 5 and 10 carry a ⚠️; the other eight are MET.**
+**RE-SCORED 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
+at `aaa88263`). **Result: 9 of 10, ⚠️x1. Recommended column: `In Design`, then `Ready for Dev`.**
+Readings: `.grugops/context/rescore-p1-backlog-2026-10-10/notes/`.
+
+- **Item 10 ⚠️ → ✅.** `ABC-092` is `Done` and `ADR-0023` is `accepted` by the owner (2026-09-19).
+  Nothing else blocks the build.
+- **Item 5 ⚠️ STANDS, and it is now the only open item.** There is still no format ADR. Architect/Design
+  owns these calls at `In Design`, before code:
+  - the key (Zobrist `bigint`, FEN, or a truncated hash), which decides `A2`'s method;
+  - the weight encoding (`ADR-0023` already allows uniform weights);
+  - where the name field lives, which `ABC-096` reads;
+  - where the artifact and the compiler live (`data/opening-book/` beside `ATTRIBUTION.md`, `tools/`,
+    or `src/`).
+
+  The compiler's placement also decides two gates. A compiler in `src/` as a non-test `.ts` file is
+  production by `AGENTS.md`'s measured rule, so it needs the owner's UAT word. If it imports a Node
+  builtin, it also fires `ADR-0036` clause (b1). A compiler outside `src/` fires neither, and the UAT
+  is waived by measurement while third-party data ships to every clone (owner question 4 in the
+  note).
+- **Items 1–4 and 6–9 stay ✅.** `A6` and `A7` carry dated readings (above). `AGENTS.md` is
+  23,633 B against its 24,576 B target, which leaves **943 B** for the regeneration command line.
+- **Size `M` and priority `P1` hold.** `EPIC-004`'s engine is `Done`, so this chain (`ABC-093` →
+  `ABC-094` → `ABC-095`) is now the only thing between the board and `EPIC-005`'s value.
+- **Overlaps.** None by file with `ABC-083`, `ABC-010`, `ABC-131` or `ABC-141`. `ABC-010` (unmerged,
+  `f9d1ff4b`) tightens `parseFen`. If the format keys on FEN, the compiler meets that stricter parser,
+  so build after `ABC-010` merges or read its tip.
+
+**History. Assessed 2026-08-16** against `agent-factory/checklists/definition-of-ready.md` by BA/PM
+at the cutting hop. **Result: 8 of 10 — items 5 and 10 carry a ⚠️; the other eight are MET.**
 
 | # | item | verdict |
 |---|---|---|
