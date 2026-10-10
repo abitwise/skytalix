@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-051` `In Review` → `Ready for UAT` (fix-forward `a9ed126`); owner acceptance owed for `ABC-036` and `ABC-051`._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-051` QE PASS_WITH_GAPS; stays `In Review` for the one-line QE-051-a fix-forward._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-051` `In Development` → `In Review` (built `85f260f`); QE `qe-ABC-051` dispatched._
@@ -512,9 +514,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-051] `ABC-021` left the turn loop's per-ply bar file false in three places and its transition count without a rule — and the bar cannot see the derive the loop now makes  (BA/PM, S, P2, epic: EPIC-002, since: 2026-08-13, **DoR 10/10 — re-cut 2026-10-10 (`recut-abc051`, merged `bdbd30e`): keep 18 per `ADR-0021` with a sourced counting rule, site 1 dropped (already true), `A2` withdrawn into `A1`.** First build stopped at re-verification `7eee6fb`.) **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-051-r2`, branch `grugops/ABC-051-r2`). **→ In Review 2026-10-10**: built on `grugops/ABC-051-r2` @ `85f260f` (A1/A3/A4 met, M2 red 4/4 on the repaired bar, gates green, N8-LANE no detectable cost). QE `qe-ABC-051` dispatched. UAT waiver does NOT apply (`src/turn-loop.ts` is a non-test file, comment-only diff). **2026-10-10 QE `qe-ABC-051` PASS_WITH_GAPS (`6a1c6cd`): A1/A3/A4 met; M3 newly caught. QE-051-a (header `:24-25` over-claims — M8 replay passes) → Engineer fix-forward in the ticket's own file before UAT. QE-051-b/c follow-up candidates.**
 
 
 
@@ -542,9 +543,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 1/4)
+## Ready for UAT (WIP 2/4)
 
 - [ABC-036] The `moves` command — the count is exact, and the frame cannot show the list  (BA/PM, S, P1, epic: EPIC-003, since: 2026-08-13, **DoR 8/10 ⚠️x3; the third was a reduced user-facing promise awaiting a named human and is now RULED — see `memory-bank/60-progress.md` § Standing directives. BA/PM re-scores at pull; the Orchestrator does not re-score another role's DoR**, 1 new test file) **2026-10-10: `A7` — `moves` is the 8th help token at 0 columns spare; the help region is FULL after it (QE ABC-102 G2).** **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; `A4` re-anchored to one `legalMoves` per `moves` line.** **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-036`, branch `grugops/ABC-036-moves-command`). **→ In Review 2026-10-10**: built on `grugops/ABC-036-moves-command` @ `a261966` (A1–A7 MET, gates green, 1573 tests, N8-LANE +130 ms ≤ 650). QE `qe-ABC-036` dispatched. UAT not waived (production lines). Owner note: start position shows 3 of 20 moves (`legal moves: 20` takes 15/21 columns). **→ Ready for UAT 2026-10-10**: QE `qe-ABC-036` PASS_WITH_GAPS (`06b03dc`; A1–A7 met, 9/9 mutants red, +4 rows, 1577 tests). Gaps: G1 stale comment `src/command-input.ts:91` (seven→eight tokens), G2 3/20 moves visible (owner wording call). **Owed: owner acceptance.**
+- [ABC-051] `ABC-021` left the turn loop's per-ply bar file false in three places and its transition count without a rule — and the bar cannot see the derive the loop now makes  (BA/PM, S, P2, epic: EPIC-002, since: 2026-08-13, **DoR 10/10 — re-cut 2026-10-10 (`recut-abc051`, merged `bdbd30e`): keep 18 per `ADR-0021` with a sourced counting rule, site 1 dropped (already true), `A2` withdrawn into `A1`.** First build stopped at re-verification `7eee6fb`.) **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-051-r2`, branch `grugops/ABC-051-r2`). **→ In Review 2026-10-10**: built on `grugops/ABC-051-r2` @ `85f260f` (A1/A3/A4 met, M2 red 4/4 on the repaired bar, gates green, N8-LANE no detectable cost). QE `qe-ABC-051` dispatched. UAT waiver does NOT apply (`src/turn-loop.ts` is a non-test file, comment-only diff). **2026-10-10 QE `qe-ABC-051` PASS_WITH_GAPS (`6a1c6cd`): A1/A3/A4 met; M3 newly caught. QE-051-a (header `:24-25` over-claims — M8 replay passes) → Engineer fix-forward in the ticket's own file before UAT. QE-051-b/c follow-up candidates.** **→ Ready for UAT 2026-10-10**: QE-051-a fixed forward `a9ed126` (comment lines only in `src/turn-loop.nfr.test.ts`; gates green, M2 red 4/4, M8 green as the sentence now says). **Owed: owner acceptance** (waiver does not apply on the literal rule — `src/turn-loop.ts` in diff, comment-only; owner may rule on comment-only diffs).
 
 
 
