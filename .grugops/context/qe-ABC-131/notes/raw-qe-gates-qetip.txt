@@ -1,0 +1,17 @@
+UTC 2026-10-10T14:54:09Z load { 5.95 6.90 7.88 } head f994c724 status-src ''
+Checked 100 files in 144ms. No fixes applied.
+lint exit 0
+typecheck exit 0
+build exit 0
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Duration  7.03s (transform 1.24s, setup 0ms, collect 11.09s, tests 13.42s, environment 6ms, prepare 2.22s)
+test exit 0
+skip count 0
+{"files":348,"tests":1608,"passed":1608,"failed":0,"pending":0,"todo":0}
+No findings.
+integrity exit 0
+The lane collects 52 test files; git tracks 52.
+No findings.
+inventory exit 0
+END UTC 2026-10-10T14:54:42Z load { 13.28 8.50 8.42 }

@@ -1,0 +1,14 @@
+// node json.mjs <dir>; env MUT. A6 mutants on the copied baseline.
+import { readFileSync, writeFileSync } from "node:fs";
+const f = `${process.argv[2]}/src/puzzle-suite.baseline.json`;
+const b = JSON.parse(readFileSync(f, "utf8"));
+const s288 = "mate in 3, seed 288: white Q+B against a bare king";
+const i = b.unsolved.indexOf(s288); if (i < 0) throw new Error("anchor");
+if (process.env.MUT === "misspell") b.unsolved[i] = s288.replace("against", "againts");
+else if (process.env.MUT === "dup") b.unsolved[i] = b.unsolved[0];           // a duplicate, count unchanged
+else if (process.env.MUT === "solvedrow") b.unsolved[i] = "mate in 3, seed 1: black Q+R against N"; // a solved row named unsolved
+else if (process.env.MUT === "dropped") b.unsolved[i] = "mate in 3, seed 1982: black Q+R against a bare king"; // a dropped row
+else if (process.env.MUT === "sum") { b.solved = 53; }                      // 53 + 4 != 58, gate still green
+else throw new Error("MUT?");
+writeFileSync(f, `${JSON.stringify(b, null, 2)}\n`);
+console.log("json mutant", process.env.MUT);

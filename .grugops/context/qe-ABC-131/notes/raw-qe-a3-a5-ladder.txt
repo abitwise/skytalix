@@ -1,0 +1,87 @@
+## a3-step1.25: RUN a3-step1.25 commit 96f3168d plant /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe131/plants/step.mjs PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:43:20Z load { 5.23 7.04 7.74 }
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1.25, wall 25.30 s
+      Tests  18 passed (18)
+real 38.71
+EXIT 0
+END UTC 2026-10-10T14:43:59Z load { 8.70 7.75 7.96 }
+## sweep-step1.3: RUN sweep-step1.3 commit 96f3168d plant /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe131/plants/step.mjs PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:43:59Z load { 8.70 7.75 7.96 }
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1.3, wall 22.95 s
+      Tests  18 passed (18)
+real 37.27
+EXIT 0
+END UTC 2026-10-10T14:44:36Z load { 7.87 7.66 7.92 }
+## sweep-step1.35: RUN sweep-step1.35 commit 96f3168d plant /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe131/plants/step.mjs PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:44:37Z load { 7.87 7.66 7.92 }
+NEWLY-MISSED	mate-in-3	c1f1	mate in 3, seed 1: black Q+R against N
+NEWLY-MISSED	mate-in-3	g3f2	mate in 3, seed 69: black 2R+B against 2P
+NEWLY-MISSED	mate-in-3	c6c3	mate in 3, seed 1163: black 2R+B against N
+PUZZLES shipped: solved 51/58, baseline 54/58, budget 25 step 1.35, wall 42.95 s
+AssertionError: expected 51 to be greater than or equal to 54
+      Tests  1 failed | 17 passed (18)
+real 62.77
+EXIT 1
+END UTC 2026-10-10T14:45:39Z load { 15.89 10.13 8.84 }
+## a5-4x: RUN a5-4x commit 96f3168d plant /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe131/plants/step.mjs PUZZLE_DEEP=1 filter=none UTC 2026-10-10T14:45:40Z load { 15.89 10.13 8.84 }
+NEWLY-SOLVED	mate-in-3	b3b7	mate in 3, seed 24: black Q+N against P
+NEWLY-SOLVED	mate-in-3	c6g2	mate in 3, seed 234: white Q+R against P
+NEWLY-SOLVED	mate-in-3	e3f4	mate in 3, seed 288: white Q+B against a bare king
+NEWLY-SOLVED	mate-in-3	e7f6	mate in 3, seed 580: white Q+B against a bare king
+PUZZLES shipped: solved 58/58, baseline 54/58, budget 25 step 0.25, wall 122.18 s
+      Tests  18 passed (18)
+real 133.81
+EXIT 0
+END UTC 2026-10-10T14:47:53Z load { 9.36 10.49 9.23 }
+## a5-weakened: RUN a5-weakened commit 96f3168d plant - PUZZLE_DEEP=weakened filter=none UTC 2026-10-10T14:47:54Z load { 9.36 10.49 9.23 }
+NEWLY-MISSED	win-material	g1f1	knight fork: Ne7+ wins the queen
+NEWLY-MISSED	win-material	g2g3	pawn fork: e5 hits knight and rook
+NEWLY-MISSED	win-material	a1b1	pin: Re1 pins the queen to the king
+NEWLY-MISSED	win-material	a1a2	skewer: Ra6+ and Rxh6
+NEWLY-MISSED	win-material	d1d2	discovered check: the bishop moves, Rxd8
+NEWLY-MISSED	win-material	d1d2	queen fork: Qd5+ and Qxa8
+NEWLY-MISSED	do-not-hang	a1e5	Q takes a pawn a rook defends
+NEWLY-MISSED	do-not-hang	a1a7	R takes a pawn the king defends
+NEWLY-MISSED	do-not-hang	b1e4	B takes a pawn a pawn defends
+NEWLY-MISSED	do-not-hang	c2d4	N takes a pawn a pawn defends
+NEWLY-MISSED	do-not-hang	a1b2	Q takes a knight a rook defends
+NEWLY-MISSED	do-not-hang	d1d3	R takes a knight a pawn defends
+NEWLY-MISSED	do-not-hang	a1a7	Q takes a rook the king defends
+NEWLY-MISSED	do-not-hang	a1b2	Q takes a bishop a knight defends
+NEWLY-MISSED	do-not-hang	a1a5	R takes a bishop a pawn defends
+NEWLY-MISSED	do-not-hang	b1b2	R takes a pawn a bishop defends
+NEWLY-MISSED	do-not-hang	a1b2	Q takes a pawn a knight defends
+NEWLY-MISSED	do-not-hang	b1e4	B takes a pawn a rook defends
+NEWLY-MISSED	do-not-hang	a8e4	mirror: q takes a pawn a rook defends
+NEWLY-MISSED	do-not-hang	a8a2	mirror: r takes a pawn the king defends
+NEWLY-MISSED	do-not-hang	b8e5	mirror: b takes a pawn a pawn defends
+NEWLY-MISSED	do-not-hang	c7d5	mirror: n takes a pawn a pawn defends
+NEWLY-MISSED	do-not-hang	a8b7	mirror: q takes a knight a rook defends
+NEWLY-MISSED	do-not-hang	d8d6	mirror: r takes a knight a pawn defends
+NEWLY-MISSED	do-not-hang	a8a2	mirror: q takes a rook the king defends
+NEWLY-MISSED	do-not-hang	a8b7	mirror: q takes a bishop a knight defends
+NEWLY-MISSED	do-not-hang	a8a4	mirror: r takes a bishop a pawn defends
+NEWLY-MISSED	do-not-hang	b8b7	mirror: r takes a pawn a bishop defends
+NEWLY-MISSED	do-not-hang	a8b7	mirror: q takes a pawn a knight defends
+NEWLY-MISSED	do-not-hang	b8e5	mirror: b takes a pawn a rook defends
+NEWLY-MISSED	mate-in-3	g7f7	mate in 3, seed 1632: white Q+R+N against N+2P
+NEWLY-MISSED	win-material	c3c2	win material, seed 7: black Q+P against R+N
+NEWLY-MISSED	win-material	f2a7	win material, seed 111: black Q+R+B+P against 2R+B+P
+NEWLY-MISSED	win-material	c2a1	win material, seed 1700: black R+B+N+2P against 2B+2N+P
+NEWLY-MISSED	win-material	a2b3	win material, seed 1706: white Q+R+2P against Q+R+2P
+NEWLY-MISSED	win-material	g6h7	win material, seed 1811: white 2R+N+2P against 2B+N+2P
+NEWLY-MISSED	win-material	g6h7	win material, seed 5180: black R+N+P against Q+B+N
+NEWLY-MISSED	win-material	e1f2	win material, seed 5464: black B+P against B+N
+NEWLY-MISSED	win-material	a1a2	win material, seed 279: black Q+3P against R+2N+P
+PUZZLES weakened (evaluate = 0): solved 15/58, baseline 54/58, budget 25 step 1, wall 19.81 s
+AssertionError: expected 15 to be greater than or equal to 54
+      Tests  1 failed | 13 passed (14)
+real 20.97
+EXIT 1
+END UTC 2026-10-10T14:48:15Z load { 7.61 9.99 9.08 }
+## readings per step (readings.mts, real virtualClock)
+step 0.25	readings<25 99	ratio 4.125
+step 1	readings<25 24	ratio 1.000
+step 1.2	readings<25 20	ratio 0.833
+step 1.25	readings<25 19	ratio 0.792
+step 1.3	readings<25 19	ratio 0.792
+step 1.35	readings<25 18	ratio 0.750
+step 1.4	readings<25 17	ratio 0.708
+step 1.5	readings<25 16	ratio 0.667

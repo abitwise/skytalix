@@ -1,0 +1,20 @@
+#!/bin/bash
+# run.sh <name> <commit> <plant-script-or-"-"> <PUZZLE_DEEP value> [vitest -t filter]
+# git-archive copy of <commit> out of tree, optional plant (node <plant> <dir>), run the puzzle lane,
+# log load1 at start and end, exit code, real wall. The repo and worktrees are never written.
+set -u
+Q=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe131
+REPO=/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example
+name=$1; commit=$2; plant=$3; mode=$4; filt=${5:-}
+D=$Q/copies/$name; rm -rf "$D"; mkdir -p "$D"
+git -C "$REPO" archive "$commit" src package.json tsconfig.json vitest.config.ts | tar -x -C "$D"
+ln -s "$REPO/node_modules" "$D/node_modules"
+if [ "$plant" != "-" ]; then node "$plant" "$D" || { echo "PLANT FAILED $name"; exit 2; }; fi
+O=$Q/out/$name.txt
+{ echo "RUN $name commit $(git -C "$REPO" rev-parse --short "$commit") plant $plant PUZZLE_DEEP=$mode filter=${filt:-none} UTC $(date -u +%FT%TZ) load $(sysctl -n vm.loadavg)"
+  if [ -n "$filt" ]; then (cd "$D" && /usr/bin/time -p env PUZZLE_DEEP=$mode npx vitest run src/puzzle-suite.test.ts -t "$filt" 2>&1); else (cd "$D" && /usr/bin/time -p env PUZZLE_DEEP=$mode npx vitest run src/puzzle-suite.test.ts 2>&1); fi
+  echo "EXIT $?"; echo "END UTC $(date -u +%FT%TZ) load $(sysctl -n vm.loadavg)"; } > "$O" 2>&1
+grep -E "^(SOLVED|MISSED)	" "$O" > "$Q/out/$name.rows.txt"
+echo "== $name: $(grep -E '^EXIT' $O) | $(grep -E '^ +Tests ' $O | head -1 | xargs) | $(grep -E '^PUZZLES' $O) | $(grep -E '^real' $O) | start $(head -1 $O | sed 's/.*load //') | NEWLY $(grep -c '^NEWLY' $O)"
+grep -E "^NEWLY|AssertionError|^ +FAIL | ✗ | × " "$O" | head -12
+rm -rf "$D"

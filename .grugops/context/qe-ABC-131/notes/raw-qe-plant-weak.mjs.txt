@@ -1,0 +1,15 @@
+// node weak.mjs <dir>; env WID=W1|W1b|... Plants ONE of QE-084's 17 weakenings, read verbatim from the M table.
+import { readFileSync, writeFileSync } from "node:fs";
+const text = readFileSync("/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.grugops/context/qe-ABC-084/probe/weakenings.mjs", "utf8");
+const from = text.indexOf("const M = [");
+const M = new Function(`${text.slice(from, text.indexOf("];", from) + 2)}; return M;`)();
+if (M.length !== 17) throw new Error(`expected 17, read ${M.length}`);
+const row = M.find((m) => m[0].split("-")[0] === process.env.WID);
+if (!row) throw new Error(`no ${process.env.WID}`);
+const [, file, find, replace, count] = row;
+const f = `${process.argv[2]}/${file}`;
+const t = readFileSync(f, "utf8");
+const hits = t.split(find).length - 1;
+if (hits !== count) throw new Error(`${row[0]}: expected ${count}, found ${hits}`);
+writeFileSync(f, t.split(find).join(replace));
+console.log(`planted ${row[0]} (${hits}x) in ${file}`);

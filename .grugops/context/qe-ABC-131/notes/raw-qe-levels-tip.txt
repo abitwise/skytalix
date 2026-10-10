@@ -1,0 +1,14 @@
+RUN levels-tip commit 96f3168d ENGINE_DEEP=1 src/levels.test.ts UTC 2026-10-10T14:42:47Z load { 6.23 7.41 7.89 }
+A4 [ENGINE_DEEP, ENDGAMES]: (80 blunders + 1 no-candidate) / 204 moves = 39.7% against 40%; blunders played / moves = 39.2%
+A4 [ENGINE_DEEP, perft + puzzles]: (96 blunders + 0 no-candidate) / 242 moves = 39.7% against 40%; blunders played / moves = 39.7%
+A5: 30 moves, max 4780 ms: 4534,4545,4505,4528,4537,4512,4516,4505,4543,4517,4543,4516,4520,4511,4516,4508,4594,4780,4546,4603,4666,4539,4563,4540,4527,4542,4527,4527,4522,4525
+A3: easiest 35/58, default 54/58
+   ✓ A4 — the easiest level over the perft corpus and the puzzles [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best  30276ms
+   ✓ A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > every level, on the shipped path, uses its budget ±20% and never more than 5 s  5964ms
+   ✓ A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > a blunder move at the easiest level uses the level budget ±20% (the clamped sum)  7876ms
+   ✓ A5 — the hardest level, 30 positions, every move ≤ 5 s on the REAL clock [deep] > returns within 5 000 ms on 30/30  136378ms
+   ✓ A3 — the easiest level solves strictly fewer puzzles than the default [deep] > counts both on one run of the suite in the tree  31294ms
+      Tests  28 passed (28)
+real 213.26
+EXIT 0
+END UTC 2026-10-10T14:46:20Z load { 20.73 11.93 9.54 }

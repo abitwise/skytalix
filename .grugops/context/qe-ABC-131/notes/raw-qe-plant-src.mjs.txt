@@ -1,0 +1,10 @@
+// node src.mjs <dir>; env MUT. A8 mutants on the copied corpus.
+import { readFileSync, writeFileSync } from "node:fs";
+const f = `${process.argv[2]}/src/puzzle-corpus.ts`;
+const t = readFileSync(f, "utf8");
+const a = 'accept: ["d4g7", "d4c5"], source: `${WIN} +4` }';
+if (t.split(a).length !== 2) throw new Error("M9 anchor");
+const r = { m9: a.replace("+4", "+6"), none: a.replace(" +4", ""), two: a.replace("+4", "+4 +4"), low: a.replace("+4", "+3") }[process.env.MUT];
+if (!r) throw new Error("MUT?");
+writeFileSync(f, t.replace(a, r));
+console.log("src mutant", process.env.MUT);

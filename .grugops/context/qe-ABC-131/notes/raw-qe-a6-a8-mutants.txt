@@ -1,0 +1,70 @@
+json mutant misspell
+== a6-misspell: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 0.78 | start { 7.28 9.63 8.99 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 7ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total
+AssertionError: mate in 3, seed 288: white Q+B againts a bare king: expected false to be true // Object.is equality
+json mutant sum
+== a6-sum: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 0.89 | start { 7.28 9.63 8.99 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 5ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total
+AssertionError: expected 57 to be 58 // Object.is equality
+json mutant dropped
+== a6-dropped: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 0.63 | start { 8.30 9.80 9.05 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 4ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total
+AssertionError: mate in 3, seed 1982: black Q+R against a bare king: expected false to be true // Object.is equality
+json mutant dup
+== a6-dup: EXIT 0 | Tests 18 passed (18) | PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 21.40 s | real 31.88 | start { 8.30 9.80 9.05 } | NEWLY 1
+NEWLY-MISSED	mate-in-3	e3f2	mate in 3, seed 288: white Q+B against a bare king
+json mutant solvedrow
+== a6-solvedrow: EXIT 0 | Tests 18 passed (18) | PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 28.85 s | real 41.83 | start { 6.75 9.28 8.89 } | NEWLY 2
+NEWLY-SOLVED	mate-in-3	a1f6	mate in 3, seed 1: black Q+R against N
+NEWLY-MISSED	mate-in-3	e3f2	mate in 3, seed 288: white Q+B against a bare king
+src mutant m9
+== a8-m9: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 1.38 | start { 6.69 8.92 8.77 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain 700ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain
+AssertionError: discovered check: the bishop moves, Rxd8: expected [ 6 ] to deeply equal [ 4 ]
+src mutant none
+== a8-none: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 1.31 | start { 6.69 8.92 8.77 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain 617ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain
+AssertionError: discovered check: the bishop moves, Rxd8: expected [] to deeply equal [ 4 ]
+src mutant two
+== a8-two: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 1.27 | start { 6.69 8.92 8.77 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain 609ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain
+AssertionError: discovered check: the bishop moves, Rxd8: expected [ 4, 4 ] to deeply equal [ 4 ]
+src mutant low
+== a8-low: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 1.30 | start { 7.51 9.06 8.82 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain 604ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain
+AssertionError: discovered check: the bishop moves, Rxd8: expected [ 3 ] to deeply equal [ 4 ]
+planted W1-quiescence-off (1x) in src/quiescence.ts
+== a4-W1: EXIT 1 | Tests 1 failed | 17 passed (18) | PUZZLES shipped: solved 43/58, baseline 54/58, budget 25 step 1, wall 20.23 s | real 30.48 | start { 7.51 9.06 8.82 } | NEWLY 11
+
+## after QE commit f994c724
+json mutant dup
+== qe-dup-old: EXIT 0 | Tests 1 passed | 17 skipped (18) |  | real 0.72 | start { 3.93 6.76 7.90 } | NEWLY 0
+json mutant dup
+== qe-dup-new: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 0.73 | start { 3.93 6.76 7.90 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 4ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total
+AssertionError: unsolved names are distinct: expected 3 to be 4 // Object.is equality
+json mutant misspell
+== qe-misspell-new: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 0.60 | start { 3.93 6.76 7.90 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 4ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total
+AssertionError: mate in 3, seed 288: white Q+B againts a bare king: expected false to be true // Object.is equality
+json mutant sum
+== qe-sum-new: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 0.69 | start { 3.93 6.76 7.90 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 9ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total
+AssertionError: expected 57 to be 58 // Object.is equality
+json mutant dropped
+== qe-dropped-new: EXIT 1 | Tests 1 failed | 17 skipped (18) |  | real 0.60 | start { 4.02 6.73 7.88 } | NEWLY 0
+   × the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 4ms
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total
+AssertionError: mate in 3, seed 1982: black Q+R against a bare king: expected false to be true // Object.is equality
+== qe-a6-pristine-new: EXIT 0 | Tests 1 passed | 17 skipped (18) |  | real 0.75 | start { 4.02 6.73 7.88 } | NEWLY 0
+== deep-qetip: EXIT 0 | Tests 18 passed (18) | PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 25.00 s | real 37.17 | start { 4.02 6.73 7.88 } | NEWLY 0

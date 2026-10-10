@@ -1,0 +1,7 @@
+// node step.mjs <dir>; env STEP. Changes ONLY stepMs in the copied baseline.
+import { readFileSync, writeFileSync } from "node:fs";
+const f = `${process.argv[2]}/src/puzzle-suite.baseline.json`;
+const t = readFileSync(f, "utf8");
+const a = '"stepMs": 1,';
+if (t.split(a).length !== 2) throw new Error("stepMs anchor");
+writeFileSync(f, t.replace(a, `"stepMs": ${process.env.STEP},`));
