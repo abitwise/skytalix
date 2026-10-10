@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-059` → `Done` (UAT WAIVED; merged `4c33b72b`); `ABC-133` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-104` → `Ready for UAT` (`328e77e8`); owner word owed._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-104` QE PASS_WITH_GAPS; docblock fix-forward `fix-ABC-104` dispatched (stays `In Review`)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-057` → `Done` (UAT WAIVED; merged `f7f957ae`)._
@@ -440,7 +441,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   trigger fires (the columns still exist; they just stay empty).
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
 
@@ -448,7 +449,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
     ## In Review (WIP 0/3)
@@ -576,10 +577,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-005] Opening book  (owner: BA/PM, **size: M — corrected from `S`; the cutter stopped at `M` deliberately, refusing the M→XL/M→L precedent as "a pattern, not evidence", since `L` would claim the book is the size of `EPIC-004`'s whole engine**, priority: P1, since: 2026-07-22, **DECOMPOSED 2026-08-16 into `ABC-092`…`ABC-096`. The WORK is pullable today — 4 of 5 tickets need nothing from `EPIC-004` — but the VALUE is not deliverable until `EPIC-004` lands; collapsing those two is how a board lies.** `EPIC-001`'s dependency verified DISCHARGED by reading the tree, not the front matter; `ABC-095` is the only hard blocker. Largest ticket `M`, no `SPLIT_REQUIRED`)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 4/8)
+## Ready (WIP 3/8)
 
 - [ABC-132] Three production docblocks cite the deleted FRAME_PRODUCERS list  (BA/PM, XS, P3, epic: —, since: 2026-10-10, **DoR 10/10**; cut at `postmerge-followups-2026-10-10`; comment-only in `src/render-seam.ts`/`result-screen.ts`/`cli.ts` → owner UAT word (pair with ABC-129); never in parallel with ABC-129)
-- [ABC-133] Count the spawn pin over the parser view, not a stripped string  (BA/PM, S, P3 → P1 if AR-058-STRIP fires, epic: —, since: 2026-10-10, **DoR 10/10**; F-058-1 + P1 folded; ~176 ms parse cost, A4 ≤ 250 ms; after ABC-059, same file)
 
 - [ABC-131] Drop the four puzzle rows that sit on the budget edge — 58/62 → 54/58, so every gating row keeps a 0.8x readings margin  (BA/PM, XS, P1, epic: EPIC-004, since: 2026-10-10, **DoR 10/10**; `ADR-0034` (b) @0.8x on the owner's word; baseline re-recorded in its own commit; folds QE-127-e; after `ABC-126`, before `ABC-083`; owner UAT word owed — `puzzle-corpus.ts` non-test) **2026-10-10 (`postmerge-followups-2026-10-10`): QE-126-b folded as A8 (source gain = oracle gain; 16/16 match today).**
 
@@ -590,7 +590,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-133] Count the spawn pin over the parser view, not a stripped string  (BA/PM, S, P3 → P1 if AR-058-STRIP fires, epic: —, since: 2026-10-10, **DoR 10/10**; F-058-1 + P1 folded; ~176 ms parse cost, A4 ≤ 250 ms; after ABC-059, same file) **→ In Development 2026-10-10**, pulled after `ABC-059` merged (`4c33b72b`) by the Orchestrator (subtask `ticket-to-pr-ABC-133`, branch `grugops/ABC-133-spawn-pin-parser-view`).
 
 
 
@@ -618,9 +619,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-059] The `AGENTS.md` runnability guard pins a spelling, not the fact  (BA/PM, XS, P3, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ same ordering; `S6` — the mechanism that let `Q13` through a green gate) **2026-10-10 audit: same ordering met — `ABC-042` Done 2026-08-15.** **2026-10-10 re-score: DoR 10/10 → Ready; A1 re-worded (3 `Dev / run` occurrences now); P3→P2. After ABC-058.** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-059`, branch `grugops/ABC-059-runnability-guard`). **→ In Review 2026-10-10**: built on `grugops/ABC-059-runnability-guard` @ `4230d3ab` (A1–A6 MET, gates green, 1584 tests; `src/cli.test.ts` +76 only; AR-058-STRIP not fired; green on ABC-087's AGENTS.md). Cost reading INADMISSIBLE (twin control failed twice under load1 20–34) — QE re-reads. QE `qe-ABC-059` dispatched.
 
 
 
@@ -815,6 +815,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
   without the same explicit instruction.
 -->
 - [ABC-057] Licence guard — the unwitnessed `toEqual` comparator, and the docblock still stating `ADR-0011` clause 3's struck sentence  (BA/PM, XS, P2, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ ordered behind `ABC-042`'s merge — `src/cli.test.ts` does not exist on `main`; `Q3`/`R5` + `D1`/`Q14`, routed by Architect/Design as one review) **2026-10-10 audit: `ABC-042` Done (merged `dbaf972`, 2026-08-15) and `src/cli.test.ts` exists — the ordering is met. DoR not re-scored.** **2026-10-10 re-score: DoR 10/10 → Ready; anchors exact, M15 still survives the suite. Next pull after the owner-word BA/PM batch.** **2026-10-10: sequence after `ABC-054` (same licence paragraph); becomes P1 when `ABC-053` is pulled.** **2026-10-10: R5 trigger fired (ABC-053 pulled) → P1; AR-053-ORDER test note added; after ABC-054.** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-057`, branch `grugops/ABC-057-licence-guard`; carries QE-054-b). **2026-10-10 built on `grugops/ABC-057-licence-guard` @ `20179d56` (`src/history-pane.nfr.test.ts` +34/−12; A1–A5 met; M15 now red; composer docblock narrowed per QE-054-b; N8-LANE MET on set 2). Two stale comments in the same file being fixed forward before QE; ADR reading for `turn-loop.ts` part (i) → Architect.** **→ In Review 2026-10-10**: comment fix-forward `00aad4da` (spans byte-identical; M15 red; 1583 green). QE `qe-ABC-057` dispatched. **→ Done 2026-10-10 — UAT WAIVED (waived is not accepted; zero production lines)**: QE `qe-ABC-057` PASS_WITH_GAPS (`864dbf5b`; A1–A5 met, M15/M15-SUB red on head, survive on base); merged `f7f957ae`. Gaps routed: QE-057-a/c (LOW) → Architect; QE-057-b (LOW) → BA/PM.
+- [ABC-059] The `AGENTS.md` runnability guard pins a spelling, not the fact  (BA/PM, XS, P3, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ same ordering; `S6` — the mechanism that let `Q13` through a green gate) **2026-10-10 audit: same ordering met — `ABC-042` Done 2026-08-15.** **2026-10-10 re-score: DoR 10/10 → Ready; A1 re-worded (3 `Dev / run` occurrences now); P3→P2. After ABC-058.** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-059`, branch `grugops/ABC-059-runnability-guard`). **→ In Review 2026-10-10**: built on `grugops/ABC-059-runnability-guard` @ `4230d3ab` (A1–A6 MET, gates green, 1584 tests; `src/cli.test.ts` +76 only; AR-058-STRIP not fired; green on ABC-087's AGENTS.md). Cost reading INADMISSIBLE (twin control failed twice under load1 20–34) — QE re-reads. QE `qe-ABC-059` dispatched. **→ Done 2026-10-10 — UAT WAIVED (waived is not accepted; zero production lines)**: QE `qe-ABC-059` PASS_WITH_GAPS (`196a3811`; A1–A6 met, 46 mutant runs; N8-LANE MET on proposed ADR-0035, +0.047/−0.063 s, both sets admissible); merged `4c33b72b`. Gaps QE-059-a/b/c (LOW, A1 wording: span ends early on `e.g.`, three spellings pinned, false red if the slot's first `. ` is lost) → BA/PM next batch; QE-059-d/e INFO.
 
 ## Blocked (visible, time-tracked)
 
