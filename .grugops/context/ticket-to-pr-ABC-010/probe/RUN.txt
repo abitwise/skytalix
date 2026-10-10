@@ -1,0 +1,35 @@
+Software Engineer probes for the ABC-010 build, task wave-2026-09-25, subtask ticket-to-pr-ABC-010, 2026-10-10 ~16:02-16:40Z.
+Base grugops/wave-2026-09-25 @ be37e222; code commit 1304cc2c on grugops/ABC-010-fen-semantic-validation.
+Apple M3, Node v26.11.0. Load was high throughout (load1 ~8-32; other agents' lanes were running in parallel). Load was logged, not gated.
+<base>, <head> and <twin> are out-of-tree `git archive` trees (be37e222, 1304cc2c, be37e222), with node_modules linked.
+`/usr/bin/diff -r -x node_modules <base> <twin>` was empty. Every script reads src/ only and writes nothing in any tree.
+The committed scripts under .grugops/context/**/probe/ ran without a permission refusal.
+
+PREMISE (before any edit)
+  node ../../design-abc010/probe/fen-corpus.mjs <worktree@be37e222>   -> fen-corpus.be37e222.out.txt
+        1,099 literals, 143 distinct / 185 occurrences rejected. Byte-identical to bapm-abc010's fen-corpus.b98fb419.out.txt.
+  node ../../recut-abc010/probe/fen-scan.mjs <worktree@be37e222>      -> (stdout) the same 15 grammar faults as at b98fb419.
+  git diff --stat b98fb419 be37e222 -- src spike                     -> cli.ts, render-seam.ts, result-screen.ts only (none in the fence).
+
+FIXTURE CHOICES
+  node move-input-probe.mts <tree> <fen> <line> ...    -> move-input-probe.out.txt   resolveMoveInput candidates, base FENs vs head FENs.
+  node six-queens-search.mts <head>                    -> six-queens-search.out.txt  0 legal placements (king, or king + 1 black blocker)
+                                                          give a byte-identical Qxd4 list. e5 was chosen: all six candidates now carry #.
+  node qrig-search.mts <head>                          -> qrig-search.out.txt        legal re-placements of the runaway rig's king.
+  node qrig-search.mts <base> "<shipped rig>"          -> qrig-shipped-base.out.txt  the shipped rig reads 6,932 nodes (its comment said 7 112).
+
+CRITERIA
+  9(d) node ../../recut-abc010/probe/fen-scan.mjs <worktree@1304cc2c> -> fen-scan.branch.out.txt   "by file:" names 11 files, all allowed.
+  9(e) plant `// plant: parseFenGrammarOnly` in src/status-panel.ts, run the guard, revert -> guard-plant.out.txt
+  9(f) deep lanes, sequential, worktree @ 1304cc2c   -> deep-lanes.log (exit, wall, load1 at start and end), deep-puzzle.summary.txt
+  PERFT_DEEP=1 npx vitest run src/perft.test.ts      -> in deep-lanes.log (32/32)
+
+NFR
+  node nfr002-parse.mts <base> <head>                -> nfr002.out.txt   NFR-002: parseFen mean µs/call, one process, interleaved.
+  npm run perft (worktree @ 1304cc2c)                -> perft-nfr001.out.txt   NFR-001.
+
+COST (ADR-0035, proposed)
+  npx vitest related --run src/fen.ts (in <head>)    -> related-set.txt   50 of 52 files: the narrow set is the lane.
+  ./cost.sh <label> <files...>; node cost-analyse.mjs cost-<label>.tsv   -> cost-*.tsv, cost-analysis.out.txt
+        Sets: g1-fen (fen.test.ts), g2-swaps (the 6 import swaps), g3-fixtures (the 8 files of 9(c) other than fen.test.ts),
+        g0-narrow (ADR-0035's set, 50 files). Each set: 9 rounds of base/head/twin, rotated; round 0 dropped; CPU = user + sys.

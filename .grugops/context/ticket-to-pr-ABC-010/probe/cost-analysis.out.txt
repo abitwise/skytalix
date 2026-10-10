@@ -1,0 +1,24 @@
+== g1-fen
+n 8; exit codes 0; counts base: 27 passed (27) | head: 60 passed (60) | twin: 27 passed (27)
+load1 median 17.34 (min 14.88, max 19.29)
+base CPU median 1.545 s
+twin - base: median 0.005 s (0.32 %), positives 4/8, R 0.100 s; admissible (<= 1.5 %): true
+head - base: median 0.015 s, interval x(k)..x(n+1-k) -0.060..0.060 s, positives 5/8
+== g2-swaps
+n 8; exit codes 0; counts base: 384 passed (384) | head: 384 passed (384) | twin: 384 passed (384)
+load1 median 22.05 (min 14.81, max 31.98)
+base CPU median 3.430 s
+twin - base: median -0.030 s (-0.87 %), positives 4/8, R 0.200 s; admissible (<= 1.5 %): true
+head - base: median -0.060 s, interval x(k)..x(n+1-k) -0.140..-0.030 s, positives 1/8
+== g3-fixtures
+n 8; exit codes 0; counts base: 252 passed (252) | head: 252 passed (252) | twin: 252 passed (252)
+load1 median 22.41 (min 19.83, max 28.58)
+base CPU median 4.520 s
+twin - base: median 0.000 s (0.00 %), positives 4/8, R 0.150 s; admissible (<= 1.5 %): true
+head - base: median -0.005 s, interval x(k)..x(n+1-k) -0.100..0.260 s, positives 4/8
+== g0-narrow
+n 8; exit codes 0; counts base: 1584 passed (1584) | head: 1617 passed (1617) | twin: 1584 passed (1584)
+load1 median 33.89 (min 20.89, max 51.12)
+base CPU median 36.090 s
+twin - base: median -0.380 s (-1.05 %), positives 4/8, R 1.030 s; admissible (<= 1.5 %): true
+head - base: median 0.025 s, interval x(k)..x(n+1-k) -0.630..0.880 s, positives 4/8

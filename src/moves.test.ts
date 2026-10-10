@@ -254,7 +254,9 @@ describe("ABC-004 acceptance — castling generation", () => {
 
   it("withholds every castle while the king is in check", () => {
     // A black rook on e8 checks the white king down the open e-file; e1 is attacked.
-    expect(castleTargets(generateMoves(parseFen("4r2k/8/8/8/8/8/8/R3K2R w KQ - 0 1")))).toEqual([]);
+    expect(castleTargets(generateMoves(parseFen("4r1k1/8/8/8/8/8/8/R3K2R w KQ - 0 1")))).toEqual(
+      [],
+    );
   });
 });
 

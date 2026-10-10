@@ -1,0 +1,220 @@
+files scanned 90; FEN-shaped literals 1120; rejected by parseFen 208
+  by file: src/coordinate-move.test.ts 1
+  by file: src/fen.test.ts 24
+  by file: src/history-pane.test.ts 1
+  by file: src/legal.test.ts 11
+  by file: src/moves.castling.hardening.test.ts 94
+  by file: src/moves.castling.test.ts 14
+  by file: src/moves.enpassant.hardening.test.ts 36
+  by file: src/moves.enpassant.test.ts 15
+  by file: src/render.test.ts 1
+  by file: src/san.parse.test.ts 1
+  by file: src/zobrist.test.ts 10
+  src/coordinate-move.test.ts:16  side not to move (black) is in check: its king on e2 is attacked  ::  8/4P3/8/8/8/8/4k3/4K3 w - - 0 1
+  src/fen.test.ts:73  rank 7 describes 7 squares, expected 8  ::  rnbqkbnr/ppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1
+  src/fen.test.ts:82  position must have exactly one white king, found 0  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQ1BNR w - - 0 1
+  src/fen.test.ts:83  position must have exactly one black king, found 0  ::  rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1
+  src/fen.test.ts:91  illegal character "X" in castling field  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w XQkq - 0 1
+  src/fen.test.ts:96  en-passant field must be "-" or a square, found "z9"  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq z9 0 1
+  src/fen.test.ts:111  fullmove number must be at least 1, found 0  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0
+  src/fen.test.ts:116  en-passant field must be "-" or a square, found "e33"  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e33 0 1
+  src/fen.test.ts:121  en-passant field must be "-" or a square, found "e9"  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e9 0 1
+  src/fen.test.ts:140  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K7 w KQ - 0 1
+  src/fen.test.ts:145  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K3 w K - 0 1
+  src/fen.test.ts:150  castling right "q" is inconsistent with the board: no black rook on a8  ::  4k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/fen.test.ts:155  side not to move (black) is in check: its king on e8 is attacked  ::  4k3/8/4Q3/8/8/8/8/4K3 w - - 0 1
+  src/fen.test.ts:160  side not to move (white) is in check: its king on e1 is attacked  ::  4k3/8/8/8/8/8/4q3/4K3 b - - 0 1
+  src/fen.test.ts:165  pawn on a1: no pawn can stand on rank 1  ::  4k3/8/8/8/8/8/8/P3K3 w - - 0 1
+  src/fen.test.ts:170  pawn on a8: no pawn can stand on rank 8  ::  p3k3/8/8/8/8/8/8/4K3 w - - 0 1
+  src/fen.test.ts:175  en-passant square e6 is inconsistent with the board: no black pawn on e5  ::  4k3/8/8/8/8/8/8/4K3 w - e6 0 1
+  src/fen.test.ts:180  en-passant square e3 is inconsistent with the board: it must be on rank 6 when w  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 0 1
+  src/fen.test.ts:185  en-passant square e6 is inconsistent with the board: e6 is occupied  ::  4k3/8/4n3/4p3/8/8/8/4K3 w - e6 0 1
+  src/fen.test.ts:190  en-passant square e6 is inconsistent with the board: e7 is occupied  ::  4k3/4n3/8/4p3/8/8/8/4K3 w - e6 0 1
+  src/fen.test.ts:200  fullmove number "1000000000000000000000" does not round-trip: it reads back as "  ::  4k3/8/8/8/8/8/8/4K3 w - - 0 1000000000000000000000
+  src/fen.test.ts:205  halfmove clock "00" does not round-trip: it reads back as "0"  ::  4k3/8/8/8/8/8/8/4K3 w - - 00 1
+  src/fen.test.ts:217  pawn on h1: no pawn can stand on rank 1  ::  4k3/8/4Q3/8/8/8/8/4K2P w K e6 0 1
+  src/fen.test.ts:218  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/4Q3/8/8/8/8/4K3 w K e6 0 1
+  src/fen.test.ts:219  en-passant square e6 is inconsistent with the board: e6 is occupied  ::  4k3/8/4Q3/8/8/8/8/4K3 w - e6 0 1
+  src/history-pane.test.ts:860  position must have exactly one white king, found 0  ::  8/8/8/8/8/8/8/8 w - - 0 1
+  src/legal.test.ts:205  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/3pP3/8/8/8/K7 w KQ d6 0 1
+  src/legal.test.ts:284  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1
+  src/legal.test.ts:285  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1
+  src/legal.test.ts:286  en-passant square a3 is inconsistent with the board: it must be on rank 6 when w  ::  4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1
+  src/legal.test.ts:288  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1
+  src/legal.test.ts:293  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1
+  src/legal.test.ts:294  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/legal.test.ts:385  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1
+  src/legal.test.ts:386  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  k7/8/8/8/3pR3/8/8/4K3 b - e3 0 1
+  src/legal.test.ts:388  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1
+  src/legal.test.ts:389  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  7k/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.castling.hardening.test.ts:81  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3q2R w K - 0 1
+  src/moves.castling.hardening.test.ts:81  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2q w K - 0 1
+  src/moves.castling.hardening.test.ts:331  castling right "Q" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/R3R2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:332  castling right "Q" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/R3B2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:333  castling right "k" is inconsistent with the board: no black king on e8  ::  k3n2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:348  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3Q2R w K - 0 1
+  src/moves.castling.hardening.test.ts:349  castling right "Q" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/R3Q2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:350  castling right "k" is inconsistent with the board: no black king on e8  ::  k3q2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:351  castling right "q" is inconsistent with the board: no black king on e8  ::  r3q2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:352  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3R2R w K - 0 1
+  src/moves.castling.hardening.test.ts:353  castling right "k" is inconsistent with the board: no black king on e8  ::  k3r2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:354  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3B2R w K - 0 1
+  src/moves.castling.hardening.test.ts:355  castling right "k" is inconsistent with the board: no black king on e8  ::  k3b2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:356  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3N2R w K - 0 1
+  src/moves.castling.hardening.test.ts:357  castling right "Q" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/R3N2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:358  pawn on e1: no pawn can stand on rank 1  ::  4k3/8/8/8/8/8/8/K3P2R w K - 0 1
+  src/moves.castling.hardening.test.ts:359  pawn on e8: no pawn can stand on rank 8  ::  r3p2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:372  castling right "Q" is inconsistent with the board: no white rook on a1  ::  4k3/8/8/8/8/8/8/B3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:373  castling right "k" is inconsistent with the board: no black rook on h8  ::  4k2n/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:386  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2Q w K - 0 1
+  src/moves.castling.hardening.test.ts:387  castling right "Q" is inconsistent with the board: no white rook on a1  ::  4k3/8/8/8/8/8/8/Q3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:388  castling right "k" is inconsistent with the board: no black rook on h8  ::  4k2q/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:389  castling right "q" is inconsistent with the board: no black rook on a8  ::  q3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:390  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2B w K - 0 1
+  src/moves.castling.hardening.test.ts:391  castling right "k" is inconsistent with the board: no black rook on h8  ::  4k2b/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:392  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2N w K - 0 1
+  src/moves.castling.hardening.test.ts:393  castling right "Q" is inconsistent with the board: no white rook on a1  ::  4k3/8/8/8/8/8/8/N3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:394  pawn on h1: no pawn can stand on rank 1  ::  4k3/8/8/8/8/8/8/4K2P w K - 0 1
+  src/moves.castling.hardening.test.ts:395  pawn on a8: no pawn can stand on rank 8  ::  p3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:408  castling right "Q" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/R3n2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:409  pawn on e1: no pawn can stand on rank 1  ::  4k3/8/8/8/8/8/8/K3p2R w K - 0 1
+  src/moves.castling.hardening.test.ts:426  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3n2R w K - 0 1
+  src/moves.castling.hardening.test.ts:427  castling right "k" is inconsistent with the board: no black king on e8  ::  4N2r/8/8/5k2/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:428  pawn on e1: no pawn can stand on rank 1  ::  4k3/8/8/8/8/8/8/R3p2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:429  pawn on e8: no pawn can stand on rank 8  ::  r3P3/8/8/5k2/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:442  castling right "Q" is inconsistent with the board: no white rook on a1  ::  4k3/8/8/8/8/8/8/n3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:443  pawn on h1: no pawn can stand on rank 1  ::  4k3/8/8/8/8/8/8/4K2p w K - 0 1
+  src/moves.castling.hardening.test.ts:453  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2n w K - 0 1
+  src/moves.castling.hardening.test.ts:454  castling right "k" is inconsistent with the board: no black rook on h8  ::  4k2N/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:455  pawn on a1: no pawn can stand on rank 1  ::  4k3/8/8/8/8/8/8/p3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:456  pawn on a8: no pawn can stand on rank 8  ::  P3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:586  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/R3K3 w KQ - 0 1
+  src/moves.castling.hardening.test.ts:587  castling right "Q" is inconsistent with the board: no white rook on a1  ::  4k3/8/8/8/8/8/8/4K2R w KQ - 0 1
+  src/moves.castling.hardening.test.ts:588  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/R3K2B w KQ - 0 1
+  src/moves.castling.hardening.test.ts:589  castling right "Q" is inconsistent with the board: no white rook on a1  ::  4k3/8/8/8/8/8/8/B3K2R w KQ - 0 1
+  src/moves.castling.hardening.test.ts:590  castling right "k" is inconsistent with the board: no black rook on h8  ::  r3k3/8/8/8/8/8/8/4K3 b kq - 0 1
+  src/moves.castling.hardening.test.ts:591  castling right "q" is inconsistent with the board: no black rook on a8  ::  4k2r/8/8/8/8/8/8/4K3 b kq - 0 1
+  src/moves.castling.hardening.test.ts:686  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3q2R w K - 0 1
+  src/moves.castling.hardening.test.ts:686  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2q w K - 0 1
+  src/moves.castling.hardening.test.ts:794  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2r w K - 0 1
+  src/moves.castling.hardening.test.ts:795  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K3 w K - 0 1
+  src/moves.castling.hardening.test.ts:801  castling right "K" is inconsistent with the board: no white king on e1  ::  8/8/8/8/8/8/8/K3k2R w K - 0 1
+  src/moves.castling.hardening.test.ts:802  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3q2R w K - 0 1
+  src/moves.castling.hardening.test.ts:803  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3r2R w K - 0 1
+  src/moves.castling.hardening.test.ts:804  castling right "K" is inconsistent with the board: no white rook on h1  ::  8/8/8/8/8/8/8/4K2k w K - 0 1
+  src/moves.castling.hardening.test.ts:805  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2q w K - 0 1
+  src/moves.castling.hardening.test.ts:806  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2r w K - 0 1
+  src/moves.castling.hardening.test.ts:828  position must have exactly one white king, found 2  ::  4k3/8/8/8/8/8/8/4K2K w K - 0 1
+  src/moves.castling.hardening.test.ts:829  position must have exactly one white king, found 2  ::  4k3/8/8/8/8/8/8/K3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:830  position must have exactly one black king, found 2  ::  4k2k/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:831  position must have exactly one black king, found 2  ::  k3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:931  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2r w K - 0 1
+  src/moves.castling.hardening.test.ts:935  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K3 w K - 0 1
+  src/moves.castling.hardening.test.ts:994  position must have exactly one white king, found 2  ::  4k3/8/8/8/8/8/8/K3K2n w K - 0 1
+  src/moves.castling.hardening.test.ts:1012  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3n2n w K - 0 1
+  src/moves.castling.hardening.test.ts:1013  castling right "q" is inconsistent with the board: no black king on e8  ::  N3N2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1014  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3Q2Q w K - 0 1
+  src/moves.castling.hardening.test.ts:1015  castling right "q" is inconsistent with the board: no black king on e8  ::  q3q2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1254  side not to move (black) is in check: its king on h2 is attacked  ::  8/8/8/8/8/8/7k/4K2R w K - 0 1
+  src/moves.castling.hardening.test.ts:1264  side not to move (white) is in check: its king on h7 is attacked  ::  4k2r/7K/8/8/8/8/8/8 b k - 0 1
+  src/moves.castling.hardening.test.ts:1288  castling right "q" is inconsistent with the board: no black king on e8  ::  r3r2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1289  castling right "q" is inconsistent with the board: no black king on e8  ::  r3b2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1290  castling right "q" is inconsistent with the board: no black king on e8  ::  r3n2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1291  pawn on e1: no pawn can stand on rank 1  ::  4k3/8/8/8/8/8/8/R3P2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:1292  pawn on e8: no pawn can stand on rank 8  ::  k3p2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1293  castling right "q" is inconsistent with the board: no black rook on a8  ::  b3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1294  castling right "q" is inconsistent with the board: no black rook on a8  ::  n3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1295  pawn on a1: no pawn can stand on rank 1  ::  4k3/8/8/8/8/8/8/P3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:1296  pawn on h8: no pawn can stand on rank 8  ::  4k2p/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1297  castling right "q" is inconsistent with the board: no black king on e8  ::  r3N2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1298  pawn on e8: no pawn can stand on rank 8  ::  k3P2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1299  castling right "q" is inconsistent with the board: no black rook on a8  ::  N3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1300  pawn on h8: no pawn can stand on rank 8  ::  4k2P/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1330  castling right "Q" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/n3n2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:1331  castling right "k" is inconsistent with the board: no black king on e8  ::  k3N2N/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1332  castling right "Q" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/Q3Q2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:1333  castling right "k" is inconsistent with the board: no black king on e8  ::  k3q2q/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1343  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3Q2R w K - 7 1
+  src/moves.castling.hardening.test.ts:1344  castling right "k" is inconsistent with the board: no black king on e8  ::  k3q2r/8/8/8/8/8/8/4K3 b k - 0 27
+  src/moves.castling.hardening.test.ts:1345  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3n2R w K c6 0 1
+  src/moves.castling.hardening.test.ts:1348  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2B w K - 3 9
+  src/moves.castling.hardening.test.ts:1351  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3n2n w K - 9 5
+  src/moves.castling.hardening.test.ts:1359  en-passant square c6 is inconsistent with the board: no black pawn on c5  ::  4k1r1/8/8/8/8/8/8/4K2R w K c6 0 1
+  src/moves.castling.hardening.test.ts:1510  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K3 w K - 0 1
+  src/moves.castling.test.ts:82  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K7 w KQ - 0 1
+  src/moves.castling.test.ts:89  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K6R w K - 0 1
+  src/moves.castling.test.ts:90  castling right "Q" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/R6K w Q - 0 1
+  src/moves.castling.test.ts:91  castling right "k" is inconsistent with the board: no black king on e8  ::  k6r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.test.ts:92  castling right "q" is inconsistent with the board: no black king on e8  ::  r6k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.test.ts:103  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3B2R w K - 0 1
+  src/moves.castling.test.ts:104  castling right "Q" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/R3N2K w Q - 0 1
+  src/moves.castling.test.ts:105  castling right "K" is inconsistent with the board: no white king on e1  ::  4k3/8/8/8/8/8/8/K3b2R w K - 0 1
+  src/moves.castling.test.ts:106  castling right "k" is inconsistent with the board: no black king on e8  ::  k3b2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.test.ts:120  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2B w K - 0 1
+  src/moves.castling.test.ts:121  castling right "Q" is inconsistent with the board: no white rook on a1  ::  4k3/8/8/8/8/8/8/N3K3 w Q - 0 1
+  src/moves.castling.test.ts:122  castling right "k" is inconsistent with the board: no black rook on h8  ::  4k2b/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.test.ts:123  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K2b w K - 0 1
+  src/moves.castling.test.ts:176  castling right "K" is inconsistent with the board: no white rook on h1  ::  4k3/8/8/8/8/8/8/4K3 w K - 0 1
+  src/moves.enpassant.hardening.test.ts:111  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3P4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:112  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:113  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3B4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:114  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3R4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:115  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3Q4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:116  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3K4/3pP3/8/8/8/8 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:118  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4p3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:119  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:120  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4b3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:121  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4r3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:122  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4q3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:123  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  8/8/8/8/3pP3/4k3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:134  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:135  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:136  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3NP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:137  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3BP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:138  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3RP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:139  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3QP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:140  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3KP3/8/8/8/8 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:141  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:142  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3bP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:143  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3rP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:144  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3qP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:145  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  8/8/8/3kP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:147  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3p4/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:148  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:149  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pn3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:150  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pb3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:151  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pr3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:152  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pq3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:153  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  8/8/8/8/3pk3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:154  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pN3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:155  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pB3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:156  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pR3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:157  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pQ3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:158  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pK3/8/8/8 b - e3 0 1
+  src/moves.enpassant.test.ts:33  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:95  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:96  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:97  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4r3/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:98  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3R4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:109  en-passant square a3 is inconsistent with the board: it must be on rank 6 when w  ::  4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1
+  src/moves.enpassant.test.ts:110  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:111  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:112  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3p4/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:113  en-passant square h3 is inconsistent with the board: no white pawn on h4  ::  4k3/8/8/8/6p1/8/8/4K3 b - h3 0 1
+  src/moves.enpassant.test.ts:114  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:130  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:131  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:132  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4R3/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:133  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3r4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/render.test.ts:479  position must have exactly one white king, found 0  ::  8/8/8/8/8/8/8/8 w - - 0 1
+  src/san.parse.test.ts:44  side not to move (black) is in check: its king on e2 is attacked  ::  8/4P3/8/8/8/8/4k3/4K3 w - - 0 1
+  src/zobrist.test.ts:274  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1
+  src/zobrist.test.ts:275  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1
+  src/zobrist.test.ts:276  en-passant square a3 is inconsistent with the board: it must be on rank 6 when w  ::  4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1
+  src/zobrist.test.ts:277  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1
+  src/zobrist.test.ts:278  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1
+  src/zobrist.test.ts:279  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/zobrist.test.ts:307  en-passant square d6 is inconsistent with the board: no black pawn on d5  ::  4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1
+  src/zobrist.test.ts:308  en-passant square e3 is inconsistent with the board: no white pawn on e4  ::  k7/8/8/8/3pR3/8/8/4K3 b - e3 0 1
+  src/zobrist.test.ts:309  en-passant square e3 is inconsistent with the board: e3 is occupied  ::  4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1
+  src/zobrist.test.ts:310  en-passant square d6 is inconsistent with the board: d6 is occupied  ::  7k/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1

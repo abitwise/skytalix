@@ -1,0 +1,58 @@
+# RUN log — qe-ABC-010, QE/E2E. Base be37e222, code 1304cc2c, reviewed tip 2344c015 (branch grugops/ABC-010-fen-semantic-validation).
+# Apple M3, Node v26.11.0. Two other QE agents ran in parallel; load1 is logged on every timed row.
+# <base>, <head>, <mut>, <plant> = out-of-tree `git archive` trees (be37e222, 2344c015, 2344c015, 2344c015) in QE's
+# private scratchpad, node_modules symlinked. `/usr/bin/diff -r -x node_modules -x .git <head> <QE worktree>` was empty.
+# The committed probe scripts were NOT refused: recut-abc010/probe/fen-scan.mjs ran as committed.
+
+CLAIM   2026-10-10T16:26:59Z  bare mkdir .grugops/queue/claimed/qe-ABC-010 in the main checkout.
+
+GATES at the reviewed tip 2344c015 (QE worktree; before QE's rows)
+  16:28:24Z load1 16.41  npm run lint        exit 0 (Checked 100 files)
+  16:28:25Z load1 16.41  npm run typecheck   exit 0
+  16:28:27Z load1 15.34  npm run build       exit 0
+  16:28:33Z load1 14.59  npm test            exit 0, 52 files, 1641 passed, 6.6 s wall
+                         skip count (vitest JSON numPendingTests+numTodoTests) = 0
+                         test-skip-integrity.js .grugops/test-skips.md --skip-count 0 -> No findings., exit 0
+                         lane-inventory.js -> 52 / 52, No findings., exit 0
+
+DEEP LANES (qe010-deep-lanes.sh <worktree> <out>, sequential)     -> deep-lanes.log, deep-puzzle.summary.txt
+  puzzle 33 s, perft 40 s, quiescence 3 s, zobrist 37 s, levels 210 s; all exit 0 (load1 per row in the log)
+
+9(d)  node <head>/.grugops/context/recut-abc010/probe/fen-scan.mjs <head>   -> fen-scan.2344c015.out.txt
+      byte-identical (modulo leading spaces) to ticket-to-pr-ABC-010/probe/fen-scan.branch.out.txt
+9(b)  git diff -U0 be37e222...1304cc2c -- <each of the six swap files>: one -/+ import line each
+9(c)  grep -c parseFenGrammarOnly on the 8 re-authored files: 0 each
+9(e)  in <plant> (about 16:34Z; not stamped at the time, between the harness run and NFR run 1):  P1 `export { parseFenGrammarOnly as __qePlant } from "./fen.ts"` appended to src/history.ts
+        -> guard RED "expected [ 'history.ts' ] to deeply equal []"; P2 reverted -> green.
+      Blind spots (QE-010-d), each GREEN: P3 src/qeplant/x.ts re-export; P4 computed member
+        ns["parseFen" + "GrammarOnly"] in src/history.ts; P5 src/qeplant.mts re-export. All reverted;
+        `diff -r <plant>/src <fresh archive of 2344c015>/src` empty.
+
+HARNESS  node qe010-harness.mts <tree> <seed> 200000 300
+  16:33:40Z load1 16.05  <head> seed 20261010 -> harness-head-2344c015.out.txt   PASS (3.8 s)
+  ~16:43Z                <head> seed 777      -> harness-head-2344c015-seed777.out.txt  PASS
+  ~16:43Z                <base> seed 20261010 -> harness-base-be37e222.out.txt  FAIL, 149,924 lines (red first)
+  (harness self-check: one table row of QE's was wrong on the first smoke run — a pawn on f3 does not attack e1;
+   QE's oracle agreed with parseFen; the row was corrected to f2 before the recorded runs)
+
+MUTANTS  node qe010-mutants.mjs <mut> qe010-harness.mts          -> mutants-2344c015.tsv
+  16:34:45Z..16:40:49Z, load1 18.78 -> 32.85. 30 mutants; 24 killed by the suite, 6 survive (M08 M09 M11 M12 M16 M18);
+  the harness kills 29 of 30 (not M26, which the suite kills). <mut>/src/fen.ts restored (cmp with <head>: identical).
+  With QE's rows copied into <mut>: node qe010-mutants.mjs <mut> qe010-harness.mts M08 M09 M11 M12 M16 M18
+  16:41:13Z..16:42:27Z, load1 23.07 -> 29.68 -> mutants-closed-by-qe-rows.tsv: red 3/3/1/1/1/4. fen.test.ts restored.
+  Red first: QE's rows in a fresh <base> archive, `npx vitest run src/fen.test.ts -t "every right, both colours"`
+  -> 16 failed | 6 passed (the 6 are the accept controls).
+
+FIXTURES
+  node qe010-count-derives.mts <count-base|count-head> <fen>   -> six-queens-derives.out.txt (6 -> 7)
+     (<count-*> = archives of src/ with one counter line inserted at the top of legal.ts legalMoves)
+  node qe010-fullmove-bound.mts <head>                         -> fullmove-bound.out.txt
+
+NFR
+  16:35:35Z load1 29.03  node qe010-nfr002.mts <base> <head> 40 20000   (mutants running)  -> nfr002.out.txt run 1
+  16:42:44Z load1 22.95  node qe010-nfr002.mts <base> <head> 60 20000   (mutants done)     -> nfr002.out.txt run 2
+  16:42:51Z load1 21.75  npm run perft (QE worktree)                                       -> perft-nfr001.out.txt
+
+GATES on the final tree (QE worktree, QE's 22 rows in src/fen.test.ts)
+  16:43:59Z load1 11.38  lint 0, typecheck 0, build 0; npm test exit 0, 52 files, 1663 passed; skip 0;
+                         integrity No findings.; lane-inventory 52/52 No findings.

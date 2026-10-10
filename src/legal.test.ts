@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { parseFen, toFen } from "./fen.ts";
+import { parseFenGrammarOnly as parseFen, toFen } from "./fen.ts";
 import { hasLegalEnPassant, isInCheck, legalMoves } from "./legal.ts";
 import { FLAG_EN_PASSANT, generateMoves, isSquareAttackedBy } from "./moves.ts";
 import { BLACK, KING, type Position, parseSquareName } from "./position.ts";

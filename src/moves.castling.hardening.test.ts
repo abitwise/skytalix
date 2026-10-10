@@ -123,7 +123,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { parseFen, toFen } from "./fen.ts";
+import { parseFenGrammarOnly as parseFen, toFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import { FLAG_CASTLE, generateMoves, isSquareAttackedBy, type Move } from "./moves.ts";
 import {

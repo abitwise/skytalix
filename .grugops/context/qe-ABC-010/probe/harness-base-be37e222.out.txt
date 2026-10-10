@@ -1,0 +1,25 @@
+start 16:43:22Z load1 15.36 tree=be37e222 (base)
+== A hand-picked table
+A rejects matched 0/40; accepts held 25/25
+== B non-string inputs
+B FenError on 0 of 11 (entry x input)
+== C differential fuzz
+C 200000 random FENs (seed 20261010); oracle buckets: accept 69470, castling 67241, en-passant 22462, pawn 5211, side 35616; accepted+round-tripped 54052
+== D positive corpus by play
+D 300 games, 69625 positions (68494 distinct boards), ep set 944, castling held 4693, side to move in check 3997
+== E production corpora
+E 92/92 corpus FENs accepted and round-tripped
+== RESULT FAIL (149924 failure lines)
+FAIL lines (first 60 printed by the harness):
+FAIL A wrongly ACCEPTED: 4k3/8/8/8/8/8/8/K7 w KQ - 0 1 (expected: castling right "K" is inconsistent with the board: no white king on e1)
+FAIL A wrongly ACCEPTED: 4k3/8/8/8/8/8/8/4K3 w K - 0 1 (expected: castling right "K" is inconsistent with the board: no white rook on h1)
+FAIL A wrongly ACCEPTED: 4k3/8/4Q3/8/8/8/8/4K3 w - - 0 1 (expected: side not to move (black) is in check: its king on e8 is attacked)
+FAIL A wrongly ACCEPTED: 4k3/8/8/8/8/8/8/P3K3 w - - 0 1 (expected: pawn on a1: no pawn can stand on rank 1)
+FAIL A wrongly ACCEPTED: 4k3/8/8/8/8/8/8/R4K2 w Q - 0 1 (expected: castling right "Q" is inconsistent with the board: no white king on e1)
+FAIL A wrongly ACCEPTED: 4k3/8/8/8/8/8/8/4K3 w Q - 0 1 (expected: castling right "Q" is inconsistent with the board: no white rook on a1)
+FAIL A wrongly ACCEPTED: 5k1r/8/8/8/8/8/8/4K3 w k - 0 1 (expected: castling right "k" is inconsistent with the board: no black king on e8)
+FAIL A wrongly ACCEPTED: 4k3/8/8/8/8/8/8/4K3 w k - 0 1 (expected: castling right "k" is inconsistent with the board: no black rook on h8)
+FAIL A wrongly ACCEPTED: r4k2/8/8/8/8/8/8/4K3 w q - 0 1 (expected: castling right "q" is inconsistent with the board: no black king on e8)
+FAIL A wrongly ACCEPTED: 4k3/8/8/8/8/8/8/4K3 b q - 0 1 (expected: castling right "q" is inconsistent with the board: no black rook on a8)
+FAIL A wrongly ACCEPTED: r3K2r/8/8/8/8/8/8/R3k2R w KQkq - 0 1 (expected: castling right "K" is inconsistent with the board: no white king on e1)
+FAIL A wrongly ACCEPTED: 4k3/8/8/8/8/8/8/4K2Q w K - 0 1 (expected: castling right "K" is inconsistent with the board: no white rook on h1)
