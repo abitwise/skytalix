@@ -178,6 +178,22 @@ its un-clarified wording permanently, and the record of why is this section.
   wording is decided. Not the other way round.
 - **No dependency on `ABC-042`'s merge.** It merged 2026-08-15 @ `dbaf972`, measured.
 
+## Design (Architect/Design, 2026-10-10)
+
+**Ruled: DELTA.** See
+[`ADR-0036`](../../memory-bank/50-decisions/ADR-0036-abc041-clause-b-is-a-delta-test-on-the-production-capability-surface.md),
+accepted by Architect/Design at `design-owed-rulings-2026-10-10`.
+- **When (b) fires:** (b1) the diff adds or changes a capability line in production code, or (b2) a
+  production file gains a value or bare import of a module that holds one.
+- **The baseline:** the tree's 0 / 3 / 0 is recorded, not used as a trigger (re-measured at
+  `37ca6ae2`).
+- **The consequence this accepts:** a narrower trigger. A new call into an existing capability over
+  an existing edge does not fire (ADR §3).
+- **`A1`:** met by the ADR.
+- **Still this ticket's hop:** `A2`–`A5`. The ADR's §4 answers `A5`'s question: (b) did NOT fire on
+  `ABC-065`. **Not re-opened.**
+- **Not done here:** DoR, size, priority and column. Those are BA/PM's and the Orchestrator's.
+
 ## Security / NFR triggers
 
 - **Clause (b) is the SUBJECT of this ticket, and it is answered here in the form the ticket asks

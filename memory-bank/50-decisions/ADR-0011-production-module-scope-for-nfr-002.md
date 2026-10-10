@@ -45,6 +45,18 @@ and now *"game-owning driver"*): the RULING was right every time, one of its **d
 not. Still `accepted`, still no target and no level, **still zero production lines and zero test
 lines.**
 
+**POINTERS 2026-10-10 at task `wave-2026-09-25`, subtask `design-owed-rulings-2026-10-10`
+(Workflow 07). No clause's ruling, verdict, instrument or criterion changes.** These were owed when
+the owner accepted `ADR-0029` and `ADR-0030` and when `ABC-057` merged (`f7f957ae`). All of them
+are in one block, `### Pointers 2026-10-10`, below the residual register:
+- clause 2 is superseded in part;
+- `R1` is discharged;
+- `R4` gains `WGLYPH-DYN` and the inline all-type sentence;
+- `R5`'s operator half is closed and its operand half is registered (`R5b`);
+- one reading of clause 3 (i): "receive one injected" means the data (`QE-057-c`).
+
+That reading is a **description** made precise. **Both licence entries pass as before.**
+
 **No target moves and no level is set, so no owner ratification is owed** — the same distinction from
 `ADR-0008` that `ADR-0009` and `ADR-0010` both draw. `ADR-0008` needed **Olger Oeselg** because it
 fixed a budget *level* a human has to value; there is no level here. Every claim below is
@@ -188,6 +200,10 @@ is the whole defect.** The next two clauses are the per-guard rules.
 
 ### Clause 2 — `NFR-002`'s structural premise is a property of the FRAME PATH, and the probe roots there
 
+> **[POINTER 2026-10-10: the sentence "DECLARED, not derived" below is SUPERSEDED IN PART by
+> `ADR-0029` (accepted 2026-10-10). The frame path is now derived from one declared composition
+> root. The property in the quote is unchanged. See `### Pointers 2026-10-10`, P1.]**
+
 > The **frame path** is the module closure of the frame's producers. `NFR-002`'s premise is:
 > **`src/history.ts`'s module body is never evaluated in the frame path.** No other module set is in
 > scope for this row.
@@ -320,6 +336,10 @@ a kill the delivered rule does not have (measured below).
 > a third module is forbidden by the ticket's scope, and `import type` is unavailable because
 > `newGame` is **called**; (ii) its citation states it and `ADR-0002` clause 4 is intact on the
 > delivered build. **Both pass on the property. Neither passed on the struck role-name.**
+>
+> **[POINTER 2026-10-10: how (i)'s "receive one **injected**" is read is in
+> `### Pointers 2026-10-10`, P5 (`QE-057-c`). It means the `GameHistory` VALUE, not the history
+> module's operations. Both entries still pass.]**
 >
 > ### THE WIDE READING IS REFUSED BY NAME, so this block cannot be cited as licence for it
 >
@@ -757,6 +777,71 @@ composition becomes an import and **the frame path becomes a real closure**. At 
 declaration is replaced by `closure(<assembly module>)` and **deleted**, and clause 2's
 "declared, not derived" caveat dies with it. **This ADR should be revisited at `EPIC-006` and not
 before.**
+
+### Pointers 2026-10-10: owed at `ADR-0029`/`ADR-0030` acceptance and at `ABC-057`'s merge
+
+Written at task `wave-2026-09-25`, subtask `design-owed-rulings-2026-10-10`. P1–P4 are pointers and
+P5 is a reading. Nothing above is rewritten, and every verdict stands. The reasoning is in the decision
+note `.grugops/context/design-owed-rulings-2026-10-10/notes/…95c73721`.
+
+- **P1. Clause 2 is SUPERSEDED IN PART by `ADR-0029`.**
+  - "The frame path is DECLARED, not derived" no longer holds. The path is the load closure of one
+    declared composition root, `render-seam.ts`, plus every module a frame call loads.
+    `FRAME_PRODUCERS` is deleted (`ABC-053`, merged `a090dda0`).
+  - Clause 2's **property** is unchanged: `history.ts`'s module body is never evaluated on the frame
+    path. So is the boundary between clause 2 (the probe) and clause 3 (the licence).
+- **P2. `R1` is DISCHARGED, with its dated expiry,** by `ADR-0029` decision 2.
+  - The EXPIRY paragraph above fired early: at `render-seam.ts` (`ABC-041`), not at `EPIC-006`.
+  - `R1`'s fail-open became the composer tripwire's equality. That tripwire's reach limits are
+    `ADR-0029`'s (its 2026-10-10 pointer), not this file's.
+- **P3. `R4` gains two sentences.** Its owner and trigger are unchanged.
+  - **(a) `WGLYPH-DYN` is a named member:** a module-scope `void import("./history.ts")` in
+    `glyph-mode.ts`. It is green since `glyph-mode.ts` left the probe's root set, and it is
+    `ADR-0029`'s one recorded loss. It is the same class as `WPERFT-DYN`, under the same ruling:
+    not a breach.
+  - **(b) The inline all-type form `import { type X } from "./history.ts"` is a spelling of the
+    bare form** under `verbatimModuleSyntax`, and it is caught (`ADR-0030` decision 1). It is not a
+    sixth form, and "3 of 5" does not change.
+  - **The trigger has NOT fired:** 0 production files contain `import(` at `37ca6ae2`. The same
+    event, if the dynamic import is of `./frame.ts`, also fires `AR-053-COMPOSER` (`ADR-0029`'s
+    pointer). One grep watches both.
+- **P4. `R5`: the OPERATOR half is CLOSED, and the OPERAND half is registered as `R5b`.**
+  - **Operator, closed.** `ABC-057` (merged `f7f957ae`) pins the comparator with a framed literal.
+    `M15` and `M15-SUB` are RED on head (QE `…70eb6930`).
+  - **`R5b` (`QE-057-a`, LOW, pre-existing).** Two gate-clean one-line edits **outside** the pinned
+    lines drop the unlicensed-importer kill, and the whole suite stays green (1583/1583):
+    - narrowing the importer set to the licence before the equality (`QLHS-INTERSECT`);
+    - narrowing the guard's scanned set (`QSCAN-NARROW`).
+
+    Either one turns the equality into a subset check in effect. **Owner: Architect/Design.**
+  - **Ruled: a TICKET, not an accepted risk.**
+    - The reason `R5` earned a pin applies just as well to the operands that undo it.
+    - The fix is `XS`: test file only, zero production lines.
+    - It reads clause 1's call; it does not change clause 1's expression, so `ABC-029`'s bar is not
+      crossed.
+  - **Who and when.** BA/PM cuts it, and the decision note lists what it must pin. If it is not cut,
+    the trigger is `R5`'s own: the next hop that opens `src/history-pane.nfr.test.ts` for any reason
+    folds it in.
+- **P5. Clause 3 (i): "receive one INJECTED" means receiving the `GameHistory` VALUE, the data**
+  (`QE-057-c`; the Engineer's `…b4c2a298` `D2`).
+  - **What the sentence covers.** It names the two forms that make a runtime import unnecessary for
+    a module that only READS a game: a type import and an injected value. Neither form lets a module
+    CALL `history.ts`, whether to construct, advance or evaluate the game.
+  - **Injected operations are NOT an "available form" under (i)** (`playMove`, `takeBack` and
+    `gameStatusOf` passed in as a seam). In this repository a seam is a substitution point
+    (`ADR-0015`). The history module is the one supplier `ADR-0002` clause 4 says there is exactly
+    one of. An operations seam would create the place where a second supplier could be passed in.
+    That weakens the property clause 3 holds, just to move an import edge.
+  - **Why the existing seams are different.** `InputSeam` and `EngineSeam` are seams because they
+    have several suppliers: stubs, the line reader and the engine. The history operations have one,
+    by rule.
+  - **So the citation stands as written.** It is at `src/history-pane.nfr.test.ts:227-232`: *"the
+    `GameHistory` it already receives injected is the data, not the operations that advance it"*.
+    This file's "(i) it advances the game, which is what a loop is" is read together with it.
+  - **Verdicts unchanged:** 2 of 2 entries pass.
+  - **What would falsify this reading:** a second legitimate supplier of history operations, such
+    as a replay or network-game module. Operations would then need a seam, and (i) must be read
+    again.
 
 ### What this changes elsewhere
 

@@ -143,6 +143,15 @@ this out, and this ADR does not adopt it.
 | **C1** | A value binding that is **imported but never called** counts as a consumer. Biome's `noUnusedImports` sees an unused one, but only as a **warning** (lint exit 0, measured). A binding used for anything other than a call (for example `void renderBoard;`) would pass both (reasoned, not measured: `UNKNOWN - verify`) | Architect/Design | the first time `A8`'s rule is applied to a target outside the seam's three, where `A11`'s call count does not reach |
 | **C2** | Re-export chains under-count (fails RED, by decision) | Architect/Design | the first production `export … from` of a renderer |
 
+> **[POINTER 2026-10-10 (`design-owed-rulings-2026-10-10`)]**
+> - **"Fails RED" holds only for an at-least-one claim such as `A8`'s.** A guard that borrows
+>   decision 2's definition for an EQUALITY against a fixed set fails OPEN on the forms the
+>   definition excludes. `ADR-0029`'s composer tripwire is that case: a second composer reached
+>   through a re-export hop or a dynamic import leaves the set at `[root]`, which is green. See
+>   `ADR-0029`'s 2026-10-10 pointer under decision 2.
+> - **The `R4` sentence that `ADR-0011` owed is written** as `ADR-0011` § "Pointers 2026-10-10",
+>   P3(b).
+
 ### What this changes elsewhere
 
 - **`plans/nfr-catalog.md`: not opened.** Neither guard is on an NFR row's bar (`ABC-054`: *"`NFR-002` not

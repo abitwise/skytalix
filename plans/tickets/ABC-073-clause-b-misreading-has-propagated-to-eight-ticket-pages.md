@@ -134,6 +134,23 @@ Any of `ABC-055`/`057`/`058`/`059` merged before this hop leaves the set too.)*
   of them is pulled and merged before this ticket, its page leaves the editable set the way
   `ABC-065`'s did. **Re-measure the table at the hop; do not trust these eight rows blind.**
 
+## Design (Architect/Design, 2026-10-10)
+
+**The reading is ruled DELTA:**
+[`ADR-0036`](../../memory-bank/50-decisions/ADR-0036-abc041-clause-b-is-a-delta-test-on-the-production-capability-surface.md).
+This ticket still waits for `ABC-072`'s canonical paragraph (`A2`). That paragraph is what the pages
+cite.
+- **What the ruling means for the copies.**
+  - Under DELTA, "0 production files touched" is a **sufficient** answer for "(b) does not fire".
+    It is not a necessary one.
+  - So the file-touch pages answer correctly whenever they touch no production file, and the repair
+    is mostly a citation swap.
+  - A page that touches production files answers (b1) and (b2) with its own facts (`A3`).
+  - `ABC-053`'s self-contradiction is a separate fix (`A4`).
+- **The live set has shrunk** at `37ca6ae2`. `ABC-053`, `ABC-054`, `ABC-057` and `ABC-058` are
+  `Done`, which leaves `ABC-055` and `ABC-059`. Re-measure at the hop.
+- **Not done here:** DoR, size, priority and column.
+
 ## Security / NFR triggers
 
 - **`ABC-041`'s four clauses against this ticket's own diff** — answered in the form `ABC-072` is

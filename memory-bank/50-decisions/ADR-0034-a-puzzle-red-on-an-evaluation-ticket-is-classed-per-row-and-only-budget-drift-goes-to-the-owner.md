@@ -8,6 +8,11 @@ id: ADR-0034
 
 **accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x"*
 
+**READING 2026-10-10 (`design-owed-rulings-2026-10-10`).**
+- Decision 2's "trigger-list file" means a matched file the shipped engine can load. The block under
+  decision 2 has the details.
+- The run trigger, the gate and the baseline do not change.
+
 Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-puzzle-edge`). It answers
 Security/NFR's required fix **`R1`** on `ABC-127` (decision `…2468e396`, PASS_WITH_RISKS). That fix is owed
 before `ABC-083` enters `In Development`. **Owner acceptance owed.** No agent moves an ADR to `accepted`.
@@ -83,6 +88,49 @@ recorded d5". Three of the four do. Seed 5180 under E5 reads d5, against d6 on b
    - A diff that touches any other trigger-list file has **no drift class here**. Every missed row is class B.
    - A not-a-defect argument for that diff goes through `ADR-0026` decision 10's oracle, not through this ADR.
    - The reason: `W3`–`W5` and `W16` read exactly like drift, and `W1` reads exactly like a label margin.
+
+   > **[READING 2026-10-10 at task `wave-2026-09-25`, subtask `design-owed-rulings-2026-10-10`: what
+   > "trigger-list file" means HERE. The run trigger is NOT changed.]**
+   >
+   > - **Raised by.** BA/PM at `owner-adrs-followups` (`…41693c28`, item 6) and `ABC-083`'s page. The
+   >   globs `src/search*.ts` and `src/evaluate*.ts` also match test files and test-only fixture
+   >   modules.
+   > - **The list has two uses, and they read differently.**
+   >   1. **The RUN trigger** is the owner's option B (`AGENTS.md`; `ABC-084`: "the globs are read
+   >      literally"). A test-only change inside a glob triggers a run. **Unchanged.** Running too
+   >      often costs ≤ 60 s and fails safe.
+   >   2. **This decision's SCOPE test** decides whether a red can be given a drift class at all.
+   >      Here a "trigger-list file" is a file the list matches **that the shipped engine can load**:
+   >      it is not a `.test.ts`, and at `<head>` at least one non-`.test.ts` file under `src/`
+   >      imports it.
+   > - **Why the scope test reads only loadable files.** This decision exists because search
+   >   weakenings read like drift. Only code the puzzle suite runs can weaken search. These cannot
+   >   change a puzzle row's result:
+   >   - a test file;
+   >   - a test-only fixture. At `37ca6ae2` these are `src/search.mate-corpus.ts` and
+   >     `src/evaluate.mirror-corpus.ts`, and only tests import them.
+   > - **The instrument:**
+   >
+   >   ```sh
+   >   git diff --name-only "$B" "$H" \
+   >     | grep -E '^src/(engine\.ts|search[^/]*\.ts|evaluate[^/]*\.ts|quiescence\.ts|transposition\.ts)$' \
+   >     | grep -v '\.test\.ts$' \
+   >     | while read -r f; do n=$(basename "$f")
+   >         git grep -lF "\"./$n\"" "$H" -- 'src/*.ts' ':!src/*.test.ts' | grep -q . && echo "$f"; done
+   >   ```
+   >
+   >   Decisions 3 and 4 apply only if every printed line is `src/evaluate*.ts`.
+   > - **Measured.**
+   >
+   >   | merge | read literally | read here | result |
+   >   |---|---|---|---|
+   >   | `ABC-082` (`3858e3c`) | 6 files, including `src/search.ordering.test.ts` and `src/search.pvs-lmr.test.ts` | **`src/evaluate.ts` only** | literally, every row would be B; read here, D and L stay available |
+   >   | `ABC-121` (`5b5a0a36`), control | — | `src/engine.ts`, `src/search.ts` | still all B, as decision 2 intends |
+   >   | `ABC-079` (`4a79c812`), control | — | `src/engine.ts`, `src/quiescence.ts`, `src/search.ts` | still all B, as decision 2 intends |
+   >
+   >   So `ABC-083` `A10`'s re-pins of search test files do not remove the drift class.
+   > - **Bound.** A new production file under a glob counts as soon as anything imports it. A file
+   >   nothing imports is not loaded, so it cannot move a row.
 
 3. **QE classes every `NEWLY-MISSED` row.** All the inputs are deterministic, so no load gate is needed:
    - **Side by side:** the per-row lines of the branch run and of a run at the ticket's base commit.
