@@ -24,7 +24,7 @@
  */
 
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { type Clock, chooseMove, DEFAULT_BUDGET_MS, HARD_CEILING_MS } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
@@ -42,6 +42,28 @@ import {
 import type { Move } from "./moves.ts";
 import { squareName } from "./position.ts";
 import { virtualClock } from "./virtual-clock.ts";
+
+/**
+ * QE-087-a: every `chooseMove` call the level module makes is recorded, its options copied, and
+ * passed through to the real engine unchanged. A pass-through, so every other row reads the real
+ * engine; it costs no search. `vi.hoisted` because `vi.mock` is hoisted above the imports.
+ */
+const engineCalls = vi.hoisted(() => [] as { budgetMs: number; now: unknown; keys: string[] }[]);
+vi.mock("./engine.ts", async (importOriginal) => {
+  const real = await importOriginal<typeof import("./engine.ts")>();
+  return {
+    ...real,
+    chooseMove: (...args: Parameters<typeof real.chooseMove>) => {
+      const [, options] = args;
+      engineCalls.push({
+        budgetMs: options.budgetMs,
+        now: options.now,
+        keys: Object.keys(options).sort(),
+      });
+      return real.chooseMove(...args);
+    },
+  };
+});
 
 const RUN_DEEP = process.env.ENGINE_DEEP === "1";
 
@@ -247,6 +269,57 @@ describe("A4 — the easiest level over ≥ 200 moves", () => {
   });
 });
 
+describe("QE-087-a — the seed never reaches the engine (ADR-0027 d1)", () => {
+  it("every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed", () => {
+    const fen = THIRTY[0] as string;
+    for (const seed of [1, 2, 3, 5, 7, 11, 13, 2026]) {
+      // Rate 0: the engine path, whatever the seed.
+      const level = LEVELS[DEFAULT_LEVEL];
+      const clock = coarseClock(level);
+      engineCalls.length = 0;
+      createLevel(level, { seed, now: clock })(parseFen(fen));
+      expect(engineCalls).toHaveLength(1);
+      expect(engineCalls[0]).toEqual({
+        budgetMs: level.budgetMs,
+        now: clock,
+        keys: ["budgetMs", "now"],
+      });
+      // A blunder: one call per root move, each with the same two keys and the caller's clock.
+      const always: Level = { budgetMs: 100, blunderRate: 0.999_999 };
+      const blunderClock = virtualClock(100);
+      engineCalls.length = 0;
+      const choice = createLevel(always, { seed, now: blunderClock })(parseFen(fen));
+      expect(engineCalls).toHaveLength(choice?.scored?.length as number);
+      for (const call of engineCalls) {
+        expect(call.keys).toEqual(["budgetMs", "now"]);
+        expect(call.now).toBe(blunderClock);
+      }
+    }
+  });
+});
+
+describe("QE-087-b — the scored list is the engine's, not a self-consistent lie", () => {
+  it("each child's score is minus the real `chooseMove`'s depth-1 score on that child", () => {
+    // White wins the black queen with Qxd5: the honest list puts d1d5 alone at the top.
+    const fen = "4k3/8/8/3q4/8/8/8/3QK3 w - - 0 1";
+    const always: Level = { budgetMs: 100, blunderRate: 0.999_999 };
+    // Coarse clock: every child runs depth 1 only, so the re-derivation is exact.
+    const choice = createLevel(always, { seed: 1, now: virtualClock(100) })(parseFen(fen));
+    const scored = choice?.scored ?? [];
+    expect(scored.length).toBe(legalMoves(parseFen(fen)).length);
+    const position = parseFen(fen);
+    for (const entry of scored) {
+      const undo = makeMove(position, entry.move);
+      const child = chooseMove(position, { budgetMs: 0, now: virtualClock(100) });
+      unmakeMove(position, entry.move, undo);
+      expect(child?.depth).toBe(1);
+      expect(entry.score).toBe(-(child?.score as number));
+    }
+    const top = Math.max(...scored.map((s) => s.score));
+    expect(scored.filter((s) => s.score === top).map((s) => label(s.move))).toEqual(["d1d5"]);
+  });
+});
+
 describe("the blunder path's edge cases (ADR-0032 decisions 1-2)", () => {
   /** A rate of (just under) 1: every draw calls for a blunder. */
   const always: Level = { budgetMs: 100, blunderRate: 0.999_999 };
@@ -386,7 +459,7 @@ if (RUN_DEEP) {
   describe("A4 — the easiest level over ≥ 200 moves [deep]", () => {
     // Moved from the default lane unchanged (`rule-abc087-cost`, option (a)): `N8-LANE`.
     it("every move legal; rate ±5 pp; never the worst; the strict second-best [deep]", () => {
-      assertA4("default lane, ENDGAMES", ENDGAMES, playAll(easiest, 87, ENDGAMES));
+      assertA4("ENGINE_DEEP, ENDGAMES", ENDGAMES, playAll(easiest, 87, ENDGAMES));
     });
   });
 
