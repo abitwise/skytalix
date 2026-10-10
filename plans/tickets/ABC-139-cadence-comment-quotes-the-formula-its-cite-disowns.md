@@ -113,3 +113,21 @@ contradicts both its cite and its assertion, and no other ticket opens this file
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P3` |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-139`).
+- Branch `grugops/ABC-139-cadence-comment`, from `e7641dea`. The code is `0d22d9d6`
+  (`src/command-input.test.ts` +5/−3, comment lines only).
+- Not merged, not pushed.
+- The decision and readings are in `.grugops/context/ticket-to-pr-ABC-139/` (`…5b2e91c4`, `…8d4a07e3`,
+  `probe/`) and are not restated here.
+
+**`A1`–`A4` are met. No stop condition fired.**
+- The premise held at `e7641dea`: grep count 1, and `src/turn-loop.ts:279` was unchanged since `b98fb419`.
+- The comment now quotes the docblock's `RE-EMITTING` formula and gives 1 + 0 + 0 + 3 = 4, with `eof` re-emitting
+  nothing.
+- Q4 holds on both measures, on QE's committed `exit132.mjs` (it ran; it was not refused) and on an SE AST-comment-range harness.
+  The gate is green: 52 files, 1,608 tests, skip 0.
+- **For QE:** `exit132.mjs`'s `POS-comment-only` control fails on this file, which has no block header. That control
+  does not apply here (`…8d4a07e3`).
