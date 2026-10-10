@@ -1,0 +1,12 @@
+{
+  "solved": 40,
+  "total": 40,
+  "budgetMs": 25,
+  "stepMs": 1,
+  "measuredAt": "b3321f0 (grugops/ABC-084-puzzle-suite; descends from ABC-082's merge 0de4a93)",
+  "measuredOn": "2026-10-09T21:18:44Z to 21:19:25Z, three separate processes, identical per-puzzle move, depth and nodes",
+  "machine": "Apple M3, 8 cores, 16 GiB, macOS 26.5.2, Node v26.11.0",
+  "load": "load1 3.9 to 4.3 (5-min 5.2 to 5.3)",
+  "wallSeconds": "13.20 / 13.01 / 12.23 for the gating run in vitest (14.2 / 13.9 / 13.2 s process real)",
+  "reason": "First recording, at the ABC-084 build. Every puzzle solved by the shipped engine in ADR-0027 deterministic mode at 25 virtual readings per move. Raising this is QE's; lowering it needs the owner's word (ABC-084 A7)."
+}

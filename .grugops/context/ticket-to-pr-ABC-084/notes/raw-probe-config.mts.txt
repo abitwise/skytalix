@@ -1,0 +1,13 @@
+const W = process.argv[2]; const budget = Number(process.argv[3]); const step = Number(process.argv[4]);
+const { chooseMove } = await import(`${W}/src/engine.ts`);
+const { parseFen } = await import(`${W}/src/fen.ts`);
+const { virtualClock } = await import(`${W}/src/virtual-clock.ts`);
+const { squareName } = await import(`${W}/src/position.ts`);
+const rows = JSON.parse(process.env.ROWS);
+let ok = 0; const t0 = performance.now();
+for (const [fen, acc] of rows) {
+  const c = chooseMove(parseFen(fen), { budgetMs: budget, now: virtualClock(step) });
+  const mv = `${squareName(c.move.from)}${squareName(c.move.to)}`; const s = acc.includes(mv); if (s) ok++;
+  console.log(`${s ? "ok  " : "MISS"} ${mv} d${c.depth} n${c.nodes} ${fen}`);
+}
+console.log(`budget=${budget} step=${step} solved=${ok}/${rows.length} wall=${((performance.now()-t0)/1000).toFixed(2)}s`);

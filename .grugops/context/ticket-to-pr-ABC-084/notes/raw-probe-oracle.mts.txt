@@ -1,0 +1,114 @@
+// ABC-084 A6 oracle probe: rules-only brute force over the project's legal-move generator.
+// Imports NOTHING from search/evaluate/engine/quiescence. Usage: node oracle.mts <worktree>
+const W = process.argv[2];
+const { legalMoves, isInCheck } = await import(`${W}/src/legal.ts`);
+const { makeMove, unmakeMove } = await import(`${W}/src/apply.ts`);
+const { parseFen } = await import(`${W}/src/fen.ts`);
+const { squareName } = await import(`${W}/src/position.ts`);
+
+const label = (m) => `${squareName(m.from)}${squareName(m.to)}`;
+
+// --- mate in N: exhaustive, no evaluation at all ---
+function canMate(p, n) {
+  for (const m of legalMoves(p)) {
+    const u = makeMove(p, m);
+    const ok = defenderLost(p, n);
+    unmakeMove(p, m, u);
+    if (ok) return true;
+  }
+  return false;
+}
+function defenderLost(p, n) {
+  const replies = legalMoves(p);
+  if (replies.length === 0) return isInCheck(p); // mate yes, stalemate no
+  if (n <= 1) return false;
+  for (const r of replies) {
+    const u = makeMove(p, r);
+    const ok = canMate(p, n - 1);
+    unmakeMove(p, r, u);
+    if (!ok) return false;
+  }
+  return true;
+}
+function mateKeys(fen, n) {
+  const p = parseFen(fen);
+  const keys = [];
+  for (const m of legalMoves(p)) {
+    const u = makeMove(p, m);
+    if (defenderLost(p, n)) keys.push(label(m));
+    unmakeMove(p, m, u);
+  }
+  return keys;
+}
+
+// --- material-only negamax (P1 N3 B3 R5 Q9, mate +-1000), fixed depth + capture quiescence ---
+const VAL = [0, 1, 3, 3, 5, 9, 0];
+function material(p) {
+  let s = 0;
+  for (let sq = 0; sq < 128; sq++) {
+    if (sq & 0x88) continue;
+    const pc = p.board[sq];
+    if (!pc) continue;
+    s += (pc & 8 ? -1 : 1) * VAL[pc & 7];
+  }
+  return p.blackToMove ? -s : s;
+}
+function qs(p, a, b) {
+  const moves = legalMoves(p);
+  if (moves.length === 0) return isInCheck(p) ? -1000 : 0;
+  const stand = material(p);
+  if (stand >= b) return stand;
+  if (stand > a) a = stand;
+  for (const m of moves) {
+    if (!m.captured) continue;
+    const u = makeMove(p, m);
+    const v = -qs(p, -b, -a);
+    unmakeMove(p, m, u);
+    if (v >= b) return v;
+    if (v > a) a = v;
+  }
+  return a;
+}
+function nm(p, d, a, b) {
+  const moves = legalMoves(p);
+  if (moves.length === 0) return isInCheck(p) ? -1000 - d : 0;
+  if (d === 0) return qs(p, a, b);
+  for (const m of moves) {
+    const u = makeMove(p, m);
+    const v = -nm(p, d - 1, -b, -a);
+    unmakeMove(p, m, u);
+    if (v >= b) return v;
+    if (v > a) a = v;
+  }
+  return a;
+}
+function materialRoot(fen, depth) {
+  const p = parseFen(fen);
+  const rows = legalMoves(p).map((m) => {
+    const u = makeMove(p, m);
+    const v = -nm(p, depth - 1, -10000, 10000);
+    unmakeMove(p, m, u);
+    return { mv: label(m), v };
+  });
+  rows.sort((x, y) => y.v - x.v);
+  return { stand: material(p), rows };
+}
+
+const MATES = JSON.parse(process.env.MATES ?? "[]");
+const WINS = JSON.parse(process.env.WINS ?? "[]");
+for (const fen of MATES) {
+  const t = performance.now();
+  const p = parseFen(fen);
+  const inCheck = isInCheck(p);
+  const m1 = mateKeys(fen, 1);
+  const m2 = mateKeys(fen, 2);
+  console.log(`MATE ${fen}\n  inCheck=${inCheck} m1=[${m1}] m2=[${m2}] ${(performance.now() - t).toFixed(0)}ms`);
+}
+for (const fen of WINS) {
+  const t = performance.now();
+  const r = materialRoot(fen, Number(process.env.DEPTH ?? 4));
+  const best = r.rows[0].v;
+  console.log(
+    `WIN ${fen}\n  stand=${r.stand} best=${best} keys=[${r.rows.filter((x) => x.v === best).map((x) => x.mv)}] next=${r.rows.find((x) => x.v < best)?.v} ${(performance.now() - t).toFixed(0)}ms`,
+  );
+}

@@ -1,0 +1,57 @@
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-084-puzzle-suite
+
+stdout | src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline, in <= 60 s (A5)
+SOLVED	mate-in-2	f6f7	d7	n18876	K+R: king steps up, rook mates
+SOLVED	mate-in-2	d5g8	d6	n19724	smothered: Qg8+ Rxg8 Nf7#
+SOLVED	mate-in-2	e2e8	d6	n19725	back rank: Re8+ Rxe8 Rxe8#
+SOLVED	mate-in-2	b1b7	d5	n20512	two-rook ladder
+SOLVED	mate-in-2	h1h7	d6	n19484	K+Q against the cornered king
+SOLVED	mate-in-2	h5h7	d5	n20531	Anastasia: Qxh7+ Kxh7 Rh3#
+SOLVED	mate-in-2	e7e1	d6	n19480	mirror: back rank, Re1+ Rxe1 Rxe1#
+SOLVED	mate-in-2	d4g1	d6	n19495	mirror: smothered, Qg1+ Rxg1 Nf2#
+SOLVED	mate-in-2	f3f2	d6	n19478	mirror: K+R, king steps up
+SOLVED	mate-in-2	a7a2	d5	n20512	mirror: two-rook ladder
+SOLVED	win-material	d5e7	d8	n17441	knight fork: Ne7+ wins the queen
+SOLVED	win-material	e4e5	d8	n17430	pawn fork: e5 hits knight and rook
+SOLVED	win-material	a1e1	d7	n18450	pin: Re1 pins the queen to the king
+SOLVED	win-material	a1a6	d7	n18458	skewer: Ra6+ and Rxh6
+SOLVED	win-material	d4e5	d7	n18473	discovered check: the bishop moves, Rxd8
+SOLVED	win-material	d1d5	d6	n19483	queen fork: Qd5+ and Qxa8
+SOLVED	do-not-hang	a1a4	d6	n19479	Q takes a pawn a rook defends
+SOLVED	do-not-hang	e1f1	d7	n18451	R takes a pawn the king defends
+SOLVED	do-not-hang	e1f2	d7	n18444	B takes a pawn a pawn defends
+SOLVED	do-not-hang	c2a1	d7	n18446	N takes a pawn a pawn defends
+SOLVED	do-not-hang	a1a6	d6	n19475	Q takes a knight a rook defends
+SOLVED	do-not-hang	d1d2	d7	n18446	R takes a knight a pawn defends
+SOLVED	do-not-hang	a1e5	d6	n19487	Q takes a rook the king defends
+SOLVED	do-not-hang	a1b1	d6	n19474	Q takes a bishop a knight defends
+SOLVED	do-not-hang	e1f1	d7	n18440	R takes a bishop a pawn defends
+SOLVED	do-not-hang	e1d1	d8	n18123	R takes a pawn a bishop defends
+SOLVED	do-not-hang	a1a8	d7	n18450	Q takes a pawn a knight defends
+SOLVED	do-not-hang	b1a2	d8	n17420	B takes a pawn a rook defends
+SOLVED	do-not-hang	a8a5	d6	n19480	mirror: q takes a pawn a rook defends
+SOLVED	do-not-hang	e8f7	d7	n18450	mirror: r takes a pawn the king defends
+SOLVED	do-not-hang	e8f7	d7	n18444	mirror: b takes a pawn a pawn defends
+SOLVED	do-not-hang	c7a8	d8	n17424	mirror: n takes a pawn a pawn defends
+SOLVED	do-not-hang	a8a3	d6	n19477	mirror: q takes a knight a rook defends
+SOLVED	do-not-hang	d8d7	d7	n18450	mirror: r takes a knight a pawn defends
+SOLVED	do-not-hang	a8e4	d6	n19483	mirror: q takes a rook the king defends
+SOLVED	do-not-hang	a8b8	d6	n19475	mirror: q takes a bishop a knight defends
+SOLVED	do-not-hang	e8f8	d7	n18439	mirror: r takes a bishop a pawn defends
+SOLVED	do-not-hang	e8d8	d8	n17421	mirror: r takes a pawn a bishop defends
+SOLVED	do-not-hang	a8a1	d7	n18451	mirror: q takes a pawn a knight defends
+SOLVED	do-not-hang	b8a7	d8	n17420	mirror: b takes a pawn a rook defends
+PUZZLES shipped: solved 40/40, baseline 40/40, budget 25 step 1, wall 13.20 s
+
+ ✓ src/puzzle-suite.test.ts (12 tests) 13387ms
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline, in <= 60 s (A5)  13222ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  00:18:44
+   Duration  13.56s (transform 62ms, setup 0ms, collect 42ms, tests 13.39s, environment 0ms, prepare 34ms)
+
+real 14.20
+user 14.12
+sys 0.36

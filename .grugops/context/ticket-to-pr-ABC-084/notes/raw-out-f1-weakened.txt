@@ -1,0 +1,80 @@
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-084-puzzle-suite
+
+stdout | src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=weakened] > the gate: solved >= the recorded baseline
+SOLVED	mate-in-2	f6f7	d6	n19477	K+R: king steps up, rook mates
+SOLVED	mate-in-2	d5g8	d6	n19491	smothered: Qg8+ Rxg8 Nf7#
+SOLVED	mate-in-2	e2e8	d6	n19479	back rank: Re8+ Rxe8 Rxe8#
+SOLVED	mate-in-2	b1b7	d5	n20511	two-rook ladder
+SOLVED	mate-in-2	h1h7	d6	n19481	K+Q against the cornered king
+SOLVED	mate-in-2	h5h7	d5	n20526	Anastasia: Qxh7+ Kxh7 Rh3#
+SOLVED	mate-in-2	e7e1	d6	n19479	mirror: back rank, Re1+ Rxe1 Rxe1#
+SOLVED	mate-in-2	d4g1	d6	n19490	mirror: smothered, Qg1+ Rxg1 Nf2#
+SOLVED	mate-in-2	f3g3	d6	n19477	mirror: K+R, king steps up
+SOLVED	mate-in-2	a7a2	d5	n20511	mirror: two-rook ladder
+MISSED	win-material	g1f1	d7	n18449	knight fork: Ne7+ wins the queen
+MISSED	win-material	g2g3	d7	n18441	pawn fork: e5 hits knight and rook
+MISSED	win-material	a1b1	d6	n19470	pin: Re1 pins the queen to the king
+MISSED	win-material	a1a2	d7	n18452	skewer: Ra6+ and Rxh6
+MISSED	win-material	d4g7	d7	n18458	discovered check: the bishop moves, Rxd8
+MISSED	win-material	d1d2	d6	n19482	queen fork: Qd5+ and Qxa8
+MISSED	do-not-hang	a1e5	d6	n19476	Q takes a pawn a rook defends
+MISSED	do-not-hang	a1a7	d7	n18447	R takes a pawn the king defends
+MISSED	do-not-hang	b1e4	d8	n17418	B takes a pawn a pawn defends
+MISSED	do-not-hang	c2d4	d9	n16395	N takes a pawn a pawn defends
+MISSED	do-not-hang	a1b2	d7	n18448	Q takes a knight a rook defends
+MISSED	do-not-hang	d1d3	d8	n17418	R takes a knight a pawn defends
+MISSED	do-not-hang	a1a7	d7	n18454	Q takes a rook the king defends
+MISSED	do-not-hang	a1b2	d7	n18448	Q takes a bishop a knight defends
+MISSED	do-not-hang	a1a5	d8	n17414	R takes a bishop a pawn defends
+MISSED	do-not-hang	b1b2	d8	n17418	R takes a pawn a bishop defends
+MISSED	do-not-hang	a1b2	d8	n17424	Q takes a pawn a knight defends
+MISSED	do-not-hang	b1e4	d8	n17418	B takes a pawn a rook defends
+MISSED	do-not-hang	a8e4	d6	n19476	mirror: q takes a pawn a rook defends
+MISSED	do-not-hang	a8a2	d7	n18447	mirror: r takes a pawn the king defends
+MISSED	do-not-hang	b8e5	d9	n16394	mirror: b takes a pawn a pawn defends
+MISSED	do-not-hang	c7d5	d9	n16395	mirror: n takes a pawn a pawn defends
+MISSED	do-not-hang	a8b7	d7	n18448	mirror: q takes a knight a rook defends
+MISSED	do-not-hang	d8d6	d8	n17418	mirror: r takes a knight a pawn defends
+MISSED	do-not-hang	a8a2	d7	n18454	mirror: q takes a rook the king defends
+MISSED	do-not-hang	a8b7	d7	n18448	mirror: q takes a bishop a knight defends
+MISSED	do-not-hang	a8a4	d8	n17414	mirror: r takes a bishop a pawn defends
+MISSED	do-not-hang	b8b7	d8	n17418	mirror: r takes a pawn a bishop defends
+MISSED	do-not-hang	a8b7	d8	n17424	mirror: q takes a pawn a knight defends
+MISSED	do-not-hang	b8e5	d8	n17418	mirror: b takes a pawn a rook defends
+PUZZLES weakened (evaluate = 0): solved 10/40, baseline 40/40, budget 25 step 1, wall 10.75 s
+
+ ❯ src/puzzle-suite.test.ts (11 tests | 1 failed) 10947ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > holds >= 40 puzzles: >= 10 mate-in-2, >= 6 win-material, >= 20 do-not-hang 1ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > every row names its source and its moves are legal; no added row starts in check 4ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2 163ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > the do-not-hang class starts with ABC-079's 24 rows, and ABC-079 still reads exactly those 24 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0.049: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 2, step 0.001: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step NaN: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0: RangeError, no search 0ms
+   ✓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > the bound itself (step = budgetMs / 1 000) is accepted and searches 0ms
+   × the gating run [deep, PUZZLE_DEEP=weakened] > the gate: solved >= the recorded baseline 10777ms
+     → expected 10 to be greater than or equal to 40
+   ✓ the gating run [deep, PUZZLE_DEEP=weakened] > A3 — the weakened engine solves FEWER than the baseline (so the gate row above is red) 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=weakened] > the gate: solved >= the recorded baseline
+AssertionError: expected 10 to be greater than or equal to 40
+ ❯ src/puzzle-suite.test.ts:239:22
+    237|       const { solved, total } = await gatingRun();
+    238|       expect(total).toBe(baseline.total);
+    239|       expect(solved).toBeGreaterThanOrEqual(baseline.solved);
+       |                      ^
+    240|     }, 300_000);
+    241| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  01:39:16
+   Duration  11.09s (transform 59ms, setup 0ms, collect 43ms, tests 10.95s, environment 0ms, prepare 29ms)
+
