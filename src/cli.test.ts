@@ -2135,6 +2135,82 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
   });
 });
 
+describe("ABC-059 — every claim AGENTS.md makes about `Dev / run` agrees with the delivered command", () => {
+  /** The token every claim about the slot names, wherever and however it is written. */
+  const OCCURRENCE = "Dev / run";
+
+  /**
+   * WHAT THIS GUARD IS FOR: THE FACT, NOT ONE SPELLING OF IT. `ABC-042`'s `A1` row bars one
+   * rendering of "there is no entry point", the list item, and `Q13` shipped the same claim in
+   * PROSE, split across a line break, for a day while that row stayed green. So this block looks
+   * for no sentence. It finds every `Dev / run` in the file and reads what the text after it says.
+   *
+   * DO NOT "SIMPLIFY" IT BACK INTO A SUBSTRING TEST, AND DO NOT MAKE IT PER LINE. All whitespace is
+   * collapsed to single spaces first; a literal or per-line check is blind to the newline that hid
+   * `Q13`. Nor does it bar the phrase `UNKNOWN - verify`, which the file uses for other slots.
+   *
+   * THE SPAN, stated mechanically: from an occurrence of `Dev / run` up to and including the next
+   * sentence terminator, a `.`, `!` or `?` followed by a space or the end of the text. A `.` inside
+   * a path such as `src/cli.ts` ends nothing. Pure, over a string, so every mutant is in memory.
+   */
+  const spansIn = (agents: string): string[] => {
+    const text = agents.replace(/\s+/g, " ");
+    const spans: string[] = [];
+    for (let at = text.indexOf(OCCURRENCE); at >= 0; at = text.indexOf(OCCURRENCE, at + 1)) {
+      const end = text.slice(at).search(/[.!?]( |$)/);
+      spans.push(end < 0 ? text.slice(at) : text.slice(at, at + end + 1));
+    }
+    return spans;
+  };
+
+  it("A1-A4 — no span says `UNKNOWN - verify`, every command span names the entry point's script, and `Q13` reds", () => {
+    const agents = readFileSync(`${REPOSITORY}AGENTS.md`, "utf8");
+    const { scripts } = JSON.parse(readFileSync(`${REPOSITORY}package.json`, "utf8")) as {
+      scripts: Record<string, string>;
+    };
+
+    // `A4` — the command is READ, never transcribed: the one script whose value runs this file's
+    // own `ENTRY_POINT`. The script's name is spelled nowhere in this block.
+    const entry = ENTRY_POINT.slice(REPOSITORY.length);
+    const runners = Object.keys(scripts).filter((name) =>
+      scripts[name]?.split(/\s+/).includes(entry),
+    );
+    expect(runners, `package.json scripts that run ${entry}`).toHaveLength(1);
+    const command = `npm run ${runners[0]}`;
+
+    // `A1` (i) and (ii): a span disagrees when it says `UNKNOWN - verify`, or when it names any
+    // `npm run` other than the delivered one. A span naming no command (a pointer) agrees.
+    const disagreeingIn = (text: string): string[] =>
+      spansIn(text).filter(
+        (span) =>
+          span.includes("UNKNOWN - verify") ||
+          (span.match(/npm run [\w:-]*/g) ?? []).some((named) => named !== command),
+      );
+
+    // The floors, so the verdict below cannot be green by finding nothing to read.
+    const spans = spansIn(agents);
+    expect(spans.length, "`Dev / run` occurrences in AGENTS.md").toBeGreaterThanOrEqual(1);
+    const commandSpans = spans.filter((span) => span.includes(command));
+    expect(commandSpans.length, `spans naming ${command}`).toBeGreaterThanOrEqual(1);
+    // `A1` and `A3` — the file as delivered, legitimate `UNKNOWN - verify` slots and all.
+    expect(disagreeingIn(agents), "AGENTS.md spans that disagree with package.json").toEqual([]);
+
+    // `A2` — the historical sentence, WITH its original line break, at the head, middle and tail.
+    const q13 =
+      "There is also no CLI entry point yet, which is why `Dev / run` above is\n" +
+      "`UNKNOWN - verify` and stays that way.";
+    const middle = agents.indexOf("\n\n", agents.length / 2);
+    for (const at of [0, middle, agents.length]) {
+      const mutant = `${agents.slice(0, at)}\n\n${q13}\n\n${agents.slice(at)}`;
+      expect(disagreeingIn(mutant), `Q13 inserted at offset ${at}`).toHaveLength(1);
+    }
+
+    // `A1` (ii)'s own witness: every command span re-pointed at another script disagrees.
+    const other = `npm run ${Object.keys(scripts).find((name) => name !== runners[0])}`;
+    expect(disagreeingIn(agents.replaceAll(command, other))).toHaveLength(commandSpans.length);
+  });
+});
+
 describe("ABC-109 — AGENTS.md stays inside its byte budget", () => {
   /** `ABC-109` `A1`'s target: a quarter under the inherited 32,768 B reader cap, which truncates silently from the tail. */
   const AGENTS_MD_BUDGET_BYTES = 24_576;
