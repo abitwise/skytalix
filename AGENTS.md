@@ -36,11 +36,10 @@ Roles pull the shared verified context they need and publish their work output a
 > .grugops/queue/claimed` for the parent, then a **bare** `mkdir` (no `-p`) of the task directory —
 > that bare `mkdir` is the atomic act. **Do not re-derive this; do not invent a stamp.**
 
-Drafted by BA/PM at task `home-the-gaps-2026-08-13` and placed by the Orchestrator on the owner's
-instruction. It is here because **eight consecutive hops re-derived it from scratch** before doing any
-work. It records what IS, not what should be: restoring the sanctioned writer is an install-level fix
-(`node install/install.js --check`), not project work, and it is escalated to the owner rather than
-ticketed.
+Drafted by BA/PM at `home-the-gaps-2026-08-13`, placed by the Orchestrator on the owner's
+instruction, because **eight consecutive hops re-derived it from scratch**. It records what IS:
+restoring the sanctioned writer is an install-level fix (`node install/install.js --check`), not
+project work, and is escalated to the owner rather than ticketed.
 
 ## Kit vs state
 
@@ -86,23 +85,25 @@ waiting shell's own command line and never exits. Wait on the PID you started or
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
-  2026-10-09: exit 0, 50 files, 1539 tests, 6.66 s. A hung lane exits 124 within the 60 s bound —
-  stop with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run
-  via `npx vitest run` directly, never through `npm test`. -->
+  2026-10-10: exit 0, 52 files, 1603 tests, 5.9 s. A hung lane exits 124 at the 60 s bound — stop
+  with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
+  `npx vitest run` directly, never through `npm test`. -->
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
   41 passed (28 default), 23.0 s. Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
   QE and after any src/search.ts change. -->
 - Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 npx vitest run src/engine.test.ts` <!-- RUN 2026-10-09:
-  exit 0, 45 passed (32 default), 318.6 s wall at load1 10.0 -> 7.6 (QE/Security lanes in parallel);
-  291.9 s at load1 ~7-8 (ABC-086 receipt) — so ~5 min, not 100 s. Wall-clock cases plus the 300-run
-  virtual-clock cases; the default lane runs on an injected clock. Run after any src/engine.ts or
+  exit 0, 45 passed (32 default), ~5 min (292-319 s), not 100 s. Wall-clock cases + 300-run
+  virtual-clock cases; the default lane uses an injected clock. Run after any src/engine.ts or
   src/virtual-clock.ts change. -->
+- Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`
+  <!-- RUN 2026-10-10: exit 0, 28 passed (22 default), 202 s (A5: 135 s).
+  Holds A4's evidence (ENDGAMES 204 + perft/puzzles 246 moves), A2 on a virtual clock, A3 (35
+  vs 58 of 62). Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change. -->
 - Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
-  <!-- RUN 2026-09-26: exit 0, 34 passed, 0.34 s — 34 is the whole lane; 33 means NODE_OPTIONS was
-  dropped and the external-memory retention guard did not run (exits 0 either way). TRAP: never
-  assert this guard on heapUsed — it is blind to an unflattened rope (0.00 vs 32.00 MiB via
-  process.memoryUsage().external after gc(), the field that is NOT blind). Run after any
-  src/line-input.ts change. -->
+  <!-- RUN 2026-09-26: exit 0, 34 passed — 34 is the whole lane; 33 = NODE_OPTIONS dropped,
+  retention guard did not run (exits 0 either way). TRAP: never assert this guard on heapUsed —
+  blind to an unflattened rope (0.00 vs 32.00 MiB via process.memoryUsage().external after gc(),
+  which is NOT blind). Run after any src/line-input.ts change. -->
 - Transposition deep lanes (ABC-081, `src/transposition.test.ts`): `SEARCH_DEEP=1 npx vitest run
   src/transposition.test.ts` <!-- exit 0, 40 passed (25 default), 47.7 s --> and `ENGINE_DEEP=1 npx
   vitest run src/transposition.test.ts` <!-- exit 0, 26 passed (25 default), 4.8 s -->
@@ -111,10 +112,9 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 - Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- exit 0,
   37 passed (29 default), 1.8 s -->
 - Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`
-  <!-- RUN 2026-10-10: exit 0, 17 passed (12 default), 32-36 s (gating run 20-24 s) at load1 4-8;
-  ABC-127 A7 reads <= 90 / 45 s, never asserted, 300 s hang guards. Baseline
-  `src/puzzle-suite.baseline.json` (58/62, budget 25, step 1; the 4 unsolved rows named, a run
-  prints NEWLY-MISSED / NEWLY-SOLVED per row that differs). TRIGGER (owner, option B,
+  <!-- RUN 2026-10-10: exit 0, 17 passed (12 default), 32-36 s; ABC-127 A7 reads <= 90 / 45 s,
+  never asserted, 300 s hang guards. Baseline `src/puzzle-suite.baseline.json` (58/62, budget 25,
+  step 1; a run prints NEWLY-MISSED / NEWLY-SOLVED per differing row). TRIGGER (owner, option B,
   2026-10-09): QE runs it during review when the change touches engine code (`src/engine.ts`,
   `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`, `src/transposition.ts`, move
   ordering). red = QE FAIL. Not a `quality.mandatory_gates` entry. The baseline moves only in its
@@ -122,18 +122,17 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   commit); raising it is QE's, lowering it needs the owner's word. `PUZZLE_DEEP=weakened` is the
   red demonstration and exits 1 by design. -->
 - PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 npx vitest run
-  src/search.pvs-lmr.test.ts` <!-- exit 0, 29 passed (20 default). RUN 2026-09-26 (default): 0.6 s.
-  Deep 926.2 s wall — cited from UAT (`uat-run-ABC-121#77854a65`), not re-run here (over 10 min).
-  Run after any PVS/LMR change to src/search.ts or src/engine.ts. -->
+  src/search.pvs-lmr.test.ts` <!-- exit 0, 29 passed (20 default; 0.6 s). Deep 926.2 s wall,
+  cited from UAT (`uat-run-ABC-121#77854a65`), not re-run (over 10 min). Run after any PVS/LMR
+  change to src/search.ts or src/engine.ts. -->
 - Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 npx vitest run src/cli.real-engine.test.ts`
-  <!-- RUN 2026-10-10: exit 0, 7 passed (1 default), 6.4 s at load1 4.4 (QE: 6.3-6.5 s at load1
-  15-18); two real children of `node src/cli.ts --colour black --ascii`, 3099-3147 ms each. Unset:
-  NOT DEFINED, not skipped. Run at QE and after any src/cli.ts or src/engine.ts change. -->
+  <!-- RUN 2026-10-10: exit 0, 7 passed (1 default), 6.4 s; two real children of
+  `node src/cli.ts --colour black --ascii`. Unset: NOT DEFINED, not skipped. Run at QE and after
+  any src/cli.ts or src/engine.ts change. -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- exit 0, 856/856 on 30 files. Not in
   `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
-  child process and v8 coverage does not cross a process boundary, so it reads uncovered while
-  thoroughly tested. -->
+  child and v8 coverage does not cross a process boundary, so it reads uncovered while tested. -->
 - Coverage (`src/` only — the other denominator; neither is agreed): `npx vitest run --coverage --coverage.include='src/**'` <!-- exit 0 -->
 
 ### Acceptance
@@ -159,18 +158,15 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 
 ### Build
 
-- Build (use sparingly): `npm run build` <!-- currently `tsc --noEmit` — type-checked, nothing
-  published until EPIC-006. Honest naming: a typecheck wearing the build slot's name. -->
+- Build (use sparingly): `npm run build` <!-- `tsc --noEmit`: a typecheck; nothing published until EPIC-006. -->
 - Docs build / link-check: `UNKNOWN - verify`
 - Clean / reset: `UNKNOWN - verify`
 
 ### E2E
 
-- E2E: `UNKNOWN - verify` <!-- no runnable game until EPIC-006; `quality.ui_e2e` is
-  `ui-or-critical-path` and this project has no UI surface yet -->
+- E2E: `UNKNOWN - verify` <!-- no UI surface (`quality.ui_e2e`: `ui-or-critical-path`) -->
 
-<!-- Command slots filled 2026-07-22 (ABC-008); every command was RUN before being recorded. A slot
-  still `UNKNOWN - verify` is genuinely unknown — nothing was guessed. -->
+<!-- Command slots filled 2026-07-22 (ABC-008), each RUN first; `UNKNOWN - verify` = unknown. -->
 
 ### Stack
 
