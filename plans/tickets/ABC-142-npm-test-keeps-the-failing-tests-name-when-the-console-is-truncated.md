@@ -15,6 +15,11 @@ feature: —
 > Workflow 07), from two QE gaps: **`QE-141-a`** (LOW) and **`QE-093-e`** (INFO).
 > **This ticket does not hunt the flake.** It makes the next sighting name it. Hunting it is a later
 > cut, made against a name.
+>
+> **Amended 2026-10-10 by BA/PM** (subtask `bapm-amend-abc142-2026-10-10`): `A5` had a stale premise.
+> `ABC-042` A10 pins `scripts.test` byte-exact at `src/cli.test.ts:1667`, so "zero `src/`" made the
+> script edit impossible (SE stop note `…3e7c51a0`). `A5` now allows that one pinned literal, and
+> `A6` keeps the pin exact.
 
 ## Problem
 
@@ -41,14 +46,21 @@ failure recurs").
 - `npm test` writes, **on every run**, a machine-readable result file at **one fixed, git-ignored path
   per checkout**. It lists each failed test's **file and full title**, plus the run's totals.
 - The console output and the exit codes of `npm test` / `tools/grugops/run-bounded.js` are unchanged.
-- **The mechanism is the engineer's.** One candidate is a second vitest reporter with an output file,
-  passed through the `run-bounded.js` argv. It is named here only as an example.
+- **The mechanism lives in `package.json`'s `test` script** (for example, a second vitest reporter
+  with an output file on that line). The flags are the engineer's choice.
+- Two routes are out:
+  - **`vitest.config.ts` reporters:** this would also apply to every direct `npx vitest run`,
+    including the `*_DEEP` lanes, so it reaches past `npm test`.
+  - **`run-bounded.js` injecting flags:** a generic wrapper would be rewriting its own argv, and that
+    goes around the A10 pin's intent.
 
 ## Out of scope
 
 - Finding, fixing, retrying or quarantining the flaky test. **No retry flag.** A retry hides exactly
   what this ticket exists to expose.
-- Any change under `src/`, any test, `vitest.config.ts`'s `exclude`, `isolate`, or the pool.
+- Any production line under `src/`.
+- Any test edit other than the one pinned literal that `A5` names.
+- Any change to `vitest.config.ts`.
 - The `*_DEEP` lanes. They do not run through `npm test`.
 - `AGENTS.md`. A pointer to the file's path is the Scribe's call, within 1,360 B of headroom
   (`QE-093-a`).
@@ -69,12 +81,24 @@ failure recurs").
   is git-ignored. **And** the file is not collected as a test, so the lane's file and test counts equal
   the base's.
 - **`A5` (nothing else moved).**
-  - The diff touches at most `package.json`'s `test` script, `.gitignore`, and
-    `tools/grugops/run-bounded.js` (only if the argv needs it).
-  - `git diff --name-only -- src/` is **empty**.
-  - `run-bounded.js`'s documented exit contract (own code / 124 / 128+n / 2) is byte-unchanged in its
-    header.
+  - The diff touches at most four things:
+    - `package.json`'s `test` script;
+    - `.gitignore`;
+    - `src/cli.test.ts`, on **one** line only: the `SCRIPTS_AT_HEAD.test` literal (`ABC-042` A10, line
+      1667 at base);
+    - the one comment line in `tools/grugops/run-bounded.js`'s header that quotes the `test` script
+      (line 10). The comment may only be updated to quote the new value.
+  - **Zero production `src/` lines.** `git diff --name-only -- src/ | grep -v '\.test\.ts$'` is
+    **empty**, and `git diff --numstat -- src/` has one row: 1 added, 1 deleted, `src/cli.test.ts`.
+  - `run-bounded.js`'s code is unchanged, and so is its documented exit contract (own code / 124 /
+    128+n / 2). Both are byte-unchanged.
   - The skip-count capture command in `AGENTS.md` still returns an integer.
+- **`A6` (the pin still pins).**
+  - **Given** the delivered tree, **then** `SCRIPTS_AT_HEAD.test` equals the new `package.json` `test`
+    string **byte for byte**. It is still asserted with `toBe` of the full string, with no prefix,
+    regex, `toContain`, or `startsWith`. `A10`'s `added` still equals `["chess"]`.
+  - **And**, on a scratch copy with one character appended to the `test` script, `npx vitest run
+    src/cli.test.ts` fails on `A10`.
 
 ## Dependencies
 
@@ -96,12 +120,14 @@ failure recurs").
 1. Plant the red build in a **scratch copy** outside the repository, never in the worktree.
 2. Read the file with `jq` or `node -e`, not by eye, and quote the extracted name in the delivery note.
 3. Mandatory gates: `npm run lint`, `npm run typecheck`, `npm run build`, `npm test`. The QE hop is
-   owed. The diff carries no `src/` line, so the UAT waiver is expected to apply; that is measured at
-   the exit, never asserted here.
+   owed. The diff carries one `.test.ts` line and no production `src/` line, so the UAT waiver is
+   expected to apply. Its filter (`grep -v '\.test\.ts$' | grep '^src/'`) should read empty. That is
+   measured at the exit, never asserted here.
 
 ## Size and priority
 
-**`XS`:** one script line, one ignore line, and three red/green runs.
+**`XS`:** one script line, one ignore line, one pinned test literal, and four red/green runs. Still
+`XS` after the amendment.
 - Not `S`: no harness, no load induction, no test is written.
 
 **`P2`:**
@@ -114,19 +140,20 @@ failure recurs").
 
 ## Definition of Ready
 
-BA/PM, 2026-10-10. **Result: 10 of 10.**
+BA/PM, 2026-10-10. Re-scored after the `A5` amendment. **Result: 10 of 10.** The first score, also
+10 of 10, missed the A10 pin; item 5 now names it.
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** two dated, cited sightings, and the loss mechanism (truncated capture) named |
-| 2 | scope and out-of-scope clear | **✅** one kept file; retry, quarantine, `src/` and the deep lanes fenced out |
+| 2 | scope and out-of-scope clear | **✅** one kept file; retry, quarantine, production `src/`, `vitest.config.ts` and the deep lanes fenced out; the two rejected routes are named |
 | 3 | INVEST-shaped | **✅** independent, small, testable by planted red and green runs |
-| 4 | acceptance testable and measurable | **✅** exit codes, a named title, failed = 1 / 0, counts equal to the console, an empty `git status` |
-| 5 | dependencies known | **✅** none blocking; the concurrency limit named |
+| 4 | acceptance testable and measurable | **✅** exit codes, a named title, failed = 1 / 0, counts equal to the console, an empty `git status`, `numstat` `1 1` on `src/`, and a byte-exact pin (`A6`) |
+| 5 | dependencies known | **✅** none blocking; the concurrency limit named; the `ABC-042` A10 pin (`src/cli.test.ts:1667`) and its run-bounded.js header quote named |
 | 6 | security/NFR triggers with a measurable target | **✅** count pin 0/0/0; git-ignored, no surface |
 | 7 | test notes present | **✅** three |
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P2`, with both directions and the triggers |
-| 10 | no major unresolved blocker | **✅** none |
+| 10 | no major unresolved blocker | **✅** none; the A5-vs-A10 conflict the SE stopped on is resolved by this amendment |
 
 Column moves are the Orchestrator's.
