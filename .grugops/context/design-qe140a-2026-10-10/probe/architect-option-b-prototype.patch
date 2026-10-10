@@ -1,0 +1,17 @@
+--- a/src/history-pane.nfr.test.ts
++++ b/src/history-pane.nfr.test.ts
+@@ -528,12 +528,9 @@
+     // `expect` would miss a one-line pin. The comparator literal holds the tripwire's failure
+     // message, so rewording that message reds here too, as intended. The predicate's reach
+     // (`bindsAssembleFrame`) is `ADR-0029`'s and is not pinned. Same framing as above.
+-    expect(instrument, "the composer tripwire scans EVERY production module").toContain(
++    expect(instrument, "the composer tripwire scans EVERY production module and compares with an EQUALITY").toContain(
+       // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
+-      '\n    const composers = productionModulesIn(directory).filter((file) =>\n      bindsAssembleFrame(readFileSync(`${directory}${file}`, "utf8")),\n    );\n',
+-    );
+-    expect(instrument, "the composer tripwire compares with an EQUALITY").toContain(
+-      '\n    expect(\n      composers,\n      "a second frame composer: make it import the seam, or declare it as the root",\n    ).toEqual([COMPOSITION_ROOT]);\n',
++      '\n    const composers = productionModulesIn(directory).filter((file) =>\n      bindsAssembleFrame(readFileSync(`${directory}${file}`, "utf8")),\n    );\n\n    expect(\n      composers,\n      "a second frame composer: make it import the seam, or declare it as the root",\n    ).toEqual([COMPOSITION_ROOT]);\n',
+     );
+   });
+ 

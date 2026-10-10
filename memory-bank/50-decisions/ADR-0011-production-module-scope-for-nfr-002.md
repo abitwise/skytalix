@@ -72,6 +72,12 @@ No clause, verdict or instrument changes.
 
 No clause, verdict or instrument changes.
 
+**P8, 2026-10-10, subtask `design-qe140a-2026-10-10`:**
+- `QE-140-a` is accepted. One class trigger now covers both guards' whole `it` bodies.
+- The `R5` text-pin chain stops at `R5d`.
+
+No ticket. No clause, verdict or instrument changes.
+
 **No target moves and no level is set, so no owner ratification is owed** — the same distinction from
 `ADR-0008` that `ADR-0009` and `ADR-0010` both draw. `ADR-0008` needed **Olger Oeselg** because it
 fixed a budget *level* a human has to value; there is no level here. Every claim below is
@@ -937,6 +943,28 @@ note `.grugops/context/design-owed-rulings-2026-10-10/notes/…95c73721`.
   - **Clause 1's docblock (`:152–153`).** "Both guards" and "the two rules differ because THE TWO GUARDS…"
     are stale since `ADR-0029`: three instruments now hold two properties. The fix rides with `R5d`'s
     ticket as its own criterion. It is outside every pin.
+- **P8 (2026-10-10, subtask `design-qe140a-2026-10-10`). `QE-140-a` is ACCEPTED under one class trigger,
+  and the `R5` text-pin chain STOPS at `R5d`. No ticket.** Re-measured at `bb73aebb`. The reasoning and
+  readings are in `.grugops/context/design-qe140a-2026-10-10/notes/` (`…13d0531f`, `…bec044c1`).
+  - **`QE-140-a` (LOW, owner Architect/Design).** A statement inserted between `R5d`'s two pinned statements
+    keeps every pinned byte (`ABC-140`, merged). This is `QE-136-a`'s twin on the composer tripwire.
+    - **Option (b), one contiguous literal, is rejected.** A prototype closes QE's two spellings. An early
+      `return` one statement above the scan still survives with it, and the whole suite stays green at
+      1608/1608. The only text closure is the whole `it` body, which is what P7 refused to pin.
+  - **The class trigger replaces `QE-136-a`'s line-span trigger for both guards.**
+    - **Fires on:** the first diff that adds or edits an executable line inside either guard's `it` body,
+      other than text the drift tripwire pins, or that renames either `it`. The guards are identified by
+      their `it` titles, not by line numbers.
+    - **On firing:** that hop's QE reads the line as an `R5b` or `R5d` question. A `bindsAssembleFrame` edit
+      is `AR-053-COMPOSER`'s question instead.
+    - **No pin is owed.** P6's "the contiguous pin is cut then" is withdrawn.
+    - **Covers:** `QE-140-b` and the licence guard's own early-`return` twin.
+  - **Where the chain stops.** A text pin is cut only for an edit to the kill's operand, operator or
+    definition that one finite literal closes. `R5`, `R5b`, `R5c` and `R5d` were all of that kind.
+    - Survivors that insert a statement or rebind a name are accepted under the trigger and never pinned.
+    - **Revisit trigger:** such a weakening is found merged past a QE hop. The answer then is a behaviour
+      witness, not another pin.
+  - **`QE-140-c`** rides the next hop that edits the clause 1 docblock.
 
 ### What this changes elsewhere
 
