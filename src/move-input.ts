@@ -4,7 +4,8 @@
  * `EPIC-003` promises both formats always accepted with NO MODE SWITCH: the player never declares
  * whether they are typing `e2e4` or `e4`. `ABC-031` and `ABC-032` each answer *"is this string a
  * move, in MY grammar?"*; this module is the one that answers *"is this LINE a move at all?"* and
- * turns either answer into the `PromptOutcome` the merged loop consumes (`src/turn-loop.ts:125`).
+ * turns either answer into the `PromptOutcome` the merged loop consumes
+ * (`src/turn-loop.ts` `PromptOutcome`).
  *
  * THIS MODULE ASKS; IT DOES NOT PARSE. There is no grammar here, no token table, no piece letter,
  * no square arithmetic and no chess logic — every one of those lives in `src/coordinate-move.ts`

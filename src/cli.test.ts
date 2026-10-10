@@ -587,9 +587,9 @@ const substituting = (module: string, source: string): string =>
  *
  * It calls the REAL `legalMoves` — a substituted module's relative imports resolve against the
  * module it replaced — so the move it returns is a generator-owned `Move` with all six fields, which
- * is what `wasGenerated` (`src/turn-loop.ts:191`) demands and what keeps this a deterministic
- * opponent rather than a second fault. `DEFAULT_BUDGET_MS` is exported because the entry point
- * imports it; the double consults no clock, so its value cannot matter.
+ * is what `wasGenerated` (`src/turn-loop.ts` `wasGenerated`) demands and what keeps this a
+ * deterministic opponent rather than a second fault. `DEFAULT_BUDGET_MS` is exported because the
+ * entry point imports it; the double consults no clock, so its value cannot matter.
  */
 const scriptedEngine = (moves: readonly string[]): string => `
 import { legalMoves } from "./legal.ts";
@@ -746,7 +746,8 @@ export function createEngine() {
    * `A5` again — an `EngineSeam` that returns a move `legalMoves` did not produce. A REAL legal move
    * with one field falsified: `captured` decides the undo record `playMove` builds, so a move with
    * the right squares and a wrong `captured` corrupts the board exactly as a foreign move does
-   * (`src/turn-loop.ts:191-200`). A pair of made-up squares would be caught by a weaker guard too.
+   * (`src/turn-loop.ts` `wasGenerated`). A pair of made-up squares would be caught by a weaker
+   * guard too.
    */
   engineForeign: play(["--colour", "black"], {
     hook: substituting(

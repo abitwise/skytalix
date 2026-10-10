@@ -1630,9 +1630,10 @@ describe("ADR-0009 clause 9f — the loop against the REAL panels, both of them"
 
 // ---------------------------------------------------------------------------
 // `ABC-021` — TRANSITION 16 only. `ABC-019` owns that `game-over` is reachable from
-// `awaiting-human` at all (`turn-loop.ts:114-116`); what is asserted below is the player having the
-// move CLAIMING, with a claimed reason, and the loop ending the game — plus the availability value
-// and the refusal. The other fifteen transitions are not re-litigated here.
+// `awaiting-human` at all (`turn-loop.ts`, `PromptOutcome`'s docblock,
+// "OWNS ONLY THAT THE TRANSITION EXISTS"); what is asserted below is the player having the move
+// CLAIMING, with a claimed reason, and the loop ending the game — plus the availability value and
+// the refusal. The other fifteen transitions are not re-litigated here.
 //
 // ZERO NEW TEST FILES, which is the count `N8-LANE` binds: these rows sit beside `ABC-019`'s in the
 // file that already mocks `gameend.ts`, `history.ts` and `frame.ts`, exactly as the ticket's

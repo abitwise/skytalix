@@ -56,10 +56,10 @@
  * AVAILABILITY-BLIND — `A6`. This module calls neither `gameStatusOf` nor `repetitionCounts`, and
  * it does not import `./history.ts` at all beyond the `GameHistory` type. A `claim` is classified
  * identically whether or not a draw is claimable; the loop adjudicates it against the status it
- * already evaluated for this ply (`src/turn-loop.ts:319-341`), and the unavailable-case wording is
- * `claimShortfall`'s (`src/turn-loop.ts:234`), merged and asserted by `ABC-021` `A3`. A second
- * derive here would cost 46-50 µs at 120 plies against `NFR-002`'s 100 µs per-ply bar, for a value
- * the loop already holds.
+ * already evaluated for this ply (`src/turn-loop.ts`, `runTurnLoop`'s "TRANSITION 16" branch), and
+ * the unavailable-case wording is `claimShortfall`'s (`src/turn-loop.ts` `claimShortfall`), merged
+ * and asserted by `ABC-021` `A3`. A second derive here would cost 46-50 µs at 120 plies against
+ * `NFR-002`'s 100 µs per-ply bar, for a value the loop already holds.
  *
  * THE HELP TEXT IS DERIVED FROM THE TABLE AND IS NEVER TYPED TWICE — `A4`. `helpMessages()` folds
  * `COMMAND_TABLE`, so a token added to the table appears in `help` by construction. `ABC-030`
@@ -88,7 +88,7 @@ export type CommandToken =
 /**
  * One row of the table: the token, and WHICH arm of `PromptOutcome` classifying it produces.
  *
- * `outcome` is here because the seven tokens do NOT share one arm. Three are `command` — the merged
+ * `outcome` is here because the eight tokens do NOT share one arm. Four are `command` — the merged
  * non-advancing outcome (`src/turn-loop.ts`) — `claim` is the dedicated payload-free
  * `{ kind: "claim" }` arm, `resign` is the `game-over` arm with a result, and `new` and `undo` are
  * the `take-back` arm with a ply count. A parser that returned `command` for `claim` would never reach
