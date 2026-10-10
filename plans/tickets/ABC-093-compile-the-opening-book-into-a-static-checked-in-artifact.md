@@ -1,8 +1,8 @@
 ---
 id: ABC-093
 title: Compile the selected opening lines into one static, checked-in, data-only book artifact — reproducibly, under 1 MB, with every move proved legal in its keyed position
-status: backlog
-column: Backlog
+status: in-design
+column: In Design
 size: M
 priority: P1
 epic: EPIC-005
