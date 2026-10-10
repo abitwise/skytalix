@@ -325,3 +325,22 @@ at the cutting hop. **Result: 8 of 10 — items 5 and 10 carry a ⚠️; the oth
 | 8 | size assigned | **✅** `M`, with both re-size boundaries named |
 | 9 | priority assigned | **✅** `P1`, with the reason it is not `P0` |
 | 10 | no major unresolved blocker | **⚠️ ONE, ordering.** `ABC-093` must deliver the artifact before `A1`–`A4` can be closed. `A5`/`A6` are not blocked. **Not an `EPIC-004` blocker — this ticket has none, and that is its headline property.** |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-094`).
+- Branch `grugops/ABC-094-book-probe`, from `97223dfe`. Code commit `8cf395fc`: `src/book.ts` (production,
+  +153) and `src/book.test.ts` (+359, 26 tests). Not merged, not pushed.
+- Readings and calls live in `.grugops/context/ticket-to-pr-ABC-094/` (`…d14f72cb` decision, `…77180424`
+  readings, `…93e5f38e` artifact-ref, `probe/`) and are not restated here.
+
+**`A1`–`A7` are met on the delivered tree, with one part handed on. No stop condition fired.**
+- **The seam.** `createBookProbe({ read, warn, random })`. The reader and the warn sink are injected, as
+  `random` is. So the probe holds no `ADR-0036` limb, and clause (b) **does not fire** here (instrument:
+  0 / 0 / 0). It fires on `ABC-095`, where `src/cli.ts` binds the read and the sink.
+- **`A5`'s stream half moves with the sink.** The probe writes to neither stream (0 calls, both spied). The
+  stderr binding and its check are `ABC-095`'s.
+- **`N-LOAD`** is MET in its first form: 0 reads at construction. A book hit is ≤ 0.88 ms against the 30 ms bar.
+- **Cost (`ADR-0035`).** 1 file and 0 spawns. Both narrow-set readings were inadmissible on a loaded host, so
+  a re-read is owed.
+- **Gates.** UAT needs the owner's word. QE is owed.
