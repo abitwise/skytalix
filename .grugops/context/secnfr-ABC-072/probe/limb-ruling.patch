@@ -1,0 +1,118 @@
+--- a/.grugops/context/design-ABC-072/probe/clause-b.mjs
++++ b/.grugops/context/design-ABC-072/probe/clause-b.mjs
+@@ -32,29 +32,29 @@
+ }
+ 
+ const NAME = {
+-  1: "Node builtin import (`node:` specifier)",
+-  2: "`process.` read",
+-  3: "call to spawn / exec / fetch / eval / new Function (child_process family included)",
++  1: "non-local import (Node builtin, prefixed or not, or a package)",
++  2: "reference to the global `process`",
++  3: "call to spawn / exec / fetch / eval / Function / WebSocket (child_process family included)",
+ };
+ const UNIT = {
+   1: "import statements in code",
+   2: "read sites in code",
+   3: "call sites in code",
+ };
+-const WORD = { 1: /node:/, 2: /process\./, 3: /\b(?:spawn|spawnSync|exec|execSync|execFile|execFileSync|fork|fetch|eval)\b|\bnew\s+Function\b/ };
+-const CALLS = new Set(["spawn", "spawnSync", "exec", "execSync", "execFile", "execFileSync", "fork", "fetch", "eval"]);
++const WORD = { 1: /node:|from\s*["'][^."'\/]|import\(\s*["'`][^."'`\/]/, 2: /\bprocess\b/, 3: /\b(?:spawn|spawnSync|exec|execSync|execFile|execFileSync|fork|fetch|eval|WebSocket)\b|\bFunction\s*\(/ };
++const CALLS = new Set(["spawn", "spawnSync", "exec", "execSync", "execFile", "execFileSync", "fork", "fetch", "eval", "Function", "WebSocket"]);
+ const CHILD_PROCESS = new Set(["node:child_process", "child_process"]);
+ 
+ const git = (...args) => execFileSync("git", args, { encoding: "utf8", maxBuffer: 256 << 20 });
+ const short = (rev) => git("rev-parse", "--short=8", rev).trim();
+-const isProduction = (f) => f.startsWith("src/") && f.endsWith(".ts") && !f.endsWith(".test.ts");
++const isProduction = (f) => f.startsWith("src/") && /\.[mc]?[jt]s$/.test(f) && !/\.test\.[mc]?[jt]s$/.test(f) && !f.endsWith(".d.ts");
+ const productionFiles = (rev) =>
+   git("ls-tree", "-r", "--name-only", rev, "--", "src").split("\n").filter(isProduction);
+ 
+ // One file at one revision → its limb occurrences (line spans) and its runtime import specifiers.
+ function scan(rev, file) {
+   const text = git("show", `${rev}:${file}`);
+-  const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
++  const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, /\.[mc]?js$/.test(file) ? ts.ScriptKind.JS : ts.ScriptKind.TS);
+   const lineOf = (pos) => sf.getLineAndCharacterOfPosition(pos).line + 1;
+   const occ = { 1: [], 2: [], 3: [] };
+   const add = (l, node) => occ[l].push({ first: lineOf(node.getStart(sf)), last: lineOf(node.getEnd()) });
+@@ -69,7 +69,7 @@
+     if (!st.moduleSpecifier || !ts.isStringLiteral(st.moduleSpecifier)) continue;
+     const spec = st.moduleSpecifier.text;
+     const typeOnly = isImport ? Boolean(st.importClause?.isTypeOnly) : st.isTypeOnly;
+-    if (spec.startsWith("node:")) add(1, st);
++    if (!spec.startsWith(".") && !typeOnly) add(1, st);
+     if (spec.startsWith(".") && !typeOnly) edges.push(spec);
+     if (isImport && CHILD_PROCESS.has(spec) && st.importClause && !typeOnly) {
+       const c = st.importClause;
+@@ -82,27 +82,39 @@
+     }
+   }
+ 
++  const inType = (n) => { for (let p = n.parent; p; p = p.parent) if (ts.isTypeNode(p)) return true; return false; };
++  const isProcessRef = (n) => {
++    if (ts.isPropertyAccessExpression(n) && ts.isIdentifier(n.expression) && n.expression.text === "globalThis" && n.name.text === "process") return true;
++    if (!ts.isIdentifier(n) || n.text !== "process" || inType(n)) return false;
++    const p = n.parent;
++    if (ts.isPropertyAccessExpression(p) && p.name === n) return false;
++    if ((ts.isPropertyAssignment(p) || ts.isPropertyDeclaration(p) || ts.isMethodDeclaration(p) || ts.isBindingElement(p)) && p.name === n) return false;
++    if (ts.isBindingElement(p) && p.propertyName === n) return false;
++    if ((ts.isVariableDeclaration(p) || ts.isParameter(p) || ts.isFunctionDeclaration(p)) && p.name === n) return false;
++    if (ts.isImportSpecifier(p) || ts.isExportSpecifier(p) || ts.isImportClause(p) || ts.isNamespaceImport(p)) return false;
++    return true;
++  };
+   const visit = (n) => {
+     if (ts.isCallExpression(n) && n.expression.kind === ts.SyntaxKind.ImportKeyword) {
+       const a = n.arguments[0];
+       if (a && ts.isStringLiteralLike(a)) {
+-        if (a.text.startsWith("node:")) add(1, n);
++        if (!a.text.startsWith(".")) add(1, n);
+         if (a.text.startsWith(".")) edges.push(a.text);
+       } else unresolvable.push(`${file}:${lineOf(n.getStart(sf))} dynamic import() of a non-literal`);
+-    } else if (ts.isPropertyAccessExpression(n) && ts.isIdentifier(n.expression) && n.expression.text === "process") {
++    } else if (isProcessRef(n)) {
+       add(2, n);
+     } else if (ts.isCallExpression(n)) {
+       const e = n.expression;
+-      if (ts.isIdentifier(e) && (CALLS.has(e.text) || cpAlias.has(e.text))) add(3, e);
++      if (ts.isIdentifier(e) && (CALLS.has(e.text) || cpAlias.has(e.text))) add(3, n);
+       else if (
+         ts.isPropertyAccessExpression(e) &&
+         CALLS.has(e.name.text) &&
+         ts.isIdentifier(e.expression) &&
+         (cpNamespace.has(e.expression.text) || e.expression.text === "globalThis")
+       )
+-        add(3, e);
+-    } else if (ts.isNewExpression(n) && ts.isIdentifier(n.expression) && n.expression.text === "Function") {
+-      add(3, n.expression);
++        add(3, n);
++    } else if (ts.isNewExpression(n) && ts.isIdentifier(n.expression) && (n.expression.text === "Function" || n.expression.text === "WebSocket")) {
++      add(3, n);
+     }
+     ts.forEachChild(n, visit);
+   };
+@@ -181,7 +193,7 @@
+ const unresolved = [];
+ for (const f of H.files) {
+   const s = H.per.get(f);
+-  unresolved.push(...s.unresolvable);
++  if (added.has(f)) unresolved.push(...s.unresolvable); // scoped to the diff: a STATE listing must not decide a DELTA verdict
+   const before = new Set(B.per.get(f)?.targets ?? []);
+   for (const t of s.targets) {
+     if (!H.per.has(t)) {
+@@ -199,7 +211,7 @@
+ 
+ const rawFiles = H.files.filter((f) => WORD[limb].test(H.per.get(f).text));
+ const changed = [...added.keys()].filter((f) => H.per.has(f) || B.per.has(f));
+-const fires = b1.length > 0 || b2.length > 0;
++const fires = b1.length > 0 || b2.length > 0 || unresolved.length > 0;
+ const list = (xs) => xs.map((x) => `      ${x}`).join("\n");
+ 
+ console.log(`ADR-0036 clause (b), limb ${limb} of 3: ${NAME[limb]}`);
+@@ -211,4 +223,4 @@
+ if (unresolved.length) console.log(`       unresolved, listed (a dispute -> the fail-safe): ${unresolved.length}\n${list(unresolved)}`);
+ console.log(`  word hits on added lines, not counted: ${words.length}${words.length ? `\n${list(words)}` : ""}`);
+ console.log(`  baseline at <head>, STATE (recorded, not a trigger): ${H.files.length} production files; ${holders.length} hold this limb in code${holders.length ? ` (${holders.join(", ")})` : ""}; ${rawFiles.length} by raw word hit`);
+-console.log(`  limb ${limb}: ${fires ? "FIRES" : "does not fire"}`);
++console.log(`  limb ${limb}: ${b1.length || b2.length ? "FIRES" : unresolved.length ? "FIRES (disputed: unresolved, the fail-safe)" : "does not fire"}`);

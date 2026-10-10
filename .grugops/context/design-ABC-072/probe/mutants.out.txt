@@ -1,0 +1,30 @@
+tip 6bfc7b29
+M1 node:fs import            limb 1  b1=1 b2=0 words=0  FIRES
+M1 node:fs import            limb 2  b1=0 b2=0 words=0  does not fire
+M1 node:fs import            limb 3  b1=0 b2=0 words=0  does not fire
+M2 cp.execSync, new file     limb 1  b1=1 b2=0 words=0  FIRES
+M2 cp.execSync, new file     limb 2  b1=0 b2=0 words=0  does not fire
+M2 cp.execSync, new file     limb 3  b1=1 b2=0 words=0  FIRES
+M3 words only                limb 1  b1=0 b2=0 words=0  does not fire
+M3 words only                limb 2  b1=0 b2=0 words=2  does not fire
+M3 words only                limb 3  b1=0 b2=0 words=2  does not fire
+M4 value edge -> holder      limb 1  b1=0 b2=0 words=0  does not fire
+M4 value edge -> holder      limb 2  b1=0 b2=1 words=0  FIRES
+M4 value edge -> holder      limb 3  b1=0 b2=0 words=0  does not fire
+M5 import type -> holder     limb 1  b1=0 b2=0 words=0  does not fire
+M5 import type -> holder     limb 2  b1=0 b2=0 words=0  does not fire
+M5 import type -> holder     limb 3  b1=0 b2=0 words=0  does not fire
+M6 inline type -> holder     limb 1  b1=0 b2=0 words=0  does not fire
+M6 inline type -> holder     limb 2  b1=0 b2=1 words=0  FIRES
+M6 inline type -> holder     limb 3  b1=0 b2=0 words=0  does not fire
+M7 transitive reach (B7..M7) limb 1  b1=0 b2=0 words=0  does not fire
+M7 transitive reach (B7..M7) limb 2  b1=0 b2=1 words=0  FIRES
+M7 transitive reach (B7..M7) limb 3  b1=0 b2=0 words=0  does not fire
+  -    isTTY: Boolean(process.stdout.isTTY),
+  +    isTTY: Boolean(process.stdout.isTTY), // edited in place
+M8 holder line edited        limb 1  b1=0 b2=0 words=0  does not fire
+M8 holder line edited        limb 2  b1=1 b2=0 words=0  FIRES
+M8 holder line edited        limb 3  b1=0 b2=0 words=0  does not fire
+M9 comment in a holder       limb 1  b1=0 b2=0 words=0  does not fire
+M9 comment in a holder       limb 2  b1=0 b2=0 words=0  does not fire
+M9 comment in a holder       limb 3  b1=0 b2=0 words=0  does not fire

@@ -235,6 +235,9 @@ accepted by Architect/Design at `design-owed-rulings-2026-10-10`.
   stated because that is the defect.** **(c)** no test file touched, no network, no write, no spawn;
   **(d)** blast radius is two markdown paths, none under `src/`. **Whichever way the reading is
   disputed, it fires and the gate resolves it.**
+  *(2026-10-10, ruled, `design-ABC-072`.)* **(b) does not fire, per `ADR-0036` § Canonical clause
+  (b).** The delivered commit touches 0 production files: (b1) 0 lines and (b2) 0 edges on all
+  three limbs. The two-reading answer above is kept as the record of the defect.
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**. **0 new test files, 0 new files under `src/`,
   0 new child processes, 0 assertions added.** The lane cost of this ticket is **zero** and that is
   checkable from `A6`'s path list.
@@ -309,3 +312,71 @@ which owes `A2`–`A5` (`ADR-0036` § Consequences).
 - **Item 4 stays ✅, extended.** `A3` gains three fixtures with known answers. `A1` is met by the ADR.
 - **Item 5 stays ✅.** `ABC-073` is recommended to fold into this hop, and `A6` allows its paths.
 - **Items 1–3 and 6–9 stay ✅.** The baseline was re-measured, unchanged, at 0 / 3 / 0. `S`, `P2`.
+
+## Delivery
+
+**2026-10-10, Architect/Design** (task `wave-2026-09-25`, subtask `design-ABC-072`). `ABC-073` is
+folded in.
+- **Branch:** `grugops/ABC-072-clause-b-delta`, from `6bfc7b29`. **The delivered commit is
+  `088e48db`.** The record commit follows it.
+- Not merged, not pushed. The column move is the Orchestrator's.
+- **Where the detail is:** decision `…66a8bfa8`, readings `…23cfa14f`, and the commands with full
+  output in `probe/RUN.txt`, all under `.grugops/context/design-ABC-072/`. They are not restated
+  here.
+
+**`A1`–`A6` are met** (`A1` by `ADR-0036`). The premises were re-verified at the tip before any
+edit.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | `ADR-0036`, DELTA, accepted earlier |
+| `A2` | MET | `ADR-0036` § Canonical clause (b): the text once, and the place to cite |
+| `A3` | MET | Three commands (`probe/clause-b.mjs … 1\|2\|3`) on the AST, each naming its unit. Baseline **0 / 3 / 0** (36 files; 35 at `f76e041`). `dbaf972f` **FIRES**: (b1) 4 lines, (b2) `cli.ts -> glyph-mode.ts`. `34c9c026` does not (4 edges, none to a holder). `4c33b72b` does not (0 files). Mutants 9 of 9 |
+| `A4` | MET | No prediction in the block (phrase count 0). Limb 1 is still 0 across all 36 production files after `dbaf972` |
+| `A5` | MET | (b) did NOT fire on `ABC-065` (`460b9f58`: 0 files, 0 / 0 / 0). Not re-opened. The skip note is cited by path |
+| `A6` | MET | `088e48db`: the ADR, `ABC-055`, this page. 0 under `src/`. `ABC-041`/`042`/`065`/`066` blobs identical. Lint 0, `npm test` 52 files / 1608, skip 0, integrity `No findings.` |
+
+- **Two readings were settled in the block,** and the ruling did not move:
+  - (b2) reads as the runtime closure, which only widens and moves no answer today;
+  - § Alternatives 3's `cli-options.ts` example is corrected.
+- **Next:** Security/NFR confirms the limb list at the gate. The owner's veto on `ADR-0036` stays
+  open (`…95c73721`).
+
+## Security/NFR 2026-10-10 (`secnfr-ABC-072`, Workflow 05 Security/NFR gate; also this docs-only ticket's review exit): PASS_WITH_RISKS
+
+Reviewed `6bfc7b29..5f48753f`, delivered commit `088e48db`. ASVS L1, `block_on` high. Every reading is
+this hop's own, in its own worktree. **Nothing blocks. No fix is required on this branch.** DELTA vs
+STATE is not ruled here; every ruling below holds under either reading. Decision `…29849eeb`;
+readings `…6dd88c01` under `.grugops/context/secnfr-ABC-072/`.
+
+- **`A1`–`A6` MET on this page, and `ABC-073` `A1`–`A3`, `A5`, `A6` MET (`A4` VOID).**
+  - The three fixtures, `ABC-065`'s merge and the delivered commit all reproduce their recorded
+    answers. The baseline is **0 / 3 / 0** at 36 files and at 35.
+  - The four fenced blobs are equal on `main`.
+  - `ABC-055`'s single hunk sits inside its Security section, and its Acceptance is byte-identical.
+- **The limb list is NOT confirmed as written. It is WIDENED** (`F-072-1`, MEDIUM, owner
+  Architect/Design). Of 13 plants, 8 pass **silently** today.
+  - **Bare `process`: count.** Any value reference to the global, including `globalThis.process`.
+  - **Non-`node:` builtins: count**, and go wider: any non-local import, including packages. Biome
+    reports an unprefixed builtin as info, exit 0.
+  - **`Worker`: no separate entry.** It has no global; limb 1 counts `worker_threads`.
+  - **Also add** `Function(…)` without `new`, the global `WebSocket`, the whole call span, every
+    JS/TS source under `src/`, and "unresolved = fires (disputed)".
+  - **The widening is cheap.** It is demonstrated by `probe/limb-ruling.patch`: the baseline and all
+    21 fixture rows are unchanged, M1–M9 are byte-identical, and S1–S12 fire.
+- **Both of the Architect's readings are UPHELD.**
+  - **(b2) as the runtime closure:** widening only, no answer moves, and the only runtime edge into
+    a holder is `cli.ts:71`.
+  - **The § Alternatives 3 example → `glyph-mode.ts`:** `cli-options.ts` has only `import type`
+    edges and a docblock "spawn".
+- **Accepted risks.**
+  - **`AR-072-LIMBS`** (MEDIUM until `F-072-1` lands), owner the Orchestrator. Ruling 1's forms are
+    on the record as disputes, so they fire under the fail-safe. Promote to HIGH if one of them is
+    routed past this column before the fix.
+  - **`AR-072-WORDHIT`** (LOW), owner Security/NFR. Computed eval forms stay listed word hits.
+  - **`ADR-0036` §3 residual:** concurred, unchanged.
+- **`V1.2.5 [L1]` / `V1.3.2 [L1]`** are MET: 0 sites in production under either count. The MEDIUM is
+  a trigger-reach gap, not a control failure; the reason is stated in `…29849eeb`.
+- **NFR.** `N8-LANE` is zero and `NFR-002` is not triggered. The catalog is not opened.
+- **Gate:** lint exit 0. `npm test` is 52 files / 1608, 12.22 s at load1 21.55–26.40. Skip is 0,
+  and integrity reads `No findings.` The UAT waiver measures 0 production lines.

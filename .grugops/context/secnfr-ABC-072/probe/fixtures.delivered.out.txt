@@ -1,0 +1,248 @@
+# node v26.11.0; typescript 5.9.3; run 2026-10-10T14:46Z (worktree secnfr-ABC-072, tip 5f48753f); /usr/bin/time -p per limb; load at end below
+### dbaf972f^ dbaf972f limb 1
+ADR-0036 clause (b), limb 1 of 3: Node builtin import (`node:` specifier)
+  diff dbaf972f^..dbaf972f = 65cda2ef..dbaf972f; production files changed: 2
+      src/cli-options.ts
+      src/cli.ts
+  COUNTS import statements in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 5; reaching a holder of this limb at <head>: 0
+       edges reaching no holder: src/cli.ts -> src/cli-options.ts; src/cli.ts -> src/frame.ts; src/cli.ts -> src/glyph-mode.ts; src/cli.ts -> src/history.ts; src/cli.ts -> src/render-seam.ts
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 20 production files; 0 hold this limb in code; 0 by raw word hit
+  limb 1: does not fire
+real 0.54
+user 0.50
+sys 0.14
+### dbaf972f^ dbaf972f limb 2
+ADR-0036 clause (b), limb 2 of 3: `process.` read
+  diff dbaf972f^..dbaf972f = 65cda2ef..dbaf972f; production files changed: 2
+      src/cli-options.ts
+      src/cli.ts
+  COUNTS read sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 4
+      src/cli.ts:73  const resolution = resolveOptions(process.argv.slice(2));
+      src/cli.ts:76  process.stderr.write(
+      src/cli.ts:81  process.exitCode = USAGE_EXIT_CODE;
+      src/cli.ts:90  beginFrameSession(process.stdout, frame.length)(frame);
+  (b2) new runtime import edges: 5; reaching a holder of this limb at <head>: 1
+      src/cli.ts -> src/glyph-mode.ts  (holds it)
+       edges reaching no holder: src/cli.ts -> src/cli-options.ts; src/cli.ts -> src/frame.ts; src/cli.ts -> src/history.ts; src/cli.ts -> src/render-seam.ts
+  word hits on added lines, not counted: 5
+      src/cli.ts:2  * `ABC-042` — the entry point: the one place that reads `process.argv`, the one place that supplies
+      src/cli.ts:3  * `process.stdout` as a `FrameSink`, and the first command in this repository's history that puts a
+      src/cli.ts:16  * THE TWO HANDLES, AND THE RULE THEY OBEY. Only this module may acquire `process.stdout` or
+      src/cli.ts:17  * `process.stderr` as a WRITABLE HANDLE, and only `process.stdout` is ever passed onward — as the
+      src/cli.ts:79  // NOT `process.exit()`. On macOS a pipe is an asynchronous stream, and exiting on the spot
+  baseline at <head>, STATE (recorded, not a trigger): 20 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 7 by raw word hit
+  limb 2: FIRES
+real 0.60
+user 0.55
+sys 0.16
+### dbaf972f^ dbaf972f limb 3
+ADR-0036 clause (b), limb 3 of 3: call to spawn / exec / fetch / eval / new Function (child_process family included)
+  diff dbaf972f^..dbaf972f = 65cda2ef..dbaf972f; production files changed: 2
+      src/cli-options.ts
+      src/cli.ts
+  COUNTS call sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 5; reaching a holder of this limb at <head>: 0
+       edges reaching no holder: src/cli.ts -> src/cli-options.ts; src/cli.ts -> src/frame.ts; src/cli.ts -> src/glyph-mode.ts; src/cli.ts -> src/history.ts; src/cli.ts -> src/render-seam.ts
+  word hits on added lines, not counted: 1
+      src/cli-options.ts:8  * complement sweep are unaffordable at one spawn each and cost 0.112 ms as unit calls. So the rules
+  baseline at <head>, STATE (recorded, not a trigger): 20 production files; 0 hold this limb in code; 1 by raw word hit
+  limb 3: does not fire
+real 0.63
+user 0.58
+sys 0.16
+### 34c9c026^ 34c9c026 limb 1
+ADR-0036 clause (b), limb 1 of 3: Node builtin import (`node:` specifier)
+  diff 34c9c026^..34c9c026 = 5ebe1d8e..34c9c026; production files changed: 2
+      src/evaluate.mirror-corpus.ts
+      src/evaluate.ts
+  COUNTS import statements in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 4; reaching a holder of this limb at <head>: 0
+       edges reaching no holder: src/evaluate.mirror-corpus.ts -> src/apply.ts; src/evaluate.mirror-corpus.ts -> src/fen.ts; src/evaluate.mirror-corpus.ts -> src/legal.ts; src/evaluate.mirror-corpus.ts -> src/position.ts
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 33 production files; 0 hold this limb in code; 3 by raw word hit
+  limb 1: does not fire
+real 0.75
+user 0.67
+sys 0.21
+### 34c9c026^ 34c9c026 limb 2
+ADR-0036 clause (b), limb 2 of 3: `process.` read
+  diff 34c9c026^..34c9c026 = 5ebe1d8e..34c9c026; production files changed: 2
+      src/evaluate.mirror-corpus.ts
+      src/evaluate.ts
+  COUNTS read sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 4; reaching a holder of this limb at <head>: 0
+       edges reaching no holder: src/evaluate.mirror-corpus.ts -> src/apply.ts; src/evaluate.mirror-corpus.ts -> src/fen.ts; src/evaluate.mirror-corpus.ts -> src/legal.ts; src/evaluate.mirror-corpus.ts -> src/position.ts
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 33 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit
+  limb 2: does not fire
+real 0.88
+user 0.73
+sys 0.26
+### 34c9c026^ 34c9c026 limb 3
+ADR-0036 clause (b), limb 3 of 3: call to spawn / exec / fetch / eval / new Function (child_process family included)
+  diff 34c9c026^..34c9c026 = 5ebe1d8e..34c9c026; production files changed: 2
+      src/evaluate.mirror-corpus.ts
+      src/evaluate.ts
+  COUNTS call sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 4; reaching a holder of this limb at <head>: 0
+       edges reaching no holder: src/evaluate.mirror-corpus.ts -> src/apply.ts; src/evaluate.mirror-corpus.ts -> src/fen.ts; src/evaluate.mirror-corpus.ts -> src/legal.ts; src/evaluate.mirror-corpus.ts -> src/position.ts
+  word hits on added lines, not counted: 1
+      src/evaluate.mirror-corpus.ts:5  * ABC-083's after it) read ONE corpus and ONE mirror helper instead of a fork each. Not named
+  baseline at <head>, STATE (recorded, not a trigger): 33 production files; 0 hold this limb in code; 5 by raw word hit
+  limb 3: does not fire
+real 0.85
+user 0.73
+sys 0.25
+### 4c33b72b^1 4c33b72b limb 1
+ADR-0036 clause (b), limb 1 of 3: Node builtin import (`node:` specifier)
+  diff 4c33b72b^1..4c33b72b = 35ad336b..4c33b72b; production files changed: 0
+  COUNTS import statements in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 35 production files; 0 hold this limb in code; 3 by raw word hit
+  limb 1: does not fire
+real 0.82
+user 0.74
+sys 0.24
+### 4c33b72b^1 4c33b72b limb 2
+ADR-0036 clause (b), limb 2 of 3: `process.` read
+  diff 4c33b72b^1..4c33b72b = 35ad336b..4c33b72b; production files changed: 0
+  COUNTS read sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 35 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit
+  limb 2: does not fire
+real 0.80
+user 0.74
+sys 0.23
+### 4c33b72b^1 4c33b72b limb 3
+ADR-0036 clause (b), limb 3 of 3: call to spawn / exec / fetch / eval / new Function (child_process family included)
+  diff 4c33b72b^1..4c33b72b = 35ad336b..4c33b72b; production files changed: 0
+  COUNTS call sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 35 production files; 0 hold this limb in code; 6 by raw word hit
+  limb 3: does not fire
+real 0.84
+user 0.75
+sys 0.24
+### 460b9f58^1 460b9f58 limb 1
+ADR-0036 clause (b), limb 1 of 3: Node builtin import (`node:` specifier)
+  diff 460b9f58^1..460b9f58 = cb04b40a..460b9f58; production files changed: 0
+  COUNTS import statements in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 20 production files; 0 hold this limb in code; 0 by raw word hit
+  limb 1: does not fire
+real 0.73
+user 0.64
+sys 0.21
+### 460b9f58^1 460b9f58 limb 2
+ADR-0036 clause (b), limb 2 of 3: `process.` read
+  diff 460b9f58^1..460b9f58 = cb04b40a..460b9f58; production files changed: 0
+  COUNTS read sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 20 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 7 by raw word hit
+  limb 2: does not fire
+real 0.73
+user 0.61
+sys 0.20
+### 460b9f58^1 460b9f58 limb 3
+ADR-0036 clause (b), limb 3 of 3: call to spawn / exec / fetch / eval / new Function (child_process family included)
+  diff 460b9f58^1..460b9f58 = cb04b40a..460b9f58; production files changed: 0
+  COUNTS call sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 20 production files; 0 hold this limb in code; 1 by raw word hit
+  limb 3: does not fire
+real 0.59
+user 0.55
+sys 0.15
+### 088e48db~1 088e48db limb 1
+ADR-0036 clause (b), limb 1 of 3: Node builtin import (`node:` specifier)
+  diff 088e48db~1..088e48db = 6bfc7b29..088e48db; production files changed: 0
+  COUNTS import statements in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 36 production files; 0 hold this limb in code; 3 by raw word hit
+  limb 1: does not fire
+real 0.92
+user 0.79
+sys 0.28
+### 088e48db~1 088e48db limb 2
+ADR-0036 clause (b), limb 2 of 3: `process.` read
+  diff 088e48db~1..088e48db = 6bfc7b29..088e48db; production files changed: 0
+  COUNTS read sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 36 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit
+  limb 2: does not fire
+real 0.86
+user 0.75
+sys 0.25
+### 088e48db~1 088e48db limb 3
+ADR-0036 clause (b), limb 3 of 3: call to spawn / exec / fetch / eval / new Function (child_process family included)
+  diff 088e48db~1..088e48db = 6bfc7b29..088e48db; production files changed: 0
+  COUNTS call sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 36 production files; 0 hold this limb in code; 6 by raw word hit
+  limb 3: does not fire
+real 0.94
+user 0.79
+sys 0.30
+### 6bfc7b29 5f48753f limb 1
+ADR-0036 clause (b), limb 1 of 3: Node builtin import (`node:` specifier)
+  diff 6bfc7b29..5f48753f = 6bfc7b29..5f48753f; production files changed: 0
+  COUNTS import statements in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 36 production files; 0 hold this limb in code; 3 by raw word hit
+  limb 1: does not fire
+real 0.96
+user 0.81
+sys 0.28
+### 6bfc7b29 5f48753f limb 2
+ADR-0036 clause (b), limb 2 of 3: `process.` read
+  diff 6bfc7b29..5f48753f = 6bfc7b29..5f48753f; production files changed: 0
+  COUNTS read sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 36 production files; 3 hold this limb in code (src/cli.ts, src/glyph-mode.ts, src/perft-bench.ts); 9 by raw word hit
+  limb 2: does not fire
+real 0.93
+user 0.80
+sys 0.28
+### 6bfc7b29 5f48753f limb 3
+ADR-0036 clause (b), limb 3 of 3: call to spawn / exec / fetch / eval / new Function (child_process family included)
+  diff 6bfc7b29..5f48753f = 6bfc7b29..5f48753f; production files changed: 0
+  COUNTS call sites in code (TypeScript AST; comments and strings are not code). Word hits are LISTED, never counted.
+  (b1) capability lines added or changed: 0
+  (b2) new runtime import edges: 0; reaching a holder of this limb at <head>: 0
+  word hits on added lines, not counted: 0
+  baseline at <head>, STATE (recorded, not a trigger): 36 production files; 0 hold this limb in code; 6 by raw word hit
+  limb 3: does not fire
+real 0.81
+user 0.71
+sys 0.24
+{ 13.50 11.30 9.44 }

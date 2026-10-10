@@ -251,3 +251,21 @@ Orchestrator's.
   `Done`). The live set is 1.
 - **Item 5 stays ✅.** The live set is `ABC-055`. If it merges first, the set is 0.
 - **Items 1–3 and 6–9 stay ✅.** `XS`, `P3`.
+
+## Delivery
+
+**2026-10-10, Architect/Design, folded into `ABC-072`'s hop** (subtask `design-ABC-072`, branch
+`grugops/ABC-072-clause-b-delta`, delivered commit `088e48db`). Not merged, not pushed.
+**`ABC-072` `A6` is the binding path list.**
+- **Detail:** decision `…66a8bfa8` and `probe/RUN.txt` under `.grugops/context/design-ABC-072/`.
+- **The table was re-measured at `6bfc7b29` before editing** (`abc073-set.sh`, normalized text).
+  The live set is `ABC-055` alone, in `Ready`.
+
+| # | verdict | reading at `088e48db` |
+|---|---|---|
+| `A1` | MET | The non-`Done` pages returning either grep are `ABC-072` (ruled line added) and this page. The "unruled" grep finds 0 non-`Done` pages, this one excluded. `ABC-055` returns neither and cites `ADR-0036` § Canonical clause (b). Every other page carrying old or interim text is `Done` |
+| `A2` | MET | `ABC-055` carries the fail-safe: 1 of 1, normalized |
+| `A3` | MET | `ABC-055`'s answer gives its own facts: `plans/board.md`, plus one `history/` file only if a header is replaced, so 0 production files |
+| `A4` | VOID | `ABC-053` is `Done` (recorded 2026-10-10) |
+| `A5` | MET | One hunk, `@@ -133,3 +133,4 @@`, inside `## Security / NFR triggers` (`:127`–`:139`). `## Acceptance` is byte-identical |
+| `A6` | MET | The set contributes exactly `ABC-055`. 0 under `src/`, 0 new files. Suite green, skip 0 |

@@ -1,0 +1,57 @@
+# 2026-10-10T14:53:31Z load { 5.27 6.92 7.93 } node v26.11.0 — instrument: design-ABC-072/probe/clause-b.mjs AS DELIVERED (at 5f48753f)
+tip 5f48753f
+S1 unprefixed builtin "fs"         limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S1 unprefixed builtin "fs"         limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S1 unprefixed builtin "fs"         limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S1 unprefixed builtin "fs": clause (b) does not fire
+S2 const { argv } = process        limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S2 const { argv } = process        limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S2 const { argv } = process        limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S2 const { argv } = process: clause (b) does not fire
+S3 process["env"]                  limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S3 process["env"]                  limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S3 process["env"]                  limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S3 process["env"]: clause (b) does not fire
+S4 globalThis.process.env          limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S4 globalThis.process.env          limb 2  b1=0 b2=0 words=1 unresolved=0  does not fire
+S4 globalThis.process.env          limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S4 globalThis.process.env: clause (b) does not fire
+S5 Function() without new          limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S5 Function() without new          limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S5 Function() without new          limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S5 Function() without new: clause (b) does not fire
+S6 global WebSocket                limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S6 global WebSocket                limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S6 global WebSocket                limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S6 global WebSocket: clause (b) does not fire
+S7 new src/*.mjs with execSync     limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S7 new src/*.mjs with execSync     limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S7 new src/*.mjs with execSync     limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S7 new src/*.mjs with execSync: clause (b) does not fire
+S8 .ts edge into that .mjs (B8..)  limb 1  b1=0 b2=0 words=0 unresolved=1  does not fire
+S8 .ts edge into that .mjs (B8..)  limb 2  b1=0 b2=0 words=0 unresolved=1  does not fire
+S8 .ts edge into that .mjs (B8..)  limb 3  b1=0 b2=0 words=0 unresolved=1  does not fire
+  => S8 .ts edge into that .mjs (B8..): clause (b) does not fire
+S9 bare package import             limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S9 bare package import             limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S9 bare package import             limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S9 bare package import: clause (b) does not fire
+  -    "true",
+  +    "rm",
+S10 spawn arg line edited (B10..)  limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S10 spawn arg line edited (B10..)  limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S10 spawn arg line edited (B10..)  limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S10 spawn arg line edited (B10..): clause (b) does not fire
+S11 non-literal import()           limb 1  b1=0 b2=0 words=0 unresolved=1  does not fire
+S11 non-literal import()           limb 2  b1=0 b2=0 words=0 unresolved=1  does not fire
+S11 non-literal import()           limb 3  b1=0 b2=0 words=0 unresolved=1  does not fire
+  => S11 non-literal import(): clause (b) does not fire
+S12 Worker via node:worker_threads limb 1  b1=1 b2=0 words=0 unresolved=0  FIRES
+S12 Worker via node:worker_threads limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S12 Worker via node:worker_threads limb 3  b1=0 b2=0 words=0 unresolved=0  does not fire
+  => S12 Worker via node:worker_threads: clause (b) FIRES (limbs: L1)
+S13 indirect (0, eval)             limb 1  b1=0 b2=0 words=0 unresolved=0  does not fire
+S13 indirect (0, eval)             limb 2  b1=0 b2=0 words=0 unresolved=0  does not fire
+S13 indirect (0, eval)             limb 3  b1=0 b2=0 words=1 unresolved=0  does not fire
+  => S13 indirect (0, eval): clause (b) does not fire
+# end 2026-10-10T14:54:11Z load { 5.79 6.85 7.86 }
