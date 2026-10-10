@@ -1,0 +1,46 @@
+it-blocks base=12 head=12
+SAME   	a05f7191057b5642	a05f7191057b5642	never derives: gameStatusOf / repetitionCounts / keyHistory / gameStat
+SAME   	a13c2303ed196bfe	a13c2303ed196bfe	never rewinds the caller's history: takeBack and playMove are 0 at eve
+SAME   	6a56bcdeccce1dd8	6a56bcdeccce1dd8	parses the anchor AT MOST ONCE per render, on an empty history and on 
+SAME   	be9f3c729e86d223	be9f3c729e86d223	calls toSan exactly once per RENDERED ply, and never more than 2 x HIS
+SAME   	993501e498e34e0d	993501e498e34e0d	hands toSan no legal move list — the optional parameter is a contract,
+SAME   	7ce0b0d99ac22a83	7ce0b0d99ac22a83	still renders the right cells while spied, so the counts above cannot 
+SAME   	1bae33dfe6f5719a	1bae33dfe6f5719a	licenses src/history.ts's runtime importers: the set EQUALS the declar
+CHANGED	aa5ad48f4c45b800	5d00e2c0daacd967	runs the guard's OWN expression — a drift tripwire, not a copy that ca
+SAME   	1fb07a84967bb1d4	1fb07a84967bb1d4	A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSE
+SAME   	ae0b93ef29432dd8	ae0b93ef29432dd8	A6.4 — the runtime-importer forms are GENERALISED, across the closed r
+SAME   	56e0d582c82ec91a	56e0d582c82ec91a	the composer tripwire: assembleFrame's value-importers EQUAL the one c
+SAME   	fdfc0a11f12db003	fdfc0a11f12db003	evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measure
+outside-tripwire base=9ba49230889b1e97 head=9ba49230889b1e97 IDENTICAL
+tripwire base code lines=18 kept-in-order=18 head code lines=21 added=3
+tripwire head code lines NOT in base:
+  +     expect(instrument, "clause 1's one expression is unchanged").toContain(
+  +       '\nconst productionModulesIn = (directory: string): readonly string[] =>\n  readdirSync(directory).filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"));\n',
+helper :163-164 base=4b3fcd1de1ec998b head=4b3fcd1de1ec998b IDENTICAL
+framed helper (real newlines) count base=1 head=1
+anchor 136 SCAN	base=1	head=1
+anchor 136 DIR_SCAN	base=1	head=1
+anchor 136/057 LHS_END	base=1	head=1
+anchor 136 TOEQ	base=1	head=1
+anchor 136 HELPER	base=1	head=1
+anchor 136 LICIT_END	base=1	head=1
+anchor 057 G framed	base=1	head=1
+anchor 057 HP	base=1	head=1
+anchor 057 QSCAN anchor	base=1	head=1
+anchor 136 biome-ignore line	base=1	head=1
+LICENSED_DRIVERS decl base=1 head=1
+COMPOSITION_ROOT decl lines base=1 head=1
+biome-ignore base=1 head=1; it( base=12 head=12
+collapsed "it pins four spans of the guard by TEXT"	base=1	head=0
+collapsed "R5c"	base=0	head=2
+collapsed "clause 1's helper definition"	base=0	head=2
+collapsed "helper definition"	base=0	head=2
+tripwire // comments "R5c"	base=0	head=2
+tripwire // comments "helper definition"	base=0	head=2
+tripwire // comments "clause 1"	base=0	head=2
+SAME	0f1fda2690e34d56	0f1fda2690e34d56	3 lines	sibling-tripwire
+SAME	cd9275ce8ad23305	cd9275ce8ad23305	3 lines	R5-operator-pin
+SAME	bdc44ec3bdc6657a	bdc44ec3bdc6657a	3 lines	R5b-scan-pin
+SAME	f46fdab0eadaedec	f46fdab0eadaedec	4 lines	R5b-importer-pin
+SAME	d846613674bb11a9	d846613674bb11a9	1 lines	LICENSED_DRIVERS
+SAME	5fcde2281bb76239	5fcde2281bb76239	2 lines	witnessed-expression

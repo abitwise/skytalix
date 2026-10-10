@@ -1,0 +1,43 @@
+# RUN log — qe-ABC-137, QE/E2E. Base 2946e22a, delivered code 54280bc8, branch tip 455a0846 (the file under
+# test is byte-identical at 54280bc8 and 455a0846: `git show 455a0846:src/history-pane.nfr.test.ts | cmp`).
+# Apple M3, Node v26.11.0, vitest 3.2.7. Other agents ran in parallel, so load1 is logged on every row (5.5 -> 35).
+
+## DEVIATION, stated first: QE's committed planters were REFUSED for QE as well
+The brief says to try QE's own unchanged scripts first (qe-ABC-136/probe/ledger.sh + plantqe136.py +
+plantqe057.py, copied unchanged into <scratch>/bin/). The permission layer refused the COPY itself
+(between 15:59:34Z and 16:03:04Z, classifier "Auto-Mode Bypass"), so none of the three was executed. Not worked around; no
+other role was asked to run them. QE then wrote its OWN independent harness. It is not the SE's port
+(plant137.mjs was not read until the comparison) and not a port of QE's scripts:
+  qe137-plant.mjs   own anchors and own spellings, exactly-once assertion per anchor (exit 3 = PLANT-FAILED)
+  qe137-ledger.sh   one fresh `git archive` per build, node_modules linked, vitest JSON reporter (not stdout
+                    grep), failing assertion MESSAGE per failed test, biome check src AND tsc --noEmit per build
+  qe137-static.mjs  per-`it` hashes, outside-tripwire identity, anchor counts (QE's planter anchors RETYPED
+                    from reading them), raw-reader declarations, A3 phrases on ABC-134's collapsed text
+Spelling differences from QE-057/136 (same class, same verdicts): WPERFT-STATIC imports `newGame` (QE:
+`gameStatusOf`); WLAUNDER re-exports `keyHistory` (QE: `repetitionCounts`).
+
+## Ledgers
+ledger-base-2946e22a.tsv  2026-10-10T16:03:04Z..16:03:43Z (11 ticket builds; the rows whose failure message carries no label
+                          wrap over two lines — the message regex was fixed after this run; the
+                          verdict columns are unaffected) + 16:05:35Z..16:06:25Z (QE's own narrowings at base)
+ledger-head-54280bc8.tsv  2026-10-10T16:03:56Z..16:05:05Z (ticket builds + QE's own), then 16:05:35Z, 16:08:04Z.
+  SUPERSEDED rows, kept for the record:
+  - the FIRST H-READDIR-SHADOW pair (lint=1): QE's own spelling put the shadow between two import lines
+    (biome organizeImports). Re-spelled below the imports -> lint=0, tsc=0 (the later pair).
+  - the FIRST QF-SECOND-COMPOSER / H-WRAP-CALLS rows: the witness lived in cli-options.ts, which
+    src/cli.test.ts A6(i) reads, so the whole suite went red on the WITNESS, not on the narrowing
+    (fullsuite-survivors.tsv rows 4-5). Moved to perft-bench.ts (read by name only) -> later rows.
+fullsuite-survivors.tsv   the whole suite (`vitest run`, JSON) on each survivor tree, 54280bc8.
+static.txt                qe137-static.mjs on `git show 2946e22a:` vs `git show 54280bc8:` of the file, + span hashes.
+
+## Gate (worktree .claude/worktrees/qe-ABC-137 at 455a0846), 2026-10-10T16:10:13Z..16:10:27Z
+npm run lint       exit 0  "Checked 100 files in 173ms. No fixes applied."   load1 15.89
+npm run typecheck  exit 0                                                   load1 15.18
+npm run build      exit 0                                                   load1 15.18
+npm test           exit 0  52 files / 1608 passed, 8.81 s                   load1 15.18 -> 24.50  (gate-npm-test.txt)
+skip count         0  (`npx vitest run --reporter=json | jq '.numPendingTests + .numTodoTests'`)
+test-skip-integrity .grugops/test-skips.md --skip-count 0   "No findings."  exit 0
+lane-inventory.js  "The lane collects 52 test files; git tracks 52. No findings."  exit 0
+raw readers alone  `npx vitest run src/cli.test.ts src/render-seam.test.ts`  2 files / 81 passed, exit 0
+Cost: NOT re-measured — load1 15-35 during this hop makes any ADR-0035 set inadmissible. The SE's two sets
+(admissible) are cited, not reproduced.

@@ -1,0 +1,9 @@
+54280bc8	CONTROL	load1=10.09	exit=0	files=52 tests=1608 passed=1608 failed=0 pending=0 todo=0 
+54280bc8	H-READDIR-SHADOW+FMT+WPERFT-STATIC	load1=13.68	exit=0	files=52 tests=1608 passed=1608 failed=0 pending=0 todo=0 
+54280bc8	H-COMMENTED+FMT+WPERFT-STATIC	load1=20.20	exit=0	files=52 tests=1608 passed=1608 failed=0 pending=0 todo=0 
+54280bc8	H-COMPOSER-NARROW+FMT+QF-SECOND-COMPOSER	load1=29.55	exit=1	files=52 tests=1608 passed=1607 failed=1 pending=0 todo=0 cli.test.ts > A6(i) — the enumeration is the ONLY argv literal i
+54280bc8	H-WRAP-CALLS+FMT+QF-SECOND-COMPOSER	load1=32.86	exit=1	files=52 tests=1608 passed=1607 failed=1 pending=0 todo=0 cli.test.ts > A6(i) — the enumeration is the ONLY argv literal i
+54280bc8	XHELPER-NARROW+FMT+WPERFT-STATIC	load1=34.13	exit=1	files=52 tests=1608 passed=1607 failed=1 pending=0 todo=0 history-pane.nfr.test.ts > runs the guard's OWN expression — a drift tripwire
+FULL 54280bc8	QF-SECOND-COMPOSER	load1=24.18	exit=1	files=52 tests=1608 passed=1607 failed=1 pending=0 todo=0 history-pane.nfr.test.ts > the composer tripwire: assembleFrame's value-impor
+FULL 54280bc8	H-COMPOSER-NARROW+FMT+QF-SECOND-COMPOSER	load1=28.91	exit=0	files=52 tests=1608 passed=1608 failed=0 pending=0 todo=0 
+FULL 54280bc8	H-WRAP-CALLS+FMT+QF-SECOND-COMPOSER	load1=35.48	exit=0	files=52 tests=1608 passed=1608 failed=0 pending=0 todo=0 

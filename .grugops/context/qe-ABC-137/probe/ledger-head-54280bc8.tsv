@@ -1,0 +1,32 @@
+54280bc8	CONTROL	load1=10.77	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	WPERFT-STATIC	load1=10.77	exit=1	total=12	passed=11	failed=1	FAILED:licenses src/history.ts's runtime import <expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]>	lint=0	tsc=0
+54280bc8	XHELPER-NARROW	load1=10.39	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <clause 1's one expression is unchanged>	lint=1	tsc=0
+54280bc8	XHELPER-NARROW+FMT	load1=10.39	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <clause 1's one expression is unchanged>	lint=0	tsc=0
+54280bc8	XHELPER-NARROW+FMT+WPERFT-STATIC	load1=9.72	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <clause 1's one expression is unchanged>	lint=0	tsc=0
+54280bc8	XSHADOW-HELPER+FMT+WPERFT-STATIC	load1=9.42	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	QSCAN-NARROW+FMT+WPERFT-STATIC	load1=9.42	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard scans EVERY production module>	lint=0	tsc=0
+54280bc8	QLHS-INTERSECT+FMT+WPERFT-STATIC	load1=8.83	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard scans EVERY production module>	lint=0	tsc=0
+54280bc8	M15+FMT	load1=8.83	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard compares with an EQUALITY>	lint=0	tsc=0
+54280bc8	M15SUB+FMT	load1=8.28	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard compares with an EQUALITY>	lint=0	tsc=0
+54280bc8	WLAUNDER	load1=8.28	exit=1	total=12	passed=9	failed=3	FAILED:licenses src/history.ts's runtime import <expected [ 'cli.ts', 'turn-loop.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]> | A6.3 — the type-only exclusion is pinned <the unmutated control> | A6.4 — the runtime-importer forms are GE <the witness is not matching every export line>	lint=1	tsc=0
+54280bc8	WSTALELICENCE	load1=7.86	exit=1	total=12	passed=11	failed=1	FAILED:licenses src/history.ts's runtime import <expected [ 'cli.ts' ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]>	lint=1	tsc=0
+54280bc8	H-STARTSWITH+FMT+WPERFT-STATIC	load1=7.86	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <clause 1's one expression is unchanged>	lint=0	tsc=0
+54280bc8	H-INCLUDES+FMT+WPERFT-STATIC	load1=7.87	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <clause 1's one expression is unchanged>	lint=0	tsc=0
+54280bc8	H-REGEX+FMT+WPERFT-STATIC	load1=7.87	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <clause 1's one expression is unchanged>	lint=0	tsc=0
+54280bc8	H-CHAIN+FMT+WPERFT-STATIC	load1=8.44	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <clause 1's one expression is unchanged>	lint=0	tsc=0
+54280bc8	H-BLOCK+FMT+WPERFT-STATIC	load1=8.44	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <clause 1's one expression is unchanged>	lint=0	tsc=0
+54280bc8	H-PARAM-RENAME+FMT	load1=9.20	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <clause 1's one expression is unchanged>	lint=0	tsc=0
+54280bc8	H-RENAME+FMT	load1=8.63	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	H-CRLF	load1=8.63	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard compares with an EQUALITY>	lint=1	tsc=0
+54280bc8	H-COMMENTED+FMT+WPERFT-STATIC	load1=8.42	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	H-READDIR-SHADOW+FMT+WPERFT-STATIC	load1=8.42	exit=0	total=12	passed=12	failed=0	FAILED:	lint=1	tsc=0
+54280bc8	H-READDIR-SHADOW+FMT	load1=7.98	exit=0	total=12	passed=12	failed=0	FAILED:	lint=1	tsc=0
+54280bc8	QF-SECOND-COMPOSER	load1=7.98	exit=1	total=12	passed=11	failed=1	FAILED:the composer tripwire: assembleFrame's v <a second frame composer>	lint=0	tsc=0
+54280bc8	H-WRAP-CALLS+FMT+QF-SECOND-COMPOSER	load1=7.66	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	H-WRAP-CALLS+FMT	load1=7.66	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	H-READDIR-SHADOW+FMT+WPERFT-STATIC	load1=5.55	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	H-READDIR-SHADOW+FMT	load1=5.55	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	H-COMPOSER-NARROW+FMT+QF-SECOND-COMPOSER	load1=6.54	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	QF-SECOND-COMPOSER	load1=21.09	exit=1	total=12	passed=11	failed=1	FAILED:the composer tripwire: assembleFrame's v <a second frame composer>	lint=0	tsc=0
+54280bc8	H-COMPOSER-NARROW+FMT+QF-SECOND-COMPOSER	load1=26.95	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+54280bc8	H-WRAP-CALLS+FMT+QF-SECOND-COMPOSER	load1=25.67	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
