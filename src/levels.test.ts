@@ -320,6 +320,18 @@ describe("QE-087-b — the scored list is the engine's, not a self-consistent li
   });
 });
 
+describe("Security/NFR R1 (QE-087-c) — the level clamps its own total to HARD_CEILING_MS", () => {
+  it("a blundering 20 s level spends at most the ceiling plus a few readings", () => {
+    // Five legal moves; `virtualClock(250)`. Measured: 5 750 with the clamp, 20 750 without.
+    const fen = "6k1/8/8/8/8/8/1R6/6K1 b - - 0 1";
+    const step = 250;
+    const level: Level = { budgetMs: 20_000, blunderRate: 1 };
+    const choice = createLevel(level, { seed: 1, now: virtualClock(step) })(parseFen(fen));
+    expect(choice?.kind).not.toBe("engine");
+    expect(choice?.elapsedMs).toBeLessThanOrEqual(HARD_CEILING_MS + 4 * step);
+  });
+});
+
 describe("the blunder path's edge cases (ADR-0032 decisions 1-2)", () => {
   /** A rate of (just under) 1: every draw calls for a blunder. */
   const always: Level = { budgetMs: 100, blunderRate: 0.999_999 };
@@ -381,6 +393,12 @@ describe("A9 — different seeds actually differ", () => {
       const choices = playAll(easiest, seed, THIRTY);
       // Test note 7: `A4`'s per-move clauses on the moves already played. No new search.
       assertPerMove(THIRTY, choices);
+      // QE-087-d: one draw per move (`ADR-0032` d2). Move k fires iff the k-th draw of a fresh
+      // generator on the same seed is below the rate; an extra draw anywhere desynchronises it.
+      const draws = seededRandom(seed);
+      for (const choice of choices) {
+        expect(choice.kind !== "engine").toBe(draws() < easiest.blunderRate);
+      }
       return decisions(choices).join();
     });
     console.log(`A9: ${new Set(sequences).size} distinct sequences over 5 seeds`);
