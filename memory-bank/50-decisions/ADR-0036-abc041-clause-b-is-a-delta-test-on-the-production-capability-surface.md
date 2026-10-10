@@ -24,6 +24,8 @@ DoR item 10. Through `ABC-072`, it also clears the ordering ⚠️ on `ABC-073`.
   question, at `ABC-072`'s gate.
 - **Not edited:** `ABC-041`, `ABC-042`, `ABC-065` and `ABC-066`. Their gated wording stays
   permanently (`ABC-072` § Where the corrected wording lands).
+- **2026-10-10, `design-ABC-072`:** § Canonical clause (b) is added below. It answers `ABC-072`
+  `A2`–`A5`. § Decision is unchanged; the block settles two readings of it, stated there.
 
 ## Context
 
@@ -157,3 +159,102 @@ Edit this file to read STATE. Nothing is built on it. Under STATE every open tic
 reads "fires", and the Orchestrator routes every ticket through `In Security/NFR`. **What would
 falsify DELTA:** a ticket that passes (b1) and (b2) quietly and is later found to have shipped a
 capability change that Security/NFR would have blocked. Re-open at the first such case.
+
+## Canonical clause (b) — 2026-10-10
+
+Added by Architect/Design at `design-ABC-072` (branch `grugops/ABC-072-clause-b-delta`, from wave tip
+`6bfc7b29`). It delivers `ABC-072` `A2`–`A5`. The ruling above is unchanged, and the owner may still
+veto it (§ Rollback).
+
+**Cite this block; do not copy it.** A ticket page answers clause (b) by citing
+`memory-bank/50-decisions/ADR-0036-abc041-clause-b-is-a-delta-test-on-the-production-capability-surface.md`
+§ Canonical clause (b). It then gives **its own** (b1) and (b2) facts: its own production paths and
+its own counts. Copying another page's answer is the failure `ABC-073` exists to end.
+
+### The clause (`A2`), stated once
+
+> **(b) Production capability — a DELTA test.** Production files are the `.ts` files under `src/`
+> that are not `.test.ts`, at `<base>` and at `<head>`. Three limbs: **(1)** an import of a Node
+> builtin (a `node:` specifier: static, `export … from`, or dynamic `import()`); **(2)** a
+> `process.` read; **(3)** a call to `spawn` / `exec` / `fetch` / `eval` / `new Function`, with the
+> `child_process` family (`spawnSync`, `execSync`, `execFile`, `fork`) counted as `spawn`/`exec`.
+> Over the diff `<base>..<head>`, (b) **fires** if, for any limb:
+> - **(b1)** an added or changed line of **executable code** in a production file carries the limb;
+>   or
+> - **(b2)** a production file gains a **runtime** import edge (a value or bare import, or a
+>   re-export; `import type` and `export type` are not edges) to a local module whose runtime
+>   closure at `<head>`, that module included, holds the limb in executable code.
+>
+> A limb word in a comment or a string is a **word hit**: listed, never a trigger. The tree's
+> standing capability is a **baseline**: recorded, never a trigger. 0 production files touched is
+> enough for "does not fire". **Whichever way a reading is disputed, it fires and the gate resolves
+> it.**
+
+### The instrument (`A3`): three commands, one per limb
+
+Run from the repository root. Each command reads git objects only, so any commit pair works.
+
+```sh
+node .grugops/context/design-ABC-072/probe/clause-b.mjs <base> <head> 1  # counts import statements in code
+node .grugops/context/design-ABC-072/probe/clause-b.mjs <base> <head> 2  # counts process. read sites in code
+node .grugops/context/design-ABC-072/probe/clause-b.mjs <base> <head> 3  # counts call sites in code
+```
+
+- **What each counts.** Each command counts **occurrences in executable code**, found on the
+  TypeScript AST. Comments and strings are not code. Each command prints its unit, the (b1) lines,
+  the (b2) edges with the holder each one reaches, and the word hits (listed, not counted). It also
+  prints the STATE baseline at `<head>` beside the verdict.
+- **Which pair to run.** For a branch, `<base>` is its merge-base and `<head>` is its tip. For a
+  merge commit, use `<merge>^1 <merge>`.
+- **Known limits, stated.**
+  - A renamed file counts every line as added (`--no-renames`). It over-fires, the safe direction.
+  - A non-literal `import()` is listed as unresolved. Under the fail-safe, that is a dispute.
+  - § Alternatives 5's widenings (a bare `process`, unprefixed builtins, `Worker`) are not counted.
+    Where the word matches they show as word hits. Whether to count them stays Security/NFR's
+    question.
+
+**What it read at this hop.** Full output: `.grugops/context/design-ABC-072/probe/RUN.txt`.
+
+| run | limb 1 | limb 2 | limb 3 | (b) |
+|---|---|---|---|---|
+| baseline at `6bfc7b29`, 36 production files | 0 files | **3** files in code: `cli.ts`, `glyph-mode.ts`, `perft-bench.ts` (9 by raw word hit) | 0 files; the 3 `RegExp.prototype.exec` calls are not counted | recorded, not a trigger |
+| baseline at `f76e041`, 35 production files | 0 | 3, the same files (9 raw) | 0 | recorded, not a trigger |
+| `dbaf972f^..dbaf972f` (`ABC-042`) | 0 | (b1) **4** lines, `cli.ts:73`, `:76`, `:81`, `:90`; (b2) `cli.ts -> glyph-mode.ts`, which holds it | 0 | **FIRES** |
+| `34c9c026^..34c9c026` (`ABC-082`) | 0 | 0 lines; 4 new edges, none reaching a holder | 0 | does not fire |
+| `4c33b72b^1..4c33b72b` (`ABC-059`) | 0 production files | 0 | 0 | does not fire |
+
+- **One count differs from BA/PM's rough reading.** `ABC-082` adds **4** new edges, not 3. The
+  fourth is a multi-line `import { … } from "./position.ts"`, which a line grep cannot see. It
+  reaches no holder, so the answer is the same.
+- **A mutant ledger proves the cases history does not hold:** limbs 1 and 3, a transitive edge,
+  `import type` against an inline `type`, an in-place edit, and word hits. Nine plants, 9 of 9 as
+  designed (`probe/mutants.sh`, `probe/mutants.out.txt`).
+
+### The retired prediction (`A4`)
+
+`ABC-041`'s parenthetical predicted that `ABC-042` would end the `node:` baseline. **The measured
+fact:** `ABC-042` merged @ `dbaf972`. Limb 1 is still **0** across all **36** production files at
+`6bfc7b29`, and across 35 at `f76e041`. `ABC-042` added `process.` reads (limb 2), not a `node:`
+import. This block makes no prediction.
+
+### `ABC-065` (`A5`)
+
+**Under DELTA, clause (b) did NOT fire on `ABC-065`: its merge `460b9f58` touches 0 production
+files and reads 0 / 0 / 0 on the three commands, so `ABC-065`'s merge is not re-opened.** The
+Orchestrator's skip paragraph is
+`.grugops/context/pull-abc065-066-2026-08-16/notes/20260816T030000Z-orchestrator-decision-abc065-merged-and-why-security-nfr-was-skipped-9f2b81d4.md`,
+row "production files touched". This is a record. No Security/NFR verdict is re-run.
+
+### Two readings this block settles
+
+- **(b2) reads "holds" as "holds, or reaches at runtime".** § Decision 2 names a module that holds
+  a limb, then says the capability "only has to be newly reachable". The closure covers every case
+  the rule names, because a holder is in its own closure. So it only widens, which is the safe
+  direction. **At `6bfc7b29` it changes no answer.** Only the three holders reach a holder at
+  runtime. The one runtime edge into a holder is `cli.ts -> glyph-mode.ts`.
+- **§ Alternatives 3's example is corrected.** `cli-options.ts` holds no limb in code and reaches
+  none at runtime. Its only import of `glyph-mode.ts` is `import type`, and its "spawn" is a word
+  in a comment. The example that fits is `glyph-mode.ts`. The row's verdict is unchanged.
+
+`ABC-042`'s paragraph applied STATE and was right under the text it was gated on. It is not
+re-opened (§ 4; `ABC-072` test note 4).

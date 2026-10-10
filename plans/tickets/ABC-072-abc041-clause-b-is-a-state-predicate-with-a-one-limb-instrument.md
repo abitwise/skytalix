@@ -235,6 +235,9 @@ accepted by Architect/Design at `design-owed-rulings-2026-10-10`.
   stated because that is the defect.** **(c)** no test file touched, no network, no write, no spawn;
   **(d)** blast radius is two markdown paths, none under `src/`. **Whichever way the reading is
   disputed, it fires and the gate resolves it.**
+  *(2026-10-10, ruled, `design-ABC-072`.)* **(b) does not fire, per `ADR-0036` § Canonical clause
+  (b).** The delivered commit touches 0 production files: (b1) 0 lines and (b2) 0 edges on all
+  three limbs. The two-reading answer above is kept as the record of the defect.
 - **`N8-LANE`, inherited by name** — ≤ **650 ms CPU**. **0 new test files, 0 new files under `src/`,
   0 new child processes, 0 assertions added.** The lane cost of this ticket is **zero** and that is
   checkable from `A6`'s path list.

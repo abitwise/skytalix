@@ -130,9 +130,10 @@ missing at the moment it is least convenient.
   touches `plans/` and nothing else.
 - **`NFR-002` not triggered.** No production path.
 - **Security: not triggered.** `ABC-041`'s repaired four clauses: **(a)** no manifest touch.
-  **(b)** The reading is unruled (`ABC-072`). Under STATE it fires: 3 production files read
-  `process.` in code, unchanged here. Under DELTA it does not: nothing under `src/` is touched.
-  **(c)** No test file is touched. **(d)** The blast radius is `plans/board.md`, plus one
+  **(b)** Does not fire, per `ADR-0036` § Canonical clause (b) (DELTA). This ticket edits
+  `plans/board.md` and, only if a header is replaced, one `history/` file: 0 production files, so
+  (b1) 0 capability lines and (b2) 0 new import edges. Run that section's three commands on the
+  delivered commit and record them. **(c)** No test file is touched. **(d)** The blast radius is `plans/board.md`, plus one
   `history/` file only if a header is replaced. **On a disputed reading it fires and the gate
   resolves it.**
 
