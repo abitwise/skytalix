@@ -1810,7 +1810,7 @@ describe("ABC-021 acceptance — transition 16, the draw claim", () => {
   // suite; `A9` exists because the width argument was carried in a comment and by nothing else.
   // -------------------------------------------------------------------------
 
-  it("A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else", async () => {
+  it("A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim, and on no advancing ply, allowed claim or take-back (`ABC-120` `A3`-`A5`)", async () => {
     // (i) An ADVANCING run. Both standing bars read their green values here...
     await run({ fen: SHUFFLE_FEN, script: shuffle(2) });
     expect(derivesMade()).toBe(9);
@@ -1945,6 +1945,9 @@ describe("ABC-120 acceptance — transitions 17 (quit) and 18 (take-back)", () =
     // rewinds the move list and not the key list passes any one of them.
     expect(history.moves).toHaveLength(0);
     expect(toFen(history.position)).toBe(START_FEN);
+    // The take-back edge derives through `gameStatus` only (`derivesMade()` above). Read BEFORE
+    // this row's own `keyHistory(history)` below, which goes through the same spy.
+    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
     expect(keyHistory(history)).toHaveLength(1);
     const counts = repetitionCounts(history);
     expect(counts.size).toBe(1);
@@ -1972,6 +1975,7 @@ describe("ABC-120 acceptance — transitions 17 (quit) and 18 (take-back)", () =
     // 1 + 2 + 1 (the take-back re-emits) + 2.
     expect(frames).toHaveLength(6);
     expect(derivesMade()).toBe(6);
+    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
     // Frame 4 carries the item; frames 5 and 6 do not (`A5b`'s shape, on the new arm).
     expect(messageRegionOf(frames[3] as string[])).toContain("took back 2");
     expect(messageRegionOf(frames[4] as string[]).join("")).toBe("");
@@ -1988,6 +1992,7 @@ describe("ABC-120 acceptance — transitions 17 (quit) and 18 (take-back)", () =
     expect(derivesMade()).toBe(2);
     expect(history.moves).toHaveLength(0);
     expect(toFen(history.position)).toBe(START_FEN);
+    expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
     expect(keyHistory(history)).toHaveLength(1);
     expect(events).toEqual(["frame", "input", "frame", "input"]);
     // The `eof` after the script, byte-identical to `A8`'s — `quit` was not in this script.
