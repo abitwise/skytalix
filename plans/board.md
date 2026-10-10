@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-qe137-2026-10-10` merged: QE-137-a → ADR-0011 `R5d` (ticket owed; also the composer tripwire's comparator, found unpinned; clause 1 docblock rides with it); QE-137-b accepted residual (trigger: `node:fs` import change, module-scope `readdirSync`, `vi.mock`/`vi.spyOn` of `node:fs`). BA/PM `bapm-r5d-qe139a-2026-10-10` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` QE PASS_WITH_GAPS; fix-forward `fix-ABC-138` dispatched (stays `In Review`)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-139` → `Done` (UAT WAIVED); Architect `design-qe137-2026-10-10` dispatched (QE-137-a/b)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` → `In Review` (`2344c015`); QE `qe-ABC-010` dispatched. In Review 3/3._
