@@ -144,4 +144,4 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 7 | test notes present | **✅** four |
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P1` |
-| 10 | no major unresolved blocker | **⚠️ NOT MET ×2** — (i) **ordering: `ABC-041` must merge first** or `A4` measures the wrong tree; (ii) **the ruling is Architect/Design's**, and "imports" vs "consumes" is not BA/PM's to choose |
+| 10 | no major unresolved blocker | **⚠️ NOT MET ×2** — (i) **ordering: `ABC-041` must merge first** or `A4` measures the wrong tree; (ii) **the ruling is Architect/Design's**, and "imports" vs "consumes" is not BA/PM's to choose. **→ (ii) RULED 2026-10-10 by Architect/Design in [`ADR-0030`](../../memory-bank/50-decisions/ADR-0030-imports-means-evaluates-for-the-licence-and-consumes-means-binds-a-value-for-a8.md) (`proposed`, owner acceptance owed).** The licence guard counts evaluation and is unchanged; its "false RED" premise does not hold under `verbatimModuleSyntax`. `A8` counts value bindings. (i) is not this ruling's. Not re-scored: the verdict is BA/PM's |
