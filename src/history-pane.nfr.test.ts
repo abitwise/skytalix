@@ -684,7 +684,9 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     // turns (the loop's bound below). The load hook fires when an import is ISSUED, so a frame's
     // synchronous import is seen without it; the settle is what reaches an import issued from a
     // macrotask, and it reaches a `setImmediate` chain at most 3 deep. A deeper `setImmediate`
-    // chain, or a timer of any delay, is NOT seen (`QE-053-d`). It also stays because `package.json`
+    // chain is NOT seen (`QE-053-d`). A timer is NOT reliably seen: it is seen only if it fires
+    // before the settle ends, a race with the clock (`QE-134-a`, Node v26.11.0: 0 and 1 ms seen in
+    // 10 of 10 runs, 5 ms in 1 of 10, 50 ms in 0 of 10). It also stays because `package.json`
     // admits Node >= 22. If this phase ever flakes, look at the settle first.
     const probe = `import { registerHooks } from "node:module";
       import { writeSync } from "node:fs";
