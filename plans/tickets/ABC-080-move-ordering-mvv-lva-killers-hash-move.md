@@ -1,8 +1,8 @@
 ---
 id: ABC-080
 title: Move ordering — MVV-LVA, killer moves, hash move first
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-004

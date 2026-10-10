@@ -1,8 +1,8 @@
 ---
 id: ABC-092
 title: Decide and record the opening-book source and its licence — before one byte of book data is copied into this repository
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-005

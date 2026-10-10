@@ -1,8 +1,8 @@
 ---
 id: ABC-082
 title: Evaluation — pawn structure (doubled, isolated, passed)
-status: ready
-column: Ready
+status: done
+column: Done
 size: M
 priority: P1
 epic: EPIC-004

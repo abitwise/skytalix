@@ -1,8 +1,8 @@
 ---
 id: ABC-121
 title: Principal-variation search with late-move reductions (C1)
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P1
 epic: EPIC-004

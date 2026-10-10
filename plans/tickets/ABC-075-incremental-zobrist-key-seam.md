@@ -1,8 +1,8 @@
 ---
 id: ABC-075
 title: Incremental Zobrist key — the one seam this epic needs and does not have
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-004

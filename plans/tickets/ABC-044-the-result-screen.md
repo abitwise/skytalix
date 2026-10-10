@@ -1,8 +1,8 @@
 ---
 id: ABC-044
 title: The result screen — eight reasons settled against `ABC-020`'s shipped set, two faults that are not chess outcomes, and the full move list
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-006

@@ -1,8 +1,8 @@
 ---
 id: ABC-118
 title: A type-valid `exclude` glob silently changes what the default lane collects — nothing in this repository asserts the lane's inventory
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: —

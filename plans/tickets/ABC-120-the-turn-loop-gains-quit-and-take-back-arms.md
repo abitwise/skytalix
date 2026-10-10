@@ -1,8 +1,8 @@
 ---
 id: ABC-120
 title: The turn loop gains a `quit` arm and a `take-back` arm — transitions 17 and 18, the arm ticket `ADR-0021` clause 8 says lands FIRST
-status: ready
-column: Ready
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-006

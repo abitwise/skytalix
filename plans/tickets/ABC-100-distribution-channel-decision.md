@@ -1,8 +1,8 @@
 ---
 id: ABC-100
 title: The distribution channel — a superseding ADR on the owner's word, not a packaging build
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P1
 epic: EPIC-006

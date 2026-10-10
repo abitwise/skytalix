@@ -1,8 +1,8 @@
 ---
 id: ABC-081
 title: Transposition table and in-tree repetition detection
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-004

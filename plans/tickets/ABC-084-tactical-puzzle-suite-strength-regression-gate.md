@@ -1,8 +1,8 @@
 ---
 id: ABC-084
 title: Tactical puzzle suite as a strength regression gate
-status: ready
-column: Ready
+status: done
+column: Done
 size: M
 priority: P0
 epic: EPIC-004

@@ -1,8 +1,8 @@
 ---
 id: ABC-107
 title: The message region cannot show a 7-candidate ambiguity — decide what the frame does when a list does not fit, without truncating it and without widening the frame
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-002

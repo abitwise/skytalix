@@ -1,8 +1,8 @@
 ---
 id: ABC-068
 title: The shared helpers in `src/cli.test.ts` became infrastructure without contracts — `advertisedTextOf` returns garbage where its sibling throws, and the comment above them says TWO where there are FOUR
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: —

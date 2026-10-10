@@ -1,8 +1,8 @@
 ---
 id: ABC-112
 title: The product advertises `quit` in its own `help` output and does not honour it — the PROMISE, not the effect
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P1
 epic: EPIC-006

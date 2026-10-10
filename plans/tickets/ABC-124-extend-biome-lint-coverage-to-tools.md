@@ -1,8 +1,8 @@
 ---
 id: ABC-124
 title: Extend Biome lint coverage to tools/grugops/*.js (typecheck stays out of scope)
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P2
 epic: EPIC-004

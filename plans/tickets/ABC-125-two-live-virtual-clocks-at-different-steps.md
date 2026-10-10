@@ -1,8 +1,8 @@
 ---
 id: ABC-125
 title: Two live virtual clocks at different steps — the row that kills a module-level step
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P1
 epic: EPIC-004
