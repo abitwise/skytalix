@@ -1,0 +1,29 @@
+== npm run lint
+
+> cli-chess@0.0.0 lint
+> biome check .
+
+Checked 97 files in 238ms. No fixes applied.
+== npm run typecheck
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+== npm run build
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+== npm run test
+ Test Files  50 passed (50)
+      Tests  1577 passed (1577)
+   Start at  11:37:07
+   Duration  9.32s (transform 1.35s, setup 0ms, collect 12.37s, tests 17.38s, environment 6ms, prepare 2.53s)
+
+== PERFT_DEEP=1 npx vitest run src/perft.test.ts (at a261966)
+ Test Files  1 passed (1)
+      Tests  32 passed (32)
+   Start at  11:34:49
+   Duration  53.71s (transform 68ms, setup 0ms, collect 69ms, tests 53.46s, environment 0ms, prepare 58ms)
+
+exit 0
