@@ -1,8 +1,8 @@
 ---
 id: ABC-137
 title: Clause 1's one expression is unpinned — narrowing `productionModulesIn` weakens three guards at once and the whole suite stays green (ADR-0011 R5c)
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —

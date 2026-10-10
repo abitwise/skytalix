@@ -31,3 +31,7 @@ Commit-message file in a PRIVATE scratchpad subdirectory. Real UTC stamps. Trail
 Notes per Workflow 16, trace row at the END of `plans/traceability.md`, ticket § QE. Queue
 pending → claimed → done (by hand, main checkout, uncommitted). Report: verdict, per-criterion evidence,
 ledger comparison, gaps with severity, gates, branch + sha.
+
+## Done 2026-10-10T16:14:20Z (qe-e2e)
+
+Verdict PASS_WITH_GAPS. Branch grugops/ABC-137-helper-pin, QE commit 51384532 (code 54280bc8, base 2946e22a). QE's unchanged planters refused by the permission layer; QE's own harness used. Notes .grugops/context/qe-ABC-137/notes/ (…f440af61, …01c2d8fc, …853f77e5). Gaps QE-137-a, QE-137-b LOW -> Architect/Design; QE-137-c, -d INFO. Not merged, not pushed.
