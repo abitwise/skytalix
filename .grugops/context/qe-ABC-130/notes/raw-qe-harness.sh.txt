@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# QE ABC-130 mutant harness (independent of the Engineer's). Usage: harness.sh <tree-ish> <label>
+# Every scenario runs in a FRESH clone of a git-archive template copy under the scratchpad.
+# The repository, the worktree and its vitest.config.ts are never edited.
+set -u
+REPO=/Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example
+WT=$REPO/.claude/worktrees/ABC-130-lane-inventory-probes
+SP=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe-ABC-130
+TREE=$1; LABEL=$2
+TPL=$SP/tpl-$LABEL
+G() { git -c gc.auto=0 -c maintenance.auto=false -c user.name=qe -c user.email=qe@qe -c core.quotePath=false "$@"; }
+
+rm -rf "$TPL"; mkdir -p "$TPL"
+git -C "$WT" archive "$TREE" | tar -x -C "$TPL"
+ln -s "$REPO/node_modules" "$TPL/node_modules"
+(cd "$TPL" && G init -q && git config gc.auto 0 && git config maintenance.auto false && G add -A && G commit -qm base)
+
+fresh() { # name -> cd into a fresh clone of the template
+  C=$SP/c-$LABEL-$1; rm -rf "$C"; cp -R "$TPL" "$C"; cd "$C" || exit 9
+}
+cfg_sub() { # perl substitution applied to vitest.config.ts IN THE COPY
+  perl -0pi -e "$1" vitest.config.ts
+}
+run() { # name [extra args to tool]
+  local name=$1; shift
+  echo "---- [$LABEL] $name"
+  node tools/grugops/lane-inventory.js "$@" > "$SP/out-$LABEL-$name.txt" 2>&1; local e=$?
+  local n; n=$(wc -l < "$SP/out-$LABEL-$name.txt" | tr -d ' ')
+  if [ "$n" -le 10 ]; then cat "$SP/out-$LABEL-$name.txt"; else head -4 "$SP/out-$LABEL-$name.txt"; echo "... ($n lines total)"; fi
+  echo "EXIT=$e  grugops-lines=$(grep -c '\.grugops/' "$SP/out-$LABEL-$name.txt")  grugops-NOT-tracked-lines=$(grep '\.grugops/' "$SP/out-$LABEL-$name.txt" | grep -c 'NOT tracked by git')"
+}
+probe() { mkdir -p "$(dirname "$1")"; printf 'import { it } from "vitest";\nit("qe", () => {});\n' > "$1"; }
+commit() { G add -A && G commit -qm "$1"; }
+
+# ---- the ticket's criteria, re-run ----
+fresh S0;  run S0-baseline
+echo "A1-ref git ls-files -- '*.test.ts' ':!.grugops/' | wc -l = $(git ls-files -- '*.test.ts' ':!.grugops/' | wc -l | tr -d ' ')"
+fresh A2;  cfg_sub 's/^      "\.grugops\/\*\*",\n//m'; echo "glob-count=$(grep -c '\.grugops/\*\*' vitest.config.ts)"; run A2-glob-removed
+           git checkout -q -- vitest.config.ts; run A2-glob-restored
+fresh M1;  cfg_sub 's/^(      "plans\/\*\*",\n)/$1      "src\/perft.test.ts",\n/m'; echo "m1=$(grep -c 'src/perft.test.ts' vitest.config.ts)"; run M1-perft-excluded
+fresh M2;  mkdir -p .claude/worktrees/probe; git -C "$WT" archive "$TREE" src | tar -x -C .claude/worktrees/probe
+           cfg_sub 's/^      "\.claude\/\*\*",$/      ".claud\/**",/m'; echo "m2=$(grep -c '"\.claud/\*\*"' vitest.config.ts)"; run M2-typo-planted
+           git checkout -q -- vitest.config.ts; run M2-restored-planted-still-present
+fresh M3;  probe src/zz.test.ts; run M3-untracked; G add src/zz.test.ts; run M3-after-add
+fresh A4;  probe .grugops/context/zz/probe/new.test.ts; commit probe; run A4-committed-probe
+
+# ---- QE's own mutants ----
+# Q1 nested .grugops probes collected by a mistyped glob
+fresh Q1a; probe .grugops/context/a/b/c/d/deep.test.ts; commit deep
+           cfg_sub 's/^      "\.grugops\/\*\*",$/      ".grugops\/*",/m'; echo "q1a=$(grep -c '"\.grugops/\*"' vitest.config.ts)"; run Q1a-deep-probe-glob-single-star
+fresh Q1b; probe .grugops/context/a/b/c/d/deep.test.ts; commit deep
+           cfg_sub 's/^      "\.grugops\/\*\*",$/      ".grugop\/**",/m'; echo "q1b=$(grep -c '"\.grugop/\*\*"' vitest.config.ts)"; run Q1b-deep-probe-glob-typo-grugop
+fresh Q1c; probe src/.grugops/zz.test.ts; commit nested; run Q1c-src-nested-grugops-committed
+fresh Q1d; probe src/.grugops/zz.test.ts; commit nested
+           cfg_sub 's/^      "\.grugops\/\*\*",$/      "**\/.grugops\/**",/m'; echo "q1d=$(grep -c '"\*\*/\.grugops/\*\*"' vitest.config.ts)"; run Q1d-src-nested-overbroad-glob
+fresh Q1e; probe src/.grugops/zz.test.ts; run Q1e-src-nested-untracked
+# Q2 .test.ts outside src/ and outside .grugops/
+fresh Q2a; probe tools/zz.test.ts; commit t; run Q2a-tools-committed
+fresh Q2b; probe tools/zz.test.ts; run Q2b-tools-untracked
+fresh Q2c; probe plans/zz.test.ts; commit t; run Q2c-plans-committed
+fresh Q2d; probe .claude/skills/zz.test.ts; G add -f .claude/skills/zz.test.ts; G commit -qm t; run Q2d-claude-committed
+fresh Q2e; probe .grugopsx/zz.test.ts; commit t; run Q2e-grugopsx-committed
+fresh Q2f; probe src/zz.test.mjs; commit t; run Q2f-src-mjs-committed-G4
+# Q3 quoted / space / non-ASCII paths
+fresh Q3a; probe '.grugops/context/my probe/sp ace "q" '\''s'\''.test.ts'; commit sp; run Q3a-grugops-space-quote-committed
+           cfg_sub 's/^      "\.grugops\/\*\*",\n//m'; run Q3a-grugops-space-quote-glob-removed
+fresh Q3b; probe 'src/sp ace "q" '\''s'\''.test.ts'; run Q3b-src-space-quote-untracked; commit sp; run Q3b-src-space-quote-committed
+fresh Q3c; probe 'src/ümlaut.test.ts'; run Q3c-src-nonascii-untracked; commit u; run Q3c-src-nonascii-committed
+# Q4 invariants: argv/env ignored, subdir cwd, no .grugops at all
+fresh Q4a; run Q4a-argv ':!src/' --exclude src
+fresh Q4b; GRUGOPS_OMIT=src/ OMITTED_DIR=src/ run Q4b-env
+fresh Q4c; echo "---- [$LABEL] Q4c-cwd-src"; (cd src && node ../tools/grugops/lane-inventory.js; echo "EXIT=$?")
+fresh Q4d; G rm -rq .grugops; G commit -qm rm; echo "grugops-tracked=$(git ls-files .grugops | wc -l | tr -d ' ')"; run Q4d-no-grugops-dir
+echo "==== done [$LABEL]"
