@@ -185,3 +185,32 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `9ddd6e80`. **Res
   `result-screen.ts`) read AST 0 and emit DIFFERENT.
 - **On that ruling, UAT is WAIVED** (waived is not accepted). The waiver is applied at `Done` by the
   Orchestrator and is not self-applied here.
+
+## QE
+
+**2026-10-10, QE/E2E** (subtask `qe-ABC-132`).
+- Range: base `3159ab68`, reviewed tip `7387c65a`.
+- Every reading is QE's own. The detail is in `.grugops/context/qe-ABC-132/notes/`: `…29eca70d`
+  (verdict), `…b8a8159b` (readings), `…b5412758` (gaps), `…ec024f29` (probes). It is not restated
+  here.
+
+**PASS_WITH_GAPS.**
+- `A1` 2 → 0. `A2` 3 → 0, and `declared, not derived` remains only at `history-pane.nfr.test.ts:168`.
+- `A3`: both kept sentences are string-identical. `A4`: three paths, and the pipeline is empty.
+- Gates: lint, typecheck and build exit 0. `npm test` ran 52 files / 1608 passed with 0 skipped.
+  Integrity and lane-inventory print `No findings.` `CLI_DEEP` ran 7 tests, all passed.
+
+**QE comment fix (`QE-132-a`, LOW).** "(only `src/cli.ts` imports it)" was false over `src/`, because
+three test files also import `result-screen.ts`. It now reads "(of the production modules, only
+`src/cli.ts` imports it)" (`7387c65a`). The other sentences are true as measured:
+- `COMPOSITION_ROOT = "render-seam.ts"`.
+- `result-screen.ts` is outside the 11-module closure, and frames load 0 modules in all 4 variants.
+- `ABC-042` § `:235` states 18 → 20 and 1 → 2.
+
+**Exit (owner Q4): HOLDS on all 3 production files.** Every changed line is a comment (`cli.ts` 7/7,
+`render-seam.ts` 12/12, `result-screen.ts` 8/8), and the `removeComments` emit is byte-identical at base
+and tip. The negative controls go red on each file, and the type-only edit is caught only by the
+conjunction. **UAT WAIVED (waived is not accepted)** is the Orchestrator's to apply at `Done`.
+
+Gaps `QE-132-b` and `QE-132-c` are INFO: blind spots in the `A4` filter and in the older probe's
+`+++` skip. The Q4 conjunction catches both, and this diff hits neither. Not merged, not pushed.
