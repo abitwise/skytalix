@@ -1,8 +1,8 @@
 ---
 id: ABC-060
 title: Four `EPIC-006` tickets copy `ABC-042` `A12`'s diff-scoping clause without saying WHICH diff — the reading that made it MET is written in a note, not in the criteria
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: XS
 priority: P2
 epic: EPIC-006
