@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-qe140a-2026-10-10` merged: QE-140-a accepted under one trigger on both guards' `it` bodies (ADR-0011 P8); the text-pin chain stops at R5d._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — **owner word (note `…owner-word-eight-answers-6a1f3d92`): ABC-131 + ABC-010 UAT ACCEPTED → Done; ADR-0035 accepted with NFR-008 R-1; ABC-060 DROPPED; NFR-005 PROVISIONAL retired; reference runtime → Node v26.11.0; Scribe rank 3 approved; probe-script allow-list approved; ADR-0036 — owner asked for more explanation.**_
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `rescore-p1-backlog-2026-10-10` merged: `ABC-093` and `ABC-085` Backlog → `In Design` (2/2); Architect `design-ABC-093` and `design-ABC-085` dispatched; ABC-094/095 re-scored, stay Backlog._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-140` → `Done` (UAT WAIVED)._

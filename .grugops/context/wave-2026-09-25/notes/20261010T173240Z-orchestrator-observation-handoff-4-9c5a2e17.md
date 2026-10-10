@@ -32,7 +32,10 @@ step 1.35 loses mate-in-3 seeds 1/69/1163); AR-133-WRAP discharged / AR-133-LOAD
 `loader-scan.mjs` retired.
 
 ## In flight
-- Architect `design-qe140a-2026-10-10` (QE-140-a + where the text-pin chain stops).
+- None. Architect `design-qe140a-2026-10-10` merged after this note was first written: QE-140-a accepted
+  under ONE trigger anchored on both guards' `it` titles (any executable line added/edited in either `it` body
+  → that hop's QE reads it as an R5b/R5d question); text-pin chain STOPS at R5d (ADR-0011 P8). QE-140-c rides
+  the next clause 1 docblock hop. All four slots free at compaction.
 ## Board
 - In Design 2/2: ABC-093 (D1 format; D2 RNG placement rides) and ABC-085 (D4 virtual-clock step) — enqueue +
   dispatch Architect hops `design-ABC-093`, `design-ABC-085` (BA/PM note `…0e4da324` has D1–D4).
@@ -41,7 +44,7 @@ step 1.35 loses mate-in-3 seeds 1/69/1163); AR-133-WRAP discharged / AR-133-LOAD
   evaluate.pawns.test.ts; page should name evaluate.pawns.test.ts; ADR-0031/0034 rules; PUZZLE_DEEP margin thin).
 - ABC-141 (Backlog, 9/10): ABC-010 merged → BA/PM re-score → Ready.
 - ABC-094/095 Backlog (wait 093). Ready for UAT 0/4; In Review/In Dev/In Security 0.
-## Priority for next dispatches (width 3; Architect QE-140a holds one slot)
+## Priority for next dispatches (width 3; all free)
 1 ABC-083 build  2 design-ABC-093  3 design-ABC-085  4 Security/NFR catalog hop  5 Scribe hop
 6 BA/PM ABC-141 re-score (+ ABC-083 page note)  7 ADR-0035 status line (Orchestrator, now)  8 allow-list.
 ## Gotcha repeated today
