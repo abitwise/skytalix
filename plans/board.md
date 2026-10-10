@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-126` pulled → `In Development` (unblocked by `ABC-127`'s merge). Worktree cleanup on owner word: 43 merged worktrees removed, branches kept._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — **owner word (note `…owner-word-d7a1c3e5`): `ABC-036`, `ABC-051`, `ABC-127` UAT ACCEPTED → `Done`** (merged `4a745a77`/`a154d306`/`d45a0261`; merged-tip gates green, 51 files / 1581; `PERFT_DEEP` 32/32; `PUZZLE_DEEP` 17/17, 58/62); **`ADR-0029`, `ADR-0033` ACCEPTED; R2 keep depth 7; `ABC-074` DROPPED (spike ruled out).** Local `main` fast-forwarded. Still proposed: `ADR-0030`/`0031`/`0032`/`0034`._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `ruling-puzzle-edge` merged: `ADR-0034` PROPOSED (Security/NFR R1); owner decision owed before `ABC-083`._
@@ -529,15 +531,16 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-005] Opening book  (owner: BA/PM, **size: M — corrected from `S`; the cutter stopped at `M` deliberately, refusing the M→XL/M→L precedent as "a pattern, not evidence", since `L` would claim the book is the size of `EPIC-004`'s whole engine**, priority: P1, since: 2026-07-22, **DECOMPOSED 2026-08-16 into `ABC-092`…`ABC-096`. The WORK is pullable today — 4 of 5 tickets need nothing from `EPIC-004` — but the VALUE is not deliverable until `EPIC-004` lands; collapsing those two is how a board lies.** `EPIC-001`'s dependency verified DISCHARGED by reading the tree, not the front matter; `ABC-095` is the only hard blocker. Largest ticket `M`, no `SPLIT_REQUIRED`)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 1/8)
+## Ready (WIP 0/8)
 
-- [ABC-126] The hanging-corpus pair "R takes a bishop a pawn defends" starts with the side to move in check  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3 DISCHARGED 2026-10-10 by `ABC-084`'s merge (BA/PM re-score owed); cut from Architect `ruling-abc082-levels` side finding) **2026-10-10 audit: BA/PM re-score dispatched (`rescore-batch-2026-10-10`); builds after `ABC-127`, which leaves the 40 existing rows byte-identical.** **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; gains `A6` (remove ABC-084 carve-out); builds after `ABC-127` (shared `src/puzzle-corpus.ts`).** **2026-10-10 re-cut (`recut-abc010`, merged `d24e740`): XS → S, DoR 10/10, still Ready; title widened — also re-finds the two defective `puzzle-corpus.ts` rows (`A7`, ADR-0033 rules); `A4`/`A6` read the base baseline (ABC-127 re-records it). Order: ABC-127 → ABC-126 → ABC-083 / ABC-010.** **2026-10-10: `ABC-127` merged — `ABC-126` is unblocked and pullable.**
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+
+- [ABC-126] The hanging-corpus pair "R takes a bishop a pawn defends" starts with the side to move in check  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3 DISCHARGED 2026-10-10 by `ABC-084`'s merge (BA/PM re-score owed); cut from Architect `ruling-abc082-levels` side finding) **2026-10-10 audit: BA/PM re-score dispatched (`rescore-batch-2026-10-10`); builds after `ABC-127`, which leaves the 40 existing rows byte-identical.** **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; gains `A6` (remove ABC-084 carve-out); builds after `ABC-127` (shared `src/puzzle-corpus.ts`).** **2026-10-10 re-cut (`recut-abc010`, merged `d24e740`): XS → S, DoR 10/10, still Ready; title widened — also re-finds the two defective `puzzle-corpus.ts` rows (`A7`, ADR-0033 rules); `A4`/`A6` read the base baseline (ABC-127 re-records it). Order: ABC-127 → ABC-126 → ABC-083 / ABC-010.** **2026-10-10: `ABC-127` merged — `ABC-126` is unblocked and pullable.** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-126`, branch `grugops/ABC-126-corpus-repairs`).
 
 
 
