@@ -1,0 +1,11 @@
+X5b-CONDITIONAL-nodigit	exit=1	load1=4.61	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-query-nodigit	exit=1	load1=4.61	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+CTRL-EMPTY-ONLY+X5b-CONDITIONAL	exit=1	load1=4.61	 Tests 2 failed | 21 passed (23)	AssertionError: expected '\n\nimport { assembleFrame } from "./…' not to match /\d/|AssertionError: frames drawn: the empty game, then one longer than the history window: expected [ +0 ] to deeply equal [ +0, 40 ]|
+CTRL-NO-FRAME	exit=1	load1=4.61	 Tests 1 failed | 22 passed (23)	AssertionError: rows the frame at 0 plies returned: expected 0 to be greater than 0|
+CTRL-NO-FRAMES-AT-ALL	exit=1	load1=4.56	 Tests 1 failed | 22 passed (23)	AssertionError: frames drawn: the empty game, then one longer than the history window: expected [] to deeply equal [ +0, 40 ]|
+CTRL-ZERO-SETTLE+X5b	exit=1	load1=4.56	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+CTRL-NO-COMPOSER	exit=1	load1=4.56	 Tests 1 failed | 22 passed (23)	AssertionError: assembleFrame: expected "assembleFrame" to be called 1 times, but got 0 times|
+X5b-rep2	exit=1	load1=4.44	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-rep3	exit=1	load1=4.44	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-rep4	exit=1	load1=4.44	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+X5b-rep5	exit=1	load1=4.44	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
