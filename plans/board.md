@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-036` `In Review` → `Ready for UAT` (QE PASS_WITH_GAPS `06b03dc`); owner acceptance owed. `ABC-051` pulled → `In Development` (no file overlap with `ABC-127`/`ABC-036`)._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-036` `In Development` → `In Review` (built `a261966`); QE `qe-ABC-036` dispatched._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `ruling-abc053-abc054` merged `3c841b0`: `ADR-0029` (`ABC-053`) and `ADR-0030` (`ABC-054`) PROPOSED, owner acceptance owed. Architect `ruling-abc083-abc087` (R1/R3) dispatched._
@@ -452,7 +454,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-095] Put the book in front of the engine's move choice and fall through cleanly when it leaves book  (BA/PM, S, P1, epic: EPIC-005, since: 2026-08-16, **DoR 8/10 ⚠️x2 — RE-SCORED 2026-08-18 by BA/PM on `ADR-0012` (`accepted`, `3f73d7e`); was 7/10 ⚠️x3. STILL NOT READY.** **⚠️(5) DISCHARGED BY RULING — all three unknowns answered: id is `ABC-078`, wrappable YES, spy-able YES, so `A6` cannot fire; `G3` is CLOSED** (the short-circuit lives in a third module, a decorator of `EngineSeam`, wired at `EPIC-006`'s composition root). **⚠️(10) reduced from TWO blockers to ONE and STANDS: `ABC-078` is `In Review` and unmerged, `ABC-093`/`ABC-094` are unbuilt — nothing to wrap, nothing to probe.** ⚠️(3) stands for the same reason. Size `S` is now unconditional — the wrappable-seam assumption it was priced on is ruled true) **2026-10-10 audit: `ABC-078` is Done (2026-08-20), not `In Review`; `ABC-093`/`ABC-094` are still unbuilt. DoR not re-scored.**
 - [ABC-096] Show the named opening when the book knows it — inside the frame's existing row identity  (BA/PM, S, P3, epic: EPIC-005, since: 2026-08-16, DoR 8/10 ⚠️ needs ABC-093's format to carry the name; **the epic's droppable bullet — shed this first**; first third-party text to reach the terminal, so the ABC-018 escape-byte bar applies (G7); promote to P2 if the format would have to be re-opened to add it later)
 - [ABC-101] Difficulty — the user-facing selection only; the engine budget behind it is EPIC-004's  (BA/PM, M, P2, epic: EPIC-006, since: 2026-08-16, DoR 7/10 ⚠️x3 — **buildable today and it changes nothing until EPIC-004 lands**; levels are opaque ordinals per `RISK-002` (time-based, never depth); default is the MIDDLE, derived from `NFR-004`'s two bars; **five merged guards named in advance, incl. `ABC-065`'s predicted red**; promote to P1 when EPIC-004's mapping lands; 0 new test files)
-- [ABC-051] ABC-021 left the turn loop's own records false in four places, and its per-ply bar blind to the derive the loop now makes  (BA/PM, S, P2, epic: EPIC-002, since: 2026-08-13, **DoR 10/10**; TWO of the six sites were reported by nobody; NOT a re-open — a gap found after a merge becomes a new ticket)
 - [ABC-052] The traceability Status column goes stale on every merge — 12 of 27 Done tickets, and it grew by two this morning  (BA/PM, S, P2, epic: —, since: 2026-08-13, DoR 8/10 ⚠️x2 NOT MET — ordering on ABC-040, which merges the ABC-029 row pair this ticket would otherwise repair first; no criterion carries a literal count)
 - [ABC-053] The frame-path probe measures LOAD-time closure, and NFR-002's premise is the PER-FRAME path  (BA/PM, S, P1, epic: —, since: 2026-08-13, DoR 9/10 ⚠️x1 — **the ruling is Architect/Design's by ADR-0011's own words**; measured: a dynamic `import("./history.ts")` inside the returned closure is 19/19 green past three guards at once. ADR-0011 clause 2's DATED EXPIRY IS RIPE — `closure("render-seam.ts")` is finally derivable. 0 new test files) **2026-10-10 ruling (`ruling-abc053-abc054`, merged `3c841b0`): `ADR-0029` PROPOSED — guard checks load AND per-frame from one root (`render-seam.ts`); discharges item 10 on acceptance. Owner acceptance owed; then BA/PM re-score. Build also edits `src/render-seam.test.ts` A9. Sequence 053 → 054 → 057 (shared `src/history-pane.nfr.test.ts`).**
 - [ABC-054] Two merged guards count import STATEMENTS, not consumers — one blind spot, a false GREEN on ABC-041 A8 and a false RED on the licence guard  (BA/PM, S, P1, epic: —, since: 2026-08-13, DoR 8/10 ⚠️x2 — ordering on ABC-041's merge + **the "imports" vs "consumes" ruling is Architect/Design's**; `import { type X }` reads as a value import to both regexes, so **the measurement EPIC-006's P2→P1 raise rests on is satisfiable without curing what it measures**. 0 new test files) **2026-10-10 ruling: `ADR-0030` PROPOSED — licence guard red on `import { type X }` is a TRUE red (verbatimModuleSyntax evaluates the module); the real defect is `ABC-041` A8, which must count value-binding consumers. Discharges item 10 (ii) on acceptance; BA/PM re-cut owed (licence half → docblock prose only).**
@@ -479,9 +480,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
 
 - [ABC-127] Harder puzzles — catch the weakenings ABC-084's suite misses, and leave headroom below the ceiling  (EPIC-004, M, P1, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3, `A3`'s ≥ 6-of-10 bar, read non-blocking by the Orchestrator: measurable, with a stop rule) **→ In Development 2026-10-10.** Cut by BA/PM on the owner's word (`…e47a1c08`; `cut-harder-puzzles`, note `…5fefe3f1`, merged `ab87d8a`); pulled by the Orchestrator at `f9689e7` (subtask `ticket-to-pr-ABC-127`, branch `grugops/ABC-127-harder-puzzles`). `ABC-126` follows it.
+- [ABC-051] ABC-021 left the turn loop's own records false in four places, and its per-ply bar blind to the derive the loop now makes  (BA/PM, S, P2, epic: EPIC-002, since: 2026-08-13, **DoR 10/10**; TWO of the six sites were reported by nobody; NOT a re-open — a gap found after a merge becomes a new ticket) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-051`, branch `grugops/ABC-051-turn-loop-records`); DoR 10/10 dates from 2026-08-13 — the build re-verifies the six sites first and stops if the premise moved.
 
 
 
@@ -499,9 +501,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-036] The `moves` command — the count is exact, and the frame cannot show the list  (BA/PM, S, P1, epic: EPIC-003, since: 2026-08-13, **DoR 8/10 ⚠️x3; the third was a reduced user-facing promise awaiting a named human and is now RULED — see `memory-bank/60-progress.md` § Standing directives. BA/PM re-scores at pull; the Orchestrator does not re-score another role's DoR**, 1 new test file) **2026-10-10: `A7` — `moves` is the 8th help token at 0 columns spare; the help region is FULL after it (QE ABC-102 G2).** **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; `A4` re-anchored to one `legalMoves` per `moves` line.** **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-036`, branch `grugops/ABC-036-moves-command`). **→ In Review 2026-10-10**: built on `grugops/ABC-036-moves-command` @ `a261966` (A1–A7 MET, gates green, 1573 tests, N8-LANE +130 ms ≤ 650). QE `qe-ABC-036` dispatched. UAT not waived (production lines). Owner note: start position shows 3 of 20 moves (`legal moves: 20` takes 15/21 columns).
 
 
 
@@ -528,7 +529,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+
+- [ABC-036] The `moves` command — the count is exact, and the frame cannot show the list  (BA/PM, S, P1, epic: EPIC-003, since: 2026-08-13, **DoR 8/10 ⚠️x3; the third was a reduced user-facing promise awaiting a named human and is now RULED — see `memory-bank/60-progress.md` § Standing directives. BA/PM re-scores at pull; the Orchestrator does not re-score another role's DoR**, 1 new test file) **2026-10-10: `A7` — `moves` is the 8th help token at 0 columns spare; the help region is FULL after it (QE ABC-102 G2).** **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; `A4` re-anchored to one `legalMoves` per `moves` line.** **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-036`, branch `grugops/ABC-036-moves-command`). **→ In Review 2026-10-10**: built on `grugops/ABC-036-moves-command` @ `a261966` (A1–A7 MET, gates green, 1573 tests, N8-LANE +130 ms ≤ 650). QE `qe-ABC-036` dispatched. UAT not waived (production lines). Owner note: start position shows 3 of 20 moves (`legal moves: 20` takes 15/21 columns). **→ Ready for UAT 2026-10-10**: QE `qe-ABC-036` PASS_WITH_GAPS (`06b03dc`; A1–A7 met, 9/9 mutants red, +4 rows, 1577 tests). Gaps: G1 stale comment `src/command-input.ts:91` (seven→eight tokens), G2 3/20 moves visible (owner wording call). **Owed: owner acceptance.**
 
 
 
