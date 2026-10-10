@@ -13,12 +13,12 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import { makeMove } from "./apply.ts";
-import { type BookProbeOptions, createBookProbe } from "./book.ts";
+import { BOOK_MAX_BYTES, type BookProbeOptions, createBookProbe } from "./book.ts";
 import { parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import { seededRandom } from "./levels.ts";
 import type { Move } from "./moves.ts";
-import { type Position, squareName } from "./position.ts";
+import { KNIGHT, type Position, QUEEN, squareName } from "./position.ts";
 import { zobristKey } from "./zobrist.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -355,5 +355,106 @@ describe("ABC-094 A7 — nothing is executed, nothing is fetched, no capability 
     expect(specifiers.length).toBeGreaterThan(0);
     for (const specifier of specifiers) expect(specifier).toMatch(/^\.\//);
     expect(code).not.toMatch(/\bprocess\b/);
+  });
+});
+
+describe("ABC-094 QE — gaps closed at qe-ABC-094 (each kills a mutant the suite above left green)", () => {
+  const startKey = hexKey(start());
+
+  it("A1: a book position whose key has a leading zero is found (the padStart in the key encoding)", () => {
+    let frontier: string[][] = [[]];
+    let line: string[] | undefined;
+    while (line === undefined && frontier.length > 0) {
+      const next: string[][] = [];
+      for (const moves of frontier) {
+        const key = hexKey(moves.reduce(play, start()));
+        const entry = BOOK.positions[key];
+        if (entry !== undefined && entry.m.length > 0 && key.startsWith("0")) {
+          line = moves;
+          break;
+        }
+        for (const [text] of entry?.m ?? []) next.push([...moves, text]);
+      }
+      frontier = next;
+    }
+    expect(line).toBeDefined();
+    const position = (line as string[]).reduce(play, start());
+    const { probe, warnings } = probeOver(() => BOOK_BYTES);
+    expect(probe.inBook(position)).toBe(true);
+    const move = probe.bookMove(position);
+    expect(move).toBeDefined();
+    expect(BOOK.positions[hexKey(position)]?.m.map(([text]) => text)).toContain(uci(move as Move));
+    expect(warnings).toHaveLength(0);
+  });
+
+  const nameAt = BOOK_BYTES.indexOf(Buffer.from("King's Pawn Game"));
+  const badUtf8InString = new Uint8Array(BOOK_BYTES.length + 1);
+  badUtf8InString.set(BOOK_BYTES.subarray(0, nameAt), 0);
+  badUtf8InString[nameAt] = 0xff;
+  badUtf8InString.set(BOOK_BYTES.subarray(nameAt), nameAt + 1);
+
+  const more: [string, Uint8Array][] = [
+    ["garbage payload: a triple, not a pair", fixture({ [startKey]: { m: [["e2e4", 1, 1]] } })],
+    [
+      "garbage payload: key in uppercase hex",
+      fixture({ [startKey.toUpperCase()]: { m: [["e2e4", 1]] } }),
+    ],
+    [
+      "garbage payload: weights summing past 2^53",
+      fixture({
+        [startKey]: {
+          m: [
+            ["e2e4", 2 ** 53 - 1],
+            ["d2d4", 2 ** 53 - 1],
+          ],
+        },
+      }),
+    ],
+    ["invalid UTF-8 inside a string of the real book", badUtf8InString],
+    [
+      "garbage payload: a non-UCI move under a key the calls never reach",
+      fixture({ [startKey]: { m: [["e2e4", 1]] }, "0000000000000001": { m: [["castle", 1]] } }),
+    ],
+  ];
+
+  it.each(more)("%s: 50 calls throw 0, return nothing, warn exactly once", (_name, bytes) => {
+    const { probe, warnings } = probeOver(() => bytes);
+    const { thrown, results } = callRepeatedly(50, () => probe.bookMove(start()));
+    expect(thrown).toBe(0);
+    expect(results.every((r) => r === undefined)).toBe(true);
+    expect(warnings).toHaveLength(1);
+  });
+
+  it("a control character that reaches the schema check (JSON-escaped) stays out of the warning", () => {
+    const hostile = encode('{"format":1,"positions":{"\\u001b[2J":{"m":[]}}}');
+    expect(Object.keys(JSON.parse(new TextDecoder().decode(hostile)).positions)[0]).toBe(
+      "\u001b[2J",
+    );
+    const { probe, warnings } = probeOver(() => hostile);
+    probe.bookMove(start());
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatch(/^[\x20-\x7e]+$/);
+  });
+
+  it("a file of exactly BOOK_MAX_BYTES is not refused for its size", () => {
+    const exact = new Uint8Array(BOOK_MAX_BYTES).fill(0x20);
+    exact.set(BOOK_BYTES, 0);
+    const { probe, warnings } = probeOver(() => exact);
+    expect(probe.bookMove(start())).toBeDefined();
+    expect(warnings).toHaveLength(0);
+  });
+
+  it("promotions are encoded as UCI letters: e7e8q is a queen, e7e8n a knight", () => {
+    const fen = "8/4P3/8/8/8/8/k7/4K3 w - - 0 1";
+    for (const [text, piece] of [
+      ["e7e8q", QUEEN],
+      ["e7e8n", KNIGHT],
+    ] as const) {
+      const { probe, warnings } = probeOver(() =>
+        fixture({ [hexKey(parseFen(fen))]: { m: [[text, 1]] } }),
+      );
+      expect(probe.bookMove(parseFen(fen))?.promotion).toBe(piece);
+      expect(warnings).toHaveLength(0);
+    }
   });
 });

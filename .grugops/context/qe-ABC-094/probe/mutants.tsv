@@ -1,0 +1,34 @@
+M01	key encoding: padStart dropped	s{\.toString\(16\)\.padStart\(16, "0"\)}{.toString(16)}
+M02	key encoding: uppercase hex	s{\.toString\(16\)\.padStart}{.toString(16).toUpperCase().padStart}
+M03	key encoding: decimal	s{zobristKey\(position\)\.toString\(16\)}{zobristKey(position).toString(10)}
+M04	pick off-by-one: draw <= weight	s{if \(draw < weight\)}{if (draw <= weight)}
+M05	pick off-by-one: Math.round	s{Math\.floor\(random\(\) \* total\)}{Math.round(random() * total)}
+M06	pick off-by-one: random() * (total - 1)	s{random\(\) \* total\)}{random() * (total - 1))}
+M07	pick off-by-one: Math.ceil	s{Math\.floor\(random\(\)}{Math.ceil(random()}
+M08	weights ignored (uniform pick)	s{let draw = Math\.floor\(random\(\) \* total\);}{let draw = Math.floor(random() * moves.length);}; s{if \(draw < weight\) return move;\n(\s*)draw -= weight;}{if (draw < 1) return move;\n$1draw -= 1;}
+M09	pick walks m in reverse (spec-equivalent)	s{for \(const \{ move, weight \} of moves\)}{for (const { move, weight } of [...moves].reverse())}
+M10	empty-m entry kept and inBook by key presence	s{if \(lines\.length > 0\) entries\.set\(key, lines\);}{entries.set(key, lines);}; s{inBook: \(position\) => bookMoves\(position\)\.length > 0,}{inBook: (position) => (bookMoves(position), book?.has(zobristKey(position).toString(16).padStart(16, "0")) ?? false),}
+M11	empty-m entry kept in the map only (expected equivalent)	s{if \(lines\.length > 0\) entries\.set\(key, lines\);}{entries.set(key, lines);}
+M12	out of book returns a legal non-book move	s{\n      return undefined;\n}{\n      return legalMoves(position)[0];\n}
+M13	illegal move slips through (fabricated from its squares)	s{const move = legal\.find\(\(candidate\) => uciOf\(candidate\) === uci\);}{const move = legal.find((candidate) => uciOf(candidate) === uci) ?? ({ ...legal[0], from: parseSquareName(uci.slice(0, 2)), to: parseSquareName(uci.slice(2, 4)) } as Move);}; s{import \{ type Position, squareName \} from "\./position\.ts";}{import { type Position, parseSquareName, squareName } from "./position.ts";}
+M14	illegal move skipped silently (no warning)	s{switchOff\("holds a move that is illegal in its position"\);\n\s*return \[\];}{continue;}
+M15	illegal move warns but keeps this call's legal moves	s{(switchOff\("holds a move that is illegal in its position"\);)\n\s*return \[\];}{$1\n        continue;}
+M16	throw on corrupt input: outer catch removed	s{try \{\n\s*book = parseBook\(read\(\)\);\n\s*\} catch \(error\) \{\n\s*switchOff\(error instanceof BookRefused \? error\.message : "could not be read"\);\n\s*\}}{book = parseBook(read());}
+M17	inner JSON catch removed (spec-equivalent)	s{try \{\n\s*root = JSON\.parse\((.*?)\);\n\s*\} catch \{\n\s*throw new BookRefused\("is not valid UTF-8 JSON"\);\n\s*\}}{root = JSON.parse($1);}
+M18	throw when out of book	s{const total = }{if (moves.length === 0) throw new Error("out of book");\n      const total = }
+M19	read at construction (eager load)	s{(const switchOff = \(reason: string\): void => \{\n\s*book = null;\n\s*warn\(`opening book \$\{reason\}; playing on without it`\);\n\s*\};)}{$1\n  try {\n    book = parseBook(read());\n  } catch (error) {\n    switchOff(error instanceof BookRefused ? error.message : "could not be read");\n  }}
+M20	second warning: failed load retried per call	s#if \(book === undefined\) \{#if (!book) {#
+M21	second warning: illegal path warns without switching off	s{switchOff\("holds a move that is illegal in its position"\);}{warn("opening book holds a move that is illegal in its position; playing on without it");}
+M22	second warning: switchOff warns twice	s{(warn\(`opening book \$\{reason\}; playing on without it`\);)}{$1\n    $1}
+M23	size bar off-by-one (>=)	s{bytes\.length > BOOK_MAX_BYTES}{bytes.length >= BOOK_MAX_BYTES}
+M24	size bar removed	s{if \(bytes\.length > BOOK_MAX_BYTES\)\n\s*throw new BookRefused\(`is larger than \$\{BOOK_MAX_BYTES\} bytes`\);}{}
+M25	UTF-8 decoder not fatal	s{fatal: true}{fatal: false}
+M26	weight-sum overflow check removed	s{if \(!Number\.isSafeInteger\(lines\.reduce}{if (false && !Number.isSafeInteger(lines.reduce}
+M27	pair length check removed	s{pair\.length === 2 &&}{}
+M28	key regex accepts uppercase	s{\[0-9a-f\]\{16\}}{[0-9a-fA-F]{16}}
+M29	promotion letters n/q swapped	s{\["", "", "n", "b", "r", "q"\]}{["", "", "q", "b", "r", "n"]}
+M30	UCI regex loosened to any text	s{const UCI = .*;}{const UCI = /^.+\$/;}
+M31	Math.random instead of the injected random	s{random\(\) \* total}{Math.random() * total}
+M32	warning carries a byte of the file (the key)	s{throw new BookRefused\("has an entry that does not match the format"\);}{throw new BookRefused(`has an entry \$\{key\} that does not match the format`);}
+M33	weight 0 accepted	s{\(pair\[1\] as number\) >= 1}{(pair[1] as number) >= 0}
+M34	inBook true for every position once loaded	s{bookMoves\(position\)\.length > 0}{bookMoves(position).length >= 0}
