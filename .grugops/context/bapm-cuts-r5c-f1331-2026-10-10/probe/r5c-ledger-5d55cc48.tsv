@@ -1,0 +1,11 @@
+5d55cc48	CONTROL	load1=8.85	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+5d55cc48	WPERFT-STATIC	load1=8.70	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+5d55cc48	XHELPER-NARROW+FMT	load1=8.70	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+5d55cc48	XHELPER-NARROW+FMT+WPERFT-STATIC	load1=9.29	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+5d55cc48	XSHADOW-HELPER+FMT+WPERFT-STATIC	load1=9.29	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+5d55cc48	QSCAN-NARROW+FMT+WPERFT-STATIC	load1=8.94	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+5d55cc48	QLHS-INTERSECT+FMT+WPERFT-STATIC	load1=8.94	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+5d55cc48	M15+FMT	load1=8.94	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+5d55cc48	M15SUB+FMT	load1=7.84	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+5d55cc48	WLAUNDER	load1=7.84	exit=1	 Tests 3 failed | 9 passed (12)	lint=1 Found 1 error 	FAILED:A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar|A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set|licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+5d55cc48	WSTALELICENCE	load1=7.84	exit=1	 Tests 1 failed | 11 passed (12)	lint=1 Found 1 error 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|

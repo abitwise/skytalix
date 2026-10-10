@@ -1,0 +1,72 @@
+# RUN log — bapm-cuts-r5c-f1331-2026-10-10 (BA/PM), started 2026-10-10T15:28:41Z, Node v26.11.0, Apple M3.
+# Base of this branch: 5d55cc48 (the enqueue). The wave moved during the hop to 3159ab68 (ABC-129 merged at 3730f28e,
+# ABC-132 pulled); both readings are taken, and each line says which commit it read.
+# Paths are relative to the repo root unless they start with probe/ (this directory). <repo> = the main checkout.
+# Every planted build is a fresh `git archive` tree with node_modules symlinked; nothing was planted in a checkout.
+
+## Item 1 — ADR-0011 R5c (QE-136-b) -> ABC-137
+
+$ git log --oneline 7f7e6b84..5d55cc48 -- src/history-pane.nfr.test.ts   # the Architect measured at 7f7e6b84
+4cac6911 test(ABC-134): ... ; a42b59e3 test(ABC-134): ...                  # comment-only (ABC-134 is comment-only by contract)
+$ git diff --stat 5d55cc48 3159ab68 -- src/history-pane.nfr.test.ts
+(empty = byte-identical at the newer tip)
+
+$ .grugops/context/qe-ABC-136/probe/ledger.sh <repo> 5d55cc48 <scratch> <builds...>   # QE's runner, unchanged;
+#   plantqe136.py + plantqe057.py copied unchanged into <scratch>/bin/ (plantqe057.py sha256 d33f53e59242...)
+#   2026-10-10T15:32:51Z .. ~15:34Z, load1 7.84 - 9.29  -> probe/r5c-ledger-5d55cc48.tsv
+CONTROL                              exit 0  12/12
+WPERFT-STATIC                        exit 1  11/12  licence guard
+XHELPER-NARROW+FMT                   exit 0  12/12  <- the survivor (lint 0)
+XHELPER-NARROW+FMT+WPERFT-STATIC     exit 0  12/12  <- the survivor with an unlicensed importer planted (lint 0)
+XSHADOW-HELPER+FMT+WPERFT-STATIC     exit 0  12/12  (QE-136-c class, accepted)
+QSCAN-NARROW+FMT+WPERFT-STATIC       exit 1  11/12  drift tripwire (R5b pin holds)
+QLHS-INTERSECT+FMT+WPERFT-STATIC     exit 1  11/12  drift tripwire (R5b pin holds)
+M15+FMT, M15SUB+FMT                  exit 1  11/12  drift tripwire (R5 pin holds)
+WLAUNDER                             exit 1   9/12  A6.3, A6.4, licence guard
+WSTALELICENCE                        exit 1  11/12  licence guard
+
+$ raw-text counts, src/history-pane.nfr.test.ts at 5d55cc48 (node one-liner; split(t).length - 1)
+1 | "\nconst productionModulesIn = (directory: string): readonly string[] =>\n  readdirSync(directory).filter((file) => file.endsWith(\".ts\") && !file.endsWith(\".test.ts\"));\n"   (the framed helper, :163-:164)
+1 | plantqe136.py's HELPER anchor ('  readdirSync(directory).filter(...);\n', real newline)
+$ node .grugops/context/bapm-owed-batch-2026-10-10/probe/phrases.mjs src/history-pane.nfr.test.ts <phrases>   # collapsed text
+1 | it pins four spans of the guard by TEXT
+0 | R5c
+6 | productionModulesIn
+$ grep -c 'file.endsWith(".ts") && !file.endsWith(".test.ts")' src/cli.test.ts src/render-seam.test.ts
+1 / 1   (each file's own copy of clause 1's expression — out of scope, the Architect's ruling)
+$ helper call sites at 5d55cc48: :369 (licence guard), :583 (composer tripwire), :645 (frame-path probe)
+$ raw readers: src/cli.test.ts:1695 /const LICENSED_DRIVERS: readonly string\[\] = .../ ; src/render-seam.test.ts:408 /^const COMPOSITION_ROOT = "render-seam\.ts";$/m
+
+## Item 2 — F-133-1 (QE-133-a / QE-133-b) -> ABC-138
+
+$ git rev-parse 82104f70:src/cli.test.ts 5d55cc48:src/cli.test.ts        # QE-133's head vs this branch's base
+6afe2848... 6afe2848...   (byte-identical)
+$ git diff 5d55cc48 3159ab68 -- src/cli.test.ts                          # ABC-129's merge: two comment hunks, +1 line
+$ node .grugops/context/secnfr-ABC-133/probe/loader-scan.mjs src/cli.test.ts      # at 5d55cc48 — the AR triggers
+{"childProcessArgCalls":[],"createRequireSites":[...@1858 (one site, two call nodes)],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@343"]}
+$ (same, on 3159ab68:src/cli.test.ts)
+{"childProcessArgCalls":[],"createRequireSites":[...@1859 (one site)],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@343"]}
+=> neither AR-133-LOADER's nor AR-133-WRAP's promotion trigger fires at either tip. ABC-138 stays P3.
+
+$ probe/f1331-plants.sh <repo> 3159ab68 tip3159 <scratch>     # 2026-10-10T15:33:46Z .. 15:35:33Z, load1 6.74 - 12.00
+#   -> probe/f1331-plants-3159ab68.out.txt. 18 runs, 0 ABORTED, every one: Tests 67 passed (67).
+control, E-A1, S-CTRL                          GREEN 67/67  (controls)
+Q14, C5, C6, C7, C8, C10                       GREEN 67/67  (QE-133-b class: holes)
+X5, X5b, X6, X7, S2 (vi.mock), S3              GREEN 67/67  (QE-133-a class: holes)
+C13, C14, C15                                  GREEN 67/67  (controls)
+
+$ probe/f1331-dryrun.sh .grugops/context <scratch> <3159ab68:src/cli.test.ts>   # no vitest: Security's loader-scan over each planted COPY
+#   -> probe/f1331-dryrun-3159ab68.out.txt. (a) = loader-scan's childProcessArgCalls; (b) = its spawnSyncValueRefs (2 = clean)
+CONTROL, E-A1, S-CTRL, C13, C15                (a) []                       (b) 2
+Q14, C5, C6, C7, C8, C10                       (a) []                       (b) 3   <- (b) reds each
+X5, X5b, X6, X7, S2, S3                        (a) one entry each           (b) 2   <- (a) reds each
+P-DYN                                          (a) ["import@60"]            (b) 2   (already red under count (i) today)
+C14 (as QE recorded it)                        (a) ["JSON.stringify@60"]    (b) 2   <- FALSE RED under (a) "whatever the callee"
+C14-ARRAY (C14 minus its JSON.stringify call)  (a) []                       (b) 2
+C14-ARG (the JSON.stringify call alone)        (a) ["JSON.stringify@60"]    (b) 2
+=> Security's (a) as written reds C14, which Security's own control list (Ruling 2, "C13/C14 (no false count)") expects green.
+   ABC-138 resolves it: C14-ARRAY is the control; C14-ARG is a named, loud, accepted false-red class.
+
+$ git log --since=2026-08-01 --oneline 3159ab68 -- src/cli.test.ts | wc -l
+37 commits; tickets named in their subjects: ABC-042 043 044 045 046 058 059 065 066 068 076 077 103 109 113 115 122 133 (18; ABC-129 also touched it)
+=> the manual loader-scan check (BA/PM at the cut, Security/NFR at the gate) would have run on ~19 tickets in ten weeks.
