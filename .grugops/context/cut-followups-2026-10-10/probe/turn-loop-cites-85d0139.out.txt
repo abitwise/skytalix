@@ -1,0 +1,18 @@
+85d0139:src/cli.test.ts:588: * is what `wasGenerated` (`src/turn-loop.ts:191`) demands and what keeps this a deterministic
+85d0139:src/cli.test.ts:744:   * (`src/turn-loop.ts:191-200`). A pair of made-up squares would be caught by a weaker guard too.
+85d0139:src/cli.ts:30: * repairs the borrowed board and RETHROWS (`turn-loop.ts:293-309`), and `ABC-037` catches nothing,
+85d0139:src/cli.ts:181:    // `INPUT_ENDED_NOTICE` (`src/turn-loop.ts:312`) is the merged precedent for that. The renderer
+85d0139:src/command-input.test.ts:412:    // `1 + one per non-advancing outcome` (`src/turn-loop.ts:246`). A `board` that redrew for
+85d0139:src/command-input.test.ts:540:    // first frame and never again on this path (`src/turn-loop.ts:269`).
+85d0139:src/command-input.ts:58: * already evaluated for this ply (`src/turn-loop.ts:319-341`), and the unavailable-case wording is
+85d0139:src/command-input.ts:59: * `claimShortfall`'s (`src/turn-loop.ts:234`), merged and asserted by `ABC-021` `A3`. A second
+85d0139:src/engine.ts:507: * The `EngineSeam` `src/turn-loop.ts:138` has been waiting on since `ABC-019`, bound to a budget.
+85d0139:src/line-input.ts:5: * published in merged code (`src/turn-loop.ts:135`) with the comment "`EPIC-003` replaces it"; until
+85d0139:src/line-input.ts:21: * The loop's `A9b` repair (`src/turn-loop.ts:291-309`) runs on the way out and rethrows; what the
+85d0139:src/line-input.ts:49: * on it. The loop then writes `INPUT_ENDED_NOTICE` (`src/turn-loop.ts:176`) and returns
+85d0139:src/move-input.ts:7: * turns either answer into the `PromptOutcome` the merged loop consumes (`src/turn-loop.ts:125`).
+85d0139:src/result-screen.ts:12: * row to a column. `INPUT_ENDED_NOTICE` (`src/turn-loop.ts:312`) is the merged precedent for a
+85d0139:src/turn-loop.test.ts:1633:// `awaiting-human` at all (`turn-loop.ts:114-116`); what is asserted below is the player having the
+grugops/ABC-036-moves-command 06b03dc: 15 hits
+grugops/ABC-051-r2 a9ed126: 15 hits
+grugops/ABC-127-harder-puzzles a7e1128: 15 hits
