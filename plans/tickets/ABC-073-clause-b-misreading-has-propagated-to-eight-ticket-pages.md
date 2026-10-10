@@ -1,8 +1,8 @@
 ---
 id: ABC-073
 title: 'Eight ticket pages restate `ABC-041` clause (b) and not one uses the test the clause states — six answer a file-touch or a delta, and two carry no fail-safe sentence at all'
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
