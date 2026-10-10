@@ -21,12 +21,15 @@
  * The honest limit on the spies is the one `turn-loop.test.ts` states: `gameStatusOf` calls
  * `repetitionCounts` INSIDE `history.ts`, where a module-boundary spy cannot see it. So the derive
  * the bar is about is counted by `gameStatus`, which `history.ts:153` calls exactly once per
- * `gameStatusOf`, and `repetitionCounts` and `keyHistory` at 0 prove the loop adds no replay of its
- * own to a PLY. The loop DOES make one derive of its own — `keyHistory`, in `claimShortfall`, on a
+ * `gameStatusOf`. `repetitionCounts` and `keyHistory` at 0 show only that the loop calls neither
+ * export directly — they observe those two exports and nothing else. A replay by any other route
+ * (`takeBack`, which rebuilds the position from `initialFen`, called on every ply) leaves all three
+ * counts green here: a module-boundary spy on these exports cannot see it. The loop DOES make one
+ * derive of its own — `keyHistory`, in `claimShortfall`, on a
  * claim the rules core refused — but that is priced per command and never per ply, and it is
  * ledgered by merged `A8` in `turn-loop.test.ts`, not here. `keyHistory` is spied here because a
  * build that called it on every ply would leave `gameStatus` at `plies + 1` and `repetitionCounts`
- * at 0, and without its zero this file would be green on the one cost `NFR-002` forbids.
+ * at 0, and without its zero this file would be green on a second key-list replay per ply.
  */
 import { describe, expect, it, vi } from "vitest";
 import { assembleFrame } from "./frame.ts";
@@ -137,8 +140,9 @@ describe("NFR-002 — the loop derives once per ply, spied at A17's three ply co
       // first frame is shown. A two-derives-per-ply build reads `2 * (plies + 1)` here and MEETS the
       // timing bar at 120.
       expect(vi.mocked(gameStatus)).toHaveBeenCalledTimes(plies + 1);
-      // No replay of the loop's own on an advancing ply: every evaluation went through
-      // `gameStatusOf`, and the loop's one direct `keyHistory` call (the refused claim) never ran.
+      // Neither export is called by the loop directly on an advancing run: every `gameStatus` call
+      // came through `gameStatusOf`, and the loop's one direct `keyHistory` call (the refused claim)
+      // never ran.
       expect(vi.mocked(repetitionCounts)).toHaveBeenCalledTimes(0);
       expect(vi.mocked(keyHistory)).toHaveBeenCalledTimes(0);
     });
