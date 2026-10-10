@@ -1,0 +1,27 @@
+tests 1503 passed 1486 failed 17
+FILE coordinate-move.test.ts 1 
+   - ABC-031 A2 — the promotion letter selects one of four records why A2's printed FEN cannot carry the criterion: :: FenError: side not to move (black) is in check
+FILE evaluate.pawns.test.ts 0 suite error: side not to move (black) is in check
+FILE fen.test.ts 1 
+   - FEN field parsing parses and preserves an en-passant target square :: FenError: en-passant square e3 is on the wrong rank
+FILE move-input.test.ts 7 
+   - fixtures — every FEN in this file round-trips through toFen round-trips 3q1k2/4P3/8/8/8/8/8/4K3 w - - 0 1 :: FenError: side not to move (black) is in check
+   - fixtures — every FEN in this file round-trips through toFen round-trips 3Q1k2/8/1Q4Q1/8/Q2q3Q/8/1Q6/3Q1K2 w -  :: FenError: side not to move (black) is in check
+   - ABC-033 A4 — the candidate list fits the frame's message region hides nothing for four promotion captures :: FenError: side not to move (black) is in check
+   - ABC-033 A4 — the candidate list fits the frame's message region hides nothing for four promotions :: FenError: side not to move (black) is in check
+   - ABC-033 A4 — the candidate list fits the frame's message region hides nothing for six queens, adversarial :: FenError: side not to move (black) is in check
+   - ABC-033 A5 — one derive per prompt hands the ONE derived array to every candidate render for six queens, the w :: FenError: side not to move (black) is in check
+   - ABC-033 fences — the line is handed over unmodified, and nothing is guessed never picks between two legal move :: FenError: side not to move (black) is in check
+FILE moves.test.ts 1 
+   - ABC-004 acceptance — castling generation withholds every castle while the king is in check :: FenError: side not to move (black) is in check
+FILE puzzle-suite.test.ts 1 
+   - A6 — every puzzle carries its provenance, and the mates are the rules' answer every row names its source and i :: FenError: pawn on rank 8 (h8)
+FILE quiescence.test.ts 1 
+   - A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY the cap BINDS on a runaw :: FenError: side not to move (black) is in check
+FILE san.parse.test.ts 1 
+   - A4 — promotion and suffix tolerance PINS the ticket's printed FEN as defective: kings adjacent, `Kxe2` the onl :: FenError: side not to move (black) is in check
+FILE status-panel.nfr.test.ts 4 
+   - ABC-016 A13 — the panel derives nothing (call counts, spied) never touches the repetition machinery, on any sh :: FenError: side not to move (black) is in check
+   - ABC-016 A13 — the panel derives nothing (call counts, spied) scans the 64 squares exactly once, whatever the b :: FenError: side not to move (black) is in check
+   - ABC-016 A13 — the panel derives nothing (call counts, spied) replays the history exactly once for the last mov :: FenError: side not to move (black) is in check
+   - ABC-016 A13 — the panel derives nothing (call counts, spied) pays no replay at all before the first move :: FenError: side not to move (black) is in check

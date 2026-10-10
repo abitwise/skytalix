@@ -1,0 +1,24 @@
+Architect/Design probe for ABC-010, task wave-2026-09-25, subtask design-abc010, 2026-10-10 ~08:50-09:00Z.
+Base: grugops/wave-2026-09-25 @ 6ade041 (src/fen.ts identical to 71be48b, the BA/PM probe's tree).
+Machine: Apple M3, Node v26.11.0, darwin arm64. load1 8.3-12.1 throughout (parallel hops running).
+
+Everything was measured on an OUT-OF-TREE copy (<tree-copy> = rsync of the worktree, node_modules
+symlinked). No file in any repository worktree was written by a measurement. The prototype is a
+MEASUREMENT INSTRUMENT, not the build: the Engineer writes src/ at the build hop.
+
+  node closure.mjs <tree>/src         -> closure.out.txt      runtime import graph (ADR-0030: only `import type`
+                                                               is erased); the effect of a fen.ts -> legal.ts edge
+  node fen-corpus.mjs <tree>          -> fen-corpus.out.txt   every FEN literal in src/ and spike/ through today's
+                                                               parseFen, then the page's six rules (prototype inline)
+  prototype-variantB.patch            the throwaway src/fen.ts (fen.ts -> moves.ts, parseFenUnchecked = grammar only)
+                                      + the 6 import swaps + a measurement-only legal SPARSE_FEN in status-panel.nfr
+  prototype-variantA-vs-B.diff        variant A = the in-check rule through legal.ts `isInCheck` (flip, probe, flip back)
+  npx vitest run (variant B, tests untouched)        -> run-B-raw.out.txt    325 failed / 1503, 15 files
+  npx vitest run (variant B + 6 import swaps)        -> run-B-swap.out.txt   17 failed + 1 suite error, 9 files
+  npx vitest run src/status-panel.nfr.test.ts src/history-pane.nfr.test.ts
+        variant B: 17/17 passed.  variant A: 16/17, `ABC-016 A13 asks isInCheck exactly once ITSELF`
+        -> "expected 2 to be 1" (the parse inside the panel's replay is counted by the isInCheck spy).
+  node fen-accept-b.mjs <tree>        -> fen-accept-b.out.txt the page's acceptance FENs + round trip over 589 FENs
+  node fen-cost-ab.mjs <tree>         -> fen-cost-ab.out.txt  base vs validated parseFen, ONE process, 9 interleaved rounds
+  node src/perft-bench.ts (B, then base)             -> perft-ab.out.txt
+  PERFT_DEEP=1 npx vitest run src/perft.test.ts (B)  -> perft-deep-b.out.txt  32/32, exit 0

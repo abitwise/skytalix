@@ -1,0 +1,18 @@
+tests 1503 passed 1178 failed 325 suitesFailed 53
+{
+  'coordinate-move.test.ts': '1',
+  'evaluate.pawns.test.ts': '0 (suite error: side not to move (black) is in check)',
+  'fen.test.ts': '1',
+  'legal.test.ts': '11',
+  'move-input.test.ts': '7',
+  'moves.castling.hardening.test.ts': '104',
+  'moves.castling.test.ts': '23',
+  'moves.enpassant.hardening.test.ts': '108',
+  'moves.enpassant.test.ts': '52',
+  'moves.test.ts': '1',
+  'puzzle-suite.test.ts': '1',
+  'quiescence.test.ts': '1',
+  'san.parse.test.ts': '1',
+  'status-panel.nfr.test.ts': '4',
+  'zobrist.test.ts': '10'
+}

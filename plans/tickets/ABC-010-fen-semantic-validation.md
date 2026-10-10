@@ -164,7 +164,35 @@ but it is a real structural change to a graph the audit recorded as a clean acyc
 choosing where the check lives is a design decision, not an implementation detail. Flagged
 here, not answered here. *(2026-10-10: `isInCheck` is now exported at `src/legal.ts:32`, so the
 candidate edge is `fen.ts → legal.ts`. `legal.ts` imports `apply`, `moves` and `position`, not
-`fen`, so the edge makes no cycle. Still Architect/Design's at the design hop.)*
+`fen`, so the edge makes no cycle. Still Architect/Design's at the design hop.)* **Answered
+2026-10-10 in § Design below (`ADR-0033`, proposed): `fen.ts → moves.ts`, not `legal.ts`.**
+
+## Design (Architect/Design, 2026-10-10, `design-abc010`)
+
+Authority: [`ADR-0033`](../../memory-bank/50-decisions/ADR-0033-parsefen-checks-the-side-not-to-move-through-moves-ts-and-off-domain-fixtures-parse-grammar-only.md)
+(**proposed, owner acceptance owed**). Evidence: `.grugops/context/design-abc010/` (`notes/`, `probe/`).
+
+- **Where the check lives.** `fen.ts` imports `isSquareAttackedBy` from `moves.ts`, on the king squares
+  `assertBothKingsPresent` already finds. It does **not** call `legal.ts` `isInCheck`, because that turns
+  `ABC-016` `A13` red (`src/status-panel.nfr.test.ts`: "expected 2 to be 1", measured).
+  `fen.ts` moves from level 2 to level 3, there is no cycle, and no importer's closure changes.
+- **Two entries.** `parseFen` is the boundary: grammar, then semantics. `parseFenGrammarOnly` is
+  test-only, and a test in `fen.test.ts` keeps every production file from naming it. Rule order,
+  message shape and the en-passant definition (no capturer required) are in `ADR-0033` decision 3.
+- **Bars, measured on a throwaway prototype.** `NFR-002`: 2.97 µs mean against 2.50 µs base, so ≤
+  10 µs holds. `NFR-001`: perft 4.96 M nodes/sec. Deep perft: 32/32.
+- **⚠️ Criterion 9 cannot hold as worded. This goes back to BA/PM.** The six rules reject 144 of
+  the repo's 732 distinct parsing FENs (186 occurrences).
+  - 175 of the 186 sit in six rules-core files that feed impossible boards on purpose: `moves.castling*`,
+    `moves.enpassant*`, `legal`, `zobrist`. These switch to `parseFenGrammarOnly`, one import line each,
+    and were measured green.
+  - 9 more are incidental, in 8 test files, and must be re-authored. One is `fen.test.ts:29`, an
+    `ABC-001` case, `e3` with white to move.
+  - 2 are rows of `src/puzzle-corpus.ts`: a pawn on h8, and black in check with white to move.
+
+  The fence becomes 16 files. The page's "shares no file" no longer holds: `puzzle-corpus.ts` is
+  shared with `ABC-127` and `ABC-126`, and `quiescence.test.ts` with `ABC-083`. The proposed wording
+  and the file list are in the decision note.
 
 ## Security / NFR triggers
 

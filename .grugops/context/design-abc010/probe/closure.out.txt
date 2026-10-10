@@ -1,0 +1,13 @@
+runtime edges fen.ts: [ 'position.ts' ]  legal.ts: [ 'apply.ts', 'moves.ts', 'position.ts' ]
+modules: 35 runtime edges: 90
+cycle before: false after: false
+max depth before: 10 after: 10
+CLOSURE GROWS fen.ts: +apply.ts,legal.ts,moves.ts  (before 1, after 4)
+importers of fen.ts: evaluate.mirror-corpus.ts, history-pane.ts, history.ts, perft-bench.ts, result-screen.ts, status-panel.ts
+depth fen before/after: 2 5
+  evaluate.mirror-corpus.ts depth before 5 after 6
+  history-pane.ts depth before 6 after 6
+  history.ts depth before 6 after 6
+  perft-bench.ts depth before 6 after 6
+  result-screen.ts depth before 6 after 6
+  status-panel.ts depth before 6 after 6
