@@ -1,0 +1,32 @@
+##### out-base-M-FIRST-STATEMENT-ONLY.txt
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+##### out-base-M-SINGLE-LINE.txt
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+##### out-base-pristine.txt
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+##### out-tip-M-FIRST-STATEMENT-ONLY.txt
+import { f } from "./m.ts";: expected false to be true // Object.is equality
+ FAIL  src/render-seam.test.ts > ABC-041 — the render seam > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import type { X } from "./m.ts";
+import { f } from "./m.ts";: expected false to be true // Object.is equality
+ Test Files  1 failed (1)
+      Tests  1 failed | 12 passed (13)
+##### out-tip-M-NO-STRIP.txt
+     → import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+ FAIL  src/render-seam.test.ts > ABC-041 — the render seam > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+ Test Files  1 failed (1)
+      Tests  1 failed | 12 passed (13)
+##### out-tip-M-SINGLE-LINE.txt
+} from "./m.ts";: expected false to be true // Object.is equality
+ FAIL  src/render-seam.test.ts > ABC-041 — the render seam > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import {
+} from "./m.ts";: expected false to be true // Object.is equality
+ Test Files  1 failed (1)
+      Tests  1 failed | 12 passed (13)
+##### out-tip-pristine.txt
+ Test Files  1 passed (1)
+      Tests  13 passed (13)

@@ -1,0 +1,46 @@
+# A3, QE harness (AST lift + TS-parser oracle). <scratch>/tree-* are git archive copies of 5c17d1ed / e7123236
+{"testFile":"<scratch>/tree-base/src/render-seam.test.ts","lifted":1,"modules":35,"pairs":1190,"consumers":92,"oracleConsumers":92,"disagree":[],"headline":["render.ts:true","status-panel.ts:true","history-pane.ts:true"]}
+{"testFile":"<scratch>/tree-tip/src/render-seam.test.ts","lifted":2,"modules":35,"pairs":1190,"consumers":92,"oracleConsumers":92,"disagree":[],"headline":["render.ts:true","status-panel.ts:true","history-pane.ts:true"]}
+{"testFile":"<scratch>/mut-qe-pristine/src/render-seam.test.ts","lifted":2,"modules":35,"pairs":1190,"consumers":92,"oracleConsumers":92,"disagree":[],"headline":["render.ts:true","status-panel.ts:true","history-pane.ts:true"]}
+# surviving-at-b09d880c mutants over the real tree
+M-SWAP-ORDER: consumers=92 oracleDisagree=0 render.ts:true status-panel.ts:true history-pane.ts:true
+M-LINE-TO-EOF: consumers=92 oracleDisagree=0 render.ts:true status-panel.ts:true history-pane.ts:true
+M-LINE-WHOLE-LINE: consumers=92 oracleDisagree=0 render.ts:true status-panel.ts:true history-pane.ts:true
+M-GREEDY-BLOCK: consumers=0 oracleDisagree=92 render.ts:false status-panel.ts:false history-pane.ts:false
+a8da4a9d958df88d75cb0eadb5286d622dd48a1a644e0a1a776ed0b227099dc1  <scratch>/map-base.txt
+a8da4a9d958df88d75cb0eadb5286d622dd48a1a644e0a1a776ed0b227099dc1  <scratch>/map-tip.txt
+a8da4a9d958df88d75cb0eadb5286d622dd48a1a644e0a1a776ed0b227099dc1  <scratch>/map-qe.txt
+# hazard scan, real tree then planted control
+(none)
+files=35 hazards=0
+p.ts:1 literal "\"http://x\""
+p.ts:5 literal "`a/*b`"
+p.ts:3 line-comment-with-block-delim "// open /* here"
+p.ts:4 block-comment-with-// "/* see https://y */"
+files=1 hazards=4
+# probes
+P1 /* in a string opens a fake block           base=true  tip=false oracle=true  WRONG-undercount-NEW
+P2 /* inside a line comment                    base=true  tip=false oracle=true  WRONG-undercount-NEW
+P3 */ inside a line comment                    base=true  tip=true  oracle=true  ok
+P4 URL specifier above (// in a specifier)     base=true  tip=true  oracle=true  ok
+P5 URL specifier same line                     base=false tip=false oracle=true  WRONG-unchanged
+P6 trailing // with URL                        base=true  tip=true  oracle=true  ok
+P7 // URL inside a block comment above         base=true  tip=true  oracle=true  ok
+P8 // string literal above                     base=true  tip=true  oracle=true  ok
+P9 line comment above the import               base=true  tip=true  oracle=true  ok
+P10 commented value beside a type              base=true  tip=false oracle=false FIXED
+P11 block comment between specifiers           base=true  tip=true  oracle=true  ok
+P12 comment in default clause                  base=true  tip=true  oracle=true  ok
+P13 block comment leading the import line      base=false tip=false oracle=true  WRONG-unchanged
+P14 trailing block comment                     base=true  tip=true  oracle=true  ok
+P15 comment inside the specifier string        base=false tip=true  oracle=false WRONG-overcount-NEW
+P16 type import with trailing // f             base=false tip=false oracle=false ok
+P17 template literal with //                   base=true  tip=true  oracle=true  ok
+P18 jsdoc with */ in code later                base=true  tip=true  oracle=true  ok
+# the six ticket rows
+R1 { /* c */ type X }                          base=true  tip=false oracle=false FIXED
+R2 all-type + trailing // c                    base=true  tip=false oracle=false FIXED
+R3 all-type + // f, line                       base=true  tip=false oracle=false FIXED
+R4 import in /* */ block                       base=true  tip=false oracle=false FIXED
+R5 multi-line mixed brace                      base=true  tip=true  oracle=true  ok
+R6 type then value statement                   base=true  tip=true  oracle=true  ok

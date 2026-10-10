@@ -1,0 +1,58 @@
+// QE ABC-135 A3, independent of the engineer's harness: lift the instrument out of a
+// render-seam.test.ts by AST (not by text slicing), run it over every ordered pair of production
+// modules, and compare it with a TypeScript-parser oracle of ADR-0030 decision 2.
+// usage: node qe-a3.cjs <render-seam.test.ts> <srcDir> <mapOut>
+const ts = require("typescript");
+const fs = require("node:fs");
+const [testFile, dir, mapOut] = process.argv.slice(2);
+const text = fs.readFileSync(testFile, "utf8");
+const sf = ts.createSourceFile(testFile, text, ts.ScriptTarget.Latest, true);
+const wanted = new Set(["withoutComments", "bindsAValueFrom"]);
+const decls = [];
+for (const st of sf.statements)
+  if (ts.isVariableStatement(st))
+    for (const d of st.declarationList.declarations)
+      if (wanted.has(d.name.getText(sf))) decls.push(st.getText(sf));
+const js = ts.transpileModule(`${decls.join("\n")}\nmodule.exports = { bindsAValueFrom };`, {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText;
+const m = { exports: {} };
+new Function("module", "exports", js)(m, m.exports);
+const { bindsAValueFrom } = m.exports;
+
+// Oracle: decision 2 read off the real syntax tree.
+const oracle = (source, target) => {
+  const s = ts.createSourceFile("x.ts", source, ts.ScriptTarget.Latest, true);
+  return s.statements.some((st) => {
+    if (!ts.isImportDeclaration(st) || st.moduleSpecifier.text !== `./${target}`) return false;
+    const c = st.importClause;
+    if (!c || c.isTypeOnly) return false;
+    if (c.name) return true;
+    const nb = c.namedBindings;
+    if (!nb) return false;
+    if (ts.isNamespaceImport(nb)) return true;
+    return nb.elements.some((e) => !e.isTypeOnly);
+  });
+};
+
+const prod = fs.readdirSync(dir).filter((f) => f.endsWith(".ts") && !f.endsWith(".test.ts")).sort();
+const lines = [];
+let pairs = 0, consumers = 0, oracleConsumers = 0;
+const disagree = [];
+for (const t of prod)
+  for (const f of prod) {
+    if (f === t) continue;
+    pairs++;
+    const src = fs.readFileSync(`${dir}/${f}`, "utf8");
+    const v = bindsAValueFrom(src, t);
+    const o = oracle(src, t);
+    if (v) consumers++;
+    if (o) oracleConsumers++;
+    if (v !== o) disagree.push(`${f} -> ${t} instrument=${v} oracle=${o}`);
+    lines.push(`${f} -> ${t} ${v}`);
+  }
+fs.writeFileSync(mapOut, `${lines.join("\n")}\n`);
+const headline = ["render.ts", "status-panel.ts", "history-pane.ts"].map(
+  (t) => `${t}:${bindsAValueFrom(fs.readFileSync(`${dir}/render-seam.ts`, "utf8"), t)}`,
+);
+console.log(JSON.stringify({ testFile, lifted: decls.length, modules: prod.length, pairs, consumers, oracleConsumers, disagree, headline }));

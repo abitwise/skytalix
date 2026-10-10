@@ -142,3 +142,54 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `35ad336b`. **Res
 | 8 | size assigned | **✅** `XS` (1), with feasibility measured |
 | 9 | priority assigned | **✅** `P3`, with a named promotion trigger |
 | 10 | no major unresolved blocker | **✅** the fix reads the accepted ADR as written. The `C3` alternative would only strike `A1` |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-135`).
+Branch `grugops/ABC-135-a8-comment-specifiers` from `5c17d1ed`, code in `b09d880`. Not merged, not pushed.
+Readings and raw files: `.grugops/context/ticket-to-pr-ABC-135/notes/`. Every mutant and cost run was in a
+`git archive` copy outside the repository.
+
+**Premise re-verified at `5c17d1ed`:** the instrument is byte-unchanged since `35ad336b`, all six rows read
+`true`, and the map is 1,190 / 92. **Criteria: 4 of 4 met.** Red first: with the six rows added and the
+instrument unchanged, the new `it` failed on `import { /* c */ type X }` (`expected true to be false`).
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | The instrument matches over `withoutComments(source)`, the file's existing `deliveredCode` strip lifted into one helper. A sibling `it` asserts the four `QE-054-a` spellings `false`. The eight `ADR-0030` rows, their strings and their `toHaveLength(4)` are untouched. `M-NO-STRIP` reds the new `it` only |
+| `A2` | MET | The two `QE-054-c` rows assert `true`. `M-SINGLE-LINE` (`[^;"\\n]`) and `M-FIRST-STATEMENT-ONLY` (`.slice(0, 1)`) each **survive** the base (12/12) and each **red** the tip on exactly their row (1 failed / 12 passed). Pristine: 12 and 13 passed |
+| `A3` | MET | The instrument was lifted verbatim from each tree and run over every ordered pair of the 35 production modules. Base and tip both read 1,190 pairs / 92 consumers, and the maps are byte-identical (sha256 `a8da4a9d…`). `render-seam.ts` consumes `render.ts`, `status-panel.ts` and `history-pane.ts` |
+| `A4` | MET | `git diff --name-only 5c17d1ed..b09d880` = `src/render-seam.test.ts` only (+31/−6). Lint, typecheck and build exit 0. `npm test` exit 0 at 51 files / **1585** (base 1584, so +1 `it`). Skips 0. Integrity `No findings.`. `lane-inventory.js` 51/51 `No findings.` |
+
+**`N8-LANE`: MET** on the narrow set (`ADR-0035`). The first reading (n = 8) had an inadmissible twin
+(−2.17 %). The second reading (n = 12, load1 8.2–10.8): twin −10 ms (−0.84 %, admissible), R 40 ms; tip
+−15 ms, interval [−70, +20] ms. No file was added. **Owed:** the QE hop, the `In Review` move
+(Orchestrator) and the merge. UAT is waived by rule (`.test.ts` only), measured at merge.
+
+## QE
+
+**2026-10-10, QE/E2E** (task `wave-2026-09-25`, subtask `qe-ABC-135`, Workflow 04 review exit).
+**Result: PASS_WITH_GAPS. `A1`–`A4` are MET and no gap blocks it.** QE re-derived each criterion with
+its own harnesses in `git archive` copies. It added one test-only commit, `ce6d8746` (+15 in
+`src/render-seam.test.ts`, 0 production lines). Notes: `.grugops/context/qe-ABC-135/notes/` (decision
+`…28ea625e`, observations `…2a045cdb` and `…efa99c8b`, artifact-ref `…5b93e7c5`).
+
+| # | QE verdict | independent evidence |
+|---|---|---|
+| `A1` | MET | The four rows read `true` on the base instrument and `false` on the tip, and a TypeScript-parser oracle also reads `false`. The eight `ADR-0030` rows' `it` is byte-identical at base, `b09d880c` and `ce6d8746` |
+| `A2` | MET | `M-SINGLE-LINE` and `M-FIRST-STATEMENT-ONLY` each survive the base and red the tip on exactly their row. Pristine: 12, 13, 14 |
+| `A3` | MET | AST-lifted instrument: base and tip both 1,190 / 92, byte-identical maps (sha256 `a8da4a9d…`). The parser oracle agrees on all 1,190 pairs. The headline holds |
+| `A4` | MET | `src/` diff = `src/render-seam.test.ts` only. Lint, typecheck, build exit 0. `npm test` 51 / 1586 (base 1584, Engineer 1585), 0 skips. Integrity and inventory `No findings.` |
+
+**Gaps.**
+- `QE-135-a` (LOW): **closed** by `ce6d8746`. Three over-strip mutants (`M-LINE-TO-EOF`, `M-LINE-WHOLE-LINE`, `M-SWAP-ORDER`) survived the delivered file and the real-tree map. They are now RED.
+- `QE-135-b` (LOW): the docblock does not name the second naive-strip limit, a `/*` inside a line comment. There is 0 exposure on today's tree.
+- INFO:
+  - `QE-135-c`: the map is a one-off measurement, not a test.
+  - `QE-135-d`: an unreachable over-count, a comment inside a specifier.
+  - `QE-135-e`: two column-0 under-counts from before this ticket.
+  - `QE-135-f`: `A4` on the branch tip versus the code commits.
+
+**The sibling `it` is endorsed**: it keeps the eight rows and their `toHaveLength(4)` byte-identical.
+**Owed:** the `In Review` move and the merge (Orchestrator). UAT is waived by rule (0 production
+lines on both commits).

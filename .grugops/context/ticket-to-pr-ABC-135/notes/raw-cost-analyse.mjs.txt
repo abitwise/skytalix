@@ -1,0 +1,17 @@
+// ADR-0035 dec 1: per-round deltas, median, sign, R at k=2 (n=8), admissibility (twin |median| <= 1.5% of base CPU).
+import { readFileSync } from "node:fs";
+const rows = readFileSync(process.argv[2], "utf8").trim().split("\n").slice(1).map((l) => l.split(" "));
+const by = {};
+for (const [r, c, l1, , , cpu] of rows) if (r !== "0") (by[r] ??= {})[c] = { cpu: +cpu, l1: +l1 };
+const rounds = Object.keys(by).sort((a, b) => a - b);
+const med = (xs) => { const s = [...xs].sort((a, b) => a - b), m = s.length / 2; return s.length % 2 ? s[m | 0] : (s[m - 1] + s[m]) / 2; };
+const n = rounds.length, k = n >= 14 ? 4 : n >= 11 ? 3 : n >= 8 ? 2 : 1;
+const read = (cond) => {
+  const d = rounds.map((r) => +(by[r][cond].cpu - by[r].A.cpu).toFixed(2)).sort((a, b) => a - b);
+  return { deltas: d, median: +med(d).toFixed(3), pos: d.filter((x) => x > 0).length, neg: d.filter((x) => x < 0).length, zero: d.filter((x) => x === 0).length, interval: [d[k - 1], d[n - k]], R: Math.max(Math.abs(d[k - 1]), Math.abs(d[n - k])) };
+};
+const baseMed = med(rounds.map((r) => by[r].A.cpu));
+const N = read("N"), B = read("B");
+console.log({ n, k, baseMedianCpu: baseMed, load1: [Math.min(...rows.map((x) => +x[2])), Math.max(...rows.map((x) => +x[2]))], load1Median: med(rows.slice(3).map((x) => +x[2])) });
+console.log("twin N-A", N, "pct", (100 * N.median / baseMed).toFixed(2), "admissible(|med|<=1.5%)", Math.abs(N.median) <= 0.015 * baseMed);
+console.log("tip  B-A", B, "pct", (100 * B.median / baseMed).toFixed(2), "net B-N median", +(B.median - N.median).toFixed(3));

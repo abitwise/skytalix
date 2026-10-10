@@ -92,12 +92,21 @@ const productionModules = (): readonly string[] =>
     (file) => file.endsWith(".ts") && !file.endsWith(".test.ts"),
   );
 
+/** `source` with every `/* … *\/` block and `// …` line comment removed. */
+const withoutComments = (source: string): string =>
+  source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+
 /**
  * `ADR-0030` decision 2, read off the SPECIFIER LIST: does `source` hold an `import` from
  * `./<target>` that binds at least one VALUE — a default binding, a namespace binding, or a brace
  * specifier not prefixed `type`? `import type`, an all-`type` brace list, a bare `import "…"` and an
  * `export … from` re-export bind none. `[^;"]*` reads a statement across lines, as 12 production
- * files spell theirs (`ABC-054` test note 3).
+ * files spell theirs (`ABC-054` test note 3), and EVERY matching statement in the file is read.
+ *
+ * COMMENTS ARE NOT READ (`ABC-135`, `QE-054-a`): a comment is neither a specifier nor a statement,
+ * so the source is stripped of comments before it is matched. The strip is naive — a `/*` or `//`
+ * inside a string literal would hide code — and is held to the real tree by the base's consumer map
+ * (1,190 ordered pairs, 92 consumers at `ABC-135`'s pull), never by these rows alone.
  *
  * This is CONSUMPTION, not evaluation. `import { type X, type Y }` EVALUATES the target under
  * `verbatimModuleSyntax`, which is why the licence guard in `src/history-pane.nfr.test.ts` counts it
@@ -106,7 +115,7 @@ const productionModules = (): readonly string[] =>
  */
 const bindsAValueFrom = (source: string, target: string): boolean =>
   [
-    ...source.matchAll(
+    ...withoutComments(source).matchAll(
       new RegExp(`^import\\s+([^;"]*?)\\s*from\\s+"\\./${target.replace(".", "\\.")}";`, "gm"),
     ),
   ].some(([, clause = ""]) => {
@@ -133,10 +142,7 @@ const runtimeConsumersOf = (target: string): readonly string[] =>
   productionModules().filter((file) => file !== target && bindsAValueFrom(sourceOf(file), target));
 
 /** The delivered module with every comment removed — what `A3` and `A6` assert over. */
-const deliveredCode = (): string =>
-  sourceOf("render-seam.ts")
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/\/\/.*$/gm, "");
+const deliveredCode = (): string => withoutComments(sourceOf("render-seam.ts"));
 
 describe("ABC-041 — the render seam", () => {
   afterEach(() => vi.restoreAllMocks());
@@ -351,6 +357,40 @@ describe("ABC-041 — the render seam", () => {
     for (const [spelling, consumes] of spellings)
       expect(bindsAValueFrom(spelling, "m.ts"), spelling).toBe(consumes);
     expect(spellings.filter(([, consumes]) => consumes)).toHaveLength(4);
+  });
+
+  it("A8's instrument — a comment is not a specifier; it reads across lines and every statement", () => {
+    // `ABC-135`. The four `false` rows are `QE-054-a`'s: a comment is neither a specifier nor a
+    // statement, so none of them binds a value (`ADR-0030` decision 2). `A8` is `toContain`, so
+    // only these rows can see that over-count. The two `true` rows are `QE-054-c`'s: one statement
+    // across lines, and a value-binding statement that is not the file's first from the target.
+    // String literals only. Biome's autofix would rewrite three of the four into `import type`.
+    const spellings: readonly (readonly [spelling: string, consumes: boolean])[] = [
+      ['import { /* c */ type X } from "./m.ts";', false],
+      ['import {\n  type X, // c\n} from "./m.ts";', false],
+      ['import {\n  type X,\n  // f,\n} from "./m.ts";', false],
+      ['/*\nimport { f } from "./m.ts";\n*/', false],
+      ['import {\n  type X,\n  f,\n} from "./m.ts";', true],
+      ['import type { X } from "./m.ts";\nimport { f } from "./m.ts";', true],
+    ];
+
+    for (const [spelling, consumes] of spellings)
+      expect(bindsAValueFrom(spelling, "m.ts"), spelling).toBe(consumes);
+  });
+
+  it("A8's instrument — the comment strip eats no code: a consumer beside a comment still counts", () => {
+    // `ABC-135` QE. The rows above only see a strip that removes too LITTLE. These see one that
+    // removes too much: a line comment read to end of file, a whole line dropped for its trailing
+    // comment, or the line strip run before the block strip (it cuts a `*/` behind a URL). Each
+    // leaves today's real-tree map unchanged, so only rows can catch it.
+    const spellings: readonly string[] = [
+      '// c\nimport { f } from "./m.ts";',
+      'import { f } from "./m.ts"; // c',
+      '/* see http://x */\nimport { f } from "./m.ts";\n/* c */',
+    ];
+
+    for (const spelling of spellings)
+      expect(bindsAValueFrom(spelling, "m.ts"), spelling).toBe(true);
   });
 
   it("A9 — the declared COMPOSITION_ROOT, and deliberately NOT in LICENSED_DRIVERS", () => {
