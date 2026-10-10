@@ -1,0 +1,7 @@
+   × parseFenGrammarOnly guard — no production module names it > is absent from every src/*.ts except fen.ts and the tests 8ms
+     → expected [ 'status-panel.ts' ] to deeply equal []
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/fen.test.ts > parseFenGrammarOnly guard — no production module names it > is absent from every src/*.ts except fen.ts and the tests
+AssertionError: expected [ 'status-panel.ts' ] to deeply equal []
+[31m+   "status-panel.ts",[39m
+      Tests  1 passed | 59 skipped (60)

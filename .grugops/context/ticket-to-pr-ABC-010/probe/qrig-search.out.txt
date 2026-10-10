@@ -1,0 +1,15 @@
+cap 8
+h8=. q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/k7/8/K7 w - - 0 1 {"deepest":8,"nodes":121988,"score":90,"ms":1269.2}
+h8=. q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/2k5/8/K7 w - - 0 1 {"deepest":8,"nodes":5174,"score":100,"ms":53}
+h8=. q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/4k3/8/K7 w - - 0 1 {"deepest":8,"nodes":4798,"score":110,"ms":42.1}
+h8=. q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/6k1/8/K7 w - - 0 1 {"deepest":8,"nodes":8455,"score":100,"ms":67.8}
+h8=. q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K1k5 w - - 0 1 {"deepest":8,"nodes":5174,"score":100,"ms":36.7}
+h8=. q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K3k3 w - - 0 1 {"deepest":8,"nodes":4798,"score":110,"ms":37}
+h8=. q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K5k1 w - - 0 1 {"deepest":8,"nodes":8455,"score":100,"ms":64.1}
+h8=q q1q1q1qq/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/k7/8/K7 w - - 0 1 {"deepest":8,"nodes":4218,"score":-790,"ms":35.4}
+h8=q q1q1q1qq/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/2k5/8/K7 w - - 0 1 {"deepest":8,"nodes":6818,"score":-780,"ms":61.8}
+h8=q q1q1q1qq/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/4k3/8/K7 w - - 0 1 {"deepest":0,"nodes":0,"score":-770,"ms":0}
+h8=q q1q1q1qq/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/6k1/8/K7 w - - 0 1 {"deepest":0,"nodes":0,"score":-780,"ms":0}
+h8=q q1q1q1qq/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K1k5 w - - 0 1 {"deepest":0,"nodes":0,"score":-780,"ms":0}
+h8=q q1q1q1qq/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K3k3 w - - 0 1 {"deepest":0,"nodes":0,"score":-770,"ms":0}
+h8=q q1q1q1qq/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K5k1 w - - 0 1 {"deepest":0,"nodes":0,"score":-780,"ms":0}

@@ -354,3 +354,30 @@ board move is the Orchestrator's, and so is the `ABC-083` sequencing in § Depen
 
 **History:** cut 2026-07-29 (10/10 claimed); 9/10 on 2026-08-12; 10/10 at `rescore-batch`, then
 `Backlog` after the design hop; 8/10 at `recut-abc010` (`980890f`); 10/10 here. Full texts are in git.
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-010`).
+- Branch `grugops/ABC-010-fen-semantic-validation`, from `be37e222`. The code is `1304cc2c`, exactly the 16-file fence:
+  - production: `src/fen.ts` +124/−6;
+  - tests: 15 files, +186/−42 (`src/fen.test.ts` +148/−1).
+- Not merged, not pushed.
+- Decisions, the PR-note fixture table (old FEN, new FEN, every changed expected value) and the readings are in
+  `.grugops/context/ticket-to-pr-ABC-010/` (`…5b986289`, `…386fd214`, `probe/`). They are not restated here.
+
+**All criteria are met, and no stop condition fired.**
+- **The premise held at `be37e222`:** the corpus scan is byte-identical to `b98fb419`'s (185 occurrences), and the
+  9(d) scan rejects the same 15 grammar faults.
+- **Gates:** lint, typecheck and build exit 0. `npm test` passes 52 files / 1,641 tests with skip 0. Integrity and
+  `lane-inventory.js` report no findings.
+- **The 9(f) lanes** (quiescence, zobrist, levels, puzzle) and `PERFT_DEEP` all exit 0. The puzzle suite solves 58/62
+  against a baseline of 58/62.
+- **`NFR-002`:** 2.45 µs per call (base 2.29). **`NFR-001`:** 3.60 M nodes/sec.
+- **`ADR-0036` (b) does not fire.**
+- **Cost (`ADR-0035`):** all four sets are admissible. The three changed-file groups are MET against `N8-LANE`. The
+  50-file narrow set is UNRESOLVED (R 1.03 s): at most +0.88 s.
+- **Two things for the reviewer:**
+  - `SIX_QUEENS_FEN`'s candidates gained one `#` (`Q8xd4#`). No legal byte-identical placement exists.
+  - The rank-1/8 pawn scan uses raw 0x88 squares. With `squareAt`, `ABC-016` `A13`'s spy counts rose by 16.
+- **`memory-bank/30-architecture.md`:** the `fen.ts` row moved to level 3 (owed by `ADR-0033` § Consequences).
+- **UAT is owed** (production file): the owner's word at `In UAT`.

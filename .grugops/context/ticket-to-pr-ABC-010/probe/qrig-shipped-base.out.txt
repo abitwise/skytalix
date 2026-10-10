@@ -1,0 +1,1 @@
+q1q1q1qk/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K7 w - - 0 1 {"deepest":8,"nodes":6932,"score":915,"ms":74.5}

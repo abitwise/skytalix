@@ -1,0 +1,4 @@
+Apple M3, Node v26.11.0, load1 23.93, 7 FENs, 30 blocks x 20000 calls each arm, interleaved
+base   parseFen: mean 2.287 µs/call, median-of-blocks 2.208
+branch parseFen: mean 2.446 µs/call, median-of-blocks 2.485  (bar <= 10 µs)
+delta mean 0.159 µs; sink 199990

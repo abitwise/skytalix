@@ -42,10 +42,10 @@ measured below.
 | L | Module | Owns |
 |---|---|---|
 | 1 | `position.ts` | the 0x88 board (ADR-0001), piece encoding, square geometry and naming. The only leaf and the hub |
-| 2 | `fen.ts` | FEN parse/serialize; typed `FenError` on malformed grammar |
 | 2 | `moves.ts` | pseudo-legal move generation, plus the `isSquareAttackedBy` primitive |
 | 2 | `render.ts` | `renderBoard` — the board frame as a VALUE, 9 rows, shaded by character, either glyph mode, either orientation. Reads no terminal and writes nothing |
 | 3 | `apply.ts` | `makeMove` / `unmakeMove` — the only writer of a `Position` |
+| 3 | `fen.ts` | FEN parse/serialize, grammar and semantics; typed `FenError` naming the fault. `parseFen` is the boundary; `parseFenGrammarOnly` is grammar only, for rules-core tests, and no production module names it. Level 3 since `ABC-010`: it imports `moves.ts` `isSquareAttackedBy` (ADR-0033) |
 | 3 | `frame.ts` | `assembleFrame` (the frame as a constant-height VALUE) and `beginFrameSession` (the writer, strategy chosen once). Imports only a TYPE — it composes by injection, so its runtime closure is itself alone (ADR-0011) |
 | 3 | `glyph-mode.ts` | the five-row glyph precedence RULE plus the SESSION that reads `isTTY`/`env` exactly once. The only module that reads ambient terminal signals |
 | 4 | `legal.ts` | `legalMoves`, `isInCheck`, and `hasLegalEnPassant` — make/test/unmake (ADR-0003), and the en-passant oracle the hash asks (ADR-0005) |
