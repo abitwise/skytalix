@@ -478,3 +478,27 @@ for the gate and the cost.
   9.0-15.0. It rests on `ADR-0035` (`proposed`).
 - **The `AGENTS.md` lane line** is re-drafted in `…53ebd6d1` as "27 passed (21 default)". The Scribe
   owes it before merge.
+
+**2026-10-10, Software Engineer: Security/NFR R1** (`1160b063`, `src/levels.test.ts` only, on
+`c35f38bf`). The readings are in `…14ec8ea7`, which supersedes `…26fd4d9d`.
+
+**New rows and pins.**
+- **R1 / QE-087-c (new default-lane row, 6 ms).** A `{ 20 000 ms, rate 1 }` level on a 5-move
+  position with `virtualClock(250)`, asserting `elapsedMs ≤ HARD_CEILING_MS + 4·step`. **M4 is red,
+  on this row only** (20 750 > 6 000).
+- **QE-087-d (taken, inside `A9`'s test, no new search).** Move k is a non-engine move iff the k-th
+  draw of a fresh `seededRandom(seed)` is below the rate. **M5b is red, on `A9` only.**
+
+**Gate.** Lint, typecheck and build exit 0. `npm test` reads **52 / 1603 / 0 skipped**, integrity
+`No findings.`, and the lane inventory is 52 = 52.
+
+**`ENGINE_DEEP=1`.** **28 passed (22 default)**, 202.0 s at load1 8.9 → 8.4.
+
+**`N8-LANE`: MET.**
+- Treatment **+0.545 s**, interval 0.53-0.56.
+- Twin +0.33 % at 4/8.
+- R 0.030 s.
+- load1 8.41-9.54.
+
+**`AGENTS.md`.** The lane line is re-drafted as "28 passed (22 default)" (`…53ebd6d1`). It is owed by
+the Scribe.

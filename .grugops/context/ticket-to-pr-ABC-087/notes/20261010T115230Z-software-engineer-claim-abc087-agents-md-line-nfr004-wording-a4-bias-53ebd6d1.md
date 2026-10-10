@@ -32,14 +32,14 @@ I suggest placing it after the `Engine deep lane` bullet:
 
 ```
 - Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`
-  <!-- RUN 2026-10-10: exit 0, 27 passed (21 default), 198 s at load1 12.5 -> 3.6; A5 is 135 s of it
+  <!-- RUN 2026-10-10: exit 0, 28 passed (22 default), 202 s at load1 8.9 -> 8.4; A5 is 135 s of it
   (30 real moves at 4.5 s). A4's evidence is here (ENDGAMES 204 moves + perft/puzzles 246), A2 on
   a virtual clock, A3 (35 vs 58 of 62). Run
   after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change. -->
 ```
 
 That is about 370 B. `AGENTS.md` is not edited here. *(Updated 2026-10-10 at the re-hop `f61ad6b1`:
-"21 default" after the QE fix-forward `026a7373` (was "19 default", per `rule-abc087-cost`); `A4`'s evidence now lives in this lane.)*
+"22 default" after the R1 row `1160b063` ("21 default" at the QE fix-forward `026a7373`; "19 default" per `rule-abc087-cost`); `A4`'s evidence now lives in this lane.)*
 
 ## 2. `NFR-004` — catalog wording for the level layer (Security/NFR's, `ADR-0032` § Consequences)
 

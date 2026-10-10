@@ -10,3 +10,5 @@
 {  n: 8,  counts: [ 'base:1', 'head:19', 'twin:19' ],  treatMedian: '0.535',  treatSign: '8/8',  treatInterval: [ '0.50', '0.62' ],  nullMedian: '0.005',  nullPctOfHead: '0.31%',  nullSign: '4/8',  R: '0.030',  load1: [ 6.42, 6.66, 6.85 ]}
 == qefix1 (026a7373)
 {  n: 8,  counts: [ 'base:1', 'head:21', 'twin:21' ],  treatMedian: '0.555',  treatSign: '8/8',  treatInterval: [ '0.52', '0.57' ],  nullMedian: '-0.010',  nullPctOfHead: '-0.66%',  nullSign: '3/8',  R: '0.030',  load1: [ 8.96, 13.5, 14.97 ]}
+== r1 (1160b063)
+{  n: 8,  counts: [ 'base:1', 'head:22', 'twin:22' ],  treatMedian: '0.545',  treatSign: '8/8',  treatInterval: [ '0.53', '0.56' ],  nullMedian: '0.005',  nullPctOfHead: '0.33%',  nullSign: '4/8',  R: '0.030',  load1: [ 8.41, 8.94, 9.54 ]}
