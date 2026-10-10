@@ -1,8 +1,8 @@
 ---
 id: ABC-058
 title: Two of `ABC-042`'s security-bar instruments cannot observe their own clauses — a `U+007F` clause whose probe carries no `U+007F`, and a spawn pin a docblock sentence can red (the third, `S1`, closed by the tree since)
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P2
 epic: —
