@@ -52,8 +52,9 @@
  *
  * ACCEPTED LIMITATION, stated rather than silently handled: a loaded FEN whose `fullmoveNumber`
  * exceeds 9,999 renders a row wider than `HISTORY_COLS`. No such position is reachable by play;
- * `parseFen` imposes no upper bound and `ABC-010` is the ticket that would. Nothing is truncated —
- * a wrong move number is worse than a wide row.
+ * `parseFen` imposes no upper bound (it accepts fullmove 10000), and no ticket delivers one: the
+ * bound is for the first ticket that lets a human or a file supply a FEN to decide. Nothing is
+ * truncated — a wrong move number is worse than a wide row.
  */
 
 import { makeMove } from "./apply.ts";

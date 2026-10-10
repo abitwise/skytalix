@@ -45,7 +45,8 @@
  * WHAT `A5` DOES NOT SAY, because it was once read as saying it: rendering an ambiguity is NOT
  * free. `toSan` derives the legal moves of the position AFTER a checking candidate to decide its
  * `+`/`#` suffix (`src/san.ts:105`), so the honest cost of a prompt is `1 + O(candidates)` derives
- * — six queens on `d4` cost six of those, measured by QE. Those are OTHER positions, which is why
+ * — one for the prompt plus one per checking candidate, so six queens on `d4` (six candidates, all
+ * `#`) cost seven: 1 + 6, measured at `ABC-141`. Those are OTHER positions, which is why
  * `A5`'s one-derive-per-prompt still holds as written; anyone quoting "one derive per prompt" as a
  * cost bound for `NFR-003` or `N8-LANE` is quoting a number that does not hold for ambiguities.
  *

@@ -1,0 +1,24 @@
+== src/move-input.ts
+  DIFF  (i) rem-at-base 1/1 add-at-tip 2/2 HOLDS | (ii) IDENTICAL repo:1206a1e6f551=1206a1e6f551(2270B) esnext:1206a1e6f551=1206a1e6f551(2270B) | Q4 HOLDS
+  POS-docblock-line        (i) rem-at-base 1/1 add-at-tip 3/3 HOLDS | (ii) IDENTICAL repo:1206a1e6f551=1206a1e6f551(2270B) esnext:1206a1e6f551=1206a1e6f551(2270B) | Q4 HOLDS
+  NEG-exec                 (i) rem-at-base 1/1 add-at-tip 3/4 FAILS | (ii) DIFFERS repo:1206a1e6f551!=8688c54a5ab4(2270B) esnext:1206a1e6f551!=8688c54a5ab4(2270B) | Q4 FAILS
+  NEG-type-only            (i) rem-at-base 1/1 add-at-tip 3/4 FAILS | (ii) IDENTICAL repo:1206a1e6f551=1206a1e6f551(2270B) esnext:1206a1e6f551=1206a1e6f551(2270B) | Q4 FAILS
+  NEG-template-slashslash  (i) rem-at-base 1/1 add-at-tip 3/6 FAILS | (ii) DIFFERS repo:1206a1e6f551!=fef195d15cc4(2270B) esnext:1206a1e6f551!=fef195d15cc4(2270B) | Q4 FAILS
+  NEG-code-behind-comment  (i) rem-at-base 1/1 add-at-tip 3/4 FAILS | (ii) DIFFERS repo:1206a1e6f551!=f6f8eff0ed60(2270B) esnext:1206a1e6f551!=f6f8eff0ed60(2270B) | Q4 FAILS
+  NEG-code-commented-out   (i) rem-at-base 1/2 add-at-tip 3/3 FAILS | (ii) DIFFERS repo:1206a1e6f551!=fd5a26923d3e(2270B) esnext:1206a1e6f551!=fd5a26923d3e(2270B) | Q4 FAILS
+== src/move-input.test.ts
+  DIFF  (i) rem-at-base 1/1 add-at-tip 2/2 HOLDS | (ii) IDENTICAL repo:c43a444a41f3=c43a444a41f3(16336B) esnext:c43a444a41f3=c43a444a41f3(16336B) | Q4 HOLDS
+  POS-docblock-line        (i) rem-at-base 1/1 add-at-tip 3/3 HOLDS | (ii) IDENTICAL repo:c43a444a41f3=c43a444a41f3(16336B) esnext:c43a444a41f3=c43a444a41f3(16336B) | Q4 HOLDS
+  NEG-exec                 (i) rem-at-base 1/1 add-at-tip 3/4 FAILS | (ii) DIFFERS repo:c43a444a41f3!=cc14b26dd86c(16336B) esnext:c43a444a41f3!=cc14b26dd86c(16336B) | Q4 FAILS
+  NEG-type-only            (i) rem-at-base 1/1 add-at-tip 3/4 FAILS | (ii) IDENTICAL repo:c43a444a41f3=c43a444a41f3(16336B) esnext:c43a444a41f3=c43a444a41f3(16336B) | Q4 FAILS
+  NEG-template-slashslash  (i) rem-at-base 1/1 add-at-tip 3/6 FAILS | (ii) DIFFERS repo:c43a444a41f3!=deb759e14592(16336B) esnext:c43a444a41f3!=deb759e14592(16336B) | Q4 FAILS
+  NEG-code-behind-comment  (i) rem-at-base 1/1 add-at-tip 3/4 FAILS | (ii) DIFFERS repo:c43a444a41f3!=b49f341cbae9(16336B) esnext:c43a444a41f3!=b49f341cbae9(16336B) | Q4 FAILS
+  NEG-code-commented-out   (i) rem-at-base 1/2 add-at-tip 3/3 FAILS | (ii) DIFFERS repo:c43a444a41f3!=eadc2ad00766(16336B) esnext:c43a444a41f3!=eadc2ad00766(16336B) | Q4 FAILS
+== src/history-pane.ts
+  DIFF  (i) rem-at-base 2/2 add-at-tip 3/3 HOLDS | (ii) IDENTICAL repo:6e1a37155324=6e1a37155324(1685B) esnext:6e1a37155324=6e1a37155324(1685B) | Q4 HOLDS
+  POS-docblock-line        (i) rem-at-base 2/2 add-at-tip 4/4 HOLDS | (ii) IDENTICAL repo:6e1a37155324=6e1a37155324(1685B) esnext:6e1a37155324=6e1a37155324(1685B) | Q4 HOLDS
+  NEG-exec                 (i) rem-at-base 2/2 add-at-tip 4/5 FAILS | (ii) DIFFERS repo:6e1a37155324!=44f6a3e68d09(1685B) esnext:6e1a37155324!=44f6a3e68d09(1685B) | Q4 FAILS
+  NEG-type-only            (i) rem-at-base 2/2 add-at-tip 4/5 FAILS | (ii) IDENTICAL repo:6e1a37155324=6e1a37155324(1685B) esnext:6e1a37155324=6e1a37155324(1685B) | Q4 FAILS
+  NEG-template-slashslash  (i) rem-at-base 2/2 add-at-tip 4/7 FAILS | (ii) DIFFERS repo:6e1a37155324!=8b259a9d91c5(1685B) esnext:6e1a37155324!=8b259a9d91c5(1685B) | Q4 FAILS
+  NEG-code-behind-comment  (i) rem-at-base 2/2 add-at-tip 4/5 FAILS | (ii) DIFFERS repo:6e1a37155324!=e0c4ca801ff2(1685B) esnext:6e1a37155324!=e0c4ca801ff2(1685B) | Q4 FAILS
+  NEG-code-commented-out   (i) rem-at-base 2/3 add-at-tip 4/4 FAILS | (ii) DIFFERS repo:6e1a37155324!=73000d6fce4d(1685B) esnext:6e1a37155324!=73000d6fce4d(1685B) | Q4 FAILS
