@@ -151,6 +151,25 @@ and no stop condition fired.** No test was added, and no other `src/` file was t
 **UAT cost, as § Size and priority predicted:** this ticket is **not** waived, so the owner's word is
 needed at `In UAT` for one docblock paragraph.
 
+**Fix-forward, 2026-10-10, Software Engineer** (subtask `fix-ABC-104`, QE-104-a/b/c).
+- The code commit is `82180eae`. It is comment-only, in the header docblock only, and is not merged or
+  pushed.
+- The decision and readings are in `.grugops/context/fix-ABC-104/notes/` (`…2e7fbb75`, `…c73ed93e`) and
+  are not restated here.
+
+What changed:
+- **a.** `:25` now reads "TWO CALLER OBLIGATIONS".
+- **b.** Only the `legal`-list obligation is attributed to `ADR-0004` clause 2. "A real `Position`" is
+  marked as this module's own.
+- **c.** "a wrong type throws" became "CAN throw, and need not", with the read conditions and a quoted
+  non-throwing call. The two throwing calls are unchanged.
+
+Status:
+- **`A1`–`A3` still MET.** QE's probe output is identical after the edit.
+- The comment-stripped emit is byte-identical to `b7cffc52`.
+- Gate: 51 files / 1583 passed, skips 0, integrity `No findings.`
+- **UAT is still not waived.**
+
 ## QE
 
 **2026-10-10, QE/E2E** (task `wave-2026-09-25`, subtask `qe-ABC-104`, Workflow 04 review exit). QE read
