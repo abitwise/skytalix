@@ -1,8 +1,8 @@
 ---
 id: ABC-010
 title: FEN semantic validation
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: M
 priority: P2
 epic: EPIC-003
