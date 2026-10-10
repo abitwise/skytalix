@@ -6,7 +6,9 @@ id: ADR-0034
 
 ## Status
 
-**proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-puzzle-edge`). It answers
+**accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x"*
+
+Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-puzzle-edge`). It answers
 Security/NFR's required fix **`R1`** on `ABC-127` (decision `…2468e396`, PASS_WITH_RISKS). That fix is owed
 before `ABC-083` enters `In Development`. **Owner acceptance owed.** No agent moves an ADR to `accepted`.
 

@@ -6,7 +6,9 @@ id: ADR-0030
 
 ## Status
 
-**proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-abc053-abc054`), ruling
+**accepted** 2026-10-10 by the owner. Owner (Olger Oeselg), 2026-10-10, verbatim: *"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x"*
+
+Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-abc053-abc054`), ruling
 `ABC-054`. **Owner acceptance owed.** It is left `proposed` because it changes the instrument under
 `EPIC-006`'s headline criterion (`ABC-041` `A8`). It also overturns half of `ABC-054`'s premise, and the owner
 should see that before a build hop relies on it.
