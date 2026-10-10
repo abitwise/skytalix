@@ -1852,7 +1852,10 @@ describe("ABC-042 — the shape of what was delivered", () => {
     //   (ii) exactly ONE call's callee resolves to a name that import binds, or to a member of one,
     //       and it is the call in `childOf`;
     //   (iii) exactly TWO value-position references to a name that import binds — the binding
-    //       itself and the callee in `childOf` (`ABC-138`). A reference inside a type does not count.
+    //       itself and the callee in `childOf` (`ABC-138`). A reference inside a type does not count,
+    //       EXCEPT a class `extends` clause or an instantiation expression: TypeScript calls both a
+    //       type node and both are VALUE positions, so `class S extends (spawnSync as …) {}` counts
+    //       (`QE-138-a`, `QE-138-d`).
     //       No data flow is needed: a wrapped callee — `(spawnSync)()`, `(0, spawnSync)()`,
     //       `spawnSync!()`, `(spawnSync as …)()` — a binding passed as a value to
     //       `Reflect.apply(spawnSync, …)`, and a VARIABLE ALIAS, `const alias = spawnSync; alias(…)`,
@@ -1865,7 +1868,9 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // reds (`C14`) — so a hop that needs the name as a call argument spells it through a `const`, as
     // bar 1's list does. A member name or object key spelled like a bound name, and a local that
     // shadows one, also red (iii) — loud, never silent. THE BOUND IT KEEPS: a module name that is not
-    // a literal (computed or concatenated) is not seen. One load and one parse per run of this file,
+    // a literal (computed or concatenated) is not seen, and neither is a literal that is not a call's
+    // FIRST argument — `getBuiltinModule.call(process, …)`, `Reflect.apply(req, undefined, […])`
+    // (`QE-138-b`). One load and one parse per run of this file,
     // both here. The load is `createRequire`, not an ESM `import`: under vitest the `import` measured
     // ~205 ms CPU against ~85 ms (`ABC-133` `A4`).
     const ts: typeof Ts = createRequire(import.meta.url)("typescript");
@@ -1939,7 +1944,12 @@ describe("ABC-042 — the shape of what was delivered", () => {
       "spawnSync in childOf",
     ]);
     const references = identifiers
-      .filter((name) => bound.has(name.text) && ts.findAncestor(name, ts.isTypeNode) === undefined)
+      .filter(
+        (name) =>
+          bound.has(name.text) &&
+          ts.findAncestor(name, (n) => ts.isTypeNode(n) && !ts.isExpressionWithTypeArguments(n)) ===
+            undefined,
+      )
       .map((name) => `${name.text} (${ts.SyntaxKind[name.parent.kind]})`);
     expect(references, "value-position references to a child_process binding").toEqual([
       "spawnSync (ImportSpecifier)",
