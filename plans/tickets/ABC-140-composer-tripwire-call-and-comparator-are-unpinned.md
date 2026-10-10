@@ -198,3 +198,52 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `75dcc0f5`. **Res
 - **Cost.** Both `ADR-0035` sets are admissible (twin +0.47 % / +0.32 %, sign 4/8). `N8-LANE` is MET.
 - **Harness.** The Architect's `plant.mjs` ran unchanged inside the SE's own loop. Nothing was refused. That loop
   reproduces BA/PM's base rows.
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-140`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `6dde3261..dcc8dcca` (code `795adca4`; the tip's `src` blob is the same). Each reading was taken in a fresh
+`git archive` tree per build. Notes `.grugops/context/qe-ABC-140/notes/` (`…1e1185ff` verdict, `…5400cc2b`
+readings, `…64112bc2` gaps) and `probe/`. They are not restated here.
+
+**Harness.** The Architect's `plant.mjs` ran unchanged (sha256 `b6b5e458…57bd`), together with QE's own planter,
+inside QE's own loop. The permission layer refused nothing. At `6dde3261` the loop reproduces BA/PM's `75dcc0f5` base
+rows on every shared build.
+
+**`A1`–`A6` are MET. No test was added.**
+- **`A1`.** The five survivors `+FMT+WSC` exit 0 with 12/12 at base and exit 1 at head. Each failure is on the drift
+  tripwire. Whole lane: `N591-TAIL` and `C-OPERAND` give 1607/1608.
+- **`A2`.**
+  - `CONTROL`/`FMT` run 12/12.
+  - `WSC`/`WPS` red the same tests by name, and so do QE's own `Q-WSC`/`Q-WPS`.
+  - `N653-NARROW`, `H-SHADOW` and `H-FSMOCK` are recorded green.
+  - No `PLANT-FAILED`.
+  - The five existing pins are hash-identical.
+- **`A3`.** "five spans" 1 → 0 and `R5d` 0 → 2. The comment states seven spans and gives the sixth and seventh to
+  the composer tripwire.
+- **`A4`.** "Both guards…" 1 → 0 and "THE TWO GUARDS…" 1 → 0. The docblock names three instruments and both rules,
+  and says the probe and the tripwire "share `COMPOSITION_ROOT`".
+- **`A5`.**
+  - One `src` path, 0 production lines.
+  - The helper, the composer statements and the predicate are byte-identical.
+  - The raw-reader declarations each occur ×1 and are identical.
+  - `biome-ignore` 1 → 2.
+- **`A6`.**
+  - lint, typecheck and build exit 0.
+  - `npm test`: 52 files / 1608 passed.
+  - Skip count 0; integrity `No findings.`; lane-inventory 52/52.
+- **QE's own narrowings.** Every edit to pinned text reds at head and was green at base. That covers three
+  matcher swaps (`arrayContaining`, `toContainEqual`, `toStrictEqual`), an operand `.slice(-1)`, a reworded
+  message, an inner `&&` filter, a wrapper and a benign `(file: string)`.
+- **Gaps.**
+  - **`QE-140-a` LOW → Architect/Design.** A statement between the two pinned statements (`:613`) survives with
+    the whole lane green (52 / 1608) and a second composer planted. The spellings are an in-place `splice` filter
+    and an early `return`. It is `QE-136-a`'s `XSPLICE` twin, but `QE-136-a`'s trigger names only the licence
+    guard's lines. Options: extend the trigger to `:610–617`, or merge `R5d` into one contiguous literal. Here that
+    over-pins no comment.
+  - **`QE-140-b` INFO.** A local `productionModulesIn` shadow in the composer `it` survives. It is the
+    `XSHADOW-HELPER` / `QE-136-c` class, accepted.
+  - **`QE-140-c` INFO.** The docblock's "makes that one root fail closed" is unqualified against `ADR-0029`
+    decision 2's pointer: the fail-open spellings are listed under `AR-053-COMPOSER`. Also, the probe uses the
+    helper only for its root-exists check. Fold this into the next edit of the docblock.
+- **Not re-measured.** `N8-LANE`; the SE's admissible sets are cited. UAT is WAIVED by the 2026-08-17 rule
+  (0 production lines, measured). The board move is the Orchestrator's. Not merged, not pushed.

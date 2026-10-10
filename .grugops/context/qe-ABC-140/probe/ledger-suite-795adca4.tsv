@@ -1,0 +1,6 @@
+795adca4	suite	CONTROL	plant.mjs	load1=6.17	exit=0	files=52	total=1608	passed=1608	failed=0	FAILED:	lint=0	tsc=0
+795adca4	suite	N591-TAIL+FMT+WSC	plant.mjs	load1=8.49	exit=1	files=52	total=1608	passed=1607	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire scans EVERY production module>	lint=0	tsc=0
+795adca4	suite	C-OPERAND+FMT+WSC	plant.mjs	load1=9.63	exit=1	files=52	total=1608	passed=1607	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire compares with an EQUALITY>	lint=0	tsc=0
+795adca4	suite	Q-MUTATE-BETWEEN+FMT+Q-WSC	qe140-plant.mjs	load1=10.75	exit=0	files=52	total=1608	passed=1608	failed=0	FAILED:	lint=0	tsc=0
+795adca4	suite	Q-RETURN-BETWEEN+FMT+Q-WSC	qe140-plant.mjs	load1=11.80	exit=0	files=52	total=1608	passed=1608	failed=0	FAILED:	lint=0	tsc=0
+795adca4	suite	Q-LOCAL-SHADOW+FMT+Q-WSC	qe140-plant.mjs	load1=13.11	exit=0	files=52	total=1608	passed=1608	failed=0	FAILED:	lint=0	tsc=0
