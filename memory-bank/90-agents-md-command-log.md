@@ -60,6 +60,27 @@ the coupling is a diagnosable false red once; the cost of relaxing it is a silen
 `ABC-069` documents the cost instead of removing it. `AGENTS.md`
 carries the rules in the slot's own comment; this entry is their receipt.
 
+## Regenerate the opening book (`ABC-093`) — `node tools/opening-book/compile.ts <dir>`
+
+RUN 2026-10-10, `scribe-book-regen-2026-10-10`, wave tip `39d87491`. The five source files were fetched
+from the raw URLs in `data/opening-book/ATTRIBUTION.md` at the pinned commit `a6189a30` into a private
+scratchpad directory outside the repository; their sha256 all match the table there. Command:
+`node tools/opening-book/compile.ts <that directory>` run from the worktree root. Exit 0, 0.4 s wall.
+`cmp` of the result against `git show HEAD:data/opening-book/book.json`: **exit 0**; 356,526 B, sha256
+`3802f52f3ced9d6911875c778c42246854893afbc4bcdae18b5b01454d4bb41d`. Run twice, same bytes.
+
+TRAPS, read from `tools/opening-book/compile.ts` (lines 139-146) and run:
+- `<dir>` is the SOURCE directory, not an output directory. The output path is fixed (resolved from
+  `import.meta.url` to `data/opening-book/book.json`): the compiler REWRITES THE COMMITTED FILE IN
+  PLACE. The brief's "run into a scratch dir and `cmp`" cannot be done by argument; the check is
+  `git diff --stat -- data/opening-book/book.json` (empty) or `cmp` against `git show HEAD:...`.
+- No argument: prints the usage line, exit 1, writes nothing.
+- The compiler pins `SOURCE_COMMIT` in its own source; it does not re-check the five sha256 values at
+  compile time (`QE-093-b`, LOW). A different upstream commit in `<dir>` compiles without complaint.
+  Moving to a newer commit means editing `SOURCE_COMMIT` and `ATTRIBUTION.md` together.
+- Source files are not checked in. `AGENTS.md` carries the line and one fact; the URLs and hashes stay in
+  `ATTRIBUTION.md` (single source, not restated).
+
 ## Test (all) — `npm test`
 
 `node tools/grugops/run-bounded.js 60000 vitest run` (`ABC-122`). RUN 2026-09-25: exit 0, 47 files,
@@ -90,6 +111,11 @@ merged as `231d1288`), load1 ~6: exit 0, **52 files, 1663 tests, 6.49 s**. `AGEN
 52/1663, 6.5 s. `ABC-131` itself added +0 files and +0 rows (its page, `A7`: 52/1608 at base and tip);
 the +55 over the last reading is test rows from other tickets merged since (not attributed row by
 row). Moving figure: 47/1446 -> 50/1539 -> 51/1584 -> 52/1603 -> 52/1608 -> 52/1663.
+
+RE-MEASURED once more, 2026-10-10T19:05Z, `scribe-book-regen-2026-10-10`, wave tip `39d87491` (`ABC-093`
+merged as `ac83c3fd`): exit 0, **53 files, 1680 tests, 8.09 s** (a loaded reading). `AGENTS.md` now reads
+53/1680, 8.1 s. The +1 file is `tools/opening-book/book.test.ts`; the +17 tests over 1663 are its 17
+(13 engineer + 4 QE). Moving figure: ... -> 52/1663 -> 53/1680.
 
 ## Search deep lane (`ABC-077`) — `SEARCH_DEEP=1 npx vitest run src/search.test.ts`
 
@@ -461,3 +487,21 @@ Left out, on purpose (the brief: only where `AGENTS.md` already states the thing
   § Deployment posture); `memory-bank/00-index.md` is the index and is outside this hop's fences. No
   pointer added.
 - Lane and board state (`ABC-093` and others): not `AGENTS.md`'s.
+
+## Book-regen pass, 2026-10-10
+
+Task `scribe-book-regen-2026-10-10`, branch `grugops/scribe-book-regen-2026-10-10`, wave tip `39d87491`.
+Closes `QE-093-a` (MEDIUM, `AGENTS.md` regeneration line owed) and the engineer's claim `…a6cb510f`.
+`AGENTS.md` 23,216 B -> **23,609 B** (+393 B; cap 24,576 B, `ABC-109`; headroom 1,360 -> **967 B**).
+
+| change to `AGENTS.md` | bytes | what it kept / dropped |
+|---|---:|---|
+| New `Development` slot "Regenerate the opening book (ABC-093)" after the Spike benchmark line | +393 | command, in-place rewrite, `<dir>` meaning, pinned-source pointer to `ATTRIBUTION.md`, no-arg exit 1. Not restated: URLs, sha256, the no-hash-check gap (`QE-093-b`) |
+| `Test (all)` RUN: 52 files / 1663 tests / 6.5 s -> **53 / 1680 / 8.1 s** | +0 | re-measured, see § Test (all) |
+
+The line was verified before it was placed: RUN, exit 0, `cmp` 0 against the committed file (see §
+"Regenerate the opening book"). The engineer's draft said "`<dir holding a.tsv … e.tsv at the pinned SHA>`"; the
+verification added the one thing the draft did not say and the brief assumed otherwise: the output is
+written in place, not to the directory argument. Guards: `src/cli.test.ts` (`ABC-109` byte cap,
+`ABC-059`, `ABC-065`/`ABC-069`/`ABC-071`/`ABC-067` `Dev / run` slot rules) run in the full lane, see
+the commit.
