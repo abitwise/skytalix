@@ -1,0 +1,3 @@
+base n=10 median total 180.4 ms; median load 98.7 ms; max 272.8; >250: 2; median load1 10.34 range 8.81-12.89
+head n=10 median total 170.3 ms; median load 94.8 ms; max 261.1; >250: 1; median load1 10.11 range 9.03-12.5
+paired head-base deltas -17.6 -2.3 -3.0 -7.2 -5.5 49.6 -9.6 6.8 -109.6 7.7 median -4.3

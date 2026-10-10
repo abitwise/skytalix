@@ -230,3 +230,41 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**: base `5d55cc48`, and every
   - The Security/NFR hop the page recommends: confirm the `C14` split, and rule on discharging
     `AR-133-LOADER` / `AR-133-WRAP`.
   - The UAT waiver applies if zero production lines holds (measured 0).
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-138`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `2946e22a..7e5c9c74`, code `84edfb46`. Every reading is QE's own, taken in fresh
+`git archive` trees, with the engineer's table re-run and QE's own 22 plants. **`A1`–`A6` are MET.
+No test was added.**
+
+- **`A1`–`A4`**: the engineer's 25-row table reproduces row for row at both tips. Every red is the
+  `N8-LANE` row alone: (i) for `A1` and `A4`, (iii) for `A2`, and the base counts for `A3`'s kills.
+- **`A5`**: **170.3 ms** median at load1 10.11 (base 180.4 ms, paired −4.3 ms). Under load1 37.8 it
+  is 183.7 ms. Both are ≤ 250, with n = 10 each, round 0 discarded, and one load and one parse.
+- **`A6`**: one path, +30/−13. The manifest is empty, with 0 production lines, 0 new files and 0 new
+  `it`; `N8_SPAWN` 27. `loader-scan` reads `[]`, one site and two references. Lint, typecheck,
+  build and `npm test` (52 / 1608) exit 0. Skip is 0, and integrity and `lane-inventory.js` report
+  no findings.
+- **QE's plants**: 12 new kills beyond the page's. There is no false red on type-only references,
+  JSDoc, import type nodes or non-first-argument names.
+
+**Gaps (none fails a criterion; every hole was green at base too, so no kill was traded):**
+- **`QE-138-a` LOW, inside Scope (b)'s letter.** (iii) skips a reference inside
+  `ExpressionWithTypeArguments`, which `ts.isTypeNode` counts as a type. A class `extends` clause
+  is a value position, though. `class S extends (spawnSync as unknown as new (…) => object) {}`
+  with `new S(…)` spawns a real child. The suite stays GREEN 67/67, `tsc` exits 0 and `biome`
+  exits 0. The one-line fix is verified in scratch:
+  `ts.isTypeNode(n) && !ts.isExpressionWithTypeArguments(n)`.
+- **`QE-138-b` LOW.** A literal module name in a non-first argument stays green
+  (`getBuiltinModule.call(process, "node:child_process")`, `Reflect.apply(loader, …,
+  ["child_process"])`). The comment's bound names only non-literal names.
+- **`QE-138-c`–`-f` INFO:**
+  - the comment's "spell it through a `const`" remedy is the blind shape for a loader;
+  - the instantiation-expression alias is held off only by a Biome format quirk;
+  - `expect(…).not.toContain("child_process")` reds, as stated;
+  - single rounds go over 250 ms under load.
+
+The board move is the Orchestrator's, including whether to bounce `QE-138-a`'s one line. Security/NFR
+should not discharge `AR-133-WRAP` as closed while `QE-138-a` stands. Readings are in
+`.grugops/context/qe-ABC-138/notes/` (`…6ef45921` decision, `…9cdaa822` readings, `…d5a380ba`
+gaps) and `.grugops/context/qe-ABC-138/probe/`. Not merged, not pushed.

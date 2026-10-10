@@ -1,0 +1,10 @@
+== fix + control  load1 16.41
+      Tests  67 passed (67)
+== fix + W5  load1 15.34
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+      Tests  1 failed | 66 passed (67)
+== fix + F2  load1 14.59
+      Tests  67 passed (67)
+== fix + F2b  load1 17.58
+      Tests  67 passed (67)

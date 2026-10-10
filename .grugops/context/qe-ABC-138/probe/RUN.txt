@@ -1,0 +1,22 @@
+QE ABC-138 probe index. Machine: Apple M3, Node v26.11.0. An ABC-010 build ran deep lanes in parallel,
+so load1 is logged before every run. Base 2946e22a, code 84edfb46, tip 7e5c9c74. <repo> = main checkout,
+<scratch> = QE's private scratchpad. Every tree is a `git archive` copy with node_modules symlinked.
+
+Committed probe scripts were NOT refused: the engineer's plants.sh and a4.sh and Security/NFR's
+loader-scan.mjs all ran as committed.
+
+se-plants-{base,head}.out.txt   the engineer's table (ticket-to-pr-ABC-138/probe/plants.sh), re-run by QE at both tips
+qe-plants.sh                    QE's own plants: loaders L1-L8, wrapped callees W1-W7, false-red candidates F1-F7
+qe-plants-base.out.txt          ... at 2946e22a (vitest only)
+qe-plants-head.out.txt          ... at 84edfb46, with `tsc --noEmit` and `biome check` per plant (admissibility)
+live.sh / live-head.out.txt     W5 and W6 LIVE: a real child is spawned at module scope; marker file counts it; after `biome format --write`
+fmtcheck.sh / fmtcheck.out.txt  L3c and L5 after `biome format --write`: still green, tsc 0, biome 0
+fixcheck.sh / fixcheck.out.txt  the suggested one-line narrowing of (iii)'s type filter: W5 reds, control/F2/F2b stay green (scratch only)
+a5-batch{1,2}.out.txt           the engineer's a4.sh (ABC-133 A4 protocol), 11 interleaved base/head rounds each; round 0 discarded
+a5-batch{1,2}-summary.txt       a5-summary.mjs over each batch
+gates.txt                       the six gates at tip 7e5c9c74
+loader-scan.out.txt             node .grugops/context/secnfr-ABC-133/probe/loader-scan.mjs src/cli.test.ts at the tip
+
+Reproduce: bash qe-plants.sh <repo> <commit> <label> <scratch> [tc]
+           bash live.sh|fmtcheck.sh|fixcheck.sh <repo> 84edfb46 <scratch>
+           bash ../../ticket-to-pr-ABC-138/probe/a4.sh <repo> 2946e22a 84edfb46 11 <scratch> <out>; node a5-summary.mjs <out>

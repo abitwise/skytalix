@@ -1,0 +1,8 @@
+== L3c formatted  load1 15.49
+      Tests  67 passed (67)
+   typecheck exit 0
+   biome check exit 0
+== L5 formatted  load1 14.89
+      Tests  67 passed (67)
+   typecheck exit 0
+   biome check exit 0
