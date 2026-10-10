@@ -1,0 +1,1 @@
+rows 24 losing at d1 0 d3 0 bare d1 24 adr rejected 0 in check 0 min nonKing 4 min margin 160

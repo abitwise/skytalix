@@ -1,0 +1,6 @@
+tree=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe-ABC-126/base rows=62 hanging=24
+  FLAG R takes a bishop a pawn defends  inCheck=true adr0033=accepted
+  FLAG mirror: r takes a bishop a pawn defends  inCheck=true adr0033=accepted
+  FLAG pin: Re1 pins the queen to the king  inCheck=false adr0033=pawn on rank 8 (h8)
+  FLAG discovered check: the bishop moves, Rxd8  inCheck=false adr0033=side not to move (black) is in check
+SCAN 62 rows: stm in check 2, ADR-0033 rejected 2

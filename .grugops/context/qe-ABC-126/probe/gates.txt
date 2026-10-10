@@ -1,0 +1,38 @@
+2026-10-10T11:02:49Z
+14:02  up 7 days, 16:14, 10 users, load averages: 4.65 5.35 7.82
+== lint
+> biome check .
+
+Checked 98 files in 165ms. No fixes applied.
+exit 0
+== typecheck
+> tsc --noEmit
+
+exit 0
+== build
+> tsc --noEmit
+
+exit 0
+14:02  up 7 days, 16:14, 10 users, load averages: 4.65 5.35 7.82
+== npm test
+
+ Test Files  51 passed (51)
+      Tests  1581 passed (1581)
+   Start at  14:02:53
+   Duration  7.81s (transform 1.26s, setup 0ms, collect 11.73s, tests 12.83s, environment 7ms, prepare 2.41s)
+
+exit 0
+14:03  up 7 days, 16:14, 10 users, load averages: 6.80 5.80 7.95
+== skip count
+0
+1581
+0
+== integrity
+No findings.
+exit 0
+== lane inventory
+The lane collects 51 test files; git tracks 51.
+No findings.
+exit 0
+2026-10-10T11:03:09Z
+14:03  up 7 days, 16:14, 10 users, load averages: 7.61 6.02 8.00

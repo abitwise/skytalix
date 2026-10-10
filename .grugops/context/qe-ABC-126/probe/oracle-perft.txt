@@ -1,0 +1,6 @@
+tree=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe-ABC-126/tip rows=62 hanging=24
+PERFT d4 197281 want 197281 OK  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+PERFT d3 97862 want 97862 OK  r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+PERFT d5 674624 want 674624 OK  8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1
+PERFT d4 422333 want 422333 OK  r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1
+PERFT d3 62379 want 62379 OK  rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8

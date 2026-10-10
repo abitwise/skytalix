@@ -225,10 +225,7 @@ describe("A6 — every puzzle carries its provenance, and the mates are the rule
     for (const puzzle of PUZZLES) {
       expect(puzzle.source.length, puzzle.name).toBeGreaterThan(0);
       const position = parseFen(puzzle.fen);
-      // ABC-079's rows are not held to this: two of them (the "R takes a bishop a pawn defends"
-      // pair) start in check from the bishop they capture. Still valid rows — the losing capture
-      // is legal — and they move byte-identical, so it is reported, not fixed (ADR-0028).
-      if (puzzle.kind !== "do-not-hang") expect(isInCheck(position), puzzle.name).toBe(false);
+      expect(isInCheck(position), puzzle.name).toBe(false);
       const legal = legalMoves(position).map(label);
       const named = puzzle.kind === "do-not-hang" ? [puzzle.losing] : puzzle.accept;
       expect(named.length, puzzle.name).toBeGreaterThan(0);

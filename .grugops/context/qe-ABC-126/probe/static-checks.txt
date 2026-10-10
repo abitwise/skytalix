@@ -1,0 +1,25 @@
+== rules-only.mts on tip copy (ticket A2/A7 instrument)
+4k3/8/1p6/b7/8/8/8/R4K2 w - - 0 1  adr0033=accepted
+r4k2/8/8/8/B7/1P6/8/4K3 b - - 0 1  adr0033=accepted
+4k3/7p/8/4q3/8/1P6/P2K4/R7 w - - 0 1  adr0033=accepted
+3q1k2/8/8/8/3B4/8/6PP/3R2K1 w - - 0 1  adr0033=accepted
+== shipped A7 FENs (red first)
+4k2p/8/8/4q3/8/1P6/P2K4/R7 w - - 0 1  adr0033=pawn on rank 8 (h8)
+3q4/6k1/8/8/3B4/8/6PP/3R2K1 w - - 0 1  adr0033=side not to move (black) is in check
+== numstat base...tip -- src
+12	4	src/puzzle-corpus.ts
+1	4	src/puzzle-suite.test.ts
+4	2	src/quiescence.test.ts
+== baseline commits on branch:
+       0
+== names+kinds base vs tip
+7f4199a0166a1a3bbd4570fd3354360b
+7f4199a0166a1a3bbd4570fd3354360b
+base win-material=16 mate-in-2=11 mate-in-3=12 hang-rows=24
+tip win-material=16 mate-in-2=11 mate-in-3=12 hang-rows=24
+== losing moves unchanged
+be248a9e1227a2ff0cf234f76a1e89e2
+be248a9e1227a2ff0cf234f76a1e89e2
+== lines changed outside the 4 rows + comments in puzzle-corpus.ts
+-  { name: "mirror: r takes a bishop a pawn defends", fen: "r3k3/8/8/8/B7/1P6/8/4K3 b - - 0 1", losing: "a8a4" },
++  { name: "mirror: r takes a bishop a pawn defends", fen: "r4k2/8/8/8/B7/1P6/8/4K3 b - - 0 1", losing: "a8a4" },

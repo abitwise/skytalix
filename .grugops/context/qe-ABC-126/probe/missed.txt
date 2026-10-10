@@ -1,0 +1,4 @@
+mate in 3, seed 24: black Q+N against P
+mate in 3, seed 234: white Q+R against P
+mate in 3, seed 288: white Q+B against a bare king
+mate in 3, seed 580: white Q+B against a bare king

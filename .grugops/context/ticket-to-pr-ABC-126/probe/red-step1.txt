@@ -1,0 +1,9 @@
+2026-10-10T10:52:40Z
+{ 5.08 8.96 10.70 }
+STEP 1: first row re-found, mirror still the shipped FEN
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: mirror: r takes a bishop a pawn defends: the side to move must not be in check: expected true to be false // Object.is equality
+      Tests  1 failed | 28 skipped (29)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: mirror: r takes a bishop a pawn defends: expected true to be false // Object.is equality
+      Tests  1 failed | 11 skipped (12)

@@ -1,0 +1,19 @@
+MUTANT M7a-a7-shipped-default  2026-10-10T11:07:24Z load1 6.53 6.15 7.53
+
+ RUN  v3.2.7 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe-ABC-126/mutants/M7a-a7-shipped-default
+
+ ✓ src/puzzle-suite.test.ts (12 tests) 254ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 595 nodes with quiescence / 49 without = 12.14x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 292 nodes with quiescence / 47 without = 6.21x
+
+ ✓ src/quiescence.test.ts (29 tests) 363ms
+
+ Test Files  2 passed (2)
+      Tests  41 passed (41)
+   Start at  14:07:25
+   Duration  625ms (transform 152ms, setup 0ms, collect 192ms, tests 617ms, environment 0ms, prepare 89ms)
+
+EXIT 0
