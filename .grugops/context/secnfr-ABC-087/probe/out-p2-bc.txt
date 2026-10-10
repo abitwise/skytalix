@@ -1,0 +1,21 @@
+b 20s-level kiwipete       kind blunder children 48 elapsedMs 5000 wall 5001 over 5000: 1 load1 3.85
+b 20s-level kiwipete       kind blunder children 48 elapsedMs 5001 wall 5001 over 5000: 1 load1 3.94
+b 20s-level kiwi-child-43  kind blunder children 43 elapsedMs 5006 wall 5006 over 5000: 6 load1 5.79
+b 20s-level kiwi-child-43  kind blunder children 43 elapsedMs 5000 wall 5000 over 5000: 0 load1 6.13
+b 20s-level position-4     kind blunder children 6 elapsedMs 5002 wall 5002 over 5000: 2 load1 6.04
+b 20s-level position-4     kind blunder children 6 elapsedMs 5003 wall 5003 over 5000: 3 load1 5.71
+c level1 seed 7 kiwipete       kind blunder children 48 elapsedMs 104 wall 104 x budget 1.04 load1 5.50
+c level1 seed 8 kiwipete       kind blunder children 48 elapsedMs 103 wall 103 x budget 1.03 load1 5.50
+c level1 seed 9 kiwipete       kind blunder children 48 elapsedMs 103 wall 103 x budget 1.03 load1 5.50
+c level1 seed 7 kiwi-child-43  kind blunder children 43 elapsedMs 503 wall 503 x budget 5.03 load1 6.02
+c level1 seed 8 kiwi-child-43  kind blunder children 43 elapsedMs 502 wall 502 x budget 5.02 load1 6.02
+c level1 seed 9 kiwi-child-43  kind blunder children 43 elapsedMs 503 wall 504 x budget 5.04 load1 6.02
+c level1 seed 7 position-4     kind blunder children 6 elapsedMs 102 wall 102 x budget 1.02 load1 6.02
+c level1 seed 8 position-4     kind blunder children 6 elapsedMs 102 wall 102 x budget 1.02 load1 6.02
+c level1 seed 9 position-4     kind blunder children 6 elapsedMs 101 wall 101 x budget 1.01 load1 6.02
+c level1 seed 7 position-6     kind blunder children 46 elapsedMs 100 wall 100 x budget 1.00 load1 6.02
+c level1 seed 8 position-6     kind blunder children 46 elapsedMs 102 wall 103 x budget 1.03 load1 6.02
+c level1 seed 9 position-6     kind blunder children 46 elapsedMs 101 wall 101 x budget 1.01 load1 6.02
+c level1 seed 7 startpos       kind blunder children 20 elapsedMs 101 wall 101 x budget 1.01 load1 6.02
+c level1 seed 8 startpos       kind blunder children 20 elapsedMs 105 wall 105 x budget 1.05 load1 6.02
+c level1 seed 9 startpos       kind blunder children 20 elapsedMs 105 wall 105 x budget 1.05 load1 6.02

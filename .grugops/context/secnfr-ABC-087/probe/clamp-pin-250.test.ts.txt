@@ -1,0 +1,19 @@
+// Security/NFR ABC-087 candidate pin for QE-087-c (out of tree only; never committed to src/).
+import { expect, it } from "vitest";
+import { HARD_CEILING_MS } from "./engine.ts";
+import { parseFen } from "./fen.ts";
+import { legalMoves } from "./legal.ts";
+import { createLevel } from "./levels.ts";
+import { virtualClock } from "./virtual-clock.ts";
+
+const FEN = "6k1/8/8/8/8/8/1R6/6K1 b - - 0 1";
+it("QE-087-c — a blundering level above the ceiling is clamped to HARD_CEILING_MS in total", () => {
+  const n = legalMoves(parseFen(FEN)).length;
+  const step = 250;
+  const t0 = performance.now();
+  const choice = createLevel({ budgetMs: 20_000, blunderRate: 1 }, { seed: 1, now: virtualClock(step) })(parseFen(FEN));
+  const ms = performance.now() - t0;
+  console.log(`clamp-pin: n=${n} kind=${choice?.kind} elapsed=${choice?.elapsedMs} cost=${ms.toFixed(1)} ms`);
+  expect(choice?.kind).not.toBe("engine");
+  expect(choice?.elapsedMs).toBeLessThanOrEqual(HARD_CEILING_MS + 4 * step);
+});

@@ -1,0 +1,3 @@
+n=8 treatment median 0.555 s, interval [0.52, 0.57], sign 8/8
+twin median -0.010 s = -0.66 % of head 1.52 s, sign 3/8, R 0.030 s
+passed counts: head:21 twin:21 base:1; load1 min/median/max 8.96 / 13.915 / 14.97

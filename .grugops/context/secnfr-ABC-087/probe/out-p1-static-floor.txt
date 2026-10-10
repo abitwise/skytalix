@@ -1,0 +1,16 @@
+load1 start 3.30
+LEVELS["3"] -> object {"budgetMs":3000,"blunderRate":0} own: true
+LEVELS["0"] -> undefined undefined own: false
+LEVELS["6"] -> undefined undefined own: false
+LEVELS["constructor"] -> function function Object() { [native co own: false
+LEVELS["__proto__"] -> object {} own: false
+LEVELS["toString"] -> function function toString() { [native  own: false
+LEVELS["hasOwnProperty"] -> function function hasOwnProperty() { [n own: false
+constructor-as-level   kind blunder depth 1 wall 12.6 ms
+NaN rate               kind blunder depth 3 wall 100.4 ms
+undefined fields       kind blunder depth 1 wall 2.3 ms
+rate 1                 kind blunder depth 3 wall 100.1 ms
+rate -1                kind engine depth 5 wall 101.4 ms
+floor: positions 246 median sum 16.0 ms; max sum 534.9 ms over 43 children; r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N1BQ1p/PPP1BPPP/R3K2R b KQkq - 1 1 ; max single child 47.8 ms
+always-blunder at 1 ms, real clock: max elapsedMs 589 on r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N1BQ1p/PPP1BPPP/R3K2R b KQkq - 1 1
+load1 end 3.49
