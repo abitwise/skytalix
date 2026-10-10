@@ -1,8 +1,8 @@
 ---
 id: ABC-126
 title: The hanging corpus's "R takes a bishop a pawn defends" pair starts in check, and two win-material rows describe boards no game reaches — re-find all four, and assert the header's claim
-status: in-review
-column: In Review
+status: ready-for-uat
+column: Ready for UAT
 size: S
 priority: P2
 epic: EPIC-004

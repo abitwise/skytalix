@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-126` `In Review` → `Ready for UAT` (QE PASS_WITH_GAPS `b22f6e16`); owner acceptance owed (puzzle-corpus.ts is a non-test file)._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `ruling-timing-protocol` merged: `ADR-0035` PROPOSED (timing bounds checked only above the instrument floor; per-ticket cost on the narrowest file set); **`NFR-008` CPU and WALL both BREACHED — owner word owed (R-1 recommended: wall ≤ 10 s, CPU reported).** `ABC-058` pulled → `In Development`._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — **owner word (note `…owner-word-adrs-91c4e7a0`): `ADR-0030`, `ADR-0031`, `ADR-0032`, `ADR-0034` ACCEPTED, ADR-0034 decision 5 = (b) at 0.8x.** BA/PM `owner-adrs-followups` (053/054/083/087 re-scores, puzzle-edge cut, EPIC-003 amendment) dispatched; `ABC-126` → `In Review`._
@@ -570,9 +572,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 0/3)
 
-- [ABC-126] The hanging-corpus pair "R takes a bishop a pawn defends" starts with the side to move in check  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3 DISCHARGED 2026-10-10 by `ABC-084`'s merge (BA/PM re-score owed); cut from Architect `ruling-abc082-levels` side finding) **2026-10-10 audit: BA/PM re-score dispatched (`rescore-batch-2026-10-10`); builds after `ABC-127`, which leaves the 40 existing rows byte-identical.** **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; gains `A6` (remove ABC-084 carve-out); builds after `ABC-127` (shared `src/puzzle-corpus.ts`).** **2026-10-10 re-cut (`recut-abc010`, merged `d24e740`): XS → S, DoR 10/10, still Ready; title widened — also re-finds the two defective `puzzle-corpus.ts` rows (`A7`, ADR-0033 rules); `A4`/`A6` read the base baseline (ABC-127 re-records it). Order: ABC-127 → ABC-126 → ABC-083 / ABC-010.** **2026-10-10: `ABC-127` merged — `ABC-126` is unblocked and pullable.** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-126`, branch `grugops/ABC-126-corpus-repairs`). **→ In Review 2026-10-10**: built on `grugops/ABC-126-corpus-repairs` @ `efcda60d` (test data only: corpus +12/−4, suite +1/−4, quiescence +4/−2; A1–A7 met; `PUZZLE_DEEP=1` ×3 58/62, no NEWLY lines; `SEARCH_DEEP` 37/37). 0 production lines → waiver expected. QE `qe-ABC-126` dispatched (option B: QE runs `PUZZLE_DEEP`).
 
 
 
@@ -604,7 +605,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+
+- [ABC-126] The hanging-corpus pair "R takes a bishop a pawn defends" starts with the side to move in check  (BA/PM, XS, P2, epic: EPIC-004, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3 DISCHARGED 2026-10-10 by `ABC-084`'s merge (BA/PM re-score owed); cut from Architect `ruling-abc082-levels` side finding) **2026-10-10 audit: BA/PM re-score dispatched (`rescore-batch-2026-10-10`); builds after `ABC-127`, which leaves the 40 existing rows byte-identical.** **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; gains `A6` (remove ABC-084 carve-out); builds after `ABC-127` (shared `src/puzzle-corpus.ts`).** **2026-10-10 re-cut (`recut-abc010`, merged `d24e740`): XS → S, DoR 10/10, still Ready; title widened — also re-finds the two defective `puzzle-corpus.ts` rows (`A7`, ADR-0033 rules); `A4`/`A6` read the base baseline (ABC-127 re-records it). Order: ABC-127 → ABC-126 → ABC-083 / ABC-010.** **2026-10-10: `ABC-127` merged — `ABC-126` is unblocked and pullable.** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-126`, branch `grugops/ABC-126-corpus-repairs`). **→ In Review 2026-10-10**: built on `grugops/ABC-126-corpus-repairs` @ `efcda60d` (test data only: corpus +12/−4, suite +1/−4, quiescence +4/−2; A1–A7 met; `PUZZLE_DEEP=1` ×3 58/62, no NEWLY lines; `SEARCH_DEEP` 37/37). 0 production lines → waiver expected. QE `qe-ABC-126` dispatched (option B: QE runs `PUZZLE_DEEP`). **→ Ready for UAT 2026-10-10**: QE `qe-ABC-126` PASS_WITH_GAPS (`b22f6e16`; A1–A7 met; own oracle (no project code) flags exactly the 4 shipped defects, 0 on tip; `PUZZLE_DEEP=1` ×3 58/62 cmp-identical; 6 mutants killed). **UAT NOT waived: the literal rule lists `src/puzzle-corpus.ts` (non-test file, data only) — owner acceptance owed.** Gaps: QE-126-b (source gain unchecked, LOW → BA/PM), a/c/d INFO.
 
 
 
