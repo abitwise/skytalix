@@ -178,3 +178,20 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `71418879`. **Res
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with the Architect's promotion trigger |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-136`).
+- Branch `grugops/ABC-136-licence-operands`, from `c715b3c2`. The code is `b50b0e2b`
+  (`src/history-pane.nfr.test.ts` +16/−2: the tripwire comment and two pins).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-136/` (`…5b359211`,
+  `…881e15e2`, `probe/`) and are not restated here.
+
+**`A1`–`A5` are met. No stop condition fired.**
+- The premise held at `c715b3c2` (the file is byte-identical to `71418879`): both operand mutants
+  were green 12/12, with and without `WPERFT-STATIC`.
+- On the delivered tree, all four `A1`/`A2` builds exit 1 on the drift tripwire. The rest of the ledger
+  is unchanged by test name, and `ABC-057`'s spans hash identically.
+- Cost: both `ADR-0035` sets were inadmissible under parallel load (twin over 1.5 %). The readings are
+  reported in the observation note, with no claim made against the floor.

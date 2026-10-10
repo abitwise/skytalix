@@ -1,0 +1,106 @@
+
+> cli-chess@0.0.0 test
+> node tools/grugops/run-bounded.js 60000 vitest run
+
+
+ RUN  v3.2.7 <repo>/.claude/worktrees/ticket-to-pr-ABC-136
+
+ ✓ src/puzzle-suite.test.ts (12 tests) 850ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2  804ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 595 nodes with quiescence / 49 without = 12.14x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 292 nodes with quiescence / 47 without = 6.21x
+
+ ✓ src/quiescence.test.ts (29 tests) 1368ms
+   ✓ A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded  817ms
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 1110 / 1319 = 84.2%
+
+ ✓ src/search.pvs-lmr.test.ts (20 tests) 2274ms
+   ✓ PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores > the engine doors bite: chooseMoveWithoutReductions is the unreduced engine, not chooseMove  366ms
+   ✓ A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions  731ms
+   ✓ A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > chooseMove(): the same, deepened to depth 4 in the engine's own recursion  612ms
+ ✓ src/perft.test.ts (24 tests) 3016ms
+   ✓ ABC-006 acceptance — exact perft counts > startpos perft(4) = 197281  997ms
+   ✓ ABC-006 acceptance — exact perft counts > kiwipete perft(3) = 97862  524ms
+   ✓ ABC-006 acceptance — exact perft counts > position-5 perft(3) = 62379  316ms
+   ✓ ABC-006 acceptance — exact perft counts > position-6 perft(3) = 89890  321ms
+   ✓ ABC-006 — perftDivide > splits Kiwipete depth 3 into one entry per legal first move that sums to the total  459ms
+ ✓ src/search.ordering.test.ts (24 tests) 3135ms
+   ✓ A1 — ordered and unordered scores are identical > startpos at depth 3  310ms
+   ✓ A3 — ordered search visits a small fraction of the unordered nodes > position-6 at depth 2 — the default lane's standing guard  1249ms
+   ✓ A4 — each heuristic's node count, and the delete rule > position-6 at depth 2: none 9 319, MVV-LVA 3 286, + killers 2 429  397ms
+ ✓ src/transposition.test.ts (25 tests) 3413ms
+   ✓ A3 — iterative deepening with the table visits <= 70% of the nodes it visits without > position-3 deepened to depth 4 — the default lane's standing guard  400ms
+   ✓ A5 — the only non-losing line repeats, and it scores exactly 0 > search(), depth 4: the perpetual scores exactly 0 and is played — in 7 251 nodes  1369ms
+   ✓ A5 — the only non-losing line repeats, and it scores exactly 0 > chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0  302ms
+ ✓ src/san.qualifier.hardening.test.ts (20 tests) 1319ms
+   ✓ ABC-025 A1 — the qualifier is the shortest ladder entry that names exactly one move > holds for every non-pawn, non-castle legal move of all 207 corpus positions, both call forms  1091ms
+stdout | src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+A9: 5 distinct sequences over 5 seeds
+
+ ✓ src/san.test.ts (22 tests) 566ms
+ ✓ src/history-pane.test.ts (26 tests) 1066ms
+   ✓ ABC-017 acceptance > A9 — two renders of a history nothing has rendered are byte-identical  311ms
+ ✓ src/levels.test.ts (22 tests) 1864ms
+   ✓ A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences  696ms
+   ✓ A7 — seeded, in deterministic mode > a fixed seed gives identical blunder decisions across runs  315ms
+ ✓ src/search.test.ts (28 tests) 4522ms
+   ✓ A1 — pruned and unpruned scores are identical > position-3 at depth 3  1029ms
+   ✓ A1 — pruned and unpruned scores are identical > position-4 at depth 2  2326ms
+   ✓ A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1  768ms
+ ✓ src/engine.capacity.test.ts (1 test) 1129ms
+   ✓ ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() > ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it  1128ms
+ ✓ src/turn-loop.test.ts (63 tests) 283ms
+ ✓ src/frame.test.ts (34 tests) 336ms
+ ✓ src/command-input.test.ts (188 tests) 468ms
+ ✓ src/zobrist.test.ts (32 tests) 1292ms
+   ✓ ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) > holds at every node within 2 plies of every perft position  622ms
+   ✓ ABC-011 QE — zobristKey returns the position exactly as it found it > is byte-pure at every node of a 2-ply walk from all six perft positions  348ms
+ ✓ src/turn-loop.nfr.test.ts (4 tests) 1107ms
+   ✓ NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives EXACTLY once per ply at 300 plies  854ms
+ ✓ src/render.test.ts (27 tests) 136ms
+ ✓ src/history.test.ts (12 tests) 90ms
+ ✓ src/moves.castling.hardening.test.ts (110 tests) 194ms
+ ✓ src/moves.enpassant.hardening.test.ts (120 tests) 145ms
+ ✓ src/search.qe.test.ts (8 tests) 118ms
+ ✓ src/rejection.test.ts (53 tests) 220ms
+ ✓ src/status-panel.test.ts (29 tests) 97ms
+ ✓ src/evaluate.pawns.test.ts (37 tests) 98ms
+ ✓ src/gameend.test.ts (45 tests) 114ms
+ ✓ src/history-pane.nfr.test.ts (12 tests) 470ms
+   ✓ A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched  415ms
+ ✓ src/san.parse.test.ts (30 tests) 49ms
+ ✓ src/line-input.test.ts (30 tests) 76ms
+ ✓ src/evaluate.test.ts (21 tests) 68ms
+ ✓ src/moves.enpassant.test.ts (58 tests) 82ms
+ ✓ src/result-screen.test.ts (13 tests) 138ms
+ ✓ src/legal.test.ts (31 tests) 120ms
+ ✓ src/search.capacity.test.ts (1 test) 121ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 86ms
+ ✓ src/render-seam.test.ts (14 tests) 135ms
+ ✓ src/move-input.test.ts (50 tests) 117ms
+ ✓ src/moves.castling.test.ts (33 tests) 33ms
+ ✓ src/coordinate-move.test.ts (45 tests) 50ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 72ms
+ ✓ src/apply.test.ts (24 tests) 71ms
+ ✓ src/frame.overflow-bound.test.ts (25 tests) 83ms
+ ✓ src/gameend.nfr.test.ts (3 tests) 9ms
+ ✓ src/fen.test.ts (27 tests) 32ms
+ ✓ src/glyph-mode.test.ts (21 tests) 8ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 11ms
+ ✓ src/moves.test.ts (33 tests) 62ms
+ ✓ src/san.nfr.test.ts (5 tests) 5ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 9ms
+ ✓ src/cli.real-engine.test.ts (1 test) 3ms
+ ✓ src/engine.test.ts (33 tests) 1920ms
+   ✓ A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames  1113ms
+ ✓ src/cli.test.ts (67 tests) 297ms
+
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Start at  17:44:48
+   Duration  14.12s (transform 2.05s, setup 0ms, collect 20.72s, tests 33.34s, environment 9ms, prepare 5.00s)
+

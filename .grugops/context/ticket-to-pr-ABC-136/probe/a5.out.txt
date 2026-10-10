@@ -1,0 +1,16 @@
+$ git diff --name-only c715b3c2..b50b0e2b
+src/history-pane.nfr.test.ts
+$ git diff --numstat c715b3c2..b50b0e2b
+16	2	src/history-pane.nfr.test.ts
+$ guard statements (raw, real newlines): count at base | count at head
+1 | 1 | const production line
+1 | 1 | runtimeImporters statement
+1 | 1 | toEqual line
+licence it block byte-identical: True
+$ executable added lines (non-comment, non-blank)
++    expect(instrument, "the licence guard scans EVERY production module").toContain(
++      "\n    const production = productionModulesIn(directory);\n    const runtimeImporters = production.filter((file) =>\n",
++    );
++    expect(instrument, "the licence guard compares EVERY runtime importer").toContain(
++      '\n    const runtimeImporters = production.filter((file) =>\n      /^(?:import|export)\\s+(?!type\\b)(?:[^;]*from\\s+)?"\\.\\/history\\.ts";/m.test(\n        readFileSync(`${directory}${file}`, "utf8"),\n      ),\n    );\n',
++    );
