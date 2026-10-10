@@ -1,8 +1,8 @@
 ---
 id: ABC-116
 title: The `T2` re-measure trigger has a ruling and no carrier — record it where a hop that changes an existing child will actually meet it
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: XS
 priority: P2
 epic: —
