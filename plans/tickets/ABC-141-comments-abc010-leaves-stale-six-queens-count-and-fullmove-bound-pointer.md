@@ -142,3 +142,30 @@ in `Backlog`.** Re-score when `ABC-010` merges.
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3` |
 | 10 | no major unresolved blocker | **✅** none beyond item 3's merge order |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-141`).
+- Branch `grugops/ABC-141-stale-comments`, from `957a85c3` (wave tip). The code is `f92868f6`.
+- Not merged, not pushed.
+- The decision and readings are in `.grugops/context/ticket-to-pr-ABC-141/notes/` (`…7739f7b7`
+  decision, `…8d96eef4` readings) and are not restated here. The probes are in `../probe/`.
+
+**The premise held at `957a85c3`.** On a `git archive` copy: derives = 7 (1 + 6 checking candidates, all
+`#`), and `parseFen` accepts fullmove 10000. **No stop condition fired.** The `history-pane.ts` edit is in the
+module docblock, outside the only text pin (`history-pane.nfr.test.ts:386`) and outside every `it` body.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | Tip counter derives = 7. Both sites say "seven: 1 + 6". `cost six of those` 1 → **0**, `measured six` 1 → **0** |
+| `A2` | MET | `` `ABC-010` is the ticket that would `` 1 → **0**. The paragraph keeps "accepts fullmove 10000", and the tip's `parseFen` gives 10000. No ticket is named as delivering a bound |
+| `A3` | MET | `--name-only` lists exactly the three files. Both Q4 measures hold per file (below) |
+| `A4` | MET | lint, typecheck and build exit 0. `npm test` 52 files / 1663 passed (base 1663). Skips 0. Integrity `No findings.`, lane-inventory 52/52 `No findings.` One unreproduced JSON-run failure, test unnamed: `UNKNOWN - verify` (readings note) |
+
+**Exit (owner ruling, `…5c8e2a17`): both measures hold for all 3 files** (`qe-ABC-132/probe/exit132.mjs`).
+- Every changed line is a comment line: `move-input.ts` 3/3, `move-input.test.ts` 3/3, `history-pane.ts`
+  5/5, by regex and by the TS scanner.
+- `transpileModule` with `removeComments: true` emits byte-identical output at base and tip for all three,
+  under the repo tsconfig and ESNext. The negative controls fail the conjunction in every file.
+- **On that ruling, UAT is WAIVED** (waived is not accepted). The Orchestrator applies the waiver at `Done`;
+  it is not self-applied here.
