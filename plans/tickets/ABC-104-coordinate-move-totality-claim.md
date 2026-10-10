@@ -130,3 +130,23 @@ another ticket that already needs his word, or as a ride-along.
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with the UAT cost named |
 | 10 | no major unresolved blocker | **✅** none. The UAT word is a cost, not a blocker |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-104`).
+- Branch `grugops/ABC-104-coordinate-move-docblock`, from `b7cffc52`. The code is `7707f61f`.
+- Not merged, not pushed.
+- The decision, readings and probe are in `.grugops/context/ticket-to-pr-ABC-104/` (`…30823a98`,
+  `…a2addac5`, `probe/probe.mts`) and are not restated here.
+
+**The premise held at `b7cffc52`.** Both throws were re-measured before the edit. **`A1`–`A3` are met,
+and no stop condition fired.** No test was added, and no other `src/` file was touched.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | `:30-37` reads "TOTAL OVER `text`", "Totality is over `text` ONLY", and "`position` and `legal` are a caller obligation, in the same terms `ADR-0004` clause 2 states for `toSan` and `parseSan`". The phrase "TOTAL function" is gone |
+| `A2` | MET | After the edit, `parseCoordinateMove(null, "e2e4")` still throws `TypeError` (reading `'blackToMove'`), and `(position, "e2e4", 42)` still throws `TypeError` (`.filter is not a function`). The docblock names both calls as the contract |
+| `A3` | MET | `git diff -U0 7707f61f~1 7707f61f`: only `src/coordinate-move.ts`, one hunk `@@ -30,3 +30,8 @@`, inside lines 1–33. The header at base is identical to the one at `f76e041`. numstat `8 3`, all ` *` lines. lint/typecheck/build exit 0; `npm test` 51 files / 1583 passed; skips 0; `test-skip-integrity` `No findings.` |
+
+**UAT cost, as § Size and priority predicted:** this ticket is **not** waived, so the owner's word is
+needed at `In UAT` for one docblock paragraph.
