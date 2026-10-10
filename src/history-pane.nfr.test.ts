@@ -187,16 +187,24 @@ const productionModulesIn = (directory: string): readonly string[] =>
  * IT FAILS CLOSED ON A SECOND COMPOSER THAT BINDS `assembleFrame` BY A STATIC VALUE IMPORT THE
  * TRIPWIRE READS, and on no wider set: the production modules holding a static value-binding import
  * (`ADR-0030` decision 2) of `assembleFrame` from `./frame.ts` must EQUAL `[COMPOSITION_ROOT]`. It
- * reads that import as a namespace binding or a brace specifier that BEGINS with the name, so two
- * static value imports are NOT counted (`QE-054-b`): a comment ahead of the name inside the brace,
- * and a default binding (`import assembleFrame from`, `{ default as assembleFrame }`).
+ * reads that import as a namespace binding or a brace specifier that BEGINS with the name, and the
+ * clause it reads ends at the first `;`. So static value imports are NOT counted, AT LEAST these
+ * four, and the list is not exhaustive (`ADR-0029` decision 2's 2026-10-10 pointer lists the same
+ * four): a comment ahead of the name inside the brace, and a default binding (`import assembleFrame
+ * from`, `{ default as assembleFrame }`) (`QE-054-b`); a string-named specifier
+ * (`{ "assembleFrame" as compose }`), and a comment containing `;` inside the brace after the name
+ * (`QE-057-b`).
  *
  * WHAT NEITHER PHASE COVERS, stated so it is not read as more:
  * - a derive DEFERRED past the settle, for example behind a timer;
- * - a lazy load CONDITIONAL on a game state the frames do not reach (the two states bound this; they
- *   do not close it);
- * - a renderer that rebuilds the derive from modules OTHER than `history.ts` (`gameend.ts` plus its
- *   own counts) — only `ABC-041` `A2`'s synchronous spies see that, a pre-existing limit;
+ * - a lazy load CONDITIONAL on anything the frames hold fixed: the game state (the two states bound
+ *   this; they do not close it), the glyph mode (`ascii` only, never `unicode`), the orientation
+ *   (`white-bottom` only, never `black-bottom`), `thinking` (always false) and the message region
+ *   (always empty);
+ * - a renderer that rebuilds the derive from modules OTHER than `history.ts`: `ABC-041` `A2`'s
+ *   synchronous spies see a rebuild that calls `gameStatus` (`gameend.ts` plus its own counts), but
+ *   a rebuild by replay (`parseFen`, `makeMove` and `zobristKey`, no `gameStatus` call) is seen by
+ *   no instrument at all, a pre-existing limit;
  * - a second composer that reaches `assembleFrame` through a re-export hop (`export … from
  *   "./frame.ts"`) or a dynamic `import("./frame.ts")`: neither is a static value import, so the
  *   tripwire counts neither (`ADR-0030` decision 2 excludes both; `AR-053-COMPOSER`), and what
@@ -553,9 +561,11 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
   it("the composer tripwire: assembleFrame's value-importers EQUAL the one composition root", () => {
     // `ADR-0029` decision 2 — what makes deriving the path from ONE root fail CLOSED, for a second
     // composer that binds `assembleFrame` by a static value import THE EXPRESSION BELOW READS, and
-    // for nothing wider: a namespace binding, or a brace specifier that BEGINS with the name. A
-    // comment ahead of the name inside the brace, and a default binding, are value imports it does
-    // not count (`QE-054-b`; the docblock's fail-closed paragraph). Such a module is a second
+    // for nothing wider: a namespace binding, or a brace specifier that BEGINS with the name. Value
+    // imports it does not count include AT LEAST these four, and the list is not exhaustive: a
+    // comment ahead of the name inside the brace, a default binding (`QE-054-b`), a string-named
+    // specifier, and a comment containing `;` after the name, which ends the clause it reads
+    // (`QE-057-b`; the docblock's fail-closed paragraph). Such a module is a second
     // root, and its closure would go unmeasured; a root that stops composing is no longer the root. A re-export hop or a dynamic `import("./frame.ts")` is not counted (the
     // docblock's WHAT NEITHER PHASE COVERS). "Value-binding import" is `ADR-0030` decision 2's: a
     // brace specifier NOT prefixed `type`, or a namespace binding. `import type`, an all-`type`
@@ -670,9 +680,12 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     // this file holds no copy of `GameHistory`'s shape, and the plain `history.ts` URL stays unloaded:
     // a frame that loads it produces a fresh load event. Two states, because the pane's window
     // branches at `2 x HISTORY_ROWS` plies and a lazy edge behind that branch never fires on an empty
-    // game. The settle is a bounded count of macrotask turns and NEVER a clock: the load hook fires
-    // when an import is ISSUED, so it is not load-bearing on Node v26.11.0, and it stays because
-    // `package.json` admits Node >= 22. If this phase ever flakes, look at the settle first.
+    // game. The settle is a bounded count of macrotask turns and NEVER a clock: 3 `setImmediate`
+    // turns (the loop's bound below). The load hook fires when an import is ISSUED, so a frame's
+    // synchronous import is seen without it; the settle is what reaches an import issued from a
+    // macrotask, and it reaches a `setImmediate` chain at most 3 deep. A deeper `setImmediate`
+    // chain, or a timer of any delay, is NOT seen (`QE-053-d`). It also stays because `package.json`
+    // admits Node >= 22. If this phase ever flakes, look at the settle first.
     const probe = `import { registerHooks } from "node:module";
       import { writeSync } from "node:fs";
       let loaded = [];
