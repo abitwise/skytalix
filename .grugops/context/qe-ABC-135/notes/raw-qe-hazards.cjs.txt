@@ -1,0 +1,48 @@
+// QE ABC-135: where on the real production tree could the naive strip misread code?
+// Lists string/template/regex literals holding `//` or `/*`, line comments holding `/*`, and
+// block comments holding `//` (the last only matters if the strip order is swapped).
+// usage: node qe-hazards.cjs <srcDir>
+const ts = require("typescript");
+const fs = require("node:fs");
+const dir = process.argv[2];
+const prod = fs.readdirSync(dir).filter((f) => f.endsWith(".ts") && !f.endsWith(".test.ts")).sort();
+const out = [];
+for (const f of prod) {
+  const text = fs.readFileSync(`${dir}/${f}`, "utf8");
+  const sc = ts.createScanner(ts.ScriptTarget.Latest, false, ts.LanguageVariant.Standard, text);
+  const sf = ts.createSourceFile(f, text, ts.ScriptTarget.Latest, true);
+  // literals via AST (the scanner alone mis-tokenises regexes)
+  const visit = (n) => {
+    if (ts.isStringLiteralLike(n) || ts.isRegularExpressionLiteral(n) || ts.isTemplateLiteralToken?.(n) || n.kind === ts.SyntaxKind.TemplateHead || n.kind === ts.SyntaxKind.TemplateMiddle || n.kind === ts.SyntaxKind.TemplateTail) {
+      const t = n.getText(sf);
+      if (t.includes("//") || t.includes("/*") || t.includes("*/"))
+        out.push(`${f}:${sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1} literal ${JSON.stringify(t.slice(0, 80))}`);
+    }
+    ts.forEachChild(n, visit);
+  };
+  visit(sf);
+  // comments: leading/trailing comment ranges of every node, de-duplicated
+  const seen = new Set();
+  const take = (ranges) => {
+    for (const r of ranges ?? []) {
+      if (seen.has(r.pos)) continue;
+      seen.add(r.pos);
+      const t = text.slice(r.pos, r.end);
+      const line = sf.getLineAndCharacterOfPosition(r.pos).line + 1;
+      if (r.kind === ts.SyntaxKind.SingleLineCommentTrivia && (t.includes("/*") || t.includes("*/")))
+        out.push(`${f}:${line} line-comment-with-block-delim ${JSON.stringify(t.slice(0, 80))}`);
+      if (r.kind === ts.SyntaxKind.MultiLineCommentTrivia && t.slice(2, -2).includes("//"))
+        out.push(`${f}:${line} block-comment-with-// ${JSON.stringify(t.slice(0, 60))}`);
+    }
+  };
+  const walk = (n) => {
+    take(ts.getLeadingCommentRanges(text, n.pos));
+    take(ts.getTrailingCommentRanges(text, n.end));
+    ts.forEachChild(n, walk);
+  };
+  walk(sf);
+  take(ts.getLeadingCommentRanges(text, sf.endOfFileToken.pos));
+  void sc;
+}
+console.log(out.join("\n") || "(none)");
+console.log(`files=${prod.length} hazards=${out.length}`);

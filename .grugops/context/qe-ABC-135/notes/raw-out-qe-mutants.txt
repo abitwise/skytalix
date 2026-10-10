@@ -1,0 +1,135 @@
+##### out-base-M-FIRST-STATEMENT-ONLY
+strip: 
+      Tests  12 passed (12)
+##### out-base-M-SINGLE-LINE
+strip: 
+      Tests  12 passed (12)
+##### out-base-pristine
+strip: 
+      Tests  12 passed (12)
+##### out-tip-M-BLOCK-ONLY
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "");
+      Tests  1 failed | 12 passed (13)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import {
+##### out-tip-M-BLOCK-TO-SPACE-NONE
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "x").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 12 passed (13)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+##### out-tip-M-FIRST-STATEMENT-ONLY
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 12 passed (13)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import type { X } from "./m.ts";
+##### out-tip-M-GREEDY-BLOCK
+strip:   source.replace(/\/\*[\s\S]*\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 12 passed (13)
+ FAIL > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer
+AssertionError: production runtime consumers of render.ts: expected [] to include 'render-seam.ts'
+##### out-tip-M-LINE-NO-M-FLAG
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/g, "");
+      Tests  1 failed | 12 passed (13)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import {
+##### out-tip-M-LINE-ONLY
+strip:   source.replace(/\/\/.*$/gm, "");
+      Tests  2 failed | 11 passed (13)
+ FAIL > A3 — one height across 10 cases, equal to frameHeight, with no row count in the module
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: expected '/**\n * `ABC-041` — the render seam: …' not to match /\d/
+AssertionError: import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+##### out-tip-M-LINE-TO-EOF
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[\s\S]*$/g, "");
+      Tests  13 passed (13)
+##### out-tip-M-LINE-WHOLE-LINE
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^.*\/\/.*$/gm, "");
+      Tests  13 passed (13)
+##### out-tip-M-NO-STRIP
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 12 passed (13)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+##### out-tip-M-SINGLE-LINE
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 12 passed (13)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import {
+##### out-tip-M-STRIP-IN-CALLER
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 12 passed (13)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+##### out-tip-M-SWAP-ORDER
+strip:   source.replace(/\/\/.*$/gm, "").replace(/\/\*[\s\S]*?\*\//g, "");
+      Tests  13 passed (13)
+##### out-tip-pristine
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  13 passed (13)
+##### out-qe-M-BLOCK-ONLY
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import {
+##### out-qe-M-BLOCK-TO-SPACE-NONE
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "x").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+##### out-qe-M-FIRST-STATEMENT-ONLY
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import type { X } from "./m.ts";
+##### out-qe-M-GREEDY-BLOCK
+strip:   source.replace(/\/\*[\s\S]*\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  2 failed | 12 passed (14)
+ FAIL > A8 — the headline: render / status-panel / history-pane each gain a runtime consumer
+ FAIL > A8's instrument — the comment strip eats no code: a consumer beside a comment still counts
+AssertionError: /* see http://x */
+AssertionError: production runtime consumers of render.ts: expected [] to include 'render-seam.ts'
+##### out-qe-M-LINE-NO-M-FLAG
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/g, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import {
+##### out-qe-M-LINE-ONLY
+strip:   source.replace(/\/\/.*$/gm, "");
+      Tests  2 failed | 12 passed (14)
+ FAIL > A3 — one height across 10 cases, equal to frameHeight, with no row count in the module
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: expected '/**\n * `ABC-041` — the render seam: …' not to match /\d/
+AssertionError: import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+##### out-qe-M-LINE-TO-EOF
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[\s\S]*$/g, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — the comment strip eats no code: a consumer beside a comment still counts
+AssertionError: // c
+##### out-qe-M-LINE-WHOLE-LINE
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^.*\/\/.*$/gm, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — the comment strip eats no code: a consumer beside a comment still counts
+AssertionError: import { f } from "./m.ts"; // c: expected false to be true // Object.is equality
+##### out-qe-M-NO-STRIP
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+##### out-qe-M-SINGLE-LINE
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import {
+##### out-qe-M-STRIP-IN-CALLER
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — a comment is not a specifier; it reads across lines and every statement
+AssertionError: import { /* c */ type X } from "./m.ts";: expected true to be false // Object.is equality
+##### out-qe-M-SWAP-ORDER
+strip:   source.replace(/\/\/.*$/gm, "").replace(/\/\*[\s\S]*?\*\//g, "");
+      Tests  1 failed | 13 passed (14)
+ FAIL > A8's instrument — the comment strip eats no code: a consumer beside a comment still counts
+AssertionError: /* see http://x */
+##### out-qe-pristine
+strip:   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+      Tests  14 passed (14)

@@ -1,0 +1,32 @@
+#!/bin/bash
+# QE ABC-135 mutants. usage: qe-mutants.sh <scratch> <repo> <rev> <label> [mutant ...]
+# Each mutant is a perl -0 substitution on src/render-seam.test.ts in a fresh `git archive` copy;
+# `or die "anchor"` proves the mutation landed. Runs `npx vitest run src/render-seam.test.ts`.
+S=$1; R=$2; REV=$3; L=$4; shift 4
+F=src/render-seam.test.ts
+declare -A M
+M[pristine]='1'
+M[M-SINGLE-LINE]='s/\(\[\^;"\]\*\?\)/([^;"\\\\n]*?)/ or die "anchor"'
+M[M-FIRST-STATEMENT-ONLY]='s/\]\.some\(\(\[, clause/].slice(0, 1).some(([, clause/ or die "anchor"'
+M[M-NO-STRIP]='s/withoutComments\(source\)\.matchAll/source.matchAll/ or die "anchor"'
+M[M-LINE-ONLY]='s/source\.replace\(\/\\\/\\\*\[\\s\\S\]\*\?\\\*\\\/\/g, ""\)\.replace/source.replace/ or die "anchor"'
+M[M-BLOCK-ONLY]='s/\.replace\(\/\\\/\\\/\.\*\$\/gm, ""\);/;/ or die "anchor"'
+M[M-SWAP-ORDER]='s/source\.replace\(\/\\\/\\\*\[\\s\\S\]\*\?\\\*\\\/\/g, ""\)\.replace\(\/\\\/\\\/\.\*\$\/gm, ""\)/source.replace(\/\\\/\\\/.*\$\/gm, "").replace(\/\\\/\\*[\\s\\S]*?\\*\\\/\/g, "")/ or die "anchor"'
+M[M-GREEDY-BLOCK]='s/\[\\s\\S\]\*\?\\\*\\\/\/g/[\\s\\S]*\\*\\\/\/g/ or die "anchor"'
+M[M-LINE-NO-M-FLAG]='s/\/\\\/\\\/\.\*\$\/gm/\/\\\/\\\/.*\$\/g/ or die "anchor"'
+M[M-LINE-TO-EOF]='s/\/\\\/\\\/\.\*\$\/gm/\/\\\/\\\/[\\s\\S]*\$\/g/ or die "anchor"'
+M[M-LINE-WHOLE-LINE]='s/\/\\\/\\\/\.\*\$\/gm/\/^.*\\\/\\\/.*\$\/gm/ or die "anchor"'
+M[M-STRIP-IN-CALLER]='s/withoutComments\(source\)\.matchAll/source.matchAll/ or die "a1"; s/bindsAValueFrom\(sourceOf\(file\), target\)/bindsAValueFrom(withoutComments(sourceOf(file)), target)/ or die "a2"'
+M[M-BLOCK-TO-SPACE-NONE]='s/\[\\s\\S\]\*\?\\\*\\\/\/g, ""/[\\s\\S]*?\\*\\\/\/g, "x"/ or die "anchor"'
+for name in "$@"; do
+  d=$S/mut-$L-$name; rm -rf "$d"; mkdir -p "$d"
+  git -C "$R" archive "$REV" | tar -x -C "$d"; ln -s "$R/node_modules" "$d/node_modules"
+  if [ "$name" != pristine ]; then
+    perl -0pi -e "${M[$name]}" "$d/$F" || { echo "== $L $name ANCHOR-MISS"; continue; }
+  fi
+  sed -n '/^const withoutComments/,/^$/p' "$d/$F" | sed -n 2p > "$S/strip-$L-$name.txt"
+  ( cd "$d" && npx vitest run "$F" 2>&1 ) > "$S/out-$L-$name.txt"; rc=$?
+  echo "== $L $name exit=$rc :: $(grep -E '^ +Tests ' "$S/out-$L-$name.txt" | tr -s ' ')"
+  grep -E '^ FAIL ' "$S/out-$L-$name.txt" | sed 's/.*the render seam > //' | sort -u
+  grep -E '^AssertionError' "$S/out-$L-$name.txt" | sort -u | head -3
+done
