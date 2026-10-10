@@ -1,0 +1,36 @@
+T0 diff-lines=0
+T0 S0 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T0 A2 | The lane collects 54 test files; git tracks 50. | findings=4 grugops-false-NOT-tracked=0 | EXIT=1
+T0 A4 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T0 Q2e | The lane collects 51 test files; git tracks 51. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T0 Q5 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T1 diff-lines=2
+T1 S0 | The lane collects 50 test files; git tracks 53. | findings=3 grugops-false-NOT-tracked=0 | EXIT=1
+T1 A2 | The lane collects 54 test files; git tracks 53. | findings=4 grugops-false-NOT-tracked=0 | EXIT=1
+T1 A4 | The lane collects 50 test files; git tracks 54. | findings=4 grugops-false-NOT-tracked=0 | EXIT=1
+T1 Q2e | The lane collects 51 test files; git tracks 54. | findings=3 grugops-false-NOT-tracked=0 | EXIT=1
+T1 Q5 | The lane collects 50 test files; git tracks 54. | findings=4 grugops-false-NOT-tracked=0 | EXIT=1
+T2 diff-lines=6
+T2 S0 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T2 A2 | The lane collects 54 test files; git tracks 50. | findings=4 grugops-false-NOT-tracked=4 | EXIT=1
+T2 A4 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T2 Q2e | The lane collects 51 test files; git tracks 51. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T2 Q5 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T3 diff-lines=2
+T3 S0 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T3 A2 | The lane collects 54 test files; git tracks 50. | findings=4 grugops-false-NOT-tracked=0 | EXIT=1
+T3 A4 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T3 Q2e | The lane collects 51 test files; git tracks 51. | findings=1 grugops-false-NOT-tracked=0 | EXIT=1
+T3 Q5 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T4 diff-lines=2
+T4 S0 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T4 A2 | The lane collects 54 test files; git tracks 50. | findings=4 grugops-false-NOT-tracked=0 | EXIT=1
+T4 A4 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T4 Q2e | The lane collects 51 test files; git tracks 51. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T4 Q5 | The lane collects 50 test files; git tracks 51. | findings=1 grugops-false-NOT-tracked=0 | EXIT=1
+T5 diff-lines=4
+T5 S0 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T5 A2 | The lane collects 54 test files; git tracks 53. | findings=4 grugops-false-NOT-tracked=0 | EXIT=1
+T5 A4 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T5 Q2e | The lane collects 51 test files; git tracks 51. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0
+T5 Q5 | The lane collects 50 test files; git tracks 50. | findings=0 grugops-false-NOT-tracked=0 | EXIT=0

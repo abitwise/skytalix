@@ -1,0 +1,195 @@
+---- [base] S0-baseline
+The lane collects 50 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+A1-ref git ls-files -- '*.test.ts' ':!.grugops/' | wc -l = 50
+glob-count=0
+---- [base] A2-glob-removed
+The lane collects 54 test files; git tracks 53.
+Collected by the lane but NOT tracked by git: .grugops/context/ticket-to-pr-ABC-081/probe/depth-vitest.test.mjs — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=1  grugops-NOT-tracked-lines=1
+---- [base] A2-glob-restored
+The lane collects 50 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+m1=1
+---- [base] M1-perft-excluded
+The lane collects 49 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: src/perft.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+m2=1
+---- [base] M2-typo-planted
+The lane collects 100 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+... (54 lines total)
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] M2-restored-planted-still-present
+The lane collects 50 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] M3-untracked
+The lane collects 51 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Collected by the lane but NOT tracked by git: src/zz.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] M3-after-add
+The lane collects 51 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] A4-committed-probe
+The lane collects 50 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/zz/probe/new.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=4  grugops-NOT-tracked-lines=0
+q1a=1
+---- [base] Q1a-deep-probe-glob-single-star
+The lane collects 50 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/a/b/c/d/deep.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=4  grugops-NOT-tracked-lines=0
+q1b=1
+---- [base] Q1b-deep-probe-glob-typo-grugop
+The lane collects 55 test files; git tracks 54.
+Collected by the lane but NOT tracked by git: .grugops/context/ticket-to-pr-ABC-081/probe/depth-vitest.test.mjs — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=1  grugops-NOT-tracked-lines=1
+---- [base] Q1c-src-nested-grugops-committed
+The lane collects 51 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+q1d=1
+---- [base] Q1d-src-nested-overbroad-glob
+The lane collects 50 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: src/.grugops/zz.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=4  grugops-NOT-tracked-lines=0
+---- [base] Q1e-src-nested-untracked
+The lane collects 51 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Collected by the lane but NOT tracked by git: src/.grugops/zz.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=4  grugops-NOT-tracked-lines=1
+---- [base] Q2a-tools-committed
+The lane collects 51 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q2b-tools-untracked
+The lane collects 51 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Collected by the lane but NOT tracked by git: tools/zz.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q2c-plans-committed
+The lane collects 50 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: plans/zz.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q2d-claude-committed
+The lane collects 50 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .claude/skills/zz.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q2e-grugopsx-committed
+The lane collects 51 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q2f-src-mjs-committed-G4
+The lane collects 51 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Collected by the lane but NOT tracked by git: src/zz.test.mjs — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q3a-grugops-space-quote-committed
+The lane collects 50 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/my probe/sp ace "q" 's'.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=4  grugops-NOT-tracked-lines=0
+---- [base] Q3a-grugops-space-quote-glob-removed
+The lane collects 55 test files; git tracks 54.
+Collected by the lane but NOT tracked by git: .grugops/context/ticket-to-pr-ABC-081/probe/depth-vitest.test.mjs — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=1  grugops-NOT-tracked-lines=1
+---- [base] Q3b-src-space-quote-untracked
+The lane collects 51 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Collected by the lane but NOT tracked by git: src/sp ace "q" 's'.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q3b-src-space-quote-committed
+The lane collects 51 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q3c-src-nonascii-untracked
+The lane collects 51 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Collected by the lane but NOT tracked by git: src/ümlaut.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q3c-src-nonascii-committed
+The lane collects 51 test files; git tracks 54.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q4a-argv
+The lane collects 50 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q4b-env
+The lane collects 50 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=3  grugops-NOT-tracked-lines=0
+---- [base] Q4c-cwd-src
+The lane collects 50 test files; git tracks 53.
+Tracked by git but NOT collected by the lane: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+Tracked by git but NOT collected by the lane: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1
+grugops-tracked=0
+---- [base] Q4d-no-grugops-dir
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+==== done [base]

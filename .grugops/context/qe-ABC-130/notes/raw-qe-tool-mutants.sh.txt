@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# QE ABC-130 tool mutants: mutate lane-inventory.js IN A COPY of the tip template (tpl-tip, built by
+# harness.sh) and run the discriminating scenarios. The worktree is never edited.
+set -u
+SP=/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/e0dd4cf5-83f1-4fb6-bb33-18c0c2394948/scratchpad/qe-ABC-130
+TPL=$SP/tpl-tip
+T=tools/grugops/lane-inventory.js
+G() { git -c gc.auto=0 -c maintenance.auto=false -c user.name=qe -c user.email=qe@qe "$@"; }
+probe() { mkdir -p "$(dirname "$1")"; printf 'import { it } from "vitest";\nit("qe", () => {});\n' > "$1"; }
+
+mutate() { # id
+  case $1 in
+    T0) : ;;  # unmutated tip, the control
+    T1) perl -0pi -e 's/"\*\.test\.ts", OMITTED_FROM_TRACKED\]/"*.test.ts"]/' $T ;;
+    T2) perl -0pi -e 's/  if \(path\.startsWith\(OMITTED_DIR\)\) \{\n.*?\n.*?\n    \);\n  \} else if/  if/s' $T ;;
+    T3) perl -0pi -e 's/const OMITTED_DIR = "\.grugops\/";/const OMITTED_DIR = ".grugops";/' $T ;;
+    T4) perl -0pi -e 's/const OMITTED_DIR = "\.grugops\/";/const OMITTED_DIR = ".grugops\/context\/";/' $T ;;
+    T5) perl -0pi -e 's/import \{ existsSync \} from "node:fs";/import { existsSync, readFileSync } from "node:fs";/; s/const OMITTED_FROM_TRACKED = `:!\$\{OMITTED_DIR\}`;/const OMITTED_FROM_TRACKED = readFileSync(join(root, "vitest.config.ts"), "utf8").includes(`"\${OMITTED_DIR}**"`) ? `:!\${OMITTED_DIR}` : ":!.none\/";/' $T ;;
+  esac
+}
+scen() { # mutant scenario
+  C=$SP/m-$1-$2; rm -rf "$C"; cp -R "$TPL" "$C"; cd "$C" || exit 9
+  mutate "$1"
+  case $2 in
+    S0) : ;;
+    A2) perl -0pi -e 's/^      "\.grugops\/\*\*",\n//m' vitest.config.ts ;;
+    A4) probe .grugops/context/zz/probe/new.test.ts; G add -A; G commit -qm p ;;
+    Q2e) probe .grugopsx/zz.test.ts; G add -A; G commit -qm p ;;
+    Q5) probe .grugops/queue/zz.test.ts; G add -A; G commit -qm p ;;
+  esac
+  local out; out=$(node $T 2>&1); local e=$?
+  local head; head=$(printf '%s\n' "$out" | head -1)
+  local fl; fl=$(printf '%s\n' "$out" | grep '^\.grugops/\|: \.grugops/' | grep -c 'NOT tracked by git')
+  local nf; nf=$(printf '%s\n' "$out" | tail -n +2 | grep -vc '^No findings\.$')
+  echo "$1 $2 | $head | findings=$nf grugops-false-NOT-tracked=$fl | EXIT=$e"
+}
+for m in T0 T1 T2 T3 T4 T5; do
+  ( cd "$TPL" && cp $T /dev/null )
+  # show that the mutation applied (diff line count against the template)
+  C=$SP/m-$m-diff; rm -rf "$C"; mkdir -p "$C/tools/grugops"; cp "$TPL/$T" "$C/$T"; (cd "$C" && mutate $m && echo "$m diff-lines=$(diff "$TPL/$T" "$T" | grep -c '^[<>]')")
+  for s in S0 A2 A4 Q2e Q5; do scen $m $s; done
+done

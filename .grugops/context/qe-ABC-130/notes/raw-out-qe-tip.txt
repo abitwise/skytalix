@@ -1,0 +1,143 @@
+---- [tip] S0-baseline
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+A1-ref git ls-files -- '*.test.ts' ':!.grugops/' | wc -l = 50
+glob-count=0
+---- [tip] A2-glob-removed
+The lane collects 54 test files; git tracks 50.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/ticket-to-pr-ABC-081/probe/depth-vitest.test.mjs — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+EXIT=1  grugops-lines=4  grugops-NOT-tracked-lines=0
+---- [tip] A2-glob-restored
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+m1=1
+---- [tip] M1-perft-excluded
+The lane collects 49 test files; git tracks 50.
+Tracked by git but NOT collected by the lane: src/perft.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=0  grugops-NOT-tracked-lines=0
+m2=1
+---- [tip] M2-typo-planted
+The lane collects 100 test files; git tracks 50.
+Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/apply.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/cli.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+Collected by the lane but NOT tracked by git: .claude/worktrees/probe/src/command-input.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+... (51 lines total)
+EXIT=1  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] M2-restored-planted-still-present
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] M3-untracked
+The lane collects 51 test files; git tracks 50.
+Collected by the lane but NOT tracked by git: src/zz.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] M3-after-add
+The lane collects 51 test files; git tracks 51.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] A4-committed-probe
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+q1a=1
+---- [tip] Q1a-deep-probe-glob-single-star
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+q1b=1
+---- [tip] Q1b-deep-probe-glob-typo-grugop
+The lane collects 55 test files; git tracks 50.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/a/b/c/d/deep.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/ticket-to-pr-ABC-081/probe/depth-vitest.test.mjs — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+EXIT=1  grugops-lines=5  grugops-NOT-tracked-lines=0
+---- [tip] Q1c-src-nested-grugops-committed
+The lane collects 51 test files; git tracks 51.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+q1d=1
+---- [tip] Q1d-src-nested-overbroad-glob
+The lane collects 50 test files; git tracks 51.
+Tracked by git but NOT collected by the lane: src/.grugops/zz.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=1  grugops-NOT-tracked-lines=0
+---- [tip] Q1e-src-nested-untracked
+The lane collects 51 test files; git tracks 50.
+Collected by the lane but NOT tracked by git: src/.grugops/zz.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=1  grugops-NOT-tracked-lines=1
+---- [tip] Q2a-tools-committed
+The lane collects 51 test files; git tracks 51.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q2b-tools-untracked
+The lane collects 51 test files; git tracks 50.
+Collected by the lane but NOT tracked by git: tools/zz.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q2c-plans-committed
+The lane collects 50 test files; git tracks 51.
+Tracked by git but NOT collected by the lane: plans/zz.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q2d-claude-committed
+The lane collects 50 test files; git tracks 51.
+Tracked by git but NOT collected by the lane: .claude/skills/zz.test.ts — a `test.exclude` glob in vitest.config.ts is dropping it.
+EXIT=1  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q2e-grugopsx-committed
+The lane collects 51 test files; git tracks 51.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q2f-src-mjs-committed-G4
+The lane collects 51 test files; git tracks 50.
+Collected by the lane but NOT tracked by git: src/zz.test.mjs — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q3a-grugops-space-quote-committed
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q3a-grugops-space-quote-glob-removed
+The lane collects 55 test files; git tracks 50.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/cut-harder-puzzles/probe/vitest-price.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/fold-abc084-gate-b/probe/a3-const-eval.probe.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/my probe/sp ace "q" 's'.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/ruling-abc079-oracle/probe/vt/oracle.test.ts — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+Collected by the lane from .grugops/, which is factory state the lane must exclude: .grugops/context/ticket-to-pr-ABC-081/probe/depth-vitest.test.mjs — restore the `".grugops/**"` glob in vitest.config.ts's `test.exclude`.
+EXIT=1  grugops-lines=5  grugops-NOT-tracked-lines=0
+---- [tip] Q3b-src-space-quote-untracked
+The lane collects 51 test files; git tracks 50.
+Collected by the lane but NOT tracked by git: src/sp ace "q" 's'.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q3b-src-space-quote-committed
+The lane collects 51 test files; git tracks 51.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q3c-src-nonascii-untracked
+The lane collects 51 test files; git tracks 50.
+Collected by the lane but NOT tracked by git: src/ümlaut.test.ts — `git add` it, delete it, or repair the `test.exclude` glob that let it in.
+EXIT=1  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q3c-src-nonascii-committed
+The lane collects 51 test files; git tracks 51.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q4a-argv
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q4b-env
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+---- [tip] Q4c-cwd-src
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0
+grugops-tracked=0
+---- [tip] Q4d-no-grugops-dir
+The lane collects 50 test files; git tracks 50.
+No findings.
+EXIT=0  grugops-lines=0  grugops-NOT-tracked-lines=0
+==== done [tip]
