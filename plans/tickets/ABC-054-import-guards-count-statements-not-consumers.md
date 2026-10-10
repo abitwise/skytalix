@@ -1,8 +1,8 @@
 ---
 id: ABC-054
 title: Two merged guards count import STATEMENTS, not consumers — one inline-type-specifier blind spot, a false GREEN on `ABC-041` `A8` and a false RED on the licence guard
-status: ready
-column: Ready
+status: backlog
+column: Backlog
 size: S
 priority: P1
 epic: —
