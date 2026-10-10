@@ -1,0 +1,4 @@
+0 | it pins four spans of the guard by TEXT
+2 | R5c
+7 | productionModulesIn
+2 | clause 1's helper definition

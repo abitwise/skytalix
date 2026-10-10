@@ -1,0 +1,28 @@
+2946e22a	CONTROL	load1=5.55	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	WPERFT-STATIC	load1=5.91	exit=1	total=12	passed=11	failed=1	FAILED:licenses src/history.ts's runtime import <expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+    at <scratch>/trees/2946e22a-WPERFT-STATIC/src/history-pane.nfr.test.ts>	lint=0	tsc=0
+2946e22a	XHELPER-NARROW+FMT	load1=5.91	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	XHELPER-NARROW+FMT+WPERFT-STATIC	load1=5.76	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	XSHADOW-HELPER+FMT+WPERFT-STATIC	load1=5.86	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	QSCAN-NARROW+FMT+WPERFT-STATIC	load1=8.43	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard scans EVERY production module>	lint=0	tsc=0
+2946e22a	QLHS-INTERSECT+FMT+WPERFT-STATIC	load1=8.08	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard scans EVERY production module>	lint=0	tsc=0
+2946e22a	M15+FMT	load1=10.39	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard compares with an EQUALITY>	lint=0	tsc=0
+2946e22a	M15SUB+FMT	load1=10.12	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard compares with an EQUALITY>	lint=0	tsc=0
+2946e22a	WLAUNDER	load1=10.12	exit=1	total=12	passed=9	failed=3	FAILED:licenses src/history.ts's runtime import <expected [ 'cli.ts', 'turn-loop.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+    at <scratch>/trees/2946e22a-WLAUNDER/src/history-pane.nfr.test.ts> | A6.3 — the type-only exclusion is pinned <the unmutated control> | A6.4 — the runtime-importer forms are GE <the witness is not matching every export line>	lint=1	tsc=0
+2946e22a	WSTALELICENCE	load1=12.43	exit=1	total=12	passed=11	failed=1	FAILED:licenses src/history.ts's runtime import <expected [ 'cli.ts' ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+    at <scratch>/trees/2946e22a-WSTALELICENCE/src/history-pane.nfr.test.ts>	lint=1	tsc=0
+2946e22a	XHELPER-NARROW	load1=6.42	exit=0	total=12	passed=12	failed=0	FAILED:	lint=1	tsc=0
+2946e22a	H-STARTSWITH+FMT+WPERFT-STATIC	load1=6.42	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	H-INCLUDES+FMT+WPERFT-STATIC	load1=6.55	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	H-REGEX+FMT+WPERFT-STATIC	load1=6.55	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	H-CHAIN+FMT+WPERFT-STATIC	load1=6.66	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	H-BLOCK+FMT+WPERFT-STATIC	load1=6.66	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	H-PARAM-RENAME+FMT	load1=6.93	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	H-RENAME+FMT	load1=7.10	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	H-CRLF	load1=7.10	exit=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drif <the licence guard compares with an EQUALITY>	lint=1	tsc=0
+2946e22a	H-COMMENTED+FMT+WPERFT-STATIC	load1=7.25	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	H-READDIR-SHADOW+FMT+WPERFT-STATIC	load1=7.25	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	QF-SECOND-COMPOSER	load1=7.07	exit=1	total=12	passed=11	failed=1	FAILED:the composer tripwire: assembleFrame's v <a second frame composer>	lint=0	tsc=0
+2946e22a	H-WRAP-CALLS+FMT+QF-SECOND-COMPOSER	load1=7.07	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+2946e22a	H-COMPOSER-NARROW+FMT+QF-SECOND-COMPOSER	load1=11.71	exit=0	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0

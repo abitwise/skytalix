@@ -163,3 +163,71 @@ at `3159ab68`. **Result: 10 of 10, 0 ⚠️ — MET → `Ready`.** The board mov
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with a promotion trigger |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-137`).
+- Branch `grugops/ABC-137-helper-pin`, from `2946e22a`. The code is `54280bc8`
+  (`src/history-pane.nfr.test.ts` +12/−4: one framed helper pin and the reach comment).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-137/` (`…3c71e0a4`,
+  `…9e4b2d17`, `probe/`) and are not restated here.
+
+**`A1`–`A4` are met. No stop condition fired.**
+- The premise held at `2946e22a`, where the file is byte-identical to `5d55cc48`: both `XHELPER-NARROW` builds
+  were green 12/12.
+- On the delivered tree, both builds exit 1 on the drift tripwire ("clause 1's one expression is unchanged"). The
+  rest of the ledger is unchanged by test name. Every span, `ABC-136`'s three pins and the helper hash identically.
+- Cost: both `ADR-0035` sets are admissible (twin +0.04 % / −0.15 %), and `N8-LANE` is MET.
+- **Deviation:** the planters are an SE port. QE's scripts could not be executed on this host. The planted
+  readings use `probe/plant137.mjs`, a line-for-line port with the same anchors. The port reproduces BA/PM's
+  `5d55cc48` ledger row for row. QE should re-run `A1`/`A2` with its own unchanged scripts.
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-137`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `2946e22a..455a0846` (code `54280bc8`). Every reading was taken in a fresh `git archive` tree per build.
+
+**Deviation.** QE's own unchanged planters were tried first. The permission layer refused even copying them, and
+QE did not work around that or hand them to another role. QE wrote its own independent harness instead
+(`.grugops/context/qe-ABC-137/probe/`): its own anchors and spellings, vitest's JSON reporter, and biome + tsc per
+build. A literal run of the unchanged scripts stays `UNKNOWN - verify`.
+
+**`A1`–`A4` are MET. No test was added.**
+
+- **`A1`**: `XHELPER-NARROW+FMT` and `+WPERFT-STATIC` exit 0 with 12/12 at base and exit 1 at head. The failure is
+  the drift tripwire, with "clause 1's one expression is unchanged".
+- **`A2`**:
+  - `CONTROL` runs 12 tests.
+  - `QSCAN-NARROW`/`QLHS-INTERSECT` (`+FMT+WPERFT-STATIC`) and `M15`/`M15SUB` red on the tripwire.
+  - `WLAUNDER` fails 3 tests; `WSTALELICENCE` and `WPERFT-STATIC` fail 1 each. These are the same tests by name as
+    at base.
+  - No build printed `PLANT-FAILED`, and QE-136/057's anchors (`HELPER` included) count 1 at base and at head.
+  - `XSHADOW-HELPER` is recorded green at both (`QE-136-c`).
+  - QE's ledger agrees with the SE's port on every shared row.
+- **`A3`**: the phrase count goes from 1 to 0. In the tripwire's `//` comments, `R5c` goes from 0 to 2 and "clause
+  1's helper definition" from 0 to 2.
+- **`A4`**:
+  - The code diff touches one path, +12/−4. The tip adds only `plans/` and `.grugops/context/`.
+  - The helper is byte-identical, and the framed helper counts 1 at base and at head.
+  - 11 of 12 `it` blocks hash identically, and every byte outside the tripwire `it` is identical.
+  - `ABC-136`'s three pins and `ABC-057`'s spans hash identically.
+- **QE's own helper narrowings**: `startsWith`, `includes`, a regex, a chained `.filter`, a block body and a
+  parameter rename were each green at base and are all red at head.
+- **Gates** at `455a0846`:
+  - lint, typecheck and build exit 0;
+  - `npm test`: 52 files / 1608 passed;
+  - skip count 0; integrity `No findings.`;
+  - `lane-inventory.js`: 52 = 52, `No findings.`
+- **Gaps** (`…853f77e5`):
+  - **`QE-137-a` LOW → Architect/Design.** The composer tripwire's own call (`:591`) is unpinned. An inline
+    `.filter` there, or a wrapper at the composer and probe calls, is gate-clean and keeps the whole suite green with
+    a second composer planted. It predates this ticket and is outside its fences.
+  - **`QE-137-b` LOW, the `QE-136-c` class.** `readdirSync` is aliased and rebound at module scope. That narrows all
+    three scanned sets with the helper's text untouched, and the whole suite stays green.
+  - **`QE-137-c` INFO.** The block-comment survivor is the class the comment names.
+  - **`QE-137-d` INFO.** The ticket's "planted" definition could not be run literally by either hop.
+- **Cost:** not re-measured (load1 15–35). The SE's admissible sets are cited.
+- **UAT:** waived by the standing rule (0 production lines). The board move is the Orchestrator's. Not merged, not
+  pushed.
+
+Notes: `…f440af61` (verdict), `…01c2d8fc` (readings), `…853f77e5` (gaps).

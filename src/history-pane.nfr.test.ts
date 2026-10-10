@@ -482,11 +482,13 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
   it("runs the guard's OWN expression — a drift tripwire, not a copy that can go stale", () => {
     // `ABC-029` forbids changing the guard's expression, so the witnesses hold a second instance of
     // the literal instead of moving it out of the guard. THIS is what keeps the two the same. Its
-    // reach, stated plainly: it pins four spans of the guard by TEXT — the expression, the
+    // reach, stated plainly: it pins five spans by TEXT. Four are the guard's — the expression, the
     // comparator (`R5`) and the two operands (`R5b`): the scanned set (`productionModulesIn`) and
-    // the importer set (`runtimeImporters`). An edit to one of those spans reds this test and is
-    // told, at the site, to re-run the witnesses. A text pin is not tamper-proof: a weakening that
-    // keeps the pinned text (in a block comment, say) survives it, so it just has to show in the diff.
+    // the importer set (`runtimeImporters`). The fifth is not the guard's: it is clause 1's helper
+    // definition (`R5c`), the one expression this guard, the composer tripwire and the frame-path
+    // probe all scan. An edit to one of those spans reds this test and is told, at the site, to
+    // re-run the witnesses. A text pin is not tamper-proof: a weakening that keeps the pinned text
+    // (in a block comment, say) survives it, so it just has to show in the diff.
     const instrument = readFileSync(`${witnessDirectory}history-pane.nfr.test.ts`, "utf8");
 
     expect(instrument, "the guard above runs the expression the witnesses below run").toContain(
@@ -507,6 +509,12 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     expect(instrument, "the licence guard compares EVERY runtime importer").toContain(
       // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
       '\n    const runtimeImporters = production.filter((file) =>\n      /^(?:import|export)\\s+(?!type\\b)(?:[^;]*from\\s+)?"\\.\\/history\\.ts";/m.test(\n        readFileSync(`${directory}${file}`, "utf8"),\n      ),\n    );\n',
+    );
+    // `ADR-0011` `R5c` — clause 1's helper definition, pinned the same way: a filename exclusion
+    // here narrows all three scanned sets at once and every guard stays green. Written with `\n`
+    // escapes and framed by its leading newline, so it cannot match itself.
+    expect(instrument, "clause 1's one expression is unchanged").toContain(
+      '\nconst productionModulesIn = (directory: string): readonly string[] =>\n  readdirSync(directory).filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"));\n',
     );
   });
 

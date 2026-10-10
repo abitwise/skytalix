@@ -1,0 +1,17 @@
+$ git diff --name-only 2946e22a..54280bc8
+src/history-pane.nfr.test.ts
+$ git diff --numstat 2946e22a..54280bc8
+12	4	src/history-pane.nfr.test.ts
+$ helper lines 163-164, base vs head (sed -n 163,164p | shasum)
+88ad40ed6eee434d48ca76ae581c61955cbde3f57df0cf8e521b9d1c279f7a74  -
+88ad40ed6eee434d48ca76ae581c61955cbde3f57df0cf8e521b9d1c279f7a74  -
+$ added non-comment lines
++    expect(instrument, "clause 1's one expression is unchanged").toContain(
++      '\nconst productionModulesIn = (directory: string): readonly string[] =>\n  readdirSync(directory).filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"));\n',
++    );
+$ biome-ignore count base|head
+1
+1
+$ it( count base|head
+12
+12

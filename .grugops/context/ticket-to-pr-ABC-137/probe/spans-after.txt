@@ -1,0 +1,15 @@
+licence-regex-lines	3 lines	3541fa85000a2f08
+licence-it-body	32 lines	33e2691d32c0f775
+sibling-tripwire	4 lines	0f1fda2690e34d56
+composer-tripwire-code	19 lines	9513ddcff3cfb93e
+witnessed-expression	3 lines	5fcde2281bb76239
+LICENSED_DRIVERS	2 lines	d846613674bb11a9
+probe-it	120 lines	98312bbf8a2ccbea
+R5-operator-pin	4 lines	cd9275ce8ad23305
+R5b-scan-pin	4 lines	bdc44ec3bdc6657a
+R5b-importer-pin	5 lines	f46fdab0eadaedec
+clause1-helper	3 lines	88ad40ed6eee434d
+count framed-helper(real newlines)	1
+count plantqe136 HELPER anchor	1
+count LICENSED_DRIVERS decl	1
+count COMPOSITION_ROOT decl lines	1
