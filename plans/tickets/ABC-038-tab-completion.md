@@ -134,6 +134,7 @@ promise in the epic holds without it.
   eight once `ABC-036` lands.
 - **`ABC-032` — not required.** Completion generates SAN with the merged `toSan`; it never parses.
 - **Merged:** `toSan` (`src/san.ts:146`), `legalMoves` (`src/legal.ts:42`).
+- *Cross-ref 2026-10-10 (BA/PM, `cut-followups-2026-10-10`):* once `ABC-036` merges, one row pins `COMMAND_TABLE`'s order (QE `ABC-036` G3).
 
 ## Security / NFR triggers
 
