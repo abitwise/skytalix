@@ -1,0 +1,64 @@
+2026-10-10T10:51:08Z
+{ 11.03 10.93 11.52 }
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-126-corpus-repairs
+
+ ❯ src/quiescence.test.ts (29 tests | 1 failed | 28 skipped) 6ms
+   ↓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly
+   ↓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > the start position: a quiet position's quiescence value IS the static evaluation, exactly
+   ↓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > queen vs rook, nothing en prise: a quiet position's quiescence value IS the static evaluation, exactly
+   ↓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > rook vs rook, nothing en prise, black to move: a quiet position's quiescence value IS the static evaluation, exactly
+   ↓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a hanging pawn makes the quiescence value STRICTLY greater than the static evaluation
+   ↓ A2 — stand-pat is a lower bound on the quiescence value, never a replacement > a DEFENDED pawn does not raise the value: the recapture is seen and the capture declined
+   × A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > carries at least 20 positions, none of them in check for the side to move 5ms
+     → R takes a bishop a pawn defends: the side to move must not be in check: expected true to be false // Object.is equality
+   ↓ A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > both arms at depth 1 — with quiescence the losing move is avoided, without it it is played
+   ↓ A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > returns on every one of 200+ positions, the capture-dense roots included, under the cap
+   ↓ A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY > the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 1: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 2: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 3: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > bare kings at depth 4: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 1: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 2: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 3: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > king and pawn vs a far king at depth 4: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 1: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 2: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 3: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > two far-apart pawns at depth 4: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > the start position at depth 1: same score, same move, same node count
+   ↓ A4 — a position with no capture anywhere near the leaves scores exactly as before > the bare-leaf door IS the pre-quiescence build: position-6 at depth 2 reproduces its recorded fingerprint
+   ↓ A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+   ↓ A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+   ↓ A6 — the searched position is unchanged on return > leaves every one of the 200+ corpus positions byte-identical after a quiescence search
+   ↓ A6 — the searched position is unchanged on return > leaves every hanging-piece position byte-identical after a depth-1 search, both arms
+   ↓ A6 — the searched position is unchanged on return > leaves the position byte-identical when the visitor THROWS mid-sequence — the engine's abort path
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/quiescence.test.ts > A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse > carries at least 20 positions, none of them in check for the side to move
+AssertionError: R takes a bishop a pawn defends: the side to move must not be in check: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ src/quiescence.test.ts:273:85
+    271|     for (const { name, fen, losing } of HANGING_CORPUS) {
+    272|       const position = parseFen(fen);
+    273|       expect(isInCheck(position), `${name}: the side to move must not …
+       |                                                                                     ^
+    274|       const legal = legalMoves(position).map((move) => label(move));
+    275|       expect(legal, `${name}: the losing capture ${losing} must be leg…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 28 skipped (29)
+   Start at  13:51:08
+   Duration  174ms (transform 57ms, setup 0ms, collect 59ms, tests 6ms, environment 0ms, prepare 35ms)
+

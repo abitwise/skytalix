@@ -1,0 +1,37 @@
+== npm run lint  start 2026-10-10T10:53:03Z load { 5.42 8.75 10.57 }
+
+> cli-chess@0.0.0 lint
+> biome check .
+
+Checked 98 files in 125ms. No fixes applied.
+exit 0  end 2026-10-10T10:53:03Z load { 5.42 8.75 10.57 }
+== npm run typecheck  start 2026-10-10T10:53:03Z load { 5.42 8.75 10.57 }
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+exit 0  end 2026-10-10T10:53:04Z load { 5.42 8.75 10.57 }
+== npm run build  start 2026-10-10T10:53:04Z load { 5.42 8.75 10.57 }
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+exit 0  end 2026-10-10T10:53:06Z load { 5.42 8.75 10.57 }
+== npm test  start 2026-10-10T10:53:06Z load { 5.42 8.75 10.57 }
+ ✓ src/quiescence.test.ts (29 tests) 430ms
+ ✓ src/cli.test.ts (66 tests) 29ms
+
+ Test Files  51 passed (51)
+      Tests  1581 passed (1581)
+   Start at  13:53:06
+   Duration  6.93s (transform 1.25s, setup 0ms, collect 10.11s, tests 12.79s, environment 5ms, prepare 2.33s)
+
+exit 0  end 2026-10-10T10:53:13Z load { 7.78 9.16 10.70 }
+== skip count
+skips=0
+No findings.
+exit 0
+== lane inventory
+The lane collects 51 test files; git tracks 51.
+No findings.
+exit 0

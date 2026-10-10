@@ -1,0 +1,9 @@
+2026-10-10T10:53:33Z
+{ 10.66 9.81 10.90 }
+10.505333000000007 ms  every row names its source and its moves are legal; no added row starts in check
+2.0879580000000146 ms  carries at least 20 positions, none of them in check for the side to move
+9.457709000000023 ms  every row names its source and its moves are legal; no added row starts in check
+2.599749999999972 ms  carries at least 20 positions, none of them in check for the side to move
+8.966709000000037 ms  every row names its source and its moves are legal; no added row starts in check
+2.0428340000000276 ms  carries at least 20 positions, none of them in check for the side to move
+isInCheck x 62000 cpu ms 57.1

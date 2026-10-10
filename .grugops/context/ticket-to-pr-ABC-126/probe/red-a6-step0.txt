@@ -1,0 +1,47 @@
+2026-10-10T10:51:15Z
+{ 10.38 10.79 11.47 }
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ABC-126-corpus-repairs
+
+ ❯ src/puzzle-suite.test.ts (12 tests | 1 failed | 11 skipped) 7ms
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > holds >= 40 puzzles: >= 10 mate-in-2, >= 6 win-material, >= 20 do-not-hang
+   × A6 — every puzzle carries its provenance, and the mates are the rules' answer > every row names its source and its moves are legal; no added row starts in check 7ms
+     → R takes a bishop a pawn defends: expected true to be false // Object.is equality
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2
+   ↓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > the do-not-hang class starts with ABC-079's 24 rows, and ABC-079 still reads exactly those 24
+   ↓ ABC-127 A1 — the harder rows > >= 16 rows after ABC-084's 40, each tagged: >= 6 mate-in-3, >= 6 win-material (>= 3 black to move), >= 4 quiet-key, >= 4 depth≥5, >= 4 quiescence
+   ↓ ABC-127 A1 — the harder rows > every quiet-key row's accepted moves are neither a capture, a check nor a promotion
+   ↓ ABC-127 A1 — the harder rows > no new row repeats, or is the colour mirror of, any row of the corpus
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0.049: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 2, step 0.001: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step NaN: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0: RangeError, no search
+   ↓ A4 — the runner refuses a step below budgetMs / 1 000, before any search > the bound itself (step = budgetMs / 1 000) is accepted and searches
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/puzzle-suite.test.ts > A6 — every puzzle carries its provenance, and the mates are the rules' answer > every row names its source and its moves are legal; no added row starts in check
+AssertionError: R takes a bishop a pawn defends: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ src/puzzle-suite.test.ts:228:48
+    226|       expect(puzzle.source.length, puzzle.name).toBeGreaterThan(0);
+    227|       const position = parseFen(puzzle.fen);
+    228|       expect(isInCheck(position), puzzle.name).toBe(false);
+       |                                                ^
+    229|       const legal = legalMoves(position).map(label);
+    230|       const named = puzzle.kind === "do-not-hang" ? [puzzle.losing] : …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 11 skipped (12)
+   Start at  13:51:16
+   Duration  182ms (transform 51ms, setup 0ms, collect 52ms, tests 7ms, environment 0ms, prepare 33ms)
+

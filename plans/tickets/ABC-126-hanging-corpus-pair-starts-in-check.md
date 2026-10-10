@@ -260,3 +260,27 @@ item 3 becomes ✅ by that fact alone, and nothing else needs to change.
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P2`, with the reason |
 | 10 | no major unresolved blocker | **✅** a candidate FEN is measured; the remedy is the Architect's, and no ruling is owed |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-126`). Branch
+`grugops/ABC-126-corpus-repairs` from `d6aceeb5`; code in `d10ffeff`. Not merged, not pushed.
+Decisions and readings are in `.grugops/context/ticket-to-pr-ABC-126/` (`…7c41a2e9`, `…b3d870e5`,
+raw files in `probe/`) and are not restated here.
+
+**Criteria: `A1`–`A7` met as readings. No stop condition fired.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | The row asserts `isInCheck === false` per row, 24/24 green. Red first on exactly the pair: shipped → red on "R takes a bishop a pawn defends"; that row re-found → red on its mirror only; both → green |
+| `A2` | MET | 24 rows. Replacements `4k3/8/1p6/b7/8/8/8/R4K2 w` and `r4k2/8/8/8/B7/1P6/8/4K3 b`: not in check, capture legal, 12 legal / 8 non-king, `rules-only.mts` → `accepted` |
+| `A3` | MET | Quiescence picks `f1g1` / `f8g8` at d1 and `a1b1` / `a8b8` at d3; the bare leaf takes at d1. Depth-3 margin **185 / 185 cp**. Default lane and `SEARCH_DEEP=1` quiescence (37 passed) green |
+| `A4` | MET | `PUZZLE_DEEP=1` ×3: 58/62 = baseline 58/62, no `NEWLY-MISSED`, identical per-row moves. Baseline file untouched; a provenance comment above each replaced row |
+| `A5` | MET | `src` numstat: `puzzle-corpus.ts` 12/4, `quiescence.test.ts` 4/2, `puzzle-suite.test.ts` 1/4. Lint, typecheck, build, `npm test` (51 / 1581) exit 0; skip 0; `No findings.` |
+| `A6` | MET | The `kind` exemption and its comment are gone; 62/62 assert not in check. Red first on exactly the two pair rows (same steps as `A1`) |
+| `A7` | MET | Red: `pawn on rank 8 (h8)`, `side not to move (black) is in check`. Replacements `accepted`. Oracle: pin `[a1e1]` +4; discovered check `[d4g7, d4c5]` +4 (source +6 → +4). Deep `A2` oracle row green. Engine solves both (`a1e1` d7, `d4c5` d6). Names and class count unchanged |
+
+- **`N8-LANE`:** 48 added `isInCheck` calls, about 0.04 ms CPU; no new test file.
+- **`QE-127-f`** is closed by `A7`: the discovered-check row's set no longer depends on the "king is
+  never captured" convention. **`QE-127-e`** is left to BA/PM.
+- **Owed:** the QE hop (zero production lines, so UAT is waived; QE is not). No `AGENTS.md` line is owed.

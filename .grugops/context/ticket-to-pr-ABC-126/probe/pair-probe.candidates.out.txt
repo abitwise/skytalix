@@ -1,0 +1,8 @@
+2026-10-10T10:51:46Z
+{ 7.81 10.13 11.20 }
+{"name":"candidate","fen":"4k3/8/1p6/b7/8/8/8/R3K3 w - - 0 1","losing":"a1a5","inCheck":true,"legal":5,"nonKing":1,"losingLegal":true,"adr0033":"accepted","d1":"e1f1","d1bare":"a1a5","d3":"e1f1","losingAtD3":-100,"bestOtherAtD3":85,"margin":185}
+{"name":"candidate","fen":"r3k3/8/8/8/B7/1P6/8/4K3 b - - 0 1","losing":"a8a4","inCheck":true,"legal":5,"nonKing":1,"losingLegal":true,"adr0033":"accepted","d1":"e8f8","d1bare":"a8a4","d3":"e8f8","losingAtD3":-100,"bestOtherAtD3":85,"margin":185}
+{"name":"candidate","fen":"4k3/8/1p6/b7/8/8/8/R4K2 w - - 0 1","losing":"a1a5","inCheck":false,"legal":12,"nonKing":8,"losingLegal":true,"adr0033":"accepted","d1":"f1g1","d1bare":"a1a5","d3":"a1b1","losingAtD3":-80,"bestOtherAtD3":105,"margin":185}
+{"name":"candidate","fen":"r4k2/8/8/8/B7/1P6/8/4K3 b - - 0 1","losing":"a8a4","inCheck":false,"legal":12,"nonKing":8,"losingLegal":true,"adr0033":"accepted","d1":"f8g8","d1bare":"a8a4","d3":"a8b8","losingAtD3":-80,"bestOtherAtD3":105,"margin":185}
+2026-10-10T10:51:46Z
+{ 7.81 10.13 11.20 }
