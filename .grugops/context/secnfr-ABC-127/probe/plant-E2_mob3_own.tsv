@@ -1,0 +1,2 @@
+run	step	utc	load_before(1/5/15)	load_after(1/5/15)	foreign_vitest	waited_s	exit	passed	solved	gating_s	oracle_m3_s	oracle_wm_s	vitest_duration_s	real_s	user_s	sys_s
+1	baseline	2026-10-10T10:01:38.890Z	8.11 9.67 12.07	6.48 9.14 11.79	3	0	1	NaN	54	33.72	NaN	NaN	33.93	34.37	34.81	0.33

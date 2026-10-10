@@ -1,0 +1,87 @@
+// secnfr-ABC-127: N8-LANE under NFR-008's own protocol (the build's harness shape, raw-harness-lane084.mjs.txt),
+// plus a REMEDY arm R (A with the A6 mate-oracle row defined only under PUZZLE_DEEP) and a load gate.
+// Lane: `npx vitest run --dir src`, one fresh OS process per run, condition order rotated every round,
+// round 0 discarded, counts asserted per run (round 0 fixes each arm's counts), identity null control N vs A.
+// Load gate: before each ROUND, wait (poll 10 s) until load1 < LMAX or WAITMAX s pass; the wait and load
+// are recorded. Foreign vitest processes (QE's) are counted before every run. Lives outside the repository.
+import { execSync, spawnSync } from "node:child_process";
+import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
+
+const S = process.env.ARMS;
+const TAG = process.env.TAG ?? "run";
+const ROUNDS = Number(process.env.ROUNDS ?? 11);
+const LMAX = Number(process.env.LMAX ?? 6);
+const WAITMAX = Number(process.env.WAITMAX ?? 180);
+const CONDS = (process.env.CONDS ?? "A,N,B").split(",");
+const OUT = `${S}/../${TAG}.tsv`;
+const loadavg = () => execSync("sysctl -n vm.loadavg").toString().trim();
+const load1 = () => Number(loadavg().replace(/[{}]/g, "").trim().split(/\s+/)[0]);
+const foreign = () => {
+  const ps = execSync("ps -Ao pid,command").toString().split("\n");
+  return ps.filter((l) => /[v]itest/.test(l) && !l.includes("secnfr-ABC-127")).length;
+};
+const sleep = (s) => execSync(`sleep ${s}`);
+
+writeFileSync(OUT, "round\tcond\twall\tuser\tsys\tcpu\tfiles\ttests\tload1_before\tload1_after\tforeign_vitest\twaited_s\tutc\tstatus\n");
+const expect = {};
+for (let round = 0; round < ROUNDS; round++) {
+  let waited = 0;
+  while (load1() >= LMAX && waited < WAITMAX) { sleep(10); waited += 10; }
+  const k = round % CONDS.length;
+  const order = [...CONDS.slice(k), ...CONDS.slice(0, k)];
+  for (const c of order) {
+    const lb = load1();
+    const fv = foreign();
+    const utc = new Date().toISOString();
+    const r = spawnSync("/usr/bin/time", ["-p", "npx", "vitest", "run", "--dir", "src"], { cwd: `${S}/${c}`, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+    const la = load1();
+    const out = r.stdout || "";
+    const err = r.stderr || "";
+    const pick = (key) => { const m = err.match(new RegExp(`^${key}\\s+([0-9.]+)`, "m")); return m ? Number(m[1]) : Number.NaN; };
+    const fm = out.match(/Test Files\s+(\d+) passed/);
+    const tm = out.match(/^\s*Tests\s+(\d+) passed/m);
+    const files = fm ? Number(fm[1]) : Number.NaN;
+    const tests = tm ? Number(tm[1]) : Number.NaN;
+    if (round === 0) expect[c] = { files, tests };
+    const ok = r.status === 0 && files === expect[c].files && tests === expect[c].tests && !/failed/.test(out.split("Test Files")[1] ?? "") ? "ok" : "HARNESS_ERROR";
+    const cpu = +(pick("user") + pick("sys")).toFixed(2);
+    appendFileSync(OUT, [round, c, pick("real"), pick("user"), pick("sys"), cpu, files, tests, lb, la, fv, waited, utc, ok].join("\t") + "\n");
+    console.log(round, c, cpu, pick("real"), files, tests, lb, fv, waited, ok);
+    waited = 0;
+  }
+}
+
+const rows = readFileSync(OUT, "utf8").trim().split("\n").slice(1).map((l) => {
+  const [round, cond, wall, user, sys, cpu, files, tests, lb, la, fv, w, utc, ok] = l.split("\t");
+  return { round: +round, cond, wall: +wall, cpu: +cpu, files: +files, tests: +tests, lb: +lb, la: +la, fv: +fv, ok };
+});
+const med = (xs) => { const s = [...xs].sort((a, b) => a - b); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const use = rows.filter((r) => r.round >= 1);
+const lines = [];
+for (const c of CONDS) {
+  const rs = use.filter((r) => r.cond === c);
+  lines.push(`${c}: n=${rs.length} files/tests=${rs[0].files}/${rs[0].tests} medianCPU=${med(rs.map((r) => r.cpu)).toFixed(3)} rangeCPU=${Math.min(...rs.map((r) => r.cpu))}-${Math.max(...rs.map((r) => r.cpu))} medianWALL=${med(rs.map((r) => r.wall)).toFixed(3)} rangeWALL=${Math.min(...rs.map((r) => r.wall))}-${Math.max(...rs.map((r) => r.wall))}`);
+}
+const paired = (x, y) => {
+  const d = [];
+  for (let round = 1; round < ROUNDS; round++) {
+    const a = use.find((r) => r.round === round && r.cond === x);
+    const b = use.find((r) => r.round === round && r.cond === y);
+    d.push({ dcpu: +(b.cpu - a.cpu).toFixed(2), dwall: +(b.wall - a.wall).toFixed(2) });
+  }
+  return d;
+};
+const mA = med(use.filter((r) => r.cond === "A").map((r) => r.cpu));
+const pairs = [["A", "N", "NULL CONTROL N-A"], ["B", "A", "CHARGE A-B (ABC-127 as built)"]];
+if (CONDS.includes("R")) pairs.push(["B", "R", "CHARGE R-B (A6 oracle row moved to PUZZLE_DEEP)"], ["R", "A", "ORACLE ROW A-R"]);
+for (const [x, y, label] of pairs) {
+  const d = paired(x, y);
+  const dm = med(d.map((v) => v.dcpu));
+  lines.push(`${label} CPU per round: ${d.map((v) => v.dcpu).join(" ")} median=${dm.toFixed(3)} (${((100 * dm) / mA).toFixed(2)}% of A) sign+ ${d.filter((v) => v.dcpu > 0).length}/${d.length}`);
+  lines.push(`${label} WALL per round: ${d.map((v) => v.dwall).join(" ")} median=${med(d.map((v) => v.dwall)).toFixed(3)}`);
+}
+lines.push(`load1 before each run: min=${Math.min(...rows.map((r) => r.lb))} median=${med(rows.map((r) => r.lb)).toFixed(2)} max=${Math.max(...rows.map((r) => r.lb))}`);
+lines.push(`foreign vitest processes before each run: runs with >0 = ${rows.filter((r) => r.fv > 0).length} of ${rows.length}`);
+lines.push(`harness errors: ${rows.filter((r) => r.ok !== "ok").length} of ${rows.length}`);
+writeFileSync(`${S}/../${TAG}-summary.txt`, lines.join("\n") + "\n");
+console.log(lines.join("\n"));

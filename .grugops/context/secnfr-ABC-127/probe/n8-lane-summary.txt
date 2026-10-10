@@ -1,0 +1,10 @@
+A: n=8 files/tests=50/1543 medianCPU=35.210 rangeCPU=26.54-38.09 medianWALL=12.865 rangeWALL=7.19-16.03
+N: n=8 files/tests=50/1543 medianCPU=34.875 rangeCPU=25.42-38.72 medianWALL=12.315 rangeWALL=7.09-15.35
+B: n=8 files/tests=50/1540 medianCPU=35.285 rangeCPU=26.2-37.98 medianWALL=14.065 rangeWALL=7.15-21.82
+NULL CONTROL N-A CPU per round: -1.12 0.76 0.63 -0.76 -0.72 -0.51 -0.44 0.78 median=-0.475 (-1.35% of A) sign+ 3/8
+NULL CONTROL N-A WALL per round: -0.1 2.81 -0.33 0.99 -2.29 0.35 -0.68 1.19 median=0.125
+CHARGE A-B (ABC-127 as built) CPU per round: 0.34 0.8 0.11 0.89 -0.1 -2.34 1.12 -1.49 median=0.225 (0.64% of A) sign+ 5/8
+CHARGE A-B (ABC-127 as built) WALL per round: 0.04 0.15 1.14 -0.08 -2.02 -7.03 1.23 -6.25 median=-0.020
+load1 before each run: min=4.61 median=21.15 max=36.03
+foreign vitest processes before each run: runs with >0 = 27 of 27
+harness errors: 0 of 27
