@@ -1,8 +1,8 @@
 ---
 id: ABC-133
 title: The spawn pin counts `child_process` use over a regex-stripped string — count it over the TypeScript parser's view (kills `Q11`–`Q13` and the pre-existing shell child `P1`)
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P3
 epic: —
