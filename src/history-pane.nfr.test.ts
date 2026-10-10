@@ -473,8 +473,12 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
 
   it("runs the guard's OWN expression — a drift tripwire, not a copy that can go stale", () => {
     // `ABC-029` forbids changing the guard's expression, so the witnesses hold a second instance of
-    // the literal instead of moving it out of the guard. THIS is what keeps the two the same: a hop
-    // that widens the guard reds this test and is told, at the site, to re-run the witnesses.
+    // the literal instead of moving it out of the guard. THIS is what keeps the two the same. Its
+    // reach, stated plainly: it pins four spans of the guard by TEXT — the expression, the
+    // comparator (`R5`) and the two operands (`R5b`): the scanned set (`productionModulesIn`) and
+    // the importer set (`runtimeImporters`). An edit to one of those spans reds this test and is
+    // told, at the site, to re-run the witnesses. A text pin is not tamper-proof: a weakening that
+    // keeps the pinned text (in a block comment, say) survives it, so it just has to show in the diff.
     const instrument = readFileSync(`${witnessDirectory}history-pane.nfr.test.ts`, "utf8");
 
     expect(instrument, "the guard above runs the expression the witnesses below run").toContain(
@@ -485,6 +489,16 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     // The leading newline and indent are load-bearing: without them this literal matches itself.
     expect(instrument, "the licence guard compares with an EQUALITY").toContain(
       "\n    expect(runtimeImporters).toEqual(production.filter((file) => LICENSED_DRIVERS.includes(file)));\n",
+    );
+    // `ADR-0011` `R5b` — the guard's two OPERANDS, pinned the same way (QE's `QSCAN-NARROW` and
+    // `QLHS-INTERSECT`): narrowing either one before the equality turns it into a subset check.
+    // The scan line is framed with the line after it, so it cannot match a similar call elsewhere.
+    expect(instrument, "the licence guard scans EVERY production module").toContain(
+      "\n    const production = productionModulesIn(directory);\n    const runtimeImporters = production.filter((file) =>\n",
+    );
+    expect(instrument, "the licence guard compares EVERY runtime importer").toContain(
+      // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
+      '\n    const runtimeImporters = production.filter((file) =>\n      /^(?:import|export)\\s+(?!type\\b)(?:[^;]*from\\s+)?"\\.\\/history\\.ts";/m.test(\n        readFileSync(`${directory}${file}`, "utf8"),\n      ),\n    );\n',
     );
   });
 
