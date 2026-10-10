@@ -1,0 +1,12 @@
+#!/bin/bash
+# usage: lane.sh <scratch> <rounds> — interleaved, order rotated, one fresh process per run
+S=$1; N=$2; conds=(base tip null); out=$S/lane.tsv; echo -e "round\tcondition\texit\tuser_s\tsys_s" > $out
+for r in $(seq 0 $N); do
+  for k in 0 1 2; do
+    c=${conds[$(( (k + r) % 3 ))]}
+    cd $S/$c
+    /usr/bin/time -p npx vitest run > /dev/null 2> $S/t.err; ec=$?
+    u=$(awk '/^user/{print $2}' $S/t.err); s=$(awk '/^sys/{print $2}' $S/t.err)
+    echo -e "$r\t$c\t$ec\t$u\t$s" >> $out
+  done
+done

@@ -1,0 +1,86 @@
+# QE mutant run, qe-ABC-036. Planted in src/command-input.ts, run on src/command-input.test.ts, reverted by git checkout after each.
+# before-rows = Engineer's tests at a261966 (184 rows); after-rows = with the four QE rows (188).
+QM1 planted
+QM1 [after-rows] exit 1 ::  Tests 14 failed | 174 passed (188)
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos 4ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete 1ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3 0ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4 0ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5 0ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6 1ms
+      × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at startpos 1ms
+      × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at kiwipete 0ms
+      × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-3 0ms
+      × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-4 0ms
+      × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-5 0ms
+      × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-6 0ms
+QM2 planted
+QM2 [after-rows] exit 1 ::  Tests 7 failed | 181 passed (188)
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos 6ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete 1ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3 0ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4 0ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5 1ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6 1ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > pins the start position's order: code-unit ascending, so piece moves sort before pawn moves 1ms
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5
+QM3 planted
+QM3 [after-rows] exit 1 ::  Tests 7 failed | 181 passed (188)
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos 7ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete 1ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3 0ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4 0ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5 1ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6 1ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > pins the start position's order: code-unit ascending, so piece moves sort before pawn moves 1ms
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5
+QM4 planted
+QM4 [after-rows] exit 1 ::  Tests 3 failed | 185 passed (188)
+      × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start 5ms
+      × ABC-036 A5 — `moves` is non-advancing and re-evaluates nothing > the pure function: FEN byte-identical, no ply, no gameStatusOf 1ms
+      × ABC-036 A5 — `moves` is non-advancing and re-evaluates nothing > through the MERGED loop: one re-emitted frame carrying the listing, and the loop's ONE gameStatusOf 1ms
+    FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start
+    FAIL  src/command-input.test.ts > ABC-036 A5 — `moves` is non-advancing and re-evaluates nothing > the pure function: FEN byte-identical, no ply, no gameStatusOf
+    FAIL  src/command-input.test.ts > ABC-036 A5 — `moves` is non-advancing and re-evaluates nothing > through the MERGED loop: one re-emitted frame carrying the listing, and the loop's ONE gameStatusOf
+QM5 planted
+QM5 [after-rows] exit 1 ::  Tests 1 failed | 187 passed (188)
+      × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > is the EIGHTH row, a non-advancing `command` 6ms
+    FAIL  src/command-input.test.ts > ABC-036 — the `moves` token joins the table under ABC-035's tolerance > is the EIGHTH row, a non-advancing `command`
+QM6 planted
+QM6 [after-rows] exit 1 ::  Tests 5 failed | 183 passed (188)
+      × ABC-035 A4 — `help` names every token in the table and no other > carries one item per table row and no heading — no row is folded away 7ms
+      × ABC-035 A7 — `help` fits the message region: hidden count exactly 0 > hides nothing at the start position 3ms
+      × ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > `help` now names BOTH — the promise `ABC-112` was cut over is TRUE, by construction 0ms
+      × ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses > A8 — `help` names every row including `undo`, with NO heading item 1ms
+      × ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > A3 and A7 hold in ASCII: `moves` keeps its count over N > 0 hidden, `help` hides nothing 1ms
+    FAIL  src/command-input.test.ts > ABC-035 A4 — `help` names every token in the table and no other > carries one item per table row and no heading — no row is folded away
+    FAIL  src/command-input.test.ts > ABC-035 A7 — `help` fits the message region: hidden count exactly 0 > hides nothing at the start position
+    FAIL  src/command-input.test.ts > ABC-046 — `new` is a take-back of every ply, and the loop rewinds all three together > `help` now names BOTH — the promise `ABC-112` was cut over is TRUE, by construction
+    FAIL  src/command-input.test.ts > ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses > A8 — `help` names every row including `undo`, with NO heading item
+    FAIL  src/command-input.test.ts > ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > A3 and A7 hold in ASCII: `moves` keeps its count over N > 0 hidden, `help` hides nothing
+QM7 planted
+QM7 [after-rows] exit 1 ::  Tests 1 failed | 187 passed (188)
+      × ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > quit / moves / quit: `moves` clears an armed quit and still answers its listing 6ms
+    FAIL  src/command-input.test.ts > ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > quit / moves / quit: `moves` clears an armed quit and still answers its listing
+QM8 planted
+QM8 [after-rows] exit 1 ::  Tests 2 failed | 186 passed (188)
+      × ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > states 0 and lists nothing at checkmate: one derive, no toSan 11ms
+      × ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > states 0 and lists nothing at stalemate: one derive, no toSan 1ms
+    FAIL  src/command-input.test.ts > ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > states 0 and lists nothing at checkmate: one derive, no toSan
+    FAIL  src/command-input.test.ts > ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > states 0 and lists nothing at stalemate: one derive, no toSan
+QM9 planted
+QM9 [after-rows] exit 1 ::  Tests 2 failed | 186 passed (188)
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3 6ms
+      × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6 1ms
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+    FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6
+QM7 [before-rows] ::  Tests 184 passed (184) (exit 0, SURVIVED)
+QM8 [before-rows] ::  Tests 184 passed (184) (exit 0, SURVIVED)

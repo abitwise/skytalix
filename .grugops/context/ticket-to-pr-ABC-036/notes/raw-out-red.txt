@@ -1,0 +1,31 @@
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > is the EIGHTH row, a non-advancing `command`
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "moves" as moves and answers the listing
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "MOVES" as moves and answers the listing
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "  Moves  " as moves and answers the listing
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "\tmoves\n" as moves and answers the listing
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 20 at startpos
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 48 at kiwipete
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 14 at position-3
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 6 at position-4
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 44 at position-5
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 46 at position-6
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > pins the start position's order: code-unit ascending, so piece moves sort before pawn moves
+   × ABC-036 A3 — the count survives the truncation the list does not > hides N > 0 moves at the start position while the stated total is still exactly 20
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at startpos
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at kiwipete
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-3
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-4
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-5
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-6
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start
+   × ABC-036 A5 — `moves` is non-advancing and re-evaluates nothing > the pure function: FEN byte-identical, no ply, no gameStatusOf
+   × ABC-036 A5 — `moves` is non-advancing and re-evaluates nothing > through the MERGED loop: one re-emitted frame carrying the listing, and the loop's ONE gameStatusOf
+⎯⎯⎯⎯⎯⎯ Failed Tests 28 ⎯⎯⎯⎯⎯⎯⎯
+ Test Files  1 failed (1)
+      Tests  28 failed | 156 passed (184)

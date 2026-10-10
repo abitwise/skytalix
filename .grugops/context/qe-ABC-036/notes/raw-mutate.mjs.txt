@@ -1,0 +1,23 @@
+// usage: node mutate.mjs <file> <id>  — applies one mutant by exact string replacement, fails if no match.
+import { readFileSync, writeFileSync } from "node:fs";
+const [file, id] = process.argv.slice(2);
+const M = {
+  QM1: [["const legal = derive(position);", "const legal = legalMoves(position); void derive;"]],
+  QM2: [[".sort();", ".sort().reverse();"]],
+  QM3: [["return [`legal moves: ${legal.length}`, ...listing];", "return [`legal moves: ${legal.length}`, ...listing.slice(1)];"]],
+  QM4: [["import type { GameHistory } from \"./history.ts\";", "import { type GameHistory, gameStatusOf } from \"./history.ts\";"],
+        ["return { kind: \"command\", messages: movesMessages(history.position, deps) };", "{ gameStatusOf(history); return { kind: \"command\", messages: movesMessages(history.position, deps) }; }"]],
+  QM5: [["  { token: \"moves\", outcome: \"command\" },\n", ""], ["  { token: \"claim\", outcome: \"claim\" },\n", "  { token: \"moves\", outcome: \"command\" },\n  { token: \"claim\", outcome: \"claim\" },\n"]],
+  QM6: [["return COMMAND_TABLE.map((spec) => spec.token);", "return [...COMMAND_TABLE.map((spec) => spec.token as string), \"pager\"];"]],
+  QM7: [["    quitArmed = classifyCommand(line)?.token === \"quit\";\n    if (wasArmed && quitArmed) return { kind: \"quit\" };",
+         "    const token = classifyCommand(line)?.token;\n    quitArmed = token === \"quit\" || (wasArmed && token === \"moves\");\n    if (wasArmed && token === \"quit\") return { kind: \"quit\" };"]],
+  QM8: [["  const legal = derive(position);\n", "  const legal = derive(position);\n  if (legal.length === 0) return [\"no legal moves\"];\n"]],
+  QM9: [["return [`legal moves: ${legal.length}`, ...listing];", "return [`legal moves: ${legal.length}`, ...listing.map((s) => s.replace(/[+#]$/, \"\"))];"]],
+};
+let src = readFileSync(file, "utf8");
+for (const [from, to] of M[id]) {
+  if (!src.includes(from)) { console.error(`${id}: anchor not found: ${from}`); process.exit(2); }
+  src = src.replace(from, to);
+}
+writeFileSync(file, src);
+console.log(`${id} planted`);

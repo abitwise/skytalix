@@ -1,0 +1,4 @@
+|legal moves: 20 Na3  |
+|Nc3 Nf3 (+17 more)   |
+|help board quit claim|
+|resign new undo moves|

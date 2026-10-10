@@ -1,9 +1,10 @@
 /**
  * ABC-035 — the command table, classified in front of `ABC-033`'s entry point.
  *
- * GRAMMAR, PLUS ONE FLAG. This module decides whether a submitted line IS one of seven commands
+ * GRAMMAR, PLUS ONE FLAG. This module decides whether a submitted line IS one of eight commands
  * and, for six of them, nothing about what any of them DOES beyond naming the arm. `help` carries
- * the one message set `ABC-035` owns; `board` carries none; `claim` is a REQUEST the loop
+ * the one message set `ABC-035` owns; `moves` carries `ABC-036`'s count and listing (below);
+ * `board` carries none; `claim` is a REQUEST the loop
  * adjudicates. There is no exit here, no second render and no availability test — `ABC-021` owns
  * both edges of a claim, and this file owns the vocabulary.
  *
@@ -67,11 +68,22 @@
  */
 
 import type { GameHistory } from "./history.ts";
+import { legalMoves } from "./legal.ts";
 import { type MoveInputDeps, resolveMoveInput } from "./move-input.ts";
+import type { Position } from "./position.ts";
+import { toSan } from "./san.ts";
 import type { PromptOutcome } from "./turn-loop.ts";
 
-/** The seven tokens, and the type that makes an eighth a compile error rather than a string typo. */
-export type CommandToken = "help" | "board" | "quit" | "claim" | "resign" | "new" | "undo";
+/** The eight tokens, and the type that makes a ninth a compile error rather than a string typo. */
+export type CommandToken =
+  | "help"
+  | "board"
+  | "quit"
+  | "claim"
+  | "resign"
+  | "new"
+  | "undo"
+  | "moves";
 
 /**
  * One row of the table: the token, and WHICH arm of `PromptOutcome` classifying it produces.
@@ -97,9 +109,10 @@ export interface CommandSpec {
  * The table. It is the single source of the vocabulary: `help`'s message set is folded out of it,
  * the classifier looks up in it, and `ABC-038`'s tab completion will read it rather than repeat it.
  *
- * `moves` is NOT here — it is `ABC-036`. `resign` IS here, `ABC-045`'s row, `new` IS here,
- * `ABC-046`'s, and `undo` IS here, `ABC-102`'s. A token absent from this table is not a command,
- * and the tests assert that in both directions.
+ * `resign` IS here, `ABC-045`'s row, `new` IS here, `ABC-046`'s, `undo` IS here, `ABC-102`'s,
+ * and `moves` IS here, `ABC-036`'s — LAST, because `help` folds this table in order and its two
+ * rows are at zero headroom at the narrowest frame with `moves` at the end (`ABC-036` `A7`). A
+ * token absent from this table is not a command, and the tests assert that in both directions.
  */
 export const COMMAND_TABLE: readonly CommandSpec[] = [
   { token: "help", outcome: "command" },
@@ -109,6 +122,7 @@ export const COMMAND_TABLE: readonly CommandSpec[] = [
   { token: "resign", outcome: "game-over" },
   { token: "new", outcome: "take-back" },
   { token: "undo", outcome: "take-back" },
+  { token: "moves", outcome: "command" },
 ];
 
 /**
@@ -138,6 +152,24 @@ export const UNDO_REFUSAL_MESSAGES: readonly string[] = ["nothing to undo"];
  */
 export function helpMessages(): readonly string[] {
   return COMMAND_TABLE.map((spec) => spec.token);
+}
+
+/**
+ * `moves`' message set (`ABC-036`): the EXACT legal count FIRST, then every legal move in SAN,
+ * ascending by SAN string (code-unit order, so `Na3` sorts before `a3` on every machine).
+ *
+ * The count is the first item because the frame's message region places items in order and hides
+ * the tail behind its `(+N more)` marker (`src/frame.ts` `layoutMessageRegion`): the count is the
+ * half that must survive, the list the half that is reduced. ONE `legalMoves` per line, and that
+ * array is handed to every `toSan` — without it `toSan` re-derives for each disambiguation
+ * (`ADR-0004` clause 2: 0.10 µs instead of 4.31 µs per move). `deps` is `ABC-033`'s seam, so both
+ * calls can be spied.
+ */
+function movesMessages(position: Position, deps?: MoveInputDeps): readonly string[] {
+  const { legalMoves: derive, toSan: san } = deps ?? { legalMoves, toSan };
+  const legal = derive(position);
+  const listing = legal.map((move) => san(position, move, legal)).sort();
+  return [`legal moves: ${legal.length}`, ...listing];
 }
 
 /**
@@ -178,18 +210,20 @@ export type PromptLineOutcome = Extract<
  * nothing to the history and reads no availability — on every arm `toFen(history.position)` is
  * byte-identical afterwards and `history.moves` is untouched.
  *
- * `history` is consulted on THREE command paths and derived from on NONE: every token is classified
- * without the position being asked anything; `resign` then reads `position.blackToMove` — a
+ * `history` is consulted on FOUR command paths and derived from on ONE: every token is classified
+ * without the position being asked anything; `moves` derives the legal moves of the position ONCE
+ * to state and list them (`ABC-036`); `resign` then reads `position.blackToMove` — a
  * field, not a derive — to name the loser, `new` reads `moves.length` — a field, not a
  * derive — to name the ply count, and `undo` reads the same field to choose between the two-ply
- * take-back and the refusal, so no derive can hide here. It is taken so this function can
+ * take-back and the refusal, so no other derive can hide here. It is taken so this function can
  * stand in the `InputSeam` shape the loop already binds, and it is handed to `resolveMoveInput`
  * unchanged when the line is not a command.
  *
  * `quit` ALWAYS answers the first-`quit` shape here — the confirmation. This function has no
  * memory, by design; `createPromptLineResolver` is where the second `quit` becomes an exit.
  *
- * `deps` is `ABC-033`'s test seam, passed straight through and never called from this module.
+ * `deps` is `ABC-033`'s test seam, passed straight through — and called from this module on the
+ * `moves` path only, for its `legalMoves` and `toSan`.
  */
 export function resolvePromptLine(
   history: GameHistory,
@@ -230,6 +264,8 @@ export function resolvePromptLine(
     };
   }
   if (spec.token === "quit") return { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
+  if (spec.token === "moves")
+    return { kind: "command", messages: movesMessages(history.position, deps) };
   return { kind: "command", messages: spec.token === "help" ? helpMessages() : [] };
 }
 
