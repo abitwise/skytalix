@@ -1,0 +1,34 @@
+UTC start 2026-10-10T15:01:03Z head b31ce2bb
+### npm run lint
+
+> cli-chess@0.0.0 lint
+> biome check .
+
+Checked 100 files in 116ms. No fixes applied.
+EXIT 0
+### npm run typecheck
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+EXIT 0
+### npm run build
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+EXIT 0
+### npm test
+ ✓ src/engine.test.ts (33 tests) 550ms
+ ✓ src/cli.test.ts (67 tests) 29ms
+
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Start at  18:01:06
+   Duration  8.55s (transform 1.65s, setup 0ms, collect 13.53s, tests 17.69s, environment 7ms, prepare 3.43s)
+
+EXIT 0
+### node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0
+No findings.
+EXIT 0
+UTC end 2026-10-10T15:01:15Z

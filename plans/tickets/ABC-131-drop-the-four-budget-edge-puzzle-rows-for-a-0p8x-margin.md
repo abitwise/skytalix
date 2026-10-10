@@ -272,3 +272,14 @@ itself. It added one test-only commit, `f994c724` (+4 in `src/puzzle-suite.test.
 **Owed:** the Orchestrator's board move and the merge. **The owner's UAT word** (non-test `src/`:
 `src/puzzle-corpus.ts`, `src/puzzle-suite.baseline.json`). After merge, the AGENTS.md Scribe (`PUZZLE_DEEP`
 and `QE-131-c`) and Security/NFR (`RISK-003`, `QE-131-f`).
+
+### Delivery addendum: fix-forward `QE-131-b`
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `fix-ABC-131`). Commit `b31ce2bb` on
+`grugops/ABC-131-drop-edge-puzzles` touches only `src/puzzle-suite.baseline.json`, and in it only `laneWallSeconds`:
+`28.24 / 33.45 / 28.97` → `33.45 / 28.24 / 28.97`, matching the raw `Duration` lines for processes 1, 2 and 3.
+The oracle-row and process-real figures in that field were already in order and are unchanged. A key-by-key
+JSON diff shows every other key byte-identical. Gates at `b31ce2bb`: lint, typecheck and build exit 0;
+`npm test` 52/1608, 0 skipped; integrity `No findings.`. `PUZZLE_DEEP=1` once (load1 12.95 → 9.78): 54/58,
+18 passed, exit 0, no NEWLY line, per-row sha1 `11326e1c`. **`A1`–`A8` still hold.** Not merged, not pushed.
+Notes: `.grugops/context/fix-ABC-131/notes/`.
