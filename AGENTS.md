@@ -67,8 +67,12 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
   (up to 3 s/move, `DEFAULT_BUDGET_MS`). Options: `--colour white|black|random`, `--ascii`,
   `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
   load-bearing; without it npm silently drops the flag and runs with defaults. Exit 0 normal
-  session, 1 refused command line, 70 internal error. Full receipts (RUN dates, byte-exact
-  before/after the `--` trap): `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
+  session, 1 refused command line, 70 internal error. WRITING RULES for this slot, enforced by
+  `ABC-065`'s block in `src/cli.test.ts`: (1) keep the invocation inside backticks - the guard
+  reads to the first backtick after it; (2) name an option here only if the program accepts it,
+  even to say it does not - write that sentence elsewhere in `AGENTS.md`. The same block requires
+  exactly one such slot (`ABC-071`) and a comment that closes inside it (`ABC-067`).
+  Full receipts (RUN dates, byte-exact before/after the `--` trap): `memory-bank/90-agents-md-command-log.md` § "Dev / run". -->
 - Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft`
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 npx vitest run src/perft.test.ts`
 - Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
