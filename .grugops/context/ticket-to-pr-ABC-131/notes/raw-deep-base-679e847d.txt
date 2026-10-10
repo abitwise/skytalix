@@ -1,0 +1,92 @@
+2026-10-10T14:20:01Z
+{ 8.75 9.18 8.25 }
+
+ RUN  v3.2.7 /Users/olgeroeselg/Projects/hacks/grugops-examples/cli-chess-example/.claude/worktrees/ticket-to-pr-ABC-131
+
+stdout | src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline
+SOLVED	mate-in-2	f6f7	d7	n18876	K+R: king steps up, rook mates
+SOLVED	mate-in-2	d5g8	d6	n19724	smothered: Qg8+ Rxg8 Nf7#
+SOLVED	mate-in-2	e2e8	d6	n19725	back rank: Re8+ Rxe8 Rxe8#
+SOLVED	mate-in-2	b1b7	d5	n20512	two-rook ladder
+SOLVED	mate-in-2	h1h7	d6	n19484	K+Q against the cornered king
+SOLVED	mate-in-2	h5h7	d5	n20531	Anastasia: Qxh7+ Kxh7 Rh3#
+SOLVED	mate-in-2	e7e1	d6	n19480	mirror: back rank, Re1+ Rxe1 Rxe1#
+SOLVED	mate-in-2	d4g1	d6	n19495	mirror: smothered, Qg1+ Rxg1 Nf2#
+SOLVED	mate-in-2	f3f2	d6	n19478	mirror: K+R, king steps up
+SOLVED	mate-in-2	a7a2	d5	n20512	mirror: two-rook ladder
+SOLVED	win-material	d5e7	d8	n17441	knight fork: Ne7+ wins the queen
+SOLVED	win-material	e4e5	d8	n17430	pawn fork: e5 hits knight and rook
+SOLVED	win-material	a1e1	d7	n18450	pin: Re1 pins the queen to the king
+SOLVED	win-material	a1a6	d7	n18458	skewer: Ra6+ and Rxh6
+SOLVED	win-material	d4c5	d6	n19493	discovered check: the bishop moves, Rxd8
+SOLVED	win-material	d1d5	d6	n19483	queen fork: Qd5+ and Qxa8
+SOLVED	do-not-hang	a1a4	d6	n19479	Q takes a pawn a rook defends
+SOLVED	do-not-hang	e1f1	d7	n18451	R takes a pawn the king defends
+SOLVED	do-not-hang	e1f2	d7	n18444	B takes a pawn a pawn defends
+SOLVED	do-not-hang	c2a1	d7	n18446	N takes a pawn a pawn defends
+SOLVED	do-not-hang	a1a6	d6	n19475	Q takes a knight a rook defends
+SOLVED	do-not-hang	d1d2	d7	n18446	R takes a knight a pawn defends
+SOLVED	do-not-hang	a1e5	d6	n19487	Q takes a rook the king defends
+SOLVED	do-not-hang	a1b1	d6	n19474	Q takes a bishop a knight defends
+SOLVED	do-not-hang	f1g1	d6	n19473	R takes a bishop a pawn defends
+SOLVED	do-not-hang	e1d1	d8	n18123	R takes a pawn a bishop defends
+SOLVED	do-not-hang	a1a8	d7	n18450	Q takes a pawn a knight defends
+SOLVED	do-not-hang	b1a2	d8	n17420	B takes a pawn a rook defends
+SOLVED	do-not-hang	a8a5	d6	n19480	mirror: q takes a pawn a rook defends
+SOLVED	do-not-hang	e8f7	d7	n18450	mirror: r takes a pawn the king defends
+SOLVED	do-not-hang	e8f7	d7	n18444	mirror: b takes a pawn a pawn defends
+SOLVED	do-not-hang	c7a8	d8	n17424	mirror: n takes a pawn a pawn defends
+SOLVED	do-not-hang	a8a3	d6	n19477	mirror: q takes a knight a rook defends
+SOLVED	do-not-hang	d8d7	d7	n18450	mirror: r takes a knight a pawn defends
+SOLVED	do-not-hang	a8e4	d6	n19483	mirror: q takes a rook the king defends
+SOLVED	do-not-hang	a8b8	d6	n19475	mirror: q takes a bishop a knight defends
+SOLVED	do-not-hang	f8g8	d7	n19188	mirror: r takes a bishop a pawn defends
+SOLVED	do-not-hang	e8d8	d8	n17421	mirror: r takes a pawn a bishop defends
+SOLVED	do-not-hang	a8a1	d7	n18451	mirror: q takes a pawn a knight defends
+SOLVED	do-not-hang	b8a7	d8	n17420	mirror: b takes a pawn a rook defends
+SOLVED	mate-in-3	a1f6	d5	n20514	mate in 3, seed 1: black Q+R against N
+SOLVED	mate-in-3	f1f6	d5	n20520	mate in 3, seed 69: black 2R+B against 2P
+SOLVED	mate-in-3	e7c5	d5	n20519	mate in 3, seed 1008: black Q+R against a bare king
+SOLVED	mate-in-3	b7c7	d6	n19509	mate in 3, seed 1075: black R+B+N against a bare king
+SOLVED	mate-in-3	g2g7	d5	n20528	mate in 3, seed 1424: white Q+2B+N against N
+SOLVED	mate-in-3	e7e2	d5	n20516	mate in 3, seed 1632: white Q+R+N against N+2P
+SOLVED	mate-in-3	c6g6	d5	n20523	mate in 3, seed 1163: black 2R+B against N
+SOLVED	mate-in-3	b4b3	d5	n21402	mate in 3, seed 1982: black Q+R against a bare king
+MISSED	mate-in-3	b3c4	d5	n20508	mate in 3, seed 24: black Q+N against P
+MISSED	mate-in-3	d8h8	d5	n20518	mate in 3, seed 234: white Q+R against P
+MISSED	mate-in-3	e3f2	d5	n20517	mate in 3, seed 288: white Q+B against a bare king
+MISSED	mate-in-3	f1f4	d5	n20521	mate in 3, seed 580: white Q+B against a bare king
+SOLVED	win-material	d5g8	d5	n20513	win material, seed 7: black Q+P against R+N
+SOLVED	win-material	a2a5	d5	n20537	win material, seed 111: black Q+R+B+P against 2R+B+P
+SOLVED	win-material	g6g7	d5	n20677	win material, seed 1700: black R+B+N+2P against 2B+2N+P
+SOLVED	win-material	c2e4	d6	n20376	win material, seed 1706: white Q+R+2P against Q+R+2P
+SOLVED	win-material	c4d6	d5	n20528	win material, seed 1811: white 2R+N+2P against 2B+N+2P
+SOLVED	win-material	h6h7	d6	n19467	win material, seed 5180: black R+N+P against Q+B+N
+SOLVED	win-material	e1d2	d7	n18441	win material, seed 5464: black B+P against B+N
+SOLVED	win-material	f5e6	d5	n20507	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+SOLVED	win-material	e7c6	d5	n20559	win material, seed 5527: black R+2B+2N+P against R+2N+3P
+SOLVED	win-material	a1g7	d6	n19482	win material, seed 279: black Q+3P against R+2N+P
+PUZZLES shipped: solved 58/62, baseline 58/62, budget 25 step 1, wall 25.52 s
+
+stdout | src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each mate-in-3 row has no mate in <= 2, and its accepted moves are EXACTLY the moves that mate in 3
+ORACLE mate-in-3: 12 rows, wall 8.70 s
+
+stdout | src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain
+ORACLE win-material: 16 rows, wall 5.30 s
+
+ ✓ src/puzzle-suite.test.ts (17 tests) 39745ms
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline  25561ms
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each mate-in-3 row has no mate in <= 2, and its accepted moves are EXACTLY the moves that mate in 3  8701ms
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain  5298ms
+
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  17:20:01
+   Duration  39.90s (transform 79ms, setup 0ms, collect 51ms, tests 39.75s, environment 0ms, prepare 28ms)
+
+
+real	0m40.371s
+user	0m38.908s
+sys	0m0.456s
+exit=0
+{ 8.58 9.11 8.27 }

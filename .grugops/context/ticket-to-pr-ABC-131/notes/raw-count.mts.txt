@@ -1,0 +1,4 @@
+const { PUZZLES } = await import(`${process.argv[2]}/src/puzzle-corpus.ts`);
+const t = (tag: string) => PUZZLES.filter((p: any) => p.tags?.includes(tag)).length;
+const added = PUZZLES.filter((p: any) => p.tags !== undefined).length;
+console.log(JSON.stringify({ total: PUZZLES.length, tagged: added, mate3: PUZZLES.filter((p: any) => p.kind === "mate-in-3").length, win: PUZZLES.filter((p: any) => p.kind === "win-material").length, quietKey: t("quiet-key"), depth5: t("depth≥5"), quiescence: t("quiescence"), headroom: t("headroom"), dropped: PUZZLES.filter((p: any) => /seed (1982|1008|1424|1075)\b/.test(p.name)).map((p: any) => p.name) }));

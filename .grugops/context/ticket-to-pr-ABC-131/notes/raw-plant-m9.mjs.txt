@@ -1,0 +1,7 @@
+// QE's M9 (qe-ABC-126): discovered-check row source +4 -> +6, copy only.
+import { readFileSync, writeFileSync } from "node:fs";
+const f = `${process.argv[2]}/src/puzzle-corpus.ts`;
+const t = readFileSync(f, "utf8");
+const from = 'accept: ["d4g7", "d4c5"], source: `${WIN} +4` }';
+if (t.split(from).length !== 2) throw new Error("M9 anchor not exactly once");
+writeFileSync(f, t.replace(from, from.replace("+4", "+6")));
