@@ -205,3 +205,14 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 ### Requested board placement 2026-08-13 by BA/PM at `refinement-home-the-gaps`: `Backlog`
 
 **Requested, not taken** — `plans/board.md` is the Orchestrator's. `Backlog`, not `Ready`.
+
+## Delivery
+
+**2026-10-10: build hop STOPPED at re-verification. No code was written.** Software Engineer,
+subtask `ticket-to-pr-ABC-051`, branch `grugops/ABC-051-turn-loop-records` from `b9e94d8`. Sites
+3–6 are still false. Site 1 is already true. **Site 2's premise moved:** `ADR-0021` (accepted)
+enumerates the machine at **18** with `quit`/`take-back` numbered 17/18, but this page's rule (the
+refused claim is its own trigger) gives **19**. Choosing between them is a judgement, and the page
+says the repair is arithmetic. `M2` is still green in `src/turn-loop.nfr.test.ts` (4/4) and is
+still caught by merged `A8` in `src/turn-loop.test.ts`. For BA/PM's re-score:
+`.grugops/context/ticket-to-pr-ABC-051/notes/` (observation `ac73a414`, decision `42b950e1`).
