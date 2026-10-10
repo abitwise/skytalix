@@ -1,0 +1,19 @@
+# A5 at 6dde3261..795adca4
+## git diff --name-only -- src
+src/history-pane.nfr.test.ts
+## git diff --numstat (whole commit)
+32	13	src/history-pane.nfr.test.ts
+## new files (--diff-filter=A)
+       0
+## helper lines sha256 base:163-164 | head:166-167
+88ad40ed6eee434d48ca76ae581c61955cbde3f57df0cf8e521b9d1c279f7a74  -
+88ad40ed6eee434d48ca76ae581c61955cbde3f57df0cf8e521b9d1c279f7a74  -
+## composer tripwire statements sha256 base:591-598 | head:610-617
+757313d7191ce2202ed5ad5e9c7055f966849be002778b6ce32d4e5c8f02e6ba  -
+757313d7191ce2202ed5ad5e9c7055f966849be002778b6ce32d4e5c8f02e6ba  -
+## biome-ignore base | head
+1
+2
+## it( base | head
+12
+12

@@ -1,0 +1,9 @@
+1	frame-path probe
+1	composer tripwire
+2	licence guard
+1	COMPOSITION_ROOT
+1	LICENSED_DRIVERS
+1	share `COMPOSITION_ROOT`
+1	ADR-0029
+0	Both guards
+0	TWO GUARDS

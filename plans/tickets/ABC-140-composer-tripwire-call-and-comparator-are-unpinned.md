@@ -167,3 +167,34 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `75dcc0f5`. **Res
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with a promotion trigger |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-140`).
+- Branch `grugops/ABC-140-composer-tripwire-pins`, from `6dde3261`. The code is `795adca4`
+  (`src/history-pane.nfr.test.ts` +32/−13). It adds two whole-statement pins in the drift tripwire after `R5c`,
+  changes the reach comment from five spans to seven, and rewrites clause 1's docblock to count three
+  instruments and two properties.
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-140/` (`…f8b6efb4`, `…1d12c309`,
+  `probe/`). They are not restated here.
+
+**`A1`–`A6` are met. No stop condition fired.**
+- **Premise.** It held at `6dde3261`, where the blob is `ed2cd2b0`, the same as at `75dcc0f5`. All five
+  survivors `+FMT+WSC` were green with 12/12.
+- **`A1`.** On the delivered tree, each survivor exits 1 on the drift tripwire:
+  - "…scans EVERY production module" for `N591-*`;
+  - "…compares with an EQUALITY" for `C-*`.
+  - With the suite whole, `N591-TAIL` and `C-OPERAND` give 1607/1608.
+- **`A2`.**
+  - `CONTROL`/`+FMT` run 12 tests.
+  - `WSC`/`WPS` fail the same tests by name.
+  - `N653-NARROW`, `H-SHADOW` and `H-FSMOCK` are recorded green.
+  - No `PLANT-FAILED`.
+  - The five existing pins, the helper and the composer tripwire's statements are hash-identical.
+- **`A6`.** Lint, typecheck, build and `npm test` all exit 0 (52 files / 1608). Skip count 0, integrity
+  `No findings.`
+- **`biome-ignore`** goes 1 → 2, as stated.
+- **Cost.** Both `ADR-0035` sets are admissible (twin +0.47 % / +0.32 %, sign 4/8). `N8-LANE` is MET.
+- **Harness.** The Architect's `plant.mjs` ran unchanged inside the SE's own loop. Nothing was refused. That loop
+  reproduces BA/PM's base rows.

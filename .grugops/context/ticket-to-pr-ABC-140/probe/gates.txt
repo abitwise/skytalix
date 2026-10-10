@@ -1,0 +1,20 @@
+2026-10-10T17:02:28Z
+load1 14.37
+> biome check .
+
+Checked 100 files in 144ms. No fixes applied.
+lint exit=0
+typecheck exit=0
+build exit=0
+load1 13.94
+npm test exit=0
+load1 16.59
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Duration  6.92s (transform 1.18s, setup 0ms, collect 10.52s, tests 13.66s, environment 5ms, prepare 2.08s)
+No findings.
+integrity exit=0
+The lane collects 52 test files; git tracks 52.
+No findings.
+lane-inventory exit=0
+2026-10-10T17:02:39Z
