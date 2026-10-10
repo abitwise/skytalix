@@ -216,3 +216,36 @@ cut; the ⚠️ (`ABC-042` held on `G1`) is discharged. `S1` is cut, because the
 | 8 | size assigned | **✅** `XS` (1), was `S` |
 | 9 | priority assigned | **✅** `P2`, with the fired triggers named and a new trigger |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-058`).
+- Branch `grugops/ABC-058-security-bar-instruments`, from `b21ec7cf`. The code is `f2235ecd`
+  (`src/cli.test.ts` +12/−7).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-058/` (`…0963774f`,
+  `…b98960df`, `probe/`) and are not restated here.
+
+**`A1`, `A2` and `A5`–`A8` are met. No stop condition fired.** `N8_SPAWN` and the `spawnSync`
+call site did not move, and no production file was touched.
+
+| # | verdict | reading (mutants rebuilt out of tree; before `b21ec7cf` → after `f2235ecd`) |
+|---|---|---|
+| `A1` | MET | The prose `` `spawnSync(` `` docblock line goes RED 1/66 → **GREEN 66/66** |
+| `A2` | MET | `MS1` and `MS2` are RED on the pin row, before and after |
+| `A5` | MET | `M3h` goes GREEN 66/66 → **RED on bar 3**. The token is `"\u0007\u001b[2Jpurple\u007f"` (`BEL`, `ESC`, `U+007F`, in one argv token of the same child) |
+| `A6` | MET | `M3f`/`M3g` are RED on the number row (byte-identical), and now on bar 3 as well |
+| `A7` | MET | `N8_SPAWN` is `17 + 7 + 1 + 2` = 27, the pin is green, 0 `it` added, 66 tests |
+| `A8` | MET | `git diff --name-only f2235ecd~1 f2235ecd` = `src/cli.test.ts`. 35 production modules have identical blob SHAs. Skip 0 |
+
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 51 files / 1581 passed. The skip count
+  is 0, and integrity reads `No findings.` `lane-inventory.js` is exit 0 with no findings.
+- **Cost (`ADR-0035`, proposed; narrow set `src/cli.test.ts` alone, twin control, n = 8).**
+  - Set 1: twin R 0.254 s, head −0.610 s → **MET** at 650 ms.
+  - Set 2: twin R 1.097 s → **UNRESOLVED**, charge at most +0.107 s.
+  - load1 median was 6.5 and 6.2.
+  - The sets are reported unpooled, and no `N8-LANE` line is claimed.
+- **Comments corrected at the sites.** "An eleventh child" and "`N8-LANE` is breached and escalated"
+  were not true at this build.
+- **Next.** QE's hop. Security/NFR reads clause (c) (the argv bytes changed in an existing literal).
+  Then `ABC-059` on the same file.

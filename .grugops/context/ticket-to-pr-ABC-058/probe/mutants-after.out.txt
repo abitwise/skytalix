@@ -1,0 +1,27 @@
+commit f2235ecd  node v26.11.0
+== control   load1 7.48  11:03:16Z
+      Tests  66 passed (66)
+== A1-prose (docblock names `spawnSync(`)   load1 7.20  11:03:21Z
+      Tests  66 passed (66)
+== MS1 (direct spawnSync child, not through childOf)   load1 7.11  11:03:25Z
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== MS2 (namespace import of node:child_process)   load1 6.86  11:03:30Z
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== M3f (src/cli.ts printableOf 0x7f -> 0x7e)   load1 6.63  11:03:35Z
+   × ABC-042 — the shape of what was delivered > A8 — neither delivered module names a row count
+   × ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  2 failed | 64 passed (66)
+== M3g (src/cli.ts printableOf || code === 0x7f deleted)   load1 6.66  11:03:40Z
+   × ABC-042 — the shape of what was delivered > A8 — neither delivered module names a row count
+   × ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  2 failed | 64 passed (66)
+== M3h (src/cli.ts printableOf narrowed to && code !== 0x7f)   load1 6.93  11:03:45Z
+   × ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
