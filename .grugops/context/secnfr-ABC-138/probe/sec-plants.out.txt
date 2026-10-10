@@ -1,0 +1,62 @@
+commit 0a63e4c4  node v26.11.0  2026-10-10T16:53:09Z
+== control (unmutated)   load1 14.24  16:53:10Z
+      Tests  67 passed (67)
+   typecheck exit 0 
+   biome exit 0  
+== K1 C14-ARG void JSON.stringify("child_process")  [stated false red, expect RED (i)]   load1 27.17  16:53:24Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 
+   biome exit 0  
+== K2 C14-ARRAY [control, expect GREEN]   load1 24.92  16:53:35Z
+      Tests  67 passed (67)
+   typecheck exit 0 
+   biome exit 1  format 
+== K3 remedy for a call that loads nothing: const CP; expect(text).not.toContain(CP) [expect GREEN]   load1 29.88  16:53:49Z
+      Tests  67 passed (67)
+   typecheck exit 0 
+   biome exit 0  
+== K4 remedy MISapplied to a loader: const CP; vi.importActual(CP) [QE-138-c blind shape, expect GREEN]   load1 31.10  16:54:01Z
+      Tests  67 passed (67)
+   typecheck exit 0 
+   biome exit 0  
+== K5 remedy MISapplied to a loader: const CP; createRequire(...)(CP).execSync [expect GREEN]   load1 31.75  16:54:15Z
+      Tests  67 passed (67)
+   typecheck exit 0 
+   biome exit 0  
+== E1 direct eval reaches the module binding by STRING: eval("spawnSync")(...) [expect GREEN suite; gate?]   load1 30.49  16:54:23Z
+      Tests  67 passed (67)
+   typecheck exit 0 
+   biome exit 1  lint/security/noGlobalEval 
+== E2 wrapped callee re-check (spawnSync as typeof spawnSync)(...) [expect RED (iii)]   load1 29.80  16:54:31Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 
+   biome exit 0  
+== E3 class extends + new (W5 shape) [expect RED (iii)]   load1 26.68  16:54:39Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+   typecheck exit 0 
+   biome exit 0  
+== L-a QE-138-b getBuiltinModule.call(process, literal) [expect GREEN]   load1 25.66  16:54:48Z
+      Tests  67 passed (67)
+   typecheck exit 0 
+   biome exit 1  format 
+== L-b concatenated name process.getBuiltinModule("node:child" + "_process") [expect GREEN, adversarial]   load1 22.93  16:54:56Z
+      Tests  67 passed (67)
+   typecheck exit 0 
+   biome exit 1  format 
+== L-c X5 createRequire(...)("node:child_process") [expect RED (i)]   load1 21.02  16:55:04Z
+      Tests  1 failed | 66 passed (67)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+   typecheck exit 0 
+   biome exit 0  
+== L-d S2 vi.mock("node:child_process") [expect RED (i)]   load1 20.22  16:55:13Z
+TypeError: Cannot read properties of undefined (reading 'error')
+   typecheck exit 0 
+   biome exit 0  
+DONE 2026-10-10T16:55:16Z

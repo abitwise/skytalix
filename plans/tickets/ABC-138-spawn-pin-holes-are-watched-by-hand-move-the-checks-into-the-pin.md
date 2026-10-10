@@ -283,3 +283,29 @@ Code `33e54f70`, `src/cli.test.ts` +13/−3 only. Not merged, not pushed. Readin
   or manifest bytes; `N8_SPAWN` 27; `loader-scan` `[]`, one site, two references.
 - **Gate.** Lint, typecheck and build exit 0; `npm test` 52 / 1608; skip 0; integrity and
   `lane-inventory.js` report no findings.
+
+## Security/NFR 2026-10-10 (`secnfr-ABC-138`, Workflow 05): PASS_WITH_RISKS
+
+Reviewed `2946e22a..a4802fc0` (code `84edfb46` and `33e54f70`) at ASVS L1, block on high. Every
+reading is this hop's own, taken at `0a63e4c4` in `git archive` trees. The readings and rulings are
+in `.grugops/context/secnfr-ABC-138/notes/` (`…91830257` decision, `…f114ac22` readings) and are not
+restated here. Not merged, not pushed.
+
+- **One required fix, made: `0a63e4c4`, comment only (+4/−2).** The `A4` remedy ("spell it through
+  a `const`") now applies only to a call that loads nothing. For a loader it was the shape count (i)
+  cannot see (`QE-138-c`).
+- **Ruling 1, the `C14` split: CONFIRMED.**
+- **Ruling 2, `AR-133-WRAP`: DISCHARGED** at merge. Direct `eval` by string is refused by
+  `npm run lint` (`noGlobalEval`).
+- **Ruling 3, `AR-133-LOADER`: NARROWED**, LOW, owner BA/PM. It now covers `QE-138-b` and the
+  non-literal name. The trigger is an event; when it fires, `F-138-1` becomes P1.
+- **Ruling 4: `loader-scan.mjs` RETIRED** from the per-diff routine at merge. **Until then, this
+  page's § Dependencies triggers stand.**
+- **`A1`–`A6` still MET at `0a63e4c4`.**
+  - `A5`: 230.2 ms at load1 11.28, and 167.9 ms at load1 9.88.
+  - `V1.2.5` is MET, and `N8_SPAWN` is 27.
+- **Gates:**
+  - Lint, typecheck and build exit 0.
+  - `npm test`: 52 files, 1608 passed.
+  - Skip count 0. Integrity and `lane-inventory.js` report no findings.
+- **UAT is waived** (0 production lines).
