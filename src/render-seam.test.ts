@@ -32,8 +32,10 @@
  * BYTE-EQUALITY DOES NOT FORBID A SECOND BOARD IMPLEMENTATION, AND THIS FILE NO LONGER SAYS IT DOES.
  * A copy of `renderBoard` in its own module renders the same bytes and is invisible to every
  * comparison here — measured at 824/824 green with `renderBoard` never called (QE's mutant `X3b`).
- * What catches it inside this seam is `A11`'s call count, below. Across the repository it is
- * `ABC-054`'s instrument, not this file's, and no criterion on this page reaches that far.
+ * What catches it inside this seam is `A11`'s call count, below. Since `ABC-054`, `A8` counts
+ * runtime CONSUMERS (`ADR-0030` decision 2), so `X3b` — `render.ts` left with only `type`
+ * specifiers — reds `A8` too. A copy shipped BESIDE a consumed `renderBoard` is still green: a
+ * consumer count is necessary, not sufficient, and `ADR-0030` decision 3 adopts nothing stronger.
  */
 
 import { readdirSync, readFileSync } from "node:fs";
@@ -91,20 +93,44 @@ const productionModules = (): readonly string[] =>
   );
 
 /**
- * The epic's own grep, module by module: which production modules hold a RUNTIME import of `target`.
- * Runtime and not type-only is the whole point of the measurement `EPIC-006` was raised on —
- * `src/render.ts` already had two `import type { GlyphMode }` importers and still had zero consumers
- * of `renderBoard`.
+ * `ADR-0030` decision 2, read off the SPECIFIER LIST: does `source` hold an `import` from
+ * `./<target>` that binds at least one VALUE — a default binding, a namespace binding, or a brace
+ * specifier not prefixed `type`? `import type`, an all-`type` brace list, a bare `import "…"` and an
+ * `export … from` re-export bind none. `[^;"]*` reads a statement across lines, as 12 production
+ * files spell theirs (`ABC-054` test note 3).
+ *
+ * This is CONSUMPTION, not evaluation. `import { type X, type Y }` EVALUATES the target under
+ * `verbatimModuleSyntax`, which is why the licence guard in `src/history-pane.nfr.test.ts` counts it
+ * and this does not. Residuals `C1` (a value bound but never called counts) and `C2` (a re-export
+ * chain under-counts, failing RED) are `ADR-0030`'s, with their triggers.
  */
-const runtimeImportersOf = (target: string): readonly string[] =>
-  productionModules().filter(
-    (file) =>
-      file !== target &&
-      new RegExp(
-        `^(?:import|export)\\s+(?!type\\b)(?:[^;]*from\\s+)?"\\./${target.replace(".", "\\.")}";`,
-        "m",
-      ).test(sourceOf(file)),
-  );
+const bindsAValueFrom = (source: string, target: string): boolean =>
+  [
+    ...source.matchAll(
+      new RegExp(`^import\\s+([^;"]*?)\\s*from\\s+"\\./${target.replace(".", "\\.")}";`, "gm"),
+    ),
+  ].some(([, clause = ""]) => {
+    if (/^type\s/.test(clause)) return false;
+    // Outside the braces only a default or a namespace binding can stand; either binds a value.
+    const outsideBraces = clause
+      .replace(/\{[^}]*\}/, "")
+      .replace(/,/g, "")
+      .trim();
+    if (outsideBraces !== "") return true;
+    return (clause.match(/\{([^}]*)\}/)?.[1] ?? "")
+      .split(",")
+      .map((specifier) => specifier.trim())
+      .some((specifier) => specifier !== "" && !/^type\s/.test(specifier));
+  });
+
+/**
+ * The epic's own measurement, module by module: which production modules are RUNTIME CONSUMERS of
+ * `target` (`ADR-0030` decision 2, above). Consumption, not import, is the whole point of the
+ * measurement `EPIC-006` was raised on — `src/render.ts` already had two `import type { GlyphMode }`
+ * importers and still had zero consumers of `renderBoard`.
+ */
+const runtimeConsumersOf = (target: string): readonly string[] =>
+  productionModules().filter((file) => file !== target && bindsAValueFrom(sourceOf(file), target));
 
 /** The delivered module with every comment removed — what `A3` and `A6` assert over. */
 const deliveredCode = (): string =>
@@ -299,13 +325,32 @@ describe("ABC-041 — the render seam", () => {
     expect(source).not.toContain('from "./history.ts"');
   });
 
-  it("A8 — the headline: render / status-panel / history-pane each gain a runtime importer", () => {
+  it("A8 — the headline: render / status-panel / history-pane each gain a runtime consumer", () => {
     // The measurement `EPIC-006`'s P2 -> P1 raise rested on read 0 / 0 / 0 before this ticket.
     for (const target of ["render.ts", "status-panel.ts", "history-pane.ts"]) {
-      expect(runtimeImportersOf(target), `production runtime importers of ${target}`).toContain(
+      expect(runtimeConsumersOf(target), `production runtime consumers of ${target}`).toContain(
         "render-seam.ts",
       );
     }
+  });
+
+  it("A8's instrument — ADR-0030's eight spellings: exactly four bind a value, four do not", () => {
+    // `ABC-054` `A1`. The boundary pair is the inline all-`type` brace (evaluates the module under
+    // `verbatimModuleSyntax`, binds nothing: NOT a consumer) and the mixed brace (a consumer).
+    const spellings: readonly (readonly [spelling: string, consumes: boolean])[] = [
+      ['import { f } from "./m.ts";', true],
+      ['import { type X, f } from "./m.ts";', true],
+      ['import D from "./m.ts";', true],
+      ['import * as ns from "./m.ts";', true],
+      ['import type { X } from "./m.ts";', false],
+      ['import { type X, type Y } from "./m.ts";', false],
+      ['import "./m.ts";', false],
+      ['export { f } from "./m.ts";', false],
+    ];
+
+    for (const [spelling, consumes] of spellings)
+      expect(bindsAValueFrom(spelling, "m.ts"), spelling).toBe(consumes);
+    expect(spellings.filter(([, consumes]) => consumes)).toHaveLength(4);
   });
 
   it("A9 — the declared COMPOSITION_ROOT, and deliberately NOT in LICENSED_DRIVERS", () => {

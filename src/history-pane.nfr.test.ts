@@ -184,8 +184,9 @@ const productionModulesIn = (directory: string): readonly string[] =>
  *   game longer than the history window, settles a bounded number of macrotask turns (no clock),
  *   and `history.ts` is not among the modules those frames loaded.
  *
- * IT FAILS CLOSED ON A SECOND COMPOSER: the production modules holding a value-binding import
- * (`ADR-0030` decision 2) of `assembleFrame` from `./frame.ts` must EQUAL `[COMPOSITION_ROOT]`.
+ * IT FAILS CLOSED ON A SECOND COMPOSER THAT BINDS `assembleFrame` BY A STATIC VALUE IMPORT, and on
+ * no wider set: the production modules holding a static value-binding import (`ADR-0030` decision
+ * 2) of `assembleFrame` from `./frame.ts` must EQUAL `[COMPOSITION_ROOT]`.
  *
  * WHAT NEITHER PHASE COVERS, stated so it is not read as more:
  * - a derive DEFERRED past the settle, for example behind a timer;
@@ -193,6 +194,10 @@ const productionModulesIn = (directory: string): readonly string[] =>
  *   do not close it);
  * - a renderer that rebuilds the derive from modules OTHER than `history.ts` (`gameend.ts` plus its
  *   own counts) — only `ABC-041` `A2`'s synchronous spies see that, a pre-existing limit;
+ * - a second composer that reaches `assembleFrame` through a re-export hop (`export … from
+ *   "./frame.ts"`) or a dynamic `import("./frame.ts")`: neither is a static value import, so the
+ *   tripwire counts neither (`ADR-0030` decision 2 excludes both; `AR-053-COMPOSER`), and what
+ *   bounds them is the entry point's pinned wiring line, `ABC-043` `A1`;
  * - a second composer that never calls `assembleFrame`, which would itself breach `ADR-0009` 9b.
  *
  * THE RECORDED LOSS is `WGLYPH-DYN`: a module-scope `void import("./history.ts")` in `glyph-mode.ts`
@@ -223,6 +228,16 @@ const COMPOSITION_ROOT = "render-seam.ts";
  * "`ABC-019`'s tree with `turn-loop.ts` deleted" are the same 16 files, so no guard can be green on
  * the first and red on the second. A licence that goes stale while its file EXISTS is caught, and
  * that is the kill the equality below buys.
+ *
+ * THE PROPERTY IS EVALUATION (`ADR-0030` decision 1): a module counts if loading it EVALUATES
+ * `history.ts`'s module body, which is why the bare `import "./history.ts";` counts while binding
+ * nothing. THE INLINE ALL-`type` FORM COUNTS TOO: under `verbatimModuleSyntax` and Node type
+ * stripping, `import { type GameHistory } from "./history.ts";` keeps the statement and evaluates
+ * `history.ts`; only `import type { … }` is erased whole. That red is TRUE, and the repair for a
+ * module that trips on it is `import type`, NEVER the licence. The guard errs only by UNDER-COUNT
+ * (false greens), and both known cases are owned in `ADR-0011`: `R4` (the two dynamic forms) and
+ * `R3` (a file in a subdirectory of `src/`; the specifier is depth-fixed). `A8` in
+ * `src/render-seam.test.ts` counts a different property, CONSUMPTION, and does not count this form.
  */
 const LICENSED_DRIVERS: readonly string[] = ["turn-loop.ts", "cli.ts"];
 
@@ -500,9 +515,11 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
   });
 
   it("the composer tripwire: assembleFrame's value-importers EQUAL the one composition root", () => {
-    // `ADR-0029` decision 2 — what makes deriving the path from ONE root fail CLOSED. A second
-    // module that composes frames is a second root, and its closure would go unmeasured; a root that
-    // stops composing is no longer the root. "Value-binding import" is `ADR-0030` decision 2's: a
+    // `ADR-0029` decision 2 — what makes deriving the path from ONE root fail CLOSED, for a second
+    // composer that binds `assembleFrame` by a static value import and for nothing wider. Such a
+    // module is a second root, and its closure would go unmeasured; a root that stops composing is
+    // no longer the root. A re-export hop or a dynamic `import("./frame.ts")` is not counted (the
+    // docblock's WHAT NEITHER PHASE COVERS). "Value-binding import" is `ADR-0030` decision 2's: a
     // brace specifier NOT prefixed `type`, or a namespace binding. `import type`, an all-`type`
     // brace list, a bare import and an `export … from` re-export bind no value and do not count.
     // BOUND, stated: a module that writes frame rows WITHOUT calling `assembleFrame` is not seen.
