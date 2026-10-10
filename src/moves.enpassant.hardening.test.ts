@@ -52,7 +52,7 @@
 
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
-import { parseFen, toFen } from "./fen.ts";
+import { parseFenGrammarOnly as parseFen, toFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import { FLAG_EN_PASSANT, generateMoves, type Move } from "./moves.ts";
 import type { Position } from "./position.ts";

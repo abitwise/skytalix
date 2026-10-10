@@ -118,7 +118,7 @@ const PASSED_CASES: ReadonlyArray<{ why: string; fen: string; square: string; pa
   },
   {
     why: "seventh rank, enemy pawn behind on an adjacent file",
-    fen: "2k5/3P4/4p3/8/8/8/8/4K3 w - - 0 1",
+    fen: "7k/3P4/4p3/8/8/8/8/4K3 w - - 0 1",
     square: "d7",
     passed: true,
   },

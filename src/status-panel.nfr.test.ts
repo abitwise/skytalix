@@ -61,13 +61,13 @@ type Move = import("./moves.ts").Move;
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 /** Three pieces, so the scan's 64 cannot be confused with the board's occupancy. */
-const SPARSE_FEN = "4k3/8/8/8/8/8/8/4R1K1 w - - 0 1";
+const SPARSE_FEN = "4k3/8/8/8/8/8/8/R5K1 w - - 0 1";
 
 /** Two plies on the sparse anchor — `A13`'s stated minimum depth for a counting clause. */
-const SPARSE_PLIES = ["e1e2", "e8d8"] as const;
+const SPARSE_PLIES = ["a1a2", "e8d8"] as const;
 
 /** Four plies on the same anchor: the count must not move with the depth. */
-const SPARSE_PLIES_DEEP = ["e1e2", "e8d8", "e2e4", "d8c8"] as const;
+const SPARSE_PLIES_DEEP = ["a1a2", "e8d8", "a2a4", "d8c8"] as const;
 
 /**
  * The occupied squares of a FEN's board field. `parseFen` places one piece per occupied square

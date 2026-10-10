@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parseCoordinateMove } from "./coordinate-move.ts";
-import { parseFen } from "./fen.ts";
+import { FenError, parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import { FLAG_EN_PASSANT, FLAG_PROMOTION, type Move } from "./moves.ts";
 import { BISHOP, KNIGHT, QUEEN, ROOK, squareName } from "./position.ts";
@@ -8,11 +8,10 @@ import { BISHOP, KNIGHT, QUEEN, ROOK, squareName } from "./position.ts";
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 /**
  * A2's FEN AS PRINTED ON THE TICKET. It is defective and the criterion cannot be met with it:
- * the two kings stand on e2 and e1, ADJACENT, which is not a legal chess position. White is
- * therefore "in check" from the black king and the ONLY legal move is `e1e2` — there is no
- * promotion to select and no ambiguity to collect. Measured, not asserted: see the test row
- * below, which pins that fact so the repair can be verified. Repair is BA/PM's; this file does
- * not edit the ticket.
+ * the two kings stand on e2 and e1, ADJACENT, which is not a legal chess position — black, the
+ * side not to move, is in check. Since ABC-010 (ADR-0033) `parseFen` rejects it, so it never
+ * reaches the generator; the test row below pins that rejection. Repair is BA/PM's; this file
+ * does not edit the ticket.
  */
 const A2_FEN_AS_WRITTEN = "8/4P3/8/8/8/8/4k3/4K3 w - - 0 1";
 /**
@@ -101,11 +100,9 @@ describe("ABC-031 A2 — the promotion letter selects one of four", () => {
   });
 
   it("records why A2's printed FEN cannot carry the criterion: its kings are adjacent", () => {
-    const asWritten = parseFen(A2_FEN_AS_WRITTEN);
-    // e2/e1 kings: white is in check from the black king and no promotion is legal at all.
-    expect(
-      legalMoves(asWritten).map((move) => squareName(move.from) + squareName(move.to)),
-    ).toEqual(["e1e2"]);
+    // e2/e1 kings: the side not to move is in check, so the boundary refuses the board.
+    expect(() => parseFen(A2_FEN_AS_WRITTEN)).toThrow(FenError);
+    expect(() => parseFen(A2_FEN_AS_WRITTEN)).toThrow(/^side not to move \(black\) is in check/);
   });
 });
 

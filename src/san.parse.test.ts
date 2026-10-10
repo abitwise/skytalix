@@ -15,7 +15,7 @@
  */
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { parseFen } from "./fen.ts";
+import { FenError, parseFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import type { Position } from "./position.ts";
@@ -36,10 +36,10 @@ const A2_FEN = "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 
 
 /**
  * `A4`'s FEN AS PRINTED ON THE TICKET. It is defective and the criterion cannot be met with it:
- * the kings stand on e1 and e2, ADJACENT, which is not a legal chess position — White is "in check"
- * from the black king and the only legal move is `Kxe2`. There is no promotion to select and no
- * ambiguity to collect. The same defect was found and pinned at `ABC-031` (`src/coordinate-move.test.ts`),
- * which is why it is pinned here the same way rather than argued: this file does not edit the ticket.
+ * the kings stand on e1 and e2, ADJACENT, which is not a legal chess position — black, the side not
+ * to move, is in check. Since `ABC-010` (`ADR-0033`) `parseFen` rejects it. The same defect was found
+ * and pinned at `ABC-031` (`src/coordinate-move.test.ts`), which is why it is pinned here the same way
+ * rather than argued: this file does not edit the ticket.
  */
 const A4_FEN_AS_WRITTEN = "8/4P3/8/8/8/8/4k3/4K3 w - - 0 1";
 
@@ -183,14 +183,10 @@ describe("A3 — disambiguation, both directions of the rule", () => {
 });
 
 describe("A4 — promotion and suffix tolerance", () => {
-  it("PINS the ticket's printed FEN as defective: kings adjacent, `Kxe2` the only legal move", () => {
-    const [position, legal] = open(A4_FEN_AS_WRITTEN);
-    expect(legal.map((move) => toSan(position, move, legal))).toEqual(["Kxe2"]);
-    // Not a parser fault: there is no promotion in this position to select.
-    expect(parseSan(position, "e8=Q", legal)).toEqual({
-      outcome: "rejected",
-      reason: "no-such-move",
-    });
+  it("PINS the ticket's printed FEN as defective: kings adjacent, so parseFen rejects it", () => {
+    // Not a SAN-parser fault: the board itself is unreachable, and the FEN boundary says so.
+    expect(() => open(A4_FEN_AS_WRITTEN)).toThrow(FenError);
+    expect(() => open(A4_FEN_AS_WRITTEN)).toThrow(/^side not to move \(black\) is in check/);
   });
 
   it("`e8=Q` is the queen promotion by reference; bare `e8` is ambiguous with exactly 4", () => {

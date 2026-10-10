@@ -325,8 +325,10 @@ describe("A3 — quiescence returns on 200+ corpus positions and never exceeds Q
   it("the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded", () => {
     // A board built to capture forever: every queen is attacked and defended many times over.
     // Without the guard this leaf would be a search of its own; with it the recursion reaches
-    // the cap exactly and stands pat there. Measured: deepest 8, 7 112 nodes, ~33 ms.
-    const rig = parseFen("q1q1q1qk/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K7 w - - 0 1");
+    // the cap exactly and stands pat there. The black king stands on e3, out of every queen's
+    // line (on h8 it was in check with white to move, which parseFen rejects since ABC-010).
+    // Measured: deepest 8, 4 798 nodes, ~41 ms.
+    const rig = parseFen("q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/4k3/8/K7 w - - 0 1");
     const run = quiesceFully(rig);
 
     expect(run.deepest).toBe(QUIESCENCE_MAX_PLY);

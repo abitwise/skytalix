@@ -348,8 +348,8 @@ describe("the blunder path's edge cases (ADR-0032 decisions 1-2)", () => {
 
   it("scores a stalemating child 0", () => {
     // Qf7 leaves the black king on h8 with no move and not in check.
-    const choice = play("7k/8/5QK1/8/8/8/8/8 w - - 0 1");
-    expect(choice?.scored?.find((s) => label(s.move) === "f6f7")?.score).toBe(0);
+    const choice = play("7k/8/6K1/5Q2/8/8/8/8 w - - 0 1");
+    expect(choice?.scored?.find((s) => label(s.move) === "f5f7")?.score).toBe(0);
   });
 
   it("returns null on a position with no legal move", () => {

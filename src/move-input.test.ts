@@ -27,7 +27,7 @@ const BOTH_CAPTURES_FEN = "4k3/8/8/8/2n5/1P6/4B3/4K3 w - - 0 1";
 /** A3 row 3 — the pawn capture only. No bishop, so the fold has nothing extra to find. */
 const PAWN_ONLY_FEN = "4k3/8/8/8/2n5/1P6/8/4K3 w - - 0 1";
 /** A4 — `e7d8` is four promotion captures, the widest candidate list a coordinate can produce. */
-const PROMOTION_CAPTURE_FEN = "3q1k2/4P3/8/8/8/8/8/4K3 w - - 0 1";
+const PROMOTION_CAPTURE_FEN = "3q3k/4P3/8/8/8/8/8/4K3 w - - 0 1";
 /**
  * A4's adversarial rows — NOT positions from a game, deliberately. Five white knights all reach d2
  * and six white queens all take on d4. Both are legal positions and both round-trip below.
@@ -48,7 +48,7 @@ const PROMOTION_CAPTURE_FEN = "3q1k2/4P3/8/8/8/8/8/4K3 w - - 0 1";
  * below therefore assert the widest list that is KNOWN TO FIT, and claim nothing beyond it.
  */
 const FIVE_KNIGHTS_FEN = "4k3/8/8/8/2N1N3/1N3N2/8/1N3KN1 w - - 0 1";
-const SIX_QUEENS_FEN = "3Q1k2/8/1Q4Q1/8/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1";
+const SIX_QUEENS_FEN = "3Q4/8/1Q4Q1/4k3/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1";
 /**
  * G2 — a pawn on e7 with the promotion square empty, so `e8=Q` names exactly one legal move and
  * the four case spellings of it are four spellings of the SAME move. The black king is on a5 and

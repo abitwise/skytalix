@@ -1,3 +1,4 @@
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { FenError, parseFen, toFen } from "./fen.ts";
 import { CASTLE_BK, CASTLE_BQ, CASTLE_WK, CASTLE_WQ, NO_SQUARE, squareName } from "./position.ts";
@@ -26,7 +27,7 @@ describe("FEN round-trip", () => {
 
 describe("FEN field parsing", () => {
   it("parses and preserves an en-passant target square", () => {
-    const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 0 1";
+    const fen = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
     const position = parseFen(fen);
 
     expect(squareName(position.epSquare)).toBe("e3");
@@ -125,6 +126,152 @@ describe("FEN rejection — each fault named, never a silent partial parse", () 
   it.each(cases)("rejects %s", (_label, fen, expected) => {
     expect(() => parseFen(fen)).toThrow(FenError);
     expect(() => parseFen(fen)).toThrow(expected);
+  });
+});
+
+/**
+ * ABC-010 / ADR-0033: grammatically perfect FENs that describe a board no game can reach. Each is
+ * rejected with a FenError whose message names the rule, the right / square / field, and why.
+ */
+describe('FEN semantic rejection — the fault is named, never a bare "invalid FEN"', () => {
+  const cases: ReadonlyArray<[label: string, fen: string, expected: RegExp]> = [
+    [
+      "castling rights with no king on its home square",
+      "4k3/8/8/8/8/8/8/K7 w KQ - 0 1",
+      /^castling right "K" is inconsistent with the board: no white king on e1$/,
+    ],
+    [
+      "a castling right with no rook on its home square",
+      "4k3/8/8/8/8/8/8/4K3 w K - 0 1",
+      /^castling right "K" is inconsistent with the board: no white rook on h1$/,
+    ],
+    [
+      "a black castling right with no rook on a8",
+      "4k3/8/8/8/8/8/8/4K3 b q - 0 1",
+      /^castling right "q" is inconsistent with the board: no black rook on a8$/,
+    ],
+    [
+      "the side not to move already in check",
+      "4k3/8/4Q3/8/8/8/8/4K3 w - - 0 1",
+      /^side not to move \(black\) is in check: its king on e8 is attacked$/,
+    ],
+    [
+      "white in check with black to move",
+      "4k3/8/8/8/8/8/4q3/4K3 b - - 0 1",
+      /^side not to move \(white\) is in check: its king on e1 is attacked$/,
+    ],
+    [
+      "a pawn on rank 1",
+      "4k3/8/8/8/8/8/8/P3K3 w - - 0 1",
+      /^pawn on a1: no pawn can stand on rank 1$/,
+    ],
+    [
+      "a pawn on rank 8",
+      "p3k3/8/8/8/8/8/8/4K3 w - - 0 1",
+      /^pawn on a8: no pawn can stand on rank 8$/,
+    ],
+    [
+      "an en-passant square with no pawn that could have double-pushed to it",
+      "4k3/8/8/8/8/8/8/4K3 w - e6 0 1",
+      /^en-passant square e6 is inconsistent with the board: no black pawn on e5$/,
+    ],
+    [
+      "an en-passant square on the wrong rank for the side to move",
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 0 1",
+      /^en-passant square e3 is inconsistent with the board: it must be on rank 6 when white is to move$/,
+    ],
+    [
+      "an occupied en-passant square",
+      "4k3/8/4n3/4p3/8/8/8/4K3 w - e6 0 1",
+      /^en-passant square e6 is inconsistent with the board: e6 is occupied$/,
+    ],
+    [
+      "an en-passant square whose origin square is occupied",
+      "4k3/4n3/8/4p3/8/8/8/4K3 w - e6 0 1",
+      /^en-passant square e6 is inconsistent with the board: e7 is occupied$/,
+    ],
+    [
+      "a halfmove clock of 400 nines (overflows to Infinity)",
+      `4k3/8/8/8/8/8/8/4K3 w - - ${"9".repeat(400)} 1`,
+      /^halfmove clock "9{24}…" does not round-trip: it reads back as "Infinity"$/,
+    ],
+    [
+      "a fullmove number of 10^21 (serializes as 1e+21)",
+      "4k3/8/8/8/8/8/8/4K3 w - - 0 1000000000000000000000",
+      /^fullmove number "1000000000000000000000" does not round-trip: it reads back as "1e\+21"$/,
+    ],
+    [
+      "a halfmove clock with a leading zero",
+      "4k3/8/8/8/8/8/8/4K3 w - - 00 1",
+      /^halfmove clock "00" does not round-trip: it reads back as "0"$/,
+    ],
+  ];
+
+  it.each(cases)("rejects %s", (_label, fen, expected) => {
+    expect(() => parseFen(fen)).toThrow(FenError);
+    expect(() => parseFen(fen)).toThrow(expected);
+  });
+
+  it("checks in ADR-0033's order: the first fault found is the one thrown", () => {
+    // Pawn on h1, a right with no rook, a bogus en-passant square and black in check, all at once.
+    expect(() => parseFen("4k3/8/4Q3/8/8/8/8/4K2P w K e6 0 1")).toThrow(/^pawn on h1/);
+    expect(() => parseFen("4k3/8/4Q3/8/8/8/8/4K3 w K e6 0 1")).toThrow(/^castling right "K"/);
+    expect(() => parseFen("4k3/8/4Q3/8/8/8/8/4K3 w - e6 0 1")).toThrow(/^en-passant square e6/);
+  });
+
+  it.each([
+    ["null", null],
+    ["undefined", undefined],
+    ["a number", 42],
+    ["an object", {}],
+    ["an array", []],
+  ])("rejects %s as non-string input with a FenError, never a raw TypeError", (name, input) => {
+    let thrown: unknown;
+    try {
+      parseFen(input as unknown as string);
+    } catch (error) {
+      thrown = error;
+    }
+    expect(thrown instanceof FenError).toBe(true);
+    expect((thrown as Error).message).toBe(`FEN must be a string, found ${name}`);
+  });
+
+  it("accepts a legal en-passant square with no capturer (ADR-0005: not normalised)", () => {
+    const fen = "4k3/8/8/4p3/8/8/8/4K3 w - e6 0 2";
+    expect(toFen(parseFen(fen))).toBe(fen);
+  });
+});
+
+describe("FEN round-trip property — parseFen(toFen(p)) holds for every position parseFen returns", () => {
+  const ACCEPTED = [
+    ...PERFT_FENS,
+    "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+    "r3k2r/8/8/8/8/8/8/R3K2R w Kq - 5 12",
+    "8/8/8/8/8/8/8/K1k5 b - - 0 1",
+    "4k3/8/8/4p3/8/8/8/4K3 w - e6 0 2",
+    `4k3/8/8/8/8/8/8/4K3 w - - ${Number.MAX_SAFE_INTEGER} ${Number.MAX_SAFE_INTEGER}`,
+  ];
+
+  it.each(ACCEPTED)("re-parses its own serialization byte-identically: %s", (fen) => {
+    const serialized = toFen(parseFen(fen));
+    expect(() => parseFen(serialized)).not.toThrow();
+    expect(toFen(parseFen(serialized))).toBe(serialized);
+  });
+});
+
+/**
+ * ADR-0033 decision 2: `parseFenGrammarOnly` exists for rules-core tests only. No production module
+ * may name it — every production FEN path goes through the validating `parseFen`.
+ */
+describe("parseFenGrammarOnly guard — no production module names it", () => {
+  it("is absent from every src/*.ts except fen.ts and the tests", () => {
+    const directory = new URL(".", import.meta.url).pathname;
+    const offenders = readdirSync(directory)
+      .filter((name) => name.endsWith(".ts") && !name.endsWith(".test.ts") && name !== "fen.ts")
+      .filter((name) =>
+        readFileSync(`${directory}${name}`, "utf8").includes("parseFenGrammarOnly"),
+      );
+    expect(offenders).toEqual([]);
   });
 });
 
