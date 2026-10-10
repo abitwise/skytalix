@@ -1,0 +1,4060 @@
+{
+ "__baseline__": {
+  "exit": 1,
+  "red": true,
+  "passed": 199,
+  "failed": [
+   "search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes position-6 at depth 2 — the default lane's standing guard :: AssertionError: expected 0.4355800607629121 to be less than or equal to 0.405"
+  ],
+  "beyondBaseline": [
+   "search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes position-6 at depth 2 — the default lane's standing guard :: AssertionError: expected 0.4355800607629121 to be less than or equal to 0.405"
+  ],
+  "ms": 10059,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "N3": {
+  "exit": 1,
+  "red": true,
+  "passed": 22,
+  "failed": [
+   "search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes position-6 at depth 2 — the default lane's standing guard :: AssertionError: expected 0.4355800607629121 to be less than or equal to 0.405",
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 354 nodes :: AssertionError: expected 350 to be 354 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 354 nodes :: AssertionError: expected 350 to be 354 // Object.is equality"
+  ],
+  "ms": 2291,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    350
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     956,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      148,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      956,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3866,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "M13": {
+  "exit": 1,
+  "red": true,
+  "passed": 17,
+  "failed": [
+   "search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order orders a capturing promotion by its victim PLUS the piece it becomes (ABC-079 QE G4) :: AssertionError: expected 'd1d5' to be 'b7a85' // Object.is equality",
+   "search.ordering.test.ts > Scope — the engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently :: AssertionError: expected 'e2e3' to be 'g5e3' // Object.is equality",
+   "search.ordering.test.ts > Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, g5e3 :: AssertionError: expected 'e2e3' to be 'g5e3' // Object.is equality",
+   "search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes position-6 at depth 2 — the default lane's standing guard :: AssertionError: expected 0.45236431399953414 to be less than or equal to 0.405",
+   "search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 8 887, MVV-LVA 4 419, + killers 3 871 :: AssertionError: expected 8586 to be 8887 // Object.is equality",
+   "search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 262 nodes (ABC-079 QE G4) :: AssertionError: expected 282 to be 262 // Object.is equality",
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 354 nodes :: AssertionError: expected 382 to be 354 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order orders a capturing promotion by its victim PLUS the piece it becomes (ABC-079 QE G4) :: AssertionError: expected 'd1d5' to be 'b7a85' // Object.is equality",
+   "search.ordering.test.ts > Scope — the engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently :: AssertionError: expected 'e2e3' to be 'g5e3' // Object.is equality",
+   "search.ordering.test.ts > Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, g5e3 :: AssertionError: expected 'e2e3' to be 'g5e3' // Object.is equality",
+   "search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 8 887, MVV-LVA 4 419, + killers 3 871 :: AssertionError: expected 8586 to be 8887 // Object.is equality",
+   "search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 262 nodes (ABC-079 QE G4) :: AssertionError: expected 282 to be 262 // Object.is equality",
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 354 nodes :: AssertionError: expected 382 to be 354 // Object.is equality"
+  ],
+  "ms": 4584,
+  "rows": {
+   "r1": [
+    8586,
+    4549,
+    3884
+   ],
+   "r2": 282,
+   "r3": [
+    3,
+    382
+   ],
+   "r4": [
+    1387,
+    1595,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7854,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      50,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      201,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      3116,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     945,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      147,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      945,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1073,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2097,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3121,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3592,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4145,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3876,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6364
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "noLmrResearch": {
+  "exit": 1,
+  "red": true,
+  "passed": 18,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1944,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    6,
+    9
+   ]
+  }
+ },
+ "noResearch": {
+  "exit": 1,
+  "red": true,
+  "passed": 18,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0",
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1511,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     47,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    5,
+    6,
+    9
+   ]
+  }
+ },
+ "noLmrResearch-search-only": {
+  "exit": 1,
+  "red": true,
+  "passed": 19,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1301,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "noLmrResearch-engine-only": {
+  "exit": 1,
+  "red": true,
+  "passed": 19,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1574,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    6,
+    9
+   ]
+  }
+ },
+ "noResearch-engine-only": {
+  "exit": 1,
+  "red": true,
+  "passed": 19,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 3020,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    5,
+    6,
+    9
+   ]
+  }
+ },
+ "noResearch-search-only": {
+  "exit": 1,
+  "red": true,
+  "passed": 19,
+  "failed": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0"
+  ],
+  "ms": 1892,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     47,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "keepBestSoFar": {
+  "exit": 1,
+  "red": true,
+  "passed": 31,
+  "failed": [
+   "engine.test.ts > A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move :: AssertionError: expected -42 to be -78 // Object.is equality",
+   "engine.test.ts > A3 (identity) — the completed iteration equals search() in move AND score agrees with search() on move and score across the mate/stalemate endgames :: AssertionError: expected [ Array(1) ] to deeply equal []"
+  ],
+  "beyondBaseline": [
+   "engine.test.ts > A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move :: AssertionError: expected -42 to be -78 // Object.is equality",
+   "engine.test.ts > A3 (identity) — the completed iteration equals search() in move AND score agrees with search() on move and score across the mate/stalemate endgames :: AssertionError: expected [ Array(1) ] to deeply equal []"
+  ],
+  "ms": 3338,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "M11": {
+  "exit": 1,
+  "red": true,
+  "passed": 21,
+  "failed": [
+   "search.ordering.test.ts > Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, g5e3 :: AssertionError: expected 'e2e3' to be 'g5e3' // Object.is equality",
+   "search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes position-6 at depth 2 — the default lane's standing guard :: AssertionError: expected 0.4355800607629121 to be less than or equal to 0.405",
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 354 nodes :: AssertionError: expected 578 to be 354 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "search.ordering.test.ts > Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, g5e3 :: AssertionError: expected 'e2e3' to be 'g5e3' // Object.is equality",
+   "search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 354 nodes :: AssertionError: expected 578 to be 354 // Object.is equality"
+  ],
+  "ms": 1704,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    578
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     3,
+     -488,
+     "f7f6"
+    ],
+    "deep10": [
+     4,
+     -387,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     2,
+     1069,
+     "e2e3",
+     -73
+    ],
+    "window": [
+     [
+      2,
+      2,
+      240,
+      "e2e3"
+     ],
+     [
+      3,
+      2,
+      1069,
+      "e2e3"
+     ],
+     [
+      4,
+      2,
+      2093,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2852,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      3,
+      4141,
+      "e2e3"
+     ],
+     [
+      8,
+      3,
+      5165,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 12143,
+    "depth": 1,
+    "bound": 10240,
+    "under": -1903
+   },
+   "r12": [
+    4,
+    6,
+    9
+   ]
+  }
+ },
+ "M1": {
+  "exit": 1,
+  "red": true,
+  "passed": 30,
+  "failed": [
+   "engine.test.ts > A2 — a budget far below one iteration's cost still returns a move, and stops near it visits only a bounded number of nodes past the deadline — the in-recursion check :: AssertionError: expected 69437 to be less than or equal to 10240",
+   "engine.test.ts > A3 — an aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards :: AssertionError: expected 3 to be 2 // Object.is equality",
+   "engine.test.ts > A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move :: AssertionError: expected 'g4g5' to be 'e2e3' // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "engine.test.ts > A2 — a budget far below one iteration's cost still returns a move, and stops near it visits only a bounded number of nodes past the deadline — the in-recursion check :: AssertionError: expected 69437 to be less than or equal to 10240",
+   "engine.test.ts > A3 — an aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards :: AssertionError: expected 3 to be 2 // Object.is equality",
+   "engine.test.ts > A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move :: AssertionError: expected 'g4g5' to be 'e2e3' // Object.is equality"
+  ],
+  "ms": 8042,
+  "rows": ""
+ },
+ "ceiling4": {
+  "exit": 1,
+  "red": true,
+  "passed": 32,
+  "failed": [
+   "engine.test.ts > A4 — no fixed depth anywhere in the delivered engine goes DEEPER than any small hard-coded ceiling would allow — the behavioural half :: AssertionError: expected 4 to be greater than 4"
+  ],
+  "beyondBaseline": [
+   "engine.test.ts > A4 — no fixed depth anywhere in the delivered engine goes DEEPER than any small hard-coded ceiling would allow — the behavioural half :: AssertionError: expected 4 to be greater than 4"
+  ],
+  "ms": 2554,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     4,
+     -387,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      3588,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    4,
+    4
+   ]
+  }
+ },
+ "repetitionBlind": {
+  "exit": 1,
+  "red": true,
+  "passed": 24,
+  "failed": [
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0 :: AssertionError: expected -387 to be +0 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0 :: AssertionError: expected -387 to be +0 // Object.is equality"
+  ],
+  "ms": 1421,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     -387,
+     "f7f6"
+    ],
+    "deep10": [
+     6,
+     -500,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "rootIgnoresHashMove": {
+  "exit": 1,
+  "red": true,
+  "passed": 24,
+  "failed": [
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0 :: AssertionError: expected 3 to be 4 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0 :: AssertionError: expected 3 to be 4 // Object.is equality"
+  ],
+  "ms": 1448,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     3,
+     -488,
+     "f7f6"
+    ],
+    "deep10": [
+     4,
+     -387,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     2,
+     1069,
+     "e2e3",
+     -73
+    ],
+    "window": [
+     [
+      2,
+      2,
+      240,
+      "e2e3"
+     ],
+     [
+      3,
+      2,
+      1069,
+      "e2e3"
+     ],
+     [
+      4,
+      2,
+      2093,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2852,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      3,
+      4141,
+      "e2e3"
+     ],
+     [
+      8,
+      3,
+      5165,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    6,
+    9
+   ]
+  }
+ },
+ "E8": {
+  "exit": 1,
+  "red": true,
+  "passed": 37,
+  "failed": [
+   "evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the LEFT (c3) scores higher than d4 with a3, both isolated :: AssertionError: expected 230 to be greater than 235",
+   "evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the RIGHT (e3) scores higher than d4 with b4, both isolated :: AssertionError: expected 240 to be greater than 240"
+  ],
+  "beyondBaseline": [
+   "evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the LEFT (c3) scores higher than d4 with a3, both isolated :: AssertionError: expected 230 to be greater than 235",
+   "evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the RIGHT (e3) scores higher than d4 with b4, both isolated :: AssertionError: expected 240 to be greater than 240"
+  ],
+  "ms": 629,
+  "rows": {
+   "r1": [
+    8524,
+    4432,
+    3770
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1266,
+    1465,
+    123,
+    123
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      202,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2715,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3445,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     251
+    ],
+    "unordered": [
+     "e7f7",
+     251
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3619,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6621
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "E9": {
+  "exit": 1,
+  "red": true,
+  "passed": 37,
+  "failed": [
+   "evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the LEFT (c3) scores higher than d4 with a3, both isolated :: AssertionError: expected 230 to be greater than 235",
+   "evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the RIGHT (e3) scores higher than d4 with b4, both isolated :: AssertionError: expected 240 to be greater than 240"
+  ],
+  "beyondBaseline": [
+   "evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the LEFT (c3) scores higher than d4 with a3, both isolated :: AssertionError: expected 230 to be greater than 235",
+   "evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the RIGHT (e3) scores higher than d4 with b4, both isolated :: AssertionError: expected 240 to be greater than 240"
+  ],
+  "ms": 636,
+  "rows": {
+   "r1": [
+    8873,
+    4454,
+    3846
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1266,
+    1465,
+    123,
+    123
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2699,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3394,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     251
+    ],
+    "unordered": [
+     "e7f7",
+     251
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3661,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6579
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "doubled40": {
+  "exit": 1,
+  "red": true,
+  "passed": 38,
+  "failed": [
+   "evaluate.pawns.test.ts > A2 — doubled pawns score lower, by no more than 50 centipawns c3/c4 scores strictly lower than c3/d3 for white, and the gap is <= 50 :: AssertionError: expected 60 to be less than or equal to 50"
+  ],
+  "beyondBaseline": [
+   "evaluate.pawns.test.ts > A2 — doubled pawns score lower, by no more than 50 centipawns c3/c4 scores strictly lower than c3/d3 for white, and the gap is <= 50 :: AssertionError: expected 60 to be less than or equal to 50"
+  ],
+  "ms": 665,
+  "rows": {
+   "r1": [
+    8261,
+    4418,
+    3720
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7835,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      202,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      3940,
+      "e2e4",
+      -37
+     ]
+    ],
+    "budget3": [
+     2,
+     1069,
+     "e2e3",
+     -73
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      2,
+      1069,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1603,
+      "e2e4"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e4"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e4"
+     ],
+     [
+      7,
+      3,
+      4141,
+      "e2e4"
+     ],
+     [
+      8,
+      4,
+      4342,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3504,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6736
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "noShelter": {
+  "exit": 1,
+  "red": true,
+  "passed": 8,
+  "failed": [
+   "evaluate.king-mobility.test.ts > A2 — a missing shelter pawn scores lower at EQUAL material too: the g-pawn on g6 instead of g2 scores strictly lower :: AssertionError: expected 4 to be less than 0"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > A2 — a missing shelter pawn scores lower at EQUAL material too: the g-pawn on g6 instead of g2 scores strictly lower :: AssertionError: expected 4 to be less than 0"
+  ],
+  "ms": 634,
+  "rows": {
+   "r1": [
+    9231,
+    4503,
+    3968
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    349
+   ],
+   "r4": [
+    1302,
+    1447,
+    98,
+    98
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7918,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     83,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     83,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -18
+     ],
+     [
+      2,
+      249,
+      "e2e3",
+      -102
+     ],
+     [
+      3,
+      3629,
+      "e2e4",
+      -40
+     ]
+    ],
+    "budget3": [
+     2,
+     1069,
+     "e2e3",
+     -102
+    ],
+    "window": [
+     [
+      2,
+      2,
+      140,
+      "e2e3"
+     ],
+     [
+      3,
+      2,
+      1069,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1727,
+      "e2e4"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e4"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e4"
+     ],
+     [
+      7,
+      3,
+      4141,
+      "e2e4"
+     ],
+     [
+      8,
+      4,
+      5082,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     276
+    ],
+    "unordered": [
+     "e7f7",
+     276
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3715,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6525
+   },
+   "r12": [
+    4,
+    6,
+    8
+   ]
+  }
+ },
+ "noFileTerm": {
+  "exit": 1,
+  "red": true,
+  "passed": 8,
+  "failed": [
+   "evaluate.king-mobility.test.ts > A3 — a half-open file next to the king scores lower at EQUAL material, shelter equal: the f-pawn on e5 (f half-open) scores lower than on f5 :: AssertionError: expected -6 to be less than -11"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > A3 — a half-open file next to the king scores lower at EQUAL material, shelter equal: the f-pawn on e5 (f half-open) scores lower than on f5 :: AssertionError: expected -6 to be less than -11"
+  ],
+  "ms": 668,
+  "rows": {
+   "r1": [
+    9189,
+    4511,
+    3862
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    350
+   ],
+   "r4": [
+    1336,
+    1477,
+    83,
+    83
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7912,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     88,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     88,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     22,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2785,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     978,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      978,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3491,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     271
+    ],
+    "unordered": [
+     "e7f7",
+     271
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3687,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6553
+   },
+   "r12": [
+    4,
+    6,
+    8
+   ]
+  }
+ },
+ "noMobility": {
+  "exit": 1,
+  "red": true,
+  "passed": 7,
+  "failed": [
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp white, with substantially more moves at equal material, scores strictly higher :: AssertionError: expected 0 to be greater than 0",
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 0 to be greater than 0"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp white, with substantially more moves at equal material, scores strictly higher :: AssertionError: expected 0 to be greater than 0",
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 0 to be greater than 0"
+  ],
+  "ms": 669,
+  "rows": {
+   "r1": [
+    8994,
+    3296,
+    2488
+   ],
+   "r2": 261,
+   "r3": [
+    3,
+    369
+   ],
+   "r4": [
+    1274,
+    1474,
+    125,
+    125
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 6723,
+    "d3": -480
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     60,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     60,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     30,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      44,
+      "e2e3",
+      -15
+     ],
+     [
+      2,
+      211,
+      "e2e3",
+      -65
+     ],
+     [
+      3,
+      2563,
+      "g4g5",
+      -30
+     ]
+    ],
+    "budget3": [
+     2,
+     1067,
+     "e2e3",
+     -65
+    ],
+    "window": [
+     [
+      2,
+      2,
+      148,
+      "e2e3"
+     ],
+     [
+      3,
+      2,
+      1067,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1467,
+      "g4g5"
+     ],
+     [
+      5,
+      3,
+      2091,
+      "g4g5"
+     ],
+     [
+      6,
+      3,
+      3115,
+      "g4g5"
+     ],
+     [
+      7,
+      4,
+      3948,
+      "g4g5"
+     ],
+     [
+      8,
+      4,
+      4139,
+      "g4g5"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "f8f7",
+     205
+    ],
+    "unordered": [
+     "e7f7",
+     205
+    ],
+    "engine": [
+     1,
+     "f8f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3666,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6574
+   },
+   "r12": [
+    4,
+    6,
+    9
+   ]
+  }
+ },
+ "noClamp": {
+  "exit": 1,
+  "red": true,
+  "passed": 8,
+  "failed": [
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 288 to be less than or equal to 100"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 288 to be less than or equal to 100"
+  ],
+  "ms": 641,
+  "rows": {
+   "r1": [
+    8887,
+    4419,
+    3871
+   ],
+   "r2": 232,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7833,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3588,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3674,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6566
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "blackKingStepFlip": {
+  "exit": 1,
+  "red": true,
+  "passed": 7,
+  "failed": [
+   "evaluate.king-mobility.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirrored pair exactly equal :: AssertionError: startpos: expected -45 to be 45 // Object.is equality",
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp white, with substantially more moves at equal material, scores strictly higher :: AssertionError: expected 30 to be +0 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirrored pair exactly equal :: AssertionError: startpos: expected -45 to be 45 // Object.is equality",
+   "evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp white, with substantially more moves at equal material, scores strictly higher :: AssertionError: expected 30 to be +0 // Object.is equality"
+  ],
+  "ms": 649,
+  "rows": {
+   "r1": [
+    9809,
+    5170,
+    3795
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1370,
+    1519,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7846,
+    "d3": -458
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     78,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     78,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      27
+     ],
+     [
+      2,
+      197,
+      "e2e3",
+      -57
+     ],
+     [
+      3,
+      2815,
+      "e2e3",
+      -12
+     ]
+    ],
+    "budget3": [
+     3,
+     953,
+     "e2e3",
+     -12
+    ],
+    "window": [
+     [
+      2,
+      2,
+      140,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      953,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3627,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     231
+    ],
+    "unordered": [
+     "e7f7",
+     231
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3745,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6495
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ },
+ "blackMobilityAdded": {
+  "exit": 1,
+  "red": true,
+  "passed": 8,
+  "failed": [
+   "evaluate.king-mobility.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirrored pair exactly equal :: AssertionError: startpos: expected -32 to be 32 // Object.is equality"
+  ],
+  "beyondBaseline": [
+   "evaluate.king-mobility.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirrored pair exactly equal :: AssertionError: startpos: expected -32 to be 32 // Object.is equality"
+  ],
+  "ms": 714,
+  "rows": {
+   "r1": [
+    8994,
+    3296,
+    2488
+   ],
+   "r2": 261,
+   "r3": [
+    3,
+    369
+   ],
+   "r4": [
+    1270,
+    1470,
+    225,
+    225
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 6733,
+    "d3": -380
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     -40,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     -40,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     130,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      85
+     ],
+     [
+      2,
+      150,
+      "e2e3",
+      32
+     ],
+     [
+      3,
+      2249,
+      "e2e3",
+      50
+     ]
+    ],
+    "budget3": [
+     3,
+     988,
+     "e2e3",
+     50
+    ],
+    "window": [
+     [
+      2,
+      2,
+      149,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      988,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3974,
+      "g4g5"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "g4g5"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "f8f7",
+     105
+    ],
+    "unordered": [
+     "e7f7",
+     105
+    ],
+    "engine": [
+     1,
+     "f8f7"
+    ]
+   },
+   "r11": {
+    "nodes": 3666,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6574
+   },
+   "r12": [
+    4,
+    6,
+    9
+   ]
+  }
+ },
+ "noCap": {
+  "exit": 1,
+  "red": true,
+  "passed": 26,
+  "failed": [
+   "quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY returns on every one of 200+ positions, the capture-dense roots included, under the cap :: AssertionError: expected 15 to be less than or equal to 8",
+   "quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY the cap BINDS on a runaway rig — twenty queens on alternating squares — and is not exceeded :: AssertionError: expected 16 to be 8 // Object.is equality",
+   "quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 position-6 at depth 1 — the default lane's cheap reading, level 10x :: AssertionError: expected 10.23404255319149 to be less than or equal to 10"
+  ],
+  "beyondBaseline": [
+   "quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY returns on every one of 200+ positions, the capture-dense roots included, under the cap :: AssertionError: expected 15 to be less than or equal to 8",
+   "quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY the cap BINDS on a runaway rig — twenty queens on alternating squares — and is not exceeded :: AssertionError: expected 16 to be 8 // Object.is equality",
+   "quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 position-6 at depth 1 — the default lane's cheap reading, level 10x :: AssertionError: expected 10.23404255319149 to be less than or equal to 10"
+  ],
+  "ms": 70585,
+  "rows": {
+   "r1": [
+    12522,
+    4922,
+    4288
+   ],
+   "r2": 262,
+   "r3": [
+    3,
+    354
+   ],
+   "r4": [
+    1325,
+    1523,
+    113,
+    113
+   ],
+   "r5": {
+    "d4": [
+     0,
+     "f7f8"
+    ],
+    "pre121nodes": 7832,
+    "d3": -488
+   },
+   "r13": {
+    "sixTicks": [
+     4,
+     0,
+     "f7f8"
+    ],
+    "deep10": [
+     6,
+     0,
+     "a3f8"
+    ]
+   },
+   "r6": {
+    "d2": [
+     136,
+     "g5f6"
+    ]
+   },
+   "r8": {
+    "search": [
+     68,
+     "h5e5"
+    ],
+    "withoutReductions": [
+     68,
+     "h5e5"
+    ],
+    "searchFenSearch": [
+     40,
+     "b1c1"
+    ]
+   },
+   "r9": {
+    "perDepth": [
+     [
+      1,
+      46,
+      "e2e3",
+      -3
+     ],
+     [
+      2,
+      196,
+      "e2e3",
+      -73
+     ],
+     [
+      3,
+      2921,
+      "e2e3",
+      -42
+     ]
+    ],
+    "budget3": [
+     3,
+     941,
+     "e2e3",
+     -42
+    ],
+    "window": [
+     [
+      2,
+      2,
+      141,
+      "e2e3"
+     ],
+     [
+      3,
+      3,
+      941,
+      "e2e3"
+     ],
+     [
+      4,
+      3,
+      1069,
+      "e2e3"
+     ],
+     [
+      5,
+      3,
+      2093,
+      "e2e3"
+     ],
+     [
+      6,
+      3,
+      3117,
+      "e2e3"
+     ],
+     [
+      7,
+      4,
+      3598,
+      "e2e3"
+     ],
+     [
+      8,
+      4,
+      4141,
+      "e2e3"
+     ]
+    ]
+   },
+   "r10": {
+    "ordered": [
+     "e7f7",
+     261
+    ],
+    "unordered": [
+     "e7f7",
+     261
+    ],
+    "engine": [
+     1,
+     "e7f7"
+    ]
+   },
+   "r11": {
+    "nodes": 4219,
+    "depth": 2,
+    "bound": 10240,
+    "under": 6021
+   },
+   "r12": [
+    4,
+    7,
+    9
+   ]
+  }
+ }
+}

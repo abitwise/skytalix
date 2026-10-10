@@ -1,0 +1,12 @@
+{"label":"base","name":"kiwipete","depth":6,"budgetTicks":255,"nodes":256581,"reached":6,"oneTickLess":5,"move":[67,84],"score":30}
+{"label":"base","name":"kiwipete","depth":7,"budgetTicks":602,"nodes":610179,"reached":7,"oneTickLess":6,"move":[20,80],"score":-5}
+{"label":"base","name":"position-6","depth":6,"budgetTicks":171,"nodes":170202,"reached":6,"oneTickLess":5,"move":[34,67],"score":50}
+{"label":"base","name":"position-6","depth":7,"budgetTicks":458,"nodes":462871,"reached":7,"oneTickLess":6,"move":[34,67],"score":45}
+{"label":"ks-only","name":"kiwipete","depth":6,"budgetTicks":243,"nodes":244095,"reached":6,"oneTickLess":5,"move":[67,84],"score":15}
+{"label":"ks-only","name":"kiwipete","depth":7,"budgetTicks":599,"nodes":607401,"reached":7,"oneTickLess":6,"move":[20,80],"score":-35}
+{"label":"ks-only","name":"position-6","depth":6,"budgetTicks":176,"nodes":175231,"reached":6,"oneTickLess":5,"move":[34,67],"score":75}
+{"label":"ks-only","name":"position-6","depth":7,"budgetTicks":463,"nodes":467730,"reached":7,"oneTickLess":6,"move":[34,67],"score":70}
+{"label":"branch","name":"kiwipete","depth":6,"budgetTicks":231,"nodes":231536,"reached":6,"oneTickLess":5,"move":[20,80],"score":13}
+{"label":"branch","name":"kiwipete","depth":7,"budgetTicks":559,"nodes":566233,"reached":7,"oneTickLess":6,"move":[20,80],"score":-22}
+{"label":"branch","name":"position-6","depth":6,"budgetTicks":171,"nodes":169685,"reached":6,"oneTickLess":5,"move":[34,67],"score":86}
+{"label":"branch","name":"position-6","depth":7,"budgetTicks":635,"nodes":644469,"reached":7,"oneTickLess":6,"move":[34,67],"score":75}

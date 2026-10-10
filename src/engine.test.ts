@@ -312,8 +312,15 @@ describe("A2 — a budget far below one iteration's cost still returns a move, a
  * the table across iterations, so each iteration opens on the previous one's hash moves, and
  * budget 4 now completes depth 3 (1 408 nodes). Only budget 3 completes depth 2 (131 nodes) and
  * aborts inside depth 3 (at 1 061), so the fixture's budget moved from 4 to 3.
+ *
+ * RE-FIXTURED at `ABC-083` (king safety and mobility): after 1. g4 d5 the best move is e2e3 at
+ * depth 3 too (−42), and budget 3 completes depth 3, so the premise was gone. Same opening,
+ * same budget, same moves, found by `.grugops/context/ticket-to-pr-ABC-083/probe/a3scan.ts`:
+ * after 1. g4 Nf6, `searchWithoutReductions` reads e2e3 at depths 1 and 2 (46 / 138 nodes) and
+ * g4g5 at depth 3 (2 048), and only budget 3 on a 1 ms tick completes depth 2 and aborts inside
+ * depth 3.
  */
-const A3_FEN = "rnbqkbnr/ppp1pppp/8/3p4/6P1/8/PPPPPP1P/RNBQKBNR w KQkq d6 0 2";
+const A3_FEN = "rnbqkb1r/pppppppp/5n2/8/6P1/8/PPPPPP1P/RNBQKBNR w KQkq - 1 2";
 
 describe("A3 — an aborted iteration's move is discarded, not returned", () => {
   const position = () => parseFen(A3_FEN);
