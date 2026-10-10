@@ -1,0 +1,12 @@
+# A5 / N8_SPAWN / V1.2.5 re-read 2026-10-10T14:36:45Z
+name-only 8be650e6..cd594b5f:
+src/cli.test.ts
+src name-only 8be650e6..e542c574:
+src/cli.test.ts
+manifest numstat: []
+added files under src: []
+N8_SPAWN: 1837:    const N8_SPAWN = 17 + 7 + 1 + 2;
+it( count base/head: 67 / 67
+exec/execSync/shell: in head src/cli.test.ts (non-comment lines):
+507:  const marked = /^NODE_EXIT=(\d+)$/m.exec(child.stdout);
+typescript installed: 5.9.3

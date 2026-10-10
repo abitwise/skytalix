@@ -1,0 +1,12 @@
+# loader-scan 2026-10-10T14:34:53Z node v26.11.0
+# head:
+{"file":"tree-head/src/cli.test.ts","childProcessArgCalls":[],"createRequireSites":["createRequire(import.meta.url)(\"typescript\")@1858","createRequire(import.meta.url)@1858"],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@343"]}
+# base:
+{"file":"tree-base/src/cli.test.ts","childProcessArgCalls":[],"createRequireSites":[],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@341"]}
+# head + X5/X6/S2/X7 planted together (a):
+{"file":"x5.ts","childProcessArgCalls":["createRequire(import.meta.url)@60","process.getBuiltinModule@61","vi.mock@62","vi.importActual@63"],"createRequireSites":["createRequire(import.meta.url)(\"node:child_process\").execSyn@60","createRequire(import.meta.url)(\"node:child_process\")@60","createRequire(import.meta.url)@60","createRequire(import.meta.url)(\"typescript\")@1862","createRequire(import.meta.url)@1862"],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@347"]}
+# head + C5/C7/C8/Q14/C10 planted together (c):
+{"file":"c.ts","childProcessArgCalls":[],"createRequireSites":["createRequire(import.meta.url)(\"typescript\")@1863","createRequire(import.meta.url)@1863"],"spawnSyncValueRefs":["ImportSpecifier@32","ParenthesizedExpression@60","NonNullExpression@61","AsExpression@62","VariableDeclaration@63","CallExpression@64","CallExpression@348"]}
+# every src/*.test.ts with a non-empty (a) or (b):
+{"file":"src/cli.test.ts","childProcessArgCalls":[],"createRequireSites":["createRequire(import.meta.url)(\"typescript\")@1858","createRequire(import.meta.url)@1858"],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@343"]}
+{"file":"src/glyph-mode.nfr.test.ts","childProcessArgCalls":["vi.mock@37","import@65"],"createRequireSites":[],"spawnSyncValueRefs":["PropertyAssignment@43","PropertyAccessExpression@43","BindingElement@65","ArrayLiteralExpression@82"]}

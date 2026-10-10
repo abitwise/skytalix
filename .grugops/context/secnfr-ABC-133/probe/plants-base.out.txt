@@ -1,0 +1,20 @@
+commit 8be650e6  node v26.11.0  2026-10-10T14:32:34Z
+== control (unmutated)   load1 8.51  14:32:34Z
+      Tests  67 passed (67)
+== Q11 real spawnSync after a "a//b" string   load1 8.23  14:32:40Z
+      Tests  67 passed (67)
+== P1 namespace import + cp.execSync("true")   load1 9.17  14:32:47Z
+      Tests  67 passed (67)
+== P-DYN void import("node:child_process")   load1 9.16  14:32:53Z
+      Tests  67 passed (67)
+== X5 createRequire(import.meta.url)("node:child_process").execSync (QE-133-a)   load1 8.60  14:32:59Z
+      Tests  67 passed (67)
+== C7 spawnSync!(…) (QE-133-b)   load1 8.31  14:33:04Z
+      Tests  67 passed (67)
+== S1 TS import-equals: import cp = require("node:child_process") + cp.execSync   load1 8.05  14:33:10Z
+      Tests  67 passed (67)
+   tsc: 1 error(s); first: src/cli.test.ts(33,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a}
+== S2 vi.mock partial mock via importOriginal (no new child)   load1 12.16  14:33:20Z
+      Tests  67 passed (67)
+== S3 node:module namespace createRequire("child_process").execSync   load1 13.78  14:33:29Z
+      Tests  67 passed (67)

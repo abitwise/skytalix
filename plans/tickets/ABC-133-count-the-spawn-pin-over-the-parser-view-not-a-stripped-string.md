@@ -270,3 +270,49 @@ Reviewed `8be650e6..82104f70`, code `cd594b5f`. Every reading is QE's own, taken
 The board move is the Orchestrator's. The Security/NFR hop is recommended by the page. Readings are
 in `.grugops/context/qe-ABC-133/notes/` (`…27801a15` decision, `…71511fc2` readings, `…f589327d`
 gaps) and `probe/`.
+
+## Security/NFR 2026-10-10 (`secnfr-ABC-133`, Workflow 05 Security/NFR gate): PASS_WITH_RISKS
+
+Reviewed `8be650e6..e542c574`, code `cd594b5f`. ASVS L1, `block_on` high. Every reading is this hop's
+own, taken in fresh `git archive` trees. **Nothing blocks. No fix is required, and no test was added.**
+
+- **The pin still discharges what rests on it.**
+  - **`N8-SPAWN` 27:** the count clause stays mechanically pinned. Across 58 plants from two hops, no
+    real-call or real-load shape is red at base and green at head.
+  - **`AR-058-STRIP` is DISCHARGED** when this merges. `Q11`, `P1` and `P-DYN` reproduce RED on the
+    pin row alone.
+  - **`V1.2.5 [L1]` stays MET.** There is one call site, no `exec*` and no `shell:`. The bar 1b
+    sentence is now pinned.
+- **`ABC-041` (a)–(d) are quiet.** There is no manifest change, no production file, no network,
+  write or spawn, and only one path.
+- **`QE-133-a`: LOW, accepted as `AR-133-LOADER`, owner BA/PM.**
+  - **Why it is routed rather than only accepted.** This ticket put the `createRequire` template into
+    the file. `src/glyph-mode.nfr.test.ts:37` already uses `vi.mock("node:child_process")`.
+  - This hop found one more loader, `S1`: `import cp = require(…)`. It is green under vitest, but the
+    `typecheck` gate refuses it (TS1202).
+- **`QE-133-b`: LOW, accepted as `AR-133-WRAP`, owner BA/PM.** The wrappers are non-idiomatic, and
+  the comment's stated class contains them.
+- **Promotion triggers for both risks.** The check is
+  `node .grugops/context/secnfr-ABC-133/probe/loader-scan.mjs src/cli.test.ts`. A risk is promoted,
+  and its part of `F-133-1` becomes P1, when the check reads:
+  - for `AR-133-LOADER`: any `child_process`-argument call, or a `createRequire` site beyond the pin's;
+  - for `AR-133-WRAP`: more than two value-position `spawnSync` references.
+- **Recommended follow-up `F-133-1` (LOW, P3; BA/PM cuts or declines):**
+  - **(a)** count (i) counts any call with a `child_process` first argument;
+  - **(b)**, BA/PM's call: bound names occur in value position only as the binding and the `childOf`
+    callee. That kills `QE-133-b`, `Q14` and `Reflect.apply`, and it reverses this page's `Q14` line.
+- **`QE-133-f`: INFO.**
+  - **`A4` is MET** at **192.3 ms** in situ, at load1 11.3, with 23 % headroom. The margin is
+    load-sensitive.
+  - **`NFR-008`'s state does not move.** It has been BREACHED since 2026-09-25, and the decision is
+    with the owner under `ADR-0035` decision 6. The added ~0.17–0.19 s is reported, not ruled.
+  - **`N8-LANE` is not at risk.** Every reading is far under 650 ms.
+  - **No in-file guard is owed.** A re-time trigger is written instead: re-time when the load line,
+    the parse count or the `typescript` version changes.
+- **Gate:** lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. Skip is 0, and
+  integrity reads `No findings.`
+- **Next:** the Orchestrator moves this ticket to `Ready for UAT`; UAT is waived under the
+  zero-production-lines rule. BA/PM cuts or declines `F-133-1`. Not merged, not pushed.
+
+Notes are in `.grugops/context/secnfr-ABC-133/notes/`: `…0f608f0c` (decision) and `…1457cc94`
+(readings). Probes are in `probe/`.
