@@ -1,0 +1,23 @@
+BA/PM probe for the ABC-010 re-score and QE-129-a, task wave-2026-09-25, subtask bapm-abc010-qe129a-2026-10-10,
+2026-10-10 ~15:42-15:46Z. Base: grugops/wave-2026-09-25 @ b98fb419. Apple M3, Node v26.11.0, load1 ~4-6.
+Every script reads src/ only and writes nothing in any worktree. <wt> = this subtask's worktree at b98fb419.
+
+  node ../../design-abc010/probe/fen-corpus.mjs <wt>   -> fen-corpus.b98fb419.out.txt
+        the Architect's literal scan + ADR-0033 prototype rules at the tip: 1,099 literals, 143 distinct /
+        185 occurrences rejected (980890f: 1,049 / 144 / 186). Against recut-abc010's 980890f list
+        (line numbers stripped): -2 src/puzzle-corpus.ts rows (ABC-126 re-found them), +1 NEW
+        src/levels.test.ts:351 "side not to move (black) is in check" 7k/8/5QK1/8/8/8/8/8 w (ABC-087, 659215a3).
+        Line moves inside the fence: src/quiescence.test.ts :327 -> :329 (ABC-126). All other cited lines hold.
+  node ../../recut-abc010/probe/fen-scan.mjs <wt>      -> fen-scan.b98fb419.out.txt
+        criterion 9(d)'s instrument at the tip (no ABC-010 code): 15 rejected, the same 15 grammar faults
+        as at 980890f (fen.test.ts 8, moves.castling.hardening 5, history-pane 1, render 1).
+  git archive 677b8b09 src spike | tar -x -C <scratch>; node ../../design-abc010/probe/fen-corpus.mjs <scratch>
+                                                       -> fen-corpus.abc131-677b8b09.out.txt
+        ABC-131's tip (unmerged): 1,095 literals, reject list IDENTICAL to b98fb419's. Its four dropped
+        mate-in-3 rows all pass ADR-0033. It touches none of ABC-010's 16 files.
+  node levels-stalemate.mts <wt> "<fen>" <move>        -> levels-stalemate.out.txt
+        src/levels.test.ts:351's fixture vs the candidate 7k/8/6K1/5Q2/8/8/8/8 w - - 0 1: rules verdict,
+        legal moves, replies after the stalemating move, and the row's own createLevel(always, seed 1,
+        virtualClock(100)) score for it. Shipped: rejected, offers f6h8 (king capture), f6f7 scores 0.
+        Candidate: accepted, f5f7 -> 0 replies not in check, scores 0.
+  npx vitest list src/levels.test.ts                   -> 22 default (stalemate row among them); ENGINE_DEEP=1 -> 28.

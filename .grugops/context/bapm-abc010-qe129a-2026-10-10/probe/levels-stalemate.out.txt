@@ -1,0 +1,10 @@
+fen 7k/8/5QK1/8/8/8/8/8 w - - 0 1
+  adr0033 = side not to move (black) is in check
+  legal 28: f6f7 f6f8 f6e6 f6d6 f6c6 f6b6 f6a6 f6f5 f6f4 f6f3 f6f2 f6f1 f6g7 f6h8 f6e7 f6d8 f6g5 f6h4 f6e5 f6d4 f6c3 f6b2 f6a1 g6h6 g6g5 g6f7 g6h5 g6f5
+  after f6f7: replies 0, in check false
+  createLevel(always, seed 1, virtualClock(100)): kind blunder, f6f7 score 0
+fen 7k/8/6K1/5Q2/8/8/8/8 w - - 0 1
+  adr0033 = accepted
+  legal 28: f5f6 f5f7 f5f8 f5g5 f5h5 f5e5 f5d5 f5c5 f5b5 f5a5 f5f4 f5f3 f5f2 f5f1 f5e6 f5d7 f5c8 f5g4 f5h3 f5e4 f5d3 f5c2 f5b1 g6h6 g6f6 g6g5 g6f7 g6h5
+  after f5f7: replies 0, in check false
+  createLevel(always, seed 1, virtualClock(100)): kind blunder, f5f7 score 0

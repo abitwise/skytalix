@@ -1,0 +1,188 @@
+files scanned 90; FEN-shaped literals 1099; parse today 1084; grammar-rejected today 15
+unique accepted FENs 773; semantically rejected by prototype 143
+occurrences rejected: 185
+  src/coordinate-move.test.ts:17  side not to move (black) is in check  ::  8/4P3/8/8/8/8/4k3/4K3 w - - 0 1
+  src/evaluate.pawns.test.ts:121  side not to move (black) is in check  ::  2k5/3P4/4p3/8/8/8/8/4K3 w - - 0 1
+  src/fen.test.ts:29  ep e3: wrong rank for side to move  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 0 1
+  src/legal.test.ts:205  castling K: no king on e1  ::  4k3/8/8/3pP3/8/8/8/K7 w KQ d6 0 1
+  src/legal.test.ts:284  ep d6: no pushed pawn on d5  ::  4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1
+  src/legal.test.ts:285  ep d6: no pushed pawn on d5  ::  4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1
+  src/legal.test.ts:286  ep a3: wrong rank for side to move  ::  4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1
+  src/legal.test.ts:288  ep e3: target occupied  ::  4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1
+  src/legal.test.ts:293  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1
+  src/legal.test.ts:294  ep d6: target occupied  ::  4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/legal.test.ts:385  ep d6: no pushed pawn on d5  ::  4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1
+  src/legal.test.ts:386  ep e3: no pushed pawn on e4  ::  k7/8/8/8/3pR3/8/8/4K3 b - e3 0 1
+  src/legal.test.ts:388  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1
+  src/legal.test.ts:389  ep d6: target occupied  ::  7k/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/levels.test.ts:351  side not to move (black) is in check  ::  7k/8/5QK1/8/8/8/8/8 w - - 0 1
+  src/move-input.test.ts:30  side not to move (black) is in check  ::  3q1k2/4P3/8/8/8/8/8/4K3 w - - 0 1
+  src/move-input.test.ts:51  side not to move (black) is in check  ::  3Q1k2/8/1Q4Q1/8/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1
+  src/moves.castling.hardening.test.ts:81  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3q2R w K - 0 1
+  src/moves.castling.hardening.test.ts:81  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2q w K - 0 1
+  src/moves.castling.hardening.test.ts:331  castling Q: no king on e1  ::  4k3/8/8/8/8/8/8/R3R2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:332  castling Q: no king on e1  ::  4k3/8/8/8/8/8/8/R3B2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:333  castling k: no king on e8  ::  k3n2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:348  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3Q2R w K - 0 1
+  src/moves.castling.hardening.test.ts:349  castling Q: no king on e1  ::  4k3/8/8/8/8/8/8/R3Q2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:350  castling k: no king on e8  ::  k3q2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:351  castling q: no king on e8  ::  r3q2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:352  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3R2R w K - 0 1
+  src/moves.castling.hardening.test.ts:353  castling k: no king on e8  ::  k3r2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:354  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3B2R w K - 0 1
+  src/moves.castling.hardening.test.ts:355  castling k: no king on e8  ::  k3b2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:356  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3N2R w K - 0 1
+  src/moves.castling.hardening.test.ts:357  castling Q: no king on e1  ::  4k3/8/8/8/8/8/8/R3N2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:358  pawn on rank 1 (e1)  ::  4k3/8/8/8/8/8/8/K3P2R w K - 0 1
+  src/moves.castling.hardening.test.ts:359  pawn on rank 8 (e8)  ::  r3p2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:372  castling Q: no rook on a1  ::  4k3/8/8/8/8/8/8/B3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:373  castling k: no rook on h8  ::  4k2n/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:386  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2Q w K - 0 1
+  src/moves.castling.hardening.test.ts:387  castling Q: no rook on a1  ::  4k3/8/8/8/8/8/8/Q3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:388  castling k: no rook on h8  ::  4k2q/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:389  castling q: no rook on a8  ::  q3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:390  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2B w K - 0 1
+  src/moves.castling.hardening.test.ts:391  castling k: no rook on h8  ::  4k2b/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:392  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2N w K - 0 1
+  src/moves.castling.hardening.test.ts:393  castling Q: no rook on a1  ::  4k3/8/8/8/8/8/8/N3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:394  pawn on rank 1 (h1)  ::  4k3/8/8/8/8/8/8/4K2P w K - 0 1
+  src/moves.castling.hardening.test.ts:395  pawn on rank 8 (a8)  ::  p3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:408  castling Q: no king on e1  ::  4k3/8/8/8/8/8/8/R3n2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:409  pawn on rank 1 (e1)  ::  4k3/8/8/8/8/8/8/K3p2R w K - 0 1
+  src/moves.castling.hardening.test.ts:426  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3n2R w K - 0 1
+  src/moves.castling.hardening.test.ts:427  castling k: no king on e8  ::  4N2r/8/8/5k2/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:428  pawn on rank 1 (e1)  ::  4k3/8/8/8/8/8/8/R3p2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:429  pawn on rank 8 (e8)  ::  r3P3/8/8/5k2/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:442  castling Q: no rook on a1  ::  4k3/8/8/8/8/8/8/n3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:443  pawn on rank 1 (h1)  ::  4k3/8/8/8/8/8/8/4K2p w K - 0 1
+  src/moves.castling.hardening.test.ts:453  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2n w K - 0 1
+  src/moves.castling.hardening.test.ts:454  castling k: no rook on h8  ::  4k2N/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:455  pawn on rank 1 (a1)  ::  4k3/8/8/8/8/8/8/p3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:456  pawn on rank 8 (a8)  ::  P3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:586  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/R3K3 w KQ - 0 1
+  src/moves.castling.hardening.test.ts:587  castling Q: no rook on a1  ::  4k3/8/8/8/8/8/8/4K2R w KQ - 0 1
+  src/moves.castling.hardening.test.ts:588  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/R3K2B w KQ - 0 1
+  src/moves.castling.hardening.test.ts:589  castling Q: no rook on a1  ::  4k3/8/8/8/8/8/8/B3K2R w KQ - 0 1
+  src/moves.castling.hardening.test.ts:590  castling k: no rook on h8  ::  r3k3/8/8/8/8/8/8/4K3 b kq - 0 1
+  src/moves.castling.hardening.test.ts:591  castling q: no rook on a8  ::  4k2r/8/8/8/8/8/8/4K3 b kq - 0 1
+  src/moves.castling.hardening.test.ts:686  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3q2R w K - 0 1
+  src/moves.castling.hardening.test.ts:686  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2q w K - 0 1
+  src/moves.castling.hardening.test.ts:794  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2r w K - 0 1
+  src/moves.castling.hardening.test.ts:795  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K3 w K - 0 1
+  src/moves.castling.hardening.test.ts:801  castling K: no king on e1  ::  8/8/8/8/8/8/8/K3k2R w K - 0 1
+  src/moves.castling.hardening.test.ts:802  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3q2R w K - 0 1
+  src/moves.castling.hardening.test.ts:803  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3r2R w K - 0 1
+  src/moves.castling.hardening.test.ts:804  castling K: no rook on h1  ::  8/8/8/8/8/8/8/4K2k w K - 0 1
+  src/moves.castling.hardening.test.ts:805  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2q w K - 0 1
+  src/moves.castling.hardening.test.ts:806  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2r w K - 0 1
+  src/moves.castling.hardening.test.ts:931  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2r w K - 0 1
+  src/moves.castling.hardening.test.ts:935  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K3 w K - 0 1
+  src/moves.castling.hardening.test.ts:1012  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3n2n w K - 0 1
+  src/moves.castling.hardening.test.ts:1013  castling q: no king on e8  ::  N3N2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1014  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3Q2Q w K - 0 1
+  src/moves.castling.hardening.test.ts:1015  castling q: no king on e8  ::  q3q2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1254  side not to move (black) is in check  ::  8/8/8/8/8/8/7k/4K2R w K - 0 1
+  src/moves.castling.hardening.test.ts:1264  side not to move (white) is in check  ::  4k2r/7K/8/8/8/8/8/8 b k - 0 1
+  src/moves.castling.hardening.test.ts:1288  castling q: no king on e8  ::  r3r2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1289  castling q: no king on e8  ::  r3b2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1290  castling q: no king on e8  ::  r3n2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1291  pawn on rank 1 (e1)  ::  4k3/8/8/8/8/8/8/R3P2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:1292  pawn on rank 8 (e8)  ::  k3p2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1293  castling q: no rook on a8  ::  b3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1294  castling q: no rook on a8  ::  n3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1295  pawn on rank 1 (a1)  ::  4k3/8/8/8/8/8/8/P3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:1296  pawn on rank 8 (h8)  ::  4k2p/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1297  castling q: no king on e8  ::  r3N2k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1298  pawn on rank 8 (e8)  ::  k3P2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1299  castling q: no rook on a8  ::  N3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:1300  pawn on rank 8 (h8)  ::  4k2P/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1330  castling Q: no king on e1  ::  4k3/8/8/8/8/8/8/n3n2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:1331  castling k: no king on e8  ::  k3N2N/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1332  castling Q: no king on e1  ::  4k3/8/8/8/8/8/8/Q3Q2K w Q - 0 1
+  src/moves.castling.hardening.test.ts:1333  castling k: no king on e8  ::  k3q2q/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:1343  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3Q2R w K - 7 1
+  src/moves.castling.hardening.test.ts:1344  castling k: no king on e8  ::  k3q2r/8/8/8/8/8/8/4K3 b k - 0 27
+  src/moves.castling.hardening.test.ts:1345  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3n2R w K c6 0 1
+  src/moves.castling.hardening.test.ts:1348  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2B w K - 3 9
+  src/moves.castling.hardening.test.ts:1351  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3n2n w K - 9 5
+  src/moves.castling.hardening.test.ts:1359  ep c6: no pushed pawn on c5  ::  4k1r1/8/8/8/8/8/8/4K2R w K c6 0 1
+  src/moves.castling.hardening.test.ts:1510  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K3 w K - 0 1
+  src/moves.castling.test.ts:82  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K7 w KQ - 0 1
+  src/moves.castling.test.ts:89  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K6R w K - 0 1
+  src/moves.castling.test.ts:90  castling Q: no king on e1  ::  4k3/8/8/8/8/8/8/R6K w Q - 0 1
+  src/moves.castling.test.ts:91  castling k: no king on e8  ::  k6r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.test.ts:92  castling q: no king on e8  ::  r6k/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.test.ts:103  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3B2R w K - 0 1
+  src/moves.castling.test.ts:104  castling Q: no king on e1  ::  4k3/8/8/8/8/8/8/R3N2K w Q - 0 1
+  src/moves.castling.test.ts:105  castling K: no king on e1  ::  4k3/8/8/8/8/8/8/K3b2R w K - 0 1
+  src/moves.castling.test.ts:106  castling k: no king on e8  ::  k3b2r/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.test.ts:120  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2B w K - 0 1
+  src/moves.castling.test.ts:121  castling Q: no rook on a1  ::  4k3/8/8/8/8/8/8/N3K3 w Q - 0 1
+  src/moves.castling.test.ts:122  castling k: no rook on h8  ::  4k2b/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.test.ts:123  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K2b w K - 0 1
+  src/moves.castling.test.ts:176  castling K: no rook on h1  ::  4k3/8/8/8/8/8/8/4K3 w K - 0 1
+  src/moves.enpassant.hardening.test.ts:111  ep d6: target occupied  ::  4k3/8/3P4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:112  ep d6: target occupied  ::  4k3/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:113  ep d6: target occupied  ::  4k3/8/3B4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:114  ep d6: target occupied  ::  4k3/8/3R4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:115  ep d6: target occupied  ::  4k3/8/3Q4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:116  ep d6: target occupied  ::  4k3/8/3K4/3pP3/8/8/8/8 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:118  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4p3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:119  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:120  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4b3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:121  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4r3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:122  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4q3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:123  ep e3: target occupied  ::  8/8/8/8/3pP3/4k3/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:134  ep d6: no pushed pawn on d5  ::  4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:135  ep d6: no pushed pawn on d5  ::  4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:136  ep d6: no pushed pawn on d5  ::  4k3/8/8/3NP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:137  ep d6: no pushed pawn on d5  ::  4k3/8/8/3BP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:138  ep d6: no pushed pawn on d5  ::  4k3/8/8/3RP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:139  ep d6: no pushed pawn on d5  ::  4k3/8/8/3QP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:140  ep d6: no pushed pawn on d5  ::  4k3/8/8/3KP3/8/8/8/8 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:141  ep d6: no pushed pawn on d5  ::  4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:142  ep d6: no pushed pawn on d5  ::  4k3/8/8/3bP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:143  ep d6: no pushed pawn on d5  ::  4k3/8/8/3rP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:144  ep d6: no pushed pawn on d5  ::  4k3/8/8/3qP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:145  ep d6: no pushed pawn on d5  ::  8/8/8/3kP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.hardening.test.ts:147  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3p4/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:148  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:149  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pn3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:150  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pb3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:151  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pr3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:152  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pq3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:153  ep e3: no pushed pawn on e4  ::  8/8/8/8/3pk3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:154  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pN3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:155  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pB3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:156  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pR3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:157  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pQ3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.hardening.test.ts:158  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pK3/8/8/8 b - e3 0 1
+  src/moves.enpassant.test.ts:33  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:95  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:96  ep d6: target occupied  ::  4k3/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:97  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4r3/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:98  ep d6: target occupied  ::  4k3/8/3R4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:109  ep a3: wrong rank for side to move  ::  4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1
+  src/moves.enpassant.test.ts:110  ep d6: no pushed pawn on d5  ::  4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:111  ep d6: no pushed pawn on d5  ::  4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:112  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3p4/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:113  ep h3: no pushed pawn on h4  ::  4k3/8/8/8/6p1/8/8/4K3 b - h3 0 1
+  src/moves.enpassant.test.ts:114  ep e3: no pushed pawn on e4  ::  4k3/8/8/8/3pp3/8/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:130  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:131  ep d6: target occupied  ::  4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.enpassant.test.ts:132  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4R3/8/4K3 b - e3 0 1
+  src/moves.enpassant.test.ts:133  ep d6: target occupied  ::  4k3/8/3r4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/moves.test.ts:257  side not to move (black) is in check  ::  4r2k/8/8/8/8/8/8/R3K2R w KQ - 0 1
+  src/quiescence.test.ts:329  side not to move (black) is in check  ::  q1q1q1qk/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/8/8/K7 w - - 0 1
+  src/san.parse.test.ts:44  side not to move (black) is in check  ::  8/4P3/8/8/8/8/4k3/4K3 w - - 0 1
+  src/status-panel.nfr.test.ts:64  side not to move (black) is in check  ::  4k3/8/8/8/8/8/8/4R1K1 w - - 0 1
+  src/zobrist.test.ts:274  ep d6: no pushed pawn on d5  ::  4k3/8/8/4P3/8/8/8/4K3 w - d6 0 1
+  src/zobrist.test.ts:275  ep d6: no pushed pawn on d5  ::  4k3/8/8/3PP3/8/8/8/4K3 w - d6 0 1
+  src/zobrist.test.ts:276  ep a3: wrong rank for side to move  ::  4k3/8/8/8/8/8/1P6/4K3 w - a3 0 1
+  src/zobrist.test.ts:277  ep e3: target occupied  ::  4k3/8/8/8/3p4/4P3/8/4K3 b - e3 0 1
+  src/zobrist.test.ts:278  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4N3/8/4K3 b - e3 0 1
+  src/zobrist.test.ts:279  ep d6: target occupied  ::  4k3/8/3n4/3pP3/8/8/8/4K3 w - d6 0 1
+  src/zobrist.test.ts:307  ep d6: no pushed pawn on d5  ::  4k3/8/8/3nP3/8/8/8/4K3 w - d6 0 1
+  src/zobrist.test.ts:308  ep e3: no pushed pawn on e4  ::  k7/8/8/8/3pR3/8/8/4K3 b - e3 0 1
+  src/zobrist.test.ts:309  ep e3: target occupied  ::  4k3/8/8/8/3pP3/4n3/8/4K3 b - e3 0 1
+  src/zobrist.test.ts:310  ep d6: target occupied  ::  7k/8/3N4/3pP3/8/8/8/4K3 w - d6 0 1
