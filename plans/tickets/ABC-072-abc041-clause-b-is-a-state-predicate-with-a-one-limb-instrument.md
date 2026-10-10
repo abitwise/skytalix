@@ -312,3 +312,32 @@ which owes `A2`–`A5` (`ADR-0036` § Consequences).
 - **Item 4 stays ✅, extended.** `A3` gains three fixtures with known answers. `A1` is met by the ADR.
 - **Item 5 stays ✅.** `ABC-073` is recommended to fold into this hop, and `A6` allows its paths.
 - **Items 1–3 and 6–9 stay ✅.** The baseline was re-measured, unchanged, at 0 / 3 / 0. `S`, `P2`.
+
+## Delivery
+
+**2026-10-10, Architect/Design** (task `wave-2026-09-25`, subtask `design-ABC-072`). `ABC-073` is
+folded in.
+- **Branch:** `grugops/ABC-072-clause-b-delta`, from `6bfc7b29`. **The delivered commit is
+  `088e48db`.** The record commit follows it.
+- Not merged, not pushed. The column move is the Orchestrator's.
+- **Where the detail is:** decision `…66a8bfa8`, readings `…23cfa14f`, and the commands with full
+  output in `probe/RUN.txt`, all under `.grugops/context/design-ABC-072/`. They are not restated
+  here.
+
+**`A1`–`A6` are met** (`A1` by `ADR-0036`). The premises were re-verified at the tip before any
+edit.
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | `ADR-0036`, DELTA, accepted earlier |
+| `A2` | MET | `ADR-0036` § Canonical clause (b): the text once, and the place to cite |
+| `A3` | MET | Three commands (`probe/clause-b.mjs … 1\|2\|3`) on the AST, each naming its unit. Baseline **0 / 3 / 0** (36 files; 35 at `f76e041`). `dbaf972f` **FIRES**: (b1) 4 lines, (b2) `cli.ts -> glyph-mode.ts`. `34c9c026` does not (4 edges, none to a holder). `4c33b72b` does not (0 files). Mutants 9 of 9 |
+| `A4` | MET | No prediction in the block (phrase count 0). Limb 1 is still 0 across all 36 production files after `dbaf972` |
+| `A5` | MET | (b) did NOT fire on `ABC-065` (`460b9f58`: 0 files, 0 / 0 / 0). Not re-opened. The skip note is cited by path |
+| `A6` | MET | `088e48db`: the ADR, `ABC-055`, this page. 0 under `src/`. `ABC-041`/`042`/`065`/`066` blobs identical. Lint 0, `npm test` 52 files / 1608, skip 0, integrity `No findings.` |
+
+- **Two readings were settled in the block,** and the ruling did not move:
+  - (b2) reads as the runtime closure, which only widens and moves no answer today;
+  - § Alternatives 3's `cli-options.ts` example is corrected.
+- **Next:** Security/NFR confirms the limb list at the gate. The owner's veto on `ADR-0036` stays
+  open (`…95c73721`).
