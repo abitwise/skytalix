@@ -27,9 +27,14 @@
  * another position's list and the answer is silently wrong. That is the price of the parameter and
  * it is paid by the caller.
  *
- * It is a TOTAL function and does not throw, deliberately unlike `parseFen` (`ADR-0004` (2a)): a
- * coordinate arrives on every line a human types, on the loop's most-travelled edge, and exceptions
- * as control flow there is the wrong shape.
+ * It is TOTAL OVER `text` — no value of `text` makes it throw — deliberately unlike `parseFen`
+ * (`ADR-0004` (2a)): a coordinate arrives on every line a human types, on the loop's most-travelled
+ * edge, and exceptions as control flow there is the wrong shape. Totality is over `text` ONLY.
+ * `position` and `legal` are a caller obligation, in the same terms `ADR-0004` clause 2 states for
+ * `toSan` and `parseSan`: a real `Position`, and, when supplied, the legal move array of that
+ * position. Neither is validated here, and a wrong type throws: `parseCoordinateMove(null, "e2e4")`
+ * and `parseCoordinateMove(position, "e2e4", 42)` each throw `TypeError` (`ABC-104`). That is the
+ * contract, not a defect.
  */
 
 import { legalMoves } from "./legal.ts";
