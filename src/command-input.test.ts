@@ -443,20 +443,13 @@ describe("ABC-035 A4 — `help` names every token in the table and no other", ()
   });
 
   /**
-   * The negative half. `moves` is a real token of the SAME prompt owned by ANOTHER ticket —
-   * `ABC-036` — so a help text that lists the epic's whole vocabulary instead of this table's is
-   * caught here rather than by a reader noticing. `resign` LEFT this list at `ABC-045`, `new` LEFT
-   * it at `ABC-046` and `undo` LEFT it at `ABC-102`, each when its ticket put it in the table; all
-   * three are asserted present in the positive half above. `ABC-112` — the filter that would have
-   * hidden `quit` from `help` until it was honoured — is moot from `ABC-046` on: the table's
-   * promise is TRUE for every row in it.
+   * The negative half is RETIRED at `ABC-036`: its last foreign token, `moves`, joined the table.
+   * `resign` LEFT this list at `ABC-045`, `new` at `ABC-046`, `undo` at `ABC-102` and `moves` at
+   * `ABC-036`, each when its ticket put it in the table; all four are asserted present in the
+   * positive half above. `EPIC-003` names no other token, so no foreign row remains to assert.
+   * `ABC-112` — the filter that would have hidden `quit` from `help` until it was honoured — is
+   * moot from `ABC-046` on: the table's promise is TRUE for every row in it.
    */
-  for (const foreign of ["moves"]) {
-    it(`does not name ${foreign}, which is not in this ticket's table`, () => {
-      expect(COMMAND_TABLE.map((spec) => spec.token as string)).not.toContain(foreign);
-      expect(helpMessages().join(" ")).not.toContain(foreign);
-    });
-  }
 
   /**
    * SUPERSEDED AT `ABC-102`, by name (ruling 6 on that ticket's page): the row that stood here
@@ -1352,5 +1345,236 @@ describe("ABC-102 — `undo` takes back the human's move AND the engine's reply,
     expect(messages).toContain("undo");
     expect(messages).toEqual(COMMAND_TABLE.map((spec) => spec.token));
     expect(messages).not.toContain("commands:");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// `ABC-036` — `moves`: the exact count FIRST, then every legal move in SAN, sorted. A1-A5 here;
+// A6 is the gate's `git diff --numstat`; A7 is `ABC-035 A7`'s rows above, green and unedited.
+// ---------------------------------------------------------------------------
+
+/**
+ * The start position and the five mid-game positions of `src/perft.test.ts` (`PERFT_SUITE`), each
+ * with its PUBLISHED depth-1 count — a second anchor beside `legalMoves(position).length`, so a
+ * count that agreed with a broken generator would still red here.
+ */
+const PERFT_DEPTH_ONE: ReadonlyArray<readonly [name: string, fen: string, count: number]> = [
+  ["startpos", START_FEN, 20],
+  ["kiwipete", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1", 48],
+  ["position-3", "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1", 14],
+  ["position-4", "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1", 6],
+  ["position-5", "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8", 44],
+  ["position-6", "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10", 46],
+];
+
+/** The stated total, read off the FIRST message item — never off the listing's length. */
+function statedCount(messages: readonly string[]): number {
+  const match = /^legal moves: (\d+)$/.exec(messages[0] ?? "");
+  expect(match).not.toBeNull();
+  return Number((match as RegExpExecArray)[1]);
+}
+
+/** Resolve `moves` and hand back the message set, failing loudly on any other arm. */
+function movesOf(history: GameHistory, deps?: MoveInputDeps, line = "moves"): readonly string[] {
+  const outcome = resolvePromptLine(history, line, deps);
+  expect(outcome.kind).toBe("command");
+  return (outcome as { messages: readonly string[] }).messages;
+}
+
+/**
+ * `A4`'s seam: EVERY function on `MoveInputDeps`, spied and calling through. `toSan` is spied for
+ * the reason the seam carries it at all — `toSan` falls back to its own derive when the list is
+ * missing, and a spy on `legalMoves` alone cannot see that (`ABC-033` M11).
+ */
+function movesSpied() {
+  const derive = vi.fn(legalMoves);
+  const san = vi.fn(toSan);
+  const coordinate = vi.fn(parseCoordinateMove);
+  const parse = vi.fn(parseSan);
+  const deps: MoveInputDeps = {
+    legalMoves: derive,
+    parseCoordinateMove: coordinate,
+    parseSan: parse,
+    toSan: san,
+  };
+  return { deps, derive, san, coordinate, parse };
+}
+
+describe("ABC-036 — the `moves` token joins the table under ABC-035's tolerance", () => {
+  it("is the EIGHTH row, a non-advancing `command`", () => {
+    expect(COMMAND_TABLE).toHaveLength(8);
+    expect(COMMAND_TABLE[7]).toEqual({ token: "moves", outcome: "command" });
+  });
+
+  for (const line of ["moves", "MOVES", "  Moves  ", "\tmoves\n"]) {
+    it(`classifies ${JSON.stringify(line)} as moves and answers the listing`, () => {
+      const history = newGame(START_FEN);
+      expect(classifyCommand(line)?.token).toBe("moves");
+      expect(statedCount(movesOf(history, undefined, line))).toBe(20);
+    });
+  }
+
+  for (const line of ["move", "movess", "mo", "moves e4", "moves 2"]) {
+    it(`does NOT classify ${JSON.stringify(line)} as a command`, () => {
+      expect(classifyCommand(line)).toBeUndefined();
+      expect(resolvePromptLine(newGame(START_FEN), line).kind).not.toBe("command");
+    });
+  }
+});
+
+describe("ABC-036 A1 — the stated count is legalMoves(position).length, exactly", () => {
+  for (const [name, fen, published] of PERFT_DEPTH_ONE) {
+    it(`states ${published} at ${name}`, () => {
+      const history = newGame(fen);
+
+      const messages = movesOf(history);
+
+      expect(statedCount(messages)).toBe(legalMoves(history.position).length);
+      expect(statedCount(messages)).toBe(published);
+    });
+  }
+});
+
+describe("ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order", () => {
+  for (const [name, fen] of PERFT_DEPTH_ONE) {
+    it(`lists every legal move once, as toSan returned it, ascending, at ${name}`, () => {
+      const history = newGame(fen);
+      const seam = movesSpied();
+
+      const listing = movesOf(history, seam.deps).slice(1);
+
+      // Every token is a string `toSan` RETURNED — none is built by string arithmetic here.
+      const returned = seam.san.mock.results.map((result) => result.value as string);
+      expect(listing).toHaveLength(returned.length);
+      expect(new Set(listing)).toEqual(new Set(returned));
+      // ...for a move in that same array, every move of it, each once.
+      const legal = seam.derive.mock.results[0]?.value as readonly Move[];
+      expect(seam.san.mock.calls.map((call) => call[1])).toEqual([...legal]);
+      // Strictly ascending: a fixed order, and no token twice.
+      for (let i = 1; i < listing.length; i++) {
+        expect((listing[i - 1] as string) < (listing[i] as string)).toBe(true);
+      }
+    });
+  }
+
+  it("pins the start position's order: code-unit ascending, so piece moves sort before pawn moves", () => {
+    // A locale-aware sort would put `a3` before `Na3`; the order is the SAN STRING's, every time.
+    expect(movesOf(newGame(START_FEN)).slice(1)).toEqual([
+      "Na3",
+      "Nc3",
+      "Nf3",
+      "Nh3",
+      "a3",
+      "a4",
+      "b3",
+      "b4",
+      "c3",
+      "c4",
+      "d3",
+      "d4",
+      "e3",
+      "e4",
+      "f3",
+      "f4",
+      "g3",
+      "g4",
+      "h3",
+      "h4",
+    ]);
+  });
+});
+
+describe("ABC-036 A3 — the count survives the truncation the list does not", () => {
+  /** The two rows before the reserved prompt row, at the DELIVERED panel width — no width asserted. */
+  function regionOf(history: GameHistory, messages: readonly string[]): string {
+    const frame = assembleFrame(
+      {
+        board: renderBoard(history.position, "unicode", "white-bottom"),
+        status: renderStatusPanel(history, gameStatusOf(history), false),
+        history: renderHistory(history),
+        messages,
+      },
+      "unicode",
+    );
+    return frame
+      .slice(frame.length - PROMPT_ROWS - MESSAGE_ROWS, frame.length - PROMPT_ROWS)
+      .join("\n");
+  }
+
+  it("hides N > 0 moves at the start position while the stated total is still exactly 20", () => {
+    const history = newGame(START_FEN);
+    const messages = movesOf(history);
+
+    const region = regionOf(history, messages);
+
+    // The truncation is real: the region's own marker states a hidden count above zero...
+    const marker = /\(\+(\d+) more\)/.exec(region);
+    expect(marker).not.toBeNull();
+    expect(Number((marker as RegExpExecArray)[1])).toBeGreaterThan(0);
+    // ...and the count is the LEGAL count, not the shown one, and it is the item the player sees.
+    expect(statedCount(messages)).toBe(20);
+    expect(region).toContain("legal moves: 20");
+  });
+});
+
+describe("ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan", () => {
+  for (const [name, fen] of PERFT_DEPTH_ONE) {
+    it(`derives once and shares the array at ${name}`, () => {
+      const history = newGame(fen);
+      const seam = movesSpied();
+
+      movesOf(history, seam.deps);
+
+      expect(seam.derive).toHaveBeenCalledTimes(1);
+      expect(seam.derive.mock.calls[0]?.[0]).toBe(history.position);
+      const legal = seam.derive.mock.results[0]?.value;
+      expect(seam.san).toHaveBeenCalledTimes((legal as readonly Move[]).length);
+      for (const call of seam.san.mock.calls) {
+        expect(call[0]).toBe(history.position);
+        expect(call[2]).toBe(legal);
+      }
+      // A command line reaches neither resolver.
+      expect(seam.coordinate).not.toHaveBeenCalled();
+      expect(seam.parse).not.toHaveBeenCalled();
+    });
+  }
+
+  it("the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start", () => {
+    // No start move gives check, so `toSan` handed the list derives nothing of its own; a build
+    // that dropped the third argument would re-derive for every knight's disambiguator.
+    movesOf(newGame(START_FEN));
+
+    expect(legalCalls()).toBe(1);
+  });
+});
+
+describe("ABC-036 A5 — `moves` is non-advancing and re-evaluates nothing", () => {
+  const atPlyFour = (): GameHistory => played(START_FEN, ["e2e4", "e7e5", "g1f3", "b8c6"]);
+
+  it("the pure function: FEN byte-identical, no ply, no gameStatusOf", () => {
+    const history = atPlyFour();
+    const before = toFen(history.position);
+
+    movesOf(history);
+
+    expect(toFen(history.position)).toBe(before);
+    expect(history.moves).toHaveLength(4);
+    expect(derives()).toBe(0);
+    expect(repetitionDerives()).toBe(0);
+  });
+
+  it("through the MERGED loop: one re-emitted frame carrying the listing, and the loop's ONE gameStatusOf", async () => {
+    const history = atPlyFour();
+    const before = toFen(history.position);
+    const expected = movesOf(atPlyFour());
+    vi.mocked(gameStatusOf).mockClear();
+
+    const run = await runLines(history, ["moves"]);
+
+    expect(run.renders).toBe(2);
+    expect(run.messagesPerFrame[1]).toEqual(expected);
+    expect(toFen(history.position)).toBe(before);
+    expect(history.moves).toHaveLength(4);
+    expect(derives()).toBe(1);
   });
 });
