@@ -1,0 +1,20 @@
+11:54  up 7 days, 14:06, 10 users, load averages: 10.16 8.14 14.76
+
+ RUN  v3.2.7 <tree-copy>
+
+ ✓ src/perft.test.ts (32 tests) 38604ms
+   ✓ ABC-006 acceptance — exact perft counts > startpos perft(5) = 4865609 [deep, PERFT_DEEP=1]  3923ms
+   ✓ ABC-006 acceptance — exact perft counts > kiwipete perft(4) = 4085603 [deep, PERFT_DEEP=1]  3485ms
+   ✓ ABC-006 acceptance — exact perft counts > position-3 perft(5) = 674624 [deep, PERFT_DEEP=1]  681ms
+   ✓ ABC-006 acceptance — exact perft counts > position-3 perft(6) = 11030083 [deep, PERFT_DEEP=1]  11794ms
+   ✓ ABC-006 acceptance — exact perft counts > position-4 perft(4) = 422333 [deep, PERFT_DEEP=1]  410ms
+   ✓ ABC-006 acceptance — exact perft counts > position-4 perft(5) = 15833292 [deep, PERFT_DEEP=1]  12774ms
+   ✓ ABC-006 acceptance — exact perft counts > position-5 perft(4) = 2103487 [deep, PERFT_DEEP=1]  1846ms
+   ✓ ABC-006 acceptance — exact perft counts > position-6 perft(4) = 3894594 [deep, PERFT_DEEP=1]  3123ms
+
+ Test Files  1 passed (1)
+      Tests  32 passed (32)
+   Start at  11:54:51
+   Duration  38.74s (transform 34ms, setup 0ms, collect 34ms, tests 38.60s, environment 0ms, prepare 25ms)
+
+exit 0

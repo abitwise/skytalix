@@ -1,0 +1,20 @@
+## variant B (validated parseFen)
+11:53  up 7 days, 14:05, 10 users, load averages: 8.31 7.88 15.27
+
+Throughput   11,377,922 nodes in 2.294 s  =>  4,960,253/sec
+NFR-001      >= 1,000,000 nodes/sec  AT OR ABOVE target
+
+Caveat (see the ABC-008 spike): this is CLASSIC perft — a leaf at depth 0 returns 1
+without generating, so most counted nodes did no work and the rate is INFLATED
+relative to real engine throughput. The spike's search-shaped metric is the one that
+maps onto engine strength; NFR-005 is read against that, not against this figure.
+## base (fen.ts @ 6ade041)
+11:53  up 7 days, 14:05, 10 users, load averages: 8.31 7.88 15.27
+
+Throughput   11,377,922 nodes in 2.259 s  =>  5,036,132/sec
+NFR-001      >= 1,000,000 nodes/sec  AT OR ABOVE target
+
+Caveat (see the ABC-008 spike): this is CLASSIC perft — a leaf at depth 0 returns 1
+without generating, so most counted nodes did no work and the rate is INFLATED
+relative to real engine throughput. The spike's search-shaped metric is the one that
+maps onto engine strength; NFR-005 is read against that, not against this figure.

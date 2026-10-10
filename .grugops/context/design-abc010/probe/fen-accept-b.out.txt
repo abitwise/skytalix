@@ -1,0 +1,14 @@
+FenError: castling right "K" needs a king on e1 :: 4k3/8/8/8/8/8/8/K7 w KQ - 0 1
+FenError: castling right "K" needs a rook on h1 :: 4k3/8/8/8/8/8/8/4K3 w K - 0 1
+FenError: side not to move (black) is in check :: 4k3/8/4Q3/8/8/8/8/4K3 w - - 0 1
+FenError: pawn on rank 1 (a1) :: 4k3/8/8/8/8/8/8/P3K3 w - - 0 1
+FenError: en-passant square e6 has no pushed pawn on e5 :: 4k3/8/8/8/8/8/8/4K3 w - e6 0 1
+FenError: halfmove clock must be a canonical integer that round-trips, found "999999999999999999999999" :: 4k3/8/8/8/8/8/8/4K3 w - - 999999999999999999
+FenError: fullmove number must be a canonical integer that round-trips, found "1000000000000000000000" :: 4k3/8/8/8/8/8/8/4K3 w - - 0 1000000000000000
+FenError: halfmove clock must be a canonical integer that round-trips, found "00" :: 4k3/8/8/8/8/8/8/4K3 w - - 00 1
+null -> instanceof FenError=true: FEN must be a string, found null
+undefined -> instanceof FenError=true: FEN must be a string, found undefined
+42 -> instanceof FenError=true: FEN must be a string, found number
+{} -> instanceof FenError=true: FEN must be a string, found object
+[] -> instanceof FenError=true: FEN must be a string, found array
+round trip over 589 distinct accepted repo FENs: 0 failures

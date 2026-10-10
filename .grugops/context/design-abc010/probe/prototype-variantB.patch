@@ -1,0 +1,220 @@
+diff --git a/src/fen.ts b/src/fen.ts
+index d46ce89..e044ad6 100644
+--- a/src/fen.ts
++++ b/src/fen.ts
+@@ -27,6 +27,7 @@ import {
+   squareAt,
+   squareName,
+ } from "./position.ts";
++import { isSquareAttackedBy } from "./moves.ts";
+ 
+ export class FenError extends Error {
+   constructor(message: string) {
+@@ -97,15 +98,17 @@ function parsePlacement(placement: string, position: Position): void {
+   }
+ }
+ 
+-function assertBothKingsPresent(position: Position): void {
++function assertBothKingsPresent(position: Position): [white: number, black: number] {
+   let whiteKings = 0;
+   let blackKings = 0;
++  let whiteKing = NO_SQUARE;
++  let blackKing = NO_SQUARE;
+ 
+   for (let square = 0; square < 128; square++) {
+     if (!isOnBoard(square)) continue;
+     const piece = position.board[square] as number;
+-    if (piece === (KING as number)) whiteKings++;
+-    else if (piece === (KING | BLACK)) blackKings++;
++    if (piece === (KING as number)) { whiteKings++; whiteKing = square; }
++    else if (piece === (KING | BLACK)) { blackKings++; blackKing = square; }
+   }
+ 
+   if (whiteKings !== 1) {
+@@ -114,6 +117,7 @@ function assertBothKingsPresent(position: Position): void {
+   if (blackKings !== 1) {
+     throw new FenError(`position must have exactly one black king, found ${blackKings}`);
+   }
++  return [whiteKing, blackKing];
+ }
+ 
+ function parseCastling(field: string, position: Position): void {
+@@ -133,14 +137,63 @@ function parseClock(field: string, label: string, minimum: number): number {
+     throw new FenError(`${label} must be a non-negative integer, found "${field}"`);
+   }
+   const value = Number(field);
++  if (String(value) !== field) {
++    throw new FenError(`${label} must be a canonical integer that round-trips, found "${field.slice(0, 24)}"`);
++  }
+   if (value < minimum) {
+     throw new FenError(`${label} must be at least ${minimum}, found ${value}`);
+   }
+   return value;
+ }
+ 
++const RIGHT_HOMES: ReadonlyArray<readonly [char: string, flag: number, king: number, rook: number, colour: number]> = [
++  ["K", CASTLE_WK, 4, 7, 0], ["Q", CASTLE_WQ, 4, 0, 0], ["k", CASTLE_BK, 116, 119, BLACK], ["q", CASTLE_BQ, 116, 112, BLACK],
++];
++
++function assertSemantics(position: Position, kings: [number, number]): void {
++  const board = position.board;
++  for (let file = 0; file < 8; file++) {
++    for (const rank of [0, 7]) {
++      const sq = rank * 16 + file;
++      if (((board[sq] as number) & 7) === PAWN) throw new FenError(`pawn on rank ${rank + 1} (${squareName(sq)})`);
++    }
++  }
++  for (const [char, flag, king, rook, colour] of RIGHT_HOMES) {
++    if ((position.castling & flag) === 0) continue;
++    if (board[king] !== (KING | colour)) throw new FenError(`castling right "${char}" needs a king on ${squareName(king)}`);
++    if (board[rook] !== (ROOK | colour)) throw new FenError(`castling right "${char}" needs a rook on ${squareName(rook)}`);
++  }
++  const ep = position.epSquare;
++  if (ep !== NO_SQUARE) {
++    const w = !position.blackToMove;
++    if (ep >> 4 !== (w ? 5 : 2)) throw new FenError(`en-passant square ${squareName(ep)} is on the wrong rank`);
++    const front = w ? ep - 16 : ep + 16;
++    const origin = w ? ep + 16 : ep - 16;
++    if (board[ep] !== EMPTY) throw new FenError(`en-passant square ${squareName(ep)} is occupied`);
++    if (board[front] !== (PAWN | (w ? BLACK : 0))) throw new FenError(`en-passant square ${squareName(ep)} has no pushed pawn on ${squareName(front)}`);
++    if (board[origin] !== EMPTY) throw new FenError(`en-passant square ${squareName(ep)}: ${squareName(origin)} is occupied`);
++  }
++  const notMovingIsBlack = !position.blackToMove;
++  const king = notMovingIsBlack ? kings[1] : kings[0];
++  if (isSquareAttackedBy(position, king, position.blackToMove)) {
++    throw new FenError(`side not to move (${notMovingIsBlack ? "black" : "white"}) is in check`);
++  }
++}
++
+ /** Parses a FEN string. Throws FenError naming the fault; never returns a partial position. */
+ export function parseFen(fen: string): Position {
++  if (typeof fen !== "string") throw new FenError(`FEN must be a string, found ${fen === null ? "null" : Array.isArray(fen) ? "array" : typeof fen}`);
++  const [position, kings] = parseFenGrammar(fen);
++  assertSemantics(position, kings);
++  return position;
++}
++
++/** PROTOTYPE: grammar only, for off-domain rules-core fixtures. */
++export function parseFenUnchecked(fen: string): Position {
++  return parseFenGrammar(fen)[0];
++}
++
++function parseFenGrammar(fen: string): [Position, [number, number]] {
+   const fields = fen.trim().split(/\s+/);
+   if (fields.length !== 6) {
+     throw new FenError(`FEN must have 6 fields, found ${fields.length}`);
+@@ -158,7 +211,7 @@ export function parseFen(fen: string): Position {
+   const position = emptyPosition();
+ 
+   parsePlacement(placement, position);
+-  assertBothKingsPresent(position);
++  const kings = assertBothKingsPresent(position);
+ 
+   if (side !== "w" && side !== "b") {
+     throw new FenError(`side to move must be "w" or "b", found "${side}"`);
+@@ -178,7 +231,7 @@ export function parseFen(fen: string): Position {
+   position.halfmoveClock = parseClock(halfmove, "halfmove clock", 0);
+   position.fullmoveNumber = parseClock(fullmove, "fullmove number", 1);
+ 
+-  return position;
++  return [position, kings];
+ }
+ 
+ /** Serializes a position back to FEN. Round-trips byte-identically with parseFen. */
+diff --git a/src/moves.castling.hardening.test.ts b/src/moves.castling.hardening.test.ts
+index ac151f5..bd37919 100644
+--- a/src/moves.castling.hardening.test.ts
++++ b/src/moves.castling.hardening.test.ts
+@@ -123,7 +123,7 @@
+  */
+ 
+ import { describe, expect, it } from "vitest";
+-import { parseFen, toFen } from "./fen.ts";
++import { parseFenUnchecked as parseFen, toFen } from "./fen.ts";
+ import { legalMoves } from "./legal.ts";
+ import { FLAG_CASTLE, generateMoves, isSquareAttackedBy, type Move } from "./moves.ts";
+ import {
+diff --git a/src/moves.castling.test.ts b/src/moves.castling.test.ts
+index a5b502a..097c706 100644
+--- a/src/moves.castling.test.ts
++++ b/src/moves.castling.test.ts
+@@ -27,7 +27,7 @@
+  */
+ 
+ import { describe, expect, it } from "vitest";
+-import { parseFen, toFen } from "./fen.ts";
++import { parseFenUnchecked as parseFen, toFen } from "./fen.ts";
+ import { legalMoves } from "./legal.ts";
+ import { FLAG_CASTLE, generateMoves, type Move } from "./moves.ts";
+ import type { Position } from "./position.ts";
+diff --git a/src/moves.enpassant.hardening.test.ts b/src/moves.enpassant.hardening.test.ts
+index 4c091f0..b5ba506 100644
+--- a/src/moves.enpassant.hardening.test.ts
++++ b/src/moves.enpassant.hardening.test.ts
+@@ -52,7 +52,7 @@
+ 
+ import { describe, expect, it } from "vitest";
+ import { makeMove, unmakeMove } from "./apply.ts";
+-import { parseFen, toFen } from "./fen.ts";
++import { parseFenUnchecked as parseFen, toFen } from "./fen.ts";
+ import { legalMoves } from "./legal.ts";
+ import { FLAG_EN_PASSANT, generateMoves, type Move } from "./moves.ts";
+ import type { Position } from "./position.ts";
+diff --git a/src/moves.enpassant.test.ts b/src/moves.enpassant.test.ts
+index b4365af..024c1fe 100644
+--- a/src/moves.enpassant.test.ts
++++ b/src/moves.enpassant.test.ts
+@@ -43,7 +43,7 @@
+ 
+ import { describe, expect, it } from "vitest";
+ import { makeMove, unmakeMove } from "./apply.ts";
+-import { parseFen } from "./fen.ts";
++import { parseFenUnchecked as parseFen } from "./fen.ts";
+ import { legalMoves } from "./legal.ts";
+ import { FLAG_EN_PASSANT, generateMoves, type Move } from "./moves.ts";
+ import type { Position } from "./position.ts";
+diff --git a/src/legal.test.ts b/src/legal.test.ts
+index d132e96..7975228 100644
+--- a/src/legal.test.ts
++++ b/src/legal.test.ts
+@@ -1,6 +1,6 @@
+ import { describe, expect, it } from "vitest";
+ import { makeMove, unmakeMove } from "./apply.ts";
+-import { parseFen, toFen } from "./fen.ts";
++import { parseFenUnchecked as parseFen, toFen } from "./fen.ts";
+ import { hasLegalEnPassant, isInCheck, legalMoves } from "./legal.ts";
+ import { FLAG_EN_PASSANT, generateMoves, isSquareAttackedBy } from "./moves.ts";
+ import { BLACK, KING, type Position, parseSquareName } from "./position.ts";
+diff --git a/src/zobrist.test.ts b/src/zobrist.test.ts
+index ff2bc99..5592a52 100644
+--- a/src/zobrist.test.ts
++++ b/src/zobrist.test.ts
+@@ -1,6 +1,6 @@
+ import { describe, expect, it } from "vitest";
+ import { makeMove, unmakeMove } from "./apply.ts";
+-import { parseFen, toFen } from "./fen.ts";
++import { parseFenUnchecked as parseFen, toFen } from "./fen.ts";
+ import { legalMoves } from "./legal.ts";
+ import { FLAG_CASTLE, FLAG_EN_PASSANT, FLAG_PROMOTION, generateMoves, type Move } from "./moves.ts";
+ import { NO_SQUARE, PAWN, type Position, parseSquareName, pieceType } from "./position.ts";
+diff --git a/src/status-panel.nfr.test.ts b/src/status-panel.nfr.test.ts
+index db1517e..ad9fb11 100644
+--- a/src/status-panel.nfr.test.ts
++++ b/src/status-panel.nfr.test.ts
+@@ -61,13 +61,13 @@ type Move = import("./moves.ts").Move;
+ const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+ 
+ /** Three pieces, so the scan's 64 cannot be confused with the board's occupancy. */
+-const SPARSE_FEN = "4k3/8/8/8/8/8/8/4R1K1 w - - 0 1";
++const SPARSE_FEN = "4k3/8/8/8/8/8/8/R5K1 w - - 0 1";
+ 
+ /** Two plies on the sparse anchor — `A13`'s stated minimum depth for a counting clause. */
+-const SPARSE_PLIES = ["e1e2", "e8d8"] as const;
++const SPARSE_PLIES = ["a1a2", "e8d8"] as const;
+ 
+ /** Four plies on the same anchor: the count must not move with the depth. */
+-const SPARSE_PLIES_DEEP = ["e1e2", "e8d8", "e2e4", "d8c8"] as const;
++const SPARSE_PLIES_DEEP = ["a1a2", "e8d8", "a2a4", "d8c8"] as const;
+ 
+ /**
+  * The occupied squares of a FEN's board field. `parseFen` places one piece per occupied square

@@ -1,0 +1,26 @@
+diff --git a/src/fen.ts (variant A) b/src/fen.ts (variant B)
+index 6411d41..e044ad6 100644
+--- a/src/fen.ts (variant A)
++++ b/src/fen.ts (variant B)
+@@ -27,7 +27,7 @@ import {
+   squareAt,
+   squareName,
+ } from "./position.ts";
+-import { isInCheck } from "./legal.ts";
++import { isSquareAttackedBy } from "./moves.ts";
+ 
+ export class FenError extends Error {
+   constructor(message: string) {
+@@ -175,11 +175,7 @@ function assertSemantics(position: Position, kings: [number, number]): void {
+   }
+   const notMovingIsBlack = !position.blackToMove;
+   const king = notMovingIsBlack ? kings[1] : kings[0];
+-  void king;
+-  position.blackToMove = !position.blackToMove;
+-  const inCheck = isInCheck(position);
+-  position.blackToMove = !position.blackToMove;
+-  if (inCheck) {
++  if (isSquareAttackedBy(position, king, position.blackToMove)) {
+     throw new FenError(`side not to move (${notMovingIsBlack ? "black" : "white"}) is in check`);
+   }
+ }
