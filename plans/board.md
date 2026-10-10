@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-134` → `In Review` (`4d6b019a`); QE `qe-ABC-134` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-136` → `Done` (UAT WAIVED; merged `f87f0b6f`); `ABC-134` pulled → `In Development`; Architect `design-F-072-1` (+ QE-136-a/b, QE-104-d) dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-072` + `ABC-073` → `Done` (UAT WAIVED; merged `be4e011f`). Security/NFR widened clause (b)'s limb list; Architect `design-F-072-1` dispatched; AR-072-LIMBS fail-safe routing in force until it lands._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-131` → `Ready for UAT` (`677b8b09`; owner word owed); `ABC-129` pulled → `In Development`._
@@ -603,9 +604,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 - [ABC-129] Cite `turn-loop.ts` by symbol, not by line — 14 of 15 cites stale (+ ABC-036 G1 "seven tokens" comment)  (BA/PM, XS, P3, epic: —, since: 2026-10-10, DoR 9/10 ⚠️ item 3 — ordering: `ABC-036` AND `ABC-051` merge first; preferably after `ABC-128`; UAT owed unless the owner rules comment-only diffs zero-production-lines) **2026-10-10: ⚠️ item 3 discharged (ABC-036 + ABC-051 Done) — BA/PM re-score due.** **2026-10-10 re-score (`bapm-owed-batch-2026-10-10`, merged `36a4c5b3`): DoR 10/10, 0 ⚠️ → Ready.** XS, P3. Pairs with `ABC-132`; never in parallel with `ABC-133` (same `src/cli.test.ts`). Exit depends on the owner's comment-only ruling. **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-129`, branch `grugops/ABC-129-turn-loop-cites-by-symbol`); `ABC-132` follows it, never in parallel. Exit: UAT waived if the owner's comment-only measurement holds (note `…owner-word-uat-q4-5c8e2a17`).
-- [ABC-134] The frame-path probe's prose claims more reach than the probe has — four wording gaps in one file, comment-only  (BA/PM, XS, P3, since: 2026-10-10, DoR 10/10; cut from QE-053-b/c/d + QE-057-b in `bapm-owed-batch-2026-10-10`; `src/history-pane.nfr.test.ts` comments only → UAT waiver applies; ADR-0011 R5b (Architect, same file) is not cut yet — fold-in or sequence decided at pull) **2026-10-10: sequence — after `ABC-136` (R5b, same file; ABC-136 adds executable pins, ABC-134 is comment-only).** **→ In Development 2026-10-10**, pulled after `ABC-136` merged (`f87f0b6f`) by the Orchestrator (subtask `ticket-to-pr-ABC-134`, branch `grugops/ABC-134-frame-probe-prose`).
 
 
 
@@ -633,7 +633,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-134] The frame-path probe's prose claims more reach than the probe has — four wording gaps in one file, comment-only  (BA/PM, XS, P3, since: 2026-10-10, DoR 10/10; cut from QE-053-b/c/d + QE-057-b in `bapm-owed-batch-2026-10-10`; `src/history-pane.nfr.test.ts` comments only → UAT waiver applies; ADR-0011 R5b (Architect, same file) is not cut yet — fold-in or sequence decided at pull) **2026-10-10: sequence — after `ABC-136` (R5b, same file; ABC-136 adds executable pins, ABC-134 is comment-only).** **→ In Development 2026-10-10**, pulled after `ABC-136` merged (`f87f0b6f`) by the Orchestrator (subtask `ticket-to-pr-ABC-134`, branch `grugops/ABC-134-frame-probe-prose`). **→ In Review 2026-10-10**: built on `grugops/ABC-134-frame-probe-prose` @ `4d6b019a` (A1–A5 MET; `src/history-pane.nfr.test.ts` +26/−13, comment lines only, code-only hash identical; ABC-136 pins and six ABC-057 spans identical). The `probe-it` span's raw hash moves because A3's settle-comment site sits inside it (code-only hash identical) — the Orchestrator's brief over-stated 'all seven byte-identical'; the ticket governs, accepted. QE `qe-ABC-134` dispatched.
 
 
 
