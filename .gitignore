@@ -15,3 +15,7 @@ coverage/
 
 # agent worktrees — live sub-checkouts, never part of this repo
 .claude/worktrees/
+
+# `npm test`'s kept result file (ABC-142): the failed tests' names survive a truncated console.
+# Rewritten on every run; one per checkout, so two runs in one checkout at once overwrite it.
+.test-results/
