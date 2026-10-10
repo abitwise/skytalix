@@ -107,8 +107,10 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 - Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- exit 0,
   37 passed (29 default), 1.8 s -->
 - Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`
-  <!-- RUN 2026-10-09: exit 0, 12 passed (9 default), 17.3 s at load1 ~11 (~13 s quiet). Baseline
-  `src/puzzle-suite.baseline.json` (40/40, budget 25, step 1). TRIGGER (owner, option B,
+  <!-- RUN 2026-10-10: exit 0, 17 passed (12 default), 32-36 s (gating run 20-24 s) at load1 4-8;
+  ABC-127 A7 reads <= 90 / 45 s, never asserted, 300 s hang guards. Baseline
+  `src/puzzle-suite.baseline.json` (58/62, budget 25, step 1; the 4 unsolved rows named, a run
+  prints NEWLY-MISSED / NEWLY-SOLVED per row that differs). TRIGGER (owner, option B,
   2026-10-09): QE runs it during review when the change touches engine code (`src/engine.ts`,
   `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`, `src/transposition.ts`, move
   ordering). red = QE FAIL. Not a `quality.mandatory_gates` entry. The baseline moves only in its
