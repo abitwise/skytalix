@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-r5d-qe139a-2026-10-10` merged (`72b9fa4b`): new `ABC-140` (R5d) pulled → `In Development`; new `ABC-141` → `Backlog` (waits ABC-010). Declined with triggers: QE-139-a (next ticket editing 'The render cadence' paragraph carries it), fullmove bound (first FEN-input ticket)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Security/NFR` (`a4802fc0`); `secnfr-ABC-138` dispatched. Architect `design-qe010d-2026-10-10` dispatched (QE-010-d)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` → `Ready for UAT` (`f9d1ff4b`; owner word owed)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-qe137-2026-10-10` merged: QE-137-a → ADR-0011 `R5d` (ticket owed; also the composer tripwire's comparator, found unpinned; clause 1 docblock rides with it); QE-137-b accepted residual (trigger: `node:fs` import change, module-scope `readdirSync`, `vi.mock`/`vi.spyOn` of `node:fs`). BA/PM `bapm-r5d-qe139a-2026-10-10` dispatched._
@@ -619,6 +620,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-004] Engine and AI opponent  (owner: BA/PM, **size: XL — corrected from `L`, 37 points over 14 tickets; that is 1.7x `EPIC-003`, the epic this board already calls `XL`, and `XL` is the top of the scale so it UNDERSTATES this one. THIRD consecutive upward correction at decomposition**, priority: P0, since: 2026-07-22, **DECOMPOSED 2026-08-16 into `ABC-074`…`ABC-087`. The spike clause STANDS and is now `ABC-074`** — the Orchestrator believed `ABC-008` had discharged it and was WRONG: `ADR-0003` amendment (2c), ratified by the owner 2026-07-30, re-pointed the mitigation from nodes/sec to **deepest ply completed in 3 s on non-M3 hardware**, and `NFR-005`'s `Verified by` cell carries the obligation. Largest ticket `M`, no `SPLIT_REQUIRED`; critical path `ABC-076`→`ABC-077`→`ABC-078`)
 - [EPIC-005] Opening book  (owner: BA/PM, **size: M — corrected from `S`; the cutter stopped at `M` deliberately, refusing the M→XL/M→L precedent as "a pattern, not evidence", since `L` would claim the book is the size of `EPIC-004`'s whole engine**, priority: P1, since: 2026-07-22, **DECOMPOSED 2026-08-16 into `ABC-092`…`ABC-096`. The WORK is pullable today — 4 of 5 tickets need nothing from `EPIC-004` — but the VALUE is not deliverable until `EPIC-004` lands; collapsing those two is how a board lies.** `EPIC-001`'s dependency verified DISCHARGED by reading the tree, not the front matter; `ABC-095` is the only hard blocker. Largest ticket `M`, no `SPLIT_REQUIRED`)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
+- [ABC-141] Comments ABC-010 leaves stale — six-queens derive count, fullmove-bound pointer  (BA/PM, XS, P3, since: 2026-10-10, DoR 9/10 ⚠️ item 3: waits ABC-010 merge, then re-score; QE-010-b + QE-010-c comment; `src/move-input.ts` (production, comment) + `src/move-input.test.ts`, `src/history-pane.ts` → owner-Q4 comment-only measures)
 
 ## Ready (WIP 0/8)
 
@@ -636,7 +638,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-140] The composer tripwire's call and comparator are unpinned (ADR-0011 R5d)  (BA/PM, XS, P3, since: 2026-10-10, DoR 10/10; from QE-137-a via `design-qe137-2026-10-10`; two whole-statement literals, reach comment 5 → 7 spans, clause 1 docblock criterion; test-only `src/history-pane.nfr.test.ts` → UAT waiver; never in parallel on that file) **→ In Development 2026-10-10** (pass-through `Ready` → `Ready for Dev` → `In Development` at pull), subtask `ticket-to-pr-ABC-140`, branch `grugops/ABC-140-composer-tripwire-pins`.
 
 
 
