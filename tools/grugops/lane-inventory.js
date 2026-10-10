@@ -22,6 +22,17 @@
 // step, like `test-skip-integrity.js`, not one of `quality.mandatory_gates`. It catches the
 // defect only when it is run; the four gates alone stay green either way.
 //
+// WHAT THE TRACKED SET OMITS, AND WHY THE OMISSION IS WRITTEN HERE (`ABC-130`, 2026-10-10):
+// `.grugops/` is factory state — the shared context's notes and the probes some hops commit beside
+// them — and the lane excludes it on purpose (`".grugops/**"` in `test.exclude`). A tracked
+// `*.test.ts` probe there is correct, not a dropped test, so the tracked set leaves `.grugops/`
+// out by the fixed pathspec `OMITTED_FROM_TRACKED` below. Before this, every committed probe
+// turned this tool red (three did, from 2026-09-24), and an always-red control hides the red it
+// exists for. The pathspec is a LITERAL in this file and is never read from `vitest.config.ts`:
+// if the expectation came from the config, the very `test.exclude` edit it guards would move it.
+// So when that glob IS removed and the lane collects a `.grugops/` file, the tool still goes red
+// and names the path with its own line (whether git tracks the file is beside the point there).
+//
 // Contract (the shape `test-skip-integrity.js` uses):
 //   node tools/grugops/lane-inventory.js
 //     exit 0 -> the collected set equals the tracked set
@@ -53,10 +64,17 @@ if (!existsSync(vitestCli)) {
   process.exit(2);
 }
 
-// What git records: every tracked `*.test.ts`, repository-relative. NUL-separated so a path
-// with a space or a newline cannot split or merge entries.
+// The directory the lane excludes on purpose and this tool therefore never expects. A literal,
+// never built from argv, the environment or the config (see the header).
+const OMITTED_DIR = ".grugops/";
+const OMITTED_FROM_TRACKED = `:!${OMITTED_DIR}`;
+
+// What git records: every tracked `*.test.ts` outside `.grugops/`, repository-relative.
+// NUL-separated so a path with a space or a newline cannot split or merge entries.
 const tracked = new Set(
-  runOrExit("git", ["ls-files", "-z", "--", "*.test.ts"], root).split("\0").filter(Boolean),
+  runOrExit("git", ["ls-files", "-z", "--", "*.test.ts", OMITTED_FROM_TRACKED], root)
+    .split("\0")
+    .filter(Boolean),
 );
 
 // What the lane collects: vitest's own collector at the repository root, files only, nothing
@@ -77,7 +95,11 @@ for (const path of [...tracked].sort()) {
   }
 }
 for (const path of [...collected].sort()) {
-  if (!tracked.has(path)) {
+  if (path.startsWith(OMITTED_DIR)) {
+    findings.push(
+      `Collected by the lane from ${OMITTED_DIR}, which is factory state the lane must exclude: ${path} — restore the \`"${OMITTED_DIR}**"\` glob in vitest.config.ts's \`test.exclude\`.`,
+    );
+  } else if (!tracked.has(path)) {
     findings.push(
       `Collected by the lane but NOT tracked by git: ${path} — \`git add\` it, delete it, or repair the \`test.exclude\` glob that let it in.`,
     );
