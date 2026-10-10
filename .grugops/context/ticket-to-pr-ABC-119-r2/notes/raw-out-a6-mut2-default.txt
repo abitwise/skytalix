@@ -1,0 +1,18 @@
+
+ RUN  v3.2.7 mut2
+
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 1110 / 1319 = 84.2%
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 595 nodes with quiescence / 49 without = 12.14x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 292 nodes with quiescence / 47 without = 6.21x
+
+
+ Test Files  51 passed (51)
+      Tests  1541 passed (1541)
+   Start at  12:57:58
+   Duration  5.43s (transform 1.29s, setup 0ms, collect 11.43s, tests 14.67s, environment 5ms, prepare 1.88s)
+

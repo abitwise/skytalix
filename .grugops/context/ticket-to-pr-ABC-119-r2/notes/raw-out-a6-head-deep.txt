@@ -1,0 +1,14 @@
+
+ RUN  v3.2.7 head
+
+stdout | src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node head/src/cli.ts --colour black --ascii <<< "" — wall 3098 ms, exit 0, signal null
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node head/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3108 ms, exit 0, signal null
+
+ ✓ src/cli.real-engine.test.ts (7 tests) 6211ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  12:57:38
+   Duration  6.37s (transform 56ms, setup 0ms, collect 63ms, tests 6.21s, environment 0ms, prepare 24ms)
+

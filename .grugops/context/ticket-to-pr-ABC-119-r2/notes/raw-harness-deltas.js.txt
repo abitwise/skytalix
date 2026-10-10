@@ -1,0 +1,15 @@
+const fs = require("node:fs");
+const med = (a) => { const s = [...a].sort((x, y) => x - y); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const all = { wall: [], cpu: [] };
+for (const f of process.argv.slice(2)) {
+  const lines = fs.readFileSync(f, "utf8").trim().split("\n");
+  const rows = lines.map((l) => ({ tree: /(base|head) real/.exec(l)[1], real: +/real=([\d.]+)/.exec(l)[1], cpu: +/cpu=([\d.]+)/.exec(l)[1], load: +/load1=([\d.]+)/.exec(l)[1] }));
+  const d = { wall: [], cpu: [] }; const loads = rows.slice(2).map((r) => r.load);
+  for (let i = 2; i < rows.length; i += 2) {
+    const [a, b] = [rows[i], rows[i + 1]]; const h = a.tree === "head" ? a : b, bs = a.tree === "base" ? a : b;
+    d.wall.push(+(h.real - bs.real).toFixed(2)); d.cpu.push(+(h.cpu - bs.cpu).toFixed(2));
+  }
+  all.wall.push(...d.wall); all.cpu.push(...d.cpu);
+  for (const k of ["wall", "cpu"]) console.log(f.split("/").pop(), k, JSON.stringify(d[k]), "median", med(d[k]).toFixed(3), "positive", d[k].filter((x) => x > 0).length + "/" + d[k].length, "load1", Math.min(...loads), "-", Math.max(...loads));
+}
+for (const k of ["wall", "cpu"]) console.log("POOLED", k, "n", all[k].length, "median", med(all[k]).toFixed(3), "positive", all[k].filter((x) => x > 0).length + "/" + all[k].length);

@@ -1,0 +1,37 @@
+
+ RUN  v3.2.7 mut2
+
+stdout | src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node mut2/src/cli.ts --colour black --ascii <<< "" — wall 120 ms, exit 0, signal null
+[CLI_DEEP] /opt/homebrew/Cellar/node/26.11.0_1/bin/node mut2/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 128 ms, exit 0, signal null
+
+ ❯ src/cli.real-engine.test.ts (7 tests | 1 failed) 256ms
+   ✓ ABC-119 — the real-engine lane's child is the delivered composition (default lane; spawns nothing) > the deep child runs the delivered entry point with no --import, loader or hook, and an empty environment 1ms
+   × ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A1 — the real search answered: the child took at least 1 s and exited 0 3ms
+     → expected 119.989667 to be greater than or equal to 1000
+   ✓ ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(i) — the reply is a legal move in the position it was played in, by the project's own generator 2ms
+   ✓ ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(ii) — the whole child, spawn to exit, stays inside NFR-004's 5 s hard ceiling (clause B) 0ms
+   ✓ ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iii) — the session advances: the side to move and the ply number both change 0ms
+   ✓ ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iv) — no stack trace on stderr, and the exit code is 0, never 70 0ms
+   ✓ ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A1 — the real search answered: the child took at least 1 s and exited 0
+AssertionError: expected 119.989667 to be greater than or equal to 1000
+ ❯ src/cli.real-engine.test.ts:188:30
+    186|     it("A1 — the real search answered: the child took at least 1 s and…
+    187|       for (const child of [played, rejected]) {
+    188|         expect(child.wallMs).toBeGreaterThanOrEqual(REAL_SEARCH_FLOOR_…
+       |                              ^
+    189|         expect(child.status).toBe(0);
+    190|         expect(child.signal).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  12:57:46
+   Duration  469ms (transform 75ms, setup 0ms, collect 86ms, tests 256ms, environment 0ms, prepare 28ms)
+

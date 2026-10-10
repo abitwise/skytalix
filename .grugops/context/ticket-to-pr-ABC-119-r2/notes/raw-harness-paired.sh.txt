@@ -1,0 +1,14 @@
+#!/bin/bash
+# usage: paired.sh <scratch> <rounds> ; warm-up round discarded, order alternates per round
+S=$1; N=$2
+run() { # tree label round
+  local load=$(sysctl -n vm.loadavg | awk '{print $2}')
+  ( cd $S/trees/$1 && /usr/bin/time -p node node_modules/vitest/vitest.mjs run --dir src > $S/out-$1-$2.txt 2> $S/err-$1-$2.txt; echo "rc=$?" >> $S/out-$1-$2.txt )
+  local real=$(awk '/^real/{print $2}' $S/err-$1-$2.txt) user=$(awk '/^user/{print $2}' $S/err-$1-$2.txt) sys=$(awk '/^sys/{print $2}' $S/err-$1-$2.txt)
+  local tests=$(grep -E '^ +Tests ' $S/out-$1-$2.txt | tr -s ' ')
+  local skipline=$(grep -c CLI_DEEP $S/out-$1-$2.txt)
+  echo "r$2 $1 real=$real cpu=$(echo "$user + $sys" | bc) load1=$load $(grep rc= $S/out-$1-$2.txt) cli_deep_lines=$skipline |$tests"
+}
+for r in $(seq 0 $N); do
+  if (( r % 2 == 0 )); then run base $r; run head $r; else run head $r; run base $r; fi
+done

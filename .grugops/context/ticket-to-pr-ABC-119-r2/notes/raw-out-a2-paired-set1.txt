@@ -1,0 +1,13 @@
+# NOTE: set 1 was run before the round label was fixed; its rows are in order r0 (warm-up, base then head), r1 head-first, r2 base-first, r3 head-first, r4 base-first, r5 head-first.
+ base real=6.23 cpu=24.00 load1=4.51 rc=0 cli_deep_lines=0 | Tests 1540 passed (1540)
+ head real=6.28 cpu=24.55 load1=6.55 rc=0 cli_deep_lines=0 | Tests 1541 passed (1541)
+ head real=6.37 cpu=24.81 load1=6.90 rc=0 cli_deep_lines=0 | Tests 1541 passed (1541)
+ base real=6.40 cpu=24.60 load1=6.58 rc=0 cli_deep_lines=0 | Tests 1540 passed (1540)
+ base real=6.38 cpu=24.85 load1=6.30 rc=0 cli_deep_lines=0 | Tests 1540 passed (1540)
+ head real=6.30 cpu=25.02 load1=7.79 rc=0 cli_deep_lines=0 | Tests 1541 passed (1541)
+ head real=6.44 cpu=25.09 load1=8.67 rc=0 cli_deep_lines=0 | Tests 1541 passed (1541)
+ base real=6.41 cpu=25.72 load1=8.62 rc=0 cli_deep_lines=0 | Tests 1540 passed (1540)
+ base real=6.47 cpu=25.43 load1=15.61 rc=0 cli_deep_lines=0 | Tests 1540 passed (1540)
+ head real=6.51 cpu=25.42 load1=15.65 rc=0 cli_deep_lines=0 | Tests 1541 passed (1541)
+ head real=6.94 cpu=25.81 load1=14.88 rc=0 cli_deep_lines=0 | Tests 1541 passed (1541)
+ base real=6.68 cpu=25.68 load1=19.53 rc=0 cli_deep_lines=0 | Tests 1540 passed (1540)

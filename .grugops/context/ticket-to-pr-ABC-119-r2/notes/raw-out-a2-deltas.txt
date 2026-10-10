@@ -1,0 +1,8 @@
+paired.txt wall [-0.03,-0.08,0.03,0.04,0.26] median 0.030 positive 3/5 load1 6.3 - 19.53
+paired.txt cpu [0.21,0.17,-0.63,-0.01,0.13] median 0.130 positive 3/5 load1 6.3 - 19.53
+paired2.txt wall [-0.47,-0.03,0.7,0.17,0.23] median 0.170 positive 3/5 load1 18.58 - 25.57
+paired2.txt cpu [-0.05,0.79,0.9,0.2,1.81] median 0.790 positive 4/5 load1 18.58 - 25.57
+paired3.txt wall [0.1,0.01,-0.36,0.22,-0.75,-0.34,-0.17,0.24] median -0.080 positive 4/8 load1 12.95 - 16.58
+paired3.txt cpu [-0.07,0.1,-0.64,0.74,-0.9,-0.53,-0.27,0.42] median -0.170 positive 3/8 load1 12.95 - 16.58
+POOLED wall n 18 median 0.020 positive 10/18
+POOLED cpu n 18 median 0.115 positive 10/18

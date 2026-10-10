@@ -297,3 +297,25 @@ ADR change.
 | 10 | no major unresolved blocker | **✅** None. The owed `NFR-008` wording is pre-existing and Architect/Design's. The `AGENTS.md` line is the Scribe's |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-119-r2`).
+Branch `grugops/ABC-119-r2` from `242b624`, code in `d45ca68`. Not merged, not pushed. Lane:
+`CLI_DEEP=1 npx vitest run src/cli.real-engine.test.ts`. Readings and raw files:
+`.grugops/context/ticket-to-pr-ABC-119-r2/notes/`.
+
+**Criteria: 5 of 6 met. `A2` is not met as written, and BA/PM rules it.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | Two hook-free children with an empty environment, 3098–3108 ms, exit 0. The command and wall time are logged on every run |
+| `A2` | **NOT MET as written** | Met: lane green (51 / 1541), skip count 0, 0 spawned children. Not met: `lane-inventory.js` **exits 1 on the base too**, because of three tracked `.grugops/context/` probe files; the new file is tracked and collected. Paired medians: pooled +0.02 s wall / +0.115 s CPU (n=18). Set 2 read **+0.79 s CPU** at load1 up to 26, and the sign rule fails in every set. Recorded and handed up, not claimed |
+| `A3` | MET | (i) The reply is one of `legalMoves(start)` by `toSan`, and the board read back equals `toFen` after `makeMove`. (ii) 3.10 s ≤ 5 s. (iii) The side changes and the ply is +1. (iv) No stack trace, exit 0 |
+| `A4` | MET | After `zz9`: same side, ply and board, `rejectionMessage(unreadable)` shown, back to the prompt, ends on `input ended`, exit 0 |
+| `A5` | MET | The first two predicates are empty. `-- src/` names only `src/cli.real-engine.test.ts` (+244/−0) |
+| `A6` | MET | M2 (`DEFAULT_BUDGET_MS` rebound in the import, line 175 untouched): new lane **RED** at `A1` (120 ms), default lane **GREEN** 1541/1541. M1 (a double) reds both lanes |
+
+**`N8-LANE`: +115 ms CPU pooled, not cleanly read** (set 2 alone exceeds 650 ms).
+**`N8-SPAWN`:** `T1`/`T2` not fired. **Owed:** BA/PM's ruling on `A2`, the Scribe's `AGENTS.md`
+line (drafted in `…2409b286`), the QE hop, and the `In Review` move (Orchestrator).
