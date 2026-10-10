@@ -1,0 +1,7 @@
+node v26.11.0  2026-10-10T11:38:36Z  stdout of vitest is a pty (script -q)
+ctl        load1 5.52                                     BEL 0 DEL 0 ESC[2J 0 'purple' 0  BEL-ESC[2J-purple-DEL run 0
+M3h        load1 5.52                                     BEL 0 DEL 0 ESC[2J 0 'purple' 0  BEL-ESC[2J-purple-DEL run 0
+Q1-BEL     load1 5.40                                     BEL 0 DEL 0 ESC[2J 0 'purple' 0  BEL-ESC[2J-purple-DEL run 0
+Q2-ESC     load1 6.33                                     BEL 0 DEL 0 ESC[2J 0 'purple' 0  BEL-ESC[2J-purple-DEL run 0
+NOFILT-h   load1 6.06                                     BEL 0 DEL 0 ESC[2J 0 'purple' 0  BEL-ESC[2J-purple-DEL run 0
+NOFILT-b   load1 5.90                                     BEL 0 DEL 0 ESC[2J 0 'purple' 0  BEL-ESC[2J-purple-DEL run 0

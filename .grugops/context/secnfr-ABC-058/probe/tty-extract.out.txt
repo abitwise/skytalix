@@ -1,0 +1,13 @@
+tty-ctl.bin      Tests  66 passed (66)                    raw: BEL 0 DEL 0 ESC[2J 0 'purple' 0
+tty-M3h.bin      Tests  1 failed | 65 passed (66)         raw: BEL 0 DEL 0 ESC[2J 0 'purple' 0
+                 assertion: AssertionError: expected [ 127 ] to deeply equal []
+tty-Q1-BEL.bin   Tests  1 failed | 65 passed (66)         raw: BEL 0 DEL 0 ESC[2J 0 'purple' 0
+                 assertion: AssertionError: expected [ 7 ] to deeply equal []
+tty-Q2-ESC.bin   Tests  1 failed | 65 passed (66)         raw: BEL 0 DEL 0 ESC[2J 0 'purple' 0
+                 assertion: AssertionError: expected [ 27 ] to deeply equal []
+tty-NOFILT-h.bin Tests  2 failed | 64 passed (66)         raw: BEL 0 DEL 0 ESC[2J 0 'purple' 0
+                 assertion: AssertionError: expected [ '0', '1', '2', '70' ] to deeply equal [ '0', '0x20', '0x7f', '1', '2', '70' ]
+                 assertion: AssertionError: expected [ 7, 27, 127 ] to deeply equal []
+tty-NOFILT-b.bin Tests  2 failed | 64 passed (66)         raw: BEL 0 DEL 0 ESC[2J 0 'purple' 0
+                 assertion: AssertionError: expected [ '0', '1', '2', '70' ] to deeply equal [ '0', '0x20', '0x7f', '1', '2', '70' ]
+                 assertion: AssertionError: expected [ 27 ] to deeply equal []
