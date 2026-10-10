@@ -1,0 +1,48 @@
+# RUN log — bapm-r5d-qe139a-2026-10-10, BA/PM. Wave tip 75dcc0f5; ABC-010 tip f9d1ff4b (unmerged).
+# Apple M3 (arm64), Node v26.11.0, vitest 3.2.7. Other agents ran in parallel (load1 13-32); verdicts, not timings.
+
+## Harness: BA/PM's OWN loop around the Architect's planter
+plant.mjs = .grugops/context/design-qe137-2026-10-10/probe/plant.mjs, copied UNCHANGED to a private scratchpad
+(sha256 b6b5e4582259211600a01ee758936eac65d80891f3b56219d3cf4cc1335657bd, both copies). It ran; nothing was refused.
+The Architect's ledger.sh was NOT run: it hardcodes the Architect's private scratch paths. ledger.sh here is BA/PM's
+own loop (same shape: one fresh `git archive <rev>` per build, node_modules symlinked, `biome check src`,
+`tsc --noEmit`, vitest JSON reporter). Set BAPM_SCRATCH to a dir holding bin/plant.mjs.
+
+## R5d premises at 75dcc0f5 (read from the file)
+src/history-pane.nfr.test.ts blob ed2cd2b0 = the Architect's eae04388 blob (no commit on the file since 54280bc8).
+:24 node:fs import | :151-162 clause 1 docblock ("Both guards" :152, "THE TWO GUARDS" :159) | :163-164 helper (R5c)
+:369 licence call (R5b) | :483-491 reach comment ("it pins five spans by TEXT" :485) | :591-593 composer scan, UNPINNED
+:595-598 composer comparator, UNPINNED | :653 probe call, read once at :661 | biome-ignore count 1
+Collapsed-text counts (bapm-owed-batch-2026-10-10/probe/phrases.mjs): "it pins five spans by TEXT" 1;
+"Both guards at the bottom of this file" 1; "THE TWO GUARDS HOLD DIFFERENT PROPERTIES" 1; "R5d" 0; "R5c" 2.
+Readers of the docblock text in other src files: 0 (grep "Both guards at|THE TWO GUARDS|derive their").
+
+## ledger-file.tsv  2026-10-10T16:46:01Z..16:47:33Z (file scope, 23 builds) — every build lint 0, tsc 0
+  CONTROL 0 12/12 | WSC 1 composer tripwire | WPS 1 licence guard
+  N591-HEAD|TAIL|WRAP +FMT+WSC   0 12/12 each        (QE-137-a reproduced)
+  C-CONTAIN|C-OPERAND +FMT+WSC   0 12/12 each        (Architect's comparator widening reproduced)
+  N653-NARROW+FMT 0 | H-SHADOW+FMT+WPS 0 | H-FSMOCK+FMT+WPS 0   (ruled / accepted)
+  PIN 0 | PIN+FMT 0 | PIN+WSC 1 composer | PIN+WPS 1 licence
+  PIN+N591-* 1 "the composer tripwire scans EVERY production module"
+  PIN+C-*    1 "the composer tripwire compares with an EQUALITY"
+  PIN+N653-NARROW / PIN+H-SHADOW / PIN+H-FSMOCK 0  — no PLANT-FAILED anywhere
+## ledger-suite.tsv 2026-10-10T16:47:39Z..16:48:29Z (whole suite)
+  CONTROL, N591-TAIL+FMT+WSC, C-OPERAND+FMT+WSC, PIN: each 52 files, 1608/1608, lint 0, tsc 0
+
+## QE-139-a premises at 75dcc0f5
+src/turn-loop.ts:281-282 "the non-advancing outcomes that carry a message re-emit a frame" (collapsed count 1);
+:392-395 re-emits for every non-move outcome reaching the else arm (by KIND). src/command-input.ts:119 `board` ->
+command; :269 messages [] for every command token but help. PromptOutcome (:135-144): rejected/ambiguous/command/
+take-back carry a `messages` field; `claim` carries none (a refused claim re-emits with claimShortfall's lines).
+Same vocabulary elsewhere: plans/tickets/ABC-019:330 (spec), src/cli.test.ts:691, :2726 (identifier
+NON_ADVANCING_WITH_A_MESSAGE, executable), :2732.
+
+## QE-010-b / QE-010-c premises (derives.mjs, fullmove.mjs on `git archive <rev> src` copies, 2026-10-10T16:54:01Z..16:54:02Z)
+legalMoves (src/legal.ts:42) spliced with a global counter (anchor x1 on both trees); FEN read from each tree's
+src/move-input.test.ts SIX_QUEENS_FEN.
+  75dcc0f5  3Q1k2/8/1Q4Q1/8/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1   derives=6  [Q1xd4#,Q2xd4#,Qaxd4#,Qhxd4#,Q6xd4#,Q8xd4]
+  f9d1ff4b  3Q4/8/1Q4Q1/4k3/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1   derives=7  [Q1xd4#,Q2xd4#,Qaxd4#,Qhxd4#,Q6xd4#,Q8xd4#]
+  fullmove 9999 / 10000 / 100000000000000000000: ACCEPTED on both trees.
+grep counts at 75dcc0f5 and f9d1ff4b alike: 'cost six of those' (move-input.ts:48) 1; 'measured six'
+(move-input.test.ts:493) 1; '`ABC-010` is the ticket that would' (history-pane.ts:55) 1.
+ABC-010's branch (be37e222..f9d1ff4b) touches src/move-input.test.ts (fixture) but not move-input.ts or history-pane.ts.
