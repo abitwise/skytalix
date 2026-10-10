@@ -344,3 +344,36 @@ at the cutting hop. **Result: 8 of 10 — items 5 and 10 carry a ⚠️; the oth
 - **Cost (`ADR-0035`).** 1 file and 0 spawns. Both narrow-set readings were inadmissible on a loaded host, so
   a re-read is owed.
 - **Gates.** UAT needs the owner's word. QE is owed.
+
+## QE
+
+**2026-10-10, QE/E2E** (subtask `qe-ABC-094`).
+- Range: base `97223dfe`, code `8cf395fc`, reviewed tip `59358836`. QE commit `58726139` (test only).
+- Every reading is QE's own. The detail is in `.grugops/context/qe-ABC-094/notes/` and is not restated here:
+  `…a9a9fe1b` (verdict), `…62a73713` (readings), `…3058eacd` (gaps), `…19fb5b97` (probe).
+
+**PASS_WITH_GAPS.**
+- **`A1`:** a sweep of every reachable book key (all 5,390). Every in-book entry gives a legal move from its
+  own `m`. Every empty-`m` entry and every absent key gives nothing. 0 throws.
+- **`A2`:** QE ran it in two real processes, with 200 picks each, identical.
+- **`A3`:** 4 distinct replies on seeds 1–10.
+- **`A4`:** 796 / 106 / 98 on seed 42. An evenly spaced sweep lands exactly 800 / 100 / 100.
+- **`A6`:** 89 corrupt inputs, each called 50 times. Each gives 0 throws, nothing or only legal moves, and
+  exactly 1 warning.
+- **`A7`:** 0 AST hits and 0 network calls.
+- **`A5`** is met in the module. It gives 0 reads at construction, 0 throws, 50 × nothing, exactly 1 warning
+  and 0 stdout writes. **Its "on stderr" half is `ABC-095`'s binding, and `ABC-095`'s page does not carry it
+  yet** (`QE-094-a`, MEDIUM, BA/PM to fold into `ABC-095` `A5`).
+- **Mutants.** The delivered suite left 8 of 34 non-equivalent mutants green. The most material is the
+  dropped leading zero in the key, which affects 330 reachable keys. Also, the "no byte of the file" warning
+  test was vacuous. QE added 9 tests to `src/book.test.ts`, and the final suite kills 32 of 34. The 2 left
+  are equivalent (`QE-094-b`, CLOSED).
+- **`ADR-0036` (b):** 0 / 0 / 0 on QE's run, so it does not fire here.
+- **Overlap:** no file is shared with `ABC-083`.
+- **Cost (`ADR-0035`):** reading 1 is admissible (twin 1.42 %, load1 median 4.93). It is MET at +0.345 s
+  against 650 ms. Reading 2 is inadmissible (load1 median 9.43). 1 file, 0 spawns.
+- **Gates at `58726139`:** lint, typecheck and build exit 0. `npm test` gives 54 files and 1,715 tests,
+  green, with skip 0. Integrity and lane-inventory print "No findings."
+- **Gaps:** `QE-094-c`–`g` are INFO.
+- **UAT:** the owner's word is owed (production lines). On QE's reading, no Security/NFR hop fires here.
+- Not merged, not pushed.
