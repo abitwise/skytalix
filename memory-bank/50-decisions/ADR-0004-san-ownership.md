@@ -101,6 +101,18 @@ ratification, the trailing comment in that file records that as deliberate, and 
 decision would read as settled. The row is now owed and paid, in the same shape as those two, and it
 carries the clause-by-clause ruling above rather than a bare "Accepted".
 
+### Pointer 2026-10-10 — (2a)'s "every input" is scoped to the text (`QE-104-d`)
+
+Written by Architect/Design at task `wave-2026-09-25`, subtask `design-F-072-1`. **No clause, outcome,
+verdict or ratified word changes.**
+- **The defect.** (2a)'s opening sentence says "every input produces one of the three arms and none
+  of them throws". It is wider than the behaviour. It is also wider than the ratification record
+  above, which says `parseSan` "does not throw for ordinary bad input".
+- **The pointer.** It sits directly under (2a)'s outcome table. It scopes the sentence to what was
+  ratified and what was measured.
+- **Same defect as `ABC-104`.** This is the over-reach `ABC-104` repaired in
+  `src/coordinate-move.ts`'s docblock. QE found it here (`.grugops/context/qe-ABC-104/notes/…df369a19`).
+
 ## Context
 
 `ADR-0002` (ratified 2026-07-30, all four clauses as proposed) closes its Decision section with
@@ -212,6 +224,23 @@ produces one of the three arms and none of them throws. The three names are the 
 | `move` | exactly one `Move` | the text names exactly one legal move | apply it, advance the ply |
 | `ambiguous` | **N ≥ 2** candidate `Move`s | the text names a legal move, but more than one matches | list the candidates, re-prompt, **ply not advanced** |
 | `rejected` | a machine-readable `SanRejectReason` | the text names **no** legal move in this position | show the reason, re-prompt, **ply not advanced** |
+
+> **[POINTER 2026-10-10, `design-F-072-1` (`QE-104-d`). "Every input" above means every `text`, and
+> it holds only under clause 2's caller obligation.** The sentence is read with the ratification
+> record's "does not throw for ordinary bad input" and with `src/san.ts:220-221` ("TOTAL against
+> whatever a loop actually hands over").
+> - **Measured at `7f7e6b84`** (Node v26.11.0; `.grugops/context/design-F-072-1/probe/qe104d-parsesan.mts`):
+>   - **Hostile text:** 39 values (strings, a 20 000-character string, `null`, `undefined`, a
+>     number, an object, a symbol, a function) × 4 calls (two positions, with and without `legal`).
+>     **156 calls, 0 throws.**
+>   - **Wrong-typed position or `legal`:** 7 of 11 calls **throw** `TypeError`. Examples:
+>     `parseSan(null, "e4")`, `parseSan(p, "e4", 42)` and `parseSan(p, "e4", [null])`.
+>   - **Another position's list:** returns a wrong arm silently, as this clause already says.
+> - **Nothing else changes.** "None of them throws" is a property of the `text` domain. A
+>   wrong-typed `position` or `legal` is the caller's obligation, and it is not validated. The three
+>   arms, the outcome set and every verdict are unchanged.
+> - **The same scope applies further down.** "It does not throw, and that is deliberately unlike
+>   `src/fen.ts`" below is the same sentence about the same domain.
 
 - **`ambiguous` and `rejected` are never merged**, and this is the clause the owner's legality-first
   priority buys. "More than one legal move matches" is the player being imprecise; "no legal move

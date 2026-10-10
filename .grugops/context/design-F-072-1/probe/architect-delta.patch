@@ -1,0 +1,128 @@
+--- a/clause-b.mjs+limb-ruling.patch
++++ b/design-F-072-1/probe/clause-b.mjs
+@@ -1,25 +1,43 @@
+-// ADR-0036 § Canonical clause (b) — the DELTA instrument (ABC-072 A3). One limb per run.
++// ADR-0036 § Canonical clause (b) — the DELTA instrument, WIDENED LIMBS (F-072-1, 2026-10-10). One limb per run.
+ //
++// CANONICAL from 2026-10-10 (ADR-0036 § Canonical clause (b) › "Widened limbs — 2026-10-10"). It is
++// `.grugops/context/design-ABC-072/probe/clause-b.mjs` (ABC-072's record, kept unchanged) with
++// Security/NFR's `secnfr-ABC-072/probe/limb-ruling.patch` applied, plus the Architect's deltas marked
++// `F-072-1` below. Old readings stay reproducible from the old path.
++//
+ // Usage, from the repository root:
+-//   node .grugops/context/design-ABC-072/probe/clause-b.mjs <base> <head> 1   # Node builtin import
+-//   node .grugops/context/design-ABC-072/probe/clause-b.mjs <base> <head> 2   # `process.` read
+-//   node .grugops/context/design-ABC-072/probe/clause-b.mjs <base> <head> 3   # spawn/exec/fetch/eval/new Function call
++//   node .grugops/context/design-F-072-1/probe/clause-b.mjs <base> <head> 1   # non-local import
++//   node .grugops/context/design-F-072-1/probe/clause-b.mjs <base> <head> 2   # reference to the global `process`
++//   node .grugops/context/design-F-072-1/probe/clause-b.mjs <base> <head> 3   # spawn/exec/fetch/eval/Function/WebSocket call
+ //
+ // Reads git objects only (`git show <rev>:<path>`), never the working tree, so any commit pair works.
+-// Production files: `.ts` under `src/`, not `.test.ts`, at each revision.
++// Production files: every JS/TS source under `src/` (`.ts .mts .cts .js .mjs .cjs`) that is not a test
++// (`.test.<ext>`) and not a declaration file (`.d.ts .d.mts .d.cts`), at each revision.
+ //
+ // COUNTS occurrences in EXECUTABLE CODE, found on the TypeScript AST. Comments and string prose are
+-// not code, so they are never counted. Limb 1 counts imports (static, `export … from`, dynamic
+-// `import()`); limbs 2 and 3 count CALL SITES / READ SITES, not files and not words.
++// not code, so they are never counted.
++//   Limb 1: an import whose specifier is not local (does not start with `.`): a builtin with or without
++//           `node:`, or a package. Static, `export … from`, literal `import()`, and literal `require()`
++//           (F-072-1: the import form of the `.cjs`/`.cts` files the ruling made production, and of
++//           `createRequire` in ESM). `import type` / `export type` are not imports at runtime.
++//   Limb 2: any value reference to the global `process` (member read, element access, destructuring,
++//           aliasing, shorthand) and `globalThis.process`. Declarations, property names and type
++//           positions named `process` are not references.
++//   Limb 3: a call to spawn / spawnSync / exec / execSync / execFile / execFileSync / fork / fetch / eval /
++//           Function, with or without `new` / `new WebSocket`, bare or via `globalThis.` (F-072-1: `new
++//           globalThis.X` too), or via a `child_process` binding (ESM import, or F-072-1: a `require()` /
++//           `await import()` of it bound to a name). The WHOLE CALL SPAN counts, arguments included.
+ // LISTS, never counts: word hits on added lines that the AST does not count (a comment, a string,
+-// `RegExp.prototype.exec`, a bare `process`). A listed hit someone disputes falls under the fail-safe.
++// `RegExp.prototype.exec`, computed forms such as `(0, eval)(…)` or `globalThis["eval"]`). A listed hit
++// someone disputes falls under the fail-safe (`AR-072-WORDHIT`).
+ //
+-// (b1) fires when an occurrence of the limb sits on a `+` line of `git diff -U0 --no-renames`.
+-//      An import statement counts if any line of it is added; a call or read counts by its callee line.
++// (b1) fires when an occurrence of the limb has any line on a `+` line of `git diff -U0 --no-renames`.
+ // (b2) fires when a production file gains a RUNTIME import edge (value or bare; `import type` and
+ //      `export type` are not edges) to a local module whose runtime closure at <head>, the module
+ //      itself included, holds the limb in executable code.
+-// The limb FIRES if (b1) or (b2) does. Clause (b) fires if any of the three limbs fires.
++// UNRESOLVED (a non-literal `import()`/`require()` in a file the diff touches, or a new edge to a local
++//      path that is not a production file at <head>) is a dispute: the limb FIRES (disputed).
++// The limb FIRES if (b1), (b2) or an unresolved item does. Clause (b) fires if any of the three limbs fires.
+ import { execFileSync } from "node:child_process";
+ import path from "node:path";
+ import ts from "typescript";
+@@ -47,7 +65,7 @@
+ 
+ const git = (...args) => execFileSync("git", args, { encoding: "utf8", maxBuffer: 256 << 20 });
+ const short = (rev) => git("rev-parse", "--short=8", rev).trim();
+-const isProduction = (f) => f.startsWith("src/") && /\.[mc]?[jt]s$/.test(f) && !/\.test\.[mc]?[jt]s$/.test(f) && !f.endsWith(".d.ts");
++const isProduction = (f) => f.startsWith("src/") && /\.[mc]?[jt]s$/.test(f) && !/\.test\.[mc]?[jt]s$/.test(f) && !/\.d\.[mc]?ts$/.test(f);
+ const productionFiles = (rev) =>
+   git("ls-tree", "-r", "--name-only", rev, "--", "src").split("\n").filter(isProduction);
+ 
+@@ -94,13 +112,40 @@
+     if (ts.isImportSpecifier(p) || ts.isExportSpecifier(p) || ts.isImportClause(p) || ts.isNamespaceImport(p)) return false;
+     return true;
+   };
++  // F-072-1: `import(…)` and `require(…)` are one form here — a module load by specifier.
++  const loadCall = (n) => {
++    if (!ts.isCallExpression(n)) return null;
++    if (n.expression.kind === ts.SyntaxKind.ImportKeyword) return "import()";
++    if (ts.isIdentifier(n.expression) && n.expression.text === "require") return "require()";
++    return null;
++  };
++  // F-072-1: `const cp = require("child_process")`, `const { spawn: s } = await import("node:child_process")`.
++  // Collected before the count so a call above its binding is still seen.
++  const collect = (n) => {
++    if (ts.isVariableDeclaration(n) && n.initializer) {
++      const init = ts.isAwaitExpression(n.initializer) ? n.initializer.expression : n.initializer;
++      const a = loadCall(init) && init.arguments[0];
++      if (a && ts.isStringLiteralLike(a) && CHILD_PROCESS.has(a.text)) {
++        if (ts.isIdentifier(n.name)) cpNamespace.add(n.name.text);
++        else if (ts.isObjectBindingPattern(n.name)) {
++          for (const el of n.name.elements) {
++            const key = el.propertyName ?? el.name;
++            if (ts.isIdentifier(key) && ts.isIdentifier(el.name) && CALLS.has(key.text)) cpAlias.add(el.name.text);
++          }
++        }
++      }
++    }
++    ts.forEachChild(n, collect);
++  };
++  collect(sf);
+   const visit = (n) => {
+-    if (ts.isCallExpression(n) && n.expression.kind === ts.SyntaxKind.ImportKeyword) {
++    const load = loadCall(n);
++    if (load) {
+       const a = n.arguments[0];
+       if (a && ts.isStringLiteralLike(a)) {
+         if (!a.text.startsWith(".")) add(1, n);
+         if (a.text.startsWith(".")) edges.push(a.text);
+-      } else unresolvable.push(`${file}:${lineOf(n.getStart(sf))} dynamic import() of a non-literal`);
++      } else unresolvable.push(`${file}:${lineOf(n.getStart(sf))} dynamic ${load} of a non-literal`);
+     } else if (isProcessRef(n)) {
+       add(2, n);
+     } else if (ts.isCallExpression(n)) {
+@@ -113,8 +158,10 @@
+         (cpNamespace.has(e.expression.text) || e.expression.text === "globalThis")
+       )
+         add(3, n);
+-    } else if (ts.isNewExpression(n) && ts.isIdentifier(n.expression) && (n.expression.text === "Function" || n.expression.text === "WebSocket")) {
+-      add(3, n);
++    } else if (ts.isNewExpression(n)) {
++      const e = n.expression; // F-072-1: `new globalThis.X(…)` is the same global as `new X(…)`
++      const name = ts.isIdentifier(e) ? e.text : ts.isPropertyAccessExpression(e) && ts.isIdentifier(e.expression) && e.expression.text === "globalThis" ? e.name.text : "";
++      if (name === "Function" || name === "WebSocket") add(3, n);
+     }
+     ts.forEachChild(n, visit);
+   };
+@@ -223,4 +270,4 @@
+ if (unresolved.length) console.log(`       unresolved, listed (a dispute -> the fail-safe): ${unresolved.length}\n${list(unresolved)}`);
+ console.log(`  word hits on added lines, not counted: ${words.length}${words.length ? `\n${list(words)}` : ""}`);
+ console.log(`  baseline at <head>, STATE (recorded, not a trigger): ${H.files.length} production files; ${holders.length} hold this limb in code${holders.length ? ` (${holders.join(", ")})` : ""}; ${rawFiles.length} by raw word hit`);
+-console.log(`  limb ${limb}: ${b1.length || b2.length ? "FIRES" : unresolved.length ? "FIRES (disputed: unresolved, the fail-safe)" : "does not fire"}`);
++console.log(`  limb ${limb}: ${!fires ? "does not fire" : b1.length || b2.length ? "FIRES" : "FIRES (disputed: unresolved, the fail-safe)"}`);

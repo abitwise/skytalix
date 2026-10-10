@@ -1,0 +1,61 @@
+design-F-072-1 — what was run, from where, and where the output is. 2026-10-10, Node v26.11.0, TypeScript 5.9.3, Apple Silicon.
+Worktree .claude/worktrees/design-F-072-1 on grugops/design-F-072-1, from wave tip 7f7e6b84 (node_modules symlinked from the
+main checkout). src/ is untouched by this hop, so every tree reading below is a reading of 7f7e6b84. Load1 is in each output file.
+Other agents (ABC-134's Engineer, ABC-129) were working in parallel.
+
+INSTRUMENT (canonical from 2026-10-10, ADR-0036 § Canonical clause (b) › "Widened limbs — 2026-10-10 (F-072-1)"):
+  clause-b.mjs = design-ABC-072/probe/clause-b.mjs  +  secnfr-ABC-072/probe/limb-ruling.patch (patch -p0, applies clean)
+                 +  architect-delta.patch (this hop: require(), child_process bindings by require()/await import(),
+                    new globalThis.X, .d.[mc]ts excluded, the header, and `fires` used by the verdict line).
+  The old path is kept unchanged as ABC-072's record.
+  ~1.0 s wall per limb at load1 ≈ 6 (`/usr/bin/time -p`, 7f7e6b84..7f7e6b84: 1.05 / 1.08 / 1.01 s).
+
+1. Fixtures + baselines, OLD vs NEW instrument (7 recorded pairs incl. f76e041, plus the wave tip, x 3 limbs):
+     .grugops/context/design-F-072-1/probe/fixtures.sh .grugops/context/design-ABC-072/probe/clause-b.mjs \
+       .grugops/context/design-F-072-1/probe/clause-b.mjs 7f7e6b84                               -> fixtures.out.txt
+   Reading: 24 of 24 (pair, limb) rows give the same b1 / edge count / b2 / holders / verdict under both instruments
+   (the 21 recorded rows plus the tip's 3). Only limb 2's raw word count moves (9 -> 11 at the 33-36-file revisions,
+   7 -> 7 at the 20-file ones) because its word regex is now \bprocess\b. Baseline at 7f7e6b84: 36 files, 0 / 3 / 0
+   (cli.ts, glyph-mode.ts, perft-bench.ts). At f76e041: 35 files, 0 / 3 / 0.
+
+2. The Architect's nine (ABC-072), harness unchanged, in a `git clone --shared` under the private scratchpad:
+     bash .grugops/context/design-ABC-072/probe/mutants.sh <repo> 6bfc7b29 <scratch> <abs path to NEW clause-b.mjs>
+     bash .grugops/context/design-ABC-072/probe/mutants.sh <repo> 7f7e6b84 <scratch> <abs path to NEW clause-b.mjs>
+                                                                                                   -> mutants.out.txt
+   Reading: the 6bfc7b29 section is BYTE-IDENTICAL to design-ABC-072/probe/mutants.out.txt (sha-256 9ca110f17b0bd103…, cmp).
+   At 7f7e6b84 it is identical apart from the `tip` line.
+
+3. Security/NFR's thirteen, harness unchanged:
+     bash .grugops/context/secnfr-ABC-072/probe/sec-mutants.sh <repo> 5f48753f <scratch> <abs NEW>
+     bash .grugops/context/secnfr-ABC-072/probe/sec-mutants.sh <repo> 7f7e6b84 <scratch> <abs NEW>  -> sec-mutants.out.txt
+   Reading: S1–S12 FIRE (S11 "FIRES (disputed: unresolved, the fail-safe)"); S13 does not fire and is a listed word hit
+   (limb 3 words=1). The 5f48753f section is BYTE-IDENTICAL (cmp) to the S1–S13 section of Security/NFR's
+   secnfr-ABC-072/probe/sec-mutants.widened.out.txt. Same verdicts at 7f7e6b84.
+
+4. This hop's plants F1–F9 for the Architect's deltas and the dispute rule:
+     bash .grugops/context/design-F-072-1/probe/f-mutants.sh <repo> 7f7e6b84 <scratch> <abs NEW>     -> f-mutants.out.txt
+   then the same plants against the demonstration copy (design-ABC-072 clause-b.mjs + limb-ruling.patch), placed
+   TEMPORARILY at the worktree root so `typescript` resolves, deleted after (git status clean of it).
+   Reading (NEW): F1–F6 FIRE, F7a does not fire (a dispute in a file the diff does not touch is not inherited), F7b FIRES
+   (disputed), F8 and F9 do not fire. Demonstration: F1, F2, F3, F6 silent; F4, F5 a word hit only; F7a/F7b/F8/F9 as NEW.
+   Across every *.out.txt of this hop: 0 rows with unresolved > 0 and "does not fire".
+
+5. QE-104-d — parseSan totality, re-measured:
+     node .grugops/context/design-F-072-1/probe/qe104d-parsesan.mts "$PWD"                              -> qe104d-parsesan.out.txt
+   Reading: 39 hostile `text` values x 4 calls (two positions, with and without `legal`) = 156 calls, 0 throws.
+   Wrong-typed `position` / `legal`: 7 of 11 calls throw TypeError. Another position's list returns silently.
+
+6. QE-136-a / QE-136-b — re-measured at 7f7e6b84 with QE's runner and planters, unchanged:
+     bash .grugops/context/qe-ABC-136/probe/ledger.sh <repo> 7f7e6b84 <scratch> CONTROL WPERFT-STATIC \
+       XSPLICE+WPERFT-STATIC XSPLICE+FMT+WPERFT-STATIC XHELPER-NARROW+WPERFT-STATIC XHELPER-NARROW+FMT+WPERFT-STATIC \
+       QSCAN-NARROW+FMT+WPERFT-STATIC QLHS-INTERSECT+FMT+WPERFT-STATIC
+     (planters copied unchanged to <scratch>/bin/, the runner's layout), then the full suite on the
+     XHELPER-NARROW+FMT+WPERFT-STATIC tree                                                            -> qe136-ledger.out.txt
+   Reading: both survivors reproduce (gate-clean after FMT, 12/12 green on the file; the helper tree 52 files / 1608 green on
+   the whole suite); WPERFT-STATIC alone is RED on the licence guard; QSCAN/QLHS are RED on the drift tripwire.
+
+7. Gates, this worktree, after the edits (2026-10-10T15:22:48Z..15:22:56Z, load1 6.26 -> 8.40):
+     npm run lint                                    exit 0, "Checked 100 files … No fixes applied."
+     npm test                                        exit 0, 52 files, 1608 passed, 7.34 s
+     npx vitest run --reporter=json | jq '.numPendingTests + .numTodoTests'        0
+     node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0  "No findings."

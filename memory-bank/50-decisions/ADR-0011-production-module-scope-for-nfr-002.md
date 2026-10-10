@@ -57,6 +57,13 @@ are in one block, `### Pointers 2026-10-10`, below the residual register:
 
 That reading is a **description** made precise. **Both licence entries pass as before.**
 
+**P6, 2026-10-10, subtask `design-F-072-1`:**
+- `R5b` is discharged by `ABC-136`.
+- `QE-136-a` is accepted, with a trigger.
+- `QE-136-b` is registered as `R5c` and goes to a ticket.
+
+No clause, verdict or instrument changes.
+
 **No target moves and no level is set, so no owner ratification is owed** — the same distinction from
 `ADR-0008` that `ADR-0009` and `ADR-0010` both draw. `ADR-0008` needed **Olger Oeselg** because it
 fixed a budget *level* a human has to value; there is no level here. Every claim below is
@@ -842,6 +849,42 @@ note `.grugops/context/design-owed-rulings-2026-10-10/notes/…95c73721`.
   - **What would falsify this reading:** a second legitimate supplier of history operations, such
     as a replay or network-game module. Operations would then need a seam, and (i) must be read
     again.
+- **P6 (2026-10-10, subtask `design-F-072-1`). `R5b` is DISCHARGED. `QE-136-a` is an accepted
+  residual. `QE-136-b` is registered as `R5c`, and it is a TICKET.** The reasoning and the readings
+  are in `.grugops/context/design-F-072-1/notes/`.
+  - **`R5b`, discharged.** `ABC-136` (merged `f87f0b6f`, QE PASS_WITH_GAPS) pins both operand
+    statements with framed literals. `QSCAN-NARROW` and `QLHS-INTERSECT` are RED on the tripwire
+    at `7f7e6b84`.
+  - **The property, stated at the width of the pins.** The decision note `…95c73721` § 3 said that
+    *any* gate-clean edit between the scan and the comparator reds the tripwire. That is wider than
+    the pins it prescribed. What is pinned is three things: the scan pair, the importer statement
+    and the comparator. **Each one reds if its text is edited.**
+  - **`QE-136-a`, accepted (LOW, owner Architect/Design).** The survivor is a new statement inserted
+    between the pinned statements that narrows the importer set in place (`XSPLICE`). It keeps every
+    pinned text. That puts it in the class the tripwire's comment already names, and `QE-136-c`
+    records the class: "a weakening that keeps the pinned text … just has to show in the diff".
+    - **Why no pin now.** Closing it alone would still leave four same-class survivors open
+      (`QE-136-c`). The contiguous pin it needs would also over-pin the comparator's comment block.
+    - **Trigger:** the first diff that adds or edits an executable line between the guard's
+      importer statement and its `toEqual` line (`src/history-pane.nfr.test.ts`, `:366`–`:374` at
+      `7f7e6b84`). That hop's QE reads it as an `R5b` question, and the contiguous pin is cut then.
+  - **`R5c` (`QE-136-b`, LOW, owner Architect/Design): clause 1's ONE expression is unpinned.**
+    - **The survivor.** `productionModulesIn` (`:163`–`:164`) narrowed with a filename exclusion
+      (`XHELPER-NARROW`) is gate-clean. With `WPERFT-STATIC` planted, the whole suite stays green
+      (52 files / 1608 passed, re-measured here).
+    - **Why it is not the same class as `QE-136-a`.** This edit changes the operand's
+      **definition**, not the text around a pin. It also weakens all three guards that derive from
+      the helper: the licence (`:361`), the composer tripwire (`:573`) and the probe (`:635`). And
+      a filename exclusion here is the exact shape `ABC-029` removed, so it reads as tidying, not
+      tampering.
+    - **Ruled: a TICKET.** The tripwire gets one more framed literal: the helper's two-line
+      definition, with its leading newline, as `ABC-057` `D1` requires. The ticket is `XS`, test
+      file only, with 0 production lines.
+    - **Sequencing.** It comes after `ABC-134` merges, because it is the same file and is never
+      run in parallel. `ABC-030` is merge-order only.
+    - **What it does not change.** The pin reads clause 1 and changes no character of it.
+    - **`R3` interaction, intended.** `R3`'s eventual recursive-enumeration fix must update this
+      pin in the same diff. That makes the change show.
 
 ### What this changes elsewhere
 

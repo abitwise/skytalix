@@ -1,0 +1,85 @@
+# 2026-10-10T15:16:36Z load { 7.54 8.20 9.04 } — instrument: design-F-072-1/probe/clause-b.mjs (canonical)
+tip 7f7e6b84
+F1 require("fs") in a new .cjs           limb 1  b1=1 b2=0 words=0 unresolved=  FIRES
+F1 require("fs") in a new .cjs           limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F1 require("fs") in a new .cjs           limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F1 require("fs") in a new .cjs: clause (b) FIRES (limbs: L1)
+F2 require() edge -> holder              limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F2 require() edge -> holder              limb 2  b1=0 b2=1 words=0 unresolved=  FIRES
+F2 require() edge -> holder              limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F2 require() edge -> holder: clause (b) FIRES (limbs: L2)
+F3 non-literal require()                 limb 1  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+F3 non-literal require()                 limb 2  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+F3 non-literal require()                 limb 3  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+  => F3 non-literal require(): clause (b) FIRES (limbs: L1 L2 L3)
+F4 new globalThis.WebSocket              limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F4 new globalThis.WebSocket              limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F4 new globalThis.WebSocket              limb 3  b1=1 b2=0 words=0 unresolved=  FIRES
+  => F4 new globalThis.WebSocket: clause (b) FIRES (limbs: L3)
+F5 cp.execSync via require ns (B5..)     limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F5 cp.execSync via require ns (B5..)     limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F5 cp.execSync via require ns (B5..)     limb 3  b1=1 b2=0 words=0 unresolved=  FIRES
+  => F5 cp.execSync via require ns (B5..): clause (b) FIRES (limbs: L3)
+F6 aliased execSync via await import (B6..) limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F6 aliased execSync via await import (B6..) limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F6 aliased execSync via await import (B6..) limb 3  b1=1 b2=0 words=0 unresolved=  FIRES
+  => F6 aliased execSync via await import (B6..): clause (b) FIRES (limbs: L3)
+F7a dispute elsewhere, diff untouched (B7..) limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F7a dispute elsewhere, diff untouched (B7..) limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F7a dispute elsewhere, diff untouched (B7..) limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F7a dispute elsewhere, diff untouched (B7..): clause (b) does not fire
+F7b comment in the disputed file (B7..)  limb 1  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+F7b comment in the disputed file (B7..)  limb 2  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+F7b comment in the disputed file (B7..)  limb 3  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+  => F7b comment in the disputed file (B7..): clause (b) FIRES (limbs: L1 L2 L3)
+F8 new .d.mts (not production)           limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F8 new .d.mts (not production)           limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F8 new .d.mts (not production)           limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F8 new .d.mts (not production): clause (b) does not fire
+F9 import type from a package            limb 1  b1=0 b2=0 words=1 unresolved=  does not fire
+F9 import type from a package            limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F9 import type from a package            limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F9 import type from a package: clause (b) does not fire
+--- the same plants against the demonstration (design-ABC-072 clause-b.mjs + limb-ruling.patch; a temporary copy in the worktree root so typescript resolves, deleted after), for contrast
+tip 7f7e6b84
+F1 require("fs") in a new .cjs           limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F1 require("fs") in a new .cjs           limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F1 require("fs") in a new .cjs           limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F1 require("fs") in a new .cjs: clause (b) does not fire
+F2 require() edge -> holder              limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F2 require() edge -> holder              limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F2 require() edge -> holder              limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F2 require() edge -> holder: clause (b) does not fire
+F3 non-literal require()                 limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F3 non-literal require()                 limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F3 non-literal require()                 limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F3 non-literal require(): clause (b) does not fire
+F4 new globalThis.WebSocket              limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F4 new globalThis.WebSocket              limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F4 new globalThis.WebSocket              limb 3  b1=0 b2=0 words=1 unresolved=  does not fire
+  => F4 new globalThis.WebSocket: clause (b) does not fire
+F5 cp.execSync via require ns (B5..)     limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F5 cp.execSync via require ns (B5..)     limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F5 cp.execSync via require ns (B5..)     limb 3  b1=0 b2=0 words=1 unresolved=  does not fire
+  => F5 cp.execSync via require ns (B5..): clause (b) does not fire
+F6 aliased execSync via await import (B6..) limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F6 aliased execSync via await import (B6..) limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F6 aliased execSync via await import (B6..) limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F6 aliased execSync via await import (B6..): clause (b) does not fire
+F7a dispute elsewhere, diff untouched (B7..) limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F7a dispute elsewhere, diff untouched (B7..) limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F7a dispute elsewhere, diff untouched (B7..) limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F7a dispute elsewhere, diff untouched (B7..): clause (b) does not fire
+F7b comment in the disputed file (B7..)  limb 1  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+F7b comment in the disputed file (B7..)  limb 2  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+F7b comment in the disputed file (B7..)  limb 3  b1=0 b2=0 words=0 unresolved=1  FIRES (disputed: unresolved, the fail-safe)
+  => F7b comment in the disputed file (B7..): clause (b) FIRES (limbs: L1 L2 L3)
+F8 new .d.mts (not production)           limb 1  b1=0 b2=0 words=0 unresolved=  does not fire
+F8 new .d.mts (not production)           limb 2  b1=0 b2=0 words=2 unresolved=  does not fire
+F8 new .d.mts (not production)           limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F8 new .d.mts (not production): clause (b) does not fire
+F9 import type from a package            limb 1  b1=0 b2=0 words=1 unresolved=  does not fire
+F9 import type from a package            limb 2  b1=0 b2=0 words=0 unresolved=  does not fire
+F9 import type from a package            limb 3  b1=0 b2=0 words=0 unresolved=  does not fire
+  => F9 import type from a package: clause (b) does not fire
+# end 2026-10-10T15:17:42Z load { 6.04 7.66 8.76 }

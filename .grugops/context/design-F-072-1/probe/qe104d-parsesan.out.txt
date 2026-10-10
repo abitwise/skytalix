@@ -1,0 +1,16 @@
+# 2026-10-10T15:08:54Z node v26.11.0 tree 7f7e6b84 (src/ identical to wave tip 7f7e6b84)
+== T: hostile TEXT, valid position, with and without legal (the domain the ADR's sentence is about)
+  39 texts x 4 calls = 156; threw 0
+== W: wrong-typed POSITION or LEGAL (the caller obligation; outside the text domain)
+W1 (null, 'e4')                                THREW TypeError: Cannot read properties of null (reading 'blackToMove')
+W2 (undefined, 'hello')                        THREW TypeError: Cannot read properties of undefined (reading 'blackToMove')
+W3 ({}, 'e4')                                  THREW TypeError: Cannot read properties of undefined (reading '0')
+W4 (p, 'e4', 42)                               THREW TypeError: moves.filter is not a function
+W5 (p, 'e4', 'abc')                            THREW TypeError: moves.filter is not a function
+W6 (p, 'e4', [null])                           THREW TypeError: Cannot read properties of null (reading 'piece')
+W7 (p, 'e4', [42])                             RETURNED rejected/no-such-move
+W8 (null, 'e4', L)   position unread           RETURNED move
+W9 (null, 'O-O', LC) castle path reads it      THREW TypeError: Cannot read properties of null (reading 'board')
+W10 (null, 42)       text guard first          RETURNED rejected/unreadable
+W11 (p, 'e4', LC)    another position's list   RETURNED rejected/no-such-move
+TOTAL returned 160, threw 7
