@@ -180,3 +180,29 @@ Architect/Design ruling. **Not `P0`:** nothing is blocked; a ticket can still be
 | 8 | size assigned | **✅** `XS` (1), was `S` |
 | 9 | priority assigned | **✅** `P1`, promoted on its own trigger |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`).
+- Branch `grugops/ABC-055-board-headings`, from `764454b5` (wave tip; board writes held). The board
+  commit is `ec5d975f`.
+- Not merged, not pushed.
+- The decision and readings are in `.grugops/context/ticket-to-pr-ABC-055/notes/` (`…5fe79e2e`
+  decision, `…252c5012` readings) and are not restated here.
+
+**The premise held at `764454b5`:** 11 headings against 13 table rows, missing exactly
+`In Analysis` and `In Design`, and the dial reads 2 and 2. **No stop condition fired.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | 13 H2 column headings = 13 table rows, same names, same order |
+| `A2` | MET | every limit equals `.grugops/factory.config.json#wip_limits`. `(WIP unlimited)` ×2 and `(visible, time-tracked)` as the FORMAT comment specifies |
+| `A3` | MET | every left number equals its row count. `In Analysis` and `In Design` hold 0 rows and read `0/2` |
+| `A4` | MET | `plans/board.md` only, +14/−3. (column, row) pairs are identical before and after (132/132). The changes are: two headings; the FORMAT lines (dial path, skip statement, invariant); one `_Updated:` line |
+| `A5` | MET | one `_Updated:` line prepended at line 2, 0 removed. Nothing is replaced, so no `history/` file is written |
+
+- **Gates:** `npm run lint` exit 0 (100 files). `npm test` exit 0, 52 files / 1608 passed, 0 skipped.
+- **Clause (b):** the three-limb probe was **not run** (UNKNOWN - verify); the session's permission
+  classifier denied it. `src/` diff is empty, so 0 production files; (b) is predicted not to fire.
+- **Board move:** `ABC-055`'s row stays in `In Development` because `A4` allows no row move. The
+  `In Review` move is left for the Orchestrator's close-out.
