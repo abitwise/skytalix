@@ -1,8 +1,8 @@
 ---
 id: ABC-135
 title: "`A8`'s consumer instrument reads a comment as a specifier, and two properties it has are pinned by no test — test-only, one file"
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
