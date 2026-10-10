@@ -1,8 +1,8 @@
 ---
 id: ABC-059
 title: `AGENTS.md`'s runnability guard pins one spelling, so the file contradicted itself for a day while the guard was green — assert the fact instead
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P2
 epic: —
