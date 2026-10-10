@@ -224,3 +224,41 @@ production file was touched.
   `N8-LANE` state is written. The block's own `it` runs in 2–3.4 ms (vitest's per-test duration,
   which is not the ADR's instrument).
 - **Next.** QE's hop. The UAT waiver applies if zero production lines holds (measured 0).
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-059`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `0b6e1c25..4230d3ab`, code `14c940ff`. Every reading is QE's own, taken in fresh
+`git archive` trees with QE's own mutants. **`A1`–`A6` are MET. No test was added.**
+
+- **`A1`**: 3 / 0-of-3 / 2-of-2, recounted.
+- **`A2`**: `Q13` with its line break reds the row at 8 positions (head, tail, § Deployment
+  posture, one-line, CRLF, list item, inside an HTML comment, mid-sentence). All 8 are green at
+  base. The real pre-repair file (`bf685784~1`) reds the row at head, and the old row stays green
+  on it at base.
+- **`A3`**: green with 8 `UNKNOWN - verify`. `ABC-087`'s `AGENTS.md` is 67/67 green.
+- **`A4`**: renaming the script alone reds the row. Renaming the script and the docs together
+  keeps it green.
+- **`A5`**: hashes are identical.
+- **`A6`**: one path, 0 production lines, 0 spawns, skip 0.
+- **Mutants**: 31 on head and 15 on base.
+- **The engineer's decisions**: the span rule and the floors-not-counts choice are **endorsed**.
+  The strict `A1`(ii) reading is accepted, with its cost named.
+- **`N8-LANE`** (narrow set, `ADR-0035` *proposed*): both sets are **admissible** (twin −0.02 % /
+  −0.74 %, R 0.086 / 0.129 s, load1 3.6 / 4.1). Head − base is +0.047 / −0.063 s against 650 ms,
+  so **MET** on the proposed protocol. `N8_SPAWN` is 27.
+- **Gates**: lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. Skip is 0,
+  integrity reads `No findings.`, and `lane-inventory.js` reports no findings.
+
+**Gaps (none fails a criterion):**
+- **`QE-059-a` LOW.** An abbreviation dot, a `?` before the claim, or a claim in the next sentence
+  ends the span early, and the claim goes unseen.
+- **`QE-059-b` LOW.** The guard still pins three spellings: the token `Dev / run`, the phrase
+  `UNKNOWN - verify`, and the command form `npm run `.
+- **`QE-059-c` LOW, fail-loud.** A slot comment without a `. ` lets the span run into the next list
+  items, and the strict (ii) reds a correct contrastive sentence.
+- **`QE-059-d` INFO.** The in-file `A2` witness is synthetic.
+- **`QE-059-e` INFO.** A stray empty `probe/x` is committed, and `RUN.txt` indexes uncommitted
+  logs.
+
+The board move is the Orchestrator's. Readings are in `.grugops/context/qe-ABC-059/notes/`
+(`…ce5cf723` decision, `…4abec244` readings, `…80ff0753` gaps) and `probe/`.

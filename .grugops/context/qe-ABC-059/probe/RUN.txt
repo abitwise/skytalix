@@ -1,0 +1,9 @@
+ABC-059 QE probes (qe-ABC-059). <repo> = the main checkout; <scratchpad> = QE's private scratchpad (qe059/). Trees are `git archive` copies with node_modules symlinked; no byte of any worktree was mutated.
+Inputs made by hand before the harness: `git show bf685784~1:AGENTS.md > <scratchpad>/agents.prerepair.md` (the file Q13 shipped in) and `git show 8330651d:AGENTS.md > <scratchpad>/agents.abc087.md`.
+mutate.mjs <tree> <mutant> <pristine AGENTS.md> <pristine package.json> <scratchpad>   resets both files from pristine, applies one mutant; anchors must be unique
+mutants.sh <commit> <label>     MUTANTS="..." env; one tree per label, `npx vitest run src/cli.test.ts` per mutant, load1 before each -> mutants-head.out.tsv (4230d3ab, 31 mutants), mutants-base.out.tsv (0b6e1c25, 15 mutants)
+mutants-head-reasons.out.txt    6 mutants re-run with -t "ABC-059" to read which assertion reds (the full-file summary truncates at 4 failures)
+mutant-bytes.txt                AGENTS.md size per mutant (max 24,546 B < ABC-109's 24,576 B budget, so no ABC-109 red is in any reading)
+spans-qe.out.txt / spans-prerepair.out.txt   QE's own count of A1/A3's figures (span rule as written in the block) on head, ABC-087's file, and the pre-repair file
+timing.sh <base> <head> 9 <tsv> the SE's harness with only the two path lines rewritten and `diff -r -x node_modules` for the twin check -> timing-set{1,2}.tsv; score.mjs (unchanged, ABC-058's) -> score-set{1,2}.out.txt
+gates.out.txt / raw-npm-test.txt  the six gates at 4230d3ab in QE's worktree, load1 logged before and after
