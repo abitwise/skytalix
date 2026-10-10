@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Security/NFR `secnfr-catalog-2026-10-10` merged (`129f5445`; ABC-074 non-M3 closure, RISK-003 at 0.8x, NFR-003 tab-completion struck); `ABC-104` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-087` → `Ready for UAT` (owner acceptance owed); `ABC-059` pulled → `In Development`._
 
@@ -570,7 +571,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-005] Opening book  (owner: BA/PM, **size: M — corrected from `S`; the cutter stopped at `M` deliberately, refusing the M→XL/M→L precedent as "a pattern, not evidence", since `L` would claim the book is the size of `EPIC-004`'s whole engine**, priority: P1, since: 2026-07-22, **DECOMPOSED 2026-08-16 into `ABC-092`…`ABC-096`. The WORK is pullable today — 4 of 5 tickets need nothing from `EPIC-004` — but the VALUE is not deliverable until `EPIC-004` lands; collapsing those two is how a board lies.** `EPIC-001`'s dependency verified DISCHARGED by reading the tree, not the front matter; `ABC-095` is the only hard blocker. Largest ticket `M`, no `SPLIT_REQUIRED`)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 5/8)
+## Ready (WIP 4/8)
 
 - [ABC-132] Three production docblocks cite the deleted FRAME_PRODUCERS list  (BA/PM, XS, P3, epic: —, since: 2026-10-10, **DoR 10/10**; cut at `postmerge-followups-2026-10-10`; comment-only in `src/render-seam.ts`/`result-screen.ts`/`cli.ts` → owner UAT word (pair with ABC-129); never in parallel with ABC-129)
 - [ABC-133] Count the spawn pin over the parser view, not a stripped string  (BA/PM, S, P3 → P1 if AR-058-STRIP fires, epic: —, since: 2026-10-10, **DoR 10/10**; F-058-1 + P1 folded; ~176 ms parse cost, A4 ≤ 250 ms; after ABC-059, same file)
@@ -578,16 +579,16 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-131] Drop the four puzzle rows that sit on the budget edge — 58/62 → 54/58, so every gating row keeps a 0.8x readings margin  (BA/PM, XS, P1, epic: EPIC-004, since: 2026-10-10, **DoR 10/10**; `ADR-0034` (b) @0.8x on the owner's word; baseline re-recorded in its own commit; folds QE-127-e; after `ABC-126`, before `ABC-083`; owner UAT word owed — `puzzle-corpus.ts` non-test) **2026-10-10 (`postmerge-followups-2026-10-10`): QE-126-b folded as A8 (source gain = oracle gain; 16/16 match today).**
 
 - [ABC-055] This board defines 13 columns and renders 10 — In Analysis, In Design and Ready for Dev have no heading  (BA/PM, S, P2, epic: —, since: 2026-08-13, **DoR 10/10**; three WIP limits — 2, 2, 6 — unenforceable by reading the single source of WIP truth, and **Ready for Dev is where AGENTS.md rule 1 puts the criteria review**. Nothing has overflowed them. Moves NO ticket; 0 files under src/) **2026-10-10 audit: `Ready for Dev` now has a heading; `In Analysis` and `In Design` still have none — left to this ticket.** **2026-10-10 re-score (`rescore-batch-2-2026-10-10`): DoR 10/10 → Ready; S→XS, P2→P1 (ABC-010 routes via In Design). Edits `plans/board.md` — build only while the Orchestrator holds board writes.**
-- [ABC-104] `coordinate-move.ts`'s docblock claims a totality it does not have  (BA/PM, XS, P3, epic: EPIC-003, since: 2026-08-17; **blocked on `ABC-031` merging — now unblocked**; docblock only, behaviour change fenced out as an `ADR-0004` question) **2026-10-10 re-score: DoR 10/10 → Ready; A3 vacuous clauses replaced. Touches a production file → owner UAT word needed.**
 
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
 
 - [ABC-059] The `AGENTS.md` runnability guard pins a spelling, not the fact  (BA/PM, XS, P3, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ same ordering; `S6` — the mechanism that let `Q13` through a green gate) **2026-10-10 audit: same ordering met — `ABC-042` Done 2026-08-15.** **2026-10-10 re-score: DoR 10/10 → Ready; A1 re-worded (3 `Dev / run` occurrences now); P3→P2. After ABC-058.** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-059`, branch `grugops/ABC-059-runnability-guard`).
+- [ABC-104] `coordinate-move.ts`'s docblock claims a totality it does not have  (BA/PM, XS, P3, epic: EPIC-003, since: 2026-08-17; **blocked on `ABC-031` merging — now unblocked**; docblock only, behaviour change fenced out as an `ADR-0004` question) **2026-10-10 re-score: DoR 10/10 → Ready; A3 vacuous clauses replaced. Touches a production file → owner UAT word needed.** **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-104`, branch `grugops/ABC-104-coordinate-move-docblock`).
 
 
 
