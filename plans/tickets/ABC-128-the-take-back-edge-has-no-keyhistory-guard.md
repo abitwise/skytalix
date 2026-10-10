@@ -1,8 +1,8 @@
 ---
 id: ABC-128
 title: The take-back edge's `keyHistory` count is guarded by no row, and `ABC-021` `A8`'s title says "nowhere else"
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P3
 epic: EPIC-002
