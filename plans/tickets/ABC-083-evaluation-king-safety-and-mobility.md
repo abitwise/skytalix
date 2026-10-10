@@ -3,7 +3,7 @@ id: ABC-083
 title: Evaluation — king safety and mobility
 status: backlog
 column: Backlog
-size: S
+size: M
 priority: P1
 epic: EPIC-004
 feature: —
@@ -22,6 +22,15 @@ feature: —
 > isolated-pawn check. `A9` is the trigger of the accepted risk `AR-NFR005-082`, put on the page as
 > a criterion. The Dependencies section now records that all three dependencies are `Done`. The
 > routing note is `.grugops/context/cut-followups-2026-10-09/notes/`.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2026-10-10`,
+> Workflow 07) against the wave tip `71be48b`. This is the second value-changing evaluator change
+> on a pinned engine. `ABC-082` was the first, and its re-score added re-pinning to its scope and
+> re-sized it `S` → `M`. That applies here too, and more widely, because mobility and king safety
+> act on boards with no pawns. New: a re-pin scope bullet and `A10`. Size `S` → `M`. `ABC-084`'s
+> trigger is live. **DoR 9/10, item 10 ⚠️: one Architect/Design ruling is owed before `Ready`, and
+> one owner question may be answered now or kept for the reading.** Reasoning:
+> `.grugops/context/rescore-batch-2026-10-10/notes/`.
 
 ## Problem
 
@@ -41,6 +50,9 @@ losing to a straightforward attack, which at 1400–1700 is how most games are d
 - **Mobility** — a bonus proportional to the number of legal moves available, from the side to
   move's point of view, symmetric across colours.
 - Additive terms on `ABC-076`'s score, same units, same sign convention.
+- **Re-pinning the merged pins these terms move** *(added 2026-10-10)*. Each pin is re-set from a
+  fresh measurement, and each fixture's bite is re-checked (`A10`). This is `ABC-082`'s scope
+  bullet, applied to this ticket. No other ticket owns it.
 
 ## Out of scope
 
@@ -111,6 +123,19 @@ term.**
   around it. *`A7` reads the same runs. A `kiwipete` drop from 7 to 6 reds `A7`, and that drop is
   exactly this trigger. It is routed here, and `A7` is not re-levelled on this page.*
 
+- **`A10` (the re-pin ledger; added 2026-10-10).** This is `ABC-082` `A8` applied here, with the
+  same classes (**P** re-pinned from a measurement, **F** bite re-checked or fixture re-found, **R**
+  never re-levelled; red = stop). Its PR-note lines and its opt-in lanes are the same. It covers
+  three groups of rows:
+  - every row of `ABC-082`'s § Merged bars, re-found at this ticket's base;
+  - **also the rows that § lists as unable to move because the board has no pawns.** A mobility or
+    king-safety term changes leaf values on every board. That includes `src/search.mate-corpus.ts`,
+    the `ABC-081` `G6` knight pair and the depth-10 rook ending;
+  - `ABC-079` `A1`'s hanging-corpus margins (on the corpus in the tree, including any rows
+    `ABC-126` re-found).
+  **And** `ABC-084`'s puzzle suite reads **40/40**. Its baseline is not touched in this ticket's
+  commits, and lowering it is the owner's word (`ABC-084` `A7`).
+
 ## Dependencies
 
 - ~~**`ABC-076` must land first — OPEN.**~~ **`ABC-076` — `Done`** (merged 2026-08-17).
@@ -120,8 +145,12 @@ term.**
   this ticket roughly 735 ns of `A5`'s 1,100.
 - ~~**`ABC-078` must land first for `A7` — OPEN.**~~ **`ABC-078` — `Done`.** The deepening loop
   exists.
-- **`ABC-084`'s trigger applies.** This ticket changes `src/evaluate*.ts`, so QE runs the puzzle
-  suite at review, and a red result is a QE FAIL (`ABC-084` § The trigger, once it merges).
+- **`ABC-084`'s trigger applies — live since 2026-10-10** (`ABC-084` merged `e634bc1`). This ticket
+  changes `src/evaluate*.ts`, so QE runs `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts` at
+  review, and a red result is a QE FAIL.
+- **File overlap (2026-10-10).** `A10` re-pins rows in `src/quiescence.test.ts`, the file `ABC-126`
+  edits. Do not build them in parallel. `ABC-126` (`XS`) goes first, so that this ledger reads the
+  re-found rows.
 
 ## Security / NFR triggers
 
@@ -158,15 +187,44 @@ term.**
 
 ## Size and priority rationale
 
-**Size `S` (2).** Two additive terms on an existing module with an existing test property. **The
-risk is in the measurement, not the volume of code** — and a risk that is fully expressed as two
-hard-stop criteria does not make a ticket bigger, it makes it honest.
+**Size `M` (3) — re-sized 2026-10-10 from `S` (2).** The terms are still small. The size comes
+from `A10`, the same reason `ABC-082` went `S` → `M`. `ABC-082` re-measured about 20 exact values,
+re-verified seven fixture bites, ran the six engine files' opt-in lanes (the PVS/LMR deep lane
+alone is about 926 s wall) and took a three-round depth read. This ticket does all of that, on
+**more** rows, because it also moves pawnless boards. It also adds the `A5` cost study and `A9`'s
+second depth read. **Not `L`:** no new production module and no new dependency edge, unless `A5`
+forces a cheaper mobility proxy. That proxy is a function inside `src/evaluate.ts`.
+
+*Original rationale, `S` (2), kept as written:* Two additive terms on an existing module with an
+existing test property. **The risk is in the measurement, not the volume of code** — and a risk
+that is fully expressed as two hard-stop criteria does not make a ticket bigger, it makes it honest.
 
 **Not `XL`. No `SPLIT_REQUIRED`.**
 
 **Priority `P1`.** Same reason as `ABC-082`: the engine plays sound chess without it.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM** (`rescore-batch-2026-10-10`, wave tip `71be48b`). **Result: 9 of 10,
+1 ⚠️ — NOT met; stays in `Backlog`.**
+- **Item 2 stays ✅, corrected.** Re-pinning was missing from scope. It is now in scope (`A10`).
+- **Item 4 stays ✅.** Ten criteria. `A10` is the re-pin ledger.
+- **Item 5 stays ✅.** `ABC-084`'s trigger is live. The file overlap with `ABC-126` is named.
+- **Item 8 stays ✅, re-sized** `S` → `M`.
+- **Item 10 stays ⚠️. What is open, exactly, and who rules it:**
+  1. **Architect/Design (`ADR-0003`'s carrier) — must be answered before `Ready`:** *"If `A5`'s total
+     leaf cost exceeds 1,100 ns with every mobility form the Engineer measures (legal-move count,
+     pseudo-legal count, attack-map count), which ships: (i) king safety alone, with mobility
+     re-cut as its own `Backlog` ticket; or (ii) nothing, with the ticket stopped until
+     `ADR-0003`'s depth model is re-derived?"* The page says the Engineer must not drop the term on
+     their own. With this answered, a miss on `A5` has a route instead of a stop.
+  2. **The owner (`AR-NFR005-082`'s risk owner) — may answer now or keep it for the reading:**
+     *"If `A9` shows `kiwipete` completing depth 6 but not depth 7 at `DEFAULT_BUDGET_MS` on an
+     uncontended M3, does depth 7 stay a level (the ticket stops, and the terms are cheapened or
+     cut until depth 7 holds), or is depth 7 retired on `kiwipete`, with the depth-6 FAIL floor
+     kept?"* The owner reserved this for the reading when accepting the risk (`…8e3f0b17`). A stop
+     with a named owner is a defined route, so BA/PM does not hold `Ready` on it.
+  **When question 1 is answered on this page, item 10 is ✅ and the ticket is `Ready` (10/10).**
 
 **Fold re-read, 2026-10-09** (subtask `cut-followups-2026-10-09`, wave tip `7b54dae`). This hop
 re-read the items the fold touched. **Result: 9 of 10, 1 ⚠️, NOT met; stays in `Backlog`.**

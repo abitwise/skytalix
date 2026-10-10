@@ -1,20 +1,32 @@
 ---
 id: ABC-010
 title: FEN semantic validation
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: M
-priority: P1
+priority: P2
 epic: EPIC-003
 feature: —
 ---
 
 # ABC-010 — FEN semantic validation
 
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2026-10-10`,
+> Workflow 07) against the wave tip `71be48b`. Item 6's `NFR-002` bar is re-derived from a
+> measurement (§ Security / NFR triggers). **Priority `P1` → `P2`.** The `P1` argument rested on
+> "`EPIC-003` accepts a FEN from a user", and `EPIC-003` does not: no epic scopes a FEN input
+> (§ Size and priority rationale). **DoR 10/10 → `Ready`, routed `Ready → In Design → Ready for
+> Dev`** for the open design question. Reasoning: `.grugops/context/rescore-batch-2026-10-10/notes/`.
+
 ## Problem
 
 *User*: the player who pastes or types a FEN to set up a position, and every EPIC-003 code
-path that accepts one.
+path that accepts one. *(Corrected 2026-10-10: no such player exists yet. No epic scopes a FEN
+input. The only `newGame` call is `newGame(START_FEN)` (`src/cli.ts:166`). The five production
+consumers of `parseFen` (`history.ts` `:58`/`:74`/`:117`, `status-panel.ts:156`,
+`history-pane.ts:121`, `result-screen.ts:132`, `perft-bench.ts`) parse `START_FEN`, the
+history's own `initialFen` or fixtures. The user today is the maintainer, and the first ticket
+that adds a FEN input inherits this guard.)*
 
 *Pain*: `src/fen.ts` validates FEN **grammar** loudly and correctly — 13 of 13 malformed
 cases throw a typed `FenError` naming the exact fault, before any position is returned. It
@@ -53,6 +65,12 @@ Every case below parses without error today:
 | `4k3/8/8/8/8/8/8/P3K3 w - - 0 1` | a white pawn on rank 1, which no legal game can produce |
 | halfmove field of 400 `9`s | `/^\d+$/` passes, `Number()` overflows → `halfmoveClock = Infinity`, and `toFen` emits `... - Infinity 1` |
 | fullmove `1000000000000000000000` | `toFen` emits `... 1e+21` |
+
+**Re-run 2026-10-10 at `71be48b`** (`.grugops/context/rescore-batch-2026-10-10/probe/`): all six
+rows still parse, and all five non-string inputs still throw `TypeError`. Rows 1–2 no longer yield
+a castle move, because the move generator now checks the rook, so their "and then" cell is stale.
+Their acceptance (`parseFen` throws) is unchanged. Row 3 still offers the king capture
+`84->116`. In rows 5–6 **both** re-parses throw, not only the `Infinity` one.
 
 `toFen` is documented at `src/fen.ts:184` to *"round-trip byte-identically with parseFen"*.
 It does not: re-parsing its own output for the `Infinity` case throws
@@ -144,7 +162,9 @@ only — it is a level-1 leaf with exactly one production consumer. Adding `fen.
 introduces a new dependency edge and moves `fen.ts` down the layering. It creates no cycle,
 but it is a real structural change to a graph the audit recorded as a clean acyclic DAG, and
 choosing where the check lives is a design decision, not an implementation detail. Flagged
-here, not answered here.
+here, not answered here. *(2026-10-10: `isInCheck` is now exported at `src/legal.ts:32`, so the
+candidate edge is `fen.ts → legal.ts`. `legal.ts` imports `apply`, `moves` and `position`, not
+`fen`, so the edge makes no cycle. Still Architect/Design's at the design hop.)*
 
 ## Security / NFR triggers
 
@@ -153,8 +173,19 @@ here, not answered here.
   call. Parsing is a once-per-input operation and the audit measured `legalMoves` itself at
   2.1–5.3 µs, so there is ample room — but the number is stated so a regression is visible
   rather than assumed.
+- **`NFR-002` — full redraw < 16 ms. Re-derived 2026-10-10; this bar replaces the `< 1 ms` above.**
+  **Validated `parseFen` ≤ 10 µs mean per call.** It is read in the PR note, base against branch in
+  one process, with the machine, Node version and 1-minute load recorded. It is not asserted in the
+  suite (`src/gameend.nfr.test.ts:16`–`:17`). Derivation: there are **2 calls per frame**
+  (`status-panel.ts:156`, `history-pane.ts:121`), so the frame cost is ≤ 20 µs, **0.125%** of
+  16 ms. There are ≤ 4 history derives per turn (`NFR-003`'s second component), so the turn cost
+  is ≤ 40 µs. Today's unvalidated parse reads **1.85 µs** median, and one in-check probe of the side
+  not to move reads **0.15 µs** (BA/PM probe, Apple M3, Node v26.11.0, load1 4.8). That is 5x
+  headroom. **Above 10 µs: stop and report to Security/NFR.**
 - `NFR-001` — move generation throughput is **not** at risk: `src/fen.ts` has exactly one
-  production consumer (`perft-bench.ts`) and is not on the search hot path. If the design
+  production consumer (`perft-bench.ts`) and is not on the search hot path. *(2026-10-10: five
+  production consumers, still none on the search hot path. `keyHistory` parses once per search,
+  never per node: `ADR-0002` clause 3.)* If the design
   question above adds a `fen.ts → moves.ts` edge, confirm `npm run perft` still reports
   **≥ 1,000,000 nodes/sec** and deep perft **32/32 exact**.
 - **No security trigger.** The audit was explicit: this is a reliability defect, not a
@@ -176,7 +207,7 @@ Three things the tests must do that a naive pass would miss:
 2. **Assert the message names the fault.** EPIC-003's acceptance is that rejections teach.
    A generic "invalid FEN" passes a throw-assertion and fails the requirement.
 3. **Keep a positive corpus.** Every legal fixture in the repo must still parse. The most
-   likely way this ticket goes wrong is over-rejection, and the existing 143-test suite plus
+   likely way this ticket goes wrong is over-rejection, and the existing 143-test suite (1,540 tests at `71be48b`) plus
    the deep perft lane are the guard.
 
 The round-trip criterion is best written as a property test over the existing perft position
@@ -215,6 +246,16 @@ its own.
 This must be `Ready` before EPIC-003 is decomposed, so it is not discovered as rework
 mid-epic.
 
+**Re-prioritised 2026-10-10: `P1` → `P2` (BA/PM).** The "Not `P2`/`P3`" argument above is false on
+today's plans. `EPIC-003`'s scope (`plans/epics/EPIC-003-move-input-and-controls.md` § Scope) is the
+move parsers, the ambiguity list, teaching rejections, the commands and Tab-completion. **It never
+accepts a FEN**, and no other epic does. The defect class is real and reproduced (re-run above),
+but no input reaches it. **Not `P3`:** `toFen`'s documented round trip is false today, and
+`EPIC-005` may make this live soon (next line). **Trigger back to `P1`:** any ticket that lets a
+human or a file supply a FEN (a `--fen` flag, a paste command, a saved-game load), or `ABC-093`
+choosing a FEN-carrying book format that `ABC-094` parses at run time. That ticket then names
+`ABC-010` as its hard prerequisite. The Orchestrator may reverse this re-prioritisation.
+
 ## Definition of Ready
 
 Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (exact FENs, exact
@@ -225,71 +266,30 @@ size `M` ✅ · priority `P1` ✅ · no blocker ✅
 Sits in `Backlog`. The open design question is a design-hop input, not a blocker. Promotion
 to `Ready` is a separate BA/PM step and has not been taken.
 
-### DoR RE-SCORED 2026-08-12 by BA/PM — **9 of 10. NOT promoted, and the reason is a measurement this page's own argument rests on.**
+### DoR re-scored 2026-08-12 by BA/PM — 9 of 10, not promoted
 
-Task `post-abc030-2026-08-12`, subtask `refinement-post-abc030`, Workflow 07. **`EPIC-003` was
-decomposed at this hop** (`ABC-031`…`ABC-038`), which is the event this page's closing line names:
-*"this must be `Ready` before EPIC-003 is decomposed, so it is not discovered as rework mid-epic."*
-So the promotion was assessed rather than deferred — **and it does not pass.**
+*(Condensed 2026-10-10. The full text is in git history at `71be48b` and in
+`.grugops/context/refinement-post-abc030/notes/20260812T181000Z-ba-pm-observation-i-re-verified-five-dor-scores-and-three-of-them-moved-6b2d5f81.md`.)*
+That re-score found four production consumers of `src/fen.ts`, two of them once per frame, and set
+**item 6 to ⚠️**: the triggers omitted `NFR-002`, and the `< 1 ms` bar was the wrong size for a
+per-frame call. It also said the design question is a design-hop input, not a blocker, so a pull
+routes `Ready → In Design → Ready for Dev`. And it noted `N8-LANE` (≤ 650 ms CPU) is inherited, with
+0 new test files expected.
 
-**THE MODULE MAP THIS TICKET QUOTES IS STALE, MEASURED AT THE SOURCE ON `main` AT `43d5a9d`:**
+### DoR re-scored 2026-10-10 by BA/PM — 10 of 10, page `Ready`
 
-```
-this page says:  "src/fen.ts has exactly ONE production consumer (perft-bench.ts)"
-                 "parseFen has no user-facing caller"
-                 "NFR-001 is not at risk: fen.ts ... is not on the search hot path"
+`rescore-batch-2026-10-10`, wave tip `71be48b`. **The board move is the Orchestrator's, and the pull
+goes to `In Design` first.**
 
-measured 2026-08-12, production (non-test) importers of src/fen.ts:  FOUR
-  src/perft-bench.ts   :63 :71 :84
-  src/history.ts       :58  :74  :117   <- :117 is inside keyHistory(), which repetitionCounts
-                                            uses, which gameStatusOf uses, which the LOOP calls
-                                            once per ply
-  src/status-panel.ts  :156                <- ONCE PER FRAME
-  src/history-pane.ts  :121                <- ONCE PER FRAME
-```
-
-**`parseFen` is now on the render path, twice per frame, and on the per-ply evaluation path.** Three
-tickets merged after this one was written (`ABC-012`, `ABC-016`, `ABC-017`) put it there, each
-legitimately — `ADR-0002`'s derive-don't-maintain rule makes replay-from-`initialFen` the correct
-shape, and replay starts with a `parseFen`.
-
-**What that does to this page, item by item:**
-
-- **item 6 — security/NFR triggers, each with a measurable target: ✅ → ⚠️.** The trigger set names
-  `NFR-003` and `NFR-001` and **does not mention `NFR-002` at all** — the render-latency bar of
-  **< 16 ms per frame**, which is now reachable by this ticket **twice per frame**. And the stated bar
-  is the wrong size in the new context: *"full parse-with-validation adds **< 1 ms** per call"* was set
-  against a module with one consumer on no hot path; **two calls at 1 ms each is 12.5% of the whole
-  frame budget.** The bar needs re-deriving against `NFR-002`, not merely re-typing. **This is the one
-  item that blocks promotion.**
-- **item 9 — priority `P1`: still ✅, and the argument is now stronger in one half and weaker in the
-  other, so both are stated.** *Weaker:* "no user-facing caller, one consumer, nothing in flight" is
-  false — four consumers, two of them per-frame. *Unchanged:* the **latency** argument for `P1` rather
-  than `P0` still holds, because none of the four callers feeds `parseFen` a **user-supplied** string
-  — all three new ones pass `history.initialFen`, which the product produced itself. The defect this
-  ticket fixes stays latent until `EPIC-003` accepts a FEN from a human, exactly as written.
-- **items 1–5, 7, 8, 10: ✅, re-verified individually.** The acceptance criteria are unaffected by the
-  module-map change — every FEN and every expected `FenError` is a property of `parseFen` alone.
-
-**On the open design question, and why it is NOT the ⚠️.** *Does `fen.ts` gain an edge to `moves.ts`
-for the side-not-to-move-in-check rule?* It stays a **design-hop input, not a blocker**, and that
-differs from `ABC-026`'s precedent for a stated reason: there, the acceptance criteria **could not be
-written** until an architect produced a number; here they **are written** and are identical whichever
-way the edge falls. **The routing consequence is real though and belongs to the Orchestrator:** when
-this ticket is pulled it goes `Ready → In Design → Ready for Dev`, not straight to development.
-**And the new measurement makes that design hop bigger than it looked** — an edge from `fen.ts` to
-`moves.ts` now lands on a module the renderers call twice per frame.
-
-**`N8-LANE` inheritance, noted because this ticket predates the row.** `plans/nfr-catalog.md`'s
-standing bar did not exist on 2026-07-29, and its own sentence — *"a ticket that states nothing has
-stated this one"* — makes this page compliant without an edit: **≤ 650 ms CPU** (5% of `NFR-008`'s
-13 s clause), net of 160 ms per test file added. **Expected new test files: 0–1** — the table tests
-belong in the existing `src/fen.test.ts`, so **0 is the honest expectation** and this ticket may cost
-the lane nothing at all in per-file floor.
-
-**Result: 9 of 10, DoR NOT met, stays in `Backlog`, NOT promoted, and not smoothed** — `ABC-024`,
-`ABC-026`, `ABC-028` and `ABC-030` were each left with the DoR honestly unmet rather than rounded up,
-and this board's standard is not suspended because a promotion would have been convenient. **What is
-needed before `Ready` is one short BA/PM pass with Architect/Design input: re-derive item 6's bar
-against `NFR-002` with the four call sites in view.** It is small, it is named, and it is cheaper than
-discovering it inside `EPIC-003`.
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** corrected: no FEN input exists yet, so the user is the maintainer and the first ticket to add one. Reproduction re-run today |
+| 2 | scope and out-of-scope clear | **✅** six rules plus round trip and error typing; retrograde legality and Chess960 fenced |
+| 3 | INVEST-shaped | **✅** independent (no dependency), small enough at `M`, with a split line named if design moves it |
+| 4 | acceptance testable and measurable | **✅** exact FENs, exact error type, byte-identical round trip, positive corpus, `32/32` |
+| 5 | dependencies known | **✅** none blocking. The design question is assigned to Architect/Design and is a routing step |
+| 6 | security/NFR triggers with a measurable target | **✅** (was ⚠️) `NFR-002`: ≤ 10 µs per validated parse, derived from 2 calls per frame and measured at 1.85 µs today; `NFR-001` perft ≥ 1,000,000 nodes/sec if an edge is added; `N8-LANE`; no security trigger |
+| 7 | test notes present | **✅** three |
+| 8 | size assigned | **✅** `M` (3) |
+| 9 | priority assigned | **✅** `P2` (re-prioritised from `P1`, with the trigger back) |
+| 10 | no major unresolved blocker | **✅** the design question is answered at the design hop and does not change any criterion |

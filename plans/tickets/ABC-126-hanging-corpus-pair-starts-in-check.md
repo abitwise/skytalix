@@ -1,8 +1,8 @@
 ---
 id: ABC-126
 title: The hanging corpus's "R takes a bishop a pawn defends" pair starts in check — re-find it, and assert the header's claim
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: XS
 priority: P2
 epic: EPIC-004
@@ -20,6 +20,14 @@ feature: —
 > **ORDERED AFTER `ABC-084` MERGES.** `ABC-084` (In Development) moves this corpus out of
 > `src/quiescence.test.ts` into a data module, byte-identical. Editing the rows before that lands
 > would collide with the move or fork the corpus.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2026-10-10`,
+> Workflow 07) against the wave tip `71be48b`. `ABC-084` merged (`e634bc1`). The corpus is
+> `HANGING_CORPUS` in `src/puzzle-corpus.ts` (the pair is at `:70` and `:84`). The "none of them in
+> check" row is still `src/quiescence.test.ts:269`. `ABC-084`'s suite carries a carve-out for this
+> pair (`src/puzzle-suite.test.ts:130`–`:133`), and this ticket removes it (`A6`). No production
+> file has changed since the `7b54dae` probe. **DoR 10/10 → `Ready`.** Reasoning:
+> `.grugops/context/rescore-batch-2026-10-10/notes/`.
 
 ## Problem
 
@@ -46,15 +54,23 @@ an Architect reading FENs.
   **not** in check. The name and the losing move stay unless the new FEN forces a new square.
 - **Make the title's claim an assertion:** the "none of them in check" row also asserts
   `isInCheck(parseFen(fen))` is `false` (`src/legal.ts:32`) for every row it iterates.
-- Both edits land wherever `ABC-084` put the corpus and that row.
+- Both edits land where `ABC-084` put them: the FENs in `src/puzzle-corpus.ts`, the assertion in
+  `src/quiescence.test.ts:269`.
+- **Drop `ABC-084`'s carve-out for this pair** *(added 2026-10-10)*. The `A6` row in
+  `src/puzzle-suite.test.ts:126`–`:139` skips the in-check assertion for `do-not-hang` rows. Its
+  comment (`:130`–`:132`) names this pair as the reason. Once the pair is re-found, that comment is
+  false and the skip has no reason left. Remove both, so that row asserts not-in-check on every
+  puzzle.
 
 ## Out of scope
 
 - **Any other corpus row,** including the four dead-draw pairs (`…d25a0383`). They are not in check.
 - **Any level of `ABC-079` `A1`.** Under `ADR-0028` decision 2 a fixture is re-found and its level
   does not move.
-- **`ABC-084`'s own additions** (mate, win-material, extra do-not-hang rows). If the shared module's
-  header now covers them and one is in check, stop and report; do not re-find it here.
+- **`ABC-084`'s own additions** (mate, win-material). *(Checked 2026-10-10: none is in check. The
+  merged `A6` row asserts it for every non-`do-not-hang` row, and it is green at `71be48b`.)*
+- **`src/puzzle-suite.baseline.json`** (`A4`), and any new puzzle. A "harder puzzles" ticket is
+  being cut in parallel (`cut-harder-puzzles`). It is not this one.
 - **Any production file.**
 
 ## Acceptance (Given/When/Then)
@@ -73,17 +89,36 @@ an Architect reading FENs.
   default lane and `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` are green.
 - **`A4` (`ABC-084`'s suite and baseline are respected).** **Given** `ABC-084`'s opt-in lane,
   **when** it runs after the change, **then** the solved count is **not below** the recorded
-  baseline. **The baseline file is not touched in this ticket's commits** (`ABC-084` `A7`: the
-  baseline moves only in its own commit with a reason). Each replaced row's provenance
-  (`ABC-084` `A6`) records the re-find and cites this ticket.
-- **`A5` (test data only).** **Then** `git diff --numstat <base>...<tip> -- src` lists only the
-  corpus data module and the test file holding the "none of them in check" row. Lint, typecheck,
-  build and `npm test` exit 0; skip count 0; integrity `No findings.`
+  baseline. **The baseline reads 40/40, so "not below" means 40/40.** **The baseline file is not
+  touched in this ticket's commits** (`ABC-084` `A7`: the baseline moves only in its own commit
+  with a reason). Each replaced row's provenance records the re-find. *(Made concrete 2026-10-10:
+  `HANGING_CORPUS` rows carry no `source` field. `PUZZLES` stamps all 24 with one shared string. So
+  the provenance is a comment line above each replaced row, in the shape of the `ABC-082` re-find
+  comment at `src/puzzle-corpus.ts:71`–`:72`. It names `ABC-126`, the old FEN's fault (in check),
+  and the depth-3 margin from `A3`.)*
+  **The `ABC-084` trigger (owner option B) does not fire here:** no file on its list changes. **The
+  suite still runs, because this criterion requires it.** This ticket changes 2 of the suite's 40
+  inputs, and the trigger list covers engine changes, not data changes. The Engineer runs
+  `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts` and records the result in the PR note, and
+  QE re-runs it at review as this ticket's `A4`.
+- **`A5` (test data only).** **Then** `git diff --numstat <base>...<tip> -- src` lists exactly
+  `src/puzzle-corpus.ts`, `src/quiescence.test.ts` and `src/puzzle-suite.test.ts` *(third file
+  added 2026-10-10, for `A6`)*. Lint, typecheck, build and `npm test` exit 0; skip count 0;
+  integrity `No findings.`
+- **`A6` (the carve-out goes; added 2026-10-10).** **Given** `src/puzzle-suite.test.ts`'s row "every
+  row names its source and its moves are legal; no added row starts in check", **then** it asserts
+  `isInCheck(position) === false` for **every** puzzle, 40/40, with no `kind` exemption. The comment
+  naming this pair is gone. **Red first:** with the exemption removed and today's pair in place,
+  the row is red on exactly the two pair rows (shown in the PR note, as for `A1`).
 
 ## Dependencies
 
-- **`ABC-084` must merge first — OPEN (In Development).** It moves the corpus and its row; the
-  data module's name is its Engineer's. This is an ordering dependency, not a design one.
+- ~~**`ABC-084` must merge first — OPEN (In Development).**~~ **`ABC-084` — `Done`** (owner
+  accepted 2026-10-10, merged `e634bc1`). The data module is `src/puzzle-corpus.ts`.
+- **File overlap (2026-10-10).** `ABC-083` re-pins rows in `src/quiescence.test.ts`, and any
+  "harder puzzles" ticket edits `src/puzzle-corpus.ts`. Do not build either in parallel with this
+  one. This ticket goes first, because it is the smallest and `ABC-083`'s re-pin ledger then reads
+  the re-found rows.
 - **`ABC-079` — `Done`.** It owns `A1` and its 24 rows.
 - **`ADR-0028` decision 2** governs the re-find (fixture re-found, level unchanged).
 
@@ -116,6 +151,19 @@ an Architect reading FENs.
 nothing is red, and nothing waits on it.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM** (`rescore-batch-2026-10-10`, wave tip `71be48b`). **Result: 10 of
+10, 0 ⚠️ — met; page `Ready`. The board move is the Orchestrator's.**
+- **Item 3, ⚠️ → ✅.** `ABC-084` is `Done`. The ticket is independent.
+- **Item 2 stays ✅, and is wider.** `ABC-084`'s carve-out comment (`src/puzzle-suite.test.ts:130`)
+  becomes false once the pair is re-found, so removing it is in scope (`A6`). `A5`'s fence lists
+  three files.
+- **Item 4 stays ✅.** `A4` now says "not below" means 40/40, says where the provenance goes, and
+  says why the suite runs although option B's trigger does not fire. `A6` is new.
+- **Item 5 stays ✅.** The dependency is `Done`. The file overlap with `ABC-083` and the
+  harder-puzzles cut is named.
+- **Items 1, 6–10 unchanged ✅.** No production file has changed since the `7b54dae` probe. The
+  candidate's measured margins still apply to today's search.
 
 Assessed by BA/PM, **2026-10-09**, against the wave tip `7b54dae`. **Result: 9 of 10, 1 ⚠️ — NOT
 met; stays in `Backlog`.** The ⚠️ is an ordering hold with a named release: when `ABC-084` merges,

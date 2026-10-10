@@ -1,0 +1,11 @@
+ACCEPTED legal=3 toFen tail="0 1" ok :: 4k3/8/8/8/8/8/8/K7 w KQ - 0 1
+ACCEPTED legal=5 toFen tail="0 1" ok :: 4k3/8/8/8/8/8/8/4K3 w K - 0 1
+ACCEPTED legal=29 toFen tail="0 1" ok :: 4k3/8/4Q3/8/8/8/8/4K3 w - - 0 1
+ACCEPTED legal=6 toFen tail="0 1" ok :: 4k3/8/8/8/8/8/8/P3K3 w - - 0 1
+ACCEPTED legal=5 toFen tail="Infinity 1" re-parse throws :: 4k3/8/8/8/8/8/8/4K3 w - - 99999999999999
+ACCEPTED legal=5 toFen tail="0 1e+21" re-parse throws :: 4k3/8/8/8/8/8/8/4K3 w - - 0 100000000000
+null -> TypeError instanceof FenError=false
+undefined -> TypeError instanceof FenError=false
+42 -> TypeError instanceof FenError=false
+{} -> TypeError instanceof FenError=false
+[] -> TypeError instanceof FenError=false
