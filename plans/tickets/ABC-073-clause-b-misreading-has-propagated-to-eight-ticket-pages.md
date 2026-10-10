@@ -29,6 +29,23 @@ feature: —
 > `ABC-072`. On 2026-10-10 this re-score already rewrote the (b) answer on `ABC-055`/`057`/`058`/
 > `059` to state both readings with each page's own facts. That is an interim form, not a ruled
 > one: no wording was guessed.
+>
+> **Re-measured 2026-10-10 by BA/PM** (subtask `bapm-followups-2026-10-10`) at wave tip `71418879`.
+> **The live set is ONE page: `ABC-055` (`Ready`).**
+> - `ABC-053`, `054`, `057`, `058` and `059` are `Done`. `ABC-059` merged as `4c33b72b`.
+> - The fail-safe is on 1 of 1.
+> - **`A4` is void:** `ABC-053` is merged and gated, so its page is not edited.
+> - **`A1` repaired.** Three `Done` pages (`057`, `058`, `059`) carry the interim "unruled" text and
+>   can never be edited, so the "unruled" grep now counts non-`Done` pages only.
+> - **Disposition: FOLD into `ABC-072`'s hop**, as § Size and priority already allows. `ABC-072`
+>   `A6` now allows these paths. The ruling exists (`ADR-0036`, DELTA), so the ⚠️ clears → DoR
+>   10/10.
+> - **Not discharged on its own.** Closing it without a hop drops a ticket, and this board drops
+>   only on the owner's word (`ABC-038`, `ABC-060`).
+> - **If `ABC-055` is `Done` before `ABC-072`'s hop,** the set is empty, and this ticket closes on
+>   that measurement at the same hop.
+>
+> Readings: `.grugops/context/bapm-followups-2026-10-10/probe/RUN.txt`.
 
 ## Problem
 
@@ -107,22 +124,33 @@ Any of `ABC-055`/`057`/`058`/`059` merged before this hop leaves the set too.)*
   the "unruled" grep returns **0** pages, and **every page left carrying the old
   wording is `Done`** (at `f76e041`: `ABC-041`, `ABC-061`, `ABC-063`, `ABC-064`, `ABC-065`, `ABC-067`,
   `ABC-082`), each because it is merged.
+  *(2026-10-10, `71418879`.)*
+  - **"The 'unruled' grep returns 0 pages" now reads "0 non-`Done` pages, this page excluded".**
+    `ABC-057`, `058` and `059` merged with the interim text and are fenced by § Out of scope.
+  - **The `Done` set carrying old or interim wording is now** `ABC-041`, `053`, `054`, `057`, `058`,
+    `059`, `061`, `063`, `064`, `065`, `067` and `082`.
+  - **The live set is `ABC-055`.**
 - **`A2` (the fail-safe is universal on live pages).** **Given** the delivered commit, **then** every
   Backlog page that restates clause (b) also carries the fail-safe sentence, counted over
-  whitespace-normalized text. **6 of 6 at `f76e041`, and still n of n after the hop.**
+  whitespace-normalized text. **6 of 6 at `f76e041`, and still n of n after the hop.** *(1 of 1 at
+  `71418879`.)*
 - **`A3` (no verdict was copied).** **Given** the pages in the set, **then** each (b) answer still names
   **that page's own** measured facts — its own path count, its own file list — and **no two pages
   carry an identical (b) answer**. *(`ABC-055`, `ABC-057` and `ABC-059` are identical today; that is
   the symptom.)*
 - **`A4` (the self-contradiction is gone).** **Given** `ABC-053`, **then** its Security bullet's
   heading and its (b) answer agree: it does not quote a firing clause under a "not triggered" header.
+  *(2026-10-10: **VOID.** `ABC-053` is `Done` and merged, and § Out of scope fences every merged
+  page. Its self-contradiction stays on the record, as `ABC-065`'s wording does. Not struck
+  silently.)*
 - **`A5` (nothing else on those pages moved).** **Given** the delivered commit, **then** for each
   page in the set the diff touches **only** lines inside the `## Security / NFR triggers` section —
   and every `## Acceptance` block is **byte-identical** by blob-level comparison of the section text.
 - **`A6` (nothing else changed).** **Given** the delivered commit, `git diff --name-only <commit>~1
   <commit>` shows **exactly** the set's `plans/tickets/ABC-0*.md` paths (6 at `f76e041`) and
   **nothing else** — **0 paths
-  under `src/`**, 0 new files. Suite green, skip **0**.
+  under `src/`**, 0 new files. Suite green, skip **0**. *(2026-10-10: 1 at `71418879`, `ABC-055`.
+  When folded, `ABC-072` `A6` is the binding path list, and this row is read inside it.)*
 
 ## Dependencies
 
@@ -213,3 +241,13 @@ still the ordering on `ABC-072`.
 | 8 | size assigned | **✅** `XS` (1), was `S` |
 | 9 | priority assigned | **✅** `P3` (page `P2` / board `P1` reconciled), with triggers |
 | 10 | no major unresolved blocker | **⚠️** `ABC-072`'s ruling must land first |
+
+**Re-scored 2026-10-10 by BA/PM** (`bapm-followups-2026-10-10`, wave tip `71418879`). **Result: 10 of
+10, 0 ⚠️ — MET, as a FOLD into `ABC-072`'s hop.** It is not pulled on its own; the board move is the
+Orchestrator's.
+- **Item 10 → ✅.** The ruling exists (`ADR-0036`). `ABC-072`'s `A2` paragraph is written in the same
+  hop, before the page edit, so the order is internal to one hop.
+- **Item 4 stays ✅, repaired.** `A1` now counts non-`Done` pages. `A4` is void (`ABC-053` is
+  `Done`). The live set is 1.
+- **Item 5 stays ✅.** The live set is `ABC-055`. If it merges first, the set is 0.
+- **Items 1–3 and 6–9 stay ✅.** `XS`, `P3`.
