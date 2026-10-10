@@ -1,0 +1,32 @@
+M2 mutant md5 276de6e0bf1e115a6d29820c37ce54f5
+M2 exit 0 — tests 4, failed 0
+M2 restored, md5 0b0687a1bb533f0db5e8629f7d0590a0
+
+M3 mutant md5 6d70be57f63a0f645df252b2497b01fc
+M3 exit 0 — tests 4, failed 0
+M3 restored, md5 0b0687a1bb533f0db5e8629f7d0590a0
+
+M4 mutant md5 55262f5a0c0bfd90b7b27a6a52455475
+M4 exit 0 — tests 4, failed 0
+M4 restored, md5 0b0687a1bb533f0db5e8629f7d0590a0
+
+M5 mutant md5 d3a5d5d924e4513d56ae3244dfeb77a7
+M5 exit 0 — tests 4, failed 0
+M5 restored, md5 0b0687a1bb533f0db5e8629f7d0590a0
+
+M6 mutant md5 03ff7483db7c380be2588fa911ba200f
+M6 exit 1 — tests 4, failed 4
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 40 plies
+       AssertionError: expected "gameStatus" to be called 41 times, but got 81 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 120 plies
+       AssertionError: expected "gameStatus" to be called 121 times, but got 241 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 300 plies
+       AssertionError: expected "gameStatus" to be called 301 times, but got 601 times
+  FAIL src/turn-loop.nfr.test.ts :: derives ZERO times on a non-advancing prompt outcome
+       AssertionError: expected "gameStatus" to be called 41 times, but got 81 times
+M6 restored, md5 0b0687a1bb533f0db5e8629f7d0590a0
+
+M8 mutant md5 14a38d3acaddc17fcdab5d1fc9aee24d
+M8 exit 0 — tests 4, failed 0
+M8 restored, md5 0b0687a1bb533f0db5e8629f7d0590a0
+

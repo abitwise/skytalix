@@ -1,0 +1,106 @@
+mutant md5 14bbca7bb40c5e7908960955a35008ed
+   × NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives EXACTLY once per ply at 40 plies 14ms
+     → expected "keyHistory" to be called +0 times, but got 40 times
+   × NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives EXACTLY once per ply at 120 plies 38ms
+     → expected "keyHistory" to be called +0 times, but got 120 times
+   × NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives EXACTLY once per ply at 300 plies 168ms
+     → expected "keyHistory" to be called +0 times, but got 300 times
+   × NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives ZERO times on a `rejected` prompt outcome 9ms
+     → expected "keyHistory" to be called +0 times, but got 40 times
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+exit 1
+restored, md5 f01ba3abed13c36f01e529289c027dcb
+M2 mutant md5 14bbca7bb40c5e7908960955a35008ed
+M2 exit 1 — tests 67, failed 5
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 40 plies
+       AssertionError: expected "keyHistory" to be called +0 times, but got 40 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 120 plies
+       AssertionError: expected "keyHistory" to be called +0 times, but got 120 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 300 plies
+       AssertionError: expected "keyHistory" to be called +0 times, but got 300 times
+  FAIL src/turn-loop.nfr.test.ts :: derives ZERO times on a `rejected` prompt outcome
+       AssertionError: expected "keyHistory" to be called +0 times, but got 40 times
+  FAIL src/turn-loop.test.ts :: A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected "keyHistory" to be called +0 times, but got 8 times
+M2 restored, md5 f01ba3abed13c36f01e529289c027dcb
+
+M3 mutant md5 e91243d09a85c146b96044e3486746b8
+M3 exit 1 — tests 67, failed 1
+  FAIL src/turn-loop.nfr.test.ts :: derives ZERO times on a `rejected` prompt outcome
+       AssertionError: expected "keyHistory" to be called +0 times, but got 12 times
+M3 restored, md5 f01ba3abed13c36f01e529289c027dcb
+
+M4 mutant md5 fd98ea483f32c947a7d6b1555f49a9dd
+M4 exit 1 — tests 67, failed 5
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 40 plies
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 120 plies
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 300 plies
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+  FAIL src/turn-loop.nfr.test.ts :: derives ZERO times on a `rejected` prompt outcome
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+  FAIL src/turn-loop.test.ts :: A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+M4 restored, md5 f01ba3abed13c36f01e529289c027dcb
+
+M5 mutant md5 590f1e08a6b24ca55a514db79c3b0836
+M5 exit 1 — tests 67, failed 5
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 40 plies
+       AssertionError: expected "keyHistory" to be called +0 times, but got 20 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 120 plies
+       AssertionError: expected "keyHistory" to be called +0 times, but got 60 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 300 plies
+       AssertionError: expected "keyHistory" to be called +0 times, but got 150 times
+  FAIL src/turn-loop.nfr.test.ts :: derives ZERO times on a `rejected` prompt outcome
+       AssertionError: expected "keyHistory" to be called +0 times, but got 20 times
+  FAIL src/turn-loop.test.ts :: A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected "keyHistory" to be called +0 times, but got 4 times
+M5 restored, md5 f01ba3abed13c36f01e529289c027dcb
+
+M6 mutant md5 a063b9c961088ab12fd8fb717c7bef8c
+M6 exit 1 — tests 67, failed 12
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 40 plies
+       AssertionError: expected "gameStatus" to be called 41 times, but got 81 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 120 plies
+       AssertionError: expected "gameStatus" to be called 121 times, but got 241 times
+  FAIL src/turn-loop.nfr.test.ts :: derives EXACTLY once per ply at 300 plies
+       AssertionError: expected "gameStatus" to be called 301 times, but got 601 times
+  FAIL src/turn-loop.nfr.test.ts :: derives ZERO times on a `rejected` prompt outcome
+       AssertionError: expected "gameStatus" to be called 41 times, but got 81 times
+  FAIL src/turn-loop.test.ts :: A3 — append then derive then evaluate then render, through `gameStatusOf` every time
+       AssertionError: expected [ 324, 329, 331, 335, 337 ] to have a length of 3 but got 5
+  FAIL src/turn-loop.test.ts :: A3b — one derive per ply, and ZERO on a non-mutating prompt outcome
+       AssertionError: expected 5 to be 3 // Object.is equality
+  FAIL src/turn-loop.test.ts :: the WIRING: the real panels derive nothing, and the status, the thinking flag and the messages are the LOOP's
+       AssertionError: expected 5 to be 3 // Object.is equality
+  FAIL src/turn-loop.test.ts :: A6 — the availability reaches the FRAME, off the ONE derive that ply already makes
+       AssertionError: expected 17 to be 9 // Object.is equality
+  FAIL src/turn-loop.test.ts :: A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected 17 to be 9 // Object.is equality
+  FAIL src/turn-loop.test.ts :: A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together
+       AssertionError: expected 19 to be 10 // Object.is equality
+  FAIL src/turn-loop.test.ts :: A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it
+       AssertionError: expected 11 to be 6 // Object.is equality
+  FAIL src/turn-loop.test.ts :: A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else
+       AssertionError: expected 3 to be 2 // Object.is equality
+M6 restored, md5 f01ba3abed13c36f01e529289c027dcb
+
+M7 mutant md5 6cc1a7c4e467d303552a5e6d1e08f566
+M7 exit 1 — tests 67, failed 1
+  FAIL src/turn-loop.test.ts :: A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim and nowhere else
+       AssertionError: expected "keyHistory" to be called 1 times, but got 2 times
+M7 restored, md5 f01ba3abed13c36f01e529289c027dcb
+
+M8 mutant md5 ed6c88ef2632bc516b7537b1e9004400
+M8 exit 0 — tests 1540, failed 0
+M8 restored, md5 f01ba3abed13c36f01e529289c027dcb
+M3 mutant md5 e91243d09a85c146b96044e3486746b8
+M3 exit 1 — tests 1540, failed 1
+  FAIL src/turn-loop.nfr.test.ts :: derives ZERO times on a `rejected` prompt outcome
+       AssertionError: expected "keyHistory" to be called +0 times, but got 12 times
+M3 restored, md5 f01ba3abed13c36f01e529289c027dcb
+M9 mutant md5 1fe12b4ef8302c7e6dbdc49f88af55df
+M9 exit 0 — tests 1540, failed 0
+M9 restored, md5 f01ba3abed13c36f01e529289c027dcb
