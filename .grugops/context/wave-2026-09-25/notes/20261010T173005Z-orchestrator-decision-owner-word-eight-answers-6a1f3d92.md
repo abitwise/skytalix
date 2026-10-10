@@ -21,4 +21,4 @@ Mapped to the questions as last put to the owner:
    Architect-accepted meanwhile; routing continues on the DELTA test.
 7. **Scribe rank 3 APPROVED:** the Safety-rules "Deploy is allowed…" bullet may be shortened to a pointer to
    "Deployment posture".
-8. **Permission allow-list APPROVED** for running committed  scripts.
+8. **Permission allow-list APPROVED** for running committed `.grugops/context/**/probe/` scripts.
