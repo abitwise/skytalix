@@ -206,3 +206,43 @@ Architect/Design ruling. **Not `P0`:** nothing is blocked; a ticket can still be
   classifier denied it. `src/` diff is empty, so 0 production files; (b) is predicted not to fire.
 - **Board move:** `ABC-055`'s row stays in `In Development` because `A4` allows no row move. The
   `In Review` move is left for the Orchestrator's close-out.
+
+## QE
+
+**2026-10-10, QE/E2E** (subtask `qe-ABC-055`).
+- Range: base `764454b5`, board commit `ec5d975f`, reviewed tip `86926927`. Wave tip at review:
+  `2946e22a`.
+- Every reading is QE's own. The detail is in `.grugops/context/qe-ABC-055/notes/`: `…08c0a16a`
+  (verdict), `…7e5f486a` (readings), `…1aec2908` (gaps), `…594edd4b` (post-merge invariants) and
+  `…e79c5541` (probe). It is not restated here.
+
+**PASS_WITH_GAPS. `A1`–`A5` MET.**
+- `A1`: 13 = 13, same order. `A2`: every limit equals the dial. `A3`: every count equals its rows,
+  and the two new columns hold 0.
+- `A4`: 0 row lines in the diff; the row list is identical in order.
+- `A5`: one `+_Updated:` line, zero `-_Updated:` lines, no `history/` file.
+- The probe is red on the base and on 4 mutants, and green on the branch.
+- Clause (b), run by QE: 0/0/0 on all three limbs. The SE's `UNKNOWN - verify` is closed.
+- Gates: lint 0 (100 files), typecheck 0. `npm test` ran 52 files / 1608 passed with 0 skipped.
+  Integrity prints `No findings.`
+- Waiver predicate: empty, so **UAT WAIVED (waived is not accepted)** is the Orchestrator's to apply.
+
+**Skip statement:**
+- The four listed columns match the kit.
+- Leaving `Ready for Dev` off matches the kit.
+- `QE-055-b` MEDIUM: `In UAT` is omitted, though the zero-production-lines waiver skips it, and
+  "only here" is untrue.
+- `QE-055-c` MEDIUM: the wave already passes tickets `Ready` → `In Development` in one hop. R1 or R2
+  is the Orchestrator's or owner's to pick.
+
+**`QE-055-a` HIGH, at merge time.**
+- `plans/board.md` has two conflict hunks. The second is next to `ABC-010` in `Ready for Dev`.
+- Resolving it with the branch side drops `ABC-010` and two `_Updated:` lines, and `A1`–`A3` still
+  pass.
+- The resolver must hold I1–I8 (`…594edd4b`): run the probe with `<ref-rev>` = the wave tip.
+
+LOW: `QE-055-d` (`A1` literally counts 15 H2s) and `QE-055-e` (this ticket's board row is stale).
+INFO: `QE-055-f`.
+
+Recommended move: `In Review` → `Ready for UAT` → `Done` (waived). Not made here, because `A4`
+forbids a row move and the board is the Orchestrator's. Not merged, not pushed.
