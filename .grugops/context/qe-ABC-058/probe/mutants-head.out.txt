@@ -1,0 +1,71 @@
+commit fb914ded  node v26.11.0
+== control   load1 4.09  11:24:39Z
+      Tests  66 passed (66)
+== E-A1 prose docblock names `spawnSync(`   load1 6.08  11:24:44Z
+      Tests  66 passed (66)
+== E-MS1 direct spawnSync child   load1 5.83  11:24:48Z
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== E-MS2 namespace import   load1 5.85  11:24:52Z
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== E-M3f 0x7f -> 0x7e   load1 5.62  11:24:57Z
+   × ABC-042 — the shape of what was delivered > A8 — neither delivered module names a row count
+   × ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  2 failed | 64 passed (66)
+== E-M3g || code === 0x7f deleted   load1 5.41  11:25:01Z
+   × ABC-042 — the shape of what was delivered > A8 — neither delivered module names a row count
+   × ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  2 failed | 64 passed (66)
+== E-M3h && code !== 0x7f   load1 5.62  11:25:05Z
+   × ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== Q1 BEL passes (C0-not-ESC class)   load1 5.62  11:25:09Z
+   × ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== Q2 ESC passes (ESC class)   load1 7.09  11:25:14Z
+   × ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== Q3 TAB passes (C0 member absent from token)   load1 6.84  11:25:18Z
+      Tests  66 passed (66)
+== Q4 token BEL->TAB, correct build (control)   load1 6.53  11:25:22Z
+      Tests  66 passed (66)
+== Q5 token BEL->TAB + TAB passes   load1 6.25  11:25:26Z
+      Tests  66 passed (66)
+== Q4b token TAB inside the locator (`[2J\tpurple`), correct build (control)   load1 6.39  11:25:31Z
+      Tests  66 passed (66)
+== Q5b token BEL->TAB inside (`[2J\tpurple`) + TAB passes   load1 6.39  11:25:35Z
+   × ABC-042 — the shape of what was delivered > bar 3 — an argument carrying an escape sequence is echoed, stripped of its control bytes
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== Q6 token BEL->TAB + BEL passes   load1 6.36  11:25:39Z
+      Tests  66 passed (66)
+== Q7 token BEL removed + BEL passes   load1 7.85  11:25:43Z
+      Tests  66 passed (66)
+== Q7b token DEL removed + M3h   load1 7.46  11:25:47Z
+      Tests  66 passed (66)
+== Q8 template-literal TEXT `spawnSync(` (not a call)   load1 7.35  11:25:52Z
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== Q9 REAL call inside a template interpolation   load1 6.92  11:25:56Z
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== Q10 // line comment names `spawnSync(`   load1 7.08  11:26:00Z
+      Tests  66 passed (66)
+== Q11 REAL call after a "//" string on the same line   load1 7.08  11:26:04Z
+      Tests  66 passed (66)
+== Q12 REAL call between "/*" and "*/" strings   load1 7.08  11:26:08Z
+      Tests  66 passed (66)
+== Q13 MS2 + call hidden after "//" string   load1 6.91  11:26:13Z
+      Tests  66 passed (66)
+== Q14 REAL call through an alias (pre-existing evasion, not traded)   load1 6.52  11:26:17Z
+      Tests  66 passed (66)

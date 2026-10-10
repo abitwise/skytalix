@@ -1,0 +1,11 @@
+cli.test.ts call: spawnSync( at line 341
+cli.test.ts call: /^NODE_EXIT=(\d+)$/m.exec( at line 505
+cli.test.ts: 1
+  64:RegularExpressionLiteral:/\/\*[\s\S]*?\*\//g
+line-input.test.ts: 1
+  956:RegularExpressionLiteral:/\/\*[\s\S]*?\*\//g
+render-seam.test.ts: 1
+  112:RegularExpressionLiteral:/\/\*[\s\S]*?\*\//g
+san.parse.test.ts: 1
+  308:RegularExpressionLiteral:/\/\*[\s\S]*?\*\//g
+files scanned 51, literals carrying // or /* : 4

@@ -1,0 +1,15 @@
+node v26.11.0  2026-10-10T11:39:23Z
+== control base   load1 5.15
+      Tests  66 passed (66)
+== P1 namespace import + cp.execSync (a shell child, never counted) base   load1 4.97
+      Tests  66 passed (66)
+== P2 real spawnSync after a URL string on the same line (QE Q11, realistic shape) base   load1 5.22
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 65 passed (66)
+== control head   load1 5.36
+      Tests  66 passed (66)
+== P1 namespace import + cp.execSync (a shell child, never counted) head   load1 5.41
+      Tests  66 passed (66)
+== P2 real spawnSync after a URL string on the same line (QE Q11, realistic shape) head   load1 5.30
+      Tests  66 passed (66)

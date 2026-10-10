@@ -1,0 +1,9 @@
+head-ctl     Tests  66 passed (66)      BEL 0  ESC 0  DEL 0  ESC[2J 0  'purple' 0  ESC-seqs: 
+head-M3h     Tests  1 failed | 65 passed (66) BEL 0  ESC 12  DEL 0  ESC[2J 0  'purple' 0  ESC-seqs: 4xESC[31m 2xESC[32m 6xESC[39m 
+             first assertion: AssertionError: expected [ 127 ] to deeply equal []
+head-Q1      Tests  1 failed | 65 passed (66) BEL 0  ESC 12  DEL 0  ESC[2J 0  'purple' 0  ESC-seqs: 4xESC[31m 2xESC[32m 6xESC[39m 
+             first assertion: AssertionError: expected [ 7 ] to deeply equal []
+head-Q2      Tests  1 failed | 65 passed (66) BEL 0  ESC 12  DEL 0  ESC[2J 0  'purple' 0  ESC-seqs: 4xESC[31m 2xESC[32m 6xESC[39m 
+             first assertion: AssertionError: expected [ 27 ] to deeply equal []
+base-Q2      Tests  1 failed | 65 passed (66) BEL 0  ESC 12  DEL 0  ESC[2J 0  'purple' 0  ESC-seqs: 4xESC[31m 2xESC[32m 6xESC[39m 
+             first assertion: AssertionError: expected [ 27 ] to deeply equal []
