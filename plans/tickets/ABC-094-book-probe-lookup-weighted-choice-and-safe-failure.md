@@ -1,8 +1,8 @@
 ---
 id: ABC-094
 title: The book probe — look a position up, pick a weighted book move under a fixed seed, and degrade to "no book move" on a missing or corrupt file without ever throwing
-status: in-review
-column: In Review
+status: ready-for-uat
+column: Ready for UAT
 size: M
 priority: P1
 epic: EPIC-005

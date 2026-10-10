@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-094` → `Ready for UAT` (QE PASS_WITH_GAPS, branch tip `7362f1f9`); owner UAT word owed._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-142` → `Done` (UAT WAIVED; merged `addbc328`; 53/1680 green)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — **owner word (note `…owner-word-six-answers-b7c41e09`)**: NFR-008 wall may rise "a bit" + new goal reduce vitest CPU on the M3 (ticket next session); `ABC-108` DROPPED; docs-only Security/NFR-instead-of-QE acceptable; book: line-count weights kept, CC0 accepted, book over weak level kept (delegated); ABC-105 question answered; ABC-085 menu answered, ADR-0038 ACCEPTED._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-142` → `In Review` (built `ab8d0088`); QE `qe-ABC-142` dispatched with the one-extra-console-line deviation to verify._
@@ -686,8 +687,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-094] Book probe — lookup, weighted seeded choice, and no crash on a missing or corrupt file  (BA/PM, M, P1, epic: EPIC-005, since: 2026-08-16, DoR 8/10 ⚠️ ordering on ABC-093 only; **the largest thing EPIC-005 can deliver while EPIC-004 is unbuilt**; introduces the project's FIRST production randomness seam — see G4) **2026-10-10 re-score: DoR 8/10 — 'first production randomness seam' stale (`seededRandom` ships in `src/levels.ts`); G4 narrowed to D2 (rides ABC-093's design hop); waits ABC-093 built. Fires ADR-0036 (b1) — expect Security/NFR.** **2026-10-10: BA/PM re-score merged `b1475747` — DoR 10/10 → Ready → Ready for Dev → pulled → In Development (pass-through). Expect owner UAT word + one In Security/NFR pass in the chain (ADR-0036 (b1)). Build `ticket-to-pr-ABC-094`.** **2026-10-10: BUILT `8cf395fc`/`59358836`: A1–A7 met; 54/1706 green; reader + warn sink injected → clause (b) 0/0/0 here, fires on ABC-095 instead; cost UNREAD (twin 3.1–3.3 % > 1.5 % at load1 8.5–10.7) → In Review, QE `qe-ABC-094`. Owner UAT word owed (`src/book.ts` +153).**
+## In Review (WIP 0/3)
 
 
 
@@ -726,7 +726,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready for UAT (WIP 0/4)
+## Ready for UAT (WIP 1/4)
+- [ABC-094] Book probe — lookup, weighted seeded choice, and no crash on a missing or corrupt file  (BA/PM, M, P1, epic: EPIC-005, since: 2026-08-16, DoR 8/10 ⚠️ ordering on ABC-093 only; **the largest thing EPIC-005 can deliver while EPIC-004 is unbuilt**; introduces the project's FIRST production randomness seam — see G4) **2026-10-10 re-score: DoR 8/10 — 'first production randomness seam' stale (`seededRandom` ships in `src/levels.ts`); G4 narrowed to D2 (rides ABC-093's design hop); waits ABC-093 built. Fires ADR-0036 (b1) — expect Security/NFR.** **2026-10-10: BA/PM re-score merged `b1475747` — DoR 10/10 → Ready → Ready for Dev → pulled → In Development (pass-through). Expect owner UAT word + one In Security/NFR pass in the chain (ADR-0036 (b1)). Build `ticket-to-pr-ABC-094`.** **2026-10-10: BUILT `8cf395fc`/`59358836`: A1–A7 met; 54/1706 green; reader + warn sink injected → clause (b) 0/0/0 here, fires on ABC-095 instead; cost UNREAD (twin 3.1–3.3 % > 1.5 % at load1 8.5–10.7) → In Review, QE `qe-ABC-094`. Owner UAT word owed (`src/book.ts` +153).** **2026-10-10: QE PASS_WITH_GAPS (tip `7362f1f9`; +9 QE tests kill 8 missed mutants incl. dropped leading-zero key ≈ 6 % of book; clause (b) 0/0/0; cost MET +0.345 s on the admissible run; 54/1715 green) → Ready for UAT — owner word owed (`src/book.ts` +153 production). QE-094-a MEDIUM: fold "warning → stderr, 0 bytes stdout" into ABC-095 A5 (BA/PM).**
 
 
 
