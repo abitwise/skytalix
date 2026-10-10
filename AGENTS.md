@@ -82,15 +82,17 @@ waiting shell's own command line and never exits. Wait on the PID you started or
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
-  2026-09-25: exit 0, 47 files, 1446 tests, 5.45 s. A hung lane exits 124 within the 60 s bound —
+  2026-10-09: exit 0, 50 files, 1539 tests, 6.66 s. A hung lane exits 124 within the 60 s bound —
   stop with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run
   via `npx vitest run` directly, never through `npm test`. -->
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
   41 passed (28 default), 23.0 s. Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
   QE and after any src/search.ts change. -->
-- Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 npx vitest run src/engine.test.ts` <!-- exit 0,
-  23 passed (17 default), 98.7 s — every WALL-CLOCK case; default lane runs on an injected clock.
-  Run after any src/engine.ts change. -->
+- Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 npx vitest run src/engine.test.ts` <!-- RUN 2026-10-09:
+  exit 0, 45 passed (32 default), 318.6 s wall at load1 10.0 -> 7.6 (QE/Security lanes in parallel);
+  291.9 s at load1 ~7-8 (ABC-086 receipt) — so ~5 min, not 100 s. Wall-clock cases plus the 300-run
+  virtual-clock cases; the default lane runs on an injected clock. Run after any src/engine.ts or
+  src/virtual-clock.ts change. -->
 - Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
   <!-- RUN 2026-09-26: exit 0, 34 passed, 0.34 s — 34 is the whole lane; 33 means NODE_OPTIONS was
   dropped and the external-memory retention guard did not run (exits 0 either way). TRAP: never
@@ -104,6 +106,15 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   33 passed (32 default), 37.0 s -->
 - Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- exit 0,
   37 passed (29 default), 1.8 s -->
+- Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`
+  <!-- RUN 2026-10-09: exit 0, 12 passed (9 default), 17.3 s at load1 ~11 (~13 s quiet). Baseline
+  `src/puzzle-suite.baseline.json` (40/40, budget 25, step 1). TRIGGER (owner, option B,
+  2026-10-09): QE runs it during review when the change touches engine code (`src/engine.ts`,
+  `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`, `src/transposition.ts`, move
+  ordering). red = QE FAIL. Not a `quality.mandatory_gates` entry. The baseline moves only in its
+  own commit with a stated reason, never with an engine change (no trigger-list file in that
+  commit); raising it is QE's, lowering it needs the owner's word. `PUZZLE_DEEP=weakened` is the
+  red demonstration and exits 1 by design. -->
 - PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 npx vitest run
   src/search.pvs-lmr.test.ts` <!-- exit 0, 29 passed (20 default). RUN 2026-09-26 (default): 0.6 s.
   Deep 926.2 s wall — cited from UAT (`uat-run-ABC-121#77854a65`), not re-run here (over 10 min).
