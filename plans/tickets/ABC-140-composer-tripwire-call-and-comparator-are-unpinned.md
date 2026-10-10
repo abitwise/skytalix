@@ -1,8 +1,8 @@
 ---
 id: ABC-140
 title: The composer tripwire's scan and comparator are unpinned — a filter or a containment there drops the second-composer kill and the whole suite stays green (ADR-0011 R5d)
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —
