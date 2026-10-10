@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Scribe `scribe-book-regen-2026-10-10` merged: AGENTS.md gains the book regeneration command (QE-093-a closed; rebuild cmp 0), receipt 53/1680; AGENTS.md 23,609 B (headroom 967)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-093` → `Done` (UAT WAIVED, zero production lines; merged `ac83c3fd`; 53/1680 green). ABC-094 now unblocked for BA/PM re-score. Scribe `scribe-book-regen-2026-10-10` enqueued (QE-093-a)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-141` → `Done` (UAT WAIVED, comment-only; merged `fec51def`; 52/1663 green)._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-141` → `In Review` (built `4bfc7b3e`, comment-only); QE `qe-ABC-141` dispatched._
