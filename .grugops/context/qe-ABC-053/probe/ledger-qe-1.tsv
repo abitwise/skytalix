@@ -1,0 +1,17 @@
+Q-PLY41-PANE	bin-v26.11.0	exit=0	load1=2.83	 Tests 23 passed (23)	
+Q-PLY40-PANE	bin-v26.11.0	exit=1	load1=2.83	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-PLY17-PANE	bin-v26.11.0	exit=1	load1=2.76	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-PANE-X5b	bin-v26.11.0	exit=1	load1=2.76	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-STATUS-X5b	bin-v26.11.0	exit=1	load1=2.76	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-COMPOSER-NAMESPACE	bin-v26.11.0	exit=1	load1=2.76	 Tests 1 failed | 22 passed (23)	AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 'render-seam.|
+Q-COMPOSER-ALIAS	bin-v26.11.0	exit=1	load1=2.76	 Tests 1 failed | 22 passed (23)	AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 'render-seam.|
+Q-COMPOSER-TYPE-FIRST	bin-v26.11.0	exit=1	load1=2.86	 Tests 1 failed | 22 passed (23)	AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 'render-seam.|
+Q-COMPOSER-MULTILINE	bin-v26.11.0	exit=1	load1=2.86	 Tests 1 failed | 22 passed (23)	AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 'render-seam.|
+Q-COMPOSER-SINGLEQUOTE	bin-v26.11.0	exit=0	load1=2.86	 Tests 23 passed (23)	
+Q-COMPOSER-DYNAMIC	bin-v26.11.0	exit=0	load1=2.86	 Tests 23 passed (23)	
+Q-COMPOSER-REEXPORT	bin-v26.11.0	exit=0	load1=2.87	 Tests 23 passed (23)	
+Q-COMPOSER-NEG-ALLTYPE	bin-v26.11.0	exit=0	load1=2.87	 Tests 23 passed (23)	
+Q-COMPOSER-NEG-OTHERVALUE	bin-v26.11.0	exit=0	load1=2.87	 Tests 23 passed (23)	
+Q-ROOT-RENAME	bin-v26.11.0	exit=1	load1=2.87	 Tests 5 failed | 18 passed (23)	AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'frame-seam.ts' ] to deeply equal [ 'render-seam.ts' ]|AssertionError: production runtime importers of render.ts: expected [ 'frame-seam.ts' ] to include 'render-seam.ts'|AssertionError: the declared composition root exists: expected [ 'apply.ts', 'cli-options.ts', …(33) ] to include 'render-seam.ts'|Error: ENOENT: no such file or directory, open '<scratchpad>/qe-ABC-053/trees/Q-ROOT-RENAME/src/render-seam.ts'|
+Q-ROOT-RENAME-FULL	bin-v26.11.0	exit=1	load1=2.87	 Tests 4 failed | 19 passed (23)	AssertionError: expected '/**\n * `ABC-017`\'s `A11` — the pane…' to match /^const COMPOSITION_|AssertionError: production runtime importers of render.ts: expected [ 'frame-seam.ts' ] to include 'render-seam.ts'|Error: ENOENT: no such file or directory, open '<scratchpad>/qe-ABC-053/trees/Q-ROOT-RENAME-FULL/src/render-seam.ts'|
+Q-FACTORY-RENAME	bin-v26.11.0	exit=0	load1=2.80	 Tests 23 passed (23)	

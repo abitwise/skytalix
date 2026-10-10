@@ -1,0 +1,23 @@
+Q-FACTORY-RENAME-PROD	bin-v26.11.0	exit=1	load1=3.91	 Tests 1 failed | 22 passed (23)	Error: probe child failed (1): file://<scratchpad>/qe-ABC-053/trees/Q-FACTORY-RENAME-PROD/[eval1]:19|TypeError: makeRenderSeam is not a function|
+Q-SETTLE-NEXTTICK	bin-v26.11.0	exit=1	load1=3.91	 Tests 2 failed | 21 passed (23)	AssertionError: expected '/**\n * `ABC-041` — the render seam: …' not to contain 'process.'|AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-SETTLE-MICROCHAIN	bin-v26.11.0	exit=1	load1=3.92	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-SETTLE-IMM1	bin-v26.11.0	exit=1	load1=3.92	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-SETTLE-IMM2	bin-v26.11.0	exit=1	load1=3.92	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-SETTLE-IMM3	bin-v26.11.0	exit=1	load1=3.92	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-SETTLE-IMM4	bin-v26.11.0	exit=0	load1=3.92	 Tests 23 passed (23)	
+Q-SETTLE-IMM5	bin-v26.11.0	exit=0	load1=3.68	 Tests 23 passed (23)	
+Q-SETTLE-IMM1+ZERO	bin-v26.11.0	exit=0	load1=3.68	 Tests 23 passed (23)	
+Q-SETTLE-TIMEOUT-NODELAY	bin-v26.11.0	exit=1	load1=3.68	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-SETTLE-TIMEOUT-50	bin-v26.11.0	exit=0	load1=3.68	 Tests 23 passed (23)	
+Q-ZERO-SETTLE+X5b	bin-v26.11.0	exit=1	load1=3.63	 Tests 1 failed | 22 passed (23)	AssertionError: PER FRAME: history.ts was loaded by a frame call: expected [ 'history.ts' ] to not include 'history.ts'|
+Q-UNICODE-ONLY	bin-v26.11.0	exit=0	load1=3.63	 Tests 23 passed (23)	
+Q-BLACK-BOTTOM-ONLY	bin-v26.11.0	exit=0	load1=3.63	 Tests 23 passed (23)	
+Q-THINKING-ONLY	bin-v26.11.0	exit=0	load1=3.63	 Tests 23 passed (23)	
+Q-MESSAGES-ONLY	bin-v26.11.0	exit=0	load1=3.50	 Tests 23 passed (23)	
+Q-CLAIMABLE-ONLY	bin-v26.11.0	exit=0	load1=3.50	 Tests 23 passed (23)	
+Q-REDERIVE-GAMESTATUS	bin-v26.11.0	exit=1	load1=3.50	 Tests 1 failed | 22 passed (23)	AssertionError: expected "gameStatus" to be called +0 times, but got 3 times|
+Q-REDERIVE-REPLAY	bin-v26.11.0	exit=0	load1=3.50	 Tests 23 passed (23)	
+Q-ROWS-WITHOUT-ASSEMBLE	bin-v26.11.0	exit=0	load1=3.50	 Tests 23 passed (23)	
+Q-FIXTURE-SPECIFIER	bin-v26.11.0	exit=0	load1=3.62	 Tests 23 passed (23)	
+Q-CTRL-DEAF-AFTER-LOAD+X5b	bin-v26.11.0	exit=1	load1=3.62	 Tests 1 failed | 22 passed (23)	AssertionError: the probe is ARMED: expected [] to include 'history.ts'|
+Q-CTRL-ARMING-FIRST+DEAF+X5b	bin-v26.11.0	exit=0	load1=3.62	 Tests 23 passed (23)	
