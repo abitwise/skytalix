@@ -34,12 +34,9 @@ Roles pull the shared verified context they need and publish their work output a
 > `claim` / `observation` / `decision` / `artifact-ref`, hand-authored per
 > `agent-factory/contracts/context-note.md`, and take the queue claim by hand: `mkdir -p
 > .grugops/queue/claimed` for the parent, then a **bare** `mkdir` (no `-p`) of the task directory —
-> that bare `mkdir` is the atomic act. **Do not re-derive this; do not invent a stamp.**
-
-Drafted by BA/PM at `home-the-gaps-2026-08-13`, placed by the Orchestrator on the owner's
-instruction, because **eight consecutive hops re-derived it from scratch**. It records what IS:
-restoring the sanctioned writer is an install-level fix (`node install/install.js --check`), not
-project work, and is escalated to the owner rather than ticketed.
+> that bare `mkdir` is the atomic act. Restoring the writer is an install-level fix
+> (`node install/install.js --check`) escalated to the owner, not a ticket.
+> **Do not re-derive this; do not invent a stamp.**
 
 ## Kit vs state
 
@@ -49,8 +46,6 @@ Clear voice — this is a resolution and safety rule, not a joke.
 - `plans/`, `memory-bank/`, `.grugops/` = **STATE** — read/write in THIS repo.
 - Roles read and write the shared verified context only via Workflow 16 (`agent-factory/workflows/16-context-read-write.md`) — referenced, never restated.
 - The kit root is resolved by the adapter only. If the resolved kit dir is absent: **STOP — do not hunt** the repo for `agent-factory/…`. Re-run the installer (`node install/install.js` or `node install/install.js --check`).
-
-> **Kit vs state invariant:** `agent-factory/…` = read-only KIT (from the kit root, never written); `plans/`, `memory-bank/`, `.grugops/` = STATE in this repo. Roles pull shared context and publish typed notes per Workflow 16 — referenced, never restated. If the kit dir is absent, STOP — do not hunt.
 
 ## Commands
 
@@ -85,19 +80,19 @@ waiting shell's own command line and never exits. Wait on the PID you started or
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
-  2026-10-10: exit 0, 52 files, 1603 tests, 5.9 s. A hung lane exits 124 at the 60 s bound — stop
+  2026-10-10: exit 0, 52 files, 1608 tests, 7.8 s. A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
   41 passed (28 default), 23.0 s. Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
   QE and after any src/search.ts change. -->
-- Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 npx vitest run src/engine.test.ts` <!-- RUN 2026-10-09:
-  exit 0, 45 passed (32 default), ~5 min (292-319 s), not 100 s. Wall-clock cases + 300-run
+- Engine deep lane (opt-in, ABC-078): `ENGINE_DEEP=1 npx vitest run src/engine.test.ts` <!-- RUN 2026-10-10:
+  exit 0, 46 passed (33 default), ~5 min (292-319 s), not 100 s. Wall-clock cases + 300-run
   virtual-clock cases; the default lane uses an injected clock. Run after any src/engine.ts or
   src/virtual-clock.ts change. -->
 - Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`
-  <!-- RUN 2026-10-10: exit 0, 28 passed (22 default), 202 s (A5: 135 s).
-  Holds A4's evidence (ENDGAMES 204 + perft/puzzles 246 moves), A2 on a virtual clock, A3 (35
+  <!-- RUN 2026-10-10: exit 0, 28 passed (22 default), 202-225 s (A5: 135 s).
+  Holds A4's evidence (ENDGAMES 204 + perft/puzzles 246 moves), A2 on a virtual clock, A3 (35-36
   vs 58 of 62). Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change. -->
 - Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
   <!-- RUN 2026-09-26: exit 0, 34 passed — 34 is the whole lane; 33 = NODE_OPTIONS dropped,
