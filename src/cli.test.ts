@@ -1865,8 +1865,10 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // regex comment strip this replaces could (`Q11`-`Q13`; `P1`, a namespace `execSync`, was never
     // counted at all). THE ONE FALSE RED (i) BUYS, STATED (`ABC-138` `A4`): a call that takes the
     // module name as its first argument is counted whatever it does — `JSON.stringify` of that name
-    // reds (`C14`) — so a hop that needs the name as a call argument spells it through a `const`, as
-    // bar 1's list does. A member name or object key spelled like a bound name, and a local that
+    // reds (`C14`) — so a hop that needs the name as an argument to a call that LOADS NOTHING spells
+    // it through a `const`, as bar 1's list does. NEVER a loader's argument: a `const` name is the
+    // unseen bound below, and a second load in this file is a scope change, not a spelling
+    // (`QE-138-c`). A member name or object key spelled like a bound name, and a local that
     // shadows one, also red (iii) — loud, never silent. THE BOUND IT KEEPS: a module name that is not
     // a literal (computed or concatenated) is not seen, and neither is a literal that is not a call's
     // FIRST argument — `getBuiltinModule.call(process, …)`, `Reflect.apply(req, undefined, […])`
