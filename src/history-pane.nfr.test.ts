@@ -239,9 +239,9 @@ const COMPOSITION_ROOT = "render-seam.ts";
  * nothing, so it is never on the frame path and never a probe root.
  *
  * THE LICENCE IS FILTERED TO THE ENTRIES THAT EXIST, so a driver that has not been built yet is
- * vacuous rather than red — this tree has no `turn-loop.ts` and `ABC-019`'s has one, and the guard
- * is green on both. The reach that bounds is named in `ADR-0011` and is NOT a choice: this tree and
- * "`ABC-019`'s tree with `turn-loop.ts` deleted" are the same 16 files, so no guard can be green on
+ * vacuous rather than red — the guard was green before `ABC-019` added `turn-loop.ts` and after it.
+ * The reach that bounds is named in `ADR-0011` and is NOT a choice: a tree that never had a licensed
+ * file and the same tree with that file deleted are the same files, so no guard can be green on
  * the first and red on the second. A licence that goes stale while its file EXISTS is caught, and
  * that is the kill the equality below buys.
  *
@@ -538,9 +538,11 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
 
   it("the composer tripwire: assembleFrame's value-importers EQUAL the one composition root", () => {
     // `ADR-0029` decision 2 — what makes deriving the path from ONE root fail CLOSED, for a second
-    // composer that binds `assembleFrame` by a static value import and for nothing wider. Such a
-    // module is a second root, and its closure would go unmeasured; a root that stops composing is
-    // no longer the root. A re-export hop or a dynamic `import("./frame.ts")` is not counted (the
+    // composer that binds `assembleFrame` by a static value import THE EXPRESSION BELOW READS, and
+    // for nothing wider: a namespace binding, or a brace specifier that BEGINS with the name. A
+    // comment ahead of the name inside the brace, and a default binding, are value imports it does
+    // not count (`QE-054-b`; the docblock's fail-closed paragraph). Such a module is a second
+    // root, and its closure would go unmeasured; a root that stops composing is no longer the root. A re-export hop or a dynamic `import("./frame.ts")` is not counted (the
     // docblock's WHAT NEITHER PHASE COVERS). "Value-binding import" is `ADR-0030` decision 2's: a
     // brace specifier NOT prefixed `type`, or a namespace binding. `import type`, an all-`type`
     // brace list, a bare import and an `export … from` re-export bind no value and do not count.
