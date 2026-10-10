@@ -1,0 +1,2 @@
+file-c715b3c2.ts scan-framed=1 importer-stmt=1 toEqual-framed=1 anchor:QSCAN=1 anchor:LHS_END=1 anchor:HP=1 biome-ignore lines=0
+file-520fa185.ts scan-framed=1 importer-stmt=1 toEqual-framed=1 anchor:QSCAN=1 anchor:LHS_END=1 anchor:HP=1 biome-ignore lines=1

@@ -1,0 +1,7 @@
+n = 8 scored rounds, k = 2, load1 median 16.87 (min 15.12, max 18.24)
+cpu: base median 1.772 s, head 1.835 s, twin 1.830 s
+  twin - base: median +0.039 s (2.20 %), sign 4/8 positive, interval -0.100..0.196, R 0.196 s; deltas -0.142 -0.100 -0.096 -0.034 0.112 0.153 0.196 0.254
+  head - base: median +0.061 s (3.44 %), sign 6/8 positive, interval -0.009..0.099, R 0.099 s; deltas -0.045 -0.009 0.054 0.061 0.061 0.095 0.099 0.204
+wall: base median 0.994 s, head 1.029 s, twin 1.047 s
+  twin - base: median +0.076 s (7.69 %), sign 5/8 positive, interval -0.119..0.285, R 0.285 s; deltas -0.153 -0.119 -0.066 0.013 0.140 0.148 0.285 0.294
+  head - base: median +0.053 s (5.38 %), sign 5/8 positive, interval -0.028..0.082, R 0.082 s; deltas -0.060 -0.028 -0.013 0.048 0.059 0.071 0.082 0.190

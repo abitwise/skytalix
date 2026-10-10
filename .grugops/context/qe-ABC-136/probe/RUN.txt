@@ -1,0 +1,22 @@
+# RUN log — qe-ABC-136, QE/E2E. base c715b3c2, delivered code b50b0e2b, tip 520fa185 (src identical to b50b0e2b).
+# Apple M3, Node v26.11.0. A second QE agent ran deep puzzle lanes in parallel; load1 is logged beside every reading.
+# Trees: one fresh `git archive` per build, node_modules symlinked from the main checkout. Nothing planted in any checkout.
+# <scratch> = QE's private scratchpad; scripts here are copies of what ran.
+
+ledger.sh             QE's runner: archive, plant (plantqe136.py), `vitest run src/history-pane.nfr.test.ts`, `biome check src`.
+plantqe136.py         QE's own narrowings (X* tokens); every other token is delegated unchanged to qe-ABC-057/probe/plantqe057.py
+                      (sha256 d33f53e5…8be7, identical to the committed copy).
+ledger-ticket.tsv     the ticket's ledger at base and tip, 13 builds each. 2026-10-10T14:53:07Z..14:53:53Z, load1 4.21 -> 5.64.
+ledger-qe.tsv         QE's own narrowings + pin isolation at tip. 14:54:21Z..14:55:55Z (load1 6.25 -> 22.49), XDEAD-COPY2 at ~14:56:30Z (16.96).
+reasons.txt           first AssertionError message per killed build (tip).
+typecheck-survivors.txt  `tsc --noEmit` on each gate-clean survivor tree: all exit 0 (14:56:33Z..14:56:40Z, load1 16.96 -> 15.25).
+fullsuite-survivors.txt  full suite (run-bounded 120 s) on each survivor tree +WPERFT-STATIC: 52 files / 1608 passed, exit 0 (14:57:07Z..14:58:02Z, load1 12.15 -> 28.86).
+counts.py/counts.txt  raw-text counts at base and tip: framed scan pair, importer statement, toEqual line, planter anchors, biome-ignore.
+spans.txt             qe-ABC-057/probe/spansqe.py at base and tip: identical, and equal to QE-057's recorded hashes.
+phrases.txt           bapm-owed-batch-2026-10-10/probe/phrases.mjs (ABC-134's collapsed text) at base and tip.
+biome-ignore-scope.txt  XNOIGNORE: 1 noTemplateCurlyInString warning, on the pinned literal only. XIGNORE-LEAK: a second `${` string after it is still flagged.
+timing-set{1,2}.tsv   ADR-0035 narrow set (src/history-pane.nfr.test.ts), base c715b3c2 / head 520fa185 / twin; the SE's timing.sh with paths filled in, 9 rounds, round 0 dropped.
+                      set1 14:59:44Z..15:00:19Z, set2 15:00:26Z..15:01:00Z.
+score-set{1,2}.txt    qe-ABC-059/probe/score.mjs unchanged. BOTH INADMISSIBLE: twin CPU median +1.73 % / +1.92 % (> 1.5 %), load1 median 14.50 / 13.26.
+micro.mjs             the two added `includes` scans timed in-process: 0.37 us per pair on the 45,726-char file (load1 14.49). An observation, not an ADR-0035 reading.
+gates.txt             lint / typecheck / build / npm test / skip / integrity / lane-inventory at 520fa185, QE worktree, 14:59:11Z..14:59:34Z, load1 12.30 -> 15.47.

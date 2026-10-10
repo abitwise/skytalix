@@ -1,0 +1,10 @@
+== XNOIGNORE (ignore line removed)
+src/history-pane.nfr.test.ts:500:179 lint/suspicious/noTemplateCurlyInString ━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Unexpected template string placeholder.
+  
+== XIGNORE-LEAK (second ${-in-string after the ignored literal)
+src/history-pane.nfr.test.ts:503:39 lint/suspicious/noTemplateCurlyInString ━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Unexpected template string placeholder.
+  

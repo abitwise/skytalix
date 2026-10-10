@@ -1,0 +1,20 @@
+# RUN log — ticket-to-pr-ABC-136, Software Engineer, base c715b3c2 (wave tip at pull), delivered b50b0e2b.
+# Apple M3, Node v26.11.0. A QE agent ran deep puzzle lanes in parallel, so load1 is high and logged beside each run.
+# <repo> = the main checkout; <scratchpad> = the SE's private scratchpad. Trees are `git archive` copies with node_modules linked.
+
+ledger-before.tsv      premise re-run at c715b3c2 BEFORE editing: BA/PM's probe/r5b-ledger.sh (bapm-followups-2026-10-10),
+                       QE's planter unchanged. 2026-10-10T14:41:56Z..14:42:13Z, load1 7.87 -> 7.86. Matches BA/PM's 71418879 readings
+                       row for row (file byte-identical 71418879..c715b3c2: `git diff --stat` empty).
+spans-before.txt       qe-ABC-057/probe/spansqe.py on the file at c715b3c2 (ABC-057's pinned spans)
+spans-after.txt        same at b50b0e2b; `diff` empty = byte-identical
+ledger-after.tsv       same ledger at b50b0e2b, plus unformatted QLHS-INTERSECT and QSCAN-NARROW.
+                       2026-10-10T14:43:50Z..14:44:15Z, load1 9.11 -> 8.73
+ledger-after-reasons.txt  the assertion message that reds each killed build (first failing expect in the tripwire `it`)
+ledger-residual.tsv    QMOVE-COMMENTED-M15 at base and head: green both (the accepted residual, ticket § Out of scope).
+                       2026-10-10T14:47:22Z..14:47:26Z, load1 12.04 -> 11.48
+a5.out.txt             name-only, numstat, guard statements' framed counts base|head, licence `it` byte-identity, executable added lines
+timing.sh              ABC-059's ADR-0035 harness, re-targeted: narrow set src/history-pane.nfr.test.ts, counts 12/12/12 asserted,
+                       twin checked with `diff -r -x node_modules` (main checkout's node_modules/node_modules self-symlink pre-exists)
+timing-set{1,2}.tsv    9 rounds each, round 0 discarded. set1 14:45:38Z..14:46:17Z, set2 14:46:23Z..14:46:56Z
+score-set{1,2}.out.txt ABC-059's score.mjs, unchanged. BOTH SETS INADMISSIBLE (twin median -2.02 % / +2.20 % > 1.5 %), load1 median 15.05 / 16.87
+raw-npm-test.txt / raw-lane-inventory.txt  gate outputs at b50b0e2b (worktree)

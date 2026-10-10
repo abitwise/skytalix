@@ -1,0 +1,17 @@
+QSCAN-NARROW+FMT	AssertionError: the licence guard scans EVERY production module
+QSCAN-NARROW+FMT+WPERFT-STATIC	AssertionError: the licence guard scans EVERY production module
+QLHS-INTERSECT+FMT	AssertionError: the licence guard scans EVERY production module
+QLHS-INTERSECT+FMT+WPERFT-STATIC	AssertionError: the licence guard scans EVERY production module
+M15+FMT	AssertionError: the licence guard compares with an EQUALITY
+M15SUB+FMT	AssertionError: the licence guard compares with an EQUALITY
+QSCAN-NARROW	AssertionError: the licence guard scans EVERY production module
+QLHS-INTERSECT	AssertionError: the licence guard compares EVERY runtime importer
+XDROP-SCANPIN+QLHS-INTERSECT+FMT	AssertionError: the licence guard compares EVERY runtime importer
+XDROP-SCANPIN+QLHS-INTERSECT+FMT+WPERFT-STATIC	AssertionError: the licence guard compares EVERY runtime importer
+XDROP-LHSPIN+QSCAN-NARROW+FMT	AssertionError: the licence guard scans EVERY production module
+XDROP-LHSPIN+QLHS-INTERSECT+FMT	AssertionError: the licence guard scans EVERY production module
+XSCAN-SLICE+FMT	AssertionError: the licence guard scans EVERY production module
+XLHS-AND+FMT	AssertionError: the licence guard scans EVERY production module
+XRENAME-SCAN+FMT	AssertionError: the licence guard scans EVERY production module
+XRENAME-PRODUCTION+FMT	AssertionError: the licence guard compares with an EQUALITY
+XDIR-NARROW+FMT	AssertionError: expected [] to include 'history-pane.ts'

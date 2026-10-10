@@ -1,0 +1,24 @@
+
+> cli-chess@0.0.0 lint
+> biome check .
+
+Checked 100 files in 129ms. No fixes applied.
+
+> cli-chess@0.0.0 typecheck
+> tsc --noEmit
+
+
+> cli-chess@0.0.0 build
+> tsc --noEmit
+
+ ✓ src/engine.test.ts (33 tests) 454ms
+ ✓ src/cli.test.ts (67 tests) 159ms
+
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Start at  17:59:15
+   Duration  9.22s (transform 1.96s, setup 0ms, collect 12.85s, tests 19.24s, environment 6ms, prepare 2.74s)
+
+== skip count: npx vitest run --reporter=json | jq '.numPendingTests + .numTodoTests' -> 0
+== node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0 -> "No findings." exit 0
+== node tools/grugops/lane-inventory.js -> "The lane collects 52 test files; git tracks 52. No findings." exit 0

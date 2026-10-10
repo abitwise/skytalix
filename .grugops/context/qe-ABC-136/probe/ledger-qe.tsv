@@ -1,0 +1,28 @@
+520fa185	XDROP-SCANPIN+QLHS-INTERSECT+FMT	load1=6.25	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XDROP-SCANPIN+QLHS-INTERSECT+FMT+WPERFT-STATIC	load1=9.11	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XDROP-SCANPIN+QSCAN-NARROW+FMT	load1=9.11	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XDROP-LHSPIN+QSCAN-NARROW+FMT	load1=9.58	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XDROP-LHSPIN+QLHS-INTERSECT+FMT	load1=9.58	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XDROP-LHSPIN+QLHS-INTERSECT	load1=13.22	exit=0	 Tests 12 passed (12)	lint=1 Found 1 error 	FAILED:
+520fa185	XSPLICE+FMT	load1=13.28	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XSPLICE+FMT+WPERFT-STATIC	load1=13.28	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XSHADOW-HELPER+FMT	load1=13.28	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XSHADOW-HELPER+FMT+WPERFT-STATIC	load1=12.46	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XHELPER-NARROW+FMT	load1=12.46	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XHELPER-NARROW+FMT+WPERFT-STATIC	load1=11.86	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XSHADOW-READ+FMT	load1=18.36	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XSHADOW-READ+FMT+WPERFT-STATIC	load1=22.09	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XDIR-NARROW+FMT	load1=22.09	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+520fa185	XLICENCE-PUSH+FMT+WPERFT-STATIC	load1=22.49	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XRENAME-PRODUCTION+FMT	load1=23.41	exit=1	 Tests 2 failed | 10 passed (12)	lint=0 	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XRENAME-SCAN+FMT	load1=22.17	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XRENAME-SCAN+FMT+WPERFT-STATIC	load1=22.88	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XSCAN-SLICE+FMT	load1=25.53	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XLHS-AND+FMT	load1=24.85	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XLHS-AND+FMT+WPERFT-STATIC	load1=24.85	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XDEAD-COPY+FMT	load1=24.54	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 Found 1 warning 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XDEAD-COPY+FMT+WPERFT-STATIC	load1=23.30	exit=1	 Tests 1 failed | 11 passed (12)	lint=0 Found 1 warning 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XNOIGNORE	load1=22.31	exit=0	 Tests 12 passed (12)	lint=0 Found 1 warning 	FAILED:
+520fa185	XIGNORE-LEAK	load1=20.84	exit=1	 Tests 1 failed | 11 passed (12)	lint=1 Found 1 error Found 1 warning 	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+520fa185	XDEAD-COPY2+FMT	load1=16.96	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:
+520fa185	XDEAD-COPY2+FMT+WPERFT-STATIC	load1=16.96	exit=0	 Tests 12 passed (12)	lint=0 	FAILED:

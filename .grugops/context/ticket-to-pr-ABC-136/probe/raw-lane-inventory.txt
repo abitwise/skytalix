@@ -1,0 +1,2 @@
+The lane collects 52 test files; git tracks 52.
+No findings.
