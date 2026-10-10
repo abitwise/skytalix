@@ -267,3 +267,38 @@ ticket stays in `Backlog`.** Recorded rather than smoothed, per this board's sta
 | 8 | size assigned | **✅** `S` (2), **conditional on the ruling**, with the re-cut condition named |
 | 9 | priority assigned | **✅** `P1`, with the not-`P0` and not-`P2` arguments |
 | 10 | no major unresolved blocker | **⚠️** **a REDUCED USER-FACING PROMISE awaits a named human.** It does not block development (the criterion is testable either way, `EPIC-002` `[A1]`'s posture) — but it is a promise change and this repo ratifies those with a human, so it is recorded here as open rather than absorbed |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-036`).
+Branch `grugops/ABC-036-moves-command` from `85eb80c`, code in `6aad5c9`. Not merged, not pushed.
+Readings and raw files: `.grugops/context/ticket-to-pr-ABC-036/notes/` (`…daa1392b` decision,
+`…605aa727` observation, `…83696dfe` claim).
+
+**Criteria: 7 of 7 met.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | All six `PERFT_SUITE` positions: stated count == `legalMoves(position).length` == the published depth-1 count (20, 48, 14, 6, 44, 46) |
+| `A2` | MET | The listing is exactly the strings the `toSan` spy returned, one per legal move, strictly ascending. The start order is pinned (`Na3 Nc3 Nf3 Nh3 a3 … h4`, code-unit order) |
+| `A3` | MET | Start position, delivered panels: `(+N more)` with N > 0, stated total 20, count item visible. Seen: `legal moves: 20 Na3` / `Nc3 Nf3 (+17 more)` |
+| `A4` | MET | One `legalMoves` on the prompt position, and the same array (`toBe`) in every `toSan`, on all six positions through `MoveInputDeps`. Production path: 1 module-level `legalMoves` at the start |
+| `A5` | MET | FEN byte-identical, ply unchanged, 0 `gameStatusOf` in the pure function. Through the loop: 2 renders and the loop's own single `gameStatusOf` |
+| `A6` | MET | numstat `src/command-input.test.ts` +237/−13, `src/command-input.ts` +47/−11, nothing else. `src/frame.ts`, `src/move-input.ts` and `src/turn-loop.ts` are byte-identical. `npm test` 50 / 1573 / 0 skipped; `PERFT_DEEP=1` 32/32 |
+| `A7` | MET | The `ABC-035 A7` rows are unedited and green. `help` renders `help board quit claim` / `resign new undo moves`, 21/21 each |
+
+Six mutants were planted and all six went red (dropped list, second derive, locale sort, count
+last, shown count, unsorted). Lint, typecheck and build exit 0; integrity `No findings.`.
+
+**`N8-LANE`: +130 ms net (+0.35 %, sign 5/8), MET.** The null read +0.34 %, 5/8, so the run is
+admissible. 0 new files. M3 under load1 20–95.
+
+**One `ABC-035` row retired:** `A4`'s "does not name `moves`" (its last foreign token joined the
+table, as `resign`, `new` and `undo` did before it).
+
+**For the owner:** the start frame shows 3 of 20 moves, not the ~9 this page estimated. The count
+item takes most of row 1. This is within the amended criterion. Shorter wording would show more.
+That is the product's choice, and it is recorded in the claim note.
+
+**Owed:** the QE hop, the `In Review` move (Orchestrator) and the merge. UAT is NOT waived
+(the diff has production lines).

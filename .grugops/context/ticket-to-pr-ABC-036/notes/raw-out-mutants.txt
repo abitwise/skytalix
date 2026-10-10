@@ -1,0 +1,136 @@
+=== M1-drop-list: 'san(position, move, legal)' -> 'san(position, move)'
+      Tests  7 failed | 177 passed (184)
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at kiwipete
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-3
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-4
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-5
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-6
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at startpos
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at kiwipete
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-3
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-4
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-5
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-6
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at startpos
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+exit 1
+=== M2-second-derive: 'legal.map((move) => san(position, move, legal))' -> 'derive(position).map((move) => san(position, move, legal))'
+      Tests  7 failed | 177 passed (184)
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at kiwipete
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-3
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-4
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-5
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-6
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at startpos
+   × ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at kiwipete
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-3
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-4
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-5
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-6
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at startpos
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+exit 1
+=== M3-locale-sort: '.sort();' -> '.sort((a, b) => a.localeCompare(b));'
+      Tests  7 failed | 177 passed (184)
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > pins the start position's order: code-unit ascending, so piece moves sort before pawn moves
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > pins the start position's order: code-unit ascending, so piece moves sort before pawn moves
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+exit 1
+=== M4-count-last: 'return [`legal moves: ${legal.length}`, ...listing];' -> 'return [...listing, `legal moves: ${legal.length}`];'
+      Tests  18 failed | 166 passed (184)
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "  Moves  " as moves and answers the listing
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "\tmoves\n" as moves and answers the listing
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "moves" as moves and answers the listing
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "MOVES" as moves and answers the listing
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 14 at position-3
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 20 at startpos
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 44 at position-5
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 46 at position-6
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 48 at kiwipete
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 6 at position-4
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > pins the start position's order: code-unit ascending, so piece moves sort before pawn moves
+   × ABC-036 A3 — the count survives the truncation the list does not > hides N > 0 moves at the start position while the stated total is still exactly 20
+ FAIL  src/command-input.test.ts > ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "  Moves  " as moves and answers the listing
+ FAIL  src/command-input.test.ts > ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "\tmoves\n" as moves and answers the listing
+ FAIL  src/command-input.test.ts > ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "moves" as moves and answers the listing
+ FAIL  src/command-input.test.ts > ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "MOVES" as moves and answers the listing
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 14 at position-3
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 20 at startpos
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 44 at position-5
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 46 at position-6
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 48 at kiwipete
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 6 at position-4
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > pins the start position's order: code-unit ascending, so piece moves sort before pawn moves
+ FAIL  src/command-input.test.ts > ABC-036 A3 — the count survives the truncation the list does not > hides N > 0 moves at the start position while the stated total is still exactly 20
+⎯⎯⎯⎯⎯⎯ Failed Tests 18 ⎯⎯⎯⎯⎯⎯⎯
+exit 1
+=== M5-shown-count: 'return [`legal moves: ${legal.length}`, ...listing];' -> 'return [`legal moves: ${Math.min(legal.length, 9)}`, ...listing];'
+      Tests  10 failed | 174 passed (184)
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "  Moves  " as moves and answers the listing
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "\tmoves\n" as moves and answers the listing
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "moves" as moves and answers the listing
+   × ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "MOVES" as moves and answers the listing
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 14 at position-3
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 20 at startpos
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 44 at position-5
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 46 at position-6
+   × ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 48 at kiwipete
+   × ABC-036 A3 — the count survives the truncation the list does not > hides N > 0 moves at the start position while the stated total is still exactly 20
+ FAIL  src/command-input.test.ts > ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "  Moves  " as moves and answers the listing
+ FAIL  src/command-input.test.ts > ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "\tmoves\n" as moves and answers the listing
+ FAIL  src/command-input.test.ts > ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "moves" as moves and answers the listing
+ FAIL  src/command-input.test.ts > ABC-036 — the `moves` token joins the table under ABC-035's tolerance > classifies "MOVES" as moves and answers the listing
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 14 at position-3
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 20 at startpos
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 44 at position-5
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 46 at position-6
+ FAIL  src/command-input.test.ts > ABC-036 A1 — the stated count is legalMoves(position).length, exactly > states 48 at kiwipete
+ FAIL  src/command-input.test.ts > ABC-036 A3 — the count survives the truncation the list does not > hides N > 0 moves at the start position while the stated total is still exactly 20
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+exit 1
+=== M6-unsorted: '.sort();' -> ';'
+      Tests  7 failed | 177 passed (184)
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos
+   × ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > pins the start position's order: code-unit ascending, so piece moves sort before pawn moves
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at kiwipete
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-3
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-4
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-5
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at position-6
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > lists every legal move once, as toSan returned it, ascending, at startpos
+ FAIL  src/command-input.test.ts > ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order > pins the start position's order: code-unit ascending, so piece moves sort before pawn moves
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+exit 1
