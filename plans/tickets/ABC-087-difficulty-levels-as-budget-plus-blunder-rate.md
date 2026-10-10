@@ -455,3 +455,26 @@ for the gate and the cost.
   (+0.31 %, 4/8) and R 0.030 s, at load1 6.42-6.85. The verdict rests on `ADR-0035` (`proposed`).
 - **The `AGENTS.md` lane line** is re-drafted with "19 default" in `…53ebd6d1`. It is the Scribe's,
   owed before merge.
+
+**2026-10-10, Software Engineer QE fix-forward** (`026a7373`, `src/levels.test.ts` only, on QE's
+`a2850bd0`). This closes QE-087-a, -b and -e from QE's register (`…62d79e31`). Readings are in
+`…26fd4d9d`, which supersedes `…69fa98d1`.
+
+- **QE-087-a (default lane).** A pass-through spy on `chooseMove` checks 8 seeds: every call is
+  `{ budgetMs, now }` only, and the engine path gets exactly the level budget. **M3a is red** (1 of 21:
+  this row only).
+- **QE-087-b (default lane).** Every child score of one blunder is re-derived against the real
+  `chooseMove` at depth 1, and Qxd5 (wins a queen) must be alone at the top. **M8 is red** (1 of 21:
+  this row only).
+- **QE-087-e.** The deep `ENDGAMES` run now logs `ENGINE_DEEP, ENDGAMES`.
+- **Gate:**
+  - lint, typecheck and build: exit 0;
+  - `npm test`: **52 / 1602 / 0 skipped**;
+  - integrity `No findings.`;
+  - lane inventory 52 = 52.
+- **`ENGINE_DEEP=1`:** **27 passed (21 default)**, 197.6 s at load1 12.5 → 3.6. `A4` reads 39.7 % and
+  39.4 %; `A5` max is 4,536 ms; `A3` reads 35 vs 58.
+- **`N8-LANE`: MET.** The reading is +0.555 s (0.52-0.57), twin −0.66 % at 3/8, R 0.030 s, at load1
+  9.0-15.0. It rests on `ADR-0035` (`proposed`).
+- **The `AGENTS.md` lane line** is re-drafted in `…53ebd6d1` as "27 passed (21 default)". The Scribe
+  owes it before merge.
