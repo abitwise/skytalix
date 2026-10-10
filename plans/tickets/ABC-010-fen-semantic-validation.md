@@ -1,8 +1,8 @@
 ---
 id: ABC-010
 title: FEN semantic validation
-status: ready
-column: Ready
+status: backlog
+column: Backlog
 size: M
 priority: P2
 epic: EPIC-003
