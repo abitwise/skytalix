@@ -11,12 +11,16 @@ feature: —
 
 # ABC-010 — FEN semantic validation
 
-> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2026-10-10`,
-> Workflow 07) against the wave tip `71be48b`. Item 6's `NFR-002` bar is re-derived from a
-> measurement (§ Security / NFR triggers). **Priority `P1` → `P2`.** The `P1` argument rested on
-> "`EPIC-003` accepts a FEN from a user", and `EPIC-003` does not: no epic scopes a FEN input
-> (§ Size and priority rationale). **DoR 10/10 → `Ready`, routed `Ready → In Design → Ready for
-> Dev`** for the open design question. Reasoning: `.grugops/context/rescore-batch-2026-10-10/notes/`.
+> **Re-scored 2026-10-10 by BA/PM** (`rescore-batch-2026-10-10`, at `71be48b`). `NFR-002` was
+> re-derived, priority went `P1` → `P2`, and the DoR reached 10/10, routed via `In Design`.
+>
+> **Re-cut 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `recut-abc010`) after the design
+> hop (`ADR-0033`, **proposed**), at the wave tip `980890f`. **Criterion 9 is re-worded** (two entries,
+> named fixtures, a re-run scan). **The two `src/puzzle-corpus.ts` rows move to `ABC-126`**, which is
+> now a hard predecessor. The fence is **15 `src/` files**, listed in § Scope. Size `M` holds and
+> priority stays `P2`. **DoR 8/10, so the page stays in `Backlog`.** Two ⚠️ remain: `ABC-126` must
+> merge, and **the build waits for the owner to accept `ADR-0033`**. Reasoning:
+> `.grugops/context/recut-abc010/notes/`.
 
 ## Problem
 
@@ -98,6 +102,25 @@ to write, and what EPIC-003's CLI boundary will write — leaks a stack trace in
 
 `toFen`'s documented round-trip guarantee holds for every position `parseFen` returns.
 
+**How it is built (re-cut 2026-10-10, under `ADR-0033`, proposed).** The design is the ADR's and is
+not restated here. This page names only what the build delivers and where.
+- **Two entries.** `parseFen` is the boundary (grammar, then semantics, in decision 3's order).
+  `parseFenGrammarOnly` is test-only. A guard row in `src/fen.test.ts` keeps every production file
+  from naming it.
+- **The fence is 15 `src/` files** (`git diff --name-only`), measured at `980890f`:
+  - **Production:** `src/fen.ts`.
+  - **The new table tests, the guard and one re-authored `ABC-001` case:** `src/fen.test.ts`.
+  - **Six one-line import swaps** to `parseFenGrammarOnly` (an alias is allowed):
+    `src/moves.castling.hardening.test.ts`, `src/moves.castling.test.ts`,
+    `src/moves.enpassant.hardening.test.ts`, `src/moves.enpassant.test.ts`, `src/legal.test.ts`,
+    `src/zobrist.test.ts`.
+  - **Seven files whose fixtures are re-authored**, or that now assert a rejection:
+    - `src/coordinate-move.test.ts:17` and `src/san.parse.test.ts:44` assert the rejection;
+    - `src/move-input.test.ts:30`, `:51`, `src/moves.test.ts:257`, `src/quiescence.test.ts:327`,
+      `src/evaluate.pawns.test.ts:121` and `src/status-panel.nfr.test.ts:64` are re-authored.
+- **Owed when the code lands:** the `src/fen.ts` row of `memory-bank/30-architecture.md` (level 3,
+  "grammar and semantics", `parseFenGrammarOnly`), per `ADR-0033` § Consequences.
+
 ## Out of scope
 
 - **Fixing `legalMoves`' mutation of its argument** — that is `ABC-009`, deliberately
@@ -110,6 +133,12 @@ to write, and what EPIC-003's CLI boundary will write — leaks a stack trace in
   start?). Explicitly declined — unbounded work for no user value. The six checks above are
   the cheap slice that closes every hole the audit actually reproduced.
 - Chess960 castling-rights notation. Variants are a permanent non-goal (EPIC-001).
+- **`src/puzzle-corpus.ts`** *(re-cut 2026-10-10)*. Its two rows that the rules reject (`:108` "pin:
+  Re1", a pawn on h8; `:110` "discovered check", black in check with white to move) are re-authored
+  under `ABC-084`'s oracle by **`ABC-126`**, which lands first. This ticket does not edit the corpus
+  and does not touch `src/puzzle-suite.baseline.json`.
+- **`src/legal.ts`, `src/moves.ts`, `src/apply.ts`.** `ADR-0033` adds an import of
+  `isSquareAttackedBy` and changes none of them.
 
 ## Acceptance (Given/When/Then)
 
@@ -137,11 +166,36 @@ Each criterion is a currently-failing test that must go green. All FENs are exac
 - **Given** each of `null`, `undefined`, `42`, `{}`, `[]`, **when** passed to `parseFen`,
   **then** the thrown error satisfies `instanceof FenError`. *(Today: all five throw
   `TypeError`; `instanceof FenError` is `false` for all five.)*
-- **Given** every FEN fixture already in the repo — the six perft positions, all `ABC-001`
-  round-trip cases, and every fixture in `src/*.test.ts` — **when** the suite runs after the
-  change, **then** all still parse and the suite is green with a skip count of 0. A
-  validation that rejects kiwipete is a broken validation, and this is the criterion that
-  catches it.
+- **Criterion 9 (the positive corpus). Re-worded 2026-10-10, `recut-abc010`.** The old text, "every
+  fixture still parses", cannot hold: the rules reject 186 fixture occurrences at `980890f`, 175 of
+  them on purpose (`ADR-0033` § Context). This is the Architect's proposed text, made checkable.
+  **Given** every FEN fixture in the repo, **when** the suite runs after the change, **then**:
+  - **(a)** the six perft positions and every `ABC-001` case parse through `parseFen`. A validation
+    that rejects kiwipete is a broken validation. The one rejected `ABC-001` case is re-authored,
+    not exempted: `src/fen.test.ts:29` becomes
+    `rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1`, and it still round-trips.
+  - **(b)** in each of the six import-swap files (§ Scope), every line that
+    `git diff -U0 <base>...<tip> -- <file>` changes belongs to an import statement. Their fixtures
+    parse through `parseFenGrammarOnly`, and their tests pass unedited.
+  - **(c)** `src/coordinate-move.test.ts:17` (`A2`) and `src/san.parse.test.ts:44` (`A4`) assert that
+    `parseFen` throws `FenError` on their printed FEN (the kings are adjacent). The other seven are re-authored
+    to FENs that `parseFen` accepts: the six in § Scope's last list, and (a)'s. Each test keeps its name and its point.
+    The PR note lists the old FEN, the new FEN and every expected value that changed, with the
+    reason. None of the seven switches to `parseFenGrammarOnly`.
+  - **(d)** `node .grugops/context/recut-abc010/probe/fen-scan.mjs <tip-tree>` runs every FEN
+    literal through the tip's `parseFen`. Its `by file:` lines name only these: `src/fen.test.ts`, the
+    six swap files, the two files of (c), and `src/history-pane.test.ts` and `src/render.test.ts`.
+    The last two each hold one empty-board literal that was already rejected at `980890f`
+    (`fen-scan.980890f.out.txt`). **Stop rule:** if the scan rejects a literal in any other file,
+    report it and do not re-author it. That covers a row that landed after `980890f`, a
+    `src/puzzle-corpus.ts` row and a FEN built at run time. The fence does not grow at build.
+  - **(e)** the guard row is red first. A planted `parseFenGrammarOnly` mention in one production
+    file turns it red; the plant is reverted (`git status --porcelain src` shows nothing extra).
+  - **(f)** `npm test` is green with a skip count of 0. These lanes exit 0, because their files are
+    in the fence or parse the corpus: `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts`,
+    `ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts` and
+    `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`. On the last, the solved count is not
+    below the baseline file's and the file is untouched.
 - **Given** `PERFT_DEEP=1`, **when** the deep perft lane runs, **then** all 32 cases still
   match their published node counts exactly.
 - **Given** each rejection above, **when** the message is read, **then** it names the specific
@@ -150,58 +204,45 @@ Each criterion is a currently-failing test that must go green. All FENs are exac
 
 ## Dependencies
 
-- No blocking dependency. `src/fen.ts` is merged on `main` (`ABC-001`).
-- **Not** dependent on `ABC-009`. Either may ship first; shipping this one first makes
-  ABC-009's defect unreachable in practice, which is why it carries the higher priority.
+*(Re-cut 2026-10-10. This replaces the cut-time "no blocking dependency" line.)*
 
-### Open design question — hand to Architect/Design at the design hop, do not decide in dev
-
-The "side not to move is in check" rule needs attack detection, which today lives in
-`src/moves.ts` (`isSquareAttackedBy`). `src/fen.ts` currently imports from `src/position.ts`
-only — it is a level-1 leaf with exactly one production consumer. Adding `fen.ts → moves.ts`
-introduces a new dependency edge and moves `fen.ts` down the layering. It creates no cycle,
-but it is a real structural change to a graph the audit recorded as a clean acyclic DAG, and
-choosing where the check lives is a design decision, not an implementation detail. Flagged
-here, not answered here. *(2026-10-10: `isInCheck` is now exported at `src/legal.ts:32`, so the
-candidate edge is `fen.ts → legal.ts`. `legal.ts` imports `apply`, `moves` and `position`, not
-`fen`, so the edge makes no cycle. Still Architect/Design's at the design hop.)* **Answered
-2026-10-10 in § Design below (`ADR-0033`, proposed): `fen.ts → moves.ts`, not `legal.ts`.**
+- **⚠️ `ADR-0033` is `proposed`, and the build waits for the owner to accept it** (Olger Oeselg).
+  No agent moves an ADR to `accepted`. If the owner rejects it, this page goes back to
+  Architect/Design. Its criterion 9 and § Scope's fence rest on the ADR's two entries.
+- **⚠️ `ABC-126` is a hard predecessor and must merge first.** It re-authors the two
+  `src/puzzle-corpus.ts` rows these rules reject, under `ABC-084`'s oracle (R3 of the re-cut). With
+  those rows unchanged, `PUZZLE_DEEP=1` and the default `A6` corpus row go red at this ticket's
+  build, because the suite parses every puzzle through `parseFen`.
+- **Order on the shared files. Never build two of these in parallel; the second one rebases.**
+  - `src/puzzle-corpus.ts`: `ABC-127` (In Development) → `ABC-126` → this ticket. This ticket
+    does not edit the file, but criterion 9(d) and the deep lane read it.
+  - `src/quiescence.test.ts`: `ABC-126` (its `:269` row) → this ticket (`:327`, the runaway rig).
+    `ABC-083` `A10` also re-pins rows in that file, so `ABC-083` and this ticket must not run
+    side by side. Neither blocks the other. When both are pullable, `ABC-083` (`P1`) goes first.
+  - `ABC-127`'s 22 new rows pass the rules at its in-flight `47433c5` (snapshot, in the note).
+- **Not** dependent on `ABC-009`. Either may ship first.
 
 ## Design (Architect/Design, 2026-10-10, `design-abc010`)
 
 Authority: [`ADR-0033`](../../memory-bank/50-decisions/ADR-0033-parsefen-checks-the-side-not-to-move-through-moves-ts-and-off-domain-fixtures-parse-grammar-only.md)
 (**proposed, owner acceptance owed**). Evidence: `.grugops/context/design-abc010/` (`notes/`, `probe/`).
 
-- **Where the check lives.** `fen.ts` imports `isSquareAttackedBy` from `moves.ts`, on the king squares
-  `assertBothKingsPresent` already finds. It does **not** call `legal.ts` `isInCheck`, because that turns
-  `ABC-016` `A13` red (`src/status-panel.nfr.test.ts`: "expected 2 to be 1", measured).
-  `fen.ts` moves from level 2 to level 3, there is no cycle, and no importer's closure changes.
-- **Two entries.** `parseFen` is the boundary: grammar, then semantics. `parseFenGrammarOnly` is
-  test-only, and a test in `fen.test.ts` keeps every production file from naming it. Rule order,
-  message shape and the en-passant definition (no capturer required) are in `ADR-0033` decision 3.
-- **Bars, measured on a throwaway prototype.** `NFR-002`: 2.97 µs mean against 2.50 µs base, so ≤
-  10 µs holds. `NFR-001`: perft 4.96 M nodes/sec. Deep perft: 32/32.
-- **⚠️ Criterion 9 cannot hold as worded. This goes back to BA/PM.** The six rules reject 144 of
-  the repo's 732 distinct parsing FENs (186 occurrences).
-  - 175 of the 186 sit in six rules-core files that feed impossible boards on purpose: `moves.castling*`,
-    `moves.enpassant*`, `legal`, `zobrist`. These switch to `parseFenGrammarOnly`, one import line each,
-    and were measured green.
-  - 9 more are incidental, in 8 test files, and must be re-authored. One is `fen.test.ts:29`, an
-    `ABC-001` case, `e3` with white to move.
-  - 2 are rows of `src/puzzle-corpus.ts`: a pawn on h8, and black in check with white to move.
-
-  The fence becomes 16 files. The page's "shares no file" no longer holds: `puzzle-corpus.ts` is
-  shared with `ABC-127` and `ABC-126`, and `quiescence.test.ts` with `ABC-083`. The proposed wording
-  and the file list are in the decision note.
+- **Where the check lives:** `fen.ts` imports `moves.ts` `isSquareAttackedBy` and does not use
+  `legal.ts` `isInCheck`. The `isInCheck` route turns `ABC-016` `A13` red ("expected 2 to be 1",
+  measured). `fen.ts` goes from level 2 to level 3, with no cycle.
+- **Rule order, messages, en passant:** these are in `ADR-0033` decision 3. The en-passant rule
+  requires no capturer.
+- **Bars, measured on a throwaway prototype:** `NFR-002` 2.97 µs against 2.50 µs base; `NFR-001`
+  4.96 M nodes/sec; deep perft 32/32.
+- **Criterion 9:** it could not hold as worded, and BA/PM re-worded it at `recut-abc010`. The rules
+  reject 186 fixture occurrences. 175 sit in the six swap files, 9 are incidental and 2 are corpus
+  rows, which went to `ABC-126`. The re-cut scan at `980890f` gives the identical list.
 
 ## Security / NFR triggers
 
-- `NFR-003` — input responsiveness (EPIC-003): keystroke echo **< 50 ms**, `moves` and
-  tab-completion **< 100 ms**. Measurable bar: full parse-with-validation adds **< 1 ms** per
-  call. Parsing is a once-per-input operation and the audit measured `legalMoves` itself at
-  2.1–5.3 µs, so there is ample room — but the number is stated so a regression is visible
-  rather than assumed.
-- **`NFR-002` — full redraw < 16 ms. Re-derived 2026-10-10; this bar replaces the `< 1 ms` above.**
+- `NFR-003` (keystroke echo < 50 ms; `moves`/Tab < 100 ms). Its cut-time `< 1 ms` per-parse bar is
+  superseded by the `NFR-002` bar below, which is 100x tighter.
+- **`NFR-002` — full redraw < 16 ms. Re-derived 2026-10-10.**
   **Validated `parseFen` ≤ 10 µs mean per call.** It is read in the PR note, base against branch in
   one process, with the machine, Node version and 1-minute load recorded. It is not asserted in the
   suite (`src/gameend.nfr.test.ts:16`–`:17`). Derivation: there are **2 calls per frame**
@@ -213,9 +254,11 @@ Authority: [`ADR-0033`](../../memory-bank/50-decisions/ADR-0033-parsefen-checks-
 - `NFR-001` — move generation throughput is **not** at risk: `src/fen.ts` has exactly one
   production consumer (`perft-bench.ts`) and is not on the search hot path. *(2026-10-10: five
   production consumers, still none on the search hot path. `keyHistory` parses once per search,
-  never per node: `ADR-0002` clause 3.)* If the design
-  question above adds a `fen.ts → moves.ts` edge, confirm `npm run perft` still reports
-  **≥ 1,000,000 nodes/sec** and deep perft **32/32 exact**.
+  never per node: `ADR-0002` clause 3.)* `ADR-0033` adds the `fen.ts → moves.ts` edge, so confirm
+  `npm run perft` still reports **≥ 1,000,000 nodes/sec** and deep perft **32/32 exact**. The
+  prototype read 4.96 M nodes/sec and 32/32.
+- **`N8-LANE` ≤ 650 ms CPU net:** 0 new test files. The fixtures change 1:1, and the new rows go
+  into `src/fen.test.ts`.
 - **No security trigger.** The audit was explicit: this is a reliability defect, not a
   security one. There is no injection sink, no trust boundary, no privilege and no data
   exposure; the consequences are a wrong chess answer and a corrupted in-memory board. No
@@ -234,90 +277,70 @@ Three things the tests must do that a naive pass would miss:
    assertion, and `instanceof` must be checked explicitly for the five non-string inputs.
 2. **Assert the message names the fault.** EPIC-003's acceptance is that rejections teach.
    A generic "invalid FEN" passes a throw-assertion and fails the requirement.
-3. **Keep a positive corpus.** Every legal fixture in the repo must still parse. The most
+3. **Keep a positive corpus** (criterion 9 defines it). Every legal fixture must still parse. The most
    likely way this ticket goes wrong is over-rejection, and the existing 143-test suite (1,540 tests at `71be48b`) plus
    the deep perft lane are the guard.
 
 The round-trip criterion is best written as a property test over the existing perft position
 table rather than as one-off cases — the table is already there.
 
+Two more, added at the re-cut:
+
+4. **Re-run 9(d)'s scan on your own base before you write code** *(re-cut 2026-10-10)*. The
+   fixture list is measured at `980890f`. The base you build on is later, at least `ABC-127` and
+   `ABC-126`. A FEN outside the list falls under the stop rule.
+5. **Measured replacements exist for two fixtures** (Architect, `…aa14ac4d`). For `fen.test.ts:29`,
+   use the after-`1.e4` FEN above. For `status-panel.nfr.test.ts:64` `SPARSE_FEN`,
+   `4k3/8/8/8/8/8/8/R5K1 w - - 0 1` with plies `a1a2 e8d8` and `a1a2 e8d8 a2a4 d8c8` kept the file
+   at 17/17. The other five are the Engineer's to choose.
+
 ## Size and priority rationale
 
-**Size `M` (3).** Six validation rules, all local to one existing 225-line module, each with
-an exact FEN fixture and an exact expected error. Calibrated against `ABC-007` (five terminal
-conditions **plus** a new Zobrist module, `M`) and `ABC-001` (position representation plus
-full FEN parse/serialize plus an ADR, `M`); it is clearly below `ABC-004` (special moves,
-`L`). Not `L`, because no new subsystem is created and the oracle already exists.
+*(Condensed 2026-10-10 at `recut-abc010`. The cut-time `P1` argument and the earlier DoR texts are
+in git at `980890f` and in the notes they cite.)*
 
-**Not `XL`, and here is the split line if it moves.** If the design hop decides the
-side-not-to-move-in-check rule requires a new module or a restructure of the dependency graph,
-this ticket splits along a line named now, not improvised later: **(a) board-semantic legality**
-— castling rights, side-not-to-move-in-check, pawns on rank 1/8, en-passant plausibility; and
-**(b) field bounds and error typing** — clock overflow, `toFen` round-trip guarantee,
-non-string input to `FenError`. Part (b) is `S`, has no new dependency edge, and can ship on
-its own.
+**Size `M` (3), re-checked against the 15-file fence.** It holds, because the file count measures
+breadth, not risk:
+- the production change is about 60 lines in one module (prototype, `…aa14ac4d`);
+- 6 of the 15 files change one import line each, and were measured green;
+- 9 fixtures in 8 files are re-authored or assert a rejection. Two have measured replacements,
+  and two only flip an assertion;
+- no new module and no open design question remain.
 
-**Priority `P1`, not defaulted.** Applying the latent/live test:
+It stays below `ABC-004` (`L`). It calibrates with `ABC-007` and `ABC-001` (`M`). **Not `L`:** the
+churn is mechanical and bounded by 9(d)'s stop rule. **Not `XL`.** The cut-time split line ((a)
+board semantics, (b) field bounds and typing) existed in case design added a module. Design added
+none, so the split is not taken. The one piece that was separable, the corpus rows, went to
+`ABC-126`.
 
-- **Not `P0`:** the defect is latent today. `parseFen` has no user-facing caller — the module
-  map records exactly one production consumer, the perft harness, which feeds it only
-  well-formed fixture FENs. Nothing in flight is broken and the suite is 143/143 green.
-  Dropping everything is not warranted.
-- **Not `P2`/`P3`:** it goes **live the moment EPIC-003 accepts a FEN from a user**, which is
-  what EPIC-003 exists to do — and EPIC-003 is a `P0` epic. It is the audit's named required
-  fix `RF-3`, gated explicitly on "before EPIC-003 accepts user FEN". It is also the **only**
-  boundary guarding this class: every deeper symptom the audit found, including `ABC-009`'s
-  board corruption, enters through this parser. Fixing the boundary makes the class
-  unreachable; leaving it means EPIC-003 is decomposed on a parser known to accept impossible
-  positions.
-
-This must be `Ready` before EPIC-003 is decomposed, so it is not discovered as rework
-mid-epic.
-
-**Re-prioritised 2026-10-10: `P1` → `P2` (BA/PM).** The "Not `P2`/`P3`" argument above is false on
-today's plans. `EPIC-003`'s scope (`plans/epics/EPIC-003-move-input-and-controls.md` § Scope) is the
-move parsers, the ambiguity list, teaching rejections, the commands and Tab-completion. **It never
-accepts a FEN**, and no other epic does. The defect class is real and reproduced (re-run above),
-but no input reaches it. **Not `P3`:** `toFen`'s documented round trip is false today, and
-`EPIC-005` may make this live soon (next line). **Trigger back to `P1`:** any ticket that lets a
-human or a file supply a FEN (a `--fen` flag, a paste command, a saved-game load), or `ABC-093`
-choosing a FEN-carrying book format that `ABC-094` parses at run time. That ticket then names
-`ABC-010` as its hard prerequisite. The Orchestrator may reverse this re-prioritisation.
+**Priority `P2`, unchanged** (re-prioritised from `P1` at `rescore-batch-2026-10-10`). No epic
+accepts a FEN from a user. **Not `P3`:** `toFen`'s documented round trip is false today.
+**Trigger back to `P1`:** any ticket that lets a human or a file supply a FEN (a `--fen` flag, a
+paste command, a saved-game load), or `ABC-093` choosing a FEN-carrying book format that `ABC-094`
+parses at run time. That ticket names `ABC-010` as its hard prerequisite. The predecessor
+`ABC-126` is `P2` too, so the order costs no priority.
 
 ## Definition of Ready
 
-Problem ✅ · scope + out-of-scope ✅ · INVEST ✅ · acceptance measurable ✅ (exact FENs, exact
-error type, byte-identical round trip) · dependencies ✅ (none blocking; one open design
-question flagged and assigned) · NFR triggers ✅ (NFR-003, numeric bar) · test notes ✅ ·
-size `M` ✅ · priority `P1` ✅ · no blocker ✅
+### DoR re-scored 2026-10-10 by BA/PM at `recut-abc010` — 8 of 10, 2 ⚠️, stays in `Backlog`
 
-Sits in `Backlog`. The open design question is a design-hop input, not a blocker. Promotion
-to `Ready` is a separate BA/PM step and has not been taken.
-
-### DoR re-scored 2026-08-12 by BA/PM — 9 of 10, not promoted
-
-*(Condensed 2026-10-10. The full text is in git history at `71be48b` and in
-`.grugops/context/refinement-post-abc030/notes/20260812T181000Z-ba-pm-observation-i-re-verified-five-dor-scores-and-three-of-them-moved-6b2d5f81.md`.)*
-That re-score found four production consumers of `src/fen.ts`, two of them once per frame, and set
-**item 6 to ⚠️**: the triggers omitted `NFR-002`, and the `< 1 ms` bar was the wrong size for a
-per-frame call. It also said the design question is a design-hop input, not a blocker, so a pull
-routes `Ready → In Design → Ready for Dev`. And it noted `N8-LANE` (≤ 650 ms CPU) is inherited, with
-0 new test files expected.
-
-### DoR re-scored 2026-10-10 by BA/PM — 10 of 10, page `Ready`
-
-`rescore-batch-2026-10-10`, wave tip `71be48b`. **The board move is the Orchestrator's, and the pull
-goes to `In Design` first.**
+Wave tip `980890f`. **NOT met.** Both ⚠️ have a named owner and a release that needs no BA/PM
+work. When both are released the page reads 10/10, and the pull goes straight to `Ready for Dev`,
+because the design hop is done. The board move is the Orchestrator's.
 
 | # | item | verdict |
 |---|---|---|
-| 1 | problem clear | **✅** corrected: no FEN input exists yet, so the user is the maintainer and the first ticket to add one. Reproduction re-run today |
-| 2 | scope and out-of-scope clear | **✅** six rules plus round trip and error typing; retrograde legality and Chess960 fenced |
-| 3 | INVEST-shaped | **✅** independent (no dependency), small enough at `M`, with a split line named if design moves it |
-| 4 | acceptance testable and measurable | **✅** exact FENs, exact error type, byte-identical round trip, positive corpus, `32/32` |
-| 5 | dependencies known | **✅** none blocking. The design question is assigned to Architect/Design and is a routing step |
-| 6 | security/NFR triggers with a measurable target | **✅** (was ⚠️) `NFR-002`: ≤ 10 µs per validated parse, derived from 2 calls per frame and measured at 1.85 µs today; `NFR-001` perft ≥ 1,000,000 nodes/sec if an edge is added; `N8-LANE`; no security trigger |
-| 7 | test notes present | **✅** three |
-| 8 | size assigned | **✅** `M` (3) |
-| 9 | priority assigned | **✅** `P2` (re-prioritised from `P1`, with the trigger back) |
-| 10 | no major unresolved blocker | **✅** the design question is answered at the design hop and does not change any criterion |
+| 1 | problem clear | **✅** unchanged. The reproduction was re-run at `71be48b`, and no input reaches it yet |
+| 2 | scope and out-of-scope clear | **✅ re-read.** It adds the two entries and the 15-file fence. The corpus rows (`ABC-126`) and `legal.ts`/`moves.ts`/`apply.ts` are fenced out |
+| 3 | INVEST-shaped | **⚠️ not independent until `ABC-126` merges.** The suite parses the two defective corpus rows. **Owner: the Orchestrator** (sequencing, `ABC-127` → `ABC-126` → here). Released by that merge alone |
+| 4 | acceptance testable and measurable | **✅ re-worded.** Criterion 9 is now (a)–(f): named fixtures, an import-only diff on six files, an attributable scan with a stop rule, a red-first guard, and three named deep lanes |
+| 5 | dependencies known | **✅** `ADR-0033` acceptance, `ABC-126`, and the file order with `ABC-127` and `ABC-083`, all named |
+| 6 | security/NFR triggers with a measurable target | **✅** `NFR-002` ≤ 10 µs (prototype 2.97); `NFR-001` ≥ 1 M nodes/sec and 32/32 (prototype 4.96 M); `N8-LANE` 0 new files; no security trigger |
+| 7 | test notes present | **✅** five (two added) |
+| 8 | size assigned | **✅** `M` (3), re-checked against 15 files |
+| 9 | priority assigned | **✅** `P2`, with the trigger back to `P1` |
+| 10 | no major unresolved blocker | **⚠️ `ADR-0033` is `proposed`, and the build waits for the owner to accept it.** **Owner: Olger Oeselg.** If he rejects it, the page goes back to Architect/Design |
+
+**History:** cut 2026-07-29 (10/10 claimed); 9/10 on 2026-08-12 (`…6b2d5f81`); 10/10 on
+2026-10-10 (`rescore-batch`), then back to `Backlog` after the design hop (`980890f`). Full texts are
+in git.

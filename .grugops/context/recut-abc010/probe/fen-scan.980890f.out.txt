@@ -1,0 +1,20 @@
+files scanned 87; FEN-shaped literals 1049; rejected by parseFen 15
+  by file: src/fen.test.ts 8
+  by file: src/history-pane.test.ts 1
+  by file: src/moves.castling.hardening.test.ts 5
+  by file: src/render.test.ts 1
+  src/fen.test.ts:72  rank 7 describes 7 squares, expected 8  ::  rnbqkbnr/ppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1
+  src/fen.test.ts:81  position must have exactly one white king, found 0  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQ1BNR w - - 0 1
+  src/fen.test.ts:82  position must have exactly one black king, found 0  ::  rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1
+  src/fen.test.ts:90  illegal character "X" in castling field  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w XQkq - 0 1
+  src/fen.test.ts:95  en-passant field must be "-" or a square, found "z9"  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq z9 0 1
+  src/fen.test.ts:110  fullmove number must be at least 1, found 0  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0
+  src/fen.test.ts:115  en-passant field must be "-" or a square, found "e33"  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e33 0 1
+  src/fen.test.ts:120  en-passant field must be "-" or a square, found "e9"  ::  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e9 0 1
+  src/history-pane.test.ts:860  position must have exactly one white king, found 0  ::  8/8/8/8/8/8/8/8 w - - 0 1
+  src/moves.castling.hardening.test.ts:828  position must have exactly one white king, found 2  ::  4k3/8/8/8/8/8/8/4K2K w K - 0 1
+  src/moves.castling.hardening.test.ts:829  position must have exactly one white king, found 2  ::  4k3/8/8/8/8/8/8/K3K3 w Q - 0 1
+  src/moves.castling.hardening.test.ts:830  position must have exactly one black king, found 2  ::  4k2k/8/8/8/8/8/8/4K3 b k - 0 1
+  src/moves.castling.hardening.test.ts:831  position must have exactly one black king, found 2  ::  k3k3/8/8/8/8/8/8/4K3 b q - 0 1
+  src/moves.castling.hardening.test.ts:994  position must have exactly one white king, found 2  ::  4k3/8/8/8/8/8/8/K3K2n w K - 0 1
+  src/render.test.ts:479  position must have exactly one white king, found 0  ::  8/8/8/8/8/8/8/8 w - - 0 1

@@ -1,15 +1,15 @@
 ---
 id: ABC-126
-title: The hanging corpus's "R takes a bishop a pawn defends" pair starts in check — re-find it, and assert the header's claim
+title: The hanging corpus's "R takes a bishop a pawn defends" pair starts in check, and two win-material rows describe boards no game reaches — re-find all four, and assert the header's claim
 status: ready
 column: Ready
-size: XS
+size: S
 priority: P2
 epic: EPIC-004
 feature: —
 ---
 
-# ABC-126 — two corpus rows break the corpus's own rule, and the row named for that rule only checks legality
+# ABC-126 — four corpus rows break a rule they claim to keep, and the row named for that rule only checks legality
 
 > **Cut 2026-10-09 by BA/PM** (task `wave-2026-09-25`, subtask `cut-followups-2026-10-09`,
 > Workflow 07) from Architect/Design's side finding at `ruling-abc082-levels`
@@ -28,6 +28,13 @@ feature: —
 > pair (`src/puzzle-suite.test.ts:130`–`:133`), and this ticket removes it (`A6`). No production
 > file has changed since the `7b54dae` probe. **DoR 10/10 → `Ready`.** Reasoning:
 > `.grugops/context/rescore-batch-2026-10-10/notes/`.
+>
+> **Folded 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `recut-abc010`) at the wave tip
+> `980890f`. Two `win-material` rows of `PUZZLES` that `ABC-010`'s rules (`ADR-0033`) reject are
+> folded in as **`A7`**: "pin: Re1" has a pawn on h8, and in "discovered check" black is in check
+> with white to move. **This ticket is now `ABC-010`'s hard predecessor.** `A4` and `A6` no longer
+> hard-code 40/40, because `ABC-127` re-records the baseline. **Size `XS` → `S`. `P2` unchanged.
+> DoR 10/10, page stays `Ready`.** Reasoning: `.grugops/context/recut-abc010/notes/`.
 
 ## Problem
 
@@ -44,8 +51,16 @@ pair** (`.grugops/context/cut-followups-2026-10-09/probe/in-check.out.txt`).
 The rows still test something, because the losing capture also answers the check. But with 5 legal
 moves, 4 of them king moves, the row is a much narrower test than its theme claims.
 
+*Added 2026-10-10 (fold from `ABC-010`'s re-cut).* Two `ABC-084` rows describe boards that no
+game reaches. In "pin: Re1 pins the queen to the king" (`src/puzzle-corpus.ts:108`,
+`4k2p/8/8/4q3/8/1P6/P2K4/R7 w - - 0 1`) a black pawn stands on h8. In "discovered check: the bishop
+moves, Rxd8" (`:110`, `3q4/6k1/8/8/3B4/8/6PP/3R2K1 w - - 0 1`), `Bd4` already checks `g7` with
+white to move. Under `ADR-0033` `parseFen` rejects both, and the suite parses every puzzle, so
+`ABC-010` cannot land over them. It is the same defect class as the pair: a corpus row that breaks a
+rule the corpus claims to keep.
+
 *Value*: the corpus says what it does, and a future in-check row is caught by a test instead of by
-an Architect reading FENs.
+an Architect reading FENs. `ABC-010` can then land without editing the corpus.
 
 ## Scope
 
@@ -56,6 +71,8 @@ an Architect reading FENs.
   `isInCheck(parseFen(fen))` is `false` (`src/legal.ts:32`) for every row it iterates.
 - Both edits land where `ABC-084` put them: the FENs in `src/puzzle-corpus.ts`, the assertion in
   `src/quiescence.test.ts:269`.
+- **Re-author the two `win-material` rows** *(folded 2026-10-10, `A7`)*: same name, class and
+  motif, a board that passes `ADR-0033`'s rules, and an accepted set that `ABC-084`'s oracle proves.
 - **Drop `ABC-084`'s carve-out for this pair** *(added 2026-10-10)*. The `A6` row in
   `src/puzzle-suite.test.ts:126`–`:139` skips the in-check assertion for `do-not-hang` rows. Its
   comment (`:130`–`:132`) names this pair as the reason. Once the pair is re-found, that comment is
@@ -65,12 +82,13 @@ an Architect reading FENs.
 ## Out of scope
 
 - **Any other corpus row,** including the four dead-draw pairs (`…d25a0383`). They are not in check.
+  *(Re-checked at the fold.)* `ADR-0033`'s rules reject no other row, either at `980890f` or at
+  `ABC-127`'s in-flight `47433c5`.
 - **Any level of `ABC-079` `A1`.** Under `ADR-0028` decision 2 a fixture is re-found and its level
   does not move.
-- **`ABC-084`'s own additions** (mate, win-material). *(Checked 2026-10-10: none is in check. The
-  merged `A6` row asserts it for every non-`do-not-hang` row, and it is green at `71be48b`.)*
-- **`src/puzzle-suite.baseline.json`** (`A4`), and any new puzzle. A "harder puzzles" ticket is
-  being cut in parallel (`cut-harder-puzzles`). It is not this one.
+- **`ADR-0033`'s rules themselves, and `src/fen.ts`.** Those are `ABC-010`'s. Here they are only an
+  instrument (`A7`).
+- **`src/puzzle-suite.baseline.json`** (`A4`), and any new puzzle. New puzzles are `ABC-127`'s.
 - **Any production file.**
 
 ## Acceptance (Given/When/Then)
@@ -81,15 +99,19 @@ an Architect reading FENs.
   the FEN change).
 - **`A2` (the pair is re-found, not dropped).** **Then** `ABC-079` `A1` still reads **exactly 24
   rows**. The two replacements are not in check, their losing capture is legal, and the side to
-  move has **more than one non-king move**.
+  move has **more than one non-king move**. *(Added at the fold:)* each replacement also passes
+  `ADR-0033`'s rules, so `ABC-010` does not have to touch it. "Passes" means
+  `node .grugops/context/recut-abc010/probe/rules-only.mts <tree> <fen>` prints `accepted`.
 - **`A3` (the rows still discriminate).** **Given** each replacement, **then** with quiescence the
   losing capture is **not** chosen at depth 1 and at depth 3 (`SEARCH_DEEP=1`), and the bare leaf
   (`searchWithoutQuiescence`) **does** choose it at depth 1. The PR note records each row's margin
   at depth 3 (the best move's score minus the capture's), as `…f0115510` did for row 21. The
   default lane and `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` are green.
 - **`A4` (`ABC-084`'s suite and baseline are respected).** **Given** `ABC-084`'s opt-in lane,
-  **when** it runs after the change, **then** the solved count is **not below** the recorded
-  baseline. **The baseline reads 40/40, so "not below" means 40/40.** **The baseline file is not
+  **when** it runs after the change, **then** `total` equals the baseline file's `total` and the
+  solved count is **not below** its `solved`, both read on this ticket's base. *(Re-worded at the
+  fold. It read 40/40 at `980890f`, and `ABC-127` re-records it.)* If `ABC-127`'s per-row diff is on
+  the base, the run prints **no `NEWLY-MISSED` line**. **The baseline file is not
   touched in this ticket's commits** (`ABC-084` `A7`: the baseline moves only in its own commit
   with a reason). Each replaced row's provenance records the re-find. *(Made concrete 2026-10-10:
   `HANGING_CORPUS` rows carry no `source` field. `PUZZLES` stamps all 24 with one shared string. So
@@ -97,7 +119,7 @@ an Architect reading FENs.
   comment at `src/puzzle-corpus.ts:71`–`:72`. It names `ABC-126`, the old FEN's fault (in check),
   and the depth-3 margin from `A3`.)*
   **The `ABC-084` trigger (owner option B) does not fire here:** no file on its list changes. **The
-  suite still runs, because this criterion requires it.** This ticket changes 2 of the suite's 40
+  suite still runs, because this criterion requires it.** This ticket changes 4 of the suite's
   inputs, and the trigger list covers engine changes, not data changes. The Engineer runs
   `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts` and records the result in the PR note, and
   QE re-runs it at review as this ticket's `A4`.
@@ -107,18 +129,43 @@ an Architect reading FENs.
   integrity `No findings.`
 - **`A6` (the carve-out goes; added 2026-10-10).** **Given** `src/puzzle-suite.test.ts`'s row "every
   row names its source and its moves are legal; no added row starts in check", **then** it asserts
-  `isInCheck(position) === false` for **every** puzzle, 40/40, with no `kind` exemption. The comment
+  `isInCheck(position) === false` for **every** puzzle (`PUZZLES.length` on the base; 40 at
+  `980890f`), with no `kind` exemption. The comment
   naming this pair is gone. **Red first:** with the exemption removed and today's pair in place,
   the row is red on exactly the two pair rows (shown in the PR note, as for `A1`).
+- **`A7` (two win-material rows that no game reaches are re-authored; folded 2026-10-10).**
+  **Given** "pin: Re1 pins the queen to the king" and "discovered check: the bishop moves, Rxd8",
+  **then** each FEN is replaced, and:
+  - **red first:** on the shipped FENs, `rules-only.mts` (as in `A2`) prints `pawn on rank 8 (h8)`
+    and `side not to move (black) is in check`. On the replacements it prints `accepted`;
+  - **the answer is the oracle's, never the engine's** (`ABC-084` `A6`). Each row's `accept` is
+    exactly the strictly-best set of `ABC-084`'s material-only 4-ply oracle, and its `source`
+    gain is that oracle's best minus stand. If `ABC-127`'s `A2` row is on the base, that
+    `PUZZLE_DEEP=1` row is the re-proof. Otherwise the PR note carries the
+    `.grugops/context/ticket-to-pr-ABC-084/notes/raw-probe-oracle.mts.txt` reading;
+  - **name, class and count unchanged:** both names stay byte-identical, so the baseline's row
+    names and `ABC-127`'s per-row lines keep their keys. The `win-material` count does not change;
+  - **solved, and the baseline does not move.** The shipped engine solves each replacement at the
+    baseline file's budget and step (`A4`). A replacement it does not solve is re-found, never
+    kept, the same rule `ADR-0028` decision 2 applies to a fixture. Lowering the baseline needs the
+    owner's word (`ABC-084` `A7`) and is not this ticket's to ask;
+  - **provenance:** a comment line above each row names `ABC-126` (via `ABC-010`'s re-cut), the old
+    FEN's fault, and the oracle's gain, in the shape of `src/puzzle-corpus.ts:71`–`:72`.
 
 ## Dependencies
 
 - ~~**`ABC-084` must merge first — OPEN (In Development).**~~ **`ABC-084` — `Done`** (owner
   accepted 2026-10-10, merged `e634bc1`). The data module is `src/puzzle-corpus.ts`.
-- **File overlap (2026-10-10).** `ABC-083` re-pins rows in `src/quiescence.test.ts`, and any
-  "harder puzzles" ticket edits `src/puzzle-corpus.ts`. Do not build either in parallel with this
-  one. This ticket goes first, because it is the smallest and `ABC-083`'s re-pin ledger then reads
-  the re-found rows.
+- **File overlap (2026-10-10, re-dated at the fold).** Do not build any two of these in
+  parallel; the second one rebases.
+  - **`ABC-127` is In Development** on `src/puzzle-corpus.ts`, `src/puzzle-suite.test.ts` and the
+    baseline, so this ticket **builds after `ABC-127` merges**. `ABC-127` keeps the existing rows
+    byte-identical and only appends, so the rebase is mechanical. Its `A2` row then re-proves `A7`'s
+    accepted sets in the lane.
+  - **`ABC-083`** re-pins rows in `src/quiescence.test.ts`. This ticket goes before it, so
+    `ABC-083`'s re-pin ledger reads the re-found rows.
+- **`ABC-010` names this ticket as its hard predecessor** *(fold)*. Its build parses every puzzle
+  through the validating `parseFen`.
 - **`ABC-079` — `Done`.** It owns `A1` and its 24 rows.
 - **`ADR-0028` decision 2** governs the re-find (fixture re-found, level unchanged).
 
@@ -140,17 +187,49 @@ an Architect reading FENs.
    the margins are re-measured on the tree it lands on.
 3. **Re-run `ABC-084`'s lane, do not assume it.** The shared rows read 0/24 losing at `dfda6ba`,
    and a re-found row should keep that, but `A4` is a reading.
+4. **`A7` has measured candidates, not prescriptions** (BA/PM, `980890f`,
+   `.grugops/context/recut-abc010/probe/`):
+   - **"pin: Re1"**: move the pawn from h8 to h7, giving `4k3/7p/8/4q3/8/1P6/P2K4/R7 w - - 0 1`.
+     The oracle keys are `[a1e1]` and the gain is +4, the same as today. The engine plays `a1e1`
+     at d7 (budget 25, step 1).
+   - **"discovered check"**: put the king on f8, giving `3q1k2/8/8/8/3B4/8/6PP/3R2K1 w - - 0 1`.
+     `Bc5+` (or `Bg7+`) unmasks `Rd1` on `Qd8`. The oracle keys are `[d4g7, d4c5]` and the gain is
+     **+4, not +6**, because the king can now reach e7/e8 and guard d8. The engine plays `d4c5` at
+     d6. The `source` string's gain changes to match.
+
+   Both candidates are `accepted` under `ADR-0033`'s rules, with the side to move not in check (14
+   and 26 legal moves). Re-measure on the tree the change lands on.
 
 ## Size and priority rationale
 
-**Size `XS` (1).** Two FENs and one added assertion, with a measured candidate.
+**Size `S` (2)** *(was `XS` (1); re-sized at the fold)*. There are now four FENs instead of two,
+under two oracles (quiescence margins for the pair, the material oracle for `A7`), plus one added
+assertion and a carve-out removed. Every FEN has a measured candidate, and the file fence does not
+grow (`A5`).
 
 **Not `XL`. No `SPLIT_REQUIRED`.**
 
-**Priority `P2`.** A correctness gap in test data, not a defect: the rows still test something,
-nothing is red, and nothing waits on it.
+**Priority `P2`.** A correctness gap in test data, not a defect: the rows still test something and
+nothing is red. *(Fold.)* `ABC-010` (`P2`) now waits on it. That makes it a predecessor, and it
+gains no priority from that: a predecessor of a `P2` is not urgent before the `P2` is.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM at the fold** (`recut-abc010`, wave tip `980890f`). **Result: 10 of
+10, 0 ⚠️. Met; the page stays `Ready`.** The board move is the Orchestrator's.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅ wider:** four named rows. The pair breaks the header; the two `A7` rows break `ADR-0033`'s rules, reproduced at `980890f` |
+| 2 | scope and out-of-scope clear | **✅ wider:** `A7` is in scope. Every other row, `ADR-0033`'s rules, the baseline and production code are fenced out. Same three files (`A5`) |
+| 3 | INVEST-shaped | **✅** `ABC-127` shares the file but not the rows, so the order is a merge order, not a content dependency (§ Dependencies). Still small at `S` |
+| 4 | acceptance testable and measurable | **✅** `A4` and `A6` read the base's baseline and length instead of 40/40. New `A7`: red first on the rules, oracle-exact sets, unchanged names, solved without a baseline move. `A2` gains a rules check |
+| 5 | dependencies known | **✅** `ABC-127` (merges first), `ABC-083` (after), `ABC-010` (waits on this one) |
+| 6 | security/NFR triggers with a measurable target | **✅** unchanged: `N8-LANE` ≈ 0 ms, no new file; `NFR-004`/`NFR-005` not triggered |
+| 7 | test notes present | **✅** four (adds `A7`'s candidates) |
+| 8 | size assigned | **✅** `S` (2), was `XS` |
+| 9 | priority assigned | **✅** `P2`, with the reason |
+| 10 | no major unresolved blocker | **✅** every FEN has a measured candidate, and no ruling is owed. The baseline does not move (`A7`) |
 
 **Re-scored 2026-10-10 by BA/PM** (`rescore-batch-2026-10-10`, wave tip `71be48b`). **Result: 10 of
 10, 0 ⚠️ — met; page `Ready`. The board move is the Orchestrator's.**
