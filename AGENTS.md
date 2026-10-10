@@ -123,6 +123,10 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   src/search.pvs-lmr.test.ts` <!-- exit 0, 29 passed (20 default). RUN 2026-09-26 (default): 0.6 s.
   Deep 926.2 s wall — cited from UAT (`uat-run-ABC-121#77854a65`), not re-run here (over 10 min).
   Run after any PVS/LMR change to src/search.ts or src/engine.ts. -->
+- Real-engine CLI lane (opt-in, ABC-119): `CLI_DEEP=1 npx vitest run src/cli.real-engine.test.ts`
+  <!-- RUN 2026-10-10: exit 0, 7 passed (1 default), 6.4 s at load1 4.4 (QE: 6.3-6.5 s at load1
+  15-18); two real children of `node src/cli.ts --colour black --ascii`, 3099-3147 ms each. Unset:
+  NOT DEFINED, not skipped. Run at QE and after any src/cli.ts or src/engine.ts change. -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- exit 0, 856/856 on 30 files. Not in
   `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
