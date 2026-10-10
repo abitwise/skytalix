@@ -1,8 +1,8 @@
 ---
 id: ABC-119
 title: No automated test anywhere spawns the delivered CLI and lets the REAL engine choose a move — the product's strongest end-to-end evidence is a transcript
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: M
 priority: P2
 epic: EPIC-006
