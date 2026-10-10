@@ -1,0 +1,54 @@
+# RUN log — bapm-owed-batch-2026-10-10, wave tip 35ad336b, 2026-10-10T13:50:56Z, v26.11.0
+
+$ git grep -nE "turn-loop\.ts:[0-9]" -- src | wc -l
+      15
+
+$ node probe/tripwire.mjs   # QE-057-b
+COUNTED   control: value brace
+COUNTED   control: namespace
+uncounted QE-054-b(1) comment ahead
+uncounted QE-054-b(2) default
+uncounted QE-054-b(2) default-as
+uncounted QE-057-b(1) string-named
+uncounted QE-057-b(2) comment with ; after name
+
+$ node probe/a8.mjs   # QE-054-a/c on the unmodified instrument
+true QE-054-a O1 comment in all-type brace (expect false)
+true QE-054-a O2 trailing line comment (expect false)
+true QE-054-a O6 commented-out value (expect false)
+true QE-054-a O4 col-0 import inside block comment (expect false)
+true QE-054-c multi-line mixed brace (expect true)
+true QE-054-c second statement binds (expect true)
+
+$ node probe/map.mjs src
+{
+  productionModules: 35,
+  consumerPairs: 92,
+  filesWithMultiLineImport: 12
+}
+
+$ node probe/strip-check.mjs src   # ABC-135 feasibility
+{ orderedPairs: 1190, consumerPairsUnstripped: 92, differ: [] }
+ok  "import { /* c */ type X } from \"./m.ts\";"
+ok  "import {\n  type X, // c\n} from \"./m.ts\";"
+ok  "import {\n  type X,\n  // f,\n} from \"./m.ts\";"
+ok  "/*\nimport { f } from \"./m.ts\";\n*/"
+ok  "import {\n  type X,\n  f,\n} from \"./m.ts\";"
+ok  "import type { X } from \"./m.ts\";\nimport { f } from \"./m.ts\";"
+
+$ node probe/lv.mjs   # ABC-101 forward note
+"constructor" -> function (prototype member) | hasOwn: false
+"__proto__" -> Object.prototype | hasOwn: false
+"toString" -> function (prototype member) | hasOwn: false
+"3" -> {"b":3000} | hasOwn: true
+3 -> {"b":3000} | hasOwn: true
+"03" -> undefined | hasOwn: false
+6 -> undefined | hasOwn: false
+0 -> undefined | hasOwn: false
+
+$ node probe/phrases.mjs src/history-pane.nfr.test.ts …   # ABC-134 base counts
+1 | so two static value imports are NOT counted
+1 | A comment ahead of the name inside the brace, and a default binding, are value imports it does not count
+1 | CONDITIONAL on a game state the frames do not reach
+1 | only `ABC-041` `A2`'s synchronous spies see that
+1 | so it is not load-bearing on Node v26.11.0

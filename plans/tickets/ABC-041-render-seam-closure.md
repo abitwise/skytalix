@@ -150,6 +150,9 @@ Every criterion is provable as a value with **no TTY and no child process** — 
   `src/status-panel.ts` and `src/history-pane.ts` each have **≥ 1 production (non-`.test.ts`)
   importer** — measured by the same `grep` the epic's raise used, which read **0 / 0 / 0** (plus two
   `import type`) before.
+  *(2026-10-10, BA/PM, `bapm-owed-batch-2026-10-10`: since `ABC-054` merged (`cb044bb2`), "importer"
+  here reads **runtime consumer** — `ADR-0030` decision 2, an `import` that binds at least one value —
+  and `src/render-seam.test.ts`'s `A8` counts exactly that; residuals `C1`/`C2` are the ADR's.)*
 - **`A9` (the new frame producer is DECLARED).** The merged probe's declared frame-path root list
   gains this module. **Given** the probe after the edit, **then** it reports a closure that includes
   this module, and it remains **armed** (rooted at `src/turn-loop.ts` it still reports `history.ts`).
