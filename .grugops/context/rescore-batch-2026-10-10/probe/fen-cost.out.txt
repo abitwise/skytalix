@@ -1,0 +1,3 @@
+parseFen (3 fens rotating): median 1849 ns/call (min 1811, max 2145)
+isInCheck of side NOT to move (flip, probe, flip back): median 145 ns/call (min 142, max 180)
+node v26.11.0, darwin arm64

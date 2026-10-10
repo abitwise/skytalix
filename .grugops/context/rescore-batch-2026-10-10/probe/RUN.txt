@@ -1,0 +1,7 @@
+BA/PM probe for ABC-010, task rescore-batch-2026-10-10, 2026-10-10 ~08:05Z, tree 71be48b (no production
+file differs from 7b54dae). Each script takes the worktree root as its only argument and imports
+src/*.ts directly (Node type stripping; no node_modules):
+  node fen-cost.mjs <worktree>     -> fen-cost.out.txt     (load1 4.79, Apple M3, Node v26.11.0)
+  node fen-repro.mjs <worktree>    -> fen-repro.out.txt    (the page's reproduction table, re-run)
+  node fen-castle.mjs <worktree>   -> fen-castle.out.txt   (rows 1-2: no FLAG_CASTLE move any more)
+  node fen-kingcap.mjs <worktree>  -> fen-kingcap.out.txt  (row 3: 29 legal, one captures the king 84->116)

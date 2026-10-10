@@ -31,6 +31,13 @@ feature: —
 > and the generator's limits. The PVS-bound fact is carried into § The design question. `A7` is
 > re-pointed, and the size is re-estimated. **The DoR was not re-scored and did not move** (see
 > § Definition of Ready).
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2026-10-10`,
+> Workflow 07) against the wave tip `71be48b`. `ABC-084` and `ABC-125` are `Done`. **The
+> level-vocabulary mismatch is closed here.** `A1` adopts the vocabulary `ABC-101` published:
+> integers `1`–`5`, default `3`. The PVS citation is re-pointed to today's lines. **DoR 9/10, item
+> 10 ⚠️: the blunder construction is still Architect/Design's, and it is the only thing between
+> this page and `Ready`.** Reasoning: `.grugops/context/rescore-batch-2026-10-10/notes/`.
 
 ## Problem
 
@@ -89,7 +96,8 @@ degenerate version. **I have not picked one.**
 decided there or here)*:
 
 - Under PVS, only the first root move gets an exact score. **Every root move after the first has
-  only a bound** (`src/engine.ts:320-331`), so a move that ties or trails the best fails low and
+  only a bound** (`searchMove`, `src/engine.ts:314`–`:336`; the null window starts at `:325`;
+  re-pointed 2026-10-10), so a move that ties or trails the best fails low and
   looks the same as a worse one.
 - **The root therefore does not hold the scores a blunder draw needs.** Picking "the *n*-th best",
   or obeying `A4`'s "never the worst-scoring move", both need per-move scores.
@@ -105,13 +113,18 @@ decided there or here)*:
 
 - **`A1` (levels are data, and the endpoints are named).** **Then** the delivered module exports a
   level table with **≥ 3** entries, each carrying a budget and a blunder rate, and with **default**,
-  **easiest** and **hardest** identified by name.
+  **easiest** and **hardest** identified by name. *(Vocabulary fixed 2026-10-10.)* The table is
+  keyed by the ordinals `ABC-101` publishes: **integers `1`–`5`, weakest to strongest**. **easiest =
+  `1`, default = `3`, hardest = `5`.** `EPIC-006` reads the table by those integers and attaches no
+  meaning to them (`ABC-101`, `RISK-002`).
 - **`A2` (the budget reaches the engine).** **Given** each level, **when** a move is requested,
   **then** the wall clock used matches that level's budget within **±20%**, and **no level ever
   exceeds 5 s** (`NFR-004`).
 - **`A3` (a lower level is measurably weaker).** **Given** the easiest and the default level on
   `ABC-084`'s puzzle suite, **then** the easiest solves **strictly fewer** puzzles. *(Cheap, fast,
-  deterministic evidence of ordering; `ABC-085` provides the expensive game-level evidence.)*
+  deterministic evidence of ordering; `ABC-085` provides the expensive game-level evidence.)* *(2026-10-10:
+  run it on `ABC-084`'s runner in deterministic mode (`ADR-0027`) with a fixed seed, so the two
+  counts are reproducible. `src/puzzle-suite.baseline.json` (40/40) is not touched.)*
 - **`A4` (the blunder is a mistake, not chaos).** **Given** the easiest level over **≥ 200** moves,
   **then** every played move is **legal**, the observed blunder frequency matches the configured
   rate within **±5 percentage points**, and **no played move is ever the worst-scoring move in the
@@ -150,13 +163,23 @@ decided there or here)*:
 - ~~**`ABC-086` must land first — OPEN.**~~ **`ABC-086` — `Done`** (merged `3f26e21`; status
   corrected 2026-10-09). *(Re-pointed 2026-10-09.)* `A7`, `A9` and `A10` run on its virtual clock
   (deterministic mode). The seed is no longer `ABC-086`'s: it is this ticket's own.
-- **`ABC-084` must land first — OPEN (In Development at `7b54dae`).** `A3` uses its puzzle
-  suite.
+- ~~**`ABC-084` must land first — OPEN (In Development at `7b54dae`).**~~ **`ABC-084` — `Done`**
+  (merged `e634bc1`, 2026-10-10). `A3` uses its suite and runner.
+- **`ABC-125` — `Done`** (2026-10-10). The board asked for it to land first. It is a prerequisite
+  of `ABC-085`, not of this ticket.
 - **Architect/Design's ruling on the blunder construction — OPEN.** Named above; not resolved here.
 - **`EPIC-006` consumes this table.** *(Cross-epic, and the direction matters: `EPIC-006` reads the
   level names this ticket publishes. **If `EPIC-006`'s decomposition — running concurrently with
   this one — assumed a different level vocabulary, that mismatch is real and is not resolved
-  here.** Owner: the Orchestrator, who holds both decompositions.)*
+  here.** Owner: the Orchestrator, who holds both decompositions.)* **Resolved 2026-10-10 by BA/PM.**
+  `ABC-101` published integers `1`–`5`, default `3`, as an "opaque ordinal" that is "cheap to
+  change". `A1` now uses exactly that, and `ABC-101` is not edited. Both pages are BA/PM's cuts.
+  This needs no ruling. The Orchestrator may reverse it.
+- **File overlap (2026-10-10).** Construction (a) in the ruling below lives in its own module and
+  shares no file with the other tickets in this batch. Construction (b) changes `src/engine.ts` and
+  its pinned tests, which `ABC-083`'s `A10` also re-pins. Under (b), do not build in parallel
+  with `ABC-083`. Either way, `A3` and `A6` read results that `ABC-083` moves, so they are
+  measured on the tree this ticket lands on.
 
 ## Security / NFR triggers
 
@@ -210,6 +233,23 @@ and the verification is `ABC-084`'s and `ABC-085`'s.
 tickets. **It is a hard blocker for `ABC-085`**, which is also `P1`, so the pair is consistent.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM** (`rescore-batch-2026-10-10`, wave tip `71be48b`). **Result: 9 of 10,
+1 ⚠️ — NOT met; stays in `Backlog`.**
+- **Item 3, ⚠️ → ✅.** Every ticket dependency is `Done` (`ABC-078`, `ABC-086`, `ABC-084`). The
+  design ruling is counted once, at item 10.
+- **Item 5, ⚠️ → ✅.** The vocabulary mismatch is closed by adopting `ABC-101`'s (§ Dependencies).
+- **Item 4 stays ✅.** `A1` names its keys, and `A3` names its mode.
+- **Item 8 stays ✅:** `M`, conditional on the ruling, as § Size says.
+- **Item 10 stays ⚠️. The exact question for Architect/Design:** *"Under PVS only the first root
+  move has an exact score (`src/engine.ts:314`–`:336`). Which blunder construction ships? (a)
+  Candidate root moves are scored separately, outside the root search and inside the same
+  per-move budget (`NFR-004`). (b) The root window is widened for exact scores, under `ADR-0026`
+  decision 10 (switch, doors, bounded oracle; +3.3–5.2% nodes; value-changing with LMR on). Within
+  the construction, what does a blunder pick: the n-th best, or a uniform choice among the moves
+  that are not the worst? And on that construction's scores, what is the 'worst-scoring move in the
+  list' that `A4` forbids?"* **When the answer is on this page, the ticket is `Ready` (10/10) under
+  (a). Under (b) it is `Ready` once it is re-sized, likely to `L` (§ Size).**
 
 **Fold note, 2026-10-09** (subtask `fold-abc086-adr0027`): **not re-scored, and the score did not
 move. It is still 7 of 10, with the same three ⚠️ items.** What the fold touched:

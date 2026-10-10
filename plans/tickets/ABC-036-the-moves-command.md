@@ -1,8 +1,8 @@
 ---
 id: ABC-036
 title: The `moves` command — the count is exact, and the frame cannot show the list
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P1
 epic: EPIC-003
@@ -21,6 +21,12 @@ feature: —
 > amendment and `EPIC-002`'s `[A1]` all took this posture). **It does not block ticket cutting or
 > development** — the amended criterion is testable either way — and it is exactly one choice a human
 > can reverse.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2026-10-10`,
+> Workflow 07) against the wave tip `71be48b`. `ABC-032`, `ABC-033`, `ABC-035` and `ABC-037` are
+> `Done`, and `EPIC-006` delivered the composed frame. `A4` is re-worded to the merged seam. A
+> `moves` line never reaches `ABC-033`'s resolver, so no array is "already generated" for it. `A6`
+> names the module. **DoR 10/10 → `Ready`.** Reasoning: `.grugops/context/rescore-batch-2026-10-10/notes/`.
 
 ## Problem
 
@@ -80,7 +86,9 @@ shape `EPIC-002` `[A1]`/`2c` flagged for a human and shipped anyway.
 ## Scope
 
 - The `moves` token joins `ABC-035`'s command table (same tolerance rules: case-insensitive, trimmed,
-  exact match, no arguments).
+  exact match, no arguments). *(2026-10-10: that table is `COMMAND_TABLE` in `src/command-input.ts:104`,
+  seven tokens today. `CommandToken` (`:74`) gains `"moves"`. Nothing outside that file reads the
+  table or the type, so this ticket's module is `src/command-input.ts`.)*
 - The outcome is `ABC-019`'s merged `command` (`src/turn-loop.ts:122`) — **non-advancing**.
 - The message carries the **exact count** and the SAN listing, rendered with
   `toSan(position, move, legal)` over the **one** `legal` array the prompt already generated.
@@ -112,15 +120,23 @@ shape `EPIC-002` `[A1]`/`2c` flagged for a human and shipped anyway.
   **hidden count `N` is > 0** and the message's stated total is **still exactly 20** — i.e. the count
   survives the truncation the list does not. **The discriminating requirement:** a build that quietly
   states the *shown* count instead of the *legal* count passes every other criterion on this page.
-- **`A4` (one derive per prompt).** **Given** one `moves` submission, **when** it is resolved, **then**
-  `legalMoves` is called **exactly once** for that ply — the same array `ABC-033` generated — asserted
-  by spy. *(`ADR-0004` clause 2 prices the alternative: with the list supplied, `toSan` costs
+- **`A4` (one derive per `moves` line; re-worded 2026-10-10).** **Given** one `moves` submission,
+  **when** it is resolved, **then** `legalMoves` is called **exactly once**, and **every** `toSan`
+  call receives that same array as its third argument. Both are asserted by spy through the
+  `MoveInputDeps` seam that `resolvePromptLine` already takes (`src/command-input.ts:197`).
+  *(Was: "the same array `ABC-033` generated". On the merged code a `moves` line goes to the
+  command table and never reaches `resolveMoveInput`, so no array exists for it yet. One derive per
+  `moves` line is the merged equivalent. Spy on both because `toSan` falls back to its own
+  `legalMoves` when the list is missing, and a spy on `legalMoves` alone does not see that. QE
+  mutant `M11` on `ABC-033` proved this, `src/move-input.ts:95`–`:99`.)* *(`ADR-0004` clause 2 prices the alternative: with the list supplied, `toSan` costs
   **0.10 µs instead of 4.31 µs** per move, and this command formats ~41 of them.)*
 - **`A5` (non-advancing).** **Given** `moves`, **when** it is submitted, **then** the ply is not
   advanced, `toFen(position)` is byte-identical, and `gameStatus` is **not** re-evaluated.
 - **`A6` (no production change outside this ticket's module).** `git diff --numstat` shows this
   ticket's module and test file(s) and nothing else under `src/` — **`src/frame.ts` in particular is
-  byte-identical** — suite green, skip **0**, `PERFT_DEEP=1` **32/32**.
+  byte-identical** — suite green, skip **0**, `PERFT_DEEP=1` **32/32**. *(Named 2026-10-10: the module
+  is `src/command-input.ts`, and its test file is `src/command-input.test.ts`. `src/move-input.ts`
+  and `src/turn-loop.ts` stay byte-identical. The `command` outcome arm already carries messages.)*
 - **`A7` (`help` still shows every command; added 2026-10-09 from QE `ABC-102` G2, `…f7b21e38`).**
   **Given** the delivered command table with `moves` as its **eighth** token, **then** the merged
   rows `ABC-035 A7 — help fits the message region: hidden count exactly 0`
@@ -136,9 +152,9 @@ shape `EPIC-002` `[A1]`/`2c` flagged for a human and shipped anyway.
 
 ## Dependencies
 
-- **`ABC-035` must land first — OPEN.** The command table is that ticket's.
-- **`ABC-032` must land first — OPEN.** `toSan` is merged, but the `legal`-supplied call path this
-  ticket's `A4` depends on is the one `ADR-0004` clause 2 specifies for both directions.
+- ~~**`ABC-035` must land first — OPEN.**~~ **`ABC-035` — `Done`.** The table is `COMMAND_TABLE`.
+- ~~**`ABC-032` must land first — OPEN.**~~ **`ABC-032` — `Done`.** `toSan(position, move, legal)` is
+  `src/san.ts:146`.
 - ~~**A named human on the reduced promise — OPEN, and NON-BLOCKING.**~~ **CLOSED 2026-08-13: the
   reduced promise is ACCEPTED and the pager is REFUSED.** Ruled by the Orchestrator under the owner's
   in-session delegation (*"Decide on 2, 3 and 4 based on your best recommendations"*); the ruling, its
@@ -157,7 +173,9 @@ shape `EPIC-002` `[A1]`/`2c` flagged for a human and shipped anyway.
   region and must answer it first. Ticket order is the Orchestrator's.
 - **`EPIC-006` supplies the runtime frame width** (the render-seam closure, `ADR-0009` clause 9b), which
   is why `A3`'s `N > 0` is asserted against the delivered panels rather than against a number typed
-  here.
+  here. *(Delivered, 2026-10-10. The panel width is 21 columns at the start position and 18 at the
+  narrowest board-only frame (`src/command-input.ts:115`, `:133`). The `ABC-035 A7` rows' helper
+  (`src/command-input.test.ts:550`) shows how to read the region at the delivered width.)*
 
 ## Security / NFR triggers
 
@@ -189,6 +207,9 @@ shape `EPIC-002` `[A1]`/`2c` flagged for a human and shipped anyway.
    must be the legal moves of the supplied position.
 5. **Sort deterministically and assert the order** — a truncated list in an unstable order is worse
    than no list.
+6. **Put the count first** *(2026-10-10)*. The region places each item whole, in order, or hides
+   it (`src/frame.ts:145`–`:187`). If the count is not the first item it can be the one hidden,
+   and then `A3` is red.
 
 ## Lane cost — how many test FILES this ticket implies
 
@@ -211,6 +232,18 @@ and dropping the command would leave that criterion unmet with nothing recorded,
 mode this page exists to avoid.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM** (`rescore-batch-2026-10-10`, wave tip `71be48b`). **Result: 10 of
+10, 0 ⚠️ — met; page `Ready`. The board move is the Orchestrator's.**
+- **Item 3, ⚠️ → ✅.** `ABC-035` and `ABC-032` are `Done`, and so are `ABC-033` and `ABC-037`.
+- **Item 10, ⚠️ → ✅.** The reduced promise was ruled on 2026-08-13: accepted, with the pager refused
+  (§ Dependencies). The Orchestrator ruled under the owner's delegation, and the reversal condition
+  is named. Nothing else is open.
+- **Item 4 stays ✅, corrected.** `A4` named an array that does not exist on the merged path. It now
+  requires one `legalMoves` per `moves` line, with that array passed to every `toSan`, both spied.
+  `A7`'s zero-headroom check is unchanged.
+- **Item 5 stays ✅.** All dependencies are `Done`. The frame width is delivered.
+- **Items 1, 2, 6–9 unchanged ✅.** `A6` now names `src/command-input.ts`.
 
 **Fold note, 2026-10-09** (task `wave-2026-09-25`, subtask `cut-followups-2026-10-09`). **Not
 re-scored; the score below does not move.** Item 4 gains `A7`, a hidden count of 0 checked through

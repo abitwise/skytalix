@@ -15,6 +15,42 @@ feature: —
 > Workflow 03) at `EPIC-003`'s decomposition. **This is the epic's negotiable slice** — the ticket to
 > cut first if the epic runs long. The drop condition is named under `## Size and priority rationale`
 > rather than left to a judgement call later.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-batch-2026-10-10`,
+> Workflow 07) against the wave tip `71be48b`. Both dependencies are `Done`. **The merged reader
+> cannot see a Tab press,** so this page cannot be built as written (§ The blocker). **DoR 8/10,
+> NOT met; stays in `Backlog`; an owner ruling is owed.** Reasoning:
+> `.grugops/context/rescore-batch-2026-10-10/notes/`.
+
+## The blocker — found 2026-10-10
+
+`ABC-037`'s reader (`src/line-input.ts`) takes `process.stdin` as it comes (`src/cli.ts:174`). No
+file under `src/` calls `setRawMode`, and none imports `node:readline`. On a terminal, stdin is
+therefore in the kernel's **canonical (line) mode**. The terminal buffers and echoes what is typed,
+and the program receives nothing until Enter. A Tab is one more character in that line. **No
+completer attached to this reader can run on a Tab press, and no single attachment line changes
+that.**
+
+Delivering Tab-completion needs a keystroke reader: raw mode, or `node:readline` in terminal mode.
+Then echo, backspace, line editing and Ctrl-C become the program's job. That collides with three
+merged rulings. `ABC-037` fences out raw mode and key handling (§ Out of scope there). Its reader
+imports no Node builtin, as a security property. It emits no cursor control, because the frame's
+single erase-to-end (`4b`) depends on that. With pipes, the mode every `ABC-037`
+criterion is provable in, there is no terminal to put in raw mode at all.
+
+**Ruling owed — owner (or the Orchestrator under an explicit delegation, as `ABC-036`'s reduced
+promise was ruled):**
+> "Tab-completion cannot work on the merged prompt: the reader is in canonical mode, so a Tab is
+> just a character in the line until Enter. Do you want (a) a keystroke reader built for it — this
+> ticket is then re-cut at `M` or `L`, with an Architect/Design pass on how raw-mode echo and
+> cursor control coexist with the in-place frame (`ADR-0009`/`ADR-0010`) and a new Security/NFR
+> surface — or (b) `ABC-038` dropped? This is the epic's named drop-first slice, and all four
+> `EPIC-003` acceptance criteria hold without it. The epic's scope line 'Tab-completion of legal
+> moves at the prompt' would then be amended to record the drop."
+
+**BA/PM recommends (b).** It cuts scope and protects the MVP. `ABC-036`'s exact count plus partial
+list and `ABC-033`'s ambiguity candidate list already answer "what can I play" without a new
+terminal surface. Architect/Design is needed only if the answer is (a).
 
 ## Problem
 
@@ -44,7 +80,9 @@ promise in the epic holds without it.
   **Explicitly declined**, not forgotten.
 - **Fuzzy matching, ranking, or "did you mean".** Prefix only. Coding rules 5 and 7.
 - **Arrow keys, input-history recall, raw-mode key handling** — named non-goals in `EPIC-003` § Out of
-  scope and in `ABC-037`.
+  scope and in `ABC-037`. *(Corrected 2026-10-10: `EPIC-003` § Out of scope names arrow-key board
+  navigation only. Raw mode and key handling are fenced out by `ABC-037`. This bullet is what
+  makes the scope above undeliverable; see § The blocker.)*
 - **Any change to `ABC-037`'s reader beyond attaching the completer**, and any change to `src/frame.ts`.
 - **`EPIC-006`'s command tokens** (`undo`, `resign`, `new`). They are not in `ABC-035`'s table, so they
   are not completion targets here; `EPIC-006` adds them to the table and inherits completion for free.
@@ -90,8 +128,10 @@ promise in the epic holds without it.
 
 ## Dependencies
 
-- **`ABC-037` must land first — OPEN.** The reader the completer attaches to.
-- **`ABC-035` must land first — OPEN.** The command table `A2` merges in.
+- ~~**`ABC-037` must land first — OPEN.**~~ **`ABC-037` — `Done`.** It has no keystroke path to
+  attach to (§ The blocker).
+- ~~**`ABC-035` must land first — OPEN.**~~ **`ABC-035` — `Done`.** `COMMAND_TABLE`, seven tokens;
+  eight once `ABC-036` lands.
 - **`ABC-032` — not required.** Completion generates SAN with the merged `toSan`; it never parses.
 - **Merged:** `toSan` (`src/san.ts:146`), `legalMoves` (`src/legal.ts:42`).
 
@@ -142,6 +182,19 @@ question and is re-prioritised then — **checked at this cut: NOT FIRED**, beca
 happened and there is no runnable product to test with.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM** (`rescore-batch-2026-10-10`, wave tip `71be48b`). **Result: 8 of 10,
+2 ⚠️ — NOT met; stays in `Backlog`.**
+- **Item 3, ⚠️ → ✅.** `ABC-037` and `ABC-035` are `Done`.
+- **Item 2, ✅ → ⚠️.** The scope ("a completer attached to `ABC-037`'s line reader", "at most the
+  one line") cannot be delivered inside this page's own out-of-scope (no raw mode, no key handling).
+  § The blocker.
+- **Item 10 stays ⚠️, for a new reason.** The ordering holds are gone. What blocks now is the owner
+  ruling in § The blocker. If the answer is (a), the page is re-cut and the whole DoR is re-scored.
+  Item 8 (`S`) and item 6 (no new security trigger) would no longer hold. If the answer is (b),
+  the ticket closes as dropped.
+- **Items 1, 4–9 unchanged.** The criteria are testable through a fake source. The product just
+  cannot reach them.
 
 **Fold note, 2026-10-09** (task `wave-2026-09-25`, subtask `cut-followups-2026-10-09`). **Not
 re-scored; the score below does not move.** Item 4's `A6` now also requires
