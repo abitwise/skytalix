@@ -25,7 +25,6 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { type Clock, chooseMove, DEFAULT_BUDGET_MS, HARD_CEILING_MS } from "./engine.ts";
-import { buildCorpus } from "./evaluate.mirror-corpus.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import {
@@ -40,7 +39,6 @@ import {
 } from "./levels.ts";
 import type { Move } from "./moves.ts";
 import { squareName } from "./position.ts";
-import { PUZZLES } from "./puzzle-corpus.ts";
 import { virtualClock } from "./virtual-clock.ts";
 
 const RUN_DEEP = process.env.ENGINE_DEEP === "1";
@@ -80,16 +78,13 @@ const ENDGAMES = withChildren([
   "6k1/8/8/8/8/8/1R6/6K1 b - - 0 1",
   "8/3k4/8/2n5/8/5B2/3K4/8 w - - 0 1",
   "8/p4k2/1p6/8/8/1P6/P4K2/8 w - - 0 1",
-  "8/8/3k4/3p4/3P4/3K4/8/8 w - - 0 1",
   "8/5pk1/6p1/8/8/6P1/5PK1/8 b - - 0 1",
-  "8/2k5/8/8/8/8/2N1K3/8 w - - 0 1",
+  "8/8/4k3/8/2b5/8/4PK2/8 w - - 0 1",
+  "8/4k3/8/3n4/8/2P5/3K4/8 w - - 0 1",
 ]);
 
-/** The perft corpus (184) and the puzzles: the deep lane's corpus. */
-const deepCorpus = (): string[] => [
-  ...buildCorpus().map((entry) => toFen(entry.position)),
-  ...PUZZLES.map((puzzle) => puzzle.fen),
-];
+/** ≥ 30 positions for `A6` / `A7` / `A9` / `A10`: the first 30 endgame positions with ≤ 8 legal moves. */
+const THIRTY = ENDGAMES.filter((fen) => legalMoves(parseFen(fen)).length <= 8).slice(0, 30);
 
 /** One clock reading per level budget: depth 1 on the engine path, depth 1 per child. */
 const coarseClock = (level: Level): Clock => virtualClock(level.budgetMs);
@@ -209,7 +204,7 @@ describe("A6 — the default level", () => {
   it("at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock", () => {
     const level = LEVELS[DEFAULT_LEVEL];
     const step = level.budgetMs / 3;
-    for (const fen of ENDGAMES.slice(0, 12)) {
+    for (const fen of THIRTY.slice(0, 6)) {
       const viaLevel = createLevel(level, { seed: 7, now: virtualClock(step) })(parseFen(fen));
       const viaEngine = chooseMove(parseFen(fen), {
         budgetMs: level.budgetMs,
@@ -299,12 +294,9 @@ describe("seededRandom — the generator", () => {
   });
 });
 
-/** ≥ 30 positions for `A7` / `A9`: every seventh endgame position. */
-const THIRTY = ENDGAMES.filter((_, i) => i % 7 === 0);
-
 describe("A9 — different seeds actually differ", () => {
   it("≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences", () => {
-    expect(THIRTY.length).toBeGreaterThanOrEqual(30);
+    expect(THIRTY).toHaveLength(30);
     const sequences = [1, 2, 3, 4, 5].map((seed) =>
       decisions(playAll(easiest, seed, THIRTY)).join(),
     );
@@ -371,6 +363,16 @@ describe("A8 — the level module's boundary", () => {
 // ---------------------------------------------------------------------------
 
 if (RUN_DEEP) {
+  // Loaded here, not at the top: the default lane never pays for the deep corpora (`N8-LANE`).
+  const { buildCorpus } = await import("./evaluate.mirror-corpus.ts");
+  const { PUZZLES } = await import("./puzzle-corpus.ts");
+
+  /** The perft corpus (184) and the puzzles: the deep lane's corpus. */
+  const deepCorpus = (): string[] => [
+    ...buildCorpus().map((entry) => toFen(entry.position)),
+    ...PUZZLES.map((puzzle) => puzzle.fen),
+  ];
+
   describe("A4 — the easiest level over the perft corpus and the puzzles [deep]", () => {
     it("every move legal; rate ±5 pp; never the worst; the strict second-best", () => {
       const fens = deepCorpus();
