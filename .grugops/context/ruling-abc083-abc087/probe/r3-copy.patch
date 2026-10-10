@@ -1,0 +1,67 @@
+[1;33mdiff --git a<worktree>/src/search.ts b/r3/src/search.ts[m
+[1;33mindex 7d172c4..5f518d7 100644[m
+[1;33m--- a<worktree>/src/search.ts[m
+[1;33m+++ b/r3/src/search.ts[m
+[1;35m@@ -193,6 +193,8 @@[m [mexport function orderMoves([m
+ * which turns off both — so a test can measure what it changed.[m
+ */[m
+interface Switches {[m
+  [32m/** PROBE ONLY: every root move searched with the full window (-inf, +inf); root alpha never rises. */[m
+[32m  readonly fullRoot?: boolean;[m
+  /**[m
+   * The MAIN TREE's alpha-beta cutoffs. False declines them only; a quiescence leaf still runs[m
+   * `quiesce` with its own cutoffs — `searchWithoutPruning`, `searchWithoutPruningOrQuiescence`.[m
+[1;35m@@ -489,7 +491,9 @@[m [mfunction searchMove([m
+ * root probes the table for its hash move only — it never cuts, it must return a move — and on[m
+ * a fresh table finds none; the root's own entry is stored so both recursions store alike.[m
+ */[m
+[32mexport const SCORED: { move: Move; score: number }[] = [];[m
+function searchRoot(position: Position, depth: number, switches: Switches): SearchResult {[m
+  [32mSCORED.length = 0;[m
+  const counter: NodeCounter = { nodes: 1 };[m
+  const prune = switches.prune;[m
+  const killers = new KillerTable();[m
+[1;35m@@ -529,10 +533,10 @@[m [mfunction searchRoot(position: Position, depth: number, switches: Switches): Sear[m
+    const score = searchMove([m
+      position,[m
+      depth,[m
+      [32mswitches.fullRoot ? Number.NEGATIVE_INFINITY :[m alpha,
+      Number.POSITIVE_INFINITY,[m
+      0,[m
+      [32mswitches.fullRoot ? 0 :[m index,
+      reduction,[m
+      switches,[m
+      counter,[m
+[1;35m@@ -541,6 +545,7 @@[m [mfunction searchRoot(position: Position, depth: number, switches: Switches): Sear[m
+    );[m
+    unmakeMove(position, move, undo);[m
+    index++;[m
+    [32mSCORED.push({ move, score });[m
+
+    if (score > best) {[m
+      best = score;[m
+[1;35m@@ -713,3 +718,10 @@[m [mexport function searchWithoutPvsOrReductions(position: Position, depth: number):[m
+    reductions: false,[m
+  });[m
+}[m
+
+[32m/** PROBE ONLY: the shipped search with every root move given the full window. */[m
+[32mexport function searchFullRoot(position: Position, depth: number): SearchResult {[m
+[32m  return searchRoot(position, depth, {[m
+[32m    prune: true, quiescence: true, ordering: "full", table: true, pvs: true, reductions: true, fullRoot: true,[m
+[32m  });[m
+[32m}[m
+[1;33mdiff --git a<worktree>/src/evaluate.ts b/r3/src/evaluate.ts[m
+[1;33mindex a32e7c9..654e959 100644[m
+[1;33m--- a<worktree>/src/evaluate.ts[m
+[1;33m+++ b/r3/src/evaluate.ts[m
+[1;35m@@ -248,7 +248,9 @@[m [mfunction whiteMinusBlack(position: Position): number {[m
+ * Pure: it reads the position and writes nothing — not even transiently. (`zobristKey` on this[m
+ * codebase does mutate transiently, which is why ABC-076's A5 asserts byte-identity here.)[m
+ */[m
+[32mexport const EVAL_CALLS = { n: 0 };[m
+export function evaluate(position: Position): number {[m
+  [32mEVAL_CALLS.n++;[m
+  const score = whiteMinusBlack(position);[m
+  // `0 - score`, not `-score`: negating a balanced position yields `-0`, which is `Object.is`[m
+  // -distinct from `0` and so is NOT "exactly equal" to its mirror's score. Caught by A1 at[m

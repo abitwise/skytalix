@@ -250,6 +250,11 @@ tickets. **It is a hard blocker for `ABC-085`**, which is also `P1`, so the pair
   that are not the worst? And on that construction's scores, what is the 'worst-scoring move in the
   list' that `A4` forbids?"* **When the answer is on this page, the ticket is `Ready` (10/10) under
   (a). Under (b) it is `Ready` once it is re-sized, likely to `L` (§ Size).**
+  **→ RULED 2026-10-10 by Architect/Design in [`ADR-0032`](../../memory-bank/50-decisions/ADR-0032-a-blunder-scores-every-root-move-with-the-shipped-engine-and-plays-the-strict-second-best.md)
+  (`proposed`, owner acceptance owed): (a), no re-size (`M`).** A blunder move scores every root move
+  with the shipped `chooseMove` on its child, inside the level's own clamped budget. It plays the
+  **strict second-best**. `A4`'s "worst" is the minimum class of that move's own scored list. (b)
+  measured 5.7–13.3x nodes on `kiwipete`, not +3.3–5.2%. Not re-scored: the verdict is BA/PM's.
 
 **Fold note, 2026-10-09** (subtask `fold-abc086-adr0027`): **not re-scored, and the score did not
 move. It is still 7 of 10, with the same three ⚠️ items.** What the fold touched:

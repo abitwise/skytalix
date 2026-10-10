@@ -224,7 +224,11 @@ that is fully expressed as two hard-stop criteria does not make a ticket bigger,
      cut until depth 7 holds), or is depth 7 retired on `kiwipete`, with the depth-6 FAIL floor
      kept?"* The owner reserved this for the reading when accepting the risk (`…8e3f0b17`). A stop
      with a named owner is a defined route, so BA/PM does not hold `Ready` on it.
-  **When question 1 is answered on this page, item 10 is ✅ and the ticket is `Ready` (10/10).**
+  **When question 1 is answered on this page, item 10 is ✅ and the ticket is `Ready` (10/10).** **→ Question 1 RULED 2026-10-10 by
+  Architect/Design in [`ADR-0031`](../../memory-bank/50-decisions/ADR-0031-a-mobility-term-that-misses-the-leaf-cost-bar-is-cut-and-king-safety-ships-alone.md)
+  (`proposed`, owner acceptance owed): (i).** If every mobility form (legal, pseudo-legal, attack-map)
+  misses `A5`, king safety ships alone (it must meet `A5` itself) and mobility is re-cut to `Backlog`.
+  Nothing is re-derived and `A5` stays 1,100 ns. Question 2 is not ruled. Not re-scored: the verdict is BA/PM's.
 
 **Fold re-read, 2026-10-09** (subtask `cut-followups-2026-10-09`, wave tip `7b54dae`). This hop
 re-read the items the fold touched. **Result: 9 of 10, 1 ⚠️, NOT met; stays in `Backlog`.**

@@ -1,0 +1,3 @@
+{"part":"split","name":"startpos","B":1000,"step":5,"mainDepth":8,"mainNodes":196628,"children":20,"childDepthMin":4,"childDepthMedian":4,"childDepthMax":4,"childNodes":64081,"virtualElapsed":1015,"mainElapsed":1005}
+{"part":"split","name":"kiwipete","B":1000,"step":5,"mainDepth":5,"mainNodes":200274,"children":48,"childDepthMin":1,"childDepthMedian":1,"childDepthMax":2,"childNodes":36292,"virtualElapsed":1015,"mainElapsed":1005}
+{"part":"split","name":"position-6","B":1000,"step":5,"mainDepth":6,"mainNodes":199086,"children":46,"childDepthMin":1,"childDepthMedian":1,"childDepthMax":2,"childNodes":27703,"virtualElapsed":1015,"mainElapsed":1005}
