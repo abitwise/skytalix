@@ -1,0 +1,3 @@
+CONTROL	suite	17:01:50Z..17:01:59Z	lint=0	tsc=0	vitest=0	52 files	1608/1608	-	load1=18.76
+N591-TAIL+FMT+WSC	suite	17:02:00Z..17:02:10Z	lint=0	tsc=0	vitest=1	52 files	1607/1608	runs the guard's OWN expression — a drift tripwire, not a co :: AssertionError: the composer tripwire scans EVERY production module: expected '/**\n * `ABC-017`\'s `A11` — th	load1=17.01
+C-OPERAND+FMT+WSC	suite	17:02:11Z..17:02:20Z	lint=0	tsc=0	vitest=1	52 files	1607/1608	runs the guard's OWN expression — a drift tripwire, not a co :: AssertionError: the composer tripwire compares with an EQUALITY: expected '/**\n * `ABC-017`\'s `A11` — the pa	load1=15.36

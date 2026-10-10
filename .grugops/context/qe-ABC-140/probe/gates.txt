@@ -1,0 +1,31 @@
+2026-10-10T17:17:52Z
+dcc8dcca
+{ 9.57 9.86 11.19 }
+> biome check .
+
+Checked 100 files in 216ms. No fixes applied.
+lint exit=0
+> tsc --noEmit
+
+typecheck exit=0
+> tsc --noEmit
+
+build exit=0
+
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Start at  20:17:57
+   Duration  9.71s (transform 1.55s, setup 0ms, collect 14.48s, tests 19.36s, environment 8ms, prepare 3.09s)
+
+npm test exit=0
+0
+348
+1608
+1608
+No findings.
+integrity exit=0
+The lane collects 52 test files; git tracks 52.
+No findings.
+lane-inventory exit=0
+{ 13.07 10.67 11.44 }
+2026-10-10T17:18:18Z

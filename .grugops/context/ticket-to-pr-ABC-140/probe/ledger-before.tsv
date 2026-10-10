@@ -1,0 +1,12 @@
+CONTROL	file	16:57:46Z..16:57:49Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=11.90
+FMT	file	16:57:51Z..16:57:53Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=11.90
+WSC	file	16:57:55Z..16:57:58Z	lint=0	tsc=0	vitest=1	1 files	11/12	the composer tripwire: assembleFrame's value-importers EQUAL :: AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'perft	load1=11.34
+WPS	file	16:58:00Z..16:58:03Z	lint=0	tsc=0	vitest=1	1 files	11/12	licenses src/history.ts's runtime importers: the set EQUALS  :: AssertionError: expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]	load1=11.00
+N591-HEAD+FMT+WSC	file	16:58:05Z..16:58:09Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=11.79
+N591-TAIL+FMT+WSC	file	16:58:11Z..16:58:14Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=11.24
+N591-WRAP+FMT+WSC	file	16:58:16Z..16:58:19Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=11.22
+C-CONTAIN+FMT+WSC	file	16:58:21Z..16:58:24Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=11.05
+C-OPERAND+FMT+WSC	file	16:58:26Z..16:58:29Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=10.72
+N653-NARROW+FMT	file	16:58:30Z..16:58:33Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=10.72
+H-SHADOW+FMT+WPS	file	16:58:35Z..16:58:38Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=10.82
+H-FSMOCK+FMT+WPS	file	16:58:39Z..16:58:43Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=10.52

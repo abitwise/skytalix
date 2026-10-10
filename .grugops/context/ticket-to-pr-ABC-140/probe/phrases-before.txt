@@ -1,0 +1,11 @@
+1 | it pins five spans by TEXT
+0 | it pins seven spans by TEXT
+1 | Both guards at the bottom of this file
+1 | THE TWO GUARDS HOLD DIFFERENT PROPERTIES
+0 | R5d
+2 | R5c
+0 | three instruments
+0 | Three instruments
+0 | the composer tripwire's own (`R5d`)
+7 | COMPOSITION_ROOT
+4 | LICENSED_DRIVERS

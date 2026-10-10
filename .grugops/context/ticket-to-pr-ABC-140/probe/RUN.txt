@@ -1,0 +1,47 @@
+# RUN log — ticket-to-pr-ABC-140, Software Engineer, base 6dde3261 (wave tip at pull), delivered 795adca4.
+# Apple M3, macOS 26.5.2, Node v26.11.0. Other agents (secnfr-ABC-138, design-qe010d-2026-10-10) held claims in
+# parallel, so load1 is logged beside every reading. <repo> = the main checkout; <scratch> = the SE's private
+# scratchpad. Every planted build is a fresh `git archive <rev>` tree with node_modules linked, deleted after its
+# row; nothing was planted in a checkout.
+
+## Harness: the Architect's planter UNCHANGED, the SE's own loop
+plant.mjs = .grugops/context/design-qe137-2026-10-10/probe/plant.mjs, copied unchanged to <scratch>/bin
+(sha256 b6b5e4582259211600a01ee758936eac65d80891f3b56219d3cf4cc1335657bd, both copies; not re-committed here).
+It ran; NOTHING WAS REFUSED by the permission layer. The Architect's ledger.sh was not run (it hardcodes the
+Architect's scratch paths). ledger140.sh is the SE's own loop, the same shape as BA/PM's: per build, biome check
+src, tsc --noEmit, vitest JSON reporter on src/history-pane.nfr.test.ts (scope file) or the whole lane (suite).
+  usage: ledger140.sh <repo> <scratch> <rev> <out.tsv> <file|suite> <build>...
+Port check: ledger-before.tsv at 6dde3261 matches BA/PM's bapm-r5d-qe139a ledger-file.tsv (75dcc0f5) on every
+shared row (CONTROL, WSC, WPS, the five survivors, N653-NARROW, H-SHADOW, H-FSMOCK), same exit, count, failure.
+  spans140.mjs   hashes by TEXT anchor (sha256[:16]) the five existing drift-tripwire pins, the helper and the
+                 composer tripwire's two statements; counts planter anchors, raw-reader declarations,
+                 framed literals, biome-ignore, it(
+  phrases.mjs    = .grugops/context/bapm-owed-batch-2026-10-10/probe/phrases.mjs, unchanged (collapsed text)
+  timing140.sh / score140.mjs  = copies of ticket-to-pr-ABC-137's timing137.sh / score137.mjs, logic unchanged
+
+## Premise (before editing), base 6dde3261
+src/history-pane.nfr.test.ts blob ed2cd2b0 at 6dde3261 = 75dcc0f5 (unchanged since 54280bc8).
+ledger-before.tsv   2026-10-10T16:57:45Z..16:58:43Z: the five survivors +FMT+WSC each exit 0 12/12 -> premise holds.
+spans-before.txt, phrases-before.txt (on `git show 6dde3261:src/history-pane.nfr.test.ts`)
+
+## Delivered 795adca4
+spans-after.txt     `diff` with spans-before.txt: line numbers only (+3 docblock, +2 reach comment) and
+                    biome-ignore 1 -> 2. Every sha identical (five pins, helper, composer scan, composer comparator);
+                    every plant.mjs anchor x1; raw-reader declarations 1 each; it( 12.
+phrases-after.txt   "it pins five spans by TEXT" 1 -> 0; "it pins seven spans by TEXT" 0 -> 1; R5d 0 -> 2;
+                    "Both guards at the bottom of this file" 1 -> 0; "THE TWO GUARDS HOLD DIFFERENT PROPERTIES" 1 -> 0
+docblock-checks.txt lines matching in the docblock above productionModulesIn (grep -c, per line)
+a5.out.txt          name-only, numstat, new files, helper and composer-statement sha256 base|head, biome-ignore, it(
+ledger-after.tsv    2026-10-10T17:00:37Z..17:01:49Z, the 12 base builds + the five survivors WITHOUT +FMT (lint 1 on
+                    the two N591 head/tail spellings unformatted; vitest red either way)
+ledger-suite-after.tsv  17:01:49Z..17:02:21Z whole suite: CONTROL 52/1608; N591-TAIL / C-OPERAND +FMT+WSC 1607/1608
+
+## Gate (worktree, 795adca4), 2026-10-10T17:02:28Z..17:02:39Z   (gates.txt, raw-npm-test.txt)
+npm run lint exit 0 (100 files) | typecheck 0 | build 0 | npm test 0, 52 files / 1608 passed, 6.92 s,
+load1 13.94 -> 16.59 | test-skip-integrity --skip-count 0 "No findings." | lane-inventory "52 / 52. No findings."
+
+## Cost, ADR-0035 (proposed), narrow set src/history-pane.nfr.test.ts, base 6dde3261 / head 795adca4 / twin
+timing140.sh, 9 rounds, round 0 discarded, rotated arm order, count 12 asserted, CPU = user+sys, twin
+`diff -r -x node_modules` identical (the main checkout's node_modules/node_modules self-symlink pre-exists; left alone).
+timing-set1.tsv  17:02:50Z..17:03:09Z  load1 median 13.31   score-set1.out.txt
+timing-set2.tsv  17:03:09Z..17:03:33Z  load1 median 12.37   score-set2.out.txt

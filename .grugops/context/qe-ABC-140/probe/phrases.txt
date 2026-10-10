@@ -1,0 +1,12 @@
+== base
+1 | it pins five spans by TEXT
+0 | it pins seven spans by TEXT
+0 | R5d
+1 | Both guards at the bottom of this file
+1 | THE TWO GUARDS HOLD DIFFERENT PROPERTIES
+== head
+0 | it pins five spans by TEXT
+1 | it pins seven spans by TEXT
+2 | R5d
+0 | Both guards at the bottom of this file
+0 | THE TWO GUARDS HOLD DIFFERENT PROPERTIES

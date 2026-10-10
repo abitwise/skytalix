@@ -1,0 +1,24 @@
+pin1-expression(ABC-057)	lines 499-501	n_start=1	sha=91f94d5c0b7d8474
+pin2-R5-comparator	lines 505-507	n_start=1	sha=386337e9b7cb8b08
+pin3-R5b-scan	lines 511-513	n_start=1	sha=2165995152fe49e6
+pin4-R5b-importers	lines 514-517	n_start=1	sha=b85f2b732d0c510b
+pin5-R5c-helper	lines 521-523	n_start=1	sha=db991c664817eac2
+helper:163-164	lines 166-167	n_start=2	sha=4b3fcd1de1ec998b
+composer-scan:591-593	lines 610-612	n_start=2	sha=c04679b50dc5735e
+composer-cmp:595-598	lines 614-617	n_start=2	sha=14b046f9980eb765
+framed scan statement (real newlines) occurrences	1
+framed comparator statement (real newlines) occurrences	1
+decl 'const LICENSED_DRIVERS: readonly string[]'	1
+decl line /^const COMPOSITION_ROOT = "render-seam\.ts";$/m	1
+'const COMPOSITION_ROOT =' anywhere	1
+biome-ignore	2
+it( blocks	12
+plant.mjs anchor x1	"    const composers = productionModulesIn(directory).filter("
+plant.mjs anchor x1	"      bindsAssembleFrame(readFileSync(`${directory}${file}`,"
+plant.mjs anchor x1	"    ).toEqual([COMPOSITION_ROOT]);\n"
+plant.mjs anchor x1	"      composers,\n      \"a second frame composer"
+plant.mjs anchor x1	"\n/**\n * `ADR-0011` CLAUSE 1"
+plant.mjs anchor x1	"\n/**\n * `ADR-0029` — THE FRAME PATH IS DERIVED"
+plant.mjs anchor x1	"    const production = productionModulesIn(directory.pathnam"
+plant.mjs anchor x1	"\nvi.mock(\"./fen.ts\", "
+plant.mjs anchor x1	"import { readdirSync, readFileSync } from \"node:fs\";\n"

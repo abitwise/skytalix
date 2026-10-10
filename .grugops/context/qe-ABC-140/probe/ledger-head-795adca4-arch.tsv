@@ -1,0 +1,13 @@
+795adca4	file	CONTROL	plant.mjs	load1=6.01	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+795adca4	file	FMT	plant.mjs	load1=5.85	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+795adca4	file	WSC	plant.mjs	load1=5.86	exit=1	files=1	total=12	passed=11	failed=1	FAILED:the composer tripwire: assembleFrame's value <a second frame composer>	lint=0	tsc=0
+795adca4	file	WPS	plant.mjs	load1=5.71	exit=1	files=1	total=12	passed=11	failed=1	FAILED:licenses src/history.ts's runtime importers: <expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]>	lint=0	tsc=0
+795adca4	file	N591-HEAD+FMT+WSC	plant.mjs	load1=5.73	exit=1	files=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire scans EVERY production module>	lint=0	tsc=0
+795adca4	file	N591-TAIL+FMT+WSC	plant.mjs	load1=5.73	exit=1	files=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire scans EVERY production module>	lint=0	tsc=0
+795adca4	file	N591-WRAP+FMT+WSC	plant.mjs	load1=5.76	exit=1	files=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire scans EVERY production module>	lint=0	tsc=0
+795adca4	file	C-CONTAIN+FMT+WSC	plant.mjs	load1=7.62	exit=1	files=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire compares with an EQUALITY>	lint=0	tsc=0
+795adca4	file	C-OPERAND+FMT+WSC	plant.mjs	load1=7.65	exit=1	files=1	total=12	passed=11	failed=1	FAILED:runs the guard's OWN expression — a drift tr <the composer tripwire compares with an EQUALITY>	lint=0	tsc=0
+795adca4	file	N653-NARROW+FMT	plant.mjs	load1=7.43	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+795adca4	file	H-SHADOW+FMT+WPS	plant.mjs	load1=7.48	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+795adca4	file	H-FSMOCK+FMT+WPS	plant.mjs	load1=7.48	exit=0	files=1	total=12	passed=12	failed=0	FAILED:	lint=0	tsc=0
+795adca4	file	N653-DROPROOT	plant.mjs	load1=7.92	exit=1	files=1	total=12	passed=11	failed=1	FAILED:evaluates history.ts's module body NOWHERE O <the declared composition root exists>	lint=1	tsc=0

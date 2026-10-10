@@ -149,16 +149,19 @@ const renderedPliesOf = (rows: readonly string[]): number =>
   );
 
 /**
- * `ADR-0011` CLAUSE 1 — THE ONE EXPRESSION. Both guards at the bottom of this file derive their
- * scanned set from this function and from nothing else.
+ * `ADR-0011` CLAUSE 1 — THE ONE EXPRESSION. Three instruments in this file derive their scanned
+ * set from this function and from nothing else: the frame-path probe, the composer tripwire and
+ * the licence guard.
  *
  * > A **production module** is every `.ts` file under `src/` that is not a `.test.ts`.
  *
  * No exclusions, no exceptions, no filenames. `history.ts` is one, `perft-bench.ts` is one, and on
- * `ABC-019`'s branch `turn-loop.ts` is one. Each guard then applies exactly ONE named rule about
- * this set — `COMPOSITION_ROOT` for the probe, `LICENSED_DRIVERS` for the regex — and the two rules
- * differ because THE TWO GUARDS HOLD DIFFERENT PROPERTIES. Being a production module is not the
- * same as being in scope for `NFR-002`, and conflating those two was the defect `ABC-029` fixed.
+ * `ABC-019`'s branch `turn-loop.ts` is one. Each instrument then applies exactly ONE named rule
+ * about this set, and the three hold TWO properties between them. The probe and the composer
+ * tripwire share `COMPOSITION_ROOT`: the probe derives the frame path from that one root, and the
+ * tripwire is what makes that one root fail closed (`ADR-0029` decision 2). The licence guard
+ * applies `LICENSED_DRIVERS` to the regex. Being a production module is not the same as being in
+ * scope for `NFR-002`, and conflating those two was the defect `ABC-029` fixed.
  */
 const productionModulesIn = (directory: string): readonly string[] =>
   readdirSync(directory).filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"));
@@ -482,13 +485,15 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
   it("runs the guard's OWN expression — a drift tripwire, not a copy that can go stale", () => {
     // `ABC-029` forbids changing the guard's expression, so the witnesses hold a second instance of
     // the literal instead of moving it out of the guard. THIS is what keeps the two the same. Its
-    // reach, stated plainly: it pins five spans by TEXT. Four are the guard's — the expression, the
-    // comparator (`R5`) and the two operands (`R5b`): the scanned set (`productionModulesIn`) and
-    // the importer set (`runtimeImporters`). The fifth is not the guard's: it is clause 1's helper
-    // definition (`R5c`), the one expression this guard, the composer tripwire and the frame-path
-    // probe all scan. An edit to one of those spans reds this test and is told, at the site, to
-    // re-run the witnesses. A text pin is not tamper-proof: a weakening that keeps the pinned text
-    // (in a block comment, say) survives it, so it just has to show in the diff.
+    // reach, stated plainly: it pins seven spans by TEXT, all of them in this `it`. Four are the
+    // licence guard's — the expression, the comparator (`R5`) and the two operands (`R5b`): the
+    // scanned set (`productionModulesIn`) and the importer set (`runtimeImporters`). The fifth is
+    // clause 1's helper definition (`R5c`), the one expression this guard, the composer tripwire
+    // and the frame-path probe all scan. The sixth and seventh are the composer tripwire's own
+    // (`R5d`): its whole scan statement and its whole comparator. An edit to one of those spans reds
+    // this test and is told, at the site, to re-run the witnesses. A text pin is not tamper-proof: a
+    // weakening that keeps the pinned text (in a block comment, say) survives it, so it just has to
+    // show in the diff.
     const instrument = readFileSync(`${witnessDirectory}history-pane.nfr.test.ts`, "utf8");
 
     expect(instrument, "the guard above runs the expression the witnesses below run").toContain(
@@ -515,6 +520,20 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     // escapes and framed by its leading newline, so it cannot match itself.
     expect(instrument, "clause 1's one expression is unchanged").toContain(
       '\nconst productionModulesIn = (directory: string): readonly string[] =>\n  readdirSync(directory).filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"));\n',
+    );
+    // `ADR-0011` `R5d` — the composer tripwire's scan and comparator, each pinned WHOLE. That
+    // tripwire alone holds the second-composer kill: a filename filter before or after the scan, a
+    // wrapper around the helper, a containment, or a narrowed operand drops it and every guard
+    // stays green. Whole, because a filter appended after `)` or an operand narrowed inside the
+    // `expect` would miss a one-line pin. The comparator literal holds the tripwire's failure
+    // message, so rewording that message reds here too, as intended. The predicate's reach
+    // (`bindsAssembleFrame`) is `ADR-0029`'s and is not pinned. Same framing as above.
+    expect(instrument, "the composer tripwire scans EVERY production module").toContain(
+      // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
+      '\n    const composers = productionModulesIn(directory).filter((file) =>\n      bindsAssembleFrame(readFileSync(`${directory}${file}`, "utf8")),\n    );\n',
+    );
+    expect(instrument, "the composer tripwire compares with an EQUALITY").toContain(
+      '\n    expect(\n      composers,\n      "a second frame composer: make it import the seam, or declare it as the root",\n    ).toEqual([COMPOSITION_ROOT]);\n',
     );
   });
 

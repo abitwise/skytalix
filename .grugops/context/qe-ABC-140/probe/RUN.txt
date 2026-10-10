@@ -1,0 +1,46 @@
+# RUN log — qe-ABC-140, QE/E2E. Base 6dde3261, code 795adca4, tip dcc8dcca (same src blob ddc0dda8 as 795adca4).
+# Apple M3, macOS, Node v26.11.0. Other agents held claims in parallel, so load1 is logged beside every reading.
+# <repo> = the main checkout; <scratch> = QE's private scratchpad. Every planted build is a fresh `git archive <rev>`
+# tree with node_modules linked, deleted after its row. Nothing was planted in a checkout.
+
+## Harness
+qe140-ledger.sh   QE's OWN loop. usage: qe140-ledger.sh <repo> <rev> <scratch> <file|suite> <build...>
+                  Per build: plant, vitest JSON reporter (file scope = src/history-pane.nfr.test.ts, suite = whole lane),
+                  biome check src, tsc --noEmit. A spec with a `Q-` component runs qe140-plant.mjs, otherwise the
+                  Architect's plant.mjs.
+plant.mjs         .grugops/context/design-qe137-2026-10-10/probe/plant.mjs, copied UNCHANGED to <scratch>/bin
+                  (sha256 b6b5e4582259211600a01ee758936eac65d80891f3b56219d3cf4cc1335657bd). Not re-committed here.
+                  It ran. NOTHING WAS REFUSED by the permission layer. The Architect's ledger.sh and the SE's
+                  ledger140.sh were not used.
+qe140-plant.mjs   QE's OWN planter: own anchors, own witness spellings (Q-WSC = an ALIASED brace specifier
+                  `assembleFrame as composeFrame`; Q-WPS = `newGame`), own spellings of the five survivors, and QE's
+                  new narrowings (matcher swaps, operand reshapes, a local-shadow helper indirection, statements
+                  inserted between the two pinned statements, the fenced-out predicate).
+qe140-static.mjs  hashes (sha256[:16]) the drift tripwire's `expect(instrument, …)` statements by message, the helper,
+                  the composer tripwire's scan..comparator span, the predicate; counts the raw-reader declarations,
+                  biome-ignore, `it(`, the H-SHADOW docblock anchor; prints the collapsed docblock and reach comment.
+phrases.mjs       .grugops/context/bapm-owed-batch-2026-10-10/probe/phrases.mjs, copied unchanged (collapsed text).
+
+## Ledgers
+ledger-base-6dde3261-arch.tsv   17:10:01Z..17:10:54Z  Architect's builds at base: reproduces BA/PM's 75dcc0f5
+                                ledger-file.tsv on every shared row (same exit, count, failing test).
+ledger-head-795adca4-arch.tsv   17:11:02Z..17:11:57Z  same builds at head: the five survivors 0 -> 1 on the drift
+                                tripwire; every other row unchanged by name; no PLANT-FAILED.
+ledger-qe-base-head.tsv         17:12:10Z..17:14:53Z  QE's 19 builds at base, then at head.
+ledger-suite-795adca4.tsv       17:15:35Z..17:16:51Z  whole lane at head: CONTROL 1608/1608; N591-TAIL, C-OPERAND
+                                1607/1608; Q-MUTATE-BETWEEN, Q-RETURN-BETWEEN, Q-LOCAL-SHADOW (each +FMT+Q-WSC)
+                                1608/1608 with lint 0, tsc 0.
+(N653-DROPROOT is unformatted, so lint=1 on that row; it is a red control, not a gate-clean claim.)
+
+## Static (base file = `git show 6dde3261:src/history-pane.nfr.test.ts`, head = 795adca4)
+static.txt    five existing pins IDENTICAL by hash; two new; helper, composer statements, predicate IDENTICAL;
+              raw-reader declarations x1 each, IDENTICAL; biome-ignore 1 -> 2; it( 12 -> 12; docblock anchor x1.
+phrases.txt   "five spans" 1 -> 0, "seven spans" 0 -> 1, R5d 0 -> 2, "Both guards…" 1 -> 0, "THE TWO GUARDS…" 1 -> 0.
+Decoded literals: the scan literal and the comparator literal each occur exactly once in the head file.
+
+## Gate (QE worktree .claude/worktrees/qe-ABC-140 at dcc8dcca), 17:17:52Z..17:18:18Z   (gates.txt)
+lint 0 (100 files) | typecheck 0 | build 0 | npm test 0, 52 files / 1608 passed, 9.71 s, load1 9.57 -> 13.07 |
+skip count 0 | test-skip-integrity "No findings." | lane-inventory "52 / 52. No findings."
+
+## Not re-measured
+N8-LANE cost: QE did not re-time; the SE's two admissible ADR-0035 sets are cited (…1d12c309).

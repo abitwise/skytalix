@@ -1,0 +1,37 @@
+pins base=5 head=7
+  pin 1 IDENTICAL 7b6fd41fc8750944 the guard above runs the expression the witnesses below run
+  pin 2 IDENTICAL 14d18ca7ba710a81 the licence guard compares with an EQUALITY
+  pin 3 IDENTICAL 5becb6bba7d5444c the licence guard scans EVERY production module
+  pin 4 IDENTICAL 60fe8c705e13dfd8 the licence guard compares EVERY runtime importer
+  pin 5 IDENTICAL 3e426bc1c0748231 clause 1's one expression is unchanged
+  new 344aad66c8072aad the composer tripwire scans EVERY production module
+  new e2e454f10bf2b3b5 the composer tripwire compares with an EQUALITY
+helper: IDENTICAL base=ecd6f4ef8b44d401 head=ecd6f4ef8b44d401
+composer scan..comparator: IDENTICAL base=411a05ce25f6b58e head=411a05ce25f6b58e
+bindsAssembleFrame: IDENTICAL base=cc5f0dc0e9315dab head=cc5f0dc0e9315dab
+helper line base=163 head=166; composer scan line base=591 head=610
+LICENSED_DRIVERS decl: base x1 head x1 IDENTICAL const LICENSED_DRIVERS: readonly string[] = ["turn-loop.ts", "cli.ts"];
+COMPOSITION_ROOT decl: base x1 head x1 IDENTICAL const COMPOSITION_ROOT = "render-seam.ts";
+raw substring 'const LICENSED_DRIVERS: readonly string[]' base x1 head x1; 'const COMPOSITION_ROOT =' base x1 head x1
+"biome-ignore" base x1 head x2
+"\n  it(" base x12 head x12
+"/**\n * `ADR-0011` CLAUSE 1" base x1 head x1
+DOCBLOCK(head, collapsed): /** `ADR-0011` CLAUSE 1 — THE ONE EXPRESSION. Three instruments in this file derive their scanned set from this function and from nothing else: the frame-path probe, the composer tripwire and the licence guard. > A **production module** is every `.ts` file under `src/` that is not a `.test.ts`. No exclusions, no exceptions, no filenames. `history.ts` is one, `perft-bench.ts` is one, and on `ABC-019`'s branch `turn-loop.ts` is one. Each instrument then applies exactly ONE named rule about this set, and the three hold TWO properties between them. The probe and the composer tripwire share `COMPOSITION_ROOT`: the probe derives the frame path from that one root, and the tripwire is what makes that one root fail closed (`ADR-0029` decision 2). The licence guard applies `LICENSED_DRIVERS` to the regex. Being a production module is not the same as being in scope for `NFR-002`, and conflating those two was the defect `ABC-029` fixed. /
+  docblock x1 | frame-path probe
+  docblock x2 | composer tripwire
+  docblock x2 | licence guard
+  docblock x1 | COMPOSITION_ROOT
+  docblock x1 | LICENSED_DRIVERS
+  docblock x1 | share `COMPOSITION_ROOT`
+  docblock x1 | Three instruments
+  docblock x1 | TWO properties
+  docblock x1 | ADR-0029` decision 2
+  docblock x0 | Both guards
+  docblock x0 | THE TWO GUARDS
+REACH(head, collapsed): `ABC-029` forbids changing the guard's expression, so the witnesses hold a second instance of the literal instead of moving it out of the guard. THIS is what keeps the two the same. Its reach, stated plainly: it pins seven spans by TEXT, all of them in this `it`. Four are the licence guard's — the expression, the comparator (`R5`) and the two operands (`R5b`): the scanned set (`productionModulesIn`) and the importer set (`runtimeImporters`). The fifth is clause 1's helper definition (`R5c`), the one expression this guard, the composer tripwire and the frame-path probe all scan. The sixth and seventh are the composer tripwire's own (`R5d`): its whole scan statement and its whole comparator. An edit to one of those spans reds this test and is told, at the site, to re-run the witnesses. A text pin is not tamper-proof: a weakening that keeps the pinned text (in a block comment, say) survives it, so it just has to show in the diff. const instrument =
+  reach x1 | seven spans
+  reach x0 | five spans
+  reach x1 | R5d
+  reach x1 | composer tripwire's own
+  reach x1 | licence guard's
+  reach x1 | all of them in this `it`
