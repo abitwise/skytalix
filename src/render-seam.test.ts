@@ -378,6 +378,21 @@ describe("ABC-041 — the render seam", () => {
       expect(bindsAValueFrom(spelling, "m.ts"), spelling).toBe(consumes);
   });
 
+  it("A8's instrument — the comment strip eats no code: a consumer beside a comment still counts", () => {
+    // `ABC-135` QE. The rows above only see a strip that removes too LITTLE. These see one that
+    // removes too much: a line comment read to end of file, a whole line dropped for its trailing
+    // comment, or the line strip run before the block strip (it cuts a `*/` behind a URL). Each
+    // leaves today's real-tree map unchanged, so only rows can catch it.
+    const spellings: readonly string[] = [
+      '// c\nimport { f } from "./m.ts";',
+      'import { f } from "./m.ts"; // c',
+      '/* see http://x */\nimport { f } from "./m.ts";\n/* c */',
+    ];
+
+    for (const spelling of spellings)
+      expect(bindsAValueFrom(spelling, "m.ts"), spelling).toBe(true);
+  });
+
   it("A9 — the declared COMPOSITION_ROOT, and deliberately NOT in LICENSED_DRIVERS", () => {
     const probe = sourceOf("history-pane.nfr.test.ts");
     const declaredList = (name: string): string => {
