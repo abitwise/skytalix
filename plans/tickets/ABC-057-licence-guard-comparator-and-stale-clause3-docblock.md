@@ -1,8 +1,8 @@
 ---
 id: ABC-057
 title: The merged licence guard's comparator is unwitnessed, and its docblock still states the sentence `ADR-0011` clause 3 struck — two sites, one file, zero production lines
-status: in-development
-column: In Development
+status: in-review
+column: In Review
 size: XS
 priority: P2
 epic: —

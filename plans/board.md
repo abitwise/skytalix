@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-057` → `In Review` (`00aad4da`); QE `qe-ABC-057` dispatched._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-057` built (`20179d56`); comment fix-forward before QE._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-087` Security/NFR PASS_WITH_RISKS; R1 clamp-pin row being added; `ABC-057` building._
@@ -582,9 +584,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-
-- [ABC-057] Licence guard — the unwitnessed `toEqual` comparator, and the docblock still stating `ADR-0011` clause 3's struck sentence  (BA/PM, XS, P2, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ ordered behind `ABC-042`'s merge — `src/cli.test.ts` does not exist on `main`; `Q3`/`R5` + `D1`/`Q14`, routed by Architect/Design as one review) **2026-10-10 audit: `ABC-042` Done (merged `dbaf972`, 2026-08-15) and `src/cli.test.ts` exists — the ordering is met. DoR not re-scored.** **2026-10-10 re-score: DoR 10/10 → Ready; anchors exact, M15 still survives the suite. Next pull after the owner-word BA/PM batch.** **2026-10-10: sequence after `ABC-054` (same licence paragraph); becomes P1 when `ABC-053` is pulled.** **2026-10-10: R5 trigger fired (ABC-053 pulled) → P1; AR-053-ORDER test note added; after ABC-054.** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-057`, branch `grugops/ABC-057-licence-guard`; carries QE-054-b). **2026-10-10 built on `grugops/ABC-057-licence-guard` @ `20179d56` (`src/history-pane.nfr.test.ts` +34/−12; A1–A5 met; M15 now red; composer docblock narrowed per QE-054-b; N8-LANE MET on set 2). Two stale comments in the same file being fixed forward before QE; ADR reading for `turn-loop.ts` part (i) → Architect.**
+## In Development (WIP 0/3)
 
 
 
@@ -610,7 +610,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+
+## In Review (WIP 1/3)
+
+- [ABC-057] Licence guard — the unwitnessed `toEqual` comparator, and the docblock still stating `ADR-0011` clause 3's struck sentence  (BA/PM, XS, P2, epic: EPIC-006, since: 2026-08-16, DoR 9/10 ⚠️ ordered behind `ABC-042`'s merge — `src/cli.test.ts` does not exist on `main`; `Q3`/`R5` + `D1`/`Q14`, routed by Architect/Design as one review) **2026-10-10 audit: `ABC-042` Done (merged `dbaf972`, 2026-08-15) and `src/cli.test.ts` exists — the ordering is met. DoR not re-scored.** **2026-10-10 re-score: DoR 10/10 → Ready; anchors exact, M15 still survives the suite. Next pull after the owner-word BA/PM batch.** **2026-10-10: sequence after `ABC-054` (same licence paragraph); becomes P1 when `ABC-053` is pulled.** **2026-10-10: R5 trigger fired (ABC-053 pulled) → P1; AR-053-ORDER test note added; after ABC-054.** **→ In Development 2026-10-10** (subtask `ticket-to-pr-ABC-057`, branch `grugops/ABC-057-licence-guard`; carries QE-054-b). **2026-10-10 built on `grugops/ABC-057-licence-guard` @ `20179d56` (`src/history-pane.nfr.test.ts` +34/−12; A1–A5 met; M15 now red; composer docblock narrowed per QE-054-b; N8-LANE MET on set 2). Two stale comments in the same file being fixed forward before QE; ADR reading for `turn-loop.ts` part (i) → Architect.** **→ In Review 2026-10-10**: comment fix-forward `00aad4da` (spans byte-identical; M15 red; 1583 green). QE `qe-ABC-057` dispatched.
 
 
 
