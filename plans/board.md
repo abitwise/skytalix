@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-139` → `In Review` (`daa5184a`); QE `qe-ABC-139` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` → `Done` (UAT WAIVED; merged `382a03d5`); `ABC-139` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Review` (`7e5c9c74`); QE `qe-ABC-138` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` pulled `Ready for Dev` → `In Development`._
@@ -629,9 +630,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 - [ABC-010] FEN semantic validation  (BA/PM, M, P1, epic: EPIC-003, since: 2026-07-29, **DoR re-verified 2026-08-13: 9/10, NOT the 10/10 the page claimed — NOT promoted.** Its page says `src/fen.ts` has exactly ONE production consumer and is off any hot path; measured FOUR — `perft-bench`, `history.ts:117` (once per ply), `status-panel.ts:156` and `history-pane.ts:121` (once per FRAME). Item 6 omits NFR-002 and its <1 ms bar is wrong-sized. Acceptance and the P1 argument unaffected; needs one short BA/PM + Architect pass) **2026-10-10 re-score (`rescore-batch-2026-10-10`): DoR 10/10 → Ready; P1 → P2 (no epic accepts a user FEN; back to P1 on any FEN-input ticket or a FEN-carrying book format); routes via In Design on pull.** **2026-10-10: pulled into its design hop — Architect `design-abc010` (open design question, page § "Open design question") dispatched; stays in `Ready` here until `In Design` has a heading (`ABC-055`).** **2026-10-10 design hop (`design-abc010`, merged `5a613d1`): `ADR-0033` PROPOSED (check via `moves.ts`; test-only `parseFenGrammarOnly`). NOT Ready for Dev — criterion 9 cannot hold (rules reject 186 fixture occurrences across 16 files, incl. 2 `src/puzzle-corpus.ts` rows); overlaps `ABC-127`/`ABC-126`/`ABC-083`. → back to Backlog; BA/PM `recut-abc010` dispatched.** **2026-10-10 re-cut (`recut-abc010`, merged `d24e740`): DoR 8/10, M, P2 — criterion 9 re-worded (a)–(f); 15 `src/` files. ⚠️ item 3: waits `ABC-126` merge; ⚠️ item 10: waits owner acceptance of `ADR-0033`. Then straight to Ready for Dev. Never build in parallel with `ABC-083` (shared `src/quiescence.test.ts`; ABC-083 first if both pullable).** **2026-10-10: `ADR-0033` ACCEPTED by the owner — ⚠️ item 10 cleared; still waits `ABC-126` (⚠️ item 3).** **2026-10-10 re-score (`bapm-abc010-qe129a-2026-10-10`, merged `7d62038a`): DoR 10/10, M, P2 (row's 'P1' text is stale) — both ⚠️ cleared; fence grows 15 → 16 (`src/levels.test.ts:351` fixture rejected by ADR-0033, replacement measured); 9(f) adds the levels deep lane. → `Ready for Dev` (design done, ADR-0033 accepted). Does NOT wait ABC-131. Shares `quiescence.test.ts` AND `evaluate.pawns.test.ts` with ABC-083: ABC-083 (P1) first if both pullable. Production (`src/fen.ts`) → owner UAT.** **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-010`, branch `grugops/ABC-010-fen-semantic-validation`). If the owner accepts ABC-131 meanwhile, ABC-083 waits for this build and rebases (BA/PM `…6e1b4d27`).
-- [ABC-139] The cadence comment in `src/command-input.test.ts:412` quotes the formula its cite disowns  (BA/PM, XS, P3, since: 2026-10-10, DoR 10/10; cut from QE-129-a; comment-only test file → UAT waiver; owner-Q4 combined measures) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-139`, branch `grugops/ABC-139-cadence-comment`).
 
 
 
@@ -659,8 +659,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
 - [ABC-138] The spawn pin's holes are watched by hand — move the AR-133-LOADER / AR-133-WRAP checks into the pin (F-133-1 (a)+(b))  (BA/PM, S, P3, since: 2026-10-10, DoR 10/10; test-only `src/cli.test.ts` → UAT waiver; reverses ABC-133's 'Q14 out'; C14 control split for Security/NFR to confirm at its gate) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-138`, branch `grugops/ABC-138-spawn-pin-in-suite`). **→ In Review 2026-10-10**: built on `grugops/ABC-138-spawn-pin-in-suite` @ `7e5c9c74` (A1–A6 MET; 12 holes GREEN → RED on the pin row, all kills/controls as the page predicts, C14 the one stated false red; `src/cli.test.ts` +30/−13; A4 in-file cost 164.8 ms ≤ 250, head−base −0.3 ms; N8_SPAWN 27; AR-058-STRIP not fired). QE `qe-ABC-138` dispatched; Security/NFR (C14 split, AR-133-LOADER/WRAP discharge) after QE.
+- [ABC-139] The cadence comment in `src/command-input.test.ts:412` quotes the formula its cite disowns  (BA/PM, XS, P3, since: 2026-10-10, DoR 10/10; cut from QE-129-a; comment-only test file → UAT waiver; owner-Q4 combined measures) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-139`, branch `grugops/ABC-139-cadence-comment`). **→ In Review 2026-10-10**: built on `grugops/ABC-139-cadence-comment` @ `daa5184a` (A1–A4 MET; `src/command-input.test.ts` +5/−3, comments only by both Q4 measures on two harnesses; one extra in-block wording fix — 'a fourth, a fifth and a sixth' → 'one more frame per `board`, three in all'). QE `qe-ABC-139` dispatched.
 
 
 
