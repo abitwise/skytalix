@@ -14,6 +14,6 @@
   "machine": "Apple M3, 8 cores, 16 GiB, macOS 26.5.2, Node v26.11.0",
   "load": "load1 7.73 / 7.98 / 6.04 at start (7.98 / 6.04 / 5.04 at end; other lanes running)",
   "wallSeconds": "23.94 / 19.21 / 19.93 for the gating run in vitest",
-  "laneWallSeconds": "28.24 / 33.45 / 28.97 for the whole PUZZLE_DEEP=1 run in vitest, the gating run plus the oracle rows (mate-in-3 4.20 / 4.18 / 4.25 s, win-material 4.51 / 4.51 / 4.46 s); 34.84 / 28.74 / 29.51 s process real",
+  "laneWallSeconds": "33.45 / 28.24 / 28.97 for the whole PUZZLE_DEEP=1 run in vitest, the gating run plus the oracle rows (mate-in-3 4.20 / 4.18 / 4.25 s, win-material 4.51 / 4.51 / 4.46 s); 34.84 / 28.74 / 29.51 s process real",
   "reason": "ABC-131: four budget-edge rows dropped (seeds 1982, 1008, 1424, 1075), so the recorded total moves 62 -> 58 and the solved count 58 -> 54. This IS a lowering under ABC-084 A7, taken on the owner's word, 2026-10-10: \"accept ADR-0030, ADR-0031, ADR-0032, ADR-0034 with (b) at 0.8x\" (ADR-0034 decision 5). Budget, step and the four headroom rows are unchanged. Raising this is QE's; lowering it needs the owner's word."
 }
