@@ -1,0 +1,1 @@
+{"file":"src/cli.test.ts","childProcessArgCalls":[],"createRequireSites":["createRequire(import.meta.url)(\"typescript\")@1871","createRequire(import.meta.url)@1871"],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@343"]}

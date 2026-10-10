@@ -1,0 +1,23 @@
+# gates at 33e54f70 2026-10-10T16:46:48Z
+== lint load1 10.35
+
+Checked 100 files in 159ms. No fixes applied.
+exit 0
+== typecheck load1 10.35
+exit 0
+== build load1 10.35
+exit 0
+== npm test load1 10.35
+exit 0
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Duration  11.02s (transform 1.68s, setup 0ms, collect 14.80s, tests 24.45s, environment 7ms, prepare 3.07s)
+== skip count load1 13.43
+skip 0
+== integrity load1 15.09
+No findings.
+exit 0
+== lane-inventory load1 15.09
+The lane collects 52 test files; git tracks 52.
+No findings.
+exit 0

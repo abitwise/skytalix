@@ -1,0 +1,17 @@
+Security/NFR ABC-138 probe index (subtask secnfr-ABC-138). <repo> = the main checkout; <scratch> = this hop's private
+scratchpad. Trees are `git archive` copies with node_modules symlinked, never in the repo. Ticket base 2946e22a; tip under
+review a4802fc0 (code 33e54f70); this hop's comment-only commit 0a63e4c4. Node v26.11.0, Apple M3. Other agents ran in
+parallel; load1 is beside every run. The committed probe scripts were NOT refused: all ran as committed.
+
+se-plants.out.txt       ticket-to-pr-ABC-138/probe/plants.sh <repo> 0a63e4c4 sec <scratch>        (the engineer's 25 rows + control)
+qe-plants.out.txt       qe-ABC-138/probe/qe-plants.sh <repo> 0a63e4c4 sec <scratch> tc           (QE's 22 plants, tsc + biome each)
+sec-plants.sh/.out.txt  sec-plants.sh <repo> 0a63e4c4 sec <scratch> qe-ABC-133/probe/mutate.cjs   (this hop's 11 plants + control,
+                        tsc + biome each: K1-K5 the C14 split and the const remedy, E1-E3 the WRAP residual, L-a..L-d LOADER)
+loader-scan-w5.out.txt  secnfr-ABC-133/probe/loader-scan.mjs on a copy of 0a63e4c4's src/cli.test.ts with QE's W5 planted
+                        (the scan reads two references; the suite reds W5 on (iii): the scan is now WEAKER than the pin)
+a5-batch1.out.txt       ticket-to-pr-ABC-138/probe/a4.sh <repo> 2946e22a 0a63e4c4 11 <scratch> <out>  (+ -summary.txt via
+a5-batch2.out.txt       qe-ABC-138/probe/a5-summary.mjs). Two batches, 11 interleaved rounds each, round 0 discarded.
+a6.out.txt              one-path re-read at 0a63e4c4: name-only, numstat, manifest, production lines, it( count, N8_SPAWN,
+                        load/parse count, the A4 phrase, loader-scan.mjs at head
+gates.txt               lint, typecheck, build, npm test, skip count, test-skip-integrity, lane-inventory at 0a63e4c4 in the
+                        hop's own worktree (.claude/worktrees/secnfr-ABC-138)

@@ -1,0 +1,23 @@
+== W5 LIVE  load1 16.26  16:43:17Z
+60:class SpawnerW5 extends (spawnSync as unknown as new (f: string, a: string[]) => object) {}
+61:const strayW5 = new SpawnerW5(process.execPath, [
+62-  "-e",
+63-  'require("node:fs").appendFileSync(process.env.QE_MARK, "child-ran\\n")',
+64-]);
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+      Tests  1 failed | 66 passed (67)
+   child marks written: 1
+   typecheck exit 0
+   biome check exit 0
+== W6 LIVE  load1 14.69  16:43:27Z
+60:const aliasW6 = spawnSync as unknown as <T>(f: string, a: string[]) => T<object>;
+61-const strayW6 = aliasW6(process.execPath, [
+62-  "-e",
+63-  'require("node:fs").appendFileSync(process.env.QE_MARK, "child-ran\\n")',
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: value-position references to a child_process binding: expected [ 'spawnSync (ImportSpecifier)', …(2) ] to deeply equal [ 'spawnSync (ImportSpecifier)', …(1) ]
+      Tests  1 failed | 66 passed (67)
+   child marks written: 1
+   typecheck exit 2
+   biome check exit 0

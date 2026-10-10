@@ -198,3 +198,114 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**: base `5d55cc48`, and every
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P3`, with two `P1` triggers |
 | 10 | no major unresolved blocker | **✅** none. The `C14` split is resolved on this page, and Security/NFR confirms it at the gate |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-138`).
+- Branch `grugops/ABC-138-spawn-pin-in-suite`, from `2946e22a`. The code is `84edfb46`
+  (`src/cli.test.ts` +30/−13, the pin's one `it` and its comment).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-138/` (`…8d70af7c`,
+  `…74a52ca8`, `probe/`) and are not restated here.
+
+**`A1`–`A6` are met. No stop condition fired.**
+- **The premise held at `2946e22a`.** The file is byte-identical to `3159ab68`, and all 12 gap
+  plants and the controls are GREEN 67/67.
+- **`AR-058-STRIP` did not fire.** No `//` or `/*` literal was added, and no `child_process`
+  import form.
+
+| # | verdict | reading (plants out of tree; base `2946e22a` → delivered `84edfb46`) |
+|---|---|---|
+| `A1` | MET | `X5`, `X5b`, `X6`, `X7`, `S2`, `S3`: GREEN 67/67 → **RED 1/67**, the pin row, on count (i) |
+| `A2` | MET | `C5`, `C6`, `C7`, `C8`, `C10`, `Q14`: GREEN 67/67 → **RED 1/67**, the pin row, on the new count (iii) |
+| `A3` | MET | The unmutated file is GREEN. It reads (i) `[["spawnSync"]]`, (ii) `["spawnSync in childOf"]` and (iii) two. `Q11`, `Q12`, `Q13`, `P1`, `P-DYN`, `E-MS1` and `E-MS2` stay RED, and `P-DYN` is one extra entry. `E-A1`, `S-CTRL`, `C13`, `C15` and `C14-ARRAY` stay GREEN |
+| `A4` | MET | `C14` and `C14-ARG` are RED on (i). The comment names that class. "resolving it needs data flow" is 1 → 0 |
+| `A5` | MET | In situ, n = 10 after round 0, interleaved with base. Median **164.8 ms** CPU ≤ 250 at load1 7.78; base 162.5 ms at 7.94; paired delta −0.3 ms. One load, one parse |
+| `A6` | MET | `git diff --name-only` = `src/cli.test.ts`; the manifest numstat is empty; 0 production lines, 0 new files, 0 new `it`; `N8_SPAWN` 27. `loader-scan.mjs` reads `[]`, one `createRequire` site and two references. `ABC-042` `A1`, `ABC-065` and `ABC-059` hash identically |
+
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 52 files / 1608 passed. The skip count
+  is 0, and integrity reads `No findings.` `lane-inventory.js` exits 0 with no findings.
+- **Next.**
+  - QE's hop.
+  - The Security/NFR hop the page recommends: confirm the `C14` split, and rule on discharging
+    `AR-133-LOADER` / `AR-133-WRAP`.
+  - The UAT waiver applies if zero production lines holds (measured 0).
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-138`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `2946e22a..7e5c9c74`, code `84edfb46`. Every reading is QE's own, taken in fresh
+`git archive` trees, with the engineer's table re-run and QE's own 22 plants. **`A1`–`A6` are MET.
+No test was added.**
+
+- **`A1`–`A4`**: the engineer's 25-row table reproduces row for row at both tips. Every red is the
+  `N8-LANE` row alone: (i) for `A1` and `A4`, (iii) for `A2`, and the base counts for `A3`'s kills.
+- **`A5`**: **170.3 ms** median at load1 10.11 (base 180.4 ms, paired −4.3 ms). Under load1 37.8 it
+  is 183.7 ms. Both are ≤ 250, with n = 10 each, round 0 discarded, and one load and one parse.
+- **`A6`**: one path, +30/−13. The manifest is empty, with 0 production lines, 0 new files and 0 new
+  `it`; `N8_SPAWN` 27. `loader-scan` reads `[]`, one site and two references. Lint, typecheck,
+  build and `npm test` (52 / 1608) exit 0. Skip is 0, and integrity and `lane-inventory.js` report
+  no findings.
+- **QE's plants**: 12 new kills beyond the page's. There is no false red on type-only references,
+  JSDoc, import type nodes or non-first-argument names.
+
+**Gaps (none fails a criterion; every hole was green at base too, so no kill was traded):**
+- **`QE-138-a` LOW, inside Scope (b)'s letter.** (iii) skips a reference inside
+  `ExpressionWithTypeArguments`, which `ts.isTypeNode` counts as a type. A class `extends` clause
+  is a value position, though. `class S extends (spawnSync as unknown as new (…) => object) {}`
+  with `new S(…)` spawns a real child. The suite stays GREEN 67/67, `tsc` exits 0 and `biome`
+  exits 0. The one-line fix is verified in scratch:
+  `ts.isTypeNode(n) && !ts.isExpressionWithTypeArguments(n)`.
+- **`QE-138-b` LOW.** A literal module name in a non-first argument stays green
+  (`getBuiltinModule.call(process, "node:child_process")`, `Reflect.apply(loader, …,
+  ["child_process"])`). The comment's bound names only non-literal names.
+- **`QE-138-c`–`-f` INFO:**
+  - the comment's "spell it through a `const`" remedy is the blind shape for a loader;
+  - the instantiation-expression alias is held off only by a Biome format quirk;
+  - `expect(…).not.toContain("child_process")` reds, as stated;
+  - single rounds go over 250 ms under load.
+
+The board move is the Orchestrator's, including whether to bounce `QE-138-a`'s one line. Security/NFR
+should not discharge `AR-133-WRAP` as closed while `QE-138-a` stands. Readings are in
+`.grugops/context/qe-ABC-138/notes/` (`…6ef45921` decision, `…9cdaa822` readings, `…d5a380ba`
+gaps) and `.grugops/context/qe-ABC-138/probe/`. Not merged, not pushed.
+
+## Delivery addendum 2026-10-10 (Software Engineer, fix-forward `fix-ABC-138`)
+
+Code `33e54f70`, `src/cli.test.ts` +13/−3 only. Not merged, not pushed. Readings are in
+`.grugops/context/fix-ABC-138/` (`…4c39f4c1` decision, `…3133420f` readings, `probe/`).
+- **`QE-138-a` / `QE-138-d` closed.** Count (iii) now counts a reference inside
+  `ExpressionWithTypeArguments`. `W5` and `W6` go GREEN → RED on (iii); `W5` LIVE reds the suite.
+  Type arguments in `extends` / `implements` stay type-only (own controls `G1`–`G3`, GREEN).
+- **`QE-138-b` (comment).** The bound now names a literal that is not a call's first argument
+  (`getBuiltinModule.call`, `Reflect.apply`). Count (i) is not widened; `L3c` and `L5` stay GREEN.
+- **`A1`–`A6` still MET.** The engineer's 25-row table and QE's other 20 plants read as at `84edfb46`.
+  `A5`: 174.5 ms median at load1 8.87 (base 170.6 ms). `A6`: one path; 0 production lines, files, `it`
+  or manifest bytes; `N8_SPAWN` 27; `loader-scan` `[]`, one site, two references.
+- **Gate.** Lint, typecheck and build exit 0; `npm test` 52 / 1608; skip 0; integrity and
+  `lane-inventory.js` report no findings.
+
+## Security/NFR 2026-10-10 (`secnfr-ABC-138`, Workflow 05): PASS_WITH_RISKS
+
+Reviewed `2946e22a..a4802fc0` (code `84edfb46` and `33e54f70`) at ASVS L1, block on high. Every
+reading is this hop's own, taken at `0a63e4c4` in `git archive` trees. The readings and rulings are
+in `.grugops/context/secnfr-ABC-138/notes/` (`…91830257` decision, `…f114ac22` readings) and are not
+restated here. Not merged, not pushed.
+
+- **One required fix, made: `0a63e4c4`, comment only (+4/−2).** The `A4` remedy ("spell it through
+  a `const`") now applies only to a call that loads nothing. For a loader it was the shape count (i)
+  cannot see (`QE-138-c`).
+- **Ruling 1, the `C14` split: CONFIRMED.**
+- **Ruling 2, `AR-133-WRAP`: DISCHARGED** at merge. Direct `eval` by string is refused by
+  `npm run lint` (`noGlobalEval`).
+- **Ruling 3, `AR-133-LOADER`: NARROWED**, LOW, owner BA/PM. It now covers `QE-138-b` and the
+  non-literal name. The trigger is an event; when it fires, `F-138-1` becomes P1.
+- **Ruling 4: `loader-scan.mjs` RETIRED** from the per-diff routine at merge. **Until then, this
+  page's § Dependencies triggers stand.**
+- **`A1`–`A6` still MET at `0a63e4c4`.**
+  - `A5`: 230.2 ms at load1 11.28, and 167.9 ms at load1 9.88.
+  - `V1.2.5` is MET, and `N8_SPAWN` is 27.
+- **Gates:**
+  - Lint, typecheck and build exit 0.
+  - `npm test`: 52 files, 1608 passed.
+  - Skip count 0. Integrity and `lane-inventory.js` report no findings.
+- **UAT is waived** (0 production lines).

@@ -1,0 +1,29 @@
+# A6 at 84edfb46 vs base 2946e22a, 2026-10-10T16:03:04Z
+## name-only
+src/cli.test.ts
+## numstat
+30	13	src/cli.test.ts
+## manifest numstat (empty = none)
+## added/deleted files (empty = none)
+## zero-production-lines grep (empty = 0 production files)
+## it( count base / head
+67
+67
+## N8_SPAWN
+1838:    const N8_SPAWN = 17 + 7 + 1 + 2;
+## one load, one parse in the pin
+1
+1871:    const ts: typeof Ts = createRequire(import.meta.url)("typescript");
+## phrase 'resolving it needs data flow' (collapsed) base / head
+1
+0
+## region hashes before
+A042-A1 12 cfed65970e28374b
+D065 184 4c2d5f84a0dc8dd9
+D059 75 1a39fb91c2e021ee
+## region hashes after
+A042-A1 12 cfed65970e28374b
+D065 184 4c2d5f84a0dc8dd9
+D059 75 1a39fb91c2e021ee
+## loader-scan on delivered file
+{"file":"src/cli.test.ts","childProcessArgCalls":[],"createRequireSites":["createRequire(import.meta.url)(\"typescript\")@1871","createRequire(import.meta.url)@1871"],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@343"]}

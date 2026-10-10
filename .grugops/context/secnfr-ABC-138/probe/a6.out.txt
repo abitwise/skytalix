@@ -1,0 +1,23 @@
+# A6 / one-path / scan re-read at 0a63e4c4, 2026-10-10T17:03:03Z
+## git diff --name-only 2946e22a..0a63e4c4 (outside .grugops/context/)
+plans/tickets/ABC-138-spawn-pin-holes-are-watched-by-hand-move-the-checks-into-the-pin.md
+plans/traceability.md
+src/cli.test.ts
+## src numstat
+42	13	src/cli.test.ts
+## manifest numstat (empty = none)
+## production lines (UAT rule; empty = 0)
+## it( count base / head
+67
+67
+## N8_SPAWN
+1838:    const N8_SPAWN = 17 + 7 + 1 + 2;
+## loads / parses
+1
+1
+## A4 phrase in collapsed text
+0
+## loader-scan.mjs at head (committed probe, ran, not refused)
+{"file":"src/cli.test.ts","childProcessArgCalls":[],"createRequireSites":["createRequire(import.meta.url)(\"typescript\")@1878","createRequire(import.meta.url)@1878"],"spawnSyncValueRefs":["ImportSpecifier@32","CallExpression@343"]}
+## this hop's code diff 33e54f70..0a63e4c4
+4	2	src/cli.test.ts
