@@ -1,0 +1,10 @@
+079284d9	QWLAUNDER-CLIOPT	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+079284d9	M15SUB+FMT+WPERFT-STATIC	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+079284d9	M15SUB+FMT+QWLAUNDER-CLIOPT	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+079284d9	QSTRICT-AC+FMT+WPERFT-STATIC	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+079284d9	QSTRICT+FMT+WPERFT-STATIC	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+079284d9	QMATCHOBJ+FMT+WPERFT-STATIC	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+079284d9	M15+FMT+WPERFT-STATIC	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+00aad4da	QWLAUNDER-CLIOPT	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+00aad4da	M15SUB+FMT+WPERFT-STATIC	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+00aad4da	M15SUB+FMT+QWLAUNDER-CLIOPT	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|

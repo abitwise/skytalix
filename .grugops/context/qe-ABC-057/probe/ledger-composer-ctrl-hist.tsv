@@ -1,0 +1,19 @@
+00aad4da	QMOVE-COMMENTED-M15+FMT	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QF-ALIAS	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:the composer tripwire: assembleFrame's value-importers EQUAL the one composition root|
+    AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 'render-seam.ts' ]
+00aad4da	QF-NAMESPACE	exit=1	 Tests 1 failed | 11 passed (12)	lint=1	tsc=0	FAILED:the composer tripwire: assembleFrame's value-importers EQUAL the one composition root|
+    AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'cli-options.ts', 'render-seam.ts' ] to deeply equal [ 'render-seam.ts' ]
+00aad4da	QF-COMMENT	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QF-COMMENT-AFTER-SEMI	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QF-STRING-NAME	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QF-DEFAULT-AS	exit=0	 Tests 12 passed (12)	lint=0	tsc=2	FAILED:
+unknown build Q-CTRL-DEAF-AFTER-LOAD
+00aad4da	Q-CTRL-DEAF-AFTER-LOAD+X5b	PLANT-FAILED
+unknown build Q-CTRL-ARMING-FIRST
+00aad4da	Q-CTRL-ARMING-FIRST+DEAF+X5b	PLANT-FAILED
+unknown build Q-CTRL-DEAF-AFTER-LOAD
+079284d9	Q-CTRL-DEAF-AFTER-LOAD+X5b	PLANT-FAILED
+unknown build Q-CTRL-ARMING-FIRST
+079284d9	Q-CTRL-ARMING-FIRST+DEAF+X5b	PLANT-FAILED
+6cd25079	CONTROL	exit=0	 Tests 11 passed (11)	lint=0	tsc=0	FAILED:
+d83a7e4d	CONTROL	exit=0	 Tests 11 passed (11)	lint=0	tsc=0	FAILED:

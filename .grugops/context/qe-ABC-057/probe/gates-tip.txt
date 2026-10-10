@@ -1,0 +1,16 @@
+tip 00aad4da node v26.11.0 load1 2.12
+npm run lint exit=0
+Checked 98 files in 119ms. No fixes applied.
+npm run typecheck exit=0
+npm run build exit=0
+npm test exit=0
+ Test Files  51 passed (51)
+      Tests  1583 passed (1583)
+   Duration  6.71s (transform 1.25s, setup 0ms, collect 9.25s, tests 10.86s, environment 9ms, prepare 1.72s)
+skip-count=0
+No findings.
+integrity exit=0
+The lane collects 51 test files; git tracks 51.
+No findings.
+lane-inventory exit=0
+load1 6.27
