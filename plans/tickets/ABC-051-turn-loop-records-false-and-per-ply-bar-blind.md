@@ -1,8 +1,8 @@
 ---
 id: ABC-051
 title: `ABC-021` landed and left the turn loop's own records false in four places — and its per-ply bar cannot see the derive the loop now makes
-status: in-development
-column: In Development
+status: backlog
+column: Backlog
 size: S
 priority: P2
 epic: EPIC-002

@@ -1,5 +1,7 @@
 # Board
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`, subtask `board-audit-2026-10-10`, Workflow 09, 2026-10-10T08:04:25Z) — **board audit against the record.** `ABC-127` row lands in `In Development` (1/3) as pulled at `f9689e7`. 34 ticket pages' `status:`/`column:` synced to this board (33 → `Done`, `ABC-074` → `Blocked`); the six pages under re-score and new `ABC-127` left alone. Stale dependency text dated on `ABC-085`/`087`/`093`/`095`/`057`–`060`/`126`/`055`; `ABC-074` re-checked, still blocked, dated and escalated. No DoR re-scored, no acceptance text changed, no other ticket moved. Findings: note under `.grugops/context/board-audit-2026-10-10/`._
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-051` build stopped at re-verification (premise moved; merged stop `7eee6fb`) → `Backlog`; BA/PM `recut-abc051` dispatched._
+
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-036` `In Review` → `Ready for UAT` (QE PASS_WITH_GAPS `06b03dc`); owner acceptance owed. `ABC-051` pulled → `In Development` (no file overlap with `ABC-127`/`ABC-036`)._
 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-036` `In Development` → `In Review` (built `a261966`); QE `qe-ABC-036` dispatched._
@@ -413,6 +415,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 
+- [ABC-051] ABC-021 left the turn loop's own records false in four places, and its per-ply bar blind to the derive the loop now makes  (BA/PM, S, P2, epic: EPIC-002, since: 2026-08-13, **DoR 10/10**; TWO of the six sites were reported by nobody; NOT a re-open — a gap found after a merge becomes a new ticket) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-051`, branch `grugops/ABC-051-turn-loop-records`); DoR 10/10 dates from 2026-08-13 — the build re-verifies the six sites first and stops if the premise moved. **2026-10-10 build STOPPED at re-verification (`7eee6fb`, no code): site 1 already true; site 2 premise moved — `ADR-0021` (accepted) counts 18 transitions, the ticket's rule gives 19; A2 overlaps merged A8. → back to Backlog, BA/PM re-cut `recut-abc051` dispatched.**
 
 - [ABC-119] No automated test anywhere spawns the delivered CLI and lets the REAL engine choose a move — the product's strongest end-to-end evidence is a transcript  (BA/PM, **M, P2**, epic: EPIC-006, since: 2026-08-21, **DoR 9/10 ⚠️x1 — PULLABLE TODAY; the ⚠️ is item 5 and it is a DISCLOSED CONDITIONAL HAND-OFF with a named stop, not an open question.**) `G-06`, cut from QE/E2E's gap register at `quality-gate-ABC-043-qe-2026-08-19` and handed forward unchanged by a second QE hop at `qe-ABC-043-review-exit-2026-08-20` — **two QE hops named it, neither cut it, and this is the first BA/PM hop to see it.** **`ABC-043` IS NOT RE-OPENED AND IS NOT DEFECTIVE — it declared and fenced this exclusion in three places before any gate ran.** **`ENGINE_DEEP` does NOT close it** (it drives `chooseMove`/`createEngine` in-process as a unit and never spawns the CLI). **PRICED, which is what made it cuttable:** a real-engine child re-measured here at **3.09/3.07/3.07 s wall, 3.19 s user** breaches `N8-SPAWN`'s in-force per-child CPU clause **~10.6x** and its added-wall clause **1.5x**, into a count already AT its `17 + 7 = 24` ceiling and a lane already over `NFR-008` (read here at ~4.1–4.3 s wall / ~16.5–17.3 s CPU). **RULED: an opt-in lane on the four-lane precedent, priced OUT of the default lane at a MEASURED +0.09 s wall / +0.06 s CPU** (median of 5 interleaved paired rounds, sign 4/5, skip count 0). **Two construction traps MEASURED at the cut so the obvious build is not attempted twice: `describe.runIf` REPORTS A SKIP (moves the gate's count off 0, and `.grugops/test-skips.md` is human-owned), and a new file registering nothing when the variable is unset FAILS the default lane with `No test suite found in file`.** `A3` bars any assertion naming a move, score, depth or node count. **NAMING TRAP: `G6` (no hyphen) is a DIFFERENT and CLOSED item; `G-QE115-1..5` are unrelated.**
 
@@ -480,10 +483,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 
 - [ABC-127] Harder puzzles — catch the weakenings ABC-084's suite misses, and leave headroom below the ceiling  (EPIC-004, M, P1, since: 2026-10-10, DoR 9/10 ⚠️x1 — item 3, `A3`'s ≥ 6-of-10 bar, read non-blocking by the Orchestrator: measurable, with a stop rule) **→ In Development 2026-10-10.** Cut by BA/PM on the owner's word (`…e47a1c08`; `cut-harder-puzzles`, note `…5fefe3f1`, merged `ab87d8a`); pulled by the Orchestrator at `f9689e7` (subtask `ticket-to-pr-ABC-127`, branch `grugops/ABC-127-harder-puzzles`). `ABC-126` follows it.
-- [ABC-051] ABC-021 left the turn loop's own records false in four places, and its per-ply bar blind to the derive the loop now makes  (BA/PM, S, P2, epic: EPIC-002, since: 2026-08-13, **DoR 10/10**; TWO of the six sites were reported by nobody; NOT a re-open — a gap found after a merge becomes a new ticket) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-051`, branch `grugops/ABC-051-turn-loop-records`); DoR 10/10 dates from 2026-08-13 — the build re-verifies the six sites first and stops if the premise moved.
 
 
 
