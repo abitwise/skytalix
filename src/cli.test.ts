@@ -31,6 +31,8 @@
 
 import { spawnSync } from "node:child_process";
 import { lstatSync, readdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import type * as Ts from "typescript";
 import { describe, expect, it, vi } from "vitest";
 import { ACCEPTED_ARGUMENTS, type ResolvedOptions, resolveOptions } from "./cli-options.ts";
 import { QUIT_CONFIRMATION_MESSAGES } from "./command-input.ts";
@@ -1838,16 +1840,93 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // THE PIN ABOVE IS SELF-REFERENTIAL: `spawned` counts only children made through `childOf`, so
     // a direct `spawnSync` adds a child the counter never sees, and that build was green. The child
     // count is the instrument the spawn account rests on (no `N8-LANE` line is claimed in this
-    // file — see above) — so the count is closed at its source rather than at the wrapper:
-    // `spawnSync` is the ONLY name this file takes from `node:child_process`, and it has exactly
-    // one call site. Both are counted over EXECUTABLE CODE, COMMENTS STRIPPED (`ABC-058` `S5`), so
-    // a comment that names the call in prose cannot red a correct file.
-    const self = executableCodeOf("cli.test.ts");
-    const imported = [...self.matchAll(/import\s*\{([^}]*)\}\s*from\s*"node:child_process"/g)].map(
-      (match) => (match[1] as string).trim(),
+    // file — see above) — so the count is closed at its source rather than at the wrapper, over THE
+    // TYPESCRIPT PARSER'S VIEW of this file and never over its text (`ABC-133`):
+    //   (i) exactly ONE module-specifier position names `child_process` — a static `import`,
+    //       `export … from`, `import()` or `require()` — and it binds `spawnSync` ALONE: no
+    //       namespace, no default, no rename;
+    //   (ii) exactly ONE call's callee resolves to a name that import binds, or to a member of one,
+    //       and it is the call in `childOf`.
+    // A string, template or comment is not a specifier or a call in that view, so prose cannot red a
+    // correct file (`ABC-058` `A1`) and a `"//"` or `"/*"` string cannot hide a real call — which the
+    // regex comment strip this replaces could (`Q11`-`Q13`; `P1`, a namespace `execSync`, was never
+    // counted at all). THE BOUND IT KEEPS (`Q14`): a callee that is neither a bound name nor a member
+    // of one — a VARIABLE ALIAS, `const alias = spawnSync; alias(…)` — is not seen; resolving it
+    // needs data flow. One load and one parse per run of this file, both here. The load is
+    // `createRequire`, not an ESM `import`: under vitest the `import` measured ~205 ms CPU against
+    // ~85 ms (`ABC-133` `A4`).
+    const ts: typeof Ts = createRequire(import.meta.url)("typescript");
+    const view = ts.createSourceFile(
+      "cli.test.ts",
+      sourceOf("cli.test.ts"),
+      ts.ScriptTarget.Latest,
+      true,
     );
-    expect(imported).toEqual(["spawnSync"]);
-    expect(self.match(/\bspawnSync\s*\(/g)).toHaveLength(1);
+    const namesChildProcess = (node: Ts.Node | undefined): boolean =>
+      node !== undefined &&
+      ts.isStringLiteralLike(node) &&
+      /^(node:)?child_process$/.test(node.text);
+    const specifiers: string[][] = [];
+    const bound = new Set<string>();
+    const callees: [Ts.LeftHandSideExpression, boolean][] = [];
+    const visit = (node: Ts.Node): void => {
+      if (
+        (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
+        namesChildProcess(node.moduleSpecifier)
+      ) {
+        const clause = ts.isImportDeclaration(node) ? node.importClause : undefined;
+        const named = clause?.namedBindings;
+        const binds: [shown: string, local: string][] = [];
+        if (clause?.name !== undefined) {
+          binds.push([`default ${clause.name.text}`, clause.name.text]);
+        }
+        if (named !== undefined && ts.isNamespaceImport(named)) {
+          binds.push([`* as ${named.name.text}`, named.name.text]);
+        }
+        if (named !== undefined && ts.isNamedImports(named)) {
+          for (const { propertyName, name } of named.elements) {
+            const shown =
+              propertyName === undefined ? name.text : `${propertyName.text} as ${name.text}`;
+            binds.push([shown, name.text]);
+          }
+        }
+        for (const [, local] of binds) bound.add(local);
+        specifiers.push(binds.map(([shown]) => shown));
+      }
+      if (ts.isCallExpression(node)) {
+        const callee = node.expression;
+        if (
+          (callee.kind === ts.SyntaxKind.ImportKeyword ||
+            (ts.isIdentifier(callee) && callee.text === "require")) &&
+          namesChildProcess(node.arguments[0])
+        ) {
+          specifiers.push([]);
+        }
+        const inChildOf = ts.findAncestor(
+          node,
+          (ancestor) =>
+            ts.isVariableDeclaration(ancestor) && ancestor.name.getText(view) === "childOf",
+        );
+        callees.push([callee, inChildOf !== undefined]);
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(view);
+    expect(specifiers, "child_process specifier positions and what each binds").toEqual([
+      ["spawnSync"],
+    ]);
+    const resolved = callees
+      .filter(
+        ([callee]) =>
+          (ts.isIdentifier(callee) && bound.has(callee.text)) ||
+          ((ts.isPropertyAccessExpression(callee) || ts.isElementAccessExpression(callee)) &&
+            ts.isIdentifier(callee.expression) &&
+            bound.has(callee.expression.text)),
+      )
+      .map(([callee, inChildOf]) => `${callee.getText(view)}${inChildOf ? " in childOf" : ""}`);
+    expect(resolved, "calls that resolve to a child_process binding").toEqual([
+      "spawnSync in childOf",
+    ]);
   });
 });
 

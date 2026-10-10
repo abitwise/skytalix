@@ -1,0 +1,12 @@
+Security/NFR ABC-133 probes (subtask secnfr-ABC-133). Trees live in a private scratch dir, never in the repo.
+Node v26.11.0, typescript 5.9.3, Apple M3. load1 is beside each reading in each output.
+
+plants.sh <repo> <commit> <label> <scratch-dir>   -> plants-head.out.txt (e542c574), plants-base.out.txt (8be650e6)
+    9 plants alone per run: control, Q11, P1, P-DYN, X5, C7, S1 (+ tsc), S2, S3. mutate.cjs = QE's, byte-identical.
+loader-scan.mjs <file>                             -> loader-scan.out.txt
+    (a) calls with a (node:)child_process first argument, (b) createRequire sites, (c) value-position
+    `spawnSync` identifiers. The check behind AR-133-LOADER's and AR-133-WRAP's promotion triggers.
+a4.sh <repo> <commit> <n> <scratch-dir>            -> a4-require.out.txt (9 processes, round 0 discarded, summary line)
+    adapted from qe-ABC-133/probe/a4.sh (tree and raw file moved to the scratch dir; delivered form only).
+a5.out.txt     A5 / N8_SPAWN / V1.2.5 re-read (git diff, numstat, grep).
+gates.txt      lint, typecheck, build, npm test, skip count, test-skip-integrity, in the hop's worktree at e542c574.

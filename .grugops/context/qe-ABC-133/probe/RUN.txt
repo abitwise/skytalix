@@ -1,0 +1,19 @@
+QE ABC-133 probes. <repo> = the main checkout. Trees are `git archive` copies with node_modules symlinked (not kept).
+Base 8be650e6 (the engineer's branch point). Head 82104f70 (src/ byte-identical to the code commit cd594b5f). Apple M3 (8 cpu), Node v26.11.0, typescript 5.9.3.
+
+plants.sh <commit> <label>     one plant at a time, `npx vitest run src/cli.test.ts` alone, load1 before each, tree restored + diff-checked.
+                                Recipes copied from qe-ABC-058/probe/mutants.sh (Q8-Q14, E-MS1, E-MS2, E-A1) and secnfr-ABC-058/probe/pin-gaps.sh (P1, P2);
+                                P-DYN and S-CTRL from the page; X* (specifier spellings) and C* (call shapes) are QE-133's own.
+                                -> plants-head.out.txt (82104f70), plants-base.out.txt (8be650e6). summarize.mjs -> summary.txt (one row per plant).
+                                X2c in plants-*.out.txt is a RECIPE ERROR (`run` collides with the file's own helper at :657); re-run fixed in plants2.
+plants2.sh                      X2c fixed (`spawnSync as runChild`), and SOFT runs: count (i)'s expect made `expect.soft` so count (ii) also reports
+                                (P1, Q13, X1, X2, X9, soft-only control). -> plants2-head.out.txt
+mutate.cjs                      QE-058's, byte-identical (each anchor must occur exactly once).
+a4.sh <commit> <variant> <n>    A4 IN SITU: three process.cpuUsage marks planted around the DELIVERED pin's own lines (before the load, after it,
+                                before the final expect), n fresh `npx vitest run src/cli.test.ts`, load1 logged; round 0 discarded by the reader.
+                                variant require = as delivered -> a4-require.out.txt; variant esm = load swapped for `await import("typescript")`,
+                                the `it` made async -> a4-esm.out.txt. Columns: round load1 load_ms total_ms specifiers resolved tests.
+load-form.sh / load-form.mjs    plain node, the load alone, createRequire vs ESM import, 9 rounds interleaved -> load-form.out.txt
+literals.cjs <file>             A2: every (node:)child_process string-like literal, by line, and whether it is a module specifier
+c9-tagged.out.txt               does spawnSync`true` spawn? (no: ERR_INVALID_ARG_TYPE)
+gates.txt / raw-npm-test.txt    gate outputs at 82104f70 (QE worktree)

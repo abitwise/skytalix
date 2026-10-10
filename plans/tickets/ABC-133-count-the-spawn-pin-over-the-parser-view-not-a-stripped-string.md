@@ -187,3 +187,132 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `9ddd6e80`. **Res
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P3`, with its `P1` trigger |
 | 10 | no major unresolved blocker | **✅** none. The order behind `ABC-059` is a pull order, not a blocker |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-133`).
+- Branch `grugops/ABC-133-spawn-pin-parser-view`, from `8be650e6`. The code is `cd594b5f`
+  (`src/cli.test.ts` +88/−9, two hunks: the import block and the pin).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-133/` (`…a530d175`,
+  `…ccb75b95`, `probe/`) and are not restated here.
+
+**`A1`–`A5` are met. No stop condition fired.**
+- The premise held at `8be650e6`: the pin is at `:1835-1850`, `N8_SPAWN` is 27, and the file is
+  changed only by `ABC-059`'s insertion.
+- `AR-058-STRIP` did not fire on this diff: no `//` or `/*` literal was added, and no
+  `node:child_process` form.
+
+| # | verdict | reading (plants out of tree; base `8be650e6` → delivered `cd594b5f`) |
+|---|---|---|
+| `A1` | MET | `Q11`, `Q12`, `Q13`, `P1` and `P-DYN`: GREEN 67/67 → **RED 1/67**, the pin row alone. `P1` reds on both counts |
+| `A2` | MET | The unmutated file is green, and (i) reads 1 position (`:1706` not counted). `MS1`/`MS2` stay RED. The prose plant and the string control stay GREEN |
+| `A3` | MET | `Q14` is **GREEN** at delivery. The pin's comment names a variable alias as the bound it does not see |
+| `A4` | MET | `createRequire` load + one parse and walk, n = 8 of 9 fresh processes. Median **162.0 ms** CPU in plain node (load1 8.6) and **156.5 ms** in a vitest worker (load1 9.7–10.2). Both ≤ 250 ms. It runs once per run of the file |
+| `A5` | MET | `git diff --name-only` = `src/cli.test.ts`; manifest numstat empty; 0 files added; 0 production lines; 0 `it` added; `N8_SPAWN` 27. The `ABC-042` `A1` row, `ABC-065` block and `ABC-059` block hash identically |
+
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. The skip count
+  is 0, and integrity reads `No findings.` `lane-inventory.js` is exit 0 with no findings.
+- **Load form.** `typescript` is loaded with `createRequire`, inside the pin's `it`.
+  - An ESM `import` measured ~205 ms CPU for the load under vitest, against ~85 ms. That form put
+    the in-file total near 280 ms.
+  - Decision `…a530d175` item 5 has the readings.
+- **Side effect.** `QE-058-e` is closed: `Q8`, template text naming `spawnSync(`, no longer reds a
+  correct file. `Q9`, a real call in an interpolation, stays RED.
+- **Cost (`ADR-0035`, proposed; narrow set `src/cli.test.ts`, twin control, n = 8).**
+  - **Both sets are admissible**: the twin reads −0.73 % / −0.22 %, sign 2/8 / 3/8, R 0.582 /
+    0.371 s, at load1 median 7.7 / 6.5.
+  - Head − base is **+0.144 s / +0.089 s** CPU (intervals −0.005..+0.290 / −0.059..+0.203).
+  - No `N8-LANE` state is written: 0 files added, and the content bound is `A4`.
+- **Next.**
+  - QE's hop.
+  - The Security/NFR hop the page recommends (`V1.2.5`'s instrument changed).
+  - The UAT waiver applies if zero production lines holds (measured 0).
+
+## QE 2026-10-10 (QE/E2E, `qe-ABC-133`, Workflow 04 review exit): PASS_WITH_GAPS
+
+Reviewed `8be650e6..82104f70`, code `cd594b5f`. Every reading is QE's own, taken in fresh
+`git archive` trees with QE's own plants. **`A1`–`A5` are MET. No test was added.**
+
+- **`A1`**: `Q11`, `Q12`, `Q13`, `P1` and `P-DYN` are GREEN 67/67 at base and RED 1/67 at head.
+  The red is the `N8-LANE` row alone, on the pin's own assertions. Soft re-runs show `P1` and `Q13`
+  red both counts.
+- **`A2`**: the unmutated file is green, and count (i) reads 1 of 2 literals (`:32`, `:1708`).
+  `E-MS1`/`E-MS2` are RED. The prose plant and the string control are GREEN.
+- **`A3`**: `Q14` is GREEN. The comment names the variable alias (`:1853-1854`).
+- **`A4`**: timed in situ on the delivered pin, n = 8 of 9 fresh vitest processes. The median is
+  **173.2 ms** CPU at load1 median 10.1, against 250. The ESM form would read 268.1 ms.
+- **`A5`**: one path, 0 manifest bytes, 0 files added, 0 production lines, 67 `it`, and
+  `N8_SPAWN` 27.
+- **Plants**: 49 on head and base, plus 6 soft re-runs. Every `child_process` spelling and call
+  shape the brief named reds, except those in the gaps below. There is no false count on
+  `RegExp.exec`, a local `.execSync`, value strings or a lookalike path.
+- **The engineer's decisions** are **endorsed**: binding-list specifiers, callee resolution, and
+  `createRequire` inside the `it`. The ESM gap is now partly explained: +41 ms of it shows up in
+  plain node, and the remaining ~+67 ms only under vitest. The mechanism is `UNKNOWN - verify`. It
+  does not matter here, because the choice rests on the `A4` measurement.
+- **Gates**: lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. Skip is 0,
+  integrity reads `No findings.`, and `lane-inventory.js` reports no findings.
+
+**Gaps (none fails a criterion; every hole was green at base too, so no kill was traded):**
+- **`QE-133-a` LOW.** Count (i) recognises only `import` and `require` as loaders.
+  `createRequire(import.meta.url)("node:child_process")` (the shape this ticket's own load line
+  uses), `process.getBuiltinModule(…)` and `vi.importActual(…)` stay green.
+- **`QE-133-b` LOW.** Count (ii) does not unwrap a callee. `(spawnSync)()`, `(0, spawnSync)()`,
+  `spawnSync!()` and `(spawnSync as …)()` stay green. `!` and `as` are named nowhere.
+- **`QE-133-c` INFO.** `Reflect.apply` is the alias class. A tagged template cannot spawn.
+- **`QE-133-d` INFO, fail-loud.** `import type … from "node:child_process"` now reds, while
+  `typeof import(…)` does not.
+- **`QE-133-e` INFO, fail-loud.** A shadowed `spawnSync` reds, as stated.
+- **`QE-133-f` INFO.** `A4` has ~31 % headroom. One single round read 254.4 ms. Nothing in the file
+  guards the load form except the comment.
+
+The board move is the Orchestrator's. The Security/NFR hop is recommended by the page. Readings are
+in `.grugops/context/qe-ABC-133/notes/` (`…27801a15` decision, `…71511fc2` readings, `…f589327d`
+gaps) and `probe/`.
+
+## Security/NFR 2026-10-10 (`secnfr-ABC-133`, Workflow 05 Security/NFR gate): PASS_WITH_RISKS
+
+Reviewed `8be650e6..e542c574`, code `cd594b5f`. ASVS L1, `block_on` high. Every reading is this hop's
+own, taken in fresh `git archive` trees. **Nothing blocks. No fix is required, and no test was added.**
+
+- **The pin still discharges what rests on it.**
+  - **`N8-SPAWN` 27:** the count clause stays mechanically pinned. Across 58 plants from two hops, no
+    real-call or real-load shape is red at base and green at head.
+  - **`AR-058-STRIP` is DISCHARGED** when this merges. `Q11`, `P1` and `P-DYN` reproduce RED on the
+    pin row alone.
+  - **`V1.2.5 [L1]` stays MET.** There is one call site, no `exec*` and no `shell:`. The bar 1b
+    sentence is now pinned.
+- **`ABC-041` (a)–(d) are quiet.** There is no manifest change, no production file, no network,
+  write or spawn, and only one path.
+- **`QE-133-a`: LOW, accepted as `AR-133-LOADER`, owner BA/PM.**
+  - **Why it is routed rather than only accepted.** This ticket put the `createRequire` template into
+    the file. `src/glyph-mode.nfr.test.ts:37` already uses `vi.mock("node:child_process")`.
+  - This hop found one more loader, `S1`: `import cp = require(…)`. It is green under vitest, but the
+    `typecheck` gate refuses it (TS1202).
+- **`QE-133-b`: LOW, accepted as `AR-133-WRAP`, owner BA/PM.** The wrappers are non-idiomatic, and
+  the comment's stated class contains them.
+- **Promotion triggers for both risks.** The check is
+  `node .grugops/context/secnfr-ABC-133/probe/loader-scan.mjs src/cli.test.ts`. A risk is promoted,
+  and its part of `F-133-1` becomes P1, when the check reads:
+  - for `AR-133-LOADER`: any `child_process`-argument call, or a `createRequire` site beyond the pin's;
+  - for `AR-133-WRAP`: more than two value-position `spawnSync` references.
+- **Recommended follow-up `F-133-1` (LOW, P3; BA/PM cuts or declines):**
+  - **(a)** count (i) counts any call with a `child_process` first argument;
+  - **(b)**, BA/PM's call: bound names occur in value position only as the binding and the `childOf`
+    callee. That kills `QE-133-b`, `Q14` and `Reflect.apply`, and it reverses this page's `Q14` line.
+- **`QE-133-f`: INFO.**
+  - **`A4` is MET** at **192.3 ms** in situ, at load1 11.3, with 23 % headroom. The margin is
+    load-sensitive.
+  - **`NFR-008`'s state does not move.** It has been BREACHED since 2026-09-25, and the decision is
+    with the owner under `ADR-0035` decision 6. The added ~0.17–0.19 s is reported, not ruled.
+  - **`N8-LANE` is not at risk.** Every reading is far under 650 ms.
+  - **No in-file guard is owed.** A re-time trigger is written instead: re-time when the load line,
+    the parse count or the `typescript` version changes.
+- **Gate:** lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. Skip is 0, and
+  integrity reads `No findings.`
+- **Next:** the Orchestrator moves this ticket to `Ready for UAT`; UAT is waived under the
+  zero-production-lines rule. BA/PM cuts or declines `F-133-1`. Not merged, not pushed.
+
+Notes are in `.grugops/context/secnfr-ABC-133/notes/`: `…0f608f0c` (decision) and `…1457cc94`
+(readings). Probes are in `probe/`.

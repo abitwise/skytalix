@@ -1,0 +1,25 @@
+ABC-133 build probes. <repo> = the main checkout; <scratchpad> = the SE's private scratchpad. Trees are `git archive` copies with node_modules symlinked.
+Base 8be650e6 (wave tip at pull). Delivered code cd594b5f. Machine Apple M3, Node v26.11.0, typescript 5.9.3.
+
+plants.sh <commit> <label>       fresh tree, one plant at a time, `npx vitest run src/cli.test.ts`, load1 before each run; tree restored from a pristine copy, diff-checked.
+                                  Recipes: QE's qe-ABC-058/probe/mutants.sh (Q8-Q14, E-MS1, E-MS2, E-A1), Security/NFR's secnfr-ABC-058/probe/pin-gaps.sh (P1),
+                                  the page's P-DYN and string control (S-CTRL). mutate.cjs is QE's, copied unchanged (each anchor must occur exactly once).
+                                  -> plants-base.out.txt (8be650e6), plants-head.out.txt (cd594b5f)
+plants-reasons.out.txt           the assertion message for P1, Q11, P-DYN on cd594b5f (`-t "N8-LANE"`)
+plants-counts.out.txt            a4-cost.mjs's two counts (specifiers, resolved) per plant on the cd594b5f tree: which count each plant moves
+a4-cost.mjs <tree>               A4: process.cpuUsage of loading typescript (createRequire) + one parse and walk of src/cli.test.ts; the delivered walk transcribed to JS,
+                                  printing its two counts as a transcription check
+a4-cost.out.txt                  9 fresh plain-node processes, round 0 discarded (cd594b5f)
+a4-cost-in-vitest.out.txt        the same module run inside a vitest worker, 9 fresh `npx vitest run` processes, round 0 discarded (cd594b5f)
+a4-in-vitest.out.txt             5 vitest runs, ESM `await import("typescript")` + parse (why the load is createRequire)
+a4-in-vitest-require.out.txt     5 vitest runs, createRequire + parse (the comparison)
+timing.sh <base> <head> 9 <tsv>  ADR-0035 (proposed) narrow set src/cli.test.ts; base/head/twin, counts 67/67/67 asserted, twin `diff -r -x node_modules` identical;
+                                  ABC-059's harness with the count and the diff exclude changed. score.mjs is ABC-058's/ABC-059's, unchanged.
+                                  -> timing-set{1,2}.tsv/.log, score-set{1,2}.out.txt (8be650e6 vs cd594b5f)
+scan-literals.out.txt            Security/NFR's secnfr-ABC-058/probe/scan-literals.mjs on base and delivered trees (AR-058-STRIP trigger check)
+a5.out.txt                       name-only, numstat, manifest numstat, added/deleted files, zero-production-lines grep, it( count, N8_SPAWN, added-line greps, region hashes, hunks
+regions.sh / regions-before.txt  sha256 of ABC-042's A1 row, ABC-065's describe and ABC-059's describe, before (8be650e6) and after (in a5.out.txt)
+raw-npm-test.txt / raw-lane-inventory.txt  gate outputs at cd594b5f (worktree)
+
+Not kept: the first build commit 68f6dd7f (ESM `import ts from "typescript"`, squashed into cd594b5f). Its plant run matched cd594b5f row for row; its narrow-set
+set (twin -0.27 %, 3/8, R 0.155 s; head - base +0.358 s, interval +0.281..+0.482, load1 7.0) is quoted in the observation note, the raw tsv was overwritten.

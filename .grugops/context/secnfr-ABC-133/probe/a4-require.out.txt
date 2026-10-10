@@ -1,0 +1,12 @@
+# commit e542c574 variant require node v26.11.0 2026-10-10T14:35:13Z
+# round load1 load_ms total_ms specifiers resolved tests
+0 11.90 105.578 204.738 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+1 11.51 108.663 201.651 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+2 11.51 100.561 193.124 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+3 11.07 111.057 211.672 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+4 10.66 122.017 230.542 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+5 10.29 98.957 191.438 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+6 12.03 84.653 144.46 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+7 11.47 91.263 177.011 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+8 11.03 91.918 160.145 [["spawnSync"]] ["spawnSync in childOf"] | Tests 67 passed (67)
+# summary (rounds 1-8, round 0 discarded): n=8 total median 192.3 ms (range 144.46-230.542), load median 99.8 ms, parse+walk median 92.5 ms, load1 median 11.27 (10.29-12.03); headroom to 250 ms 23.1 %

@@ -1,0 +1,55 @@
+commit 82104f70  node v26.11.0  2026-10-10T14:20:46Z
+== control (unmutated)   load1 8.06  14:20:46Z
+      Tests  67 passed (67)
+== X2c (fixed) rename the one import: spawnSync as runChild   load1 7.65  14:20:51Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1916:81
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync as runChild' ] ] to deeply equal [ [ 'spawnSync' ] ]
+== SOFT P1 (count (i) made soft so (ii) also reports)   load1 13.36  14:20:56Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1918:86
+ ❯ src/cli.test.ts:1930:71
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: calls that resolve to a child_process binding: expected [ 'cp.execSync', …(1) ] to deeply equal [ 'spawnSync in childOf' ]
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [ '* as cp' ] ] to deeply equal [ [ 'spawnSync' ] ]
+== SOFT Q13   load1 12.53  14:21:00Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1918:86
+ ❯ src/cli.test.ts:1930:71
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: calls that resolve to a child_process binding: expected [ 'cp.spawnSync', …(1) ] to deeply equal [ 'spawnSync in childOf' ]
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [ '* as cp' ] ] to deeply equal [ [ 'spawnSync' ] ]
+== SOFT X2 default import + cpd.execSync   load1 11.77  14:21:05Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1918:86
+ ❯ src/cli.test.ts:1930:71
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: calls that resolve to a child_process binding: expected [ 'cpd.execSync', …(1) ] to deeply equal [ 'spawnSync in childOf' ]
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [ 'default cpd' ] ] to deeply equal [ [ 'spawnSync' ] ]
+== SOFT X1 bare second import + execSync   load1 11.39  14:21:10Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1918:86
+ ❯ src/cli.test.ts:1930:71
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: calls that resolve to a child_process binding: expected [ 'execSync', 'spawnSync in childOf' ] to deeply equal [ 'spawnSync in childOf' ]
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [ 'execSync' ] ] to deeply equal [ [ 'spawnSync' ] ]
+== SOFT X9 import() then m.execSync (m is NOT a binding)   load1 15.01  14:21:18Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1917:86
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+== SOFT control (soft only, unmutated otherwise)   load1 14.12  14:21:22Z
+      Tests  67 passed (67)

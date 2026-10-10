@@ -1,0 +1,41 @@
+commit 8be650e6  node v26.11.0  2026-10-10T13:49:04Z
+== control (unmutated)   load1 4.97  13:49:04Z
+      Tests  67 passed (67)
+== Q11 REAL call after a "//" string on the same line   load1 4.89  13:49:08Z
+      Tests  67 passed (67)
+== Q12 REAL call between "/*" and "*/" strings   load1 4.82  13:49:12Z
+      Tests  67 passed (67)
+== Q13 MS2 + call hidden after "//" string   load1 4.83  13:49:16Z
+      Tests  67 passed (67)
+== P1 namespace import + cp.execSync (a shell child)   load1 4.93  13:49:20Z
+      Tests  67 passed (67)
+== P-DYN module-level dynamic import   load1 4.93  13:49:24Z
+      Tests  67 passed (67)
+== E-MS1 direct spawnSync child   load1 4.93  13:49:29Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1852:45
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== E-MS2 namespace import   load1 4.86  13:49:34Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1850:22
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== E-A1 prose docblock names `spawnSync(`   load1 4.86  13:49:39Z
+      Tests  67 passed (67)
+== S-CTRL string control, no call   load1 9.04  13:49:43Z
+      Tests  67 passed (67)
+== Q14 REAL call through an alias (out of scope)   load1 8.71  13:49:47Z
+      Tests  67 passed (67)
+== Q8 template-literal TEXT `spawnSync(` (not a call)   load1 8.66  13:49:51Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1852:45
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== Q9 REAL call inside a template interpolation   load1 8.12  13:49:55Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1852:45
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== Q10 // line comment names `spawnSync(`   load1 7.95  13:49:59Z
+      Tests  67 passed (67)

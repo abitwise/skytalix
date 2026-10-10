@@ -1,0 +1,5 @@
+load1 6.40 IN-VITEST load 201.9 ms, parse+walk 76.1 ms, nodes 12147
+load1 6.40 IN-VITEST load 207.9 ms, parse+walk 66.1 ms, nodes 12147
+load1 6.40 IN-VITEST load 197.0 ms, parse+walk 65.0 ms, nodes 12147
+load1 6.40 IN-VITEST load 211.3 ms, parse+walk 82.7 ms, nodes 12147
+load1 6.40 IN-VITEST load 207.4 ms, parse+walk 77.5 ms, nodes 12147

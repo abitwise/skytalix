@@ -1,0 +1,38 @@
+commit e542c574  node v26.11.0  2026-10-10T14:32:34Z
+== control (unmutated)   load1 8.51  14:32:34Z
+      Tests  67 passed (67)
+== Q11 real spawnSync after a "a//b" string   load1 8.23  14:32:40Z
+     → calls that resolve to a child_process binding: expected [ 'spawnSync', 'spawnSync in childOf' ] to deeply equal [ 'spawnSync in childOf' ]
+      Tests  1 failed | 66 passed (67)
+    1929|     expect(resolved, "calls that resolve to a child_process binding").…
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: calls that resolve to a child_process binding: expected [ 'spawnSync', 'spawnSync in childOf' ] to deeply equal [ 'spawnSync in childOf' ]
+== P1 namespace import + cp.execSync("true")   load1 9.17  14:32:47Z
+     → child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [ '* as cp' ] ] to deeply equal [ [ 'spawnSync' ] ]
+      Tests  1 failed | 66 passed (67)
+    1918|     expect(specifiers, "child_process specifier positions and what eac…
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [ '* as cp' ] ] to deeply equal [ [ 'spawnSync' ] ]
+== P-DYN void import("node:child_process")   load1 8.74  14:32:53Z
+     → child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+      Tests  1 failed | 66 passed (67)
+    1916|     expect(specifiers, "child_process specifier positions and what eac…
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+== X5 createRequire(import.meta.url)("node:child_process").execSync (QE-133-a)   load1 8.60  14:32:59Z
+      Tests  67 passed (67)
+== C7 spawnSync!(…) (QE-133-b)   load1 8.31  14:33:05Z
+      Tests  67 passed (67)
+== S1 TS import-equals: import cp = require("node:child_process") + cp.execSync   load1 8.05  14:33:11Z
+      Tests  67 passed (67)
+   tsc: 1 error(s); first: src/cli.test.ts(33,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a}
+== S2 vi.mock partial mock via importOriginal (no new child)   load1 14.55  14:33:24Z
+      Tests  67 passed (67)
+== S3 node:module namespace createRequire("child_process").execSync   load1 13.78  14:33:32Z
+      Tests  67 passed (67)

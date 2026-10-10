@@ -1,0 +1,48 @@
+== P1
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [ '* as cp' ] ] to deeply equal [ [ 'spawnSync' ] ]
+
+- Expected
++ Received
+
+  [
+    [
+      "spawnSync",
+    ],
++   [
++     "* as cp",
++   ],
+  ]
+
+ ❯ src/cli.test.ts:1918:81
+== Q11
+AssertionError: calls that resolve to a child_process binding: expected [ 'spawnSync', 'spawnSync in childOf' ] to deeply equal [ 'spawnSync in childOf' ]
+
+- Expected
++ Received
+
+  [
++   "spawnSync",
+    "spawnSync in childOf",
+  ]
+
+ ❯ src/cli.test.ts:1929:71
+    1927|       )
+    1928|       .map(([callee, inChildOf]) => `${callee.getText(view)}${inChildO…
+    1929|     expect(resolved, "calls that resolve to a child_process binding").…
+       |                                                                       ^
+== P-DYN
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+
+- Expected
++ Received
+
+  [
+    [
+      "spawnSync",
+    ],
++   [],
+  ]
+
+ ❯ src/cli.test.ts:1916:81
+    1914|     };
+    1915|     visit(view);

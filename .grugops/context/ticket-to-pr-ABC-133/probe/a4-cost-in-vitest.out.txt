@@ -1,0 +1,11 @@
+tree cd594b5f (git archive), vitest worker, node v26.11.0, 2026-10-10T14:00:42Z
+round 0 load1 10.24 ts 5.9.3 load 81.0 ms, parse+walk 65.4 ms, total 146.4 ms; specifiers [["spawnSync"]], resolved ["spawnSync in childOf"]
+round 1 load1 10.24 ts 5.9.3 load 90.5 ms, parse+walk 68.6 ms, total 159.1 ms; specifiers [["spawnSync"]], resolved ["spawnSync in childOf"]
+round 2 load1 10.24 ts 5.9.3 load 81.6 ms, parse+walk 72.7 ms, total 154.3 ms; specifiers [["spawnSync"]], resolved ["spawnSync in childOf"]
+round 3 load1 10.24 ts 5.9.3 load 80.9 ms, parse+walk 67.5 ms, total 148.4 ms; specifiers [["spawnSync"]], resolved ["spawnSync in childOf"]
+round 4 load1 10.24 ts 5.9.3 load 96.1 ms, parse+walk 62.6 ms, total 158.7 ms; specifiers [["spawnSync"]], resolved ["spawnSync in childOf"]
+round 5 load1 9.74 ts 5.9.3 load 85.1 ms, parse+walk 75.7 ms, total 160.8 ms; specifiers [["spawnSync"]], resolved ["spawnSync in childOf"]
+round 6 load1 9.74 ts 5.9.3 load 80.3 ms, parse+walk 64.8 ms, total 145.0 ms; specifiers [["spawnSync"]], resolved ["spawnSync in childOf"]
+round 7 load1 9.74 ts 5.9.3 load 79.7 ms, parse+walk 65.2 ms, total 144.8 ms; specifiers [["spawnSync"]], resolved ["spawnSync in childOf"]
+round 8 load1 9.74 ts 5.9.3 load 100.6 ms, parse+walk 63.4 ms, total 164.0 ms; specifiers [["spawnSync"]], resolved ["spawnSync in childOf"]
+n=8 (round 0 discarded) total CPU median 156.5 ms, min 144.8, max 164; load1 median 9.99 (9.74-10.24)
