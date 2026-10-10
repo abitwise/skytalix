@@ -1,0 +1,1 @@
+specifier positions 1 ["static@32"]; string literals with that text 2 at [32,1706]

@@ -1,0 +1,18 @@
+BA/PM probe, task wave-2026-09-25, subtask postmerge-followups-2026-10-10, 2026-10-10 ~12:20-12:50Z.
+Wave tip 9ddd6e80. Apple M3, Darwin 25.5.0, Node v26.11.0. QE (qe-ABC-087) and Security/NFR (catalog) ran
+in parallel; load1 is beside each timed reading. Every plant ran in a `git archive` copy in the BA/PM
+scratchpad (node_modules symlinked), never in the worktree.
+
+  node consumers.mjs <tree>/src        -> consumers-9ddd6e80.out.txt
+      ABC-054 A4 re-read (ADR-0030 decision 2 reference read: render.ts / status-panel.ts / history-pane.ts
+      each ["render-seam.ts"]); test note 3 (12 of 35 production files hold a multi-line import);
+      AR-053-COMPOSER trigger (no production export-from / import() of ./frame.ts).
+  gaincheck (ABC-131 A8 / QE-126-b)     -> gaincheck-126.out.txt
+      git archive grugops/ABC-126-corpus-repairs (b22f6e16); ONE line added after
+      `expect(gain, puzzle.name).toBeGreaterThan(0);` in the PUZZLE_DEEP=1 win-material row:
+        console.log(`GAINCHECK|${puzzle.name}|oracle=${gain}|source=${puzzle.source.match(/\+(\d+)/)?.[1]}`);
+      PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts -t "each win-material row"  -> exit 0, 16/16 equal.
+  node ts-parse-cost.mjs <tree>  x9      -> ts-parse-cost.out.txt   (ABC-133 A4: typescript load + one parse/walk)
+  node cp-specifiers.mjs <tree>          -> cp-specifiers.out.txt   (ABC-133 test note 2: 1 specifier, 2 literals)
+  plant-one.py <tree> '<line>' + npx vitest run src/cli.test.ts -> pin-plants-9ddd6e80.out.txt
+      (ABC-133 A1/A2 base readings: control, P-DYN, string control; all 66/66 green)

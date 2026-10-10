@@ -1,0 +1,18 @@
+      Tests  1 passed | 16 skipped (17)
+GAINCHECK|discovered check: the bishop moves, Rxd8|oracle=4|source=4
+GAINCHECK|knight fork: Ne7+ wins the queen|oracle=9|source=9
+GAINCHECK|pawn fork: e5 hits knight and rook|oracle=2|source=2
+GAINCHECK|pin: Re1 pins the queen to the king|oracle=4|source=4
+GAINCHECK|queen fork: Qd5+ and Qxa8|oracle=5|source=5
+GAINCHECK|skewer: Ra6+ and Rxh6|oracle=10|source=10
+GAINCHECK|win material, seed 111: black Q+R+B+P against 2R+B+P|oracle=5|source=5
+GAINCHECK|win material, seed 1700: black R+B+N+2P against 2B+2N+P|oracle=2|source=2
+GAINCHECK|win material, seed 1706: white Q+R+2P against Q+R+2P|oracle=8|source=8
+GAINCHECK|win material, seed 1811: white 2R+N+2P against 2B+N+2P|oracle=3|source=3
+GAINCHECK|win material, seed 279: black Q+3P against R+2N+P|oracle=2|source=2
+GAINCHECK|win material, seed 5061: white B+N+4P against Q+R+2B+N+P|oracle=2|source=2
+GAINCHECK|win material, seed 5180: black R+N+P against Q+B+N|oracle=3|source=3
+GAINCHECK|win material, seed 5464: black B+P against B+N|oracle=3|source=3
+GAINCHECK|win material, seed 5527: black R+2B+2N+P against R+2N+3P|oracle=3|source=3
+GAINCHECK|win material, seed 7: black Q+P against R+N|oracle=5|source=5
+ORACLE win-material: 16 rows, wall 5.21 s

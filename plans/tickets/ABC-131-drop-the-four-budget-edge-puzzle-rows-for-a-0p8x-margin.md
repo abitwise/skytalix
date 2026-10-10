@@ -17,6 +17,14 @@ feature: —
 > ADR-0032, ADR-0034 with (b) at 0.8x"* (note `…owner-word-adrs-91c4e7a0`). That sentence is the owner's
 > word `ABC-084` `A7` requires for a lowering. **`ABC-127` is `Done` and is not re-opened** (its gate would
 > restart). Reasoning: `.grugops/context/owner-adrs-followups/notes/`.
+>
+> **Folded 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `postmerge-followups-2026-10-10`):
+> **`QE-126-b`** (LOW, routed to BA/PM by QE at `qe-ABC-126`, `b22f6e16`) becomes **`A8`**. It is
+> one assertion in the deep win-material row this ticket already runs ×3, in a file it already
+> edits. Measured before folding, on an out-of-tree copy of `ABC-126`'s tip: **16 of 16** rows'
+> `source` `+N` equal the oracle's gain, so `A8` is green on arrival and cannot stall this `P1`.
+> **Separable, like `A6`.** Still `XS`, `P1`, DoR 10/10. Reasoning:
+> `.grugops/context/postmerge-followups-2026-10-10/notes/`.
 
 ## Problem
 
@@ -48,6 +56,11 @@ some row — a reading worth the owner's time, not a false alarm. **This must la
 - **Fold `QE-127-e`** (LOW, routed to BA/PM by QE at `qe-ABC-127`, homeless since): one `PUZZLE_DEEP=1`
   row that cross-checks `unsolved` against the corpus (`A6`). It is here because this ticket re-records
   that list. **Separable:** strike `A6` and the ticket still stands.
+- **Fold `QE-126-b`** (LOW, routed to BA/PM by QE at `qe-ABC-126`). In the `PUZZLE_DEEP=1` row
+  "`ABC-127` `A2` — each win-material row … accepts EXACTLY the material-best moves, and they gain",
+  the gain is checked against the row's `source` `+N` and not only `> 0` (`A8`). One assertion goes
+  inside the existing row, and no row is added. **Separable:** strike `A8` and the ticket still
+  stands.
 
 ## Out of scope
 
@@ -96,9 +109,18 @@ some row — a reading worth the owner's time, not a false alarm. **This must la
   `solved + |unsolved| = total` (**54 + 4 = 58**). **Red first:** with one `unsolved` name misspelt in an
   out-of-tree copy of the baseline, the row is **RED**.
 - **`A7` (scope and gates).** `git diff --name-only <base>..<delivered>` lists under `src/` **exactly**
-  `src/puzzle-corpus.ts`, `src/puzzle-suite.baseline.json` and `src/puzzle-suite.test.ts` (`A6` only).
+  `src/puzzle-corpus.ts`, `src/puzzle-suite.baseline.json` and `src/puzzle-suite.test.ts` (`A6` and
+  `A8` only).
   **No trigger-list file.** Lint, typecheck, build and `npm test` exit 0; skip count 0; integrity
   `No findings.`; the default lane gains **0** test files and **0** rows.
+- **`A8` (a win-material row's `+N` is the oracle's — `QE-126-b`, folded 2026-10-10).** **Given**
+  `PUZZLE_DEEP=1`, **when** the row "`ABC-127` `A2` — each win-material row … and they gain" runs,
+  **then** for **every** `win-material` row (**16** on the tree with `ABC-126`'s rows; this ticket
+  drops none of them), the `source` holds exactly one `+N`, and `N` **equals** the gain
+  `materialBest` returns for that row. The existing `gain > 0` and accepted-set assertions stay.
+  **Red first:** QE's `M9` (`discovered check` row, `source` `+4` → `+6`, in an out-of-tree copy)
+  is **RED** on this row and names that row. QE measured it green at `b22f6e16`. **Green on the
+  delivered tree in all three `A2` processes.**
 
 ## Dependencies
 
@@ -142,17 +164,32 @@ some row — a reading worth the owner's time, not a false alarm. **This must la
    `ADR-0034`'s `classify.out.txt` on all 17 weakenings. A measured number that differs is the finding.
 4. **Expect about 10 minutes of deep runs** (17 weakenings + the 1.25 and 4× runs + 3 processes, ~20–35
    s each). Record load1 beside each.
+5. **`A8`'s numbers are measured, not inherited** (BA/PM, 2026-10-10). A `git archive` copy of
+   `grugops/ABC-126-corpus-repairs` (`b22f6e16`) had one print line added to the win-material row.
+   Under `PUZZLE_DEEP=1 -t "each win-material row"` the oracle printed **16 rows, each `+N` equal to
+   its gain** (wall 5.21 s, load1 4.40). Readings:
+   `.grugops/context/postmerge-followups-2026-10-10/probe/gaincheck-126.out.txt`. QE's `M9` recipe
+   is `.grugops/context/qe-ABC-126/probe/mutant.sh` + `plant.mjs` (on `ABC-126`'s branch until it
+   merges). Every `source` writes the gain as `+N` after the `WIN` / `WIN3` prefix. Neither prefix
+   contains a `+`.
 
 ## Size and priority rationale
 
 **Size `XS` (1).** Four deleted lines, one re-recorded JSON file, one test row. The measurements are
 scripted and their expected values are written down. **Not `S`:** no row is re-found and no oracle runs
-new.
+new. **Still `XS` after the `A8` fold** (2026-10-10): one assertion inside an existing deep row, one
+mutant run, and the deep runs this ticket already makes.
 
 **Priority `P1`.** It is the predecessor `ADR-0034` names for `ABC-083` (`P1`), so it cannot be lower.
 Not `P0`: nothing shipped is wrong; the cost of not doing it is a predictable owner stop on `ABC-083`.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM at the `QE-126-b` fold** (`postmerge-followups-2026-10-10`, wave tip
+`9ddd6e80`). **Still 10 of 10, 0 ⚠️, `Ready`.** Item 2 now covers two folded LOW gaps, each separable.
+Item 4 adds `A8`: 16/16 equalities and a named mutant RED. Item 7 has five test notes. Item 3 is
+unchanged: `A8` touches the file this ticket already edits and adds no dependency. Pull after
+`ABC-126` merges, as before.
 
 Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `246ddfc`. **Result: 10 of 10 — MET →
 `Ready`.** Pull after `ABC-126` merges.

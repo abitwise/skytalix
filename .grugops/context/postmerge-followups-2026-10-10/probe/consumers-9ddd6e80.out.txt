@@ -1,0 +1,5 @@
+render.ts ["render-seam.ts"]
+status-panel.ts ["render-seam.ts"]
+history-pane.ts ["render-seam.ts"]
+production files: 35 with a multi-line import: 12 ["apply.ts","engine.ts","evaluate.mirror-corpus.ts","evaluate.ts","fen.ts","gameend.ts","moves.ts","render.ts","san.ts","search.ts","status-panel.ts","zobrist.ts"]
+AR-053-COMPOSER trigger hits: []
