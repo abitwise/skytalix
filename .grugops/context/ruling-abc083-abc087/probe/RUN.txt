@@ -1,0 +1,23 @@
+ruling-abc083-abc087 probe. Out of tree, read-only against the worktree src/ at a5c185b
+(grugops/ruling-abc083-abc087 = grugops/wave-2026-09-25 tip). No src/ file in any checkout was modified.
+Machine: Apple M3, Darwin 25.5.0, Node v26.11.0, plain node (type stripping). 2026-10-10 08:32-08:45Z.
+Load: HIGH and recorded per row (load1 7.5-14.2; the 5-min average was 50 at the start, from the two
+parallel builds). Timing rows are therefore upper-ish; every node count, ratio and score row is
+deterministic and load-free.
+
+R1 (ABC-083) — complete-evaluation cost per call, ABC-076's method (best of 5 x N per root after an
+N/10 warm-up, six perft roots, one variant per fresh process), order base, ks, ks+attack, ks+pseudo,
+ks+legal, then reversed. N = 1,000,000 (ks+legal: 100,000):
+  for v in base ks ks+attack ks+pseudo ks+legal ks+legal ks+pseudo ks+attack ks base; do
+    node r1-cost.mjs <worktree> $v <N> >> r1-cost.out.jsonl; done
+  The king-safety and mobility terms in r1-cost.mjs are PROTOTYPES (cheapest honest shape), not the build.
+
+R3 (ABC-087) — ./r3/src is a git-archive copy of the worktree src/ with r3-copy.patch applied
+(one probe-only switch fullRoot in searchRoot, a SCORED list, and an evaluate() call counter).
+  node r3-probe.mjs <worktree> <copy> identity          # copy == worktree search(), 12/12 cells
+  node r3-probe.mjs <worktree> <copy> evalcalls         # evaluate() calls per node
+  node r3-probe.mjs <worktree> <copy> cost 3,4,5        # construction (b): full-window root vs shipped
+  node r3-probe.mjs <worktree> <copy> scores 3          # exact per-move scores, corpus184 + puzzles40
+  node r3-aggregate.mjs r3-scores-d3.out.jsonl          # what each blunder rule would play
+  node r3-probe.mjs <worktree> <copy> split 3000 5      # construction (a) on the shipped chooseMove,
+  node r3-probe.mjs <worktree> <copy> split 1000 5      #   virtual clock, one shared deadline

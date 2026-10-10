@@ -1,0 +1,2 @@
+{"set":"corpus184","positions":184,"rank2TiesBest":30,"noCandidate":1,"allEqual":0,"second_medianLoss":55,"second_P300":0.109,"uniformMiddle_meanP300":0.604,"uniformMiddle_medianOfMeanLoss":348.9,"uniformNonWorst_meanP300":0.582}
+{"set":"puzzles40","positions":40,"rank2TiesBest":15,"noCandidate":0,"allEqual":0,"second_medianLoss":100,"second_P300":0.425,"uniformMiddle_meanP300":0.55,"uniformMiddle_medianOfMeanLoss":475.3,"uniformNonWorst_meanP300":0.503}
