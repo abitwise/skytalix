@@ -1844,18 +1844,30 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // file — see above) — so the count is closed at its source rather than at the wrapper, over THE
     // TYPESCRIPT PARSER'S VIEW of this file and never over its text (`ABC-133`):
     //   (i) exactly ONE module-specifier position names `child_process` — a static `import`,
-    //       `export … from`, `import()` or `require()` — and it binds `spawnSync` ALONE: no
-    //       namespace, no default, no rename;
+    //       `export … from`, or ANY call whose first argument is a string or no-substitution
+    //       template naming it, WHATEVER THE CALLEE (`ABC-138`): `import()` and `require()`, and
+    //       equally `createRequire(…)(…)`, a local `req(…)`, `process.getBuiltinModule(…)`,
+    //       `vi.importActual(…)` and `vi.mock(…)` (`X5`-`X7`, `S2`, `S3`) — and it binds `spawnSync`
+    //       ALONE: no namespace, no default, no rename;
     //   (ii) exactly ONE call's callee resolves to a name that import binds, or to a member of one,
-    //       and it is the call in `childOf`.
+    //       and it is the call in `childOf`;
+    //   (iii) exactly TWO value-position references to a name that import binds — the binding
+    //       itself and the callee in `childOf` (`ABC-138`). A reference inside a type does not count.
+    //       No data flow is needed: a wrapped callee — `(spawnSync)()`, `(0, spawnSync)()`,
+    //       `spawnSync!()`, `(spawnSync as …)()` — a binding passed as a value to
+    //       `Reflect.apply(spawnSync, …)`, and a VARIABLE ALIAS, `const alias = spawnSync; alias(…)`,
+    //       each add a reference (`C5`-`C8`, `C10`, `Q14`).
     // A string, template or comment is not a specifier or a call in that view, so prose cannot red a
     // correct file (`ABC-058` `A1`) and a `"//"` or `"/*"` string cannot hide a real call — which the
     // regex comment strip this replaces could (`Q11`-`Q13`; `P1`, a namespace `execSync`, was never
-    // counted at all). THE BOUND IT KEEPS (`Q14`): a callee that is neither a bound name nor a member
-    // of one — a VARIABLE ALIAS, `const alias = spawnSync; alias(…)` — is not seen; resolving it
-    // needs data flow. One load and one parse per run of this file, both here. The load is
-    // `createRequire`, not an ESM `import`: under vitest the `import` measured ~205 ms CPU against
-    // ~85 ms (`ABC-133` `A4`).
+    // counted at all). THE ONE FALSE RED (i) BUYS, STATED (`ABC-138` `A4`): a call that takes the
+    // module name as its first argument is counted whatever it does — `JSON.stringify` of that name
+    // reds (`C14`) — so a hop that needs the name as a call argument spells it through a `const`, as
+    // bar 1's list does. A member name or object key spelled like a bound name, and a local that
+    // shadows one, also red (iii) — loud, never silent. THE BOUND IT KEEPS: a module name that is not
+    // a literal (computed or concatenated) is not seen. One load and one parse per run of this file,
+    // both here. The load is `createRequire`, not an ESM `import`: under vitest the `import` measured
+    // ~205 ms CPU against ~85 ms (`ABC-133` `A4`).
     const ts: typeof Ts = createRequire(import.meta.url)("typescript");
     const view = ts.createSourceFile(
       "cli.test.ts",
@@ -1870,6 +1882,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
     const specifiers: string[][] = [];
     const bound = new Set<string>();
     const callees: [Ts.LeftHandSideExpression, boolean][] = [];
+    const identifiers: Ts.Identifier[] = [];
     const visit = (node: Ts.Node): void => {
       if (
         (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
@@ -1896,11 +1909,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       }
       if (ts.isCallExpression(node)) {
         const callee = node.expression;
-        if (
-          (callee.kind === ts.SyntaxKind.ImportKeyword ||
-            (ts.isIdentifier(callee) && callee.text === "require")) &&
-          namesChildProcess(node.arguments[0])
-        ) {
+        if (namesChildProcess(node.arguments[0])) {
           specifiers.push([]);
         }
         const inChildOf = ts.findAncestor(
@@ -1910,6 +1919,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
         );
         callees.push([callee, inChildOf !== undefined]);
       }
+      if (ts.isIdentifier(node)) identifiers.push(node);
       ts.forEachChild(node, visit);
     };
     visit(view);
@@ -1927,6 +1937,13 @@ describe("ABC-042 — the shape of what was delivered", () => {
       .map(([callee, inChildOf]) => `${callee.getText(view)}${inChildOf ? " in childOf" : ""}`);
     expect(resolved, "calls that resolve to a child_process binding").toEqual([
       "spawnSync in childOf",
+    ]);
+    const references = identifiers
+      .filter((name) => bound.has(name.text) && ts.findAncestor(name, ts.isTypeNode) === undefined)
+      .map((name) => `${name.text} (${ts.SyntaxKind[name.parent.kind]})`);
+    expect(references, "value-position references to a child_process binding").toEqual([
+      "spawnSync (ImportSpecifier)",
+      "spawnSync (CallExpression)",
     ]);
   });
 });
