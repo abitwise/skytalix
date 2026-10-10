@@ -1,0 +1,13 @@
+tip NONE exit=0 files=50 tests=1540 passed=1540 failed=0 skipped=0
+M9 planted at line 384: keyHistory(history);
+tip M9 exit=1 files=50 tests=1540 passed=1537 failed=3 skipped=0
+  FAIL ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+  FAIL ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+  FAIL ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else
+       AssertionError: expected "keyHistory" to be called +0 times, but got 1 times
+M14 planted at line 388: keyHistory(history);
+tip M14 exit=0 files=50 tests=1540 passed=1540 failed=0 skipped=0
+M17 planted at line 352: keyHistory(history);
+tip M17 exit=0 files=50 tests=1540 passed=1540 failed=0 skipped=0
