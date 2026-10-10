@@ -1,0 +1,3 @@
+run 1 load1=18.45 ABC-059 it: passed 2.0416669999995065 ms
+run 2 load1=17.54 ABC-059 it: passed 3.3834999999999127 ms
+run 3 load1=16.45 ABC-059 it: passed 2.156209000000672 ms

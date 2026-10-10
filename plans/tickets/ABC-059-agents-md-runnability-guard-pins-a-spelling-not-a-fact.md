@@ -192,3 +192,35 @@ this claim now.
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P2`, promoted on the page's own trigger, with the evidence |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-059`).
+- Branch `grugops/ABC-059-runnability-guard`, from `0b6e1c25`. The code is `14c940ff`
+  (`src/cli.test.ts` +76/−0, one hunk after `ABC-065`'s `describe`).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-059/` (`…084a3e0b`,
+  `…53346fff`, `probe/`) and are not restated here.
+
+**`A1`–`A6` are met. No stop condition fired.** `AR-058-STRIP` did not fire: no `//` or `/*`
+literal was added, and no second `node:child_process` form. `N8_SPAWN` did not move, and no
+production file was touched.
+
+| # | verdict | reading (mutants rebuilt out of tree; before `0b6e1c25` → after `14c940ff`) |
+|---|---|---|
+| `A1` | MET | 3 occurrences; 0/3 spans with `UNKNOWN - verify`; 2/2 command spans name `npm run chess`; the pointer names none. The span ends at `.`/`!`/`?` + space |
+| `A2` | MET | `Q13` with its line break at the head, the tail and § Deployment posture, plus a one-line variant: GREEN 66/66 → **RED 1/67**, this row alone. A re-pointed prose command reds too |
+| `A3` | MET | The unmutated file is green with its 8 `UNKNOWN - verify` |
+| `A4` | MET | The script is the one `package.json` key whose value runs `ENTRY_POINT`'s path; no added literal spells it |
+| `A5` | MET | `ABC-042`'s `A1` row and `ABC-065`'s `describe` hash identically; the new block is `ABC-059 — …` |
+| `A6` | MET | `git diff --name-only 14c940ff~1 14c940ff` = `src/cli.test.ts`; 0 production lines; 0 children; skip 0 |
+
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. The skip count
+  is 0, and integrity reads `No findings.` `lane-inventory.js` is exit 0 with no findings.
+- **`ABC-087`'s `AGENTS.md`** (`8330651d`) reads 3 / 0-of-3 / 2-of-2 / 8, and with it swapped in,
+  `src/cli.test.ts` is 67/67 green.
+- **Cost (`ADR-0035`, proposed; narrow set `src/cli.test.ts`, twin control, n = 8).** Both sets
+  are **inadmissible**: the twin reads −5.87 % and +3.47 %, at load1 median 19.7 and 34.4. No
+  `N8-LANE` state is written. The block's own `it` runs in 2–3.4 ms (vitest's per-test duration,
+  which is not the ADR's instrument).
+- **Next.** QE's hop. The UAT waiver applies if zero production lines holds (measured 0).

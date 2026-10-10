@@ -1,0 +1,10 @@
+== grugops/wave-2026-09-25 0b6e1c25
+"Dev / run: `npm run chess` <!-- prints the board and plays a full game against the merged engine (up to 3 s/move, `DEFAULT_BUDGET_MS`)." | UNKNOWN: false | named: ["npm run chess"]
+"Dev / run\"." | UNKNOWN: false | named: []
+"Dev / run` = `npm run chess`) but changes none of this — it runs `src/cli.ts` from source, in place." | UNKNOWN: false | named: ["npm run chess"]
+occurrences 3 | UNKNOWN spans 0 | command spans 2 | UNKNOWN - verify in file 8 | bytes 24433
+== grugops/ABC-087-difficulty-levels 8330651d
+"Dev / run: `npm run chess` <!-- prints the board and plays a full game against the merged engine (up to 3 s/move, `DEFAULT_BUDGET_MS`)." | UNKNOWN: false | named: ["npm run chess"]
+"Dev / run\"." | UNKNOWN: false | named: []
+"Dev / run` = `npm run chess`) but changes none of this — it runs `src/cli.ts` from source, in place." | UNKNOWN: false | named: ["npm run chess"]
+occurrences 3 | UNKNOWN spans 0 | command spans 2 | UNKNOWN - verify in file 8 | bytes 24162

@@ -1,0 +1,6 @@
+before	control	load1=2.48	exit=0	 Tests 66 passed (66)	
+before	q13-head	load1=2.44	exit=0	 Tests 66 passed (66)	
+before	q13-tail	load1=2.40	exit=0	 Tests 66 passed (66)	
+before	q13-posture	load1=2.45	exit=0	 Tests 66 passed (66)	
+before	q13-oneline	load1=2.50	exit=0	 Tests 66 passed (66)	
+before	prose-wrong-cmd	load1=2.38	exit=0	 Tests 66 passed (66)	

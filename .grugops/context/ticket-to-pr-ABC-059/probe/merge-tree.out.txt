@@ -1,0 +1,6 @@
+e372e0ddb1b0eed9550eb79f4ca140162c79bc4e
+plans/traceability.md
+
+Auto-merging plans/tickets/ABC-087-difficulty-levels-as-budget-plus-blunder-rate.md
+Auto-merging plans/traceability.md
+CONFLICT (content): Merge conflict in plans/traceability.md

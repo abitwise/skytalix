@@ -1,0 +1,12 @@
+ABC-059 build probes. <repo> = the main checkout; <scratchpad> = the SE's private scratchpad. Trees are `git archive` copies with node_modules symlinked.
+mutate.mjs <tree> <mutant>     one AGENTS.md mutant in place; anchors must be unique (control, q13-head/-tail/-posture/-oneline, prose-wrong-cmd)
+mutants.sh <commit> <label>    fresh tree per mutant, `npx vitest run src/cli.test.ts`, load1 before each run -> mutants-before.out.txt (0b6e1c25), mutants-after.out.txt (14c940ff)
+mutants-after-reasons.out.txt  the assertion that reds on q13-posture and prose-wrong-cmd (head tree, -t ABC-059)
+spans.mjs < AGENTS.md          the block's span rule, verbatim, printed -> spans.out.txt (wave tip 0b6e1c25 and grugops/ABC-087-difficulty-levels 8330651d)
+abc087-agents.out.txt          head 14c940ff with ABC-087's AGENTS.md swapped in, src/cli.test.ts; then `git merge-tree --write-tree --name-only 14c940ff grugops/ABC-087-difficulty-levels`
+merge-tree.out.txt             that merge-tree, full output (exit 1: plans/traceability.md, which the wave tip alone also conflicts on; exit 1 there too)
+timing.sh <base> <head> 9 <tsv> ADR-0035 narrow set src/cli.test.ts; base/head/twin; counts 66/67/66 asserted -> timing-set{1,2}.tsv; score.mjs (ABC-058's, unchanged) -> score-set{1,2}.out.txt
+timing-set{1,2}.log            the harness's twin line: diff -r warns on node_modules/node_modules (a pre-existing 2026-09-19 symlink in the main checkout), exit 0; re-verified with -x node_modules -> a5-a6 context
+block-duration.out.txt         the new it's own vitest duration, 3 json-reporter runs of the head file (NOT ADR-0035's instrument)
+a5-a6.out.txt                  name-only, numstat, hunks, production-lines grep, spawn/exec grep, `//` `/*` literal grep, it( count, ABC-042 A1 row + ABC-065 block hashes, production blob hash
+raw-npm-test.txt / raw-lane-inventory.txt  gate outputs at 14c940ff (worktree)

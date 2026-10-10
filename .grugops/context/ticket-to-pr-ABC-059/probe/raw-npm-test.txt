@@ -1,0 +1,82 @@
+
+> cli-chess@0.0.0 test
+> node tools/grugops/run-bounded.js 60000 vitest run
+
+
+ RUN  v3.2.7 <repo>/.claude/worktrees/ABC-059-runnability-guard
+
+ ✓ src/history-pane.nfr.test.ts (12 tests) 204ms
+stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 1110 / 1319 = 84.2%
+
+ ✓ src/search.pvs-lmr.test.ts (20 tests) 956ms
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 595 nodes with quiescence / 49 without = 12.14x
+
+stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 292 nodes with quiescence / 47 without = 6.21x
+
+ ✓ src/quiescence.test.ts (29 tests) 506ms
+ ✓ src/perft.test.ts (24 tests) 1423ms
+   ✓ ABC-006 acceptance — exact perft counts > startpos perft(4) = 197281  444ms
+ ✓ src/search.ordering.test.ts (24 tests) 1326ms
+   ✓ A3 — ordered search visits a small fraction of the unordered nodes > position-6 at depth 2 — the default lane's standing guard  460ms
+ ✓ src/transposition.test.ts (25 tests) 1456ms
+   ✓ A5 — the only non-losing line repeats, and it scores exactly 0 > search(), depth 4: the perpetual scores exactly 0 and is played — in 7 251 nodes  578ms
+ ✓ src/san.qualifier.hardening.test.ts (20 tests) 513ms
+   ✓ ABC-025 A1 — the qualifier is the shortest ladder entry that names exactly one move > holds for every non-pawn, non-castle legal move of all 207 corpus positions, both call forms  369ms
+ ✓ src/history-pane.test.ts (26 tests) 432ms
+ ✓ src/puzzle-suite.test.ts (12 tests) 325ms
+   ✓ A6 — every puzzle carries its provenance, and the mates are the rules' answer > each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2  306ms
+ ✓ src/zobrist.test.ts (32 tests) 440ms
+ ✓ src/turn-loop.nfr.test.ts (4 tests) 262ms
+ ✓ src/san.test.ts (22 tests) 221ms
+ ✓ src/engine.capacity.test.ts (1 test) 493ms
+   ✓ ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() > ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it  493ms
+ ✓ src/search.test.ts (28 tests) 2034ms
+   ✓ A1 — pruned and unpruned scores are identical > position-3 at depth 3  482ms
+   ✓ A1 — pruned and unpruned scores are identical > position-4 at depth 2  1038ms
+   ✓ A4 — the returned root move is legal in every corpus position > returns a legal move in 200+ positions from the perft corpus, at depth 1  346ms
+ ✓ src/status-panel.nfr.test.ts (6 tests) 15ms
+ ✓ src/search.qe.test.ts (8 tests) 38ms
+ ✓ src/frame.test.ts (34 tests) 84ms
+ ✓ src/turn-loop.test.ts (63 tests) 94ms
+ ✓ src/moves.castling.hardening.test.ts (110 tests) 50ms
+ ✓ src/command-input.test.ts (188 tests) 55ms
+ ✓ src/moves.enpassant.hardening.test.ts (120 tests) 63ms
+ ✓ src/history.test.ts (12 tests) 36ms
+ ✓ src/san.parse.test.ts (30 tests) 22ms
+ ✓ src/line-input.test.ts (30 tests) 22ms
+ ✓ src/search.capacity.test.ts (1 test) 39ms
+ ✓ src/rejection.test.ts (53 tests) 35ms
+ ✓ src/apply.test.ts (24 tests) 15ms
+ ✓ src/legal.test.ts (31 tests) 85ms
+ ✓ src/render-seam.test.ts (12 tests) 35ms
+ ✓ src/gameend.test.ts (45 tests) 44ms
+ ✓ src/evaluate.pawns.test.ts (37 tests) 34ms
+ ✓ src/render.test.ts (27 tests) 128ms
+ ✓ src/evaluate.test.ts (21 tests) 119ms
+ ✓ src/moves.enpassant.test.ts (58 tests) 66ms
+ ✓ src/move-input.test.ts (50 tests) 90ms
+ ✓ src/result-screen.test.ts (13 tests) 143ms
+ ✓ src/moves.test.ts (33 tests) 7ms
+ ✓ src/san.suffix.hardening.test.ts (4 tests) 27ms
+ ✓ src/status-panel.test.ts (29 tests) 57ms
+ ✓ src/frame.overflow-bound.test.ts (25 tests) 103ms
+ ✓ src/coordinate-move.test.ts (45 tests) 22ms
+ ✓ src/zobrist.nfr.test.ts (3 tests) 3ms
+ ✓ src/glyph-mode.test.ts (21 tests) 8ms
+ ✓ src/gameend.nfr.test.ts (3 tests) 10ms
+ ✓ src/moves.castling.test.ts (33 tests) 41ms
+ ✓ src/fen.test.ts (27 tests) 5ms
+ ✓ src/san.nfr.test.ts (5 tests) 5ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 3ms
+ ✓ src/cli.real-engine.test.ts (1 test) 2ms
+ ✓ src/engine.test.ts (33 tests) 1399ms
+   ✓ A3 (identity) — the completed iteration equals search() in move AND score > agrees with search() on move and score across the mate/stalemate endgames  815ms
+ ✓ src/cli.test.ts (67 tests) 29ms
+
+ Test Files  51 passed (51)
+      Tests  1584 passed (1584)
+   Start at  16:20:47
+   Duration  8.29s (transform 1.18s, setup 0ms, collect 12.07s, tests 13.63s, environment 5ms, prepare 2.49s)

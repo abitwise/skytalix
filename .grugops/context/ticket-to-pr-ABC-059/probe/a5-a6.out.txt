@@ -1,0 +1,24 @@
+== name-only
+src/cli.test.ts
+== numstat
+76	0	src/cli.test.ts
+== hunks
+@@ -2137,0 +2138,76 @@ describe("ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option l
+== zero-production-lines grep (empty = waiver applies)
+== added lines mentioning child_process/spawn/exec
+0
+== added non-comment lines containing // or /*
+(end)
+== it( lines added / removed
+1
+0
+== ABC-042 A1 row and ABC-065 block byte-identical
+240d0c66b450
+e940a64a37ae
+     184
+240d0c66b450
+e940a64a37ae
+     184
+== production blobs
+82cd23df200e
+82cd23df200e

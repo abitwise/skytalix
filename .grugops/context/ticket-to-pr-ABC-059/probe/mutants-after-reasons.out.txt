@@ -1,0 +1,6 @@
+mutant q13-posture: 24545 B
+AssertionError: AGENTS.md spans that disagree with package.json: expected [ Array(1) ] to deeply equal []
+ ❯ src/cli.test.ts:2196:86
+mutant prose-wrong-cmd: 24433 B
+AssertionError: AGENTS.md spans that disagree with package.json: expected [ Array(1) ] to deeply equal []
+ ❯ src/cli.test.ts:2196:86
