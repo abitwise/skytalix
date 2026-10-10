@@ -1,0 +1,18 @@
+== ctl (75dcc0f5)
+SIX_QUEENS_FEN fen="3Q1k2/8/1Q4Q1/8/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1" line=Qxd4 kind=ambiguous derives=6 on-start=1 on-other=5 distinct-other=5
+  messages=["Q1xd4#","Q2xd4#","Qaxd4#","Qhxd4#","Q6xd4#","Q8xd4"]
+TWO_KNIGHTS_FEN fen="4k3/8/8/8/8/5N2/8/1N2K3 w - - 0 1" line=Nd2 kind=ambiguous derives=1 on-start=1 on-other=0 distinct-other=0
+  messages=["Nbd2","Nfd2"]
+parseFen fullmove 10000 -> fullmoveNumber=10000
+== base (957a85c3)
+SIX_QUEENS_FEN fen="3Q4/8/1Q4Q1/4k3/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1" line=Qxd4 kind=ambiguous derives=7 on-start=1 on-other=6 distinct-other=6
+  messages=["Q1xd4#","Q2xd4#","Qaxd4#","Qhxd4#","Q6xd4#","Q8xd4#"]
+TWO_KNIGHTS_FEN fen="4k3/8/8/8/8/5N2/8/1N2K3 w - - 0 1" line=Nd2 kind=ambiguous derives=1 on-start=1 on-other=0 distinct-other=0
+  messages=["Nbd2","Nfd2"]
+parseFen fullmove 10000 -> fullmoveNumber=10000
+== tip (f92868f6)
+SIX_QUEENS_FEN fen="3Q4/8/1Q4Q1/4k3/Q2q3Q/8/1Q6/3Q1K2 w - - 0 1" line=Qxd4 kind=ambiguous derives=7 on-start=1 on-other=6 distinct-other=6
+  messages=["Q1xd4#","Q2xd4#","Qaxd4#","Qhxd4#","Q6xd4#","Q8xd4#"]
+TWO_KNIGHTS_FEN fen="4k3/8/8/8/8/5N2/8/1N2K3 w - - 0 1" line=Nd2 kind=ambiguous derives=1 on-start=1 on-other=0 distinct-other=0
+  messages=["Nbd2","Nfd2"]
+parseFen fullmove 10000 -> fullmoveNumber=10000

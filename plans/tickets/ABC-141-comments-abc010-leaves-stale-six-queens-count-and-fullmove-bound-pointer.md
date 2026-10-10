@@ -169,3 +169,23 @@ module docblock, outside the only text pin (`history-pane.nfr.test.ts:386`) and 
   under the repo tsconfig and ESNext. The negative controls fail the conjunction in every file.
 - **On that ruling, UAT is WAIVED** (waived is not accepted). The Orchestrator applies the waiver at `Done`;
   it is not self-applied here.
+
+## QE
+
+**2026-10-10, QE/E2E** (subtask `qe-ABC-141`).
+- Range: base `957a85c3`, code `f92868f6`, reviewed tip `4bfc7b3e`.
+- Every reading is QE's own. The detail is in `.grugops/context/qe-ABC-141/notes/`: `…f635f83e`
+  (verdict), `…529ceebb` (readings), `…baafc88b` (gaps), `…aef1ebbe` (probes). It is not restated here.
+
+**PASS.**
+- `A1`: QE's own counter gives derives = 7 (1 + 6, all `#`) at base and code. The control `75dcc0f5` gives
+  6 = 1 + 5. Both greps go 1 → 0.
+- `A2`: the grep goes 1 → 0, and `parseFen` gives fullmove 10000. No ticket scopes a bound.
+- `A3`: exactly three paths. Both owner-Q4 measures hold per file, with the NEG controls red and the POS
+  control green.
+- The edits lie outside every `R5`–`R5d` pin, outside the `:386` pin and outside every `it` body.
+- `A4`: lint, typecheck and build exit 0. `npm test` ran 8 times with the JSON reporter, and every run read
+  52 / 1663 / 0 failed / 0 skipped, at load1 7.4–24.4. Integrity and lane-inventory print `No findings.`
+- Gaps: `QE-141-a` LOW (the SE's one failure is unnamed and did not reproduce), and `QE-141-b`/`c`/`d` INFO.
+  None blocks.
+- On QE's reading, the UAT waiver applies (WAIVED, not accepted). The Orchestrator applies it at `Done`.
