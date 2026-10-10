@@ -1,0 +1,4 @@
+00aad4da	file	QMOVE-COMMENTED-M15	exit=0	 Test Files 1 passed (1)	 Tests 12 passed (12)	lint=1	tsc=0	FAILED:
+00aad4da	file	QMOVE-COMMENTED-M15+FMT+WSTALELICENCE	exit=0	 Test Files 1 passed (1)	 Tests 12 passed (12)	lint=1	tsc=0	FAILED:
+00aad4da	src	QLHS-INTERSECT+FMT+WPERFT-STATIC	exit=0	 Test Files 51 passed (51)	 Tests 1583 passed (1583)	lint=0	tsc=0	FAILED:
+00aad4da	src	QSCAN-NARROW+FMT+WPERFT-STATIC	exit=0	 Test Files 51 passed (51)	 Tests 1583 passed (1583)	lint=0	tsc=0	FAILED:

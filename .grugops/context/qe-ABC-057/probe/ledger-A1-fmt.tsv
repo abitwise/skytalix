@@ -1,0 +1,18 @@
+00aad4da	src	M15+FMT	exit=1	load1=16.16	 Test Files 1 failed | 50 passed (51)	 Tests 1 failed | 1582 passed (1583)	lint=0	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+    AssertionError: the licence guard compares with an EQUALITY: expected '/**\n * `ABC-017`\'s `A11` — the pane…' to contain '\n    expect(runtimeImporters).toEqua…'
+00aad4da	src	M15SUB+FMT	exit=1	load1=16.43	 Test Files 1 failed | 50 passed (51)	 Tests 1 failed | 1582 passed (1583)	lint=0	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+    AssertionError: the licence guard compares with an EQUALITY: expected '/**\n * `ABC-017`\'s `A11` — the pane…' to contain '\n    expect(runtimeImporters).toEqua…'
+00aad4da	src	QSTRICT+FMT	exit=1	load1=15.11	 Test Files 1 failed | 50 passed (51)	 Tests 1 failed | 1582 passed (1583)	lint=0	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+    AssertionError: the licence guard compares with an EQUALITY: expected '/**\n * `ABC-017`\'s `A11` — the pane…' to contain '\n    expect(runtimeImporters).toEqua…'
+00aad4da	src	QMATCHOBJ+FMT	exit=1	load1=14.24	 Test Files 1 failed | 50 passed (51)	 Tests 1 failed | 1582 passed (1583)	lint=0	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+    AssertionError: the licence guard compares with an EQUALITY: expected '/**\n * `ABC-017`\'s `A11` — the pane…' to contain '\n    expect(runtimeImporters).toEqua…'
+00aad4da	src	QSTRICT-AC+FMT	exit=1	load1=19.68	 Test Files 1 failed | 50 passed (51)	 Tests 1 failed | 1582 passed (1583)	lint=0	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+    AssertionError: the licence guard compares with an EQUALITY: expected '/**\n * `ABC-017`\'s `A11` — the pane…' to contain '\n    expect(runtimeImporters).toEqua…'
+00aad4da	src	QMATCHOBJ-AC+FMT	exit=1	load1=21.75	 Test Files 1 failed | 50 passed (51)	 Tests 1 failed | 1582 passed (1583)	lint=0	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+    AssertionError: the licence guard compares with an EQUALITY: expected '/**\n * `ABC-017`\'s `A11` — the pane…' to contain '\n    expect(runtimeImporters).toEqua…'
+079284d9	src	M15+FMT	exit=0	load1=20.58	 Test Files 51 passed (51)	 Tests 1583 passed (1583)	lint=0	tsc=0	FAILED:
+079284d9	src	M15SUB+FMT	exit=0	load1=19.30	 Test Files 51 passed (51)	 Tests 1583 passed (1583)	lint=0	tsc=0	FAILED:
+079284d9	src	QSTRICT+FMT	exit=0	load1=21.22	 Test Files 51 passed (51)	 Tests 1583 passed (1583)	lint=0	tsc=0	FAILED:
+079284d9	src	QMATCHOBJ+FMT	exit=0	load1=28.73	 Test Files 51 passed (51)	 Tests 1583 passed (1583)	lint=0	tsc=0	FAILED:
+079284d9	src	QSTRICT-AC+FMT	exit=0	load1=35.97	 Test Files 51 passed (51)	 Tests 1583 passed (1583)	lint=0	tsc=0	FAILED:
+079284d9	src	QMATCHOBJ-AC+FMT	exit=0	load1=46.98	 Test Files 51 passed (51)	 Tests 1583 passed (1583)	lint=0	tsc=0	FAILED:

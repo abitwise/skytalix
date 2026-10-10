@@ -1,0 +1,6 @@
+00aad4da	Q-CTRL-DEAF-AFTER-LOAD+X5b	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched|
+    AssertionError: the probe is ARMED: expected [] to include 'history.ts'
+00aad4da	Q-CTRL-ARMING-FIRST+DEAF+X5b	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+079284d9	Q-CTRL-DEAF-AFTER-LOAD+X5b	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched|
+    AssertionError: the probe is ARMED: expected [] to include 'history.ts'
+079284d9	Q-CTRL-ARMING-FIRST+DEAF+X5b	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:

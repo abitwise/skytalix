@@ -1,0 +1,18 @@
+079284d9	file	CONTROL	exit=0	load1=41.07	 Test Files 1 passed (1)	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+079284d9	file	WLAUNDER	exit=1	load1=41.07	 Test Files 1 failed (1)	 Tests 3 failed | 9 passed (12)	lint=1	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar|src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set|src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts', 'turn-loop.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+    AssertionError: the unmutated control: expected true to be false // Object.is equality
+    AssertionError: the witness is not matching every export line: expected true to be false // Object.is equality
+079284d9	file	WPERFT-STATIC	exit=1	load1=38.18	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+079284d9	file	WSTALELICENCE	exit=1	load1=35.53	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	lint=1	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts' ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+00aad4da	file	CONTROL	exit=0	load1=35.53	 Test Files 1 passed (1)	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	file	WLAUNDER	exit=1	load1=34.12	 Test Files 1 failed (1)	 Tests 3 failed | 9 passed (12)	lint=1	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar|src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > A6.4 — the runtime-importer forms are GENERALISED, across the closed re-export set|src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts', 'turn-loop.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+    AssertionError: the unmutated control: expected true to be false // Object.is equality
+    AssertionError: the witness is not matching every export line: expected true to be false // Object.is equality
+00aad4da	file	WPERFT-STATIC	exit=1	load1=32.99	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+00aad4da	file	WSTALELICENCE	exit=1	load1=30.75	 Test Files 1 failed (1)	 Tests 1 failed | 11 passed (12)	lint=1	tsc=0	FAILED:src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence|
+    AssertionError: expected [ 'cli.ts' ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]

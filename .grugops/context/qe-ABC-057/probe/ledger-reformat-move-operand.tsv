@@ -1,0 +1,21 @@
+00aad4da	QWRAP	exit=1	 Tests 1 failed | 11 passed (12)	lint=1	tsc=0	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+00aad4da	QWRAP+FMT	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QTRAIL-WS	exit=1	 Tests 1 failed | 11 passed (12)	lint=1	tsc=0	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+00aad4da	QPARAM	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+00aad4da	QCRLF	exit=1	 Tests 1 failed | 11 passed (12)	lint=1	tsc=0	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+00aad4da	QMOVE-AFTER	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QMOVE-NESTED	exit=1	 Tests 1 failed | 11 passed (12)	lint=1	tsc=0	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+00aad4da	QMOVE-NESTED+FMT	exit=1	 Tests 1 failed | 11 passed (12)	lint=0	tsc=0	FAILED:runs the guard's OWN expression — a drift tripwire, not a copy that can go stale|
+00aad4da	QMOVE-UNREACHABLE	exit=0	 Tests 12 passed (12)	lint=1	tsc=0	FAILED:
+00aad4da	QMOVE-UNREACHABLE+WSTALELICENCE	exit=0	 Tests 12 passed (12)	lint=1	tsc=0	FAILED:
+unknown build QMOVE-COMMENTED
+00aad4da	QMOVE-COMMENTED+M15	PLANT-FAILED
+unknown build QMOVE-COMMENTED
+00aad4da	QMOVE-COMMENTED+M15+FMT+WSTALELICENCE	PLANT-FAILED
+00aad4da	QLHS-INTERSECT+FMT	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QLHS-INTERSECT+FMT+WPERFT-STATIC	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QLHS-INTERSECT+FMT+QWLAUNDER-CLIOPT	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QSCAN-NARROW+FMT	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+00aad4da	QSCAN-NARROW+FMT+WPERFT-STATIC	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+079284d9	QLHS-INTERSECT+FMT+WPERFT-STATIC	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:
+079284d9	QSCAN-NARROW+FMT+WPERFT-STATIC	exit=0	 Tests 12 passed (12)	lint=0	tsc=0	FAILED:

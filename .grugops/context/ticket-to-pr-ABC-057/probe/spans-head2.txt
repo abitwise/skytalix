@@ -1,0 +1,5 @@
+licence-regex-lines 3 a291254dc642
+composer-tripwire-span 17 a7d6a4389a3c
+sibling-tripwire 3 cc0307e211c9
+guard-body 1bd29dbb2707
+game-owning driver: 0
