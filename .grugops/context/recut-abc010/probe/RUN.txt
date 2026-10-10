@@ -1,0 +1,20 @@
+BA/PM probe for the ABC-010 re-cut, task wave-2026-09-25, subtask recut-abc010, 2026-10-10 ~09:00-09:07Z.
+Base: grugops/wave-2026-09-25 @ 980890f. Machine: Apple M3, Node v26.11.0. load1 ~6 (5-min ~18, other hops running).
+Every script reads src/ only and writes nothing in any worktree. <wt> = the recut-abc010 worktree at 980890f.
+
+  node ../../design-abc010/probe/fen-corpus.mjs <wt>   -> fen-corpus.980890f.out.txt
+        the Architect's literal scan, re-run at 980890f: 1,049 literals, 144 distinct / 186 occurrences
+        rejected; the reject list is IDENTICAL to the Architect's at 6ade041.
+  WINS='[...]' node ../../ticket-to-pr-ABC-084/notes/raw-probe-oracle.mts.txt <wt>  (copied as oracle.mts)
+        -> oracle.out.txt  ABC-084's material-only 4-ply oracle on the two defective rows and three candidates.
+  ROWS='[[fen,[accept...]],...]' node engine-and-rules.mts <wt>  -> engine-and-rules.out.txt
+        ADR-0033's six rules (rules.mjs = the Architect's prototype semanticFault, copied verbatim) and the
+        shipped chooseMove in ADR-0027 deterministic mode at the baseline config (budget 25, step 1, fresh clock).
+  node incheck.mts <wt> <fen...>                       -> incheck.out.txt   side to move not in check, legal count.
+  node rules-only.mts <wt> <fen...>                    -> abc126-candidates.out.txt   ABC-126's measured pair under ADR-0033.
+  git show 47433c5:src/puzzle-corpus.ts | <FEN regex> | node rules-only.mts <wt>
+                                                       -> abc127-47433c5-corpus-rules.out.txt
+        ABC-127's in-flight corpus (62 rows, a snapshot of work in progress): 60 accepted, the same 2 rejected.
+  node fen-scan.mjs <tree>                             -> fen-scan.980890f.out.txt
+        ABC-010 criterion 9(d)'s instrument: every literal through the tree's OWN parseFen, rejected ones
+        printed as file:line + message, with a per-file count. At 980890f: 15 rejected (all grammar faults).

@@ -1,0 +1,10 @@
+WIN 4k2p/8/8/4q3/8/1P6/P2K4/R7 w - - 0 1
+  stand=-3 best=1 keys=[a1e1] next=-4 110ms
+WIN 3q4/6k1/8/8/3B4/8/6PP/3R2K1 w - - 0 1
+  stand=1 best=7 keys=[d4e5,d4c3,d4b2,d4a1] next=1 207ms
+WIN 4k3/7p/8/4q3/8/1P6/P2K4/R7 w - - 0 1
+  stand=-3 best=1 keys=[a1e1] next=-4 148ms
+WIN 4k3/8/8/4q3/8/1P6/P2K4/R7 w - - 0 1
+  stand=-2 best=2 keys=[a1e1] next=-3 88ms
+WIN 3q1k2/8/8/8/3B4/8/6PP/3R2K1 w - - 0 1
+  stand=1 best=5 keys=[d4g7,d4c5] next=1 137ms
