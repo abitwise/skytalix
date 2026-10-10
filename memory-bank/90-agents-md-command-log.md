@@ -85,6 +85,12 @@ other tickets merged into the wave since (`ABC-133`, `ABC-135`, `ABC-136` touche
 reading; the quiet ones are 5.5-6.7 s). Moving figure: 47/1446 -> 50/1539 -> 51/1584 -> 52/1603 -> 52/1608.
 `ABC-131`'s own branch will move it again when it merges (not applied: unmerged).
 
+RE-MEASURED once more, 2026-10-10T18:40Z, `scribe-receipts-2026-10-10`, wave tip `a9bfd27c` (`ABC-131`
+merged as `231d1288`), load1 ~6: exit 0, **52 files, 1663 tests, 6.49 s**. `AGENTS.md` now reads
+52/1663, 6.5 s. `ABC-131` itself added +0 files and +0 rows (its page, `A7`: 52/1608 at base and tip);
+the +55 over the last reading is test rows from other tickets merged since (not attributed row by
+row). Moving figure: 47/1446 -> 50/1539 -> 51/1584 -> 52/1603 -> 52/1608 -> 52/1663.
+
 ## Search deep lane (`ABC-077`) — `SEARCH_DEEP=1 npx vitest run src/search.test.ts`
 
 RUN 2026-08-17 at the `ABC-077` branch tip: exit 0, 41 passed (28 in the default lane), 23.0 s.
@@ -146,10 +152,15 @@ passed (22 default), 224.95 s**; `A4` 39.7 % (80 blunders + 1 no-candidate / 204
 dependent, and are not gates; the gate is the exit code and 28 passed. COUNT YOUR RUN: 28 is the whole
 lane. Trigger: run it after any change to `src/levels.ts`, `src/engine.ts` or `src/virtual-clock.ts`.
 
-OWED, not applied (unmerged): `ABC-131` (`grugops/ABC-131-drop-edge-puzzles`, awaiting the owner's UAT
-word) changes the figures this entry quotes — `PUZZLE_DEEP` 54/58 and 18 passed, levels `A4` 242 moves
-(not 246), `A3` 35 vs 54 of 58 (not 58 of 62). Per `QE-131-c`. When it merges, refresh this entry, the
-Puzzle-suite entry and `AGENTS.md` together.
+APPLIED 2026-10-10, `scribe-receipts-2026-10-10` (the former OWED paragraph): `ABC-131` merged
+(`231d1288`, UAT accepted by the owner) and changed the figures this entry quoted. `AGENTS.md` now says
+`A4` perft + puzzles **242 moves** (was 246) and `A3` **35 vs 54 of 58** (was 35-36 vs 58 of 62), per
+`QE-131-c`. Source, not re-run (the lane is ~3.5 min and `src/levels*.ts`, `src/engine.ts`,
+`src/virtual-clock.ts` are untouched by `ABC-131`): QE's levels run on `96f3168d`
+(`.grugops/context/qe-ABC-131/notes/raw-qe-levels-tip.txt`, 2026-10-10T14:42Z, load1 6.2-7.9): exit 0,
+**28 passed**, 213.26 s real; `A4` 39.7 % of 204 and 39.7 % (96 + 0 / 242); `A5` 30/30, max 4,780 ms;
+`A3` easiest **35/58**, default **54/58**. 213 s sits inside "202-225 s", so that range stands. The old
+"35-36" collapses to "35": the "36" was a 62-row reading, and `A3` is wall-clock-dependent either way.
 
 ## Input-seam deep lane (`ABC-037`) — `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
 
@@ -259,6 +270,14 @@ readings: mate in 3 seed 24 (black Q+N against P), seed 234 (white Q+R against P
   4.8 s). Default lane, `npx vitest run src/puzzle-suite.test.ts src/cli.real-engine.test.ts`: 13
   passed in 2 files (12 + the 1 `cli.real-engine` default test, matching each file's stated default
   count). Inside both ranges.
+- RE-MEASURED 2026-10-10T18:40Z, `scribe-receipts-2026-10-10`, wave tip `a9bfd27c` (after `ABC-131`'s
+  merge `231d1288`), load1 ~6: exit 0, **18 passed (12 default)**, 34.37 s vitest duration. Default
+  lane (`npx vitest run src/puzzle-suite.test.ts`): 12 passed, 0.45 s. Baseline
+  `src/puzzle-suite.baseline.json` reads **54/58**, budget 25, step 1 (`ABC-131` dropped the four
+  budget-edge rows, mate-in-3 seeds 1982, 1008, 1424 and 1075, all solved; the four unsolved rows
+  above are unchanged). The 17 -> 18 is `ABC-131`'s `A6` row. `AGENTS.md` now says 18 passed and
+  54/58; "32-36 s" stands (34.37 s inside it; the engineer reads the gating run faster, 19.2-23.9 s
+  vs 25.5 s at base, printed and not asserted).
 - `ABC-127` `A7` reads the lane's wall as <= 90 s and the gating run's as <= 45 s, NEVER ASSERTED;
   the only wall assertions are four `300_000` ms hang guards. A reading above 90 / 45 s at load1 > 8
   is load, not a breach.
@@ -414,3 +433,31 @@ runnability, `ABC-065`/`ABC-069` `Dev / run` slot rules); the `Dev / run` slot a
 
 Resolved by this pass: the two stale counts and the `Levels deep lane` entry that the ledger above
 left owed. Still owed: `ABC-131`'s figures (see § Levels deep lane), when it merges.
+
+## Receipts pass, 2026-10-10 (after `ABC-131`'s merge)
+
+Task `scribe-receipts-2026-10-10`, branch `grugops/scribe-receipts-2026-10-10`, wave tip `a9bfd27c`.
+`AGENTS.md` 23,633 B -> **23,216 B** (-417 B; cap 24,576 B, `ABC-109`; headroom 943 -> **1,360 B**).
+
+| change to `AGENTS.md` | bytes | what it dropped / kept |
+|---|---:|---|
+| Rank 3 (owner-approved, "7. ok", Orchestrator note `…6a1f3d92`): Safety-rules "Deploy is allowed…" bullet -> a two-line pointer to `## Deployment posture` | -414 | kept the two-clause headline ("allowed, and nothing to deploy"), the owner and date (2026-08-15, one sentence), `production_requires_human_confirmation` stays `true` and "the grant did not flip it". Dropped: the "neither 'deploy freely' nor 'the old prohibition stands'" sentence, the "no artifact, no target, no release machinery" restatement, the `EPIC-006` pointer and "moving it is the owner's word, never an inference". Each is in `## Deployment posture` ("Nothing here relaxes anything"; the `EPIC-006` revisit trigger; "the grant deliberately did not flip it; moving it is the owner's word, never an inference") except the "neither…nor" sentence, which is gone |
+| `Test (all)` RUN: 1608 tests / 7.8 s -> **1663** / 6.5 s | +0 | re-measured, see § Test (all) |
+| `Levels deep lane`: perft + puzzles 246 -> **242** moves; `A3` "35-36 vs 58 of 62" -> **"35 vs 54 of 58"** | -3 | `ABC-131`'s figures, per `QE-131-c`; see § Levels deep lane |
+| `PUZZLE_DEEP`: 17 -> **18** passed; baseline 58/62 -> **54/58** | +0 | re-measured, see § Puzzle-suite |
+
+Net: 23,633 -> 23,216 B (-417 B). Guards: `src/cli.test.ts` 67 passed (`ABC-109` byte cap, `ABC-059`
+runnability, `ABC-065`/`ABC-069` `Dev / run` slot rules); `npm run lint` exit 0. The `Dev / run` slot
+and the `PUZZLE_DEEP` `TRIGGER` text are untouched.
+
+Left out, on purpose (the brief: only where `AGENTS.md` already states the thing):
+- `NFR-008` R-1 (wall <= 10 s, CPU reported), `NFR-005` depth 7 no longer provisional, `RISK-003` 0.8x:
+  `AGENTS.md` mentions none of them (grep for `NFR-005`, `NFR-008`, `RISK-003`: 0 hits), so there is
+  nothing to correct and no section was added.
+- Reference runtime Node v26.11.0: `AGENTS.md` § Stack says "Node (>= 22)", a minimum and not the
+  reference runtime; it stays true on v26.11.0. The Security/NFR note counts `AGENTS.md` v24 mentions
+  at 0. Left as is.
+- ADRs 0035, 0036, 0037, 0038: `AGENTS.md` has no ADR index (its only ADR pointer is `ADR-0007`, in
+  § Deployment posture); `memory-bank/00-index.md` is the index and is outside this hop's fences. No
+  pointer added.
+- Lane and board state (`ABC-093` and others): not `AGENTS.md`'s.
