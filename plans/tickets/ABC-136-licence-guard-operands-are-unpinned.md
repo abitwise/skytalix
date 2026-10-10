@@ -1,8 +1,8 @@
 ---
 id: ABC-136
 title: The licence guard's two operands are unpinned — narrowing either one turns its equality into a subset check and the suite stays green (ADR-0011 R5b)
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P3
 epic: —

@@ -1,8 +1,8 @@
 ---
 id: ABC-134
 title: The frame-path probe's prose claims more reach than the probe has — four wording gaps in one file, comment-only
-status: ready
-column: Ready
+status: in-development
+column: In Development
 size: XS
 priority: P3
 epic: —
