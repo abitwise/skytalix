@@ -1,0 +1,23 @@
+# gate at 84edfb46, worktree, node v26.11.0, 2026-10-10T16:03:12Z
+== npm run lint  load1 5.76
+
+Checked 100 files in 95ms. No fixes applied.
+exit 0
+== npm run typecheck  load1 5.76
+exit 0
+== npm run build  load1 5.76
+exit 0
+== npm test  load1 5.86
+exit 0
+ Test Files  52 passed (52)
+      Tests  1608 passed (1608)
+   Duration  8.63s (transform 1.49s, setup 0ms, collect 12.80s, tests 17.42s, environment 9ms, prepare 2.74s)
+== skip count  load1 8.08
+skip=0
+== test-skip-integrity  load1 10.39
+No findings.
+exit 0
+== lane-inventory  load1 10.39
+The lane collects 52 test files; git tracks 52.
+No findings.
+exit 0

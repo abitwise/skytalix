@@ -1,0 +1,17 @@
+ABC-138 build probes. <repo> = the main checkout; <scratchpad> = the SE's private scratchpad. Trees are `git archive` copies with node_modules symlinked.
+Base 2946e22a (wave tip at pull). Delivered code 84edfb46. Machine Apple M3, Node v26.11.0. Two other agents ran in parallel; load1 is logged beside every run.
+
+premise-f1331-plants-2946e22a.out.txt   BA/PM's bapm-cuts-r5c-f1331-2026-10-10/probe/f1331-plants.sh <repo> 2946e22a tip <scratchpad>, run BEFORE editing: control + 17 plants all 67/67
+premise-f1331-dryrun-2946e22a.out.txt   BA/PM's f1331-dryrun.sh <context> <scratchpad>/dry <copy of src/cli.test.ts at 2946e22a>: identical to the 3159ab68 reading
+regions-before.txt                      ticket-to-pr-ABC-133/probe/regions.sh src/cli.test.ts at 2946e22a (A042-A1, D065, D059); after = a6.out.txt
+plants.sh <repo> <commit> <label> <scratchpad>
+                                        every plant the page names: A1 (X5 X5b X6 X7 S2 S3), A2 (C5 C6 C7 C8 C10 Q14), A3 kills (Q11 Q12 Q13 P1 P-DYN E-MS1 E-MS2),
+                                        A3 controls (E-A1 S-CTRL C13 C15 C14-ARRAY), A4 (C14 C14-ARG), plus the control. Recipes copied byte-for-byte from QE-133,
+                                        SecNFR-133 and BA/PM's dry run; QE-133's mutate.cjs (anchors must occur once); tree restored + diff-checked after each.
+                                        -> plants-base.out.txt (2946e22a), plants-head.out.txt (84edfb46)
+a4.sh <repo> <base> <head> <n> <scratchpad> <out>
+                                        A5: QE-133's in-situ process.cpuUsage marks, base and head interleaved, n = 11 each, round 0 discarded by the reader;
+                                        the head end mark sits before (iii)'s expect (Test note 5). -> a4.out.txt, a4-summary.txt
+a6.out.txt                              name-only, numstat, manifest numstat, added/deleted, production-lines grep, it( count, N8_SPAWN, one load/one parse,
+                                        A4 phrase count, region hashes before/after, loader-scan.mjs on the delivered file
+gates.txt, raw-npm-test.txt             lint, typecheck, build, npm test, skip count, test-skip-integrity, lane-inventory at 84edfb46

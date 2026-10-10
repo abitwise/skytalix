@@ -1,0 +1,37 @@
+commit 2946e22a  node v26.11.0  2026-10-10T15:52:41Z
+== control (unmutated)   load1 4.86  15:52:41Z
+      Tests  67 passed (67)
+== E-A1 prose docblock names `spawnSync(`   load1 5.75  15:52:46Z
+      Tests  67 passed (67)
+== S-CTRL string control, no call   load1 5.85  15:52:52Z
+      Tests  67 passed (67)
+== Q14 REAL call through an alias (out of scope)   load1 5.62  15:52:57Z
+      Tests  67 passed (67)
+== X5 createRequire(import.meta.url)("node:child_process") inline   load1 5.25  15:53:01Z
+      Tests  67 passed (67)
+== X5b const req = createRequire(...); req("child_process")   load1 5.07  15:53:06Z
+      Tests  67 passed (67)
+== X6 process.getBuiltinModule("node:child_process")   load1 4.98  15:53:10Z
+      Tests  67 passed (67)
+== X7 vi.importActual("node:child_process")   load1 4.82  15:53:15Z
+      Tests  67 passed (67)
+== C5 PARENTHESISED callee (spawnSync)()   load1 4.60  15:53:19Z
+      Tests  67 passed (67)
+== C6 COMMA callee (0, spawnSync)()   load1 4.60  15:53:24Z
+      Tests  67 passed (67)
+== C7 NON-NULL callee spawnSync!()   load1 4.71  15:53:28Z
+      Tests  67 passed (67)
+== C8 AS-cast callee (spawnSync as typeof spawnSync)()   load1 4.57  15:53:32Z
+      Tests  67 passed (67)
+== C10 Reflect.apply(spawnSync, ...)   load1 4.77  15:53:37Z
+      Tests  67 passed (67)
+== C13 RegExp.exec + local object .execSync (false-red control)   load1 4.62  15:53:41Z
+      Tests  67 passed (67)
+== C14 "child_process" string NOT a specifier (array/arg)   load1 4.90  15:53:45Z
+      Tests  67 passed (67)
+== C15 import of a lookalike path ./child_process (not the module)   load1 4.74  15:53:50Z
+      Tests  67 passed (67)
+== S2 vi.mock partial mock via importOriginal (no new child)   load1 4.74  15:53:54Z
+      Tests  67 passed (67)
+== S3 node:module namespace createRequire("child_process").execSync   load1 9.89  15:53:59Z
+      Tests  67 passed (67)

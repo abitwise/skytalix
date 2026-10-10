@@ -198,3 +198,35 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**: base `5d55cc48`, and every
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P3`, with two `P1` triggers |
 | 10 | no major unresolved blocker | **✅** none. The `C14` split is resolved on this page, and Security/NFR confirms it at the gate |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-138`).
+- Branch `grugops/ABC-138-spawn-pin-in-suite`, from `2946e22a`. The code is `84edfb46`
+  (`src/cli.test.ts` +30/−13, the pin's one `it` and its comment).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-138/` (`…8d70af7c`,
+  `…74a52ca8`, `probe/`) and are not restated here.
+
+**`A1`–`A6` are met. No stop condition fired.**
+- **The premise held at `2946e22a`.** The file is byte-identical to `3159ab68`, and all 12 gap
+  plants and the controls are GREEN 67/67.
+- **`AR-058-STRIP` did not fire.** No `//` or `/*` literal was added, and no `child_process`
+  import form.
+
+| # | verdict | reading (plants out of tree; base `2946e22a` → delivered `84edfb46`) |
+|---|---|---|
+| `A1` | MET | `X5`, `X5b`, `X6`, `X7`, `S2`, `S3`: GREEN 67/67 → **RED 1/67**, the pin row, on count (i) |
+| `A2` | MET | `C5`, `C6`, `C7`, `C8`, `C10`, `Q14`: GREEN 67/67 → **RED 1/67**, the pin row, on the new count (iii) |
+| `A3` | MET | The unmutated file is GREEN. It reads (i) `[["spawnSync"]]`, (ii) `["spawnSync in childOf"]` and (iii) two. `Q11`, `Q12`, `Q13`, `P1`, `P-DYN`, `E-MS1` and `E-MS2` stay RED, and `P-DYN` is one extra entry. `E-A1`, `S-CTRL`, `C13`, `C15` and `C14-ARRAY` stay GREEN |
+| `A4` | MET | `C14` and `C14-ARG` are RED on (i). The comment names that class. "resolving it needs data flow" is 1 → 0 |
+| `A5` | MET | In situ, n = 10 after round 0, interleaved with base. Median **164.8 ms** CPU ≤ 250 at load1 7.78; base 162.5 ms at 7.94; paired delta −0.3 ms. One load, one parse |
+| `A6` | MET | `git diff --name-only` = `src/cli.test.ts`; the manifest numstat is empty; 0 production lines, 0 new files, 0 new `it`; `N8_SPAWN` 27. `loader-scan.mjs` reads `[]`, one `createRequire` site and two references. `ABC-042` `A1`, `ABC-065` and `ABC-059` hash identically |
+
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 52 files / 1608 passed. The skip count
+  is 0, and integrity reads `No findings.` `lane-inventory.js` exits 0 with no findings.
+- **Next.**
+  - QE's hop.
+  - The Security/NFR hop the page recommends: confirm the `C14` split, and rule on discharging
+    `AR-133-LOADER` / `AR-133-WRAP`.
+  - The UAT waiver applies if zero production lines holds (measured 0).

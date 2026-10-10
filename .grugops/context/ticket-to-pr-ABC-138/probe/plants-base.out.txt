@@ -1,0 +1,83 @@
+commit 2946e22a  node v26.11.0  2026-10-10T15:56:04Z
+== control (unmutated)   load1 8.91  15:56:04Z
+      Tests  67 passed (67)
+== A1 X5 createRequire(import.meta.url)("node:child_process") inline   load1 8.51  15:56:09Z
+      Tests  67 passed (67)
+== A1 X5b const req = createRequire(...); req("child_process")   load1 11.44  15:56:14Z
+      Tests  67 passed (67)
+== A1 X6 process.getBuiltinModule("node:child_process")   load1 11.08  15:56:19Z
+      Tests  67 passed (67)
+== A1 X7 vi.importActual("node:child_process")   load1 11.23  15:56:23Z
+      Tests  67 passed (67)
+== A1 S2 vi.mock partial mock via importOriginal (no new child)   load1 10.57  15:56:28Z
+      Tests  67 passed (67)
+== A1 S3 node:module namespace createRequire("child_process").execSync   load1 10.13  15:56:32Z
+      Tests  67 passed (67)
+== A2 C5 PARENTHESISED callee (spawnSync)()   load1 9.64  15:56:36Z
+      Tests  67 passed (67)
+== A2 C6 COMMA callee (0, spawnSync)()   load1 9.10  15:56:41Z
+      Tests  67 passed (67)
+== A2 C7 NON-NULL callee spawnSync!()   load1 9.18  15:56:45Z
+      Tests  67 passed (67)
+== A2 C8 AS-cast callee (spawnSync as typeof spawnSync)()   load1 8.92  15:56:49Z
+      Tests  67 passed (67)
+== A2 C10 Reflect.apply(spawnSync, ...)   load1 8.92  15:56:54Z
+      Tests  67 passed (67)
+== A2 Q14 REAL call through an alias   load1 8.53  15:56:58Z
+      Tests  67 passed (67)
+== A3 Q11 REAL call after a "//" string on the same line   load1 8.56  15:57:03Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: calls that resolve to a child_process binding: expected [ 'spawnSync', 'spawnSync in childOf' ] to deeply equal [ 'spawnSync in childOf' ]
+== A3 Q12 REAL call between "/*" and "*/" strings   load1 8.04  15:57:07Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: calls that resolve to a child_process binding: expected [ 'spawnSync', 'spawnSync in childOf' ] to deeply equal [ 'spawnSync in childOf' ]
+== A3 Q13 MS2 + call hidden after "//" string   load1 8.12  15:57:12Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [ '* as cp' ] ] to deeply equal [ [ 'spawnSync' ] ]
+== A3 P1 namespace import + cp.execSync (a shell child)   load1 7.79  15:57:16Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [ '* as cp' ] ] to deeply equal [ [ 'spawnSync' ] ]
+== A3 P-DYN module-level dynamic import   load1 7.40  15:57:21Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ 'spawnSync' ], [] ] to deeply equal [ [ 'spawnSync' ] ]
+== A3 E-MS1 direct spawnSync child   load1 7.05  15:57:25Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: calls that resolve to a child_process binding: expected [ 'spawnSync', 'spawnSync in childOf' ] to deeply equal [ 'spawnSync in childOf' ]
+== A3 E-MS2 namespace import   load1 6.81  15:57:29Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ FAIL  src/cli.test.ts > ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+AssertionError: child_process specifier positions and what each binds: expected [ [ '* as childProcess' ] ] to deeply equal [ [ 'spawnSync' ] ]
+== A3 E-A1 prose docblock names `spawnSync(`   load1 6.81  15:57:34Z
+      Tests  67 passed (67)
+== A3 S-CTRL string control, no call   load1 6.66  15:57:38Z
+      Tests  67 passed (67)
+== A3 C13 RegExp.exec + local object .execSync (false-red control)   load1 6.45  15:57:43Z
+      Tests  67 passed (67)
+== A3 C15 import of a lookalike path ./child_process (not the module)   load1 6.17  15:57:47Z
+      Tests  67 passed (67)
+== A3 C14-ARRAY (C14 without its JSON.stringify call)   load1 6.08  15:57:52Z
+      Tests  67 passed (67)
+== A4 C14 "child_process" string NOT a specifier (array/arg)   load1 6.31  15:57:56Z
+      Tests  67 passed (67)
+== A4 C14-ARG (C14's JSON.stringify call alone)   load1 6.13  15:58:01Z
+      Tests  67 passed (67)
