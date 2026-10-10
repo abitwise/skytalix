@@ -1,0 +1,5 @@
+pristine load1 2.94:  Tests 21 passed (21) | red: 
+M3a_seed_perturbs_engine_budget load1 2.94:  Tests 1 failed | 20 passed (21) | red: QE-087-a — the seed never reaches the engine (ADR-0027 d1) > every cal;
+M8_child_score_sign_flipped load1 3.02:  Tests 1 failed | 20 passed (21) | red: QE-087-b — the scored list is the engine's, not a self-consistent lie ;
+M4_clamp_removed load1 3.02:  Tests 21 passed (21) | red: 
+M5b_extra_draw_per_root_move load1 3.02:  Tests 21 passed (21) | red: 

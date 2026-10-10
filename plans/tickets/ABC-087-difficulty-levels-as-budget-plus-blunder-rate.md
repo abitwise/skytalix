@@ -45,6 +45,12 @@ feature: —
 > folded (`A2`, `A4` ×2, `A5`), `A8` gains `ADR-0032` decision 1's "engine and search do not change",
 > the stale "OPEN" in § Dependencies and the stale "40/40" in `A3` are fixed. **DoR 10/10 → `Ready`.**
 > Reasoning: `.grugops/context/owner-adrs-followups/notes/`.
+>
+> **Ruled 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rule-abc087-cost`), on the build's
+> `N8-LANE` overrun. **Option (a): `A4`'s ≥ 200-move run moves to `ENGINE_DEEP=1`. No count, rate or
+> clause is lowered, and the bar stays 650 ms.** `A4`'s frequency is re-worded so it reads p, not
+> p(1−q)/(1−pq). The levels 3/4/5 risk is named on `ABC-085`. **DoR 10/10, unchanged.** What the
+> Engineer re-runs is in § Delivery. Reasoning: `.grugops/context/rule-abc087-cost/notes/`.
 
 ## Problem
 
@@ -152,9 +158,16 @@ decided there or here)*:
   list**. *(The last clause is the "without being random" constraint made falsifiable. If
   Architect/Design's construction cannot satisfy it, that is the finding.)*
   *(Folded 2026-10-10, `ADR-0032` decisions 2–3.)*
-  - **The frequency's denominator:** blunders played ÷ moves, with **no-candidate moves** (fewer than
+  - ~~**The frequency's denominator:** blunders played ÷ moves, with **no-candidate moves** (fewer than
     three distinct scores, so no strict second-best exists) **left out of the denominator and
-    reported** as a count.
+    reported** as a count.~~ *(Struck 2026-10-10, `rule-abc087-cost`. Only a no-candidate move whose
+    draw fired leaves that denominator. With a no-candidate share q it reads p(1−q)/(1−pq), not p:
+    25.8 % against 40 % on pawn endings.)*
+  - **The frequency** *(2026-10-10)* is **(blunder moves + no-candidate moves) ÷ moves**. That is
+    every move on which the draw called for a blunder, and it must be within ±5 pp of the rate.
+    **Blunders played ÷ moves and the no-candidate count are reported beside it.** **Every
+    no-candidate move's own scored list has fewer than three distinct scores.** So a skipped blunder
+    cannot hide under the label.
   - **"Never the worst" is asserted on every blunder move, against that move's own returned scored
     list.** The module returns the list with the move (shape: the Engineer's), and the test reads it;
     it does not re-derive scores. The **worst class** is every move scoring the list's minimum, when
@@ -224,10 +237,15 @@ decided there or here)*:
   tests, and `A5` exists because this is the ticket that could create a level that breaks it.
 - **`NFR-005` — `A6` fixes the level the depth bars are measured at.** Without it "default
   difficulty" in `NFR-005`'s target has no referent.
-- **`N8-LANE` — ≤ 650 ms CPU.** `A2`/`A5`'s wall-clock runs are **opt-in**; `A1`, `A4`, `A7` and
-  `A8` are fast and machine-independent and stay in the default lane. *(2026-10-09.)* `A9` and
+- **`N8-LANE` — ≤ 650 ms CPU.** `A2`/`A5`'s wall-clock runs are **opt-in**; ~~`A1`, `A4`, `A7` and
+  `A8` are fast and machine-independent and stay in the default lane.~~ *(2026-10-09.)* `A9` and
   `A10` also run on the virtual clock and are machine-independent. Their CPU is measured against
   the bar, not assumed: `A9` alone is ≥ 150 searches.
+  *(Re-placed 2026-10-10, `rule-abc087-cost`.)* The ruled construction made "`A4` is fast" false.
+  Every blunder runs one `chooseMove` per legal root move, and the build read +0.825 s.
+  - **`ENGINE_DEEP=1`:** `A2`, `A3`, `A5`, and **`A4`'s ≥ 200-move run, every clause**.
+  - **Default lane:** `A1`, `A6`, `A7`, `A8`, `A9`, `A10`, plus test note 7's guard.
+  - **The bar is still 650 ms**, read on `ADR-0035`'s narrow set (`src/levels.test.ts`).
 - **Security — not triggered.** No input surface — `A8` guarantees it, since the only surface would
   be the argv parsing this ticket is forbidden to add.
 
@@ -245,6 +263,11 @@ decided there or here)*:
 5. **`A9` before `A7`** *(moved from `ABC-086`)*. A draw that ignores its seed passes `A7` trivially.
 6. **Do not add a PRNG dependency** *(moved from `ABC-086`)*. A dozen lines of xorshift is enough,
    and `AGENTS.md` says not to add dependencies without reason.
+7. **Keep the per-move half of `A4` in the default lane, at no search cost** *(2026-10-10,
+   `rule-abc087-cost`)*. `A4`'s run is opt-in now. So on the moves `A9` already plays (5 seeds × 30),
+   assert every non-engine move's clauses: legal, list in `legalMoves` order, never the worst, the
+   strict second-best, and no-candidate means fewer than three distinct scores. That adds no new
+   search and no frequency clause. It is a regression guard for note 2, not `A4`'s evidence.
 
 ## Size and priority rationale
 
@@ -274,6 +297,16 @@ scored outside the root search, so no switch, doors or oracle, and no re-size (`
 tickets. **It is a hard blocker for `ABC-085`**, which is also `P1`, so the pair is consistent.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM** (`rule-abc087-cost`, branch tip `ef297855`). **Result: 10 of 10 —
+unchanged.** The column is the Orchestrator's, and the ticket stays `In Development` until the re-run below.
+- **Item 4 stays ✅.** `A4`'s frequency now reads p on any corpus. No count, tolerance or clause was
+  lowered: ≥ 200 moves, ±5 pp and never-the-worst all stand.
+- **Item 6 stays ✅.** `N8-LANE` keeps 650 ms. Only `A4`'s run changes lane, and the line says which.
+- **Item 7 stays ✅:** seven notes.
+- **Item 10 stays ✅.** The overrun is a delivery reading. It is ruled, not a readiness blocker.
+- **Items 1–3, 5, 8, 9 are unchanged.** The levels 3/4/5 risk is `ABC-085`'s to measure. It is named
+  there and does not block this page.
 
 **Re-scored 2026-10-10 by BA/PM** (`owner-adrs-followups`, wave tip `246ddfc`). **Result: 10 of 10 —
 MET → `Ready`.** No ordering: it shares no file with any open ticket.
@@ -337,3 +370,135 @@ Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P1`, consistent with `ABC-085` |
 | 10 | no major unresolved blocker | **⚠️** **the blunder construction is genuinely open and is Architect/Design's.** `A4` is written to accept either candidate and to reject the degenerate one, but **which construction satisfies "beatable without being random" is not decided** |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-087`). Branch
+`grugops/ABC-087-difficulty-levels` from `94cf5e6b`: code `659215a3`, test refinements `3a133d26`,
+docs on top. Not merged, not pushed. Decisions, readings and drafts are in
+`.grugops/context/ticket-to-pr-ABC-087/notes/` (`…4e5f0323`, `…25962b19`, `…53ebd6d1`), with raw files
+in `probe/`. They are not restated here.
+
+**Criteria: `A1`-`A10` met. One NFR bar is NOT MET: `N8-LANE` reads +0.825 s CPU against 650 ms.
+It is reported, not lowered. No stop condition fired on the engine: `src/engine.ts` and
+`src/search.ts` are untouched, and 0 trigger-list files changed.**
+
+| # | verdict | reading |
+|---|---|---|
+| `A1` | MET | `LEVELS` 1-5, frozen: 100 ms/0.40, 500/0.20, **3000/0**, 4000/0, 4500/0. Easiest 1, default 3, hardest 5 |
+| `A2` | MET | Virtual clock: shipped path +2.0 % at every level; blunder path at the easiest level 101.3/100 over 20 and over 43 children; all ≤ 5 000 |
+| `A3` | MET (measurement) | Easiest **35/62**, default **58/62**, `ABC-084`'s rule at one step (120 virtual ms) for both. Baseline untouched |
+| `A4` | MET | Default lane 80/(204 − 1) = **39.4 %**; deep (perft + puzzles) 97/(246 − 0) = **39.4 %**. All legal. Never the worst, the strict second-best, on every blunder's own list |
+| `A5` | MET | Hardest, real clock: **30/30 ≤ 5 s, max 4,527 ms**. The rate is 0, so the blunder clause does not apply (asserted) |
+| `A6` | MET | Default = 3000 = `DEFAULT_BUDGET_MS`, rate 0. Identical to `chooseMove` reading-for-reading |
+| `A7` | MET | Same seed, same decisions over 30 positions (with blunders) |
+| `A8` | MET | `src/` diff: `levels.ts` +182/−0 and `levels.test.ts` +484/−0 only. The import set is asserted (no `virtual-clock.ts`), and no argv or prompt |
+| `A9` | MET | 5 seeds → 5 distinct sequences over 30 positions |
+| `A10` | MET | Interleaved A/B, seeds 11/12: **10/10 each**, and A ≠ B |
+
+- **Gate at `3a133d26`.** Lint, typecheck and build exit 0. `npm test` is 52 files / 1601 passed / 0
+  skipped. Skip integrity reads `No findings.`, and the lane inventory is 52 = 52.
+  `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`: 25 passed, 199 s at load1 5.8 → 4.0.
+- **`N8-LANE`** (`ADR-0035` narrow set, twin R 0.060 s): **+0.825 s (0.78-0.85), NOT MET.** Options
+  (a) move the default-lane `A4` run to deep, (b) a criterion change, or (c) accept. Routed in
+  `…53ebd6d1`; the Engineer took none.
+- **Raised, not acted on:**
+  - `A4`'s folded frequency is biased low by p(1 − q)/(1 − pq) when no-candidate positions are
+    common. It reads exact on the shipped corpora.
+  - Levels 3/4/5 differ by budget only, a risk to `ABC-085` `A2`.
+  - `NFR-004` wording is drafted for Security/NFR.
+  - The `AGENTS.md` lane line is drafted for the Scribe.
+
+**2026-10-10, BA/PM ruling** (subtask `rule-abc087-cost`). **Option (a). (b) is refused: lowering
+`A4`'s count weakens a criterion. (c) is not needed unless (a)'s re-run misses.**
+
+The Engineer changes `src/levels.test.ts` only. `src/levels.ts` is not touched.
+1. **Move** the default-lane `it("every move legal; rate ±5 pp; never the worst; the strict
+   second-best")` under `describe("A4 — the easiest level over ≥ 200 moves")` into the
+   `if (RUN_DEEP)` block, unchanged and tagged `[deep]`. Move it; do not delete it. It is the only
+   run that exercises a no-candidate move inside `A4`.
+2. **Keep in the default lane:** `A1` ×4, `A6` ×3, `A4`'s "byte-identical after a blunder", the four
+   edge cases, `seededRandom` ×2, `A9`, `A7`, `A10`, and `A8` ×2. That is **19 tests**.
+3. **Add test note 7's guard inside `A9`'s `it`**, on the choices it already plays. It adds
+   assertions only, with no new search and no new test.
+4. **Re-word `assertA4`'s frequency** to (blunders + no-candidate) ÷ moves, and log both.
+   Expected: deep perft + puzzles (97 + 0)/246 = 39.4 %; `ENDGAMES` (80 + 1)/204 = 39.7 %.
+
+**Re-measure:**
+- **Gate.** Expect `npm test` at 52 files / **1600** / 0 skipped, plus integrity and lane inventory.
+  Expect `ENGINE_DEEP=1 npx vitest run src/levels.test.ts` at **25 passed (19 default)**.
+- **`N8-LANE` on the same harness:** `ADR-0035` narrow set, placeholder base, `diff -r` twin, n = 8,
+  R reported.
+- **The verdict:**
+  - **MET** needs an admissible twin (≤ 1.5 %, sign at chance), R ≤ 650 ms and a median ≤ 650 ms.
+  - The variant's +0.54 s (0.47–0.57) stood on an inadmissible twin (−1.92 %). It is not evidence.
+  - An inadmissible twin is re-run within `self_fix_attempts` (2).
+  - **NOT MET or UNRESOLVED → stop.** That is option (c), the owner's word, with both readings.
+    BA/PM moves no other criterion out of the default lane.
+
+**2026-10-10, Software Engineer re-hop** (option (a) applied, `src/levels.test.ts` only, `f61ad6b1`).
+I applied the ruling's four items exactly. The moved `A4` run's body is unchanged, including its now
+stale `"default lane, ENDGAMES"` log label. Readings are in `…69fa98d1`, which supersedes `…25962b19`
+for the gate and the cost.
+
+- **Gate:**
+  - lint, typecheck and build: exit 0;
+  - `npm test`: **52 files / 1600 / 0 skipped**;
+  - integrity `No findings.`;
+  - lane inventory 52 = 52.
+- **`ENGINE_DEEP=1`:** **25 passed (19 default)**, 200.8 s at load1 6.9 → 3.7.
+  - `A4`: `ENDGAMES` (80 + 1)/204 = **39.7 %**; perft + puzzles (97 + 0)/246 = **39.4 %**, both within
+    ±5 pp. Blunders played ÷ moves are 39.2 % and 39.4 %.
+  - `A5`: max 4,590 ms.
+  - `A3`: 35/62 vs 58/62.
+- **`N8-LANE`: MET.** The reading is +0.535 s CPU (0.50-0.62, sign 8/8), with an admissible twin
+  (+0.31 %, 4/8) and R 0.030 s, at load1 6.42-6.85. The verdict rests on `ADR-0035` (`proposed`).
+- **The `AGENTS.md` lane line** is re-drafted with "19 default" in `…53ebd6d1`. It is the Scribe's,
+  owed before merge.
+
+**2026-10-10, Software Engineer QE fix-forward** (`026a7373`, `src/levels.test.ts` only, on QE's
+`a2850bd0`). This closes QE-087-a, -b and -e from QE's register (`…62d79e31`). Readings are in
+`…26fd4d9d`, which supersedes `…69fa98d1`.
+
+- **QE-087-a (default lane).** A pass-through spy on `chooseMove` checks 8 seeds: every call is
+  `{ budgetMs, now }` only, and the engine path gets exactly the level budget. **M3a is red** (1 of 21:
+  this row only).
+- **QE-087-b (default lane).** Every child score of one blunder is re-derived against the real
+  `chooseMove` at depth 1, and Qxd5 (wins a queen) must be alone at the top. **M8 is red** (1 of 21:
+  this row only).
+- **QE-087-e.** The deep `ENDGAMES` run now logs `ENGINE_DEEP, ENDGAMES`.
+- **Gate:**
+  - lint, typecheck and build: exit 0;
+  - `npm test`: **52 / 1602 / 0 skipped**;
+  - integrity `No findings.`;
+  - lane inventory 52 = 52.
+- **`ENGINE_DEEP=1`:** **27 passed (21 default)**, 197.6 s at load1 12.5 → 3.6. `A4` reads 39.7 % and
+  39.4 %; `A5` max is 4,536 ms; `A3` reads 35 vs 58.
+- **`N8-LANE`: MET.** The reading is +0.555 s (0.52-0.57), twin −0.66 % at 3/8, R 0.030 s, at load1
+  9.0-15.0. It rests on `ADR-0035` (`proposed`).
+- **The `AGENTS.md` lane line** is re-drafted in `…53ebd6d1` as "27 passed (21 default)". The Scribe
+  owes it before merge.
+
+**2026-10-10, Software Engineer: Security/NFR R1** (`1160b063`, `src/levels.test.ts` only, on
+`c35f38bf`). The readings are in `…14ec8ea7`, which supersedes `…26fd4d9d`.
+
+**New rows and pins.**
+- **R1 / QE-087-c (new default-lane row, 6 ms).** A `{ 20 000 ms, rate 1 }` level on a 5-move
+  position with `virtualClock(250)`, asserting `elapsedMs ≤ HARD_CEILING_MS + 4·step`. **M4 is red,
+  on this row only** (20 750 > 6 000).
+- **QE-087-d (taken, inside `A9`'s test, no new search).** Move k is a non-engine move iff the k-th
+  draw of a fresh `seededRandom(seed)` is below the rate. **M5b is red, on `A9` only.**
+
+**Gate.** Lint, typecheck and build exit 0. `npm test` reads **52 / 1603 / 0 skipped**, integrity
+`No findings.`, and the lane inventory is 52 = 52.
+
+**`ENGINE_DEEP=1`.** **28 passed (22 default)**, 202.0 s at load1 8.9 → 8.4.
+
+**`N8-LANE`: MET.**
+- Treatment **+0.545 s**, interval 0.53-0.56.
+- Twin +0.33 % at 4/8.
+- R 0.030 s.
+- load1 8.41-9.54.
+
+**`AGENTS.md`.** The lane line is re-drafted as "28 passed (22 default)" (`…53ebd6d1`). It is owed by
+the Scribe.

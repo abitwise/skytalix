@@ -1,0 +1,18 @@
+M5b_extra_draw_per_root_move: planted 3 edit(s) in <qe-scratch>/mut/M5b_extra_draw_per_root_move/src/levels.ts
+ .../scratchpad/qe-ABC-087/head/src => src}/levels.ts                 | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+== M5b_extra_draw_per_root_move default load1 { 3.35 4.31 4.90 } 12:18:53
+exit 0  1 s  load1 { 3.35 4.31 4.90 }
+    Test Files  1 passed (1)
+         Tests  19 passed (19)
+== M5b_extra_draw_per_root_move qe load1 { 3.35 4.31 4.90 } 12:18:54
+exit 1  90 s  load1 { 4.45 4.52 4.93 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  1 failed | 7 passed (8)
+      1  FAIL  src/levels.qe.test.ts > I2 — one draw per move > move k is non-engine iff the k-th draw < rate, terminals included, 5 seeds
+      1 AssertionError: seed 3 k=2: expected false to be true // Object.is equality
+== M5b_extra_draw_per_root_move deep load1 { 4.45 4.52 4.93 } 12:20:24
+exit 0  59 s  load1 { 5.00 4.61 4.93 }
+    Test Files  1 passed (1)
+         Tests  6 passed | 19 skipped (25)

@@ -1,0 +1,24 @@
+M8_child_score_sign_flipped: planted 1 edit(s) in <qe-scratch>/mut/M8_child_score_sign_flipped/src/levels.ts
+ .../scratchpad/qe-ABC-087/head/src => src}/levels.ts                    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== M8_child_score_sign_flipped default load1 { 6.67 5.40 5.15 } 12:26:24
+exit 0  2 s  load1 { 7.50 5.59 5.22 }
+    Test Files  1 passed (1)
+         Tests  19 passed (19)
+== M8_child_score_sign_flipped qe load1 { 7.50 5.59 5.22 } 12:26:26
+exit 1  44 s  load1 { 5.81 5.40 5.17 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  5 failed | 3 passed (8)
+      1  FAIL  src/levels.qe.test.ts > I1 — the seed never reaches chooseMove > blunder path: child budgets are the deadline formula and nothing seed-shaped, for 10 seeds
+      1  FAIL  src/levels.qe.test.ts > I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst > coarse clock (depth-1 children) on QE's mixed corpus
+      1  FAIL  src/levels.qe.test.ts > I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst > fine clock (deeper children, varied depths) on 12 perft/puzzle positions
+      1  FAIL  src/levels.qe.test.ts > I5 — the level total clamps to HARD_CEILING_MS > a 20000 ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000
+      1  FAIL  src/levels.qe.test.ts > I5 — the level total clamps to HARD_CEILING_MS > a Infinity ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000
+      1 AssertionError: expected -35 to be 35 // Object.is equality
+      2 AssertionError: expected +0 to be -0 // Object.is equality
+      1 AssertionError: expected 200 to be -200 // Object.is equality
+== M8_child_score_sign_flipped deep load1 { 5.81 5.40 5.17 } 12:27:10
+exit 0  73 s  load1 { 4.58 5.11 5.08 }
+    Test Files  1 passed (1)
+         Tests  6 passed | 19 skipped (25)

@@ -1,0 +1,12 @@
+{
+  n: 8,
+  counts: [ 'base:1', 'head:19', 'twin:19' ],
+  treatMedian: '0.535',
+  treatSign: '8/8',
+  treatInterval: [ '0.500', '0.620' ],
+  nullMedian: '0.005',
+  nullPctOfHead: '0.31%',
+  nullSign: '4/8',
+  R: '0.030',
+  load1: [ 6.42, 6.85 ]
+}

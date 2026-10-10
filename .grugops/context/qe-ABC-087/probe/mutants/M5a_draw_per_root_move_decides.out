@@ -1,0 +1,30 @@
+M5a_draw_per_root_move_decides: planted 1 edit(s) in <qe-scratch>/mut/M5a_draw_per_root_move_decides/src/levels.ts
+ .../scratchpad/qe-ABC-087/head/src => src}/levels.ts                    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== M5a_draw_per_root_move_decides default load1 { 3.76 4.63 4.88 } 12:32:51
+exit 1  1 s  load1 { 3.94 4.65 4.89 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  1 failed | 18 passed (19)
+      1  FAIL  src/levels.test.ts > A10 — the seed is threaded, not global > two instances, different seeds, called A, B, A, B, … play as each alone: 10/10 each
+      1 AssertionError: expected [ Array(10) ] to not deeply equal [ Array(10) ]
+== M5a_draw_per_root_move_decides qe load1 { 3.94 4.65 4.89 } 12:32:52
+exit 1  86 s  load1 { 3.79 4.47 4.80 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  2 failed | 6 passed (8)
+      1  FAIL  src/levels.qe.test.ts > I1 — the seed never reaches chooseMove > engine path: one call, { budgetMs: level budget, now }, identical result for 20 seeds
+      1  FAIL  src/levels.qe.test.ts > I2 — one draw per move > move k is non-engine iff the k-th draw < rate, terminals included, 5 seeds
+      1 AssertionError: expected 'blunder' to be 'engine' // Object.is equality
+      1 AssertionError: seed 3 k=0: expected false to be true // Object.is equality
+== M5a_draw_per_root_move_decides deep load1 { 3.79 4.47 4.80 } 12:34:18
+exit 1  99 s  load1 { 4.67 4.54 4.79 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  3 failed | 3 passed | 19 skipped (25)
+      1  FAIL  src/levels.test.ts > A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > every level, on the shipped path, uses its budget ±20% and never more than 5 s
+      1  FAIL  src/levels.test.ts > A4 — the easiest level over ≥ 200 moves [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best [deep]
+      1  FAIL  src/levels.test.ts > A4 — the easiest level over the perft corpus and the puzzles [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best
+      1 AssertionError: expected 'blunder' to be 'engine' // Object.is equality
+      1 AssertionError: expected 0.5754901960784313 to be less than or equal to 0.05
+      1 AssertionError: expected 0.5959349593495935 to be less than or equal to 0.05

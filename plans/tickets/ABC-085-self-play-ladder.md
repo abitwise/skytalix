@@ -81,6 +81,19 @@ at least 90%."*
 
 - **`ABC-087` must land first — OPEN.** There are no difficulty levels to ladder without it.
   *(2026-10-09.)* It also owns the seed and the seeded generator that `A5` consumes.
+  - **Named risk to `A2`** *(2026-10-10, BA/PM, `rule-abc087-cost`)*. `ABC-087`'s built table puts
+    **levels 3, 4 and 5 at 3 s, 4 s and 4.5 s, all at blunder rate 0**, so they differ by budget
+    alone: 1.33x and 1.125x.
+    - **Why it is structural.** Above the 3 s default, `NFR-004`'s 5 s ceiling allows at most
+      1.67x. On `kiwipete`, one ply cost about 3x the time: depth 5 at 1 000 ms, 6 at 3 000 ms
+      (`ADR-0032` § Context).
+    - **The prediction.** The 3/4 and 4/5 pairs may score about 50 %, not > 50 %.
+      `UNKNOWN - verify`; the ladder measures it, and the levels are not tuned for it (test note 4).
+    - **If `A2` fails there,** it is `ABC-087`'s finding, routed to BA/PM.
+    - **Every fix found so far is a product call, and none is taken here.** Fewer levels above the
+      default changes `ABC-101`'s vocabulary, which `EPIC-006` reads. A blunder rate at the default
+      changes today's play and `NFR-005`'s referent. Scoping `A2` to pairs at or below the default
+      weakens it, so it is the owner's.
 - ~~**`ABC-086` must land first — OPEN.**~~ **`ABC-086` — `Done`** (merged `3f26e21`; status
   corrected 2026-10-09). `A5`'s ~~seeded reproducibility~~ deterministic mode, the virtual clock, is
   that ticket's contract *(re-pointed 2026-10-09; the seed moved to `ABC-087`)*. This one
@@ -115,6 +128,8 @@ at least 90%."*
 3. **Do not let `A1` be the only measurement.** `A2` is the one that catches a broken middle.
 4. **Report the mode with every number** (`A6`). A 90% from a 10-game short run is not the epic's
    criterion and must never be quoted as if it were.
+5. **Run `A2`'s 3/4 and 4/5 pairs first** *(2026-10-10)*. They are the named risk in
+   § Dependencies, and the cheapest early answer to it.
 
 ## Size and priority rationale
 
@@ -131,6 +146,10 @@ overruled on:** if the owner wants the epic's first criterion treated as `P0`, t
 change.
 
 ## Definition of Ready
+
+**Fold note, 2026-10-10** (subtask `rule-abc087-cost`). **Not re-scored; still 7 of 10.** A named
+risk to `A2` (§ Dependencies) and test note 5 are added. No criterion changed. Item 3 stays ⚠️
+because `ABC-087` is not `Done`.
 
 **Fold note, 2026-10-09** (task `wave-2026-09-25`, subtask `fold-abc086-adr0027`, accepted
 `ADR-0027`, list `…f3caccd1`). **Not re-scored, and the score did not move: still 7 of 10, the same

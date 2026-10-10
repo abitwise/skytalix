@@ -1,0 +1,15 @@
+load1 { 2.78 4.75 5.12 }
+stdout | src/levels.qe.test.ts > I6 — level 3 IS chooseMove at DEFAULT_BUDGET_MS > one call, same move/depth/nodes/elapsed and clock readings, 3 seeds × 16 positions
+I6: 17 positions × 3 seeds identical to chooseMove
+ ✓ src/levels.qe.test.ts (8 tests) 82270ms
+   ✓ I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst > coarse clock (depth-1 children) on QE's mixed corpus  11113ms
+   ✓ I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst > fine clock (deeper children, varied depths) on 12 perft/puzzle positions  24850ms
+   ✓ I1 — the seed never reaches chooseMove > engine path: one call, { budgetMs: level budget, now }, identical result for 20 seeds  6593ms
+   ✓ I1 — the seed never reaches chooseMove > blunder path: child budgets are the deadline formula and nothing seed-shaped, for 10 seeds  9338ms
+   ✓ I2 — one draw per move > move k is non-engine iff the k-th draw < rate, terminals included, 5 seeds  453ms
+   ✓ I5 — the level total clamps to HARD_CEILING_MS > a 20000 ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000  500ms
+   ✓ I5 — the level total clamps to HARD_CEILING_MS > a Infinity ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000  503ms
+   ✓ I6 — level 3 IS chooseMove at DEFAULT_BUDGET_MS > one call, same move/depth/nodes/elapsed and clock readings, 3 seeds × 16 positions  28919ms
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+load1 { 3.33 4.34 4.92 }

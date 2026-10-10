@@ -1,0 +1,20 @@
+M4_clamp_removed: planted 1 edit(s) in <qe-scratch>/mut/M4_clamp_removed/src/levels.ts
+ .../scratchpad/qe-ABC-087/head/src => src}/levels.ts                    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== M4_clamp_removed default load1 { 4.85 5.09 5.07 } 12:29:18
+exit 0  1 s  load1 { 4.85 5.09 5.07 }
+    Test Files  1 passed (1)
+         Tests  19 passed (19)
+== M4_clamp_removed qe load1 { 4.85 5.09 5.07 } 12:29:19
+exit 1  143 s  load1 { 4.17 4.85 4.98 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  2 failed | 6 passed (8)
+      1  FAIL  src/levels.qe.test.ts > I5 — the level total clamps to HARD_CEILING_MS > a 20000 ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000
+      1  FAIL  src/levels.qe.test.ts > I5 — the level total clamps to HARD_CEILING_MS > a Infinity ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000
+      1 AssertionError: expected 950 to be close to 200, received difference is 750, but expected 5e-10
+      1 AssertionError: expected Infinity to be close to 200, received difference is Infinity, but expected 5e-10
+== M4_clamp_removed deep load1 { 4.17 4.85 4.98 } 12:31:42
+exit 0  67 s  load1 { 3.76 4.63 4.88 }
+    Test Files  1 passed (1)
+         Tests  6 passed | 19 skipped (25)

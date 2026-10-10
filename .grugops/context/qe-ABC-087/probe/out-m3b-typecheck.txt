@@ -1,0 +1,3 @@
+== M3b typecheck, run directly (the runner's 'exit 0' line read PIPESTATUS outside its subshell: a runner bug, superseded by this)
+src/levels.ts(118,76): error TS2353: Object literal may only specify known properties, and 'seed' does not exist in type 'EngineOptions'.
+tsc exit 2

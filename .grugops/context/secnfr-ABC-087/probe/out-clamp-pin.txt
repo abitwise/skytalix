@@ -1,0 +1,22 @@
+== step 250 tree load1 { 2.89 3.70 4.09 }
+clamp-pin: n=5 kind=blunder elapsed=5750 cost=9.8 ms
+ ✓ src/clamp-pin.test.ts (1 test) 12ms
+      Tests  1 passed (1)
+== step 250 m4tree load1 { 2.89 3.70 4.09 }
+clamp-pin: n=5 kind=no-candidate elapsed=20750 cost=445.5 ms
+   × QE-087-c — a blundering level above the ceiling is clamped to HARD_CEILING_MS in total 449ms
+     → expected 20750 to be less than or equal to 6000
+AssertionError: expected 20750 to be less than or equal to 6000
+     16|   console.log(`clamp-pin: n=${n} kind=${choice?.kind} elapsed=${choice…
+      Tests  1 failed (1)
+== step 100 tree load1 { 2.89 3.70 4.09 }
+clamp-pin: n=5 kind=blunder elapsed=5300 cost=177.1 ms
+ ✓ src/clamp-pin.test.ts (1 test) 179ms
+      Tests  1 passed (1)
+== step 100 m4tree load1 { 2.89 3.70 4.09 }
+clamp-pin: n=5 kind=no-candidate elapsed=20300 cost=1446.6 ms
+   × QE-087-c — a blundering level above the ceiling is clamped to HARD_CEILING_MS in total 1450ms
+     → expected 20300 to be less than or equal to 5400
+AssertionError: expected 20300 to be less than or equal to 5400
+     16|   console.log(`clamp-pin: n=${n} kind=${choice?.kind} elapsed=${choice…
+      Tests  1 failed (1)

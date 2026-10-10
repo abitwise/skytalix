@@ -1,0 +1,27 @@
+M9_deadline_not_shared: planted 1 edit(s) in <qe-scratch>/mut/M9_deadline_not_shared/src/levels.ts
+ .../scratchpad/qe-ABC-087/head/src => src}/levels.ts                    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== M9_deadline_not_shared default load1 { 4.58 5.11 5.08 } 12:28:25
+exit 0  1 s  load1 { 4.58 5.11 5.08 }
+    Test Files  1 passed (1)
+         Tests  19 passed (19)
+== M9_deadline_not_shared qe load1 { 4.58 5.11 5.08 } 12:28:26
+exit 1  356 s  load1 { 3.81 4.47 4.80 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  5 failed | 3 passed (8)
+      1  FAIL  src/levels.qe.test.ts > I1 — the seed never reaches chooseMove > blunder path: child budgets are the deadline formula and nothing seed-shaped, for 10 seeds
+      1  FAIL  src/levels.qe.test.ts > I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst > coarse clock (depth-1 children) on QE's mixed corpus
+      1  FAIL  src/levels.qe.test.ts > I3/I4 — every blunder is the strict second-best of an HONEST list, never the worst > fine clock (deeper children, varied depths) on 12 perft/puzzle positions
+      1  FAIL  src/levels.qe.test.ts > I5 — the level total clamps to HARD_CEILING_MS > a 20000 ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000
+      1  FAIL  src/levels.qe.test.ts > I5 — the level total clamps to HARD_CEILING_MS > a Infinity ms blundering level: total ≤ ceiling + overrun, last deadline = start + 5000
+      1 AssertionError: expected 100 to be close to 14.285714285714286, received difference is 85.71428571428571, but expected 5e-10
+      1 AssertionError: expected 100 to be close to 2.1739130434782608, received difference is 97.82608695652173, but expected 5e-10
+      1 AssertionError: expected 1000 to be close to 50, received difference is 950, but expected 5e-10
+== M9_deadline_not_shared deep load1 { 3.81 4.47 4.80 } 12:34:22
+exit 1  208 s  load1 { 4.59 4.39 4.68 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  1 failed | 5 passed | 19 skipped (25)
+      1  FAIL  src/levels.test.ts > A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > a blunder move at the easiest level uses the level budget ±20% (the clamped sum)
+      1 AssertionError: expected 1918.3333333331536 to be less than or equal to 20

@@ -1,0 +1,22 @@
+M3b_seed_as_engine_option: planted 1 edit(s) in <qe-scratch>/mut/M3b_seed_as_engine_option/src/levels.ts
+ .../scratchpad/qe-ABC-087/head/src => src}/levels.ts                    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== M3b_seed_as_engine_option default load1 { 5.59 5.36 5.15 } 12:27:14
+exit 0  1 s  load1 { 5.59 5.36 5.15 }
+    Test Files  1 passed (1)
+         Tests  19 passed (19)
+== M3b_seed_as_engine_option qe load1 { 5.59 5.36 5.15 } 12:27:15
+exit 1  53 s  load1 { 4.54 5.14 5.08 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  2 failed | 6 passed (8)
+      1  FAIL  src/levels.qe.test.ts > I1 — the seed never reaches chooseMove > engine path: one call, { budgetMs: level budget, now }, identical result for 20 seeds
+      1  FAIL  src/levels.qe.test.ts > I6 — level 3 IS chooseMove at DEFAULT_BUDGET_MS > one call, same move/depth/nodes/elapsed and clock readings, 3 seeds × 16 positions
+      2 AssertionError: expected [ 'budgetMs', 'now', 'seed' ] to deeply equal [ 'budgetMs', 'now' ]
+== M3b_seed_as_engine_option deep load1 { 4.54 5.14 5.08 } 12:28:08
+exit 0  67 s  load1 { 4.57 5.04 5.05 }
+    Test Files  1 passed (1)
+         Tests  6 passed | 19 skipped (25)
+== M3b_seed_as_engine_option typecheck
+src/levels.ts(118,76): error TS2353: Object literal may only specify known properties, and 'seed' does not exist in type 'EngineOptions'.
+exit 0

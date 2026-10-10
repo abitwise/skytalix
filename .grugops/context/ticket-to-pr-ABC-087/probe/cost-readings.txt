@@ -1,0 +1,14 @@
+== v1
+{  n: 8,  counts: [ 'base:1', 'head:20', 'twin:20' ],  treatMedian: '0.995',  treatSign: '8/8',  treatInterval: [ '0.90', '1.03' ],  nullMedian: '-0.030',  nullPctOfHead: '-1.49%',  nullSign: '1/8',  R: '0.080',  load1: [ 8.67, 9.48, 10 ]}
+== v2
+{  n: 8,  counts: [ 'base:1', 'head:20', 'twin:20' ],  treatMedian: '0.810',  treatSign: '8/8',  treatInterval: [ '0.78', '0.89' ],  nullMedian: '-0.025',  nullPctOfHead: '-1.31%',  nullSign: '3/8',  R: '0.090',  load1: [ 8.74, 9.15, 10.03 ]}
+== v3
+{  n: 8,  counts: [ 'base:1', 'head:20', 'twin:20' ],  treatMedian: '0.825',  treatSign: '8/8',  treatInterval: [ '0.78', '0.85' ],  nullMedian: '0.010',  nullPctOfHead: '0.54%',  nullSign: '4/8',  R: '0.060',  load1: [ 5.56, 6.02, 6.31 ]}
+== variant-noA4default
+{  n: 8,  counts: [ 'base:1', 'head:19', 'twin:19' ],  treatMedian: '0.540',  treatSign: '8/8',  treatInterval: [ '0.47', '0.57' ],  nullMedian: '-0.030',  nullPctOfHead: '-1.92%',  nullSign: '2/8',  R: '0.040',  load1: [ 5.35, 6.18, 6.37 ]}
+== rehop1 (f61ad6b1)
+{  n: 8,  counts: [ 'base:1', 'head:19', 'twin:19' ],  treatMedian: '0.535',  treatSign: '8/8',  treatInterval: [ '0.50', '0.62' ],  nullMedian: '0.005',  nullPctOfHead: '0.31%',  nullSign: '4/8',  R: '0.030',  load1: [ 6.42, 6.66, 6.85 ]}
+== qefix1 (026a7373)
+{  n: 8,  counts: [ 'base:1', 'head:21', 'twin:21' ],  treatMedian: '0.555',  treatSign: '8/8',  treatInterval: [ '0.52', '0.57' ],  nullMedian: '-0.010',  nullPctOfHead: '-0.66%',  nullSign: '3/8',  R: '0.030',  load1: [ 8.96, 13.5, 14.97 ]}
+== r1 (1160b063)
+{  n: 8,  counts: [ 'base:1', 'head:22', 'twin:22' ],  treatMedian: '0.545',  treatSign: '8/8',  treatInterval: [ '0.53', '0.56' ],  nullMedian: '0.005',  nullPctOfHead: '0.33%',  nullSign: '4/8',  R: '0.030',  load1: [ 8.41, 8.94, 9.54 ]}

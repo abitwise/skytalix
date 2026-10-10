@@ -1,0 +1,22 @@
+M3a_seed_perturbs_engine_budget: planted 1 edit(s) in <qe-scratch>/mut/M3a_seed_perturbs_engine_budget/src/levels.ts
+ .../scratchpad/qe-ABC-087/head/src => src}/levels.ts                    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== M3a_seed_perturbs_engine_budget default load1 { 4.92 4.78 4.97 } 12:22:44
+exit 0  1 s  load1 { 4.92 4.78 4.97 }
+    Test Files  1 passed (1)
+         Tests  19 passed (19)
+== M3a_seed_perturbs_engine_budget qe load1 { 4.92 4.78 4.97 } 12:22:45
+exit 1  57 s  load1 { 4.08 4.54 4.87 }
+   ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+    Test Files  1 failed (1)
+         Tests  3 failed | 5 passed (8)
+      1  FAIL  src/levels.qe.test.ts > I1 — the seed never reaches chooseMove > engine path: one call, { budgetMs: level budget, now }, identical result for 20 seeds
+      1  FAIL  src/levels.qe.test.ts > I2 — one draw per move > move k is non-engine iff the k-th draw < rate, terminals included, 5 seeds
+      1  FAIL  src/levels.qe.test.ts > I6 — level 3 IS chooseMove at DEFAULT_BUDGET_MS > one call, same move/depth/nodes/elapsed and clock readings, 3 seeds × 16 positions
+      1 AssertionError: expected 2700.1978474203497 to be 3000 // Object.is equality
+      1 AssertionError: expected 90.05471442360431 to be 100 // Object.is equality
+      1 AssertionError: seed 3 k=1: expected true to be false // Object.is equality
+== M3a_seed_perturbs_engine_budget deep load1 { 4.08 4.54 4.87 } 12:23:42
+exit 0  211 s  load1 { 5.59 5.36 5.15 }
+    Test Files  1 passed (1)
+         Tests  25 passed (25)

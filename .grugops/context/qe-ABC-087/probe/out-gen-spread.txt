@@ -1,0 +1,12 @@
+ENDGAMES n=204 seeds 1..20: outside ±5pp 7/20 (35.0%), mean 40.83%, sd 3.85pp; binomial sd 3.43pp
+ENDGAMES n=204 seeds 1..1000: outside ±5pp 142/1000 (14.2%), mean 40.04%, sd 3.38pp; binomial sd 3.43pp
+ENDGAMES n=204 seeds 1000000..1001000: outside ±5pp 148/1001 (14.8%), mean 39.88%, sd 3.39pp; binomial sd 3.43pp
+perft+puzzles n=246 seeds 1..20: outside ±5pp 5/20 (25.0%), mean 40.49%, sd 3.78pp; binomial sd 3.12pp
+perft+puzzles n=246 seeds 1..1000: outside ±5pp 121/1000 (12.1%), mean 40.04%, sd 3.14pp; binomial sd 3.12pp
+perft+puzzles n=246 seeds 1000000..1001000: outside ±5pp 110/1001 (11.0%), mean 39.90%, sd 3.11pp; binomial sd 3.12pp
+A9 5x30 n=150 seeds 1..20: outside ±5pp 7/20 (35.0%), mean 40.97%, sd 4.58pp; binomial sd 4.00pp
+A9 5x30 n=150 seeds 1..1000: outside ±5pp 209/1000 (20.9%), mean 40.00%, sd 3.98pp; binomial sd 4.00pp
+A9 5x30 n=150 seeds 1000000..1001000: outside ±5pp 201/1001 (20.1%), mean 39.86%, sd 3.89pp; binomial sd 4.00pp
+exact P(outside ±5pp | Binomial(204, 0.4)) = 15.3%
+exact P(outside ±5pp | Binomial(246, 0.4)) = 11.8%
+exact P(outside ±5pp | Binomial(150, 0.4)) = 21.1%
