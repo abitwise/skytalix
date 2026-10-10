@@ -1,8 +1,8 @@
 ---
 id: ABC-142
 title: Two one-test `npm test` failures went unnamed because each run's console output was truncated — make every run keep the failing test's name on disk
-status: in-review
-column: In Review
+status: done
+column: Done
 size: XS
 priority: P2
 epic: —
