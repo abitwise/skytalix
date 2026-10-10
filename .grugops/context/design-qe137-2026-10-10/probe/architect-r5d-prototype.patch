@@ -1,0 +1,20 @@
+--- a/src/history-pane.nfr.test.ts (eae04388)
++++ b/src/history-pane.nfr.test.ts (prototype R5d pins; spelling is the Engineer's)
+@@ -515,7 +515,17 @@
+     // escapes and framed by its leading newline, so it cannot match itself.
+     expect(instrument, "clause 1's one expression is unchanged").toContain(
+       '\nconst productionModulesIn = (directory: string): readonly string[] =>\n  readdirSync(directory).filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"));\n',
++    );
++    // `ADR-0011` `R5d` — the composer tripwire's own call and comparator, pinned the same way: a
++    // narrowed scan or a containment there drops the second-composer kill and every guard stays
++    // green. Its predicate's reach is `ADR-0029`'s (`AR-053-COMPOSER`), not pinned here.
++    expect(instrument, "the composer tripwire scans EVERY production module").toContain(
++      // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
++      '\n    const composers = productionModulesIn(directory).filter((file) =>\n      bindsAssembleFrame(readFileSync(`${directory}${file}`, "utf8")),\n    );\n',
+     );
++    expect(instrument, "the composer tripwire compares with an EQUALITY").toContain(
++      '\n    expect(\n      composers,\n      "a second frame composer: make it import the seam, or declare it as the root",\n    ).toEqual([COMPOSITION_ROOT]);\n',
++    );
+   });
+ 
+   it("A6.3 — the type-only exclusion is pinned to the WORD, across the CLOSED grammar", () => {

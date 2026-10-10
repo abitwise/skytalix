@@ -1,0 +1,56 @@
+# RUN log — design-qe137-2026-10-10, Architect/Design. Wave tip eae04388 (src/history-pane.nfr.test.ts blob ed2cd2b0).
+# Apple M3, Node v26.11.0, vitest 3.2.7. Other agents ran in parallel; load1 is logged per row (4.2 -> 35).
+
+## Harness: the Architect's OWN, not QE's and not the SE's
+QE's committed planters (qe-ABC-137/probe/qe137-*.mjs|sh, qe-ABC-136/probe/plantqe136.py) were NOT executed.
+They were read for their anchors only. No refusal was hit, because none was attempted, and no one else was
+asked to run anything. Own files, copied here from a private scratchpad (ledger.sh's hardcoded paths point
+there):
+  plant.mjs   own anchors + own spellings, each anchor asserted to occur EXACTLY once (exit 3 = PLANT-FAILED)
+  ledger.sh   one fresh `git archive eae04388` per build, node_modules symlinked, `biome check src`,
+              `tsc --noEmit`, vitest JSON reporter; scope `file` = src/history-pane.nfr.test.ts, `suite` = all
+Own witness spellings: WPS = `import { playMove } from "./history.ts";` + `void playMove;` in perft-bench.ts
+(QE: newGame + an export; QE-057: gameStatusOf). WSC = `import { assembleFrame } from "./frame.ts";` +
+`void assembleFrame;` in perft-bench.ts (QE: QF-SECOND-COMPOSER). perft-bench.ts stays export-free in both.
+
+## Premises re-measured at eae04388 (read from the file, not from QE's note)
+:24      `import { readdirSync, readFileSync } from "node:fs";`         (QE-137-b's rebind target)
+:152-153 "Both guards at the bottom of this file derive their scanned set from this function"  (item 3)
+:163-164 clause 1's helper, pinned by R5c (ABC-137)
+:369     licence guard call, pinned by R5b (ABC-136)
+:591-593 composer tripwire call statement, UNPINNED                         (QE-137-a)
+:595-598 composer tripwire comparator `expect(composers, …).toEqual([COMPOSITION_ROOT])`, UNPINNED (new here)
+:653     probe call; `production` feeds ONLY :661 `toContain(COMPOSITION_ROOT)` (no other read to :770)
+Readers of clause 1's docblock text in other test files: 0 (grep "THE ONE EXPRESSION|derive their|Both guards at").
+
+## ledger-file.tsv   2026-10-10T16:32:16Z..16:32:53Z (file scope)
+## ledger-suite.tsv  2026-10-10T16:33:07Z..16:34:33Z (whole suite on every survivor + the witness)
+## ledger-pin.tsv    2026-10-10T16:37:04Z..16:38:50Z (prototype R5d pins = architect-r5d-prototype.patch)
+  An earlier pin ledger (16:34:40Z..16:36:25Z) placed the same two literals ABOVE the R5c expect. The
+  verdicts were identical row for row. It was superseded only to put the literals after R5c with their own comment.
+
+Summary (exit / tests; every build lint 0, tsc 0):
+  CONTROL                          0  12/12
+  WPS                              1  licence guard        (armed)
+  WSC                              1  composer tripwire    (armed; suite: 1607/1608, the ONLY red)
+  N591-HEAD+FMT+WSC                0  12/12; suite 52 files 1608/1608   QE-137-a reproduced (filter before)
+  N591-TAIL+FMT+WSC                0  12/12; suite 1608/1608            QE-137-a (filter appended after `)`)
+  N591-WRAP+FMT+WSC                0  12/12; suite 1608/1608            QE-137-a (module-level wrapper)
+  C-CONTAIN+FMT+WSC                0  12/12; suite 1608/1608            NEW: comparator toEqual -> toContain
+  C-OPERAND+FMT+WSC                0  12/12; suite 1608/1608            NEW: asserted operand narrowed in expect
+  N653-NARROW+FMT                  0  12/12   no kill to drop: `production` feeds one toContain
+  N653-DROPROOT+FMT                1  probe "the declared composition root exists"  (narrowing fails CLOSED)
+  W653-WIDEN+ROOT-RENAMED+FMT      1  composer tripwire + probe child "failed (1) … esm/resolve"  (existence
+                                      check is double-held by the child's import of the root)
+  H-SHADOW+FMT+WPS                 0  12/12; suite 1608/1608            QE-137-b reproduced (own spelling)
+  H-FSMOCK+FMT+WPS                 0  12/12; suite 1608/1608            QE-137-b, second spelling: vi.mock("node:fs")
+                                      with :24 BYTE-IDENTICAL -> a pin on :24 would not close the class
+  PIN (prototype)                  0  12/12; PIN+FMT 0 12/12; PIN suite 52 files 1608/1608
+  PIN+WSC / PIN+WPS                1  composer tripwire / licence guard (witness reds unchanged)
+  PIN+N591-HEAD|TAIL|WRAP (+FMT+WSC) 1  drift tripwire "the composer tripwire scans EVERY production module"
+  PIN+C-CONTAIN|C-OPERAND (+FMT+WSC) 1  drift tripwire "the composer tripwire compares with an EQUALITY"
+  PIN+N653-NARROW+FMT              0  (ruled: no pin)
+  PIN+H-SHADOW|H-FSMOCK (+FMT+WPS) 0  (accepted class, QE-136-c)
+  biome-ignore count in the file: 1 at eae04388 -> 2 with the prototype (the scan literal holds `${`).
+
+## Gates on this branch: see the decision note's last section (own worktree, docs-only diff).

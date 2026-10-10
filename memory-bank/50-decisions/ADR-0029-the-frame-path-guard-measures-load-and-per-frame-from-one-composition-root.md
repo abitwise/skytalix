@@ -28,6 +28,11 @@ hop. A one-line pointer in `ADR-0011` is owed at acceptance.
   equality, and gives the pre-ruled fix for `AR-053-COMPOSER`'s trigger.
 - No decision changes.
 
+**POINTER 2026-10-10 (`design-qe137-2026-10-10`).** Decision 2's composer tripwire has two unpinned spans:
+its own scan statement and its comparator (`QE-137-a`). They are registered as `ADR-0011` `R5d`, and BA/PM is
+to cut a ticket that pins both in the drift tripwire. The predicate's reach stays `AR-053-COMPOSER`, with
+option 1 unchanged. See `ADR-0011` P7. No decision changes.
+
 ## Context
 
 `NFR-002`'s structural premise, in the catalog's words: *"If a renderer ever pulls the repetition derive

@@ -1,0 +1,13 @@
+CONTROL	file	16:32:17Z..16:32:19Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=4.15
+WPS	file	16:32:20Z..16:32:22Z	lint=0	tsc=0	vitest=1	1 files	11/12	licenses src/history.ts's runtime importers: the set EQUALS  :: AssertionError: expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]	load1=4.30
+WSC	file	16:32:23Z..16:32:25Z	lint=0	tsc=0	vitest=1	1 files	11/12	the composer tripwire: assembleFrame's value-importers EQUAL :: AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'perft	load1=4.30
+N591-HEAD+FMT+WSC	file	16:32:25Z..16:32:28Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=4.27
+N591-TAIL+FMT+WSC	file	16:32:28Z..16:32:30Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=4.27
+N591-WRAP+FMT+WSC	file	16:32:31Z..16:32:33Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=4.57
+C-CONTAIN+FMT+WSC	file	16:32:34Z..16:32:36Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=4.57
+C-OPERAND+FMT+WSC	file	16:32:37Z..16:32:39Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=4.37
+N653-NARROW+FMT	file	16:32:40Z..16:32:42Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=4.42
+N653-DROPROOT+FMT	file	16:32:43Z..16:32:45Z	lint=0	tsc=0	vitest=1	1 files	11/12	evaluates history.ts's module body NOWHERE ON THE FRAME PATH :: AssertionError: the declared composition root exists: expected [ 'apply.ts', 'cli-options.ts', …(33) ] to incl	load1=4.42
+W653-WIDEN+ROOT-RENAMED+FMT	file	16:32:45Z..16:32:48Z	lint=0	tsc=0	vitest=1	1 files	10/12	the composer tripwire: assembleFrame's value-importers EQUAL :: AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'rende || evaluates history.ts's module body NOWHERE ON THE FRAME PATH :: Error: probe child failed (1): node:internal/modules/esm/resolve:241	load1=4.38
+H-SHADOW+FMT+WPS	file	16:32:48Z..16:32:50Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=4.38
+H-FSMOCK+FMT+WPS	file	16:32:51Z..16:32:53Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=4.43

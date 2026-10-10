@@ -1,0 +1,8 @@
+N591-HEAD+FMT+WSC	suite	16:33:07Z..16:33:18Z	lint=0	tsc=0	vitest=0	52 files	1608/1608	-	load1=11.11
+N591-TAIL+FMT+WSC	suite	16:33:19Z..16:33:32Z	lint=0	tsc=0	vitest=0	52 files	1608/1608	-	load1=13.44
+N591-WRAP+FMT+WSC	suite	16:33:32Z..16:33:42Z	lint=0	tsc=0	vitest=0	52 files	1608/1608	-	load1=15.25
+C-CONTAIN+FMT+WSC	suite	16:33:43Z..16:33:52Z	lint=0	tsc=0	vitest=0	52 files	1608/1608	-	load1=16.56
+C-OPERAND+FMT+WSC	suite	16:33:53Z..16:34:02Z	lint=0	tsc=0	vitest=0	52 files	1608/1608	-	load1=19.64
+H-SHADOW+FMT+WPS	suite	16:34:02Z..16:34:13Z	lint=0	tsc=0	vitest=0	52 files	1608/1608	-	load1=17.45
+H-FSMOCK+FMT+WPS	suite	16:34:13Z..16:34:24Z	lint=0	tsc=0	vitest=0	52 files	1608/1608	-	load1=19.74
+WSC	suite	16:34:24Z..16:34:33Z	lint=0	tsc=0	vitest=1	52 files	1607/1608	the composer tripwire: assembleFrame's value-importers EQUAL :: AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'perft	load1=18.31

@@ -1,0 +1,13 @@
+PIN	file	16:37:04Z..16:37:08Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=32.70
+PIN+FMT	file	16:37:11Z..16:37:17Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=31.85
+PIN+WSC	file	16:37:20Z..16:37:27Z	lint=0	tsc=0	vitest=1	1 files	11/12	the composer tripwire: assembleFrame's value-importers EQUAL :: AssertionError: a second frame composer: make it import the seam, or declare it as the root: expected [ 'perft	load1=32.18
+PIN+WPS	file	16:37:29Z..16:37:35Z	lint=0	tsc=0	vitest=1	1 files	11/12	licenses src/history.ts's runtime importers: the set EQUALS  :: AssertionError: expected [ 'cli.ts', 'perft-bench.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]	load1=32.08
+PIN+N591-HEAD+FMT+WSC	file	16:37:37Z..16:37:40Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire, not a co :: AssertionError: the composer tripwire scans EVERY production module: expected '/**\n * `ABC-017`\'s `A11` — th	load1=29.91
+PIN+N591-TAIL+FMT+WSC	file	16:37:44Z..16:37:49Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire, not a co :: AssertionError: the composer tripwire scans EVERY production module: expected '/**\n * `ABC-017`\'s `A11` — th	load1=30.92
+PIN+N591-WRAP+FMT+WSC	file	16:37:50Z..16:37:55Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire, not a co :: AssertionError: the composer tripwire scans EVERY production module: expected '/**\n * `ABC-017`\'s `A11` — th	load1=30.29
+PIN+C-CONTAIN+FMT+WSC	file	16:37:58Z..16:38:02Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire, not a co :: AssertionError: the composer tripwire compares with an EQUALITY: expected '/**\n * `ABC-017`\'s `A11` — the pa	load1=32.02
+PIN+C-OPERAND+FMT+WSC	file	16:38:03Z..16:38:11Z	lint=0	tsc=0	vitest=1	1 files	11/12	runs the guard's OWN expression — a drift tripwire, not a co :: AssertionError: the composer tripwire compares with an EQUALITY: expected '/**\n * `ABC-017`\'s `A11` — the pa	load1=32.06
+PIN+N653-NARROW+FMT	file	16:38:13Z..16:38:16Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=29.89
+PIN+H-SHADOW+FMT+WPS	file	16:38:19Z..16:38:26Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=31.71
+PIN+H-FSMOCK+FMT+WPS	file	16:38:28Z..16:38:32Z	lint=0	tsc=0	vitest=0	1 files	12/12	-	load1=29.65
+PIN	suite	16:38:36Z..16:38:50Z	lint=0	tsc=0	vitest=0	52 files	1608/1608	-	load1=37.61

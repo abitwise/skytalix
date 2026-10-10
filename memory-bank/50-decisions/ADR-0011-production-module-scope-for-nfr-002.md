@@ -64,6 +64,14 @@ That reading is a **description** made precise. **Both licence entries pass as b
 
 No clause, verdict or instrument changes.
 
+**P7, 2026-10-10, subtask `design-qe137-2026-10-10`:**
+- `QE-137-a` is registered as `R5d` and goes to a ticket. The ticket pins the composer tripwire's call and its
+  comparator.
+- `QE-137-b` is accepted in the `QE-136-c` class, with a trigger.
+- The clause 1 docblock fix rides with `R5d`.
+
+No clause, verdict or instrument changes.
+
 **No target moves and no level is set, so no owner ratification is owed** — the same distinction from
 `ADR-0008` that `ADR-0009` and `ADR-0010` both draw. `ADR-0008` needed **Olger Oeselg** because it
 fixed a budget *level* a human has to value; there is no level here. Every claim below is
@@ -885,6 +893,44 @@ note `.grugops/context/design-owed-rulings-2026-10-10/notes/…95c73721`.
     - **What it does not change.** The pin reads clause 1 and changes no character of it.
     - **`R3` interaction, intended.** `R3`'s eventual recursive-enumeration fix must update this
       pin in the same diff. That makes the change show.
+- **P7 (2026-10-10, subtask `design-qe137-2026-10-10`). `QE-137-a` is registered as `R5d`, and it is a
+  TICKET. `QE-137-b` is an accepted residual. The clause 1 docblock fix rides with `R5d`.** All three were
+  re-measured at `eae04388` on the Architect's own harness, with both survivors run against the whole suite.
+  The reasoning and readings are in `.grugops/context/design-qe137-2026-10-10/notes/` (`…e86924d7`,
+  `…ca8c4b23`).
+  - **`R5d` (`QE-137-a`, LOW, owner Architect/Design). The composer tripwire's own call and comparator are
+    unpinned.**
+    - **The survivors.** The call statement at `:591–593` can be narrowed: by a filter before the predicate,
+      a filter appended after `)`, or a module-level wrapper. Separately, the comparator at `:595–598` can be
+      weakened to `toContain`, or its asserted operand narrowed. Each of these five is gate-clean. With a
+      second `assembleFrame` value-importer planted, the whole suite stays green (52 files / 1608 passed).
+      That tripwire is the second-composer kill's only holder.
+    - **Ruled: a TICKET**, on `R5b`'s and `R5c`'s reasons unchanged. A filename filter in front of a
+      scanned set is the shape `ABC-029` deleted. The equality is a kill only while its operands and its
+      operator are held.
+    - **What the ticket pins.** Two framed literals go in the drift tripwire: the whole scan statement and
+      the whole comparator statement. The reach comment goes from five spans to seven. A prototype reds all
+      five survivors and keeps the whole suite green. The `biome-ignore` count goes 1 → 2.
+    - **Ticket shape.** `XS`, 1 test file, 0 production lines. It is never run in parallel with another hop
+      on this file.
+    - **Not pinned.** The predicate `bindsAssembleFrame`: its reach stays `ADR-0029`'s `AR-053-COMPOSER`
+      (owner BA/PM). Its pre-ruled option 1 is unchanged.
+    - **The probe's call (`:653`): no witness, no pin.** Its set feeds one `toContain(COMPOSITION_ROOT)`, so
+      a narrowing can only fail closed (measured). A widening is double-held by the child's import of the
+      root (measured).
+    - **Trigger to revisit `:653`:** the first diff that makes that set feed anything else.
+  - **`QE-137-b`: accepted, LOW, owner Architect/Design, in the `QE-136-c` class.**
+    - **The survivor.** Rebinding the helper's callee keeps the pinned helper text. The aliased import plus
+      a module-scope `readdirSync` survives, and so does a `vi.mock("node:fs")` that leaves `:24`
+      byte-identical. It narrows all three scanned sets.
+    - **Why it is accepted.** It reaches three guards like `R5c`, but it reads as tampering, and no text pin
+      closes the class.
+    - **Trigger:** the first diff to this file that changes the `node:fs` import, adds a module-scope
+      `readdirSync`, or adds a `vi.mock`/`vi.spyOn` of `node:fs`. That hop's QE reads it as an `R5c`
+      question.
+  - **Clause 1's docblock (`:152–153`).** "Both guards" and "the two rules differ because THE TWO GUARDS…"
+    are stale since `ADR-0029`: three instruments now hold two properties. The fix rides with `R5d`'s
+    ticket as its own criterion. It is outside every pin.
 
 ### What this changes elsewhere
 
