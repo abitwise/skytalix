@@ -21,6 +21,11 @@ that the rules core's hardening tests exist to feed. **Owner acceptance owed.** 
   probes and raw readings are in `.grugops/context/design-abc010/probe/` (`RUN.txt` lists them). The summary
   is in that task's `notes/`.
 
+**POINTER 2026-10-10 (`design-qe010d-2026-10-10`).** QE found three shapes that decision 2's guard does not
+read (`QE-010-d`): a subdirectory, a non-`.ts` source, and a computed name. All three are **accepted residuals
+with triggers**. They are registered in § Residuals of decision 2's guard, and none is a ticket now. No
+decision changes. The guard reads exactly what decision 2 says, and nothing is owed on the `ABC-010` branch.
+
 ## Context
 
 `src/fen.ts` imports only `src/position.ts`. The rule "the side not to move is not in check" needs attack
@@ -156,3 +161,26 @@ The `ADR-0011` render closure is unchanged too.
 `fen.ts`. Variant A also needs `A13`'s count re-derived. Removing `parseFenGrammarOnly` is the expensive
 direction, because the six files would then have to build their boards some other way, and that cost is why
 the entry exists.
+
+## Residuals of decision 2's guard (2026-10-10, `design-qe010d-2026-10-10`)
+
+The guard is `src/fen.test.ts`'s "parseFenGrammarOnly guard". It reads `src/*.ts` flat, except `*.test.ts`
+and `fen.ts`, and it is a substring test. QE's gap is `QE-010-d`. Readings were taken on the Architect's own
+harness at `ABC-010` tip `f9d1ff4b`. The reasoning and readings are in
+`.grugops/context/design-qe010d-2026-10-10/notes/` (`…bbe6bd95`, `…03a2029d`).
+
+| id | shape | today (measured) | owner | trigger |
+|---|---|---|---|---|
+| **`AR-033-NESTED`** (LOW) | a production `.ts` under a subdirectory of `src/` | the guard is green, but the gate is RED: `src/cli.test.ts` `A3`'s `nested` equality | Architect/Design | **`ADR-0011` `R3`'s trigger** (the first `.ts` under a subdirectory of `src/`) |
+| **`AR-033-EXT`** (LOW) | a production `.mts .cts .js .mjs .cjs` under `src/` | `.mts` is silent on the guard, suite, lint and `tsc`, even when imported live. A live `.js` is red on `tsc` only | Architect/Design | the first diff that adds any of those extensions under `src/` (there are 0 today) |
+| **`AR-033-COMPUTED`** (LOW) | the name not spelled: a computed key, a typed template literal, a `\u` escape | silent on all four, and live | Architect/Design | the first production diff that binds `fen.ts` other than by a named import (`import * as`, `import()`, `export * from`). There are 0 today |
+
+- **The alignment fix for `AR-033-NESTED` and `AR-033-EXT`, whichever trigger fires first.** In the same
+  diff, the guard's file set becomes `ADR-0036`'s widened production-file set:
+  - every JS/TS source under `src/`, read **recursively**;
+  - excluding `.test.<ext>`, `.d.ts`/`.d.mts`/`.d.cts` and `fen.ts`.
+
+  The fix is one test file and 0 production lines. It is a criterion on the triggering hop's ticket, not a
+  ticket of its own.
+- **`AR-033-COMPUTED` has no textual fix**, in the same class as `AR-072-WORDHIT`. At its trigger, that hop's QE
+  reads it as an `AR-033-COMPUTED` question.

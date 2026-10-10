@@ -758,6 +758,12 @@ reader looking for the risk register finds all three.
 | **R4** | **the two DYNAMIC forms** in unlicensed, off-frame-path modules stay uncaught after the containment | Architect/Design | **the first production module that gains a dynamic import of any local module**, or `EPIC-006` when the frame path becomes a real closure and the probe's reach can be reconsidered |
 | **R5** | **ADDED 2026-08-15 — clause 3's EQUALITY IS ITSELF UNWITNESSED.** `toEqual` at `src/history-pane.nfr.test.ts:335` can be weakened to a containment and **the whole suite stays green** (QE's `M15` at `quality-gate-ABC-042`, survived). Either direction lost is a real kill: superset-of-licence loses the **unlicensed importer** (the primary kill, `WLAUNDER`/`WPERFT-STATIC`), subset loses **`WSTALELICENCE`** (the gained one). **Pre-existing and latent** — the comparator has been unwitnessed since `ABC-029` and `ABC-042` changed the array, not the operator | Architect/Design | **OPEN NOW.** Routed at this hop as a **new-ticket row** (BA/PM writes it, the Engineer builds it) — `ABC-042`'s `A12` bars the file. If that row is not cut, the trigger is **the next hop that opens `src/history-pane.nfr.test.ts` for any reason** |
 
+**`R3` also fires `ADR-0033` `AR-033-NESTED` (2026-10-10, `design-qe010d-2026-10-10`).** `ADR-0033`'s
+`parseFenGrammarOnly` guard in `src/fen.test.ts` also reads `src/` flat. Today only `src/cli.test.ts` `A3`'s
+`nested` equality stops a nested production file from reaching it. So the diff that fires `R3` must also widen
+that guard, in the same diff, to `ADR-0036`'s production-file set, read recursively. See `ADR-0033`
+§ Residuals of decision 2's guard. Nothing about `R3` itself changes.
+
 **`R5` is a residual of the INSTRUMENT, not of the ruling** — the same species as `R3`, and it is
 listed here because *"the equality is the kill this clause buys"* is only honest if something notices
 when the equality stops being one. **The guard is machine-checked; the guard's own comparator is

@@ -1,0 +1,38 @@
+# RUN log — design-qe010d-2026-10-10, Architect/Design. Question: ADR-0033 decision 2's 9(e) guard reach (QE-010-d).
+# Apple M3, Node v26.11.0. Other agents ran in parallel; load1 is on every plant row (4 → 32).
+# Subject: ABC-010 tip f9d1ff4b416b81ad4f9e235f8bf75cb0dd49560a (NOT merged). The guard is src/fen.test.ts:369-383 there.
+# Harness: the Architect's OWN, probe/plant.sh. Each plant is a fresh out-of-tree `git archive f9d1ff4b` in a private
+# scratchpad, node_modules symlinked; nothing was planted in any worktree. QE's probe scripts were not needed for this
+# question and were not executed, so nothing was refused.
+
+CLAIM   2026-10-10T16:49:57Z  bare mkdir .grugops/queue/claimed/design-qe010d-2026-10-10 in the main checkout.
+
+PLANTS  bash probe/plant.sh <repo> f9d1ff4b <trees> <plant> <out>   -> plants.out.txt (16:52:03Z – 16:54:04Z)
+  Per plant: guard alone (vitest -t "parseFenGrammarOnly guard"), whole suite (vitest run), biome check ., tsc --noEmit.
+  Every plant exports parseFenGrammarOnly into production under another name (`__qePlant`).
+
+  plant               where                                  guard  suite                       lint  tsc
+  CONTROL             —                                      green  green 52 / 1663             0     0
+  POS-flat-ts         src/history.ts re-export               RED    RED 1 (the guard)           0     0
+  N1-nested-ts        src/qeplant/x.ts re-export             green  RED 1 (cli.test.ts A3)      0     0
+  N1-nested-ts-live   same + history.ts re-exports it        green  RED 1 (cli.test.ts A3)      0     0
+  N1-nested-mts       src/qeplant/x.mts                      green  green                       0     0
+  N2-flat-mts         src/qeplant.mts                        green  green                       0     0
+  N2-flat-mts-live    same + history.ts re-exports it        green  green                       0     0
+  N2-flat-js-live     src/qeplant.js + history.ts re-export  green  green                       0     2 (TS7016)
+  N3-concat           (qeFen as Record<…>)["parseFen" + "GrammarOnly"]   green  green           0     0
+  N3-template         qeFen[`parseFen${"GrammarOnly"}` as const] — no cast   green  green       0     0
+  N3-escape           qeFen.parseFenGrammarOnly         green  green                       0     0
+
+  The cli.test.ts red is "ABC-042 — the shape of what was delivered > A3 — the entry point is flat in src/": its
+  `nested` equality (src/cli.test.ts:1511-1514 at both tips), i.e. ADR-0011 R3's tripwire, not the 9(e) guard.
+
+LIVENESS  node --input-type=module, import src/history.ts and src/fen.ts in each silent tree -> liveness.out.txt
+  N1-nested-ts-live, N2-flat-mts-live, N3-concat, N3-template, N3-escape: `__qePlant === parseFenGrammarOnly` true (5/5).
+
+SHAPE COUNTS at f9d1ff4b and at the wave tip 4afff35e (git ls-tree)
+  .mts .cts .js .mjs .cjs .tsx under src/: 0 and 0.  .ts under a subdirectory of src/: 0 and 0.
+  Production importers of fen.ts (f9d1ff4b) -> fen-importers.out.txt: 6, all `import { parseFen } from "./fen.ts"`.
+  Namespace bindings of fen.ts in production (import * as / import() / export * from): 0.
+
+GATE on this branch (docs only): see the decision note and the commit message.
