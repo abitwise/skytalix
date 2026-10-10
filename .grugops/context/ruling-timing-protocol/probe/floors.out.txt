@@ -1,0 +1,54 @@
+## ABC-110 2026-09-19 @2c96dbd [full-lane] load1 4.1-7.5 med 4.5
+   arm medians (scored rounds): N n=8 cpu 14.915 wall 4.380 | A n=8 cpu 14.940 wall 4.385
+   cpu  null N-A n=8 med -0.055 s sign+ 3/8 k=2 -0.220..+0.110 R=0.220 s (cov 93.0 %) = 1.47 % of ~14.95 s
+   wall null N-A n=8 med -0.025 s sign+ 3/8 k=2 -0.190..+0.060 R=0.190 s (cov 93.0 %)
+## ABC-079 2026-09-25 [full-lane] load1 2.3-13.3 med 4.5
+   arm medians (scored rounds): N n=8 cpu 22.300 wall 5.335 | B n=8 cpu 18.605 wall 4.885 | A n=8 cpu 22.285 wall 5.340
+   cpu  null N-A n=8 med +0.130 s sign+ 6/8 k=2 -0.290..+0.310 R=0.310 s (cov 93.0 %) = 1.41 % of ~22.05 s  | treat A-B med +3.625 s +3.480..+3.700
+   wall null N-A n=8 med -0.025 s sign+ 3/8 k=2 -0.250..+0.280 R=0.280 s (cov 93.0 %)  | treat A-B med +0.480 s +0.360..+0.580
+## ABC-122 2026-09-25 [full-lane] load1 5.8-20.8 med 12.6
+   arm medians (scored rounds): N n=8 cpu 23.385 wall 5.475 | B n=8 cpu 22.845 wall 5.390 | W n=8 cpu 23.660 wall 5.500 | A n=8 cpu 23.460 wall 5.460
+   cpu  null N-A n=8 med -0.020 s sign+ 2/8 k=2 -0.120..+0.060 R=0.120 s (cov 93.0 %) = 0.51 % of ~23.33 s  | treat A-B med +0.670 s +0.450..+0.880
+   wall null N-A n=8 med +0.010 s sign+ 4/8 k=2 -0.170..+0.200 R=0.200 s (cov 93.0 %)  | treat A-B med +0.045 s -0.010..+0.360
+## ABC-082 2026-10-09 (2 sessions) [full-lane] load1 13.2-22.9 med 17.2
+   arm medians (scored rounds): N n=14 cpu 31.035 wall 7.950 | X n=14 cpu 30.735 wall 7.850 | B n=14 cpu 29.915 wall 7.745 | A n=14 cpu 30.860 wall 7.910
+   cpu  null N-A n=14 med +0.035 s sign+ 7/14 k=4 -0.450..+0.350 R=0.450 s (cov 94.3 %) = 1.46 % of ~30.77 s  | treat A-B med +0.870 s +0.650..+1.230
+   wall null N-A n=14 med -0.010 s sign+ 6/14 k=4 -0.070..+0.060 R=0.070 s (cov 94.3 %)  | treat A-B med +0.160 s +0.080..+0.210
+## ABC-084 run1 2026-10-09 [full-lane] load1 5.4-44.1 med 7.1
+   arm medians (scored rounds): N n=10 cpu 24.930 wall 6.585 | B n=10 cpu 24.855 wall 6.520 | R n=10 cpu 24.770 wall 6.405 | A n=10 cpu 25.125 wall 6.650
+   cpu  null N-A n=10 med +0.155 s sign+ 6/10 k=2 -0.850..+0.990 R=0.990 s (cov 97.9 %) = 3.97 % of ~24.92 s  | treat A-B med +0.245 s -1.280..+2.350
+   wall null N-A n=10 med +0.060 s sign+ 5/10 k=2 -0.240..+0.930 R=0.930 s (cov 97.9 %)  | treat A-B med +0.060 s -0.670..+0.260
+## ABC-084 run2 2026-10-09 [full-lane] load1 5.1-13.6 med 7.6
+   arm medians (scored rounds): N n=8 cpu 25.375 wall 6.800 | B n=8 cpu 24.875 wall 6.880 | R n=8 cpu 24.785 wall 6.620 | A n=8 cpu 25.350 wall 6.795
+   cpu  null N-A n=8 med +0.415 s sign+ 6/8 k=2 -1.580..+0.910 R=1.580 s (cov 93.0 %) = 6.32 % of ~25.00 s  | treat A-B med +0.460 s -0.710..+1.280
+   wall null N-A n=8 med +0.100 s sign+ 4/8 k=2 -0.500..+0.450 R=0.500 s (cov 93.0 %)  | treat A-B med +0.020 s -0.090..+0.180
+## ABC-084 run3 2026-10-09 [full-lane] load1 5.6-14.7 med 7.5
+   arm medians (scored rounds): N n=8 cpu 26.220 wall 7.140 | B n=8 cpu 26.040 wall 7.160 | R n=8 cpu 26.085 wall 7.470 | A n=8 cpu 26.075 wall 7.005
+   cpu  null N-A n=8 med +0.370 s sign+ 6/8 k=2 -1.030..+0.900 R=1.030 s (cov 93.0 %) = 3.94 % of ~26.17 s  | treat A-B med +0.370 s -0.480..+1.650
+   wall null N-A n=8 med +0.130 s sign+ 6/8 k=2 -0.140..+0.200 R=0.200 s (cov 93.0 %)  | treat A-B med +0.090 s -0.130..+0.320
+## ABC-128 Engineer 2026-10-10 [full-lane] load1 not logged
+   arm medians (scored rounds): B n=7 cpu 35.410 | N n=7 cpu 35.810 | A n=7 cpu 34.590
+   cpu  null N-A n=7 med +0.620 s sign+ 6/7 k=1 -0.240..+2.890 R=2.890 s (cov 98.4 %) = 8.26 % of ~34.98 s  | treat B-A med +0.590 s -0.600..+2.150
+## ABC-127 Security/NFR 2026-10-10 [full-lane] load1 7.2-36.0 med 26.5
+   arm medians (scored rounds): N n=8 cpu 34.875 wall 12.315 | B n=8 cpu 35.285 wall 14.065 | A n=8 cpu 35.210 wall 12.865
+   cpu  null N-A n=8 med -0.475 s sign+ 3/8 k=2 -0.760..+0.760 R=0.760 s (cov 93.0 %) = 2.17 % of ~35.05 s  | treat A-B med +0.225 s -1.490..+0.890
+   wall null N-A n=8 med +0.125 s sign+ 4/8 k=2 -0.680..+1.190 R=1.190 s (cov 93.0 %)  | treat A-B med -0.020 s -6.250..+1.140
+## ABC-119 QE set A 2026-10-10 [full-lane] load1 12.5-31.5 med 22.5
+   arm medians (scored rounds): head n=10 cpu 32.770 wall 9.595 | twin n=10 cpu 33.670 wall 10.390 | base n=10 cpu 33.865 wall 9.825
+   cpu  null twin-base n=10 med -0.110 s sign+ 5/10 k=2 -1.160..+3.120 R=3.120 s (cov 97.9 %) = 9.35 % of ~33.38 s  | treat head-base med -0.715 s -1.450..+1.210
+   wall null twin-base n=10 med +0.100 s sign+ 5/10 k=2 -0.700..+3.250 R=3.250 s (cov 97.9 %)  | treat head-base med +0.035 s -4.500..+0.510
+## ABC-119 QE set B 2026-10-10 [full-lane] load1 22.5-35.9 med 29.7
+   arm medians (scored rounds): head n=10 cpu 34.400 wall 10.570 | twin n=10 cpu 33.325 wall 9.585 | base n=10 cpu 33.025 wall 9.495
+   cpu  null twin-base n=10 med -0.065 s sign+ 5/10 k=2 -0.840..+1.720 R=1.720 s (cov 97.9 %) = 5.14 % of ~33.46 s  | treat head-base med +0.725 s -0.830..+2.630
+   wall null twin-base n=10 med +0.100 s sign+ 5/10 k=2 -0.670..+4.390 R=4.390 s (cov 97.9 %)  | treat head-base med +0.035 s -0.800..+5.190
+## ABC-128 Engineer 2026-10-10 [one-file] load1 not logged
+   arm medians (scored rounds): B n=9 cpu 2.000 | N n=9 cpu 1.990 | A n=9 cpu 2.060
+   cpu  null N-A n=9 med +0.030 s sign+ 7/9 k=2 -0.170..+0.090 R=0.170 s (cov 96.1 %) = 8.46 % of ~2.01 s  | treat B-A med +0.030 s -0.160..+0.120
+## ABC-127 Security/NFR 2026-10-10 [one-file] load1 15.3-24.0 med 20.1
+   arm medians (scored rounds): N n=12 cpu 1.550 wall 0.905 | B n=12 cpu 1.480 wall 0.840 | A n=12 cpu 1.540 wall 0.880
+   cpu  null N-A n=12 med -0.025 s sign+ 5/12 k=3 -0.130..+0.090 R=0.130 s (cov 96.1 %) = 8.61 % of ~1.51 s  | treat A-B med +0.045 s -0.100..+0.150
+   wall null N-A n=12 med +0.020 s sign+ 7/12 k=3 -0.050..+0.270 R=0.270 s (cov 96.1 %)  | treat A-B med +0.025 s -0.080..+0.090
+## ABC-084 2026-10-09 P=suite file, E=one-assertion empty file [one-file] load1 7.3-8.6 med 7.9
+   arm medians (scored rounds): Q n=12 cpu 1.095 wall 0.570 | E n=12 cpu 1.015 wall 0.535 | P n=12 cpu 1.290 wall 0.730
+   cpu  no identity twin in this set  | treat P-E med +0.280 s +0.260..+0.300
+   wall no identity twin in this set  | treat P-E med +0.195 s +0.190..+0.210
