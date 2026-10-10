@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-133` → `In Review` (`82104f70`); QE `qe-ABC-133` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-135` → `In Review` (`e7123236`); QE `qe-ABC-135` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — Scribe `scribe-command-log-2026-10-10` merged: command log reconciled (4 AGENTS.md commits; PUZZLE_DEEP/CLI_DEEP/ENGINE_DEEP re-run). Headroom proposal (ranks 1–3 → 1,533 B headroom) held until `ABC-087` merges; two stale receipts (Test (all) 51/1584, ENGINE_DEEP 46) fold into that edit._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-owed-batch-2026-10-10` merged (`36a4c5b3`): `ABC-129` Backlog → `Ready` (10/10); new `ABC-134`, `ABC-135` → `Ready` (10/10, XS); page notes on ABC-041 A8 and ABC-101 (own-integer-key lookup) `ABC-135` pulled → `In Development`._
@@ -445,7 +446,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   trigger fires (the columns still exist; they just stay empty).
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
 
@@ -453,10 +454,10 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 2/3)
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
   BOARD <-> TICKET CONTRACT: each ticket file (`plans/tickets/<prefix>-xxx.md`) carries a
@@ -595,8 +596,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-133] Count the spawn pin over the parser view, not a stripped string  (BA/PM, S, P3 → P1 if AR-058-STRIP fires, epic: —, since: 2026-10-10, **DoR 10/10**; F-058-1 + P1 folded; ~176 ms parse cost, A4 ≤ 250 ms; after ABC-059, same file) **→ In Development 2026-10-10**, pulled after `ABC-059` merged (`4c33b72b`) by the Orchestrator (subtask `ticket-to-pr-ABC-133`, branch `grugops/ABC-133-spawn-pin-parser-view`).
+## In Development (WIP 0/3)
 
 
 
@@ -624,8 +624,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
 - [ABC-135] `A8`'s consumer instrument reads a comment as a specifier, and two properties it has are pinned by no test — test-only, one file  (BA/PM, XS, P3 → P2 on ADR-0030 C1's trigger, since: 2026-10-10, DoR 10/10; cut from QE-054-a/c in `bapm-owed-batch-2026-10-10`; `src/render-seam.test.ts` only → UAT waiver applies) **→ In Development 2026-10-10**, pulled by the Orchestrator (subtask `ticket-to-pr-ABC-135`, branch `grugops/ABC-135-a8-comment-specifiers`). **→ In Review 2026-10-10**: built on `grugops/ABC-135-a8-comment-specifiers` @ `e7123236` (A1–A4 MET, gates green, 1585 tests; `src/render-seam.test.ts` +31/−6 only; real-tree map 1,190/92 identical; N8-LANE MET, reading 2 admissible). QE `qe-ABC-135` dispatched.
+- [ABC-133] Count the spawn pin over the parser view, not a stripped string  (BA/PM, S, P3 → P1 if AR-058-STRIP fires, epic: —, since: 2026-10-10, **DoR 10/10**; F-058-1 + P1 folded; ~176 ms parse cost, A4 ≤ 250 ms; after ABC-059, same file) **→ In Development 2026-10-10**, pulled after `ABC-059` merged (`4c33b72b`) by the Orchestrator (subtask `ticket-to-pr-ABC-133`, branch `grugops/ABC-133-spawn-pin-parser-view`). **→ In Review 2026-10-10**: built on `grugops/ABC-133-spawn-pin-parser-view` @ `82104f70` (A1–A5 MET, gates green, 1584 tests; `src/cli.test.ts` +88/−9 only; A4 in-file cost ~157–162 ms CPU ≤ 250; N8_SPAWN 27; AR-058-STRIP not fired; closes QE-058-e as a side effect). QE `qe-ABC-133` dispatched; page recommends a Security/NFR hop after QE (V1.2.5 drift guard changed).
 
 
 
