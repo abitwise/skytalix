@@ -256,3 +256,19 @@ still caught by merged `A8` in `src/turn-loop.test.ts`. For BA/PM's re-score:
 **2026-10-10: re-cut by BA/PM** (`recut-abc051`). All three stop questions are answered in the
 header and in `.grugops/context/recut-abc051/notes/`. The next build hop starts from the table in
 `## Scope`.
+
+**2026-10-10: built** by the Software Engineer (subtask `ticket-to-pr-ABC-051-r2`). Branch
+`grugops/ABC-051-r2` from `7812018`, code commit `5451323`. Re-verification held, and sites 2–6 are
+exactly as `## Scope` states.
+
+- **`A1`.** The spy went in at `:40-43`. `M2` (md5 `276de6e0…`) is red 4/4 in
+  `src/turn-loop.nfr.test.ts`, and every failure is `expected "keyHistory" to be called +0 times`
+  (40/120/300/40). On base it was green 4/4.
+- **`A3`.** The grep exits 1. The rule sits beside 18.
+- **`A4`.** Exactly two files (+19/−7 and +7/−1). The pipeline output is empty. The suite is 50 /
+  1,540 on both sides, and the skip count is 0. All gates exit 0.
+- **`N8-LANE`.** The median is −410 ms, with the null at −0.63%. The machine was under heavy load,
+  and the note says so.
+
+Ready for `In Review`: the board move is the Orchestrator's, and the QE hop is owed. Evidence:
+`.grugops/context/ticket-to-pr-ABC-051-r2/notes/`.
