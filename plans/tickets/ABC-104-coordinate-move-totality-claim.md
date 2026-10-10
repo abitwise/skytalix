@@ -1,8 +1,8 @@
 ---
 id: ABC-104
 title: `src/coordinate-move.ts`'s header claims total, and it is total over `text` only
-status: in-review
-column: In Review
+status: ready-for-uat
+column: Ready for UAT
 size: XS
 priority: P3
 epic: EPIC-003
