@@ -2,7 +2,7 @@
 task: wave-2026-09-25
 subtask: design-owed-rulings-2026-10-10
 role: architect-design
-workflow: agent-factory/workflows/03-architecture.md
+workflow: agent-factory/workflows/07-backlog-refinement.md (Architect rulings; ADR per role page)
 ref: .grugops/context/design-owed-rulings-2026-10-10/
 source_refs:
   - .grugops/context/wave-2026-09-25/notes/20261010T132239Z-orchestrator-observation-handoff-2-7d3e1b84.md (§ Owed routings → Architect)
