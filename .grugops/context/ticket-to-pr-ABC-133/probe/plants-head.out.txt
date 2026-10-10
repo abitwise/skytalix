@@ -1,0 +1,53 @@
+commit cd594b5f  node v26.11.0  2026-10-10T13:58:36Z
+== control (unmutated)   load1 5.51  13:58:36Z
+      Tests  67 passed (67)
+== Q11 REAL call after a "//" string on the same line   load1 7.79  13:58:42Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1929:71
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== Q12 REAL call between "/*" and "*/" strings   load1 7.56  13:58:46Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1931:71
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== Q13 MS2 + call hidden after "//" string   load1 7.36  13:58:51Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1918:81
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== P1 namespace import + cp.execSync (a shell child)   load1 7.17  13:58:55Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1918:81
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== P-DYN module-level dynamic import   load1 7.17  13:58:59Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1916:81
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== E-MS1 direct spawnSync child   load1 7.16  13:59:04Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1929:71
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== E-MS2 namespace import   load1 6.90  13:59:08Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1916:81
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== E-A1 prose docblock names `spawnSync(`   load1 7.15  13:59:13Z
+      Tests  67 passed (67)
+== S-CTRL string control, no call   load1 6.74  13:59:17Z
+      Tests  67 passed (67)
+== Q14 REAL call through an alias (out of scope)   load1 6.68  13:59:21Z
+      Tests  67 passed (67)
+== Q8 template-literal TEXT `spawnSync(` (not a call)   load1 10.07  13:59:27Z
+      Tests  67 passed (67)
+== Q9 REAL call inside a template interpolation   load1 11.10  13:59:33Z
+      Tests  1 failed | 66 passed (67)
+   × ABC-042 — the shape of what was delivered > N8-LANE — this file spawns TWENTY-SEVEN children and no more
+ ❯ src/cli.test.ts:1929:71
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+== Q10 // line comment names `spawnSync(`   load1 10.61  13:59:38Z
+      Tests  67 passed (67)

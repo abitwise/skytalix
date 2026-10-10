@@ -1,0 +1,32 @@
+base 8be650e6 delivered cd594b5f
+-- name-only base..delivered
+src/cli.test.ts
+-- numstat
+88	9	src/cli.test.ts
+-- package.json/package-lock.json numstat (empty = untouched)
+-- added/deleted files
+-- zero-production-lines grep (empty = rule applies)
+-- src/ non-test numstat
+-- it( added/removed
+0
+0
+-- N8_SPAWN
+1837:    const N8_SPAWN = 17 + 7 + 1 + 2;
+-- spawn/exec in added lines
+13:+      /^(node:)?child_process$/.test(node.text);
+60:+    expect(specifiers, "child_process specifier positions and what each binds").toEqual([
+72:+    expect(resolved, "calls that resolve to a child_process binding").toEqual([
+-- added non-comment lines containing // or /*
+(none)
+-- typescript loads in src/*.test.ts
+src/cli.test.ts
+-- protected regions (before / after)
+A042-A1 12 cfed65970e28374b
+D065 184 4c2d5f84a0dc8dd9
+D059 75 1a39fb91c2e021ee
+A042-A1 12 cfed65970e28374b
+D065 184 4c2d5f84a0dc8dd9
+D059 75 1a39fb91c2e021ee
+-- hunks
+@@ -31,6 +31,8 @@
+@@ -1838,16 +1840,93 @@ describe("ABC-042 — the shape of what was delivered", () => {

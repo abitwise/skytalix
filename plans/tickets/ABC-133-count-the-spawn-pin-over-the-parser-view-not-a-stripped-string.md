@@ -187,3 +187,44 @@ Assessed by BA/PM at the cutting hop, **2026-10-10**, wave tip `9ddd6e80`. **Res
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P3`, with its `P1` trigger |
 | 10 | no major unresolved blocker | **✅** none. The order behind `ABC-059` is a pull order, not a blocker |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-133`).
+- Branch `grugops/ABC-133-spawn-pin-parser-view`, from `8be650e6`. The code is `cd594b5f`
+  (`src/cli.test.ts` +88/−9, two hunks: the import block and the pin).
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-133/` (`…a530d175`,
+  `…ccb75b95`, `probe/`) and are not restated here.
+
+**`A1`–`A5` are met. No stop condition fired.**
+- The premise held at `8be650e6`: the pin is at `:1835-1850`, `N8_SPAWN` is 27, and the file is
+  changed only by `ABC-059`'s insertion.
+- `AR-058-STRIP` did not fire on this diff: no `//` or `/*` literal was added, and no
+  `node:child_process` form.
+
+| # | verdict | reading (plants out of tree; base `8be650e6` → delivered `cd594b5f`) |
+|---|---|---|
+| `A1` | MET | `Q11`, `Q12`, `Q13`, `P1` and `P-DYN`: GREEN 67/67 → **RED 1/67**, the pin row alone. `P1` reds on both counts |
+| `A2` | MET | The unmutated file is green, and (i) reads 1 position (`:1706` not counted). `MS1`/`MS2` stay RED. The prose plant and the string control stay GREEN |
+| `A3` | MET | `Q14` is **GREEN** at delivery. The pin's comment names a variable alias as the bound it does not see |
+| `A4` | MET | `createRequire` load + one parse and walk, n = 8 of 9 fresh processes. Median **162.0 ms** CPU in plain node (load1 8.6) and **156.5 ms** in a vitest worker (load1 9.7–10.2). Both ≤ 250 ms. It runs once per run of the file |
+| `A5` | MET | `git diff --name-only` = `src/cli.test.ts`; manifest numstat empty; 0 files added; 0 production lines; 0 `it` added; `N8_SPAWN` 27. The `ABC-042` `A1` row, `ABC-065` block and `ABC-059` block hash identically |
+
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 51 files / 1584 passed. The skip count
+  is 0, and integrity reads `No findings.` `lane-inventory.js` is exit 0 with no findings.
+- **Load form.** `typescript` is loaded with `createRequire`, inside the pin's `it`.
+  - An ESM `import` measured ~205 ms CPU for the load under vitest, against ~85 ms. That form put
+    the in-file total near 280 ms.
+  - Decision `…a530d175` item 5 has the readings.
+- **Side effect.** `QE-058-e` is closed: `Q8`, template text naming `spawnSync(`, no longer reds a
+  correct file. `Q9`, a real call in an interpolation, stays RED.
+- **Cost (`ADR-0035`, proposed; narrow set `src/cli.test.ts`, twin control, n = 8).**
+  - **Both sets are admissible**: the twin reads −0.73 % / −0.22 %, sign 2/8 / 3/8, R 0.582 /
+    0.371 s, at load1 median 7.7 / 6.5.
+  - Head − base is **+0.144 s / +0.089 s** CPU (intervals −0.005..+0.290 / −0.059..+0.203).
+  - No `N8-LANE` state is written: 0 files added, and the content bound is `A4`.
+- **Next.**
+  - QE's hop.
+  - The Security/NFR hop the page recommends (`V1.2.5`'s instrument changed).
+  - The UAT waiver applies if zero production lines holds (measured 0).
