@@ -294,3 +294,38 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `S` (2) |
 | 9 | priority assigned | **✅** `P1` |
 | 10 | no major unresolved blocker | ~~**⚠️ NOT MET ×2**~~ **✅ 2026-10-10 — see the re-score above.** Was: — (i) **ordering: `ABC-041` must merge first** or `A4` measures the wrong tree; (ii) **the ruling is Architect/Design's**, and "imports" vs "consumes" is not BA/PM's to choose. **→ (ii) RULED 2026-10-10 by Architect/Design in [`ADR-0030`](../../memory-bank/50-decisions/ADR-0030-imports-means-evaluates-for-the-licence-and-consumes-means-binds-a-value-for-a8.md) (`proposed`, owner acceptance owed).** The licence guard counts evaluation and is unchanged; its "false RED" premise does not hold under `verbatimModuleSyntax`. `A8` counts value bindings. (i) is not this ruling's. Not re-scored: the verdict is BA/PM's |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-054`).
+- Branch `grugops/ABC-054-consumers`, from `68dd87ac`. The code is `9989f28c`.
+- Not merged, not pushed.
+- Decisions, readings and raw files are in `.grugops/context/ticket-to-pr-ABC-054/` (`…2d1f4a22`,
+  `…144df3f3`, `probe/`) and are not restated here.
+
+**`A1`–`A6` are met, and no stop condition fired.** 0 production lines. The licence regex lines and the
+tripwire's code are byte-identical (they moved to `:347`/`:416` and `:526-542`).
+
+| # | verdict | reading (builds out of tree on `9989f28c`) |
+|---|---|---|
+| `A1` | MET | 8 spellings asserted; 4 consume. The old regex counted 7 of 8 |
+| `A2` | MET | `X3b`: `A8` RED, `render.ts` → `[]` (plus `A11`). On base `68dd87ac`, `X3b` leaves `A8` green |
+| `A3` | MET | The docblock names evaluation, `verbatimModuleSyntax`, `import type`, under-count, `R3`, `R4`. Regex lines byte-identical |
+| `A4` | MET | `render.ts`, `status-panel.ts` and `history-pane.ts` each → exactly `["render-seam.ts"]` |
+| `A5` | MET | `src/` = `src/history-pane.nfr.test.ts` (+22/−5, comment lines only) and `src/render-seam.test.ts` (+62/−17). 0 new files, 0 spawns |
+| `A6` | MET | (i) `static` in both sites. (ii) One entry added, as the 4th, so the four existing entries are unchanged. (iii) The 17-line span is byte-identical. (iv) `Q-COMPOSER-REEXPORT` and `Q-COMPOSER-DYNAMIC` are GREEN; `SECOND-COMPOSER` is RED |
+
+- **Test note 5.** `Q-CTRL-DEAF-AFTER-LOAD+X5b` is RED on `the probe is ARMED`.
+  `Q-CTRL-ARMING-FIRST+DEAF+X5b` is GREEN (by construction).
+- **Test note 6.** The trigger grep prints nothing.
+- **Gate.** Lint, typecheck and build exit 0. `npm test` is 51 files / 1583 passed (load1 2.42 → 5.60).
+  The skip count is 0 (measured), and integrity reads `No findings.` `lane-inventory.js` is exit 0 with
+  no findings.
+- **Cost (`ADR-0035`, proposed; narrow set = the two files, twin control).** **Both sets are
+  inadmissible** (twin −2.61 % and −2.44 %, over the 1.5 % limit; load1 2.9–4.2 and median 9.95), so
+  no `N8-LANE` verdict is claimed. Head interval: −0.061..+0.047 s and −0.033..+0.055 s. 0 files added.
+- **Beyond the literal scope, flagged.** The header docblock of `src/render-seam.test.ts` said the
+  instrument was "not this file's". That became false with this change, so it is corrected in one hunk.
+- **Next.** QE's hop. The `In Development → In Review` board move is left to the Orchestrator (the board
+  is fenced from this hop). At merge, BA/PM's one-line annotation on `ABC-041` `A8` is owed. Then
+  `ABC-057`. Its anchors move again: the struck sentence is now `:212-213` (+5), and the comparator is `:358` (+15).
