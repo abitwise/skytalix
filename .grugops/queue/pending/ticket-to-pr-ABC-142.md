@@ -18,8 +18,10 @@ XS, P2, DoR 10/10. The ticket page is the contract (A1–A5). The mechanism is y
 premise at the current tip first; if stale, STOP and report.
 
 ## Stop conditions
-- Diff limited to `package.json`'s `test` script, `.gitignore`, and `tools/grugops/run-bounded.js` only if argv
-  needs it (A5). Zero `src/`. Any other path — STOP.
+- **Amended 2026-10-10 (BA/PM `bapm-amend-abc142-2026-10-10`, merged `a559ca34`):** the diff is limited to the
+  page's amended A5 — `package.json`'s `test` script, `.gitignore`, the ONE `SCRIPTS_AT_HEAD.test` literal in
+  `src/cli.test.ts` (ABC-042 A10), and the `run-bounded.js` line-10 comment quoting the script. Zero production
+  `src/`. New A6: the pin stays a full-string `toBe`. Any other path — STOP.
 - `run-bounded.js`'s documented exit contract stays byte-unchanged; console output and exit codes unchanged.
 - ABC-083 and ABC-094 are being built in parallel and run `npm test` in their own worktrees — do not touch their
   worktrees; A1's inverted assertion goes in a scratch copy of YOUR tree only.
