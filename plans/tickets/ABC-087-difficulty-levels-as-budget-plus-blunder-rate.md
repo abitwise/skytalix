@@ -1,8 +1,8 @@
 ---
 id: ABC-087
 title: Difficulty levels — the MECHANISM (search budget + blunder rate). The CHOOSING is EPIC-006's.
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: M
 priority: P1
 epic: EPIC-004
@@ -38,6 +38,13 @@ feature: —
 > integers `1`–`5`, default `3`. The PVS citation is re-pointed to today's lines. **DoR 9/10, item
 > 10 ⚠️: the blunder construction is still Architect/Design's, and it is the only thing between
 > this page and `Ready`.** Reasoning: `.grugops/context/rescore-batch-2026-10-10/notes/`.
+>
+> **Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `owner-adrs-followups`) on
+> [`ADR-0032`](../../memory-bank/50-decisions/ADR-0032-a-blunder-scores-every-root-move-with-the-shipped-engine-and-plays-the-strict-second-best.md),
+> **accepted by the owner 2026-10-10**: construction (a), no re-size. Its four criteria edits are
+> folded (`A2`, `A4` ×2, `A5`), `A8` gains `ADR-0032` decision 1's "engine and search do not change",
+> the stale "OPEN" in § Dependencies and the stale "40/40" in `A3` are fixed. **DoR 10/10 → `Ready`.**
+> Reasoning: `.grugops/context/owner-adrs-followups/notes/`.
 
 ## Problem
 
@@ -85,6 +92,15 @@ level*, not about maximum strength.
 
 ## The design question I am NOT answering
 
+> **RULED 2026-10-10 — `ADR-0032`, accepted by the owner.** Construction **(a)**, in the level module;
+> `src/engine.ts` and `src/search.ts` do not change. One seeded draw per move decides, before any
+> search, whether the move is a blunder. Not a blunder: the shipped `chooseMove`, unchanged. A blunder:
+> every legal root move is scored on its child with the shipped `chooseMove`, in `legalMoves` order,
+> on one clock against one shared deadline `start + B·(i+1)/N`, with `B = min(level budget,
+> HARD_CEILING_MS)`; the move played is the **strict second-best** (`n` = 2, not a level field). The
+> premise below is corrected there: the root lacks per-move scores because of alpha-beta, not only PVS,
+> and (b) measured **5.7–13.3x** nodes on `kiwipete`, not +3.3–5.2 %. The text below is kept as cut.
+
 **"Beatable by a beginner without being random" is a real constraint and it is not obviously
 satisfied by a uniform blunder draw.** A uniform random blunder occasionally throws a queen, which
 *is* random-feeling; picking the *n*-th best move is more human. **Which construction meets the
@@ -119,20 +135,37 @@ decided there or here)*:
   meaning to them (`ABC-101`, `RISK-002`).
 - **`A2` (the budget reaches the engine).** **Given** each level, **when** a move is requested,
   **then** the wall clock used matches that level's budget within **±20%**, and **no level ever
-  exceeds 5 s** (`NFR-004`).
+  exceeds 5 s** (`NFR-004`). *(Folded 2026-10-10, `ADR-0032`.)* The runs include **at least one blunder move at
+  the easiest level**, with a seed chosen so that one fires, so the blunder path's budget (the clamped
+  sum of its child searches) is measured, not only the shipped path's.
 - **`A3` (a lower level is measurably weaker).** **Given** the easiest and the default level on
   `ABC-084`'s puzzle suite, **then** the easiest solves **strictly fewer** puzzles. *(Cheap, fast,
   deterministic evidence of ordering; `ABC-085` provides the expensive game-level evidence.)* *(2026-10-10:
   run it on `ABC-084`'s runner in deterministic mode (`ADR-0027`) with a fixed seed, so the two
-  counts are reproducible. `src/puzzle-suite.baseline.json` (40/40) is not touched.)*
+  counts are reproducible. `src/puzzle-suite.baseline.json` is not touched — ~~(40/40)~~, stale; it
+  reads 58/62 today and 54/58 after `ABC-131`. Both counts come from one run on whatever suite is in
+  the tree, so `A3` does not wait on `ABC-131`. This is a measurement, not the gate (`ADR-0034`
+  § Consequences).)*
 - **`A4` (the blunder is a mistake, not chaos).** **Given** the easiest level over **≥ 200** moves,
   **then** every played move is **legal**, the observed blunder frequency matches the configured
   rate within **±5 percentage points**, and **no played move is ever the worst-scoring move in the
   list**. *(The last clause is the "without being random" constraint made falsifiable. If
   Architect/Design's construction cannot satisfy it, that is the finding.)*
+  *(Folded 2026-10-10, `ADR-0032` decisions 2–3.)*
+  - **The frequency's denominator:** blunders played ÷ moves, with **no-candidate moves** (fewer than
+    three distinct scores, so no strict second-best exists) **left out of the denominator and
+    reported** as a count.
+  - **"Never the worst" is asserted on every blunder move, against that move's own returned scored
+    list.** The module returns the list with the move (shape: the Engineer's), and the test reads it;
+    it does not re-derive scores. The **worst class** is every move scoring the list's minimum, when
+    that minimum is strictly below the maximum; if all score the same, no move is worst. On a
+    non-blunder move there is no list and the clause does not apply.
 - **`A5` (the hardest level respects `NFR-004`).** **Given** the hardest level over **≥ 30**
   positions, **then** every move returns within **≤ 5 s** — **30/30**. *(The ceiling binds at
   **any** difficulty, and "hardest" is where it is most likely to be broken.)*
+  *(Folded 2026-10-10, `ADR-0032`.)* **If the hardest level's blunder rate is above 0**, the 30 include
+  blunder moves (a seed chosen so that they fire), and each of those also returns within **≤ 5 s**:
+  `NFR-004` is enforced per `chooseMove` call, and only the level layer's clamp bounds the sum.
 - **`A6` (the default is the 3 s level).** **Then** the default level's budget is **3 s**, and
   `NFR-005`'s depth measurements on `kiwipete` and `position-6` are taken at that level.
 - **`A7` (seeded, in deterministic mode).** **Given** a fixed seed and deterministic mode, **then**
@@ -140,7 +173,9 @@ decided there or here)*:
   `ABC-086`'s virtual clock, consumed and not re-implemented. The seed is this ticket's own.
 - **`A8` (no user interface — the epic boundary as a criterion).** **Then** `git diff --numstat`
   shows **no change to `src/cli.ts`, `src/cli-options.ts` or `src/turn-loop.ts`**, and the delivered
-  diff contains **no argv parsing and no prompt string**. *(The boundary is asserted, not trusted —
+  diff contains **no argv parsing and no prompt string**. *(Added 2026-10-10, `ADR-0032` decision 1:)*
+  **and no change to `src/engine.ts` or `src/search.ts`**; the level module does not import
+  `src/virtual-clock.ts` (the clock is passed in, `ADR-0027` decision 4). *(The boundary is asserted, not trusted —
   which is what the last decomposition hop's rewrite was about.)*
 - **`A9` (different seeds actually differ)** *(moved from `ABC-086` `A3`, 2026-10-09, re-aimed at
   the blunder draw)*. **Given** the easiest level, deterministic mode and the same **≥ 30**
@@ -167,7 +202,8 @@ decided there or here)*:
   (merged `e634bc1`, 2026-10-10). `A3` uses its suite and runner.
 - **`ABC-125` — `Done`** (2026-10-10). The board asked for it to land first. It is a prerequisite
   of `ABC-085`, not of this ticket.
-- **Architect/Design's ruling on the blunder construction — OPEN.** Named above; not resolved here.
+- ~~**Architect/Design's ruling on the blunder construction — OPEN.**~~ **RULED and accepted
+  2026-10-10 — `ADR-0032`**, construction (a). See § The design question.
 - **`EPIC-006` consumes this table.** *(Cross-epic, and the direction matters: `EPIC-006` reads the
   level names this ticket publishes. **If `EPIC-006`'s decomposition — running concurrently with
   this one — assumed a different level vocabulary, that mismatch is real and is not resolved
@@ -175,11 +211,12 @@ decided there or here)*:
   `ABC-101` published integers `1`–`5`, default `3`, as an "opaque ordinal" that is "cheap to
   change". `A1` now uses exactly that, and `ABC-101` is not edited. Both pages are BA/PM's cuts.
   This needs no ruling. The Orchestrator may reverse it.
-- **File overlap (2026-10-10).** Construction (a) in the ruling below lives in its own module and
-  shares no file with the other tickets in this batch. Construction (b) changes `src/engine.ts` and
-  its pinned tests, which `ABC-083`'s `A10` also re-pins. Under (b), do not build in parallel
-  with `ABC-083`. Either way, `A3` and `A6` read results that `ABC-083` moves, so they are
-  measured on the tree this ticket lands on.
+- **File overlap (2026-10-10; (a) ruled).** The level module is a new production file, and `A8` keeps
+  `src/engine.ts` and `src/search.ts` unchanged, so this ticket shares **no file** with `ABC-083`,
+  `ABC-126` or `ABC-131`. `A3` and `A6` read results that `ABC-083` moves, so they are measured on the
+  tree this ticket lands on. **Option B (`PUZZLE_DEEP` at QE):** the level module's file name is the
+  Engineer's. If it falls under a trigger glob (`src/search*.ts`, `src/evaluate*.ts`), QE runs the
+  gate; otherwise it does not, and `A3` is the only puzzle reading (`ADR-0034` § Consequences).
 
 ## Security / NFR triggers
 
@@ -227,12 +264,29 @@ and the verification is `ABC-084`'s and `ABC-085`'s.
     `ADR-0026` decision 10. The size is then re-estimated at that point, and likely `L`. It is not
     guessed now.
 
+**Resolved 2026-10-10: `M` (3), unconditional.** `ADR-0032` ruled construction (a): candidates are
+scored outside the root search, so no switch, doors or oracle, and no re-size (`ADR-0032`
+§ Consequences). The fold adds five clauses to existing criteria (`ADR-0032`'s four, plus decision 1 on `A8`) and no new criterion.
+
 **Not `XL`. No `SPLIT_REQUIRED`.**
 
 **Priority `P1`.** The engine is playable at one strength without it, and it sits behind three `P0`
 tickets. **It is a hard blocker for `ABC-085`**, which is also `P1`, so the pair is consistent.
 
 ## Definition of Ready
+
+**Re-scored 2026-10-10 by BA/PM** (`owner-adrs-followups`, wave tip `246ddfc`). **Result: 10 of 10 —
+MET → `Ready`.** No ordering: it shares no file with any open ticket.
+- **Item 10, ⚠️ → ✅.** The blunder construction is ruled and accepted (`ADR-0032`, owner 2026-10-10):
+  (a), the strict second-best, and "worst" defined on the construction's own scores.
+- **Item 4 stays ✅, folded.** `A4`'s denominator and its per-blunder-move list; `A2` measures at least
+  one blunder at the easiest level; `A5` covers the blunder path when the hardest rate is above 0;
+  `A8` adds "no change to `src/engine.ts` or `src/search.ts`". `A3`'s stale "40/40" is struck.
+- **Item 5 stays ✅.** § Dependencies no longer reads "OPEN"; every ticket dependency is `Done`.
+- **Item 8 stays ✅:** `M`, no longer conditional.
+- **Items 1–3, 6, 7, 9 stay ✅.** `P1`, hard blocker for `ABC-085`.
+- **Owed elsewhere, not blocking:** `NFR-004`'s catalog wording for the level layer's clamp on the sum
+  (Security/NFR, `ADR-0032` § Consequences).
 
 **Re-scored 2026-10-10 by BA/PM** (`rescore-batch-2026-10-10`, wave tip `71be48b`). **Result: 9 of 10,
 1 ⚠️ — NOT met; stays in `Backlog`.**

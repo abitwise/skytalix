@@ -118,8 +118,9 @@ On `ABC-036`'s tip, #7/#8 sit at `:59`/`:60` and #6 at `:533`. Re-read the table
   re-numbers `src/turn-loop.ts` after `:271`, and `A2` resolves anchors in that file.
 - **`ABC-128`** edits `src/turn-loop.test.ts` (other lines). Prefer it first. The second one rebases.
 - **`ABC-126`, `ABC-127`: no overlap.** They touch puzzle files and `src/quiescence.test.ts`.
-- **Merge-order only, all in `Backlog`, comment lines:** `ABC-038` (`src/line-input.ts`, one
-  attach line), `ABC-114` (`src/cli.test.ts`), `ABC-087`/`ABC-119` (`src/engine.ts`, `src/cli.ts`).
+- **Merge-order only, all in `Backlog`, comment lines:** ~~`ABC-038` (`src/line-input.ts`, one
+  attach line)~~ *(dropped 2026-10-10 on the owner's word; no longer a merge-order neighbour)*,
+  `ABC-114` (`src/cli.test.ts`), `ABC-087`/`ABC-119` (`src/engine.ts`, `src/cli.ts`).
   Whichever lands second rebases.
 
 ## Security / NFR triggers

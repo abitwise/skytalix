@@ -107,7 +107,21 @@ forced to type more than they need to.
 - Rejection messages that teach: name *why* the move is illegal (own king would be in
   check / no piece on that square / that piece cannot move there), never a bare "invalid".
 - In-game commands: `moves` (list legal moves), `help`, `board` (redraw), `quit`, **`claim`**.
-- Tab-completion of legal moves at the prompt.
+- ~~Tab-completion of legal moves at the prompt.~~ **DROPPED 2026-10-10** — see the amendment below.
+
+**[AMENDED 2026-10-10 by BA/PM — tab-completion (`ABC-038`) is DROPPED on the owner's word.]** Owner
+(Olger Oeselg), 2026-10-10: *"R4: drop it"* — option (b) of the ruling `ABC-038` asked for (note
+`.grugops/context/wave-2026-09-25/notes/20261010T105406Z-orchestrator-decision-owner-word-r4-6b2f90e4.md`).
+**Why:** the merged prompt (`ABC-037`) is a **line-mode** reader. The terminal holds the line until
+Enter, so the program never sees a Tab press, and no completer attached to that reader can run. A
+keystroke (raw-mode) reader was judged not worth its size and its terminal-restore risk; it would also
+collide with three merged rulings (`ABC-037`'s raw-mode fence, its no-Node-builtin property, and the
+frame's single erase-to-end). **The discovery need is covered by `ABC-036`'s `moves` command** (exact
+count plus a partial list, `Done`) and by `ABC-033`'s ambiguity candidate list. **All four epic
+acceptance criteria hold without it** — `ABC-038` was cut as this epic's named drop-first slice.
+The mentions of tab-completion and completion targets in the 2026-08-12 decomposition notes above, and
+in `ABC-038`'s sibling pages, are history; none is a live promise. **Size:** the delivered scope is
+**20 points** over the eight remaining tickets (22 − `ABC-038`'s `S` 2); the epic stays `XL`.
 
 **[AMENDED 2026-07-31 by BA/PM — `claim` added to the command set.]** `ABC-020` makes threefold
 repetition (FIDE 9.2) and the fifty-move rule (FIDE 9.3) **claimable by the player having the move**
@@ -157,7 +171,9 @@ position **~9 of 20 legal moves show and `+11` hides**. The criterion now reads,
 
 **This is a reduced user-facing promise, recorded as one rather than absorbed.** It is reversible and
 the reversal is named: if play-testing under `EPIC-006` shows the truncation is a real barrier, the
-pager is the change to make — the same moment `ABC-038`'s escalation trigger fires.
+pager is the change to make — the same moment `ABC-038`'s escalation trigger fires. *(2026-10-10:
+`ABC-038` is dropped, so that trigger has no live page. The pager trigger stands on its own:
+play-testing under `EPIC-006` shows the truncation is a real barrier.)*
 
 ## Dependencies
 
@@ -171,7 +187,8 @@ pager is the change to make — the same moment `ABC-038`'s escalation trigger f
 ## NFR triggers
 
 - `NFR-003` Input responsiveness — keystroke echo at the prompt **< 50 ms**; the `moves`
-  command and tab-completion return **< 100 ms**. Architect seeds the row in
+  command ~~and tab-completion~~ returns **< 100 ms**. *(Tab-completion dropped 2026-10-10.
+  `plans/nfr-catalog.md`'s `NFR-003` row still names it; re-wording that row is Security/NFR's.)* Architect seeds the row in
   `plans/nfr-catalog.md`.
 
 ## Test notes
