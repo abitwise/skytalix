@@ -1,0 +1,3 @@
+src/cli.real-engine.test.ts:11: *   1. `describe.runIf` / `it.skipIf` REPORT A SKIP and move the gate's skip count off 0. The deep
+src/cli.test.ts:1567:    // the same reason: a COUNT of `process.argv` cannot see a SECOND read spelled `process["argv"]`.
+src/cli.test.ts:1591:    // an alias (`const ambient = process`), an ESM import (`import { argv } from "node:process"`)

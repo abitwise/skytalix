@@ -1,0 +1,230 @@
+[
+  {
+    "label": "m9b-49997a87",
+    "mutant": "m9b",
+    "row": "green",
+    "exit": 0,
+    "wantExit": 0,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [],
+    "wantLines": [],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": true,
+      "runState": "exited",
+      "exitCode": 0,
+      "startTime": 1791756930961,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1741,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "deprecatLines": 0,
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1741 passed (1741)"
+    ]
+  },
+  {
+    "label": "m9b-49997a87",
+    "mutant": "m9b",
+    "row": "unhandled",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "error  PLANT-timer",
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "error  PLANT-timer",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791756940155,
+      "stamp": null,
+      "numTotalTests": 1742,
+      "numPassedTests": 1742,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": [
+        "PLANT-timer"
+      ]
+    },
+    "deprecatLines": 0,
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1742 passed (1742)"
+    ]
+  },
+  {
+    "label": "m9b-49997a87",
+    "mutant": "m9b",
+    "row": "suite",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "suite  <scratch>/v2/trees/m9b-49997a87-suite/src/frame.test.ts  PLANT-suite",
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "suite  <scratch>/v2/trees/m9b-49997a87-suite/src/frame.test.ts  PLANT-suite",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791756949479,
+      "stamp": null,
+      "numTotalTests": 1707,
+      "numPassedTests": 1707,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 1,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "deprecatLines": 0,
+    "consoleTail": [
+      " Test Files  1 failed | 55 passed (56)",
+      "      Tests  1707 passed (1707)"
+    ]
+  },
+  {
+    "label": "m9b-49997a87",
+    "mutant": "m9b",
+    "row": "assertion",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "test   <scratch>/v2/trees/m9b-49997a87-assertion/src/moves.test.ts  ABC-004 — attack detection sees a rook attacking along its open file and rank, and colours it correctly",
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "test   <scratch>/v2/trees/m9b-49997a87-assertion/src/moves.test.ts  ABC-004 — attack detection sees a rook attacking along its open file and rank, and colours it correctly",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791756958879,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1740,
+      "numFailedTests": 1,
+      "numFailedTestSuites": 2,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "deprecatLines": 0,
+    "consoleTail": [
+      " Test Files  1 failed | 55 passed (56)",
+      "      Tests  1 failed | 1740 passed (1741)",
+      "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+    ]
+  },
+  {
+    "label": "m9b-49997a87",
+    "mutant": "m9b",
+    "row": "exitonly",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": false,
+    "linesOk": false,
+    "verdict": "DISAGREE",
+    "lines": [],
+    "wantLines": [
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": true,
+      "runState": "exited",
+      "exitCode": 0,
+      "startTime": 1791756968446,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1741,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "deprecatLines": 0,
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1741 passed (1741)",
+      "ERROR: Coverage for lines (99.43%) does not meet global threshold (100%)"
+    ]
+  },
+  {
+    "label": "m9b-49997a87",
+    "mutant": "m9b",
+    "row": "hang",
+    "exit": 124,
+    "wantExit": 124,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "run    started exitCode=none, killed"
+    ],
+    "wantLines": [
+      "run    started exitCode=none, killed"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "started",
+      "startTime": 1791756990464,
+      "stamp": 1791756990097,
+      "files": 0,
+      "unhandled": []
+    },
+    "deprecatLines": 0,
+    "consoleTail": []
+  }
+]

@@ -408,3 +408,46 @@ otherwise MET, except one `V2` sub-clause.
 - **Route (the Orchestrator's):** the SE makes one repair hop for `QE-152-h`, and for `QE-152-a` if the Architect
   agrees. QE then re-checks that delta. After that, the next stop is `In Security/NFR`: the `V12` review, then
   the width-1 window `V9`–`V11`.
+
+**2026-10-12, QE/E2E delta re-check** (subtask `qe2-ABC-152`).
+- Range: the SE repair `476fdde0` / `502df2b6` / `49997a87` over `88009d0b`. It is graded against `ADR-0042`
+  addendum 2 (rulings 8–11), which governs here as the ruling note `…e50fbbe3` allows. The dry-run merge was
+  against `main` `9ad2c5f5`.
+- Every reading is QE's own:
+  - QE's own worktree on the branch, with its own `npm ci`;
+  - a base tree with its own `npm ci` (3.2.7);
+  - scratch clones outside the repository;
+  - `V2` plant files new to this ticket.
+- **No timing was read.**
+- The detail is in `.grugops/context/qe2-ABC-152/notes/`, and it is not restated here:
+  - `…049a4c21`, the verdict;
+  - `…9dc4714f`, group 4 and the census;
+  - `…29f4d3e9`, `V2`, `M9b` and A5;
+  - `…5cf58584`, the comments, gates, `V5`, `V7` and the merge;
+  - `…e0c0d051`, the gaps;
+  - `…12e6722b`, the commands and the probe.
+
+**PASS WITH GAPS, none blocking.**
+- **`QE-152-h` is closed.**
+  - `PUZZLE_DEEP=weakened` is red on **the gate row** at **15/58**, and A3 is green.
+  - All 97 per-row lines (move, depth, nodes) equal base 3.2.7's.
+  - Plant (a) gives 54/58 with A3 red. "No leak reader" is confirmed.
+  - QE's `finally`-reset plant is blind, as ruling 8 predicts.
+  - `PUZZLE_DEEP=1` gives 18 passed at 54/58, and its 58 rows equal base's.
+- **The census is re-derived:** byte-identical to the SE's, with one (iv). QE's widened census adds none.
+- **`QE-152-a` is closed.**
+  - The six `V2` rows AGREE at the tip on new plant files.
+  - `M9b` is killed by the exit-code-only row alone.
+  - There are 0 deprecation lines, and the reporter adds no console line (`ABC-143` A5).
+- **`QE-152-d` is closed.** Commit 3 is comment-only, at exactly the named sites, and each line matches the code.
+- **Gates:** green at 56 / 1741, skip 0. `V5` holds (`cli` +3 only). `V7` was re-run: 20 / 20.
+- **New gaps:**
+  - `QE-152-i` LOW: `src/cli.test.ts:6` ("nothing here re-routes the module graph") is stale. The A5 expected-0
+    guard rests on the `{ spy: true }` re-route. It goes to the Architect, and QE did not fix it.
+  - `QE-152-j` INFO: a production query import blinds weakened at the tip and on base alike, so it is not a
+    regression.
+  - `QE-152-k` INFO: the dry-run merge conflicts on `plans/traceability.md`. It is append against append and
+    union-resolvable, and the merged tree is green.
+- **Ruling 7: 0.**
+- **Route (the Orchestrator's):** `In Security/NFR` (the `V12` review, then `V9`–`V11`). `QE-152-i` goes to the
+  Architect in parallel.
