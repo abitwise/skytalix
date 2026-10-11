@@ -11,7 +11,11 @@ id: ADR-0042
 Previously **proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-152`, ticket `ABC-152`
 `D1`–`D4`), on branch `grugops/design-ABC-152` from the wave tip `4973d8e0`. ~~**Owner word owed** (§ Decision 5).~~
 
-**ADDENDUM 2 2026-10-11 (rulings 8–11 on QE's `ABC-152` gaps), the last section of this file.** It extends rulings 1
+**ADDENDUM 3 2026-10-12 (rulings 12–13 on QE's delta gaps `QE-152-i` and `QE-152-j`), the last section of this file.**
+It extends ruling 10 by one comment line and rewords `RISK-ABC152-SPY-QUERY`. It changes no decision and adds no
+ruling 7 case.
+
+**ADDENDUM 2 2026-10-11 (rulings 8–11 on QE's `ABC-152` gaps), the section before addendum 3.** It extends rulings 1
 and 5 and the residuals. It changes no decision and adds no ruling 7 case.
 
 **ADDENDUM 2026-10-11 (the owner's route), the section before addendum 2: it governs over decisions 3 and 5.**
@@ -642,3 +646,42 @@ weakened, and no ruling 7 case is added. The owner may overrule any ruling here.
 - Decisions 1, 2 and 4, rulings 2–4, 6 and 7, `ADR-0040` addendum 2's k = 2, and `ADR-0008` d7.
 - Ruling 7's count: **0 cases**.
 - The UAT-waiver measurement (`grep '^src/'` over the delivered diff) stays empty under rulings 8–10.
+
+## ADDENDUM 3 2026-10-12: rulings 12–13 on QE's delta gaps `QE-152-i` and `QE-152-j`
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-152-qe152i`, ticket `ABC-152`), on branch
+`grugops/design-ABC-152-qe152i` from `main` `9653cfd4`. **Rulings only. This hop measured nothing.** It read QE's
+delta register `…e0c0d051`, notes `…5cf58584` and `…9dc4714f`, and `src/cli.test.ts` at the ticket tip `5eafe95c`.
+Note: `.grugops/context/design-ABC-152-qe152i/notes/`. **No owner word is owed.** No decision moves, no test is
+weakened, and no ruling 7 case is added.
+
+### Ruling 12 (`QE-152-i`): ruling 10 extends to `src/cli.test.ts` line 6, in one comment-only commit
+
+- **It is ruling 10's class.** R1 (`66aaa39e`) put `vi.mock("./glyph-mode.ts", { spy: true })` at file top. By
+  `ABC-030`'s definition that re-routes the module graph for every test in the file. `A5`'s expected-0 guard sees
+  `cli-options.ts`'s call only through that re-route. Line 6 says "nothing here re-routes the module graph". It
+  misstates the mechanism a guard rests on, and this ticket's own rewrite made it false. QE dated it to `88009d0b`,
+  the tip it graded; the commit that made it false is `66aaa39e`.
+- **Not a follow-up.** A ticket for one comment line costs more than the line, and the trap would merge meanwhile.
+- **The SE commit:** line 6 only, replaced by exactly this line (101 bytes; line 5 stays verbatim):
+
+  ```
+   * it is not an `*.nfr.test.ts`: it re-routes `glyph-mode.ts` for every test here, but calls through.
+  ```
+
+- **Bounds:** ruling 10's, unchanged. Comment-only, in its own commit. No line added or removed. `expect(` in
+  `src/cli.test.ts` stays 324. No other line, and no other file.
+- **`V5`'s ruling-10 entry gains this site.**
+
+### Ruling 13 (`QE-152-j`): `RISK-ABC152-SPY-QUERY`'s wording names the stub half; its scope, severity and owners do not move
+
+- QE's plant x2 shows that a query import bypasses the stub as well as the count. The automock's
+  `mockImplementation` did not reach `quiescence.ts`. The result was 54/58, with A3 red, at the tip and on base
+  3.2.7 alike. It is the same trigger, which is a `?` import of a production module, and the same review tripwire.
+  It is not a regression.
+- **The residual row now reads:** "A `{ spy: true }` automock neither counts nor stubs calls made through a
+  query-string import of the same file. That import is a separate, unmocked instance. At `PUZZLE_DEEP=weakened` it
+  blinds the red demonstration (54/58, A3 red) on 3.2.7 and 4.1.11 alike. The graded reading and A3 catch it; an
+  exit-code reader does not." Severity is still low. The owners are still the Architect and QE.
+- **The tripwire is unchanged,** and now reads on both halves. Any new `?` import of a production module in
+  non-test code is read against every `{ spy: true }` guard **and stub** on that module.
