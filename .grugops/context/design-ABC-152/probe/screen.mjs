@@ -16,7 +16,8 @@ const progress = join(OUT, `${ARM}.progress.txt`);
 rmSync(json, { force: true });
 rmSync(progress, { force: true });
 
-const env = { ...process.env, PROGRESS: progress };
+// `npm test` puts the tree's node_modules/.bin on PATH; do the same so run-bounded.js finds `vitest`.
+const env = { ...process.env, PROGRESS: progress, PATH: `${join(TREE, "node_modules", ".bin")}:${process.env.PATH}` };
 delete env.NODE_OPTIONS;
 for (const k of Object.keys(env)) if (k.endsWith("_DEEP")) delete env[k];
 const r = spawnSync(

@@ -1,0 +1,4 @@
+runner=off isolate=true exit=0 |  |  Tests 2 passed (2)
+runner=off isolate=false exit=1 |  |  Tests 1 failed | 1 passed (2)
+runner=on isolate=true exit=0 | iso-probe a.iso.test.mjs thread=2 count=1;iso-probe b.iso.test.mjs thread=1 count=1; |  Tests 2 passed (2)
+runner=on isolate=false exit=1 | iso-probe a.iso.test.mjs thread=1 count=2;iso-probe b.iso.test.mjs thread=1 count=1; |  Tests 1 failed | 1 passed (2)

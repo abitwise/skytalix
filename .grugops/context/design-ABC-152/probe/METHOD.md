@@ -87,3 +87,19 @@ unchanged and its assertion unchanged:
 If no runner-off configuration reaches a green lane with only R1/R2 rewrites (`F1`), **no runner-off lever
 is built**, and the D3 table goes to the owner with two options (ship 4.1 runner on; stay on 3.2.7). No agent
 picks between them.
+
+## AMENDMENT 1, after `A0`/`A1` and BEFORE `A2`, `S1`, `F1` (disclosed: this form was named after a reading)
+
+- **What `A1` read:** 2 reds, both `src/command-input.test.ts` "ABC-036 A4 … derives once …" (position-3,
+  position-6). The cause is a vitest 4 semantic change, not the runner switch: **`vi.fn(m)`, where `m` is
+  already a mock, returns `m` itself on 4.1.11** (3.2.7 returned a new spy with its own call state).
+  Armed probe `fnwrap/` (`raw/fnwrap-probe.txt`): 3.2.7 `outer=1 same=false`, exit 0; 4.1.11 `outer=4
+  same=true`, exit 1.
+- **R3, added here:** `vi.fn(f)` where `f` is an imported binding that the same file `vi.mock`s with a
+  `vi.fn` → `vi.fn((...args: Parameters<typeof f>) => f(...args))`. That gives a new spy that calls through
+  to the module mock, which is exactly 3.2.7's behaviour. Same callee, same assertions.
+- **Because R3 was named after a reading, `D4` is reported twice:** with R1–R3, and with R1–R2 only. The
+  owner sees both. No arm after this line is changed by it: `A2` and `S1` take no rewrite, and `F1` applies
+  R1–R3 to the reds `A2` shows.
+- Driver fix, before any reading: `screen.mjs` puts the tree's `node_modules/.bin` on PATH (as `npm` does).
+  The first `A0`/`A1` attempt exited 2 ("spawn vitest ENOENT") and read nothing.
