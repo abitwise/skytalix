@@ -296,6 +296,7 @@ delivered and MET.
   into the reporter's header: six rows, including the coverage-threshold red that alone pins the
   exit-code check, and the `A2` marker read by content. When a hop changes the reporter, the `test`
   script or vitest, it re-runs that set, not just this page's `A1`–`A6`.
+  - **Delivered (`ABC-149`):** the set is the REGRESSION PLANTS block in `tools/grugops/result-file-reporter.js`.
 - **`QE-143-c` → `RISK-ABC143-01`**, below.
 - **`QE-143-d` → accepted as `AR-143-HANG`**, below.
 - **`QE-143-e` → accepted as `AR-143-OVERWRITE`**, below.

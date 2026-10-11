@@ -189,3 +189,45 @@ BA/PM, 2026-10-11. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none; the coverage red and all three mutants are already defined and run by QE |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+**2026-10-11, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-149`). Branch
+`grugops/ABC-149-reporter-plants`, code `e3e9c126`, base `4973d8e0`. Not merged.
+
+- **Built.** The REGRESSION PLANTS block in `tools/grugops/result-file-reporter.js`, comments only, and
+  one pointer line on the `ABC-143` page.
+- **`A1`–`A6`: met on the SE's reading.** All six rows agree at head. `M1`, `M9` and the query without
+  its `run` arm each disagree on the named row. The query without its `suite` arm disagrees on the
+  suite row by content. The fences hold, and the counts equal the base's (56 / 1740 / 0).
+- **One reading to keep.** One inverted assertion reads `numFailedTestSuites` 2, so the assertion row
+  names no suite count (`…a1eff3dc`).
+- Readings, mutants and gates are in `.grugops/context/ticket-to-pr-ABC-149/notes/`. QE is owed.
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-149`).
+- Range: base `4973d8e0`, code `e3e9c126`, reviewed tip `9a309fb4`.
+- Every reading is QE's own, with plants in other files than the SE's and the block's commands cut
+  from the header by program. The detail is in `.grugops/context/qe-ABC-149/notes/`: `…1835132a`
+  (verdict), `…1d736a15` (readings), `…918a2941` (mutants), `…179b8018` (gaps). It is not restated
+  here.
+
+**PASS_WITH_GAPS.**
+- **`A1`–`A6` are MET.**
+  - All six rows agree at the tip.
+  - `M1` and `M9` read `success` true on the exit-code-only row. Each still meets `ABC-143`
+    `A1`–`A5`.
+  - Without its `run` arm, the query prints 0 lines on the hang row. Without its `suite` arm, it
+    disagrees by content on the suite row.
+  - The fences and counts hold (56 / 1740 / 0).
+  - The gates are green.
+- **Gaps:**
+  - `QE-149-a` LOW: READ IT, pasted with its line breaks, exits 126 and prints nothing. Joined into
+    one line it is correct. The fix is comment-only.
+  - `QE-149-b` INFO: the SE's suite count is resolved. It is 1 for the file plus 1 per enclosing
+    `describe`.
+  - `QE-149-c` INFO: QE's `M9b` mutant is killed only by the exit-code-only row. It goes to
+    `ABC-152` `V2`.
+- UAT waiver: the production filter is empty, so on QE's reading the waiver applies. The Orchestrator
+  applies it at the exit.
