@@ -15,6 +15,17 @@ The catalog wording is applied by the `NFR-008` row's owner (Security/NFR) in it
 
 No decision is changed.
 
+**Floors after `ABC-152`, 2026-10-12** (`design-ABC-144-fcap`; this applies `ADR-0042` ruling 6, which the owner
+accepted, and `ADR-0040` addendum 2 item 6). vitest 4.1.11 with the module runner off merged at `7a920ca5`, so
+decision 3's recorded floors are pre-merge data.
+- **The full lane keeps `F` = 1.72 s CPU / 3.25 s wall** until the first full-lane twin R is read on 4.1.11,
+  runner off, at k = 2. That R replaces it outright, because with fewer than three readings the largest is used.
+- `ABC-152` `V9`'s twin R is 0.440 s CPU / 0.190 s wall, read on 3.2.7 at k = 2. It is listed and not used.
+- Every narrow set, the one-file row included, takes the provisional 16 % until its first 4.1 reading.
+
+No decision is changed and nothing was measured. Note
+`.grugops/context/design-ABC-144-fcap/notes/20261011T231917Z-architect-design-decision-abc144-fcap-floors-after-abc152-dd7a6ec9.md`.
+
 Previously `proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25`, subtask `ruling-timing-protocol`),
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.
