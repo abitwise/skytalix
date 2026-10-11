@@ -27,6 +27,8 @@ import type { Position } from "../../src/position.ts";
 import { zobristKey } from "../../src/zobrist.ts";
 import { SOURCE_COMMIT, SOURCE_FILES, toUci, writeBook } from "./compile.ts";
 
+vi.mock("../../src/zobrist.ts", { spy: true });
+
 const BOOK_DIR = fileURLToPath(new URL("../../data/opening-book/", import.meta.url));
 const BOOK_PATH = join(BOOK_DIR, "book.json");
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -99,8 +101,7 @@ describe("A1 — two compiles of the same source are byte-identical", () => {
 // every position to one value builds it. Scoped to this test: doMock + a fresh module registry.
 describe("D1(f) — a key carrying two different positions is refused", () => {
   it("refuses the compile and writes no artifact", async () => {
-    vi.resetModules();
-    vi.doMock("../../src/zobrist.ts", () => ({ zobristKey: () => 0n }));
+    vi.mocked(zobristKey).mockImplementation(() => 0n);
     try {
       const stubbed = await import("./compile.ts");
       const dir = fixture("d1f-collision", `${HEADER}\n${GOOD_ROWS[0]}\n`);
@@ -108,8 +109,7 @@ describe("D1(f) — a key carrying two different positions is refused", () => {
       expect(() => stubbed.writeBook(dir, out, "0".repeat(40))).toThrow(/carries two positions/);
       expect(existsSync(out)).toBe(false);
     } finally {
-      vi.doUnmock("../../src/zobrist.ts");
-      vi.resetModules();
+      vi.mocked(zobristKey).mockReset(); // an automock spy: back to the original implementation
     }
   });
 });
