@@ -8,6 +8,9 @@ id: ADR-0007
 
 **CLAUSE 5 SUPERSEDED 2026-09-19 by `ADR-0018` (`ADR-0018-distribution-channel-git-clone-npm-run-chess.md`) on the owner's word — the channel is `git clone` + `npm run chess`, "for now". Clauses 1–4 and 6 stand unamended; this file is otherwise byte-identical at that hop (`ABC-100` `A1`).**
 
+**Pointer 2026-10-11** (`design-low-batch-2026-10-11`). How a gate reads `tools/grugops/host-protection.js`
+exit 2 while `D3` holds is in `§ Pointers 2026-10-11` at the end of this file. No clause is amended.
+
 **accepted** — 2026-08-06 by Architect/Design at task `refinement-deploy-posture-2026-08-06`
 (subtask `architect-deploy-posture`), under the project owner's standing directive of 2026-08-03
 recorded in `memory-bank/60-progress.md` under **"Standing directive — who decides"**, which retired
@@ -396,3 +399,36 @@ changes character is when `EPIC-006` picks a distribution mechanism: at that poi
 > roles, not an enforced control**. Its observable trace if ignored would be a release record (`D4`)
 > or a deploy artifact (`D1`). **A rail with no instrument is exactly as strong as its prose, which is
 > the strongest argument in this file against weakening the prose.**
+
+## § Pointers 2026-10-11
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-low-batch-2026-10-11`). **No clause
+is amended.** Note `…647fad5d`.
+
+**`host-protection.js` exit 2, while `D3` holds, means "could not run". It is neither a pass nor a
+fault.**
+- **The contract.** It is the tool's own header (`D-12`) and the kit's gate step 3. Exit 2 means
+  `UNKNOWN - verify` on some branch, with none `unprotected`, or that the check could not run. *"Exit 2
+  is never a pass."* The gate records `UNKNOWN - verify` with the printed reason. The check never
+  changes the terminal result on its own.
+- **Here.** `git remote -v` prints 0 lines (`D3`, re-read at this hop). There is no host to ask. Gates
+  at `ABC-082`, `ABC-093`, `ABC-141` and `ABC-142` recorded exit 2 with *"gh returned no readable HTTP
+  status"*.
+- **Not a pass.** No note may say the host floor exists. There is no host. The merge floor in this
+  posture is the human who merges (`_commit-convention.md` (c)).
+- **Not a fault.** It is not a finding against the ticket. It uses no self-fix attempt and blocks
+  nothing.
+- **The one exception: exit 2 is a fault of the invocation** when the printed reason is a refused command
+  line or a thrown error. Fix the command and re-run.
+- **What a gate writes.** It keeps the kit's token and adds the posture qualifier:
+  `host-protection.js: exit 2, UNKNOWN - verify (<reason as printed>). N/A in this posture: no git
+  remote (ADR-0007 D3; git remote -v printed 0 lines at this run).`
+- **Why the qualifier is added and does not replace the token** (BA/PM's recommendation `…d8990fbb` item
+  5 was to write *"N/A — no git remote"* in place of `UNKNOWN`):
+  - The kit's step 3 prescribes the token, and the kit is read-only.
+  - The printed reason does not say "no remote". It says what a missing `gh` login also looks like. So
+    "N/A" is true only when the same run checks `git remote -v` and finds it empty.
+  - A bare "N/A", written from habit, would outlive the remote's arrival and hide a real `UNKNOWN`.
+- **Revisit trigger: `D3` fires** (a remote is added, as under `EPIC-006`). From then on exit 2 is a real
+  `UNKNOWN - verify` for a human to resolve. The tool cites the grugops checkout's git-host checklist
+  (`install/README.md` §5, which is not in this repository). The qualifier is dropped.

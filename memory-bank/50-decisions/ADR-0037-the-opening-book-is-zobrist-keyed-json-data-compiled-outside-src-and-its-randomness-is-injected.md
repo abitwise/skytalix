@@ -9,6 +9,9 @@ id: ADR-0037
 **accepted**, 2026-10-10, by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-093`,
 Workflows 02 and 07, branch `grugops/design-ABC-093` from wave tip `489c549e`).
 
+**Amended 2026-10-11** (`design-low-batch-2026-10-11`). D1(f) gains a source-hash refusal
+(`QE-093-b`), in the block under (f). It takes effect when its ticket merges.
+
 - **What it answers.** BA/PM's decision note `…0e4da324` (`rescore-p1-backlog-2026-10-10`) names
   three structural decisions:
   - **D1**, the book format (`ABC-093` DoR item 5);
@@ -141,6 +144,26 @@ reproducibility rules:
 - no key carrying two different 4-field FENs (a collision);
 - no position carrying two names;
 - no C0, DEL or ESC byte in a name. This is defence in depth only; `ABC-096` still sanitises.
+
+> **[AMENDED 2026-10-11 (task `wave-2026-09-25`, subtask `design-low-batch-2026-10-11`): `QE-093-b`
+> is ruled. (f) gains a seventh refusal. It takes effect when the ticket that builds it merges.
+> Until then the compiler is as delivered.]**
+>
+> - **The refusal.** Before it compiles, the command-line run checks that each of the five source
+>   files' sha256 (over the raw bytes) equals the pinned value. If one differs, it refuses with no
+>   write, and names the file and both hashes.
+> - **Why.** `source.commit` is a provenance claim in a shipped file, and `ADR-0023`'s CC0 basis
+>   rests on it. Today any directory of well-formed TSVs compiles under that commit, so the field is
+>   a label and not a proof (QE, `…cce9af72`). The compiler is the only party that sees the bytes. So
+>   the check belongs to the compiler, and the cost is one `node:crypto` call per file.
+> - **Where the pins live.** A `SOURCE_SHA256` constant beside `SOURCE_COMMIT`. A lane test pins the
+>   five values to `ATTRIBUTION.md`, so the pair cannot drift apart.
+> - **What does not change.** `compileBook`, `writeBook`'s signature, the artifact's bytes, and the
+>   existing fixture tests. The check sits on the command-line path, before `writeBook`.
+> - **Rejected:** carrying `QE-093-b` as an accepted risk. The fix costs about as much as the risk
+>   record would, and the record would never close.
+> - **The ticket** is recommended to BA/PM: `XS`, `P3`. It has 0 `src/` lines, 0 new files and 0
+>   children (note `…e95791ae`).
 
 **(g) Placement. The compiler and its test live outside `src/`. The data lives beside its
 attribution.**
