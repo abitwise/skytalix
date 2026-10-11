@@ -1,0 +1,73 @@
+# abc144-frontier-warm: npm test | conds B,T,K4,K3,K2,K1 | rounds 9 | gap 0s -> /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/win-a/abc144-frontier-warm.tsv
+0 B cpu 26.02 wall 6.31 par 4.124 53 1680 load1 2.48 foreign 0 limit none ok
+0 T cpu 25.9 wall 6.31 par 4.105 53 1680 load1 2.68 foreign 0 limit none ok
+0 K4 cpu 23.75 wall 6.43 par 3.694 53 1680 load1 4.31 foreign 0 limit none ok
+0 K3 cpu 22.66 wall 7.05 par 3.214 53 1680 load1 4.1 foreign 0 limit none ok
+0 K2 cpu 20.94 wall 8.19 par 2.557 53 1680 load1 4.17 foreign 0 limit none ok
+0 K1 cpu 19.18 wall 14.65 par 1.309 53 1680 load1 4.06 foreign 0 limit none ok
+1 T cpu 27.34 wall 6.17 par 4.431 53 1680 load1 4.15 foreign 0 limit none ok
+1 K4 cpu 23.82 wall 6.54 par 3.642 53 1680 load1 4.06 foreign 0 limit none ok
+1 K3 cpu 22.09 wall 7.06 par 3.129 53 1680 load1 4.29 foreign 0 limit none ok
+1 K2 cpu 20.77 wall 8.17 par 2.542 53 1680 load1 4.01 foreign 0 limit none ok
+1 K1 cpu 19.09 wall 14.56 par 1.311 53 1680 load1 3.93 foreign 0 limit none ok
+1 B cpu 26.78 wall 6.08 par 4.405 53 1680 load1 3.43 foreign 0 limit none ok
+2 K4 cpu 24.14 wall 6.5 par 3.714 53 1680 load1 4.35 foreign 0 limit none ok
+2 K3 cpu 22.62 wall 6.99 par 3.236 53 1680 load1 6.37 foreign 0 limit none ok
+2 K2 cpu 21.07 wall 8.25 par 2.554 53 1680 load1 6.26 foreign 0 limit none ok
+2 K1 cpu 19.1 wall 14.63 par 1.306 53 1680 load1 6.07 foreign 0 limit none ok
+2 B cpu 27 wall 6.17 par 4.376 53 1680 load1 5.52 foreign 0 limit none ok
+2 T cpu 27.23 wall 6.37 par 4.275 53 1680 load1 6.44 foreign 0 limit none ok
+3 K3 cpu 22.62 wall 7.13 par 3.173 53 1680 load1 7.05 foreign 0 limit none ok
+3 K2 cpu 20.84 wall 8.18 par 2.548 53 1680 load1 6.42 foreign 0 limit none ok
+3 K1 cpu 19.42 wall 14.86 par 1.307 53 1680 load1 6.22 foreign 0 limit none ok
+3 B cpu 27.06 wall 6.29 par 4.302 53 1680 load1 5.52 foreign 0 limit none ok
+3 T cpu 26.99 wall 6.3 par 4.284 53 1680 load1 8.98 foreign 0 limit none ok
+3 K4 cpu 24.4 wall 6.53 par 3.737 53 1680 load1 8.42 foreign 0 limit none ok
+4 K2 cpu 20.93 wall 8.18 par 2.559 53 1680 load1 8.39 foreign 0 limit none ok
+4 K1 cpu 19.11 wall 14.64 par 1.305 53 1680 load1 7.71 foreign 0 limit none ok
+4 B cpu 28.23 wall 6.3 par 4.481 53 1680 load1 6.36 foreign 0 limit none ok
+4 T cpu 27.4 wall 6.45 par 4.248 53 1680 load1 8.01 foreign 0 limit none ok
+4 K4 cpu 24.39 wall 6.55 par 3.724 53 1680 load1 7.3 foreign 0 limit none ok
+4 K3 cpu 23.05 wall 7.24 par 3.184 53 1680 load1 6.79 foreign 0 limit none ok
+5 K1 cpu 19.18 wall 14.66 par 1.308 53 1680 load1 6.57 foreign 0 limit none ok
+5 B cpu 27.13 wall 6.26 par 4.334 53 1680 load1 5.93 foreign 0 limit none ok
+5 T cpu 27.59 wall 6.41 par 4.304 53 1680 load1 5.93 foreign 0 limit none ok
+5 K4 cpu 24.72 wall 6.6 par 3.745 53 1680 load1 5.78 foreign 0 limit none ok
+5 K3 cpu 22.78 wall 7.23 par 3.151 53 1680 load1 5.87 foreign 0 limit none ok
+5 K2 cpu 21.02 wall 8.21 par 2.56 53 1680 load1 5.89 foreign 0 limit none ok
+6 B cpu 28.54 wall 6.39 par 4.466 53 1680 load1 5.65 foreign 0 limit none ok
+6 T cpu 27.9 wall 6.51 par 4.286 53 1680 load1 6.04 foreign 0 limit none ok
+6 K4 cpu 24.78 wall 6.76 par 3.666 53 1680 load1 5.8 foreign 0 limit none ok
+6 K3 cpu 23 wall 7.24 par 3.177 53 1680 load1 5.81 foreign 0 limit none ok
+6 K2 cpu 21.14 wall 8.26 par 2.559 53 1680 load1 5.6 foreign 0 limit none ok
+6 K1 cpu 19.28 wall 14.71 par 1.311 53 1680 load1 5.55 foreign 0 limit none ok
+7 T cpu 27.62 wall 6.26 par 4.412 53 1680 load1 5.07 foreign 0 limit none ok
+7 K4 cpu 24.53 wall 6.69 par 3.667 53 1680 load1 5.05 foreign 0 limit none ok
+7 K3 cpu 22.95 wall 7.21 par 3.183 53 1680 load1 4.97 foreign 0 limit none ok
+7 K2 cpu 21.02 wall 8.26 par 2.545 53 1680 load1 4.89 foreign 0 limit none ok
+7 K1 cpu 19.27 wall 14.77 par 1.305 53 1680 load1 4.81 foreign 0 limit none ok
+7 B cpu 27.46 wall 6.25 par 4.394 53 1680 load1 4.34 foreign 0 limit none ok
+8 K4 cpu 24.92 wall 6.74 par 3.697 53 1680 load1 5.44 foreign 0 limit none ok
+8 K3 cpu 23.19 wall 7.3 par 3.177 53 1680 load1 5.08 foreign 0 limit none ok
+8 K2 cpu 21.14 wall 8.25 par 2.562 53 1680 load1 5.23 foreign 0 limit none ok
+8 K1 cpu 19.23 wall 14.7 par 1.308 53 1680 load1 5.13 foreign 0 limit none ok
+8 B cpu 27.17 wall 6.31 par 4.306 53 1680 load1 4.73 foreign 0 limit none ok
+8 T cpu 27.48 wall 6.39 par 4.3 53 1680 load1 7.71 foreign 0 limit none ok
+# abc144-frontier-warm summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 27.15	wall 6.28	par 4.385	load1 5.52	load1>8 0/8	files 53	tests 1680
+T	cpu 27.44	wall 6.38	par 4.293	load1 6.24	load1>8 2/8	files 53	tests 1680
+  T-B cpu	median 0.195 (0.72 % of base cpu)	sign 5/8	k 2	interval [-0.640, 0.460]	R 0.640
+  T-B wall	median 0.105	sign 8/8	k 2	interval [0.010, 0.150]	R 0.150
+K4	cpu 24.46	wall 6.57	par 3.705	load1 5.61	load1>8 1/8	files 53	tests 1680
+  K4-B cpu	median -2.895 (-10.66 % of base cpu)	sign 0/8	k 2	interval [-3.760, -2.410]	R 3.760
+  K4-B wall	median 0.355	sign 8/8	k 2	interval [0.250, 0.440]	R 0.440
+K3	cpu 22.87	wall 7.22	par 3.177	load1 5.84	load1>8 0/8	files 53	tests 1680
+  K3-B cpu	median -4.475 (-16.48 % of base cpu)	sign 0/8	k 2	interval [-5.180, -4.350]	R 5.180
+  K3-B wall	median 0.950	sign 8/8	k 2	interval [0.840, 0.980]	R 0.980
+K2	cpu 21.02	wall 8.23	par 2.556	load1 5.74	load1>8 1/8	files 53	tests 1680
+  K2-B cpu	median -6.165 (-22.71 % of base cpu)	sign 0/8	k 2	interval [-7.300, -6.010]	R 7.300
+  K2-B wall	median 1.945	sign 8/8	k 2	interval [1.880, 2.080]	R 2.080
+K1	cpu 19.20	wall 14.68	par 1.308	load1 5.81	load1>8 0/8	files 53	tests 1680
+  K1-B cpu	median -7.945 (-29.26 % of base cpu)	sign 0/8	k 2	interval [-9.120, -7.690]	R 9.120
+  K1-B wall	median 8.430	sign 8/8	k 2	interval [8.340, 8.520]	R 8.520
+twin R: cpu 0.640 s, wall 0.150 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).
