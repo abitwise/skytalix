@@ -236,3 +236,48 @@ code commit `0035001c`, base `f439c8fd`. The detail is in `.grugops/context/tick
 - **Gates:** lint, typecheck, build and `npm test` all exit 0.
 - **No timing read.** `A3`, `A4` and `A5` are Security/NFR's width-1 window, in addendum 2's step order.
   `AGENTS.md` is the Scribe's.
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-151`).
+- Range: base `f439c8fd`, code `0035001c`, reviewed tip `fc4ebb33`. The dry-run merges were against the wave tip
+  `aa932974` and `ABC-149`'s branch (`9a309fb4`).
+- Every reading is QE's own. **No timing, CPU or heat was read or graded.** The detail is in
+  `.grugops/context/qe-ABC-151/notes/`, and it is not restated here:
+  - `…333ce1b6`, the verdict;
+  - `…6774ed96`, the readings;
+  - `…cb3b04e5`, the plants;
+  - `…5ee777b8`, the gaps;
+  - `…43898bdd`, the commands and the probe.
+
+**PASS_WITH_GAPS.**
+- **`A1` MET.** `effectiveWorkers` is **2 at head and 3 at base**, with `isolate: true`. There is no `isolate` key
+  and no `poolOptions`. At runtime, the runner used 2 pool slots at head and 3 at base.
+- **`A2` MET.** QE re-planted the reds on fresh copies:
+  - r1, r2, r3, r3b (`VITEST_MAX_THREADS=3`) and `maxWorkers: 3` are all **RED**;
+  - `=2` and `=1` stay green;
+  - QE's 19 extras: 15 RED as designed, 2 survive (`QE-151-a`), 1 false red (`QE-151-b`), and 1 is the known
+    CLI-flag route.
+- **`A6` MET within QE's scope:**
+  - **20 of 20 consecutive green `npm test` at head, in 20 runs total**, each with 7 of 7 `*.nfr` files passing;
+  - 56 files and 1740 tests (**= base**), with 0 skipped;
+  - all 10 opt-in lane configurations collect the same files and tests as base; only the renamed pin id differs;
+  - 0 production `src/` lines.
+- **`A7`, as far as it exists at this hop:**
+  - the addendum and the config header are as specified;
+  - `NFR-008`'s row is unchanged;
+  - **the `AGENTS.md` worker-cap line still says 3. That is owed to the Scribe.**
+- **Not graded, and owed to the width-1 window:** `A3`, `A4`, `A5` and the lanes' exits.
+- **Dry-run merges:**
+  - against `aa932974`: **clean**, and the merged tree is green (56 / 1740, `effectiveWorkers` 2);
+  - against `ABC-149`: one append-only conflict, in `plans/traceability.md`. **There is no `src/cli.test.ts`
+    overlap**, and the union tree is green;
+  - both were aborted, and nothing was committed.
+- **Gaps: 1 LOW and 3 INFO, none blocking:**
+  - `QE-151-a` (LOW): a hex env value (`0x3`) raises the cap with the pin green. vitest parses with no radix,
+    and the pin parses with radix 10. Pre-existing since `ABC-144`. Proposed carrier: `ABC-152`;
+  - `QE-151-b`: an empty `VITEST_MAX_THREADS=` is a false red;
+  - `QE-151-c`: the traceability union at merge;
+  - `QE-151-d`: the lanes' exits are window step 5.
+- **UAT:** the waiver applies on QE's reading (0 production `src/` lines). Applying it is the Orchestrator's.
+- **Next:** `In Security/NFR` for the width-1 window, in addendum 2's step order. That is the Orchestrator's move.

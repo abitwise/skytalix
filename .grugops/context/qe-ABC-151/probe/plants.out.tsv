@@ -1,0 +1,27 @@
+control	exit=0	GREEN	as-designed	-	Tests  1 passed | 67 skipped (68)		eff=2 isolate=true threadsMax=null	unmodified head
+r1	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected undefined to be 2 // Object.is equality	eff=7 isolate=true threadsMax=null	delete maxWorkers: 2
+r2	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected false to be true // Object.is equality	eff=2 isolate=false threadsMax=null	add isolate: false
+r3	exit=1	RED	as-designed	-	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_THREADS: expected 8 to be less than or equal to 2	eff=8 isolate=true threadsMax=8	VITEST_MAX_THREADS=8
+r3b	exit=1	RED	as-designed	-	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_THREADS: expected 3 to be less than or equal to 2	eff=3 isolate=true threadsMax=3	VITEST_MAX_THREADS=3 (the stale <= 3 boundary)
+raise3	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected 3 to be 2 // Object.is equality	eff=3 isolate=true threadsMax=null	maxWorkers: 3 (a revert of this ticket)
+lower2	exit=0	GREEN	as-designed	-	Tests  1 passed | 67 skipped (68)		eff=2 isolate=true threadsMax=2	VITEST_MAX_THREADS=2 (equal, may stay)
+lower1	exit=0	GREEN	as-designed	-	Tests  1 passed | 67 skipped (68)		eff=1 isolate=true threadsMax=1	VITEST_MAX_THREADS=1 (may lower)
+x1	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected 4 to be 2 // Object.is equality	eff=4 isolate=true threadsMax=null	maxWorkers: 4 (breaks pick + decision 2)
+x2	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected false to be true // Object.is equality	eff=1 isolate=true threadsMax=null	add fileParallelism: false
+x3	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected { threads: { maxThreads: 2 } } to be undefined	eff=2 isolate=true threadsMax=2	add poolOptions.threads.maxThreads: 2 (same value, forbidden key)
+x3b	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected { threads: { maxThreads: 8 } } to be undefined	eff=8 isolate=true threadsMax=8	add poolOptions.threads.maxThreads: 8
+x4	exit=1	RED	as-designed	-	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_FORKS: expected 3 to be less than or equal to 2	eff=2 isolate=true threadsMax=null	VITEST_MAX_FORKS=3
+x4b	exit=1	RED	as-designed	-	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_FORKS: expected 8 to be less than or equal to 2	eff=2 isolate=true threadsMax=null	VITEST_MAX_FORKS=8
+q1	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected 'forks' to be 'threads' // Object.is equality	eff=2 isolate=true threadsMax=null	pool: "forks"
+q2	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected '50%' to be 2 // Object.is equality	eff=4 isolate=true threadsMax=null	maxWorkers: "50%"
+q2b	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected '2' to be 2 // Object.is equality	eff=2 isolate=true threadsMax=null	maxWorkers: "2" (string)
+q3	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected 1 to be 2 // Object.is equality	eff=1 isolate=true threadsMax=null	maxWorkers: 1 (a lowering in config is a ruling too)
+q4	exit=1	RED	as-designed	hit-1	Tests  1 failed | 67 skipped (68)	AssertionError: expected { threads: { isolate: false } } to be undefined	eff=2 isolate=true threadsMax=null	poolOptions.threads.isolate: false
+q6	exit=1	RED	as-designed	hit-1	Tests  no tests	Errors  1 error	eff=2 isolate=true threadsMax=null	add minWorkers: 8
+q8	exit=1	RED	as-designed	-	Tests  no tests	Errors  1 error	eff=null isolate=true threadsMax=null	VITEST_MAX_THREADS=abc (NaN)
+q11	exit=0	GREEN	observe	-	Tests  1 passed | 67 skipped (68)		eff=3 isolate=true threadsMax=3	VITEST_MAX_THREADS=0x3 (vitest parseInt no radix -> 3; pin radix 10 -> 0)
+q11b	exit=0	GREEN	observe	-	Tests  1 passed | 67 skipped (68)		eff=8 isolate=true threadsMax=8	VITEST_MAX_THREADS=0x8
+q12	exit=1	RED	as-designed	-	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_THREADS: expected 3 to be less than or equal to 2	eff=3 isolate=true threadsMax=3	VITEST_MAX_THREADS=3abc (both parsers -> 3)
+q13	exit=1	RED	observe	-	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_THREADS: expected NaN to be less than or equal to 2	eff=2 isolate=true threadsMax=null	VITEST_MAX_THREADS= (empty; vitest ignores it)
+q14	exit=1	RED	as-designed	-	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_THREADS: expected 3 to be less than or equal to 2	eff=3 isolate=true threadsMax=3	VITEST_MAX_THREADS=' 3' (leading space)
+q9	exit=0	GREEN	observe	-	Tests  1 passed | 67 skipped (68)		eff=2 isolate=true threadsMax=null	CLI --maxWorkers=8 on the narrow set (QE-144-b route)
