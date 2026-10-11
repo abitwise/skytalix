@@ -7,6 +7,14 @@
 Decision 6 is taken as **option R-1** for `NFR-008`: wall ≤ 10 s is the gate; CPU is reported, not gated.
 The catalog wording is applied by the `NFR-008` row's owner (Security/NFR) in its next catalog hop.
 
+**Pointers 2026-10-11** (`design-low-batch-2026-10-11`). Three readings and one erratum are in
+`§ Pointers 2026-10-11` at the end of this file:
+- P1: the clause's file set is what `npm test` collects, `tools/` included;
+- P2: the `ABC-084` count, 49 and not 51;
+- P3: the reading of `N8-LANE`'s 5 %.
+
+No decision is changed.
+
 Previously `proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25`, subtask `ruling-timing-protocol`),
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.
@@ -79,7 +87,8 @@ also wrote down trigger (a), a conforming median over 15 s. **That trigger fired
 The owner accepted that ticket's charge (`AR-N8LANE-079`, *"3. accept"*, 2026-09-25). **The level
 question went unanswered, and the catalog still ends at "MET by 60 ms".** Today the conforming base
 arms read 24.86 s and 26.04 s CPU, and 6.52 s and 7.16 s wall (`ABC-084` runs 1 and 3, load1 median 7.1
-and 7.5). That is 51 files and 1 541 tests. `ABC-084` run 2 is inadmissible: its null is +1.66 %.
+and 7.5). That is 51 files and 1 541 tests *[erratum 2026-10-11: 49 files / 1 530 tests; see
+§ Pointers 2026-10-11 P2]*. `ABC-084` run 2 is inadmissible: its null is +1.66 %.
 
 **The reference stack is gone.** `node --version` is v26.11.0. Homebrew carries only `node@26`, and
 v24.12.0 is not installed. Every October reading is on v26.11.0, and the row says `UNKNOWN - verify`
@@ -301,3 +310,74 @@ instrument for `NFR-008`'s TOTAL only, which is a ~2x question.**
   named commit. A reading at or below 13 s also triggers `ADR-0019` (b).
 - **Decision 6 is the owner's.** If he declines it, R-4 holds, and this ADR's decisions 1–5 stand
   without it.
+
+## § Pointers 2026-10-11
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-low-batch-2026-10-11`), the owner of
+this protocol. These are readings and one erratum. **No decision changes, no level moves, and nothing was
+measured at this hop.** Notes: `.grugops/context/design-low-batch-2026-10-11/notes/`.
+
+**P1. The clause's file set is what `npm test` collects, and that includes `tools/` (note `…7bf3d1ce`).**
+- **The question.** The `NFR-008` row says the lane is *"measured as `npx vitest run --dir src` (`ADR-0035`
+  decision 5)"*. `ADR-0037` placed `tools/opening-book/book.test.ts` outside `src/`, and `vitest.config.ts`
+  does not exclude `tools/`.
+- **The reading.** R-1's levelled clause is *"`npm test` wall ≤ W"*, and its subject is what a human waits
+  for. That is every file `npm test` collects, which includes `tools/opening-book/book.test.ts`. The CPU
+  total reported beside it is read on the same set.
+- **This ADR never named `--dir src`.** It has 0 occurrences here. The row's attribution to decision 5 is a
+  transcription slip. The form comes from the `ADR-0017` and `ADR-0019` protocols, written when the two
+  sets were equal.
+- **The instrument for the total** is `npm test`, or `npx vitest run` at the repository root with no
+  `--dir`. Its count is the set `node tools/grugops/lane-inventory.js` collects. A `--dir src` run after
+  `ac83c3fd` (the `ABC-093` merge) is one file short (52 against 53), so it is not a reading of the
+  clause. Label it if one is taken.
+- **History stands.** No test file outside `src/` was collected before `5332f501`, the commit that added
+  the first one. The `.grugops/` probes are excluded. So every `--dir src` reading before `ac83c3fd` was a
+  reading of the same set.
+- **Decision 2 is unchanged.** A ticket that adds or modifies a `tools/` test file puts it in its narrow
+  set. Whether `npx vitest related` also pulls `book.test.ts` in for a change to a `src/` module that
+  `tools/opening-book/compile.ts` imports is `UNKNOWN - verify`. It was not run at this hop.
+- **Owed (Security/NFR, at the next catalog hop):** replace the row's *"measured as `npx vitest run --dir
+  src` (`ADR-0035` decision 5)"* and its flag *"0 today"* with this reading.
+
+**P2. Erratum: `ABC-084`'s base arm is 49 files and 1 530 tests, not 51 and 1 541 (note `…a727a0fb`).**
+- **What the runs read.** Security/NFR's `ABC-084` runs 1 and 3 (`secnfr-ABC-084`,
+  `raw-out-lane-run1-summary.txt` and `raw-out-lane-run3-summary.txt`) give the figures 24.86 s / 6.52 s
+  and 26.04 s / 7.16 s. Both are base arm B, `7b54dae`, and the harness asserted **49 / 1530** on every
+  run.
+- **The git recount at `7b54dae` agrees.** It finds 49 `*.test.ts` outside `.grugops/`, or 51 counting
+  the two committed probes that the lane excludes.
+- **Which one is stale.** The stale one is this ADR's Context sentence, now marked inline. The 51 is the
+  lane at this ADR's own base, `2320269b` (git count, 51). The 1 541 matches no harness-asserted arm in
+  the `ABC-084` files, so where it came from is `UNKNOWN - verify`. The proposal note `…45cf4e0d` and the
+  catalog's 2026-10-10 section both read 49, and both are right.
+- **No verdict moves.** Decision 5's projection reads about 18.3 s at 49 files (14.94 + 9 × 0.37). That is
+  still over 15 s, and the verdict is history under R-1 anyway. The Alternatives line "40 → 51 files" is
+  the lane at `2320269b`, and it stands.
+- **Owed (Security/NFR, at the next catalog hop):** retire the catalog's *"File-count note, flagged rather
+  than resolved"* with a pointer here.
+
+**P3. `N8-LANE`'s 5 % is 5 % of the 13 s CPU level, and 650 ms is now a fixed number (note
+`…5ad29a76`).**
+- **The question.** `N8-LANE` reads *"at most 5 % of `NFR-008`'s TOTAL — ≤ 650 ms CPU while the CPU clause
+  is 13 s"*. Under R-1 there is no CPU level for it to be 5 % of.
+- **The level it is read at:**
+  - **The 13 s CPU level** that the owner ratified on 2026-08-11. `ADR-0014` decision 4 fixed 650 ms
+    there.
+  - **Not 15 s.** The 2026-09-19 section refused to run 750 ms into the bar.
+  - **Not W.** W is wall, and the row measured a per-ticket wall delta as unmeasurable by construction:
+    −15 to +3 ms per added file.
+- **Under R-1, the bar is the number:** ≤ 650 ms CPU on the narrow set, a rate limit (`ADR-0014`
+  decision 4). The "5 %" is its provenance and no longer arithmetic over a live level. This is the
+  reading this ADR's Scope fence and Consequences already imply. It is written down here.
+- **The load level: none.** A reading is taken at whatever load1 the harness logs, which decision 2 logs
+  and never gates. Load enters only through R. A reading resolves 650 ms only when the twin's R is
+  ≤ 650 ms (decision 1). On today's per-set floors, `src/cli.test.ts` (1.097 s) cannot resolve it, and
+  the count is its pin (the amendment under decision 3).
+- **Re-derivation trigger.** If a CPU total is levelled again, re-derive `N8-LANE` at that hop by the
+  row's own rule (*"Where 5 % comes from"*). The owner's lane-CPU goal (handoff #5 item 3) may end in such
+  a level. Until then 650 ms stands.
+- **Owed (Security/NFR, at the next catalog hop).** Replace *"≤ 650 ms CPU while the CPU clause is 13 s"*
+  with *"≤ 650 ms CPU, fixed at 5 % of the 13 s level ratified 2026-08-11. Under R-1 no CPU level exists,
+  and 650 ms stands as a number (`ADR-0035` § Pointers 2026-10-11 P3)"*. Then retire the paragraph
+  *"Recorded, not ruled: what `N8-LANE`'s 5 % means under R-1"*.
