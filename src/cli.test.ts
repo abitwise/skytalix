@@ -2678,15 +2678,19 @@ describe("ABC-043 — the live session", () => {
     // - `M9`, a flat copy bound under the same name (`history: decoy,`), is NOT blind to them. On
     //   the control, the shorthand row reds it (`history: decoy,` does not match `/\bhistory,/`).
     //   Here this count reds it too, with 2 binders.
-    // This row is placed BEFORE the other two, so on any decoy it is the row that speaks first. The
-    // cost is that vitest stops at it, and the shorthand row's own red on `M9` is invisible from
+    // ORDER: this row sits AFTER the initializer row and BEFORE the shorthand row. On `D3` and `M9`
+    // it is the row that speaks, because both leave the initializer row green. It does NOT speak
+    // first on every decoy: `ORD` (`const history: ReturnType<typeof newGame> = newGame(START_FEN);`
+    // plus `M9`'s flat copy, `tsc`-clean) reds the initializer row, and vitest stops there. On `M9`
+    // the cost is that vitest stops at this row, so the shorthand row's own red is invisible from
     // this file's output. Delivered → `["history ="]`, 1.
     // WHAT THIS COUNT CANNOT SEE: it matches `/\bhistory\s*[:=]/g`, so a binder with neither `:` nor
     // `=` after the name is not counted. The open remainder is the `[:=]`-free binder forms:
     // `for…of`, `for…in`, `catch (history)`, and a contextually-typed callback parameter. `D4`
-    // (`const spare = { ...history }; for (const history of [spare])`) is `tsc`-clean and leaves
-    // the lane GREEN on this file and on the control. Closing it is a new assertion, not this
-    // comment's.
+    // (`const spare = { ...history }; for (const history of [spare])`) is `tsc`-clean. Every row
+    // of this file stays green on it. On the control `A1` stays green, and the control's only reds
+    // are its 2 unrelated `ABC-042` drift rows (`A9`, `A10`). Closing it is a new assertion, not
+    // this comment's.
     // Counted over `executableCodeOf` and never the raw file (`## Test notes` 1 — the word
     // `history` in a comment reddens a raw count), and written as a COUNT rather than a
     // `not.toContain("decoy")` (`## Test notes` 2 — a negative row on a literal passes on every
