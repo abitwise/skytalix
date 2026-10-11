@@ -161,7 +161,9 @@ export const PUZZLES: readonly Puzzle[] = [
   { name: "win material, seed 1811: white 2R+N+2P against 2B+N+2P", fen: "6n1/1k5b/5bP1/3K1p2/2NR4/3p4/4P3/5R2 w - - 0 1", kind: "win-material", accept: ["c4d6"], tags: ["quiescence"], source: `${WIN3} +3, seed 1811` },
   { name: "win material, seed 5180: black R+N+P against Q+B+N", fen: "8/1p5N/6kr/3K4/1B5n/8/8/3Q4 b - - 0 1", kind: "win-material", accept: ["h6h7"], tags: ["depth≥5", "quiescence"], source: `${WIN3} +3, seed 5180` },
   { name: "win material, seed 5464: black B+P against B+N", fen: "8/8/3B1K1N/8/k7/2p5/8/4b3 b - - 0 1", kind: "win-material", accept: ["e1d2"], tags: ["quiet-key", "depth≥5", "quiescence"], source: `${WIN3} +3, seed 5464` },
-  { name: "win material, seed 5061: white B+N+4P against Q+R+2B+N+P", fen: "8/nk1p3q/4b3/5P2/1P2P3/3r4/6NP/b4KB1 w - - 0 1", kind: "win-material", accept: ["f5e6", "g1a7"], tags: ["quiescence"], source: `${WIN3} +2, seed 5061` },
+  // Re-found at ABC-083 (ADR-0028 d2 via ADR-0034 d4): seed 5061 (8/nk1p3q/…) sat on a 55 cp LMR near-tie at d5.
+  // Seed 5147 is from ABC-127's same pool; its keys lead by >= 270 cp, LMR off, at d4-d6 on base and branch.
+  { name: "win material, seed 5147: white Q+B against B+N", fen: "7k/6n1/7B/1Q6/1b6/5K2/8/8 w - - 0 1", kind: "win-material", accept: ["b5b4", "b5b8", "h6g7"], tags: ["quiescence"], source: `${WIN3} +3, seed 5147` },
   { name: "win material, seed 5527: black R+2B+2N+P against R+2N+3P", fen: "k2r1N1b/4n3/2R1N2K/7b/3P4/1p4PP/4n3/8 b - - 0 1", kind: "win-material", accept: ["e7c6"], tags: ["depth≥5", "quiescence"], source: `${WIN3} +3, seed 5527` },
   { name: "win material, seed 279: black Q+3P against R+2N+P", fen: "8/7N/3p2pp/8/1N2R3/3P1K2/8/q2k4 b - - 0 1", kind: "win-material", accept: ["a1g7"], tags: ["quiet-key"], source: `${WIN3} +2, seed 279` },
 ];
