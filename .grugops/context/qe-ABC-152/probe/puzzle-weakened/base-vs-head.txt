@@ -1,0 +1,15 @@
+QE ABC-152: PUZZLE_DEEP=weakened at base and at head (vitest run src/puzzle-suite.test.ts; dot/default reporter).
+
+== base 91024242 (vitest 3.2.7, runner on), exit 1:
+PUZZLES weakened (evaluate = 0): solved 15/58, baseline 54/58, budget 25 step 1, wall <not read: QE reads no timing>
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=weakened] > the gate: solved >= the recorded baseline
+AssertionError: expected 15 to be greater than or equal to 54
+      Tests  1 failed | 13 passed (14)
+
+== head a99e9845 (vitest 4.1.11, runner off), exit 1:
+PUZZLES weakened (evaluate = 0): solved 54/58, baseline 54/58, budget 25 step 1, wall <not read: QE reads no timing>
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=weakened] > A3 — the weakened engine solves FEWER than the baseline (so the gate row above is red)
+AssertionError: expected 54 to be less than 54
+      Tests  1 failed | 13 passed (14)

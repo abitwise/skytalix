@@ -1,0 +1,43 @@
+
+=== abc152-warm: 27 runs, harness errors 0, utc 2026-10-11T22:55:24.633Z .. 2026-10-11T22:59:04.033Z
+  B n=8 cpu 23.41 (22.75-23.69) wall 9.17 (8.90-9.41) par 2.549 load1b 4.66 (4.11-5.48) load1b>8 0/8 files [56] tests [1740] foreign_before {0: 8} foreign_after {0: 8} power ['AC Power'] speed_limit ['none']
+  H n=8 cpu 18.54 (18.18-19.03) wall 6.12 (5.95-6.28) par 3.029 load1b 4.73 (3.89-5.37) load1b>8 0/8 files [56] tests [1741] foreign_before {0: 8} foreign_after {0: 8} power ['AC Power'] speed_limit ['none']
+  T n=8 cpu 23.38 (23.00-24.18) wall 9.19 (9.00-9.51) par 2.552 load1b 4.57 (4.14-5.67) load1b>8 0/8 files [56] tests [1740] foreign_before {0: 8} foreign_after {0: 8} power ['AC Power'] speed_limit ['none']
+  round 0 (discarded): B cpu 22.05 wall 8.63 files 56 tests 1740 ok, H cpu 17.6 wall 5.81 files 56 tests 1741 ok, T cpu 22.72 wall 8.93 files 56 tests 1740 ok
+  H-B cpu median -4.855 (-20.74 % of B cpu; interval -21.06..-19.31 %) sign+ 0/8 k 2 interval [-4.930, -4.520] R 4.930
+      per-round deltas [-5.37, -4.57, -4.93, -4.86, -4.52, -4.89, -4.85, -3.98]
+  H-B wall median -3.105 sign+ 0/8 k 2 interval [-3.190, -2.820] R 3.190
+      per-round deltas [-3.29, -2.82, -3.13, -3.09, -2.9, -3.12, -3.19, -2.78]
+  T-B cpu median +0.145 (+0.62 % of B cpu; interval -1.88..+1.45 %) sign+ 5/8 k 2 interval [-0.440, +0.340] R 0.440
+      per-round deltas [-0.52, 0.27, -0.22, 0.34, 0.22, 0.07, -0.44, 1.17]
+  T-B wall median +0.040 sign+ 4/8 k 2 interval [-0.190, +0.120] R 0.190
+      per-round deltas [-0.19, 0.12, -0.1, 0.08, 0.11, 0.0, -0.29, 0.45]
+  TWIN: cpu median +0.62 % of B (ADR-0035 d1 limit 1.5 %), sign 5/8 (chance band 2..6) -> ADR-0035 d1 admissible True
+        cpu R 0.440 s = 1.88 % of B (ticket V9: <= 15 %) -> ticket admissible True; wall R 0.190 s
+  V9: H-B cpu median -4.855 s = -20.74 % of B median 23.41 s; interval [-21.06 %, -19.31 %]; sign 0/8 -> MERGES (<= -15 %)
+      ratio of medians H/B cpu 0.7921; the bar at -15 % is -3.511 s
+  V10: H wall median 6.115 + T wall R 0.190 = 6.305 s (<= 10 s: True; > 9.0 s cooled owed: False)
+       H-B paired median wall -3.105 s, interval [-3.190, -2.820] <= + T wall R 0.190: True
+  V11, runs with thermal level >= 1 (before OR after), per arm:
+    B: 5/8 scored runs (5/9 incl. round 0); max level 1; before {'0': 5, '1': 4} after {'0': 4, '1': 5}
+    H: 4/8 scored runs (4/9 incl. round 0); max level 2; before {'0': 5, '1': 4} after {'0': 5, '1': 3, '2': 1}
+    T: 4/8 scored runs (4/9 incl. round 0); max level 1; before {'0': 5, '1': 4} after {'0': 5, '1': 4}
+  foreign runner present before 0/27 runs: []
+  runs over W = 10 s: []
+
+=== abc152-puzzle (RISK-ABC152-PUZZLE-SPY, not a gate): 10 runs
+  round=0 | cond=B | exit=0 | wall=28.68 | cpu=29.07 | printed_puzzles_wall=19.48 | printed_mate3_wall=4.08 | printed_winmat_wall=4.23 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=2.99 | load1_after=4.28 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:06:29Z
+  round=0 | cond=H | exit=0 | wall=6.20 | cpu=6.74 | printed_puzzles_wall=4.05 | printed_mate3_wall=0.77 | printed_winmat_wall=0.82 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=4.28 | load1_after=4.24 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:06:58Z
+  round=1 | cond=H | exit=0 | wall=6.00 | cpu=6.58 | printed_puzzles_wall=3.95 | printed_mate3_wall=0.73 | printed_winmat_wall=0.81 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=4.24 | load1_after=4.14 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:07:04Z
+  round=1 | cond=B | exit=0 | wall=29.50 | cpu=29.98 | printed_puzzles_wall=20.16 | printed_mate3_wall=4.22 | printed_winmat_wall=4.41 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=4.14 | load1_after=3.70 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:07:10Z
+  round=2 | cond=B | exit=0 | wall=28.82 | cpu=29.36 | printed_puzzles_wall=19.73 | printed_mate3_wall=4.08 | printed_winmat_wall=4.26 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=3.70 | load1_after=3.20 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:07:40Z
+  round=2 | cond=H | exit=0 | wall=6.00 | cpu=6.49 | printed_puzzles_wall=3.94 | printed_mate3_wall=0.74 | printed_winmat_wall=0.81 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=3.20 | load1_after=2.94 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:08:09Z
+  round=3 | cond=H | exit=0 | wall=6.01 | cpu=6.60 | printed_puzzles_wall=3.96 | printed_mate3_wall=0.74 | printed_winmat_wall=0.81 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=2.94 | load1_after=3.02 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:08:15Z
+  round=3 | cond=B | exit=0 | wall=28.83 | cpu=29.32 | printed_puzzles_wall=19.66 | printed_mate3_wall=4.10 | printed_winmat_wall=4.34 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=3.02 | load1_after=3.01 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:08:21Z
+  round=4 | cond=B | exit=0 | wall=31.68 | cpu=32.13 | printed_puzzles_wall=21.39 | printed_mate3_wall=4.76 | printed_winmat_wall=4.75 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=3.01 | load1_after=2.85 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:08:50Z
+  round=4 | cond=H | exit=0 | wall=6.17 | cpu=6.70 | printed_puzzles_wall=4.03 | printed_mate3_wall=0.75 | printed_winmat_wall=0.83 | solved=solved_54/58 | files_line=Test Files 1 passed (1) | tests_line=Tests 18 passed (18) | load1_before=2.85 | load1_after=3.66 | thermal_before=0 | thermal_after=0 | foreign_before=0 | utc=2026-10-11T23:09:22Z
+  B n=4 exits ['0'] printed PUZZLES wall median 19.95 (19.66-21.39) process wall median 29.16 (28.82-31.68) cpu median 29.67 solved ['solved_54/58'] tests ['Tests 18 passed (18)']
+  H n=4 exits ['0'] printed PUZZLES wall median 3.96 (3.94-4.03) process wall median 6.00 (6.00-6.17) cpu median 6.59 solved ['solved_54/58'] tests ['Tests 18 passed (18)']
+  H-B printed_puzzles_wall: per round [-16.21, -15.79, -15.7, -17.36], median -16.00
+  H-B wall: per round [-23.5, -22.82, -22.82, -25.51], median -23.16
+  H-B cpu: per round [-23.4, -22.87, -22.72, -25.43], median -23.13

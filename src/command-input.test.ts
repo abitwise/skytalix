@@ -48,31 +48,21 @@ import {
  * sit where a direct import is still visible: `vi.mock` replaces the module in the graph for EVERY
  * importer, including one that has not been written yet.
  *
- * Everything CALLS THROUGH (`vi.fn(actual.…)`), so no behaviour changes. Known limit, stated rather
+ * It CALLS THROUGH (`vi.mock(p, { spy: true })`): no behaviour changes. Known limit, stated rather
  * than papered over: `gameStatusOf` calls `repetitionCounts` INSIDE `history.ts` and a
  * module-boundary mock cannot see an intra-module call — so the `repetitionCounts` count is the
  * count of DIRECT external calls, which is exactly what `A6` bars.
  */
-vi.mock("./history.ts", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./history.ts")>();
-  return {
-    ...actual,
-    gameStatusOf: vi.fn(actual.gameStatusOf),
-    repetitionCounts: vi.fn(actual.repetitionCounts),
-  };
-});
+vi.mock("./history.ts", { spy: true });
 
 /**
  * `ABC-045` `A2`'s guard, the SAME shape as `A6`'s above and for the same reason: the loop imports
  * `legalMoves` DIRECTLY from `./legal.ts` (`src/turn-loop.ts`, `wasGenerated`) and so does the
  * rules core under `gameStatusOf`, so a spy on the test seam's `deps.legalMoves` sees neither. The
  * criterion is "0 calls AFTER the outcome is produced", counted at the module boundary where every
- * importer's call is visible. Calls through (`vi.fn(actual.legalMoves)`), so no behaviour changes.
+ * importer's call is visible. Calls through (`vi.mock(p, { spy: true })`), so no behaviour changes.
  */
-vi.mock("./legal.ts", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./legal.ts")>();
-  return { ...actual, legalMoves: vi.fn(actual.legalMoves) };
-});
+vi.mock("./legal.ts", { spy: true });
 
 const derives = (): number => vi.mocked(gameStatusOf).mock.calls.length;
 const repetitionDerives = (): number => vi.mocked(repetitionCounts).mock.calls.length;
@@ -861,7 +851,7 @@ describe("ABC-046 — `quit` asks once, ends on the second consecutive `quit`, a
   it("clause 6 — `disarm` clears an armed flag, is harmless unarmed, and calls no resolver", () => {
     const history = newGame(RICH_FEN);
     const deps: MoveInputDeps = {
-      legalMoves: vi.fn(legalMoves),
+      legalMoves: vi.fn((...args: Parameters<typeof legalMoves>) => legalMoves(...args)),
       parseCoordinateMove: vi.fn(parseCoordinateMove),
       parseSan: vi.fn(parseSan),
       toSan: vi.fn(toSan),
@@ -1391,7 +1381,7 @@ function movesOf(history: GameHistory, deps?: MoveInputDeps, line = "moves"): re
  * missing, and a spy on `legalMoves` alone cannot see that (`ABC-033` M11).
  */
 function movesSpied() {
-  const derive = vi.fn(legalMoves);
+  const derive = vi.fn((...args: Parameters<typeof legalMoves>) => legalMoves(...args));
   const san = vi.fn(toSan);
   const coordinate = vi.fn(parseCoordinateMove);
   const parse = vi.fn(parseSan);

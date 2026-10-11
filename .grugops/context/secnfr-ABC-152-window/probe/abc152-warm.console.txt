@@ -1,0 +1,37 @@
+# abc152-warm: npm test | conds B,H,T | rounds 9 | gap 0s -> w152/abc152-warm.tsv
+0 B cpu 22.05 wall 8.63 par 2.555 56 1740 load1 2.44 foreign 0 limit none therm 0->0 ok
+0 H cpu 17.6 wall 5.81 par 3.029 56 1741 load1 2.6 foreign 0 limit none therm 0->0 ok
+0 T cpu 22.72 wall 8.93 par 2.544 56 1740 load1 3.59 foreign 0 limit none therm 0->0 ok
+1 H cpu 18.32 wall 5.95 par 3.079 56 1741 load1 3.89 foreign 0 limit none therm 0->0 ok
+1 T cpu 23.17 wall 9.05 par 2.56 56 1740 load1 4.14 foreign 0 limit none therm 0->0 ok
+1 B cpu 23.69 wall 9.24 par 2.564 56 1740 load1 4.11 foreign 0 limit none therm 0->0 ok
+2 T cpu 23.02 wall 9.02 par 2.552 56 1740 load1 4.32 foreign 0 limit none therm 0->0 ok
+2 B cpu 22.75 wall 8.9 par 2.556 56 1740 load1 4.26 foreign 0 limit none therm 0->0 ok
+2 H cpu 18.18 wall 6.08 par 2.99 56 1741 load1 4.16 foreign 0 limit none therm 0->0 ok
+3 B cpu 23.22 wall 9.1 par 2.552 56 1740 load1 4.74 foreign 0 limit none therm 0->0 ok
+3 H cpu 18.29 wall 5.97 par 3.064 56 1741 load1 5.16 foreign 0 limit none therm 0->0 ok
+3 T cpu 23 wall 9 par 2.556 56 1740 load1 4.76 foreign 0 limit none therm 0->0 ok
+4 H cpu 18.51 wall 6.09 par 3.039 56 1741 load1 4.42 foreign 0 limit none therm 0->0 ok
+4 T cpu 23.71 wall 9.26 par 2.56 56 1740 load1 4.38 foreign 0 limit none therm 0->0 ok
+4 B cpu 23.37 wall 9.18 par 2.546 56 1740 load1 4.57 foreign 0 limit none therm 0->1 ok
+5 T cpu 23.66 wall 9.27 par 2.552 56 1740 load1 4.39 foreign 0 limit none therm 1->1 ok
+5 B cpu 23.44 wall 9.16 par 2.559 56 1740 load1 4.55 foreign 0 limit none therm 1->1 ok
+5 H cpu 18.92 wall 6.26 par 3.022 56 1741 load1 4.58 foreign 0 limit none therm 1->1 ok
+6 B cpu 23.46 wall 9.26 par 2.533 56 1740 load1 4.78 foreign 0 limit none therm 1->1 ok
+6 H cpu 18.57 wall 6.14 par 3.024 56 1741 load1 4.89 foreign 0 limit none therm 1->1 ok
+6 T cpu 23.53 wall 9.26 par 2.541 56 1740 load1 4.9 foreign 0 limit none therm 1->1 ok
+7 H cpu 18.83 wall 6.22 par 3.027 56 1741 load1 5.37 foreign 0 limit none therm 1->1 ok
+7 T cpu 23.24 wall 9.12 par 2.548 56 1740 load1 5.18 foreign 0 limit none therm 1->1 ok
+7 B cpu 23.68 wall 9.41 par 2.516 56 1740 load1 5.32 foreign 0 limit none therm 1->1 ok
+8 T cpu 24.18 wall 9.51 par 2.543 56 1740 load1 5.67 foreign 0 limit none therm 1->1 ok
+8 B cpu 23.01 wall 9.06 par 2.54 56 1740 load1 5.48 foreign 0 limit none therm 1->1 ok
+8 H cpu 19.03 wall 6.28 par 3.03 56 1741 load1 5.18 foreign 0 limit none therm 1->2 ok
+# abc152-warm summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 23.41	wall 9.17	par 2.549	load1 4.66	load1>8 0/8	files 56	tests 1740
+H	cpu 18.54	wall 6.12	par 3.029	load1 4.73	load1>8 0/8	files 56	tests 1741
+  H-B cpu	median -4.855 (-20.74 % of base cpu)	sign 0/8	k 2	interval [-4.930, -4.520]	R 4.930
+  H-B wall	median -3.105	sign 0/8	k 2	interval [-3.190, -2.820]	R 3.190
+T	cpu 23.38	wall 9.19	par 2.552	load1 4.57	load1>8 0/8	files 56	tests 1740
+  T-B cpu	median 0.145 (0.62 % of base cpu)	sign 5/8	k 2	interval [-0.440, 0.340]	R 0.440
+  T-B wall	median 0.040	sign 4/8	k 2	interval [-0.190, 0.120]	R 0.190
+twin R: cpu 0.440 s, wall 0.190 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

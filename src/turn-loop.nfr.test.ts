@@ -54,9 +54,9 @@ vi.mock("./history.ts", async (importOriginal) => {
   };
 });
 
-const { gameStatus } = await import("./gameend.ts");
-const { keyHistory, newGame, repetitionCounts } = await import("./history.ts");
-const { runTurnLoop } = await import("./turn-loop.ts");
+import { gameStatus } from "./gameend.ts";
+import { keyHistory, newGame, repetitionCounts } from "./history.ts";
+import { runTurnLoop } from "./turn-loop.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 

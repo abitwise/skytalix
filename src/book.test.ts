@@ -241,8 +241,7 @@ describe("ABC-094 A2 — deterministic under a fixed seed", () => {
   it("two fresh module instances, same position, artifact and seed: 100 picks identical element for element", async () => {
     const sequences: string[][] = [];
     for (let run = 0; run < 2; run++) {
-      vi.resetModules();
-      const fresh = (await import("./book.ts")) as typeof import("./book.ts");
+      const fresh = (await import(`./book.ts?abc094-a2=${run}`)) as typeof import("./book.ts");
       const probe = fresh.createBookProbe({
         read: () => readFileSync(ARTIFACT),
         warn: () => {},

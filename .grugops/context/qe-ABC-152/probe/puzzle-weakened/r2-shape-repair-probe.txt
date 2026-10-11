@@ -1,0 +1,135 @@
+===== pz-asis-weakened-HEAD
+# pz-asis-weakened-HEAD
+why: as committed: which row is red?
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {"PUZZLE_DEEP":"weakened"}
+failed: 1 passed: 13
+
+reds (1), first 4:
+  AssertionError: expected 54 to be less than 54 @ [src/puzzle-suite.test.ts] the gating run [deep, PUZZLE_DEEP=weakened] A3 — the weakened engine solves FEWER than the baseline (so the gate row above is red)
+
+===== pz-r2form-weakened
+# pz-r2form-weakened
+why: R2 shape: the GATE row must be the red one, A3 green
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {"PUZZLE_DEEP":"weakened"}
+failed: 1 passed: 13
+--- src/puzzle-suite.test.ts
++++ src/puzzle-suite.test.ts
+@@ -28,12 +28,15 @@
+ import { describe, expect, it, vi } from "vitest";
+ import { makeMove, unmakeMove } from "./apply.ts";
+ import type { EngineChoice, EngineOptions } from "./engine.ts";
++import { evaluate } from "./evaluate.ts";
+ import { parseFen } from "./fen.ts";
+ import { isInCheck, legalMoves } from "./legal.ts";
+ import type { Move } from "./moves.ts";
+ import { EMPTY, isBlack, isOnBoard, type Position, pieceType, squareName } from "./position.ts";
+ import { HANGING_CORPUS, PUZZLES, type Puzzle, type PuzzleTag } from "./puzzle-corpus.ts";
+ import { virtualClock } from "./virtual-clock.ts";
++
++vi.mock("./evaluate.ts", { spy: true });
+ 
+ const MODE = process.env.PUZZLE_DEEP;
+ 
+@@ -366,10 +369,7 @@
+   /** The engine under test: the shipped one, or (A3) the shipped one with `evaluate` returning 0. */
+   async function engineUnderTest(): Promise<Choose> {
+     if (MODE === "weakened") {
+-      vi.doMock("./evaluate.ts", async (importOriginal) => ({
+-        ...(await importOriginal<typeof import("./evaluate.ts")>()),
+-        evaluate: () => 0,
+-      }));
++      vi.mocked(evaluate).mockImplementation(() => 0);
+     }
+     return (await import("./engine.ts")).chooseMove;
+   }
+reds (1), first 4:
+  AssertionError: expected 15 to be greater than or equal to 54 @ [src/puzzle-suite.test.ts] the gating run [deep, PUZZLE_DEEP=weakened] the gate: solved >= the recorded baseline
+
+===== pz-r2form-deep1
+# pz-r2form-deep1
+why: R2 shape must not move the shipped gating run
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {"PUZZLE_DEEP":"1"}
+failed: 0 passed: 18
+--- src/puzzle-suite.test.ts
++++ src/puzzle-suite.test.ts
+@@ -28,12 +28,15 @@
+ import { describe, expect, it, vi } from "vitest";
+ import { makeMove, unmakeMove } from "./apply.ts";
+ import type { EngineChoice, EngineOptions } from "./engine.ts";
++import { evaluate } from "./evaluate.ts";
+ import { parseFen } from "./fen.ts";
+ import { isInCheck, legalMoves } from "./legal.ts";
+ import type { Move } from "./moves.ts";
+ import { EMPTY, isBlack, isOnBoard, type Position, pieceType, squareName } from "./position.ts";
+ import { HANGING_CORPUS, PUZZLES, type Puzzle, type PuzzleTag } from "./puzzle-corpus.ts";
+ import { virtualClock } from "./virtual-clock.ts";
++
++vi.mock("./evaluate.ts", { spy: true });
+ 
+ const MODE = process.env.PUZZLE_DEEP;
+ 
+@@ -366,10 +369,7 @@
+   /** The engine under test: the shipped one, or (A3) the shipped one with `evaluate` returning 0. */
+   async function engineUnderTest(): Promise<Choose> {
+     if (MODE === "weakened") {
+-      vi.doMock("./evaluate.ts", async (importOriginal) => ({
+-        ...(await importOriginal<typeof import("./evaluate.ts")>()),
+-        evaluate: () => 0,
+-      }));
++      vi.mocked(evaluate).mockImplementation(() => 0);
+     }
+     return (await import("./engine.ts")).chooseMove;
+   }
+reds (0), first 4:
+
+
+===== pz-r2form-default
+# pz-r2form-default
+why: default lane unchanged
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 12
+--- src/puzzle-suite.test.ts
++++ src/puzzle-suite.test.ts
+@@ -28,12 +28,15 @@
+ import { describe, expect, it, vi } from "vitest";
+ import { makeMove, unmakeMove } from "./apply.ts";
+ import type { EngineChoice, EngineOptions } from "./engine.ts";
++import { evaluate } from "./evaluate.ts";
+ import { parseFen } from "./fen.ts";
+ import { isInCheck, legalMoves } from "./legal.ts";
+ import type { Move } from "./moves.ts";
+ import { EMPTY, isBlack, isOnBoard, type Position, pieceType, squareName } from "./position.ts";
+ import { HANGING_CORPUS, PUZZLES, type Puzzle, type PuzzleTag } from "./puzzle-corpus.ts";
+ import { virtualClock } from "./virtual-clock.ts";
++
++vi.mock("./evaluate.ts", { spy: true });
+ 
+ const MODE = process.env.PUZZLE_DEEP;
+ 
+@@ -366,10 +369,7 @@
+   /** The engine under test: the shipped one, or (A3) the shipped one with `evaluate` returning 0. */
+   async function engineUnderTest(): Promise<Choose> {
+     if (MODE === "weakened") {
+-      vi.doMock("./evaluate.ts", async (importOriginal) => ({
+-        ...(await importOriginal<typeof import("./evaluate.ts")>()),
+-        evaluate: () => 0,
+-      }));
++      vi.mocked(evaluate).mockImplementation(() => 0);
+     }
+     return (await import("./engine.ts")).chooseMove;
+   }
+reds (0), first 4:
+
+

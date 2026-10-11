@@ -1,0 +1,10 @@
+0 B exit 0 wall 28.72 cpu 29.07 printed 19.49 solved_54/58 th 0->0
+0 H exit 0 wall 6.28 cpu 6.85 printed   th 0->0
+1 H exit 0 wall 6.29 cpu 6.89 printed   th 0->0
+1 B exit 0 wall 29.76 cpu 30.22 printed 20.20 solved_54/58 th 0->0
+2 B exit 0 wall 30.55 cpu 31.04 printed 20.83 solved_54/58 th 0->0
+2 H exit 0 wall 6.52 cpu 7.03 printed   th 0->0
+3 H exit 0 wall 6.48 cpu 6.89 printed   th 0->0
+3 B exit 0 wall 31.86 cpu 32.28 printed 21.90 solved_54/58 th 0->1
+4 B exit 0 wall 29.82 cpu 30.34 printed 20.22 solved_54/58 th 1->1
+4 H exit 0 wall 6.22 cpu 6.90 printed   th 1->1

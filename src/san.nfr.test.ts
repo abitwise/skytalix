@@ -35,8 +35,8 @@ vi.mock("./legal.ts", async (importOriginal) => {
   return { ...actual, legalMoves: vi.fn(actual.legalMoves) };
 });
 
-const { legalMoves } = await import("./legal.ts");
-const { toSan } = await import("./san.ts");
+import { legalMoves } from "./legal.ts";
+import { toSan } from "./san.ts";
 
 /** The benchmark position `ABC-013` pins as a literal FEN: 42 legal moves, 3 of which give check. */
 const P60 = "1rb4r/3k4/p1ppNn2/1p1np1Q1/1q1P1B1P/PRP2p2/3KP1BR/6N1 w - - 2 31";

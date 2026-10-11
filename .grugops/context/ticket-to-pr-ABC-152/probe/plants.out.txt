@@ -1,0 +1,761 @@
+
+===== PLANT C4-engine-capacity-extra-zobristKeyAfterMove  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-engine-capacity-extra-zobristKeyAfterMove, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/engine.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-engine-capacity-extra-zobristKeyAfterMove/src/engine.ts	2026-10-11 23:26:04
+@@ -280,6 +280,7 @@
+     const undo = makeMove(position, move);
+     let score: number;
+     try {
++      zobristKeyAfterMove(key, position, move, undo); // PLANT
+       keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
+       score = searchMove(position, remaining, alpha, beta, ply, index, reduction, budget);
+     } finally {
+
+CMD: npx vitest run src/engine.capacity.test.ts
+     × ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it 60ms
+ FAIL  src/engine.capacity.test.ts > ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() > ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it
+AssertionError: expected 255 to be 128 // Object.is equality
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+exit 1
+===== PLANT C4-levels-extra-chooseMove-on-engine-path  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-levels-extra-chooseMove-on-engine-path, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/levels.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-levels-extra-chooseMove-on-engine-path/src/levels.ts	2026-10-11 23:26:02
+@@ -115,6 +115,7 @@
+   const now = options.now ?? Date.now;
+   return (position) => {
+     if (random() >= level.blunderRate) {
++      chooseMove(position, { budgetMs: level.budgetMs, now }); // PLANT
+       const choice = chooseMove(position, { budgetMs: level.budgetMs, now });
+       if (choice === null) return null;
+       const { move, depth, nodes, elapsedMs } = choice;
+
+CMD: npx vitest run src/levels.test.ts -t 'QE-087-a'
+     × every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed 6ms
+ FAIL  src/levels.test.ts > QE-087-a — the seed never reaches the engine (ADR-0027 d1) > every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed
+AssertionError: expected [ { budgetMs: 3000, …(2) }, …(1) ] to have a length of 1 but got 2
+ Test Files  1 failed (1)
+      Tests  1 failed | 21 skipped (22)
+exit 1
+===== PLANT C4-search-capacity-extra-zobristKeyAfterMove  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-search-capacity-extra-zobristKeyAfterMove, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/search.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-search-capacity-extra-zobristKeyAfterMove/src/search.ts	2026-10-11 23:26:06
+@@ -373,6 +373,7 @@
+       ? lateMoveReduction(position, move, depth, index, false)
+       : 0;
+     const undo = makeMove(position, move);
++    zobristKeyAfterMove(key, position, move, undo); // PLANT
+     keys[ply + 1] = zobristKeyAfterMove(key, position, move, undo);
+     const score = searchMove(
+       position,
+
+CMD: npx vitest run src/search.capacity.test.ts
+     × ends a depth-200 line at ply 128 with a leaf's score: no child past it, no key written past it 12ms
+ FAIL  src/search.capacity.test.ts > ABC-122 A6: src/search.ts's KEY_ARRAY_CAPACITY guard, reached through search() > ends a depth-200 line at ply 128 with a leaf's score: no child past it, no key written past it
+AssertionError: expected 255 to be 128 // Object.is equality
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+exit 1
+===== PLANT C4-search-ordering-makeMove-around-killer-record  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-search-ordering-makeMove-around-killer-record, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/search.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-search-ordering-makeMove-around-killer-record/src/search.ts	2026-10-11 23:26:03
+@@ -397,7 +397,9 @@
+     if (!prune) continue;
+     if (best > alpha) alpha = best;
+     if (alpha >= beta) {
++      const plantUndo = makeMove(position, move); // PLANT: one makeMove (and its unmake) added
+       killers.record(ply, move);
++      unmakeMove(position, move, plantUndo);
+       break; // the opponent would never allow this node; the rest cannot matter
+     }
+   }
+
+CMD: npx vitest run src/search.ordering.test.ts
+     × search(): every killer offered was recorded at that ply of that search, and killers ARE offered 10ms
+ FAIL  src/search.ordering.test.ts > A6 — a killer is offered only at the ply it was recorded at, and only in its own search > search(): every killer offered was recorded at that ply of that search, and killers ARE offered
+AssertionError: expected [ …(212) ] to deeply equal []
+ Test Files  1 failed (1)
+      Tests  1 failed | 23 passed (24)
+exit 1
+===== PLANT C4-search-pvs-lmr-node-storeEntry-removed  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-search-pvs-lmr-node-storeEntry-removed, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/search.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-search-pvs-lmr-node-storeEntry-removed/src/search.ts	2026-10-11 23:26:07
+@@ -402,7 +402,7 @@
+     }
+   }
+ 
+-  if (switches.table) storeEntry(key, depth, boundOf(best, alphaIn, beta), best, ply, bestMove);
++  // PLANT: the node's storeEntry call removed
+   return best;
+ }
+ 
+
+CMD: npx vitest run src/search.pvs-lmr.test.ts -t 'A4'
+     × search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions 45ms
+ FAIL  src/search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one > search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions
+AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 18 skipped (20)
+exit 1
+===== PLANT C4-transposition-node-probeTable-removed  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-transposition-node-probeTable-removed, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/search.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/C4-transposition-node-probeTable-removed/src/search.ts	2026-10-11 23:26:08
+@@ -349,7 +349,7 @@
+   const prune = switches.prune;
+   const key = keys[ply] as bigint;
+ 
+-  const slot = switches.table ? probeTable(key) : -1;
++  const slot = -1; // PLANT: the node's probeTable call removed
+   if (slot !== -1) {
+     const settled = tableCutoff(slot, depth, alpha, beta, ply);
+     if (settled !== null) return settled;
+
+CMD: npx vitest run src/transposition.test.ts -t 'standing guard'
+     × position-3 at depth 4 — the default lane's standing guard 19ms
+ FAIL  src/transposition.test.ts > A2 — the hit rate is reported and is at least 10% > position-3 at depth 4 — the default lane's standing guard
+AssertionError: expected 0 to be greater than or equal to 0.1
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 23 skipped (25)
+exit 1
+===== PLANT R1-cli-resolveOptions-calls-selectGlyphMode  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R1-cli-resolveOptions-calls-selectGlyphMode, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/cli-options.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R1-cli-resolveOptions-calls-selectGlyphMode/src/cli-options.ts	2026-10-11 23:22:30
+@@ -35,7 +35,7 @@
+  * path). A caller that never echoes them is caught by that bar's non-vacuity arm, not by this file.
+  */
+ 
+-import type { GlyphFlags } from "./glyph-mode.ts";
++import { type GlyphFlags, selectGlyphMode } from "./glyph-mode.ts";
+ import type { Orientation } from "./render.ts";
+ 
+ /**
+@@ -107,6 +107,7 @@
+  * **V2.2.2 [L1]**): the entry point reads it once, hands it here, and branches on nothing after.
+  */
+ export function resolveOptions(argv: readonly string[]): Resolution {
++  selectGlyphMode({ ascii: false, unicode: false, isTTY: false, env: {} }); // PLANT
+   let colour: ColourValue = WHITE; // the table's "no arguments" row
+   let ascii = false;
+   let unicode = false;
+
+CMD: npx vitest run src/cli.test.ts -t 'selectGlyphMode is not called'
+     × A5 — `--ascii --unicode` is refused at the resolver, and selectGlyphMode is not called 12ms
+ FAIL  src/cli.test.ts > ABC-042 — a rejected command line starts no game > A5 — `--ascii --unicode` is refused at the resolver, and selectGlyphMode is not called
+AssertionError: expected "vi.fn()" to be called +0 times, but got 1 times
+ Test Files  1 failed (1)
+      Tests  1 failed | 68 skipped (69)
+exit 1
+===== PLANT R1-render-seam-derives-legalMoves  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R1-render-seam-derives-legalMoves, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/render-seam.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R1-render-seam-derives-legalMoves/src/render-seam.ts	2026-10-11 23:22:35
+@@ -40,6 +40,7 @@
+ 
+ import { assembleFrame } from "./frame.ts";
+ import { renderHistory } from "./history-pane.ts";
++import { legalMoves } from "./legal.ts";
+ import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
+ import { renderStatusPanel } from "./status-panel.ts";
+ import type { RenderSeam } from "./turn-loop.ts";
+@@ -50,7 +51,7 @@
+  */
+ export function makeRenderSeam(mode: GlyphMode, orientation: Orientation): RenderSeam {
+   return (history, status, thinking, messages) =>
+-    assembleFrame(
++    (legalMoves(history.position), assembleFrame)( // PLANT
+       {
+         board: renderBoard(history.position, mode, orientation),
+         status: renderStatusPanel(history, status, thinking),
+
+CMD: npx vitest run src/render-seam.test.ts
+     × A2 — derives NOTHING: gameStatus / gameStatusOf / legalMoves are 0 over three calls 3ms
+ FAIL  src/render-seam.test.ts > ABC-041 — the render seam > A2 — derives NOTHING: gameStatus / gameStatusOf / legalMoves are 0 over three calls
+AssertionError: expected "vi.fn()" to be called +0 times, but got 3 times
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 passed (14)
+exit 1
+===== PLANT R1-render-seam-renderBoard-twice  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R1-render-seam-renderBoard-twice, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/render-seam.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R1-render-seam-renderBoard-twice/src/render-seam.ts	2026-10-11 23:22:36
+@@ -52,7 +52,7 @@
+   return (history, status, thinking, messages) =>
+     assembleFrame(
+       {
+-        board: renderBoard(history.position, mode, orientation),
++        board: (renderBoard(history.position, mode, orientation), renderBoard(history.position, mode, orientation)), // PLANT
+         status: renderStatusPanel(history, status, thinking),
+         history: renderHistory(history),
+         messages,
+
+CMD: npx vitest run src/render-seam.test.ts
+     × A11 — the merged four are each CALLED exactly once, never re-implemented 3ms
+ FAIL  src/render-seam.test.ts > ABC-041 — the render seam > A11 — the merged four are each CALLED exactly once, never re-implemented
+AssertionError: renderBoard: expected "vi.fn()" to be called 1 times, but got 2 times
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 passed (14)
+exit 1
+===== PLANT R2a-book-delete-mockImplementation  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2a-book-delete-mockImplementation, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/tools/opening-book/book.test.ts	2026-10-11 23:18:11
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2a-book-delete-mockImplementation/tools/opening-book/book.test.ts	2026-10-11 23:18:41
+@@ -101,7 +101,6 @@
+ // every position to one value builds it. Scoped to this test: doMock + a fresh module registry.
+ describe("D1(f) — a key carrying two different positions is refused", () => {
+   it("refuses the compile and writes no artifact", async () => {
+-    vi.mocked(zobristKey).mockImplementation(() => 0n);
+     try {
+       const stubbed = await import("./compile.ts");
+       const dir = fixture("d1f-collision", `${HEADER}\n${GOOD_ROWS[0]}\n`);
+
+CMD: npx vitest run tools/opening-book/book.test.ts
+     × refuses the compile and writes no artifact 4ms
+ FAIL  tools/opening-book/book.test.ts > D1(f) — a key carrying two different positions is refused > refuses the compile and writes no artifact
+AssertionError: expected [Function] to throw an error
+ Test Files  1 failed (1)
+      Tests  1 failed | 16 passed (17)
+exit 1
+===== PLANT R2b-book-delete-finally-reset  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2b-book-delete-finally-reset, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/tools/opening-book/book.test.ts	2026-10-11 23:18:11
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2b-book-delete-finally-reset/tools/opening-book/book.test.ts	2026-10-11 23:18:42
+@@ -109,7 +109,6 @@
+       expect(() => stubbed.writeBook(dir, out, "0".repeat(40))).toThrow(/carries two positions/);
+       expect(existsSync(out)).toBe(false);
+     } finally {
+-      vi.mocked(zobristKey).mockReset(); // an automock spy: back to the original implementation
+     }
+   });
+ });
+
+CMD: npx vitest run tools/opening-book/book.test.ts
+     × refuses a row without 3 columns and writes no artifact 3ms
+     × refuses a SAN that does not resolve to exactly one move and writes no artifact 1ms
+     × refuses a SAN past maxPly that does not resolve and writes no artifact 1ms
+     × refuses a position carrying two names and writes no artifact 1ms
+     × A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight 0ms
+ FAIL  tools/opening-book/book.test.ts > A8 — a malformed source never ships > refuses a row without 3 columns and writes no artifact
+AssertionError: expected [Function] to throw error matching /2 columns/ but got 'a.tsv:2: key 0000000000000000 carries…'
+ FAIL  tools/opening-book/book.test.ts > A8 — a malformed source never ships > refuses a SAN that does not resolve to exactly one move and writes no artifact
+ FAIL  tools/opening-book/book.test.ts > A8 — a malformed source never ships > refuses a SAN past maxPly that does not resolve and writes no artifact
+AssertionError: expected [Function] to throw error matching /"Ke3" is rejected/ but got 'a.tsv:2: key 0000000000000000 carries…'
+ FAIL  tools/opening-book/book.test.ts > A8 — a malformed source never ships > refuses a position carrying two names and writes no artifact
+AssertionError: expected [Function] to throw error matching /named both/ but got 'a.tsv:2: key 0000000000000000 carries…'
+ FAIL  tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight
+AssertionError: expected 0 to be greater than or equal to 3
+ Test Files  1 failed (1)
+      Tests  5 failed | 12 passed (17)
+exit 1
+===== PLANT R2nd-san-A20-alias-toSanX  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2nd-san-A20-alias-toSanX, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/san.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2nd-san-A20-alias-toSanX/src/san.ts	2026-10-11 23:24:20
+@@ -143,6 +143,7 @@
+  * this function would otherwise pay for the disambiguator. A castle string and a pawn move never
+  * consult the list at all; a checking move pays one generation regardless, for the mate test.
+  */
++export { toSan as toSanX };
+ export function toSan(position: Position, move: Move, legal?: readonly Move[]): string {
+   return `${body(position, move, legal)}${suffix(position, move)}`;
+ }
+
+CMD: npx vitest run src/san.test.ts -t A20
+     × A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure 3ms
+ FAIL  src/san.test.ts > ABC-013 acceptance > A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure
+AssertionError: expected [ 'parseSan', 'toSan', 'toSanX' ] to deeply equal [ 'parseSan', 'toSan' ]
+ Test Files  1 failed (1)
+      Tests  1 failed | 21 skipped (22)
+exit 1
+===== PLANT R2nd-san-A20-export-PLANT  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2nd-san-A20-export-PLANT, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/san.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2nd-san-A20-export-PLANT/src/san.ts	2026-10-11 23:24:18
+@@ -143,6 +143,7 @@
+  * this function would otherwise pay for the disambiguator. A castle string and a pawn move never
+  * consult the list at all; a checking move pays one generation regardless, for the mate test.
+  */
++export const PLANT = 1;
+ export function toSan(position: Position, move: Move, legal?: readonly Move[]): string {
+   return `${body(position, move, legal)}${suffix(position, move)}`;
+ }
+
+CMD: npx vitest run src/san.test.ts -t A20
+     × A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure 3ms
+ FAIL  src/san.test.ts > ABC-013 acceptance > A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure
+AssertionError: expected [ 'PLANT', 'parseSan', 'toSan' ] to deeply equal [ 'parseSan', 'toSan' ]
+ Test Files  1 failed (1)
+      Tests  1 failed | 21 skipped (22)
+exit 1
+===== PLANT R2p-compile-keyOf-skips-zobristKey  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2p-compile-keyOf-skips-zobristKey, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/tools/opening-book/compile.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R2p-compile-keyOf-skips-zobristKey/tools/opening-book/compile.ts	2026-10-11 23:18:44
+@@ -53,7 +53,8 @@
+     return code < 0x20 || code === 0x7f;
+   });
+ 
+-const keyOf = (position: Position): string => zobristKey(position).toString(16).padStart(16, "0");
++const keyOf = (position: Position): string => // PLANT: the key no longer calls zobristKey
++  [...toFen(position)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7).toString(16).padStart(16, "0");
+ const fen4 = (position: Position): string => toFen(position).split(" ").slice(0, 4).join(" ");
+ 
+ interface Entry {
+
+CMD: npx vitest run tools/opening-book/book.test.ts
+     × refuses the compile and writes no artifact 4ms
+ FAIL  tools/opening-book/book.test.ts > D1(f) — a key carrying two different positions is refused > refuses the compile and writes no artifact
+AssertionError: expected [Function] to throw an error
+ Test Files  1 failed (1)
+      Tests  1 failed | 16 passed (17)
+exit 1
+===== PLANT R3-command-input-movesMessages-derives-twice  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R3-command-input-movesMessages-derives-twice, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/command-input.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R3-command-input-movesMessages-derives-twice/src/command-input.ts	2026-10-11 23:22:38
+@@ -167,6 +167,7 @@
+  */
+ function movesMessages(position: Position, deps?: MoveInputDeps): readonly string[] {
+   const { legalMoves: derive, toSan: san } = deps ?? { legalMoves, toSan };
++  derive(position); // PLANT
+   const legal = derive(position);
+   const listing = legal.map((move) => san(position, move, legal)).sort();
+   return [`legal moves: ${legal.length}`, ...listing];
+
+CMD: npx vitest run src/command-input.test.ts
+     × derives once and shares the array at startpos 5ms
+     × derives once and shares the array at kiwipete 0ms
+     × derives once and shares the array at position-3 0ms
+     × derives once and shares the array at position-4 0ms
+     × derives once and shares the array at position-5 0ms
+     × derives once and shares the array at position-6 0ms
+     × the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start 1ms
+     × states 0 and lists nothing at checkmate: one derive, no toSan 0ms
+     × states 0 and lists nothing at stalemate: one derive, no toSan 0ms
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at startpos
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at kiwipete
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-3
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-4
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-5
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-6
+AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > the PRODUCTION path (no seam) shares the list too: one module-level legalMoves at the start
+AssertionError: expected 2 to be 1 // Object.is equality
+ FAIL  src/command-input.test.ts > ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > states 0 and lists nothing at checkmate: one derive, no toSan
+ FAIL  src/command-input.test.ts > ABC-036 QE — zero legal moves, an armed quit, and the ASCII glyph set > states 0 and lists nothing at stalemate: one derive, no toSan
+AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times
+ Test Files  1 failed (1)
+      Tests  9 failed | 179 passed (188)
+exit 1
+===== PLANT R3rd-book-A2-load-salt-at-head  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R3rd-book-A2-load-salt-at-head, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/book.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R3rd-book-A2-load-salt-at-head/src/book.ts	2026-10-11 23:24:30
+@@ -48,6 +48,7 @@
+ 
+ type BookLine = readonly [uci: string, weight: number];
+ 
++const LOAD_SALT = Math.random(); // PLANT: load-time nondeterminism
+ const KEY = /^[0-9a-f]{16}$/;
+ const UCI = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
+ /** Indexed by piece type: KNIGHT 2, BISHOP 3, ROOK 4, QUEEN 5 (as `tools/opening-book/compile.ts`). */
+@@ -142,7 +143,7 @@
+     bookMove(position) {
+       const moves = bookMoves(position);
+       const total = moves.reduce((sum, { weight }) => sum + weight, 0);
+-      let draw = Math.floor(random() * total);
++      let draw = Math.floor(((random() + LOAD_SALT) % 1) * total);
+       for (const { move, weight } of moves) {
+         if (draw < weight) return move;
+         draw -= weight;
+
+CMD: npx vitest run src/book.test.ts -t 'ABC-094 A2'
+     × two fresh module instances, same position, artifact and seed: 100 picks identical element for element 23ms
+ FAIL  src/book.test.ts > ABC-094 A2 — deterministic under a fixed seed > two fresh module instances, same position, artifact and seed: 100 picks identical element for element
+AssertionError: expected [ 'c2c4', 'e2e4', 'd2d4', …(97) ] to deeply equal [ 'd2d4', 'b2b4', 'd2d4', …(97) ]
+ Test Files  1 failed (1)
+      Tests  1 failed | 34 skipped (35)
+exit 1
+===== PLANT R3rd-book-A2-load-salt-OLD-resetModules-form  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R3rd-book-A2-load-salt-OLD-resetModules-form, rev ccb8f1bd)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/book.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R3rd-book-A2-load-salt-OLD-resetModules-form/src/book.ts	2026-10-11 23:24:31
+@@ -48,6 +48,7 @@
+ 
+ type BookLine = readonly [uci: string, weight: number];
+ 
++const LOAD_SALT = Math.random(); // PLANT: load-time nondeterminism
+ const KEY = /^[0-9a-f]{16}$/;
+ const UCI = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
+ /** Indexed by piece type: KNIGHT 2, BISHOP 3, ROOK 4, QUEEN 5 (as `tools/opening-book/compile.ts`). */
+@@ -142,7 +143,7 @@
+     bookMove(position) {
+       const moves = bookMoves(position);
+       const total = moves.reduce((sum, { weight }) => sum + weight, 0);
+-      let draw = Math.floor(random() * total);
++      let draw = Math.floor(((random() + LOAD_SALT) % 1) * total);
+       for (const { move, weight } of moves) {
+         if (draw < weight) return move;
+         draw -= weight;
+
+CMD: npx vitest run src/book.test.ts -t 'ABC-094 A2'
+ Test Files  1 passed (1)
+      Tests  1 passed | 34 skipped (35)
+exit 0
+===== PLANT R4-gameend-nfr-NFR001-extra-legalMoves  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-gameend-nfr-NFR001-extra-legalMoves, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/gameend.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-gameend-nfr-NFR001-extra-legalMoves/src/gameend.ts	2026-10-11 23:23:48
+@@ -134,6 +134,7 @@
+   position: Position,
+   positionCounts?: ReadonlyMap<bigint, number>,
+ ): GameStatus {
++  legalMoves(position); // PLANT
+   if (legalMoves(position).length === 0) {
+     if (isInCheck(position)) {
+       return { result: position.blackToMove ? "white-wins" : "black-wins", reason: "checkmate" };
+
+CMD: npx vitest run src/gameend.nfr.test.ts
+     × generates the legal moves EXACTLY once, on every call shape 3ms
+ FAIL  src/gameend.nfr.test.ts > NFR-001 — gameStatus stays cheap at a search leaf (call counts, spied) > generates the legal moves EXACTLY once, on every call shape
+AssertionError: bare, in progress: expected "vi.fn()" to be called 1 times, but got 2 times
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+exit 1
+===== PLANT R4-gameend-nfr-NFR001-zobristKey-on-cheap-branch  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-gameend-nfr-NFR001-zobristKey-on-cheap-branch, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/gameend.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-gameend-nfr-NFR001-zobristKey-on-cheap-branch/src/gameend.ts	2026-10-11 23:23:49
+@@ -134,6 +134,7 @@
+   position: Position,
+   positionCounts?: ReadonlyMap<bigint, number>,
+ ): GameStatus {
++  zobristKey(position); // PLANT: an expected-0 read added
+   if (legalMoves(position).length === 0) {
+     if (isInCheck(position)) {
+       return { result: position.blackToMove ? "white-wins" : "black-wins", reason: "checkmate" };
+
+CMD: npx vitest run src/gameend.nfr.test.ts
+     × reads the Zobrist key exactly ONCE when the counts map is consulted 2ms
+     × reads the Zobrist key NOT AT ALL when a cheaper branch already decides 0ms
+ FAIL  src/gameend.nfr.test.ts > NFR-001 — gameStatus stays cheap at a search leaf (call counts, spied) > reads the Zobrist key exactly ONCE when the counts map is consulted
+AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times
+ FAIL  src/gameend.nfr.test.ts > NFR-001 — gameStatus stays cheap at a search leaf (call counts, spied) > reads the Zobrist key NOT AT ALL when a cheaper branch already decides
+AssertionError: expected "vi.fn()" to be called +0 times, but got 1 times
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+exit 1
+===== PLANT R4-glyph-mode-nfr-NFR007-cp  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-glyph-mode-nfr-NFR007-cp, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/glyph-mode.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-glyph-mode-nfr-NFR007-cp/src/glyph-mode.ts	2026-10-11 23:24:17
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import { spawnSync } from "node:child_process";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -79,6 +80,7 @@
+  * to disagree.
+  */
+ export function selectGlyphMode(signals: GlyphSignals): GlyphMode {
++  spawnSync("true"); // PLANT
+   if (signals.ascii) return "ascii"; // row 1 — the flag beats every signal
+   if (signals.unicode) return "unicode"; // row 2 — and so does the override, in the other direction
+   if (!signals.isTTY) return "ascii"; // row 3 — a sink that cannot be seen gets the portable form
+
+CMD: npx vitest run src/glyph-mode.nfr.test.ts
+     × performs ZERO process operations — there is no `locale` subprocess and no font probe 22ms
+ FAIL  src/glyph-mode.nfr.test.ts > NFR-007 — the glyph-mode selection reaches its answer with no I/O (spied) > performs ZERO process operations — there is no `locale` subprocess and no font probe
+AssertionError: spawnSync: expected "vi.fn()" to be called +0 times, but got 9 times
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+exit 1
+===== PLANT R4-glyph-mode-nfr-NFR007-fs  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-glyph-mode-nfr-NFR007-fs, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/glyph-mode.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-glyph-mode-nfr-NFR007-fs/src/glyph-mode.ts	2026-10-11 23:24:15
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import { existsSync } from "node:fs";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -79,6 +80,7 @@
+  * to disagree.
+  */
+ export function selectGlyphMode(signals: GlyphSignals): GlyphMode {
++  existsSync("/etc/locale.conf"); // PLANT
+   if (signals.ascii) return "ascii"; // row 1 — the flag beats every signal
+   if (signals.unicode) return "unicode"; // row 2 — and so does the override, in the other direction
+   if (!signals.isTTY) return "ascii"; // row 3 — a sink that cannot be seen gets the portable form
+
+CMD: npx vitest run src/glyph-mode.nfr.test.ts
+     × performs ZERO filesystem operations, on every selection path 2ms
+ FAIL  src/glyph-mode.nfr.test.ts > NFR-007 — the glyph-mode selection reaches its answer with no I/O (spied) > performs ZERO filesystem operations, on every selection path
+AssertionError: existsSync: expected "vi.fn()" to be called +0 times, but got 9 times
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+exit 1
+===== PLANT R4-glyph-mode-nfr-NFR007-fsp  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-glyph-mode-nfr-NFR007-fsp, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/glyph-mode.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-glyph-mode-nfr-NFR007-fsp/src/glyph-mode.ts	2026-10-11 23:24:16
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import { access } from "node:fs/promises";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -79,6 +80,7 @@
+  * to disagree.
+  */
+ export function selectGlyphMode(signals: GlyphSignals): GlyphMode {
++  void access("/etc/locale.conf").catch(() => {}); // PLANT
+   if (signals.ascii) return "ascii"; // row 1 — the flag beats every signal
+   if (signals.unicode) return "unicode"; // row 2 — and so does the override, in the other direction
+   if (!signals.isTTY) return "ascii"; // row 3 — a sink that cannot be seen gets the portable form
+
+CMD: npx vitest run src/glyph-mode.nfr.test.ts
+     × performs ZERO filesystem operations, on every selection path 3ms
+ FAIL  src/glyph-mode.nfr.test.ts > NFR-007 — the glyph-mode selection reaches its answer with no I/O (spied) > performs ZERO filesystem operations, on every selection path
+AssertionError: fs/promises access: expected "vi.fn()" to be called +0 times, but got 9 times
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+exit 1
+===== PLANT R4-history-pane-nfr-derives-gameStatusOf  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-history-pane-nfr-derives-gameStatusOf, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/history-pane.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-history-pane-nfr-derives-gameStatusOf/src/history-pane.ts	2026-10-11 23:23:54
+@@ -59,7 +59,7 @@
+ 
+ import { makeMove } from "./apply.ts";
+ import { parseFen } from "./fen.ts";
+-import type { GameHistory } from "./history.ts";
++import { type GameHistory, gameStatusOf } from "./history.ts";
+ import type { Move } from "./moves.ts";
+ import { toSan } from "./san.ts";
+ 
+@@ -117,6 +117,7 @@
+  * move list a chess player reads grows in.
+  */
+ export function renderHistory(history: GameHistory): string[] {
++  gameStatusOf(history); // PLANT: an expected-0 derive added
+   // The one `parseFen`: the anchor, parsed once. The replay walks forward from it, and the object
+   // it returns is this function's own — the caller's `history.position` is never touched.
+   const position = parseFen(history.initialFen);
+
+CMD: npx vitest run src/history-pane.nfr.test.ts
+     × never derives: gameStatusOf / repetitionCounts / keyHistory / gameStatus are 0 at every length 5ms
+     × parses the anchor AT MOST ONCE per render, on an empty history and on a 2,000-ply one 0ms
+     × licenses src/history.ts's runtime importers: the set EQUALS the declared licence 3ms
+     × evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched 98ms
+ FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > never derives: gameStatusOf / repetitionCounts / keyHistory / gameStatus are 0 at every length
+AssertionError: gameStatusOf at 40: expected "vi.fn()" to be called +0 times, but got 1 times
+ FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > parses the anchor AT MOST ONCE per render, on an empty history and on a 2,000-ply one
+AssertionError: parseFen at 0: expected 2 to be less than or equal to 1
+ FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > licenses src/history.ts's runtime importers: the set EQUALS the declared licence
+AssertionError: expected [ 'cli.ts', 'history-pane.ts', …(1) ] to deeply equal [ 'cli.ts', 'turn-loop.ts' ]
+ FAIL  src/history-pane.nfr.test.ts > A11 — the pane derives nothing, and this is a CALL COUNT > evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched
+AssertionError: AT LOAD: history.ts was evaluated on the frame path: expected [ 'render-seam.ts', 'frame.ts', …(12) ] to not include 'history.ts'
+ Test Files  1 failed (1)
+      Tests  4 failed | 8 passed (12)
+exit 1
+===== PLANT R4-san-nfr-N1-generates-with-list-supplied  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-san-nfr-N1-generates-with-list-supplied, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/san.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-san-nfr-N1-generates-with-list-supplied/src/san.ts	2026-10-11 23:23:51
+@@ -144,6 +144,7 @@
+  * consult the list at all; a checking move pays one generation regardless, for the mate test.
+  */
+ export function toSan(position: Position, move: Move, legal?: readonly Move[]): string {
++  legalMoves(position); // PLANT
+   return `${body(position, move, legal)}${suffix(position, move)}`;
+ }
+ 
+
+CMD: npx vitest run src/san.nfr.test.ts
+     × generates NOT AT ALL when the caller supplies the list and the move is not a check 2ms
+     × generates NOT AT ALL for an unassisted quiet PAWN move — a pawn has no rivals to weigh 0ms
+     × generates EXACTLY ONCE for an unassisted quiet piece move 0ms
+     × pays EXACTLY ONE extra generation for the mate test, and only on a checking move 0ms
+ FAIL  src/san.nfr.test.ts > N1 — toSan generates the legal moves only when it has to (call counts, spied) > generates NOT AT ALL when the caller supplies the list and the move is not a check
+AssertionError: pawn move, list supplied: expected "vi.fn()" to be called +0 times, but got 1 times
+ FAIL  src/san.nfr.test.ts > N1 — toSan generates the legal moves only when it has to (call counts, spied) > generates NOT AT ALL for an unassisted quiet PAWN move — a pawn has no rivals to weigh
+AssertionError: pawn move, no list: expected "vi.fn()" to be called +0 times, but got 1 times
+ FAIL  src/san.nfr.test.ts > N1 — toSan generates the legal moves only when it has to (call counts, spied) > generates EXACTLY ONCE for an unassisted quiet piece move
+AssertionError: piece move, no list: expected "vi.fn()" to be called 1 times, but got 2 times
+ FAIL  src/san.nfr.test.ts > N1 — toSan generates the legal moves only when it has to (call counts, spied) > pays EXACTLY ONE extra generation for the mate test, and only on a checking move
+AssertionError: checking move, list supplied: expected "vi.fn()" to be called 1 times, but got 2 times
+ Test Files  1 failed (1)
+      Tests  4 failed | 1 passed (5)
+exit 1
+===== PLANT R4-turn-loop-and-nfr-extra-gameStatusOf  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-turn-loop-and-nfr-extra-gameStatusOf, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/turn-loop.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-turn-loop-and-nfr-extra-gameStatusOf/src/turn-loop.ts	2026-10-11 23:23:53
+@@ -301,6 +301,7 @@
+   let writer: FrameWriter | undefined;
+   let messages: readonly string[] = [];
+   // Transition 1 → 2. The status is computed before the first frame — always, terminal or not.
++  gameStatusOf(history); // PLANT
+   let status = gameStatusOf(history);
+ 
+   for (;;) {
+
+CMD: npx vitest run src/turn-loop.test.ts src/turn-loop.nfr.test.ts
+     × derives EXACTLY once per ply at 40 plies 12ms
+     × derives EXACTLY once per ply at 120 plies 13ms
+     × derives EXACTLY once per ply at 300 plies 29ms
+     × derives ZERO times on a `rejected` prompt outcome 4ms
+     × A3 — append then derive then evaluate then render, through `gameStatusOf` every time 9ms
+     × A3b — one derive per ply, and ZERO on a non-mutating prompt outcome 1ms
+     × A5 — `rejected` and `ambiguous` advance no ply, re-evaluate nothing, and reach the message region 1ms
+     × A6 — a non-mutating command re-emits a frame, advances no ply and re-evaluates nothing 0ms
+     × the WIRING: the real panels derive nothing, and the status, the thinking flag and the messages are the LOOP's 0ms
+     × A3 — a claim the rules core refuses takes `rejected`'s path, and the message names BOTH gaps in numbers 0ms
+     × A6 — the availability reaches the FRAME, off the ONE derive that ply already makes 0ms
+     × A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim, and on no advancing ply, allowed claim or take-back (`ABC-120` `A3`-`A5`) 0ms
+     × A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read 0ms
+     × A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together 0ms
+     × A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it 0ms
+     × A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else 0ms
+ FAIL  src/turn-loop.nfr.test.ts > NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives EXACTLY once per ply at 40 plies
+AssertionError: expected "vi.fn()" to be called 41 times, but got 42 times
+ FAIL  src/turn-loop.nfr.test.ts > NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives EXACTLY once per ply at 120 plies
+AssertionError: expected "vi.fn()" to be called 121 times, but got 122 times
+ FAIL  src/turn-loop.nfr.test.ts > NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives EXACTLY once per ply at 300 plies
+AssertionError: expected "vi.fn()" to be called 301 times, but got 302 times
+ FAIL  src/turn-loop.nfr.test.ts > NFR-002 — the loop derives once per ply, spied at A17's three ply counts > derives ZERO times on a `rejected` prompt outcome
+AssertionError: expected "vi.fn()" to be called 41 times, but got 42 times
+ FAIL  src/turn-loop.test.ts > ABC-019 acceptance > A3 — append then derive then evaluate then render, through `gameStatusOf` every time
+AssertionError: expected [ 292, 294, 299, 303 ] to have a length of 3 but got 4
+ FAIL  src/turn-loop.test.ts > ABC-019 acceptance > A3b — one derive per ply, and ZERO on a non-mutating prompt outcome
+AssertionError: expected 4 to be 3 // Object.is equality
+ FAIL  src/turn-loop.test.ts > ABC-019 acceptance > A5 — `rejected` and `ambiguous` advance no ply, re-evaluate nothing, and reach the message region
+AssertionError: expected 2 to be 1 // Object.is equality
+ FAIL  src/turn-loop.test.ts > ABC-019 acceptance > A6 — a non-mutating command re-emits a frame, advances no ply and re-evaluates nothing
+AssertionError: expected 2 to be 1 // Object.is equality
+ FAIL  src/turn-loop.test.ts > ADR-0009 clause 9f — the loop against the REAL panels, both of them > the WIRING: the real panels derive nothing, and the status, the thinking flag and the messages are the LOOP's
+AssertionError: expected 4 to be 3 // Object.is equality
+ FAIL  src/turn-loop.test.ts > ABC-021 acceptance — transition 16, the draw claim > A3 — a claim the rules core refuses takes `rejected`'s path, and the message names BOTH gaps in numbers
+AssertionError: expected 2 to be 1 // Object.is equality
+ FAIL  src/turn-loop.test.ts > ABC-021 acceptance — transition 16, the draw claim > A6 — the availability reaches the FRAME, off the ONE derive that ply already makes
+AssertionError: expected 10 to be 9 // Object.is equality
+ FAIL  src/turn-loop.test.ts > ABC-021 acceptance — transition 16, the draw claim > A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim, and on no advancing ply, allowed claim or take-back (`ABC-120` `A3`-`A5`)
+AssertionError: expected 10 to be 9 // Object.is equality
+exit 1
+===== PLANT R4-zobrist-nfr-NFR005-asks-hasLegalEnPassant  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-zobrist-nfr-NFR005-asks-hasLegalEnPassant, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/zobrist.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R4-zobrist-nfr-NFR005-asks-hasLegalEnPassant/src/zobrist.ts	2026-10-11 23:23:50
+@@ -25,6 +25,7 @@
+  */
+ 
+ import type { UndoRecord } from "./apply.ts";
++import { hasLegalEnPassant } from "./legal.ts";
+ import { FLAG_CASTLE, FLAG_EN_PASSANT, type Move } from "./moves.ts";
+ import {
+   CASTLE_BK,
+@@ -67,6 +68,7 @@
+  * rights, and en-passant file. Ignores the halfmove and fullmove counters by construction.
+  */
+ export function zobristKey(position: Position): bigint {
++  hasLegalEnPassant(position); // PLANT: an expected-0 call added
+   let key = 0n;
+ 
+   const board = position.board;
+
+CMD: npx vitest run src/zobrist.nfr.test.ts
+     × asks nothing on any input, with or without an ep square 3ms
+ FAIL  src/zobrist.nfr.test.ts > NFR-005 — zobristKey never consults hasLegalEnPassant (structural since ADR-0020, spied) > asks nothing on any input, with or without an ep square
+AssertionError: startpos: expected "vi.fn()" to be called +0 times, but got 1 times
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+exit 1
+===== PLANT R5-command-input-PRODUCTION_DEPS-path-extra-legalMoves  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R5-command-input-PRODUCTION_DEPS-path-extra-legalMoves, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/move-input.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R5-command-input-PRODUCTION_DEPS-path-extra-legalMoves/src/move-input.ts	2026-10-11 23:22:39
+@@ -105,7 +105,12 @@
+   readonly toSan: (position: Position, move: Move, legal?: readonly Move[]) => string;
+ }
+ 
+-const PRODUCTION_DEPS: MoveInputDeps = { legalMoves, parseCoordinateMove, parseSan, toSan };
++const PRODUCTION_DEPS: MoveInputDeps = {
++  legalMoves: (position) => (legalMoves(position), legalMoves(position)), // PLANT: one extra call on the deps path
++  parseCoordinateMove,
++  parseSan,
++  toSan,
++};
+ 
+ /**
+  * The case-folded RETRY's variants, applied to the whole line and nowhere else.
+
+CMD: npx vitest run src/command-input.test.ts
+ Test Files  1 passed (1)
+      Tests  188 passed (188)
+exit 0
+===== PLANT R5-command-input-PRODUCTION_DEPS-path-removes-legalMoves  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R5-command-input-PRODUCTION_DEPS-path-removes-legalMoves, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/move-input.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R5-command-input-PRODUCTION_DEPS-path-removes-legalMoves/src/move-input.ts	2026-10-11 23:23:09
+@@ -105,7 +105,12 @@
+   readonly toSan: (position: Position, move: Move, legal?: readonly Move[]) => string;
+ }
+ 
+-const PRODUCTION_DEPS: MoveInputDeps = { legalMoves, parseCoordinateMove, parseSan, toSan };
++const PRODUCTION_DEPS: MoveInputDeps = {
++  legalMoves: () => [], // PLANT: the deps path no longer calls legalMoves
++  parseCoordinateMove,
++  parseSan,
++  toSan,
++};
+ 
+ /**
+  * The case-folded RETRY's variants, applied to the whole line and nowhere else.
+
+CMD: npx vitest run src/command-input.test.ts
+     × A2 control — the same legalMoves spy DOES count a real call on a line that is a move 5ms
+     × A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure) 1ms
+     × A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session 1ms
+     × A1 — through the MERGED loop: the human's move and the reply go, byte-identical to before the human moved 1ms
+ FAIL  src/command-input.test.ts > ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss > A2 control — the same legalMoves spy DOES count a real call on a line that is a move
+AssertionError: expected 0 to be greater than or equal to 1
+ FAIL  src/command-input.test.ts > ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)
+AssertionError: expected 'rejected' to be 'move' // Object.is equality
+ FAIL  src/command-input.test.ts > ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else > A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session
+AssertionError: expected [] to have a length of 2 but got +0
+ FAIL  src/command-input.test.ts > ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses > A1 — through the MERGED loop: the human's move and the reply go, byte-identical to before the human moved
+AssertionError: expected [ 4, 4 ] to deeply equal [ 4, 6 ]
+ Test Files  1 failed (1)
+      Tests  4 failed | 184 passed (188)
+exit 1
+===== PLANT R5R4-status-panel-nfr-extra-isInCheck  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R5R4-status-panel-nfr-extra-isInCheck, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/status-panel.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R5R4-status-panel-nfr-extra-isInCheck/src/status-panel.ts	2026-10-11 23:23:57
+@@ -203,6 +203,7 @@
+   // what epic acceptance #3 asks for. It is a second, independent call from the one `gameStatus`
+   // makes inside its zero-legal-moves branch; at a measured 0.06-0.11 µs it is free, and it is the
+   // honest reading of a criterion about the rendered board rather than about the terminal check.
++  isInCheck(position); // PLANT
+   const check = isInCheck(position) ? "CHECK" : "";
+ 
+   const balance = materialBalance(position);
+
+CMD: npx vitest run src/status-panel.nfr.test.ts
+     × asks isInCheck exactly once ITSELF — the panel's own call is the only one it makes 2ms
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > asks isInCheck exactly once ITSELF — the panel's own call is the only one it makes
+AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+exit 1
+===== PLANT R5R4-status-panel-nfr-extra-squareAt  (copy /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R5R4-status-panel-nfr-extra-squareAt, rev HEAD)
+--- /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-ABC-152/src/status-panel.ts	2026-10-11 23:11:40
++++ /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/abc152/plants/R5R4-status-panel-nfr-extra-squareAt/src/status-panel.ts	2026-10-11 23:23:56
+@@ -205,6 +205,7 @@
+   // honest reading of a criterion about the rendered board rather than about the terminal check.
+   const check = isInCheck(position) ? "CHECK" : "";
+ 
++  squareAt(0, 0); // PLANT
+   const balance = materialBalance(position);
+   const material = `material: ${balance > 0 ? `+${balance}` : balance}`;
+ 
+
+CMD: npx vitest run src/status-panel.nfr.test.ts
+     × scans the 64 squares exactly once, whatever the board holds and however deep the game 4ms
+     × replays the history exactly once for the last move, and never twice 1ms
+     × pays no replay at all before the first move 0ms
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > scans the 64 squares exactly once, whatever the board holds and however deep the game
+AssertionError: 32 pieces, 4 plies: expected "vi.fn()" to be called 96 times, but got 97 times
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > replays the history exactly once for the last move, and never twice
+AssertionError: expected "vi.fn()" to be called 67 times, but got 68 times
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > pays no replay at all before the first move
+AssertionError: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1: expected "vi.fn()" to be called 64 times, but got 65 times
+ Test Files  1 failed (1)
+      Tests  3 failed | 3 passed (6)
+exit 1

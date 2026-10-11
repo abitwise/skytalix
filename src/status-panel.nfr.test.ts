@@ -13,47 +13,27 @@
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("./history.ts", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./history.ts")>();
-  return {
-    ...actual,
-    gameStatusOf: vi.fn(actual.gameStatusOf),
-    repetitionCounts: vi.fn(actual.repetitionCounts),
-    keyHistory: vi.fn(actual.keyHistory),
-  };
-});
+vi.mock("./history.ts", { spy: true });
 
-vi.mock("./gameend.ts", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./gameend.ts")>();
-  return { ...actual, gameStatus: vi.fn(actual.gameStatus) };
-});
+vi.mock("./gameend.ts", { spy: true });
 
-vi.mock("./legal.ts", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./legal.ts")>();
-  return { ...actual, isInCheck: vi.fn(actual.isInCheck) };
-});
+vi.mock("./legal.ts", { spy: true });
 
-vi.mock("./san.ts", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./san.ts")>();
-  return { ...actual, toSan: vi.fn(actual.toSan) };
-});
+vi.mock("./san.ts", { spy: true });
 
 // `squareAt` is how the material scan steps the board, and spying it is the only way to count the
 // scan itself: the scan returns one integer, so every assertion in `status-panel.test.ts` is blind
 // to it running twice.
-vi.mock("./position.ts", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./position.ts")>();
-  return { ...actual, squareAt: vi.fn(actual.squareAt) };
-});
+vi.mock("./position.ts", { spy: true });
 
-const { gameStatusOf, keyHistory, repetitionCounts } = await import("./history.ts");
-const { gameStatus } = await import("./gameend.ts");
-const { isInCheck, legalMoves } = await import("./legal.ts");
-const { toSan } = await import("./san.ts");
-const { squareAt, parseSquareName } = await import("./position.ts");
-const { makeMove } = await import("./apply.ts");
-const { parseFen } = await import("./fen.ts");
-const { renderStatusPanel } = await import("./status-panel.ts");
+import { makeMove } from "./apply.ts";
+import { parseFen } from "./fen.ts";
+import { gameStatus } from "./gameend.ts";
+import { gameStatusOf, keyHistory, repetitionCounts } from "./history.ts";
+import { isInCheck, legalMoves } from "./legal.ts";
+import { parseSquareName, squareAt } from "./position.ts";
+import { toSan } from "./san.ts";
+import { renderStatusPanel } from "./status-panel.ts";
 
 type GameHistory = import("./history.ts").GameHistory;
 type Move = import("./moves.ts").Move;

@@ -1,0 +1,7 @@
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall <cut>
+ ✓ src/puzzle-suite.test.ts (18 tests)
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline 
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each mate-in-3 row has no mate in <= 2, and its accepted moves are EXACTLY the moves that mate in 3 
+   ✓ the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain 
+ Test Files  1 passed (1)
+      Tests  18 passed (18)

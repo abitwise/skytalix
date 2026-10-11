@@ -1,0 +1,9 @@
+READ_IT (with line breaks):
+jq -r '(.testResults[] | .name as $f | (.assertionResults[] | select(.status=="failed")
+| "test   \($f)  \(.fullName)"), (select(.status=="failed" and .message!="")
+| "suite  \(.name)  \(.message)")), (.unhandledErrors[]? | "error  \(.message)"),
+(select(.success!=true) | "run    \(.runState) exitCode=\(.exitCode // "none, killed")")' .test-results/last-run.json
+
+STAMP: node -p 'Date.now()'
+EXIT_ONLY: npm test -- --coverage --coverage.thresholds.lines=100
+UNHANDLED_EG: it("p", async () => { setTimeout(() => { throw new Error("PLANT-timer"); }, 0); await new Promise((r) => setTimeout(r, 50)); })

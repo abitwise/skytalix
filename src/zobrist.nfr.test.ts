@@ -33,8 +33,8 @@ vi.mock("./legal.ts", async (importOriginal) => {
   return { ...actual, hasLegalEnPassant: vi.fn(actual.hasLegalEnPassant) };
 });
 
-const { hasLegalEnPassant } = await import("./legal.ts");
-const { zobristKey } = await import("./zobrist.ts");
+import { hasLegalEnPassant } from "./legal.ts";
+import { zobristKey } from "./zobrist.ts";
 
 /** Ordinary positions carrying NO en-passant square — the overwhelming majority of search nodes. */
 const NO_EP: [string, string][] = [

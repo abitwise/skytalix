@@ -12,7 +12,7 @@
 //   1. At start (`onInit`) it overwrites the file with a "started" marker: `success: false`,
 //      `runState: "started"`, and THIS run's `startTime`. A run that is killed leaves the marker,
 //      never a stale green.
-//   2. It keeps the unhandled errors vitest hands to `onFinished`, as `unhandledErrors`
+//   2. It keeps the unhandled errors vitest hands to `onTestRunEnd`, as `unhandledErrors`
 //      (name, message, stack). Any unhandled error makes `success` false.
 //   3. It writes the final file only when the vitest process exits (`process.on("exit")`), with
 //      `runState: "exited"` and the real `exitCode`. `success` is true only when vitest's own
@@ -24,8 +24,7 @@
 //   jq -r '(.testResults[] | .name as $f | (.assertionResults[] | select(.status=="failed")
 //     | "test   \($f)  \(.fullName)"), (select(.status=="failed" and .message!="")
 //     | "suite  \(.name)  \(.message)")), (.unhandledErrors[]? | "error  \(.message)"),
-//     (select(.success!=true) | "run    \(.runState) exitCode=\(.exitCode // "none, killed")")'
-//     .test-results/last-run.json
+//     (select(.success!=true) | "run    \(.runState) exitCode=\(.exitCode // "none, killed")")' .test-results/last-run.json
 //
 // THE LIMITS, stated rather than smoothed:
 //   - A run that never reaches "exit" (the 124 bound's SIGKILL, or a signal vitest does not
@@ -43,8 +42,11 @@
 // pass: without its `suite` or `error` arm the query still prints the `run` line on every red file.
 // Each row: plant; `npm test` exit; file fields; query lines.
 //   green: no plant. Exit 0. `success` true, `runState` "exited", `exitCode` 0. Query: no line.
-//   unhandled: a test that throws from a `setTimeout`, e.g. `it("p", () => { setTimeout(() => {
-//     throw new Error("PLANT-timer"); }, 0); })`. Exit 1. `success` false, `exitCode` 1,
+//   unhandled: a test that throws from a `setTimeout` and then awaits a timer, e.g.
+//     `it("p", async () => { setTimeout(() => { throw new Error("PLANT-timer"); }, 0); await new
+//     Promise((r) => setTimeout(r, 50)); })`. Not the un-awaited form: on vitest 4.1 with the
+//     module runner off it races (the file's worker can stop first; 5 of 10 runs exited 0,
+//     `ADR-0042` addendum ruling 5). Exit 1. `success` false, `exitCode` 1,
 //     `unhandledErrors[].message` "PLANT-timer". Query: `error  PLANT-timer` and
 //     `run    exited exitCode=1`.
 //   hang: after a green run, take a stamp (`node -p 'Date.now()'`), then make one test
@@ -71,7 +73,11 @@
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { JsonReporter } from "vitest/reporters";
+import { JsonReporter } from "vitest/node";
+
+for (const hook of ["writeReport", "onTestRunEnd"]) {
+  if (typeof JsonReporter.prototype[hook] !== "function") throw new Error(`result-file-reporter: JsonReporter.prototype.${hook} is gone; re-read RISK-ABC143-01`);
+}
 
 export default class ResultFileReporter extends JsonReporter {
   #file;
@@ -97,9 +103,9 @@ export default class ResultFileReporter extends JsonReporter {
     });
   }
 
-  async onFinished(files, errors = [], coverageMap) {
-    this.#unhandled = errors;
-    await super.onFinished(files, errors, coverageMap);
+  async onTestRunEnd(testModules, unhandledErrors = [], reason) {
+    this.#unhandled = unhandledErrors;
+    await super.onTestRunEnd(testModules, unhandledErrors, reason);
   }
 
   async writeReport(report) {

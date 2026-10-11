@@ -2,8 +2,8 @@
  * `ABC-042` — the entry point and its argv resolver: `A1`…`A10` and `A12`'s structural halves, plus
  * the security bars this ticket's page states in a form a test can decide.
  *
- * ONE FILE FOR BOTH MODULES, and it is the heaviest file either epic adds. It holds no `vi.mock`, so
- * it is not an `*.nfr.test.ts`: nothing here re-routes the module graph.
+ * ONE FILE FOR BOTH MODULES, the heaviest either epic adds. Its only `vi.mock` is `{ spy: true }`, so
+ * it is not an `*.nfr.test.ts`: it re-routes `glyph-mode.ts` for every test here, but calls through.
  *
  * THE SPAWN BUDGET IS THE POINT OF THE LAYOUT. `CHILDREN` below spawns each command line EXACTLY
  * ONCE, at module scope, with stdout AND stderr piped — a child cannot be re-run to add a pipe
@@ -49,6 +49,8 @@ import { makeRenderSeam } from "./render-seam.ts";
 import { renderResultScreen } from "./result-screen.ts";
 import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
 import { INPUT_ENDED_NOTICE, QUIT_NOTICE, type TerminalReason } from "./turn-loop.ts";
+
+vi.mock("./glyph-mode.ts", { spy: true });
 
 const SOURCE_DIRECTORY = new URL(".", import.meta.url).pathname;
 const REPOSITORY = new URL("..", import.meta.url).pathname;
@@ -1146,7 +1148,8 @@ describe("ABC-042 — the resolved colour reaches the board", () => {
 
 describe("ABC-042 — a rejected command line starts no game", () => {
   it("A5 — `--ascii --unicode` is refused at the resolver, and selectGlyphMode is not called", () => {
-    const spy = vi.spyOn(glyphMode, "selectGlyphMode");
+    const spy = vi.mocked(glyphMode.selectGlyphMode);
+    spy.mockClear();
     try {
       // ARMING CONTROL FIRST: a zero call count is worthless if the spy cannot see a call at all.
       glyphMode.selectGlyphMode({ ascii: false, unicode: false, isTTY: false, env: {} });
@@ -1162,7 +1165,7 @@ describe("ABC-042 — a rejected command line starts no game", () => {
       expect(resolution.offending).toEqual(["--ascii", "--unicode"]);
       expect(spy).toHaveBeenCalledTimes(0);
     } finally {
-      spy.mockRestore();
+      spy.mockClear();
     }
   });
 
@@ -3389,9 +3392,10 @@ describe("ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isol
   // The literal is 2 by `ADR-0040` addendum 2 (`ABC-151`): the owner's pick for heat, "Heat 2
   // workers is fine" (2026-10-11). A raise to 3 breaks his pick; to 4, decision 2 as well; above
   // 4, `A2` too. Each needs his word.
-  // Each line follows vitest 3.2.7's own precedence for the worker count: `fileParallelism: false`
-  // forces 1; `poolOptions.threads.maxThreads` silently outranks `maxWorkers`; the environment
-  // (`VITEST_MAX_THREADS` / `VITEST_MAX_FORKS`) outranks both. The CLI-flag route is closed by
+  // Each line follows vitest 4.1's own precedence for the worker count (`ADR-0042` addendum ruling
+  // 4): `fileParallelism: false` forces 1; a `test.projects` entry's own `maxWorkers` outranks the
+  // root's; `poolOptions` is ignored on 4.x, and stays forbidden; the environment
+  // (`VITEST_MAX_WORKERS`) outranks all of them. The CLI-flag route is closed by
   // `ABC-042` `A10`'s byte pin on `scripts.test`. `toBe(2)`, not `<= 2`: lowering the cap moves
   // `A3`/`A4`'s wall and the floors `F`, so it is a ruling too. Only the environment may lower it.
   it("vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it", async () => {
@@ -3403,10 +3407,25 @@ describe("ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isol
     expect(test.maxWorkers).toBe(2);
     expect(test.fileParallelism ?? true).toBe(true);
     expect(test.isolate ?? true).toBe(true); // `ADR-0008` decision 7
-    expect(test.poolOptions).toBeUndefined();
-    for (const name of ["VITEST_MAX_THREADS", "VITEST_MAX_FORKS"]) {
-      const raw = process.env[name];
-      if (raw !== undefined) expect(Number.parseInt(raw, 10), name).toBeLessThanOrEqual(2);
+    expect(Object.hasOwn(test, "poolOptions")).toBe(false);
+    expect(test.projects).toBeUndefined(); // a project's own maxWorkers outranks the root's (QE-144-a)
+    // Parsed exactly as vitest 4.1 does (`if (env) maxWorkers = Number.parseInt(env)`): an empty
+    // value is ignored (QE-151-b), `0x3` reads 3 (QE-151-a), and 0 or NaN fall back to cpus - 1
+    // (a raise).
+    const raw = process.env.VITEST_MAX_WORKERS;
+    if (raw) {
+      // biome-ignore lint/correctness/useParseIntRadix: parsed as vitest parses it (QE-151-a)
+      const workers = Number.parseInt(raw);
+      expect(workers, "VITEST_MAX_WORKERS").toBeGreaterThanOrEqual(1);
+      expect(workers, "VITEST_MAX_WORKERS").toBeLessThanOrEqual(2);
     }
+  });
+});
+
+describe("ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum)", () => {
+  it("vitest.config.ts sets experimental.viteModuleRunner to exactly false", async () => {
+    const { default: lane } = await import("../vitest.config.ts");
+    const test: NonNullable<ViteUserConfig["test"]> = lane.test ?? {};
+    expect(test.experimental?.viteModuleRunner).toBe(false);
   });
 });

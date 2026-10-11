@@ -53,15 +53,20 @@ vi.mock("./history.ts", async (importOriginal) => {
   };
 });
 
-const { parseFen } = await import("./fen.ts");
-const { toSan } = await import("./san.ts");
-const { gameStatus } = await import("./gameend.ts");
-const { gameStatusOf, keyHistory, newGame, playMove, repetitionCounts, takeBack } = await import(
-  "./history.ts"
-);
-const { HISTORY_ROWS, renderHistory } = await import("./history-pane.ts");
-const { legalMoves } = await import("./legal.ts");
-const { parseSquareName } = await import("./position.ts");
+import { parseFen } from "./fen.ts";
+import { gameStatus } from "./gameend.ts";
+import {
+  gameStatusOf,
+  keyHistory,
+  newGame,
+  playMove,
+  repetitionCounts,
+  takeBack,
+} from "./history.ts";
+import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
+import { legalMoves } from "./legal.ts";
+import { parseSquareName } from "./position.ts";
+import { toSan } from "./san.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -662,7 +667,7 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
    *
    * THE SCOPE IS THE FRAME PATH'S CLOSURE, NOT THIS PROCESS, and that distinction is the whole
    * reason this runs in a child. THIS FILE is itself a runtime importer of `history.ts` — the
-   * `vi.mock` + `importOriginal()` at `:43-44` and the `await import` at `:58-60`, which this
+   * `vi.mock` with `importOriginal()` and the static imports after the `vi.mock` blocks, which this
    * file's own spies and `A7`'s `takeBack` require — so a probe phrased as "`history.ts` never
    * loads in this process" would fail in the very file that holds it. A child process rooted at
    * the declared composition root is that scoping made mechanical.

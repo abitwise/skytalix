@@ -1,0 +1,9 @@
+
+ RUN  v4.1.11 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/w152/arms/H
+
+
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+   Start at  02:01:17
+   Duration  5.92s (transform 0ms, setup 0ms, import 51ms, tests 5.81s, environment 0ms)
+

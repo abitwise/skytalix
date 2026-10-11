@@ -81,15 +81,31 @@ import type { ViteUserConfig } from "vitest/config";
  * count.
  * It is pinned BY VALUE in `src/cli.test.ts` (`ABC-144 A7`): raising it, adding
  * `poolOptions` (whose `maxThreads` silently outranks `maxWorkers`), `fileParallelism: false`
- * or `isolate: false` turns that pin red, and `VITEST_MAX_THREADS` / `VITEST_MAX_FORKS` may
- * lower the cap but never raise it. Changing the number is a ruling, not a drive-by edit.
+ * or `isolate: false` turns that pin red, and `VITEST_MAX_WORKERS` may lower the cap but never
+ * raise it. Changing the number is a ruling, not a drive-by edit.
  * The default export is a plain object (`satisfies ViteUserConfig`, a type-only import) so
  * that the pin's import of this file loads nothing at run time.
+ *
+ * -------------------------------------------------------------------------------------------
+ * `experimental: { viteModuleRunner: false }` below runs `src/` by native `import`, not through
+ * vite's module runner, whose cross-module interop was ~5x the cost of production code under
+ * plain `node` (`ADR-0041`). Ruled by `ADR-0042`'s addendum (2026-10-11, `ABC-152`, accepted by
+ * the owner): vitest `~4.1.11`; `vi.mock` is carried by Node loader hooks
+ * (`experimental.nodeLoader`, default on; off fails loudly). Isolation still holds by mechanism
+ * with the runner off: each file gets its own worker and so its own native module cache
+ * (`ADR-0042` `D2`(b)). The key is pinned by value in `src/cli.test.ts` (`ABC-152 V3`), and the
+ * `ABC-144 A7` pin reads vitest 4.x's names: `VITEST_MAX_WORKERS` parsed as vitest parses it
+ * (1 <= n <= 2; the 3.x `VITEST_MAX_THREADS` / `VITEST_MAX_FORKS` are read by nothing on 4.x),
+ * `test.projects` absent (a project's `maxWorkers` outranks the root's), and `poolOptions`
+ * absent (ignored on 4.x, still forbidden). A test that needs a fresh module or a spy on a
+ * module namespace uses the addendum's forms (`vi.mock(p, { spy: true })`, a query-string
+ * import), never `vi.resetModules()`, which returns the same instance with the runner off.
  */
 export default {
   test: {
     pool: "threads",
     maxWorkers: 2,
+    experimental: { viteModuleRunner: false },
     /**
      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by

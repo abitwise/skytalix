@@ -1,0 +1,6 @@
+PUZZLES weakened (evaluate = 0): solved 15/58, baseline 54/58, budget 25 step 1, wall <cut>
+     × the gate: solved >= the recorded baseline
+ FAIL  src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=weakened] > the gate: solved >= the recorded baseline
+AssertionError: expected 15 to be greater than or equal to 54
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 passed (14)

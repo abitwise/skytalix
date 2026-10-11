@@ -305,3 +305,167 @@ BA/PM, 2026-10-11, re-scored at the re-cut. **Result: 10 of 10.** Recommended pl
 | 10 | no major unresolved blocker | **✅** the owner picked the route and accepted `ADR-0042` and `RISK-ABC152-A2-GRAPH`. Ruling 7 cases found: 0 (`UNKNOWN - verify` until `V4`) |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-11 (subtask `ticket-to-pr-ABC-152`). Branch `grugops/ABC-152-vitest-4-1-runner-off`
+from `main` `91024242`; code and test commits `9313dda7..23c5521a`, one per step of the addendum's build plan. The
+detail is in `.grugops/context/ticket-to-pr-ABC-152/notes/`, and the scripts and raw output are in `…/probe/`.
+**No timing, CPU or heat reading was taken for `V9`–`V11`.**
+
+- **`V1`:** `npm ls` exits 0. vitest 4.1.11, coverage-v8 4.1.11, vite 7.3.6 (direct). No other devDependency
+  moved. The lockfile is +3 / −61 / 20 changed.
+- **`V3`:** the key resolves `false`. The `V3` `it` is red when the key is deleted and red when it is `true`.
+- **`V6`:** `A7` was edited in place. All 11 listed reds are red and all 3 listed greens are green. `QE-144-a`
+  closes; `QE-151-a` and `QE-151-b` are folded.
+- **`V2`** (SE's own reading, QE grades it): all six rows AGREE by content, with READ IT pasted with its line
+  breaks. `M9b` is killed by the exit-code-only row alone. `main`'s `onFinished` code fails the unhandled row. The
+  load-time check throws on either missing hook.
+- **`V4`:** 30 plants on 20 files. Every file in the set has a production plant that turns a count or routing
+  guard red, including `NFR-001`, `NFR-005`, `N1` and `NFR-007` (×3), A20 (×2), and A2 (red at head, blind under
+  the old form).
+  - One add-plant stayed green. It is on `command-input`'s `PRODUCTION_DEPS` path, whose only guard is `>= 1`, and
+    it is green on base 3.2.7 too. The removal plant turns that guard red. **Ruling 7: 0 cases.**
+- **`V5`:** `expect(` is equal per file, except `src/cli.test.ts` 321 → 324. **56 files / 1741 tests / 0
+  skipped.** No test was deleted, skipped, moved or merged.
+- **`V7`:** 20 of 20 consecutive green `npm test` runs, with all 7 `*.nfr` files passing. **`V8`:** same 56 paths.
+  Each opt-in lane collects base + `V3` and exits 0. Coverage exits 0.
+- **`V12` (0 production lines):** `git diff --name-only 91024242 23c5521a | grep -v '\.test\.ts$' | grep '^src/'`
+  is empty.
+- **Gates:** lint, typecheck, build and `npm test` (56 / 1741 / 0) all exit 0. Skip count 0; integrity
+  `No findings.`
+- **Seen, not changed:**
+  - vitest 4.1 prints a `vitest/reporters` deprecation line on every `npm test` (`RISK-ABC143-01` surface 1);
+  - three stale comments that still describe the pre-rewrite forms.
+
+  Both are routed in the hand-off note `…4567b6b5`.
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-152`).
+- Range: base `91024242`, code `9313dda7..23c5521a`, reviewed tip `a99e9845`. The dry-run merge was against `main`
+  `0ff618be`.
+- Every reading is QE's own:
+  - QE's worktree had its own `npm ci`;
+  - the scratch copies sat outside the repository, with no `node_modules` symlink;
+  - QE planted in other files and functions than the SE's.
+- **No timing, CPU or heat was read or graded.**
+- The detail is in `.grugops/context/qe-ABC-152/notes/`, and it is not restated here:
+  - `…ee5be445`, the verdict;
+  - `…469a3462`, the readings;
+  - `…0d5f42fb`, `V2`;
+  - `…cdea38ad`, `V4`;
+  - `…8bfb6cb5`, the gaps;
+  - `…14f57bfc`, the commands and the probe.
+
+**FAIL, on one blocking gap that is repairable inside the admitted forms.** Every listed criterion QE grades is
+otherwise MET, except one `V2` sub-clause.
+- **`QE-152-h` (HIGH): `PUZZLE_DEEP=weakened`, `ABC-084` A3's red demonstration, is blind at head.**
+  - Its `vi.doMock("./evaluate.ts", …)` plus `await import("./engine.ts")` (`src/puzzle-suite.test.ts:368-374`)
+    no longer reaches the engine with the runner off.
+  - The weakened engine solves **54/58 at head** against **15/58 at base 3.2.7**, so the gate row stays
+    **green**.
+  - The run still exits 1, but only because A3 ("solves FEWER") fails. An exit-code check misses it.
+  - It escaped `V4`'s set because `D3` screened the default lane only.
+  - **The repair is an admitted form, proven on a scratch copy:** R2's shape (`vi.mock("./evaluate.ts", { spy:
+    true })` plus `vi.mocked(evaluate).mockImplementation(() => 0)`). It gives the gate row red at 15/58,
+    `PUZZLE_DEEP=1` and default green, and `expect(` unchanged.
+  - **Not a ruling 7 case.** QE's search found no other site.
+- **`V1` MET.** vitest 4.1.11, coverage-v8 4.1.11, vite 7.3.6 (direct). No other devDependency moves.
+- **`V2` MET, except one sub-clause.**
+  - All six rows AGREE by content on QE's plant files.
+  - **`M9b` is killed by the exit-code-only row alone.** The `onFinished` route fails the unhandled row.
+  - READ IT works as pasted (`QE-149-a` closed).
+  - **Not met as written:** `ABC-143` `A5`'s "the console gains no line". vitest 4.1 prints a `vitest/reporters`
+    deprecation line on every `npm test` (`QE-152-a`, LOW). The one-line fix, `vitest/node` (the identical
+    class), was proven on a scratch copy.
+- **`V3` MET.** `viteModuleRunner` resolves `false`. The `V3` `it` is red with the key deleted and with it `true`.
+- **`V4` MET for its set.**
+  - All 20 files have a QE production plant that turns a count or routing guard red. This covers `NFR-001`,
+    `NFR-005`, `N1`, `NFR-007` (×3), A20 (×2), R2 (a)/(b), R3's `called 1 times, but got 2`, and R5 on
+    `PRODUCTION_DEPS`.
+  - **A2 is red at head on QE's own salt, and blind on the old form.**
+  - **Ruling 7: 0 cases.**
+  - The SE's green add-plant on `PRODUCTION_DEPS` is confirmed: it is green at base too, and the guard is armed by
+    removal. That is a pre-existing gap (`QE-152-e`).
+- **`V5` MET.** `expect(` is equal per file, except `src/cli.test.ts` +3. **56 / 1741 / 0 skipped.**
+- **`V6` MET.** 11 reds and 3 greens on QE's copies. `QE-144-a` closes; `QE-151-a` and `QE-151-b` are folded.
+- **`V7` MET.** **20 of 20 consecutive green `npm test` runs**, each with 7/7 `*.nfr` files passing.
+- **`V8` MET as written.**
+  - The same 56 paths. All 9 lane configurations collect base's ids plus the `V3` id.
+  - **All 8 opt-in lanes exit 0** at base + 1, with every test passed. `PUZZLE_DEEP=1` reads 54/58, equal to the
+    baseline.
+  - Both coverage commands exit 0. No wall was read.
+- **`V12`, the line check, MET:** 0 production `src/` lines.
+- **Gates:** lint, typecheck, build and `npm test` all exit 0. Skip count 0; integrity `No findings.`
+- **Dry-run merge against `main` `0ff618be`:** clean (only queue files and `plans/board.md` come in). The merged
+  tree is green: 4 gates at 0, 56 / 1741. Aborted; nothing was committed.
+- **Other gaps:**
+  - `QE-152-b` LOW: `RISK-ABC152-NEGWORKERS` is confirmed, and **any** negative value exits 0 with nothing run.
+    QE keeps the residual, so the Scribe owes the `AGENTS.md` line.
+  - `QE-152-c` LOW: the exit-code-only row's margin is 0.57 points of lines coverage on 4.x.
+  - `-d` to `-g` are INFO.
+- **Route (the Orchestrator's):** the SE makes one repair hop for `QE-152-h`, and for `QE-152-a` if the Architect
+  agrees. QE then re-checks that delta. After that, the next stop is `In Security/NFR`: the `V12` review, then
+  the width-1 window `V9`–`V11`.
+
+**2026-10-12, QE/E2E delta re-check** (subtask `qe2-ABC-152`).
+- Range: the SE repair `476fdde0` / `502df2b6` / `49997a87` over `88009d0b`. It is graded against `ADR-0042`
+  addendum 2 (rulings 8–11), which governs here as the ruling note `…e50fbbe3` allows. The dry-run merge was
+  against `main` `9ad2c5f5`.
+- Every reading is QE's own:
+  - QE's own worktree on the branch, with its own `npm ci`;
+  - a base tree with its own `npm ci` (3.2.7);
+  - scratch clones outside the repository;
+  - `V2` plant files new to this ticket.
+- **No timing was read.**
+- The detail is in `.grugops/context/qe2-ABC-152/notes/`, and it is not restated here:
+  - `…049a4c21`, the verdict;
+  - `…9dc4714f`, group 4 and the census;
+  - `…29f4d3e9`, `V2`, `M9b` and A5;
+  - `…5cf58584`, the comments, gates, `V5`, `V7` and the merge;
+  - `…e0c0d051`, the gaps;
+  - `…12e6722b`, the commands and the probe.
+
+**PASS WITH GAPS, none blocking.**
+- **`QE-152-h` is closed.**
+  - `PUZZLE_DEEP=weakened` is red on **the gate row** at **15/58**, and A3 is green.
+  - All 97 per-row lines (move, depth, nodes) equal base 3.2.7's.
+  - Plant (a) gives 54/58 with A3 red. "No leak reader" is confirmed.
+  - QE's `finally`-reset plant is blind, as ruling 8 predicts.
+  - `PUZZLE_DEEP=1` gives 18 passed at 54/58, and its 58 rows equal base's.
+- **The census is re-derived:** byte-identical to the SE's, with one (iv). QE's widened census adds none.
+- **`QE-152-a` is closed.**
+  - The six `V2` rows AGREE at the tip on new plant files.
+  - `M9b` is killed by the exit-code-only row alone.
+  - There are 0 deprecation lines, and the reporter adds no console line (`ABC-143` A5).
+- **`QE-152-d` is closed.** Commit 3 is comment-only, at exactly the named sites, and each line matches the code.
+- **Gates:** green at 56 / 1741, skip 0. `V5` holds (`cli` +3 only). `V7` was re-run: 20 / 20.
+- **New gaps:**
+  - `QE-152-i` LOW: `src/cli.test.ts:6` ("nothing here re-routes the module graph") is stale. The A5 expected-0
+    guard rests on the `{ spy: true }` re-route. It goes to the Architect, and QE did not fix it.
+  - `QE-152-j` INFO: a production query import blinds weakened at the tip and on base alike, so it is not a
+    regression.
+  - `QE-152-k` INFO: the dry-run merge conflicts on `plans/traceability.md`. It is append against append and
+    union-resolvable, and the merged tree is green.
+- **Ruling 7: 0.**
+- **Route (the Orchestrator's):** `In Security/NFR` (the `V12` review, then `V9`–`V11`). `QE-152-i` goes to the
+  Architect in parallel.
+
+## Security/NFR
+
+**PASS_WITH_RISKS, no required fixes, no owner word owed by any bar.** Subtask `secnfr-ABC-152-window`, width 1.
+Notes are in `.grugops/context/secnfr-ABC-152-window/notes/`: `…bceca0ca` (grades), `…40741ea8` (readings), `…397a05b6`
+(method) and `…daf38cf7` (`V12`).
+- **`V12` MET.**
+  - The lockfile reads +3 / −61 / 20. Every licence is permissive. The install-script set is unchanged.
+  - Audit: base 8 (2 critical), head 3 (0 critical). `--omit=dev` is 0 at both. 0 production lines.
+  - Head keeps `nanoid`, `postcss` and `source-map-js`. The last is new to `AR-1`'s record, so `ABC-056` gets a pointer.
+- **`V9` MET (the merge band):** H − B CPU **−20.74 %** of B's 23.41 s, interval **[−21.06 %, −19.31 %]**, sign 0/8.
+  The twin is admissible (R 1.88 % of B).
+- **`V10` MET:** 6.115 + 0.190 = **6.305 s**. H − B wall is −3.105 s. The cooled state is not owed.
+- **`V11`:** at level ≥ 1, H 4/8 against B 5/8, so nothing goes to the owner.
+- **`RISK-ABC152-PUZZLE-SPY`:** printed wall H 3.96 s against B 19.95 s, both 54/58. The rows are equal, and the
+  wall half is closed.
+- **`RISK-ABC144-FCAP`:** the k = 2 twin R is 0.440 s CPU / 0.190 s wall. Per ruling 6 it closes before the merge.
+- **The gate waited 15 min 8 s** for another project's vitest, which was absent at every graded run's boundaries.

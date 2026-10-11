@@ -1,0 +1,4 @@
+id	expect	got	ok	exit	failed	passed	first_red
+OLD-ctl-book	green	green	OK	0	0	35	
+OLD-a2-ordinal-salt	green	red	UNEXPECTED	1	2	33	AssertionError: expected { e2e4: 816, g1f3: 83, d2d4: 101 } to deeply equal { e2e4: 796, d2d4: 106, g1f3: 98 } @ [src/book.test.ts] ABC-094 A4 — the weights are used 8:1:1 over 1,000 draws from seed 42: each share within ±5 pp, exact counts recorded
+a2only-ordinal-salt-OLD	green	green	OK	0	0	1	

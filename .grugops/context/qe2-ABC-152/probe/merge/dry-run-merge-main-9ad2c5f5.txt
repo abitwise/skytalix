@@ -1,0 +1,10 @@
+# dry-run merge: detached worktree at 49997a87, git merge --no-commit --no-ff main (9ad2c5f5); aborted, worktree removed
+Auto-merging plans/traceability.md
+CONFLICT (content): Merge conflict in plans/traceability.md
+Automatic merge failed; fix conflicts and then commit the result.
+# resolution: git merge-file --union on plans/traceability.md (both sides append rows at the table tail); 0 conflict markers after
+# staged (non-.grugops) after resolution:
+memory-bank/50-decisions/ADR-0042-….md
+plans/board.md
+plans/traceability.md
+# gates on the merged tree: lint 0, typecheck 0, build 0, npm test 0 (56 files, 1741 passed), deprecat lines 0, skip 0, integrity No findings. (0), inventory 56=56 No findings. (0)

@@ -60,10 +60,10 @@ vi.mock("node:fs/promises", async (importOriginal) => {
   };
 });
 
-const { readFileSync, existsSync, statSync, readdirSync } = await import("node:fs");
-const { readFile, stat, readdir, access } = await import("node:fs/promises");
-const { execSync, execFileSync, spawnSync, spawn } = await import("node:child_process");
-const { beginGlyphModeSession, selectGlyphMode } = await import("./glyph-mode.ts");
+import { execFileSync, execSync, spawn, spawnSync } from "node:child_process";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { access, readdir, readFile, stat } from "node:fs/promises";
+import { beginGlyphModeSession, selectGlyphMode } from "./glyph-mode.ts";
 
 const FILESYSTEM = [
   ["readFileSync", readFileSync],

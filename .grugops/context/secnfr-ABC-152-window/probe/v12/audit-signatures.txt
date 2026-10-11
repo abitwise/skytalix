@@ -1,0 +1,18 @@
+== B
+audited 124 packages in 2s
+
+124 packages have verified registry signatures
+
+35 packages have verified attestations
+(use --json --include-attestations to view attestation details)
+
+exit 0
+== H
+audited 66 packages in 1s
+
+66 packages have verified registry signatures
+
+32 packages have verified attestations
+(use --json --include-attestations to view attestation details)
+
+exit 0

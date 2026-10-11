@@ -1,0 +1,146 @@
+===== r1-delete-maxWorkers
+@@ -104,7 +104,6 @@
+ export default {
+   test: {
+     pool: "threads",
+-    maxWorkers: 2,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+     × vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it 13ms
+ FAIL  src/cli.test.ts > ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) > vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+AssertionError: expected undefined to be 2 // Object.is equality
+      Tests  1 failed | 1 passed | 67 skipped (69)
+
+===== r2-isolate-false
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    isolate: false,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+     × vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it 23ms
+ FAIL  src/cli.test.ts > ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) > vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+AssertionError: expected false to be true // Object.is equality
+      Tests  1 failed | 1 passed | 67 skipped (69)
+
+===== r4-projects
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    projects: [{ test: { maxWorkers: 8 } }],
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+     × vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it 18ms
+ FAIL  |0| src/cli.test.ts > ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) > vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+AssertionError: expected [ { test: { maxWorkers: 8 } } ] to be undefined
+      Tests  1 failed | 1 passed | 67 skipped (69)
+
+===== maxWorkers-3
+@@ -104,7 +104,7 @@
+ export default {
+   test: {
+     pool: "threads",
+-    maxWorkers: 2,
++    maxWorkers: 3,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+     × vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it 13ms
+ FAIL  src/cli.test.ts > ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) > vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+AssertionError: expected 3 to be 2 // Object.is equality
+      Tests  1 failed | 1 passed | 67 skipped (69)
+
+===== fileParallelism-false
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    fileParallelism: false,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+     × vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it 16ms
+ FAIL  src/cli.test.ts > ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) > vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+AssertionError: expected false to be true // Object.is equality
+      Tests  1 failed | 1 passed | 67 skipped (69)
+
+===== poolOptions
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    poolOptions: { threads: { maxThreads: 8 } },
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+     × vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it 13ms
+ FAIL  src/cli.test.ts > ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) > vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+AssertionError: expected true to be false // Object.is equality
+      Tests  1 failed | 1 passed | 67 skipped (69)
+
+===== v3-key-deleted
+@@ -105,7 +105,6 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
+-    experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by
+     × vitest.config.ts sets experimental.viteModuleRunner to exactly false 3ms
+ FAIL  src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false
+AssertionError: expected undefined to be false // Object.is equality
+      Tests  1 failed | 1 passed | 67 skipped (69)
+
+===== v3-key-true
+@@ -105,7 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
+-    experimental: { viteModuleRunner: false },
++    experimental: { viteModuleRunner: true },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by
+     × vitest.config.ts sets experimental.viteModuleRunner to exactly false 4ms
+ FAIL  src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false
+AssertionError: expected true to be false // Object.is equality
+      Tests  1 failed | 1 passed | 67 skipped (69)
+
+===== VITEST_MAX_WORKERS='UNSET'
+      Tests  2 passed | 67 skipped (69)
+exit 0
+===== VITEST_MAX_WORKERS='8'
+AssertionError: VITEST_MAX_WORKERS: expected 8 to be less than or equal to 2
+      Tests  1 failed | 1 passed | 67 skipped (69)
+exit 1
+===== VITEST_MAX_WORKERS='3'
+AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2
+      Tests  1 failed | 1 passed | 67 skipped (69)
+exit 1
+===== VITEST_MAX_WORKERS='0x3'
+AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2
+      Tests  1 failed | 1 passed | 67 skipped (69)
+exit 1
+===== VITEST_MAX_WORKERS='0'
+AssertionError: VITEST_MAX_WORKERS: expected 0 to be greater than or equal to 1
+      Tests  1 failed | 1 passed | 67 skipped (69)
+exit 1
+===== VITEST_MAX_WORKERS='abc'
+AssertionError: VITEST_MAX_WORKERS: expected NaN to be greater than or equal to 1
+      Tests  1 failed | 1 passed | 67 skipped (69)
+exit 1
+===== VITEST_MAX_WORKERS=''
+      Tests  2 passed | 67 skipped (69)
+exit 0
+===== VITEST_MAX_WORKERS='1'
+      Tests  2 passed | 67 skipped (69)
+exit 0
+===== VITEST_MAX_WORKERS='2'
+      Tests  2 passed | 67 skipped (69)
+exit 0
