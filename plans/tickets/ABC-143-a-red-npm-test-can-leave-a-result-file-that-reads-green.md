@@ -184,3 +184,64 @@ BA/PM, 2026-10-11. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none; feasibility read from the installed reporter API |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-11 (subtask `ticket-to-pr-ABC-143`). Branch
+`grugops/ABC-143-result-file-reads-red`, code commit `f97ad60b`, base `117c1c8e`. The readings are in
+`.grugops/context/ticket-to-pr-ABC-143/notes/`. QE is owed.
+
+- **Mechanism.** `tools/grugops/result-file-reporter.js` subclasses vitest's own `JsonReporter`
+  (`vitest/reporters`, 3.2.7). The `test` script swaps `--reporter=json` for
+  `--reporter=./tools/grugops/result-file-reporter.js`. The path and `--outputFile.json` are
+  unchanged. It makes three changes:
+  - **At start** (`onInit`), it overwrites the file with a marker: `success: false`,
+    `runState: "started"`, and this run's `startTime`. A run killed by the 124 bound leaves the
+    marker (`QE-142-c`).
+  - **It keeps the unhandled errors** that vitest passes to `onFinished`, and the built-in reporter
+    drops. They go in `unhandledErrors[]` (`name`, `message`, `stack`). Any one of them sets
+    `success: false` (`QE-142-a`).
+  - **It writes the final file on process exit**, with `runState: "exited"` and the real
+    `exitCode`. `success` is `true` only when vitest's own verdict was success, there was no
+    unhandled error, and the exit code is 0.
+- **Read it** (this replaces both `ABC-142` queries; one line per recorded red, 0 lines on a green
+  file):
+
+  ```sh
+  jq -r '(.testResults[] | .name as $f | (.assertionResults[] | select(.status=="failed") | "test   \($f)  \(.fullName)"), (select(.status=="failed" and .message!="") | "suite  \(.name)  \(.message)")), (.unhandledErrors[]? | "error  \(.message)"), (select(.success!=true) | "run    \(.runState) exitCode=\(.exitCode // "none, killed")")' .test-results/last-run.json
+  ```
+
+  Every red file also prints one `run` line. `run    started exitCode=none, killed` means the run never
+  reached exit, which is the timeout case.
+- **Console delta.** No line is added. Vitest's `JSON report written to <path>` line, which `ABC-142`
+  added, is gone because the file is written at exit and not by the built-in reporter. Apart from
+  timings, the green console now matches the pre-`ABC-142` console, except for npm's echo of the
+  script.
+- **Diff.** `package.json` (the `test` script), `src/cli.test.ts` (the `SCRIPTS_AT_HEAD.test`
+  literal, `1 1`), `tools/grugops/run-bounded.js` (line 10 only), and
+  `tools/grugops/result-file-reporter.js` (new, outside `src/`). It has 0 production `src/` lines.
+  `vitest.config.ts` is untouched.
+- **Limits.**
+  - A run that never reaches exit (SIGKILL, or a signal vitest does not handle) leaves the marker.
+    It reads not-success but names no test. The console's last line names the timeout.
+  - Two runs in one checkout still overwrite each other's file.
+  - Direct `npx vitest run` (the `*_DEEP` lanes) writes no file, as before.
+- **Readings.** All were run on 2026-10-11 on macOS with Node v26.11.0 and vitest 3.2.7, with the
+  plants in copies outside the repository.
+
+  | criterion | base `117c1c8e` | head `f97ad60b` |
+  |---|---|---|
+  | `A1` setTimeout throw | exit 1, `success` true, error text count 0 | exit 1, `success` false, `exitCode` 1, `unhandledErrors` = [`PLANT-143-UNHANDLED-boom`], text count 2 |
+  | `A2` green, then `while (true) {}` | green exit 0, then 124; file `success` true, `startTime` unchanged | green exit 0, then 124; file `success` false, `runState` `started`, new `startTime` (later than a stamp taken just before the run) |
+  | `A3` `throw` in a `describe` body (`src/san.test.ts`) | (not re-run; QE's `…298ed173`) | exit 1, `numFailedTestSuites` 1, query names `src/san.test.ts  PLANT-143-SUITE-boom` |
+  | `A4` query | — | `A1` 2 lines (`error`, `run`); `A3` 2 lines (`suite`, `run`); `ABC-142`-`A1` inverted `src/fen.test.ts:54`, 2 lines (`test … FEN field parsing parses the side to move`, `run`); `A2` marker, 1 line; green, 0 lines |
+  | `A5` green | 53 / 1680 | exit 0, `success` true, failed 0, 1680 / 1680 = console, 53 files; porcelain empty; no `JSON report` line |
+  | `A6` fences | — | production `src/` filter is empty; `numstat` `1 1 src/cli.test.ts`; `vitest.config.ts` unchanged; `run-bounded.js` one hunk `@@ -10 +10 @@`; `X` appended to the script gives `A10` red (`1 failed \| 66 passed (67)`); skip-count `0`; 53 / 1680 as at base |
+
+- **Gates** (worktree, at the commit). lint 0 (103 files), typecheck 0, build 0, `npm test` 0
+  (53 / 1680). `test-skip-integrity.js --skip-count 0` printed `No findings.` `lane-inventory.js`
+  read 53 / 53, `No findings.` `run-bounded.proof.js` held all rows.
+- **Cost** (`ADR-0035` d3; the count is the pin). 0 test files, 0 tests and 0 spawns were added.
+  The reporter runs in vitest's main process and does one extra small write at start. Green
+  `Duration` was 6.02 to 6.07 s at load1 5 to 7 on a loaded machine. This is not graded.
+- **UAT.** A waiver is expected (0 production `src/` lines). It is measured at exit.
