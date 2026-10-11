@@ -1,0 +1,16 @@
+# commit b29c837c (parent 1b5d5c42): files touched
+src/puzzle-corpus.ts
+# option-B run-trigger globs matched by b29c837c (src/engine.ts, src/search*.ts, src/evaluate*.ts, src/quiescence.ts, src/transposition.ts)
+(none)
+# baseline file in b29c837c / over 5ed308a8..HEAD
+(empty above = untouched)
+{  "solved": 54,  "total": 58,  "budgetMs": 25,  "stepMs": 1,  "unsolved": [    "mate in 3, seed 24: black Q+N against P",    "mate in 3, seed 234: white Q+R against P",    "mate in 3, seed 288: white Q+B against a bare king",    "mate in 3, seed 580: white Q+B against a bare king"  ],  "measuredAt"
+# src files touched by 35f49bb7
+(empty = none)
+# importers of puzzle-corpus.ts outside tests
+(none)
+# ADR-0034 d2 scope instrument, B=5ed308a8 H=HEAD
+src/evaluate.ts
+# UAT-waiver measure: git diff --name-only 5ed308a8 HEAD | grep -v '\.test\.ts$' | grep ^src/
+src/evaluate.ts
+src/puzzle-corpus.ts

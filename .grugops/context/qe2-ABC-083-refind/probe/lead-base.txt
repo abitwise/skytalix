@@ -1,0 +1,38 @@
+# lead.mjs on base (5ed308a8 + b29c837c row); rows 5147, 5061 (control), 1700, 5180
+# start 2026-10-11T15:14:50Z load1=2.68 thermal=0
+base	7k/6n1/7B/1Q6/1b6/5K2/8/8 w - - 0 1	accept b5b4,b5b8,h6g7
+  call@20	SOLVED b5b4 d5 n15394
+  call@25	SOLVED b5b4 d5 n20514
+  call@31.25	SOLVED b5b4 d5 n27682
+  callNoRed@25	SOLVED b5b4 d4
+  k4	clean lead 270 (b5b4 865 vs b5e5 595)	shipped lead 270 (b5b4 865 vs b5e5 595)	search() SOLVED b5b4 885
+  k5=d	clean lead 280 (b5b4 895 vs b5e5 615)	shipped lead 275 (h6g7 890 vs b5e5 615)	search() SOLVED h6g7 890
+  k6	clean lead 280 (b5b4 900 vs b5c4 620)	shipped lead 285 (b5b4 895 vs f3g2 610)	search() SOLVED b5b4 895
+base	8/nk1p3q/4b3/5P2/1P2P3/3r4/6NP/b4KB1 w - - 0 1	accept f5e6,g1a7
+  call@20	SOLVED f5e6 d5 n15387
+  call@25	SOLVED f5e6 d5 n20507
+  call@31.25	SOLVED f5e6 d5 n27675
+  callNoRed@25	SOLVED f5e6 d5
+  k4	clean lead 10 (f5e6 -1150 vs g2e1 -1160)	shipped lead 10 (f5e6 -1150 vs g2e1 -1160)	search() SOLVED f5e6 -1150
+  k5=d	clean lead 105 (f5e6 -1175 vs f1e2 -1280)	shipped lead 105 (f5e6 -1175 vs f1e2 -1280)	search() MISSED g2e1 -1160
+  k6	clean lead 110 (f5e6 -1185 vs g2e1 -1295)	shipped lead 110 (f5e6 -1185 vs g2e1 -1295)	search() SOLVED f5e6 -1185
+base	8/7B/6r1/1P2b1p1/1k6/3p2N1/2nK4/N5B1 b - - 0 1	accept g6g7,g6h6
+  call@20	SOLVED g6g7 d5 n15557
+  call@25	SOLVED g6g7 d5 n20677
+  call@31.25	SOLVED g6g7 d6 n26821
+  callNoRed@25	SOLVED g6g7 d5
+  k4	clean lead 10 (g6g7 50 vs g6e6 40)	shipped lead 10 (g6g7 50 vs g6e6 40)	search() SOLVED g6g7 50
+  k5=d	clean lead 75 (g6g7 100 vs g6d6 25)	shipped lead 75 (g6g7 100 vs g6d6 25)	search() SOLVED g6g7 100
+  k6	clean lead 70 (g6g7 100 vs g6d6 30)	shipped lead 70 (g6g7 100 vs g6d6 30)	search() SOLVED g6g7 100
+base	8/1p5N/6kr/3K4/1B5n/8/8/3Q4 b - - 0 1	accept h6h7
+  call@20	SOLVED h6h7 d5 n15371
+  call@25	SOLVED h6h7 d6 n19467
+  call@31.25	SOLVED h6h7 d6 n26635
+  callNoRed@25	SOLVED h6h7 d5
+  k5	clean lead 140 (h6h7 -285 vs g6h7 -425)	shipped lead 140 (h6h7 -285 vs g6h7 -425)	search() SOLVED h6h7 -285
+  k6=d	clean lead 120 (h6h7 -315 vs g6h7 -435)	shipped lead 120 (h6h7 -315 vs g6h7 -435)	search() SOLVED h6h7 -295
+  k7	clean lead 100 (h6h7 -325 vs g6h7 -425)	shipped lead 100 (h6h7 -325 vs g6h7 -425)	search() SOLVED h6h7 -305
+real 24.58
+user 24.72
+sys 0.10
+# end 2026-10-11T15:15:15Z load1=2.95 thermal=0 exit=0

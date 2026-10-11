@@ -434,3 +434,22 @@ figures are in `.grugops/context/ticket-to-pr-ABC-083/notes/` and the raw output
 - **No owner word for the re-find** (`ADR-0028` d5).
 - **`ADR-0034` addendum PROPOSED.** It makes the bar standing for later L re-finds. It names seeds 1700 (75/75 cp) and 5180 (120/77 cp) as thin, and cuts nothing. The owner's acceptance is owed, and it does not block this ticket.
 - **Next:** QE delta re-read. No board move at this hop.
+
+## QE — the re-find re-read
+
+**2026-10-11, QE/E2E** (subtask `qe2-ABC-083-refind`, width 1). Tip `35f49bb7` (re-find `b29c837c`), base `5ed308a8` with the same row.
+- **Detail:** `.grugops/context/qe2-ABC-083-refind/notes/`:
+  - `…ee53fec8` (readings, with load1 and thermal per run);
+  - `…d1c74ad2` (the re-find against QE's route, and seeds 1700 / 5180 at d ± 1);
+  - `…95e9bb05` (verdict and gap register);
+  - `…a51498aa` (artifacts).
+- **`A10` puzzle gate: MET.** `PUZZLE_DEEP=1` reads 54/58, exit 0, on the branch and on base, 2 + 2 runs (load1 2.25–4.51, thermal 0). Only seed 5061's line → seed 5147's changed. `PUZZLE_DEEP=weakened` reads 15/58, exit 1.
+- **The re-find is valid.** `ADR-0028` d1's three proofs and `ADR-0034` d4's four conditions are MET. The ruled clean-lead bar is MET at 270 cp minimum, against > 75, at d4–d6 on both trees. QE's own probe reproduces the Architect's figures exactly.
+- **The levels lane re-run.** The re-find feeds the `ENGINE_DEEP` levels lane (`A4`, `A3` read `PUZZLES`), which no earlier hop re-ran. It is green, 28/28. Its `A3` easiest count reads 31/58, against 35 on `main`. The −4 is the evaluator's, not the re-find's.
+- **Gates green:** `npm test` 1 739/1 739, skip 0, lint and typecheck clean.
+- **QE-083-c is CLOSED** by the Architect's screen. New INFO only:
+  - QE2-083-a: seed 1700 is a 10–18 cp near-tie at d − 1;
+  - QE2-083-b: seed 1700's lost `quiescence` tag;
+  - QE2-083-c: the levels lane was not in the re-find hop's scope check;
+  - QE2-083-d: AGENTS.md's levels `A3` figure goes stale on merge.
+- **Verdict: PASS_WITH_GAPS** (QE-083-a/b LOW, open, unchanged). It supersedes the FAIL (`…56016fe2`). QE no longer holds the ticket. Still owed: the owner's words on `AR-N8LANE-083` and `AR-NFR005-083`, his UAT word, and his acceptance of the `ADR-0034` addendum (not blocking). No board move at this hop.
