@@ -34,6 +34,7 @@ import { lstatSync, readdirSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import type * as Ts from "typescript";
 import { describe, expect, it, vi } from "vitest";
+import type { ViteUserConfig } from "vitest/config";
 import { ACCEPTED_ARGUMENTS, type ResolvedOptions, resolveOptions } from "./cli-options.ts";
 import { QUIT_CONFIRMATION_MESSAGES } from "./command-input.ts";
 import { frameHeight } from "./frame.ts";
@@ -3380,5 +3381,29 @@ describe("ABC-115 — a reader that closes early ends the session quietly, at th
     expect(status, "the product ran and reported a status").toBeTypeOf("number");
     expect(status, `a failed write was absorbed: ${JSON.stringify(child.stdout)}`).not.toBe(0);
     expect(child.stderr, "a failed write was absorbed silently").not.toBe("");
+  });
+});
+
+describe("ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolation (ADR-0040)", () => {
+  // A VALUE pin, never a timing (`ADR-0040` decision 3 + Window A addendum, accepted 2026-10-11).
+  // Each line follows vitest 3.2.7's own precedence for the worker count: `fileParallelism: false`
+  // forces 1; `poolOptions.threads.maxThreads` silently outranks `maxWorkers`; the environment
+  // (`VITEST_MAX_THREADS` / `VITEST_MAX_FORKS`) outranks both. The CLI-flag route is closed by
+  // `ABC-042` `A10`'s byte pin on `scripts.test`. `toBe(3)`, not `<= 3`: lowering the cap moves
+  // `A3`/`A4`'s wall and the floors `F`, so it is a ruling too. Only the environment may lower it.
+  it("vitest.config.ts resolves to 3 threads workers with isolation on, and no env raises it", async () => {
+    const { default: lane } = await import("../vitest.config.ts");
+    // Widened on purpose: `satisfies` keeps the literal type, and the keys asserted ABSENT
+    // (`isolate`, `fileParallelism`, `poolOptions`) would not exist on it.
+    const test: NonNullable<ViteUserConfig["test"]> = lane.test ?? {};
+    expect(test.pool).toBe("threads");
+    expect(test.maxWorkers).toBe(3);
+    expect(test.fileParallelism ?? true).toBe(true);
+    expect(test.isolate ?? true).toBe(true); // `ADR-0008` decision 7
+    expect(test.poolOptions).toBeUndefined();
+    for (const name of ["VITEST_MAX_THREADS", "VITEST_MAX_FORKS"]) {
+      const raw = process.env[name];
+      if (raw !== undefined) expect(Number.parseInt(raw, 10), name).toBeLessThanOrEqual(3);
+    }
   });
 });

@@ -1,0 +1,9 @@
+# abc144-cooled summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 26.49	wall 6.43	par 4.129	load1 2.55	load1>8 0/8	files 55	tests 1728
+H	cpu 22.26	wall 7.08	par 3.147	load1 2.75	load1>8 0/8	files 55	tests 1729
+  H-B cpu	median -4.200 (-15.85 % of base cpu)	sign 0/8	k 2	interval [-4.390, -4.090]	R 4.390
+  H-B wall	median 0.660	sign 8/8	k 2	interval [0.600, 0.940]	R 0.940
+T	cpu 26.63	wall 6.33	par 4.200	load1 2.92	load1>8 0/8	files 55	tests 1728
+  T-B cpu	median 0.170 (0.64 % of base cpu)	sign 6/8	k 2	interval [-0.030, 0.870]	R 0.870
+  T-B wall	median -0.050	sign 3/8	k 2	interval [-0.220, 0.140]	R 0.220
+twin R: cpu 0.870 s, wall 0.220 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

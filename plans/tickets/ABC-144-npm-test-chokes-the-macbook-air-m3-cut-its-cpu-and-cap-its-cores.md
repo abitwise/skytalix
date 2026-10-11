@@ -278,3 +278,117 @@ Design`** for the Architect hop (In Design WIP allows it).
 | 10 | no major unresolved blocker | **✅** the owner questions refine numbers on a stated fork and do not block the design hop |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-11 (subtask `ticket-to-pr-ABC-144`). Branch `grugops/ABC-144-cap-test-workers`,
+code commit `d4468fd3`, base `5ed308a8`. The detail is in `.grugops/context/ticket-to-pr-ABC-144/notes/`.
+
+- **The setting, as `ADR-0040` and its Window A addendum rule it (k = 3).** `vitest.config.ts` gets
+  `test.maxWorkers: 3`. `pool: "threads"` stays, `isolate` is not written (default `true`), and there is no
+  `poolOptions`. The export is a plain object, `satisfies ViteUserConfig`, using a type-only import.
+  `npm run typecheck` exits 0 on that form. One header paragraph names `ADR-0040`. `scripts.test` is unchanged.
+- **The pin (`A7`).** One `it` in its own `describe` at the end of `src/cli.test.ts`. It checks:
+  - pool `threads`;
+  - `maxWorkers` `toBe(3)`;
+  - `fileParallelism` and `isolate` are not `false`;
+  - `poolOptions` is undefined;
+  - `VITEST_MAX_THREADS` / `VITEST_MAX_FORKS` are ≤ 3 if set.
+
+  It has no timing assertion.
+- **Armed.** On a scratch copy each of these went red: r1 (cap deleted), r2 (`isolate: false`),
+  r3 (`VITEST_MAX_THREADS=8`) and r3b (`VITEST_MAX_THREADS=4`). So did `maxWorkers: 4`,
+  `fileParallelism: false`, `poolOptions.threads.maxThreads: 8` and `VITEST_MAX_FORKS=8`.
+  `VITEST_MAX_THREADS=2` stays green. The env half is kept.
+- **`A2` read from the resolved configuration:** `effectiveWorkers: 3`, `isolate: true`.
+- **`A6` counts, from one run:** 55 files (= base) and 1729 tests (= base 1728 + 1), with 0 skipped.
+  The 20-run screen is still owed.
+- **Gates:** lint, typecheck, build and `npm test` all exit 0. 0 production `src/` lines.
+- **No timing read.** Lane cost is **not graded**. `A1`, `A3`, `A4`, `A5` and the `AR-N8SPAWN-DRIFT`
+  discharge belong to Window B (Security/NFR, width 1).
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-144`).
+- Range: base `5ed308a8`, code `d4468fd3`, reviewed tip `d675ef42`. The dry-run merge was against the
+  wave tip `9d0fcb96`.
+- Every reading is QE's own. **No timing or CPU was read or graded.** The detail is in
+  `.grugops/context/qe-ABC-144/notes/`: `…84ad7813` (verdict), `…f287edc5` (readings), `…21613086`
+  (plants), `…0f16e7eb` (gaps and the ruling on unsealed notes), `…f8aab052` (commands and probe). It
+  is not restated here.
+
+**PASS_WITH_GAPS.**
+- `A2` **MET**: `effectiveWorkers: 3` at head, 7 at base, read from the resolved configuration.
+- `A6` **MET** within QE's scope:
+  - `isolate: true` resolved;
+  - **20 of 20 consecutive green `npm test` runs at head**, each with 7 of 7 `*.nfr.test.ts` files
+    passing;
+  - files 55 (= base), tests 1729 (= base + 1), 0 skipped, on every run;
+  - all 10 opt-in lane configurations collect the same files and tests as base;
+  - 8 lanes exit 0 under the cap;
+  - 0 production `src/` lines.
+- `A7` **MET**:
+  - the SE's r1, r2, r3, r3b and x1–x4 re-planted by QE, all RED;
+  - QE's 11 extras: 7 RED and 4 survive. The survivors are three routes: per-project `isolate: false`
+    (inert on vitest 3.2.7, proven by a leak probe), a hand-typed `--maxWorkers` flag, and an
+    adversarial worker-env conditional;
+  - no timing assertion added.
+- `A1`, `A3`, `A4`, `A5`, the `AR-N8SPAWN-DRIFT` discharge and the thermal log: **not graded**. They
+  are Window B's.
+- **Dry-run merge with `9d0fcb96`.** One append-only conflict, in `plans/traceability.md`.
+  `src/cli.test.ts` auto-merges. The merged tree has 4 gates at 0, 55 / 1729 (= wave + 1), and
+  `effectiveWorkers` 3. Aborted, never committed.
+- **Gaps: 6 INFO, none blocking:**
+  - `QE-144-a`: the pin does not read `test.projects`. Owner BA/PM; trigger: a vitest bump.
+  - `QE-144-b`: a CLI `--maxWorkers` flag is unseen, by design.
+  - `QE-144-c`: the adversarial survivor.
+  - `QE-144-d`: the traceability merge conflict. Owner: Orchestrator.
+  - `QE-144-e`: `LADDER_DEEP=verdict`'s exit is not run; it is `ABC-146`'s.
+  - `QE-144-f`: the git host reads `UNKNOWN - verify`. Owner: human.
+- **Ruling:** the notes being hand-written and unsealed does not matter. It is the repository norm
+  (`AGENTS.md`), and no stamp is claimed.
+- **UAT waiver applies** on QE's reading (0 production `src/` lines). QE recommends the `In Review` exit
+  to `In Security/NFR` for Window B. Not merged, not pushed.
+
+## Security/NFR — Window B
+
+**2026-10-11, Security/NFR** (subtask `secnfr-ABC-144-window-b`).
+- **Window:** width 1, 11:57:18Z–12:46:21Z.
+- **Commits:** base `5ed308a8`, head `5ddf150e` (code `d4468fd3`), twin = base.
+- **Runs:** 81, with 0 harness errors. n = 8 per arm per state.
+- **Detail:** `.grugops/context/secnfr-ABC-144-window-b/notes/`:
+  - `…e451fa31` (grades and result);
+  - `…bfdcf3b3` (readings);
+  - `…1ff56629` (heat);
+  - `…866dc5af` (method and limits).
+- **Raw files:** `../probe/`. They are not restated here.
+
+**PASS_WITH_RISKS. No required fixes.**
+
+| | bar | reading | state |
+|---|---|---|---|
+| `A1` | H CPU ≤ 0.85 × B | warm **−16.05 %** (24.01 vs 28.35 s; interval −16.96..−14.60 %); cooled −15.85 % (22.26 vs 26.49 s). Twins admissible, CPU R 0.280 / 0.870 s | MET (warm margin thin) |
+| `A2` | ≤ 4 workers | resolved **3** (base 7). CPU ÷ wall warm B 4.258 → H 3.165; cooled 4.129 → 3.147 | MET |
+| `A3` | H warm wall ≤ 10 s | **7.54 s** | MET |
+| `A4` | each state ≤ W by its twin R | warm 7.54 + 0.180 = 7.72 s; cooled 7.08 + 0.220 = 7.30 s | MET |
+| `A5` | the proposal | **`W_new`: none, W stays 10 s (ratio 1.00).** Wall cost +0.86 s warm, +0.66 s cooled. Cooled ÷ warm factor at head 0.939, so warm binds; the re-open trigger is W = 10 s (wording in `…e451fa31`). `N8-LANE` not re-derived (no CPU level) | delivered |
+| `AR-N8SPAWN-DRIFT` | `src/cli.test.ts` within `F` = 1.097 s | H−B **−0.255 s** (twin R 0.070 s); the pair straddles the cap by design | **DISCHARGED** for `5ddf150e` |
+
+- **Heat: moderate thermal pressure (level 1) still occurs at k = 3.**
+  - Warm (back-to-back runs): level 1 from the 21st run on, for B, H and T alike. 13 of 54 reads were at
+    level 1.
+  - Cooled and narrow: 0 on every read.
+  - The window cannot separate k = 3's own heat from that of the uncapped arms it ran beside.
+  - **The k = 2 option goes back to the owner.**
+- **Risks, each with an owner:**
+  - `RISK-ABC144-HEAT`: owner Olger Oeselg.
+  - `RISK-ABC144-A1THIN`: owner Security/NFR.
+  - `RISK-ABC144-STALL`: one cooled head run at 12.04 s with normal CPU, cause unknown. Owner Security/NFR.
+  - `RISK-ABC144-FCAP`: the full-lane `F` under the cap was not re-read, because the twins are base
+    copies. Owner Architect/Design.
+- **`*_DEEP` lanes:** seven were run once at base and once at head, all exit 0. Walls are in `…bfdcf3b3`:
+  `ENGINE_DEEP` 294 → 283 s, `SEARCH_DEEP` 951 → 968 s (single runs). `LADDER_DEEP=1` was not timed;
+  its wall at head is `UNKNOWN - verify`.
+- **Merge:** no owner word is needed, because head's wall is ≤ 10 s. The heat question goes to the owner
+  beside it.
+- **Not merged, not pushed.** The board is the Orchestrator's.

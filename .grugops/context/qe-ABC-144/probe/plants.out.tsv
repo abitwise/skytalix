@@ -1,0 +1,22 @@
+control	exit=0	GREEN	Tests  1 passed | 67 skipped (68)		eff=3 isolate=true threadsIsolate=null	unmodified head
+r1	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: expected undefined to be 3 // Object.is equality	eff=7 isolate=true threadsIsolate=null	delete maxWorkers: 3
+r2	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: expected false to be true // Object.is equality	eff=3 isolate=false threadsIsolate=false	add isolate: false
+r3	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_THREADS: expected 8 to be less than or equal to 3	eff=8 isolate=true threadsIsolate=null	VITEST_MAX_THREADS=8
+r3b	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_THREADS: expected 4 to be less than or equal to 3	eff=4 isolate=true threadsIsolate=null	VITEST_MAX_THREADS=4
+x1	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: expected 4 to be 3 // Object.is equality	eff=4 isolate=true threadsIsolate=null	maxWorkers: 4
+x2	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: expected false to be true // Object.is equality	eff=1 isolate=true threadsIsolate=null	add fileParallelism: false
+x3	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: expected { threads: { maxThreads: 8 } } to be undefined	eff=8 isolate=true threadsIsolate=null	add poolOptions.threads.maxThreads: 8
+x4	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_FORKS: expected 8 to be less than or equal to 3	eff=3 isolate=true threadsIsolate=null	VITEST_MAX_FORKS=8
+lower	exit=0	GREEN	Tests  1 passed | 67 skipped (68)		eff=2 isolate=true threadsIsolate=null	VITEST_MAX_THREADS=2 (may lower)
+lower3	exit=0	GREEN	Tests  1 passed | 67 skipped (68)		eff=3 isolate=true threadsIsolate=null	VITEST_MAX_THREADS=3 (boundary, equal)
+q1	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: expected 'forks' to be 'threads' // Object.is equality	eff=3 isolate=true threadsIsolate=null	pool: "forks"
+q2	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: expected '50%' to be 3 // Object.is equality	eff=4 isolate=true threadsIsolate=null	maxWorkers: "50%"
+q3	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: expected 2 to be 3 // Object.is equality	eff=2 isolate=true threadsIsolate=null	maxWorkers: 2 (a lowering is a ruling too)
+q4	exit=1	RED	Tests  1 failed | 67 skipped (68)	AssertionError: expected { threads: { isolate: false } } to be undefined	eff=3 isolate=true threadsIsolate=false	poolOptions.threads.isolate: false
+q5	exit=0	GREEN	Tests  1 passed | 67 skipped (68)		eff=3 isolate=true threadsIsolate=null	projects: [{ extends: true, test: { name: 'p', isolate: false } }]
+q5b	exit=0	GREEN	Tests  1 passed | 67 skipped (68)		eff=3 isolate=true threadsIsolate=null	projects: [{ extends: true, test: { name: 'p', poolOptions: { threads: { isolate: false } } } }]
+q6	exit=1	RED	Tests  no tests	Errors  1 error	eff=3 isolate=true threadsIsolate=null	add minWorkers: 8
+q7	exit=1	RED	Tests  no tests	Errors  1 error	eff=3 isolate=true threadsIsolate=null	VITEST_MIN_THREADS=8
+q8	exit=1	RED	Tests  no tests	Errors  1 error	eff=null isolate=true threadsIsolate=null	VITEST_MAX_THREADS=abc (NaN)
+q9	exit=0	GREEN	Tests  1 passed | 67 skipped (68)		eff=3 isolate=true threadsIsolate=null	CLI --maxWorkers=8 on the narrow set
+q10	exit=0	GREEN	Tests  1 passed | 67 skipped (68)		eff=8 isolate=true threadsIsolate=null	maxWorkers: process.env.VITEST_WORKER_ID ? 3 : 8 (worker sees 3, main resolves 8)

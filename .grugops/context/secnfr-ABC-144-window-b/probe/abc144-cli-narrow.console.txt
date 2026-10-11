@@ -1,0 +1,37 @@
+# abc144-cli-narrow: npx vitest run src/cli.test.ts --reporter=default --reporter=json --outputFile.json=.test-results/last-run.json | conds B,H,T | rounds 9 | gap 0s -> /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/winb/abc144-cli-narrow.tsv
+0 B cpu 5.94 wall 4.13 par 1.438 1 67 load1 2.97 foreign 0 limit none therm 0->0 ok
+0 H cpu 5.71 wall 4.05 par 1.41 1 68 load1 2.89 foreign 0 limit none therm 0->0 ok
+0 T cpu 5.86 wall 4 par 1.465 1 67 load1 2.9 foreign 0 limit none therm 0->0 ok
+1 H cpu 5.64 wall 4 par 1.41 1 68 load1 2.83 foreign 0 limit none therm 0->0 ok
+1 T cpu 5.9 wall 4.01 par 1.471 1 67 load1 2.68 foreign 0 limit none therm 0->0 ok
+1 B cpu 5.96 wall 4.06 par 1.468 1 67 load1 2.62 foreign 0 limit none therm 0->0 ok
+2 T cpu 6.05 wall 4.11 par 1.472 1 67 load1 2.62 foreign 0 limit none therm 0->0 ok
+2 B cpu 5.94 wall 4.07 par 1.459 1 67 load1 2.65 foreign 0 limit none therm 0->0 ok
+2 H cpu 5.69 wall 4.05 par 1.405 1 68 load1 2.84 foreign 0 limit none therm 0->0 ok
+3 B cpu 5.94 wall 4.03 par 1.474 1 67 load1 2.93 foreign 0 limit none therm 0->0 ok
+3 H cpu 5.68 wall 4.03 par 1.409 1 68 load1 3.02 foreign 0 limit none therm 0->0 ok
+3 T cpu 5.9 wall 4 par 1.475 1 67 load1 2.86 foreign 0 limit none therm 0->0 ok
+4 H cpu 5.68 wall 4.01 par 1.416 1 68 load1 2.86 foreign 0 limit none therm 0->0 ok
+4 T cpu 5.96 wall 4.05 par 1.472 1 67 load1 2.79 foreign 0 limit none therm 0->0 ok
+4 B cpu 5.99 wall 4.04 par 1.483 1 67 load1 3.12 foreign 0 limit none therm 0->0 ok
+5 T cpu 5.94 wall 4.04 par 1.47 1 67 load1 3.03 foreign 0 limit none therm 0->0 ok
+5 B cpu 6.01 wall 4.12 par 1.459 1 67 load1 3.35 foreign 0 limit none therm 0->0 ok
+5 H cpu 5.63 wall 4 par 1.407 1 68 load1 3.24 foreign 0 limit none therm 0->0 ok
+6 B cpu 5.89 wall 4 par 1.472 1 67 load1 3.22 foreign 0 limit none therm 0->0 ok
+6 H cpu 5.73 wall 4.09 par 1.401 1 68 load1 3.22 foreign 0 limit none therm 0->0 ok
+6 T cpu 5.91 wall 4.05 par 1.459 1 67 load1 3.13 foreign 0 limit none therm 0->0 ok
+7 H cpu 5.68 wall 4.03 par 1.409 1 68 load1 4.24 foreign 0 limit none therm 0->0 ok
+7 T cpu 5.95 wall 4.06 par 1.466 1 67 load1 4.38 foreign 0 limit none therm 0->0 ok
+7 B cpu 5.88 wall 4.03 par 1.459 1 67 load1 4.35 foreign 0 limit none therm 0->0 ok
+8 T cpu 5.86 wall 3.98 par 1.472 1 67 load1 4.24 foreign 0 limit none therm 0->0 ok
+8 B cpu 5.89 wall 4.01 par 1.469 1 67 load1 4.38 foreign 0 limit none therm 0->0 ok
+8 H cpu 5.67 wall 4.01 par 1.414 1 68 load1 4.38 foreign 0 limit none therm 0->0 ok
+# abc144-cli-narrow summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 5.94	wall 4.04	par 1.469	load1 3.17	load1>8 0/8	files 1	tests 67
+H	cpu 5.68	wall 4.02	par 1.409	load1 3.12	load1>8 0/8	files 1	tests 68
+  H-B cpu	median -0.255 (-4.29 % of base cpu)	sign 0/8	k 2	interval [-0.320, -0.200]	R 0.320
+  H-B wall	median -0.010	sign 1/8	k 2	interval [-0.060, 0.000]	R 0.060
+T	cpu 5.93	wall 4.04	par 1.472	load1 2.94	load1>8 0/8	files 1	tests 67
+  T-B cpu	median -0.030 (-0.51 % of base cpu)	sign 3/8	k 2	interval [-0.060, 0.070]	R 0.070
+  T-B wall	median -0.010	sign 4/8	k 2	interval [-0.050, 0.040]	R 0.050
+twin R: cpu 0.070 s, wall 0.050 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).
