@@ -121,7 +121,8 @@ It is the only candidate where the reader and the trigger-er are the same agent 
   writes no lane and adds none.
 - **Re-opening, re-scoring or moving** `ADR-0017`, `AR-N8SPAWN-DRIFT`, `ABC-115`, `ABC-108`,
   `NFR-008`, `N8-LANE` or `G-QE115-3`.
-- **`AR-N8SPAWN-DRIFT`'s discharge**, which `ADR-0017` places at `ABC-108`'s remedy. This ticket
+- **`AR-N8SPAWN-DRIFT`'s discharge**, which `ADR-0017` places at `ABC-144` § Scope 4 (re-pointed 2026-10-11
+  from the dropped `ABC-108`'s remedy, `ADR-0017` § Pointers 2026-10-11). This ticket
   carries the control; it does not discharge the risk, and it must not be read as having reduced it.
 
 ## The edit owed elsewhere — NAMED, with its owner, and NOT MADE HERE
@@ -182,8 +183,9 @@ cut (8 matched lines), and this ticket requires that they still do afterwards (`
 - **None blocking. Pullable today.** `ADR-0017` is merged (`9c56a6f`), the catalog section is
   merged, and the `ChildOptions` surface exists at `main` @ `fcf12c1` — all three verified at this
   cut rather than assumed.
-- **Ordering, not a block:** `ABC-108`/`ABC-110` are open and hold `AR-N8SPAWN-DRIFT`'s discharge.
-  This ticket does not wait on them and does not touch them.
+- **Ordering, not a block:** `ABC-144` § Scope 4 holds `AR-N8SPAWN-DRIFT`'s discharge (re-pointed
+  2026-10-11 from `ABC-108`/`ABC-110`, `ADR-0017` § Pointers 2026-10-11).
+  This ticket does not wait on it and does not touch it.
 - **`ABC-109` (`AGENTS.md` byte cap):** mutual awareness, neither blocking — this ticket writes zero
   bytes to that file (`A5`).
 - **`ABC-114` shares `src/cli.test.ts`.** Comment-only edits rebase cheaply; a delivering hop that
