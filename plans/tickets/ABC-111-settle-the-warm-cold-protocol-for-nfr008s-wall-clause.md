@@ -332,3 +332,35 @@ hop. **Caveat on the factor:** it was measured on v24.12.0 at 39 files; on re-op
 than reuse it.
 
 **DoR: not re-scored — a dropped ticket is not pulled.**
+
+## Page note — 2026-10-11 (BA/PM, subtask `bapm-batch-2026-10-11`, wave tip `506550f3`)
+
+**Recommendation: FOLD the trigger into `ABC-144`, then DROP this ticket (close as SUPERSEDED).**
+`column`/`status` are not moved here; that is the Orchestrator's.
+
+**Re-read against the owner's new goal.** On 2026-10-10 the owner asked for less `npm test` CPU on the
+M3 and allowed the 10 s wall to rise "a bit". That is `ABC-144`, `P1`.
+- **This page's own finding is about parallelism.** § "What is already established", item 1: the
+  warm/cold effect is on CPU/wall, with zero overlap between the states.
+- **A worker cap changes parallelism, and it raises the wall toward W.** So `ABC-144` will move the
+  lane into the zone where the warm/cold choice can flip a verdict. The 2026-10-10 re-score put that
+  zone at a warm median of 8.76 s against 10 s, and today's 6.52 / 7.16 s will rise.
+- **The trigger was never carried.** There is no "8.76" in `plans/nfr-catalog.md` at this tip, so
+  the 2026-10-10 "drop once `NFR-008` carries it" condition has not been met.
+
+**What `ABC-144` takes (its `A4` and `A5`):**
+- both states measured at the new setting, each with its own identity twin;
+- both medians under W by at least that state's R;
+- the cooled/warm factor **re-measured**, not reused (the caveat above);
+- the re-open trigger re-derived as W ÷ factor;
+- wording for the `NFR-008` row, written by Security/NFR after the owner's word.
+
+**What is dropped:** `A3`'s cause discrimination (four candidates, primed-cache and gap-length arms)
+and `A7` (`ABC-110` is `Done`). No verdict depends on the cause. If `ABC-144` `A4` finds one state
+over W, the owner hears it, and cause discrimination can be re-cut then, against a real number.
+
+**Why not keep this ticket open beside `ABC-144`:** both would read the same lane in the same window,
+twice. **Why not drop it outright:** the trigger would lose its only carrier just as the wall moves
+toward it.
+
+**DoR: not re-scored.** A ticket recommended for drop is not pulled.

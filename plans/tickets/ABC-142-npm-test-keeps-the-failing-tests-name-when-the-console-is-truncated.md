@@ -169,6 +169,15 @@ Software Engineer, 2026-10-10. Branch `grugops/ABC-142-test-result-file`, code c
   `status == "failed"`; the totals are `numFailedTests`, `numPassedTests` and `numTotalTests`.
 - **Read it.** `jq -r '.testResults[] | .name as $f | .assertionResults[] | select(.status=="failed")
   | "\($f)  \(.fullName)"' .test-results/last-run.json`
+  - *Page note, 2026-10-11, BA/PM (`bapm-batch-2026-10-11`, from `QE-142-b`).* **This query misses a
+    suite-level red.** A `throw` in a `describe` body, or a failing import, gives `numFailedTests` 0
+    and `numFailedTestSuites` 1, and the query prints nothing. The file does carry it. Run this too:
+    `jq -r '.testResults[] | select(.status=="failed") | "\(.name)  \(.message)"' .test-results/last-run.json`
+    That is QE's suggested form (`…68f78a28`). The `status` and `message` it reads were seen on QE's
+    plant (`…298ed173`); the query string itself was not re-run at this hop.
+  - **Neither query sees an unhandled error, and neither sees a timeout.** On those reds the file
+    reads `success: true` (`QE-142-a`, `QE-142-c`). **On a non-zero exit, read the console's last
+    lines before you trust this file.** `ABC-143` fixes the file and replaces both queries with one.
 - **Concurrency limit.** Two `npm test` runs in one checkout at once overwrite each other's file.
   Agent hops use separate worktrees. This is not engineered around.
 - **Console delta.** The output gains exactly one line after the summary:
