@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — ABC-150 diagnosis merged: cause found, no safe setting on vitest 3.2.7; `ADR-0041` PROPOSED; owner word owed._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — BA/PM lever cut merged: `ABC-150` (P1) → In Design; ABC-146 synced. Next free id ABC-151._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-147` → Done (Security/NFR PASS_WITH_GAPS; merged)._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-147` probe: ~1/3 of lane CPU recoverable (vitest ~5x per node) → In Review; Security/NFR review + BA/PM lever-ticket cut dispatched (no test runs)._
@@ -685,7 +686,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Design (WIP 1/2)
-- [ABC-150] vitest runs the engine ~5x slower than node — find why, then cut the lane's CPU  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; from ABC-147's ≥ 15 % arm; D1–D3 Architect diagnosis (one candidate at a time: transform/sourcemaps, worker flags, module interop) → one setting by ADR; bar L1 = measured paired lane CPU ≤ −15 % vs the ABC-144-merged base (never R); L1–L4 in a no-other-hop window; owner goal: CPU + heat) **2026-10-11: new → Ready → In Design (Architect diagnosis).**
+- [ABC-150] vitest runs the engine ~5x slower than node — find why, then cut the lane's CPU  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; from ABC-147's ≥ 15 % arm; D1–D3 Architect diagnosis (one candidate at a time: transform/sourcemaps, worker flags, module interop) → one setting by ADR; bar L1 = measured paired lane CPU ≤ −15 % vs the ABC-144-merged base (never R); L1–L4 in a no-other-hop window; owner goal: CPU + heat) **2026-10-11: new → Ready → In Design (Architect diagnosis).** **2026-10-11: D1–D3 done (`c2715ecd`): factor re-read E 5.01x / S 5.11x / perft 4.33x; cause = the vite module runner's cross-module interop (bundle and `deps.external` both remove ~100 %; sourcemaps and forks ~0 %). `deps.external` over `src/` blinds 47 mock/spy tests → no admissible runner setting on vitest 3.2.7. `ADR-0041` PROPOSED: close at the ruling. Owner word owed (ADR-0041; whether to cut a vitest 4.1 `viteModuleRunner: false` route ticket).**
 
 
 ## Ready for Dev (WIP 0/6)
