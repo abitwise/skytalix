@@ -1,0 +1,226 @@
+[
+  {
+    "label": "head-502df2b6",
+    "mutant": "none",
+    "row": "green",
+    "exit": 0,
+    "wantExit": 0,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [],
+    "wantLines": [],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": true,
+      "runState": "exited",
+      "exitCode": 0,
+      "startTime": 1791755807277,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1741,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1741 passed (1741)"
+    ]
+  },
+  {
+    "label": "head-502df2b6",
+    "mutant": "none",
+    "row": "unhandled",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "error  PLANT-timer",
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "error  PLANT-timer",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791755816127,
+      "stamp": null,
+      "numTotalTests": 1742,
+      "numPassedTests": 1742,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": [
+        "PLANT-timer"
+      ]
+    },
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1742 passed (1742)"
+    ]
+  },
+  {
+    "label": "head-502df2b6",
+    "mutant": "none",
+    "row": "suite",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "suite  /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/v2out/trees/head-502df2b6-suite/src/fen.test.ts  PLANT-suite",
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "suite  /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/v2out/trees/head-502df2b6-suite/src/fen.test.ts  PLANT-suite",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791755825313,
+      "stamp": null,
+      "numTotalTests": 1659,
+      "numPassedTests": 1659,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 1,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  1 failed | 55 passed (56)",
+      "      Tests  1659 passed (1659)"
+    ]
+  },
+  {
+    "label": "head-502df2b6",
+    "mutant": "none",
+    "row": "assertion",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "test   /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/v2out/trees/head-502df2b6-assertion/src/legal.test.ts  isInCheck is false in the starting position",
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "test   /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/v2out/trees/head-502df2b6-assertion/src/legal.test.ts  isInCheck is false in the starting position",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791755834351,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1740,
+      "numFailedTests": 1,
+      "numFailedTestSuites": 2,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  1 failed | 55 passed (56)",
+      "      Tests  1 failed | 1740 passed (1741)",
+      "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+    ]
+  },
+  {
+    "label": "head-502df2b6",
+    "mutant": "none",
+    "row": "exitonly",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791755843493,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1741,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1741 passed (1741)",
+      "ERROR: Coverage for lines (99.43%) does not meet global threshold (100%)"
+    ]
+  },
+  {
+    "label": "head-502df2b6",
+    "mutant": "none",
+    "row": "hang",
+    "exit": 124,
+    "wantExit": 124,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "run    started exitCode=none, killed"
+    ],
+    "wantLines": [
+      "run    started exitCode=none, killed"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "started",
+      "startTime": 1791755864522,
+      "stamp": 1791755864145,
+      "files": 0,
+      "unhandled": []
+    },
+    "consoleTail": []
+  }
+]

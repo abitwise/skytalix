@@ -1,0 +1,103 @@
+src/command-input.test.ts:56:vi.mock("./history.ts", { spy: true });
+src/command-input.test.ts:65:vi.mock("./legal.ts", { spy: true });
+src/command-input.test.ts:731:    const write = vi.spyOn(process.stdout, "write").mockImplementation(() => true);
+src/command-input.test.ts:732:    const errorWrite = vi.spyOn(process.stderr, "write").mockImplementation(() => true);
+src/engine.capacity.test.ts:42:vi.mock("./legal.ts", async (importOriginal) => {
+src/engine.capacity.test.ts:43:  const real = await importOriginal<typeof import("./legal.ts")>();
+src/engine.capacity.test.ts:47:vi.mock("./zobrist.ts", async (importOriginal) => {
+src/engine.capacity.test.ts:48:  const real = await importOriginal<typeof import("./zobrist.ts")>();
+src/engine.capacity.test.ts:58:vi.mock("./search.ts", async (importOriginal) => {
+src/engine.capacity.test.ts:59:  const real = await importOriginal<typeof import("./search.ts")>();
+src/glyph-mode.nfr.test.ts:26:vi.mock("node:fs", async (importOriginal) => {
+src/glyph-mode.nfr.test.ts:27:  const actual = await importOriginal<typeof import("node:fs")>();
+src/glyph-mode.nfr.test.ts:37:vi.mock("node:child_process", async (importOriginal) => {
+src/glyph-mode.nfr.test.ts:38:  const actual = await importOriginal<typeof import("node:child_process")>();
+src/glyph-mode.nfr.test.ts:52:vi.mock("node:fs/promises", async (importOriginal) => {
+src/glyph-mode.nfr.test.ts:53:  const actual = await importOriginal<typeof import("node:fs/promises")>();
+src/book.test.ts:78:    const stdout = vi.spyOn(process.stdout, "write");
+src/book.test.ts:79:    const stderr = vi.spyOn(process.stderr, "write");
+src/book.test.ts:244:      const fresh = (await import(`./book.ts?abc094-a2=${run}`)) as typeof import("./book.ts");
+src/cli.test.ts:53:vi.mock("./glyph-mode.ts", { spy: true });
+src/cli.test.ts:1713:      for (const forbidden of ["eval", "Function(", "child_process", "import("]) {
+src/cli.test.ts:1852:    //       template naming it, WHATEVER THE CALLEE (`ABC-138`): `import()` and `require()`, and
+src/cli.test.ts:1854:    //       `vi.importActual(…)` and `vi.mock(…)` (`X5`-`X7`, `S2`, `S3`) — and it binds `spawnSync`
+src/cli.test.ts:3402:    const { default: lane } = await import("../vitest.config.ts");
+src/cli.test.ts:3427:    const { default: lane } = await import("../vitest.config.ts");
+src/line-input.test.ts:45: *             `globalThis`, `eval`, `Function`, `require`, dynamic `import(`, `child_process`,
+src/line-input.test.ts:531:        vi.spyOn(console, method).mockImplementation(() => {}),
+src/line-input.test.ts:533:      const stdoutSpy = vi.spyOn(process.stdout, "write").mockImplementation(() => true);
+src/line-input.test.ts:534:      const stderrSpy = vi.spyOn(process.stderr, "write").mockImplementation(() => true);
+src/gameend.nfr.test.ts:22:vi.mock("./legal.ts", async (importOriginal) => {
+src/gameend.nfr.test.ts:23:  const actual = await importOriginal<typeof import("./legal.ts")>();
+src/gameend.nfr.test.ts:27:vi.mock("./zobrist.ts", async (importOriginal) => {
+src/gameend.nfr.test.ts:28:  const actual = await importOriginal<typeof import("./zobrist.ts")>();
+src/puzzle-suite.test.ts:39:vi.mock("./evaluate.ts", { spy: true });
+src/puzzle-suite.test.ts:374:    return (await import("./engine.ts")).chooseMove;
+src/glyph-mode.test.ts:129:    const out = vi.spyOn(process.stdout, "write");
+src/glyph-mode.test.ts:130:    const err = vi.spyOn(process.stderr, "write");
+src/search.capacity.test.ts:35:vi.mock("./legal.ts", async (importOriginal) => {
+src/search.capacity.test.ts:36:  const real = await importOriginal<typeof import("./legal.ts")>();
+src/search.capacity.test.ts:40:vi.mock("./zobrist.ts", async (importOriginal) => {
+src/search.capacity.test.ts:41:  const real = await importOriginal<typeof import("./zobrist.ts")>();
+src/levels.test.ts:52:vi.mock("./engine.ts", async (importOriginal) => {
+src/levels.test.ts:53:  const real = await importOriginal<typeof import("./engine.ts")>();
+src/levels.test.ts:468:  const { buildCorpus } = await import("./evaluate.mirror-corpus.ts");
+src/levels.test.ts:469:  const { PUZZLES } = await import("./puzzle-corpus.ts");
+src/search.pvs-lmr.test.ts:84:vi.mock("./transposition.ts", async (importOriginal) => {
+src/search.pvs-lmr.test.ts:85:  const actual = await importOriginal<typeof import("./transposition.ts")>();
+src/history-pane.nfr.test.ts:29:vi.mock("./fen.ts", async (importOriginal) => {
+src/history-pane.nfr.test.ts:30:  const actual = await importOriginal<typeof import("./fen.ts")>();
+src/history-pane.nfr.test.ts:34:vi.mock("./san.ts", async (importOriginal) => {
+src/history-pane.nfr.test.ts:35:  const actual = await importOriginal<typeof import("./san.ts")>();
+src/history-pane.nfr.test.ts:39:vi.mock("./gameend.ts", async (importOriginal) => {
+src/history-pane.nfr.test.ts:40:  const actual = await importOriginal<typeof import("./gameend.ts")>();
+src/history-pane.nfr.test.ts:44:vi.mock("./history.ts", async (importOriginal) => {
+src/history-pane.nfr.test.ts:45:  const actual = await importOriginal<typeof import("./history.ts")>();
+src/history-pane.nfr.test.ts:217: *   "./frame.ts"`) or a dynamic `import("./frame.ts")`: neither is a static value import, so the
+src/history-pane.nfr.test.ts:222: * THE RECORDED LOSS is `WGLYPH-DYN`: a module-scope `void import("./history.ts")` in `glyph-mode.ts`
+src/history-pane.nfr.test.ts:601:    // root, and its closure would go unmeasured; a root that stops composing is no longer the root. A re-export hop or a dynamic `import("./frame.ts")` is not counted (the
+src/history-pane.nfr.test.ts:639:   * - a renderer reaching `history.ts` by a DYNAMIC `void import("./history.ts")` or a query
+src/history-pane.nfr.test.ts:670:   * `vi.mock` + `importOriginal()` at `:43-44` and the `await import` at `:58-60`, which this
+src/history-pane.nfr.test.ts:729:      const { makeRenderSeam } = await import(root);
+src/history-pane.nfr.test.ts:731:      const { gameStatusOf, newGame, playMove } = await import(new URL("history.ts?fixture", root).href);
+src/history-pane.nfr.test.ts:732:      const { legalMoves } = await import(new URL("legal.ts", root).href);
+src/history-pane.nfr.test.ts:747:      await import(arming);
+src/zobrist.nfr.test.ts:31:vi.mock("./legal.ts", async (importOriginal) => {
+src/zobrist.nfr.test.ts:32:  const actual = await importOriginal<typeof import("./legal.ts")>();
+src/render-seam.test.ts:61:vi.mock("./frame.ts", { spy: true });
+src/render-seam.test.ts:62:vi.mock("./gameend.ts", { spy: true });
+src/render-seam.test.ts:63:vi.mock("./history.ts", { spy: true });
+src/render-seam.test.ts:64:vi.mock("./history-pane.ts", { spy: true });
+src/render-seam.test.ts:65:vi.mock("./legal.ts", { spy: true });
+src/render-seam.test.ts:66:vi.mock("./render.ts", { spy: true });
+src/render-seam.test.ts:67:vi.mock("./status-panel.ts", { spy: true });
+src/search.ordering.test.ts:47:vi.mock("./apply.ts", async (importOriginal) => {
+src/search.ordering.test.ts:48:  const actual = await importOriginal<typeof import("./apply.ts")>();
+src/search.ordering.test.ts:524:    vi.spyOn(KillerTable.prototype, "at").mockImplementation(function (this: KillerTable, ply) {
+src/search.ordering.test.ts:529:    vi.spyOn(KillerTable.prototype, "record").mockImplementation(function (
+src/status-panel.nfr.test.ts:16:vi.mock("./history.ts", { spy: true });
+src/status-panel.nfr.test.ts:18:vi.mock("./gameend.ts", { spy: true });
+src/status-panel.nfr.test.ts:20:vi.mock("./legal.ts", { spy: true });
+src/status-panel.nfr.test.ts:22:vi.mock("./san.ts", { spy: true });
+src/status-panel.nfr.test.ts:27:vi.mock("./position.ts", { spy: true });
+src/status-panel.nfr.test.ts:38:type GameHistory = import("./history.ts").GameHistory;
+src/status-panel.nfr.test.ts:39:type Move = import("./moves.ts").Move;
+src/san.nfr.test.ts:33:vi.mock("./legal.ts", async (importOriginal) => {
+src/san.nfr.test.ts:34:  const actual = await importOriginal<typeof import("./legal.ts")>();
+src/transposition.test.ts:68:vi.mock("./transposition.ts", async (importOriginal) => {
+src/transposition.test.ts:69:  const actual = await importOriginal<typeof import("./transposition.ts")>();
+src/transposition.test.ts:650:        const { chooseMove } = await import(${JSON.stringify(engineUrl)});
+src/transposition.test.ts:651:        const { parseFen } = await import(${JSON.stringify(fenUrl)});
+src/san.test.ts:286:    const namespace = await import("./san.ts");
+src/turn-loop.test.ts:86:vi.mock("./frame.ts", async (importOriginal) => {
+src/turn-loop.test.ts:87:  const actual = await importOriginal<typeof import("./frame.ts")>();
+src/turn-loop.test.ts:96:vi.mock("./gameend.ts", async (importOriginal) => {
+src/turn-loop.test.ts:97:  const actual = await importOriginal<typeof import("./gameend.ts")>();
+src/turn-loop.test.ts:101:vi.mock("./history.ts", async (importOriginal) => {
+src/turn-loop.test.ts:102:  const actual = await importOriginal<typeof import("./history.ts")>();
+src/turn-loop.nfr.test.ts:43:vi.mock("./gameend.ts", async (importOriginal) => {
+src/turn-loop.nfr.test.ts:44:  const actual = await importOriginal<typeof import("./gameend.ts")>();
+src/turn-loop.nfr.test.ts:48:vi.mock("./history.ts", async (importOriginal) => {
+src/turn-loop.nfr.test.ts:49:  const actual = await importOriginal<typeof import("./history.ts")>();
+tools/opening-book/book.test.ts:30:vi.mock("../../src/zobrist.ts", { spy: true });
+tools/opening-book/book.test.ts:106:      const stubbed = await import("./compile.ts");

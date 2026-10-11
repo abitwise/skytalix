@@ -1,0 +1,27 @@
+src/cli.real-engine.test.ts:40:const RUN_DEEP = process.env.CLI_DEEP === "1";
+src/cli.test.ts:3415:    const raw = process.env.VITEST_MAX_WORKERS;
+src/engine.test.ts:73:const RUN_DEEP = process.env.ENGINE_DEEP === "1";
+src/glyph-mode.nfr.test.ts:5: * ZERO filesystem and ZERO process operations; it reads `process.stdout.isTTY` and `process.env`
+src/glyph-mode.nfr.test.ts:91: * and `process.env` (`src/glyph-mode.ts`); every other line injects its signals as values. So if
+src/glyph-mode.test.ts:7: * an argument. A rule that read `process.env` directly could be exercised for one tuple per
+src/glyph-mode.test.ts:11: * it deliberately: their criteria are written about `process.env` and `process.stdout.isTTY` being
+src/glyph-mode.test.ts:13: * against the mutant the test notes name — the implementation that re-reads `process.env` on every
+src/glyph-mode.test.ts:43:const ORIGINAL_LOCALE = LOCALE_VARIABLES.map((name) => [name, process.env[name]] as const);
+src/glyph-mode.test.ts:54:    if (value === undefined) Reflect.deleteProperty(process.env, name);
+src/glyph-mode.test.ts:55:    else process.env[name] = value;
+src/glyph-mode.test.ts:64:    if (value === undefined) Reflect.deleteProperty(process.env, name);
+src/glyph-mode.test.ts:65:    else process.env[name] = value;
+src/glyph-mode.test.ts:192:      // `process.env` on every call answers `ambientAnswer` here and dies.
+src/ladder.test.ts:45:const MODE = process.env.LADDER_DEEP;
+src/line-input.test.ts:107:const RUN_DEEP = process.env.INPUT_DEEP === "1";
+src/puzzle-suite.test.ts:41:const MODE = process.env.PUZZLE_DEEP;
+src/levels.test.ts:68:const RUN_DEEP = process.env.ENGINE_DEEP === "1";
+src/quiescence.test.ts:59:const RUN_DEEP = process.env.SEARCH_DEEP === "1";
+src/perft.test.ts:66:const RUN_DEEP = process.env.PERFT_DEEP === "1";
+src/transposition.test.ts:56:const RUN_SEARCH_DEEP = process.env.SEARCH_DEEP === "1";
+src/transposition.test.ts:57:const RUN_ENGINE_DEEP = process.env.ENGINE_DEEP === "1";
+src/zobrist.test.ts:339:const RUN_DEEP = process.env.ZOBRIST_DEEP === "1";
+src/search.ordering.test.ts:38:const RUN_DEEP = process.env.SEARCH_DEEP === "1";
+src/search.pvs-lmr.test.ts:59:const RUN_DEEP = process.env.SEARCH_DEEP === "1";
+src/search.pvs-lmr.test.ts:60:const RUN_ENGINE_DEEP = process.env.ENGINE_DEEP === "1";
+src/search.test.ts:114:const RUN_DEEP = process.env.SEARCH_DEEP === "1";
