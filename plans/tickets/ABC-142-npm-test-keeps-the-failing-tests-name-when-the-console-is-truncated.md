@@ -178,6 +178,9 @@ Software Engineer, 2026-10-10. Branch `grugops/ABC-142-test-result-file`, code c
   - **Neither query sees an unhandled error, and neither sees a timeout.** On those reds the file
     reads `success: true` (`QE-142-a`, `QE-142-c`). **On a non-zero exit, read the console's last
     lines before you trust this file.** `ABC-143` fixes the file and replaces both queries with one.
+  - *Pointer, 2026-10-11, SE (`ticket-to-pr-ABC-143`).* **The query that replaces both is on the
+    `ABC-143` page, § Delivery.** It prints one line per failed test, failed suite, unhandled error and
+    unfinished or red run.
 - **Concurrency limit.** Two `npm test` runs in one checkout at once overwrite each other's file.
   Agent hops use separate worktrees. This is not engineered around.
 - **Console delta.** The output gains exactly one line after the summary:
