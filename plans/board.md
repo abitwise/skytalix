@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-144` QE PASS_WITH_GAPS → In Security/NFR; QUIET WINDOW OPEN: Window B runs alone (width 1)._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — ABC-150 diagnosis merged: cause found, no safe setting on vitest 3.2.7; `ADR-0041` PROPOSED; owner word owed._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — BA/PM lever cut merged: `ABC-150` (P1) → In Design; ABC-146 synced. Next free id ABC-151._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-147` → Done (Security/NFR PASS_WITH_GAPS; merged)._
@@ -720,8 +721,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-144] `npm test` chokes the MacBook Air M3 — cut its CPU and cap its cores  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner goal 2026-10-10; CPU ≤ 0.85× base, ≤ 4 workers, wall ≤ 10 s unless the owner accepts Security/NFR's new number; `isolate` stays true; readings only in a no-other-hop window) **2026-10-11: Ready → In Design (Architect hop for the pool/worker setting).** **2026-10-11: Architect design merged (`aaef2cff`): `ADR-0040` PROPOSED — `maxWorkers: 4` in `vitest.config.ts`, pinned by value (env may lower, never raise), `isolate` stays on; owner word owed (ADR-0040 + meaning of 'choking'). Stays In Design until quiet Window A (≈ 15 min, width 1, 54 runs: 7/4/3/2/1 workers) is read.** **2026-10-11: Window A read (`94cf1728`, width 1, 54 runs): CPU vs 7 workers — 4w −10.7 %, 3w −16.5 % (wall 7.2 s), 2w −22.7 % (8.2 s), 1w −29.3 % (14.7 s). ADR-0040 d2 picks **3 workers**; Architect addendum owed; owner word on ADR-0040 owed. No heat instrument on M3 (`CPU_Speed_Limit` absent); thermal pressure went nominal → moderate in the last ~1.5 min.** **2026-10-11: `ADR-0040` ACCEPTED by the owner at k = 3 → In Design → Ready for Dev. Build: `maxWorkers: 3` + value pin (A7); then Window B (≈ 60 min, width 1). 'Choking' meaning still unanswered; Window B logs thermal pressure.** **2026-10-11: owner — 'choking' = CPU AND heat. Window B logs thermal pressure; if moderate at k = 3, k = 2 goes back to the owner.** **2026-10-11: BUILT `d4468fd3` (tip `d675ef42`): `maxWorkers: 3` (plain-object config, typecheck OK), value pin + 8 reds incl. r3b, env lowering allowed; 55/1729 (= base + 1) → In Review; QE `qe-ABC-144` queued; Window B (width 1) after.**
+## In Review (WIP 0/3)
 
 
 
@@ -745,7 +745,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-144] `npm test` chokes the MacBook Air M3 — cut its CPU and cap its cores  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner goal 2026-10-10; CPU ≤ 0.85× base, ≤ 4 workers, wall ≤ 10 s unless the owner accepts Security/NFR's new number; `isolate` stays true; readings only in a no-other-hop window) **2026-10-11: Ready → In Design (Architect hop for the pool/worker setting).** **2026-10-11: Architect design merged (`aaef2cff`): `ADR-0040` PROPOSED — `maxWorkers: 4` in `vitest.config.ts`, pinned by value (env may lower, never raise), `isolate` stays on; owner word owed (ADR-0040 + meaning of 'choking'). Stays In Design until quiet Window A (≈ 15 min, width 1, 54 runs: 7/4/3/2/1 workers) is read.** **2026-10-11: Window A read (`94cf1728`, width 1, 54 runs): CPU vs 7 workers — 4w −10.7 %, 3w −16.5 % (wall 7.2 s), 2w −22.7 % (8.2 s), 1w −29.3 % (14.7 s). ADR-0040 d2 picks **3 workers**; Architect addendum owed; owner word on ADR-0040 owed. No heat instrument on M3 (`CPU_Speed_Limit` absent); thermal pressure went nominal → moderate in the last ~1.5 min.** **2026-10-11: `ADR-0040` ACCEPTED by the owner at k = 3 → In Design → Ready for Dev. Build: `maxWorkers: 3` + value pin (A7); then Window B (≈ 60 min, width 1). 'Choking' meaning still unanswered; Window B logs thermal pressure.** **2026-10-11: owner — 'choking' = CPU AND heat. Window B logs thermal pressure; if moderate at k = 3, k = 2 goes back to the owner.** **2026-10-11: BUILT `d4468fd3` (tip `d675ef42`): `maxWorkers: 3` (plain-object config, typecheck OK), value pin + 8 reds incl. r3b, env lowering allowed; 55/1729 (= base + 1) → In Review; QE `qe-ABC-144` queued; Window B (width 1) after.** **2026-10-11: QE PASS_WITH_GAPS (`5ddf150e`): A2/A6/A7 met; 20/20 green count screen; all 10 lane configs collect equal; 15/19 pin plants red (4 survivors INFO: per-project isolate — no runtime effect on 3.2.7, hand-typed --maxWorkers, env-branching config) → In Security/NFR for Window B (width 1).**
 
 
 
