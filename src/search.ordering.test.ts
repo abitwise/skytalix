@@ -388,9 +388,14 @@ describe("A3 — ordered search visits a small fraction of the unordered nodes",
    * tip: position-6 2 467 / 9 804 = 25.2% (kiwipete, not run here: 2 772 / 10 249 = 27.0%).
    * The bar is 1.5x the larger reading (`ADR-0024` decision 3's headroom rule, as `A3`'s own bar
    * is): 40.5%. A comparator that stopped ordering reads 100%.
+   *
+   * RE-LEVELLED at `ABC-083` on the owner's word (`ADR-0039` decision 3, accepted 2026-10-11):
+   * 40.5% → 65%, 1.5x the mobility build's reading of 3 871 / 8 887 = 43.56%. The d2 count is
+   * ~96% quiescence, which the evaluator moves by design; `A3`'s own d4 bar (4%) is unchanged.
+   * The stopped-ordering comparator still reads 100%, and `A4`'s exact d2 pins still bite.
    */
   it("position-6 at depth 2 — the default lane's standing guard", () => {
-    expect(full("position-6", 2).nodes / none("position-6", 2).nodes).toBeLessThanOrEqual(0.405);
+    expect(full("position-6", 2).nodes / none("position-6", 2).nodes).toBeLessThanOrEqual(0.65);
   });
 
   if (RUN_DEEP) {

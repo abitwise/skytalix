@@ -421,10 +421,14 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
    * 45.0x, position-6 6.3x / 17.4x / 8.3x at depths 1–3), indexed `[depth]`. Node counts are
    * deterministic, so the headroom absorbs legitimate evaluator changes, not noise. Not a number
    * to tune: over the level, halt and report to Architect/Design.
+   *
+   * RE-LEVELLED at `ABC-083` on the owner's word (`ADR-0039` decision 3, accepted 2026-10-11):
+   * position-6 depth 2 only, 26x → 42x, 1.5x the mobility build's 3 871 / 136 = 28.46x. Every other
+   * cell is unchanged. Quiescence with its MVV-LVA sort removed reads 572.57x there, still red.
    */
   const STOP_LEVEL: Readonly<Record<string, readonly number[]>> = {
     kiwipete: [Number.NaN, 180, 50, 70],
-    "position-6": [Number.NaN, 10, 26, 13],
+    "position-6": [Number.NaN, 10, 42, 13],
   };
   const stopLevel = (name: string, depth: number): number =>
     (STOP_LEVEL[name] as readonly number[])[depth] as number;
