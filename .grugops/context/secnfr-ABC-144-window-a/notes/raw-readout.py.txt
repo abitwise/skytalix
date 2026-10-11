@@ -1,0 +1,15 @@
+import csv,statistics as st,sys,collections
+W=sys.argv[1]
+rows=list(csv.DictReader(open(W+"/abc144-frontier-warm.tsv"),delimiter="\t"))
+sc=[r for r in rows if int(r["round"])>=1]
+print("all statuses:",collections.Counter(r["status"] for r in rows),"| speed_limit:",collections.Counter(r["speed_limit"] for r in rows),"| power:",collections.Counter(r["power"] for r in rows),"| foreign max:",max(int(r["foreign_vitest"]) for r in rows))
+print("utc first/last:",rows[0]["utc"],rows[-1]["utc"])
+print("arm\tcpu_med\tcpu_min-max\twall_med\twall_min-max\twall_IQR\tl1b_med\tl1b_min-max\tl1a_med\tl1a_min-max\tl1b>8\tl1a>8")
+for c in "B T K4 K3 K2 K1".split():
+    g=[r for r in sc if r["cond"]==c]
+    f=lambda k:[float(r[k]) for r in g]
+    cpu,wall,lb,la=f("cpu"),f("wall"),f("load1_before"),f("load1_after")
+    q=st.quantiles(wall,n=4)
+    print(f"{c}\t{st.median(cpu):.2f}\t{min(cpu):.2f}-{max(cpu):.2f}\t{st.median(wall):.2f}\t{min(wall):.2f}-{max(wall):.2f}\t{q[2]-q[0]:.3f}\t{st.median(lb):.2f}\t{min(lb):.2f}-{max(lb):.2f}\t{st.median(la):.2f}\t{min(la):.2f}-{max(la):.2f}\t{sum(x>8 for x in lb)}/8\t{sum(x>8 for x in la)}/8")
+th=list(csv.DictReader(open(W+"/abc144-frontier-warm.thermal.tsv"),delimiter="\t"))
+print("thermal samples:",len(th),th[0]["utc"],"->",th[-1]["utc"],"| pressure:",collections.Counter(r["thermalpressurelevel"] for r in th),"| speed_limit:",collections.Counter(r["cpu_speed_limit"] for r in th),"| power:",collections.Counter(r["power"] for r in th),"| load1 max:",max(float(r["load1"]) for r in th))

@@ -1,0 +1,19 @@
+# Pre-run (before any timed run, 2026-10-11T09:44Z): /usr/bin/diff -rq -x node_modules B T printed nothing (clean).
+# Post-run listing below: only the per-run .test-results/last-run.json differs, as expected.
+# git archive af6ada41 per arm; node_modules symlinked to the main checkout
+## /usr/bin/diff -rq -x node_modules B T
+Files <scratchpad>/win-a/arms/B/.test-results/last-run.json and <scratchpad>/win-a/arms/T/.test-results/last-run.json differ
+## /usr/bin/diff B/vitest.config.ts K4/vitest.config.ts
+73a74
+>     maxWorkers: 4,
+## /usr/bin/diff B/vitest.config.ts K3/vitest.config.ts
+73a74
+>     maxWorkers: 3,
+## /usr/bin/diff B/vitest.config.ts K2/vitest.config.ts
+73a74
+>     maxWorkers: 2,
+## /usr/bin/diff B/vitest.config.ts K1/vitest.config.ts
+73a74
+>     maxWorkers: 1,
+## post-run: /usr/bin/diff -rq -x node_modules -x .test-results B T
+(clean)
