@@ -1,0 +1,13 @@
+QE/E2E, subtask qe-ABC-085 (task wave-2026-09-25). Tree: grugops/ABC-085-self-play-ladder at 773b48cc (src identical to the
+harness commit d5b0f0e2). Own worktree, node_modules symlinked. Apple M3, macOS Darwin 25.5.0. LOADED HOST, NO TIMING GRADES:
+no wall figure in these files is a bar, a grade or a reading of any criterion.
+
+1. short-run-qe-773b48cc.out.txt — `LADDER_DEEP=1 npx vitest run src/ladder.test.ts`, 2026-10-11T09:56:56Z..10:11:16Z.
+   exit 0, 14 passed (14). The ONE short-mode run this hop took. LADDER_DEEP=verdict was NOT run.
+2. cmp.mjs — `node cmp.mjs <SE run 2> <this run>`: every LADDER GAME / PAIR / A5 line, minus wallS / load1 / commit, is
+   equal to ../../ticket-to-pr-ABC-085/probe/short-run-2-d5b0f0e2.out.txt (32 = 32 lines, all equal).
+3. mutants.mjs / mutants.out.txt — `node mutants.mjs <worktree>`: each mutant is an exact-string plant (asserted to match
+   once) in a temp copy src/ladder.qemut.test.ts, run alone in the DEFAULT lane (LADDER_DEEP deleted from env), then deleted.
+   CONTROL (unmutated copy) green 9/9. No mutant was run in a LADDER_DEEP lane.
+4. Collection-only refusals (no game played): LADDER_DEEP = "" / 0 / true / VERDICT / 4 each give RangeError at load,
+   Test Files 1 failed, no tests, exit 1.

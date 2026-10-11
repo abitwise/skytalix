@@ -1,0 +1,28 @@
+CONTROL	unmutated copy	exit 0	green	Tests 9 passed (9)
+M1	claim dropped (Engineer)	exit 1	KILLED	Tests 3 failed | 6 passed (9)
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a threefold repetition ends as 'threefold-repetition (claimed)' at the first offer
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a fifty-move draw ends as 'fifty-move (claimed)' at the first offer
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > A4's replay check refuses an illegal move and a move played past an ending
+M2	cap scored as a draw (Engineer)	exit 1	KILLED	Tests 1 failed | 8 passed (9)
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a game at the ply cap is an ERROR with no score, never a draw
+M3	per-side step accepted (Engineer)	exit 1	KILLED	Tests 1 failed | 8 passed (9)
+	  red: ABC-085 ladder — the step is one named constant per run (test note 6) > refuses, before any move, a side handed a different step or a step not named
+M4	a ladder game played in a default row (Engineer)	exit 1	KILLED	Tests 1 failed | 8 passed (9)
+	  red: ABC-085 ladder — the default lane played 0 ladder games
+M5	budget scaled (x0.5) in makeSide	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M6	colour alternation dropped (stronger always white)	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M7	verdict A1 game count 100 -> 50	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M7b	short A2 game count 4 -> 2	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M8	both sides share one clock per step	exit 1	KILLED	Tests 1 failed | 8 passed (9)
+	  red: ABC-085 ladder — the step is one named constant per run (test note 6) > both sides read the run's one step, each on its own clock instance
+M9	A4 replay: recorded-ending equality dropped	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M10	opening drawn from Math.random, not seededRandom(seed)	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M11	A1 bar >= 90 -> > 90	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M12	claimedDraws counts every draw	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M13	PLY_CAP 600 -> Infinity (hang guard gone)	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M14	pair scored for the weaker level	exit 0	SURVIVED (default lane)	Tests 9 passed (9)
+M15	SHORT_STEP 120 -> 60	exit 1	KILLED	Tests 1 failed | 8 passed (9)
+	  red: ABC-085 ladder — the step is one named constant per run (test note 6) > LADDER_DEEP=1 is the short step 120, =verdict the verdict step 4, anything else refused
+M16	claim recorded without the (claimed) tag	exit 1	KILLED	Tests 2 failed | 7 passed (9)
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a threefold repetition ends as 'threefold-repetition (claimed)' at the first offer
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a fifty-move draw ends as 'fifty-move (claimed)' at the first offer

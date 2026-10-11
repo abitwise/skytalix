@@ -376,3 +376,98 @@ Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P1`, **with the argument against it stated and handed to the owner** |
 | 10 | no major unresolved blocker | **⚠️** **a 5-hour opt-in run has no home in this delivery process.** No board column, cadence or gate accommodates it, and nothing says who runs it or how often. Owner: the Orchestrator with the project owner |
+
+## Delivery
+
+**2026-10-11, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-085`). **BUILD ONLY; the
+verdict was not run.** Branch `grugops/ABC-085-self-play-ladder` from `aee4b8cb`: harness `d5b0f0e2`, docs on top.
+Not merged, not pushed. Decisions and readings are in `.grugops/context/ticket-to-pr-ABC-085/notes/`
+(`…098699a1` decisions, `…8c8d3fa3` readings, `…70684a78` cost risk, `…8515e3e7` artefacts), with raw files in
+`probe/`. They are not restated here.
+
+**The harness is `src/ladder.test.ts`. 0 production lines.** `SHORT_STEP = 120` and `VERDICT_STEP = 4` are
+named constants. `LADDER_DEEP=1` / `=verdict` select one per run, and both sides get it, each on its own clock.
+`LEVELS` is used verbatim. One `it` per pair: 3v4, 4v5, 2v3, 1v2, then 1v5.
+
+| # | status | evidence |
+|---|---|---|
+| `A1` | **WAITS for the verdict run** | Not taken. It needs `LADDER_DEEP=verdict` on a tree with `ABC-083`'s merge (decision 6). The report line carries commit, step, seeds, games, wall and load1, and prints MET/RED. Short mode's 10/10 is against the depth-1 floor and is never `A1` |
+| `A2` | **WAITS for the verdict run** | Not taken. Early signal ONLY (short mode, step 120, 4 games each): 3v4 2.5/4, 4v5 2.5/4, 2v3 4/4, 1v2 3/4 |
+| `A3` | Met in short mode | 26/26 games ended in each of two runs, 0 at the ply cap, 7 by claim. Default rows: threefold claimed at ply 8 (the first offer, not fivefold at 16), fifty-move claimed at the first offer, a capped game is an error with no score |
+| `A4` | Met in short mode | 26/26 move lists replay through `legalMoves` / `makeMove` in each run, with no ending before the last ply |
+| `A5` | Met in short mode | 1v2 played twice in process gives equal move lists and score. All 5 pair digests are equal across two separate runs. The step rows refuse a per-side step and any un-named step (test note 6) |
+| `A6` | Met (harness); the verdict wall waits | Every line names mode, step and games, plus claimed draws per pair. Short-mode counts are constants (10 / 4). Short-mode wall 848 s, **loaded machine, not graded** |
+
+- **Gates at `d5b0f0e2`.** Lint, typecheck and build exit 0. `npm test` is 54 files / 1689 passed / 0 skipped
+  (baseline 53 / 1680). Skip integrity reads `No findings.`, and the lane inventory is 54 = 54.
+- **Default lane, by count:** 0 ladder games (a pin row), +1 file, +9 rows, 0 spawns. `LADDER_DEEP=1`: run 2
+  exits 0, 14/14.
+- **Raised, not acted on:**
+  - Inside vitest the engine costs ~4.3x per node against plain node (same games, same nodes). The verdict
+    estimate of ~10 h is likely **~44 h** in this lane (`…70684a78`). That is routed to Architect/Orchestrator.
+  - The `AGENTS.md` lane line is drafted for the Scribe (`…8515e3e7`).
+- **The board move (`In Development` → `In Review`) is the Orchestrator's.** This hop was fenced off
+  `plans/board.md`.
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-085`). Reviewed tip `773b48cc`; the harness is `d5b0f0e2`, with `src` identical. Every reading
+is QE's own, from its own worktree and its own single `LADDER_DEEP=1` run. The detail is in `.grugops/context/qe-ABC-085/notes/`:
+`…3b1e7c52` (verdict and readings), `…d4a90f16` (mutants), `…6f2c8a91` (gaps), `…9e47d0b3` (commands). Raw files are in `../probe/`.
+**Loaded host, no timing grades.** Every deep-lane number is **short mode, step 120**.
+
+**PASS_WITH_GAPS** on `A3`–`A6`. `A1` and `A2` are out of scope and wait for the verdict run.
+
+| # | QE reading |
+|---|---|
+| `A3` | **MET.** 26/26 games ended and 0 hit the cap (max 135 plies against 600), with 0 crashes and 0 timeouts. Endings: 18 mate, 7 `threefold-repetition (claimed)`, 1 insufficient, 0 fivefold or seventy-five. Default rows: threefold claimed at ply 8, fifty-move at the first offer, and the cap is an error with no score. Mutants M1, M2 and M16 are killed |
+| `A4` | **MET.** 26/26 move lists replay through `legalMoves` / `playMove` with 0 faults. The oracle refuses an illegal move and a move played past an ending |
+| `A5` | **MET.** In process, the 1v2 pair played twice is equal. Across sessions, QE's run equals the SE's run 2 on all 32 report lines, all 5 pair digests included. The step is literal 120/4 (M15 killed), a per-side or derived step is refused (M3 killed), and each side has its own clock (M8 killed). Budgets verbatim are **unpinned** (M5 survives; `QE-085-b`) |
+| `A6` | **MET (harness).** All 32 lines say "short mode, step 120". Every pair line names the step, the games, the seeds, the commit, the claimed draws and "not graded". The claimed counts match the `(claimed)` reasons. The verdict-step wall waits with the verdict run |
+
+- **Default lane, by count:** 0 ladder games, pinned. Re-planted M4 turns the pin red. `npm test` gives 54 files / 1689 / 0 skipped, and
+  the ladder file has 9 rows. Unset, the deep rows are not defined.
+- **Mutants:** the SE's 4 are re-planted and all killed. QE added 13: 3 are killed and 10 survive the default lane.
+- **Gaps** (none fails `A3`–`A6`):
+  - `QE-085-a` **MEDIUM**, SE. The verdict report's colour schedule, score, bar and claimed count are unpinned in every lane (M6, M11,
+    M12, M14). Fix this before the verdict run.
+  - `QE-085-b` **LOW**, SE. `LEVELS` verbatim and the game counts are unpinned (M5, M7, M7b).
+  - `QE-085-c` **LOW**, SE. `PLY_CAP` is unpinned (M13).
+  - `QE-085-d` **INFO**. M9 is equivalent; M10 is killed by the deep A5 row by construction, not run.
+  - `QE-085-e` **INFO**, Scribe. `LADDER_DEEP=` or `=0` fails at load, unlike the other `*_DEEP` lanes. The lane line should say "unset is
+    the only off".
+- **Gates:** lint, typecheck and build exit 0. Skip integrity reads `No findings.`, and the inventory is 54 = 54. There are 0 production
+  `src/` lines, so on QE's reading the UAT waiver applies (WAIVED, not accepted; the Orchestrator applies it).
+
+## QE (2nd pass)
+
+**2026-10-11, QE/E2E** (subtask `qe2-ABC-085`). This pass reviews the fix `f28d91ad`, at tip `dacbf42a`. Every reading is QE's own, from
+its own worktree and its own single `LADDER_DEEP=1` run. The detail is in `.grugops/context/qe2-ABC-085/notes/`: `…a2b6e4f0` (verdict),
+`…5e81c0a4` (mutants), `…7c3d19e2` (gaps and the `PLY_CAP` ruling) and `…91f0d6b8` (commands). Raw files are in `../probe/`. **Loaded
+host, no timing grades.** Every deep-lane number is **short mode, step 120**.
+
+**PASS_WITH_GAPS** on `A3`–`A6`. Only LOW and INFO gaps remain. `QE-085-a`, `-b` and `-c` are closed. `A1` and `A2` wait for the
+verdict run.
+
+- **The refactor preserved behaviour.** The run exited 0, 18/18, with the commit `dacbf42a` clean. All 32 report lines and all 5 pair
+  digests equal **each** of the three earlier runs, with wall, load1 and commit excluded. The digests are `72f01570a3987247`,
+  `302d8b4676cd7299`, `f89bbd75f4a066e9`, `89b8059f53c970df` and `d30b4a153b7c1a9a`. `A3`: 26/26 games ended, 0 at the cap, max 135
+  plies. `A4`: 26/26 replays clean.
+- **Mutants:** QE re-planted all 16 itself against the refactored file, re-finding the sites of M5, M6, M11 and M14.
+  - 14 are killed, and M7b is killed too. All 8 of the SE's named survivors are now killed (M5, M6, M7, M7b, M11, M12, M13, M14).
+  - M9 and M10 survive as INFO, as before.
+  - Three call-site plants (X6, X13, X14) survive. The pure functions are pinned, but the deep row's hand-off into them is not.
+- **Default lane, by count:** 0 ladder games, pinned (M4 turns the pin red). `npm test` gives 54 files / 1693 / 0 skipped, and the
+  ladder file has 13 rows.
+- **The `PLY_CAP` call-site ruling: LOW, not blocking.**
+  - A smaller value turns `A3` red, which is loud.
+  - A larger value cannot manufacture a draw (M2 pins cap-as-error).
+  - It only hides a game of more than 600 plies (the max seen is 135), so it is equivalent on every run so far.
+  - An optional one-line deep-row check `max plies <= PLY_CAP` closes it with 0 games.
+- **Gaps** (none fails `A3`–`A6`):
+  - `QE2-085-a` **LOW**, SE, optional before the verdict run. The three call-site hand-offs are unpinned: `playPair`'s colours, the
+    `runGame` cap, and `summarizePair`'s level.
+  - `QE-085-d` **INFO** is carried: M9 is equivalent, and M10 is `UNKNOWN - verify`.
+  - `QE-085-e` **INFO**, Scribe, is carried.
+- **Gates:** lint, typecheck and build exit 0. Skip integrity reads `No findings.`, and the inventory is 54 = 54. The `src` diff from
+  `aee4b8cb` is `src/ladder.test.ts` only, so there are 0 production lines.
