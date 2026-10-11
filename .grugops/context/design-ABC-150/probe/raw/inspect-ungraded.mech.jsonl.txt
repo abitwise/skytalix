@@ -1,0 +1,2 @@
+{"cand":"base","work":"S","digest":"0f86f021e96f607d","mech":{"cand":"base","isMainThread":false,"threadId":1,"srcBinding":"accessor","workload":"probe/workload150.mjs","srcNamespaceFastProperties":false,"srcNamespaceProto":"null"}}
+{"cand":"C4","work":"S","digest":"0f86f021e96f607d","mech":{"cand":"C4","isMainThread":false,"threadId":1,"srcBinding":"data","workload":"probe/workload150.mjs","srcNamespaceFastProperties":true,"srcNamespaceProto":"null"}}

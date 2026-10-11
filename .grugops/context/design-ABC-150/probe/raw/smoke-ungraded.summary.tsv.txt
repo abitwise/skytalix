@@ -1,0 +1,16 @@
+cand	work	pair	node_median	vitest_median	ratio	node_cold	vitest_cold	cold_ratio	digest_equal	mech_ok	max_load1	therm	usable
+base	E	0	-	-	-	-	-	-	yes	yes	4.11	1/1	yes
+base	S	0	-	-	-	-	-	-	yes	yes	4.11	1/1	yes
+base	P	0	-	-	-	-	-	-	yes	yes	4.1	1/1	yes
+C1	E	0	-	-	-	-	-	-	yes	yes	4.02	1/1	yes
+C1	S	0	-	-	-	-	-	-	yes	yes	4.09	1/1	yes
+C1	P	0	-	-	-	-	-	-	yes	yes	4.09	1/1	yes
+C2	E	0	-	-	-	-	-	-	yes	yes	4.09	1/1	yes
+C2	S	0	-	-	-	-	-	-	yes	yes	4.17	1/1	yes
+C2	P	0	-	-	-	-	-	-	yes	yes	4.23	1/1	yes
+C3	E	0	-	-	-	-	-	-	yes	yes	4.23	1/1	yes
+C3	S	0	-	-	-	-	-	-	yes	yes	6.7	1/1	yes
+C3	P	0	-	-	-	-	-	-	yes	yes	6.7	1/1	yes
+C4	E	0	-	-	-	-	-	-	yes	yes	6.7	1/1	yes
+C4	S	0	-	-	-	-	-	-	yes	yes	6.7	1/1	yes
+C4	P	0	-	-	-	-	-	-	yes	yes	6.4	1/1	yes
