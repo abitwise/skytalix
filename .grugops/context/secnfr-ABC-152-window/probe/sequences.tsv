@@ -1,0 +1,4 @@
+step	label	gate_start_utc	gate_pass_utc	launch_utc	battery	load1	thermal
+1	settle-then-warm	2026-10-11T22:40:16Z	2026-10-11T22:55:24Z	2026-10-11T22:55:24Z	'AC Power' 80%; AC attached; not charging present: true 	2.44	0
+3	gate-puzzle	2026-10-11T22:59:10Z	2026-10-11T23:00:41Z	2026-10-11T23:00:41Z	'AC Power' 80%; AC attached; not charging present: true 	3.62	0
+3b	gate-puzzle-3b	2026-10-11T23:04:57Z	2026-10-11T23:06:29Z	2026-10-11T23:06:29Z	'AC Power' 80%; AC attached; not charging present: true 	2.99	0

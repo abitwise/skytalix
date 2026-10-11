@@ -1,0 +1,20 @@
+#!/bin/bash
+# step3b: identical to sampler.sh except that it APPENDS to an existing w152.thermal.tsv instead of truncating it.
+# secnfr-ABC-152-window: a copy of secnfr-ABC-151-window/probe/sampler.sh. THREE changes: the output file is
+# w152.thermal.tsv; a last column foreign_cpu_pct sums ps %cpu over [v]itest processes whose command line does NOT
+# contain this window's arms path (the foreign runner's live CPU, a lower bound: exited workers are not in it);
+# and the cap is 360 min.
+# Usage: bash sampler.sh <outdir>; stops when <outdir>/STOP exists or after 360 min.
+W="$1"; OUT="$W/w152.thermal.tsv"
+[ -e "$OUT" ] || printf 'utc\tload1\tthermalpressurelevel\tcpu_speed_limit\tpower\trunner_procs_incl_this_window\tforeign_cpu_pct\n' > "$OUT"
+end=$(( $(date +%s) + 21600 ))
+while [ ! -e "$W/STOP" ] && [ "$(date +%s)" -lt "$end" ]; do
+  l=$(sysctl -n vm.loadavg | tr -d '{}' | awk '{print $1}')
+  tp=$(notifyutil -g com.apple.system.thermalpressurelevel | awk '{print $2}')
+  sl=$(pmset -g therm | sed -n 's/.*CPU_Speed_Limit[[:space:]]*=[[:space:]]*\([0-9]*\).*/\1/p'); [ -z "$sl" ] && sl=none
+  pw=$(pmset -g batt | sed -n "s/.*'\(.*\)'.*/\1/p")
+  fv=$(ps -Ao command | grep -c '[v]itest')
+  fc=$(ps -Ao %cpu,command | grep '[v]itest' | grep -v "$W/arms" | awk '{s+=$1} END {printf "%.1f", s+0}')
+  printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$l" "$tp" "$sl" "$pw" "$fv" "$fc" >> "$OUT"
+  sleep 15
+done

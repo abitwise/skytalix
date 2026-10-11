@@ -1,0 +1,94 @@
+
+ RUN  v4.1.11 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/w152/arms/H
+
+stdout | src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline
+SOLVED	mate-in-2	f6f7	d6	n19478	K+R: king steps up, rook mates
+SOLVED	mate-in-2	d5g8	d6	n20240	smothered: Qg8+ Rxg8 Nf7#
+SOLVED	mate-in-2	e2e8	d6	n19481	back rank: Re8+ Rxe8 Rxe8#
+SOLVED	mate-in-2	b1b7	d5	n20514	two-rook ladder
+SOLVED	mate-in-2	h1h7	d6	n19484	K+Q against the cornered king
+SOLVED	mate-in-2	e7g6	d5	n20528	Anastasia: Qxh7+ Kxh7 Rh3#
+SOLVED	mate-in-2	e7e1	d6	n19481	mirror: back rank, Re1+ Rxe1 Rxe1#
+SOLVED	mate-in-2	d4g1	d6	n19495	mirror: smothered, Qg1+ Rxg1 Nf2#
+SOLVED	mate-in-2	f3g3	d6	n19478	mirror: K+R, king steps up
+SOLVED	mate-in-2	a7a2	d5	n20514	mirror: two-rook ladder
+SOLVED	win-material	d5e7	d9	n16805	knight fork: Ne7+ wins the queen
+SOLVED	win-material	e4e5	d8	n17428	pawn fork: e5 hits knight and rook
+SOLVED	win-material	a1e1	d7	n18449	pin: Re1 pins the queen to the king
+SOLVED	win-material	a1a6	d7	n18468	skewer: Ra6+ and Rxh6
+SOLVED	win-material	d4c5	d6	n19498	discovered check: the bishop moves, Rxd8
+SOLVED	win-material	d1d5	d6	n19483	queen fork: Qd5+ and Qxa8
+SOLVED	do-not-hang	a1a2	d6	n19480	Q takes a pawn a rook defends
+SOLVED	do-not-hang	e1f1	d7	n18449	R takes a pawn the king defends
+SOLVED	do-not-hang	b1a2	d8	n17420	B takes a pawn a pawn defends
+SOLVED	do-not-hang	c2a1	d7	n18445	N takes a pawn a pawn defends
+SOLVED	do-not-hang	a1a6	d5	n20500	Q takes a knight a rook defends
+SOLVED	do-not-hang	f1g2	d7	n18448	R takes a knight a pawn defends
+SOLVED	do-not-hang	a1h8	d6	n19488	Q takes a rook the king defends
+SOLVED	do-not-hang	a1b1	d6	n19475	Q takes a bishop a knight defends
+SOLVED	do-not-hang	a1d1	d6	n19474	R takes a bishop a pawn defends
+SOLVED	do-not-hang	e1d1	d8	n17422	R takes a pawn a bishop defends
+SOLVED	do-not-hang	a1a4	d7	n18453	Q takes a pawn a knight defends
+SOLVED	do-not-hang	e1e2	d7	n18444	B takes a pawn a rook defends
+SOLVED	do-not-hang	e8f7	d6	n19482	mirror: q takes a pawn a rook defends
+SOLVED	do-not-hang	e8f8	d7	n18452	mirror: r takes a pawn the king defends
+SOLVED	do-not-hang	e8d7	d7	n18444	mirror: b takes a pawn a pawn defends
+SOLVED	do-not-hang	c7a8	d8	n17424	mirror: n takes a pawn a pawn defends
+SOLVED	do-not-hang	a8a3	d6	n19479	mirror: q takes a knight a rook defends
+SOLVED	do-not-hang	f8e7	d6	n19475	mirror: r takes a knight a pawn defends
+SOLVED	do-not-hang	a8h1	d6	n19488	mirror: q takes a rook the king defends
+SOLVED	do-not-hang	a8b8	d6	n19480	mirror: q takes a bishop a knight defends
+SOLVED	do-not-hang	f8g7	d6	n19474	mirror: r takes a bishop a pawn defends
+SOLVED	do-not-hang	e8d8	d8	n17422	mirror: r takes a pawn a bishop defends
+SOLVED	do-not-hang	a8d8	d6	n19479	mirror: q takes a pawn a knight defends
+SOLVED	do-not-hang	e8e7	d7	n18444	mirror: b takes a pawn a rook defends
+SOLVED	mate-in-3	a1f6	d5	n20514	mate in 3, seed 1: black Q+R against N
+SOLVED	mate-in-3	f1f6	d5	n20520	mate in 3, seed 69: black 2R+B against 2P
+SOLVED	mate-in-3	e7e2	d5	n20516	mate in 3, seed 1632: white Q+R+N against N+2P
+SOLVED	mate-in-3	c6g6	d5	n20523	mate in 3, seed 1163: black 2R+B against N
+MISSED	mate-in-3	b3c4	d5	n20508	mate in 3, seed 24: black Q+N against P
+MISSED	mate-in-3	d8h8	d5	n20518	mate in 3, seed 234: white Q+R against P
+MISSED	mate-in-3	e3f3	d5	n20517	mate in 3, seed 288: white Q+B against a bare king
+MISSED	mate-in-3	f1f4	d5	n20521	mate in 3, seed 580: white Q+B against a bare king
+SOLVED	win-material	d5g8	d5	n20513	win material, seed 7: black Q+P against R+N
+SOLVED	win-material	a2a5	d5	n20536	win material, seed 111: black Q+R+B+P against 2R+B+P
+SOLVED	win-material	g6h6	d5	n20722	win material, seed 1700: black R+B+N+2P against 2B+2N+P
+SOLVED	win-material	c2e4	d6	n20037	win material, seed 1706: white Q+R+2P against Q+R+2P
+SOLVED	win-material	c4d6	d5	n20528	win material, seed 1811: white 2R+N+2P against 2B+N+2P
+SOLVED	win-material	h6h7	d6	n19467	win material, seed 5180: black R+N+P against Q+B+N
+SOLVED	win-material	e1d2	d7	n18441	win material, seed 5464: black B+P against B+N
+SOLVED	win-material	b5b4	d5	n20514	win material, seed 5147: white Q+B against B+N
+SOLVED	win-material	e7c6	d5	n20559	win material, seed 5527: black R+2B+2N+P against R+2N+3P
+SOLVED	win-material	a1g7	d6	n19486	win material, seed 279: black Q+3P against R+2N+P
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 4.05 s
+
+ ✓ src/puzzle-suite.test.ts > A6 — every puzzle carries its provenance, and the mates are the rules' answer > holds >= 40 puzzles: >= 10 mate-in-2, >= 6 win-material, >= 20 do-not-hang 1ms
+ ✓ src/puzzle-suite.test.ts > A6 — every puzzle carries its provenance, and the mates are the rules' answer > every row names its source and its moves are legal; no added row starts in check 5ms
+ ✓ src/puzzle-suite.test.ts > A6 — every puzzle carries its provenance, and the mates are the rules' answer > each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2 36ms
+ ✓ src/puzzle-suite.test.ts > A6 — every puzzle carries its provenance, and the mates are the rules' answer > the do-not-hang class starts with ABC-079's 24 rows, and ABC-079 still reads exactly those 24 0ms
+ ✓ src/puzzle-suite.test.ts > ABC-127 A1 — the harder rows > >= 16 rows after ABC-084's 40, each tagged: >= 6 mate-in-3, >= 6 win-material (>= 3 black to move), >= 4 quiet-key, >= 4 depth≥5, >= 4 quiescence 0ms
+ ✓ src/puzzle-suite.test.ts > ABC-127 A1 — the harder rows > every quiet-key row's accepted moves are neither a capture, a check nor a promotion 0ms
+ ✓ src/puzzle-suite.test.ts > ABC-127 A1 — the harder rows > no new row repeats, or is the colour mirror of, any row of the corpus 1ms
+ ✓ src/puzzle-suite.test.ts > A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0.049: RangeError, no search 0ms
+ ✓ src/puzzle-suite.test.ts > A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 2, step 0.001: RangeError, no search 0ms
+ ✓ src/puzzle-suite.test.ts > A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step NaN: RangeError, no search 0ms
+ ✓ src/puzzle-suite.test.ts > A4 — the runner refuses a step below budgetMs / 1 000, before any search > budget 50, step 0: RangeError, no search 0ms
+ ✓ src/puzzle-suite.test.ts > A4 — the runner refuses a step below budgetMs / 1 000, before any search > the bound itself (step = budgetMs / 1 000) is accepted and searches 0ms
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > the gate: solved >= the recorded baseline 4058ms
+stdout | src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each mate-in-3 row has no mate in <= 2, and its accepted moves are EXACTLY the moves that mate in 3
+ORACLE mate-in-3: 8 rows, wall 0.77 s
+
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > A1 — every mate in 2 is found (10/10 or better) 0ms
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > A2 — the losing move is not played in >= 19 of 20 do-not-hang rows 0ms
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each mate-in-3 row has no mate in <= 2, and its accepted moves are EXACTLY the moves that mate in 3 767ms
+stdout | src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain
+ORACLE win-material: 16 rows, wall 0.82 s
+
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-127 A2 — each win-material row (ABC-084's six included) accepts EXACTLY the material-best moves, and they gain 817ms
+ ✓ src/puzzle-suite.test.ts > the gating run [deep, PUZZLE_DEEP=1] > ABC-131 A6 — every recorded unsolved name is a PUZZLES row, and solved + |unsolved| = total 0ms
+
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+   Start at  02:06:58
+   Duration  5.80s (transform 0ms, setup 0ms, import 54ms, tests 5.69s, environment 0ms)
+

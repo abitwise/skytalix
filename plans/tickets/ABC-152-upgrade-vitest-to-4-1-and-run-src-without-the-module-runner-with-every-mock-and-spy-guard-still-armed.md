@@ -451,3 +451,21 @@ otherwise MET, except one `V2` sub-clause.
 - **Ruling 7: 0.**
 - **Route (the Orchestrator's):** `In Security/NFR` (the `V12` review, then `V9`–`V11`). `QE-152-i` goes to the
   Architect in parallel.
+
+## Security/NFR
+
+**PASS_WITH_RISKS, no required fixes, no owner word owed by any bar.** Subtask `secnfr-ABC-152-window`, width 1.
+Notes are in `.grugops/context/secnfr-ABC-152-window/notes/`: `…bceca0ca` (grades), `…40741ea8` (readings), `…397a05b6`
+(method) and `…daf38cf7` (`V12`).
+- **`V12` MET.**
+  - The lockfile reads +3 / −61 / 20. Every licence is permissive. The install-script set is unchanged.
+  - Audit: base 8 (2 critical), head 3 (0 critical). `--omit=dev` is 0 at both. 0 production lines.
+  - Head keeps `nanoid`, `postcss` and `source-map-js`. The last is new to `AR-1`'s record, so `ABC-056` gets a pointer.
+- **`V9` MET (the merge band):** H − B CPU **−20.74 %** of B's 23.41 s, interval **[−21.06 %, −19.31 %]**, sign 0/8.
+  The twin is admissible (R 1.88 % of B).
+- **`V10` MET:** 6.115 + 0.190 = **6.305 s**. H − B wall is −3.105 s. The cooled state is not owed.
+- **`V11`:** at level ≥ 1, H 4/8 against B 5/8, so nothing goes to the owner.
+- **`RISK-ABC152-PUZZLE-SPY`:** printed wall H 3.96 s against B 19.95 s, both 54/58. The rows are equal, and the
+  wall half is closed.
+- **`RISK-ABC144-FCAP`:** the k = 2 twin R is 0.440 s CPU / 0.190 s wall. Per ruling 6 it closes before the merge.
+- **The gate waited 15 min 8 s** for another project's vitest, which was absent at every graded run's boundaries.

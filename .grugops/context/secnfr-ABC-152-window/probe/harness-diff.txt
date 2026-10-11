@@ -1,0 +1,46 @@
+# harness: secnfr-ABC-144-window-b/probe/lane144b.mjs used IN PLACE on the ticket branch. sha256 at main, B, H and the branch:
+652b779305bca2b0fbf39ec1974de4b914d9b06e55829b2923fc64401ba80c7c  main:.grugops/context/secnfr-ABC-144-window-b/probe/lane144b.mjs
+652b779305bca2b0fbf39ec1974de4b914d9b06e55829b2923fc64401ba80c7c  wt-secnfr-152/.grugops/context/secnfr-ABC-144-window-b/probe/lane144b.mjs
+
+# gate.sh vs secnfr-ABC-151-window/probe/gate.sh (/usr/bin/cmp):
+identical (exit 0)
+
+# sampler.sh vs secnfr-ABC-151-window/probe/sampler.sh (/usr/bin/diff):
+2,6c2,9
+< # secnfr-ABC-151-window: a copy of secnfr-ABC-144-window-b/probe/sampler.sh. TWO changes: the cap is 300 min, not 120 (this window runs the lanes too), and the output file is w151.thermal.tsv. The run used this logic; only this comment line was corrected after the run.
+< # Usage: bash sampler.sh <outdir>; stops when <outdir>/STOP exists or after 300 min.
+< W="$1"; OUT="$W/w151.thermal.tsv"
+< printf 'utc\tload1\tthermalpressurelevel\tcpu_speed_limit\tpower\trunner_procs_incl_this_window\n' > "$OUT"
+< end=$(( $(date +%s) + 18000 ))
+---
+> # secnfr-ABC-152-window: a copy of secnfr-ABC-151-window/probe/sampler.sh. THREE changes: the output file is
+> # w152.thermal.tsv; a last column foreign_cpu_pct sums ps %cpu over [v]itest processes whose command line does NOT
+> # contain this window's arms path (the foreign runner's live CPU, a lower bound: exited workers are not in it);
+> # and the cap is 360 min.
+> # Usage: bash sampler.sh <outdir>; stops when <outdir>/STOP exists or after 360 min.
+> W="$1"; OUT="$W/w152.thermal.tsv"
+> printf 'utc\tload1\tthermalpressurelevel\tcpu_speed_limit\tpower\trunner_procs_incl_this_window\tforeign_cpu_pct\n' > "$OUT"
+> end=$(( $(date +%s) + 21600 ))
+13c16,17
+<   printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$l" "$tp" "$sl" "$pw" "$fv" >> "$OUT"
+---
+>   fc=$(ps -Ao %cpu,command | grep '[v]itest' | grep -v "$W/arms" | awk '{s+=$1} END {printf "%.1f", s+0}')
+>   printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$l" "$tp" "$sl" "$pw" "$fv" "$fc" >> "$OUT"
+
+# sampler.sh.append vs sampler.sh (/usr/bin/diff):
+1a2
+> # step3b: identical to sampler.sh except that it APPENDS to an existing w152.thermal.tsv instead of truncating it.
+8c9
+< printf 'utc\tload1\tthermalpressurelevel\tcpu_speed_limit\tpower\trunner_procs_incl_this_window\tforeign_cpu_pct\n' > "$OUT"
+---
+> [ -e "$OUT" ] || printf 'utc\tload1\tthermalpressurelevel\tcpu_speed_limit\tpower\trunner_procs_incl_this_window\tforeign_cpu_pct\n' > "$OUT"
+
+# puzzle152.sh: first pass (as run) vs amended (/usr/bin/diff):
+6a7,9
+> # AMENDED after the first pass (disclosed in the method note): --reporter=verbose on BOTH arms. On vitest 4.1 a passing
+> # row's stdout prints only under the verbose reporter (QE, qe2-ABC-152 artifact-ref), so the first pass printed no wall
+> # for H. Its process wall and CPU stand as a supplementary reading (abc152-puzzle-firstpass.tsv).
+17c20
+<     (cd "$D/arms/$c" && PUZZLE_DEEP=1 /usr/bin/time -p npx vitest run src/puzzle-suite.test.ts > "$C" 2> "$C.time")
+---
+>     (cd "$D/arms/$c" && PUZZLE_DEEP=1 /usr/bin/time -p npx vitest run src/puzzle-suite.test.ts --reporter=verbose > "$C" 2> "$C.time")
