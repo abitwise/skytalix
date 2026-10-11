@@ -13,7 +13,9 @@
  *
  * THREE LANES, on the `PUZZLE_DEEP` precedent:
  * - DEFAULT (`npm test`): the step constants, the one-step guard, the claim policy on a scripted
- *   repetition, the ply-cap-as-error rule and the scorer. 0 ladder games, pinned by the last row.
+ *   repetition, the ply-cap-as-error rule, the scorer, the game counts / ply cap / run plan, the
+ *   budgets passed verbatim, the colour schedule and the pair report's arithmetic on synthetic
+ *   records. 0 ladder games, pinned by the last row.
  * - `LADDER_DEEP=1`: the short mode, step 120. Claims `A3`, `A4`, `A5` and an early `A2` signal on
  *   3v4 and 4v5, and NOTHING ELSE: at step 120 level 1 sits on the depth-1 floor. Every number it
  *   prints is labelled "short mode, step 120".
@@ -77,10 +79,18 @@ interface Side {
   readonly choose: ReturnType<typeof createLevel>;
 }
 
-/** One side: its own clock instance, its own seeded generator, its level's budget verbatim. */
-function makeSide(level: LevelId, seed: number, step: number): Side {
+/**
+ * One side: its own clock instance, its own seeded generator, its level's budget verbatim.
+ * `make` is `createLevel`; a default row hands a spy to see the `LEVELS` entry passed as is.
+ */
+function makeSide(
+  level: LevelId,
+  seed: number,
+  step: number,
+  make: typeof createLevel = createLevel,
+): Side {
   const now = virtualClock(step);
-  return { level, step, now, choose: createLevel(LEVELS[level], { seed, now }) };
+  return { level, step, now, choose: make(LEVELS[level], { seed, now }) };
 }
 
 /**
@@ -208,14 +218,75 @@ function scoreFor(game: LadderGame, level: LevelId): number {
   return (game.result === "white-wins") === (game.white === level) ? 1 : 0;
 }
 
+interface Pairing {
+  readonly seed: number;
+  readonly white: LevelId;
+  readonly black: LevelId;
+}
+
 /** Seeds 1..n/2; each seed's opening is played twice, the stronger level white then black. */
-function playPair(weaker: LevelId, stronger: LevelId, games: number, step: number): LadderGame[] {
-  const out: LadderGame[] = [];
+function colourSchedule(weaker: LevelId, stronger: LevelId, games: number): Pairing[] {
+  if (!Number.isInteger(games / 2) || games <= 0) {
+    throw new RangeError(`ladder: a pair plays a positive even number of games, got ${games}`);
+  }
+  const out: Pairing[] = [];
   for (let seed = 1; seed <= games / 2; seed++) {
-    out.push(playLadderGame(stronger, weaker, seed, step));
-    out.push(playLadderGame(weaker, stronger, seed, step));
+    out.push({ seed, white: stronger, black: weaker });
+    out.push({ seed, white: weaker, black: stronger });
   }
   return out;
+}
+
+function playPair(weaker: LevelId, stronger: LevelId, games: number, step: number): LadderGame[] {
+  return colourSchedule(weaker, stronger, games).map(({ seed, white, black }) =>
+    playLadderGame(white, black, seed, step),
+  );
+}
+
+type Criterion = "A1" | "A2";
+
+/** The run's pairs: 3v4 and 4v5 first (test note 5), then the rest of `A2`, then `A1`. */
+function ladderPlan(
+  verdict: boolean,
+): readonly { weaker: LevelId; stronger: LevelId; games: number; criterion: Criterion }[] {
+  const a1 = verdict ? VERDICT_A1_GAMES : SHORT_A1_GAMES;
+  const a2 = verdict ? VERDICT_A2_GAMES : SHORT_A2_GAMES;
+  return [
+    { weaker: 3, stronger: 4, games: a2, criterion: "A2" },
+    { weaker: 4, stronger: 5, games: a2, criterion: "A2" },
+    { weaker: 2, stronger: 3, games: a2, criterion: "A2" },
+    { weaker: 1, stronger: 2, games: a2, criterion: "A2" },
+    { weaker: 1, stronger: 5, games: a1, criterion: "A1" },
+  ];
+}
+
+interface PairSummary {
+  readonly score: number;
+  readonly wins: number;
+  readonly draws: number;
+  readonly losses: number;
+  readonly claimed: number;
+  readonly pct: number;
+  /** `A1`'s bar is >= 90%, `A2`'s is > 50%, both for the STRONGER level. */
+  readonly met: boolean;
+  readonly reasons: Readonly<Record<string, number>>;
+}
+
+/** The pair's report arithmetic, for the stronger level. Pure: the deep row prints it. */
+function summarizePair(
+  played: readonly LadderGame[],
+  stronger: LevelId,
+  criterion: Criterion,
+): PairSummary {
+  const score = played.reduce((sum, g) => sum + scoreFor(g, stronger), 0);
+  const wins = played.filter((g) => scoreFor(g, stronger) === 1).length;
+  const draws = played.filter((g) => g.result === "draw").length;
+  const reasons: Record<string, number> = {};
+  for (const g of played) reasons[g.reason] = (reasons[g.reason] ?? 0) + 1;
+  const claimed = played.filter((g) => g.reason.endsWith("(claimed)")).length;
+  const pct = (100 * score) / played.length;
+  const met = criterion === "A1" ? pct >= 90 : pct > 50;
+  return { score, wins, draws, losses: played.length - wins - draws, claimed, pct, met, reasons };
 }
 
 const digest = (games: readonly LadderGame[]): string =>
@@ -357,6 +428,112 @@ describe("ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 
   });
 });
 
+describe("ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6)", () => {
+  it("the game counts, the ply cap and the run plan are the stated constants", () => {
+    expect({ VERDICT_A1_GAMES, VERDICT_A2_GAMES, SHORT_A1_GAMES, SHORT_A2_GAMES }).toEqual({
+      VERDICT_A1_GAMES: 100,
+      VERDICT_A2_GAMES: 20,
+      SHORT_A1_GAMES: 10,
+      SHORT_A2_GAMES: 4,
+    });
+    // The only hang guard on the deep rows (they carry no wall timeout).
+    expect(PLY_CAP).toBe(600);
+    const pairs = (verdict: boolean) =>
+      ladderPlan(verdict).map((p) => `${p.weaker}v${p.stronger} ${p.games} ${p.criterion}`);
+    expect(pairs(true)).toEqual(["3v4 20 A2", "4v5 20 A2", "2v3 20 A2", "1v2 20 A2", "1v5 100 A1"]);
+    expect(pairs(false)).toEqual(["3v4 4 A2", "4v5 4 A2", "2v3 4 A2", "1v2 4 A2", "1v5 10 A1"]);
+  });
+
+  it("every level is built from its LEVELS entry itself — budgets are never scaled", () => {
+    for (const level of [1, 2, 3, 4, 5] as const) {
+      const seen: Parameters<typeof createLevel>[] = [];
+      const spy: typeof createLevel = (...args) => {
+        seen.push(args);
+        return createLevel(...args);
+      };
+      const side = makeSide(level, 7, SHORT_STEP, spy);
+      expect(seen).toHaveLength(1);
+      const [config, options] = seen[0] as Parameters<typeof createLevel>;
+      expect(config).toBe(LEVELS[level]);
+      expect(options).toMatchObject({ seed: 7 });
+      expect(options?.now).toBe(side.now);
+    }
+  });
+
+  it("each seed is played in both chairs, stronger white first: half the games as white", () => {
+    expect(colourSchedule(3, 4, 4)).toEqual([
+      { seed: 1, white: 4, black: 3 },
+      { seed: 1, white: 3, black: 4 },
+      { seed: 2, white: 4, black: 3 },
+      { seed: 2, white: 3, black: 4 },
+    ]);
+    const a1 = colourSchedule(1, 5, VERDICT_A1_GAMES);
+    expect(a1).toHaveLength(100);
+    expect(a1.filter((p) => p.white === 5)).toHaveLength(50);
+    for (let seed = 1; seed <= 50; seed++) {
+      const both = a1.filter((p) => p.seed === seed).map((p) => `${p.white}-${p.black}`);
+      expect(both).toEqual(["5-1", "1-5"]);
+    }
+    for (const odd of [0, 3, 99]) expect(() => colourSchedule(1, 5, odd)).toThrow(RangeError);
+  });
+
+  it("the pair's score, W-D-L, claimed draws and MET/RED are for the stronger level", () => {
+    const g = (
+      white: LevelId,
+      black: LevelId,
+      result: Ending["result"],
+      reason = "checkmate",
+    ): LadderGame => ({ result, reason, moves: [], seed: 1, white, black, wallMs: 0 });
+    // A1, 1v5, 10 games: level 5 wins 8 (both chairs), loses 0, draws 2 — 9/10 is exactly 90%.
+    const a1 = [
+      ...Array.from({ length: 4 }, () => g(5, 1, "white-wins")),
+      ...Array.from({ length: 4 }, () => g(1, 5, "black-wins")),
+      g(5, 1, "draw", "threefold-repetition (claimed)"),
+      g(1, 5, "draw", "stalemate"),
+    ];
+    expect(summarizePair(a1, 5, "A1")).toEqual({
+      score: 9,
+      wins: 8,
+      draws: 2,
+      losses: 0,
+      claimed: 1,
+      pct: 90,
+      met: true,
+      reasons: { checkmate: 8, "threefold-repetition (claimed)": 1, stalemate: 1 },
+    });
+    // One more loss in place of a win: 8.5/10 is RED.
+    const a1Red = [...a1.slice(1), g(1, 5, "white-wins")];
+    expect(summarizePair(a1Red, 5, "A1")).toMatchObject({ score: 8, losses: 1, met: false });
+
+    // A2, 4 games: 2/4 is RED (the bar is strictly over 50%); 2.5/4 is MET. Weaker level 3 wins one.
+    const even = [
+      g(4, 3, "white-wins"),
+      g(4, 3, "black-wins"),
+      g(3, 4, "black-wins"),
+      g(3, 4, "white-wins"),
+    ];
+    expect(summarizePair(even, 4, "A2")).toMatchObject({
+      score: 2,
+      wins: 2,
+      losses: 2,
+      met: false,
+    });
+    const over = [...even.slice(0, 3), g(3, 4, "draw", "fifty-move (claimed)")];
+    expect(summarizePair(over, 4, "A2")).toMatchObject({
+      score: 2.5,
+      wins: 2,
+      draws: 1,
+      losses: 1,
+      claimed: 1,
+      pct: 62.5,
+      met: true,
+    });
+    // Automatic draws are draws, never claimed draws.
+    const auto = [g(4, 3, "draw", "fivefold-repetition"), g(3, 4, "draw", "seventy-five-move")];
+    expect(summarizePair(auto, 4, "A2")).toMatchObject({ draws: 2, claimed: 0, met: false });
+  });
+});
+
 // ---------------------------------------------------------------------------
 // LADDER_DEEP lanes — the games. Not defined when unset.
 // ---------------------------------------------------------------------------
@@ -369,19 +546,7 @@ if (MODE !== undefined) {
     : `short mode, step ${SHORT_STEP}`;
   const commit = commitOf();
 
-  /** 3v4 and 4v5 first (test note 5), then the rest of `A2`, then `A1`. */
-  const plan: readonly {
-    weaker: LevelId;
-    stronger: LevelId;
-    games: number;
-    criterion: "A1" | "A2";
-  }[] = [
-    { weaker: 3, stronger: 4, games: verdict ? VERDICT_A2_GAMES : SHORT_A2_GAMES, criterion: "A2" },
-    { weaker: 4, stronger: 5, games: verdict ? VERDICT_A2_GAMES : SHORT_A2_GAMES, criterion: "A2" },
-    { weaker: 2, stronger: 3, games: verdict ? VERDICT_A2_GAMES : SHORT_A2_GAMES, criterion: "A2" },
-    { weaker: 1, stronger: 2, games: verdict ? VERDICT_A2_GAMES : SHORT_A2_GAMES, criterion: "A2" },
-    { weaker: 1, stronger: 5, games: verdict ? VERDICT_A1_GAMES : SHORT_A1_GAMES, criterion: "A1" },
-  ];
+  const plan = ladderPlan(verdict);
 
   /**
    * NO wall timeout (vitest's 0). A game is synchronous, so vitest's timer cannot pre-empt it: a
@@ -400,6 +565,7 @@ if (MODE !== undefined) {
           const t0 = performance.now();
           const played = playPair(weaker, stronger, games, step);
           const wallS = (performance.now() - t0) / 1_000;
+          expect(played).toHaveLength(games);
 
           for (const game of played) {
             console.log(
@@ -423,14 +589,11 @@ if (MODE !== undefined) {
           // A4: every move list replays legally, and every claim was at its first offer.
           expect(played.map(replayFault).filter((f) => f !== null)).toEqual([]);
 
-          const score = played.reduce((sum, g) => sum + scoreFor(g, stronger), 0);
-          const wins = played.filter((g) => scoreFor(g, stronger) === 1).length;
-          const draws = played.filter((g) => g.result === "draw").length;
-          const reasons: Record<string, number> = {};
-          for (const g of played) reasons[g.reason] = (reasons[g.reason] ?? 0) + 1;
-          const claimed = played.filter((g) => g.reason.endsWith("(claimed)")).length;
-          const pct = (100 * score) / games;
-          const bar = criterion === "A1" ? pct >= 90 : pct > 50;
+          const { score, wins, draws, losses, claimed, pct, met, reasons } = summarizePair(
+            played,
+            stronger,
+            criterion,
+          );
           console.log(
             `LADDER PAIR ${JSON.stringify({
               mode: modeLabel,
@@ -441,11 +604,11 @@ if (MODE !== undefined) {
               step,
               seeds: `1..${games / 2}, both colours each`,
               games,
-              stronger_w_d_l: [wins, draws, games - wins - draws],
+              stronger_w_d_l: [wins, draws, losses],
               score: `${score}/${games}`,
               scorePct: Number(pct.toFixed(1)),
               bar: criterion === "A1" ? ">= 90%" : "> 50%",
-              verdict: verdict ? (bar ? "MET" : "RED") : "not graded (short mode)",
+              verdict: verdict ? (met ? "MET" : "RED") : "not graded (short mode)",
               claimedDraws: claimed,
               reasons,
               digest: digest(played),
