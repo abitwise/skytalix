@@ -1,0 +1,5 @@
+id	expect	got	ok	exit	failed	passed	first_red
+BASE-ctl-command-input-engine-capacity	green	green	OK	0	0	189	
+BASE-ci-pd-add-SE	green	green	OK	0	0	188	
+BASE-ci-pd-remove-SE	red	red	OK	1	4	184	AssertionError: expected 0 to be greater than or equal to 1 @ [src/command-input.test.ts] ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss A2 control — the same legalMoves spy DOES count a real call on a line that is a move
+BASE-ec-root-key-not-via-mock	green	green	OK	0	0	1	

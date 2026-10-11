@@ -1,0 +1,8 @@
+
+> cli-chess@0.0.0 test
+> node tools/grugops/run-bounded.js 60000 vitest run --reporter=default --reporter=./tools/grugops/result-file-reporter.js --outputFile.json=.test-results/last-run.json
+
+Importing from "vitest/reporters" is deprecated since Vitest 4.1. Please use "vitest/node" instead.
+
+ RUN  v4.1.11 <scratch>/W-head
+

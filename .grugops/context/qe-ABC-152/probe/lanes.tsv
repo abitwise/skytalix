@@ -1,0 +1,12 @@
+lane	exit	files	passed	failed	total	pending	todo	foreign_vitest_at_start
+PERFT_DEEP	0	56	1749	0	1749	0	0	5
+SEARCH_DEEP	0	56	1816	0	1816	0	0	5
+ENGINE_DEEP	0	56	1762	0	1762	0	0	0
+INPUT_DEEP	0	56	1745	0	1745	0	0	65
+ZOBRIST_DEEP	0	56	1742	0	1742	0	0	21
+PUZZLE_DEEP	0	56	1747	0	1747	0	0	0
+CLI_DEEP	0	56	1747	0	1747	0	0	1
+LADDER_DEEP	0	56	1746	0	1746	0	0	5
+PUZZLE_DEEP=weakened src/puzzle-suite.test.ts	1
+coverage	0
+coverage src/**	0

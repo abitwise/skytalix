@@ -1,0 +1,1681 @@
+===== pin-control
+# pin-control
+why: no plant
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 2
+
+reds (0), first 4:
+
+
+===== pin-r1-del-maxWorkers
+# pin-r1-del-maxWorkers
+why: r1
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -104,7 +104,6 @@
+ export default {
+   test: {
+     pool: "threads",
+-    maxWorkers: 2,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (1), first 4:
+  AssertionError: expected undefined to be 2 // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-r2-isolate-false
+# pin-r2-isolate-false
+why: r2
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    isolate: false,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (1), first 4:
+  AssertionError: expected false to be true // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-r3-env-8
+# pin-r3-env-8
+why: r3
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {"VITEST_MAX_WORKERS":"8"}
+failed: 1 passed: 1
+
+reds (1), first 4:
+  AssertionError: VITEST_MAX_WORKERS: expected 8 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-r3b-env-3
+# pin-r3b-env-3
+why: r3b
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {"VITEST_MAX_WORKERS":"3"}
+failed: 1 passed: 1
+
+reds (1), first 4:
+  AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-r4-projects
+# pin-r4-projects
+why: r4
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    projects: [{ test: { name: "qe", maxWorkers: 6 } }],
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (1), first 4:
+  AssertionError: expected [ { test: { name: 'qe', …(1) } } ] to be undefined @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-maxWorkers-3
+# pin-maxWorkers-3
+why: raise
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -104,7 +104,7 @@
+ export default {
+   test: {
+     pool: "threads",
+-    maxWorkers: 2,
++    maxWorkers: 3,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (1), first 4:
+  AssertionError: expected 3 to be 2 // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-fileParallelism-false
+# pin-fileParallelism-false
+why: fp
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    fileParallelism: false,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (1), first 4:
+  AssertionError: expected false to be true // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-poolOptions
+# pin-poolOptions
+why: poolOptions entry (QE's own entry: forks.singleFork)
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    poolOptions: { forks: { singleFork: true } },
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (1), first 4:
+  AssertionError: expected true to be false // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-env-0x3
+# pin-env-0x3
+why: QE-151-a fold
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {"VITEST_MAX_WORKERS":"0x3"}
+failed: 1 passed: 1
+
+reds (1), first 4:
+  AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-env-0
+# pin-env-0
+why: 0 falls back to cpus-1
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {"VITEST_MAX_WORKERS":"0"}
+failed: 1 passed: 1
+
+reds (1), first 4:
+  AssertionError: VITEST_MAX_WORKERS: expected 0 to be greater than or equal to 1 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== pin-env-abc
+# pin-env-abc
+why: NaN falls back to cpus-1
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {"VITEST_MAX_WORKERS":"abc"}
+failed: 1 passed: 1
+
+reds (1), first 4:
+  AssertionError: VITEST_MAX_WORKERS: expected NaN to be greater than or equal to 1 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== v3-key-deleted
+# v3-key-deleted
+why: V3 delete
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,7 +105,6 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
+-    experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by
+reds (1), first 4:
+  AssertionError: expected undefined to be false // Object.is equality @ [src/cli.test.ts] ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) vitest.config.ts sets experimental.viteModuleRunner to exactly false
+
+===== v3-key-true
+# v3-key-true
+why: V3 true
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,7 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
+-    experimental: { viteModuleRunner: false },
++    experimental: { viteModuleRunner: true },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by
+reds (1), first 4:
+  AssertionError: expected true to be false // Object.is equality @ [src/cli.test.ts] ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) vitest.config.ts sets experimental.viteModuleRunner to exactly false
+
+===== pin-env-empty
+# pin-env-empty
+why: QE-151-b fold
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {"VITEST_MAX_WORKERS":""}
+failed: 0 passed: 2
+
+reds (0), first 4:
+
+
+===== pin-env-1
+# pin-env-1
+why: lowering
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {"VITEST_MAX_WORKERS":"1"}
+failed: 0 passed: 2
+
+reds (0), first 4:
+
+
+===== pin-env-2
+# pin-env-2
+why: equal
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {"VITEST_MAX_WORKERS":"2"}
+failed: 0 passed: 2
+
+reds (0), first 4:
+
+
+===== qx-v3-key-zero
+# qx-v3-key-zero
+why: falsy non-false
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,7 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
+-    experimental: { viteModuleRunner: false },
++    experimental: { viteModuleRunner: 0 as unknown as false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by
+reds (1), first 4:
+  AssertionError: expected +0 to be false // Object.is equality @ [src/cli.test.ts] ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) vitest.config.ts sets experimental.viteModuleRunner to exactly false
+
+===== qx-v3-experimental-empty
+# qx-v3-experimental-empty
+why: experimental present, key absent
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,7 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
+-    experimental: { viteModuleRunner: false },
++    experimental: {},
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by
+reds (1), first 4:
+  AssertionError: expected undefined to be false // Object.is equality @ [src/cli.test.ts] ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) vitest.config.ts sets experimental.viteModuleRunner to exactly false
+
+===== qx-maxWorkers-string-2
+# qx-maxWorkers-string-2
+why: string 2
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -104,7 +104,7 @@
+ export default {
+   test: {
+     pool: "threads",
+-    maxWorkers: 2,
++    maxWorkers: "2" as unknown as number,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (1), first 4:
+  AssertionError: expected '2' to be 2 // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== qx-maxWorkers-50pct
+# qx-maxWorkers-50pct
+why: percentage
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -104,7 +104,7 @@
+ export default {
+   test: {
+     pool: "threads",
+-    maxWorkers: 2,
++    maxWorkers: "50%",
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (1), first 4:
+  AssertionError: expected '50%' to be 2 // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== qx-projects-empty
+# qx-projects-empty
+why: empty projects array
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: ? passed: ?
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    projects: [],
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (0), first 4:
+
+
+===== qx-poolOptions-undefined
+# qx-poolOptions-undefined
+why: own key, value undefined
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 1
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    poolOptions: undefined,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (1), first 4:
+  AssertionError: expected true to be false // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== qx-isolate-true-explicit
+# qx-isolate-true-explicit
+why: explicit isolate true is the same ruling
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 2
+--- vitest.config.ts
++++ vitest.config.ts
+@@ -105,6 +105,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    isolate: true,
+     experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+reds (0), first 4:
+
+
+===== qx-env-space3
+# qx-env-space3
+why: leading space
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {"VITEST_MAX_WORKERS":" 3"}
+failed: 1 passed: 1
+
+reds (1), first 4:
+  AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== qx-env-3abc
+# qx-env-3abc
+why: trailing junk
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {"VITEST_MAX_WORKERS":"3abc"}
+failed: 1 passed: 1
+
+reds (1), first 4:
+  AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+
+===== qx-env-0x2
+# qx-env-0x2
+why: hex 2 is 2 to both parsers
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {"VITEST_MAX_WORKERS":"0x2"}
+failed: 0 passed: 2
+
+reds (0), first 4:
+
+
+===== qx-env-2.9
+# qx-env-2.9
+why: parseInt 2 to both parsers
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {"VITEST_MAX_WORKERS":"2.9"}
+failed: 0 passed: 2
+
+reds (0), first 4:
+
+
+===== qx-env-1e9
+# qx-env-1e9
+why: parseInt 1 to both parsers
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {"VITEST_MAX_WORKERS":"1e9"}
+failed: 0 passed: 2
+
+reds (0), first 4:
+
+
+===== qx-env-neg1
+# qx-env-neg1
+why: RISK-ABC152-NEGWORKERS: the pin cannot see it if nothing runs
+expect: red
+got: green (UNEXPECTED)
+exit: 0 signal: null
+env: {"VITEST_MAX_WORKERS":"-1"}
+failed: ? passed: ?
+
+reds (0), first 4:
+
+
+===== qx-env-threads-8
+# qx-env-threads-8
+why: 3.x names are read by nothing on 4.1 (check eff with the resolver)
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {"VITEST_MAX_THREADS":"8","VITEST_MAX_FORKS":"8"}
+failed: 0 passed: 2
+
+reds (0), first 4:
+
+
+===== ctl-set
+# ctl-set
+why: the 20 files, unplanted
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 537
+
+reds (0), first 4:
+
+
+===== cli-reject-calls-selectGlyphMode
+# cli-reject-calls-selectGlyphMode
+why: expected-0 guard (A5); plant adds the call
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 68
+--- src/cli-options.ts
++++ src/cli-options.ts
+@@ -35,7 +35,7 @@
+  * path). A caller that never echoes them is caught by that bar's non-vacuity arm, not by this file.
+  */
+ 
+-import type { GlyphFlags } from "./glyph-mode.ts";
++import { type GlyphFlags, selectGlyphMode } from "./glyph-mode.ts";
+ import type { Orientation } from "./render.ts";
+ 
+ /**
+@@ -93,7 +93,7 @@
+ const MISSING_VALUE = "--colour needs one of white|black|random";
+ const CONFLICTING_FLAGS = "--ascii and --unicode cannot be used together";
+ 
+-const reject = (problem: string, ...offending: readonly string[]): Resolution => ({
++const reject = (problem: string, ...offending: readonly string[]): Resolution => (selectGlyphMode({ ascii: false, unicode: false, isTTY: false, env: {} }), {
+   ok: false,
+   problem,
+   offending,
+reds (1), first 4:
+  AssertionError: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/cli.test.ts] ABC-042 — a rejected command line starts no game A5 — `--ascii --unicode` is refused at the resolver, and selectGlyphMode is not called
+
+===== rs-seam-calls-gameStatusOf
+# rs-seam-calls-gameStatusOf
+why: expected-0 statusOf guard; plant adds the call
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 2 passed: 12
+--- src/render-seam.ts
++++ src/render-seam.ts
+@@ -40,6 +40,7 @@
+ 
+ import { assembleFrame } from "./frame.ts";
+ import { renderHistory } from "./history-pane.ts";
++import { gameStatusOf } from "./history.ts";
+ import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
+ import { renderStatusPanel } from "./status-panel.ts";
+ import type { RenderSeam } from "./turn-loop.ts";
+@@ -54,7 +55,7 @@
+       {
+         board: renderBoard(history.position, mode, orientation),
+         status: renderStatusPanel(history, status, thinking),
+-        history: renderHistory(history),
++        history: (gameStatusOf(history), renderHistory(history)),
+         messages,
+       },
+       mode,
+reds (2), first 4:
+  AssertionError: expected "vi.fn()" to be called +0 times, but got 3 times @ [src/render-seam.test.ts] ABC-041 — the render seam A2 — derives NOTHING: gameStatus / gameStatusOf / legalMoves are 0 over three calls
+  AssertionError: expected '/**\n * `ABC-041` — the render seam: …' not to contain 'from "./history.ts"' @ [src/render-seam.test.ts] ABC-041 — the render seam A6 / A7 — no ambient reads, no glyph-mode import, and history.ts imported nowhere
+
+===== rs-renderHistory-twice
+# rs-renderHistory-twice
+why: renderHistory expected 1
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 13
+--- src/render-seam.ts
++++ src/render-seam.ts
+@@ -54,7 +54,7 @@
+       {
+         board: renderBoard(history.position, mode, orientation),
+         status: renderStatusPanel(history, status, thinking),
+-        history: renderHistory(history),
++        history: (renderHistory(history), renderHistory(history)),
+         messages,
+       },
+       mode,
+reds (1), first 4:
+  AssertionError: renderHistory: expected "vi.fn()" to be called 1 times, but got 2 times @ [src/render-seam.test.ts] ABC-041 — the render seam A11 — the merged four are each CALLED exactly once, never re-implemented
+
+===== ci-r3-movesMessages-twice
+# ci-r3-movesMessages-twice
+why: R3 derive site: called 1 times, but got 2
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 15 passed: 173
+--- src/command-input.ts
++++ src/command-input.ts
+@@ -265,7 +265,7 @@
+   }
+   if (spec.token === "quit") return { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
+   if (spec.token === "moves")
+-    return { kind: "command", messages: movesMessages(history.position, deps) };
++    return { kind: "command", messages: (movesMessages(history.position, deps), movesMessages(history.position, deps)) };
+   return { kind: "command", messages: spec.token === "help" ? helpMessages() : [] };
+ }
+reds (15), first 4:
+  AssertionError: expected [ 'Na3', 'Nc3', 'Nf3', 'Nh3', …(16) ] to have a length of 40 but got 20 @ [src/command-input.test.ts] ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order lists every legal move once, as toSan returned it, ascending, at startpos
+  AssertionError: expected [ 'Bb5', 'Bc1', 'Bc4', 'Bd1', …(44) ] to have a length of 96 but got 48 @ [src/command-input.test.ts] ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order lists every legal move once, as toSan returned it, ascending, at kiwipete
+  AssertionError: expected [ 'Ka4', 'Ka6', 'Ra4', 'Rb1', …(10) ] to have a length of 28 but got 14 @ [src/command-input.test.ts] ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order lists every legal move once, as toSan returned it, ascending, at position-3
+  AssertionError: expected [ 'Bc5', 'Kh1', 'Nd4', 'Rf2', …(2) ] to have a length of 12 but got 6 @ [src/command-input.test.ts] ABC-036 A2 — the listing is toSan over the one list, in ascending SAN-string order lists every legal move once, as toSan returned it, ascending, at position-4
+
+===== ci-r3-quit-derives
+# ci-r3-quit-derives
+why: R3 clause-6 site: expected 0
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 5 passed: 183
+--- src/command-input.ts
++++ src/command-input.ts
+@@ -263,7 +263,10 @@
+       reason: "resignation",
+     };
+   }
+-  if (spec.token === "quit") return { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
++  if (spec.token === "quit") {
++    deps?.legalMoves(history.position);
++    return { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
++  }
+   if (spec.token === "moves")
+     return { kind: "command", messages: movesMessages(history.position, deps) };
+   return { kind: "command", messages: spec.token === "help" ? helpMessages() : [] };
+reds (5), first 4:
+  AssertionError: expected 1 to be +0 // Object.is equality @ [src/command-input.test.ts] ABC-035 A2 — a command never reaches a resolver calls neither resolver for "quit"
+  AssertionError: expected 1 to be +0 // Object.is equality @ [src/command-input.test.ts] ABC-035 A2 — a command never reaches a resolver calls neither resolver for "QUIT"
+  AssertionError: expected 1 to be +0 // Object.is equality @ [src/command-input.test.ts] ABC-035 A2 — a command never reaches a resolver calls neither resolver for " Quit "
+  AssertionError: expected "vi.fn()" to be called +0 times, but got 3 times @ [src/command-input.test.ts] ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else clause 6 — `disarm` clears an armed flag, is harmless unarmed, and calls no resolver
+
+===== ci-r5-history-repetitionCounts
+# ci-r5-history-repetitionCounts
+why: R5 history spy: A6 repetitionDerives expects 0
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 5 passed: 183
+--- src/command-input.ts
++++ src/command-input.ts
+@@ -67,7 +67,7 @@
+  * instead of a fact.
+  */
+ 
+-import type { GameHistory } from "./history.ts";
++import { type GameHistory, repetitionCounts } from "./history.ts";
+ import { legalMoves } from "./legal.ts";
+ import { type MoveInputDeps, resolveMoveInput } from "./move-input.ts";
+ import type { Position } from "./position.ts";
+@@ -266,6 +266,7 @@
+   if (spec.token === "quit") return { kind: "command", messages: QUIT_CONFIRMATION_MESSAGES };
+   if (spec.token === "moves")
+     return { kind: "command", messages: movesMessages(history.position, deps) };
++  if (spec.token === "help") repetitionCounts(history);
+   return { kind: "command", messages: spec.token === "help" ? helpMessages() : [] };
+ }
+reds (5), first 4:
+  AssertionError: expected 1 to be +0 // Object.is equality @ [src/command-input.test.ts] ABC-035 A6 — the parser adds ZERO derives: it does not ask derives nothing for "help"
+  AssertionError: expected 1 to be +0 // Object.is equality @ [src/command-input.test.ts] ABC-035 A6 — the parser adds ZERO derives: it does not ask derives nothing for "HELP"
+  AssertionError: expected 1 to be +0 // Object.is equality @ [src/command-input.test.ts] ABC-035 A6 — the parser adds ZERO derives: it does not ask derives nothing for "  help  "
+  AssertionError: expected 1 to be +0 // Object.is equality @ [src/command-input.test.ts] ABC-035 A6 — the parser adds ZERO derives: it does not ask derives nothing for "Help"
+
+===== ci-r5-legal-resign
+# ci-r5-legal-resign
+why: R5 legal spy: 0 legalMoves after the outcome
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 187
+--- src/command-input.ts
++++ src/command-input.ts
+@@ -253,6 +253,7 @@
+     return { kind: "take-back", plies: history.moves.length, messages: [] };
+   }
+   if (spec.outcome === "game-over") {
++    legalMoves(history.position);
+     // `ABC-045` `A1`, both directions from ONE expression: the resigner is the side to move, and
+     // the opponent wins. `blackToMove` is read, never `humanColour` — the loop prompts only when
+     // the side to move is the human's (`src/turn-loop.ts`), so the field IS the human's colour on
+reds (1), first 4:
+  AssertionError: expected 1 to be +0 // Object.is equality @ [src/command-input.test.ts] ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss A3 — classified before the grammars: neither resolver and no derive sees `resign`
+
+===== ci-pd-add-SE
+# ci-pd-add-SE
+why: SE's add-plant: >= 1 guard cannot see an extra call (graded)
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 188
+--- src/move-input.ts
++++ src/move-input.ts
+@@ -105,7 +105,12 @@
+   readonly toSan: (position: Position, move: Move, legal?: readonly Move[]) => string;
+ }
+ 
+-const PRODUCTION_DEPS: MoveInputDeps = { legalMoves, parseCoordinateMove, parseSan, toSan };
++const PRODUCTION_DEPS: MoveInputDeps = {
++  legalMoves: (position) => (legalMoves(position), legalMoves(position)), // PLANT
++  parseCoordinateMove,
++  parseSan,
++  toSan,
++};
+ 
+ /**
+  * The case-folded RETRY's variants, applied to the whole line and nowhere else.
+reds (0), first 4:
+
+
+===== ci-pd-remove-SE
+# ci-pd-remove-SE
+why: SE's removal plant
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 4 passed: 184
+--- src/move-input.ts
++++ src/move-input.ts
+@@ -105,7 +105,12 @@
+   readonly toSan: (position: Position, move: Move, legal?: readonly Move[]) => string;
+ }
+ 
+-const PRODUCTION_DEPS: MoveInputDeps = { legalMoves, parseCoordinateMove, parseSan, toSan };
++const PRODUCTION_DEPS: MoveInputDeps = {
++  legalMoves: () => [], // PLANT
++  parseCoordinateMove,
++  parseSan,
++  toSan,
++};
+ 
+ /**
+  * The case-folded RETRY's variants, applied to the whole line and nowhere else.
+reds (4), first 4:
+  AssertionError: expected 0 to be greater than or equal to 1 @ [src/command-input.test.ts] ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss A2 control — the same legalMoves spy DOES count a real call on a line that is a move
+  AssertionError: expected 'rejected' to be 'move' // Object.is equality @ [src/command-input.test.ts] ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)
+  AssertionError: expected [] to have a length of 2 but got +0 @ [src/command-input.test.ts] ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session
+  AssertionError: expected [ 4, 4 ] to deeply equal [ 4, 6 ] @ [src/command-input.test.ts] ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A1 — through the MERGED loop: the human's move and the reply go, byte-identical to before the human moved
+
+===== ci-pd-route-around-QE
+# ci-pd-route-around-QE
+why: the deps path imports legal.ts by another URL: does the mock still count it?
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 187
+--- src/move-input.ts
++++ src/move-input.ts
+@@ -105,7 +105,8 @@
+   readonly toSan: (position: Position, move: Move, legal?: readonly Move[]) => string;
+ }
+ 
+-const PRODUCTION_DEPS: MoveInputDeps = { legalMoves, parseCoordinateMove, parseSan, toSan };
++import { legalMoves as qeUnmockedLegal } from "./legal.ts?qe152";
++const PRODUCTION_DEPS: MoveInputDeps = { legalMoves: qeUnmockedLegal, parseCoordinateMove, parseSan, toSan };
+ 
+ /**
+  * The case-folded RETRY's variants, applied to the whole line and nowhere else.
+reds (1), first 4:
+  AssertionError: expected 0 to be greater than or equal to 1 @ [src/command-input.test.ts] ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss A2 control — the same legalMoves spy DOES count a real call on a line that is a move
+
+===== san-a20-export-const-PLANT
+# san-a20-export-const-PLANT
+why: ticket plant 1
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 21
+--- src/san.ts
++++ src/san.ts
+@@ -143,6 +143,7 @@
+  * this function would otherwise pay for the disambiguator. A castle string and a pawn move never
+  * consult the list at all; a checking move pays one generation regardless, for the mate test.
+  */
++export const PLANT = 1;
+ export function toSan(position: Position, move: Move, legal?: readonly Move[]): string {
+   return `${body(position, move, legal)}${suffix(position, move)}`;
+ }
+reds (1), first 4:
+  AssertionError: expected [ 'PLANT', 'parseSan', 'toSan' ] to deeply equal [ 'parseSan', 'toSan' ] @ [src/san.test.ts] ABC-013 acceptance A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure
+
+===== san-a20-alias-toSanX
+# san-a20-alias-toSanX
+why: ticket plant 2
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 21
+--- src/san.ts
++++ src/san.ts
+@@ -143,6 +143,7 @@
+  * this function would otherwise pay for the disambiguator. A castle string and a pawn move never
+  * consult the list at all; a checking move pays one generation regardless, for the mate test.
+  */
++export { toSan as toSanX };
+ export function toSan(position: Position, move: Move, legal?: readonly Move[]): string {
+   return `${body(position, move, legal)}${suffix(position, move)}`;
+ }
+reds (1), first 4:
+  AssertionError: expected [ 'parseSan', 'toSan', 'toSanX' ] to deeply equal [ 'parseSan', 'toSan' ] @ [src/san.test.ts] ABC-013 acceptance A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure
+
+===== san-a20-default-export-QE
+# san-a20-default-export-QE
+why: QE: a default export grows the surface
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 21
+--- src/san.ts
++++ src/san.ts
+@@ -143,6 +143,7 @@
+  * this function would otherwise pay for the disambiguator. A castle string and a pawn move never
+  * consult the list at all; a checking move pays one generation regardless, for the mate test.
+  */
++export default 0;
+ export function toSan(position: Position, move: Move, legal?: readonly Move[]): string {
+   return `${body(position, move, legal)}${suffix(position, move)}`;
+ }
+reds (1), first 4:
+  AssertionError: expected [ 'default', 'parseSan', 'toSan' ] to deeply equal [ 'parseSan', 'toSan' ] @ [src/san.test.ts] ABC-013 acceptance A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure
+
+===== san-a20-type-export-QE
+# san-a20-type-export-QE
+why: QE: a type-only export is erased, not run-time surface
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 22
+--- src/san.ts
++++ src/san.ts
+@@ -143,6 +143,7 @@
+  * this function would otherwise pay for the disambiguator. A castle string and a pawn move never
+  * consult the list at all; a checking move pays one generation regardless, for the mate test.
+  */
++export type QePlant = number;
+ export function toSan(position: Position, move: Move, legal?: readonly Move[]): string {
+   return `${body(position, move, legal)}${suffix(position, move)}`;
+ }
+reds (0), first 4:
+
+
+===== book-r2a-no-mockImplementation
+# book-r2a-no-mockImplementation
+why: R2 (a)
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 16
+--- tools/opening-book/book.test.ts
++++ tools/opening-book/book.test.ts
+@@ -101,7 +101,6 @@
+ // every position to one value builds it. Scoped to this test: doMock + a fresh module registry.
+ describe("D1(f) — a key carrying two different positions is refused", () => {
+   it("refuses the compile and writes no artifact", async () => {
+-    vi.mocked(zobristKey).mockImplementation(() => 0n);
+     try {
+       const stubbed = await import("./compile.ts");
+       const dir = fixture("d1f-collision", `${HEADER}\n${GOOD_ROWS[0]}\n`);
+reds (1), first 4:
+  AssertionError: expected [Function] to throw an error @ [tools/opening-book/book.test.ts] D1(f) — a key carrying two different positions is refused refuses the compile and writes no artifact
+
+===== book-r2b-no-finally-reset
+# book-r2b-no-finally-reset
+why: R2 (b): a later test reads the real zobristKey?
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 5 passed: 12
+--- tools/opening-book/book.test.ts
++++ tools/opening-book/book.test.ts
+@@ -109,7 +109,6 @@
+       expect(() => stubbed.writeBook(dir, out, "0".repeat(40))).toThrow(/carries two positions/);
+       expect(existsSync(out)).toBe(false);
+     } finally {
+-      vi.mocked(zobristKey).mockReset(); // an automock spy: back to the original implementation
+     }
+   });
+ });
+reds (5), first 4:
+  AssertionError: expected [Function] to throw error matching /2 columns/ but got 'a.tsv:2: key 0000000000000000 carries…' @ [tools/opening-book/book.test.ts] A8 — a malformed source never ships refuses a row without 3 columns and writes no artifact
+  AssertionError: expected [Function] to throw error matching /"Ke3" is rejected/ but got 'a.tsv:2: key 0000000000000000 carries…' @ [tools/opening-book/book.test.ts] A8 — a malformed source never ships refuses a SAN that does not resolve to exactly one move and writes no artifact
+  AssertionError: expected [Function] to throw error matching /"Ke3" is rejected/ but got 'a.tsv:2: key 0000000000000000 carries…' @ [tools/opening-book/book.test.ts] A8 — a malformed source never ships refuses a SAN past maxPly that does not resolve and writes no artifact
+  AssertionError: expected [Function] to throw error matching /named both/ but got 'a.tsv:2: key 0000000000000000 carries…' @ [tools/opening-book/book.test.ts] A8 — a malformed source never ships refuses a position carrying two names and writes no artifact
+
+===== book-r2-compile-routes-around-mock-QE
+# book-r2-compile-routes-around-mock-QE
+why: QE: compile.ts reaches zobristKey by another URL
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 16
+--- tools/opening-book/compile.ts
++++ tools/opening-book/compile.ts
+@@ -20,7 +20,7 @@
+ import type { Move } from "../../src/moves.ts";
+ import { type Position, squareName } from "../../src/position.ts";
+ import { parseSan } from "../../src/san.ts";
+-import { zobristKey } from "../../src/zobrist.ts";
++import { zobristKey } from "../../src/zobrist.ts?qe152";
+ 
+ /** The upstream commit this book is compiled from. Change it only with `ATTRIBUTION.md`. */
+ export const SOURCE_COMMIT = "a6189a30dc273ccb21fc2536a9a2fefd5592a67a";
+reds (1), first 4:
+  AssertionError: expected [Function] to throw an error @ [tools/opening-book/book.test.ts] D1(f) — a key carrying two different positions is refused refuses the compile and writes no artifact
+
+===== ge-zobristKey-twice-on-counts
+# ge-zobristKey-twice-on-counts
+why: exactly ONCE
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 2
+--- src/gameend.ts
++++ src/gameend.ts
+@@ -152,7 +152,7 @@
+   // ONE key read, shared by the automatic fivefold rule and the threefold claim below — and
+   // skipped entirely, at no cost, by a caller that passes no counts map.
+   const occurrences =
+-    positionCounts === undefined ? 0 : (positionCounts.get(zobristKey(position)) ?? 0);
++    positionCounts === undefined ? 0 : (positionCounts.get((zobristKey(position), zobristKey(position))) ?? 0);
+ 
+   if (occurrences >= FIVEFOLD_OCCURRENCES) {
+     return { result: "draw", reason: "fivefold-repetition" };
+reds (1), first 4:
+  AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times @ [src/gameend.nfr.test.ts] NFR-001 — gameStatus stays cheap at a search leaf (call counts, spied) reads the Zobrist key exactly ONCE when the counts map is consulted
+
+===== zb-ep-branch-asks-legal
+# zb-ep-branch-asks-legal
+why: expected 0 on ep inputs
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 2
+--- src/zobrist.ts
++++ src/zobrist.ts
+@@ -25,6 +25,7 @@
+  */
+ 
+ import type { UndoRecord } from "./apply.ts";
++import { hasLegalEnPassant } from "./legal.ts";
+ import { FLAG_CASTLE, FLAG_EN_PASSANT, type Move } from "./moves.ts";
+ import {
+   CASTLE_BK,
+@@ -82,7 +83,7 @@
+     if ((position.castling & (CASTLE_FLAGS[i] as number)) !== 0) key ^= CASTLE_KEYS[i] as bigint;
+   }
+ 
+-  if (position.epSquare !== NO_SQUARE) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
++  if (position.epSquare !== NO_SQUARE && hasLegalEnPassant(position)) key ^= EP_FILE[fileOf(position.epSquare)] as bigint;
+ 
+   return key;
+ }
+reds (1), first 4:
+  AssertionError: ep set, no capture at all: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/zobrist.nfr.test.ts] NFR-005 — zobristKey never consults hasLegalEnPassant (structural since ADR-0020, spied) asks nothing on any input, with or without an ep square
+
+===== sn-mate-test-twice
+# sn-mate-test-twice
+why: checking move: 1 -> 2
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 4
+--- src/san.ts
++++ src/san.ts
+@@ -102,7 +102,7 @@
+   const undo = makeMove(position, move);
+   // makeMove flipped the side, so isInCheck now asks about the side the move was played AGAINST.
+   const check = isInCheck(position);
+-  const mate = check && legalMoves(position).length === 0;
++  const mate = check && (legalMoves(position), legalMoves(position)).length === 0;
+   unmakeMove(position, move, undo);
+ 
+   if (!check) return "";
+reds (1), first 4:
+  AssertionError: checking move, list supplied: expected "vi.fn()" to be called 1 times, but got 2 times @ [src/san.nfr.test.ts] N1 — toSan generates the legal moves only when it has to (call counts, spied) pays EXACTLY ONE extra generation for the mate test, and only on a checking move
+
+===== tl-keyHistory-before-first-frame
+# tl-keyHistory-before-first-frame
+why: keyHistory expected 0
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 8 passed: 59
+--- src/turn-loop.ts
++++ src/turn-loop.ts
+@@ -301,6 +301,7 @@
+   let writer: FrameWriter | undefined;
+   let messages: readonly string[] = [];
+   // Transition 1 → 2. The status is computed before the first frame — always, terminal or not.
++  keyHistory(history);
+   let status = gameStatusOf(history);
+ 
+   for (;;) {
+reds (8), first 4:
+  AssertionError: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/turn-loop.nfr.test.ts] NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY once per ply at 40 plies
+  AssertionError: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/turn-loop.nfr.test.ts] NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY once per ply at 120 plies
+  AssertionError: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/turn-loop.nfr.test.ts] NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY once per ply at 300 plies
+  AssertionError: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/turn-loop.nfr.test.ts] NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives ZERO times on a `rejected` prompt outcome
+
+===== tl-second-frame-session
+# tl-second-frame-session
+why: beginFrameSession expected 1
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 4 passed: 59
+--- src/turn-loop.ts
++++ src/turn-loop.ts
+@@ -312,6 +312,7 @@
+     // `rendering`. The session height is the FIRST frame's own row count, held for the session, and
+     // `beginFrameSession` is called exactly once — the property `frame.ts`'s header rests on.
+     const frame = render(history, status, thinking, messages);
++    if (writer === undefined) beginFrameSession(sink, frame.length);
+     writer ??= beginFrameSession(sink, frame.length);
+     writer(frame);
+     messages = [];
+reds (4), first 4:
+  AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times @ [src/turn-loop.test.ts] ABC-019 acceptance A19 — one session at the first frame's own height, frames untouched (shape A)
+  AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times @ [src/turn-loop.test.ts] ABC-019 acceptance A19 — one session at the first frame's own height, frames untouched (shape B)
+  AssertionError: expected 0 to be greater than 0 @ [src/turn-loop.test.ts] ABC-019 acceptance A20 — after EVERY redraw the screen equals the frame, at `W`(frame 1) and at 80 columns
+  AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times @ [src/turn-loop.test.ts] ADR-0009 clause 9f — the loop against the REAL panels, both of them `A19`'s four clauses hold at the real geometry, and the height is DERIVED there too
+
+===== hp-parseFen-twice
+# hp-parseFen-twice
+why: parseFen <= 1
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 11
+--- src/history-pane.ts
++++ src/history-pane.ts
+@@ -119,7 +119,7 @@
+ export function renderHistory(history: GameHistory): string[] {
+   // The one `parseFen`: the anchor, parsed once. The replay walks forward from it, and the object
+   // it returns is this function's own — the caller's `history.position` is never touched.
+-  const position = parseFen(history.initialFen);
++  const position = (parseFen(history.initialFen), parseFen(history.initialFen));
+   const moves = history.moves;
+   const firstVisible = firstVisiblePly(moves.length, position.blackToMove);
+reds (1), first 4:
+  AssertionError: parseFen at 0: expected 2 to be less than or equal to 1 @ [src/history-pane.nfr.test.ts] A11 — the pane derives nothing, and this is a CALL COUNT parses the anchor AT MOST ONCE per render, on an empty history and on a 2,000-ply one
+
+===== sp-toSan-twice
+# sp-toSan-twice
+why: toSan 1 -> 2
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 2 passed: 4
+--- src/status-panel.ts
++++ src/status-panel.ts
+@@ -156,7 +156,7 @@
+   const position = parseFen(history.initialFen);
+   for (let ply = 0; ply < moves.length - 1; ply++) makeMove(position, moves[ply] as Move);
+ 
+-  return `last: ${toSan(position, moves[moves.length - 1] as Move)}`;
++  return `last: ${(toSan(position, moves[moves.length - 1] as Move), toSan(position, moves[moves.length - 1] as Move))}`;
+ }
+ 
+ /**
+reds (2), first 4:
+  AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times @ [src/status-panel.nfr.test.ts] ABC-016 A13 — the panel derives nothing (call counts, spied) calls toSan exactly once, and not at all before the first move
+  AssertionError: expected 2 to be 1 // Object.is equality @ [src/status-panel.nfr.test.ts] ABC-016 A13 — the panel derives nothing (call counts, spied) asks isInCheck exactly once ITSELF — the panel's own call is the only one it makes
+
+===== sp-keyHistory-called
+# sp-keyHistory-called
+why: keyHistory expected 0
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 3 passed: 3
+--- src/status-panel.ts
++++ src/status-panel.ts
+@@ -39,7 +39,7 @@
+ import { makeMove } from "./apply.ts";
+ import { parseFen } from "./fen.ts";
+ import type { ClaimableDraw, GameStatus } from "./gameend.ts";
+-import type { GameHistory } from "./history.ts";
++import { type GameHistory, keyHistory } from "./history.ts";
+ import { isInCheck } from "./legal.ts";
+ import type { Move } from "./moves.ts";
+ import {
+@@ -156,6 +156,7 @@
+   const position = parseFen(history.initialFen);
+   for (let ply = 0; ply < moves.length - 1; ply++) makeMove(position, moves[ply] as Move);
+ 
++  keyHistory(history);
+   return `last: ${toSan(position, moves[moves.length - 1] as Move)}`;
+ }
+reds (3), first 4:
+  AssertionError: one ply: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/status-panel.nfr.test.ts] ABC-016 A13 — the panel derives nothing (call counts, spied) never touches the repetition machinery, on any shape
+  AssertionError: 32 pieces, 4 plies: expected "vi.fn()" to be called 96 times, but got 128 times @ [src/status-panel.nfr.test.ts] ABC-016 A13 — the panel derives nothing (call counts, spied) scans the 64 squares exactly once, whatever the board holds and however deep the game
+  AssertionError: expected "vi.fn()" to be called 67 times, but got 70 times @ [src/status-panel.nfr.test.ts] ABC-016 A13 — the panel derives nothing (call counts, spied) replays the history exactly once for the last move, and never twice
+
+===== gm-fs-readFileSync
+# gm-fs-readFileSync
+why: node:fs
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 2
+--- src/glyph-mode.ts
++++ src/glyph-mode.ts
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import { readFileSync } from "node:fs";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -118,5 +119,6 @@
+     env: process.env,
+   });
+ 
++  readFileSync("/dev/null");
+   return () => mode;
+ }
+reds (1), first 4:
+  AssertionError: readFileSync: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/glyph-mode.nfr.test.ts] NFR-007 — the glyph-mode selection reaches its answer with no I/O (spied) performs ZERO filesystem operations, on every selection path
+
+===== gm-fsp-readdir
+# gm-fsp-readdir
+why: node:fs/promises
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 2
+--- src/glyph-mode.ts
++++ src/glyph-mode.ts
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import { readdir } from "node:fs/promises";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -118,5 +119,6 @@
+     env: process.env,
+   });
+ 
++  readdir("/").catch(() => undefined);
+   return () => mode;
+ }
+reds (1), first 4:
+  AssertionError: fs/promises readdir: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/glyph-mode.nfr.test.ts] NFR-007 — the glyph-mode selection reaches its answer with no I/O (spied) performs ZERO filesystem operations, on every selection path
+
+===== gm-cp-execFileSync
+# gm-cp-execFileSync
+why: node:child_process
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 2
+--- src/glyph-mode.ts
++++ src/glyph-mode.ts
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import { execFileSync } from "node:child_process";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -118,5 +119,6 @@
+     env: process.env,
+   });
+ 
++  execFileSync("/usr/bin/true");
+   return () => mode;
+ }
+reds (1), first 4:
+  AssertionError: execFileSync: expected "vi.fn()" to be called +0 times, but got 1 times @ [src/glyph-mode.nfr.test.ts] NFR-007 — the glyph-mode selection reaches its answer with no I/O (spied) performs ZERO process operations — there is no `locale` subprocess and no font probe
+
+===== a2-ordinal-salt-head
+# a2-ordinal-salt-head
+why: two evaluations of book.ts differ
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 3 passed: 32
+--- src/book.ts
++++ src/book.ts
+@@ -48,6 +48,8 @@
+ 
+ type BookLine = readonly [uci: string, weight: number];
+ 
++const QE_LOADS = globalThis as unknown as { qe152Loads?: number };
++const QE_ORDINAL = (QE_LOADS.qe152Loads = (QE_LOADS.qe152Loads ?? 0) + 1);
+ const KEY = /^[0-9a-f]{16}$/;
+ const UCI = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
+ /** Indexed by piece type: KNIGHT 2, BISHOP 3, ROOK 4, QUEEN 5 (as `tools/opening-book/compile.ts`). */
+@@ -140,7 +142,9 @@
+   return {
+     inBook: (position) => bookMoves(position).length > 0,
+     bookMove(position) {
+-      const moves = bookMoves(position);
++      const unrotated = bookMoves(position);
++      const turn = QE_ORDINAL % Math.max(unrotated.length, 1);
++      const moves = [...unrotated.slice(turn), ...unrotated.slice(0, turn)];
+       const total = moves.reduce((sum, { weight }) => sum + weight, 0);
+       let draw = Math.floor(random() * total);
+       for (const { move, weight } of moves) {
+reds (3), first 4:
+  AssertionError: expected [ 'e2e4', 'd2d4', 'e2e4', …(97) ] to deeply equal [ 'e2e4', 'd2d4', 'e2e4', …(97) ] @ [src/book.test.ts] ABC-094 A2 — deterministic under a fixed seed two fresh module instances, same position, artifact and seed: 100 picks identical element for element
+  AssertionError: expected { e2e4: 816, g1f3: 83, d2d4: 101 } to deeply equal { e2e4: 796, d2d4: 106, g1f3: 98 } @ [src/book.test.ts] ABC-094 A4 — the weights are used 8:1:1 over 1,000 draws from seed 42: each share within ±5 pp, exact counts recorded
+  AssertionError: expected 'd2d4' to be 'e2e4' // Object.is equality @ [src/book.test.ts] ABC-094 A4 — the weights are used the draw maps [0, 1) onto the cumulative weights: 0 picks the first move, just under 1 the last
+
+===== lv-blunder-first-child-skips-engine
+# lv-blunder-first-child-skips-engine
+why: one call per root move
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 2 passed: 20
+--- src/levels.ts
++++ src/levels.ts
+@@ -142,7 +142,7 @@
+       // One shared deadline: an overrun by one child shortens the next. A non-positive budget
+       // still runs the engine's unabortable depth 1.
+       const deadline = start + (budgetMs * (i + 1)) / moves.length;
+-      const child = chooseMove(position, { budgetMs: deadline - now(), now });
++      const child = i === 0 ? null : chooseMove(position, { budgetMs: deadline - now(), now });
+       if (child === null) {
+         const mated = gameStatus(position).reason === "checkmate";
+         scored.push({ move, score: mated ? MATE_SCORE - 1 : 0 });
+reds (2), first 4:
+  AssertionError: expected [ { …(3) }, { …(3) }, { …(3) }, …(3) ] to have a length of 7 but got 6 @ [src/levels.test.ts] QE-087-a — the seed never reaches the engine (ADR-0027 d1) every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed
+  AssertionError: expected +0 to be -25 // Object.is equality @ [src/levels.test.ts] QE-087-b — the scored list is the engine's, not a self-consistent lie each child's score is minus the real `chooseMove`'s depth-1 score on that child
+
+===== so-root-make-routes-around-mock
+# so-root-make-routes-around-mock
+why: ply instrument off by one
+expect: red
+got: green (UNEXPECTED)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 24
+--- src/search.ts
++++ src/search.ts
+@@ -60,6 +60,7 @@
+  */
+ 
+ import { makeMove, unmakeMove } from "./apply.ts";
++import { makeMove as qeMake, unmakeMove as qeUnmake } from "./apply.ts?qe152";
+ import { evaluate } from "./evaluate.ts";
+ import { gameStatus } from "./gameend.ts";
+ import { isInCheck, legalMoves } from "./legal.ts";
+@@ -524,7 +525,7 @@
+     const reduction = switches.reductions
+       ? lateMoveReduction(position, move, depth, index, true)
+       : 0;
+-    const undo = makeMove(position, move);
++    const undo = qeMake(position, move);
+     keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
+     const score = searchMove(
+       position,
+@@ -539,7 +540,7 @@
+       killers,
+       keys,
+     );
+-    unmakeMove(position, move, undo);
++    qeUnmake(position, move, undo);
+     index++;
+ 
+     if (score > best) {
+reds (0), first 4:
+
+
+===== so-killer-recorded-one-ply-deep-QE
+# so-killer-recorded-one-ply-deep-QE
+why: argument plant (extra): mis-ply record
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 2 passed: 22
+--- src/search.ts
++++ src/search.ts
+@@ -397,7 +397,7 @@
+     if (!prune) continue;
+     if (best > alpha) alpha = best;
+     if (alpha >= beta) {
+-      killers.record(ply, move);
++      killers.record(ply + 1, move);
+       break; // the opponent would never allow this node; the rest cannot matter
+     }
+   }
+reds (2), first 4:
+  AssertionError: expected 4419 to be 3871 // Object.is equality @ [src/search.ordering.test.ts] A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 8 887, MVV-LVA 4 419, + killers 3 871
+  AssertionError: expected [ …(240) ] to deeply equal [] @ [src/search.ordering.test.ts] A6 — a killer is offered only at the ply it was recorded at, and only in its own search search(): every killer offered was recorded at that ply of that search, and killers ARE offered
+
+===== ec-root-key-not-via-mock
+# ec-root-key-not-via-mock
+why: writes per iteration 128 -> 127
+expect: red
+got: green (UNEXPECTED)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 1
+--- src/engine.ts
++++ src/engine.ts
+@@ -383,7 +383,7 @@
+     const undo = makeMove(position, move);
+     let score: number;
+     try {
+-      budget.keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
++      budget.keys[1] = zobristKey(position);
+       score = searchMove(
+         position,
+         remaining,
+reds (0), first 4:
+
+
+===== sc-root-key-not-via-mock
+# sc-root-key-not-via-mock
+why: keyWrites 128 -> 127
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 0
+--- src/search.ts
++++ src/search.ts
+@@ -525,7 +525,7 @@
+       ? lateMoveReduction(position, move, depth, index, true)
+       : 0;
+     const undo = makeMove(position, move);
+-    keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
++    keys[1] = zobristKey(position);
+     const score = searchMove(
+       position,
+       depth,
+reds (1), first 4:
+  AssertionError: expected 127 to be 128 // Object.is equality @ [src/search.capacity.test.ts] ABC-122 A6: src/search.ts's KEY_ARRAY_CAPACITY guard, reached through search() ends a depth-200 line at ply 128 with a leaf's score: no child past it, no key written past it
+
+===== pl-engine-node-store-removed
+# pl-engine-node-store-removed
+why: the engine's stores vanish from the trace
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 19
+--- src/engine.ts
++++ src/engine.ts
+@@ -300,7 +300,6 @@
+ 
+   // Never reached by an aborted subtree: the abort throws past this line, so a partial result
+   // is never stored.
+-  storeEntry(key, remaining, boundOf(best, alphaIn, beta), best, ply, bestMove);
+   return best;
+ }
+reds (1), first 4:
+  AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0 @ [src/search.pvs-lmr.test.ts] A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to dep
+
+===== tt-engine-node-probe-removed
+# tt-engine-node-probe-removed
+why: engine hit rate
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 24
+--- src/engine.ts
++++ src/engine.ts
+@@ -259,7 +259,7 @@
+   }
+   const key = keys[ply] as bigint;
+ 
+-  const slot = probeTable(key);
++  const slot = -1;
+   if (slot !== -1) {
+     const settled = tableCutoff(slot, remaining, alpha, beta, ply);
+     if (settled !== null) return settled;
+reds (1), first 4:
+  AssertionError: expected 1 to be less than or equal to 0.7 @ [src/transposition.test.ts] A3 — iterative deepening with the table visits <= 70% of the nodes it visits without position-3 deepened to depth 4 — the default lane's standing guard
+
+===== so-offer-made-one-ply-deep
+# so-offer-made-one-ply-deep
+why: killer offered while one extra move is outstanding
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 23
+--- src/search.ts
++++ src/search.ts
+@@ -368,7 +368,10 @@
+   let best = Number.NEGATIVE_INFINITY;
+   let bestMove = moves[0] as Move;
+   let index = 0;
+-  for (const move of ordered(moves, ply, switches, killers, hashMove)) {
++  const qeUndo = makeMove(position, moves[0] as Move);
++  const qeOrdered = ordered(moves, ply, switches, killers, hashMove);
++  unmakeMove(position, moves[0] as Move, qeUndo);
++  for (const move of qeOrdered) {
+     const reduction = switches.reductions
+       ? lateMoveReduction(position, move, depth, index, false)
+       : 0;
+reds (1), first 4:
+  AssertionError: expected [ …(244) ] to deeply equal [] @ [src/search.ordering.test.ts] A6 — a killer is offered only at the ply it was recorded at, and only in its own search search(): every killer offered was recorded at that ply of that search, and killers ARE offered
+
+===== ec-root-key-written-twice
+# ec-root-key-written-twice
+why: writes per iteration 128 -> 129
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 0
+--- src/engine.ts
++++ src/engine.ts
+@@ -383,6 +383,7 @@
+     const undo = makeMove(position, move);
+     let score: number;
+     try {
++      zobristKeyAfterMove(rootKey, position, move, undo);
+       budget.keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
+       score = searchMove(
+         position,
+reds (1), first 4:
+  AssertionError: expected 129 to be 128 // Object.is equality @ [src/engine.capacity.test.ts] ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() ends every line at ply 128 with a leaf's score once the deepening passes it: no node or key past it
+
+===== a2only-ordinal-salt-HEAD
+# a2only-ordinal-salt-HEAD
+why: two evaluations of book.ts differ
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 1 passed: 0
+--- src/book.ts
++++ src/book.ts
+@@ -48,6 +48,8 @@
+ 
+ type BookLine = readonly [uci: string, weight: number];
+ 
++const QE_LOADS = globalThis as unknown as { qe152Loads?: number };
++const QE_ORDINAL = (QE_LOADS.qe152Loads = (QE_LOADS.qe152Loads ?? 0) + 1);
+ const KEY = /^[0-9a-f]{16}$/;
+ const UCI = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
+ /** Indexed by piece type: KNIGHT 2, BISHOP 3, ROOK 4, QUEEN 5 (as `tools/opening-book/compile.ts`). */
+@@ -140,7 +142,9 @@
+   return {
+     inBook: (position) => bookMoves(position).length > 0,
+     bookMove(position) {
+-      const moves = bookMoves(position);
++      const unrotated = bookMoves(position);
++      const turn = QE_ORDINAL % Math.max(unrotated.length, 1);
++      const moves = [...unrotated.slice(turn), ...unrotated.slice(0, turn)];
+       const total = moves.reduce((sum, { weight }) => sum + weight, 0);
+       let draw = Math.floor(random() * total);
+       for (const { move, weight } of moves) {
+reds (1), first 4:
+  AssertionError: expected [ 'e2e4', 'd2d4', 'e2e4', …(97) ] to deeply equal [ 'e2e4', 'd2d4', 'e2e4', …(97) ] @ [src/book.test.ts] ABC-094 A2 — deterministic under a fixed seed two fresh module instances, same position, artifact and seed: 100 picks identical element for element
+
+===== BASE-ctl-command-input-engine-capacity
+# BASE-ctl-command-input-engine-capacity
+why: base control
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 189
+
+reds (0), first 4:
+
+
+===== BASE-ci-pd-add-SE
+# BASE-ci-pd-add-SE
+why: SE's add-plant on base 3.2.7
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 188
+--- src/move-input.ts
++++ src/move-input.ts
+@@ -105,7 +105,12 @@
+   readonly toSan: (position: Position, move: Move, legal?: readonly Move[]) => string;
+ }
+ 
+-const PRODUCTION_DEPS: MoveInputDeps = { legalMoves, parseCoordinateMove, parseSan, toSan };
++const PRODUCTION_DEPS: MoveInputDeps = {
++  legalMoves: (position) => (legalMoves(position), legalMoves(position)), // PLANT
++  parseCoordinateMove,
++  parseSan,
++  toSan,
++};
+ 
+ /**
+  * The case-folded RETRY's variants, applied to the whole line and nowhere else.
+reds (0), first 4:
+
+
+===== BASE-ci-pd-remove-SE
+# BASE-ci-pd-remove-SE
+why: SE's removal on base
+expect: red
+got: red (OK)
+exit: 1 signal: null
+env: {}
+failed: 4 passed: 184
+--- src/move-input.ts
++++ src/move-input.ts
+@@ -105,7 +105,12 @@
+   readonly toSan: (position: Position, move: Move, legal?: readonly Move[]) => string;
+ }
+ 
+-const PRODUCTION_DEPS: MoveInputDeps = { legalMoves, parseCoordinateMove, parseSan, toSan };
++const PRODUCTION_DEPS: MoveInputDeps = {
++  legalMoves: () => [], // PLANT
++  parseCoordinateMove,
++  parseSan,
++  toSan,
++};
+ 
+ /**
+  * The case-folded RETRY's variants, applied to the whole line and nowhere else.
+reds (4), first 4:
+  AssertionError: expected 0 to be greater than or equal to 1 @ [src/command-input.test.ts] ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss A2 control — the same legalMoves spy DOES count a real call on a line that is a move
+  AssertionError: expected 'rejected' to be 'move' // Object.is equality @ [src/command-input.test.ts] ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)
+  AssertionError: expected [] to have a length of 2 but got +0 @ [src/command-input.test.ts] ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session
+  AssertionError: expected [ 4, 4 ] to deeply equal [ 4, 6 ] @ [src/command-input.test.ts] ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A1 — through the MERGED loop: the human's move and the reply go, byte-identical to before the human moved
+
+===== BASE-ec-root-key-not-via-mock
+# BASE-ec-root-key-not-via-mock
+why: is the root-write removal blind on base too?
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 1
+--- src/engine.ts
++++ src/engine.ts
+@@ -383,7 +383,7 @@
+     const undo = makeMove(position, move);
+     let score: number;
+     try {
+-      budget.keys[1] = zobristKeyAfterMove(rootKey, position, move, undo);
++      budget.keys[1] = zobristKey(position);
+       score = searchMove(
+         position,
+         remaining,
+reds (0), first 4:
+
+
+===== OLD-ctl-book
+# OLD-ctl-book
+why: old-form control
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 35
+
+reds (0), first 4:
+
+
+===== OLD-a2-ordinal-salt
+# OLD-a2-ordinal-salt
+why: ruling 3: the old form is blind to a load-time salt
+expect: green
+got: red (UNEXPECTED)
+exit: 1 signal: null
+env: {}
+failed: 2 passed: 33
+--- src/book.ts
++++ src/book.ts
+@@ -48,6 +48,8 @@
+ 
+ type BookLine = readonly [uci: string, weight: number];
+ 
++const QE_LOADS = globalThis as unknown as { qe152Loads?: number };
++const QE_ORDINAL = (QE_LOADS.qe152Loads = (QE_LOADS.qe152Loads ?? 0) + 1);
+ const KEY = /^[0-9a-f]{16}$/;
+ const UCI = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
+ /** Indexed by piece type: KNIGHT 2, BISHOP 3, ROOK 4, QUEEN 5 (as `tools/opening-book/compile.ts`). */
+@@ -140,7 +142,9 @@
+   return {
+     inBook: (position) => bookMoves(position).length > 0,
+     bookMove(position) {
+-      const moves = bookMoves(position);
++      const unrotated = bookMoves(position);
++      const turn = QE_ORDINAL % Math.max(unrotated.length, 1);
++      const moves = [...unrotated.slice(turn), ...unrotated.slice(0, turn)];
+       const total = moves.reduce((sum, { weight }) => sum + weight, 0);
+       let draw = Math.floor(random() * total);
+       for (const { move, weight } of moves) {
+reds (2), first 4:
+  AssertionError: expected { e2e4: 816, g1f3: 83, d2d4: 101 } to deeply equal { e2e4: 796, d2d4: 106, g1f3: 98 } @ [src/book.test.ts] ABC-094 A4 — the weights are used 8:1:1 over 1,000 draws from seed 42: each share within ±5 pp, exact counts recorded
+  AssertionError: expected 'd2d4' to be 'e2e4' // Object.is equality @ [src/book.test.ts] ABC-094 A4 — the weights are used the draw maps [0, 1) onto the cumulative weights: 0 picks the first move, just under 1 the last
+
+===== a2only-ordinal-salt-OLD
+# a2only-ordinal-salt-OLD
+why: two evaluations of book.ts differ
+expect: green
+got: green (OK)
+exit: 0 signal: null
+env: {}
+failed: 0 passed: 1
+--- src/book.ts
++++ src/book.ts
+@@ -48,6 +48,8 @@
+ 
+ type BookLine = readonly [uci: string, weight: number];
+ 
++const QE_LOADS = globalThis as unknown as { qe152Loads?: number };
++const QE_ORDINAL = (QE_LOADS.qe152Loads = (QE_LOADS.qe152Loads ?? 0) + 1);
+ const KEY = /^[0-9a-f]{16}$/;
+ const UCI = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
+ /** Indexed by piece type: KNIGHT 2, BISHOP 3, ROOK 4, QUEEN 5 (as `tools/opening-book/compile.ts`). */
+@@ -140,7 +142,9 @@
+   return {
+     inBook: (position) => bookMoves(position).length > 0,
+     bookMove(position) {
+-      const moves = bookMoves(position);
++      const unrotated = bookMoves(position);
++      const turn = QE_ORDINAL % Math.max(unrotated.length, 1);
++      const moves = [...unrotated.slice(turn), ...unrotated.slice(0, turn)];
+       const total = moves.reduce((sum, { weight }) => sum + weight, 0);
+       let draw = Math.floor(random() * total);
+       for (const { move, weight } of moves) {
+reds (0), first 4:
+
+

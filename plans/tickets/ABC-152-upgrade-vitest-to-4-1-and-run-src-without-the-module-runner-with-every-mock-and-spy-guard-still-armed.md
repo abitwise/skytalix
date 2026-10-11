@@ -339,3 +339,72 @@ detail is in `.grugops/context/ticket-to-pr-ABC-152/notes/`, and the scripts and
   - three stale comments that still describe the pre-rewrite forms.
 
   Both are routed in the hand-off note `…4567b6b5`.
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-152`).
+- Range: base `91024242`, code `9313dda7..23c5521a`, reviewed tip `a99e9845`. The dry-run merge was against `main`
+  `0ff618be`.
+- Every reading is QE's own:
+  - QE's worktree had its own `npm ci`;
+  - the scratch copies sat outside the repository, with no `node_modules` symlink;
+  - QE planted in other files and functions than the SE's.
+- **No timing, CPU or heat was read or graded.**
+- The detail is in `.grugops/context/qe-ABC-152/notes/`, and it is not restated here:
+  - `…ee5be445`, the verdict;
+  - `…469a3462`, the readings;
+  - `…0d5f42fb`, `V2`;
+  - `…cdea38ad`, `V4`;
+  - `…8bfb6cb5`, the gaps;
+  - `…14f57bfc`, the commands and the probe.
+
+**FAIL, on one blocking gap that is repairable inside the admitted forms.** Every listed criterion QE grades is
+otherwise MET, except one `V2` sub-clause.
+- **`QE-152-h` (HIGH): `PUZZLE_DEEP=weakened`, `ABC-084` A3's red demonstration, is blind at head.**
+  - Its `vi.doMock("./evaluate.ts", …)` plus `await import("./engine.ts")` (`src/puzzle-suite.test.ts:368-374`)
+    no longer reaches the engine with the runner off.
+  - The weakened engine solves **54/58 at head** against **15/58 at base 3.2.7**, so the gate row stays
+    **green**.
+  - The run still exits 1, but only because A3 ("solves FEWER") fails. An exit-code check misses it.
+  - It escaped `V4`'s set because `D3` screened the default lane only.
+  - **The repair is an admitted form, proven on a scratch copy:** R2's shape (`vi.mock("./evaluate.ts", { spy:
+    true })` plus `vi.mocked(evaluate).mockImplementation(() => 0)`). It gives the gate row red at 15/58,
+    `PUZZLE_DEEP=1` and default green, and `expect(` unchanged.
+  - **Not a ruling 7 case.** QE's search found no other site.
+- **`V1` MET.** vitest 4.1.11, coverage-v8 4.1.11, vite 7.3.6 (direct). No other devDependency moves.
+- **`V2` MET, except one sub-clause.**
+  - All six rows AGREE by content on QE's plant files.
+  - **`M9b` is killed by the exit-code-only row alone.** The `onFinished` route fails the unhandled row.
+  - READ IT works as pasted (`QE-149-a` closed).
+  - **Not met as written:** `ABC-143` `A5`'s "the console gains no line". vitest 4.1 prints a `vitest/reporters`
+    deprecation line on every `npm test` (`QE-152-a`, LOW). The one-line fix, `vitest/node` (the identical
+    class), was proven on a scratch copy.
+- **`V3` MET.** `viteModuleRunner` resolves `false`. The `V3` `it` is red with the key deleted and with it `true`.
+- **`V4` MET for its set.**
+  - All 20 files have a QE production plant that turns a count or routing guard red. This covers `NFR-001`,
+    `NFR-005`, `N1`, `NFR-007` (×3), A20 (×2), R2 (a)/(b), R3's `called 1 times, but got 2`, and R5 on
+    `PRODUCTION_DEPS`.
+  - **A2 is red at head on QE's own salt, and blind on the old form.**
+  - **Ruling 7: 0 cases.**
+  - The SE's green add-plant on `PRODUCTION_DEPS` is confirmed: it is green at base too, and the guard is armed by
+    removal. That is a pre-existing gap (`QE-152-e`).
+- **`V5` MET.** `expect(` is equal per file, except `src/cli.test.ts` +3. **56 / 1741 / 0 skipped.**
+- **`V6` MET.** 11 reds and 3 greens on QE's copies. `QE-144-a` closes; `QE-151-a` and `QE-151-b` are folded.
+- **`V7` MET.** **20 of 20 consecutive green `npm test` runs**, each with 7/7 `*.nfr` files passing.
+- **`V8` MET as written.**
+  - The same 56 paths. All 9 lane configurations collect base's ids plus the `V3` id.
+  - **All 8 opt-in lanes exit 0** at base + 1, with every test passed. `PUZZLE_DEEP=1` reads 54/58, equal to the
+    baseline.
+  - Both coverage commands exit 0. No wall was read.
+- **`V12`, the line check, MET:** 0 production `src/` lines.
+- **Gates:** lint, typecheck, build and `npm test` all exit 0. Skip count 0; integrity `No findings.`
+- **Dry-run merge against `main` `0ff618be`:** clean (only queue files and `plans/board.md` come in). The merged
+  tree is green: 4 gates at 0, 56 / 1741. Aborted; nothing was committed.
+- **Other gaps:**
+  - `QE-152-b` LOW: `RISK-ABC152-NEGWORKERS` is confirmed, and **any** negative value exits 0 with nothing run.
+    QE keeps the residual, so the Scribe owes the `AGENTS.md` line.
+  - `QE-152-c` LOW: the exit-code-only row's margin is 0.57 points of lines coverage on 4.x.
+  - `-d` to `-g` are INFO.
+- **Route (the Orchestrator's):** the SE makes one repair hop for `QE-152-h`, and for `QE-152-a` if the Architect
+  agrees. QE then re-checks that delta. After that, the next stop is `In Security/NFR`: the `V12` review, then
+  the width-1 window `V9`–`V11`.

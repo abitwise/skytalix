@@ -1,0 +1,32 @@
+id	expect	got	ok	exit	failed	passed	first_red
+pin-control	green	green	OK	0	0	2	
+pin-r1-del-maxWorkers	red	red	OK	1	1	1	AssertionError: expected undefined to be 2 // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-r2-isolate-false	red	red	OK	1	1	1	AssertionError: expected false to be true // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-r3-env-8	red	red	OK	1	1	1	AssertionError: VITEST_MAX_WORKERS: expected 8 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-r3b-env-3	red	red	OK	1	1	1	AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-r4-projects	red	red	OK	1	1	1	AssertionError: expected [ { test: { name: 'qe', …(1) } } ] to be undefined @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-maxWorkers-3	red	red	OK	1	1	1	AssertionError: expected 3 to be 2 // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-fileParallelism-false	red	red	OK	1	1	1	AssertionError: expected false to be true // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-poolOptions	red	red	OK	1	1	1	AssertionError: expected true to be false // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-env-0x3	red	red	OK	1	1	1	AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-env-0	red	red	OK	1	1	1	AssertionError: VITEST_MAX_WORKERS: expected 0 to be greater than or equal to 1 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+pin-env-abc	red	red	OK	1	1	1	AssertionError: VITEST_MAX_WORKERS: expected NaN to be greater than or equal to 1 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+v3-key-deleted	red	red	OK	1	1	1	AssertionError: expected undefined to be false // Object.is equality @ [src/cli.test.ts] ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) vitest.config.ts sets experimental.viteModuleRunner to exactly false
+v3-key-true	red	red	OK	1	1	1	AssertionError: expected true to be false // Object.is equality @ [src/cli.test.ts] ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) vitest.config.ts sets experimental.viteModuleRunner to exactly false
+pin-env-empty	green	green	OK	0	0	2	
+pin-env-1	green	green	OK	0	0	2	
+pin-env-2	green	green	OK	0	0	2	
+qx-v3-key-zero	red	red	OK	1	1	1	AssertionError: expected +0 to be false // Object.is equality @ [src/cli.test.ts] ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) vitest.config.ts sets experimental.viteModuleRunner to exactly false
+qx-v3-experimental-empty	red	red	OK	1	1	1	AssertionError: expected undefined to be false // Object.is equality @ [src/cli.test.ts] ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) vitest.config.ts sets experimental.viteModuleRunner to exactly false
+qx-maxWorkers-string-2	red	red	OK	1	1	1	AssertionError: expected '2' to be 2 // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+qx-maxWorkers-50pct	red	red	OK	1	1	1	AssertionError: expected '50%' to be 2 // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+qx-projects-empty	red	red	OK	1	?	?	exit 1 signal null ⎯⎯⎯⎯⎯⎯⎯ Startup Error ⎯⎯⎯⎯⎯⎯⎯⎯
+qx-poolOptions-undefined	red	red	OK	1	1	1	AssertionError: expected true to be false // Object.is equality @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+qx-isolate-true-explicit	green	green	OK	0	0	2	
+qx-env-space3	red	red	OK	1	1	1	AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+qx-env-3abc	red	red	OK	1	1	1	AssertionError: VITEST_MAX_WORKERS: expected 3 to be less than or equal to 2 @ [src/cli.test.ts] ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040) vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it
+qx-env-0x2	green	green	OK	0	0	2	
+qx-env-2.9	green	green	OK	0	0	2	
+qx-env-1e9	green	green	OK	0	0	2	
+qx-env-neg1	red	green	UNEXPECTED	0	?	?	
+qx-env-threads-8	green	green	OK	0	0	2	

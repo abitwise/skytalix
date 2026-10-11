@@ -1,0 +1,10 @@
+lane	base_exit	head_exit	files_base	files_head	same_paths	tests_base	tests_head	only_base	only_head
+default	0	0	56	56	true	1740	1741	[]	["src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false"]
+PERFT_DEEP	0	0	56	56	true	1748	1749	[]	["src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false"]
+SEARCH_DEEP	0	0	56	56	true	1815	1816	[]	["src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false"]
+ENGINE_DEEP	0	0	56	56	true	1761	1762	[]	["src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false"]
+INPUT_DEEP	0	0	56	56	true	1744	1745	[]	["src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false"]
+ZOBRIST_DEEP	0	0	56	56	true	1741	1742	[]	["src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false"]
+PUZZLE_DEEP	0	0	56	56	true	1746	1747	[]	["src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false"]
+CLI_DEEP	0	0	56	56	true	1746	1747	[]	["src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false"]
+LADDER_DEEP	0	0	56	56	true	1745	1746	[]	["src/cli.test.ts > ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum) > vitest.config.ts sets experimental.viteModuleRunner to exactly false"]

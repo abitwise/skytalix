@@ -1,0 +1,5 @@
+id	expect	got	ok	exit	failed	passed	first_red
+pz-asis-weakened-HEAD	red	red	OK	1	1	13	AssertionError: expected 54 to be less than 54 @ [src/puzzle-suite.test.ts] the gating run [deep, PUZZLE_DEEP=weakened] A3 — the weakened engine solves FEWER than the baseline (so the gate row above is red)
+pz-r2form-weakened	red	red	OK	1	1	13	AssertionError: expected 15 to be greater than or equal to 54 @ [src/puzzle-suite.test.ts] the gating run [deep, PUZZLE_DEEP=weakened] the gate: solved >= the recorded baseline
+pz-r2form-deep1	green	green	OK	0	0	18	
+pz-r2form-default	green	green	OK	0	0	12	

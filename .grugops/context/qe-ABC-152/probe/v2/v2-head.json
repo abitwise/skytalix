@@ -1,0 +1,233 @@
+[
+  {
+    "label": "head",
+    "mutant": "none",
+    "row": "green",
+    "exit": 0,
+    "wantExit": 0,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [],
+    "wantLines": [],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": true,
+      "runState": "exited",
+      "exitCode": 0,
+      "startTime": 1791752582397,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1741,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1741 passed (1741)",
+      "Importing from \"vitest/reporters\" is deprecated since Vitest 4.1. Please use \"vitest/node\" instead."
+    ]
+  },
+  {
+    "label": "head",
+    "mutant": "none",
+    "row": "unhandled",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "error  PLANT-timer",
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "error  PLANT-timer",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791752594178,
+      "stamp": null,
+      "numTotalTests": 1742,
+      "numPassedTests": 1742,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": [
+        "PLANT-timer"
+      ]
+    },
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1742 passed (1742)",
+      "Importing from \"vitest/reporters\" is deprecated since Vitest 4.1. Please use \"vitest/node\" instead."
+    ]
+  },
+  {
+    "label": "head",
+    "mutant": "none",
+    "row": "suite",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "suite  <scratch>/out-v2/trees/head-suite/src/fen.test.ts  PLANT-suite",
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "suite  <scratch>/out-v2/trees/head-suite/src/fen.test.ts  PLANT-suite",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791752605619,
+      "stamp": null,
+      "numTotalTests": 1659,
+      "numPassedTests": 1659,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 1,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  1 failed | 55 passed (56)",
+      "      Tests  1659 passed (1659)",
+      "Importing from \"vitest/reporters\" is deprecated since Vitest 4.1. Please use \"vitest/node\" instead."
+    ]
+  },
+  {
+    "label": "head",
+    "mutant": "none",
+    "row": "assertion",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "test   <scratch>/out-v2/trees/head-assertion/src/legal.test.ts  isInCheck is false in the starting position",
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "test   <scratch>/out-v2/trees/head-assertion/src/legal.test.ts  isInCheck is false in the starting position",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791752617132,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1740,
+      "numFailedTests": 1,
+      "numFailedTestSuites": 2,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  1 failed | 55 passed (56)",
+      "      Tests  1 failed | 1740 passed (1741)",
+      "Importing from \"vitest/reporters\" is deprecated since Vitest 4.1. Please use \"vitest/node\" instead.",
+      "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+    ]
+  },
+  {
+    "label": "head",
+    "mutant": "none",
+    "row": "exitonly",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791752628911,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1741,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1741 passed (1741)",
+      "Importing from \"vitest/reporters\" is deprecated since Vitest 4.1. Please use \"vitest/node\" instead.",
+      "ERROR: Coverage for lines (99.43%) does not meet global threshold (100%)"
+    ]
+  },
+  {
+    "label": "head",
+    "mutant": "none",
+    "row": "hang",
+    "exit": 124,
+    "wantExit": 124,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [
+      "run    started exitCode=none, killed"
+    ],
+    "wantLines": [
+      "run    started exitCode=none, killed"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "started",
+      "startTime": 1791752655656,
+      "stamp": 1791752655270,
+      "files": 0,
+      "unhandled": []
+    },
+    "consoleTail": [
+      "Importing from \"vitest/reporters\" is deprecated since Vitest 4.1. Please use \"vitest/node\" instead."
+    ]
+  }
+]

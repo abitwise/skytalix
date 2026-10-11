@@ -1,0 +1,12 @@
+import { expect, it, vi } from "vitest";
+import { parseFen } from "../fen.ts";
+import { legalMoves } from "../legal.ts";
+vi.mock("../legal.ts", { spy: true });
+it("spy:true automock: static vs dynamic query", async () => {
+  const query = (await import("../legal.ts?qeprobe")) as typeof import("../legal.ts");
+  const p = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+  vi.mocked(legalMoves).mockClear(); legalMoves(p); const s = vi.mocked(legalMoves).mock.calls.length;
+  vi.mocked(legalMoves).mockClear(); query.legalMoves(p); const q = vi.mocked(legalMoves).mock.calls.length;
+  process.stderr.write(`QEPROBE SPYTRUE static=${s} query=${q}\n`);
+  expect(true).toBe(true);
+});

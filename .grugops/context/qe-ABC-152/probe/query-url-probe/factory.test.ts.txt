@@ -1,0 +1,18 @@
+import { expect, it, vi } from "vitest";
+import * as staticApply from "../apply.ts";
+import { parseFen } from "../fen.ts";
+import { legalMoves } from "../legal.ts";
+const seen = vi.hoisted(() => ({ n: 0 }));
+vi.mock("../apply.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../apply.ts")>();
+  return { ...actual, makeMove: (...a: Parameters<typeof actual.makeMove>) => { seen.n++; return actual.makeMove(...a); } };
+});
+it("factory mock: static vs dynamic plain vs dynamic query", async () => {
+  const plain = await import("../apply.ts");
+  const query = (await import("../apply.ts?qeprobe")) as typeof import("../apply.ts");
+  const p = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+  const m = legalMoves(p)[0]!;
+  const count = (mod: typeof staticApply) => { seen.n = 0; const u = mod.makeMove(p, m); mod.unmakeMove(p, m, u); return seen.n; };
+  process.stderr.write(`QEPROBE FACTORY static=${count(staticApply)} plain=${count(plain)} query=${count(query)}\n`);
+  expect(true).toBe(true);
+});

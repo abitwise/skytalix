@@ -1,0 +1,77 @@
+[
+  {
+    "label": "onfinished",
+    "mutant": "onfinished",
+    "row": "green",
+    "exit": 0,
+    "wantExit": 0,
+    "exitOk": true,
+    "fieldsOk": true,
+    "linesOk": true,
+    "verdict": "AGREE",
+    "lines": [],
+    "wantLines": [],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": true,
+      "runState": "exited",
+      "exitCode": 0,
+      "startTime": 1791752856311,
+      "stamp": null,
+      "numTotalTests": 1741,
+      "numPassedTests": 1741,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1741 passed (1741)",
+      "Importing from \"vitest/reporters\" is deprecated since Vitest 4.1. Please use \"vitest/node\" instead."
+    ]
+  },
+  {
+    "label": "onfinished",
+    "mutant": "onfinished",
+    "row": "unhandled",
+    "exit": 1,
+    "wantExit": 1,
+    "exitOk": true,
+    "fieldsOk": false,
+    "linesOk": false,
+    "verdict": "DISAGREE",
+    "lines": [
+      "run    exited exitCode=1"
+    ],
+    "wantLines": [
+      "error  PLANT-timer",
+      "run    exited exitCode=1"
+    ],
+    "queryExit": 0,
+    "queryStderr": "",
+    "file": {
+      "success": false,
+      "runState": "exited",
+      "exitCode": 1,
+      "startTime": 1791752866385,
+      "stamp": null,
+      "numTotalTests": 1742,
+      "numPassedTests": 1742,
+      "numFailedTests": 0,
+      "numFailedTestSuites": 0,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "files": 56,
+      "unhandled": []
+    },
+    "consoleTail": [
+      " Test Files  56 passed (56)",
+      "      Tests  1742 passed (1742)",
+      "Importing from \"vitest/reporters\" is deprecated since Vitest 4.1. Please use \"vitest/node\" instead."
+    ]
+  }
+]
