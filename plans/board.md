@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-144` design merged (`ADR-0040` PROPOSED). Draining to width 1 for Window A: no new pulls until QE ABC-114 and the ABC-085 build finish._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — BA/PM follow-ups merged (`757cdab2`): `ABC-145` cut → Ready; ABC-116 pointer → ABC-144; ABC-065 row 5 annotated. `ABC-085` pulled → In Development (harness build only)._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-070` → Done (UAT WAIVED; merged `22409a59`); BA/PM follow-up `bapm-followups-2026-10-11` enqueued._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-114` → In Review (built `67296100`); QE `qe-ABC-114` enqueued._
@@ -660,7 +661,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Design (WIP 1/2)
-- [ABC-144] `npm test` chokes the MacBook Air M3 — cut its CPU and cap its cores  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner goal 2026-10-10; CPU ≤ 0.85× base, ≤ 4 workers, wall ≤ 10 s unless the owner accepts Security/NFR's new number; `isolate` stays true; readings only in a no-other-hop window) **2026-10-11: Ready → In Design (Architect hop for the pool/worker setting).**
+- [ABC-144] `npm test` chokes the MacBook Air M3 — cut its CPU and cap its cores  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner goal 2026-10-10; CPU ≤ 0.85× base, ≤ 4 workers, wall ≤ 10 s unless the owner accepts Security/NFR's new number; `isolate` stays true; readings only in a no-other-hop window) **2026-10-11: Ready → In Design (Architect hop for the pool/worker setting).** **2026-10-11: Architect design merged (`aaef2cff`): `ADR-0040` PROPOSED — `maxWorkers: 4` in `vitest.config.ts`, pinned by value (env may lower, never raise), `isolate` stays on; owner word owed (ADR-0040 + meaning of 'choking'). Stays In Design until quiet Window A (≈ 15 min, width 1, 54 runs: 7/4/3/2/1 workers) is read.**
 
 
 ## Ready for Dev (WIP 0/6)
