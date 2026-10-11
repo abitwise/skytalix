@@ -11,18 +11,23 @@ feature: —
 
 # ABC-152 — `ADR-0041` route (a): the major bump, the runner switch, the guards it could blind, and the reporter it could break
 
-> **Cut 2026-10-11 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-cut-k2-vitest41`), on the owner's word
-> of 2026-10-11 (note `.grugops/context/wave-2026-09-25/notes/…fbbdde16`, item 4, verbatim):
-> *"vitest - yes do a ticket and upgrade"*.
+> **Re-cut 2026-10-11 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-recut-ABC-152`) to the owner's route, as
+> ruled in `ADR-0042`'s addendum (`aff180c7`; decision `…f9b73048`, hand-off `…80a214d3`). The first cut was
+> subtask `bapm-cut-k2-vitest41` (`59f78226`), on *"vitest - yes do a ticket and upgrade"* (`…fbbdde16` item 4).
 >
-> - **His "yes" answers `ABC-150`'s owner question 2** (`…7dc3b488`). That question bundled route (a) with
->   its test-content change ("your R-3 call"). This ticket reads the "yes" as covering **only that change**:
->   mechanism-preserving rewrites of the spy form (`V5`). Deleting, skipping, moving or weakening a test stays
->   R-3, and stays his.
-> - **His question 3 (a `deps.external` value pin) is unanswered** (`…fbbdde16` item 6). It is not in this
->   ticket.
-> - **This hop measured nothing.** Every figure is cited. Counts marked "grep" were read from the tree at
->   `619abc14` by text search, with no run.
+> - **The owner's word, 2026-10-11** (`.grugops/context/wave-2026-09-25/notes/…06bfc2d7`, item 2, verbatim):
+>   *"Vitest - upgrade and fix/upgrade tests as well, use one ticket for it, include CPU saving."*
+>   - It **replaces** the first cut's reading that his "yes" covered only spy-form rewrites.
+>   - **`D4` is answered:** the runner is off, the tests are reworked, and both happen in this ticket.
+> - **The test rework in scope** is the addendum's admitted content: forms R1–R5 (ruling 1), `san.test.ts` A20's one
+>   assertion (ruling 2) and `src/book.test.ts` ABC-094 A2's one import (ruling 3). Each rewritten guard is
+>   plant-checked (`V4`).
+> - **These stay the owner's** (ruling 7): deleting, skipping, moving, merging or weakening a test, and any guard
+>   that no admitted form arms. **Found so far: 0.**
+> - **The `deps.external` pin question is closed:** no separate ticket (`…06bfc2d7` item 3). `V3` is the guard now.
+> - **The owner then accepted `ADR-0042` with its addendum, and `RISK-ABC152-A2-GRAPH`** (`…c9b52bb2`, verbatim:
+>   *"1. ADR-0042 - accept ; 2. yes"*). That clears the merge hold.
+> - **This hop measured nothing.** Every figure is cited from `ADR-0042`, its addendum or their notes.
 
 ## Problem
 
@@ -38,8 +43,11 @@ perft 4.328x; `ADR-0041` `D1`).
   (`ADR-0041` d2, `…f80e9eba`).
 - **Route (a), `ADR-0041` d4:** vitest ≥ 4.1 with `test.experimental.viteModuleRunner: false`. This uses
   native import, with `vi.mock` carried by Node loader hooks.
-  - Whether its mocks reach every importer is `UNKNOWN - verify`, and so is its CPU effect.
-  - C4 is the nearest reading: ~100 % of the excess, inside the same worker.
+  - On 4.1.11 with the runner off, **98 tests in 13 files go red** (`ADR-0042` `D3`). In the screen, the
+    addendum's forms take that to 1 red (`F3`, post-hoc). That 1 red is ruling 2. **No guard was
+    plant-checked in that screen.** That is `V4`'s job.
+  - Its CPU effect is `UNKNOWN - verify` (`V9`). C4 is the nearest reading: ~100 % of the excess, inside the same
+    worker.
 - **The recoverable share is an estimate.** It was 26.0–35.8 % of lane CPU at 7 workers (`ABC-147`). At 2
   workers it is `UNKNOWN - verify` (`ADR-0041` § Consequences).
 
@@ -48,111 +56,123 @@ heat that is never made.
 
 ## Scope
 
-1. **Architect/Design (`In Design`): an ADR, before any build.**
-   - It reads vitest 4.1 in a scratch tree, never in this checkout.
-   - It answers `D1`–`D4`.
-   - It ends in a pre-registered split (`D4`).
-2. **Software Engineer: the build.**
-   - The bump, in `package.json` and the lockfile.
-   - The runner setting and its pin.
-   - The ruled spy-form rewrites.
-   - Any reporter change the ADR rules.
-   - The `ADR-0040` pin re-armed on 4.1.
-3. **QE:** the screens in `V2`, `V4`–`V8`.
-4. **Security/NFR:**
-   - the dependency review (`V12`);
-   - the width-1 window (`V9`–`V11`).
+1. **Architect/Design: done.** `ADR-0042` (`D1`–`D4`) and its addendum (rulings 1–7) were read in scratch trees.
+   The owner accepted the ADR with its addendum on 2026-10-11 (`…c9b52bb2`).
+2. **Software Engineer: the build**, following the addendum's build plan (`…80a214d3`):
+   - **the bump:** `vitest` and `@vitest/coverage-v8` `~4.1.11`, and `vite` `~7.3.6` as a direct
+     devDependency, plus the lockfile (`npm install`, no `--force`);
+   - **`experimental: { viteModuleRunner: false }`** in `vitest.config.ts`, plus one header paragraph (ruling 4);
+   - **the pin:** `A7` edited in place, plus one new `it` for `V3` (ruling 4, `probe/pin-prototype.diff`);
+   - **the reporter:** the route, its header and its plant block, in one commit (ruling 5);
+   - **the test rework:** R1, R2, R3 + R5, R4 + R5, ruling 2 and ruling 3, one commit per form;
+   - **the plants (`V4`):** each recorded with its diff and its red message.
+3. **QE:** `V2` (with `M9b`) and `V4`–`V8`.
+4. **Security/NFR:** the dependency review (`V12`) and the width-1 window (`V9`–`V11`).
 
 ## Out of scope
 
 - **vitest 5.x.** QE read 5.0.3 on `ABC-143`, and its import fails loudly (`RISK-ABC143-01`).
 - **`isolate: false`, `vmThreads`/`vmForks`** (`ADR-0008` d7), and **any `deps.external` over production
   `src/`** (`ADR-0041` d3).
-- **Re-ruling k** (that is `ABC-151`) and **a CPU level** (R-1).
-- **`src/` changes** (`ADR-0041` d4b). **Test content beyond `V5`'s rewrites** (R-3).
-- **The `deps.external` value pin.** That is owner question 3, which is open.
-- **`ABC-146`, `ABC-095` and `ABC-096` rows:** nothing changes on them. See § Dependencies for `ABC-146`'s
+- **Re-ruling k** (`ABC-151` merged k = 2) and **a CPU level** (R-1).
+- **`src/` changes** (`ADR-0041` d4b).
+- **Test content beyond the addendum's admitted forms** (R1–R5, ruling 2, ruling 3 and the pins). A test that is
+  deleted, skipped, moved to an opt-in lane, merged or weakened is the owner's (ruling 7).
+- **A sixth rewrite form.** If no admitted form arms a guard, the build stops and the owner rules (ruling 7).
+- **Pinning `experimental.nodeLoader`.** Turning it off fails loudly (ruling 1).
+- **The `ABC-146`, `ABC-095` and `ABC-096` rows:** nothing changes on them. See § Dependencies for `ABC-146`'s
   straddle.
 
 ## Acceptance (Given/When/Then)
 
-### Design (Architect/Design: an ADR, `proposed`, read only in a scratch tree)
+### Design: met
 
-- **`D1` (the target).** The ADR names:
-  - one vitest 4.1.x patch (QE read 4.1.11 on 2026-10-11, `…4f652dad`);
-  - the matching `@vitest/coverage-v8`. Its 3.2.7 manifest peers `vitest: 3.2.7` exactly
-    (`RISK-ABC143-01`), so it moves too;
-  - any `vite` or Node requirement, checked against Node v26.11.0 and vite 7.3.6;
-  - the `package.json` range, which must not resolve to 5.x.
-- **`D2` (what 4.1 changes under this lane).** Each item is read from the 4.1 source or docs, and is
-  `UNKNOWN - verify` until then:
-  - **(a) the worker count's precedence.** What decides it on 4.1: `maxWorkers`, `poolOptions` (does it still
-    exist?), `fileParallelism`, and `VITEST_MAX_THREADS`/`VITEST_MAX_FORKS`. This also covers whether
-    `resolved-workers.mjs` still reads the truth; its own header says to re-read on an upgrade;
-  - **(b) `isolate`** under `pool: "threads"` with the runner off. Does each test file still get a fresh
-    module registry (`ADR-0008` d7)?
-  - **(c) `viteModuleRunner: false`.** Its exact key, and whether `vi.mock` and `vi.spyOn` reach every
-    importer;
-  - **(d) the five reporter surfaces** of `RISK-ABC143-01`.
-- **`D3` (the correctness screen: no timing, as `ADR-0041`'s C4 screen).** The full default lane runs in a
-  scratch tree at 4.1, in two arms: **(i)** the runner on (the bump alone), and **(ii)** the runner off.
-  For each arm, report:
-  - exit code;
-  - files, tests, failures and skips;
-  - every red test, by name;
-  - files that did not finish.
-
-  Then rule which tests need `V5`'s rewrite. **The known-sensitive set is C4's 12 files / 47 tests plus its
-  5 unfinished files.** That list is a proxy: what the runner switch on 4.1 actually touches is the screen's
-  answer. Grep at `619abc14` reads 21 `vi.spyOn(` calls in 7 test files and `vi.mock(` in 16.
-- **`D4` (the split, pre-registered).** **If no configuration with the runner off passes `V4` with only
-  `V5`-shaped rewrites, no runner-off lever is built.** The `D3` table then goes to the owner, with two
-  options: ship 4.1 with the runner on, which buys no CPU and still pays `V2` and `V12`, or stay on 3.2.7.
-  **No agent picks between them.**
+**`D1`–`D4` are met in `ADR-0042` (`ACCEPTED`) and its addendum.** The first cut's text for them is in `59f78226`.
+`D4` fired, and the owner's pick answered it (see the banner).
 
 ### Build, screens and readings
 
 - **`V1` (the version).** **Given** head, **then**:
-  - the installed `vitest` and `@vitest/coverage-v8` are `D1`'s patch;
-  - `npm ls vitest @vitest/coverage-v8` exits 0;
-  - no other devDependency changes major unless `D1` names it.
-- **`V2` (the result file still tells the truth: `RISK-ABC143-01`).**
-  - **Given** head, **when** `ABC-149`'s six REGRESSION PLANTS run in a scratch copy, **then** every row's exit
-    code, file fields and query lines **read by content** match the block.
-  - **The 4.x hazard is planted:** a red caused only by an unhandled error must exit non-zero and leave
-    `success: false` that names it.
-  - `ABC-143` `A1`–`A6` still hold.
-  - If `tools/grugops/result-file-reporter.js` needs a change, it is in scope, and its plant block is updated
-    in the same commit.
+  - the installed `vitest` and `@vitest/coverage-v8` resolve from `~4.1.11`, and `vite` resolves from `~7.3.6`;
+  - `npm ls vitest @vitest/coverage-v8 vite` exits 0;
+  - no other devDependency changes major.
+- **`V2` (the result file still tells the truth: `RISK-ABC143-01`, ruling 5).** **Given** head, **when** `ABC-149`'s
+  six REGRESSION PLANTS run in a scratch copy, **then**:
+  - **all six rows**, including the **exit-code-only row**, match the block **by content**: the exit code, the
+    file fields and the query lines.
+  - **The unhandled row's plant awaits its timer.** It throws from a `setTimeout(…, 0)` and then awaits a 50 ms
+    timer. That form exits non-zero, and the reporter names `PLANT-timer` in `unhandledErrors` with
+    `success: false`. The un-awaited form is not admitted, because it races on 4.1.11: 5 of 10 runs exited 0.
+  - **`M9b` (`QE-149-c`):** QE re-runs it (a report-time write of `runState` / `exitCode` from
+    `process.exitCode`). The exit-code-only row kills it.
+  - **`QE-149-a`:** the READ IT query is joined onto the line that carries its closing `'`. That one join is the
+    whole change. Pasted with its line breaks, the query prints the row's lines.
+  - `ABC-143` `A1`–`A6` still hold. They run as well as the rows, **never instead of one**.
+  - The reporter's route (`onTestRunEnd` and a load-time check) and its plant block change **in one commit**.
 - **`V3` (the runner is off, and pinned).** **Given** head, **then**:
-  - the resolved configuration shows `D2`(c)'s key off;
-  - a value check in the default lane goes **red when the key is removed**, shown on a scratch copy. No
-    wall-clock or CPU assertion.
+  - the resolved configuration shows `test.experimental.viteModuleRunner` as `false`
+    (`design-ABC-152/probe/resolved-workers-v4.mjs`);
+  - one new `it` in `src/cli.test.ts` asserts that the key is exactly `false`. On a scratch copy it goes red when the
+    key is deleted, and red when the key is `true`. It makes no wall-clock or CPU assertion.
 - **`V4` (every guard still armed: the reason this ticket exists).** **Given** head, **then**:
-  - every test in `D3`'s sensitive set passes, and so does every test the `D3`(ii) screen turned red;
-  - **for each of those files, at least one plant in a scratch copy turns a call-count or mock-routing guard
-    red at head.** The plant is an added or removed call to the spied or mocked function. It never relies on
-    a guard whose expected count is 0 (`ADR-0041` d3: a blind guard can read 0 where 0 is expected);
+  - **The set** is three groups, and every test in it passes:
+    - the 13 files that `D3`'s runner-off arm turned red: `cli`, `render-seam`, `command-input`, `san`,
+      `tools/opening-book/book`, `gameend.nfr`, `glyph-mode.nfr`, `history-pane.nfr`, `san.nfr`,
+      `status-panel.nfr`, `turn-loop.nfr`, `turn-loop` and `zobrist.nfr`;
+    - `src/book.test.ts`;
+    - C4's set (`…f80e9eba`).
+  - **Armed (ruling 1):** for each file in the set, at least one plant turns a call-count or mock-routing guard
+    **red** at head. The plant goes in a scratch copy outside the repository, in production code (`src/*.ts` or
+    non-test `tools/**`). It adds or removes **one call** to the spied or mocked function, on the path the test
+    drives. **For an expected-0 guard, the plant adds the call.** Each plant is recorded with its diff, its red
+    message and the file.
+  - **Per form:**
+    - R2 gets two plants: delete the `mockImplementation` line, and delete the `finally` reset. For the second,
+      if no later test in the file reads the real function, record "no leak reader" and do not invent one.
+    - R3's extra call reads `called 1 times, but got 2`.
+    - R5 in `command-input` is planted inside the deps path of `PRODUCTION_DEPS` (`src/move-input.ts:108`).
+  - **`glyph-mode.nfr` (`NFR-007`):** one plant per spied module (`node:fs`, `node:fs/promises`,
+    `node:child_process`), and each is red.
   - **`NFR-001`** (`gameend.nfr`), **`NFR-005`** (`zobrist.nfr`) and **`ABC-025` `N1`** (`san.nfr`) are each
     shown red on a plant.
+  - **`san.test.ts` A20 (ruling 2):** it is red on an added `export const PLANT`, and red on an added
+    `export { toSan as toSanX }`.
+  - **`src/book.test.ts` ABC-094 A2 (ruling 3):** a load-time salt plant in `book.ts` is red at head. The same
+    plant is also shown green, and so blind, under the old `vi.resetModules()` form.
+  - **The stop rule (ruling 7).** Either of these stops the build. It then goes to the owner via the Orchestrator,
+    with its reading:
+    - a guard that stays green under every admitted form;
+    - a test that only a deletion, a skip, a move, a merge or a weaker assertion would turn green.
 
   **A green run alone is not evidence. The plants are.**
-- **`V5` (test content: mechanism-preserving only).** **Then** `git diff <base> -- '*.test.ts'` contains only:
-  - `D3`-ruled spy-form rewrites (for example, `vi.spyOn(ns, …)` → `vi.mock(path, { spy: true })`, or the
-    form the ADR names);
-  - the imports they need;
-  - `V3`'s pin and `V6`'s re-arm.
+- **`V5` (test content: the admitted forms only).** **Then** `git diff <base> -- '*.test.ts'` contains only:
+  - the R1–R5 rewrites (ruling 1) and the imports they need;
+  - ruling 2's one assertion, with its one comment sentence;
+  - ruling 3's one import;
+  - `V3`'s new `it` and `V6`'s edited `A7`.
 
-  Each rewritten file is listed with its `expect` count before and after, and the counts are equal. No test is
-  deleted, skipped, moved to an opt-in lane or merged. File count = base. Test count = base + the pins
-  declared in the ADR before any reading. Skips 0.
-- **`V6` (`ADR-0040`'s cap means the same thing on 4.1).** **Given** head, **then**:
-  - resolved effective workers = **k (2, after `ABC-151`)**;
-  - the `ABC-144` `A7` pin passes;
-  - its reds are re-planted on 4.1 and each is red: delete the cap, `isolate: false`, an env raise to 8, and
-    an env raise to k + 1.
-  - If `D2`(a) finds a key or variable renamed or removed, the ADR amends `ADR-0040` d3 and the pin follows.
-  - **`QE-144-a`'s trigger fires here** (the pin does not read `test.projects`). The ADR rules on it.
+  Each rewritten file is listed with its `expect(` count before and after.
+  - **The counts are equal per file, except `src/cli.test.ts`, which is +3** (`A7` 6 → 8, and `V3` +1).
+  - No test is deleted, skipped, moved to an opt-in lane or merged.
+  - **Files = base (56). Tests = base + 1 (1741). Skips 0.**
+- **`V6` (`ADR-0040`'s cap means the same thing on 4.1, ruling 4).** **Given** head, **then**:
+  - the resolved effective workers are **k = 2**, and `isolate` is `true` (`resolved-workers-v4.mjs`);
+  - **the `ABC-144` `A7` pin is edited in place, and it passes.** It asserts:
+    - `pool` is `"threads"`, and `maxWorkers` is exactly 2;
+    - `fileParallelism` and `isolate` are both `true`;
+    - `Object.hasOwn(test, "poolOptions")` is `false`;
+    - `test.projects` is `undefined`;
+    - **`VITEST_MAX_WORKERS`**, when it is set and non-empty, is parsed as vitest parses it, to **1 ≤ n ≤ 2**.
+      That parse is `Number.parseInt` with no radix, with the `biome-ignore` that ruling 4 gives.
+  - The `VITEST_MAX_THREADS` / `_FORKS` loop is dropped, because 4.x reads neither variable.
+  - **Reds (11):** each is re-planted on a scratch copy, and each is red. They are: r1, delete `maxWorkers`; r2,
+    `isolate: false`; r3, `VITEST_MAX_WORKERS=8`; r3b, `=3`; r4, a `projects` entry; `maxWorkers: 3`;
+    `fileParallelism: false`; a `poolOptions` entry; `=0x3`; `=0`; and `=abc`.
+  - **Greens:** `VITEST_MAX_WORKERS=` (empty), `=1` and `=2`.
+  - **Folded by name:** `QE-151-a` (the hex raise: `=0x3` is red) and `QE-151-b` (an empty value is ignored).
+    **`QE-144-a` closes**, because the pin now reads `test.projects`.
+  - In `vitest.config.ts`'s header, `VITEST_MAX_WORKERS` replaces the 3.x pair. The isolation warning stays word
+    for word.
 - **`V7` (isolation is kept: `ADR-0008` d7/d8).** At head:
   - `isolate` resolves `true`;
   - **≥ 20 consecutive green `npm test` runs**, each with every `*.nfr.test.ts` file passing.
@@ -164,21 +184,40 @@ heat that is never made.
   - `npx vitest run --coverage` exits 0;
   - a lane whose result rests on a wall-clock budget may read differently because the engine runs faster.
     That is reported and routed, **never fixed by moving a baseline here**.
-- **`V9` (CPU goes down: the bar).** **Given** base = the wave tip with `ABC-151` (k = 2) and `ABC-149`
-  merged, and head = base + this ticket, **when** the full lane is read with `ABC-144`'s instrument
-  (`lane144.mjs`, `ADR-0035` d2, identity twin, n ≥ 8 scored rounds, rotated, round 0 discarded, width 1,
-  unprofiled), **then** the twin is admissible, and:
-  - **a paired median CPU delta of ≤ −15 % of base** merges;
-  - **a delta between −15 % and 0, with the interval wholly below 0,** goes to the owner;
-  - **any other result does not merge**, and goes to the owner with the `D3` table.
+- **`V9` (CPU goes down: the bar, ruling 6).** **Given** three trees:
+  - **base B** is the build's merge-base on `main`: vitest 3.2.7, runner on, k = 2, with `ABC-149` and `ABC-151`
+    merged;
+  - **head H** is the branch tip;
+  - **twin T** is a second tree of base.
+
+  Each tree is built by its own `npm ci` from its own lockfile. **No tree symlinks `node_modules` to the main
+  checkout.** Before the first run, each tree logs `npm ls vitest` and its resolved workers. Head also logs
+  `viteModuleRunner: false`.
+
+  **When** the full lane is read with `lane144b.mjs`, **then** the twin is admissible (its CPU R is ≤ 15 % of
+  B's), and the bar is applied.
+  - **The reading's conditions:**
+    - the script is used in place, from `.grugops/context/secnfr-ABC-144-window-b/probe/` (`ADR-0035` d2);
+    - it runs behind the step-0 gate: 4 consecutive 15 s samples at thermal level 0, load1 ≤ 4.0, and no
+      `[v]itest` process;
+    - width 1; n ≥ 8 scored rounds, rotated; round 0 discarded; warm; unprofiled;
+    - counts are asserted on every run: base 56 / 1740, head 56 / 1741.
+  - **The bar:**
+    - **an H − B paired median CPU delta of ≤ −15 % of B's median** merges;
+    - **a delta between −15 % and 0, with the interval wholly below 0,** goes to the owner;
+    - **any other result does not merge.** It goes to the owner with the `D3` table and the addendum.
 
   The bar is the measured lane CPU. `ADR-0041`'s ratios and `ABC-147`'s R are never quoted as `V9`. **The
   number is never weakened silently.**
-- **`V10` (the wall does not rise).** **Then** head's paired median wall delta is ≤ + the twin's wall R, and
-  head's median wall + R is ≤ W (10 s).
-- **`V11` (heat, reported, with no bar).** `thermalpressurelevel` is logged before and after every `V9` run.
-  The count of runs at level ≥ 1 is reported per arm. If head's count is higher than base's, that goes to the
-  owner.
+- **`V10` (the wall does not rise).** **Then**:
+  - H's warm median wall + T's wall R is ≤ W (10 s);
+  - H − B's paired median wall is ≤ + T's wall R;
+  - **when H warm + R > 9.0 s, the cooled state is owed**, because at k = 2 the cooled state bound (`ABC-151`:
+    f = 1.023). Its median wall + R must also be ≤ W.
+- **`V11` (heat, reported, with no bar).** `thermalpressurelevel` is logged before and after every `V9` run, and
+  the count of runs at level ≥ 1 is reported per arm. If head's count is higher than base's, that goes to the
+  owner. No `A5`-style sequence is owed. A foreign runner's presence is logged per run and named in the grade
+  (`RISK-ABC151-FOREIGN`).
 - **`V12` (the dependency change is reviewed, and there are 0 production lines).**
   - **Security/NFR reviews:**
     - the lockfile diff: packages added and removed, licences, and install scripts;
@@ -188,67 +227,81 @@ heat that is never made.
 
 ## Dependencies
 
-- **`ABC-149` merges first.** Its plant set is `V2`'s instrument (`ADR-0041` d4a).
-- **`ABC-151` merges first.** Both edit `vitest.config.ts` and the `A7` pin, and `V9`'s base carries k = 2.
-  The ADR hop (`D1`–`D4`) may run before either merge, because it reads only a scratch tree.
+- **`ABC-149` and `ABC-151` are merged** (`abd21ff4`, `ef581383`). Nothing the build waits on is open.
+- **`ADR-0042` and its addendum are accepted** (`…c9b52bb2`), so the merge hold the Architect named is cleared.
 - **A no-other-hop window for `V9`–`V11`**, scheduled by the Orchestrator. It never overlaps `ABC-146`'s
   verdict run.
 - **The straddle rule (`ADR-0040` d5).** Any paired reading in flight whose base and head straddle this merge
-  is void. This includes:
-  - `ABC-146` `A1`'s `LADDER_DEEP=1` equivalence check, which runs inside vitest;
-  - `ADR-0035`'s floors `F`, which the ADR states carry over or must be re-read.
+  is void. That includes `ABC-146` `A1`'s `LADDER_DEEP=1` equivalence check, which runs inside vitest.
+- **The floors `F`: none carries over the merge** (ruling 6), because the runner change moves every file's cost.
+  - After the merge, every set takes `ADR-0035` d3's provisional 16 % until three readings on 4.1 replace it.
+  - The full lane keeps 1.72 s CPU / 3.25 s wall until a twin R exists on 4.1 with the runner off at k = 2.
+- **`RISK-ABC144-FCAP`** closes for the pre-merge lane at `V9`'s twin R, a 3.2.7, k = 2 reading. After the merge
+  that R is listed, not used.
 - **`ABC-056`** (`AR-1`, owner Release Manager): this ticket performs the coverage-v8 major upgrade that
   `ABC-056` priced.
+
+## Risks (residuals carried, `ADR-0042` addendum)
+
+| id | residual | severity | owner |
+|---|---|---|---|
+| `RISK-ABC152-NEGWORKERS` | On 4.1.11, `VITEST_MAX_WORKERS=-1` makes `vitest run` **exit 0 having run no test**. The pin cannot see it, because nothing runs. The result file reads `success: false` with no counts | low: nobody sets −1 by accident, and the result file stays truthful. Only a consumer that reads the exit code alone is fooled | QE (the `V2` / `V6` review); Security/NFR |
+| `RISK-ABC152-A2-GRAPH` | Ruling 3: A2 re-evaluates `book.ts`, but not its imports (`legal`, `zobrist`, `position`, `apply`) | low | **accepted by the owner, 2026-10-11** (`…c9b52bb2`: "yes"). The worker-per-sequence route is not taken |
 
 ## Security / NFR triggers
 
 - **Security: triggered.** It is a dependency major bump (`V12`). The review covers the lockfile, the
   licences, the install scripts and the audit.
 - **`NFR-008`:** wall ≤ W (`V10`); CPU is reported, and `V9` is a ticket target.
-- **`NFR-001`, `NFR-005`, `ABC-025` `N1`:** `V4`'s plants and `V7`'s screen.
-- **`N8-LANE`:** + the declared pin tests, 0 test files, 0 spawns.
+- **`NFR-001`, `NFR-005`, `NFR-007`, `ABC-025` `N1`:** `V4`'s plants and `V7`'s screen.
+- **`N8-LANE`:** + 1 test (`V3`), 0 test files, 0 spawns.
 
 ## Test notes
 
-1. **The screens come before the clock.** `D3`, `V4` and `V7` gate `V9`. A fast lane whose mocks went blind is
-   not a fast lane (`ADR-0041` d3).
+1. **The screens come before the clock.** `V4` and `V7` gate `V9`. A fast lane whose mocks went blind is not a
+   fast lane (`ADR-0041` d3).
 2. **Every reading lives in the notes**, with its machine, load1, thermal level, commit and vitest version.
 3. **No `V` reading is profiled.** `--cpu-prof` hung 5 of 18 runs (`RISK-ABC147-01`).
-4. **Mandatory gates:** lint, typecheck, build, `npm test`. Then QE, then `In Security/NFR`.
+4. **Mandatory gates:** lint, typecheck, build, and `npm test` at 56 / 1741 / 0 skipped. Then the skip-count
+   capture and the integrity check. Then QE, then `In Security/NFR`.
 5. **UAT:** the zero-production-lines waiver applies only if `V12`'s diff check is empty.
-6. **`AGENTS.md`'s `vitest` lines** (the worker cap, `RISK-ABC143-01`, the Stack line) are re-read after the
-   merge by the Scribe.
+6. **After the merge, the Scribe re-reads `AGENTS.md`:** the worker-cap line, the Stack line, the
+   `RISK-ABC143-01` line, and what the coverage figure means. The `RISK-ABC152-NEGWORKERS` line is added too, if
+   QE keeps that residual.
+7. **Rollback** is the addendum's (§ "Rollback, extended for this addendum").
 
 ## Size and priority
 
-**`L`.** A dependency major bump, an ADR with a two-arm correctness screen, up to 7 rewritten test files
-(grep), plants across about 12 files, a possible reporter change, a Security review, a 20-run screen, a window
-and the opt-in lanes.
-- **Not `M`:** this is `ABC-150`'s window and screen plus the test content and the dependency.
-- **Not `XL`:** one dependency, one setting, no production code, and `D4` closes it early if the switch is
-  inadmissible.
-- **Considered and not split:** "bump" and "runner off" as two tickets. The bump alone has no CPU value, and
-  `D4` already sends that option to the owner.
+**`L`, at the upper edge.** The work is a dependency major bump, 14 test files touched, plants across about 16
+files, the reporter, a Security review, a 20-run screen, a window and the opt-in lanes.
+- **Not `XL`:**
+  - the design risk is retired. Every form, the pin, the reporter route, A20 and A2 have a prototype the
+    addendum ran;
+  - there are no production lines;
+  - the one open unknown, a guard that no form arms, has a stop rule (ruling 7), so the build cannot grow past it.
+- **Not split.** The owner said *"use one ticket for it"*. Neither half ships alone anyway: the bump with the
+  runner on buys no CPU, and the runner off without the rework is red in 13 files (`ADR-0042` `D3`).
+- **What no longer applies:** the first cut's "`D4` closes it early". `D4` is answered.
 
 **`P1`.** The owner asked for it today, by name, for his P1 goal.
 - **Not `P0`:** nothing is broken.
 
 ## Definition of Ready
 
-BA/PM, 2026-10-11. **Result: 10 of 10.** Recommended placement: **`Ready`, then `In Design`** for the ADR.
-`D1`–`D4` read a scratch tree and do not wait on the merges. The build waits for `ABC-149` and `ABC-151`.
+BA/PM, 2026-10-11, re-scored at the re-cut. **Result: 10 of 10.** Recommended placement: **`In Design` →
+`Ready for Dev`**. Under process rule 1, the criteria are re-read against `main` at the `Ready for Dev` exit.
 
 | # | item | verdict |
 |---|---|---|
-| 1 | problem clear | **✅** ~5x factor, cause named, the one admissible route |
-| 2 | scope and out-of-scope clear | **✅** 5.x, isolation, `deps.external`, k, `src/`, other R-3 and the open pin are fenced off |
-| 3 | INVEST-shaped | **✅** one bump, one setting; a pre-registered split in `D4` |
-| 4 | acceptance testable and measurable | **✅** a named patch; the plants by content; red-on-removal pins; a plant red per sensitive file; equal `expect` counts; resolved k; 20 green runs; equal path lists; ≤ −15 % measured CPU with an owner band; wall ≤ + R and ≤ W |
-| 5 | dependencies known | **✅** `ABC-149` and `ABC-151` first, a window, the straddle, `ABC-056` |
-| 6 | security/NFR triggers with a measurable target | **✅** lockfile review and audit `--omit=dev` = 0; `NFR-008` |
-| 7 | test notes present | **✅** six |
-| 8 | size assigned | **✅** `L` |
+| 1 | problem clear | **✅** ~5x factor; cause named; the route, and what it turns red (`D3`) |
+| 2 | scope and out-of-scope clear | **✅** the admitted forms by name. Fenced off: deletes, skips, moves, merges, weakening and a sixth form (ruling 7), plus 5.x, isolation, `deps.external`, k, `src/` and `nodeLoader` |
+| 3 | INVEST-shaped | **✅** one ticket by the owner's word; neither half has value alone; a stop rule bounds it |
+| 4 | acceptance testable and measurable | **✅** named ranges; six rows by content plus `M9b`; 11 reds and 3 greens on the pin, plus `V3`'s 2; one production plant red per file in the set; `expect(` equal except +3; 56 / 1741 / 0; 20 green runs; equal path lists; ≤ −15 % measured CPU with an owner band; wall + R ≤ W, cooled if owed |
+| 5 | dependencies known | **✅** `ABC-149` and `ABC-151` merged; `ADR-0042` accepted; the window, the straddle, the floors, `ABC-056` |
+| 6 | security/NFR triggers with a measurable target | **✅** lockfile review and audit `--omit=dev` = 0; `NFR-008` W = 10 s and ≤ −15 % CPU; `NFR-001`/`005`/`007` and `N1` red on plants |
+| 7 | test notes present | **✅** seven |
+| 8 | size assigned | **✅** `L` (upper edge) |
 | 9 | priority assigned | **✅** `P1` |
-| 10 | no major unresolved blocker | **✅** the owner's yes covers the bump and `V5`; the 4.1 unknowns are the design hop's job |
+| 10 | no major unresolved blocker | **✅** the owner picked the route and accepted `ADR-0042` and `RISK-ABC152-A2-GRAPH`. Ruling 7 cases found: 0 (`UNKNOWN - verify` until `V4`) |
 
 Column moves are the Orchestrator's.
