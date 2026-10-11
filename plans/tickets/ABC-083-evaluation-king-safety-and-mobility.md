@@ -395,3 +395,22 @@ figures are in `.grugops/context/ticket-to-pr-ABC-083/notes/` and the raw output
   - No required fix.
 - **Owner's word owed on two proposed LOW risks:** `AR-N8LANE-083` and `AR-NFR005-083` (position-6 margin).
 - `NFR-008` wall on the merged tree: 7.63 s, under 10 s.
+
+## QE — seed 5061 classed, and the QE pass
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-083-seed5061`, width 1). Tip `67c189b9`, base `5ed308a8`.
+- **Detail:** `.grugops/context/qe-ABC-083-seed5061/notes/`:
+  - `…67b0c99a` (seed 5061 readings);
+  - `…b631991b` (the class and its route);
+  - `…6b2e2f3b` (gates, lanes, mutants, gaps);
+  - `…56016fe2` (verdict).
+- **Seed 5061 is class L** (`ADR-0034` decision 3). It is not load: the lines are byte-identical across 3+3 runs at load1 2.4–3.9, thermal 0. It is not drift: still missed at +25 % and +50 %. It is not an evaluator regression: every full-width search on the branch, d4–d6, plays the label's `f5e6`, 55 cp ahead of `g2e1`.
+  - The miss is the shipped LMR's d5 iteration over-scoring `g2e1` by 60 cp, which lands it 5 cp above `f5e6`. That is within `ADR-0026` decision 9's drift. Base's fixed-depth `search()` flips the same row.
+  - King safety alone reproduces it, mobility alone does not, and it holds at 0.75x–1.5x king-safety weight.
+- **What `A10` now requires:** an Architect/Design-ruled re-find of the row (`ADR-0028` decision 2). It lands in its own commit, touching no trigger-list file and not the baseline. No owner word is needed. QE then re-reads `PUZZLE_DEEP=1` at 54/58 and `=weakened` at exit 1. There is no cut, no re-weight and no level move.
+- **QE pass:**
+  - `A1`–`A4`, `A6` and `A8` are MET on QE's own mutants: 12 red on the criterion rows, and E8/E9 red on both `A8` rows.
+  - `A10`'s ledger rows are green on every deep lane run on the tip.
+  - Gates green: `npm test` 1 739/1 739, skip count 0.
+  - Gaps: 2 LOW (king-safety and mobility details pinned only by node counts), 3 INFO.
+- **Verdict: FAIL**, on `A10`'s puzzle gate only, with the agent route above. The owner's words on `AR-N8LANE-083` and `AR-NFR005-083`, and his UAT word, are still owed.

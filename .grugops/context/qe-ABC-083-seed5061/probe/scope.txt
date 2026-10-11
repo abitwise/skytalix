@@ -1,0 +1,22 @@
+# ADR-0034 d2 scope command, B=5ed308a8 H=67c189b9
+src/evaluate.ts
+# literal glob matches (run trigger):
+src/evaluate.king-mobility.test.ts
+src/evaluate.pawns.test.ts
+src/evaluate.ts
+src/search.ordering.test.ts
+src/search.pvs-lmr.test.ts
+# UAT waiver measure: git diff --name-only 5ed308a8 67c189b9 | grep -v test | grep ^src/
+src/evaluate.ts
+# src delta 79248602..67c189b9 (build's pvs-lmr deep run was at 79248602):
+ src/book.test.ts            | 460 +++++++++++++++++++++++++++++++
+ src/book.ts                 | 153 +++++++++++
+ src/cli.test.ts             |  40 ++-
+ src/history-pane.ts         |   5 +-
+ src/ladder.test.ts          | 648 ++++++++++++++++++++++++++++++++++++++++++++
+ src/move-input.test.ts      |   3 +-
+ src/move-input.ts           |   3 +-
+ src/quiescence.test.ts      |   6 +-
+ src/result-screen.test.ts   |  19 +-
+ src/search.ordering.test.ts |   7 +-
+ 10 files changed, 1322 insertions(+), 22 deletions(-)

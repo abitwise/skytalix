@@ -1,0 +1,54 @@
+# QE seed 5061 evaluator variants. Each is a scratch `git archive 67c189b9 src` copy outside the repo; only these lines differ from the tip.
+# ks = king safety only (mobility weight 0); mob = mobility only (king-safety penalties 0); ks-xK = king-safety penalties scaled by K.
+ .../scratchpad/br/src => src}/evaluate.ts                               | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+193c193
+< const MOBILITY_WEIGHT = 4;
+---
+> const MOBILITY_WEIGHT = 0;
+ .../scratchpad/br/src => src}/evaluate.ts                           | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+183,185c183,185
+< const KING_SHELTER_MISSING_PENALTY = 15;
+< const KING_FILE_HALF_OPEN_PENALTY = 10;
+< const KING_FILE_OPEN_PENALTY = 20;
+---
+> const KING_SHELTER_MISSING_PENALTY = 0;
+> const KING_FILE_HALF_OPEN_PENALTY = 0;
+> const KING_FILE_OPEN_PENALTY = 0;
+# ks-x0.5: scratch git-archive copy of 67c189b9 src/, src/evaluate.ts changed:
+183,185c183,185
+< const KING_SHELTER_MISSING_PENALTY = 15;
+< const KING_FILE_HALF_OPEN_PENALTY = 10;
+< const KING_FILE_OPEN_PENALTY = 20;
+---
+> const KING_SHELTER_MISSING_PENALTY = 7.5;
+> const KING_FILE_HALF_OPEN_PENALTY = 5;
+> const KING_FILE_OPEN_PENALTY = 10;
+# ks-x0.75: scratch git-archive copy of 67c189b9 src/, src/evaluate.ts changed:
+183,185c183,185
+< const KING_SHELTER_MISSING_PENALTY = 15;
+< const KING_FILE_HALF_OPEN_PENALTY = 10;
+< const KING_FILE_OPEN_PENALTY = 20;
+---
+> const KING_SHELTER_MISSING_PENALTY = 11.25;
+> const KING_FILE_HALF_OPEN_PENALTY = 7.5;
+> const KING_FILE_OPEN_PENALTY = 15;
+# ks-x1.25: scratch git-archive copy of 67c189b9 src/, src/evaluate.ts changed:
+183,185c183,185
+< const KING_SHELTER_MISSING_PENALTY = 15;
+< const KING_FILE_HALF_OPEN_PENALTY = 10;
+< const KING_FILE_OPEN_PENALTY = 20;
+---
+> const KING_SHELTER_MISSING_PENALTY = 18.75;
+> const KING_FILE_HALF_OPEN_PENALTY = 12.5;
+> const KING_FILE_OPEN_PENALTY = 25;
+# ks-x1.5: scratch git-archive copy of 67c189b9 src/, src/evaluate.ts changed:
+183,185c183,185
+< const KING_SHELTER_MISSING_PENALTY = 15;
+< const KING_FILE_HALF_OPEN_PENALTY = 10;
+< const KING_FILE_OPEN_PENALTY = 20;
+---
+> const KING_SHELTER_MISSING_PENALTY = 22.5;
+> const KING_FILE_HALF_OPEN_PENALTY = 15;
+> const KING_FILE_OPEN_PENALTY = 30;

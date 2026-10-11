@@ -1,0 +1,41 @@
+# 2026-10-11T14:32:37Z load1=2.47 thermal=0
+base	chooseMove	readings=20.00	SOLVED	f5e6	d5	score=-1175	n15387
+base	chooseMoveWithoutReductions	readings=20.00	SOLVED	f5e6	d4	score=-1150	n16411
+base	chooseMoveWithoutPvsOrReductions	readings=20.00	SOLVED	f5e6	d4	score=-1150	n16411
+base	chooseMove	readings=22.73	SOLVED	f5e6	d5	score=-1175	n18459
+base	chooseMoveWithoutReductions	readings=22.73	SOLVED	f5e6	d5	score=-1175	n18459
+base	chooseMoveWithoutPvsOrReductions	readings=22.73	SOLVED	f5e6	d5	score=-1175	n18729
+base	chooseMove	readings=25.00	SOLVED	f5e6	d5	score=-1175	n20507
+base	chooseMoveWithoutReductions	readings=25.00	SOLVED	f5e6	d5	score=-1175	n20507
+base	chooseMoveWithoutPvsOrReductions	readings=25.00	SOLVED	f5e6	d5	score=-1175	n20507
+base	chooseMove	readings=50.00	SOLVED	f5e6	d6	score=-1185	n45083
+base	chooseMoveWithoutReductions	readings=50.00	SOLVED	f5e6	d5	score=-1175	n46107
+base	chooseMoveWithoutPvsOrReductions	readings=50.00	SOLVED	f5e6	d5	score=-1175	n46107
+base	chooseMove	readings=100.00	SOLVED	f5e6	d6	score=-1185	n96283
+base	chooseMoveWithoutReductions	readings=100.00	SOLVED	f5e6	d5	score=-1175	n97307
+base	chooseMoveWithoutPvsOrReductions	readings=100.00	SOLVED	f5e6	d5	score=-1175	n97307
+branch	chooseMove	readings=20.00	MISSED	g2e1	d5	score=-1295	n15387
+branch	chooseMoveWithoutReductions	readings=20.00	SOLVED	f5e6	d4	score=-1235	n16411
+branch	chooseMoveWithoutPvsOrReductions	readings=20.00	SOLVED	f5e6	d4	score=-1235	n16411
+branch	chooseMove	readings=22.73	MISSED	g2e1	d5	score=-1295	n18459
+branch	chooseMoveWithoutReductions	readings=22.73	SOLVED	f5e6	d4	score=-1235	n19483
+branch	chooseMoveWithoutPvsOrReductions	readings=22.73	SOLVED	f5e6	d4	score=-1235	n19483
+branch	chooseMove	readings=25.00	MISSED	g2e1	d5	score=-1295	n20507
+branch	chooseMoveWithoutReductions	readings=25.00	SOLVED	f5e6	d4	score=-1235	n21531
+branch	chooseMoveWithoutPvsOrReductions	readings=25.00	SOLVED	f5e6	d4	score=-1235	n21531
+branch	chooseMove	readings=50.00	SOLVED	f5e6	d6	score=-1300	n45083
+branch	chooseMoveWithoutReductions	readings=50.00	SOLVED	f5e6	d5	score=-1300	n46107
+branch	chooseMoveWithoutPvsOrReductions	readings=50.00	SOLVED	f5e6	d5	score=-1300	n46107
+branch	chooseMove	readings=100.00	SOLVED	f5e6	d6	score=-1300	n96283
+branch	chooseMoveWithoutReductions	readings=100.00	SOLVED	f5e6	d6	score=-1310	n96283
+branch	chooseMoveWithoutPvsOrReductions	readings=100.00	SOLVED	f5e6	d5	score=-1300	n97307
+# king-safety weight scale (diagnostic for ADR-0028 d1 proof 2 only; NOT a re-weight), mobility 4 cp kept, suite call
+ks-x0.5	step=1	readings=25.00	SOLVED	f5e6	d5	n20507	score=-1287.5
+ks-x0.5	step=0.8	readings=31.25	SOLVED	f5e6	d5	n27675	score=-1287.5
+ks-x0.75	step=1	readings=25.00	MISSED	g2e1	d5	n20507	score=-1292.5
+ks-x0.75	step=0.8	readings=31.25	MISSED	g2e1	d5	n27675	score=-1292.5
+ks-x1.25	step=1	readings=25.00	MISSED	g2e1	d5	n20507	score=-1297.5
+ks-x1.25	step=0.8	readings=31.25	MISSED	g2e1	d5	n27675	score=-1297.5
+ks-x1.5	step=1	readings=25.00	MISSED	g2e1	d5	n20507	score=-1300
+ks-x1.5	step=0.8	readings=31.25	MISSED	g2e1	d5	n27675	score=-1300
+# end 2026-10-11T14:32:44Z load1=2.43 thermal=0
