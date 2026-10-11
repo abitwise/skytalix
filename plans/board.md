@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — ABC-144 Window A merged: rule picks 3 workers. Width back to 3: Architect verdict-cost + ADR-0040 addendum, QE ABC-085, fix ABC-114 dispatched; BA/PM fold next._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-085` → In Review (built `d5b0f0e2`). Width 1: Security/NFR runs ABC-144 Window A alone; QE ABC-085, Architect verdict-cost, fix ABC-114 and BA/PM fold queued behind it._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-114` QE FAIL → back to In Development; `fix-ABC-114` and `bapm-fold-qe114` queued behind ABC-144 Window A._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-144` design merged (`ADR-0040` PROPOSED). Draining to width 1 for Window A: no new pulls until QE ABC-114 and the ABC-085 build finish._
@@ -663,7 +664,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Design (WIP 1/2)
-- [ABC-144] `npm test` chokes the MacBook Air M3 — cut its CPU and cap its cores  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner goal 2026-10-10; CPU ≤ 0.85× base, ≤ 4 workers, wall ≤ 10 s unless the owner accepts Security/NFR's new number; `isolate` stays true; readings only in a no-other-hop window) **2026-10-11: Ready → In Design (Architect hop for the pool/worker setting).** **2026-10-11: Architect design merged (`aaef2cff`): `ADR-0040` PROPOSED — `maxWorkers: 4` in `vitest.config.ts`, pinned by value (env may lower, never raise), `isolate` stays on; owner word owed (ADR-0040 + meaning of 'choking'). Stays In Design until quiet Window A (≈ 15 min, width 1, 54 runs: 7/4/3/2/1 workers) is read.**
+- [ABC-144] `npm test` chokes the MacBook Air M3 — cut its CPU and cap its cores  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner goal 2026-10-10; CPU ≤ 0.85× base, ≤ 4 workers, wall ≤ 10 s unless the owner accepts Security/NFR's new number; `isolate` stays true; readings only in a no-other-hop window) **2026-10-11: Ready → In Design (Architect hop for the pool/worker setting).** **2026-10-11: Architect design merged (`aaef2cff`): `ADR-0040` PROPOSED — `maxWorkers: 4` in `vitest.config.ts`, pinned by value (env may lower, never raise), `isolate` stays on; owner word owed (ADR-0040 + meaning of 'choking'). Stays In Design until quiet Window A (≈ 15 min, width 1, 54 runs: 7/4/3/2/1 workers) is read.** **2026-10-11: Window A read (`94cf1728`, width 1, 54 runs): CPU vs 7 workers — 4w −10.7 %, 3w −16.5 % (wall 7.2 s), 2w −22.7 % (8.2 s), 1w −29.3 % (14.7 s). ADR-0040 d2 picks **3 workers**; Architect addendum owed; owner word on ADR-0040 owed. No heat instrument on M3 (`CPU_Speed_Limit` absent); thermal pressure went nominal → moderate in the last ~1.5 min.**
 
 
 ## Ready for Dev (WIP 0/6)
