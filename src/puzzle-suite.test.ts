@@ -28,12 +28,15 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import type { EngineChoice, EngineOptions } from "./engine.ts";
+import { evaluate } from "./evaluate.ts";
 import { parseFen } from "./fen.ts";
 import { isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { EMPTY, isBlack, isOnBoard, type Position, pieceType, squareName } from "./position.ts";
 import { HANGING_CORPUS, PUZZLES, type Puzzle, type PuzzleTag } from "./puzzle-corpus.ts";
 import { virtualClock } from "./virtual-clock.ts";
+
+vi.mock("./evaluate.ts", { spy: true });
 
 const MODE = process.env.PUZZLE_DEEP;
 
@@ -366,10 +369,7 @@ if (MODE === "1" || MODE === "weakened") {
   /** The engine under test: the shipped one, or (A3) the shipped one with `evaluate` returning 0. */
   async function engineUnderTest(): Promise<Choose> {
     if (MODE === "weakened") {
-      vi.doMock("./evaluate.ts", async (importOriginal) => ({
-        ...(await importOriginal<typeof import("./evaluate.ts")>()),
-        evaluate: () => 0,
-      }));
+      vi.mocked(evaluate).mockImplementation(() => 0);
     }
     return (await import("./engine.ts")).chooseMove;
   }
