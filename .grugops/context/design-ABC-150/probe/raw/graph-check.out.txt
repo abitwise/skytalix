@@ -1,0 +1,96 @@
+{
+ "productionModules": 37,
+ "mockedOrSpied": {
+  "apply.ts": [
+   "search.ordering.test.ts mock"
+  ],
+  "engine.ts": [
+   "levels.test.ts mock"
+  ],
+  "evaluate.ts": [
+   "puzzle-suite.test.ts mock"
+  ],
+  "fen.ts": [
+   "history-pane.nfr.test.ts mock"
+  ],
+  "frame.ts": [
+   "render-seam.test.ts spyOn(frameModule)",
+   "turn-loop.test.ts mock"
+  ],
+  "gameend.ts": [
+   "history-pane.nfr.test.ts mock",
+   "render-seam.test.ts spyOn(gameend)",
+   "status-panel.nfr.test.ts mock",
+   "turn-loop.nfr.test.ts mock",
+   "turn-loop.test.ts mock"
+  ],
+  "glyph-mode.ts": [
+   "cli.test.ts spyOn(glyphMode)"
+  ],
+  "history-pane.ts": [
+   "render-seam.test.ts spyOn(historyPane)"
+  ],
+  "history.ts": [
+   "command-input.test.ts mock",
+   "history-pane.nfr.test.ts mock",
+   "render-seam.test.ts spyOn(historyModule)",
+   "status-panel.nfr.test.ts mock",
+   "turn-loop.nfr.test.ts mock",
+   "turn-loop.test.ts mock"
+  ],
+  "legal.ts": [
+   "command-input.test.ts mock",
+   "engine.capacity.test.ts mock",
+   "gameend.nfr.test.ts mock",
+   "render-seam.test.ts spyOn(legal)",
+   "san.nfr.test.ts mock",
+   "search.capacity.test.ts mock",
+   "status-panel.nfr.test.ts mock",
+   "zobrist.nfr.test.ts mock"
+  ],
+  "position.ts": [
+   "status-panel.nfr.test.ts mock"
+  ],
+  "render.ts": [
+   "render-seam.test.ts spyOn(render)"
+  ],
+  "san.ts": [
+   "history-pane.nfr.test.ts mock",
+   "status-panel.nfr.test.ts mock"
+  ],
+  "search.ts": [
+   "engine.capacity.test.ts mock"
+  ],
+  "status-panel.ts": [
+   "render-seam.test.ts spyOn(statusPanel)",
+   "render-seam.test.ts spyOn(statusPanel)",
+   "render-seam.test.ts spyOn(statusPanel)"
+  ],
+  "transposition.ts": [
+   "search.pvs-lmr.test.ts mock",
+   "transposition.test.ts mock"
+  ],
+  "zobrist.ts": [
+   "engine.capacity.test.ts mock",
+   "gameend.nfr.test.ts mock",
+   "search.capacity.test.ts mock"
+  ]
+ },
+ "hotModules": {
+  "moves.ts": "imports mocked/spied: position.ts",
+  "legal.ts": "mocked/spied itself",
+  "position.ts": "mocked/spied itself",
+  "apply.ts": "mocked/spied itself",
+  "evaluate.ts": "mocked/spied itself",
+  "search.ts": "mocked/spied itself",
+  "engine.ts": "mocked/spied itself",
+  "perft.ts": "imports mocked/spied: apply.ts, position.ts, legal.ts",
+  "quiescence.ts": "imports mocked/spied: apply.ts, position.ts, evaluate.ts, legal.ts",
+  "transposition.ts": "mocked/spied itself",
+  "zobrist.ts": "mocked/spied itself"
+ },
+ "safeToExternalize": [
+  "puzzle-corpus.ts",
+  "search.mate-corpus.ts"
+ ]
+}

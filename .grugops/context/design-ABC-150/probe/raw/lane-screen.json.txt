@@ -1,0 +1,131 @@
+{
+ "note": "ABC-150 D3 admissibility screen. Correctness only: no wall or CPU figure is recorded; per-test durations were stripped from the console before this file was written.",
+ "ctl": {
+  "screen": "ctl",
+  "load1": "{ 3.85 4.21 4.48 }",
+  "therm": "com.apple.system.thermalpressurelevel 2",
+  "exit": 0,
+  "signal": null,
+  "files": 55,
+  "tests": 1728,
+  "passed": 1728,
+  "failed": 0,
+  "skipped": 0,
+  "failedFiles": 0,
+  "failing": []
+ },
+ "C4_first": {
+  "screen": "C4",
+  "load1": "{ 4.10 4.25 4.49 }",
+  "therm": "com.apple.system.thermalpressurelevel 2",
+  "exit": 143,
+  "signal": null,
+  "files": null,
+  "skipped": 0,
+  "failedFiles": 0,
+  "failing": [],
+  "meaning": "killed by the driver guard (spawnSync timeout 300 s, SIGTERM): no JSON written"
+ },
+ "C4_second": {
+  "exit": 137,
+  "meaning": "killed by `timeout -s KILL 240`: the lane never finished; console captured",
+  "filesReported": 62,
+  "filesGreen": 50,
+  "filesRed": 12,
+  "testsFailed": 47,
+  "red": [
+   {
+    "file": "src/levels.test.ts",
+    "tests": 22,
+    "failed": 1
+   },
+   {
+    "file": "src/search.ordering.test.ts",
+    "tests": 24,
+    "failed": 2
+   },
+   {
+    "file": "src/san.test.ts",
+    "tests": 22,
+    "failed": 1
+   },
+   {
+    "file": "src/turn-loop.nfr.test.ts",
+    "tests": 4,
+    "failed": 4
+   },
+   {
+    "file": "src/turn-loop.test.ts",
+    "tests": 63,
+    "failed": 16
+   },
+   {
+    "file": "src/history-pane.nfr.test.ts",
+    "tests": 12,
+    "failed": 2
+   },
+   {
+    "file": "src/command-input.test.ts",
+    "tests": 188,
+    "failed": 8
+   },
+   {
+    "file": "src/render-seam.test.ts",
+    "tests": 14,
+    "failed": 3
+   },
+   {
+    "file": "src/status-panel.nfr.test.ts",
+    "tests": 6,
+    "failed": 5
+   },
+   {
+    "file": "src/gameend.nfr.test.ts",
+    "tests": 3,
+    "failed": 2
+   },
+   {
+    "file": "src/san.nfr.test.ts",
+    "tests": 5,
+    "failed": 2
+   },
+   {
+    "file": "src/cli.test.ts",
+    "tests": 67,
+    "failed": 1
+   }
+  ],
+  "failureMessageShapes": {
+   "expected [] to have a length of N but got +N": 2,
+   "expected [ …(N) ] to deeply equal []": 2,
+   "expected [ 'parseSan', 'toSan' ] to deeply equal [ 'toSan', 'parseSan' ]": 1,
+   "expected \"gameStatus\" to be called N times, but got N times": 4,
+   "expected +N to be N // Object.is equality": 18,
+   "expected \"spy\" to be called N times, but got N times": 3,
+   "Cannot read properties of undefined (reading 'mock')": 1,
+   "toSan at N: expected \"toSan\" to be called N times, but got N times": 1,
+   "expected \"toSan\" to be called at least once": 1,
+   "expected N to be greater than or equal to N": 1,
+   "Cannot spy on export \"gameStatus\". Module namespace is not configurable in ESM. See: https://vitest.dev/guide/browser/#limitations": 1,
+   "Cannot spy on export \"renderBoard\". Module namespace is not configurable in ESM. See: https://vitest.dev/guide/browser/#limitations": 1,
+   "Cannot spy on export \"renderStatusPanel\". Module namespace is not configurable in ESM. See: https://vitest.dev/guide/browser/#limitations": 1,
+   "expected \"toSan\" to be called N times, but got N times": 1,
+   "expected \"isInCheck\" to be called N times, but got N times": 1,
+   "N pieces, N plies: expected \"squareAt\" to be called N times, but got N times": 1,
+   "expected \"squareAt\" to be called N times, but got N times": 1,
+   "rnbqkbnr/pppppppp/N/N/N/N/PPPPPPPP/RNBQKBNR w KQkq - N N: expected \"squareAt\" to be called N times, but got N times": 1,
+   "bare, in progress: expected \"legalMoves\" to be called N times, but got N times": 1,
+   "expected \"zobristKey\" to be called N times, but got N times": 1,
+   "piece move, no list: expected \"legalMoves\" to be called N times, but got N times": 1,
+   "checking move, list supplied: expected \"legalMoves\" to be called N times, but got N times": 1,
+   "Cannot spy on export \"selectGlyphMode\". Module namespace is not configurable in ESM. See: https://vitest.dev/guide/browser/#limitations": 1
+  },
+  "neverFinished": [
+   "tools/opening-book/book.test.ts",
+   "src/engine.capacity.test.ts",
+   "src/search.capacity.test.ts",
+   "src/search.pvs-lmr.test.ts",
+   "src/transposition.test.ts"
+  ]
+ }
+}
