@@ -272,7 +272,9 @@ code commit `0035001c`, base `f439c8fd`. The detail is in `.grugops/context/tick
   - against `aa932974`: **clean**, and the merged tree is green (56 / 1740, `effectiveWorkers` 2);
   - against `ABC-149`: one append-only conflict, in `plans/traceability.md`. **There is no `src/cli.test.ts`
     overlap**, and the union tree is green;
-  - both were aborted, and nothing was committed.
+  - both were aborted, and nothing was committed;
+  - **re-checked against the newer tip `868f28b9`** (the `ABC-152` design, with no code change): one
+    append-only conflict, in `plans/traceability.md`, which a union resolves. See note `…843d8b1b`.
 - **Gaps: 1 LOW and 3 INFO, none blocking:**
   - `QE-151-a` (LOW): a hex env value (`0x3`) raises the cap with the pin green. vitest parses with no radix,
     and the pin parses with radix 10. Pre-existing since `ABC-144`. Proposed carrier: `ABC-152`;
