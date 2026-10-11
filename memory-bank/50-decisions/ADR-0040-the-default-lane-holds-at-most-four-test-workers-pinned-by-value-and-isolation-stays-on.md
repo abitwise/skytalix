@@ -29,6 +29,15 @@ the owner's own pick, so no acceptance is owed for it. Ticket `ABC-151`.
 - `poolOptions` is checked by `Object.hasOwn`.
 - k stays 2, and nothing else in this ADR moves.
 
+**Pointer, 2026-10-12 (`RISK-ABC144-FCAP`, addendum 2 item 6).**
+- `ABC-152` `V9` read the first full-lane twin R at k = 2: **0.440 s CPU / 0.190 s wall**, on 3.2.7 with the
+  runner on. That met item 6's condition for that lane only, and that lane ended at `ABC-152`'s merge
+  (`7a920ca5`).
+- After the merge, the full lane keeps `ADR-0035`'s 1.72 s / 3.25 s until a twin R is read at k = 2 on 4.1.11
+  with the runner off (`ADR-0042` ruling 6).
+- `RISK-ABC144-FCAP` stays open on that lane. Its owner is still Architect/Design, and no literal moves.
+- Note: `.grugops/context/design-ABC-144-fcap/notes/` (`…dd7a6ec9`).
+
 - It sets a runner option in the file `ADR-0008` governs. It amends no decision of `ADR-0008` or `ADR-0035`.
   `ADR-0008` decision 7 (`isolate: false` forbidden) binds and is restated in the pin (decision 3).
 - **No timing or CPU reading was taken at this hop.** Two Engineer builds were running `npm test`. Every
