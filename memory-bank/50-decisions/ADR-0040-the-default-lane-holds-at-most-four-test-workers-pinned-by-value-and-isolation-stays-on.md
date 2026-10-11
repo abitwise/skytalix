@@ -2,7 +2,7 @@
 kind: adr
 id: ADR-0040
 ---
-# ADR-0040: The default lane holds at most 3 test workers (`test.maxWorkers: 3` in `vitest.config.ts`), pinned by value. Isolation stays on. Proposed at 4; the quiet-window frontier stepped it down to 3 by the rule written here first (addendum 2026-10-11)
+# ADR-0040: The default lane holds at most 2 test workers (`test.maxWorkers: 2` in `vitest.config.ts`), pinned by value. Isolation stays on. Proposed at 4; the quiet-window frontier stepped it down to 3 by the rule written here first (addendum 2026-10-11); the owner picked 2 for heat (addendum 2, 2026-10-11)
 
 ## Status
 
@@ -14,6 +14,12 @@ Previously **proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, 
 **Addendum 2026-10-11 (Window A, ACCEPTED with the ADR): decision 2's rule rules k = 3, not 4.** The addendum at
 the end of this file governs. Where decisions 1, 3 and 4 below say 4, read 3; each place is marked
 "→ 3, addendum". The file name keeps "four" so that existing links still resolve.
+
+**Addendum 2 2026-10-11 (the owner's pick, k = 2), the last section of this file: it governs over the decisions
+and the first addendum.** The owner's word *"Heat 2 workers is fine"* (note `…fbbdde16` item 3) moves k 3 → 2 for
+heat. Where decisions 1, 3 and 4 or the first addendum give the cap's value (4 or 3), read 2; each marked place
+now also says "→ 2, addendum 2". Decision 2's own result (the largest eligible k is 3) stands as a reading. It is
+the owner's own pick, so no acceptance is owed for it. Ticket `ABC-151`.
 
 - It sets a runner option in the file `ADR-0008` governs. It amends no decision of `ADR-0008` or `ADR-0035`.
   `ADR-0008` decision 7 (`isolate: false` forbidden) binds and is restated in the pin (decision 3).
@@ -79,7 +85,8 @@ written and stays at its default `true`. No `minWorkers`, no `poolOptions` and n
     line. The config placement gives no merge-order coupling with `ABC-143`.
 - **`maxWorkers`, not `poolOptions.threads.maxThreads`:** it does not depend on the pool. The pool-specific
   key silently outranks it, so the pin forbids that key (decision 3).
-- **Why 4:** *(→ 3, addendum. Window A ruled 3 under decision 2. The three reasons below are re-read there.)*
+- **Why 4:** *(→ 3, addendum. Window A ruled 3 under decision 2. The three reasons below are re-read there.
+  → 2, addendum 2: the owner's pick for heat.)*
   - it is `A2`'s bar;
   - it is this machine's performance-core count, which is the mechanism above;
   - it is the largest cap `A2` allows, so it buys the most wall headroom against `A3`.
@@ -111,13 +118,13 @@ the build.** Each arm is the base tree with one changed line, `maxWorkers: k`.
 so the two pins close the CLI-flag route and the config route together.
 - It reads `const { default: lane } = await import("../vitest.config.ts")` and asserts on `lane.test`:
   - `pool` is `"threads"`;
-  - `maxWorkers` is **exactly** `4` *(→ `3`, addendum)*, ADR-0040's number. A raise breaks `A2`. A lowering moves `A3`/`A4`'s
+  - `maxWorkers` is **exactly** `4` *(→ `3`, addendum; → `2`, addendum 2)*, ADR-0040's number. A raise breaks `A2`. A lowering moves `A3`/`A4`'s
     wall and the floors `F`. Both are rulings, not drive-by edits;
   - `fileParallelism ?? true` is `true`;
   - `isolate ?? true` is `true` (`ADR-0008` d7);
   - `poolOptions` is `undefined`. No per-pool `maxThreads` outranks the cap, and no per-pool `isolate`
     turns isolation off;
-  - for `VITEST_MAX_THREADS` and `VITEST_MAX_FORKS`: if set, `parseInt` is ≤ 4 *(→ ≤ 3, addendum)*. **The environment may
+  - for `VITEST_MAX_THREADS` and `VITEST_MAX_FORKS`: if set, `parseInt` is ≤ 4 *(→ ≤ 3, addendum; → ≤ 2, addendum 2)*. **The environment may
     lower the cap, never raise it.**
 - **Armed before it is trusted.** The Engineer shows each red on a scratch copy and records them:
   - (r1) delete `maxWorkers: 4` → red;
@@ -136,11 +143,11 @@ so the two pins close the CLI-flag route and the config route together.
     below that `F`. Security/NFR reports it under § Scope 4.
 
 **4. The recorded floors `F` (`ABC-144` § Dependencies asks whether they carry over).**
-- **Narrow sets of ≤ 4 files *(→ ≤ 3, addendum)*: CARRY OVER, provisionally.** Each file already had its own worker. The only
+- **Narrow sets of ≤ 4 files *(→ ≤ 3, addendum; → ≤ 2, addendum 2)*: CARRY OVER, provisionally.** Each file already had its own worker. The only
   scheduling change is `tinypool`'s idle boots (7 → 4), a per-run constant that base, head and twin all
   share. `ADR-0035` Rollback says floors are data, so the first three readings after the merge replace
   them by decision 3's own rule.
-- **Sets of more than 4 files *(→ 3, addendum)*, and the full lane: NOT carried.** The cap changes how their files queue.
+- **Sets of more than 4 files *(→ 3, addendum; → 2, addendum 2)*, and the full lane: NOT carried.** The cap changes how their files queue.
   - A set with more than 4 files is "a set with none" until its first admissible reading under the cap.
     It takes the provisional 16 % of base CPU (`ADR-0035` decision 3, amended).
   - Full-lane `F` (1.72 s CPU / 3.25 s wall) is re-read from the window's twin R. Until three readings
@@ -331,3 +338,179 @@ This hop's decision note is `.grugops/context/design-abc085-verdict-cost/notes/�
 
 Set the literal back to the k the owner names, in the config and in the pin's three literals. Decision 4's
 threshold follows that k. Nothing else in this addendum depends on 3.
+
+## ADDENDUM 2, 2026-10-11: the owner picks k = 2 for heat. Decision 2's rule still reads 3, and his word overrides it
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-151`, ticket `ABC-151`), on the wave
+tip `4973d8e0`. **This hop took no timing, CPU or heat reading.** Two other hops were running (Architect
+`ABC-152`, Software Engineer `ABC-149`). Every figure below is cited from Window A
+(`.grugops/context/secnfr-ABC-144-window-a/notes/`), Window B (`.grugops/context/secnfr-ABC-144-window-b/notes/`)
+or the first addendum, or it is labelled as arithmetic. This hop's notes are in `.grugops/context/design-ABC-151/notes/`:
+`…5c4c4ef2` (decisions) and `…6cc7b91d` (hand-off).
+
+**Status: governs as written.** It records the owner's own pick, and the rest follows from decisions 2 and 4,
+so no acceptance is owed for this addendum. The owner's word *is* owed in the conditional cases that `ABC-151`
+names (`A3`, `A4`, `A5`, below).
+
+### The owner's word
+
+- **Verbatim, 2026-10-11, in session:** *"Accept ABC-083 and ADR-0041; Heat 2 workers is fine ; 4. vitest - yes
+  do a ticket and upgrade ; ADR-0034 accepted"*. The clause that governs here is *"Heat 2 workers is fine"*. It is item
+  3 of the Orchestrator's transcription, note
+  `.grugops/context/wave-2026-09-25/notes/20261011T161037Z-orchestrator-decision-owner-word-uat-abc083-adr0041-k2-vitest41-adr0034-addendum-fbbdde16.md`.
+  That note is a transcription of his word, not a stamp (`human_admission` is `off`).
+- **It answers Window B's heat question** (`…1ff56629` § For the owner; `RISK-ABC144-HEAT`, owner Olger
+  Oeselg). At k = 3, back-to-back runs read level 1 (moderate) from the 21st run on, 13 of 54 warm reads.
+- **Two readings exist, and this addendum takes the first.** Window B offered three levers: k = 2 for the
+  lane, Orchestrator width, and `VITEST_MAX_THREADS=2` for agent hops only. "2 workers" fits the first and the
+  third. The transcription and BA/PM's cut both take the first, which also covers the owner's own `npm test`.
+  If he meant agent hops only, `A5`'s report puts that difference in front of him.
+
+### Why 2: the owner's pick, not decision 2's rule
+
+- **Decision 2's rule still rules 3.** It takes the largest eligible k, and K3 is eligible (first addendum).
+- **K2 is eligible too:** −22.71 % CPU, warm wall + twin R 8.38 s. So the owner's pick sits inside the eligible
+  set. It overrides only the word "largest", and it does so on a criterion decision 2 does not read, which is heat.
+  - **Decision 2 is not amended.** It stays the rule an agent applies when no owner pick is on record.
+  - The first addendum foresaw this case: "the owner may still pick K2 for heat when he accepts".
+- **Expected cost and gain.** These are arithmetic on Window A's medians against the 7-worker base, not readings:
+  - CPU: 0.7729 ÷ 0.8352 − 1 ≈ **−7.5 %** against k = 3;
+  - wall: 8.23 − 7.22 ≈ **+1.0 s** warm. Window B read k = 3 at 7.54 s warm, so k = 2 is expected near 8.5 s,
+    under W = 10 s.
+- **Heat:** no reading yet separates k = 2 from k = 3. `ABC-151` `A5` is the first one.
+
+### The literals that follow. Decision 2: "a smaller k changes the pin's literal and nothing else"
+
+1. **Decision 1, the setting:** `test.maxWorkers: 2`. These all stay as they are: `pool: "threads"`, `isolate`
+   unwritten (default `true`, `ADR-0008` d7), no `poolOptions`, no `minWorkers`, the plain-object form, the
+   placement in the config, and `scripts.test`.
+2. **The config's header paragraph** names the owner's pick and this addendum. It replaces the sentence "3 is
+   the largest cap whose Window A reading …". The isolation warning stays word for word.
+3. **Decision 3, the pin (`A7`):**
+   - `expect(test.maxWorkers).toBe(2)`;
+   - the environment loop checks `toBeLessThanOrEqual(2)` for `VITEST_MAX_THREADS` and `VITEST_MAX_FORKS`;
+   - the `describe` and `it` titles say 2, and the comment cites "`ADR-0040` addendum 2".
+   - **`toBe`, not `≤`, stays.** A lowering moves the wall and the floors, so it is a ruling too.
+   - **What a raise breaks now.** A raise to 3 keeps `A2` and decision 2's eligibility, but it breaks the owner's
+     pick. A raise to 4 also breaks decision 2. A raise above 4 breaks all three. Each one needs the owner's word.
+4. **Decision 3, the armed reds.** Each one runs on a scratch copy, as
+   `npx vitest run src/cli.test.ts -t "ABC-144"`, and must turn red:
+   - r1: delete `maxWorkers: 2`;
+   - r2: add `isolate: false`;
+   - r3: `VITEST_MAX_THREADS=8`;
+   - **r3b: `VITEST_MAX_THREADS=3`.** 3 is the boundary that a stale `≤ 3` would let through, and neither 8 nor 4
+     can see it;
+   - `maxWorkers: 3`, which is a revert of this ticket.
+
+   `VITEST_MAX_THREADS=2` and `=1` stay green. The environment may lower the cap, never raise it.
+5. **QE's `A2` read** (`resolved-workers.mjs`): expect `effectiveWorkers: 2` at head, 3 at base, and
+   `isolate: true`.
+6. **Decision 4, the floors, at k = 2.** The threshold follows k, for decision 4's own reason: each file in a
+   small set had its own worker.
+   - Narrow sets of **≤ 2 files** carry their `F` over provisionally. Only `tinypool`'s idle boots change (3 → 2).
+   - Sets of **more than 2 files**, and the full lane, are re-read under the cap.
+   - **No recorded `F` moves.** Every recorded set has at most 2 files (`plans/nfr-catalog.md` § floors,
+     `ADR-0035`):
+     - `src/cli.test.ts`, 1.097 s, 1 file;
+     - `src/history-pane.nfr.test.ts`, 0.058 s, 1 file;
+     - `history-pane.nfr` + `render-seam.test`, 0.038 s, 2 files;
+     - the one-file instrument row, 0.17 s, 1 file.
+   - **This is narrower than at k = 3.** A 3-file set that carried over at k = 3 does not carry at k = 2. None
+     is recorded.
+   - **The full-lane `F` at k = 2 (`RISK-ABC144-FCAP`):**
+     - No full-lane R under any cap exists. Window B's twins were base copies at 7 workers, and `ABC-151`'s
+       twin will be a base copy at k = 3.
+     - **Ruled:** until a full-lane twin R is read at k = 2, the full lane keeps `ADR-0035`'s recorded `F`
+       (1.72 s CPU / 3.25 s wall). That is the larger value, and so the stricter one. An R read at any other
+       k is listed and not used.
+     - The first chance is the first paired window whose base carries `ABC-151`. That is expected to be
+       `ABC-152` `V9`. The risk's owner stays Architect/Design.
+7. **§ Consequences, width and the environment:**
+   - At Orchestrator width 3, the cap holds up to **6** workers on 8 cores (arithmetic). It was 9 at k = 3,
+     and 21 uncapped. That count leaves out each main vitest process and `src/cli.test.ts`'s 27 children.
+   - The sentence "an Orchestrator can run hops with `VITEST_MAX_THREADS=2`" now describes the default, so the
+     variable at 2 does nothing. The only lower value is 1. Window A read K1 at 14.68 s warm wall, which is over
+     W. **A lane run under `VITEST_MAX_THREADS=1` is not an `NFR-008` reading.**
+8. **Decision 5, the straddle rule.** `ABC-151`'s merge changes `vitest.config.ts`.
+   - A paired reading whose base and head sit on opposite sides of that merge is not a reading of a ticket.
+     Rebase first.
+   - `ABC-152` builds on a base that carries k = 2 (its `V6` and `V9`).
+   - Any reading `ABC-149` has in flight rebases first.
+   - `LADDER_DEEP` is one file on one worker under any cap. Only the idle boots change (3 → 2).
+
+### `ABC-151`'s window, as this addendum reads it. No readings are taken here
+
+**The instrument** is `ABC-144`'s as it stands: `lane144b.mjs` with its thermal columns (`ADR-0035` d2).
+- **Width 1.**
+- **Trees:** base = the wave tip at k = 3; head = base + `ABC-151`; the twin is a copy of base.
+- **Runs:** n ≥ 8, rotated, round 0 discarded, unprofiled.
+- **Logged on every run:** file and test counts (asserted), and load1 and `thermalpressurelevel` before and after.
+
+**The criteria:**
+
+- **`A3`, the wall.** Head's warm median + the twin's wall R must be ≤ W = 10 s.
+  - Expected: about 8.2–8.5 s (the arithmetic above).
+  - The cooled state is owed only if warm + R > 9.0 s.
+  - Every run over 10 s is listed.
+  - A head over W holds for the owner's word.
+- **`A4`, CPU.** Head − base, the paired median with its interval, is reported. **There is no 15 % bar.**
+  - The interval must lie wholly below 0. If it does not, the ticket holds for the owner's word.
+  - Expected: about −7.5 %.
+- **`A5`, heat. There is no bar.** It is two sequences of 27 back-to-back `npm test` runs, one tree per sequence
+  (the ticket's "head-only"): k = 2 (head) first, then k = 3 (base).
+  - **The k = 3 sequence runs on the base tree, never on head with `VITEST_MAX_THREADS=3`.** The pin turns
+    that run red by design (r3b), and the environment cannot raise the cap.
+  - **The step order is fixed now:**
+    1. warm paired (`A3`/`A4`);
+    2. the gate, then `A5` k = 2;
+    3. the gate, then `A5` k = 3;
+    4. the cooled state, only if owed;
+    5. the opt-in lanes (`A6`).
+  - **Why this order.** The gate (4 consecutive 15 s samples at level 0) shows the pressure level. It does not
+    show the chassis temperature of a fanless machine. With a fixed order, any residual heat lands on the
+    second sequence, and that flatters k = 2.
+    - With this order, each sequence follows about 27 back-to-back runs. The first follows the paired runs,
+      two thirds of them at k = 3 (B and T). The second follows 27 runs at k = 2.
+    - So any residual bias leans **against** k = 2, which means toward asking the owner, not away from it.
+    - That is a claim about direction, not a measurement.
+  - **Logged per sequence:**
+    - the idle seconds between the previous run's end and the sequence's first run;
+    - the time the gate passed;
+    - the battery state (Window B started on a charging battery, `…1ff56629`);
+    - load1.
+  - **Reported per sequence:**
+    - the run index of the first read at level ≥ 1;
+    - the count of reads at level ≥ 1, out of 54;
+    - each run's wall and CPU.
+  - **It goes to the owner if** k = 2 reaches level ≥ 1 no later than k = 3, and on no fewer reads.
+  - **Two readings of the ticket, which BA/PM may overrule:**
+    - **Neither sequence reaches level 1.** Then the window cannot separate the two on heat. It is reported
+      to the owner as "not separable", not as k = 2 failing.
+    - **`A5` does not hold the merge.** It has no bar, and the ticket's hold wording sits on `A3` and `A4`
+      only. Its owner outcome goes beside the merge, as Window B's heat question did.
+  - The level is system-wide, and it is not a clock speed. "No speed limit was observed" is never written.
+- **`A6`.** Unchanged from the ticket.
+  - **A projection for the opt-in lanes:** `ENGINE_DEEP` (4 files) is the lane most likely to read a longer
+    wall at k = 2. Its CPU ÷ wall at k = 3 was 1.88 (531.39 / 283.01 s, one run, `…bfdcf3b3`), the nearest
+    of any lane to 2. `SEARCH_DEEP` (5 files) read 1.30.
+  - The wall is reported, not bounded.
+
+### What this does NOT change
+
+- **The other runner settings:** `isolate` (`ADR-0008` d7), `pool`, `fileParallelism`, `poolOptions` and
+  `minWorkers`, plus the plain-object form and the placement.
+- **Decision 2's text**, and decision 6: no `W_new` (W stays 10 s), no CPU level, and width stays the owner's
+  and the Orchestrator's.
+- **`NFR-008`'s row**, unless `A3` goes to the owner.
+- **`ABC-146`, `ABC-095` and `ABC-096`.**
+- **The vitest version.** Whether `VITEST_MAX_THREADS` and `poolOptions` survive on 4.1 is `ABC-152`'s `D2`(a).
+  If a key is renamed there, `ABC-152`'s ADR amends decision 3 and the pin follows it. k stays 2.
+
+### Rollback, extended for addendum 2
+
+Set the literal back to the k the owner names, in each of these places:
+- the config;
+- its header paragraph;
+- the pin's three literals.
+
+3 restores the first addendum. Decision 4's threshold follows the k. Nothing else depends on 2.
