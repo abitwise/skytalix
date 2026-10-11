@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-151` design merged (ADR-0040 addendum 2, k = 2) → In Development; SE build dispatched._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — BA/PM cut merged: `ABC-151` (k = 2) and `ABC-152` (vitest 4.1) → In Design; `ABC-149` → P2 → In Development. Width 3: Architect ×2 + SE._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-083` → Done (owner UAT ACCEPTED; merged `f00038ef`); `main` fast-forwarded; ABC-083 branch deleted._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — owner word (`…fbbdde16`): ABC-083 UAT ACCEPTED; ADR-0041 ACCEPTED → ABC-150 Done; k = 2 for heat; vitest 4.1 upgrade ticket; ADR-0034 addendum ACCEPTED. BA/PM cut + ABC-083 merge in flight._
@@ -693,15 +694,15 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 2/2)
-- [ABC-151] Heat: the owner picks 2 test workers — lower the cap 3 → 2, re-pin it, read wall and heat at k = 2  (BA/PM, **S, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner word `…fbbdde16` item 3; ADR-0040 addendum first, then config + pin literals (armed reds incl. `VITEST_MAX_THREADS=3`), width-1 window: wall + R ≤ 10 s, CPU interval below 0 (no 15 % bar), heat = two 27-run head-only sequences k = 2 vs k = 3, no bar; merges BEFORE ABC-152) **2026-10-11: cut (`59f78226`) → Ready → In Design (Architect: ADR-0040 addendum).**
+## In Design (WIP 1/2)
 - [ABC-152] Upgrade vitest 3.2.7 → 4.1 and run `src/` without the module runner, every mock/spy guard still armed  (BA/PM, **L, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner word `…fbbdde16` item 4; ADR-0041 route (a); ADR first (D1–D4, two-arm correctness screen, pre-registered split → owner); build waits on ABC-149 + ABC-151 merges; RISK-ABC143-01, QE-144-a trigger, Security triggered (dependency major); CPU ≤ −15 % merges, (−15 %, 0) → owner) **2026-10-11: cut (`59f78226`) → Ready → In Design (Architect: new ADR, scratch-tree reads only).**
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
+## In Development (WIP 2/3)
+- [ABC-151] Heat: the owner picks 2 test workers — lower the cap 3 → 2, re-pin it, read wall and heat at k = 2  (BA/PM, **S, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner word `…fbbdde16` item 3; ADR-0040 addendum first, then config + pin literals (armed reds incl. `VITEST_MAX_THREADS=3`), width-1 window: wall + R ≤ 10 s, CPU interval below 0 (no 15 % bar), heat = two 27-run head-only sequences k = 2 vs k = 3, no bar; merges BEFORE ABC-152) **2026-10-11: cut (`59f78226`) → Ready → In Design (Architect: ADR-0040 addendum).** **2026-10-11: ADR-0040 addendum 2 merged (`7b7e52e3`): k = 2 is the owner's pick; pin `toBe(2)`, env ≤ 2, r3b `VITEST_MAX_THREADS=3` red; window step order fixed (warm pairs → A5 k = 2 → A5 k = 3 on base → cooled if owed). No owner word owed. Criteria A1–A7 re-read → Ready for Dev → In Development (SE `ticket-to-pr-ABC-151`).**
 - [ABC-149] The result-file reporter's exit-code check is pinned by no plant  (BA/PM, **XS, P3**, epic: —, since: 2026-10-11, **DoR 10/10**; from QE-143-a/-b; six-row REGRESSION PLANTS block in `tools/grugops/result-file-reporter.js`, comments only; → P2 and merge first when a ticket touches the reporter, the `test` script or the vitest major; never inside a measurement window) **2026-10-11: P3 → P2 by its own trigger (ABC-152 is the vitest major) → Ready → Ready for Dev → In Development (SE build `ticket-to-pr-ABC-149`); merges before ABC-152's build.**
 
 
