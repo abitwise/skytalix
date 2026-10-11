@@ -58,6 +58,21 @@ import * as statusPanel from "./status-panel.ts";
 import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
 import { type RenderSeam, runTurnLoop } from "./turn-loop.ts";
 
+vi.mock("./frame.ts", { spy: true });
+vi.mock("./gameend.ts", { spy: true });
+vi.mock("./history.ts", { spy: true });
+vi.mock("./history-pane.ts", { spy: true });
+vi.mock("./legal.ts", { spy: true });
+vi.mock("./render.ts", { spy: true });
+vi.mock("./status-panel.ts", { spy: true });
+
+/** R1: a `{ spy: true }` automock spy, cleared at the point the original `vi.spyOn` was installed. */
+function spyFrom<T extends (...args: never[]) => unknown>(fn: T) {
+  const spy = vi.mocked(fn);
+  spy.mockClear();
+  return spy;
+}
+
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 /** The shortest checkmate there is — four plies, and `A1`'s "≥ 4 plies to a terminal result". */
@@ -201,10 +216,10 @@ describe("ABC-041 — the render seam", () => {
 
     // Spies over the imported namespaces, call-through. Installed AFTER the fixture's own derive,
     // so what they count is the seam's and nothing else.
-    const gameStatus = vi.spyOn(gameend, "gameStatus");
-    const statusOf = vi.spyOn(historyModule, "gameStatusOf");
-    const moves = vi.spyOn(legal, "legalMoves");
-    const panel = vi.spyOn(statusPanel, "renderStatusPanel");
+    const gameStatus = spyFrom(gameend.gameStatus);
+    const statusOf = spyFrom(historyModule.gameStatusOf);
+    const moves = spyFrom(legal.legalMoves);
+    const panel = spyFrom(statusPanel.renderStatusPanel);
 
     for (let call = 0; call < 3; call++) seam(history, status, false, []);
 
@@ -438,10 +453,10 @@ describe("ABC-041 — the render seam", () => {
     // across the repository — a seam could call them for the count and render from a copy — and
     // that repo-wide property is `ABC-054`'s.
     const { history, status, seam } = fixture();
-    const board = vi.spyOn(render, "renderBoard");
-    const panel = vi.spyOn(statusPanel, "renderStatusPanel");
-    const pane = vi.spyOn(historyPane, "renderHistory");
-    const assembler = vi.spyOn(frameModule, "assembleFrame");
+    const board = spyFrom(render.renderBoard);
+    const panel = spyFrom(statusPanel.renderStatusPanel);
+    const pane = spyFrom(historyPane.renderHistory);
+    const assembler = spyFrom(frameModule.assembleFrame);
 
     seam(history, status, false, []);
 
@@ -470,7 +485,7 @@ describe("ABC-041 — the render seam", () => {
     // The ticket's `## Scope` says `status` AND `thinking` are "passed through verbatim". `A2`
     // asserts it of `status` only. Measured: a seam hardcoding `false` passes 824/824 and lint.
     const { history, status, seam } = fixture();
-    const panel = vi.spyOn(statusPanel, "renderStatusPanel");
+    const panel = spyFrom(statusPanel.renderStatusPanel);
 
     for (const thinking of [true, false]) seam(history, status, thinking, []);
 

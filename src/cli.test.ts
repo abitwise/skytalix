@@ -50,6 +50,8 @@ import { renderResultScreen } from "./result-screen.ts";
 import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
 import { INPUT_ENDED_NOTICE, QUIT_NOTICE, type TerminalReason } from "./turn-loop.ts";
 
+vi.mock("./glyph-mode.ts", { spy: true });
+
 const SOURCE_DIRECTORY = new URL(".", import.meta.url).pathname;
 const REPOSITORY = new URL("..", import.meta.url).pathname;
 const ENTRY_POINT = new URL("cli.ts", import.meta.url).pathname;
@@ -1146,7 +1148,8 @@ describe("ABC-042 — the resolved colour reaches the board", () => {
 
 describe("ABC-042 — a rejected command line starts no game", () => {
   it("A5 — `--ascii --unicode` is refused at the resolver, and selectGlyphMode is not called", () => {
-    const spy = vi.spyOn(glyphMode, "selectGlyphMode");
+    const spy = vi.mocked(glyphMode.selectGlyphMode);
+    spy.mockClear();
     try {
       // ARMING CONTROL FIRST: a zero call count is worthless if the spy cannot see a call at all.
       glyphMode.selectGlyphMode({ ascii: false, unicode: false, isTTY: false, env: {} });
@@ -1162,7 +1165,7 @@ describe("ABC-042 — a rejected command line starts no game", () => {
       expect(resolution.offending).toEqual(["--ascii", "--unicode"]);
       expect(spy).toHaveBeenCalledTimes(0);
     } finally {
-      spy.mockRestore();
+      spy.mockClear();
     }
   });
 
