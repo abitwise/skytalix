@@ -171,3 +171,25 @@ IS CLAIMED RIGHT NOW BY ANOTHER HOP"*, so `A1` is still at 2, not 0. `ABC-065` i
 
 All ten DoR rows are unchanged from the cut and re-read true. Row 5 is lighter now that the `Ready for
 UAT` courtesy is void.
+
+## Delivery — 2026-10-11T08:45:31Z (Software Engineer, subtask `ticket-to-pr-ABC-070`, base `f6187bc1`)
+
+**Built in delivered commit `c0fedf7c`** on `grugops/ABC-070-abc065-dependencies`. Not merged, not pushed.
+
+**Premise re-measured at `f6187bc1`, and it HELD.** `ABC-065` line 130 still read *"`AGENTS.md` IS CLAIMED
+RIGHT NOW BY ANOTHER HOP"*, so this page was not closed unstarted. The drain was re-verified by listing the
+directories. `.grugops/queue/done/` holds `agents-md-owner-grants.md` and `agents-md-owner-grants.claim.md`.
+`pending/` and `claimed/` hold nothing of that name.
+
+| criterion | evidence | verdict |
+|---|---|---|
+| `A1` | `grep -c 'IS CLAIMED RIGHT NOW\|must not be pulled'` on the `ABC-065` page → **0** (was 2) | MET |
+| `A2` | the bullet still names `agents-md-owner-grants` (path, `by`, `at`, branch), says it *"held the file when this ticket was cut"*, and gives *"drained on 2026-08-16"*: **3 of 3** | MET |
+| `A3` | the bullet and DoR row 10 both say the claim drained on 2026-08-16, with the same two `done/` files: **0** contradictions | MET |
+| `A4` | `git diff c0fedf7c~1 c0fedf7c` hunks are `@@ -130 +130` and `@@ -132,3 +132,6`. All of them are inside § Dependencies' first bullet. **0** lines changed in the front matter, `A1`–`A6`, the DoR or the `A2` annotation | MET |
+| `A5` | `git diff --name-only c0fedf7c~1 c0fedf7c` → exactly 1 path: `plans/tickets/ABC-065-…md`. **0** `src/`, **0** child processes. Gates at `c0fedf7c`: lint exit 0 (102 files), typecheck exit 0, build exit 0, `npm test` exit 0 with **53 files / 1680 tests passed, 0 failed, 0 skipped, 0 todo** | MET |
+
+**Residual, not fixed (fenced by `A4`/out of scope):** `ABC-065` DoR **row 5** still reads *"the live
+`agents-md-owner-grants` claim"*. That is the cut-time score of a merged scored section. Test note 2 forbids
+re-scoring it, so it is reported here and not edited. `G6` was not folded in, because it was not in this
+subtask. The front matter of this page and of `ABC-065` was not moved. Board moves belong to the Orchestrator.

@@ -127,11 +127,14 @@ follow-up set and the only one a human is meeting today.
 
 ## Dependencies
 
-- **`AGENTS.md` IS CLAIMED RIGHT NOW BY ANOTHER HOP — this is the one open item.**
+- **At the cut, another hop held `AGENTS.md` — that was the one open item then, and it is closed.**
   `.grugops/queue/claimed/agents-md-owner-grants/claim.md` (`by: agents-md-scribe`, `at:
-  2026-08-15T13:13:00Z`, branch `grugops/agents-md-owner-grants`) holds the file. **This ticket must
-  not be pulled while that claim is live**, and whoever pulls it re-reads the slot from `main` first:
-  the wording quoted above is the wording at the cut.
+  2026-08-15T13:13:00Z`, branch `grugops/agents-md-owner-grants`) held the file when this ticket was
+  cut. **That claim drained on 2026-08-16**: `.grugops/queue/done/agents-md-owner-grants.md` and
+  `agents-md-owner-grants.claim.md` sit under `done/`, as DoR row 10 records. The ticket was pulled
+  after the drain. The wording quoted above was the wording at the cut. *(Re-worded in the past
+  tense by `ABC-070`. Only the live instruction was removed. The claim, its holder and its drain date
+  are kept.)*
 - **The `AGENTS.md` edit is the `AGENTS.md` Scribe's**, per this project's recorded practice
   (`agents-md-*` subtasks in `.grugops/queue/done/`). The test block is an engineer's. **One hop, one
   ticket** — because of the coupling in the header — but the pen on the markdown file is not this
