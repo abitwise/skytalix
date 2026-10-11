@@ -99,7 +99,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   src/virtual-clock.ts change. -->
 - Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`
   <!-- RUN 2026-10-10: exit 0, 28 passed (22 default), 202-225 s (A5: 135 s).
-  Holds A4's evidence (ENDGAMES 204 + perft/puzzles 242 moves), A2 on a virtual clock, A3 (35
+  Holds A4's evidence (ENDGAMES 204 + perft/puzzles 242 moves), A2 on a virtual clock, A3 (31
   vs 54 of 58). Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change. -->
 - Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
   <!-- RUN 2026-09-26: exit 0, 34 passed — 34 is the whole lane; 33 = NODE_OPTIONS dropped,
