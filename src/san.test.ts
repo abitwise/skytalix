@@ -288,7 +288,8 @@ describe("ABC-013 acceptance", () => {
     // is the hop that exercised it, so the expected surface moves by exactly the one export that
     // ticket adds. What the row actually guards — the import set below, i.e. that the second
     // direction dragged no new dependency into the module — is unchanged and is asserted as before.
-    expect(Object.keys(namespace)).toEqual(["toSan", "parseSan"]);
+    // A native module namespace lists its keys sorted, so the row pins the set, not the order.
+    expect(Object.keys(namespace).sort()).toEqual(["parseSan", "toSan"]);
 
     const source = readFileSync(new URL("./san.ts", import.meta.url), "utf8");
     const specifiers = [...source.matchAll(/\bfrom "([^"]+)"/g)].map((match) => match[1] as string);
