@@ -87,9 +87,9 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   2026-10-10: exit 0, 53 files, 1680 tests, 8.1 s. A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
-- Worker cap (ABC-144, ADR-0040): `vitest.config.ts` `test.maxWorkers: 3`, pinned by value in
+- Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
   `src/cli.test.ts`; `isolate` stays on. Never raise it or pass a higher `--maxWorkers`; env may only
-  lower it (`VITEST_MAX_THREADS` ≤ 3).
+  lower it (`VITEST_MAX_THREADS` ≤ 2).
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
   41 passed (28 default), 23.0 s. Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
   QE and after any src/search.ts change. -->
