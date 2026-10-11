@@ -325,3 +325,55 @@ at the cutting hop. **Result: 8 of 10 — items 5 and 10 carry a ⚠️; the oth
 | 8 | size assigned | **✅** `M`, with both re-size boundaries named |
 | 9 | priority assigned | **✅** `P1`, with the reason it is not `P0` |
 | 10 | no major unresolved blocker | **⚠️ ONE, ordering.** `ABC-093` must deliver the artifact before `A1`–`A4` can be closed. `A5`/`A6` are not blocked. **Not an `EPIC-004` blocker — this ticket has none, and that is its headline property.** |
+
+## Delivery
+
+**2026-10-10, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-094`).
+- Branch `grugops/ABC-094-book-probe`, from `97223dfe`. Code commit `8cf395fc`: `src/book.ts` (production,
+  +153) and `src/book.test.ts` (+359, 26 tests). Not merged, not pushed.
+- Readings and calls live in `.grugops/context/ticket-to-pr-ABC-094/` (`…d14f72cb` decision, `…77180424`
+  readings, `…93e5f38e` artifact-ref, `probe/`) and are not restated here.
+
+**`A1`–`A7` are met on the delivered tree, with one part handed on. No stop condition fired.**
+- **The seam.** `createBookProbe({ read, warn, random })`. The reader and the warn sink are injected, as
+  `random` is. So the probe holds no `ADR-0036` limb, and clause (b) **does not fire** here (instrument:
+  0 / 0 / 0). It fires on `ABC-095`, where `src/cli.ts` binds the read and the sink.
+- **`A5`'s stream half moves with the sink.** The probe writes to neither stream (0 calls, both spied). The
+  stderr binding and its check are `ABC-095`'s.
+- **`N-LOAD`** is MET in its first form: 0 reads at construction. A book hit is ≤ 0.88 ms against the 30 ms bar.
+- **Cost (`ADR-0035`).** 1 file and 0 spawns. Both narrow-set readings were inadmissible on a loaded host, so
+  a re-read is owed.
+- **Gates.** UAT needs the owner's word. QE is owed.
+
+## QE
+
+**2026-10-10, QE/E2E** (subtask `qe-ABC-094`).
+- Range: base `97223dfe`, code `8cf395fc`, reviewed tip `59358836`. QE commit `58726139` (test only).
+- Every reading is QE's own. The detail is in `.grugops/context/qe-ABC-094/notes/` and is not restated here:
+  `…a9a9fe1b` (verdict), `…62a73713` (readings), `…3058eacd` (gaps), `…19fb5b97` (probe).
+
+**PASS_WITH_GAPS.**
+- **`A1`:** a sweep of every reachable book key (all 5,390). Every in-book entry gives a legal move from its
+  own `m`. Every empty-`m` entry and every absent key gives nothing. 0 throws.
+- **`A2`:** QE ran it in two real processes, with 200 picks each, identical.
+- **`A3`:** 4 distinct replies on seeds 1–10.
+- **`A4`:** 796 / 106 / 98 on seed 42. An evenly spaced sweep lands exactly 800 / 100 / 100.
+- **`A6`:** 89 corrupt inputs, each called 50 times. Each gives 0 throws, nothing or only legal moves, and
+  exactly 1 warning.
+- **`A7`:** 0 AST hits and 0 network calls.
+- **`A5`** is met in the module. It gives 0 reads at construction, 0 throws, 50 × nothing, exactly 1 warning
+  and 0 stdout writes. **Its "on stderr" half is `ABC-095`'s binding, and `ABC-095`'s page does not carry it
+  yet** (`QE-094-a`, MEDIUM, BA/PM to fold into `ABC-095` `A5`).
+- **Mutants.** The delivered suite left 8 of 34 non-equivalent mutants green. The most material is the
+  dropped leading zero in the key, which affects 330 reachable keys. Also, the "no byte of the file" warning
+  test was vacuous. QE added 9 tests to `src/book.test.ts`, and the final suite kills 32 of 34. The 2 left
+  are equivalent (`QE-094-b`, CLOSED).
+- **`ADR-0036` (b):** 0 / 0 / 0 on QE's run, so it does not fire here.
+- **Overlap:** no file is shared with `ABC-083`.
+- **Cost (`ADR-0035`):** reading 1 is admissible (twin 1.42 %, load1 median 4.93). It is MET at +0.345 s
+  against 650 ms. Reading 2 is inadmissible (load1 median 9.43). 1 file, 0 spawns.
+- **Gates at `58726139`:** lint, typecheck and build exit 0. `npm test` gives 54 files and 1,715 tests,
+  green, with skip 0. Integrity and lane-inventory print "No findings."
+- **Gaps:** `QE-094-c`–`g` are INFO.
+- **UAT:** the owner's word is owed (production lines). On QE's reading, no Security/NFR hop fires here.
+- Not merged, not pushed.

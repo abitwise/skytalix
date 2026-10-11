@@ -1,0 +1,56 @@
+# UAT ABC-094 harness run — 2026-10-11T08:24:47Z, tree 7362f1f9, node v26.11.0, load { 2.66 2.39 2.04 }
+# command: node .grugops/context/uat-ABC-094-2026-10-11/probe/uat-harness.ts <worktree root> <scratch dir outside the repo>
+     artifact sha256 before: 3802f52f3ced9d6911875c778c42246854893afbc4bcdae18b5b01454d4bb41d
+     S1 start position: book answers e2e4; the file holds 20 move(s)
+     S1 1. e4: book answers a7a6; the file holds 19 move(s), name "King's Pawn Game"
+     S1 1. d4: book answers g8f6; the file holds 14 move(s), name "Queen's Pawn Game"
+     S1 1. c4 (English): book answers g8f6; the file holds 11 move(s), name "English Opening"
+     S1 1. e4 c5 (Sicilian): book answers g1f3; the file holds 20 move(s), name "Sicilian Defense"
+     S1 1. e4 e6 (French): book answers d2d4; the file holds 12 move(s), name "French Defense"
+     S1 1. e4 c6 (Caro-Kann): book answers d2d4; the file holds 9 move(s), name "Caro-Kann Defense"
+     S1 1. e4 e5 2. Nf3 Nc6 3. Bb5 (Ruy Lopez): book answers d8e7; the file holds 18 move(s), name "Ruy Lopez"
+     S1 1. e4 e5 2. Nf3 Nc6 3. Bc4 (Italian): book answers f8c5; the file holds 7 move(s), name "Italian Game"
+     S1 1. d4 d5 2. c4 (Queen's Gambit): book answers g8f6; the file holds 9 move(s), name "Queen's Gambit"
+     S1 1. d4 Nf6 2. c4 g6 (King's Indian): book answers b1c3; the file holds 7 move(s), name "Indian Defense: West Indian Defense"
+     S1 transposition 1.d4 Nf6 2.c4 e6 vs 1.c4 e6 2.d4 Nf6 (seed 5): g1f3 / g1f3
+PASS S1 book agrees with the file on 11/11 named positions; 11 answered with a move; transposition same answer: true; the two key routes agree 11/11; warnings 0
+     S2 Kiwipete middlegame (FEN): nothing, inBook false; file entry absent
+     S2 1. a4 a5 2. h4 h5 3. Ra3 Ra6: nothing, inBook false; file entry absent
+     S2 named, no moves: "Saragossa Opening" (c2c3): nothing, inBook false; file entry m=0
+     S2 named, no moves: "Ware Opening: Symmetric Variation" (a2a4 a7a5): nothing, inBook false; file entry m=0
+     S2 named, no moves: "Van Geet Opening: Laroche Gambit" (b1c3 b7b5): nothing, inBook false; file entry m=0
+     S2 named, no moves: "Nimzo-Larsen Attack: Polish Variation" (b2b3 b7b5): nothing, inBook false; file entry m=0
+     S2 named, no moves: "Nimzo-Larsen Attack: Symmetrical Variation" (b2b3 b7b6): nothing, inBook false; file entry m=0
+     S2 the seed-1 book walk leaves book after 4 plies: e2e4 a7a6 d2d4 e7e5; next call: nothing
+PASS S2 8/8 out-of-book positions answered nothing; throws 0; warnings 0; 5 named-but-moveless entries found and used
+     S2 INFO random draws consumed by 1 out-of-book bookMove + 1 inBook: 1 (reads 1)
+     S3 process A exit 0, process B exit 0; seed-3 walk: e2e4 c7c5 g1f3 b8c6 d2d4 c5d4 f3d4 g7g6 b1c3 f8g7 c1e3 g8f6
+PASS S3 seeds 1-10: 10/10 whole book walks identical across 2 processes; seed 7: 100 start-position picks identical: true; 10 distinct walks among the 10 seeds
+     S4 replies to 1. e4, seeds 1-10: e7e5 e7e5 e7e5 e7e6 e7e5 e7e5 b8c6 c7c5 c7c5 e7e5
+     S4 INFO first moves from the start, seeds 1-10: e2e4 e2e4 e2e4 e2e4 e2e4 e2e4 b2b3 d2d4 d2d4 e2e4 (3 distinct)
+PASS S4 4 distinct replies to 1. e4 over seeds 1-10 (bar: >= 3)
+     S5 after 1. e4, seed 1, 1,000 draws (drawn/weight): a7a5 0%/0.1%, a7a6 0.3%/0.2%, b7b6 0.5%/0.3%, b8a6 0%/0.0%, b8c6 2.4%/2.2%, c7c5 20.3%/20.2%, c7c6 5.1%/5.4%, d7d5 3%/2.4%, d7d6 2.4%/2.2%, e7e5 50.7%/50.9%, e7e6 9.4%/10.5%, f7f5 0%/0.0%, f7f6 0.1%/0.1%, g7g5 0%/0.2%, g7g6 2.4%/2.2%, g8f6 3.2%/2.8%, g8h6 0%/0.1%, h7h5 0.1%/0.1%, h7h6 0.1%/0.1%
+     S5 after 1. e4: worst deviation 1.1 pp; moves outside the entry 0
+     S5 start position, seed 1, 1,000 draws (drawn/weight): a2a3 0%/0.1%, a2a4 0.5%/0.2%, b1a3 0.1%/0.1%, b1c3 0.4%/0.8%, b2b3 0.7%/0.4%, b2b4 1%/0.7%, c2c3 0%/0.0%, c2c4 6.3%/5.2%, d2d3 0.1%/0.1%, d2d4 35.1%/34.5%, e2e3 0.2%/0.2%, e2e4 49.8%/52.6%, f2f3 0.1%/0.2%, f2f4 0.9%/0.7%, g1f3 3.2%/2.8%, g1h3 0%/0.1%, g2g3 0.5%/0.5%, g2g4 0.8%/0.5%, h2h3 0.1%/0.1%, h2h4 0.2%/0.2%
+     S5 start position: worst deviation 2.8 pp; moves outside the entry 0
+PASS S5 every move's share within +/-5 pp of its weight, at both positions, seed 1
+     C0 control: the real artifact, unharmed: exit 0; throws 0; nothing 0; legal 50; illegal 0; stdout 0 B; stderr lines 0; ESC in stderr false; net 0 -> ok
+     C1 missing file: exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book could not be read; playing on without it"; ESC in stderr false; net 0 -> ok
+     C2 empty file (0 B): exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book is not valid UTF-8 JSON; playing on without it"; ESC in stderr false; net 0 -> ok
+     C3 real book cut in half (truncated mid-record): exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book is not valid UTF-8 JSON; playing on without it"; ESC in stderr false; net 0 -> ok
+     C4 valid JSON, one key not 16 hex digits: exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book has an entry that does not match the format; playing on without it"; ESC in stderr false; net 0 -> ok
+     C4b valid JSON, format 2: exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book is not a format-1 book; playing on without it"; ESC in stderr false; net 0 -> ok
+     C5 illegal move at the start position (e2e5): exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book holds a move that is illegal in its position; playing on without it"; ESC in stderr false; net 0 -> ok
+     C5b illegal move 3 plies in (a8a1 after 1.e4 e5 2.Nf3): exit 0; throws 0; nothing 47; legal 3; illegal 0; stdout 0 B; stderr lines 1 "opening book holds a move that is illegal in its position; playing on without it"; ESC in stderr false; net 0 -> ok
+     C6 real book padded past 1 MiB (still valid JSON): exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book is larger than 1048576 bytes; playing on without it"; ESC in stderr false; net 0 -> ok
+     C7 real book with one byte that is not UTF-8: exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book is not valid UTF-8 JSON; playing on without it"; ESC in stderr false; net 0 -> ok
+     C8 a key carrying a terminal escape sequence: exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book has an entry that does not match the format; playing on without it"; ESC in stderr false; net 0 -> ok
+     C9 a directory where the file should be: exit 0; throws 0; nothing 50; legal 0; illegal 0; stdout 0 B; stderr lines 1 "opening book could not be read; playing on without it"; ESC in stderr false; net 0 -> ok
+PASS S6 missing book: 50 calls, 0 throws, 50 x nothing, exactly 1 warning line, 0 B on stdout (harness-bound stderr)
+PASS S7 control C0 answers 50/50 with no warning; C2-C9: 0 throws, nothing or only legal moves, never the illegal one, exactly 1 warning, no file bytes in it
+     S8 src/book.ts imports: ./legal.ts, ./moves.ts, ./position.ts, ./zobrist.ts
+PASS S8 network calls across every parent scenario 0 (each child also reported 0); Node builtin or package imports 0; eval/Function/import()/require() sites 0
+PASS S9 reads at construction 0; after the first question 1; after 100 more 1
+     artifact sha256 after: 3802f52f3ced9d6911875c778c42246854893afbc4bcdae18b5b01454d4bb41d (unchanged)
+SUMMARY 9/9 PASS
+exit 0

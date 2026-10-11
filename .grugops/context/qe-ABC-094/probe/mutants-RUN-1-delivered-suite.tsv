@@ -1,0 +1,36 @@
+id	load1	suite_failed	suite_total	harness_fails	harness_failing_tags	desc
+M01	6.82	0	26	1	A1×1	key encoding: padStart dropped
+M02	6.82	8	26	3	A1×1,A2×1,HARNESS×1	key encoding: uppercase hex
+M03	7.48	8	26	3	A1×1,A2×1,HARNESS×1	key encoding: decimal
+M04	7.48	2	26	5	A4×4,EXTRA×1	pick off-by-one: draw <= weight
+M05	7.44	3	26	6	A1×1,A4×4,HARNESS×1	pick off-by-one: Math.round
+M06	7.44	2	26	5	A4×4,EXTRA×1	pick off-by-one: random() * (total - 1)
+M07	7.32	3	26	6	A1×1,A4×4,HARNESS×1	pick off-by-one: Math.ceil
+M08	7.32	2	26	5	A4×4,EXTRA×1	weights ignored (uniform pick)
+M09	6.98	2	26	1	EXTRA×1	pick walks m in reverse (spec-equivalent)
+M10	6.98	1	26	1	A1×1	empty-m entry kept and inBook by key presence
+M11	6.74	0	26	0	-	empty-m entry kept in the map only (expected equivalent)
+M12	6.74	17	26	5	A1×2,A5×2,A6×1	out of book returns a legal non-book move
+M13	6.60	3	26	6	A6×6	illegal move slips through (fabricated from its squares)
+M14	6.60	3	26	5	A6×5	illegal move skipped silently (no warning)
+M15	6.39	1	26	0	-	illegal move warns but keeps this call's legal moves
+M16	6.39	13	26	6	A5×4,EXTRA×1,HARNESS×1	throw on corrupt input: outer catch removed
+M17	6.12	0	26	0	-	inner JSON catch removed (spec-equivalent)
+M18	6.12	18	26	8	A1×3,A5×3,EXTRA×1,HARNESS×1	throw when out of book
+M19	5.87	2	26	1	A5×1	read at construction (eager load)
+M20	5.87	15	26	93	A5×2,A6×87,EXTRA×4	second warning: failed load retried per call
+M21	5.80	3	26	5	A6×5	second warning: illegal path warns without switching off
+M22	5.81	16	26	93	A5×2,A6×87,EXTRA×4	second warning: switchOff warns twice
+M23	5.81	0	26	0	-	size bar off-by-one (>=)
+M24	5.75	1	26	1	A6×1	size bar removed
+M25	5.75	0	26	1	EXTRA×1	UTF-8 decoder not fatal
+M26	5.77	0	26	1	EXTRA×1	weight-sum overflow check removed
+M27	5.77	0	26	1	A6×1	pair length check removed
+M28	9.87	0	26	1	A6×1	key regex accepts uppercase
+M29	9.87	0	26	2	EXTRA×2	promotion letters n/q swapped
+M30	9.48	0	26	0	-	UCI regex loosened to any text
+M31	9.04	3	26	4	A2×2,A4×1,EXTRA×1	Math.random instead of the injected random
+M32	9.04	0	26	0	-	warning carries a byte of the file (the key)
+M33	8.56	1	26	1	A6×1	weight 0 accepted
+M34	8.56	15	26	92	A1×2,A5×1,A6×86,EXTRA×3	inBook true for every position once loaded
+worktree src/book.ts unchanged (cmp 0)
