@@ -2670,11 +2670,27 @@ describe("ABC-043 — the live session", () => {
 
     // THE BINDER COUNT (`ABC-113` `A1`): `history` is BOUND EXACTLY ONCE in the executable view of
     // the entry point. The initializer row above and the shorthand row below pin a name and a
-    // shorthand, and a regex over source text cannot do scope analysis — a shadowing-parameter
-    // rebind (`D3`) or a flat copy bound under the same name (`M9`, `history: decoy,`) hands the
-    // loop a different object with both of those rows still green. It is placed BEFORE them so the
-    // COUNT is the row that speaks first on such a build. Measured at the cut and re-measured on
-    // this branch: delivered → `["history ="]`, 1; `D3` → 2; `M9` → 2.
+    // shorthand, and a regex over source text cannot do scope analysis. The two named decoys are NOT
+    // alike (`ABC-114` `A1`, re-planted 2026-10-11 against this file and, as the control, against
+    // the pre-`ABC-113` file `git show cc037b3e^:src/cli.test.ts`):
+    // - `D3`, a shadowing-parameter rebind, hands the loop a different object with BOTH of those
+    //   rows still green. On the control, `A1` is green. Only this count reds it: 2 binders.
+    // - `M9`, a flat copy bound under the same name (`history: decoy,`), is NOT blind to them. On
+    //   the control, the shorthand row reds it (`history: decoy,` does not match `/\bhistory,/`).
+    //   Here this count reds it too, with 2 binders.
+    // ORDER: this row sits AFTER the initializer row and BEFORE the shorthand row. On `D3` and `M9`
+    // it is the row that speaks, because both leave the initializer row green. It does NOT speak
+    // first on every decoy: `ORD` (`const history: ReturnType<typeof newGame> = newGame(START_FEN);`
+    // plus `M9`'s flat copy, `tsc`-clean) reds the initializer row, and vitest stops there. On `M9`
+    // the cost is that vitest stops at this row, so the shorthand row's own red is invisible from
+    // this file's output. Delivered → `["history ="]`, 1.
+    // WHAT THIS COUNT CANNOT SEE: it matches `/\bhistory\s*[:=]/g`, so a binder with neither `:` nor
+    // `=` after the name is not counted. The open remainder is the `[:=]`-free binder forms:
+    // `for…of`, `for…in`, `catch (history)`, and a contextually-typed callback parameter. `D4`
+    // (`const spare = { ...history }; for (const history of [spare])`) is `tsc`-clean. Every row
+    // of this file stays green on it. On the control `A1` stays green, and the control's only reds
+    // are its 2 unrelated `ABC-042` drift rows (`A9`, `A10`). Closing it is a new assertion, not
+    // this comment's.
     // Counted over `executableCodeOf` and never the raw file (`## Test notes` 1 — the word
     // `history` in a comment reddens a raw count), and written as a COUNT rather than a
     // `not.toContain("decoy")` (`## Test notes` 2 — a negative row on a literal passes on every
@@ -2737,10 +2753,14 @@ describe("ABC-043 — the live session", () => {
     // THE CLAUSE THAT WAS MISSING, and it is the one that made this row's other three PROXIES rather
     // than the property (QE, 2026-08-19). All three above are green on a build that hoists the
     // options bag to a name and then calls the seam THROUGH THE BAG — `void options.input(…)` —
-    // because none of them names the bag. Measured at this hop on a LIVE stdin (a FIFO carrying one
-    // move and held open, which is a human at a keyboard): that build renders ONE board, writes
-    // THREE prompts and NEVER PLAYS THE MOVE, where the delivered build plays it and renders TWO.
-    // The bag is the call's own argument, so there is no name reaching the seam AT ALL, which is the
+    // because none of them names the bag. NO RUNTIME SYMPTOM OF THAT BUILD IS CLAIMED HERE
+    // (`ABC-114` `A4`, struck 2026-10-11). The live-stdin harness that once put one here (a FIFO
+    // carrying one move, then held open) was re-run 6 times on the hoisted build. Every run PLAYED
+    // the move (3 boards, 3 prompts, 1483 bytes; the delivered build: 3 / 2 / 1481), so the old
+    // "never plays the move" did not reproduce. The harness also cannot end on its own: with the
+    // writer closed, neither the product nor a bare `process.stdin` reader in Node saw
+    // end-of-input on this platform. So it cannot support a stable symptom claim, and the proof is
+    // the source row below. The bag is the call's own argument, so there is no name reaching the seam AT ALL, which is the
     // property "called nowhere" actually states. `windowOf` throws on the hoist rather than
     // returning an empty window — the same derivation `A1` uses, and the same repair.
     expect(
