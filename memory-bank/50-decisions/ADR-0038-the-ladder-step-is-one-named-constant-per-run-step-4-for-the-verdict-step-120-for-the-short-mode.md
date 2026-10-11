@@ -9,6 +9,12 @@ id: ADR-0038
 **accepted** 2026-10-10 by Olger Oeselg (owner), verbatim "levels 4 and 5 run as specified, step 4, keep P1,
 accept ADR-0038" (note `.grugops/context/wave-2026-09-25/notes/20261010T192920Z-orchestrator-decision-owner-word-six-answers-b7c41e09.md`). Owner menu: question 1 → option (a); question 2 → step 4; question 3 → P1.
 
+**Addendum 2026-10-11: PROPOSED, owner acceptance owed.** It amends decision 5 only, and only for the verdict
+mode. The verdict mode would run the same harness code under plain `node`, outside the vitest runner. Inside
+vitest the engine runs about 4.3x slower per node, with the same node count. See § Addendum 2026-10-11 at the
+end. Decisions 1–4 and 6, and decision 5 for the short mode and the default lane, stay **accepted** as
+written.
+
 Previously **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-085`, Workflow 02
 In Design hop and Workflow 07). It is D4, owed to `ABC-085`'s DoR item 4 by BA/PM's re-score
 (`20261010T172705Z-ba-pm-decision-p1-backlog-two-in-design-two-backlog-0e4da324`).
@@ -186,3 +192,116 @@ Only `src/fen.ts` moved (`ABC-010`), and the corpus still parses.
 - **The admission rule** is re-read whenever `LEVELS[1]` changes.
 - **Decision 1** reopens only if a level is redefined as something other than a budget plus a rate.
 - Nothing in code depends on this ADR beyond two constants and one environment variable in a test file.
+
+## ADDENDUM 2026-10-11 (PROPOSED; owner acceptance owed): the verdict mode runs the same harness under plain `node`, not inside vitest. The vitest runner costs ~4.3x per node and plays the same games
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-abc085-verdict-cost`), on the wave tip
+`8639effb`. **No timing was taken at this hop.** A QE hop and an Engineer hop were running. Every figure is
+the Engineer's recorded reading, or arithmetic on it:
+- note `…70684a78` and `.grugops/context/ticket-to-pr-ABC-085/probe/RUN.txt`, on branch
+  `grugops/ABC-085-self-play-ladder`;
+- this hop's notes `…2566e813` (the ruling) and `…5d70d79e` (the arithmetic).
+
+### Context: what the Engineer read
+
+- **The same games, at a different wall.** The vitest harness's 3v4 row and this ADR's own plain-`node` probe
+  played **the same four step-120 games**: the same plies, 123/122/119/115, and the same endings.
+  - The probe took 11.7–12.2 s a game.
+  - The harness took 57.3–62.0 s a game, back to back at load1 ~2.8.
+- **Isolated:** `chooseMove(start, 4 000 ms, virtualClock(120))` ×5 searched **145 765 nodes every time**,
+  under either runner.
+  - Plain `node`: 782 / 791 ms, which is **5.5 ms per 1 024 nodes**.
+  - vitest `threads`: 3 473 / 3 379 ms. vitest `forks`: 3 344 / 3 490 ms. That is 23.5–24.5 ms per 1 024 nodes.
+  - **The ratio is 4.23–4.46x (mean 4.35x).** It does not depend on the pool. Its cause is `UNKNOWN - verify`.
+    The Engineer's guess is the module transform's import indirection in the hot path, which is not shown.
+- **Cost.** § Consequences priced the verdict at ~10 h (7–13). That figure used 3.5–6.5 ms per reading, which
+  is plain-`node` probe data. **Two routes give the same in-vitest figure:**
+  - this ADR's ~10 h × 4.35 = **~43.5 h** (band 30–58 h);
+  - the Engineer's in-vitest step-120 walls × 30 (120 ÷ 4) = **43.5 h**. Plies at step 4 are
+    `UNKNOWN - verify`.
+
+  **So the verdict costs ~10 h under plain `node` and ~44 h inside vitest, for identical games.**
+
+### What a virtual-clock verdict depends on, and what it does not
+
+- The games depend on node counts only (decision 4; `A5`). The runner changes the wall and nothing else. The
+  Engineer read equal node counts under both runners, and the four games above were equal.
+- **The Rollback band of 2–8 ms per reading is read under plain `node`.** That is the runner the engine ships
+  on (`npm run chess` is `node src/cli.ts`), and step 4's "about real time" was calibrated against it.
+  - The vitest figure, ~24 ms per 1 024 nodes, is a reading of the test runner. It is not a reading of real
+    play, and **it does not trigger the Rollback**.
+  - The plain-`node` 5.5 ms is inside the band. **Step 4 stands.**
+
+### Decision 5, amended (PROPOSED). Only the verdict mode moves
+
+1. **The verdict mode runs under plain `node`, from a tool outside `src/`.** The shape is `ADR-0037` D1(g)'s
+   precedent (`tools/opening-book/compile.ts`): it imports `src/` read-only, runs on demand, and is not
+   production code (`ADR-0011` clause 1 covers `.ts` under `src/` only).
+   - **One game loop, not two.** The harness's non-vitest code moves verbatim into a module under
+     `tools/ladder/`: the step constants, `stepForMode`, the sides, the game loop, the claim policy, the cap,
+     the scorer, the `A4` replay, the digests and the report lines.
+     - `src/ladder.test.ts` imports it. It keeps every default row and `LADDER_DEEP=1`.
+     - A small entry, run as `node tools/ladder/<entry>.ts verdict` (the Engineer names it), runs the
+       verdict plan. It takes `1` too, for the equivalence check in item 2.
+     - `tsconfig.json` `include` and `biome.json` `files.includes` gain `tools/ladder/**/*.ts`, as `ADR-0037`
+       did.
+   - **There is one verdict route.** Under vitest, `LADDER_DEEP=verdict` is refused at load, and the message
+     names the `node` command. A 44-hour route that nobody should take is not left open.
+   - The step, the game counts, the seeds, the claim policy, `-t`-style single-pair re-runs, and the rule
+     that `A1`/`A2` are printed and never asserted are all unchanged. `A3` and `A4` failures exit non-zero.
+2. **Equivalence is pre-registered. It is a check on counts and digests, never on a timing.** On one commit,
+   before any verdict is quoted:
+   - run `LADDER_DEEP=1 npx vitest run src/ladder.test.ts` and the `node` entry with `1`;
+   - they must print **the same five pair digests, the same `A5` digest, and the same plies and ending for
+     every game**. The digests recorded at `d5b0f0e2` are `72f01570a3987247`, `302d8b4676cd7299`,
+     `f89bbd75f4a066e9`, `89b8059f53c970df` and `d30b4a153b7c1a9a`. They hold only while the engine path is
+     unchanged.
+   - **If any differs, the `node` route is not the same harness.** The verdict then stays in vitest (~44 h),
+     and the difference goes to the owner.
+3. **The report adds one field: the runner and its version** (`node v…`). The commit, step, seeds, game count,
+   wall time and load1 stay as before. A wall time from one runner is never compared with one from the other.
+4. **Scheduling, the Orchestrator's (unchanged in kind).** The verdict is one process, serial, in the
+   background, once per verdict.
+   - **It never overlaps a no-other-hop window.** That covers `ABC-144` Window B and any `ADR-0035` reading.
+     A run holding one core for ~10 h is another hop by that definition.
+   - **The pairs never run as parallel processes** (Alternatives (b)).
+
+### Alternatives (this addendum)
+
+| option | ruling | why |
+|---|---|---|
+| **(a) accept ~44 h inside vitest** | **rejected as the plan; kept as the fallback** if item 2's check fails | identical games at ~4.35x the CPU, about 33 extra core-hours per verdict, and again at every re-take after a staleness merge (decision 6). It holds one core of a fanless Air for ~2 days, with no quiet window possible meanwhile. It runs against the owner's "reduce cpu usage" (`ABC-144`) |
+| **(b) the pairs as parallel processes** | **rejected**, under either runner | CPU-hours stay the same (~43.5 h in vitest). Up to 5 cores are held at once. The wall floor is still the single `A1` `it`, 1v5 at ~18.7 h in vitest. `ADR-0040`'s cap is per process and cannot see it. Window A read the M3 reach moderate thermal pressure after ~6 min of lane runs. A once-per-verdict background run has no wall requirement to buy |
+| **(c) the same harness outside vitest** | **RECOMMENDED** (items 1–4) | the same games and ~10 h (7–13), the cost this ADR was accepted at. The build is `XS` |
+| (c′) the `node` entry under `src/` | rejected | it becomes a production module (`ADR-0011` cl. 1). It adds a `process.` holder to `ADR-0036`'s capability surface. Decision 5 says it needs the owner's UAT word |
+| (c″) a shim that runs `src/ladder.test.ts` itself under `node` (stubbing `vitest`) | rejected | one file with two meanings. Clever, not boring |
+| (d) find and remove the vitest overhead | not a dependency of the verdict | the cause is `UNKNOWN - verify`. It may matter to the default lane's CPU, so it is routed to BA/PM (note `…be323233`), not ruled here |
+| (e) a coarser verdict step (10) | not offered again | the step is the owner's, and he chose 4. Under `node`, step 4 costs what he accepted |
+
+### Consequences (this addendum)
+
+| route, step 4 | full run | `A1` (1v5, 100 games) | 3v4 + 4v5 first (test note 5) |
+|---|---:|---:|---:|
+| plain `node` (recommended) | **~10 h** (7–13) | ~4.3 h | ~4.6 h |
+| inside vitest | ~43.5 h (30–58) | ~18.7 h | ~20.0 h |
+
+- The per-pair split is the Engineer's ×30 route, divided by 4.35 for `node`. It is an estimate, not a
+  reading.
+- **`NFR-008`, the default lane:** unchanged. The default lane still plays 0 games. `src/ladder.test.ts`
+  stays 1 file. `tools/ladder/` adds no test file unless the Engineer chooses one, and then it is +1, by
+  count.
+- **`ABC-144` `A6`** reads `LADDER_DEEP=1` only. The verdict mode is not an opt-in vitest lane after this
+  amendment, and it was never one of `A6`'s runs.
+- **Where it is built.** `ABC-085` is In Review on its harness `d5b0f0e2`, and the verdict cannot run before
+  `ABC-083` merges (decision 6; `ABC-083` is `Blocked`). So nothing is lost by building this in the
+  **pre-registered split ticket** (`ABC-085` § Dependencies: the `A1`/`A2` verdict run as its own `XS`), not
+  as a repair to the build under review. The Orchestrator and BA/PM choose. The design is the same either
+  way.
+- The `AGENTS.md` lane line drafted in `…8515e3e7` ("~10 h estimated, likely ~44 h in vitest") stays
+  accurate until this is accepted and built. The Scribe then writes the `node` command.
+
+### Rollback (this addendum)
+
+Delete `tools/ladder/`'s entry, and let `src/ladder.test.ts` define `LADDER_DEEP=verdict` again. The core
+module can stay where it is, because nothing in `src/` production depends on it. The verdict then costs
+~44 h again.
