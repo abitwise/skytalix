@@ -1,0 +1,30 @@
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/src/cli.test.ts	2026-10-11 22:43:59
++++ v41off/src/cli.test.ts	2026-10-11 22:49:32
+@@ -3403,10 +3403,23 @@
+     expect(test.maxWorkers).toBe(2);
+     expect(test.fileParallelism ?? true).toBe(true);
+     expect(test.isolate ?? true).toBe(true); // `ADR-0008` decision 7
+-    expect(test.poolOptions).toBeUndefined();
+-    for (const name of ["VITEST_MAX_THREADS", "VITEST_MAX_FORKS"]) {
+-      const raw = process.env[name];
+-      if (raw !== undefined) expect(Number.parseInt(raw, 10), name).toBeLessThanOrEqual(2);
++    expect(Object.hasOwn(test, "poolOptions")).toBe(false);
++    expect(test.projects).toBeUndefined(); // a project's own maxWorkers outranks the root's (QE-144-a)
++    // Parsed exactly as vitest 4.1 does (`if (env) maxWorkers = Number.parseInt(env)`): an empty
++    // value is ignored, `0x3` reads 3 (QE-151-a), and 0 or NaN fall back to cpus - 1 (a raise).
++    const raw = process.env.VITEST_MAX_WORKERS;
++    if (raw) {
++      const workers = Number.parseInt(raw);
++      expect(workers, "VITEST_MAX_WORKERS").toBeGreaterThanOrEqual(1);
++      expect(workers, "VITEST_MAX_WORKERS").toBeLessThanOrEqual(2);
+     }
+   });
+ });
++
++describe("ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-0042 addendum)", () => {
++  it("vitest.config.ts sets experimental.viteModuleRunner to exactly false", async () => {
++    const { default: lane } = await import("../vitest.config.ts");
++    const test: NonNullable<ViteUserConfig["test"]> = lane.test ?? {};
++    expect(test.experimental?.viteModuleRunner).toBe(false);
++  });
++});

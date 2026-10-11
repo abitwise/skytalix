@@ -1,0 +1,11 @@
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/src/san.test.ts	2026-10-11 22:43:59
++++ a20/sorted/src/san.test.ts	2026-10-11 22:46:15
+@@ -288,7 +288,7 @@
+     // is the hop that exercised it, so the expected surface moves by exactly the one export that
+     // ticket adds. What the row actually guards — the import set below, i.e. that the second
+     // direction dragged no new dependency into the module — is unchanged and is asserted as before.
+-    expect(Object.keys(namespace)).toEqual(["toSan", "parseSan"]);
++    expect(Object.keys(namespace).sort()).toEqual(["parseSan", "toSan"]);
+ 
+     const source = readFileSync(new URL("./san.ts", import.meta.url), "utf8");
+     const specifiers = [...source.matchAll(/\bfrom "([^"]+)"/g)].map((match) => match[1] as string);
