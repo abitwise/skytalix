@@ -73,7 +73,7 @@
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { JsonReporter } from "vitest/reporters";
+import { JsonReporter } from "vitest/node";
 
 for (const hook of ["writeReport", "onTestRunEnd"]) {
   if (typeof JsonReporter.prototype[hook] !== "function") throw new Error(`result-file-reporter: JsonReporter.prototype.${hook} is gone; re-read RISK-ABC143-01`);
