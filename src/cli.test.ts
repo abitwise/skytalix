@@ -2,7 +2,7 @@
  * `ABC-042` — the entry point and its argv resolver: `A1`…`A10` and `A12`'s structural halves, plus
  * the security bars this ticket's page states in a form a test can decide.
  *
- * ONE FILE FOR BOTH MODULES, and it is the heaviest file either epic adds. It holds no `vi.mock`, so
+ * ONE FILE FOR BOTH MODULES, the heaviest either epic adds. Its only `vi.mock` is `{ spy: true }`, so
  * it is not an `*.nfr.test.ts`: nothing here re-routes the module graph.
  *
  * THE SPAWN BUDGET IS THE POINT OF THE LAYOUT. `CHILDREN` below spawns each command line EXACTLY

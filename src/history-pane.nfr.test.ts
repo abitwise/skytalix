@@ -667,7 +667,7 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
    *
    * THE SCOPE IS THE FRAME PATH'S CLOSURE, NOT THIS PROCESS, and that distinction is the whole
    * reason this runs in a child. THIS FILE is itself a runtime importer of `history.ts` — the
-   * `vi.mock` + `importOriginal()` at `:43-44` and the `await import` at `:58-60`, which this
+   * `vi.mock` with `importOriginal()` and the static imports after the `vi.mock` blocks, which this
    * file's own spies and `A7`'s `takeBack` require — so a probe phrased as "`history.ts` never
    * loads in this process" would fail in the very file that holds it. A child process rooted at
    * the declared composition root is that scoping made mechanical.

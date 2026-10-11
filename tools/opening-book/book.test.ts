@@ -98,7 +98,7 @@ describe("A1 — two compiles of the same source are byte-identical", () => {
 });
 
 // QE (ABC-093): D1(f)'s sixth refusal cannot be built from real chess, so a stub key that maps
-// every position to one value builds it. Scoped to this test: doMock + a fresh module registry.
+// every position to one value builds it. Scoped to this test: `mockImplementation` + `mockReset`.
 describe("D1(f) — a key carrying two different positions is refused", () => {
   it("refuses the compile and writes no artifact", async () => {
     vi.mocked(zobristKey).mockImplementation(() => 0n);

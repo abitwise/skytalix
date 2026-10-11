@@ -48,7 +48,7 @@ import {
  * sit where a direct import is still visible: `vi.mock` replaces the module in the graph for EVERY
  * importer, including one that has not been written yet.
  *
- * Everything CALLS THROUGH (`vi.fn(actual.…)`), so no behaviour changes. Known limit, stated rather
+ * It CALLS THROUGH (`vi.mock(p, { spy: true })`): no behaviour changes. Known limit, stated rather
  * than papered over: `gameStatusOf` calls `repetitionCounts` INSIDE `history.ts` and a
  * module-boundary mock cannot see an intra-module call — so the `repetitionCounts` count is the
  * count of DIRECT external calls, which is exactly what `A6` bars.
@@ -60,7 +60,7 @@ vi.mock("./history.ts", { spy: true });
  * `legalMoves` DIRECTLY from `./legal.ts` (`src/turn-loop.ts`, `wasGenerated`) and so does the
  * rules core under `gameStatusOf`, so a spy on the test seam's `deps.legalMoves` sees neither. The
  * criterion is "0 calls AFTER the outcome is produced", counted at the module boundary where every
- * importer's call is visible. Calls through (`vi.fn(actual.legalMoves)`), so no behaviour changes.
+ * importer's call is visible. Calls through (`vi.mock(p, { spy: true })`), so no behaviour changes.
  */
 vi.mock("./legal.ts", { spy: true });
 

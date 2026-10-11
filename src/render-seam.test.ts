@@ -1,10 +1,10 @@
 /**
  * `ABC-041`'s eleven acceptance criteria (`A11` was cut by BA/PM after the QE gate).
  *
- * NO `vi.mock`, NO SPAWN, NO TTY — the ticket's `## Test notes` row 5, and the reason this is a
+ * NO `vi.mock` FACTORY, NO SPAWN, NO TTY — the ticket's `## Test notes` row 5, and why this is a
  * plain `*.test.ts` rather than an eighth `*.nfr.test.ts`: a `vi.mock` factory is hoisted to file
- * scope and would re-route the module graph for the whole table. `A2`'s spies are `vi.spyOn` over
- * imported namespaces, which call through, so every frame asserted below is a REAL frame composed by
+ * scope and would re-route the module graph for the whole table. `A2`'s spies are file-top
+ * `vi.mock(p, { spy: true })` automocks, calling through: each frame asserted is REAL, composed by
  * the four merged producers.
  *
  * `A7` AND `A9` ARE NOT ASSERTED HERE AS A MEASUREMENT — they are the MERGED probe's, in
