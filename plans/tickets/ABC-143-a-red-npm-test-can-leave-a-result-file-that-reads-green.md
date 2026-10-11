@@ -285,3 +285,63 @@ Software Engineer, 2026-10-11 (subtask `ticket-to-pr-ABC-143`). Branch
   - Two runs in one checkout is fenced out and unchanged (`QE-143-e`, INFO).
 - **UAT waiver applies** on QE's reading (0 production `src/` lines). QE recommends the `In Review`
   exit. Not merged, not pushed.
+
+## Follow-ups
+
+**2026-10-11, BA/PM** (task `wave-2026-09-25`, subtask `bapm-fold-qe143-2026-10-11`). This folds QE's gap
+register (`…da133511`). This hop measured nothing. Nothing above this heading changed: `A1`–`A6` stay as
+delivered and MET.
+
+- **`QE-143-a` and `QE-143-b` → `ABC-149`** (`XS`, `P3`, DoR 10/10). It writes the regression plant set
+  into the reporter's header: six rows, including the coverage-threshold red that alone pins the
+  exit-code check, and the `A2` marker read by content. When a hop changes the reporter, the `test`
+  script or vitest, it re-runs that set, not just this page's `A1`–`A6`.
+- **`QE-143-c` → `RISK-ABC143-01`**, below.
+- **`QE-143-d` → accepted as `AR-143-HANG`**, below.
+- **`QE-143-e` → accepted as `AR-143-OVERWRITE`**, below.
+- `QE-143-f` (the git host's protection reads `UNKNOWN - verify`) is the human's, as at `QE-142-f`. No
+  BA/PM action.
+
+**`RISK-ABC143-01` — a vitest major bump breaks the result-file reporter, and on 4.x it breaks
+silently.**
+- **What.** `tools/grugops/result-file-reporter.js` leans on five vitest 3.x surfaces (`…4f652dad`): the
+  `vitest/reporters` export, `JsonReporter`'s fields, `onFinished`, `writeReport`, and Node's `exit`
+  hook. QE read 4.1.11 and 5.0.3 and ran neither, so both effects are `UNKNOWN - verify`.
+  - **4.x:** `onFinished` is no longer called on reporters, so unhandled errors are dropped and `npm test`
+    stays green. The file still reads not-success, but only through the exit-code check.
+  - **5.x:** the import fails loudly. After the import is repointed, every file reads not-success and
+    names nothing, the green file included.
+- **What holds it today.** Only `"vitest": "^3.0.0"` and the lockfile (3.2.7). No test, guard or
+  `overrides` entry holds it. `@vitest/coverage-v8` is `^3.2.7`, and its installed manifest declares the
+  peer `vitest: 3.2.7` (read at the hop). So **upgrading coverage-v8 to 4.x is in practice a vitest 4.x
+  bump.** The 4.x peer itself is `UNKNOWN - verify`. That is the upgrade `AR-1` priced and `ABC-056`
+  leaves for the Release Manager to decide.
+- **The carrier rule.** A ticket that changes the major version of `vitest` or of any `@vitest/*` package
+  carries this risk in its § Security / NFR triggers. That covers a deliberate bump, `npm audit fix
+  --force`, and a yes on `ABC-056`'s coverage-v8 question. That ticket:
+  1. depends on `ABC-149` being merged, or carries its six rows itself if it is not;
+  2. re-runs the six rows at its head. The "unhandled" row must name the thrown text, and the "green"
+     row must read `success` true;
+  3. takes QE's 4.x route or says why not. That route reads unhandled errors from
+     `onTestRunEnd(testModules, unhandledErrors, reason)`, which 3.2.7 already calls, and checks at load
+     that `writeReport` exists. It is the Software Engineer's call and was not tried.
+- **Owner:** BA/PM carries it, and the Software Engineer owns the fix. Security/NFR may enter it in
+  `plans/nfr-catalog.md`. **Trigger:** a vitest or `@vitest/*` major version appears in a ticket's
+  scope or in a `package-lock.json` diff.
+
+**`AR-143-HANG` — on a 124 exit, neither the file nor the console names the hung test (`QE-143-d`).
+Accepted. No ticket.**
+- **Why accept.** `A2` is met as written, and the marker reads not-success. The console lists every
+  file but the hung one, so it is found by elimination. A fix would need a per-file progress write into
+  the marker (cost on every green run) or a change to `run-bounded.js`'s code (fenced). Neither is
+  worth it for a red that has not been seen in the wild.
+- **Promotion trigger** (QE's): a 124 sighting whose hung file cannot be named by elimination. Then
+  BA/PM cuts a ticket. A SIGTERM (exit 143) leaves the same marker and falls under the same trigger.
+
+**`AR-143-OVERWRITE` — two `npm test` runs in one checkout overwrite each other's file (`QE-143-e`).
+Accepted. No ticket.**
+- **Why accept.** This ticket and `ABC-142` fence it out. The marker adds no new green path: only a run
+  whose own exit was 0 writes `success` true. The overwrite shows in the file, as one `testResults`
+  entry where the lane has dozens. The standing mitigation is one worktree per hop.
+- **Promotion trigger:** a hop is misled by a file another run wrote, or the factory starts running two
+  `npm test` runs in one checkout by design. Then BA/PM cuts a ticket.
