@@ -6,7 +6,9 @@ id: ADR-0042
 
 ## Status
 
-**proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-152`, ticket `ABC-152`
+**accepted** 2026-10-11 by Olger Oeselg (owner), with the owner-route addendum, verbatim "1. ADR-0042 - accept ; 2. yes" (Orchestrator transcription note `…c9b52bb2`); the "yes" also accepts `RISK-ABC152-A2-GRAPH`.
+
+Previously **proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-152`, ticket `ABC-152`
 `D1`–`D4`), on branch `grugops/design-ABC-152` from the wave tip `4973d8e0`. ~~**Owner word owed** (§ Decision 5).~~
 
 **ADDENDUM 2026-10-11 (the owner's route), the last section of this file: it governs over decisions 3 and 5.**
