@@ -428,3 +428,36 @@ is QE's own, from its own worktree and its own single `LADDER_DEEP=1` run. The d
     the only off".
 - **Gates:** lint, typecheck and build exit 0. Skip integrity reads `No findings.`, and the inventory is 54 = 54. There are 0 production
   `src/` lines, so on QE's reading the UAT waiver applies (WAIVED, not accepted; the Orchestrator applies it).
+
+## QE (2nd pass)
+
+**2026-10-11, QE/E2E** (subtask `qe2-ABC-085`). This pass reviews the fix `f28d91ad`, at tip `dacbf42a`. Every reading is QE's own, from
+its own worktree and its own single `LADDER_DEEP=1` run. The detail is in `.grugops/context/qe2-ABC-085/notes/`: `…a2b6e4f0` (verdict),
+`…5e81c0a4` (mutants), `…7c3d19e2` (gaps and the `PLY_CAP` ruling) and `…91f0d6b8` (commands). Raw files are in `../probe/`. **Loaded
+host, no timing grades.** Every deep-lane number is **short mode, step 120**.
+
+**PASS_WITH_GAPS** on `A3`–`A6`. Only LOW and INFO gaps remain. `QE-085-a`, `-b` and `-c` are closed. `A1` and `A2` wait for the
+verdict run.
+
+- **The refactor preserved behaviour.** The run exited 0, 18/18, with the commit `dacbf42a` clean. All 32 report lines and all 5 pair
+  digests equal **each** of the three earlier runs, with wall, load1 and commit excluded. The digests are `72f01570a3987247`,
+  `302d8b4676cd7299`, `f89bbd75f4a066e9`, `89b8059f53c970df` and `d30b4a153b7c1a9a`. `A3`: 26/26 games ended, 0 at the cap, max 135
+  plies. `A4`: 26/26 replays clean.
+- **Mutants:** QE re-planted all 16 itself against the refactored file, re-finding the sites of M5, M6, M11 and M14.
+  - 14 are killed, and M7b is killed too. All 8 of the SE's named survivors are now killed (M5, M6, M7, M7b, M11, M12, M13, M14).
+  - M9 and M10 survive as INFO, as before.
+  - Three call-site plants (X6, X13, X14) survive. The pure functions are pinned, but the deep row's hand-off into them is not.
+- **Default lane, by count:** 0 ladder games, pinned (M4 turns the pin red). `npm test` gives 54 files / 1693 / 0 skipped, and the
+  ladder file has 13 rows.
+- **The `PLY_CAP` call-site ruling: LOW, not blocking.**
+  - A smaller value turns `A3` red, which is loud.
+  - A larger value cannot manufacture a draw (M2 pins cap-as-error).
+  - It only hides a game of more than 600 plies (the max seen is 135), so it is equivalent on every run so far.
+  - An optional one-line deep-row check `max plies <= PLY_CAP` closes it with 0 games.
+- **Gaps** (none fails `A3`–`A6`):
+  - `QE2-085-a` **LOW**, SE, optional before the verdict run. The three call-site hand-offs are unpinned: `playPair`'s colours, the
+    `runGame` cap, and `summarizePair`'s level.
+  - `QE-085-d` **INFO** is carried: M9 is equivalent, and M10 is `UNKNOWN - verify`.
+  - `QE-085-e` **INFO**, Scribe, is carried.
+- **Gates:** lint, typecheck and build exit 0. Skip integrity reads `No findings.`, and the inventory is 54 = 54. The `src` diff from
+  `aee4b8cb` is `src/ladder.test.ts` only, so there are 0 production lines.
