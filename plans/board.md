@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator — Scribe ABC-152 AGENTS.md merged (24,494 B); FCAP ruled (`d18355aa`): full-lane F kept (1.72 s / 3.25 s) until the first 4.1 twin R; RISK-ABC144-FCAP open (low). Wave work in flight: none._
 _Updated: 2026-10-12 by the Orchestrator — `ABC-152` → Done (vitest 4.1.11, runner off; CPU −20.7 %; merged `7a920ca5`); branch deleted; quiet window closed. Scribe + Architect follow-ups dispatched._
 _Updated: 2026-10-12 by the Orchestrator — `ABC-152` → In Security/NFR. QUIET WINDOW OPEN (width 1): V12 review + V9–V11._
 _Updated: 2026-10-12 by the Orchestrator — ABC-152 QE delta PASS_WITH_GAPS; Architect ruling on QE-152-i before the window._
