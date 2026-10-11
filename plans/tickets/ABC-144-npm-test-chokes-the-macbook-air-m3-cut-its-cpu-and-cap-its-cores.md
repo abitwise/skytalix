@@ -109,6 +109,11 @@ to the wall reading.
 - CPU = user + sys, one fresh process per run, **n ≥ 8 scored rounds**, rotated order, round 0
   discarded;
 - file and test counts asserted on every run, load1 logged before every run.
+- *(2026-10-11, BA/PM, `ADR-0040` addendum, note `…7974985e`.)* **Window B also logs
+  `com.apple.system.thermalpressurelevel` before and after every run**, beside load1. `pmset -g
+  therm` prints no `CPU_Speed_Limit` line on this M3, so that column is kept only as the record that it
+  is empty, and it is never reported as a reading. A background `ABC-085` ladder verdict run
+  (`ABC-146`) is another hop, and it never overlaps this window.
 
 A reading is used only if it is admissible (the twin's median delta is ≤ 1.5 % with its sign at
 chance) and it resolves the bound (twin R ≤ the bound, in its unit; `ADR-0035` decision 1). All
@@ -127,6 +132,10 @@ readings are taken in the no-other-hop window (§ What is established).
   the core count. That leaves at least half of the 8 logical cores free of test workers.
   - The median effective parallelism (CPU ÷ wall) is reported for base and head.
   - **4 is BA/PM's proposal.** The owner may move it from the Architect's frontier, as in `A1`.
+  - *(2026-10-11, BA/PM.)* **Expected reading at head: 3 workers** (`effectiveWorkers: 3` from
+    `resolved-workers.mjs`, and 7 at base). Window A ruled k = 3 under `ADR-0040` decision 2 (addendum,
+    note `…7974985e`, still PROPOSED). **`A2`'s bar is unchanged at ≤ 4.** If the owner picks another
+    k when he accepts `ADR-0040`, his k is the expected reading.
 - **`A3` (the wall stays inside the owner's allowance).** **Given** head, **then** its median
   wall is **≤ W**.
   - **W = 10 s** (R-1, today's level), **unless the owner has accepted Security/NFR's `W_new`**
@@ -165,6 +174,9 @@ readings are taken in the no-other-hop window (§ What is established).
     file passing**. That is `ADR-0008` decision 8's screen for a runner change, and it applies here
     because a worker cap changes scheduling.
   - The default lane's file count and test count equal the base's on every run. Skip count is 0.
+    *(2026-10-11, BA/PM, `ADR-0040` decision 3, declared before any reading:)* **the test count reads
+    base + 1**, the `A7` pin's one new `it` in `src/cli.test.ts`. The file count reads base. Any other
+    delta fails `A6`.
   - Each opt-in lane (`PERFT_DEEP`, `SEARCH_DEEP`, `ENGINE_DEEP`, `INPUT_DEEP`, `ZOBRIST_DEEP`,
     `PUZZLE_DEEP`, `CLI_DEEP`, plus any added before this merges) collects the same files and tests
     as at base and exits 0. Their wall is reported, not bounded.

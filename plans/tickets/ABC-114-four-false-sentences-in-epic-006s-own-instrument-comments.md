@@ -3,7 +3,7 @@ id: ABC-114
 title: Four false sentences ship in `EPIC-006`'s own instrument comments — the guards are right and their narration is not
 status: ready
 column: Ready
-size: S
+size: XS
 priority: P2
 epic: EPIC-006
 feature: —
@@ -89,23 +89,38 @@ SCOPE of this ticket and were NOT corrected at the cut hop** — the reasoning i
 - **`A1` (S1 — the `M9` sentence, re-measured not re-read).** **Given** `M9` (`const decoy = {
   ...history }` with `history: decoy,` at the `runTurnLoop(` call) planted at the branch tip, **when**
   `npx vitest run --dir src` runs against **this** instrument **and** against the control
-  `git show main:src/cli.test.ts`, **then** the two row-level outcomes are recorded as numbers (failed /
+  ~~`git show main:src/cli.test.ts`~~ **the ablation: this file with ONLY the count row's `expect`
+  removed** *(control named 2026-10-11, BA/PM, on QE `…5d58ace9` §1; the struck words are kept.
+  `main:` already held `ABC-113`'s count row at the cut, so it was never a control. The ablation
+  changes one variable. `cc037b3e^:src/cli.test.ts` is admissible as a second control, read per
+  row, because it carries 2 unrelated `ABC-042` drift reds)*, **then** the two row-level outcomes are recorded as numbers (failed /
   passed, and the failing row's message) **and** the replacement sentence states exactly what those two
   runs showed. **The sentence must distinguish `D3` from `M9`**: `D3` leaves both rows green; `M9` reds
   the shorthand row and the count row simply speaks first. **`tsc --noEmit` clean on the planted build;
   the build reverted and `git status --porcelain` empty afterwards.**
 - **`A2` (S2 — the remainder, named and bounded).** **Given** `D4` (`const spare = { ...history }; for
   (const history of [spare])`) planted at the tip, **then** `tsc --noEmit` is **clean** and the lane is
-  **GREEN on both instruments** — re-measured at this hop — **and** the comment names the open remainder
-  as the `[:=]`-free binder forms **`for…of`, `for…in`, `catch (history)`, and a contextually-typed
-  callback parameter**, with the count row's own regex `/\bhistory\s*[:=]/g` quoted as the reason. **The
+  **GREEN on ~~both instruments~~ this file and on `A1`'s ablation, with `A1` green on
+  `cc037b3e^` read per row** — re-measured at this hop — **and** the comment names the open remainder
+  as the `[:=]`-free binder forms ~~**`for…of`, `for…in`, `catch (history)`, and a contextually-typed
+  callback parameter**~~ **that pass BOTH `tsc --noEmit` and the lane: `for…of` and a parenthesised,
+  contextually-typed callback parameter `(history) =>`**, with the count row's own regex `/\bhistory\s*[:=]/g` quoted as the reason. **The
   same narrowing is applied to `ABC-113` page line 64**: *closes `D3`* → *closes the annotated-rebind
   spelling of `D3`*. **No assertion is added** (that is `## Out of scope`).
+  - *Corrected 2026-10-11 by BA/PM (`QE-114-c`, MEDIUM; QE `…168698b8`, readings `…94a87a28`; the
+    struck words are kept). The struck list was too broad, and it was BA/PM's wording.
+    `for (const history in …)` and `catch (history)` are regex-blind, but `tsc` reds both (exit 2:
+    a string key is not a game; `unknown` under `strict`). So the typecheck, which `A1` names as part
+    of its instrument, closes them. A bare `history =>` is not blind at all: the regex counts the `=`
+    of `=>`. The delivered comment (`src/cli.test.ts`, "The open remainder is…") and the `ABC-113` page
+    correction under line 64 met `A2` as it was written, so this ticket is not re-opened. Narrowing
+    those two lists is follow-up **`ABC-148`** (`XS`, `P3`). Line 64's own narrowing stands.*
 - **`A3` (S3 — `unconstructible`, re-constructed at this hop).** **Given** `M15` re-built in
   `src/result-screen.ts`'s `headline()` (fivefold → a TWO-row headline, threefold → one row), **then**
   `tsc --noEmit` is clean, the lane against this instrument reports **exactly one failed test and it is
-  the retargeted headline row**, and the control `git show main:src/result-screen.test.ts` reports the
-  lane **fully green**. **Only on those two readings** may the sentence say `M15` is constructible,
+  the retargeted headline row**, and the control ~~`git show main:src/result-screen.test.ts`~~
+  **`git show cc037b3e^:src/result-screen.test.ts`, the pre-retarget instrument** *(named 2026-10-11,
+  BA/PM, on QE `…5d58ace9` §1; the struck words are kept)* reports the lane **fully green**. **Only on those two readings** may the sentence say `M15` is constructible,
   killed by the headline rows ALONE, and **evidence FOR** the retarget. **If this hop's numbers DISAGREE
   with the `ABC-113` QE note, the sentence follows THIS hop's measurement and the disagreement is
   written down** — copying the note is a FAIL of this criterion.
@@ -117,8 +132,13 @@ SCOPE of this ticket and were NOT corrected at the cut hop** — the reasoning i
   reachable outcomes with the single-slot overwrite in `createLineInputSeam` (`src/line-input.ts` ≈232)
   named as the cause; or **(b) STRIKE** — remove the empirical clause and keep only what the assertion
   itself proves, stating that the harness cannot terminate (a FIFO stdin produces no end-of-input in Node
-  on this platform, for any program) and so cannot support a stable symptom claim. **Whichever is
+  on this platform, ~~for any program~~ **for a reader of Node's `process.stdin` stream, which is the
+  product's input path**) and so cannot support a stable symptom claim. **Whichever is
   chosen, the reason is written beside it.**
+  *(Corrected 2026-10-11 by BA/PM, `QE-114-c` part 2; the struck words are kept. QE measured that a
+  FIFO whose writer closes DOES end `cat`, `wc -c`, `python3` and Node's own `fs.readFileSync(0)`. It
+  never fired `end` for a bare `process.stdin` reader or for the product. The delivered comment
+  already states the narrow scope, so it needs no follow-up.)*
 - **`A5` (the fence — checkable from git, and it is stricter than `ABC-113` `A3`).** **Then**
   `git diff --name-only main...HEAD -- src/` lists **exactly** `src/cli.test.ts` and
   `src/result-screen.test.ts`; `git diff --numstat main...HEAD -- 'src/' ':!src/*.test.ts'` is
@@ -181,7 +201,10 @@ task's notes, so the record is not silent about them in the meantime.
 - Lane is `npx vitest run --dir src` and **never** the repo root (`AGENTS.md` `## Test notes` 5).
 - Every wrong build is planted **at the branch tip**, `tsc --noEmit`-checked, watched, and reverted with
   `git checkout --`; `git status --porcelain` empty after each.
-- Controls are taken with `git show main:src/cli.test.ts` / `git show main:src/result-screen.test.ts` —
+- Controls are taken with ~~`git show main:src/cli.test.ts` / `git show main:src/result-screen.test.ts`~~
+  **`A1`/`A2`: the ablation (this file with only the count row's `expect` removed); `A3`:
+  `git show cc037b3e^:src/result-screen.test.ts`** *(2026-10-11, BA/PM, on QE `…5d58ace9` §1; struck
+  words kept)* —
   the ordering inside `ABC-043` `A1` means the shorthand row's independent status on `M9` is **invisible
   from this instrument's own output**, and `A1` depends on it.
 - Mandatory gates: `npm run lint`, `npm run typecheck`, `npm run build`, unit. `npm run lint`
@@ -225,6 +248,25 @@ true and unread; a document that is read and false is the same failure with the 
   found in the same two files.
 - **`P3` DEMOTION TRIGGER:** `ABC-043`'s UAT or follow-up repairs S4 in place, leaving three sites and no
   harness work.
+
+**Recorded 2026-10-11 by BA/PM** (subtask `bapm-fold-qe114-2026-10-11`; notes
+`.grugops/context/bapm-fold-qe114-2026-10-11/notes/`):
+- **Re-size `S` → `XS`. The pre-registered trigger FIRED.** The repair hop took `A4`'s STRIKE branch
+  (`67296100`), and QE confirmed it on measurement (13 of 13 runs played the move; `…5d58ace9` §2–3).
+  This is a record, not a re-argument. The front matter now reads `XS`.
+- **`P1` promotion trigger: MET on its letter, promotion NOT taken. `P2` stays.**
+  - **Met.** QE pass 1 found a fifth false sentence in `src/cli.test.ts` (`QE-114-a`, the "placed
+    BEFORE the other two" sentence).
+  - **Not taken, for three reasons.** (1) The trigger exists to move a waiting ticket up the queue.
+    When it can be ruled, this ticket is built, has passed its second QE, and is merged (`87dc29a3`).
+    A priority on a delivered ticket orders nothing. (2) The sentence was written inside this repair
+    and caught by this ticket's own `A7` validator before merge. That is the outcome `## Risks`
+    predicted, and `A7` is the mitigation working. It is not evidence that false narration steers
+    work. The trigger's first clause, a routing decision made off one of these sentences, has never
+    fired. (3) What is left (`QE-114-c`'s two comment lists) is sized on its own merits as `ABC-148`.
+  - **The trigger's wording was the defect.** It should have said "found on `main`". Any future
+    trigger of this kind on a repair ticket will say where the sentence must be found. **The owner may
+    overrule this ruling.**
 
 ## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
 
