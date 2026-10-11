@@ -414,3 +414,23 @@ figures are in `.grugops/context/ticket-to-pr-ABC-083/notes/` and the raw output
   - Gates green: `npm test` 1 739/1 739, skip count 0.
   - Gaps: 2 LOW (king-safety and mobility details pinned only by node counts), 3 INFO.
 - **Verdict: FAIL**, on `A10`'s puzzle gate only, with the agent route above. The owner's words on `AR-N8LANE-083` and `AR-NFR005-083`, and his UAT word, are still owed.
+
+## Architect/Design — seed 5061 re-found
+
+**2026-10-11, Architect/Design** (subtask `design-ABC-083-refind-5061`, width 1). Base `5ed308a8`.
+- **Detail:** `.grugops/context/design-ABC-083-refind-5061/notes/`:
+  - `…8205516a` (the ruling and its readings);
+  - `…3777f413` (the QE-083-c screen);
+  - `…d95b51f2` (the addendum);
+  - `…6648b502` (artifacts).
+- **Ruling:** seed 5061 is re-found as **seed 5147** (`7k/6n1/7B/1Q6/1b6/5K2/8/8 w`, accepts `b5b4`/`b5b8`/`h6g7`, +3, `["quiescence"]`). It comes from `ABC-127`'s own pool. The route is `ADR-0028` d2 read through `ADR-0034` d4.
+- **The bar:** the keys lead the best other move by more than 75 cp, LMR off, at d − 1, d and d + 1, on base and on the branch. Both `search()` and the suite's call solve the row at d.
+  - Seed 5147 reads 270–285 cp on both trees.
+  - Seed 5061 read 105 cp on base and 50 cp on the branch.
+- **Landed in its own commit, `b29c837c`.** It touches `src/puzzle-corpus.ts` only, with no trigger-list file and no baseline change.
+  - `PUZZLE_DEEP=1` reads **54/58**, exit 0, on the branch and on base. Only this row's line changes.
+  - `PUZZLE_DEEP=weakened` reads 15/58, **exit 1**.
+  - `npm test` passes 1 739/1 739, skip count 0.
+- **No owner word for the re-find** (`ADR-0028` d5).
+- **`ADR-0034` addendum PROPOSED.** It makes the bar standing for later L re-finds. It names seeds 1700 (75/75 cp) and 5180 (120/77 cp) as thin, and cuts nothing. The owner's acceptance is owed, and it does not block this ticket.
+- **Next:** QE delta re-read. No board move at this hop.

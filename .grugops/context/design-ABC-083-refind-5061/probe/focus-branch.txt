@@ -1,0 +1,20 @@
+branch	8/1R6/2Q5/3rk3/7r/7P/5K2/5n2 w - - 0 1
+  ladder 20:S:b7e7:d5:n15407  25:S:b7e7:d5:n20527  26.25:S:b7e7:d5:n22575  27.5:S:b7e7:d5:n23599  31.25:S:b7e7:d5:n27695  37.5:S:b7e7:d5:n33839  50:S:b7e7:d5:n46127
+  d4: lead 219 (best accepted 800, best other c6c3 581) search S:b7e7:800 noRed S:b7e7:800
+  d5: lead 215 (best accepted 800, best other c6c3 585) search S:b7e7:800 noRed S:b7e7:800
+  d6: lead 11 (best accepted 788, best other c6c7 777) search S:b7e7:788 noRed S:b7e7:788
+branch	7k/6n1/7B/1Q6/1b6/5K2/8/8 w - - 0 1
+  ladder 20:S:b5b4:d5:n15394  25:S:b5b4:d5:n20514  26.25:S:b5b4:d5:n22562  27.5:S:b5b4:d5:n23586  31.25:S:b5b4:d5:n27682  37.5:S:b5b4:d5:n33826  50:S:b5b4:d6:n45090
+  d4: lead 282 (best accepted 952, best other b5e5 670) search S:b5b4:960 noRed S:b5b4:952
+  d5: lead 280 (best accepted 970, best other b5e5 690) search S:h6g7:965 noRed S:b5b4:970
+  d6: lead 285 (best accepted 980, best other b5e5 695) search S:b5b4:980 noRed S:b5b4:980
+branch	6R1/1K6/5p2/3rR1rP/p1pP2k1/8/3p2P1/5N2 w - - 0 1
+  ladder 20:S:g8g5:d5:n15430  25:S:g8g5:d5:n20550  26.25:S:g8g5:d5:n22598  27.5:S:g8g5:d5:n23622  31.25:S:g8g5:d5:n27718  37.5:S:g8g5:d5:n33862  50:S:g8g5:d6:n45126
+  d4: lead 156 (best accepted 484, best other e5g5 328) search S:g8g5:484 noRed S:g8g5:484
+  d5: lead 156 (best accepted 484, best other e5g5 328) search S:g8g5:484 noRed S:g8g5:484
+  d6: lead 101 (best accepted 449, best other e5d5 348) search S:g8g5:545 noRed S:g8g5:449
+branch	8/8/1p6/6P1/2k1Bp1P/8/3Kb3/8 w - - 0 1
+  ladder 20:S:d2e2:d7:n13331  25:S:d2e2:d7:n18451  26.25:S:d2e2:d7:n20499  27.5:S:d2e2:d7:n21523  31.25:S:d2e2:d7:n25619  37.5:S:d2e2:d8:n30739  50:S:d2e2:d8:n43027
+  d6: lead 335 (best accepted 489, best other g5g6 154) search S:d2e2:489 noRed S:d2e2:489
+  d7: lead 315 (best accepted 520, best other g5g6 205) search S:d2e2:484 noRed S:d2e2:520
+  d8: lead 281 (best accepted 486, best other g5g6 205) search S:d2e2:486 noRed S:d2e2:486

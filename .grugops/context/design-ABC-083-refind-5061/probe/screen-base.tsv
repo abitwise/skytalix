@@ -1,0 +1,50 @@
+tree	row	inSuite	side	accept	cm25	cm20	cmNoRed25	search@d	lead@d	bestNonAccepted	W1	W5
+base	knight fork: Ne7+ wins the queen	suite	w	d5e7	S:d5e7:d8	S:d5e7:d8	S:d5e7:d8	S:d5e7:d8	965	d5e3:-625	S:d5e7:d8	S:d5e7:d4
+base	pawn fork: e5 hits knight and rook	suite	w	e4e5	S:e4e5:d8	S:e4e5:d7	S:e4e5:d7	S:e4e5:d8	335	h2h3:-685	S:e4e5:d8	S:e4e5:d4
+base	pin: Re1 pins the queen to the king	suite	w	a1e1	S:a1e1:d7	S:a1e1:d7	S:a1e1:d6	S:a1e1:d7	495	a1b1:-375	S:a1e1:d8	S:a1e1:d4
+base	skewer: Ra6+ and Rxh6	suite	w	a1a6	S:a1a6:d7	S:a1a6:d7	S:a1a6:d7	S:a1a6:d7	995	a1e1:-260	S:a1a6:d7	S:a1a6:d4
+base	discovered check: the bishop moves, Rxd8	suite	w	d4g7,d4c5	S:d4c5:d6	S:d4c5:d6	S:d4c5:d6	S:d4c5:d6	415	d1d3:175	S:d4c5:d7	S:d4c5:d4
+base	queen fork: Qd5+ and Qxa8	suite	w	d1d5	S:d1d5:d6	S:d1d5:d5	S:d1d5:d5	S:d1d5:d6	520	d1d4:405	S:d1d5:d6	S:d1d5:d4
+base	win material, seed 7: black Q+P against R+N	suite	b	d5g8	S:d5g8:d5	S:d5g8:d5	S:d5g8:d5	S:d5g8:d5	160	d5e5:575	M:c3c2:d5	S:d5g8:d4
+base	win material, seed 111: black Q+R+B+P against 2R+B+P	suite	b	a2a5	S:a2a5:d5	S:a2a5:d5	S:a2a5:d5	S:a2a5:d5	405	e5a5:455	M:e5h2:d5	S:a2a5:d4
+base	win material, seed 1700: black R+B+N+2P against 2B+2N+P	suite	b	g6g7,g6h6	S:g6g7:d5	S:g6g7:d5	S:g6g7:d5	S:g6g7:d5	75	g6d6:25	M:g6d6:d5	S:g6g7:d4
+base	win material, seed 1706: white Q+R+2P against Q+R+2P	suite	w	c2e4	S:c2e4:d6	S:c2e4:d5	S:c2e4:d5	S:c2e4:d6	210	a2b3:520	M:a2b3:d6	S:c2e4:d4
+base	win material, seed 1811: white 2R+N+2P against 2B+N+2P	suite	w	c4d6	S:c4d6:d5	S:c4d6:d5	S:c4d6:d5	S:c4d6:d5	310	g6h7:425	M:g6h7:d5	S:c4d6:d4
+base	win material, seed 5180: black R+N+P against Q+B+N	suite	b	h6h7	S:h6h7:d6	S:h6h7:d5	S:h6h7:d5	S:h6h7:d6	120	g6h7:-435	M:g6h7:d6	M:g6h7:d4
+base	win material, seed 5464: black B+P against B+N	suite	b	e1d2	S:e1d2:d7	S:e1d2:d6	S:e1d2:d6	S:e1d2:d7	335	c3c2:-5	M:c3c2:d6	M:c3c2:d4
+base	win material, seed 5061: white B+N+4P against Q+R+2B+N+P	suite	w	f5e6,g1a7	S:f5e6:d5	S:f5e6:d5	S:f5e6:d5	M:g2e1:d5	105	f1e2:-1280	M:g2e1:d5	S:f5e6:d4
+base	win material, seed 5527: black R+2B+2N+P against R+2N+3P	suite	b	e7c6	S:e7c6:d5	S:e7c6:d5	M:d8f8:d4	S:e7c6:d5	115	d8f8:645	M:d8f8:d5	M:d8f8:d4
+base	win material, seed 279: black Q+3P against R+2N+P	suite	b	a1g7	S:a1g7:d6	S:a1g7:d5	S:a1g7:d5	S:a1g7:d6	185	d1d2:-10	S:a1g7:d6	S:a1g7:d4
+base	wm-27	pool	b	g7f8	S:g7f8:d7	S:g7f8:d7	S:g7f8:d6	S:g7f8:d7	100	d5c4:240	M:d5c4:d7	S:g7f8:d4
+base	wm-71	pool	w	b2b4	S:b2b4:d6	S:b2b4:d6	S:b2b4:d6	S:b2b4:d6	150	h2f4:510	S:b2b4:d6	S:b2b4:d4
+base	wm-93	pool	w	b6e3	S:b6e3:d5	S:b6e3:d5	S:b6e3:d4	S:b6e3:d5	205	b6c6:1135	S:b6e3:d5	S:b6e3:d4
+base	wm-103	pool	b	c4b3,e2g3	S:c4b3:d6	S:c4b3:d5	S:c4b3:d5	S:c4b3:d6	475	c4c3:835	S:c4b3:d6	M:d1f2:d4
+base	wm-125	pool	w	g1f2	S:g1f2:d7	S:g1f2:d7	S:g1f2:d6	S:g1f2:d7	110	d7e5:-220	S:g1f2:d7	S:g1f2:d4
+base	wm-175	pool	w	g6g7	S:g6g7:d5	S:g6g7:d5	S:g6g7:d5	S:g6g7:d5	350	c2b2:860	S:g6g7:d6	M:c2b2:d4
+base	wm-204	pool	w	g4h2	S:g4h2:d6	S:g4h2:d5	S:g4h2:d5	S:g4h2:d6	155	d7h7:330	S:g4h2:d6	S:g4h2:d4
+base	wm-215	pool	b	f5d7,f5f7	S:f5d7:d5	S:f5d7:d5	S:f5d7:d5	S:f5d7:d5	230	d8e6:660	S:f5d7:d6	S:f5d7:d4
+base	wm-218	pool	w	h3g4	S:h3g4:d7	S:h3g4:d7	S:h3g4:d6	S:h3g4:d7	360	f6f7:-165	S:h3g4:d7	M:f6f7:d4
+base	wm-228	pool	w	h5h6	S:h5h6:d7	S:h5h6:d6	S:h5h6:d7	S:h5h6:d7	475	g2a8:150	S:h5h6:d7	M:g2a8:d4
+base	wm-235	pool	b	c3c2	S:c3c2:d6	S:c3c2:d6	S:c3c2:d6	S:c3c2:d6	415	f6g7:185	S:c3c2:d6	M:g1h1:d4
+base	wm-346	pool	b	a3a2	S:a3a2:d7	S:a3a2:d7	S:a3a2:d6	S:a3a2:d7	450	f4d3:475	S:a3a2:d7	M:f4g2:d4
+base	wm-369	pool	b	b7b3	S:b7b3:d5	S:b7b3:d5	S:b7b3:d5	S:b7b3:d5	265	b7b2:825	S:b7b3:d5	S:b7b3:d4
+base	wm-375	pool	b	a4a3	S:a4a3:d8	S:a4a3:d8	S:a4a3:d8	S:a4a3:d8	35	e7e6:700	M:e7e6:d8	M:c3d4:d4
+base	wm-1563	pool	w	g8g5	S:g8g5:d5	S:g8g5:d5	S:g8g5:d5	S:g8g5:d5	110	e5g5:325	M:f1e3:d5	S:g8g5:d4
+base	wm-1792	pool	b	e7d6	S:e7d6:d6	S:e7d6:d6	S:e7d6:d6	S:e7d6:d6	215	g3e4:135	M:g2e4:d6	S:e7d6:d4
+base	wm-1813	pool	b	c1b1,c1b2,c1d1,c1d2,f3f2	S:c1b2:d6	M:g7h7:d5	M:g7h7:d5	S:c1b2:d6	60	g7h7:825	M:g7f7:d6	M:g7h7:d4
+base	wm-1881	pool	w	d2e2	S:d2e2:d7	S:d2e2:d6	S:d2e2:d6	S:d2e2:d7	280	g5g6:205	M:g5g6:d6	S:d2e2:d4
+base	wm-1917	pool	w	b7e7	S:b7e7:d5	S:b7e7:d5	S:b7e7:d4	S:b7e7:d5	195	c6c3:555	M:c6c7:d5	S:b7e7:d4
+base	wm-2014	pool	w	b3b1,b3b2,c1c2	S:b3b1:d5	S:b3b1:d5	S:b3b1:d5	S:b3b1:d5	80	c1b1:690	M:c1b1:d5	S:b3b1:d4
+base	wm-2031	pool	b	c7a6,c7a8	S:c7a6:d5	S:c7a6:d5	S:c7a6:d5	S:c7a6:d5	120	c7d5:930	M:h5c5:d5	S:c7a6:d4
+base	wm-2046	pool	b	f2d2,h4e4	S:h4e4:d5	S:h4e4:d5	S:f2d2:d4	S:h4e4:d5	35	f2f8:-1130	M:f2f8:d5	S:f2d2:d4
+base	wm-2063	pool	b	h5g4	S:h5g4:d5	S:h5g4:d5	S:h5g4:d4	S:h5g4:d5	15	g1f2:445	M:f7f2:d5	S:h5g4:d4
+base	wm-5030	pool	w	b5f5	S:b5f5:d5	S:b5f5:d5	S:b5f5:d5	S:b5f5:d5	70	b5b7:445	M:b5b7:d5	S:b5f5:d4
+base	wm-5147	pool	w	b5b4,b5b8,h6g7	S:b5b4:d5	S:b5b4:d5	S:b5b4:d4	S:h6g7:d5	280	b5e5:615	M:b5e5:d5	S:b5b4:d4
+base	wm-5152	pool	b	a2a5	S:a2a5:d5	S:a2a5:d5	S:a2a5:d4	S:a2a5:d5	360	g7g8:585	M:g7f7:d5	S:a2a5:d4
+base	wm-5184	pool	b	d4e4	S:d4e4:d5	S:d4e4:d5	S:d4e4:d4	S:d4e4:d5	220	d4b2:860	M:d4b2:d5	S:d4e4:d4
+base	wm-5244	pool	w	e5e4	S:e5e4:d5	S:e5e4:d5	S:e5e4:d4	S:e5e4:d5	-85	f6e7:1475	M:h5f3:d5	S:e5e4:d4
+base	wm-5429	pool	b	e7e5	S:e7e5:d6	S:e7e5:d6	S:e7e5:d6	S:e7e5:d6	95	b8b7:925	M:b8b7:d6	S:e7e5:d4
+base	wm-5439	pool	b	c5d4	S:c5d4:d5	S:c5d4:d5	S:c5d4:d5	S:c5d4:d5	215	c7d6:-425	M:c7c6:d6	S:c5d4:d4
+base	wm-h145	pool	b	a1c2,c6d4,d3d1,h6e6	M:d3d4:d5	M:d3d4:d5	M:d3d4:d4	M:d3d4:d5	-40	d3d4:425	S:a1c2:d5	M:d3d4:d4
+base	wm-h209	pool	b	d5g5	M:d5e5:d6	M:d5e5:d6	M:d5e5:d5	M:d5e5:d6	-25	d5e5:-790	S:d5g5:d6	S:d5g5:d4
+base	wm-h356	pool	b	c2a1,c2a3,c2e3,d3d2,e1f1,e1f2	M:c2b4:d7	M:c2b4:d7	S:d3d2:d7	M:c2b4:d7	0	c2b4:755	S:d3d2:d7	S:d3d2:d4

@@ -13,6 +13,10 @@ id: ADR-0034
   decision 2 has the details.
 - The run trigger, the gate and the baseline do not change.
 
+**Addendum 2026-10-11: PROPOSED, owner acceptance owed.** It adds one item to decision 4's list for an L
+re-find: a clean-lead bar that sees an LMR near-tie. It moves no count, total, baseline, budget, trigger or
+level. Decisions 1–6 stay **accepted** as written. See § Addendum 2026-10-11 at the end.
+
 Was: **proposed** 2026-10-10 by Architect/Design (task `wave-2026-09-25`, subtask `ruling-puzzle-edge`). It answers
 Security/NFR's required fix **`R1`** on `ABC-127` (decision `…2468e396`, PASS_WITH_RISKS). That fix is owed
 before `ABC-083` enters `In Development`. **Owner acceptance owed.** No agent moves an ADR to `accepted`.
@@ -278,3 +282,71 @@ recorded d5". Three of the four do. Seed 5180 under E5 reads d5, against d6 on b
 
 Edit this file. Nothing is built on it. If decision 5 is taken, undo it by restoring the four rows and
 re-recording 58/62 in its own commit. That is a raise, so it is QE's to make.
+
+## ADDENDUM 2026-10-11 (PROPOSED; owner acceptance owed): a re-found L row must also clear a clean-lead bar at its solving depth ± 1. QE-083-c's screen names two thin rows and cuts none
+
+Proposed by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-083-refind-5061`). Readings:
+`.grugops/context/design-ABC-083-refind-5061/` (ruling `…8205516a`, screen `…3777f413`, this addendum
+`…d95b51f2`).
+
+### Context (this addendum)
+
+- **Seed 5061 on `ABC-083` is class L by decision 3's table, but the table's "read as" is false for it**
+  (QE `…b631991b`). The branch's evaluator ranks the label's `f5e6` first in every LMR-off search.
+  `chooseMove`'s LMR iteration at d5 over-scores `g2e1` and lands it 5 cp above `f5e6`. With LMR off, the
+  gap is 55 cp. That over-score is within `ADR-0026` decision 9's drift. Base's fixed-depth `search()` at d5
+  already flipped the row.
+- **Decision 4's re-find list cannot see this, and decision 5's margin cannot either (QE-083-c).** Seed 5061
+  met both on base: it was solved at 0.8x readings, and its oracle and tags held. The 0.8x margin measures
+  readings. It does not measure whether the chosen move is stable once LMR is on.
+
+### Decision (this addendum)
+
+1. **A re-found L row also meets a clean-lead bar, on base and on the branch.**
+   - Let d be the depth the suite's call (`chooseMove`, recorded budget and step) completes on that tree.
+   - At d − 1, d and d + 1, search every root move's child with `searchWithoutReductions` at one ply less,
+     and negate the score.
+   - The best accepted move must lead the best other move by **more than 75 cp**. That is `ADR-0026`
+     decision 9's ceiling: LMR's accepted drift cannot close a lead that is larger than its own bound.
+   - At d, fixed-depth `search()` and the suite's call must both play an accepted move.
+   - **Why ± 1:** an evaluation term moves the solving depth by one ply (decision 3's shallower class). Seed
+     1917 is the case. It leads by 195 cp at d5, but only by 20 cp at d6.
+   - Applied first at `b29c837c`: seed 5061 was replaced by seed 5147, from `ABC-127`'s own pool. Its leads
+     at d4/d5/d6 are 270/280/280 cp on base and 282/280/285 cp on the branch. Seed 5061 read 105 cp on base
+     and 50 cp on the branch at d5.
+2. **The 0.8x margin rule (decision 5, the owner's word) is unchanged. No retained row is cut or re-found
+   because of this screen.**
+   - Every `win-material` row was screened at d (`…3777f413`). All read above 75 cp except two:
+     - seed 1700: 75 cp on base and 75 cp on the branch;
+     - seed 5180: 120 cp on base and 77 cp on the branch.
+   - Both rows are solved on both trees. They are named here, and nothing changes.
+   - If a later ticket misses either row, it is class L, and decision 1 of this addendum governs the
+     re-find. This follows how `ADR-0028` named its four dead-draw pairs.
+3. **Whose word.**
+   - The re-find at `b29c837c` does not wait on this addendum. It stands on decision 4 as written
+     ("Architect/Design rules the re-find") and on `ADR-0028` decision 5 (a fixture re-find needs no owner
+     word).
+   - Accepting this addendum makes decision 1 here the standing bar for later L re-finds. Until then, it is
+     this hop's ruling for seed 5061 only.
+
+### Alternatives (this addendum)
+
+- **QE's bar at d only. Not adopted.** Seed 1917 passes it at d5 (195 cp) and is a 20 cp near-tie at d6.
+- **Screen and cut every retained row under the bar now. Rejected.** That changes decision 5's margin rule,
+  which is the owner's word. It would also cut seed 1700, which every tree solves. The cut would trade one
+  red for a thinner suite (coding rule 5).
+- **Choose the replacement by "the suite's call solves it" alone. Rejected.** That is how seed 5061 was
+  chosen.
+- **Raise the bar to 150 cp. Not adopted.** No reading ties 75 cp to a miss beyond `ADR-0026` decision 9's
+  own bound, and a higher bar would choose rows by how easy they are.
+
+### Consequences (this addendum)
+
+- An L re-find costs one more probe run per tree (`probe/screen.mjs`, then `probe/focus.mjs`). Its wall time
+  was not measured: `UNKNOWN - verify`. Node counts are deterministic, so load does not change the result.
+- Seed 1700's `quiescence` tag no longer reads on the branch (`W1` plays `g6h6` and solves the row). Tags
+  are recorded measurements (`ABC-127` `A3`) and are not asserted. This is named for QE, and nothing changes.
+
+### Rollback (this addendum)
+
+Delete this section and the Status line that points to it. `b29c837c` is not affected.
