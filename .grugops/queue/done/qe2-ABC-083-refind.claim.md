@@ -1,0 +1,7 @@
+by: qe-e2e (claude-opus-5-5)
+at: 2026-10-11T15:09:54Z
+task: qe2-ABC-083-refind
+
+completed_at: 2026-10-11T15:25:37Z
+result: Width 1 (AGENTS.md Scribe beside, lint/typecheck/one test file). QE delta re-read of re-find b29c837c at tip 35f49bb7 vs base 5ed308a8 + same row. PUZZLE_DEEP=1 54/58 exit 0 on both trees, 2+2 runs (load1 2.25-4.51, thermal 0), only the re-found row's line differs; PUZZLE_DEEP=weakened 15/58 exit 1 (A3 green). ADR-0028 d1 three proofs MET; ADR-0034 d4 conditions MET (W1 misses, W5 solves, oracle row green, 0.8x solved on base, own commit, no trigger-list file, no baseline); ruled clean lead 270-285 cp > 75 at d4/d5/d6 on base and branch, search() and suite call solve at d (QE's own probe, figures equal the Architect's). Levels ENGINE_DEEP lane (loads PUZZLES, not re-run by the re-find hop) green 28/28; its A3 easiest 31/58 vs 35 on main is the evaluator's (attributed). npm test 1739/1739, skip 0, lint/typecheck clean. QE-083-c CLOSED by the screen; new INFO QE2-083-a (seed 1700 10-18 cp near-tie at d-1, 5180 76-79 on branch), b (1700 quiescence tag lost on branch), c (levels lane outside re-find scope check), d (AGENTS.md levels A3 figure stale on merge). Verdict PASS_WITH_GAPS (QE-083-a/b LOW open), supersedes ...56016fe2. Notes ...ee53fec8 (readings), ...d1c74ad2 (bar re-read), ...95e9bb05 (verdict/gaps), ...a51498aa (artifacts). Branch grugops/ABC-083-king-safety-mobility. Not merged, not pushed, no board move, no src/ edit.
+commit: 7f933cfc
