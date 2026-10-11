@@ -278,3 +278,31 @@ Design`** for the Architect hop (In Design WIP allows it).
 | 10 | no major unresolved blocker | **✅** the owner questions refine numbers on a stated fork and do not block the design hop |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-11 (subtask `ticket-to-pr-ABC-144`). Branch `grugops/ABC-144-cap-test-workers`,
+code commit `d4468fd3`, base `5ed308a8`. The detail is in `.grugops/context/ticket-to-pr-ABC-144/notes/`.
+
+- **The setting, as `ADR-0040` and its Window A addendum rule it (k = 3).** `vitest.config.ts` gets
+  `test.maxWorkers: 3`. `pool: "threads"` stays, `isolate` is not written (default `true`), and there is no
+  `poolOptions`. The export is a plain object, `satisfies ViteUserConfig`, using a type-only import.
+  `npm run typecheck` exits 0 on that form. One header paragraph names `ADR-0040`. `scripts.test` is unchanged.
+- **The pin (`A7`).** One `it` in its own `describe` at the end of `src/cli.test.ts`. It checks:
+  - pool `threads`;
+  - `maxWorkers` `toBe(3)`;
+  - `fileParallelism` and `isolate` are not `false`;
+  - `poolOptions` is undefined;
+  - `VITEST_MAX_THREADS` / `VITEST_MAX_FORKS` are ≤ 3 if set.
+
+  It has no timing assertion.
+- **Armed.** On a scratch copy each of these went red: r1 (cap deleted), r2 (`isolate: false`),
+  r3 (`VITEST_MAX_THREADS=8`) and r3b (`VITEST_MAX_THREADS=4`). So did `maxWorkers: 4`,
+  `fileParallelism: false`, `poolOptions.threads.maxThreads: 8` and `VITEST_MAX_FORKS=8`.
+  `VITEST_MAX_THREADS=2` stays green. The env half is kept.
+- **`A2` read from the resolved configuration:** `effectiveWorkers: 3`, `isolate: true`.
+- **`A6` counts, from one run:** 55 files (= base) and 1729 tests (= base 1728 + 1), with 0 skipped.
+  The 20-run screen is still owed.
+- **Gates:** lint, typecheck, build and `npm test` all exit 0. 0 production `src/` lines.
+- **No timing read.** Lane cost is **not graded**. `A1`, `A3`, `A4`, `A5` and the `AR-N8SPAWN-DRIFT`
+  discharge belong to Window B (Security/NFR, width 1).
