@@ -1,0 +1,119 @@
+    455|
+    456| async function run(options: RunOptions = {}): Promise<RunResult> {
+    457|   const history = options.history ?? newGame(options.fen ?? START_FEN);
+       |                                      ^
+    458|   const scripted = scriptedSeams(options.script ?? []);
+    459|   const seam = options.seam ?? panelSeam(options.shape ?? SHAPE_A);
+ ❯ <anonymous> src/turn-loop.test.ts:1816:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[70/100]⎯
+
+ FAIL  src/turn-loop.test.ts > ABC-021 acceptance — transition 16, the draw claim > A9 — the WIDEST refusal message the loop can emit still fits the NARROWEST frame it can emit it into
+TypeError: newGame is not a function
+ ❯ run src/turn-loop.test.ts:457:38
+    455|
+    456| async function run(options: RunOptions = {}): Promise<RunResult> {
+    457|   const history = options.history ?? newGame(options.fen ?? START_FEN);
+       |                                      ^
+    458|   const scripted = scriptedSeams(options.script ?? []);
+    459|   const seam = options.seam ?? panelSeam(options.shape ?? SHAPE_A);
+ ❯ <anonymous> src/turn-loop.test.ts:1852:30
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[71/100]⎯
+
+ FAIL  src/turn-loop.test.ts > ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read
+TypeError: newGame is not a function
+ ❯ run src/turn-loop.test.ts:457:38
+    455|
+    456| async function run(options: RunOptions = {}): Promise<RunResult> {
+    457|   const history = options.history ?? newGame(options.fen ?? START_FEN);
+       |                                      ^
+    458|   const scripted = scriptedSeams(options.script ?? []);
+    459|   const seam = options.seam ?? panelSeam(options.shape ?? SHAPE_A);
+ ❯ <anonymous> src/turn-loop.test.ts:1896:62
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[72/100]⎯
+
+ FAIL  src/turn-loop.test.ts > ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together
+TypeError: newGame is not a function
+ ❯ run src/turn-loop.test.ts:457:38
+    455|
+    456| async function run(options: RunOptions = {}): Promise<RunResult> {
+    457|   const history = options.history ?? newGame(options.fen ?? START_FEN);
+       |                                      ^
+    458|   const scripted = scriptedSeams(options.script ?? []);
+    459|   const seam = options.seam ?? panelSeam(options.shape ?? SHAPE_A);
+ ❯ <anonymous> src/turn-loop.test.ts:1928:58
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[73/100]⎯
+
+ FAIL  src/turn-loop.test.ts > ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it
+TypeError: newGame is not a function
+ ❯ run src/turn-loop.test.ts:457:38
+    455|
+    456| async function run(options: RunOptions = {}): Promise<RunResult> {
+    457|   const history = options.history ?? newGame(options.fen ?? START_FEN);
+       |                                      ^
+    458|   const scripted = scriptedSeams(options.script ?? []);
+    459|   const seam = options.seam ?? panelSeam(options.shape ?? SHAPE_A);
+ ❯ <anonymous> src/turn-loop.test.ts:1968:39
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[74/100]⎯
+
+ FAIL  src/turn-loop.test.ts > ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) > A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else
+TypeError: newGame is not a function
+ ❯ run src/turn-loop.test.ts:457:38
+    455|
+    456| async function run(options: RunOptions = {}): Promise<RunResult> {
+    457|   const history = options.history ?? newGame(options.fen ?? START_FEN);
+       |                                      ^
+    458|   const scripted = scriptedSeams(options.script ?? []);
+    459|   const seam = options.seam ?? panelSeam(options.shape ?? SHAPE_A);
+ ❯ <anonymous> src/turn-loop.test.ts:1990:56
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[75/100]⎯
+
+ FAIL  src/zobrist.nfr.test.ts > NFR-005 — zobristKey never consults hasLegalEnPassant (structural since ADR-0020, spied) > asks nothing on any input, with or without an ep square
+TypeError: undefined is not a spy or a call to a spy!
+ ❯ <anonymous> src/zobrist.nfr.test.ts:68:40
+     66|       zobristKey(position);
+     67|
+     68|       expect(hasLegalEnPassant, label).toHaveBeenCalledTimes(0);
+       |                                        ^
+     69|     }
+     70|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[76/100]⎯
+
+ FAIL  src/zobrist.nfr.test.ts > NFR-005 — hasLegalEnPassant's own NO_SQUARE guard > returns false and touches no board byte (a candidate capturer, probe legal)
+ FAIL  src/zobrist.nfr.test.ts > NFR-005 — hasLegalEnPassant's own NO_SQUARE guard > returns false and touches no board byte (a candidate capturer, probe illegal)
+TypeError: hasLegalEnPassant is not a function
+ ❯ <anonymous> src/zobrist.nfr.test.ts:122:12
+    120|     // The spy wraps the real implementation (`vi.fn(actual.hasLegalEn…
+    121|     // here runs the shipped predicate, not a stub.
+    122|     expect(hasLegalEnPassant(position)).toBe(false);
+       |            ^
+    123|
+    124|     expect(Array.from(position.board)).toEqual(Array.from(before));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[77/100]⎯
+
+ FAIL  tools/opening-book/book.test.ts > D1(f) — a key carrying two different positions is refused > refuses the compile and writes no artifact
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ <anonymous> tools/opening-book/book.test.ts:108:65
+    106|       const dir = fixture("d1f-collision", `${HEADER}\n${GOOD_ROWS[0]}…
+    107|       const out = join(scratch, "d1f-collision.json");
+    108|       expect(() => stubbed.writeBook(dir, out, "0".repeat(40))).toThro…
+       |                                                                 ^
+    109|       expect(existsSync(out)).toBe(false);
+    110|     } finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[78/100]⎯
+
