@@ -319,3 +319,25 @@ readings and rulings are in `.grugops/context/qe-ABC-114/notes/`.
 - **Re-size.** The pre-registered trigger fired, so the size goes `S` → `XS`. BA/PM records it; this
   page's size line is not edited here. The **`P1` promotion trigger** ("a fifth false sentence") is
   met on QE's reading. That ruling is BA/PM's.
+
+## QE (2nd pass)
+
+QE/E2E (Claude Opus 5.5), 2026-10-11, subtask `qe2-ABC-114`, reviewed at `d60cedb4` (fix `54644ee5`).
+This is a separate dispatch from the author of the fix. I re-planted `M9`, `D3`, `ORD`, `D4` and
+`M15` myself and ran them on the tip file, a one-row ablation and `cc037b3e^`. No number here is
+quoted from the fix notes. Readings, gap status and verdict are in
+`.grugops/context/qe2-ABC-114/notes/`.
+
+**Verdict: PASS_WITH_GAPS.** `A1`–`A7` are MET. `QE-114-a` and `QE-114-b` are CLOSED.
+
+- **`A1`.** The new ORDER sentence holds on measurement. The count row sits between the initializer
+  row (`src/cli.test.ts:2669`) and the shorthand row (`:2712`). On `M9` and `D3` the count row is the
+  one red at the tip. On `ORD` the initializer row is the one red. On `M9` the ablation and the
+  control show the shorthand row's own red.
+- **`A2`.** `D4` is `tsc`-clean and 67/67 on this file. On the control, `A1` is green and the only
+  reds are `ABC-042` `A9` and `A10`. That is exactly what the rewritten sentence says.
+- **`A3`–`A6`.** Unchanged by the fix. `M15` gives one red, the headline row, and the control is
+  green. The diff is still `//` lines only, in the two test files. The lane reads 53 / 1680 / 0 at
+  base and at tip.
+- **Still open, not this hop's:** `QE-114-c` (MEDIUM, BA/PM), the `S` → `XS` re-size record, and
+  the `P1` trigger ruling. `QE-114-d` stays INFO. `host-protection.js` is `UNKNOWN - verify`.
