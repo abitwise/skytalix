@@ -21,7 +21,7 @@ Verify everything that is not a timing reading:
 - **A6's 20 consecutive green runs (a count screen, not timing);**
 - the `*_DEEP` lanes' equal-collection check.
 
-Also check the merge against `grugops/ABC-143-result-file-reads-red`, which edits `src/cli.test.ts` too: a dry-run merge in your worktree, never committed.
+ABC-143 (which also edits `src/cli.test.ts`) is now merged to the wave. Check the dry-run merge of the ABC-144 branch against the CURRENT wave tip in your worktree, never committed.
 Rule whether the hand-written notes being "unsealed" matters. It is the repo norm.
 **Take no timing grades.** A1, A3, A4, A5, the AR-N8SPAWN-DRIFT discharge and the thermal log belong to Window B. Do not touch `plans/board.md` or production `src/`. Never merge or push.
 Publish notes per Workflow 16 with a PASS / PASS_WITH_GAPS / FAIL verdict, a trace row at the END of `plans/traceability.md`, and a § QE section on the ticket.
