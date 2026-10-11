@@ -189,3 +189,17 @@ BA/PM, 2026-10-11. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none; the coverage red and all three mutants are already defined and run by QE |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+**2026-10-11, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-149`). Branch
+`grugops/ABC-149-reporter-plants`, code `e3e9c126`, base `4973d8e0`. Not merged.
+
+- **Built.** The REGRESSION PLANTS block in `tools/grugops/result-file-reporter.js`, comments only, and
+  one pointer line on the `ABC-143` page.
+- **`A1`–`A6`: met on the SE's reading.** All six rows agree at head. `M1`, `M9` and the query without
+  its `run` arm each disagree on the named row. The query without its `suite` arm disagrees on the
+  suite row by content. The fences hold, and the counts equal the base's (56 / 1740 / 0).
+- **One reading to keep.** One inverted assertion reads `numFailedTestSuites` 2, so the assertion row
+  names no suite count (`…a1eff3dc`).
+- Readings, mutants and gates are in `.grugops/context/ticket-to-pr-ABC-149/notes/`. QE is owed.
