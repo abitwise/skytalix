@@ -208,3 +208,31 @@ for the Architect's addendum (In Design WIP 0/2).
 | 10 | no major unresolved blocker | **✅** the owner has answered; nothing else is open |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-11 (subtask `ticket-to-pr-ABC-151`). Branch `grugops/ABC-151-two-test-workers`,
+code commit `0035001c`, base `f439c8fd`. The detail is in `.grugops/context/ticket-to-pr-ABC-151/notes/`
+(`…586f20f4`, `…d73145f6`, `…de66a3a9`). Plant script and raw output: `…/probe/`.
+
+- **The setting, per `ADR-0040` addendum 2 (k = 2).** `vitest.config.ts` `test.maxWorkers: 2`. Nothing else in the
+  config moves. The header paragraph names the owner's pick for heat and addendum 2, and keeps decision 2's
+  reading of 3 in view. The isolation warning is byte-identical.
+- **The pin (`ABC-144 A7`):** `toBe(2)`, `VITEST_MAX_THREADS` / `VITEST_MAX_FORKS` ≤ 2, and titles that say 2. The
+  comment cites "`ADR-0040` addendum 2" and lists what a raise breaks. No `it` was added.
+- **Armed (`A2`).** On fresh `git archive 0035001c` copies, each of these went red:
+  - r1, `maxWorkers: 2` deleted: `expected undefined to be 2`;
+  - r2, `isolate: false`;
+  - r3, `VITEST_MAX_THREADS=8`;
+  - r3b, `VITEST_MAX_THREADS=3`: `expected 3 to be less than or equal to 2`;
+  - `maxWorkers: 3`: `expected 3 to be 2`;
+  - extra: `VITEST_MAX_FORKS=3`.
+
+  `VITEST_MAX_THREADS=2` and `=1` stay green, and so does the control.
+- **`A1` resolved:** `effectiveWorkers` is 2 at head and 3 at base, with `isolate: true`. There is no `isolate` key
+  and no `poolOptions`.
+- **`A6`, from one run each:** 56 files and 1740 tests at both head and base, with 0 skipped. All 7 `*.nfr` files
+  passed. 0 production `src/` lines. The 20-run screen is still owed.
+- **Gates:** lint, typecheck, build and `npm test` all exit 0.
+- **No timing read.** `A3`, `A4` and `A5` are Security/NFR's width-1 window, in addendum 2's step order.
+  `AGENTS.md` is the Scribe's.
