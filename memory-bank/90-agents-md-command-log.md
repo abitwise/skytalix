@@ -520,3 +520,31 @@ inherited 32,768 B reader cap leaves 8,531 B). Nothing tightened, no rule droppe
 Owed, NOT written: the `test.maxWorkers: 3` cap (`ADR-0040`, accepted) lands at `ABC-144`'s merge; `ABC-144` is
 in QE. No line until then. Headroom 339 B is under one more lane line: the Scribe hop after `ABC-144` must
 tighten wording or move receipts here first.
+
+## `ABC-152` pass, 2026-10-12 (vitest 4.1.11, module runner off; merged `7a920ca5`)
+
+Task `scribe-ABC-152`, branch `grugops/scribe-ABC-152` from `main` `6464bd2f`. `AGENTS.md` 24,485 B -> **24,494 B**
+(+9 B; budget 24,576 B, `ABC-109`; headroom 91 -> **82 B**). Every figure below was RUN in this worktree
+(`node_modules` symlinked from the main checkout, vitest 4.1.11, M3, load1 ~3.7), none cited.
+
+| command | exit | reading |
+|---|---:|---|
+| `npm test` | 0 | 56 files, 1741 tests, `Duration` 5.73 s, `real` 6.15 s; no deprecation line (the reporter imports `vitest/node`) |
+| `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts` | 0 | 18 passed; printed `PUZZLES shipped: solved 54/58 … wall 3.97 s`, `Duration` 5.78 s (was 32-36 s on 3.x; Security/NFR: B 19.95 s / H 3.96 s printed) |
+| `PUZZLE_DEEP=weakened npx vitest run src/puzzle-suite.test.ts --reporter=verbose` | 1 | 1 failed, 13 passed. The failed row is the gate (`expected 15 to be greater than or equal to 54`, `solved 15/58`); A3 is ✓. Exit 1 alone proves nothing: at `a99e9845` it exited 1 with the gate row green at 54/58 (`QE-152-h`) |
+| `npx vitest run --coverage` | 0 | `All files` 99.2 / 97.94 / 100 / **99.43** (stmts / branch / funcs / lines). 4.x dropped `coverage.all`: the denominator is the files LOADED, not 30 files; not comparable to the 3.2.7 "856/856 on 30 files" |
+| `npx vitest run --coverage --coverage.include='src/**'` | 0 | 95.73 / 97.34 / 97.61 / **95.55** |
+| `VITEST_MAX_WORKERS=-1 npm test` | 0 | nothing ran; `.test-results/last-run.json`: `success` false, `runState` "exited", `exitCode` 0, 0 `testResults`. `RISK-ABC152-NEGWORKERS` (QE-152-b), a class: any negative value |
+
+Cut from `AGENTS.md` to pay for the above (all kept here or already in this file): the jest / pytest / go
+skip-count examples (§ "Skip-count capture"); the Acceptance slot's comment (host runner examples
+`cucumber-js` / `behave` / `bddgen && playwright test`, "examples only, never a hard command"); the
+"Command slots filled 2026-07-22 (ABC-008)" comment (§ "Command slots, provenance"); the puzzle lane's
+`NEWLY-MISSED` / `NEWLY-SOLVED` clause (printed per differing row; `src/puzzle-suite.test.ts` header).
+
+Refreshed with no new RUN of their own: the `Test (all)` receipt (53 files / 1680 tests / 8.1 s ->
+56 / 1741 / ~6 s) from the `npm test` row above. `RISK-ABC143-01` safety bullet re-worded: `ABC-152` ruling 5
+rewrote the reporter for 4.x (`onTestRunEnd`) with a load-time check, so it no longer "breaks silently on
+4.x"; the six-row regression plants (reporter header) are still owed on any vitest bump. Notes read:
+`ticket-to-pr-ABC-152` (`…4567b6b5`, `…ac190931`), `qe-ABC-152`, `qe2-ABC-152`, `design-ABC-152*`
+(`…e50fbbe3`), `secnfr-ABC-152-window` (`…bceca0ca`).

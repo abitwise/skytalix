@@ -84,12 +84,15 @@ waiting shell's own command line and never exits. Wait on the PID you started or
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
-  2026-10-10: exit 0, 53 files, 1680 tests, 8.1 s. A hung lane exits 124 at the 60 s bound — stop
+  2026-10-12: exit 0, 56 files, 1741 tests, 6.2 s. A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
 - Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
-  `src/cli.test.ts`; `isolate` stays on. Never raise it or pass a higher `--maxWorkers`; env may only
-  lower it (`VITEST_MAX_THREADS` ≤ 2).
+  `src/cli.test.ts`; `isolate` stays on; no `projects`/`poolOptions`. Never raise it or pass a higher
+  `--maxWorkers`; env may only lower it: `VITEST_MAX_WORKERS` 1..2 (`VITEST_MAX_THREADS` is read by
+  nothing on 4.x). Runner off (ABC-152): `test.experimental.viteModuleRunner: false`, pinned.
+  `RISK-ABC152-NEGWORKERS`: a negative `VITEST_MAX_WORKERS` makes `npm test` exit 0 having run nothing
+  (result file: `success` false, `testResults` 0).
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
   41 passed (28 default), 23.0 s. Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
   QE and after any src/search.ts change. -->
@@ -114,15 +117,15 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 - Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- exit 0,
   37 passed (29 default), 1.8 s -->
 - Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`
-  <!-- RUN 2026-10-10: exit 0, 18 passed (12 default), 32-36 s; ABC-127 A7 reads <= 90 / 45 s,
+  <!-- RUN 2026-10-12: exit 0, 18 passed (12 default), ~6 s (printed wall 4 s); ABC-127 A7 reads <= 90 / 45 s,
   never asserted, 300 s hang guards. Baseline `src/puzzle-suite.baseline.json` (54/58, budget 25,
-  step 1; a run prints NEWLY-MISSED / NEWLY-SOLVED per differing row). TRIGGER (owner, option B,
-  2026-10-09): QE runs it during review when the change touches engine code (`src/engine.ts`,
-  `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`, `src/transposition.ts`, move
-  ordering). red = QE FAIL. Not a `quality.mandatory_gates` entry. The baseline moves only in its
+  step 1). TRIGGER (owner, option B, 2026-10-09): QE runs it during review when the change touches
+  engine code (`src/engine.ts`, `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`,
+  `src/transposition.ts`, move ordering). red = QE FAIL. Not a `quality.mandatory_gates` entry. The baseline moves only in its
   own commit with a stated reason, never with an engine change (no trigger-list file in that
   commit); raising it is QE's, lowering it needs the owner's word. `PUZZLE_DEEP=weakened` is the
-  red demonstration and exits 1 by design. -->
+  red demonstration: exits 1 by design, gate row red (15/58), A3 green; the exit code alone is not
+  the reading. -->
 - PVS/LMR deep lane (ABC-121, `src/search.pvs-lmr.test.ts`): `SEARCH_DEEP=1 npx vitest run
   src/search.pvs-lmr.test.ts` <!-- exit 0, 29 passed (20 default; 0.6 s). Deep 926.2 s wall,
   cited from UAT (`uat-run-ABC-121#77854a65`), not re-run (over 10 min). Run after any PVS/LMR
@@ -137,18 +140,18 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   `LADDER_DEEP=` and `=0` fail at load (QE-085-e). Unset: NOT DEFINED, not skipped. The A1/A2
   verdict is not run here (~44 h in vitest): its route is ABC-146's (plain node, ADR-0038 addendum). -->
 - Test (single file): `npx vitest run <path>`
-- Coverage: `npx vitest run --coverage` <!-- exit 0, 856/856 on 30 files. Not in
+- Coverage: `npx vitest run --coverage` <!-- exit 0, 99.43 % lines over LOADED files only (4.x: no `coverage.all`; was 856/856 on 30 files). Not in
   `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
   child and v8 coverage does not cross a process boundary, so it reads uncovered while tested. -->
-- Coverage (`src/` only — the other denominator; neither is agreed): `npx vitest run --coverage --coverage.include='src/**'` <!-- exit 0 -->
+- Coverage (`src/` only — the other denominator; neither is agreed): `npx vitest run --coverage --coverage.include='src/**'` <!-- exit 0, 95.55 % lines -->
 
 ### Acceptance
 
-- Acceptance / BDD scenarios: `UNKNOWN - verify` <!-- host runner, e.g. cucumber-js / behave / `bddgen && playwright test` — names live here only as examples, never as a hard command -->
+- Acceptance / BDD scenarios: `UNKNOWN - verify`
 
 ### Test integrity
 
-- Skip-count capture: `npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Other runners: jest `jest --json | jq '.numPendingTests'`; pytest `pytest --json-report --json-report-file=- | jq '.summary.skipped'`; go `go test -json ./... | jq -s '[.[]|select(.Action=="skip")]|length'` — examples only. Undeterminable → `UNKNOWN - verify`, never a silent 0. -->
+- Skip-count capture: `npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. -->
 
 - Test-integrity check (the gate's step): `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` <!-- verified: `No findings.`, exit 0, at skip count 0. `.grugops/test-skips.md` is HUMAN-OWNED — an agent may READ and RUN this, never write a row into it. -->
 
@@ -173,11 +176,9 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 
 - E2E: `UNKNOWN - verify` <!-- no UI surface (`quality.ui_e2e`: `ui-or-critical-path`) -->
 
-<!-- Command slots filled 2026-07-22 (ABC-008), each RUN first; `UNKNOWN - verify` = unknown. -->
-
 ### Stack
 
-TypeScript on Node (>= 22), ESM. Vitest for tests, Biome for lint + format. Node runs `.ts`
+TypeScript on Node (>= 22), ESM. Vitest 4.1 (module runner off) for tests, Biome for lint + format. Node runs `.ts`
 files directly via built-in type stripping, so there is no bundler or transpile step in dev.
 
 ## Delivery
@@ -327,7 +328,7 @@ requirement stands unchanged.
 - **Deploy is allowed, and there is nothing to deploy** (the owner, 2026-08-15, one sentence).
   `production_requires_human_confirmation` stays `true`; the grant did not flip it. See `## Deployment posture`.
 - Do not change dependencies without reason. No unrelated refactors. No fake results.
-- A `vitest`/`@vitest/*` major bump carries `RISK-ABC143-01` (`ABC-143` § Follow-ups): it breaks the result-file reporter, silently on 4.x.
+- A `vitest`/`@vitest/*` bump carries `RISK-ABC143-01` (`ABC-143` § Follow-ups): the result-file reporter uses vitest internals; fails loud at load if one is gone (`ABC-152`).
 
 ## Coding rules (the 12)
 
