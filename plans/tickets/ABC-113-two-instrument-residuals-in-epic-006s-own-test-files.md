@@ -61,8 +61,13 @@ strictly ordered — and the ticket carries that sentence into the test file.**
 - The **new** triple kills `M10` and is blind to `D3` — a shadowing-parameter rebind.
 
 **Neither dominates.** "Strictly stronger" was false when it was claimed and "strictly weaker" is
-false too. `A1` below closes `D3` while keeping the once-only pin, so after this ticket the
-instrument is stronger than **both** — which is the first time an ordering can honestly be asserted.
+false too. `A1` below closes ~~`D3`~~ **the annotated-rebind spelling of `D3`** while keeping the
+once-only pin, so after this ticket the instrument is stronger than **both** — which is the first
+time an ordering can honestly be asserted.
+*Correction (`ABC-114` `A2`, 2026-10-11; the struck words are kept): the count row's regex
+`/\bhistory\s*[:=]/g` does not see a `[:=]`-free binder (`for…of`, `for…in`, `catch (history)`, a
+contextually-typed callback parameter). `D4` (`for (const history of [spare])`) is `tsc`-clean and
+leaves the lane green, so that part of the `D3` class is still open.*
 
 ## Scope
 
@@ -103,9 +108,16 @@ instrument is stronger than **both** — which is the first time an ordering can
   (`fivefold-repetition` → `"by repetition"`, `threefold-repetition` → `"by repetition. it was
   claimed by the player to move under FIDE 9.2"`) the **whole-screen rows are GREEN and the headline
   rows are RED**.* **Disclosed rather than oversold: `M11b` also reddens the sibling `automatic` word
-  row, and a mutant that the headline rows kill ALONE is unconstructible while those word rows stand**
-  — a substring relation forces the forbidden word into the other screen. This half buys
-  **non-vacuity and the criterion's own words**, not new coverage, and it must not be sold as more.
+  row, and ~~a mutant that the headline rows kill ALONE is unconstructible while those word rows stand~~**
+  ~~— a substring relation forces the forbidden word into the other screen. This half buys~~
+  ~~**non-vacuity and the criterion's own words**, not new coverage, and it must not be sold as more.~~
+  *Correction (`ABC-114` `A3`, 2026-10-11; the struck words are kept): the struck sentence holds
+  only for a ONE-row headline. `M15` gives fivefold a TWO-row headline (`"Draw by repetition."`,
+  then `"Specifically fivefold repetition, automatic under FIDE 9.6.1."`) and threefold one row
+  (`"Draw by repetition. Specifically threefold repetition, claimed by the player to move under
+  FIDE 9.2."`). It is `tsc`-clean. Against the retargeted rows the lane is 1 failed / 1679, and the
+  one failure is the headline row. Against the pre-`ABC-113` instrument it is 1680 / 1680 green.
+  So the headline rows kill `M15` ALONE, and this half buys new coverage as well as non-vacuity.*
 - **`A3` (zero production lines — the fence, checkable).** **Then** `git diff --name-only main...HEAD
   -- src/` lists **exactly** `src/cli.test.ts` and `src/result-screen.test.ts` and nothing else; every
   non-test file under `src/` is byte-identical, `src/cli.ts` and `src/result-screen.ts` named

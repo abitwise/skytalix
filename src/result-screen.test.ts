@@ -176,12 +176,19 @@ describe("ABC-044 A2 — a CLAIMED draw and an AUTOMATIC one are distinguishable
     // 9.2"`) left the whole-screen rows GREEN and turns the headline rows RED.
     // `renderResultScreen` returns `["", ...headline, "", ...moveList]`, so row 1 IS the headline.
     //
-    // WHAT THIS BUYS, AND WHAT IT DOES NOT — stated so the next reader does not overclaim it: it
-    // buys NON-VACUITY and the criterion's own words, NOT new coverage. `M11b` also reddens the
-    // sibling `automatic` word row in the test above, and a mutant that these headline rows kill
-    // ALONE is unconstructible while those word rows stand — a substring relation forces the
-    // forbidden word into the other screen. BOTH directions and BOTH pairs are kept: dropping a
-    // direction re-creates the dominated row in a shorter form.
+    // WHAT THIS BUYS: non-vacuity, the criterion's own words, AND one build no other row kills.
+    // `M11b` also reddens the sibling `automatic` word row in the test above. With a ONE-row
+    // headline that is forced: a substring relation drags the forbidden word into the other
+    // screen. A TWO-row headline escapes it, and `M15` is that build (`ABC-114` `A3`, re-built
+    // 2026-10-11 in `headline()`): fivefold → `["Draw by repetition.", "Specifically fivefold
+    // repetition, automatic under FIDE 9.6.1."]`, threefold → one row, `"Draw by repetition.
+    // Specifically threefold repetition, claimed by the player to move under FIDE 9.2."`. With
+    // `tsc` clean, the lane was 1 failed / 1679 passed, and the failure was this test ("threefold-
+    // repetition's headline contains fivefold-repetition's"). The word rows scan the whole screen
+    // and stayed green. With the pre-`ABC-113` file (`git show cc037b3e^:src/result-screen.test.ts`)
+    // as the control, the lane was 1680 / 1680 green. So `M15` is evidence FOR the retarget to row
+    // 1. BOTH directions and BOTH pairs are kept: dropping a direction re-creates the dominated row
+    // in a shorter form.
     for (const [claimed, automatic] of PAIRS) {
       const one = screenFor(claimed, "draw").split("\n")[1];
       const other = screenFor(automatic, "draw").split("\n")[1];
