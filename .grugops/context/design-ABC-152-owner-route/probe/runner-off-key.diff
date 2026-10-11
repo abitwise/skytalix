@@ -1,0 +1,10 @@
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/vitest.config.ts	2026-10-11 22:43:59
++++ v41off/vitest.config.ts	2026-10-11 22:44:40
+@@ -90,6 +90,7 @@
+   test: {
+     pool: "threads",
+     maxWorkers: 2,
++    experimental: { viteModuleRunner: false },
+     /**
+      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
+      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by

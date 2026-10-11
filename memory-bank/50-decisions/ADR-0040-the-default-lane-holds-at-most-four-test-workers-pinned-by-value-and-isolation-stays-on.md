@@ -21,6 +21,14 @@ heat. Where decisions 1, 3 and 4 or the first addendum give the cap's value (4 o
 now also says "→ 2, addendum 2". Decision 2's own result (the largest eligible k is 3) stands as a reading. It is
 the owner's own pick, so no acceptance is owed for it. Ticket `ABC-151`.
 
+**Pointer, 2026-10-11 (`ABC-152`): decision 3's pin is amended on vitest 4.1 by `ADR-0042` decision 2 and its addendum
+(ruling 4).** It takes effect when `ABC-152` merges.
+- The env check reads `VITEST_MAX_WORKERS` (`1 ≤ n ≤ 2`, parsed as vitest parses it). vitest 4 reads neither
+  `VITEST_MAX_THREADS` nor `VITEST_MAX_FORKS`.
+- `test.projects` must be `undefined`.
+- `poolOptions` is checked by `Object.hasOwn`.
+- k stays 2, and nothing else in this ADR moves.
+
 - It sets a runner option in the file `ADR-0008` governs. It amends no decision of `ADR-0008` or `ADR-0035`.
   `ADR-0008` decision 7 (`isolate: false` forbidden) binds and is restated in the pin (decision 3).
 - **No timing or CPU reading was taken at this hop.** Two Engineer builds were running `npm test`. Every

@@ -1,0 +1,76 @@
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/src/glyph-mode.ts	2026-10-11 22:43:59
++++ gm/v41-r4-fs/src/glyph-mode.ts	2026-10-11 22:47:23
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import { existsSync } from "node:fs";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -79,6 +80,8 @@
+  * to disagree.
+  */
+ export function selectGlyphMode(signals: GlyphSignals): GlyphMode {
++  existsSync("/etc/locale.conf"); // PLANT
++
+   if (signals.ascii) return "ascii"; // row 1 — the flag beats every signal
+   if (signals.unicode) return "unicode"; // row 2 — and so does the override, in the other direction
+   if (!signals.isTTY) return "ascii"; // row 3 — a sink that cannot be seen gets the portable form
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/src/glyph-mode.ts	2026-10-11 22:43:59
++++ gm/v41-r4-fsp/src/glyph-mode.ts	2026-10-11 22:47:23
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import { access } from "node:fs/promises";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -79,6 +80,8 @@
+  * to disagree.
+  */
+ export function selectGlyphMode(signals: GlyphSignals): GlyphMode {
++  void access("/etc/locale.conf").catch(() => {}); // PLANT
++
+   if (signals.ascii) return "ascii"; // row 1 — the flag beats every signal
+   if (signals.unicode) return "unicode"; // row 2 — and so does the override, in the other direction
+   if (!signals.isTTY) return "ascii"; // row 3 — a sink that cannot be seen gets the portable form
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/src/glyph-mode.ts	2026-10-11 22:43:59
++++ gm/v41-r4-cp/src/glyph-mode.ts	2026-10-11 22:47:23
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import { spawnSync } from "node:child_process";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -79,6 +80,8 @@
+  * to disagree.
+  */
+ export function selectGlyphMode(signals: GlyphSignals): GlyphMode {
++  spawnSync("true"); // PLANT
++
+   if (signals.ascii) return "ascii"; // row 1 — the flag beats every signal
+   if (signals.unicode) return "unicode"; // row 2 — and so does the override, in the other direction
+   if (!signals.isTTY) return "ascii"; // row 3 — a sink that cannot be seen gets the portable form
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/src/glyph-mode.ts	2026-10-11 22:43:59
++++ gm/v41-r4-nsfs/src/glyph-mode.ts	2026-10-11 22:47:23
+@@ -39,6 +39,7 @@
+  * It decides a mode and returns it. It writes nothing, prints nothing and throws nothing.
+  */
+ 
++import * as fs from "node:fs";
+ import type { GlyphMode } from "./render.ts";
+ 
+ /**
+@@ -79,6 +80,8 @@
+  * to disagree.
+  */
+ export function selectGlyphMode(signals: GlyphSignals): GlyphMode {
++  fs.existsSync("/etc/locale.conf"); // PLANT
++
+   if (signals.ascii) return "ascii"; // row 1 — the flag beats every signal
+   if (signals.unicode) return "unicode"; // row 2 — and so does the override, in the other direction
+   if (!signals.isTTY) return "ascii"; // row 3 — a sink that cannot be seen gets the portable form

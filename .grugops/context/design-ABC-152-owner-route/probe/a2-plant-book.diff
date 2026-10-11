@@ -1,0 +1,19 @@
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/src/book.ts	2026-10-11 22:43:59
++++ a2/query-plant/src/book.ts	2026-10-11 22:45:49
+@@ -48,6 +48,7 @@
+ 
+ type BookLine = readonly [uci: string, weight: number];
+ 
++const LOAD_SALT = Math.random(); // PLANT: load-time nondeterminism
+ const KEY = /^[0-9a-f]{16}$/;
+ const UCI = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
+ /** Indexed by piece type: KNIGHT 2, BISHOP 3, ROOK 4, QUEEN 5 (as `tools/opening-book/compile.ts`). */
+@@ -142,7 +143,7 @@
+     bookMove(position) {
+       const moves = bookMoves(position);
+       const total = moves.reduce((sum, { weight }) => sum + weight, 0);
+-      let draw = Math.floor(random() * total);
++      let draw = Math.floor(((random() + LOAD_SALT) % 1) * total);
+       for (const { move, weight } of moves) {
+         if (draw < weight) return move;
+         draw -= weight;

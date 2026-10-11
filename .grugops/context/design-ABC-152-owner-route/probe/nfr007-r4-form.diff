@@ -1,0 +1,17 @@
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/src/glyph-mode.nfr.test.ts	2026-10-11 22:43:59
++++ gm/v41-r4-none/src/glyph-mode.nfr.test.ts	2026-10-11 22:47:23
+@@ -60,10 +60,10 @@
+   };
+ });
+ 
+-const { readFileSync, existsSync, statSync, readdirSync } = await import("node:fs");
+-const { readFile, stat, readdir, access } = await import("node:fs/promises");
+-const { execSync, execFileSync, spawnSync, spawn } = await import("node:child_process");
+-const { beginGlyphModeSession, selectGlyphMode } = await import("./glyph-mode.ts");
++import { readFileSync, existsSync, statSync, readdirSync } from "node:fs";
++import { readFile, stat, readdir, access } from "node:fs/promises";
++import { execSync, execFileSync, spawnSync, spawn } from "node:child_process";
++import { beginGlyphModeSession, selectGlyphMode } from "./glyph-mode.ts";
+ 
+ const FILESYSTEM = [
+   ["readFileSync", readFileSync],

@@ -1,0 +1,26 @@
+--- /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/wt-design/tools/grugops/result-file-reporter.js	2026-10-11 22:43:59
++++ v41off/.probe/rep/r.js	2026-10-11 22:47:55
+@@ -73,6 +73,10 @@
+ import { dirname, resolve } from "node:path";
+ import { JsonReporter } from "vitest/reporters";
+ 
++for (const hook of ["writeReport", "onTestRunEnd"]) {
++  if (typeof JsonReporter.prototype[hook] !== "function") throw new Error(`result-file-reporter: JsonReporter.prototype.${hook} is gone; re-read RISK-ABC143-01`);
++}
++
+ export default class ResultFileReporter extends JsonReporter {
+   #file;
+   #result;
+@@ -97,9 +101,9 @@
+     });
+   }
+ 
+-  async onFinished(files, errors = [], coverageMap) {
+-    this.#unhandled = errors;
+-    await super.onFinished(files, errors, coverageMap);
++  async onTestRunEnd(testModules, unhandledErrors = [], reason) {
++    this.#unhandled = unhandledErrors;
++    await super.onTestRunEnd(testModules, unhandledErrors, reason);
+   }
+ 
+   async writeReport(report) {
