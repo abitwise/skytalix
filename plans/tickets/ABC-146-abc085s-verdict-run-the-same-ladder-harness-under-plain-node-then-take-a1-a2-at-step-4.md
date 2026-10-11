@@ -13,12 +13,17 @@ feature: —
 
 > **Cut 2026-10-11 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-fold-qe114-2026-10-11`, Workflow 07).
 > This is **`ABC-085`'s pre-registered split** (`ABC-085` § Dependencies, "Split trigger"): the `A1`/`A2`
-> verdict run as its own `XS`. It is built to the **PROPOSED** `ADR-0038` addendum of 2026-10-11 (decision 5
+> verdict run as its own `XS`. It is built to the ~~**PROPOSED**~~ **ACCEPTED** `ADR-0038` addendum of 2026-10-11 (decision 5
 > amended; Architect notes `…2566e813`, `…be323233`, arithmetic `…5d70d79e`).
 >
-> **WAITING on two things, both outside this ticket:** the owner's acceptance of the `ADR-0038` addendum, and
+> ~~**WAITING on two things, both outside this ticket:** the owner's acceptance of the `ADR-0038` addendum, and
 > `ABC-083`'s merge (it is `Blocked`). It also needs `ABC-085`'s harness merged, because that is the code it
-> moves. **This hop ran nothing and timed nothing.** Every figure is cited.
+> moves.~~ **This hop ran nothing and timed nothing.** Every figure is cited.
+>
+> **2026-10-11, BA/PM sync (subtask `bapm-cut-abc147-lever`).** The `ADR-0038` addendum is **ACCEPTED** by the
+> owner, 2026-10-11 (verbatim "accepr ADR-0040 and ADR-0038", transcription note
+> `…owner-word-accept-adr0040-adr0038-addendum-7089c972`, not a stamp). `ABC-085`'s harness is **merged**
+> (`1031911b`). **One wait remains: `ABC-083`'s merge** (`Blocked`, re-levelled on its branch, unmerged).
 
 ## Problem
 
@@ -31,6 +36,13 @@ the Engineer's `…70684a78`). So the step-4 verdict costs **~43.5 h (30–58) o
 ~10 h (7–13) `ADR-0038` was accepted at. The games are a function of node counts only (`ADR-0038` decision
 4), so the runner buys nothing but wall. Two days of one core on a fanless Air also runs against the owner's
 "reduce cpu usage" (`ABC-144`).
+
+*2026-10-11, BA/PM:* **the factor that moves this verdict to `node` is the same factor `ABC-147` measured and
+`ABC-150` now targets.** `ABC-147` read **4.93–5.38x** on the default lane's two heaviest engine workloads
+(paired, digests equal, load1 5–6, thermal level 1; `…a6122481`). The ladder's own figure stays `ABC-085`'s
+4.35x on `chooseMove`, so the ~43.5 h vitest fallback below is, if anything, low. **This route does not wait
+on `ABC-150`, and `ABC-150` does not re-open it:** plain `node` pays no factor, and `A3`'s digest check stays
+the bar whatever `ABC-150` rules.
 
 *Value*: the epic's first criterion, and `A2`'s ordered-ladder check, are read at the cost the owner accepted,
 with a digest check that proves the cheaper route plays the same games.
@@ -58,7 +70,8 @@ with a digest check that proves the cheaper route plays the same games.
 - **Running the pairs as parallel processes** (`ADR-0038` addendum, rejected alternative (b)).
 - **A `node` entry under `src/`** (rejected alternative (c′): it would be a production module, `ADR-0011`
   cl. 1).
-- **Finding or removing vitest's per-node overhead.** That is `ABC-147`, and nothing here depends on it.
+- **Finding or removing vitest's per-node overhead.** That is `ABC-147` (the reading) and `ABC-150` (the
+  lever, cut 2026-10-11), and nothing here depends on either.
 - **`AGENTS.md`.** The Scribe writes the `node` command after this merges (`…8515e3e7` stays as drafted
   until then).
 
@@ -112,9 +125,10 @@ with a digest check that proves the cheaper route plays the same games.
 
 ## Dependencies
 
-- **The owner's acceptance of the `ADR-0038` addendum — OWED** (Architect `…be323233` question 1). **If he
-  declines,** `A1`–`A4` are cancelled, and this ticket becomes the verdict run inside vitest at ~43.5 h
-  (`A5` with `LADDER_DEEP=verdict` in vitest). It is then re-scored before it is pulled.
+- **The owner's acceptance of the `ADR-0038` addendum — ~~OWED~~ ACCEPTED 2026-10-11** (Architect `…be323233`
+  question 1; note `…7089c972`). ~~**If he declines,** `A1`–`A4` are cancelled, and this ticket becomes the
+  verdict run inside vitest at ~43.5 h (`A5` with `LADDER_DEEP=verdict` in vitest). It is then re-scored
+  before it is pulled.~~ The decline branch is moot.
 - **`ABC-083`'s merge — for `A5` only.** `ABC-083` is `Blocked` (BLOCKED_NEEDS_FIX, two class-R reds). The
   verdict has no date until it merges.
 - **`ABC-085`'s merge, including `fix-ABC-085` — for `A1`–`A4`.** Its harness is the code that moves. **The
@@ -122,8 +136,10 @@ with a digest check that proves the cheaper route plays the same games.
   with `ABC-083` unmerged. `fix-ABC-085` is now adding default-lane rows for `QE-085-a`/`b`/`c` (the colour
   schedule, the pair score, the `A1` bar, the claimed-draw count, the budgets, the game counts and
   `PLY_CAP`). **This ticket moves the harness as it stands after that fix**, rows included, and `A1`'s
-  base is that merge.
-- **Pull it only when all three hold.** The build half could start before `ABC-083` merges, but nothing is
+  base is that merge. *2026-10-11: **merged** (`1031911b`, QE PASS_WITH_GAPS on the second pass). `A1`'s base is
+  `1031911b` or a later main that keeps the harness byte-equal. `QE2-085-a` (LOW, optional before the verdict)
+  is on `ABC-085`'s page.*
+- **Pull it only when all three hold.** *(2026-10-11: two hold; `ABC-083`'s merge is the one left.)* The build half could start before `ABC-083` merges, but nothing is
   gained: the verdict cannot run, and `A3` is re-run on the verdict commit anyway.
 - **Staleness** (`ABC-085` § Dependencies): a verdict is STALE after any merge that touches `PUZZLE_DEEP`'s
   engine trigger list, `src/levels.ts` or `src/virtual-clock.ts`. Re-taking it is the Orchestrator's to
@@ -185,6 +201,6 @@ BA/PM, 2026-10-11. **Result: 9 of 10, ⚠️x1 (item 10). Stays in `Backlog`.**
 | 7 | test notes present | **✅** five |
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P1`, inherited |
-| 10 | no major unresolved blocker | **⚠️** the `ADR-0038` addendum is PROPOSED, and `ABC-083` is `Blocked`. **Re-score to 10/10 when the owner accepts and `ABC-083` merges** |
+| 10 | no major unresolved blocker | **⚠️** ~~the `ADR-0038` addendum is PROPOSED, and~~ `ABC-083` is `Blocked`. **Re-score to 10/10 when ~~the owner accepts and~~ `ABC-083` merges.** *Re-scored 2026-10-11 (BA/PM, `bapm-cut-abc147-lever`): the addendum is ACCEPTED and `ABC-085` is merged; `ABC-083`'s merge is the only open part. Still 9/10, still `Backlog`* |
 
 Column moves are the Orchestrator's.
