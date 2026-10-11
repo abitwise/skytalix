@@ -1,0 +1,17 @@
+# Gates, run in worktree grugops/ABC-083-king-safety-mobility (host load avg ~12-14, not a timing reading)
+
+## On merge 0129c4c8 (fa81b948 + main 5ed308a8)
+lint (biome check .)        exit 0  Checked 106 files, no fixes
+typecheck (tsc --noEmit)    exit 0
+build (tsc --noEmit)        exit 0
+npm test                    exit 1  Test Files 1 failed | 55 passed (56); Tests 1 failed | 1738 passed (1739)
+  the one red: src/search.ordering.test.ts A3 position-6 d2 guard, 0.43558 > 0.405 (row 15, the known R red)
+
+## On re-level 547b5155
+lint                        exit 0  Checked 106 files, no fixes
+typecheck                   exit 0
+build                       exit 0
+npm test                    exit 0  Test Files 56 passed (56); Tests 1739 passed (1739)
+SEARCH_DEEP=1 vitest run src/quiescence.test.ts src/search.ordering.test.ts
+                            exit 0  Test Files 2 passed (2); Tests 75 passed (75)
+  log line: A5 position-6 depth 2: 3871 nodes with quiescence / 136 without = 28.46x

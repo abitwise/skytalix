@@ -1,0 +1,75 @@
+{"label":"base","name":"Q takes a pawn a rook defends","bareD1":"a1e5","d3":"a1a8","losing":"a1e5","margin":765}
+{"label":"base","name":"R takes a pawn the king defends","bareD1":"a1a7","d3":"e1f1","losing":"a1a7","margin":400}
+{"label":"base","name":"B takes a pawn a pawn defends","bareD1":"b1e4","d3":"e1f2","losing":"b1e4","margin":180}
+{"label":"base","name":"N takes a pawn a pawn defends","bareD1":"c2d4","d3":"e1e2","losing":"c2d4","margin":160}
+{"label":"base","name":"Q takes a knight a rook defends","bareD1":"a1b2","d3":"a1a6","losing":"a1b2","margin":595}
+{"label":"base","name":"R takes a knight a pawn defends","bareD1":"d1d3","d3":"f1g2","losing":"d1d3","margin":205}
+{"label":"base","name":"Q takes a rook the king defends","bareD1":"a1a7","d3":"a1f6","losing":"a1a7","margin":390}
+{"label":"base","name":"Q takes a bishop a knight defends","bareD1":"a1b2","d3":"a1b1","losing":"a1b2","margin":570}
+{"label":"base","name":"R takes a bishop a pawn defends","bareD1":"a1a5","d3":"a1b1","losing":"a1a5","margin":185}
+{"label":"base","name":"R takes a pawn a bishop defends","bareD1":"b1b2","d3":"e1f1","losing":"b1b2","margin":280}
+{"label":"base","name":"Q takes a pawn a knight defends","bareD1":"a1b2","d3":"a1a4","losing":"a1b2","margin":655}
+{"label":"base","name":"B takes a pawn a rook defends","bareD1":"b1e4","d3":"b1a2","losing":"b1e4","margin":185}
+{"label":"base","name":"mirror: q takes a pawn a rook defends","bareD1":"a8e4","d3":"a8a1","losing":"a8e4","margin":765}
+{"label":"base","name":"mirror: r takes a pawn the king defends","bareD1":"a8a2","d3":"e8f8","losing":"a8a2","margin":400}
+{"label":"base","name":"mirror: b takes a pawn a pawn defends","bareD1":"b8e5","d3":"e8f7","losing":"b8e5","margin":180}
+{"label":"base","name":"mirror: n takes a pawn a pawn defends","bareD1":"c7d5","d3":"c7b5","losing":"c7d5","margin":160}
+{"label":"base","name":"mirror: q takes a knight a rook defends","bareD1":"a8b7","d3":"a8b8","losing":"a8b7","margin":595}
+{"label":"base","name":"mirror: r takes a knight a pawn defends","bareD1":"d8d6","d3":"f8g7","losing":"d8d6","margin":205}
+{"label":"base","name":"mirror: q takes a rook the king defends","bareD1":"a8a2","d3":"a8f3","losing":"a8a2","margin":390}
+{"label":"base","name":"mirror: q takes a bishop a knight defends","bareD1":"a8b7","d3":"a8b8","losing":"a8b7","margin":570}
+{"label":"base","name":"mirror: r takes a bishop a pawn defends","bareD1":"a8a4","d3":"a8b8","losing":"a8a4","margin":185}
+{"label":"base","name":"mirror: r takes a pawn a bishop defends","bareD1":"b8b7","d3":"e8f8","losing":"b8b7","margin":280}
+{"label":"base","name":"mirror: q takes a pawn a knight defends","bareD1":"a8b7","d3":"a8a5","losing":"a8b7","margin":655}
+{"label":"base","name":"mirror: b takes a pawn a rook defends","bareD1":"b8e5","d3":"b8a7","losing":"b8e5","margin":185}
+{"label":"base","summary":true,"rows":24,"bareD1Losing":24,"d3Losing":0,"minMargin":160}
+{"label":"ks-only","name":"Q takes a pawn a rook defends","bareD1":"a1e5","d3":"a1a4","losing":"a1e5","margin":745}
+{"label":"ks-only","name":"R takes a pawn the king defends","bareD1":"a1a7","d3":"e1f1","losing":"a1a7","margin":365}
+{"label":"ks-only","name":"B takes a pawn a pawn defends","bareD1":"b1e4","d3":"b1a2","losing":"b1e4","margin":150}
+{"label":"ks-only","name":"N takes a pawn a pawn defends","bareD1":"c2d4","d3":"c2b4","losing":"c2d4","margin":160}
+{"label":"ks-only","name":"Q takes a knight a rook defends","bareD1":"a1b2","d3":"a1a6","losing":"a1b2","margin":595}
+{"label":"ks-only","name":"R takes a knight a pawn defends","bareD1":"d1d3","d3":"f1g1","losing":"d1d3","margin":240}
+{"label":"ks-only","name":"Q takes a rook the king defends","bareD1":"a1a7","d3":"a1h8","losing":"a1a7","margin":390}
+{"label":"ks-only","name":"Q takes a bishop a knight defends","bareD1":"a1b2","d3":"a1b1","losing":"a1b2","margin":570}
+{"label":"ks-only","name":"R takes a bishop a pawn defends","bareD1":"a1a5","d3":"a1b1","losing":"a1a5","margin":185}
+{"label":"ks-only","name":"R takes a pawn a bishop defends","bareD1":"b1b2","d3":"e1f1","losing":"b1b2","margin":245}
+{"label":"ks-only","name":"Q takes a pawn a knight defends","bareD1":"a1b2","d3":"a1a4","losing":"a1b2","margin":655}
+{"label":"ks-only","name":"B takes a pawn a rook defends","bareD1":"b1e4","d3":"b1a2","losing":"b1e4","margin":185}
+{"label":"ks-only","name":"mirror: q takes a pawn a rook defends","bareD1":"a8e4","d3":"a8a5","losing":"a8e4","margin":745}
+{"label":"ks-only","name":"mirror: r takes a pawn the king defends","bareD1":"a8a2","d3":"e8f8","losing":"a8a2","margin":365}
+{"label":"ks-only","name":"mirror: b takes a pawn a pawn defends","bareD1":"b8e5","d3":"b8a7","losing":"b8e5","margin":150}
+{"label":"ks-only","name":"mirror: n takes a pawn a pawn defends","bareD1":"c7d5","d3":"c7b5","losing":"c7d5","margin":160}
+{"label":"ks-only","name":"mirror: q takes a knight a rook defends","bareD1":"a8b7","d3":"a8b8","losing":"a8b7","margin":595}
+{"label":"ks-only","name":"mirror: r takes a knight a pawn defends","bareD1":"d8d6","d3":"f8g8","losing":"d8d6","margin":240}
+{"label":"ks-only","name":"mirror: q takes a rook the king defends","bareD1":"a8a2","d3":"a8h1","losing":"a8a2","margin":390}
+{"label":"ks-only","name":"mirror: q takes a bishop a knight defends","bareD1":"a8b7","d3":"a8b8","losing":"a8b7","margin":570}
+{"label":"ks-only","name":"mirror: r takes a bishop a pawn defends","bareD1":"a8a4","d3":"a8b8","losing":"a8a4","margin":185}
+{"label":"ks-only","name":"mirror: r takes a pawn a bishop defends","bareD1":"b8b7","d3":"e8f8","losing":"b8b7","margin":245}
+{"label":"ks-only","name":"mirror: q takes a pawn a knight defends","bareD1":"a8b7","d3":"a8a5","losing":"a8b7","margin":655}
+{"label":"ks-only","name":"mirror: b takes a pawn a rook defends","bareD1":"b8e5","d3":"b8a7","losing":"b8e5","margin":185}
+{"label":"ks-only","summary":true,"rows":24,"bareD1Losing":24,"d3Losing":0,"minMargin":150}
+{"label":"branch","name":"Q takes a pawn a rook defends","bareD1":"a1e5","d3":"a1a8","losing":"a1e5","margin":858}
+{"label":"branch","name":"R takes a pawn the king defends","bareD1":"a1a7","d3":"e1f1","losing":"a1a7","margin":423}
+{"label":"branch","name":"B takes a pawn a pawn defends","bareD1":"b1e4","d3":"b1a2","losing":"b1e4","margin":192}
+{"label":"branch","name":"N takes a pawn a pawn defends","bareD1":"c2d4","d3":"c2b4","losing":"c2d4","margin":173}
+{"label":"branch","name":"Q takes a knight a rook defends","bareD1":"a1b2","d3":"a1b1","losing":"a1b2","margin":685}
+{"label":"branch","name":"R takes a knight a pawn defends","bareD1":"d1d3","d3":"f1g1","losing":"d1d3","margin":230}
+{"label":"branch","name":"Q takes a rook the king defends","bareD1":"a1a7","d3":"a1h8","losing":"a1a7","margin":462}
+{"label":"branch","name":"Q takes a bishop a knight defends","bareD1":"a1b2","d3":"a1b1","losing":"a1b2","margin":603}
+{"label":"branch","name":"R takes a bishop a pawn defends","bareD1":"a1a5","d3":"a1b1","losing":"a1a5","margin":215}
+{"label":"branch","name":"R takes a pawn a bishop defends","bareD1":"b1b2","d3":"e1f1","losing":"b1b2","margin":293}
+{"label":"branch","name":"Q takes a pawn a knight defends","bareD1":"a1b2","d3":"a1a4","losing":"a1b2","margin":749}
+{"label":"branch","name":"B takes a pawn a rook defends","bareD1":"b1e4","d3":"b1a2","losing":"b1e4","margin":231}
+{"label":"branch","name":"mirror: q takes a pawn a rook defends","bareD1":"a8e4","d3":"a8a1","losing":"a8e4","margin":858}
+{"label":"branch","name":"mirror: r takes a pawn the king defends","bareD1":"a8a2","d3":"e8f8","losing":"a8a2","margin":423}
+{"label":"branch","name":"mirror: b takes a pawn a pawn defends","bareD1":"b8e5","d3":"b8a7","losing":"b8e5","margin":192}
+{"label":"branch","name":"mirror: n takes a pawn a pawn defends","bareD1":"c7d5","d3":"c7b5","losing":"c7d5","margin":173}
+{"label":"branch","name":"mirror: q takes a knight a rook defends","bareD1":"a8b7","d3":"a8b8","losing":"a8b7","margin":685}
+{"label":"branch","name":"mirror: r takes a knight a pawn defends","bareD1":"d8d6","d3":"f8g8","losing":"d8d6","margin":230}
+{"label":"branch","name":"mirror: q takes a rook the king defends","bareD1":"a8a2","d3":"a8h1","losing":"a8a2","margin":462}
+{"label":"branch","name":"mirror: q takes a bishop a knight defends","bareD1":"a8b7","d3":"a8b8","losing":"a8b7","margin":603}
+{"label":"branch","name":"mirror: r takes a bishop a pawn defends","bareD1":"a8a4","d3":"a8b8","losing":"a8a4","margin":215}
+{"label":"branch","name":"mirror: r takes a pawn a bishop defends","bareD1":"b8b7","d3":"e8f8","losing":"b8b7","margin":293}
+{"label":"branch","name":"mirror: q takes a pawn a knight defends","bareD1":"a8b7","d3":"a8a5","losing":"a8b7","margin":749}
+{"label":"branch","name":"mirror: b takes a pawn a rook defends","bareD1":"b8e5","d3":"b8a7","losing":"b8e5","margin":231}
+{"label":"branch","summary":true,"rows":24,"bareD1Losing":24,"d3Losing":0,"minMargin":173}

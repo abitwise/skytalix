@@ -1,0 +1,17 @@
+base	SOLVED	win-material	f5e6	d5	n20507	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+base	PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 46.22 s
+ks	MISSED	win-material	g2e1	d5	n20507	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+ks	NEWLY-MISSED	win-material	g2e1	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+ks	PUZZLES shipped: solved 53/58, baseline 54/58, budget 25 step 1, wall 26.20 s
+ladder105	MISSED	win-material	g2e1	d5	n22555	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+ladder105	NEWLY-MISSED	win-material	g2e1	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+ladder105	PUZZLES shipped: solved 53/58, baseline 54/58, budget 25 step 0.9523809523809523, wall 32.88 s
+ladder110	MISSED	win-material	g2e1	d5	n23579	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+ladder110	NEWLY-MISSED	win-material	g2e1	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+ladder110	PUZZLES shipped: solved 53/58, baseline 54/58, budget 25 step 0.9090909090909091, wall 31.48 s
+ladder125	MISSED	win-material	g2e1	d5	n27675	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+ladder125	NEWLY-MISSED	win-material	g2e1	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+ladder125	PUZZLES shipped: solved 53/58, baseline 54/58, budget 25 step 0.8, wall 36.24 s
+branch	MISSED	win-material	g2e1	d5	n20507	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+branch	NEWLY-MISSED	win-material	g2e1	win material, seed 5061: white B+N+4P against Q+R+2B+N+P
+branch	PUZZLES shipped: solved 53/58, baseline 54/58, budget 25 step 1, wall 32.83 s

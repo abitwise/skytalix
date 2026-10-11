@@ -1,0 +1,8 @@
+# commit b29c837c: files touched
+src/puzzle-corpus.ts
+# run-trigger globs matched (literal; option B)
+(none)
+# baseline file touched?
+(no)
+# zero-production-lines measure (test-data file, not imported by production)
+(no production importer)

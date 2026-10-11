@@ -1,0 +1,25 @@
+{"round":1,"label":"branch-79248602","name":"kiwipete","depth":7,"nodes":640602,"ms":3001,"nps":213463,"load1":3.88,"at":"2026-10-10T19:37:39.720Z"}
+{"round":1,"label":"base","name":"kiwipete","depth":7,"nodes":672338,"ms":3001,"nps":224038,"load1":3.88,"at":"2026-10-10T19:37:42.820Z"}
+{"round":1,"label":"branch-79248602","name":"position-6","depth":7,"nodes":683673,"ms":3000,"nps":227891,"load1":3.81,"at":"2026-10-10T19:37:45.910Z"}
+{"round":1,"label":"base","name":"position-6","depth":7,"nodes":681390,"ms":3004,"nps":226828,"load1":3.66,"at":"2026-10-10T19:37:48.999Z"}
+{"round":2,"label":"base","name":"kiwipete","depth":7,"nodes":682578,"ms":3005,"nps":227147,"load1":3.66,"at":"2026-10-10T19:37:52.095Z"}
+{"round":2,"label":"branch-79248602","name":"kiwipete","depth":7,"nodes":638554,"ms":3003,"nps":212639,"load1":3.45,"at":"2026-10-10T19:37:55.189Z"}
+{"round":2,"label":"base","name":"position-6","depth":7,"nodes":678318,"ms":3002,"nps":225955,"load1":3.41,"at":"2026-10-10T19:37:58.284Z"}
+{"round":2,"label":"branch-79248602","name":"position-6","depth":7,"nodes":685721,"ms":3003,"nps":228345,"load1":3.41,"at":"2026-10-10T19:38:01.377Z"}
+{"round":3,"label":"branch-79248602","name":"kiwipete","depth":7,"nodes":639578,"ms":3003,"nps":212980,"load1":3.3,"at":"2026-10-10T19:38:04.474Z"}
+{"round":3,"label":"base","name":"kiwipete","depth":7,"nodes":646738,"ms":3002,"nps":215436,"load1":3.3,"at":"2026-10-10T19:38:07.563Z"}
+{"round":3,"label":"branch-79248602","name":"position-6","depth":6,"nodes":504473,"ms":3001,"nps":168102,"load1":3.67,"at":"2026-10-10T19:38:10.673Z"}
+{"round":3,"label":"base","name":"position-6","depth":7,"nodes":662958,"ms":3005,"nps":220618,"load1":43.82,"at":"2026-10-10T19:38:13.773Z"}
+{"session":"extra rounds 4-6 (renumbered 1-3 by the script)"}
+{"round":1,"label":"branch-79248602","name":"kiwipete","depth":7,"nodes":637530,"ms":3002,"nps":212368,"load1":6.67,"at":"2026-10-10T19:41:05.245Z"}
+{"round":1,"label":"base","name":"kiwipete","depth":7,"nodes":686674,"ms":3003,"nps":228663,"load1":6.67,"at":"2026-10-10T19:41:08.337Z"}
+{"round":1,"label":"branch-79248602","name":"position-6","depth":7,"nodes":686745,"ms":3002,"nps":228762,"load1":6.37,"at":"2026-10-10T19:41:11.425Z"}
+{"round":1,"label":"base","name":"position-6","depth":7,"nodes":684462,"ms":3004,"nps":227850,"load1":6.26,"at":"2026-10-10T19:41:14.513Z"}
+{"round":2,"label":"base","name":"kiwipete","depth":7,"nodes":686674,"ms":3004,"nps":228587,"load1":6.26,"at":"2026-10-10T19:41:17.601Z"}
+{"round":2,"label":"branch-79248602","name":"kiwipete","depth":7,"nodes":629338,"ms":3003,"nps":209570,"load1":6,"at":"2026-10-10T19:41:20.696Z"}
+{"round":2,"label":"base","name":"position-6","depth":7,"nodes":679342,"ms":3002,"nps":226296,"load1":5.76,"at":"2026-10-10T19:41:23.788Z"}
+{"round":2,"label":"branch-79248602","name":"position-6","depth":7,"nodes":686745,"ms":3000,"nps":228915,"load1":5.76,"at":"2026-10-10T19:41:26.876Z"}
+{"round":3,"label":"branch-79248602","name":"kiwipete","depth":7,"nodes":641626,"ms":3001,"nps":213804,"load1":5.54,"at":"2026-10-10T19:41:29.963Z"}
+{"round":3,"label":"base","name":"kiwipete","depth":7,"nodes":680530,"ms":3000,"nps":226843,"load1":5.54,"at":"2026-10-10T19:41:33.049Z"}
+{"round":3,"label":"branch-79248602","name":"position-6","depth":7,"nodes":672409,"ms":3004,"nps":223838,"load1":5.42,"at":"2026-10-10T19:41:36.147Z"}
+{"round":3,"label":"base","name":"position-6","depth":7,"nodes":659886,"ms":3002,"nps":219815,"load1":5.14,"at":"2026-10-10T19:41:39.240Z"}

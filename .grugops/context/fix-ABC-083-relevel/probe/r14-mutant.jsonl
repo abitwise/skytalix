@@ -1,0 +1,6 @@
+{"label":"mutant-unordered-q-0129c4c8","name":"kiwipete","depth":1,"withQ":4782,"bare":49,"ratio":97.59,"level":180,"over":false}
+{"label":"mutant-unordered-q-0129c4c8","name":"kiwipete","depth":2,"withQ":13613,"bare":132,"ratio":103.13,"level":50,"over":true}
+{"label":"mutant-unordered-q-0129c4c8","name":"kiwipete","depth":3,"withQ":61158,"bare":2265,"ratio":27,"level":70,"over":false}
+{"label":"mutant-unordered-q-0129c4c8","name":"position-6","depth":1,"withQ":2579,"bare":47,"ratio":54.87,"level":10,"over":true}
+{"label":"mutant-unordered-q-0129c4c8","name":"position-6","depth":2,"withQ":77870,"bare":136,"ratio":572.57,"level":26,"over":true}
+{"label":"mutant-unordered-q-0129c4c8","name":"position-6","depth":3,"withQ":63895,"bare":2355,"ratio":27.13,"level":13,"over":true}

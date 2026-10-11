@@ -1,5 +1,6 @@
 /**
- * Static evaluation — material plus piece-square tables (ABC-076), plus pawn structure (ABC-082).
+ * Static evaluation — material plus piece-square tables (ABC-076), plus pawn structure (ABC-082),
+ * plus king safety and mobility (ABC-083).
  *
  * One pure function: a position in, a centipawn score out, in the NEGAMAX convention —
  * positive is good for the SIDE TO MOVE, never "good for white". The search (ABC-077) can
@@ -14,13 +15,17 @@
  */
 
 import {
+  BISHOP,
   BLACK,
   EMPTY,
   fileOf,
   isBlack,
+  KING,
+  KNIGHT,
   PAWN,
   type Position,
   pieceType,
+  ROOK,
   rankOf,
 } from "./position.ts";
 
@@ -169,6 +174,105 @@ export function isPassedPawn(board: Uint8Array, square: number): boolean {
   return true;
 }
 
+/**
+ * ABC-083's king safety, in centipawns, per file of the king's own file and the files either side
+ * of it (two files for a king on the a- or h-file). SHELTER: no own pawn one or two ranks ahead
+ * of the king on that file. FILE_HALF_OPEN: no own pawn anywhere on the file, an enemy pawn on it.
+ * FILE_OPEN: no pawn of either colour on the file. Untapered by decision (the page's § Out of scope).
+ */
+const KING_SHELTER_MISSING_PENALTY = 15;
+const KING_FILE_HALF_OPEN_PENALTY = 10;
+const KING_FILE_OPEN_PENALTY = 20;
+
+/**
+ * ABC-083's mobility: centipawns per square a non-pawn piece reaches (empty, or holding an enemy
+ * piece) — the attack-map form of `ADR-0031` decision 2: counted on the board, no `Move` objects,
+ * no make/unmake, pins and checks ignored. The total is clamped to `A4`'s ±100 cp, so mobility can
+ * never outvote a minor piece.
+ */
+const MOBILITY_WEIGHT = 4;
+const MOBILITY_CAP = 100;
+
+const KNIGHT_STEPS: readonly number[] = [33, 31, 18, 14, -14, -18, -31, -33];
+const KING_STEPS: readonly number[] = [17, 16, 15, 1, -1, -15, -16, -17];
+/** Diagonals first, then orthogonals: a bishop reads 0..3, a rook 4..7, a queen all eight. */
+const RAYS: readonly number[] = [17, 15, -15, -17, 16, 1, -1, -16];
+
+/**
+ * How many squares the non-pawn `piece` on `square` reaches: empty squares, plus the first
+ * occupied square on each line when it holds an enemy piece. Reads the board only.
+ */
+function squaresReached(board: Uint8Array, square: number, piece: number): number {
+  const type = pieceType(piece);
+  const black = isBlack(piece);
+  let count = 0;
+
+  if (type === KNIGHT || type === KING) {
+    const steps = type === KNIGHT ? KNIGHT_STEPS : KING_STEPS;
+    for (let i = 0; i < 8; i++) {
+      const to = square + (steps[i] as number);
+      if ((to & 0x88) !== 0) continue;
+      const target = board[to] as number;
+      if (target === EMPTY || isBlack(target) !== black) count++;
+    }
+    return count;
+  }
+
+  const from = type === ROOK ? 4 : 0;
+  const to = type === BISHOP ? 4 : 8;
+  for (let i = from; i < to; i++) {
+    const ray = RAYS[i] as number;
+    for (let at = square + ray; (at & 0x88) === 0; at += ray) {
+      const target = board[at] as number;
+      if (target === EMPTY) {
+        count++;
+        continue;
+      }
+      if (isBlack(target) !== black) count++;
+      break;
+    }
+  }
+  return count;
+}
+
+/**
+ * The king-safety penalty for the king on `king` (positive = worse for that king's side).
+ * `ownPawn`/`enemyPawn` are the two coloured pawn codes and `step` is the king's forward
+ * direction in ranks (+1 white, -1 black), which is what makes the term mirror-exact.
+ */
+function kingExposure(
+  board: Uint8Array,
+  king: number,
+  ownPawn: number,
+  enemyPawn: number,
+  step: number,
+): number {
+  const kingFile = fileOf(king);
+  const shelterRank1 = rankOf(king) + step;
+  const shelterRank2 = shelterRank1 + step;
+  const fromFile = kingFile === 0 ? 0 : kingFile - 1;
+  const toFile = kingFile === 7 ? 7 : kingFile + 1;
+  let penalty = 0;
+
+  for (let file = fromFile; file <= toFile; file++) {
+    const sheltered =
+      (shelterRank1 >= 0 && shelterRank1 <= 7 && board[shelterRank1 * 16 + file] === ownPawn) ||
+      (shelterRank2 >= 0 && shelterRank2 <= 7 && board[shelterRank2 * 16 + file] === ownPawn);
+    if (!sheltered) penalty += KING_SHELTER_MISSING_PENALTY;
+
+    let own = false;
+    let enemy = false;
+    for (let rank = 1; rank <= 6; rank++) {
+      const piece = board[rank * 16 + file];
+      if (piece === ownPawn) own = true;
+      else if (piece === enemyPawn) enemy = true;
+    }
+    if (!own) penalty += enemy ? KING_FILE_HALF_OPEN_PENALTY : KING_FILE_OPEN_PENALTY;
+  }
+
+  return penalty;
+}
+
 /** The files either side of `file`, as a bitmask over files a..h (bit 0 = a). */
 const adjacentFiles = (file: number): number => (((1 << file) << 1) | ((1 << file) >> 1)) & 0xff;
 
@@ -218,13 +322,17 @@ function pawnStructure(board: Uint8Array): number {
  * black's. Kept separate from the negamax flip so the sign convention lives in exactly one
  * place and the tables are read exactly once per piece.
  */
-function whiteMinusBlack(position: Position): number {
+function whiteMinusBlack(position: Position, mobilityWeight: number): number {
   const board = position.board;
   let score = 0;
+  let mobility = 0;
+  let whiteKing = -1;
+  let blackKing = -1;
 
   for (let rank = 7; rank >= 0; rank--) {
     for (let file = 0; file < 8; file++) {
-      const piece = board[rank * 16 + file] as number;
+      const square = rank * 16 + file;
+      const piece = board[square] as number;
       if (piece === EMPTY) continue;
 
       const type = pieceType(piece);
@@ -236,10 +344,23 @@ function whiteMinusBlack(position: Position): number {
         ((PIECE_SQUARE_TABLE[type] as readonly number[])[tableIndex] as number);
 
       score += black ? -value : value;
+
+      if (type === PAWN) continue;
+      const reached = squaresReached(board, square, piece);
+      mobility += black ? -reached : reached;
+      if (type === KING) {
+        if (black) blackKing = square;
+        else whiteKing = square;
+      }
     }
   }
 
-  return score + pawnStructure(board);
+  const mobilityScore = Math.max(-MOBILITY_CAP, Math.min(MOBILITY_CAP, mobilityWeight * mobility));
+  const kingSafety =
+    kingExposure(board, blackKing, BLACK_PAWN, PAWN, -1) -
+    kingExposure(board, whiteKing, PAWN, BLACK_PAWN, 1);
+
+  return score + pawnStructure(board) + kingSafety + mobilityScore;
 }
 
 /**
@@ -249,9 +370,20 @@ function whiteMinusBlack(position: Position): number {
  * codebase does mutate transiently, which is why ABC-076's A5 asserts byte-identity here.)
  */
 export function evaluate(position: Position): number {
-  const score = whiteMinusBlack(position);
+  const score = whiteMinusBlack(position, MOBILITY_WEIGHT);
   // `0 - score`, not `-score`: negating a balanced position yields `-0`, which is `Object.is`
   // -distinct from `0` and so is NOT "exactly equal" to its mirror's score. Caught by A1 at
   // startpos-with-black-to-move; `0 - 0` is `+0`.
+  return position.blackToMove ? 0 - score : score;
+}
+
+/**
+ * TEST-ONLY. `evaluate` with the mobility weight at 0 — every other term, the sign convention and
+ * the board walk unchanged — so `evaluate(p) - evaluateWithoutMobility(p)` is exactly the mobility
+ * term, which is how `ABC-083` `A4` reads its ±100 cp bound. Nothing in production calls it (the
+ * `searchWithout…` doors' precedent).
+ */
+export function evaluateWithoutMobility(position: Position): number {
+  const score = whiteMinusBlack(position, 0);
   return position.blackToMove ? 0 - score : score;
 }

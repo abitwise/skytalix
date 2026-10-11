@@ -1,0 +1,44 @@
+# ENGINE_DEEP=1 npx vitest run src/levels.test.ts on 35f49bb7 (PUZZLES feeds A4 'perft + puzzles')
+# start 2026-10-11T15:17:37Z load1=3.19 thermal=0
+
+ RUN  v3.2.7 <branch-tree>
+
+stdout | src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+A9: 5 distinct sequences over 5 seeds
+
+stdout | src/levels.test.ts > A4 — the easiest level over ≥ 200 moves [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best [deep]
+A4 [ENGINE_DEEP, ENDGAMES]: (81 blunders + 0 no-candidate) / 204 moves = 39.7% against 40%; blunders played / moves = 39.7%
+
+stdout | src/levels.test.ts > A4 — the easiest level over the perft corpus and the puzzles [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best
+A4 [ENGINE_DEEP, perft + puzzles]: (96 blunders + 0 no-candidate) / 242 moves = 39.7% against 40%; blunders played / moves = 39.7%
+
+stdout | src/levels.test.ts > A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > every level, on the shipped path, uses its budget ±20% and never more than 5 s
+A2 level 1: engine, 102 / 100
+A2 level 2: engine, 510 / 500
+A2 level 3: engine, 3060 / 3000
+A2 level 4: engine, 4080 / 4000
+A2 level 5: engine, 4590 / 4500
+
+stdout | src/levels.test.ts > A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > a blunder move at the easiest level uses the level budget ±20% (the clamped sum)
+A2 blunder path: blunder over 20 children, 101.33333333333297 / 100
+A2 blunder path: blunder over 43 children, 101.33333333333297 / 100
+
+stdout | src/levels.test.ts > A5 — the hardest level, 30 positions, every move ≤ 5 s on the REAL clock [deep] > returns within 5 000 ms on 30/30
+A5: 30 moves, max 4530 ms: 4512,4518,4521,4509,4515,4518,4500,4502,4514,4519,4507,4513,4505,4510,4500,4507,4520,4518,4519,4520,4510,4517,4515,4530,4503,4515,4500,4500,4509,4508
+
+stdout | src/levels.test.ts > A3 — the easiest level solves strictly fewer puzzles than the default [deep] > counts both on one run of the suite in the tree
+A3: easiest 31/58, default 54/58
+
+ ✓ src/levels.test.ts (28 tests) 199458ms
+   ✓ A4 — the easiest level over the perft corpus and the puzzles [deep] > every move legal; rate ±5 pp; never the worst; the strict second-best  31744ms
+   ✓ A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > every level, on the shipped path, uses its budget ±20% and never more than 5 s  5348ms
+   ✓ A2 — the budget reaches the engine, ±20% on a fine virtual step [deep] > a blunder move at the easiest level uses the level budget ±20% (the clamped sum)  6483ms
+   ✓ A5 — the hardest level, 30 positions, every move ≤ 5 s on the REAL clock [deep] > returns within 5 000 ms on 30/30  135354ms
+   ✓ A3 — the easiest level solves strictly fewer puzzles than the default [deep] > counts both on one run of the suite in the tree  19940ms
+
+ Test Files  1 passed (1)
+      Tests  28 passed (28)
+   Start at  18:17:38
+   Duration  199.65s (transform 70ms, setup 0ms, collect 90ms, tests 199.46s, environment 0ms, prepare 23ms)
+
+# end 2026-10-11T15:20:57Z load1=3.11 thermal=0 exit=0

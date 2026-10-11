@@ -1,0 +1,9 @@
+{"found":422}
+{"fen":"q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/2K5/8/8/k7 w - - 0 1","nodes":44,"base":{"nodes":44,"deepest":8}}
+{"fen":"q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/2K5/8/8/2k5 w - - 0 1","nodes":44,"base":{"nodes":44,"deepest":8}}
+{"fen":"q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/2K5/8/8/4k3 w - - 0 1","nodes":44,"base":{"nodes":44,"deepest":8}}
+{"fen":"q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/2K5/8/8/6k1 w - - 0 1","nodes":44,"base":{"nodes":44,"deepest":8}}
+{"fen":"q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/2K5/8/k7/8 w - - 0 1","nodes":44,"base":{"nodes":44,"deepest":8}}
+{"fen":"q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/2K5/k7/8/8 w - - 0 1","nodes":44,"base":{"nodes":44,"deepest":8}}
+{"fen":"q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/2K5/4k3/8/8 w - - 0 1","nodes":44,"base":{"nodes":44,"deepest":8}}
+{"fen":"q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/2K5/6k1/8/8 w - - 0 1","nodes":44,"base":{"nodes":44,"deepest":8}}

@@ -1,0 +1,15 @@
+# tags.mjs: suite call at 25 readings, W1 (quiescence off) and W5 (depth cap 4) built by ABC-127 mkvariants.mjs; base = 5ed308a8 + b29c837c row, branch = 35f49bb7
+# start 2026-10-11T15:16:26Z load1=2.49 thermal=0
+base shipped seed5147	SOLVED b5b4 d5 n20514
+base shipped seed1700	SOLVED g6g7 d5 n20677
+base W1 seed5147	MISSED b5e5 d5 n20514
+base W1 seed1700	MISSED g6d6 d5 n20513
+base W5 seed5147	SOLVED b5b4 d4 n4643
+base W5 seed1700	SOLVED g6g7 d4 n4053
+branch shipped seed5147	SOLVED b5b4 d5 n20514
+branch shipped seed1700	SOLVED g6h6 d5 n20722
+branch W1 seed5147	MISSED b5e5 d5 n20514
+branch W1 seed1700	SOLVED g6h6 d5 n20513
+branch W5 seed5147	SOLVED b5b4 d4 n4243
+branch W5 seed1700	SOLVED g6h6 d4 n4193
+# end 2026-10-11T15:16:28Z load1=2.53 thermal=0

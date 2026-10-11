@@ -311,10 +311,16 @@ describe("the table — verified keys, always-replace, cutoffs only at the store
  * guard is the key rows, which no search switch reaches: "G6 bites" below, and `zobrist.test.ts`'s
  * castling-rights rows ("depends on castling rights"; `ABC-075` `A4`). See the `ADR-0006` `G6`
  * erratum of 2026-09-26 (`ruling-abc121-g6` `…ea306e58` §3–§4).
+ *
+ * RE-MEASURED at `ABC-083` (king safety and mobility act on pawnless boards too): both read 894 at
+ * depth 4, table on and off, so at this depth the score pair no longer shows the premise. The
+ * subtrees still differ: at depth 5 the pair reads 928 vs 910
+ * (`.grugops/context/ticket-to-pr-ABC-083/probe/g6.out.jsonl`). The guard is unaffected; it is the
+ * key row below and `zobrist.test.ts`'s castling-rights rows, as stated above.
  */
 const KNIGHT_G1_PAIR = [
-  { name: "knight-g1 w K", fen: "4k3/8/8/8/8/8/8/4K1NR w K - 0 1", score: 830 },
-  { name: "knight-g1 w -", fen: "4k3/8/8/8/8/8/8/4K1NR w - - 0 1", score: 820 },
+  { name: "knight-g1 w K", fen: "4k3/8/8/8/8/8/8/4K1NR w K - 0 1", score: 894 },
+  { name: "knight-g1 w -", fen: "4k3/8/8/8/8/8/8/4K1NR w - - 0 1", score: 894 },
 ];
 
 describe("A1 — table-on and table-off scores are identical", () => {
@@ -347,7 +353,7 @@ describe("A1 — table-on and table-off scores are identical", () => {
     });
   }
 
-  it("G6 bites: the knight-g1 pair keys differently — the scores above differ, so they must", () => {
+  it("G6 bites: the knight-g1 pair keys differently — the subtrees differ, so they must", () => {
     const [withRight, without] = KNIGHT_G1_PAIR.map(({ fen }) => zobristKey(parseFen(fen)));
     expect(withRight).not.toBe(without);
   });
@@ -357,14 +363,15 @@ describe("A1 — table-on and table-off scores are identical", () => {
    * Exact, measured at this ticket's build: position-3 at depth 4 visits 1 123 nodes with the
    * table and 1 299 without it. A table-off door that quietly used the table reads 1 123 twice.
    * RE-MEASURED at `ABC-082` (the pawn-structure term moves the tree): 1 319 and 1 474.
+   * RE-MEASURED at `ABC-083` (king safety and mobility): 1 325 and 1 523 (`probe/rows.ts`).
    */
-  it("position-3 at depth 4 — the same score, and the work changes: 1 319 nodes with the table, 1 474 without", () => {
+  it("position-3 at depth 4 — the same score, and the work changes: 1 325 nodes with the table, 1 523 without", () => {
     // The pre-`ABC-121` search since `ABC-121` (`ADR-0026` decision 4); both pins are unchanged.
     const on = searchWithoutPvsOrReductions(parseFen(fenOf("position-3")), 4);
     const off = searchWithoutTable(parseFen(fenOf("position-3")), 4);
     expect(on.score).toBe(off.score);
-    expect(on.nodes).toBe(1_319);
-    expect(off.nodes).toBe(1_474);
+    expect(on.nodes).toBe(1_325);
+    expect(off.nodes).toBe(1_523);
   });
 });
 
@@ -488,18 +495,20 @@ describe("A5 — the only non-losing line repeats, and it scores exactly 0", () 
    * repetition's 0 to a path where it is not one). The node count is pinned too: it is the
    * cheapest detector of `search()` dropping the hash move, which changes no score here.
    */
-  it("search(), depth 4: the perpetual scores exactly 0 and is played — in 7 251 nodes", () => {
+  it("search(), depth 4: the perpetual scores exactly 0 and is played — in 7 832 nodes", () => {
     const result = search(parseFen(REPEATS_AT_PLY_4), 4);
     expect(result.score).toBe(0); // `toBe` is Object.is: a -0 fails here
     expect(label(result.move)).toBe("f7f8");
     // The node pin is a work reading: the pre-`ABC-121` search since `ABC-121` (`ADR-0026`
     // decisions 4 and 7), unchanged. The score and the move stay on the shipped search.
     // RE-MEASURED at `ABC-082` (the pawn-structure term moves the tree): 7 241 became 7 251.
-    expect(searchWithoutPvsOrReductions(parseFen(REPEATS_AT_PLY_4), 4).nodes).toBe(7_251);
+    // RE-MEASURED at `ABC-083` (king safety and mobility): 7 251 became 7 832 (`probe/rows.ts`).
+    expect(searchWithoutPvsOrReductions(parseFen(REPEATS_AT_PLY_4), 4).nodes).toBe(7_832);
   });
 
   it("the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows", () => {
-    expect(search(parseFen(REPEATS_AT_PLY_4), 3).score).toBe(-470);
+    // RE-MEASURED at `ABC-083` (king safety and mobility): −470 became −488 (`probe/rows.ts`).
+    expect(search(parseFen(REPEATS_AT_PLY_4), 3).score).toBe(-488);
   });
 
   /**

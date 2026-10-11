@@ -184,14 +184,29 @@ const PASSED_CASES: ReadonlyArray<{ why: string; fen: string; square: string; pa
   },
 ];
 
-/** `A2`: the same two white pawns, sharing the c-file (c3/c4) or side by side (c3/d3). PST-neutral. */
-const DOUBLED = "4k3/2pp4/8/8/2P5/2P5/8/4K3 w - - 0 1";
-const SIDE_BY_SIDE = "4k3/2pp4/8/8/8/2PP4/8/4K3 w - - 0 1";
+/**
+ * `A2`: the same two white pawns, sharing the c-file (c3/c4) or side by side (c3/d3). PST-neutral.
+ * Re-found at ABC-083 (`ADR-0028` decision 2; the level is unchanged): the kings stood on e1/e8,
+ * beside the d-file, so ABC-083's king safety added 25 cp to the gap (35 -> 60). On h1/h8 they
+ * see neither pawn file, and the gap reads 35 on both builds — the pawn terms alone.
+ */
+const DOUBLED = "7k/2pp4/8/8/2P5/2P5/8/7K w - - 0 1";
+const SIDE_BY_SIDE = "7k/2pp4/8/8/8/2PP4/8/7K w - - 0 1";
 
 /** `A3`: d4 supported by c3/e3, the same d4 alone, and the same material on a3/g3 (all isolated). */
 const SUPPORTED = "4k3/1ppppp2/8/8/3P4/2P1P3/8/4K3 w - - 0 1";
 const ALONE = "4k3/1ppppp2/8/8/3P4/8/8/4K3 w - - 0 1";
 const SPREAD = "4k3/1ppppp2/8/8/3P4/P5P1/8/4K3 w - - 0 1";
+
+/**
+ * ABC-083 `A8` (QE's ABC-082 gap G-QE-1): d4's ONLY friendly neighbour stands on ONE adjacent file
+ * — c3 (left) or e3 (right) — against the same d4 with a non-adjacent partner, so both pawns are
+ * isolated. The kings stand in the corners and see no pawn file, so only the pawn terms differ.
+ */
+const NEIGHBOUR_LEFT = "7k/8/8/8/3P4/2P5/8/7K w - - 0 1";
+const APART_A3 = "7k/8/8/8/3P4/P7/8/7K w - - 0 1";
+const NEIGHBOUR_RIGHT = "7k/8/8/8/3P4/4P3/8/7K w - - 0 1";
+const APART_B4 = "7k/8/8/8/1P1P4/8/8/7K w - - 0 1";
 
 /** `A4`: a white a-pawn, passed on a5 / a7 (black's pawn is on h7), and stopped on a5 by b6. */
 const PASSED_A5 = "4k3/7p/8/P7/8/8/8/4K3 w - - 0 1";
@@ -218,6 +233,10 @@ const PAWN_FENS: readonly string[] = [
     PASSED_A5,
     PASSED_A7,
     STOPPED_A5,
+    NEIGHBOUR_LEFT,
+    APART_A3,
+    NEIGHBOUR_RIGHT,
+    APART_B4,
     ...MORE_STRUCTURES,
   ]),
 ];
@@ -264,6 +283,21 @@ describe("A3 — an isolated pawn scores lower", () => {
     // The row above is won by material alone. This one is not: the piece-square tables favour
     // a3/g3 over c3/e3 by 10, so only the isolated term can make it lower (red without the term).
     expect(score(SPREAD)).toBeLessThan(score(SUPPORTED));
+  });
+});
+
+describe("ABC-083 A8 — the isolation check reads BOTH adjacent files", () => {
+  // A strict ordering alone may not separate a one-file mutant (ABC-083 test note 5): these pairs
+  // are chosen so that it does. The apart pair is favoured by 15 (a3, the tables) and by 10 (b4,
+  // its passed-pawn rank), so only the isolated term's two 10s put the neighbour pair above it.
+  // A check that reads one file isolates one pawn of each neighbour pair, and the order falls
+  // to <= 0 (measured: -5 and 0 under QE's E8 and E9).
+  it("d4 with its only neighbour on the LEFT (c3) scores higher than d4 with a3, both isolated", () => {
+    expect(score(NEIGHBOUR_LEFT)).toBeGreaterThan(score(APART_A3));
+  });
+
+  it("d4 with its only neighbour on the RIGHT (e3) scores higher than d4 with b4, both isolated", () => {
+    expect(score(NEIGHBOUR_RIGHT)).toBeGreaterThan(score(APART_B4));
   });
 });
 

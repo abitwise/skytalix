@@ -322,13 +322,17 @@ describe("A3 — quiescence returns on 200+ corpus positions and never exceeds Q
     expect(run.deepest).toBeLessThanOrEqual(QUIESCENCE_MAX_PLY);
   });
 
-  it("the cap BINDS on a runaway rig — sixteen queens on alternating squares — and is not exceeded", () => {
+  it("the cap BINDS on a runaway rig — twenty queens on alternating squares — and is not exceeded", () => {
     // A board built to capture forever: every queen is attacked and defended many times over.
     // Without the guard this leaf would be a search of its own; with it the recursion reaches
     // the cap exactly and stands pat there. The black king stands on e3, out of every queen's
     // line (on h8 it was in check with white to move, which parseFen rejects since ABC-010).
     // Measured: deepest 8, 4 798 nodes, ~41 ms.
-    const rig = parseFen("q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/8/4k3/8/K7 w - - 0 1");
+    // RE-FOUND at ABC-083: under king safety and mobility that rig stands pat at ply 4 after 8
+    // nodes, so the cap no longer binds there. A fifth rank of black queens on rank 4, kings on
+    // a1/e1, binds it on the base, king-safety-only and shipped evaluators alike: deepest 8, 6 878
+    // nodes, ~36 ms (`.grugops/context/ticket-to-pr-ABC-083/probe/rigscan.out.jsonl`).
+    const rig = parseFen("q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/1Q1Q1Q1Q/q1q1q1q1/8/8/K3k3 w - - 0 1");
     const run = quiesceFully(rig);
 
     expect(run.deepest).toBe(QUIESCENCE_MAX_PLY);
@@ -395,11 +399,13 @@ describe("A4 — a position with no capture anywhere near the leaves scores exac
   });
 
   if (RUN_DEEP) {
-    it("position-6 at depth 3 reproduces the recorded 2 273 nodes and c3d5 [deep, SEARCH_DEEP=1]", () => {
+    it("position-6 at depth 3 reproduces the recorded 2 355 nodes and c3d5 [deep, SEARCH_DEEP=1]", () => {
       // 14 565 unordered; 2 273 ordered at ABC-080, the same move.
+      // RE-MEASURED at ABC-083 (king safety and mobility move the bare leaf): 2 355, the same
+      // move (`.grugops/context/ticket-to-pr-ABC-083/probe/rows.ts`, DEEP=1; base 2 273).
       const result = searchWithoutQuiescence(parseFen(fenOf("position-6")), 3);
 
-      expect(result.nodes).toBe(2_273);
+      expect(result.nodes).toBe(2_355);
       expect(label(result.move)).toBe("c3d5");
     }, 30_000);
   }
@@ -415,10 +421,14 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
    * 45.0x, position-6 6.3x / 17.4x / 8.3x at depths 1–3), indexed `[depth]`. Node counts are
    * deterministic, so the headroom absorbs legitimate evaluator changes, not noise. Not a number
    * to tune: over the level, halt and report to Architect/Design.
+   *
+   * RE-LEVELLED at `ABC-083` on the owner's word (`ADR-0039` decision 3, accepted 2026-10-11):
+   * position-6 depth 2 only, 26x → 42x, 1.5x the mobility build's 3 871 / 136 = 28.46x. Every other
+   * cell is unchanged. Quiescence with its MVV-LVA sort removed reads 572.57x there, still red.
    */
   const STOP_LEVEL: Readonly<Record<string, readonly number[]>> = {
     kiwipete: [Number.NaN, 180, 50, 70],
-    "position-6": [Number.NaN, 10, 26, 13],
+    "position-6": [Number.NaN, 10, 42, 13],
   };
   const stopLevel = (name: string, depth: number): number =>
     (STOP_LEVEL[name] as readonly number[])[depth] as number;
@@ -441,10 +451,15 @@ describe("A5 — the node-count multiplier on kiwipete and position-6 is reporte
    * was re-run in plain node on the build and equals `searchWithoutPvsOrReductions` AND `search()`
    * on score and move on both boards — kiwipete 55 / e2a6 (was 50; 282 s), position-6 55 / c3d5
    * (was 30; 38 s). The moves did not change.
+   *
+   * RE-PINNED at `ABC-083` (king safety and mobility) by the same rule: the oracle, re-run in plain
+   * node on the build, equals `searchWithoutPvsOrReductions` AND `search()` on score and move on
+   * both boards — kiwipete 70 / e2a6 (was 55; 398 s), position-6 84 / c3d5 (was 55; 63 s)
+   * (`.grugops/context/ticket-to-pr-ABC-083/probe/oracle-branch.jsonl`). The moves did not change.
    */
   const ORACLE_AT_DEPTH_3: Readonly<Record<string, { score: number; move: string }>> = {
-    kiwipete: { score: 55, move: "e2a6" },
-    "position-6": { score: 55, move: "c3d5" },
+    kiwipete: { score: 70, move: "e2a6" },
+    "position-6": { score: 84, move: "c3d5" },
   };
 
   /**

@@ -1,0 +1,62 @@
+# tree 67c189b9
+## lint | npm run lint | start 2026-10-11T14:33:53Z load1=2.79 thermal=0
+## lint | exit=0 | 0 s | end 2026-10-11T14:33:53Z load1=2.79 thermal=0
+## typecheck | npm run typecheck | start 2026-10-11T14:33:53Z load1=2.79 thermal=0
+## typecheck | exit=0 | 2 s | end 2026-10-11T14:33:55Z load1=2.79 thermal=0
+## build | npm run build | start 2026-10-11T14:33:55Z load1=2.79 thermal=0
+## build | exit=0 | 1 s | end 2026-10-11T14:33:56Z load1=2.81 thermal=0
+## test | npm test | start 2026-10-11T14:33:56Z load1=2.81 thermal=0
+## test | exit=0 | 6 s | end 2026-10-11T14:34:02Z load1=2.82 thermal=0
+ Test Files  56 passed (56)
+      Tests  1739 passed (1739)
+## skipcount | sh -c npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests' | start 2026-10-11T14:34:02Z load1=2.82 thermal=0
+## skipcount | exit=0 | 7 s | end 2026-10-11T14:34:09Z load1=4.20 thermal=0
+0
+## integrity | node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0 | start 2026-10-11T14:34:09Z load1=4.20 thermal=0
+## integrity | exit=0 | 0 s | end 2026-10-11T14:34:09Z load1=4.20 thermal=0
+No findings.
+## evaluate-files | npx vitest run src/evaluate.king-mobility.test.ts src/evaluate.pawns.test.ts src/evaluate.test.ts | start 2026-10-11T14:34:09Z load1=4.20 thermal=0
+## evaluate-files | exit=0 | 1 s | end 2026-10-11T14:34:10Z load1=4.20 thermal=0
+ Test Files  3 passed (3)
+      Tests  69 passed (69)
+## search-deep | SEARCH_DEEP=1 npx vitest run src/search.test.ts | start 2026-10-11T14:34:10Z load1=4.20 thermal=0
+## search-deep | exit=0 | 49 s | end 2026-10-11T14:34:59Z load1=3.37 thermal=0
+ Test Files  1 passed (1)
+      Tests  57 passed (57)
+## quiescence-deep | SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts | start 2026-10-11T14:34:59Z load1=3.37 thermal=0
+## quiescence-deep | exit=0 | 3 s | end 2026-10-11T14:35:02Z load1=3.34 thermal=0
+ Test Files  1 passed (1)
+      Tests  37 passed (37)
+## ordering-deep | SEARCH_DEEP=1 npx vitest run src/search.ordering.test.ts | start 2026-10-11T14:35:02Z load1=3.34 thermal=0
+## ordering-deep | exit=0 | 148 s | end 2026-10-11T14:37:30Z load1=2.88 thermal=0
+ Test Files  1 passed (1)
+      Tests  38 passed (38)
+## transposition-search-deep | SEARCH_DEEP=1 npx vitest run src/transposition.test.ts | start 2026-10-11T14:37:30Z load1=2.88 thermal=0
+## transposition-search-deep | exit=0 | 58 s | end 2026-10-11T14:38:28Z load1=2.69 thermal=0
+ Test Files  1 passed (1)
+      Tests  40 passed (40)
+## transposition-engine-deep | ENGINE_DEEP=1 npx vitest run src/transposition.test.ts | start 2026-10-11T14:38:28Z load1=2.69 thermal=0
+## transposition-engine-deep | exit=0 | 6 s | end 2026-10-11T14:38:34Z load1=2.72 thermal=0
+ Test Files  1 passed (1)
+      Tests  26 passed (26)
+## zobrist-deep | ZOBRIST_DEEP=1 npx vitest run src/zobrist.test.ts | start 2026-10-11T14:38:34Z load1=2.72 thermal=0
+## zobrist-deep | exit=0 | 35 s | end 2026-10-11T14:39:09Z load1=2.93 thermal=0
+ Test Files  1 passed (1)
+      Tests  33 passed (33)
+## engine-deep | ENGINE_DEEP=1 npx vitest run src/engine.test.ts | start 2026-10-11T14:39:09Z load1=2.93 thermal=0
+## engine-deep | exit=0 | 287 s | end 2026-10-11T14:43:56Z load1=2.66 thermal=0
+ Test Files  1 passed (1)
+      Tests  46 passed (46)
+## levels-deep | ENGINE_DEEP=1 npx vitest run src/levels.test.ts | start 2026-10-11T14:43:56Z load1=2.66 thermal=0
+## levels-deep | exit=0 | 203 s | end 2026-10-11T14:47:19Z load1=2.99 thermal=0
+ Test Files  1 passed (1)
+      Tests  28 passed (28)
+## cli-deep | CLI_DEEP=1 npx vitest run src/cli.real-engine.test.ts | start 2026-10-11T14:47:19Z load1=2.99 thermal=0
+## cli-deep | exit=0 | 7 s | end 2026-10-11T14:47:26Z load1=3.07 thermal=0
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+## puzzle-weakened | PUZZLE_DEEP=weakened npx vitest run src/puzzle-suite.test.ts | start 2026-10-11T14:47:26Z load1=3.07 thermal=0
+## puzzle-weakened | exit=1 | 16 s | end 2026-10-11T14:47:42Z load1=3.00 thermal=0
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 passed (14)
+# done 2026-10-11T14:47:42Z load1=3.00 thermal=0

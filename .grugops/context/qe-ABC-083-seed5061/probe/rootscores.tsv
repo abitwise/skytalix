@@ -1,0 +1,16 @@
+base	search d5	best=g2e1	score=-1160	nodes=10023
+base	search d6	best=f5e6	score=-1185	nodes=22971
+base	root d5 (child d4)	f5e6=-1175 g1a7=-1190 g2e1=-1295	top5: f5e6:-1175(static -1015)  g1a7:-1190(static -1025)  f1e2:-1280(static -1315)  g2e1:-1295(static -1315)  g1f2:-1300(static -1295)
+base	root d6 (child d5)	f5e6=-1185 g1a7=-1190 g2e1=-1295	top5: f5e6:-1185(static -1015)  g1a7:-1190(static -1025)  g2e1:-1295(static -1315)  f1e2:-1320(static -1315)  g1f2:-1330(static -1295)
+branch	search d5	best=f5e6	score=-1300	nodes=14540
+branch	search d6	best=f5e6	score=-1300	nodes=28769
+branch	root d5 (child d4)	f5e6=-1300 g1a7=-1300 g2e1=-1355	top5: g1a7:-1300(static -1095)  f5e6:-1300(static -1105)  f1e2:-1350(static -1360)  g2e1:-1355(static -1385)  g1f2:-1360(static -1365)
+branch	root d6 (child d5)	f5e6=-1300 g1a7=-1310 g2e1=-1355	top5: f5e6:-1300(static -1105)  g1a7:-1310(static -1095)  g2e1:-1355(static -1385)  f1e2:-1375(static -1360)  g1f2:-1385(static -1365)
+ks-only	search d5	best=f5e6	score=-1200	nodes=14506
+ks-only	search d6	best=f5e6	score=-1200	nodes=28799
+ks-only	root d5 (child d4)	f5e6=-1200 g1a7=-1200 g2e1=-1255	top5: g1a7:-1200(static -995)  f5e6:-1200(static -1005)  f1e2:-1250(static -1260)  g2e1:-1255(static -1285)  g1f2:-1260(static -1265)
+ks-only	root d6 (child d5)	f5e6=-1200 g1a7=-1210 g2e1=-1255	top5: f5e6:-1200(static -1005)  g1a7:-1210(static -995)  g2e1:-1255(static -1285)  f1e2:-1275(static -1260)  g1f2:-1285(static -1265)
+mobility-only	search d5	best=g2e1	score=-1260	nodes=10032
+mobility-only	search d6	best=f5e6	score=-1285	nodes=23185
+mobility-only	root d5 (child d4)	f5e6=-1275 g1a7=-1290 g2e1=-1395	top5: f5e6:-1275(static -1115)  g1a7:-1290(static -1125)  f1e2:-1380(static -1415)  g2e1:-1395(static -1415)  g1f2:-1400(static -1395)
+mobility-only	root d6 (child d5)	f5e6=-1285 g1a7=-1290 g2e1=-1395	top5: f5e6:-1285(static -1115)  g1a7:-1290(static -1125)  g2e1:-1395(static -1415)  f1e2:-1420(static -1415)  g1f2:-1430(static -1395)

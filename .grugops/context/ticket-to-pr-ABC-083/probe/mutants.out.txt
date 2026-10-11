@@ -1,0 +1,67 @@
+__baseline__	exit 1	BASELINE	1 rows	10059 ms
+   search.ordering.test.ts > A3 — ordered search visits a small fraction of the unordered nodes position-6 at depth 2 — the default lane's standing guard :: AssertionError: expected 0.4355800607629121 to be less than or equal to 0.405
+N3	exit 1	RED	1 rows	2291 ms
+   search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 354 nodes :: AssertionError: expected 350 to be 354 // Object.is equality
+M13	exit 1	RED	6 rows	4584 ms
+   search.ordering.test.ts > the comparator — hash move, then MVV-LVA, then killers, then generation order orders a capturing promotion by its victim PLUS the piece it becomes (ABC-079 QE G4) :: AssertionError: expected 'd1d5' to be 'b7a85' // Object.is equality
+   search.ordering.test.ts > Scope — the engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently :: AssertionError: expected 'e2e3' to be 'g5e3' // Object.is equality
+   search.ordering.test.ts > Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, g5e3 :: AssertionError: expected 'e2e3' to be 'g5e3' // Object.is equality
+   search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 8 887, MVV-LVA 4 419, + killers 3 871 :: AssertionError: expected 8586 to be 8887 // Object.is equality
+   search.ordering.test.ts > A4 — each heuristic's node count, and the delete rule the promotion-capture fixture at depth 3 visits 262 nodes (ABC-079 QE G4) :: AssertionError: expected 282 to be 262 // Object.is equality
+   search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 354 nodes :: AssertionError: expected 382 to be 354 // Object.is equality
+noLmrResearch	exit 1	RED	2 rows	1944 ms
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noResearch	exit 1	RED	2 rows	1511 ms
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noLmrResearch-search-only	exit 1	RED	1 rows	1301 ms
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noLmrResearch-engine-only	exit 1	RED	1 rows	1574 ms
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noResearch-engine-only	exit 1	RED	1 rows	3020 ms
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+noResearch-search-only	exit 1	RED	1 rows	1892 ms
+   search.pvs-lmr.test.ts > A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move equal searchWithoutReductions :: AssertionError: no reduced fail-high was re-searched at a null-window node: expected 0 to be greater than 0
+keepBestSoFar	exit 1	RED	2 rows	3338 ms
+   engine.test.ts > A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move :: AssertionError: expected -42 to be -78 // Object.is equality
+   engine.test.ts > A3 (identity) — the completed iteration equals search() in move AND score agrees with search() on move and score across the mate/stalemate endgames :: AssertionError: expected [ Array(1) ] to deeply equal []
+M11	exit 1	RED	2 rows	1704 ms
+   search.ordering.test.ts > Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move, g5e3 :: AssertionError: expected 'e2e3' to be 'g5e3' // Object.is equality
+   search.ordering.test.ts > G1 — chooseMove records a killer only on a beta cutoff position-3 at 3 injected ticks: depth 3 in exactly 354 nodes :: AssertionError: expected 578 to be 354 // Object.is equality
+M1	exit 1	RED	3 rows	8042 ms
+   engine.test.ts > A2 — a budget far below one iteration's cost still returns a move, and stops near it visits only a bounded number of nodes past the deadline — the in-recursion check :: AssertionError: expected 69437 to be less than or equal to 10240
+   engine.test.ts > A3 — an aborted iteration's move is discarded, not returned aborts INSIDE depth 3 — the run really did enter the iteration it discards :: AssertionError: expected 3 to be 2 // Object.is equality
+   engine.test.ts > A3 — an aborted iteration's move is discarded, not returned returns the completed depth-2 move, which is NOT the depth-3 move :: AssertionError: expected 'g4g5' to be 'e2e3' // Object.is equality
+ceiling4	exit 1	RED	1 rows	2554 ms
+   engine.test.ts > A4 — no fixed depth anywhere in the delivered engine goes DEEPER than any small hard-coded ceiling would allow — the behavioural half :: AssertionError: expected 4 to be greater than 4
+repetitionBlind	exit 1	RED	1 rows	1421 ms
+   transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0 :: AssertionError: expected -387 to be +0 // Object.is equality
+rootIgnoresHashMove	exit 1	RED	1 rows	1448 ms
+   transposition.test.ts > A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 4, the perpetual played and scored exactly 0 :: AssertionError: expected 3 to be 4 // Object.is equality
+E8	exit 1	RED	2 rows	629 ms
+   evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the LEFT (c3) scores higher than d4 with a3, both isolated :: AssertionError: expected 230 to be greater than 235
+   evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the RIGHT (e3) scores higher than d4 with b4, both isolated :: AssertionError: expected 240 to be greater than 240
+E9	exit 1	RED	2 rows	636 ms
+   evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the LEFT (c3) scores higher than d4 with a3, both isolated :: AssertionError: expected 230 to be greater than 235
+   evaluate.pawns.test.ts > ABC-083 A8 — the isolation check reads BOTH adjacent files d4 with its only neighbour on the RIGHT (e3) scores higher than d4 with b4, both isolated :: AssertionError: expected 240 to be greater than 240
+doubled40	exit 1	RED	1 rows	665 ms
+   evaluate.pawns.test.ts > A2 — doubled pawns score lower, by no more than 50 centipawns c3/c4 scores strictly lower than c3/d3 for white, and the gap is <= 50 :: AssertionError: expected 60 to be less than or equal to 50
+noShelter	exit 1	RED	1 rows	634 ms
+   evaluate.king-mobility.test.ts > A2 — a missing shelter pawn scores lower at EQUAL material too: the g-pawn on g6 instead of g2 scores strictly lower :: AssertionError: expected 4 to be less than 0
+noFileTerm	exit 1	RED	1 rows	668 ms
+   evaluate.king-mobility.test.ts > A3 — a half-open file next to the king scores lower at EQUAL material, shelter equal: the f-pawn on e5 (f half-open) scores lower than on f5 :: AssertionError: expected -6 to be less than -11
+noMobility	exit 1	RED	2 rows	669 ms
+   evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp white, with substantially more moves at equal material, scores strictly higher :: AssertionError: expected 0 to be greater than 0
+   evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 0 to be greater than 0
+noClamp	exit 1	RED	1 rows	641 ms
+   evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move :: AssertionError: expected 288 to be less than or equal to 100
+blackKingStepFlip	exit 1	RED	2 rows	649 ms
+   evaluate.king-mobility.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirrored pair exactly equal :: AssertionError: startpos: expected -45 to be 45 // Object.is equality
+   evaluate.king-mobility.test.ts > A4 — mobility: more moves score higher, and the term is bounded by ±100 cp white, with substantially more moves at equal material, scores strictly higher :: AssertionError: expected 30 to be +0 // Object.is equality
+blackMobilityAdded	exit 1	RED	1 rows	714 ms
+   evaluate.king-mobility.test.ts > A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirrored pair exactly equal :: AssertionError: startpos: expected -32 to be 32 // Object.is equality
+noCap	exit 1	RED	3 rows	70585 ms
+   quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY returns on every one of 200+ positions, the capture-dense roots included, under the cap :: AssertionError: expected 15 to be less than or equal to 8
+   quiescence.test.ts > A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY the cap BINDS on a runaway rig — twenty queens on alternating squares — and is not exceeded :: AssertionError: expected 16 to be 8 // Object.is equality
+   quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 position-6 at depth 1 — the default lane's cheap reading, level 10x :: AssertionError: expected 10.23404255319149 to be less than or equal to 10

@@ -322,3 +322,134 @@ Assessed by BA/PM, **2026-08-16**. **Result: 8 of 10 clean, 2 ⚠️ — NOT met
 | 8 | size assigned | **✅** `S` (2), with the volume-vs-risk reasoning stated |
 | 9 | priority assigned | **✅** `P1` |
 | 10 | no major unresolved blocker | **⚠️** **whether mobility is affordable at all is genuinely unknown** — 2 × `legalMoves` per leaf is 4–10x over the modelled budget. `A5` makes it a stop rather than a surprise, **but the fallback (a cheaper proxy, or dropping the term) is not pre-decided and is Architect/Design's if the bar is missed** |
+
+## Delivery
+
+**Built 2026-10-10 by the Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-083`,
+Workflow 04) on `grugops/ABC-083-king-safety-mobility` @ **`79248602`** (code), off
+`grugops/wave-2026-09-25` @ `489c549e`. **Unmerged; not pushed. STOPPED: two class-R levels red, and
+`PUZZLE_DEEP` red. Architect/Design rules the R rows; QE classes the puzzle row.** A pointer only: the
+figures are in `.grugops/context/ticket-to-pr-ABC-083/notes/` and the raw output is in `probe/`.
+
+- **Terms:**
+  - King safety: shelter, plus a half-open or open file, over the king's file ±1.
+  - Mobility in its attack-map form: non-pawn reach, 4 cp per square, clamped to ±100.
+  - Weights are `ADR-0031`'s prototype, untuned.
+  - One test-only door: `evaluateWithoutMobility`.
+  - No new import edge.
+- **`A1`–`A4`, `A6` MET** (`src/evaluate.king-mobility.test.ts`, new). There are 20 new positions.
+  `A2`/`A3`/`A4` each carry an equal-material row that is red without the term, and each term's own
+  mutant reds its row.
+- **`A5` MET:** 775.8 ns, the mean of two sessions run in reverse order (1,100 bar), and 636 ns at
+  `79248602`. The pseudo-legal form reads 1,574–1,767 ns and the legal form 10,057–10,861 ns; both
+  miss. King safety alone reads 445–463 ns and base 346–383 ns. 0 generator calls per leaf
+  (`NFR-001`). `ADR-0031`'s cut does not fire.
+- **`A7`/`A9`:**
+  - Depth 7 on 17 of 18 branch runs. kiwipete is 9/9; position-6 is 8/9, with one depth 6 in a
+    load spike (load1 → 43.8). No depth below 6.
+  - Nodes to depth 7 on kiwipete: 610 179 → 566 233. On position-6: **462 871 → 644 469 (+39%)**.
+  - The position-6 margin is about 1.05x. **For Security/NFR.**
+- **`A8` MET** (`src/evaluate.pawns.test.ts`, which the page does not name): the LEFT and RIGHT
+  one-sided-neighbour rows. E8 and E9 each exit 1 with both rows red; both are green unmutated.
+- **`A10`:**
+  - The P rows are re-pinned from measurements.
+  - Fixtures are re-found where the property was lost: pvs-lmr `A4`, the ordering tie, engine
+    `A3`, the quiescence cap rig, and `ABC-082` `A2`'s kings (`ADR-0028` decision 2).
+  - Every named mutant is red. The G6 pair is re-pinned. The hanging corpus margins are 160 → 173 cp.
+  - **NOT MET: row 15** (`ABC-080` `A3` d2 guard, 43.56% against ≤ 40.5%) **and row 14** (`ABC-079`
+    `A5` position-6 d2, 28.46x against ≤ 26x). Both are untouched. Both levels already carry their
+    1.5x headroom: `ADR-0028` decision 4 applies, so this is a stop. The cause is one: mobility.
+    King safety alone reads 27.66% and 18.29x.
+  - **`PUZZLE_DEEP` 53/58 against 54/58:** seed 5061 is missed at d5 on every rung up to +25%.
+    The scope command prints `src/evaluate.ts` only, so it reads as L. King safety alone also misses
+    it.
+- **Gate** (`79248602`):
+  - lint, typecheck and build exit 0;
+  - `npm test`: 53 files, 1 673 passed / **1 failed (row 15)**;
+  - skip count 0; integrity `No findings.`.
+- **Deep lanes at `79248602`:**
+  - `SEARCH_DEEP` ordering 37/38 (row 15) and quiescence 36/37 (row 14);
+  - `SEARCH_DEEP` transposition 40/40 and search 57/57;
+  - `ENGINE_DEEP` transposition 26/26 and engine 46/46;
+  - pvs-lmr 29/29 (1 117 s; drift 97.33% / 97.86%, max 51 cp; mate floor 0 / 180);
+  - `PUZZLE_DEEP` **53/58, exit 1** (seed 5061).
+- **Cost (`ADR-0035`):** on the 15-file narrow set, `N8-LANE` is **NOT MET**: +1.08 s CPU
+  (+0.92..+1.41, R 0.316 s, admissible).
+- **Clause (b) (`ADR-0036`) does not fire** on any limb. Production: `src/evaluate.ts` +137/−5. The
+  owner's UAT word is owed.
+
+## Security/NFR — quiet readings (`A9`/`A7`, `N8-LANE`)
+
+**2026-10-11, Security/NFR** (subtask `secnfr-ABC-083-quiet-readings`).
+- **Window:** width 1. Trees: base `5ed308a8`, branch `09b8c960`. For `N8-LANE`, main `322427b3` (k = 3) against a scratch merge of the tip with main.
+- **Detail:** `.grugops/context/secnfr-ABC-083-quiet-readings/notes/`:
+  - `…1643be6c` (depth readings);
+  - `…4583f42c` (lane readings);
+  - `…8ff62fd0` (rulings).
+- **`A9`/`A7` MET.** Depth 7 held on 24 of 24 runs, base and branch, on both positions, at load1 1.90–2.34 and thermal 0. No depth below 6.
+  - Nodes to depth 7: kiwipete 610 179 → 566 233; position-6 462 871 → 644 469.
+  - Margins: kiwipete 1.126–1.130x; **position-6 1.056–1.066x** (base 1.47x).
+  - **`ADR-0031` decision 5 does not fire,** so `547b5155` stands.
+- **`N8-LANE` NOT MET:** +1.005 s CPU (+0.910..+1.060, twin R 0.110 s) on 17 files at k = 3.
+  - About 0.8 s is the costlier `evaluate`, paid by existing search tests. About 0.15 s is the new file.
+  - No required fix.
+- **Owner's word owed on two proposed LOW risks:** `AR-N8LANE-083` and `AR-NFR005-083` (position-6 margin).
+- `NFR-008` wall on the merged tree: 7.63 s, under 10 s.
+
+## QE — seed 5061 classed, and the QE pass
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-083-seed5061`, width 1). Tip `67c189b9`, base `5ed308a8`.
+- **Detail:** `.grugops/context/qe-ABC-083-seed5061/notes/`:
+  - `…67b0c99a` (seed 5061 readings);
+  - `…b631991b` (the class and its route);
+  - `…6b2e2f3b` (gates, lanes, mutants, gaps);
+  - `…56016fe2` (verdict).
+- **Seed 5061 is class L** (`ADR-0034` decision 3). It is not load: the lines are byte-identical across 3+3 runs at load1 2.4–3.9, thermal 0. It is not drift: still missed at +25 % and +50 %. It is not an evaluator regression: every full-width search on the branch, d4–d6, plays the label's `f5e6`, 55 cp ahead of `g2e1`.
+  - The miss is the shipped LMR's d5 iteration over-scoring `g2e1` by 60 cp, which lands it 5 cp above `f5e6`. That is within `ADR-0026` decision 9's drift. Base's fixed-depth `search()` flips the same row.
+  - King safety alone reproduces it, mobility alone does not, and it holds at 0.75x–1.5x king-safety weight.
+- **What `A10` now requires:** an Architect/Design-ruled re-find of the row (`ADR-0028` decision 2). It lands in its own commit, touching no trigger-list file and not the baseline. No owner word is needed. QE then re-reads `PUZZLE_DEEP=1` at 54/58 and `=weakened` at exit 1. There is no cut, no re-weight and no level move.
+- **QE pass:**
+  - `A1`–`A4`, `A6` and `A8` are MET on QE's own mutants: 12 red on the criterion rows, and E8/E9 red on both `A8` rows.
+  - `A10`'s ledger rows are green on every deep lane run on the tip.
+  - Gates green: `npm test` 1 739/1 739, skip count 0.
+  - Gaps: 2 LOW (king-safety and mobility details pinned only by node counts), 3 INFO.
+- **Verdict: FAIL**, on `A10`'s puzzle gate only, with the agent route above. The owner's words on `AR-N8LANE-083` and `AR-NFR005-083`, and his UAT word, are still owed.
+
+## Architect/Design — seed 5061 re-found
+
+**2026-10-11, Architect/Design** (subtask `design-ABC-083-refind-5061`, width 1). Base `5ed308a8`.
+- **Detail:** `.grugops/context/design-ABC-083-refind-5061/notes/`:
+  - `…8205516a` (the ruling and its readings);
+  - `…3777f413` (the QE-083-c screen);
+  - `…d95b51f2` (the addendum);
+  - `…6648b502` (artifacts).
+- **Ruling:** seed 5061 is re-found as **seed 5147** (`7k/6n1/7B/1Q6/1b6/5K2/8/8 w`, accepts `b5b4`/`b5b8`/`h6g7`, +3, `["quiescence"]`). It comes from `ABC-127`'s own pool. The route is `ADR-0028` d2 read through `ADR-0034` d4.
+- **The bar:** the keys lead the best other move by more than 75 cp, LMR off, at d − 1, d and d + 1, on base and on the branch. Both `search()` and the suite's call solve the row at d.
+  - Seed 5147 reads 270–285 cp on both trees.
+  - Seed 5061 read 105 cp on base and 50 cp on the branch.
+- **Landed in its own commit, `b29c837c`.** It touches `src/puzzle-corpus.ts` only, with no trigger-list file and no baseline change.
+  - `PUZZLE_DEEP=1` reads **54/58**, exit 0, on the branch and on base. Only this row's line changes.
+  - `PUZZLE_DEEP=weakened` reads 15/58, **exit 1**.
+  - `npm test` passes 1 739/1 739, skip count 0.
+- **No owner word for the re-find** (`ADR-0028` d5).
+- **`ADR-0034` addendum PROPOSED.** It makes the bar standing for later L re-finds. It names seeds 1700 (75/75 cp) and 5180 (120/77 cp) as thin, and cuts nothing. The owner's acceptance is owed, and it does not block this ticket.
+- **Next:** QE delta re-read. No board move at this hop.
+
+## QE — the re-find re-read
+
+**2026-10-11, QE/E2E** (subtask `qe2-ABC-083-refind`, width 1). Tip `35f49bb7` (re-find `b29c837c`), base `5ed308a8` with the same row.
+- **Detail:** `.grugops/context/qe2-ABC-083-refind/notes/`:
+  - `…ee53fec8` (readings, with load1 and thermal per run);
+  - `…d1c74ad2` (the re-find against QE's route, and seeds 1700 / 5180 at d ± 1);
+  - `…95e9bb05` (verdict and gap register);
+  - `…a51498aa` (artifacts).
+- **`A10` puzzle gate: MET.** `PUZZLE_DEEP=1` reads 54/58, exit 0, on the branch and on base, 2 + 2 runs (load1 2.25–4.51, thermal 0). Only seed 5061's line → seed 5147's changed. `PUZZLE_DEEP=weakened` reads 15/58, exit 1.
+- **The re-find is valid.** `ADR-0028` d1's three proofs and `ADR-0034` d4's four conditions are MET. The ruled clean-lead bar is MET at 270 cp minimum, against > 75, at d4–d6 on both trees. QE's own probe reproduces the Architect's figures exactly.
+- **The levels lane re-run.** The re-find feeds the `ENGINE_DEEP` levels lane (`A4`, `A3` read `PUZZLES`), which no earlier hop re-ran. It is green, 28/28. Its `A3` easiest count reads 31/58, against 35 on `main`. The −4 is the evaluator's, not the re-find's.
+- **Gates green:** `npm test` 1 739/1 739, skip 0, lint and typecheck clean.
+- **QE-083-c is CLOSED** by the Architect's screen. New INFO only:
+  - QE2-083-a: seed 1700 is a 10–18 cp near-tie at d − 1;
+  - QE2-083-b: seed 1700's lost `quiescence` tag;
+  - QE2-083-c: the levels lane was not in the re-find hop's scope check;
+  - QE2-083-d: AGENTS.md's levels `A3` figure goes stale on merge.
+- **Verdict: PASS_WITH_GAPS** (QE-083-a/b LOW, open, unchanged). It supersedes the FAIL (`…56016fe2`). QE no longer holds the ticket. Still owed: the owner's words on `AR-N8LANE-083` and `AR-NFR005-083`, his UAT word, and his acceptance of the `ADR-0034` addendum (not blocking). No board move at this hop.
