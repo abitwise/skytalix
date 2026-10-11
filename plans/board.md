@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — ABC-152 design merged: ADR-0042 PROPOSED, split fired; owner pick owed (4.1 runner-on vs stay 3.2.7)._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-151` built → In Review; QE ABC-149 and QE ABC-151 dispatched (width 3 with Architect ABC-152)._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-149` built → In Review; QE dispatched._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-151` design merged (ADR-0040 addendum 2, k = 2) → In Development; SE build dispatched._
@@ -697,7 +698,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Design (WIP 1/2)
-- [ABC-152] Upgrade vitest 3.2.7 → 4.1 and run `src/` without the module runner, every mock/spy guard still armed  (BA/PM, **L, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner word `…fbbdde16` item 4; ADR-0041 route (a); ADR first (D1–D4, two-arm correctness screen, pre-registered split → owner); build waits on ABC-149 + ABC-151 merges; RISK-ABC143-01, QE-144-a trigger, Security triggered (dependency major); CPU ≤ −15 % merges, (−15 %, 0) → owner) **2026-10-11: cut (`59f78226`) → Ready → In Design (Architect: new ADR, scratch-tree reads only).**
+- [ABC-152] Upgrade vitest 3.2.7 → 4.1 and run `src/` without the module runner, every mock/spy guard still armed  (BA/PM, **L, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner word `…fbbdde16` item 4; ADR-0041 route (a); ADR first (D1–D4, two-arm correctness screen, pre-registered split → owner); build waits on ABC-149 + ABC-151 merges; RISK-ABC143-01, QE-144-a trigger, Security triggered (dependency major); CPU ≤ −15 % merges, (−15 %, 0) → owner) **2026-10-11: cut (`59f78226`) → Ready → In Design (Architect: new ADR, scratch-tree reads only).** **2026-10-11: Architect D1–D4 (`1c29d8c3`): split FIRED — vitest 4.1.11 runner-off 98 red / 13 files; declared rewrites R1–R3 leave 91 red; `san.test.ts` A20 (namespace key order) needs an assertion change; `vi.resetModules()` silently no-ops (book.test ABC-094 A2). Runner-on 4.1: 2 red (R3 fixes), no CPU gain known. RISK-ABC143-01 confirmed (reporter loses unhandled errors on 4.x). `ADR-0042` PROPOSED. Owner word owed: Q1 ship 4.1 runner-on vs stay 3.2.7; Q2 R3 in scope; Q3 (info) runner-off needs a new test-content ticket.**
 
 
 ## Ready for Dev (WIP 0/6)
