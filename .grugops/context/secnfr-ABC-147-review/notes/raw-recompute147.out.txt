@@ -1,0 +1,38 @@
+lane rows: 36
+rule mismatches: 0
+used P: 6,13,14,15,16,17  used U: 7,8,10,12,13,14,15,16,17
+unused: 21 0P[load>8+exit124+warmup] 0U[load>8+warmup] 1U[load>8] 1P[load>8] 2P[load>8] 2U[load>8] 3U[load>8] 3P[load>8+exit124] 4P[load>8] 4U[load>8] 5U[load>8] 5P[load>8] 6U[load>8] 7P[load>8+exit124] 8P[load>8] 9U[load>8] 9P[load>8] 10P[load>8+exit124] 11U[load>8] 11P[load>8] 12P[exit124]
+  unused with load>8: 20  hung (exit124): 5  hung with load<=8: 12P
+profiled runs: 18 hung: 5 | unprofiled: 18 hung: 0
+unprofiled lane CPU n=9 median 28.10 (26.88-30.78)
+profiled CPU median 32.77 ; P/U 1.166
+run 6: sum 99.999 | bucketS sum 31.612 vs busy 31.611 | workers 61 | i==iW+iChild+iMain? 43.930 vs 43.93 | where sum 100.00 | cov 0.975
+run 13: sum 100.000 | bucketS sum 30.725 vs busy 30.725 | workers 61 | i==iW+iChild+iMain? 40.303 vs 40.303 | where sum 100.00 | cov 0.951
+run 14: sum 100.001 | bucketS sum 31.011 vs busy 31.011 | workers 61 | i==iW+iChild+iMain? 43.448 vs 43.448 | where sum 100.00 | cov 0.956
+run 15: sum 99.999 | bucketS sum 31.613 vs busy 31.612 | workers 61 | i==iW+iChild+iMain? 42.415 vs 42.414 | where sum 100.00 | cov 0.934
+run 16: sum 99.999 | bucketS sum 31.785 vs busy 31.785 | workers 61 | i==iW+iChild+iMain? 44.190 vs 44.19 | where sum 100.00 | cov 0.960
+run 17: sum 100.000 | bucketS sum 57.704 vs busy 57.705 | workers 61 | i==iW+iChild+iMain? 37.682 vs 37.682 | where sum 100.00 | cov 1.367
+bucket i: 42.93 (37.68-44.19)
+bucket ii: 1.43 (1.21-1.68)
+bucket iii: 12.15 (11.02-14.13)
+bucket iv: 42.08 (41.10-44.21)
+bucket v: 1.82 (1.56-2.30)
+sum of medians: 100.41
+(i-w): 42.62 (37.27-43.91)
+top prod: src/moves.ts 19.62 n6 | src/legal.ts 7.06 n6 | src/position.ts 5.51 n6 | src/apply.ts 2.29 n6 | src/evaluate.ts 2.24 n6
+per-test-file: src/engine.test.ts rank 1 pct 9.83 n6 | src/search.test.ts rank 2 pct 4.69 n6 | src/transposition.test.ts rank 3.5 pct 3.34 n6 | src/search.ordering.test.ts rank 4.5 pct 2.88 n6 | src/perft.test.ts rank 4.5 pct 3.17 n6 | src/search.pvs-lmr.test.ts rank 6 pct 2.27 n6
+excluded completed P runs (i-w): [["1",43.098],["2",47.122],["4",40.095],["5",47.788],["8",40.705],["9",45.361],["11",43.621]]
+A2 rows 20 median mismatches 0 order: E0n E0v S0n S0v E1v E1n S1v S1n E2n E2v S2n S2v E3v E3n S3v S3n E4n E4v S4n S4v
+digests E: [ 'f66389c97154ff65' ] S: [ '0f86f021e96f607d' ]
+E: ratio 5.093 (4.929-5.379) cold 3.317 (3.306-3.802)
+S: ratio 5.028 (4.948-5.184) cold 4.050 (3.938-4.145)
+file-median ratio max/min: 1.0130
+pooled ratio median 5.0606 cold pooled 3.8705
+declared (i-w): R 34.20 % = 9.61 s ; band 29.71-35.75 % = 8.35-10.04 s ; lane-min/max s 7.98-11.00
+letter (i)    : R 34.45 % = 9.68 s ; band 30.04-35.98 % = 8.44-10.11 s ; lane-min/max s 8.07-11.07
+cold (i-w)    : R 31.61 % = 8.88 s ; band 26.00-33.31 % = 7.30-9.36 s ; lane-min/max s 6.99-10.25
+cold (i)      : R 31.84 % = 8.95 s ; band 26.28-33.53 % = 7.39-9.42 s ; lane-min/max s 7.07-10.32
+ABC-085 4.23x (i-w): R 32.82 % = 9.22 s ; band 28.46-34.06 % = 8.00-9.57 s ; lane-min/max s 7.65-10.48
+drop run 17 (i-w): R 34.64 % = 9.73 s ; band 31.90-35.75 % = 8.96-10.04 s ; lane-min/max s 8.57-11.00
+break-even ratio at (i-w) min for 15 %: 1.674 ; break-even share at lowest warm ratio: 18.82 ; at lowest cold: 21.50
+E+S-only (i-w) share per run: 15.45,13.56,14.83,14.87,14.20,13.34 median 14.52 min 13.34 -> R if factor only on E+S: 11.65 lower 10.63

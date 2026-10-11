@@ -181,3 +181,46 @@ The raw data is in `probe/raw/`. **QE re-reads `A1`–`A3` from its own runs (Te
   - No no-other-hop window was open, and no `ABC-146` run was in progress.
   - 24 runs were recorded and not used: 15 at load1 > 8, plus the profiler-only 60 s hangs (5 of 18
     profiled runs, 0 of 18 unprofiled). See the caveats note `…144c6b5d`.
+
+## Review
+
+Security/NFR (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-11, subtask `secnfr-ABC-147-review`.
+It took QE's slot under the owner's docs-only rule. It reviewed `4c634f09` for method, admissibility and
+arithmetic, and **re-ran nothing**. Every figure was recomputed from the committed raw files by
+`raw-recompute147.mjs.txt`. The notes are in `.grugops/context/secnfr-ABC-147-review/notes/`.
+
+**Verdict: PASS_WITH_GAPS.** The `A4` arm stands: **≥ 15 % → BA/PM cuts a `P1` lever ticket.**
+
+- **Method before graded runs: holds.**
+  - `d152298f` (10:25:49Z) precedes round 0 (10:25:54Z) and the first graded run (10:51:26Z).
+  - `188cb6c3` (10:32:01Z) precedes the first `A2` process (11:09:34Z).
+  - `analyze.mjs` is unchanged since. The drivers' later edit adds only a logged wait gate; the
+    `usable` rule is byte-unchanged.
+- **Exclusions: hold.**
+  - The declared rule re-applied to all 36 rows gives 0 mismatches.
+  - Excluded runs would not lower the (i-w) minimum.
+  - **The count on this page is wrong:** 21 runs were unused, not 24. 20 were at load1 > 8 (4 of those
+    also hung), and 12P hung alone. See G1.
+- **`A1`: holds.** Each run sums to 100.000. The medians sum to 100.41. (i-w) is 42.62 (37.27–43.91). The
+  top five files and the file ranking match.
+- **`A2`: holds.** The order alternates per pair. The digests are equal on 10/10 pairs. The ratios
+  recompute to E 5.093 (4.929–5.379) and S 5.028 (4.948–5.184).
+- **`A3`: holds.** Declared band 29.71–35.75 %, letter 30.04–35.98 %. The cold-call lower edge is
+  37.267 × (1 − 1 ÷ 3.306) = **26.0 %**.
+- **The ≥ 15 % arm under every allowed reading: yes.** The lowest edge is 26.00 %. To leave the arm, the
+  factor would have to be ≤ 1.67x, or the share ≤ 18.8 %.
+  - One reading the page does **not** allow, the factor on `engine`/`search` only, gives 11.65 %. That is
+    `RISK-ABC147-02`.
+- **Risks, accepted with owners:**
+  - `RISK-ABC147-01`, `--cpu-prof` hangs 5 of 18 profiled runs at 60 s and 0 of 18 unprofiled. Cause
+    `UNKNOWN - verify`. **Owner: QE/E2E.**
+  - `RISK-ABC147-02`, a ratio read on 2 files and applied to all of (i-w). **Owner: BA/PM**, in the lever
+    ticket, whose acceptance should be a measured lane-CPU cut, not R.
+- **Gaps:**
+  - G1, the run count (Software Engineer);
+  - G2, the aggregator is not committed (Software Engineer);
+  - G3, the profiles were deleted (QE/E2E);
+  - G4, Test note 4's independent re-read is **not** satisfied by this review (BA/PM's lever ticket /
+    QE/E2E).
+- **Fences: hold.** 0 paths outside `plans/` and `.grugops/`. `plans/board.md` is untouched. No secret
+  is in the probe output.

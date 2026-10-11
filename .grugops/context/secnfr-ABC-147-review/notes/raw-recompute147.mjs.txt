@@ -1,0 +1,77 @@
+// Security/NFR recompute of ABC-147 A1-A3 from committed raw files only. Read-only.
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+const RAW = process.argv[2];
+const med = (a) => { const s = [...a].sort((x, y) => x - y); const n = s.length; return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2; };
+const mn = (a) => Math.min(...a), mx = (a) => Math.max(...a);
+const f2 = (x) => x.toFixed(2);
+const tsv = (f) => { const [h, ...r] = readFileSync(join(RAW, f), "utf8").trim().split("\n"); const H = h.split("\t"); return r.map((l) => Object.fromEntries(l.split("\t").map((v, i) => [H[i], v]))); };
+
+// ---- A1 lane rows: re-apply the declared rule
+const lane = tsv("a1-lane.tsv.txt");
+console.log("lane rows:", lane.length);
+let mism = 0;
+const used = { P: [], U: [] }, unused = [];
+for (const r of lane) {
+  const rule = Number(r.load1_before) <= 8 && r.exit === "0" && r.failed === "0" && r.files === "54" && r.tests === "1715" && Number(r.round) > 0;
+  if ((rule ? "yes" : "no") !== r.usable) { mism++; console.log("RULE MISMATCH", r.round, r.arm, r.usable); }
+  if (rule) used[r.arm].push(r); else unused.push(r);
+}
+const why = (r) => [Number(r.load1_before) > 8 ? "load>8" : null, r.exit !== "0" ? "exit" + r.exit : null, r.round === "0" ? "warmup" : null].filter(Boolean).join("+");
+console.log("rule mismatches:", mism);
+console.log("used P:", used.P.map((r) => r.round).join(","), " used U:", used.U.map((r) => r.round).join(","));
+console.log("unused:", unused.length, unused.map((r) => `${r.round}${r.arm}[${why(r)}]`).join(" "));
+console.log("  unused with load>8:", unused.filter((r) => Number(r.load1_before) > 8).length, " hung (exit124):", lane.filter((r) => r.exit === "124").length, " hung with load<=8:", lane.filter((r) => r.exit === "124" && Number(r.load1_before) <= 8).map((r) => r.round + r.arm).join(","));
+const Pall = lane.filter((r) => r.arm === "P"), Uall = lane.filter((r) => r.arm === "U");
+console.log("profiled runs:", Pall.length, "hung:", Pall.filter((r) => r.exit === "124").length, "| unprofiled:", Uall.length, "hung:", Uall.filter((r) => r.exit === "124").length);
+const U = used.U.map((r) => Number(r.cpu));
+console.log("unprofiled lane CPU n=%d median %s (%s-%s)", U.length, f2(med(U)), f2(mn(U)), f2(mx(U)));
+const Pc = used.P.map((r) => Number(r.cpu));
+console.log("profiled CPU median %s ; P/U %s", f2(med(Pc)), (med(Pc) / med(U)).toFixed(3));
+
+// ---- A1 buckets from per-run JSON
+const runs = used.P.map((r) => ({ round: r.round, cpu: Number(r.cpu), j: JSON.parse(readFileSync(join(RAW, `a1-${r.round}.json.txt`), "utf8")) }));
+for (const x of runs) { const s = x.j.sharePct; const sum = s.i + s.ii + s.iii + s.iv + s.v; const bs = Object.values(x.j.bucketS).reduce((a, b) => a + b, 0); console.log(`run ${x.round}: sum ${sum.toFixed(3)} | bucketS sum ${bs.toFixed(3)} vs busy ${x.j.sampledBusyS} | workers ${x.j.workerProfiles} | i==iW+iChild+iMain? ${(x.j.iWorkerPct + x.j.iChildPct + x.j.iVitestMainPct).toFixed(3)} vs ${s.i} | where sum ${(x.j.wherePct.worker + x.j.wherePct.vitestMain + x.j.wherePct.child).toFixed(2)} | cov ${(x.j.sampledBusyS / x.cpu).toFixed(3)}`); }
+let sm = 0;
+for (const b of ["i", "ii", "iii", "iv", "v"]) { const a = runs.map((x) => x.j.sharePct[b]); sm += med(a); console.log(`bucket ${b}: ${f2(med(a))} (${f2(mn(a))}-${f2(mx(a))})`); }
+console.log("sum of medians:", f2(sm));
+const iW = runs.map((x) => x.j.iWorkerPct);
+console.log("(i-w):", f2(med(iW)), `(${f2(mn(iW))}-${f2(mx(iW))})`);
+const prod = {}; for (const x of runs) for (const t of x.j.topProd) (prod[t.file] ??= []).push(t.pct);
+console.log("top prod:", Object.entries(prod).map(([f, a]) => [f, med(a), a.length]).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([f, m, n]) => `${f} ${f2(m)} n${n}`).join(" | "));
+const ptf = {}; for (const x of runs) x.j.perTestFileIW.forEach((t, k) => (ptf[t.file] ??= { r: [], p: [] }) && (ptf[t.file].r.push(k + 1), ptf[t.file].p.push(t.pct)));
+console.log("per-test-file:", Object.entries(ptf).map(([f, o]) => [f, med(o.r), med(o.p), o.r.length]).sort((a, b) => a[1] - b[1]).slice(0, 6).map(([f, r, p, n]) => `${f} rank ${r} pct ${f2(p)} n${n}`).join(" | "));
+const ES = runs.map((x) => { const g = (n) => x.j.perTestFileIW.find((t) => t.file === n)?.pct ?? 0; return g("src/engine.test.ts") + g("src/search.test.ts"); });
+// ---- also: would including the load-excluded P runs move the (i-w) min?
+const excl = lane.filter((r) => r.arm === "P" && r.exit === "0" && r.usable === "no").map((r) => { try { return [r.round, JSON.parse(readFileSync(join(RAW, `a1-${r.round}.json.txt`), "utf8")).iWorkerPct]; } catch { return [r.round, null]; } });
+console.log("excluded completed P runs (i-w):", JSON.stringify(excl));
+
+// ---- A2
+const pr = tsv("a2-pairs.tsv.txt");
+let bad = 0;
+for (const r of pr) { const ms = r.ms.split(",").map(Number); if (Math.abs(med(ms) - Number(r.median_ms)) > 1e-9) { bad++; console.log("MEDIAN MISMATCH", r.work, r.pair, r.side); } if (r.exit !== "0") console.log("EXIT", r.work, r.pair, r.side); if (Number(r.load1) > 8) console.log("LOAD>8", r.work, r.pair, r.side); }
+console.log("A2 rows", pr.length, "median mismatches", bad, "order:", pr.map((r) => `${r.work}${r.pair}${r.side[0]}`).join(" "));
+const ratios = { E: [], S: [] }, colds = { E: [], S: [] };
+for (const w of ["E", "S"]) for (let p = 0; p < 5; p++) {
+  const n = pr.find((r) => r.work === w && r.pair == p && r.side === "node"), v = pr.find((r) => r.work === w && r.pair == p && r.side === "vitest");
+  if (n.digest !== v.digest) console.log("DIGEST DIFF", w, p);
+  ratios[w].push(Number(v.median_ms) / Number(n.median_ms)); colds[w].push(Number(v.cold_ms) / Number(n.cold_ms));
+}
+console.log("digests E:", [...new Set(pr.filter((r) => r.work === "E").map((r) => r.digest))], "S:", [...new Set(pr.filter((r) => r.work === "S").map((r) => r.digest))]);
+for (const w of ["E", "S"]) console.log(`${w}: ratio ${med(ratios[w]).toFixed(3)} (${mn(ratios[w]).toFixed(3)}-${mx(ratios[w]).toFixed(3)}) cold ${med(colds[w]).toFixed(3)} (${mn(colds[w]).toFixed(3)}-${mx(colds[w]).toFixed(3)})`);
+const all = [...ratios.E, ...ratios.S], allc = [...colds.E, ...colds.S];
+console.log("file-median ratio max/min:", (mx([med(ratios.E), med(ratios.S)]) / mn([med(ratios.E), med(ratios.S)])).toFixed(4));
+// ---- A3
+const L = med(U), sh = med(iW), shi = med(runs.map((x) => x.j.sharePct.i));
+const k = (r) => 1 - 1 / r;
+const rep = (lab, s, smin, smax, rpt, rlo, rhi) => console.log(`${lab}: R ${f2(s * k(rpt))} % = ${f2((L * s * k(rpt)) / 100)} s ; band ${f2(smin * k(rlo))}-${f2(smax * k(rhi))} % = ${f2((L * smin * k(rlo)) / 100)}-${f2((L * smax * k(rhi)) / 100)} s ; lane-min/max s ${f2((mn(U) * smin * k(rlo)) / 100)}-${f2((mx(U) * smax * k(rhi)) / 100)}`);
+const si = runs.map((x) => x.j.sharePct.i);
+console.log("pooled ratio median", med(all).toFixed(4), "cold pooled", med(allc).toFixed(4));
+rep("declared (i-w)", sh, mn(iW), mx(iW), med(all), mn(all), mx(all));
+rep("letter (i)    ", shi, mn(si), mx(si), med(all), mn(all), mx(all));
+rep("cold (i-w)    ", sh, mn(iW), mx(iW), med(allc), mn(allc), mx(allc));
+rep("cold (i)      ", shi, mn(si), mx(si), med(allc), mn(allc), mx(allc));
+rep("ABC-085 4.23x (i-w)", sh, mn(iW), mx(iW), 4.35, 4.23, 4.46);
+rep("drop run 17 (i-w)", med(iW.filter((_, i) => runs[i].round !== "17")), mn(iW.filter((_, i) => runs[i].round !== "17")), mx(iW), med(all), mn(all), mx(all));
+console.log("break-even ratio at (i-w) min for 15 %:", (1 / (1 - 15 / mn(iW))).toFixed(3), "; break-even share at lowest warm ratio:", f2(15 / k(mn(all))), "; at lowest cold:", f2(15 / k(mn(allc))));
+console.log("E+S-only (i-w) share per run:", ES.map(f2).join(","), "median", f2(med(ES)), "min", f2(mn(ES)), "-> R if factor only on E+S:", f2(med(ES) * k(med(all))), "lower", f2(mn(ES) * k(mn(all))));
