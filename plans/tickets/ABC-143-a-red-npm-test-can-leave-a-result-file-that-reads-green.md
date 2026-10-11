@@ -1,0 +1,186 @@
+---
+id: ABC-143
+title: A red `npm test` can leave a result file that reads green — an unhandled error (exit 1) and a timeout (exit 124) both do
+status: backlog
+column: Backlog
+size: S
+priority: P2
+epic: —
+feature: —
+---
+
+# ABC-143 — after any non-zero `npm test` exit, the kept result file never reads green, and the documented query names every red it records
+
+> **Cut 2026-10-11 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-batch-2026-10-11`, Workflow 07),
+> from `ABC-142`'s QE gap register (`.grugops/context/qe-ABC-142/notes/…68f78a28`):
+> - **`QE-142-a`** (MEDIUM) is the reason for this ticket;
+> - **`QE-142-c`** (LOW) is folded in, because it is the same lie in the same file and would edit the
+>   same pinned script line;
+> - **`QE-142-b`** (LOW) is folded in as `A4`, the read query.
+>
+> Every reading below is QE's (`…298ed173`), cited, not re-run. This hop measured nothing.
+
+## Problem
+
+*User*: every hop that reads `.test-results/last-run.json` to name a red `npm test` run. That
+reader is the one `ABC-142` created and sent to the file: Software Engineer, QE/E2E, Security/NFR,
+and the next reader who has to tell a flake from a regression.
+
+*Pain*: **the file can read `success: true` after a run that exited red.** QE planted three red
+shapes at `ABC-142`'s tip:
+- **Unhandled error (`QE-142-a`).** A test that throws from a `setTimeout`. `npm test` exits **1**,
+  and the console shows `Errors 1 error` with all 1681 tests passed. **The file reads
+  `success: true`, failed 0, and has no trace of the error text** (`grep -c` 0). Vitest's JSON reporter
+  does not record unhandled errors. A timer-driven throw is a plausible flake shape under load.
+- **Timeout (`QE-142-c`).** A non-terminating test. `run-bounded.js` exits **124** and SIGKILLs the
+  tree before the reporter writes. **The previous run's file stays, unchanged `startTime`, reading
+  `success: true`.** The console's last line names the timeout, so a `tail` shows it. A reader of the
+  file alone is misled.
+- **Suite-level red (`QE-142-b`).** A `throw` in a `describe` body. The file is honest
+  (`numFailedTestSuites` 1, and `testResults[].status == "failed"` carries the file and message).
+  **But the read query documented on `ABC-142` prints nothing for it**, because it reads only
+  `assertionResults`.
+
+**A file that reads green after a red exit is worse than no file.** It answers the question
+`ABC-142` sent the reader to it for, and it answers wrong.
+
+*Value*: `ABC-142`'s promise, *"the next sighting is named"*, holds for every red shape `npm test`
+can exit with, not only for an assertion failure.
+
+## Scope
+
+- After **any** `npm test` exit other than 0, the file at `.test-results/last-run.json` (the path
+  is unchanged):
+  - **never reads `success: true`**. It reads a not-success state, or it is absent;
+  - **names what the run recorded**: failed tests (file and full title), failed suites (file and
+    message), and **unhandled errors (message text)**.
+- **The documented read query** prints one line per recorded red of all three kinds.
+- **The mechanism is the engineer's.** It must stay inside `ABC-142`'s fences:
+  - `package.json`'s `test` script, plus a reporter module **outside `src/`** if one is needed
+    (for example under `tools/grugops/`);
+  - the `ABC-042` A10 pinned literal at `src/cli.test.ts:1667`, if the script string changes;
+  - the `run-bounded.js:10` header comment that quotes it.
+- **Feasibility, read and not run.** The installed vitest is 3.2.7. Its reporter type declares
+  `onTestRunEnd(testModules, unhandledErrors, reason)` (`node_modules/vitest/dist/chunks/reporters.d.*.d.ts`).
+  So the unhandled errors reach a reporter. Whether a built-in reporter writes them is
+  `UNKNOWN - verify` (the JSON one does not, per QE).
+
+## Out of scope
+
+- **`vitest.config.ts`.** As on `ABC-142`, a config-level reporter would also run in every direct
+  `npx vitest run`, including the `*_DEEP` lanes. **`ABC-144` may edit that file for workers**, and
+  this ticket stays out of it.
+- **`run-bounded.js`'s code and its exit contract** (own code / 124 / 128+n / 2). It may not learn
+  about vitest's file. **A wrapper that deletes a runner's output** is the same "generic wrapper
+  rewriting its own argv" route that `ABC-142` refused.
+- Any production line under `src/`.
+- Finding, retrying or quarantining any flaky test. **No retry flag.**
+- `AGENTS.md`. A pointer to the query is the Scribe's call (967 B of headroom at `506550f3`).
+- Concurrency: two `npm test` runs in one checkout still overwrite each other's file (`ABC-142`
+  § Dependencies). That is unchanged and named.
+
+## Acceptance (Given/When/Then)
+
+All plants are made in a **scratch copy outside the repository** (`ABC-142` test note 1). Each
+criterion reads the file with `jq` or `node -e`, never by eye.
+
+- **`A1` (an unhandled error is not green).** **Given** a scratch copy with one test that throws
+  from a `setTimeout` (QE's plant), **when** `npm test` runs, **then** it exits **1**, **and** the
+  file does not read `success: true`, **and** the file contains the thrown error's message text
+  (a count of it in the file is **≥ 1**).
+- **`A2` (a timeout leaves no green file behind).** **Given** a scratch copy where a green
+  `npm test` has just written the file, and one test is then made non-terminating, **when**
+  `npm test` runs and exits **124**, **then** the file at the path is **absent or reads a
+  not-success state**. It must never read `success: true` with the earlier run's `startTime`.
+  *(If the mechanism writes a "started" marker, the marker carries the new run's start time.)*
+- **`A3` (a suite-level red stays named).** **Given** a scratch copy with a `throw` in a `describe`
+  body, **when** `npm test` runs, **then** it exits **1**, and the file names that test file and the
+  thrown message. *(It does today; this keeps it true through the mechanism change.)*
+- **`A4` (the documented query prints every red — `QE-142-b`).** **Given** the files from `A1`,
+  `A3` and `ABC-142` `A1`'s inverted-assertion plant, **when** the query in this ticket's
+  § Delivery runs on each, **then** each prints **≥ 1** line naming the red:
+  - for a test failure: the file and the full title;
+  - for a suite failure: the file and the message;
+  - for an unhandled error: the message.
+  On a green file it prints **0** lines. The `ABC-142` page carries a pointer to the new query.
+- **`A5` (a green run is unchanged).** **Given** the unmodified tree, **when** `npm test` runs,
+  **then** it exits 0, the file reads `success: true` and failed 0, passed and total equal the
+  console's summary counts (`ABC-142` `A3`), and `git status --porcelain` is empty afterwards
+  (`ABC-142` `A4`).
+  - **The console gains no line** beyond `ABC-142`'s accepted `JSON report written to …` line. If
+    the mechanism removes that line, that is allowed and is stated in the delivery note.
+- **`A6` (fences).**
+  - **Zero production `src/` lines.** `git diff --name-only -- src/ | grep -v '\.test\.ts$'` is
+    empty.
+  - `git diff --numstat -- src/` is empty, or one row `1 1 src/cli.test.ts` (the `SCRIPTS_AT_HEAD.test`
+    literal).
+  - `vitest.config.ts` is unchanged.
+  - `run-bounded.js`'s code is byte-unchanged; only its line-10 quote may change.
+  - The `ABC-042` A10 pin still equals the `test` script **byte for byte**, still asserted with
+    `toBe`. Appending one character to the script on a scratch copy turns `A10` red (`ABC-142`
+    `A6`'s check).
+  - **The lane's test file count and test count equal the base's**, and the skip count is 0. The
+    AGENTS.md skip-count capture still returns an integer.
+
+## Dependencies
+
+- **`ABC-142` — `Done`** (merged `addbc328`). This ticket amends its mechanism.
+- **`ABC-144` — named overlap, merge order only.** If the Architect puts `ABC-144`'s worker settings
+  in the `test` script rather than in `vitest.config.ts`, both tickets edit the same byte-pinned
+  line (`src/cli.test.ts:1667`) and the `run-bounded.js:10` quote. The second to merge rebases the
+  pin. There is no design conflict.
+- None blocking. Pullable today.
+
+## Security / NFR triggers
+
+- **`NFR-008` (R-1, wall ≤ 10 s at load1 ≤ 8; CPU reported).** **The count is the pin**
+  (`ADR-0035` decision 3): **0 test files, 0 tests, 0 spawns added.** No timing bound is written. A
+  reporter runs in the main process, and its cost is reported, not bounded.
+- **Security:** the file holds test titles, paths and error messages from this repo only. It is
+  git-ignored. An error message may carry an absolute path, the same class `QE-142-e` already
+  accepted (276 tracked files carry it). No network, no input surface, no dependency added.
+
+## Test notes
+
+1. **Plant every red in a scratch copy, never in the worktree.** Each criterion's plant is QE's,
+   named in `…298ed173`.
+2. **`A2` must start from a green file.** A timeout on a tree with no file proves nothing about a
+   stale one.
+3. **Show `A1` and `A2` going green → red.** Show each on the base first (the file reads green, the
+   defect) and then on the head (the file does not), with the same plant.
+4. **Mandatory gates:** lint, typecheck, build, `npm test`. The QE hop is owed. With zero production
+   `src/` lines the UAT waiver is expected; it is measured at the exit, never asserted here.
+
+## Size and priority
+
+**`S`:** a reporter-level change (likely a small reporter module, `UNKNOWN - verify` until the
+engineer reads the API), the script line and its pin, and five plant runs.
+- **Not `XS`:** `ABC-142` added a built-in reporter with flags only. This one probably needs code that
+  reads unhandled errors and handles a killed run.
+- **Not `M`:** no harness, no production code, no new test file.
+
+**`P2`:**
+- **Not `P3`:** `QE-142-a` is MEDIUM. The file lies on the blocking gate, and a timer-driven throw is
+  a plausible flake shape under the load this machine runs at.
+- **Not `P1`:** nothing is blocked, the console still names both reds above the truncation point,
+  and no player sees anything.
+- **Promotion trigger:** a red `npm test` sighting where the file read green.
+
+## Definition of Ready
+
+BA/PM, 2026-10-11. **Result: 10 of 10.**
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** three QE plants, each with its exit code and what the file said |
+| 2 | scope and out-of-scope clear | **✅** one file and one query; `vitest.config.ts`, `run-bounded.js` code, production `src/`, retry and `AGENTS.md` fenced out |
+| 3 | INVEST-shaped | **✅** independent of every open ticket; small; testable by planted reds |
+| 4 | acceptance testable and measurable | **✅** exit 1 / 124 / 0, `success` never `true` after a red, error text count ≥ 1, query lines ≥ 1 / 0, `numstat`, a byte-exact pin, equal counts |
+| 5 | dependencies known | **✅** `ABC-142` `Done`; `ABC-144` overlap on the pinned line named as merge order |
+| 6 | security/NFR triggers with a measurable target | **✅** count pin 0 / 0 / 0; git-ignored; path class already accepted |
+| 7 | test notes present | **✅** four |
+| 8 | size assigned | **✅** `S` |
+| 9 | priority assigned | **✅** `P2`, both directions argued, promotion trigger named |
+| 10 | no major unresolved blocker | **✅** none; feasibility read from the installed reporter API |
+
+Column moves are the Orchestrator's.

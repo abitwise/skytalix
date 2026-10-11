@@ -34,8 +34,11 @@ at least 90%."*
 - Game termination via the merged `src/gameend.ts` — checkmate, stalemate, fifty-move, threefold,
   insufficient material. **Nothing here re-implements a rule.**
 - A score report: wins / draws / losses, score percentage, and per-game terminal reason.
-- Runs at a **configurable reduced budget**, with the 100-game / default-budget run as an explicit
-  opt-in mode.
+- ~~Runs at a **configurable reduced budget**, with the 100-game / default-budget run as an explicit
+  opt-in mode.~~ *(Overtaken 2026-10-11, `ADR-0038` accepted.)* Runs at **one of two named steps**
+  of the virtual clock: the **short step, 120** (`LADDER_DEEP=1`), and the **verdict step, 4**
+  (`LADDER_DEEP=verdict`, the owner's choice). **Budgets are never scaled.** Every level plays at its
+  `LEVELS` budget, verbatim (`ADR-0038` decision 1).
 
 ## Out of scope
 
@@ -59,13 +62,46 @@ at least 90%."*
 - **`A1` (the epic's criterion, verbatim).** **Given** the hardest difficulty and the easiest,
   **when** 100 games are played, **then** the hardest scores **≥ 90%** (win = 1, draw = 0.5).
   Colours alternate so each side plays 50 as white.
+  - *(Folded 2026-10-11, `ADR-0038`.)* **The `A1` verdict is taken at the verdict step, step 4**
+    (`ADR-0038` decision 3; the owner's choice, "step 4"), **on a tree that contains `ABC-083`'s
+    merge** (decision 6). **The report names the commit, the step, the seeds, the game count, the
+    wall time and load1.** A score from any other step is never quoted as `A1`.
+  - If `ABC-083` is split, the tree must contain the merge of every piece that changes the evaluation.
+    If it is dropped, the verdict is taken on the tip at the drop. Either way it is the engine that
+    ships (decision 6's reason).
 - **`A2` (the ladder is monotone, not just its endpoints).** **Given** each **adjacent** pair of
   difficulty levels, **when** ≥ 20 games are played, **then** the stronger scores **> 50%**. *(A
   ladder that satisfies `A1` while having its middle levels out of order is still broken, and `A1`
   alone cannot see it.)*
+  - *(Folded 2026-10-11, `ADR-0038` and the owner's question 1, option (a): "levels 4 and 5 run as
+    specified".)* **Same step as `A1` (step 4), same tree.** **The 3v4 and 4v5 pairs run first**
+    (test note 5).
+  - **`A2` is MEASURED AND REPORTED, and its bar stays `> 50%`.** Every adjacent pair's score is
+    reported against `> 50%`, as MET or RED, with its game count.
+  - A RED pair does not hold this ticket open, and it is not a delivery defect. It is
+    **`ABC-087`'s finding, with a real score**, routed to BA/PM. The owner then chooses re-cutting
+    levels 4/5 or scoping the ladder up to level 3 on a game result (`ADR-0038` owner menu (b)/(c)).
+  - **The levels are not tuned here** (§ Out of scope).
+  - `A1` reads the same way: ≥ 90% is MET or RED, and a RED is `ABC-087`'s finding (§ Out of scope).
 - **`A3` (every game terminates).** **Given** any run, **then** **100/100** games reach a terminal
   state from `gameStatus` with no timeout, no crash, and no game exceeding a stated ply cap. **A
   game hitting the ply cap is reported as an error, not as a draw.**
+  - *(Folded 2026-10-11. The claim policy is BA/PM's call, per `ADR-0038` § Consequences.)*
+    **The harness CLAIMS every claimable draw at the first offer.** When `gameStatus` reports
+    `claimable` for the side to move (`threefold-repetition` or `fifty-move`, `src/gameend.ts`), the
+    game ends there as a draw. Its terminal reason is recorded as **`threefold-repetition (claimed)`**
+    or **`fifty-move (claimed)`**, distinct from the automatic `fivefold-repetition` and
+    `seventy-five-move`. A claimed draw counts as a terminal state for this criterion.
+  - **Why claim.** For a deterministic pair (levels 3, 4 and 5 are all blunder rate 0), a
+    history-blind engine that repeats once repeats until fivefold. So the claim **changes cost, not
+    score** (`…d60bfcc9` item 6). When a pair includes level 1 or 2 (blunder rate 0.4 / 0.2),
+    claiming ends play that the blunders could still have broken. When the stronger side is rate 0
+    (every pair except 1v2), the claim is therefore **expected to lower the stronger side's score,
+    not raise it**. That is the conservative direction for a ≥ 90% bar. The direction is an
+    expectation, not a proof, and stays `UNKNOWN - verify` until the claimed-draw counts are read.
+  - **The report counts claimed draws per pair**, so the policy's effect is visible (`A6`). If
+    claimed draws decide a RED or a MET at the margin, that is reported, not re-run under another
+    policy.
 - **`A4` (every move played was legal).** **Then** each game's move list replays cleanly from the
   start position through merged `apply`/`legal` — **100/100**. *(The harness is also the only
   long-running integration test this engine will ever have; it should be used as one.)*
@@ -77,9 +113,26 @@ at least 90%."*
   on its **own** instance of `ABC-086`'s virtual clock. The seed, and the generator that both the
   blunder draws and the opening choice consume, are `ABC-087`'s. This harness consumes both and
   re-implements neither.
-- **`A6` (cost is reported and the run mode is honest).** **Then** the wall clock for the full
+  - *(Folded 2026-10-11, `ADR-0038` decisions 1–2.)* **One step per run, for both sides**, each
+    side on its own `virtualClock(step)` instance. **A per-level step is refused**, because it is a
+    re-tuned level. **The steps are named constants in the harness (120 and 4), never computed from
+    a timing at run time.** A step calibrated per host or per load would play different games on
+    different machines, and that breaks this criterion.
+- **`A6` (cost is reported and the run mode is honest).** ~~**Then** the wall clock for the full
   100-game run at the default budget is reported. **A short mode — fewer games, reduced budget —
-  is the one that runs routinely, and the report states which mode produced any quoted number.**
+  is the one that runs routinely, and the report states which mode produced any quoted number.**~~
+  *(Overtaken 2026-10-11, `ADR-0038` accepted.)*
+  - **Then** the wall clock for the full run at **the levels' own budgets at the verdict step
+    (step 4)** is reported.
+  - The routine run is the **short mode, `LADDER_DEEP=1`, at the short step 120**. "Reduced budget"
+    means a coarser step and nothing else. The short mode may play fewer games than the verdict
+    mode. Its game counts are named constants, and the report states them.
+  - **Every number from the short mode is labelled "short mode, step 120"** and is never quoted as
+    `A1` or `A2`. At step 120, level 1 sits on the depth-1 floor on 50 of 50 positions. The short
+    mode can claim `A3`, `A4` and `A5`, plus an early `A2` signal on 3v4 and 4v5, and nothing more
+    (decision 3).
+  - Every report states the mode, the step, the game count and the count of claimed draws per pair
+    (`A3`).
 
 ## Dependencies
 
@@ -123,9 +176,24 @@ at least 90%."*
   **consumes** it and does not re-implement it.
 - **`ABC-125` — `Done`** (merged `99fb7ad1`; status corrected 2026-10-10). Was: must land first
   *(added 2026-10-09, `cut-followups-2026-10-09`)*. `A5`
-  runs two engines, each on its own virtual clock, and the levels may use different steps. No
+  runs two engines, each on its own virtual clock, ~~and the levels may use different steps~~
+  *(overtaken 2026-10-11: `ADR-0038` decision 1 puts one step on the whole run)*. No
   merged row runs two live clocks at different steps. QE's mutant `M5` (the step held at module
-  level) survives every row (`ABC-086` G-QE-1). `ABC-125` adds the row that kills it.
+  level) survives every row (`ABC-086` G-QE-1). `ABC-125` adds the row that kills it. **`ABC-125`'s
+  row stays as a guard against a module-level step. It is not a licence for a per-level step.**
+- **`ABC-083` — the VERDICT waits for it, and the BUILD does not** *(folded 2026-10-11, `ADR-0038`
+  decision 6)*. `ABC-083` changes the evaluation every level uses. A verdict taken before it merges
+  is a verdict on an engine that will not ship. There is no file overlap, so the harness can be
+  built, and its short mode run, before `ABC-083`. **`ABC-083` is `Blocked` today**
+  (BLOCKED_NEEDS_FIX, handoff #5), so the verdict has no date.
+  - **Staleness rule.** A verdict is **STALE** after any merge that touches `PUZZLE_DEEP`'s engine
+    trigger list, `src/levels.ts` or `src/virtual-clock.ts`. Re-taking it is the Orchestrator's to
+    schedule. **It is not a gate on that merge.**
+  - **Split trigger, pre-registered.** Suppose the build passes QE on `A3`–`A6` (short mode) while
+    `ABC-083` is still unmerged. Then the Orchestrator may split `A1`/`A2`'s verdict run into its own
+    `XS` ticket: the run plus the report, at step 4, on the tree decision 6 names. This ticket then
+    closes on `A3`–`A6`. That keeps a ~10-hour background run on an unmerged dependency from holding
+    a built harness in a column.
 - ~~**`ABC-078`, `ABC-077`, `ABC-076` — OPEN** (transitively).~~ **All `Done`** (status corrected
   2026-10-09).
 - **`src/gameend.ts`, `src/history.ts`, `src/apply.ts`, `src/legal.ts` — MERGED** and used as-is.
@@ -137,17 +205,43 @@ at least 90%."*
 - **`N8-LANE` / `NFR-008` — ⚠️ THIS IS THE MOST EXPENSIVE THING IN THE EPIC AND IT CANNOT BE IN THE
   DEFAULT LANE.** Arithmetic, stated rather than hidden: 100 games × ~60 plies × 3 s ≈ **5 hours**.
   Against `NFR-008`'s **3 s wall / 13 s CPU** whole-suite clause this is four orders of magnitude
-  out. **Ruling: OPT-IN ONLY, `PERFT_DEEP`'s established shape, never in `npm test`.** A short mode
+  out. **Ruling: OPT-IN ONLY, `PERFT_DEEP`'s established shape, never in `npm test`.** ~~A short mode
   (e.g. 10 games at a millisecond budget) may run in the default lane **only if it is measured to
-  fit the 650 ms per-ticket bar** — measure, do not assume.
+  fit the 650 ms per-ticket bar** — measure, do not assume.~~ *(Overtaken 2026-10-11, `ADR-0038`
+  decision 5 and its "a short mode in the default lane" alternative, rejected.)*
+  - **Folded 2026-10-11, `ADR-0038` decision 5. The lane is `LADDER_DEEP`, in a test file.**
+    - `LADDER_DEEP=1` is the short mode (step 120). `LADDER_DEEP=verdict` is the verdict mode
+      (step 4).
+    - **Unset, the rows are NOT DEFINED, not skipped**, so the gate's skip count stays 0.
+    - There is one `it` per pair, so `-t "<pair>"` re-runs one pair, and `A5` makes the re-run
+      reproduce it.
+    - **The default lane plays 0 games.** That is pinned by a count: **0 games, +1 test file** at
+      `ADR-0035` decision 2's per-file floor. **No wall bound is written.** `NFR-008` takes the +1
+      file by count, which is Security/NFR's row.
+    - The harness lives in a `*.test.ts` file (`src/ladder.test.ts` is suggested; the Engineer
+      names it). The diff then carries zero production lines.
+    - **`LADDER_DEEP` is not a gate**, not a `quality.mandatory_gates` entry, and not a per-ticket QE
+      trigger. `ADR-0035` decision 5's `grep -rhoE 'process\.env\.[A-Z_]+_DEEP' src` adds it to
+      `NFR-008`'s Applies-to list by itself.
+    - **The verdict run is machine time.** It runs once per verdict, in the background, on the
+      Orchestrator's schedule.
+  - **Cost table** (`ADR-0038` § Consequences). These are estimates, labelled, not readings. The
+    formula is plies ÷ 2 × (budget A + budget B) ÷ step × 3.5–6.5 ms. Plies at step 4 are
+    `UNKNOWN - verify`. A full run is `A1` at 100 games plus `A2` at 20 games per pair.
+
+    | step | full run | `A1` alone | the 3v4 + 4v5 pairs |
+    |---:|---:|---:|---:|
+    | 4 (verdict) | ~10 h (7–13) | ~3.3 h | ~5.8 h |
+    | 120 (short) | ~20 min (14–26) | ~7 min | ~12 min |
   - *2026-10-10 re-score: the 5 hours was priced on the REAL clock.* `A5` puts the ladder on a
     virtual clock, where a move costs `budget ÷ step` readings at about 4.4–5.5 ms real each (probe,
     loaded host). **The step sets the cost and also what is measured.** At step 120 the levels run
     at about 1/27 of a real level-3 move. At step 10, level 3 still runs at only about half of one,
     and step 4 is about real time on this host (probe table above). Neither is the shipped 3 s engine (`ADR-0027`: "a virtual millisecond is
-    not a real one"). No ruling names the step. Until one does, "the default budget" in `A1` and
-    `A6` has no reproducible meaning. The `N8-LANE` 650 ms is refused at the cut under `ADR-0035`
-    (proposed); the short mode, if any, is pinned by a count.
+    not a real one"). ~~No ruling names the step. Until one does, "the default budget" in `A1` and
+    `A6` has no reproducible meaning.~~ *(2026-10-11: `ADR-0038` names it, step 4 / step 120.)* The
+    `N8-LANE` 650 ms is refused at the cut under `ADR-0035` (accepted); the short mode is pinned by a
+    count.
 - **`NFR-004` — not triggered.** The harness sets its own budget.
 - **Security — not triggered.** No input surface.
 
@@ -162,6 +256,12 @@ at least 90%."*
    criterion and must never be quoted as if it were.
 5. **Run `A2`'s 3/4 and 4/5 pairs first** *(2026-10-10)*. They are the named risk in
    § Dependencies, and the cheapest early answer to it.
+6. **Test the step constants, not just the games** *(2026-10-11, `ADR-0038` decisions 1–2)*. One row
+   shows that both sides of a game read the same step from a named constant. The run must fail if a
+   side is handed a different step, or if the step is derived from a timing.
+7. **Test the claim policy on a known repetition** *(2026-10-11, `A3`)*. Use a position sequence
+   that reaches threefold. The game must end as `threefold-repetition (claimed)` at the first offer,
+   not at fivefold.
 
 ## Size and priority rationale
 
@@ -175,9 +275,37 @@ implements the epic's **first** acceptance criterion, which argues for `P0`. But
 after seven other tickets, it verifies rather than delivers behaviour, and a 5-hour run is not
 something the board can pull like other work. **Recorded as a judgement, and it is BA/PM's to be
 overruled on:** if the owner wants the epic's first criterion treated as `P0`, this is the row to
-change.
+change. **2026-10-11: the owner kept `P1`** (*"keep P1"*, note `…owner-word-six-answers-b7c41e09`).
+
+**Size `M` still holds after `ADR-0038` (2026-10-11).** It adds two named constants, one environment
+variable with two values, and the claim policy. That is no new module and no production line.
 
 ## Definition of Ready
+
+**RE-SCORED 2026-10-11 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-batch-2026-10-11`, at
+`506550f3`), on folding the accepted `ADR-0038` (fold list `…8d778218`, 9 items, all folded).
+**Result: 10 of 10, 0 ⚠️ (was 8/10, ⚠️x2). Recommended column: `Ready for Dev`** (the design hop
+is complete). Notes: `.grugops/context/bapm-batch-2026-10-11/notes/`.
+
+- **Item 4 ⚠️ → ✅.** The step is named: 4 for the verdict and 120 for the short mode, as constants,
+  one per run. `A1` and `A2` name their tree and their report fields. `A2` is "measured and
+  reported" against `> 50%` (owner option (a)). `A3`'s claim policy is ruled. `A6`'s "default" and
+  "reduced" budgets are replaced by steps.
+- **Item 10 ⚠️ → ✅, re-worded as `ADR-0038` asks.** The run has a home: the `LADDER_DEEP` lane. The
+  verdict runs once, in the background, on the Orchestrator's schedule. The owner answered the step
+  question ("step 4"). **No homeless run and no open owner question is left.**
+- **Item 3 stays ✅, with one ordering named.** The build is independent. The verdict waits for
+  `ABC-083`, which is `Blocked`. The § Dependencies split trigger stops that from holding the built
+  harness. **Item 5 stays ✅.** `ABC-083` is named, the staleness rule is stated, and `ABC-125` is
+  re-read.
+- **Item 6 stays ✅, restated.** `LADDER_DEEP`: 0 games and +1 file in the default lane, by count,
+  with no wall bound. The cost table is labelled as an estimate.
+- **Item 7 ✅ (seven test notes)**, **item 8 ✅ (`M` holds)**, **item 9 ✅ (`P1`, the owner's word)**.
+- **Production and UAT** are unchanged. If the harness stays in a `*.test.ts` file, the diff has
+  zero production lines and the UAT waiver is measured at the exit.
+- **Overlaps.** `ABC-083` has no file overlap (`ADR-0038` decision 6). `ABC-144` (cut at this hop)
+  may change the runner's worker settings, which changes `LADDER_DEEP`'s wall but not its games.
+  `A5` is unaffected, because the virtual clock does not read the wall.
 
 **RE-SCORED 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
 at `aaa88263`). **Result: 8 of 10, ⚠️x2 (was 7). Recommended column: `In Design`.** Readings:
