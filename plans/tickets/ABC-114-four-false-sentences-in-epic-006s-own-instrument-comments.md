@@ -269,3 +269,22 @@ UAT did not repair it. `A4` stays live, and so does `S`.
 | 8 | size assigned | **✅** `S` |
 | 9 | priority assigned | **✅** `P2`; neither trigger fired |
 | 10 | no major unresolved blocker | **✅** — *the board's ⚠️.* `A7`'s separate validator is the standing QE hop, so no human decision is owed |
+
+## Delivery
+
+Software Engineer (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-11. **This agent wrote
+every replacement sentence (`A7`). It has not validated them. The `In Review` verdict belongs to a
+separate QE hop that re-plants `M9`, `D4` and `M15` itself.** Branch `grugops/ABC-114-instrument-comments`,
+code commit `67296100`, base `7411f73a`. The readings are in `.grugops/context/ticket-to-pr-ABC-114/notes/`.
+
+- **Premise.** All six sentences were on disk at `7411f73a`: `src/cli.test.ts:2675` (S1/S2) and
+  `:2742` (S4), `src/result-screen.test.ts:182` (S3), and `ABC-113` page lines 64 and 106.
+- **The control moved.** `git show main:src/cli.test.ts` and `git show main:src/result-screen.test.ts`
+  are byte-identical to the tip, because `ABC-113` is on `main`. A literal `main` control therefore
+  re-runs this instrument. The control used for `A1`–`A3` is the pre-`ABC-113` file, `cc037b3e^`. On
+  the delivered build it has 2 unrelated drift reds (`ABC-042` `A9`, `A10`), so it is read per row.
+- **`A4`: STRIKE, chosen on measurement.** The hoisted `G03` build played the move in 6 of 6 FIFO
+  runs. This hop never saw the "move eaten" outcome, so RE-MEASURE's two-outcome sentence would have
+  been copied from a note. By the pre-registered trigger the ticket is now `XS`. That re-size is
+  BA/PM's to record.
+- **Scope kept.** 0 production lines, 0 assertions changed, 0 tests added. No column was moved here.
