@@ -349,3 +349,46 @@ code commit `d4468fd3`, base `5ed308a8`. The detail is in `.grugops/context/tick
   (`AGENTS.md`), and no stamp is claimed.
 - **UAT waiver applies** on QE's reading (0 production `src/` lines). QE recommends the `In Review` exit
   to `In Security/NFR` for Window B. Not merged, not pushed.
+
+## Security/NFR — Window B
+
+**2026-10-11, Security/NFR** (subtask `secnfr-ABC-144-window-b`).
+- **Window:** width 1, 11:57:18Z–12:46:21Z.
+- **Commits:** base `5ed308a8`, head `5ddf150e` (code `d4468fd3`), twin = base.
+- **Runs:** 81, with 0 harness errors. n = 8 per arm per state.
+- **Detail:** `.grugops/context/secnfr-ABC-144-window-b/notes/`:
+  - `…e451fa31` (grades and result);
+  - `…bfdcf3b3` (readings);
+  - `…1ff56629` (heat);
+  - `…866dc5af` (method and limits).
+- **Raw files:** `../probe/`. They are not restated here.
+
+**PASS_WITH_RISKS. No required fixes.**
+
+| | bar | reading | state |
+|---|---|---|---|
+| `A1` | H CPU ≤ 0.85 × B | warm **−16.05 %** (24.01 vs 28.35 s; interval −16.96..−14.60 %); cooled −15.85 % (22.26 vs 26.49 s). Twins admissible, CPU R 0.280 / 0.870 s | MET (warm margin thin) |
+| `A2` | ≤ 4 workers | resolved **3** (base 7). CPU ÷ wall warm B 4.258 → H 3.165; cooled 4.129 → 3.147 | MET |
+| `A3` | H warm wall ≤ 10 s | **7.54 s** | MET |
+| `A4` | each state ≤ W by its twin R | warm 7.54 + 0.180 = 7.72 s; cooled 7.08 + 0.220 = 7.30 s | MET |
+| `A5` | the proposal | **`W_new`: none, W stays 10 s (ratio 1.00).** Wall cost +0.86 s warm, +0.66 s cooled. Cooled ÷ warm factor at head 0.939, so warm binds; the re-open trigger is W = 10 s (wording in `…e451fa31`). `N8-LANE` not re-derived (no CPU level) | delivered |
+| `AR-N8SPAWN-DRIFT` | `src/cli.test.ts` within `F` = 1.097 s | H−B **−0.255 s** (twin R 0.070 s); the pair straddles the cap by design | **DISCHARGED** for `5ddf150e` |
+
+- **Heat: moderate thermal pressure (level 1) still occurs at k = 3.**
+  - Warm (back-to-back runs): level 1 from the 21st run on, for B, H and T alike. 13 of 54 reads were at
+    level 1.
+  - Cooled and narrow: 0 on every read.
+  - The window cannot separate k = 3's own heat from that of the uncapped arms it ran beside.
+  - **The k = 2 option goes back to the owner.**
+- **Risks, each with an owner:**
+  - `RISK-ABC144-HEAT`: owner Olger Oeselg.
+  - `RISK-ABC144-A1THIN`: owner Security/NFR.
+  - `RISK-ABC144-STALL`: one cooled head run at 12.04 s with normal CPU, cause unknown. Owner Security/NFR.
+  - `RISK-ABC144-FCAP`: the full-lane `F` under the cap was not re-read, because the twins are base
+    copies. Owner Architect/Design.
+- **`*_DEEP` lanes:** seven were run once at base and once at head, all exit 0. Walls are in `…bfdcf3b3`:
+  `ENGINE_DEEP` 294 → 283 s, `SEARCH_DEEP` 951 → 968 s (single runs). `LADDER_DEEP=1` was not timed;
+  its wall at head is `UNKNOWN - verify`.
+- **Merge:** no owner word is needed, because head's wall is ≤ 10 s. The heat question goes to the owner
+  beside it.
+- **Not merged, not pushed.** The board is the Orchestrator's.

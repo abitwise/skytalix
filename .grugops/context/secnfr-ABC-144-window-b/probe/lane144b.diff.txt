@@ -1,0 +1,24 @@
+0a1,3
+> // secnfr-ABC-144-window-b: a copy of design-ABC-144/probe/lane144.mjs with ADDITIVE columns only (ADR-0040 addendum, Window B):
+> //   thermal_before / thermal_after = `notifyutil -g com.apple.system.thermalpressurelevel` (0 nominal, 1 moderate, 2 heavy, ...),
+> //   foreign_after and power_after. They are appended after `status`, so the summary parser and every other column are unchanged.
+51a55
+> const tpl = () => (DRY ? "dry" : (sh("notifyutil -g com.apple.system.thermalpressurelevel").split(/\s+/)[1] ?? "unknown"));
+56c60
+<   "round\tcond\twall\tuser\tsys\tcpu\tpar\tfiles\ttests\tfailed\tskipped\tload1_before\tload1_after\tforeign_vitest\tspeed_limit\tpower\tgap_s\tutc\tstatus\n",
+---
+>   "round\tcond\twall\tuser\tsys\tcpu\tpar\tfiles\ttests\tfailed\tskipped\tload1_before\tload1_after\tforeign_vitest\tspeed_limit\tpower\tgap_s\tutc\tstatus\tthermal_before\tthermal_after\tforeign_after\tpower_after\n",
+72a77
+>     const tb = tpl();
+80a86,88
+>     const ta = tpl();
+>     const fa = foreign();
+>     const pa = power();
+108c116
+<       `${[round, c, wall, pick("user"), pick("sys"), cpu, par, files, tests, failed, skipped, lb, la, fv, sl, pw, GAP, utc, ok ? "ok" : "HARNESS_ERROR"].join("\t")}\n`,
+---
+>       `${[round, c, wall, pick("user"), pick("sys"), cpu, par, files, tests, failed, skipped, lb, la, fv, sl, pw, GAP, utc, ok ? "ok" : "HARNESS_ERROR", tb, ta, fa, pa].join("\t")}\n`,
+110c118
+<     console.log(round, c, `cpu ${cpu}`, `wall ${wall}`, `par ${par}`, files, tests, `load1 ${lb}`, `foreign ${fv}`, `limit ${sl}`, ok ? "ok" : "HARNESS_ERROR");
+---
+>     console.log(round, c, `cpu ${cpu}`, `wall ${wall}`, `par ${par}`, files, tests, `load1 ${lb}`, `foreign ${fv}`, `limit ${sl}`, `therm ${tb}->${ta}`, ok ? "ok" : "HARNESS_ERROR");
