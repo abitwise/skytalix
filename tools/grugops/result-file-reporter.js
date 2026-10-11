@@ -33,6 +33,41 @@
 //   - Two `npm test` runs in one checkout at once overwrite each other's file (as at `ABC-142`).
 //   - Only `npm test` uses this file. `vitest.config.ts` is untouched, so a direct `npx vitest run`
 //     (the `*_DEEP` lanes) writes nothing.
+//
+// REGRESSION PLANTS (`ABC-149`). Re-run all six rows when a hop changes this file, the `test` script
+// in `package.json`, or the installed `vitest` / `@vitest/*` version. It is not a per-diff gate: one
+// pass is six `npm test` runs. Plant in a scratch copy OUTSIDE the repository, never in a worktree;
+// which test file takes the plant is the hop's choice. Read every file with `jq` or `node -e`, and
+// run the READ IT query above on it. A row passes only when its exit code, its file fields AND its
+// query lines all match, the lines compared BY CONTENT (in any order). A line count alone is not a
+// pass: without its `suite` or `error` arm the query still prints the `run` line on every red file.
+// Each row: plant; `npm test` exit; file fields; query lines.
+//   green: no plant. Exit 0. `success` true, `runState` "exited", `exitCode` 0. Query: no line.
+//   unhandled: a test that throws from a `setTimeout`, e.g. `it("p", () => { setTimeout(() => {
+//     throw new Error("PLANT-timer"); }, 0); })`. Exit 1. `success` false, `exitCode` 1,
+//     `unhandledErrors[].message` "PLANT-timer". Query: `error  PLANT-timer` and
+//     `run    exited exitCode=1`.
+//   hang: after a green run, take a stamp (`node -p 'Date.now()'`), then make one test
+//     non-terminating (`while (true) {}`). Exit 124. `success` false, `runState` "started", no
+//     `exitCode`, `startTime` later than the stamp. Query: exactly
+//     `run    started exitCode=none, killed`.
+//   suite: `throw new Error("PLANT-suite")` in a `describe` body. Exit 1. `success` false,
+//     `numFailedTestSuites` 1, and that file's `testResults` entry carries "PLANT-suite". Query:
+//     `suite  <file>  PLANT-suite` and `run    exited exitCode=1`.
+//   assertion: one assertion inverted (`ABC-142` `A1`: `toBe(false)` -> `toBe(true)`). Exit 1.
+//     `success` false, `numFailedTests` 1. Query: `test   <file>  <full title>` and
+//     `run    exited exitCode=1`.
+//   exit code only: no plant; run `npm test -- --coverage --coverage.thresholds.lines=100`. Exit 1.
+//     `success` false, `exitCode` 1, AND `numFailedTests` 0, `numFailedTestSuites` 0,
+//     `unhandledErrors` empty. Query: exactly `run    exited exitCode=1`.
+// The exit-code-only row is the one red where the exit code alone decides `success`; every other
+// red also fails vitest's verdict or carries an unhandled error. It proves the exit-code check ONLY
+// WHILE all four of its fields hold. If lines coverage ever reaches 100 %, the command exits 0 and
+// the row must be re-planted with another red that vitest's own verdict calls green.
+// What the set catches that `ABC-143` `A1`-`A6` do not (QE, `qe-ABC-143` `…112f11df`): `success`
+// computed without the exit code, or the file written at report time with no exit hook, makes the
+// exit-code-only row read `success` true; the query without its `run` arm prints no line on the hang
+// row.
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
