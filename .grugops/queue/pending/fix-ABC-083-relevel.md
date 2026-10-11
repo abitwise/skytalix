@@ -11,11 +11,11 @@ branch: grugops/ABC-083-king-safety-mobility (tip fa81b948, base 489c549e — st
 hold: dispatch when a slot frees
 ---
 
-# Subtask: rebase ABC-083 onto the wave tip and apply ADR-0039's re-levels (now ACCEPTED), node counts only
+# Subtask: bring ABC-083 up to main by MERGE (not rebase) and apply ADR-0039's re-levels (now ACCEPTED), node counts only
 
 `ADR-0039` was accepted by the owner on 2026-10-11 (note `…owner-word-accept-adr0039-53cde860`). Its decision 3 conditions bind:
-1. **Rebase** `grugops/ABC-083-king-safety-mobility` onto the current wave tip. Resolve conflicts; ABC-010, ABC-131 and ABC-094 have landed since. Gates must be green.
-2. **Re-read rows 14 and 15** on the rebased tree. These are deterministic node counts. They should still read 43.56 % and 28.46x; if not, STOP and report.
+1. **Merge `main` INTO `grugops/ABC-083-king-safety-mobility`** (owner's call, 2026-10-11: a rebase over 136 commits is likely to fail; a plain merge keeps history and needs no force). Resolve the conflicts on the branch. ABC-010, ABC-131, ABC-094, ABC-142 and ABC-114 have landed since. Gates must be green. Do NOT merge back to main; that happens only after every ABC-083 gate clears.
+2. **Re-read rows 14 and 15** on the merged tree. These are deterministic node counts. They should still read 43.56 % and 28.46x; if not, STOP and report.
 3. **Proof (iii) for row 14:** plant the unordered-quiescence mutant and read its ratio. **It must read above 42x.** If it reads ≤ 42x, STOP: the re-level is refused and the Architect rules.
 4. **Only if 2 and 3 hold:** apply the two re-levels in **their own commit**: row 15 ≤ 40.5 % → ≤ 65 %, row 14 ≤ 26x → ≤ 42x, citing ADR-0039.
 
@@ -23,6 +23,5 @@ hold: dispatch when a slot frees
 The ticket stays `Blocked` until all of them clear. If A9 later stops, mobility is cut (ADR-0031 d5) and the re-level commit is reverted.
 
 ## Fences
-Never merge to the wave; never push. Do not touch `plans/board.md`. Work in your own worktree, with `node_modules` linked into it only. Use `--force-with-lease` only on this
-ticket branch, if the rebase needs it locally (there is no remote). End each commit with a `Co-Authored-By:` trailer naming the model you actually are.
+Never merge to the wave; never push. Do not touch `plans/board.md`. Work in your own worktree, with `node_modules` linked into it only. No force of any kind, and no history rewrite. End each commit with a `Co-Authored-By:` trailer naming the model you actually are.
 Publish notes per Workflow 16. Move the queue file pending → claimed → done by hand.
