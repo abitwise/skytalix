@@ -6,8 +6,10 @@ id: ADR-0041
 
 ## Status
 
-**proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-150`, ticket `ABC-150` `D3`),
-on branch `grugops/design-ABC-150` from the wave tip `304bbd9d`. **Owner acceptance owed.**
+**accepted** 2026-10-11 by Olger Oeselg (owner), verbatim "Accept ABC-083 and ADR-0041; …" (Orchestrator transcription note `…owner-word-uat-abc083-adr0041-k2-vitest41-adr0034-addendum`). ABC-150 closes at this ruling; the owner also asked for a vitest 4.1 upgrade ticket.
+
+Previously **proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-150`, ticket `ABC-150` `D3`),
+on branch `grugops/design-ABC-150` from the wave tip `304bbd9d`. Owner acceptance was owed.
 
 - This is the ticket's **pre-registered split rule** ("if no such setting exists, no lever is built here").
   On acceptance, `ABC-150` closes on `D1`–`D3`, and this ruling goes to BA/PM with the `D2` table. `L1`–`L5`
