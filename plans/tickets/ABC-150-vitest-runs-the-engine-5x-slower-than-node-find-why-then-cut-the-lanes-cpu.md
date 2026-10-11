@@ -17,8 +17,12 @@ feature: —
 >
 > **This hop ran nothing and timed nothing.** Every figure is cited from `ABC-147`'s notes on branch
 > `grugops/ABC-147-vitest-overhead-probe` @ `4c634f09` (`…d689c50d`, `…a6122481`, `…7769faa0`, `…144c6b5d`), from
-> `ABC-144` Window A (`…a898a14a`), or from `ABC-085`'s `RUN.txt` item 4. `ABC-147` is in review; its numbers are
-> one hop's.
+> `ABC-144` Window A (`…a898a14a`), or from `ABC-085`'s `RUN.txt` item 4.
+>
+> **Security/NFR reviewed `ABC-147` (in QE's slot): PASS_WITH_GAPS, and the ≥ 15 % arm holds under every allowed
+> reading** (`…ff01ca7a`). `ABC-147` is merged (`9ac44156`). The review routed two items here, and both are
+> folded in: **`RISK-ABC147-02`** (R is an estimated ceiling, so the bar is a measured cut: `L1`, `D1`) and
+> **G4** (no independent re-measure yet: `D1` and `L1` are that re-measure) (`…44c6cd6d`).
 
 ## Problem
 
@@ -35,6 +39,10 @@ several times.
 - Production code under `src/` is **42.9 %** of the lane's sampled CPU (`A1`, `…7769faa0`).
 - **R, the CPU that removing the factor could recover: 34.2 % of lane CPU (9.6 s of 28.10 s), band 29.7–35.8 %;
   26.0 % at the cold-call edge** (`A3`, uncapped, 7 workers). That is an estimate and a ceiling, not a cut.
+- **`RISK-ABC147-02` (Medium, owned here):** the ratio was read on 2 files that hold 14.52 % of sampled CPU,
+  about a third of (i-w). If the factor held only there, R would be **11.65 %** (lower edge 10.63 %), the
+  middle arm. The page's rule does not allow that reading, but it is why **this ticket's bar is a measured
+  lane-CPU cut, never R** (`L1`).
 - **The cause is `UNKNOWN - verify`.** No A/B on it has been run.
 - `ADR-0040`'s worker cap cannot reach it: the cap limits how many workers run, and the factor is per node
   inside one worker (`ADR-0040` addendum, "Does the vitest runner's ~4.3x … change any of this? No").
@@ -85,8 +93,13 @@ and not used.
 - **`D1` (the factor, re-read at the base).** **Given** the base tree, **when** E and S run under `node` and
   under vitest, **n ≥ 5 pairs per file**, **then** the ratio vitest ÷ `node` is reported per file as median
   (min–max).
-  - **Stop rule, pre-registered:** if the lowest pair on either file reads **below 1.67x**, the ticket goes
-    back to BA/PM before `D2`. (At 1.67x, `ABC-147`'s formula at its lowest share, 37.27 %, gives R = 15 %.)
+  - **A third workload, for `RISK-ABC147-02`:** one call from a default-lane file outside E and S whose
+    bucket-(i) CPU is mostly `moves.ts`/`legal.ts` (for example `src/perft.test.ts`, `ABC-147`'s rank 4.5),
+    named in the method before it runs, read the same way. Its ratio is reported. It is not a stop rule: it
+    tells the Architect whether the factor reaches the rest of (i-w), and `L1` settles the risk.
+  - **Stop rule, pre-registered:** if the lowest pair on E or S reads **below 1.67x**, the ticket goes back to
+    BA/PM before `D2`. (At 1.67x, `ABC-147`'s formula at its lowest share, 37.27 %, gives R = 15 %. The review
+    derived the same break-even, `…ff01ca7a`.)
 - **`D2` (the cause: one candidate at a time).** **Given** the candidates declared in a committed method
   file before the first graded run, **when** each is varied **alone** on the vitest side, with the `node`
   side unchanged, n ≥ 5 pairs per file, **then** a table reports, per candidate and file:
@@ -114,8 +127,12 @@ and not used.
   unprofiled), **then**:
   - the twin is admissible (`ADR-0035` d1) and its CPU R is ≤ 15 % of base CPU;
   - **head's paired median CPU delta is ≤ −15 % of base's median CPU**, the same form as `ADR-0040` d2.
+  - **The bar is this measured lane CPU, never R** (`RISK-ABC147-02`). R, the `D1`–`D2` ratios and any
+    profile share are never quoted as `L1`.
   - **Expectation, not the bar:** `ABC-147`'s band (26.0–35.8 %) was read at 7 workers. At 3 it is
-    `UNKNOWN - verify`.
+    `UNKNOWN - verify`, and the 2-file extrapolation allows as little as ~11.7 %.
+  - **This is `ABC-147` G4's independent re-measure.** `L1` and `D1` are new runs by other roles, not quotes
+    of `ABC-147`'s numbers.
   - **If the setting misses 15 %,** it does not merge. The `D2` table and the `L1` reading go to the owner.
     **The number is never weakened silently.**
 - **`L2` (the cut came from the factor).** **Given** head, **when** `D1`'s probe re-runs, **then** each file's
@@ -152,13 +169,13 @@ and not used.
   - **Profiler caveat (`…144c6b5d`):** under `NODE_OPTIONS=--cpu-prof`, **5 of 18** profiled lane runs hit
     `run-bounded.js`'s 60 s bound (exit 124), against **0 of 18** unprofiled. The cause is `UNKNOWN - verify`.
     A hung profiled run is void, not a reading. **No `L` reading is profiled** (the profiler adds ~16.6 %
-    CPU).
+    CPU). Any hop that profiles the lane here logs its own hang rate and **never raises the 60 s bound
+    silently** (`RISK-ABC147-01`, owner QE/E2E).
 
 ## Dependencies
 
-- **`ABC-147`'s review exit** (Security/NFR in place of QE, subtask `secnfr-ABC-147-review`). This ticket rests
-  on its `A4` arm. If the review's re-read puts R's lower edge below 15 %, this ticket goes back to BA/PM
-  before it is pulled. `D1` checks the ratio again either way.
+- **`ABC-147`'s review exit — MET 2026-10-11.** Security/NFR, PASS_WITH_GAPS, arm confirmed (`…ff01ca7a`);
+  merged `9ac44156`, `Done`. Its probe scripts are on the wave tip. `D1` checks the ratio again either way.
 - **`ABC-144` merged — for `L1`–`L5` only.** The base must carry `maxWorkers: 3`. `ADR-0040` d5's straddle rule
   applies: a base before that merge and a head after it is not a reading. `D1`–`D3` may run before it merges.
 - **A no-other-hop window for `L1`–`L4`**, the Orchestrator's. It is not `ABC-144`'s Window B, which reads
@@ -209,20 +226,20 @@ machine time.
 
 ## Definition of Ready
 
-BA/PM, 2026-10-11. **Result: 10 of 10.** Recommended placement: **`Ready`**, then **`In Design`** for the
-Architect's `D1`–`D3` once `ABC-147` leaves `In Review` with its arm intact.
+BA/PM, 2026-10-11. **Result: 10 of 10.** Recommended placement: **`Ready`**, then straight to **`In Design`**
+for the Architect's `D1`–`D3` (`ABC-147` is `Done` with its arm confirmed; In Design WIP allows it).
 
 | # | item | verdict |
 |---|---|---|
 | 1 | problem clear | **✅** a ~5x factor with equal digests; R 34.2 % (band 29.7–35.8 %); the owner's "choking cpu and generating heat" |
 | 2 | scope and out-of-scope clear | **✅** diagnosis, ruling, one setting, readings; isolation, `k`, `src/`, test content and `ABC-146` fenced off |
 | 3 | INVEST-shaped | **✅** one setting; negotiable on the owner's fork in `L1`; a pre-registered split in `D3` |
-| 4 | acceptance testable and measurable | **✅** ratios with digests, ≥ 50 % of the excess, ≤ −15 % paired CPU, wall ≤ + twin R and ≤ W, 20 green runs, equal counts, red-on-removal pins |
-| 5 | dependencies known | **✅** `ABC-147`'s review, `ABC-144`'s merge for `L`, a window, `ABC-149` on a major bump |
+| 4 | acceptance testable and measurable | **✅** ratios with digests on 3 workloads, ≥ 50 % of the excess, ≤ −15 % **measured** paired CPU (never R), wall ≤ + twin R and ≤ W, 20 green runs, equal counts, red-on-removal pins |
+| 5 | dependencies known | **✅** `ABC-147`'s review (met), `ABC-144`'s merge for `L`, a window, `ABC-149` on a major bump; `RISK-ABC147-01`/`-02` and G4 carried |
 | 6 | security/NFR triggers with a measurable target | **✅** `NFR-008` ≤ W; −15 % CPU; count pin; Security only on a dependency change |
 | 7 | test notes present | **✅** six |
 | 8 | size assigned | **✅** `M`, machine-time heavy |
 | 9 | priority assigned | **✅** `P1`, pre-registered |
-| 10 | no major unresolved blocker | **✅** `D1`–`D3` can start when `ABC-147`'s review exits; `ABC-144`'s merge gates only `L1`–`L5` |
+| 10 | no major unresolved blocker | **✅** `D1`–`D3` can start now; `ABC-144`'s merge gates only `L1`–`L5` |
 
 Column moves are the Orchestrator's.
