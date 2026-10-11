@@ -21,3 +21,11 @@ Rule on the options:
 
 Also say whether the 4.3x runner overhead matters to ABC-144, whose bar is lane CPU.
 Use recorded readings only. Write any ADR change as PROPOSED. Never merge or push. Do not touch `src/` or `plans/board.md`.
+
+## Added 2026-10-11 after Window A
+Window A (`grugops/secnfr-ABC-144-window-a` `94cf1728`, decision note `…b66453e7`) applied ADR-0040 d2, and **the rule picks K3, not K4**:
+- K4 cuts CPU by −10.66 % and is not eligible;
+- K3 cuts by −16.48 % with wall 7.37 s and is eligible;
+- K2 cuts by −22.71 % with wall 8.38 s and is eligible.
+
+Write the ADR-0040 addendum, still PROPOSED: "Why 4" becomes 3, the pin becomes `toBe(3)` / `≤ 3`, and record the missing heat field (`CPU_Speed_Limit` is absent on the M3; thermalpressurelevel went to 1 for the last ~9 runs). Then say whether the 4.3x vitest overhead changes any of this.
