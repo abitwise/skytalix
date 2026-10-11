@@ -76,6 +76,15 @@ to the wall reading.
 3. **Security/NFR** takes fresh base and head readings of the full lane in that window, and
    **proposes `W_new`**, `NFR-008`'s new wall level in seconds, for the owner to accept. **The owner
    moves the level. No agent does.**
+4. **`AR-N8SPAWN-DRIFT`'s discharge point** *(folded 2026-10-11 from Architect/Design `…36088a35`,
+   `ADR-0017` § Pointers 2026-10-11; it moved here when the owner dropped `ABC-108`)*.
+   - In the same window, read `src/cli.test.ts`'s CPU on its narrow set against its last admissible
+     base reading.
+   - **If it reads within its `F` = 1.097 s, `AR-N8SPAWN-DRIFT` is DISCHARGED for that tree.**
+   - **If it reads over `F`,** check each of its 27 children against its criterion's priced shape
+     (`T2`: the substitution hook present, not the real engine). Any child that grew is a finding
+     against the hop that grew it.
+   - A discharge on one tree does not close the risk for later trees.
 
 ## Out of scope
 
@@ -94,7 +103,9 @@ to the wall reading.
 
 **The instrument for `A1`–`A4`** is `ADR-0035` decision 2's harness shape applied to the full lane:
 - three out-of-tree trees: base, head, and a `cmp`/`diff -r` identity twin;
-- `npm test` as the command;
+- `npm test` as the command, which is the set `tools/grugops/lane-inventory.js` collects, `tools/`
+  tests included. A `--dir src` run is one file short and is not a reading of the clause
+  (Architect `…7bf3d1ce`, `ADR-0035` § Pointers P1);
 - CPU = user + sys, one fresh process per run, **n ≥ 8 scored rounds**, rotated order, round 0
   discarded;
 - file and test counts asserted on every run, load1 logged before every run.
@@ -141,7 +152,11 @@ readings are taken in the no-other-hop window (§ What is established).
   - the reference stack (Apple M3 Mac15,13 / 8 cores / Darwin 25.5.0 / Node v26.11.0 / vitest
     3.2.7);
   - the commit;
-  - the `A4` re-open trigger as wording for the `NFR-008` row.
+  - the `A4` re-open trigger as wording for the `NFR-008` row;
+  - the `AR-N8SPAWN-DRIFT` result from § Scope 4: discharged, or the children that grew;
+  - **if the owner levels a CPU total again** (owner question 2), the `N8-LANE` re-derivation at
+    that level, by the row's own "where 5 % comes from" rule (`ADR-0035` § Pointers 2026-10-11 P3,
+    Architect `…5ad29a76`). With no CPU level, `N8-LANE` stays ≤ 650 ms as a fixed number.
 
   The row itself is written by its owner, Security/NFR, in a catalog hop after the owner's word.
 - **`A6` (no guard disarmed, nothing moved between lanes).**
@@ -243,7 +258,7 @@ Design`** for the Architect hop (In Design WIP allows it).
 | 2 | scope and out-of-scope clear | **✅** three roles' parts; `isolate: false`, R-3, test content and CPU re-levelling fenced out |
 | 3 | INVEST-shaped | **✅** independent; one setting; negotiable numbers with a stated owner fork; testable by the `ADR-0035` instrument |
 | 4 | acceptance testable and measurable | **✅** ≤ 0.85 × base CPU; ≤ 4 workers; wall ≤ W (10 s or the owner's `W_new`); both states ≤ W by R; 20 consecutive green runs; equal counts; a red-on-removal pin |
-| 5 | dependencies known | **✅** Architect first, a no-other-hop window, the owner's word only above 10 s, `ABC-111` folded, `F` floors and `ABC-083` re-reads named |
+| 5 | dependencies known | **✅** (+ `AR-N8SPAWN-DRIFT` discharge carried, § Scope 4) Architect first, a no-other-hop window, the owner's word only above 10 s, `ABC-111` folded, `F` floors and `ABC-083` re-reads named |
 | 6 | security/NFR triggers with a measurable target | **✅** `NFR-008` W; `A6` guards; count pin |
 | 7 | test notes present | **✅** five |
 | 8 | size assigned | **✅** `M`, machine-time heavy |
