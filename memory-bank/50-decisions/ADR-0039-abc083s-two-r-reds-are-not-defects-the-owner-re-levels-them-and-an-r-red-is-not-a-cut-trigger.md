@@ -6,8 +6,10 @@ id: ADR-0039
 
 ## Status
 
-**proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-abc083-r-reds-2026-10-11`).
-**Owner acceptance owed.** No agent moves an ADR to `accepted`.
+**accepted** 2026-10-11 by Olger Oeselg (owner), verbatim "accepting ADR-0039" (note `.grugops/context/wave-2026-09-25/notes/20261011T102124Z-orchestrator-decision-owner-word-accept-adr0039-53cde860.md`). Decision 3's conditions still bind.
+
+Previously **proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-abc083-r-reds-2026-10-11`).
+~~**Owner acceptance owed.**~~ Owner accepted (above). No agent moves an ADR to `accepted`; this line records the owner's word.
 
 - It applies `ADR-0028` decision 4 as written. It amends no accepted ADR.
 - Under `ADR-0028` decision 5, **accepting this ADR is the owner's word for the two re-levels in decision 3.**
