@@ -398,3 +398,33 @@ named constants. `LADDER_DEEP=1` / `=verdict` select one per run, and both sides
   - The `AGENTS.md` lane line is drafted for the Scribe (`…8515e3e7`).
 - **The board move (`In Development` → `In Review`) is the Orchestrator's.** This hop was fenced off
   `plans/board.md`.
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-085`). Reviewed tip `773b48cc`; the harness is `d5b0f0e2`, with `src` identical. Every reading
+is QE's own, from its own worktree and its own single `LADDER_DEEP=1` run. The detail is in `.grugops/context/qe-ABC-085/notes/`:
+`…3b1e7c52` (verdict and readings), `…d4a90f16` (mutants), `…6f2c8a91` (gaps), `…9e47d0b3` (commands). Raw files are in `../probe/`.
+**Loaded host, no timing grades.** Every deep-lane number is **short mode, step 120**.
+
+**PASS_WITH_GAPS** on `A3`–`A6`. `A1` and `A2` are out of scope and wait for the verdict run.
+
+| # | QE reading |
+|---|---|
+| `A3` | **MET.** 26/26 games ended and 0 hit the cap (max 135 plies against 600), with 0 crashes and 0 timeouts. Endings: 18 mate, 7 `threefold-repetition (claimed)`, 1 insufficient, 0 fivefold or seventy-five. Default rows: threefold claimed at ply 8, fifty-move at the first offer, and the cap is an error with no score. Mutants M1, M2 and M16 are killed |
+| `A4` | **MET.** 26/26 move lists replay through `legalMoves` / `playMove` with 0 faults. The oracle refuses an illegal move and a move played past an ending |
+| `A5` | **MET.** In process, the 1v2 pair played twice is equal. Across sessions, QE's run equals the SE's run 2 on all 32 report lines, all 5 pair digests included. The step is literal 120/4 (M15 killed), a per-side or derived step is refused (M3 killed), and each side has its own clock (M8 killed). Budgets verbatim are **unpinned** (M5 survives; `QE-085-b`) |
+| `A6` | **MET (harness).** All 32 lines say "short mode, step 120". Every pair line names the step, the games, the seeds, the commit, the claimed draws and "not graded". The claimed counts match the `(claimed)` reasons. The verdict-step wall waits with the verdict run |
+
+- **Default lane, by count:** 0 ladder games, pinned. Re-planted M4 turns the pin red. `npm test` gives 54 files / 1689 / 0 skipped, and
+  the ladder file has 9 rows. Unset, the deep rows are not defined.
+- **Mutants:** the SE's 4 are re-planted and all killed. QE added 13: 3 are killed and 10 survive the default lane.
+- **Gaps** (none fails `A3`–`A6`):
+  - `QE-085-a` **MEDIUM**, SE. The verdict report's colour schedule, score, bar and claimed count are unpinned in every lane (M6, M11,
+    M12, M14). Fix this before the verdict run.
+  - `QE-085-b` **LOW**, SE. `LEVELS` verbatim and the game counts are unpinned (M5, M7, M7b).
+  - `QE-085-c` **LOW**, SE. `PLY_CAP` is unpinned (M13).
+  - `QE-085-d` **INFO**. M9 is equivalent; M10 is killed by the deep A5 row by construction, not run.
+  - `QE-085-e` **INFO**, Scribe. `LADDER_DEEP=` or `=0` fails at load, unlike the other `*_DEEP` lanes. The lane line should say "unset is
+    the only off".
+- **Gates:** lint, typecheck and build exit 0. Skip integrity reads `No findings.`, and the inventory is 54 = 54. There are 0 production
+  `src/` lines, so on QE's reading the UAT waiver applies (WAIVED, not accepted; the Orchestrator applies it).
