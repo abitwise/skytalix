@@ -194,6 +194,12 @@ at least 90%."*
     `XS` ticket: the run plus the report, at step 4, on the tree decision 6 names. This ticket then
     closes on `A3`–`A6`. That keeps a ~10-hour background run on an unmerged dependency from holding
     a built harness in a column.
+  - **Split CUT 2026-10-11 as `ABC-146`** (`XS`, `P1`, BA/PM subtask `bapm-fold-qe114-2026-10-11`). The
+    trigger fired: QE passed `A3`–`A6` at `3783ae15` with `ABC-083` unmerged. It is built to the PROPOSED `ADR-0038`
+    addendum: the same harness under plain `node` from `tools/ladder/`, with a digest equivalence
+    check against `LADDER_DEEP=1` before any verdict, and `LADDER_DEEP=verdict` refused inside vitest.
+    **`A1`, `A2` and `A6`'s verdict wall are taken there.** This ticket closes on `A3`–`A6`, as the
+    trigger says. `ABC-146` waits on the owner's acceptance of the addendum and on `ABC-083`'s merge.
 - ~~**`ABC-078`, `ABC-077`, `ABC-076` — OPEN** (transitively).~~ **All `Done`** (status corrected
   2026-10-09).
 - **`src/gameend.ts`, `src/history.ts`, `src/apply.ts`, `src/legal.ts` — MERGED** and used as-is.
@@ -233,6 +239,10 @@ at least 90%."*
     |---:|---:|---:|---:|
     | 4 (verdict) | ~10 h (7–13) | ~3.3 h | ~5.8 h |
     | 120 (short) | ~20 min (14–26) | ~7 min | ~12 min |
+
+    *(2026-10-11, BA/PM.)* **These are plain-`node` figures.** Inside vitest the engine runs ~4.35x
+    per node, so step 4 costs ~43.5 h (30–58) there (`ADR-0038` addendum). The table with a runner
+    column is on `ABC-146`, where the verdict now lives.
   - *2026-10-10 re-score: the 5 hours was priced on the REAL clock.* `A5` puts the ladder on a
     virtual clock, where a move costs `budget ÷ step` readings at about 4.4–5.5 ms real each (probe,
     loaded host). **The step sets the cost and also what is measured.** At step 120 the levels run
