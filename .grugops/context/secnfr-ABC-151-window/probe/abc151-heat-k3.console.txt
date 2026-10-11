@@ -1,0 +1,31 @@
+# abc151-heat-k3: npm test | conds B | rounds 27 | gap 0s -> /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/w151/abc151-heat-k3.tsv
+0 B cpu 26.34 wall 7.43 par 3.545 56 1740 load1 3.9 foreign 4 limit none therm 0->0 ok
+1 B cpu 25.46 wall 7.61 par 3.346 56 1740 load1 3.99 foreign 4 limit none therm 0->0 ok
+2 B cpu 26.54 wall 7.95 par 3.338 56 1740 load1 3.84 foreign 4 limit none therm 0->0 ok
+3 B cpu 26.79 wall 8.11 par 3.303 56 1740 load1 3.94 foreign 4 limit none therm 0->0 ok
+4 B cpu 27.38 wall 8.25 par 3.319 56 1740 load1 4.02 foreign 4 limit none therm 0->0 ok
+5 B cpu 27.49 wall 8.24 par 3.336 56 1740 load1 4.32 foreign 4 limit none therm 0->1 ok
+6 B cpu 27.3 wall 8.3 par 3.289 56 1740 load1 4.42 foreign 4 limit none therm 1->1 ok
+7 B cpu 27.85 wall 8.35 par 3.335 56 1740 load1 4.55 foreign 4 limit none therm 1->1 ok
+8 B cpu 27.69 wall 8.26 par 3.352 56 1740 load1 4.84 foreign 4 limit none therm 1->1 ok
+9 B cpu 27.79 wall 8.47 par 3.281 56 1740 load1 4.78 foreign 4 limit none therm 1->1 ok
+10 B cpu 27.75 wall 8.53 par 3.253 56 1740 load1 5.04 foreign 4 limit none therm 1->1 ok
+11 B cpu 31.64 wall 9.42 par 3.359 56 1740 load1 5.83 foreign 4 limit none therm 1->1 ok
+12 B cpu 28.21 wall 8.65 par 3.261 56 1740 load1 5.79 foreign 4 limit none therm 1->2 ok
+13 B cpu 28.52 wall 8.69 par 3.282 56 1740 load1 6.05 foreign 4 limit none therm 2->2 ok
+14 B cpu 28.09 wall 8.58 par 3.274 56 1740 load1 6.27 foreign 4 limit none therm 2->2 ok
+15 B cpu 28.9 wall 8.53 par 3.388 56 1740 load1 6.14 foreign 4 limit none therm 2->2 ok
+16 B cpu 28.66 wall 8.8 par 3.257 56 1740 load1 6.05 foreign 4 limit none therm 2->2 ok
+17 B cpu 29.74 wall 8.84 par 3.364 56 1740 load1 6.28 foreign 4 limit none therm 2->2 ok
+18 B cpu 30.45 wall 9.23 par 3.299 56 1740 load1 7.7 foreign 4 limit none therm 2->2 ok
+19 B cpu 32.14 wall 9.9 par 3.246 56 1740 load1 7.5 foreign 4 limit none therm 2->2 ok
+20 B cpu 32.93 wall 9.98 par 3.3 56 1740 load1 7.35 foreign 4 limit none therm 2->2 ok
+21 B cpu 34.4 wall 10.32 par 3.333 56 1740 load1 7.14 foreign 4 limit none therm 2->2 ok
+22 B cpu 32.59 wall 9.92 par 3.285 56 1740 load1 6.96 foreign 4 limit none therm 2->2 ok
+23 B cpu 32.68 wall 9.86 par 3.314 56 1740 load1 6.58 foreign 4 limit none therm 2->2 ok
+24 B cpu 32.97 wall 10.01 par 3.294 56 1740 load1 6.65 foreign 4 limit none therm 2->2 ok
+25 B cpu 34.6 wall 10.49 par 3.298 56 1740 load1 6.77 foreign 4 limit none therm 2->2 ok
+26 B cpu 32.82 wall 9.67 par 3.394 56 1740 load1 8.48 foreign 4 limit none therm 2->1 ok
+# abc151-heat-k3 summary: n = 26 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 28.59	wall 8.67	par 3.301	load1 6.05	load1>8 1/26	files 56	tests 1740
+twin R: cpu NaN s, wall NaN s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

@@ -1,0 +1,141 @@
+=== every run over W = 10 s, all steps
+  abc151-warm round 5 H wall 10.02 cpu 25.53 load1 5.22->5.87 th 0->0 fv 0/0
+  abc151-heat-k2 round 0 H wall 10.22 cpu 26.47 load1 4.03->4.18 th 0->0 fv 5/5
+  abc151-heat-k2 round 1 H wall 10.34 cpu 26.79 load1 4.18->4.3 th 0->0 fv 5/5
+  abc151-heat-k2 round 2 H wall 12.11 cpu 29.94 load1 4.3->5.21 th 0->0 fv 5/5
+  abc151-heat-k2 round 3 H wall 10.27 cpu 26.2 load1 5.21->5.19 th 0->0 fv 5/5
+  abc151-heat-k2 round 4 H wall 10.07 cpu 26.12 load1 5.19->5.47 th 0->1 fv 5/5
+  abc151-heat-k2 round 6 H wall 10.04 cpu 25.75 load1 5.41->5.56 th 1->1 fv 5/5
+  abc151-heat-k2 round 7 H wall 10.33 cpu 26.86 load1 5.56->5.29 th 1->1 fv 5/5
+  abc151-heat-k2 round 8 H wall 10.13 cpu 26.51 load1 5.29->5.48 th 1->1 fv 5/5
+  abc151-heat-k2 round 9 H wall 10.17 cpu 26.52 load1 5.48->5.33 th 1->1 fv 5/5
+  abc151-heat-k2 round 10 H wall 10.1 cpu 26.19 load1 5.33->5.44 th 1->1 fv 5/5
+  abc151-heat-k2 round 11 H wall 10.41 cpu 26.83 load1 5.44->6.1 th 1->2 fv 5/5
+  abc151-heat-k2 round 12 H wall 10.63 cpu 27.28 load1 6.1->6.48 th 2->2 fv 5/5
+  abc151-heat-k2 round 13 H wall 10.14 cpu 26.38 load1 6.48->6.25 th 2->2 fv 5/5
+  abc151-heat-k2 round 14 H wall 10.2 cpu 26.38 load1 6.25->6.37 th 2->2 fv 5/5
+  abc151-heat-k2 round 15 H wall 10.31 cpu 26.58 load1 6.37->6.39 th 2->2 fv 5/5
+  abc151-heat-k2 round 16 H wall 10.56 cpu 27.41 load1 6.39->6.18 th 2->2 fv 5/5
+  abc151-heat-k2 round 17 H wall 11.28 cpu 29.0 load1 6.18->6.55 th 2->2 fv 5/5
+  abc151-heat-k2 round 18 H wall 11.21 cpu 29.0 load1 6.55->6.17 th 2->2 fv 5/5
+  abc151-heat-k2 round 19 H wall 10.12 cpu 25.9 load1 6.17->6.07 th 2->2 fv 5/0
+  abc151-heat-k2 round 22 H wall 10.51 cpu 27.02 load1 5.54->5.63 th 2->2 fv 0/0
+  abc151-heat-k2 round 23 H wall 10.35 cpu 26.47 load1 5.5->5.56 th 2->2 fv 0/0
+  abc151-heat-k2 round 24 H wall 10.22 cpu 26.31 load1 5.56->5.31 th 2->2 fv 0/0
+  abc151-heat-k2 round 25 H wall 12.48 cpu 31.19 load1 5.31->5.49 th 2->1 fv 0/0
+  abc151-heat-k2 round 26 H wall 11.54 cpu 28.98 load1 5.49->5.73 th 1->1 fv 0/4
+  abc151-heat-k3 round 21 B wall 10.32 cpu 34.4 load1 7.14->6.96 th 2->2 fv 4/4
+  abc151-heat-k3 round 24 B wall 10.01 cpu 32.97 load1 6.65->6.77 th 2->2 fv 4/4
+  abc151-heat-k3 round 25 B wall 10.49 cpu 34.6 load1 6.77->8.48 th 2->2 fv 4/4
+  abc151-cooled round 1 H wall 10.46 cpu 26.12 load1 3.23->58.9 th 0->0 fv 4/4
+
+=== abc151-warm: 27 runs, errors 0, utc 2026-10-11T17:18:36.289Z .. 2026-10-11T17:22:16.316Z
+  B n=8 cpu 25.86 (25.14-26.43) wall 7.87 (7.62-8.06) par 3.296 load1b 5.15 (3.82-5.87) load1b>8 0/8 files [56] tests [1740] fv_before Counter({0: 8}) fv_after Counter({0: 8}) power ['Battery Power'] speed_limit ['none']
+     thermal before {'0': 6, '1': 2} after {'0': 6, '1': 2}
+  H n=8 cpu 23.08 (22.95-25.53) wall 9.04 (8.96-10.02) par 2.554 load1b 4.89 (3.37-5.65) load1b>8 0/8 files [56] tests [1740] fv_before Counter({0: 8}) fv_after Counter({0: 8}) power ['Battery Power'] speed_limit ['none']
+     thermal before {'0': 6, '1': 2} after {'0': 5, '1': 3}
+  T n=8 cpu 25.88 (24.71-26.92) wall 7.63 (7.49-8.29) par 3.345 load1b 4.89 (3.34-6.05) load1b>8 0/8 files [56] tests [1740] fv_before Counter({0: 8}) fv_after Counter({0: 8}) power ['Battery Power'] speed_limit ['none']
+     thermal before {'0': 5, '1': 3} after {'0': 5, '1': 3}
+  all 27 runs incl round 0, before+after: {'0': 39, '1': 15}
+  round 0 (discarded): B cpu 24.6 wall 7.98, H cpu 22.89 wall 9.0, T cpu 25.34 wall 7.5
+  H-B cpu median -2.345 (-9.07 % of B cpu; interval -11.25..-7.81 %) sign+ 0/8 k 2 interval [-2.910, -2.020] R 2.910
+  H-B wall median +1.325 sign+ 8/8 k 2 interval [+1.140, +1.490] R 1.490
+  T-B cpu median +0.270 (+1.04 % of B cpu; interval -2.17..+2.63 %) sign+ 5/8 k 2 interval [-0.560, +0.680] R 0.680
+  T-B wall median -0.170 sign+ 3/8 k 2 interval [-0.230, +0.220] R 0.230
+  twin: cpu median +1.04 % of B (limit 1.5 %), sign 5/8 (chance band 2..6) -> admissible True; twin cpu R 0.680 s (2.63 % of B); twin wall R 0.230 s
+  A3: H wall median 9.035 + twin wall R 0.230 = 9.265 s  (<= 10 s: True; > 9.0 s cooled owed: True)
+  A4: H-B cpu median -2.345 s (-9.07 %), interval [-2.910, -2.020] s = [-11.25 %, -7.81 %]; wholly below 0: True
+  ratio of medians H/B cpu 0.8923, wall 1.1488
+
+=== abc151-cooled: 27 runs, errors 0, utc 2026-10-11T17:39:39.336Z .. 2026-10-11T18:22:18.361Z
+  B n=8 cpu 25.16 (22.99-26.35) wall 7.64 (7.15-7.98) par 3.295 load1b 3.51 (2.48-7.05) load1b>8 0/8 files [56] tests [1740] fv_before Counter({4: 5, 0: 1, 1: 1, 5: 1}) fv_after Counter({4: 5, 0: 2, 5: 1}) power ['Battery Power'] speed_limit ['none']
+     thermal before {'0': 8} after {'0': 8}
+  H n=8 cpu 23.66 (22.63-26.12) wall 9.25 (8.91-10.46) par 2.541 load1b 3.45 (2.80-4.61) load1b>8 0/8 files [56] tests [1740] fv_before Counter({4: 5, 5: 2, 0: 1}) fv_after Counter({4: 4, 0: 2, 5: 2}) power ['Battery Power'] speed_limit ['none']
+     thermal before {'0': 8} after {'0': 8}
+  T n=8 cpu 25.00 (22.87-26.24) wall 7.51 (7.02-7.87) par 3.296 load1b 3.53 (2.20-15.70) load1b>8 1/8 files [56] tests [1740] fv_before Counter({4: 5, 0: 2, 5: 1}) fv_after Counter({4: 4, 0: 4}) power ['Battery Power'] speed_limit ['none']
+     thermal before {'0': 8} after {'0': 8}
+  all 27 runs incl round 0, before+after: {'0': 54}
+  round 0 (discarded): B cpu 25.0 wall 7.86, H cpu 24.01 wall 9.34, T cpu 25.66 wall 7.74
+  H-B cpu median -1.080 (-4.29 % of B cpu; interval -9.66..-0.95 %) sign+ 0/8 k 2 interval [-2.430, -0.240] R 2.430
+  H-B wall median +1.665 sign+ 8/8 k 2 interval [+1.340, +1.850] R 1.850
+  T-B cpu median -0.115 (-0.46 % of B cpu; interval -1.67..+1.95 %) sign+ 3/8 k 2 interval [-0.420, +0.490] R 0.490
+  T-B wall median -0.080 sign+ 3/8 k 2 interval [-0.130, +0.070] R 0.130
+  twin: cpu median -0.46 % of B (limit 1.5 %), sign 3/8 (chance band 2..6) -> admissible True; twin cpu R 0.490 s (1.95 % of B); twin wall R 0.130 s
+  A3: H wall median 9.245 + twin wall R 0.130 = 9.375 s  (<= 10 s: True; > 9.0 s cooled owed: True)
+  A4: H-B cpu median -1.080 s (-4.29 %), interval [-2.430, -0.240] s = [-9.66 %, -0.95 %]; wholly below 0: True
+  ratio of medians H/B cpu 0.9402, wall 1.2093
+
+=== sequences.tsv
+  step=1 | label=settle-then-warm | prev_end_utc=none | gate_start_utc=2026-10-11T16:56:09Z | gate_pass_utc=2026-10-11T17:18:36Z | launch_utc=2026-10-11T17:18:36Z | battery='Battery Power' 98%; discharging; 6:19 remaining present: true  | load1=2.28 | thermal=0
+  step=2 | label=gate-k2 | prev_end_utc=2026-10-11T17:22:25Z | gate_start_utc=2026-10-11T17:22:25Z | gate_pass_utc=2026-10-11T17:23:56Z | launch_utc=2026-10-11T17:23:56Z | battery='Battery Power' 95%; discharging; 5:59 remaining present: true  | load1=4.03 | thermal=0
+  step=3 | label=gate-k3 | prev_end_utc=2026-10-11T17:28:47Z | gate_start_utc=2026-10-11T17:28:47Z | gate_pass_utc=2026-10-11T17:31:33Z | launch_utc=2026-10-11T17:31:33Z | battery='Battery Power' 92%; discharging; 5:09 remaining present: true  | load1=3.90 | thermal=0
+  step=4 | label=gate-cooled | prev_end_utc=last-k3-run-start:2026-10-11T17:35:31.442Z | gate_start_utc=2026-10-11T17:36:38Z | gate_pass_utc=2026-10-11T17:38:09Z | launch_utc=2026-10-11T17:38:09Z | battery='Battery Power' 90%; discharging; 4:33 remaining present: true  | load1=4.12 | thermal=0
+  step=5 | label=lanes | prev_end_utc=2026-10-11T18:22:27Z | gate_start_utc=- | gate_pass_utc=- | launch_utc=2026-10-11T18:22:27Z | battery='Battery Power' 78%; discharging; 5:02 remaining present: true  | load1=3.52 | thermal=0
+
+=== A5 abc151-heat-k2 (H only, 27 runs back to back), errors 0
+  first read at level >= 1: run 5 (after); reads at >= 1: 45 of 54; max level 2
+  idle s from previous run's end (2026-10-11T17:22:25Z) to first run (2026-10-11T17:23:56.563Z): 92; gate 2026-10-11T17:22:25Z -> pass 2026-10-11T17:23:56Z; battery 'Battery Power' 95%; discharging; 5:59 remaining present: true ; load1 4.03; level 0
+  wall median 10.27 (9.94-12.48), cpu median 26.51 (25.42-31.19), files [56] tests [1740] load1b 4.03-6.55 fv_before Counter({5: 20, 0: 7}) power ['Battery Power']
+  sampler during the sequence: 19 samples, 16 at >= 1, first >= 1 at 2026-10-11T17:24:55+00:00 (58 s after the first run started)
+  idx	round	wall	cpu	par	load1_b	load1_a	th_b	th_a	fv_b	status	utc
+  1	0	10.22	26.47	2.59	4.03	4.18	0	0	5	ok	2026-10-11T17:23:56.563Z
+  2	1	10.34	26.79	2.591	4.18	4.3	0	0	5	ok	2026-10-11T17:24:07.060Z
+  3	2	12.11	29.94	2.472	4.3	5.21	0	0	5	ok	2026-10-11T17:24:17.668Z
+  4	3	10.27	26.2	2.551	5.21	5.19	0	0	5	ok	2026-10-11T17:24:30.119Z
+  5	4	10.07	26.12	2.594	5.19	5.47	0	1	5	ok	2026-10-11T17:24:40.648Z
+  6	5	9.98	25.77	2.582	5.47	5.41	1	1	5	ok	2026-10-11T17:24:50.980Z
+  7	6	10.04	25.75	2.565	5.41	5.56	1	1	5	ok	2026-10-11T17:25:01.223Z
+  8	7	10.33	26.86	2.6	5.56	5.29	1	1	5	ok	2026-10-11T17:25:11.523Z
+  9	8	10.13	26.51	2.617	5.29	5.48	1	1	5	ok	2026-10-11T17:25:22.139Z
+  10	9	10.17	26.52	2.608	5.48	5.33	1	1	5	ok	2026-10-11T17:25:32.539Z
+  11	10	10.1	26.19	2.593	5.33	5.44	1	1	5	ok	2026-10-11T17:25:42.961Z
+  12	11	10.41	26.83	2.577	5.44	6.1	1	2	5	ok	2026-10-11T17:25:53.311Z
+  13	12	10.63	27.28	2.566	6.1	6.48	2	2	5	ok	2026-10-11T17:26:03.983Z
+  14	13	10.14	26.38	2.602	6.48	6.25	2	2	5	ok	2026-10-11T17:26:14.882Z
+  15	14	10.2	26.38	2.586	6.25	6.37	2	2	5	ok	2026-10-11T17:26:25.288Z
+  16	15	10.31	26.58	2.578	6.37	6.39	2	2	5	ok	2026-10-11T17:26:35.757Z
+  17	16	10.56	27.41	2.596	6.39	6.18	2	2	5	ok	2026-10-11T17:26:46.356Z
+  18	17	11.28	29.0	2.571	6.18	6.55	2	2	5	ok	2026-10-11T17:26:57.196Z
+  19	18	11.21	29.0	2.587	6.55	6.17	2	2	5	ok	2026-10-11T17:27:08.766Z
+  20	19	10.12	25.9	2.559	6.17	6.07	2	2	5	ok	2026-10-11T17:27:20.280Z
+  21	20	9.96	25.62	2.572	6.07	5.74	2	2	0	ok	2026-10-11T17:27:30.641Z
+  22	21	9.94	25.42	2.557	5.74	5.54	2	2	0	ok	2026-10-11T17:27:40.858Z
+  23	22	10.51	27.02	2.571	5.54	5.63	2	2	0	ok	2026-10-11T17:27:51.043Z
+  24	23	10.35	26.47	2.557	5.5	5.56	2	2	0	ok	2026-10-11T17:28:01.787Z
+  25	24	10.22	26.31	2.574	5.56	5.31	2	2	0	ok	2026-10-11T17:28:12.428Z
+  26	25	12.48	31.19	2.499	5.31	5.49	2	1	0	ok	2026-10-11T17:28:22.885Z
+  27	26	11.54	28.98	2.511	5.49	5.73	1	1	0	ok	2026-10-11T17:28:35.675Z
+
+=== A5 abc151-heat-k3 (B only, 27 runs back to back), errors 0
+  first read at level >= 1: run 6 (after); reads at >= 1: 43 of 54; max level 2
+  idle s from previous run's end (2026-10-11T17:28:47Z) to first run (2026-10-11T17:31:34.081Z): 167; gate 2026-10-11T17:28:47Z -> pass 2026-10-11T17:31:33Z; battery 'Battery Power' 92%; discharging; 5:09 remaining present: true ; load1 3.90; level 0
+  wall median 8.65 (7.43-10.49), cpu median 28.52 (25.46-34.60), files [56] tests [1740] load1b 3.84-8.48 fv_before Counter({4: 27}) power ['Battery Power']
+  sampler during the sequence: 16 samples, 13 at >= 1, first >= 1 at 2026-10-11T17:32:30+00:00 (56 s after the first run started)
+  idx	round	wall	cpu	par	load1_b	load1_a	th_b	th_a	fv_b	status	utc
+  1	0	7.43	26.34	3.545	3.9	3.99	0	0	4	ok	2026-10-11T17:31:34.081Z
+  2	1	7.61	25.46	3.346	3.99	3.84	0	0	4	ok	2026-10-11T17:31:41.764Z
+  3	2	7.95	26.54	3.338	3.84	3.94	0	0	4	ok	2026-10-11T17:31:49.616Z
+  4	3	8.11	26.79	3.303	3.94	4.02	0	0	4	ok	2026-10-11T17:31:57.822Z
+  5	4	8.25	27.38	3.319	4.02	4.32	0	0	4	ok	2026-10-11T17:32:06.184Z
+  6	5	8.24	27.49	3.336	4.32	4.42	0	1	4	ok	2026-10-11T17:32:14.685Z
+  7	6	8.3	27.3	3.289	4.42	4.55	1	1	4	ok	2026-10-11T17:32:23.178Z
+  8	7	8.35	27.85	3.335	4.55	4.84	1	1	4	ok	2026-10-11T17:32:31.736Z
+  9	8	8.26	27.69	3.352	4.84	4.78	1	1	4	ok	2026-10-11T17:32:40.343Z
+  10	9	8.47	27.79	3.281	4.78	5.04	1	1	4	ok	2026-10-11T17:32:48.856Z
+  11	10	8.53	27.75	3.253	5.04	5.83	1	1	4	ok	2026-10-11T17:32:57.579Z
+  12	11	9.42	31.64	3.359	5.83	5.79	1	1	4	ok	2026-10-11T17:33:06.372Z
+  13	12	8.65	28.21	3.261	5.79	6.05	1	2	4	ok	2026-10-11T17:33:16.048Z
+  14	13	8.69	28.52	3.282	6.05	6.27	2	2	4	ok	2026-10-11T17:33:24.953Z
+  15	14	8.58	28.09	3.274	6.27	6.14	2	2	4	ok	2026-10-11T17:33:33.892Z
+  16	15	8.53	28.9	3.388	6.14	6.05	2	2	4	ok	2026-10-11T17:33:42.720Z
+  17	16	8.8	28.66	3.257	6.05	6.28	2	2	4	ok	2026-10-11T17:33:51.500Z
+  18	17	8.84	29.74	3.364	6.28	7.7	2	2	4	ok	2026-10-11T17:34:00.562Z
+  19	18	9.23	30.45	3.299	7.7	7.5	2	2	4	ok	2026-10-11T17:34:09.649Z
+  20	19	9.9	32.14	3.246	7.5	7.35	2	2	4	ok	2026-10-11T17:34:19.124Z
+  21	20	9.98	32.93	3.3	7.35	7.14	2	2	4	ok	2026-10-11T17:34:29.282Z
+  22	21	10.32	34.4	3.333	7.14	6.96	2	2	4	ok	2026-10-11T17:34:39.515Z
+  23	22	9.92	32.59	3.285	6.96	6.58	2	2	4	ok	2026-10-11T17:34:50.115Z
+  24	23	9.86	32.68	3.314	6.58	6.65	2	2	4	ok	2026-10-11T17:35:00.302Z
+  25	24	10.01	32.97	3.294	6.65	6.77	2	2	4	ok	2026-10-11T17:35:10.430Z
+  26	25	10.49	34.6	3.298	6.77	8.48	2	2	4	ok	2026-10-11T17:35:20.700Z
+  27	26	9.67	32.82	3.394	8.48	8.27	2	1	4	ok	2026-10-11T17:35:31.442Z

@@ -1,0 +1,3 @@
+# abc151-heat-k3 summary: n = 26 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 28.59	wall 8.67	par 3.301	load1 6.05	load1>8 1/26	files 56	tests 1740
+twin R: cpu NaN s, wall NaN s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

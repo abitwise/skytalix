@@ -1,0 +1,9 @@
+# abc151-warm summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 25.86	wall 7.87	par 3.296	load1 5.15	load1>8 0/8	files 56	tests 1740
+H	cpu 23.08	wall 9.04	par 2.554	load1 4.89	load1>8 0/8	files 56	tests 1740
+  H-B cpu	median -2.345 (-9.07 % of base cpu)	sign 0/8	k 2	interval [-2.910, -2.020]	R 2.910
+  H-B wall	median 1.325	sign 8/8	k 2	interval [1.140, 1.490]	R 1.490
+T	cpu 25.88	wall 7.63	par 3.345	load1 4.89	load1>8 0/8	files 56	tests 1740
+  T-B cpu	median 0.270 (1.04 % of base cpu)	sign 5/8	k 2	interval [-0.560, 0.680]	R 0.680
+  T-B wall	median -0.170	sign 3/8	k 2	interval [-0.230, 0.220]	R 0.230
+twin R: cpu 0.680 s, wall 0.230 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

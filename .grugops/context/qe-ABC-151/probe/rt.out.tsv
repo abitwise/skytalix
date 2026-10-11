@@ -1,0 +1,6 @@
+tag	sha	env	files_logged	distinct_pool_ids	ids	vitest_summary
+head	fc4ebb33	-	6	2	1,2	Tests  6 passed (6)
+base	f439c8fd	-	6	3	1,2,3	Tests  6 passed (6)
+head-env1	fc4ebb33	VITEST_MAX_THREADS=1	6	1	1	Tests  6 passed (6)
+head-env8	fc4ebb33	VITEST_MAX_THREADS=8	6	6	1,2,3,4,5,6	Tests  6 passed (6)
+head-env0x3	fc4ebb33	VITEST_MAX_THREADS=0x3	6	3	1,2,3	Tests  6 passed (6)

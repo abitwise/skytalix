@@ -1,0 +1,7 @@
+// QE ABC-151 runtime probe (scratch copies only, never the repository): which pool slot ran this file?
+import { appendFileSync } from "node:fs";
+import { it } from "vitest";
+it("records its pool slot", async () => {
+  appendFileSync(process.env.QE_POOL_LOG as string, `${process.env.VITEST_POOL_ID}\t${process.env.VITEST_WORKER_ID}\n`);
+  await new Promise((r) => setTimeout(r, 400)); // overlap only; nothing is timed or asserted on time
+});

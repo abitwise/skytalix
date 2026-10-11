@@ -69,12 +69,16 @@ import type { ViteUserConfig } from "vitest/config";
  *     flaking, delete this file first - that is the whole rollback - and say so on the ticket.
  *
  * -------------------------------------------------------------------------------------------
- * `maxWorkers: 3` below is the worker cap ruled by
+ * `maxWorkers: 2` below is the worker cap ruled by
  * `memory-bank/50-decisions/ADR-0040-the-default-lane-holds-at-most-four-test-workers-pinned-by-value-and-isolation-stays-on.md`
- * (accepted 2026-10-11 with its Window A addendum, `ABC-144`). Without it `vitest run` takes
- * `availableParallelism() - 1` = 7 workers on the reference M3's 8 cores. 3 is the largest cap
- * whose Window A reading cut lane CPU by >= 15% with the wall inside 10 s (K4 missed the CPU
- * clause). It is a fixed integer, not a percentage, so it does not scale with the core count.
+ * (accepted 2026-10-11 with its Window A addendum, `ABC-144`; set to 2 by its addendum 2,
+ * `ABC-151`). Without it `vitest run` takes `availableParallelism() - 1` = 7 workers on the
+ * reference M3's 8 cores. 2 is THE OWNER'S PICK, FOR HEAT: "Heat 2 workers is fine" (Olger
+ * Oeselg, 2026-10-11), answering the moderate thermal pressure `ABC-144` Window B read at 3.
+ * Decision 2's rule alone still reads 3 (the largest cap whose Window A reading cut lane CPU by
+ * >= 15% with the wall inside 10 s); 2 is eligible under it too, and the owner's word overrides
+ * only "largest". It is a fixed integer, not a percentage, so it does not scale with the core
+ * count.
  * It is pinned BY VALUE in `src/cli.test.ts` (`ABC-144 A7`): raising it, adding
  * `poolOptions` (whose `maxThreads` silently outranks `maxWorkers`), `fileParallelism: false`
  * or `isolate: false` turns that pin red, and `VITEST_MAX_THREADS` / `VITEST_MAX_FORKS` may
@@ -85,7 +89,7 @@ import type { ViteUserConfig } from "vitest/config";
 export default {
   test: {
     pool: "threads",
-    maxWorkers: 3,
+    maxWorkers: 2,
     /**
      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by

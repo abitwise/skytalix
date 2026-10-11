@@ -208,3 +208,124 @@ for the Architect's addendum (In Design WIP 0/2).
 | 10 | no major unresolved blocker | **✅** the owner has answered; nothing else is open |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-11 (subtask `ticket-to-pr-ABC-151`). Branch `grugops/ABC-151-two-test-workers`,
+code commit `0035001c`, base `f439c8fd`. The detail is in `.grugops/context/ticket-to-pr-ABC-151/notes/`
+(`…586f20f4`, `…d73145f6`, `…de66a3a9`). Plant script and raw output: `…/probe/`.
+
+- **The setting, per `ADR-0040` addendum 2 (k = 2).** `vitest.config.ts` `test.maxWorkers: 2`. Nothing else in the
+  config moves. The header paragraph names the owner's pick for heat and addendum 2, and keeps decision 2's
+  reading of 3 in view. The isolation warning is byte-identical.
+- **The pin (`ABC-144 A7`):** `toBe(2)`, `VITEST_MAX_THREADS` / `VITEST_MAX_FORKS` ≤ 2, and titles that say 2. The
+  comment cites "`ADR-0040` addendum 2" and lists what a raise breaks. No `it` was added.
+- **Armed (`A2`).** On fresh `git archive 0035001c` copies, each of these went red:
+  - r1, `maxWorkers: 2` deleted: `expected undefined to be 2`;
+  - r2, `isolate: false`;
+  - r3, `VITEST_MAX_THREADS=8`;
+  - r3b, `VITEST_MAX_THREADS=3`: `expected 3 to be less than or equal to 2`;
+  - `maxWorkers: 3`: `expected 3 to be 2`;
+  - extra: `VITEST_MAX_FORKS=3`.
+
+  `VITEST_MAX_THREADS=2` and `=1` stay green, and so does the control.
+- **`A1` resolved:** `effectiveWorkers` is 2 at head and 3 at base, with `isolate: true`. There is no `isolate` key
+  and no `poolOptions`.
+- **`A6`, from one run each:** 56 files and 1740 tests at both head and base, with 0 skipped. All 7 `*.nfr` files
+  passed. 0 production `src/` lines. The 20-run screen is still owed.
+- **Gates:** lint, typecheck, build and `npm test` all exit 0.
+- **No timing read.** `A3`, `A4` and `A5` are Security/NFR's width-1 window, in addendum 2's step order.
+  `AGENTS.md` is the Scribe's.
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-151`).
+- Range: base `f439c8fd`, code `0035001c`, reviewed tip `fc4ebb33`. The dry-run merges were against the wave tip
+  `aa932974` and `ABC-149`'s branch (`9a309fb4`).
+- Every reading is QE's own. **No timing, CPU or heat was read or graded.** The detail is in
+  `.grugops/context/qe-ABC-151/notes/`, and it is not restated here:
+  - `…333ce1b6`, the verdict;
+  - `…6774ed96`, the readings;
+  - `…cb3b04e5`, the plants;
+  - `…5ee777b8`, the gaps;
+  - `…43898bdd`, the commands and the probe.
+
+**PASS_WITH_GAPS.**
+- **`A1` MET.** `effectiveWorkers` is **2 at head and 3 at base**, with `isolate: true`. There is no `isolate` key
+  and no `poolOptions`. At runtime, the runner used 2 pool slots at head and 3 at base.
+- **`A2` MET.** QE re-planted the reds on fresh copies:
+  - r1, r2, r3, r3b (`VITEST_MAX_THREADS=3`) and `maxWorkers: 3` are all **RED**;
+  - `=2` and `=1` stay green;
+  - QE's 19 extras: 15 RED as designed, 2 survive (`QE-151-a`), 1 false red (`QE-151-b`), and 1 is the known
+    CLI-flag route.
+- **`A6` MET within QE's scope:**
+  - **20 of 20 consecutive green `npm test` at head, in 20 runs total**, each with 7 of 7 `*.nfr` files passing;
+  - 56 files and 1740 tests (**= base**), with 0 skipped;
+  - all 10 opt-in lane configurations collect the same files and tests as base; only the renamed pin id differs;
+  - 0 production `src/` lines.
+- **`A7`, as far as it exists at this hop:**
+  - the addendum and the config header are as specified;
+  - `NFR-008`'s row is unchanged;
+  - **the `AGENTS.md` worker-cap line still says 3. That is owed to the Scribe.**
+- **Not graded, and owed to the width-1 window:** `A3`, `A4`, `A5` and the lanes' exits.
+- **Dry-run merges:**
+  - against `aa932974`: **clean**, and the merged tree is green (56 / 1740, `effectiveWorkers` 2);
+  - against `ABC-149`: one append-only conflict, in `plans/traceability.md`. **There is no `src/cli.test.ts`
+    overlap**, and the union tree is green;
+  - both were aborted, and nothing was committed;
+  - **re-checked against the newer tip `868f28b9`** (the `ABC-152` design, with no code change): one
+    append-only conflict, in `plans/traceability.md`, which a union resolves. See note `…843d8b1b`.
+- **Gaps: 1 LOW and 3 INFO, none blocking:**
+  - `QE-151-a` (LOW): a hex env value (`0x3`) raises the cap with the pin green. vitest parses with no radix,
+    and the pin parses with radix 10. Pre-existing since `ABC-144`. Proposed carrier: `ABC-152`;
+  - `QE-151-b`: an empty `VITEST_MAX_THREADS=` is a false red;
+  - `QE-151-c`: the traceability union at merge;
+  - `QE-151-d`: the lanes' exits are window step 5.
+- **UAT:** the waiver applies on QE's reading (0 production `src/` lines). Applying it is the Orchestrator's.
+- **Next:** `In Security/NFR` for the width-1 window, in addendum 2's step order. That is the Orchestrator's move.
+
+## Security/NFR — the width-1 window
+
+**2026-10-11, Security/NFR** (subtask `secnfr-ABC-151-window`).
+- **Window:** width 1 for this factory, 17:18:36Z–19:12:14Z, after a 22 min 27 s settle wait. That wait was held
+  mostly by another project's test runner. The run was in addendum 2's fixed step order, on battery.
+- **Commits:** base `f439c8fd` (k = 3), head `612b7b6d` (code `0035001c`, k = 2), and twin = base. Resolved workers
+  were 3, 2 and 3, with `isolate: true`.
+- **Runs:** 135 harness runs and 9 lane runs, with 0 harness errors. Every run read 56 files and 1740 tests.
+- **Detail:** `.grugops/context/secnfr-ABC-151-window/notes/`:
+  - `…fcf66342`, the grades and result;
+  - `…78a8c8ea`, the readings;
+  - `…363fc14c`, the heat;
+  - `…2983f397`, the method, the settle wait and the foreign load.
+- **Raw files:** `../probe/`. They are not restated here.
+
+**PASS_WITH_RISKS. No required fixes.**
+
+| | bar | reading | state |
+|---|---|---|---|
+| `A3` warm | H median + twin wall R ≤ 10 s | 9.035 + 0.230 = **9.265 s**. That is > 9.0 s, so the cooled state was owed | MET |
+| `A3` cooled | the same, with its own twin | 9.245 + 0.130 = **9.375 s**. Cooled ÷ warm is 1.023 at head, so **cooled binds** at k = 2 | MET |
+| `A4` | CPU interval wholly below 0 | **−9.07 %** (interval −11.25..−7.81 %). Cooled: −4.29 % (−9.66..−0.95 %) | MET |
+| `A5` | reported | first read at level ≥ 1: k = 2 at **run 5**, k = 3 at **run 6**. Reads at ≥ 1: **45** and **43** of 54. Both reached **level 2** (28 reads each) | **to the owner** |
+| lanes (`QE-151-d`) | each exits 0 | 8 of 8 at head exit 0, and the counts equal QE's base. `ENGINE_DEEP`: H 330.8 s, B 317.8 s | delivered |
+
+- **Every run over 10 s:**
+  - warm: H 10.02 s;
+  - cooled: H 10.46 s, during a foreign burst;
+  - `A5` k = 2: 24 of 27 runs (median 10.27 s);
+  - `A5` k = 3: 3 of 27 runs.
+- **Said plainly: k = 2 did not reach moderate heat later or less than k = 3.** On the clock it was 5–17 s later
+  to each level. That is within one run, and it is not counted as a separation.
+- **The k = 2 sequence cost 8.6 % fewer CPU-seconds**, but it reached the same levels. 90 s of idle between runs kept
+  every read at 0.
+- **The `A5` outcome goes to the owner beside the merge** (`RISK-ABC151-HEAT-NOGAIN`). His options are to keep k = 2,
+  to roll back to 3 (addendum 2), or to use another lever (width, or idle between runs).
+- **Risks, each with an owner:**
+  - `RISK-ABC151-HEAT-NOGAIN`: Olger Oeselg.
+  - `RISK-ABC151-WALL-MARGIN`: Olger Oeselg. The margin is 0.6–0.7 s, and k = 2 runs over 10 s under sustained heat.
+  - `RISK-ABC151-FOREIGN`: Orchestrator. Another session's test runner was present for parts of `A5`, the cooled
+    step and the lanes.
+  - `RISK-ABC144-FCAP`: Architect/Design. No k = 2 twin was read.
+  - `RISK-ABC144-STALL`: Security/NFR.
+- **Untouched:** `src/`, `vitest.config.ts`, `plans/board.md`, `plans/nfr-catalog.md` and `AGENTS.md`. Nothing was
+  merged or pushed.

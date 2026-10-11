@@ -1,0 +1,10 @@
+control	rc=0	Tests  1 passed | 67 skipped (68)		eff 2, isolate true
+r2	rc=1	Tests  1 failed | 67 skipped (68)	AssertionError: expected false to be true // Object.is equality	eff 2, isolate false
+r3	rc=1	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_THREADS: expected 8 to be less than or equal to 2	eff 8, isolate true
+r3b	rc=1	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_THREADS: expected 3 to be less than or equal to 2	eff 3, isolate true
+raise3	rc=1	Tests  1 failed | 67 skipped (68)	AssertionError: expected 3 to be 2 // Object.is equality	eff 3, isolate true
+lower2	rc=0	Tests  1 passed | 67 skipped (68)		eff 2, isolate true
+lower1	rc=0	Tests  1 passed | 67 skipped (68)		eff 1, isolate true
+x4forks	rc=1	Tests  1 failed | 67 skipped (68)	AssertionError: VITEST_MAX_FORKS: expected 3 to be less than or equal to 2	eff 2, isolate true
+r1	rc=1	Tests  1 failed | 67 skipped (68)	AssertionError: expected undefined to be 2 // Object.is equality	eff 7, isolate true
+# r1's first attempt used a multi-line anchor; grep -cF counted 120 lines, the arm did not run. Re-run with the single-line anchor "maxWorkers: 2," (plants-r1 variant).

@@ -3384,26 +3384,29 @@ describe("ABC-115 — a reader that closes early ends the session quietly, at th
   });
 });
 
-describe("ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolation (ADR-0040)", () => {
+describe("ABC-144 A7 — the lane's runner holds its 2-worker cap and keeps isolation (ADR-0040)", () => {
   // A VALUE pin, never a timing (`ADR-0040` decision 3 + Window A addendum, accepted 2026-10-11).
+  // The literal is 2 by `ADR-0040` addendum 2 (`ABC-151`): the owner's pick for heat, "Heat 2
+  // workers is fine" (2026-10-11). A raise to 3 breaks his pick; to 4, decision 2 as well; above
+  // 4, `A2` too. Each needs his word.
   // Each line follows vitest 3.2.7's own precedence for the worker count: `fileParallelism: false`
   // forces 1; `poolOptions.threads.maxThreads` silently outranks `maxWorkers`; the environment
   // (`VITEST_MAX_THREADS` / `VITEST_MAX_FORKS`) outranks both. The CLI-flag route is closed by
-  // `ABC-042` `A10`'s byte pin on `scripts.test`. `toBe(3)`, not `<= 3`: lowering the cap moves
+  // `ABC-042` `A10`'s byte pin on `scripts.test`. `toBe(2)`, not `<= 2`: lowering the cap moves
   // `A3`/`A4`'s wall and the floors `F`, so it is a ruling too. Only the environment may lower it.
-  it("vitest.config.ts resolves to 3 threads workers with isolation on, and no env raises it", async () => {
+  it("vitest.config.ts resolves to 2 threads workers with isolation on, and no env raises it", async () => {
     const { default: lane } = await import("../vitest.config.ts");
     // Widened on purpose: `satisfies` keeps the literal type, and the keys asserted ABSENT
     // (`isolate`, `fileParallelism`, `poolOptions`) would not exist on it.
     const test: NonNullable<ViteUserConfig["test"]> = lane.test ?? {};
     expect(test.pool).toBe("threads");
-    expect(test.maxWorkers).toBe(3);
+    expect(test.maxWorkers).toBe(2);
     expect(test.fileParallelism ?? true).toBe(true);
     expect(test.isolate ?? true).toBe(true); // `ADR-0008` decision 7
     expect(test.poolOptions).toBeUndefined();
     for (const name of ["VITEST_MAX_THREADS", "VITEST_MAX_FORKS"]) {
       const raw = process.env[name];
-      if (raw !== undefined) expect(Number.parseInt(raw, 10), name).toBeLessThanOrEqual(3);
+      if (raw !== undefined) expect(Number.parseInt(raw, 10), name).toBeLessThanOrEqual(2);
     }
   });
 });

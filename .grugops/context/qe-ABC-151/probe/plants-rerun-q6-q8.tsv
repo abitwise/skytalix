@@ -1,0 +1,2 @@
+q6	exit=1	RED	as-designed	hit-1	Tests  no tests	RangeError: options.minThreads and options.maxThreads must not conflict	eff=2 isolate=true threadsMax=null	add minWorkers: 8
+q8	exit=1	RED	as-designed	-	Tests  no tests	RangeError: Invalid array length	eff=null isolate=true threadsMax=null	VITEST_MAX_THREADS=abc (NaN)
