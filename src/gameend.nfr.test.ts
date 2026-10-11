@@ -29,9 +29,9 @@ vi.mock("./zobrist.ts", async (importOriginal) => {
   return { ...actual, zobristKey: vi.fn(actual.zobristKey) };
 });
 
-const { legalMoves } = await import("./legal.ts");
-const { zobristKey } = await import("./zobrist.ts");
-const { gameStatus } = await import("./gameend.ts");
+import { gameStatus } from "./gameend.ts";
+import { legalMoves } from "./legal.ts";
+import { zobristKey } from "./zobrist.ts";
 
 /** The G-1 position: a legal, ordinary board that every state below is a clock/counts edit of. */
 const G1_FEN = "6k1/5ppp/8/b7/8/8/5PPP/4R1K1 w - - 0 1";

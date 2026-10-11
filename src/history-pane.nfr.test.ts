@@ -53,15 +53,20 @@ vi.mock("./history.ts", async (importOriginal) => {
   };
 });
 
-const { parseFen } = await import("./fen.ts");
-const { toSan } = await import("./san.ts");
-const { gameStatus } = await import("./gameend.ts");
-const { gameStatusOf, keyHistory, newGame, playMove, repetitionCounts, takeBack } = await import(
-  "./history.ts"
-);
-const { HISTORY_ROWS, renderHistory } = await import("./history-pane.ts");
-const { legalMoves } = await import("./legal.ts");
-const { parseSquareName } = await import("./position.ts");
+import { parseFen } from "./fen.ts";
+import { gameStatus } from "./gameend.ts";
+import {
+  gameStatusOf,
+  keyHistory,
+  newGame,
+  playMove,
+  repetitionCounts,
+  takeBack,
+} from "./history.ts";
+import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
+import { legalMoves } from "./legal.ts";
+import { parseSquareName } from "./position.ts";
+import { toSan } from "./san.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 

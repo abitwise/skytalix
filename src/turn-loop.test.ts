@@ -114,12 +114,10 @@ vi.mock("./history.ts", async (importOriginal) => {
   };
 });
 
-const { assembleFrame, beginFrameSession, MESSAGE_ROWS, PROMPT_ROWS } = await import("./frame.ts");
-const { gameStatus } = await import("./gameend.ts");
-const { gameStatusOf, keyHistory, newGame, playMove, repetitionCounts } = await import(
-  "./history.ts"
-);
-const { INPUT_ENDED_NOTICE, QUIT_NOTICE, runTurnLoop } = await import("./turn-loop.ts");
+import { assembleFrame, beginFrameSession, MESSAGE_ROWS, PROMPT_ROWS } from "./frame.ts";
+import { gameStatus } from "./gameend.ts";
+import { gameStatusOf, keyHistory, newGame, playMove, repetitionCounts } from "./history.ts";
+import { INPUT_ENDED_NOTICE, QUIT_NOTICE, runTurnLoop } from "./turn-loop.ts";
 
 // ---------------------------------------------------------------------------
 // Positions. Every one of them was RUN against merged `src/` before it was written down.
