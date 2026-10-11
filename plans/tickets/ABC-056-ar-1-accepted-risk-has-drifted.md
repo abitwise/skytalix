@@ -150,3 +150,16 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P2`, with the promotion trigger named |
 | 10 | no major unresolved blocker | **⚠️ NOT MET** — the re-check trigger (`A4`) is a **Release Manager** decision, and the `@vitest/coverage-v8` breaking-upgrade question is theirs too. BA/PM cannot score this Ready on someone else's behalf |
+
+## Page note — `RISK-ABC143-01` rides on the coverage-v8 question
+
+**2026-10-11, BA/PM** (task `wave-2026-09-25`, subtask `bapm-fold-qe143-2026-10-11`). Nothing above changed.
+DoR stays 9/10, and item 10 is still the Release Manager's.
+- `@vitest/coverage-v8` 3.2.7's installed manifest declares the peer `vitest: 3.2.7` (read at the hop). So
+  **a yes to the coverage-v8 4.x upgrade is in practice a vitest 4.x bump.** The 4.x peer is
+  `UNKNOWN - verify`.
+- On 4.x, `tools/grugops/result-file-reporter.js` silently drops unhandled errors (`QE-143-c`, read, not
+  run). **The upgrade ticket, if one is cut, carries `RISK-ABC143-01`.** That rule is stated once, on
+  `ABC-143`'s page § Follow-ups. In short: depend on `ABC-149`, re-run its six plant rows at head, and
+  take or decline QE's 4.x route.
+- This ticket still performs no upgrade (`A5`).
