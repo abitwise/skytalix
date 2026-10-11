@@ -1,0 +1,2 @@
+tree=base vitest/3.2.7 exit=0 | fnwrap outer=1 inner=4 lambda=1 same=false
+tree=v41v7 vitest/4.1.11 exit=1 | fnwrap outer=4 inner=4 lambda=1 same=true

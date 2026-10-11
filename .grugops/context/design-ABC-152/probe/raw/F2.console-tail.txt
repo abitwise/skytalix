@@ -1,0 +1,119 @@
+
+ FAIL  src/san.test.ts > ABC-013 acceptance > A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure
+AssertionError: expected [ 'parseSan', 'toSan' ] to deeply equal [ 'toSan', 'parseSan' ]
+
+- Expected
++ Received
+
+  [
+-   "toSan",
+    "parseSan",
++   "toSan",
+  ]
+
+ ❯ src/san.test.ts:291:36
+    289|     // ticket adds. What the row actually guards — the import set belo…
+    290|     // direction dragged no new dependency into the module — is unchan…
+    291|     expect(Object.keys(namespace)).toEqual(["toSan", "parseSan"]);
+       |                                    ^
+    292|
+    293|     const source = readFileSync(new URL("./san.ts", import.meta.url), …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/20]⎯
+
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > never touches the repetition machinery, on any shape
+FenError: illegal character "r" in placement rank 8
+ ❯ parsePlacement src/fen.ts:88:15
+     86|       const type = PIECE_BY_CHAR[char.toLowerCase()];
+     87|       if (type === undefined) {
+     88|         throw new FenError(`illegal character "${char}" in placement r…
+       |               ^
+     89|       }
+     90|       if (file > 7) {
+ ❯ parseGrammar src/fen.ts:278:3
+ ❯ Module.parseFen src/fen.ts:237:29
+ ❯ gameFrom src/status-panel.nfr.test.ts:83:20
+ ❯ <anonymous> src/status-panel.nfr.test.ts:112:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/20]⎯
+
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > calls toSan exactly once, and not at all before the first move
+FenError: illegal character "r" in placement rank 8
+ ❯ parsePlacement src/fen.ts:88:15
+     86|       const type = PIECE_BY_CHAR[char.toLowerCase()];
+     87|       if (type === undefined) {
+     88|         throw new FenError(`illegal character "${char}" in placement r…
+       |               ^
+     89|       }
+     90|       if (file > 7) {
+ ❯ parseGrammar src/fen.ts:278:3
+ ❯ Module.parseFen src/fen.ts:237:29
+ ❯ gameFrom src/status-panel.nfr.test.ts:83:20
+ ❯ <anonymous> src/status-panel.nfr.test.ts:133:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/20]⎯
+
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > asks isInCheck exactly once ITSELF — the panel's own call is the only one it makes
+FenError: illegal character "r" in placement rank 8
+ ❯ parsePlacement src/fen.ts:88:15
+     86|       const type = PIECE_BY_CHAR[char.toLowerCase()];
+     87|       if (type === undefined) {
+     88|         throw new FenError(`illegal character "${char}" in placement r…
+       |               ^
+     89|       }
+     90|       if (file > 7) {
+ ❯ parseGrammar src/fen.ts:278:3
+ ❯ Module.parseFen src/fen.ts:237:29
+ ❯ gameFrom src/status-panel.nfr.test.ts:83:20
+ ❯ <anonymous> src/status-panel.nfr.test.ts:145:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/20]⎯
+
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > scans the 64 squares exactly once, whatever the board holds and however deep the game
+FenError: illegal character "r" in placement rank 8
+ ❯ parsePlacement src/fen.ts:88:15
+     86|       const type = PIECE_BY_CHAR[char.toLowerCase()];
+     87|       if (type === undefined) {
+     88|         throw new FenError(`illegal character "${char}" in placement r…
+       |               ^
+     89|       }
+     90|       if (file > 7) {
+ ❯ parseGrammar src/fen.ts:278:3
+ ❯ Module.parseFen src/fen.ts:237:29
+ ❯ gameFrom src/status-panel.nfr.test.ts:83:20
+ ❯ <anonymous> src/status-panel.nfr.test.ts:215:30
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/20]⎯
+
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > replays the history exactly once for the last move, and never twice
+FenError: illegal character "k" in placement rank 8
+ ❯ parsePlacement src/fen.ts:88:15
+     86|       const type = PIECE_BY_CHAR[char.toLowerCase()];
+     87|       if (type === undefined) {
+     88|         throw new FenError(`illegal character "${char}" in placement r…
+       |               ^
+     89|       }
+     90|       if (file > 7) {
+ ❯ parseGrammar src/fen.ts:278:3
+ ❯ Module.parseFen src/fen.ts:237:29
+ ❯ gameFrom src/status-panel.nfr.test.ts:83:20
+ ❯ <anonymous> src/status-panel.nfr.test.ts:233:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/20]⎯
+
+ FAIL  src/status-panel.nfr.test.ts > ABC-016 A13 — the panel derives nothing (call counts, spied) > pays no replay at all before the first move
+FenError: illegal character "r" in placement rank 8
+ ❯ parsePlacement src/fen.ts:88:15
+     86|       const type = PIECE_BY_CHAR[char.toLowerCase()];
+     87|       if (type === undefined) {
+     88|         throw new FenError(`illegal character "${char}" in placement r…
+       |               ^
+     89|       }
+     90|       if (file > 7) {
+ ❯ parseGrammar src/fen.ts:278:3
+ ❯ Module.parseFen src/fen.ts:237:29
+ ❯ gameFrom src/status-panel.nfr.test.ts:83:20
+ ❯ <anonymous> src/status-panel.nfr.test.ts:255:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/20]⎯
+

@@ -1,0 +1,2 @@
+vitest 4.1.11 runner=on exit=0 | 
+vitest 4.1.11 runner=off exit=1 | reset-probe same-instance=true

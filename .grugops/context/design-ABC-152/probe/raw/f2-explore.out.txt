@@ -1,0 +1,8 @@
+src/gameend.nfr.test.ts: 3 dynamic imports -> static
+src/history-pane.nfr.test.ts: 7 dynamic imports -> static
+src/glyph-mode.nfr.test.ts: 4 dynamic imports -> static
+src/san.nfr.test.ts: 2 dynamic imports -> static
+src/turn-loop.nfr.test.ts: 3 dynamic imports -> static
+src/status-panel.nfr.test.ts: 8 dynamic imports -> static
+src/zobrist.nfr.test.ts: 2 dynamic imports -> static
+src/turn-loop.test.ts: 4 dynamic imports -> static

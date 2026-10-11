@@ -1,0 +1,61 @@
+
+ RUN  v4.1.11 <scratch>/v41v7
+
+······························································································································································································································································································································································x··x························································································································································································stdout | src/search.pvs-lmr.test.ts > A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 > position-3 at depth 4 — the default lane's standing guard
+ABC-121 A5 position-3 d4: 991 / 1325 = 74.8%
+
+··············································································································································································································································································stdout | src/levels.test.ts > A9 — different seeds actually differ > ≥ 5 seeds over the same ≥ 30 positions give ≥ 2 distinct blunder-decision sequences
+A9: 5 distinct sequences over 5 seeds
+
+···················································stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > kiwipete at depth 1 — the default lane's cheap reading, level 180x
+A5 kiwipete depth 1: 603 nodes with quiescence / 49 without = 12.31x
+
+···stdout | src/quiescence.test.ts > A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 > position-6 at depth 1 — the default lane's cheap reading, level 10x
+A5 position-6 depth 1: 432 nodes with quiescence / 47 without = 9.19x
+
+···································································································································································································································································································································································································································································································································································································································································································································································································································stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A2 — every book move is legal in its keyed position, over every entry
+ABC-093 A2: examined 5390 entries of 5390; 5825 moves; 0 illegal
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A3 — the longest line is >= 8 plies and never deeper than maxPly (<= 12)
+ABC-093 A3: longest book line 12 plies; maxPly 12
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight
+ABC-093 A4: 19 weighted replies to 1. e4
+
+stdout | tools/opening-book/book.test.ts > the delivered artifact (data/opening-book/book.json) > A5 — NFR-006: the artifact on disk is <= 1,048,576 bytes
+ABC-093 A5: 356526 bytes of 1048576 (34.0%)
+
+···········································································
+
+ Test Files  1 failed | 55 passed (56)
+      Tests  2 failed | 1738 passed (1740)
+
+JSON report written to <scratch>/out/A1.vitest.json
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-3
+AssertionError: expected "vi.fn()" to be called 1 times, but got 3 times
+ ❯ src/command-input.test.ts:1532:27
+    1530|       movesOf(history, seam.deps);
+    1531|
+    1532|       expect(seam.derive).toHaveBeenCalledTimes(1);
+       |                           ^
+    1533|       expect(seam.derive.mock.calls[0]?.[0]).toBe(history.position);
+    1534|       const legal = seam.derive.mock.results[0]?.value;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/command-input.test.ts > ABC-036 A4 — one legalMoves per `moves` line, and that array in every toSan > derives once and shares the array at position-6
+AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times
+ ❯ src/command-input.test.ts:1532:27
+    1530|       movesOf(history, seam.deps);
+    1531|
+    1532|       expect(seam.derive).toHaveBeenCalledTimes(1);
+       |                           ^
+    1533|       expect(seam.derive.mock.calls[0]?.[0]).toBe(history.position);
+    1534|       const legal = seam.derive.mock.results[0]?.value;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

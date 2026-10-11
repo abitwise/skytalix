@@ -1,0 +1,647 @@
+{
+  "arm": "F1",
+  "tree": "<scratch>/v41v7-f1",
+  "exit": 1,
+  "signal": null,
+  "jsonWritten": true,
+  "files": 56,
+  "tests": 1723,
+  "passed": 1632,
+  "failed": 91,
+  "skippedOrPending": 0,
+  "failedSuites": 27,
+  "success": false,
+  "filesStarted": 56,
+  "filesEnded": 56,
+  "unfinished": [],
+  "redFiles": [
+    "src/command-input.test.ts",
+    "src/gameend.nfr.test.ts",
+    "src/glyph-mode.nfr.test.ts",
+    "src/history-pane.nfr.test.ts",
+    "src/san.nfr.test.ts",
+    "src/san.test.ts",
+    "src/status-panel.nfr.test.ts",
+    "src/turn-loop.nfr.test.ts",
+    "src/turn-loop.test.ts",
+    "src/zobrist.nfr.test.ts"
+  ],
+  "red": [
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-045 — `resign` resolves to the EXISTING game-over arm with the resigner's loss A2 control — the same legalMoves spy DOES count a real call on a line that is a move",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-035 fences — grammar only writes to no stream of its own — the outcome is the only channel",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-035 fences — grammar only takes no argument: a token with anything after it is not a command",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else A1 — quit / legal move / quit: an intervening MOVE clears it (the third clause, pure)",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else A1 — quit / rejected line / quit: a line that is NOT a move clears it too",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else G1 — trailing text does not arm: quit / quit now / quit asks AGAIN, and quit now twice never exits",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-046 — `quit` asks once, ends on the second consecutive `quit`, and forgets on anything else A1 — through the MERGED loop with an opponent: quit / e4 / quit does NOT end the session",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-102 — `undo` takes back the human's move AND the engine's reply, or refuses A1 — through the MERGED loop: the human's move and the reply go, byte-identical to before the human moved",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-036 — the `moves` token joins the table under ABC-035's tolerance does NOT classify \"move\" as a command",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-036 — the `moves` token joins the table under ABC-035's tolerance does NOT classify \"movess\" as a command",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-036 — the `moves` token joins the table under ABC-035's tolerance does NOT classify \"mo\" as a command",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-036 — the `moves` token joins the table under ABC-035's tolerance does NOT classify \"moves e4\" as a command",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/command-input.test.ts",
+      "kind": "test",
+      "title": "ABC-036 — the `moves` token joins the table under ABC-035's tolerance does NOT classify \"moves 2\" as a command",
+      "first": "TypeError: deps.legalMoves is not a function"
+    },
+    {
+      "file": "src/gameend.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-001 — gameStatus stays cheap at a search leaf (call counts, spied) generates the legal moves EXACTLY once, on every call shape",
+      "first": "TypeError: undefined is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/gameend.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-001 — gameStatus stays cheap at a search leaf (call counts, spied) reads the Zobrist key exactly ONCE when the counts map is consulted",
+      "first": "TypeError: zobristKey is not a function"
+    },
+    {
+      "file": "src/gameend.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-001 — gameStatus stays cheap at a search leaf (call counts, spied) reads the Zobrist key NOT AT ALL when a cheaper branch already decides",
+      "first": "TypeError: zobristKey is not a function"
+    },
+    {
+      "file": "src/glyph-mode.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-007 — the glyph-mode selection reaches its answer with no I/O (spied) performs ZERO filesystem operations, on every selection path",
+      "first": "TypeError: [Function readFileSync] is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/glyph-mode.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-007 — the glyph-mode selection reaches its answer with no I/O (spied) performs ZERO process operations — there is no `locale` subprocess and no font probe",
+      "first": "TypeError: [Function execSync] is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/history-pane.nfr.test.ts",
+      "kind": "suite",
+      "title": "",
+      "first": "newGame is not a function"
+    },
+    {
+      "file": "src/san.nfr.test.ts",
+      "kind": "suite",
+      "title": "",
+      "first": "legalMoves is not a function"
+    },
+    {
+      "file": "src/san.test.ts",
+      "kind": "test",
+      "title": "ABC-013 acceptance A20 — the module surface: two exports, four imports, and no `parseSan` foreclosure",
+      "first": "AssertionError: expected [ 'parseSan', 'toSan' ] to deeply equal [ 'toSan', 'parseSan' ]"
+    },
+    {
+      "file": "src/status-panel.nfr.test.ts",
+      "kind": "test",
+      "title": "ABC-016 A13 — the panel derives nothing (call counts, spied) never touches the repetition machinery, on any shape",
+      "first": "TypeError: [Function gameStatusOf] is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/status-panel.nfr.test.ts",
+      "kind": "test",
+      "title": "ABC-016 A13 — the panel derives nothing (call counts, spied) calls toSan exactly once, and not at all before the first move",
+      "first": "TypeError: [Function toSan] is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/status-panel.nfr.test.ts",
+      "kind": "test",
+      "title": "ABC-016 A13 — the panel derives nothing (call counts, spied) asks isInCheck exactly once ITSELF — the panel's own call is the only one it makes",
+      "first": "TypeError: [Function isInCheck] is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/status-panel.nfr.test.ts",
+      "kind": "test",
+      "title": "ABC-016 A13 — the panel derives nothing (call counts, spied) scans the 64 squares exactly once, whatever the board holds and however deep the game",
+      "first": "TypeError: [Function squareAt] is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/status-panel.nfr.test.ts",
+      "kind": "test",
+      "title": "ABC-016 A13 — the panel derives nothing (call counts, spied) replays the history exactly once for the last move, and never twice",
+      "first": "TypeError: [Function squareAt] is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/status-panel.nfr.test.ts",
+      "kind": "test",
+      "title": "ABC-016 A13 — the panel derives nothing (call counts, spied) pays no replay at all before the first move",
+      "first": "TypeError: [Function squareAt] is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/turn-loop.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY once per ply at 40 plies",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY once per ply at 120 plies",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY once per ply at 300 plies",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives ZERO times on a `rejected` prompt outcome",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 1 — mate line (Fool's mate)",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 2 — stalemate line",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 3 — insufficient-material line",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 4 — fivefold repetition, on the FIFTH occurrence",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 5 — 75-move line",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 6 — THIRD repetition, play on",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 7 — halfmove clock 100, play on",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 8 — rejected input",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 9 — ambiguous input (a promotion)",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 10 — `board` redraw",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 11 — EOF",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 12 — engine throw inside a `makeMove` bracket",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 13 — engine returns a foreign move",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 15 — prompt-driven `game-over` (the seam's own result and reason)",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 16 — already-terminal START — K+N vs K, six legal moves available",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 14 — INPUT seam throws inside a `makeMove` bracket",
+      "first": "Error: expected TypeError: newGame is not a function to be Error: parser exploded inside the bracket // Object.is equality"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 17 — INPUT seam returns a move not in `legalMoves`",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A1 — the human is BLACK, so the engine acts first and no prompt precedes it",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A1b — the human is WHITE, so the input seam acts first and no engine call precedes it",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A2 — one full move renders THREE frames, and the cadence is 1 + plies + non-advancing",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A3 — append then derive then evaluate then render, through `gameStatusOf` every time",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A3b — one derive per ply, and ZERO on a non-mutating prompt outcome",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A4 — the third occurrence is claimable ON THAT PLY, the fifth ends it ON THAT PLY",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A5 — `rejected` and `ambiguous` advance no ply, re-evaluate nothing, and reach the message region",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A5b — a non-advancing outcome's message items belong to ONE frame and leave with it",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A6 — a non-mutating command re-emits a frame, advances no ply and re-evaluates nothing",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A7 — the final frame is the MATED position and the winner is `gameStatus`'s own result",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A7b — neither seam is called after the terminal status is computed",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A8 — stdin ends: one notice, no further act, exit 0, and NO terminal result",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A8b — the prompt-driven `game-over` returns the seam's OWN result and reason, unaltered",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A9 — a mid-bracket throw is repaired by replay, and the loop never continues on the object",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A9b — an INPUT-seam mid-bracket throw is repaired and then RETHROWN",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A10 — a foreign move is not applied, and its reason is no chess outcome",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A10b — a foreign move from the INPUT seam is not applied either, and the loop THROWS",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A11 — the thinking flag is set only in the thinking state, and the row count never moves",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A13 — a claimable draw does NOT stop the loop, and the claim reaches the render seam",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A15 — a seam resolving on a LATER MACROTASK gives an identical frame sequence and verdict",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A16 — a seam that mutates while suspended: the next frame is the position AT THAT MOMENT",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A18 — TWO stub seams: neither at 3/8, one fits a 24-row TTY and one does not",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A19 — one session at the first frame's own height, frames untouched (shape A)",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A19 — one session at the first frame's own height, frames untouched (shape B)",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-019 acceptance A20 — after EVERY redraw the screen equals the frame, at `W`(frame 1) and at 80 columns",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ADR-0009 clause 9f — the loop against the REAL panels, both of them the real pair is 3/8, assembles to H = 23, and redraws IN PLACE on a 24-row TTY",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ADR-0009 clause 9f — the loop against the REAL panels, both of them `A19`'s four clauses hold at the real geometry, and the height is DERIVED there too",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ADR-0009 clause 9f — the loop against the REAL panels, both of them the WIRING: the real panels derive nothing, and the status, the thinking flag and the messages are the LOOP's",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ADR-0009 clause 9f — the loop against the REAL panels, both of them the loop is SWAP-INVARIANT: same verdict, same cadence, same plies at stub 2/5, stub 4/9 and the real 3/8",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-021 acceptance — transition 16, the draw claim A1 — the human claims the third occurrence: the loop stops with the CLAIMED article, and the final frame is that position",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-021 acceptance — transition 16, the draw claim A2 — the same position played ON instead: mate, and NO draw is reported at any point in the run",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-021 acceptance — transition 16, the draw claim A3 — a claim the rules core refuses takes `rejected`'s path, and the message names BOTH gaps in numbers",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-021 acceptance — transition 16, the draw claim A4 — the ENGINE is never asked for a claim: it is handed the game, it answers with a move, and the game goes on",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-021 acceptance — transition 16, the draw claim A5 — neither side ever claims: the FIFTH occurrence ends it automatically, reached through the LOOP",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-021 acceptance — transition 16, the draw claim A6 — the availability reaches the FRAME, off the ONE derive that ply already makes",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-021 acceptance — transition 16, the draw claim A7 — BOTH claimed reasons are reachable through the loop, and the ratified order decides when both are",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-021 acceptance — transition 16, the draw claim A8 — the ONE derive the loop makes on its own, ledgered: `keyHistory` fires on the REFUSED claim, and on no advancing ply, allowed claim or take-back (`ABC-120` `A3`-`A5`)",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-021 acceptance — transition 16, the draw claim A9 — the WIDEST refusal message the loop can emit still fits the NARROWEST frame it can emit it into",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A1 — `quit` ends the session with NO result, NO frame, one notice, and NO further read",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A3 — `take-back` on a CLAIMABLE position: ONE derive clears the stale claim cell, and the three rewind together",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A4 — `take-back` of two plies WITH a message: the message reaches the next frame and leaves with it",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/turn-loop.test.ts",
+      "kind": "test",
+      "title": "ABC-120 acceptance — transitions 17 (quit) and 18 (take-back) A5 — `take-back` of ZERO plies at ply 0: one derive, one frame, nothing else",
+      "first": "TypeError: newGame is not a function"
+    },
+    {
+      "file": "src/zobrist.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-005 — zobristKey never consults hasLegalEnPassant (structural since ADR-0020, spied) asks nothing on any input, with or without an ep square",
+      "first": "TypeError: undefined is not a spy or a call to a spy!"
+    },
+    {
+      "file": "src/zobrist.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-005 — hasLegalEnPassant's own NO_SQUARE guard returns false and touches no board byte (a candidate capturer, probe legal)",
+      "first": "TypeError: hasLegalEnPassant is not a function"
+    },
+    {
+      "file": "src/zobrist.nfr.test.ts",
+      "kind": "test",
+      "title": "NFR-005 — hasLegalEnPassant's own NO_SQUARE guard returns false and touches no board byte (a candidate capturer, probe illegal)",
+      "first": "TypeError: hasLegalEnPassant is not a function"
+    }
+  ],
+  "collected": [
+    "src/apply.test.ts",
+    "src/book.test.ts",
+    "src/cli.real-engine.test.ts",
+    "src/cli.test.ts",
+    "src/command-input.test.ts",
+    "src/coordinate-move.test.ts",
+    "src/engine.capacity.test.ts",
+    "src/engine.test.ts",
+    "src/evaluate.king-mobility.test.ts",
+    "src/evaluate.pawns.test.ts",
+    "src/evaluate.test.ts",
+    "src/fen.test.ts",
+    "src/frame.overflow-bound.test.ts",
+    "src/frame.test.ts",
+    "src/gameend.nfr.test.ts",
+    "src/gameend.test.ts",
+    "src/glyph-mode.nfr.test.ts",
+    "src/glyph-mode.test.ts",
+    "src/history-pane.nfr.test.ts",
+    "src/history-pane.test.ts",
+    "src/history.test.ts",
+    "src/ladder.test.ts",
+    "src/legal.test.ts",
+    "src/levels.test.ts",
+    "src/line-input.test.ts",
+    "src/move-input.test.ts",
+    "src/moves.castling.hardening.test.ts",
+    "src/moves.castling.test.ts",
+    "src/moves.enpassant.hardening.test.ts",
+    "src/moves.enpassant.test.ts",
+    "src/moves.test.ts",
+    "src/perft.test.ts",
+    "src/puzzle-suite.test.ts",
+    "src/quiescence.test.ts",
+    "src/rejection.test.ts",
+    "src/render-seam.test.ts",
+    "src/render.test.ts",
+    "src/result-screen.test.ts",
+    "src/san.nfr.test.ts",
+    "src/san.parse.test.ts",
+    "src/san.qualifier.hardening.test.ts",
+    "src/san.suffix.hardening.test.ts",
+    "src/san.test.ts",
+    "src/search.capacity.test.ts",
+    "src/search.ordering.test.ts",
+    "src/search.pvs-lmr.test.ts",
+    "src/search.qe.test.ts",
+    "src/search.test.ts",
+    "src/status-panel.nfr.test.ts",
+    "src/status-panel.test.ts",
+    "src/transposition.test.ts",
+    "src/turn-loop.nfr.test.ts",
+    "src/turn-loop.test.ts",
+    "src/zobrist.nfr.test.ts",
+    "src/zobrist.test.ts",
+    "tools/opening-book/book.test.ts"
+  ]
+}

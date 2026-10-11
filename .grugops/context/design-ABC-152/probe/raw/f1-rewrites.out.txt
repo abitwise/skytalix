@@ -1,0 +1,4 @@
+src/cli.test.ts: expect( 321 -> 321
+src/render-seam.test.ts: expect( 36 -> 36
+src/command-input.test.ts: expect( 295 -> 295
+tools/opening-book/book.test.ts: expect( 26 -> 26
