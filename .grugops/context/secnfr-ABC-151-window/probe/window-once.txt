@@ -1,0 +1,20 @@
+utc_start 2026-10-11T16:56:09Z
+B f439c8fdc1b1ff0d2079c3ecc0d4c9d665648ef5
+T f439c8fdc1b1ff0d2079c3ecc0d4c9d665648ef5
+H 612b7b6d65ea4498cecd0acb5f8cb7b78dbc79c4
+ lowpowermode         0
+node v26.11.0
+runner 3.2.7
+hw Mac15,13 Apple M3 perf=4 eff=4
+os Darwin 25.5.0
+pmset -g therm:
+Note: No thermal warning level has been recorded
+Note: No performance warning level has been recorded
+Note: No CPU power status has been recorded
+pmset -g batt:
+Now drawing from 'Battery Power'
+ -InternalBattery-0 (id=23658595)	100%; discharging; 6:53 remaining present: true
+com.apple.system.thermalpressurelevel 0
+load: { 4.28 6.03 9.53 }
+steps_0_3_end 2026-10-11T17:35:41Z
+utc_end 2026-10-11T19:12:14Z

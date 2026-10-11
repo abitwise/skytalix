@@ -1,0 +1,17 @@
+# harness: secnfr-ABC-144-window-b/probe/lane144b.mjs used IN PLACE on the ticket branch. /usr/bin/cmp against main's copy:
+cmp: identical (exit 0). lane144b.mjs diff: NONE.
+652b779305bca2b0fbf39ec1974de4b914d9b06e55829b2923fc64401ba80c7c  .grugops/context/secnfr-ABC-144-window-b/probe/lane144b.mjs
+
+# sampler.sh vs secnfr-ABC-144-window-b/probe/sampler.sh (/usr/bin/diff):
+2,4c2,4
+< # secnfr-ABC-144-window-b: supplementary 15 s heat/power/load sampler over the whole window (as Window A's raw-sampler.sh.txt).
+< # Usage: bash sampler.sh <outdir>; stops when <outdir>/STOP exists or after 120 min.
+< W="$1"; OUT="$W/winb.thermal.tsv"
+---
+> # secnfr-ABC-151-window: a copy of secnfr-ABC-144-window-b/probe/sampler.sh. TWO changes: the cap is 300 min, not 120 (this window runs the lanes too), and the output file is w151.thermal.tsv. The run used this logic; only this comment line was corrected after the run.
+> # Usage: bash sampler.sh <outdir>; stops when <outdir>/STOP exists or after 300 min.
+> W="$1"; OUT="$W/w151.thermal.tsv"
+6c6
+< end=$(( $(date +%s) + 7200 ))
+---
+> end=$(( $(date +%s) + 18000 ))

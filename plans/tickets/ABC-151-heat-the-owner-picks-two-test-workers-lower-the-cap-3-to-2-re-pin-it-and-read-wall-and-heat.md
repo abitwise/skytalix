@@ -283,3 +283,49 @@ code commit `0035001c`, base `f439c8fd`. The detail is in `.grugops/context/tick
   - `QE-151-d`: the lanes' exits are window step 5.
 - **UAT:** the waiver applies on QE's reading (0 production `src/` lines). Applying it is the Orchestrator's.
 - **Next:** `In Security/NFR` for the width-1 window, in addendum 2's step order. That is the Orchestrator's move.
+
+## Security/NFR — the width-1 window
+
+**2026-10-11, Security/NFR** (subtask `secnfr-ABC-151-window`).
+- **Window:** width 1 for this factory, 17:18:36Z–19:12:14Z, after a 22 min 27 s settle wait. That wait was held
+  mostly by another project's test runner. The run was in addendum 2's fixed step order, on battery.
+- **Commits:** base `f439c8fd` (k = 3), head `612b7b6d` (code `0035001c`, k = 2), and twin = base. Resolved workers
+  were 3, 2 and 3, with `isolate: true`.
+- **Runs:** 135 harness runs and 9 lane runs, with 0 harness errors. Every run read 56 files and 1740 tests.
+- **Detail:** `.grugops/context/secnfr-ABC-151-window/notes/`:
+  - `…fcf66342`, the grades and result;
+  - `…78a8c8ea`, the readings;
+  - `…363fc14c`, the heat;
+  - `…2983f397`, the method, the settle wait and the foreign load.
+- **Raw files:** `../probe/`. They are not restated here.
+
+**PASS_WITH_RISKS. No required fixes.**
+
+| | bar | reading | state |
+|---|---|---|---|
+| `A3` warm | H median + twin wall R ≤ 10 s | 9.035 + 0.230 = **9.265 s**. That is > 9.0 s, so the cooled state was owed | MET |
+| `A3` cooled | the same, with its own twin | 9.245 + 0.130 = **9.375 s**. Cooled ÷ warm is 1.023 at head, so **cooled binds** at k = 2 | MET |
+| `A4` | CPU interval wholly below 0 | **−9.07 %** (interval −11.25..−7.81 %). Cooled: −4.29 % (−9.66..−0.95 %) | MET |
+| `A5` | reported | first read at level ≥ 1: k = 2 at **run 5**, k = 3 at **run 6**. Reads at ≥ 1: **45** and **43** of 54. Both reached **level 2** (28 reads each) | **to the owner** |
+| lanes (`QE-151-d`) | each exits 0 | 8 of 8 at head exit 0, and the counts equal QE's base. `ENGINE_DEEP`: H 330.8 s, B 317.8 s | delivered |
+
+- **Every run over 10 s:**
+  - warm: H 10.02 s;
+  - cooled: H 10.46 s, during a foreign burst;
+  - `A5` k = 2: 24 of 27 runs (median 10.27 s);
+  - `A5` k = 3: 3 of 27 runs.
+- **Said plainly: k = 2 did not reach moderate heat later or less than k = 3.** On the clock it was 5–17 s later
+  to each level. That is within one run, and it is not counted as a separation.
+- **The k = 2 sequence cost 8.6 % fewer CPU-seconds**, but it reached the same levels. 90 s of idle between runs kept
+  every read at 0.
+- **The `A5` outcome goes to the owner beside the merge** (`RISK-ABC151-HEAT-NOGAIN`). His options are to keep k = 2,
+  to roll back to 3 (addendum 2), or to use another lever (width, or idle between runs).
+- **Risks, each with an owner:**
+  - `RISK-ABC151-HEAT-NOGAIN`: Olger Oeselg.
+  - `RISK-ABC151-WALL-MARGIN`: Olger Oeselg. The margin is 0.6–0.7 s, and k = 2 runs over 10 s under sustained heat.
+  - `RISK-ABC151-FOREIGN`: Orchestrator. Another session's test runner was present for parts of `A5`, the cooled
+    step and the lanes.
+  - `RISK-ABC144-FCAP`: Architect/Design. No k = 2 twin was read.
+  - `RISK-ABC144-STALL`: Security/NFR.
+- **Untouched:** `src/`, `vitest.config.ts`, `plans/board.md`, `plans/nfr-catalog.md` and `AGENTS.md`. Nothing was
+  merged or pushed.

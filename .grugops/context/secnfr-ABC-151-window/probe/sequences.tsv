@@ -1,0 +1,6 @@
+step	label	prev_end_utc	gate_start_utc	gate_pass_utc	launch_utc	battery	load1	thermal
+1	settle-then-warm	none	2026-10-11T16:56:09Z	2026-10-11T17:18:36Z	2026-10-11T17:18:36Z	'Battery Power' 98%; discharging; 6:19 remaining present: true 	2.28	0
+2	gate-k2	2026-10-11T17:22:25Z	2026-10-11T17:22:25Z	2026-10-11T17:23:56Z	2026-10-11T17:23:56Z	'Battery Power' 95%; discharging; 5:59 remaining present: true 	4.03	0
+3	gate-k3	2026-10-11T17:28:47Z	2026-10-11T17:28:47Z	2026-10-11T17:31:33Z	2026-10-11T17:31:33Z	'Battery Power' 92%; discharging; 5:09 remaining present: true 	3.90	0
+4	gate-cooled	last-k3-run-start:2026-10-11T17:35:31.442Z	2026-10-11T17:36:38Z	2026-10-11T17:38:09Z	2026-10-11T17:38:09Z	'Battery Power' 90%; discharging; 4:33 remaining present: true 	4.12	0
+5	lanes	2026-10-11T18:22:27Z	-	-	2026-10-11T18:22:27Z	'Battery Power' 78%; discharging; 5:02 remaining present: true 	3.52	0
