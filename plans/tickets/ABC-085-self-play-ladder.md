@@ -366,3 +366,35 @@ Assessed by BA/PM, **2026-08-16**. **Result: 7 of 10 clean, 3 ⚠️ — NOT met
 | 8 | size assigned | **✅** `M` (3) |
 | 9 | priority assigned | **✅** `P1`, **with the argument against it stated and handed to the owner** |
 | 10 | no major unresolved blocker | **⚠️** **a 5-hour opt-in run has no home in this delivery process.** No board column, cadence or gate accommodates it, and nothing says who runs it or how often. Owner: the Orchestrator with the project owner |
+
+## Delivery
+
+**2026-10-11, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-085`). **BUILD ONLY; the
+verdict was not run.** Branch `grugops/ABC-085-self-play-ladder` from `aee4b8cb`: harness `d5b0f0e2`, docs on top.
+Not merged, not pushed. Decisions and readings are in `.grugops/context/ticket-to-pr-ABC-085/notes/`
+(`…098699a1` decisions, `…8c8d3fa3` readings, `…70684a78` cost risk, `…8515e3e7` artefacts), with raw files in
+`probe/`. They are not restated here.
+
+**The harness is `src/ladder.test.ts`. 0 production lines.** `SHORT_STEP = 120` and `VERDICT_STEP = 4` are
+named constants. `LADDER_DEEP=1` / `=verdict` select one per run, and both sides get it, each on its own clock.
+`LEVELS` is used verbatim. One `it` per pair: 3v4, 4v5, 2v3, 1v2, then 1v5.
+
+| # | status | evidence |
+|---|---|---|
+| `A1` | **WAITS for the verdict run** | Not taken. It needs `LADDER_DEEP=verdict` on a tree with `ABC-083`'s merge (decision 6). The report line carries commit, step, seeds, games, wall and load1, and prints MET/RED. Short mode's 10/10 is against the depth-1 floor and is never `A1` |
+| `A2` | **WAITS for the verdict run** | Not taken. Early signal ONLY (short mode, step 120, 4 games each): 3v4 2.5/4, 4v5 2.5/4, 2v3 4/4, 1v2 3/4 |
+| `A3` | Met in short mode | 26/26 games ended in each of two runs, 0 at the ply cap, 7 by claim. Default rows: threefold claimed at ply 8 (the first offer, not fivefold at 16), fifty-move claimed at the first offer, a capped game is an error with no score |
+| `A4` | Met in short mode | 26/26 move lists replay through `legalMoves` / `makeMove` in each run, with no ending before the last ply |
+| `A5` | Met in short mode | 1v2 played twice in process gives equal move lists and score. All 5 pair digests are equal across two separate runs. The step rows refuse a per-side step and any un-named step (test note 6) |
+| `A6` | Met (harness); the verdict wall waits | Every line names mode, step and games, plus claimed draws per pair. Short-mode counts are constants (10 / 4). Short-mode wall 848 s, **loaded machine, not graded** |
+
+- **Gates at `d5b0f0e2`.** Lint, typecheck and build exit 0. `npm test` is 54 files / 1689 passed / 0 skipped
+  (baseline 53 / 1680). Skip integrity reads `No findings.`, and the lane inventory is 54 = 54.
+- **Default lane, by count:** 0 ladder games (a pin row), +1 file, +9 rows, 0 spawns. `LADDER_DEEP=1`: run 2
+  exits 0, 14/14.
+- **Raised, not acted on:**
+  - Inside vitest the engine costs ~4.3x per node against plain node (same games, same nodes). The verdict
+    estimate of ~10 h is likely **~44 h** in this lane (`…70684a78`). That is routed to Architect/Orchestrator.
+  - The `AGENTS.md` lane line is drafted for the Scribe (`…8515e3e7`).
+- **The board move (`In Development` → `In Review`) is the Orchestrator's.** This hop was fenced off
+  `plans/board.md`.
