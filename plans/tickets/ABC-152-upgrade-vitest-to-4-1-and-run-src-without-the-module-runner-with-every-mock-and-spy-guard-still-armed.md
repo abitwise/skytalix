@@ -305,3 +305,37 @@ BA/PM, 2026-10-11, re-scored at the re-cut. **Result: 10 of 10.** Recommended pl
 | 10 | no major unresolved blocker | **✅** the owner picked the route and accepted `ADR-0042` and `RISK-ABC152-A2-GRAPH`. Ruling 7 cases found: 0 (`UNKNOWN - verify` until `V4`) |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-11 (subtask `ticket-to-pr-ABC-152`). Branch `grugops/ABC-152-vitest-4-1-runner-off`
+from `main` `91024242`; code and test commits `9313dda7..23c5521a`, one per step of the addendum's build plan. The
+detail is in `.grugops/context/ticket-to-pr-ABC-152/notes/`, and the scripts and raw output are in `…/probe/`.
+**No timing, CPU or heat reading was taken for `V9`–`V11`.**
+
+- **`V1`:** `npm ls` exits 0. vitest 4.1.11, coverage-v8 4.1.11, vite 7.3.6 (direct). No other devDependency
+  moved. The lockfile is +3 / −61 / 20 changed.
+- **`V3`:** the key resolves `false`. The `V3` `it` is red when the key is deleted and red when it is `true`.
+- **`V6`:** `A7` was edited in place. All 11 listed reds are red and all 3 listed greens are green. `QE-144-a`
+  closes; `QE-151-a` and `QE-151-b` are folded.
+- **`V2`** (SE's own reading, QE grades it): all six rows AGREE by content, with READ IT pasted with its line
+  breaks. `M9b` is killed by the exit-code-only row alone. `main`'s `onFinished` code fails the unhandled row. The
+  load-time check throws on either missing hook.
+- **`V4`:** 30 plants on 20 files. Every file in the set has a production plant that turns a count or routing
+  guard red, including `NFR-001`, `NFR-005`, `N1` and `NFR-007` (×3), A20 (×2), and A2 (red at head, blind under
+  the old form).
+  - One add-plant stayed green. It is on `command-input`'s `PRODUCTION_DEPS` path, whose only guard is `>= 1`, and
+    it is green on base 3.2.7 too. The removal plant turns that guard red. **Ruling 7: 0 cases.**
+- **`V5`:** `expect(` is equal per file, except `src/cli.test.ts` 321 → 324. **56 files / 1741 tests / 0
+  skipped.** No test was deleted, skipped, moved or merged.
+- **`V7`:** 20 of 20 consecutive green `npm test` runs, with all 7 `*.nfr` files passing. **`V8`:** same 56 paths.
+  Each opt-in lane collects base + `V3` and exits 0. Coverage exits 0.
+- **`V12` (0 production lines):** `git diff --name-only 91024242 23c5521a | grep -v '\.test\.ts$' | grep '^src/'`
+  is empty.
+- **Gates:** lint, typecheck, build and `npm test` (56 / 1741 / 0) all exit 0. Skip count 0; integrity
+  `No findings.`
+- **Seen, not changed:**
+  - vitest 4.1 prints a `vitest/reporters` deprecation line on every `npm test` (`RISK-ABC143-01` surface 1);
+  - three stale comments that still describe the pre-rewrite forms.
+
+  Both are routed in the hand-off note `…4567b6b5`.

@@ -1,0 +1,60 @@
+PERFT_DEEP start 1791750961 { 5.18 4.81 4.47 } thermal=Note: No thermal warning level has been recorded
+PERFT_DEEP exit 0 wall_s 11
+SEARCH_DEEP start 1791750972 { 6.15 5.06 4.56 } thermal=Note: No thermal warning level has been recorded
+SEARCH_DEEP exit 0 wall_s 278
+ENGINE_DEEP start 1791751250 { 3.75 4.46 4.45 } thermal=Note: No thermal warning level has been recorded
+ENGINE_DEEP exit 0 wall_s 205
+INPUT_DEEP start 1791751455 { 4.66 4.84 4.63 } thermal=Note: No thermal warning level has been recorded
+INPUT_DEEP exit 0 wall_s 8
+ZOBRIST_DEEP start 1791751463 { 4.79 4.86 4.64 } thermal=Note: No thermal warning level has been recorded
+ZOBRIST_DEEP exit 0 wall_s 12
+PUZZLE_DEEP start 1791751475 { 4.83 4.86 4.64 } thermal=Note: No thermal warning level has been recorded
+PUZZLE_DEEP exit 0 wall_s 11
+CLI_DEEP start 1791751486 { 4.78 4.85 4.64 } thermal=Note: No thermal warning level has been recorded
+CLI_DEEP exit 0 wall_s 14
+LADDER_DEEP start 1791751500 { 4.97 4.89 4.66 } thermal=Note: No thermal warning level has been recorded
+LADDER_DEEP exit 0 wall_s 191
+DONE
+
+attempt 1 (no lane ran; run-bounded could not find vitest on PATH):
+PERFT_DEEP start 1791750939 { 4.86 4.72 4.43 } thermal=Note: No thermal warning level has been recorded
+PERFT_DEEP exit 2 wall_s 0
+SEARCH_DEEP start 1791750939 { 4.86 4.72 4.43 } thermal=Note: No thermal warning level has been recorded
+SEARCH_DEEP exit 2 wall_s 0
+ENGINE_DEEP start 1791750939 { 4.86 4.72 4.43 } thermal=Note: No thermal warning level has been recorded
+ENGINE_DEEP exit 2 wall_s 0
+INPUT_DEEP start 1791750939 { 4.86 4.72 4.43 } thermal=Note: No thermal warning level has been recorded
+INPUT_DEEP exit 2 wall_s 0
+ZOBRIST_DEEP start 1791750939 { 4.86 4.72 4.43 } thermal=Note: No thermal warning level has been recorded
+ZOBRIST_DEEP exit 2 wall_s 0
+PUZZLE_DEEP start 1791750939 { 4.86 4.72 4.43 } thermal=Note: No thermal warning level has been recorded
+PUZZLE_DEEP exit 2 wall_s 0
+CLI_DEEP start 1791750939 { 4.86 4.72 4.43 } thermal=Note: No thermal warning level has been recorded
+CLI_DEEP exit 2 wall_s 0
+LADDER_DEEP start 1791750939 { 4.86 4.72 4.43 } thermal=Note: No thermal warning level has been recorded
+LADDER_DEEP exit 2 wall_s 0
+DONE
+== PERFT_DEEP
+ Test Files  56 passed (56)
+      Tests  1749 passed (1749)
+== SEARCH_DEEP
+ Test Files  56 passed (56)
+      Tests  1816 passed (1816)
+== ENGINE_DEEP
+ Test Files  56 passed (56)
+      Tests  1762 passed (1762)
+== INPUT_DEEP
+ Test Files  56 passed (56)
+      Tests  1745 passed (1745)
+== ZOBRIST_DEEP
+ Test Files  56 passed (56)
+      Tests  1742 passed (1742)
+== PUZZLE_DEEP
+ Test Files  56 passed (56)
+      Tests  1747 passed (1747)
+== CLI_DEEP
+ Test Files  56 passed (56)
+      Tests  1747 passed (1747)
+== LADDER_DEEP
+ Test Files  56 passed (56)
+      Tests  1746 passed (1746)

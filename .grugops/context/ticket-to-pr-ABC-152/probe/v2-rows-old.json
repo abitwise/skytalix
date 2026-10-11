@@ -1,0 +1,130 @@
+{
+ "label": "old-onFinished",
+ "stampCmd": "node -p 'Date.now()'",
+ "exitOnlyCmd": "npm test -- --coverage --coverage.thresholds.lines=100",
+ "unhandledEg": "it(\"p\", async () => { setTimeout(() => { throw new Error(\"PLANT-timer\"); }, 0); await new Promise((r) => setTimeout(r, 50)); })",
+ "rows": [
+  {
+   "row": "green",
+   "exit": 0,
+   "exitOk": true,
+   "fieldsOk": true,
+   "linesOk": true,
+   "agree": true,
+   "query": [],
+   "fields": {
+    "success": true,
+    "runState": "exited",
+    "exitCode": 0,
+    "numTotalTests": 1741,
+    "numFailedTests": 0,
+    "numFailedTestSuites": 0,
+    "unhandled": [],
+    "startTime": 1791750632507
+   }
+  },
+  {
+   "row": "hang",
+   "exit": 124,
+   "exitOk": true,
+   "fieldsOk": true,
+   "linesOk": true,
+   "agree": true,
+   "query": [
+    "run    started exitCode=none, killed"
+   ],
+   "fields": {
+    "success": false,
+    "runState": "started",
+    "unhandled": [],
+    "startTime": 1791750638335
+   }
+  },
+  {
+   "row": "unhandled",
+   "exit": 1,
+   "exitOk": true,
+   "fieldsOk": false,
+   "linesOk": false,
+   "agree": false,
+   "query": [
+    "run    exited exitCode=1"
+   ],
+   "fields": {
+    "success": false,
+    "runState": "exited",
+    "exitCode": 1,
+    "numTotalTests": 1742,
+    "numFailedTests": 0,
+    "numFailedTestSuites": 0,
+    "unhandled": [],
+    "startTime": 1791750698525
+   }
+  },
+  {
+   "row": "suite",
+   "exit": 1,
+   "exitOk": true,
+   "fieldsOk": true,
+   "linesOk": true,
+   "agree": true,
+   "query": [
+    "run    exited exitCode=1",
+    "suite  src/history.test.ts  PLANT-suite"
+   ],
+   "fields": {
+    "success": false,
+    "runState": "exited",
+    "exitCode": 1,
+    "numTotalTests": 1729,
+    "numFailedTests": 0,
+    "numFailedTestSuites": 1,
+    "unhandled": [],
+    "startTime": 1791750704327
+   }
+  },
+  {
+   "row": "assertion",
+   "exit": 1,
+   "exitOk": true,
+   "fieldsOk": true,
+   "linesOk": true,
+   "agree": true,
+   "query": [
+    "run    exited exitCode=1",
+    "test   src/gameend.test.ts  the claimable set omits the claimable property entirely rather than carrying an empty one"
+   ],
+   "fields": {
+    "success": false,
+    "runState": "exited",
+    "exitCode": 1,
+    "numTotalTests": 1741,
+    "numFailedTests": 1,
+    "numFailedTestSuites": 2,
+    "unhandled": [],
+    "startTime": 1791750710057
+   }
+  },
+  {
+   "row": "exit code only",
+   "exit": 1,
+   "exitOk": true,
+   "fieldsOk": true,
+   "linesOk": true,
+   "agree": true,
+   "query": [
+    "run    exited exitCode=1"
+   ],
+   "fields": {
+    "success": false,
+    "runState": "exited",
+    "exitCode": 1,
+    "numTotalTests": 1741,
+    "numFailedTests": 0,
+    "numFailedTestSuites": 0,
+    "unhandled": [],
+    "startTime": 1791750715929
+   }
+  }
+ ]
+}
