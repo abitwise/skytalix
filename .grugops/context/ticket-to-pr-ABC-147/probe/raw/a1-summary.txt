@@ -1,0 +1,37 @@
+usable profiled runs: [6, 13, 14, 15, 16, 17]
+bucket   i: 42.93 (37.68–44.19) %
+bucket  ii: 1.43 (1.21–1.68) %
+bucket iii: 12.15 (11.02–14.13) %
+bucket  iv: 42.08 (41.10–44.21) %
+bucket   v: 1.82 (1.56–2.30) %
+sum of medians: 100.41
+(i-w) in vitest workers: 42.62 (37.27–43.91)
+(i) in child processes: 0.29 (0.24–0.41)
+outside-src (in ii): 0.02 (0.01–0.02)
+where: worker 89.92 (88.69–90.18) | vitest main 3.34 (2.36–3.49) | child 6.97 (6.63–7.87)
+sampled busy s: 31.61 (30.73–57.70) | profiled run user+sys: 32.77 (32.30–42.22)
+coverage busy/cpu: 0.96 (0.93–1.37)
+unprofiled lane cpu (n=9): 28.10 (26.88–30.78)
+profiler overhead P/U cpu median: 1.166
+workerProfiles: [61, 61, 61, 61, 61, 61] noSingleFile: [7, 8, 7, 7, 7, 7] noSingleFile i%: [0, 0, 0, 0, 0, 0]
+top prod files (median % of sampled busy, runs present):
+   src/moves.ts 19.62 (16.97–21.45) 6
+   src/legal.ts 7.06 (5.57–7.60) 6
+   src/position.ts 5.51 (4.47–6.17) 6
+   src/apply.ts 2.29 (2.11–2.56) 6
+   src/evaluate.ts 2.24 (1.95–2.76) 6
+per-test-file (i-w): median rank, median %:
+   src/engine.test.ts rank 1.0 pct 9.83 (8.98–10.96) 6
+   src/search.test.ts rank 2.0 pct 4.69 (3.03–5.87) 6
+   src/transposition.test.ts rank 3.5 pct 3.34 (1.98–3.85) 6
+   src/search.ordering.test.ts rank 4.5 pct 2.88 (2.01–3.98) 6
+   src/perft.test.ts rank 4.5 pct 3.17 (1.93–3.42) 6
+   src/search.pvs-lmr.test.ts rank 6.0 pct 2.27 (1.44–2.83) 6
+   tools/opening-book/book.test.ts rank 6.5 pct 1.77 (1.49–2.05) 2
+   src/levels.test.ts rank 7 pct 2.16 (1.83–2.46) 5
+run 6 {'i': 43.93, 'ii': 1.41, 'iii': 11.547, 'iv': 41.55, 'v': 1.562} iW 43.688
+run 13 {'i': 40.303, 'ii': 1.457, 'iii': 12.301, 'iv': 44.076, 'v': 1.863} iW 40.014
+run 14 {'i': 43.448, 'ii': 1.362, 'iii': 12.299, 'iv': 41.099, 'v': 1.793} iW 43.172
+run 15 {'i': 42.414, 'ii': 1.473, 'iii': 12.001, 'iv': 42.423, 'v': 1.688} iW 42.065
+run 16 {'i': 44.19, 'ii': 1.205, 'iii': 11.022, 'iv': 41.727, 'v': 1.855} iW 43.908
+run 17 {'i': 37.682, 'ii': 1.68, 'iii': 14.126, 'iv': 44.213, 'v': 2.299} iW 37.267

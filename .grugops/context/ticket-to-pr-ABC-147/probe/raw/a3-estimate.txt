@@ -1,0 +1,8 @@
+A2 pairs: 10 usable: 10 void: 0
+E n 5 ratio median 5.093 (4.929–5.379) | cold first-call ratio median 3.317 (3.306–3.802)
+S n 5 ratio median 5.028 (4.948–5.184) | cold first-call ratio median 4.050 (3.938–4.145)
+max/min file-median ratio: 1.013 (2x rule not triggered)
+(i-w) DECLARED: R = 34.20 % of lane CPU = 9.61 s at lane median 28.1 s; band 29.71 %–35.75 % = 8.35–10.04 s (with lane CPU min/max: 7.99–11.00 s)
+(i) letter: R = 34.45 % of lane CPU = 9.68 s at lane median 28.1 s; band 30.04 %–35.97 % = 8.44–10.11 s (with lane CPU min/max: 8.07–11.07 s)
+sensitivity, cold first-call ratios (not declared): (i-w) lower edge 26.00 %, point 31.61 %
+break-even check: lower edge >= 15 % -> True

@@ -13,6 +13,8 @@ if (!REPO || !OUT) throw new Error("REPO and OUT are required");
 const WORK = (process.env.WORK ?? "E,S").split(",");
 const PAIRS = Number(process.env.PAIRS ?? 5);
 const START = Number(process.env.START ?? 0);
+const WAIT_LOAD = Number(process.env.WAIT_LOAD ?? 99);
+const WAIT_MAX = Number(process.env.WAIT_MAX ?? 300);
 const HERE = dirname(fileURLToPath(import.meta.url));
 mkdirSync(OUT, { recursive: true });
 const TSV = join(OUT, "a2-pairs.tsv");
@@ -26,7 +28,7 @@ const sh = (c) => {
 const load1 = () => Number(sh("sysctl -n vm.loadavg").replace(/[{}]/g, "").trim().split(/\s+/)[0]);
 const therm = () => sh("notifyutil -g com.apple.system.thermalpressurelevel").split(/\s+/).pop();
 if (!existsSync(TSV))
-  writeFileSync(TSV, "work\tpair\tside\torder\tutc\tload1\ttherm\texit\tdigest\tcold_ms\tmedian_ms\tms\n");
+  writeFileSync(TSV, "work\tpair\tside\twaited_s\tutc\tload1\ttherm\texit\tdigest\tcold_ms\tmedian_ms\tms\n");
 const SUM = join(OUT, "a2-pairs.summary.tsv");
 if (!existsSync(SUM)) writeFileSync(SUM, "work\tpair\tnode_median\tvitest_median\tratio\tnode_cold\tvitest_cold\tcold_ratio\tdigest_equal\tmax_load1\tusable\n");
 
@@ -35,6 +37,10 @@ const runSide = (side, which, pair) => {
   rmSync(out, { force: true });
   const env = { ...process.env, WHICH: which, OUT_JSON: out };
   delete env.NODE_OPTIONS;
+  // Scheduling gate, as in a147-lane.mjs: wait until load1 <= WAIT_LOAD (at most WAIT_MAX s), logged.
+  const t0 = Date.now();
+  while (load1() > WAIT_LOAD && Date.now() - t0 < WAIT_MAX * 1000) execSync("sleep 10");
+  const waited = Math.round((Date.now() - t0) / 1000);
   const lb = load1();
   const th = therm();
   const utc = new Date().toISOString();
@@ -43,7 +49,7 @@ const runSide = (side, which, pair) => {
       ? spawnSync("node", [join(HERE, "a2-node.mjs")], { cwd: REPO, env, encoding: "utf8" })
       : spawnSync(join(REPO, "node_modules", ".bin", "vitest"), ["run", "-c", join(HERE, "vitest.probe.config.mjs")], { cwd: REPO, env, encoding: "utf8" });
   const j = existsSync(out) ? JSON.parse(readFileSync(out, "utf8")) : {};
-  appendFileSync(TSV, `${[which, pair, side, "", utc, lb, th, r.status, j.digest, j.coldMs, j.medianMs, (j.ms ?? []).join(",")].join("\t")}\n`);
+  appendFileSync(TSV, `${[which, pair, side, waited, utc, lb, th, r.status, j.digest, j.coldMs, j.medianMs, (j.ms ?? []).join(",")].join("\t")}\n`);
   return { lb, th, status: r.status, ...j };
 };
 

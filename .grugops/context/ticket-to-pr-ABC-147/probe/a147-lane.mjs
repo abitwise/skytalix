@@ -13,6 +13,8 @@ const OUT = process.env.OUT;
 if (!REPO || !OUT) throw new Error("REPO and OUT are required");
 const ROUNDS = Number(process.env.ROUNDS ?? 6);
 const START = Number(process.env.START ?? 0);
+const WAIT_LOAD = Number(process.env.WAIT_LOAD ?? 99);
+const WAIT_MAX = Number(process.env.WAIT_MAX ?? 300);
 const HERE = dirname(fileURLToPath(import.meta.url));
 mkdirSync(OUT, { recursive: true });
 const TSV = join(OUT, "a147-lane.tsv");
@@ -32,7 +34,7 @@ const foreign = () => sh("ps -Ao command").split("\n").filter((l) => /[v]itest/.
 if (!existsSync(TSV))
   writeFileSync(
     TSV,
-    "round\tarm\tutc\twall\tuser\tsys\tcpu\tfiles\ttests\tfailed\texit\tload1_before\tload1_after\ttherm_before\ttherm_after\tpower\tforeign_vitest\tusable\n",
+    "round\tarm\tutc\twall\tuser\tsys\tcpu\tfiles\ttests\tfailed\texit\tload1_before\tload1_after\ttherm_before\ttherm_after\tpower\tforeign_vitest\tusable\twaited_s\n",
   );
 
 for (let round = START; round < START + ROUNDS; round++) {
@@ -43,6 +45,11 @@ for (let round = START; round < START + ROUNDS; round++) {
     const prof = join(OUT, `prof-${round}`);
     rmSync(prof, { recursive: true, force: true });
     if (arm === "P") mkdirSync(prof);
+    // Scheduling gate (added after rounds 0-11, not a method change): wait until load1 <= WAIT_LOAD,
+    // at most WAIT_MAX s, so the previous run's own load does not void the next. The wait is logged.
+    const t0 = Date.now();
+    while (load1() > WAIT_LOAD && Date.now() - t0 < WAIT_MAX * 1000) execSync("sleep 10");
+    const waited = Math.round((Date.now() - t0) / 1000);
     const lb = load1();
     const tb = therm();
     const pw = power();
@@ -54,6 +61,7 @@ for (let round = START; round < START + ROUNDS; round++) {
     const r = spawnSync("/usr/bin/time", ["-p", "npm", "test"], { cwd: REPO, env, encoding: "utf8", maxBuffer: 64 << 20 });
     const la = load1();
     const ta = therm();
+    writeFileSync(join(OUT, `out-${round}-${arm}.txt`), `${r.stdout ?? ""}\n--- stderr ---\n${r.stderr ?? ""}`);
     const pick = (k) => Number((r.stderr ?? "").match(new RegExp(`^${k}\\s+([0-9.]+)`, "m"))?.[1]);
     let files = Number.NaN;
     let tests = Number.NaN;
@@ -68,9 +76,9 @@ for (let round = START; round < START + ROUNDS; round++) {
     const cpu = +(pick("user") + pick("sys")).toFixed(2);
     appendFileSync(
       TSV,
-      `${[round, arm, utc, pick("real"), pick("user"), pick("sys"), cpu, files, tests, failed, r.status, lb, la, tb, ta, pw, fv, usable ? "yes" : "no"].join("\t")}\n`,
+      `${[round, arm, utc, pick("real"), pick("user"), pick("sys"), cpu, files, tests, failed, r.status, lb, la, tb, ta, pw, fv, usable ? "yes" : "no", waited].join("\t")}\n`,
     );
-    console.log(round, arm, `cpu ${cpu}`, `wall ${pick("real")}`, files, tests, `exit ${r.status}`, `load1 ${lb}->${la}`, `therm ${tb}->${ta}`, usable ? "usable" : "NOT-USABLE");
+    console.log(round, arm, `cpu ${cpu}`, `wall ${pick("real")}`, files, tests, `exit ${r.status}`, `load1 ${lb}->${la}`, `therm ${tb}->${ta}`, `waited ${waited}s`, usable ? "usable" : "NOT-USABLE");
     if (arm === "P") {
       const a = spawnSync("node", [join(HERE, "analyze.mjs"), prof, REPO], { encoding: "utf8", maxBuffer: 64 << 20 });
       if (a.status !== 0) console.log("analyze failed", a.stderr);
