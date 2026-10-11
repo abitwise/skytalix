@@ -11,7 +11,10 @@ id: ADR-0042
 Previously **proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-152`, ticket `ABC-152`
 `D1`–`D4`), on branch `grugops/design-ABC-152` from the wave tip `4973d8e0`. ~~**Owner word owed** (§ Decision 5).~~
 
-**ADDENDUM 2026-10-11 (the owner's route), the last section of this file: it governs over decisions 3 and 5.**
+**ADDENDUM 2 2026-10-11 (rulings 8–11 on QE's `ABC-152` gaps), the last section of this file.** It extends rulings 1
+and 5 and the residuals. It changes no decision and adds no ruling 7 case.
+
+**ADDENDUM 2026-10-11 (the owner's route), the section before addendum 2: it governs over decisions 3 and 5.**
 The owner answered decision 5 with Q3's route: vitest 4.1.11 **with the module runner off and the test rework**,
 in **one ticket** (`ABC-152`), with the CPU saving in scope (note `…06bfc2d7`). Decisions 1, 2 and 4 take effect as
 the addendum details them. Decision 3's "no runner-off lever is built" is overtaken by his pick. The file name is
@@ -505,3 +508,137 @@ The test rewrites R1–R5, ruling 2 and ruling 3 may stay. Both mechanisms they 
 - `{ spy: true }` counts calls made through an importer (`READINGS` R10).
 
 **`UNKNOWN - verify`:** the whole lane on 3.2.7 with the rewrites was not run here.
+
+## ADDENDUM 2 2026-10-11: rulings 8–11 on QE's `ABC-152` gaps
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-152-qe-rulings`, ticket `ABC-152`), on
+branch `grugops/design-ABC-152-qe-rulings` from `main` `ab0c76e0`. **Rulings only. This hop measured nothing.** It
+read sources and ran a grep at the ticket tip `88009d0b`. The inputs are QE's verdict `…ee5be445`, its gap register
+`…8bfb6cb5`, and its probe `qe-ABC-152/probe/puzzle-weakened/` (both on `grugops/ABC-152-vitest-4-1-runner-off`).
+Note: `.grugops/context/design-ABC-152-qe-rulings/notes/`. **No owner word is owed.** No decision moves, no test is
+weakened, and no ruling 7 case is added. The owner may overrule any ruling here.
+
+### Ruling 8 (`QE-152-h`): R2 covers `src/puzzle-suite.test.ts`'s `PUZZLE_DEEP=weakened` site, and `V4`'s set is defined by mechanism in every lane
+
+- **The same form.** The site uses `vi.doMock(p, <factory with a stub>)` and then a dynamic `import(q)`. That is R2's
+  from-shape without the `resetModules` call, which the file never needed because it loads the engine once.
+- **The to-form is QE's probe diff, exactly:**
+  - add `import { evaluate } from "./evaluate.ts"`;
+  - add `vi.mock("./evaluate.ts", { spy: true })` at file top;
+  - replace the `doMock` block with `vi.mocked(evaluate).mockImplementation(() => 0)`;
+  - `return (await import("./engine.ts")).chooseMove` stays as it is.
+- **No reset, and never one inside `engineUnderTest()`.**
+  - Under `{ spy: true }` the stub is read **at each call**. It is not fixed at import time, as `doMock` fixed it.
+  - So a `finally` reset in `engineUnderTest()` would run **before** `runSuite`. That puts the real `evaluate` back
+    and makes the demonstration blind again (head's 54/58).
+  - The stub must hold through the memoized `gatingRun()`. The only rows after it are the gate row and A3, and both
+    read the memoized result. So R2's plant (b) records **"no leak reader"**.
+- **Armed, for a red demonstration.** These are R2's two plants, read for a mode whose designed outcome is a red:
+  - **At head**, `PUZZLE_DEEP=weakened` exits 1 with **exactly one red, the gate row**
+    (`expected 15 to be greater than or equal to 54`). The `PUZZLES` line reads `solved 15/58`, and A3 is green.
+  - **15 is the reach proof.** It equals base 3.2.7's weakened count, where `doMock` reached every importer.
+    A red at any other count below 54 is partial reach. That stops the hop and returns to the Architect.
+  - **Plant (a):** delete the `mockImplementation` line in a scratch copy. The run reads 54/58, the gate row is
+    green and A3 is red (`expected 54 to be less than 54`).
+  - **Plant (b):** "no leak reader", as above.
+  - `PUZZLE_DEEP=1` stays green: 18 passed, 54/58 = the baseline, and the baseline file is unchanged. The default
+    lane stays green: 12 passed.
+- **"Exits 1" is not evidence for this mode.** The graded reading is which row is red, and the count.
+- **`V4`'s set gains a fourth group: every mock mechanism that runs only under an opt-in environment value.**
+  - The set is defined by mechanism. `D3`'s default-lane screen is no longer its source.
+  - Today the group is exactly this site.
+  - A file-top mock that the default lane already exercises, and that a `V4` plant already showed red in the same
+    file, is not a separate member. It is the same mechanism in every lane.
+- **How the absence of any other site is proven: a census, recorded by the SE.** It runs over `V8`'s 56 lane paths:
+  1. list every environment read that gates rows (file, line range, value);
+  2. list every `vi.mock`, `vi.doMock`, `vi.unmock`, `vi.doUnmock`, `vi.resetModules`, `vi.importActual`,
+     `vi.importMock`, `vi.spyOn` and `importOriginal`, and every dynamic `import(`;
+  3. classify each hit of step 2 that sits inside a region of step 1 as exactly one of:
+     - **(i)** a file-top mock whose route a `V4` plant already showed red in the same file (name the plant);
+     - **(ii)** a spy on an object (`console`, `process.stdout`, a class prototype), not on a module namespace;
+     - **(iii)** a dynamic import whose module graph holds no module the file mocks (name the graph);
+     - **(iv)** a mock mechanism that runs only in that lane. It joins group 4 and gets its own plant under its
+       lane. A **second (iv)** stops the hop. It is armed with an admitted form, or, failing that, it is a ruling 7
+       case for the owner.
+  - **The Architect's read at `88009d0b` is not a substitute for the census.** Seven files hold both a gate and a mock
+    API: `cli`, `levels`, `line-input`, `puzzle-suite`, `search.ordering`, `search.pvs-lmr` and `transposition`.
+    Only `puzzle-suite.test.ts:368-374` reads as (iv). Three others are expected:
+    - `levels.test.ts:468-469` is (iii): `evaluate.mirror-corpus.ts` imports `apply`, `fen`, `legal` and
+      `position`, and `levels` mocks only `engine.ts`;
+    - the `vi.spyOn` calls in `line-input` and `search.ordering` are (ii);
+    - `transposition.test.ts:650-651` sits in a child-process script string, so it is not a mock site.
+- **New residual `RISK-ABC152-PUZZLE-SPY`** (low). The file-top spy wraps `evaluate` in every mode. So
+  `PUZZLE_DEEP=1` now runs the shipped engine through a spy that keeps every call until the file ends.
+  - The results are unchanged: QE read 18/18 at 54/58.
+  - The wall is not read, because QE reads no timing. The 300 s row timeout bounds it.
+  - Security/NFR may read the printed `wall` against `AGENTS.md`'s 32–36 s when it runs the lanes. This is not a
+    gate.
+
+### Ruling 9 (`QE-152-a`): `vitest/node` is admitted under ruling 5
+
+- **One specifier changes:** `tools/grugops/result-file-reporter.js:76`, from `"vitest/reporters"` to `"vitest/node"`.
+  - It is the same class (`===`, QE's probe).
+  - The load-time check is unchanged, and it is the guard if that export ever changes.
+  - `RISK-ABC143-01` surface 1 (decision 4, `D2` (d)) now reads: "`vitest/node` exports `JsonReporter`".
+  - Nothing else in the file changes.
+- **It rides in its own commit.** Ruling 5's "one commit" binds the route and the plant block, and they are already
+  in `2d523837`.
+- **Readings:**
+  - `===` is true;
+  - `npm test` exits 0 at 56 / 1741 / 0 skipped, with **0 console lines containing `deprecated`**;
+  - `V2`'s six rows hold by content at the new head, because `V2` is graded at head and head's reporter changed;
+  - `M9b` is QE's to re-run, as `V2` says.
+- **This closes `ABC-143` `A5`'s "the console gains no line".** The zero-production-lines measurement stays empty,
+  because the file is under `tools/`, not `src/`.
+
+### Ruling 10 (`QE-152-d`): the six stale comments are admitted into `V5` as comment-only lines
+
+- **This ticket's own rewrites made each of them false:**
+  - R1: `src/render-seam.test.ts` lines 4 and 6–7, and `src/cli.test.ts` line 5;
+  - R2: `tools/opening-book/book.test.ts` line 101;
+  - R5: `src/command-input.test.ts` lines 51 and 63;
+  - R4: `src/history-pane.nfr.test.ts` line 670.
+- **A comment that misstates the mechanism a guard rests on is a trap for the next maintainer.** Correcting it is
+  part of the rewrite that made it false.
+- **Bounds:**
+  - exactly those sites;
+  - every changed line is a comment line;
+  - each states the mechanism now present;
+  - no line-number citation: line 670 names "the static imports after the `vi.mock` blocks";
+  - no code line, and no other comment;
+  - it rides in its own commit, and `expect(` counts are unchanged.
+- **`V5`'s list gains:** "comment lines the rewrites made false, at the sites ruling 10 names".
+
+### Ruling 11 (`QE-152-b`, `QE-152-c`, `QE-152-f`): accepted as residuals; this ticket owes nothing more for them
+
+- **`QE-152-b`.** `RISK-ABC152-NEGWORKERS` widens from `-1` to **any negative value**. It stays low, and its owners
+  are unchanged.
+  - The Scribe's `AGENTS.md` line stands.
+  - No config-load guard is added in this ticket. Nobody sets the value by accident, the result file stays
+    truthful, and the guard was not requested.
+- **`QE-152-c`.** It is the new `RISK-ABC152-COV-MARGIN` (low, BA/PM: fold it into the next ticket that edits the
+  reporter's plant block).
+  - The block's re-plant rule stands, and a lost margin fails loudly.
+  - **A candidate durable red, `UNKNOWN - verify`:** a threshold no run can meet, such as `lines=101`. It works only
+    if vitest 4.1.11 accepts the value, and only if vitest's verdict sets the exit code, not a config validation
+    error.
+- **`QE-152-f`.** It is the new `RISK-ABC152-SPY-QUERY` (low, the Architect and QE).
+  - No production file uses a query import today (grep exit 1).
+  - The tripwire is review: any new `?` import of a production module in non-test code is read against the
+    `{ spy: true }` guards on that module.
+- **`QE-152-e` and `QE-152-g`:** no ruling is needed. Both are pre-existing, and QE recorded them.
+
+### Residuals (addendum 2)
+
+| id | residual | severity | owner |
+|---|---|---|---|
+| `RISK-ABC152-NEGWORKERS` (widened) | Any negative `VITEST_MAX_WORKERS` makes `npm test` exit 0 having run no test | low | QE; Security/NFR |
+| `RISK-ABC152-PUZZLE-SPY` | `PUZZLE_DEEP=1` runs the engine through a recording `evaluate` spy. Its wall is not read | low | Security/NFR (a reading, not a gate) |
+| `RISK-ABC152-COV-MARGIN` | The exit-code-only row's precondition holds by 0.57 points of lines coverage on 4.x | low | BA/PM |
+| `RISK-ABC152-SPY-QUERY` | A `{ spy: true }` automock does not count calls through a query-string import of the same file | low | Architect; QE |
+
+### What addendum 2 does NOT change
+
+- Decisions 1, 2 and 4, rulings 2–4, 6 and 7, `ADR-0040` addendum 2's k = 2, and `ADR-0008` d7.
+- Ruling 7's count: **0 cases**.
+- The UAT-waiver measurement (`grep '^src/'` over the delivered diff) stays empty under rulings 8–10.
