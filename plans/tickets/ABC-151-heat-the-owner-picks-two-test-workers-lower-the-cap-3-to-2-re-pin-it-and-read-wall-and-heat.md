@@ -182,6 +182,13 @@ window: about 2 × 9 runs paired, plus 2 × 27 back-to-back runs, plus the opt-i
 - **Not `P0`:** nothing is broken.
 - **Not `P2`:** he answered it by name today.
 
+## Design
+
+Architect/Design, 2026-10-11 (subtask `design-ABC-151`): **`ADR-0040` addendum 2**, which governs as written. No
+owner word is owed for it. The literals, the reds and decision 4 at k = 2 are in the addendum. So is the window's
+fixed step order: warm paired → `A5` k = 2 → `A5` k = 3 on the base tree → cooled if owed → lanes. **Nothing
+was measured.** Notes: `.grugops/context/design-ABC-151/notes/` (`…5c4c4ef2`, `…6cc7b91d`).
+
 ## Definition of Ready
 
 BA/PM, 2026-10-11. **Result: 10 of 10.** Recommended placement: **`Ready`, then straight to `In Design`**
