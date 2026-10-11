@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-144` built → In Review (QE queued); `ABC-083` merge-from-main + re-level dispatched._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-085` → Done (UAT WAIVED; merged `1031911b`); `main` fast-forwarded; ABC-144 build dispatched._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — owner word: quiet window yes (A9 + Window B + ABC-116); choking = CPU + heat; branch/worktree cleanup and main fast-forward authorized (no force)._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — owner word: `ADR-0040` ACCEPTED (k = 3) → ABC-144 Ready for Dev; `ADR-0038` addendum ACCEPTED (verdict under node) → ABC-146 owner part cleared._
@@ -678,8 +679,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Design (WIP 0/2)
 
 
-## Ready for Dev (WIP 1/6)
-- [ABC-144] `npm test` chokes the MacBook Air M3 — cut its CPU and cap its cores  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner goal 2026-10-10; CPU ≤ 0.85× base, ≤ 4 workers, wall ≤ 10 s unless the owner accepts Security/NFR's new number; `isolate` stays true; readings only in a no-other-hop window) **2026-10-11: Ready → In Design (Architect hop for the pool/worker setting).** **2026-10-11: Architect design merged (`aaef2cff`): `ADR-0040` PROPOSED — `maxWorkers: 4` in `vitest.config.ts`, pinned by value (env may lower, never raise), `isolate` stays on; owner word owed (ADR-0040 + meaning of 'choking'). Stays In Design until quiet Window A (≈ 15 min, width 1, 54 runs: 7/4/3/2/1 workers) is read.** **2026-10-11: Window A read (`94cf1728`, width 1, 54 runs): CPU vs 7 workers — 4w −10.7 %, 3w −16.5 % (wall 7.2 s), 2w −22.7 % (8.2 s), 1w −29.3 % (14.7 s). ADR-0040 d2 picks **3 workers**; Architect addendum owed; owner word on ADR-0040 owed. No heat instrument on M3 (`CPU_Speed_Limit` absent); thermal pressure went nominal → moderate in the last ~1.5 min.** **2026-10-11: `ADR-0040` ACCEPTED by the owner at k = 3 → In Design → Ready for Dev. Build: `maxWorkers: 3` + value pin (A7); then Window B (≈ 60 min, width 1). 'Choking' meaning still unanswered; Window B logs thermal pressure.** **2026-10-11: owner — 'choking' = CPU AND heat. Window B logs thermal pressure; if moderate at k = 3, k = 2 goes back to the owner.**
+## Ready for Dev (WIP 0/6)
 
 
 ## In Development (WIP 1/3)
@@ -711,7 +711,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
+- [ABC-144] `npm test` chokes the MacBook Air M3 — cut its CPU and cap its cores  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner goal 2026-10-10; CPU ≤ 0.85× base, ≤ 4 workers, wall ≤ 10 s unless the owner accepts Security/NFR's new number; `isolate` stays true; readings only in a no-other-hop window) **2026-10-11: Ready → In Design (Architect hop for the pool/worker setting).** **2026-10-11: Architect design merged (`aaef2cff`): `ADR-0040` PROPOSED — `maxWorkers: 4` in `vitest.config.ts`, pinned by value (env may lower, never raise), `isolate` stays on; owner word owed (ADR-0040 + meaning of 'choking'). Stays In Design until quiet Window A (≈ 15 min, width 1, 54 runs: 7/4/3/2/1 workers) is read.** **2026-10-11: Window A read (`94cf1728`, width 1, 54 runs): CPU vs 7 workers — 4w −10.7 %, 3w −16.5 % (wall 7.2 s), 2w −22.7 % (8.2 s), 1w −29.3 % (14.7 s). ADR-0040 d2 picks **3 workers**; Architect addendum owed; owner word on ADR-0040 owed. No heat instrument on M3 (`CPU_Speed_Limit` absent); thermal pressure went nominal → moderate in the last ~1.5 min.** **2026-10-11: `ADR-0040` ACCEPTED by the owner at k = 3 → In Design → Ready for Dev. Build: `maxWorkers: 3` + value pin (A7); then Window B (≈ 60 min, width 1). 'Choking' meaning still unanswered; Window B logs thermal pressure.** **2026-10-11: owner — 'choking' = CPU AND heat. Window B logs thermal pressure; if moderate at k = 3, k = 2 goes back to the owner.** **2026-10-11: BUILT `d4468fd3` (tip `d675ef42`): `maxWorkers: 3` (plain-object config, typecheck OK), value pin + 8 reds incl. r3b, env lowering allowed; 55/1729 (= base + 1) → In Review; QE `qe-ABC-144` queued; Window B (width 1) after.**
 - [ABC-143] A red `npm test` can leave a result file that reads green  (BA/PM, **S, P2**, epic: —, since: 2026-10-11, **DoR 10/10**; cut from QE-142-a/b/c) **2026-10-11: pulled → In Development (build `ticket-to-pr-ABC-143`).** **2026-10-11: BUILT `f97ad60b` (tip `14cd1cf0`): `tools/grugops/result-file-reporter.js` (subclasses vitest's JsonReporter) — a non-zero exit always leaves a not-success file, start marker survives a 60 s kill, unhandled errors recorded; A1–A6 met, 53/1680 green, 0 production lines → In Review, QE `qe-ABC-143`.**
 
 
