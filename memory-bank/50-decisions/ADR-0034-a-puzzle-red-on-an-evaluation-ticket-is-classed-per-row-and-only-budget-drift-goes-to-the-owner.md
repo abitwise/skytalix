@@ -13,7 +13,7 @@ id: ADR-0034
   decision 2 has the details.
 - The run trigger, the gate and the baseline do not change.
 
-**Addendum 2026-10-11: PROPOSED, owner acceptance owed.** It adds one item to decision 4's list for an L
+**Addendum 2026-10-11: ACCEPTED** 2026-10-11 by Olger Oeselg (owner), verbatim "ADR-0034 accepted" (Orchestrator transcription note `…fbbdde16`); previously proposed, owner acceptance owed. It adds one item to decision 4's list for an L
 re-find: a clean-lead bar that sees an LMR near-tie. It moves no count, total, baseline, budget, trigger or
 level. Decisions 1–6 stay **accepted** as written. See § Addendum 2026-10-11 at the end.
 
@@ -283,7 +283,7 @@ recorded d5". Three of the four do. Seed 5180 under E5 reads d5, against d6 on b
 Edit this file. Nothing is built on it. If decision 5 is taken, undo it by restoring the four rows and
 re-recording 58/62 in its own commit. That is a raise, so it is QE's to make.
 
-## ADDENDUM 2026-10-11 (PROPOSED; owner acceptance owed): a re-found L row must also clear a clean-lead bar at its solving depth ± 1. QE-083-c's screen names two thin rows and cuts none
+## ADDENDUM 2026-10-11 (ACCEPTED 2026-10-11 by the owner, note `…fbbdde16`): a re-found L row must also clear a clean-lead bar at its solving depth ± 1. QE-083-c's screen names two thin rows and cuts none
 
 Proposed by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-083-refind-5061`). Readings:
 `.grugops/context/design-ABC-083-refind-5061/` (ruling `…8205516a`, screen `…3777f413`, this addendum
