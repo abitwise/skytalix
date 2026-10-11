@@ -288,3 +288,34 @@ code commit `67296100`, base `7411f73a`. The readings are in `.grugops/context/t
   been copied from a note. By the pre-registered trigger the ticket is now `XS`. That re-size is
   BA/PM's to record.
 - **Scope kept.** 0 production lines, 0 assertions changed, 0 tests added. No column was moved here.
+
+## QE
+
+QE/E2E (Claude Opus 5.5, a separate dispatch from the author), 2026-10-11, subtask `qe-ABC-114`,
+reviewed at `8895a9a0`. I re-planted every build myself: `M9`, `D3`, `D4`, `M15` and `G03`, plus a
+row-order decoy `ORD` and an ablation control. No number here is quoted from the delivery note. The
+readings and rulings are in `.grugops/context/qe-ABC-114/notes/`.
+
+**Verdict: FAIL (`BLOCKED_NEEDS_FIX`).** `A1` is NOT MET. `A2`–`A7` are MET.
+
+- **`A1`.** The `D3`/`M9` distinction is right on measurement. But the same block now says *"This row
+  is placed BEFORE the other two, so on any decoy it is the row that speaks first"*, and that is
+  false. The initializer row (`src/cli.test.ts:2669`) comes before the count row (`:2701`). On a
+  `tsc`-clean decoy that reds both rows, the initializer row is the one that speaks. This is the
+  fifth false sentence `## Risks` predicted (`QE-114-a`). The fix is comment-only, and it goes back
+  to the Software Engineer. QE does not write it.
+- **`A2`.** MET as written. Two gaps:
+  - `QE-114-b`, LOW: the comment says "lane GREEN … on the control", but that file has 2 unrelated
+    drift reds. Only `A1` is green on it.
+  - `QE-114-c`, MEDIUM, owner BA/PM: the mandated remainder list is too broad. `tsc` reds `for…in`
+    and `catch (history)`. Only `for…of` and a parenthesised `(history) =>` callback get past both
+    `tsc` and the lane.
+- **The control.** `cc037b3e^` is valid if read per row. It was degenerate from the cut, not since:
+  `ABC-113` was already on `main` at `b03658f`. The cleaner `A1` control is the tip file with only
+  the count row removed. BA/PM should name it in `A1`, `A3` and `## Test notes`.
+- **`A4` STRIKE is right.** `G03` played the move in 13 of 13 of my runs. The comment's scope, "a
+  bare `process.stdin` reader in Node", is the correct one. `A4`(b)'s "for any program" is false:
+  `cat`, `python3` and Node's `fs.readFileSync(0)` all see end of input.
+- **Re-size.** The pre-registered trigger fired, so the size goes `S` → `XS`. BA/PM records it; this
+  page's size line is not edited here. The **`P1` promotion trigger** ("a fifth false sentence") is
+  met on QE's reading. That ruling is BA/PM's.
