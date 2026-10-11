@@ -306,3 +306,46 @@ code commit `d4468fd3`, base `5ed308a8`. The detail is in `.grugops/context/tick
 - **Gates:** lint, typecheck, build and `npm test` all exit 0. 0 production `src/` lines.
 - **No timing read.** Lane cost is **not graded**. `A1`, `A3`, `A4`, `A5` and the `AR-N8SPAWN-DRIFT`
   discharge belong to Window B (Security/NFR, width 1).
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-144`).
+- Range: base `5ed308a8`, code `d4468fd3`, reviewed tip `d675ef42`. The dry-run merge was against the
+  wave tip `9d0fcb96`.
+- Every reading is QE's own. **No timing or CPU was read or graded.** The detail is in
+  `.grugops/context/qe-ABC-144/notes/`: `…84ad7813` (verdict), `…f287edc5` (readings), `…21613086`
+  (plants), `…0f16e7eb` (gaps and the ruling on unsealed notes), `…f8aab052` (commands and probe). It
+  is not restated here.
+
+**PASS_WITH_GAPS.**
+- `A2` **MET**: `effectiveWorkers: 3` at head, 7 at base, read from the resolved configuration.
+- `A6` **MET** within QE's scope:
+  - `isolate: true` resolved;
+  - **20 of 20 consecutive green `npm test` runs at head**, each with 7 of 7 `*.nfr.test.ts` files
+    passing;
+  - files 55 (= base), tests 1729 (= base + 1), 0 skipped, on every run;
+  - all 10 opt-in lane configurations collect the same files and tests as base;
+  - 8 lanes exit 0 under the cap;
+  - 0 production `src/` lines.
+- `A7` **MET**:
+  - the SE's r1, r2, r3, r3b and x1–x4 re-planted by QE, all RED;
+  - QE's 11 extras: 7 RED and 4 survive. The survivors are three routes: per-project `isolate: false`
+    (inert on vitest 3.2.7, proven by a leak probe), a hand-typed `--maxWorkers` flag, and an
+    adversarial worker-env conditional;
+  - no timing assertion added.
+- `A1`, `A3`, `A4`, `A5`, the `AR-N8SPAWN-DRIFT` discharge and the thermal log: **not graded**. They
+  are Window B's.
+- **Dry-run merge with `9d0fcb96`.** One append-only conflict, in `plans/traceability.md`.
+  `src/cli.test.ts` auto-merges. The merged tree has 4 gates at 0, 55 / 1729 (= wave + 1), and
+  `effectiveWorkers` 3. Aborted, never committed.
+- **Gaps: 6 INFO, none blocking:**
+  - `QE-144-a`: the pin does not read `test.projects`. Owner BA/PM; trigger: a vitest bump.
+  - `QE-144-b`: a CLI `--maxWorkers` flag is unseen, by design.
+  - `QE-144-c`: the adversarial survivor.
+  - `QE-144-d`: the traceability merge conflict. Owner: Orchestrator.
+  - `QE-144-e`: `LADDER_DEEP=verdict`'s exit is not run; it is `ABC-146`'s.
+  - `QE-144-f`: the git host reads `UNKNOWN - verify`. Owner: human.
+- **Ruling:** the notes being hand-written and unsealed does not matter. It is the repository norm
+  (`AGENTS.md`), and no stamp is claimed.
+- **UAT waiver applies** on QE's reading (0 production `src/` lines). QE recommends the `In Review` exit
+  to `In Security/NFR` for Window B. Not merged, not pushed.
