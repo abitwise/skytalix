@@ -1,0 +1,22 @@
+secnfr-ABC-083-quiet-readings — declared BEFORE the first timed run, 2026-10-11T13:49:40Z
+Trees: base = 5ed308a8 (merge-base of the ABC-083 branch and main; engine files identical to the build's base 489c549e,
+only src/book.ts, history-pane.ts, move-input.ts differ, none on chooseMove's path); branch = 09b8c960 (tip).
+1. A9/A7 plain-node depth: one.mjs, chooseMove at DEFAULT_BUDGET_MS, fresh process per run, kiwipete then position-6
+   per round, odd rounds base first, even rounds branch first. GRADED = rounds 1-3 (the page's three rounds).
+   Rounds 4-6 run unconditionally right after, DESCRIPTIVE only, never graded (no optional stopping).
+   Per run: load1 and thermalpressurelevel before and after, foreign node/vitest count before.
+2. Clock-free nodes to complete depth 6/7: nodes7.mjs (the build's own file), base and branch, twice each (determinism).
+3. Rule for ADR-0031 d5 (fixed now): an A9 stop = any GRADED branch run below depth 7 on kiwipete OR position-6 at
+   thermal 0 and foreign 0 (NFR-005 clause 2 names both; A7 needs >= base). A branch miss in a run with a foreign
+   process or thermal >= 1 is reported, not graded as a stop, and the round is NOT re-run in its place.
+   Depth < 6 anywhere = FAIL. A miss in rounds 4-6 is reported to the owner as evidence, not a stop on its own.
+4. N8-LANE: ADR-0035 d2 narrow set (files the ticket adds/modifies + vitest related src/evaluate.ts), arms
+   B = main tip (k = 3), T = twin of B, H = branch tip merged with main in a scratch detached tree (k = 3; branch
+   not touched). Added file -> one-assertion placeholder in B and T. lane144b.mjs (Window B copy), NARROW=<set>,
+   ROUNDS=9, GAP=0, round 0 discarded, n = 8. Verdict by ADR-0035 d1 at b = 0.650 s CPU.
+5. ADDED 2026-10-11T14:04:13Z, AFTER the graded N8-LANE window (NOT MET read), DESCRIPTIVE ONLY, never graded:
+   attribution split, ABC-082's shape. Arm X = H with src/evaluate.king-mobility.test.ts replaced by the B placeholder.
+   H - X = the added file's content; X - B = evaluate.ts + the six modified test files (second order + re-pins).
+   CONDS=B,X,H,T, ROUNDS=9, GAP=0, same set, same harness, TAG=abc083-n8-split.
+6. ADDED 2026-10-11T14:07:05Z, DESCRIPTIVE ONLY: NFR-008 R-1 wall trip-wire on H (k = 3): full `npm test`,
+   CONDS=H,T (T = main + placeholder, i.e. main's lane + 1 trivial file), ROUNDS=4, round 0 discarded, GAP=0. Not paired-graded.

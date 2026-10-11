@@ -1,0 +1,10 @@
+hw Mac15,13 Apple M3 perf=4 eff=4
+os Darwin 25.5.0
+node v26.11.0
+vitest 3.2.7
+ lowpowermode         0
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=23658595)	100%; charged; 0:00 remaining present: true
+trees: depth base 5ed308a8 / branch 09b8c960; N8 B=T=322427b3 (main) +placeholder, H=00e70e58 scratch merge of 09b8c960 + 322427b3 (detached, not on any branch), X = H with placeholder
+lane harness: .grugops/context/secnfr-ABC-144-window-b/probe/lane144b.mjs (cmp-identical copy run from scratch)
+foreign=1 in abc083-n8-k3.tsv = the driver shell's own command line (contained 'vitest.config.ts'/'VITEST_MAX_THREADS'); ps showed no vitest process after; foreign=0 in the later two windows whose driver lines did not contain the word

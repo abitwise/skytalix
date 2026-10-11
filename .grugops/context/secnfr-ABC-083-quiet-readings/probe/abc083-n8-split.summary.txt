@@ -1,0 +1,12 @@
+# abc083-n8-split summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 9.71	wall 3.15	par 3.087	load1 4.99	load1>8 0/8	files 17	tests 311
+X	cpu 10.54	wall 3.60	par 2.920	load1 5.08	load1>8 0/8	files 17	tests 313
+  X-B cpu	median 0.795 (8.19 % of base cpu)	sign 8/8	k 2	interval [0.570, 0.910]	R 0.910
+  X-B wall	median 0.485	sign 8/8	k 2	interval [0.400, 0.510]	R 0.510
+H	cpu 10.69	wall 3.75	par 2.827	load1 5.08	load1>8 0/8	files 17	tests 321
+  H-B cpu	median 0.905 (9.33 % of base cpu)	sign 8/8	k 2	interval [0.880, 1.090]	R 1.090
+  H-B wall	median 0.605	sign 8/8	k 2	interval [0.470, 0.820]	R 0.820
+T	cpu 9.59	wall 3.44	par 2.798	load1 5.24	load1>8 0/8	files 17	tests 311
+  T-B cpu	median -0.135 (-1.39 % of base cpu)	sign 2/8	k 2	interval [-0.220, 0.010]	R 0.220
+  T-B wall	median 0.275	sign 6/8	k 2	interval [-0.060, 0.340]	R 0.340
+twin R: cpu 0.220 s, wall 0.340 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

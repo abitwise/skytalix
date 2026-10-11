@@ -1,0 +1,6 @@
+# abc083-fulllane-k3 summary: n = 3 scored rounds, round 0 discarded, 0 harness errors
+H	cpu 24.75	wall 7.63	par 3.260	load1 4.36	load1>8 0/3	files 56	tests 1740
+  H-T cpu	median 1.090 (4.58 % of base cpu)	sign 3/3	k 1	interval [0.910, 1.330]	R 1.330
+  H-T wall	median 0.320	sign 3/3	k 1	interval [0.320, 0.330]	R 0.330
+T	cpu 23.78	wall 7.31	par 3.257	load1 4.25	load1>8 0/3	files 56	tests 1730
+twin R: cpu NaN s, wall NaN s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

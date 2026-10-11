@@ -377,3 +377,21 @@ figures are in `.grugops/context/ticket-to-pr-ABC-083/notes/` and the raw output
   (+0.92..+1.41, R 0.316 s, admissible).
 - **Clause (b) (`ADR-0036`) does not fire** on any limb. Production: `src/evaluate.ts` +137/−5. The
   owner's UAT word is owed.
+
+## Security/NFR — quiet readings (`A9`/`A7`, `N8-LANE`)
+
+**2026-10-11, Security/NFR** (subtask `secnfr-ABC-083-quiet-readings`).
+- **Window:** width 1. Trees: base `5ed308a8`, branch `09b8c960`. For `N8-LANE`, main `322427b3` (k = 3) against a scratch merge of the tip with main.
+- **Detail:** `.grugops/context/secnfr-ABC-083-quiet-readings/notes/`:
+  - `…1643be6c` (depth readings);
+  - `…4583f42c` (lane readings);
+  - `…8ff62fd0` (rulings).
+- **`A9`/`A7` MET.** Depth 7 held on 24 of 24 runs, base and branch, on both positions, at load1 1.90–2.34 and thermal 0. No depth below 6.
+  - Nodes to depth 7: kiwipete 610 179 → 566 233; position-6 462 871 → 644 469.
+  - Margins: kiwipete 1.126–1.130x; **position-6 1.056–1.066x** (base 1.47x).
+  - **`ADR-0031` decision 5 does not fire,** so `547b5155` stands.
+- **`N8-LANE` NOT MET:** +1.005 s CPU (+0.910..+1.060, twin R 0.110 s) on 17 files at k = 3.
+  - About 0.8 s is the costlier `evaluate`, paid by existing search tests. About 0.15 s is the new file.
+  - No required fix.
+- **Owner's word owed on two proposed LOW risks:** `AR-N8LANE-083` and `AR-NFR005-083` (position-6 margin).
+- `NFR-008` wall on the merged tree: 7.63 s, under 10 s.

@@ -1,0 +1,9 @@
+round	cond	wall	user	sys	cpu	par	files	tests	failed	skipped	load1_before	load1_after	foreign_vitest	speed_limit	power	gap_s	utc	status	thermal_before	thermal_after	foreign_after	power_after
+0	H	6.97	21.8	1.9	23.7	3.4	56	1740	0	0	4.42	4.2	0	none	AC Power	0	2026-10-11T14:07:05.551Z	ok	0	0	0	AC Power
+0	T	6.98	21.14	1.83	22.97	3.291	56	1730	0	0	4.2	4.42	0	none	AC Power	0	2026-10-11T14:07:12.758Z	ok	0	0	0	AC Power
+1	T	7.05	21.49	1.83	23.32	3.308	56	1730	0	0	4.42	4.19	0	none	AC Power	0	2026-10-11T14:07:19.987Z	ok	0	0	0	AC Power
+1	H	7.38	22.76	1.89	24.65	3.34	56	1740	0	0	4.19	4.41	0	none	AC Power	0	2026-10-11T14:07:27.267Z	ok	0	0	0	AC Power
+2	H	7.63	23.02	1.85	24.87	3.26	56	1740	0	0	4.41	4.18	0	none	AC Power	0	2026-10-11T14:07:34.881Z	ok	0	0	0	AC Power
+2	T	7.31	21.94	1.84	23.78	3.253	56	1730	0	0	4.18	4.25	0	none	AC Power	0	2026-10-11T14:07:42.744Z	ok	0	0	0	AC Power
+3	T	7.32	21.98	1.86	23.84	3.257	56	1730	0	0	4.25	4.36	0	none	AC Power	0	2026-10-11T14:07:50.300Z	ok	0	0	0	AC Power
+3	H	7.64	22.87	1.88	24.75	3.24	56	1740	0	0	4.36	4.33	0	none	AC Power	0	2026-10-11T14:07:57.854Z	ok	0	0	0	AC Power
