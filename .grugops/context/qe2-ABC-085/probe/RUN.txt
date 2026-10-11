@@ -1,0 +1,15 @@
+QE/E2E, subtask qe2-ABC-085 (task wave-2026-09-25), second QE pass on the fix f28d91ad. Tree: grugops/ABC-085-self-play-ladder at
+dacbf42a. Own worktree, node_modules symlinked. Apple M3, macOS Darwin 25.5.0. LOADED HOST, NO TIMING GRADES: no wall figure in these
+files is a bar, a grade or a reading of any criterion.
+
+1. short-run-qe2-dacbf42a.out.txt — `LADDER_DEEP=1 npx vitest run src/ladder.test.ts`, 2026-10-11T10:20:57Z..10:40:05Z.
+   exit 0, 18 passed (18): 12 default rows + 5 pairs + A5. The ONE short-mode run this hop took. LADDER_DEEP=verdict was NOT run.
+   Every PAIR line has commit dacbf42a..., clean (no +dirty-src). The mutant copies were planted only after collection, when the
+   harness had already read `git status -- src`.
+2. `node ../../qe-ABC-085/probe/cmp.mjs <earlier> short-run-qe2-dacbf42a.out.txt` against each of the three earlier runs:
+   ../../ticket-to-pr-ABC-085/probe/short-run-1-uncommitted.out.txt, ../../ticket-to-pr-ABC-085/probe/short-run-2-d5b0f0e2.out.txt and
+   ../../qe-ABC-085/probe/short-run-qe-773b48cc.out.txt. 32 = 32 lines, all equal with wallS / load1 / commit excluded, each time.
+3. mutants.mjs / mutants.out.txt — `node mutants.mjs <worktree>`: QE's own plants, re-targeted at dacbf42a, in a temp copy
+   src/ladder.qe2mut.test.ts that runs alone in the DEFAULT lane (LADDER_DEEP deleted from env) and is then deleted. CONTROL green 13/13.
+   No mutant was run in a LADDER_DEEP lane.
+4. default-lane-dacbf42a.out.txt — `npm test` with LADDER_DEEP unset: exit 0, 54 files / 1693 tests passed.

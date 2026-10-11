@@ -1,8 +1,8 @@
 ---
 id: ABC-116
 title: The `T2` re-measure trigger has a ruling and no carrier — record it where a hop that changes an existing child will actually meet it
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: XS
 priority: P2
 epic: —
@@ -121,7 +121,8 @@ It is the only candidate where the reader and the trigger-er are the same agent 
   writes no lane and adds none.
 - **Re-opening, re-scoring or moving** `ADR-0017`, `AR-N8SPAWN-DRIFT`, `ABC-115`, `ABC-108`,
   `NFR-008`, `N8-LANE` or `G-QE115-3`.
-- **`AR-N8SPAWN-DRIFT`'s discharge**, which `ADR-0017` places at `ABC-108`'s remedy. This ticket
+- **`AR-N8SPAWN-DRIFT`'s discharge**, which `ADR-0017` places at `ABC-144` § Scope 4 (re-pointed 2026-10-11
+  from the dropped `ABC-108`'s remedy, `ADR-0017` § Pointers 2026-10-11). This ticket
   carries the control; it does not discharge the risk, and it must not be read as having reduced it.
 
 ## The edit owed elsewhere — NAMED, with its owner, and NOT MADE HERE
@@ -182,8 +183,9 @@ cut (8 matched lines), and this ticket requires that they still do afterwards (`
 - **None blocking. Pullable today.** `ADR-0017` is merged (`9c56a6f`), the catalog section is
   merged, and the `ChildOptions` surface exists at `main` @ `fcf12c1` — all three verified at this
   cut rather than assumed.
-- **Ordering, not a block:** `ABC-108`/`ABC-110` are open and hold `AR-N8SPAWN-DRIFT`'s discharge.
-  This ticket does not wait on them and does not touch them.
+- **Ordering, not a block:** `ABC-144` § Scope 4 holds `AR-N8SPAWN-DRIFT`'s discharge (re-pointed
+  2026-10-11 from `ABC-108`/`ABC-110`, `ADR-0017` § Pointers 2026-10-11).
+  This ticket does not wait on it and does not touch it.
 - **`ABC-109` (`AGENTS.md` byte cap):** mutual awareness, neither blocking — this ticket writes zero
   bytes to that file (`A5`).
 - **`ABC-114` shares `src/cli.test.ts`.** Comment-only edits rebase cheaply; a delivering hop that
@@ -280,3 +282,60 @@ authorised on the page, not an open question.**
 | 10 | no major unresolved blocker | **✅** none. The one edit this ticket implies elsewhere is **named with its owner and deliberately not made**, which is a disclosed hand-off rather than a blocker — the same stop `ADR-0017` `§7` and `ABC-108`'s `A5` recorded |
 
 Column moves are the Orchestrator's.
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: READY. DoR 10/10. `XS`, `P2` kept.** `column`/`status` are not moved here; `Backlog → Ready`
+is the Orchestrator's. The cut text above is history and stands, **except where the amendments below
+supersede it**. Where they conflict, this section wins.
+
+**Premise re-measured at `39d87491`, and it HOLDS:**
+- `grep -cw T2 src/cli.test.ts` = **0**. `interface ChildOptions` is at `:319` and `const childOf` at
+  `:336`.
+- `ABC-138` (`Done`, the spawn-pin holes ticket) carries `T2` **0** times, so it did not absorb this one.
+- **The need grew.** `AR-N8SPAWN-DRIFT`'s only recorded discharge point was *"at `ABC-108`'s remedy"*.
+  `ABC-108` is recommended DROP at this hop, and no discharge is recorded anywhere. `T2` is now the only
+  thing standing on that risk, with no end date.
+
+**Amendments — each stale against the tip or against accepted `ADR-0035`:**
+- **`A1`(ii), re-read:** `T2` obliges a re-measure **on the narrow file set, `src/cli.test.ts`, by
+  `ADR-0035` decision 2**. It reports the median, the twin's `R` and the state (MET / NOT MET /
+  UNRESOLVED, decision 1) against the per-child clause. The comment names **decision 3's per-set `F`** as
+  the floor to read, and **does not quote `F`'s number**: `F` is data that moves, and a live number in a
+  comment is `ABC-030`'s defect class.
+  - **Disclosed limit, not hidden:** that file's `F` is **1.097 s**, above the **0.30 s** per-child
+    clause. A small drift therefore reads UNRESOLVED.
+  - The measured failure mode (**+2.60 s CPU**, one deleted hook) reads **NOT MET at any `R`**, so `T2`
+    still catches the drift it exists for.
+- **`A2`, re-read:** the hook-deletion re-measure is a paired reading on `ADR-0035` decision 2's harness:
+  base, mutant and identity twin, n ≥ 8, round 0 discarded, load1 logged. It is reported with its `R`.
+  This stays `XS`: one file, ~27 runs.
+- **`A5`'s hash pin is VOID.** `63f66795…ca31` is no longer the tip's value. The `NFR-005` and `NFR-008`
+  rows moved on the owner's word (`…d1e00b44`), and the hash at `39d87491` is `c74e7426…0d3b`. **Read
+  `A5` as:** the 8-line hash is **identical at the branch base and the tip**, both values recorded.
+- **`A6` and test notes, the lane:** read `npx vitest run --dir src` as **`npm test`**.
+  - Since `ABC-093` merged, `tools/opening-book/book.test.ts` sits outside `src/`, so `--dir src`
+    collects 52 files where `npm test` collects 53 (`QE-093-d`).
+  - The cited *"`AGENTS.md` `## Test notes` 5"* no longer exists. Drop that cite.
+- **`## NFR / security`, `N8-LANE`, re-read:** `NFR-008` is now R-1 (wall ≤ 10 s gate, CPU reported).
+  This diff is comment-only, so **the count is the pin** (`ADR-0035` decision 3): 0 test files, 0 tests,
+  0 spawns, and **no timing bound written**. The *"BREACHED by 1.480 s / UNRULED on wall / `ABC-108` open"*
+  sentence is history.
+- **Dependencies, re-read:**
+  - `ABC-108`/`ABC-110` ordering is void.
+  - `ABC-115` and `ABC-109` are `Done`. Still 0 bytes go to `AGENTS.md`.
+  - `ABC-114` and `ABC-117` share `src/cli.test.ts`. All three are comment-only. Whichever lands second
+    rebases and re-reads its own sites.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** re-measured: 0 `T2` at the point of change; the discharge orphaned |
+| 2 | scope and out-of-scope clear | **✅** unchanged |
+| 3 | INVEST-shaped | **✅** independent; `XS` holds with the `A2` harness (one file) |
+| 4 | acceptance testable and measurable | **✅** — *was ⚠️.* `A4` is met by a sentence existing, and that **is** measurable. The propagation it cannot measure is not claimed by `A4` and is disclosed in `## Risks`. The ⚠️ marked a limit, not an untestable criterion |
+| 5 | dependencies known | **✅** re-read above |
+| 6 | security/NFR triggers with a measurable target | **✅** count pin (0/0/0) per `ADR-0035` decision 3; `A1`(ii) carries decision 1's three states |
+| 7 | test notes present | **✅** lane re-pointed to `npm test` |
+| 8 | size assigned | **✅** `XS` |
+| 9 | priority assigned | **✅** `P2`. The `P1` trigger (an observed un-re-measured child change) has not fired |
+| 10 | no major unresolved blocker | **✅** none |

@@ -490,7 +490,8 @@ describe("ABC-033 A5 — one derive per prompt", () => {
    * The honest cost, since it is not one derive: `toSan` DOES derive on its own for the `+`/`#`
    * suffix, on the position AFTER each checking candidate (`src/san.ts:105`). Those are other
    * positions, so `A5` as written still holds — but a prompt costs `1 + O(candidates)` derives in
-   * total, and six queens on `d4` measured six. Do not quote "one derive per prompt" as a cost
+   * total — one for the prompt plus one per checking candidate. Six queens on `d4` (six candidates,
+   * all `#`) measured seven: 1 + 6, at `ABC-141`. Do not quote "one derive per prompt" as a cost
    * bound for an ambiguity.
    */
   const RENDERED: ReadonlyArray<readonly [name: string, fen: string, line: string]> = [

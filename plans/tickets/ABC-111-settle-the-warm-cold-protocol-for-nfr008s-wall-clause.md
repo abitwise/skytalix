@@ -4,7 +4,7 @@ title: Settle the warm/cold measurement protocol for `NFR-008`'s wall clause —
 status: backlog
 column: Backlog
 size: M
-priority: P1
+priority: P3
 epic: —
 feature: —
 ---
@@ -301,3 +301,66 @@ can be estimated to deliver, not about whether the ticket can start.**
 | 10 | no major unresolved blocker | **✅** and it is the point of this ticket: **there is no human decision and no environmental precondition here.** `ABC-110` waits on the owner; this does not. **The machine's failure to go quiet is sized rather than blocking** (`A1` reuses the sizing shape, not the quiet threshold) |
 
 Column moves are the Orchestrator's.
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: DROP — close as SUPERSEDED, once `NFR-008`'s row carries the re-open trigger below.** Until
+then it stays in `Backlog` at **`P3`** (frontmatter moved `P1` → `P3` at this hop) so the trigger keeps
+a carrier. `column`/`status` are not moved here.
+
+**Why: this page's own DEMOTION TRIGGER fired, on the owner's word.** It reads *"if the owner moves the
+3 s level … this drops to `P2` pending re-derivation against his new level, on his words and their
+date."* He did: 2026-10-10, *"2. accept"* on `ADR-0035`, mapped by the Orchestrator to **R-1 — wall ≤ 10 s
+at load1 ≤ 8** (note `…6a1f3d92`; the mapping is flagged to him, see Owner question). **Re-derived
+here against W = 10 s:**
+
+| quantity | value | source |
+|---|---|---|
+| cooled/warm wall factor | 5.291 ÷ 4.637 = **1.141** | this page, 2026-08-19 ratios (39 files, Node v24.12.0) |
+| today's conforming wall | **6.52 s / 7.16 s** | `ADR-0035` § Context (`ABC-084` runs 1 and 3) |
+| today, projected cold | **7.44 s / 8.17 s** | × 1.141 — **a projection, not a reading** |
+| warm wall at which the protocol choice could flip W | 10 ÷ 1.141 = **8.76 s** | arithmetic |
+
+**The warm/cold choice cannot move a verdict against 10 s today.** Both states land under it with
+≥ 1.83 s to spare, even on the projection. `ADR-0035` decision 5 says the same in words. The consumer
+this ticket served, `ABC-110` `A6`, is `Done`.
+
+**What survives — one trigger, not a ticket.** *Re-open the warm/cold protocol question when a
+conforming warm `npm test` wall median reaches **8.76 s**, or any cooled reading exceeds **10 s**.*
+**Carrier: the `NFR-008` row, owner Security/NFR / Architect/Design** — recommended for its next catalog
+hop. **Caveat on the factor:** it was measured on v24.12.0 at 39 files; on re-open, re-measure it rather
+than reuse it.
+
+**DoR: not re-scored — a dropped ticket is not pulled.**
+
+## Page note — 2026-10-11 (BA/PM, subtask `bapm-batch-2026-10-11`, wave tip `506550f3`)
+
+**Recommendation: FOLD the trigger into `ABC-144`, then DROP this ticket (close as SUPERSEDED).**
+`column`/`status` are not moved here; that is the Orchestrator's.
+
+**Re-read against the owner's new goal.** On 2026-10-10 the owner asked for less `npm test` CPU on the
+M3 and allowed the 10 s wall to rise "a bit". That is `ABC-144`, `P1`.
+- **This page's own finding is about parallelism.** § "What is already established", item 1: the
+  warm/cold effect is on CPU/wall, with zero overlap between the states.
+- **A worker cap changes parallelism, and it raises the wall toward W.** So `ABC-144` will move the
+  lane into the zone where the warm/cold choice can flip a verdict. The 2026-10-10 re-score put that
+  zone at a warm median of 8.76 s against 10 s, and today's 6.52 / 7.16 s will rise.
+- **The trigger was never carried.** There is no "8.76" in `plans/nfr-catalog.md` at this tip, so
+  the 2026-10-10 "drop once `NFR-008` carries it" condition has not been met.
+
+**What `ABC-144` takes (its `A4` and `A5`):**
+- both states measured at the new setting, each with its own identity twin;
+- both medians under W by at least that state's R;
+- the cooled/warm factor **re-measured**, not reused (the caveat above);
+- the re-open trigger re-derived as W ÷ factor;
+- wording for the `NFR-008` row, written by Security/NFR after the owner's word.
+
+**What is dropped:** `A3`'s cause discrimination (four candidates, primed-cache and gap-length arms)
+and `A7` (`ABC-110` is `Done`). No verdict depends on the cause. If `ABC-144` `A4` finds one state
+over W, the owner hears it, and cause discrimination can be re-cut then, against a real number.
+
+**Why not keep this ticket open beside `ABC-144`:** both would read the same lane in the same window,
+twice. **Why not drop it outright:** the trigger would lose its only carrier just as the wall moves
+toward it.
+
+**DoR: not re-scored.** A ticket recommended for drop is not pulled.

@@ -1,0 +1,17 @@
+Software Engineer, subtask ticket-to-pr-ABC-085 (task wave-2026-09-25). Build only; the verdict mode was NOT run.
+Tree: base aee4b8cb; harness commit d5b0f0e2 (src/ladder.test.ts only). Apple M3, macOS Darwin 25.5.0, Node v26.11.0,
+vitest 3.2.7. LOADED MACHINE, NOT GRADED: three other agent hops shared the host; load1 is logged per pair. No wall figure
+below is a bar or a grade.
+
+1. short-run-1-uncommitted.out.txt — `LADDER_DEEP=1 npx vitest run src/ladder.test.ts`, 2026-10-11T09:04:23Z..09:18:36Z,
+   on aee4b8cb + the untracked harness (commit field reads "+dirty-src"). exit 1: 13 passed, 1 failed — the 4v5 row
+   was marked "Test timed out in 240000ms" by the harness's own first hang guard (1 min/game); the pair HAD finished
+   (248.9 s) and printed its summary. Fixed in d5b0f0e2 by removing the wall timeout (vitest 0); PLY_CAP is the hang guard.
+2. short-run-2-d5b0f0e2.out.txt — same command on d5b0f0e2, 09:25:02Z..09:39:11Z. exit 0, 14 passed (14), 848.3 s.
+   All five pair digests and the A5 digest equal run 1's byte for byte (A5 across runs).
+3. Probe cross-check: .grugops/context/design-ABC-085/probe/ladder-step.mjs games 120 4v3 under plain node at load1 ~2.8
+   played the SAME four games as the harness's 3v4 row (plies 123/122/119/115, same endings; same opening rule)
+   at 11.7–12.2 s/game. The harness row, run right after (-t "3v4"), took 57.3–62.0 s/game.
+4. Runner micro-probe (temp file, deleted, never committed): chooseMove(start position, budget 4000, virtualClock(120)) x5,
+   145 765 nodes every time. plain node 782 / 791 ms; vitest --pool=threads 3 473 / 3 379 ms; --pool=forks 3 344 / 3 490 ms.
+   => the vitest module runner costs ~4.3x per node on this engine, pool-independent.

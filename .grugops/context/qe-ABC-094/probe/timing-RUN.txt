@@ -1,0 +1,5 @@
+2026-10-10T19:34:17Z load1 10.16 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.0765,"firstCallLoadMs":5.3558,"reads":1,"hitMedianMs":0.0134,"hitP99Ms":0.0626,"hitMaxMs":0.7515}
+2026-10-10T19:34:17Z load1 10.16 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.062,"firstCallLoadMs":5.4368,"reads":1,"hitMedianMs":0.0133,"hitP99Ms":0.0609,"hitMaxMs":1.0226}
+2026-10-10T19:34:17Z load1 10.16 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.0625,"firstCallLoadMs":5.5889,"reads":1,"hitMedianMs":0.0138,"hitP99Ms":0.0595,"hitMaxMs":0.9195}
+2026-10-10T19:34:17Z load1 10.16 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.0629,"firstCallLoadMs":5.7444,"reads":1,"hitMedianMs":0.0141,"hitP99Ms":0.0598,"hitMaxMs":0.9575}
+2026-10-10T19:34:18Z load1 10.16 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.0717,"firstCallLoadMs":6.0149,"reads":1,"hitMedianMs":0.0134,"hitP99Ms":0.0597,"hitMaxMs":1.6992}

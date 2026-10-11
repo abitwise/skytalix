@@ -47,7 +47,8 @@ placing the short-circuit and proving the fall-through is invisible.
   `engine: createEngine({ budgetMs: DEFAULT_BUDGET_MS })` today. This ticket wraps that value with
   the decorator. **Without that line, no player's game ever consults the book**, and the Problem
   above says this ticket is the only one a player can perceive. The seed binding comes with the
-  line (`ADR-0012` clause 3(b)), and where a per-session seed comes from is unruled (§ DoR).
+  line (`ADR-0012` clause 3(b)). Its source is **RULED 2026-10-10 (`ADR-0037` D3)**: there is no
+  session seed, and the root builds the probe with `random: Math.random`.
 
 ## Out of scope — read this before writing a line
 
@@ -70,8 +71,11 @@ placing the short-circuit and proving the fall-through is invisible.
   `NFR-005` — that "not slower at all" is a call-count bar and no wall-clock run can settle it.)*
 - **`A2` (and it is fast, measured against a ratified budget).** **Given** the same call, **then**
   it returns in **≤ 30 ms** — 1% of `NFR-004`'s ratified 3 s default budget — on the reference
-  machine Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64, `UNKNOWN - verify` elsewhere,
-  measured **outside** the test suite.
+  machine Apple M3 (Mac15,13) / ~~Node v24.12.0~~ **Node v26.11.0** / Darwin 25.5.0 arm64,
+  `UNKNOWN - verify` elsewhere, measured **outside** the test suite. *(Re-pointed 2026-10-11 by
+  BA/PM. The reference stack was re-declared to v26.11.0 by `ADR-0035` decision 5, applied in the
+  `NFR-008` row. v24.12.0 is no longer installed. That clears `QE-094-f`'s "the reference names
+  v24.12.0" ambiguity for this page. The bar is unchanged.)*
 - **`A3` (leaving book searches, exactly once, silently).** **Given** a position **not** in the
   book, **when** the engine is asked for a move, **then** the search entry point is called
   **exactly 1** time, a legal move is returned, and **0 bytes** are written to stderr and **0**
@@ -86,6 +90,23 @@ placing the short-circuit and proving the fall-through is invisible.
   full game is played, **then** every engine move comes from the search, **exactly 1** warning is
   emitted for the whole process, and the game reaches a normal result — **0** crashes.
   *(`EPIC-005` § Acceptance bullet 4. `ABC-094` proves the probe's half; this proves the game's.)*
+  - **The stream half** *(folded 2026-10-11 by BA/PM from `QE-094-a`, MEDIUM, gap register
+    `…3058eacd` on `grugops/ABC-094-book-probe`)*. **The one warning goes to stderr, and 0 bytes of
+    it go to stdout.**
+    - **Why this is `ABC-095`'s.** `ABC-094`'s probe takes an injected warn sink (SE decision
+      `…d14f72cb`, allowed by `ADR-0037` § Consequences). So the stream is fixed only where the
+      composition root binds it, and that root is this ticket's (`A7`).
+    - **Given** the artifact moved aside (test note 4), **when** a real `node src/cli.ts` child runs
+      from launch to exit, with its stdout and stderr captured separately (the human may `quit`
+      after the engine's first reply), **then**:
+      - stderr carries the warning **exactly once**;
+      - stdout carries **0 bytes of the warning's text** (a count of its text in stdout is 0);
+      - the child exits 0 on `quit`.
+    - **"0 bytes to stdout" means 0 bytes OF THE WARNING.** In a live game, stdout carries the
+      frames, so stdout itself is never empty. QE's "stdout 0 B" reading came from a probe-only
+      child binding with no frames.
+    - **This is a `CLI_DEEP` row** in `src/cli.real-engine.test.ts`, next to `A7`'s, and never in
+      the default lane. It adds no test file.
 - **`A6` (the engine was not modified).** **Given** the delivered diff, **then** the number of
   changed lines in the modules `EPIC-004` delivers as its search, evaluation and ordering is
   **0** — or, if the seam genuinely cannot be consumed without a change there, **the ticket stops
@@ -93,8 +114,10 @@ placing the short-circuit and proving the fall-through is invisible.
   reworded. **This criterion is the subject boundary, written as a test.**
 - **`A7` (a real session consults the book)** *(added 2026-10-10)*. **Given** the delivered
   `src/cli.ts`, **then** its `engine:` value is the decorator wrapping
-  `createEngine({ budgetMs: DEFAULT_BUDGET_MS })`, and that is the only changed expression in the
-  `runTurnLoop({ … })` call. **And given** the book present and a real `node src/cli.ts` child in
+  `createEngine({ budgetMs: DEFAULT_BUDGET_MS })` with a probe built with `random: Math.random`
+  (`ADR-0037` D3), and `engine:` is the only changed property inside the `runTurnLoop({ … })` call.
+  *(Folded 2026-10-10: a probe built in a `const` above the call is allowed. It is not inside the
+  call.)* **And given** the book present and a real `node src/cli.ts` child in
   which the human plays `e2e4`, **then** the engine's reply is one of the book's entries for the
   position after `1. e4`. That is one row in the `CLI_DEEP` lane (`src/cli.real-engine.test.ts`),
   never in the default lane.
@@ -146,10 +169,14 @@ placing the short-circuit and proving the fall-through is invisible.
   `position-6`) is out of book anyway. Recorded because it is an easy and attractive mistake.
 - **`NFR-008` (lane ≤ 3 s wall / ≤ 13 s CPU; per-ticket ≤ 650 ms CPU).** **Target: ≤ 1 new test
   file, 0 new spawned processes, ≤ 650 ms CPU.** `A5`'s full game and `A2`'s timing run **outside**
-  the default lane.
+  the default lane. *(2026-10-10: the CPU level is 15 s (`ADR-0019`). Under `ADR-0035` (accepted,
+  owner option R-1) the counts — ≤ 1 file, 0 spawns — are the pins.)*
 - **Security: no new surface.** No file is parsed here that `ABC-094` does not already parse; no
   network; no manifest change. `ABC-041`'s clauses are answered at the delivering hop against the
-  real diff, which cannot be enumerated before `EPIC-004` exists.
+  real diff, which cannot be enumerated before `EPIC-004` exists. *(2026-10-10: superseded for
+  routing. `ADR-0036` (b2) fires through the new edge to the probe, or (b1) if `src/cli.ts` holds the
+  read (`ADR-0037` § Consequences' injected-reader option). D3's `Math.random` is not a limb: ASVS
+  `V11.5.1` is L2, outside the active L1 set, the same reasoning as `src/cli-options.ts:103`.)*
 
 ## Test notes
 
@@ -184,7 +211,34 @@ move interface lands, this becomes the cheapest visible win on the board.
 
 ## Definition of Ready
 
-**RE-SCORED 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
+**Fold note, 2026-10-11 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-batch-2026-10-11`, at
+`506550f3`). **Not re-scored; still 8 of 10, ⚠️x2 (items 3 and 10).** The re-score trigger is
+`ABC-094`'s merge, and `ABC-094` is `In UAT` today.
+- **`QE-094-a` is folded into `A5`** as its stream half. The one warning goes to stderr, and 0 bytes
+  of it go to stdout, read on a real child. It is one more `CLI_DEEP` row, not one more file.
+- **`QE-094-a` asked for this to land before `ABC-095` is pulled.** It has.
+- **`A2`'s reference runtime** is re-pointed to v26.11.0 (`ADR-0035` decision 5). The bar is
+  unchanged.
+- **`QE-094-e`** (one warning per probe *instance*) is already covered by `A5`'s "exactly 1 for
+  the whole process", which holds only if the root builds one probe. `A7`'s wiring line builds
+  one.
+- The `ABC-094` page was not touched.
+
+**RE-SCORED 2026-10-10 by BA/PM at the fold** (task `wave-2026-09-25`, subtask
+`bapm-fold-book-chain-2026-10-10`, at `4768b3b0`; `ADR-0037` folded per `…d06f5ba8`). **Result: 8 of
+10, ⚠️x2 (items 3 and 10). It stays in `Backlog`, last of the chain.** Readings:
+`.grugops/context/bapm-fold-book-chain-2026-10-10/notes/`.
+
+- **Item 5 ⚠️ → ✅.** The seed source is ruled (`ADR-0037` D3). `A7` names the probe's `random`.
+- **Items 3 and 10 ⚠️ STAND**, on `ABC-093` and `ABC-094`, both unbuilt. **Re-score trigger:
+  `ABC-094`'s merge.**
+- **Size `S` and `P1` hold.**
+- **Production and UAT.** **The owner's UAT word** (a decorator module, and `src/cli.ts`).
+  `In Security/NFR` through (b2), or (b1) if `src/cli.ts` holds the read. D3 adds no limb.
+- **`ABC-101` overlap.** Its integer seed for `createLevel` comes from the same root read,
+  `Math.floor(Math.random() * 2 ** 32)` (D3). Its wiring is its own. Owner question 5 is unchanged.
+
+**History. Re-scored 2026-10-10 by BA/PM** (task `wave-2026-09-25`, subtask `rescore-p1-backlog-2026-10-10`,
 at `aaa88263`). **Result: 7 of 10, ⚠️x3. It stays in `Backlog`, last of the four.** Readings:
 `.grugops/context/rescore-p1-backlog-2026-10-10/notes/`.
 
@@ -193,8 +247,8 @@ at `aaa88263`). **Result: 7 of 10, ⚠️x3. It stays in `Backlog`, last of the 
 - **Item 5 ✅ → ⚠️, and this is the cost of the wiring line now in scope.** For "games vary between
   sessions" (`EPIC-005`), the composition root needs a seed that differs per session. **No production
   module has a session seed source today.** `createEngine` takes none, and `src/levels.ts` takes a
-  caller's seed. Whether that seed comes from `Date.now`, `crypto` or something else is
-  Architect/Design's. Put it in the same `In Design` hop as `ABC-093`'s format and `ABC-094`'s `G4`.
+  caller's seed. **Ruled 2026-10-10 (`ADR-0037` D3): there is no session seed; `src/cli.ts` binds
+  `Math.random`.**
   **If the Orchestrator reverses the wiring call,** the score returns to 8/10 and the wiring line
   needs its own XS ticket.
 - **Size `S` holds**: one wiring expression, plus one `CLI_DEEP` row. **`P1` holds.**

@@ -1,0 +1,13 @@
+#!/bin/bash
+# Supplementary heat/power sampler for Window A. Every 15 s; stops when $1/STOP exists or after 60 min.
+W="$1"; OUT="$W/abc144-frontier-warm.thermal.tsv"
+printf 'utc\tload1\tthermalpressurelevel\tcpu_speed_limit\tpower\n' > "$OUT"
+end=$(( $(date +%s) + 3600 ))
+while [ ! -e "$W/STOP" ] && [ "$(date +%s)" -lt "$end" ]; do
+  l=$(sysctl -n vm.loadavg | tr -d '{}' | awk '{print $1}')
+  tp=$(notifyutil -g com.apple.system.thermalpressurelevel | awk '{print $2}')
+  sl=$(pmset -g therm | sed -n 's/.*CPU_Speed_Limit[[:space:]]*=[[:space:]]*\([0-9]*\).*/\1/p'); [ -z "$sl" ] && sl=none
+  pw=$(pmset -g batt | sed -n "s/.*'\(.*\)'.*/\1/p")
+  printf '%s\t%s\t%s\t%s\t%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$l" "$tp" "$sl" "$pw" >> "$OUT"
+  sleep 15
+done

@@ -152,6 +152,35 @@ second folder rather than a line appended in place.
   pre-cutover count separately. The `Done` row set is parsed from the line-leading `- [ABC-xxx]` form
   only — *measured 2026-08-17: a naive `ABC-\d+` scan of the same section yields **42**, because four
   ids appear inside other rows' prose. A tool that reports 42 is wrong.*
+  - *(Amended 2026-10-11 by BA/PM, `bapm-batch-2026-10-11`. **"0 in-scope findings" is struck**,
+    because it is known to be false at the tip.)* `Done` now holds rows that were closed with no QE
+    hop on purpose:
+    - drops and owner-word closes with no delivered diff (`ABC-060`, `ABC-074`, `ABC-092`,
+      `ABC-100`, `ABC-108` and `ABC-112`, from the 2026-10-10 rough sweep and this hop's read of
+      the `Done` section);
+    - `ABC-073`, delivered inside `ABC-072`'s Security/NFR hop, in a folder that names only
+      `ABC-072`.
+  - **Then** `--sweep` reports exact counts on separate lines: `Done` rows, pre-cutover,
+    covered by `qe-e2e`, covered by the `security-nfr` substitute (`A9`), and in-scope findings.
+    **Every finding is listed by id.**
+  - The delivery note classifies each finding from its board row as dropped / owner-close / real
+    miss. **The deliverable is the exact numbers, not 0.** Each count must equal a hand count of
+    the same rule. Test note 3 still stands: no flag clears a finding.
+- **`A9` (the owner's substitute for docs-only tickets is visible, not silent)** *(added 2026-10-11,
+  on the owner's answer 3, note `…owner-word-six-answers-b7c41e09`: closing `ABC-072`/`ABC-073` with
+  Security/NFR "instead of QE: acceptable for docs-only tickets")*.
+  - **Given** a `kind: decision` note authored `by: security-nfr` that meets the other three
+    conditions (refs contain `T`; folder names `T`; folder is not `T`'s `ticket-to-pr-*`), **when**
+    `--ticket T` runs, **then** exit is **0**, and stdout labels the coverage
+    **`covered (security-nfr substitute — docs-only rule)`**, distinct from `covered (qe-e2e)`.
+  - **Proven on the real `ABC-072`:** `--ticket ABC-072` gives exit 0, the substitute label, and the
+    path under `secnfr-ABC-072/notes/`.
+  - **Proven on the real `ABC-073`:** `--ticket ABC-073` gives exit **1**. The only verdict that
+    cites it sits in a folder that names `ABC-072`, so the folder rule (`A3`) holds for the
+    substitute too.
+  - **The tool does not judge "docs-only".** It cannot see a diff's kind from a note. The label
+    makes the substitute visible to the human at the `Done` exit, and that human applies the
+    owner's rule. This is the same ceiling as `A7`: a completeness check on the record.
 - **`A5` (id normalisation).** **Given** a folder named `abc031-…` and a ticket `ABC-031`, **when**
   coverage is computed, **then** they match; and `ABC-006` does **not** match a folder named
   `…abc0066…`. *(Zero-padded, boundary-safe — not a substring test.)*
@@ -236,3 +265,86 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` (**10 items**
 | 8 | size assigned | **✅** `M` (5), with the five pieces that make it `M` and the condition that makes it `L` |
 | 9 | priority assigned | **✅** `P2`, with the argument for `P1` stated rather than hidden |
 | 10 | no major unresolved blocker | **⚠️** **The owner should acknowledge the stated ceiling before this is built.** He said yes to "the QE detector"; this ticket rules that the achievable detector is a *completeness check on the record*, not proof the hop ran, and that `by: qe-e2e` is self-declarable. If he understood "detector" to mean a control an agent cannot satisfy by writing its own note, **this ticket does not deliver that and no amount of building it will** — it needs an external signal and a different, larger ticket. Buildable as written either way; the risk is a mismatch between what ships and what was agreed. |
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: STAYS `Backlog`. DoR 9/10, the ⚠️ is still item 10 (the owner's acknowledgement of the
+ceiling). `M` and `P2` kept.** `column`/`status` are not moved here.
+
+**Premise re-checked. The failure it watches for HAS RECURRED in a recorded form.**
+- `tools/grugops/qe-hop-integrity.js` does not exist at the tip.
+- A rough sweep (folder names the ticket + `by: qe-e2e` + `kind: decision`; this is **not** the tool's
+  four-condition rule) over the 112 `Done` rows finds **7** tickets from `ABC-069` up with no QE verdict.
+  - **Five are explained:** `ABC-071` was closed 2026-08-16, before the cutover. `ABC-074`, `ABC-092`,
+    `ABC-100` and `ABC-112` are owner-word closes or cancellations with no delivered diff.
+  - **Two are not:** `ABC-072` and `ABC-073` reached `Done` **2026-10-10** with no `qe-e2e` hop. The
+    `ABC-072` row says Security/NFR re-verified `A1`–`A6` *"in place of a separate QE hop
+    (Orchestrator routing: docs-only ruling ticket)"*, and `ABC-073` was delivered inside that hop.
+- **So it was not silent drift.** It was a recorded routing call. But it **departs from the owner's
+  2026-08-17 rule** (*"Every ticket gets a `qe-e2e` hop … none reaches `Done` without one"*). This tool
+  would flag both. That is the argument for `P2` and against `P3`. It is not `P1` because the departure
+  was recorded and not silent.
+
+**Amendments:**
+- **`A4`'s 38** and the 1288 / 223 note counts are history. The page already lets the builder
+  re-measure at build time.
+- **`## Security / NFR triggers`, `N8-LANE`, re-read** under `ADR-0035`:
+  - the new test file's cost is read on its **narrow set**, against the placeholder arm, with `R`
+    reported (decisions 1–2);
+  - the provisional `F` is 16 % of its base CPU; the 650 ms holds only at or above `F`;
+  - 1 file, 0 spawns is the count pin.
+  - **A file under `tools/` runs only in the `npm test` root lane**, not in `--dir src` (`QE-093-d`).
+- **NEW dependency, `AGENTS.md` bytes.** `A7` adds an `AGENTS.md` paragraph. Main's file is
+  **23,216 B of a 24,576 B target**, so **1,360 B** are left (`QE-093-a`), and `QE-093-a`'s regeneration
+  line also wants some. The paragraph has to fit the remainder or go by pointer. That is the Scribe's
+  call at the pull.
+
+**DoR item 10 stays ⚠️, and it is the owner's.** His *"yes to the QE detector"* (2026-08-17) has not
+been squared with the stated ceiling: a completeness check on the record, not proof that a hop ran. See
+Owner questions in `.grugops/context/bapm-rescore-backlog-r1-2026-10-10/notes/`.
+
+## Re-score — 2026-10-11 (BA/PM, subtask `bapm-batch-2026-10-11`, wave tip `506550f3`)
+
+**Verdict: DoR 10/10, 0 ⚠️ (was 9/10). Recommend `Backlog → Ready`. `M` and `P2` kept.**
+`column`/`status` are not moved here; that is the Orchestrator's.
+
+**Item 10 ⚠️ → ✅, on the owner's word.** On 2026-10-10 he answered (note
+`…owner-word-six-answers-b7c41e09`, answer 5): *"yes, it is enough"*. The Orchestrator mapped that to
+"a QE note exists" is enough. **So the ceiling stated in § Scope 4 and `A7` is acknowledged.** The
+detector he agreed to is a completeness check on the record, not proof that a hop ran. `A7` stays
+as written, because it is what makes the ceiling visible to the next reader.
+
+**Owner answer 3 is folded as `A9`, because it changes what "covered" means.** He accepted
+Security/NFR in place of QE for docs-only tickets. Without `A9`, the tool would report every such
+close as a finding forever.
+- `A9` labels the substitute and does not judge "docs-only". The human at the `Done` exit applies
+  that rule.
+- Real-data proofs: `ABC-072` passes with the substitute label, and `ABC-073` stays a finding.
+
+**`A4` is amended: exact counts, every finding named, and "0" struck.** Read at this tip, the
+`Done` section holds drops and owner-word closes with no QE hop (`ABC-060`, `ABC-074`, `ABC-092`,
+`ABC-100`, `ABC-108`, `ABC-112`) plus `ABC-073`. A sweep that must read 0 would fail on day one,
+or would need an override flag that test note 3 forbids.
+
+**Dependency re-read, `AGENTS.md` bytes.** It is **23,609 B** at this tip (`wc -c`, last touched by
+`076dca9b`), so **967 B** of the 24,576 B target are left. `A7`'s paragraph has to fit that or go by
+pointer. The Scribe calls it at the pull. This is not a blocker.
+
+**`P2` holds.** Answer 3 makes the `ABC-072` routing owner-accepted, so the 2026-10-10 "departure"
+argument for `P2` is gone. What is left is the original one: the measured drift was silent for five
+tickets, and the board now closes tickets at width 3. **Demotion trigger:** if the Orchestrator
+records the `--ticket` check as a manual step in its own `Done` routine before this is built, drop
+to `P3`.
+
+| # | item | 2026-10-11 |
+|---|---|---|
+| 1 | problem clear | ✅ unchanged |
+| 2 | scope and out-of-scope clear | ✅ plus `A9`'s substitute and its "does not judge docs-only" fence |
+| 3 | INVEST-shaped | ✅ independent; `M` |
+| 4 | acceptance testable and measurable | ✅ `A4` is now exact counts with named findings; `A9` gives exit 0 / 1 on two real tickets |
+| 5 | dependencies known | ✅ none blocking; `AGENTS.md` 967 B headroom named |
+| 6 | security/NFR triggers with a measurable target | ✅ unchanged (`N8-LANE` narrow set; 1 file, 0 spawns; no-exec, no symlink escape) |
+| 7 | test notes present | ✅ four |
+| 8 | size assigned | ✅ `M` (5); `A9` is one more author value on an existing rule |
+| 9 | priority assigned | ✅ `P2`, with a demotion trigger |
+| 10 | no major unresolved blocker | **✅** *(was ⚠️)* the owner's answer 5 acknowledges the ceiling |

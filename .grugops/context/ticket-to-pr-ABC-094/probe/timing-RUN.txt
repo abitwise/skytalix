@@ -1,0 +1,5 @@
+load1 8.98 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.036,"firstCallLoadMs":6.93,"readsAfter1001Calls":1,"hitMedianMs":0.0158,"hitP99Ms":0.0725,"hitMaxMs":0.7432}
+load1 8.98 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.042,"firstCallLoadMs":6.95,"readsAfter1001Calls":1,"hitMedianMs":0.0157,"hitP99Ms":0.082,"hitMaxMs":0.7891}
+load1 8.98 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.044,"firstCallLoadMs":7.32,"readsAfter1001Calls":1,"hitMedianMs":0.0168,"hitP99Ms":0.0774,"hitMaxMs":0.815}
+load1 8.98 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.042,"firstCallLoadMs":7.03,"readsAfter1001Calls":1,"hitMedianMs":0.0175,"hitP99Ms":0.0833,"hitMaxMs":0.7817}
+load1 8.98 {"node":"v26.11.0","readsAtConstruction":0,"constructMs":0.042,"firstCallLoadMs":8.13,"readsAfter1001Calls":1,"hitMedianMs":0.0184,"hitP99Ms":0.0802,"hitMaxMs":0.8792}

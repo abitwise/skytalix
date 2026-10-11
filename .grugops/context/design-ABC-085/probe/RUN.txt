@@ -1,0 +1,27 @@
+Architect/Design probe, subtask design-ABC-085 (D4 for ABC-085, ADR-0038), task wave-2026-09-25.
+Tree: 489c549e (grugops/wave-2026-09-25 tip). src/ unmodified; nothing under src/ was written.
+Engine path byte-identical to BA/PM's aaa88263: `git diff --stat aaa88263 HEAD -- src/engine.ts src/search.ts
+src/levels.ts src/virtual-clock.ts src/evaluate.ts src/evaluate.mirror-corpus.ts src/quiescence.ts
+src/transposition.ts src/moves.ts src/legal.ts src/apply.ts src/gameend.ts src/history.ts src/zobrist.ts
+src/position.ts` printed nothing. Only src/fen.ts (ABC-010) moved on the engine's import path.
+Machine: Apple M3, macOS (Darwin 25.5.0), Node v26.11.0. The host was shared with other hops; load1 is logged
+per run and the wall figures are diagnostic, never a bar. Every count is deterministic.
+
+1. reverify-345.out.txt — BA/PM's own script, unmodified, re-run from its directory in this worktree:
+     cd ../../rescore-p1-backlog-2026-10-10/probe && for s in 120 30; do node levels-345-depth.mjs $s 4; done
+   Steps 10 and 4 not re-run (step 4 took ~13.5 min at BA/PM's hop; this hop's fence is 10 min per run).
+
+2. ladder-step.mjs (this directory), imports merged src/ read-only:
+     node ladder-step.mjs equiv              -> ladder-step-equiv-floor.out.txt
+     node ladder-step.mjs floor              -> ladder-step-equiv-floor.out.txt
+     node ladder-step.mjs games 120          -> ladder-step-games-120.out.txt
+     node ladder-step.mjs games 30 5v4       -> ladder-step-games-30-5v4.out.txt  (run under `timeout 570`)
+   equiv: chooseMove at (3000 ms, step 120), (750, 30), (300, 12) on the 50-position corpus (buildCorpus,
+          stride 4, BA/PM's set); counts positions where move, depth AND nodes are all identical.
+   floor: chooseMove at 100 ms and 500 ms (levels 1 and 2's budgets) at steps 120/30/10/4; median depth and
+          the count at depth 1 (the unabortable floor).
+   games: createLevel games from START_FEN. Opening: 4 plies chosen by seededRandom(seed) uniformly over
+          legalMoves (seeds 1, 2). Each side its own virtualClock(step). Both colour orders per seed. Ends on
+          gameStatusOf's result, on the FIRST claimable draw (threefold/fifty, claimed at once — a probe
+          policy, not a ruling), or at a 600-ply cap (never hit). sameGameBothChairs compares the two
+          colour orders' move lists for one seed.

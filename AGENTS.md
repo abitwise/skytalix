@@ -70,6 +70,10 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 - Perft harness (move-gen correctness + nodes/sec, ABC-006): `npm run perft`
 - Perft deep counts (opt-in slow suite): `PERFT_DEEP=1 npx vitest run src/perft.test.ts`
 - Spike benchmark (throwaway, ABC-008): `npm run spike:perft [depth]`
+- Regenerate the opening book (ABC-093): `node tools/opening-book/compile.ts <dir>` <!-- RUN 2026-10-10:
+  exit 0, 0.4 s; rewrites `data/opening-book/book.json` IN PLACE, `cmp` 0 against the committed file.
+  `<dir>` = the five source files `a.tsv`..`e.tsv` fetched OUTSIDE the repo at the pinned CC0 commit
+  (URLs, sha256: `data/opening-book/ATTRIBUTION.md`). No `<dir>`: usage, exit 1. -->
 
 ### Test
 
@@ -80,7 +84,7 @@ waiting shell's own command line and never exits. Wait on the PID you started or
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
-  2026-10-10: exit 0, 52 files, 1608 tests, 7.8 s. A hung lane exits 124 at the 60 s bound — stop
+  2026-10-10: exit 0, 53 files, 1680 tests, 8.1 s. A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
@@ -92,8 +96,8 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   src/virtual-clock.ts change. -->
 - Levels deep lane (ABC-087, `src/levels.test.ts`): `ENGINE_DEEP=1 npx vitest run src/levels.test.ts`
   <!-- RUN 2026-10-10: exit 0, 28 passed (22 default), 202-225 s (A5: 135 s).
-  Holds A4's evidence (ENDGAMES 204 + perft/puzzles 246 moves), A2 on a virtual clock, A3 (35-36
-  vs 58 of 62). Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change. -->
+  Holds A4's evidence (ENDGAMES 204 + perft/puzzles 242 moves), A2 on a virtual clock, A3 (35
+  vs 54 of 58). Run after any src/levels.ts, src/engine.ts or src/virtual-clock.ts change. -->
 - Input-seam deep lane (opt-in, ABC-037): `INPUT_DEEP=1 NODE_OPTIONS=--expose-gc npx vitest run src/line-input.test.ts`
   <!-- RUN 2026-09-26: exit 0, 34 passed — 34 is the whole lane; 33 = NODE_OPTIONS dropped,
   retention guard did not run (exits 0 either way). TRAP: never assert this guard on heapUsed —
@@ -107,8 +111,8 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 - Quiescence deep lane (ABC-079): `SEARCH_DEEP=1 npx vitest run src/quiescence.test.ts` <!-- exit 0,
   37 passed (29 default), 1.8 s -->
 - Puzzle suite, strength gate (opt-in, ABC-084): `PUZZLE_DEEP=1 npx vitest run src/puzzle-suite.test.ts`
-  <!-- RUN 2026-10-10: exit 0, 17 passed (12 default), 32-36 s; ABC-127 A7 reads <= 90 / 45 s,
-  never asserted, 300 s hang guards. Baseline `src/puzzle-suite.baseline.json` (58/62, budget 25,
+  <!-- RUN 2026-10-10: exit 0, 18 passed (12 default), 32-36 s; ABC-127 A7 reads <= 90 / 45 s,
+  never asserted, 300 s hang guards. Baseline `src/puzzle-suite.baseline.json` (54/58, budget 25,
   step 1; a run prints NEWLY-MISSED / NEWLY-SOLVED per differing row). TRIGGER (owner, option B,
   2026-10-09): QE runs it during review when the change touches engine code (`src/engine.ts`,
   `src/search*.ts`, `src/evaluate*.ts`, `src/quiescence.ts`, `src/transposition.ts`, move
@@ -312,13 +316,8 @@ requirement stands unchanged.
   is `blocking`): run the gates on the branch tip before and on `main` after, and record both.
   Running a ticket's tests and conducting its UAT are the agent's on the same terms — see
   `## Test and UAT authority`.
-- **Deploy is allowed, and there is nothing to deploy.** Both halves came from the owner in one
-  sentence (2026-08-15): the authority was granted and the need was denied — this project stays
-  local. Read it as neither "deploy freely" nor "the old prohibition stands". There is no artifact,
-  no target and no release machinery today, so there is no deploy to perform; `EPIC-006` is where
-  that could change. `production_requires_human_confirmation` is `true` and the grant did not flip
-  it — it binds as written, and moving it is the owner's word, never an inference from the grant.
-  See `## Deployment posture`.
+- **Deploy is allowed, and there is nothing to deploy** (the owner, 2026-08-15, one sentence).
+  `production_requires_human_confirmation` stays `true`; the grant did not flip it. See `## Deployment posture`.
 - Do not change dependencies without reason. No unrelated refactors. No fake results.
 
 ## Coding rules (the 12)

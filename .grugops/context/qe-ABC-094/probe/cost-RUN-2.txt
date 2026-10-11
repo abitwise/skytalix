@@ -1,0 +1,6 @@
+twin - head (identity null): median -0.025 s, x(2)..x(7) -0.030..+0.030, R 0.030 s, signs 2+/6-/0 zero; sorted -0.050 -0.030 -0.030 -0.030 -0.020 -0.010 +0.030 +0.090
+head - base (QE final, 35 tests): median +0.385 s, x(2)..x(7) +0.360..+0.400, R 0.400 s, signs 8+/0-/0 zero; sorted +0.350 +0.360 +0.370 +0.380 +0.390 +0.400 +0.400 +0.420
+se - base (8cf395fc, 26 tests): median +0.350 s, x(2)..x(7) +0.310..+0.390, R 0.390 s, signs 8+/0-/0 zero; sorted +0.270 +0.310 +0.320 +0.340 +0.360 +0.360 +0.390 +0.390
+head file CPU median 1.420 s; twin median = -1.76 % of it (admissible needs <= 1.5 % with sign at chance)
+load1 over scored runs: min 9.2, median 9.43, max 11.56
+ADR-0035 reading against b = 650 ms: INADMISSIBLE (no state)

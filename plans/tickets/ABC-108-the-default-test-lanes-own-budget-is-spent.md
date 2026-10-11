@@ -1,8 +1,8 @@
 ---
 id: ABC-108
 title: The default test lane sits at or over `NFR-008`'s 13 s CPU clause and it did so BEFORE `ABC-078` arrived — re-measure on a quiet machine and rule
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P1
 epic: —
@@ -327,3 +327,32 @@ inside a good result.** The ruling stands on a *replacement* instrument, not on 
 unchanged, reason replaced, criteria defect recorded above rather than smoothed away.**
 
 Column moves are the Orchestrator's.
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: DROP — close as SUPERSEDED. Not delivered, overtaken.** This page's `column`/`status` are not
+moved here; the move is the Orchestrator's.
+
+**What overtook it, in order:**
+1. **The clause was ruled** — `ADR-0014` (BREACHED, 2026-08-19, on a replacement instrument; `A1` recorded
+   FAILED above). The remedy it asked for was cut and closed as `ABC-110` (`Done`).
+2. **The level moved twice** — `ADR-0019` (13 s → 15 s), then `ADR-0035` decision 5 (BREACHED on both
+   clauses, 24.86–26.04 s CPU on Node v26.11.0).
+3. **The clause no longer exists as a gate.** The owner accepted `ADR-0035` with option **R-1** on
+   2026-10-10 (*"2. accept"*, note `…6a1f3d92`): wall ≤ 10 s at load1 ≤ 8 is the gate; **CPU is reported,
+   not levelled.** A ticket whose deliverable is "rule the 13 s CPU clause" has no clause left to rule.
+4. `ADR-0035` § Consequences recommends exactly this close.
+
+**What survives, and where it lives — no part of it needs this ticket:**
+- **`A6`'s question** (*may `N8-LANE`'s 5 % be granted, and against what total?*) → answered in form by
+  `ADR-0035` decisions 2–3: `N8-LANE` stays **650 ms as a number**, read on the narrow file set at or above
+  that set's `F`. The "5 % of the total" wording now has no CPU level under it. That is Security/NFR's
+  flagged LOW item 3 (`…d1e00b44` § Flagged) — a catalog wording edit for Architect/Design, not a ticket.
+- **`AR-N8SPAWN-DRIFT`'s discharge point.** `plans/nfr-catalog.md` § `AR-N8SPAWN-DRIFT` reads *"Discharge:
+  at `ABC-108`'s remedy"*. Searched at `39d87491`: **no discharge is recorded anywhere** (catalog, ADRs,
+  ticket pages, notes). Closing this page orphans that pointer. **Owner: Architect/Design** (the risk's
+  named owner) — re-point the discharge. `T2` (`ABC-116`) stays its only control.
+- **`A1`'s lesson** (size the load contamination, never assert quiet) is already the protocol in
+  `ADR-0035` decision 2 (*"Load is logged, never gated"*).
+
+**DoR: not re-scored — a dropped ticket is not pulled.** Detail: `.grugops/context/bapm-rescore-backlog-r1-2026-10-10/notes/`.

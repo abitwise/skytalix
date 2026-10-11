@@ -4,6 +4,10 @@
 
 accepted
 
+**Pointer 2026-10-11** (`design-low-batch-2026-10-11`). `AR-N8SPAWN-DRIFT`'s discharge has moved off
+`ABC-108`, which was DROPPED on 2026-10-10. Its new place is in `§ Pointers 2026-10-11` at the end of
+this file. Decisions 1–4 are unchanged.
+
 Written 2026-08-21 by Architect/Design at task `residual-G-QE115-3-2026-08-21`, the owner of
 `NFR-008`, its per-file floor account and its spawn account, ruling the residual **`G-QE115-3`** that
 QE raised at `ABC-115`'s re-verification and handed to this role and to `ABC-108` by name.
@@ -169,3 +173,37 @@ Rolling back costs nothing else: this ADR added no code, no lane, no dependency 
 the `T2` trigger from `plans/nfr-catalog.md`'s `N8-SPAWN` section and close `AR-N8SPAWN-DRIFT` there,
 and the account is byte-equivalent to its 2026-08-15 state. **`NFR-008`'s level, `N8-LANE`'s clauses
 and `ADR-0008` are untouched by this ADR and are unaffected by its rollback.**
+
+## § Pointers 2026-10-11
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-low-batch-2026-10-11`), the owner of
+`AR-N8SPAWN-DRIFT`. **No decision changes, and nothing was measured.** Note `…36088a35`.
+
+**`AR-N8SPAWN-DRIFT`'s discharge is re-pointed.**
+- **Why it moved.** Decision 3 placed it *"at `ABC-108`'s remedy, as one input among many"*. The owner
+  DROPPED `ABC-108` on 2026-10-10 (*"2. yes"*, note `…owner-word-six-answers-b7c41e09`), because R-1
+  superseded it. That left the risk with no carrier.
+- **New discharge point: the owner's lane-CPU ticket.** This is the P1 ticket BA/PM cuts for *"reduce
+  `npm test` CPU on the MacBook Air M3"* (handoff #5 item 3, `bapm-batch-2026-10-11` item 5). Its id is not
+  known at this hop.
+  - It is `ABC-108`'s successor in kind: the hop that reads where the lane's CPU goes.
+  - It is the same framing decision 3 used: a grown child is one input among many.
+- **What discharges it there (one condition, read from that ticket's own per-file readings):**
+  - `src/cli.test.ts` (27 children, `N8_SPAWN` at `:1838`) reads within `F` = 1.097 s of its most recent
+    admissible base reading (`ADR-0035` amendment under decision 3). If it does, the risk is DISCHARGED for
+    that tree.
+  - If it reads more than `F` over, each child is checked against its criterion's priced shape (the
+    substitution hook present, not the real engine). Any child that grew is a finding against the hop
+    that grew it, under `T2`.
+  - The measured drift this risk names is +2.60 s CPU from one child. That is about 2.4x that `F`, so the
+    condition can see it.
+- **What does not change.**
+  - `T2` stays the only forward control. `ABC-116` (Ready) carries it.
+  - Decision 1 stands, and so does the Rollback falsifier.
+  - Discharging the risk for one tree does not close it for later trees.
+- **Not the discharge, but a second signal:** R-1's wall trip-wire, W, at each Security/NFR gate. On the
+  record, one grown child adds about +2.7 s of wall against the roughly 3 s of runway to W = 10 s. That
+  is a detector, not a discharge.
+- **Fallback.** Suppose the lane-CPU ticket is not cut, or its readings do not cover `src/cli.test.ts`.
+  Then the discharge falls to the next hop that reads `src/cli.test.ts` on its narrow set, under the
+  same condition.

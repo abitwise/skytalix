@@ -1,0 +1,7 @@
+src/move-input.ts:48 enclosing-calls=[] inIt=false
+src/move-input.ts:49 enclosing-calls=[] inIt=false
+src/move-input.test.ts:493 enclosing-calls=[describe] inIt=false
+src/move-input.test.ts:494 enclosing-calls=[describe] inIt=false
+src/history-pane.ts:55 enclosing-calls=[] inIt=false
+src/history-pane.ts:56 enclosing-calls=[] inIt=false
+src/history-pane.ts:57 enclosing-calls=[] inIt=false

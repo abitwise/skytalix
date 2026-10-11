@@ -1,0 +1,18 @@
+# abc144-frontier-warm summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 27.15	wall 6.28	par 4.385	load1 5.52	load1>8 0/8	files 53	tests 1680
+T	cpu 27.44	wall 6.38	par 4.293	load1 6.24	load1>8 2/8	files 53	tests 1680
+  T-B cpu	median 0.195 (0.72 % of base cpu)	sign 5/8	k 2	interval [-0.640, 0.460]	R 0.640
+  T-B wall	median 0.105	sign 8/8	k 2	interval [0.010, 0.150]	R 0.150
+K4	cpu 24.46	wall 6.57	par 3.705	load1 5.61	load1>8 1/8	files 53	tests 1680
+  K4-B cpu	median -2.895 (-10.66 % of base cpu)	sign 0/8	k 2	interval [-3.760, -2.410]	R 3.760
+  K4-B wall	median 0.355	sign 8/8	k 2	interval [0.250, 0.440]	R 0.440
+K3	cpu 22.87	wall 7.22	par 3.177	load1 5.84	load1>8 0/8	files 53	tests 1680
+  K3-B cpu	median -4.475 (-16.48 % of base cpu)	sign 0/8	k 2	interval [-5.180, -4.350]	R 5.180
+  K3-B wall	median 0.950	sign 8/8	k 2	interval [0.840, 0.980]	R 0.980
+K2	cpu 21.02	wall 8.23	par 2.556	load1 5.74	load1>8 1/8	files 53	tests 1680
+  K2-B cpu	median -6.165 (-22.71 % of base cpu)	sign 0/8	k 2	interval [-7.300, -6.010]	R 7.300
+  K2-B wall	median 1.945	sign 8/8	k 2	interval [1.880, 2.080]	R 2.080
+K1	cpu 19.20	wall 14.68	par 1.308	load1 5.81	load1>8 0/8	files 53	tests 1680
+  K1-B cpu	median -7.945 (-29.26 % of base cpu)	sign 0/8	k 2	interval [-9.120, -7.690]	R 9.120
+  K1-B wall	median 8.430	sign 8/8	k 2	interval [8.340, 8.520]	R 8.520
+twin R: cpu 0.640 s, wall 0.150 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).

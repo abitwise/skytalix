@@ -1,0 +1,37 @@
+CONTROL	unmutated copy	exit 0	green	Tests 13 passed (13)
+M1	claim dropped (Engineer)	exit 1	KILLED	Tests 3 failed | 10 passed (13)
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a threefold repetition ends as 'threefold-repetition (claimed)' at the first offer
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a fifty-move draw ends as 'fifty-move (claimed)' at the first offer
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > A4's replay check refuses an illegal move and a move played past an ending
+M2	cap scored as a draw (Engineer)	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a game at the ply cap is an ERROR with no score, never a draw
+M3	per-side step accepted (Engineer)	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the step is one named constant per run (test note 6) > refuses, before any move, a side handed a different step or a step not named
+M4	a ladder game played in a default row (Engineer)	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the default lane played 0 ladder games
+M5	budget scaled (x0.5) in makeSide	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > every level is built from its LEVELS entry itself — budgets are never scaled
+M6	colour alternation dropped (stronger always white)	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > each seed is played in both chairs, stronger white first: half the games as white
+M7	verdict A1 game count 100 -> 50	exit 1	KILLED	Tests 2 failed | 11 passed (13)
+	  red: ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the game counts, the ply cap and the run plan are the stated constants
+	  red: ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > each seed is played in both chairs, stronger white first: half the games as white
+M7b	short A2 game count 4 -> 2	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the game counts, the ply cap and the run plan are the stated constants
+M8	both sides share one clock per step	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the step is one named constant per run (test note 6) > both sides read the run's one step, each on its own clock instance
+M9	INFO: A4 replay: recorded-ending equality dropped	exit 0	SURVIVED (default lane)	Tests 13 passed (13)
+M10	INFO: opening drawn from Math.random, not seededRandom(seed)	exit 0	SURVIVED (default lane)	Tests 13 passed (13)
+M11	A1 bar >= 90 -> > 90	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the pair's score, W-D-L, claimed draws and MET/RED are for the stronger level
+M12	claimedDraws counts every draw	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the pair's score, W-D-L, claimed draws and MET/RED are for the stronger level
+M13	PLY_CAP 600 -> Infinity (hang guard gone)	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the game counts, the ply cap and the run plan are the stated constants
+M14	pair scored for the weaker level	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the run's constants and its report arithmetic (A1, A2, A5, A6) > the pair's score, W-D-L, claimed draws and MET/RED are for the stronger level
+M15	SHORT_STEP 120 -> 60	exit 1	KILLED	Tests 1 failed | 12 passed (13)
+	  red: ABC-085 ladder — the step is one named constant per run (test note 6) > LADDER_DEEP=1 is the short step 120, =verdict the verdict step 4, anything else refused
+M16	claim recorded without the (claimed) tag	exit 1	KILLED	Tests 2 failed | 11 passed (13)
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a threefold repetition ends as 'threefold-repetition (claimed)' at the first offer
+	  red: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) > a fifty-move draw ends as 'fifty-move (claimed)' at the first offer

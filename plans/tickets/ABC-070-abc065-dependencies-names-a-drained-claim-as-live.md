@@ -1,8 +1,8 @@
 ---
 id: ABC-070
 title: `ABC-065` § Dependencies still says `AGENTS.md` "IS CLAIMED RIGHT NOW BY ANOTHER HOP" and that the ticket must not be pulled — it was pulled, built and merged, and the same page's DoR row 10 records the claim as drained
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: XS
 priority: P3
 epic: —
@@ -152,3 +152,44 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `XS` (1) |
 | 9 | priority assigned | **✅** `P3`, with the promotion trigger and the close-unstarted condition both named |
 | 10 | no major unresolved blocker | **✅** nothing open. The only decision anyone else holds — whether to fold `G6` in — is stated as a recommendation and does not block the bullet |
+
+## Re-score — 2026-10-10 (BA/PM, subtask `bapm-rescore-backlog-r1-2026-10-10`, wave tip `39d87491`)
+
+**Verdict: READY. DoR 10/10. `XS` and `P3` kept.** `column`/`status` are not moved here.
+
+**Premise re-measured at `39d87491`, and it HOLDS.** `ABC-065`'s page, line **130**, still reads *"`AGENTS.md`
+IS CLAIMED RIGHT NOW BY ANOTHER HOP"*, so `A1` is still at 2, not 0. `ABC-065` is now `Done`.
+
+**Amendments:**
+- The `## Dependencies` *"`ABC-065` sits in `Ready for UAT`"* courtesy is void: it is `Done`, so no UAT
+  hop holds the page.
+- The `G6` fold recommendation stands, and it is still the Orchestrator's to take or leave. `A6`'s
+  *"**two paths**"* wording is at `ABC-065` `:124–125`. **Not re-derived here:** what `G6` found wrong
+  with it is `UNKNOWN - verify` at this hop.
+- The cheapest route (test note 4) still stands. If a hop already in the file repairs the bullet, close
+  this one unstarted.
+
+All ten DoR rows are unchanged from the cut and re-read true. Row 5 is lighter now that the `Ready for
+UAT` courtesy is void.
+
+## Delivery — 2026-10-11T08:45:31Z (Software Engineer, subtask `ticket-to-pr-ABC-070`, base `f6187bc1`)
+
+**Built in delivered commit `c0fedf7c`** on `grugops/ABC-070-abc065-dependencies`. Not merged, not pushed.
+
+**Premise re-measured at `f6187bc1`, and it HELD.** `ABC-065` line 130 still read *"`AGENTS.md` IS CLAIMED
+RIGHT NOW BY ANOTHER HOP"*, so this page was not closed unstarted. The drain was re-verified by listing the
+directories. `.grugops/queue/done/` holds `agents-md-owner-grants.md` and `agents-md-owner-grants.claim.md`.
+`pending/` and `claimed/` hold nothing of that name.
+
+| criterion | evidence | verdict |
+|---|---|---|
+| `A1` | `grep -c 'IS CLAIMED RIGHT NOW\|must not be pulled'` on the `ABC-065` page → **0** (was 2) | MET |
+| `A2` | the bullet still names `agents-md-owner-grants` (path, `by`, `at`, branch), says it *"held the file when this ticket was cut"*, and gives *"drained on 2026-08-16"*: **3 of 3** | MET |
+| `A3` | the bullet and DoR row 10 both say the claim drained on 2026-08-16, with the same two `done/` files: **0** contradictions | MET |
+| `A4` | `git diff c0fedf7c~1 c0fedf7c` hunks are `@@ -130 +130` and `@@ -132,3 +132,6`. All of them are inside § Dependencies' first bullet. **0** lines changed in the front matter, `A1`–`A6`, the DoR or the `A2` annotation | MET |
+| `A5` | `git diff --name-only c0fedf7c~1 c0fedf7c` → exactly 1 path: `plans/tickets/ABC-065-…md`. **0** `src/`, **0** child processes. Gates at `c0fedf7c`: lint exit 0 (102 files), typecheck exit 0, build exit 0, `npm test` exit 0 with **53 files / 1680 tests passed, 0 failed, 0 skipped, 0 todo** | MET |
+
+**Residual, not fixed (fenced by `A4`/out of scope):** `ABC-065` DoR **row 5** still reads *"the live
+`agents-md-owner-grants` claim"*. That is the cut-time score of a merged scored section. Test note 2 forbids
+re-scoring it, so it is reported here and not edited. `G6` was not folded in, because it was not in this
+subtask. The front matter of this page and of `ABC-065` was not moved. Board moves belong to the Orchestrator.

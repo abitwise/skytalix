@@ -1,0 +1,129 @@
+2026-10-10T19:34:28Z load1 8.99 node v26.11.0
+PASS A1 in-book entries: 3626 returned a legal move from their own m and inBook true, 0 did not
+PASS A1 present-with-empty-m: 1764 returned nothing and inBook false, 0 did not
+PASS A1 absent-key children: 3620 returned nothing and inBook false, 0 did not
+PASS A1 throws over the sweep: 0
+PASS A1 warnings over the sweep on the delivered artifact: 0
+INFO A1 sweep reached 5679 keys (5390 in the file); 330 reached keys have a leading zero
+PASS A1 independent key encoding: the file holds the start key 99116e4984517620 with 20 moves
+PASS A2 two processes, seed 2026: 200 picks each (100 start + 100 after e4), identical: true
+PASS A2 the in-process sequence equals the child-process sequence
+INFO A2 distinct picks in the 100 start-position draws: 10
+PASS A3 distinct replies on seeds 1-10: 4 (e7e5 e7e5 e7e5 e7e6 e7e5 e7e5 b8c6 c7c5 c7c5 e7e5)
+PASS A4 seed 42: {"e2e4":796,"d2d4":106,"g1f3":98} each within ±5 pp
+PASS A4 seed 1: {"e2e4":811,"g1f3":97,"d2d4":92} each within ±5 pp
+PASS A4 seed 2026: {"e2e4":790,"d2d4":83,"g1f3":127} each within ±5 pp
+PASS A4 evenly spaced [0,1) sweep: {"e2e4":800,"d2d4":100,"g1f3":100} (exact 800/100/100 expected)
+PASS EXTRA cumulative mapping in file order, 3:2:5 over 10 spaced draws: e2e4 e2e4 e2e4 d2d4 d2d4 g1f3 g1f3 g1f3 g1f3 g1f3
+PASS A5 reads at construction: 0
+PASS A5 throws over 50 bookMove + 10 inBook: 0
+PASS A5 50 of 50 returned nothing; inBook false 10 of 10
+PASS A5 warnings: 1
+INFO A5 reads in total: 1; warning text: "opening book could not be read; playing on without it"
+PASS A5 QE's stderr binding in a child (ABC-095's shape, not the delivered root): exit 0, stdout 0 B, stderr 1 line(s)
+PASS EXTRA a reader throwing a non-Error: throws 0, warnings 1
+INFO A5 two probe instances on one bad file in one process warn 2 times in total (once per instance)
+PASS A6 empty file: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: key 15 hex: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: key 17 hex: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: key uppercase: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: key __proto__: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: m a string: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: pair of 3: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: weight 0: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: weight -1: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: weight 1.5: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: weight '1': throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: weight 2^53: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: uci 'E2E4': throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: uci 'e7e8k': throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: format '1': throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: positions an array: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 valid container, garbage payload: null: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 illegal in keyed position: e2e5 at start: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 illegal in keyed position: Black's e7e5 at start: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 illegal in keyed position: e2e4 beside it, weight 10^6: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 illegal in keyed position: real book with e2e5 appended at start: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 larger than 1 MB: real book space-padded to 1,048,577 B: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS EXTRA invalid UTF-8 inside the n string of the real book: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS EXTRA 1,000,000 B of nested arrays: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS EXTRA weights overflow: two of 2^53-1: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 5485: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 10970: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 16455: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 21940: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 27425: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 32910: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 38395: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 43880: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 49365: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 54850: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 60335: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 65820: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 71305: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 76790: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 82275: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 87760: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 93245: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 98730: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 104215: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 109700: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 115185: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 120670: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 126155: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 131640: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 137125: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 142610: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 148095: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 153580: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 159065: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 164550: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 170035: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 175520: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 181005: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 186490: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 191975: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 197460: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 202945: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 208430: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 213915: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 219400: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 224885: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 230370: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 235855: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 241340: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 246825: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 252310: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 257795: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 263280: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 268765: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 274250: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 279735: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 285220: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 290705: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 296190: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 301675: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 307160: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 312645: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 318130: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 323615: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 329100: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 334585: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 340070: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 345555: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 truncated mid-record at byte 351040: throws 0, nothing-or-legal true, warnings 1, printable true
+PASS A6 illegal e2e5 is never returned, even when the draw lands on it (random 0.99999999)
+INFO A6 mixed-entry draw on the illegal move: 50/50 nothing, warnings 1
+PASS A6 illegal entry met later: before e2e4, after all nothing true, warnings 1
+INFO A6 boundary: exactly 1,048,576 B (real book padded) -> accepted, returned e2e4, warnings 0
+PASS EXTRA promotion e7e8q: returned promotion piece 5 (want 5), warnings 0
+PASS EXTRA promotion e7e8n: returned promotion piece 2 (want 2), warnings 0
+PASS EXTRA promotion e7e8r: returned promotion piece 4 (want 4), warnings 0
+PASS EXTRA promotion e7e8b: returned promotion piece 3 (want 3), warnings 0
+PASS A7 AST hits for eval/Function/require/import()/fetch/WebSocket/XHR/EventSource/process/globalThis/import.meta/.constructor: 0
+PASS A7 import specifiers: ./legal.ts, ./moves.ts, ./position.ts, ./zobrist.ts (all local)
+INFO A7 element accesses (reviewed, not counted): element access [0]; element access [0]; element access [1]; element access [1]; element access [move.promotion]
+PASS A7 network globals called during every check above: 0
+PASS A5 in-process writes by the probe to stdout / stderr during every check: 0 / 0
+SUMMARY GREEN fails=0 checks=119
+exit 0
