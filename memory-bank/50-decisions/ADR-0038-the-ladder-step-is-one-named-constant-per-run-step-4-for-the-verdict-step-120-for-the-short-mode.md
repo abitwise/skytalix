@@ -9,7 +9,7 @@ id: ADR-0038
 **accepted** 2026-10-10 by Olger Oeselg (owner), verbatim "levels 4 and 5 run as specified, step 4, keep P1,
 accept ADR-0038" (note `.grugops/context/wave-2026-09-25/notes/20261010T192920Z-orchestrator-decision-owner-word-six-answers-b7c41e09.md`). Owner menu: question 1 → option (a); question 2 → step 4; question 3 → P1.
 
-**Addendum 2026-10-11: PROPOSED, owner acceptance owed.** It amends decision 5 only, and only for the verdict
+**Addendum 2026-10-11: ACCEPTED** 2026-10-11 by Olger Oeselg (owner), verbatim "accepr ADR-0040 and ADR-0038", read as the addendum because ADR-0038 itself was already accepted (note `.grugops/context/wave-2026-09-25/notes/20261011T102346Z-orchestrator-decision-owner-word-accept-adr0040-adr0038-addendum-7089c972.md`). It amends decision 5 only, and only for the verdict
 mode. The verdict mode would run the same harness code under plain `node`, outside the vitest runner. Inside
 vitest the engine runs about 4.3x slower per node, with the same node count. See § Addendum 2026-10-11 at the
 end. Decisions 1–4 and 6, and decision 5 for the short mode and the default lane, stay **accepted** as

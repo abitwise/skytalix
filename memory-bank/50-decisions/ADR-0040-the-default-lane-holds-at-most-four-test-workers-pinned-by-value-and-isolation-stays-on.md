@@ -6,10 +6,12 @@ id: ADR-0040
 
 ## Status
 
-**proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-144`, ticket `ABC-144`).
-**Owner acceptance owed.** No agent moves an ADR to `accepted`.
+**accepted** 2026-10-11 by Olger Oeselg (owner), with the Window A addendum (k = 3), verbatim "accepr ADR-0040 and ADR-0038" (note `.grugops/context/wave-2026-09-25/notes/20261011T102346Z-orchestrator-decision-owner-word-accept-adr0040-adr0038-addendum-7089c972.md`).
 
-**Addendum 2026-10-11 (Window A, still `proposed`): decision 2's rule rules k = 3, not 4.** The addendum at
+Previously **proposed** 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-144`, ticket `ABC-144`).
+~~**Owner acceptance owed.**~~ Owner accepted (above).
+
+**Addendum 2026-10-11 (Window A, ACCEPTED with the ADR): decision 2's rule rules k = 3, not 4.** The addendum at
 the end of this file governs. Where decisions 1, 3 and 4 below say 4, read 3; each place is marked
 "→ 3, addendum". The file name keeps "four" so that existing links still resolve.
 
