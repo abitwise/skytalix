@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — `ABC-147` probe: ~1/3 of lane CPU recoverable (vitest ~5x per node) → In Review; Security/NFR review + BA/PM lever-ticket cut dispatched (no test runs)._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — Scribe merged: AGENTS.md 24,237 B (LADDER_DEEP lane line + RISK-ABC143-01); headroom 339 B under the 24,576 B budget — the ABC-144 line will need tightening first._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — BA/PM QE-143 fold merged: `ABC-149` cut → Ready; `RISK-ABC143-01` recorded; Scribe owes one AGENTS.md line. Next free id ABC-150._
 _Updated: 2026-10-11 by the Orchestrator (task `wave-2026-09-25`) — ABC-083 brought up to main and re-levelled per ADR-0039 (branch, not merged); BA/PM fold of QE-143 gaps dispatched._
@@ -687,8 +688,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-147] How much of `npm test`'s CPU is vitest's per-node engine overhead  (BA/PM, **XS, P2**, epic: —, since: 2026-10-11, **DoR 10/10**; read-only probe; ≥ 15 % recoverable → P1 lever ticket, 5–15 % → owner, < 5 % → close; never inside a no-other-hop window) **2026-10-11: pulled → In Development (build `ticket-to-pr-ABC-147`).**
+## In Development (WIP 0/3)
 
 
 
@@ -716,7 +716,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
+- [ABC-147] How much of `npm test`'s CPU is vitest's per-node engine overhead  (BA/PM, **XS, P2**, epic: —, since: 2026-10-11, **DoR 10/10**; read-only probe; ≥ 15 % recoverable → P1 lever ticket, 5–15 % → owner, < 5 % → close; never inside a no-other-hop window) **2026-10-11: pulled → In Development (build `ticket-to-pr-ABC-147`).** **2026-10-11: PROBE DONE (`4c634f09`): production code is 42.9 % of lane CPU and runs 4.93–5.38x slower in vitest than plain node → recoverable R = 34.2 % (band 29.7–35.8 %, cold edge 26.0 %) → pre-registered ≥ 15 % arm: P1 lever ticket (BA/PM cutting, → Architect). → In Review; Security/NFR validates in place of QE (docs-only, owner rule).**
 - [ABC-144] `npm test` chokes the MacBook Air M3 — cut its CPU and cap its cores  (BA/PM, **M, P1**, epic: —, since: 2026-10-11, **DoR 10/10**; owner goal 2026-10-10; CPU ≤ 0.85× base, ≤ 4 workers, wall ≤ 10 s unless the owner accepts Security/NFR's new number; `isolate` stays true; readings only in a no-other-hop window) **2026-10-11: Ready → In Design (Architect hop for the pool/worker setting).** **2026-10-11: Architect design merged (`aaef2cff`): `ADR-0040` PROPOSED — `maxWorkers: 4` in `vitest.config.ts`, pinned by value (env may lower, never raise), `isolate` stays on; owner word owed (ADR-0040 + meaning of 'choking'). Stays In Design until quiet Window A (≈ 15 min, width 1, 54 runs: 7/4/3/2/1 workers) is read.** **2026-10-11: Window A read (`94cf1728`, width 1, 54 runs): CPU vs 7 workers — 4w −10.7 %, 3w −16.5 % (wall 7.2 s), 2w −22.7 % (8.2 s), 1w −29.3 % (14.7 s). ADR-0040 d2 picks **3 workers**; Architect addendum owed; owner word on ADR-0040 owed. No heat instrument on M3 (`CPU_Speed_Limit` absent); thermal pressure went nominal → moderate in the last ~1.5 min.** **2026-10-11: `ADR-0040` ACCEPTED by the owner at k = 3 → In Design → Ready for Dev. Build: `maxWorkers: 3` + value pin (A7); then Window B (≈ 60 min, width 1). 'Choking' meaning still unanswered; Window B logs thermal pressure.** **2026-10-11: owner — 'choking' = CPU AND heat. Window B logs thermal pressure; if moderate at k = 3, k = 2 goes back to the owner.** **2026-10-11: BUILT `d4468fd3` (tip `d675ef42`): `maxWorkers: 3` (plain-object config, typecheck OK), value pin + 8 reds incl. r3b, env lowering allowed; 55/1729 (= base + 1) → In Review; QE `qe-ABC-144` queued; Window B (width 1) after.**
 
 
