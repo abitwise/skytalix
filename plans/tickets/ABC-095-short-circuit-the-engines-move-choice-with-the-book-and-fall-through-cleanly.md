@@ -71,8 +71,11 @@ placing the short-circuit and proving the fall-through is invisible.
   `NFR-005` — that "not slower at all" is a call-count bar and no wall-clock run can settle it.)*
 - **`A2` (and it is fast, measured against a ratified budget).** **Given** the same call, **then**
   it returns in **≤ 30 ms** — 1% of `NFR-004`'s ratified 3 s default budget — on the reference
-  machine Apple M3 (Mac15,13) / Node v24.12.0 / Darwin 25.5.0 arm64, `UNKNOWN - verify` elsewhere,
-  measured **outside** the test suite.
+  machine Apple M3 (Mac15,13) / ~~Node v24.12.0~~ **Node v26.11.0** / Darwin 25.5.0 arm64,
+  `UNKNOWN - verify` elsewhere, measured **outside** the test suite. *(Re-pointed 2026-10-11 by
+  BA/PM. The reference stack was re-declared to v26.11.0 by `ADR-0035` decision 5, applied in the
+  `NFR-008` row. v24.12.0 is no longer installed. That clears `QE-094-f`'s "the reference names
+  v24.12.0" ambiguity for this page. The bar is unchanged.)*
 - **`A3` (leaving book searches, exactly once, silently).** **Given** a position **not** in the
   book, **when** the engine is asked for a move, **then** the search entry point is called
   **exactly 1** time, a legal move is returned, and **0 bytes** are written to stderr and **0**
@@ -87,6 +90,23 @@ placing the short-circuit and proving the fall-through is invisible.
   full game is played, **then** every engine move comes from the search, **exactly 1** warning is
   emitted for the whole process, and the game reaches a normal result — **0** crashes.
   *(`EPIC-005` § Acceptance bullet 4. `ABC-094` proves the probe's half; this proves the game's.)*
+  - **The stream half** *(folded 2026-10-11 by BA/PM from `QE-094-a`, MEDIUM, gap register
+    `…3058eacd` on `grugops/ABC-094-book-probe`)*. **The one warning goes to stderr, and 0 bytes of
+    it go to stdout.**
+    - **Why this is `ABC-095`'s.** `ABC-094`'s probe takes an injected warn sink (SE decision
+      `…d14f72cb`, allowed by `ADR-0037` § Consequences). So the stream is fixed only where the
+      composition root binds it, and that root is this ticket's (`A7`).
+    - **Given** the artifact moved aside (test note 4), **when** a real `node src/cli.ts` child runs
+      from launch to exit, with its stdout and stderr captured separately (the human may `quit`
+      after the engine's first reply), **then**:
+      - stderr carries the warning **exactly once**;
+      - stdout carries **0 bytes of the warning's text** (a count of its text in stdout is 0);
+      - the child exits 0 on `quit`.
+    - **"0 bytes to stdout" means 0 bytes OF THE WARNING.** In a live game, stdout carries the
+      frames, so stdout itself is never empty. QE's "stdout 0 B" reading came from a probe-only
+      child binding with no frames.
+    - **This is a `CLI_DEEP` row** in `src/cli.real-engine.test.ts`, next to `A7`'s, and never in
+      the default lane. It adds no test file.
 - **`A6` (the engine was not modified).** **Given** the delivered diff, **then** the number of
   changed lines in the modules `EPIC-004` delivers as its search, evaluation and ordering is
   **0** — or, if the seam genuinely cannot be consumed without a change there, **the ticket stops
@@ -190,6 +210,19 @@ start, and a `P0` on unstartable work makes the board lie. **Not `P2`**: the mom
 move interface lands, this becomes the cheapest visible win on the board.
 
 ## Definition of Ready
+
+**Fold note, 2026-10-11 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-batch-2026-10-11`, at
+`506550f3`). **Not re-scored; still 8 of 10, ⚠️x2 (items 3 and 10).** The re-score trigger is
+`ABC-094`'s merge, and `ABC-094` is `In UAT` today.
+- **`QE-094-a` is folded into `A5`** as its stream half. The one warning goes to stderr, and 0 bytes
+  of it go to stdout, read on a real child. It is one more `CLI_DEEP` row, not one more file.
+- **`QE-094-a` asked for this to land before `ABC-095` is pulled.** It has.
+- **`A2`'s reference runtime** is re-pointed to v26.11.0 (`ADR-0035` decision 5). The bar is
+  unchanged.
+- **`QE-094-e`** (one warning per probe *instance*) is already covered by `A5`'s "exactly 1 for
+  the whole process", which holds only if the root builds one probe. `A7`'s wiring line builds
+  one.
+- The `ABC-094` page was not touched.
 
 **RE-SCORED 2026-10-10 by BA/PM at the fold** (task `wave-2026-09-25`, subtask
 `bapm-fold-book-chain-2026-10-10`, at `4768b3b0`; `ADR-0037` folded per `…d06f5ba8`). **Result: 8 of
