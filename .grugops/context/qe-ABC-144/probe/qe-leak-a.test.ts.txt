@@ -1,0 +1,2 @@
+import { it, expect } from "vitest";
+it("qe-leak-a", () => { const g = globalThis as { __qe?: number }; g.__qe = (g.__qe ?? 0) + 1; console.log("QE-LEAK a count", g.__qe); expect(true).toBe(true); });

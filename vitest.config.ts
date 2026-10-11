@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import type { ViteUserConfig } from "vitest/config";
 
 /**
  * The default test lane's runner configuration.
@@ -67,10 +67,25 @@ import { defineConfig } from "vitest/config";
  *     EVERY `*.nfr.test.ts` file.)
  *   - 24 of 24 green bounds the failure rate at roughly 12.5%, NOT at zero. If this lane starts
  *     flaking, delete this file first - that is the whole rollback - and say so on the ticket.
+ *
+ * -------------------------------------------------------------------------------------------
+ * `maxWorkers: 3` below is the worker cap ruled by
+ * `memory-bank/50-decisions/ADR-0040-the-default-lane-holds-at-most-four-test-workers-pinned-by-value-and-isolation-stays-on.md`
+ * (accepted 2026-10-11 with its Window A addendum, `ABC-144`). Without it `vitest run` takes
+ * `availableParallelism() - 1` = 7 workers on the reference M3's 8 cores. 3 is the largest cap
+ * whose Window A reading cut lane CPU by >= 15% with the wall inside 10 s (K4 missed the CPU
+ * clause). It is a fixed integer, not a percentage, so it does not scale with the core count.
+ * It is pinned BY VALUE in `src/cli.test.ts` (`ABC-144 A7`): raising it, adding
+ * `poolOptions` (whose `maxThreads` silently outranks `maxWorkers`), `fileParallelism: false`
+ * or `isolate: false` turns that pin red, and `VITEST_MAX_THREADS` / `VITEST_MAX_FORKS` may
+ * lower the cap but never raise it. Changing the number is a ruling, not a drive-by edit.
+ * The default export is a plain object (`satisfies ViteUserConfig`, a type-only import) so
+ * that the pin's import of this file loads nothing at run time.
  */
-export default defineConfig({
+export default {
   test: {
     pool: "threads",
+    maxWorkers: 3,
     /**
      * Vitest's default `exclude` is REPLACED, not extended, when you set this key - so the
      * stock entries (`node_modules`, `dist`, `.idea`, `.git`, `.cache`) are repeated here by
@@ -98,4 +113,4 @@ export default defineConfig({
       "plans/**",
     ],
   },
-});
+} satisfies ViteUserConfig;

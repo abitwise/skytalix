@@ -1,0 +1,16 @@
+work	pair	src_median	bundle_median	ratio	digest_equal	load1	therm	usable
+E	0	30.24	27.97	0.925	yes	4.16	2/2	yes
+S	0	88.21	77.09	0.874	yes	4.16	2/2	yes
+P	0	41.38	37.95	0.917	yes	4.16	2/2	yes
+E	1	31.55	28.22	0.894	yes	4.16	2/2	yes
+S	1	87.85	77.33	0.880	yes	4.16	2/2	yes
+P	1	43.26	38.72	0.895	yes	4.07	2/2	yes
+E	2	31.26	27.87	0.892	yes	4.07	2/2	yes
+S	2	89.13	79.46	0.892	yes	4.07	2/2	yes
+P	2	43.27	38.98	0.901	yes	4.07	2/2	yes
+E	3	32.32	27.76	0.859	yes	4.07	2/2	yes
+S	3	87.84	78.63	0.895	yes	4.07	2/2	yes
+P	3	41.36	39.8	0.962	yes	3.98	2/2	yes
+E	4	31.27	28.96	0.926	yes	3.98	2/2	yes
+S	4	87.66	76.27	0.870	yes	3.98	2/2	yes
+P	4	41.51	37.79	0.910	yes	3.98	2/2	yes

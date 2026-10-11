@@ -87,6 +87,9 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   2026-10-10: exit 0, 53 files, 1680 tests, 8.1 s. A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
+- Worker cap (ABC-144, ADR-0040): `vitest.config.ts` `test.maxWorkers: 3`, pinned by value in
+  `src/cli.test.ts`; `isolate` stays on. Never raise it or pass a higher `--maxWorkers`; env may only
+  lower it (`VITEST_MAX_THREADS` ≤ 3).
 - Search deep lane (opt-in, ABC-077): `SEARCH_DEEP=1 npx vitest run src/search.test.ts` <!-- exit 0,
   41 passed (28 default), 23.0 s. Unset: NOT DEFINED, not skipped (gate skip-count stays 0). Run at
   QE and after any src/search.ts change. -->
@@ -128,6 +131,11 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   <!-- RUN 2026-10-10: exit 0, 7 passed (1 default), 6.4 s; two real children of
   `node src/cli.ts --colour black --ascii`. Unset: NOT DEFINED, not skipped. Run at QE and after
   any src/cli.ts or src/engine.ts change. -->
+- Self-play ladder lane (opt-in, ABC-085, ADR-0038): `LADDER_DEEP=1 npx vitest run src/ladder.test.ts`
+  <!-- RUN 2026-10-11: exit 0, 14 passed (9 default), 848 s, loaded host. Short mode, step 120:
+  claims A3/A4/A5 only, never A1/A2. `-t "3v4"` re-runs one pair. Unset is the only off:
+  `LADDER_DEEP=` and `=0` fail at load (QE-085-e). Unset: NOT DEFINED, not skipped. The A1/A2
+  verdict is not run here (~44 h in vitest): its route is ABC-146's (plain node, ADR-0038 addendum). -->
 - Test (single file): `npx vitest run <path>`
 - Coverage: `npx vitest run --coverage` <!-- exit 0, 856/856 on 30 files. Not in
   `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
@@ -319,6 +327,7 @@ requirement stands unchanged.
 - **Deploy is allowed, and there is nothing to deploy** (the owner, 2026-08-15, one sentence).
   `production_requires_human_confirmation` stays `true`; the grant did not flip it. See `## Deployment posture`.
 - Do not change dependencies without reason. No unrelated refactors. No fake results.
+- A `vitest`/`@vitest/*` major bump carries `RISK-ABC143-01` (`ABC-143` § Follow-ups): it breaks the result-file reporter, silently on 4.x.
 
 ## Coding rules (the 12)
 

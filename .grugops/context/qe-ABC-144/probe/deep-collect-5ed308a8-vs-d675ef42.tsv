@@ -1,0 +1,11 @@
+lane	base_exit	head_exit	base_files	head_files	base_tests	head_tests	only_base	only_head	verdict
+DEFAULT	0	0	55	55	1728	1729	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL
+PERFT_DEEP	0	0	55	55	1736	1737	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL
+SEARCH_DEEP	0	0	55	55	1803	1804	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL
+ENGINE_DEEP	0	0	55	55	1749	1750	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL
+INPUT_DEEP	0	0	55	55	1732	1733	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL
+ZOBRIST_DEEP	0	0	55	55	1729	1730	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL
+PUZZLE_DEEP	0	0	55	55	1734	1735	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL
+CLI_DEEP	0	0	55	55	1734	1735	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL
+LADDER_DEEP=1	0	0	55	55	1733	1734	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL
+LADDER_DEEP=verdict	0	0	55	55	1732	1733	0	1 (src/cli.test.ts :: ABC-144 A7 — the lane's runner holds its 3-worker cap and keeps isolati)	EQUAL

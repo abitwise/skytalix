@@ -1,0 +1,69 @@
+
+=== abc144-warm: 27 runs, scored 24, errors(all) 0, errors(scored) 0
+  utc 2026-10-11T11:57:18.751Z .. 2026-10-11T12:00:24.265Z
+  B n=8 cpu 28.35 (27.68-29.15) wall 6.66 (6.51-6.86) wallIQR 0.230 par 4.258 load1b 7.21 (3.42-10.84) load1a 6.83 (3.87-11.10) load1b>8 4/8 files {55} tests {1728} fv_b 0 fv_a 0 power {'AC Power'} speed_limit {'none'}
+     thermal_before {'0': 6, '1': 2} thermal_after {'0': 6, '1': 2}
+  H n=8 cpu 24.01 (22.81-25.50) wall 7.54 (7.25-8.08) wallIQR 0.267 par 3.165 load1b 6.63 (3.54-11.10) load1a 6.85 (3.49-10.93) load1b>8 3/8 files {55} tests {1729} fv_b 0 fv_a 0 power {'AC Power'} speed_limit {'none'}
+     thermal_before {'0': 6, '1': 2} thermal_after {'0': 6, '1': 2}
+  T n=8 cpu 28.48 (27.64-28.87) wall 6.68 (6.42-6.89) wallIQR 0.190 par 4.239 load1b 5.82 (3.49-10.43) load1a 7.27 (3.42-10.84) load1b>8 3/8 files {55} tests {1728} fv_b 0 fv_a 0 power {'AC Power'} speed_limit {'none'}
+     thermal_before {'0': 6, '1': 2} thermal_after {'0': 5, '1': 3}
+  all 27 runs incl round 0, before+after reads: {'0': 41, '1': 13}
+  round 0 (discarded): B cpu 26.27 wall 6.72 th 0->0, H cpu 22.32 wall 7.12 th 0->0, T cpu 27.49 wall 6.29 th 0->0
+  H-B cpu median -4.550 (-16.05 % of B cpu; interval -16.96..-14.60 %) sign+ 0/8 k 2 interval [-4.810, -4.140] R 4.810
+  H-B wall median +0.860 sign+ 8/8 k 2 interval [+0.740, +0.950] R 0.950
+  T-B cpu median -0.025 (-0.09 % of B cpu; interval -0.99..+0.21 %) sign+ 3/8 k 2 interval [-0.280, +0.060] R 0.280
+  T-B wall median -0.025 sign+ 4/8 k 2 interval [-0.090, +0.180] R 0.180
+  twin cpu median -0.09 % of B (limit 1.5 %), sign 3/8 -> admissible-by-size True
+  ratio of medians H/B cpu 0.8468, wall 1.1329
+
+=== abc144-cooled: 27 runs, scored 24, errors(all) 0, errors(scored) 0
+  utc 2026-10-11T12:02:02.703Z .. 2026-10-11T12:44:06.479Z
+  B n=8 cpu 26.49 (26.38-26.66) wall 6.43 (6.20-6.53) wallIQR 0.170 par 4.129 load1b 2.55 (2.16-3.99) load1a 3.62 (2.49-6.31) load1b>8 0/8 files {55} tests {1728} fv_b 0 fv_a 0 power {'AC Power'} speed_limit {'none'}
+     thermal_before {'0': 8} thermal_after {'0': 8}
+  H n=8 cpu 22.26 (22.15-22.52) wall 7.08 (6.95-12.04) wallIQR 0.148 par 3.147 load1b 2.75 (2.29-4.09) load1a 3.29 (2.31-4.24) load1b>8 0/8 files {55} tests {1729} fv_b 0 fv_a 0 power {'AC Power'} speed_limit {'none'}
+     thermal_before {'0': 8} thermal_after {'0': 8}
+  T n=8 cpu 26.62 (26.43-27.67) wall 6.33 (6.19-6.69) wallIQR 0.100 par 4.200 load1b 2.92 (2.27-3.28) load1a 3.99 (2.17-4.62) load1b>8 0/8 files {55} tests {1728} fv_b 0 fv_a 0 power {'AC Power'} speed_limit {'none'}
+     thermal_before {'0': 8} thermal_after {'0': 8}
+  all 27 runs incl round 0, before+after reads: {'0': 54}
+  round 0 (discarded): B cpu 26.69 wall 6.43 th 0->0, H cpu 22.19 wall 7.08 th 0->0, T cpu 26.73 wall 6.23 th 0->0
+  H-B cpu median -4.200 (-15.85 % of B cpu; interval -16.57..-15.44 %) sign+ 0/8 k 2 interval [-4.390, -4.090] R 4.390
+  H-B wall median +0.660 sign+ 8/8 k 2 interval [+0.600, +0.940] R 0.940
+  T-B cpu median +0.170 (+0.64 % of B cpu; interval -0.11..+3.28 %) sign+ 6/8 k 2 interval [-0.030, +0.870] R 0.870
+  T-B wall median -0.050 sign+ 3/8 k 2 interval [-0.220, +0.140] R 0.220
+  twin cpu median +0.64 % of B (limit 1.5 %), sign 6/8 -> admissible-by-size True
+  ratio of medians H/B cpu 0.8400, wall 1.1019
+
+=== abc144-cli-narrow: 27 runs, scored 24, errors(all) 0, errors(scored) 0
+  utc 2026-10-11T12:44:13.719Z .. 2026-10-11T12:46:04.835Z
+  B n=8 cpu 5.94 (5.88-6.01) wall 4.04 (4.00-4.12) wallIQR 0.053 par 1.469 load1b 3.17 (2.62-4.38) load1a 3.12 (2.62-4.38) load1b>8 0/8 files {1} tests {67} fv_b 0 fv_a 0 power {'AC Power'} speed_limit {'none'}
+     thermal_before {'0': 8} thermal_after {'0': 8}
+  H n=8 cpu 5.68 (5.63-5.73) wall 4.02 (4.00-4.09) wallIQR 0.043 par 1.409 load1b 3.12 (2.83-4.38) load1a 3.03 (2.68-4.38) load1b>8 0/8 files {1} tests {68} fv_b 0 fv_a 0 power {'AC Power'} speed_limit {'none'}
+     thermal_before {'0': 8} thermal_after {'0': 8}
+  T n=8 cpu 5.93 (5.86-6.05) wall 4.04 (3.98-4.11) wallIQR 0.055 par 1.472 load1b 2.94 (2.62-4.38) load1a 3.24 (2.65-4.38) load1b>8 0/8 files {1} tests {67} fv_b 0 fv_a 0 power {'AC Power'} speed_limit {'none'}
+     thermal_before {'0': 8} thermal_after {'0': 8}
+  all 27 runs incl round 0, before+after reads: {'0': 54}
+  round 0 (discarded): B cpu 5.94 wall 4.13 th 0->0, H cpu 5.71 wall 4.05 th 0->0, T cpu 5.86 wall 4.0 th 0->0
+  H-B cpu median -0.255 (-4.29 % of B cpu; interval -5.39..-3.37 %) sign+ 0/8 k 2 interval [-0.320, -0.200] R 0.320
+  H-B wall median -0.010 sign+ 1/8 k 2 interval [-0.060, +0.000] R 0.060
+  T-B cpu median -0.030 (-0.51 % of B cpu; interval -1.01..+1.18 %) sign+ 3/8 k 2 interval [-0.060, +0.070] R 0.070
+  T-B wall median -0.010 sign+ 4/8 k 2 interval [-0.050, +0.040] R 0.050
+  twin cpu median -0.51 % of B (limit 1.5 %), sign 3/8 -> admissible-by-size True
+  ratio of medians H/B cpu 0.9562, wall 0.9963
+
+=== grades
+  A1 warm: H-B cpu -16.05 % (bar <= -15 %), interval upper -14.60 %, twin cpu R 0.280 s = 0.99 % of B; |delta| 4.550 > R? True
+  A4 warm: H wall 7.54 + twin wall R 0.180 = 7.73 (<= 10.0)
+  A2 warm: par B 4.258 H 3.165 T 4.239
+  A1 cooled: H-B cpu -15.85 % (bar <= -15 %), interval upper -15.44 %, twin cpu R 0.870 s = 3.28 % of B; |delta| 4.200 > R? True
+  A4 cooled: H wall 7.08 + twin wall R 0.220 = 7.30 (<= 10.0)
+  A2 cooled: par B 4.129 H 3.147 T 4.200
+  A3 warm H wall 7.54 <= 10.0
+  cooled/warm wall factor at H 0.9390; at B 0.9655; re-open trigger W/factor 10.65 s
+  cooled/warm cpu factor at H 0.9269; at B 0.9344
+  AR-N8SPAWN-DRIFT: H-B cpu paired median -0.255 s vs F 1.097; H med 5.68 B med 5.94; twin R 0.070
+
+=== sampler 194 samples 2026-10-11T11:57:18Z .. 2026-10-11T12:46:06Z
+  abc144-warm [2026-10-11T11:57:18Z..2026-10-11T12:00:33Z] level counts {'0': 10, '1': 3} load1 med 5.59 power {'AC Power'} speed_limit {'none'}
+  abc144-cooled [2026-10-11T12:02:02Z..2026-10-11T12:44:13Z] level counts {'0': 167} load1 med 3.08 power {'AC Power'} speed_limit {'none'}
+  abc144-cli-narrow [2026-10-11T12:44:13Z..2026-10-11T12:46:09Z] level counts {'0': 8} load1 med 3.03 power {'AC Power'} speed_limit {'none'}
+  transitions: 2026-10-11T11:59:50Z 0->1, 2026-10-11T12:01:21Z 1->0

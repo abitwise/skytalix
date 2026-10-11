@@ -505,3 +505,18 @@ verification added the one thing the draft did not say and the brief assumed oth
 written in place, not to the directory argument. Guards: `src/cli.test.ts` (`ABC-109` byte cap,
 `ABC-059`, `ABC-065`/`ABC-069`/`ABC-071`/`ABC-067` `Dev / run` slot rules) run in the full lane, see
 the commit.
+
+## Ladder-lane and RISK pass, 2026-10-11
+
+Task `scribe-lines-2026-10-11`, branch `grugops/scribe-lines-2026-10-11`, wave tip `2ae3b501`.
+`AGENTS.md` 23,609 B -> **24,237 B** (+628 B; budget 24,576 B, `ABC-109`; headroom 967 -> **339 B**; the
+inherited 32,768 B reader cap leaves 8,531 B). Nothing tightened, no rule dropped.
+
+| change to `AGENTS.md` | bytes | source |
+|---|---:|---|
+| New `Test` lane "Self-play ladder lane (opt-in, ABC-085, ADR-0038)" after the Real-engine CLI lane | +~487 | The Engineer's draft, note `…8515e3e7`: its RUN receipt is CITED (exit 0, 14 passed / 9 default, 848 s, loaded host), not re-run: `npm test` was barred on a hot machine. `QE-085-e` added: unset is the only off, `LADDER_DEEP=` and `=0` fail at load (`stepForMode`, `src/ladder.test.ts`). The verdict route is `ABC-146`'s (plain node, accepted `ADR-0038` addendum), not this lane's |
+| New safety bullet `RISK-ABC143-01` after "Do not change dependencies without reason" | +~141 | BA/PM's suggested text, note `…de5cd740`, verbatim |
+
+Owed, NOT written: the `test.maxWorkers: 3` cap (`ADR-0040`, accepted) lands at `ABC-144`'s merge; `ABC-144` is
+in QE. No line until then. Headroom 339 B is under one more lane line: the Scribe hop after `ABC-144` must
+tighten wording or move receipts here first.

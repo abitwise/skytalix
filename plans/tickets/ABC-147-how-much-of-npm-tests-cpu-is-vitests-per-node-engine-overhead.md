@@ -145,3 +145,82 @@ BA/PM, 2026-10-11. **Result: 10 of 10.** Recommended placement: `Ready`.
 | 10 | no major unresolved blocker | **✅** |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-11, subtask `ticket-to-pr-ABC-147`.
+Branch `grugops/ABC-147-vitest-overhead-probe` from `63ac790f`. The method was committed `d152298f`, before the
+first graded run. Not merged, not pushed. The readings are in `.grugops/context/ticket-to-pr-ABC-147/notes/`.
+The raw data is in `probe/raw/`. **QE re-reads `A1`–`A3` from its own runs (Test note 4).**
+
+- **`A1`.** n = 6 usable profiled runs at the **uncapped** setting (7 workers; `ABC-144` has not merged).
+  - Every run: 54 files / 1715 tests, exit 0.
+  - Shares of sampled CPU, median (min–max):
+    - (i) production **42.93 % (37.68–44.19)**;
+    - (ii) tests 1.43;
+    - (iii) runner 12.15;
+    - (iv) Node and GC 42.08;
+    - (v) unattributed 1.82.
+    - The medians sum to 100.41.
+  - (i) inside vitest workers, (i-w): **42.62 % (37.27–43.91)**.
+  - Top five production files: `moves.ts` 19.6, `legal.ts` 7.1, `position.ts` 5.5, `apply.ts` 2.3,
+    `evaluate.ts` 2.2.
+  - load1 4.76–6.00 before every graded run. Thermal pressure was 0, except run 17, which started at 2.
+- **`A2`.** The top two files by (i-w) were `engine.test.ts` and `search.test.ts`. 5 pairs each,
+  interleaved, with a digest equal on every pair (0 void). load1 5.18–5.95, thermal 1.
+  - vitest ÷ `node`: **5.09 (4.93–5.38)** and **5.03 (4.95–5.18)**. They are within 2x of each other.
+- **`A3` (estimate).** Lane CPU is 28.10 s (unprofiled median, n = 9).
+  - **R = 34.2 % = 9.6 s, band 29.7 %–35.8 % (8.4–10.0 s).**
+  - On the letter, with all of (i): 30.0 %–36.0 %.
+  - With cold first-call ratios (sensitivity only): lower edge 26.0 %.
+- **`A4`.** The lower edge, 29.7 %, is ≥ 15 %. **Arm: BA/PM cuts a `P1` lever ticket, routed to
+  Architect/Design.** This hop cut none. The cause of the factor is still `UNKNOWN - verify`.
+- **`A5`.**
+  - `git diff --name-only 63ac790f` lists only `plans/` and `.grugops/` paths, with 0 under `src/`,
+    `tools/` or the root. `plans/board.md` was not touched.
+  - No no-other-hop window was open, and no `ABC-146` run was in progress.
+  - 24 runs were recorded and not used: 15 at load1 > 8, plus the profiler-only 60 s hangs (5 of 18
+    profiled runs, 0 of 18 unprofiled). See the caveats note `…144c6b5d`.
+
+## Review
+
+Security/NFR (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-11, subtask `secnfr-ABC-147-review`.
+It took QE's slot under the owner's docs-only rule. It reviewed `4c634f09` for method, admissibility and
+arithmetic, and **re-ran nothing**. Every figure was recomputed from the committed raw files by
+`raw-recompute147.mjs.txt`. The notes are in `.grugops/context/secnfr-ABC-147-review/notes/`.
+
+**Verdict: PASS_WITH_GAPS.** The `A4` arm stands: **≥ 15 % → BA/PM cuts a `P1` lever ticket.**
+
+- **Method before graded runs: holds.**
+  - `d152298f` (10:25:49Z) precedes round 0 (10:25:54Z) and the first graded run (10:51:26Z).
+  - `188cb6c3` (10:32:01Z) precedes the first `A2` process (11:09:34Z).
+  - `analyze.mjs` is unchanged since. The drivers' later edit adds only a logged wait gate; the
+    `usable` rule is byte-unchanged.
+- **Exclusions: hold.**
+  - The declared rule re-applied to all 36 rows gives 0 mismatches.
+  - Excluded runs would not lower the (i-w) minimum.
+  - **The count on this page is wrong:** 21 runs were unused, not 24. 20 were at load1 > 8 (4 of those
+    also hung), and 12P hung alone. See G1.
+- **`A1`: holds.** Each run sums to 100.000. The medians sum to 100.41. (i-w) is 42.62 (37.27–43.91). The
+  top five files and the file ranking match.
+- **`A2`: holds.** The order alternates per pair. The digests are equal on 10/10 pairs. The ratios
+  recompute to E 5.093 (4.929–5.379) and S 5.028 (4.948–5.184).
+- **`A3`: holds.** Declared band 29.71–35.75 %, letter 30.04–35.98 %. The cold-call lower edge is
+  37.267 × (1 − 1 ÷ 3.306) = **26.0 %**.
+- **The ≥ 15 % arm under every allowed reading: yes.** The lowest edge is 26.00 %. To leave the arm, the
+  factor would have to be ≤ 1.67x, or the share ≤ 18.8 %.
+  - One reading the page does **not** allow, the factor on `engine`/`search` only, gives 11.65 %. That is
+    `RISK-ABC147-02`.
+- **Risks, accepted with owners:**
+  - `RISK-ABC147-01`, `--cpu-prof` hangs 5 of 18 profiled runs at 60 s and 0 of 18 unprofiled. Cause
+    `UNKNOWN - verify`. **Owner: QE/E2E.**
+  - `RISK-ABC147-02`, a ratio read on 2 files and applied to all of (i-w). **Owner: BA/PM**, in the lever
+    ticket, whose acceptance should be a measured lane-CPU cut, not R.
+- **Gaps:**
+  - G1, the run count (Software Engineer);
+  - G2, the aggregator is not committed (Software Engineer);
+  - G3, the profiles were deleted (QE/E2E);
+  - G4, Test note 4's independent re-read is **not** satisfied by this review (BA/PM's lever ticket /
+    QE/E2E).
+- **Fences: hold.** 0 paths outside `plans/` and `.grugops/`. `plans/board.md` is untouched. No secret
+  is in the probe output.

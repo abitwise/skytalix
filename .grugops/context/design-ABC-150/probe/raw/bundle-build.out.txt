@@ -1,0 +1,21 @@
+{
+ "outfile": "bundle/workload150.bundle.mjs",
+ "sha256_16": "47d8c558e2484a48",
+ "inputs": [
+  ".grugops/context/design-ABC-150/probe/workload150.mjs",
+  ".grugops/context/ticket-to-pr-ABC-147/probe/workload.mjs",
+  "src/apply.ts",
+  "src/engine.ts",
+  "src/evaluate.ts",
+  "src/fen.ts",
+  "src/gameend.ts",
+  "src/legal.ts",
+  "src/moves.ts",
+  "src/perft.ts",
+  "src/position.ts",
+  "src/quiescence.ts",
+  "src/search.ts",
+  "src/transposition.ts",
+  "src/zobrist.ts"
+ ]
+}

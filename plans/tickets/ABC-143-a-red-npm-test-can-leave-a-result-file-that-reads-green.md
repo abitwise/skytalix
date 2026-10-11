@@ -184,3 +184,164 @@ BA/PM, 2026-10-11. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none; feasibility read from the installed reporter API |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-11 (subtask `ticket-to-pr-ABC-143`). Branch
+`grugops/ABC-143-result-file-reads-red`, code commit `f97ad60b`, base `117c1c8e`. The readings are in
+`.grugops/context/ticket-to-pr-ABC-143/notes/`. QE is owed.
+
+- **Mechanism.** `tools/grugops/result-file-reporter.js` subclasses vitest's own `JsonReporter`
+  (`vitest/reporters`, 3.2.7). The `test` script swaps `--reporter=json` for
+  `--reporter=./tools/grugops/result-file-reporter.js`. The path and `--outputFile.json` are
+  unchanged. It makes three changes:
+  - **At start** (`onInit`), it overwrites the file with a marker: `success: false`,
+    `runState: "started"`, and this run's `startTime`. A run killed by the 124 bound leaves the
+    marker (`QE-142-c`).
+  - **It keeps the unhandled errors** that vitest passes to `onFinished`, and the built-in reporter
+    drops. They go in `unhandledErrors[]` (`name`, `message`, `stack`). Any one of them sets
+    `success: false` (`QE-142-a`).
+  - **It writes the final file on process exit**, with `runState: "exited"` and the real
+    `exitCode`. `success` is `true` only when vitest's own verdict was success, there was no
+    unhandled error, and the exit code is 0.
+- **Read it** (this replaces both `ABC-142` queries; one line per recorded red, 0 lines on a green
+  file):
+
+  ```sh
+  jq -r '(.testResults[] | .name as $f | (.assertionResults[] | select(.status=="failed") | "test   \($f)  \(.fullName)"), (select(.status=="failed" and .message!="") | "suite  \(.name)  \(.message)")), (.unhandledErrors[]? | "error  \(.message)"), (select(.success!=true) | "run    \(.runState) exitCode=\(.exitCode // "none, killed")")' .test-results/last-run.json
+  ```
+
+  Every red file also prints one `run` line. `run    started exitCode=none, killed` means the run never
+  reached exit, which is the timeout case.
+- **Console delta.** No line is added. Vitest's `JSON report written to <path>` line, which `ABC-142`
+  added, is gone because the file is written at exit and not by the built-in reporter. Apart from
+  timings, the green console now matches the pre-`ABC-142` console, except for npm's echo of the
+  script.
+- **Diff.** `package.json` (the `test` script), `src/cli.test.ts` (the `SCRIPTS_AT_HEAD.test`
+  literal, `1 1`), `tools/grugops/run-bounded.js` (line 10 only), and
+  `tools/grugops/result-file-reporter.js` (new, outside `src/`). It has 0 production `src/` lines.
+  `vitest.config.ts` is untouched.
+- **Limits.**
+  - A run that never reaches exit (SIGKILL, or a signal vitest does not handle) leaves the marker.
+    It reads not-success but names no test. The console's last line names the timeout.
+  - Two runs in one checkout still overwrite each other's file.
+  - Direct `npx vitest run` (the `*_DEEP` lanes) writes no file, as before.
+- **Readings.** All were run on 2026-10-11 on macOS with Node v26.11.0 and vitest 3.2.7, with the
+  plants in copies outside the repository.
+
+  | criterion | base `117c1c8e` | head `f97ad60b` |
+  |---|---|---|
+  | `A1` setTimeout throw | exit 1, `success` true, error text count 0 | exit 1, `success` false, `exitCode` 1, `unhandledErrors` = [`PLANT-143-UNHANDLED-boom`], text count 2 |
+  | `A2` green, then `while (true) {}` | green exit 0, then 124; file `success` true, `startTime` unchanged | green exit 0, then 124; file `success` false, `runState` `started`, new `startTime` (later than a stamp taken just before the run) |
+  | `A3` `throw` in a `describe` body (`src/san.test.ts`) | (not re-run; QE's `…298ed173`) | exit 1, `numFailedTestSuites` 1, query names `src/san.test.ts  PLANT-143-SUITE-boom` |
+  | `A4` query | — | `A1` 2 lines (`error`, `run`); `A3` 2 lines (`suite`, `run`); `ABC-142`-`A1` inverted `src/fen.test.ts:54`, 2 lines (`test … FEN field parsing parses the side to move`, `run`); `A2` marker, 1 line; green, 0 lines |
+  | `A5` green | 53 / 1680 | exit 0, `success` true, failed 0, 1680 / 1680 = console, 53 files; porcelain empty; no `JSON report` line |
+  | `A6` fences | — | production `src/` filter is empty; `numstat` `1 1 src/cli.test.ts`; `vitest.config.ts` unchanged; `run-bounded.js` one hunk `@@ -10 +10 @@`; `X` appended to the script gives `A10` red (`1 failed \| 66 passed (67)`); skip-count `0`; 53 / 1680 as at base |
+
+- **Gates** (worktree, at the commit). lint 0 (103 files), typecheck 0, build 0, `npm test` 0
+  (53 / 1680). `test-skip-integrity.js --skip-count 0` printed `No findings.` `lane-inventory.js`
+  read 53 / 53, `No findings.` `run-bounded.proof.js` held all rows.
+- **Cost** (`ADR-0035` d3; the count is the pin). 0 test files, 0 tests and 0 spawns were added.
+  The reporter runs in vitest's main process and does one extra small write at start. Green
+  `Duration` was 6.02 to 6.07 s at load1 5 to 7 on a loaded machine. This is not graded.
+- **UAT.** A waiver is expected (0 production `src/` lines). It is measured at exit.
+
+## QE
+
+**2026-10-11, QE/E2E** (subtask `qe-ABC-143`).
+- Range: base `117c1c8e`, code `f97ad60b`, reviewed tip `14cd1cf0`.
+- Every reading is QE's own, with plants in other files than the SE's. The detail is in
+  `.grugops/context/qe-ABC-143/notes/`: `…efb34d57` (verdict), `…e1e5acd5` (readings), `…112f11df`
+  (mutants), `…4f652dad` (vitest coupling), `…da133511` (gaps and the two rulings). It is not
+  restated here.
+
+**PASS_WITH_GAPS.**
+- `A1`: base exit 1 reads `success` true with text count 0. Head exit 1 reads `success` false, and
+  `unhandledErrors` names `QE143-UNHANDLED-timer-boom`.
+- `A2`: base 124 leaves the green run's `startTime` reading `success` true. Head 124 leaves the
+  `started` marker, `success` false, with a `startTime` later than a pre-run stamp.
+- `A3`: exit 1. The file names `src/moves.test.ts` and `QE143-SUITE-describe-boom`.
+- `A4`: the page's query, run verbatim, names each red by content. The `ABC-142` page points to it.
+  - `A1`: an `error` line and a `run` line.
+  - `A3`: a `suite` line and a `run` line.
+  - `ABC-142` `A1`: a `test` line and a `run` line.
+  - Green: 0 lines.
+- `A5`: exit 0, 1680 / 1680, 53 files, porcelain empty. The console has no added line; only the
+  `JSON report written` line is gone.
+- `A6`: all fences hold. Appending `X` to the script turns `A10` red (`1 failed | 66 passed`).
+  Counts are 53 / 1680 / 0, the same as base.
+- **Mutants:**
+  - The start marker dropped, unhandled errors dropped and the exit hook dropped are each killed
+    by `A1`–`A6`.
+  - **`success` without the exit code survives `A1`–`A6`.** Only QE's coverage-threshold red kills
+    it. The head holds that red.
+- **Gaps:** 3 LOW and 3 INFO, none blocking:
+  - `QE-143-a`: the exit-code conjunct is pinned by no criterion.
+  - `QE-143-b`: `A4` omits the `A2` marker, so the query's `run` arm is unpinned.
+  - `QE-143-c`: vitest 4.x silently drops unhandled errors, and 5.x drops both `vitest/reporters`
+    and `writeReport`. Only `^3.0.0` and the lockfile hold it.
+- **Rulings on the SE's limits:**
+  - The killed-run marker that names no test is not an acceptance gap (`QE-143-d`, INFO).
+  - Two runs in one checkout is fenced out and unchanged (`QE-143-e`, INFO).
+- **UAT waiver applies** on QE's reading (0 production `src/` lines). QE recommends the `In Review`
+  exit. Not merged, not pushed.
+
+## Follow-ups
+
+**2026-10-11, BA/PM** (task `wave-2026-09-25`, subtask `bapm-fold-qe143-2026-10-11`). This folds QE's gap
+register (`…da133511`). This hop measured nothing. Nothing above this heading changed: `A1`–`A6` stay as
+delivered and MET.
+
+- **`QE-143-a` and `QE-143-b` → `ABC-149`** (`XS`, `P3`, DoR 10/10). It writes the regression plant set
+  into the reporter's header: six rows, including the coverage-threshold red that alone pins the
+  exit-code check, and the `A2` marker read by content. When a hop changes the reporter, the `test`
+  script or vitest, it re-runs that set, not just this page's `A1`–`A6`.
+- **`QE-143-c` → `RISK-ABC143-01`**, below.
+- **`QE-143-d` → accepted as `AR-143-HANG`**, below.
+- **`QE-143-e` → accepted as `AR-143-OVERWRITE`**, below.
+- `QE-143-f` (the git host's protection reads `UNKNOWN - verify`) is the human's, as at `QE-142-f`. No
+  BA/PM action.
+
+**`RISK-ABC143-01` — a vitest major bump breaks the result-file reporter, and on 4.x it breaks
+silently.**
+- **What.** `tools/grugops/result-file-reporter.js` leans on five vitest 3.x surfaces (`…4f652dad`): the
+  `vitest/reporters` export, `JsonReporter`'s fields, `onFinished`, `writeReport`, and Node's `exit`
+  hook. QE read 4.1.11 and 5.0.3 and ran neither, so both effects are `UNKNOWN - verify`.
+  - **4.x:** `onFinished` is no longer called on reporters, so unhandled errors are dropped and `npm test`
+    stays green. The file still reads not-success, but only through the exit-code check.
+  - **5.x:** the import fails loudly. After the import is repointed, every file reads not-success and
+    names nothing, the green file included.
+- **What holds it today.** Only `"vitest": "^3.0.0"` and the lockfile (3.2.7). No test, guard or
+  `overrides` entry holds it. `@vitest/coverage-v8` is `^3.2.7`, and its installed manifest declares the
+  peer `vitest: 3.2.7` (read at the hop). So **upgrading coverage-v8 to 4.x is in practice a vitest 4.x
+  bump.** The 4.x peer itself is `UNKNOWN - verify`. That is the upgrade `AR-1` priced and `ABC-056`
+  leaves for the Release Manager to decide.
+- **The carrier rule.** A ticket that changes the major version of `vitest` or of any `@vitest/*` package
+  carries this risk in its § Security / NFR triggers. That covers a deliberate bump, `npm audit fix
+  --force`, and a yes on `ABC-056`'s coverage-v8 question. That ticket:
+  1. depends on `ABC-149` being merged, or carries its six rows itself if it is not;
+  2. re-runs the six rows at its head. The "unhandled" row must name the thrown text, and the "green"
+     row must read `success` true;
+  3. takes QE's 4.x route or says why not. That route reads unhandled errors from
+     `onTestRunEnd(testModules, unhandledErrors, reason)`, which 3.2.7 already calls, and checks at load
+     that `writeReport` exists. It is the Software Engineer's call and was not tried.
+- **Owner:** BA/PM carries it, and the Software Engineer owns the fix. Security/NFR may enter it in
+  `plans/nfr-catalog.md`. **Trigger:** a vitest or `@vitest/*` major version appears in a ticket's
+  scope or in a `package-lock.json` diff.
+
+**`AR-143-HANG` — on a 124 exit, neither the file nor the console names the hung test (`QE-143-d`).
+Accepted. No ticket.**
+- **Why accept.** `A2` is met as written, and the marker reads not-success. The console lists every
+  file but the hung one, so it is found by elimination. A fix would need a per-file progress write into
+  the marker (cost on every green run) or a change to `run-bounded.js`'s code (fenced). Neither is
+  worth it for a red that has not been seen in the wild.
+- **Promotion trigger** (QE's): a 124 sighting whose hung file cannot be named by elimination. Then
+  BA/PM cuts a ticket. A SIGTERM (exit 143) leaves the same marker and falls under the same trigger.
+
+**`AR-143-OVERWRITE` — two `npm test` runs in one checkout overwrite each other's file (`QE-143-e`).
+Accepted. No ticket.**
+- **Why accept.** This ticket and `ABC-142` fence it out. The marker adds no new green path: only a run
+  whose own exit was 0 writes `success` true. The overwrite shows in the file, as one `testResults`
+  entry where the lane has dozens. The standing mitigation is one worktree per hop.
+- **Promotion trigger:** a hop is misled by a file another run wrote, or the factory starts running two
+  `npm test` runs in one checkout by design. Then BA/PM cuts a ticket.

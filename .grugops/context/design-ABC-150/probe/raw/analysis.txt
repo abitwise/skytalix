@@ -1,0 +1,29 @@
+## D1 (base) and D2: ratio vitest / node, median (min-max), usable pairs
+base	E	n=5/5	void=0	5.009 (4.903-5.454)	cold 3.450	load1 3.23-5.47	therm 1,2
+base	S	n=5/5	void=0	5.106 (4.872-5.395)	cold 4.263	load1 3.23-5.27	therm 1,2
+base	P	n=5/5	void=0	4.328 (4.127-4.498)	cold 3.346	load1 3.29-5.27	therm 1,2
+C1	E	n=5/5	void=0	4.949 (4.850-5.097)	cold 3.431	load1 3.43-5.2	therm 1,2
+C1	S	n=5/5	void=0	5.049 (5.002-5.147)	cold 4.195	load1 3.43-5.2	therm 1,2
+C1	P	n=5/5	void=0	4.212 (4.191-4.317)	cold 3.215	load1 3.48-5.43	therm 1,2
+C2	E	n=5/5	void=0	5.133 (4.959-5.639)	cold 3.655	load1 3.48-5.43	therm 1,2
+C2	S	n=5/5	void=0	5.128 (4.946-5.651)	cold 4.232	load1 3.48-5.55	therm 1,2
+C2	P	n=5/5	void=0	4.228 (4.096-4.505)	cold 3.396	load1 3.6-5.55	therm 1,2
+C3	E	n=5/5	void=0	0.802 (0.766-0.806)	cold 0.751	load1 4.44-5.43	therm 1,2
+C3	S	n=5/5	void=0	0.812 (0.798-0.826)	cold 0.814	load1 4.44-5.43	therm 1,2
+C3	P	n=5/5	void=0	0.858 (0.850-0.891)	cold 0.844	load1 4.44-5.43	therm 1,2
+C4	E	n=5/5	void=0	1.011 (0.997-1.036)	cold 0.964	load1 4.44-5.47	therm 1,2
+C4	S	n=5/5	void=0	1.005 (0.968-1.017)	cold 0.990	load1 4.44-5.47	therm 1,2
+C4	P	n=5/5	void=0	0.988 (0.979-1.006)	cold 1.005	load1 4.24-5.47	therm 1,2
+
+## D1 stop rule: lowest base pair on E or S = 4.872 -> continue (>= 1.67x)
+
+## D2: share of the excess removed = (r_base - r_cand) / (r_base - 1), r_base = D1 median; [range from the candidate's max..min]
+C1	E 1.5 % [-2.2 %..4.0 %]	S 1.4 % [-1.0 %..2.5 %]	P 3.5 % [0.3 %..4.1 %]	-> does not explain
+C2	E -3.1 % [-15.7 %..1.2 %]	S -0.5 % [-13.3 %..3.9 %]	P 3.0 % [-5.3 %..7.0 %]	-> does not explain
+C3	E 104.9 % [104.8 %..105.8 %]	S 104.6 % [104.2 %..104.9 %]	P 104.3 % [103.3 %..104.5 %]	-> EXPLAINS (>= 50 % on E and S)
+C4	E 99.7 % [99.1 %..100.1 %]	S 99.9 % [99.6 %..100.8 %]	P 100.4 % [99.8 %..100.6 %]	-> EXPLAINS (>= 50 % on E and S)
+
+## C3 control (supplementary): plain node, bundle / src, median (min-max), usable pairs
+E	n=5	0.894 (0.859-0.926)
+S	n=5	0.880 (0.870-0.895)
+P	n=5	0.910 (0.895-0.962)
