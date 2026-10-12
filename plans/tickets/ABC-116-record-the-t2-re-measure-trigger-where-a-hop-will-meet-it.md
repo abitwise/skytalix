@@ -415,6 +415,23 @@ Software Engineer (Claude Opus 5.5), 2026-10-12, subtask `ticket-to-pr-ABC-116`,
   - skip integrity at 0 reads `No findings.`
 - **UAT-waiver reading:** `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'`
   is **empty**, so 0 production lines. The waiver applies at the exit, and it is not a signature.
+- **2026-10-12, repair of QE-116-a/b (Software Engineer, subtask `fix-ABC-116`, comment lines only).**
+  - **QE-116-a.** "its settle (`timeout`)" now reads "its settle (a `sleep` in a child's shell argv,
+    e.g. `A9_SETTLE_SECONDS`) … `timeout` is the hang bound, not the settle". Checked in the code:
+    `timeout` is `spawnSync`'s bound in `childOf`, and `A9_SETTLE_SECONDS` is a `sleep` in A9's
+    `/bin/sh -c` argv. Neither `ADR-0017` decision 2 nor the catalog's `G-QE115-3` says whether a
+    change to the hang bound fires `T2`. The comment does not rule on it, and the question is named
+    for BA/PM.
+  - **QE-116-b.** "on the surface such a hop has to edit" now says that the block sits on the options
+    type of `childOf`, which every child spawns through. The edit itself lands in a `CHILDREN` entry
+    or in a constant a child's argv reads, not in this block.
+  - **QE-116-c/d.** The two logs were renamed to `a2-window.log.txt` (`git mv`, no `-f` needed). The
+    rename, and the logs' add commit `d39618d1`, are recorded in a note under
+    `.grugops/context/fix-ABC-116/notes/`.
+  - **`C2` is NOT edited.** This page does not say the Engineer may edit it. Its "`timeout` (the settle)" and
+    "the reader and the trigger-er are the same agent by construction" are named for BA/PM.
+  - The `src/` diff is still `src/cli.test.ts` only, now +28/−0 against `main`, and every line is a
+    comment line. `N8_SPAWN` is byte-identical. `T2` does not fire.
 
 ### Security / NFR triggers
 

@@ -321,14 +321,17 @@ interface Child {
  *
  * `T2` — EDITING WHAT AN EXISTING CHILD DOES FIRES A RE-MEASURE, AND NOTHING HERE WILL TELL YOU SO
  * (`ABC-116`). (i) Changing an existing child's argv (`childOf`'s `args` / `productArgv`), its stdin
- * script (`input`), its substitution hook (`hook`) or its settle (`timeout`) fires `T2`. (ii) `T2`
+ * script (`input`), its substitution hook (`hook`) or its settle (a `sleep` in a child's shell
+ * argv, e.g. `A9_SETTLE_SECONDS`) fires `T2`; `timeout` is the hang bound, not the settle. (ii) `T2`
  * obliges a re-measure of `N8-SPAWN`'s per-child CPU clause WHETHER OR NOT THE COUNT MOVES: on the
  * narrow set, this file (`ADR-0035` decision 2), reporting the median, the twin's `R` and the state
  * (MET / NOT MET / UNRESOLVED, decision 1), read against decision 3's per-set `F` for this file.
  * (iii) The count pin (`N8_SPAWN`, `spawned`, `Object.keys(CHILDREN)`) CANNOT see it: a changed child
  * is still one child, so the pin stays green. `T1` (a hop that changes the NUMBER of children
  * re-measures both time clauses) is the trigger the pin forces; `T2` has nothing forcing it, which is
- * why it is written here, on the surface such a hop has to edit. (iv) Ruled by `ADR-0017` decision 2
+ * why it is written here, on the options type of `childOf`, which every child spawns through. The
+ * edit itself lands elsewhere: in a `CHILDREN` entry below (e.g. `black`'s hook) or in a constant a
+ * child's argv reads (e.g. `A9_SETTLE_SECONDS`), not in this block. (iv) Ruled by `ADR-0017` decision 2
  * and recorded in `plans/nfr-catalog.md`'s `G-QE115-3` section. It is a re-measure obligation, NOT a
  * licence to build a guard: `ADR-0017` decision 1 refuses one, and its `## Rollback` names the only
  * falsifier that would earn one.
