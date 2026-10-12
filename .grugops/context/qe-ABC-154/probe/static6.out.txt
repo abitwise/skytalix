@@ -43,3 +43,5 @@ whole branch 69a1f4b4..beb0991c: []
 non-test, non-docs files in 69a1f4b4..0f8036f9: tools/grugops/qe-hop-integrity.js
 the other 'neither' (line above) is outside main's JSDoc (lines 220-225)
 117:    return { malformed: `line ${i + 1} is neither "key: value" nor an indented "- item"` };
+plant tree tools/grugops/qe-hop-integrity.js cmp 0 to 0f8036f9
+plant tree tools/grugops/qe-hop-integrity.test.ts cmp 0 to 0f8036f9
