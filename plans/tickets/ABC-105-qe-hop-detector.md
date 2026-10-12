@@ -359,3 +359,27 @@ are byte-equal). The detail is in `.grugops/context/ticket-to-pr-ABC-105/notes/`
 - **Gates:** lint, typecheck, build and `npm test` exit 0. 57 files / 1771 tests, `success: true`, skip count 0,
   integrity `No findings.`
 - **0 `src/` files**, and the waiver reading is empty. No timing was read; `N8-LANE` is QE's.
+
+## QE
+
+QE/E2E, 2026-10-12 (subtask `qe-ABC-105`, post-build). Reviewed tip `60415a8a` (code `ada10423`, base `aeeba067`) on
+QE's own branch `grugops/qe-ABC-105`. Verdict note `.grugops/context/qe-ABC-105/notes/…-8094d5b1`; readings
+`…0ff9feb3`, plants `…bf59d633`, security/config/waiver `…3740506e`, timing `…7177253b`, commands `…2b14a4e1`.
+
+**Verdict: PASS_WITH_GAPS.** `A1`–`A9` and Test notes 1–5 are MET on QE's own readings; `N8-LANE` is MET.
+
+- **`A4`:** `--sweep` reads 132 / 38 / 77 / 2 / 15, exit 1; QE's independent Python hand count agrees on every
+  count and id. The snapshot equals the 38 `## Done` ids of `9998a544` by QE's own parse.
+- **`A3`:** the full refs-only plant turns `A3` red (4 tests); the exact-refs plant turns `A2`'s `ABC-076` red
+  (3 tests). **`QE-105-p` (MEDIUM, test-only):** a refs-only `coverage()` alone leaves `A3` green, because
+  `--ticket` reads only folders naming T; it false-passes 9 sweep findings and only `A5`'s synthetic negative
+  sees it. One unfiltered `coverage()` assertion on `ABC-062`/`ABC-073` closes it.
+- **`N8-LANE`:** narrow set H − B +0.475 s CPU (+0.460..+0.520), twin R 0.010 s, provisional `F` 0.092 s →
+  MET at 650 ms; load1 5.1–5.3 logged, not gated; 1 file, 0 spawns.
+- **Security** holds (no exec, no write, no network; symlinks refused at every level under the root — two
+  levels untested, `QE-105-q`; a symlinked root is followed, `QE-105-r`). **Config** acceptable: `tsc` gains
+  exactly the tool and its test; a sibling `.d.ts` is the narrower option (`QE-105-u`).
+- **UAT:** the waiver measurement is empty, but `ABC-122`'s `tools/` change was not waived — the Orchestrator's
+  or owner's call (`QE-105-v`).
+- **`A7` ceiling, observed:** `--ticket ABC-105` now exits 0 naming both QE's post-build verdict and the
+  pre-build `qe-recheck-ABC-105/…-72ae8565`; the tool cannot tell them apart.
