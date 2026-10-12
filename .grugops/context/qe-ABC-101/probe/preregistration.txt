@@ -1,0 +1,91 @@
+qe-ABC-101 TIMING PRE-REGISTRATION: the N8-LANE reading for ABC-101 (--difficulty), three narrow sets, one per changed test file.
+Written 2026-10-12 ~21:00Z, BEFORE any window and before any run of any arm. Width 1: QE is the only grugops hop running (brief
+.grugops/queue/pending/qe-ABC-101.md at main be4c67b1). Committed on grugops/qe-ABC-101 (off the ABC-101 tip 98ea0a84) before the
+first window's first run and before the count-only smoke. ADR-0035 decisions 1-3 with § Addendum 2026-10-12 A1-A3 (3017115c) and
+§ Addendum (after ABC-154) B1-B4 (0fe43646) apply; both addenda are ancestors of 98ea0a84 and so of this commit (B1's order: rule
+public -> pre-registration committed -> window runs; the blob must reach main unchanged, which is a merge QE does not make).
+Nothing below changes after the first window starts; any later text is an ADDENDUM that changes no rule. Timing readings are taken
+only in clean windows; no number is estimated.
+
+STATE AT WRITING (a ps/sysctl snapshot, 21:00:11Z, not a gate sample): load1 2.76, thermal 0, power 'AC Power' (59 %, charging),
+low-power mode 0, NO oeselg-labs/platform process, NO vitest process. ANOTHER session's grugops installer processes are present
+(node .../public/grugops/install/install.js --target /var/folders/.../grugops-{e6u8ZX,MmHPii}, PIDs 48761 and 58151 with their
+script/sh parents). They are not test runners and not platform processes, so no void clause names them; they are logged by the
+sampler only if they spawn vitest. QE does not touch them. Machine Apple M3 Mac15,13, Node v26.11.0, vitest 4.1.11.
+
+HEAD CHOICE: H = the tip 98ea0a84, not the code commit ac8deab1. src/ is byte-identical between them (git diff --stat ac8deab1
+98ea0a84 touches AGENTS.md, notes, the ticket page and traceability only). But S1 reads AGENTS.md at run time (ABC-065 A3), and at
+ac8deab1 that row is the one expected red, so every H round of S1 would fail status and void the window. 98ea0a84 is the delivered
+tree on which A6 is read. Base B = 3ea3e352, the brief's base, an ancestor of 98ea0a84.
+
+ONE OVERALL WAIT BUDGET: probe/master-n8.sh, 45 minutes counted from its start, which precedes the first gate sample (never longer
+than 45 min from the first gate sample). No gate starts after the deadline and no gate waits past it; a window whose gate passed runs
+to its end. Order: S1 w1 [w2 only if void/inadmissible/not opened] -> S2 w1 [w2] -> S3 w1 [w2]. One re-attempt per set, never a
+third. Anything not started, or whose gate timed out, is NOT READ. NO POOLING of rounds or windows. No estimate, ever, and no "would
+have read" figure for a void window. Void and inadmissible windows are kept in probe/windows/ and reported as read, never graded. The
+master logs load1, thermal, power, runner processes, platform processes and abc095-book-absent-* copies in os.tmpdir() before and
+after every window.
+
+GATE (every window, as before): secnfr-ABC-152-window/probe/gate.sh IN PLACE, unchanged, sha256
+5335905acbe8c97804458b11091405474bd3df7028b13c6b78b7da8133352b6f: thermal 0 AND no test-runner process (NOFOREIGN 1) on 4 consecutive
+15 s samples; MAXLOAD "" (load1 logged, NOT gated: ADR-0035 d2, § Pointers P3, B4). Power is logged by the gate.
+
+ARMS (outside the repository, session scratchpad .../scratchpad/qen8101/arms/, built 20:59Z by this hop; removed by exact path at the
+end). One node_modules symlink per arm root, to the main checkout's node_modules (ADR-0035 § Status "Per-set floor" shared-install
+condition). No symlink was made inside the main checkout.
+  arms/B = git archive 3ea3e352; arms/T = cp -R of arms/B (/usr/bin/diff -r: identical); arms/H = git archive 98ea0a84.
+  sha256 prefixes, each equal to `git show <commit>:<path>`:
+    src/cli.test.ts              B/T 54ae3d482fc324b3  H 3e850b0661942bb6
+    src/cli.real-engine.test.ts  B/T f32ebbd19b0502c9  H 131f355f24759310
+    src/engine.test.ts           B/T b31aaf57bc89455b  H 244b6cf02ece9d69
+    src/cli.ts                   B/T 3fa1654a62b98f31  H 9bb7c1a0a0815570
+    AGENTS.md                    B/T c13223f74613d4d8  H e0261a7961241037
+
+THE SETS (ADR-0035 decision 2), base 3ea3e352, head 98ea0a84, as the brief names them (the ticket's changed test files):
+  S1 = src/cli.test.ts.                                       F = 0.100 s CPU / 0.180 s wall (§ Status "Per-set floor").
+  S2 = src/cli.real-engine.test.ts, DEFAULT LANE (CLI_DEEP     F = provisional 16 % of the window's own B CPU median (decision 3
+       unset; A10 is a CLI_DEEP row and does not run).             amendment; the 0.030 s readings of qe-n8-ABC-095 are not folded).
+  S3 = src/engine.test.ts (default lane; ENGINE_DEEP unset).  F = provisional 16 % of the window's own B CPU median (no 4.1 reading).
+  All three are CHANGED files, not added ones: no placeholder arm, no "added" mode. S2 and S3 keep the readout's original rule
+  (B, T and H read the same round-0 count: this ticket adds 0 default-lane rows to S2 and replaces one `it` with one `it` in S3).
+  S1's count RISES at head (the ticket adds its `ABC-101` describe to src/cli.test.ts), so the original rule would discard every
+  S1 round on counts. S1 is therefore read in the readout's R4 "changed" mode (below): B = T = B's round-0 count, H = H's own
+  round-0 count, 1 file in every arm. That is the only count rule that differs from qe-n8-ABC-095, and it is fixed here.
+  Not read (stated, not hidden): `vitest related` for src/cli.ts, src/cli-options.ts, src/level-seam.ts.
+
+HARNESS secnfr-ABC-144-window-b/probe/lane144b.mjs IN PLACE, unchanged, sha256
+        652b779305bca2b0fbf39ec1974de4b914d9b06e55829b2923fc64401ba80c7c; NARROW=<set>, CONDS=B,H,T, ROUNDS=9 (round 0
+        discarded, n = 8), rotated order, GAP=0; CLI_DEEP, SEARCH_DEEP, ENGINE_DEEP, VITEST_MAX_WORKERS unset (env -u). It logs
+        load1, thermal level, runner-process count and power before AND after every run. Its own per-cond round-0 count check
+        (status ok only if each cond reads its own round-0 counts) is unchanged.
+WINDOW  probe/window-n8.sh (sha256 1eca3b150a8e381b4d1560e4430b9f996685660d0d4c9b63f33bdbc28c207260) = qe-n8-ABC-095's window-n8r.sh
+        (cf7841fc...a7209) with ONE change only: (W1) CTX is this hop's worktree, where lane144b.mjs and gate.sh are the same bytes
+        (sha256 above), plus three header comment lines saying so.
+MASTER  probe/master-n8.sh (sha256 08144087e5d1c882f730ec313bdb180de187e3280f63a644ac21c3764a760e7e) = qe-n8-ABC-095's master-n8r.sh
+        (e814e6da...b64b1), unchanged in logic, with: (M1) P = this probe, and the readout is this probe's readout-n8.py;
+        (M2) SP = qen8101; (M3) the three sets above on one arms set, S1 in "changed" mode, S2 and S3 in the original mode;
+        (M4) the before/after snapshot line also logs the abc095-book-absent-* count in os.tmpdir() (logged, decides nothing).
+READOUT probe/readout-n8.py (sha256 8b18f27e344b7b874b488cbc0e93c962e1cb2e708fb91bf2384ae82299a5c215) = qe-n8-ABC-095's readout-n8r.py
+        (6804201f...3b65; R1 power logged not a void, R2 "added", R3 bracket log) with ONE change: (R4) a 4th argument "changed"
+        sets expected counts B = T = (1, B's round-0 tests), H = (1, H's round-0 tests), and requires round 0 to read B = T and
+        1 file in every arm. Everything else (discards, n/k/R, A1, the ladder) is byte-for-byte the original. Self-test on
+        RECORDED TSVs only (probe/readout-selftest.out.txt): on qe-n8-ABC-095's three windows the output is cmp-identical to each
+        recorded readout.out.txt (MET, MET, MET); and n8r-cli-w1 read in "changed" mode is cmp-identical too, so R4 equals the
+        original rule whenever the three counts agree.
+VOID    (carried UNCHANGED, forward-only) a round is discarded on: status != ok; counts != expected; a foreign test runner before or
+        after the run; thermal != 0 before or after; any 5 s sampler row in [start-5 s, end+5 s] with a runner other than the
+        window's own file, an oeselg-labs/platform process, or thermal != 0. ANY discarded round voids the window (n must be 8).
+        Power is NOT a void (R1); it is logged.
+ADMISSIBLE (A1): |twin T-B CPU median| <= max(1.5 % of the B CPU median, one 10 ms tick) AND the two-sided sign test on the NON-ZERO
+        twin deltas at p > 0.05 (zeros dropped; none non-zero: p = 1).
+GRADE   (decision 1, CPU unit, 650 ms; wall reported, not graded): n = 8, k = 2, R = max(|x(2)|, |x(7)|) of the twin; NOT MET if
+        the treatment's x(2) > 0.650 s (at any R); else MET if R <= 0.650 s and the H-B median <= 0.650 s; else NOT MET if
+        R <= 0.650 s; else UNRESOLVED (charge "at most x(7)"). 650 ms is graded only if 650 ms >= F; if F > 650 ms the bound is
+        REFUSED at this instrument (UNRESOLVED, "at most x(7)"). Reported per set as MET / NOT MET / NOT READ.
+TICKET LINE (the 650 ms bar is per ticket), arithmetic labelled NOT A READING: the sum of the H-B medians and the sum of the x(7)
+        over the graded sets. If every summed set is MET and the sum of the x(7) <= 650 ms, "the costs sit under the bar";
+        otherwise the sum is reported as is.
+
+COUNT-ONLY SMOKE (not a reading; taken AFTER this commit and BEFORE master-n8.sh starts, never overlapping a window): one
+`npx vitest run <set>` per arm per set (9 runs, CLI_DEEP/ENGINE_DEEP/SEARCH_DEEP unset), exit code and file/test counts only; no
+time is recorded or reported. It exists so a broken arm cannot spend a window. If an arm fails it, the set is NOT READ.
