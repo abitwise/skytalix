@@ -2689,8 +2689,13 @@ describe("ABC-043 — the live session", () => {
     // the cost is that vitest stops at this row, so the shorthand row's own red is invisible from
     // this file's output. Delivered → `["history ="]`, 1.
     // WHAT THIS COUNT CANNOT SEE: it matches `/\bhistory\s*[:=]/g`, so a binder with neither `:` nor
-    // `=` after the name is not counted. The open remainder is the `[:=]`-free binder forms:
-    // `for…of`, `for…in`, `catch (history)`, and a contextually-typed callback parameter. `D4`
+    // `=` after the name is not counted. The open remainder (`ABC-148` `A1`, five `[:=]`-free forms
+    // re-planted one at a time on 2026-10-12 at the `runTurnLoop(` call) is the two that are
+    // `tsc`-clean AND green on every row of this file: `for…of`, and a PARENTHESISED
+    // contextually-typed callback parameter, `(history) =>`. The other three are not open: a bare
+    // `history =>` IS counted (the `=` of `=>` matches; this row reds it with 2 binders), and
+    // `for…in` and `catch (history)` are closed by the typecheck (`tsc` exit 2: a `string` key and
+    // an `unknown` catch binding are not a `GameHistory`). `D4`
     // (`const spare = { ...history }; for (const history of [spare])`) is `tsc`-clean. Every row
     // of this file stays green on it. On the control `A1` stays green, and the control's only reds
     // are its 2 unrelated `ABC-042` drift rows (`A9`, `A10`). Closing it is a new assertion, not
