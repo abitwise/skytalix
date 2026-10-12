@@ -270,3 +270,17 @@ sibling hops live.
 - **Production lines > 0**, so the UAT waiver does not apply; the owner's word is needed at
   `In UAT`. Not merged, not deployed; `plans/board.md` untouched — the `In Review` exit is the
   Orchestrator's move. Notes: `.grugops/context/qe-ABC-045/notes/`.
+
+## Amendment — 2026-10-12 (delivered by `ABC-095`'s diff): (N) confirmed, no Given changes
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5cc`. **This page stays
+`Done`, and no criterion's text changes.** `ABC-095`'s diff moves `CHILDREN.resigns`'s engine double
+from `./engine.ts` to `./book-engine.ts` (`withBook`), which is `ADR-0037` § Addendum — 2026-10-12 R2.
+With the book in front, the old double would meet a random book reply to `1. e4`. Reasons:
+`.grugops/context/bapm-amend-ABC-095/notes/`.
+
+- **`A4`.** Its Given, "a scripted game driven through the entry point where the human resigns", does
+  not change. (N) is confirmed: the scripted opponent stands at the same `EngineSeam` at `engine:`. The
+  screen, the winner and the exit code are product code. There is one seam.
+- **§ QE's "with the engine substituted"** stays true, because the engine seam is still the one
+  substituted. Only the module that supplies it moved.

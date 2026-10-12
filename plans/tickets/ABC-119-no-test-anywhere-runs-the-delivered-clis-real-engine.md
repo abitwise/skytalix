@@ -98,6 +98,8 @@ deep cases are undefined when the variable is unset was measured as **median +0.
    (`Error: No test suite found in file …`, `Test Files 1 failed`). The placement ruling makes this
    binding: **the new file defines at least one default-lane test that spawns nothing and can fail.**
    `A2` makes that a watched green. *(Neither re-run at the re-cut; `vitest` is still `^3.0.0`.)*
+   *(2026-10-12: that default-lane row is amended, and the amendment is delivered by `ABC-095`'s diff.
+   See § Amendment — 2026-10-12.)*
 
 ## Scope
 
@@ -137,9 +139,14 @@ deep cases are undefined when the variable is unset was measured as **median +0.
 
 - **`A1` (the lane exists, is opt-in, and actually runs the real search).** **Given** the variable
   set, **when** the lane runs, **then** at least one child is spawned that runs the delivered entry
-  point **with no `--import`, no substitution hook and no double**, the child's own wall time is
-  **≥ 1.0 s** (an instant reply proves a double leaked in), it **exits 0**, and the recorded run
-  states the measured wall and the command verbatim.
+  point *— amended 2026-10-12, delivered by `ABC-095`'s diff (§ Amendment — 2026-10-12): **from a
+  temporary copy of the tree**, made under `mkdtemp(os.tmpdir() …)`, **a real copy** in which no entry
+  under `src/` is a symbolic link (`lstat`), **whose `src/` is byte-identical to the repository's,
+  asserted before the spawn**, **and in which `data/opening-book/book.json` is absent**; the copy is
+  removed by a recursive `rmSync` of exactly the path `mkdtemp` returned —* **with no `--import`, no
+  substitution hook and no double**, the child's own wall time is **≥ 1.0 s** ~~(an instant reply
+  proves a double leaked in)~~ **(an instant reply proves a double, or the book, leaked in)**, it
+  **exits 0**, and the recorded run states the measured wall and the command verbatim.
 - **`A2` (the default lane pays nothing, and both traps are cleared).** *Two clauses re-worded
   2026-10-10 by BA/PM (subtask `rule-abc119-a2`). Neither bound moved. Ruling:
   `.grugops/context/rule-abc119-a2/notes/`.* `<base>` is `git merge-base <wave> HEAD`, which is
@@ -177,7 +184,9 @@ deep cases are undefined when the variable is unset was measured as **median +0.
   disagrees, QE's number is recorded and the disagreement is written down** — `ABC-114` `A3`'s
   discipline.
 - **`A3` (deterministic assertions against a non-deterministic opponent — the criterion that makes
-  this lane worth having).** **Then** every assertion is on a property the real search cannot
+  this lane worth having).** *(Amended 2026-10-12, delivered by `ABC-095`'s diff: **Given** the same
+  children as `A1`, run from `A1`'s book-absent copy.)* **Then** every assertion is on a property the
+  real search cannot
   legally violate, and **no assertion names a specific move, score, depth or node count**:
   (i) the engine's reply is a **legal move in the position it was played in**, checked by the
   project's own move generator, not by a literal; (ii) it arrives **within `NFR-004`'s 5 s HARD
@@ -185,9 +194,12 @@ deep cases are undefined when the variable is unset was measured as **median +0.
   exit, which bounds the reply from above — **not** the 3 s clause, which is `AR-NFR004-A` (missed by
   abort granularity at `budgetMs = 3000`) and so red by construction; (iii) the session **advances**
   — the side to move and the ply number both change; (iv) `stderr` carries **no stack trace** and the
-  exit code is **0**, never `70`. **A criterion that would go red on a different machine or a
+  exit code is **0**, never `70` *— amended 2026-10-12, delivered by `ABC-095`'s diff:* **and `stderr`
+  carries the probe's one book-absent warning line, asserted PRESENT, exactly once** (`ABC-095` `A5`).
+  It is the leak detector: if it is missing, the child read a book. **A criterion that would go red on a different machine or a
   different search is not a criterion, and this page will not accept one.**
-- **`A4` (the rejection path against the real engine).** **Then** one child feeds an illegal or
+- **`A4` (the rejection path against the real engine).** *(Amended 2026-10-12, delivered by
+  `ABC-095`'s diff: **Given** `A1`'s book-absent copy.)* **Then** one child feeds an illegal or
   unparseable input into a real-engine session and observes `ABC-019`'s **non-advancing-with-a-message
   cadence** — the same side to move and the same ply number before and after — with the session
   continuing rather than exiting. *This is the one behaviour a hand run has already shown against
@@ -360,3 +372,58 @@ Branch `grugops/ABC-119-r2` from `242b624`, code in `d45ca68`. Not merged, not p
 **`N8-LANE`: +115 ms CPU pooled, not cleanly read** (set 2 alone exceeds 650 ms).
 **`N8-SPAWN`:** `T1`/`T2` not fired. **Owed:** BA/PM's ruling on `A2`, the Scribe's `AGENTS.md`
 line (drafted in `…2409b286`), the QE hop, and the `In Review` move (Orchestrator).
+
+## Amendment — 2026-10-12 (delivered by `ABC-095`'s diff)
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5cc`. **This page stays
+`Done`. The amended criteria are delivered by `ABC-095`'s diff, not by a re-opening of this ticket.**
+Rulings: `ADR-0037` § Addendum — 2026-10-12 R2, and Security/NFR's S3 item 7
+(`.grugops/context/secnfr-ABC-095-placement/notes/…a096cf43`). Reasons:
+`.grugops/context/bapm-amend-ABC-095/notes/`.
+
+**Why the Givens change.** With the book wired, both of this lane's children only ever meet the book:
+the engine moves at ply 0, from the start position, which is always in book. `A1`'s floor caught it
+(201 ms and 187 ms on the SE's attempted wiring, `…ef39c9a6`). Without the change, `A3` and `A4` would
+pass while testing the book. **This is a re-scope in form, not in substance.** `A1`–`A4` still read
+the real search, through the delivered composition, with no hook. An absent artifact is a state the
+product handles itself (`ABC-095` `A5`: one warning, then the search).
+
+**What changed, each marked in place with the original words kept:**
+- **`A1`'s Given.** The child runs from a temporary copy of the tree. The copy is real: no entry under
+  `src/` is a symbolic link (`lstat`). Its `src/` is byte-identical to the repository's, asserted
+  before the spawn, and `data/opening-book/book.json` is absent. It is made under
+  `mkdtemp(os.tmpdir() …)` and removed by a recursive `rmSync` of exactly the path `mkdtemp`
+  returned. "With no `--import`, no substitution hook and no double" is unchanged.
+  - **Why "real".** Node resolves an ES module's `import.meta.url` to its real path. A copy whose
+    `src/` (or `src/book-file.ts`) is a link reads the repository's book, and a byte-identity check
+    reads through the link and cannot see it (`…f0bf8b4a` § 3).
+- **`A1`'s parenthetical.** It now reads "a double, or the book, leaked in". The ≥ 1.0 s floor is
+  unchanged.
+- **`A3` and `A4`.** They take `A1`'s Given, because they read the same children.
+- **`A3`(iv).** The book-absent warning is asserted **present**, exactly once, on the child's stderr.
+  It is the leak detector. No stack trace and exit 0 are unchanged.
+- **The default-lane row** ("the deep child runs the delivered entry point with no `--import`, loader
+  or hook, and an empty environment"). Its entry path moves to the copy, and the copy's checks join it:
+  - every entry under the copy's `src/` is a regular file;
+  - the copy's `src/` is byte-identical to the repository's;
+  - `book.json` is absent from the copy;
+  - the deep children's entry point is the copy's `src/cli.ts`;
+  - the copy is removed by the exact `mkdtemp` path.
+
+  **It still spawns nothing.** Its filesystem writes go under `os.tmpdir()` only (`ABC-041` clause
+  (c)). The cost is `UNKNOWN - verify` and is charged to `ABC-095`'s `N8-LANE` line.
+
+**Unchanged:**
+- **`A2`.** The default lane pays nothing, and the new lane contributes zero spawned children.
+- **`A5`.** It is the fence on this ticket's own delivered diff, and it is not re-read against
+  `ABC-095`'s diff.
+- **`A6`.** Its mutant is still planted in a copy outside the repository, and it must still red `A1`
+  on the amended lane. QE reads that at `ABC-095`'s hop.
+
+**Rejected by the ruling, recorded here so they are not re-proposed:**
+- hooking the book out (`A1`'s Given forbids a hook);
+- having the human play `1. c3`, the one first move that leaves book (it ties the lane to the
+  artifact's content);
+- re-scoping `A1` (it would re-open `G-06`).
+
+**The book-present real session is `ABC-095` `A7`'s `CLI_DEEP` row, not this lane's.**
