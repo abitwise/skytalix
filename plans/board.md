@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word "I answer a" (stop the scaffolder, pause the grugops-kit tests, one N8-LANE re-read): `qe-n8-ABC-095` dispatched for QE-095-N8 (+ QE-095-h if pre-registered). `ABC-095` stays Ready for UAT. In flight: that hop only (width 1)._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `secnfr-ABC-095-s3` PASS_WITH_RISKS (S3 items 1–8 MET; new `AR-095-CWD` LOW) → `ABC-095` Ready for UAT. Owner owed: UAT word, and N8-LANE (re-read in a quiet window or ruling). In flight: none._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `qe-ABC-095` PASS_WITH_GAPS (A2/R3 MET in a clean window; N8-LANE NOT READ, MEDIUM, owed before merge) → `ABC-095` In Security/NFR; S3 gate `secnfr-ABC-095-s3` dispatched. In flight: that hop only (width 1)._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-095` wired (`2307fc11`) → In Review; QE dispatched. In flight: `qe-ABC-095` (width 1)._
