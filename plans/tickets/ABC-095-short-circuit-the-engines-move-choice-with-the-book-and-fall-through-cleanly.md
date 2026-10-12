@@ -587,6 +587,26 @@ QE/E2E, 2026-10-12 (subtask `qe-ABC-095`, branch `grugops/qe-ABC-095` off `2307f
 - **UAT:** the waiver does not apply (3 production files in the delivered pair). The owner's word is owed. Next is
   `In Security/NFR` (S3).
 
+**2026-10-12, `N8-LANE` re-read** (QE/E2E, subtask `qe-n8-ABC-095`, branch `grugops/qe-n8-ABC-095` off `7b93c973`).
+QE was the only hop running; this followed the owner's word "(a)". The detail is in
+`.grugops/context/qe-n8-ABC-095/notes/` (decision `…15521bc7`, readings `…195fc847`).
+- **`N8-LANE` is MET on both named costs, so `QE-095-N8` is closed.**
+  - The pre-registration was committed as `8f4f75e5` before any run.
+  - Base `0974102f`, head `2307fc11`, n = 8. Each set was read clean in its first window, with 0 rounds discarded.
+  - S1 `src/cli.test.ts`: H−B **+0.225 s** CPU (x(2)..x(7) −0.100..+0.690), twin R 0.340 s, `F` 0.100 s.
+  - S2 `src/cli.real-engine.test.ts` default lane: **+0.025 s** (+0.020..+0.050), R 0.030 s.
+- **`QE-095-h` is closed.** S3 `src/book-engine.test.ts` against the placeholder reads **+0.115 s**
+  (+0.100..+0.120), R 0.030 s: MET.
+- **The ticket line is arithmetic, not a reading.**
+  - S1 + S2 medians sum to 0.250 s, and their x(7) ends sum to 0.740 s.
+  - With S3, the sums are 0.365 s and 0.860 s.
+- **New INFO items:**
+  - `QE-095-j`: S1's x(7) is above 650 ms;
+  - `QE-095-k`: S2 and S3 are admissible only by A1's tick floor;
+  - `QE-095-l`: new twin readings for Architect/Design to fold.
+- The laptop was on battery throughout. Power was logged and is not a void clause. No platform process appeared.
+  The other `qe-ABC-095` rows stand.
+
 ## Security/NFR
 
 **2026-10-12, Security/NFR** (task `wave-2026-09-25`, subtask `secnfr-ABC-095-s3`, branch

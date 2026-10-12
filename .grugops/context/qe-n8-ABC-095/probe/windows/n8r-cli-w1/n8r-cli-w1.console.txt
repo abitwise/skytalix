@@ -1,0 +1,37 @@
+# n8r-cli-w1: npx vitest run src/cli.test.ts --reporter=default --reporter=json --outputFile.json=.test-results/last-run.json | conds B,H,T | rounds 9 | gap 0s -> /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qen8095/n8r-cli-w1.tsv
+0 B cpu 6.18 wall 4.75 par 1.301 1 69 load1 2.89 foreign 0 limit none therm 0->0 ok
+0 H cpu 5.82 wall 4.01 par 1.451 1 69 load1 3.22 foreign 0 limit none therm 0->0 ok
+0 T cpu 5.52 wall 3.98 par 1.387 1 69 load1 3.84 foreign 0 limit none therm 0->0 ok
+1 H cpu 5.88 wall 4.06 par 1.448 1 69 load1 3.77 foreign 0 limit none therm 0->0 ok
+1 T cpu 5.77 wall 4.27 par 1.351 1 69 load1 3.77 foreign 0 limit none therm 0->0 ok
+1 B cpu 6.11 wall 4.66 par 1.311 1 69 load1 4.59 foreign 0 limit none therm 0->0 ok
+2 T cpu 5.58 wall 3.99 par 1.398 1 69 load1 9.83 foreign 0 limit none therm 0->0 ok
+2 B cpu 5.51 wall 3.95 par 1.395 1 69 load1 9.2 foreign 0 limit none therm 0->0 ok
+2 H cpu 6.2 wall 4.39 par 1.412 1 69 load1 8.78 foreign 0 limit none therm 0->0 ok
+3 B cpu 5.92 wall 4.35 par 1.361 1 69 load1 8.4 foreign 0 limit none therm 0->0 ok
+3 H cpu 5.85 wall 4.02 par 1.455 1 69 load1 8.45 foreign 0 limit none therm 0->0 ok
+3 T cpu 5.65 wall 4.02 par 1.405 1 69 load1 8.17 foreign 0 limit none therm 0->0 ok
+4 H cpu 5.76 wall 3.97 par 1.451 1 69 load1 8 foreign 0 limit none therm 0->0 ok
+4 T cpu 5.53 wall 3.92 par 1.411 1 69 load1 8 foreign 0 limit none therm 0->0 ok
+4 B cpu 5.56 wall 3.93 par 1.415 1 69 load1 7.76 foreign 0 limit none therm 0->0 ok
+5 T cpu 5.64 wall 3.98 par 1.417 1 69 load1 7.46 foreign 0 limit none therm 0->0 ok
+5 B cpu 5.53 wall 3.93 par 1.407 1 69 load1 7.58 foreign 0 limit none therm 0->0 ok
+5 H cpu 5.78 wall 3.96 par 1.46 1 69 load1 7.13 foreign 0 limit none therm 0->0 ok
+6 B cpu 5.95 wall 4.21 par 1.413 1 69 load1 6.88 foreign 0 limit none therm 0->0 ok
+6 H cpu 5.85 wall 4 par 1.462 1 69 load1 6.88 foreign 0 limit none therm 0->0 ok
+6 T cpu 5.55 wall 3.91 par 1.419 1 69 load1 6.57 foreign 0 limit none therm 0->0 ok
+7 H cpu 6.47 wall 4.89 par 1.323 1 69 load1 6.44 foreign 0 limit none therm 0->0 ok
+7 T cpu 5.88 wall 4.33 par 1.358 1 69 load1 7.69 foreign 0 limit none therm 0->0 ok
+7 B cpu 5.78 wall 4.08 par 1.417 1 69 load1 7.47 foreign 0 limit none therm 0->0 ok
+8 T cpu 5.72 wall 4.05 par 1.412 1 69 load1 7.12 foreign 0 limit none therm 0->0 ok
+8 B cpu 5.59 wall 3.98 par 1.405 1 69 load1 6.63 foreign 0 limit none therm 0->0 ok
+8 H cpu 5.88 wall 4.04 par 1.455 1 69 load1 6.18 foreign 0 limit none therm 0->0 ok
+# n8r-cli-w1 summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 5.69	wall 4.03	par 1.406	load1 7.53	load1>8 2/8	files 1	tests 69
+H	cpu 5.87	wall 4.03	par 1.453	load1 7.00	load1>8 2/8	files 1	tests 69
+  H-B cpu	median 0.225 (3.96 % of base cpu)	sign 5/8	k 2	interval [-0.100, 0.690]	R 0.690
+  H-B wall	median 0.035	sign 5/8	k 2	interval [-0.330, 0.440]	R 0.440
+T	cpu 5.64	wall 4.00	par 1.408	load1 7.58	load1>8 2/8	files 1	tests 69
+  T-B cpu	median 0.020 (0.35 % of base cpu)	sign 4/8	k 2	interval [-0.340, 0.110]	R 0.340
+  T-B wall	median 0.015	sign 4/8	k 2	interval [-0.330, 0.070]	R 0.330
+twin R: cpu 0.340 s, wall 0.330 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).
