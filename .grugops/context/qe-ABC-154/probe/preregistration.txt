@@ -1,0 +1,68 @@
+qe-ABC-154 N8-LANE re-read (RISK-ABC105-LANE trigger T-b): PRE-REGISTRATION, written 2026-10-12T11:25Z, BEFORE any window is
+started. Width 1: QE is the only hop running (brief .grugops/queue/pending/qe-ABC-154.md at main 8a58e079).
+Committed on grugops/qe-ABC-154 (off beb0991c) before window 1. Nothing below changes after window 1 starts; any later text is
+an ADDENDUM that changes no rule.
+
+WHAT IS READ
+  The narrow set tools/grugops/qe-hop-integrity.test.ts (ADR-0035 decision 2), H = the file at 0f8036f9 (ABC-154's code commit):
+  sha256 140ed0dcc8fca2a928fc5f994351983db238e3fc8d1139f949789e584590070b, blob bf0ea7d5, 32 tests (ABC-154 adds 0 `it`).
+  The tool it imports is at 0f8036f9 too (blob cc0f4157). The branch tip beb0991c holds the same two blobs.
+ARMS
+  Three out-of-tree `git archive beb0991c` trees in the session scratchpad
+  (/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe154/lane/arms),
+  shared node_modules symlinked (one symlink per arm root). 2656 note files in each arm.
+    B = the one-assertion placeholder at the path (probe/placeholder.test.ts, sha256 f730fdb2...ba515e3e, cmp 0 to
+        qe-ABC-105's and qe4-ABC-105's);
+    T = twin of B (/usr/bin/diff -r B T: identical);
+    H = the file and tool at 0f8036f9 (cmp 0 to git show 0f8036f9:<path>).
+METHOD: QE4's (qe4-ABC-105/probe/), unchanged except where stated.
+  harness  secnfr-ABC-144-window-b/probe/lane144b.mjs IN PLACE, unchanged, sha256 652b779305bca2b0fbf39ec1974de4b914d9b06e55829b2923fc64401ba80c7c
+  gate     secnfr-ABC-152-window/probe/gate.sh IN PLACE, unchanged, sha256 5335905acbe8c97804458b11091405474bd3df7028b13c6b78b7da8133352b6f
+           settle: thermal 0, no vitest runner process (NOFOREIGN 1), 4 x 15 s, MAXLOAD="" (load1 logged, NOT gated), GMAX 45 min.
+  window   probe/window-qe5.sh (sha256 b2d39bce...b4027aedfc) = qe4's window-qe4.sh with only CTX, TAG (n8-qe5), the console
+           name and two comment lines changed; CONDS=B,H,T ROUNDS=9 (round 0 discarded, n = 8), rotated order, GAP=0;
+           load1/thermal/foreign/power logged before and after every run; 5 s sampler throughout (foreign vitest other than
+           this lane's file; oeselg-labs/platform lines; thermal; power).
+           Run as: MAXLOAD="" GMAX=45 bash window-qe5.sh, from <scratch>/qe154/lane (window N copied to probe/wN/).
+  readout  probe/readout-qe5.py (sha256 490d6ab8...a42255a6), derived from qe4's readout-qe4.py. Changes:
+           (1) TSV name n8-qe5.tsv; H count 32 unchanged;
+           (2) integer centiseconds and exact (Fraction) medians, so float residue cannot flip a one-tick comparison;
+           (3) admissibility per ADR-0035 § Addendum 2026-10-12 A1 (below);
+           (4) the per-set F = 0.020 s (A2) replaces the provisional 16 % x B.
+           Self-test BEFORE window 1 on the recorded raw TSVs of QE4 w2 and QE3 w1 (probe/readout-selftest.out.txt)
+           reproduces the A1 table: QE4 w2 twin +0.010 s, +5/-2/1 zero, p 0.453, R 0.030, "would read" MET; QE3 w1 +0.010 s,
+           +7/-1, p 0.070, R 0.010, "would read" NOT MET. That is a harness check, not a reading of this code.
+
+VOID (fixed now, as QE4)
+  - A round is discarded on: status != ok; counts != (1,1) for B and T or (1,32) for H; a foreign vitest runner before or after
+    the run; thermal != 0 before or after; power != AC before or after; or any 5 s sampler row in [start-5 s, end+5 s] with a
+    foreign vitest runner (for example the grugops kit's suite in another session), an oeselg-labs/platform (repos/shared)
+    process, thermal != 0 or not AC.
+  - A window with ANY discarded round is VOID (n must be 8; nothing is graded on n < 8). A gate timeout (45 min) is VOID.
+ADMISSIBLE (ADR-0035 § Addendum 2026-10-12 A1)
+  - A non-void window is ADMISSIBLE iff |twin T-B CPU median| <= max(1.5 % of the B CPU median, one tick), where one tick is
+    0.010 s for /usr/bin/time -p, AND the twin's sign is at chance.
+  - SIGN CONVENTION, stated: the two-sided sign test is taken on the NON-ZERO twin deltas only (a zero delta lies inside one
+    tick and has no sign; zeros are dropped, n' = the count of non-zero deltas), admissible at p > 0.05. With n' = 0, p = 1.
+    The old convention (positives against everything else) is printed beside it for the record and decides nothing.
+  - Forward-only clause: A1 applies "to a window whose pre-registration lands on main after this addendum does". The
+    addendum is on main (e7d8a09f, an ancestor of beb0991c and of main 8a58e079) BEFORE this pre-registration was written.
+    This file is committed on grugops/qe-ABC-154 and reaches main only through the Orchestrator's merge; QE never merges.
+    QE applies A1 because the brief directs it and because no window here was seen before the rule. If the Architect reads
+    the clause as requiring this file to be ON main before window 1, the state is the Architect's to re-rule, not QE's.
+GRADE (ADR-0035 decision 1, at 650 ms CPU, on the CPU unit; wall is reported, not graded)
+  - n = 8, k = 2: R = the larger magnitude of the twin's x(2), x(7); the treatment interval is x(2)..x(7) of H-B.
+  - NOT MET if the treatment's lower end x(2) > 0.650 s (at any R);
+    else MET if R <= 0.650 s and the H-B median <= 0.650 s;
+    else NOT MET if R <= 0.650 s;
+    else UNRESOLVED (charge "at most x(7)").
+  - The per-set F = 0.020 s CPU (ADR-0035 § Addendum A2; plans/nfr-catalog.md floors block): 650 ms >= F, so the bound is not
+    refused at this instrument.
+ATTEMPTS
+  ONE window (w1). If w1 is void or inadmissible: ONE re-attempt (w2) under exactly this rule, same arms, harness, gate and readout.
+  No w3. If w2 is also void or inadmissible: N8-LANE is NOT READ by this hop. No pooling of windows, ever. No estimate.
+  A void or inadmissible window is kept in probe/ and reported as read, never graded.
+WHAT THE STATE DOES (plans/nfr-catalog.md § "N8-LANE at ABC-105", RISK-ABC105-LANE, read not ruled here)
+  MET -> the catalog's row says "write the reading and close the risk"; NOT MET -> it goes to the owner; NOT READ -> the risk
+  stays open on the same triggers. QE reports the state; the catalog edit and the risk closure are Architect/Design's and the
+  Orchestrator's (the brief fences plans/nfr-catalog.md and ADRs from QE).
