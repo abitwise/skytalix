@@ -111,6 +111,8 @@ guessed here in any form.**
 
 - **Anything the engine does with the level** — `EPIC-004`, by name and by behaviour. This ticket
   ships a value that reaches no engine, and says so.
+  *(Superseded 2026-10-12 in part, BA/PM `bapm-amend-ABC-101`, by the 2026-10-12 § Scope bullet and `A8′`:
+  the level now reaches the engine. What a level MEANS, its budget and blunder rate, stays `EPIC-004`'s.)*
 - **A startup PROMPT for difficulty.** `EPIC-006` § Scope says *"via prompt or CLI flags"* and **no
   prompt exists for colour either** (`ABC-042` resolves `random` before the loop and prompts for
   nothing). Cutting a prompt for difficulty alone would be inconsistent scope. **Recorded as a gap,
@@ -157,6 +159,18 @@ guessed here in any form.**
   outside comments that cite this ruling, and `ResolvedOptions`' difficulty field is a plain ordinal
   with no unit in its name or type. *(The instrument is a grep and it is deliberately crude; the
   criterion it guards is that this layer attaches no meaning to a level.)*
+  - *(Reading ruled 2026-10-12 by BA/PM, subtask `bapm-amend-ABC-101`, as test note 4 anticipated.)* At
+    `main` `4e5c38d4` the raw grep already reads **2** hits. Both are older `ABC-042` comments that do
+    not cite this ruling: `0.112 ms` (`:8`, a recorded measurement) and `simply` (`:129`, the `ply` in
+    it). So the literal text fails before this ticket writes a line. **The grep is read in two halves:**
+    - **Executable code: 0 matches.** This is the test row, over `src/cli-options.ts` with comments and
+      string text removed.
+    - **Lines this ticket adds, comments included: 0 matches,** except a comment that cites this
+      ruling. QE reads this off the `+` lines of `git diff <base> <delivered> -- src/cli-options.ts`.
+    - The two older comment hits are tolerated **by name and only those two**. They are not edited
+      (coding rule 9; they are `ABC-042`'s). A new hit anywhere in the file reds one half or the other,
+      so this does not loosen the criterion. No test asserts the raw count of 2, because a prose count is
+      the nuisance that note 4 warns gets deleted.
 - **`A8′` (the level reaches the engine, and nothing in `EPIC-004` moves)** *(replaces `A8`, 2026-10-12)*.
   - **Given** each level `N` in `1`…`5`, a seed `s` and an injected clock, **when** the seam the root builds
     for `N` is asked for a move, **then** it returns the move `createLevel(LEVELS[N], { seed: s, now })`
@@ -187,6 +201,15 @@ guessed here in any form.**
   the reading.)*
 - **`A9` (nothing else changed).** `git diff --numstat` shows `src/cli-options.ts`, `src/cli.ts`,
   their two test files and `AGENTS.md` — and nothing else. Suite green, skip **0**.
+- *(`A9` widened 2026-10-12 by BA/PM, subtask `bapm-amend-ABC-101`, by one file and one row.)* The allowed
+  set also holds **`src/engine.test.ts`, for `ABC-086` `A5`(i′)'s re-pinned row only.** That means the
+  `(i)` `it` inside `describe("ABC-086 A5 …")` (its title may name (i′)), plus the import specifiers that
+  row needs (`LEVELS` and `DEFAULT_LEVEL` from `./levels.ts`, `resolveOptions` from `./cli-options.ts`).
+  - Read it with `git diff -U0 <base> <delivered> -- src/engine.test.ts`. Every hunk falls in the
+    import block or inside that one `it`. Every other line of the file is byte-identical, and so is
+    every other row's count (`(ii)` included).
+  - **`AGENTS.md` stays the Scribe's**, landed in its own hop. `A6` is read on the tree where both have
+    landed. New test files: still **0**.
 
 ## The guards this ticket will red, named in advance
 
@@ -200,6 +223,23 @@ deliberately instead of meeting them at the gate:
 | `src/cli.test.ts:931-956` (`devRunSlot`) | `AGENTS.md`'s documented option list is compared to `ACCEPTED_ARGUMENTS` at run time. **`ABC-065`'s own board row predicted this exact failure: *"the failure that arrives the day `EPIC-006` adds an option reds with `expected 3 to be greater than or equal to 4`"*** |
 | `src/cli.test.ts:383` | `--difficulty 3` is currently a **rejection** fixture. It becomes an accepting one; the rejection fixture must be replaced with a token that is still unrecognised |
 | `ABC-042` `A6`'s scope table | its `"anything else, including --difficulty"` row is superseded by this ticket and must be annotated on that merged page, not silently contradicted |
+
+*(Added 2026-10-12 by BA/PM, subtask `bapm-amend-ABC-101`, after the build met them.)* The build met
+three more guards. All of them are now named here:
+- **`src/engine.test.ts` `ABC-086` `A5`(i) reds, and it is re-pinned, not loosened.** The pin is the
+  literal `createEngine({ budgetMs: DEFAULT_BUDGET_MS })` in `src/cli.ts`. See `ABC-086` `A5`(i′) for
+  the four assertions, and `A9` above for the one-row allowance.
+- **`ABC-061` `A2`/`A3`'s whole-object expectations gain `difficulty: 3`.** The criteria compare
+  the whole resolved object per argv, so a new field must appear in every expectation. This makes the
+  rows stricter: the default level is now pinned on all six argvs, `random` on both outcomes. `A3`
+  still asserts colour and orientation together. `ABC-061` `A5` ("`ACCEPTED_ARGUMENTS` unchanged")
+  reads `ABC-061`'s own delivered diff, not later ones.
+- **`ABC-042` `A8`'s numeric-literal transcription gains `32` in `src/cli.ts` and `2`–`5` in
+  `src/cli-options.ts`.** `32` is the seed range's exponent (`ADR-0037` D3). `1`–`5` are the
+  `Difficulty` ordinals, and `3` is also the default. None of them is a count of rows, which is what
+  `A8` decides. The transcription is built to grow one explained number at a time. **Both lists stay
+  exact (`toEqual`), each new number with its meaning in the comment.** `3` happens to equal
+  `STATUS_ROWS`. `A8` reads meaning, not value, and the comment states the meaning.
 
 ## Dependencies
 
@@ -391,3 +431,31 @@ board row and front matter are the Orchestrator's to sync. Readings and commands
 | 8 | size assigned | ✅ `M` |
 | 9 | priority assigned | ✅ **`P1`** (the trigger fired) |
 | 10 | no major unresolved blocker | ✅ *(was ⚠️⚠️)* |
+
+## Amendment — 2026-10-12 (BA/PM, task `wave-2026-09-25`, subtask `bapm-amend-ABC-101`)
+
+The build stopped at `ABC-086` `A5`(i) (SE notes `…57bfba6d`, `…443a041f`, branch
+`grugops/ABC-101-difficulty-selection`). These rulings are dated, append-only and open. The reasons are in
+`.grugops/context/bapm-amend-ABC-101/notes/`.
+1. **`ABC-086` `A5`(i) is re-pinned as (i′)** on that page. It is a criteria question, not a design one,
+   because the ADRs already rule the construction. It is not a loosening.
+2. **`A9` is widened by `src/engine.test.ts`, one row plus its imports.**
+3. **`A7` is read in two halves:** code 0, added lines 0, and the two older `ABC-042` comment hits
+   tolerated by name.
+4. **`ABC-042`'s page now points here** for its `--difficulty` refusal row, out-of-scope bullet and
+   `A6`(iii) child.
+5. **The guards that moved without being named** (`ABC-061` `A2`/`A3`, `ABC-042` `A8`) are allowed
+   moves. They are now named under the guard table.
+
+**DoR, re-scored at this hop: 10 of 10. MET.** Items 2, 4, 5 and 10 were re-read. The rest stand as of
+the 2026-10-12 re-score.
+
+| # | item | verdict |
+|---|---|---|
+| 2 | scope and out-of-scope clear | ✅ the stale "reaches no engine" bullet is annotated as superseded |
+| 4 | acceptance testable and measurable | ✅ `A7` has two instruments with the base hits named. `A9` names the one row and how to read it |
+| 5 | dependencies known | ✅ adds `ABC-086` `A5`(i′). The `AGENTS.md` line is the Scribe's, read under `A6` |
+| 10 | no major unresolved blocker | ✅ the `A5`(i) red is ruled. Nothing is open for Architect/Design or the owner |
+
+**Size `M` and priority `P1` hold.** The SE's resume adds one test row. The front matter
+(`status: backlog`, `P2`) is still stale and is the Orchestrator's to sync.
