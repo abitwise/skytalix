@@ -491,6 +491,26 @@ one test file, its QE hop's `N8-LANE` reading follows them.
   - Security/NFR: where the read lives. Either amend bar 4, which is (b1), or use a holder module, which is (b2).
   - BA/PM and QE: how the four substituted-engine and real-search Givens meet a book that answers first.
 
+**2026-10-12, Software Engineer, the wiring hop** (subtask `wire-ABC-095`). `main` `0974102f` was merged in at
+`75606020` (no rebase), and the code is at `09740ea4`. It was built to this page as amended below, to `ADR-0037`
+§ Addendum R1–R3, `ADR-0036` § S1, and S3 items 2–8. No ruling was weakened. Readings, plants, clause (b) and
+the S3 self-check: `.grugops/context/wire-ABC-095/notes/` (`…c2673608`, `…adc2b5bb`, `…a045086f`, `…bd2ae8d8`).
+
+| criterion | state | reading |
+|---|---|---|
+| `A1` | met | `src/book-engine.test.ts`: inner seam called 0 times on a book hit |
+| `A2` | **NOT READ, so not met** | no quiet window in 15 min: a foreign vitest at every poll. Not estimated. Instrument: `probe/time.ts cold-hit` |
+| `A3` | met | the inner seam is called once, with 0 stderr writes and 0 warnings. The warm miss bar (R3) is **NOT READ**, as for `A2` |
+| `A4` | met | two real frames across the leave-book ply |
+| `A5` | met | game half: 10 inner calls, 1 warning. Stream half (`CLI_DEEP`, book-absent copy): stderr is exactly the warning line, 0 occurrences of it on stdout, the session ends on `quit`, exit 0 |
+| `A6` | met | 0 lines in engine, search, evaluation, ordering, TT, levels, time budget, `turn-loop.ts`, `book.ts` and `data/` |
+| `A7` | met | `engine:` is the only changed line inside `runTurnLoop({…})`; `book` is built with `read: readBookFile`, a stderr `warn` and `Math.random`. `CLI_DEEP`: the reply to `e2e4` is one of the book's entries. **The child row alone does not red an unwired build** (the search's reply is also a book move). The pin and the re-targeted children do |
+
+`ABC-119` `A1`/`A3`/`A4` and its default row run on the real, byte-verified, book-absent `mkdtemp` copy, and
+`A3`(iv) asserts the warning present exactly once. Gates: lint, typecheck and build exit 0; `npm test` 58 files,
+1780 passed, 0 skipped; skip integrity clean; `CLI_DEEP` 9/9. **Open:** `A2` and the warm miss bar (timing, quiet
+host); QE's `N8-LANE` costs and `ABC-119` `A6`; S3 at `In Security/NFR`; the owner's UAT word.
+
 ## Amendment and re-score — 2026-10-12 (wiring rulings)
 
 BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5cc`. Rulings applied:
