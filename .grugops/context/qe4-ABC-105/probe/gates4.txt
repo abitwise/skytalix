@@ -1,0 +1,41 @@
+qe4-ABC-105 gates at grugops/qe4-ABC-105 = cfcd59af (code 8fd0c233), worktree ../wt-qe4-ABC-105, 2026-10-12T10:10:39Z..10:11:05Z
+npm run -s lint: exit 0 (Checked 109 files. No fixes applied.)
+npm run -s typecheck: exit 0
+npm run -s build: exit 0
+npm test: exit 0; tail:
+ Test Files  57 passed (57)
+      Tests  1775 passed (1775)
+   Start at  13:10:49
+   Duration  5.62s (transform 0ms, setup 0ms, import 5.69s, tests 2.81s, environment 3ms)
+
+.test-results/last-run.json (deleted before the run):
+{"success":true,"files":57,"numTotalTests":1775,"numPassedTests":1775,"numFailedTests":0,"numPendingTests":0,"numTodoTests":0}
+node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count 0: No findings. exit 0
+npx vitest run tools/grugops/qe-hop-integrity.test.ts: 1 file, 32 passed
+node tools/grugops/qe-hop-integrity.js --sweep: exit 1
+QE-hop integrity sweep of the "## Done" rows in plans/board.md.
+Done rows: 132
+Pre-cutover (out of scope; .grugops/qe-cutover-2026-08-17.txt): 38
+Covered (qe-e2e): 77
+  ABC-010 ABC-031 ABC-032 ABC-033 ABC-034 ABC-035 ABC-036 ABC-037 ABC-043 ABC-045 ABC-046 ABC-050 ABC-051 ABC-053 ABC-054 ABC-055 ABC-057 ABC-058 ABC-059 ABC-069 ABC-075 ABC-076 ABC-077 ABC-078 ABC-079 ABC-080 ABC-081 ABC-082 ABC-083 ABC-084 ABC-086 ABC-087 ABC-093 ABC-094 ABC-102 ABC-103 ABC-104 ABC-106 ABC-107 ABC-109 ABC-114 ABC-115 ABC-116 ABC-117 ABC-118 ABC-119 ABC-120 ABC-121 ABC-122 ABC-123 ABC-124 ABC-125 ABC-126 ABC-127 ABC-128 ABC-129 ABC-130 ABC-131 ABC-132 ABC-133 ABC-134 ABC-135 ABC-136 ABC-137 ABC-138 ABC-139 ABC-140 ABC-141 ABC-142 ABC-143 ABC-144 ABC-145 ABC-148 ABC-149 ABC-151 ABC-152 ABC-153
+Covered (security-nfr substitute — docs-only rule): 2
+  ABC-072: .grugops/context/secnfr-ABC-072/notes/20261010T150119Z-security-nfr-decision-abc072-pass-with-risks-limb-list-widened-readings-upheld-f-072-1-29849eeb.md
+  ABC-147: .grugops/context/secnfr-ABC-147-review/notes/20261011T111823Z-security-nfr-decision-abc147-review-verdict-pass-with-gaps-ff01ca7a.md
+In-scope findings: 15
+  ABC-038: no QE verdict note was found.
+  ABC-044: no QE verdict note was found.
+  ABC-060: no QE verdict note was found.
+  ABC-070: no QE verdict note was found.
+  ABC-073: no QE verdict note was found.
+  ABC-074: no QE verdict note was found.
+  ABC-085: no QE verdict note was found.
+  ABC-092: no QE verdict note was found.
+  ABC-100: no QE verdict note was found.
+  ABC-108: no QE verdict note was found.
+  ABC-110: no QE verdict note was found.
+  ABC-111: no QE verdict note was found.
+  ABC-112: no QE verdict note was found.
+  ABC-113: no QE verdict note was found.
+  ABC-150: no QE verdict note was found.
+Malformed front matter (UNKNOWN - verify): 0
+This is a completeness check on the record: a note's presence is not proof that a QE hop ran.

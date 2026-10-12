@@ -1,0 +1,30 @@
+[old test file] none (unmutated tool)	tests 28/28	red 0
+[old test file] A3-refs-only (coverage() only)	tests 27/28	red 1
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+[old test file] A3-refs-only-full	tests 24/28	red 4
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) ABC-062 exits 0 on the committed snapshot, and 1 with it removed: the folder does not name it
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) ABC-073 exits 1 (its verdict sits in a folder naming ABC-072), and 0 only if grandfathered
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag under --ticket only malformed notes in a folder naming T are reported
+[old test file] symlink-notesdir-follow	tests 28/28	red 0
+[old test file] symlink-notesdir-refusal-only	tests 28/28	red 0
+[old test file] symlink-notefile-follow	tests 28/28	red 0
+[new test file] none (unmutated tool)	tests 32/32	red 0
+[new test file] A3-refs-only (coverage() only)	tests 29/32	red 3
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+[new test file] A3-refs-only-full	tests 26/32	red 6
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) ABC-062 exits 0 on the committed snapshot, and 1 with it removed: the folder does not name it
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) ABC-073 exits 1 (its verdict sits in a folder naming ABC-072), and 0 only if grandfathered
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag under --ticket only malformed notes in a folder naming T are reported
+[new test file] symlink-notesdir-follow	tests 31/32	red 1
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at the notes/ directory with exit 2 and does not follow it
+[new test file] symlink-notesdir-refusal-only	tests 31/32	red 1
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at the notes/ directory with exit 2 and does not follow it
+[new test file] symlink-notefile-follow	tests 31/32	red 1
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at a note file with exit 2 and does not follow it
+restored; cmp pristine == tool: True

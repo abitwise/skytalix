@@ -1,0 +1,4 @@
+real notes tree: /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/q4/plant/.grugops/context holds 2641 note files
+[old] tests 32/32 red 0 | readNotes calls 26: unfiltered on the real tree 5, filtered on the real tree 11, on synthetic trees 10 | real note files read 13289 = 5.032 x the tree
+[new] tests 32/32 red 0 | readNotes calls 23: unfiltered on the real tree 2, filtered on the real tree 11, on synthetic trees 10 | real note files read 5366 = 2.032 x the tree
+restored to the new pair; tool == 8fd0c233: True ; test == 8fd0c233: True

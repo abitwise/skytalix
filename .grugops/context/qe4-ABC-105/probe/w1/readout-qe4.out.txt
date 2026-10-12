@@ -1,0 +1,47 @@
+round	cond	cpu	wall	files	tests	load_b	load_a	foreign_b	foreign_a	therm	power	sampler_bad	status	kept
+0	B	0.62	0.5	1	1	4.87	4.87	0	0	0->0	AC Power	0	ok	round0
+0	H	1.12	1	1	32	4.87	4.87	0	0	0->0	AC Power	0	ok	round0
+0	T	0.65	0.51	1	1	4.87	4.87	0	0	0->0	AC Power	0	ok	round0
+1	H	0.95	0.7	1	32	4.87	4.87	0	0	0->0	AC Power	0	ok	ok
+1	T	0.6	0.44	1	1	5.28	5.28	0	0	0->0	AC Power	0	ok	ok
+1	B	0.55	0.42	1	1	5.28	5.28	0	0	0->0	AC Power	0	ok	ok
+2	T	0.57	0.42	1	1	5.28	5.28	0	0	0->0	AC Power	0	ok	ok
+2	B	0.58	0.43	1	1	5.28	5.28	0	0	0->0	AC Power	0	ok	ok
+2	H	0.94	0.7	1	32	5.28	5.28	0	0	0->0	AC Power	0	ok	ok
+3	B	0.61	0.45	1	1	5.28	5.28	0	2	0->0	AC Power	0	ok	DISCARD:foreign
+3	H	1.06	0.82	1	32	5.28	5.25	2	2	0->0	AC Power	1	ok	DISCARD:foreign,sampler
+3	T	0.63	0.47	1	1	5.25	5.25	2	2	0->0	AC Power	1	ok	DISCARD:foreign,sampler
+4	H	1.08	0.81	1	32	5.25	5.25	2	2	0->0	AC Power	1	ok	DISCARD:foreign,sampler
+4	T	0.68	0.52	1	1	5.25	5.25	2	2	0->0	AC Power	1	ok	DISCARD:foreign,sampler
+4	B	0.67	0.5	1	1	5.25	5.25	2	2	0->0	AC Power	1	ok	DISCARD:foreign,sampler
+5	T	0.62	0.47	1	1	5.25	5.25	2	1	0->0	AC Power	1	ok	DISCARD:foreign,sampler
+5	B	0.62	0.45	1	1	5.25	5.07	1	1	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+5	H	1.08	0.81	1	32	5.07	5.07	1	1	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+6	B	0.64	0.47	1	1	5.07	5.07	1	1	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+6	H	1.12	0.84	1	32	5.07	5.07	1	1	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+6	T	0.62	0.48	1	1	5.07	5.07	1	1	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+7	H	1.05	0.77	1	32	5.07	5.07	1	4	0->0	AC Power	3	ok	DISCARD:foreign,sampler
+7	T	0.6	0.46	1	1	5.07	5.07	4	5	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+7	B	0.6	0.44	1	1	5.07	5.07	5	5	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+8	T	0.61	0.45	1	1	5.07	5.07	5	5	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+8	B	0.6	0.44	1	1	5.07	5.07	5	5	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+8	H	1.04	0.78	1	32	5.07	5.07	5	5	0->0	AC Power	2	ok	DISCARD:foreign,sampler
+
+scored rounds 2 [1, 2]; discarded rounds [3, 4, 5, 6, 7, 8]
+
+[CPU user+sys] n=2 k=1
+  base B median 0.565 s; H median 0.945 s; T median 0.585 s
+  twin T-B sorted: -0.01, +0.05
+  twin median +0.020 s (+3.54 % of base), sign 1/2 (two-sided p 1.000), R 0.050 s -> admissible False
+  treatment H-B sorted: +0.36, +0.40
+  treatment median +0.380 s, interval x(k)..x(n+1-k) = +0.360..+0.400
+
+  provisional F = 16 % x base CPU 0.565 = 0.090 s; 650 ms >= F: True
+  resolves 650 ms (R <= b): True; STATE at 650 ms CPU: INADMISSIBLE (no state)
+
+[wall] n=2 k=1
+  base B median 0.425 s; H median 0.700 s; T median 0.430 s
+  twin T-B sorted: -0.01, +0.02
+  twin median +0.005 s (+1.18 % of base), sign 1/2 (two-sided p 1.000), R 0.020 s -> admissible True
+  treatment H-B sorted: +0.27, +0.28
+  treatment median +0.275 s, interval x(k)..x(n+1-k) = +0.270..+0.280

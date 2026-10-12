@@ -1,0 +1,10 @@
+A3-refs-only-full	tests 24/28	red 4	sweep exit 1 [132 / 38 / 83 / 5 / 6]
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) ABC-062 exits 0 on the committed snapshot, and 1 with it removed: the folder does not name it
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) ABC-073 exits 1 (its verdict sits in a folder naming ABC-072), and 0 only if grandfathered
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag under --ticket only malformed notes in a folder naming T are reported
+ticket-filter-removed-only	tests 27/28	red 1	sweep exit 1 [132 / 38 / 77 / 2 / 15]
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag under --ticket only malformed notes in a folder naming T are reported
+A3-refs-only	tests 27/28	red 1	sweep exit 1 [132 / 38 / 83 / 5 / 6]
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+restored: tests 28/28 red 0; cmp pristine == tool: True

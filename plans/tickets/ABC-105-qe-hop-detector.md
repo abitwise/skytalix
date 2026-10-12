@@ -326,3 +326,156 @@ Against `agent-factory/checklists/definition-of-ready.md` (10 items). **Result: 
   enough"*) acknowledges the ceiling; answer 3 becomes `A9`; `A4`'s "0" struck.
 - **2026-10-12 QE pre-build re-check** (`qe-recheck-ABC-105`, `…72ae8565`, `…298a669e`) — BUILDABLE WITH
   PAGE AMENDMENTS, 2 HIGH / 6 MEDIUM / 7 LOW; Ready → Backlog. Folded by this amendment.
+
+## Delivery
+
+Software Engineer, 2026-10-12 (subtask `ticket-to-pr-ABC-105`). Branch `grugops/ABC-105-qe-hop-integrity`,
+code commit `ada10423`, base `aeeba067` (`d64f6d73` plus the Orchestrator's pull; `## Done` and the context tree
+are byte-equal). The detail is in `.grugops/context/ticket-to-pr-ABC-105/notes/` (`…d53d8ab6`, `…dd4973a7`,
+`…d21b9cec`, `…59fc8af7`).
+
+- **Built:** `tools/grugops/qe-hop-integrity.js` (§ Scope 1–5), the snapshot `.grugops/qe-cutover-2026-08-17.txt`
+  (38 ids, 304 B, from `git show 9998a544:plans/board.md` through the tool's own `parseDone`; the one-off
+  command is in `…d21b9cec`), and `tools/grugops/qe-hop-integrity.test.ts` (**28 tests, 0 spawns**).
+- **Two seam additions, both in-memory only.** `main`'s options also take `root`, so `A6` can use synthetic
+  trees: `process.chdir` is unavailable in a vitest worker. `readNotes` is exported for `A2`/`A3`'s
+  real-data premises. The CLI has no way to supply either (`…dd4973a7`).
+- **`A4` at `ada10423`:** `132 Done rows · 38 pre-cutover · 77 covered (qe-e2e) · 2 covered (security-nfr
+  substitute) · 15 findings: ABC-038 044 060 070 073 074 085 092 100 108 110 111 112 113 150`, malformed 0,
+  exit **1**. This equals the `a37a4e12` row above, and an independent shell hand count agrees on every id.
+- **Classes of the 15** (from the board row, per `A4`; the tool does not classify):
+  - dropped/cancelled: `038 060 074 108 111 112`;
+  - owner-close: `092 100 150`;
+  - verified elsewhere: `073`;
+  - QE'd off-convention: `044 110 113` (own `ticket-to-pr-*`) and `070 085` (filed as `observation`);
+  - real miss: 0.
+- **`--ticket ABC-105` exits 0 today on QE's pre-build note `qe-recheck-ABC-105/…-72ae8565`**. That is the
+  `A7` ceiling, not a verdict. QE's post-build verdict should be filed under the convention.
+- **`A7`:** the header comment and `memory-bank/40-contributing.md` § Conventions carry the convention and the
+  ceiling. **No `AGENTS.md` edit** (24545 B); the pointer line is the Scribe's, after merge, if bytes can be
+  freed.
+- **Config:** `tsconfig.json` gets `allowJs` and one include, and `biome.json` gets one include, so the test is
+  typechecked and linted (`…d53d8ab6`).
+- **Gates:** lint, typecheck, build and `npm test` exit 0. 57 files / 1771 tests, `success: true`, skip count 0,
+  integrity `No findings.`
+- **0 `src/` files**, and the waiver reading is empty. No timing was read; `N8-LANE` is QE's.
+
+## QE
+
+QE/E2E, 2026-10-12 (subtask `qe-ABC-105`, post-build). Reviewed tip `60415a8a` (code `ada10423`, base `aeeba067`) on
+QE's own branch `grugops/qe-ABC-105`. Verdict note `.grugops/context/qe-ABC-105/notes/…-8094d5b1`; readings
+`…0ff9feb3`, plants `…bf59d633`, security/config/waiver `…3740506e`, timing `…7177253b`, commands `…2b14a4e1`.
+
+**Verdict: PASS_WITH_GAPS.** `A1`–`A9` and Test notes 1–5 are MET on QE's own readings; `N8-LANE` is MET.
+
+- **`A4`:** `--sweep` reads 132 / 38 / 77 / 2 / 15, exit 1; QE's independent Python hand count agrees on every
+  count and id. The snapshot equals the 38 `## Done` ids of `9998a544` by QE's own parse.
+- **`A3`:** the full refs-only plant turns `A3` red (4 tests); the exact-refs plant turns `A2`'s `ABC-076` red
+  (3 tests). **`QE-105-p` (MEDIUM, test-only):** a refs-only `coverage()` alone leaves `A3` green, because
+  `--ticket` reads only folders naming T; it false-passes 9 sweep findings and only `A5`'s synthetic negative
+  sees it. One unfiltered `coverage()` assertion on `ABC-062`/`ABC-073` closes it.
+- **`N8-LANE`:** narrow set H − B +0.475 s CPU (+0.460..+0.520), twin R 0.010 s, provisional `F` 0.092 s →
+  MET at 650 ms; load1 5.1–5.3 logged, not gated; 1 file, 0 spawns.
+- **Security** holds (no exec, no write, no network; symlinks refused at every level under the root — two
+  levels untested, `QE-105-q`; a symlinked root is followed, `QE-105-r`). **Config** acceptable: `tsc` gains
+  exactly the tool and its test; a sibling `.d.ts` is the narrower option (`QE-105-u`).
+- **UAT:** the waiver measurement is empty, but `ABC-122`'s `tools/` change was not waived — the Orchestrator's
+  or owner's call (`QE-105-v`).
+- **`A7` ceiling, observed:** `--ticket ABC-105` now exits 0 naming both QE's post-build verdict and the
+  pre-build `qe-recheck-ABC-105/…-72ae8565`; the tool cannot tell them apart.
+
+## Fix (2026-10-12)
+
+Software Engineer, subtask `fix-ABC-105`. Branch `grugops/fix-ABC-105` off `a0016dbb`; code `4bf6f3ee`. Test-only:
+`tools/grugops/qe-hop-integrity.js` is `cmp` 0 to `60415a8a`. Notes `.grugops/context/fix-ABC-105/notes/`.
+
+- **`QE-105-p` closed.** `coverage()` over every real note (no `--ticket` folder filter) must read `ABC-062`
+  (snapshot minus `ABC-062`) and `ABC-073` as `finding`, and `--sweep` must list `ABC-073`. QE's `coverage()`-only
+  refs-only plant now turns 3 red, including `A3`'s own block (was 1, `A5` only).
+- **`QE-105-q` closed.** A symlinked `notes/` directory and a symlinked note file each exit 2; removing either check
+  turns 1 test red (was 0).
+- **`QE-105-t`.** The plant text is recorded verbatim in `…5c1e7a20`.
+- **Gates.** 57 files / 1775 tests (32 in this file), `success: true`, skip 0, integrity `No findings.` `QE-105-r` is
+  left open (it is a tool behaviour change).
+
+## QE2 (2026-10-12)
+
+QE/E2E, subtask `qe2-ABC-105`, re-checked `grugops/fix-ABC-105` (tip `cf353820`, code `4bf6f3ee`) on QE's own
+branch `grugops/qe2-ABC-105`. Verdict `.grugops/context/qe2-ABC-105/notes/…-3bc30c08`; readings `…3b7da581`.
+
+- **`QE-105-p` CLOSED.** QE's own `coverage()`-only plant text: new file 3 red (`A3` unfiltered `coverage()`,
+  `A9` `--sweep` lists ABC-073, `A5`), old file 1 red. Unmutated 32/32.
+- **`QE-105-q` CLOSED.** QE's `notes/`-dir and note-file symlink plants: 1 red each (old file 0 each).
+- **Scope and gates.** Test file only; the tool `cmp` 0 to `60415a8a`; 1 file, 0 spawns. Lint/typecheck/build/`npm test`
+  exit 0, 57 files / 1775 tests, `success: true`, skip 0, integrity `No findings.`; `--sweep` 132/38/77/2/15 exit 1.
+- **`QE-105-x` (LOW, open):** the new tests add 2 whole-tree reads of the real notes (3 → 5); not re-timed.
+  `-r`/`-s`/`-u` LOW and `-w` INFO stay open. UAT waived by the owner (not re-litigated).
+
+## N8-LANE re-read (2026-10-12, QE3)
+
+QE/E2E, subtask `qe3-ABC-105-lane`, timing only, width 1. It re-reads `N8-LANE` at `db1cfb6c` using
+`qe-ABC-105`'s method unchanged. The decision is `.grugops/context/qe3-ABC-105-lane/notes/…-15ca6e06`, and the
+readings are in `…fc1f4a7c`.
+
+- **NOT MET at 650 ms CPU on the narrow set.** H − B reads **+0.690 s** (+0.670..+0.700). Twin R is 0.020 s and
+  the twin median is +0.000 s, sign 2/8, so the reading is admissible. The file is over the bound by +0.040 s at
+  the median. Load1 read 3.08–3.28; it was logged and not gated. Thermal was 0, power was AC, and there were 0
+  foreign runners.
+- **Driver:** the file's 5 whole-tree reads of the real notes account for 499.5 of 538.3 in-worker ms.
+  - `A4`'s three `--sweep` reads: 282.0 ms.
+  - The fix's `A9` `--sweep`: 109.4 ms.
+  - The fix's `A3` unfiltered `coverage()`: 108.1 ms.
+- **The earlier MET does not carry.** `qe-ABC-105` read +0.475 s, MET, at `60415a8a`, before those two reads
+  existed.
+- **`QE-105-x`** is now a measured breach; QE suggests MEDIUM. No fix was made here. The severity, and what to do
+  about it, are the Orchestrator's and the owner's to rule.
+- **Windows that were not graded.** Window 1 was inadmissible: the twin read +1.74 %, above the 1.5 % limit.
+  Window 2 was void: a foreign vitest overlapped every round. Both are kept in `probe/`.
+
+## Fix 2 (2026-10-12)
+
+Software Engineer, subtask `fix2-ABC-105`, for QE3's `N8-LANE` NOT MET. The branch is `grugops/fix2-ABC-105`,
+off `48a78f08`, and the code commit is `8fd0c233`. The notes are in `.grugops/context/fix2-ABC-105/notes/`. **No
+timing was read.** QE re-times.
+
+- **Whole-tree reads of the real notes: 5 → 2**, counted by instrumenting a scratch copy of `readNotes`.
+  - **One plain `--sweep`, with nothing injected.** This is the real end-to-end path, and `A4` and `A9` share it.
+  - **One unfiltered `readNotes`.** `A3` uses it. `A4`'s `--json` and all-`Done` runs also use it, through the
+    new seam.
+- **The tool changes in two lines.** `main`'s in-memory options also take `notes` (pre-read `Note[]`), like `root`
+  and `snapshotIds`. No argv token reaches it, and the decision is recorded in `…9c628f28`. Every other byte is
+  unchanged.
+- **No catch is lost.** All 23 recorded plants were re-run outside the repo, with the plant text loaded verbatim
+  from the probes of QE, QE2 and fix. For each plant, the old pair (`db1cfb6c` test with `60415a8a` tool) and the
+  new pair turn **the same tests red, by name**, on 23 of 23. The unmutated tool reads 32/32. The table is in
+  `…c1259095`.
+- **Gates.** 57 files / 1775 tests (32 in this file), `success: true`, skip 0, integrity `No findings.`;
+  `--sweep` reads 132/38/77/2/15, exit 1.
+
+## QE4 (2026-10-12)
+
+QE/E2E, subtask `qe4-ABC-105`, re-checked `grugops/fix2-ABC-105` (tip `cfcd59af`, code `8fd0c233`) on QE's own branch
+`grugops/qe4-ABC-105`, width 1. Verdict `.grugops/context/qe4-ABC-105/notes/…-6a647762`; readings `…6df3826a` (plants,
+seam, reads, gates) and `…622677c5` (timing).
+
+**Verdict: PASS_WITH_GAPS. `N8-LANE` is NOT READ at `8fd0c233`, so QE4 does not lift the merge hold.**
+
+- **No catch lost.** All 23 recorded plants turn the same tests red, by name, in the old and new files. Two QE4 plants
+  that break only `main`'s `--sweep` read go 1 red in the new file and 0 in the old: the plain `plainSweep()` catches
+  what the injected `--json` would hide. Each single broken memo goes 1 red (`A4`).
+- **Seam.** The tool diff is the JSDoc type plus one read line. No argv path reaches `notes`. Through the CLI, a missing
+  context dir exits 2 and an empty one exits 1. No criterion is weakened.
+- **Whole-tree reads: 2** (old 5), by QE's own instrumentation.
+- **`N8-LANE`.**
+  - Window 1 was void: the grugops kit's vitest ran in another session.
+  - Window 2, the one pre-registered re-attempt, was inadmissible: twin +1.75 % against a 1.5 % limit.
+  - No grade and no estimate. QE3's NOT MET was for `db1cfb6c`.
+- **Gates** at the tip are green: 57 files / 1775 tests, `success: true`, skip 0, integrity `No findings.`; `--sweep`
+  132/38/77/2/15, exit 1.
+- **Gaps.**
+  - `QE-105-x`: OPEN, now NOT READ.
+  - `-y` (LOW): the stale JSDoc "neither".
+  - `-z` (LOW): no positive control on the whole-tree reads. An unfiltered-only `readNotes` drop is 0 red in the old
+    and new files alike.
+  - `-aa` (INFO): seam behaviour that exists in memory only.
+  - `-ab` (INFO): the 1.5 % twin limit is under the 10 ms CPU tick.

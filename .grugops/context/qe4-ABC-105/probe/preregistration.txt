@@ -1,0 +1,34 @@
+qe4-ABC-105 N8-LANE re-read: PRE-REGISTRATION, written 2026-10-12T10:11:31Z, BEFORE any window is started. Width 1 (QE4 is the only hop).
+
+What is read: the narrow set tools/grugops/qe-hop-integrity.test.ts, H = the file at 8fd0c233
+(sha256 6b8d03bd58e9e79bb3930827a5bf58a1ff9c6ffa4ffc85ca288c17340e772b2a, cmp 0 to git show 8fd0c233:<file>;
+the branch tip cfcd59af holds the same bytes), 32 tests.
+Arms: three out-of-tree 'git archive cfcd59af' trees under the session scratchpad (/private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/q4/lane/arms),
+shared node_modules symlinked; 2641 note files each.
+  B = placeholder.test.ts (one assertion; cmp 0 to qe-ABC-105's and qe3's) at the path; T = twin of B (diff -r identical); H = the file.
+Method: QE3's, unchanged.
+  harness  secnfr-ABC-144-window-b/probe/lane144b.mjs IN PLACE, sha256 652b779305bca2b0fbf39ec1974de4b914d9b06e55829b2923fc64401ba80c7c
+  gate     secnfr-ABC-152-window/probe/gate.sh IN PLACE, sha256 5335905acbe8c97804458b11091405474bd3df7028b13c6b78b7da8133352b6f
+           settle: thermal 0, no vitest runner process (NOFOREIGN 1), 4 x 15 s, MAXLOAD="" (load1 logged, not gated), GMAX 45 min
+  window   probe/window-qe4.sh = qe3's window-qe3.sh with CTX, TAG, console name and the arm-tip comment changed;
+           CONDS=B,H,T ROUNDS=9 (round 0 discarded, n = 8) rotated, GAP=0; load1/thermal/foreign/power logged before and after every run;
+           5 s sampler throughout (foreign vitest other than this lane's file; oeselg-labs/platform lines).
+  readout  probe/readout-qe4.py = qe3's readout-qe3.py with the TSV name changed (H count 32 unchanged).
+Void / admissible / grade, fixed now:
+  - A round is discarded on: status != ok, counts != (1,1)/(1,32), foreign runner before/after, thermal != 0, power != AC,
+    or any 5 s sampler row in [start-5 s, end+5 s] with a foreign vitest (e.g. the grugops kit's suite in another session),
+    an oeselg-labs/platform (repos/shared) process, thermal != 0 or not-AC.
+  - A window with ANY discarded round is VOID (n must be 8; no grading on n < 8). A gate timeout (45 min) is VOID.
+  - A non-void window is ADMISSIBLE iff the twin T-B CPU median is <= 1.5 % of the B median AND its sign test is at chance (two-sided p > 0.05).
+  - Grade at 650 ms CPU on an admissible window, as QE3 did: NOT MET if the lower end x(2) > 0.650 s; else MET if twin R <= 0.650 s
+    and the H-B median <= 0.650 s (and provisional F = 16 % x B median <= 0.650 s); else NOT MET if R <= 0.650 s; else UNRESOLVED.
+Attempts: ONE window (w1). If w1 is void or inadmissible: ONE re-attempt (w2) under exactly this rule. No w3.
+  If w2 is also void or inadmissible: N8-LANE is NOT READ by this hop. No pooling of windows, ever. No estimate.
+  A void/inadmissible window is kept in probe/ and reported as read, never graded.
+
+ADDENDUM 2026-10-12T10:13:14Z, after window 1, BEFORE window 2 is started (no rule is changed):
+Window 1 (gate 10:11:42->10:12:27Z, lane 10:12:27-10:12:50Z) is VOID: the grugops kit's own 'vitest run' under
+/Users/olgeroeselg/Projects/public/grugops (another session) started at 10:12:41Z (first sampler row with a foreign runner)
+and overlapped rounds 3-8; the readout discards 6 of 8 (n = 2). Under the rule above a window with any discarded round
+is VOID; its summary numbers are NOT used and are not pooled with anything. Window 2 is the ONE re-attempt, under the same
+rule, same arms, same harness, gate and readout. If window 2 is void or inadmissible, N8-LANE is NOT READ by this hop; no window 3.

@@ -1,0 +1,37 @@
+# n8-qe3: npx vitest run tools/grugops/qe-hop-integrity.test.ts --reporter=default --reporter=json --outputFile.json=.test-results/last-run.json | conds B,H,T | rounds 9 | gap 0s -> /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe3-105-lane/n8-qe3.tsv
+0 B cpu 0.61 wall 0.62 par 0.984 1 1 load1 3.08 foreign 0 limit none therm 0->0 ok
+0 H cpu 1.32 wall 1.18 par 1.119 1 32 load1 3.16 foreign 0 limit none therm 0->0 ok
+0 T cpu 0.58 wall 0.42 par 1.381 1 1 load1 3.16 foreign 0 limit none therm 0->0 ok
+1 H cpu 1.26 wall 0.98 par 1.286 1 32 load1 3.16 foreign 0 limit none therm 0->0 ok
+1 T cpu 0.59 wall 0.43 par 1.372 1 1 load1 3.16 foreign 0 limit none therm 0->0 ok
+1 B cpu 0.56 wall 0.41 par 1.366 1 1 load1 3.16 foreign 0 limit none therm 0->0 ok
+2 T cpu 0.56 wall 0.41 par 1.366 1 1 load1 3.14 foreign 0 limit none therm 0->0 ok
+2 B cpu 0.57 wall 0.42 par 1.357 1 1 load1 3.14 foreign 0 limit none therm 0->0 ok
+2 H cpu 1.27 wall 0.98 par 1.296 1 32 load1 3.14 foreign 0 limit none therm 0->0 ok
+3 B cpu 0.58 wall 0.43 par 1.349 1 1 load1 3.14 foreign 0 limit none therm 0->0 ok
+3 H cpu 1.27 wall 0.98 par 1.296 1 32 load1 3.14 foreign 0 limit none therm 0->0 ok
+3 T cpu 0.58 wall 0.42 par 1.381 1 1 load1 3.14 foreign 0 limit none therm 0->0 ok
+4 H cpu 1.25 wall 0.98 par 1.276 1 32 load1 3.13 foreign 0 limit none therm 0->0 ok
+4 T cpu 0.58 wall 0.43 par 1.349 1 1 load1 3.13 foreign 0 limit none therm 0->0 ok
+4 B cpu 0.56 wall 0.41 par 1.366 1 1 load1 3.13 foreign 0 limit none therm 0->0 ok
+5 T cpu 0.56 wall 0.42 par 1.333 1 1 load1 3.13 foreign 0 limit none therm 0->0 ok
+5 B cpu 0.56 wall 0.41 par 1.366 1 1 load1 3.13 foreign 0 limit none therm 0->0 ok
+5 H cpu 1.25 wall 0.98 par 1.276 1 32 load1 3.13 foreign 0 limit none therm 0->0 ok
+6 B cpu 0.58 wall 0.43 par 1.349 1 1 load1 3.28 foreign 0 limit none therm 0->0 ok
+6 H cpu 1.25 wall 0.98 par 1.276 1 32 load1 3.28 foreign 0 limit none therm 0->0 ok
+6 T cpu 0.57 wall 0.42 par 1.357 1 1 load1 3.28 foreign 0 limit none therm 0->0 ok
+7 H cpu 1.24 wall 0.96 par 1.292 1 32 load1 3.28 foreign 0 limit none therm 0->0 ok
+7 T cpu 0.58 wall 0.43 par 1.349 1 1 load1 3.28 foreign 0 limit none therm 0->0 ok
+7 B cpu 0.58 wall 0.43 par 1.349 1 1 load1 3.28 foreign 0 limit none therm 0->0 ok
+8 T cpu 0.57 wall 0.41 par 1.39 1 1 load1 3.18 foreign 0 limit none therm 0->0 ok
+8 B cpu 0.57 wall 0.41 par 1.39 1 1 load1 3.18 foreign 0 limit none therm 0->0 ok
+8 H cpu 1.25 wall 0.97 par 1.289 1 32 load1 3.18 foreign 0 limit none therm 0->0 ok
+# n8-qe3 summary: n = 8 scored rounds, round 0 discarded, 0 harness errors
+B	cpu 0.57	wall 0.41	par 1.361	load1 3.15	load1>8 0/8	files 1	tests 1
+H	cpu 1.25	wall 0.98	par 1.288	load1 3.15	load1>8 0/8	files 1	tests 32
+  H-B cpu	median 0.690 (121.05 % of base cpu)	sign 8/8	k 2	interval [0.670, 0.700]	R 0.700
+  H-B wall	median 0.560	sign 8/8	k 2	interval [0.550, 0.570]	R 0.570
+T	cpu 0.57	wall 0.42	par 1.361	load1 3.15	load1>8 0/8	files 1	tests 1
+  T-B cpu	median 0.000 (0.00 % of base cpu)	sign 2/8	k 2	interval [-0.010, 0.020]	R 0.020
+  T-B wall	median 0.000	sign 3/8	k 2	interval [-0.010, 0.020]	R 0.020
+twin R: cpu 0.020 s, wall 0.020 s. Admissible = twin cpu median <= 1.5 % of base with sign at chance (ADR-0035 d1).
