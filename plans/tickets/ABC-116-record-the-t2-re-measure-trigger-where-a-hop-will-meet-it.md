@@ -339,3 +339,205 @@ supersede it**. Where they conflict, this section wins.
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P2`. The `P1` trigger (an observed un-re-measured child change) has not fired |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Canonical `N8-SPAWN` row form (`A3`) — copy this row whole; fill only the angle brackets
+
+Written 2026-10-12 by the Software Engineer at the delivering hop (`ticket-to-pr-ABC-116`). The two
+trigger sentences are fixed text. A cut or a delivery that carries an `N8-SPAWN` row copies them
+unchanged and fills in only the readings and the fired / not-fired verdicts.
+
+> - **`N8-SPAWN`: `<n>` added children, `<ms>` charged.**
+>   **`T1` — a hop that changes the NUMBER of children re-measures both time clauses; the count pin forces the `N8_SPAWN` edit.** `T1` `<FIRED | NOT FIRED>`: `<reason>`.
+>   **`T2` — a hop that changes WHAT AN EXISTING CHILD DOES (its argv, its stdin script, its substitution hook or its settle) re-measures the per-child CPU clause on `src/cli.test.ts`, whether or not the count moves (`ADR-0035` decision 2: median, the twin's `R`, MET / NOT MET / UNRESOLVED against that set's `F`); the count pin cannot see it.** `T2` `<FIRED | NOT FIRED>`: `<reason>`.
+>   Ruling: `ADR-0017` decision 2; `plans/nfr-catalog.md` § `G-QE115-3`; carrier at the point of change: the comment on `ChildOptions` in `src/cli.test.ts` (`ABC-116`).
+
+## Delivery
+
+Software Engineer (Claude Opus 5.5), 2026-10-12, subtask `ticket-to-pr-ABC-116`, run at width 1.
+- **Branch.** `grugops/ABC-116-t2-carrier` from `main` @ `3c38a8ea` (the subtask frontmatter says
+  `cc2d4cdc`, which is the parent of `3c38a8ea`; `3c38a8ea` only moves the board and the queue).
+- **Commits.** The carrier commit is `9b8c38ec`. This section, the notes and the trace row follow it.
+- **Status.** Not pushed, not merged, and no column moved. **QE is owed.**
+- **Where the evidence is.** Readings: `.grugops/context/ticket-to-pr-ABC-116/notes/`. Raw TSV of
+  every timed run: `…/probe/a2-runs.tsv`.
+
+- **`A1`.** `grep -n "T2" src/cli.test.ts` hits `:322`, `:324`, `:330` and `:336`. All four are inside
+  the JSDoc on `interface ChildOptions` (`:321-346`, the interface at `:347`). The block states each
+  of the four parts:
+  - (i) argv / stdin script / substitution hook / settle, named as `args`/`productArgv`, `input`,
+    `hook` and `timeout`;
+  - (ii) the per-child CPU re-measure whether or not the count moves, on the narrow set, with the
+    median, the twin's `R`, the three states and decision 3's per-set `F` (named, no number);
+  - (iii) the count pin cannot see it;
+  - (iv) `ADR-0017` decision 2 and `plans/nfr-catalog.md`'s `G-QE115-3` section, both named.
+- **`A2` — measured at this hop; the readings are in note `…55c8efb6`.**
+  - **Mutant:** `black`'s `FIRST_LEGAL_ENGINE` hook deleted, one line.
+  - **Set-up:** base / mutant / identity twin, outside the repository, with `node_modules` symlinked.
+    `npx vitest run src/cli.test.ts` on vitest 4.1.11, 2 workers, module runner off.
+  - **Order:** rotated, 9 rounds with round 0 discarded, so n = 8. 60 s idle before the first run
+    and 20 s before each later run.
+  - **Paired medians: +3.08 s wall and +3.12 s CPU.** The intervals are +2.91..+3.19 and
+    +3.00..+3.27, and the sign is 8/8 on both.
+  - **Twin:** R = 0.18 s wall / 0.10 s CPU, admissible.
+  - **State: NOT MET** against the 0.30 s per-child clause, at any R.
+  - **Every run:** 1 file / 69 tests, all green. Thermal 0 before and after every run. AC power.
+    load1 2.4–9.3, logged and not gated.
+  - **Discarded:** 3 runs, for another project's runner (`oeselg-labs/platform/repos/shared`); each
+    was re-taken. One earlier start was aborted before any run.
+  - **Disagreement with `ADR-0017` (+2.68 s / +2.60 s), written down:** this hop reads +0.40 s more
+    wall and +0.52 s more CPU. The instrument, runner, worker cap, Node and tree all differ, and no
+    single cause is claimed. The comment states this hop's figures and the disagreement.
+- **`A3`.** The canonical form is the section above. Its trigger sentences are quoted unchanged
+  below.
+- **`A4`. The next cut that carries an `N8-SPAWN` row owes `T1` and `T2` inline, in the canonical
+  row form that lives on this page (`ABC-116`, § Canonical `N8-SPAWN` row form).**
+- **`A5`.**
+  - `git diff --name-only main...HEAD -- src/` lists exactly `src/cli.test.ts`.
+  - The non-test `src/` numstat is empty.
+  - `src/cli.test.ts` is +25/−0, and every added line is a ` * ` comment line.
+  - The numstat for `plans/nfr-catalog.md` and `AGENTS.md` is empty.
+  - **8-row hash: `c74e7426…0d3b` at base `3c38a8ea` AND at the tip, on 8 lines.** That is equal.
+  - **Drift from this page, written down:** the page's `63f66795…ca31` is stale. It was taken at
+    `fcf12c1`, and the rows have moved twice since.
+  - **Named and NOT made:** the one-line `plans/nfr-catalog.md` pointer from the `N8-SPAWN` account
+    block (now `:1192`) to the `T1`/`T2` bullets (now `:1629-1630`). Its owner is Architect/Design.
+- **`A6`.**
+  - **Counts:** `npm test` read **56 files / 1743 tests / 0 skipped** at base (`main` checkout) and
+    at head (worktree). Both exit 0, and both have `success: true`.
+  - **Pin lines:** the non-comment `N8_SPAWN` / `spawned` / `Object.keys(CHILDREN)` lines hash the
+    same at `main` and the tip (`2f156443…`). `const N8_SPAWN = 17 + 7 + 1 + 2;` is byte-identical.
+  - **`T2` does NOT fire on this delivery.** The diff is comment-only, so no child's argv, stdin
+    script, substitution hook or settle changes.
+  - **The `A2` reading is not a `T2` re-measure.** It measures a mutant that was never delivered.
+- **Gates at the tip, run after the window and never during it:**
+  - `npm run lint`, `typecheck` and `build` exit 0;
+  - `npm test` exits 0, and `.test-results/last-run.json` reads `success: true`;
+  - skip integrity at 0 reads `No findings.`
+- **UAT-waiver reading:** `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'`
+  is **empty**, so 0 production lines. The waiver applies at the exit, and it is not a signature.
+- **2026-10-12, repair of QE-116-a/b (Software Engineer, subtask `fix-ABC-116`, comment lines only).**
+  - **QE-116-a.** "its settle (`timeout`)" now reads "its settle (a `sleep` in a child's shell argv,
+    e.g. `A9_SETTLE_SECONDS`) … `timeout` is the hang bound, not the settle". Checked in the code:
+    `timeout` is `spawnSync`'s bound in `childOf`, and `A9_SETTLE_SECONDS` is a `sleep` in A9's
+    `/bin/sh -c` argv. Neither `ADR-0017` decision 2 nor the catalog's `G-QE115-3` says whether a
+    change to the hang bound fires `T2`. The comment does not rule on it, and the question is named
+    for BA/PM.
+  - **QE-116-b.** "on the surface such a hop has to edit" now says that the block sits on the options
+    type of `childOf`, which every child spawns through. The edit itself lands in a `CHILDREN` entry
+    or in a constant a child's argv reads, not in this block.
+  - **QE-116-c/d.** The two logs were renamed to `a2-window.log.txt` (`git mv`, no `-f` needed). The
+    rename, and the logs' add commit `d39618d1`, are recorded in a note under
+    `.grugops/context/fix-ABC-116/notes/`.
+  - **`C2` is NOT edited.** This page does not say the Engineer may edit it. Its "`timeout` (the settle)" and
+    "the reader and the trigger-er are the same agent by construction" are named for BA/PM.
+  - The `src/` diff is still `src/cli.test.ts` only, now +28/−0 against `main`, and every line is a
+    comment line. `N8_SPAWN` is byte-identical. `T2` does not fire.
+
+### Security / NFR triggers
+
+> - **`N8-SPAWN`: 0 added children, 0 ms charged.**
+>   **`T1` — a hop that changes the NUMBER of children re-measures both time clauses; the count pin forces the `N8_SPAWN` edit.** `T1` NOT FIRED: `const N8_SPAWN = 17 + 7 + 1 + 2;` is byte-identical.
+>   **`T2` — a hop that changes WHAT AN EXISTING CHILD DOES (its argv, its stdin script, its substitution hook or its settle) re-measures the per-child CPU clause on `src/cli.test.ts`, whether or not the count moves (`ADR-0035` decision 2: median, the twin's `R`, MET / NOT MET / UNRESOLVED against that set's `F`); the count pin cannot see it.** `T2` NOT FIRED: the diff is 25 comment lines; no child's argv, stdin script, substitution hook or settle changed.
+>   Ruling: `ADR-0017` decision 2; `plans/nfr-catalog.md` § `G-QE115-3`; carrier at the point of change: the comment on `ChildOptions` in `src/cli.test.ts` (`ABC-116`).
+- `N8-LANE`: the count is the pin (`ADR-0035` d3): 0 test files, 0 tests, 0 spawns, no timing bound written.
+- Security: not engaged (comment diff; no input path, process boundary, network or write outside `plans/` / `.grugops/`).
+
+## QE
+
+QE/E2E (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-12, subtask `qe-ABC-116`, on branch
+`grugops/qe-ABC-116` off tip `d39618d1`. **Verdict: PASS_WITH_GAPS.**
+- **Order.** QE's own A1 and A2 readings were taken before the build notes and the TSV were read.
+- **Notes.** `.grugops/context/qe-ABC-116/notes/`; raw TSV in `.grugops/context/qe-ABC-116/probe/`.
+- **Status.** This is an agent `decision`, not a stamp.
+
+- **A1 MET as written.** All four parts (i)–(iv) are present inside the `ChildOptions` JSDoc
+  (`:322`, `:324`, `:330`, `:336`). Checked claim by claim against the code, two are not true:
+  - **QE-116-a (MEDIUM, recommended repaired before merge).** "its settle (`timeout`)" is wrong.
+    `timeout` is the `spawnSync` hang bound. The settle is `A9_SETTLE_SECONDS` (`:484`), a `sleep`
+    inside A9's shell argv (`:495`).
+  - **QE-116-b (LOW).** "the surface such a hop has to edit" overclaims. The block's own mutant edits
+    `CHILDREN.black` at `:695`, not the interface or `childOf`.
+  - Both are inherited from this page's `C2`.
+- **A2 MET; QE's spot check PASSES.** These are two out-of-tree trees of the tip with the same
+  one-line hook deletion: `/usr/bin/time -l npx vitest run src/cli.test.ts`, 5 alternating pairs after a
+  warm-up round, 60 s idle first, ≥ 20 s between runs.
+
+  | pair | order | Δ wall (s) | Δ CPU (s) |
+  |---|---|---|---|
+  | 1 | B-M | +3.21 | +3.21 |
+  | 2 | M-B | +3.11 | +3.20 |
+  | 3 | B-M | +3.15 | +3.13 |
+  | 4 | M-B | +3.09 | +3.21 |
+  | 5 | B-M | +3.46 | +3.58 |
+
+  - **Medians: +3.15 s wall, +3.21 s CPU, with sign 5/5.** Against the Engineer's +3.08 / +3.12, that is
+    +0.07 / +0.09, inside ±0.5 s.
+  - Every kept run read 69/69 green, thermal 0 and AC power. load1 ran 2.51–4.58.
+  - 8 runs were discarded for another session's runner (`oeselg-labs/platform`). The first window was
+    aborted and re-taken.
+  - The Engineer's TSV recomputes exactly: +3.080 / +3.115, x(2)..x(7) +2.91..+3.19 / +3.00..+3.27,
+    8/8, twin R 0.180 / 0.100.
+  - Their 3 discards each carry a foreign count, and no kept row does. Their mutant is the one line.
+  - The comment's figure and the disagreement sentence claim no cause beyond what was measured.
+- **A3 MET.** The `T1` and `T2` sentences and the `Ruling:` line are `cmp`-equal between the canonical
+  form and the triggers quote.
+- **A4 MET.** The sentence is at `## Delivery` `:392`.
+- **A5 MET.**
+  - The `src/` diff is `src/cli.test.ts` only: +25/−0, 0 non-comment lines.
+  - Non-test `src/`, the catalog and `AGENTS.md` are all empty.
+  - The 8-row hash is `c74e7426…0d3b` at base and at tip.
+  - The pointer is named and not made, and `:1192` / `:1629-1630` are correct.
+- **A6 MET.**
+  - `npm test` reads 56 / 1743 / 0 at base and at tip, both `success: true`.
+  - The `N8_SPAWN` pin lines and the `CHILDREN` block are hash-identical.
+  - `T2` did not fire, and the mutant run is not claimed as a `T2` re-measure.
+- **Gates at the tip, run after the timed runs.**
+  - Lint, typecheck and build exit 0.
+  - `npm test` exits 0.
+  - The skip count is 0, and the integrity check reads `No findings.`
+- **UAT waiver.** The production `src/` diff is empty, measured, so the waiver applies. It is not a signature.
+- **The force-added `*.log` files (QE-116-c, LOW).** Acceptable as a record, but rename them to
+  `*.log.txt`. They are the only tracked `*.log` files, `.gitignore` still matches them, and `rg`
+  does not list them.
+- **QE-116-d (INFO).** Note `…ae9de9b2` places the logs in `9b8c38ec`. They were added at `d39618d1`.
+
+### QE — addendum, 2026-10-12: re-check of the QE-116-a..d repair (`qe2-ABC-116`)
+
+QE/E2E (Claude Opus 5.5, subagent of the Orchestrator), subtask `qe2-ABC-116`, branch
+`grugops/qe2-ABC-116` off tip `ffe52710`. This agent did not author the repair, and it read the code
+and git before the Engineer's notes. **Verdict: PASS_WITH_GAPS** (INFO only, none blocking). Notes are in
+`.grugops/context/qe2-ABC-116/notes/` (`…a0f3e853` readings, `…43bb8876` commands, `…6a1c2b14` verdict).
+This is an agent `decision`, not a stamp. No timing readings were taken.
+
+- **QE-116-a and QE-116-b CLOSED.** Every changed sentence is true of the code:
+  - `timeout` is the bound `childOf` passes to `spawnSync` (`:390`).
+  - The settle is `sleep ${A9_SETTLE_SECONDS}` in A9's `/bin/sh -c` argv (`:498`).
+  - `spawnSync(` occurs once, inside `childOf` (`:374`), and every child spawns through it.
+  - A1's (i)–(iv) are still present.
+  - **QE2-116-a (INFO):** "where the edit lands" omits the builder bodies (`closedReader`,
+    `heldOpenReaderClosed`, `unwritableStdout`). (i) still fires `T2` on any argv change.
+- **The refusal to add "or its bound (`timeout`)" is CORRECT.** `ADR-0017` decision 2 names four things,
+  and the bound is not among them. QE's input for the routed question: on a green lane a bound change is
+  either a cost no-op, or a visible red, because a reached bound returns `ETIMEDOUT` and `childOf`
+  throws. It is never silent drift. The ruling stays with BA/PM and Architect/Design.
+  - **QE2-116-b (INFO):** note `…16a8ee37`'s "two orders of magnitude" does not hold for A9's 4 s bound.
+- **QE-116-c and QE-116-d CLOSED.**
+  - Both logs are `R100`-renamed to `*.log.txt`; `git ls-files '*.log'` is empty, and neither new name
+    is ignored.
+  - `d39618d1` is the correct add commit.
+  - No committed note was edited.
+  - **QE2-116-c (INFO):** note `…79e292cc`'s "traceability does not name them" is overtaken by the same
+    commit's row.
+- **Fence MET against `3c38a8ea`.**
+  - `src/` changes only `src/cli.test.ts`: +28/−0, all comment lines, with the non-comment hash equal.
+  - The catalog, `AGENTS.md` and the board are untouched.
+  - The NFR hash is `c74e7426…0d3b` at base and at tip.
+  - `N8_SPAWN` is byte-identical. `T1` and `T2` did not fire.
+- **Gates at the tip.**
+  - Lint, typecheck and build exit 0.
+  - `npm test` reads 56 files / 1743 tests, `success: true`.
+  - The skip count is 0, and the integrity check reads `No findings.`
+  - `host-protection.js` exits 2 (`UNKNOWN - verify`, no remote).
+- **UAT waiver** applies, measured over the tip, the fix commit and `main...HEAD`. It is not a signature.
+- **Still owed:** `C2`'s "`timeout` (the settle)" (BA/PM); the hang-bound question (BA/PM and
+  Architect/Design); the `In Review` exit (Orchestrator).

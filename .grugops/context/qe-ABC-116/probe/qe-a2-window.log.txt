@@ -1,0 +1,72 @@
+2026-10-12T06:02:26Z window start; host Mac15,13 ncpu 8 node v26.11.0; pairs=5
+2026-10-12T06:02:26Z idle 60 s
+2026-10-12T06:03:26Z foreign present before r0 base (not launched): 80032,80033,79988,80004,79922,79978,79979,
+79922 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+79978 pnpm exec vitest run --project integration packages/db
+79979 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+79988 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+80004 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+80032 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+80033 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T06:03:26Z idle 30 s
+2026-10-12T06:03:56Z idle 20 s
+2026-10-12T06:04:20Z FOREIGN during r0 base: 82538,
+82300 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r0-base-a1.time npx vitest
+82304 npm exec vitest run src/cli.test.ts    
+82331 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/base/node_modules/.bin/vitest run src/cli.tes
+82538 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+2026-10-12T06:04:21Z FOREIGN post r0 base: 82761,82768,82652,82653,82784,82538,
+82538 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+82652 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+82653 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+82761 pnpm exec vitest run --project integration packages/db
+82768 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+82784 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+82821 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+82822 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T06:04:21Z r0 1 base a1 real=4.18 cpu=5.65 exit=0 tests=Tests_69_passed_(69) verdict=DISCARD_foreign load1 2.15->2.05 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:04:21Z idle 30 s
+2026-10-12T06:04:56Z FOREIGN post r0 base: 86239,86252,86253,86254,86255,86256,86257,86223,86275,
+86223 sh -c trap 'if [ "$?" -eq 130 ]; then trap - INT; kill -s INT $$; fi; trap "trap - INT; kill -s INT $$" INT' INT; vitest run --project unit && node --test scripts/*.test.mjs
+86239 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+86252 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+86253 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+86254 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+86255 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+86257 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+86275 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T06:04:56Z r0 1 base a2 real=4.23 cpu=5.72 exit=0 tests=Tests_69_passed_(69) verdict=DISCARD_foreign load1 2.35->2.33 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:04:56Z idle 30 s
+2026-10-12T06:05:27Z foreign present before r0 base (not launched): 90286,90596,90612,90587,90588,90635,
+90286 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+90587 pnpm exec vitest run --project integration packages/db
+90588 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+90596 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+90612 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+90635 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T06:05:27Z idle 30 s
+2026-10-12T06:05:57Z idle 20 s
+2026-10-12T06:06:22Z r0 1 base a3 real=4.25 cpu=5.80 exit=0 tests=Tests_69_passed_(69) verdict=warmup load1 3.23->3.37 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:06:22Z idle 20 s
+2026-10-12T06:06:50Z r0 2 mutant a1 real=6.98 cpu=8.71 exit=0 tests=Tests_69_passed_(69) verdict=warmup load1 3.31->3.26 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:06:50Z idle 20 s
+2026-10-12T06:07:15Z r1 1 base a1 real=4.00 cpu=5.64 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 3.11->3.27 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:07:15Z idle 20 s
+2026-10-12T06:07:43Z r1 2 mutant a1 real=7.21 cpu=8.85 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 3.00->2.84 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:07:43Z idle 20 s
+2026-10-12T06:08:11Z r2 1 mutant a1 real=7.11 cpu=8.78 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 2.51->3.19 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:08:11Z idle 20 s
+2026-10-12T06:08:36Z r2 2 base a1 real=4.00 cpu=5.58 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 3.48->3.60 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:08:36Z idle 20 s
+2026-10-12T06:09:01Z r3 1 base a1 real=3.95 cpu=5.59 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 3.28->3.18 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:09:01Z idle 20 s
+2026-10-12T06:09:29Z r3 2 mutant a1 real=7.10 cpu=8.72 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 3.20->3.18 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:09:29Z idle 20 s
+2026-10-12T06:09:57Z r4 1 mutant a1 real=6.97 cpu=8.67 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 3.66->4.02 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:09:57Z idle 20 s
+2026-10-12T06:10:22Z r4 2 base a1 real=3.88 cpu=5.46 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 4.12->4.03 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:10:22Z idle 20 s
+2026-10-12T06:10:47Z r5 1 base a1 real=3.90 cpu=5.49 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 3.61->3.80 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:10:47Z idle 20 s
+2026-10-12T06:11:15Z r5 2 mutant a1 real=7.36 cpu=9.07 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 3.52->4.58 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:11:15Z window end

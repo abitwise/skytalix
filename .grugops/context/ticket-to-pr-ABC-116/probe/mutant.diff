@@ -1,0 +1,4 @@
+670c670
+<   black: play(["--colour", "black"], { hook: substituting("engine.ts", FIRST_LEGAL_ENGINE) }),
+---
+>   black: play(["--colour", "black"], {}),

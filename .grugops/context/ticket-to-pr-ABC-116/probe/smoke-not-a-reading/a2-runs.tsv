@@ -1,0 +1,4 @@
+seq	round	arm	attempt	utc_start	wall_s	user_s	sys_s	cpu_s	maxrss_b	exit	files	tests	failed	skipped	load1_before	load1_after	thermal_before	thermal_after	foreign_before	foreign_during	foreign_after	pgrep_before	pgrep_after	power_before	power_after	status
+1	0	B	1	2026-10-12T05:24:45Z	4.14	4.63	0.94	5.57	259440640	0	1	69	0	0	3.41	3.46	0	0	0	0	0	0	0	AC Power	AC Power	ok
+2	0	M	1	2026-10-12T05:24:51Z	6.98	7.82	0.97	8.79	251379712	0	1	69	0	0	3.46	3.34	0	0	0	0	0	0	0	AC Power	AC Power	ok
+3	0	T	1	2026-10-12T05:24:59Z	3.95	4.64	0.93	5.57	251609088	0	1	69	0	0	3.23	3.21	0	0	0	0	0	0	0	AC Power	AC Power	ok

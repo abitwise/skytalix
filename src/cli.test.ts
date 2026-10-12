@@ -318,6 +318,34 @@ interface Child {
  *
  * `hook` — a `data:` URL loaded with `--import`, substituting one module in the CHILD only. See
  * `substituting` below for the mechanism, its licence and its limits.
+ *
+ * `T2` — EDITING WHAT AN EXISTING CHILD DOES FIRES A RE-MEASURE, AND NOTHING HERE WILL TELL YOU SO
+ * (`ABC-116`). (i) Changing an existing child's argv (`childOf`'s `args` / `productArgv`), its stdin
+ * script (`input`), its substitution hook (`hook`) or its settle (a `sleep` in a child's shell
+ * argv, e.g. `A9_SETTLE_SECONDS`) fires `T2`; `timeout` is the hang bound, not the settle. (ii) `T2`
+ * obliges a re-measure of `N8-SPAWN`'s per-child CPU clause WHETHER OR NOT THE COUNT MOVES: on the
+ * narrow set, this file (`ADR-0035` decision 2), reporting the median, the twin's `R` and the state
+ * (MET / NOT MET / UNRESOLVED, decision 1), read against decision 3's per-set `F` for this file.
+ * (iii) The count pin (`N8_SPAWN`, `spawned`, `Object.keys(CHILDREN)`) CANNOT see it: a changed child
+ * is still one child, so the pin stays green. `T1` (a hop that changes the NUMBER of children
+ * re-measures both time clauses) is the trigger the pin forces; `T2` has nothing forcing it, which is
+ * why it is written here, on the options type of `childOf`, which every child spawns through. The
+ * edit itself lands elsewhere: in a `CHILDREN` entry below (e.g. `black`'s hook) or in a constant a
+ * child's argv reads (e.g. `A9_SETTLE_SECONDS`), not in this block. (iv) Ruled by `ADR-0017` decision 2
+ * and recorded in `plans/nfr-catalog.md`'s `G-QE115-3` section. It is a re-measure obligation, NOT a
+ * licence to build a guard: `ADR-0017` decision 1 refuses one, and its `## Rollback` names the only
+ * falsifier that would earn one.
+ *
+ * `AR-N8SPAWN-DRIFT` is the accepted risk `T2` is the only control on. Its teeth, re-measured at
+ * `ABC-116` (2026-10-12; vitest 4.1.11, 2 workers, module runner off; this file alone, base / mutant /
+ * identity twin out of tree, n = 8 paired rounds): deleting ONE line's hook (`black`'s
+ * `FIRST_LEGAL_ENGINE` below) makes that child run the real engine and costs +3.08 s wall and
+ * +3.12 s CPU (paired medians; 8 of 8 rounds positive; twin R 0.18 s wall / 0.10 s CPU), NOT MET
+ * against the 0.30 s per-child clause at any R, with all 69 tests green and the count pin armed.
+ * `ADR-0017`'s +2.68 s wall / +2.60 s CPU was the whole lane on vitest 3.2.7 at another worker count;
+ * this hop reads 0.40 s more wall and 0.52 s more CPU on a different instrument (one file, not the
+ * lane), runner, worker cap and Node. The two figures disagree, and neither is to be copied as the
+ * other; the readings and the reasons are in `.grugops/context/ticket-to-pr-ABC-116/`.
  */
 interface ChildOptions {
   readonly input?: string;

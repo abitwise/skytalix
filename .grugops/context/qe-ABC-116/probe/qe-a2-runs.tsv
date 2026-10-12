@@ -1,0 +1,15 @@
+round	slot	tree	attempt	start_utc	load1_pre	thermal_pre	power_pre	foreign_pre	foreign_during	load1_post	thermal_post	power_post	foreign_post	real_s	user_s	sys_s	cpu_s	exit	tests	verdict
+0	1	base	1	2026-10-12T06:04:16Z	2.15	0	AC_Power	-	82538,	2.05	0	AC_Power	82761,82768,82652,82653,82784,82538,	4.18	4.71	0.94	5.65	0	Tests_69_passed_(69)	DISCARD_foreign
+0	1	base	2	2026-10-12T06:04:51Z	2.35	0	AC_Power	-	-	2.33	0	AC_Power	86239,86252,86253,86254,86255,86256,86257,86223,86275,	4.23	4.75	0.97	5.72	0	Tests_69_passed_(69)	DISCARD_foreign
+0	1	base	3	2026-10-12T06:06:17Z	3.23	0	AC_Power	-	-	3.37	0	AC_Power	-	4.25	4.82	0.98	5.80	0	Tests_69_passed_(69)	warmup
+0	2	mutant	1	2026-10-12T06:06:42Z	3.31	0	AC_Power	-	-	3.26	0	AC_Power	-	6.98	7.76	0.95	8.71	0	Tests_69_passed_(69)	warmup
+1	1	base	1	2026-10-12T06:07:10Z	3.11	0	AC_Power	-	-	3.27	0	AC_Power	-	4.00	4.69	0.95	5.64	0	Tests_69_passed_(69)	kept
+1	2	mutant	1	2026-10-12T06:07:35Z	3.00	0	AC_Power	-	-	2.84	0	AC_Power	-	7.21	7.87	0.98	8.85	0	Tests_69_passed_(69)	kept
+2	1	mutant	1	2026-10-12T06:08:03Z	2.51	0	AC_Power	-	-	3.19	0	AC_Power	-	7.11	7.82	0.96	8.78	0	Tests_69_passed_(69)	kept
+2	2	base	1	2026-10-12T06:08:31Z	3.48	0	AC_Power	-	-	3.60	0	AC_Power	-	4.00	4.64	0.94	5.58	0	Tests_69_passed_(69)	kept
+3	1	base	1	2026-10-12T06:08:56Z	3.28	0	AC_Power	-	-	3.18	0	AC_Power	-	3.95	4.64	0.95	5.59	0	Tests_69_passed_(69)	kept
+3	2	mutant	1	2026-10-12T06:09:21Z	3.20	0	AC_Power	-	-	3.18	0	AC_Power	-	7.10	7.76	0.96	8.72	0	Tests_69_passed_(69)	kept
+4	1	mutant	1	2026-10-12T06:09:49Z	3.66	0	AC_Power	-	-	4.02	0	AC_Power	-	6.97	7.73	0.94	8.67	0	Tests_69_passed_(69)	kept
+4	2	base	1	2026-10-12T06:10:18Z	4.12	0	AC_Power	-	-	4.03	0	AC_Power	-	3.88	4.54	0.92	5.46	0	Tests_69_passed_(69)	kept
+5	1	base	1	2026-10-12T06:10:42Z	3.61	0	AC_Power	-	-	3.80	0	AC_Power	-	3.90	4.58	0.91	5.49	0	Tests_69_passed_(69)	kept
+5	2	mutant	1	2026-10-12T06:11:07Z	3.52	0	AC_Power	-	-	4.58	0	AC_Power	-	7.36	8.03	1.04	9.07	0	Tests_69_passed_(69)	kept

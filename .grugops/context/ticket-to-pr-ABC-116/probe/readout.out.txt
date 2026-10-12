@@ -1,0 +1,49 @@
+scored rounds n = 8 (round 0 discarded), k = 2; discarded/errored rows: 3
+  DISCARDED seq 14 round 4 arm T attempt 1 status DISCARDED_FOREIGN foreign b/d/a 0/6/6
+  DISCARDED seq 19 round 5 arm M attempt 1 status DISCARDED_FOREIGN foreign b/d/a 0/2/5
+  DISCARDED seq 24 round 7 arm M attempt 1 status DISCARDED_FOREIGN foreign b/d/a 0/8/0
+
+wall: median B 4.060  M 7.070  T 4.115 s
+  M-B per round: +2.91 +2.99 +3.05 +2.83 +3.19 +3.23 +3.12 +3.11
+  M-B median +3.080 s, interval x(2)..x(7) = +2.910..+3.190, sign + 8/8
+  T-B per round: -0.08 +0.18 +0.01 +0.01 +0.03 +1.39 -0.03 +0.00
+  T-B median +0.010 s (+0.25 % of base), sign + 5/8, twin R = 0.180 s
+
+CPU: median B 5.610  M 8.735  T 5.625 s
+  M-B per round: +3.00 +3.12 +3.25 +3.11 +3.27 +3.29 +2.90 +3.05
+  M-B median +3.115 s, interval x(2)..x(7) = +3.000..+3.270, sign + 8/8
+  T-B per round: -0.10 +0.04 +0.06 +0.01 -0.03 +0.47 -0.24 -0.01
+  T-B median +0.000 s (+0.00 % of base), sign + 4/8, twin R = 0.100 s
+  per-child clause b = 0.3 s CPU: twin admissible (|median| <= 1.5 %) = True; resolves b (R <= b) = True; state = NOT MET
+
+per-run load1 / thermal / foreign / power (scored and round 0):
+  seq  1 r0 B a1 load1 2.80->3.21 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq  2 r0 M a1 load1 3.11->3.26 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq  3 r0 T a1 load1 5.27->5.09 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq  4 r1 M a1 load1 4.37->4.42 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq  5 r1 T a1 load1 3.46->3.90 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq  6 r1 B a1 load1 3.97->3.97 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq  7 r2 T a1 load1 3.69->3.71 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq  8 r2 B a1 load1 2.93->2.86 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq  9 r2 M a1 load1 2.79->2.73 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 10 r3 B a1 load1 2.50->2.46 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 11 r3 M a1 load1 2.43->2.48 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 12 r3 T a1 load1 2.48->2.60 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 13 r4 M a1 load1 2.41->2.87 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 14 r4 T a1 load1 3.47->3.51 therm 0->0 foreign 0/6/6 pgrep 0/6 power AC Power->AC Power DISCARDED_FOREIGN
+  seq 15 r4 T a2 load1 2.45->2.50 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 16 r4 B a1 load1 2.50->2.46 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 17 r5 T a1 load1 2.66->2.68 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 18 r5 B a1 load1 2.77->2.71 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 19 r5 M a1 load1 2.84->4.13 therm 0->0 foreign 0/2/5 pgrep 0/126 power AC Power->AC Power DISCARDED_FOREIGN
+  seq 20 r5 M a2 load1 3.93->3.85 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 21 r6 B a1 load1 3.03->3.11 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 22 r6 M a1 load1 3.16->3.30 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 23 r6 T a1 load1 2.93->3.17 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 24 r7 M a1 load1 3.19->4.30 therm 0->0 foreign 0/8/0 pgrep 0/0 power AC Power->AC Power DISCARDED_FOREIGN
+  seq 25 r7 M a2 load1 6.13->9.26 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 26 r7 T a1 load1 7.19->7.18 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 27 r7 B a1 load1 6.25->6.15 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 28 r8 T a1 load1 6.57->6.36 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 29 r8 B a1 load1 5.06->6.42 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
+  seq 30 r8 M a1 load1 5.08->4.99 therm 0->0 foreign 0/0/0 pgrep 0/0 power AC Power->AC Power ok
