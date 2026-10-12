@@ -410,3 +410,24 @@ branch `grugops/qe2-ABC-105`. Verdict `.grugops/context/qe2-ABC-105/notes/…-3b
   exit 0, 57 files / 1775 tests, `success: true`, skip 0, integrity `No findings.`; `--sweep` 132/38/77/2/15 exit 1.
 - **`QE-105-x` (LOW, open):** the new tests add 2 whole-tree reads of the real notes (3 → 5); not re-timed.
   `-r`/`-s`/`-u` LOW and `-w` INFO stay open. UAT waived by the owner (not re-litigated).
+
+## N8-LANE re-read (2026-10-12, QE3)
+
+QE/E2E, subtask `qe3-ABC-105-lane`, timing only, width 1. It re-reads `N8-LANE` at `db1cfb6c` using
+`qe-ABC-105`'s method unchanged. The decision is `.grugops/context/qe3-ABC-105-lane/notes/…-15ca6e06`, and the
+readings are in `…fc1f4a7c`.
+
+- **NOT MET at 650 ms CPU on the narrow set.** H − B reads **+0.690 s** (+0.670..+0.700). Twin R is 0.020 s and
+  the twin median is +0.000 s, sign 2/8, so the reading is admissible. The file is over the bound by +0.040 s at
+  the median. Load1 read 3.08–3.28; it was logged and not gated. Thermal was 0, power was AC, and there were 0
+  foreign runners.
+- **Driver:** the file's 5 whole-tree reads of the real notes account for 499.5 of 538.3 in-worker ms.
+  - `A4`'s three `--sweep` reads: 282.0 ms.
+  - The fix's `A9` `--sweep`: 109.4 ms.
+  - The fix's `A3` unfiltered `coverage()`: 108.1 ms.
+- **The earlier MET does not carry.** `qe-ABC-105` read +0.475 s, MET, at `60415a8a`, before those two reads
+  existed.
+- **`QE-105-x`** is now a measured breach; QE suggests MEDIUM. No fix was made here. The severity, and what to do
+  about it, are the Orchestrator's and the owner's to rule.
+- **Windows that were not graded.** Window 1 was inadmissible: the twin read +1.74 %, above the 1.5 % limit.
+  Window 2 was void: a foreign vitest overlapped every round. Both are kept in `probe/`.

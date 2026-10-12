@@ -1,0 +1,47 @@
+round	cond	cpu	wall	files	tests	load_b	load_a	foreign_b	foreign_a	therm	power	sampler_bad	status	kept
+0	B	0.56	0.41	1	1	2.48	2.48	0	0	0->0	AC Power	0	ok	round0
+0	H	1.26	0.97	1	32	2.48	2.48	0	0	0->0	AC Power	0	ok	round0
+0	T	0.57	0.42	1	1	2.48	2.48	0	0	0->0	AC Power	0	ok	round0
+1	H	1.24	0.97	1	32	2.48	2.44	0	0	0->0	AC Power	0	ok	ok
+1	T	0.58	0.43	1	1	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+1	B	0.57	0.42	1	1	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+2	T	0.57	0.42	1	1	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+2	B	0.56	0.43	1	1	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+2	H	1.26	0.96	1	32	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+3	B	0.6	0.45	1	1	2.44	2.64	0	0	0->0	AC Power	0	ok	ok
+3	H	1.25	0.96	1	32	2.64	2.64	0	0	0->0	AC Power	0	ok	ok
+3	T	0.61	0.46	1	1	2.64	2.64	0	0	0->0	AC Power	0	ok	ok
+4	H	1.26	1	1	32	2.64	2.64	0	0	0->0	AC Power	0	ok	ok
+4	T	0.58	0.44	1	1	2.64	2.64	0	0	0->0	AC Power	0	ok	ok
+4	B	0.56	0.41	1	1	2.64	2.64	0	0	0->0	AC Power	0	ok	ok
+5	T	0.59	0.43	1	1	2.64	2.59	0	0	0->0	AC Power	0	ok	ok
+5	B	0.58	0.42	1	1	2.59	2.59	0	0	0->0	AC Power	0	ok	ok
+5	H	1.25	0.96	1	32	2.59	2.59	0	0	0->0	AC Power	0	ok	ok
+6	B	0.58	0.43	1	1	2.59	2.59	0	0	0->0	AC Power	0	ok	ok
+6	H	1.25	0.96	1	32	2.59	2.59	0	0	0->0	AC Power	0	ok	ok
+6	T	0.59	0.43	1	1	2.59	2.59	0	0	0->0	AC Power	0	ok	ok
+7	H	1.26	0.97	1	32	2.59	2.62	0	0	0->0	AC Power	0	ok	ok
+7	T	0.58	0.43	1	1	2.62	2.62	0	0	0->0	AC Power	0	ok	ok
+7	B	0.57	0.42	1	1	2.62	2.62	0	0	0->0	AC Power	0	ok	ok
+8	T	0.57	0.41	1	1	2.62	2.62	0	0	0->0	AC Power	0	ok	ok
+8	B	0.58	0.41	1	1	2.62	2.62	0	0	0->0	AC Power	0	ok	ok
+8	H	1.24	0.97	1	32	2.62	2.62	0	0	0->0	AC Power	0	ok	ok
+
+scored rounds 8 [1, 2, 3, 4, 5, 6, 7, 8]; discarded rounds []
+
+[CPU user+sys] n=8 k=2
+  base B median 0.575 s; H median 1.250 s; T median 0.580 s
+  twin T-B sorted: -0.01, +0.01, +0.01, +0.01, +0.01, +0.01, +0.01, +0.02
+  twin median +0.010 s (+1.74 % of base), sign 7/8 (two-sided p 0.070), R 0.010 s -> admissible False
+  treatment H-B sorted: +0.65, +0.66, +0.67, +0.67, +0.67, +0.69, +0.70, +0.70
+  treatment median +0.670 s, interval x(k)..x(n+1-k) = +0.660..+0.700
+
+  provisional F = 16 % x base CPU 0.575 = 0.092 s; 650 ms >= F: True
+  resolves 650 ms (R <= b): True; STATE at 650 ms CPU: INADMISSIBLE (no state)
+
+[wall] n=8 k=2
+  base B median 0.420 s; H median 0.965 s; T median 0.430 s
+  twin T-B sorted: -0.01, +0.00, +0.00, +0.01, +0.01, +0.01, +0.01, +0.03
+  twin median +0.010 s (+2.38 % of base), sign 5/8 (two-sided p 0.727), R 0.010 s -> admissible False
+  treatment H-B sorted: +0.51, +0.53, +0.53, +0.54, +0.55, +0.55, +0.56, +0.59
+  treatment median +0.545 s, interval x(k)..x(n+1-k) = +0.530..+0.560
