@@ -1,4 +1,5 @@
 # NFR Catalog
+_Updated: 2026-10-12 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-105-lane`, after `ABC-105` merged as `f6400877`): **NO TABLE ROW TOUCHED. NO LEVEL MOVED.** The eight `NFR-001`–`NFR-008` rows hash `c74e7426…0d3b` before and after the write, and all nine `NFR-` rows hash `6b62892c…6b41` before and after. Four edits were made. (1) **The `N8-LANE` admissibility bullet** gains one dated sub-bullet: the limit is max(1.5 %, one 10 ms tick), and the sign test is on the non-zero deltas. This is forward-only (`ADR-0035` § Addendum 2026-10-12 A1, `QE-105-ab`), and the old text is kept. (2) **The floors block:** `tools/grugops/qe-hop-integrity.test.ts` `F` = **0.020 s CPU / 0.020 s wall** (A2). (3) **A new section at the end, "`N8-LANE` at `ABC-105`":** the reading is **NOT READ** at the merged code. The merge stands **on the owner's ruling, not on a MET**. `QE-105-x` is carried as `RISK-ABC105-LANE`, with three triggers, one of them the record reaching 4,000 note files (A3). (4) This line. **`RISK-ABC144-FCAP` is unchanged.** Nothing was measured. Note: `.grugops/context/design-ABC-105-lane/notes/`._
 _Updated: 2026-10-12 by Architect/Design (task `wave-2026-09-25`, subtask `design-2026-10-12-fold`, after `ABC-116` merged as `2a17783f`): **NO TABLE ROW TOUCHED. NO LEVEL MOVED.** The eight `NFR-001`–`NFR-008` rows hash `c74e7426…0d3b` before and after the write. Three edits were made. (1) **The `ABC-116` `A5` pointer:** one dated paragraph directly after the `N8-SPAWN` account block, pointing to `T1`/`T2` in the `G-QE115-3` section. The account text is byte-identical. (2) **Under the `T2` bullet:** one dated line. A change to a child's hang bound alone does not fire `T2` (`ADR-0017` § Addendum 2026-10-12 A1). (3) **The floors block:** `src/cli.test.ts` `F` = **0.100 s CPU / 0.180 s wall**, from its first 4.1 reading (`ABC-116`'s twin, n = 8). The 1.097 s and the "650 ms refused" sentence are struck and kept. **The full lane keeps 1.72 s / 3.25 s, and `RISK-ABC144-FCAP` stays open.** Nothing was measured. Note: `.grugops/context/design-2026-10-12-fold/notes/`._
 _Updated: 2026-10-12 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-144-fcap`, ticket `ABC-144`, after `ABC-152` merged as `7a920ca5`): **NO TABLE ROW TOUCHED AND THE FLOORS BLOCK IS NOT EDITED — THIS LINE ONLY. NO LEVEL MOVED.** The nine `NFR-` rows and the floors block are byte-identical, each hashed before and after the write. **`NFR-008` floors after vitest 4.1.11 with the runner off** (`ADR-0042` ruling 6, accepted by the owner; `ADR-0040` addendum 2 item 6): **the full lane keeps `F` = 1.72 s CPU / 3.25 s wall** until the first full-lane twin R is read on 4.1.11, runner off, at k = 2. Base must carry `7a920ca5`, and the twin is a base copy with its own `npm ci`. That R replaces `F` outright (fewer than three: the largest). `ABC-152` `V9`'s twin R, **0.440 s CPU / 0.190 s wall** (3.2.7, runner on, k = 2), is listed and not used. The per-set floors below (`src/cli.test.ts` 1.097 s, `history-pane.nfr` 0.058 s, the pair 0.038 s, the one-file row 0.17 s / 0.27 s) are 3.2.7 data and do not carry over. Every set takes the provisional 16 % of its base CPU until its first 4.1 reading. **`RISK-ABC144-FCAP` stays open on the post-merge lane** (owner Architect/Design, low). Its pre-merge half closed at `V9`. No window is owed for it: the re-read is taken at the next paired full-lane window, and Architect/Design moves `F` from it. Nothing was measured. Note: `.grugops/context/design-ABC-144-fcap/notes/` (`…dd7a6ec9`)._
 _Updated: 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-152-owner-route`, ticket `ABC-152`): **NO TABLE ROW TOUCHED — THIS LINE ONLY. NO LEVEL MOVED.** The `ADR-0042` addendum rules the owner's route: vitest 4.1.11 with the module runner off and the test rework (R1–R5, `san.test.ts` A20 sorted, `book.test.ts` A2 by query import), in one ticket. **`NFR-008`:** `ABC-152` `V9`'s bar stays ≤ −15 % paired lane CPU against the k = 2 base, read with `lane144b.mjs` at width 1 (ruling 6); the cooled state is owed if warm + R > 9.0 s; **no recorded floor `F` carries over the merge** (every set takes the provisional 16 % until three readings on 4.1; the full lane keeps 1.72 s / 3.25 s until a twin R is read on 4.1 at k = 2). **`NFR-007`:** `glyph-mode.nfr`'s zero-I/O guards stay armed with the runner off under R4 (4 plants red, as on 3.2.7). **`NFR-001`, `NFR-005`, `ABC-025` `N1`:** the build's `V4` plants. No timing was read. Notes: `.grugops/context/design-ABC-152-owner-route/notes/`._
@@ -922,6 +923,11 @@ re-deriving a lane bar per ticket, which has now cost two ruling hops.
 >   run as its own condition in the same interleaved harness — **reading ≤ 1.5% CPU with its sign at
 >   chance.** Measured null floors on this instrument: **−0.43%, −0.52%, −1.26%; signs 3/8, 3/8, 3/8**
 >   (BA/PM's quieter session read ±0.1% at 4/8; this hop's is worse and is reported, not smoothed).
+>   - **Amended 2026-10-12, forward-only (`ADR-0035` § Addendum 2026-10-12 A1, `QE-105-ab`).** The limit is
+>     **max(1.5 % of the base median, one tick)**. One tick is 0.010 s for `/usr/bin/time -p`.
+>     - **The sign test counts only the non-zero deltas.**
+>     - The amendment binds only below a 0.667 s base. Above that base the 1.5 % clause is unchanged.
+>     - A window graded before this amendment stays as graded.
 > - **Added 2026-10-10 (`ADR-0035` decision 1). It RESOLVES a bound `b` only if the twin's spread R ≤
 >   `b`.** At n = 8, R is the larger magnitude of the 2nd-smallest and the 2nd-largest per-round twin
 >   delta. Other n are in `ADR-0035` decision 1.
@@ -1741,6 +1747,15 @@ files is owed to the protocol's owner, Architect/Design. No verdict hangs on it.
     The 1.097 s above is 3.2.7 data, struck and kept. The other two figures on this line are 3.2.7 data too,
     and each set keeps the provisional 16 % until its own first 4.1 reading (the `design-ABC-144-fcap`
     `_Updated` line at the top). Source: `ADR-0035` § Status, "Per-set floor, 2026-10-12".
+  - **2026-10-12 (Architect/Design, `design-ABC-105-lane`): `tools/grugops/qe-hop-integrity.test.ts`, read
+    against a one-assertion placeholder: `F` = 0.020 s CPU / 0.020 s wall** on vitest 4.1.11, runner off,
+    `maxWorkers: 2`.
+    - It comes from two admissible twins at n = 8, k = 2, so the largest R governs:
+      - `qe-ABC-105` at `60415a8a`: R 0.010 / 0.010;
+      - QE3 w3 at `db1cfb6c`: R 0.020 / 0.020.
+    - It replaces the provisional 16 % (0.091–0.092 s).
+    - Two windows are inadmissible, and their R is listed but not used: QE3 w1 and QE4 w2.
+    - Source: `ADR-0035` § Addendum 2026-10-12 A2.
 - ~~So a 650 ms `N8-LANE` reading on `src/cli.test.ts` alone is refused at the cut.~~ (true at 1.097 s)
   **2026-10-12: at `F` = 0.100 s, a 650 ms `N8-LANE` bound and the 0.30 s per-child clause on
   `src/cli.test.ts` are no longer refused at the cut.** That file is still bounded by
@@ -2009,3 +2024,92 @@ No catalog line named these before this hop.
 - **Not moved:** the `NFR-004` `Verified by` cell. Its open question is answered (see that section's fence), and
   moving the cell is the next `NFR-004` ruling's.
 - **Not measured:** nothing. Every figure is cited from a committed note or page.
+
+## `N8-LANE` AT `ABC-105`: **NOT READ** at the merged code. The merge stands **ON THE OWNER'S RULING, NOT ON A MET**. Written 2026-10-12 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-105-lane`), after `ABC-105` merged as `f6400877`
+
+**What did not move.**
+- No table row was touched and no level moved. `NFR-001`–`NFR-008` hash `c74e7426…0d3b` before and after.
+- `N8-LANE`'s 650 ms is unchanged.
+- **Nothing was measured.** Every figure is recomputed from QE's raw TSVs
+  (`.grugops/context/design-ABC-105-lane/probe/recompute.out.txt`).
+
+### The record: six windows on one narrow set, three code states
+
+The set is `tools/grugops/qe-hop-integrity.test.ts`, read against a one-assertion placeholder. All six windows ran
+at width 1, under `ADR-0035` decision 1 as written at the time.
+
+| hop / window | code | state | the figures |
+|---|---|---|---|
+| `qe-ABC-105` | `60415a8a` | **MET** | +0.475 s (+0.460..+0.520); twin +0.000 s, R 0.010 s |
+| QE3 w1 | `db1cfb6c` | inadmissible, no state | twin +0.010 s = 1.739 % |
+| QE3 w2 | `db1cfb6c` | void | a foreign vitest overlapped all 8 rounds |
+| QE3 w3 | `db1cfb6c` | **NOT MET** | +0.690 s (+0.670..+0.700); twin +0.000 s, R 0.020 s |
+| QE4 w1 | `8fd0c233` | void | 6 of 8 rounds discarded |
+| QE4 w2 | `8fd0c233` | inadmissible, no state | twin +0.010 s = 1.754 %; it read +0.370 s (+0.370..+0.400), R 0.030 s, which is **ungraded** |
+
+- **`8fd0c233` is the merged code**, inside `f6400877`. **No graded `N8-LANE` reading exists for it.**
+- The MET at `60415a8a` and the NOT MET at `db1cfb6c` belong to earlier code and do not carry over.
+
+### The owner's ruling, recorded as his ruling and not as a reading
+
+- **Ruling.** On 2026-10-12, Olger Oeselg (owner) ruled that `ABC-105` merges **"on the +0.370 s reading"**. That
+  number is QE4 w2's ungraded treatment median.
+- **Source.** This is transcribed from:
+  - the Orchestrator's merge commit `f6400877` (*"N8-LANE merged on the owner's ruling (+0.370 s ungraded)"*);
+  - the board line at `c1841b36`;
+  - this hop's brief.
+- **The owner's verbatim words are not in any note on `main`.** They are `UNKNOWN - verify`, owed by the
+  Orchestrator.
+- **What it is:** the owner's authority to merge with the bar unread. It is a ruling and not a reading.
+- **What it is not:**
+  - **It is not a MET, and it is not a margin.** +0.370 s against 650 ms is never to be written as "MET" or as
+    "0.280 s of headroom".
+  - It is not a grade under `ADR-0035` § Addendum 2026-10-12 A1. A1 is forward-only, and QE4 w2 stays
+    inadmissible.
+  - It does not lower or re-level `N8-LANE`.
+  - It does not set a precedent that an ungraded number may stand in for a reading. Only the owner can make
+    that call, ticket by ticket.
+
+### `RISK-ABC105-LANE` (`QE-105-x`, MEDIUM): the formal `N8-LANE` reading at the merged code is owed
+
+**Roles.**
+- **Owner of the record:** Architect/Design.
+- **Reader:** QE/E2E.
+- **Dispatcher:** the Orchestrator.
+- MEDIUM is QE3's suggestion, kept by QE4.
+
+**Triggers.** Whichever comes first:
+- **T-a. The next width-1 window** the Orchestrator opens for any timing reading. The reading takes about 25 s of
+  lane time after the gate passes.
+- **T-b. Any change** to `tools/grugops/qe-hop-integrity.test.ts` or `tools/grugops/qe-hop-integrity.js`.
+  - Either change moves the set. The changing ticket's own `N8-LANE` reading discharges the risk, and that reading
+    is owed at its QE anyway.
+- **T-c. The record reaches 4,000 note files**, counted by `find .grugops/context -path '*/notes/*.md' | wc -l`
+  on `main`.
+  - The count is 2645 at `6ae6dd27`.
+  - The trigger is projected at ~0.48 s against 650 ms. It is a projection and not a reading (`ADR-0035`
+    § Addendum 2026-10-12 A3).
+
+**Method.**
+- Use QE4's pre-registration (`qe4-ABC-105/probe/preregistration.txt`): arms are `git archive` of `main`'s tip
+  at the time, one window plus one re-attempt, no pooling, no estimate.
+- Apply decision 1 as amended by A1.
+- The per-set `F` is 0.020 s (A2).
+
+**What happens next.**
+
+| outcome | what happens |
+|---|---|
+| **MET** | Write the reading and close the risk. |
+| **NOT MET** | It goes to the owner. The lever is the count of whole-tree reads (`fix2-ABC-105` cut 5 → 2). The size of any further cut is `UNKNOWN - verify`. |
+| **NOT READ** again | The risk stays open on the same triggers. |
+
+### Fence
+
+- No ticket page was edited. `ABC-105`'s page is BA/PM's (`bapm-fold-ABC-105-153`), and BA/PM cross-references
+  this section.
+- No `src/`, `tools/`, board or `AGENTS.md` byte changed.
+- **`RISK-ABC144-FCAP` is unchanged.**
+  - A1 binds only below a 0.667 s base, and the full lane's base is tens of seconds.
+  - A2 is a narrow-set instrument.
+  - The full-lane twin R on 4.1.11 at k = 2 is still owed.
