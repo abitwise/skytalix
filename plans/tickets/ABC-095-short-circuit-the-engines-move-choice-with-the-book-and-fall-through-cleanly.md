@@ -3,7 +3,7 @@ id: ABC-095
 title: Put the book in front of the engine's move choice — a book hit skips the search entirely, and leaving book falls through to the search with nothing visible to the player
 status: backlog
 column: Backlog
-size: S
+size: M
 priority: P1
 epic: EPIC-005
 feature: —
@@ -49,6 +49,25 @@ placing the short-circuit and proving the fall-through is invisible.
   above says this ticket is the only one a player can perceive. The seed binding comes with the
   line (`ADR-0012` clause 3(b)). Its source is **RULED 2026-10-10 (`ADR-0037` D3)**: there is no
   session seed, and the root builds the probe with `random: Math.random`.
+- **Added 2026-10-12 by BA/PM** (subtask `bapm-amend-ABC-095`), to `ADR-0037` § Addendum — 2026-10-12
+  (R1, R2) and `ADR-0036` § S1. Besides the decorator already built (`521a8513`), the wiring hop delivers:
+  - **`src/book-file.ts`, a new production module and a capability holder** (R1). One export,
+    `readBookFile(): Uint8Array`, with no parameter. It imports `node:fs` only, holds no `process`, does
+    not catch, and reads nothing at import. **The probe's `read` is `readBookFile`.** Its `warn` writes
+    the line plus `\n` to `process.stderr`, bound in `src/cli.ts`, in the same `const` as
+    `random: Math.random`, above `runTurnLoop({`.
+  - **The re-target of the 10 `src/cli.test.ts` children that substitute `./engine.ts`** (`black`,
+    `random`, `mate`, `engineThrows`, `engineForeign`, `colourBlack`, `colourWhite`, `resigns`, `quits`,
+    `renews`) to `./book-engine.ts`, whose double exports `withBook(_probe, _inner)` and returns today's
+    double seam (R2). No child keeps an `./engine.ts` substitution.
+  - **Two pins move, each with a reason line** (R2): `ABC-042` `A9`'s `process` census (9 → 10, a third
+    `process.stderr`) and `ABC-043` `A1`'s `engine:` row (`withBook(book, createEngine({ budgetMs:
+    DEFAULT_BUDGET_MS }))`, both halves pinned). **Neither ticket's criterion text changes.**
+  - **`ABC-119`'s lane moves to a book-absent, real, byte-verified copy of the tree** (R2; `ABC-119`
+    § Amendment — 2026-10-12). The same copy serves `A5`'s stream half (test note 4).
+  - **The files under `src/` this ticket touches** (`ABC-041` clause (d)): `src/book-engine.ts`,
+    `src/book-engine.test.ts`, `src/book-file.ts`, `src/cli.ts`, `src/cli.test.ts`,
+    `src/cli.real-engine.test.ts`. Any other `src/` file in the diff fires (d).
 
 ## Out of scope — read this before writing a line
 
@@ -69,7 +88,9 @@ placing the short-circuit and proving the fall-through is invisible.
   move is one of the book's entries for that position and `EPIC-004`'s search entry point is
   called **exactly 0 times**. *(A spied call count. This project has ruled twice — `NFR-001`,
   `NFR-005` — that "not slower at all" is a call-count bar and no wall-clock run can settle it.)*
-- **`A2` (and it is fast, measured against a ratified budget).** **Given** the same call, **then**
+- **`A2` (and it is fast, measured against a ratified budget).** **Given** the same call,
+  *made as **the first call in a fresh process**, so the one read and parse of `book.json` are inside the
+  30 ms (cold) — amended 2026-10-12, `ADR-0037` § Addendum R3; the bar does not change*, **then**
   it returns in **≤ 30 ms** — 1% of `NFR-004`'s ratified 3 s default budget — on the reference
   machine Apple M3 (Mac15,13) / ~~Node v24.12.0~~ **Node v26.11.0** / Darwin 25.5.0 arm64,
   `UNKNOWN - verify` elsewhere, measured **outside** the test suite. *(Re-pointed 2026-10-11 by
@@ -126,7 +147,9 @@ placing the short-circuit and proving the fall-through is invisible.
   call.)* **And given** the book present and a real `node src/cli.ts` child in
   which the human plays `e2e4`, **then** the engine's reply is one of the book's entries for the
   position after `1. e4`. That is one row in the `CLI_DEEP` lane (`src/cli.real-engine.test.ts`),
-  never in the default lane.
+  never in the default lane. *(Amended 2026-10-12, `ADR-0037` § Addendum R1: the probe's `read` is
+  `readBookFile` from `src/book-file.ts`, and its `warn` writes the line plus `\n` to `process.stderr`
+  in `src/cli.ts`. "`engine:` is the only changed property inside the call" is unchanged.)*
 
 ## Dependencies
 
@@ -168,6 +191,12 @@ placing the short-circuit and proving the fall-through is invisible.
 - **`NFR-004` (≤ 3 s per move, hard ceiling 5 s) — consumed, not owned.** `A2`'s 30 ms is 1% of the
   default budget. **This ticket must not be allowed to make the *miss* path slower**: `A3`'s
   call-count bar plus a recorded probe cost of **≤ 5 ms** on an out-of-book position covers it.
+  *(Amended 2026-10-12, `ADR-0037` § Addendum R3, which holds the definition; this page cites it.)*
+  **The 5 ms miss bar is WARM:** the steady-state cost of one `bookMove(P)` call on a probe whose one
+  read and parse are done, `P` the position after `1. e4 e5 2. Ke2`. Fresh process, outside the suite;
+  one warm-up hit on the start position; **200** timed calls; **the maximum ≤ 5 ms**, with the median and
+  p99 recorded beside it; on the reference machine under the quiet-host gate; in the notes, never
+  asserted (test note 5). The cold read and parse are `A2`'s.
 - **`NFR-002` (frame < 16 ms) — touched by `A4` only as an observer.** 0 frame modules changed.
 - **`NFR-005` (depth in budget) — NOT triggered and must not be re-measured here.** A book hit does
   not search, so it contributes no depth. **A book that shortens the measured search time must
@@ -176,13 +205,43 @@ placing the short-circuit and proving the fall-through is invisible.
 - **`NFR-008` (lane ≤ 3 s wall / ≤ 13 s CPU; per-ticket ≤ 650 ms CPU).** **Target: ≤ 1 new test
   file, 0 new spawned processes, ≤ 650 ms CPU.** `A5`'s full game and `A2`'s timing run **outside**
   the default lane. *(2026-10-10: the CPU level is 15 s (`ADR-0019`). Under `ADR-0035` (accepted,
-  owner option R-1) the counts — ≤ 1 file, 0 spawns — are the pins.)*
+  owner option R-1) the counts — ≤ 1 file, 0 spawns — are the pins.)* *(Amended 2026-10-12,
+  `ADR-0037` § Addendum § Consequences.)* **0 new spawns and ≤ 1 new test file still hold.** Two costs
+  are added, both `UNKNOWN - verify`, both charged to this ticket's `N8-LANE` line and read by QE under
+  `ADR-0035`:
+  - each of the 10 re-targeted `src/cli.test.ts` children now loads the real `./engine.ts` closure, plus
+    `./book.ts` and `./book-file.ts`, which the `./engine.ts` double used to replace;
+  - `ABC-119`'s default-lane row now builds the book-absent tree copy (filesystem writes under
+    `os.tmpdir()` only, 0 spawns).
 - **Security: no new surface.** No file is parsed here that `ABC-094` does not already parse; no
   network; no manifest change. `ABC-041`'s clauses are answered at the delivering hop against the
   real diff, which cannot be enumerated before `EPIC-004` exists. *(2026-10-10: superseded for
-  routing. `ADR-0036` (b2) fires through the new edge to the probe, or (b1) if `src/cli.ts` holds the
-  read (`ADR-0037` § Consequences' injected-reader option). D3's `Math.random` is not a limb: ASVS
+  routing. ~~`ADR-0036` (b2) fires through the new edge to the probe, or (b1) if `src/cli.ts` holds the
+  read (`ADR-0037` § Consequences' injected-reader option).~~ D3's `Math.random` is not a limb: ASVS
   `V11.5.1` is L2, outside the active L1 set, the same reasoning as `src/cli-options.ts:103`.)*
+  - **Struck and replaced 2026-10-12 by BA/PM**, to `ADR-0037` § Addendum R1 and `ADR-0036` § `### S1 —
+    the fourth holder — 2026-10-12`. The struck prediction missed `ABC-042` bar 4, and `book.ts` holds no
+    limb, so its edge never fires. **Prediction for the delivered diff**, read at `In Security/NFR` with
+    `.grugops/context/design-F-072-1/probe/clause-b.mjs` plus § S1 Ruling 2 by hand:
+    - **(b1) FIRES** on `src/book-file.ts` (limb 1, the `node:fs` import) and on `src/cli.ts` (limb 2,
+      the warn's `process.stderr`);
+    - **(b2) FIRES** on `cli.ts -> book-file.ts`. It does not fire on `cli.ts -> book.ts` or
+      `cli.ts -> book-engine.ts`;
+    - **the holder set goes 3 → 4**, which fired `ADR-0036` § Decision 3's trigger. § S1 rules it:
+      (b2) gets no call-graph reach, and **limb 1's (b1) unit is the holder file**, so any later edit to
+      `src/book-file.ts` routes to `In Security/NFR`.
+  - **The gate is S3**, the checklist in `.grugops/context/secnfr-ABC-095-placement/notes/…a096cf43`.
+    Build to it.
+  - **`ABC-042` bar 4 is file-scoped** (S2): its text does not change, and `src/cli.ts` imports no
+    `node:fs`.
+  - **Accepted risks, named:**
+    - **`AR-095-READ`** (LOW, owner Security/NFR). An oversized or non-regular `book.json` is read whole
+      (a FIFO blocks the first engine ply) before `NFR-006`'s 1 MB cap refuses it. Fixed when `data/`
+      can come from a location another principal writes (`EPIC-006`), or when the path stops being a
+      constant.
+    - **`AR-095-L1UNIT`** (LOW, owner the Orchestrator). Until `clause-b.mjs` folds Ruling 2, the
+      Orchestrator applies it by hand when routing. The fold is owed by Architect/Design.
+    - `F-095-1` (MEDIUM) was closed when the § S1 block merged.
 
 ## Test notes
 
@@ -196,7 +255,13 @@ placing the short-circuit and proving the fall-through is invisible.
    would trip it — which is `ABC-096`'s problem to solve, **not something to pre-empt here**.
 4. **Play `A5`'s game with the artifact moved aside in a temp copy of the tree, never by deleting
    the checked-in file.** Shared working tree; a test that leaves the repo dirty on failure is
-   worse than the defect.
+   worse than the defect. *(Amended 2026-10-12: this is the copy `ABC-119`'s lane uses (`ADR-0037` R2),
+   built by one helper, and S3 item 7 binds it. It is **a real copy**: every entry under its `src/` is a
+   regular file (`lstat`), never a symbolic link, because Node resolves `import.meta.url` to the real
+   path and a linked `src/` reads the repository's book. Its `src/` is byte-identical to the
+   repository's, asserted before the spawn, and `data/opening-book/book.json` is absent. It is made
+   under `mkdtemp(os.tmpdir() …)`, and removed by a recursive `rmSync` of exactly the path `mkdtemp`
+   returned: never a joined or computed path, and never the repository.)*
 5. **Every wall-clock figure lives in the notes with its machine, never in an assertion.** Standing
    project rule.
 
@@ -204,12 +269,34 @@ placing the short-circuit and proving the fall-through is invisible.
 
 **One**, holding `A1`, `A3`, `A4` and `A6`. `A2` and `A5` are out-of-lane measurements.
 
+*(Amended 2026-10-12, `ADR-0037` § Addendum.)* **Still one new test file**, `src/book-engine.test.ts`
+(built at `521a8513`; it also holds `A5`'s game half). **Two existing test files are edited:**
+`src/cli.test.ts` (10 hook sites, 2 pins) and `src/cli.real-engine.test.ts` (`A7`'s and `A5`'s
+stream-half `CLI_DEEP` rows, and `ABC-119`'s move to the book-absent copy).
+
 ## Size and priority rationale
 
 **Size `S`.** Two or three call sites and one test file; every hard problem was retired by
 `ABC-094`. **Not `XS`**: `A4`'s frame comparison and `A1`'s spy are real test construction. **Not
 `M`** — *on the assumption that the seam is a wrappable function*. **If `EPIC-004` delivers a seam
 this ticket must reach inside, re-size at `In Design` and do not absorb the difference silently.**
+
+**Re-sized 2026-10-12 by BA/PM: `S` → `M` (3).** The re-size trigger above did not fire (the seam is
+wrappable). `S` was priced on its other premise, "two or three call sites and one test file", and
+the wiring rulings broke that one:
+- **Production:** 3 files, 2 of them new (`src/book-engine.ts`, `src/book-file.ts`, `src/cli.ts`).
+  `book-file.ts` is a capability holder with an 8-item `In Security/NFR` checklist (S3).
+- **Tests:** 1 new file and 2 edited. The edits include a new harness, the book-absent tree copy, with
+  three safety properties (real copy, byte identity, exact-path removal), shared with `ABC-119`. They
+  also include 2 `CLI_DEEP` rows, 12 mechanical edits in `src/cli.test.ts`, and the amended Givens of a
+  `Done` ticket (`ABC-119` `A1`/`A3`/`A4`) that this diff delivers.
+- **Comparable:** `ABC-119` is `M` for a new lane with a spawn harness. This ticket now carries a
+  harness of that class on top of the decorator.
+- **Not `L`.** Every design question is ruled (R1–R3, S1–S3), the decorator is built, and every
+  remaining edit is named.
+- **Not splittable.** The re-targets and the lane move must land in the same diff as the wiring line,
+  or the default lane and `CLI_DEEP` go red (`…ef39c9a6` on the SE's branch). `ADR-0037`'s merge order
+  says the same.
 
 **Priority `P1`.** It is where all of `EPIC-005`'s user value is realised. **Not `P0`**: it cannot
 start, and a `P0` on unstartable work makes the board lie. **Not `P2`**: the moment `EPIC-004`'s
@@ -264,8 +351,9 @@ at `aaa88263`). **Result: 7 of 10, ⚠️x3. It stays in `Backlog`, last of the 
   `CLI_DEEP` runs at QE (`AGENTS.md`: after any `src/cli.ts` change).
 - **Overlaps.** `ABC-101` (P2, Backlog) rewrites the same `engine:` expression to wire a level. The
   second of the two to land composes onto the first. Owner question: does a book hit bypass a weak
-  level's blunders? `ABC-138` merged (`497d3b2f`) into `src/cli.test.ts`, which this ticket does not
-  need to edit. No file overlap with `ABC-083`, `ABC-010`, `ABC-131` or `ABC-141`.
+  level's blunders? `ABC-138` merged (`497d3b2f`) into `src/cli.test.ts`~~, which this ticket does not
+  need to edit~~. *(Struck 2026-10-12 by BA/PM, `ADR-0037` R2: the wiring hop edits it, 10 hook sites
+  and 2 pins, and it edits `src/cli.real-engine.test.ts` too.)* No file overlap with `ABC-083`, `ABC-010`, `ABC-131` or `ABC-141`.
 
 **History. Assessed 2026-08-16** against `agent-factory/checklists/definition-of-ready.md` by BA/PM
 at the cutting hop. **Result: 7 of 10 — items 3, 5 and 10 carry a ⚠️. THE SCORE IS NOT INFLATED AND
@@ -402,3 +490,48 @@ one test file, its QE hop's `N8-LANE` reading follows them.
 - **Rulings owed before the wiring hop:**
   - Security/NFR: where the read lives. Either amend bar 4, which is (b1), or use a holder module, which is (b2).
   - BA/PM and QE: how the four substituted-engine and real-search Givens meet a book that answers first.
+
+## Amendment and re-score — 2026-10-12 (wiring rulings)
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5cc`. Rulings applied:
+`ADR-0037` § Addendum — 2026-10-12 (R1–R3, merge order) and `ADR-0036` § `### S1 — the fourth holder —
+2026-10-12`. Amendment lists: `.grugops/context/design-ABC-095-wiring/notes/…a4fe3027` and
+`.grugops/context/secnfr-ABC-095-placement/notes/…a096cf43`. Why each change was made:
+`.grugops/context/bapm-amend-ABC-095/notes/`. No timing was read.
+
+**What changed on this page, each dated in place, with the original words kept:**
+- § Scope: `src/book-file.ts`, the 10 re-targets, the 2 pins, `ABC-119`'s lane move, and the `src/` file
+  list for clause (d).
+- `A2`: the Given is cold (the first call in a fresh process). The 30 ms bar does not change.
+- `A7`: `read` is `readBookFile`, and `warn` writes to `process.stderr` in `src/cli.ts`.
+- § Security / NFR triggers: `NFR-004`'s 5 ms miss bar is warm (R3). `NFR-008` adds two costs, both
+  `UNKNOWN - verify`. The Security prediction is struck and replaced with R1's, citing § S1, S3,
+  `AR-095-READ` and `AR-095-L1UNIT`.
+- Test note 4: the copy's rules (real, byte-verified, book absent, `mkdtemp`, exact-path `rmSync`).
+- § Lane cost: still one new file; two existing test files are edited.
+- § Size: `S` → `M` (3). `P1` holds.
+- The 2026-10-10 re-score's "does not need to edit `src/cli.test.ts`" is struck.
+
+**`A1`, `A3`–`A6` and the Givens of `A5` and `A7` do not change.** Neither do `ABC-042`'s criteria or bar
+4's text. **Criteria on other pages that this diff delivers**, each amended on its own page:
+- `ABC-119` `A1`, `A3`, `A4` and its default-lane row: their Givens change;
+- `ABC-043` `A1`: a pointer only;
+- `ABC-043` `A2`/`A5`/`A7`, `ABC-044` `A3`/`A6`, `ABC-045` `A4`, `ABC-046` `A2`/`A3`/`A6`: (N) is
+  confirmed, and the Givens do not change.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | ✅ unchanged |
+| 2 | scope and out-of-scope clear | ✅ § Scope names every new file and every edited test file, and clause (d)'s file list. The engine boundary (`A6`) is unchanged |
+| 3 | INVEST-shaped | ✅ every input is merged: `ABC-093`, `ABC-094`, `ADR-0037` § Addendum and `ADR-0036` § S1. `M`, and not splittable (§ Size) |
+| 4 | acceptance testable and measurable | ✅ `A2` is now cold and definite. `ABC-119`'s amended Givens are checkable properties (`lstat`, byte identity, an absent file, a warning counted on stderr) |
+| 5 | dependencies known | ✅ the decorator commit `521a8513` is this ticket's own, on `grugops/ABC-095-book-before-engine`. It merges only together with the wiring |
+| 6 | security/NFR triggers with a measurable target | ✅ `NFR-004`: ≤ 30 ms cold, and a max of 200 warm calls ≤ 5 ms. `NFR-008`: ≤ 1 new file, 0 spawns, `N8-LANE` ≤ 650 ms CPU (two costs `UNKNOWN - verify`, read by QE). Security: the (b1)/(b2) prediction, the S3 checklist, two accepted risks named |
+| 7 | test notes present | ✅ five; note 4 now carries the copy's rules |
+| 8 | size assigned | ✅ `M` (3), re-sized from `S` |
+| 9 | priority assigned | ✅ `P1` |
+| 10 | no major unresolved blocker | ✅ none. `AR-095-L1UNIT` is routed by hand until the fold lands, and it does not block |
+
+**Result: 10 of 10.** The wiring hop may proceed. The column stays `In Development` (the board is the
+Orchestrator's). **Production and UAT** are unchanged: the owner's UAT word is needed, QE runs
+`CLI_DEEP`, and `In Security/NFR` runs S3.

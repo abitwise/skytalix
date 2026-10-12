@@ -32,6 +32,11 @@ DoR item 10. Through `ABC-072`, it also clears the ordering ⚠️ on `ABC-073`.
   rule there take precedence over the narrower words in this Status, in § Decision 2 and in the
   quoted clause. DELTA, (b2), the baseline rule and the fail-safe are unchanged. The canonical
   instrument moves to `.grugops/context/design-F-072-1/probe/clause-b.mjs`.
+- **2026-10-12, `secnfr-ABC-095-placement`:** § Decision 3's trigger has fired. `src/book-file.ts`
+  (`ADR-0037` § Addendum R1) is the fourth holder and the first limb-1 holder. Security/NFR rules it
+  in `### S1 — the fourth holder — 2026-10-12` at the end of this file: (b2) gets **no** call-graph
+  reach, and limb 1's (b1) unit widens to the holder file. DELTA, (b2), the baseline rule and the
+  fail-safe are unchanged.
 
 ## Context
 
@@ -345,3 +350,67 @@ node .grugops/context/design-F-072-1/probe/clause-b.mjs <base> <head> 3  # count
   Unchanged. The widened limbs leave the holders at the same 3 files, so its trigger does not move.
 - **`O-072-a`.** Closed: § Alternatives row 3 now points at the correction.
 - **Rollback.** Strike this block and route with the old path. Nothing else is built on it.
+
+### S1 — the fourth holder — 2026-10-12
+
+Ruled by Security/NFR (task `wave-2026-09-25`, subtask `secnfr-ABC-095-placement`, branch
+`grugops/secnfr-ABC-095-placement` from `main` `d0cde2e2`). It answers `ADR-0037` § Addendum's S1.
+The readings are in `.grugops/context/secnfr-ABC-095-placement/notes/…f0bf8b4a`. They come from
+plants in a scratch clone outside the repository, read with the canonical instrument. No timing was
+read.
+
+**The trigger.** `src/book-file.ts`, as `ADR-0037` R1 contracts it, is the first production module
+outside `cli.ts`, `glyph-mode.ts` and `perft-bench.ts` that holds a limb. It is also the first
+production file that holds **limb 1**: the limb-1 baseline has been 0 since the repository began.
+
+**Ruling 1: (b2) gets no call-graph reach.** The delta test stands for (b2) as written.
+- **The residual that a reach would close** is a new call over an existing edge (§ Decision 3). For
+  this holder it reaches one function that takes no parameter and reads one fixed path, read-only.
+  A new call re-reads the same bytes, so no new input reaches the capability.
+- **Measured:** a new `readBookFile()` call in `cli.ts` does not fire, and it carries no new
+  exposure. A second importer of `book-file.ts` (`render-seam.ts -> book-file.ts`) **fires** (b2).
+- **Cost.** § Alternatives 4's reason stands: a parser and a resolver, now for 4 files.
+
+**Ruling 2: limb 1's (b1) unit is the HOLDER FILE.** For limb 1 only, (b1) also fires when a `+`
+line of `git diff -U0 --no-renames <base> <head>` falls anywhere in a production file that holds
+limb 1 in code at `<base>` or at `<head>`. A comment-only edit fires too, which is the safe
+direction.
+- **Why limb 1 differs.** For limb 2, every use carries the token `process`. For limb 3, every use is
+  a counted call span. For limb 1, the counted occurrence is the import statement, and the uses of
+  the imported binding (`readFileSync(…)`) carry no token. Until now no production file held limb 1,
+  so this gap had nothing to hide.
+- **Measured: two diffs that break R1's contract fire NOTHING on any limb under the instrument as it
+  stands:**
+  - the holder reads `/etc/passwd` instead of the book;
+  - the holder takes `path: string`, and `cli.ts` passes a value derived from its options.
+
+  The second is the path-from-input shape that `ADR-0037` R1 option 4 rejected (`V12.3.1` [L1]).
+  Under Ruling 2 both fire, because both touch `src/book-file.ts`. An edit to the import line (for
+  example, adding `writeFileSync`) already fires.
+- **Cost.** The holder set for limb 1 is `src/book-file.ts`, about 5 lines. Limb 2 and limb 3
+  holders are not affected.
+- **Severity of the gap, if Ruling 2 did not land:** MEDIUM (`F-095-1`). It is the class of
+  `F-072-1`: a form that passes silently. It does not block (`block_on: high`).
+
+**How to apply Ruling 2 before the instrument carries it.** Take the limb-1 holders from the
+instrument's own `baseline at <head>` line for `<head>`, and from the same line run as
+`<base> <base> 1` for `<base>`. Then run
+`git diff --name-only --no-renames <base> <head> -- <those paths>`. A non-empty output means limb 1
+FIRES (b1). Folding this into `.grugops/context/design-F-072-1/probe/clause-b.mjs` belongs to
+Architect/Design, the instrument's owner. Until the fold lands, the Orchestrator applies the by-hand
+check when it routes (`AR-095-L1UNIT`).
+
+**§ Decision 3's trigger is re-armed:**
+- at the first holder that exports a function taking a caller-supplied value which reaches a
+  capability, because from then on a new call over an existing edge can carry new input; or
+- at a fifth holder.
+
+**What this leaves, and who owns it.**
+- **`F-095-1`** (MEDIUM): closed by Ruling 2 when this block merges. The Orchestrator records the
+  close.
+- **`AR-095-L1UNIT`** (LOW; owner the Orchestrator, who routes by hand until the fold lands; the fold
+  is owed by Architect/Design). It closes when `clause-b.mjs` fires on a `+` line in a limb-1 holder.
+  The fold needs at least the two plants above, and they must fire.
+- **§ Decision 3's residual** (LOW; owner Architect/Design). Unchanged, apart from the re-armed
+  trigger.
+- **Rollback.** Strike this block. `F-095-1` then re-opens at MEDIUM, owned by the Orchestrator.

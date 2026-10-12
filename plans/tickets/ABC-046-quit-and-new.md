@@ -585,3 +585,19 @@ restored, with sha256 and `git status --porcelain -- src` asserted.
   - Nothing was merged or deployed.
 - **Column:** the move out of `In Review` is the Orchestrator's. Production lines are > 0, so the
   owner's word is still needed at `In UAT`.
+
+## Amendment — 2026-10-12 (delivered by `ABC-095`'s diff): (N) confirmed, no Given changes
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5cc`. **This page stays
+`Done`, and no criterion's text changes.** `ABC-095`'s diff moves the engine double in
+`CHILDREN.quits` and `CHILDREN.renews` from `./engine.ts` to `./book-engine.ts` (`withBook`), which is
+`ADR-0037` § Addendum — 2026-10-12 R2. With the book in front, the old double would meet a random book
+reply to `1. e4`. Reasons: `.grugops/context/bapm-amend-ABC-095/notes/`.
+
+- **`A2`, `A3` and `A6`** (read on `quits` and `renews`). The Givens do not change, and (N) is confirmed
+  for both children. The double stands at the same `EngineSeam` at `engine:`. What is asserted is
+  product code: the confirmation, `QUIT_NOTICE`, no result screen, the redrawn opening frame and the exit
+  code. There is one seam.
+- **Recorded, not re-opened.** These Givens do not stipulate a constructed engine. The double was
+  admitted at this ticket's build on `ABC-043` `## Test notes` 8 (no default-lane row runs the real
+  search), and the re-target does not change that reading.
