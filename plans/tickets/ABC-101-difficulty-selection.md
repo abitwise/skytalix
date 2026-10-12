@@ -489,3 +489,21 @@ the 2026-10-12 re-score.
 
 **Size `M` and priority `P1` hold.** The SE's resume adds one test row. The front matter
 (`status: backlog`, `P2`) is still stale and is the Orchestrator's to sync.
+
+## Delivery — addendum, 2026-10-12 (Software Engineer, subtask `resume2-ABC-101`)
+
+**Delivered on the branch, not merged.** `main` `3ea3e352` merged in at `e88a7832` (no rebase; the two
+pre-ruled conflicts kept both sides). Code commit **`ac8deab1`**: the probe diff plus `ABC-086` `A5`(i′)'s
+four assertions in `src/engine.test.ts`. Readings: `.grugops/context/resume2-ABC-101/notes/` (`…4822a352`
+gates, `…c243b4f0` criteria, `…d2414062` calls). Not restated here.
+
+| criterion | on `ac8deab1` |
+|---|---|
+| `A1`, `A2`, `A3` (+ extended) | PASS |
+| `A5` | PASS |
+| `A6` | FAIL, expected: `ABC-065` `A3` is the one red of 1789 until the Scribe lands the `AGENTS.md` slot line |
+| `A7` | PASS: code 0; added lines 0; the two `ABC-042` hits only |
+| `A8′` | PASS |
+| `A9` (widened) | PASS: `engine.test.ts` `-U0` = 2 import hunks + the one `(i)` `it` |
+| `A10` | PASS: `CLI_DEEP` 10/10, 0 temp copies before and after |
+| `ABC-086` `A5`(i′) | PASS, four assertions; mutants (1), (2), (4) red |
