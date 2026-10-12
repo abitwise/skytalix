@@ -414,3 +414,35 @@ merged, no column moved. **This hop wrote every corrected sentence and has not v
   is empty.
 - **Left alone, flagged:** `src/cli.test.ts:3251` (`EPIPE`, pre-`ABC-115`, not CLAIM-B as written)
   and the `A10` comment's stale `src/cli.ts:159` cite (now `:160`).
+
+## QE
+
+QE/E2E (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-12, subtask `qe-ABC-117`, branch
+`grugops/qe-ABC-117` off tip `d5afab3f`. **Verdict: PASS_WITH_GAPS.** The readings were taken at
+QE's own hand before the build notes were read. Notes: `.grugops/context/qe-ABC-117/notes/`. This is
+an agent `decision`, not a stamp.
+
+- **A1 MET.** Tip, `node src/cli.ts 1</dev/null </dev/null`: exit `1`, `^usage: ` 0,
+  `internal error` 0, Node's banner on `src/cli.ts:160`. QE's out-of-product script: exit `1`,
+  `CAUGHT:` never printed. Control `--bogus`: exit `1`, `^usage: ` **1**, `Usage` **0**. Every
+  corrected sentence agrees.
+- **The instrument: the Engineer's substitution is SOUND.** This page's `grep -c "Usage"` reads 0 on
+  both paths and decides nothing; `^usage: ` reads 1 against 0. **That is a gap for BA/PM
+  (QE-117-b, LOW):** amend A1's quantity to the `usage:` line.
+- **A2 MET (all four).** `cmp` of the original's lines 24-49 against the carried quote: equal, 26 lines.
+- **A3 MET.** **A4 MET.** The S9 board block names both S6 and S9, as the Orchestrator ruled.
+- **A5 MET.** No CLAIM-A line touched, `ADR-0016` numstat empty, and every re-open / re-score / arm
+  word in the added text is a negation.
+- **A6 MET.** `c74e7426…0d3b` at base == head. **A7 MET.** 56 / 1741 / 0 at both ends, N8 lines
+  hash-equal, `T2` not fired.
+- **QE-117-a (MEDIUM, routed to BA/PM): two CLAIM-B clauses this page's inventory missed, false at
+  the tip.** First, `plans/traceability.md`'s `ABC-115` row: *"the non-`EPIPE` path still exits `1`
+  (= `USAGE_EXIT_CODE`)"*. `## Out of scope` above says that row was checked and carries no CLAIM-B
+  clause, and it does. Second, `…0391186e:69-70`. QE recommends widening by two rows and an SE delta
+  hop before merge.
+- **Left alone, agreed:** `src/cli.test.ts:3251`. Measured: the pre-`ABC-115` `EPIPE` `1` was also
+  Node's, and the sentence is a value statement in the CLAIM-A register. Also left alone: the dated
+  `src/cli.ts:159` reading at `:3376`. QE-117-c (INFO): the S8 rewrite's "this ticket" now reads
+  ambiguously and means `ABC-115`.
+- **UAT-waiver reading, measured:** production `src/` is empty over the range and for each of
+  `59000c87`, `00741431` and `d5afab3f`, so the waiver applies.
