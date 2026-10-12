@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word "send 2 small follow-ups": Architect `design-ABC-154-close` (record `RISK-ABC105-LANE` closure; QE-154-b/-c/-d) and BA/PM `bapm-fold-ABC-154` (QE-154-a) dispatched, width 2. No ticket moves._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-154` → Done (merged `4537fb11`, UAT WAIVED by measurement); N8-LANE MET at `0f8036f9` closes `RISK-ABC105-LANE` (catalog entry owed by Architect). In flight: none. Ready: `ABC-155`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-154` delivered (`beb0991c`) → In Review; QE dispatched (width 1). In flight: `qe-ABC-154`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word: pull `ABC-154` → In Development (SE dispatched, width 1). Ready: `ABC-155`._
