@@ -109,6 +109,15 @@ describe("ABC-105 A3 — the refs-only false pass is closed (real notes)", () =>
     expect(removed.stdout).toContain("ABC-062: finding. No QE verdict note was found");
     expect(removed.stdout).not.toContain("quality-gate-ABC-066-qe");
   });
+
+  it("coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings", () => {
+    // QE-105-p: `main --ticket` opens only folders naming T, which masks a coverage() that has lost
+    // the folder condition. Read the whole context tree so coverage() alone must hold condition 4.
+    const all = readNotes(join(ROOT, ".grugops/context"));
+    expect(coverage("ABC-062", all, minus("ABC-062")).status).toBe("finding");
+    expect(snapshotIds).not.toContain("ABC-073");
+    expect(coverage("ABC-073", all, snapshotIds).status).toBe("finding");
+  });
 });
 
 describe("ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes)", () => {
@@ -126,6 +135,12 @@ describe("ABC-105 A9 — the security-nfr substitute is visible, not silent (rea
     expect(r.code).toBe(1);
     expect(r.stdout).toContain("ABC-073: finding.");
     expect(run(["--ticket", "ABC-073"], { snapshotIds: [...snapshotIds, "ABC-073"] }).code).toBe(0);
+  });
+
+  it("--sweep lists ABC-073 as a finding", () => {
+    const r = run(["--sweep"]);
+    expect(r.code).toBe(1);
+    expect(r.stdout).toContain("  ABC-073: no QE verdict note was found.\n");
   });
 });
 
@@ -293,6 +308,25 @@ describe("ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no over
       expect(r.stderr).toContain(
         "refusing to follow the symbolic link .grugops/context/qe-ABC-200",
       );
+    } finally {
+      rmSync(outside, { recursive: true, force: true });
+    }
+  });
+
+  it.each([
+    ["the notes/ directory", "qe-ABC-200/notes", "notes"],
+    ["a note file", "qe-ABC-200/notes/a.md", "notes/a.md"],
+  ])("refuses a symbolic link at %s with exit 2 and does not follow it", (_, link, target) => {
+    const outside = mkdtempSync(join(tmpdir(), "qe-hop-outside-"));
+    try {
+      mkdirSync(join(outside, "notes"));
+      writeFileSync(join(outside, "notes/a.md"), good);
+      const parent = link.endsWith(".md") ? "qe-ABC-200/notes" : "qe-ABC-200";
+      mkdirSync(join(tree({}), ".grugops/context", parent), { recursive: true });
+      symlinkSync(join(outside, target), join(root, ".grugops/context", link));
+      const r = run(["--sweep"], { root });
+      expect([r.code, r.stdout]).toEqual([2, ""]);
+      expect(r.stderr).toContain(`refusing to follow the symbolic link .grugops/context/${link}\n`);
     } finally {
       rmSync(outside, { recursive: true, force: true });
     }
