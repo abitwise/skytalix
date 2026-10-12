@@ -1,0 +1,11 @@
+# count-only smoke, after pre-registration 8f4f75e5, before master-n8r.sh; exit code and counts only, NO time recorded. start 2026-10-12T17:16:51Z
+arms/B src/cli.test.ts exit 0 files 1 tests 69 failed 0 skipped 0
+arms/T src/cli.test.ts exit 0 files 1 tests 69 failed 0 skipped 0
+arms/H src/cli.test.ts exit 0 files 1 tests 69 failed 0 skipped 0
+arms/B src/cli.real-engine.test.ts exit 0 files 1 tests 1 failed 0 skipped 0
+arms/T src/cli.real-engine.test.ts exit 0 files 1 tests 1 failed 0 skipped 0
+arms/H src/cli.real-engine.test.ts exit 0 files 1 tests 1 failed 0 skipped 0
+arms3/B src/book-engine.test.ts exit 0 files 1 tests 1 failed 0 skipped 0
+arms3/T src/book-engine.test.ts exit 0 files 1 tests 1 failed 0 skipped 0
+arms3/H src/book-engine.test.ts exit 0 files 1 tests 5 failed 0 skipped 0
+end 2026-10-12T17:17:06Z

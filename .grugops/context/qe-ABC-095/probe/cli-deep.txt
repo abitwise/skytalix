@@ -1,0 +1,24 @@
+2026-10-12T14:18:32Z
+load { 4.25 6.69 7.01 }
+before:        0
+stdout | src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-mnSRIT) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-mnSRIT/src/cli.ts --colour black --ascii <<< "" — wall 3102 ms, exit 0, signal null
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-mnSRIT) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-mnSRIT/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3106 ms, exit 0, signal null
+ ✓ src/cli.real-engine.test.ts > ABC-119 — the real-engine lane's child is the delivered composition (default lane; spawns nothing) > the deep child runs the delivered entry point with no --import, loader or hook, and an empty environment 22ms
+stdout | src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-mnSRIT) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-mnSRIT/src/cli.ts --colour black --ascii <<< "quit\nquit\n" — wall 3105 ms, exit 0, signal null
+[CLI_DEEP] (cwd /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-095/) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-095/src/cli.ts --colour white --ascii <<< "e2e4\n" — wall 110 ms, exit 0, signal null
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A1 — the real search answered: the child took at least 1 s and exited 0 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(i) — the reply is a legal move in the position it was played in, by the project's own generator 1ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(ii) — the whole child, spawn to exit, stays inside NFR-004's 5 s hard ceiling (clause B) 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iii) — the session advances: the side to move and the ply number both change 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iv) — no stack trace on stderr, and the exit code is 0, never 70 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session > A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child exits 0 on quit 0ms
+ ✓ src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session > A7 — a real session consults the book: the reply to 1. e4 is one of the book's entries for that position 3ms
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Duration  9.57s (transform 0ms, setup 0ms, import 42ms, tests 9.48s, environment 0ms)
+exit 0
+after:        0
+2026-10-12T14:18:42Z

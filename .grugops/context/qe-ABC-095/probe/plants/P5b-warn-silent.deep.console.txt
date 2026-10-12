@@ -1,0 +1,69 @@
+
+ RUN  v4.1.11 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P5b-warn-silent
+
+stdout | src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OmJzo0) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OmJzo0/src/cli.ts --colour black --ascii <<< "" — wall 3105 ms, exit 0, signal null
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OmJzo0) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OmJzo0/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3099 ms, exit 0, signal null
+
+stdout | src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OmJzo0) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OmJzo0/src/cli.ts --colour black --ascii <<< "quit\nquit\n" — wall 3108 ms, exit 0, signal null
+[CLI_DEEP] (cwd /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P5b-warn-silent/) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P5b-warn-silent/src/cli.ts --colour white --ascii <<< "e2e4\n" — wall 108 ms, exit 0, signal null
+
+ ❯ src/cli.real-engine.test.ts (9 tests | 2 failed) 9478ms
+     ✓ the deep child runs the delivered entry point with no --import, loader or hook, and an empty environment 24ms
+     ✓ A1 — the real search answered: the child took at least 1 s and exited 0 0ms
+     ✓ A3(i) — the reply is a legal move in the position it was played in, by the project's own generator 1ms
+     ✓ A3(ii) — the whole child, spawn to exit, stays inside NFR-004's 5 s hard ceiling (clause B) 0ms
+     ✓ A3(iii) — the session advances: the side to move and the ply number both change 0ms
+     × A3(iv) — no stack trace on stderr, and the exit code is 0, never 70 2ms
+     ✓ A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues 0ms
+     × A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child exits 0 on quit 0ms
+     ✓ A7 — a real session consults the book: the reply to 1. e4 is one of the book's entries for that position 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine > A3(iv) — no stack trace on stderr, and the exit code is 0, never 70
+AssertionError: book-absent warnings: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/cli.real-engine.test.ts:366:89
+    364|       // AMENDED 2026-10-12, delivered by `ABC-095`: THE LEAK DETECTOR…
+    365|       // asserted PRESENT, exactly once. Missing, it means the child r…
+    366|       expect(occurrencesOf(played.stderr, BOOK_ABSENT_WARNING), "book-…
+       |                                                                                         ^
+    367|     });
+    368|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session > A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child exits 0 on quit
+AssertionError: warnings on stderr: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/cli.real-engine.test.ts:411:89
+    409|       expect(bookless.stdout.trimEnd().endsWith(INPUT_ENDED_NOTICE)).t…
+    410|
+    411|       expect(occurrencesOf(bookless.stderr, BOOK_ABSENT_WARNING), "war…
+       |                                                                                         ^
+    412|       expect(bookless.stderr).toBe(`${BOOK_ABSENT_WARNING}\n`);
+    413|       expect(occurrencesOf(bookless.stdout, BOOK_ABSENT_WARNING), "war…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 7 passed (9)
+   Start at  17:26:23
+   Duration  9.57s (transform 0ms, setup 0ms, import 43ms, tests 9.48s, environment 0ms)
+
+JSON report written to /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-095/.grugops/context/qe-ABC-095/probe/plants/P5b-warn-silent.deep.json

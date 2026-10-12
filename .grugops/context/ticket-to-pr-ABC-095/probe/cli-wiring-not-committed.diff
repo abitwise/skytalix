@@ -1,0 +1,39 @@
+diff --git a/src/cli.ts b/src/cli.ts
+index 68899052..1b4c972c 100644
+--- a/src/cli.ts
++++ b/src/cli.ts
+@@ -67,6 +67,9 @@
+  * would be a change this ticket is not licensed to make.
+  */
+ 
++import { readFileSync } from "node:fs";
++import { createBookProbe } from "./book.ts";
++import { withBook } from "./book-engine.ts";
+ import { resolveOptions } from "./cli-options.ts";
+ import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
+ import { beginGlyphModeSession } from "./glyph-mode.ts";
+@@ -165,6 +168,15 @@ async function main(): Promise<void> {
+   // holds both once the loop has returned. It is still the merged factory's own value and it is
+   // still constructed exactly once — `ABC-043` `A1`'s row is pinned on this line now.
+   const history = newGame(START_FEN);
++  // `ABC-095` — ONE probe for the process, so its one warning is one for the whole session (`A5`).
++  // The read, the warning's stream and the randomness are bound here, the only place that may hold
++  // them (`src/book.ts`'s header): the artifact's bytes, stderr (stdout is the board), and
++  // `Math.random` with no session seed (`ADR-0037` D3). Nothing is read until the engine's first ply.
++  const book = createBookProbe({
++    read: () => readFileSync(new URL("../data/opening-book/book.json", import.meta.url)),
++    warn: (line) => process.stderr.write(`${line}\n`),
++    random: Math.random,
++  });
+ 
+   try {
+     const outcome = await runTurnLoop({
+@@ -173,7 +185,7 @@ async function main(): Promise<void> {
+       render: makeRenderSeam(mode, orientation),
+       // BUILT HERE, CALLED NOWHERE — `G6`'s single-caller precondition. See the module header.
+       input: createLineInputSeam({ source: process.stdin, output: sink }),
+-      engine: createEngine({ budgetMs: DEFAULT_BUDGET_MS }),
++      engine: withBook(book, createEngine({ budgetMs: DEFAULT_BUDGET_MS })),
+       sink,
+     });
+ 

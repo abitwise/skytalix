@@ -467,6 +467,50 @@ one test file, its QE hop's `N8-LANE` reading follows them.
 **Production and UAT:** a new `src/` module and `src/cli.ts`. That needs the owner's UAT word. QE runs
 `CLI_DEEP`.
 
+## Delivery
+
+**2026-10-12, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-095`).
+- Branch `grugops/ABC-095-book-before-engine`, from `e9b1c50a`. Code commit `521a8513`: `src/book-engine.ts`
+  (production, +20) and `src/book-engine.test.ts` (+186, 5 tests). Not merged, not pushed.
+- Readings and calls are in `.grugops/context/ticket-to-pr-ABC-095/` (`…ef39c9a6` reds, `…1e971b4d` decision,
+  `…31116475` timing, `…2cc11fef` artifact-ref, `probe/`). They are not restated here.
+
+**Partial. The decorator and five criteria are met. The wiring line is NOT delivered, and the hop stopped there.**
+- **Test note 1 holds.** The search is spy-able through the decorator's inner-seam argument. 0 engine lines changed,
+  and `A6` does not fire.
+- **Met:** `A1` (search called 0 times), `A3` (1 time, 0 stderr writes, 0 warnings), `A4` (two real frames across the
+  leave-book ply), `A5`'s game half (10 calls, 1 warning), `A6`.
+- **Not met: `A7` and `A5`'s stream half.** Both need the `src/cli.ts` line. That line was built and run, then reverted,
+  because it reds:
+  - `ABC-042` **bar 4** (security): no `node:fs` in `cli.ts`. The ADRs' "(b1) if `src/cli.ts` holds the read" missed it.
+  - `ABC-043` `A5`/`A7`, `ABC-044` `A3` and `ABC-119` `A1`. Their Givens assume the engine seam answers the engine's
+    first ply, and with the book in front it does not.
+  - two mechanical pins (the `process.*` census and the `engine:` regex).
+  - This § Re-score's "`src/cli.test.ts` … this ticket does not need to edit" does not hold at `e9b1c50a`.
+- **Rulings owed before the wiring hop:**
+  - Security/NFR: where the read lives. Either amend bar 4, which is (b1), or use a holder module, which is (b2).
+  - BA/PM and QE: how the four substituted-engine and real-search Givens meet a book that answers first.
+
+**2026-10-12, Software Engineer, the wiring hop** (subtask `wire-ABC-095`). `main` `0974102f` was merged in at
+`75606020` (no rebase), and the code is at `09740ea4`. It was built to this page as amended below, to `ADR-0037`
+§ Addendum R1–R3, `ADR-0036` § S1, and S3 items 2–8. No ruling was weakened. Readings, plants, clause (b) and
+the S3 self-check: `.grugops/context/wire-ABC-095/notes/` (`…c2673608`, `…adc2b5bb`, `…a045086f`, `…bd2ae8d8`).
+
+| criterion | state | reading |
+|---|---|---|
+| `A1` | met | `src/book-engine.test.ts`: inner seam called 0 times on a book hit |
+| `A2` | **NOT READ, so not met** | no quiet window in 15 min: a foreign vitest at every poll. Not estimated. Instrument: `probe/time.ts cold-hit` |
+| `A3` | met | the inner seam is called once, with 0 stderr writes and 0 warnings. The warm miss bar (R3) is **NOT READ**, as for `A2` |
+| `A4` | met | two real frames across the leave-book ply |
+| `A5` | met | game half: 10 inner calls, 1 warning. Stream half (`CLI_DEEP`, book-absent copy): stderr is exactly the warning line, 0 occurrences of it on stdout, the session ends on `quit`, exit 0 |
+| `A6` | met | 0 lines in engine, search, evaluation, ordering, TT, levels, time budget, `turn-loop.ts`, `book.ts` and `data/` |
+| `A7` | met | `engine:` is the only changed line inside `runTurnLoop({…})`; `book` is built with `read: readBookFile`, a stderr `warn` and `Math.random`. `CLI_DEEP`: the reply to `e2e4` is one of the book's entries. **The child row alone does not red an unwired build** (the search's reply is also a book move). The pin and the re-targeted children do |
+
+`ABC-119` `A1`/`A3`/`A4` and its default row run on the real, byte-verified, book-absent `mkdtemp` copy, and
+`A3`(iv) asserts the warning present exactly once. Gates: lint, typecheck and build exit 0; `npm test` 58 files,
+1780 passed, 0 skipped; skip integrity clean; `CLI_DEEP` 9/9. **Open:** `A2` and the warm miss bar (timing, quiet
+host); QE's `N8-LANE` costs and `ABC-119` `A6`; S3 at `In Security/NFR`; the owner's UAT word.
+
 ## Amendment and re-score — 2026-10-12 (wiring rulings)
 
 BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5cc`. Rulings applied:
@@ -511,3 +555,77 @@ BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5c
 **Result: 10 of 10.** The wiring hop may proceed. The column stays `In Development` (the board is the
 Orchestrator's). **Production and UAT** are unchanged: the owner's UAT word is needed, QE runs
 `CLI_DEEP`, and `In Security/NFR` runs S3.
+
+## QE
+
+QE/E2E, 2026-10-12 (subtask `qe-ABC-095`, branch `grugops/qe-ABC-095` off `2307fc11`; QE was the only hop running).
+**Verdict: PASS_WITH_GAPS.** The detail is in `.grugops/context/qe-ABC-095/notes/` (decision `…ee8775a2`).
+
+- **`A1`–`A7` MET, every one re-read by QE.**
+  - **`A2`: max 8.300 ms ≤ 30 ms, cold.** 10 fresh processes, read in a clean pre-registered window.
+  - **R3 (warm miss): max 0.0149 ms ≤ 5 ms.** 3 × 200 calls, median about 0.0009 ms and p99 about 0.007 ms.
+  - **`CLI_DEEP` 9 / 9**, with 0 copies left behind.
+  - **Real children:**
+    - `A4`: the book frame and the search frame have the same rows, and nothing on screen or stderr names the book;
+    - `A5`: 3 searched plies in a book-absent copy give exactly 1 warning, on stderr only;
+    - `A7` ×10: every reply is a book entry.
+- **18 plants, outside the repository.**
+  - All are caught except a cwd-relative `readBookFile` (`QE-095-a`) and two copy leaks (`QE-095-d`).
+  - `ABC-119` `A6` holds on the amended lane: M1 and M2 red `CLI_DEEP` `A1` alone, and the default lane stays green.
+  - The 10 re-targeted children each exercise their criterion. `src/cli.test.ts` ×20 is green (the naive wiring is
+    red in 4 of 10), and the default lane never reads the book.
+- **The SE's readings hold.** The copy rule (no links, every non-directory entry a regular file) is honest and
+  sufficient; the page wording is `QE-095-e`. "Both halves pinned" pins a superset of either reading.
+- **`N8-LANE`: NOT READ (`QE-095-N8`, MEDIUM).**
+  - All 4 pre-registered windows were void, and both named costs stay `UNKNOWN - verify`.
+  - The count pins hold: +1 file, 0 new spawns.
+- **Other gaps** (LOW unless marked):
+  - `QE-095-b`: the `A7` child alone does not discriminate. That is enough by composition;
+  - `QE-095-c`: "1 warning per process" is not behavioural in `CLI_DEEP`;
+  - `QE-095-h`: the added file's lane cost has never been read;
+  - `QE-095-f`, `-g` and `-i` are INFO.
+- **UAT:** the waiver does not apply (3 production files in the delivered pair). The owner's word is owed. Next is
+  `In Security/NFR` (S3).
+
+**2026-10-12, `N8-LANE` re-read** (QE/E2E, subtask `qe-n8-ABC-095`, branch `grugops/qe-n8-ABC-095` off `7b93c973`).
+QE was the only hop running; this followed the owner's word "(a)". The detail is in
+`.grugops/context/qe-n8-ABC-095/notes/` (decision `…15521bc7`, readings `…195fc847`).
+- **`N8-LANE` is MET on both named costs, so `QE-095-N8` is closed.**
+  - The pre-registration was committed as `8f4f75e5` before any run.
+  - Base `0974102f`, head `2307fc11`, n = 8. Each set was read clean in its first window, with 0 rounds discarded.
+  - S1 `src/cli.test.ts`: H−B **+0.225 s** CPU (x(2)..x(7) −0.100..+0.690), twin R 0.340 s, `F` 0.100 s.
+  - S2 `src/cli.real-engine.test.ts` default lane: **+0.025 s** (+0.020..+0.050), R 0.030 s.
+- **`QE-095-h` is closed.** S3 `src/book-engine.test.ts` against the placeholder reads **+0.115 s**
+  (+0.100..+0.120), R 0.030 s: MET.
+- **The ticket line is arithmetic, not a reading.**
+  - S1 + S2 medians sum to 0.250 s, and their x(7) ends sum to 0.740 s.
+  - With S3, the sums are 0.365 s and 0.860 s.
+- **New INFO items:**
+  - `QE-095-j`: S1's x(7) is above 650 ms;
+  - `QE-095-k`: S2 and S3 are admissible only by A1's tick floor;
+  - `QE-095-l`: new twin readings for Architect/Design to fold.
+- The laptop was on battery throughout. Power was logged and is not a void clause. No platform process appeared.
+  The other `qe-ABC-095` rows stand.
+
+## Security/NFR
+
+**2026-10-12, Security/NFR** (task `wave-2026-09-25`, subtask `secnfr-ABC-095-s3`, branch
+`grugops/secnfr-ABC-095-s3` off the QE tip `e1444f23`; width 1). This is the S3 gate on the delivered pair
+`0974102f..2307fc11`; the QE tip adds no production line. ASVS L1, block on `high`. **Result:
+PASS_WITH_RISKS.** The notes are in `.grugops/context/secnfr-ABC-095-s3/notes/` (`…b65b11b7` decision,
+`…c24fec8e` readings) and are not restated here. No timing was read.
+
+| item | reading | state |
+|---|---|---|
+| 1 clause (b) | (b1) `book-file.ts` limb 1 and `cli.ts` limb 2; (b2) `cli.ts -> book-file.ts` only; limb 3 silent; **holders 4**; Ruling 2 by hand fires | **MET, as predicted** |
+| 2–6 | `book-file.ts` to R1's contract and cwd-independent in a child; `cli.ts` limited to imports, the `const` and `engine:`; `A9` 9 → 10; bars 1 and 4 unedited; `book.ts` 0 lines, fixed-text warning | **MET** |
+| 7 tree copy | real copy, leak detector present once, `mkdtemp` under `tmpdir()`, exact-path removal | **MET**; the checklist text is corrected (`QE-095-e`) |
+| 8 `ABC-041` (a) (c) (d) | no manifest change; tmp-only writes, 0 new default-lane spawns, 2 named `CLI_DEEP` children; the six files | **MET** |
+| `QE-095-a` | ruled LOW, non-blocking: no ASVS requirement fails at the tip. Accepted as **`AR-095-CWD`** (owner: the Orchestrator). The named fix is QE's (run `A7`'s child from a neutral cwd), and it is measured to red the cwd-relative plant. Not owed before merge | **accepted risk** |
+
+- **Required fixes before merge:** none.
+- **Accepted risks:** `AR-095-CWD` (LOW, the Orchestrator), `AR-095-READ` (LOW, Security/NFR, confirmed)
+  and `AR-095-L1UNIT` (LOW, the Orchestrator, confirmed open; Architect/Design owes the fold).
+- **Owed by BA/PM:** test note 4 and `ABC-119` § Amendment, to the corrected copy rule; the
+  `AR-095-CWD` fix, as an amendment to `A7`'s Given or as a follow-up.
+- **Next:** `Ready for UAT` (the Orchestrator's move). The owner's UAT word is owed.

@@ -1,0 +1,45 @@
+# readout-n8r.py self-test on RECORDED TSVs only (no run). 2026-10-12T17:14:53Z
+## 1. qe-ABC-154 w1 (placeholder set; graded MET: twin -0.005 s, R 0.030 s, H-B +0.380 s (+0.350..+0.410)) with 'added'
+expected counts (round 0): {'B': (1, 1), 'T': (1, 1), 'H': (1, 32)}
+scored rounds 8 [1, 2, 3, 4, 5, 6, 7, 8]; discarded rounds []
+load1 before each scored run: 3.21-8.88
+
+[CPU user+sys] n=8 k=2
+  B median 0.575 s; H median 0.960 s; T median 0.570 s
+  twin T-B sorted: -0.040, -0.030, -0.020, -0.010, +0.000, +0.000, +0.000, +0.020
+  twin median -0.005 s (-0.870 % of B); limit max(1.5 % = 8.62 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +1 / -4 (zeros 3, dropped): two-sided p 0.375  [old convention, not used: 1/8, p 0.070]
+  R 0.030 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: +0.340, +0.350, +0.350, +0.370, +0.390, +0.410, +0.410, +0.420
+  treatment median +0.380 s, interval x(2)..x(7) = +0.350..+0.410
+
+  per-set F = 0.020 s (recorded per-set F); 650 ms >= F: True
+  resolves 650 ms (R <= b): True; lower end x(k) +0.350 s > b: False; median +0.380 s <= b: True
+  STATE at 650 ms CPU: MET
+
+[wall] n=8 k=2
+  B median 0.415 s; H median 0.730 s; T median 0.420 s
+  twin T-B sorted: -0.100, -0.030, -0.010, +0.000, +0.000, +0.000, +0.010, +0.010
+  twin median +0.000 s (+0.000 % of B); limit max(1.5 % = 6.23 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +2 / -3 (zeros 3, dropped): two-sided p 1.000  [old convention, not used: 2/8, p 0.289]
+  R 0.030 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: +0.190, +0.280, +0.280, +0.290, +0.310, +0.330, +0.330, +0.340
+  treatment median +0.300 s, interval x(2)..x(7) = +0.280..+0.330
+## 2. qe-ABC-095 n8-cli-w1 (graded VOID), discard reasons per row, then the state
+  18 DISCARD:foreign,sampler
+   6 DISCARD:sampler
+scored rounds 0 []; discarded rounds [1, 2, 3, 4, 5, 6, 7, 8]
+WINDOW STATE: VOID (n must be 8; a window with any discarded round is void). No summary is used.
+## 2. qe-ABC-095 n8-cli-w2 (graded VOID), discard reasons per row, then the state
+  21 DISCARD:foreign,sampler
+   3 DISCARD:sampler
+scored rounds 0 []; discarded rounds [1, 2, 3, 4, 5, 6, 7, 8]
+WINDOW STATE: VOID (n must be 8; a window with any discarded round is void). No summary is used.
+## 2. qe-ABC-095 n8-real-w1 (graded VOID), discard reasons per row, then the state
+  24 DISCARD:sampler
+scored rounds 0 []; discarded rounds [1, 2, 3, 4, 5, 6, 7, 8]
+WINDOW STATE: VOID (n must be 8; a window with any discarded round is void). No summary is used.
+## 2. qe-ABC-095 n8-real-w2 (graded VOID), discard reasons per row, then the state
+  24 DISCARD:sampler
+scored rounds 0 []; discarded rounds [1, 2, 3, 4, 5, 6, 7, 8]
+WINDOW STATE: VOID (n must be 8; a window with any discarded round is void). No summary is used.

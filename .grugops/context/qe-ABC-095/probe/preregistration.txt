@@ -1,0 +1,78 @@
+qe-ABC-095 TIMING PRE-REGISTRATION: N8-LANE (two narrow sets), A2 (cold) and the R3 warm miss bar. Written 2026-10-12 ~14:30Z,
+BEFORE any window. Width 1: QE is the only grugops hop running (brief .grugops/queue/pending/qe-ABC-095.md at main 54381495).
+Committed on grugops/qe-ABC-095 (off 2307fc11) before the first window's first run. The rules are ADR-0035 decisions 1-3 with
+§ Addendum 2026-10-12 A1 and § Addendum (after ABC-154) B1. Both addenda (3017115c, 0fe43646) are ancestors of 0974102f and of
+2307fc11, so they are ancestors of this commit. Nothing below changes after the first window starts; any later text is an ADDENDUM
+that changes no rule. Correctness runs (gates, CLI_DEEP, plants, mate x20) were taken BEFORE this was committed; none of them is a
+timing reading, and no window has been seen.
+
+ONE GLOBAL BUDGET: probe/master.sh (sha256 e720cc5a4b18c8b100c140bdd14fd0eec56e5614f1882ca20ba971187123da00), 30 minutes of window
+time from its start, gates included. No gate starts after the deadline; a window whose gate passed runs to its end. Order:
+A2/R3 w1 [w2 only if w1 void] -> N8 src/cli.test.ts w1 [w2 only if void/inadmissible] -> N8 src/cli.real-engine.test.ts w1 [w2].
+Anything not started, or whose gate timed out, is NOT READ. One re-attempt per reading, never a third. NO POOLING of windows. No
+estimate, ever. Void and inadmissible windows are kept in probe/windows/ and reported as read, never graded.
+
+GATE (every window): secnfr-ABC-152-window/probe/gate.sh IN PLACE, unchanged, sha256
+5335905acbe8c97804458b11091405474bd3df7028b13c6b78b7da8133352b6f: thermal 0 AND no vitest runner process (NOFOREIGN 1) on 4
+consecutive 15 s samples; MAXLOAD "" (load1 logged, NOT gated: ADR-0035 d2, § Pointers P3, B4). AC power is logged by the sampler
+and voids (below). The foreign suites seen this session (the grugops kit's vitest, oeselg-labs/platform repos) block the gate.
+
+ARMS (outside the repository, session scratchpad .../scratchpad/qe095/lane/arms), one shared node_modules symlink per arm root:
+  B = git archive 0974102f (the base the brief names); T = cp -R of B (/usr/bin/diff -r B T: identical); H = git archive 2307fc11.
+  B/T src/cli.test.ts sha256 d361ea85..., src/cli.real-engine.test.ts f4caad8f..., src/cli.ts f9065eea...
+  H   src/cli.test.ts sha256 54ae3d48... (cmp 0 to git show 2307fc11), src/cli.real-engine.test.ts f32ebbd1..., src/cli.ts 3fa1654a...
+
+1. N8-LANE (ADR-0035 decision 2; ticket § NFR-008: the two UNKNOWN - verify costs)
+  SETS, each read as its own narrow set, base 0974102f, as the brief directs:
+    S1 = src/cli.test.ts (the 10 re-targeted children now load the real ./engine.ts closure + ./book.ts + ./book-file.ts);
+    S2 = src/cli.real-engine.test.ts, DEFAULT LANE (CLI_DEEP unset; the ABC-119 default row now builds the tree copy).
+    Not read here (stated, not hidden): src/book-engine.test.ts (the ADDED file; decision 2 would put it in the set with a
+    placeholder base) and `vitest related` for src/cli.ts, src/book-file.ts, src/book-engine.ts. The brief names S1 and S2.
+  HARNESS secnfr-ABC-144-window-b/probe/lane144b.mjs IN PLACE, unchanged, sha256
+          652b779305bca2b0fbf39ec1974de4b914d9b06e55829b2923fc64401ba80c7c; NARROW=<set>, CONDS=B,H,T, ROUNDS=9 (round 0
+          discarded, n = 8), rotated order, GAP=0; CLI_DEEP, SEARCH_DEEP, ENGINE_DEEP, VITEST_MAX_WORKERS unset (env -u).
+  WINDOW  probe/window-n8.sh (sha256 d31d738bb43047f4c84a6cd2a72b16f982088ab2d9c0d2cbbb9ad2e9a64cb35b) = qe-ABC-154's
+          window-qe5.sh with CTX, the set, TAG, the sampler's own-file filter and the window dir as parameters; 5 s sampler.
+  READOUT probe/readout-n8.py (sha256 f9492ecb44962a31c32d4c8845df0bbab34a128893cafdbaaac400f80284d93d) = qe-ABC-154's
+          readout-qe5.py with: (1) arguments <dir> <tag> <F>; (2) expected counts = files 1 and the ROUND-0 test count, which
+          must be equal in B, T and H (0 rows added to either file; at the tip S1 reads 69 tests, S2 reads 1).
+          Self-test on qe-ABC-154 w1's recorded TSV (H count set to 1 in a scratch copy so the count rule passes) reproduces
+          its graded line: twin -0.005 s, R 0.030 s, H-B +0.380 s (+0.350..+0.410), MET (probe/readout-selftest.out.txt).
+  VOID    a round is discarded on: status != ok; counts != expected; a foreign vitest runner before or after the run; thermal
+          != 0 before or after; power != AC before or after; any 5 s sampler row in [start-5 s, end+5 s] with a vitest runner
+          other than the window's own file, an oeselg-labs/platform process, thermal != 0 or not AC. ANY discarded round voids
+          the window (n must be 8).
+  ADMISSIBLE (A1): |twin T-B CPU median| <= max(1.5 % of the B CPU median, one 10 ms tick) AND the two-sided sign test on the
+          NON-ZERO twin deltas at p > 0.05 (zeros dropped; none non-zero: p = 1).
+  FLOOR F: S1 = 0.100 s CPU / 0.180 s wall (ADR-0035 § Status "Per-set floor, 2026-10-12"). S2 has no recorded 4.1 reading,
+          so its F is the provisional 16 % of this window's B CPU median (decision 3 amendment; § Status "Floors after ABC-152").
+          650 ms is graded only if 650 ms >= F; if F > 650 ms, the bound is REFUSED at this instrument and the state is
+          UNRESOLVED with the charge written "at most x(7)".
+  GRADE   (decision 1, CPU unit, 650 ms; wall reported, not graded): n = 8, k = 2, R = max(|x(2)|, |x(7)|) of the twin;
+          NOT MET if the treatment's x(2) > 0.650 s (at any R); else MET if R <= 0.650 s and the H-B median <= 0.650 s; else
+          NOT MET if R <= 0.650 s; else UNRESOLVED (charge "at most x(7)").
+  TICKET LINE (the 650 ms bar is per ticket): arithmetic over the two graded sets, labelled NOT A READING: the sum of the two
+          H-B medians and the sum of the two x(7). Stated, not graded: if both sets are MET and the sum of the x(7) <= 650 ms,
+          "the two named costs sit under the bar"; otherwise the sum is reported as is. No pooling of rounds or windows.
+
+2. A2 (ticket A2, amended 2026-10-12: <= 30 ms, the FIRST call in a fresh process, read + parse inside) and R3 (ticket § NFR-004:
+   warm, one warm-up hit, 200 timed bookMove(P), P after 1. e4 e5 2. Ke2, MAX <= 5 ms, median and p99 recorded)
+  WINDOW  probe/window-timing.sh (sha256 8bbbe95953bc1d8a90d759f6a23e17e060ce0c104efa7179644f05ba2da87145): the gate above,
+          then from H: 10 x probe/time-strict.ts (QE's, sha256 5fab3addbb207535d5a155f01081833f08613e3cccaa666d8fe8b916616e31a2),
+          10 x wire-ABC-095/probe/time.ts cold-hit (the SE's), 3 x wire-ABC-095/probe/time.ts warm-miss; each a fresh node
+          process; 2 s sampler; load1/thermal/power/vitest logged before and after.
+          time-strict.ts differs from the SE's cold-hit in ONE way: nothing but the imports, newGame(START) and the probe/stub
+          construction runs before the timed call (the SE's plays 1. e4 e5 2. Ke2 through legalMoves first, warming the
+          generator the probe re-validates with).
+  READOUT probe/readout-timing.py (sha256 bef9e8979b560672aadd4009126a0c9d1024de1a5c171b86708342d679e77020).
+  VOID    any sampler row from gate_pass to utc_end with a vitest process, thermal != 0 or power != AC; a vitest in the
+          before/after log; a missing or malformed reading; a hit reading with innerCalls != 0, warned != 0 or no move; a
+          warm-miss with warned != 0 or n != 200.
+  GRADE   A2 on QE's strict instrument: MET iff the MAX of the 10 <= 30 ms, else NOT MET. The SE's 10 are reported beside it,
+          not graded. R3: MET iff EVERY warm-miss process's max <= 5 ms, else NOT MET; median and p99 per process recorded.
+          A valid NOT MET stands; it is not re-attempted.
+
+ERRATUM (appended 2026-10-12 ~14:33Z, before any window; changes no rule): the header line "Correctness runs (gates, CLI_DEEP,
+plants, mate x20) were taken BEFORE this was committed" is wrong in part. The gates and one CLI_DEEP run were taken before; the
+plants and the mate x20 run are taken AFTER this commit and BEFORE master.sh starts. None of them is a timing reading, and they
+never overlap a window (the master runs only after they finish).

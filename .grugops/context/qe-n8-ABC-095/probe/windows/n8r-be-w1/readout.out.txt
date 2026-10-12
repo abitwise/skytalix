@@ -1,0 +1,67 @@
+expected counts (round 0): {'B': (1, 1), 'T': (1, 1), 'H': (1, 5)}
+round	cond	cpu	wall	files	tests	load_b	load_a	foreign_b	foreign_a	therm	power	sampler_bad	status	kept
+0	B	0.61	0.6	1	1	3.61	3.61	0	0	0->0	Battery Power	0	ok	round0
+0	H	0.69	0.49	1	5	3.61	4.2	0	0	0->0	Battery Power	0	ok	round0
+0	T	0.56	0.42	1	1	4.2	4.2	0	0	0->0	Battery Power	0	ok	round0
+1	H	0.71	0.48	1	5	4.2	4.2	0	0	0->0	Battery Power	0	ok	ok
+1	T	0.6	0.43	1	1	4.2	4.2	0	0	0->0	Battery Power	0	ok	ok
+1	B	0.57	0.41	1	1	4.2	4.2	0	0	0->0	Battery Power	0	ok	ok
+2	T	0.57	0.42	1	1	4.2	4.2	0	0	0->0	Battery Power	0	ok	ok
+2	B	0.58	0.42	1	1	4.2	4.2	0	0	0->0	Battery Power	0	ok	ok
+2	H	0.68	0.46	1	5	4.2	4.2	0	0	0->0	Battery Power	0	ok	ok
+3	B	0.57	0.42	1	1	4.2	4.03	0	0	0->0	Battery Power	0	ok	ok
+3	H	0.69	0.46	1	5	4.03	4.03	0	0	0->0	Battery Power	0	ok	ok
+3	T	0.61	0.44	1	1	4.03	4.03	0	0	0->0	Battery Power	0	ok	ok
+4	H	0.68	0.47	1	5	4.03	4.03	0	0	0->0	Battery Power	0	ok	ok
+4	T	0.57	0.42	1	1	4.03	4.03	0	0	0->0	Battery Power	0	ok	ok
+4	B	0.57	0.42	1	1	4.03	4.03	0	0	0->0	Battery Power	0	ok	ok
+5	T	0.59	0.44	1	1	4.03	4.03	0	0	0->0	Battery Power	0	ok	ok
+5	B	0.57	0.42	1	1	4.03	3.87	0	0	0->0	Battery Power	0	ok	ok
+5	H	0.67	0.46	1	5	3.87	3.87	0	0	0->0	Battery Power	0	ok	ok
+6	B	0.58	0.42	1	1	3.87	3.87	0	0	0->0	Battery Power	0	ok	ok
+6	H	0.68	0.47	1	5	3.87	3.87	0	0	0->0	Battery Power	0	ok	ok
+6	T	0.57	0.42	1	1	3.87	3.87	0	0	0->0	Battery Power	0	ok	ok
+7	H	0.69	0.46	1	5	3.87	3.87	0	0	0->0	Battery Power	0	ok	ok
+7	T	0.58	0.43	1	1	3.87	3.87	0	0	0->0	Battery Power	0	ok	ok
+7	B	0.57	0.42	1	1	3.87	3.88	0	0	0->0	Battery Power	0	ok	ok
+8	T	0.57	0.42	1	1	3.88	3.88	0	0	0->0	Battery Power	0	ok	ok
+8	B	0.56	0.41	1	1	3.88	3.88	0	0	0->0	Battery Power	0	ok	ok
+8	H	0.68	0.46	1	5	3.88	3.88	0	0	0->0	Battery Power	0	ok	ok
+
+bracket log per lane round (sampler row at/before the first run's start | at/after the last run's end):
+round	before_utc	load1	therm	power	foreign	platform	|	after_utc	load1	therm	power	foreign	platform
+0	2026-10-12T17:29:48Z	3.61	0	Battery Power	0	0	|	2026-10-12T17:29:59Z	4.03	0	Battery Power	0	0
+1	2026-10-12T17:29:53Z	4.20	0	Battery Power	0	0	|	2026-10-12T17:29:59Z	4.03	0	Battery Power	0	0
+2	2026-10-12T17:29:53Z	4.20	0	Battery Power	0	0	|	2026-10-12T17:29:59Z	4.03	0	Battery Power	0	0
+3	2026-10-12T17:29:53Z	4.20	0	Battery Power	0	0	|	2026-10-12T17:30:04Z	3.87	0	Battery Power	0	0
+4	2026-10-12T17:29:59Z	4.03	0	Battery Power	0	0	|	2026-10-12T17:30:04Z	3.87	0	Battery Power	0	0
+5	2026-10-12T17:29:59Z	4.03	0	Battery Power	0	0	|	2026-10-12T17:30:04Z	3.87	0	Battery Power	0	0
+6	2026-10-12T17:29:59Z	4.03	0	Battery Power	0	0	|	2026-10-12T17:30:09Z	3.88	0	Battery Power	0	0
+7	2026-10-12T17:30:04Z	3.87	0	Battery Power	0	0	|	2026-10-12T17:30:09Z	3.88	0	Battery Power	0	0
+8	2026-10-12T17:30:04Z	3.87	0	Battery Power	0	0	|	2026-10-12T17:30:15Z	3.65	0	Battery Power	0	0
+
+cpu == user + sys (centiseconds) on every row: True
+scored rounds 8 [1, 2, 3, 4, 5, 6, 7, 8]; discarded rounds []
+load1 before each scored run: 3.87-4.20
+
+[CPU user+sys] n=8 k=2
+  B median 0.570 s; H median 0.680 s; T median 0.575 s
+  twin T-B sorted: -0.010, -0.010, +0.000, +0.010, +0.010, +0.020, +0.030, +0.040
+  twin median +0.010 s (+1.754 % of B); limit max(1.5 % = 8.55 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +5 / -2 (zeros 1, dropped): two-sided p 0.453  [old convention, not used: 5/8, p 0.727]
+  R 0.030 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: +0.100, +0.100, +0.100, +0.110, +0.120, +0.120, +0.120, +0.140
+  treatment median +0.115 s, interval x(2)..x(7) = +0.100..+0.120
+
+  per-set F = 0.091 s (provisional 16 % of this window B CPU median); 650 ms >= F: True
+  resolves 650 ms (R <= b): True; lower end x(k) +0.100 s > b: False; median +0.115 s <= b: True
+  STATE at 650 ms CPU: MET
+
+[wall] n=8 k=2
+  B median 0.420 s; H median 0.460 s; T median 0.425 s
+  twin T-B sorted: +0.000, +0.000, +0.000, +0.010, +0.010, +0.020, +0.020, +0.020
+  twin median +0.010 s (+2.381 % of B); limit max(1.5 % = 6.30 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +5 / -0 (zeros 3, dropped): two-sided p 0.062  [old convention, not used: 5/8, p 0.727]
+  R 0.020 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: +0.040, +0.040, +0.040, +0.040, +0.050, +0.050, +0.050, +0.070
+  treatment median +0.045 s, interval x(2)..x(7) = +0.040..+0.050

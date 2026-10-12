@@ -1,0 +1,46 @@
+## item 2: book-file.ts at 2307fc11
+imports:
+13:import { readFileSync } from "node:fs";
+exports:
+6: * The contract is the whole file: one import, one export with no parameter, one read of one fixed
+15:export function readBookFile(): Uint8Array {
+fs/process/catch/write/other path tokens (comments included):
+2: * `ABC-095` — the opening book's bytes, for the probe's injected `read` (`ADR-0037` § Addendum —
+7: * path resolved from this module's own URL. No argument, option or environment value reaches the
+16:  return readFileSync(new URL("../data/opening-book/book.json", import.meta.url));
+## item 3: added/removed lines in cli.ts
+      14
+## item 4: \bprocess\b in cli.ts base / tip (raw, comments included)
+      21
+      22
+process.stderr occurrences tip:
+       4
+globalThis guard in cli.test.ts at tip:
+1535:    expect(executableCodeOf("cli.ts")).not.toContain("globalThis");
+1653:    expect(entry).not.toContain("globalThis");
+1663:    expect(source).not.toContain("globalThis");
+## item 5: forbidden substrings in ADDED cli.ts lines (comments included)
+hits: 1  (1 = none)
+forbidden substrings over WHOLE cli.ts at tip:
+hits: 1  (1 = none)
+cli.test.ts hunk headers (bars 1/4 rows near 'bar 1'):
+@@ -597,6 +597,16 @@ const productExitOf = (child: Child): number | null =>
+@@ -619,14 +629,13 @@ const substituting = (module: string, source: string): string =>
+@@ -647,8 +656,7 @@ export function createEngine() {
+@@ -695,8 +703,10 @@ const CHILDREN = {
+@@ -724,7 +734,7 @@ const CHILDREN = {
+@@ -764,9 +774,8 @@ const CHILDREN = {
+@@ -782,10 +791,9 @@ export function createEngine() {
+@@ -801,7 +809,7 @@ export function createEngine() {
+@@ -811,7 +819,7 @@ export function createEngine() {
+@@ -823,7 +831,7 @@ export function createEngine() {
+@@ -835,7 +843,7 @@ export function createEngine() {
+@@ -846,7 +854,7 @@ export function createEngine() {
+@@ -1609,6 +1617,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
+@@ -1631,7 +1640,12 @@ describe("ABC-042 — the shape of what was delivered", () => {
+@@ -2758,7 +2772,18 @@ describe("ABC-043 — the live session", () => {
+1752:  it("bar 1 — the production modules treat arguments as data, never as code", () => {
+## item 6: book.ts untouched
+       0
+warn text at tip (book.ts):
+120:        switchOff(error instanceof BookRefused ? error.message : "could not be read");

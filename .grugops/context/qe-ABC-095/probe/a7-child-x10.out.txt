@@ -1,0 +1,11 @@
+run 1 exit 0 stderr_bytes 0 reply last: e5
+run 2 exit 0 stderr_bytes 0 reply last: c5
+run 3 exit 0 stderr_bytes 0 reply last: e5
+run 4 exit 0 stderr_bytes 0 reply last: c5
+run 5 exit 0 stderr_bytes 0 reply last: e5
+run 6 exit 0 stderr_bytes 0 reply last: e6
+run 7 exit 0 stderr_bytes 0 reply last: e5
+run 8 exit 0 stderr_bytes 0 reply last: e5
+run 9 exit 0 stderr_bytes 0 reply last: e5
+run 10 exit 0 stderr_bytes 0 reply last: e5
+book replies after 1.e4 (SAN): a5 a6 b6 Na6 Nc6 c5 c6 d5 d6 e5 e6 f5 f6 g5 g6 Nf6 Nh6 h5 h6

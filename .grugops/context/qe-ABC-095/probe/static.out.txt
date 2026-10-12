@@ -1,0 +1,33 @@
+== A6: git diff --numstat 0974102f 2307fc11 over EPIC-004's modules + turn-loop, book.ts, data/
+lines of numstat output: 0
+src/evaluate.king-mobility.test.ts src/evaluate.mirror-corpus.ts src/evaluate.pawns.test.ts src/evaluate.test.ts src/evaluate.ts src/search.capacity.test.ts src/search.mate-corpus.ts src/search.ordering.test.ts src/search.ordering.test.ts src/search.pvs-lmr.test.ts src/search.qe.test.ts src/search.test.ts src/search.ts 
+== clause (d): src/ files in the delivered pair
+186	0	src/book-engine.test.ts
+20	0	src/book-engine.ts
+17	0	src/book-file.ts
+228	19	src/cli.real-engine.test.ts
+47	22	src/cli.test.ts
+13	1	src/cli.ts
+== A7: changed lines inside runTurnLoop({ ... }) in src/cli.ts
++import { createBookProbe } from "./book.ts";
++import { withBook } from "./book-engine.ts";
++import { readBookFile } from "./book-file.ts";
++  // `ABC-095` — the opening book in front of the engine (`ADR-0037` § Addendum R1, D3). The probe's
++  // three effects are bound here and nowhere else: the bytes from the holder module, the one warning
++  // to stderr (stdout is the board), and the session's randomness. Nothing is read until the engine's
++  // first ply asks.
++  const book = createBookProbe({
++    read: readBookFile,
++    warn: (line) => process.stderr.write(`${line}\n`),
++    random: Math.random,
++  });
+-      engine: createEngine({ budgetMs: DEFAULT_BUDGET_MS }),
++      engine: withBook(book, createEngine({ budgetMs: DEFAULT_BUDGET_MS })),
+== UAT waiver measurement (AGENTS.md 2026-08-17 rule), delivered = 2307fc11 as a pair against the merge-base
+merge-base main: 0974102f
+src/book-engine.ts
+src/book-file.ts
+src/cli.ts
+(the literal <delivered>~1 form: git diff --name-only 2307fc11~1 2307fc11 -> 0 src lines; 2307fc11 is the records commit, the code is 09740ea4 + 521a8513)
+09740ea4~1..09740ea4: src/book-file.ts src/cli.ts 
+521a8513~1..521a8513: src/book-engine.ts 

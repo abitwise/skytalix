@@ -1,0 +1,6 @@
+delivered | cwd = tree root (as A7 today)                              | exit 0 | stderr 0 B ""
+delivered | cwd = neutral empty dir                                    | exit 0 | stderr 0 B ""
+P6b       | cwd = tree root (as A7 today)                              | exit 0 | stderr 0 B ""
+P6b       | cwd = neutral empty dir                                    | exit 0 | stderr 54 B "opening book could not be read; playing on without it"
+P6b       | cwd = dir holding a planted data/opening-book/book.json    | exit 0 | stderr 60 B "opening book is not valid UTF-8 JSON; playing on without it"
+delivered | cwd = dir holding a planted data/opening-book/book.json    | exit 0 | stderr 0 B ""

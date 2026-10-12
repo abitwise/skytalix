@@ -1,0 +1,240 @@
+=== P0-control 2026-10-12T14:23:39Z
+P0-control: 0 edit(s) applied
+census before: 0
+default lane exit 0
+files 58 tests 1780 passed 1780 failed 0 suites-failed 0
+census after default: 0
+CLI_DEEP exit 0
+files 1 tests 9 passed 9 failed 0 suites-failed 0
+
+census after CLI_DEEP: 0
+=== P1a-unwire-engine-line 2026-10-12T14:23:56Z
+P1a-unwire-engine-line: 1 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1773 failed 7 suites-failed 4
+  FILE-FAIL src/cli.test.ts 
+  FAIL src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(book,\s*createEng…/
+  FAIL src/cli.test.ts :: ABC-043 — the live session A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0 :: AssertionError: expected [ '8 .r:n.b::.k:b.n:r      ', …(22) ] to deeply equal [ '8 .r:n.b::.k:b.n:r      ', …(22) ]
+  FAIL src/cli.test.ts :: ABC-043 — the live session A5 — an engine fault is not a chess outcome: both faulty seams exit 0 and name nothing :: AssertionError: engine-threw: frames: expected [ …(2) ] to have a length of 1 but got 2
+  FAIL src/cli.test.ts :: ABC-043 — the live session A7 — the human's colour decides who moves first, in BOTH directions :: AssertionError: expected [ …(4) ] to deeply equal [ …(4) ]
+  FAIL src/cli.test.ts :: ABC-044 — the result screen reaches the player A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0 :: AssertionError: expected '\nBlack wins by checkmate.\n\n1. f3 e…' to be '\nBlack wins by checkmate.\n\n1. f3 e…' // Object.is equality
+  FAIL src/cli.test.ts :: ABC-044 — the result screen reaches the player A3 — a faulty engine gets a screen that is not a chess outcome, and says the game did not finish :: AssertionError: engine-threw: the screen is missing: expected '1 .R:N.B:K.Q:B.N:R   \n2 :P.P:P.P:P.P…' to contain 'did not finish'
+  FAIL src/cli.test.ts :: ABC-045 — `resign` reaches the screen as reason 8 A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0 :: AssertionError: expected '\nBlack wins by resignation.\n\n1. e4…' to be '\nBlack wins by resignation.\n\n1. e4…' // Object.is equality
+census after default: 0
+CLI_DEEP exit 1
+files 1 tests 9 passed 7 failed 2 suites-failed 3
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine A3(iv) — no stack trace on stderr, and the exit code is 0, never 70 :: AssertionError: book-absent warnings: expected +0 to be 1 // Object.is equality
+  FAIL src/cli.real-engine.test.ts :: ABC-095 — CLI_DEEP: the book in a real session A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child  :: AssertionError: warnings on stderr: expected +0 to be 1 // Object.is equality
+
+census after CLI_DEEP: 0
+=== P2-always-searches 2026-10-12T14:24:48Z
+P2-always-searches: 1 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1778 failed 2 suites-failed 2
+  FILE-FAIL src/book-engine.test.ts 
+  FAIL src/book-engine.test.ts :: ABC-095 — the book in front of the engine's move choice A1 — a book hit returns one of the book's entries and calls the search exactly 0 times :: AssertionError: expected 1 to be +0 // Object.is equality
+  FAIL src/book-engine.test.ts :: ABC-095 — the book in front of the engine's move choice A4 — the frame where the game leaves book has the same rows and no extra message line as the o :: AssertionError: the precondition: the seeded book reply: expected 'a7a6' to be 'e7e5' // Object.is equality
+census after default: 0
+CLI_DEEP exit 0
+files 1 tests 9 passed 9 failed 0 suites-failed 0
+
+census after CLI_DEEP: 0
+=== P3-searches-and-returns-book 2026-10-12T14:25:09Z
+P3-searches-and-returns-book: 1 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1778 failed 2 suites-failed 2
+  FILE-FAIL src/book-engine.test.ts 
+  FAIL src/book-engine.test.ts :: ABC-095 — the book in front of the engine's move choice A1 — a book hit returns one of the book's entries and calls the search exactly 0 times :: AssertionError: expected 1 to be +0 // Object.is equality
+  FAIL src/book-engine.test.ts :: ABC-095 — the book in front of the engine's move choice A4 — the frame where the game leaves book has the same rows and no extra message line as the o :: AssertionError: exactly one move came from the search: expected 2 to be 1 // Object.is equality
+census after default: 0
+CLI_DEEP exit 0
+files 1 tests 9 passed 9 failed 0 suites-failed 0
+
+census after CLI_DEEP: 0
+=== P4-warn-to-stdout 2026-10-12T14:25:40Z
+P4-warn-to-stdout: 1 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1777 failed 3 suites-failed 3
+  FILE-FAIL src/cli.test.ts 
+  FAIL src/cli.test.ts :: ABC-042 — the shape of what was delivered A9 — process.stdout is acquired once, in the entry point, and only as the FrameSink :: AssertionError: expected [ 'process.stdout', 'process.stdout' ] to have a length of 1 but got 2
+  FAIL src/cli.test.ts :: ABC-042 — the shape of what was delivered A9 — process.argv occurs EXACTLY once and only as the resolver's argument :: AssertionError: expected [ 'process.argv', …(9) ] to deeply equal [ 'process.argv', …(9) ]
+  FAIL src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /const book = createBookProbe\(\{\s*re…/
+census after default: 0
+CLI_DEEP exit 1
+files 1 tests 9 passed 7 failed 2 suites-failed 3
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine A3(iv) — no stack trace on stderr, and the exit code is 0, never 70 :: AssertionError: book-absent warnings: expected +0 to be 1 // Object.is equality
+  FAIL src/cli.real-engine.test.ts :: ABC-095 — CLI_DEEP: the book in a real session A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child  :: AssertionError: warnings on stderr: expected +0 to be 1 // Object.is equality
+wall 3114 ms, exit 0;wall 3104 ms, exit 0;wall 3102 ms, exit 0;wall 107 ms, exit 0;
+census after CLI_DEEP: 0
+=== P5-warn-twice 2026-10-12T14:25:58Z
+P5-warn-twice: 1 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1779 failed 1 suites-failed 2
+  FILE-FAIL src/cli.test.ts 
+  FAIL src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /const book = createBookProbe\(\{\s*re…/
+census after default: 0
+CLI_DEEP exit 1
+files 1 tests 9 passed 7 failed 2 suites-failed 3
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine A3(iv) — no stack trace on stderr, and the exit code is 0, never 70 :: AssertionError: book-absent warnings: expected 2 to be 1 // Object.is equality
+  FAIL src/cli.real-engine.test.ts :: ABC-095 — CLI_DEEP: the book in a real session A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child  :: AssertionError: warnings on stderr: expected 2 to be 1 // Object.is equality
+wall 3108 ms, exit 0;wall 3103 ms, exit 0;wall 3111 ms, exit 0;wall 104 ms, exit 0;
+census after CLI_DEEP: 0
+=== P5b-warn-silent 2026-10-12T14:26:15Z
+P5b-warn-silent: 1 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1778 failed 2 suites-failed 3
+  FILE-FAIL src/cli.test.ts 
+  FAIL src/cli.test.ts :: ABC-042 — the shape of what was delivered A9 — process.argv occurs EXACTLY once and only as the resolver's argument :: AssertionError: expected [ 'process.argv', …(8) ] to deeply equal [ 'process.argv', …(9) ]
+  FAIL src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /const book = createBookProbe\(\{\s*re…/
+census after default: 0
+CLI_DEEP exit 1
+files 1 tests 9 passed 7 failed 2 suites-failed 3
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine A3(iv) — no stack trace on stderr, and the exit code is 0, never 70 :: AssertionError: book-absent warnings: expected +0 to be 1 // Object.is equality
+  FAIL src/cli.real-engine.test.ts :: ABC-095 — CLI_DEEP: the book in a real session A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child  :: AssertionError: warnings on stderr: expected +0 to be 1 // Object.is equality
+wall 3105 ms, exit 0;wall 3099 ms, exit 0;wall 3108 ms, exit 0;wall 108 ms, exit 0;
+census after CLI_DEEP: 0
+=== P6a-read-other-path 2026-10-12T14:26:33Z
+P6a-read-other-path: 1 edit(s) applied
+census before: 0
+default lane exit 0
+files 58 tests 1780 passed 1780 failed 0 suites-failed 0
+census after default: 0
+CLI_DEEP exit 1
+files 1 tests 9 passed 8 failed 1 suites-failed 2
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-095 — CLI_DEEP: the book in a real session A7 — a real session consults the book: the reply to 1. e4 is one of the book's entries for that positio :: AssertionError: expected 'opening book could not be read; playi…' to be '' // Object.is equality
+wall 3101 ms, exit 0;wall 3102 ms, exit 0;wall 3103 ms, exit 0;wall 3096 ms, exit 0;
+census after CLI_DEEP: 0
+=== P6b-read-cwd-relative 2026-10-12T14:26:54Z
+P6b-read-cwd-relative: 1 edit(s) applied
+census before: 0
+default lane exit 0
+files 58 tests 1780 passed 1780 failed 0 suites-failed 0
+census after default: 0
+CLI_DEEP exit 0
+files 1 tests 9 passed 9 failed 0 suites-failed 0
+wall 3109 ms, exit 0;wall 3117 ms, exit 0;wall 3137 ms, exit 0;wall 108 ms, exit 0;
+census after CLI_DEEP: 0
+=== P7-probe-per-move 2026-10-12T14:27:12Z
+P7-probe-per-move: 1 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1774 failed 6 suites-failed 4
+  FILE-FAIL src/cli.test.ts 
+  FAIL src/cli.test.ts :: ABC-042 — the shape of what was delivered A9 — process.argv occurs EXACTLY once and only as the resolver's argument :: AssertionError: expected [ 'process.argv', …(10) ] to deeply equal [ 'process.argv', …(9) ]
+  FAIL src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(book,\s*createEng…/
+  FAIL src/cli.test.ts :: ABC-043 — the live session A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0 :: AssertionError: expected [ …(5) ] to have a length of 6 but got 5
+  FAIL src/cli.test.ts :: ABC-043 — the live session A6 — one frame session, one writer, and no row count is named on either side of the diff :: AssertionError: expected 5 to be greater than or equal to 6
+  FAIL src/cli.test.ts :: ABC-043 — the live session A7 — the human's colour decides who moves first, in BOTH directions :: AssertionError: expected [ …(3) ] to deeply equal [ …(4) ]
+  FAIL src/cli.test.ts :: ABC-044 — the result screen reaches the player A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0 :: AssertionError: expected ' program, not a chess outcome.\n\n1. …' to be '\nBlack wins by checkmate.\n\n1. f3 e…' // Object.is equality
+census after default: 0
+CLI_DEEP exit 0
+files 1 tests 9 passed 9 failed 0 suites-failed 0
+wall 3137 ms, exit 0;wall 3103 ms, exit 0;wall 3113 ms, exit 0;wall 177 ms, exit 0;
+census after CLI_DEEP: 0
+=== P8-copy-with-data 2026-10-12T14:27:44Z
+P8-copy-with-data: 1 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1779 failed 1 suites-failed 2
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — the real-engine lane's child is the delivered composition (default lane; spawns nothing) the deep child runs the delivered entry point with  :: AssertionError: the copy's book: expected true to be false // Object.is equality
+census after default: 0
+CLI_DEEP exit 1
+files 1 tests 9 passed 0 failed 0 suites-failed 1
+  FILE-FAIL src/cli.real-engine.test.ts the copy's book: expected true to be false // Object.is equality
+
+census after CLI_DEEP: 0
+=== P9a-linked-src 2026-10-12T14:27:57Z
+P9a-linked-src: 2 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1779 failed 1 suites-failed 2
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — the real-engine lane's child is the delivered composition (default lane; spawns nothing) the deep child runs the delivered entry point with  :: AssertionError: the copy's src/ itself: expected false to be true // Object.is equality
+census after default: 0
+CLI_DEEP exit 1
+files 1 tests 9 passed 0 failed 0 suites-failed 1
+  FILE-FAIL src/cli.real-engine.test.ts the copy's src/ itself: expected false to be true // Object.is equality
+
+census after CLI_DEEP: 0
+=== P9b-linked-book-file 2026-10-12T14:28:10Z
+P9b-linked-book-file: 2 edit(s) applied
+census before: 0
+default lane exit 1
+files 58 tests 1780 passed 1779 failed 1 suites-failed 2
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — the real-engine lane's child is the delivered composition (default lane; spawns nothing) the deep child runs the delivered entry point with  :: AssertionError: src/book-file.ts is a symbolic link: expected true to be false // Object.is equality
+census after default: 0
+CLI_DEEP exit 1
+files 1 tests 9 passed 0 failed 0 suites-failed 1
+  FILE-FAIL src/cli.real-engine.test.ts src/book-file.ts is a symbolic link: expected true to be false // Object.is equality
+
+census after CLI_DEEP: 0
+=== P10a-deep-copy-not-removed 2026-10-12T14:28:20Z
+P10a-deep-copy-not-removed: 1 edit(s) applied
+census before: 0
+default lane exit 0
+files 58 tests 1780 passed 1780 failed 0 suites-failed 0
+census after default: 0
+CLI_DEEP exit 0
+files 1 tests 9 passed 9 failed 0 suites-failed 0
+wall 3131 ms, exit 0;wall 3109 ms, exit 0;wall 3109 ms, exit 0;wall 120 ms, exit 0;
+census after CLI_DEEP: 1
+=== P10b-default-row-no-finally-plus-P8 2026-10-12T14:28:40Z
+P10b-default-row-no-finally-plus-P8: 2 edit(s) applied
+census before: 1
+default lane exit 1
+files 58 tests 1780 passed 1779 failed 1 suites-failed 2
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — the real-engine lane's child is the delivered composition (default lane; spawns nothing) the deep child runs the delivered entry point with  :: AssertionError: the copy's book: expected true to be false // Object.is equality
+census after default: 2
+CLI_DEEP exit 1
+files 1 tests 9 passed 0 failed 0 suites-failed 1
+  FILE-FAIL src/cli.real-engine.test.ts the copy's book: expected true to be false // Object.is equality
+
+census after CLI_DEEP: 2
+=== P11-M1-composition-reverted-to-double 2026-10-12T14:28:50Z
+P11-M1-composition-reverted-to-double: 1 edit(s) applied
+census before: 2
+default lane exit 0
+files 58 tests 1780 passed 1780 failed 0 suites-failed 0
+census after default: 2
+CLI_DEEP exit 1
+files 1 tests 9 passed 8 failed 1 suites-failed 2
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine A1 — the real search answered: the child took at least 1 s and exited 0 :: AssertionError: expected 98.34033300000004 to be greater than or equal to 1000
+wall 98 ms, exit 0;wall 97 ms, exit 0;wall 98 ms, exit 0;wall 102 ms, exit 0;
+census after CLI_DEEP: 2
+=== P11-M2-budget-removed 2026-10-12T14:28:59Z
+P11-M2-budget-removed: 1 edit(s) applied
+census before: 2
+default lane exit 0
+files 58 tests 1780 passed 1780 failed 0 suites-failed 0
+census after default: 2
+CLI_DEEP exit 1
+files 1 tests 9 passed 8 failed 1 suites-failed 2
+  FILE-FAIL src/cli.real-engine.test.ts 
+  FAIL src/cli.real-engine.test.ts :: ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine A1 — the real search answered: the child took at least 1 s and exited 0 :: AssertionError: expected 121.38545899999997 to be greater than or equal to 1000
+wall 121 ms, exit 0;wall 121 ms, exit 0;wall 117 ms, exit 0;wall 118 ms, exit 0;
+census after CLI_DEEP: 2
+=== P12-book-read-marker 2026-10-12T14:31:42Z
+P12-book-read-marker: 2 edit(s) applied
+census before: 0
+default lane exit 0
+files 58 tests 1780 passed 1780 failed 0 suites-failed 0
+census after default: 0
+CLI_DEEP exit 0
+files 1 tests 9 passed 9 failed 0 suites-failed 0
+wall 3136 ms, exit 0;wall 3124 ms, exit 0;wall 3153 ms, exit 0;wall 142 ms, exit 0;
+census after CLI_DEEP: 0

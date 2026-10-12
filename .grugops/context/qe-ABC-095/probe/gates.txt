@@ -1,0 +1,29 @@
+2026-10-12T14:18:16Z
+load { 4.20 6.81 7.06 }
+2307fc1189d400cdb6a1537d0c3a83b696e1510b
+Checked 112 files in 136ms. No fixes applied.
+lint exit 0
+typecheck exit 0
+build exit 0
+ ✓ src/zobrist.nfr.test.ts (3 tests) 3ms
+ ✓ src/glyph-mode.nfr.test.ts (3 tests) 2ms
+
+ Test Files  58 passed (58)
+      Tests  1780 passed (1780)
+   Start at  17:18:19
+   Duration  6.11s (transform 0ms, setup 0ms, import 6.17s, tests 3.08s, environment 3ms)
+
+test exit 0
+{
+  "success": true,
+  "numTotalTestSuites": 391,
+  "numTotalTests": 1780,
+  "numPassedTests": 1780,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "files": 58
+}
+No findings.
+integrity exit 0
+2026-10-12T14:18:25Z

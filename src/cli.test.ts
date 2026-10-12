@@ -597,6 +597,16 @@ const productExitOf = (child: Child): number | null =>
 // UNCHANGED on `A2` (whose Given stipulates the reader as REAL) and on `A5` (one criterion, one
 // seam). A module refused under one criterion is not thereby refused under another, and one admitted
 // under one is not admitted generally — there is no module list here, in either direction.
+//
+// `ABC-095` MOVED THE ENGINE DOUBLE ONE SUPPLIER OUT, AND NOT ONE SEAM (`ADR-0037` § Addendum R2,
+// 2026-10-12). `engine:` is now `withBook(book, createEngine(…))`, so under (S) the supplier named at
+// that injection point is `./book-engine.ts`: `./engine.ts`'s binding goes to `withBook`, not to the
+// bag. Every child that substituted `./engine.ts` substitutes `./book-engine.ts` instead, and its
+// `withBook` ignores both arguments and returns the same double seam as before. Same seam, same (N)
+// verdicts (BA/PM, `bapm-amend-ABC-095`). A double left on `./engine.ts` would sit BEHIND the book,
+// which answers the start position first, so it would never be asked (`mate` flaked on 40% of runs
+// that way). What these children now load for real and never call: `createEngine`'s module and the
+// probe, so the default lane never reads the book's bytes.
 // ---------------------------------------------------------------------------------------------
 
 /** A hook URL that gives the child a different `src/<module>` and leaves every other module real. */
@@ -619,14 +629,13 @@ const substituting = (module: string, source: string): string =>
  * It calls the REAL `legalMoves` — a substituted module's relative imports resolve against the
  * module it replaced — so the move it returns is a generator-owned `Move` with all six fields, which
  * is what `wasGenerated` (`src/turn-loop.ts` `wasGenerated`) demands and what keeps this a
- * deterministic opponent rather than a second fault. `DEFAULT_BUDGET_MS` is exported because the
- * entry point imports it; the double consults no clock, so its value cannot matter.
+ * deterministic opponent rather than a second fault. It stands in for `./book-engine.ts` (`ABC-095`):
+ * `withBook` ignores the probe and the real engine it is handed, and the double consults no clock.
  */
 const scriptedEngine = (moves: readonly string[]): string => `
 import { legalMoves } from "./legal.ts";
 import { squareName } from "./position.ts";
-export const DEFAULT_BUDGET_MS = 0;
-export function createEngine() {
+export function withBook(_probe, _inner) {
   const scripted = ${JSON.stringify(moves)};
   let ply = 0;
   return async (history) => {
@@ -647,8 +656,7 @@ export function createEngine() {
  */
 const FIRST_LEGAL_ENGINE = `
 import { legalMoves } from "./legal.ts";
-export const DEFAULT_BUDGET_MS = 0;
-export function createEngine() {
+export function withBook(_probe, _inner) {
   return async (history) => legalMoves(history.position)[0];
 }
 `;
@@ -695,8 +703,10 @@ const CHILDREN = {
    * spent at random. `## Test notes` 8 forbids a default-lane row to run the real engine, so they
    * get the instant opponent; the real search end to end stays the named, uncovered gap it was.
    */
-  black: play(["--colour", "black"], { hook: substituting("engine.ts", FIRST_LEGAL_ENGINE) }),
-  random: play(["--colour", "random"], { hook: substituting("engine.ts", FIRST_LEGAL_ENGINE) }),
+  black: play(["--colour", "black"], { hook: substituting("book-engine.ts", FIRST_LEGAL_ENGINE) }),
+  random: play(["--colour", "random"], {
+    hook: substituting("book-engine.ts", FIRST_LEGAL_ENGINE),
+  }),
   /** `A5` end to end. */
   conflict: run("--ascii", "--unicode"),
   /** `A6`(iii)'s four, exactly as the criterion names them. */
@@ -724,7 +734,7 @@ const CHILDREN = {
    */
   mate: play(["--colour", "white"], {
     input: "f3\nzzz\ng4\n",
-    hook: substituting("engine.ts", scriptedEngine(["e7e5", "d8h4"])),
+    hook: substituting("book-engine.ts", scriptedEngine(["e7e5", "d8h4"])),
   }),
 
   /**
@@ -764,9 +774,8 @@ const CHILDREN = {
   /** `A5` — an `EngineSeam` that throws. `--colour black`, so the engine acts before anything else. */
   engineThrows: play(["--colour", "black"], {
     hook: substituting(
-      "engine.ts",
-      `export const DEFAULT_BUDGET_MS = 0;
-export function createEngine() {
+      "book-engine.ts",
+      `export function withBook(_probe, _inner) {
   return async () => { throw new Error("the engine seam threw"); };
 }
 `,
@@ -782,10 +791,9 @@ export function createEngine() {
    */
   engineForeign: play(["--colour", "black"], {
     hook: substituting(
-      "engine.ts",
+      "book-engine.ts",
       `import { legalMoves } from "./legal.ts";
-export const DEFAULT_BUDGET_MS = 0;
-export function createEngine() {
+export function withBook(_probe, _inner) {
   return async (history) => ({ ...legalMoves(history.position)[0], captured: 1 });
 }
 `,
@@ -801,7 +809,7 @@ export function createEngine() {
    */
   colourBlack: play(["--colour", "black"], {
     input: "e5\n",
-    hook: substituting("engine.ts", scriptedEngine(["a2a3", "b2b3"])),
+    hook: substituting("book-engine.ts", scriptedEngine(["a2a3", "b2b3"])),
   }),
 
   /**
@@ -811,7 +819,7 @@ export function createEngine() {
    */
   colourWhite: play(["--colour", "white"], {
     input: "e4\n",
-    hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
+    hook: substituting("book-engine.ts", scriptedEngine(["e7e5"])),
   }),
 
   /**
@@ -823,7 +831,7 @@ export function createEngine() {
    */
   resigns: play(["--colour", "white"], {
     input: "e4\nresign\nd4\n",
-    hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
+    hook: substituting("book-engine.ts", scriptedEngine(["e7e5"])),
   }),
 
   /**
@@ -835,7 +843,7 @@ export function createEngine() {
    */
   quits: play(["--colour", "white"], {
     input: "e4\nquit\nquit\nd4\n",
-    hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
+    hook: substituting("book-engine.ts", scriptedEngine(["e7e5"])),
   }),
 
   /**
@@ -846,7 +854,7 @@ export function createEngine() {
    */
   renews: play(["--colour", "white"], {
     input: "e4\nnew\nquit\n",
-    hook: substituting("engine.ts", scriptedEngine(["e7e5"])),
+    hook: substituting("book-engine.ts", scriptedEngine(["e7e5"])),
   }),
 
   // -------------------------------------------------------------------------------------------
@@ -1609,6 +1617,7 @@ describe("ABC-042 — the shape of what was delivered", () => {
       "process.exitCode",
       "process.stderr",
       "process.stderr",
+      "process.stderr",
       "process.stdin",
       "process.stdin",
       "process.stdout",
@@ -1631,7 +1640,12 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // assignment above, so no second exit-status site exists to be seen here. A build that reached
     // exit `0` by assigning it in the arm would show a FOURTH `process.exitCode` on the row above,
     // which is precisely the blanket-`exitCode` shape `ADR-0016` clause 5 forbids and `A4` fails.
-    expect(entry.match(/\bprocess\b/g)).toHaveLength(9);
+    //
+    // NINE UNTIL `ABC-095`, and the tenth is the opening book's one warning: a THIRD
+    // `process.stderr`, in the probe's `warn` sink bound at the root (`ADR-0037` § Addendum R1/R2).
+    // It is acquired here, in the entry point, which is what `A9` asks; the probe and the holder
+    // module that reads the book name no handle. The two existing stderr writes are unchanged.
+    expect(entry.match(/\bprocess\b/g)).toHaveLength(10);
     // `globalThis` is asserted here as well as on `A2`'s row, for a different reason: there it is
     // about publishing a binding, here about acquiring an ambient one. `globalThis["process"].argv`
     // — `X8`'s own spelling in the `ABC-041` re-gate — is caught today ONLY by `A2`'s row, so `A9`
@@ -2758,7 +2772,18 @@ describe("ABC-043 — the live session", () => {
     expect(entry).toMatch(/humanColour:\s*colour/);
     expect(entry).toMatch(/render:\s*makeRenderSeam\(mode,\s*orientation\)/);
     expect(entry).toMatch(/input:\s*createLineInputSeam\(/);
-    expect(entry).toMatch(/engine:\s*createEngine\(\{\s*budgetMs:\s*DEFAULT_BUDGET_MS\s*\}\)/);
+    // `ABC-095` MOVED THIS ROW, AND BOTH HALVES ARE PINNED (`ADR-0037` § Addendum R2). `engine:` is
+    // the book decorator around the merged engine at its merged budget: `withBook` is `EngineSeam ->
+    // EngineSeam`, the composition `ADR-0012` clause 2(3) names, so it is no TYPE adapter and the
+    // typecheck still decides "no adapter". The inner half keeps the old pin's whole text, and the
+    // probe the decorator is handed is pinned at its one construction, with its three bound effects.
+    expect(entry).toMatch(
+      /engine:\s*withBook\(book,\s*createEngine\(\{\s*budgetMs:\s*DEFAULT_BUDGET_MS\s*\}\)\)/,
+    );
+    expect(entry.match(/\bcreateBookProbe\s*\(/g)).toHaveLength(1);
+    expect(entry).toMatch(
+      /const book = createBookProbe\(\{\s*read:\s*readBookFile,\s*warn:\s*\(line\)\s*=>\s*process\.stderr\.write\(`\$\{line\}\\n`\),\s*random:\s*Math\.random,?\s*\}\);/,
+    );
     expect(entry).toMatch(/\bsink,/);
 
     // NO CAST AND NO ADAPTER, over the CALL — which is what the criterion is about, and scoped
