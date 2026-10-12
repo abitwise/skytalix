@@ -479,3 +479,33 @@ different agent.** Notes: `.grugops/context/fix-ABC-117/notes/`.
 - **Gates at `7bf4c61e`:** lint, typecheck, build and `npm test` all exit 0. `npm test` ran 56 files
   and 1741 tests with 0 pending, and `.test-results/last-run.json` reads `success: true`. Skip
   integrity reads `No findings.` at 0. **UAT waiver:** the production `src/` list is empty.
+
+## QE — addendum, 2026-10-12: re-check of the widening (`qe2-ABC-117`)
+
+QE/E2E (Claude Opus 5.5, subagent of the Orchestrator), subtask `qe2-ABC-117`, branch
+`grugops/qe2-ABC-117` off tip `86bf76b5`. This agent did not author the repair, and took its
+readings before reading the Engineer's notes. **Verdict: PASS_WITH_GAPS.** Notes:
+`.grugops/context/qe2-ABC-117/notes/`. This is an agent `decision`, not a stamp.
+
+- **A1 re-taken (Node v26.11.0).** Tip `1</dev/null`: exit `1`, `^usage: ` 0, `internal error` 0,
+  throw at `src/cli.ts:160`. A10's own inner form gives `NODE_EXIT=1`. QE's own repro and
+  `…d2c79dc9` both exit `1` and never print `CAUGHT:`. `--bogus` gives `^usage: ` 1. The cites
+  `:136-138`, `:141`, `:160`, `:169` and `:196` are all correct.
+- **S10 MET.** It is appended at the END, and the `ABC-115` row is `cmp` equal at base and tip. It
+  names the row and the clause, and it re-opens nothing. **S11 MET.** It is a new `observation`
+  with an empty `supersedes` and both refs. `.grugops/context` gained added files only.
+  **QE-117-a closed.**
+- **Page MET.** The original `## Out of scope` bullet is kept, and the dated correction is true.
+  **QE-117-c closed:** `ABC-115`'s `## Residual ruling` exists (`:249`), and the change is 3 comment
+  lines that say nothing new.
+- **Search.** QE ran its own two passes (proximity, then predication). Neither found a CLAIM-B
+  site beyond S1–S11. `…8d7cad3b:80` is **not** a site: "collision" there is a value word, and the
+  sentence is true about `A10`.
+- **Fences MET** against `3537fe48`: A4–A7. The NFR hash `c74e7426…0d3b` is the same at base and
+  tip. `npm test` is 56 / 1741 / 0 at both. `T2` is not fired. The gates are green at the tip. **The
+  UAT waiver applies:** production `src/` is empty for each commit and over the range.
+- **QE2-117-a (LOW, not blocking).** Five corrections (S6/S9, S7, S8, S10, S11) say the re-throw
+  fires "on a later tick than `main`'s `try`". Measured, the `try` is still open, suspended on
+  `await`, and the throw escapes anyway. The precise wording is "no `try` on the stack", as in
+  `…0081a95a` (ii). The conclusion is true. No further hop is recommended before merge; a future
+  residual-closing cut should cite `…0081a95a` (ii).
