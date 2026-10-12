@@ -26,6 +26,15 @@ It **corrects** two things in § Consequences:
 
 D1–D3 do not change.
 
+**2026-10-12, `secnfr-ABC-095-placement`: Security/NFR answers the addendum's S1 and S2. R1 stands.**
+- **S1** is ruled in `ADR-0036` § `### S1 — the fourth holder — 2026-10-12`. (b2) gets no
+  call-graph reach. Limb 1's (b1) unit widens to the holder file, so any later edit to
+  `src/book-file.ts` routes to `In Security/NFR`.
+- **S2.** `ABC-042` bar 4 is file-scoped: it covers the own source of `src/cli.ts` and
+  `src/cli-options.ts`, which is what its test reads. Bar 4's text does not change, and no carve-out
+  is written.
+- **S3's checklist** is in `.grugops/context/secnfr-ABC-095-placement/notes/…a096cf43`.
+
 - **What it answers.** BA/PM's decision note `…0e4da324` (`rescore-p1-backlog-2026-10-10`) names
   three structural decisions:
   - **D1**, the book format (`ABC-093` DoR item 5);
