@@ -391,3 +391,33 @@ board row and front matter are the Orchestrator's to sync. Readings and commands
 | 8 | size assigned | ✅ `M` |
 | 9 | priority assigned | ✅ **`P1`** (the trigger fired) |
 | 10 | no major unresolved blocker | ✅ *(was ⚠️⚠️)* |
+
+## Delivery
+
+**2026-10-12, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-101`). Branch
+`grugops/ABC-101-difficulty-selection`, from `main` `f0bd27f7`. Not merged, not pushed. Readings and calls are in
+`.grugops/context/ticket-to-pr-ABC-101/` (`…57bfba6d` reds, `…443a041f` decision, `…01564e07` artifact-ref,
+`…3bfd8b9d` criteria and guards, `probe/`). They are not restated here.
+
+**STOPPED. Nothing in `src/` is committed.** The full build is `probe/abc101-full-not-committed.diff`, which applies
+to `f0bd27f7`.
+- **The stop: `ABC-086` `A5`(i)**, "The shipped construction is unchanged: `src/cli.ts:175`,
+  `createEngine({ budgetMs: DEFAULT_BUDGET_MS })`, passes no `now`." This page's wiring replaces that construction with
+  `createLevelSeam(difficulty, { seed })`, inside the book. It still passes no `now`, and level 3 is the old
+  construction by value. But the criterion's text is contradicted, and its row is in `src/engine.test.ts`, outside
+  `A9`. Not amended; the ruling is owed to the Orchestrator (`…443a041f` lists the options).
+- **Expected and owed: `ABC-065` `A3`.** It stays red until the Scribe lands the `AGENTS.md` line in
+  `probe/agents-md-dev-run-slot.txt` (+4 B, 24,573 B against 24,576 B).
+
+| criterion | on the probe tree `c7fbafff` |
+|---|---|
+| `A1` | PASS: both orders resolve to the same `{ colour: "black", difficulty: 3 }` |
+| `A2` | PASS: the default is 3, the middle of `Object.keys(LEVELS)`, `DEFAULT_LEVEL` |
+| `A3` (+ extended) | PASS: `1`..`5` in; `0`, `6`, `-1`, `3.5`, `three`, `3.0`, `+3`, `03` and a bare flag out, named; flag words = `Object.keys(LEVELS)` |
+| `A4` | struck |
+| `A5` | PASS: `USAGE` advertises `[--difficulty 1\|2\|3\|4\|5]` after `--`; three forms run, each exit 0 |
+| `A6` | FAIL until the `AGENTS.md` line lands; PASS with it, in a scratch copy |
+| `A7` | PASS on code (0); raw grep reads 2 OLDER `ABC-042` comment hits, at base and head alike. Reading to rule |
+| `A8′` | PASS: 5 levels × 2 calls equal to `createLevel` on seed 7 and an injected clock; level 1 blunders; own-key refusal; engine modules byte-identical |
+| `A9` | PASS for the code set (5 files, 1 new flat module, 0 new test files); closing the stop needs `src/engine.test.ts` |
+| `A10` | PASS: `CLI_DEEP` 10/10, book-absent copy, 0 temp copies before and after |

@@ -1,0 +1,12 @@
+# AGENTS.md § Commands › Development, `- Dev / run:` slot — the edit ABC-101 owes (the Scribe lands it; the Software Engineer may not).
+# Replace the OLD block with the NEW block, byte for byte. Delta +4 B: 24,569 B -> 24,573 B (budget 24,576 B, ABC-109 A5).
+# Verified 2026-10-12 in a scratch copy of the probe tree c7fbafff: src/cli.test.ts 78/78 (ABC-065 A1/A3, ABC-067, ABC-071, ABC-109 A5 green).
+# Forms run before writing (stdin /dev/null, exit 0 each): npm run chess -- --difficulty 5 | -- --colour black --difficulty 3 | -- --difficulty 1 --ascii
+----- OLD
+- Dev / run: `npm run chess` <!-- prints the board and plays a full game against the merged engine
+  (up to 3 s/move, `DEFAULT_BUDGET_MS`). Options: `--colour white|black|random`, `--ascii`,
+  `--unicode`. Pass
+----- NEW
+- Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
+  level 3 (3 s/move). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|5`, `--ascii`,
+  `--unicode`. Pass
