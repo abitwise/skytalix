@@ -535,3 +535,23 @@ is in `.grugops/context/qe-ABC-101/notes/` (decision `…2fa04d14`) and is not r
   exit 0, 58 files, 1789 passed, 0 failed, 0 pending; `.test-results/last-run.json` `success: true`;
   `test-skip-integrity --skip-count 0` "No findings."; `qe-hop-integrity --ticket ABC-101` exit 0 (covered by
   `…2fa04d14`; not yet a `## Done` row).
+
+## Security/NFR
+
+Security/NFR, 2026-10-12 (task `wave-2026-09-25`, subtask `secnfr-ABC-101`, branch `grugops/secnfr-ABC-101` off the QE tip
+`dee6562a`; the only hop running). Delivered pair `3ea3e352..98ea0a84`, code `ac8deab1`. **Result: PASS_WITH_RISKS.** There is
+no required fix. The one risk carried is `AR-NFR004-A`, re-accepted with its number, and no new risk is opened. **No timing was read.**
+The plants were run in scratch copies outside the repository. The detail is in `.grugops/context/secnfr-ABC-101/notes/` (decision `…4bed890a`) and is not restated here.
+
+| trigger | reading | verdict |
+|---|---|---|
+| Input handling: ASVS `V2.2.1`/`V2.2.2` [L1], the page's firing threshold | The level is parsed only in `resolveOptions`, by exact equality against the closed set. The one `Number(…)` converts a word that is already a member. Hostile values refused: 36 of 36 (prototype keys, other-script digits, `0x3`, `3e0`, whitespace, NUL, escapes). A value word on its own and `--difficulty=3` are refused. An escape-laden value echoed in a real child: exit 1, 0 B stdout, 0 ESC/BEL bytes | **MET; the threshold does not fire** |
+| The `Object.hasOwn` forward rule | `createLevelSeam` refuses `__proto__`, `constructor`, `toString`, `valueOf`, `hasOwnProperty`, `0`, `6`, `-0`, `3.5`, `NaN`, `Infinity`, `03` and `" 3"` with a `RangeError`. `LEVELS` is frozen | **MET** |
+| Plants (scratch copies, 1789-row suite) | 11 plants: 9 caught (`parseInt` range, regex with a `""` literal, unanchored regex, a `--difficulty=` form, a second `process.argv` parser, guard removed, seed from env, seed from input). Green: an anchored regex identical to the set (no exposure), and a `/m` regex that accepts `3\nx` (`SEC-101-a`, INFO). Under the second one the seam's guard fails closed: exit 70, 0 B stdout | **MET** |
+| `ADR-0036` clause (b), limbs 1–3 | Each limb: (b1) 0, (b2) 0. New edges `cli.ts → level-seam.ts` and `level-seam.ts → levels.ts` reach no holder. Word hits 0, nothing unresolved. **Holders at the tip: 4** (unchanged). The QE tip adds no production file | **does not fire** |
+| `ADR-0036` § S1 Ruling 2, by hand | Limb-1 holders: `src/book-file.ts` at base and at head. `git diff --name-only` on it is empty (blob `5f0ea29d` at both ends). The pathspec was non-empty, so the empty-pathspec trap does not apply | **does not fire** |
+| The seed (`ADR-0037` D3) | One added randomness site: the root's `Math.floor(Math.random() * 2 ** 32)`. No `crypto`, env or argv source. No input reaches it (`seed` appears only in that call and its comment) | **MET** |
+| `AR-NFR004-A` | **Stands as written; re-accepted with its number.** Level 3 makes the same `chooseMove` call as the old construction. The ceiling needs nothing new: no level's budget reaches `HARD_CEILING_MS`. A dated block was added to `plans/nfr-catalog.md`; no row moved | **re-accepted** |
+| `QE-101-a`, `QE-101-d` | No security or NFR bearing. `-a` stays QE's LOW, owned by the SE. `-d` is INFO | — |
+
+**Next:** `In Security/NFR` → `Ready for UAT` (the Orchestrator moves it). The owner's UAT word is owed.

@@ -1,0 +1,16 @@
+$ node .grugops/context/design-F-072-1/probe/clause-b.mjs 3ea3e352 3ea3e352 1 | grep baseline
+  baseline at <head>, STATE (recorded, not a trigger): 39 production files; 1 hold this limb in code (src/book-file.ts); 4 by raw word hit
+$ node .grugops/context/design-F-072-1/probe/clause-b.mjs 98ea0a84 98ea0a84 1 | grep baseline
+  baseline at <head>, STATE (recorded, not a trigger): 40 production files; 1 hold this limb in code (src/book-file.ts); 4 by raw word hit
+# union of limb-1 holders at <base> and <head> = src/book-file.ts (non-empty, so the diff is run with a non-empty pathspec)
+$ git diff --name-only --no-renames 3ea3e352 98ea0a84 -- src/book-file.ts
+exit 0 ; lines: 0
+$ git diff -U0 --no-renames 3ea3e352 98ea0a84 -- src/book-file.ts | grep -c "^+[^+]"
+0
+$ git rev-parse 3ea3e352:src/book-file.ts 98ea0a84:src/book-file.ts
+5f0ea29d8e8db2d294a9f01925837256b0932c90
+5f0ea29d8e8db2d294a9f01925837256b0932c90
+# Ruling 2 does not fire (the holder file is byte-identical across the pair).
+# For contrast only, the trap NOT used as a reading: an empty pathspec lists every changed path:
+$ git diff --name-only --no-renames 3ea3e352 98ea0a84 -- | wc -l
+20

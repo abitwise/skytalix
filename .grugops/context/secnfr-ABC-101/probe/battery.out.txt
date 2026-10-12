@@ -1,0 +1,36 @@
+--difficulty <v> over 36 hostile values: accepted 0
+["3"] -> refused: unrecognised argument ["3"]
+["1"] -> refused: unrecognised argument ["1"]
+["--difficulty=3"] -> refused: unrecognised argument ["--difficulty=3"]
+["--DIFFICULTY","3"] -> refused: unrecognised argument ["--DIFFICULTY"]
+["-d","3"] -> refused: unrecognised argument ["-d"]
+["--difficulty","--difficulty","3"] -> refused: --difficulty needs one of 1|2|3|4|5 ["--difficulty"]
+["--difficulty","3","--difficulty","5"] -> ok difficulty 5
+["--difficulty","5","--difficulty","1"] -> ok difficulty 1
+["--difficulty","3","3"] -> refused: unrecognised argument ["3"]
+["--colour","3"] -> refused: --colour needs one of white|black|random ["3"]
+["--difficulty","white"] -> refused: --difficulty needs one of 1|2|3|4|5 ["white"]
+["--difficulty","--ascii"] -> refused: --difficulty needs one of 1|2|3|4|5 ["--ascii"]
+accepted words after --difficulty, of ACCEPTED_ARGUMENTS: 5; Object.keys(LEVELS) = ["1","2","3","4","5"]
+createLevelSeam(1) -> built
+createLevelSeam(2) -> built
+createLevelSeam(3) -> built
+createLevelSeam(4) -> built
+createLevelSeam(5) -> built
+createLevelSeam("3") -> built
+createLevelSeam(3) -> built
+createLevelSeam(0) -> RangeError: level-seam: no level 0
+createLevelSeam(6) -> RangeError: level-seam: no level 6
+createLevelSeam(-0) -> RangeError: level-seam: no level 0
+createLevelSeam(3.5) -> RangeError: level-seam: no level 3.5
+createLevelSeam(NaN) -> RangeError: level-seam: no level NaN
+createLevelSeam(Infinity) -> RangeError: level-seam: no level Infinity
+createLevelSeam(-1) -> RangeError: level-seam: no level -1
+createLevelSeam("constructor") -> RangeError: level-seam: no level constructor
+createLevelSeam("__proto__") -> RangeError: level-seam: no level __proto__
+createLevelSeam("toString") -> RangeError: level-seam: no level toString
+createLevelSeam("valueOf") -> RangeError: level-seam: no level valueOf
+createLevelSeam("hasOwnProperty") -> RangeError: level-seam: no level hasOwnProperty
+createLevelSeam("03") -> RangeError: level-seam: no level 03
+createLevelSeam(" 3") -> RangeError: level-seam: no level  3
+prototype keys visible by bracket: constructor=function, __proto__=object; hasOwn: false/false; frozen: true

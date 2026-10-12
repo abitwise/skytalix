@@ -1,0 +1,7 @@
+$ node src/cli.ts --difficulty $'\e]0;pwned\a\e[2J7' < /dev/null
+exit 1
+stdout bytes: 0
+stderr bytes: 151; ESC (0x1b) count: 0; BEL (0x07) count: 0
+stderr:
+--difficulty needs one of 1|2|3|4|5: ]0;pwned[2J7
+usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5] [--ascii | --unicode]
