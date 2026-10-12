@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-153` delivered (`fe6add38`) → In Review; QE dispatched. In flight: `qe-ABC-153`, `qe-recheck-ABC-105`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word: pull `ABC-153` (→ In Development, SE dispatched) and have QE re-check `ABC-105` (pre-build investigation dispatched; stays Ready). Width 2, no timing readings._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — follow-up batch merged: Scribe (`684aa694`, AGENTS.md 24,545 B, 31 B headroom), Architect (`9bdd7fd3`), BA/PM (`5e9ec81c`, `ABC-153` cut → Ready). In flight: none. Ready: `ABC-105` (owner question), `ABC-153`. Next free id `ABC-154`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-116` → Done (merged `2a17783f`, UAT WAIVED). In flight: none. Ready: `ABC-105` (owner question)._
@@ -728,8 +729,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-153] The book compiler's sha256 test alters only `a.tsv`, and the fixture's other four files share one hash — a check limited to the first file passes it  (BA/PM, **XS, P3**, epic: EPIC-005, since: 2026-10-12, **DoR 10/10**; cut from QE-145-a in `bapm-fold-2026-10-12` (merged `5e9ec81c`); test-only, 0 production lines, 0 new tests; QE-145-b accepted as `AR-145-CLI-WIRING`. **→ P2 and merge first if a ticket edits `compile.ts`, changes `SOURCE_COMMIT`/`SOURCE_SHA256`, or regenerates `book.json`.**) **2026-10-12: pulled → In Development (SE `ticket-to-pr-ABC-153`, width 2, base `05a1f11d`).**
+## In Development (WIP 0/3)
 
 
 
@@ -757,7 +757,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-153] The book compiler's sha256 test alters only `a.tsv`, and the fixture's other four files share one hash — a check limited to the first file passes it  (BA/PM, **XS, P3**, epic: EPIC-005, since: 2026-10-12, **DoR 10/10**; cut from QE-145-a in `bapm-fold-2026-10-12` (merged `5e9ec81c`); test-only, 0 production lines, 0 new tests; QE-145-b accepted as `AR-145-CLI-WIRING`. **→ P2 and merge first if a ticket edits `compile.ts`, changes `SOURCE_COMMIT`/`SOURCE_SHA256`, or regenerates `book.json`.**) **2026-10-12: pulled → In Development (SE `ticket-to-pr-ABC-153`, width 2, base `05a1f11d`).** **2026-10-12: delivered (tip `fe6add38`, code `917df052`, gates green 56/1743 = base, 8 mutant readings as contracted) → In Review; QE `qe-ABC-153` dispatched.**
 
 
 
