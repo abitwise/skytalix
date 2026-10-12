@@ -116,6 +116,11 @@ The full site inventory, both re-runs and the true/false split below are in
 - **`plans/traceability.md`'s `ABC-115` row** — checked at this cut and it carries **no CLAIM-B
   clause**; it says *"flips from exit `1` + 1542 bytes of stack to SILENT exit `0`"*, which is a
   reading, not a mechanism. **Verified rather than assumed, and left alone.**
+- **Correction, 2026-10-12 (Software Engineer, subtask `fix-ABC-117`, QE-117-a): the bullet above is
+  wrong.** The `ABC-115` trace row DID carry a CLAIM-B clause. Its `RESIDUAL KNOWINGLY ACCEPTED`
+  sentence says *"the non-`EPIPE` path still exits `1` (= `USAGE_EXIT_CODE`)"*. The cut checked a
+  different clause of the same row. That clause is site **S10**, and a correction row is now
+  appended at the END of `plans/traceability.md`. The `ABC-115` row itself is not edited.
 
 ## The shape ruling — HOW an append-only record gets corrected without un-accepting a ruling
 
