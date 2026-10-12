@@ -326,3 +326,36 @@ Against `agent-factory/checklists/definition-of-ready.md` (10 items). **Result: 
   enough"*) acknowledges the ceiling; answer 3 becomes `A9`; `A4`'s "0" struck.
 - **2026-10-12 QE pre-build re-check** (`qe-recheck-ABC-105`, `…72ae8565`, `…298a669e`) — BUILDABLE WITH
   PAGE AMENDMENTS, 2 HIGH / 6 MEDIUM / 7 LOW; Ready → Backlog. Folded by this amendment.
+
+## Delivery
+
+Software Engineer, 2026-10-12 (subtask `ticket-to-pr-ABC-105`). Branch `grugops/ABC-105-qe-hop-integrity`,
+code commit `ada10423`, base `aeeba067` (`d64f6d73` plus the Orchestrator's pull; `## Done` and the context tree
+are byte-equal). The detail is in `.grugops/context/ticket-to-pr-ABC-105/notes/` (`…d53d8ab6`, `…dd4973a7`,
+`…d21b9cec`, `…59fc8af7`).
+
+- **Built:** `tools/grugops/qe-hop-integrity.js` (§ Scope 1–5), the snapshot `.grugops/qe-cutover-2026-08-17.txt`
+  (38 ids, 304 B, from `git show 9998a544:plans/board.md` through the tool's own `parseDone`; the one-off
+  command is in `…d21b9cec`), and `tools/grugops/qe-hop-integrity.test.ts` (**28 tests, 0 spawns**).
+- **Two seam additions, both in-memory only.** `main`'s options also take `root`, so `A6` can use synthetic
+  trees: `process.chdir` is unavailable in a vitest worker. `readNotes` is exported for `A2`/`A3`'s
+  real-data premises. The CLI has no way to supply either (`…dd4973a7`).
+- **`A4` at `ada10423`:** `132 Done rows · 38 pre-cutover · 77 covered (qe-e2e) · 2 covered (security-nfr
+  substitute) · 15 findings: ABC-038 044 060 070 073 074 085 092 100 108 110 111 112 113 150`, malformed 0,
+  exit **1**. This equals the `a37a4e12` row above, and an independent shell hand count agrees on every id.
+- **Classes of the 15** (from the board row, per `A4`; the tool does not classify):
+  - dropped/cancelled: `038 060 074 108 111 112`;
+  - owner-close: `092 100 150`;
+  - verified elsewhere: `073`;
+  - QE'd off-convention: `044 110 113` (own `ticket-to-pr-*`) and `070 085` (filed as `observation`);
+  - real miss: 0.
+- **`--ticket ABC-105` exits 0 today on QE's pre-build note `qe-recheck-ABC-105/…-72ae8565`**. That is the
+  `A7` ceiling, not a verdict. QE's post-build verdict should be filed under the convention.
+- **`A7`:** the header comment and `memory-bank/40-contributing.md` § Conventions carry the convention and the
+  ceiling. **No `AGENTS.md` edit** (24545 B); the pointer line is the Scribe's, after merge, if bytes can be
+  freed.
+- **Config:** `tsconfig.json` gets `allowJs` and one include, and `biome.json` gets one include, so the test is
+  typechecked and linted (`…d53d8ab6`).
+- **Gates:** lint, typecheck, build and `npm test` exit 0. 57 files / 1771 tests, `success: true`, skip count 0,
+  integrity `No findings.`
+- **0 `src/` files**, and the waiver reading is empty. No timing was read; `N8-LANE` is QE's.
