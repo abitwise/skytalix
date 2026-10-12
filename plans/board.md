@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — Scribe `scribe-ABC-105-2026-10-12` merged (AGENTS.md 24,569 B, 7 B headroom: QE-hop pointer + command row; test line 57/1775). The Orchestrator's `--ticket ABC-105` run at `f6400877` read exit 0, "ABC-105: covered (qe-e2e)", covering notes `qe-ABC-105/…8094d5b1` and `qe-recheck-ABC-105/…72ae8565`. In flight: Architect `design-ABC-105-lane`, BA/PM `bapm-fold-ABC-105-153`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word "yes": follow-up batch for ABC-105/153 dispatched (width 3): Scribe `scribe-ABC-105-2026-10-12`, Architect `design-ABC-105-lane`, BA/PM `bapm-fold-ABC-105-153`. No ticket moves._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-105` → Done (merged `f6400877`, UAT WAIVED, N8-LANE on owner ruling). Stray `node_modules/node_modules` self-symlink removed on owner word. In flight: none. Ready: none._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `qe4-ABC-105` PASS_WITH_GAPS, N8-LANE NOT READ; `ABC-105` held in In Review, owner asked. In flight: none._
