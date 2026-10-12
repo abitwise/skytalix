@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word "yes": follow-up batch for ABC-105/153 dispatched (width 3): Scribe `scribe-ABC-105-2026-10-12`, Architect `design-ABC-105-lane`, BA/PM `bapm-fold-ABC-105-153`. No ticket moves._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-105` → Done (merged `f6400877`, UAT WAIVED, N8-LANE on owner ruling). Stray `node_modules/node_modules` self-symlink removed on owner word. In flight: none. Ready: none._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `qe4-ABC-105` PASS_WITH_GAPS, N8-LANE NOT READ; `ABC-105` held in In Review, owner asked. In flight: none._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `fix2-ABC-105` delivered; `qe4-ABC-105` dispatched. In flight: that hop only._
