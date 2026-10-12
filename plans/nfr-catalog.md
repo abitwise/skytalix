@@ -1,4 +1,5 @@
 # NFR Catalog
+_Updated: 2026-10-12 by Architect/Design (task `wave-2026-09-25`, subtask `design-2026-10-12-fold`, after `ABC-116` merged as `2a17783f`): **NO TABLE ROW TOUCHED. NO LEVEL MOVED.** The eight `NFR-001`–`NFR-008` rows hash `c74e7426…0d3b` before and after the write. Three edits were made. (1) **The `ABC-116` `A5` pointer:** one dated paragraph directly after the `N8-SPAWN` account block, pointing to `T1`/`T2` in the `G-QE115-3` section. The account text is byte-identical. (2) **Under the `T2` bullet:** one dated line. A change to a child's hang bound alone does not fire `T2` (`ADR-0017` § Addendum 2026-10-12 A1). (3) **The floors block:** `src/cli.test.ts` `F` = **0.100 s CPU / 0.180 s wall**, from its first 4.1 reading (`ABC-116`'s twin, n = 8). The 1.097 s and the "650 ms refused" sentence are struck and kept. **The full lane keeps 1.72 s / 3.25 s, and `RISK-ABC144-FCAP` stays open.** Nothing was measured. Note: `.grugops/context/design-2026-10-12-fold/notes/`._
 _Updated: 2026-10-12 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-144-fcap`, ticket `ABC-144`, after `ABC-152` merged as `7a920ca5`): **NO TABLE ROW TOUCHED AND THE FLOORS BLOCK IS NOT EDITED — THIS LINE ONLY. NO LEVEL MOVED.** The nine `NFR-` rows and the floors block are byte-identical, each hashed before and after the write. **`NFR-008` floors after vitest 4.1.11 with the runner off** (`ADR-0042` ruling 6, accepted by the owner; `ADR-0040` addendum 2 item 6): **the full lane keeps `F` = 1.72 s CPU / 3.25 s wall** until the first full-lane twin R is read on 4.1.11, runner off, at k = 2. Base must carry `7a920ca5`, and the twin is a base copy with its own `npm ci`. That R replaces `F` outright (fewer than three: the largest). `ABC-152` `V9`'s twin R, **0.440 s CPU / 0.190 s wall** (3.2.7, runner on, k = 2), is listed and not used. The per-set floors below (`src/cli.test.ts` 1.097 s, `history-pane.nfr` 0.058 s, the pair 0.038 s, the one-file row 0.17 s / 0.27 s) are 3.2.7 data and do not carry over. Every set takes the provisional 16 % of its base CPU until its first 4.1 reading. **`RISK-ABC144-FCAP` stays open on the post-merge lane** (owner Architect/Design, low). Its pre-merge half closed at `V9`. No window is owed for it: the re-read is taken at the next paired full-lane window, and Architect/Design moves `F` from it. Nothing was measured. Note: `.grugops/context/design-ABC-144-fcap/notes/` (`…dd7a6ec9`)._
 _Updated: 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-152-owner-route`, ticket `ABC-152`): **NO TABLE ROW TOUCHED — THIS LINE ONLY. NO LEVEL MOVED.** The `ADR-0042` addendum rules the owner's route: vitest 4.1.11 with the module runner off and the test rework (R1–R5, `san.test.ts` A20 sorted, `book.test.ts` A2 by query import), in one ticket. **`NFR-008`:** `ABC-152` `V9`'s bar stays ≤ −15 % paired lane CPU against the k = 2 base, read with `lane144b.mjs` at width 1 (ruling 6); the cooled state is owed if warm + R > 9.0 s; **no recorded floor `F` carries over the merge** (every set takes the provisional 16 % until three readings on 4.1; the full lane keeps 1.72 s / 3.25 s until a twin R is read on 4.1 at k = 2). **`NFR-007`:** `glyph-mode.nfr`'s zero-I/O guards stay armed with the runner off under R4 (4 plants red, as on 3.2.7). **`NFR-001`, `NFR-005`, `ABC-025` `N1`:** the build's `V4` plants. No timing was read. Notes: `.grugops/context/design-ABC-152-owner-route/notes/`._
 _Updated: 2026-10-11 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-152`, ticket `ABC-152` `D1`–`D4`): **NO TABLE ROW TOUCHED — THIS LINE ONLY. NO LEVEL MOVED.** `ADR-0042` (PROPOSED) screened vitest 4.1.11 in scratch trees: with the module runner off the default lane is red (98 tests in 13 files; 91 in 10 after the declared spy-form rewrites), and one red (`san.test.ts` A20, namespace key order) needs an assertion change, so `ABC-152`'s pre-registered split fires and no runner-off lever is built; the owner picks between 4.1.11 with the runner on (no CPU by this ruling) and staying on 3.2.7. **`NFR-008`:** unchanged; expected lane-CPU effect from `ABC-152` is 0 under either option until a reading says otherwise. **`NFR-001`, `NFR-005`, `ABC-025` `N1`:** per-file isolation holds by mechanism on 4.1.11 with the runner off (armed probe). Notes: `.grugops/context/design-ABC-152/notes/`._
@@ -1259,6 +1260,8 @@ per-file CPU SLOPE  forks 158.2 ms/file  ->  threads 138.9 ms/file   = -12.2%   
 > accounts** — child processes ARE visible on the wall, unusually for this lane, and nothing here
 > exempts them from it.
 
+**Re-measure triggers — pointer, added 2026-10-12 by Architect/Design (`design-2026-10-12-fold`, `ABC-116` `A5`):** a checker reading this account must also read **`T1`** and **`T2`** in the `G-QE115-3` section below, under *"What replaces the gate — TWO NAMED TRIGGERS"* (`ADR-0017` decision 2). **`T2` fires when an existing child changes and the count does NOT move, so the count pin cannot show it.** A change to a child's hang bound (`timeout`) alone does not fire `T2` (`ADR-0017` § Addendum 2026-10-12 A1). The account text above is unchanged.
+
 **What this account does NOT do — stated because a carve-out not bounded in writing gets read wider.**
 
 - **It does not move `NFR-008`'s level.** 3 s wall / 13 s CPU is Olger Oeselg's, ratified in person
@@ -1628,6 +1631,7 @@ Security/NFR left the next gate the sentence *"a 5% slice of a total that is alr
 
 - **`T1` — a hop that CHANGES THE NUMBER OF CHILDREN re-measures BOTH time clauses** under this account's protocol. **Already effectively enforced**: the count pin forces such a hop to edit the literal and write its reason, and it fired twice on `ABC-115` (+5 → +6, +6 → +7). This only writes it down.
 - **`T2` — a hop that changes WHAT AN EXISTING CHILD DOES** — its argv, its stdin script, its substitution hook, its settle — **re-measures the per-child CPU clause, whether or not the count moves.** **This trigger existed nowhere before this ruling**: not on the ticket, not in this account, not in the test file, not in QE's residual. **It is the substantive addition, and it is this account's own rule read honestly** — *"a child no criterion names is a finding against the ticket"* extended to *a child that stopped being the child its criterion priced*.
+  - **2026-10-12 (Architect/Design, `design-2026-10-12-fold`):** **a change to a child's hang bound (`timeout` in `childOf`) alone does NOT fire `T2`.** A child inside its bound costs the same under any bound. A child that reaches it throws `ETIMEDOUT`, and its row goes red. So a bound change is never silent drift. `A9`'s bound is that row's criterion, so a change to it is a criterion change (BA/PM). The four triggers above stay four (`ADR-0017` § Addendum 2026-10-12 A1).
 
 ### `AR-N8SPAWN-DRIFT` — the accepted risk, because a residual with no carrier is how this board loses things
 
@@ -1728,10 +1732,18 @@ files is owed to the protocol's owner, Architect/Design. No verdict hangs on it.
   admissible reading replaces it. 16 % is the largest R ÷ base CPU on record (`src/cli.test.ts` set 2, 1.097 ÷
   6.95 s).
 - **Inadmissible sets.** Their R is listed and not used.
-- **Floors today, per set:** `src/cli.test.ts` **1.097 s**; `src/history-pane.nfr.test.ts` **0.058 s**;
+- **Floors today, per set:** `src/cli.test.ts` ~~**1.097 s**~~; `src/history-pane.nfr.test.ts` **0.058 s**;
   `history-pane.nfr` + `render-seam.test` **0.038 s**. The one-file row above (0.17 s) stays as the record of
   the two files it was measured on.
-- So a 650 ms `N8-LANE` reading on `src/cli.test.ts` alone is refused at the cut. That file is bounded by
+  - **2026-10-12 (Architect/Design, `design-2026-10-12-fold`): `src/cli.test.ts` `F` = 0.100 s CPU / 0.180 s
+    wall** on vitest 4.1.11, runner off, `maxWorkers: 2`. It is the set's first 4.1 reading: `ABC-116`'s
+    identity twin, n = 8, order statistic k = 2, base `3c38a8ea`, admissible (median 0.00 % CPU, sign 4/8).
+    The 1.097 s above is 3.2.7 data, struck and kept. The other two figures on this line are 3.2.7 data too,
+    and each set keeps the provisional 16 % until its own first 4.1 reading (the `design-ABC-144-fcap`
+    `_Updated` line at the top). Source: `ADR-0035` § Status, "Per-set floor, 2026-10-12".
+- ~~So a 650 ms `N8-LANE` reading on `src/cli.test.ts` alone is refused at the cut.~~ (true at 1.097 s)
+  **2026-10-12: at `F` = 0.100 s, a 650 ms `N8-LANE` bound and the 0.30 s per-child clause on
+  `src/cli.test.ts` are no longer refused at the cut.** That file is still bounded by
   the count (`N8_SPAWN` 27 and the file count), or by content timed in process (`ABC-058`'s 0.154 ms,
   `ABC-133` `A4`'s ≤ 250 ms).
 
