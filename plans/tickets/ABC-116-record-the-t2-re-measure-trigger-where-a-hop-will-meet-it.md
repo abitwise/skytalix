@@ -305,6 +305,10 @@ still holds, and the `P3` demotion trigger has not fired.***
 - *`ABC-116` is `Done`, so its priority no longer orders any work. Both triggers survive as signals.
   If the `P1` promotion trigger fires, the next cut adds the one-line pointers that `QE-116-b`
   suggested, at the `CHILDREN` block and at `A9_SETTLE_SECONDS`. They are not cut today.*
+- *Update, 2026-10-12 (read after rebasing onto `main` `9bdd7fd3`): Architect/Design made the catalog
+  pointer edit (`plans/nfr-catalog.md`, after the `N8-SPAWN` account). That is the demotion trigger's
+  first event. The second, an unprompted `T2` re-measure at a real gate, has not happened, so the
+  trigger still has not fired.*
 
 ## Definition of Ready
 
@@ -610,3 +614,8 @@ Nothing was measured, and no timing was taken. The line cites are a read of `src
   - If the addendum does not add the bound, nothing on this page changes.
   - Until it is ruled, this page reads the four spellings exactly as `ADR-0017` decision 2 names
     them.
+  - *Ruled, 2026-10-12 (read after rebasing onto `main` `9bdd7fd3`): a change to a child's hang bound
+    alone does **not** fire `T2` (`ADR-0017` § Addendum 2026-10-12 A1, note
+    `.grugops/context/design-2026-10-12-fold/notes/…14514376`). So nothing on this page changes, and
+    the canonical row form keeps its four spellings. The same ruling says a change to `A9_BOUND_MS`
+    is a criterion change, which belongs to BA/PM, and not a `T2` event.*
