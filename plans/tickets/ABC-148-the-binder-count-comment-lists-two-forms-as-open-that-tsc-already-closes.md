@@ -122,3 +122,40 @@ BA/PM, 2026-10-11. **Result: 10 of 10.** Recommended placement: `Ready`.
 | 10 | no major unresolved blocker | **✅** |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-12. **This agent is the
+author of both corrected passages (`A5`). It has not validated them.** The `In Review` verdict belongs
+to a separate QE hop that re-plants all five forms itself. Branch `grugops/ABC-148-binder-comment`,
+code commit `7acd8db2`, base `main` @ `3537fe48`. Readings: `.grugops/context/ticket-to-pr-ABC-148/notes/`.
+
+- **`A1`, re-measured at this hop.** Each form was planted alone in `src/cli.ts`, inside an async IIFE
+  at the `runTurnLoop(` call. The scaffold was the same for all five (`const spare = { ...history }`,
+  the binder, then `throw new Error("unreachable")`), so only the binder differs. After each build,
+  `git checkout -- src/cli.ts` ran and `git status --porcelain` was empty. Base file: 69 / 69.
+
+  | form | `tsc --noEmit` | `npx vitest run src/cli.test.ts` |
+  |---|---|---|
+  | `for (const history of [spare])` (`D4`) | 0 | 69 / 69 passed: **open** |
+  | `(history) =>` (`[spare].map(…)`) | 0 | 69 / 69 passed: **open** |
+  | bare `history =>` | 0 | 1 failed / 68: `ABC-043` `A1`, the count row, `[ 'history =', 'history =' ]` |
+  | `for (const history in { spare })` | **2** (TS2322, `string`) | 26 failed / 43: spawn rows, child exits 70; the count row is green |
+  | `catch (history)` | **2** (TS2322, `unknown`) | 69 / 69 passed: closed by the typecheck **only** |
+
+- **Against QE's table (`…94a87a28`).** The five `tsc` exits agree, and so does the bare-arrow red row.
+  Where QE recorded only "closed by the typecheck", this hop also ran the file. `for…in` reds 26
+  behavioural rows, because the child really receives the string `"spare"`. `catch (history)` passes
+  every row, so the typecheck is its **only** guard. Neither result changes the open list. The file's
+  totals are 69, not 67, because the file has grown since QE measured.
+- **`A2`/`A3`.** The comment paragraph and the `ABC-113` note both name exactly `for…of` and a
+  parenthesised `(history) =>` as open. They name `for…in` and `catch (history)` as closed by the
+  typecheck and the bare `history =>` as counted. On the page, the struck four-form list is kept and
+  a dated correction follows it. Line 64 is byte-identical to `main` (`cmp`).
+- **`A4`.** `git diff --name-only main -- src/` lists `src/cli.test.ts` only. There are 0 non-`//`
+  lines added or removed under `src/`. `it(` occurs 101 times and `expect(` 324 times, both at base
+  and at the tip. `npm test` gives 56 files / 1741 tests / 0 pending / 0 todo, both at base (the
+  base's `src/cli.test.ts` in place) and at the tip.
+- **Gates at the tip.** `npm run -s lint` 0, `typecheck` 0, `build` 0, `npm test` 0, and
+  `.test-results/last-run.json` reads `success: true`. Skip-integrity at skip count 0: `No findings.`
+  This hop took no timing readings.
