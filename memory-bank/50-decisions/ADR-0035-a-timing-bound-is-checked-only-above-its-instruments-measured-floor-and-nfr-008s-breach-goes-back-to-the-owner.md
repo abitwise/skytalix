@@ -51,6 +51,17 @@ amendment). **`src/cli.test.ts`: `F` = 0.100 s CPU / 0.180 s wall**, on vitest 4
 
 No decision is changed and nothing was measured. Note `.grugops/context/design-2026-10-12-fold/notes/`.
 
+**Addendum 2026-10-12 (`design-ABC-105-lane`, after `ABC-105` merged as `f6400877`).** Three items, in
+`§ Addendum 2026-10-12` at the end of this file:
+- **A1 amends decision 1, forward-only (`QE-105-ab`).** The admissibility limit becomes max(1.5 %, one tick), and
+  the sign test counts only non-zero deltas. Decision 1 is a protocol clause, and the protocol is this role's
+  (below). No level moves. Windows graded before it stay as graded.
+- **A2:** the per-set `F` for `tools/grugops/qe-hop-integrity.test.ts` is 0.020 s CPU / 0.020 s wall.
+- **A3:** that set's cost grows with `.grugops/context`, so its re-read is triggered at 4,000 note files. This is
+  a risk with a trigger, not `N8-LANE` text.
+
+Nothing was measured. Notes are in `.grugops/context/design-ABC-105-lane/notes/`.
+
 Previously `proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25`, subtask `ruling-timing-protocol`),
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.
@@ -417,3 +428,151 @@ measured at this hop.** Notes: `.grugops/context/design-low-batch-2026-10-11/not
   with *"≤ 650 ms CPU, fixed at 5 % of the 13 s level ratified 2026-08-11. Under R-1 no CPU level exists,
   and 650 ms stands as a number (`ADR-0035` § Pointers 2026-10-11 P3)"*. Then retire the paragraph
   *"Recorded, not ruled: what `N8-LANE`'s 5 % means under R-1"*.
+
+## § Addendum 2026-10-12
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-105-lane`), the owner of this protocol,
+after `ABC-105` merged as `f6400877`. **Nothing was measured at this hop.**
+- **Source of the figures.** Every figure was recomputed from the raw per-run TSVs of `qe-ABC-105`,
+  `qe3-ABC-105-lane` and `qe4-ABC-105` by this hop's own script, in integer centiseconds
+  (`.grugops/context/design-ABC-105-lane/probe/recompute.py` → `recompute.out.txt`).
+- **Agreement with QE.** The recompute agrees with QE's readouts on every figure QE graded.
+- Notes are in `.grugops/context/design-ABC-105-lane/notes/`.
+
+### A1. `QE-105-ab`: the admissibility limit gets a one-tick floor. Decision 1 is amended, forward-only
+
+**The defect.**
+- `/usr/bin/time -p` prints user and sys in 10 ms ticks. CPU is user + sys, so every per-round twin delta is a
+  whole number of ticks, and the median of eight is a multiple of 5 ms.
+- On this set the B median is 0.570–0.575 s, so 1.5 % is 8.55–8.63 ms. **A twin median of ±0.010 s always
+  fails. Only 0.000 or ±0.005 s can pass.** The clause asks for a resolution finer than the instrument
+  prints.
+- The defect binds wherever the B median is below 0.667 s (0.010 ÷ 0.015).
+
+**What it cost on the record.** Two of the four non-void windows on this set failed on it, each by a single
+tick: QE3 w1 (+0.010 s = 1.739 %) and QE4 w2 (+0.010 s = 1.754 %).
+
+**Ruled.**
+- **Admissible** means |twin median| ≤ **max(1.5 % of the B median, one tick)**, in the unit's own
+  instrument.
+  - The tick is 0.010 s for `/usr/bin/time -p`, for CPU and wall alike. A different timer states its own tick.
+  - At a base of 0.667 s or more, this is the 1.5 % clause unchanged. The full lane and `src/cli.test.ts`
+    (5.61 s) are not affected.
+- **"Sign at chance"** is the two-sided sign test on the **non-zero** deltas, at p > 0.05. A zero delta lies
+  inside one tick, so it has no sign.
+  - QE's readout scripts (`readout105.py`, `readout-qe3.py`, `readout-qe4.py`) count the positives against
+    everything else, which treats a zero as a negative. That can admit a twin that the test above refuses:
+    6 positive and 2 zero reads p 0.289 by the scripts and p 0.031 by the rule.
+  - On the six `ABC-105` windows, and on `ABC-116`'s `src/cli.test.ts` twin, the two conventions give the same
+    admissibility. **No recorded state moves.**
+- **Forward-only.**
+  - The rule applies to a window whose pre-registration lands on `main` after this addendum does. A window
+    with no pre-registration counts from its first run.
+  - A window already graded stays as graded. Changing an admissibility rule after the window has been seen,
+    and then grading that window, is the fault a pre-registration exists to stop.
+  - **So QE3 w1 and QE4 w2 stay INADMISSIBLE, with no state.**
+
+**What each would read under the amended clause.** This is recorded, not regraded:
+
+| window | code | twin CPU: median, signs, R | admissible under A1? | treatment H − B: median, x(2)..x(7) | would read at 650 ms |
+|---|---|---|---|---|---|
+| QE3 w1 | `db1cfb6c` | +0.010 s (1.739 %); 7 +, 1 −; p 0.070; R 0.010 s | yes | +0.670 s, +0.660..+0.700 | NOT MET (the lower end is over the bound by one tick) |
+| QE4 w2 | `8fd0c233` | +0.010 s (1.754 %); 5 +, 2 −, 1 zero; p 0.453; R 0.030 s | yes | +0.370 s, +0.370..+0.400 | MET |
+
+- **The QE4 w2 line is not a MET.**
+  - That window was graded inadmissible under the rule in force when it ran, and the line above is only what
+    A1 would say about it.
+  - `N8-LANE` at `8fd0c233` stays **NOT READ** (QE4 `…6a647762`).
+  - The merge rests on the owner's ruling, not on this line. See the catalog section "`N8-LANE` at `ABC-105`".
+- **The QE3 w1 line** agrees with QE3 w3's graded NOT MET at the same code. `8fd0c233` superseded `db1cfb6c`.
+
+**Alternatives rejected.**
+- **Keep 1.5 % as it is.**
+  - It refuses one-tick medians on every set under 0.667 s. That refuses windows for quantisation, not for
+    bias.
+  - It also wastes width-1 windows, which this factory cannot buy at will. QE3 needed three windows and QE4
+    needed two.
+- **A two-tick floor (20 ms).**
+  - One delta's quantisation error can reach ±20 ms, because each arm truncates twice.
+  - But no window here failed by more than one tick, and two ticks is 3.5 % on this set. It is wider than
+    needed.
+- **Change the timer** (microsecond `getrusage` of the child).
+  - This is the real fix for resolution.
+  - But it changes the harness, which every per-set floor and pre-registration names by sha256 (`lane144b.mjs`,
+    `652b7793…c80c7c`). Every recorded `F` would then need a re-read.
+  - **It becomes the route if a bound is ever cut within a few ticks of a reading.** That is not the case at
+    650 ms.
+
+**Rollback.** Apply decision 1's own rollback test. If a twin that only the floor admits (a one-tick median) is
+followed by readings that flip sides of a bound, revert to 1.5 % and take the timer route.
+
+### A2. Per-set `F`: `tools/grugops/qe-hop-integrity.test.ts` = 0.020 s CPU / 0.020 s wall
+
+**The set.**
+- The file, against the one-assertion placeholder at the same path (`qe-ABC-105/probe/placeholder.test.ts`,
+  `cmp` 0 in all three hops).
+- vitest 4.1.11, runner off, `maxWorkers: 2`.
+- A symlinked, shared `node_modules`, which is the condition stated in the § Status per-set paragraph.
+
+**Admissible twin readings** (decision 1 as written when they ran; n = 8, k = 2):
+
+| reading | code / notes in the arm | load1 | twin CPU, sorted (x(2), x(7) bold) | CPU R | wall R |
+|---|---|---|---|---|---|
+| `qe-ABC-105` | `60415a8a` / 2624 | 5.10–5.31 | −0.13, **−0.01**, −0.01, 0.00, 0.00, 0.01, **0.01**, 0.01 | 0.010 s | 0.010 s |
+| QE3 w3 | `db1cfb6c` / 2636 | 3.13–3.28 | −0.01, **−0.01**, 0.00, 0.00, 0.00, 0.00, **0.02**, 0.03 | 0.020 s | 0.020 s |
+
+- **The wall twins are admissible too:** −0.005 s (−1.16 % of 0.430 s) and 0.000 s.
+- **There are two readings, so the largest R governs: `F` = 0.020 s CPU / 0.020 s wall.**
+  - It replaces the provisional 16 %, which is 0.091–0.092 s on these bases.
+  - From the third admissible reading on, the median of the three most recent governs.
+- **Listed, not used:**
+  - QE3 w1 (R 0.010 / 0.010) and QE4 w2 (R 0.030 / 0.020) are inadmissible.
+  - QE3 w2 and QE4 w1 are void.
+- **What it changes at the cut.**
+  - A CPU bound on this set at or above 0.020 s is not refused, and 650 ms is far above that.
+  - A wall bound must still name its failure mode (decision 3).
+  - The count pins stay: 1 file, 0 spawns, 0 `src/` files.
+- Both twin arms run the placeholder, so the file's own growth (A3) does not move `F`.
+
+### A3. A set whose cost grows with the record: a re-read trigger on the record's size, not `N8-LANE` text
+
+**The mechanism.**
+- The file's content cost is mostly whole-tree reads of the real notes (`QE-105-x`).
+- Since `fix2-ABC-105` there are 2 reads per run. QE4 counted 5366 note files read, which is 2.032 × 2641.
+- Each read costs in proportion to `.grugops/context`, and every hop grows that. **So the cost moves after
+  the merge, with no ticket to charge it to. `N8-LANE` assumes a cost that is fixed at merge.**
+
+**Projection.** This is arithmetic over two admissible readings. It is not a reading and has no state.
+- The two windows: +0.475 s with 3 reads at 2624 notes, and +0.690 s with 5 reads at 2636 notes.
+- The 2 extra reads cost 0.215 s, so one whole-tree read is about 0.1075 s at ~2630 notes, or ~41 µs a note.
+  That leaves ~0.153 s that is not a read.
+- At 2 reads, the content is about 0.153 + 0.215 × N / 2630 s. **That crosses 650 ms at N ≈ 6,100 notes.**
+- **Limits.**
+  - The two windows ran at different loads (5.1–5.3 and 3.1–3.3), and they are not paired.
+  - The projection assumes the cost is linear in N.
+  - QE4 w2's ungraded +0.370 s is not used.
+
+**How fast the record grows.** This is a git count of `.grugops/context/*/notes/*.md` at each commit:
+
+| commit | date | notes |
+|---|---|---|
+| `81add970` | 2026-08-21 | 1682 |
+| `90457728` | 2026-09-27 | 1970 |
+| `0ff618be` | 2026-10-11 | 2513 |
+| `6ae6dd27` | 2026-10-12 | 2645 |
+
+- That is ~39 notes a day over the last fortnight, and 132 on 2026-10-12 alone.
+
+**Ruled: the trigger is 4,000 note files**, counted by `find .grugops/context -path '*/notes/*.md' | wc -l` on
+`main`.
+- At 4,000 notes the projection reads ~0.48 s. That is about the share of the bound the first MET read
+  (73–74 %), so a re-read at the trigger still has room to land under the bound.
+- At ~39 notes a day, the trigger is about five weeks away.
+
+**Not `N8-LANE` text.**
+- `N8-LANE` is the standing bar that every ticket inherits, and this is one file.
+  `tools/grugops/qe-hop-integrity.test.ts` is the only test file that reads `.grugops/context` (a grep over the
+  `src/` and `tools/` test files at `6ae6dd27`).
+- One file is a risk with a trigger, not a clause. It is recorded in the catalog as `RISK-ABC105-LANE`.
+- **If a second test file reads the record, lift this into `N8-LANE`**, worded as: "a set that reads
+  repository data states that data's size beside the reading, and the reading holds at that size."
