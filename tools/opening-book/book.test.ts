@@ -272,35 +272,47 @@ describe("ABC-145 — the source bytes are checked against pinned sha256 values 
     createHash("sha256").update(readFileSync(path)).digest("hex");
 
   it("A1/A2 — refuses a source altered by one byte and writes nothing; unaltered, it writes", () => {
-    const dir = fixture("abc145", `${HEADER}\n${GOOD_ROWS.join("\n")}\n`);
+    // ABC-153: one GOOD_ROWS row per file, so the five files carry five distinct hashes and a check
+    // that skips or swaps any file is caught.
+    const dir = fixture("abc145", `${HEADER}\n${GOOD_ROWS[0]}\n`);
+    const texts = SOURCE_FILES.map((_, i) => `${HEADER}\n${GOOD_ROWS[i]}\n`);
+    SOURCE_FILES.forEach((file, i) => {
+      writeFileSync(join(dir, file), texts[i] as string);
+    });
     const expected = Object.fromEntries(
       SOURCE_FILES.map((file) => [file, sha256(join(dir, file))]),
     ) as typeof SOURCE_SHA256;
+    expect(new Set(Object.values(expected)).size).toBe(5);
 
     const control = join(scratch, "abc145-control.json");
     checkThenWriteBook(dir, control, "0".repeat(40), expected);
     expect(existsSync(control)).toBe(true);
 
-    // One byte changed in place, inside a name: the file stays well-formed, so only the hash can
-    // refuse it.
-    const altered = join(dir, "a.tsv");
-    writeFileSync(altered, readFileSync(altered, "utf8").replace("Italian Game", "Italian Gamf"));
-    const actual = sha256(altered);
-    expect(actual).not.toBe(expected["a.tsv"]);
+    // Each file in turn: one byte changed in place, inside a name (its first letter lower-cased),
+    // so the file stays well-formed and only the hash can refuse it; then the file is restored.
+    SOURCE_FILES.forEach((file, i) => {
+      const altered = join(dir, file);
+      const name = (GOOD_ROWS[i] as string).split("\t")[1] as string;
+      const renamed = `${name.charAt(0).toLowerCase()}${name.slice(1)}`;
+      writeFileSync(altered, (texts[i] as string).replace(`\t${name}\t`, `\t${renamed}\t`));
+      const actual = sha256(altered);
+      expect(actual).not.toBe(expected[file]);
 
-    const out = join(scratch, "abc145-altered.json");
-    let refusal = "";
-    try {
-      checkThenWriteBook(dir, out, "0".repeat(40), expected);
-    } catch (error) {
-      refusal = (error as Error).message;
-    }
-    expect(["a.tsv", expected["a.tsv"], actual].filter((part) => refusal.includes(part))).toEqual([
-      "a.tsv",
-      expected["a.tsv"],
-      actual,
-    ]);
-    expect(existsSync(out)).toBe(false);
+      const out = join(scratch, `abc145-altered-${file}.json`);
+      let refusal = "";
+      try {
+        checkThenWriteBook(dir, out, "0".repeat(40), expected);
+      } catch (error) {
+        refusal = (error as Error).message;
+      }
+      expect([file, expected[file], actual].filter((part) => refusal.includes(part))).toEqual([
+        file,
+        expected[file],
+        actual,
+      ]);
+      expect(existsSync(out)).toBe(false);
+      writeFileSync(altered, texts[i] as string);
+    });
   });
 
   it("A3 — each SOURCE_SHA256 value sits on ATTRIBUTION.md's table row for its own file", () => {
