@@ -203,3 +203,35 @@ code commit `7acd8db2`, base `main` @ `3537fe48`. Readings: `.grugops/context/ti
 - **`QE-148-d` INFO.** Host-protection exited 2 (`UNKNOWN - verify`).
 
 QE made no board move, did not merge and did not push.
+
+**Addendum 2026-10-12, QE/E2E re-check** (subtask `qe2-ABC-148`; a different agent from the SE author).
+- Range: repair code `2208d2a0`, reviewed tip `9c3efd62`, base `3537fe48`.
+- The readings are QE's own, taken with its own generator before the SE's repair note was read. The
+  detail is in `.grugops/context/qe2-ABC-148/notes/`:
+  - `…56966be0`, the verdict;
+  - `…e7dc8867`, the readings;
+  - `…18ca4c99`, the paragraph check and gaps;
+  - `…433f1691`, the commands.
+
+**PASS.**
+- **`QE-148-a` is closed.**
+  - Each family was re-planted by QE: `const [history]`, `function (history)` and the `for…of` object
+    destructure each read `tsc` 0 and 69 / 69.
+  - The bare-arrow control reds the count row.
+  - Every form the paragraph calls open is `tsc` 0 and green, and counted and closed-by-typecheck are
+    right.
+  - The paragraph claims no completeness.
+- **`QE-148-b` is closed.** No `[:=]`-free label remains.
+- **The fence holds.** `src/cli.test.ts` changed in `//` lines only; `\bit(` 69 and `\bexpect(` 324;
+  `npm test` 56 / 1741 / 0 at base and tip; line 64 `cmp` 0; struck words kept.
+- **Gates at the tip are 0.** Host-protection exited 2, which is standing.
+- **The UAT waiver applies on QE's measurement.**
+- **`QE2-148-a` INFO.** A hunt for a seventh family found three more open forms:
+  - `let history;` assigned through a `for…of` target;
+  - `let history;` assigned through `[history] = …`;
+  - an object-method parameter typed through `satisfies`.
+
+  The paragraph's "NOT an exhaustive one … measured or not" covers them, so no wording change is owed.
+  A future close-`D4` ticket must work from the mechanism, not the eight-item list.
+
+QE made no board move, did not merge and did not push.
