@@ -159,6 +159,15 @@ code commit `7acd8db2`, base `main` @ `3537fe48`. Readings: `.grugops/context/ti
 - **Gates at the tip.** `npm run -s lint` 0, `typecheck` 0, `build` 0, `npm test` 0, and
   `.test-results/last-run.json` reads `success: true`. Skip-integrity at skip count 0: `No findings.`
   This hop took no timing readings.
+- **Repair, 2026-10-12 (subtask `fix-ABC-148`, `QE-148-a`/`QE-148-b`; same SE author, code `2208d2a0`).**
+  The six extra binders QE found were re-planted by this hop, one at a time, with the same scaffold
+  (callback host `Promise.resolve(…).then(…)`, destructures in a nested block): each read `tsc` 0 and
+  `src/cli.test.ts` 69 / 69, reverted, `git status --porcelain` empty; the bare-arrow control red the
+  count row. The paragraph now names the eight measured open forms by family (loop binders; callback
+  parameters, including `function` and parenthesised arrows; destructuring patterns), says the regex
+  sees `history` only where `:` or `=` directly follows it, and says the list is what was measured,
+  not exhaustive. The "five `[:=]`-free forms" label is gone (`QE-148-b`). The `ABC-113` page gets a
+  dated correction with the same list; nothing struck, line 64 byte-unchanged. A QE re-check is owed.
 
 ## QE
 
