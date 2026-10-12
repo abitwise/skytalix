@@ -1,0 +1,42 @@
+# QE-hop cutover snapshot (ABC-105). Written once at build; never regenerated.
+# The ids of the line-leading `## Done` rows of `git show 9998a544:plans/board.md`, the commit of
+# the owner's 2026-08-17 directive that every ticket passes through QE. They are out of scope:
+# the owner declined a retro QE pass (AGENTS.md § QE validation authority, "Forward-only").
+ABC-063
+ABC-064
+ABC-062
+ABC-061
+ABC-068
+ABC-067
+ABC-071
+ABC-065
+ABC-066
+ABC-042
+ABC-041
+ABC-021
+ABC-026
+ABC-028
+ABC-029
+ABC-019
+ABC-017
+ABC-027
+ABC-016
+ABC-025
+ABC-013
+ABC-023
+ABC-022
+ABC-009
+ABC-018
+ABC-015
+ABC-014
+ABC-012
+ABC-011
+ABC-020
+ABC-008
+ABC-001
+ABC-002
+ABC-003
+ABC-004
+ABC-005
+ABC-006
+ABC-007
