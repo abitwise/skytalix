@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-116` delivered → In Review; QE hop at width 1._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-116` pulled → In Development, width 1 (A2 quiet-window re-measure)._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-117` → Done (merged `70aa303f`, UAT WAIVED). In flight: none._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-148` → Done (merged `6c2dd121`, UAT WAIVED)._
@@ -724,8 +725,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-116] The `T2` re-measure trigger has a ruling and no carrier — record it where a hop that changes an existing child will actually meet it  (BA/PM, **XS, P2**, epic: —, since: 2026-08-21, **DoR 9/10 ⚠️x1 — PULLABLE TODAY, NO BLOCKING DEPENDENCY; the ⚠️ is item 4 and it is a CONSEQUENCE authorised on the page — `A4` is an obligation on a LATER cut and the page says outright that the propagation is not measurable at this delivery.**) Cut from Architect/Design's `G-QE115-3` ruling, which named this ticket `XS`/`P2`/BA-PM and deliberately did not cut it. **Comment prose only: 0 production lines, 0 assertions, 0 new spawns, `N8-SPAWN` 0 ms, `T1` and `T2` both NOT FIRED.** **THE CARRIER DIFFERS FROM THE PROPOSAL ON A MEASUREMENT: the kit gate checklist CANNOT hold it** (read-only KIT, machine-generated OWASP ASVS 5.0, 0 mentions of any budget here, regenerated away) — the carrier ruled is `ChildOptions`/`childOf` in `src/cli.test.ts`, the one surface a `T2`-firing hop MUST edit. **`ADR-0017`, `AR-N8SPAWN-DRIFT` and `NFR-008` NOT re-opened; no mechanism built and none owed. One `plans/nfr-catalog.md` pointer edit NAMED and NOT MADE, owner Architect/Design.** **2026-10-10 re-score vs R-1 (`bapm-rescore-backlog-r1-2026-10-10`, merged `2174691a`): DoR 10/10 → Ready.** **2026-10-11: A2 needs a quiet-window CPU/wall re-measure — pull only into a width-1 window.** **2026-10-12: pulled → In Development ALONE (width-1 window for the A2 re-measure on vitest 4.1 / k=2).**
+## In Development (WIP 0/3)
 
 
 
@@ -753,7 +753,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-116] The `T2` re-measure trigger has a ruling and no carrier — record it where a hop that changes an existing child will actually meet it  (BA/PM, **XS, P2**, epic: —, since: 2026-08-21, **DoR 9/10 ⚠️x1 — PULLABLE TODAY, NO BLOCKING DEPENDENCY; the ⚠️ is item 4 and it is a CONSEQUENCE authorised on the page — `A4` is an obligation on a LATER cut and the page says outright that the propagation is not measurable at this delivery.**) Cut from Architect/Design's `G-QE115-3` ruling, which named this ticket `XS`/`P2`/BA-PM and deliberately did not cut it. **Comment prose only: 0 production lines, 0 assertions, 0 new spawns, `N8-SPAWN` 0 ms, `T1` and `T2` both NOT FIRED.** **THE CARRIER DIFFERS FROM THE PROPOSAL ON A MEASUREMENT: the kit gate checklist CANNOT hold it** (read-only KIT, machine-generated OWASP ASVS 5.0, 0 mentions of any budget here, regenerated away) — the carrier ruled is `ChildOptions`/`childOf` in `src/cli.test.ts`, the one surface a `T2`-firing hop MUST edit. **`ADR-0017`, `AR-N8SPAWN-DRIFT` and `NFR-008` NOT re-opened; no mechanism built and none owed. One `plans/nfr-catalog.md` pointer edit NAMED and NOT MADE, owner Architect/Design.** **2026-10-10 re-score vs R-1 (`bapm-rescore-backlog-r1-2026-10-10`, merged `2174691a`): DoR 10/10 → Ready.** **2026-10-11: A2 needs a quiet-window CPU/wall re-measure — pull only into a width-1 window.** **2026-10-12: pulled → In Development ALONE (width-1 window for the A2 re-measure on vitest 4.1 / k=2).** **2026-10-12: delivered (tip `d39618d1`, gates green 56/1743, 0 production lines; A2 hook-deletion cost re-measured on vitest 4.1.11 / k=2: +3.08 s wall / +3.12 s CPU, 8/8 pairs, vs ADR-0017 +2.68/+2.60 — disagreement written; first 4.1 narrow-set twin R for `src/cli.test.ts` = 0.100 s CPU / 0.180 s wall, input for Architect) → In Review; QE `qe-ABC-116` dispatched, width 1.**
 
 
 
