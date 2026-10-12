@@ -1,0 +1,429 @@
+plants start 2026-10-12T21:11:30Z
+=== P1-seam-ignores-level  2026-10-12T21:11:30Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P1-seam-ignores-level: applied 1 edit(s)
+--- a/src/level-seam.ts
++++ b/src/level-seam.ts
+@@ -12,7 +12,7 @@
+ 
+ export function createLevelSeam(level: number, options: LevelOptions): EngineSeam {
+   if (!Object.hasOwn(LEVELS, level)) throw new RangeError(`level-seam: no level ${level}`);
+-  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
++  const choose = createLevel(LEVELS[3], options);
+   return async (history) => {
+     const choice = choose(history.position);
+     if (choice === null) throw new Error("engine: asked to move in a position with no legal move");
+vitest exit 1
+files 58 tests 1789 passed 1788 failed 1 pending 0
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock :: AssertionError: level 1, call 0: expected { from: 6, to: 37, piece: 2, …(3) } to deeply equal { from: 1, to: 34, piece: 2, …(3) }
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P1-seam-ignores-level; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P2-in-not-hasOwn  2026-10-12T21:11:39Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P2-in-not-hasOwn: applied 1 edit(s)
+--- a/src/level-seam.ts
++++ b/src/level-seam.ts
+@@ -11,7 +11,7 @@
+ import type { EngineSeam } from "./turn-loop.ts";
+ 
+ export function createLevelSeam(level: number, options: LevelOptions): EngineSeam {
+-  if (!Object.hasOwn(LEVELS, level)) throw new RangeError(`level-seam: no level ${level}`);
++  if (!(level in LEVELS)) throw new RangeError(`level-seam: no level ${level}`);
+   const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+   return async (history) => {
+     const choice = choose(history.position);
+vitest exit 1
+files 58 tests 1789 passed 1788 failed 1 pending 0
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the table is read only by an OWN key: everything else is refused (Security forward note) :: AssertionError: expected '\n\nimport { createLevel, LEVELS, typ…' to match /Object\.hasOwn\(LEVELS, level\)/
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P2-in-not-hasOwn; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P3-number-range-check  2026-10-12T21:11:49Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P3-number-range-check: applied 1 edit(s)
+--- a/src/cli-options.ts
++++ b/src/cli-options.ts
+@@ -155,9 +155,10 @@
+     if (token === DIFFICULTY) {
+       const next = argv[index + 1];
+       // The same exact-equality lookup as `--colour`: `0`, `6`, `03`, `+3` and `3.0` are not members.
+-      const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);
+-      if (value === undefined) return reject(MISSING_DIFFICULTY, next ?? token);
+-      difficulty = Number(value) as Difficulty;
++      const value = Number(next);
++      if (next === undefined || !Number.isInteger(value) || value < 1 || value > 5)
++        return reject(MISSING_DIFFICULTY, next ?? token);
++      difficulty = value as Difficulty;
+       index++;
+       continue;
+     }
+vitest exit 1
+files 58 tests 1789 passed 1788 failed 1 pending 0
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A3 — every level is in, and the boundary pair, the near-numbers and a bare flag are out :: AssertionError: --difficulty "3.0": expected { ok: true, options: { …(4) } } to deeply equal { ok: false, …(2) }
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P3-number-range-check; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P4-root-fixed-level  2026-10-12T21:11:58Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P4-root-fixed-level: applied 1 edit(s)
+--- a/src/cli.ts
++++ b/src/cli.ts
+@@ -190,7 +190,7 @@
+       // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.
+       engine: withBook(
+         book,
+-        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
++        createLevelSeam(3, { seed: Math.floor(Math.random() * 2 ** 32) }),
+       ),
+       sink,
+     });
+vitest exit 1
+files 58 tests 1789 passed 1785 failed 4 pending 0
+RED src/cli.test.ts :: ABC-042 — the shape of what was delivered A8 — neither delivered module names a row count :: AssertionError: expected [ '0', '0x20', '0x7f', '1', '2', …(3) ] to deeply equal [ '0', '0x20', '0x7f', '1', '2', …(2) ]
+RED src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(\s*book,\s*create…/
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS` :: AssertionError: expected [ 'difficulty' ] to have a length of 2 but got 1
+RED src/engine.test.ts :: ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine :: AssertionError: expected '/**\n * `ABC-042` — the entry point: …' to contain 'createLevelSeam(difficulty, { seed: M…'
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P4-root-fixed-level; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P4b-root-fixed-level-shadowed  2026-10-12T21:12:07Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P4b-root-fixed-level-shadowed: applied 1 edit(s)
+--- a/src/cli.ts
++++ b/src/cli.ts
+@@ -147,7 +147,9 @@
+     return;
+   }
+ 
+-  const { colour, orientation, flags, difficulty } = resolution.options;
++  const { colour, orientation, flags, difficulty: chosen } = resolution.options;
++  void chosen;
++  const difficulty = 3;
+   const mode = beginGlyphModeSession(flags)();
+   // Read ONCE and passed twice: the loop's `FrameSink` and the prompt's `PromptOutput` are two
+   // shapes over one handle, and `A9`'s "acquired once, in the entry point" is about the acquisition.
+vitest exit 1
+files 58 tests 1789 passed 1787 failed 2 pending 0
+RED src/cli.test.ts :: ABC-042 — the shape of what was delivered A8 — neither delivered module names a row count :: AssertionError: expected [ '0', '0x20', '0x7f', '1', '2', …(3) ] to deeply equal [ '0', '0x20', '0x7f', '1', '2', …(2) ]
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS` :: AssertionError: expected [ 'difficulty', 'difficulty', …(1) ] to have a length of 2 but got 3
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P4b-root-fixed-level-shadowed; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P5-now-at-root  2026-10-12T21:12:17Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P5-now-at-root: applied 1 edit(s)
+--- a/src/cli.ts
++++ b/src/cli.ts
+@@ -190,7 +190,7 @@
+       // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.
+       engine: withBook(
+         book,
+-        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
++        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32), now: Date.now }),
+       ),
+       sink,
+     });
+vitest exit 1
+files 58 tests 1789 passed 1787 failed 2 pending 0
+RED src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(\s*book,\s*create…/
+RED src/engine.test.ts :: ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine :: AssertionError: expected '/**\n * `ABC-042` — the entry point: …' to contain 'createLevelSeam(difficulty, { seed: M…'
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P5-now-at-root; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P5b-now-at-root-literal-kept-in-comment  2026-10-12T21:12:26Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P5b-now-at-root-literal-kept-in-comment: applied 1 edit(s)
+--- a/src/cli.ts
++++ b/src/cli.ts
+@@ -188,9 +188,10 @@
+       // BUILT HERE, CALLED NOWHERE — `G6`'s single-caller precondition. See the module header.
+       input: createLineInputSeam({ source: process.stdin, output: sink }),
+       // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.
++      // was: createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) })
+       engine: withBook(
+         book,
+-        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
++        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32), now: Date.now }),
+       ),
+       sink,
+     });
+vitest exit 1
+files 58 tests 1789 passed 1788 failed 1 pending 0
+RED src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(\s*book,\s*create…/
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P5b-now-at-root-literal-kept-in-comment; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P6-default-level-blunders  2026-10-12T21:12:35Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P6-default-level-blunders: applied 1 edit(s)
+--- a/src/levels.ts
++++ b/src/levels.ts
+@@ -42,7 +42,7 @@
+ export const LEVELS: Readonly<Record<1 | 2 | 3 | 4 | 5, Level>> = Object.freeze({
+   1: Object.freeze({ budgetMs: 100, blunderRate: 0.4 }),
+   2: Object.freeze({ budgetMs: 500, blunderRate: 0.2 }),
+-  3: Object.freeze({ budgetMs: 3_000, blunderRate: 0 }),
++  3: Object.freeze({ budgetMs: 3_000, blunderRate: 0.05 }),
+   4: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),
+   5: Object.freeze({ budgetMs: 4_500, blunderRate: 0 }),
+ });
+vitest exit 1
+files 58 tests 1789 passed 1783 failed 6 pending 0
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock :: AssertionError: expected 'b1c3' not to be 'b1c3' // Object.is equality
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS` :: AssertionError: expected { budgetMs: 3000, blunderRate: 0.05 } to deeply equal { budgetMs: 3000, blunderRate: +0 }
+RED src/engine.test.ts :: ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine :: AssertionError: expected { budgetMs: 3000, blunderRate: 0.05 } to deeply equal { budgetMs: 3000, blunderRate: +0 }
+RED src/levels.test.ts :: A6 — the default level never blunders, so `NFR-005`'s reading on `chooseMove` at 3 s IS this level's reading :: AssertionError: expected 0.05 to be +0 // Object.is equality
+RED src/levels.test.ts :: A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock :: AssertionError: expected 'blunder' to be 'engine' // Object.is equality
+RED src/levels.test.ts :: QE-087-a — the seed never reaches the engine (ADR-0027 d1) every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed :: AssertionError: expected [ { …(3) }, { …(3) }, { …(3) }, …(4) ] to have a length of 1 but got 7
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P6-default-level-blunders; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P6b-default-level-other-budget  2026-10-12T21:12:45Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P6b-default-level-other-budget: applied 1 edit(s)
+--- a/src/levels.ts
++++ b/src/levels.ts
+@@ -42,7 +42,7 @@
+ export const LEVELS: Readonly<Record<1 | 2 | 3 | 4 | 5, Level>> = Object.freeze({
+   1: Object.freeze({ budgetMs: 100, blunderRate: 0.4 }),
+   2: Object.freeze({ budgetMs: 500, blunderRate: 0.2 }),
+-  3: Object.freeze({ budgetMs: 3_000, blunderRate: 0 }),
++  3: Object.freeze({ budgetMs: 2_000, blunderRate: 0 }),
+   4: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),
+   5: Object.freeze({ budgetMs: 4_500, blunderRate: 0 }),
+ });
+vitest exit 1
+files 58 tests 1789 passed 1786 failed 3 pending 0
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS` :: AssertionError: expected { budgetMs: 2000, blunderRate: +0 } to deeply equal { budgetMs: 3000, blunderRate: +0 }
+RED src/engine.test.ts :: ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine :: AssertionError: expected { budgetMs: 2000, blunderRate: +0 } to deeply equal { budgetMs: 3000, blunderRate: +0 }
+RED src/levels.test.ts :: A6 — the default level has the 3 s budget (`NFR-004`), the engine's own `DEFAULT_BUDGET_MS` :: AssertionError: expected 2000 to be 3000 // Object.is equality
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P6b-default-level-other-budget; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P7-book-inside-level-seam  2026-10-12T21:12:54Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P7-book-inside-level-seam: applied 4 edit(s)
+--- a/src/cli.ts
++++ b/src/cli.ts
+@@ -188,10 +188,7 @@
+       // BUILT HERE, CALLED NOWHERE — `G6`'s single-caller precondition. See the module header.
+       input: createLineInputSeam({ source: process.stdin, output: sink }),
+       // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.
+-      engine: withBook(
+-        book,
+-        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
+-      ),
++      engine: createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }, book),
+       sink,
+     });
+ 
+--- a/src/level-seam.ts
++++ b/src/level-seam.ts
+@@ -7,13 +7,16 @@
+  * member that `createLevel` would accept without throwing (Security/NFR's `ABC-087` ruling 7).
+  */
+ 
++import type { BookProbe } from "./book.ts";
+ import { createLevel, LEVELS, type LevelOptions } from "./levels.ts";
+ import type { EngineSeam } from "./turn-loop.ts";
+ 
+-export function createLevelSeam(level: number, options: LevelOptions): EngineSeam {
++export function createLevelSeam(level: number, options: LevelOptions, book?: BookProbe): EngineSeam {
+   if (!Object.hasOwn(LEVELS, level)) throw new RangeError(`level-seam: no level ${level}`);
+   const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+   return async (history) => {
++    const booked = book?.bookMove(history.position);
++    if (booked) return booked;
+     const choice = choose(history.position);
+     if (choice === null) throw new Error("engine: asked to move in a position with no legal move");
+     return choice.move;
+vitest exit 1
+files 58 tests 1789 passed 1781 failed 8 pending 0
+RED src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(\s*book,\s*create…/
+RED src/cli.test.ts :: ABC-043 — the live session A2 — a scripted game runs end to end: the mated board, the cadence, and exit 0 :: AssertionError: the game ended on end-of-input: expected '8 .r:n.b:q.k:b.n:r   \n7 :p.p:p.p:p.p…' not to contain 'input ended'
+RED src/cli.test.ts :: ABC-043 — the live session A5 — an engine fault is not a chess outcome: both faulty seams exit 0 and name nothing :: AssertionError: engine-threw: frames: expected [ …(2) ] to have a length of 1 but got 2
+RED src/cli.test.ts :: ABC-043 — the live session A7 — the human's colour decides who moves first, in BOTH directions :: AssertionError: expected [ …(4) ] to deeply equal [ …(4) ]
+RED src/cli.test.ts :: ABC-044 — the result screen reaches the player A6 — the stream ENDS with the screen, after the final frame's last row, and exits 0 :: AssertionError: expected '         \n                     \n\n>…' to be '\nBlack wins by checkmate.\n\n1. f3 e…' // Object.is equality
+RED src/cli.test.ts :: ABC-044 — the result screen reaches the player A3 — a faulty engine gets a screen that is not a chess outcome, and says the game did not finish :: AssertionError: engine-threw: the screen is missing: expected '1 .R:N.B:K.Q:B.N:R   \n2 :P.P:P.P:P.P…' to contain 'did not finish'
+RED src/cli.test.ts :: ABC-045 — `resign` reaches the screen as reason 8 A4 — the stream ends with ABC-044's screen naming resignation and the opponent as winner, exit 0 :: AssertionError: expected '\nBlack wins by resignation.\n\n1. e4…' to be '\nBlack wins by resignation.\n\n1. e4…' // Object.is equality
+RED src/engine.test.ts :: ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine :: AssertionError: expected '/**\n * `ABC-042` — the entry point: …' to contain 'createLevelSeam(difficulty, { seed: M…'
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P7-book-inside-level-seam; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P8-constant-seed-at-root  2026-10-12T21:13:05Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P8-constant-seed-at-root: applied 1 edit(s)
+--- a/src/cli.ts
++++ b/src/cli.ts
+@@ -190,7 +190,7 @@
+       // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.
+       engine: withBook(
+         book,
+-        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
++        createLevelSeam(difficulty, { seed: 42 }),
+       ),
+       sink,
+     });
+vitest exit 1
+files 58 tests 1789 passed 1786 failed 3 pending 0
+RED src/cli.test.ts :: ABC-042 — the shape of what was delivered A8 — neither delivered module names a row count :: AssertionError: expected [ '0', '0x20', '0x7f', '1', '2', …(2) ] to deeply equal [ '0', '0x20', '0x7f', '1', '2', …(2) ]
+RED src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(\s*book,\s*create…/
+RED src/engine.test.ts :: ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine :: AssertionError: expected '/**\n * `ABC-042` — the entry point: …' to contain 'createLevelSeam(difficulty, { seed: M…'
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P8-constant-seed-at-root; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P8b-constant-seed-literal-kept-in-comment  2026-10-12T21:13:14Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P8b-constant-seed-literal-kept-in-comment: applied 1 edit(s)
+--- a/src/cli.ts
++++ b/src/cli.ts
+@@ -188,9 +188,10 @@
+       // BUILT HERE, CALLED NOWHERE — `G6`'s single-caller precondition. See the module header.
+       input: createLineInputSeam({ source: process.stdin, output: sink }),
+       // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.
++      // was: createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) })
+       engine: withBook(
+         book,
+-        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
++        createLevelSeam(difficulty, { seed: 0x2a }),
+       ),
+       sink,
+     });
+vitest exit 1
+files 58 tests 1789 passed 1787 failed 2 pending 0
+RED src/cli.test.ts :: ABC-042 — the shape of what was delivered A8 — neither delivered module names a row count :: AssertionError: expected [ '0', '0x20', '0x2a', '0x7f', …(3) ] to deeply equal [ '0', '0x20', '0x7f', '1', '2', …(2) ]
+RED src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter :: AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(\s*book,\s*create…/
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P8b-constant-seed-literal-kept-in-comment; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P8c-constant-seed-inside-adapter  2026-10-12T21:13:23Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P8c-constant-seed-inside-adapter: applied 1 edit(s)
+--- a/src/level-seam.ts
++++ b/src/level-seam.ts
+@@ -12,7 +12,7 @@
+ 
+ export function createLevelSeam(level: number, options: LevelOptions): EngineSeam {
+   if (!Object.hasOwn(LEVELS, level)) throw new RangeError(`level-seam: no level ${level}`);
+-  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
++  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], { ...options, seed: 0 });
+   return async (history) => {
+     const choice = choose(history.position);
+     if (choice === null) throw new Error("engine: asked to move in a position with no legal move");
+vitest exit 1
+files 58 tests 1789 passed 1788 failed 1 pending 0
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock :: AssertionError: level 2, call 0: expected { from: 20, to: 52, piece: 1, …(3) } to deeply equal { from: 1, to: 34, piece: 2, …(3) }
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P8c-constant-seed-inside-adapter; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P10-difficulty-only-first  2026-10-12T21:13:33Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P10-difficulty-only-first: applied 1 edit(s)
+--- a/src/cli-options.ts
++++ b/src/cli-options.ts
+@@ -152,7 +152,7 @@
+       index++;
+       continue;
+     }
+-    if (token === DIFFICULTY) {
++    if (token === DIFFICULTY && index === 0) {
+       const next = argv[index + 1];
+       // The same exact-equality lookup as `--colour`: `0`, `6`, `03`, `+3` and `3.0` are not members.
+       const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);
+vitest exit 1
+files 58 tests 1789 passed 1787 failed 2 pending 0
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A1 — `EPIC-006` criterion 4's command line, in both orders, resolves to the same options :: Error: refused: ["--colour","black","--difficulty","3"] (unrecognised argument)
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A3 — every level is in, and the boundary pair, the near-numbers and a bare flag are out :: AssertionError: ["--colour","black","--difficulty"]: expected { ok: false, …(2) } to deeply equal { ok: false, …(2) }
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P10-difficulty-only-first; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P11-fresh-level-per-move  2026-10-12T21:13:42Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P11-fresh-level-per-move: applied 1 edit(s)
+--- a/src/level-seam.ts
++++ b/src/level-seam.ts
+@@ -12,9 +12,8 @@
+ 
+ export function createLevelSeam(level: number, options: LevelOptions): EngineSeam {
+   if (!Object.hasOwn(LEVELS, level)) throw new RangeError(`level-seam: no level ${level}`);
+-  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+   return async (history) => {
+-    const choice = choose(history.position);
++    const choice = createLevel(LEVELS[level as keyof typeof LEVELS], options)(history.position);
+     if (choice === null) throw new Error("engine: asked to move in a position with no legal move");
+     return choice.move;
+   };
+vitest exit 0
+files 58 tests 1789 passed 1789 failed 0 pending 0
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P11-fresh-level-per-move; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P9a-agents-md-1234  2026-10-12T21:13:51Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P9a-agents-md-1234: applied 1 edit(s)
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -56,7 +56,7 @@
+ ### Development
+ 
+ - Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
+-  level 3 (≤3 s/move). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|5`, `--ascii`,
++  level 3 (≤3 s/move). Options: `--colour white|black|random`, `--difficulty 1|2|3|4`, `--ascii`,
+   `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
+   load-bearing; without it npm silently drops the flag and runs with defaults. Exit 0 normal
+   session, 1 refused command line, 70 internal error. WRITING RULES for this slot, enforced by
+vitest exit 0
+files 58 tests 1789 passed 1789 failed 0 pending 0
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P9a-agents-md-1234; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P9b-agents-md-12349  2026-10-12T21:14:00Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P9b-agents-md-12349: applied 1 edit(s)
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -56,7 +56,7 @@
+ ### Development
+ 
+ - Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
+-  level 3 (≤3 s/move). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|5`, `--ascii`,
++  level 3 (≤3 s/move). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|9`, `--ascii`,
+   `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
+   load-bearing; without it npm silently drops the flag and runs with defaults. Exit 0 normal
+   session, 1 refused command line, 70 internal error. WRITING RULES for this slot, enforced by
+vitest exit 0
+files 58 tests 1789 passed 1789 failed 0 pending 0
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P9b-agents-md-12349; plant dirs after: 0  abc095-book-absent-* after: 0
+=== P9c-agents-md-1345  2026-10-12T21:14:10Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P9c-agents-md-1345: applied 1 edit(s)
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -56,7 +56,7 @@
+ ### Development
+ 
+ - Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
+-  level 3 (≤3 s/move). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|5`, `--ascii`,
++  level 3 (≤3 s/move). Options: `--colour white|black|random`, `--difficulty 1|3|4|5`, `--ascii`,
+   `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
+   load-bearing; without it npm silently drops the flag and runs with defaults. Exit 0 normal
+   session, 1 refused command line, 70 internal error. WRITING RULES for this slot, enforced by
+vitest exit 0
+files 58 tests 1789 passed 1789 failed 0 pending 0
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P9c-agents-md-1345; plant dirs after: 0  abc095-book-absent-* after: 0
+plants end 2026-10-12T21:14:19Z
+extra start 2026-10-12T21:15:05Z
+=== P9d-agents-md-1235  2026-10-12T21:15:05Z  plant dirs before: 0  abc095-book-absent-* before: 0
+P9d-agents-md-1235: applied 1 edit(s)
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -56,7 +56,7 @@
+ ### Development
+ 
+ - Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
+-  level 3 (≤3 s/move). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|5`, `--ascii`,
++  level 3 (≤3 s/move). Options: `--colour white|black|random`, `--difficulty 1|2|3|5`, `--ascii`,
+   `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
+   load-bearing; without it npm silently drops the flag and runs with defaults. Exit 0 normal
+   session, 1 refused command line, 70 internal error. WRITING RULES for this slot, enforced by
+vitest exit 1
+files 58 tests 1789 passed 1788 failed 1 pending 0
+RED src/cli.test.ts :: ABC-065 — AGENTS.md's `Dev / run` slot is reachable and its option list is the accepted set A3 — the documented option list EQUALS the accepted set, both ways, and names every value :: AssertionError: documented value 4: expected '- Dev / run: `npm run chess` <!-- pri…' to contain '4'
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/P9d-agents-md-1235; plant dirs after: 0  abc095-book-absent-* after: 0
+=== Q1-three-calls-delivered  2026-10-12T21:15:14Z  plant dirs before: 0  abc095-book-absent-* before: 0
+Q1-three-calls-delivered: applied 1 edit(s)
+vitest exit 0
+files 58 tests 1789 passed 1789 failed 0 pending 0
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/Q1-three-calls-delivered; plant dirs after: 0  abc095-book-absent-* after: 0
+=== Q2-three-calls-with-P11  2026-10-12T21:15:23Z  plant dirs before: 0  abc095-book-absent-* before: 0
+Q2-three-calls-with-P11: applied 2 edit(s)
+--- a/src/level-seam.ts
++++ b/src/level-seam.ts
+@@ -12,9 +12,8 @@
+ 
+ export function createLevelSeam(level: number, options: LevelOptions): EngineSeam {
+   if (!Object.hasOwn(LEVELS, level)) throw new RangeError(`level-seam: no level ${level}`);
+-  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+   return async (history) => {
+-    const choice = choose(history.position);
++    const choice = createLevel(LEVELS[level as keyof typeof LEVELS], options)(history.position);
+     if (choice === null) throw new Error("engine: asked to move in a position with no legal move");
+     return choice.move;
+   };
+vitest exit 1
+files 58 tests 1789 passed 1788 failed 1 pending 0
+RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock :: AssertionError: level 1, call 2: expected { from: 1, to: 34, piece: 2, …(3) } to deeply equal { from: 20, to: 52, piece: 1, …(3) }
+tsc exit 0 0 errors: 
+removed <scratchpad>/qe101plants/Q2-three-calls-with-P11; plant dirs after: 0  abc095-book-absent-* after: 0
+extra end 2026-10-12T21:15:33Z

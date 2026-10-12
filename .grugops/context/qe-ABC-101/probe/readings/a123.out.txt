@@ -1,0 +1,15 @@
+# node --no-warnings a123.mts  (2026-10-12T21:15:55Z, tree 98ea0a84 worktree)
+A1 forward {"ok":true,"options":{"colour":"black","orientation":"black-bottom","flags":{"ascii":false,"unicode":false},"difficulty":3}}
+A1 equal both orders: true
+A1 both orders for 1,2,4,5 with --colour white: checked
+A2 default 3; DEFAULT_DIFFICULTY 3; middle of keys 3; max 5; DEFAULT_LEVEL 3
+A3 members 1:true 2:true 3:true 4:true 5:true
+A3 refused ["--difficulty","0"] -> ok:false offending ["0"] options absent
+A3 refused ["--difficulty","6"] -> ok:false offending ["6"] options absent
+A3 refused ["--difficulty","-1"] -> ok:false offending ["-1"] options absent
+A3 refused ["--difficulty","3.5"] -> ok:false offending ["3.5"] options absent
+A3 refused ["--difficulty","three"] -> ok:false offending ["three"] options absent
+A3 refused ["--difficulty"] -> ok:false offending ["--difficulty"] options absent
+A3 refused ["--ascii","--difficulty"] -> ok:false offending ["--difficulty"] options absent
+A3 extended: accepted level words ["1","2","3","4","5"] = Object.keys(LEVELS) ["1","2","3","4","5"] true
+A3 sweep of 300 near-number spellings outside 1..5: accepted 0

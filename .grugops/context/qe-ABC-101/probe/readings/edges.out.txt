@@ -1,0 +1,35 @@
+# node --no-warnings edges.mts  (2026-10-12T21:15:56Z, tree 98ea0a84 worktree)
+["--difficulty","3","--difficulty","5"] -> ok difficulty 5
+["--difficulty","5","--difficulty","3"] -> ok difficulty 3
+["--difficulty","--colour","black"] -> refused ["--colour"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","--ascii"] -> refused ["--ascii"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","3","3"] -> refused ["3"] (unrecognised argument)
+["3"] -> refused ["3"] (unrecognised argument)
+["--difficulty","３"] -> refused ["３"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","3\n"] -> refused ["3\n"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","3\u0000"] -> refused ["3\u0000"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","١"] -> refused ["١"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","1e0"] -> refused ["1e0"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","0x3"] -> refused ["0x3"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","Infinity"] -> refused ["Infinity"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","NaN"] -> refused ["NaN"] (--difficulty needs one of 1|2|3|4|5)
+["--colour","--difficulty","3"] -> refused ["--difficulty"] (--colour needs one of white|black|random)
+["--difficulty","3","--colour"] -> refused ["--colour"] (--colour needs one of white|black|random)
+["--DIFFICULTY","3"] -> refused ["--DIFFICULTY"] (unrecognised argument)
+["--difficulty","toString"] -> refused ["toString"] (--difficulty needs one of 1|2|3|4|5)
+["--difficulty","hasOwnProperty"] -> refused ["hasOwnProperty"] (--difficulty needs one of 1|2|3|4|5)
+createLevelSeam(1) -> built
+createLevelSeam(2) -> built
+createLevelSeam(3) -> built
+createLevelSeam(4) -> built
+createLevelSeam(5) -> built
+createLevelSeam("3") -> built
+createLevelSeam(3) -> built
+createLevelSeam(0) -> RangeError
+createLevelSeam(1) -> built
+createLevelSeam("1") -> built
+createLevelSeam(null) -> RangeError
+createLevelSeam("valueOf") -> RangeError
+createLevelSeam("hasOwnProperty") -> RangeError
+createLevelSeam("isPrototypeOf") -> RangeError
+createLevelSeam("length") -> RangeError

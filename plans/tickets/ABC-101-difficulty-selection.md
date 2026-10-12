@@ -507,3 +507,31 @@ gates, `…c243b4f0` criteria, `…d2414062` calls). Not restated here.
 | `A9` (widened) | PASS: `engine.test.ts` `-U0` = 2 import hunks + the one `(i)` `it` |
 | `A10` | PASS: `CLI_DEEP` 10/10, 0 temp copies before and after |
 | `ABC-086` `A5`(i′) | PASS, four assertions; mutants (1), (2), (4) red |
+
+## QE
+
+QE/E2E, 2026-10-12 (task `wave-2026-09-25`, subtask `qe-ABC-101`, branch `grugops/qe-ABC-101` off `98ea0a84`; QE was
+the only hop running). Delivered pair `3ea3e352..98ea0a84`, code `ac8deab1`. **Verdict: PASS_WITH_GAPS.** The detail
+is in `.grugops/context/qe-ABC-101/notes/` (decision `…2fa04d14`) and is not restated here.
+
+- **Every live criterion MET, each re-read by QE:** `A1`, `A2`, `A3` (+ extended; a 300-spelling sweep accepts 0),
+  `A5` (8 advertised forms exit 0 through npm), `A6`, `A7` (code 0; added lines 0; the two `ABC-042` hits only),
+  `A8′` (60 seam-vs-`createLevel` comparisons, 0 mismatches; own key; engine modules byte-identical), `A9` (the `-U0`
+  hunks are the import block and the one `(i)` `it`), `A10`. `ABC-086` `A5` (i′) 1–4, (ii), (iii): MET.
+- **`CLI_DEEP` 10/10**, with 0 `abc095-book-absent-*` copies before and after. The 10 children doubled at
+  `./book-engine.ts` reach their doubles: `src/cli.test.ts` ×10 green, the `mate` rows green every time.
+- **19 plants, outside the repository: 15 caught.** Every plant the brief named is caught. **A level rebuilt on every
+  move is caught by nothing** (`QE-101-a`).
+- **`N8-LANE` MET on all three sets** (pre-registration `bd846627`, before any run; n = 8, clean windows, AC power):
+  `src/cli.test.ts` H−B **+0.105 s** (−0.010..+0.240); `src/cli.real-engine.test.ts` default lane **+0.005 s**
+  (−0.010..+0.030; its first window was clean but inadmissible, the re-attempt admissible); `src/engine.test.ts`
+  **−0.015 s** (−0.040..+0.000). Ticket line, arithmetic: medians +0.095 s, x(7) +0.270 s.
+- **Gaps:** `QE-101-a` LOW (SE: `A8′`'s row needs a third call; measured to red the plant), `QE-101-b` LOW (BA/PM's
+  ruling-6 item, graded: `ABC-065` `A3`'s value check is load-bearing for `4` only), `QE-101-c`, `-d`, `-e` INFO.
+  None blocks.
+- **UAT:** the waiver does not apply (`src/cli-options.ts`, `src/cli.ts`, `src/level-seam.ts`). The owner's word is
+  owed. Next is `In Security/NFR` (the `Object.hasOwn` forward note is met; `AR-NFR004-A` is owed its re-read).
+- **Gates on the QE tree before its last commit** (21:19:57Z): `npm run -s lint`, `typecheck`, `build` exit 0; `npm test`
+  exit 0, 58 files, 1789 passed, 0 failed, 0 pending; `.test-results/last-run.json` `success: true`;
+  `test-skip-integrity --skip-count 0` "No findings."; `qe-hop-integrity --ticket ABC-101` exit 0 (covered by
+  `…2fa04d14`; not yet a `## Done` row).

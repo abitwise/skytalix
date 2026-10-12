@@ -1,0 +1,11 @@
+count-only smoke 2026-10-12T21:01:50Z, after bd846627, before master-n8.sh; exit code and counts only, no time recorded. abc095-book-absent-* before: 0
+src/cli.test.ts B exit 0 files 1 tests 69 failed 0 pending 0 todo 0
+src/cli.test.ts T exit 0 files 1 tests 69 failed 0 pending 0 todo 0
+src/cli.test.ts H exit 0 files 1 tests 78 failed 0 pending 0 todo 0
+src/cli.real-engine.test.ts B exit 0 files 1 tests 1 failed 0 pending 0 todo 0
+src/cli.real-engine.test.ts T exit 0 files 1 tests 1 failed 0 pending 0 todo 0
+src/cli.real-engine.test.ts H exit 0 files 1 tests 1 failed 0 pending 0 todo 0
+src/engine.test.ts B exit 0 files 1 tests 33 failed 0 pending 0 todo 0
+src/engine.test.ts T exit 0 files 1 tests 33 failed 0 pending 0 todo 0
+src/engine.test.ts H exit 0 files 1 tests 33 failed 0 pending 0 todo 0
+abc095-book-absent-* after: 0
