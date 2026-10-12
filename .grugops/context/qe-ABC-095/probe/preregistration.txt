@@ -71,3 +71,8 @@ ARMS (outside the repository, session scratchpad .../scratchpad/qe095/lane/arms)
   GRADE   A2 on QE's strict instrument: MET iff the MAX of the 10 <= 30 ms, else NOT MET. The SE's 10 are reported beside it,
           not graded. R3: MET iff EVERY warm-miss process's max <= 5 ms, else NOT MET; median and p99 per process recorded.
           A valid NOT MET stands; it is not re-attempted.
+
+ERRATUM (appended 2026-10-12 ~14:33Z, before any window; changes no rule): the header line "Correctness runs (gates, CLI_DEEP,
+plants, mate x20) were taken BEFORE this was committed" is wrong in part. The gates and one CLI_DEEP run were taken before; the
+plants and the mate x20 run are taken AFTER this commit and BEFORE master.sh starts. None of them is a timing reading, and they
+never overlap a window (the master runs only after they finish).
