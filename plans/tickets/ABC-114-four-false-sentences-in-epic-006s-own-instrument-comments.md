@@ -74,6 +74,14 @@ SCOPE of this ticket and were NOT corrected at the cut hop** — the reasoning i
 
 - **`D4`'s CLOSE.** Naming the remainder is in scope; adding an assertion that kills it is a new
   instrument and its own ticket. `A2` names it, `A5` forbids the assertion.
+  *Pointer for the cut that closes `D4` (BA/PM, 2026-10-12, `QE2-148-a`; nothing above is changed):
+  the open set is not `D4` alone. At least **11** binders are measured `tsc`-clean and green on every
+  row of `src/cli.test.ts`. Eight are the ones the comment names after `ABC-148`. The other three come
+  from QE's re-check (`.grugops/context/qe2-ABC-148/notes/…18ca4c99`): `let history;` then
+  `for (history of …)`, `let history;` then `[history] = …`, and an object-method parameter typed
+  through `satisfies`. Whether more exist is `UNKNOWN - verify`. Cut from the mechanism, not from
+  the list: the count row's regex `/\bhistory\s*[:=]/g` sees `history` only where `:` or `=` directly
+  follows it, so it misses any binder that puts neither there.*
 - **`M15`'s exploitation.** `A2` of `ABC-113` stays exactly as written; this ticket corrects what the
   comment CLAIMS about it, not what the rows DO.
 - The **EPIPE session-death regression**, the **lane-inventory gap** and **`G-06`** — all three are real,
