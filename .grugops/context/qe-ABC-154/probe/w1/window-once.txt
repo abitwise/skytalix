@@ -1,0 +1,14 @@
+utc_start 2026-10-12T11:25:25Z
+lane sha256 652b779305bca2b0fbf39ec1974de4b914d9b06e55829b2923fc64401ba80c7c
+gate sha256 5335905acbe8c97804458b11091405474bd3df7028b13c6b78b7da8133352b6f
+node v26.11.0 vitest 4.1.11
+hw Mac15,13 Apple M3
+Now drawing from 'AC Power'
+ lowpowermode         0
+com.apple.system.thermalpressurelevel 0
+load { 3.52 5.48 6.54 }
+VITEST_ env: 0
+gate_start 2026-10-12T11:25:25Z MAXLOAD=[]
+gate_pass 2026-10-12T11:26:11Z
+lane_exit 0 2026-10-12T11:26:32Z
+utc_end 2026-10-12T11:26:38Z

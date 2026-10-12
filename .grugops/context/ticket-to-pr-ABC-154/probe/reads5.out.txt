@@ -1,0 +1,4 @@
+real notes tree holds 2653 note files
+[base] tests 32/32 red 0 | readNotes calls 23: unfiltered on the real tree 2, filtered on the real tree 11, on synthetic trees 10 | real note files read 5390 = 2.032 x the tree
+[head] tests 32/32 red 0 | readNotes calls 23: unfiltered on the real tree 2, filtered on the real tree 11, on synthetic trees 10 | real note files read 5390 = 2.032 x the tree
+restored to the head pair; tool == worktree: True ; test == worktree: True

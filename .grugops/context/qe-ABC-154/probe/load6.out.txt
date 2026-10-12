@@ -1,0 +1,39 @@
+plants4.py blob at 5843e282: 29917268ebf97ef969e1b5e9b6bd9ad0bdb826f4
+plants4.py blob at 69a1f4b4: 29917268ebf97ef969e1b5e9b6bd9ad0bdb826f4
+plants4.py blob at beb0991c: 29917268ebf97ef969e1b5e9b6bd9ad0bdb826f4
+QE4 prefix loads 23 recorded (incl. none) + 5 tool + 4 test = 32 plants
+recorded names (QE4 order): none (unmutated tool), A3-refs-only-full, ticket-filter-removed-only, A3-refs-only, A3-exact-refs, folder-substring, accept-observation, accept-own-t2p, symlink-folder-follow, symlink-notesdir-follow, symlink-notefile-follow, naive-done-all-hits, naive-done-distinct, silent-0-missing-board, silent-0-missing-snapshot, flag-force-accepted, flag-snapshot-accepted, any-author, malformed-ignored, unreadable-note-skipped, t2p-check-any-folder-substring, A3-refs-only (coverage() only), symlink-notesdir-refusal-only
+SAME	4f53cda18c2baa0c	4f53cda18c2baa0c	none (unmutated tool)
+SAME	b6ea357e4fae1169	b6ea357e4fae1169	A3-refs-only-full
+SAME	7f266ca903490172	7f266ca903490172	ticket-filter-removed-only
+SAME	8ce12bca11f8f447	8ce12bca11f8f447	A3-refs-only
+SAME	5a3157d4519d6fef	5a3157d4519d6fef	A3-exact-refs
+SAME	c663ade3fc2747e8	c663ade3fc2747e8	folder-substring
+SAME	4948a01ac966b824	4948a01ac966b824	accept-observation
+SAME	47f7850cfe9b0e6c	47f7850cfe9b0e6c	accept-own-t2p
+SAME	020bba7a6d8eecf1	020bba7a6d8eecf1	symlink-folder-follow
+SAME	068f8ea9c6d23e37	068f8ea9c6d23e37	symlink-notesdir-follow
+SAME	20b146d8ad328fe8	20b146d8ad328fe8	symlink-notefile-follow
+SAME	c4f8f73450e561dd	c4f8f73450e561dd	naive-done-all-hits
+SAME	3bd9ba417bdc1d27	3bd9ba417bdc1d27	naive-done-distinct
+SAME	97c083828443af97	97c083828443af97	silent-0-missing-board
+SAME	a18f8bc2d830d86f	a18f8bc2d830d86f	silent-0-missing-snapshot
+SAME	61c35eff84d14532	61c35eff84d14532	flag-force-accepted
+SAME	2c0af97e22c4538e	2c0af97e22c4538e	flag-snapshot-accepted
+SAME	49df6ace3978d30d	49df6ace3978d30d	any-author
+SAME	43973441d1f6096c	43973441d1f6096c	malformed-ignored
+SAME	5c7f5a84af552e5f	5c7f5a84af552e5f	unreadable-note-skipped
+SAME	4183d5e5b5070a74	4183d5e5b5070a74	t2p-check-any-folder-substring
+SAME	8ce12bca11f8f447	8ce12bca11f8f447	A3-refs-only (coverage() only)
+SAME	c98d3ed72c842413	c98d3ed72c842413	symlink-notesdir-refusal-only
+SAME	0ba96d6bad1a6117	0ba96d6bad1a6117	q4a-main-sweep-read-drops-secnfr
+SAME	6a5d4469a484d480	6a5d4469a484d480	q4a-main-sweep-read-drops-quality-gate
+SAME	cdf462cfc6f2ac9d	cdf462cfc6f2ac9d	q4a-readNotes-unfiltered-drops-secnfr
+SAME	f76c5ba02f64fc69	f76c5ba02f64fc69	q4a-readNotes-unfiltered-drops-quality-gate
+SAME	666fb549abe19e49	666fb549abe19e49	q4a-readNotes-unfiltered-empty
+SAME	010f0a981beb74ab	010f0a981beb74ab	q4b-allNotes-memo-empty
+SAME	45bf878fb1dab8e1	45bf878fb1dab8e1	q4b-allNotes-memo-stale-filtered
+SAME	3ac0803da08e3665	3ac0803da08e3665	q4b-plainSweep-memo-empty-notes
+SAME	5f6aedb58a2bc2ff	5f6aedb58a2bc2ff	q4b-both-memos-empty (two faults)
+SE plants5.py load == QE4 plants4.py verbatim-prefix load: 32 of 32 plants (names, order, edit text)
+restored to the head pair; tool == 0f8036f9: True ; test == 0f8036f9: True

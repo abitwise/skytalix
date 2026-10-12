@@ -161,3 +161,70 @@ BA/PM, 2026-10-12. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-12 (subtask `ticket-to-pr-ABC-154`). The branch is
+`grugops/ABC-154-positive-control-whole-tree-read`, from `main` `69a1f4b4`. That is a child of the brief's
+`c4822697` and changes only the board and the queue; the tool and the test are blob-identical to `8fd0c233`. The
+code commit is `0f8036f9`. The detail is in `.grugops/context/ticket-to-pr-ABC-154/notes/`. **No timing reading
+was taken.**
+
+- **Shape.**
+  - Inside `A3`'s unfiltered `it`, `allNotes()` must read `ABC-031` as `covered (qe-e2e)` and `ABC-072` as the
+    `security-nfr` substitute.
+  - Inside `A9`'s `--sweep` `it`, `plainSweep()` must not list either id as a finding.
+  - There is no new `it` and no new read. The tool's `main` JSDoc now says the command line can supply "none of
+    snapshotIds, root and notes".
+- **`A1`.** All three plants read **0 red on the base test** (32/32) and **2 red on the head test** (30/32: `A3`
+  unfiltered, `A9` --sweep). The unmutated head is 32/32. **PASS.**
+- **`A2`.** The 23 recorded plants plus `plants4.py`'s 9 were run on base and head. **Head ⊇ base by name on 32 of
+  32.** The 23 recorded plants are identical. The 9 QE4 plants each gain 1 or 2 red at head. **PASS.**
+- **`A3`.** The one changed line is in `main`'s JSDoc (line 223), and "neither" is gone from that block. **PASS.**
+- **`A4`** (read at `0f8036f9`):
+  - the diff is exactly the two files, with 0 new files;
+  - 0 spawn sites;
+  - whole-tree reads are 2 at base and **2** at head, by instrumentation;
+  - `--sweep` and `--sweep --json` stdout from the head tool are byte-identical to the base tool's;
+  - `npm test` reads 57 files / 1775 tests at base and at head, with 0 skips;
+  - integrity reads `No findings.`.
+
+  **PASS.**
+- **Gates.** Lint, typecheck, build and `npm test` all exit 0, and `last-run.json` has `success: true`.
+- **UAT-waiver reading.** `git diff --name-only 0f8036f9~1 0f8036f9 | grep -v '\.test\.ts$' | grep '^src/'` is
+  empty.
+- **Owed.**
+  - **The QE hop.** QE re-plants, and reads the `N8-LANE` narrow set at width 1 under `ADR-0035` A1.
+  - **The UAT rule.** The Orchestrator states which rule it applies (Test note 5).
+
+## QE
+
+QE/E2E, 2026-10-12 (subtask `qe-ABC-154`, branch `grugops/qe-ABC-154` off `beb0991c`; QE was the only hop running).
+**Verdict: PASS_WITH_GAPS.** The detail is in `.grugops/context/qe-ABC-154/notes/` (decision `…d9ae510a`).
+
+- **`A1`–`A4` MET, every one re-read by QE.**
+  - **The plant text.** QE loaded it by executing QE4's `plants4.py` verbatim up to `PAIRS`. The SE's load is
+    identical on 32 of 32 plants, and base matches QE4's `[new]` rows on 32 of 32.
+  - **`A1`.** The three plants read 0 → 2 red.
+  - **`A2`.** Head ⊇ base on 32 of 32.
+  - **`A3`.** The tool with comments stripped hashes the same at base and head.
+  - **`A4`.** Whole-tree reads are 2 = 2. `--sweep` and `--sweep --json` are `cmp` 0. `npm test` reads 57 / 1775
+    (+0), skip 0.
+- **QE's own plants are all caught at head.** A `readNotes` that drops `by: security-nfr` notes on unfiltered reads
+  goes 0 → 2 red. The hash half and the random half are caught, and so is a one-folder `allNotes()` memo. Removing
+  any one, or any pair, of the four new expects leaves every fault still caught.
+- **`N8-LANE` (`RISK-ABC105-LANE` T-b): MET at 650 ms CPU** at `0f8036f9`.
+  - The reading is **+0.380 s (+0.350..+0.410)**. The twin is −0.005 s with R 0.030 s, from one admissible window
+    (pre-registered as `b9a5c957`, under the `ADR-0035` A1 rule).
+  - Under the catalog this **closes the risk once `0f8036f9` is on `main`**. The record is Architect/Design's to
+    write.
+- **Gaps.**
+  - **`QE-154-a` (LOW).** The positive control is two-point. A real-tree thinning that spares the two control
+    folders stays green (sweep 14 / 61).
+  - **`QE-154-b`–`d` (INFO):**
+    - the A1 forward-only wording (no state depends on it);
+    - `F` stays 0.020 s;
+    - whether the `T-c` trigger survives the closure;
+    - an unexplained load1 rise to 8.88.
+- **UAT-waiver reading:** empty (0 production `src/` lines; the tool change is a comment). Which rule applies is the
+  Orchestrator's to state.

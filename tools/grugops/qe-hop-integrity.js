@@ -220,7 +220,7 @@ const CEILING =
 /**
  * @param {string[]} argv
  * @param {{ snapshotIds?: string[], root?: string, notes?: Note[] }} [options]  in-memory test seam only; the
- *   command line can supply neither
+ *   command line can supply none of snapshotIds, root and notes
  * @returns {0 | 1 | 2}
  */
 export function main(argv, options = {}) {

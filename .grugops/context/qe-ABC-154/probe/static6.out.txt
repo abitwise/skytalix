@@ -1,0 +1,47 @@
+## A3: git diff -U0 69a1f4b4 0f8036f9 -- tools/grugops/qe-hop-integrity.js
+diff --git a/tools/grugops/qe-hop-integrity.js b/tools/grugops/qe-hop-integrity.js
+index 4e352175..cc0f4157 100644
+--- a/tools/grugops/qe-hop-integrity.js
++++ b/tools/grugops/qe-hop-integrity.js
+@@ -223 +223 @@ const CEILING =
+- *   command line can supply neither
++ *   command line can supply none of snapshotIds, root and notes
+## main's JSDoc block at 0f8036f9 (lines 220-226)
+     1	/**
+     2	 * @param {string[]} argv
+     3	 * @param {{ snapshotIds?: string[], root?: string, notes?: Note[] }} [options]  in-memory test seam only; the
+     4	 *   command line can supply none of snapshotIds, root and notes
+     5	 * @returns {0 | 1 | 2}
+     6	 */
+     7	export function main(argv, options = {}) {
+'neither' in that block: 0
+'neither' anywhere in the tool at 0f8036f9: 1
+## A3 extra: the tool diff with comments stripped is empty?
+637dd6fe06d18db534c337d50d1e59c9fb0b82fd8cc573210de17fa7d51d8d1f  -
+637dd6fe06d18db534c337d50d1e59c9fb0b82fd8cc573210de17fa7d51d8d1f  -
+## A4: changed files 69a1f4b4..0f8036f9
+M	tools/grugops/qe-hop-integrity.js
+M	tools/grugops/qe-hop-integrity.test.ts
+## A4: changed files over the whole branch 69a1f4b4..beb0991c, outside .grugops/context and plans/
+M	plans/tickets/ABC-154-the-qe-hop-detector-test-has-no-positive-control-on-its-whole-tree-read.md
+M	plans/traceability.md
+M	tools/grugops/qe-hop-integrity.js
+M	tools/grugops/qe-hop-integrity.test.ts
+## A4: spawn sites (page grep)
+6ae6dd27: 0
+69a1f4b4: 0
+0f8036f9: 0
+## A4: it( count
+69a1f4b4: 18
+0f8036f9: 18
+## fences: src/ AGENTS.md tsconfig.json biome.json plans/board.md plans/nfr-catalog.md memory-bank/50-decisions in 69a1f4b4..beb0991c
+       0
+## UAT-waiver reading (AGENTS.md 2026-08-17 rule)
+delivered=0f8036f9: []
+delivered=beb0991c: []
+whole branch 69a1f4b4..beb0991c: []
+non-test, non-docs files in 69a1f4b4..0f8036f9: tools/grugops/qe-hop-integrity.js
+the other 'neither' (line above) is outside main's JSDoc (lines 220-225)
+117:    return { malformed: `line ${i + 1} is neither "key: value" nor an indented "- item"` };
+plant tree tools/grugops/qe-hop-integrity.js cmp 0 to 0f8036f9
+plant tree tools/grugops/qe-hop-integrity.test.ts cmp 0 to 0f8036f9

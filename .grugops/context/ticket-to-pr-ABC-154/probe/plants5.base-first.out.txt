@@ -1,0 +1,87 @@
+recorded plants loaded: 23 (incl. none); plants4.py plants: 9
+[base] none (unmutated tool)	tests 32/32	skipped 0	red 0	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+[base] A3-refs-only-full	tests 26/32	skipped 0	red 6	sweep exit 1 133/38/84/5/6 lists-ABC-073 False
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) ABC-062 exits 0 on the committed snapshot, and 1 with it removed: the folder does not name it
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag under --ticket only malformed notes in a folder naming T are reported
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) ABC-073 exits 1 (its verdict sits in a folder naming ABC-072), and 0 only if grandfathered
+[base] ticket-filter-removed-only	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag under --ticket only malformed notes in a folder naming T are reported
+[base] A3-refs-only	tests 29/32	skipped 0	red 3	sweep exit 1 133/38/84/5/6 lists-ABC-073 False
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding
+[base] A3-exact-refs	tests 29/32	skipped 0	red 3	sweep exit 1 133/38/77/2/16 lists-ABC-073 True
+    RED: ABC-105 A2 — it passes a real QE hop (real notes) ABC-076 exits 0 and names its covering note under quality-gate-ABC-076-qe-2026-08-17/notes/
+    RED: ABC-105 A2 — it passes a real QE hop (real notes) ABC-076's covering notes cite it only as a path, so an exact-element reading would fail
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition matches abc031-… to ABC-031, case-insensitive, optional hyphen, zero-padded
+[base] folder-substring	tests 30/32	skipped 0	red 2	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition matches abc031-… to ABC-031, case-insensitive, optional hyphen, zero-padded
+[base] accept-observation	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/80/2/13 lists-ABC-073 True
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition rejects T's own ticket-to-pr-* folder and a non-decision kind
+[base] accept-own-t2p	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/81/2/12 lists-ABC-073 True
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition rejects T's own ticket-to-pr-* folder and a non-decision kind
+[base] symlink-folder-follow	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link under .grugops/context with exit 2 and does not follow it
+[base] symlink-notesdir-follow	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at the notes/ directory with exit 2 and does not follow it
+[base] symlink-notefile-follow	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at a note file with exit 2 and does not follow it
+[base] naive-done-all-hits	tests 30/32	skipped 0	red 2	sweep exit 1 1238/237/841/17/143 lists-ABC-073 True
+    RED: ABC-105 A4 — the sweep's counts partition the Done rows (real board) parses only the line-leading `- [ABC-xxx]` rows of `## Done`
+    RED: ABC-105 A4 — the sweep's counts partition the Done rows (real board) prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+[base] naive-done-distinct	tests 31/32	skipped 0	red 1	sweep exit 1 140/38/78/2/22 lists-ABC-073 True
+    RED: ABC-105 A4 — the sweep's counts partition the Done rows (real board) parses only the line-leading `- [ABC-xxx]` rows of `## Done`
+[base] silent-0-missing-board	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag missing board, missing snapshot and an unreadable note each exit 2 with a stderr message
+[base] silent-0-missing-snapshot	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag missing board, missing snapshot and an unreadable note each exit 2 with a stderr message
+[base] flag-force-accepted	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses ["--sweep","--force"] with exit 2
+[base] flag-snapshot-accepted	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses ["--sweep","--snapshot","x.txt"] with exit 2
+[base] any-author	tests 29/32	skipped 0	red 3	sweep exit 1 133/38/87/0/8 lists-ABC-073 True
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) ABC-062 exits 0 on the committed snapshot, and 1 with it removed: the folder does not name it
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) ABC-072 exits 0 with the substitute label and its secnfr-ABC-072 note
+[base] malformed-ignored	tests 28/32	skipped 0	red 4	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag malformed front matter (line 3 is neither "key: value") is an UNKNOWN - verify finding with its path
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag malformed front matter (no closing --- line) is an UNKNOWN - verify finding with its path
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag malformed front matter (the first line is not ---) is an UNKNOWN - verify finding with its path
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag under --ticket only malformed notes in a folder naming T are reported
+[base] unreadable-note-skipped	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag missing board, missing snapshot and an unreadable note each exit 2 with a stderr message
+[base] t2p-check-any-folder-substring	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/81/2/12 lists-ABC-073 True
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition rejects T's own ticket-to-pr-* folder and a non-decision kind
+[base] A3-refs-only (coverage() only)	tests 29/32	skipped 0	red 3	sweep exit 1 133/38/84/5/6 lists-ABC-073 False
+    RED: ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+    RED: ABC-105 A5 — id normalisation decides both the folder and the refs condition does not match ABC-006 to …abc0066… in the folder or in refs
+    RED: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding
+[base] symlink-notesdir-refusal-only	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at the notes/ directory with exit 2 and does not follow it
+[base] q4a-main-sweep-read-drops-secnfr	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/0/17 lists-ABC-073 True
+    RED: ABC-105 A4 — the sweep's counts partition the Done rows (real board) prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+[base] q4a-main-sweep-read-drops-quality-gate	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/68/3/24 lists-ABC-073 True
+    RED: ABC-105 A4 — the sweep's counts partition the Done rows (real board) prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+[base] q4a-readNotes-unfiltered-drops-secnfr	tests 32/32	skipped 0	red 0	sweep exit 1 133/38/78/0/17 lists-ABC-073 True
+[base] q4a-readNotes-unfiltered-drops-quality-gate	tests 32/32	skipped 0	red 0	sweep exit 1 133/38/68/3/24 lists-ABC-073 True
+[base] q4a-readNotes-unfiltered-empty	tests 24/32	skipped 0	red 8	sweep exit 1 133/38/0/0/95 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag a well-formed tree exits 0
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag malformed front matter (line 3 is neither "key: value") is an UNKNOWN - verify finding with its path
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag malformed front matter (no closing --- line) is an UNKNOWN - verify finding with its path
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag malformed front matter (the first line is not ---) is an UNKNOWN - verify finding with its path
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag missing board, missing snapshot and an unreadable note each exit 2 with a stderr message
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at a note file with exit 2 and does not follow it
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at the notes/ directory with exit 2 and does not follow it
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link under .grugops/context with exit 2 and does not follow it
+[base] q4b-allNotes-memo-empty	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A4 — the sweep's counts partition the Done rows (real board) prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+[base] q4b-allNotes-memo-stale-filtered	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A4 — the sweep's counts partition the Done rows (real board) prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+[base] q4b-plainSweep-memo-empty-notes	tests 31/32	skipped 0	red 1	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+    RED: ABC-105 A4 — the sweep's counts partition the Done rows (real board) prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+[base] q4b-both-memos-empty (two faults)	tests 32/32	skipped 0	red 0	sweep exit 1 133/38/78/2/15 lists-ABC-073 True
+restored to the head pair; tool == worktree: True ; test == worktree: True

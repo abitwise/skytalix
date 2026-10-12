@@ -1,0 +1,54 @@
+# readout-qe5.py self-test on recorded raw TSVs (copied to scratch, TSV renamed n8-qe5.tsv). Harness check only: no reading of 0f8036f9.
+# Expected (ADR-0035 § Addendum 2026-10-12 A1 table): QE4 w2 twin +0.010 s, 5+/2-/1 zero, p 0.453, R 0.030, would read MET; QE3 w1 twin +0.010 s, 7+/1-, p 0.070, R 0.010, would read NOT MET.
+######## qe4w2
+cpu == user + sys (centiseconds) on every row: True
+scored rounds 8 [1, 2, 3, 4, 5, 6, 7, 8]; discarded rounds []
+load1 before each scored run: 3.30-3.91
+
+[CPU user+sys] n=8 k=2
+  B median 0.570 s; H median 0.950 s; T median 0.580 s
+  twin T-B sorted: -0.020, -0.010, +0.000, +0.010, +0.010, +0.030, +0.030, +0.060
+  twin median +0.010 s (+1.754 % of B); limit max(1.5 % = 8.55 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +5 / -2 (zeros 1, dropped): two-sided p 0.453  [old convention, not used: 5/8, p 0.727]
+  R 0.030 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: +0.370, +0.370, +0.370, +0.370, +0.370, +0.400, +0.400, +0.410
+  treatment median +0.370 s, interval x(2)..x(7) = +0.370..+0.400
+
+  per-set F = 0.020 s (ADR-0035 § Addendum A2); 650 ms >= F: True
+  resolves 650 ms (R <= b): True; lower end x(k) +0.370 s > b: False; median +0.370 s <= b: True
+  STATE at 650 ms CPU: MET
+
+[wall] n=8 k=2
+  B median 0.420 s; H median 0.705 s; T median 0.425 s
+  twin T-B sorted: -0.010, -0.010, +0.000, +0.010, +0.010, +0.020, +0.020, +0.030
+  twin median +0.010 s (+2.381 % of B); limit max(1.5 % = 6.30 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +5 / -2 (zeros 1, dropped): two-sided p 0.453  [old convention, not used: 5/8, p 0.727]
+  R 0.020 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: +0.270, +0.280, +0.280, +0.290, +0.290, +0.300, +0.300, +0.320
+  treatment median +0.290 s, interval x(2)..x(7) = +0.280..+0.300
+######## qe3w1
+cpu == user + sys (centiseconds) on every row: True
+scored rounds 8 [1, 2, 3, 4, 5, 6, 7, 8]; discarded rounds []
+load1 before each scored run: 2.44-2.64
+
+[CPU user+sys] n=8 k=2
+  B median 0.575 s; H median 1.250 s; T median 0.580 s
+  twin T-B sorted: -0.010, +0.010, +0.010, +0.010, +0.010, +0.010, +0.010, +0.020
+  twin median +0.010 s (+1.739 % of B); limit max(1.5 % = 8.62 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +7 / -1 (zeros 0, dropped): two-sided p 0.070  [old convention, not used: 7/8, p 0.070]
+  R 0.010 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: +0.650, +0.660, +0.670, +0.670, +0.670, +0.690, +0.700, +0.700
+  treatment median +0.670 s, interval x(2)..x(7) = +0.660..+0.700
+
+  per-set F = 0.020 s (ADR-0035 § Addendum A2); 650 ms >= F: True
+  resolves 650 ms (R <= b): True; lower end x(k) +0.660 s > b: True; median +0.670 s <= b: False
+  STATE at 650 ms CPU: NOT MET
+
+[wall] n=8 k=2
+  B median 0.420 s; H median 0.965 s; T median 0.430 s
+  twin T-B sorted: -0.010, +0.000, +0.000, +0.010, +0.010, +0.010, +0.010, +0.030
+  twin median +0.010 s (+2.381 % of B); limit max(1.5 % = 6.30 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +5 / -1 (zeros 2, dropped): two-sided p 0.219  [old convention, not used: 5/8, p 0.727]
+  R 0.010 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: +0.510, +0.530, +0.530, +0.540, +0.550, +0.550, +0.560, +0.590
+  treatment median +0.545 s, interval x(2)..x(7) = +0.530..+0.560
