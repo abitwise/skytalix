@@ -500,3 +500,44 @@ QE/E2E (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-12, subtask `qe-
   `*.log.txt`. They are the only tracked `*.log` files, `.gitignore` still matches them, and `rg`
   does not list them.
 - **QE-116-d (INFO).** Note `…ae9de9b2` places the logs in `9b8c38ec`. They were added at `d39618d1`.
+
+### QE — addendum, 2026-10-12: re-check of the QE-116-a..d repair (`qe2-ABC-116`)
+
+QE/E2E (Claude Opus 5.5, subagent of the Orchestrator), subtask `qe2-ABC-116`, branch
+`grugops/qe2-ABC-116` off tip `ffe52710`. This agent did not author the repair, and it read the code
+and git before the Engineer's notes. **Verdict: PASS_WITH_GAPS** (INFO only, none blocking). Notes are in
+`.grugops/context/qe2-ABC-116/notes/` (`…a0f3e853` readings, `…43bb8876` commands, `…6a1c2b14` verdict).
+This is an agent `decision`, not a stamp. No timing readings were taken.
+
+- **QE-116-a and QE-116-b CLOSED.** Every changed sentence is true of the code:
+  - `timeout` is the bound `childOf` passes to `spawnSync` (`:390`).
+  - The settle is `sleep ${A9_SETTLE_SECONDS}` in A9's `/bin/sh -c` argv (`:498`).
+  - `spawnSync(` occurs once, inside `childOf` (`:374`), and every child spawns through it.
+  - A1's (i)–(iv) are still present.
+  - **QE2-116-a (INFO):** "where the edit lands" omits the builder bodies (`closedReader`,
+    `heldOpenReaderClosed`, `unwritableStdout`). (i) still fires `T2` on any argv change.
+- **The refusal to add "or its bound (`timeout`)" is CORRECT.** `ADR-0017` decision 2 names four things,
+  and the bound is not among them. QE's input for the routed question: on a green lane a bound change is
+  either a cost no-op, or a visible red, because a reached bound returns `ETIMEDOUT` and `childOf`
+  throws. It is never silent drift. The ruling stays with BA/PM and Architect/Design.
+  - **QE2-116-b (INFO):** note `…16a8ee37`'s "two orders of magnitude" does not hold for A9's 4 s bound.
+- **QE-116-c and QE-116-d CLOSED.**
+  - Both logs are `R100`-renamed to `*.log.txt`; `git ls-files '*.log'` is empty, and neither new name
+    is ignored.
+  - `d39618d1` is the correct add commit.
+  - No committed note was edited.
+  - **QE2-116-c (INFO):** note `…79e292cc`'s "traceability does not name them" is overtaken by the same
+    commit's row.
+- **Fence MET against `3c38a8ea`.**
+  - `src/` changes only `src/cli.test.ts`: +28/−0, all comment lines, with the non-comment hash equal.
+  - The catalog, `AGENTS.md` and the board are untouched.
+  - The NFR hash is `c74e7426…0d3b` at base and at tip.
+  - `N8_SPAWN` is byte-identical. `T1` and `T2` did not fire.
+- **Gates at the tip.**
+  - Lint, typecheck and build exit 0.
+  - `npm test` reads 56 files / 1743 tests, `success: true`.
+  - The skip count is 0, and the integrity check reads `No findings.`
+  - `host-protection.js` exits 2 (`UNKNOWN - verify`, no remote).
+- **UAT waiver** applies, measured over the tip, the fix commit and `main...HEAD`. It is not a signature.
+- **Still owed:** `C2`'s "`timeout` (the settle)" (BA/PM); the hang-bound question (BA/PM and
+  Architect/Design); the `In Review` exit (Orchestrator).
