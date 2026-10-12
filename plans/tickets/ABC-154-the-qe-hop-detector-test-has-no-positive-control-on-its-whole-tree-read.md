@@ -228,3 +228,36 @@ QE/E2E, 2026-10-12 (subtask `qe-ABC-154`, branch `grugops/qe-ABC-154` off `beb09
     - an unexplained load1 rise to 8.88.
 - **UAT-waiver reading:** empty (0 production `src/` lines; the tool change is a comment). Which rule applies is the
   Orchestrator's to state.
+
+## Fold (2026-10-12, BA/PM, subtask `bapm-fold-ABC-154`)
+
+This section is append-only. Nothing above it was edited, and no criterion is rewritten. The reasoning and the
+readings are in `.grugops/context/bapm-fold-ABC-154/notes/` (decision `…b84edbb6`, readings `…3a619733`). **No
+timing was taken.**
+
+| gap | sev | disposition |
+|---|---|---|
+| `QE-154-a` | LOW | **Accepted as `AR-154-TWO-POINT-CONTROL`. No ticket is cut, and `ABC-156` stays free.** Both green plants spare a control folder by name. Their untuned twins go red (4, `A6`), and the fault fails closed with `--ticket` unaffected. Closing it now would cost a width-1 window, and riding along with the next edit to the set costs none. **Triggers:** **R-a**, a ticket that edits `qe-hop-integrity.test.ts` or the tool's note-reading path is cut or pulled: BA/PM adds `F1`–`F4` to it. **R-b**, a finding is traced to a note on disk that `readNotes` did not return: cut at once at `P2`. **R-c**, the owner pulls it: cut it as the next free id, `XS`, `P3` |
+| `QE-154-b` | INFO | Not BA/PM's: `design-ABC-154-close` item 2 (the wording of `ADR-0035` A1's forward-only clause) |
+| `QE-154-c` | INFO | Not BA/PM's: `design-ABC-154-close` item 3 (the set's `F`, and whether the 4,000-note `T-c` survives the risk's closure) |
+| `QE-154-d` | INFO | Not BA/PM's: `design-ABC-154-close` item 4 (load1 at 8.88 during w1) |
+
+**`AR-154-TWO-POINT-CONTROL`: the acceptance carried when a trigger fires.**
+- **`F1`.** `allNotes().length` equals the number of `*.md` names under every non-symlink
+  `.grugops/context/<folder>/notes/`. The number comes from a listing that opens no note. The check compares
+  two counts and never a literal; both read 2660 at `b89b3fd2`.
+- **`F2`.** QE's two green plants, loaded verbatim from `qe-ABC-154/probe/plants6.py` `extra` mode
+  (`q5x-…-drops-qe-folders-real-tree-only` and `q5x-…-drops-quality-gate-except-ABC-031 (real tree)`), each turn
+  **≥ 1** red at head and 0 at base. The unmutated head is green.
+- **`F3`.** Head ⊇ base by name over the 32 plants, QE's `own` plants and the two `F2` plants.
+- **`F4`.**
+  - Whole-tree `readNotes` calls stay 2. There are 0 spawns and at most 1 new `it`. Skips are 0.
+  - The listing's cost is read by the host ticket's `N8-LANE` re-read at 650 ms CPU, never estimated.
+  - If that reading is NOT MET, the fallback is one control id per folder form, which is weaker. The lever is
+    the owner's.
+
+This option was chosen over "more ids" and a covered-count floor because it is the only one that closes the
+thinning class (decision `…b84edbb6`).
+
+**The front matter is stale:** `status: backlog` / `column: Backlog`. The board is authoritative: `Done`, merged
+`4537fb11`. Correcting it is the Orchestrator's call. **Column moves recommended: none.**
