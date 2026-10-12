@@ -21,3 +21,9 @@ Edit only `memory-bank/50-decisions/` (ADRs), `plans/nfr-catalog.md`, your notes
 
 ## Fences (all three hops run in parallel, width 3)
 Never merge or push. Do not touch `plans/board.md`, `src/` or `tools/`. Work in your OWN worktree (`git worktree add ../wt-design-ABC-105-lane -b grugops/design-ABC-105-lane main`). No `update-ref` on another branch, no `--force`, `-D`, `--amend`, `reset --hard`. Take NO timing readings (others run in parallel). `diff` is a git wrapper; use `/usr/bin/diff` or `cmp`. If you change any committed file other than notes, run the gates before your last commit: `npm run -s lint && npm run -s typecheck && npm run -s build && npm test`, `.test-results/last-run.json` success:true. Notes per Workflow 16 under `ref:`, one trace row at the END of `plans/traceability.md`. End commits with a `Co-Authored-By:` trailer naming the model you are. Queue: `mkdir .grugops/queue/claimed/design-ABC-105-lane`, then at the end FLAT files `.grugops/queue/done/design-ABC-105-lane.md` and `.grugops/queue/done/design-ABC-105-lane.claim.md` (not a directory), uncommitted; `rmdir` the claim dir. Report: branch tip, what you changed (with readings), and anything owed by another role or the owner.
+
+## Done 2026-10-12 (architect-design)
+
+Branch `grugops/design-ABC-105-lane` tip `3017115c` (from `main` `6ae6dd27`), not merged and not pushed. Notes:
+`.grugops/context/design-ABC-105-lane/notes/` (`…d1e341ef`, `…4d096b6b`, `…2a41a1c4`, `…2f31c1a7`). Gates green: 57 files /
+1775 tests, `success: true`.
