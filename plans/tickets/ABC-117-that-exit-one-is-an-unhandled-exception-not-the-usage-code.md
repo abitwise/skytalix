@@ -395,7 +395,7 @@ merged, no column moved. **This hop wrote every corrected sentence and has not v
   --numstat` is empty for all three originals, and no existing note file is touched.
 - **`A4`.** `plans/board.md` +2/−0, `ABC-115` page +14/−0. Each block quotes the clause it corrects.
   **S9 rides the one S6 block**, named there by its entry, because the subtask fences the board to
-  one correction (decision `…7f8b9026`). S8 is comment lines only (+8/−4) and says it corrects the
+  one correction (decision `…7f8b9026`). S8 is comment lines only (+7/−3) and says it corrects the
   earlier sentence.
 - **`A5`.** `ADR-0016` numstat empty. On the `ABC-115` page the only lines touched are the 14 added
   after the `## RESIDUAL` paragraph (S7). They quote `:302`'s clause, and no existing line changed.
