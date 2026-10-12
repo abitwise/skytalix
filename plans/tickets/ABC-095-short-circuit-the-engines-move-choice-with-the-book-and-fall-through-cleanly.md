@@ -378,3 +378,27 @@ one test file, its QE hop's `N8-LANE` reading follows them.
 
 **Production and UAT:** a new `src/` module and `src/cli.ts`. That needs the owner's UAT word. QE runs
 `CLI_DEEP`.
+
+## Delivery
+
+**2026-10-12, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-095`).
+- Branch `grugops/ABC-095-book-before-engine`, from `e9b1c50a`. Code commit `521a8513`: `src/book-engine.ts`
+  (production, +20) and `src/book-engine.test.ts` (+186, 5 tests). Not merged, not pushed.
+- Readings and calls are in `.grugops/context/ticket-to-pr-ABC-095/` (`…ef39c9a6` reds, `…1e971b4d` decision,
+  `…31116475` timing, `…2cc11fef` artifact-ref, `probe/`). They are not restated here.
+
+**Partial. The decorator and five criteria are met. The wiring line is NOT delivered, and the hop stopped there.**
+- **Test note 1 holds.** The search is spy-able through the decorator's inner-seam argument. 0 engine lines changed,
+  and `A6` does not fire.
+- **Met:** `A1` (search called 0 times), `A3` (1 time, 0 stderr writes, 0 warnings), `A4` (two real frames across the
+  leave-book ply), `A5`'s game half (10 calls, 1 warning), `A6`.
+- **Not met: `A7` and `A5`'s stream half.** Both need the `src/cli.ts` line. That line was built and run, then reverted,
+  because it reds:
+  - `ABC-042` **bar 4** (security): no `node:fs` in `cli.ts`. The ADRs' "(b1) if `src/cli.ts` holds the read" missed it.
+  - `ABC-043` `A5`/`A7`, `ABC-044` `A3` and `ABC-119` `A1`. Their Givens assume the engine seam answers the engine's
+    first ply, and with the book in front it does not.
+  - two mechanical pins (the `process.*` census and the `engine:` regex).
+  - This § Re-score's "`src/cli.test.ts` … this ticket does not need to edit" does not hold at `e9b1c50a`.
+- **Rulings owed before the wiring hop:**
+  - Security/NFR: where the read lives. Either amend bar 4, which is (b1), or use a holder module, which is (b2).
+  - BA/PM and QE: how the four substituted-engine and real-search Givens meet a book that answers first.
