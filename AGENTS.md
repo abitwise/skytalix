@@ -10,12 +10,10 @@ repository — and its overflow is silent and eats the file from the tail (`ABC-
 
 ## How to work here
 
-All work starts with the Orchestrator: `agent-factory/roles/orchestrator.md`.
-
 Read in this order:
 
 1. `.grugops/factory.config.json` — the dial (mode, cadence, autonomy, WIP limits). Runs lean with documented defaults when absent.
-2. `agent-factory/roles/orchestrator.md` — the routing contract; act as the Orchestrator.
+2. `agent-factory/roles/orchestrator.md` — the routing contract. All work starts here; act as the Orchestrator.
 3. `plans/board.md` — the visible state; respect every column's WIP limit before pulling new work.
 
 The Orchestrator classifies the request, activates the right specialist role(s), requires published notes from each, updates the board and traceability, and produces the next action.
@@ -84,7 +82,7 @@ waiting shell's own command line and never exits. Wait on the PID you started or
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
-  2026-10-12: exit 0, 56 files, 1743 tests. A hung lane exits 124 at the 60 s bound — stop
+  2026-10-12: exit 0, 57 files, 1775 tests. A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
 - Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
@@ -140,7 +138,7 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
   `LADDER_DEEP=` and `=0` fail at load (QE-085-e). Unset: NOT DEFINED, not skipped. The A1/A2
   verdict is not run here (~44 h in vitest): its route is ABC-146's (plain node, ADR-0038 addendum). -->
 - Test (single file): `npx vitest run <path>`
-- Coverage: `npx vitest run --coverage` <!-- exit 0, 99.43 % lines over LOADED files only (4.x: no `coverage.all`; was 856/856 on 30 files). Not in
+- Coverage: `npx vitest run --coverage` <!-- exit 0, 99.43 % lines over LOADED files only (4.x: no `coverage.all`). Not in
   `quality.mandatory_gates` — a measurement, not a gate. TRAP: `src/cli.ts`'s tests SPAWN it as a
   child and v8 coverage does not cross a process boundary, so it reads uncovered while tested. -->
 - Coverage (`src/` only — the other denominator; neither is agreed): `npx vitest run --coverage --coverage.include='src/**'` <!-- exit 0, 95.55 % lines -->
@@ -154,6 +152,9 @@ completion notification; if a pattern is unavoidable, bracket one character (`[v
 - Skip-count capture: `npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` <!-- verified: returns an integer (0 with no tests). Undeterminable → `UNKNOWN - verify`, never a silent 0. -->
 
 - Test-integrity check (the gate's step): `node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` <!-- verified: `No findings.`, exit 0, at skip count 0. `.grugops/test-skips.md` is HUMAN-OWNED — an agent may READ and RUN this, never write a row into it. -->
+
+- QE-hop check (`ABC-105`): `node tools/grugops/qe-hop-integrity.js --ticket ABC-xxx` | `--sweep` <!-- exit 0 clean / 1 finding / 2 cannot run;
+  `--json`. Orchestrator runs `--ticket` at every move to `Done`. -->
 
 ### Lint
 
@@ -216,12 +217,12 @@ The owner authorized merges to `main` standing (2026-08-06) and made merge/test 
 agent's **per ticket** (2026-08-15) — the gate still binds and the authority is his and revocable.
 Full text, the authority: `memory-bank/60-progress.md` §§ "Standing directive — the branching model,
 and who turns the merge key" and "Standing directive — deploy is ALLOWED and NOT NEEDED; merge, test
-and UAT are the agent's, per ticket. 2026-08-15." — this is a pointer to them.
+and UAT are the agent's, per ticket. 2026-08-15."
 
 The commit-side branch guard in `agent-factory/_commit-convention.md` still holds: commit on
 `grugops/<task>`, never `main` directly.
 
-**Kit override 1 of 3** (count and the "reader who counts four" line: `## QE validation authority`).
+**Kit override 1 of 3** (count: `## QE validation authority`).
 The kit says "agents never merge" (`_commit-convention.md` §(c), workflows 04/05/12) — read-only,
 cannot carry a project override. Merge to `main` in THIS project is allowed once all tests pass and
 the ticket is done, never before.
@@ -262,7 +263,7 @@ Scope is the `In UAT` exit signature only — `quality.gate_enforcement` stays `
 `production_requires_human_confirmation` stays `true`. Authority: `memory-bank/60-progress.md` §§
 "Standing directive — deploy is ALLOWED and NOT NEEDED... 2026-08-15.", "...the owner's word in
 session IS the `In UAT` signature. 2026-08-16." and "...ZERO PRODUCTION LINES has its UAT WAIVED,
-standing. 2026-08-17." — this is a pointer to them, not the text itself.
+standing. 2026-08-17." — pointers, not the text.
 
 ## QE validation authority
 
@@ -286,6 +287,8 @@ UAT waiver. A reader who counts four is wrong.**
 `memory-bank/60-progress.md` § "Standing directive — EVERY ticket passes through QE's validation. QE
 dispatch resumes. 2026-08-17."
 
+QE-hop record convention and ceiling: `memory-bank/40-contributing.md` § Conventions.
+
 ## Deployment posture
 
 This project deploys nowhere; it runs locally, from source. No container, manifest, CI or git
@@ -296,8 +299,7 @@ is not deployable**: `package.json` is `private: true`, no `bin`/`main`/`exports
 **Present posture, explicitly revisitable** — owner said "currently"/"for now" (2026-08-06); revisit
 trigger `EPIC-006` (packaging) decides HOW it is eventually distributed (npm, binary, `git clone` —
 undecided). Ruling, evidence, what's preserved for that day:
-`memory-bank/50-decisions/ADR-0007-deployment-posture-local-only.md` — the authority; this is a
-pointer.
+`memory-bank/50-decisions/ADR-0007-deployment-posture-local-only.md` — the authority.
 
 **Who holds the deploy key changed 2026-08-15; where anything runs did not.** The owner granted
 deploy authority to the agent AND re-affirmed no deploy is needed, in one sentence — both his.
@@ -310,9 +312,8 @@ deliberately did not flip it; moving it is the owner's word, never an inference 
 "Deploys nowhere today" is not "decided never"; "may deploy" is not "has anything to deploy" — no
 release machinery was added or removed.
 
-**Kit override 2 of 3** (see `## QE validation authority` for the count and its "reader who counts
-four" line). The kit hardcodes a `dev → staging → prod` path (`agent-factory/workflows/12-release.md`
-step 3; `agent-factory/roles/release-manager.md`) — read-only, cannot carry a project override.
+**Kit override 2 of 3** (count: `## QE validation authority`). The kit hardcodes a `dev → staging → prod` path
+(`agent-factory/workflows/12-release.md` step 3; `agent-factory/roles/release-manager.md`) — read-only, cannot carry a project override.
 `.grugops/factory.config.json`, `ADR-0007` and `memory-bank/` win here; the human-confirmation
 requirement stands unchanged.
 
@@ -323,8 +324,7 @@ requirement stands unchanged.
 - Merging gated work to `main` is authorized standing by the owner — see `## Branching model`. It
   is approval to merge work that PASSED, never to skip or soften a gate (`quality.gate_enforcement`
   is `blocking`): run the gates on the branch tip before and on `main` after, and record both.
-  Running a ticket's tests and conducting its UAT are the agent's on the same terms — see
-  `## Test and UAT authority`.
+  Tests and UAT are the agent's on the same terms — see `## Test and UAT authority`.
 - **Deploy is allowed, and there is nothing to deploy** (the owner, 2026-08-15, one sentence).
   `production_requires_human_confirmation` stays `true`; the grant did not flip it. See `## Deployment posture`.
 - Do not change dependencies without reason. No unrelated refactors. No fake results.

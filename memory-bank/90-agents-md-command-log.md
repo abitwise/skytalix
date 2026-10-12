@@ -382,6 +382,13 @@ not cross a process boundary, so it reads uncovered while being thoroughly teste
 
 The other denominator; neither is the agreed one. RUN 2026-08-15 at `daa20c4`: exit 0.
 
+RE-MEASURED once more, 2026-10-12, `scribe-ABC-105-2026-10-12`, `main` `6ae6dd27` (`ABC-105` merged `f6400877`,
+`ABC-153` merged `38e52f4d`): `npm test` exit 0, **57 files, 1775 tests**, `.test-results/last-run.json`
+`success` true, 0 failed, 0 pending. Counts only; no wall time was taken (three hops shared the host). `AGENTS.md`
+now reads 57/1775. The +1 file is `tools/grugops/qe-hop-integrity.test.ts`; the +32 tests over 1743 are its 32
+(`ABC-105`'s own page: 1743 -> 1775). `ABC-153` added no file and no test row to the count (its test alters five
+sources inside an existing case). Moving figure: ... -> 56/1741 -> 56/1743 -> 57/1775.
+
 ## Skip-count capture
 
 `npx vitest run --reporter=json 2>/dev/null | jq '.numPendingTests + .numTodoTests'` — verified
@@ -400,6 +407,34 @@ determined, record `UNKNOWN - verify`, never a silent 0.
 "the agent may not self-author a justification to clear its own gate") — an agent may READ it and
 RUN this, never write a row into it. Created by the owner 2026-08-13, discharging `H2`; before that
 this step exited 2 (could not run) on every gate.
+
+## QE-hop check (`ABC-105`) — `node tools/grugops/qe-hop-integrity.js --ticket ABC-xxx` | `--sweep`
+
+Added to `AGENTS.md` § Commands 2026-10-12 (`scribe-ABC-105-2026-10-12`), after `ABC-105` merged (`f6400877`).
+Exactly one of `--ticket ABC-xxx` or `--sweep`; `--json` for machine output. Exit 0 no in-scope finding, 1 at
+least one finding (a ticket with no QE verdict note, or a note that does not meet the four conditions), 2 could not
+run (bad arguments, a missing board or snapshot, an unreadable note). It is a completeness check on the record, not
+proof a QE hop ran; the convention and the ceiling are in `memory-bank/40-contributing.md` § Conventions. The
+Orchestrator runs `--ticket` at every move to `Done` (the dispatch brief's account of the practice from `ABC-105`
+at `f6400877`; that run's output is not in the tree, so this entry does not re-attest it).
+
+RUN 2026-10-12 at `main` `6ae6dd27`, in this hop's worktree, read-only on the tree, no timing taken:
+
+| invocation | exit | reading |
+|---|---:|---|
+| `--sweep` | 1 | Done rows **133**, pre-cutover **38**, covered (qe-e2e) **78**, covered (security-nfr substitute) **2** (`ABC-072`, `ABC-147`), in-scope findings **15**, malformed front matter **0** |
+| `--sweep --json` | 1 | `ok` false; same counts |
+| `--ticket ABC-105` | 0 | `covered (qe-e2e)`, five covering notes (`qe-ABC-105`, `qe-recheck-ABC-105`, `qe2-ABC-105`, `qe3-ABC-105-lane`, `qe4-ABC-105`) |
+| `--ticket ABC-038` | 1 | a `Done` row with no QE verdict note (one of the 15) |
+| `--ticket ABC-999` | 1 | finding, "is not a row in `## Done`": a ticket with no note is a finding whether or not it is a `Done` row |
+| no argument | 2 | `give exactly one of --ticket ABC-xxx or --sweep`, plus usage |
+
+The brief expected `--sweep` to read 132/38/77/2/15. It reads **133/38/78/2/15**, and the difference is exactly
+`ABC-105` itself: the build-tip reading (`ada10423`, note `…abc105-sweep-at-build-tip-and-hand-count-agree-59fc8af7`)
+was taken while `ABC-105` sat in `In Review`; the board moved it to `Done` at `c1841b36` (one more `Done` row, one
+more covered). `ABC-153` was already `Done` at the build tip (`38e52f4d` precedes it), so it is in both. The 15
+findings are unchanged (`ABC-038` `044` `060` `070` `073` `074` `085` `092` `100` `108` `110` `111` `112` `113`
+`150`); none was introduced by this ticket and none is this hop's to clear.
 
 ## Lint (all) — `npm run lint`
 
@@ -590,3 +625,32 @@ stays true (a refused command line does exit 1), so nothing was made false.
 Checked for other lines the four merges made false, none found: the `Dev / run` slot (exit 0 / 1 / 70), the
 worker-cap and `ABC-152` lines, the deep-lane receipts (none of the four touched `src/` production, `vitest.config.ts`
 or `package.json`).
+
+## `scribe-ABC-105-2026-10-12` pass, 2026-10-12 (`ABC-105` merged `f6400877`, `ABC-153` merged `38e52f4d`)
+
+Task `scribe-ABC-105-2026-10-12`, branch `grugops/scribe-ABC-105-2026-10-12` from `main` `6ae6dd27`.
+`AGENTS.md` 24,545 B -> **24,569 B** (+24 B; budget 24,576 B, `ABC-109`; headroom 31 -> **7 B**). The pointer line (+88 B) and
+the command row (+215 B) cost +303 B, so 279 B were freed first, as follows (per-hunk byte differences measured
+from `git diff`, summing to +24). No reading was lost:
+each old text is quoted, and where a figure left `AGENTS.md` it is kept in this file.
+
+| `AGENTS.md` change (old -> new) | bytes | where the reading stays |
+|---|---:|---|
+| "All work starts with the Orchestrator: `agent-factory/roles/orchestrator.md`." (own paragraph) deleted; step 2 "the routing contract; act as the Orchestrator." -> "the routing contract. All work starts here; act as the Orchestrator." | -57 | step 2 names the same file; the sentence moved into it (hunks: -79 and +22) |
+| `Test (all)` "56 files, 1743 tests" -> "57 files, 1775 tests" | 0 | read at `main` above (`npm test`, exit 0) |
+| Coverage comment "(4.x: no `coverage.all`; was 856/856 on 30 files)" -> "(4.x: no `coverage.all`)" | -25 | § "Coverage" above (RUN 2026-08-15, 856/856 on 30 files) |
+| Branching model "…2026-08-15." — this is a pointer to them." -> "…2026-08-15."" | -31 | "Full text, the authority:" already says it |
+| Kit override 1 of 3 "(count and the "reader who counts four" line: `## QE validation authority`)" -> "(count: `## QE validation authority`)" | -38 | the "reader who counts four" line is in `## QE validation authority` itself, unchanged |
+| Kit override 2 of 3 "(see `## QE validation authority` for the count and its "reader who counts four" line)" -> "(count: `## QE validation authority`)" | -49 | same (includes a line re-wrap, 0 B) |
+| UAT authority "— this is a pointer to them, not the text itself." -> "— pointers, not the text." | -24 | same meaning |
+| Deployment "`ADR-0007…md` — the authority; this is a pointer." -> "— the authority." | -19 | same meaning |
+| Safety "Running a ticket's tests and conducting its UAT are the agent's on the same terms — see `## Test and UAT authority`." -> "Tests and UAT are the agent's on the same terms — see `## Test and UAT authority`." | -36 | same, pointer kept |
+| NEW pointer under `## QE validation authority`: "QE-hop record convention and ceiling: `memory-bank/40-contributing.md` § Conventions." | +88 | `A7` of the `ABC-105` page |
+| NEW command row (`ABC-105`) `qe-hop-integrity.js --ticket ABC-xxx` / `--sweep`, exit 0 clean / 1 finding / 2 cannot run, `--json`, Orchestrator runs `--ticket` at every move to `Done` | +215 | § "QE-hop check" above |
+
+(-57 -25 -31 -38 -24 -19 -49 -36 = -279; +88 +215 = +303; net +24; `wc -c AGENTS.md` = 24,569.)
+
+Checked and left unchanged: the test-integrity row already states the full form,
+`node tools/grugops/test-skip-integrity.js .grugops/test-skips.md --skip-count <N>` (`<N>` is the count; the bare
+`--skip-count 0` form exits 2), so item 4 of the brief needed no edit. The `Dev / run` slot and the guards on it
+(`ABC-065`, `ABC-067`, `ABC-071`) were not touched.
