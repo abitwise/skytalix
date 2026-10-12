@@ -36,6 +36,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
+import { resolveOptions } from "./cli-options.ts";
 import * as engineModule from "./engine.ts";
 import {
   type Clock,
@@ -53,6 +54,7 @@ import type { FrameSink } from "./frame.ts";
 import { gameStatus } from "./gameend.ts";
 import { type GameHistory, newGame } from "./history.ts";
 import { legalMoves } from "./legal.ts";
+import { DEFAULT_LEVEL, LEVELS } from "./levels.ts";
 import type { Move } from "./moves.ts";
 import { type Position, squareName } from "./position.ts";
 import { MATE_SCORE, searchWithoutReductions } from "./search.ts";
@@ -858,8 +860,26 @@ describe("ABC-086 A1 — the same position, budget and fresh virtual clock choos
 describe("ABC-086 A5 — the virtual clock stays off the shipped path", () => {
   const cliSource = readFileSync(new URL("./cli.ts", import.meta.url), "utf8");
 
-  it("(i) the shipped construction passes a budget and no clock", () => {
-    expect(cliSource).toContain("createEngine({ budgetMs: DEFAULT_BUDGET_MS })");
+  it("(i′) the shipped construction passes no clock, and its default level is the shipped engine", () => {
+    // Re-pinned 2026-10-12 (BA/PM, `bapm-amend-ABC-101`): `ABC-101` moves the literal, not the property.
+    // 1. The root's construction, verbatim: its options object is `{ seed }`, so no clock is passed.
+    expect(cliSource).toContain(
+      "createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) })",
+    );
+    // 2. The module the root imports `createLevelSeam` from adds no clock of its own.
+    const seamImport = /import\s*\{[^}]*\bcreateLevelSeam\b[^}]*\}\s*from\s*"(\.\/[^"]+)"/.exec(
+      cliSource,
+    );
+    expect(seamImport).not.toBeNull();
+    const seamSource = readFileSync(
+      new URL((seamImport as RegExpExecArray)[1] as string, import.meta.url),
+      "utf8",
+    );
+    expect(seamSource.match(/\bnow\b/g)).toBeNull();
+    // 3. The default level is the shipped budget and never blunders.
+    expect(LEVELS[DEFAULT_LEVEL]).toEqual({ budgetMs: DEFAULT_BUDGET_MS, blunderRate: 0 });
+    // 4. No `--difficulty` resolves to that level.
+    expect(resolveOptions([])).toMatchObject({ ok: true, options: { difficulty: DEFAULT_LEVEL } });
   });
 
   it("(ii) src/cli.ts does not import the virtual-clock module, directly or transitively", () => {

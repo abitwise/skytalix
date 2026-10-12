@@ -62,6 +62,7 @@ import { createBookProbe } from "./book.ts";
 import { HARD_CEILING_MS } from "./engine.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
+import { PROMPT } from "./line-input.ts";
 import { squareName } from "./position.ts";
 import { rejectionMessage } from "./rejection.ts";
 import { toSan } from "./san.ts";
@@ -448,6 +449,50 @@ if (RUN_DEEP) {
       // The book was read: no warning, nothing on stderr, a normal end.
       expect(booked.stderr).toBe("");
       expect(booked.status).toBe(0);
+    });
+  });
+
+  describe("ABC-101 — CLI_DEEP: the chosen level plays a real session", () => {
+    /**
+     * `A10`: `EPIC-006` criterion 4's command line at level 1, from the BOOK-ABSENT copy, so the
+     * engine's opening ply is the LEVEL's and not the book's. The human quits twice. No timing here.
+     */
+    let levelled: RealChild;
+    const QUIT_TWICE = `${QUIT_NOTICE}\n${QUIT_NOTICE}\n`;
+
+    beforeAll(() => {
+      levelled = spawnReal(copy, QUIT_TWICE, ["--colour", "black", "--difficulty", "1", "--ascii"]);
+    }, 4 * HANG_GUARD_MS);
+
+    it("A10 — no prompt before the engine opens as white with a legal move, and the child exits 0 on quit", () => {
+      const frames = framesOf(levelled.stdout);
+      expect(frames.length, "frames before quit").toBeGreaterThanOrEqual(2);
+      const [opening, replied] = frames as [Frame, Frame];
+
+      // The engine opens: the first frame is the start position with White to move, the second
+      // carries White's reply, and it is a move the project's own generator produces.
+      expect(opening.placement).toBe(placementOf(START_FEN));
+      expect(opening.side).toBe("White");
+      expect(replied.side).toBe("Black");
+      const position = parseFen(START_FEN);
+      const legal = legalMoves(position);
+      const replies = legal.filter((move) => toSan(position, move, legal) === replied.last);
+      expect(replies).toHaveLength(1);
+      makeMove(position, replies[0] as (typeof legal)[number]);
+      expect(replied.placement).toBe(placementOf(toFen(position)));
+
+      // No prompt appears before the engine's reply is on screen: the first prompt comes after the
+      // reply's `last:` row (and it does come — the human quits through it).
+      const replyAt = levelled.stdout.indexOf(`last: ${replied.last}`);
+      expect(replyAt, "the reply's last: row").toBeGreaterThan(0);
+      expect(levelled.stdout.indexOf(PROMPT), "the first prompt").toBeGreaterThan(replyAt);
+
+      // The level answered, not the book: the book-absent warning is there exactly once.
+      expect(occurrencesOf(levelled.stderr, BOOK_ABSENT_WARNING), "book-absent warnings").toBe(1);
+      expect(levelled.stderr).toBe(`${BOOK_ABSENT_WARNING}\n`);
+      expect(levelled.stdout.trimEnd().endsWith(QUIT_NOTICE)).toBe(true);
+      expect(levelled.status).toBe(0);
+      expect(levelled.signal).toBeNull();
     });
   });
 }

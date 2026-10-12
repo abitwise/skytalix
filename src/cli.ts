@@ -23,9 +23,10 @@
  * awaits the seam before calling it again, so the merged sequencing is safe; a build that
  * "helpfully" pre-reads a line here would hang. It is constructed, passed, and never invoked.
  *
- * THE OPPONENT IS THE MERGED ENGINE AT ITS MERGED BUDGET — `createEngine({ budgetMs:
- * DEFAULT_BUDGET_MS })`, no new number, no `--difficulty`, no flag (`ADR-0013`: no placeholder
- * opponent ships, and none is needed now that a real one exists).
+ * THE OPPONENT IS THE LEVEL THE HUMAN CHOSE (`ABC-101`) — `createLevelSeam(difficulty, …)` over
+ * `ABC-087`'s `LEVELS`, behind `ABC-095`'s book. With no `--difficulty` it is level 3, which is the
+ * merged engine at `DEFAULT_BUDGET_MS` with no blunders, so a session without the flag plays as it
+ * did. No new number here (`ADR-0013`: no placeholder opponent ships).
  *
  * THE ONE `try`/`catch` IN THIS PRODUCT is below, around the whole session. `ABC-019`'s input arm
  * repairs the borrowed board and RETHROWS (`turn-loop.ts`, `runTurnLoop`'s `A9b` arm), and
@@ -71,9 +72,9 @@ import { createBookProbe } from "./book.ts";
 import { withBook } from "./book-engine.ts";
 import { readBookFile } from "./book-file.ts";
 import { resolveOptions } from "./cli-options.ts";
-import { createEngine, DEFAULT_BUDGET_MS } from "./engine.ts";
 import { beginGlyphModeSession } from "./glyph-mode.ts";
 import { newGame } from "./history.ts";
+import { createLevelSeam } from "./level-seam.ts";
 import { createLineInputSeam } from "./line-input.ts";
 import { makeRenderSeam } from "./render-seam.ts";
 import { renderResultScreen } from "./result-screen.ts";
@@ -88,7 +89,8 @@ const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
  * command he was just refused for (`ABC-066`). Every form it advertises was run before it was
  * printed. Do not tidy the separator away.
  */
-const USAGE = "usage: npm run chess -- [--colour white|black|random] [--ascii | --unicode]";
+const USAGE =
+  "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5] [--ascii | --unicode]";
 
 /** A refused command line is a failure, and the shell is told so. Nothing here calls `exit`. */
 const USAGE_EXIT_CODE = 1;
@@ -145,7 +147,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  const { colour, orientation, flags } = resolution.options;
+  const { colour, orientation, flags, difficulty } = resolution.options;
   const mode = beginGlyphModeSession(flags)();
   // Read ONCE and passed twice: the loop's `FrameSink` and the prompt's `PromptOutput` are two
   // shapes over one handle, and `A9`'s "acquired once, in the entry point" is about the acquisition.
@@ -185,7 +187,11 @@ async function main(): Promise<void> {
       render: makeRenderSeam(mode, orientation),
       // BUILT HERE, CALLED NOWHERE — `G6`'s single-caller precondition. See the module header.
       input: createLineInputSeam({ source: process.stdin, output: sink }),
-      engine: withBook(book, createEngine({ budgetMs: DEFAULT_BUDGET_MS })),
+      // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.
+      engine: withBook(
+        book,
+        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
+      ),
       sink,
     });
 
