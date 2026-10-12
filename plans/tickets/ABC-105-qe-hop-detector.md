@@ -397,3 +397,16 @@ Software Engineer, subtask `fix-ABC-105`. Branch `grugops/fix-ABC-105` off `a001
 - **`QE-105-t`.** The plant text is recorded verbatim in `…5c1e7a20`.
 - **Gates.** 57 files / 1775 tests (32 in this file), `success: true`, skip 0, integrity `No findings.` `QE-105-r` is
   left open (it is a tool behaviour change).
+
+## QE2 (2026-10-12)
+
+QE/E2E, subtask `qe2-ABC-105`, re-checked `grugops/fix-ABC-105` (tip `cf353820`, code `4bf6f3ee`) on QE's own
+branch `grugops/qe2-ABC-105`. Verdict `.grugops/context/qe2-ABC-105/notes/…-3bc30c08`; readings `…3b7da581`.
+
+- **`QE-105-p` CLOSED.** QE's own `coverage()`-only plant text: new file 3 red (`A3` unfiltered `coverage()`,
+  `A9` `--sweep` lists ABC-073, `A5`), old file 1 red. Unmutated 32/32.
+- **`QE-105-q` CLOSED.** QE's `notes/`-dir and note-file symlink plants: 1 red each (old file 0 each).
+- **Scope and gates.** Test file only; the tool `cmp` 0 to `60415a8a`; 1 file, 0 spawns. Lint/typecheck/build/`npm test`
+  exit 0, 57 files / 1775 tests, `success: true`, skip 0, integrity `No findings.`; `--sweep` 132/38/77/2/15 exit 1.
+- **`QE-105-x` (LOW, open):** the new tests add 2 whole-tree reads of the real notes (3 → 5); not re-timed.
+  `-r`/`-s`/`-u` LOW and `-w` INFO stay open. UAT waived by the owner (not re-litigated).
