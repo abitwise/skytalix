@@ -339,3 +339,14 @@ supersede it**. Where they conflict, this section wins.
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P2`. The `P1` trigger (an observed un-re-measured child change) has not fired |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Canonical `N8-SPAWN` row form (`A3`) — copy this row whole; fill only the angle brackets
+
+Written 2026-10-12 by the Software Engineer at the delivering hop (`ticket-to-pr-ABC-116`). The two
+trigger sentences are fixed text. A cut or a delivery that carries an `N8-SPAWN` row copies them
+unchanged and fills in only the readings and the fired / not-fired verdicts.
+
+> - **`N8-SPAWN`: `<n>` added children, `<ms>` charged.**
+>   **`T1` — a hop that changes the NUMBER of children re-measures both time clauses; the count pin forces the `N8_SPAWN` edit.** `T1` `<FIRED | NOT FIRED>`: `<reason>`.
+>   **`T2` — a hop that changes WHAT AN EXISTING CHILD DOES (its argv, its stdin script, its substitution hook or its settle) re-measures the per-child CPU clause on `src/cli.test.ts`, whether or not the count moves (`ADR-0035` decision 2: median, the twin's `R`, MET / NOT MET / UNRESOLVED against that set's `F`); the count pin cannot see it.** `T2` `<FIRED | NOT FIRED>`: `<reason>`.
+>   Ruling: `ADR-0017` decision 2; `plans/nfr-catalog.md` § `G-QE115-3`; carrier at the point of change: the comment on `ChildOptions` in `src/cli.test.ts` (`ABC-116`).
