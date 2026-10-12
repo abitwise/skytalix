@@ -156,6 +156,11 @@ code commit `7acd8db2`, base `main` @ `3537fe48`. Readings: `.grugops/context/ti
   lines added or removed under `src/`. `it(` occurs 101 times and `expect(` 324 times, both at base
   and at the tip. `npm test` gives 56 files / 1741 tests / 0 pending / 0 todo, both at base (the
   base's `src/cli.test.ts` in place) and at the tip.
+  *Correction (BA/PM, 2026-10-12, `QE-148-c`; the words above are kept): 101 is an **unanchored**
+  `it(` count, so it also counts `exit(`, `split(` and the like. It is not the count of `it(` calls
+  that `A4` names. Anchored, `\bit(` reads **69**, and `\bexpect(` reads 324. BA/PM re-read both from
+  git at base `3537fe48` and at the merge `6c2dd121`; QE read the same. Both counts are equal at the
+  two ends, so `A4` holds either way.*
 - **Gates at the tip.** `npm run -s lint` 0, `typecheck` 0, `build` 0, `npm test` 0, and
   `.test-results/last-run.json` reads `success: true`. Skip-integrity at skip count 0: `No findings.`
   This hop took no timing readings.
@@ -235,3 +240,22 @@ QE made no board move, did not merge and did not push.
   A future close-`D4` ticket must work from the mechanism, not the eight-item list.
 
 QE made no board move, did not merge and did not push.
+
+## BA/PM fold — 2026-10-12
+
+BA/PM, subtask `bapm-fold-2026-10-12`, branch `grugops/bapm-fold-2026-10-12` from `main` @ `d8794608`.
+The readings cited are QE's (`.grugops/context/qe-ABC-148/notes/…ceabe8d9`,
+`.grugops/context/qe2-ABC-148/notes/…18ca4c99`). The one count re-read here was a `git show` and
+`grep` read. No test was run and no timing was taken. The verdicts and `Done` are unchanged.
+
+- **`QE-148-c` (INFO):** corrected with a dated line under § Delivery `A4`.
+- **`QE2-148-a` (INFO): recorded where a `D4`-closing cut will meet it, and no ticket is cut.** The
+  pages send every such cut to `ABC-114` § Out of scope ("`D4`'s CLOSE … its own ticket"), so a dated
+  pointer is appended under that bullet. It says **at least 11** binders are measured open: the eight
+  the comment names, plus `let history;` then `for (history of …)`, `let history;` then
+  `[history] = …`, and an object-method parameter typed through `satisfies`. It also says the cut must
+  work from the mechanism, not the list. The mechanism is that the regex sees `history` only where `:`
+  or `=` directly follows it.
+- **Why no ticket:** nobody has asked for `D4` to be closed. Closing it is a new instrument that needs
+  its own cut, sized on the day it is wanted. The delivered paragraph already covers the open set by
+  mechanism and claims no completeness. A ticket now would cut work that is not asked for.

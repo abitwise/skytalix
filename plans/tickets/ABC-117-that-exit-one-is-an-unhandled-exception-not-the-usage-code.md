@@ -53,6 +53,14 @@ grep -c "internal error" on that stderr  ->  0
 without a usage line. And `main`'s `catch` at `:193` writes `INTERNAL_ERROR`, so it did not run
 either. **The status came from Node, not from this product.**
 
+*Correction (BA/PM, 2026-10-12, `QE-117-b`; the words above are kept): of "those two zeroes", the
+`grep -c "Usage"` zero decides nothing. The product's line is lower-case `usage:` (`src/cli.ts:88`),
+so that pattern reads 0 on every path, including a refused command line (QE: `--bogus` exits 1, with
+`Usage` 0 and `^usage: ` 1). The instrument that separates the two paths is `grep -c '^usage: '`: 1
+on the refusal and 0 on `EBADF`. The SE, QE, the fix hop and QE's re-check all took it on 2026-10-12.
+The conclusion stands on that reading and on the `internal error` zero. The cut's note `…7f2a91c4`
+has the same flaw. It is not edited, and this line is the correction.*
+
 **WHY THE CATCH CANNOT RUN, AND THIS IS THE PART THAT MATTERS BEYOND BOOKKEEPING.** `main`'s
 `try`/`catch` (`src/cli.ts:166-196`) wraps the loop, and the failing write happens inside it — the
 stack even names `at main` — so it *looks* catchable. It is not: Node's stream machinery emits
@@ -164,6 +172,14 @@ is not it.**
 > so it needs the owner's word before it is cut at all** — which is why it is named here and left to
 > the Orchestrator to route.
 
+*Pointer (BA/PM, 2026-10-12, `QE2-117-a`; accepted, nothing corrected): if this change is ever cut,
+the cut cites `.grugops/context/ticket-to-pr-ABC-117/notes/…0081a95a` § (ii), which says the re-throw
+fires "with no `try` on the stack", and QE's `…da3adce8`. It does not cite the paraphrase in the five
+delivered corrections (S6/S9, S7, S8, S10, S11), which say the re-throw fires "on a later tick than
+`main`'s `try`". QE measured that `main`'s `try` is still open when the listener throws: it is
+suspended on `await runTurnLoop(…)`, and the throw escapes anyway. The conclusion in all five is true:
+the `1` is Node's, and no `try`/`catch` in `main` can route it. The five are not edited.*
+
 ## Acceptance criteria
 
 - **`A1` (the mechanism is re-derived, never copied).** **Given** the delivered build at the branch
@@ -173,6 +189,10 @@ is not it.**
   **`CAUGHT:` printed**. **Every corrected sentence is written from THIS hop's readings.** If they
   disagree with this page, **the sentence follows this hop's measurement and the disagreement is
   written down.** Quoting this page's numbers without a run **FAILS this criterion.**
+  *Correction (BA/PM, 2026-10-12, `QE-117-b`): read "count of `Usage` lines" as the count of
+  `^usage: ` lines (`grep -c '^usage: '`), taken with a refusal control (`--bogus`) that reads 1.
+  `grep -c "Usage"` reads 0 on every path. Every delivered reading already used `^usage: `, so `A1`
+  stays MET.*
 - **`A2` (S1/S2 — supersede AND carry forward).** **Then** `…-8a4b2e69.md` is **unmodified on disk**
   and a new `decision` note exists whose `supersedes` is that note's id, which (i) states that the
   `1` is Node's unhandled-exception status and **not** an assignment of `USAGE_EXIT_CODE`, citing
@@ -326,6 +346,11 @@ FIRED.** `column`/`status` are not moved here.
 `node src/cli.ts 1</dev/null </dev/null` → **exit 1**, `Usage` lines **0**, `internal error` lines
 **0**, `EBADF` thrown from **`src/cli.ts:160`** (was `:159`; the arm is unchanged). **CLAIM B is still
 false on the current runtime.**
+
+*Correction (BA/PM, 2026-10-12, `QE-117-b`; the words above are kept): "`Usage` lines **0**" measured
+nothing on that axis, because `grep -c "Usage"` reads 0 on every path. On 2026-10-10 the conclusion
+rested on the other two readings: `internal error` 0, and Node's banner from `:160`. The `^usage: `
+reading was first taken at delivery on 2026-10-12: 0 on `EBADF` and 1 on the refusal. It agrees.*
 
 **THE `P2` TRIGGER FIRED.** The trigger reads *"any second site of the same clause found outside this
 inventory"*.
@@ -509,3 +534,18 @@ readings before reading the Engineer's notes. **Verdict: PASS_WITH_GAPS.** Notes
   `await`, and the throw escapes anyway. The precise wording is "no `try` on the stack", as in
   `…0081a95a` (ii). The conclusion is true. No further hop is recommended before merge; a future
   residual-closing cut should cite `…0081a95a` (ii).
+
+## BA/PM fold — 2026-10-12
+
+BA/PM, subtask `bapm-fold-2026-10-12`, branch `grugops/bapm-fold-2026-10-12` from `main` @ `d8794608`.
+Nothing was measured; the readings cited are QE's (`.grugops/context/qe-ABC-117/notes/…7db4ad01`,
+`.grugops/context/qe2-ABC-117/notes/…da3adce8`, `…da88891b`). The verdicts and `Done` are unchanged.
+The reasons are in `.grugops/context/bapm-fold-2026-10-12/notes/`.
+
+- **`QE-117-b` (LOW):** corrected with three dated lines, under `## Problem`, under `A1` and under the
+  2026-10-10 re-score. The `^usage: ` instrument replaces `Usage`. Nothing is struck.
+- **`QE2-117-a` (LOW): accepted, with a record pointer.** The pointer sits under the named, uncut
+  product change in `## Ruling`, which is where a cut of that change starts, and it sends the cut to
+  `…0081a95a` (ii). No further correction is appended at the five sites. Their conclusions are true,
+  and QE judged that correcting all five would cost more than the imprecision does. The only reader
+  the wording can mislead is a cut that closes the residual, and the pointer meets that reader.

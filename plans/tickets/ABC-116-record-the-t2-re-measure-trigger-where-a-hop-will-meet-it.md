@@ -86,6 +86,24 @@ function's arguments.** To change what an existing child does, a hop **must** ed
 which makes this the one place a `T2`-firing hop provably passes through, and the count pin's
 `T1`-equivalent for a trigger that has no count to move.
 
+*Correction (BA/PM, 2026-10-12, `QE-116-a`/`QE-116-b`; the words above are kept). Line cites are at
+`main` `d8794608`.*
+- *"`timeout` (the settle)" is **false**. `timeout` is the hang bound that `childOf` passes to
+  `spawnSync` (`:390`). The settle is a `sleep` in a child's shell argv: `sleep ${A9_SETTLE_SECONDS}`
+  in A9's `/bin/sh -c` argv (`:498`). So the settle is reached through the argv, which is one of the
+  four spellings, and not through a `ChildOptions` field. The delivered comment says this since fix
+  `be6882b8`.*
+- *Whether a change to the hang bound fires `T2` is **not ruled here**. See § BA/PM fold below.*
+- *"A hop **must** edit one of them … provably passes through" is **stronger than the code**. A hop
+  that changes what a child does edits one of these:*
+  - *a `CHILDREN` entry (QE's measured mutant edits `black`'s hook, now `:698`);*
+  - *a builder body (`closedReader`, `heldOpenReaderClosed`, `unwritableStdout`);*
+  - *a constant that an argv reads (`A9_SETTLE_SECONDS`, `FIRST_LEGAL_ENGINE`).*
+
+  *Each of these is a value that is typed by, or passed to, `ChildOptions`/`childOf`. It is not the
+  interface or the function. The comment sits on the type that every child spawns through. That is
+  next to the path of change, not on it.*
+
 **`C3` — THE CUT, carried forward by copy.** `N8-SPAWN` rows propagate between tickets by being
 copied from the most recent page that has one (8 pages today). This ticket writes a **canonical
 `N8-SPAWN` row form that states `T1` and `T2` inline**, so the next cut that copies a row copies the
@@ -100,6 +118,14 @@ config change, and this ticket proposes none.**
 asked to be answered on the page rather than assumed: **every other carrier for `T2` is a document
 someone must decide to read; `C2` is a line someone must edit in order to fire the trigger at all.**
 It is the only candidate where the reader and the trigger-er are the same agent by construction.
+
+*Correction (BA/PM, 2026-10-12, `QE-116-b`; the words above are kept): "by construction" is **weaker
+than written**. The reader and the trigger-er are the same agent only when the hop reads the type of
+the value it edits, and nothing forces that read. So `C2` is still a document someone must read. It
+is the one placed nearest to the edit, on the type every child spawns through, and its own text now
+says where the edit lands (fix `be6882b8`). It is closer to the path than `C1` or `C3`, and it is not
+a mechanical guarantee. The carrier ruling still stands: `C1` is impossible, and `C2` and `C3` are
+the carriers delivered. `C2` is the nearer of the two to the edit.*
 
 ## Scope
 
@@ -200,6 +226,9 @@ cut (8 matched lines), and this ticket requires that they still do afterwards (`
 - **A comment is still a document someone must read.** `C2` is better than the alternatives because
   the reader and the trigger-er coincide — it is **not** a mechanism, and this ticket claims no
   mechanical guarantee. **`AR-N8SPAWN-DRIFT` stays exactly as accepted and exactly as large.**
+  *Correction (BA/PM, 2026-10-12, `QE-116-b`): the reader and the trigger-er coincide only when the
+  hop reads the type of the value it edits. See the correction under `C2`'s carrier paragraph. The
+  rest of this bullet stands.*
 - **The named checker may again not show up.** `ABC-115` had no Security/NFR hop at all. This ticket
   changes nothing about who is dispatched, and it cannot; naming that limit is the honest thing
   available to it.
@@ -261,6 +290,21 @@ already names the catalog — so this is a **discoverability** defect, not an ab
 - **`P3` DEMOTION TRIGGER:** Architect/Design makes the catalog pointer edit named above **and** a
   `T2` re-measure is observed happening unprompted at a real gate. Two events, not one: the pointer
   alone is a document, and this ticket's whole case is that documents were not enough.
+
+*Re-statement (BA/PM, 2026-10-12, after `QE-116-a`/`QE-116-b`; the words above are kept): **NOT `P3`
+still holds, and the `P3` demotion trigger has not fired.***
+- *The three reasons in the NOT-`P3` bullet are: the only control, a one-line mutant, and a checker
+  that was measured absent. None of them rests on `C2`'s "by construction". So the weaker premise
+  does not move this ticket to `P3`.*
+- *What it weakens is the `P2` case's contrast between `C2` and "a document". `C2` is a document,
+  placed next to the edit. That makes the demotion trigger's second event, a `T2` re-measure
+  observed happening unprompted at a real gate, the **only** evidence that the carrier works. So the
+  trigger keeps both events. The catalog pointer edit alone (owed to Architect/Design, and in
+  flight under `design-2026-10-12-fold`) does not demote anything. No unprompted `T2` re-measure
+  has been observed: this ticket's own `A2` run measured a mutant, not a `T2` re-measure.*
+- *`ABC-116` is `Done`, so its priority no longer orders any work. Both triggers survive as signals.
+  If the `P1` promotion trigger fires, the next cut adds the one-line pointers that `QE-116-b`
+  suggested, at the `CHILDREN` block and at `A9_SETTLE_SECONDS`. They are not cut today.*
 
 ## Definition of Ready
 
@@ -541,3 +585,28 @@ This is an agent `decision`, not a stamp. No timing readings were taken.
 - **UAT waiver** applies, measured over the tip, the fix commit and `main...HEAD`. It is not a signature.
 - **Still owed:** `C2`'s "`timeout` (the settle)" (BA/PM); the hang-bound question (BA/PM and
   Architect/Design); the `In Review` exit (Orchestrator).
+
+## BA/PM fold — 2026-10-12
+
+BA/PM, subtask `bapm-fold-2026-10-12`, branch `grugops/bapm-fold-2026-10-12` from `main` @ `d8794608`.
+Nothing was measured, and no timing was taken. The line cites are a read of `src/cli.test.ts` at
+`d8794608`. The QE verdicts and `Done` are unchanged. The reasons are in
+`.grugops/context/bapm-fold-2026-10-12/notes/`.
+
+- **`C2` corrected with dated lines.** "`timeout` (the settle)" is false: `timeout` is the hang
+  bound, and the settle is a `sleep` in a child's argv. "The reader and the trigger-er are the same
+  agent by construction" is weaker than written (`QE-116-b`). Nothing is struck. The `## Risks` bullet
+  that repeats the claim has a pointer.
+- **`P3` re-stated under § Size and priority.** NOT `P3` still holds, and the demotion trigger has not
+  fired.
+- **The hang-bound `T2` question: routed, not ruled.** The question is whether a change to a child's
+  hang bound (`timeout` in `childOf`) fires `T2`. It belongs to Architect/Design, which owns
+  `ADR-0017` decision 2. It is being ruled in parallel as an `ADR-0017` addendum (subtask
+  `design-2026-10-12-fold`, item 1). QE's input is in `.grugops/context/qe2-ABC-116/notes/…6a1c2b14`:
+  on a green lane, a bound change is either a cost no-op or a visible red, and never silent drift.
+  - **BA/PM's part once it is ruled:** if the addendum adds the bound to `T2`, BA/PM appends that to
+    § Canonical `N8-SPAWN` row form on this page, as a dated line, because the row form is this
+    page's. The comment line in `src/cli.test.ts` is an SE hop that the Architect names.
+  - If the addendum does not add the bound, nothing on this page changes.
+  - Until it is ruled, this page reads the four spellings exactly as `ADR-0017` decision 2 names
+    them.

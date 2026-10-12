@@ -55,6 +55,10 @@ sees the bytes, and the check costs about one `node:crypto` call per file (`…e
 
 - **`compileBook`, `writeBook`'s signature, and the 9 existing tests in `book.test.ts`.** They stay
   unchanged. The fixture tests still call `writeBook` with `"0".repeat(40)`.
+  *Correction (BA/PM, 2026-10-12, `QE-145-f`; the words above are kept): "the 9 existing tests" is
+  wrong. At base `3537fe48`, `book.test.ts` held **10** blocks: 9 `it` and 1 `it.each` over 8 rows,
+  which is 17 tests. Read "9" as "10 blocks (17 tests)" here and in `A6`. The SE and QE both counted
+  10, and all 10 are byte-unchanged, so the verdict does not move.*
 - **`book.json`'s bytes.** The artifact does not change by one byte.
 - **Any line under `src/`.**
 - **Fetching the source in the test lane.** The lane cannot hold the source files (`ADR-0037`). The
@@ -95,6 +99,19 @@ Each criterion is read by a command or an assertion, never by eye.
   Negative run in the same window: copy the fetched directory, append one byte to one file, and run the
   same command on the copy. **Then** it exits **non-zero**, names that file, and `book.json` still `cmp`s
   **0** against the base. This is the same evidence `ABC-093`'s `A1` used.
+
+  *Correction (BA/PM, 2026-10-12, `QE-145-e`; the words above are kept): this negative run, as
+  written, cannot tell the new check from the validator that was already there. With no check at
+  all, the base compiler also exits 1 and names the file when one byte is appended (QE:
+  `Error: b.tsv:783: 1 columns, not 3`), and it does the same for an appended newline. Two readings do
+  tell them apart:*
+  - *the refusal text carries the expected hash and the actual hash. The SE's run and QE's run both
+    carry them, so `A4` is MET on content;*
+  - *one byte flipped **in place** inside a name. The base compiler exits 0 and rewrites `book.json`
+    (`cmp` 1). The head exits 1, names the file, and `book.json` `cmp`s 0.*
+
+  *Any later hop that repeats this run (see `AR-145-CLI-WIRING` in § BA/PM fold below) flips a byte
+  in place in a file that is not `a.tsv`, and reads the hash text, not just the exit code.*
 - **`A5` (the regeneration instruction names the new pin).** **Given** `ATTRIBUTION.md` § Regenerating,
   **when** it is searched **on joined text** (newlines folded to spaces, `**` and backticks stripped),
   **then** `SOURCE_SHA256` occurs **≥ 1** time in that section.
@@ -108,6 +125,8 @@ Each criterion is read by a command or an assertion, never by eye.
   - `data/opening-book/book.json` is byte-unchanged (`cmp` against the base exits 0).
   - `compileBook`'s body and `writeBook`'s export line are byte-unchanged.
   - The 9 existing `it` blocks in `book.test.ts` are unchanged.
+    *Correction (BA/PM, 2026-10-12, `QE-145-f`): 10 blocks, 9 `it` and 1 `it.each`. See § Out of
+    scope.*
   - The no-argument run still prints the usage line and exits **1**.
   - `npm test`: the **file count equals the base's**, the **test count is the base's + 2**, and skips are
     **0**.
@@ -244,3 +263,25 @@ in `.grugops/context/qe-ABC-145/notes/`. **No timing reading was taken.**
 Orchestrator's.
 
 **Board move:** the Orchestrator's.
+
+## BA/PM fold — 2026-10-12
+
+BA/PM, subtask `bapm-fold-2026-10-12`, branch `grugops/bapm-fold-2026-10-12` from `main` @ `d8794608`. This
+folds QE's gap register (`.grugops/context/qe-ABC-145/notes/…8deadc79`). Nothing was measured, and no
+timing was taken. The acceptance above and QE's PASS_WITH_GAPS are **unchanged**. The reasons are in
+`.grugops/context/bapm-fold-2026-10-12/notes/`.
+
+- **`QE-145-a` (LOW) → cut as `ABC-153`** (XS, P3, test-only). The `ABC-145` test alters only `a.tsv`,
+  and the fixture's `b.tsv`..`e.tsv` share one hash. So a check limited to the first file (`M05`)
+  passes the lane. `ABC-153` alters each of the five files in turn, gives them five distinct hashes,
+  and shows `M05` red.
+- **`QE-145-b` (LOW) → accepted as `AR-145-CLI-WIRING`.** No lane test pins the command-line block's
+  call to `checkThenWriteBook`. QE's `M07` (the block calls `writeBook` directly) passes all 19
+  tests. The 0-spawn fence makes this a design residual. A spawn would pin it, and the fence exists
+  to keep spawns out of this file. A test that reads `compile.ts`'s source text is declined: a comment
+  satisfies it, and it pins the spelling, not the behaviour. **Trigger:** a hop that edits the
+  command-line block of `tools/opening-book/compile.ts`, moves `SOURCE_COMMIT` or `SOURCE_SHA256`, or
+  regenerates `book.json` repeats `A4` on the real source, with the discriminating negative run
+  described under `A4` above. `ABC-153`'s § Out of scope carries the same line, so it is on the board.
+- **`QE-145-e` and `QE-145-f` (wording):** corrected above with dated lines. Nothing is struck.
+- **`QE-145-c`, `-d` and `-g` (INFO):** no action.
