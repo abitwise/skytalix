@@ -170,3 +170,37 @@ from `main` `21980135` (child of the brief's `05a1f11d`; board/queue only); code
 - **Gates:** lint, typecheck, build and `npm test` exit 0; `last-run.json` `success: true`; integrity `No findings.`
 - **UAT waiver reading:** `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'` is empty.
 - **Owed:** the QE hop.
+
+## QE
+
+QE/E2E, 2026-10-12 (subtask `qe-ABC-153`). This reviews `fe6add38` (code `917df052`, base `21980135`) on QE's own
+branch `grugops/qe-ABC-153`. QE took its own readings; they agree with the SE's. The detail is in
+`.grugops/context/qe-ABC-153/notes/`. **No timing reading was taken.**
+
+**Verdict: PASS_WITH_GAPS (none blocking).**
+
+- **`A1` MET.** 5 distinct expected hashes. Each file is altered by one byte (length kept, still compiles without
+  the check). Per file: refused, 3 of 3, no output.
+- **`A2` MET.** The control writes.
+- **`A3` MET.** QE's eight readings, in a scratch copy: unmutated green/green; `M05` green → red; `M-SWAP`
+  green → red (dies in the control); `M06` red/red.
+- **`A4` MET.** 1 path and 0 new files on the code range; the tip adds only record paths. `cmp` 0 on lines 1–274,
+  base 304–314 = head 316–326, and `fixture()`; every hunk sits inside the `A1/A2` `it`. `compile.ts` and
+  `book.json` `cmp` 0. 0 spawns. `npm test` 56 files / 1743 tests at base and head, 0 skips. Lint, typecheck,
+  build exit 0; integrity `No findings.`
+
+**Break-the-test:** the head test catches a last-file-only check, a skipped `c.tsv` (base did not), a partial
+output before the throw, a refusal without the actual hash, an empty `SOURCE_FILES`, a missing restore, a row
+collision and a no-op alteration. It misses a prefix compare and a case-insensitive compare.
+
+**Gaps:**
+
+| id | severity | gap |
+|---|---|---|
+| `QE-153-a` | LOW | A check that compares only the first 8 hex chars passes 19/19. An `expected` that differs from the fixture's hash only in its last hex char would kill it. Not asked by this ticket. |
+| `QE-153-b` | INFO | A case-insensitive compare passes; equivalent on every reachable input (lowercase digest, lowercase pins). |
+| `QE-153-c` | INFO | The restore after `e.tsv` is read by nothing. Earlier restores are read by the next iteration and fail loud; none can mask a later file. |
+
+**UAT waiver:** the measured line is empty, and no `tools/` code changed either. Application is the Orchestrator's.
+
+**Board move:** the Orchestrator's.
