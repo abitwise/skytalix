@@ -201,3 +201,46 @@ from `main` `3537fe48`; code commit `7be28bf9`. The detail is in `.grugops/conte
 - **Gates:** lint, typecheck, build and `npm test` exit 0. Skip count 0; integrity `No findings.`
 - **UAT waiver reading:** `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'` is empty.
 - **Owed:** the QE hop; after merge, the Scribe's line in `memory-bank/90-agents-md-command-log.md`.
+
+## QE
+
+QE/E2E, 2026-10-12 (subtask `qe-ABC-145`). This reviews `62a5f8ea` (code `7be28bf9`, base `3537fe48`) on QE's own
+branch `grugops/qe-ABC-145`. QE took its own readings first, then read the SE's notes, and they agree. The detail is
+in `.grugops/context/qe-ABC-145/notes/`. **No timing reading was taken.**
+
+**Verdict: PASS_WITH_GAPS (none blocking).**
+
+- **`A1` MET.** QE's own plant flipped one byte in place in `c.tsv`, then in `e.tsv`, across five distinct
+  files. It is refused with 3 of 3 substrings, and there is no output. A variant with no check matches 0 of 3
+  and writes.
+- **`A2` MET.** The control writes.
+- **`A3` MET.** 5 of 5. These all turn it red: one hex character in the constant, one in `ATTRIBUTION.md`, the
+  `a`/`b` swap, an uppercased hex character, and a renamed key.
+- **`A4` MET (re-run by QE).**
+  - The fetched bytes match 5 of 5 pins. The compile exits 0, and `cmp` against `main` exits 0.
+  - These all exit 1 with `book.json` `cmp` 0: `x` appended to `b.tsv`, one byte flipped in place in `c.tsv`,
+    and a missing `e.tsv`.
+- **`A5` MET.** 2 occurrences on joined text (0 at base). The table rows `cmp` 0.
+- **`A6` MET, on the code range.**
+  - 3 paths, 0 under `src/`, 0 new files.
+  - The tip adds only the record paths.
+  - `book.json`, `compileBook` and `writeBook` `cmp` 0.
+  - All **10** existing blocks are byte-unchanged.
+  - The no-argument run exits 1.
+  - 56 → 56 files, 1741 → 1743 tests, 0 skips, 0 spawns.
+  - Lint, typecheck and build exit 0.
+
+**Gaps:**
+
+| id | severity | gap |
+|---|---|---|
+| `QE-145-a` | LOW | The lane alters only `a.tsv`. A check limited to `a.tsv` passes it. |
+| `QE-145-b` | LOW | No lane test pins the command-line path's call to the check. Only `A4` catches a bypass. This is a design residual of the 0-spawn fence. |
+| `QE-145-e` | LOW, wording | `A4`'s "append one byte" negative run does not tell the check apart from the base validator: base also exits 1 and names the file. An in-place flip, or the hash text in the message, is the discriminating reading. |
+| `QE-145-f` | INFO, wording | § Out of scope and `A6` say "9 existing `it` blocks". The base file holds 10: 9 `it` plus 1 `it.each` over 8 rows. QE did not edit the prose above. |
+| `QE-145-c`, `-d`, `-g` | INFO | A decoded-text hash gives the same answer on the real bytes. A check-then-read gap exists, which the SE declared. An extra key in the constant is refused by typecheck only. |
+
+**UAT waiver:** the measured line is empty. `tools/` changed, but it does not reach the game. Application is the
+Orchestrator's.
+
+**Board move:** the Orchestrator's.
