@@ -1,0 +1,50 @@
+
+ RUN  v4.1.11 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P6a-read-other-path
+
+stdout | src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-I5WAI8) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-I5WAI8/src/cli.ts --colour black --ascii <<< "" — wall 3101 ms, exit 0, signal null
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-I5WAI8) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-I5WAI8/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3102 ms, exit 0, signal null
+
+stdout | src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-I5WAI8) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-I5WAI8/src/cli.ts --colour black --ascii <<< "quit\nquit\n" — wall 3103 ms, exit 0, signal null
+[CLI_DEEP] (cwd /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P6a-read-other-path/) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P6a-read-other-path/src/cli.ts --colour white --ascii <<< "e2e4\n" — wall 3096 ms, exit 0, signal null
+
+ ❯ src/cli.real-engine.test.ts (9 tests | 1 failed) 12460ms
+     ✓ the deep child runs the delivered entry point with no --import, loader or hook, and an empty environment 24ms
+     ✓ A1 — the real search answered: the child took at least 1 s and exited 0 0ms
+     ✓ A3(i) — the reply is a legal move in the position it was played in, by the project's own generator 1ms
+     ✓ A3(ii) — the whole child, spawn to exit, stays inside NFR-004's 5 s hard ceiling (clause B) 0ms
+     ✓ A3(iii) — the session advances: the side to move and the ply number both change 0ms
+     ✓ A3(iv) — no stack trace on stderr, and the exit code is 0, never 70 0ms
+     ✓ A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues 0ms
+     ✓ A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child exits 0 on quit 0ms
+     × A7 — a real session consults the book: the reply to 1. e4 is one of the book's entries for that position 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session > A7 — a real session consults the book: the reply to 1. e4 is one of the book's entries for that position
+AssertionError: expected 'opening book could not be read; playi…' to be '' // Object.is equality
+
+- Expected
++ Received
+
++ opening book could not be read; playing on without it
++
+
+ ❯ src/cli.real-engine.test.ts:449:29
+    447|
+    448|       // The book was read: no warning, nothing on stderr, a normal en…
+    449|       expect(booked.stderr).toBe("");
+       |                             ^
+    450|       expect(booked.status).toBe(0);
+    451|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 passed (9)
+   Start at  17:26:41
+   Duration  12.55s (transform 0ms, setup 0ms, import 42ms, tests 12.46s, environment 0ms)
+
+JSON report written to /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-095/.grugops/context/qe-ABC-095/probe/plants/P6a-read-other-path.deep.json

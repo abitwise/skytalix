@@ -1,0 +1,43 @@
+
+ RUN  v4.1.11 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P9a-linked-src
+
+ ❯ src/cli.real-engine.test.ts (9 tests | 9 skipped) 10ms
+     ↓ the deep child runs the delivered entry point with no --import, loader or hook, and an empty environment
+     ↓ A1 — the real search answered: the child took at least 1 s and exited 0
+     ↓ A3(i) — the reply is a legal move in the position it was played in, by the project's own generator
+     ↓ A3(ii) — the whole child, spawn to exit, stays inside NFR-004's 5 s hard ceiling (clause B)
+     ↓ A3(iii) — the session advances: the side to move and the ply number both change
+     ↓ A3(iv) — no stack trace on stderr, and the exit code is 0, never 70
+     ↓ A4 — an unreadable line against the real engine does not advance, carries a message, and the session continues
+     ↓ A5 (stream half) — the one warning goes to stderr exactly once, 0 bytes of it to stdout, and the child exits 0 on quit
+     ↓ A7 — a real session consults the book: the reply to 1. e4 is one of the book's entries for that position
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/cli.real-engine.test.ts [ src/cli.real-engine.test.ts ]
+AssertionError: the copy's src/ itself: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ expectBookAbsentCopy src/cli.real-engine.test.ts:123:91
+    121|   expect(listing(root), "the copy's src/ listing").toEqual(entries);
+    122|
+    123|   expect(lstatSync(join(root, COPIED_DIRECTORY)).isDirectory(), "the c…
+       |                                                                                           ^
+    124|     true,
+    125|   );
+ ❯ src/cli.real-engine.test.ts:310:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  9 skipped (9)
+   Start at  17:28:08
+   Duration  237ms (transform 0ms, setup 0ms, import 85ms, tests 10ms, environment 0ms)
+
+JSON report written to /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-095/.grugops/context/qe-ABC-095/probe/plants/P9a-linked-src.deep.json

@@ -1,0 +1,2 @@
+[{"ply": 0, "rows": 22, "extra": [], "book": 0}, {"ply": 1, "rows": 22, "extra": [], "book": 0}, {"ply": 2, "rows": 22, "extra": [], "book": 0}, {"ply": 3, "rows": 22, "extra": [], "book": 0}, {"ply": 4, "rows": 22, "extra": [], "book": 0}]
+stderr bytes 0; stdout lines containing "book": 0

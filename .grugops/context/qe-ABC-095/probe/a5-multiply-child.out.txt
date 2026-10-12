@@ -1,0 +1,8 @@
+copy made; book present: no; symlinks under src: 0
+src byte-identical (diff -r exit 0)
+exit 0 wall ~9 s
+stderr: opening book could not be read; playing on without it
+stderr lines: 1
+warning on stderr: 1; on stdout: 0
+frames 7 plies [0, 1, 2, 3, 4, 5, 5] row counts [22] extra 1
+last: Nf3 last: a6 last: Nc3 last: h6 last: d4 last: d4 

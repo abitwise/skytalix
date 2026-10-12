@@ -555,3 +555,34 @@ BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5c
 **Result: 10 of 10.** The wiring hop may proceed. The column stays `In Development` (the board is the
 Orchestrator's). **Production and UAT** are unchanged: the owner's UAT word is needed, QE runs
 `CLI_DEEP`, and `In Security/NFR` runs S3.
+
+## QE
+
+QE/E2E, 2026-10-12 (subtask `qe-ABC-095`, branch `grugops/qe-ABC-095` off `2307fc11`; QE was the only hop running).
+**Verdict: PASS_WITH_GAPS.** The detail is in `.grugops/context/qe-ABC-095/notes/` (decision `…ee8775a2`).
+
+- **`A1`–`A7` MET, every one re-read by QE.**
+  - **`A2`: max 8.300 ms ≤ 30 ms, cold.** 10 fresh processes, read in a clean pre-registered window.
+  - **R3 (warm miss): max 0.0149 ms ≤ 5 ms.** 3 × 200 calls, median about 0.0009 ms and p99 about 0.007 ms.
+  - **`CLI_DEEP` 9 / 9**, with 0 copies left behind.
+  - **Real children:**
+    - `A4`: the book frame and the search frame have the same rows, and nothing on screen or stderr names the book;
+    - `A5`: 3 searched plies in a book-absent copy give exactly 1 warning, on stderr only;
+    - `A7` ×10: every reply is a book entry.
+- **18 plants, outside the repository.**
+  - All are caught except a cwd-relative `readBookFile` (`QE-095-a`) and two copy leaks (`QE-095-d`).
+  - `ABC-119` `A6` holds on the amended lane: M1 and M2 red `CLI_DEEP` `A1` alone, and the default lane stays green.
+  - The 10 re-targeted children each exercise their criterion. `src/cli.test.ts` ×20 is green (the naive wiring is
+    red in 4 of 10), and the default lane never reads the book.
+- **The SE's readings hold.** The copy rule (no links, every non-directory entry a regular file) is honest and
+  sufficient; the page wording is `QE-095-e`. "Both halves pinned" pins a superset of either reading.
+- **`N8-LANE`: NOT READ (`QE-095-N8`, MEDIUM).**
+  - All 4 pre-registered windows were void, and both named costs stay `UNKNOWN - verify`.
+  - The count pins hold: +1 file, 0 new spawns.
+- **Other gaps** (LOW unless marked):
+  - `QE-095-b`: the `A7` child alone does not discriminate. That is enough by composition;
+  - `QE-095-c`: "1 warning per process" is not behavioural in `CLI_DEEP`;
+  - `QE-095-h`: the added file's lane cost has never been read;
+  - `QE-095-f`, `-g` and `-i` are INFO.
+- **UAT:** the waiver does not apply (3 production files in the delivered pair). The owner's word is owed. Next is
+  `In Security/NFR` (S3).

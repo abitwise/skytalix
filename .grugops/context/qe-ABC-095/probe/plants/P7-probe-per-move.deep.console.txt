@@ -1,0 +1,19 @@
+
+ RUN  v4.1.11 /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P7-probe-per-move
+
+stdout | src/cli.real-engine.test.ts > ABC-119 — CLI_DEEP: the delivered CLI against the REAL engine
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OnAUNF) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OnAUNF/src/cli.ts --colour black --ascii <<< "" — wall 3137 ms, exit 0, signal null
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OnAUNF) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OnAUNF/src/cli.ts --colour black --ascii <<< "zz9\n" — wall 3103 ms, exit 0, signal null
+
+stdout | src/cli.real-engine.test.ts > ABC-095 — CLI_DEEP: the book in a real session
+[CLI_DEEP] (cwd /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OnAUNF) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/abc095-book-absent-OnAUNF/src/cli.ts --colour black --ascii <<< "quit\nquit\n" — wall 3113 ms, exit 0, signal null
+[CLI_DEEP] (cwd /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P7-probe-per-move/) /opt/homebrew/Cellar/node/26.11.0_1/bin/node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe095/plants/P7-probe-per-move/src/cli.ts --colour white --ascii <<< "e2e4\n" — wall 177 ms, exit 0, signal null
+
+ ✓ src/cli.real-engine.test.ts (9 tests) 9655ms
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Start at  17:27:20
+   Duration  9.76s (transform 0ms, setup 0ms, import 48ms, tests 9.66s, environment 0ms)
+
+JSON report written to /Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-095/.grugops/context/qe-ABC-095/probe/plants/P7-probe-per-move.deep.json
