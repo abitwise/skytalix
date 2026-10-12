@@ -122,6 +122,11 @@ describe("ABC-105 A3 — the refs-only false pass is closed (real notes)", () =>
     // QE-105-p: `main --ticket` opens only folders naming T, which masks a coverage() that has lost
     // the folder condition. Read the whole context tree so coverage() alone must hold condition 4.
     const all = allNotes();
+    // ABC-154: positive control, so an empty or thinned read cannot pass the two finding checks below.
+    expect(coverage("ABC-031", all, snapshotIds).status).toBe("covered (qe-e2e)");
+    expect(coverage("ABC-072", all, snapshotIds).status).toBe(
+      "covered (security-nfr substitute — docs-only rule)",
+    );
     expect(coverage("ABC-062", all, minus("ABC-062")).status).toBe("finding");
     expect(snapshotIds).not.toContain("ABC-073");
     expect(coverage("ABC-073", all, snapshotIds).status).toBe("finding");
@@ -149,6 +154,9 @@ describe("ABC-105 A9 — the security-nfr substitute is visible, not silent (rea
     const r = plainSweep();
     expect(r.code).toBe(1);
     expect(r.stdout).toContain("  ABC-073: no QE verdict note was found.\n");
+    // ABC-154: positive control on the plain sweep's own whole-tree read.
+    expect(r.stdout).not.toContain("  ABC-031: no QE verdict note was found.");
+    expect(r.stdout).not.toContain("  ABC-072: no QE verdict note was found.");
   });
 });
 
