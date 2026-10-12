@@ -195,6 +195,25 @@ elif MODE == "own":
             assert ptool is not None and ptest is not None, (rname, fname)
             one(f"rm:{rname}", fname, ptest, ptool)
             restore("head")
+elif MODE == "extra":
+    # the two-point control's residual: an unfiltered-only drop that SPARES the two control folders
+    LOOP = Q4["LOOP"]
+    Q5_EXTRA = {
+        "q5x-readNotes-unfiltered-drops-qe-folders": [(LOOP, LOOP.replace(") continue;", ' || (!folderFilter && folder.name.startsWith("qe-"))) continue;'))],
+        "q5x-readNotes-unfiltered-drops-qe-and-qe2-qe3-qe4": [(LOOP, LOOP.replace(") continue;", ' || (!folderFilter && /^qe\\d?-/.test(folder.name))) continue;'))],
+        # isolating the real-tree checks: the same drop, sparing A6's synthetic qe-ABC-200 folder (tuned to the test ON PURPOSE)
+        "q5x-readNotes-unfiltered-drops-qe-folders-real-tree-only": [(LOOP, LOOP.replace(") continue;", ' || (!folderFilter && /^qe\\d?-/.test(folder.name) && folder.name !== "qe-ABC-200")) continue;'))],
+        "q5x-readNotes-unfiltered-drops-quality-gate-except-ABC-031 (real tree)": [(LOOP, LOOP.replace(") continue;", ' || (!folderFilter && folder.name.startsWith("quality-gate-") && !folder.name.startsWith("quality-gate-ABC-031"))) continue;'))],
+    }
+    for label in ("base", "head"):
+        test, tool = PAIRS[label]
+        for name, edits in Q5_EXTRA.items():
+            planted = apply(tool, edits)
+            if planted is None:
+                print(f"[{label}] {name}\tn/a (plant text matches 0 or >1 times in this pair)")
+                continue
+            one(label, name, test, planted)
+            restore(label)
 elif MODE == "reads":
     log = os.path.join(P, "..", "reads6.log")
     real = os.path.realpath(os.path.join(P, ".grugops/context"))

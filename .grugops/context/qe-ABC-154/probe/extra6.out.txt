@@ -1,0 +1,25 @@
+[base] q5x-readNotes-unfiltered-drops-qe-folders	tests 28/32	skipped 0	red 4	sweep exit 1 133/38/21/18/56 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag a well-formed tree exits 0
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag missing board, missing snapshot and an unreadable note each exit 2 with a stderr message
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at a note file with exit 2 and does not follow it
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at the notes/ directory with exit 2 and does not follow it
+[base] q5x-readNotes-unfiltered-drops-qe-and-qe2-qe3-qe4	tests 28/32	skipped 0	red 4	sweep exit 1 133/38/14/20/61 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag a well-formed tree exits 0
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag missing board, missing snapshot and an unreadable note each exit 2 with a stderr message
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at a note file with exit 2 and does not follow it
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at the notes/ directory with exit 2 and does not follow it
+[base] q5x-readNotes-unfiltered-drops-qe-folders-real-tree-only	tests 32/32	skipped 0	red 0	sweep exit 1 133/38/14/20/61 lists-ABC-073 True
+[base] q5x-readNotes-unfiltered-drops-quality-gate-except-ABC-031 (real tree)	tests 32/32	skipped 0	red 0	sweep exit 1 133/38/69/3/23 lists-ABC-073 True
+[head] q5x-readNotes-unfiltered-drops-qe-folders	tests 28/32	skipped 0	red 4	sweep exit 1 133/38/21/18/56 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag a well-formed tree exits 0
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag missing board, missing snapshot and an unreadable note each exit 2 with a stderr message
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at a note file with exit 2 and does not follow it
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at the notes/ directory with exit 2 and does not follow it
+[head] q5x-readNotes-unfiltered-drops-qe-and-qe2-qe3-qe4	tests 28/32	skipped 0	red 4	sweep exit 1 133/38/14/20/61 lists-ABC-073 True
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag a well-formed tree exits 0
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag missing board, missing snapshot and an unreadable note each exit 2 with a stderr message
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at a note file with exit 2 and does not follow it
+    RED: ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at the notes/ directory with exit 2 and does not follow it
+[head] q5x-readNotes-unfiltered-drops-qe-folders-real-tree-only	tests 32/32	skipped 0	red 0	sweep exit 1 133/38/14/20/61 lists-ABC-073 True
+[head] q5x-readNotes-unfiltered-drops-quality-gate-except-ABC-031 (real tree)	tests 32/32	skipped 0	red 0	sweep exit 1 133/38/69/3/23 lists-ABC-073 True
+restored to the head pair; tool == 0f8036f9: True ; test == 0f8036f9: True
