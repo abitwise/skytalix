@@ -3374,9 +3374,13 @@ describe("ABC-115 — a reader that closes early ends the session quietly, at th
     //
     // NON-ZERO AND NON-EMPTY IS THE WHOLE ASSERTION, and the omissions are the criterion, not
     // laziness: no status literal, no errno name, no byte count, no stack shape. The delivered
-    // status on this path is `1`, which is `USAGE_EXIT_CODE` — a collision this ticket neither
-    // fixes nor endorses and which its `## Residual ruling` accepts knowingly, with a named cut
-    // trigger. A row pinning `1` would pin that defect and would go red for the WRONG reason the
+    // status on this path is `1`, and it is NOT `USAGE_EXIT_CODE` being assigned — `ABC-117`
+    // corrects the sentence that stood here, which said it was. It is Node's default status for
+    // an unhandled exception: the re-throw in the sink's error arm fires on a later tick than
+    // `main`'s `try`, so neither the usage line nor the internal-error line is written. It merely
+    // collides with `USAGE_EXIT_CODE`'s value — a collision `ABC-115` neither fixes nor endorses
+    // and which `ABC-115`'s `## Residual ruling` accepts knowingly, with a named cut trigger. A
+    // row pinning `1` would pin that defect and would go red for the WRONG reason the
     // day a later ticket correctly routes non-`EPIPE` to `70`; this row stays green through that
     // change. Readings at this hop, for the record and NEVER as assertions: delivered
     // `NODE_EXIT=1` with ~1.5 kB of stderr whose caret sits on the delivered `throw error` itself

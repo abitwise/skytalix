@@ -116,6 +116,11 @@ The full site inventory, both re-runs and the true/false split below are in
 - **`plans/traceability.md`'s `ABC-115` row** — checked at this cut and it carries **no CLAIM-B
   clause**; it says *"flips from exit `1` + 1542 bytes of stack to SILENT exit `0`"*, which is a
   reading, not a mechanism. **Verified rather than assumed, and left alone.**
+- **Correction, 2026-10-12 (Software Engineer, subtask `fix-ABC-117`, QE-117-a): the bullet above is
+  wrong.** The `ABC-115` trace row DID carry a CLAIM-B clause. Its `RESIDUAL KNOWINGLY ACCEPTED`
+  sentence says *"the non-`EPIPE` path still exits `1` (= `USAGE_EXIT_CODE`)"*. The cut checked a
+  different clause of the same row. That clause is site **S10**, and a correction row is now
+  appended at the END of `plans/traceability.md`. The `ABC-115` row itself is not edited.
 
 ## The shape ruling — HOW an append-only record gets corrected without un-accepting a ruling
 
@@ -366,3 +371,141 @@ inventory"*.
 | 8 | size assigned | **✅** `XS`. One extra board append does not move it |
 | 9 | priority assigned | **✅** `P2`, by the page's own trigger |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+Software Engineer (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-12, subtask
+`ticket-to-pr-ABC-117`. Branch `grugops/ABC-117-exit-one-correction` from `main` @ `3537fe48`
+(the subtask frontmatter says `61aef6e6`; the dispatch said `3537fe48`, which is `main`). Corrections
+commit `59000c87`; this section, the trace row and the `artifact-ref` follow it. Not pushed, not
+merged, no column moved. **This hop wrote every corrected sentence and has not validated them; the
+`In Review` verdict is a separate QE hop's.** Readings and rulings: `.grugops/context/ticket-to-pr-ABC-117/notes/`.
+
+- **`A1` — both runs made here (Node v26.11.0).** `node src/cli.ts 1</dev/null </dev/null`: exit `1`,
+  **0** `usage:` lines, **0** `internal error` lines, no `CAUGHT:`, Node's banner on `src/cli.ts:160`.
+  QE's out-of-product script with `1</dev/null`: exit `1`, **no `CAUGHT:`**; writable control exit 0.
+  **Disagreement with this page, written down:** its `grep -c "Usage"` reads 0 on the refusal path
+  too (`node src/cli.ts --nonsense` → exit 1, 0 matches), because the line is lower-case `usage:`
+  (`src/cli.ts:88`, and `:87` at `fcf12c1`). That zero decides nothing. `grep -c '^usage: '` reads 1
+  on the refusal and 0 on `EBADF`, and the corrected sentences cite that one. The conclusion holds.
+- **Sites, re-located by content at `3537fe48`.** S1 `…8a4b2e69:20`, S2 `:41`, S3 `…9d3a7e52:43`,
+  S4 `…8c04b19d:66`, S5 `…6b1e4c72:46`, all unmoved. **S6 board `:659`** (was `:168` at the cut,
+  `:588` at the re-score). **S7** `ABC-115` page `:302`, unmoved. **S8** `src/cli.test.ts:3366` (was
+  `:2980`, then `:3342`). **S9** board `:871` (was `:791`).
+- **`A2`.** `…8a4b2e69` byte-identical. A new `decision` `…0081a95a` supersedes it and carries (i)
+  Node's status with the two zero counts, (ii) no `try`/`catch` can route it, so the outcome goes in
+  the `:160` arm, (iii) the ruling and trigger verbatim (original lines 24-49, `cmp` equal), and (iv)
+  the residual is not re-opened.
+- **`A3`.** One `observation` `…92514474`, all three ids on `refs`, `supersedes` empty. `git diff
+  --numstat` is empty for all three originals, and no existing note file is touched.
+- **`A4`.** `plans/board.md` +2/−0, `ABC-115` page +14/−0. Each block quotes the clause it corrects.
+  **S9 rides the one S6 block**, named there by its entry, because the subtask fences the board to
+  one correction (decision `…7f8b9026`). S8 is comment lines only (+7/−3) and says it corrects the
+  earlier sentence.
+- **`A5`.** `ADR-0016` numstat empty. On the `ABC-115` page the only lines touched are the 14 added
+  after the `## RESIDUAL` paragraph (S7). They quote `:302`'s clause, and no existing line changed.
+  No wider arm is proposed. `ABC-115` is not described as re-scored, moved or re-opened.
+- **`A6`.** `src/` lists only `src/cli.test.ts`. The non-test numstat is empty, 0 non-`//` lines are
+  changed, and `nfr-catalog.md`/`AGENTS.md` numstat is empty. 8 rows hash
+  **`c74e7426…0d3b` at base AND head** (equal). That is the re-score's value and differs from this
+  page's `63f66795…ca31`, which was taken at `fcf12c1`.
+- **`A7`.** `npm test`: **56 files / 1741 tests / 0 skipped, before and after**, both exit 0. The
+  `N8_SPAWN`/`spawned`/`Object.keys(CHILDREN)` lines hash the same at base and head. **`T2` does not
+  fire:** the diff is comments only, so no child's argv, stdin script, substitution hook or settle
+  changes, and the count literal is byte-identical.
+- **Gates at the tip:** lint, typecheck, build and `npm test` all exit 0, and
+  `.test-results/last-run.json` reads `success: true`. Skip integrity reads `No findings.` at 0.
+  **UAT-waiver reading:** `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'`
+  is empty.
+- **Left alone, flagged:** `src/cli.test.ts:3251` (`EPIPE`, pre-`ABC-115`, not CLAIM-B as written)
+  and the `A10` comment's stale `src/cli.ts:159` cite (now `:160`).
+
+## QE
+
+QE/E2E (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-12, subtask `qe-ABC-117`, branch
+`grugops/qe-ABC-117` off tip `d5afab3f`. **Verdict: PASS_WITH_GAPS.** The readings were taken at
+QE's own hand before the build notes were read. Notes: `.grugops/context/qe-ABC-117/notes/`. This is
+an agent `decision`, not a stamp.
+
+- **A1 MET.** Tip, `node src/cli.ts 1</dev/null </dev/null`: exit `1`, `^usage: ` 0,
+  `internal error` 0, Node's banner on `src/cli.ts:160`. QE's out-of-product script: exit `1`,
+  `CAUGHT:` never printed. Control `--bogus`: exit `1`, `^usage: ` **1**, `Usage` **0**. Every
+  corrected sentence agrees.
+- **The instrument: the Engineer's substitution is SOUND.** This page's `grep -c "Usage"` reads 0 on
+  both paths and decides nothing; `^usage: ` reads 1 against 0. **That is a gap for BA/PM
+  (QE-117-b, LOW):** amend A1's quantity to the `usage:` line.
+- **A2 MET (all four).** `cmp` of the original's lines 24-49 against the carried quote: equal, 26 lines.
+- **A3 MET.** **A4 MET.** The S9 board block names both S6 and S9, as the Orchestrator ruled.
+- **A5 MET.** No CLAIM-A line touched, `ADR-0016` numstat empty, and every re-open / re-score / arm
+  word in the added text is a negation.
+- **A6 MET.** `c74e7426…0d3b` at base == head. **A7 MET.** 56 / 1741 / 0 at both ends, N8 lines
+  hash-equal, `T2` not fired.
+- **QE-117-a (MEDIUM, routed to BA/PM): two CLAIM-B clauses this page's inventory missed, false at
+  the tip.** First, `plans/traceability.md`'s `ABC-115` row: *"the non-`EPIPE` path still exits `1`
+  (= `USAGE_EXIT_CODE`)"*. `## Out of scope` above says that row was checked and carries no CLAIM-B
+  clause, and it does. Second, `…0391186e:69-70`. QE recommends widening by two rows and an SE delta
+  hop before merge.
+- **Left alone, agreed:** `src/cli.test.ts:3251`. Measured: the pre-`ABC-115` `EPIPE` `1` was also
+  Node's, and the sentence is a value statement in the CLAIM-A register. Also left alone: the dated
+  `src/cli.ts:159` reading at `:3376`. QE-117-c (INFO): the S8 rewrite's "this ticket" now reads
+  ambiguously and means `ABC-115`.
+- **UAT-waiver reading, measured:** production `src/` is empty over the range and for each of
+  `59000c87`, `00741431` and `d5afab3f`, so the waiver applies.
+
+## Delivery — widening for QE-117-a and QE-117-c, 2026-10-12
+
+Software Engineer (Claude Opus 5.5, subagent of the Orchestrator), subtask `fix-ABC-117`. The branch
+was fast-forwarded to `grugops/qe-ABC-117` (`8e679aed`), then the corrections were committed as
+`7bf4c61e`. Not pushed or merged, and no column was moved. **A QE re-check of this delta is owed to a
+different agent.** Notes: `.grugops/context/fix-ABC-117/notes/`.
+
+- **S10** (`plans/traceability.md`, `ABC-115` row, *"the non-`EPIPE` path still exits `1` (=
+  `USAGE_EXIT_CODE`)"*): one correction row appended at the END. The row itself is untouched.
+- **S11** (`…0391186e:69-70`): one new `observation`, `…3429abce`, with an empty `supersedes`. Its
+  `refs` name `…0391186e` and the S3–S5 note `…92514474`. No note was edited.
+- **This page's `## Out of scope` bullet** on the trace row is now followed by a dated correction.
+  The original is kept.
+- **QE-117-c:** the `A10` comment in `src/cli.test.ts` names `ABC-115` and `ABC-115`'s `## Residual
+  ruling`. Comment lines only (+3/−3).
+- **`A1`, re-taken at this hop** (Node v26.11.0): exit `1`, `^usage: ` **0**, `internal error`
+  **0**, banner on `src/cli.ts:160`. Repro: exit `1`, no `CAUGHT:`; with stdout writable, exit 0.
+  Control `--bogus`: exit `1`, `^usage: ` **1**.
+- **Content search** (`…9016b077`): no CLAIM-B site beyond S1–S11. `…8d7cad3b:80` was judged not a
+  site. CLAIM-A sites and QE-117-d's four lines were not touched.
+- **Fences:** `plans/board.md`, the `ABC-115` page, `ADR-0016`, `nfr-catalog.md` and `AGENTS.md` are
+  untouched by this delta. No existing note was modified. Production `src/` is empty. 0 non-`//`
+  lines under `src/`. `it(`/`expect(` count 393 at both ends. NFR 8-row hash is `c74e7426…0d3b`. No
+  `N8_SPAWN`/`spawned`/`CHILDREN` line changed, so `T2` is not fired.
+- **Gates at `7bf4c61e`:** lint, typecheck, build and `npm test` all exit 0. `npm test` ran 56 files
+  and 1741 tests with 0 pending, and `.test-results/last-run.json` reads `success: true`. Skip
+  integrity reads `No findings.` at 0. **UAT waiver:** the production `src/` list is empty.
+
+## QE — addendum, 2026-10-12: re-check of the widening (`qe2-ABC-117`)
+
+QE/E2E (Claude Opus 5.5, subagent of the Orchestrator), subtask `qe2-ABC-117`, branch
+`grugops/qe2-ABC-117` off tip `86bf76b5`. This agent did not author the repair, and took its
+readings before reading the Engineer's notes. **Verdict: PASS_WITH_GAPS.** Notes:
+`.grugops/context/qe2-ABC-117/notes/`. This is an agent `decision`, not a stamp.
+
+- **A1 re-taken (Node v26.11.0).** Tip `1</dev/null`: exit `1`, `^usage: ` 0, `internal error` 0,
+  throw at `src/cli.ts:160`. A10's own inner form gives `NODE_EXIT=1`. QE's own repro and
+  `…d2c79dc9` both exit `1` and never print `CAUGHT:`. `--bogus` gives `^usage: ` 1. The cites
+  `:136-138`, `:141`, `:160`, `:169` and `:196` are all correct.
+- **S10 MET.** It is appended at the END, and the `ABC-115` row is `cmp` equal at base and tip. It
+  names the row and the clause, and it re-opens nothing. **S11 MET.** It is a new `observation`
+  with an empty `supersedes` and both refs. `.grugops/context` gained added files only.
+  **QE-117-a closed.**
+- **Page MET.** The original `## Out of scope` bullet is kept, and the dated correction is true.
+  **QE-117-c closed:** `ABC-115`'s `## Residual ruling` exists (`:249`), and the change is 3 comment
+  lines that say nothing new.
+- **Search.** QE ran its own two passes (proximity, then predication). Neither found a CLAIM-B
+  site beyond S1–S11. `…8d7cad3b:80` is **not** a site: "collision" there is a value word, and the
+  sentence is true about `A10`.
+- **Fences MET** against `3537fe48`: A4–A7. The NFR hash `c74e7426…0d3b` is the same at base and
+  tip. `npm test` is 56 / 1741 / 0 at both. `T2` is not fired. The gates are green at the tip. **The
+  UAT waiver applies:** production `src/` is empty for each commit and over the range.
+- **QE2-117-a (LOW, not blocking).** Five corrections (S6/S9, S7, S8, S10, S11) say the re-throw
+  fires "on a later tick than `main`'s `try`". Measured, the `try` is still open, suspended on
+  `await`, and the throw escapes anyway. The precise wording is "no `try` on the stack", as in
+  `…0081a95a` (ii). The conclusion is true. No further hop is recommended before merge; a future
+  residual-closing cut should cite `…0081a95a` (ii).

@@ -310,6 +310,20 @@ and non-empty*, never `1`, so a future ticket routing non-`EPIPE` to `70` leaves
 probe, or any hop or script measured taking a wrong routing decision off this path's `1` — the same
 trigger shape as `## Priority`'s `P0` promotion trigger, and it is nobody's silent inheritance.
 
+> **CORRECTION OF RECORD, appended 2026-10-12 by the Software Engineer (`ABC-117`, S7). Not one word
+> above is deleted.** The clause it corrects is *"the delivered build exits **`1`**, which is
+> `USAGE_EXIT_CODE`"*, in the paragraph directly above. The `1` is real; the mechanism that clause implies is not:
+> nothing assigns `USAGE_EXIT_CODE` on this path. The `1` is **Node's default status for an
+> unhandled exception**, and only collides with `USAGE_EXIT_CODE`'s value. Re-measured at this hop
+> (Node v26.11.0, `main` @ `3537fe48`): `node src/cli.ts 1</dev/null </dev/null` exits `1` with
+> Node's banner on the re-throw at `src/cli.ts:160`, **0** `usage:` lines (a refused command line,
+> `--nonsense`, prints **1** on the same instrument) and **0** `internal error` lines — so neither the
+> `USAGE_EXIT_CODE` arm nor `main`'s `catch` ran. The re-throw fires on a later tick than `main`'s
+> `try`, which therefore cannot reach it. Everything else in the paragraph above stands as written:
+> the residual stays knowingly accepted, its trigger is unchanged, `A10` is untouched, and this
+> correction re-opens nothing. Readings and the out-of-product reproduction:
+> `.grugops/context/ticket-to-pr-ABC-117/notes/`.
+
 **NOT MINE AND NOT DONE HERE: `G-QE115-2`** — the superseded `<= 0.5 s CPU` clause and the false
 "THE CPU CLAUSE IS BREACHED" sentence left in `src/cli.test.ts` by my own budget ruling. It is a real
 defect of mine, it is routed to its own repair hop, and **nothing on this page repairs it**.
