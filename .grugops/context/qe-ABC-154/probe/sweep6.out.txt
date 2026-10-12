@@ -1,0 +1,9 @@
+[base] --sweep: exit 1, stdout 1934 B sha256 c5d8d389727de1d2, stderr 0 B
+[base] --sweep --json: exit 1, stdout 21682 B sha256 8a5ce72bef7b9e84, stderr 0 B
+[head] --sweep: exit 1, stdout 1934 B sha256 c5d8d389727de1d2, stderr 0 B
+[head] --sweep --json: exit 1, stdout 21682 B sha256 8a5ce72bef7b9e84, stderr 0 B
+restored to the head pair; tool == 0f8036f9: True ; test == 0f8036f9: True
+cmp 0: plain.stdout
+cmp 0: plain.stderr
+cmp 0: json.stdout
+cmp 0: json.stderr

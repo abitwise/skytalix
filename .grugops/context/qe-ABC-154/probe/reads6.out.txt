@@ -1,0 +1,4 @@
+real notes tree: 2656 note files (find -path '*/notes/*.md')
+[base] tests 32/32 red 0 | completed readNotes calls 19: unfiltered on the real tree 2 (notes returned [2656, 2656]), filtered on the real tree 11, other trees 6 | real note files read 5396 = 2.032 x the tree
+[head] tests 32/32 red 0 | completed readNotes calls 19: unfiltered on the real tree 2 (notes returned [2656, 2656]), filtered on the real tree 11, other trees 6 | real note files read 5396 = 2.032 x the tree
+restored to the head pair; tool == 0f8036f9: True ; test == 0f8036f9: True

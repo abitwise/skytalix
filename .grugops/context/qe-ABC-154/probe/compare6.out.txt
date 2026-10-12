@@ -1,0 +1,69 @@
+## A2: head ⊇ base by name
+none (unmutated tool)	base red 0	head red 0	head ⊇ base True	added at head: []
+A3-refs-only-full	base red 6	head red 6	head ⊇ base True	added at head: []
+ticket-filter-removed-only	base red 1	head red 1	head ⊇ base True	added at head: []
+A3-refs-only	base red 3	head red 3	head ⊇ base True	added at head: []
+A3-exact-refs	base red 3	head red 3	head ⊇ base True	added at head: []
+folder-substring	base red 2	head red 2	head ⊇ base True	added at head: []
+accept-observation	base red 1	head red 1	head ⊇ base True	added at head: []
+accept-own-t2p	base red 1	head red 1	head ⊇ base True	added at head: []
+symlink-folder-follow	base red 1	head red 1	head ⊇ base True	added at head: []
+symlink-notesdir-follow	base red 1	head red 1	head ⊇ base True	added at head: []
+symlink-notefile-follow	base red 1	head red 1	head ⊇ base True	added at head: []
+naive-done-all-hits	base red 2	head red 2	head ⊇ base True	added at head: []
+naive-done-distinct	base red 1	head red 1	head ⊇ base True	added at head: []
+silent-0-missing-board	base red 1	head red 1	head ⊇ base True	added at head: []
+silent-0-missing-snapshot	base red 1	head red 1	head ⊇ base True	added at head: []
+flag-force-accepted	base red 1	head red 1	head ⊇ base True	added at head: []
+flag-snapshot-accepted	base red 1	head red 1	head ⊇ base True	added at head: []
+any-author	base red 3	head red 3	head ⊇ base True	added at head: []
+malformed-ignored	base red 4	head red 4	head ⊇ base True	added at head: []
+unreadable-note-skipped	base red 1	head red 1	head ⊇ base True	added at head: []
+t2p-check-any-folder-substring	base red 1	head red 1	head ⊇ base True	added at head: []
+A3-refs-only (coverage() only)	base red 3	head red 3	head ⊇ base True	added at head: []
+symlink-notesdir-refusal-only	base red 1	head red 1	head ⊇ base True	added at head: []
+q4a-main-sweep-read-drops-secnfr	base red 1	head red 2	head ⊇ base True	added at head: ['ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding']
+q4a-main-sweep-read-drops-quality-gate	base red 1	head red 2	head ⊇ base True	added at head: ['ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding']
+q4a-readNotes-unfiltered-drops-secnfr	base red 0	head red 2	head ⊇ base True	added at head: ['ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings', 'ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding']
+q4a-readNotes-unfiltered-drops-quality-gate	base red 0	head red 2	head ⊇ base True	added at head: ['ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings', 'ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding']
+q4a-readNotes-unfiltered-empty	base red 8	head red 10	head ⊇ base True	added at head: ['ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings', 'ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding']
+q4b-allNotes-memo-empty	base red 1	head red 2	head ⊇ base True	added at head: ['ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings']
+q4b-allNotes-memo-stale-filtered	base red 1	head red 2	head ⊇ base True	added at head: ['ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings']
+q4b-plainSweep-memo-empty-notes	base red 1	head red 2	head ⊇ base True	added at head: ['ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding']
+q4b-both-memos-empty (two faults)	base red 0	head red 2	head ⊇ base True	added at head: ['ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings', 'ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding']
+head ⊇ base on 32 of 32 plants
+
+## base (69a1f4b4 = 8fd0c233 blobs) vs QE4 [new] (8fd0c233): pass count and red names
+SAME	none (unmutated tool)	mine 32/32 red 0 sweep 133/38/78/2/15	QE4 32/32 red 0 sweep 132/38/77/2/15
+SAME	A3-refs-only-full	mine 26/32 red 6 sweep 133/38/84/5/6	QE4 26/32 red 6 sweep 132/38/83/5/6
+SAME	ticket-filter-removed-only	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	A3-refs-only	mine 29/32 red 3 sweep 133/38/84/5/6	QE4 29/32 red 3 sweep 132/38/83/5/6
+SAME	A3-exact-refs	mine 29/32 red 3 sweep 133/38/77/2/16	QE4 29/32 red 3 sweep 132/38/76/2/16
+SAME	folder-substring	mine 30/32 red 2 sweep 133/38/78/2/15	QE4 30/32 red 2 sweep 132/38/77/2/15
+SAME	accept-observation	mine 31/32 red 1 sweep 133/38/80/2/13	QE4 31/32 red 1 sweep 132/38/79/2/13
+SAME	accept-own-t2p	mine 31/32 red 1 sweep 133/38/81/2/12	QE4 31/32 red 1 sweep 132/38/80/2/12
+SAME	symlink-folder-follow	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	symlink-notesdir-follow	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	symlink-notefile-follow	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	naive-done-all-hits	mine 30/32 red 2 sweep 1238/237/841/17/143	QE4 30/32 red 2 sweep 1220/235/827/17/141
+SAME	naive-done-distinct	mine 31/32 red 1 sweep 140/38/78/2/22	QE4 31/32 red 1 sweep 137/38/77/2/20
+SAME	silent-0-missing-board	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	silent-0-missing-snapshot	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	flag-force-accepted	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	flag-snapshot-accepted	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	any-author	mine 29/32 red 3 sweep 133/38/87/0/8	QE4 29/32 red 3 sweep 132/38/86/0/8
+SAME	malformed-ignored	mine 28/32 red 4 sweep 133/38/78/2/15	QE4 28/32 red 4 sweep 132/38/77/2/15
+SAME	unreadable-note-skipped	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	t2p-check-any-folder-substring	mine 31/32 red 1 sweep 133/38/81/2/12	QE4 31/32 red 1 sweep 132/38/80/2/12
+SAME	A3-refs-only (coverage() only)	mine 29/32 red 3 sweep 133/38/84/5/6	QE4 29/32 red 3 sweep 132/38/83/5/6
+SAME	symlink-notesdir-refusal-only	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	q4a-main-sweep-read-drops-secnfr	mine 31/32 red 1 sweep 133/38/78/0/17	QE4 31/32 red 1 sweep 132/38/77/0/17
+SAME	q4a-main-sweep-read-drops-quality-gate	mine 31/32 red 1 sweep 133/38/68/3/24	QE4 31/32 red 1 sweep 132/38/67/3/24
+SAME	q4a-readNotes-unfiltered-drops-secnfr	mine 32/32 red 0 sweep 133/38/78/0/17	QE4 32/32 red 0 sweep 132/38/77/0/17
+SAME	q4a-readNotes-unfiltered-drops-quality-gate	mine 32/32 red 0 sweep 133/38/68/3/24	QE4 32/32 red 0 sweep 132/38/67/3/24
+SAME	q4a-readNotes-unfiltered-empty	mine 24/32 red 8 sweep 133/38/0/0/95	QE4 24/32 red 8 sweep 132/38/0/0/94
+SAME	q4b-allNotes-memo-empty	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	q4b-allNotes-memo-stale-filtered	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	q4b-plainSweep-memo-empty-notes	mine 31/32 red 1 sweep 133/38/78/2/15	QE4 31/32 red 1 sweep 132/38/77/2/15
+SAME	q4b-both-memos-empty (two faults)	mine 32/32 red 0 sweep 133/38/78/2/15	QE4 32/32 red 0 sweep 132/38/77/2/15
+base == QE4 [new] (pass count and red names) on 32 of 32 plants

@@ -1,0 +1,20 @@
+gates at 31ec102d (tree = beb0991c + qe-ABC-154 probe files), start 2026-10-12T11:33:34Z
+load { 2.87 4.30 5.49 }; foreign vitest 4
+Checked 109 files in 142ms. No fixes applied.
+lint exit 0
+typecheck exit 0
+build exit 0
+npm test exit 0
+ Test Files  57 passed (57)
+      Tests  1775 passed (1775)
+{"success":true,"files":57,"numTotalTests":1775,"numPassedTests":1775,"numFailedTests":0,"numPendingTests":0,"numTodoTests":0}
+No findings.
+integrity exit 0
+ Test Files  1 passed (1)
+      Tests  32 passed (32)
+--sweep exit 1 (expected 1: 15 in-scope findings on the board, a reading not a gate)
+ABC-154: finding. No QE verdict note was found: no "kind: decision" note authored "by: qe-e2e" (or "by: security-nfr") names ABC-154 in "refs:" from a context folder that names ABC-154 and is not its own ticket-to-pr-* folder.
+ABC-154 is not a row in "## Done" of plans/board.md.
+--ticket ABC-154 exit 1
+end 2026-10-12T11:33:44Z
+NOTE (QE, after the run): 'foreign vitest 4' above is a SELF-MATCH. The gate command line itself contains the text 'vitest' (npx vitest run ...), so ps | grep '[v]itest' counted this shell's own processes (the AGENTS.md pgrep trap). At 11:34Z, ps showed 0 vitest processes. This window's sampler was not affected: the window ran from a command line with no 'vitest' text, and its sampler logged 0 foreign runners on every row.
