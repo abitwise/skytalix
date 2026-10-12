@@ -159,3 +159,38 @@ code commit `7acd8db2`, base `main` @ `3537fe48`. Readings: `.grugops/context/ti
 - **Gates at the tip.** `npm run -s lint` 0, `typecheck` 0, `build` 0, `npm test` 0, and
   `.test-results/last-run.json` reads `success: true`. Skip-integrity at skip count 0: `No findings.`
   This hop took no timing readings.
+
+## QE
+
+**2026-10-12, QE/E2E** (subtask `qe-ABC-148`; a separate dispatch from the author).
+- Range: base `3537fe48`, code `7acd8db2`, reviewed tip `94ca6c7e`.
+- Every reading is QE's own. QE wrote its own plant generator with a different callback host, and read
+  the SE's note only afterwards. The detail is in `.grugops/context/qe-ABC-148/notes/`:
+  - `…79919cce`, the verdict;
+  - `…cb622f01`, the readings;
+  - `…ceabe8d9`, the comparison and gaps;
+  - `…119b9d8a`, the commands.
+
+  It is not restated here.
+
+**PASS_WITH_GAPS.**
+- **`A1`–`A5` are MET.**
+  - QE's five-form readings agree with the SE's and with `QE-114-c` on every `tsc` exit and every
+    open / counted / closed call.
+  - The comment and the page note say exactly what those readings show.
+  - Line 64 is byte-unchanged.
+  - The struck words are kept.
+  - The `src/` fence holds: comment lines only, and the counts equal base.
+  - The UAT waiver applies on QE's measurement.
+- **`QE-148-a` MEDIUM (criterion scope, BA/PM).** Six more `[:=]`-free binders are `tsc`-clean and
+  green on every row: array and object destructuring, renamed destructuring in a parameter and in a
+  `for…of`, and a `function (history)` callback. The paragraph's "the open remainder … is the two"
+  therefore understates the hole, which errs the unsafe way. `A2` is met as written because it binds
+  the list to `A1`'s five forms. The Orchestrator decides: either a one-sentence repair on this branch
+  before merge, or a follow-up. Any ticket that closes `D4` must take all eight open forms.
+- **`QE-148-b` LOW.** The bare `history =>` is labelled `[:=]`-free in the paragraph that says it is
+  counted.
+- **`QE-148-c` INFO.** Two SE transcription points, neither verdict-changing.
+- **`QE-148-d` INFO.** Host-protection exited 2 (`UNKNOWN - verify`).
+
+QE made no board move, did not merge and did not push.
