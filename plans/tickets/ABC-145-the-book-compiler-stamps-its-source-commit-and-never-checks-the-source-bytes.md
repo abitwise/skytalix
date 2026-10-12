@@ -175,3 +175,29 @@ BA/PM, 2026-10-11. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none. The `A4` fetch needs the network at the delivery hop, as `ABC-093`'s `A1` did |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-12 (subtask `ticket-to-pr-ABC-145`). Branch `grugops/ABC-145-book-source-sha256`
+from `main` `3537fe48`; code commit `7be28bf9`. The detail is in `.grugops/context/ticket-to-pr-ABC-145/notes/`.
+**No timing, wall or CPU reading was taken.**
+
+- **Shape:** `SOURCE_SHA256` is a record keyed by file name. `checkThenWriteBook(sourceDir, outPath, commit,
+  expected)` is the command-line path: it hashes each file and throws `<file>: sha256 is <actual>, expected
+  <expected>` before `writeBook` runs.
+- **`A1`:** red against a stub with no check (0 of 3 substrings; the altered fixture compiled), then green
+  (3 of 3, no output file). The alteration is one byte in place inside a name, so the fixture stays
+  well-formed. **`A2`:** the control writes.
+- **`A3`:** 5 of 5. On a scratch copy, a one-hex-character mutant is red (4 of 5), and so is an `a`/`b` swap
+  (3 of 5).
+- **`A4` (RUN 2026-10-12):** the five files fetched at `SOURCE_COMMIT` match all five pins. The compile exits
+  0 and `cmp` against `main`'s `book.json` exits 0. With one byte appended to `d.tsv` it exits 1 and names
+  `d.tsv` and both hashes, and `book.json` still `cmp`s 0.
+- **`A5`:** `SOURCE_SHA256` occurs 2 times in § Regenerating on joined text. The table lines `cmp` 0.
+- **`A6`** (read at `7be28bf9`; the docs commit adds the required state-plane paths): 3 paths, 0 `src/`, 0 new files. `book.json`, `compileBook`'s body and `writeBook`'s export line
+  all `cmp` 0. No existing `it` changed; the base file holds **10** blocks, not the 9 written above (9 `it`
+  plus one `it.each`). The no-argument run exits 1. `npm test`: 56 files (base 56), 1743 tests (base 1741 + 2),
+  0 skipped. 0 spawns.
+- **Gates:** lint, typecheck, build and `npm test` exit 0. Skip count 0; integrity `No findings.`
+- **UAT waiver reading:** `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'` is empty.
+- **Owed:** the QE hop; after merge, the Scribe's line in `memory-bank/90-agents-md-command-log.md`.
