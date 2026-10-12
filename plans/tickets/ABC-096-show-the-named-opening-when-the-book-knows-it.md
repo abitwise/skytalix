@@ -54,7 +54,11 @@ book-supplied opening name is the same class of input arriving through a new doo
 ## Acceptance (Given/When/Then)
 
 - **`A1` (the name appears when the book knows it).** **Given** a position the book names, **when**
-  a frame is rendered, **then** the frame contains that exact name.
+  a frame is rendered, **then** the frame contains ~~that exact name~~ *(amended 2026-10-12, BA/PM re-score;
+  see § Re-score)* **that name's family, meaning the text before the first `": "`, or the whole name when
+  it has none. It is shown whole when it is ≤ 21 characters, and otherwise as its first 18 characters
+  followed by `...`** (for example, the book's `"Ruy Lopez"` at key `75a8cd2e62c99edd` is shown as
+  `Ruy Lopez`).
 - **`A2` (THE ROW IDENTITY DOES NOT MOVE — this is the load-bearing criterion).** **Given** frames
   rendered with a known name, with no name, and out of book, **then** all three have the **same row
   count**, equal to the frame's row count on `main` before this ticket. *(`ADR-0009` puts a `= 23`
@@ -69,7 +73,10 @@ book-supplied opening name is the same class of input arriving through a new doo
   `U+007F`, **0** code points above `U+007F` in ASCII mode, and the row count is **unchanged**.
 - **`A4` (the field is bounded, so an absurd name cannot cost the frame budget).** **Given** a name
   of **100,000** characters, **when** the frame is rendered, **then** the rendered name occupies
-  **≤ the field's declared width**, the row count is unchanged, and the frame still renders in
+  **≤ the field's declared width** *(amended 2026-10-12: declared as **21**, which is `HISTORY_COLS`, the
+  widest fixed panel and so the narrowest `W` any frame has; the start frame is 23 rows at `W` = 21 in both
+  modes, measured at `1eb2edbc`)*, **the frame's `W` is the same with and without the name**, the row count
+  is unchanged, and the frame still renders in
   **< 16 ms** (`NFR-002`). *(`plans/nfr-catalog.md` measured an unbounded supplied string at
   **400,000 characters = 14.1–15.8 ms, the WHOLE 16 ms budget**, and 1,000,000 characters at
   1.8–2.6× over. That is why this criterion exists and why the bound is structural, not a comment.)*
@@ -80,6 +87,18 @@ book-supplied opening name is the same class of input arriving through a new doo
 - **`A6` (nothing outside the display path moved).** **Given** the delivered diff, **then** the book
   artifact, the compiler and the probe's public behaviour are **unchanged** — 0 lines in
   `ABC-093`'s and `ABC-094`'s deliverables other than, at most, an added read-only accessor.
+  *(Amended 2026-10-12: the probe at `1eb2edbc` discards `n` while parsing (`src/book.ts` `parseBook`
+  keeps only `m`), so an accessor alone cannot reach the name. `src/book.ts` may also change to **keep**
+  `n`. The bar becomes: `src/book.test.ts` runs unmodified and green, `inBook`/`bookMove` return the
+  same results, and the warning count is unchanged. The artifact and `tools/` are byte-identical.)*
+- **`A7` (a name that is not a string is no name)** *(added 2026-10-12)*. **Given** an artifact whose
+  entry carries `n` as a number, an object, or an empty string, **when** that position is framed, **then**
+  no name is shown, its book moves are still served, and **0** additional warnings are emitted.
+  *(The probe is the first parser of hostile input in this program, and today it never reads `n`.)*
+- **`A8` (one probe per process)** *(added 2026-10-12)*. **Given** the artifact absent, **when** a real
+  session runs from launch to `quit`, **then** stderr carries the book warning **exactly once**, whether
+  or not `ABC-095` has landed. This ticket reads names from the **same** probe instance the composition
+  root builds. It never builds a second one, because two instances warn twice (`QE-094-e`; `ABC-095` `A5`).
 
 ## Dependencies
 
@@ -129,7 +148,9 @@ book-supplied opening name is the same class of input arriving through a new doo
 3. **Snapshots: this project has `src/__snapshots__/`.** A new name field will move snapshots. Move
    them deliberately and read the diff — an accepted snapshot is not a test.
 4. **Do not widen the frame to fit a name.** Width is a frame contract (`W = 18`, 23 rows, 418
-   characters measured); a `P3` cosmetic field does not get to change it.
+   characters measured); a `P3` cosmetic field does not get to change it. *(2026-10-12: 18 is the
+   board's width. The frame's `W` at the start position is **21**, set by `HISTORY_COLS`, measured at
+   `1eb2edbc`.)*
 5. **`A5`'s choice — last-known vs blank — is a product decision this ticket's author may take,
    provided it is written down and tested.** It is small enough not to need a ruling; it is not
    small enough to be left implicit.
@@ -182,3 +203,66 @@ holds.)*
 | 8 | size assigned | **✅** `S`, with both re-size boundaries named |
 | 9 | priority assigned | **✅** `P3`, with a named promotion trigger |
 | 10 | no major unresolved blocker | **⚠️ ONE, ordering.** `ABC-093` and `ABC-094` must land first, and `ABC-093`'s format must carry the name. **No `EPIC-004` blocker.** |
+
+## Re-score — 2026-10-12
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-rescore-backlog-product`, Workflow 07), at `main` `1eb2edbc`.
+**Result: 9 of 10, ⚠️x1 (item 10: one Architect/Design question). Stays in `Backlog`. `S` and `P3` hold.**
+Readings and commands: `.grugops/context/bapm-rescore-backlog-product/notes/`. No timing was read.
+(The board row's "DoR 8/10" is stale. The page has read 9/10 since 2026-10-10.)
+
+**The ⚠️ "needs `ABC-093`'s format to carry the name" is DISCHARGED, by measurement.**
+- `book.json` carries `n` on **2,853 of 5,390** entries, with **2,456** distinct names.
+- The names hold **0** control bytes and **0** ESC bytes. **189** contain a code point above `U+007F`. They
+  run from 9 to **99** characters, with a median of 41.
+- `tools/opening-book/compile.ts:106` refuses a control byte in a name.
+- Both merges have landed: `ABC-093` `ac83c3fd` and `ABC-094` `02dfa044`.
+- The licence edge is closed: CC0-1.0 (`data/opening-book/ATTRIBUTION.md`).
+
+**Three facts the page did not know, and what I changed for them:**
+1. **The probe throws the name away.** `src/book.ts` `parseBook` keeps only `m`, and `BookProbe` exposes
+   `inBook` and `bookMove`. So `A6`'s "at most an accessor" was unbuildable. It is amended to let `src/book.ts`
+   keep `n`, with `src/book.test.ts` unmodified and green. The probe also never validates `n`, so a hostile
+   artifact could put a non-string into the frame path. New criterion **`A7`** covers that.
+2. **The frame has no room for a whole name.** `W` at the start frame is **21** (`HISTORY_COLS`) in both modes,
+   over 23 rows (measured with `makeRenderSeam`). The message region drops any item wider than `W` whole
+   (`src/frame.ts` `packRegion`). Only **169 of 2,853** names (5.9 %) fit in 21 characters, and 1,491 fit in 42.
+   - **BA/PM ruling (scope cut, negotiable): show the FAMILY**, the text before the first `": "`. The page's own
+     user wants to know "they are in a Ruy Lopez", and that is a family.
+   - There are **149** families, **118** of them fit in 21 characters, and the longest has 42. A longer family
+     is cut to 18 characters + `...`. `A1` and `A4` are amended to match.
+   - In ASCII mode the frame's existing `sanitize` drops the non-ASCII code points. That gives "Grnfeld Defense"
+     from "Grünfeld Defense" (5 of the 149 families). This is ugly but safe. `A3` binds unchanged, and
+     transliteration is out of scope.
+3. **The warning counts per probe instance.** If this ticket builds its own probe, a missing artifact warns
+   twice, which breaks `ABC-095` `A5`. New criterion **`A8`**: one probe per process.
+
+**Item 10 ⚠️, open: where the name lookup runs.** This is Architect/Design's question, not the owner's.
+- `src/render-seam.ts` is the frame path's declared composition root (`ADR-0029`; the guard is
+  `src/history-pane.nfr.test.ts:226`), and its header says "IT DERIVES NOTHING". A name lookup costs a
+  `zobristKey` and a map read for every frame.
+- The other route is for the turn loop or the root to pass the name in as a message item. That touches
+  `RenderSeam`'s caller (`src/turn-loop.ts`, `Done` and mutation-tested) and competes with rejection lines for
+  the 2 message rows.
+- **Exact question to Architect/Design:** *"Does the opening name reach the frame through the render seam
+  (an injected name lookup on the frame path, under `ADR-0029`), or as an item the turn loop or the
+  composition root passes in? And when a rejection line and the name both want the message region, which one
+  wins?"*
+- **BA/PM's product answer to the second half: the rejection line wins.** It is the player's own feedback.
+- **Re-size trigger:** if the ruling changes `RenderSeam`'s type or `src/turn-loop.ts`, this is `M`, not `S`.
+
+**Recommendation: keep it in `Backlog` at `P3`, behind `ABC-095`.** If the owner wants to shed scope, this is
+still the epic's droppable bullet. Dropping it costs nothing else in `EPIC-005`.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | ✅ |
+| 2 | scope and out-of-scope clear | ✅ (the family-name cut is written into `A1`) |
+| 3 | INVEST-shaped | ✅ |
+| 4 | acceptance testable and measurable | ✅ after the amendments: 21 characters, the family rule, `A7` and `A8` |
+| 5 | dependencies known | ✅ *(was ⚠️ on the board)* the format carries `n`, and both merges have landed |
+| 6 | security/NFR triggers with a measurable target | ✅ |
+| 7 | test notes present | ✅ (note 4's `W` corrected) |
+| 8 | size assigned | ✅ `S`, with the re-size trigger above |
+| 9 | priority assigned | ✅ `P3`. The promotion trigger does not fire, because the format already carries the name |
+| 10 | no major unresolved blocker | **⚠️** the Architect/Design question above |

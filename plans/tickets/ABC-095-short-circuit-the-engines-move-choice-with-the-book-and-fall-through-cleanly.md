@@ -89,6 +89,12 @@ placing the short-circuit and proving the fall-through is invisible.
 - **`A5` (no book at all is a normal game).** **Given** the artifact absent from disk, **when** a
   full game is played, **then** every engine move comes from the search, **exactly 1** warning is
   emitted for the whole process, and the game reaches a normal result — **0** crashes.
+  - **The game half, made concrete** *(amended 2026-10-12, BA/PM re-score; "a full game" named no driver)*.
+    **Given** one probe whose `read` throws (ENOENT) and the decorator around a counting stub inner seam,
+    **when** the decorated seam is asked for a move in **10** successive positions that the checked-in book
+    **does** hold (the start position first), **then** the inner seam is called **exactly 10** times, `warn`
+    is called **exactly 1** time, and no call throws. This runs in the default lane, in `A1`'s file. "The game
+    reaches a normal result" is the stream half's real child, which exits **0** on `quit`.
   *(`EPIC-005` § Acceptance bullet 4. `ABC-094` proves the probe's half; this proves the game's.)*
   - **The stream half** *(folded 2026-10-11 by BA/PM from `QE-094-a`, MEDIUM, gap register
     `…3058eacd` on `grugops/ABC-094-book-probe`)*. **The one warning goes to stderr, and 0 bytes of
@@ -298,3 +304,77 @@ three ⚠️ is discharged; the other two are **half** discharged, and a half is
 | 8 | size assigned | **✅** `S`, and **the condition is now DISCHARGED** — `ADR-0012` rules the seam a wrappable function type, which is the assumption `S` was priced on, so the re-size trigger (*"a seam this ticket must reach inside"*) **cannot fire**. `S` stands unconditionally |
 | 9 | priority assigned | **✅** `P1`, with the reasons it is neither `P0` nor `P2` |
 | 10 | no major unresolved blocker | **⚠️ ONE** *(was TWO)*, 2026-08-18. **(b) is CLOSED by `ADR-0012`** — the short-circuit lives in a third module, a decorator; neither epic's core owns it. **(a) STANDS and is now a MERGE-ORDER blocker, not a design one:** `ABC-078` is `In Review` and unmerged, and `ABC-093`/`ABC-094` are unbuilt — no seam to wrap, no probe to place. Not resolvable by this role, and not resolved by inference |
+
+## Re-score — 2026-10-12
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-rescore-backlog-product`, Workflow 07), at `main` `1eb2edbc`.
+**Result: 10 of 10. Recommended for `Ready`** (the column move is the Orchestrator's). **`S`, `P1`, unchanged.**
+Readings and commands: `.grugops/context/bapm-rescore-backlog-product/notes/`. No timing was read.
+
+**Items 3 and 10 ⚠️ → ✅. Both merge waits are discharged.**
+- `ABC-093` merged `ac83c3fd`, and `ABC-094` merged `02dfa044` (UAT accepted by the owner). Both are ancestors
+  of `1eb2edbc`.
+- `ABC-078` was already `Done`.
+
+**Every seam the page cites, re-read at `1eb2edbc`:**
+- `src/cli.ts:176` is still `engine: createEngine({ budgetMs: DEFAULT_BUDGET_MS })`, inside `runTurnLoop({`
+  at `:170`.
+- `createEngine` is at `src/engine.ts:518`. It is a 5-line adapter over `chooseMove`.
+- `EngineSeam` is at `src/turn-loop.ts:150`: `(history: GameHistory) => Promise<Move>`.
+- `createBookProbe({ read, warn, random })` is at `src/book.ts:105`. It exposes `inBook` and `bookMove` on a
+  `Position`. `warn` takes the line with no newline. `read` is called at most once, on the first probe.
+
+**The book, measured.**
+- `data/opening-book/book.json` is 356,526 B, sha256 `3802f52f…4bb41d`, md5 `3b42ff79…802642`. It is format 1,
+  with 5,390 entries, 3,626 of them in book. The last commit to it is `5332f501` (`ABC-093`).
+- **`ABC-145`'s sha256 check guards the compiler's SOURCE files**
+  (`tools/opening-book/compile.ts`, `data/opening-book/ATTRIBUTION.md`). It does not guard the artifact at run
+  time. Nothing in `src/` hashes `book.json`, and this ticket adds no check. A corrupt artifact is
+  `ABC-094`'s refusal path, and `A5` covers it.
+- **`A1`'s start position is in book:** key `99116e4984517620`, 20 moves, `e2e4` weight 2,032 and `d2d4`
+  weight 1,333.
+- **`A7`'s position after `1. e4` is in book:** 19 replies (FEN `… b KQkq e3 0 1`), named "King's Pawn Game".
+
+**The stderr criterion the board said was owed is on the page.** `QE-094-a`'s stream half was folded into
+`A5` on 2026-10-11: the warning goes to stderr exactly once, 0 bytes of its text go to stdout, and the child
+exits 0 on `quit`. It is a `CLI_DEEP` row, and it is testable today. `src/cli.real-engine.test.ts` exists, and
+its lane ran green on 2026-10-10 (`AGENTS.md`).
+
+**The owner's question 5 (book against a weak level) is answered:** KEEP. A book hit overrides a weak level's
+opening move (note `…owner-word-six-answers-b7c41e09`, item 4). So when `ABC-101` lands, `engine:` becomes this
+decorator around the level's seam. Whichever of the two lands second composes onto the first.
+
+**`A2`'s reference runtime:** `node --version` → `v26.11.0`, as the page says.
+
+**`ADR-0012`, `ADR-0036` and `ADR-0037` are unchanged in their effect on this page:**
+- the decorator is a third module, flat in `src/`;
+- the new edge fires `ADR-0036` (b2), or (b1) if `src/cli.ts` holds the read, so the ticket goes through
+  `In Security/NFR`;
+- the probe is built with `random: Math.random` (D3).
+
+**The `ADR-0035` addenda (A1, B1)** change only how a QE lane window is pre-registered. If this ticket adds its
+one test file, its QE hop's `N8-LANE` reading follows them.
+
+**Amended:** `A5`'s game half now names its driver: 10 in-book positions, a throwing `read`, a counting stub.
+`A1`–`A4`, `A6` and `A7` are unchanged.
+
+**File overlaps:**
+- `ABC-101` edits the same `engine:` expression. Do not build the two in parallel.
+- None with `ABC-024` or `ABC-096`, unless `ABC-096` builds a probe of its own (see `ABC-096`).
+- None with `ABC-146`'s stale-trigger list.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | ✅ |
+| 2 | scope and out-of-scope clear | ✅ |
+| 3 | INVEST-shaped | ✅ *(was ⚠️)* every dependency is merged |
+| 4 | acceptance testable and measurable | ✅ `A5`'s game half is now concrete |
+| 5 | dependencies known | ✅ |
+| 6 | security/NFR triggers with a measurable target | ✅ |
+| 7 | test notes present | ✅ |
+| 8 | size assigned | ✅ `S` |
+| 9 | priority assigned | ✅ `P1` |
+| 10 | no major unresolved blocker | ✅ *(was ⚠️)* |
+
+**Production and UAT:** a new `src/` module and `src/cli.ts`. That needs the owner's UAT word. QE runs
+`CLI_DEEP`.

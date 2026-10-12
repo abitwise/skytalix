@@ -1,0 +1,16 @@
+const root = process.argv[2];
+const { parseFen } = await import(`${root}/src/fen.ts`);
+const { newGame } = await import(`${root}/src/history.ts`);
+const { zobristKey } = await import(`${root}/src/zobrist.ts`);
+const { legalMoves } = await import(`${root}/src/legal.ts`);
+const { makeMove } = await import(`${root}/src/apply.ts`);
+const { squareName } = await import(`${root}/src/position.ts`);
+const { readFileSync } = await import("node:fs");
+const b = JSON.parse(readFileSync(`${root}/data/opening-book/book.json`, "utf8"));
+const look = (p) => b.positions[zobristKey(p).toString(16).padStart(16, "0")] ?? null;
+for (const f of ["rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"]) console.log("fen e3:", JSON.stringify(look(parseFen(f))));
+let p = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+const mv = legalMoves(p).find((m) => squareName(m.from) === "e2" && squareName(m.to) === "e4");
+const r = makeMove(p, mv);
+const p2 = r.position ?? r;
+console.log("makeMove e2e4:", JSON.stringify(look(p2))?.slice(0, 300));

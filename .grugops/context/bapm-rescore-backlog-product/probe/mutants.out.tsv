@@ -1,0 +1,16 @@
+run-BASELINE	files 57	passed 1775/1775	failed 0	pending 0	
+run-CONTROL	files 57	passed 1772/1775	failed 3	pending 0	src/moves.castling.hardening.test.ts,src/search.ordering.test.ts
+run-E-BK-g8	files 57	passed 1775/1775	failed 0	pending 0	
+run-E-BQ-b8	files 57	passed 1775/1775	failed 0	pending 0	
+run-E-BQ-c8	files 57	passed 1775/1775	failed 0	pending 0	
+run-E-BQ-d8	files 57	passed 1774/1775	failed 1	pending 0	tools/opening-book/book.test.ts
+run-R-ep	files 57	passed 1775/1775	failed 0	pending 0	
+run-R-full	files 57	passed 1774/1775	failed 1	pending 0	src/search.ordering.test.ts
+run-R-half	files 57	passed 1775/1775	failed 0	pending 0	
+PERFT_DEEP=1 src/perft.test.ts	passed 32/32	failed 0
+# NOTE: both controls wrote run-CONTROL.json (name collision in mutants.mjs); the file above is the LAST one,
+# "CONTROL right test removed". The "CONTROL empty test removed" line, from mutants.mjs's stdout:
+# CONTROL empty test removed | exit 1 | files 57 | passed 1626/1720 | failed 94 | pending 0 | 28 files incl. src/moves.castling.test.ts, src/moves.test.ts, src/perft.test.ts, tools/opening-book/book.test.ts
+# Method: git archive 1eb2edbc into the session scratchpad (outside the repo), node_modules symlinked THERE from
+# the main checkout (vitest 4.1.11), PERFT_DEEP unset, `vitest run --reporter=json` once per tree state,
+# src/moves.ts restored and re-hashed 6335b452fc21ffe2d0f902ecab930840 after every mutant. No wall time recorded.
