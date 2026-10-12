@@ -414,3 +414,20 @@ check when it routes (`AR-095-L1UNIT`).
 - **§ Decision 3's residual** (LOW; owner Architect/Design). Unchanged, apart from the re-armed
   trigger.
 - **Rollback.** Strike this block. `F-095-1` then re-opens at MEDIUM, owned by the Orchestrator.
+
+#### S3 reading — 2026-10-12
+
+Read by Security/NFR at `ABC-095`'s gate (subtask `secnfr-ABC-095-s3`, branch `grugops/secnfr-ABC-095-s3`
+off the QE tip `e1444f23`), on the delivered pair `0974102f..2307fc11`. The readings are in
+`.grugops/context/secnfr-ABC-095-s3/notes/…c24fec8e`, and the result is in `…b65b11b7`. **Nothing ruled above
+changes.**
+- **The prediction held.** Limb 1 FIRES: (b1) the `node:fs` import in `src/book-file.ts`, and (b2)
+  `cli.ts -> book-file.ts`. Limb 2 FIRES on the warn's `process.stderr` in `cli.ts`. Limb 3 does not fire.
+  The edges to `book.ts` and `book-engine.ts` reach no holder. **The holder set is 4.**
+- **Ruling 2, applied by hand, FIRES.** The holders are none at `<base>` and `src/book-file.ts` at `<head>`.
+- **The by-hand method's empty case.** The method takes the holders at `<base>` **and** `<head>`. If both
+  are empty, Ruling 2 does not fire, and the `git diff` is **not run**. With an empty pathspec,
+  `git diff --name-only <base> <head> --` lists every changed file (21 at this pair), which reads as a
+  false "fires". The fold owed under `AR-095-L1UNIT` should include this case as a plant that does not
+  fire.
+- **`AR-095-L1UNIT` is still open.** `clause-b.mjs` is unchanged since `341da4c1`.

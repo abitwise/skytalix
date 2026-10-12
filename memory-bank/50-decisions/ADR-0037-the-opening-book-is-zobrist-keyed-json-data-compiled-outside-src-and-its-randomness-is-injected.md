@@ -35,6 +35,14 @@ D1–D3 do not change.
   is written.
 - **S3's checklist** is in `.grugops/context/secnfr-ABC-095-placement/notes/…a096cf43`.
 
+**2026-10-12, `secnfr-ABC-095-s3`: S3 ran on `0974102f..2307fc11`. The result is PASS_WITH_RISKS, and R1–R3
+stand as built.** The result is in `.grugops/context/secnfr-ABC-095-s3/notes/…b65b11b7`.
+- **Item 7's first bullet is corrected there (`QE-095-e`).** No entry is a symbolic link, and every entry
+  that is not a directory is a regular file. `src/__snapshots__` is a directory.
+- **One risk is added: `AR-095-CWD` (LOW, the Orchestrator).** No test pins that `readBookFile` resolves
+  from `import.meta.url` rather than from the working directory. The named fix is to run `A7`'s child from
+  a neutral cwd.
+
 - **What it answers.** BA/PM's decision note `…0e4da324` (`rescore-p1-backlog-2026-10-10`) names
   three structural decisions:
   - **D1**, the book format (`ABC-093` DoR item 5);

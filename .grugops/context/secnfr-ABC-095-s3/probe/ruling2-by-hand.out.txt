@@ -1,0 +1,18 @@
+# limb-1 holders: base 0974102f = (none); head 2307fc11 = src/book-file.ts; union = src/book-file.ts
+$ git diff --name-only --no-renames 0974102f 2307fc11 -- src/book-file.ts
+src/book-file.ts
+exit 0
+$ git diff -U0 --no-renames 0974102f 2307fc11 -- src/book-file.ts | grep -c "^+[^+]"
+15
+# TRAP: base-only holder list is EMPTY; an empty pathspec is NOT 'no paths', it is 'all paths':
+$ git diff --name-only --no-renames 0974102f 2307fc11 -- (nothing) | wc -l
+      21
+# QE tip adds no production file:
+$ git diff --name-only --no-renames 2307fc11 e1444f23 -- src/ data/ package.json package-lock.json | wc -l
+       0
+  diff 2307fc11..e1444f23 = 2307fc11..e1444f23; production files changed: 0
+  limb 1: does not fire
+  diff 2307fc11..e1444f23 = 2307fc11..e1444f23; production files changed: 0
+  limb 2: does not fire
+  diff 2307fc11..e1444f23 = 2307fc11..e1444f23; production files changed: 0
+  limb 3: does not fire

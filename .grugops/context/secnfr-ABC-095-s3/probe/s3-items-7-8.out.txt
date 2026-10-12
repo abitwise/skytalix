@@ -1,0 +1,53 @@
+## 8(a) manifests
+       0
+## 8(d) files in the pair
+src/book-engine.test.ts
+src/book-engine.ts
+src/book-file.ts
+src/cli.real-engine.test.ts
+src/cli.test.ts
+src/cli.ts
+## 8(c) spawn / write call sites in the pair's test files (added lines)
+171:+ *   - made under `mkdtemp(os.tmpdir() …)`, and removed by a recursive `rmSync` of EXACTLY the path
+172:+ *     `mkdtemp` returned — never a joined or computed path, never the repository;
+177:+ *     asserted before any spawn;
+184:+  copyFileSync,
+185:+  cpSync,
+188:+  mkdtempSync,
+191:+  rmSync,
+216:+  const root = mkdtempSync(join(tmpdir(), "abc095-book-absent-"));
+217:+  cpSync(join(REPOSITORY, COPIED_DIRECTORY), join(root, COPIED_DIRECTORY), { recursive: true });
+218:+  copyFileSync(join(REPOSITORY, COPIED_FILE), join(root, COPIED_FILE));
+221:+/** The only removal in this file: the path `mkdtemp` returned, passed through untouched. */
+222:+const removeCopy = (root: string): void => rmSync(root, { recursive: true, force: true });
+279:+const spawnReal = (
+285:+  const child = spawnSync(process.execPath, argv, {
+287:+    throw new Error(`child ${process.execPath} ${argv.join(" ")} failed: ${child.error}`);
+288:+    `[CLI_DEEP] (cwd ${root}) ${process.execPath} ${argv.join(" ")} <<< ${JSON.stringify(script)} — ` +
+291:+    // only, removes exactly what it made, and still spawns nothing.
+313:+      played = spawnReal(copy, "");
+314:+      rejected = spawnReal(copy, `${UNREADABLE}\n`);
+326:+      bookless = spawnReal(copy, QUIT_TWICE);
+327:+      booked = spawnReal(REPOSITORY, `${OPENING}\n`, ["--colour", "white", "--ascii"]);
+## spawn call sites at tip (code), per test file of the pair
+src/cli.real-engine.test.ts 1
+src/cli.test.ts 1
+src/book-engine.test.ts 0
+## book-engine.test.ts capability tokens
+12:import { readFileSync } from "node:fs";
+34:const BOOK_BYTES = readFileSync(ARTIFACT);
+92:    const stderr = vi.spyOn(process.stderr, "write");
+166:      read: () => readFileSync(ABSENT),
+179:    const source = readFileSync(new URL("book-engine.ts", import.meta.url), "utf8");
+## N8_SPAWN pin
+329: * (iii) The count pin (`N8_SPAWN`, `spawned`, `Object.keys(CHILDREN)`) CANNOT see it: a changed child
+1884:    const N8_SPAWN = 17 + 7 + 1 + 2;
+1885:    expect(spawned).toBe(N8_SPAWN);
+1886:    expect(Object.keys(CHILDREN)).toHaveLength(N8_SPAWN);
+## item 7: the A7 child and the cwd of every spawnReal
+195:    cwd: root,
+207:    `[CLI_DEEP] (cwd ${root}) ${process.execPath} ${argv.join(" ")} <<< ${JSON.stringify(script)} — ` +
+324:      played = spawnReal(copy, "");
+325:      rejected = spawnReal(copy, `${UNREADABLE}\n`);
+399:      bookless = spawnReal(copy, QUIT_TWICE);
+400:      booked = spawnReal(REPOSITORY, `${OPENING}\n`, ["--colour", "white", "--ascii"]);

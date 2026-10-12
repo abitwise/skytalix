@@ -586,3 +586,26 @@ QE/E2E, 2026-10-12 (subtask `qe-ABC-095`, branch `grugops/qe-ABC-095` off `2307f
   - `QE-095-f`, `-g` and `-i` are INFO.
 - **UAT:** the waiver does not apply (3 production files in the delivered pair). The owner's word is owed. Next is
   `In Security/NFR` (S3).
+
+## Security/NFR
+
+**2026-10-12, Security/NFR** (task `wave-2026-09-25`, subtask `secnfr-ABC-095-s3`, branch
+`grugops/secnfr-ABC-095-s3` off the QE tip `e1444f23`; width 1). This is the S3 gate on the delivered pair
+`0974102f..2307fc11`; the QE tip adds no production line. ASVS L1, block on `high`. **Result:
+PASS_WITH_RISKS.** The notes are in `.grugops/context/secnfr-ABC-095-s3/notes/` (`…b65b11b7` decision,
+`…c24fec8e` readings) and are not restated here. No timing was read.
+
+| item | reading | state |
+|---|---|---|
+| 1 clause (b) | (b1) `book-file.ts` limb 1 and `cli.ts` limb 2; (b2) `cli.ts -> book-file.ts` only; limb 3 silent; **holders 4**; Ruling 2 by hand fires | **MET, as predicted** |
+| 2–6 | `book-file.ts` to R1's contract and cwd-independent in a child; `cli.ts` limited to imports, the `const` and `engine:`; `A9` 9 → 10; bars 1 and 4 unedited; `book.ts` 0 lines, fixed-text warning | **MET** |
+| 7 tree copy | real copy, leak detector present once, `mkdtemp` under `tmpdir()`, exact-path removal | **MET**; the checklist text is corrected (`QE-095-e`) |
+| 8 `ABC-041` (a) (c) (d) | no manifest change; tmp-only writes, 0 new default-lane spawns, 2 named `CLI_DEEP` children; the six files | **MET** |
+| `QE-095-a` | ruled LOW, non-blocking: no ASVS requirement fails at the tip. Accepted as **`AR-095-CWD`** (owner: the Orchestrator). The named fix is QE's (run `A7`'s child from a neutral cwd), and it is measured to red the cwd-relative plant. Not owed before merge | **accepted risk** |
+
+- **Required fixes before merge:** none.
+- **Accepted risks:** `AR-095-CWD` (LOW, the Orchestrator), `AR-095-READ` (LOW, Security/NFR, confirmed)
+  and `AR-095-L1UNIT` (LOW, the Orchestrator, confirmed open; Architect/Design owes the fold).
+- **Owed by BA/PM:** test note 4 and `ABC-119` § Amendment, to the corrected copy rule; the
+  `AR-095-CWD` fix, as an amendment to `A7`'s Given or as a follow-up.
+- **Next:** `Ready for UAT` (the Orchestrator's move). The owner's UAT word is owed.
