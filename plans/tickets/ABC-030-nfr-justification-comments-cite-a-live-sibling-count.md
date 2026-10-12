@@ -256,3 +256,44 @@ cure.** That observation is routed to the Orchestrator as its own concern, separ
 
 **The DoR score above is recorded so that the day someone does want to pull it, no refinement hop is
 needed.**
+
+## Re-score — 2026-10-12 (BA/PM, subtask `bapm-rescore-backlog-process`, `main` @ `1eb2edbc`)
+
+**Verdict: DoR 10/10, recommend `Ready`. `XS`, `P3` kept, and it is still last in any pull order (its
+own instruction).** One of the four sites was repaired by another ticket, so the scope is now **three**
+files. Commands and full readings are in `.grugops/context/bapm-rescore-backlog-process/notes/`
+(observation note, § ABC-030). Today's suite is 57 files and 1775 tests (`AGENTS.md`, RUN 2026-10-12).
+None of the comments quotes a suite total; each quotes its sibling.
+
+**The four sites at this tip.** Sibling counts are from the runner,
+`npx vitest run src/<f>.test.ts --reporter=json | jq '.testResults[0].assertionResults|length'`, all
+exit 0 with 0 pending:
+
+| site (md5 of the `.nfr` file) | quotes | sibling today | verdict |
+|---|---|---|---|
+| `src/zobrist.nfr.test.ts:19-21` (`bb4d52be…`) | *"every test there"* | 32 | **DISCHARGED.** `40b77ac7` (`ABC-075`, 2026-09-19) wrote the mechanism form. **Do not touch.** |
+| `src/status-panel.nfr.test.ts:11` (`b1c1998e…`) | *"all 26 tests there"* | **29** | **STALE**, unchanged since the cut |
+| `src/gameend.nfr.test.ts:13` (`5be6c34f…`) | *"all 45 tests there"* | 45 | holds, by luck as before |
+| `src/san.nfr.test.ts:19` (`5da32d6a…`) | *"the 52 rows in `san.test.ts`"* | 22 tests; row count `UNKNOWN - verify` | the premise "**cannot have gone stale**" is **FALSE**: `san.test.ts` has had 2 more commits (`c98b1e22` 08-17, `ccb8f1bd` 10-11). The repair still deletes the number. |
+
+- `808a7e82` (`ABC-152`, 2026-10-11) touched all four `.nfr` files, but not these sentences.
+- `src/gameend.nfr.test.ts:8` (*"left all 45 tests in `gameend.test.ts` green"*) is a **dated
+  witness** ("Measured at the `ABC-020` Security/NFR gate"). Test note 2 says to keep that form. **Out
+  of scope, and `A2`'s regex does not match it.**
+- No open ticket edits these three files. `ABC-024` (Backlog) only names `san.nfr.test.ts` as a
+  possible mutant catcher.
+
+**Criteria amendments (2026-10-12; old text struck, kept for one re-score):**
+- **`A1`** unchanged. It already reads exit 1 for `zobrist.nfr.test.ts`; it goes from 1 hit to 0 on
+  `status-panel`.
+- **`A2`** ~~exactly four files, every one `*.nfr.test.ts`~~ → **exactly three files**:
+  `src/status-panel.nfr.test.ts`, `src/gameend.nfr.test.ts`, `src/san.nfr.test.ts`. **Zero** lines in
+  `src/zobrist.nfr.test.ts`. The `src/*.ts` grep reads **3 hits today** and must read 0 after.
+- **`A4`** ~~the four repaired comments~~ → the three.
+- **Security/NFR firing check** ~~four `*.nfr.test.ts` files~~ → three, as in `A2`.
+- **`A3`** unchanged. Its command shape was verified on vitest 4.1 at this hop. `test.maxWorkers: 2`
+  is pinned; do not pass a higher `--maxWorkers`.
+
+**DoR 10/10:** 1 ✅, 2 ✅ (three files; zobrist fenced out), 3 ✅, 4 ✅ (`A2`/`A4` re-counted), 5 ✅
+(none open), 6 ✅ (0 production lines, 0 new files, `N8-LANE` zero), 7 ✅, 8 ✅ `XS`, 9 ✅ `P3`,
+10 ✅.

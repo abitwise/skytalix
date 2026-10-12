@@ -201,3 +201,70 @@ items, and it is genuinely open.
 
 **Requested, not taken** — `plans/board.md` is the Orchestrator's. `Backlog`, and it could not go to
 `Ready` in any case: the Definition of Ready is **8 of 10, NOT MET.**
+
+## Re-score — 2026-10-12 (BA/PM, subtask `bapm-rescore-backlog-process`, `main` @ `1eb2edbc`)
+
+**Verdict: DoR 8/10. Stays `Backlog`. Both old ⚠️ are discharged; two new ⚠️ replace them, and both
+come from one owner question (below).** Readings and commands are in
+`.grugops/context/bapm-rescore-backlog-process/notes/` (observation note, § ABC-052). Board md5
+`be514ce68361fb27254ad574c8a95dae`; trace md5 `eb3233b22053441f60f6f91cf4f479f8`.
+
+**The re-measured count (same method as the page, plus two others):** the board's `Done` column holds
+**134** ids, and every one has at least one trace row.
+- **94 of 134** have a first row whose `Status` lacks the word `Done` (the page's method; was 12 of 27).
+- **77** have no row whose `Status` holds `Done`.
+- **56** have no cell anywhere holding `Done`.
+- The original twelve are all still in every set.
+
+**Why the page's method and scope no longer fit:**
+- Since `05eecc1a` (2026-08-17), each hop **appends its own row** and touches nothing in place. So the
+  first row per id is the cut row by construction. "First row lacks `Done`" now measures the
+  convention, not staleness.
+- The word probe misfires both ways. `(BA/PM fold)` rows reading "`Done` (unchanged)" count as
+  recorded. `ABC-105`'s cut row counts because it says "flags 9 `Done` tickets".
+- **Nobody records the move to `Done` in the trace at all.** That move is a board-only act. The defect
+  is not "one stale cell per merge". It is "the merge step writes no trace row".
+- Scope item 2 (append a sentence **inside** each `Status` cell) contradicts today's append-a-row
+  convention. It is also no longer `S`: 94 rows, and **28 of 134** board `Done` rows carry no merge
+  date+sha, so those need a per-row `git` lookup. **That is the page's own split signal.**
+- **`ABC-052` has never had a trace row of its own** (`git log -S'| ABC-052'` → none). This hop's
+  appended row is its first.
+
+**Discharged:** the `ABC-040` ordering ⚠️ (items 3 and 10). Appending rows never edits `ABC-029`'s
+cell, so the two tickets now only share a file. That is sequencing, not a dependency.
+**New facts for the design:**
+- `ABC-105`'s `tools/grugops/qe-hop-integrity.js` exports `parseDone(boardText)`, which reads exactly
+  the `Done` ids this probe needs.
+- Its Done-exit practice (`memory-bank/40-contributing.md` § Conventions: the Orchestrator runs
+  `--ticket` at every move to `Done`, forward-only from a committed cutover) is the wiring precedent
+  `RISK-ABC052-01` lacked.
+
+**Owner question (exact):** *"For 94 of the 134 `Done` tickets, `plans/traceability.md` does not record
+that the ticket reached `Done`, and no hop writes that record today. Which do you want?*
+- *(A) The board's `Done` column is the only record of column state. One dated legend paragraph in the
+  trace says so, and `ABC-052` is dropped. Size `XS`; Orchestrator's paragraph.*
+- *(B) Forward-only: from a committed cutover, the Orchestrator appends one dated `ABC-xxx (done)` row
+  (date + merge sha) at every move to `Done`, and a probe reusing `parseDone` checks it at the Done
+  exit, like `qe-hop-integrity --ticket`. Size `S`.*
+- *(C) (B) plus a one-time backfill row for each of today's 94 (28 need a `git` lookup). Size `M`; I
+  would split it off as its own ticket."*
+
+**BA/PM recommendation: (A).** `AGENTS.md` § Mission already says "the board is the state". The board
+answers "did it ship?" correctly today. The delivery audit names the record as this factory's waste.
+(B) is the fallback if the owner wants the trace to carry it.
+
+**Criteria amendments (2026-10-12), applying under (B)/(C) only; (A) replaces the ticket:**
+- **`A1`** ~~reports every id whose live row does not record `Done`~~ → the probe reports every
+  in-scope `Done` id (per `parseDone`, minus the cutover snapshot under (B)) for which **no** trace row
+  whose first cell names the id contains `` reached `Done` YYYY-MM-DD at `<sha>` ``. An empty set exits
+  0. The id rule must handle multi-id first cells (`ABC-154 / ABC-155 (cut) + …`).
+- **Scope item 2** ~~APPEND a dated sentence to the `Status` cell~~ → append **one row per id**.
+  Nothing is touched in place. `A3` (zero deletion lines) is unchanged and now holds by construction.
+- `A2`, `A4`, `A5` unchanged.
+
+**DoR 8/10:** 1 ✅ (re-measured three ways), 2 ✅ (each option's scope and fences stated), 3 ✅
+(independent of `ABC-040` once rows are appended), 4 ✅ (amended `A1` testable under (B)/(C)), 5 ✅
+(`ABC-040` sequencing only; `parseDone` reuse), 6 ✅ (unchanged; a probe test file would fire
+`N8-LANE`, which is still a stop-and-report), 7 ✅, 8 ⚠️ size depends on the answer (`XS` / `S` /
+`M`), 9 ✅ `P2` kept, 10 ⚠️ the owner question above is open. Items 8 and 10 are the same open
+question.

@@ -269,3 +269,56 @@ it is the Orchestrator's call.
 **`Backlog`, not `Ready`, and the DoR is not met anyway.** Even at 10/10 this would be a `Backlog`
 request: `Ready` is the pull queue and stands at 2/8, and stocking it with records debt makes an
 under-stocked column *look* stocked. `ABC-030`'s reasoning, adopted unchanged.
+
+## Re-score — 2026-10-12 (BA/PM, subtask `bapm-rescore-backlog-process`, `main` @ `1eb2edbc`)
+
+**Verdict: DoR 10/10 (was 9/10), recommend `Ready`. `S`, `P2` kept.** The inventory grows from eight
+statements to **nine**. `A2` would have failed on a correct register. The item-3 ⚠️ is discharged by a
+new `A7`. Commands are in `.grugops/context/bapm-rescore-backlog-process/notes/` (observation note,
+§ ABC-039). Board md5 `be514ce6…`; `plans/metrics.md` md5 `1b083e8d…`, last changed `30197d6f`
+(2026-08-20).
+
+**What still holds (re-resolved by quoted text):**
+- **#1 LIVE** is now `plans/board.md:969` (was `:185`). `grep -c "FIRST BACKWARD BOARD MOVE IN THIS
+  PROJECT'S HISTORY" plans/board.md` → **1**.
+- #3–#8 are at their cited lines: `ABC-009-board-history.md:17`, `:451`, `:786`;
+  `ABC-025-…:37`, `ABC-019-…:24`, `ABC-016-…:52`.
+- No archive file has changed since the cut (`ABC-009`'s last commit is `d568e3b9`, 2026-08-10).
+- `backward-move-ordinals.md` does not exist yet.
+- `plans/metrics.md`'s Rework-rate row is now **`:28`** (was `:23`), and it still says **13 moves
+  across 9 tickets**.
+- The `P1` trigger has not fired: every note that cites an ordinal is dated 2026-08-13 or earlier.
+
+**What changed:**
+- **#2 is WRAPPED.** `ABC-009-board-history.md:814-815` splits *"FIRST BACKWARD MOVE IN THIS / PROJECT'S
+  HISTORY"* across two lines. `grep -cF` for the full label reads **0**. **`A2`'s check as written
+  exits 1 on a correct register.**
+- **#9, a second LIVE statement the cut missed:** `plans/traceability.md:437`, the `ABC-009` row's
+  `Status` cell, *"**first backward board move in this project's history**"*. It was already present
+  at `06c5427`. It is a dated hop record in a trace cell, so **register it and do not edit it**
+  (`ABC-040` `R5`; trace hops append rows and touch nothing in place).
+
+**Criteria amendments (2026-10-12; old text struck, kept for one re-score):**
+- **Inventory / `A2`** ~~eight rows~~ → **nine rows**, adding #9 above. ~~`grep -F "<the quoted
+  label>" "<the cited file>"`~~ → for #2, `grep -nF "FIRST BACKWARD MOVE IN THIS"
+  plans/tickets/history/ABC-009-board-history.md` must hit `:814`, and `sed -n 815p` must match
+  `^ *PROJECT'S HISTORY` (the line is indented). The others are unchanged. #9 is checked against `plans/traceability.md`.
+- **`A3`** ~~every backward column move~~ → every backward column move **in the window `plans/metrics.md`'s
+  Rework-rate row covers (through 2026-08-12)**. The row count equals that row's total (13 at this tip;
+  re-read it). The series closed at 08-11, so later moves are out of scope.
+- **`A5`** ~~… and NOTHING else~~. That unscoped clause fires on the hop's own paperwork (`ABC-030`'s
+  33-file lesson). → Under `plans/`, `src/`, `memory-bank/` and `AGENTS.md`, the diff is exactly:
+  `plans/board.md` 1 line changed, the new register, optionally this page, and
+  `plans/traceability.md` with **0 deletion lines** (an appended row only). Files under `.grugops/`
+  are free.
+- **`A7` (new; discharges the item-3 ⚠️):** the register quotes each of the nine labels **verbatim on
+  one line**, so `grep -rlF "<label>" plans/` lists the register for every label, #2 included. **And**
+  the corrected `ABC-009` board clause names `plans/tickets/history/backward-move-ordinals.md`. A
+  reader who greps any label now lands on the register. **Residual (named, accepted):** a reader who
+  opens an archive file and does not grep is not intercepted. Only editing the archive could change
+  that, and editing the archive is forbidden.
+- **`A6`** (≤ 60 lines) unchanged. Nine rows plus the 13-move chronology fit.
+
+**DoR 10/10:** 1 ✅, 2 ✅ (#9 registered, not edited), 3 ✅ (reachability by `A7`, residual named),
+4 ✅ (`A2`/`A3`/`A5` now pass on a correct register), 5 ✅, 6 ✅ (0 `src/`, `N8-LANE` zero), 7 ✅,
+8 ✅ `S`, 9 ✅ `P2`, 10 ✅.

@@ -163,3 +163,74 @@ DoR stays 9/10, and item 10 is still the Release Manager's.
   `ABC-143`'s page § Follow-ups. In short: depend on `ABC-149`, re-run its six plant rows at head, and
   take or decline QE's 4.x route.
 - This ticket still performs no upgrade (`A5`).
+
+## Re-score — 2026-10-12 (BA/PM, subtask `bapm-rescore-backlog-process`, `main` @ `1eb2edbc`)
+
+**Verdict: DoR 10/10 (was 9/10), recommend `Ready`. `XS`, `P2` kept. Owner: Release Manager,
+unchanged. The drift still exists and is worse: `AR-1`'s stated reason now covers 0 of 3.** I ran
+`npm audit` read-only; nothing was installed, fixed or written (manifest md5s identical before and
+after). Commands are in `.grugops/context/bapm-rescore-backlog-process/notes/` (observation note,
+§ ABC-056).
+
+**Today's set (`npm audit`, 2026-10-12T12:20Z, exit 1): 3 vulnerabilities, 1 moderate and 2 high, all
+transitive dev dependencies.**
+
+| package | severity | advisory | reaches the tree via |
+|---|---|---|---|
+| `nanoid` 3.3.16 | high | GHSA-2v37-7h3g-55p8 | `vite` → `postcss` |
+| `postcss` 8.5.22 | moderate | GHSA-fxqj-rqcc-2cmp | `vite` |
+| `source-map-js` 1.2.1 | high | GHSA-68fv-2mgg-jv7q | `postcss`; `magicast` |
+
+- **`brace-expansion`, `AR-1`'s only subject, is gone.** `9313dda7` (`ABC-152`, 2026-10-11) removed it
+  (Security/NFR `secnfr-ABC-152-window`, `V12`).
+- **`source-map-js` is new** since this page was cut.
+- npm offers a **non-`--force`** `npm audit fix` for all three.
+- **Still true:** `npm audit --omit=dev` finds **0**; `jq 'has("dependencies")' package.json` → `false`;
+  `"private": true`; no `bin`; `build` is `tsc --noEmit`.
+
+**Discharged:**
+- **The `@vitest/coverage-v8` half of the item-10 ⚠️.** `ABC-152` performed that upgrade
+  (`@vitest/coverage-v8` and `vitest` both `~4.1.11` in `package.json`; md5 `076a03d7…`). Scope bullet
+  4 and the 2026-10-11 page note on `RISK-ABC143-01` are history.
+- **The trigger half.** The Release Manager owns and executes this ticket, so choosing the trigger is
+  the ticket's work, not a blocker (`ABC-039` scored its unread dates the same way). `A4` below makes
+  the choice testable and gives a measured default.
+
+**Two premise changes `A1`/`A3` must carry:**
+1. **The set drifted twice with the lockfile UNCHANGED.** `package-lock.json` has no commit between
+   2026-07-22 and 2026-10-11. In that time `nanoid` and `postcss` appeared (by 08-13), and
+   `source-map-js` appeared (by 10-11). **A trigger of "a hop touches `package.json`" would have missed
+   both.**
+2. **"Ships nothing" is no longer literal.** `ADR-0018` (`ABC-100`) made the channel `git clone` +
+   `npm install` + `npm run chess`. `npm install` puts this dev tree on a user's machine. The leg that
+   carries the weight now is the **runtime path**: `npm run chess` runs `node src/cli.ts`, and the 37
+   non-test `src/*.ts` files hold 140 import specifiers, **all relative (`./`)**. No package is loaded
+   at runtime.
+
+**Criteria amendments (2026-10-12):**
+- **`A1`** ~~each of the three current advisories~~ → each advisory in **the set measured at the hop**.
+  It may be empty if a fix lands first; then the record says so and `A1` holds vacuously.
+- **`A3`** gains a fifth check. The production import graph loads no package:
+  ``grep -hoE "(from|import\() *['\"][^'\"]+['\"]" $(ls src/*.ts | grep -v '\.test\.ts$') | grep -vE "['\"]\./"``
+  → **empty**.
+- **`A4`** ~~a condition under which `AR-1` must be re-read~~ → the record names its trigger, and the
+  trigger **must fire on an advisory published against an unchanged lockfile**. Measured default:
+  *"any `npm audit` run at a Security/NFR hop whose (package, advisory id) set differs from the
+  record's"*. The Release Manager may adopt or replace it. **"A hop touches `package.json`" alone
+  fails `A4`.**
+- **Where the record goes:** a new `decision` note with `refs: [AR-1, ABC-056]` and **`supersedes`
+  EMPTY**. `AR-1` shares its 2026-07-29 note (`…abedec95`) with `AR-2` onward, and superseding that note
+  would fold them out on replay.
+- `A2`, `A5` unchanged. `A5` still forbids any manifest change; running `npm audit fix` is not this
+  ticket.
+
+**Owner question (exact; it does not block this ticket):** *"`npm audit` offers a non-breaking,
+lockfile-only fix for all three dev-only advisories (`nanoid`, `postcss`, `source-map-js`). Should we
+(a) leave the tree as it is and re-state `AR-1` over them (`ABC-056` as written), or (b) cut a separate
+gated ticket to apply that lockfile fix, after which `ABC-056` records an empty set and its trigger?"*
+`ABC-056` passes under either answer. Under (b), pulling the fix first makes `ABC-056` smaller.
+
+**DoR 10/10:** 1 ✅ (0 of 3 covered), 2 ✅, 3 ✅, 4 ✅ (`A1`/`A3`/`A4` amended), 5 ✅ (none; the
+`ABC-152` note cited), 6 ✅ (0 `src/`, 0 test files; security clause (a) still set against `A5`),
+7 ✅, 8 ✅ `XS`, 9 ✅ `P2` (`P1` trigger unchanged and not fired: no runtime dependency, no `bin`,
+nothing published), 10 ✅.
