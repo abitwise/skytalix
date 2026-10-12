@@ -451,3 +451,31 @@ an agent `decision`, not a stamp.
   ambiguously and means `ABC-115`.
 - **UAT-waiver reading, measured:** production `src/` is empty over the range and for each of
   `59000c87`, `00741431` and `d5afab3f`, so the waiver applies.
+
+## Delivery — widening for QE-117-a and QE-117-c, 2026-10-12
+
+Software Engineer (Claude Opus 5.5, subagent of the Orchestrator), subtask `fix-ABC-117`. The branch
+was fast-forwarded to `grugops/qe-ABC-117` (`8e679aed`), then the corrections were committed as
+`7bf4c61e`. Not pushed or merged, and no column was moved. **A QE re-check of this delta is owed to a
+different agent.** Notes: `.grugops/context/fix-ABC-117/notes/`.
+
+- **S10** (`plans/traceability.md`, `ABC-115` row, *"the non-`EPIPE` path still exits `1` (=
+  `USAGE_EXIT_CODE`)"*): one correction row appended at the END. The row itself is untouched.
+- **S11** (`…0391186e:69-70`): one new `observation`, `…3429abce`, with an empty `supersedes`. Its
+  `refs` name `…0391186e` and the S3–S5 note `…92514474`. No note was edited.
+- **This page's `## Out of scope` bullet** on the trace row is now followed by a dated correction.
+  The original is kept.
+- **QE-117-c:** the `A10` comment in `src/cli.test.ts` names `ABC-115` and `ABC-115`'s `## Residual
+  ruling`. Comment lines only (+3/−3).
+- **`A1`, re-taken at this hop** (Node v26.11.0): exit `1`, `^usage: ` **0**, `internal error`
+  **0**, banner on `src/cli.ts:160`. Repro: exit `1`, no `CAUGHT:`; with stdout writable, exit 0.
+  Control `--bogus`: exit `1`, `^usage: ` **1**.
+- **Content search** (`…9016b077`): no CLAIM-B site beyond S1–S11. `…8d7cad3b:80` was judged not a
+  site. CLAIM-A sites and QE-117-d's four lines were not touched.
+- **Fences:** `plans/board.md`, the `ABC-115` page, `ADR-0016`, `nfr-catalog.md` and `AGENTS.md` are
+  untouched by this delta. No existing note was modified. Production `src/` is empty. 0 non-`//`
+  lines under `src/`. `it(`/`expect(` count 393 at both ends. NFR 8-row hash is `c74e7426…0d3b`. No
+  `N8_SPAWN`/`spawned`/`CHILDREN` line changed, so `T2` is not fired.
+- **Gates at `7bf4c61e`:** lint, typecheck, build and `npm test` all exit 0. `npm test` ran 56 files
+  and 1741 tests with 0 pending, and `.test-results/last-run.json` reads `success: true`. Skip
+  integrity reads `No findings.` at 0. **UAT waiver:** the production `src/` list is empty.
