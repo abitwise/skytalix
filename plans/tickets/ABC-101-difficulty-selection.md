@@ -73,7 +73,10 @@ that does it.
 3. **The level is fixed for the session.** Chosen once at startup, never changed mid-game; there is
    **no `difficulty` session command** and none is cut. *(A mid-session change would mean the engine's
    strength changes between two plies of one game, which no epic asks for — coding rule 5.)*
-4. **The human is told once, at startup, on the line above the first board — not in the status
+4. *(WITHDRAWN 2026-10-12 by BA/PM: on a TTY the line is overwritten by the first frame
+   (`src/frame.ts:236-240`). This MVP shows the level nowhere. The player typed it, and a wrong value is
+   refused by name. A panel cell stays a separate ticket against the frame contract, if the owner wants
+   one.)* ~~**The human is told once, at startup, on the line above the first board — not in the status~~
    panel.** The panel is redrawn every ply and its shape is `ADR-0009`/`ABC-041`'s merged frame
    contract with `NFR-002` over it; a per-frame cell for a value that **cannot change** (ruling 3)
    buys nothing and re-opens a gated module. *(Counter-argument, recorded: most chess UIs show the
@@ -90,7 +93,12 @@ guessed here in any form.**
   established `--colour` shape: the flag and its value words are members of `ACCEPTED_ARGUMENTS`, so
   the accepted set stays **closed** and the default branch keeps rejecting everything else.
 - **`ResolvedOptions` carries the chosen level** — one ordinal field, defaulted per ruling 2.
-- **One startup line** naming the level, above the first frame (ruling 4).
+- ~~**One startup line** naming the level, above the first frame (ruling 4).~~ *(Struck 2026-10-12, BA/PM
+  re-score: on a TTY the first frame starts with cursor-home, so the line is overwritten. See § Re-score.)*
+- *(Added 2026-10-12)* **The level reaches the engine.** The composition root's `engine:` is built from
+  `LEVELS[level]` through `createLevel` (`ABC-087`, `src/levels.ts:110`). It is wrapped as an `EngineSeam` the
+  way `createEngine` wraps `chooseMove` (`src/engine.ts:518-523`), with the seed taken from
+  `Math.floor(Math.random() * 2 ** 32)` (`ADR-0037` D3).
 - **The `USAGE` literal** in `src/cli.ts:57` gains the new option, keeping the `--` separator
   (`ABC-066`'s repair) and staying a runnable command.
 - **The three merged guards this necessarily trips**, updated as part of this ticket rather than
@@ -129,7 +137,12 @@ guessed here in any form.**
   bare `--difficulty` at the end of the line, **then** each returns `ok: false` with the offending
   token named and **no** resolved options. *(`0` and `6` are the boundary pair; a
   `parseInt`-and-hope implementation accepts both.)*
-- **`A4` (one startup line, and exactly one).** **Given** `npm run chess -- --difficulty 5`, **when**
+- ~~**`A4` (one startup line, and exactly one).**~~ *(STRUCK 2026-10-12 with ruling 4. On a TTY tall
+  enough for the frame, `beginFrameSession` writes `CURSOR_HOME` before every frame (`src/frame.ts:236-240`),
+  so a line printed above the first frame is overwritten before the player can read it. A spawned child's
+  stdout is not a TTY, so it takes the append path, where this criterion would have passed. That is a green
+  test for something no interactive player sees. Text kept below for one re-score.)*
+  ~~**Given** `npm run chess -- --difficulty 5`, **when**~~
   the process runs, **then** stdout's **first** line names the level, the frame follows it
   unchanged, and the total row count is **the previous count + 1** — asserted against
   `ABC-042`'s merged row-count assertion, updated by this ticket, not deleted by it.
@@ -144,11 +157,34 @@ guessed here in any form.**
   outside comments that cite this ruling, and `ResolvedOptions`' difficulty field is a plain ordinal
   with no unit in its name or type. *(The instrument is a grep and it is deliberately crude; the
   criterion it guards is that this layer attaches no meaning to a level.)*
-- **`A8` (the level reaches no engine, and that is asserted rather than assumed).** **Then**
+- **`A8′` (the level reaches the engine, and nothing in `EPIC-004` moves)** *(replaces `A8`, 2026-10-12)*.
+  - **Given** each level `N` in `1`…`5`, a seed `s` and an injected clock, **when** the seam the root builds
+    for `N` is asked for a move, **then** it returns the move `createLevel(LEVELS[N], { seed: s, now })`
+    returns on the same position. This is asserted for every `N`, on at least one position where level `1`'s
+    first draw blunders.
+  - **Given** no `--difficulty`, the root builds level `DEFAULT_LEVEL` (3), and
+    `LEVELS[DEFAULT_LEVEL]` equals `{ budgetMs: DEFAULT_BUDGET_MS, blunderRate: 0 }` by value. So a session
+    started without the flag plays as it does today.
+  - The table is read only with `Object.hasOwn(LEVELS, level)` (§ Security, forward note).
+  - **`src/turn-loop.ts`, `src/engine.ts`, `src/levels.ts`, `src/search*.ts` and `src/evaluate*.ts` are
+    byte-identical**, and `EngineSeam` is unchanged.
+- *(Added 2026-10-12)* **`A10` (`EPIC-006` criterion 4, on a real child).** **Given**
+  `node src/cli.ts --colour black --difficulty 1 --ascii`, **when** the child starts, **then** no prompt
+  appears, the engine moves first as white with a legal move, and the child exits **0** on `quit`. This is a
+  `CLI_DEEP` row in `src/cli.real-engine.test.ts`, never the default lane.
+- *(Added 2026-10-12)* **`A3`, extended:** the accepted level words equal `Object.keys(LEVELS)`. A test reads
+  both, so the flag and the table cannot drift apart.
+- ~~**`A8` (the level reaches no engine, and that is asserted rather than assumed).**~~ *(STRUCK
+  2026-10-12. `EPIC-004`'s mapping landed with `ABC-087` (`b696d8e8`), and a flag that changes nothing is no
+  longer the slice.)* **Then**
   `src/turn-loop.ts` is **byte-identical**, `EngineSeam`'s signature is unchanged, and no module
   under `src/` reads the difficulty field except the entry point and its own tests.
   *(This ticket ships a selection with no effect. Making the effect real is `EPIC-004`'s and a seam
   change; asserting the seam did not move here is what keeps the two apart.)*
+- *(`A9` amended 2026-10-12: the allowed set is `src/cli-options.ts`, `src/cli.ts`, `src/cli.test.ts`,
+  `src/cli.real-engine.test.ts`, `AGENTS.md`, and **at most one new flat `src/` module** for the level
+  adapter, if the Engineer does not put it in `src/cli.ts`. New test files: **0**, or 1 if declared before
+  the reading.)*
 - **`A9` (nothing else changed).** `git diff --numstat` shows `src/cli-options.ts`, `src/cli.ts`,
   their two test files and `AGENTS.md` — and nothing else. Suite green, skip **0**.
 
@@ -225,6 +261,8 @@ deliberately instead of meeting them at the gate:
    comment the grep tolerates, or the criterion becomes a nuisance and gets deleted — which is the
    failure mode it exists to prevent.
 5. **Do not write a test that asserts what a level does.** There is nothing to assert; `A8` says so.
+   *(Amended 2026-10-12: assert that the root's seam is EQUIVALENT to `createLevel` for each level (`A8′`),
+   and never that a level is strong or weak. Strength is `ABC-085`/`ABC-146`'s.)*
 
 ## Lane cost — how many test FILES this ticket implies
 
@@ -272,3 +310,84 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 **Not inflated.** Items 1–9 are clean because the selection layer is fully specified and buildable
 today. Item 10 is honest: **this ticket delivers a flag that does nothing until `EPIC-004` lands**,
 and pretending otherwise would be smoothing.
+
+## Re-score — 2026-10-12
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-rescore-backlog-product`, Workflow 07), at `main` `1eb2edbc`.
+This is the first re-score since the cut on 2026-08-16. **Result: 10 of 10. Recommended for `Ready`. `M`.
+Priority `P2 → P1`, because the page's own promotion trigger has fired.** The front matter still reads `P2`. The
+board row and front matter are the Orchestrator's to sync. Readings and commands:
+`.grugops/context/bapm-rescore-backlog-product/notes/`. No timing was read.
+
+**Item 10 (a), `EPIC-004` owes the level mapping: DISCHARGED.**
+- `ABC-087` merged as `b696d8e8`. `src/levels.ts:42-52` exports `LEVELS` keyed **1–5** (budgets 100 / 500 /
+  3,000 / 4,000 / 4,500 ms; blunder rates 0.4 / 0.2 / 0 / 0 / 0), with `DEFAULT_LEVEL = 3`,
+  `EASIEST_LEVEL = 1` and `HARDEST_LEVEL = 5`. That matches rulings 1 and 2 exactly.
+- The budgets are time-based, which is `RISK-002`'s constraint. The hardest level stays under
+  `HARD_CEILING_MS` = 5,000 (`src/engine.ts:129`).
+- **The promotion trigger ("the day `EPIC-004`'s level mapping lands") has fired: `P1`.**
+
+**Item 10 (b), `EngineSeam` cannot carry a level: DISCHARGED, and no contract change is needed.**
+- `createLevel(level, { seed, now })` returns a per-instance closure over a `Position` (`src/levels.ts:110`).
+  That is the "curried seam built at startup" shape the page named first.
+- Turning it into an `EngineSeam` (`src/turn-loop.ts:150`) takes a wrapper the size of `createEngine`, which is
+  5 lines at `src/engine.ts:518-523`. `EngineSeam` does not move.
+- The seed source is already ruled: `ADR-0037` D3, "when `ABC-101` wires a level", `Math.floor(Math.random() *
+  2 ** 32)`.
+
+**Item 3 (independence): ✅. The owner's 2026-10-10 word confirms the vocabulary.**
+- "Levels 4 and 5 run as specified" chose option (a) on `ABC-085` `A2`. Option (b), re-cutting the levels above
+  the default, was the one that would have changed this ticket's vocabulary. It was refused.
+- A RED 3v4 or 4v5 in `ABC-146`'s verdict is `ABC-087`'s finding. Any later change to the level set moves one
+  array, and the extended `A3` follows it. **This ticket does not wait for `ABC-146`.**
+- **Owner question 5 is answered** (book over level, KEEP, `…b7c41e09` item 4). When both this ticket and
+  `ABC-095` have landed, `engine:` is `ABC-095`'s decorator around this ticket's level seam.
+
+**Scope changed, by BA/PM ruling:**
+- **The flag now takes effect.** `A8` is replaced by `A8′`, and `A10` is added.
+- **The startup line is cut.** Ruling 4 is withdrawn and `A4` is struck. The reason is measured: in-place
+  redraw overwrites it on a TTY (`src/frame.ts:236-240`). One consequence: `ABC-042`'s row-count assertion is
+  **no longer touched**.
+- A selection that "reaches no engine" was the right slice only while there was no engine. Shipping it now
+  would be a flag that changes nothing, which is not valuable (INVEST).
+- **Negotiable:** if the owner wants the level visible during play, that is a separate ticket against the frame
+  contract. This is not an owner question that blocks the ticket.
+
+**Every guard line the page cites, re-located at `1eb2edbc`:**
+
+| page said | today |
+|---|---|
+| `src/cli-options.ts:46-53` (6 tokens) | `:46-53`, the same 6 tokens |
+| default branch `:136-138` | `:136-138` (`return reject(UNRECOGNISED, token)` at `:138`) |
+| `src/cli.ts:57` `USAGE` | `src/cli.ts:88` |
+| `src/cli.test.ts:383` rejection fixture | `CHILDREN.difficulty` at `:703`, used at `:1212` (`A6(iii)`) |
+| `src/cli.test.ts:410-412` TABLE equality | `:1236-1241` |
+| `src/cli.test.ts:884` every argument spawned | `:2087-2090` |
+| `src/cli.test.ts:931-956` `devRunSlot` | `:2110-2141` |
+| `src/turn-loop.ts:138` `EngineSeam` | `:150` |
+
+**Size `M` holds.** Taking the startup line and the row-count churn out roughly pays for the adapter and one
+`CLI_DEEP` row. The split line, if needed: **(a)** flag, set and default (`A1`–`A3`, `A7`); **(b)** wiring,
+`USAGE`, `AGENTS.md` and guards (`A5`, `A6`, `A8′`, `A9`, `A10`). Each half is `S`.
+
+**Triggers:**
+- **Production lines (`src/cli.ts`, `src/cli-options.ts`), so the owner's UAT word is needed.**
+- **`In Security/NFR`:** the forward note's `Object.hasOwn` rule now binds, and **`AR-NFR004-A` is re-read**
+  the first time a played move goes through a level, which happens here.
+- `CLI_DEEP` runs at QE, as it does after any `src/cli.ts` change.
+- **`ABC-146` is not made stale.** `src/levels.ts`, `src/engine.ts` and the engine trigger list stay
+  byte-identical (`A8′`).
+- **File overlap with `ABC-095`** on the same `engine:` expression. Build them in sequence, not in parallel.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | ✅ the flag is still refused today (`CHILDREN.difficulty` is a rejection fixture) |
+| 2 | scope and out-of-scope clear | ✅ re-drawn: wiring in, startup line out |
+| 3 | INVEST-shaped | ✅ *(was ⚠️)* independent: the mapping is merged and the vocabulary is confirmed |
+| 4 | acceptance testable and measurable | ✅ `A8′` equivalence on an injected clock and seed; `A10` on a real child |
+| 5 | dependencies known | ✅ |
+| 6 | security/NFR triggers with a measurable target | ✅ `N8-LANE`; `Object.hasOwn`; `AR-NFR004-A` re-read |
+| 7 | test notes present | ✅ (note 5 now reads: assert equivalence to `createLevel`, never a strength) |
+| 8 | size assigned | ✅ `M` |
+| 9 | priority assigned | ✅ **`P1`** (the trigger fired) |
+| 10 | no major unresolved blocker | ✅ *(was ⚠️⚠️)* |

@@ -265,7 +265,10 @@ figure is what let `ABC-023` go stale between `ABC-022`'s merge and the morning 
   **zero extra rows** rather than enumerated. Each row asserts the occupant byte on the corridor
   square in **type and colour** before reading any outcome. **The discriminating requirement:**
   dropping any one square from any one option's `empty` array must fail **exactly its own row and no
-  other**, with `PERFT_DEEP` unset.
+  other**, with `PERFT_DEEP` unset. *(Amended 2026-10-12, BA/PM re-score: read "no other" as **no other
+  `A1` row**. At `1eb2edbc`, the `BQ` d8 mutant already fails one unrelated row,
+  `tools/opening-book/book.test.ts` "A2 — every book move is legal…". So a whole-suite "no other" could not
+  be met before a line was written.)*
   *(Measured 2026-08-10 at 625: `rn2k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1` → `gen[e8g8]`, **25** legal;
   `r1b1k2r/…` → `gen[e8g8]`, **30**; `r2qk2r/…` → `gen[e8g8]`, **39**; `r3k1nr/…` → `gen[e8c8]`,
   **26**; the enemy-occupant row `rN2k2r/…` → `gen[e8g8]`, **22**. Four of the ten mutants — `BQ` b8,
@@ -284,7 +287,9 @@ figure is what let `ABC-023` go stale between `ABC-022`'s merge and the morning 
   2** castles at **26** moves, proving the RIGHT test is the mechanism and not the scalars suppressing
   castling globally. **The discriminating requirement:** each of "the right test skipped when
   `halfmoveClock !== 0`", "… when `fullmoveNumber !== 1`" and "… when an en-passant square is set"
-  must fail at least one row, with `PERFT_DEEP` unset.
+  must fail at least one row, with `PERFT_DEEP` unset. *(Amended 2026-10-12: **at least one `A2` row**. At
+  `1eb2edbc` the `fullmoveNumber` mutant already fails `src/search.ordering.test.ts`'s "262 nodes" row,
+  which names no castling.)*
   *(Measured 2026-08-10 at 625: `4k3/8/8/8/8/8/8/R3K2R w - - 5 9` → 0 castles, **24** legal;
   `r3k2r/8/8/8/8/8/8/4K3 b - - 5 9` → 0, **24**; `4k3/8/8/2p5/8/8/8/R3K2R w - c6 0 12` → 0, **24**;
   `r3k2r/8/8/8/2P5/8/8/4K3 b - c3 0 12` → 0, **24**; the control `4k3/8/8/8/8/8/8/R3K2R w KQ - 5 9` →
@@ -314,8 +319,10 @@ figure is what let `ABC-023` go stale between `ABC-022`'s merge and the morning 
   **`6335b452fc21ffe2d0f902ecab930840`**, **no existing test row is modified or deleted in any file —
   the diff to `src/moves.castling.hardening.test.ts` is ADDITIONS ONLY and no other file under `src/`
   is touched** — verified at line level with `git diff -U0`, not by inspection — the full suite is
-  green (**625 before this ticket's rows**, plus them) with a **skip count of 0**, and the
-  `PERFT_DEEP=1` lane is **32/32** exact.
+  green (~~**625 before this ticket's rows**~~ *(amended 2026-10-12)* **the count on the ticket's own branch
+  point before this ticket's rows (1775 on 57 files at `1eb2edbc`)**, plus them) with a **skip count of
+  0**, and the `PERFT_DEEP=1` lane is **32/32** exact (re-read 2026-10-12 at `1eb2edbc`:
+  `PERFT_DEEP=1 npx vitest run src/perft.test.ts`, 32/32, exit 0).
   *(The hash is `src/moves.ts` on branch `grugops/ticket-to-pr-ABC-023`, measured with `md5 -q` at
   this hop and re-asserted after every one of this hop's 14 mutants. **It goes stale the moment any
   ticket changes `src/moves.ts`** — that is what happened to `ABC-023` when `ABC-022` merged, and the
@@ -325,10 +332,16 @@ figure is what let `ABC-023` go stale between `ABC-022`'s merge and the morning 
 
 - **`A5` (the rows close the hole in the DEFAULT lane — the deep lane is the witness, never the net).**
   **Given** the rows from `A1`–`A3`, **when** each named discriminating mutant is run against
-  `npm test` **with `PERFT_DEEP` UNSET**, **then** each **dies** — a mutant that dies only under
+  `npm test` **with `PERFT_DEEP` UNSET**, **then** each **dies** *(amended 2026-10-12: **on an `A1` or `A2`
+  row**; an incidental kill elsewhere does not count)* — a mutant that dies only under
   `PERFT_DEEP=1` has **not** been closed by this ticket and the row is not yet load-bearing — and
   **when** the **fifteen** behaviour-equivalent controls `ABC-009` established and `ABC-023`'s `A5`
-  enumerates are run, **then all fifteen still SURVIVE**, killed count **zero**.
+  enumerates are run, ~~**then all fifteen still SURVIVE**, killed count **zero**~~ *(amended
+  2026-10-12)* **then every control that survives the base's suite still survives with this ticket's rows.
+  The controls run on the base first, and the base's survivor set is recorded. The bar is zero kills added
+  by this ticket.** *(The suite grew from 625 to 1775 tests, and it now carries node-count pins: the
+  `fullmoveNumber` mutant dies on the "262 nodes" row. So a control that reorders generation may already
+  die at base, through no row of this ticket.)*
   *(That second half is the half that catches good-looking work: a row killing an equivalent mutant
   pins implementation shape instead of behaviour. `ABC-023`'s QE hop measured all fifteen surviving at
   **625/625** with the deep lane 32/32, killed count zero — that is the starting state these rows must
@@ -565,3 +578,74 @@ the new ⚠️ is a staleness in this ticket's own record rather than a new risk
 **Result: 9 of 10, DoR NOT met, stays in `Backlog`, not smoothed.** What is needed before `Ready` is
 one dev/QE re-measurement hop against 807 on 28 files: re-run the fourteen mutants, re-score the seven
 survivors, and fix `A4`'s number. `Backlog` is unlimited; no WIP limit is approached.
+
+## Re-score — 2026-10-12
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-rescore-backlog-product`, Workflow 07), at `main` `1eb2edbc`.
+**Result: 10 of 10. Recommended for `Ready`. `S`, `P2`, unchanged.** I did the re-measurement the 2026-08-12
+re-score asked a dev/QE hop for. It was a scratch copy of the tree outside the repository (`git archive`,
+`node_modules` symlinked there, never in a checkout), one run of the default lane per mutant, `PERFT_DEEP`
+unset, and `src/moves.ts` re-hashed after every mutant. The runner and raw output are in
+`.grugops/context/bapm-rescore-backlog-product/notes/`. **No timing was read. No file under `src/` in any
+checkout was written.**
+
+**The ⚠️ on item 4 is DISCHARGED.**
+- `md5 -q src/moves.ts` → **`6335b452fc21ffe2d0f902ecab930840`**, the same file as at the cut. Its last commit
+  is still `52c7b006`.
+- The `CastleOption.empty` arrays are at `src/moves.ts:295-313`.
+- The baseline default lane is **1775/1775 on 57 files**, skip 0.
+- `PERFT_DEEP=1 npx vitest run src/perft.test.ts` is **32/32**, exit 0. The deep lane is still opt-in and in
+  no gate.
+
+**The seven survivors at 1775 on 57 files:**
+
+| mutant | 2026-08-10 at 625 | 2026-10-12 at 1775 | killed by |
+|---|---|---|---|
+| `BK` g8 dropped | survived | **survived** | nothing |
+| `BQ` b8 dropped | survived | **survived** | nothing |
+| `BQ` c8 dropped | survived | **survived** | nothing |
+| `BQ` d8 dropped | survived | killed, 1774/1775 | **one incidental row**: `tools/opening-book/book.test.ts` "A2 — every book move is legal…" |
+| right test skipped when `halfmoveClock !== 0` | survived | **survived** | nothing |
+| right test skipped when `fullmoveNumber !== 1` | survived | killed, 1774/1775 | **one incidental row**: `src/search.ordering.test.ts` "…visits 262 nodes" |
+| right test skipped when an ep square is set | survived | **survived** | nothing |
+| control: whole `empty` test removed | killed 605/625 | killed, 94 failures over 28 files | (the class is still discriminable) |
+| control: right test removed | killed 623/625 | killed, 1772/1775 | `NO_RIGHT_HELD` ×2 + the 262-node row |
+
+**The problem still holds, and the ticket is not obsolete.**
+- Five of the seven still pass the whole default lane.
+- The other two die only on a book-legality sweep and a node-count pin. Neither names castling, and either goes
+  silent if the book or the search's move ordering changes. That is the page's reason 3 ("the margin is one
+  assertion") in a new place.
+
+**Every witness FEN re-run at `1eb2edbc`.** All ten parse under `ABC-010`'s stricter `parseFen` (`1304cc2c`,
+`ADR-0033`). All ten give the page's exact castles and legal counts: 25, 30, 39, 26, 22; 24, 24, 24, 24; and
+the control `e1g1 e1c1` at 26.
+
+**Amended (dated in place):**
+- **`A1`'s "no other row"** now means no other `A1` row. The d8 mutant already fails one unrelated book row.
+- **`A2`'s "at least one row"** now means at least one `A2` row, and **`A5`'s kills** must land on an `A1` or
+  `A2` row. Otherwise d8 and the `fullmoveNumber` mutant would read as closed today, before a line is written.
+- **`A4`'s count** is the base's own (1775 on 57 at `1eb2edbc`), and the deep lane is re-read 32/32.
+- **`A5`'s fifteen equivalent controls** are now a **delta against the base's survivor set**, because the
+  node-count pins added since August may kill some of them at base. I did not run the fifteen. They are
+  `ABC-009`'s and `ABC-023`'s enumeration, and running them is the delivering hop's first step.
+
+**Unchanged:**
+- The **two** escalation triggers in § Dependencies were re-checked and have not fired. `src/moves.ts` is
+  unchanged, and `EPIC-004` has not rewritten the `CastleOption` tables.
+- No production change is expected, and 0 new test files.
+- The other figures quoted in this page's Problem still read the 2026-08-10 state (625 tests, 1.2 s, and
+  36.5–39.8 s for the deep lane). They are history, not criteria.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | ✅ re-measured: 5 of 7 survive, 2 are held by one incidental row each |
+| 2 | scope and out-of-scope clear | ✅ |
+| 3 | INVEST-shaped | ✅ |
+| 4 | acceptance testable and measurable | ✅ *(was ⚠️)* counts re-based; `A1` and `A5` made meetable at today's tip |
+| 5 | dependencies known | ✅ |
+| 6 | security/NFR triggers with a measurable target | ✅ rows in an existing file; 0 new files |
+| 7 | test notes present | ✅ |
+| 8 | size assigned | ✅ `S` |
+| 9 | priority assigned | ✅ `P2`. `EPIC-004`'s rewrite of move generation has not started (`src/moves.ts` unchanged) |
+| 10 | no major unresolved blocker | ✅ |

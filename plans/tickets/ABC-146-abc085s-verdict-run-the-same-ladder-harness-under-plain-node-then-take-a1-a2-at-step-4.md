@@ -77,7 +77,11 @@ with a digest check that proves the cheaper route plays the same games.
 
 ## Acceptance (Given/When/Then)
 
-- **`A1` (the move is verbatim, read by digest).** **Given** the base commit (the merged `ABC-085` harness)
+- **`A1` (the move is verbatim, read by digest).** **Given** ~~the base commit (the merged `ABC-085` harness)~~
+  *(amended 2026-10-12, BA/PM re-score)* **this ticket's own branch point on `main`, which must contain
+  `f00038ef` (`ABC-083`) and `7a920ca5` (`ABC-152`) — never `1031911b`**, whose engine predates `ABC-083`
+  and whose runner predates `ABC-152`, so its digests differ for reasons that are not the move and the pair
+  straddles `ADR-0040` d5 —
   and this ticket's head, **when** `LADDER_DEEP=1 npx vitest run src/ladder.test.ts` runs on each, **then**
   both print **the same five pair digests and the same `A5` digest**, and the file's `it` count is the same
   at base and head, unset and with `LADDER_DEEP=1`.
@@ -108,8 +112,10 @@ with a digest check that proves the cheaper route plays the same games.
   - **`ABC-085` `A2`:** every adjacent pair's score over ≥ 20 games, as **MET or RED against > 50 %**, with
     **3v4 and 4v5 run first**;
   - the claimed draws per pair (`ABC-085` `A3`);
-  - **100/100 games terminate and 100/100 replay legally** (`ABC-085` `A3`, `A4`). A failure of either exits
-    non-zero, and no score is quoted from that run.
+  - ~~**100/100 games terminate and 100/100 replay legally**~~ *(amended 2026-10-12: the verdict plays
+    **180** games — 100 for 1v5 plus 4 adjacent pairs × 20, `ladderPlan` at `src/ladder.test.ts:249-261`)*
+    **every game of the run terminates and replays legally: 180 of 180, and 180 of 180** (`ABC-085` `A3`,
+    `A4`, "any run"). A failure of either exits non-zero, and no score is quoted from that run.
 
   A RED `A1` or `A2` is a real score and `ABC-087`'s finding. It does not hold this ticket open and it is not
   a delivery defect (`ABC-085` `A2`).
@@ -204,3 +210,74 @@ BA/PM, 2026-10-11. **Result: 9 of 10, ⚠️x1 (item 10). Stays in `Backlog`.**
 | 10 | no major unresolved blocker | **⚠️** ~~the `ADR-0038` addendum is PROPOSED, and~~ `ABC-083` is `Blocked`. **Re-score to 10/10 when ~~the owner accepts and~~ `ABC-083` merges.** *Re-scored 2026-10-11 (BA/PM, `bapm-cut-abc147-lever`): the addendum is ACCEPTED and `ABC-085` is merged; `ABC-083`'s merge is the only open part. Still 9/10, still `Backlog`* |
 
 Column moves are the Orchestrator's.
+
+## Re-score — 2026-10-12
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-rescore-backlog-product`, Workflow 07), at `main` `1eb2edbc`.
+**Result: 8 of 10, ⚠️x2 (items 1 and 10). Stays in `Backlog`. One owner question.** No timing was read here;
+every wall figure below is cited. Readings and commands: `.grugops/context/bapm-rescore-backlog-product/notes/`.
+
+**Discharged.**
+- **The owner's acceptance.** The `ADR-0038` addendum is **accepted** (ADR § Status, line 12: "ACCEPTED
+  2026-10-11", note `…7089c972`). No ADR acceptance is owed. The addendum's own heading (ADR line 196) still
+  reads "PROPOSED; owner acceptance owed". That is stale text in the ADR, and it is Architect/Design's to fix.
+- **`ABC-083`'s merge.** Merged as `f00038ef` on 2026-10-11 (`git merge-base --is-ancestor f00038ef 1eb2edbc`
+  exits 0). The board row still says "Only ABC-083's merge is open". That is stale too.
+- **The harness and the step still match today's code.** `src/ladder.test.ts` is byte-identical to `1031911b`
+  (`git diff 1031911b 1eb2edbc -- src/ladder.test.ts` is empty; md5 `bba67b75565b4f4a2e8d231e8bcd6b2e`).
+  `VERDICT_STEP = 4` and `SHORT_STEP = 120` are at `:48-50`. `LADDER_DEEP=verdict` is accepted at `:70`.
+  `src/levels.ts` and `src/virtual-clock.ts` are unchanged since `1031911b`. `src/evaluate.ts` changed by
+  `ABC-083`, which is the tree the verdict is meant for. On vitest 4.1 with the runner off, `LADDER_DEEP=1`
+  ran green at the `ABC-152` tip (56 files, 1746/1746, `…ac190931`).
+
+**New ⚠️, item 1: the problem's premise is no longer known to hold.** The pain was a **~4.35x per-node
+cost inside vitest** (`…70684a78`). `ADR-0041` names the cause as vite's module runner. **`ABC-152` turned that
+runner off** (`vitest.config.ts` `experimental.viteModuleRunner: false`, merged `7a920ca5`). Cited evidence
+that the factor went with it (none of it is a paired factor reading on `chooseMove`):
+- `PUZZLE_DEEP=1`'s printed wall is **3.96 s against 19.95 s** (paired, n = 4, Security/NFR `…bceca0ca`);
+- `LADDER_DEEP=1` across the whole suite took **191 s** at the runner-off tip (`…ac190931`, unpaired, reported
+  only). That sits beside the **~195 s** this page projects for the `node` equivalence check, and against the
+  **848 s** file-only reading with the runner on.
+- If the factor is gone, the vitest verdict also costs about **~10 h (7–13)**. Then scope items 1–4 (move the
+  harness, add an entry, two globs and a refusal) buy almost nothing. This is `UNKNOWN - verify` until a
+  paired factor reading is taken. I took none.
+
+**New ⚠️, item 10: the route is the owner's.** He accepted the `node` route on the 4.35x premise.
+
+**Owner question (exact):** *"`ABC-152` turned vitest's module runner off. `ADR-0041` says that runner caused
+the ~4.35x cost that made you accept the `ADR-0038` addendum (the verdict under plain `node`). Do you want:
+**(a)** the verdict taken inside vitest as `LADDER_DEEP=verdict npx vitest run src/ladder.test.ts`, with no new
+code, if one paired re-read of the factor puts that run inside the 7–13 h band you accepted; or **(b)**
+`ABC-146` built as you accepted it, with the harness moved to `tools/ladder/` and run under plain `node`?"*
+- **On (a):** Architect/Design writes a second `ADR-0038` addendum, and Security/NFR takes the paired re-read
+  at width 1. `A1`–`A4` are cancelled. `A5` and `A6` stand, with the command
+  `LADDER_DEEP=verdict npx vitest run src/ladder.test.ts`. Size stays `XS`. It is then a run plus a report.
+- **On (b):** the page stands as amended above. DoR goes to 10/10.
+
+**Criteria amended (dated in place above):**
+- **`A1`'s base** is now the ticket's branch point (must contain `f00038ef` and `7a920ca5`), not `1031911b`.
+- **`A5`'s game count** is now **180 of 180**, not 100/100. The verdict plays 100 + 4 × 20 games
+  (`src/ladder.test.ts:53-56`, `:249-261`).
+
+**What pulling it means (either route).**
+- **It holds one core for ~10 h (7–13).** The verdict is counts, so other hops cannot spoil it.
+- **It does spoil every timing window that overlaps it** (`A6`): `ABC-144`-style windows, any `ADR-0035`
+  reading, and any QE width-1 lane re-read. So the Orchestrator schedules it at a time when no timing window
+  is owed, for example overnight, and holds every width-1 window until it ends.
+- **The other tickets here do not make it stale.** `ABC-095` and `ABC-101` edit `src/cli.ts` and add a
+  decorator or adapter. Neither touches the `PUZZLE_DEEP` engine trigger list, `src/levels.ts` or
+  `src/virtual-clock.ts`. `ABC-024` adds test rows only.
+- **`QE2-085-a`** (LOW, optional before the verdict; `ABC-085` page line 468) is still not built.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **⚠️** the 4.35x premise is unverified after `ABC-152`; the cited evidence says it is gone |
+| 2 | scope and out-of-scope clear | ✅ |
+| 3 | INVEST-shaped | ✅ (it is negotiable, and that is the question) |
+| 4 | acceptance testable and measurable | ✅ after the amendments: `A1`'s base is a real commit; 180 of 180 |
+| 5 | dependencies known | ✅ every named dependency is merged or accepted |
+| 6 | security/NFR triggers with a measurable target | ✅ |
+| 7 | test notes present | ✅ |
+| 8 | size assigned | ✅ `XS` on either route |
+| 9 | priority assigned | ✅ `P1` |
+| 10 | no major unresolved blocker | **⚠️** the route needs the owner's word |
