@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-148` delivered → In Review; QE hop dispatched (A5, author ≠ validator)._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word "yes, pull them": `ABC-148`, `ABC-145`, `ABC-117` → In Development (3/3, SE hops in parallel); `ABC-116` held for a width-1 window after them._
 _Updated: 2026-10-12 by the Orchestrator — Scribe ABC-152 AGENTS.md merged (24,494 B); FCAP ruled (`d18355aa`): full-lane F kept (1.72 s / 3.25 s) until the first 4.1 twin R; RISK-ABC144-FCAP open (low). Wave work in flight: none._
 _Updated: 2026-10-12 by the Orchestrator — `ABC-152` → Done (vitest 4.1.11, runner off; CPU −20.7 %; merged `7a920ca5`); branch deleted; quiet window closed. Scribe + Architect follow-ups dispatched._
@@ -716,8 +717,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 3/3)
-- [ABC-148] The binder-count comment lists two forms as open that `tsc` already closes  (BA/PM, **XS, P3**, epic: —, since: 2026-10-11, **DoR 10/10**; from QE-114-c; author ≠ validator) **2026-10-12: pulled → In Development (SE, width 3, base `61aef6e6`).**
+## In Development (WIP 2/3)
 - [ABC-145] The book compiler stamps its source commit and never checks the source bytes  (BA/PM, **XS, P3**, epic: EPIC-005, since: 2026-10-11, **DoR 10/10**; cut from QE-093-b per Architect `…e95791ae`; → P2 and merge first if a hop changes `SOURCE_COMMIT` or regenerates the book) **2026-10-12: pulled → In Development (SE, width 3, base `61aef6e6`).**
 - [ABC-117] The record says a failed non-`EPIPE` stdout write exits `1` = `USAGE_EXIT_CODE` — it does not, and the fix a future hop would reach for cannot work  (BA/PM, **XS, P3**, epic: EPIC-006, since: 2026-08-21, **DoR 9/10 ⚠️x1 — PULLABLE TODAY; the ⚠️ is item 5 and it is a DISCLOSED ORDERING HAZARD with a named fallback — S7 sits on `ABC-115`'s page while that ticket is `Ready for UAT` and UNSIGNED — not an open question.**) Cut from QE/E2E's `G-QE115-5` hop, which named it `XS`/`P3`/BA-PM and refused to cut it. **RE-MEASURED HERE, NOT INHERITED: delivered build on a read-only fd exits 1 with the banner at `src/cli.ts:159`, `Usage` count 0, `internal error` count 0 — neither `:140` nor `main`'s catch ran.** **SEVEN sites, not one note — five files, two substrates, one a DELIVERED COMMENT** (`src/cli.test.ts:2980`, `ABC-114`'s defect class). **A CLAIM-A/CLAIM-B split names the five TRUE sites a careless fix would break; touching one is a `FAIL` of `A5`.** **RULED DOCUMENTATION-ONLY — 0 production lines owed.** The product change owed by whoever CLOSES the residual is named, sized `S`, shape-forced (the `:159` arm must carry the outcome; a `try`/`catch` cannot reach a later-tick throw) **and NOT CUT.** **The residual, `ABC-115`, `ADR-0016`, `ADR-0017` and QE's PASS are NOT re-opened, and `ABC-115` is NOT signed and NOT moved.** **2026-10-10 re-score vs R-1 (merged `2174691a`): own trigger fired (ninth site, ABC-115 row); P3 → P2; DoR 10/10 → Ready.** **2026-10-12: pulled → In Development (SE, width 3, base `61aef6e6`).**
 
@@ -747,7 +747,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-148] The binder-count comment lists two forms as open that `tsc` already closes  (BA/PM, **XS, P3**, epic: —, since: 2026-10-11, **DoR 10/10**; from QE-114-c; author ≠ validator) **2026-10-12: pulled → In Development (SE, width 3, base `61aef6e6`).** **2026-10-12: delivered (tip `94ca6c7e`, gates green, 56/1741, 0 production lines) → In Review; QE `qe-ABC-148` owes A5.**
 
 
 
