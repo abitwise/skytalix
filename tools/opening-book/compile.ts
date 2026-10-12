@@ -12,6 +12,7 @@
  * Reproducible by construction (`A1`): keys sorted, moves sorted by UCI, no timestamp, no path.
  * The whole source is validated before a single byte is written (`A8`, D1(f)).
  */
+import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -25,6 +26,20 @@ import { zobristKey } from "../../src/zobrist.ts";
 /** The upstream commit this book is compiled from. Change it only with `ATTRIBUTION.md`. */
 export const SOURCE_COMMIT = "a6189a30dc273ccb21fc2536a9a2fefd5592a67a";
 export const SOURCE_FILES = ["a.tsv", "b.tsv", "c.tsv", "d.tsv", "e.tsv"] as const;
+type SourceFile = (typeof SOURCE_FILES)[number];
+
+/**
+ * `ABC-145`, `ADR-0037` D1(f) amendment: the sha256 of each source file's raw bytes at
+ * `SOURCE_COMMIT`. Change it only with `SOURCE_COMMIT` and `ATTRIBUTION.md`; a lane test pins the
+ * five values to that file's table.
+ */
+export const SOURCE_SHA256: Readonly<Record<SourceFile, string>> = {
+  "a.tsv": "3282e4c9155289a29224f9a85fba0decb46efa35c2fa5e39662d2ac48fb0f793",
+  "b.tsv": "1d5ed134ebbd87915ead5683416e37583bb3e5ae3582b4d8cb5cb4aa7ef4f623",
+  "c.tsv": "45e843c7b7e79a0d04d5bda879c9bd23f5a10974488bd8615e4f4c5d0749986f",
+  "d.tsv": "1cf4057a8aece94f27bb3f278ad410ee2844831a642364eeceaafa091dbcceda",
+  "e.tsv": "48c6f6645b031a5937c8386839debab0e2e48837251687ba1afb6369677f8546",
+};
 
 /**
  * `ADR-0037` D1(c): a move's weight is the number of source lines through it ("line-count").
@@ -136,6 +151,27 @@ export function writeBook(sourceDir: string, outPath: string, commit: string): v
   writeFileSync(outPath, compileBook(texts, commit));
 }
 
+/**
+ * The command-line path: checks every source file's sha256 against `expected`, and only then
+ * calls `writeBook`. A mismatch throws naming the file and both hashes; nothing is written.
+ */
+export function checkThenWriteBook(
+  sourceDir: string,
+  outPath: string,
+  commit: string,
+  expected: Readonly<Record<SourceFile, string>>,
+): void {
+  for (const file of SOURCE_FILES) {
+    const actual = createHash("sha256")
+      .update(readFileSync(join(sourceDir, file)))
+      .digest("hex");
+    if (actual !== expected[file]) {
+      throw new Error(`${file}: sha256 is ${actual}, expected ${expected[file]}`);
+    }
+  }
+  writeBook(sourceDir, outPath, commit);
+}
+
 if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const sourceDir = process.argv[2];
   if (sourceDir === undefined) {
@@ -143,5 +179,5 @@ if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.a
     process.exit(1);
   }
   const out = fileURLToPath(new URL("../../data/opening-book/book.json", import.meta.url));
-  writeBook(sourceDir, out, SOURCE_COMMIT);
+  checkThenWriteBook(sourceDir, out, SOURCE_COMMIT, SOURCE_SHA256);
 }
