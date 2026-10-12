@@ -161,3 +161,38 @@ BA/PM, 2026-10-12. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-12 (subtask `ticket-to-pr-ABC-154`). The branch is
+`grugops/ABC-154-positive-control-whole-tree-read`, from `main` `69a1f4b4`. That is a child of the brief's
+`c4822697` and changes only the board and the queue; the tool and the test are blob-identical to `8fd0c233`. The
+code commit is `0f8036f9`. The detail is in `.grugops/context/ticket-to-pr-ABC-154/notes/`. **No timing reading
+was taken.**
+
+- **Shape.**
+  - Inside `A3`'s unfiltered `it`, `allNotes()` must read `ABC-031` as `covered (qe-e2e)` and `ABC-072` as the
+    `security-nfr` substitute.
+  - Inside `A9`'s `--sweep` `it`, `plainSweep()` must not list either id as a finding.
+  - There is no new `it` and no new read. The tool's `main` JSDoc now says the command line can supply "none of
+    snapshotIds, root and notes".
+- **`A1`.** All three plants read **0 red on the base test** (32/32) and **2 red on the head test** (30/32: `A3`
+  unfiltered, `A9` --sweep). The unmutated head is 32/32. **PASS.**
+- **`A2`.** The 23 recorded plants plus `plants4.py`'s 9 were run on base and head. **Head ⊇ base by name on 32 of
+  32.** The 23 recorded plants are identical. The 9 QE4 plants each gain 1 or 2 red at head. **PASS.**
+- **`A3`.** The one changed line is in `main`'s JSDoc (line 223), and "neither" is gone from that block. **PASS.**
+- **`A4`** (read at `0f8036f9`):
+  - the diff is exactly the two files, with 0 new files;
+  - 0 spawn sites;
+  - whole-tree reads are 2 at base and **2** at head, by instrumentation;
+  - `--sweep` and `--sweep --json` stdout from the head tool are byte-identical to the base tool's;
+  - `npm test` reads 57 files / 1775 tests at base and at head, with 0 skips;
+  - integrity reads `No findings.`.
+
+  **PASS.**
+- **Gates.** Lint, typecheck, build and `npm test` all exit 0, and `last-run.json` has `success: true`.
+- **UAT-waiver reading.** `git diff --name-only 0f8036f9~1 0f8036f9 | grep -v '\.test\.ts$' | grep '^src/'` is
+  empty.
+- **Owed.**
+  - **The QE hop.** QE re-plants, and reads the `N8-LANE` narrow set at width 1 under `ADR-0035` A1.
+  - **The UAT rule.** The Orchestrator states which rule it applies (Test note 5).
