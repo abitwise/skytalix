@@ -27,3 +27,11 @@ Deliver: a typed `kind: decision` note with verdict **BUILDABLE AS WRITTEN / BUI
 
 ## Fences
 READ-ONLY on everything except your notes, one trace row at the END of `plans/traceability.md`, and a § QE re-check (2026-10-12) section appended to the ticket page; do NOT edit the page's criteria — amendments are BA/PM's. Do not touch `src/`, `tools/`, `AGENTS.md`, `plans/board.md`. Work in your OWN worktree (`git worktree add ../wt-qe-recheck-ABC-105 -b grugops/qe-recheck-ABC-105 main`). No `--force`, `-D`, `reset --hard`. Take no timing readings; run no test suite (not needed). Never merge or push. `diff` is a git wrapper; use `/usr/bin/diff` or `cmp`. End commits with a `Co-Authored-By:` trailer naming the model you are. Queue: `mkdir .grugops/queue/claimed/qe-recheck-ABC-105`, then at the end write FLAT files `.grugops/queue/done/qe-recheck-ABC-105.md` and `.grugops/queue/done/qe-recheck-ABC-105.claim.md` (not a directory); leave both uncommitted. Report: branch tip, verdict, each numbered item with its reading, and the gap register.
+
+## Result (qe-e2e, 2026-10-12T07:00:00Z)
+
+- Branch `grugops/qe-recheck-ABC-105`, tip `167d42ea` (base `21980135`), not merged, not pushed.
+- Verdict: **BUILDABLE WITH PAGE AMENDMENTS**. 2 HIGH (`QE-105-a` snapshot generation point, `QE-105-b` A2/ABC-076 refs reading), 6 MEDIUM, 7 LOW.
+- Notes: `.grugops/context/qe-recheck-ABC-105/notes/` — `…72ae8565` (decision, gap register), `…298a669e` (observation; the brief's `kind: evidence` is not a schema kind).
+- Page: § QE re-check (2026-10-12) appended, criteria untouched. One trace row appended.
+- No suite run, no timing read; 0 `src/`, 0 `tools/`, 0 `AGENTS.md`, 0 `plans/board.md` bytes.
