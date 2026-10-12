@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — `ABC-154` delivered (`beb0991c`) → In Review; QE dispatched (width 1). In flight: `qe-ABC-154`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word: pull `ABC-154` → In Development (SE dispatched, width 1). Ready: `ABC-155`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-ABC-105-lane` merged (`e7d8a09f`, gates green 57/1775): ADR-0035 A1 (twin admissible at max(1.5 %, one 10 ms tick), sign test on non-zero deltas, forward-only), `RISK-ABC105-LANE` (MEDIUM; triggers: next width-1 window, any edit to the tool/test, 4,000 notes), qe-hop-integrity set F = 0.020 s. Owner words of the day transcribed verbatim (note `…owner-word-2026-10-12-abc105-abc153-d8e82358`). Follow-up batch complete. In flight: none. Ready: `ABC-154`, `ABC-155`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-fold-ABC-105-153` merged (`ad5f3ac4`, gates green 57/1775): `ABC-154` and `ABC-155` cut → Ready (DoR 10/10). Next free id `ABC-156`. In flight: Architect `design-ABC-105-lane`._
@@ -747,8 +748,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-154] The QE-hop detector's test has no positive control on its whole-tree read — a `readNotes` that drops notes only on the unfiltered read goes 0 red  (BA/PM, **XS, P3**, epic: —, since: 2026-10-12, **DoR 10/10**; cut from QE-105-z (+ QE-105-y stale JSDoc folded in) in `bapm-fold-ABC-105-153` (merged `ad5f3ac4`). **Changes the N8-LANE set: its QE hop owes a lane re-read and must run at width 1.** Promotion trigger: any ticket that edits `readNotes`, the test's two memos, or the tool's note-reading path.) **2026-10-12: Architect (`e7d8a09f`): editing this test file fires `RISK-ABC105-LANE` trigger T-b — its QE lane re-read (width 1, pre-registered under ADR-0035 A1) also settles `QE-105-x`.** **2026-10-12: owner word "pull ABC-154" → In Development (SE `ticket-to-pr-ABC-154`, width 1, base `c4822697`).**
+## In Development (WIP 0/3)
 
 
 
@@ -776,7 +776,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-154] The QE-hop detector's test has no positive control on its whole-tree read — a `readNotes` that drops notes only on the unfiltered read goes 0 red  (BA/PM, **XS, P3**, epic: —, since: 2026-10-12, **DoR 10/10**; cut from QE-105-z (+ QE-105-y stale JSDoc folded in) in `bapm-fold-ABC-105-153` (merged `ad5f3ac4`). **Changes the N8-LANE set: its QE hop owes a lane re-read and must run at width 1.** Promotion trigger: any ticket that edits `readNotes`, the test's two memos, or the tool's note-reading path.) **2026-10-12: Architect (`e7d8a09f`): editing this test file fires `RISK-ABC105-LANE` trigger T-b — its QE lane re-read (width 1, pre-registered under ADR-0035 A1) also settles `QE-105-x`.** **2026-10-12: owner word "pull ABC-154" → In Development (SE `ticket-to-pr-ABC-154`, width 1, base `c4822697`).** **2026-10-12: delivered (tip `beb0991c`, code `0f8036f9`; +8 test lines, 1 JSDoc line; gates green 57/1775 = base; A1 3 plants 0 → 2 red; A2 head ⊇ base on 32/32 plants; reads 2; `--sweep` `cmp` 0) → In Review; QE `qe-ABC-154` dispatched (re-plants + N8-LANE width 1, `RISK-ABC105-LANE` T-b).**
 
 
 
