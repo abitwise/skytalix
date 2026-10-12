@@ -25,3 +25,10 @@ Void / admissible / grade, fixed now:
 Attempts: ONE window (w1). If w1 is void or inadmissible: ONE re-attempt (w2) under exactly this rule. No w3.
   If w2 is also void or inadmissible: N8-LANE is NOT READ by this hop. No pooling of windows, ever. No estimate.
   A void/inadmissible window is kept in probe/ and reported as read, never graded.
+
+ADDENDUM 2026-10-12T10:13:14Z, after window 1, BEFORE window 2 is started (no rule is changed):
+Window 1 (gate 10:11:42->10:12:27Z, lane 10:12:27-10:12:50Z) is VOID: the grugops kit's own 'vitest run' under
+/Users/olgeroeselg/Projects/public/grugops (another session) started at 10:12:41Z (first sampler row with a foreign runner)
+and overlapped rounds 3-8; the readout discards 6 of 8 (n = 2). Under the rule above a window with any discarded round
+is VOID; its summary numbers are NOT used and are not pooled with anything. Window 2 is the ONE re-attempt, under the same
+rule, same arms, same harness, gate and readout. If window 2 is void or inadmissible, N8-LANE is NOT READ by this hop; no window 3.
