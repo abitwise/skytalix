@@ -479,3 +479,39 @@ seam, reads, gates) and `…622677c5` (timing).
     and new files alike.
   - `-aa` (INFO): seam behaviour that exists in memory only.
   - `-ab` (INFO): the 1.5 % twin limit is under the 10 ms CPU tick.
+
+## Owner's answers and fold (2026-10-12, BA/PM, subtask `bapm-fold-ABC-105-153`)
+
+This section is append-only. Nothing above it was edited, and no criterion is rewritten. Dispositions and
+readings are in `.grugops/context/bapm-fold-ABC-105-153/notes/`.
+
+**The owner's answers, 2026-10-12.** These are transcribed from the Orchestrator's board row (`c1841b36`) and
+the dispatch brief (`6ae6dd27`). No Orchestrator note records them. They are an agent's transcription, not a
+stamp.
+- **`QE-105-v` (UAT): waived**, on his word "Waive UAT". This is the owner's word, **not** the
+  zero-production-lines rule applied by measurement, because `ABC-122` (a `tools/` change to gate behaviour) was
+  not waived.
+- **`N8-LANE`: merged "on the +0.370 s reading"** (QE4 window 2, which is inadmissible and ungraded). This is
+  **the owner's ruling, not a MET.** The formal reading is still owed (`QE-105-x`). The Architect
+  (`design-ABC-105-lane`, item 2) records the ruling, the risk and its trigger where the `N8-LANE` readings live.
+  This page only points there.
+- **`QE-105-d`: not overruled.** Findings stand permanently, and an owner-closed ticket exits 1 under `--ticket`.
+  § Scope 2 stands as written.
+
+**The front matter is stale.** It still reads `status: backlog` / `column: Backlog`. The board is authoritative:
+`Done` since `c1841b36`. Correcting it is the Orchestrator's call, and this section does not edit it.
+
+| gap | sev | disposition |
+|---|---|---|
+| `QE-105-r` | LOW | **Accepted as `AR-105-SYMLINK-ROOT`.** A symlinked root relocates the whole record; it does not escape it. Anyone who can do that can also write a forged note in place, which § Scope 4 already admits. The tool executes nothing and writes nothing. At `6ae6dd27`, `.grugops/context` is not a link and 0 symlinks sit under it. **Trigger:** the tool is invoked by anything automatic (a hook, CI, or a gate that reads its exit), or gains a write or an argv path, or `test -L .grugops/context` reads true. Then cut the root `lstat` plus one `A6` case. That edits the test file, so it owes an `N8-LANE` re-read |
+| `QE-105-s` | LOW (by design) | **Closed, no action.** § Scope 5 chose 0 spawns. QE read the wrapper's exits by hand (`…8094d5b1`), and every real `Done` exit runs it: `--ticket ABC-105` exited 0 at `f6400877` |
+| `QE-105-u` | LOW | **Accepted as `AR-105-ALLOWJS`.** At `6ae6dd27`, one included `.ts` file imports one `.js` module: the test, line 22. A sibling `.d.ts` was rejected for now, because it duplicates the JSDoc types, which then drift silently. **Trigger:** a second `.ts` file in `tsconfig.json`'s `include` imports a `.js`/`.mjs`/`.cjs` module, or a `.js` file is added to `include`. That ticket adds the `.d.ts` and turns `allowJs` off, or states why not |
+| `QE-105-w` | INFO | **Closed, no action.** By design, § Scope 4 excludes only T's own `ticket-to-pr-*` folder. A `fix-`/`repair-` folder that covers T is one instance of the `A7` ceiling, and no covered id relies on one (QE) |
+| `QE-105-x` | MEDIUM | **Not disposed of here: it is the Architect's** (`design-ABC-105-lane`, items 2 and 4). Cross-reference: **`ABC-154` changes the `N8-LANE` set and owes a lane re-read at its QE hop.** Whether that reading discharges `QE-105-x` is the Architect's to say |
+| `QE-105-y` | LOW | **Cut → `ABC-154`** (one JSDoc line, folded in with `-z`) |
+| `QE-105-z` | LOW | **Cut → `ABC-154`** (positive assertions over the existing memos; reads stay 2) |
+| `QE-105-aa` | INFO | **Closed, no action.** The command line reaches neither behaviour, and the test injects `notes` only under `--sweep`. `ABC-154` Test note 4 keeps it so |
+| `QE-105-ab` | INFO | Not BA/PM's: `design-ABC-105-lane` item 1 |
+
+**`ABC-154` changes the `N8-LANE` set and owes a lane re-read. So does any later ticket that edits
+`qe-hop-integrity.test.ts`, or the tool that file imports.**
