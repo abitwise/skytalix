@@ -1,0 +1,3 @@
+[old] tests 32/32 red 0	unfiltered readNotes calls 13	of which WHOLE-TREE reads of the real notes 5	(the rest are synthetic temp trees)
+[new] tests 32/32 red 0	unfiltered readNotes calls 10	of which WHOLE-TREE reads of the real notes 2	(the rest are synthetic temp trees)
+restored to new pair; cmp tool: True ; cmp test: True

@@ -431,3 +431,23 @@ readings are in `…fc1f4a7c`.
   about it, are the Orchestrator's and the owner's to rule.
 - **Windows that were not graded.** Window 1 was inadmissible: the twin read +1.74 %, above the 1.5 % limit.
   Window 2 was void: a foreign vitest overlapped every round. Both are kept in `probe/`.
+
+## Fix 2 (2026-10-12)
+
+Software Engineer, subtask `fix2-ABC-105`, for QE3's `N8-LANE` NOT MET. The branch is `grugops/fix2-ABC-105`,
+off `48a78f08`, and the code commit is `8fd0c233`. The notes are in `.grugops/context/fix2-ABC-105/notes/`. **No
+timing was read.** QE re-times.
+
+- **Whole-tree reads of the real notes: 5 → 2**, counted by instrumenting a scratch copy of `readNotes`.
+  - **One plain `--sweep`, with nothing injected.** This is the real end-to-end path, and `A4` and `A9` share it.
+  - **One unfiltered `readNotes`.** `A3` uses it. `A4`'s `--json` and all-`Done` runs also use it, through the
+    new seam.
+- **The tool changes in two lines.** `main`'s in-memory options also take `notes` (pre-read `Note[]`), like `root`
+  and `snapshotIds`. No argv token reaches it, and the decision is recorded in `…9c628f28`. Every other byte is
+  unchanged.
+- **No catch is lost.** All 23 recorded plants were re-run outside the repo, with the plant text loaded verbatim
+  from the probes of QE, QE2 and fix. For each plant, the old pair (`db1cfb6c` test with `60415a8a` tool) and the
+  new pair turn **the same tests red, by name**, on 23 of 23. The unmutated tool reads 32/32. The table is in
+  `…c1259095`.
+- **Gates.** 57 files / 1775 tests (32 in this file), `success: true`, skip 0, integrity `No findings.`;
+  `--sweep` reads 132/38/77/2/15, exit 1.
