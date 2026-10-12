@@ -2688,9 +2688,20 @@ describe("ABC-043 — the live session", () => {
     // plus `M9`'s flat copy, `tsc`-clean) reds the initializer row, and vitest stops there. On `M9`
     // the cost is that vitest stops at this row, so the shorthand row's own red is invisible from
     // this file's output. Delivered → `["history ="]`, 1.
-    // WHAT THIS COUNT CANNOT SEE: it matches `/\bhistory\s*[:=]/g`, so a binder with neither `:` nor
-    // `=` after the name is not counted. The open remainder is the `[:=]`-free binder forms:
-    // `for…of`, `for…in`, `catch (history)`, and a contextually-typed callback parameter. `D4`
+    // WHAT THIS COUNT CANNOT SEE: it matches `/\bhistory\s*[:=]/g`, so it sees `history` only where
+    // `:` or `=` directly follows the name (whitespace allowed); a binder with neither after the name
+    // is not counted. Eleven binder forms were re-planted one at a time at the `runTurnLoop(` call on
+    // 2026-10-12 (`ABC-148` `A1`'s five, then six more in its repair). Eight are `tsc`-clean AND
+    // green on every row of this file, so they are OPEN, by family: loop binders (`for…of`, and
+    // `for…of` over an object destructure); callback parameters (a PARENTHESISED arrow
+    // `(history) =>`, a `function (history)` expression, a destructured `({ spare: history }) =>`);
+    // and destructuring patterns (`const [history] = …`, the same with a tuple annotation,
+    // `const { spare: history } = …`). That list is what was measured, NOT an exhaustive one: any
+    // binder that does not put `:` or `=` straight after `history` is unseen by this count, measured
+    // or not. The other three measured forms are not open: a bare
+    // `history =>` IS counted (the `=` of `=>` matches; this row reds it with 2 binders), and
+    // `for…in` and `catch (history)` are closed by the typecheck (`tsc` exit 2: a `string` key and
+    // an `unknown` catch binding are not a `GameHistory`). `D4`
     // (`const spare = { ...history }; for (const history of [spare])`) is `tsc`-clean. Every row
     // of this file stays green on it. On the control `A1` stays green, and the control's only reds
     // are its 2 unrelated `ABC-042` drift rows (`A9`, `A10`). Closing it is a new assertion, not

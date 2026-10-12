@@ -65,9 +65,22 @@ false too. `A1` below closes ~~`D3`~~ **the annotated-rebind spelling of `D3`** 
 once-only pin, so after this ticket the instrument is stronger than **both** — which is the first
 time an ordering can honestly be asserted.
 *Correction (`ABC-114` `A2`, 2026-10-11; the struck words are kept): the count row's regex
-`/\bhistory\s*[:=]/g` does not see a `[:=]`-free binder (`for…of`, `for…in`, `catch (history)`, a
-contextually-typed callback parameter). `D4` (`for (const history of [spare])`) is `tsc`-clean and
+`/\bhistory\s*[:=]/g` does not see a `[:=]`-free binder ~~(`for…of`, `for…in`, `catch (history)`, a
+contextually-typed callback parameter)~~. `D4` (`for (const history of [spare])`) is `tsc`-clean and
 leaves the lane green, so that part of the `D3` class is still open.*
+*Correction (`ABC-148` `A3`, 2026-10-12; the struck words are kept): of those four forms, re-planted one
+at a time at the `runTurnLoop(` call (`ABC-148` `A1`), only two are open, `tsc`-clean and green on
+every row of `src/cli.test.ts`: `for…of` (`D4`) and a **parenthesised** contextually-typed callback
+parameter, `(history) =>`. `for…in` and `catch (history)` are closed by the typecheck (`tsc` exit 2). A
+bare `history =>` is not open either: the regex counts the `=` of `=>`, and the count row reds it.*
+*Correction (`ABC-148` repair `QE-148-a`/`QE-148-b`, 2026-10-12; nothing above is struck): those four forms
+are not the whole open set. Six more binders, re-planted one at a time at the same call, are also
+`tsc`-clean and green on every row of `src/cli.test.ts`, so eight measured forms are open, by family:
+loop binders (`for…of`, and `for…of` over an object destructure), callback parameters (a parenthesised
+`(history) =>`, a `function (history)` expression, a destructured `({ spare: history }) =>`), and
+destructuring patterns (`const [history] = …`, the same with a tuple annotation, `const { spare:
+history } = …`). The regex sees `history` only where `:` or `=` directly follows it, so that list is
+what was measured, not an exhaustive one.*
 
 ## Scope
 

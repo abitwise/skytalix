@@ -122,3 +122,116 @@ BA/PM, 2026-10-11. **Result: 10 of 10.** Recommended placement: `Ready`.
 | 10 | no major unresolved blocker | **✅** |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-12. **This agent is the
+author of both corrected passages (`A5`). It has not validated them.** The `In Review` verdict belongs
+to a separate QE hop that re-plants all five forms itself. Branch `grugops/ABC-148-binder-comment`,
+code commit `7acd8db2`, base `main` @ `3537fe48`. Readings: `.grugops/context/ticket-to-pr-ABC-148/notes/`.
+
+- **`A1`, re-measured at this hop.** Each form was planted alone in `src/cli.ts`, inside an async IIFE
+  at the `runTurnLoop(` call. The scaffold was the same for all five (`const spare = { ...history }`,
+  the binder, then `throw new Error("unreachable")`), so only the binder differs. After each build,
+  `git checkout -- src/cli.ts` ran and `git status --porcelain` was empty. Base file: 69 / 69.
+
+  | form | `tsc --noEmit` | `npx vitest run src/cli.test.ts` |
+  |---|---|---|
+  | `for (const history of [spare])` (`D4`) | 0 | 69 / 69 passed: **open** |
+  | `(history) =>` (`[spare].map(…)`) | 0 | 69 / 69 passed: **open** |
+  | bare `history =>` | 0 | 1 failed / 68: `ABC-043` `A1`, the count row, `[ 'history =', 'history =' ]` |
+  | `for (const history in { spare })` | **2** (TS2322, `string`) | 26 failed / 43: spawn rows, child exits 70; the count row is green |
+  | `catch (history)` | **2** (TS2322, `unknown`) | 69 / 69 passed: closed by the typecheck **only** |
+
+- **Against QE's table (`…94a87a28`).** The five `tsc` exits agree, and so does the bare-arrow red row.
+  Where QE recorded only "closed by the typecheck", this hop also ran the file. `for…in` reds 26
+  behavioural rows, because the child really receives the string `"spare"`. `catch (history)` passes
+  every row, so the typecheck is its **only** guard. Neither result changes the open list. The file's
+  totals are 69, not 67, because the file has grown since QE measured.
+- **`A2`/`A3`.** The comment paragraph and the `ABC-113` note both name exactly `for…of` and a
+  parenthesised `(history) =>` as open. They name `for…in` and `catch (history)` as closed by the
+  typecheck and the bare `history =>` as counted. On the page, the struck four-form list is kept and
+  a dated correction follows it. Line 64 is byte-identical to `main` (`cmp`).
+- **`A4`.** `git diff --name-only main -- src/` lists `src/cli.test.ts` only. There are 0 non-`//`
+  lines added or removed under `src/`. `it(` occurs 101 times and `expect(` 324 times, both at base
+  and at the tip. `npm test` gives 56 files / 1741 tests / 0 pending / 0 todo, both at base (the
+  base's `src/cli.test.ts` in place) and at the tip.
+- **Gates at the tip.** `npm run -s lint` 0, `typecheck` 0, `build` 0, `npm test` 0, and
+  `.test-results/last-run.json` reads `success: true`. Skip-integrity at skip count 0: `No findings.`
+  This hop took no timing readings.
+- **Repair, 2026-10-12 (subtask `fix-ABC-148`, `QE-148-a`/`QE-148-b`; same SE author, code `2208d2a0`).**
+  The six extra binders QE found were re-planted by this hop, one at a time, with the same scaffold
+  (callback host `Promise.resolve(…).then(…)`, destructures in a nested block): each read `tsc` 0 and
+  `src/cli.test.ts` 69 / 69, reverted, `git status --porcelain` empty; the bare-arrow control red the
+  count row. The paragraph now names the eight measured open forms by family (loop binders; callback
+  parameters, including `function` and parenthesised arrows; destructuring patterns), says the regex
+  sees `history` only where `:` or `=` directly follows it, and says the list is what was measured,
+  not exhaustive. The "five `[:=]`-free forms" label is gone (`QE-148-b`). The `ABC-113` page gets a
+  dated correction with the same list; nothing struck, line 64 byte-unchanged. A QE re-check is owed.
+
+## QE
+
+**2026-10-12, QE/E2E** (subtask `qe-ABC-148`; a separate dispatch from the author).
+- Range: base `3537fe48`, code `7acd8db2`, reviewed tip `94ca6c7e`.
+- Every reading is QE's own. QE wrote its own plant generator with a different callback host, and read
+  the SE's note only afterwards. The detail is in `.grugops/context/qe-ABC-148/notes/`:
+  - `…79919cce`, the verdict;
+  - `…cb622f01`, the readings;
+  - `…ceabe8d9`, the comparison and gaps;
+  - `…119b9d8a`, the commands.
+
+  It is not restated here.
+
+**PASS_WITH_GAPS.**
+- **`A1`–`A5` are MET.**
+  - QE's five-form readings agree with the SE's and with `QE-114-c` on every `tsc` exit and every
+    open / counted / closed call.
+  - The comment and the page note say exactly what those readings show.
+  - Line 64 is byte-unchanged.
+  - The struck words are kept.
+  - The `src/` fence holds: comment lines only, and the counts equal base.
+  - The UAT waiver applies on QE's measurement.
+- **`QE-148-a` MEDIUM (criterion scope, BA/PM).** Six more `[:=]`-free binders are `tsc`-clean and
+  green on every row: array and object destructuring, renamed destructuring in a parameter and in a
+  `for…of`, and a `function (history)` callback. The paragraph's "the open remainder … is the two"
+  therefore understates the hole, which errs the unsafe way. `A2` is met as written because it binds
+  the list to `A1`'s five forms. The Orchestrator decides: either a one-sentence repair on this branch
+  before merge, or a follow-up. Any ticket that closes `D4` must take all eight open forms.
+- **`QE-148-b` LOW.** The bare `history =>` is labelled `[:=]`-free in the paragraph that says it is
+  counted.
+- **`QE-148-c` INFO.** Two SE transcription points, neither verdict-changing.
+- **`QE-148-d` INFO.** Host-protection exited 2 (`UNKNOWN - verify`).
+
+QE made no board move, did not merge and did not push.
+
+**Addendum 2026-10-12, QE/E2E re-check** (subtask `qe2-ABC-148`; a different agent from the SE author).
+- Range: repair code `2208d2a0`, reviewed tip `9c3efd62`, base `3537fe48`.
+- The readings are QE's own, taken with its own generator before the SE's repair note was read. The
+  detail is in `.grugops/context/qe2-ABC-148/notes/`:
+  - `…56966be0`, the verdict;
+  - `…e7dc8867`, the readings;
+  - `…18ca4c99`, the paragraph check and gaps;
+  - `…433f1691`, the commands.
+
+**PASS.**
+- **`QE-148-a` is closed.**
+  - Each family was re-planted by QE: `const [history]`, `function (history)` and the `for…of` object
+    destructure each read `tsc` 0 and 69 / 69.
+  - The bare-arrow control reds the count row.
+  - Every form the paragraph calls open is `tsc` 0 and green, and counted and closed-by-typecheck are
+    right.
+  - The paragraph claims no completeness.
+- **`QE-148-b` is closed.** No `[:=]`-free label remains.
+- **The fence holds.** `src/cli.test.ts` changed in `//` lines only; `\bit(` 69 and `\bexpect(` 324;
+  `npm test` 56 / 1741 / 0 at base and tip; line 64 `cmp` 0; struck words kept.
+- **Gates at the tip are 0.** Host-protection exited 2, which is standing.
+- **The UAT waiver applies on QE's measurement.**
+- **`QE2-148-a` INFO.** A hunt for a seventh family found three more open forms:
+  - `let history;` assigned through a `for…of` target;
+  - `let history;` assigned through `[history] = …`;
+  - an object-method parameter typed through `satisfies`.
+
+  The paragraph's "NOT an exhaustive one … measured or not" covers them, so no wording change is owed.
+  A future close-`D4` ticket must work from the mechanism, not the eight-item list.
+
+QE made no board move, did not merge and did not push.
