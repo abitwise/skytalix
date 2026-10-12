@@ -204,3 +204,18 @@ collision and a no-op alteration. It misses a prefix compare and a case-insensit
 **UAT waiver:** the measured line is empty, and no `tools/` code changed either. Application is the Orchestrator's.
 
 **Board move:** the Orchestrator's.
+
+## Fold (2026-10-12, BA/PM, subtask `bapm-fold-ABC-105-153`)
+
+This section is append-only. Nothing above it was edited, and no criterion is rewritten. The disposition note
+is in `.grugops/context/bapm-fold-ABC-105-153/notes/`, from QE's register `…e88108db`.
+
+| gap | sev | disposition |
+|---|---|---|
+| `QE-153-a` | LOW | **Cut → `ABC-155`** (`XS`, `P3`, with the same promotion trigger as this ticket). One more refusal inside the same `it`: an `expected` equal to the fixture's own hash except its last hex char. `Q-PREFIX` must go green → red. 0 new tests |
+| `QE-153-b` | INFO | **Closed, no action.** `Q-CASE` is equivalent on every reachable input: the digest is lowercase hex and the five pins are lowercase |
+| `QE-153-c` | INFO | **Closed, no action.** Nothing reads the directory after the loop. A failed restore of `a`..`d` fails loud on the next file (`T-NORESTORE`) |
+| `AR-145-CLI-WIRING` | accepted residual | Unchanged, with the same trigger as § Out of scope |
+
+**The front matter is stale.** It still reads `status: backlog` / `column: Backlog`. The board is authoritative:
+`Done`, merged `38e52f4d`. Correcting it is the Orchestrator's call, and this section does not edit it.
