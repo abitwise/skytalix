@@ -9,6 +9,15 @@ Written and ratified 2026-08-19 by Architect/Design at task `design-rig-licence-
 `ADR-0011` clause 4, `ADR-0013` clause 3 and `ADR-0014` are all byte-unchanged and none of their
 clauses is narrowed or widened.
 
+**2026-10-12, `design-ABC-095-wiring`:** a pointer only. Clauses (S), (C) and 2 are unchanged.
+- **Once `ABC-095` wires the book,** the value at `engine:` is `withBook(book, createEngine(…))`.
+- **(S), read on that composition,** names `./book-engine.ts` as the supplier at `engine:`.
+  `./engine.ts`'s binding goes to `withBook`, not to the bag.
+- **So the engine double stands at `./book-engine.ts` from that commit on.** The table row
+  "`./engine.ts` — yes — `engine:`" above describes the composition as it was before `ABC-095`.
+- **The ruling** is in `ADR-0037` § Addendum — 2026-10-12, R2.
+- **(N) stays BA/PM's.**
+
 ## Context
 
 `ABC-043` spawns the delivered entry point as a child process and substitutes one module inside that
