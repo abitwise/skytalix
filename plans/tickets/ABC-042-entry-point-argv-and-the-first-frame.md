@@ -58,6 +58,13 @@ value, UAT gets a destination, and a quality signal can come from outside this r
 | `--ascii --unicode` together | **rejected with a message naming both flags, non-zero exit, no frame** — the obligation `src/glyph-mode.ts:76-80` assigns to this epic by name |
 | anything else, including `--difficulty` | **rejected with a usage message naming the offending argument, non-zero exit, no frame** |
 
+> *(Annotated 2026-10-12 by BA/PM, subtask `bapm-amend-ABC-101`. Pointer only, and this ticket's criteria
+> are unchanged.)* When **`ABC-101`** merges, it supersedes three things on this page. The first is the row
+> above for `--difficulty`: `--difficulty 1|2|3|4|5` becomes accepted. The second is the `--difficulty`
+> bullet under `## Out of scope`. The third is `A6`(iii)'s `--difficulty 3` child, which becomes `--level 3`,
+> a token that is still unrecognised. **The set stays closed.** Every other token is still rejected. The
+> authority is `ABC-101` § Scope and its `A3`.
+
 **THE ACCEPTED SET, CLOSED — this table is the allowlist and `A6` verifies its complement.** The resolver
 accepts exactly: `--colour` followed by exactly one of `white` | `black` | `random`; `--ascii`;
 `--unicode`; and the empty argv. **Every other token is in the complement and is rejected** (ASVS

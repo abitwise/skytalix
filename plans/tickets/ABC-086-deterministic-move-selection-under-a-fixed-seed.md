@@ -171,6 +171,28 @@ constraint**, and this ticket must not be read as a licence to do it.
   - **(i)** The shipped construction is unchanged: `src/cli.ts:175`,
     `createEngine({ budgetMs: DEFAULT_BUDGET_MS })`, passes no `now`. `ABC-078`'s `A1` and `A4`
     stay green.
+    - *(Amended 2026-10-12 by BA/PM, subtask `bapm-amend-ABC-101`, openly as (iii) asks. In force from
+      `ABC-101`'s merge. The text above stays as the record.)* **(i′) The property is unchanged. Only
+      the line it is read from moves.** `ABC-101` builds the root's engine from the level the human
+      chose, so the literal above leaves `src/cli.ts`. The shipped construction still passes no `now`.
+      With no `--difficulty` it still runs at `DEFAULT_BUDGET_MS` and never blunders. A rate-0 level
+      IS the shipped engine (`ADR-0032`; `ABC-087` `A6`). **The re-pinned row in `src/engine.test.ts`
+      asserts all four:**
+      1. `src/cli.ts` contains `createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) })`
+         verbatim. The options object is `{ seed }` and nothing else, so no clock is passed. This is the
+         same raw-source instrument as the original row. `ABC-043` `A1`'s pin binds it to `engine:`.
+      2. The module `src/cli.ts` imports `createLevelSeam` from (`src/level-seam.ts` in the probe) has
+         **0** matches of `/\bnow\b/`. It adds no clock of its own, so `createLevel` falls back to
+         `Date.now` (`src/levels.ts`, `options.now ?? Date.now`).
+      3. `LEVELS[DEFAULT_LEVEL]` equals `{ budgetMs: DEFAULT_BUDGET_MS, blunderRate: 0 }` by `toEqual`,
+         with `DEFAULT_BUDGET_MS` imported from `src/engine.ts`, never written as `3_000`.
+      4. `resolveOptions([])` resolves `difficulty` to `DEFAULT_LEVEL`.
+      - Each assertion kills a named mutant: a `now:` at the root (1); a clock injected in the adapter
+        (2); a default level with another budget or any blunder rate (3); a default that resolves to
+        another level (4).
+      - **(ii), (iii) and the last line are unchanged.** `ABC-078` `A1`/`A4` stay green. Non-default
+        levels run other budgets. That is `ABC-101`'s product, chosen by the human, not a change to the
+        shipped default.
   - **(ii)** `src/cli.ts` does not import the virtual-clock module, either directly or through any
     module it imports.
   - **(iii)** `src/engine.ts`'s diff touches comment lines only. `ABC-078` `A4`'s pin of the export
@@ -487,3 +509,14 @@ raw output are in `.grugops/context/qe-ABC-086/` (`notes/` and `probe/`) and are
 - **Security/NFR not triggered** (no shipped-path change). `N8-LANE` is the Engineer's reading.
 
 **`ABC-086` may leave `In Review`. G-QE-1 is not a blocker. The board move is the Orchestrator's.**
+
+## Amendment — 2026-10-12 (BA/PM, task `wave-2026-09-25`, subtask `bapm-amend-ABC-101`)
+
+`A5`(i) is re-pinned as (i′) for `ABC-101`'s level wiring. See `A5`. The reason, the alternatives and
+the readings are in `.grugops/context/bapm-amend-ABC-101/notes/`.
+- **Not a loosening.** The row still discriminates on the wall clock and on the default budget, and it
+  now asserts both directly. The old row read them off one literal.
+- **A criteria question, not a design one.** `ADR-0027` decisions 3–4, `ADR-0032` and `ADR-0037` D3
+  already rule the construction. No ADR names `createEngine` as the shipped construction. `ADR-0027`
+  § Context's "`src/cli.ts:175` passes none" is a dated observation, and it stays true of `now`.
+- **Status unchanged: `Done`.** The row edit lands in `ABC-101`'s diff (`ABC-101` `A9`).
