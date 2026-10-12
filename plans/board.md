@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word "analyze backend and ready some tickets" (read as the Backlog): BA/PM re-score of all 10 Backlog tickets dispatched in two halves, width 2 — `bapm-rescore-backlog-product` (ABC-146, 095, 096, 101, 024) and `bapm-rescore-backlog-process` (ABC-052, 040, 056, 039, 030). No ticket moves until they report._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — Architect `design-ABC-154-close` merged (gates green 57/1775): `RISK-ABC105-LANE` closed; `T-QEHOP-GROWTH` (4,000 notes; 2660 now) watched by the Orchestrator. In flight: none. Ready: `ABC-155`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-fold-ABC-154` merged (gates green 57/1775). In flight: Architect `design-ABC-154-close`._
 _Updated: 2026-10-12 by the Orchestrator (task `wave-2026-09-25`) — owner word "send 2 small follow-ups": Architect `design-ABC-154-close` (record `RISK-ABC105-LANE` closure; QE-154-b/-c/-d) and BA/PM `bapm-fold-ABC-154` (QE-154-a) dispatched, width 2. No ticket moves._
