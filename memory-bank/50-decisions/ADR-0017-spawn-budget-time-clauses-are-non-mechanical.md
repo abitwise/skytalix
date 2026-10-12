@@ -8,6 +8,16 @@ accepted
 `ABC-108`, which was DROPPED on 2026-10-10. Its new place is in `§ Pointers 2026-10-11` at the end of
 this file. Decisions 1–4 are unchanged.
 
+**Addendum 2026-10-12** (`design-2026-10-12-fold`, after `ABC-116` merged as `2a17783f`). Three items are in
+`§ Addendum 2026-10-12` at the end of this file:
+- A1: a change to a child's hang bound (`timeout`) alone does **not** fire `T2`. The four triggers stay four.
+- A2: the hook-deletion cost read on vitest 4.1.11, beside decision 3's 3.2.7 figure. No single cause is
+  claimed for the difference.
+- A3: the discharge condition in `§ Pointers 2026-10-11` reads `src/cli.test.ts`'s current `F`, which is
+  now 0.100 s CPU.
+
+Decisions 1–4 are unchanged.
+
 Written 2026-08-21 by Architect/Design at task `residual-G-QE115-3-2026-08-21`, the owner of
 `NFR-008`, its per-file floor account and its spawn account, ruling the residual **`G-QE115-3`** that
 QE raised at `ABC-115`'s re-verification and handed to this role and to `ABC-108` by name.
@@ -207,3 +217,75 @@ Written by Architect/Design (task `wave-2026-09-25`, subtask `design-low-batch-2
 - **Fallback.** Suppose the lane-CPU ticket is not cut, or its readings do not cover `src/cli.test.ts`.
   Then the discharge falls to the next hop that reads `src/cli.test.ts` on its narrow set, under the
   same condition.
+
+## § Addendum 2026-10-12
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-2026-10-12-fold`), the owner of this ADR and
+of `AR-N8SPAWN-DRIFT`, after `ABC-116` merged as `2a17783f`. **No decision changes. Nothing was measured at this
+hop.** Every figure is from the `ABC-116` records, and the twin R was recomputed here from the raw
+`a2-runs.tsv`. Notes: `.grugops/context/design-2026-10-12-fold/notes/`.
+
+**A1. A change to a child's hang bound (`timeout` in `childOf`) does not fire `T2`.**
+- **The question.** Decision 2 lists four things that fire `T2`: argv, stdin script, substitution hook and
+  settle. It says nothing about the bound. The Engineer (`fix-ABC-116`, `…16a8ee37`) and QE (`qe2-ABC-116`,
+  `…6a1c2b14`) both routed the question here.
+- **The ruling.** A bound change alone does not fire `T2`. The four triggers stay four, and this addendum
+  adds no fifth.
+- **Why.** `T2` controls `AR-N8SPAWN-DRIFT`, which is cost that grows while the lane stays **green**. A bound
+  cannot cause that, for two reasons read from the code at `d8794608`:
+  - **A child inside its bound costs the same under any bound.** `childOf` passes the bound to `spawnSync` as
+    `timeout`. A timer that never fires changes nothing about what the child runs.
+  - **A child that reaches its bound is a red row.** `spawnSync` returns `ETIMEDOUT`, and `childOf` throws on
+    any `child.error`. No child can pass by reaching its bound.
+  - So a bound change either costs nothing or turns a row red. Either way it is never silent drift.
+- **The bound is not a cost control either.** The 30 s default sits far above every child, as the comment at
+  the `timeout` line says: "not a performance assertion and must never be read as one". A child already
+  grows by seconds and stays green under it: the A2 mutant grew by about 3 s. That exposure is `AR-N8SPAWN-DRIFT` itself, and `T2` is its
+  control. Raising or lowering a bound does not change that control.
+- **The premise this ruling does not use.** The Engineer wrote that a bound sits "two orders of magnitude"
+  above a child's cost. QE showed that is false for `A9`: a 4 s bound against a child of about a second
+  (`QE2-116-b`). The ruling holds without that premise.
+- **Two cases, named so they are not misread:**
+  - **`A9`'s bound IS its criterion.** `A9` asserts that a child has exited inside `A9_BOUND_MS`. Changing it
+    changes what `A9` asserts. That is a criterion change: it belongs to `ABC-115`'s criterion and its owner,
+    BA/PM, and it is pinned by the in-file check that the bound stays under `T_open`. It is not a `T2` event.
+  - **A bound raised because a child reached it.** The bound did not cost anything. The child grew, and the
+    growth is the event. If the growth came from the child's argv, stdin script, hook or settle, `T2` already
+    fired on that edit. If it came from production code, that ticket's narrow-set reading covers it
+    (`ADR-0035` decision 2, `vitest related`).
+- **No `src/` edit is owed.** The carrier on `ChildOptions` says "`timeout` is the hang bound, not the settle",
+  and names only the four. That agrees with this ruling, so no SE hop is owed.
+
+**A2. The hook-deletion cost on vitest 4.1.11 (dated 2026-10-12). Decision 3's figure stays as its own reading.**
+
+| reading | instrument | n | wall | CPU |
+|---|---|---|---|---|
+| decision 3 (2026-08-21) | full lane, 40 files; vitest 3.2.7; default workers; Node v24.12.0; tree `e4a5c48`; load1 4.30 | — | **+2.68 s** | **+2.60 s** |
+| `ABC-116` SE (2026-10-12) | `src/cli.test.ts` alone; vitest 4.1.11; `maxWorkers: 2`; runner off; Node v26.11.0; tree `3c38a8ea` | 8 | **+3.08 s** (+2.91..+3.19, 8/8) | **+3.12 s** (+3.00..+3.27, 8/8) |
+| `ABC-116` QE spot (2026-10-12) | as the SE row, no twin | 5 | +3.15 s (+3.09..+3.46, 5/5) | +3.21 s (+3.13..+3.58, 5/5) |
+
+- **What it means.** On 4.1 the mutant costs about 10x the `<= 0.30 s` per-child clause. The SE's lower
+  interval end is +3.00 s, so the clause is NOT MET at any R (`ADR-0035` decision 1). The mutant run stayed
+  green: 1 file, 69 tests, 0 failed, 0 skipped, exit 0.
+- **The QE spot has no identity twin.** It corroborates the SE row. It is not graded under `ADR-0035`
+  decision 1.
+- **The difference from decision 3.** The 4.1 readings are +0.40 s wall and +0.52 s CPU over decision 3 (SE
+  row). The QE spot is +0.47 s and +0.61 s over.
+  - The two readings differ in instrument (one file or the lane), vitest version and runner, worker count,
+    Node version and tree.
+  - **No single cause is isolated and none is claimed.** Not one of those differences was varied alone.
+- **Where the mutant is now.** The mutated line is `black`'s `FIRST_LEGAL_ENGINE` hook in `CHILDREN`. It is
+  located by content: `src/cli.test.ts:698` at `d8794608`, not `:626` as `## Rollback` says. The Rollback
+  falsifier is unchanged.
+
+**A3. The `§ Pointers 2026-10-11` discharge condition reads the set's current `F`.**
+- That condition says "`src/cli.test.ts` reads within `F` = 1.097 s of its most recent admissible base
+  reading". The 1.097 s was the floor in force on that date. `F` is data (`ADR-0035` § Rollback). The
+  condition reads the set's `F` at the time of the reading.
+- **Today that is 0.100 s CPU / 0.180 s wall** (`ADR-0035` § Status, "Per-set floor, 2026-10-12"). The 4.1
+  CPU drift of +3.12 s is about 31x that, so the condition can see it.
+- **The base must be on the same instrument.** A 4.1 reading compares only with a 4.1 base. `ABC-144`'s
+  discharge for `5ddf150e` was a 3.2.7 reading and stands as it was.
+- **The `ABC-116` reading is not a discharge.** No 4.1 base existed before it. Its base arm is the first 4.1
+  base for this set: median **5.610 s CPU / 4.060 s wall** at `3c38a8ea`, n = 8. Between `3c38a8ea` and
+  `d8794608`, `src/` changed only by 28 comment lines in this file.

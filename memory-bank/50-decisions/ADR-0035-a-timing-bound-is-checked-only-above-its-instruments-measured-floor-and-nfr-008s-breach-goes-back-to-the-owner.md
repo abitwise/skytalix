@@ -26,6 +26,31 @@ decision 3's recorded floors are pre-merge data.
 No decision is changed and nothing was measured. Note
 `.grugops/context/design-ABC-144-fcap/notes/20261011T231917Z-architect-design-decision-abc144-fcap-floors-after-abc152-dd7a6ec9.md`.
 
+**Per-set floor, 2026-10-12** (`design-2026-10-12-fold`; this applies the paragraph above and decision 3's
+amendment). **`src/cli.test.ts`: `F` = 0.100 s CPU / 0.180 s wall**, on vitest 4.1.11, runner off,
+`maxWorkers: 2`.
+- **Source.** `ABC-116`'s A2 identity twin (`ticket-to-pr-ABC-116` `probe/a2-runs.tsv`). Its base is
+  `3c38a8ea`, which carries `7a920ca5`. n = 8 scored rounds, order statistic k = 2 (coverage 92.97 %). It was
+  recomputed at this hop from the raw rows, not copied from the summary.
+  - Sorted twin − base CPU deltas: −0.24, **−0.10**, −0.03, −0.01, 0.01, 0.04, **0.06**, 0.47, so R = 0.100 s.
+  - Wall: −0.08, **−0.03**, 0.00, 0.01, 0.01, 0.03, **0.18**, 1.39, so R = 0.180 s.
+- **Admissible.** The twin median is 0.000 s CPU (0.00 % of the 5.610 s base) with sign 4/8, and 0.010 s wall
+  (0.25 %) with sign 5/8.
+- **It replaces the provisional 16 %** (0.898 s CPU on this base). It is this set's only 4.1 reading, so the
+  largest R is used. From the third 4.1 reading on, the median of the three most recent governs.
+- **One condition, stated.** The twin and base shared one symlinked `node_modules`. Decision 2's harness asks
+  only for a `cmp`/`diff -r` twin. The separate `npm ci` in the paragraph above is a full-lane condition, and
+  it is not extended to narrow sets here. If a later reading with separate installs reads wider, `F` rises by
+  the median-of-three rule.
+- **What it changes at the cut.** On this file, a 650 ms `N8-LANE` bound and the 0.30 s per-child clause are
+  both at or above `F`, so neither is refused at the cut any longer. The count stays the pin where a count
+  exists (decision 3).
+- **What it does not change.** The other per-set floors stay provisional until their own 4.1 readings. The
+  full lane keeps 1.72 s / 3.25 s, and `RISK-ABC144-FCAP` stays open: a one-file R is a different instrument
+  and is not a full-lane reading.
+
+No decision is changed and nothing was measured. Note `.grugops/context/design-2026-10-12-fold/notes/`.
+
 Previously `proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25`, subtask `ruling-timing-protocol`),
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.
