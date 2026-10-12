@@ -310,3 +310,71 @@ DoR-complete; **placing it is the Orchestrator's call.**
 2/8 with two lanes already pulled from it; adding records debt would make a thin column look
 stocked. **The DoR score is recorded so that the day someone does want to pull it, no refinement
 hop is needed.**
+
+## Re-score — 2026-10-12 (BA/PM, subtask `bapm-rescore-backlog-process`, `main` @ `1eb2edbc`)
+
+**Verdict: DoR 10/10, recommend `Ready`. Size `S` kept. Priority `P2` → `P3` (front matter not
+edited here: this hop is append-only, so the Orchestrator applies it with the move).** The repair plan
+still applies byte for byte. `A1`'s premise is gone, and two criteria would have failed on a correct
+repair. Readings and commands: `.grugops/context/bapm-rescore-backlog-process/notes/` (observation
+note, § ABC-040). `plans/traceability.md` at this tip: 1069 lines, md5 `eb3233b22053441f60f6f91cf4f479f8`.
+
+**What still holds (measured):**
+- The four `ABC-028`/`ABC-029` rows are now L460/L462 and L461/L463. They are **byte-identical to
+  `06c5427`**: nothing has been appended to the stale rows in two months. All four still split to 10
+  cells, with zero escaped pipes.
+- `A2`: the stale `ABC-028` `Status` is a byte-exact prefix (2618 of 50168 chars). Its `Code`/`Tests`
+  cells are empty.
+- `A3`: the `ABC-029` divergence is still at char **2705**. All six probe strings are in the stale cell
+  and absent from the live one. **Unit correction:** the stale tail is **2404 characters = 2418 UTF-8
+  bytes**. Every "2404-byte" on this page means characters.
+- The blocker at the comment block is still discharged (`ABC-019` `Done`). The block now sits at
+  L378–388. The escape-aware rule is at L349–370.
+
+**What changed:**
+- **"40 rows for 38 tickets" is obsolete.** Since `05eecc1a` (2026-08-17), every hop appends its own
+  suffixed row (`ABC-xxx (build)`, `(QE)`, …). Today the file has **482** `^| ABC-` rows: 129 bare and
+  353 suffixed. It has **143** distinct ids against **145** ticket files. `ABC-052` and `ABC-155` have
+  no row. **`A1`'s three-way equality can never hold again, and it is struck below.**
+- **Two more bare-id pairs exist: `ABC-100` (L658/L679) and `ABC-154` (L1066/L1067). They are NOT this
+  defect.** Their cells 0–4 differ: each is two different hops' rows, one of which omitted a suffix.
+  **Out of scope; do not reconcile them.**
+- The out-of-scope malformation list is stale. `ABC-009`/`011`/`015`/`019` all split to 10 today. The
+  rows that do not split to 10 are L630 `ABC-065` (11), L631 `ABC-066` (13), L739 `ABC-109 (UAT)` (11),
+  L986 `ABC-094 (accepted)` (6) and L1010 `ABC-150 (design)` (2). **Still out of scope.** They are
+  routed to the Orchestrator in the note.
+- **Priority falls to `P3`.** Both of the page's not-`P3` arguments are gone. The invariant it called
+  "live" is dead by convention. "It grows" is false: hops append rows, not cells, and the stale rows
+  are unchanged since `06c5427`. The page's `P1` trigger (a hop appends to a stale row) has **not
+  fired**.
+- **Why it sat in `Backlog` at 10/10:** the cutting hop asked for `Backlog`, not `Ready` (`Ready` was
+  2/8 and "records debt would make a thin column look stocked"). Its sequencing owner (the Orchestrator)
+  never had a window with no trace-appending hop. **That window is no longer needed.** Hops now append
+  at the file's tail (L1069). This ticket edits L378–388 and L460–463, so a concurrent tail append is a
+  separate git hunk.
+
+**Criteria amendments (2026-10-12; old text struck, kept for one re-score):**
+- **`A1`** ~~rows == distinct ids == ticket files, and `comm -3` empty~~ → **Given** the repaired file,
+  **then** (i) no two `^| ABC-` rows have byte-identical cells 0–4 under the escape-aware split. Today
+  exactly two pairs do: the `ABC-028` and `ABC-029` pairs. (ii) Among rows whose first cell is exactly
+  `ABC-028` or `ABC-029`, each id occurs **once**. No literal count.
+- **`A3`** ~~the cell contains (i), (ii), (iii) in this order~~ → the reconciled `ABC-029` `Status`
+  cell **equals** `live[:d] + stale[d:] + " **" + live[d:]`, byte for byte, with `d` re-derived. **The
+  three-byte separator is required.** Without it the junction reads `bytes.DESIGN HOP RUN` and the cell
+  has an odd number of `**` markers (205; it has 206 with the separator). The six probes are still
+  present.
+- **`A4`** ~~immediately after … immediately before~~ → the spliced block begins `AMENDED 2026-08-11`
+  right after `` `HISTORY_COLS` HOLDS at 21.** ** ``, and ends `ZERO `` `src/` `` bytes.` right before
+  ` **DESIGN HOP RUN 2026-08-12`.
+- **`A5`** ~~`grep -c 'NOT repaired'` → 0~~. That reads **5** today, and four of the hits are other
+  tickets' prose (L117, L192, L470, L479). → `grep -cF 'KNOWN DUPLICATE ROWS — flagged 2026-08-12 by
+  BA/PM at `` `refinement-ABC-028-shape` ``, NOT repaired.' plans/traceability.md` → **0** (today 1),
+  plus the one dated sentence as before.
+- **`A6`** unchanged: every other row is byte-identical, the row count drops by exactly 2, and one file
+  is in the diff. Since this ticket's own trace row is appended in the same diff, read "drops by 2" as
+  the count before the hop's own appended row.
+
+**DoR 10/10:** 1 ✅ (the pain is narrowed to the last-bare-match misread), 2 ✅ (two new out-of-scope
+exclusions named), 3 ✅, 4 ✅ (A1/A3/A4/A5 amended to pass on a correct repair), 5 ✅ (the
+concurrent-append hazard reduced to tail hunks), 6 ✅ (0 `src/` lines, `N8-LANE` zero), 7 ✅, 8 ✅ `S`,
+9 ✅ `P3`, 10 ✅.
