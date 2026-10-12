@@ -62,6 +62,19 @@ No decision is changed and nothing was measured. Note `.grugops/context/design-2
 
 Nothing was measured. Notes are in `.grugops/context/design-ABC-105-lane/notes/`.
 
+**Addendum 2026-10-12, second (`design-ABC-154-close`, after `ABC-154` merged as `4537fb11`).** Four items, in
+`§ Addendum 2026-10-12 (after ABC-154)` at the end of this file:
+- **B1 (`QE-154-b`):** A1's forward-only clause is met by a pre-registration that is committed before the window's
+  first run, on a commit that has the addendum as an ancestor, and that reaches `main` unchanged. The wording is
+  clarified. No recorded state moves.
+- **B2 (`QE-154-c`):** a third admissible R (0.030 s). The median of three governs, so `F` stays 0.020 s CPU /
+  0.020 s wall.
+- **B3:** `RISK-ABC105-LANE` closes on `qe-ABC-154`'s MET. A3's 4,000-note re-read survives as its own named
+  trigger on the set, `T-QEHOP-GROWTH`.
+- **B4 (`QE-154-d`):** load1 8.88 does not bear on admissibility. There is no new rule.
+
+Nothing was measured. Notes are in `.grugops/context/design-ABC-154-close/notes/`.
+
 Previously `proposed` — 2026-10-10, by Architect/Design (task `wave-2026-09-25`, subtask `ruling-timing-protocol`),
 the owner of `NFR-008`'s protocol, its floor account and its spawn account. It rules `QE-119-a` (MEDIUM,
 QE at `ABC-119`) and the `NFR-008` clause state that has been unruled since `ADR-0019` trigger (a) fired.
@@ -576,3 +589,137 @@ followed by readings that flip sides of a bound, revert to 1.5 % and take the ti
 - One file is a risk with a trigger, not a clause. It is recorded in the catalog as `RISK-ABC105-LANE`.
 - **If a second test file reads the record, lift this into `N8-LANE`**, worded as: "a set that reads
   repository data states that data's size beside the reading, and the reading holds at that size."
+
+## § Addendum 2026-10-12 (after ABC-154)
+
+Written by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-154-close`), the owner of this protocol,
+after `ABC-154` merged as `4537fb11`. **Nothing was measured at this hop.**
+- **Source of the figures.** This hop's own script recomputed every figure from the raw per-run TSVs of
+  `qe-ABC-154` w1, `qe-ABC-105`, QE3 w3 and QE4 w2, in integer centiseconds
+  (`.grugops/context/design-ABC-154-close/probe/recompute.py` → `recompute.out.txt`).
+- **Agreement with QE.** The recompute agrees with QE's `…4e153e76` on every figure.
+- Notes are in `.grugops/context/design-ABC-154-close/notes/`.
+
+### B1. `QE-154-b`: A1's forward-only clause is met by a pre-registration that reaches `main` by merge
+
+**The question.** A1 applies "to a window whose pre-registration lands on `main` after this addendum does".
+`qe-ABC-154`'s pre-registration was committed on QE's branch and reached `main` only through the merge.
+
+**The facts, from git:**
+- The addendum (merge `e7d8a09f`) was committed at 10:58:38Z.
+- The pre-registration was committed at 11:25:18Z as `b9a5c957`, and `e7d8a09f` is its ancestor.
+- The gate started at 11:25:25Z, and the first lane run was at 11:26:11Z.
+- `b9a5c957` is an ancestor of `main`. The file's blob is `5b865730` at `b9a5c957` and on `main`, and no other
+  commit touches it.
+
+**Ruled: this satisfies A1.**
+- The clause exists so that a rule cannot be chosen after the window has been seen (A1, "Forward-only").
+- What that requires is an order: the rule is public, then the pre-registration is fixed, then the window runs.
+  The pre-registration also has to reach the record unchanged.
+- "Lands on `main`" was a stand-in for that order. QE never merges, so a QE pre-registration reaches `main` only
+  by someone else's merge, after the window.
+
+**The wording, clarified.** The old text is kept above and is read as follows from this date:
+> A1 applies to a window whose pre-registration is committed **before the window's first run**, on a commit that
+> **has this addendum as an ancestor**, and that reaches `main` **with the same blob**. A window with no
+> pre-registration counts from its first run.
+
+**No recorded state moves:**
+- `qe-ABC-105` and QE3 w1–w3 ran before `e7d8a09f` existed.
+- QE4's pre-registration `9ed227fa` does not have `e7d8a09f` as an ancestor. So QE4 w1 and w2 stay as graded, and
+  QE4 w2 stays inadmissible.
+- `qe-ABC-154` w1 is A1's, as QE applied it.
+- That window is also admissible under the pre-A1 rule: −0.870 % is inside 1.5 %, and the old convention gives
+  p 0.070. So no state here hangs on B1 at all.
+
+### B2. `QE-154-c`: the set's `F` stays 0.020 s CPU / 0.020 s wall
+
+**The admissible twin readings on `tools/grugops/qe-hop-integrity.test.ts`**, oldest first (n = 8, k = 2):
+
+| reading | code | twin CPU, sorted (x(2), x(7) bold) | CPU R | wall R |
+|---|---|---|---|---|
+| `qe-ABC-105` | `60415a8a` | −0.13, **−0.01**, −0.01, 0.00, 0.00, 0.01, **0.01**, 0.01 | 0.010 s | 0.010 s |
+| QE3 w3 | `db1cfb6c` | −0.01, **−0.01**, 0.00, 0.00, 0.00, 0.00, **0.02**, 0.03 | 0.020 s | 0.020 s |
+| `qe-ABC-154` w1 | `0f8036f9` | −0.04, **−0.03**, −0.02, −0.01, 0.00, 0.00, **0.00**, +0.02 | 0.030 s | 0.030 s |
+
+- **This is the third reading, so the median of the three most recent governs.**
+  - CPU: 0.010, 0.020 and 0.030 give **0.020 s**.
+  - Wall: 0.010, 0.020 and 0.030 give **0.020 s**.
+  - **`F` is unchanged.** Its basis changes from "the largest of two" to "the median of three".
+- **The value depends on A1's forward-only clause, and that is stated here rather than hidden.**
+  - QE4 w2 (R 0.030 CPU / 0.020 wall) is inadmissible as graded and is not counted.
+  - If it were counted, the last three would be QE3 w3, QE4 w2 and `qe-ABC-154` w1, and CPU `F` would be 0.030 s.
+  - Neither value is anywhere near a cut. 650 ms is 22–33 × either.
+- Both twin arms run the placeholder, so `F` does not move with the file's content or with the record's size.
+
+### B3. `RISK-ABC105-LANE` closes. A3's re-read trigger survives it as `T-QEHOP-GROWTH`
+
+**The closure.**
+- The catalog's rule for `RISK-ABC105-LANE` was "MET: write the reading and close the risk".
+- `qe-ABC-154` w1 reads **MET at 650 ms CPU**: +0.380 s (+0.350..+0.410), twin −0.005 s, R 0.030 s.
+- The code read was `0f8036f9`, which is on `main` through `4537fb11`. The reading was owed under trigger T-b.
+- The catalog records the reading and closes the risk (`plans/nfr-catalog.md` § "`N8-LANE` at `ABC-105`").
+
+**Why the 4,000-note trigger survives.**
+- T-c was written as one of the risk's triggers, but it guards a different thing.
+  - The risk was "no graded reading exists at the merged code". The MET discharges that.
+  - T-c guards A3's mechanism: the set's content cost grows with `.grugops/context`, after the merge, with no
+    ticket to charge it to.
+- The MET does not touch that mechanism. The record had 2656 note files in the arm, and `main` has 2660 at
+  `b89b3fd2`.
+- **Dropping T-c with the risk would lose the only guard on a cost that moves by itself.** So it is re-homed.
+
+**`T-QEHOP-GROWTH`: a named re-read trigger on the set `tools/grugops/qe-hop-integrity.test.ts`.**
+- **Fires** when `find .grugops/context -path '*/notes/*.md' | wc -l` on `main` reaches **4,000**.
+- **Does:** the set's `N8-LANE` is re-read at `main`'s tip, on the method of the `qe-ABC-154` pre-registration.
+  - **MET:** write the reading. Architect/Design sets the next threshold by the same arithmetic.
+  - **NOT MET:** it goes to the owner. The lever is the count of whole-tree reads.
+  - **NOT READ:** the trigger stays armed.
+- **Roles:** Architect/Design owns the record, QE/E2E reads, and the Orchestrator dispatches. Severity LOW. It is a
+  scheduled re-read, not an open defect.
+- **A changing ticket's own reading resets nothing.** It is owed at its QE anyway, and the threshold stays 4,000.
+
+**The projection, re-anchored.** This is arithmetic, not a reading, and it has no state
+(`probe/projection.py`):
+- A3's model gives 0.153 + 0.215 × N / 2630 s at 2 reads, which is **0.370 s at 2656 notes**. The reading is
+  +0.380 s (+0.350..+0.410). The model is not contradicted. The 60 ms interval cannot validate it either.
+- Anchored on the new reading, with A3's slope of 81.75 µs a note at 2 reads:
+  - at 4,000 notes it projects **~0.49 s** (75 % of 650 ms), or ~0.52 s from the interval's upper end;
+  - it crosses 650 ms at N ≈ 5,960 (≈ 5,590 from the upper end).
+- **4,000 stays.** The re-read lands with room under the bound, and it is ~34 days out at A3's ~39 notes a day.
+- The limits are A3's own. The slope comes from two unpaired windows at different loads, and linearity in N is
+  assumed.
+
+**A3's lift clause is carried unchanged.** If a second test file reads the record, `T-QEHOP-GROWTH` becomes
+`N8-LANE` text. At `b89b3fd2` the set is still the only one. The `src/` test files name `.grugops/context` in
+comments only, and `vitest.config.ts` excludes `.grugops/**`.
+
+### B4. `QE-154-d`: load1 8.88 during w1 does not bear on admissibility
+
+**Ruled: no bearing, and there is no new rule.**
+- Decision 2 says load is logged and never gated.
+- § Pointers 2026-10-11 says "The load level: none". Load enters only through R.
+- R-1's "load1 ≤ 8" is the levelled full-lane wall clause (decision 6). It does not apply to a narrow-set
+  `N8-LANE` reading.
+- The void rule in the pre-registration lists the conditions that discard a round: status, counts, foreign runner,
+  thermal and power. Load is not one of them. 0 rounds were discarded, and the sampler shows 0 bad rows in the lane
+  interval.
+
+**What the TSV shows** (`probe/recompute.out.txt`, per-round table):
+- **The high-load rounds do not read higher.**
+  - Round 1, with load1 3.21 before every arm, reads H−B +0.41. Round 2 reads +0.41, with B and T at 3.21 and H
+    at 8.88.
+  - Rounds 3–8 (load1 7.90–8.88) read +0.34..+0.42, median +0.36.
+- **The load shows in the twin, which is its control.**
+  - Its three negative deltas, −0.04, −0.03 and −0.02, are rounds 6–8, with load1 7.90–8.33 before the runs. In
+    those rounds B ran 0.02–0.04 s CPU slower than T.
+  - That is why R is 0.030 s, the largest of the three admissible readings. The median-of-three rule in B2 absorbs it.
+- **Inference, `UNKNOWN - verify`.** load1 decays from 8.88 to 7.51 over ~16 s. That is how a one-minute average
+  behaves after a short burst, not under a sustained load near 9. The cause of the burst is not known.
+
+**Rollback.**
+- B1: restore the literal reading of "lands on `main`". No recorded state changes, because w1 is admissible under
+  the pre-A1 rule as well.
+- B2 is arithmetic.
+- B3: folding `T-QEHOP-GROWTH` back into a risk changes only where it is written.
+- B4 adds nothing to roll back.
