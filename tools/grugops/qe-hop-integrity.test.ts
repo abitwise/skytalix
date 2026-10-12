@@ -48,6 +48,14 @@ function run(argv: string[], options?: Parameters<typeof main>[1]) {
   }
 }
 
+// N8-LANE (fix2-ABC-105): the file reads the whole real notes tree exactly twice, lazily, once each.
+let allNotesOnce: ReturnType<typeof readNotes> | undefined;
+/** Every real note, no folder filter: shared by A3's unfiltered check and A4's injected runs. */
+const allNotes = () => (allNotesOnce ??= readNotes(join(ROOT, ".grugops/context")));
+let plainSweepOnce: ReturnType<typeof run> | undefined;
+/** One plain `--sweep`, nothing injected (the real end-to-end read path): shared by A4 and A9. */
+const plainSweep = () => (plainSweepOnce ??= run(["--sweep"]));
+
 describe("ABC-105 Test note 5 — the committed cutover snapshot is pinned", () => {
   it("holds the 38 ids, including ABC-061 and ABC-062, excluding ABC-031 and ABC-076", () => {
     expect(snapshotIds).toHaveLength(38);
@@ -113,7 +121,7 @@ describe("ABC-105 A3 — the refs-only false pass is closed (real notes)", () =>
   it("coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings", () => {
     // QE-105-p: `main --ticket` opens only folders naming T, which masks a coverage() that has lost
     // the folder condition. Read the whole context tree so coverage() alone must hold condition 4.
-    const all = readNotes(join(ROOT, ".grugops/context"));
+    const all = allNotes();
     expect(coverage("ABC-062", all, minus("ABC-062")).status).toBe("finding");
     expect(snapshotIds).not.toContain("ABC-073");
     expect(coverage("ABC-073", all, snapshotIds).status).toBe("finding");
@@ -138,7 +146,7 @@ describe("ABC-105 A9 — the security-nfr substitute is visible, not silent (rea
   });
 
   it("--sweep lists ABC-073 as a finding", () => {
-    const r = run(["--sweep"]);
+    const r = plainSweep();
     expect(r.code).toBe(1);
     expect(r.stdout).toContain("  ABC-073: no QE verdict note was found.\n");
   });
@@ -146,7 +154,7 @@ describe("ABC-105 A9 — the security-nfr substitute is visible, not silent (rea
 
 describe("ABC-105 A4 — the sweep's counts partition the Done rows (real board)", () => {
   it("prints each count line and every finding by id, exits 1; 0 when every row is grandfathered", () => {
-    const r = run(["--sweep", "--json"]);
+    const r = run(["--sweep", "--json"], { notes: allNotes() });
     expect(r.code).toBe(1);
     const report = JSON.parse(r.stdout);
     const { done, preCutover, coveredQe, coveredSubstitute, findings } = report.counts;
@@ -154,7 +162,7 @@ describe("ABC-105 A4 — the sweep's counts partition the Done rows (real board)
     expect(preCutover + coveredQe + coveredSubstitute + findings).toBe(done);
     expect(findings).toBeGreaterThan(0);
 
-    const text = run(["--sweep"]);
+    const text = plainSweep();
     expect(text.code).toBe(1);
     for (const label of [
       `Done rows: ${done}`,
@@ -170,7 +178,9 @@ describe("ABC-105 A4 — the sweep's counts partition the Done rows (real board)
     }
 
     const board = readFileSync(join(ROOT, "plans/board.md"), "utf8");
-    expect(run(["--sweep"], { snapshotIds: parseDone(board) ?? [] }).code).toBe(0);
+    expect(run(["--sweep"], { notes: allNotes(), snapshotIds: parseDone(board) ?? [] }).code).toBe(
+      0,
+    );
   });
 
   it("parses only the line-leading `- [ABC-xxx]` rows of `## Done`", () => {

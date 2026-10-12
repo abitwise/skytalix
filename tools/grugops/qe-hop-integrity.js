@@ -219,7 +219,7 @@ const CEILING =
 
 /**
  * @param {string[]} argv
- * @param {{ snapshotIds?: string[], root?: string }} [options]  in-memory test seam only; the
+ * @param {{ snapshotIds?: string[], root?: string, notes?: Note[] }} [options]  in-memory test seam only; the
  *   command line can supply neither
  * @returns {0 | 1 | 2}
  */
@@ -266,7 +266,7 @@ export function main(argv, options = {}) {
     }
     snapshotIds = options.snapshotIds ?? readSnapshot(snapshot);
     const n = idNumber(ticket);
-    notes = readNotes(join(root, CONTEXT), sweep ? undefined : (f) => names(f, n));
+    notes = options.notes ?? readNotes(join(root, CONTEXT), sweep ? undefined : (f) => names(f, n));
   } catch (e) {
     return fail(e instanceof Error ? e.message : String(e));
   }
