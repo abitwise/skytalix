@@ -451,3 +451,31 @@ timing was read.** QE re-times.
   `…c1259095`.
 - **Gates.** 57 files / 1775 tests (32 in this file), `success: true`, skip 0, integrity `No findings.`;
   `--sweep` reads 132/38/77/2/15, exit 1.
+
+## QE4 (2026-10-12)
+
+QE/E2E, subtask `qe4-ABC-105`, re-checked `grugops/fix2-ABC-105` (tip `cfcd59af`, code `8fd0c233`) on QE's own branch
+`grugops/qe4-ABC-105`, width 1. Verdict `.grugops/context/qe4-ABC-105/notes/…-6a647762`; readings `…6df3826a` (plants,
+seam, reads, gates) and `…622677c5` (timing).
+
+**Verdict: PASS_WITH_GAPS. `N8-LANE` is NOT READ at `8fd0c233`, so QE4 does not lift the merge hold.**
+
+- **No catch lost.** All 23 recorded plants turn the same tests red, by name, in the old and new files. Two QE4 plants
+  that break only `main`'s `--sweep` read go 1 red in the new file and 0 in the old: the plain `plainSweep()` catches
+  what the injected `--json` would hide. Each single broken memo goes 1 red (`A4`).
+- **Seam.** The tool diff is the JSDoc type plus one read line. No argv path reaches `notes`. Through the CLI, a missing
+  context dir exits 2 and an empty one exits 1. No criterion is weakened.
+- **Whole-tree reads: 2** (old 5), by QE's own instrumentation.
+- **`N8-LANE`.**
+  - Window 1 was void: the grugops kit's vitest ran in another session.
+  - Window 2, the one pre-registered re-attempt, was inadmissible: twin +1.75 % against a 1.5 % limit.
+  - No grade and no estimate. QE3's NOT MET was for `db1cfb6c`.
+- **Gates** at the tip are green: 57 files / 1775 tests, `success: true`, skip 0, integrity `No findings.`; `--sweep`
+  132/38/77/2/15, exit 1.
+- **Gaps.**
+  - `QE-105-x`: OPEN, now NOT READ.
+  - `-y` (LOW): the stale JSDoc "neither".
+  - `-z` (LOW): no positive control on the whole-tree reads. An unfiltered-only `readNotes` drop is 0 red in the old
+    and new files alike.
+  - `-aa` (INFO): seam behaviour that exists in memory only.
+  - `-ab` (INFO): the 1.5 % twin limit is under the 10 ms CPU tick.

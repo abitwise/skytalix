@@ -1,0 +1,5 @@
+--sweep, no context dir, nothing injected: exit 2; stdout []; stderr "Error: ENOENT: no such file or directory, scandir '/var/folders/y3/c2txpd5d6tv9wgxtq1wn0skh0000gn/T/qe4-seam-nMoGhT/.grugops/context'"
+--sweep, no context dir, notes: []: exit 1; stdout ["In-scope findings: 1","Malformed front matter (UNKNOWN - verify): 0"]; stderr ""
+--ticket ABC-200, no context dir, notes: [good]: exit 0; stdout ["ABC-200: covered (qe-e2e)."]; stderr ""
+--ticket ABC-200, notes: [good, malformed in another folder]: exit 1; stdout ["ABC-200: covered (qe-e2e).","UNKNOWN - verify: the front matter of .grugops/context/other/notes/b.md is malformed (no closing --- line)."]; stderr ""
+--ticket ABC-001 (pre-cutover), notes: []: exit 0; stdout ["ABC-001: out-of-scope (pre-cutover). It is listed in .grugops/qe-cutover-2026-08-17.txt; it is not checked."]; stderr ""
