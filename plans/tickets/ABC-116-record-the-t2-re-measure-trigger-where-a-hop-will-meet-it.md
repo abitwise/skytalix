@@ -350,3 +350,77 @@ unchanged and fills in only the readings and the fired / not-fired verdicts.
 >   **`T1` — a hop that changes the NUMBER of children re-measures both time clauses; the count pin forces the `N8_SPAWN` edit.** `T1` `<FIRED | NOT FIRED>`: `<reason>`.
 >   **`T2` — a hop that changes WHAT AN EXISTING CHILD DOES (its argv, its stdin script, its substitution hook or its settle) re-measures the per-child CPU clause on `src/cli.test.ts`, whether or not the count moves (`ADR-0035` decision 2: median, the twin's `R`, MET / NOT MET / UNRESOLVED against that set's `F`); the count pin cannot see it.** `T2` `<FIRED | NOT FIRED>`: `<reason>`.
 >   Ruling: `ADR-0017` decision 2; `plans/nfr-catalog.md` § `G-QE115-3`; carrier at the point of change: the comment on `ChildOptions` in `src/cli.test.ts` (`ABC-116`).
+
+## Delivery
+
+Software Engineer (Claude Opus 5.5), 2026-10-12, subtask `ticket-to-pr-ABC-116`, run at width 1.
+- **Branch.** `grugops/ABC-116-t2-carrier` from `main` @ `3c38a8ea` (the subtask frontmatter says
+  `cc2d4cdc`, which is the parent of `3c38a8ea`; `3c38a8ea` only moves the board and the queue).
+- **Commits.** The carrier commit is `9b8c38ec`. This section, the notes and the trace row follow it.
+- **Status.** Not pushed, not merged, and no column moved. **QE is owed.**
+- **Where the evidence is.** Readings: `.grugops/context/ticket-to-pr-ABC-116/notes/`. Raw TSV of
+  every timed run: `…/probe/a2-runs.tsv`.
+
+- **`A1`.** `grep -n "T2" src/cli.test.ts` hits `:322`, `:324`, `:330` and `:336`. All four are inside
+  the JSDoc on `interface ChildOptions` (`:321-346`, the interface at `:347`). The block states each
+  of the four parts:
+  - (i) argv / stdin script / substitution hook / settle, named as `args`/`productArgv`, `input`,
+    `hook` and `timeout`;
+  - (ii) the per-child CPU re-measure whether or not the count moves, on the narrow set, with the
+    median, the twin's `R`, the three states and decision 3's per-set `F` (named, no number);
+  - (iii) the count pin cannot see it;
+  - (iv) `ADR-0017` decision 2 and `plans/nfr-catalog.md`'s `G-QE115-3` section, both named.
+- **`A2` — measured at this hop; the readings are in note `…55c8efb6`.**
+  - **Mutant:** `black`'s `FIRST_LEGAL_ENGINE` hook deleted, one line.
+  - **Set-up:** base / mutant / identity twin, outside the repository, with `node_modules` symlinked.
+    `npx vitest run src/cli.test.ts` on vitest 4.1.11, 2 workers, module runner off.
+  - **Order:** rotated, 9 rounds with round 0 discarded, so n = 8. 60 s idle before the first run
+    and 20 s before each later run.
+  - **Paired medians: +3.08 s wall and +3.12 s CPU.** The intervals are +2.91..+3.19 and
+    +3.00..+3.27, and the sign is 8/8 on both.
+  - **Twin:** R = 0.18 s wall / 0.10 s CPU, admissible.
+  - **State: NOT MET** against the 0.30 s per-child clause, at any R.
+  - **Every run:** 1 file / 69 tests, all green. Thermal 0 before and after every run. AC power.
+    load1 2.4–9.3, logged and not gated.
+  - **Discarded:** 3 runs, for another project's runner (`oeselg-labs/platform/repos/shared`); each
+    was re-taken. One earlier start was aborted before any run.
+  - **Disagreement with `ADR-0017` (+2.68 s / +2.60 s), written down:** this hop reads +0.40 s more
+    wall and +0.52 s more CPU. The instrument, runner, worker cap, Node and tree all differ, and no
+    single cause is claimed. The comment states this hop's figures and the disagreement.
+- **`A3`.** The canonical form is the section above. Its trigger sentences are quoted unchanged
+  below.
+- **`A4`. The next cut that carries an `N8-SPAWN` row owes `T1` and `T2` inline, in the canonical
+  row form that lives on this page (`ABC-116`, § Canonical `N8-SPAWN` row form).**
+- **`A5`.**
+  - `git diff --name-only main...HEAD -- src/` lists exactly `src/cli.test.ts`.
+  - The non-test `src/` numstat is empty.
+  - `src/cli.test.ts` is +25/−0, and every added line is a ` * ` comment line.
+  - The numstat for `plans/nfr-catalog.md` and `AGENTS.md` is empty.
+  - **8-row hash: `c74e7426…0d3b` at base `3c38a8ea` AND at the tip, on 8 lines.** That is equal.
+  - **Drift from this page, written down:** the page's `63f66795…ca31` is stale. It was taken at
+    `fcf12c1`, and the rows have moved twice since.
+  - **Named and NOT made:** the one-line `plans/nfr-catalog.md` pointer from the `N8-SPAWN` account
+    block (now `:1192`) to the `T1`/`T2` bullets (now `:1629-1630`). Its owner is Architect/Design.
+- **`A6`.**
+  - **Counts:** `npm test` read **56 files / 1743 tests / 0 skipped** at base (`main` checkout) and
+    at head (worktree). Both exit 0, and both have `success: true`.
+  - **Pin lines:** the non-comment `N8_SPAWN` / `spawned` / `Object.keys(CHILDREN)` lines hash the
+    same at `main` and the tip (`2f156443…`). `const N8_SPAWN = 17 + 7 + 1 + 2;` is byte-identical.
+  - **`T2` does NOT fire on this delivery.** The diff is comment-only, so no child's argv, stdin
+    script, substitution hook or settle changes.
+  - **The `A2` reading is not a `T2` re-measure.** It measures a mutant that was never delivered.
+- **Gates at the tip, run after the window and never during it:**
+  - `npm run lint`, `typecheck` and `build` exit 0;
+  - `npm test` exits 0, and `.test-results/last-run.json` reads `success: true`;
+  - skip integrity at 0 reads `No findings.`
+- **UAT-waiver reading:** `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'`
+  is **empty**, so 0 production lines. The waiver applies at the exit, and it is not a signature.
+
+### Security / NFR triggers
+
+> - **`N8-SPAWN`: 0 added children, 0 ms charged.**
+>   **`T1` — a hop that changes the NUMBER of children re-measures both time clauses; the count pin forces the `N8_SPAWN` edit.** `T1` NOT FIRED: `const N8_SPAWN = 17 + 7 + 1 + 2;` is byte-identical.
+>   **`T2` — a hop that changes WHAT AN EXISTING CHILD DOES (its argv, its stdin script, its substitution hook or its settle) re-measures the per-child CPU clause on `src/cli.test.ts`, whether or not the count moves (`ADR-0035` decision 2: median, the twin's `R`, MET / NOT MET / UNRESOLVED against that set's `F`); the count pin cannot see it.** `T2` NOT FIRED: the diff is 25 comment lines; no child's argv, stdin script, substitution hook or settle changed.
+>   Ruling: `ADR-0017` decision 2; `plans/nfr-catalog.md` § `G-QE115-3`; carrier at the point of change: the comment on `ChildOptions` in `src/cli.test.ts` (`ABC-116`).
+- `N8-LANE`: the count is the pin (`ADR-0035` d3): 0 test files, 0 tests, 0 spawns, no timing bound written.
+- Security: not engaged (comment diff; no input path, process boundary, network or write outside `plans/` / `.grugops/`).
