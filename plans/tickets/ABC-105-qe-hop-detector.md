@@ -383,3 +383,17 @@ QE's own branch `grugops/qe-ABC-105`. Verdict note `.grugops/context/qe-ABC-105/
   or owner's call (`QE-105-v`).
 - **`A7` ceiling, observed:** `--ticket ABC-105` now exits 0 naming both QE's post-build verdict and the
   pre-build `qe-recheck-ABC-105/…-72ae8565`; the tool cannot tell them apart.
+
+## Fix (2026-10-12)
+
+Software Engineer, subtask `fix-ABC-105`. Branch `grugops/fix-ABC-105` off `a0016dbb`; code `4bf6f3ee`. Test-only:
+`tools/grugops/qe-hop-integrity.js` is `cmp` 0 to `60415a8a`. Notes `.grugops/context/fix-ABC-105/notes/`.
+
+- **`QE-105-p` closed.** `coverage()` over every real note (no `--ticket` folder filter) must read `ABC-062`
+  (snapshot minus `ABC-062`) and `ABC-073` as `finding`, and `--sweep` must list `ABC-073`. QE's `coverage()`-only
+  refs-only plant now turns 3 red, including `A3`'s own block (was 1, `A5` only).
+- **`QE-105-q` closed.** A symlinked `notes/` directory and a symlinked note file each exit 2; removing either check
+  turns 1 test red (was 0).
+- **`QE-105-t`.** The plant text is recorded verbatim in `…5c1e7a20`.
+- **Gates.** 57 files / 1775 tests (32 in this file), `success: true`, skip 0, integrity `No findings.` `QE-105-r` is
+  left open (it is a tool behaviour change).
