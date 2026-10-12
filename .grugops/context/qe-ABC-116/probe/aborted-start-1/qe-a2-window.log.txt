@@ -1,0 +1,410 @@
+2026-10-12T05:55:12Z window start; host Mac15,13 ncpu 8 node v26.11.0; pairs=5
+2026-10-12T05:55:12Z idle 60 s
+2026-10-12T05:56:17Z r0 1 base a1 real=3.96 cpu=5.54 exit=0 tests=Tests_69_passed_(69) verdict=warmup load1 5.38->7.11 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T05:56:17Z idle 20 s
+2026-10-12T05:56:45Z r0 2 mutant a1 real=6.99 cpu=8.77 exit=0 tests=Tests_69_passed_(69) verdict=warmup load1 5.80->5.61 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T05:56:45Z idle 20 s
+2026-10-12T05:57:09Z r1 1 base a1 real=4.08 cpu=5.75 exit=0 tests=Tests_69_passed_(69) verdict=kept load1 5.03->5.03 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T05:57:09Z idle 20 s
+2026-10-12T05:57:30Z FOREIGN pre r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T05:57:30Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+63768 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a1.time npx vite
+63772 npm exec vitest run src/cli.test.ts    
+2026-10-12T05:57:31Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+63768 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a1.time npx vite
+63772 npm exec vitest run src/cli.test.ts    
+63809 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:57:32Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+63768 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a1.time npx vite
+63772 npm exec vitest run src/cli.test.ts    
+63809 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:57:33Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+63768 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a1.time npx vite
+63772 npm exec vitest run src/cli.test.ts    
+63809 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:57:35Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+63768 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a1.time npx vite
+63772 npm exec vitest run src/cli.test.ts    
+63809 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:57:36Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+63768 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a1.time npx vite
+63772 npm exec vitest run src/cli.test.ts    
+63809 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:57:37Z FOREIGN post r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T05:57:37Z r1 2 mutant a1 real=7.15 cpu=8.77 exit=0 tests=Tests_69_passed_(69) verdict=DISCARD_foreign load1 4.44->4.16 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T05:57:37Z idle 30 s
+2026-10-12T05:58:07Z FOREIGN pre r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T05:58:08Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+65475 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a2.time npx vite
+65479 npm exec vitest run src/cli.test.ts    
+2026-10-12T05:58:09Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+65475 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a2.time npx vite
+65479 npm exec vitest run src/cli.test.ts    
+65509 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:10Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+65475 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a2.time npx vite
+65479 npm exec vitest run src/cli.test.ts    
+65509 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:11Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+65475 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a2.time npx vite
+65479 npm exec vitest run src/cli.test.ts    
+65509 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:13Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+65475 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a2.time npx vite
+65479 npm exec vitest run src/cli.test.ts    
+65509 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:14Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+65475 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a2.time npx vite
+65479 npm exec vitest run src/cli.test.ts    
+65509 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:15Z FOREIGN post r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T05:58:15Z r1 2 mutant a2 real=6.98 cpu=8.70 exit=0 tests=Tests_69_passed_(69) verdict=DISCARD_foreign load1 3.42->3.43 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T05:58:15Z idle 30 s
+2026-10-12T05:58:45Z FOREIGN pre r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T05:58:46Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+67044 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a3.time npx vite
+67048 npm exec vitest run src/cli.test.ts    
+2026-10-12T05:58:47Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+67044 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a3.time npx vite
+67048 npm exec vitest run src/cli.test.ts    
+67078 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:48Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+67044 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a3.time npx vite
+67048 npm exec vitest run src/cli.test.ts    
+67078 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:49Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+67044 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a3.time npx vite
+67048 npm exec vitest run src/cli.test.ts    
+67078 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:50Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+67044 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a3.time npx vite
+67048 npm exec vitest run src/cli.test.ts    
+67078 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:52Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+67044 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a3.time npx vite
+67048 npm exec vitest run src/cli.test.ts    
+67078 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:58:53Z FOREIGN post r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T05:58:53Z r1 2 mutant a3 real=6.89 cpu=8.68 exit=0 tests=Tests_69_passed_(69) verdict=DISCARD_foreign load1 2.95->2.95 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T05:58:53Z idle 30 s
+2026-10-12T05:59:23Z FOREIGN pre r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T05:59:23Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+68818 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a4.time npx vite
+68822 npm exec vitest run src/cli.test.ts    
+2026-10-12T05:59:25Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+68818 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a4.time npx vite
+68822 npm exec vitest run src/cli.test.ts    
+68853 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:59:26Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+68818 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a4.time npx vite
+68822 npm exec vitest run src/cli.test.ts    
+68853 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:59:27Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+68818 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a4.time npx vite
+68822 npm exec vitest run src/cli.test.ts    
+68853 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:59:28Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+68818 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a4.time npx vite
+68822 npm exec vitest run src/cli.test.ts    
+68853 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:59:29Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+68818 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a4.time npx vite
+68822 npm exec vitest run src/cli.test.ts    
+68853 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T05:59:31Z FOREIGN post r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T05:59:31Z r1 2 mutant a4 real=6.95 cpu=8.69 exit=0 tests=Tests_69_passed_(69) verdict=DISCARD_foreign load1 2.40->2.42 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T05:59:31Z idle 30 s
+2026-10-12T06:00:01Z FOREIGN pre r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T06:00:01Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+70401 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a5.time npx vite
+70405 npm exec vitest run src/cli.test.ts    
+2026-10-12T06:00:02Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+70401 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a5.time npx vite
+70405 npm exec vitest run src/cli.test.ts    
+70485 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:04Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+70401 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a5.time npx vite
+70405 npm exec vitest run src/cli.test.ts    
+70485 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:05Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+70401 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a5.time npx vite
+70405 npm exec vitest run src/cli.test.ts    
+70485 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:06Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+70401 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a5.time npx vite
+70405 npm exec vitest run src/cli.test.ts    
+70485 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:07Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+70401 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a5.time npx vite
+70405 npm exec vitest run src/cli.test.ts    
+70485 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:09Z FOREIGN post r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T06:00:09Z r1 2 mutant a5 real=7.03 cpu=8.82 exit=0 tests=Tests_69_passed_(69) verdict=DISCARD_foreign load1 2.34->2.21 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:00:09Z idle 30 s
+2026-10-12T06:00:39Z FOREIGN pre r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T06:00:39Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+72154 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a6.time npx vite
+72158 npm exec vitest run src/cli.test.ts    
+2026-10-12T06:00:40Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+72154 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a6.time npx vite
+72158 npm exec vitest run src/cli.test.ts    
+72192 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:42Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+72154 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a6.time npx vite
+72158 npm exec vitest run src/cli.test.ts    
+72192 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:43Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+72154 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a6.time npx vite
+72158 npm exec vitest run src/cli.test.ts    
+72192 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:44Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+72154 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a6.time npx vite
+72158 npm exec vitest run src/cli.test.ts    
+72192 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:45Z FOREIGN during r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+72154 /usr/bin/time -l -o /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/out/r1-mutant-a6.time npx vite
+72158 npm exec vitest run src/cli.test.ts    
+72192 node /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/a2/mutant/node_modules/.bin/vitest run src/cli.t
+2026-10-12T06:00:46Z FOREIGN post r1 mutant: 62904,62928,63011,62814,62912,
+62814 /opt/homebrew/bin/bash -c source /Users/olgeroeselg/.claude/shell-snapshots/snapshot-bash-1791218331443-s6oym4.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalia
+62904 pnpm exec vitest run --project integration packages/db
+62912 /Users/olgeroeselg/Library/pnpm/package-manager-store/v11/links/@/pnpm/12.9.1/1d23603dc64c5419a946832d34872121124d71d6cf5b70dd87f423e827d045b2/node_modules/pnpm/pnpm exec vitest run --project in
+62928 node /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.bin/../.pnpm/vitest@5.0.3_@opentelemetry+api@1.9.1_@types+node@26.6.4_vite@8.3.3_@types+node@26.6.4_jiti@
+63011 /opt/homebrew/Cellar/node/26.11.0_1/bin/node --experimental-import-meta-resolve --require /Users/olgeroeselg/Projects/private/oeselg-labs/platform/repos/shared/node_modules/.pnpm/vitest@5.0.3_@o
+2026-10-12T06:00:47Z r1 2 mutant a6 real=6.99 cpu=8.78 exit=0 tests=Tests_69_passed_(69) verdict=DISCARD_foreign load1 2.57->2.76 thermal 0->0 power AC_Power->AC_Power
+2026-10-12T06:00:47Z GIVING UP r1 mutant after 6 attempts

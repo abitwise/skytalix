@@ -424,3 +424,62 @@ Software Engineer (Claude Opus 5.5), 2026-10-12, subtask `ticket-to-pr-ABC-116`,
 >   Ruling: `ADR-0017` decision 2; `plans/nfr-catalog.md` § `G-QE115-3`; carrier at the point of change: the comment on `ChildOptions` in `src/cli.test.ts` (`ABC-116`).
 - `N8-LANE`: the count is the pin (`ADR-0035` d3): 0 test files, 0 tests, 0 spawns, no timing bound written.
 - Security: not engaged (comment diff; no input path, process boundary, network or write outside `plans/` / `.grugops/`).
+
+## QE
+
+QE/E2E (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-12, subtask `qe-ABC-116`, on branch
+`grugops/qe-ABC-116` off tip `d39618d1`. **Verdict: PASS_WITH_GAPS.**
+- **Order.** QE's own A1 and A2 readings were taken before the build notes and the TSV were read.
+- **Notes.** `.grugops/context/qe-ABC-116/notes/`; raw TSV in `.grugops/context/qe-ABC-116/probe/`.
+- **Status.** This is an agent `decision`, not a stamp.
+
+- **A1 MET as written.** All four parts (i)–(iv) are present inside the `ChildOptions` JSDoc
+  (`:322`, `:324`, `:330`, `:336`). Checked claim by claim against the code, two are not true:
+  - **QE-116-a (MEDIUM, recommended repaired before merge).** "its settle (`timeout`)" is wrong.
+    `timeout` is the `spawnSync` hang bound. The settle is `A9_SETTLE_SECONDS` (`:484`), a `sleep`
+    inside A9's shell argv (`:495`).
+  - **QE-116-b (LOW).** "the surface such a hop has to edit" overclaims. The block's own mutant edits
+    `CHILDREN.black` at `:695`, not the interface or `childOf`.
+  - Both are inherited from this page's `C2`.
+- **A2 MET; QE's spot check PASSES.** These are two out-of-tree trees of the tip with the same
+  one-line hook deletion: `/usr/bin/time -l npx vitest run src/cli.test.ts`, 5 alternating pairs after a
+  warm-up round, 60 s idle first, ≥ 20 s between runs.
+
+  | pair | order | Δ wall (s) | Δ CPU (s) |
+  |---|---|---|---|
+  | 1 | B-M | +3.21 | +3.21 |
+  | 2 | M-B | +3.11 | +3.20 |
+  | 3 | B-M | +3.15 | +3.13 |
+  | 4 | M-B | +3.09 | +3.21 |
+  | 5 | B-M | +3.46 | +3.58 |
+
+  - **Medians: +3.15 s wall, +3.21 s CPU, with sign 5/5.** Against the Engineer's +3.08 / +3.12, that is
+    +0.07 / +0.09, inside ±0.5 s.
+  - Every kept run read 69/69 green, thermal 0 and AC power. load1 ran 2.51–4.58.
+  - 8 runs were discarded for another session's runner (`oeselg-labs/platform`). The first window was
+    aborted and re-taken.
+  - The Engineer's TSV recomputes exactly: +3.080 / +3.115, x(2)..x(7) +2.91..+3.19 / +3.00..+3.27,
+    8/8, twin R 0.180 / 0.100.
+  - Their 3 discards each carry a foreign count, and no kept row does. Their mutant is the one line.
+  - The comment's figure and the disagreement sentence claim no cause beyond what was measured.
+- **A3 MET.** The `T1` and `T2` sentences and the `Ruling:` line are `cmp`-equal between the canonical
+  form and the triggers quote.
+- **A4 MET.** The sentence is at `## Delivery` `:392`.
+- **A5 MET.**
+  - The `src/` diff is `src/cli.test.ts` only: +25/−0, 0 non-comment lines.
+  - Non-test `src/`, the catalog and `AGENTS.md` are all empty.
+  - The 8-row hash is `c74e7426…0d3b` at base and at tip.
+  - The pointer is named and not made, and `:1192` / `:1629-1630` are correct.
+- **A6 MET.**
+  - `npm test` reads 56 / 1743 / 0 at base and at tip, both `success: true`.
+  - The `N8_SPAWN` pin lines and the `CHILDREN` block are hash-identical.
+  - `T2` did not fire, and the mutant run is not claimed as a `T2` re-measure.
+- **Gates at the tip, run after the timed runs.**
+  - Lint, typecheck and build exit 0.
+  - `npm test` exits 0.
+  - The skip count is 0, and the integrity check reads `No findings.`
+- **UAT waiver.** The production `src/` diff is empty, measured, so the waiver applies. It is not a signature.
+- **The force-added `*.log` files (QE-116-c, LOW).** Acceptable as a record, but rename them to
+  `*.log.txt`. They are the only tracked `*.log` files, `.gitignore` still matches them, and `rg`
+  does not list them.
+- **QE-116-d (INFO).** Note `…ae9de9b2` places the logs in `9b8c38ec`. They were added at `d39618d1`.
