@@ -348,3 +348,27 @@ to `P3`.
 | 8 | size assigned | ✅ `M` (5); `A9` is one more author value on an existing rule |
 | 9 | priority assigned | ✅ `P2`, with a demotion trigger |
 | 10 | no major unresolved blocker | **✅** *(was ⚠️)* the owner's answer 5 acknowledges the ceiling |
+
+## QE re-check (2026-10-12)
+
+QE/E2E, subtask `qe-recheck-ABC-105`, read at `main` `21980135` (byte-equal to `05a1f11d` on `## Done` and
+`.grugops/context/`). Pre-build, read-only. **Criteria above are not edited here; amendments are BA/PM's.**
+
+**Verdict: BUILDABLE WITH PAGE AMENDMENTS.** The design holds on today's data. The four-condition rule
+parses every QE/Security-NFR note with plain `String.split`, `A3`'s refs-only false pass on `ABC-062` still
+reproduces on real notes, and the 38-id cutover set is reconstructable from git. Two criteria do not hold
+as worded:
+- **`QE-105-a` (HIGH).** § Scope 3 says the snapshot is "`Done` on 2026-08-17" (38 ids), but
+  § Dependencies says it is "the board as it stands when this lands". A land-time set today would be 131 ids,
+  leaving 0 in scope. That would silence `A4`'s findings, `A9`'s `ABC-073` exit 1, and 93 post-directive
+  tickets. Suggested fix: fix the set as `## Done` at `9998a544` (38 ids).
+- **`QE-105-b` (HIGH).** `A2`'s `ABC-076` exits 1 under an exact-element reading of "refs contains `T`", because
+  its QE decisions cite only `plans/tickets/ABC-076-…md`. Suggested fix: define "contains `T`" by `A5`'s
+  normalisation.
+
+The sweep at the tip, measured: 131 `Done`, 38 pre-cutover, 75 covered (`qe-e2e`), 2 substitute
+(`ABC-072`, `ABC-147`), 15 findings (16 under exact refs). Of the findings, 0 are real misses.
+
+Gap register `QE-105-a`…`QE-105-o` (2 HIGH, 6 MEDIUM, 7 LOW) is in
+`.grugops/context/qe-recheck-ABC-105/notes/` (`…72ae8565`, decision). The sweep table, with commands, is in
+`…298a669e`. `P2` demotion trigger: not fired.
