@@ -6,6 +6,7 @@
  * checked-in artifact, so regenerating the book from a newer source never turns this red unless
  * the new book breaks a property. No snapshot, no exact entry count (ticket test note 3).
  */
+import { createHash } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
@@ -25,7 +26,14 @@ import { parseFen } from "../../src/fen.ts";
 import { legalMoves } from "../../src/legal.ts";
 import type { Position } from "../../src/position.ts";
 import { zobristKey } from "../../src/zobrist.ts";
-import { SOURCE_COMMIT, SOURCE_FILES, toUci, writeBook } from "./compile.ts";
+import {
+  checkThenWriteBook,
+  SOURCE_COMMIT,
+  SOURCE_FILES,
+  SOURCE_SHA256,
+  toUci,
+  writeBook,
+} from "./compile.ts";
 
 vi.mock("../../src/zobrist.ts", { spy: true });
 
@@ -255,5 +263,52 @@ describe("the delivered artifact (data/opening-book/book.json)", () => {
     expect(unsortedMoves).toEqual([]);
     expect(emptyUnnamed).toEqual([]);
     expect(controlNames).toEqual([]);
+  });
+});
+
+// ABC-145 (ADR-0037 D1(f) amendment): the command-line path checks each source file's sha256.
+describe("ABC-145 — the source bytes are checked against pinned sha256 values before a write", () => {
+  const sha256 = (path: string): string =>
+    createHash("sha256").update(readFileSync(path)).digest("hex");
+
+  it("A1/A2 — refuses a source altered by one byte and writes nothing; unaltered, it writes", () => {
+    const dir = fixture("abc145", `${HEADER}\n${GOOD_ROWS.join("\n")}\n`);
+    const expected = Object.fromEntries(
+      SOURCE_FILES.map((file) => [file, sha256(join(dir, file))]),
+    ) as typeof SOURCE_SHA256;
+
+    const control = join(scratch, "abc145-control.json");
+    checkThenWriteBook(dir, control, "0".repeat(40), expected);
+    expect(existsSync(control)).toBe(true);
+
+    // One byte changed in place, inside a name: the file stays well-formed, so only the hash can
+    // refuse it.
+    const altered = join(dir, "a.tsv");
+    writeFileSync(altered, readFileSync(altered, "utf8").replace("Italian Game", "Italian Gamf"));
+    const actual = sha256(altered);
+    expect(actual).not.toBe(expected["a.tsv"]);
+
+    const out = join(scratch, "abc145-altered.json");
+    let refusal = "";
+    try {
+      checkThenWriteBook(dir, out, "0".repeat(40), expected);
+    } catch (error) {
+      refusal = (error as Error).message;
+    }
+    expect(["a.tsv", expected["a.tsv"], actual].filter((part) => refusal.includes(part))).toEqual([
+      "a.tsv",
+      expected["a.tsv"],
+      actual,
+    ]);
+    expect(existsSync(out)).toBe(false);
+  });
+
+  it("A3 — each SOURCE_SHA256 value sits on ATTRIBUTION.md's table row for its own file", () => {
+    const rows = readFileSync(join(BOOK_DIR, "ATTRIBUTION.md"), "utf8").split("\n");
+    const onOwnRow = SOURCE_FILES.filter((file) => {
+      const own = rows.filter((row) => row.startsWith(`| \`${file}\` |`));
+      return own.length === 1 && (own[0] as string).includes(`\`${SOURCE_SHA256[file]}\``);
+    });
+    expect(onOwnRow).toEqual([...SOURCE_FILES]);
   });
 });

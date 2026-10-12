@@ -29,5 +29,6 @@ data came from and why it may be shipped (`ADR-0023` decision 3; `ABC-093` `A6`)
 
 Fetch the five files above into a directory outside this repository, then run
 `node tools/opening-book/compile.ts <that directory>`. The source files are not checked in.
-To move to a newer upstream commit, change `SOURCE_COMMIT` in `tools/opening-book/compile.ts`
-and this file together.
+The compiler refuses, and writes nothing, if a file's sha256 differs from its pin in `SOURCE_SHA256`.
+To move to a newer upstream commit, change `SOURCE_COMMIT` and `SOURCE_SHA256` in
+`tools/opening-book/compile.ts` and this file together.
