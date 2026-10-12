@@ -149,3 +149,24 @@ BA/PM, 2026-10-12. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-12 (subtask `ticket-to-pr-ABC-153`). Branch `grugops/ABC-153-book-sha256-every-file`
+from `main` `21980135` (child of the brief's `05a1f11d`; board/queue only); code commit `917df052`. The detail is in
+`.grugops/context/ticket-to-pr-ABC-153/notes/`. **No timing reading was taken.**
+
+- **Shape:** inside the existing `A1/A2` `it`, each file gets `HEADER` plus one `GOOD_ROWS` row (file `i`, row `i`),
+  written over `fixture()`'s output; the helper is untouched. A `forEach` over `SOURCE_FILES` lower-cases the
+  first letter of that file's name (one byte, in place), checks the refusal, then restores the file.
+- **`A1`:** set of expected hashes has size 5 (asserted); per file: refused, 3 of 3, output absent. PASS.
+- **`A2`:** the unaltered control writes. PASS.
+- **`A3`:** unmutated base 19/19 green, head 19/19 green. `M05` base green (19 passed), head red (1 failed:
+  `b.tsv` not refused). `M-SWAP` base green, head red (1 failed: the control refuses `b.tsv`). `M06` red on
+  both (1 failed: `a.tsv` not refused). PASS.
+- **`A4`** (read at `917df052`): one path, 0 new files; `cmp` 0 on lines 1–273, on the `A3` `it` to EOF and on
+  `fixture()`; `compile.ts` and `book.json` `cmp` 0; 0 spawns; `npm test` 56 files / 1743 tests at base and head,
+  0 skipped. PASS.
+- **Gates:** lint, typecheck, build and `npm test` exit 0; `last-run.json` `success: true`; integrity `No findings.`
+- **UAT waiver reading:** `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'` is empty.
+- **Owed:** the QE hop.
