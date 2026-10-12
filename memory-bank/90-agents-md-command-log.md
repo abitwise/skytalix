@@ -81,6 +81,19 @@ TRAPS, read from `tools/opening-book/compile.ts` (lines 139-146) and run:
 - Source files are not checked in. `AGENTS.md` carries the line and one fact; the URLs and hashes stay in
   `ATTRIBUTION.md` (single source, not restated).
 
+UPDATE 2026-10-12 (`ABC-145`, `scribe-lines-2026-10-12`): the third TRAP above ("it does not re-check the five
+sha256 values at compile time", `QE-093-b`) is overtaken; the words stay, as dated. The compiler now carries
+`SOURCE_SHA256` and refuses a source file whose sha256 differs, naming the file and both hashes, exit 1,
+writing nothing. The no-argument run is unchanged: usage line, exit 1 (re-run this hop, writes nothing).
+Receipt: QE's `A4` RUN, `qe-ABC-145` note `…0d24876c`, 2026-10-12 (cited, not re-run here; it needs the five
+sources fetched over the network): five files fetched from the raw URLs at `a6189a30…`, every sha256 equal
+the pins, `node tools/opening-book/compile.ts <dir>` exit 0, `cmp` 0 against `git show main:data/opening-book/book.json`.
+Negative runs on copies, each followed by `cmp` 0 on `book.json`: `x` appended to `b.tsv`, exit 1, `Error:
+b.tsv: sha256 is 1a104c25…e951, expected 1d5ed134…f623`; one byte flipped in place in `c.tsv`, exit 1, naming
+`c.tsv` and both hashes; `e.tsv` missing, exit 1 (`ENOENT`); an extra `f.tsv`, exit 0, ignored (only the five
+`SOURCE_FILES` are read). Exit 1 on a refusal is Node's status for an uncaught `throw`, not a deliberate code
+(`QE-145-e`: the base compiler also exits 1 on the appended-byte copy, so only the hash text tells the two apart).
+
 ## Test (all) — `npm test`
 
 `node tools/grugops/run-bounded.js 60000 vitest run` (`ABC-122`). RUN 2026-09-25: exit 0, 47 files,
@@ -116,6 +129,13 @@ RE-MEASURED once more, 2026-10-10T19:05Z, `scribe-book-regen-2026-10-10`, wave t
 merged as `ac83c3fd`): exit 0, **53 files, 1680 tests, 8.09 s** (a loaded reading). `AGENTS.md` now reads
 53/1680, 8.1 s. The +1 file is `tools/opening-book/book.test.ts`; the +17 tests over 1663 are its 17
 (13 engineer + 4 QE). Moving figure: ... -> 52/1663 -> 53/1680.
+
+RE-MEASURED once more, 2026-10-12, `scribe-lines-2026-10-12`, `main` `d8794608` (the `ABC-145` / `ABC-148` /
+`ABC-117` / `ABC-116` merges in): exit 0, **56 files, 1743 tests**. Counts only; no wall time was taken (three
+hops shared the host). `AGENTS.md` now reads 56/1743 and carries no time figure; the last quiet time, 6.15 s
+`real` / 5.73 s `Duration`, is in the `ABC-152` pass below (taken at 1741 tests). The +2 over 1741 is
+`ABC-145`'s two tests in `tools/opening-book/book.test.ts` (QE: base 56/1741, head 56/1743). `ABC-148`,
+`ABC-117` and `ABC-116` added no tests. Moving figure: ... -> 53/1680 -> 56/1741 -> 56/1743.
 
 ## Search deep lane (`ABC-077`) — `SEARCH_DEEP=1 npx vitest run src/search.test.ts`
 
@@ -548,3 +568,25 @@ rewrote the reporter for 4.x (`onTestRunEnd`) with a load-time check, so it no l
 4.x"; the six-row regression plants (reporter header) are still owed on any vitest bump. Notes read:
 `ticket-to-pr-ABC-152` (`…4567b6b5`, `…ac190931`), `qe-ABC-152`, `qe2-ABC-152`, `design-ABC-152*`
 (`…e50fbbe3`), `secnfr-ABC-152-window` (`…bceca0ca`).
+
+## `scribe-lines-2026-10-12` pass, 2026-10-12 (`ABC-145`, `ABC-148`, `ABC-117`, `ABC-116` merged)
+
+Task `scribe-lines-2026-10-12`, branch `grugops/scribe-lines-2026-10-12` from `main` `d8794608`. `AGENTS.md`
+24,494 B -> **24,545 B** (+51 B; budget 24,576 B, `ABC-109`; headroom 82 -> **31 B**).
+
+| change to `AGENTS.md` | bytes | source |
+|---|---:|---|
+| `Test (all)` receipt "1741 tests, 6.2 s" -> "1743 tests" (time dropped, not re-taken) | -7 | one `npm test` run in this worktree, exit 0, 56 files / 1743 tests; counts only |
+| book-compiler row gains "Wrong sha256: refused, exit 1, nothing written (ABC-145)." | +58 | `ABC-145`, QE's `A4` RUN (the entry under "Regenerate the opening book" above) |
+
+Receipts owed and written here: `ABC-145` (the "Regenerate the opening book" entry, dated UPDATE); the 56/1743
+count ("Test (all)" entry, RE-MEASURED). `ABC-116`: comment only on `ChildOptions` in `src/cli.test.ts` (its
+hook-deletion re-measure, +3.08 s wall / +3.12 s CPU, is a test-lane cost in the ticket's notes, not a
+command): no command changed, no `AGENTS.md` line, no receipt. `ABC-148`: a comment in `src/cli.test.ts`: none.
+`ABC-117`: a correction of a record (the `EBADF` exit 1 is Node's unhandled-exception status, not
+`USAGE_EXIT_CODE`); `AGENTS.md` does not carry the `EBADF` wording and its "1 refused command line" exit-code line
+stays true (a refused command line does exit 1), so nothing was made false.
+
+Checked for other lines the four merges made false, none found: the `Dev / run` slot (exit 0 / 1 / 70), the
+worker-cap and `ABC-152` lines, the deep-lane receipts (none of the four touched `src/` production, `vitest.config.ts`
+or `package.json`).

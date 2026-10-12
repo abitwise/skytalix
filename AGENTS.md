@@ -73,7 +73,7 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 - Regenerate the opening book (ABC-093): `node tools/opening-book/compile.ts <dir>` <!-- RUN 2026-10-10:
   exit 0, 0.4 s; rewrites `data/opening-book/book.json` IN PLACE, `cmp` 0 against the committed file.
   `<dir>` = the five source files `a.tsv`..`e.tsv` fetched OUTSIDE the repo at the pinned CC0 commit
-  (URLs, sha256: `data/opening-book/ATTRIBUTION.md`). No `<dir>`: usage, exit 1. -->
+  (URLs, sha256: `data/opening-book/ATTRIBUTION.md`). No `<dir>`: usage, exit 1. Wrong sha256: refused, exit 1, nothing written (ABC-145). -->
 
 ### Test
 
@@ -84,7 +84,7 @@ waiting shell's own command line and never exits. Wait on the PID you started or
 completion notification; if a pattern is unavoidable, bracket one character (`[v]itest`).
 
 - Test (all): `npm test` <!-- `node tools/grugops/run-bounded.js 60000 vitest run` (ABC-122). RUN
-  2026-10-12: exit 0, 56 files, 1741 tests, 6.2 s. A hung lane exits 124 at the 60 s bound — stop
+  2026-10-12: exit 0, 56 files, 1743 tests. A hung lane exits 124 at the 60 s bound — stop
   with Ctrl-C/SIGTERM, never SIGKILL (R1: can orphan a hung vitest). `*_DEEP` lanes below run via
   `npx vitest run` directly, never through `npm test`. -->
 - Worker cap (ABC-144, ADR-0040 addendum 2): `vitest.config.ts` `test.maxWorkers: 2`, pinned by value in
