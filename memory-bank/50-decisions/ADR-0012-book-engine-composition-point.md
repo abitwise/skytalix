@@ -22,6 +22,14 @@ and two re-measurements.
 an injected `() => number`; `seededRandom` stays in `src/levels.ts`; a production session binds
 `Math.random` at the root (D3). Clause 3(b) holds as written. Nothing else in this file changes.
 
+**2026-10-12, `design-ABC-095-wiring`:** a pointer only. Clauses 1–9 are unchanged.
+- **The wiring of clause 2(3) is ruled** in `ADR-0037` § Addendum — 2026-10-12.
+- **The file read** lives in a new holder, `src/book-file.ts` (R1).
+- **The child-process doubles** move from `./engine.ts` to `./book-engine.ts`, which is the supplier at
+  `engine:` once this clause's composition is in place (R2).
+- **Clause 2(3)'s `engine: withBook(probe, …)`** is the shape `ABC-043` `A1`'s pin moves to. A
+  same-type decorator is not an "adapter" in `A1`'s sense.
+
 ### Why it is ratified here, when the proposing hop declined
 
 That hop left it `proposed` on two named grounds. The first is a misreading and is corrected; the
