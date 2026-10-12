@@ -366,3 +366,51 @@ inventory"*.
 | 8 | size assigned | **✅** `XS`. One extra board append does not move it |
 | 9 | priority assigned | **✅** `P2`, by the page's own trigger |
 | 10 | no major unresolved blocker | **✅** none |
+
+## Delivery
+
+Software Engineer (Claude Opus 5.5, subagent of the Orchestrator), 2026-10-12, subtask
+`ticket-to-pr-ABC-117`. Branch `grugops/ABC-117-exit-one-correction` from `main` @ `3537fe48`
+(the subtask frontmatter says `61aef6e6`; the dispatch said `3537fe48`, which is `main`). Corrections
+commit `59000c87`; this section, the trace row and the `artifact-ref` follow it. Not pushed, not
+merged, no column moved. **This hop wrote every corrected sentence and has not validated them; the
+`In Review` verdict is a separate QE hop's.** Readings and rulings: `.grugops/context/ticket-to-pr-ABC-117/notes/`.
+
+- **`A1` — both runs made here (Node v26.11.0).** `node src/cli.ts 1</dev/null </dev/null`: exit `1`,
+  **0** `usage:` lines, **0** `internal error` lines, no `CAUGHT:`, Node's banner on `src/cli.ts:160`.
+  QE's out-of-product script with `1</dev/null`: exit `1`, **no `CAUGHT:`**; writable control exit 0.
+  **Disagreement with this page, written down:** its `grep -c "Usage"` reads 0 on the refusal path
+  too (`node src/cli.ts --nonsense` → exit 1, 0 matches), because the line is lower-case `usage:`
+  (`src/cli.ts:88`, and `:87` at `fcf12c1`). That zero decides nothing. `grep -c '^usage: '` reads 1
+  on the refusal and 0 on `EBADF`, and the corrected sentences cite that one. The conclusion holds.
+- **Sites, re-located by content at `3537fe48`.** S1 `…8a4b2e69:20`, S2 `:41`, S3 `…9d3a7e52:43`,
+  S4 `…8c04b19d:66`, S5 `…6b1e4c72:46`, all unmoved. **S6 board `:659`** (was `:168` at the cut,
+  `:588` at the re-score). **S7** `ABC-115` page `:302`, unmoved. **S8** `src/cli.test.ts:3366` (was
+  `:2980`, then `:3342`). **S9** board `:871` (was `:791`).
+- **`A2`.** `…8a4b2e69` byte-identical. A new `decision` `…0081a95a` supersedes it and carries (i)
+  Node's status with the two zero counts, (ii) no `try`/`catch` can route it, so the outcome goes in
+  the `:160` arm, (iii) the ruling and trigger verbatim (original lines 24-49, `cmp` equal), and (iv)
+  the residual is not re-opened.
+- **`A3`.** One `observation` `…92514474`, all three ids on `refs`, `supersedes` empty. `git diff
+  --numstat` is empty for all three originals, and no existing note file is touched.
+- **`A4`.** `plans/board.md` +2/−0, `ABC-115` page +14/−0. Each block quotes the clause it corrects.
+  **S9 rides the one S6 block**, named there by its entry, because the subtask fences the board to
+  one correction (decision `…7f8b9026`). S8 is comment lines only (+8/−4) and says it corrects the
+  earlier sentence.
+- **`A5`.** `ADR-0016` numstat empty. On the `ABC-115` page the only lines touched are the 14 added
+  after the `## RESIDUAL` paragraph (S7). They quote `:302`'s clause, and no existing line changed.
+  No wider arm is proposed. `ABC-115` is not described as re-scored, moved or re-opened.
+- **`A6`.** `src/` lists only `src/cli.test.ts`. The non-test numstat is empty, 0 non-`//` lines are
+  changed, and `nfr-catalog.md`/`AGENTS.md` numstat is empty. 8 rows hash
+  **`c74e7426…0d3b` at base AND head** (equal). That is the re-score's value and differs from this
+  page's `63f66795…ca31`, which was taken at `fcf12c1`.
+- **`A7`.** `npm test`: **56 files / 1741 tests / 0 skipped, before and after**, both exit 0. The
+  `N8_SPAWN`/`spawned`/`Object.keys(CHILDREN)` lines hash the same at base and head. **`T2` does not
+  fire:** the diff is comments only, so no child's argv, stdin script, substitution hook or settle
+  changes, and the count literal is byte-identical.
+- **Gates at the tip:** lint, typecheck, build and `npm test` all exit 0, and
+  `.test-results/last-run.json` reads `success: true`. Skip integrity reads `No findings.` at 0.
+  **UAT-waiver reading:** `git diff --name-only main...HEAD | grep -v '\.test\.ts$' | grep '^src/'`
+  is empty.
+- **Left alone, flagged:** `src/cli.test.ts:3251` (`EPIPE`, pre-`ABC-115`, not CLAIM-B as written)
+  and the `A10` comment's stale `src/cli.ts:159` cite (now `:160`).
