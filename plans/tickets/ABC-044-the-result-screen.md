@@ -214,3 +214,19 @@ Assessed against `agent-factory/checklists/definition-of-ready.md` by BA/PM at t
 | 8 | size assigned | **✅** `S` (2), with the split line named |
 | 9 | priority assigned | **✅** `P1` |
 | 10 | no major unresolved blocker | **⚠️** **one ordering dependency is OPEN and is itself blocked** — `ABC-043` waits on `ABC-037` and on an `EngineSeam` that does not exist. **The question this ticket was cut to answer — the reason count — is SETTLED, not open** |
+
+## Amendment — 2026-10-12 (delivered by `ABC-095`'s diff): (N) confirmed, no Given changes
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5cc`. **This page stays
+`Done`, and no criterion's text changes.** `ABC-095`'s diff moves the engine double in the children
+that this page's two `src/cli.test.ts` rows read, from `./engine.ts` to `./book-engine.ts` (`withBook`).
+That is `ADR-0037` § Addendum — 2026-10-12 R2. Reasons: `.grugops/context/bapm-amend-ABC-095/notes/`.
+
+- **`A3`.** Its Given, "`engine-failure` and `engine-threw` with `result: null`", does not change. The
+  row reads `ABC-043` `A5`'s two children (`engineThrows`, `engineForeign`). (N) is confirmed on
+  `ABC-043`'s page: the same `EngineSeam` at `engine:`, the screen produced by product code, one seam.
+  With the book wired and the old double, the "did not finish" screen went missing, because the fault
+  was never reached (`…ef39c9a6`).
+- **`A6`.** It reads `ABC-043` `A2`'s `mate` child, "a scripted game driven to checkmate". That Given
+  stipulates the scripted opponent, so (N) is confirmed and unchanged. The re-target also closes the
+  40 % flake the book would have put on this row.

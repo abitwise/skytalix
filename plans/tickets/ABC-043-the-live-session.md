@@ -116,7 +116,12 @@ child process — `EPIC-002` `4c` and this epic's own `## Test notes`.
 
 - **`A1` (it wires the merged loop, with no adapter).** **Given** the delivered entry point, **when**
   it is typechecked, **then** `runTurnLoop` is called **exactly once** with all six options and **no
-  cast and no adapter** on any of them.
+  cast and no adapter** on any of them. *(Pointer added 2026-10-12 by BA/PM; the criterion text is
+  unchanged. Since `ABC-095`, the `engine:` value is `withBook(book, createEngine({ budgetMs:
+  DEFAULT_BUDGET_MS }))` (`ADR-0012` clause 2(3); `ABC-095` `A7`). A same-type decorator,
+  `EngineSeam → EngineSeam`, is not an "adapter" in this criterion's sense, which is a type adapter
+  that `tsc` decides. The `engine:` row's pin moves in `ABC-095`'s diff, with both halves pinned. See
+  § Amendment — 2026-10-12.)*
 - **`A2` (a scripted game runs end to end, through the real interface).** **Given** a piped stdin
   carrying a scripted mating line and a deterministic opponent, **when** the entry point runs, **then**
   the last frame written shows the mated position, the loop's `result` is the mating side's win with
@@ -272,6 +277,14 @@ deterministic double may call the real `legalMoves`.
   criterion**, and at `DEFAULT_BUDGET_MS` = 3 s per engine ply it would also breach `NFR-008`'s 3 s
   wall clause on its own. `A2` says *"a deterministic opponent"* and that is exactly what it gets.
 
+*(Note added 2026-10-12 by BA/PM, `ADR-0037` § Addendum R2; the words above are kept as the record.)*
+**Since `ABC-095`, the double stands at `./book-engine.ts` (`withBook`).** That module is the supplier
+at `engine:` under `ADR-0015` (S), because `./engine.ts`'s binding now goes to `withBook` and not to the
+bag. Read "a different `./engine.ts`" above as "a different `./book-engine.ts`", and "substituted
+`createEngine`" as "substituted `withBook`". The double returns the same seam as before (throwing,
+foreign-move or scripted). The seam is the same `EngineSeam` at `engine:`, so the ruling's mechanism and
+its three limits are unchanged.
+
 **The three shapes that were offered, and what happened to each:**
 
 1. **A spawned-process test that induces the fault without an export — ADOPTED**, in the form above.
@@ -345,6 +358,9 @@ allow-list**; there is no list, in either direction.
 | `A2` + `./line-input.ts` | ❌ | **❌ `A2`'s Given stipulates a REAL piped stdin carrying the scripted line** | — | **refused, unchanged** |
 | `A5` + `./line-input.ts` alongside the engine double | ❌ | — | **❌ second seam** | **refused, unchanged** |
 | `A3` + `./command-input.ts` (the rig that shipped) | **❌ `A3`'s Given stipulates the `InputSeam`, not the parser** | — | — | **refused by (N) as well as by (S)** |
+| *(added 2026-10-12)* `A5` + `./book-engine.ts` throwing / illegal-move seam (`engineThrows`, `engineForeign`) | ✅ `EngineSeam`, the same seam at `engine:` | ✅ exit code, `reason`, output all real; the double is the whole opponent, and no Then reads the book | ✅ one (`./engine.ts` is no longer substituted) | **admissible** — the `A5` row above, re-targeted by `ABC-095` |
+| *(added 2026-10-12)* `A2` + `./book-engine.ts` scripted opponent (`mate`) | ✅ "a deterministic opponent" | ✅ frames, `result`, `reason` and exit code are product code | ✅ one | **admissible, unchanged.** It also closes a flake: with the book in front, `mate` passed only when the book answered `1. f3` with `e5`, 60 % of runs |
+| *(added 2026-10-12)* `A7` + `./book-engine.ts` scripted opponent (`colourBlack`, `colourWhite`) | ✅ as admitted 2026-08-20 (`## Test notes` 8: no default-lane row runs the real search) | ✅ who acts first, the unconsumed line and the frames are product code | ✅ one | **admissible, unchanged.** The re-target moves the module, not the seam |
 
 **The last row is the point.** The shipped `parserBug` child is out under **both** halves of the
 fence, independently. Lifting a name for `A3` ratifies **nothing** currently in `src/cli.test.ts`.
@@ -505,3 +521,22 @@ ruled by **Architect/Design**. Nothing on this page can clear it, and no wording
 which is exactly why it is recorded as a ⚠️ rather than smoothed into prose. **A pull with it open is
 a decision the Orchestrator may take with the number in front of him** (≈ 0.44 s of new child cost, on
 a lane already reading over its clause); it is not a decision this table makes for him.
+
+## Amendment — 2026-10-12 (delivered by `ABC-095`'s diff)
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-amend-ABC-095`), at `main` `85e9d5cc`. **This page stays
+`Done`, and no criterion's text changes.** What changes is the instrument. Both changes are delivered by
+`ABC-095`'s diff (`ADR-0037` § Addendum — 2026-10-12 R2). Reasons:
+`.grugops/context/bapm-amend-ABC-095/notes/`.
+
+- **`A1`: a pointer only** (above). The `engine:` row's pin moves to `withBook(book, createEngine({
+  budgetMs: DEFAULT_BUDGET_MS }))`, with both halves pinned and a reason line. "No adapter" means a type
+  adapter, and `withBook` is the composition `ADR-0012` clause 2(3) names.
+- **`A2`, `A5`, `A7`: the double moves from `./engine.ts` to `./book-engine.ts`.** With the book wired,
+  an `./engine.ts` double stands behind the book and is never reached on an in-book ply. The SE's
+  attempted wiring went red on `A5` and `A7`, and `A2` became a 40 % flake (`…ef39c9a6`, `…7f2adbae`).
+  (N1)–(N3) are re-confirmed in the three rows added to § The (N) limit. **The Givens of `A2`, `A5` and
+  `A7` do not change.**
+- **Recorded, not re-opened.** `A7`'s Given (`--colour black` / `white`) does not itself stipulate a
+  constructed engine. Its double was admitted at the 2026-08-20 build on `## Test notes` 8, and it was
+  never tabulated under (N) until now. The re-target does not change that reading.
