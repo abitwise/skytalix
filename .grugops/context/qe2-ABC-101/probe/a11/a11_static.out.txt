@@ -1,0 +1,55 @@
+A11d keys: base 24 (matches 24), head 24 (matches 24); key sets identical: True
+  unicode keys 12, ascii keys 12, keys naming both or neither: 0
+  changed bodies: 12; all unicode: True; changed == unicode set: True
+  ascii bodies byte-identical: True (12/12)
+  text outside the entries byte-identical: True
+  every unicode head body == base body with the six pairs swapped char for char: True
+  chars differing outside the 12 glyphs: 0; equal lengths: True
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete > kiwipete ascii black-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete > kiwipete ascii white-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete > kiwipete unicode black-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete > kiwipete unicode white-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3 > position-3 ascii black-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3 > position-3 ascii white-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3 > position-3 unicode black-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3 > position-3 unicode white-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4 > position-4 ascii black-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4 > position-4 ascii white-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4 > position-4 unicode black-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4 > position-4 unicode white-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5 > position-5 ascii black-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5 > position-5 ascii white-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5 > position-5 unicode black-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5 > position-5 unicode white-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6 > position-6 ascii black-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6 > position-6 ascii white-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6 > position-6 unicode black-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6 > position-6 unicode white-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos > startpos ascii black-bottom 1
+    same    ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos > startpos ascii white-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos > startpos unicode black-bottom 1
+    CHANGED ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos > startpos unicode white-bottom 1
+
+A11f it/test call sites (literal titles; loop-generated ones counted once): base 22, head 25
+  modifiers (.skip/.todo/.only/.fails/.skipIf) base [] head []
+  base titles all present at head: True
+  added titles: ['"A11a: draws every White piece filled (U+265A-U+265F) and every Black piece outline (U+2654-U+2659), type for type"', '"A11b: draws the exact start frames in Unicode, in both orientations"', '"A11c: keeps 9 rows of 18 code points AND 18 UTF-16 units, with 0 U+001B, on every matrix cell"']
+  '.skip(' occurrences base 0 head 0
+  '.todo(' occurrences base 0 head 0
+  '.only(' occurrences base 0 head 0
+  '.skipIf(' occurrences base 0 head 0
+  '.runIf(' occurrences base 0 head 0
+  '.fails(' occurrences base 0 head 0
+  expect( count base 51 head 61; .toMatchSnapshot base 1 head 1
+
+  lines 1..634 differing base->head: 16 at [316, 317, 322, 323, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422]
+  each differing head line == base line with the six pairs swapped: True
+  lines 1..634 of head equal base apart from those: True; base length 635 head length 707
+  base tail after 634: ['']
+  UNICODE_BY_FEN_LETTER references at head: 2 (lines [410, 442])
+  the same references at base: lines [410, 442]
+
+render.ts: lengths 151/151; differing lines [74, 75, 77, 78, 79, 80, 81, 82]
+  lines 77-82 head == base swapped: True
+  line 70 (entry order) base/head: '/** Indexed by piece TYPE (`pieceType`, 1..6); each entry is the white glyph then the black one. */' / '/** Indexed by piece TYPE (`pieceType`, 1..6); each entry is the white glyph then the black one. */'
+  ascii-table lines identical: True
