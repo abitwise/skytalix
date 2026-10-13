@@ -1,0 +1,115 @@
+
+=== control — plant dirs before: 0
+tsc exit 0
+vitest exit 0; files 392; tests 1789, passed 1789, failed 0, pending 0
+  (no red row)
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/control; plant dirs after: 0
+
+=== S1_parseInt_range — plant dirs before: 0
+edit src/cli-options.ts: -"      const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);"
+          +"      const parsed = Number.parseInt(next ?? \"\", 10);\n      const value = parsed >= 1 && parsed <= 5 ? String(parsed) : undefined;"
+tsc exit 0
+vitest exit 1; files 392; tests 1789, passed 1786, failed 3, pending 0
+  RED src/cli.test.ts :: ABC-042 — the accepted set is closed A6(i) — the enumeration is the ONLY argv literal in the delivered resolver
+      AssertionError: bare literal : expected [ '--ascii', '--unicode', …(14) ] to include ''
+  RED src/cli.test.ts :: ABC-042 — the shape of what was delivered A8 — neither delivered module names a row count
+      AssertionError: expected [ '0', '0.5', '1', '10', '2', …(3) ] to deeply equal [ '0', '0.5', '1', '2', '3', '4', '5' ]
+  RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A3 — every level is in, and the boundary pair, the near-numbers and a bare flag are out
+      AssertionError: --difficulty "3.5": expected { ok: true, options: { …(4) } } to deeply equal { ok: false, …(2) }
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S1_parseInt_range; plant dirs after: 0
+
+=== S2_regex_anchored — plant dirs before: 0
+edit src/cli-options.ts: -"      const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);"
+          +"      const value = /^[1-5]$/.test(next ?? \"\") ? next : undefined;"
+tsc exit 0
+vitest exit 1; files 392; tests 1789, passed 1788, failed 1, pending 0
+  RED src/cli.test.ts :: ABC-042 — the accepted set is closed A6(i) — the enumeration is the ONLY argv literal in the delivered resolver
+      AssertionError: bare literal : expected [ '--ascii', '--unicode', …(14) ] to include ''
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S2_regex_anchored; plant dirs after: 0
+
+=== S3_regex_unanchored_end — plant dirs before: 0
+edit src/cli-options.ts: -"      const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);"
+          +"      const value = /^[1-5]/.test(next ?? \"\") ? next : undefined;"
+tsc exit 0
+vitest exit 1; files 392; tests 1789, passed 1787, failed 2, pending 0
+  RED src/cli.test.ts :: ABC-042 — the accepted set is closed A6(i) — the enumeration is the ONLY argv literal in the delivered resolver
+      AssertionError: bare literal : expected [ '--ascii', '--unicode', …(14) ] to include ''
+  RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A3 — every level is in, and the boundary pair, the near-numbers and a bare flag are out
+      AssertionError: --difficulty "3.5": expected { ok: true, options: { …(4) } } to deeply equal { ok: false, …(2) }
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S3_regex_unanchored_end; plant dirs after: 0
+
+=== S8_equals_form — plant dirs before: 0
+edit src/cli-options.ts: -"    if (token === DIFFICULTY) {"
+          +"    if (token.startsWith(`${DIFFICULTY}=`)) {\n      const word = token.slice(DIFFICULTY.length + 1);\n      const value = DIFFICULTY_VALUES.find((candidate) => candidate === word);\n      if (value === undefined) return reject(MISSING_DIFFICULTY, token);\n      difficulty = Number(value) as Difficulty;\n      continue;\n    }\n    if (token === DIFFICULTY) {"
+tsc exit 0
+vitest exit 1; files 392; tests 1789, passed 1788, failed 1, pending 0
+  RED src/cli.test.ts :: ABC-042 — the accepted set is closed A6(i) — the enumeration is the ONLY argv literal in the delivered resolver
+      AssertionError: bare literal ${DIFFICULTY}=: expected [ '--ascii', '--unicode', …(14) ] to include '${DIFFICULTY}='
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S8_equals_form; plant dirs after: 0
+
+=== S4_second_parser_in_cli — plant dirs before: 0
+edit src/cli.ts: -"  const { colour, orientation, flags, difficulty } = resolution.options;"
+          +"  const { colour, orientation, flags } = resolution.options;\n  const at = process.argv.indexOf(\"--difficulty\");\n  const difficulty = at === -1 ? 3 : Number(process.argv[at + 1]);"
+tsc exit 0
+vitest exit 1; files 392; tests 1789, passed 1786, failed 3, pending 0
+  RED src/cli.test.ts :: ABC-042 — the shape of what was delivered A9 — process.argv occurs EXACTLY once and only as the resolver's argument
+      AssertionError: expected [ Array(3) ] to have a length of 1 but got 3
+  RED src/cli.test.ts :: ABC-042 — the shape of what was delivered A8 — neither delivered module names a row count
+      AssertionError: expected [ '0', '0x20', '0x7f', '1', '2', …(3) ] to deeply equal [ '0', '0x20', '0x7f', '1', '2', …(2) ]
+  RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS`
+      AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /const \{[^}]*\bdifficulty\b[^}]*\} = …/
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S4_second_parser_in_cli; plant dirs after: 0
+
+=== S5_guard_removed — plant dirs before: 0
+edit src/level-seam.ts: -"  if (!Object.hasOwn(LEVELS, level)) throw new RangeError(`level-seam: no level ${level}`);\n"
+          +""
+tsc exit 0
+vitest exit 1; files 392; tests 1789, passed 1788, failed 1, pending 0
+  RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the table is read only by an OWN key: everything else is refused (Security forward note)
+      AssertionError: expected '\n\nimport { createLevel, LEVELS, typ…' to match /Object\.hasOwn\(LEVELS, level\)/
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S5_guard_removed; plant dirs after: 0
+
+=== S6_seed_from_env — plant dirs before: 0
+edit src/cli.ts: -"{ seed: Math.floor(Math.random() * 2 ** 32) }"
+          +"{ seed: Number(process.env.CHESS_SEED ?? Math.floor(Math.random() * 2 ** 32)) }"
+tsc exit 0
+vitest exit 1; files 392; tests 1789, passed 1786, failed 3, pending 0
+  RED src/cli.test.ts :: ABC-042 — the shape of what was delivered A9 — process.argv occurs EXACTLY once and only as the resolver's argument
+      AssertionError: expected [ 'process.argv', 'process.env', …(9) ] to deeply equal [ 'process.argv', …(9) ]
+  RED src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter
+      AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(\s*book,\s*create…/
+  RED src/engine.test.ts :: ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine
+      AssertionError: expected '/**\n * `ABC-042` — the entry point: …' to contain 'createLevelSeam(difficulty, { seed: M…'
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S6_seed_from_env; plant dirs after: 0
+
+=== S7_seed_from_input — plant dirs before: 0
+edit src/cli.ts: -"{ seed: Math.floor(Math.random() * 2 ** 32) }"
+          +"{ seed: difficulty }"
+tsc exit 0
+vitest exit 1; files 392; tests 1789, passed 1785, failed 4, pending 0
+  RED src/cli.test.ts :: ABC-042 — the shape of what was delivered A8 — neither delivered module names a row count
+      AssertionError: expected [ '0', '0x20', '0x7f', '1', '2', '70' ] to deeply equal [ '0', '0x20', '0x7f', '1', '2', …(2) ]
+  RED src/cli.test.ts :: ABC-043 — the live session A1 — `runTurnLoop` is called ONCE, with all six options, and with no cast and no adapter
+      AssertionError: expected '\n\nimport { createBookProbe } from "…' to match /engine:\s*withBook\(\s*book,\s*create…/
+  RED src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS`
+      AssertionError: expected [ 'difficulty', 'difficulty', …(1) ] to have a length of 2 but got 3
+  RED src/engine.test.ts :: ABC-086 A5 — the virtual clock stays off the shipped path (i′) the shipped construction passes no clock, and its default level is the shipped engine
+      AssertionError: expected '/**\n * `ABC-042` — the entry point: …' to contain 'createLevelSeam(difficulty, { seed: M…'
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S7_seed_from_input; plant dirs after: 0
+
+=== S2b_regex_anchored_no_literal — plant dirs before: 0
+edit src/cli-options.ts: -"      const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);"
+          +"      const value = next !== undefined && /^[1-5]$/.test(next) ? next : undefined;"
+tsc exit 0
+vitest exit 0; files 392; tests 1789, passed 1789, failed 0, pending 0
+  (no red row)
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S2b_regex_anchored_no_literal; plant dirs after: 0
+
+=== S2c_regex_multiline_flag — plant dirs before: 0
+edit src/cli-options.ts: -"      const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);"
+          +"      const value = next !== undefined && /^[1-5]$/m.test(next) ? next : undefined;"
+tsc exit 0
+vitest exit 0; files 392; tests 1789, passed 1789, failed 0, pending 0
+  (no red row)
+child node src/cli.ts --difficulty $'3\nx' --ascii (stdin quit): exit 70; stdout 0 B; stderr "internal error: a bug ended this session, and it is not a chess outcome\n"
+removed /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/secnfr101/S2c_regex_multiline_flag; plant dirs after: 0

@@ -1,0 +1,36 @@
+# rev 3ea3e352: production files (src, non-test, non-.d.ts) matching /Math\.random|randomUUID|randomBytes|randomInt|getRandomValues|node:crypto|"crypto"|performance\.now|hrtime/ (comments included)
+src/book.ts:16: *   `src/levels.ts`; a session passes `Math.random` (D3). This module imports no generator.
+src/cli-options.ts:18: * `Math.random` is the one non-determinism and it is deliberate: `--colour random` is
+src/cli-options.ts:20: * `Math.random` suffices — a CSPRNG is ASVS **V11.5.1 [L2]**, outside this project's active L1 set.
+src/cli-options.ts:103:const coin = (): Colour => (Math.random() < 0.5 ? WHITE : BLACK);
+src/cli.ts:178:    random: Math.random,
+src/perft-bench.ts:70:    const started = process.hrtime.bigint();
+src/perft-bench.ts:72:    const seconds = Number(process.hrtime.bigint() - started) / 1e9;
+src/zobrist.ts:23: * same position always hashes to the same value, within a run and across runs. `Math.random`
+count: 8
+# rev 98ea0a84: production files (src, non-test, non-.d.ts) matching /Math\.random|randomUUID|randomBytes|randomInt|getRandomValues|node:crypto|"crypto"|performance\.now|hrtime/ (comments included)
+src/book.ts:16: *   `src/levels.ts`; a session passes `Math.random` (D3). This module imports no generator.
+src/cli-options.ts:18: * `Math.random` is the one non-determinism and it is deliberate: `--colour random` is
+src/cli-options.ts:20: * `Math.random` suffices — a CSPRNG is ASVS **V11.5.1 [L2]**, outside this project's active L1 set.
+src/cli-options.ts:122:const coin = (): Colour => (Math.random() < 0.5 ? WHITE : BLACK);
+src/cli.ts:180:    random: Math.random,
+src/cli.ts:193:        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
+src/perft-bench.ts:70:    const started = process.hrtime.bigint();
+src/perft-bench.ts:72:    const seconds = Number(process.hrtime.bigint() - started) / 1e9;
+src/zobrist.ts:23: * same position always hashes to the same value, within a run and across runs. `Math.random`
+count: 9
+# added production lines matching the pattern
+$ git diff -U0 3ea3e352 98ea0a84 -- src/cli.ts src/cli-options.ts src/level-seam.ts | grep -E "^\+" | grep -E "<pattern>"
++        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
+# every "seed" in the three production files at head
+src/cli.ts:190:      // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.
+src/cli.ts:193:        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
+# process.env / argv reads in production at head (code and comments)
+src/cli.ts:2: * `ABC-042` — the entry point: the one place that reads `process.argv`, the one place that supplies
+src/cli.ts:138:  const resolution = resolveOptions(process.argv.slice(2));
+src/frame.ts:21: * `process.env` or `process.stdout`, and imports nothing from `glyph-mode.ts` — `ABC-015` owns the
+src/glyph-mode.ts:9: *     also what makes the nine input tuples testable in ONE run: a rule that read `process.env`
+src/glyph-mode.ts:34: * module imports one TYPE and nothing else; it reads `process.stdout.isTTY` and `process.env`,
+src/glyph-mode.ts:118:    env: process.env,
+src/render.ts:7: * `process.env` or the terminal size.
+src/status-panel.ts:6: * here reads `isTTY`, `process.env` or the terminal size.

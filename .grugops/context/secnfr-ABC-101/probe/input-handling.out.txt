@@ -1,0 +1,34 @@
+# production (src, non-test) lines naming difficulty, at 98ea0a84 (comments included)
+src/cli-options.ts:46: * `ABC-101` adds `--difficulty` and its five value words, the ordinals `1`-`5`, weakest to
+src/cli-options.ts:56:  "--difficulty",
+src/cli-options.ts:64:const [ASCII, UNICODE, COLOUR, WHITE, BLACK, RANDOM, DIFFICULTY, ...DIFFICULTY_VALUES] =
+src/cli-options.ts:67:/** A difficulty level: a plain ordinal, `1` weakest to `5` strongest. */
+src/cli-options.ts:68:export type Difficulty = 1 | 2 | 3 | 4 | 5;
+src/cli-options.ts:70:/** The level when `--difficulty` is absent: the middle of the set, never the top (ruling 2). */
+src/cli-options.ts:71:export const DEFAULT_DIFFICULTY: Difficulty = 3;
+src/cli-options.ts:95:  readonly difficulty: Difficulty;
+src/cli-options.ts:112:const MISSING_DIFFICULTY = "--difficulty needs one of 1|2|3|4|5";
+src/cli-options.ts:132:  let difficulty = DEFAULT_DIFFICULTY;
+src/cli-options.ts:155:    if (token === DIFFICULTY) {
+src/cli-options.ts:158:      const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);
+src/cli-options.ts:159:      if (value === undefined) return reject(MISSING_DIFFICULTY, next ?? token);
+src/cli-options.ts:160:      difficulty = Number(value) as Difficulty;
+src/cli-options.ts:183:      difficulty,
+src/cli.ts:26: * THE OPPONENT IS THE LEVEL THE HUMAN CHOSE (`ABC-101`) — `createLevelSeam(difficulty, …)` over
+src/cli.ts:27: * `ABC-087`'s `LEVELS`, behind `ABC-095`'s book. With no `--difficulty` it is level 3, which is the
+src/cli.ts:93:  "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5] [--ascii | --unicode]";
+src/cli.ts:150:  const { colour, orientation, flags, difficulty } = resolution.options;
+src/cli.ts:193:        createLevelSeam(difficulty, { seed: Math.floor(Math.random() * 2 ** 32) }),
+src/engine.ts:45: * 5 s AT ANY DIFFICULTY"*, and a ceiling that holds only when the caller chooses well is not a
+src/engine.ts:69: * NOT HERE, each owned elsewhere: difficulty selection and how a level persists (`EPIC-006`), the
+src/engine.ts:118: * `NFR-004`'s default difficulty budget, in milliseconds, exported so `EPIC-006` passes it in
+src/engine.ts:125: * `NFR-004`'s hard ceiling, in milliseconds. A bound on the MECHANISM, not a difficulty:
+src/engine.ts:126: * `NFR-004` says the ceiling holds AT ANY DIFFICULTY, so it is honoured here whatever a caller
+src/level-seam.ts:2: * `ABC-101` — a difficulty level as the `src/turn-loop.ts` `EngineSeam`: `createLevel` (`ABC-087`)
+src/levels.ts:2: * Difficulty levels — the MECHANISM (`ABC-087`). A level is data: a per-move budget and a
+# production lines indexing LEVELS or importing it, at 98ea0a84
+src/level-seam.ts:6: * The table is read only by an OWN key (`Object.hasOwn`): `LEVELS["constructor"]` is a prototype
+src/level-seam.ts:10:import { createLevel, LEVELS, type LevelOptions } from "./levels.ts";
+src/level-seam.ts:15:  const choose = createLevel(LEVELS[level as keyof typeof LEVELS], options);
+# parseInt / Number( / RegExp on argv-derived values in the three production files
+src/cli-options.ts:160:      difficulty = Number(value) as Difficulty;

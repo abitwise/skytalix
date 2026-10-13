@@ -1,0 +1,4 @@
+readout-n8.py on qe-n8-ABC-095 n8r-cli-w1 (0.100 ): reproduces the recorded readout.out.txt byte for byte (cmp 0); STATE at 650 ms CPU: MET
+readout-n8.py on qe-n8-ABC-095 n8r-real-w1 (16pct ): reproduces the recorded readout.out.txt byte for byte (cmp 0); STATE at 650 ms CPU: MET
+readout-n8.py on qe-n8-ABC-095 n8r-be-w1 (16pct added): reproduces the recorded readout.out.txt byte for byte (cmp 0); STATE at 650 ms CPU: MET
+readout-n8.py on qe-n8-ABC-095 n8r-cli-w1 (0.100 changed): reproduces the recorded readout.out.txt byte for byte (cmp 0), so R4 equals the original rule when B, T and H counts agree; STATE at 650 ms CPU: MET

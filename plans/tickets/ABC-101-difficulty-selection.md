@@ -508,6 +508,54 @@ gates, `…c243b4f0` criteria, `…d2414062` calls). Not restated here.
 | `A10` | PASS: `CLI_DEEP` 10/10, 0 temp copies before and after |
 | `ABC-086` `A5`(i′) | PASS, four assertions; mutants (1), (2), (4) red |
 
+## QE
+
+QE/E2E, 2026-10-12 (task `wave-2026-09-25`, subtask `qe-ABC-101`, branch `grugops/qe-ABC-101` off `98ea0a84`; QE was
+the only hop running). Delivered pair `3ea3e352..98ea0a84`, code `ac8deab1`. **Verdict: PASS_WITH_GAPS.** The detail
+is in `.grugops/context/qe-ABC-101/notes/` (decision `…2fa04d14`) and is not restated here.
+
+- **Every live criterion MET, each re-read by QE:** `A1`, `A2`, `A3` (+ extended; a 300-spelling sweep accepts 0),
+  `A5` (8 advertised forms exit 0 through npm), `A6`, `A7` (code 0; added lines 0; the two `ABC-042` hits only),
+  `A8′` (60 seam-vs-`createLevel` comparisons, 0 mismatches; own key; engine modules byte-identical), `A9` (the `-U0`
+  hunks are the import block and the one `(i)` `it`), `A10`. `ABC-086` `A5` (i′) 1–4, (ii), (iii): MET.
+- **`CLI_DEEP` 10/10**, with 0 `abc095-book-absent-*` copies before and after. The 10 children doubled at
+  `./book-engine.ts` reach their doubles: `src/cli.test.ts` ×10 green, the `mate` rows green every time.
+- **19 plants, outside the repository: 15 caught.** Every plant the brief named is caught. **A level rebuilt on every
+  move is caught by nothing** (`QE-101-a`).
+- **`N8-LANE` MET on all three sets** (pre-registration `bd846627`, before any run; n = 8, clean windows, AC power):
+  `src/cli.test.ts` H−B **+0.105 s** (−0.010..+0.240); `src/cli.real-engine.test.ts` default lane **+0.005 s**
+  (−0.010..+0.030; its first window was clean but inadmissible, the re-attempt admissible); `src/engine.test.ts`
+  **−0.015 s** (−0.040..+0.000). Ticket line, arithmetic: medians +0.095 s, x(7) +0.270 s.
+- **Gaps:** `QE-101-a` LOW (SE: `A8′`'s row needs a third call; measured to red the plant), `QE-101-b` LOW (BA/PM's
+  ruling-6 item, graded: `ABC-065` `A3`'s value check is load-bearing for `4` only), `QE-101-c`, `-d`, `-e` INFO.
+  None blocks.
+- **UAT:** the waiver does not apply (`src/cli-options.ts`, `src/cli.ts`, `src/level-seam.ts`). The owner's word is
+  owed. Next is `In Security/NFR` (the `Object.hasOwn` forward note is met; `AR-NFR004-A` is owed its re-read).
+- **Gates on the QE tree before its last commit** (21:19:57Z): `npm run -s lint`, `typecheck`, `build` exit 0; `npm test`
+  exit 0, 58 files, 1789 passed, 0 failed, 0 pending; `.test-results/last-run.json` `success: true`;
+  `test-skip-integrity --skip-count 0` "No findings."; `qe-hop-integrity --ticket ABC-101` exit 0 (covered by
+  `…2fa04d14`; not yet a `## Done` row).
+
+## Security/NFR
+
+Security/NFR, 2026-10-12 (task `wave-2026-09-25`, subtask `secnfr-ABC-101`, branch `grugops/secnfr-ABC-101` off the QE tip
+`dee6562a`; the only hop running). Delivered pair `3ea3e352..98ea0a84`, code `ac8deab1`. **Result: PASS_WITH_RISKS.** There is
+no required fix. The one risk carried is `AR-NFR004-A`, re-accepted with its number, and no new risk is opened. **No timing was read.**
+The plants were run in scratch copies outside the repository. The detail is in `.grugops/context/secnfr-ABC-101/notes/` (decision `…4bed890a`) and is not restated here.
+
+| trigger | reading | verdict |
+|---|---|---|
+| Input handling: ASVS `V2.2.1`/`V2.2.2` [L1], the page's firing threshold | The level is parsed only in `resolveOptions`, by exact equality against the closed set. The one `Number(…)` converts a word that is already a member. Hostile values refused: 36 of 36 (prototype keys, other-script digits, `0x3`, `3e0`, whitespace, NUL, escapes). A value word on its own and `--difficulty=3` are refused. An escape-laden value echoed in a real child: exit 1, 0 B stdout, 0 ESC/BEL bytes | **MET; the threshold does not fire** |
+| The `Object.hasOwn` forward rule | `createLevelSeam` refuses `__proto__`, `constructor`, `toString`, `valueOf`, `hasOwnProperty`, `0`, `6`, `-0`, `3.5`, `NaN`, `Infinity`, `03` and `" 3"` with a `RangeError`. `LEVELS` is frozen | **MET** |
+| Plants (scratch copies, 1789-row suite) | 11 plants: 9 caught (`parseInt` range, regex with a `""` literal, unanchored regex, a `--difficulty=` form, a second `process.argv` parser, guard removed, seed from env, seed from input). Green: an anchored regex identical to the set (no exposure), and a `/m` regex that accepts `3\nx` (`SEC-101-a`, INFO). Under the second one the seam's guard fails closed: exit 70, 0 B stdout | **MET** |
+| `ADR-0036` clause (b), limbs 1–3 | Each limb: (b1) 0, (b2) 0. New edges `cli.ts → level-seam.ts` and `level-seam.ts → levels.ts` reach no holder. Word hits 0, nothing unresolved. **Holders at the tip: 4** (unchanged). The QE tip adds no production file | **does not fire** |
+| `ADR-0036` § S1 Ruling 2, by hand | Limb-1 holders: `src/book-file.ts` at base and at head. `git diff --name-only` on it is empty (blob `5f0ea29d` at both ends). The pathspec was non-empty, so the empty-pathspec trap does not apply | **does not fire** |
+| The seed (`ADR-0037` D3) | One added randomness site: the root's `Math.floor(Math.random() * 2 ** 32)`. No `crypto`, env or argv source. No input reaches it (`seed` appears only in that call and its comment) | **MET** |
+| `AR-NFR004-A` | **Stands as written; re-accepted with its number.** Level 3 makes the same `chooseMove` call as the old construction. The ceiling needs nothing new: no level's budget reaches `HARD_CEILING_MS`. A dated block was added to `plans/nfr-catalog.md`; no row moved | **re-accepted** |
+| `QE-101-a`, `QE-101-d` | No security or NFR bearing. `-a` stays QE's LOW, owned by the SE. `-d` is INFO | — |
+
+**Next:** `In Security/NFR` → `Ready for UAT` (the Orchestrator moves it). The owner's UAT word is owed.
+
 ## Amendment — 2026-10-13 (BA/PM, task `wave-2026-09-25`, subtask `bapm-amend2-ABC-101`)
 
 The owner held UAT on the piece colour and put the fix here: "Fix it in ABC-101" (`wave-2026-09-25`

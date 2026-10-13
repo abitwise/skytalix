@@ -1,0 +1,5 @@
+label	utc	load1	thermalpressurelevel	runner_procs	power	ok	streak
+settle	2026-10-12T21:05:05Z	4.22	0	0	AC Power	1	1
+settle	2026-10-12T21:05:20Z	3.98	0	0	AC Power	1	2
+settle	2026-10-12T21:05:35Z	3.62	0	0	AC Power	1	3
+settle	2026-10-12T21:05:50Z	3.41	0	0	AC Power	1	4

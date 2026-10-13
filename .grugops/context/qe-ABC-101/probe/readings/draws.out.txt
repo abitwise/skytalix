@@ -1,0 +1,4 @@
+# node --no-warnings draws.mts  (2026-10-12T21:15:58Z, tree 98ea0a84 worktree)
+seed 7: draws 0.0117, 0.0620, 0.9769; level 1 (0.4) BBe; level 2 (0.2) BBe
+seed 4294967295: draws 0.8964, 0.1895, 0.7157; level 1 (0.4) eBe; level 2 (0.2) eBe
+seed 1: draws 0.6271, 0.0027, 0.5274; level 1 (0.4) eBe; level 2 (0.2) eBe
