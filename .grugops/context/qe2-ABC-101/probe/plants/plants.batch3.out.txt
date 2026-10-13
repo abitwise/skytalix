@@ -1,0 +1,56 @@
+plants start 2026-10-13T12:07:25Z; copies under /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe2101/plants before: 0
+p3b-astral-one-code-point: edited /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe2101/plants/p3b-astral-one-code-point/src/render.ts
+--- p3b-astral-one-code-point: diff vs d22a709f src/render.ts
+    82c82
+    <     [KING]: ["♚", "♔"],
+    ---
+    >     [KING]: ["\u{1FA00}", "♔"],
+=== p3b-astral-one-code-point: exit 1; files 58; tests 1792 passed 1770 failed 22 pending 0 todo 0
+  FILE src/frame.test.ts: 4 failed
+    - ABC-018 acceptance — the assembled frame > shows all 6 candidates that FIT the 2-row region and emits no (+N more) marker
+        AssertionError: expected 19 to be 18 // Object.is equality
+    - ABC-018 acceptance — the assembled frame > truncates 10 candidates that do NOT fit with (+N more), N counted from the INPUT
+        AssertionError: expected 19 to be 18 // Object.is equality
+    - ABC-018 — holes QE found by mutation, closed in tests only > SEPARATES items in the message region — the space the ticket's own arithmetic counts
+        AssertionError: expected 'Nbd2 Nfd2 Rae1     ' to be 'Nbd2 Nfd2 Rae1    ' // Object.is equality
+    - ABC-018 — holes QE found by mutation, closed in tests only > DISCHARGED by ABC-027: W is still recomputed per frame, and the narrowing frame leaves NO tail
+        AssertionError: expected 19 to be 18 // Object.is equality
+  FILE src/render.test.ts: 17 failed
+    - ABC-014 acceptance — the board frame > draws 64 cells, the file row a..h and the rank labels 8..1 with white at the bottom
+        AssertionError: unicode: expected [ '.♖', ':♘', '.♗', ':♕', '.♔', …(60) ] to have a length of 64 but got 65
+    - ABC-014 acceptance — the board frame > draws Unicode piece cells inside U+2654-U+265F, white and black on different code points
+        AssertionError: e1: expected 55358 to be less than or equal to 9823
+    - ABC-014 acceptance — the board frame > shades adjacent squares differently and gives a1 and h8 the same (dark) character
+        AssertionError: unicode white-bottom: expected Set{ '.', ':', '\ude00', '♝', '♞', '♜' } to deeply equal Set{ ':', '.' }
+    - ABC-014 acceptance — the board frame > leaves an empty square holding only its shading character, identically in both modes
+        AssertionError: c5: expected '♟:' to be '::' // Object.is equality
+    - ABC-014 acceptance — the board frame > keeps one row count and one row width across every perft FEN, mode and orientation
+        AssertionError: expected Set{ 18, 19 } to deeply equal Set{ 18 }
+    - ABC-014 — the rendered frame > draws the start position with white at the bottom
+        AssertionError: expected [ '8 .♖:♘.♗:♕.♔:♗.♘:♖', …(8) ] to deeply equal [ '8 .♖:♘.♗:♕.♔:♗.♘:♖', …(8) ]
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos > startpos unicode white-bottom 1`
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete > kiwipete unicode white-bottom 1`
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3 > position-3 unicode white-botto
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4 > position-4 unicode white-botto
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5 > position-5 unicode white-botto
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6 > position-6 unicode white-botto
+    - ABC-014 QE — adversarial coverage > matches a frame derived independently from the FEN text, on all 24 matrix cells
+        AssertionError: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 unicode white-bottom: expected [ '8 .♖:♘.♗:♕.♔:♗.♘:♖', …(8) ] to deeply equal
+    - ABC-014 QE — adversarial coverage > draws a board with all 64 squares occupied without changing its geometry
+        AssertionError: white-bottom: expected Set{ 18, 19 } to deeply equal Set{ 18 }
+    - ABC-101 A11 — piece polarity > A11a: draws every White piece filled (U+265A-U+265F) and every Black piece outline (U+2654-U+2659), type for type
+        AssertionError: white-bottom e1 K: expected false to be true // Object.is equality
+    - ABC-101 A11 — piece polarity > A11b: draws the exact start frames in Unicode, in both orientations
+        AssertionError: expected [ '8 .♖:♘.♗:♕.♔:♗.♘:♖', …(8) ] to deeply equal [ '8 .♖:♘.♗:♕.♔:♗.♘:♖', …(8) ]
+    - ABC-101 A11 — piece polarity > A11c: keeps 9 rows of 18 code points AND 18 UTF-16 units, with 0 U+001B, on every matrix cell
+        AssertionError: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 unicode white-bottom: expected 19 to be 18 // Object.is equality
+  FILE src/turn-loop.test.ts: 1 failed
+    - ABC-021 acceptance — transition 16, the draw claim > A9 — the WIDEST refusal message the loop can emit still fits the NARROWEST frame it can emit it into
+        AssertionError: expected 19 to be 18 // Object.is equality
+plants end 2026-10-13T12:07:32Z; copies under /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe2101/plants after: 0

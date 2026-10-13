@@ -313,14 +313,14 @@ describe("ABC-014 — the rendered frame", () => {
     ]);
 
     expect(render(START_FEN, "unicode", "white-bottom")).toEqual([
-      "8 .♜:♞.♝:♛.♚:♝.♞:♜",
-      "7 :♟.♟:♟.♟:♟.♟:♟.♟",
+      "8 .♖:♘.♗:♕.♔:♗.♘:♖",
+      "7 :♙.♙:♙.♙:♙.♙:♙.♙",
       "6 ..::..::..::..::",
       "5 ::..::..::..::..",
       "4 ..::..::..::..::",
       "3 ::..::..::..::..",
-      "2 .♙:♙.♙:♙.♙:♙.♙:♙",
-      "1 :♖.♘:♗.♕:♔.♗:♘.♖",
+      "2 .♟:♟.♟:♟.♟:♟.♟:♟",
+      "1 :♜.♞:♝.♛:♚.♝:♞.♜",
       "   a b c d e f g h",
     ]);
   });
@@ -408,18 +408,18 @@ const DARK_SQUARES: ReadonlySet<string> = (() => {
 })();
 
 const UNICODE_BY_FEN_LETTER: Readonly<Record<string, string>> = {
-  K: "♔",
-  Q: "♕",
-  R: "♖",
-  B: "♗",
-  N: "♘",
-  P: "♙",
-  k: "♚",
-  q: "♛",
-  r: "♜",
-  b: "♝",
-  n: "♞",
-  p: "♟",
+  K: "♚",
+  Q: "♛",
+  R: "♜",
+  B: "♝",
+  N: "♞",
+  P: "♟",
+  k: "♔",
+  q: "♕",
+  r: "♖",
+  b: "♗",
+  n: "♘",
+  p: "♙",
 };
 
 /**
@@ -630,5 +630,77 @@ describe("ABC-014 QE — adversarial coverage", () => {
         expect(squaresOnly(black), `${fen} ${mode}`).not.toEqual(squaresOnly(white).reverse());
       }
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// ABC-101 `A11` — piece polarity. White is drawn with the FILLED glyphs (U+265A-U+265F) and Black
+// with the OUTLINE ones (U+2654-U+2659), so on a dark terminal the side that reads dark is Black.
+// The expected code points are written as NUMBERS, not glyph literals, so this table cannot be
+// copied from `render.ts`'s.
+// ---------------------------------------------------------------------------
+
+/** FEN letter → the code point `A11a`'s table gives it. */
+const A11_CODE_POINT_BY_FEN_LETTER: Readonly<Record<string, number>> = {
+  K: 0x265a,
+  Q: 0x265b,
+  R: 0x265c,
+  B: 0x265d,
+  N: 0x265e,
+  P: 0x265f,
+  k: 0x2654,
+  q: 0x2655,
+  r: 0x2656,
+  b: 0x2657,
+  n: 0x2658,
+  p: 0x2659,
+};
+
+describe("ABC-101 A11 — piece polarity", () => {
+  it("A11a: draws every White piece filled (U+265A-U+265F) and every Black piece outline (U+2654-U+2659), type for type", () => {
+    const pieces = piecesFromFenPlacement(START_FEN);
+    for (const orientation of ORIENTATIONS) {
+      const frame = render(START_FEN, "unicode", orientation);
+      for (const [square, letter] of pieces) {
+        const codePoint = glyphOf(cellAt(frame, orientation, square)).codePointAt(0) as number;
+        const white = letter === letter.toUpperCase();
+        const [low, high] = white ? [0x265a, 0x265f] : [0x2654, 0x2659];
+        const where = `${orientation} ${square} ${letter}`;
+        expect(codePoint >= low && codePoint <= high, where).toBe(true);
+        expect(codePoint, where).toBe(A11_CODE_POINT_BY_FEN_LETTER[letter]);
+      }
+    }
+  });
+
+  it("A11b: draws the exact start frames in Unicode, in both orientations", () => {
+    expect(render(START_FEN, "unicode", "white-bottom")).toEqual([
+      "8 .♖:♘.♗:♕.♔:♗.♘:♖",
+      "7 :♙.♙:♙.♙:♙.♙:♙.♙",
+      "6 ..::..::..::..::",
+      "5 ::..::..::..::..",
+      "4 ..::..::..::..::",
+      "3 ::..::..::..::..",
+      "2 .♟:♟.♟:♟.♟:♟.♟:♟",
+      "1 :♜.♞:♝.♛:♚.♝:♞.♜",
+      "   a b c d e f g h",
+    ]);
+
+    const black = render(START_FEN, "unicode", "black-bottom");
+    expect(black.slice(0, 2)).toEqual(["1 .♜:♞.♝:♚.♛:♝.♞:♜", "2 :♟.♟:♟.♟:♟.♟:♟.♟"]);
+    expect(black.slice(6, 8)).toEqual(["7 .♙:♙.♙:♙.♙:♙.♙:♙", "8 :♖.♘:♗.♔:♕.♗:♘.♖"]);
+    expect(black[8]).toBe("   h g f e d c b a");
+  });
+
+  it("A11c: keeps 9 rows of 18 code points AND 18 UTF-16 units, with 0 U+001B, on every matrix cell", () => {
+    eachMatrixCell((fen, mode, orientation) => {
+      const frame = render(fen, mode, orientation);
+      const where = `${fen} ${mode} ${orientation}`;
+      expect(frame, where).toHaveLength(9);
+      for (const row of frame) {
+        expect([...row], where).toHaveLength(RANK_LABEL_WIDTH + 8 * CELL_WIDTH);
+        expect(row.length, where).toBe(RANK_LABEL_WIDTH + 8 * CELL_WIDTH);
+        expect(row.includes("\u001b"), where).toBe(false);
+      }
+    });
   });
 });

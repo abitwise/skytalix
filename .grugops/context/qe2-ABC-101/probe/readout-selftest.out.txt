@@ -1,0 +1,5 @@
+readout self-test 2026-10-13T12:02:10Z, RECORDED TSVs only (qe-ABC-101 windows on grugops/qe-ABC-101 dee6562a), no run:
+  n8-cli-w1 (0.100 changed): cmp vs recorded readout.out.txt: identical;   STATE at 650 ms CPU: MET
+  n8-real-w2 (16pct equal-count): cmp vs recorded readout.out.txt: identical;   STATE at 650 ms CPU: MET
+  n8-eng-w1 (16pct equal-count): cmp vs recorded readout.out.txt: identical;   STATE at 650 ms CPU: MET
+  n8-real-w1 (16pct equal-count): cmp vs recorded readout.out.txt: identical;   STATE at 650 ms CPU: INADMISSIBLE (no state)

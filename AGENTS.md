@@ -55,8 +55,8 @@ Real commands only, with flags, preferring fast single-file variants. If a comma
 
 ### Development
 
-- Dev / run: `npm run chess` <!-- prints the board and plays a full game against the merged engine
-  (up to 3 s/move, `DEFAULT_BUDGET_MS`). Options: `--colour white|black|random`, `--ascii`,
+- Dev / run: `npm run chess` <!-- prints the board and plays a game against the engine, default
+  level 3 (≤3 s/move). Options: `--colour white|black|random`, `--difficulty 1|2|3|4|5`, `--ascii`,
   `--unicode`. Pass an option AFTER `--`: `npm run chess -- --colour black` — the separator is
   load-bearing; without it npm silently drops the flag and runs with defaults. Exit 0 normal
   session, 1 refused command line, 70 internal error. WRITING RULES for this slot, enforced by

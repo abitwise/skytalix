@@ -1,0 +1,71 @@
+plants start 2026-10-13T12:06:00Z; copies under /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe2101/plants before: 0
+p0-control: edited /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe2101/plants/p0-control/src/render.ts
+--- p0-control: diff vs d22a709f src/render.ts
+=== p0-control: exit 0; files 58; tests 1792 passed 1792 failed 0 pending 0 todo 0
+p1-one-pair-back: edited /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe2101/plants/p1-one-pair-back/src/render.ts
+--- p1-one-pair-back: diff vs d22a709f src/render.ts
+    78c78
+    <     [KNIGHT]: ["♞", "♘"],
+    ---
+    >     [KNIGHT]: ["♘", "♞"],
+=== p1-one-pair-back: exit 1; files 58; tests 1792 passed 1783 failed 9 pending 0 todo 0
+  FILE src/render.test.ts: 9 failed
+    - ABC-014 — the rendered frame > draws the start position with white at the bottom
+        AssertionError: expected [ '8 .♖:♞.♗:♕.♔:♗.♞:♖', …(8) ] to deeply equal [ '8 .♖:♘.♗:♕.♔:♗.♘:♖', …(8) ]
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos > startpos unicode white-bottom 1`
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete > kiwipete unicode white-bottom 1`
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4 > position-4 unicode white-botto
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5 > position-5 unicode white-botto
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6 > position-6 unicode white-botto
+    - ABC-014 QE — adversarial coverage > matches a frame derived independently from the FEN text, on all 24 matrix cells
+        AssertionError: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 unicode white-bottom: expected [ '8 .♖:♞.♗:♕.♔:♗.♞:♖', …(8) ] to deeply equal
+    - ABC-101 A11 — piece polarity > A11a: draws every White piece filled (U+265A-U+265F) and every Black piece outline (U+2654-U+2659), type for type
+        AssertionError: white-bottom b8 n: expected false to be true // Object.is equality
+    - ABC-101 A11 — piece polarity > A11b: draws the exact start frames in Unicode, in both orientations
+        AssertionError: expected [ '8 .♖:♞.♗:♕.♔:♗.♞:♖', …(8) ] to deeply equal [ '8 .♖:♘.♗:♕.♔:♗.♘:♖', …(8) ]
+p2-ascii-case-swapped: edited /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe2101/plants/p2-ascii-case-swapped/src/render.ts
+--- p2-ascii-case-swapped: diff vs d22a709f src/render.ts
+    86,91c86,91
+    <     [PAWN]: ["P", "p"],
+    <     [KNIGHT]: ["N", "n"],
+    <     [BISHOP]: ["B", "b"],
+    <     [ROOK]: ["R", "r"],
+    <     [QUEEN]: ["Q", "q"],
+    <     [KING]: ["K", "k"],
+    ---
+    >     [PAWN]: ["p", "P"],
+    >     [KNIGHT]: ["n", "N"],
+    >     [BISHOP]: ["b", "B"],
+    >     [ROOK]: ["r", "R"],
+    >     [QUEEN]: ["q", "Q"],
+    >     [KING]: ["k", "K"],
+=== p2-ascii-case-swapped: exit 1; files 58; tests 1792 passed 1781 failed 11 pending 0 todo 0
+  FILE src/render.test.ts: 11 failed
+    - ABC-014 acceptance — the board frame > flips BOTH axes with black at the bottom — file row h..a, ranks 1..8, king before queen
+        AssertionError: expected 'rnbkqbnr' to be 'RNBKQBNR' // Object.is equality
+    - ABC-014 acceptance — the board frame > draws ASCII pieces with case as the only colour marker
+        AssertionError: expected 'rnbqkbnr' to be 'RNBQKBNR' // Object.is equality
+    - ABC-014 — the rendered frame > draws the start position with white at the bottom
+        AssertionError: expected [ '8 .R:N.B:Q.K:B.N:R', …(8) ] to deeply equal [ '8 .r:n.b:q.k:b.n:r', …(8) ]
+    - ABC-014 — the rendered frame > draws the start position with black at the bottom
+        AssertionError: expected [ '1 .r:n.b:k.q:b.n:r', …(8) ] to deeply equal [ '1 .R:N.B:K.Q:B.N:R', …(8) ]
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos > startpos ascii white-bottom 1` m
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete > kiwipete ascii white-bottom 1` m
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3 > position-3 ascii white-bottom 
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4 > position-4 ascii white-bottom 
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5 > position-5 ascii white-bottom 
+    - ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6
+        Error: Snapshot `ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6 > position-6 ascii white-bottom 
+    - ABC-014 QE — adversarial coverage > matches a frame derived independently from the FEN text, on all 24 matrix cells
+        AssertionError: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ascii white-bottom: expected [ '8 .R:N.B:Q.K:B.N:R', …(8) ] to deeply equal [
+plants end 2026-10-13T12:06:23Z; copies under /private/tmp/claude-501/-Users-olgeroeselg-Projects-hacks-grugops-examples-cli-chess-example/8527bcf0-376e-4738-b2d4-7789ea9bdd71/scratchpad/qe2101/plants after: 0

@@ -35,13 +35,22 @@ import { createRequire } from "node:module";
 import type * as Ts from "typescript";
 import { describe, expect, it, vi } from "vitest";
 import type { ViteUserConfig } from "vitest/config";
-import { ACCEPTED_ARGUMENTS, type ResolvedOptions, resolveOptions } from "./cli-options.ts";
+import {
+  ACCEPTED_ARGUMENTS,
+  DEFAULT_DIFFICULTY,
+  type ResolvedOptions,
+  resolveOptions,
+} from "./cli-options.ts";
 import { QUIT_CONFIRMATION_MESSAGES } from "./command-input.ts";
+import { DEFAULT_BUDGET_MS } from "./engine.ts";
+import { parseFen } from "./fen.ts";
 import { frameHeight } from "./frame.ts";
 import * as glyphMode from "./glyph-mode.ts";
 import { type GameHistory, gameStatusOf, newGame, playMove } from "./history.ts";
 import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
 import { legalMoves } from "./legal.ts";
+import { createLevelSeam } from "./level-seam.ts";
+import { createLevel, DEFAULT_LEVEL, LEVELS } from "./levels.ts";
 import { PROMPT } from "./line-input.ts";
 import { squareName } from "./position.ts";
 import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
@@ -49,6 +58,7 @@ import { makeRenderSeam } from "./render-seam.ts";
 import { renderResultScreen } from "./result-screen.ts";
 import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
 import { INPUT_ENDED_NOTICE, QUIT_NOTICE, type TerminalReason } from "./turn-loop.ts";
+import { virtualClock } from "./virtual-clock.ts";
 
 vi.mock("./glyph-mode.ts", { spy: true });
 
@@ -709,8 +719,12 @@ const CHILDREN = {
   }),
   /** `A5` end to end. */
   conflict: run("--ascii", "--unicode"),
-  /** `A6`(iii)'s four, exactly as the criterion names them. */
-  difficulty: run("--difficulty", "3"),
+  /**
+   * `A6`(iii)'s four. The first was `--difficulty 3`, which `ABC-101` made an ACCEPTED command line;
+   * that ticket replaced it with a flag that is still unrecognised (its page, § "The guards this
+   * ticket will red"). Same shape, same spawn count.
+   */
+  level: run("--level", "3"),
   shortFlag: run("-x"),
   badColour: run("--colour", "purple"),
   bareWord: run("foo"),
@@ -1217,7 +1231,7 @@ describe("ABC-042 — a rejected command line starts no game", () => {
 
   it("A6(iii) — four unrecognised command lines: named, non-zero, and no frame anywhere", () => {
     const cases: readonly (readonly [name: string, child: Child, offending: string])[] = [
-      ["--difficulty 3", CHILDREN.difficulty, "--difficulty"],
+      ["--level 3", CHILDREN.level, "--level"],
       ["-x", CHILDREN.shortFlag, "-x"],
       ["--colour purple", CHILDREN.badColour, "purple"],
       ["foo", CHILDREN.bareWord, "foo"],
@@ -1241,7 +1255,10 @@ describe("ABC-042 — the accepted set is closed", () => {
   const TABLE_FLAGS = ["--ascii", "--unicode"] as const;
   const TABLE_COLOUR = "--colour";
   const TABLE_VALUES = ["white", "black", "random"] as const;
-  const TABLE = [...TABLE_FLAGS, TABLE_COLOUR, ...TABLE_VALUES];
+  /** `ABC-101`'s rows: `--difficulty` and its five level words, ruling 1. */
+  const TABLE_DIFFICULTY = "--difficulty";
+  const TABLE_LEVELS = ["1", "2", "3", "4", "5"] as const;
+  const TABLE = [...TABLE_FLAGS, TABLE_COLOUR, ...TABLE_VALUES, TABLE_DIFFICULTY, ...TABLE_LEVELS];
 
   it("A6(i) — the exported enumeration EQUALS the table, element for element, both ways", () => {
     expect([...ACCEPTED_ARGUMENTS].sort()).toEqual([...TABLE].sort());
@@ -1255,6 +1272,7 @@ describe("ABC-042 — the accepted set is closed", () => {
       ["--ascii"],
       ["--unicode"],
       ...TABLE_VALUES.map((value) => [TABLE_COLOUR, value]),
+      ...TABLE_LEVELS.map((level) => [TABLE_DIFFICULTY, level]),
     ];
 
     for (const argv of accepted) {
@@ -1277,23 +1295,48 @@ describe("ABC-042 — the accepted set is closed", () => {
     const expectations: readonly (readonly [readonly string[], ResolvedOptions])[] = [
       [
         [],
-        { colour: "white", orientation: "white-bottom", flags: { ascii: false, unicode: false } },
+        {
+          colour: "white",
+          orientation: "white-bottom",
+          flags: { ascii: false, unicode: false },
+          difficulty: 3,
+        },
       ],
       [
         ["--ascii"],
-        { colour: "white", orientation: "white-bottom", flags: { ascii: true, unicode: false } },
+        {
+          colour: "white",
+          orientation: "white-bottom",
+          flags: { ascii: true, unicode: false },
+          difficulty: 3,
+        },
       ],
       [
         ["--unicode"],
-        { colour: "white", orientation: "white-bottom", flags: { ascii: false, unicode: true } },
+        {
+          colour: "white",
+          orientation: "white-bottom",
+          flags: { ascii: false, unicode: true },
+          difficulty: 3,
+        },
       ],
       [
         ["--colour", "white"],
-        { colour: "white", orientation: "white-bottom", flags: { ascii: false, unicode: false } },
+        {
+          colour: "white",
+          orientation: "white-bottom",
+          flags: { ascii: false, unicode: false },
+          difficulty: 3,
+        },
       ],
       [
         ["--colour", "black"],
-        { colour: "black", orientation: "black-bottom", flags: { ascii: false, unicode: false } },
+        {
+          colour: "black",
+          orientation: "black-bottom",
+          flags: { ascii: false, unicode: false },
+          difficulty: 3,
+        },
       ],
     ];
 
@@ -1317,11 +1360,13 @@ describe("ABC-042 — the accepted set is closed", () => {
         colour: "white",
         orientation: "white-bottom",
         flags: { ascii: false, unicode: false },
+        difficulty: 3,
       },
       black: {
         colour: "black",
         orientation: "black-bottom",
         flags: { ascii: false, unicode: false },
+        difficulty: 3,
       },
     };
 
@@ -1686,9 +1731,12 @@ describe("ABC-042 — the shape of what was delivered", () => {
     // `2` skips the two argv entries node supplies; `1` is the usage exit code; `0`, `0x20` and
     // `0x7f` are the byte filter's C0/DEL bounds; `70` is `sysexits.h`'s `EX_SOFTWARE`, `ABC-043`'s
     // internal-error exit — and NONE of the six is a count of rows, which is what this row decides.
-    expect(numbersIn("cli.ts")).toEqual(["0", "0x20", "0x7f", "1", "2", "70"]);
-    // `0` starts the scan, `1` steps over `--colour`'s value, `0.5` is a fair coin.
-    expect(numbersIn("cli-options.ts")).toEqual(["0", "0.5", "1"]);
+    // `ABC-101` adds `32`, the exponent of the level's seed `Math.floor(Math.random() * 2 ** 32)`
+    // (`ADR-0037` D3); its base reuses `2`. Seven now, and still none is a count of rows.
+    expect(numbersIn("cli.ts")).toEqual(["0", "0x20", "0x7f", "1", "2", "32", "70"]);
+    // `0` starts the scan, `1` steps over `--colour`'s value, `0.5` is a fair coin. `ABC-101`: `1`-`5`
+    // are the `Difficulty` ordinals and `3` is also the default level — none is a count of rows.
+    expect(numbersIn("cli-options.ts")).toEqual(["0", "0.5", "1", "2", "3", "4", "5"]);
   });
 
   it("A10 — package.json gains exactly one scripts key and nothing else", () => {
@@ -2777,8 +2825,11 @@ describe("ABC-043 — the live session", () => {
     // EngineSeam`, the composition `ADR-0012` clause 2(3) names, so it is no TYPE adapter and the
     // typecheck still decides "no adapter". The inner half keeps the old pin's whole text, and the
     // probe the decorator is handed is pinned at its one construction, with its three bound effects.
+    // `ABC-101` MOVED THE INNER HALF, AS ITS PAGE SAID IT WOULD: the book stays OUTSIDE (owner
+    // question 5) and the level the human chose replaces `createEngine(…)`, seeded per `ADR-0037` D3.
+    // The default level is the old pin's engine at `DEFAULT_BUDGET_MS` (`ABC-101` `A8′`).
     expect(entry).toMatch(
-      /engine:\s*withBook\(book,\s*createEngine\(\{\s*budgetMs:\s*DEFAULT_BUDGET_MS\s*\}\)\)/,
+      /engine:\s*withBook\(\s*book,\s*createLevelSeam\(difficulty,\s*\{\s*seed:\s*Math\.floor\(Math\.random\(\)\s*\*\s*2\s*\*\*\s*32\)\s*\}\),?\s*\)/,
     );
     expect(entry.match(/\bcreateBookProbe\s*\(/g)).toHaveLength(1);
     expect(entry).toMatch(
@@ -3495,5 +3546,157 @@ describe("ABC-152 V3 — the lane runs src/ without vite's module runner (ADR-00
     const { default: lane } = await import("../vitest.config.ts");
     const test: NonNullable<ViteUserConfig["test"]> = lane.test ?? {};
     expect(test.experimental?.viteModuleRunner).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-101` — `--difficulty <level>`. In process: no new child, no new file (`NFR-008`). `A10`, the
+// real child, is a `CLI_DEEP` row in `src/cli.real-engine.test.ts`. `A4` and `A8` are struck.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-101 — --difficulty selects a level, and the played engine is that level", () => {
+  /** The table's keys, as `--difficulty`'s words. `ABC-087`'s, read at run time and never spelled. */
+  const LEVEL_WORDS = Object.keys(LEVELS);
+
+  const optionsOf = (argv: readonly string[]): ResolvedOptions => {
+    const resolution = resolveOptions(argv);
+    if (!resolution.ok) throw new Error(`refused: ${JSON.stringify(argv)} (${resolution.problem})`);
+    return resolution.options;
+  };
+
+  it("A1 — `EPIC-006` criterion 4's command line, in both orders, resolves to the same options", () => {
+    const forward = optionsOf(["--colour", "black", "--difficulty", "3"]);
+    const reversed = optionsOf(["--difficulty", "3", "--colour", "black"]);
+
+    expect(forward).toMatchObject({ colour: "black", difficulty: 3 });
+    expect(reversed).toEqual(forward);
+  });
+
+  it("A2 — the default is a VALUE: the exported constant, the middle of the level set, `DEFAULT_LEVEL`", () => {
+    const levels = LEVEL_WORDS.map(Number).sort((a, b) => a - b);
+
+    expect(optionsOf([]).difficulty).toBe(DEFAULT_DIFFICULTY);
+    expect(DEFAULT_DIFFICULTY).toBe(levels[(levels.length - 1) / 2]);
+    // Not the top: `NFR-004`'s two bars have content only if some level is slower (ruling 2).
+    expect(DEFAULT_DIFFICULTY).toBeLessThan(Math.max(...levels));
+    expect(DEFAULT_DIFFICULTY).toBe(DEFAULT_LEVEL);
+  });
+
+  it("A3 — every level is in, and the boundary pair, the near-numbers and a bare flag are out", () => {
+    for (const word of LEVEL_WORDS) {
+      expect(optionsOf(["--difficulty", word]).difficulty, `level ${word}`).toBe(Number(word));
+    }
+
+    // `0`/`6` are the boundary pair; `3.0`, `+3`, `03` are what a `Number(token)` range check
+    // accepts (`## Test notes` 1); `constructor`/`__proto__` are the prototype keys of the table.
+    const refusedValues = [
+      "0",
+      "6",
+      "-1",
+      "3.5",
+      "three",
+      "3.0",
+      "+3",
+      "03",
+      "",
+      " 3",
+      "constructor",
+      "__proto__",
+    ];
+    for (const value of refusedValues) {
+      const resolution = resolveOptions(["--difficulty", value]);
+      expect(resolution, `--difficulty ${JSON.stringify(value)}`).toEqual({
+        ok: false,
+        problem: expect.stringContaining("--difficulty"),
+        offending: [value],
+      });
+    }
+    // The bare flag at the END of the line names itself, in either position after another option.
+    for (const argv of [["--difficulty"], ["--colour", "black", "--difficulty"]]) {
+      expect(resolveOptions(argv), JSON.stringify(argv)).toEqual({
+        ok: false,
+        problem: expect.stringContaining("--difficulty"),
+        offending: ["--difficulty"],
+      });
+    }
+  });
+
+  it("A3 (extended) — the words `--difficulty` accepts EQUAL `Object.keys(LEVELS)`, both ways", () => {
+    // Read off the resolver's behaviour over its own closed set, so the flag and the table cannot
+    // drift apart: a level added to one and not the other reds here.
+    const accepted = ACCEPTED_ARGUMENTS.filter((word) => resolveOptions(["--difficulty", word]).ok);
+    expect([...accepted].sort()).toEqual([...LEVEL_WORDS].sort());
+  });
+
+  it("A5 — the usage line advertises --difficulty with every level, after the separator, and each form resolves", () => {
+    // Read from a refusal child that already exists — no new spawn (`NFR-008`).
+    const line = usageLineOf(CHILDREN.badColour.stderr);
+    expect(line).toContain(SEPARATOR_FORM);
+    expect(line).toContain("--difficulty");
+
+    const invocations = invocationsAdvertisedBy(advertisedTextOf(line));
+    for (const word of LEVEL_WORDS) {
+      expect(invocations, `advertised --difficulty ${word}`).toContainEqual(["--difficulty", word]);
+      expect(optionsOf(["--difficulty", word]).difficulty).toBe(Number(word));
+    }
+  });
+
+  it("A7 — NO DEPTH, NO CLOCK, NO NODES in the resolver's code, and the field is a plain ordinal", () => {
+    // `RISK-002`: this layer gives a level no meaning. Over CODE: prose hits are `## Test notes` 4's.
+    const code = executableCodeOf("cli-options.ts");
+    expect(code.match(/depth|ply|millisecond|\bms\b|nodes?\/sec|budget/gi) ?? []).toEqual([]);
+    expect(code).toMatch(/export type Difficulty = 1 \| 2 \| 3 \| 4 \| 5;/);
+    expect(code).toMatch(/readonly difficulty: Difficulty;/);
+  });
+
+  it("A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock", async () => {
+    // Seed 7: level 1's first draw is a BLUNDER on the start position (non-vacuity, below).
+    const SEED = 7;
+    const clockFor = (word: string) =>
+      virtualClock(LEVELS[Number(word) as keyof typeof LEVELS].budgetMs);
+    const played: Record<string, string> = {};
+
+    for (const word of LEVEL_WORDS) {
+      const level = LEVELS[Number(word) as keyof typeof LEVELS];
+      const reference = createLevel(level, { seed: SEED, now: clockFor(word) });
+      const seam = createLevelSeam(Number(word), { seed: SEED, now: clockFor(word) });
+      const history = startGame();
+      // Twice on one instance: the seam keeps the level's own generator across calls.
+      for (let call = 0; call < 2; call++) {
+        const expected = reference(parseFen(START_FEN));
+        expect(expected, `createLevel at level ${word}`).not.toBeNull();
+        const move = await seam(history);
+        expect(move, `level ${word}, call ${call}`).toEqual(expected?.move);
+        if (call === 0) played[word] = `${squareName(move.from)}${squareName(move.to)}`;
+      }
+      // The seam borrows the position and hands it back unchanged, as the loop requires.
+      expect(history.position).toEqual(parseFen(START_FEN));
+    }
+
+    // NON-VACUITY: on this position and seed, level 1 blunders and level 3 does not, and they
+    // choose different moves — so a seam that ignored the level would red above.
+    const easiest = createLevel(LEVELS[1], { seed: SEED, now: clockFor("1") })(parseFen(START_FEN));
+    expect(easiest?.kind).toBe("blunder");
+    expect(played["1"]).not.toBe(played[String(DEFAULT_LEVEL)]);
+  });
+
+  it("A8′ — no flag builds `DEFAULT_LEVEL`, which IS the shipped engine at `DEFAULT_BUDGET_MS`", () => {
+    expect(optionsOf([]).difficulty).toBe(DEFAULT_LEVEL);
+    expect(LEVELS[DEFAULT_LEVEL]).toEqual({ budgetMs: DEFAULT_BUDGET_MS, blunderRate: 0 });
+    // The root hands the resolver's field to the seam, and nothing else (`ABC-043` `A1` pins the
+    // `engine:` expression itself).
+    const entry = executableCodeOf("cli.ts");
+    expect(entry).toMatch(/const \{[^}]*\bdifficulty\b[^}]*\} = resolution\.options;/);
+    // Read once, used once: the usage line's `--difficulty` is string text and is blanked first.
+    expect(withoutStringText(entry).match(/\bdifficulty\b/g)).toHaveLength(2);
+  });
+
+  it("A8′ — the table is read only by an OWN key: everything else is refused (Security forward note)", () => {
+    expect(executableCodeOf("level-seam.ts")).toMatch(/Object\.hasOwn\(LEVELS, level\)/);
+    for (const key of [0, 6, 3.5, Number.NaN, "constructor", "__proto__", "toString"]) {
+      expect(() => createLevelSeam(key as number, { seed: 1 }), `level ${String(key)}`).toThrow(
+        RangeError,
+      );
+    }
   });
 });

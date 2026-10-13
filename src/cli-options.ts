@@ -42,6 +42,9 @@ import type { Orientation } from "./render.ts";
  * `## Scope`'s table, as one closed enumeration: the two glyph flags, `--colour`, and `--colour`'s
  * three value words. THE ORDER IS LOAD-BEARING — the destructuring below names each element by
  * position, which is what keeps every accepted spelling written exactly once in this module.
+ *
+ * `ABC-101` adds `--difficulty` and its five value words, the ordinals `1`-`5`, weakest to
+ * strongest (ruling 1). They are opaque here: this module gives a level no meaning (`RISK-002`).
  */
 export const ACCEPTED_ARGUMENTS = [
   "--ascii",
@@ -50,9 +53,22 @@ export const ACCEPTED_ARGUMENTS = [
   "white",
   "black",
   "random",
+  "--difficulty",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
 ] as const;
 
-const [ASCII, UNICODE, COLOUR, WHITE, BLACK, RANDOM] = ACCEPTED_ARGUMENTS;
+const [ASCII, UNICODE, COLOUR, WHITE, BLACK, RANDOM, DIFFICULTY, ...DIFFICULTY_VALUES] =
+  ACCEPTED_ARGUMENTS;
+
+/** A difficulty level: a plain ordinal, `1` weakest to `5` strongest. */
+export type Difficulty = 1 | 2 | 3 | 4 | 5;
+
+/** The level when `--difficulty` is absent: the middle of the set, never the top (ruling 2). */
+export const DEFAULT_DIFFICULTY: Difficulty = 3;
 
 /** `--colour`'s three value words, in the table's order. It introduces no literal of its own. */
 const COLOUR_VALUES = [WHITE, BLACK, RANDOM] as const;
@@ -75,6 +91,8 @@ export interface ResolvedOptions {
   readonly orientation: Orientation;
   /** Straight into `beginGlyphModeSession` — this module never decides a glyph mode. */
   readonly flags: GlyphFlags;
+  /** The chosen level, fixed for the session (ruling 3). The entry point decides what it does. */
+  readonly difficulty: Difficulty;
 }
 
 /** Why an argv was rejected, and which of its tokens is to blame. */
@@ -91,6 +109,7 @@ export type Resolution =
 
 const UNRECOGNISED = "unrecognised argument";
 const MISSING_VALUE = "--colour needs one of white|black|random";
+const MISSING_DIFFICULTY = "--difficulty needs one of 1|2|3|4|5";
 const CONFLICTING_FLAGS = "--ascii and --unicode cannot be used together";
 
 const reject = (problem: string, ...offending: readonly string[]): Resolution => ({
@@ -110,6 +129,7 @@ export function resolveOptions(argv: readonly string[]): Resolution {
   let colour: ColourValue = WHITE; // the table's "no arguments" row
   let ascii = false;
   let unicode = false;
+  let difficulty = DEFAULT_DIFFICULTY;
 
   for (let index = 0; index < argv.length; index++) {
     const token = argv[index] as string;
@@ -132,6 +152,15 @@ export function resolveOptions(argv: readonly string[]): Resolution {
       index++;
       continue;
     }
+    if (token === DIFFICULTY) {
+      const next = argv[index + 1];
+      // The same exact-equality lookup as `--colour`: `0`, `6`, `03`, `+3` and `3.0` are not members.
+      const value = DIFFICULTY_VALUES.find((candidate) => candidate === next);
+      if (value === undefined) return reject(MISSING_DIFFICULTY, next ?? token);
+      difficulty = Number(value) as Difficulty;
+      index++;
+      continue;
+    }
 
     // THE DEFAULT BRANCH — every token that is not in the enumeration lands here, which is what
     // makes the accepted set closed rather than a denylist of the four arguments anyone thought of.
@@ -151,6 +180,7 @@ export function resolveOptions(argv: readonly string[]): Resolution {
       colour: resolved,
       orientation: resolved === WHITE ? "white-bottom" : "black-bottom",
       flags: { ascii, unicode },
+      difficulty,
     },
   };
 }

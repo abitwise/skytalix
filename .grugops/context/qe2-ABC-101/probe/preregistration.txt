@@ -1,0 +1,86 @@
+qe2-ABC-101 TIMING PRE-REGISTRATION: the N8-LANE reading for ABC-101's A11 commit (piece polarity), ONE narrow set, src/render.test.ts.
+Written 2026-10-13 ~12:03Z, BEFORE any window and before any run of any arm (and before any test run of this hop). Width 1: QE is the
+only grugops hop running (brief .grugops/queue/pending/qe2-ABC-101.md at main fe0d48c4). Committed on grugops/qe2-ABC-101 (off the
+ABC-101 tip 36378ccf) before the count-only smoke and before the first window's first run. ADR-0035 decisions 1-3 with § Addendum
+2026-10-12 A1-A3 (3017115c) and § Addendum (after ABC-154) B1-B4 (0fe43646) apply; both are ancestors of 36378ccf and so of this
+commit (B1's order: rule public -> pre-registration committed -> window runs; the blob must reach main unchanged, which is a merge
+QE does not make). Nothing below changes after the first window starts; any later text is an ADDENDUM that changes no rule. Timing
+readings are taken only in clean windows; no number is estimated. The protocol is qe-ABC-101's (bd846627), with the changes below only.
+
+STATE AT WRITING (a ps/sysctl snapshot, 12:02:10Z, not a gate sample): load1 4.41 (5 min 3.25), thermal 0, power 'AC Power' (100 %,
+charged), low-power mode 0, NO oeselg-labs/platform process, NO test-runner process (0, recounted with a command line that cannot
+match itself; a first count read 3 and those 3 were this hop's own shell wrappers, whose command text named the runner package: see
+SELF-MATCH below). Machine Apple M3 Mac15,13, Node v26.11.0, vitest 4.1.11.
+KNOWN LEFTOVERS, LOGGED, NOT A VOID CLAUSE (the Orchestrator's word in this hop's activation): three idle `node src/cli.ts` game
+processes started 14:13 local (11:13Z), state S+, from the Orchestrator's own pty probes: PID 69785 `--difficulty 5 --colour black`
+(cwd wt-ticket-to-pr-ABC-101), PID 71584 `--colour black` (cwd main checkout), PID 72301 `--colour black --ascii` (cwd
+wt-ticket-to-pr-ABC-101). QE does not touch them. They are logged in every sampler row (column cli_procs) and in every master
+snapshot (cli_procs, cli_pids). No void clause names them and the readout never reads that column. Other sessions' grugops installer
+`script`/`install.js` processes and the grugops admission-server processes are present and idle; they are not test runners, no void
+clause names them, QE does not touch them.
+
+HEAD AND BASE: B = 081c3715 (the merge of main into the branch; parent of the A11 commit), H = d22a709f (the A11 commit), as the
+brief names them. src/ at 36378ccf equals src/ at d22a709f (the records commit adds no code).
+
+ONE OVERALL WAIT BUDGET: probe/master-n8.sh, 30 minutes counted from its start, which precedes the first gate sample. No gate starts
+after the deadline and no gate waits past it; a window whose gate passed runs to its end. Order: S1 w1 [w2 only if void/inadmissible/
+not opened]. One re-attempt, never a third. Anything not started, or whose gate timed out, is NOT READ. NO POOLING of rounds or windows.
+No estimate, ever, and no "would have read" figure for a void window. Void and inadmissible windows are kept in probe/windows/ and
+reported as read, never graded. The master logs load1, thermal, power, runner processes, platform processes, abc095-book-absent-*
+copies in os.tmpdir() and the cli_procs/cli_pids before and after every window.
+
+GATE (every window, as before): secnfr-ABC-152-window/probe/gate.sh IN PLACE, unchanged, sha256
+5335905acbe8c97804458b11091405474bd3df7028b13c6b78b7da8133352b6f: thermal 0 AND no test-runner process (NOFOREIGN 1) on 4 consecutive
+15 s samples; MAXLOAD "" (load1 logged, NOT gated: ADR-0035 d2, § Pointers P3, B4). Power is logged by the gate.
+
+SELF-MATCH (a hazard named, not a rule change): the gate and the sampler count runner processes by `ps -Ao command | grep '[v]itest'`,
+which also counts ANY process whose command line merely contains the word, including an agent's shell wrapper. From the master's start
+to its end, this hop runs no command whose text contains that word and starts no other process of its own except light file reads
+and edits. A sampler/gate row reading > 0 is still read as the rules say (it voids or holds), never explained away.
+
+ARMS (outside the repository, session scratchpad .../scratchpad/qe2101/arms/, built 12:01Z by this hop; removed by exact path at the
+end). One node_modules symlink per arm root, to the main checkout's node_modules (ADR-0035 § Status "Per-set floor" shared-install
+condition). The worktree's own node_modules symlink is at the WORKTREE root only.
+  arms/B = git archive 081c3715; arms/T = cp -R of arms/B (/usr/bin/diff -r: identical); arms/H = git archive d22a709f.
+  sha256 prefixes, each equal to `git show <commit>:<path>`:
+    src/render.test.ts                    B/T bba8885d40022184  H 7236957a308541e7
+    src/render.ts                         B/T 0f0ebe60b4c66e0e  H afb9f16f3011759b
+    src/__snapshots__/render.test.ts.snap B/T 66cfd27e10b29aca  H c92a781f32965f1a
+
+THE SET (ADR-0035 decision 2), base 081c3715, head d22a709f, the brief's "one narrow set for src/render.test.ts":
+  S1 = src/render.test.ts.   F = provisional 16 % of the window's own B CPU median (ADR-0035 § Status "Floors after ABC-152": every
+       narrow set takes the provisional 16 % until its first 4.1 reading; this set has none).
+  It is a CHANGED file, not an added one: no placeholder arm. A11 adds 3 `it`s, so its count RISES at head and the readout's original
+  equal-count rule would discard every round on counts. S1 is therefore read in the readout's R4 "changed" mode: B = T = B's round-0
+  count, H = H's own round-0 count, 1 file in every arm. That is qe-ABC-101's S1 rule, unchanged.
+  Not read (stated, not hidden): `vitest related` for src/render.ts (render-seam, frame*, cli.test import it; A11 changed 0 lines in them).
+
+HARNESS secnfr-ABC-144-window-b/probe/lane144b.mjs IN PLACE, unchanged, sha256
+        652b779305bca2b0fbf39ec1974de4b914d9b06e55829b2923fc64401ba80c7c; NARROW=src/render.test.ts, CONDS=B,H,T, ROUNDS=9 (round 0
+        discarded, n = 8), rotated order, GAP=0; CLI_DEEP, SEARCH_DEEP, ENGINE_DEEP, VITEST_MAX_WORKERS unset (env -u).
+WINDOW  probe/window-n8.sh (sha256 ee6df63b8e72f8150586e76bed4e0eecf0577feb1daba3c1596509a7f43e3cf5) = qe-ABC-101's window-n8.sh
+        (1eca3b15...07260) with TWO changes: (W1) CTX is this hop's worktree (wt-qe2-ABC-101), where lane144b.mjs and gate.sh are the
+        same bytes; (W2) the sampler appends one column, cli_procs, LOGGED ONLY. Header lines say so. Nothing else differs.
+MASTER  probe/master-n8.sh (sha256 ecabfcc6d3f784f2eadac25277479d698b8391107d257693e328a8cd503e39ae) = qe-ABC-101's master-n8.sh
+        (08144087...0e7e), unchanged in logic, with: (M1) P and RD are this probe's; (M2) SP = qe2101; (M3) ONE set, S1 above, in
+        "changed" mode; (M4) budget 1800 s; (M5) the snapshot line also logs cli_procs and cli_pids (decides nothing).
+READOUT probe/readout-n8.py (sha256 8b18f27e344b7b874b488cbc0e93c962e1cb2e708fb91bf2384ae82299a5c215) = qe-ABC-101's readout-n8.py,
+        BYTE-IDENTICAL (no change). It reads sampler columns by name, so W2's extra column is never read. Self-test on RECORDED TSVs
+        only (probe/readout-selftest.out.txt): on qe-ABC-101's four windows the output is cmp-identical to each recorded
+        readout.out.txt (MET, MET, MET, INADMISSIBLE).
+VOID    (carried UNCHANGED, forward-only) a round is discarded on: status != ok; counts != expected; a foreign test runner before or
+        after the run; thermal != 0 before or after; any 5 s sampler row in [start-5 s, end+5 s] with a runner other than the
+        window's own file, an oeselg-labs/platform process, or thermal != 0. ANY discarded round voids the window (n must be 8).
+        Power is NOT a void (R1); it is logged. cli_procs is NOT a void; it is logged.
+ADMISSIBLE (A1): |twin T-B CPU median| <= max(1.5 % of the B CPU median, one 10 ms tick) AND the two-sided sign test on the NON-ZERO
+        twin deltas at p > 0.05 (zeros dropped; none non-zero: p = 1).
+GRADE   (decision 1, CPU unit, 650 ms; wall reported, not graded): n = 8, k = 2, R = max(|x(2)|, |x(7)|) of the twin; NOT MET if
+        the treatment's x(2) > 0.650 s (at any R); else MET if R <= 0.650 s and the H-B median <= 0.650 s; else NOT MET if
+        R <= 0.650 s; else UNRESOLVED (charge "at most x(7)"). 650 ms is graded only if 650 ms >= F; if F > 650 ms the bound is
+        REFUSED at this instrument (UNRESOLVED, "at most x(7)"). Reported as MET / NOT MET / NOT READ.
+TICKET LINE: this hop reads A11's set only. qe-ABC-101's three sets (+0.095 s summed medians, +0.270 s summed x(7), arithmetic) are
+        cited, not re-read. Any combined line is arithmetic labelled NOT A READING and is only stated if every summed set is MET.
+
+COUNT-ONLY SMOKE (not a reading; taken AFTER this commit and BEFORE master-n8.sh starts, never overlapping a window): one
+`npx vitest run src/render.test.ts` per arm (3 runs, *_DEEP unset), exit code and file/test counts only; no time is recorded or
+reported. It exists so a broken arm cannot spend a window. If an arm fails it, the set is NOT READ.

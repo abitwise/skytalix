@@ -71,15 +71,15 @@ export type Orientation = "white-bottom" | "black-bottom";
 type GlyphTable = Readonly<Record<number, readonly [white: string, black: string]>>;
 
 const GLYPHS: Readonly<Record<GlyphMode, GlyphTable>> = {
-  // U+2654-U+265F, white then black — two different code points per type, never one glyph
-  // recoloured, because a terminal has no colour to recolour it with here.
+  // White U+265A-U+265F (filled), black U+2654-U+2659 (outline) — ABC-101 `A11`, for a dark
+  // terminal; two code points per type, never one glyph recoloured (no colour to recolour with).
   unicode: {
-    [PAWN]: ["♙", "♟"],
-    [KNIGHT]: ["♘", "♞"],
-    [BISHOP]: ["♗", "♝"],
-    [ROOK]: ["♖", "♜"],
-    [QUEEN]: ["♕", "♛"],
-    [KING]: ["♔", "♚"],
+    [PAWN]: ["♟", "♙"],
+    [KNIGHT]: ["♞", "♘"],
+    [BISHOP]: ["♝", "♗"],
+    [ROOK]: ["♜", "♖"],
+    [QUEEN]: ["♛", "♕"],
+    [KING]: ["♚", "♔"],
   },
   // Case is the ONLY colour marker, matching the FEN convention the rest of `src/` already uses.
   ascii: {

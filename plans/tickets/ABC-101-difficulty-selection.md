@@ -432,6 +432,36 @@ board row and front matter are the Orchestrator's to sync. Readings and commands
 | 9 | priority assigned | ✅ **`P1`** (the trigger fired) |
 | 10 | no major unresolved blocker | ✅ *(was ⚠️⚠️)* |
 
+## Delivery
+
+**2026-10-12, Software Engineer** (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-101`). Branch
+`grugops/ABC-101-difficulty-selection`, from `main` `f0bd27f7`. Not merged, not pushed. Readings and calls are in
+`.grugops/context/ticket-to-pr-ABC-101/` (`…57bfba6d` reds, `…443a041f` decision, `…01564e07` artifact-ref,
+`…3bfd8b9d` criteria and guards, `probe/`). They are not restated here.
+
+**STOPPED. Nothing in `src/` is committed.** The full build is `probe/abc101-full-not-committed.diff`, which applies
+to `f0bd27f7`.
+- **The stop: `ABC-086` `A5`(i)**, "The shipped construction is unchanged: `src/cli.ts:175`,
+  `createEngine({ budgetMs: DEFAULT_BUDGET_MS })`, passes no `now`." This page's wiring replaces that construction with
+  `createLevelSeam(difficulty, { seed })`, inside the book. It still passes no `now`, and level 3 is the old
+  construction by value. But the criterion's text is contradicted, and its row is in `src/engine.test.ts`, outside
+  `A9`. Not amended; the ruling is owed to the Orchestrator (`…443a041f` lists the options).
+- **Expected and owed: `ABC-065` `A3`.** It stays red until the Scribe lands the `AGENTS.md` line in
+  `probe/agents-md-dev-run-slot.txt` (+4 B, 24,573 B against 24,576 B).
+
+| criterion | on the probe tree `c7fbafff` |
+|---|---|
+| `A1` | PASS: both orders resolve to the same `{ colour: "black", difficulty: 3 }` |
+| `A2` | PASS: the default is 3, the middle of `Object.keys(LEVELS)`, `DEFAULT_LEVEL` |
+| `A3` (+ extended) | PASS: `1`..`5` in; `0`, `6`, `-1`, `3.5`, `three`, `3.0`, `+3`, `03` and a bare flag out, named; flag words = `Object.keys(LEVELS)` |
+| `A4` | struck |
+| `A5` | PASS: `USAGE` advertises `[--difficulty 1\|2\|3\|4\|5]` after `--`; three forms run, each exit 0 |
+| `A6` | FAIL until the `AGENTS.md` line lands; PASS with it, in a scratch copy |
+| `A7` | PASS on code (0); raw grep reads 2 OLDER `ABC-042` comment hits, at base and head alike. Reading to rule |
+| `A8′` | PASS: 5 levels × 2 calls equal to `createLevel` on seed 7 and an injected clock; level 1 blunders; own-key refusal; engine modules byte-identical |
+| `A9` | PASS for the code set (5 files, 1 new flat module, 0 new test files); closing the stop needs `src/engine.test.ts` |
+| `A10` | PASS: `CLI_DEEP` 10/10, book-absent copy, 0 temp copies before and after |
+
 ## Amendment — 2026-10-12 (BA/PM, task `wave-2026-09-25`, subtask `bapm-amend-ABC-101`)
 
 The build stopped at `ABC-086` `A5`(i) (SE notes `…57bfba6d`, `…443a041f`, branch
@@ -459,6 +489,24 @@ the 2026-10-12 re-score.
 
 **Size `M` and priority `P1` hold.** The SE's resume adds one test row. The front matter
 (`status: backlog`, `P2`) is still stale and is the Orchestrator's to sync.
+
+## Delivery — addendum, 2026-10-12 (Software Engineer, subtask `resume2-ABC-101`)
+
+**Delivered on the branch, not merged.** `main` `3ea3e352` merged in at `e88a7832` (no rebase; the two
+pre-ruled conflicts kept both sides). Code commit **`ac8deab1`**: the probe diff plus `ABC-086` `A5`(i′)'s
+four assertions in `src/engine.test.ts`. Readings: `.grugops/context/resume2-ABC-101/notes/` (`…4822a352`
+gates, `…c243b4f0` criteria, `…d2414062` calls). Not restated here.
+
+| criterion | on `ac8deab1` |
+|---|---|
+| `A1`, `A2`, `A3` (+ extended) | PASS |
+| `A5` | PASS |
+| `A6` | FAIL, expected: `ABC-065` `A3` is the one red of 1789 until the Scribe lands the `AGENTS.md` slot line |
+| `A7` | PASS: code 0; added lines 0; the two `ABC-042` hits only |
+| `A8′` | PASS |
+| `A9` (widened) | PASS: `engine.test.ts` `-U0` = 2 import hunks + the one `(i)` `it` |
+| `A10` | PASS: `CLI_DEEP` 10/10, 0 temp copies before and after |
+| `ABC-086` `A5`(i′) | PASS, four assertions; mutants (1), (2), (4) red |
 
 ## Amendment — 2026-10-13 (BA/PM, task `wave-2026-09-25`, subtask `bapm-amend2-ABC-101`)
 
@@ -598,3 +646,48 @@ The split line gains a third half: **(c) `A11`, `XS`, its own commit.** It sits 
 `S` each.
 
 **Priority `P1` holds.** The front matter is still stale and is the Orchestrator's to sync.
+
+## Delivery — addendum, 2026-10-13 (Software Engineer, subtask `glyph-ABC-101`)
+
+**`A11` delivered on the branch, not merged.** `main` `4a7bf64c` was merged in at `081c3715` (no rebase; the two
+pre-ruled conflicts kept both sides; 0 `src/` lines from the merge). The `A11` commit is **`d22a709f`**, alone, with three files:
+`src/render.ts`, `src/render.test.ts` and the `.snap`. The readings are in `.grugops/context/glyph-ABC-101/notes/`
+(`…a3a7a6f2` gates, `…1c89fdcb` criteria, `-U0` and pty frames, `…d36914ee` decisions). They are not restated here.
+
+| criterion | on `d22a709f` |
+|---|---|
+| `A11a`, `A11b`, `A11c` | PASS (`A11a`/`A11b` seen red on the old table first) |
+| `A11d` | PASS: 24 keys unchanged, 12 `unicode` bodies changed, `ascii` byte-identical |
+| `A11e` | PASS: named `it`s green, unedited |
+| `A11f` | PASS: exactly 8 re-pins, skip 0, snapshot regenerated last |
+| `A9` (widened) | PASS: `-U0` = `render.ts` 2 hunks, `render.test.ts` 4, `.snap` 20 (all `unicode`) |
+| `A11g` | owed: the owner's UAT on a dark UTF-8 TTY (pty pre-view frames in `…1c89fdcb`) |
+
+Gates: lint, typecheck and build exit 0; `npm test` 58 files, 1792/1792, skip 0; `last-run.json` `success: true`;
+skip integrity `No findings.`; `CLI_DEEP` not re-run (`src/cli.ts` untouched). Next: QE delta re-read, then owner UAT.
+
+## QE — re-check after `A11`, 2026-10-13 (QE/E2E, task `wave-2026-09-25`, subtask `qe2-ABC-101`)
+
+Branch `grugops/qe2-ABC-101` off `36378ccf`. QE was the only hop running. This section covers the delta since `98ea0a84`: the merge
+`081c3715` and the `A11` commit `d22a709f`. **Verdict: PASS_WITH_GAPS.** The detail is in
+`.grugops/context/qe2-ABC-101/notes/` (decision `…4da1976a`) and is not restated here. `qe-ABC-101`'s verdict (`…2fa04d14`,
+PASS_WITH_GAPS on `98ea0a84`) stands for the difficulty work, and its gaps are carried. Its own `## QE` section is on
+`grugops/qe-ABC-101`, which is not merged.
+
+- **`A11a`–`A11f` and the widened `A9`: MET, each re-read by QE.** `d22a709f` holds exactly the three allowed files, with `-U0`
+  hunks 2 / 4 / 20. `A11a`: 330/330 piece cells on the contract table, all 6 FENs × 2 orientations. `A11b`: 14/14
+  strings, read from this page. `A11c`: 24/24. `A11d`: QE's own `.snap` parse gives 24 = 24 keys, 12 `unicode` bodies
+  changed, and 12/12 `ascii` bodies byte-identical. `A11e`: unedited and green. `A11f`: exactly 8 re-pins at equal strength, none
+  deleted, skipped or loosened. `A11g` is the owner's.
+- **The merge brought 0 `src/` lines. `CLI_DEEP` was run once anyway: 10/10**, with 0 `abc095-book-absent-*` before and after.
+- **9 plants outside the repository, all 9 caught:** one pair back, ASCII case swapped, a variation selector, an astral code
+  point, an ESC in place of a piece and on a piece, and orientation flipped with the old or the new table.
+- **`N8-LANE` MET:** `src/render.test.ts` H−B **+0.005 s** (−0.010..+0.010). It was pre-registered at `ee688564` before any run.
+  The window was clean, n = 8, on AC power. w1 was clean but inadmissible, and w2 was graded.
+- **Gates on the QE tree** (src = `d22a709f`): lint, typecheck and build exit 0; `npm test` 58 files, 1792/1792;
+  `last-run.json` `success: true`; skip-integrity `--skip-count 0` reads "No findings.".
+- **UAT:** the waiver does not apply (`3ea3e352...36378ccf` includes `src/render.ts`). The owner's word, now including `A11g`,
+  is owed.
+- **Gaps:** `QE2-101-a` INFO (Architect/Design: `render.test.ts` 4.1 twin R 0.030 s CPU, to fold);
+  `QE2-101-b` INFO (the waiver filter counts a `.snap` as production, which fails safe); `QE2-101-c` INFO (who owns the three
+  idle `node src/cli.ts` processes: the record and the activation disagree). None blocks.
