@@ -25,26 +25,26 @@ exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete > kiwipete unicode black-bottom 1`] = `
-"1 .♖::..:♔..::..:♖
-2 :♙.♙:♙.♗:♗.♙:♙.♙
-3 .♟::.♕::..:♘..::
-4 ::..::.♙::..:♟..
-5 ..::..:♘.♙::..::
-6 ::.♟:♞.♟::..:♞.♝
-7 ..:♝.♟:♛.♟:♟..:♟
-8 :♜..::.♚::..::.♜
+"1 .♜::..:♚..::..:♜
+2 :♟.♟:♟.♝:♝.♟:♟.♟
+3 .♙::.♛::..:♞..::
+4 ::..::.♟::..:♙..
+5 ..::..:♞.♟::..::
+6 ::.♙:♘.♙::..:♘.♗
+7 ..:♗.♙:♕.♙:♙..:♙
+8 :♖..::.♔::..::.♖
    h g f e d c b a"
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — kiwipete > kiwipete unicode white-bottom 1`] = `
-"8 .♜::..::.♚::..:♜
-7 :♟..:♟.♟:♛.♟:♝..
-6 .♝:♞..::.♟:♞.♟::
-5 ::..::.♙:♘..::..
-4 ..:♟..::.♙::..::
-3 ::..:♘..::.♕::.♟
-2 .♙:♙.♙:♗.♗:♙.♙:♙
-1 :♖..::..:♔..::.♖
+"8 .♖::..::.♔::..:♖
+7 :♙..:♙.♙:♕.♙:♗..
+6 .♗:♘..::.♙:♘.♙::
+5 ::..::.♟:♞..::..
+4 ..:♙..::.♟::..::
+3 ::..:♞..::.♛::.♙
+2 .♟:♟.♟:♝.♝:♟.♟:♟
+1 :♜..::..:♚..::.♜
    a b c d e f g h"
 `;
 
@@ -74,24 +74,24 @@ exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3 > position-3 unicode black-bottom 1`] = `
 "1 ..::..::..::..::
-2 ::.♙::.♙::..::..
+2 ::.♟::.♟::..::..
 3 ..::..::..::..::
-4 :♚..:♟..::..:♖..
-5 .♜::..::..::.♙:♔
-6 ::..::..:♟..::..
-7 ..::..::..:♟..::
+4 :♔..:♙..::..:♜..
+5 .♖::..::..::.♟:♚
+6 ::..::..:♙..::..
+7 ..::..::..:♙..::
 8 ::..::..::..::..
    h g f e d c b a"
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-3 > position-3 unicode white-bottom 1`] = `
 "8 ..::..::..::..::
-7 ::..:♟..::..::..
-6 ..::..:♟..::..::
-5 :♔.♙::..::..::.♜
-4 ..:♖..::..:♟..:♚
+7 ::..:♙..::..::..
+6 ..::..:♙..::..::
+5 :♚.♟::..::..::.♖
+4 ..:♜..::..:♙..:♔
 3 ::..::..::..::..
-2 ..::..::.♙::.♙::
+2 ..::..::.♟::.♟::
 1 ::..::..::..::..
    a b c d e f g h"
 `;
@@ -121,26 +121,26 @@ exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4 > position-4 unicode black-bottom 1`] = `
-"1 ..:♔.♖::.♕::..:♖
-2 :♙.♙::..:♙..:♟.♙
-3 ..::.♘::..::..:♛
-4 ::..::.♙::.♙:♗.♗
-5 ..::..::..::.♙:♞
-6 :♘.♝:♞..::..:♝..
-7 .♟:♟.♟::.♟:♟.♟:♙
-8 :♜..::.♚::..::.♜
+"1 ..:♚.♜::.♛::..:♜
+2 :♟.♟::..:♟..:♙.♟
+3 ..::.♞::..::..:♕
+4 ::..::.♟::.♟:♝.♝
+5 ..::..::..::.♟:♘
+6 :♞.♗:♘..::..:♗..
+7 .♙:♙.♙::.♙:♙.♙:♟
+8 :♖..::.♔::..::.♖
    h g f e d c b a"
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-4 > position-4 unicode white-bottom 1`] = `
-"8 .♜::..::.♚::..:♜
-7 :♙.♟:♟.♟::.♟:♟.♟
-6 ..:♝..::..:♞.♝:♘
-5 :♞.♙::..::..::..
-4 .♗:♗.♙::.♙::..::
-3 :♛..::..::.♘::..
-2 .♙:♟..:♙..::.♙:♙
-1 :♖..::.♕::.♖:♔..
+"8 .♖::..::.♔::..:♖
+7 :♟.♙:♙.♙::.♙:♙.♙
+6 ..:♗..::..:♘.♗:♞
+5 :♘.♟::..::..::..
+4 .♝:♝.♟::.♟::..::
+3 :♕..::..::.♞::..
+2 .♟:♙..:♟..::.♟:♟
+1 :♜..::.♛::.♜:♚..
    a b c d e f g h"
 `;
 
@@ -169,26 +169,26 @@ exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5 > position-5 unicode black-bottom 1`] = `
-"1 .♖::..:♔.♕:♗.♘:♖
-2 :♙.♙:♞.♘::.♙:♙.♙
+"1 .♜::..:♚.♛:♝.♞:♜
+2 :♟.♟:♘.♞::.♟:♟.♟
 3 ..::..::..::..::
-4 ::..::..::.♗::..
+4 ::..::..::.♝::..
 5 ..::..::..::..::
-6 ::..::..::.♟::..
-7 .♟:♟.♟:♝.♙::.♟:♟
-8 :♜..:♚..:♛.♝:♞.♜
+6 ::..::..::.♙::..
+7 .♙:♙.♙:♗.♟::.♙:♙
+8 :♖..:♔..:♕.♗:♘.♖
    h g f e d c b a"
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-5 > position-5 unicode white-bottom 1`] = `
-"8 .♜:♞.♝:♛..:♚..:♜
-7 :♟.♟::.♙:♝.♟:♟.♟
-6 ..::.♟::..::..::
+"8 .♖:♘.♗:♕..:♔..:♖
+7 :♙.♙::.♟:♗.♙:♙.♙
+6 ..::.♙::..::..::
 5 ::..::..::..::..
-4 ..::.♗::..::..::
+4 ..::.♝::..::..::
 3 ::..::..::..::..
-2 .♙:♙.♙::.♘:♞.♙:♙
-1 :♖.♘:♗.♕:♔..::.♖
+2 .♟:♟.♟::.♞:♘.♟:♟
+1 :♜.♞:♝.♛:♚..::.♜
    a b c d e f g h"
 `;
 
@@ -217,26 +217,26 @@ exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6 > position-6 unicode black-bottom 1`] = `
-"1 ..:♔.♖::..::..:♖
-2 :♙.♙:♙.♕::.♙:♙..
-3 ..::.♘::.♙:♘..:♙
-4 ::.♝::.♙::.♗::..
-5 ..:♗..:♟..:♝..::
-6 ::..:♞..:♟.♞::.♟
-7 .♟:♟.♟:♛..:♟.♟::
-8 ::.♚:♜..::..::.♜
+"1 ..:♚.♜::..::..:♜
+2 :♟.♟:♟.♛::.♟:♟..
+3 ..::.♞::.♟:♞..:♟
+4 ::.♗::.♟::.♝::..
+5 ..:♝..:♙..:♗..::
+6 ::..:♘..:♙.♘::.♙
+7 .♙:♙.♙:♕..:♙.♙::
+8 ::.♔:♖..::..::.♖
    h g f e d c b a"
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — position-6 > position-6 unicode white-bottom 1`] = `
-"8 .♜::..::..:♜.♚::
-7 ::.♟:♟..:♛.♟:♟.♟
-6 .♟::.♞:♟..:♞..::
-5 ::..:♝..:♟..:♗..
-4 ..::.♗::.♙::.♝::
-3 :♙..:♘.♙::.♘::..
-2 ..:♙.♙::.♕:♙.♙:♙
-1 :♖..::..::.♖:♔..
+"8 .♖::..::..:♖.♔::
+7 ::.♙:♙..:♕.♙:♙.♙
+6 .♙::.♘:♙..:♘..::
+5 ::..:♗..:♙..:♝..
+4 ..::.♝::.♟::.♗::
+3 :♟..:♞.♟::.♞::..
+2 ..:♟.♟::.♛:♟.♟:♟
+1 :♜..::..::.♜:♚..
    a b c d e f g h"
 `;
 
@@ -265,25 +265,25 @@ exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos > startpos unicode black-bottom 1`] = `
-"1 .♖:♘.♗:♔.♕:♗.♘:♖
-2 :♙.♙:♙.♙:♙.♙:♙.♙
+"1 .♜:♞.♝:♚.♛:♝.♞:♜
+2 :♟.♟:♟.♟:♟.♟:♟.♟
 3 ..::..::..::..::
 4 ::..::..::..::..
 5 ..::..::..::..::
 6 ::..::..::..::..
-7 .♟:♟.♟:♟.♟:♟.♟:♟
-8 :♜.♞:♝.♚:♛.♝:♞.♜
+7 .♙:♙.♙:♙.♙:♙.♙:♙
+8 :♖.♘:♗.♔:♕.♗:♘.♖
    h g f e d c b a"
 `;
 
 exports[`ABC-014 — the rendered frame > matches its snapshot in both modes and both orientations — startpos > startpos unicode white-bottom 1`] = `
-"8 .♜:♞.♝:♛.♚:♝.♞:♜
-7 :♟.♟:♟.♟:♟.♟:♟.♟
+"8 .♖:♘.♗:♕.♔:♗.♘:♖
+7 :♙.♙:♙.♙:♙.♙:♙.♙
 6 ..::..::..::..::
 5 ::..::..::..::..
 4 ..::..::..::..::
 3 ::..::..::..::..
-2 .♙:♙.♙:♙.♙:♙.♙:♙
-1 :♖.♘:♗.♕:♔.♗:♘.♖
+2 .♟:♟.♟:♟.♟:♟.♟:♟
+1 :♜.♞:♝.♛:♚.♝:♞.♜
    a b c d e f g h"
 `;
