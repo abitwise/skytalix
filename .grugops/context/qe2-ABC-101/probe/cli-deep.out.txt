@@ -1,0 +1,5 @@
+CLI_DEEP on wt-qe2-ABC-101 (HEAD ee688564, src = d22a709f's) 2026-10-13T12:07:49Z; abc095-book-absent-* before: 0; cli_procs 3
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+exit 0
+abc095-book-absent-* after: 0; cli_procs 3 2026-10-13T12:07:59Z

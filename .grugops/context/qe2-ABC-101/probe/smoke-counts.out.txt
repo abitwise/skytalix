@@ -1,0 +1,5 @@
+count-only smoke 2026-10-13T12:03:12Z, after ee688564, before master-n8.sh; exit code and counts only, no time recorded. abc095-book-absent-* before: 0
+src/render.test.ts B exit 0 files 1 tests 27 failed 0 pending 0 todo 0
+src/render.test.ts T exit 0 files 1 tests 27 failed 0 pending 0 todo 0
+src/render.test.ts H exit 0 files 1 tests 30 failed 0 pending 0 todo 0
+abc095-book-absent-* after: 0

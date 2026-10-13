@@ -665,3 +665,29 @@ pre-ruled conflicts kept both sides; 0 `src/` lines from the merge). The `A11` c
 
 Gates: lint, typecheck and build exit 0; `npm test` 58 files, 1792/1792, skip 0; `last-run.json` `success: true`;
 skip integrity `No findings.`; `CLI_DEEP` not re-run (`src/cli.ts` untouched). Next: QE delta re-read, then owner UAT.
+
+## QE — re-check after `A11`, 2026-10-13 (QE/E2E, task `wave-2026-09-25`, subtask `qe2-ABC-101`)
+
+Branch `grugops/qe2-ABC-101` off `36378ccf`. QE was the only hop running. This section covers the delta since `98ea0a84`: the merge
+`081c3715` and the `A11` commit `d22a709f`. **Verdict: PASS_WITH_GAPS.** The detail is in
+`.grugops/context/qe2-ABC-101/notes/` (decision `…4da1976a`) and is not restated here. `qe-ABC-101`'s verdict (`…2fa04d14`,
+PASS_WITH_GAPS on `98ea0a84`) stands for the difficulty work, and its gaps are carried. Its own `## QE` section is on
+`grugops/qe-ABC-101`, which is not merged.
+
+- **`A11a`–`A11f` and the widened `A9`: MET, each re-read by QE.** `d22a709f` holds exactly the three allowed files, with `-U0`
+  hunks 2 / 4 / 20. `A11a`: 330/330 piece cells on the contract table, all 6 FENs × 2 orientations. `A11b`: 14/14
+  strings, read from this page. `A11c`: 24/24. `A11d`: QE's own `.snap` parse gives 24 = 24 keys, 12 `unicode` bodies
+  changed, and 12/12 `ascii` bodies byte-identical. `A11e`: unedited and green. `A11f`: exactly 8 re-pins at equal strength, none
+  deleted, skipped or loosened. `A11g` is the owner's.
+- **The merge brought 0 `src/` lines. `CLI_DEEP` was run once anyway: 10/10**, with 0 `abc095-book-absent-*` before and after.
+- **9 plants outside the repository, all 9 caught:** one pair back, ASCII case swapped, a variation selector, an astral code
+  point, an ESC in place of a piece and on a piece, and orientation flipped with the old or the new table.
+- **`N8-LANE` MET:** `src/render.test.ts` H−B **+0.005 s** (−0.010..+0.010). It was pre-registered at `ee688564` before any run.
+  The window was clean, n = 8, on AC power. w1 was clean but inadmissible, and w2 was graded.
+- **Gates on the QE tree** (src = `d22a709f`): lint, typecheck and build exit 0; `npm test` 58 files, 1792/1792;
+  `last-run.json` `success: true`; skip-integrity `--skip-count 0` reads "No findings.".
+- **UAT:** the waiver does not apply (`3ea3e352...36378ccf` includes `src/render.ts`). The owner's word, now including `A11g`,
+  is owed.
+- **Gaps:** `QE2-101-a` INFO (Architect/Design: `render.test.ts` 4.1 twin R 0.030 s CPU, to fold);
+  `QE2-101-b` INFO (the waiver filter counts a `.snap` as production, which fails safe); `QE2-101-c` INFO (who owns the three
+  idle `node src/cli.ts` processes: the record and the activation disagree). None blocks.

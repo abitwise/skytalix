@@ -1,0 +1,26 @@
+A11b strings parsed from the ticket: 14 (expect 9 + 2 + 2 + 1 = 14)
+  white-bottom 9 rows equal the ticket: true
+  black-bottom rows 1-2 / 7-8 / label equal the ticket: true / true / true
+  H white-bottom:
+    8 .♖:♘.♗:♕.♔:♗.♘:♖
+    7 :♙.♙:♙.♙:♙.♙:♙.♙
+    6 ..::..::..::..::
+    5 ::..::..::..::..
+    4 ..::..::..::..::
+    3 ::..::..::..::..
+    2 .♟:♟.♟:♟.♟:♟.♟:♟
+    1 :♜.♞:♝.♛:♚.♝:♞.♜
+       a b c d e f g h
+  H black-bottom:
+    1 .♜:♞.♝:♚.♛:♝.♞:♜
+    2 :♟.♟:♟.♟:♟.♟:♟.♟
+    3 ..::..::..::..::
+    4 ::..::..::..::..
+    5 ..::..::..::..::
+    6 ::..::..::..::..
+    7 .♙:♙.♙:♙.♙:♙.♙:♙
+    8 :♖.♘:♗.♔:♕.♗:♘.♖
+       h g f e d c b a
+A11a over all 6 matrix FENs x 2 orientations: 330 piece cells checked, 0 off the contract table
+A11c: 24/24 cells 9 rows x 18 code points x 18 units; 24/24 with 0 U+001B
+A11d (runtime): ascii frames H == B byte for byte 12/12; unicode H == B with the six pairs swapped (and != B) 12/12

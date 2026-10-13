@@ -1,0 +1,67 @@
+expected counts (round 0): {'B': (1, 27), 'T': (1, 27), 'H': (1, 30)}
+round	cond	cpu	wall	files	tests	load_b	load_a	foreign_b	foreign_a	therm	power	sampler_bad	status	kept
+0	B	0.67	0.64	1	27	2.43	2.43	0	0	0->0	AC Power	0	ok	round0
+0	H	0.65	0.45	1	30	2.48	2.48	0	0	0->0	AC Power	0	ok	round0
+0	T	0.64	0.44	1	27	2.48	2.48	0	0	0->0	AC Power	0	ok	round0
+1	H	0.64	0.44	1	30	2.48	2.48	0	0	0->0	AC Power	0	ok	ok
+1	T	0.67	0.47	1	27	2.48	2.48	0	0	0->0	AC Power	0	ok	ok
+1	B	0.65	0.45	1	27	2.48	2.48	0	0	0->0	AC Power	0	ok	ok
+2	T	0.63	0.43	1	27	2.48	2.48	0	0	0->0	AC Power	0	ok	ok
+2	B	0.64	0.45	1	27	2.48	2.48	0	0	0->0	AC Power	0	ok	ok
+2	H	0.66	0.46	1	30	2.48	2.44	0	0	0->0	AC Power	0	ok	ok
+3	B	0.63	0.44	1	27	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+3	H	0.64	0.46	1	30	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+3	T	0.68	0.47	1	27	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+4	H	0.66	0.47	1	30	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+4	T	0.64	0.44	1	27	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+4	B	0.65	0.46	1	27	2.44	2.44	0	0	0->0	AC Power	0	ok	ok
+5	T	0.64	0.45	1	27	2.44	2.88	0	0	0->0	AC Power	0	ok	ok
+5	B	0.62	0.44	1	27	2.88	2.88	0	0	0->0	AC Power	0	ok	ok
+5	H	0.65	0.45	1	30	2.88	2.88	0	0	0->0	AC Power	0	ok	ok
+6	B	0.65	0.45	1	27	2.88	2.88	0	0	0->0	AC Power	0	ok	ok
+6	H	0.66	0.46	1	30	2.88	2.88	0	0	0->0	AC Power	0	ok	ok
+6	T	0.65	0.46	1	27	2.88	2.88	0	0	0->0	AC Power	0	ok	ok
+7	H	0.65	0.45	1	30	2.88	2.88	0	0	0->0	AC Power	0	ok	ok
+7	T	0.69	0.47	1	27	2.88	2.81	0	0	0->0	AC Power	0	ok	ok
+7	B	0.66	0.46	1	27	2.81	2.81	0	0	0->0	AC Power	0	ok	ok
+8	T	0.66	0.45	1	27	2.81	2.81	0	0	0->0	AC Power	0	ok	ok
+8	B	0.64	0.45	1	27	2.81	2.81	0	0	0->0	AC Power	0	ok	ok
+8	H	0.64	0.45	1	30	2.81	2.81	0	0	0->0	AC Power	0	ok	ok
+
+bracket log per lane round (sampler row at/before the first run's start | at/after the last run's end):
+round	before_utc	load1	therm	power	foreign	platform	|	after_utc	load1	therm	power	foreign	platform
+0	2026-10-13T12:04:03Z	2.43	0	AC Power	0	0	|	2026-10-13T12:04:09Z	2.48	0	AC Power	0	0
+1	2026-10-13T12:04:03Z	2.43	0	AC Power	0	0	|	2026-10-13T12:04:14Z	2.44	0	AC Power	0	0
+2	2026-10-13T12:04:09Z	2.48	0	AC Power	0	0	|	2026-10-13T12:04:14Z	2.44	0	AC Power	0	0
+3	2026-10-13T12:04:09Z	2.48	0	AC Power	0	0	|	2026-10-13T12:04:20Z	2.88	0	AC Power	0	0
+4	2026-10-13T12:04:14Z	2.44	0	AC Power	0	0	|	2026-10-13T12:04:20Z	2.88	0	AC Power	0	0
+5	2026-10-13T12:04:14Z	2.44	0	AC Power	0	0	|	2026-10-13T12:04:20Z	2.88	0	AC Power	0	0
+6	2026-10-13T12:04:14Z	2.44	0	AC Power	0	0	|	2026-10-13T12:04:25Z	2.81	0	AC Power	0	0
+7	2026-10-13T12:04:20Z	2.88	0	AC Power	0	0	|	2026-10-13T12:04:25Z	2.81	0	AC Power	0	0
+8	2026-10-13T12:04:20Z	2.88	0	AC Power	0	0	|	2026-10-13T12:04:25Z	2.81	0	AC Power	0	0
+
+cpu == user + sys (centiseconds) on every row: True
+scored rounds 8 [1, 2, 3, 4, 5, 6, 7, 8]; discarded rounds []
+load1 before each scored run: 2.44-2.88
+
+[CPU user+sys] n=8 k=2
+  B median 0.645 s; H median 0.650 s; T median 0.655 s
+  twin T-B sorted: -0.010, -0.010, +0.000, +0.020, +0.020, +0.020, +0.030, +0.050
+  twin median +0.020 s (+3.101 % of B); limit max(1.5 % = 9.68 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +5 / -2 (zeros 1, dropped): two-sided p 0.453  [old convention, not used: 5/8, p 0.727]
+  R 0.030 s -> ADMISSIBLE (A1) False
+  treatment H-B sorted: -0.010, -0.010, +0.000, +0.010, +0.010, +0.010, +0.020, +0.030
+  treatment median +0.010 s, interval x(2)..x(7) = -0.010..+0.020
+
+  per-set F = 0.103 s (provisional 16 % of this window B CPU median); 650 ms >= F: True
+  resolves 650 ms (R <= b): True; lower end x(k) -0.010 s > b: False; median +0.010 s <= b: True
+  STATE at 650 ms CPU: INADMISSIBLE (no state)
+
+[wall] n=8 k=2
+  B median 0.450 s; H median 0.455 s; T median 0.455 s
+  twin T-B sorted: -0.020, -0.020, +0.000, +0.010, +0.010, +0.010, +0.020, +0.030
+  twin median +0.010 s (+2.222 % of B); limit max(1.5 % = 6.75 ms, one tick 10 ms) = 10.00 ms
+  sign on non-zero deltas: +5 / -2 (zeros 1, dropped): two-sided p 0.453  [old convention, not used: 5/8, p 0.727]
+  R 0.020 s -> ADMISSIBLE (A1) True
+  treatment H-B sorted: -0.010, -0.010, +0.000, +0.010, +0.010, +0.010, +0.010, +0.020
+  treatment median +0.010 s, interval x(2)..x(7) = -0.010..+0.010
