@@ -35,6 +35,12 @@ writes nothing. `ABC-018` owns writing.
 - **Two glyph modes over one layout**: Unicode figurines (`♔♕♖♗♘♙` / `♚♛♜♝♞♟`) and ASCII letters
   (`KQRBNP` upper = white, `kqrbnp` lower = black). The mode is a **parameter**, not something this
   module decides — `ABC-015` decides it.
+  *(Dated note, 2026-10-13, BA/PM, subtask `bapm-amend2-ABC-101`, by the owner's word.)* When `ABC-101` `A11`
+  lands, the Unicode pairing becomes **White = `♚♛♜♝♞♟` (U+265A–U+265F, filled), Black = `♔♕♖♗♘♙`
+  (U+2654–U+2659, outline)**. Until then `main` draws the pairing written above, which is kept as written. The
+  contract is `design-ABC-101-glyphs` `…1c687529`. **This ticket's acceptance criteria are unchanged.** None of
+  them pins which side gets which set. The Unicode criterion asks for `U+2654`–`U+265F` and for different code
+  points per type, and both still hold after the swap. The ASCII pairing (case = colour) does not move.
 - **Orientation is a parameter and it rotates both axes together.** White at the bottom: ranks
   7→0 down the frame, files 0→7 across, rank labels `8..1`, file labels `a..h`. Black at the
   bottom: ranks 0→7, files **7→0**, rank labels `1..8`, file labels **`h..a`**.

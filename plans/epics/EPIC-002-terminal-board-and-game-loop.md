@@ -166,6 +166,8 @@ process genuinely controls: **what it emits**, and **which mode it chose**.
   a product whose value is "one command, five seconds, and you are playing", and because
   remembering the answer needs a persistence surface this product does not otherwise have.
 
+  *(2026-10-13, BA/PM, `bapm-amend2-ABC-101`, by the owner's word `wave-2026-09-25` `…cd4edd0e`.)* The reduced promise also covers a **light-background terminal**. Once `ABC-101` `A11` draws White filled, Unicode pieces read inverted there, and the remedy stays `--ascii`. No flag will be added.
+
 ---
 
 **#3 — unamended.**
