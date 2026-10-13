@@ -646,3 +646,22 @@ The split line gains a third half: **(c) `A11`, `XS`, its own commit.** It sits 
 `S` each.
 
 **Priority `P1` holds.** The front matter is still stale and is the Orchestrator's to sync.
+
+## Delivery — addendum, 2026-10-13 (Software Engineer, subtask `glyph-ABC-101`)
+
+**`A11` delivered on the branch, not merged.** `main` `4a7bf64c` was merged in at `081c3715` (no rebase; the two
+pre-ruled conflicts kept both sides; 0 `src/` lines from the merge). The `A11` commit is **`d22a709f`**, alone, with three files:
+`src/render.ts`, `src/render.test.ts` and the `.snap`. The readings are in `.grugops/context/glyph-ABC-101/notes/`
+(`…a3a7a6f2` gates, `…1c89fdcb` criteria, `-U0` and pty frames, `…d36914ee` decisions). They are not restated here.
+
+| criterion | on `d22a709f` |
+|---|---|
+| `A11a`, `A11b`, `A11c` | PASS (`A11a`/`A11b` seen red on the old table first) |
+| `A11d` | PASS: 24 keys unchanged, 12 `unicode` bodies changed, `ascii` byte-identical |
+| `A11e` | PASS: named `it`s green, unedited |
+| `A11f` | PASS: exactly 8 re-pins, skip 0, snapshot regenerated last |
+| `A9` (widened) | PASS: `-U0` = `render.ts` 2 hunks, `render.test.ts` 4, `.snap` 20 (all `unicode`) |
+| `A11g` | owed: the owner's UAT on a dark UTF-8 TTY (pty pre-view frames in `…1c89fdcb`) |
+
+Gates: lint, typecheck and build exit 0; `npm test` 58 files, 1792/1792, skip 0; `last-run.json` `success: true`;
+skip integrity `No findings.`; `CLI_DEEP` not re-run (`src/cli.ts` untouched). Next: QE delta re-read, then owner UAT.
