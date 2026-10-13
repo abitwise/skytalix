@@ -459,3 +459,142 @@ the 2026-10-12 re-score.
 
 **Size `M` and priority `P1` hold.** The SE's resume adds one test row. The front matter
 (`status: backlog`, `P2`) is still stale and is the Orchestrator's to sync.
+
+## Amendment — 2026-10-13 (BA/PM, task `wave-2026-09-25`, subtask `bapm-amend2-ABC-101`)
+
+The owner held UAT on the piece colour and put the fix here: "Fix it in ABC-101" (`wave-2026-09-25`
+`…owner-word-abc101-uat-glyph-fix-in-scope-7b3805a0`). He then chose a permanent swap with no flag:
+"we can make this swap permanent and no additional flag is needed" (`…owner-word-abc101-swap-permanent-no-flag-cd4edd0e`,
+option (A)). The contract is Frontend/UI's, merged on `main`: `.grugops/context/design-ABC-101-glyphs/notes/`
+`…1c687529` (contract) and `…81cf192b` (options and readings). These rulings are dated, append-only and open.
+The readings are in `.grugops/context/bapm-amend2-ABC-101/notes/`.
+
+**Scope, added 2026-10-13.** The Unicode piece polarity is swapped in `src/render.ts`'s `GLYPHS.unicode`:
+White is drawn with the filled glyphs and Black with the outline ones. On a dark-background terminal, which is
+the owner's, each side's pieces then read as that side. The ASCII table, the shading, the geometry, `GlyphMode`,
+the selection rule (`2b`) and the accepted flag set do not move.
+
+**Out of scope, added 2026-10-13, by the owner's word:**
+- a light/dark flag or env variable, and any follow-up ticket for one;
+- ANSI colour (`[A4]`);
+- detecting the terminal background (ABC-015, `2b`).
+
+On a light-background terminal the remedy is `--ascii` (EPIC-002 `2c`, line dated 2026-10-13).
+
+**The glyph table** (the contract's design token, pasted):
+
+| piece | White (new) | Black (new) | UTF-8 |
+|---|---|---|---|
+| K | ♚ U+265A | ♔ U+2654 | `E2 99 9A` / `E2 99 94` |
+| Q | ♛ U+265B | ♕ U+2655 | `E2 99 9B` / `E2 99 95` |
+| R | ♜ U+265C | ♖ U+2656 | `E2 99 9C` / `E2 99 96` |
+| B | ♝ U+265D | ♗ U+2657 | `E2 99 9D` / `E2 99 97` |
+| N | ♞ U+265E | ♘ U+2658 | `E2 99 9E` / `E2 99 98` |
+| P | ♟ U+265F | ♙ U+2659 | `E2 99 9F` / `E2 99 99` |
+
+**Acceptance, added 2026-10-13: `A11a`–`A11g`, pasted from the contract without change.** In these criteria,
+"the table above" means the glyph table just above.
+
+- **`A11a` (polarity, per type).** **Given** glyph mode `unicode` and the start position, **when** `renderBoard` runs in
+  each orientation, **then** every White piece cell's glyph is in U+265A–U+265F and every Black piece cell's glyph is in
+  U+2654–U+2659, matching the table above type for type (K→U+265A/U+2654 … P→U+265F/U+2659).
+- **`A11b` (exact frames).** **Given** the start position in `unicode` mode, **then** `renderBoard(…, "white-bottom")`
+  equals, row for row:
+  `8 .♖:♘.♗:♕.♔:♗.♘:♖` · `7 :♙.♙:♙.♙:♙.♙:♙.♙` · `6 ..::..::..::..::` · `5 ::..::..::..::..` ·
+  `4 ..::..::..::..::` · `3 ::..::..::..::..` · `2 .♟:♟.♟:♟.♟:♟.♟:♟` · `1 :♜.♞:♝.♛:♚.♝:♞.♜` · `   a b c d e f g h`
+  **and** `renderBoard(…, "black-bottom")` has first two rows `1 .♜:♞.♝:♚.♛:♝.♞:♜` · `2 :♟.♟:♟.♟:♟.♟:♟.♟`, rows
+  7–8 `7 .♙:♙.♙:♙.♙:♙.♙:♙` · `8 :♖.♘:♗.♔:♕.♗:♘.♖`, and label row `   h g f e d c b a`.
+  *(These are the probe's readings, `../probe/readings-swapped-option-a.txt`.)*
+- **`A11c` (geometry and no colour).** **Given** every position in `render.test.ts`'s matrix, both modes, both
+  orientations, **then** the frame is 9 rows. Each row is 18 code points **and** 18 UTF-16 units (`String.length`, the unit
+  `src/frame.ts` pads by), and the frame contains **0** `U+001B` (no SGR, `[A4]`).
+- **`A11d` (ASCII untouched).** **Then** every `ascii` entry in `src/__snapshots__/render.test.ts.snap` is byte-identical to
+  `main`. `git diff <base> <delivered> -- src/__snapshots__/render.test.ts.snap` touches `unicode` entries only, and the
+  ASCII literal rows in `render.test.ts` are unchanged.
+- **`A11e` (ABC-014's own criteria still hold, unedited).** **Then** the existing `it`s "draws Unicode piece cells inside
+  U+2654-U+265F, white and black on different code points", the shading/`a1`/`h8` rows, `2a`'s zero-above-U+007F rows,
+  and `render-seam`, `frame*` and `cli.test` (`A7` `--unicode` on a pipe) are green **without edits**.
+- **`A11f` (the re-pins are deliberate, named, and the only ones).** The reds the swap causes are exactly 8 `it`s in
+  `src/render.test.ts`: the white-bottom literal (`:316-323`), the six snapshot `it`s (Unicode entries), and the
+  QE oracle through `UNICODE_BY_FEN_LETTER` (`:411-422`). Each is re-pinned to the table above. None is deleted,
+  skipped or loosened (skip count 0). The snapshot is regenerated **only after** `A11a`/`A11b` are written and red.
+- **`A11g` (the owner's eye, UAT, not automatable per `2c`).** **Given** a dark-background UTF-8 TTY, **when** the
+  owner runs `npm run chess -- --colour black`, **then** the pieces at the bottom (theirs, Black) read as the dark side and
+  the engine's (White) read as light. **And** with `--colour white` the bottom pieces read light. On a light-background
+  terminal the same command reads inverted, and `--ascii` reads correctly on both.
+- *(BA/PM reading, 2026-10-13, at `main` `94c1daa5`.)* At this commit `src/render.ts`, `src/render.test.ts` and
+  the snapshot are byte-identical to the ABC-101 branch tip `98ea0a84` (`git diff --stat` is empty).
+  - **`A11b`'s 14 frame strings are byte-exact.** Each was compared with `renderBoard` on the start position in
+    `unicode` mode, with the six pairs swapped one character for another. All 14 matched, and every row was 18
+    code points and 18 UTF-16 units.
+  - **The table's UTF-8 column is correct** for all 12 code points.
+  - **`A11f`'s cites hold.**
+    - The white-bottom Unicode literal's board rows are `:316-323`; its label row is `:324`.
+    - `UNICODE_BY_FEN_LETTER`'s twelve entries are `:411-422`.
+    - The six snapshot `it`s come from one loop at `:342-352`. They own the 12 `unicode` entries among the
+      snapshot file's 24 keys.
+  - `A11b`'s probe path is relative to `.grugops/context/design-ABC-101-glyphs/notes/`.
+  - **No other test pins the polarity.** Every other glyph in `src/` is a range check, a message-region knight or
+    a comment: `src/cli.test.ts:1107`, `src/render-seam.test.ts:313,325`, `src/frame.test.ts:604,690,695`,
+    `src/frame.ts:38`.
+- **`A11` lands as its own commit on the ABC-101 branch** (`grugops/ABC-101-difficulty-selection`). It holds
+  `src/render.ts`, `src/render.test.ts` and the snapshot, and nothing else, so it can be reviewed and reverted
+  on its own.
+
+**`A9`, widened 2026-10-13 by BA/PM (subtask `bapm-amend2-ABC-101`) by three files, for `A11` only:**
+- **`src/render.ts`:**
+  - Changes: the six `GLYPHS.unicode` entries (`:77-82`), and the comment above them (`:74-75`) re-stated
+    with the table.
+  - Byte-identical: the `[white, black]` entry order (`:70`), the `ascii` table and `renderBoard`.
+- **`src/render.test.ts`:**
+  - Changes: the new `it`s for `A11a`–`A11c`, and the 8 re-pins `A11f` names.
+  - Byte-identical: every other existing `it`. That is `A11e`.
+- **`src/__snapshots__/render.test.ts.snap`:**
+  - Changes: the bodies of the 12 `unicode` entries only.
+  - Unchanged: the 24 keys. Every `ascii` entry is byte-identical (`A11d`).
+
+Read it with `git diff -U0 <base> <A11 commit> -- src/render.ts src/render.test.ts
+src/__snapshots__/render.test.ts.snap`. New test files: still **0**. `A11` does not touch `AGENTS.md`.
+The 8 reds `A11f` names are this ticket's guards for `A11`, named in advance. They are re-pinned on purpose, and
+none is deleted, skipped or loosened.
+
+**Triggers, re-read 2026-10-13:**
+- **`NFR-002`: not re-triggered.** The per-frame work is the same table lookup, and the frame stays 9 × 18
+  (`A11c`). No timing is owed.
+- **Security: not triggered by `A11`.** It adds no input.
+- **WCAG 2.2 AA 1.4.1: met by shape.**
+- **Contrast: `UNKNOWN - verify`.** The product emits no colour, so it can neither fail nor claim contrast.
+- **UAT is needed.** `src/render.ts` is a production line, so the zero-production-lines waiver does not
+  apply. The owner's word on `A11g` is folded into the held UAT.
+
+**Test note 6, added 2026-10-13.**
+1. Write `A11a` and `A11b` first and see them red on the old table.
+2. Swap the table and re-pin the 8 named `it`s.
+3. Regenerate the snapshot last, with `npx vitest run src/render.test.ts -u` only (`A11f`).
+
+A snapshot regenerated before the criteria exist records the code, not the contract.
+
+**DoR, re-scored at this hop: 10 of 10. MET.** Every item was re-read for `A11`.
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | ✅ adds the owner's UAT report: on his dark terminal his Black pieces read as White. The cause was read from `src/render.ts:73-83` |
+| 2 | scope and out-of-scope clear | ✅ one scope bullet and three fences (flag, colour, detection), by owner's word |
+| 3 | INVEST-shaped | ✅ with a note: `A11` is independent of the difficulty half and could have been its own ticket. The owner put it here, and its own commit keeps it separable |
+| 4 | acceptance testable and measurable | ✅ `A11a`–`A11f` are byte-exact and automated. `A11g` is the owner's eye at UAT, named as not automatable (`2c`) |
+| 5 | dependencies known | ✅ the contract is merged; no ADR moves; no `AGENTS.md` bytes needed |
+| 6 | security/NFR triggers with a measurable target | ✅ `NFR-002` not re-triggered, with the reason; WCAG 1.4.1 met; contrast `UNKNOWN - verify`, outside the process |
+| 7 | test notes present | ✅ note 6 |
+| 8 | size assigned | ✅ `M` |
+| 9 | priority assigned | ✅ `P1` |
+| 10 | no major unresolved blocker | ✅ the light-terminal question is answered: option (A) |
+
+**Size `M` holds.** `A11` is `XS`:
+- 12 string literals and a two-line comment;
+- the 8 re-pins in two test tables, plus the new `A11a`–`A11c` `it`s;
+- a regeneration of 12 snapshot entries.
+
+The split line gains a third half: **(c) `A11`, `XS`, its own commit.** It sits beside (a) and (b), which are
+`S` each.
+
+**Priority `P1` holds.** The front matter is still stale and is the Orchestrator's to sync.
