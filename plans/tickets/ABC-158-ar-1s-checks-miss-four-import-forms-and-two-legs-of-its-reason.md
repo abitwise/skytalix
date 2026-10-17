@@ -126,3 +126,30 @@ BA/PM, 2026-10-17. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's. Owner of the build: **the Release Manager**, then QE.
+
+## Delivery — 2026-10-17 (Release Manager, subtask `rm-ABC-158`, branch `grugops/ABC-158-ar1-checks-widened` from `aa37f9cb`)
+
+**`AR-1` is re-stated** in decision note
+`.grugops/context/rm-ABC-158/notes/20261017T180500Z-release-manager-decision-ar1-restated-901f43b6.md`
+(`supersedes: 20261017T102600Z-release-manager-decision-ar1-restated-718112dd`). That note holds the authoritative
+text, commands and readings; this section only maps them to the criteria. I ran every command myself on 2026-10-17,
+18:00Z–18:05Z. Nothing was installed or fixed. The reason, the advisory table and trigger clause (1) carry over
+unchanged; the advisory pairs re-read today diff empty against the table.
+
+- **`A1` MET.** Check 5 reads `ADR-0036`'s production set (40 files today, recursive under `src/`). Readings at
+  `aa37f9cb`: 1 `found 0 vulnerabilities`; 2 `false`; 3 `[true,false,false,false,false]`; 4 exit 0, nothing written;
+  5a empty; 5b empty; 5c `node:fs`; 5d (new) empty; 6 `node src/cli.ts`; 7 `0` keys and `0` packages. These equal
+  the ticket's expected values. 5b's comment-line filter is there because without it 5b prints a doc comment
+  (`src/book-file.ts:8`).
+- **`A2` MET, 6 of 6.** One plant per scratch copy outside the repository. G1 → 5a, G2 → 5d, G3 → 5b, G4 → 5b,
+  G5 → 6, G6b → 7.
+- **`A3` MET, 6 of 6.** P1 → 5a, P2 → 5a, P3 → 5b, P3b → 5b and 5c, P4 → 5c, P4b → 5a.
+- **`A4` MET.** Clause (2) fires when **any of checks 1–7** reads differently from the record. Clause (1) is
+  word-for-word unchanged.
+- **`A5` MET.** The diff against `aa37f9cb` lists only this page and the new note. `git diff --numstat aa37f9cb --
+  src/ package.json package-lock.json` is empty. Manifest md5s are unchanged (`076a03d7…`, `ed7a5b0c…`).
+  `npm audit fix` was not run.
+
+**Residual, named in the note:** a loader flag through `.npmrc` `node-options` or `NODE_OPTIONS` is read by no check
+(no `.npmrc` exists today). **Owed:** the QE hop; the mandatory gates at the tip. No board or traceability edit: the
+Orchestrator owns them.
