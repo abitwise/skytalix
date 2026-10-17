@@ -297,3 +297,22 @@ exit 0 with 0 pending:
 **DoR 10/10:** 1 ✅, 2 ✅ (three files; zobrist fenced out), 3 ✅, 4 ✅ (`A2`/`A4` re-counted), 5 ✅
 (none open), 6 ✅ (0 production lines, 0 new files, `N8-LANE` zero), 7 ✅, 8 ✅ `XS`, 9 ✅ `P3`,
 10 ✅.
+
+## Delivery — 2026-10-17 (Software Engineer, subtask `ticket-to-pr-ABC-030`)
+
+Branch `grugops/ABC-030-nfr-comment-counts` from `b84dc637`; code commit `bc185f83`. Readings and
+the scope decision: `.grugops/context/ticket-to-pr-ABC-030/notes/`.
+
+- **Scope: three files, per the 2026-10-12 re-score.** `src/zobrist.nfr.test.ts` untouched (md5
+  `bb4d52be…` before and after).
+- **The change:** *"all 26 tests there"* and *"all 45 tests there"* -> *"every test there"* (the
+  discharged zobrist wording); *"the 52 rows in `san.test.ts`"* -> *"the rows in `san.test.ts`"*.
+  The `vi.mock`-hoisting argument is kept in all three.
+- **A1** grep exit 1, 0 hits. **A2** `src/*.ts` grep exit 1, 0 hits (3 before); numstat `1 1` in
+  each of the three files and nothing else; every changed line is inside the header comment.
+  **A3** per-file counts byte-identical (58 files, 1792 tests, 0 pending). **A4** the repaired
+  sentences hold no integer about another file; the dated witness at `gameend.nfr.test.ts:8` is
+  kept (test note 2).
+- **Gates on the tip:** lint 0, typecheck 0, build 0, `npm test` 0 (58 files / 1792 passed),
+  `last-run.json` success true, skip integrity `No findings.` at skip count 0.
+- **UAT:** 0 production lines (the waiver grep is empty). QE hop still required.
