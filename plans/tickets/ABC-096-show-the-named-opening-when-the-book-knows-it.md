@@ -404,3 +404,33 @@ Software Engineer, 2026-10-17 (subtask `ticket-to-pr-ABC-096`). Branch `grugops/
   - QE;
   - Security/NFR (`A3`, `A4`, `A7`; the `NFR-007` first-call ≤ 30 ms reading on the delivered build);
   - the owner's UAT (§ UAT observations).
+
+## QE — 2026-10-17
+
+QE/E2E (subtask `qe-ABC-096`) at tip `2acebaa8`, code `a48da51c`, base `6edadcf0`. **Verdict: PASS_WITH_GAPS.** The
+detail is in `.grugops/context/qe-ABC-096/notes/` (verdict `…e5a80c37`). **No timing was read.**
+
+- **`A1`–`A10`: MET by the code.** `A4`'s `< 16 ms` is not QE's reading; it is owed to Security/NFR.
+- **Fence:** 7 files, all in § Build contract's table. The must-not-change list is byte-identical. No new file.
+- **Tests:** 58 / 1810 → 58 / 1822 (+12).
+- **Gates at the tip:** lint, typecheck and build exit 0; `npm test` exit 0; skip 0, `No findings.`; `CLI_DEEP=1`
+  10 passed.
+- **UAT is not waived:** the production `src/` grep prints 3 files.
+- **Independent reads.**
+  - Base and tip `inBook` / `bookMove` are equal on 5,679 book positions.
+  - All 2,456 shipped names match an oracle built from `A1`'s text.
+- **Mutants:** 22 on the full lane plus `tsc`. 19 killed, 1 equivalent, and 2 survived:
+  - **Q2**, a code-unit `slice` cut;
+  - **Q9**, the separator `":"`.
+- **Gaps** (none blocks):
+  - **`QE-096-a` LOW.** `A1`'s "whole code points" is unpinned: Q2 survives. One odd-offset astral row in
+    `src/render-seam.test.ts` closes it. Recommended as an SE repair before merge.
+  - **`QE-096-b` INFO.** The separator is unpinned (Q9). It is equivalent on the shipped book.
+  - **`QE-096-c` INFO.** `src/cli.real-engine.test.ts:405`, *"the probe is asked only then"*, is stale under D7.
+    It is outside the fence and was not edited.
+  - **`QE-096-d` OWED to Security/NFR:** `A4` `< 16 ms` and the `NFR-007` first call `≤ 30 ms`.
+  - **`QE-096-e` INFO.** `A8`'s warning-once is evidenced only on `CLI_DEEP`.
+  - **`QE-096-f` INFO, for UAT.** 12 families share 5 shown texts after the cut, for example
+    `Blackmar-Diemer Ga...`.
+  - **`QE-096-g` INFO.** The cut is made before `sanitize`. No shipped family is affected.
+  - **`QE-096-h` INFO.** `cli.test.ts`'s reference frames are a consistency check, not a name oracle.
