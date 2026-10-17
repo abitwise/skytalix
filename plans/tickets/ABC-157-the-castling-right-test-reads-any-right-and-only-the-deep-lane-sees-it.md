@@ -126,3 +126,29 @@ BA/PM, 2026-10-17. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's.
+
+## Delivery — 2026-10-17 (Software Engineer, subtask `ticket-to-pr-ABC-157`)
+
+Branch `grugops/ABC-157-castling-one-right`, cut from `aa37f9cb`. The code commit is `968a5843`: +90/−0 to
+`src/moves.castling.hardening.test.ts` and nothing else. No timing was read. Evidence is in
+`.grugops/context/ticket-to-pr-ABC-157/notes/`; the instrument and raw logs are in `…/probe/`.
+
+- **The gap, shown first, at base `aa37f9cb` (1824 tests on 58 files).** `X-any-right` passes 1824/1824
+  with `PERFT_DEEP` unset. `src/moves.ts` md5 is `6335b452fc21ffe2d0f902ecab930840`.
+- **`A1` MET.** There are 4 rows (`w K`, `w Q`, `b k`, `b q`). Each first asserts the single right bit, then that
+  both of the mover's castles are alive but for the right. Then it checks the one castle by name at
+  `generateMoves` and at `legalMoves`, then the count 25, then that the position is unchanged.
+- **`A2` MET.** There are 2 rows (`w kq`, `b KQ`). Each first asserts that the mover holds 0 of its own bits and
+  the opponent holds both. Then it checks that no castle is offered at either layer, and the count 24.
+- **`A3` MET.** The committed ABC-024 harness was re-run with `X-any-right` added: 32 tree states per tree,
+  0 harness errors.
+  - `X-any-right` is green at base and **red at head on exactly the six new rows**.
+  - The seven named ABC-024 mutants and both class controls are killed at base and head, and their
+    failure lists are identical apart from ABC-157 rows.
+  - EQ01–EQ15 survive at base and head, so this ticket adds 0 kills.
+  - Witness on the any-right build: 26 on all six rows.
+- **`A4` MET.** `git diff --name-only aa37f9cb 968a5843` lists the one test file, and `-U0` shows 0 removed lines.
+  The md5 is unchanged. `npm test` gives 58 files, 1830/1830 (base 58/1824, +6), skip 0, integrity
+  `No findings.` Deep perft is 32/32.
+- **Gates on `968a5843`:** lint, typecheck, build and `npm test`, all exit 0.
+- **Security trigger not fired:** a test-only diff in one file, with no input path, network or dependency.
