@@ -21,7 +21,7 @@ held in scratch outside the repo, with `node_modules` symlinked. Each mutant get
 process and its own fresh `vitest run --reporter=json` process. `PERFT_DEEP` is deleted from the env. Each
 anchor is asserted to occur exactly once. `src/moves.ts` is restored and re-hashed to
 `6335b452fc21ffe2d0f902ecab930840` after every mutant. Result: 31 tree states per run, 0 broken builds,
-0 harness errors. Raw output: `probe/mutants.base.log` and `probe/mutants.rows.log`.
+0 harness errors. Raw output: `probe/mutants.base.out` and `probe/mutants.rows.out`.
 
 - `md5 -q src/moves.ts` at base and at tip: `6335b452fc21ffe2d0f902ecab930840`. This is unchanged.
 - Base default lane: 1792/1792 on 58 files, skip 0. With the rows: 1810/1810 on 58 files.
