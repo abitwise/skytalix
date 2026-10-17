@@ -378,3 +378,26 @@ note, § ABC-040). `plans/traceability.md` at this tip: 1069 lines, md5 `eb3233b
 exclusions named), 3 ✅, 4 ✅ (A1/A3/A4/A5 amended to pass on a correct repair), 5 ✅ (the
 concurrent-append hazard reduced to tail hunks), 6 ✅ (0 `src/` lines, `N8-LANE` zero), 7 ✅, 8 ✅ `S`,
 9 ✅ `P3`, 10 ✅.
+
+## Delivery — 2026-10-17 (Software Engineer, subtask `ticket-to-pr-ABC-040`, branch `grugops/ABC-040-trace-dedup` from `main` `b84dc637`)
+
+**Delivered on branch; recommend `In Review`.** Code commit `8d2e4f8b` touches `plans/traceability.md`
+only (+9/−13): the second `ABC-028` row is deleted (`R3`), the second `ABC-029` row is merged into the first (`R4`)
+and deleted, the comment paragraph is replaced by one dated sentence, and this hop's `ABC-040 (build)` row
+is appended. Every figure was re-derived at `b84dc637`, and all of them match the 2026-10-12 re-score. The rows sat at
+L461/L463 and L462/L464 (they had moved by one). Readings and the commit split:
+`.grugops/context/ticket-to-pr-ABC-040/notes/`.
+
+| criterion (as amended 2026-10-12) | reading |
+|---|---|
+| A1 | no two rows share cells 0–4 (pre-edit: exactly the two pairs); `ABC-028` ×1, `ABC-029` ×1 — **MET** |
+| A2 | prefix True (2618 of 50168), stale Code/Tests empty, checked before the delete — **MET** |
+| A3 | `d` = 2705; cell equals `live[:d] + stale[d:] + " **" + live[d:]`; 206 `**`; six probes present — **MET** |
+| A4 | both anchors occur once; the block between them equals `stale[d:]` (2404 chars, 2418 bytes) — **MET** |
+| A5 | old sentence `grep -cF` → 0; one dated `RECONCILED 2026-10-17` sentence naming R3, R4, 2404 bytes — **MET** |
+| A6 | 508 other rows byte-identical; 512 → 510 before the own row; `8d2e4f8b` numstat names one file; 0 `src/` lines — **MET** (on the code commit; this section and the notes are a separate docs commit, as the brief requires) |
+
+**Gates on tip `8d2e4f8b`:** `npm run -s lint`, `typecheck` and `build` all exit 0. `npm test` exit 0, **58 files /
+1792 tests** (= base). `.test-results/last-run.json` `success` true, 0 pending, 0 todo.
+`test-skip-integrity --skip-count 0` returns `No findings.` (exit 0). No timing reading taken. UAT waiver measurement:
+0 `src/` lines.
