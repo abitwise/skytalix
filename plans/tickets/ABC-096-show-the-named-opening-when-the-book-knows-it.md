@@ -404,6 +404,7 @@ Software Engineer, 2026-10-17 (subtask `ticket-to-pr-ABC-096`). Branch `grugops/
   - QE;
   - Security/NFR (`A3`, `A4`, `A7`; the `NFR-007` first-call ≤ 30 ms reading on the delivered build);
   - the owner's UAT (§ UAT observations).
+- **Repair 2026-10-17 (`3ceda09a`, test only):** two rows in `src/render-seam.test.ts` close `QE-096-a` (odd-offset astral cut, red on QE `Q2`) and `QE-096-b` (`": "` separator, red on QE `Q9`), both green on the real code; gates 58 / 1824, skip `No findings.`, `CLI_DEEP=1` 10 passed (note `…repair-rows-mutants-gates-3ceda09a`).
 
 ## QE — 2026-10-17
 
