@@ -172,8 +172,9 @@ async function main(): Promise<void> {
   const history = newGame(START_FEN);
   // `ABC-095` — the opening book in front of the engine (`ADR-0037` § Addendum R1, D3). The probe's
   // three effects are bound here and nowhere else: the bytes from the holder module, the one warning
-  // to stderr (stdout is the board), and the session's randomness. Nothing is read until the engine's
-  // first ply asks.
+  // to stderr (stdout is the board), and the session's randomness. `ABC-096` (`ADR-0043` D1): the
+  // same probe is handed to the render seam, for the opening name, so the file is read just before
+  // the first frame, by that frame's lookup, and never again.
   const book = createBookProbe({
     read: readBookFile,
     warn: (line) => process.stderr.write(`${line}\n`),
@@ -184,7 +185,7 @@ async function main(): Promise<void> {
     const outcome = await runTurnLoop({
       history,
       humanColour: colour,
-      render: makeRenderSeam(mode, orientation),
+      render: makeRenderSeam(mode, orientation, book),
       // BUILT HERE, CALLED NOWHERE — `G6`'s single-caller precondition. See the module header.
       input: createLineInputSeam({ source: process.stdin, output: sink }),
       // `ABC-101` — the chosen level, inside the book (owner question 5). Its seed is `ADR-0037` D3's.

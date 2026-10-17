@@ -4,7 +4,8 @@
  *
  * The artifact is `ABC-093`'s `data/opening-book/book.json`, in `ADR-0037` D1's format: entries
  * keyed by 16 lowercase hex digits of `zobristKey(position)`, each with `m`, a list of
- * `[uci, positive integer weight]` pairs. "In book" means `m` is non-empty.
+ * `[uci, positive integer weight]` pairs. "In book" means `m` is non-empty. An entry may also carry
+ * `n`, the opening's name (`ADR-0037` D1(d)); `openingName` reads it (`ABC-096`, `ADR-0043` D2).
  *
  * This module holds no capability (`ADR-0036` clause (b)). Everything with a side effect is
  * injected and bound once at the composition root:
@@ -44,6 +45,12 @@ export interface BookProbe {
   inBook(position: Position): boolean;
   /** A weighted book move for this position, legal in it, or `undefined` when out of book. */
   bookMove(position: Position): Move | undefined;
+  /**
+   * The book's name for this position, or `undefined`. Read on entries whose `m` is empty too; a
+   * name that is not a non-empty string is no name, with no warning. Calls neither `legalMoves`
+   * nor `random`, so the frame path may call it (`ADR-0043` D1-D2).
+   */
+  openingName(position: Position): string | undefined;
 }
 
 type BookLine = readonly [uci: string, weight: number];
@@ -70,8 +77,14 @@ const isBookLine = (pair: unknown): pair is BookLine =>
 const uciOf = (move: Move): string =>
   `${squareName(move.from)}${squareName(move.to)}${PROMOTION_LETTER[move.promotion] ?? ""}`;
 
-/** Validates the whole file up front; returns only the in-book entries. */
-function parseBook(bytes: Uint8Array): Map<string, readonly BookLine[]> {
+/** The parsed artifact: the in-book entries' moves, and every entry's name that is a non-empty string. */
+interface Book {
+  readonly lines: Map<string, readonly BookLine[]>;
+  readonly names: Map<string, string>;
+}
+
+/** Validates the whole file up front; returns the in-book entries and the names. */
+function parseBook(bytes: Uint8Array): Book {
   if (bytes.length > BOOK_MAX_BYTES)
     throw new BookRefused(`is larger than ${BOOK_MAX_BYTES} bytes`);
   let root: unknown;
@@ -84,6 +97,7 @@ function parseBook(bytes: Uint8Array): Map<string, readonly BookLine[]> {
     throw new BookRefused("is not a format-1 book");
   }
   const entries = new Map<string, readonly BookLine[]>();
+  const names = new Map<string, string>();
   for (const [key, entry] of Object.entries(root.positions)) {
     if (
       !KEY.test(key) ||
@@ -98,21 +112,22 @@ function parseBook(bytes: Uint8Array): Map<string, readonly BookLine[]> {
       throw new BookRefused("has an entry whose weights overflow");
     }
     if (lines.length > 0) entries.set(key, lines);
+    if (typeof entry.n === "string" && entry.n !== "") names.set(key, entry.n);
   }
-  return entries;
+  return { lines: entries, names };
 }
 
 export function createBookProbe({ read, warn, random }: BookProbeOptions): BookProbe {
   /** `undefined` until the first probe; `null` once the book is switched off. */
-  let book: Map<string, readonly BookLine[]> | null | undefined;
+  let book: Book | null | undefined;
 
   const switchOff = (reason: string): void => {
     book = null;
     warn(`opening book ${reason}; playing on without it`);
   };
 
-  /** The entry's moves, each re-validated against `legalMoves`, with their weights. */
-  const bookMoves = (position: Position): { move: Move; weight: number }[] => {
+  /** The one lazy load, shared by every method: the book, or `null` once it is switched off. */
+  const loaded = (): Book | null => {
     if (book === undefined) {
       try {
         book = parseBook(read());
@@ -120,8 +135,16 @@ export function createBookProbe({ read, warn, random }: BookProbeOptions): BookP
         switchOff(error instanceof BookRefused ? error.message : "could not be read");
       }
     }
-    if (!book) return [];
-    const lines = book.get(zobristKey(position).toString(16).padStart(16, "0"));
+    return book ?? null;
+  };
+
+  const keyOf = (position: Position): string => zobristKey(position).toString(16).padStart(16, "0");
+
+  /** The entry's moves, each re-validated against `legalMoves`, with their weights. */
+  const bookMoves = (position: Position): { move: Move; weight: number }[] => {
+    const current = loaded();
+    if (!current) return [];
+    const lines = current.lines.get(keyOf(position));
     if (lines === undefined) return [];
 
     const legal = legalMoves(position);
@@ -149,5 +172,6 @@ export function createBookProbe({ read, warn, random }: BookProbeOptions): BookP
       }
       return undefined;
     },
+    openingName: (position) => loaded()?.names.get(keyOf(position)),
   };
 }

@@ -1,0 +1,28 @@
+{
+ "entries": 5390,
+ "named": 2853,
+ "nonStr": 0,
+ "maxLen": 99,
+ "cls": {
+  "c1": 0,
+  "cf": 0,
+  "bidi": 0,
+  "mn": 0,
+  "wide": 0,
+  "above7f": 199,
+  "astral": 0
+ },
+ "ex": {
+  "above7f": "Sicilian Defense: Löwenthal Variation U+f6"
+ },
+ "distinctAbove7f": [
+  "U+f6(ö) x14",
+  "U+e9(é) x50",
+  "U+fc(ü) x76",
+  "U+e4(ä) x20",
+  "U+e1(á) x15",
+  "U+107(ć) x3",
+  "U+f3(ó) x19",
+  "U+f8(ø) x2"
+ ]
+}

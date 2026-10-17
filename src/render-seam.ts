@@ -22,7 +22,17 @@
  * reaches `renderStatusPanel` as the SAME OBJECT the caller passed — never an equal one. The
  * repetition derive is an `O(plies)` replay that belongs to the loop's `gameStatusOf` and nowhere
  * else; a renderer that re-derived a status in order to draw it would move that replay onto the
- * per-frame path while every content assertion in this suite stayed green.
+ * per-frame path while every content assertion in this suite stayed green. The seam derives nothing
+ * from the game's history, and makes one constant-cost lookup through the probe it was given
+ * (`ABC-096`, `ADR-0043` D7).
+ *
+ * THE OPENING NAME (`ABC-096`, `ADR-0043`). The book probe is bound at construction as
+ * `Pick<BookProbe, "openingName">`, so the frame path cannot draw the session's randomness or run
+ * `legalMoves`. The name is shown only when the loop supplied no message items (D4): the player's
+ * own feedback wins the region, and a frame with messages makes no lookup. What is shown is the
+ * name's family, cut to `HISTORY_COLS` code units without splitting a code point (D3), so it always
+ * fits a row and is never dropped. It is neutralised by `assembleFrame`'s `sanitize` like every
+ * other message item, and by nothing here. No state is kept between frames (D5).
  *
  * IT NAMES NO ROW COUNT — `ADR-0009` clause 9. The height is the panels' and `assembleFrame`'s; this
  * file holds no numeric literal at all, so there is no count here that can drift from
@@ -38,24 +48,53 @@
  * probe rooted here is what holds that, on every run, and it is armed.
  */
 
+import type { BookProbe } from "./book.ts";
 import { assembleFrame } from "./frame.ts";
-import { renderHistory } from "./history-pane.ts";
+import { HISTORY_COLS, renderHistory } from "./history-pane.ts";
 import { type GlyphMode, type Orientation, renderBoard } from "./render.ts";
 import { renderStatusPanel } from "./status-panel.ts";
 import type { RenderSeam } from "./turn-loop.ts";
+
+/** Where a name's family ends: `"Ruy Lopez: Berlin Defense"` is the family `"Ruy Lopez"`. */
+const FAMILY_END = ": ";
+
+/** Appended to a family cut short. */
+const ELLIPSIS = "...";
+
+/**
+ * The message items for a frame the loop gave none: `[]` when the book names nothing (`undefined`,
+ * or an empty family), else the name's family, whole if it fits `HISTORY_COLS`, else cut and marked.
+ */
+function nameItems(name: string | undefined): readonly string[] {
+  const [family = ""] = name === undefined ? [] : name.split(FAMILY_END);
+  if (family === "") return [];
+  if (family.length <= HISTORY_COLS) return [family];
+  let kept = "";
+  for (const character of family) {
+    if (kept.length + character.length > HISTORY_COLS - ELLIPSIS.length) break;
+    kept += character;
+  }
+  return [`${kept}${ELLIPSIS}`];
+}
 
 /**
  * Build the seam for a session. Every frame it returns is the merged four composed in the one order
  * `ADR-0009` clause 9b fixes; the panels are CALLED, never re-implemented.
  */
-export function makeRenderSeam(mode: GlyphMode, orientation: Orientation): RenderSeam {
+export function makeRenderSeam(
+  mode: GlyphMode,
+  orientation: Orientation,
+  book: Pick<BookProbe, "openingName">,
+): RenderSeam {
   return (history, status, thinking, messages) =>
     assembleFrame(
       {
         board: renderBoard(history.position, mode, orientation),
         status: renderStatusPanel(history, status, thinking),
         history: renderHistory(history),
-        messages,
+        // `ADR-0043` D4: the loop's items pass through unchanged, and only an empty list looks. A
+        // length is tested for truth because this file's code holds no digit (`ADR-0009` clause 9).
+        messages: messages.length ? messages : nameItems(book.openingName(history.position)),
       },
       mode,
     );

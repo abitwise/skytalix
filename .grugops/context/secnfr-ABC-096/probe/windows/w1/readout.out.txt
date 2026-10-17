@@ -1,0 +1,37 @@
+window w1: gate_pass 2026-10-17T13:13:03Z, end 2026-10-17T13:14:03Z, sampler rows 27, load1 4.52-5.17
+power in window: ['AC Power']; thermal values: ['0']
+CLEAN: 0 void conditions
+T1 a4-ascii [A4 (graded)]
+  first frame: n 10, min 0.344, median 0.353, max 0.372 ms; bar 16; MET
+  warm max: n 10, min 0.141, median 0.154, max 0.447 ms; bar 16; MET
+  warm median per process: 0.0170-0.0198 ms; p99 max 0.1755 ms
+T1 a4-unicode [A4 (graded)]
+  first frame: n 10, min 0.341, median 0.351, max 0.362 ms; bar 16; MET
+  warm max: n 10, min 0.175, median 0.204, max 0.294 ms; bar 16; MET
+  warm median per process: 0.0177-0.0194 ms; p99 max 0.1260 ms
+T1 a4-astral [A4 (graded)]
+  first frame: n 10, min 0.386, median 0.420, max 0.441 ms; bar 16; MET
+  warm max: n 10, min 0.125, median 0.167, max 0.263 ms; bar 16; MET
+  warm median per process: 0.0225-0.0253 ms; p99 max 0.2095 ms
+T1 x-sep [NFR-002 extension (graded)]
+  first frame: n 10, min 0.857, median 0.872, max 0.925 ms; bar 16; MET
+  warm max: n 10, min 0.589, median 0.630, max 0.799 ms; bar 16; MET
+  warm median per process: 0.4772-0.4875 ms; p99 max 0.6165 ms
+T1 x-max [NFR-002 extension (graded)]
+  first frame: n 10, min 0.439, median 0.466, max 0.517 ms; bar 16; MET
+  warm max: n 10, min 0.125, median 0.147, max 0.268 ms; bar 16; MET
+  warm median per process: 0.0338-0.0349 ms; p99 max 0.1293 ms
+T1 x-real [NFR-002 extension (graded)]
+  first frame: n 10, min 0.616, median 0.645, max 1.057 ms; bar 16; MET
+  warm max: n 10, min 0.281, median 0.328, max 1.861 ms; bar 16; MET
+  warm median per process: 0.0542-0.0571 ms; p99 max 0.4620 ms
+T2 NFR-007 first call, real npm run chess child [graded, <= 30 ms]
+  firstCallMs (openingName, read+parse inside): n 10, min 5.223, median 5.587, max 6.047 ms; bar 30; MET
+  readMs (the read alone): 0.107-0.163 ms; sinceOrigin at the call: 59.3-66.5 ms
+  H with hook, e2e frame0Ms [reported]: min 203.2, median 209.8, max 244.3 ms
+    firstByteMs: min 203.1, median 209.8, max 244.2 ms
+  H plain, NFR-007 e2e frame0Ms [graded, < 2000 ms]: n 10, min 201.775, median 210.752, max 222.096 ms; bar 2000; MET
+    firstByteMs: min 201.8, median 210.7, max 222.1 ms
+  B plain, e2e frame0Ms [reported]: min 192.4, median 202.6, max 213.7 ms
+    firstByteMs: min 192.4, median 202.6, max 213.6 ms
+  replica frame0WithLoadMs [reported]: min 5.485, median 5.620, max 7.594 ms

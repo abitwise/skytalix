@@ -380,3 +380,90 @@ BA/PM (task `wave-2026-09-25`, subtask `bapm-rescore-ABC-096`, Workflow 07), at 
 
 **Recommendation:** `In Design` → `Ready for Dev` (0/6), after the Orchestrator's `Ready for Dev`-exit criteria
 re-read (`AGENTS.md` process rule 1). The page is also still the epic's droppable bullet.
+
+## Delivery
+
+Software Engineer, 2026-10-17 (subtask `ticket-to-pr-ABC-096`). Branch `grugops/ABC-096-opening-name` from `main`
+`6edadcf0`; code commit `a48da51c`. The detail is in `.grugops/context/ticket-to-pr-ABC-096/notes/`.
+
+- **Fence:** 7 files changed, all inside § Build contract's table: 3 production (`src/book.ts`, `src/render-seam.ts`,
+  `src/cli.ts`) and 4 test files. 0 new files, 0 new dependencies, 0 new spawns. The must-not-change list is
+  byte-identical (`git diff --quiet` exit 0). No snapshot moved.
+- **The cut** follows `A1` as amended: code units, whole code points (the ADR's D3 says "code points"; the page wins).
+- **`A1`–`A10`: PASS** on emitted frames. `A4`'s `< 16 ms` was read **outside the suite**, because the repository
+  has no in-suite wall-clock bars (`src/frame.test.ts:618`). Every first frame and median was under 16 ms. The
+  slowest was 6.44 ms, the first frame in a fresh process, and it includes the book's one parse. Node v26.11.1,
+  darwin-arm64, load about 4. `UNKNOWN - verify` elsewhere.
+- **Gates (tip):**
+  - lint, typecheck, build: exit 0;
+  - `npm test`: exit 0, 58 files / 1822 tests (base 58 / 1810, +12), `last-run.json` `success: true`;
+  - skip-integrity `--skip-count 0`: `No findings.`;
+  - `CLI_DEEP=1`: exit 0, 10 passed.
+- **Mutants:** eight, planted outside the repository, all killed (note `…8f2d4b60`).
+- **Owed:**
+  - QE;
+  - Security/NFR (`A3`, `A4`, `A7`; the `NFR-007` first-call ≤ 30 ms reading on the delivered build);
+  - the owner's UAT (§ UAT observations).
+- **Repair 2026-10-17 (`3ceda09a`, test only):** two rows in `src/render-seam.test.ts` close `QE-096-a` (odd-offset astral cut, red on QE `Q2`) and `QE-096-b` (`": "` separator, red on QE `Q9`), both green on the real code; gates 58 / 1824, skip `No findings.`, `CLI_DEEP=1` 10 passed (note `…repair-rows-mutants-gates-3ceda09a`).
+
+## QE — 2026-10-17
+
+QE/E2E (subtask `qe-ABC-096`) at tip `2acebaa8`, code `a48da51c`, base `6edadcf0`. **Verdict: PASS_WITH_GAPS.** The
+detail is in `.grugops/context/qe-ABC-096/notes/` (verdict `…e5a80c37`). **No timing was read.**
+
+- **`A1`–`A10`: MET by the code.** `A4`'s `< 16 ms` is not QE's reading; it is owed to Security/NFR.
+- **Fence:** 7 files, all in § Build contract's table. The must-not-change list is byte-identical. No new file.
+- **Tests:** 58 / 1810 → 58 / 1822 (+12).
+- **Gates at the tip:** lint, typecheck and build exit 0; `npm test` exit 0; skip 0, `No findings.`; `CLI_DEEP=1`
+  10 passed.
+- **UAT is not waived:** the production `src/` grep prints 3 files.
+- **Independent reads.**
+  - Base and tip `inBook` / `bookMove` are equal on 5,679 book positions.
+  - All 2,456 shipped names match an oracle built from `A1`'s text.
+- **Mutants:** 22 on the full lane plus `tsc`. 19 killed, 1 equivalent, and 2 survived:
+  - **Q2**, a code-unit `slice` cut;
+  - **Q9**, the separator `":"`.
+- **Gaps** (none blocks):
+  - **`QE-096-a` LOW.** `A1`'s "whole code points" is unpinned: Q2 survives. One odd-offset astral row in
+    `src/render-seam.test.ts` closes it. Recommended as an SE repair before merge.
+  - **`QE-096-b` INFO.** The separator is unpinned (Q9). It is equivalent on the shipped book.
+  - **`QE-096-c` INFO.** `src/cli.real-engine.test.ts:405`, *"the probe is asked only then"*, is stale under D7.
+    It is outside the fence and was not edited.
+  - **`QE-096-d` OWED to Security/NFR:** `A4` `< 16 ms` and the `NFR-007` first call `≤ 30 ms`.
+  - **`QE-096-e` INFO.** `A8`'s warning-once is evidenced only on `CLI_DEEP`.
+  - **`QE-096-f` INFO, for UAT.** 12 families share 5 shown texts after the cut, for example
+    `Blackmar-Diemer Ga...`.
+  - **`QE-096-g` INFO.** The cut is made before `sanitize`. No shipped family is affected.
+  - **`QE-096-h` INFO.** `cli.test.ts`'s reference frames are a consistency check, not a name oracle.
+
+## Security/NFR — 2026-10-17
+
+Security/NFR (subtask `secnfr-ABC-096`) at tip `c11bfec8`, code `a48da51c`, base `6edadcf0`. **Result: PASS_WITH_RISKS.
+0 required fixes; 2 accepted LOW risks.** The detail is in `.grugops/context/secnfr-ABC-096/notes/` (result `…e1c94a07`).
+`src/` was not edited.
+
+- **Clause (b)** (`ADR-0036` § Canonical clause (b), canonical instrument, pair `6edadcf0..c11bfec8`):
+  - limbs 1, 2 and 3 do **not** fire: 0 (b1) lines and 0 new runtime edges. The seam's new `BookProbe` import is
+    `import type`, and `HISTORY_COLS` rides an existing edge.
+  - **Ruling 2 by hand** (holders `{src/book-file.ts}` at base and head): 0 lines changed in the holder, so it does not
+    fire.
+- **Escape bar (`A3`, G7)** on emitted frames, 14 hostile names in each mode: 0 ESC, 0 C0, 0 DEL, 0 code points above
+  `U+007F` in ASCII mode, and 23 rows.
+- **Narrowed type:** `Pick<BookProbe, "openingName">` behind `import type`. This is a compile-time control on one call
+  site, and it is adequate.
+- **No new file read, dependency or spawn.**
+- **`QE-096-d` discharged.** One pre-registered window (`92b73c49`), clean: no foreign vitest or platform process,
+  thermal 0, AC power, load1 4.5–5.2. Apple M3, Node v26.11.1. `UNKNOWN - verify` elsewhere.
+  - **`A4` `< 16 ms`: MET**, max 0.447 ms. A 1 MiB name reads 0.517 ms, and the real probe 1.861 ms worst.
+  - **`NFR-007` first call `≤ 30 ms` cold: MET**, max 6.047 ms, in a real `npm run chess` child. The first call is
+    `openingName`, with the one read inside it.
+  - **`NFR-007` `< 2 s`: MET**, max 222.1 ms to frame 0.
+- **Accepted risks:**
+  - **`AR-096-C1CP`** (LOW, owner the Orchestrator). In unicode mode, C1 and bidi code points in a book name reach the
+    terminal. 0 shipped names carry one.
+    - Recommended: an `XS` follow-up that widens `tools/opening-book/compile.ts`'s C0/DEL/ESC refusal to
+      `U+0080`–`U+009F`, before the next re-pin of the source.
+    - This is **not** the catalog's C1-byte ruling, and `sanitize` does not change.
+  - **`AR-096-DISKCOLD`** (LOW, owner Architect/Design). A page-cache-cold first call was not read; it needs
+    `sudo purge`. The only figure for it is the Architect's single 24.4 ms run.
+- **Next:** `Ready for UAT` (the Orchestrator's move). UAT is **not** waived.

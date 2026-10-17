@@ -40,13 +40,14 @@
 
 import { readdirSync, readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { type BookProbe, createBookProbe } from "./book.ts";
 import * as frameModule from "./frame.ts";
-import { assembleFrame, frameHeight } from "./frame.ts";
+import { assembleFrame, frameHeight, MESSAGE_ROWS, PROMPT_ROWS } from "./frame.ts";
 import * as gameend from "./gameend.ts";
 import * as historyModule from "./history.ts";
-import { gameStatusOf, newGame } from "./history.ts";
+import { gameStatusOf, newGame, playMove, takeBack } from "./history.ts";
 import * as historyPane from "./history-pane.ts";
-import { HISTORY_ROWS, renderHistory } from "./history-pane.ts";
+import { HISTORY_COLS, HISTORY_ROWS, renderHistory } from "./history-pane.ts";
 import * as legal from "./legal.ts";
 import { legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
@@ -57,6 +58,7 @@ import { makeRenderSeam } from "./render-seam.ts";
 import * as statusPanel from "./status-panel.ts";
 import { renderStatusPanel, STATUS_ROWS } from "./status-panel.ts";
 import { type RenderSeam, runTurnLoop } from "./turn-loop.ts";
+import { zobristKey } from "./zobrist.ts";
 
 vi.mock("./frame.ts", { spy: true });
 vi.mock("./gameend.ts", { spy: true });
@@ -83,11 +85,14 @@ const sourceOf = (file: string): string => readFileSync(`${SOURCE_DIRECTORY}${fi
 
 const startGame = () => newGame(START_FEN);
 
+/** `ABC-096`: the seam's third parameter, as a book that names no position. */
+const NO_NAMES = { openingName: () => undefined };
+
 /** A game, its status, and the seam under test — the fixture almost every criterion starts from. */
 function fixture(mode: GlyphMode = "unicode", orientation: Orientation = "white-bottom") {
   const history = startGame();
   const status = gameStatusOf(history);
-  const seam: RenderSeam = makeRenderSeam(mode, orientation);
+  const seam: RenderSeam = makeRenderSeam(mode, orientation, NO_NAMES);
   return { history, status, seam };
 }
 
@@ -167,7 +172,7 @@ describe("ABC-041 — the render seam", () => {
     // `RenderSeam` at its declaration and handed to `runTurnLoop` as `render` unwrapped. `tsc`
     // is the instrument for that half; this test is the "and it runs" half.
     const history = startGame();
-    const seam: RenderSeam = makeRenderSeam("unicode", "white-bottom");
+    const seam: RenderSeam = makeRenderSeam("unicode", "white-bottom", NO_NAMES);
 
     let cursor = 0;
     const scripted = (game: historyModule.GameHistory): Move => {
@@ -490,5 +495,369 @@ describe("ABC-041 — the render seam", () => {
     for (const thinking of [true, false]) seam(history, status, thinking, []);
 
     expect(panel.mock.calls.map((call) => call[2])).toEqual([true, false]);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------
+// `ABC-096` — the opening name, through the seam (`ADR-0043`). Every display row is asserted on the
+// EMITTED FRAME (test note 1). Books are real `createBookProbe`s over in-memory bytes, or one-method
+// doubles where the criterion says "a book double"; the shipped artifact is read only for the
+// examples the page names.
+// ---------------------------------------------------------------------------------------------
+
+describe("ABC-096 — the opening name in the message region", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  const SHIPPED = readFileSync(new URL("../data/opening-book/book.json", import.meta.url));
+  const hexKey = (history: historyModule.GameHistory): string =>
+    zobristKey(history.position).toString(16).padStart(16, "0");
+
+  /** A game played from the start by UCI tokens. */
+  const played = (tokens: readonly string[]): historyModule.GameHistory => {
+    const history = startGame();
+    for (const token of tokens) playUci(history, token);
+    return history;
+  };
+  const playUci = (history: historyModule.GameHistory, token: string): void => {
+    const from = parseSquareName(token.slice(0, 2));
+    const to = parseSquareName(token.slice(2, 4));
+    const move = legalMoves(history.position).find((m) => m.from === from && m.to === to);
+    if (move === undefined) throw new Error(`fixture: no legal move ${token}`);
+    playMove(history, move);
+  };
+
+  /** A real probe over in-memory bytes, with its warnings and its draws from `random` counted. */
+  const probeOver = (positions: Record<string, unknown>, bytes?: Uint8Array) => {
+    const warn = vi.fn();
+    let draws = 0;
+    let reads = 0;
+    const probe = createBookProbe({
+      read: () => {
+        reads++;
+        return bytes ?? new TextEncoder().encode(JSON.stringify({ format: 1, positions }));
+      },
+      warn,
+      random: () => {
+        draws++;
+        return 0;
+      },
+    });
+    return { probe, warn, draws: () => draws, reads: () => reads };
+  };
+
+  const named = (name: string): Pick<BookProbe, "openingName"> => ({ openingName: () => name });
+
+  const frameOf = (
+    history: historyModule.GameHistory,
+    book: Pick<BookProbe, "openingName">,
+    mode: GlyphMode = "ascii",
+    messages: readonly string[] = [],
+  ): readonly string[] =>
+    makeRenderSeam(mode, "white-bottom", book)(history, gameStatusOf(history), false, messages);
+
+  /** The 2-row message region: the rows just above the reserved prompt row. */
+  const regionOf = (frame: readonly string[]): readonly string[] =>
+    frame.slice(frame.length - PROMPT_ROWS - MESSAGE_ROWS, frame.length - PROMPT_ROWS);
+
+  /** `W`: every row but the prompt row is padded to it. */
+  const widthOf = (frame: readonly string[]): number => (frame[0] as string).length;
+
+  /** What the region holds for a shown name `shown`: row 1 the name, row 2 blank, both padded. */
+  const regionShowing = (frame: readonly string[], shown: string): readonly string[] => [
+    shown.padEnd(widthOf(frame)),
+    "".padEnd(widthOf(frame)),
+  ];
+
+  const blankRegion = (frame: readonly string[]): readonly string[] => regionShowing(frame, "");
+
+  const HEIGHT_ON_MAIN = (): number =>
+    frameHeight({
+      board: renderBoard(startGame().position, "ascii", "white-bottom").length,
+      status: STATUS_ROWS,
+      history: HISTORY_ROWS,
+    });
+
+  it("A1 — the family is shown, whole when it fits HISTORY_COLS, else cut to 18 code units plus '...'", () => {
+    const history = startGame();
+    const cases: readonly (readonly [name: string, shown: string | undefined])[] = [
+      ["Ruy Lopez: Berlin Defense, l'Hermet Variation", "Ruy Lopez"],
+      ["Ruy Lopez", "Ruy Lopez"],
+      // Exactly HISTORY_COLS is whole; one more is cut.
+      ["King's Knight Opening: Normal Variation", "King's Knight Opening"],
+      ["King's Gambit Accepted: Bishop's Gambit", "King's Gambit Acce..."],
+      ["Queen's Indian Defense, with e3, Bb4+ Line", "Queen's Indian Def..."],
+      // An empty family is no name.
+      [": a variation with no family", undefined],
+    ];
+    expect(HISTORY_COLS).toBe(21);
+    for (const [name, shown] of cases) {
+      const frame = frameOf(history, named(name));
+      if (shown === undefined) {
+        expect(regionOf(frame), name).toEqual(blankRegion(frame));
+        expect(frame, name).toEqual(frameOf(history, NO_NAMES));
+      } else {
+        expect(regionOf(frame), name).toEqual(regionShowing(frame, shown));
+        expect(shown.length).toBeLessThanOrEqual(HISTORY_COLS);
+      }
+    }
+  });
+
+  it("A1 — the shipped book: key 75a8cd2e62c99edd shows Ruy Lopez, and the line to it shows each position's own family", () => {
+    const { probe } = probeOver({}, SHIPPED);
+    const line = ["e2e4", "e7e5", "g1f3", "b8c6", "f1b5"];
+    const expected = ["King's Pawn Game", "King's Pawn Game", "King's Knight Opening"];
+    const history = startGame();
+    // The start position is not named (`ADR-0043` § Context).
+    expect(regionOf(frameOf(history, probe))).toEqual(blankRegion(frameOf(history, probe)));
+    const shown: string[] = [];
+    for (const token of line) {
+      playUci(history, token);
+      shown.push((regionOf(frameOf(history, probe))[0] as string).trimEnd());
+    }
+    expect(hexKey(history)).toBe("75a8cd2e62c99edd");
+    // The page's UAT observation 1 names these three families on the way to the Ruy Lopez.
+    for (const family of expected) expect(shown).toContain(family);
+    expect(shown.at(-1)).toBe("Ruy Lopez");
+  });
+
+  it("A2 — known name, no name, out of book: one row count, the 23 on main before this ticket", () => {
+    const { probe } = probeOver({}, SHIPPED);
+    const known = played(["e2e4", "e7e5", "g1f3", "b8c6", "f1b5"]);
+    const none = startGame();
+    // 1. e4 e5 2. Ke2 — `src/book-engine.test.ts` `A4`'s out-of-book line.
+    const outOfBook = played(["e2e4", "e7e5", "e1e2"]);
+    expect(probe.openingName(known.position)).toBe("Ruy Lopez");
+    expect(probe.openingName(none.position)).toBeUndefined();
+    expect(probe.inBook(outOfBook.position)).toBe(false);
+    for (const mode of ["ascii", "unicode"] as const) {
+      const heights = [known, none, outOfBook].map((h) => frameOf(h, probe, mode).length);
+      expect(heights).toEqual([23, 23, 23]);
+      expect(heights[0]).toBe(HEIGHT_ON_MAIN());
+    }
+  });
+
+  it("A3 — ESC, C0, U+007F, above U+007F and a newline in the name: none reaches the emitted frame", () => {
+    const hostile = "\u001b[2J\u0007Evil\u007fé\nName";
+    const history = startGame();
+    for (const mode of ["ascii", "unicode"] as const) {
+      const frame = frameOf(history, named(hostile), mode);
+      const codes = codePointsOf(frame);
+      expect(
+        codes.filter((code) => code === 0x1b),
+        `${mode}: ESC`,
+      ).toEqual([]);
+      expect(
+        codes.filter((code) => code < 0x20),
+        `${mode}: C0`,
+      ).toEqual([]);
+      expect(
+        codes.filter((code) => code === 0x7f),
+        `${mode}: U+007F`,
+      ).toEqual([]);
+      if (mode === "ascii")
+        expect(
+          codes.filter((code) => code > 0x7f),
+          "ascii: above U+007F",
+        ).toEqual([]);
+      expect(frame.length, `${mode}: rows`).toBe(frameOf(history, NO_NAMES, mode).length);
+      // NON-VACUITY: the name WAS rendered, as what `sanitize` leaves of it.
+      expect((regionOf(frame)[0] as string).trimEnd(), mode).toBe(
+        mode === "ascii" ? "[2JEvilName" : "[2JEviléName",
+      );
+    }
+  });
+
+  it("A4 — a 100,000-character name: shown <= 21 code units, W and the row count unchanged, in each mode", () => {
+    const history = startGame();
+    const long = "x".repeat(100_000);
+    for (const mode of ["ascii", "unicode"] as const) {
+      const without = frameOf(history, NO_NAMES, mode);
+      const frame = frameOf(history, named(long), mode);
+      expect(regionOf(frame), mode).toEqual(regionShowing(frame, `${"x".repeat(18)}...`));
+      expect((regionOf(frame)[0] as string).trimEnd().length).toBeLessThanOrEqual(HISTORY_COLS);
+      expect(widthOf(frame), `${mode}: W`).toBe(widthOf(without));
+      expect(frame.length, `${mode}: rows`).toBe(without.length);
+    }
+  });
+
+  it("A4 — astral code points in unicode mode: whole code points, no '(+N more)', no lone surrogate", () => {
+    const history = startGame();
+    const clef = "\u{1D11E}";
+    const loneSurrogate = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
+    for (const length of [100_000, 21, 11, 10]) {
+      const frame = frameOf(history, named(clef.repeat(length)), "unicode");
+      const without = frameOf(history, NO_NAMES, "unicode");
+      // 10 astral code points are 20 code units and fit whole; 11 are 22 and are cut to 9 + "...".
+      const shown = length <= 10 ? clef.repeat(length) : `${clef.repeat(9)}...`;
+      expect(regionOf(frame), `${length}`).toEqual(regionShowing(frame, shown));
+      expect(frame.join("\n"), `${length}: marker`).not.toContain("more)");
+      for (const row of frame) expect(row, `${length}: lone surrogate`).not.toMatch(loneSurrogate);
+      expect(widthOf(frame)).toBe(widthOf(without));
+      expect(frame.length).toBe(without.length);
+    }
+  });
+
+  it("A1 / A4 — an astral run at an odd offset is cut to whole code points: 'a' + 8 clefs + '...', no lone surrogate", () => {
+    // `QE-096-a`: every astral name above is all-astral, so an 18-unit cut lands on a pair boundary.
+    // Here the run starts at offset 1, so a code-unit cut at 18 would keep a lone high surrogate.
+    const history = startGame();
+    const clef = "\u{1D11E}";
+    const loneSurrogate = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
+    const frame = frameOf(history, named(`a${clef.repeat(20)}`), "unicode");
+    expect(regionOf(frame)).toEqual(regionShowing(frame, `a${clef.repeat(8)}...`));
+    for (const row of frame) expect(row, "lone surrogate").not.toMatch(loneSurrogate);
+    expect(frame.length).toBe(frameOf(history, NO_NAMES, "unicode").length);
+  });
+
+  it("A1 — the family ends at ': ', not at a bare ':': 'Foo:Bar: Baz Variation' shows 'Foo:Bar'", () => {
+    // `QE-096-b`: no shipped name has a ':' not followed by a space, so the separator was not pinned.
+    const history = startGame();
+    for (const [name, shown] of [
+      ["Foo:Bar: Baz Variation", "Foo:Bar"],
+      ["Foo:Bar", "Foo:Bar"],
+    ] as const) {
+      const frame = frameOf(history, named(name));
+      expect(regionOf(frame), name).toEqual(regionShowing(frame, shown));
+    }
+  });
+
+  it("A5 — leaving book: each ply shows its own position's name or nothing, the line end included", () => {
+    // A book built for the line, keyed by the real `zobristKey`. Ply 2 and 3 are in book and unnamed;
+    // ply 5 is a named line end (`m` empty); ply 6 is not in the book at all.
+    const line = ["e2e4", "e7e5", "g1f3", "b8c6", "f1b5", "a7a6"];
+    const entries: Record<string, unknown>[] = [
+      { m: [["e2e4", 1]] },
+      { m: [["e7e5", 1]], n: "King's Pawn Game" },
+      { m: [["g1f3", 1]] },
+      { m: [["b8c6", 1]] },
+      { m: [["f1b5", 1]], n: "King's Knight Opening: Normal Variation" },
+      { m: [], n: "Ruy Lopez" },
+    ];
+    const positions: Record<string, unknown> = {};
+    const walk = startGame();
+    entries.forEach((entry, ply) => {
+      positions[hexKey(walk)] = entry;
+      if (ply < line.length) playUci(walk, line[ply] as string);
+    });
+    const { probe, warn } = probeOver(positions);
+    const expected = [
+      undefined,
+      "King's Pawn Game",
+      undefined,
+      undefined,
+      "King's Knight Opening",
+      "Ruy Lopez",
+      undefined,
+    ];
+
+    const history = startGame();
+    const seam = makeRenderSeam("ascii", "white-bottom", probe);
+    const noNames = makeRenderSeam("ascii", "white-bottom", NO_NAMES);
+    for (let ply = 0; ply <= line.length; ply++) {
+      if (ply > 0) playUci(history, line[ply - 1] as string);
+      const frame = seam(history, gameStatusOf(history), false, []);
+      const shown = expected[ply];
+      if (shown === undefined)
+        expect(frame, `ply ${ply}`).toEqual(noNames(history, gameStatusOf(history), false, []));
+      else expect(regionOf(frame), `ply ${ply}`).toEqual(regionShowing(frame, shown));
+    }
+    // The line end is out of book and still named.
+    const lineEnd = played(line.slice(0, 5));
+    expect(probe.inBook(lineEnd.position)).toBe(false);
+    expect(probe.bookMove(lineEnd.position)).toBeUndefined();
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it("A5 — no state between frames: a take-back or a new game to an unnamed position shows nothing", () => {
+    const { probe } = probeOver({}, SHIPPED);
+    const seam = makeRenderSeam("ascii", "white-bottom", probe);
+    const noNames = makeRenderSeam("ascii", "white-bottom", NO_NAMES);
+    const frame = (h: historyModule.GameHistory) => seam(h, gameStatusOf(h), false, []);
+    const blank = (h: historyModule.GameHistory) => noNames(h, gameStatusOf(h), false, []);
+
+    const history = played(["e2e4", "e7e5", "g1f3", "b8c6", "f1b5"]);
+    expect(regionOf(frame(history))[0]?.trimEnd()).toBe("Ruy Lopez");
+    takeBack(history, 5);
+    expect(frame(history), "take-back to the unnamed start").toEqual(blank(history));
+    for (const token of ["e2e4", "e7e5", "g1f3", "b8c6", "f1b5"]) playUci(history, token);
+    expect(regionOf(frame(history))[0]?.trimEnd(), "its own name again").toBe("Ruy Lopez");
+    const fresh = startGame();
+    expect(frame(fresh), "a new game").toEqual(blank(fresh));
+  });
+
+  it("A6 — names on entries with an empty m; inBook / bookMove unchanged there; framing draws random 0 times", () => {
+    const start = startGame();
+    const afterE4 = played(["e2e4"]);
+    const { probe, draws, warn } = probeOver({
+      [hexKey(start)]: { m: [["e2e4", 1]], n: "Start" },
+      [hexKey(afterE4)]: { m: [], n: "King's Pawn Game" },
+    });
+    expect(probe.openingName(afterE4.position)).toBe("King's Pawn Game");
+    expect(probe.inBook(afterE4.position)).toBe(false);
+    expect(probe.bookMove(afterE4.position)).toBeUndefined();
+    expect(probe.inBook(start.position)).toBe(true);
+    const before = draws();
+    // The statuses are the loop's, derived before the spy, so what it counts is the frames'.
+    const games = [start, afterE4].map((h) => ({ h, status: gameStatusOf(h) }));
+    const moves = spyFrom(legal.legalMoves);
+    const seam = makeRenderSeam("unicode", "white-bottom", probe);
+    for (let frame = 0; frame < 50; frame++) {
+      for (const { h, status } of games) seam(h, status, false, []);
+    }
+    expect(draws() - before, "draws from random while framing").toBe(0);
+    expect(moves, "legalMoves while framing").toHaveBeenCalledTimes(0);
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it("A7 — n as a number, an object or an empty string is no name: moves still served, 0 warnings", () => {
+    const history = startGame();
+    for (const n of [7, { family: "Ruy Lopez" }, ""]) {
+      const { probe, warn } = probeOver({ [hexKey(history)]: { m: [["e2e4", 1]], n } });
+      const frame = frameOf(history, probe);
+      expect(frame, JSON.stringify(n)).toEqual(frameOf(history, NO_NAMES));
+      expect(probe.openingName(history.position)).toBeUndefined();
+      expect(probe.bookMove(history.position), "the artifact is not refused").toBeDefined();
+      expect(warn, JSON.stringify(n)).not.toHaveBeenCalled();
+    }
+  });
+
+  it('A8 — the third parameter is required and typed Pick<BookProbe, "openingName">, imported as a type', () => {
+    const source = sourceOf("render-seam.ts");
+    expect(deliveredCode()).toMatch(
+      /export function makeRenderSeam\(\s*mode: GlyphMode,\s*orientation: Orientation,\s*book: Pick<BookProbe, "openingName">,?\s*\): RenderSeam/,
+    );
+    expect(source).toContain('import type { BookProbe } from "./book.ts";');
+    expect(bindsAValueFrom(source, "book.ts"), "a value import of book.ts").toBe(false);
+    // The typecheck is the instrument for "required"; this never runs.
+    const _unbuildable = () =>
+      // @ts-expect-error — the seam cannot be built without the session's probe.
+      makeRenderSeam("ascii", "white-bottom");
+    expect(typeof _unbuildable).toBe("function");
+  });
+
+  it("A9 — the loop's message items win: byte-identical frames and 0 lookups; [] looks once and shows the name", () => {
+    const history = played(["e2e4", "e7e5", "g1f3", "b8c6", "f1b5"]);
+    const { probe } = probeOver({}, SHIPPED);
+    const lookup = vi.fn(probe.openingName);
+    const book = { openingName: lookup };
+    const itemSets: readonly (readonly string[])[] = [
+      ["no such move: zzz"],
+      ["ambiguous: Nbd2", "Nfd2"],
+      ["took back 2 plies"],
+      Array.from({ length: 40 }, (_, index) => `item ${index}`),
+    ];
+    for (const mode of ["ascii", "unicode"] as const) {
+      for (const messages of itemSets) {
+        lookup.mockClear();
+        const frame = frameOf(history, book, mode, messages);
+        expect(frame).toEqual(frameOf(history, NO_NAMES, mode, messages));
+        expect(lookup, `${messages[0]}: lookups`).toHaveBeenCalledTimes(0);
+      }
+      lookup.mockClear();
+      const frame = frameOf(history, book, mode, []);
+      expect(lookup).toHaveBeenCalledTimes(1);
+      expect(regionOf(frame)).toEqual(regionShowing(frame, "Ruy Lopez"));
+      expect(frame.join("\n")).not.toContain("more)");
+    }
   });
 });

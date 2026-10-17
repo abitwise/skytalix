@@ -112,7 +112,8 @@ describe("ABC-095 — the book in front of the engine's move choice", () => {
       const move = legalMoves(h.position).find((candidate) => uciOf(candidate) === uci);
       return { kind: "move", move: move as Move };
     };
-    const real = makeRenderSeam("ascii", "white-bottom");
+    // `ABC-096`: a book that names nothing, so these rows are the decorator's alone.
+    const real = makeRenderSeam("ascii", "white-bottom", { openingName: () => undefined });
     const frames: { ply: number; rows: readonly string[]; messages: readonly string[] }[] = [];
     const render: RenderSeam = (h, status, thinking, messages) => {
       const rows = real(h, status, thinking, messages);

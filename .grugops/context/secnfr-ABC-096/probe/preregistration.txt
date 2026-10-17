@@ -1,0 +1,73 @@
+secnfr-ABC-096 TIMING PRE-REGISTRATION: QE-096-d, i.e. ABC-096 A4 (< 16 ms per frame) and NFR-007's book first load
+(<= 30 ms cold, ABC-095 A2's bar; NFR-007's < 2 s unchanged). Written 2026-10-17 ~13:10Z, BEFORE any window. Width 1:
+Security/NFR is the only grugops hop running (brief .grugops/queue/pending/secnfr-ABC-096.md at main f803bec6). Committed
+on grugops/ABC-096-opening-name (tip before this commit c11bfec8) before the first window's first run. ADR-0035 addenda A1
+(3017115c) and B1 (0fe43646) are ancestors of this commit. Nothing below changes after the first window starts; any later
+text is an ADDENDUM that changes no rule.
+
+BEFORE THIS COMMIT, NOT TIMING READINGS: smoke runs of every instrument with SMOKE=1, which prints the checks and NO timing
+figure (6 frame cases, the replica on H and B, 3 real children). No timing figure has been seen. The readout's self-test ran
+on SYNTHETIC rows in the session scratchpad (selftest/gen.py), never on a reading.
+
+WHAT IS TIMED, AND WHY THIS SHAPE. Both bars are absolute (a reading against a fixed bar), not paired deltas, so ADR-0035
+decision 1's twin and R do not apply: there is no H - B charge. This is the shape QE graded ABC-095 A2 on (qe-ABC-095
+…3283096f: max of 10 fresh processes <= 30 ms). The timer is performance.now(), which resolves far below 1 ms, so it
+resolves both bars. Load is logged, never gated (ADR-0035 d2, P3, B4).
+
+ARMS (outside the repository, session scratchpad secnfr096/arms): H = git archive c11bfec8 (src/ production bytes equal to
+the code commit a48da51c: git diff --quiet exit 0 on src/book.ts, src/render-seam.ts, src/cli.ts); B = git archive 6edadcf0
+(the base). sha256 prefixes: H src/cli.ts 30e00317214e324b, book.ts 09492e9bafe45779, render-seam.ts c1a8ed7c8e57bea7;
+B src/cli.ts 9bb7c1a0a0815570, book.ts 72160824a82f0731, render-seam.ts 837ac481702a8397; book.json 3802f52f3ced9d69 in
+both (the committed artifact). No node_modules: `npm run chess` is `node src/cli.ts`, no runtime dependency.
+
+INSTRUMENTS (probe/, sha256):
+  a4-frame.ts           f2d01e87c8989f7d960858b82380fbf184f52bc4fdc96a0035c6e8249c8d61a8
+  first-call-hook.mjs   d1db7350f880caf0833323cb64f0d9c048094d73a6b46943f20e350082c96f30
+  nfr007-run.mjs        a8f2e5644638a9b95d5cff4932efa72013f268b777f830fa725a1f90c476fdd8
+  first-call-replica.ts d121e07d977041fb444881d4d146020c9dd9b40eec6839942a592f9ce233a7b3
+  gate096.sh            1ce940cf13b0525dc5452a215621a857b19b84af3c352d60f752d63e997fb7e6
+  window096.sh          c3d880195659593256829964782364a02a441bc96ab3204c81091d552bd82247
+  readout096.py         51b392caf440cae76bf4c46038f51cff51f527dd0882b4103bb6d27bf4883859
+
+T1. A4 and NFR-002 (frame < 16 ms). a4-frame.ts, one fresh node process per reading, 10 per case, case-major order.
+  The timed span is the seam call alone, seam(history, status, false, []); status is computed before the timers. Per
+  process: the first seam call (cold JIT) and 200 warm calls (median, p99, max).
+  GRADED as A4 (its literal Given): a4-ascii ("x" x 100,000, ascii), a4-unicode (same, unicode), a4-astral (U+1D11E x
+  100,000 code points, unicode).
+  GRADED as Security/NFR's NFR-002 extension (the same bar; not A4's text): x-sep (100,000 chars of "a: ", split-heavy),
+  x-max ("x" x 1,048,576 = BOOK_MAX_BYTES, the largest one parse-admitted name could be), x-real (the REAL probe over the
+  shipped book at 1. e4 e5 2. Nf3 Nc6 3. Bb5, unicode; the lazy load is triggered before the timers).
+  STATE per case: MET iff, in all 10 processes, the first frame < 16 ms AND the warm max < 16 ms; else NOT MET.
+
+T2. NFR-007 (ticket § NFR triggers: "the probe's first call, now made before frame 0, stays within <= 30 ms cold";
+  "< 2 s does not move"). 10 rounds; each round runs, in this order:
+  (a) nfr007-run.mjs H hook=1: a REAL `npm run --silent chess -- --colour white --ascii` child with
+      NODE_OPTIONS=--import=first-call-hook.mjs, which wraps createBookProbe in memory (a load hook; no file byte
+      changes) and times the probe's FIRST method call, read and parse inside. GRADED: MET iff all 10 firstCallMs
+      <= 30 ms, with first = openingName and readsInside = 1 in every one; else NOT MET.
+  (b) nfr007-run.mjs H hook=0: the same child, no hook. GRADED for NFR-007 < 2 s: MET iff all 10 frame0Ms (spawn to
+      stdout holding 23 newlines, frame 0 whole) < 2000 ms; else NOT MET.
+  (c) nfr007-run.mjs B hook=0: the base child. REPORTED, not graded (context for the moved parse; no twin, no charge).
+  (d) first-call-replica.ts H: the composition root's order in process, frame 0 timed with the load inside. REPORTED.
+  Each child: "quit" twice then end of stdin after frame 0; exit 0 and 0 stderr bytes required; a 15 s bound sends
+  SIGTERM to the child's own process group (never SIGKILL) and voids. No child outlives the window.
+  "COLD" here means the first call in a fresh process (ABC-095 A2's amended Given). A disk-cache-cold read (the
+  Architect's one 24.4 ms run) is NOT read: purging the page cache needs `sudo purge`, which this hop does not run. That
+  case stays UNKNOWN - verify, and is stated as such.
+
+GATE (every window): gate096.sh = secnfr-ABC-152-window/probe/gate.sh's rule (thermal 0, no vitest process, 4
+  consecutive 15 s samples) PLUS 0 `oeselg-labs/platform` processes (the brief). load1 and power logged, not gated.
+VOID (any one voids the WHOLE window; a void window is kept and reported, never graded):
+  - any 2 s sampler row from gate_pass to utc_end with vitest > 0, platform > 0, thermal != 0, or lowpowermode 1;
+  - any run's before or after line with the same;
+  - a missing or malformed reading, a reading count != 10 in any series, or any failed check (frame rows != 23, row 1
+    not the expected text, a "more)" marker, a lone surrogate, warm frame != frame 0; a child with exit != 0, a timeout,
+    stderr bytes != 0, no frame 0, a non-ASCII byte in ascii mode; a first-call line not openingName or reads != 1;
+    the replica with reads != 1).
+  POWER: logged, NOT a void (the brief: "log ... power source"). The host was on battery at 12:59Z; lowpowermode 0.
+  This departs from qe-ABC-095's AC rule, and it is stated here before any window.
+BUDGET: one master attempt now: window w1 with GMAX 30 (minutes of gate waiting). If w1 is VOID or its gate times out,
+  ONE re-attempt w2 with GMAX 20, never a third. NO POOLING of windows. If neither window is CLEAN: every reading here is
+  NOT READ, nothing is estimated, and the SE's 6.44 ms and the Architect's 6.4-6.9 / 24.4 ms stay theirs, ungraded.
+  Other sessions' processes are never touched.
+READOUT: python3 -I readout096.py <window dir>, mechanical; its output is committed beside the raw files.

@@ -686,6 +686,8 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     const root = new URL(COMPOSITION_ROOT, directory).href;
     // The longer per-frame game: past the pane's window, so its windowing branch is taken.
     const LONG_FRAME_PLIES = 40;
+    // `ABC-096` `A10`: the name the per-frame phase's in-memory book gives the start position.
+    const BOOK_NAME = "Probe Opening";
     expect(LONG_FRAME_PLIES, "the long frame passes the window").toBeGreaterThan(2 * HISTORY_ROWS);
     // The arming control is a root whose closure DOES contain `history.ts`, reached the same way a
     // real regression would reach it — as a DEPENDENCY of the root, not as the root itself.
@@ -725,7 +727,7 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
       let loaded = [];
       registerHooks({ load(url, context, nextLoad) { loaded.push(url); return nextLoad(url, context); } });
       const seen = () => loaded.filter((url) => url.startsWith("file:")).map((url) => url.slice(url.lastIndexOf("/") + 1).replace(/\\?.*$/, ""));
-      const [arming, root, startFen, longPlies] = process.argv.slice(1);
+      const [arming, root, startFen, longPlies, bookName] = process.argv.slice(1);
       const { makeRenderSeam } = await import(root);
       const closure = seen();
       const { gameStatusOf, newGame, playMove } = await import(new URL("history.ts?fixture", root).href);
@@ -738,20 +740,38 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
         playMove(games[1].history, moves[seed % moves.length]);
       }
       const statuses = games.map(({ history }) => gameStatusOf(history));
-      const seam = makeRenderSeam("ascii", "white-bottom");
+      const { createBookProbe } = await import(new URL("book.ts", root).href);
+      const { zobristKey } = await import(new URL("zobrist.ts", root).href);
+      const startKey = zobristKey(games[0].history.position).toString(16).padStart(16, "0");
+      const bytes = new TextEncoder().encode(JSON.stringify({ format: 1, positions: { [startKey]: { m: [], n: bookName } } }));
+      let reads = 0;
+      const book = createBookProbe({ read: () => (reads++, bytes), warn: (line) => { throw new Error(line); }, random: () => { throw new Error("random"); } });
+      const seam = makeRenderSeam("ascii", "white-bottom", book);
       loaded = [];
-      const frames = games.map(({ history, plies }, index) => ({ plies, rows: seam(history, statuses[index], false, []).length }));
+      const frames = games.map(({ history, plies }, index) => {
+        const rows = seam(history, statuses[index], false, []);
+        return { plies, rows: rows.length, named: rows.some((row) => row.includes(bookName)) };
+      });
       for (let turn = 0; turn < 3; turn++) await new Promise((resolve) => setImmediate(resolve));
       const perFrame = seen();
       loaded = [];
       await import(arming);
-      writeSync(3, JSON.stringify({ closure, perFrame, frames, armed: seen() }));`;
+      writeSync(3, JSON.stringify({ closure, perFrame, frames, reads, armed: seen() }));`;
 
     // stderr stays PIPED and is surfaced below rather than swallowed, and nothing on it is parsed —
     // so module-scope `console.error` stays correctly invisible and nothing over-reaches onto it.
     const child = spawnSync(
       process.execPath,
-      ["--input-type=module", "-e", probe, armingRoot, root, START_FEN, String(LONG_FRAME_PLIES)],
+      [
+        "--input-type=module",
+        "-e",
+        probe,
+        armingRoot,
+        root,
+        START_FEN,
+        String(LONG_FRAME_PLIES),
+        BOOK_NAME,
+      ],
       { encoding: "utf8", stdio: ["ignore", "ignore", "pipe", "pipe"] },
     );
     // A GUARD MUST NEVER PASS BY BEING UNABLE TO LOOK. `execFileSync` used to throw this for us; a
@@ -761,10 +781,11 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     if (child.status !== 0)
       throw new Error(`probe child failed (${child.status}): ${child.stderr}`);
 
-    const { closure, perFrame, frames, armed } = JSON.parse(child.output[3] as string) as {
+    const { closure, perFrame, frames, reads, armed } = JSON.parse(child.output[3] as string) as {
       closure: string[];
       perFrame: string[];
-      frames: { plies: number; rows: number }[];
+      frames: { plies: number; rows: number; named: boolean }[];
+      reads: number;
       armed: string[];
     };
 
@@ -779,6 +800,14 @@ describe("A11 — the pane derives nothing, and this is a CALL COUNT", () => {
     ).toEqual([0, LONG_FRAME_PLIES]);
     for (const { plies, rows } of frames)
       expect(rows, `rows the frame at ${plies} plies returned`).toBeGreaterThan(0);
+    // `ABC-096` `A10` (`ADR-0043` D6): the seam was built over a REAL book probe on in-memory bytes
+    // that name the start position, so the name lookup and its one lazy load ran INSIDE the window.
+    // POSITIVE control: the empty game's frame carries that name, and the bytes were read once.
+    expect(
+      frames.map(({ named }) => named),
+      "frames carrying the book's name for their position",
+    ).toEqual([true, false]);
+    expect(reads, "the book's one lazy load, inside the per-frame window").toBe(1);
     // ARMING (negative) control, LAST and on the same recorder: a zero is worthless without it.
     // The recorder is NOT blind to `history.ts` — when a root's closure contains it, it is reported.
     expect(armed, "the probe is ARMED").toContain("history.ts");
