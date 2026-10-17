@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "cut tickets for the open follow-ups" → BA/PM `bapm-cut-followups` dispatched (15 items; ids from ABC-157). In flight: `ticket-to-pr-ABC-096`, `bapm-cut-followups`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `bapm-rescore-ABC-096` merged (`6edadcf0`, DoR 10/10) → `ABC-096` In Development; SE `ticket-to-pr-ABC-096` dispatched. In flight: that hop only._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `design-ABC-096` merged (`8ed9ba2b`, ADR-0043; gates green 58/1810); BA/PM `bapm-rescore-ABC-096` dispatched. In flight: that hop only._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-156` → Done (merged `2feedddc`, UAT WAIVED by measurement, gates green 58/1810). In flight: `design-ABC-096`._
