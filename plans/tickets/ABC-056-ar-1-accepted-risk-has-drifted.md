@@ -234,3 +234,51 @@ gated ticket to apply that lockfile fix, after which `ABC-056` records an empty 
 `ABC-152` note cited), 6 ✅ (0 `src/`, 0 test files; security clause (a) still set against `A5`),
 7 ✅, 8 ✅ `XS`, 9 ✅ `P2` (`P1` trigger unchanged and not fired: no runtime dependency, no `bin`,
 nothing published), 10 ✅.
+
+## Amendment — 2026-10-17 (BA/PM, subtask `bapm-amend-ABC-056`, branch tip `10e7aab6`): `A3` check 5 ruled
+
+**Why:** the Release Manager stopped at `A3` check 5 (`…/ticket-to-pr-ABC-056/notes/…abc056-a3-blocked-0d45639e`). Run as
+written, the grep prints `from "node:fs"` (`src/book-file.ts:13`, `ABC-095` `09740ea4`, after the 2026-10-12 re-score). I re-ran
+it at `10e7aab6` and got the same: 40 non-test `src/*.ts` files and 148 specifiers. Measurements and plants are in
+`.grugops/context/bapm-amend-ABC-056/notes/`.
+
+**Ruling 1: check 5 excludes `node:` built-ins.** The check measures what its own sentence says: *"the production import
+graph loads no package"*. A `node:` specifier resolves only to a Node built-in and never to `node_modules`, so it is not a
+package. The 2026-10-12 command matched that sentence only while no production file imported a built-in (`ADR-0036`
+limb 1's baseline was 0 until `ABC-095`). The meaning is unchanged. A built-in written without the prefix (`"fs"`) still
+prints, so the check fails closed. While re-stating the command I closed two blind spots in it. A side-effect
+`import "pkg"` printed nothing before, and a non-literal `import(x)` cannot be seen by any specifier grep. **Check 5 is
+now three commands**, each over `$(ls src/*.ts | grep -v '\.test\.ts$')`:
+
+- **5a, no package specifier:** ``grep -hoE "(from|import *\(?) *['\"][^'\"]+['\"]" $(ls src/*.ts | grep -v '\.test\.ts$') | grep -vE "['\"](\./|node:)"`` → **empty**
+- **5b, no loader the grep cannot see:** ``grep -nE "\brequire *\(|createRequire|import\( *[^'\" ]" $(ls src/*.ts | grep -v '\.test\.ts$')`` → **empty**
+- **5c, the built-in set, recorded as read:** ``grep -hoE "(from|import *\(?) *['\"]node:[^'\"]+['\"]" $(ls src/*.ts | grep -v '\.test\.ts$') | grep -oE "node:[^'\"]+" | sort -u`` → the record states the set it read. 2026-10-17: **`node:fs`** (one specifier, `src/book-file.ts:13`).
+
+At `10e7aab6`: 5a is empty, 5b is empty, 5c is `node:fs`. The widened regex returns the same 148 specifiers as the old one
+(identical when sorted).
+
+**Ruling 2: the reason in `AR-1`'s re-statement does not change. Its record and trigger gain the built-in set.** The
+advisories sit in the npm dev tree, which `npm run chess` (`node src/cli.ts`) never loads. A built-in belongs to the Node
+runtime, not to the tree `npm audit` reads, and an advisory against Node itself is a Node-version question that sits
+outside `AR-1`. The record must still name the built-in set it read, and the trigger must fire when that set changes.
+Some built-ins load code: `node:module` exposes `createRequire`, and `node:child_process` can start a package's binary.
+So a new built-in is the one way a package could reach the runtime path while 5a and 5b stay empty. I did not list which
+built-ins load code, because that list would need upkeep (coding rule 7). The trigger fires rarely, since one built-in
+has appeared in the project's history. Any diff that adds a built-in already routes to Security/NFR under `ADR-0036`
+clause (b) limb 1, which is the hop where `A4`'s `npm audit` comparison runs.
+
+**Criteria amendments (2026-10-17):**
+- **`A3`:** check 5 is 5a + 5b + 5c above, each with its command and output. The record carries the 5c set. Checks 1–4 are
+  unchanged.
+- **`A4`:** the trigger keeps the 2026-10-12 rule, which the Release Manager may adopt or replace. It **must also** fire
+  when any `A3` check reads differently from the record: 5a or 5b non-empty, or a 5c set different from the recorded one
+  (the RM's draft *"if any of the structural checks 1–5 changes its reading"* meets this once 5c is in the record). This
+  clause is the minimum and is not the Release Manager's to drop.
+- `A1`, `A2`, `A5` are unchanged. `XS` and `P2` are kept. The `P1` promotion trigger has not fired: `node:fs` is not a
+  runtime dependency. Scope bullet 3's *"`ABC-042` … ends the zero-production-Node-builtin invariant"* is history:
+  `ABC-095` ended it.
+
+**DoR re-check: 10/10.** 1 ✅ (0 of 3 covered); 2 ✅; 3 ✅; 4 ✅ (check 5 now has three exact commands, and each output is
+true at the tip); 5 ✅ (none); 6 ✅ (0 `src/` lines, 0 test files, clause (a) still set against `A5`); 7 ✅; 8 ✅ `XS`; 9 ✅ `P2`;
+10 ✅ (the owner's 2026-10-12 word *"Re-state the accepted risk"* settled the only open question; this ruling is BA/PM's and
+needs no owner word). **The Release Manager resumes at `A3`.**
