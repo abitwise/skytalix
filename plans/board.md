@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — quiet window seen (3 min, no foreign vitest, ending 18:39:00Z) → `secnfr-ABC-146-a0` dispatched ALONE at width 1 from `13897307`. In flight: that hop only._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-157` merged (`2079ddb1`, UAT WAIVED by measurement, gates green 58/1830) → Done. In flight: none. Held: `secnfr-ABC-146-a0` (waits for a width-1 window with no foreign vitest)._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-158` merged (`fd56f3cf`, UAT WAIVED by measurement, gates green 58/1824) → Done. QE gaps QE-158-a..f open for BA/PM. In flight: `qe-ABC-157`. Held: `secnfr-ABC-146-a0`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-157` delivered (`968a5843`, 58/1830) → In Review; QE `qe-ABC-157` dispatched; SE trace row appended on main. In flight: `qe-ABC-157`, `qe-ABC-158`. Held: `secnfr-ABC-146-a0`._
