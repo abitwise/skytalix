@@ -311,3 +311,34 @@ installed or fixed.
 
 **Not done here:** the plain `npm audit fix` that npm offers for all three. Applying it would need a separate gated
 ticket, if the owner ever wants one. No board move: the Orchestrator owns it.
+
+## QE
+
+QE/E2E, 2026-10-17 (subtask `qe-ABC-056`). I reviewed tip `e567787c` against base `e7d9d657`, re-ran every command
+myself and copied none of the Release Manager's readings. All plants were in scratch copies outside the repo. The
+detail is in `.grugops/context/qe-ABC-056/notes/` (verdict `…5541ffaa`).
+
+**Verdict: PASS_WITH_GAPS.** `A1`–`A5` are MET on QE's own readings, and every one matches the RM's.
+
+- **`A1`:** all three advisories are `dev: true`, and 0 of 122 lockfile packages lack `dev: true`. A resolve hook on
+  `node src/cli.ts` sees 34 `src/*.ts` files, `node:fs`, and 0 `node_modules` URLs. MET.
+- **`A2`:** `npm audit` at 10:29Z read 3 (1 moderate, 2 high), and its (package, id) pairs diff empty against the
+  record. MET.
+- **`A3`:** checks 1–4 read `found 0` / `false` / `true` / nothing written. 5a and 5b are empty, and 5c is `node:fs`
+  (40 files, 148 specifiers). MET.
+- **`A4`:** a package import and a side-effect import trip 5a, `createRequire` trips 5b, and a new built-in trips 5c
+  alone. A lockfile plant trips clause (1). MET.
+- **`A5`:** both diffs are empty and the md5s are unchanged. MET.
+- **Gates (tip):** lint, typecheck, build and `npm test` exit 0 (58 files, 1792/1792). `last-run.json` is fresh with
+  `success: true`. Integrity `--skip-count 0`: `No findings.`
+- **Gaps:**
+  - **`QE-056-a` (LOW, RM/BA-PM):** check 5 does not see a subdirectory file, a `./../node_modules` path, a spaced
+    `import (x)` or `process.getBuiltinModule`. The first three load `nanoid` while 5a, 5b and 5c stay the same as the
+    record. ADR-0036 (b) fires on all four.
+  - **`QE-056-b` (LOW, RM):** no check pins the "no loader flag" leg or the "dev-only" leg. `scripts.chess` with
+    `--import nanoid` loads it, and an `optionalDependencies` entry reads `false` on check 2. `ABC-041` clause (a)
+    fires on both.
+  - `QE-056-c` (INFO): `npm install` runs the install scripts of `esbuild` and `fsevents`.
+  - `QE-056-d` (INFO): the `A2` `jq` line prints URLs, not ids.
+- **UAT waiver reading:** `git diff --name-only e7d9d657...e567787c | grep -v '\.test\.ts$' | grep '^src/'` is **empty**.
+  The waiver applies by its rule. Applying it is the Orchestrator's.
