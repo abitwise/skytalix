@@ -313,6 +313,26 @@ describe("ABC-145 — the source bytes are checked against pinned sha256 values 
       expect(existsSync(out)).toBe(false);
       writeFileSync(altered, texts[i] as string);
     });
+
+    // ABC-155: the fixture unaltered; the last file's expected hash differs only in its LAST hex
+    // char (moved to the next hex digit, modulo 16), so a check that compares a prefix passes it.
+    const last = SOURCE_FILES[4];
+    const own = expected[last];
+    const nextHex = ((Number.parseInt(own.slice(-1), 16) + 1) % 16).toString(16);
+    const nearMiss = { ...expected, [last]: `${own.slice(0, -1)}${nextHex}` };
+    const nearOut = join(scratch, "abc145-last-char.json");
+    let nearRefusal = "";
+    try {
+      checkThenWriteBook(dir, nearOut, "0".repeat(40), nearMiss);
+    } catch (error) {
+      nearRefusal = (error as Error).message;
+    }
+    expect([last, nearMiss[last], own].filter((part) => nearRefusal.includes(part))).toEqual([
+      last,
+      nearMiss[last],
+      own,
+    ]);
+    expect(existsSync(nearOut)).toBe(false);
   });
 
   it("A3 — each SOURCE_SHA256 value sits on ATTRIBUTION.md's table row for its own file", () => {
