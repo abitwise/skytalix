@@ -369,3 +369,11 @@ are in `.grugops/context/bapm-amend-ABC-039/notes/`.
 `ABC-156`), 4 ✅ (`A3` has a fixed window, a fixed count and a per-row ancestry check; `A4` (c) is checkable against
 `:28`), 5 ✅ (`ABC-156` depends on this ticket, not the other way round), 6 ✅ (0 `src/` lines, `N8-LANE` zero), 7 ✅,
 8 ✅ `S`, 9 ✅ `P2`, 10 ✅ (no owner word needed). **Resume the SE hop on this branch.**
+
+## Delivery — 2026-10-17 (Software Engineer, subtask `resume-ABC-039`)
+
+- **Register:** `plans/tickets/history/backward-move-ordinals.md`, 59 lines (`A6`). It has 9 statement rows (`A2`, `A7`),
+  15 chronology rows at or before `3215004c` with every commit an ancestor (`A3`), and defects (a), (b), (c) plus the
+  `+1` refutation (`A4`). Corrected ordinals: `ABC-009` **2**, `ABC-025` **3**, `ABC-016` **4**, `ABC-019` **5**.
+- **`A1` is owed by the Orchestrator.** Exact line and text are in `.grugops/context/resume-ABC-039/notes/`.
+- `plans/metrics.md`, the archive, `src/` and `plans/board.md` are untouched (`A5`). Gates are in the same notes.
