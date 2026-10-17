@@ -1526,3 +1526,283 @@ describe("ABC-023 QE region 9 — the SCALAR fields, an axis no other row in thi
     ).toBe(true);
   });
 });
+
+/**
+ * ------------------------------------------------------------------------------------------------
+ * `ABC-024` — the two castling guards whose ONLY protection was the opt-in `PERFT_DEEP=1` lane,
+ * added 2026-10-17. Same premise as every region above: each row PASSES on the delivered tree
+ * (`src/moves.ts` md5 `6335b452fc21ffe2d0f902ecab930840`) and NO production line changed.
+ *
+ * 10. THE `empty` CORRIDOR, square by square — `A1`. Dropping one square from an option's `empty`
+ *     array offers a castle straight through an occupied square. Before these rows, four of the
+ *     ten squares (`BK` g8, `BQ` b8/c8/d8) died in no row of the default lane, and five of the
+ *     other six died only by accident in positions no criterion owns. One row per square, each
+ *     holding exactly that square occupied while the same side's OTHER castle stays valid, so the
+ *     surviving castle can be named: a count alone cannot tell "the blocked one was refused" from
+ *     "the valid one was dropped and something else appeared". `option.empty` tests `!== EMPTY`,
+ *     so it is colour- and type-blind; two rows hold an ENEMY occupant to exercise that at zero
+ *     extra rows instead of enumerating occupants.
+ *
+ * 11. THE CASTLING RIGHT, off the `- 0 1` every row above uses — `A2`. `NO_RIGHT_HELD` kills the
+ *     right test's removal, but only at `- 0 1`, so the test switched off whenever
+ *     `halfmoveClock !== 0`, `fullmoveNumber !== 1` or an en-passant square is set survived. Four
+ *     rows, both colours x two scalar classes: an en-passant square and a non-zero halfmove clock
+ *     cannot honestly share a FEN (the double push that sets the one zeroes the other), so four is
+ *     the floor. One control per class holds the right and offers both castles, so the scalars are
+ *     shown not to suppress castling on their own.
+ * ------------------------------------------------------------------------------------------------
+ */
+
+/**
+ * `ABC-024` `A1` — one row per square of the four `empty` arrays. `option` is the castle the
+ * occupied square blocks; `survivor` is the side's other castle, still offered and named.
+ */
+const EMPTY_CORRIDOR_SQUARE: ReadonlyArray<
+  readonly [
+    option: string,
+    square: string,
+    occupant: "own" | "enemy",
+    piece: string,
+    fen: string,
+    survivor: string,
+    expected: number,
+  ]
+> = [
+  ["K", "f1", "own", "BISHOP", "r3k2r/8/8/8/8/8/8/R3KB1R w KQkq - 0 1", "e1c1", 30],
+  ["K", "g1", "own", "KNIGHT", "r3k2r/8/8/8/8/8/8/R3K1NR w KQkq - 0 1", "e1c1", 26],
+  ["Q", "b1", "enemy", "KNIGHT", "r3k2r/8/8/8/8/8/8/Rn2K2R w KQkq - 0 1", "e1g1", 22],
+  ["Q", "c1", "own", "BISHOP", "r3k2r/8/8/8/8/8/8/R1B1K2R w KQkq - 0 1", "e1g1", 30],
+  ["Q", "d1", "own", "QUEEN", "r3k2r/8/8/8/8/8/8/R2QK2R w KQkq - 0 1", "e1g1", 39],
+  ["k", "f8", "own", "BISHOP", "r3kb1r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "e8c8", 30],
+  ["k", "g8", "own", "KNIGHT", "r3k1nr/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "e8c8", 26],
+  ["q", "b8", "enemy", "KNIGHT", "rN2k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "e8g8", 22],
+  ["q", "c8", "own", "BISHOP", "r1b1k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "e8g8", 30],
+  ["q", "d8", "own", "QUEEN", "r2qk2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "e8g8", 39],
+];
+
+/** The other castle of the same side, keyed on the option a row blocks. */
+const SAME_SIDE_OTHER: Readonly<Record<string, string>> = { K: "Q", Q: "K", k: "q", q: "k" };
+
+/**
+ * `ABC-024` `A1`: the row is the experiment it claims to be. The named occupant stands on the
+ * corridor square in the TYPE AND COLOUR the row claims; it is the ONLY occupied square of the
+ * blocked option's corridor; king and rook stand home and both of the side's rights are held; the
+ * blocked option's king path is unattacked, so the `empty` test is the only thing that can refuse
+ * it; and the surviving option's corridor is clear and its king path unattacked, so its castle is
+ * alive to be named.
+ */
+function expectCorridorSetup(
+  fen: string,
+  option: string,
+  square: string,
+  occupant: "own" | "enemy",
+  piece: string,
+): void {
+  const blocked = CASTLE_SHAPE[option];
+  const other = CASTLE_SHAPE[SAME_SIDE_OTHER[option] as string];
+  if (blocked === undefined || other === undefined) throw new Error(`unknown option: ${option}`);
+
+  const position = parseFen(fen);
+  const black = fen.split(" ")[1] === "b";
+  const colour = black ? BLACK : 0;
+  const index = squareIndex(square);
+
+  expect(blocked.empty, `${square} must be in the ${option} corridor`).toContain(index);
+  expect(position.board[index], `the ${occupant} ${piece} must stand on ${square}: ${fen}`).toBe(
+    (PIECE_TYPES[piece] as number) | (occupant === "own" ? colour : colour ^ BLACK),
+  );
+  expect(
+    blocked.empty.filter((cell) => position.board[cell] !== EMPTY).map(squareName),
+    `${square} must be the ONLY occupied square of the ${option} corridor: ${fen}`,
+  ).toEqual([square]);
+  expect(
+    other.empty.filter((cell) => position.board[cell] !== EMPTY).map(squareName),
+    `the ${SAME_SIDE_OTHER[option]} corridor must be clear: ${fen}`,
+  ).toEqual([]);
+
+  for (const shape of [blocked, other]) {
+    expect(position.board[shape.kingFrom], `the king must stand home: ${fen}`).toBe(KING | colour);
+    expect(position.board[shape.rookFrom], `the rook must stand home: ${fen}`).toBe(ROOK | colour);
+    expect(position.castling & shape.right, `the right must be held: ${fen}`).toBe(shape.right);
+    expect(
+      shape.kingPath.filter((cell) => isSquareAttackedBy(position, cell, !black)).map(squareName),
+      `the king path must be unattacked: ${fen}`,
+    ).toEqual([]);
+  }
+}
+
+/**
+ * `ABC-024` `A1`'s corridor, measured through `generateMoves` instead of copied: the squares on
+ * which a lone own KNIGHT refuses the option's castle, with king and rook home and only that right
+ * held. A knight neither attacks for the enemy nor stands on a home square, so only the `empty`
+ * test can be what refuses it. A widened or narrowed production corridor moves this set.
+ */
+function corridorGenerateMovesRefusesOn(option: string): string[] {
+  const base: Readonly<Record<string, string>> = {
+    K: "4k3/8/8/8/8/8/8/4K2R w K - 0 1",
+    Q: "4k3/8/8/8/8/8/8/R3K3 w Q - 0 1",
+    k: "4k2r/8/8/8/8/8/8/4K3 b k - 0 1",
+    q: "r3k3/8/8/8/8/8/8/4K3 b q - 0 1",
+  };
+  const fen = base[option] as string;
+  const knight = KNIGHT | (fen.split(" ")[1] === "b" ? BLACK : 0);
+  const pristine = parseFen(fen);
+  expect(castles(generateMoves(pristine)), `the ${option} probe castles when empty`).toHaveLength(
+    1,
+  );
+
+  const refused: string[] = [];
+  for (let square = 0; square < 128; square++) {
+    if ((square & 0x88) !== 0 || pristine.board[square] !== EMPTY) continue;
+    const probe: Position = { ...pristine, board: pristine.board.slice() };
+    probe.board[square] = knight;
+    if (castles(generateMoves(probe)).length === 0) refused.push(squareName(square));
+  }
+  return refused.sort();
+}
+
+/**
+ * `ABC-024` `A2` — king and both rooks home, both corridors clear, NO right held, and the scalars
+ * moved off `- 0 1`. Class `clocks` moves `halfmoveClock` and `fullmoveNumber`; class `ep` sets an
+ * en-passant square. The ep FENs carry the pawn that made the double push, so they are plausible.
+ */
+const NO_RIGHT_OFF_DEFAULT_SCALARS: ReadonlyArray<
+  readonly [scalars: "clocks" | "ep", fen: string, expected: number]
+> = [
+  ["clocks", "4k3/8/8/8/8/8/8/R3K2R w - - 5 9", 24],
+  ["clocks", "r3k2r/8/8/8/8/8/8/4K3 b - - 5 9", 24],
+  ["ep", "4k3/8/8/2p5/8/8/8/R3K2R w - c6 0 12", 24],
+  ["ep", "r3k2r/8/8/8/2P5/8/8/4K3 b - c3 0 12", 24],
+];
+
+/**
+ * `ABC-024` `A2`'s non-inertness controls, one per class: the same white position with BOTH rights
+ * held. Both castles are offered, so the scalars are not what suppresses castling in the rows above.
+ */
+const RIGHT_HELD_OFF_DEFAULT_SCALARS: ReadonlyArray<
+  readonly [scalars: "clocks" | "ep", fen: string, expected: number, first: string, second: string]
+> = [
+  ["clocks", "4k3/8/8/8/8/8/8/R3K2R w KQ - 5 9", 26, "e1g1", "e1c1"],
+  ["ep", "4k3/8/8/2p5/8/8/8/R3K2R w KQ c6 0 12", 26, "e1g1", "e1c1"],
+];
+
+/** `ABC-024` `A2`: king and both rooks home and both corridors clear, for the side to move. */
+function expectBothCastlesShapeHolds(fen: string): void {
+  const position = parseFen(fen);
+  const black = fen.split(" ")[1] === "b";
+  const colour = black ? BLACK : 0;
+  for (const option of black ? ["k", "q"] : ["K", "Q"]) {
+    const shape = CASTLE_SHAPE[option];
+    if (shape === undefined) throw new Error(`unknown option: ${option}`);
+    expect(position.board[shape.kingFrom], `the king must stand home: ${fen}`).toBe(KING | colour);
+    expect(position.board[shape.rookFrom], `the rook must stand home: ${fen}`).toBe(ROOK | colour);
+    expect(
+      shape.empty.filter((cell) => position.board[cell] !== EMPTY).map(squareName),
+      `the ${option} corridor must be clear: ${fen}`,
+    ).toEqual([]);
+  }
+}
+
+describe("ABC-024 A1 — the `empty` corridor, one row per square of every option, both colours", () => {
+  it.each(EMPTY_CORRIDOR_SQUARE)(
+    "refuses the %s castle through an occupied %s (%s %s) and still offers the other: %s",
+    (option, square, occupant, piece, fen, survivor, expected) => {
+      expectCorridorSetup(fen, option, square, occupant, piece);
+
+      const position = parseFen(fen);
+      const before = fullState(position);
+      expect(castleNames(generateMoves(parseFen(fen))), `generateMoves: ${fen}`).toEqual([
+        survivor,
+      ]);
+      const legal = legalMoves(position);
+      expect(castleNames(legal), `legalMoves: ${fen}`).toEqual([survivor]);
+      expect(legal, `legalMoves count: ${fen}`).toHaveLength(expected);
+      expect(fullState(position), `full state: ${fen}`).toBe(before);
+    },
+  );
+});
+
+describe("ABC-024 A2 — the castling RIGHT, with the scalar fields off `- 0 1`", () => {
+  it.each(NO_RIGHT_OFF_DEFAULT_SCALARS)(
+    "offers no castle when no right is held, scalars class %s: %s",
+    (_scalars, fen, expected) => {
+      expectBothCastlesShapeHolds(fen);
+      expect(parseFen(fen).castling, `no right held: ${fen}`).toBe(0);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+
+  it.each(RIGHT_HELD_OFF_DEFAULT_SCALARS)(
+    "control, scalars class %s: the same position with both rights held offers both castles: %s",
+    (_scalars, fen, expected, first, second) => {
+      expectBothCastlesShapeHolds(fen);
+      const legal = legalMoves(parseFen(fen));
+      expect(castleNames(generateMoves(parseFen(fen))), `generateMoves: ${fen}`).toEqual([
+        first,
+        second,
+      ]);
+      expect(castleNames(legal), `legalMoves: ${fen}`).toEqual([first, second]);
+      expect(legal, `legalMoves count: ${fen}`).toHaveLength(expected);
+    },
+  );
+});
+
+describe("ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot silently regrow", () => {
+  it("names every square of every option's `empty` corridor by exactly one A1 row", () => {
+    const named = (option: string) =>
+      EMPTY_CORRIDOR_SQUARE.filter(([owner]) => owner === option)
+        .map(([, square]) => square)
+        .sort();
+
+    for (const option of ["K", "Q", "k", "q"]) {
+      const shape = CASTLE_SHAPE[option];
+      if (shape === undefined) throw new Error(`unknown option: ${option}`);
+      const corridor = shape.empty.map(squareName).sort();
+      // The copy in this file agrees with what `generateMoves` actually refuses on, so a corridor
+      // widened or narrowed in `src/moves.ts` goes red here, not only in the copy.
+      expect(corridorGenerateMovesRefusesOn(option), `the ${option} corridor, measured`).toEqual(
+        corridor,
+      );
+      expect(named(option), `every ${option} corridor square named by exactly one A1 row`).toEqual(
+        corridor,
+      );
+    }
+    expect(EMPTY_CORRIDOR_SQUARE, "ten corridor squares, ten rows").toHaveLength(10);
+    expect(
+      EMPTY_CORRIDOR_SQUARE.some(([, , occupant]) => occupant === "enemy"),
+      "at least one row holds an ENEMY occupant",
+    ).toBe(true);
+  });
+
+  it("holds NO_RIGHT_HELD at `- 0 1` and moves every A2 row off it, both classes, both colours", () => {
+    const scalarsOf = (fen: string) => fen.split(" ").slice(3).join(" ");
+    // The gap, executable: the pre-existing rows sit at the default scalars and cannot see a
+    // right test switched off on any other value.
+    expect([...new Set(NO_RIGHT_HELD.map(([fen]) => scalarsOf(fen)))]).toEqual(["- 0 1"]);
+
+    const noEpSquare = parseFen("4k3/8/8/8/8/8/8/4K3 w - - 0 1").epSquare;
+    for (const [scalars, fen] of NO_RIGHT_OFF_DEFAULT_SCALARS) {
+      const position = parseFen(fen);
+      expect(scalarsOf(fen), `A2 row must not sit at the default scalars: ${fen}`).not.toBe(
+        "- 0 1",
+      );
+      if (scalars === "clocks") {
+        expect(position.halfmoveClock, `halfmoveClock off 0: ${fen}`).not.toBe(0);
+        expect(position.fullmoveNumber, `fullmoveNumber off 1: ${fen}`).not.toBe(1);
+      } else {
+        expect(position.epSquare, `an en-passant square set: ${fen}`).not.toBe(noEpSquare);
+      }
+    }
+    for (const scalars of ["clocks", "ep"] as const) {
+      const rows = NO_RIGHT_OFF_DEFAULT_SCALARS.filter(([kind]) => kind === scalars);
+      expect(
+        rows.map(([, fen]) => fen.split(" ")[1]).sort(),
+        `class ${scalars}: one row per colour`,
+      ).toEqual(["b", "w"]);
+      expect(
+        RIGHT_HELD_OFF_DEFAULT_SCALARS.filter(([kind]) => kind === scalars),
+        `class ${scalars}: one control`,
+      ).toHaveLength(1);
+    }
+  });
+});
