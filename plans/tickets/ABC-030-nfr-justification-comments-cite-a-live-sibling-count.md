@@ -316,3 +316,31 @@ the scope decision: `.grugops/context/ticket-to-pr-ABC-030/notes/`.
 - **Gates on the tip:** lint 0, typecheck 0, build 0, `npm test` 0 (58 files / 1792 passed),
   `last-run.json` success true, skip integrity `No findings.` at skip count 0.
 - **UAT:** 0 production lines (the waiver grep is empty). QE hop still required.
+
+## QE
+
+QE/E2E, 2026-10-17 (subtask `qe-ABC-030`; tip `e0f8b617`, code `bc185f83`, base `b84dc637`; width 3, beside the SE
+hops on `ABC-040` and `ABC-024`). **Verdict: PASS_WITH_GAPS.** The detail is in
+`.grugops/context/qe-ABC-030/notes/` (decision `…5c5e3ce1`). Every reading was taken before the SE's notes were
+opened.
+
+- **`A1`–`A4` MET, every one re-run by QE.**
+  - **`A1`/`A2` greps.** Base had 1 and 3 hits; the tip has 0, exit 1.
+  - **Numstat.** `1 1` in exactly the three re-scored files; zobrist md5 `bb4d52be…` is unchanged. Every changed line
+    is inside the header `/** */`.
+  - **`A3`.** Per-file counts `cmp` 0 (58 files / 1792). Base was run from an independent `git archive` export. The
+    full test titles are byte-identical as well.
+  - **`A4`.** The three repaired sentences hold no integer. The dated witness `gameend.nfr.test.ts:8` is kept.
+- **Gates at the tip.** lint, typecheck and build exit 0. `npm test` passes 58 files, 1792/1792. The skip count is 0,
+  and the test-integrity check reports `No findings.` `git merge-tree` against `main` is clean.
+- **Gaps (none blocks).**
+  - **`QE-030-a` (LOW, BA/PM's to rule).** Two live number words still cite `plans/nfr-catalog.md` in the same
+    header blocks: `status-panel.nfr.test.ts:4-5` *"three times"* and `san.nfr.test.ts:17` *"twice"*. Whether
+    either is true today is `UNKNOWN - verify`. They are outside the repaired sentences, so A4, read as the
+    re-score's fence implies, does not reach them. The SE's integer list missed them.
+  - **`QE-030-b` (LOW, an accepted residual).** The A1/A2 regex caught 2 of 6 planted live counts, only the two
+    historical phrasings. It misses ``all N tests in `x.test.ts` ``, the very form standing at `gameend:8`.
+    Nothing re-runs it after the gate (`ABC-028` `F4`).
+  - **`QE-030-c` (INFO).** The SE notes' `at:` stamps are local time labelled `Z`.
+- **UAT-waiver reading:** `git diff --name-only b84dc637...e0f8b617 | grep -v '\.test\.ts$' | grep '^src/'` is
+  empty (0 production `src/` lines), so the waiver applies. The next column is the Orchestrator's call.
