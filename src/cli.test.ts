@@ -35,6 +35,7 @@ import { createRequire } from "node:module";
 import type * as Ts from "typescript";
 import { describe, expect, it, vi } from "vitest";
 import type { ViteUserConfig } from "vitest/config";
+import { createBookProbe } from "./book.ts";
 import {
   ACCEPTED_ARGUMENTS,
   DEFAULT_DIFFICULTY,
@@ -65,6 +66,22 @@ vi.mock("./glyph-mode.ts", { spy: true });
 const SOURCE_DIRECTORY = new URL(".", import.meta.url).pathname;
 const REPOSITORY = new URL("..", import.meta.url).pathname;
 const ENTRY_POINT = new URL("cli.ts", import.meta.url).pathname;
+
+/**
+ * `ABC-096` — the reference frames' book. The children read the shipped book through `src/cli.ts`,
+ * and a frame whose message region is empty shows the name the book gives its position, so the
+ * reference frames are built over the same bytes. Only `openingName` is reached; `warn` and `random`
+ * throw, so a reference book that failed to load, or a seam that drew randomness, is loud.
+ */
+const SHIPPED_BOOK = createBookProbe({
+  read: () => readFileSync(new URL("../data/opening-book/book.json", import.meta.url)),
+  warn: (line) => {
+    throw new Error(`the reference book did not load: ${line}`);
+  },
+  random: () => {
+    throw new Error("a frame drew from the book's randomness");
+  },
+});
 
 /** Every test file in this repository defines its own; there is no exported constant to import. */
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -193,7 +210,7 @@ const productionModules = (): readonly string[] =>
 
 const frameOf = (mode: GlyphMode, orientation: Orientation): readonly string[] => {
   const history = startGame();
-  return makeRenderSeam(mode, orientation)(history, gameStatusOf(history), false, []);
+  return makeRenderSeam(mode, orientation, SHIPPED_BOOK)(history, gameStatusOf(history), false, []);
 };
 
 /**
@@ -2724,7 +2741,7 @@ describe("ABC-043 — the live session", () => {
     mode: GlyphMode,
     orientation: Orientation,
   ): readonly (readonly string[])[] => {
-    const render = makeRenderSeam(mode, orientation);
+    const render = makeRenderSeam(mode, orientation, SHIPPED_BOOK);
     const prefixes = [...script.map((_, ply) => script.slice(0, ply)), script];
     return prefixes.map((plies) => {
       const history = playedOut(plies);
@@ -2818,7 +2835,10 @@ describe("ABC-043 — the live session", () => {
 
     expect(entry.match(/\bnewGame\s*\(/g)).toHaveLength(1);
     expect(entry).toMatch(/humanColour:\s*colour/);
-    expect(entry).toMatch(/render:\s*makeRenderSeam\(mode,\s*orientation\)/);
+    // `ABC-096` MOVED THIS ROW (`A8`, `ADR-0043` D1): the seam is handed the session's one book
+    // probe, by name, as its third argument. Still a call and never an arrow; the no-`=>` row over
+    // the call's window, below, is unchanged.
+    expect(entry).toMatch(/render:\s*makeRenderSeam\(mode,\s*orientation,\s*book\)/);
     expect(entry).toMatch(/input:\s*createLineInputSeam\(/);
     // `ABC-095` MOVED THIS ROW, AND BOTH HALVES ARE PINNED (`ADR-0037` § Addendum R2). `engine:` is
     // the book decorator around the merged engine at its merged budget: `withBook` is `EngineSeam ->
@@ -2832,6 +2852,12 @@ describe("ABC-043 — the live session", () => {
       /engine:\s*withBook\(\s*book,\s*createLevelSeam\(difficulty,\s*\{\s*seed:\s*Math\.floor\(Math\.random\(\)\s*\*\s*2\s*\*\*\s*32\)\s*\}\),?\s*\)/,
     );
     expect(entry.match(/\bcreateBookProbe\s*\(/g)).toHaveLength(1);
+    // `ABC-096` `A8`: the render seam and the engine decorator get the SAME probe. `book` is bound
+    // exactly once in the executable view, so both `book` arguments above name that binding.
+    expect(
+      entry.match(/\bbook\s*[:=]/g),
+      "the entry point binds `book` more than once",
+    ).toHaveLength(1);
     expect(entry).toMatch(
       /const book = createBookProbe\(\{\s*read:\s*readBookFile,\s*warn:\s*\(line\)\s*=>\s*process\.stderr\.write\(`\$\{line\}\\n`\),\s*random:\s*Math\.random,?\s*\}\);/,
     );
@@ -2908,7 +2934,7 @@ describe("ABC-043 — the live session", () => {
     const mated = playedOut(PLIES);
     const status = gameStatusOf(mated);
     expect(frames[frames.length - 1]).toEqual([
-      ...makeRenderSeam("ascii", "white-bottom")(mated, status, false, []),
+      ...makeRenderSeam("ascii", "white-bottom", SHIPPED_BOOK)(mated, status, false, []),
     ]);
     // `A2`'s "the mating side's win with `reason: "checkmate"`" — the loop returns `status.result`
     // and `status.reason` for the position it last rendered, and that is the position above.
