@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-040` delivered (`8d2e4f8b`) → In Review; QE `qe-ABC-040` dispatched. In flight: `ticket-to-pr-ABC-024`, `qe-ABC-030`, `qe-ABC-040`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-030` delivered (`bc185f83`) → In Review; QE `qe-ABC-030` dispatched. In flight: `ticket-to-pr-ABC-040`, `ticket-to-pr-ABC-024`, `qe-ABC-030`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "pull ABC-040, ABC-030, ABC-024" → all three In Development (3/3). SE hops `ticket-to-pr-ABC-040`, `-030`, `-024` dispatched (width 3); only ABC-040 writes `plans/traceability.md`. In flight: those three._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-039` → Done (merged `bf9c01db`, UAT WAIVED by measurement, gates green 58/1792); `ABC-156` → Ready (blocker discharged). All three pulled tickets Done; worktrees and branches removed. In flight: none. Next free id: ABC-157._
@@ -787,8 +788,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
-- [ABC-040] Duplicate ABC-028/ABC-029 rows in traceability — 40 rows for 38 tickets  (BA/PM, S, **P3** (was P2), epic: —, since: 2026-08-13, **DoR 10/10**; the ABC-028 pair is a LOSSLESS DELETE and the ABC-029 pair a 2404-byte MERGE — precedence ruled R1–R5 on the page, which is the question that deferred this three times; the Orchestrator still sequences it against trace-appending hops) **2026-10-12 re-score: DoR 10/10 (criteria fixed) → Ready, P2 → P3. "40 rows for 38" obsolete under the append-a-row convention (482 rows); A1 replaced by a no-identical-cells-0–4 check; repair plan still byte-exact; A3 splice and A5 grep fixed.** **2026-10-17: pulled on owner word → In Development (width 3; ABC-030/024 hand trace rows back so ABC-040 splices alone; ABC-040 merges first).**
+## In Development (WIP 1/3)
 - [ABC-024] Castling guards protected only by the opt-in deep lane  (BA/PM, S, P2, epic: EPIC-001, since: 2026-08-10, **DoR 8/10 → 9/10; both original ⚠️ discharged by ABC-023's merge, one NEW ⚠️ opens: `src/moves.ts` md5 `6335b452…` is byte-identical four merges later and the ticket went stale anyway BECAUSE THE LANE GREW AROUND IT — `A4` carries `625` inside a criterion and the lane is 807/28.** Needs a dev/QE re-measurement hop, not a BA/PM hop; both escalation triggers re-checked, still NOT fired) **2026-10-12 re-score: DoR 9 → 10/10 → Ready. `src/moves.ts` md5 `6335b452…` unchanged; 7 survivor mutants re-run on today's default lane: 5 still pass it, 2 die only on unrelated rows (A1/A2/A5 re-based so those don't count). Test-only; can run beside ABC-095 or ABC-101.** **2026-10-17: pulled on owner word → In Development (width 3; ABC-030/024 hand trace rows back so ABC-040 splices alone; ABC-040 merges first).**
 
 
@@ -817,7 +817,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
+- [ABC-040] Duplicate ABC-028/ABC-029 rows in traceability — 40 rows for 38 tickets  (BA/PM, S, **P3** (was P2), epic: —, since: 2026-08-13, **DoR 10/10**; the ABC-028 pair is a LOSSLESS DELETE and the ABC-029 pair a 2404-byte MERGE — precedence ruled R1–R5 on the page, which is the question that deferred this three times; the Orchestrator still sequences it against trace-appending hops) **2026-10-12 re-score: DoR 10/10 (criteria fixed) → Ready, P2 → P3. "40 rows for 38" obsolete under the append-a-row convention (482 rows); A1 replaced by a no-identical-cells-0–4 check; repair plan still byte-exact; A3 splice and A5 grep fixed.** **2026-10-17: pulled on owner word → In Development (width 3; ABC-030/024 hand trace rows back so ABC-040 splices alone; ABC-040 merges first).** **2026-10-17: delivered (`8d2e4f8b`, tip `08bbdf2c`; ABC-028 lossless delete, ABC-029 2404-char splice, comment sentence dated; 512 → 510 rows +1; gates green 58/1792) → In Review; QE `qe-ABC-040` dispatched. Merges first.**
 - [ABC-030] NFR-justification comments cite a live sibling test count  (BA/PM, XS, P3, **epic: EPIC-002 — CORRECTED, this row read `—` against the ticket and trace which both read EPIC-002**, since: 2026-08-13, **DoR 10/10 re-verified; one live clause scoped to *any new file under `src/`* — the unscoped form fired on 33 non-source files.** Must not be pulled ahead of anything, on its own instruction) **2026-10-12 re-score: DoR 10/10 (criteria fixed) → Ready, P3, pull last. Zobrist site already fixed by ABC-075; 3 sites remain (status-panel quotes 26, sibling has 29; gameend holds at 45; san `UNKNOWN - verify`).** **2026-10-17: pulled on owner word → In Development (width 3; ABC-030/024 hand trace rows back so ABC-040 splices alone; ABC-040 merges first).** **2026-10-17: delivered (`bc185f83`, tip `e0f8b617`; 3 comment sites, zobrist already fixed by ABC-075; gates green 58/1792) → In Review; QE `qe-ABC-030` dispatched. Trace row held by the Orchestrator until ABC-040 merges.**
 
 
