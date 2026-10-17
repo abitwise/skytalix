@@ -1,0 +1,17 @@
+A1 rows found: 10
+PRISTINE total=128 failed=0 A3-red=0  
+del-A1-0 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["K", "f1", "own", "BISHOP", "r3k2r/8/8/8/8/8/8/R3
+del-A1-1 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["K", "g1", "own", "KNIGHT", "r3k2r/8/8/8/8/8/8/R3
+del-A1-2 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["Q", "b1", "enemy", "KNIGHT", "r3k2r/8/8/8/8/8/8/
+del-A1-3 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["Q", "c1", "own", "BISHOP", "r3k2r/8/8/8/8/8/8/R1
+del-A1-4 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["Q", "d1", "own", "QUEEN", "r3k2r/8/8/8/8/8/8/R2Q
+del-A1-5 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["k", "f8", "own", "BISHOP", "r3kb1r/8/8/8/8/8/8/R
+del-A1-6 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["k", "g8", "own", "KNIGHT", "r3k1nr/8/8/8/8/8/8/R
+del-A1-7 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["q", "b8", "enemy", "KNIGHT", "rN2k2r/8/8/8/8/8/8
+del-A1-8 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["q", "c8", "own", "BISHOP", "r1b1k2r/8/8/8/8/8/8/
+del-A1-9 total=127 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["q", "d8", "own", "QUEEN", "r2qk2r/8/8/8/8/8/8/R3
+narrow-A2-0 total=128 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["clocks", "4k3/8/8/8/8/8/8/R3K2R w - - 5 9", 24]
+narrow-A2-1 total=128 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["clocks", "r3k2r/8/8/8/8/8/8/4K3 b - - 5 9", 24]
+narrow-A2-2 total=128 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["ep", "4k3/8/8/2p5/8/8/8/R3K2R w - c6 0 12", 24]
+narrow-A2-3 total=128 failed=1 A3-red=1 ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot s row=["ep", "r3k2r/8/8/8/2P5/8/8/4K3 b - c3 0 12", 24]
+restored

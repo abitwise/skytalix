@@ -649,3 +649,70 @@ the control `e1g1 e1c1` at 26.
 | 8 | size assigned | ✅ `S` |
 | 9 | priority assigned | ✅ `P2`. `EPIC-004`'s rewrite of move generation has not started (`src/moves.ts` unchanged) |
 | 10 | no major unresolved blocker | ✅ |
+
+## Delivery — 2026-10-17 (Software Engineer, subtask `ticket-to-pr-ABC-024`)
+
+Branch `grugops/ABC-024-castling-default-lane`, cut from `b84dc637`. Code commit `a18da7f5`: +280/−0 to
+`src/moves.castling.hardening.test.ts` and nothing else. No timing was read. Evidence is in
+`.grugops/context/ticket-to-pr-ABC-024/notes/`, and the instrument plus raw logs are in `…/probe/`.
+
+- **Re-measured first, at base `b84dc637` (1792 tests on 58 files).** `src/moves.ts` md5 is
+  `6335b452fc21ffe2d0f902ecab930840`. The survivors are the same as the 2026-10-12 re-score:
+  - **survived**: `BK` g8, `BQ` b8, `BQ` c8, R-half and R-ep;
+  - **killed by one incidental row only**: `BQ` d8 (book A2) and R-full (262 nodes);
+  - **all fifteen equivalent controls survive.**
+- **`A1` MET.** There are 10 rows, one per corridor square, with enemy knights on b1 and b8. The occupant
+  byte and the setup are asserted first, then the survivor by name, then the exact `legalMoves` count.
+  Dropping any one square kills its own `A1` row and no other `A1` row. All ten were measured with
+  `PERFT_DEEP` unset.
+- **`A2` MET.** There are 4 rows, both colours × {`5 9` clocks, ep `c6`/`c3` at `0 12`}, plus 2 controls at
+  26 moves with `e1g1 e1c1`. R-half fails both clocks rows, R-ep both ep rows, and R-full all four.
+- **`A3` MET.** The corridor quantifier compares the production corridor (measured through
+  `generateMoves`), this file's copy, and the `A1` rows: exactly one row per square, and at least one enemy.
+  The scalar quantifier checks that `NO_RIGHT_HELD` is at `- 0 1` and that every `A2` row is off it.
+  Deleting any of the 10 `A1` rows turns it red, and so does narrowing any of the 4 `A2` rows (14/14).
+- **`A4` MET.** The md5 is unchanged. `git diff -U0` shows additions only, in 1 file, so there are
+  0 production lines. The suite gives 1810/1810 on 58 files (base 1792 + 18), skip 0, integrity
+  `No findings.`, and deep perft 32/32.
+- **`A5` MET.** All seven named mutants die on an `A1` or `A2` row with `PERFT_DEEP` unset. All 15 controls
+  survive at base and with the rows, so this ticket adds 0 kills.
+- **Security trigger not fired:** +280 is under +525, and only one file changed.
+
+## QE — 2026-10-17 (QE/E2E, subtask `qe-ABC-024`): **PASS_WITH_GAPS**
+
+I reviewed tip `290a9f86` (code `a18da7f5`, base `b84dc637`). No timing was read. I re-planted every mutant myself, on
+my own instrument, before I opened the SE's harness. I ran it on `git archive` trees of base and head outside the
+repo, with one fresh `tsc` and one fresh `vitest` per state, `PERFT_DEEP` unset, and the md5 re-asserted after every
+state. Evidence: `.grugops/context/qe-ABC-024/notes/` (decision `…e84b25c9`) and `…/probe/`.
+
+- **The seven named mutants:**
+  - at base, `BK` g8, `BQ` b8, `BQ` c8, R-half and R-ep survive 1792/1792;
+  - at base, `BQ` d8 (book A2) and R-full (262 nodes) die on one incidental row each;
+  - at head, all seven die on an `A1`/`A2` row.
+  
+  All 62 base/head counts equal the SE's.
+- **`A1` MET.** Each of the ten drops fails its own `A1` row and no other `A1` row. The ten row FENs also parse
+  under the strict `parseFen`.
+- **`A2` MET.** R-half fails 2 rows, R-ep 2, R-full 4. The controls give 2 castles at 26.
+- **`A3` MET.** 14/14 test-file discriminators go red. A black corridor widened in production turns the corridor
+  quantifier red.
+- **`A4` MET.** The md5 is unchanged at base and tip. The diff adds lines only, 1 file under `src/`. The suite goes
+  58/1792 → 58/1810, skip 0, `No findings.` Deep perft is 32/32.
+- **`A5` MET.** The fifteen controls survive 15/15 at base and 15/15 at head, so this ticket adds 0 kills.
+  The SE's encodings match `ABC-023` A5's prose list 1:1, and so do mine, written blind.
+- **Gates on `290a9f86` are green:** lint, typecheck, build, and `npm test` 1810/1810.
+- **Security threshold not fired** (+280, one file). I read the added lines anyway: nothing found.
+- **UAT-waiver reading:** the production-`src/` grep on `b84dc637...290a9f86` is empty, so the waiver applies.
+  Waived is not signed.
+
+**Gaps.** None blocks.
+- **`QE-024-a` MEDIUM, for BA/PM to cut; outside this ticket.** The right-**mask** mutant
+  (`castling & option.right` → `castling !== 0`) survives the whole default lane at base and at head. It offers
+  castles on `w kq` with no white right held. It dies only at `PERFT_DEEP=1` `position-5 perft(4)`, 31/32. This
+  page's own § The judgement rules that such a guard is owed a default-lane row.
+- **`QE-024-b` LOW.** The fifteen controls exist upstream only as prose. Two committed encodings now agree.
+- **`QE-024-c` INFO.** Both `A2` controls are white.
+- **`QE-024-d` INFO.** The readings were taken at base `b84dc637`. `main` has since taken `ABC-030`'s three
+  comment-only lines.
+
+The escalation triggers are not fired: `src/moves.ts` and `src/perft.test.ts` are untouched.
