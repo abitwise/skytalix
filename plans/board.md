@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-155` delivered (`819e6933`, gates green 58/1792) → In Review; QE `qe-ABC-155` dispatched. In flight: that hop only (width 1)._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "pull ABC-155, ABC-056, ABC-039" → all three In Development (3/3). Width 1: SE `ticket-to-pr-ABC-155` dispatched first; then ABC-056 (Release Manager), then ABC-039. In flight: that hop only._
 _Updated: 2026-10-13 by the Orchestrator (task `wave-2026-09-25`) — `ABC-101` → Done (UAT ACCEPTED by the owner; merged `ffa96cb4` + `6631059e`; gates green 58/1792, `CLI_DEEP` 10/10). Worktrees and branches removed. **Owner word: stop work after ABC-101 to save tokens.** In flight: none._
 _Updated: 2026-10-13 by the Orchestrator (task `wave-2026-09-25`) — owner UAT ACCEPTED on `ABC-101`; merge held until `qe2-ABC-101` reports and gates pass. In flight: `qe2-ABC-101` (width 1)._
@@ -777,8 +778,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 3/3)
-- [ABC-155] The book compiler's sha256 test never offers an expected hash that differs only in its last character — a prefix compare passes the lane  (BA/PM, **XS, P3**, epic: EPIC-005, since: 2026-10-12, **DoR 10/10**; cut from QE-153-a in `bapm-fold-ABC-105-153` (merged `ad5f3ac4`); test-only, one more refusal inside the existing `it`. Promotion trigger: as ABC-145/153.) **2026-10-17: pulled on owner word → In Development (width 1; order 155, 056, 039).**
+## In Development (WIP 2/3)
 - [ABC-056] AR-1's accepted-risk override has drifted — its reason covers brace-expansion only, and two of three advisories are nanoid and postcss  (BA/PM, XS, P2, epic: —, **owner: Release Manager**, since: 2026-08-13, DoR 9/10 ⚠️x1 — the re-check trigger and the breaking @vitest/coverage-v8 upgrade are the owner's calls. **The override's structural premise re-verified 2026-08-13 and HOLDS**: `npm audit --omit=dev` 0, zero runtime deps, private, no bin, emits nothing, deploys nowhere. Upgrades NOTHING) **2026-10-11: carries `RISK-ABC143-01` if the coverage-v8 upgrade is chosen (coverage-v8 3.2.7 peers vitest 3.2.7 exactly).** **2026-10-12 re-score (`bapm-rescore-backlog-process`): DoR 9 → 10/10 → Ready. Drift worse: AR-1 now covers none of the three dev-only advisories (nanoid high, postcss moderate, source-map-js high; `--omit=dev` 0); brace-expansion gone since ABC-152; A3/A4 amended (trigger must fire on new advisories against an unchanged lockfile). Owner question open (non-blocking): re-state AR-1 vs a gated lockfile-only fix ticket.** **2026-10-12: owner word "Re-state the accepted risk" → ABC-056 as written; no lockfile-fix ticket.** **2026-10-17: pulled on owner word → In Development (width 1; order 155, 056, 039).**
 - [ABC-039] Backward-move ordinals are uncitable — a false FIRST live on this board, and a double-booked SECOND  (BA/PM, S, P2, epic: —, since: 2026-08-13, DoR 9/10 ⚠️x1 — the register is citable but not reachable; the one LIVE instance is this board's own ABC-009 row, the other seven are archived headers of Done tickets and may not be edited. **The Orchestrator DID NOT pre-empt the one-clause fix while cutting the ticket — the audit's *off-by-one* remedy was REFUTED here (two moves are both labelled SECOND; a uniform +1 leaves the collision), so half-fixing it would have shipped the refuted repair**) **2026-10-12 re-score: DoR 9 → 10/10 → Ready. False clause now at board :969; a ninth statement found at trace :437 (registered, not edited); A2 amended for the wrapped statement; new A7 clears the reachability ⚠️.** **2026-10-17: pulled on owner word → In Development (width 1; order 155, 056, 039).**
 
@@ -808,7 +808,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-155] The book compiler's sha256 test never offers an expected hash that differs only in its last character — a prefix compare passes the lane  (BA/PM, **XS, P3**, epic: EPIC-005, since: 2026-10-12, **DoR 10/10**; cut from QE-153-a in `bapm-fold-ABC-105-153` (merged `ad5f3ac4`); test-only, one more refusal inside the existing `it`. Promotion trigger: as ABC-145/153.) **2026-10-17: pulled on owner word → In Development (width 1; order 155, 056, 039).** **2026-10-17: delivered (`819e6933`, tip `dcc04871`, gates green 58/1792, A2 10 readings) → In Review; QE `qe-ABC-155` dispatched.**
 
 
 
