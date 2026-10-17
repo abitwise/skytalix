@@ -153,3 +153,33 @@ unchanged; the advisory pairs re-read today diff empty against the table.
 **Residual, named in the note:** a loader flag through `.npmrc` `node-options` or `NODE_OPTIONS` is read by no check
 (no `.npmrc` exists today). **Owed:** the QE hop; the mandatory gates at the tip. No board or traceability edit: the
 Orchestrator owns them.
+
+## QE
+
+QE/E2E, 2026-10-17 (subtask `qe-ABC-158`). I reviewed tip `cdf4255b` against base `aa37f9cb`, re-ran every command
+myself, and planted my own texts from `…a1a81cb9` before reading any RM harness. All plants were in scratch copies
+outside the repo, one per copy. The detail is in `.grugops/context/qe-ABC-158/notes/` (verdict `…d8f8e503`).
+
+**Verdict: PASS_WITH_GAPS.** `A1`–`A5` are MET on QE's own readings, and every one matches the Release Manager's.
+
+- **`A1`:** checks 1–7 read `found 0` / `false` / `[true,false,false,false,false]` / nothing written / 5a, 5b, 5d
+  empty / 5c `node:fs` / `node src/cli.ts` / `0` and `0`, over 40 files. That is byte-equal to the record. MET.
+- **`A2`:** G1 → 5a, G2 → 5d, G3 → 5b, G4 → 5b, G5 → 6, G6b → 7, which is 6 of 6. MET.
+- **`A3`:** P1 → 5a, P2 → 5a, P3 → 5b, P3b → 5b and 5c, P4 → 5c, P4b → 5a, which is 6 of 6. MET.
+- **`A4`:** clause (2) names checks 1–7, and clause (1)'s test is unchanged. It is not word for word (`QE-158-e`).
+  MET.
+- **`A5`:** only `.grugops/context/` and `plans/` change, and the `src/`/manifest numstat is empty. MET.
+- **Gates (tip):** lint, typecheck, build and `npm test` exit 0 (58 files, 1824/1824). Skip 0. Integrity: `No findings.`
+- **Gaps:** eight more forms load `nanoid` while checks 1–7 read as recorded.
+  - **`QE-158-a` (LOW, RM):** `! -name '*.test.*'` is wider than ADR-0036's `.test.<ext>` suffix, and `-type f` skips
+    links. A file named `qe.test.util.ts` passes unseen. ADR-0036 (b) fires on it.
+  - **`QE-158-b` (LOW, RM and Architect/Design):** a `src/` symlink to a file outside `src/` passes unseen, and
+    **ADR-0036 (b) does not fire on it either**. No instrumented route was found.
+  - **`QE-158-c` (LOW, RM):** a multi-line import, a `*`-led line, a typed computed `process[…]` name and a runtime
+    `.d.ts` import pass unseen. ADR-0036 (b) fires on all four.
+  - **`QE-158-d` (LOW, RM):** a `prechess` script, a dev dependency that ships a `node` bin, and `.npmrc`
+    `node-options` pass unseen. `ABC-041` (a) catches the first two. Nothing instrumented catches `.npmrc`.
+  - `QE-158-e` (INFO): clause (1) lost a referent name and its closing evidence sentence.
+  - `QE-158-f` (INFO): clause (2)'s check-4 example does not mention a tsc failure.
+- **UAT waiver reading:** `git diff --name-only aa37f9cb...cdf4255b | grep -v '\.test\.ts$' | grep '^src/'` is
+  **empty**. By its rule, the waiver applies. Applying it is the Orchestrator's job.
