@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-157` delivered (`968a5843`, 58/1830) → In Review; QE `qe-ABC-157` dispatched; SE trace row appended on main. In flight: `qe-ABC-157`, `qe-ABC-158`. Held: `secnfr-ABC-146-a0`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-158` delivered (RM, tip `cdf4255b`, records only) → In Review; QE `qe-ABC-158` dispatched; RM trace row appended on main. In flight: `ticket-to-pr-ABC-157`, `qe-ABC-158`. Held: `secnfr-ABC-146-a0`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner pulled ABC-146, ABC-157, ABC-158 → In Development. Dispatched: `ticket-to-pr-ABC-157` (SE), `rm-ABC-158` (RM). Held: `secnfr-ABC-146-a0` (needs width 1). In flight: 2._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner UAT word "accept" → `ABC-096` merged (`b20eb451`, gates green 58/1824, CLI_DEEP 10/10, PERFT_DEEP 32/32) → Done. `ABC-159` → Ready (8/8); `ABC-161`, `ABC-164` unblocked, held in Backlog by Ready's WIP limit. In flight: none._
@@ -811,9 +812,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
+## In Development (WIP 1/3)
 - [ABC-146] ABC-085's verdict — run the same ladder harness under plain node, then take A1/A2 at step 4  (BA/PM, **XS, P1**, epic: EPIC-004, since: 2026-10-11, **DoR 9/10** — item 10 open: waits on the owner's acceptance of the ADR-0038 addendum, ABC-083's merge, and ABC-085's merge; if the owner declines, it becomes the ~43.5 h vitest run, re-scored before pull) **2026-10-11: ADR-0038 addendum ACCEPTED by the owner — the owner-acceptance part of item 10 is cleared; still waits on ABC-083's merge and ABC-085's merge.** **2026-10-11: ABC-085 merged (`1031911b`) — that wait is cleared; carries QE2-085-a (pin X6/X13/X14 call sites, 0 games) before the verdict. Still waits on ABC-083.** **2026-10-11: page synced (addendum ACCEPTED; ABC-085 merged; the ~5x factor named). Only ABC-083's merge is open.** **2026-10-12 re-score: DoR 9 → 8/10, stays Backlog. ADR-0038 addendum is already accepted (heading still says PROPOSED — Architect fix); ABC-083 merged (`f00038ef`). New ⚠️: ABC-152 turned vitest's module runner off, which ADR-0041 says caused the ~4.35× cost behind the plain-node route — owner question: verdict inside vitest (if a paired re-read fits 7–13 h) vs build as accepted. A5 now 180/180 games. Needs ~10 h with no timing window owed.** **2026-10-12: owner word "Re-measure, then vitest" → one paired re-measurement of the vitest-vs-node factor first (width 1); if the in-vitest verdict fits 7–13 h it runs there with no new code, else plain node as accepted. BA/PM page amendment owed; stays Backlog.** **2026-10-17: page amended in `bapm-cut-followups` (A0 paired factor by Security/NFR before the route; route V iff 10 h × worst pair ≤ 13 h; A7 ADR-0038 headings) → DoR 10/10 → Ready. Open owner question (non-blocking): worst-of-five vs median — the page uses the worst unless the owner says otherwise before A0.** **2026-10-17: pulled on owner word → In Development. First hop `secnfr-ABC-146-a0` (A0, paired factor, worst of five decides the route) HELD: A0 needs width 1, so it is dispatched alone after `ticket-to-pr-ABC-157` and `rm-ABC-158` report and no foreign vitest is running.**
-- [ABC-157] The castling right test can be weakened to read ANY right: a build that castles on the other wing's or the opponent's right passes the whole default lane  (BA/PM, XS, P2, epic: EPIC-001, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-024-a.) **2026-10-17: pulled on owner word → In Development; SE `ticket-to-pr-ABC-157` dispatched from `aa37f9cb`.**
 
 
 
@@ -841,7 +841,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
+## In Review (WIP 2/3)
+- [ABC-157] The castling right test can be weakened to read ANY right: a build that castles on the other wing's or the opponent's right passes the whole default lane  (BA/PM, XS, P2, epic: EPIC-001, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-024-a.) **2026-10-17: pulled on owner word → In Development; SE `ticket-to-pr-ABC-157` dispatched from `aa37f9cb`.** **2026-10-17: delivered (`968a5843`, tip `2202b8eb`; +90/−0 in one test file, `src/moves.ts` md5 unchanged; `X-any-right` now dies on the six rows; 58/1830) → In Review; QE `qe-ABC-157` dispatched.**
 - [ABC-158] `AR-1`'s recorded checks miss four ways code reaches the runtime path, and pin neither "no loader flag" nor "no non-dev dependency\  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-056-a/b.) **2026-10-17: pulled on owner word → In Development; Release Manager `rm-ABC-158` dispatched from `aa37f9cb` (records only).** **2026-10-17: delivered (tip `cdf4255b`; records only, AR-1 re-stated in `…901f43b6`, A2 6/6, A3 6/6) → In Review; QE `qe-ABC-158` dispatched.**
 
 
