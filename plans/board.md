@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "continue with ABC-096 in parallel" → `ABC-096` In Design; Architect `design-ABC-096` dispatched. In flight: `ticket-to-pr-ABC-156`, `design-ABC-096`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "pull ABC-156" → In Development; SE `ticket-to-pr-ABC-156` dispatched. In flight: that hop only._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-024` → Done (merged `af92964e`, UAT WAIVED by measurement, gates green 58/1810). All three pulled tickets Done; worktrees and branches removed. Owed: BA/PM cut for `QE-024-a` (MEDIUM). In flight: none. Ready: `ABC-156`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-024` delivered (`a18da7f5`, 58/1810) → In Review; QE `qe-ABC-024` dispatched; SE trace row appended on main. In flight: `qe-ABC-024`._
@@ -768,7 +769,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-- [ABC-096] Show the named opening when the book knows it — inside the frame's existing row identity  (BA/PM, S, P3, epic: EPIC-005, since: 2026-08-16, DoR 8/10 ⚠️ needs ABC-093's format to carry the name; **the epic's droppable bullet — shed this first**; first third-party text to reach the terminal, so the ABC-018 escape-byte bar applies (G7); promote to P2 if the format would have to be re-opened to add it later) **2026-10-11: ABC-094 merged (`02dfa044`) — ordering dependency cleared; BA/PM re-score owed.** **2026-10-12 re-score: DoR 9/10, stays Backlog. Book carries names (`n` on 2,853 of 5,390 entries); scope cut to the family name (frame is 21 cols); new A7/A8. Open: Architect/Design ruling on how the name reaches the frame and who wins the message region. After ABC-095; droppable.**
 
 
 - [EPIC-003] Move input and controls  (owner: BA/PM, **size: XL — corrected from M, 22 points over nine tickets against EPIC-002's 23; the no-XL rule binds TICKETS, largest here is M, no SPLIT_REQUIRED**, priority: P0, since: 2026-07-22, **DECOMPOSED 2026-08-13 into ABC-031…ABC-038 + ABC-010, which had carried `epic: EPIC-003` since 2026-07-29 — this epic was never undecomposed, it was one ticket in and eight short**; the two-paragraph instruction is DISCHARGED to ABC-032 and retired from this row)
@@ -786,7 +786,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-096] Show the named opening when the book knows it — inside the frame's existing row identity  (BA/PM, S, P3, epic: EPIC-005, since: 2026-08-16, DoR 8/10 ⚠️ needs ABC-093's format to carry the name; **the epic's droppable bullet — shed this first**; first third-party text to reach the terminal, so the ABC-018 escape-byte bar applies (G7); promote to P2 if the format would have to be re-opened to add it later) **2026-10-11: ABC-094 merged (`02dfa044`) — ordering dependency cleared; BA/PM re-score owed.** **2026-10-12 re-score: DoR 9/10, stays Backlog. Book carries names (`n` on 2,853 of 5,390 entries); scope cut to the family name (frame is 21 cols); new A7/A8. Open: Architect/Design ruling on how the name reaches the frame and who wins the message region. After ABC-095; droppable.** **2026-10-17: owner word "continue with ABC-096 in parallel" → In Design; Architect `design-ABC-096` dispatched on DoR item 10. Then BA/PM re-score, then SE. UAT held by the owner (frame-path production lines).**
 
 
 ## Ready for Dev (WIP 0/6)
