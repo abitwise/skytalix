@@ -145,3 +145,30 @@ Software Engineer, 2026-10-17 (subtask `ticket-to-pr-ABC-155`). Branch `grugops/
 - **Gates:** lint, typecheck, build and `npm test` exit 0; `last-run.json` `success: true`; integrity `No findings.`
 - **UAT waiver reading:** `git diff --name-only c9746851 819e6933 | grep -v '\.test\.ts$' | grep '^src/'` is empty.
 - **Owed:** the QE hop.
+
+## QE
+
+QE/E2E, 2026-10-17 (subtask `qe-ABC-155`). Reviewed tip `dcc04871`, code `819e6933`, base `c9746851`. QE re-planted
+every mutant in a scratch copy outside the repo. The detail is in `.grugops/context/qe-ABC-155/notes/` (verdict `…4b5342ba`).
+**No timing reading was taken.**
+
+**Verdict: PASS_WITH_GAPS.** `A1`–`A3` are MET on QE's own readings, which match the SE's.
+
+- **`A1`:** `e.tsv`'s near-miss (`…5a60` → `…5a61`, sharing 63 of 64 chars) is refused with 3 of 3, and the
+  fresh output is absent. MET.
+- **`A2`:** `Q-PREFIX` is green on base and red on head. `Q-CASE` is green on both. `M05`, `M-SWAP` and `M06`
+  are red on both. The unmutated head is green. MET.
+- **`A3`:** one path and 0 new files. One hunk, `315a316,335`, inside the `it`. `cmp` 0 on every window,
+  `fixture()` and the `A3` `it`. `compile.ts` and `book.json` are `cmp` 0. 0 spawns. 58 files and 1792 tests
+  at base and head, with 0 skips. MET.
+- **Gates (tip):** lint, typecheck, build and `npm test` exit 0. `last-run.json` `success: true`. Integrity
+  `No findings.`
+- **Gaps:**
+  - **`QE-155-a` (LOW, BA/PM):** a compare that drops any position except the last still passes
+    (`Q-SUFFIX8`, `Q-SKIP8`). The *Value* line above over-claims. A first-char near-miss would kill the suffix
+    form.
+  - `QE-155-b` (INFO): the full compare is pinned for `e.tsv` only.
+  - `QE-155-c` (INFO): `QE-153-c`'s final restore is now observed.
+  - `QE-155-d` (INFO): width went to 3 mid-hop.
+- **UAT waiver reading:** `git diff --name-only c9746851...dcc04871 | grep -v '\.test\.ts$' | grep '^src/'` is **empty**.
+  The waiver applies by its rule. Applying it is the Orchestrator's.
