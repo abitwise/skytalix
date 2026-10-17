@@ -322,3 +322,82 @@ new `A7`. Commands are in `.grugops/context/bapm-rescore-backlog-process/notes/`
 **DoR 10/10:** 1 ✅, 2 ✅ (#9 registered, not edited), 3 ✅ (reachability by `A7`, residual named),
 4 ✅ (`A2`/`A3`/`A5` now pass on a correct register), 5 ✅, 6 ✅ (0 `src/`, `N8-LANE` zero), 7 ✅,
 8 ✅ `S`, 9 ✅ `P2`, 10 ✅.
+
+## Amendment — 2026-10-17 (BA/PM, subtask `bapm-amend-ABC-039`, branch tip `6c1257dd`)
+
+**Ruling: option (a).** The SE stopped at `A3`
+(`.grugops/context/ticket-to-pr-ABC-039/notes/…observation-chronology-cdf60868.md`, `…decision-stop-a3-183cc20d.md`).
+BA/PM re-derived the counts at source and they hold. All 15 move commits are ancestors of `3215004c`, the commit that wrote
+`plans/metrics.md:28`. `ABC-017` moved back twice (`5d387e60`, `e22ed720`), not once. `ABC-019` moved back three
+times (`9e7d9ab7`, `8cc4d8c3`, `c6ea796d`), not twice. **Why (a) and not (b):** `A3`'s link to metrics.md was a
+cross-check, made on the assumption that metrics.md was right ("the one record that got this right", § Out of scope).
+That assumption is now refuted. If `A3` keeps the 13, the register would have to drop two real moves or block forever.
+Under (b), a `P2` record ticket waits on a repair that none of its ordinals depend on, which fails INVEST
+*independent*. The live metrics row is repaired as its own ticket, **`ABC-156`**. Reasoning and the re-derivation
+are in `.grugops/context/bapm-amend-ABC-039/notes/`.
+
+**Current cites** (re-resolved at `6c1257dd`; these replace `:185`, `:969` and `:437`): #1 `plans/board.md:1001`;
+#2 `ABC-009-board-history.md:814–815` (wrapped; the `A2` check from the 2026-10-12 amendment stands);
+#3–#8 unchanged (`:17`, `:451`, `:786`, `ABC-025-…:37`, `ABC-019-…:24`, `ABC-016-…:52`);
+#9 `plans/traceability.md:438`. Lines drift; re-resolve each by its quoted text.
+
+**Criteria amendments (2026-10-17):**
+- **`A3`** ~~in the window `plans/metrics.md`'s Rework-rate row covers (through 2026-08-12) … equals that row's total~~ →
+  **Given** the register, **then** its chronology lists every backward column move made by a commit at or before
+  `3215004c` (inclusive), in **git commit order**. A backward move is a ticket whose `plans/board.md` row moves to an
+  earlier column. Commit order is used because record dates and git dates differ by about a day on 08-11 and 08-12.
+  One exclusion, stated so two readers build the same table: `47b5b935` (`ABC-013` `Done` → `Ready for UAT`) corrects a
+  false merge record and is not a move. **The row count is 15.** The window is a commit, so this number cannot drift. A
+  derivation that does not reach 15 is a STOP, not a reason to edit the table to fit. Each row names ticket, record
+  date, from-column → to-column, the `file:line` it was read from, and its commit, and
+  `git merge-base --is-ancestor <commit> 3215004c` exits 0 for every row. Each corrected ordinal in `A2` equals that
+  move's 1-based position: `ABC-009` 08-09 = **2** (#1–#5, #9), `ABC-025` = **3** (#6), `ABC-016` first 08-11 = **4**
+  (#7), `ABC-019` first 08-11 = **5** (#8).
+- **`A4`** gains **(c)**. The register states that `plans/metrics.md:28` reads **13**. Re-read it at the tip and do not
+  paste the number. It also states that the source has **15**, that the gap is exactly `ABC-017` (1 vs 2) and `ABC-019`
+  (2 vs 3), that every other per-ticket count matches, and that `ABC-156` owns the repair. Three defects, each named
+  separately.
+- **§ Out of scope, `plans/metrics.md`:** ~~does not need repair … the one record that got this right~~ → it **does**
+  need repair (its 13 is defect (c) above), and that repair is `ABC-156`'s. **This ticket still writes zero lines
+  there.**
+- **`A5`** adds one allowed file: `plans/tickets/ABC-156-*.md`, added by this BA/PM hop on this branch, **0 lines
+  changed after `bapm-amend-ABC-039`'s commit**. The rest of the 2026-10-12 list stands as written, and
+  `plans/metrics.md` stays at **0** lines.
+- `A1`, `A2`, `A6` (≤ 60 lines: 9 + 15 rows fit) and `A7` are unchanged.
+
+**DoR re-check: 10/10.** Items 1 ✅, 2 ✅ (metrics.md exclusion corrected and still fenced), 3 ✅ (now independent of
+`ABC-156`), 4 ✅ (`A3` has a fixed window, a fixed count and a per-row ancestry check; `A4` (c) is checkable against
+`:28`), 5 ✅ (`ABC-156` depends on this ticket, not the other way round), 6 ✅ (0 `src/` lines, `N8-LANE` zero), 7 ✅,
+8 ✅ `S`, 9 ✅ `P2`, 10 ✅ (no owner word needed). **Resume the SE hop on this branch.**
+
+## Delivery — 2026-10-17 (Software Engineer, subtask `resume-ABC-039`)
+
+- **Register:** `plans/tickets/history/backward-move-ordinals.md`, 59 lines (`A6`). It has 9 statement rows (`A2`, `A7`),
+  15 chronology rows at or before `3215004c` with every commit an ancestor (`A3`), and defects (a), (b), (c) plus the
+  `+1` refutation (`A4`). Corrected ordinals: `ABC-009` **2**, `ABC-025` **3**, `ABC-016` **4**, `ABC-019` **5**.
+- **`A1` is owed by the Orchestrator.** Exact line and text are in `.grugops/context/resume-ABC-039/notes/`.
+- `plans/metrics.md`, the archive, `src/` and `plans/board.md` are untouched (`A5`). Gates are in the same notes.
+
+## QE
+
+QE/E2E, 2026-10-17 (subtask `qe-ABC-039`, tip `7338ee3e`, base `e7d9d657`; width 3, beside `qe-ABC-056`).
+**Verdict: PASS_WITH_GAPS.** The detail is in `.grugops/context/qe-ABC-039/notes/` (decision `…ada5d5f9`).
+
+- **`A1`–`A7` MET, every one re-read by QE.**
+  - **`A3`, derived blind.** QE walked all 173 `plans/board.md` commits up to `3215004c` before opening the register.
+    It got 16 hits; excluding `47b5b935` leaves **15**, the same commits in the same order, all ancestors of `3215004c`.
+    The ordinals come out at 2, 3, 4 and 5.
+  - **Cites.** All 15 chronology cites and all 9 labels resolve at the tip. #2 hits `:814`, with `:815` as its
+    continuation. `grep -rlF` lists the register for 9 of 9 labels (`A7`).
+  - **`A4`.** `+1` gives 2, 3, 3, 4. `plans/metrics.md:28` re-read: 13.
+  - **`A5`.** The board diff is 1/1, and `src/`, metrics and the archive are all 0. **`A6`.** 59 lines.
+- **Gates at the tip.** lint, typecheck and build exit 0. `npm test` passes 58 files, 1792/1792. The skip count is 0, and
+  the test-integrity check reports `No findings.`
+- **Gaps.**
+  - **`QE-039-a` (LOW).** `plans/traceability.md` will conflict append-against-append with `main`. Keep both sets of
+    rows.
+  - **`QE-039-b`–`d` (INFO).**
+    - #1's quoted text no longer exists on the board after `A1`, so it resolves by row.
+    - `ABC-011`'s board row landed in `Ready for Dev`, while the record says `In Design`; the register states both.
+    - Record dates are not monotonic in git order.
+- **UAT-waiver reading:** empty (0 production `src/` lines). The next column is the Orchestrator's call.
