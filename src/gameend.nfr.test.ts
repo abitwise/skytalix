@@ -10,7 +10,7 @@
  * assertion below fails on one of them.
  *
  * This lives in its own file on purpose: a `vi.mock` factory is hoisted to file scope, so putting
- * it in `gameend.test.ts` would re-route the module graph for all 45 tests there to buy three
+ * it in `gameend.test.ts` would re-route the module graph for every test there to buy three
  * assertions. Here it re-routes nothing else.
  *
  * These are CALL-COUNT bars only. Wall-clock cost is not asserted anywhere in this suite — it is
