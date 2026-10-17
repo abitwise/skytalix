@@ -126,3 +126,22 @@ BA/PM, 2026-10-12. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's.
+
+## Delivery
+
+Software Engineer, 2026-10-17 (subtask `ticket-to-pr-ABC-155`). Branch `grugops/ABC-155-last-char-refusal` from
+`main` `c9746851`; code commit `819e6933`. The detail is in `.grugops/context/ticket-to-pr-ABC-155/notes/`.
+**No timing reading was taken.**
+
+- **Shape:** appended at the end of the `A1/A2` `it`, after the per-file loop has restored every file. File
+  `e.tsv` (`SOURCE_FILES[4]`); its expected hash with the last hex char moved to the next digit, modulo 16; every
+  other file keeps its own hash. The 3-of-3 check and the output-absent check reuse the loop's shape.
+- **`A1`:** refused; 3 of 3 (`e.tsv`, altered expected, actual); fresh scratch output absent. PASS.
+- **`A2`:** `Q-PREFIX` base green (19 passed), head red (1 failed: `[ 'e.tsv', …(2) ]`). `Q-CASE` green on both.
+  `M05`, `M-SWAP`, `M06` red on base and head (1 failed each). Unmutated head 19/19 green. PASS.
+- **`A3`:** one path, 0 new files, one hunk inside the `it`; `cmp` 0 on base 1–315 / head 1–315 and base 316–EOF /
+  head 336–EOF; `compile.ts` and `book.json` `cmp` 0; 0 spawns at base and head; `npm test` 58 files / 1792 tests
+  at base and head, 0 skipped. PASS.
+- **Gates:** lint, typecheck, build and `npm test` exit 0; `last-run.json` `success: true`; integrity `No findings.`
+- **UAT waiver reading:** `git diff --name-only c9746851 819e6933 | grep -v '\.test\.ts$' | grep '^src/'` is empty.
+- **Owed:** the QE hop.
