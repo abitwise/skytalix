@@ -282,3 +282,32 @@ clause (b) limb 1, which is the hop where `A4`'s `npm audit` comparison runs.
 true at the tip); 5 ✅ (none); 6 ✅ (0 `src/` lines, 0 test files, clause (a) still set against `A5`); 7 ✅; 8 ✅ `XS`; 9 ✅ `P2`;
 10 ✅ (the owner's 2026-10-12 word *"Re-state the accepted risk"* settled the only open question; this ruling is BA/PM's and
 needs no owner word). **The Release Manager resumes at `A3`.**
+
+## Delivery — 2026-10-17 (Release Manager, subtask `resume-ABC-056`, branch `grugops/ABC-056-restate-ar-1` from `6d24c5d1`)
+
+**`AR-1` is re-stated** in decision note
+`.grugops/context/ticket-to-pr-ABC-056/notes/20261017T102600Z-release-manager-decision-ar1-restated-718112dd.md`
+(`refs: [AR-1, ABC-056]`, `supersedes` empty). That note holds the authoritative text, and this section only maps
+it to the criteria. I re-ran every command at 10:25Z–10:26Z on 2026-10-17 and copied none of them. Nothing was
+installed or fixed.
+
+- **`A1` MET.** The new reason: *no package from the npm tree is loaded on the runtime path.* The tree is dev-only
+  (checks 1–2), and `node src/cli.ts` imports only relative modules plus the recorded built-in set (check 5). This
+  reason covers all three advisories using only their `dev: true` flag. No package-specific argument is involved.
+- **`A2` MET.** `npm audit`, 2026-10-17T10:25Z, exit 1, found 3 (1 moderate, 2 high):
+  `nanoid` high GHSA-2v37-7h3g-55p8; `postcss` moderate GHSA-fxqj-rqcc-2cmp; `source-map-js` high
+  GHSA-68fv-2mgg-jv7q. These are the same (package, id) pairs as 2026-10-12. The note gives the installed version,
+  vulnerable range and path of each, plus the `jq` line to diff against.
+- **`A3` MET** (checks 5a/5b/5c as amended). 1 `npm audit --omit=dev` → `found 0 vulnerabilities`. 2 → `false`.
+  3 → `true`, with no `bin`/`main`/`exports`/`files`. 4 `tsc --noEmit` exit 0, nothing written. 5a empty. 5b empty.
+  5c `node:fs`, which is the recorded set (40 files, 148 specifiers).
+- **`A4` MET.** Re-read `AR-1` when **(1)** any `npm audit` run returns a (package, advisory id) set different from
+  the record, or **(2)** any check 1–5c reads differently from the record, including a 5c set other than `{node:fs}`.
+  Clause (1) fires on a newly published advisory with the lockfile unchanged. Clause (2) is the minimum that BA/PM
+  ruled.
+- **`A5` MET.** `git diff --numstat main...HEAD -- package.json package-lock.json` is empty, and
+  `git diff --numstat main...HEAD -- src/` is empty. Manifest md5s are unchanged (`076a03d7…`, `ed7a5b0c…`).
+  `npm audit fix` was not run.
+
+**Not done here:** the plain `npm audit fix` that npm offers for all three. Applying it would need a separate gated
+ticket, if the owner ever wants one. No board move: the Orchestrator owns it.
