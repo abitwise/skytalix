@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-024` delivered (`a18da7f5`, 58/1810) → In Review; QE `qe-ABC-024` dispatched; SE trace row appended on main. In flight: `qe-ABC-024`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-030` → Done (merged `187167bc`, UAT WAIVED by measurement, gates green 58/1792). In flight: `ticket-to-pr-ABC-024`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-040` → Done (merged `678d2810`, UAT WAIVED by measurement, gates green 58/1792); trace file free again — ABC-030's held SE row appended. In flight: `ticket-to-pr-ABC-024`, `qe-ABC-030`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-040` delivered (`8d2e4f8b`) → In Review; QE `qe-ABC-040` dispatched. In flight: `ticket-to-pr-ABC-024`, `qe-ABC-030`, `qe-ABC-040`._
@@ -790,8 +791,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-024] Castling guards protected only by the opt-in deep lane  (BA/PM, S, P2, epic: EPIC-001, since: 2026-08-10, **DoR 8/10 → 9/10; both original ⚠️ discharged by ABC-023's merge, one NEW ⚠️ opens: `src/moves.ts` md5 `6335b452…` is byte-identical four merges later and the ticket went stale anyway BECAUSE THE LANE GREW AROUND IT — `A4` carries `625` inside a criterion and the lane is 807/28.** Needs a dev/QE re-measurement hop, not a BA/PM hop; both escalation triggers re-checked, still NOT fired) **2026-10-12 re-score: DoR 9 → 10/10 → Ready. `src/moves.ts` md5 `6335b452…` unchanged; 7 survivor mutants re-run on today's default lane: 5 still pass it, 2 die only on unrelated rows (A1/A2/A5 re-based so those don't count). Test-only; can run beside ABC-095 or ABC-101.** **2026-10-17: pulled on owner word → In Development (width 3; ABC-030/024 hand trace rows back so ABC-040 splices alone; ABC-040 merges first).**
+## In Development (WIP 0/3)
 
 
 
@@ -819,7 +819,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-024] Castling guards protected only by the opt-in deep lane  (BA/PM, S, P2, epic: EPIC-001, since: 2026-08-10, **DoR 8/10 → 9/10; both original ⚠️ discharged by ABC-023's merge, one NEW ⚠️ opens: `src/moves.ts` md5 `6335b452…` is byte-identical four merges later and the ticket went stale anyway BECAUSE THE LANE GREW AROUND IT — `A4` carries `625` inside a criterion and the lane is 807/28.** Needs a dev/QE re-measurement hop, not a BA/PM hop; both escalation triggers re-checked, still NOT fired) **2026-10-12 re-score: DoR 9 → 10/10 → Ready. `src/moves.ts` md5 `6335b452…` unchanged; 7 survivor mutants re-run on today's default lane: 5 still pass it, 2 die only on unrelated rows (A1/A2/A5 re-based so those don't count). Test-only; can run beside ABC-095 or ABC-101.** **2026-10-17: pulled on owner word → In Development (width 3; ABC-030/024 hand trace rows back so ABC-040 splices alone; ABC-040 merges first).** **2026-10-17: delivered (`a18da7f5`, tip `290a9f86`; +280/−0 in one test file, `src/moves.ts` md5 unchanged; all 7 survivors now die in the default lane, 15 controls still survive; 58/1810) → In Review; QE `qe-ABC-024` dispatched.**
 
 
 
