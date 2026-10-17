@@ -493,6 +493,19 @@ one.** Zero `src/` lines and zero test lines at this hop; every measurement ran 
 repository, so the no-wall-clock-in-the-suite rule is not engaged and `NFR-008`'s lane budget is not
 charged.
 
+### ONE NOTE ADDED 2026-10-17 by Architect/Design (task `wave-2026-09-25`, subtask `design-ABC-096`) — the opening name on the frame path (`ADR-0043`). **No target, bar or table row moves.**
+
+- **What changes.** `ABC-096` puts one injected lookup on the frame path, `openingName(position)` on the session's
+  book probe. It costs one `zobristKey`, its hex and one `Map.get`, which is **about 0.33 µs per frame**
+  measured warm, against an 8.25 µs frame.
+- **Why the `O(window)` statement still holds.** The lookup is `O(1)` in plies.
+- **The once-per-process parse moves.** The book probe's parse used to run on the engine's first ply. It now runs
+  just before frame 0, which is **`NFR-007`'s window** (`< 2 s`), not this row's per-frame bar.
+  - Measured in a fresh process: **6.4–6.9 ms**, and **24.4 ms** on one run with a cold disk cache.
+  - Machine: Node v26.11.1, darwin-arm64, load average about 4. `UNKNOWN - verify` elsewhere.
+- **What the delivering hop owes.** It measures the frame with a name present, and the first frame with the parse
+  in it, on the delivered build. Readings: `.grugops/context/design-ABC-096/notes/`.
+
 ## Notes on the measured rows (NFR-001, NFR-003, NFR-005)
 
 Seeded 2026-07-24. Every target above is transcribed from its epic's stated `NFR triggers`
