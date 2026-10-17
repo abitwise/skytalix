@@ -1,9 +1,9 @@
 ---
-id: 20261017T153500Z-software-engineer-decision-abc096-build-to-adr0043-3c9e1a7f
+id: 20261017T123500Z-software-engineer-decision-abc096-build-to-adr0043-3c9e1a7f
 kind: decision
 by: software-engineer
 task: ticket-to-pr-ABC-096
-at: 2026-10-17T15:35:00Z
+at: 2026-10-17T12:35:00Z
 verified_by:
 confidence: high
 refs:

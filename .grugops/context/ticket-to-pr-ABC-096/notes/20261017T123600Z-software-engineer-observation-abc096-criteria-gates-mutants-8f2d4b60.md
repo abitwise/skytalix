@@ -1,16 +1,16 @@
 ---
-id: 20261017T153600Z-software-engineer-observation-abc096-criteria-gates-mutants-8f2d4b60
+id: 20261017T123600Z-software-engineer-observation-abc096-criteria-gates-mutants-8f2d4b60
 kind: observation
 by: software-engineer
 task: ticket-to-pr-ABC-096
-at: 2026-10-17T15:36:00Z
+at: 2026-10-17T12:36:00Z
 verified_by:
 confidence: high
 refs:
   - ABC-096
   - ADR-0043
   - NFR-002
-  - 20261017T153500Z-software-engineer-decision-abc096-build-to-adr0043-3c9e1a7f
+  - 20261017T123500Z-software-engineer-decision-abc096-build-to-adr0043-3c9e1a7f
 supersedes:
 ---
 
