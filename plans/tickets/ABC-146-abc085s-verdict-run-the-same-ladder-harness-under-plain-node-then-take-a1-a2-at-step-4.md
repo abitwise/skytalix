@@ -281,3 +281,91 @@ code, if one paired re-read of the factor puts that run inside the 7–13 h band
 | 8 | size assigned | ✅ `XS` on either route |
 | 9 | priority assigned | ✅ `P1` |
 | 10 | no major unresolved blocker | **⚠️** the route needs the owner's word |
+
+## Amendment — 2026-10-17: the owner's route, "Re-measure, then vitest"
+
+BA/PM (task `wave-2026-09-25`, subtask `bapm-cut-followups`), at `main` `1671f24f`. **No timing was read here.** The
+facts below were re-read at `1671f24f`. Notes: `.grugops/context/bapm-cut-followups/notes/`.
+
+**The owner's word, 2026-10-12** (transcribed in `.grugops/context/wave-2026-09-25/notes/…owner-word-2026-10-12-backlog-rescore-19019ec0`,
+not a stamp): *"Re-measure, then vitest (Recommended)": one paired re-measurement of the factor first; if the in-vitest run
+(`LADDER_DEEP=verdict npx vitest run src/ladder.test.ts`) fits the accepted 7–13 h band, the verdict runs there with no new
+code; otherwise fall back to plain node as accepted.* This answers the 2026-10-12 owner question above. The ticket now has
+two routes, and `A0` picks one. The title and the sections above describe route N; they stand for that route.
+
+**Re-read at `1671f24f`.**
+- `src/ladder.test.ts` is byte-identical to `1031911b` (md5 `bba67b75565b4f4a2e8d231e8bcd6b2e`). `src/levels.ts` and
+  `src/virtual-clock.ts` are unchanged since `1031911b`. The only engine-path commit since then is `ABC-083`'s
+  (`79248602`, merged `f00038ef`), which is the tree the verdict is for.
+- `f00038ef` (`ABC-083`) and `7a920ca5` (`ABC-152`) are ancestors of `1671f24f`.
+- `LADDER_DEEP=verdict` is accepted inside vitest today (`src/ladder.test.ts:70`), and the deep rows carry no wall
+  timeout (`:552-556`). `vitest.config.ts` holds `maxWorkers: 2` and `experimental: { viteModuleRunner: false }`
+  (`:107-108`). vitest `~4.1.11`, node `v26.11.1`.
+
+### `A0` (new): the paired factor reading, then the route
+
+- **`A0` (the factor, pre-registered, counts first).** **Given** this ticket's branch point on `main` (it contains
+  `f00038ef` and `7a920ca5`), **when** `chooseMove(start, 4 000 ms, virtualClock(120))` (the workload of the 4.35x
+  reading, `ticket-to-pr-ABC-085/notes/…70684a78`) runs **5 times under plain `node` and 5 times inside vitest with
+  the repository's own config**, as 5 interleaved pairs, **at width 1** (no other hop and no other lane running),
+  **then** the record states:
+  - the node count of each of the 10 runs. **They must all be equal**; if they are not, the reading is void and is
+    re-taken, never graded;
+  - each pair's ratio (vitest wall ÷ node wall), their median `F`, and their largest `F_hi`;
+  - load1, the thermal state, and the node and vitest versions.
+
+  The workload, `n = 5` and the route rule below are committed before the first run. Security/NFR takes the reading
+  (the 2026-10-12 re-score's route (a)); the Orchestrator schedules the window.
+- **The route rule.** The plain-`node` verdict was accepted at **~10 h (7–13)**. The in-vitest projection is
+  10 h × `F_hi`.
+  - **Route V (vitest)** when 10 h × `F_hi` **≤ 13 h**, that is `F_hi` ≤ **1.30**.
+  - **Route N (plain `node`)** otherwise. The page above stands as written for that route.
+  - *Reading stated, not silent (coding rule 1):* "fits the band" is read as the band's upper end against the worst
+    of the 5 pairs. A reading on the median `F` would pick route V more often. If the owner means the median, he says
+    so and the rule changes before `A0` runs, not after.
+- **Staleness of `A0`.** A merge that changes `vitest.config.ts`, the vitest or node version, or the `PUZZLE_DEEP`
+  engine trigger list before the verdict starts makes `A0` stale. It is re-taken.
+
+### What each route keeps
+
+| criterion | route V (vitest) | route N (plain `node`) |
+|---|---|---|
+| Scope 1–4, `A1`–`A4` | **cancelled**: no code is moved or written | as written above |
+| `A5` (the verdict) | as written, with the command `LADDER_DEEP=verdict npx vitest run src/ladder.test.ts`, run directly and never through `npm test` (its 60 s bound would end it). The report adds the runner and its version, read with `npx vitest --version` and `node --version` | as written above |
+| `A6` (fences, manners) | **0 changed lines in the whole repository outside records**: `git diff --name-only <base> -- src/ tools/ vitest.config.ts package.json` is empty. The serial-run and window rules stand | as written above |
+| `A7` (new, below) | owed | owed |
+
+**On route V, if the vitest run exits non-zero before 180 of 180 games terminate and replay** (a crash, not a red
+score), no score is quoted from it. The owner's word does not cover that case, so the Orchestrator takes it to the
+owner with route N named as the next step.
+
+### `A7` (new): the ADR says what ran
+
+Folded here from the Orchestrator's follow-up list (item 13 of `bapm-cut-followups`), instead of a ticket of its own.
+- **`A7`.** **Given** the route `A0` picked, **before any verdict number is quoted**, **then**:
+  - `ADR-0038`'s addendum headings no longer say PROPOSED. At `1671f24f`, `:196` reads "ADDENDUM 2026-10-11 (PROPOSED;
+    owner acceptance owed)" and `:235` reads "Decision 5, amended (PROPOSED)", although § Status `:12` records the
+    addendum ACCEPTED on 2026-10-11. Check: `grep -nE '^#+ .*PROPOSED'` over the ADR prints nothing;
+  - **on route V**, a dated second addendum states that the verdict ran inside vitest, and cites `A0`'s reading.
+  - Owner: **Architect/Design** (the ADR's owner). The edit is records only.
+
+### Size, priority, DoR
+
+**`XS` on either route** (route V: one reading and one run; route N: unchanged). **`P1`, inherited, unchanged.**
+
+**Re-score: 10 of 10** (from 8 of 10 on 2026-10-12).
+
+| # | item | verdict |
+|---|---|---|
+| 1 | problem clear | **✅** the premise is now measured by `A0` before any route is built, and the rule that reads it is fixed in advance |
+| 2 | scope and out-of-scope clear | ✅ per route, in the table above |
+| 3 | INVEST-shaped | ✅ the negotiation is settled by the owner's word |
+| 4 | acceptance testable and measurable | ✅ `A0`: equal node counts, `F_hi` ≤ 1.30 or not; `A5` 180 of 180; `A7` a grep that prints nothing |
+| 5 | dependencies known | ✅ `ABC-083` and `ABC-152` are on `main`; the reading needs a width-1 window, which is scheduling |
+| 6 | security/NFR triggers with a measurable target | ✅ unchanged; `A0` is the one timing reading, at width 1 |
+| 7 | test notes present | ✅ five above; test note 3 applies to route N only |
+| 8 | size assigned | ✅ `XS` |
+| 9 | priority assigned | ✅ `P1` |
+| 10 | no major unresolved blocker | ✅ the route is the owner's, and he has given it |
+
+**Recommended: `Backlog → Ready`.** Column moves are the Orchestrator's.
