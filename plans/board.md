@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "pull ABC-156" → In Development; SE `ticket-to-pr-ABC-156` dispatched. In flight: that hop only._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-024` → Done (merged `af92964e`, UAT WAIVED by measurement, gates green 58/1810). All three pulled tickets Done; worktrees and branches removed. Owed: BA/PM cut for `QE-024-a` (MEDIUM). In flight: none. Ready: `ABC-156`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-024` delivered (`a18da7f5`, 58/1810) → In Review; QE `qe-ABC-024` dispatched; SE trace row appended on main. In flight: `qe-ABC-024`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-030` → Done (merged `187167bc`, UAT WAIVED by measurement, gates green 58/1792). In flight: `ticket-to-pr-ABC-024`._
@@ -775,8 +776,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [EPIC-005] Opening book  (owner: BA/PM, **size: M — corrected from `S`; the cutter stopped at `M` deliberately, refusing the M→XL/M→L precedent as "a pattern, not evidence", since `L` would claim the book is the size of `EPIC-004`'s whole engine**, priority: P1, since: 2026-07-22, **DECOMPOSED 2026-08-16 into `ABC-092`…`ABC-096`. The WORK is pullable today — 4 of 5 tickets need nothing from `EPIC-004` — but the VALUE is not deliverable until `EPIC-004` lands; collapsing those two is how a board lies.** `EPIC-001`'s dependency verified DISCHARGED by reading the tree, not the front matter; `ABC-095` is the only hard blocker. Largest ticket `M`, no `SPLIT_REQUIRED`)
 - [EPIC-006] Game session and packaging  (owner: BA/PM, **size: XL — corrected from `L`; 9 tickets / 20 points across both halves, ~1.5x the 13 `L` was assigned, and it hit that ceiling BEFORE distribution was priced**, priority: P1, since: 2026-07-22, **BOTH HALVES NOW CUT: the runnable half `ABC-041`…`ABC-046` (2026-08-13) and the second half `ABC-100`…`ABC-102` (2026-08-16) — only THREE tickets, because the scope of packaging is a FUNCTION of a distribution channel nobody has chosen.** `ABC-100` cuts the DECISION, never the ANSWER: a superseding ADR per `ADR-0007` `D5`, on the owner's word, verbatim and dated. **Acceptance criterion 1 (`npx <package>`) remains unmeetable by any ticket. Recommendation NOT taken, standing for the owner: this should probably be two epics** — the halves share no dependency in either direction and their blockers differ in kind)
 
-## Ready (WIP 1/8)
-- [ABC-156] plans/metrics.md's Rework-rate row says 13 backward moves; the source has 15 — ABC-017 and ABC-019 are each one short  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-amend-ABC-039` (`e1a62a6b`) as ABC-039's defect (c); its one blocker, ABC-039's merge, discharged at `bf9c01db` → Ready.)
+## Ready (WIP 0/8)
 
 
 
@@ -792,7 +792,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-156] plans/metrics.md's Rework-rate row says 13 backward moves; the source has 15 — ABC-017 and ABC-019 are each one short  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-amend-ABC-039` (`e1a62a6b`) as ABC-039's defect (c); its one blocker, ABC-039's merge, discharged at `bf9c01db` → Ready.) **2026-10-17: pulled on owner word → In Development; SE `ticket-to-pr-ABC-156` dispatched.**
 
 
 
