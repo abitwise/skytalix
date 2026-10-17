@@ -677,3 +677,42 @@ Branch `grugops/ABC-024-castling-default-lane`, cut from `b84dc637`. Code commit
 - **`A5` MET.** All seven named mutants die on an `A1` or `A2` row with `PERFT_DEEP` unset. All 15 controls
   survive at base and with the rows, so this ticket adds 0 kills.
 - **Security trigger not fired:** +280 is under +525, and only one file changed.
+
+## QE — 2026-10-17 (QE/E2E, subtask `qe-ABC-024`): **PASS_WITH_GAPS**
+
+I reviewed tip `290a9f86` (code `a18da7f5`, base `b84dc637`). No timing was read. I re-planted every mutant myself, on
+my own instrument, before I opened the SE's harness. I ran it on `git archive` trees of base and head outside the
+repo, with one fresh `tsc` and one fresh `vitest` per state, `PERFT_DEEP` unset, and the md5 re-asserted after every
+state. Evidence: `.grugops/context/qe-ABC-024/notes/` (decision `…e84b25c9`) and `…/probe/`.
+
+- **The seven named mutants:**
+  - at base, `BK` g8, `BQ` b8, `BQ` c8, R-half and R-ep survive 1792/1792;
+  - at base, `BQ` d8 (book A2) and R-full (262 nodes) die on one incidental row each;
+  - at head, all seven die on an `A1`/`A2` row.
+  
+  All 62 base/head counts equal the SE's.
+- **`A1` MET.** Each of the ten drops fails its own `A1` row and no other `A1` row. The ten row FENs also parse
+  under the strict `parseFen`.
+- **`A2` MET.** R-half fails 2 rows, R-ep 2, R-full 4. The controls give 2 castles at 26.
+- **`A3` MET.** 14/14 test-file discriminators go red. A black corridor widened in production turns the corridor
+  quantifier red.
+- **`A4` MET.** The md5 is unchanged at base and tip. The diff adds lines only, 1 file under `src/`. The suite goes
+  58/1792 → 58/1810, skip 0, `No findings.` Deep perft is 32/32.
+- **`A5` MET.** The fifteen controls survive 15/15 at base and 15/15 at head, so this ticket adds 0 kills.
+  The SE's encodings match `ABC-023` A5's prose list 1:1, and so do mine, written blind.
+- **Gates on `290a9f86` are green:** lint, typecheck, build, and `npm test` 1810/1810.
+- **Security threshold not fired** (+280, one file). I read the added lines anyway: nothing found.
+- **UAT-waiver reading:** the production-`src/` grep on `b84dc637...290a9f86` is empty, so the waiver applies.
+  Waived is not signed.
+
+**Gaps.** None blocks.
+- **`QE-024-a` MEDIUM, for BA/PM to cut; outside this ticket.** The right-**mask** mutant
+  (`castling & option.right` → `castling !== 0`) survives the whole default lane at base and at head. It offers
+  castles on `w kq` with no white right held. It dies only at `PERFT_DEEP=1` `position-5 perft(4)`, 31/32. This
+  page's own § The judgement rules that such a guard is owed a default-lane row.
+- **`QE-024-b` LOW.** The fifteen controls exist upstream only as prose. Two committed encodings now agree.
+- **`QE-024-c` INFO.** Both `A2` controls are white.
+- **`QE-024-d` INFO.** The readings were taken at base `b84dc637`. `main` has since taken `ABC-030`'s three
+  comment-only lines.
+
+The escalation triggers are not fired: `src/moves.ts` and `src/perft.test.ts` are untouched.
