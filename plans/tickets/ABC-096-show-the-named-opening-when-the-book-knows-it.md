@@ -435,3 +435,35 @@ detail is in `.grugops/context/qe-ABC-096/notes/` (verdict `…e5a80c37`). **No 
     `Blackmar-Diemer Ga...`.
   - **`QE-096-g` INFO.** The cut is made before `sanitize`. No shipped family is affected.
   - **`QE-096-h` INFO.** `cli.test.ts`'s reference frames are a consistency check, not a name oracle.
+
+## Security/NFR — 2026-10-17
+
+Security/NFR (subtask `secnfr-ABC-096`) at tip `c11bfec8`, code `a48da51c`, base `6edadcf0`. **Result: PASS_WITH_RISKS.
+0 required fixes; 2 accepted LOW risks.** The detail is in `.grugops/context/secnfr-ABC-096/notes/` (result `…e1c94a07`).
+`src/` was not edited.
+
+- **Clause (b)** (`ADR-0036` § Canonical clause (b), canonical instrument, pair `6edadcf0..c11bfec8`):
+  - limbs 1, 2 and 3 do **not** fire: 0 (b1) lines and 0 new runtime edges. The seam's new `BookProbe` import is
+    `import type`, and `HISTORY_COLS` rides an existing edge.
+  - **Ruling 2 by hand** (holders `{src/book-file.ts}` at base and head): 0 lines changed in the holder, so it does not
+    fire.
+- **Escape bar (`A3`, G7)** on emitted frames, 14 hostile names in each mode: 0 ESC, 0 C0, 0 DEL, 0 code points above
+  `U+007F` in ASCII mode, and 23 rows.
+- **Narrowed type:** `Pick<BookProbe, "openingName">` behind `import type`. This is a compile-time control on one call
+  site, and it is adequate.
+- **No new file read, dependency or spawn.**
+- **`QE-096-d` discharged.** One pre-registered window (`92b73c49`), clean: no foreign vitest or platform process,
+  thermal 0, AC power, load1 4.5–5.2. Apple M3, Node v26.11.1. `UNKNOWN - verify` elsewhere.
+  - **`A4` `< 16 ms`: MET**, max 0.447 ms. A 1 MiB name reads 0.517 ms, and the real probe 1.861 ms worst.
+  - **`NFR-007` first call `≤ 30 ms` cold: MET**, max 6.047 ms, in a real `npm run chess` child. The first call is
+    `openingName`, with the one read inside it.
+  - **`NFR-007` `< 2 s`: MET**, max 222.1 ms to frame 0.
+- **Accepted risks:**
+  - **`AR-096-C1CP`** (LOW, owner the Orchestrator). In unicode mode, C1 and bidi code points in a book name reach the
+    terminal. 0 shipped names carry one.
+    - Recommended: an `XS` follow-up that widens `tools/opening-book/compile.ts`'s C0/DEL/ESC refusal to
+      `U+0080`–`U+009F`, before the next re-pin of the source.
+    - This is **not** the catalog's C1-byte ruling, and `sanitize` does not change.
+  - **`AR-096-DISKCOLD`** (LOW, owner Architect/Design). A page-cache-cold first call was not read; it needs
+    `sudo purge`. The only figure for it is the Architect's single 24.4 ms run.
+- **Next:** `Ready for UAT` (the Orchestrator's move). UAT is **not** waived.

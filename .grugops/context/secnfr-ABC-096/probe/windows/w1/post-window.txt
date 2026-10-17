@@ -1,0 +1,3 @@
+post-window snapshot 2026-10-17T13:14:35Z: load { 3.59 4.09 4.10 } thermal 0 vitest 4 platform 0 power AC Power cli.ts children 0
+re-check 2026-10-17T13:14:46Z: runner procs 0 list: 
+note: the first line's 'vitest 4' is a SELF-MATCH: that snapshot's own bash -c command line carried the literal word 'vitest', which '[v]itest' matches (AGENTS.md's pgrep trap, in another form). The re-check builds the pattern from a variable, so its own command line holds no match; it reads 0. The window's own sampler and gate run from script files, whose command lines hold no such word.
