@@ -126,3 +126,57 @@ BA/PM, 2026-10-17. **Result: 10 of 10.**
 | 10 | no major unresolved blocker | **✅** none |
 
 Column moves are the Orchestrator's.
+
+## Delivery — 2026-10-17 (Software Engineer, subtask `ticket-to-pr-ABC-157`)
+
+Branch `grugops/ABC-157-castling-one-right`, cut from `aa37f9cb`. The code commit is `968a5843`: +90/−0 to
+`src/moves.castling.hardening.test.ts` and nothing else. No timing was read. Evidence is in
+`.grugops/context/ticket-to-pr-ABC-157/notes/`; the instrument and raw logs are in `…/probe/`.
+
+- **The gap, shown first, at base `aa37f9cb` (1824 tests on 58 files).** `X-any-right` passes 1824/1824
+  with `PERFT_DEEP` unset. `src/moves.ts` md5 is `6335b452fc21ffe2d0f902ecab930840`.
+- **`A1` MET.** There are 4 rows (`w K`, `w Q`, `b k`, `b q`). Each first asserts the single right bit, then that
+  both of the mover's castles are alive but for the right. Then it checks the one castle by name at
+  `generateMoves` and at `legalMoves`, then the count 25, then that the position is unchanged.
+- **`A2` MET.** There are 2 rows (`w kq`, `b KQ`). Each first asserts that the mover holds 0 of its own bits and
+  the opponent holds both. Then it checks that no castle is offered at either layer, and the count 24.
+- **`A3` MET.** The committed ABC-024 harness was re-run with `X-any-right` added: 32 tree states per tree,
+  0 harness errors.
+  - `X-any-right` is green at base and **red at head on exactly the six new rows**.
+  - The seven named ABC-024 mutants and both class controls are killed at base and head, and their
+    failure lists are identical apart from ABC-157 rows.
+  - EQ01–EQ15 survive at base and head, so this ticket adds 0 kills.
+  - Witness on the any-right build: 26 on all six rows.
+- **`A4` MET.** `git diff --name-only aa37f9cb 968a5843` lists the one test file, and `-U0` shows 0 removed lines.
+  The md5 is unchanged. `npm test` gives 58 files, 1830/1830 (base 58/1824, +6), skip 0, integrity
+  `No findings.` Deep perft is 32/32.
+- **Gates on `968a5843`:** lint, typecheck, build and `npm test`, all exit 0.
+- **Security trigger not fired:** a test-only diff in one file, with no input path, network or dependency.
+
+## QE — 2026-10-17 (QE/E2E, subtask `qe-ABC-157`): **PASS_WITH_GAPS**
+
+I reviewed tip `2202b8eb` (code `968a5843`, base `aa37f9cb`). No timing was read. I planted `X-any-right` from this page's
+text on my own runner before I opened the SE's harness. The runs used `git archive` trees outside the repo, the whole
+default lane, every `*_DEEP` unset, and the md5 restored after every state. Evidence: `.grugops/context/qe-ABC-157/notes/`
+(decision `…5e19b0c3`) and `…/probe/`.
+
+- **`A1` MET.** The 4 one-right rows each give the named castle at both layers, then 25.
+- **`A2` MET.** The 2 opponent-only rows each give no castle at either layer, then 24. Each asserts its setup first.
+- **`A3` MET.**
+  - `X-any-right` survives base 1824/1824. At head it fails 6: exactly the six rows.
+  - The committed catalogue, re-run, is byte-identical to the SE's `mutants.base.out` / `mutants.head.out`.
+  - The 7 named mutants are killed at base and head with the same lists.
+  - 15/15 controls survive at both: 0 kills added.
+- **`A4` MET.**
+  - One `src/` file, 0 removed lines.
+  - md5 `6335b452…` at base, code and tip.
+  - 58/1824 → 58/1830 (+6), skip 0, `No findings.`
+  - `PERFT_DEEP=1` perft 32/32.
+- **Gates at `2202b8eb`:** lint, typecheck, build and `npm test`, all exit 0. `merge-tree` against `main` is clean.
+- **UAT-waiver reading:** the production-`src/` grep on `aa37f9cb...2202b8eb` is empty, so the waiver applies.
+  Waived, not signed.
+- **Gaps, none blocking:**
+  - `QE-157-a` LOW: a conjunction variant passes the default lane **and** the deep lane 32/32. It offers the other
+    wing's castle only when the mover holds its other right and the opponent holds a right (`w Qk` → `e1g1 e1c1`).
+    No row holds mixed rights. Outside this ticket's one-right class.
+  - `QE-157-b` INFO: several weaker variants die on one row per colour.

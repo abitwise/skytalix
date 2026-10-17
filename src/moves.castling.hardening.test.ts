@@ -1806,3 +1806,93 @@ describe("ABC-024 A3 — the quantifiers: the corridor and the scalar gap cannot
     }
   });
 });
+
+/**
+ * ------------------------------------------------------------------------------------------------
+ * `ABC-157` — the castling right's MASK, added 2026-10-17. Same premise as every region above: each
+ * row PASSES on the delivered tree (`src/moves.ts` md5 `6335b452fc21ffe2d0f902ecab930840`) and NO
+ * production line changed.
+ *
+ * 12. WHICH right is read — `A1`/`A2`. The right test is `(position.castling & option.right) === 0`.
+ *     A build that reads `position.castling === 0` instead offers a castle whenever ANY right is
+ *     held — the other wing's, or one only the opponent holds — and passed the whole default lane
+ *     (`QE-024-a`): every row above holds either no right or the right of each castle it expects,
+ *     so the bit the test reads was never varied. Six rows on `r3k2r/8/8/8/8/8/8/R3K2R`, every
+ *     corridor clear and no king-path square attacked, so the right is the only thing that decides.
+ *     Four hold ONE wing's right and get exactly that castle; two hold only the OPPONENT's rights
+ *     and get none. On the any-right build each of the six reads 26 legal moves.
+ * ------------------------------------------------------------------------------------------------
+ */
+
+/** `ABC-157` `A1` — exactly one right held; `castle` is the one castle it gives. */
+const ONE_RIGHT_HELD: ReadonlyArray<
+  readonly [right: string, fen: string, castle: string, expected: number]
+> = [
+  ["K", "r3k2r/8/8/8/8/8/8/R3K2R w K - 0 1", "e1g1", 25],
+  ["Q", "r3k2r/8/8/8/8/8/8/R3K2R w Q - 0 1", "e1c1", 25],
+  ["k", "r3k2r/8/8/8/8/8/8/R3K2R b k - 0 1", "e8g8", 25],
+  ["q", "r3k2r/8/8/8/8/8/8/R3K2R b q - 0 1", "e8c8", 25],
+];
+
+/** `ABC-157` `A2` — the side to move holds none of its rights; the opponent holds both of theirs. */
+const OPPONENT_RIGHTS_ONLY: ReadonlyArray<
+  readonly [mover: "w" | "b", fen: string, expected: number]
+> = [
+  ["w", "r3k2r/8/8/8/8/8/8/R3K2R w kq - 0 1", 24],
+  ["b", "r3k2r/8/8/8/8/8/8/R3K2R b KQ - 0 1", 24],
+];
+
+/**
+ * `ABC-157`: both of the mover's castles are alive but for the right — king and rooks home, both
+ * corridors clear, both king paths unattacked — so a castle offered without its own right shows.
+ */
+function expectOnlyTheRightDecides(fen: string): void {
+  expectBothCastlesShapeHolds(fen);
+  const position = parseFen(fen);
+  const black = fen.split(" ")[1] === "b";
+  for (const option of black ? ["k", "q"] : ["K", "Q"]) {
+    const shape = CASTLE_SHAPE[option];
+    if (shape === undefined) throw new Error(`unknown option: ${option}`);
+    expect(
+      shape.kingPath.filter((cell) => isSquareAttackedBy(position, cell, !black)).map(squareName),
+      `the ${option} king path must be unattacked: ${fen}`,
+    ).toEqual([]);
+  }
+}
+
+describe("ABC-157 A1 — one wing's right gives that wing's castle and no other", () => {
+  it.each(ONE_RIGHT_HELD)(
+    "holding only %s offers exactly one castle: %s",
+    (right, fen, castle, expected) => {
+      expect(parseFen(fen).castling, `exactly the ${right} right: ${fen}`).toBe(
+        CASTLE_SHAPE[right]?.right,
+      );
+      expectOnlyTheRightDecides(fen);
+
+      const position = parseFen(fen);
+      const before = fullState(position);
+      expect(castleNames(generateMoves(parseFen(fen))), `generateMoves: ${fen}`).toEqual([castle]);
+      const legal = legalMoves(position);
+      expect(castleNames(legal), `legalMoves: ${fen}`).toEqual([castle]);
+      expect(legal, `legalMoves count: ${fen}`).toHaveLength(expected);
+      expect(fullState(position), `full state: ${fen}`).toBe(before);
+    },
+  );
+});
+
+describe("ABC-157 A2 — the opponent's rights give the side to move no castle", () => {
+  it.each(OPPONENT_RIGHTS_ONLY)(
+    "%s to move, holding none of its rights and the opponent both: %s",
+    (mover, fen, expected) => {
+      const own = mover === "w" ? CASTLE_WK | CASTLE_WQ : CASTLE_BK | CASTLE_BQ;
+      const opponent = mover === "w" ? CASTLE_BK | CASTLE_BQ : CASTLE_WK | CASTLE_WQ;
+      const castling = parseFen(fen).castling;
+      expect(castling & own, `the side to move holds none of its rights: ${fen}`).toBe(0);
+      expect(castling & opponent, `the opponent holds both of theirs: ${fen}`).toBe(opponent);
+      expectOnlyTheRightDecides(fen);
+
+      expect(castleNames(generateMoves(parseFen(fen))), `generateMoves: ${fen}`).toEqual([]);
+      expectNoCastleAndPure(fen, expected);
+    },
+  );
+});
