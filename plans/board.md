@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-156` delivered (`64e9c94d`) → In Review; QE `qe-ABC-156` dispatched. In flight: `design-ABC-096`, `qe-ABC-156`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "continue with ABC-096 in parallel" → `ABC-096` In Design; Architect `design-ABC-096` dispatched. In flight: `ticket-to-pr-ABC-156`, `design-ABC-096`._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "pull ABC-156" → In Development; SE `ticket-to-pr-ABC-156` dispatched. In flight: that hop only._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-024` → Done (merged `af92964e`, UAT WAIVED by measurement, gates green 58/1810). All three pulled tickets Done; worktrees and branches removed. Owed: BA/PM cut for `QE-024-a` (MEDIUM). In flight: none. Ready: `ABC-156`._
@@ -793,8 +794,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-156] plans/metrics.md's Rework-rate row says 13 backward moves; the source has 15 — ABC-017 and ABC-019 are each one short  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-amend-ABC-039` (`e1a62a6b`) as ABC-039's defect (c); its one blocker, ABC-039's merge, discharged at `bf9c01db` → Ready.) **2026-10-17: pulled on owner word → In Development; SE `ticket-to-pr-ABC-156` dispatched.**
+## In Development (WIP 0/3)
 
 
 
@@ -822,7 +822,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-156] plans/metrics.md's Rework-rate row says 13 backward moves; the source has 15 — ABC-017 and ABC-019 are each one short  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-amend-ABC-039` (`e1a62a6b`) as ABC-039's defect (c); its one blocker, ABC-039's merge, discharged at `bf9c01db` → Ready.) **2026-10-17: pulled on owner word → In Development; SE `ticket-to-pr-ABC-156` dispatched.** **2026-10-17: delivered (`64e9c94d`, tip `6d2caf56`; 15 moves, 0.60/ticket, ABC-017 2, ABC-019 3; last ten 7 tickets / 13 moves; gates green 58/1810) → In Review; QE `qe-ABC-156` dispatched.**
 
 
 
