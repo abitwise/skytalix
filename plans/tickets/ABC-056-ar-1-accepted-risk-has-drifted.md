@@ -234,3 +234,111 @@ gated ticket to apply that lockfile fix, after which `ABC-056` records an empty 
 `ABC-152` note cited), 6 ✅ (0 `src/`, 0 test files; security clause (a) still set against `A5`),
 7 ✅, 8 ✅ `XS`, 9 ✅ `P2` (`P1` trigger unchanged and not fired: no runtime dependency, no `bin`,
 nothing published), 10 ✅.
+
+## Amendment — 2026-10-17 (BA/PM, subtask `bapm-amend-ABC-056`, branch tip `10e7aab6`): `A3` check 5 ruled
+
+**Why:** the Release Manager stopped at `A3` check 5 (`…/ticket-to-pr-ABC-056/notes/…abc056-a3-blocked-0d45639e`). Run as
+written, the grep prints `from "node:fs"` (`src/book-file.ts:13`, `ABC-095` `09740ea4`, after the 2026-10-12 re-score). I re-ran
+it at `10e7aab6` and got the same: 40 non-test `src/*.ts` files and 148 specifiers. Measurements and plants are in
+`.grugops/context/bapm-amend-ABC-056/notes/`.
+
+**Ruling 1: check 5 excludes `node:` built-ins.** The check measures what its own sentence says: *"the production import
+graph loads no package"*. A `node:` specifier resolves only to a Node built-in and never to `node_modules`, so it is not a
+package. The 2026-10-12 command matched that sentence only while no production file imported a built-in (`ADR-0036`
+limb 1's baseline was 0 until `ABC-095`). The meaning is unchanged. A built-in written without the prefix (`"fs"`) still
+prints, so the check fails closed. While re-stating the command I closed two blind spots in it. A side-effect
+`import "pkg"` printed nothing before, and a non-literal `import(x)` cannot be seen by any specifier grep. **Check 5 is
+now three commands**, each over `$(ls src/*.ts | grep -v '\.test\.ts$')`:
+
+- **5a, no package specifier:** ``grep -hoE "(from|import *\(?) *['\"][^'\"]+['\"]" $(ls src/*.ts | grep -v '\.test\.ts$') | grep -vE "['\"](\./|node:)"`` → **empty**
+- **5b, no loader the grep cannot see:** ``grep -nE "\brequire *\(|createRequire|import\( *[^'\" ]" $(ls src/*.ts | grep -v '\.test\.ts$')`` → **empty**
+- **5c, the built-in set, recorded as read:** ``grep -hoE "(from|import *\(?) *['\"]node:[^'\"]+['\"]" $(ls src/*.ts | grep -v '\.test\.ts$') | grep -oE "node:[^'\"]+" | sort -u`` → the record states the set it read. 2026-10-17: **`node:fs`** (one specifier, `src/book-file.ts:13`).
+
+At `10e7aab6`: 5a is empty, 5b is empty, 5c is `node:fs`. The widened regex returns the same 148 specifiers as the old one
+(identical when sorted).
+
+**Ruling 2: the reason in `AR-1`'s re-statement does not change. Its record and trigger gain the built-in set.** The
+advisories sit in the npm dev tree, which `npm run chess` (`node src/cli.ts`) never loads. A built-in belongs to the Node
+runtime, not to the tree `npm audit` reads, and an advisory against Node itself is a Node-version question that sits
+outside `AR-1`. The record must still name the built-in set it read, and the trigger must fire when that set changes.
+Some built-ins load code: `node:module` exposes `createRequire`, and `node:child_process` can start a package's binary.
+So a new built-in is the one way a package could reach the runtime path while 5a and 5b stay empty. I did not list which
+built-ins load code, because that list would need upkeep (coding rule 7). The trigger fires rarely, since one built-in
+has appeared in the project's history. Any diff that adds a built-in already routes to Security/NFR under `ADR-0036`
+clause (b) limb 1, which is the hop where `A4`'s `npm audit` comparison runs.
+
+**Criteria amendments (2026-10-17):**
+- **`A3`:** check 5 is 5a + 5b + 5c above, each with its command and output. The record carries the 5c set. Checks 1–4 are
+  unchanged.
+- **`A4`:** the trigger keeps the 2026-10-12 rule, which the Release Manager may adopt or replace. It **must also** fire
+  when any `A3` check reads differently from the record: 5a or 5b non-empty, or a 5c set different from the recorded one
+  (the RM's draft *"if any of the structural checks 1–5 changes its reading"* meets this once 5c is in the record). This
+  clause is the minimum and is not the Release Manager's to drop.
+- `A1`, `A2`, `A5` are unchanged. `XS` and `P2` are kept. The `P1` promotion trigger has not fired: `node:fs` is not a
+  runtime dependency. Scope bullet 3's *"`ABC-042` … ends the zero-production-Node-builtin invariant"* is history:
+  `ABC-095` ended it.
+
+**DoR re-check: 10/10.** 1 ✅ (0 of 3 covered); 2 ✅; 3 ✅; 4 ✅ (check 5 now has three exact commands, and each output is
+true at the tip); 5 ✅ (none); 6 ✅ (0 `src/` lines, 0 test files, clause (a) still set against `A5`); 7 ✅; 8 ✅ `XS`; 9 ✅ `P2`;
+10 ✅ (the owner's 2026-10-12 word *"Re-state the accepted risk"* settled the only open question; this ruling is BA/PM's and
+needs no owner word). **The Release Manager resumes at `A3`.**
+
+## Delivery — 2026-10-17 (Release Manager, subtask `resume-ABC-056`, branch `grugops/ABC-056-restate-ar-1` from `6d24c5d1`)
+
+**`AR-1` is re-stated** in decision note
+`.grugops/context/ticket-to-pr-ABC-056/notes/20261017T102600Z-release-manager-decision-ar1-restated-718112dd.md`
+(`refs: [AR-1, ABC-056]`, `supersedes` empty). That note holds the authoritative text, and this section only maps
+it to the criteria. I re-ran every command at 10:25Z–10:26Z on 2026-10-17 and copied none of them. Nothing was
+installed or fixed.
+
+- **`A1` MET.** The new reason: *no package from the npm tree is loaded on the runtime path.* The tree is dev-only
+  (checks 1–2), and `node src/cli.ts` imports only relative modules plus the recorded built-in set (check 5). This
+  reason covers all three advisories using only their `dev: true` flag. No package-specific argument is involved.
+- **`A2` MET.** `npm audit`, 2026-10-17T10:25Z, exit 1, found 3 (1 moderate, 2 high):
+  `nanoid` high GHSA-2v37-7h3g-55p8; `postcss` moderate GHSA-fxqj-rqcc-2cmp; `source-map-js` high
+  GHSA-68fv-2mgg-jv7q. These are the same (package, id) pairs as 2026-10-12. The note gives the installed version,
+  vulnerable range and path of each, plus the `jq` line to diff against.
+- **`A3` MET** (checks 5a/5b/5c as amended). 1 `npm audit --omit=dev` → `found 0 vulnerabilities`. 2 → `false`.
+  3 → `true`, with no `bin`/`main`/`exports`/`files`. 4 `tsc --noEmit` exit 0, nothing written. 5a empty. 5b empty.
+  5c `node:fs`, which is the recorded set (40 files, 148 specifiers).
+- **`A4` MET.** Re-read `AR-1` when **(1)** any `npm audit` run returns a (package, advisory id) set different from
+  the record, or **(2)** any check 1–5c reads differently from the record, including a 5c set other than `{node:fs}`.
+  Clause (1) fires on a newly published advisory with the lockfile unchanged. Clause (2) is the minimum that BA/PM
+  ruled.
+- **`A5` MET.** `git diff --numstat main...HEAD -- package.json package-lock.json` is empty, and
+  `git diff --numstat main...HEAD -- src/` is empty. Manifest md5s are unchanged (`076a03d7…`, `ed7a5b0c…`).
+  `npm audit fix` was not run.
+
+**Not done here:** the plain `npm audit fix` that npm offers for all three. Applying it would need a separate gated
+ticket, if the owner ever wants one. No board move: the Orchestrator owns it.
+
+## QE
+
+QE/E2E, 2026-10-17 (subtask `qe-ABC-056`). I reviewed tip `e567787c` against base `e7d9d657`, re-ran every command
+myself and copied none of the Release Manager's readings. All plants were in scratch copies outside the repo. The
+detail is in `.grugops/context/qe-ABC-056/notes/` (verdict `…5541ffaa`).
+
+**Verdict: PASS_WITH_GAPS.** `A1`–`A5` are MET on QE's own readings, and every one matches the RM's.
+
+- **`A1`:** all three advisories are `dev: true`, and 0 of 122 lockfile packages lack `dev: true`. A resolve hook on
+  `node src/cli.ts` sees 34 `src/*.ts` files, `node:fs`, and 0 `node_modules` URLs. MET.
+- **`A2`:** `npm audit` at 10:29Z read 3 (1 moderate, 2 high), and its (package, id) pairs diff empty against the
+  record. MET.
+- **`A3`:** checks 1–4 read `found 0` / `false` / `true` / nothing written. 5a and 5b are empty, and 5c is `node:fs`
+  (40 files, 148 specifiers). MET.
+- **`A4`:** a package import and a side-effect import trip 5a, `createRequire` trips 5b, and a new built-in trips 5c
+  alone. A lockfile plant trips clause (1). MET.
+- **`A5`:** both diffs are empty and the md5s are unchanged. MET.
+- **Gates (tip):** lint, typecheck, build and `npm test` exit 0 (58 files, 1792/1792). `last-run.json` is fresh with
+  `success: true`. Integrity `--skip-count 0`: `No findings.`
+- **Gaps:**
+  - **`QE-056-a` (LOW, RM/BA-PM):** check 5 does not see a subdirectory file, a `./../node_modules` path, a spaced
+    `import (x)` or `process.getBuiltinModule`. The first three load `nanoid` while 5a, 5b and 5c stay the same as the
+    record. ADR-0036 (b) fires on all four.
+  - **`QE-056-b` (LOW, RM):** no check pins the "no loader flag" leg or the "dev-only" leg. `scripts.chess` with
+    `--import nanoid` loads it, and an `optionalDependencies` entry reads `false` on check 2. `ABC-041` clause (a)
+    fires on both.
+  - `QE-056-c` (INFO): `npm install` runs the install scripts of `esbuild` and `fsevents`.
+  - `QE-056-d` (INFO): the `A2` `jq` line prints URLs, not ids.
+- **UAT waiver reading:** `git diff --name-only e7d9d657...e567787c | grep -v '\.test\.ts$' | grep '^src/'` is **empty**.
+  The waiver applies by its rule. Applying it is the Orchestrator's.
