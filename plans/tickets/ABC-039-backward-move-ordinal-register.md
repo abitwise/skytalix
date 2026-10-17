@@ -377,3 +377,27 @@ are in `.grugops/context/bapm-amend-ABC-039/notes/`.
   `+1` refutation (`A4`). Corrected ordinals: `ABC-009` **2**, `ABC-025` **3**, `ABC-016` **4**, `ABC-019` **5**.
 - **`A1` is owed by the Orchestrator.** Exact line and text are in `.grugops/context/resume-ABC-039/notes/`.
 - `plans/metrics.md`, the archive, `src/` and `plans/board.md` are untouched (`A5`). Gates are in the same notes.
+
+## QE
+
+QE/E2E, 2026-10-17 (subtask `qe-ABC-039`, tip `7338ee3e`, base `e7d9d657`; width 3, beside `qe-ABC-056`).
+**Verdict: PASS_WITH_GAPS.** The detail is in `.grugops/context/qe-ABC-039/notes/` (decision `…ada5d5f9`).
+
+- **`A1`–`A7` MET, every one re-read by QE.**
+  - **`A3`, derived blind.** QE walked all 173 `plans/board.md` commits up to `3215004c` before opening the register.
+    It got 16 hits; excluding `47b5b935` leaves **15**, the same commits in the same order, all ancestors of `3215004c`.
+    The ordinals come out at 2, 3, 4 and 5.
+  - **Cites.** All 15 chronology cites and all 9 labels resolve at the tip. #2 hits `:814`, with `:815` as its
+    continuation. `grep -rlF` lists the register for 9 of 9 labels (`A7`).
+  - **`A4`.** `+1` gives 2, 3, 3, 4. `plans/metrics.md:28` re-read: 13.
+  - **`A5`.** The board diff is 1/1, and `src/`, metrics and the archive are all 0. **`A6`.** 59 lines.
+- **Gates at the tip.** lint, typecheck and build exit 0. `npm test` passes 58 files, 1792/1792. The skip count is 0, and
+  the test-integrity check reports `No findings.`
+- **Gaps.**
+  - **`QE-039-a` (LOW).** `plans/traceability.md` will conflict append-against-append with `main`. Keep both sets of
+    rows.
+  - **`QE-039-b`–`d` (INFO).**
+    - #1's quoted text no longer exists on the board after `A1`, so it resolves by row.
+    - `ABC-011`'s board row landed in `Ready for Dev`, while the record says `In Design`; the register states both.
+    - Record dates are not monotonic in git order.
+- **UAT-waiver reading:** empty (0 production `src/` lines). The next column is the Orchestrator's call.
