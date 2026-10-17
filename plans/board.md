@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "you can run 3 at the same time" → width 3. Dispatched `ticket-to-pr-ABC-056` (Release Manager) and `ticket-to-pr-ABC-039` (SE) beside `qe-ABC-155`. In flight: those three._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — `ABC-155` delivered (`819e6933`, gates green 58/1792) → In Review; QE `qe-ABC-155` dispatched. In flight: that hop only (width 1)._
 _Updated: 2026-10-17 by the Orchestrator (task `wave-2026-09-25`) — owner word "pull ABC-155, ABC-056, ABC-039" → all three In Development (3/3). Width 1: SE `ticket-to-pr-ABC-155` dispatched first; then ABC-056 (Release Manager), then ABC-039. In flight: that hop only._
 _Updated: 2026-10-13 by the Orchestrator (task `wave-2026-09-25`) — `ABC-101` → Done (UAT ACCEPTED by the owner; merged `ffa96cb4` + `6631059e`; gates green 58/1792, `CLI_DEEP` 10/10). Worktrees and branches removed. **Owner word: stop work after ABC-101 to save tokens.** In flight: none._
