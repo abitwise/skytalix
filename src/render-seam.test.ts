@@ -697,6 +697,30 @@ describe("ABC-096 — the opening name in the message region", () => {
     }
   });
 
+  it("A1 / A4 — an astral run at an odd offset is cut to whole code points: 'a' + 8 clefs + '...', no lone surrogate", () => {
+    // `QE-096-a`: every astral name above is all-astral, so an 18-unit cut lands on a pair boundary.
+    // Here the run starts at offset 1, so a code-unit cut at 18 would keep a lone high surrogate.
+    const history = startGame();
+    const clef = "\u{1D11E}";
+    const loneSurrogate = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
+    const frame = frameOf(history, named(`a${clef.repeat(20)}`), "unicode");
+    expect(regionOf(frame)).toEqual(regionShowing(frame, `a${clef.repeat(8)}...`));
+    for (const row of frame) expect(row, "lone surrogate").not.toMatch(loneSurrogate);
+    expect(frame.length).toBe(frameOf(history, NO_NAMES, "unicode").length);
+  });
+
+  it("A1 — the family ends at ': ', not at a bare ':': 'Foo:Bar: Baz Variation' shows 'Foo:Bar'", () => {
+    // `QE-096-b`: no shipped name has a ':' not followed by a space, so the separator was not pinned.
+    const history = startGame();
+    for (const [name, shown] of [
+      ["Foo:Bar: Baz Variation", "Foo:Bar"],
+      ["Foo:Bar", "Foo:Bar"],
+    ] as const) {
+      const frame = frameOf(history, named(name));
+      expect(regionOf(frame), name).toEqual(regionShowing(frame, shown));
+    }
+  });
+
   it("A5 — leaving book: each ply shows its own position's name or nothing, the line end included", () => {
     // A book built for the line, keyed by the real `zobristKey`. Ply 2 and 3 are in book and unnamed;
     // ply 5 is a named line end (`m` empty); ply 6 is not in the book at all.
