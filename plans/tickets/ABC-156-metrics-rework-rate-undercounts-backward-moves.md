@@ -121,3 +121,27 @@ Branch `grugops/ABC-156-metrics-rework-count`, cut from `ac7d9589`. One row of `
   blank line would be a second added line under `A5`. In rendered Markdown the two header lines run together.
 - **Gates on the change.** Lint exit 0 (113 files), typecheck 0, build 0. `npm test` exit 0 on 58 files, 1810/1810.
   `last-run.json` has `success` true and 0 pending/todo. Skip-integrity `--skip-count 0` gives `No findings.`
+
+## QE — 2026-10-17 (QE/E2E, subtask `qe-ABC-156`): **PASS_WITH_GAPS**
+
+Reviewed at tip `6d2caf56` (code `64e9c94d`, base `ac7d9589`). No timing was read. Notes:
+`.grugops/context/qe-ABC-156/notes/` (verdict decision `…1e769dea`).
+
+- **Re-derived independently, before the SE's notes were read.** The walk covers all 173 `plans/board.md` commits up to
+  `3215004c`, on linear history (0 merges). It finds 16 raw backward moves: the register's 15 plus the excluded
+  `47b5b935`. Per ticket they are 009 1, 011 1, 016 2, 017 2, 019 3, 025 1, 027 1, 028 3, 029 1, which is 15 over 25
+  = 0.60. The last ten to reach `Done` are `022`, `023`, `013`, `025`, `016`, `027`, `017`, `028`, `029`, `019`, with
+  7 tickets and 13 moves. The 11th from the end is `009`. All of these equal the SE's figures.
+- **`A1`–`A5` MET.** Each was measured, and six planted wrong rows were each caught. A compensating 028 −1 / 019 +1
+  error keeps the sum at 15 and is caught only by A2's "every other unchanged" clause.
+- **The SE's two flagged choices conform.** The header has no blank line, which is the literal A5 reading. A trailing
+  `\` would also have rendered the header separately within A5 (`QE-156-a` LOW). The Period-cell correction clause is
+  inside row `:28` and the Scope.
+- **Gates at the tip.** Lint 0 (113 files), typecheck 0, build 0, `npm test` 58 files 1810/1810, skip 0,
+  `No findings.`. `merge-tree` against `main` is clean.
+- **UAT-waiver reading.** The production-`src/` grep over `ac7d9589...6d2caf56` is empty, so the waiver applies.
+  Waived, not signed.
+- **Gaps.** `QE-156-a` LOW (header rendering), `QE-156-b` INFO (A2's sum alone is blind to compensating errors),
+  `QE-156-c` INFO (the Factory Coach's 2026-08-12 note still says 13; outside scope; the raise trigger did not fire),
+  `QE-156-d` INFO (the SE note `at:` stamps run about 3 h ahead of UTC). None blocks.
+- **Next.** QE recommends `Ready for UAT`, then `Done` under the waiver. The board is the Orchestrator's.
