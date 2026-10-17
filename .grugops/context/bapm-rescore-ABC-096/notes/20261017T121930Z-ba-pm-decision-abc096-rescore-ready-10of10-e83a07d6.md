@@ -62,7 +62,7 @@ This note is hand-authored and unsealed. The authoritative text is the ticket pa
    - ASCII accent loss (accepted 2026-10-12).
    - Each comes with a way to observe it.
 8. **The page prose budget.** The 2026-10-10 and 2026-10-12 DoR narrations are folded into a history table. Their
-   full text is in git at `8ed9ba2b` and in their own notes. The page is 381 lines, over the 300-line median target
+   full text is in git at `8ed9ba2b` and in their own notes. The page is 382 lines, over the 300-line median target
    in `AGENTS.md` rule 2. The extra length is acceptance criteria, which the rule keeps in the ticket.
 
 ## Owed by others
