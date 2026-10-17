@@ -1,0 +1,24 @@
+# base aa37f9cb
+NONE	files=397 tf=58 total=1824 passed=1824 failed=0 pending=0
+X-any-right	files=397 tf=58 total=1824 passed=1824 failed=0 pending=0
+W-own-colour-any-wing	files=397 tf=58 total=1824 passed=1824 failed=0 pending=0
+W-same-wing-either-colour	files=397 tf=58 total=1824 passed=1824 failed=0 pending=0
+W-colour-swap-same-wing	files=397 tf=58 total=1824 passed=1786 failed=38 pending=0
+W-wing-swap-own-colour	files=397 tf=58 total=1824 passed=1816 failed=8 pending=0
+W-kingside-either-colour-only	files=397 tf=58 total=1824 passed=1824 failed=0 pending=0
+W-queenside-either-colour-only	files=397 tf=58 total=1824 passed=1824 failed=0 pending=0
+W-white-any-right	files=397 tf=58 total=1824 passed=1824 failed=0 pending=0
+W-black-any-right	files=397 tf=58 total=1824 passed=1824 failed=0 pending=0
+W-mixed-own-other-plus-opp	files=397 tf=58 total=1824 passed=1824 failed=0 pending=0
+# head 2202b8eb
+NONE	files=399 tf=58 total=1830 passed=1830 failed=0 pending=0
+X-any-right	files=399 tf=58 total=1830 passed=1824 failed=6 pending=0
+W-own-colour-any-wing	files=399 tf=58 total=1830 passed=1826 failed=4 pending=0
+W-same-wing-either-colour	files=399 tf=58 total=1830 passed=1828 failed=2 pending=0
+W-colour-swap-same-wing	files=399 tf=58 total=1830 passed=1786 failed=44 pending=0
+W-wing-swap-own-colour	files=399 tf=58 total=1830 passed=1818 failed=12 pending=0
+W-kingside-either-colour-only	files=399 tf=58 total=1830 passed=1828 failed=2 pending=0
+W-queenside-either-colour-only	files=399 tf=58 total=1830 passed=1828 failed=2 pending=0
+W-white-any-right	files=399 tf=58 total=1830 passed=1827 failed=3 pending=0
+W-black-any-right	files=399 tf=58 total=1830 passed=1827 failed=3 pending=0
+W-mixed-own-other-plus-opp	files=399 tf=58 total=1830 passed=1830 failed=0 pending=0

@@ -1,0 +1,14 @@
+# columns: delivered | W-mixed-own-other-plus-opp | X-any-right (head tree)
+w K: 25 [e1g1]	w K: 25 [e1g1]	w K: 26 [e1g1 e1c1]
+w Q: 25 [e1c1]	w Q: 25 [e1c1]	w Q: 26 [e1g1 e1c1]
+b k: 25 [e8g8]	b k: 25 [e8g8]	b k: 26 [e8g8 e8c8]
+b q: 25 [e8c8]	b q: 25 [e8c8]	b q: 26 [e8g8 e8c8]
+w kq: 24 []	w kq: 24 []	w kq: 26 [e1g1 e1c1]
+b KQ: 24 []	b KQ: 24 []	b KQ: 26 [e8g8 e8c8]
+w Qk: 25 [e1c1]	w Qk: 26 [e1g1 e1c1]	w Qk: 26 [e1g1 e1c1]
+w Kq: 25 [e1g1]	w Kq: 26 [e1g1 e1c1]	w Kq: 26 [e1g1 e1c1]
+b Kq: 25 [e8c8]	b Kq: 26 [e8g8 e8c8]	b Kq: 26 [e8g8 e8c8]
+b Qk: 25 [e8g8]	b Qk: 26 [e8g8 e8c8]	b Qk: 26 [e8g8 e8c8]
+w Qkq: 25 [e1c1]	w Qkq: 26 [e1g1 e1c1]	w Qkq: 26 [e1g1 e1c1]
+b KQk: 25 [e8g8]	b KQk: 26 [e8g8 e8c8]	b KQk: 26 [e8g8 e8c8]
+# W-mixed with PERFT_DEEP=1 npx vitest run src/perft.test.ts (head tree): exit 0, 32/32

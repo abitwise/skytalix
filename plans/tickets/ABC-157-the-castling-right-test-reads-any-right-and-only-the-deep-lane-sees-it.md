@@ -152,3 +152,31 @@ Branch `grugops/ABC-157-castling-one-right`, cut from `aa37f9cb`. The code commi
   `No findings.` Deep perft is 32/32.
 - **Gates on `968a5843`:** lint, typecheck, build and `npm test`, all exit 0.
 - **Security trigger not fired:** a test-only diff in one file, with no input path, network or dependency.
+
+## QE — 2026-10-17 (QE/E2E, subtask `qe-ABC-157`): **PASS_WITH_GAPS**
+
+I reviewed tip `2202b8eb` (code `968a5843`, base `aa37f9cb`). No timing was read. I planted `X-any-right` from this page's
+text on my own runner before I opened the SE's harness. The runs used `git archive` trees outside the repo, the whole
+default lane, every `*_DEEP` unset, and the md5 restored after every state. Evidence: `.grugops/context/qe-ABC-157/notes/`
+(decision `…5e19b0c3`) and `…/probe/`.
+
+- **`A1` MET.** The 4 one-right rows each give the named castle at both layers, then 25.
+- **`A2` MET.** The 2 opponent-only rows each give no castle at either layer, then 24. Each asserts its setup first.
+- **`A3` MET.**
+  - `X-any-right` survives base 1824/1824. At head it fails 6: exactly the six rows.
+  - The committed catalogue, re-run, is byte-identical to the SE's `mutants.base.out` / `mutants.head.out`.
+  - The 7 named mutants are killed at base and head with the same lists.
+  - 15/15 controls survive at both: 0 kills added.
+- **`A4` MET.**
+  - One `src/` file, 0 removed lines.
+  - md5 `6335b452…` at base, code and tip.
+  - 58/1824 → 58/1830 (+6), skip 0, `No findings.`
+  - `PERFT_DEEP=1` perft 32/32.
+- **Gates at `2202b8eb`:** lint, typecheck, build and `npm test`, all exit 0. `merge-tree` against `main` is clean.
+- **UAT-waiver reading:** the production-`src/` grep on `aa37f9cb...2202b8eb` is empty, so the waiver applies.
+  Waived, not signed.
+- **Gaps, none blocking:**
+  - `QE-157-a` LOW: a conjunction variant passes the default lane **and** the deep lane 32/32. It offers the other
+    wing's castle only when the mover holds its other right and the opponent holds a right (`w Qk` → `e1g1 e1c1`).
+    No row holds mixed rights. Outside this ticket's one-right class.
+  - `QE-157-b` INFO: several weaker variants die on one row per colour.
