@@ -380,3 +380,27 @@ BA/PM (task `wave-2026-09-25`, subtask `bapm-rescore-ABC-096`, Workflow 07), at 
 
 **Recommendation:** `In Design` → `Ready for Dev` (0/6), after the Orchestrator's `Ready for Dev`-exit criteria
 re-read (`AGENTS.md` process rule 1). The page is also still the epic's droppable bullet.
+
+## Delivery
+
+Software Engineer, 2026-10-17 (subtask `ticket-to-pr-ABC-096`). Branch `grugops/ABC-096-opening-name` from `main`
+`6edadcf0`; code commit `a48da51c`. The detail is in `.grugops/context/ticket-to-pr-ABC-096/notes/`.
+
+- **Fence:** 7 files changed, all inside § Build contract's table: 3 production (`src/book.ts`, `src/render-seam.ts`,
+  `src/cli.ts`) and 4 test files. 0 new files, 0 new dependencies, 0 new spawns. The must-not-change list is
+  byte-identical (`git diff --quiet` exit 0). No snapshot moved.
+- **The cut** follows `A1` as amended: code units, whole code points (the ADR's D3 says "code points"; the page wins).
+- **`A1`–`A10`: PASS** on emitted frames. `A4`'s `< 16 ms` was read **outside the suite**, because the repository
+  has no in-suite wall-clock bars (`src/frame.test.ts:618`). Every first frame and median was under 16 ms. The
+  slowest was 6.44 ms, the first frame in a fresh process, and it includes the book's one parse. Node v26.11.1,
+  darwin-arm64, load about 4. `UNKNOWN - verify` elsewhere.
+- **Gates (tip):**
+  - lint, typecheck, build: exit 0;
+  - `npm test`: exit 0, 58 files / 1822 tests (base 58 / 1810, +12), `last-run.json` `success: true`;
+  - skip-integrity `--skip-count 0`: `No findings.`;
+  - `CLI_DEEP=1`: exit 0, 10 passed.
+- **Mutants:** eight, planted outside the repository, all killed (note `…8f2d4b60`).
+- **Owed:**
+  - QE;
+  - Security/NFR (`A3`, `A4`, `A7`; the `NFR-007` first-call ≤ 30 ms reading on the delivered build);
+  - the owner's UAT (§ UAT observations).
