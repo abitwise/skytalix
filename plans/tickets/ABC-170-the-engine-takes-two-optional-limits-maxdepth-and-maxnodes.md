@@ -148,3 +148,24 @@ BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 10 of 10.** Re-scored 2026-10
 
 **Recommended: → `Ready` now, as far as Ready's WIP limit (8) allows. It heads the chain and has no open dependency.**
 Column moves are the Orchestrator's.
+
+## Delivery — 2026-10-18 (Software Engineer, subtask `ticket-to-pr-ABC-170`)
+
+Branch `grugops/ABC-170`, code `e29f7951`, from `main` `358810ac` (its `src/` is identical to `a0c6db6c`). Not
+pushed, not merged. **No timing was read** (a parallel vitest run). Notes: `.grugops/context/ticket-to-pr-ABC-170/notes/`
+(`…7c1e4a90` readings, `…3b9d52e1` decision, `…e8f04d26` delivery).
+
+- **`A1` MET.** `kp-vs-k` at 10 ms: unlimited depth ≥ 6 (7); `maxDepth: 3` → depth 3, move and score = `search(p, 3)`;
+  `maxDepth: 1` → depth 1, legal.
+- **`A2` MET.** Kiwipete, `maxNodes: 20000` → depth 3, 20 058 nodes (≤ 21 024), move and score = `search(p, 3)`, and
+  more nodes than a `maxDepth: 3` run (the depth-4 iteration was entered and discarded). `maxNodes: 1` → depth 1, legal.
+- **`A3` MET.** Six perft roots at 50 ms: absent vs `maxDepth: 1000, maxNodes: MAX_SAFE_INTEGER` identical in all five
+  fields. Every pre-existing row outside `A4` unedited and green.
+- **`A4` MET.** Only the two named checks changed (`:517`, `:520-523`); export list, arity, `budgetMs` and the
+  behavioural half unedited and green. Other hunks are appended rows only.
+- **`A5` MET.** `RF-1` rows unedited and green; new rows: `Infinity` budget with `maxDepth: 1000` = same consultation
+  count and result; `budgetMs: 5`, `maxDepth: 50` = same depth and move (`kp-vs-k`, startpos).
+- **`A6` OPEN** — owed in a quiet window (Orchestrator).
+- **`A7` MET.** `src` diff lists exactly `src/engine.ts`, `src/engine.test.ts`; no limb token on the `+` lines.
+- **Gates on `e29f7951`:** lint, typecheck, build, `npm test` exit 0 (58 files, 1839/1839); `last-run.json` success;
+  skip count 0, `No findings.`; `CLI_DEEP=1` 10/10; `PERFT_DEEP=1` 32/32; deep `A3` identity sweep 2/2.
