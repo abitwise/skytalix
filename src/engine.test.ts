@@ -514,13 +514,34 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
 
   it("carries no depth default and no depth constant", () => {
     expect(source).not.toMatch(/depth\s*\??\s*(:\s*[\w<>[\]| ]+)?\s*=[^=>]/i);
-    expect(source).not.toMatch(/default_?depth|max_?depth|fixed_?depth/i);
+    expect(source).not.toMatch(/default_?depth|fixed_?depth/i);
+    // AMENDED AT `ABC-170` (`ADR-0044` D12, on the owner's Q6 word): `max_?depth` is allowed
+    // ONLY as the optional `EngineOptions` field, declared once, without a default, and read
+    // once, in the loop header below. Comment lines are prose and are not code.
+    expect(source).toMatch(/readonly maxDepth\?: number;/);
+    const codeLines = source
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => !line.startsWith("*") && !line.startsWith("/*") && !line.startsWith("//"));
+    expect(codeLines.filter((line) => /max_?depth/i.test(line))).toEqual([
+      "readonly maxDepth?: number;",
+      "iteration <= (options.maxDepth ?? Number.POSITIVE_INFINITY) &&",
+    ]);
   });
 
-  it("is driven by the clock and not by a ceiling — the deepening loop has no upper bound", () => {
-    // The `for` that deepens is bounded by `now() < budget.deadline` and by nothing else. A
-    // `iteration <= SOMETHING` clause here would be the depth constant this criterion forbids.
-    expect(source).toMatch(/for \(let iteration = 2; now\(\) < budget\.deadline; iteration\+\+\)/);
+  it("is driven by the clock and not by a ceiling — the deepening loop has no constant upper bound", () => {
+    // AMENDED AT `ABC-170` (`ADR-0044` D12, `EPIC-007` `RISK-EPIC007-04`). The `for` that
+    // deepens is bounded by `now() < budget.deadline` FIRST — so an absent limit moves no clock
+    // reading — and then by the two optional limits, which are `Infinity` when absent. A
+    // `iteration <= SOMETHING` clause with a constant would be the depth constant this
+    // criterion forbids. Whitespace is collapsed so the formatter's line breaks do not matter.
+    const flat = source.replace(/\s+/g, " ");
+    expect(flat).toContain(
+      "for ( let iteration = 2; now() < budget.deadline && " +
+        "iteration <= (options.maxDepth ?? Number.POSITIVE_INFINITY) && " +
+        "budget.nodes < budget.maxNodes; iteration++ )",
+    );
+    expect(flat).not.toMatch(/iteration\s*<=?\s*(\d|[A-Z_]{2,}\b)/);
   });
 
   /**
@@ -1198,3 +1219,156 @@ if (RUN_DEEP) {
     }, 120_000);
   });
 }
+
+// ---------------------------------------------------------------------------
+// ABC-170 — two optional limits, `maxDepth` and `maxNodes` (`ADR-0044` D12), which can only
+// SHORTEN a search. Every row runs on `tickingClock` (`ADR-0027`), so every figure is a function
+// of node counts and is the same on every host. No absolute hardware depth is asserted.
+// ---------------------------------------------------------------------------
+
+/**
+ * `search` itself, the shipped negamax with every heuristic on, is the reference for `A1` and
+ * `A2`: the limits are rows about the shipped `chooseMove`, so both sides keep their reductions.
+ * Imported HERE rather than in the import block so `A4`'s diff fence holds: this file's edits sit
+ * inside the `A4` `describe` plus appended rows.
+ */
+const { search } = await import("./search.ts");
+
+describe("ABC-170 A1 — maxDepth stops deepening once that depth has completed", () => {
+  const sparse = () => parseFen(endgameFen("kp-vs-k"));
+  const options = { budgetMs: 10, now: tickingClock(1) };
+
+  it("is a real stop: unlimited, the same budget completes depth 6 or more", () => {
+    // The `A4` behavioural row's fixture and budget. Without this the row below could pass on a
+    // budget that never reached depth 4 in the first place.
+    const unlimited = chooseMove(sparse(), options) as EngineChoice;
+    expect(unlimited.depth).toBeGreaterThanOrEqual(6);
+  });
+
+  it("reports depth 3 at maxDepth 3, with search(position, 3)'s move and score", () => {
+    const choice = chooseMove(sparse(), { budgetMs: 10, now: tickingClock(1), maxDepth: 3 });
+    const reference = search(sparse(), 3);
+    expect((choice as EngineChoice).depth).toBe(3);
+    expect(label((choice as EngineChoice).move)).toBe(label(reference.move as Move));
+    expect((choice as EngineChoice).score).toBe(reference.score);
+  });
+
+  it("reports depth 1 and a legal move at maxDepth 1", () => {
+    const position = sparse();
+    const choice = chooseMove(position, { budgetMs: 10, now: tickingClock(1), maxDepth: 1 });
+    expect((choice as EngineChoice).depth).toBe(1);
+    const { move } = choice as EngineChoice;
+    expect(legalMoves(position).some((candidate) => sameMove(candidate, move))).toBe(true);
+  });
+});
+
+describe("ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played", () => {
+  const kiwipete = () => parseFen(fenOf("kiwipete"));
+  /** The ceiling, on a 1 ms step: about 5 000 consultations, so the clock never binds first. */
+  const LONG_MS = HARD_CEILING_MS;
+  const MAX_NODES = 20_000;
+  const choice = () =>
+    chooseMove(kiwipete(), {
+      budgetMs: LONG_MS,
+      now: tickingClock(1),
+      maxNodes: MAX_NODES,
+    }) as EngineChoice;
+
+  it("stops within one clock-check interval of the node budget", () => {
+    const { nodes, elapsedMs } = choice();
+    expect(nodes).toBeGreaterThanOrEqual(MAX_NODES);
+    expect(nodes).toBeLessThanOrEqual(MAX_NODES + NODES_PER_CLOCK_CHECK);
+    expect(elapsedMs).toBeLessThan(LONG_MS);
+  });
+
+  it("plays search(position, d)'s move and score at the reported depth d — the abort is discarded", () => {
+    const limited = choice();
+    // It really entered, and aborted, the iteration after `d`: stopped at depth `d` by a depth
+    // cap instead, the same search visits fewer nodes. A build that returned the aborted
+    // iteration's move would fail the identity below.
+    const completedOnly = chooseMove(kiwipete(), {
+      budgetMs: LONG_MS,
+      now: tickingClock(1),
+      maxDepth: limited.depth,
+    }) as EngineChoice;
+    expect(limited.nodes).toBeGreaterThan(completedOnly.nodes);
+    const reference = search(kiwipete(), limited.depth);
+    expect(label(limited.move)).toBe(label(reference.move as Move));
+    expect(limited.score).toBe(reference.score);
+  });
+
+  it("still completes the first iteration at maxNodes 1: non-null, legal, depth 1", () => {
+    const position = kiwipete();
+    const tiny = chooseMove(position, { budgetMs: LONG_MS, now: tickingClock(1), maxNodes: 1 });
+    expect(tiny).not.toBeNull();
+    const { move, depth } = tiny as EngineChoice;
+    expect(depth).toBe(1);
+    expect(legalMoves(position).some((candidate) => sameMove(candidate, move))).toBe(true);
+  });
+});
+
+describe("ABC-170 A3 — absent limits are today's engine, clock read for clock read", () => {
+  // ONE ROW PER ROOT (QE-170-a). The twelve searches are the cost and none can be shared (each
+  // side of the identity needs its own run), so the six roots in one row ran 3.4-4.8 s against
+  // vitest's 5 s default and timed out under load. Split, each row carries one root's pair. The
+  // budget, the roots and the field-by-field identity are unchanged.
+  for (const { name, fen } of PERFT_CORPUS) {
+    it(`returns identical move, score, depth, nodes and elapsedMs on perft root ${name}`, () => {
+      // Two fresh ticking clocks: an extra clock read on either path moves `elapsedMs` (and, at
+      // an abort, `nodes`), so this row reds on it.
+      const absent = chooseMove(parseFen(fen), { budgetMs: 50, now: tickingClock(1) });
+      const huge = chooseMove(parseFen(fen), {
+        budgetMs: 50,
+        now: tickingClock(1),
+        maxDepth: 1000,
+        maxNodes: Number.MAX_SAFE_INTEGER,
+      });
+      expect({ name, ...huge }).toEqual({ name, ...absent });
+    });
+  }
+});
+
+describe("ABC-170 A5 — the limits only shorten; the ceiling still holds", () => {
+  /** Counts every consultation, and throws past a fuse, as `RF-1`'s clock does. */
+  const countingClock = (stepMs: number, maxConsultations: number) => {
+    const tick = tickingClock(stepMs);
+    const clock = {
+      consultations: 0,
+      now: (): number => {
+        clock.consultations++;
+        if (clock.consultations > maxConsultations) {
+          throw new Error(`the clock was consulted ${clock.consultations} times: unbounded`);
+        }
+        return tick();
+      },
+    };
+    return clock;
+  };
+
+  it("on an infinite budget, maxDepth 1000 returns within the same consultation count", () => {
+    const without = countingClock(2_500, 64);
+    const withCap = countingClock(2_500, 64);
+    const startpos = () => parseFen(fenOf("startpos"));
+    const a = chooseMove(startpos(), { budgetMs: Number.POSITIVE_INFINITY, now: without.now });
+    const b = chooseMove(startpos(), {
+      budgetMs: Number.POSITIVE_INFINITY,
+      now: withCap.now,
+      maxDepth: 1000,
+    });
+    expect(withCap.consultations).toBe(without.consultations);
+    expect(b).toEqual(a);
+  });
+
+  it("at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth", () => {
+    for (const fen of [endgameFen("kp-vs-k"), fenOf("startpos")]) {
+      const free = chooseMove(parseFen(fen), { budgetMs: 5, now: tickingClock(1) }) as EngineChoice;
+      const capped = chooseMove(parseFen(fen), {
+        budgetMs: 5,
+        now: tickingClock(1),
+        maxDepth: 50,
+      }) as EngineChoice;
+      expect(capped.depth).toBe(free.depth);
+      expect(label(capped.move)).toBe(label(free.move));
+    }
+  });
+});

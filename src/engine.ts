@@ -152,6 +152,21 @@ export interface EngineOptions {
    * virtual one.
    */
   readonly now?: Clock;
+  /**
+   * `ABC-170` (`ADR-0044` D12): stop deepening once THIS iteration has completed. Optional, and
+   * it carries no default: absent, the loop is bounded by the clock alone, as before. It can only
+   * SHORTEN a search the clock and `HARD_CEILING_MS` still bound, so `RISK-002` holds: the budget
+   * is time, and a depth can only cut it short. The first iteration always completes.
+   */
+  readonly maxDepth?: number;
+  /**
+   * `ABC-170` (`ADR-0044` D12): abort once `nodes >= maxNodes`, read in `countNode`'s
+   * every-`NODES_PER_CLOCK_CHECK` branch AFTER the clock and in the loop condition AFTER the
+   * clock, so an absent field moves no virtual-clock reading. The aborted iteration is discarded,
+   * as it is for time, and the overshoot is bounded the same way. The first iteration always
+   * completes, so a tiny value still returns a depth-1 move.
+   */
+  readonly maxNodes?: number;
 }
 
 export interface EngineChoice {
@@ -182,6 +197,8 @@ interface Heuristics {
 interface Budget extends Heuristics {
   readonly now: Clock;
   readonly deadline: number;
+  /** `options.maxNodes`, or `Infinity` when absent: the comparison that never fires. */
+  readonly maxNodes: number;
   nodes: number;
   /** The node count at which the clock is next consulted. `Infinity` disarms the abort. */
   nextCheck: number;
@@ -208,7 +225,7 @@ function countNode(budget: Budget): void {
   budget.nodes++;
   if (budget.nodes >= budget.nextCheck) {
     budget.nextCheck = budget.nodes + NODES_PER_CLOCK_CHECK;
-    if (budget.now() >= budget.deadline) throw ABORTED;
+    if (budget.now() >= budget.deadline || budget.nodes >= budget.maxNodes) throw ABORTED;
   }
 }
 
@@ -462,6 +479,7 @@ function deepen(
     // (`NaN` stays `NaN` — both comparisons false, depth 1; `0` / `-1` / `-1e9` unchanged) and
     // turns `Infinity` into the ceiling, which is the module's only non-terminating budget.
     deadline: start + Math.min(options.budgetMs, HARD_CEILING_MS),
+    maxNodes: options.maxNodes ?? Number.POSITIVE_INFINITY,
     nodes: 0,
     // Disarmed for the first iteration: depth 1 always completes, so a move always exists.
     nextCheck: Number.POSITIVE_INFINITY,
@@ -480,7 +498,15 @@ function deepen(
   let reached = 1;
   budget.nextCheck = budget.nodes + NODES_PER_CLOCK_CHECK;
 
-  for (let iteration = 2; now() < budget.deadline; iteration++) {
+  // The clock FIRST, so it is read exactly as often as before; the two limits (`ABC-170`) are
+  // plain comparisons after it, and absent they are `Infinity`, which never stops the loop.
+  for (
+    let iteration = 2;
+    now() < budget.deadline &&
+    iteration <= (options.maxDepth ?? Number.POSITIVE_INFINITY) &&
+    budget.nodes < budget.maxNodes;
+    iteration++
+  ) {
     let deeper: Iteration;
     try {
       deeper = runIteration(position, rootMoves, iteration, budget);
