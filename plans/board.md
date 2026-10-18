@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-19 by the Orchestrator (task `wave-2026-09-25`) — `qe2-ABC-167` PASS_WITH_GAPS (`6922f772`; both MEDIUMs closed; 44 mutants 31/13; 59/1908 success true; N8-LANE OWED) → `ABC-167` In Security/NFR; `secnfr-ABC-167` dispatched (QE-167-g M40/M42, NFR-004, N8-LANE if quiet). Owner owed: QE-167-i (add keyword-boundary rows or accept). In flight: `secnfr-ABC-167`._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-167-fix2` done (`6922f772`, tests only; gates green 59/1908, CLI_DEEP 10/10, PERFT_DEEP 32/32). QE `qe2-ABC-167` dispatched (re-check). In flight: that hop only._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `bapm-amend2-ABC-167` merged (`f2328d99`; gates green 58/1844): clock step ruled per amended row, none left on step 1. SE `ticket-to-pr-ABC-167-fix2` dispatched (tests only). In flight: that hop only._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `ticket-to-pr-ABC-167-fix` BLOCKED at `20a9fc5d` (code fix for A6-e2/e3/e4, A7-f1 done; lane red: A5-b1, A7-f3 time out on clock step 1). BA/PM `bapm-amend2-ABC-167` dispatched to rule the step. In flight: that hop only._
@@ -870,8 +871,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-167] `src/uci-session.ts`: capability-free UCI session, D4 time rule, D12 `go` limits  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-170.) **2026-10-18: owner word "Pull ABC-167" → In Development; SE `ticket-to-pr-ABC-167` dispatched.** **2026-10-18: delivered `4dbbfbd8` (code `3dd0db1b`), A1–A12 MET, 59/1888; N8-LANE delta owed → In Review. QE waits for the end of ABC-166's width-1 run.**
+## In Review (WIP 0/3)
 
 
 
@@ -895,7 +895,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Security/NFR (WIP 0/2)
+## In Security/NFR (WIP 1/2)
+- [ABC-167] `src/uci-session.ts`: capability-free UCI session, D4 time rule, D12 `go` limits  (owner: BA/PM, size: S, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10. Waits: after ABC-170.) **2026-10-18: owner word "Pull ABC-167" → In Development; SE `ticket-to-pr-ABC-167` dispatched.** **2026-10-18: delivered `4dbbfbd8` (code `3dd0db1b`), A1–A12 MET, 59/1888; N8-LANE delta owed → In Review. QE waits for the end of ABC-166's width-1 run.** **2026-10-19: `qe2-ABC-167` PASS_WITH_GAPS at `6922f772` (QE-167-a..f, -h closed; -g → Security/NFR; new -i LOW, -j INFO; N8-LANE OWED) → In Security/NFR.**
 
 
 

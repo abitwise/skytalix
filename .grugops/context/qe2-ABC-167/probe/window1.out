@@ -1,0 +1,36 @@
+{
+ "host": "MacBook-Air.local",
+ "start": "2026-10-18T21:06:00.040Z",
+ "secs": 180,
+ "polls": 181,
+ "foreignPolls": 22,
+ "kinds": {
+  "platform": 22
+ },
+ "firstForeign": [
+  {
+   "at": "1",
+   "lines": [
+    "91174 /Applications/iTerm.app/Contents/XPCServices/pidinfo.xpc/Contents/MacOS/pidinfo --git-state /Users/olgeroeselg/Projects/private/oeselg-labs/platform 4 1"
+   ]
+  },
+  {
+   "at": "2",
+   "lines": [
+    "91174 /Applications/iTerm.app/Contents/XPCServices/pidinfo.xpc/Contents/MacOS/pidinfo --git-state /Users/olgeroeselg/Projects/private/oeselg-labs/platform 4 1"
+   ]
+  }
+ ],
+ "lastForeign": {
+  "at": "83",
+  "lines": [
+   "94088 /Applications/iTerm.app/Contents/XPCServices/pidinfo.xpc/Contents/MacOS/pidinfo --git-state /Users/olgeroeselg/Projects/private/oeselg-labs/platform 4 1"
+  ]
+ },
+ "load1": {
+  "first": "13.95",
+  "min": "6.21",
+  "max": "14.29",
+  "last": "10.57"
+ }
+}
