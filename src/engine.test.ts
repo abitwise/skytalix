@@ -1308,10 +1308,14 @@ describe("ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is pl
 });
 
 describe("ABC-170 A3 — absent limits are today's engine, clock read for clock read", () => {
-  it("returns identical move, score, depth, nodes and elapsedMs on the six perft roots", () => {
-    // Two fresh ticking clocks: an extra clock read on either path moves `elapsedMs` (and, at an
-    // abort, `nodes`), so this row reds on it.
-    for (const { name, fen } of PERFT_CORPUS) {
+  // ONE ROW PER ROOT (QE-170-a). The twelve searches are the cost and none can be shared (each
+  // side of the identity needs its own run), so the six roots in one row ran 3.4-4.8 s against
+  // vitest's 5 s default and timed out under load. Split, each row carries one root's pair. The
+  // budget, the roots and the field-by-field identity are unchanged.
+  for (const { name, fen } of PERFT_CORPUS) {
+    it(`returns identical move, score, depth, nodes and elapsedMs on perft root ${name}`, () => {
+      // Two fresh ticking clocks: an extra clock read on either path moves `elapsedMs` (and, at
+      // an abort, `nodes`), so this row reds on it.
       const absent = chooseMove(parseFen(fen), { budgetMs: 50, now: tickingClock(1) });
       const huge = chooseMove(parseFen(fen), {
         budgetMs: 50,
@@ -1320,8 +1324,8 @@ describe("ABC-170 A3 — absent limits are today's engine, clock read for clock 
         maxNodes: Number.MAX_SAFE_INTEGER,
       });
       expect({ name, ...huge }).toEqual({ name, ...absent });
-    }
-  });
+    });
+  }
 });
 
 describe("ABC-170 A5 — the limits only shorten; the ceiling still holds", () => {
