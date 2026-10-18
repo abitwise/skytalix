@@ -11,6 +11,11 @@ feature: —
 
 # ABC-171 — two UCI options, both requested by the owner, wired to code that already exists
 
+> **Accepted 2026-10-18 by the owner** (BA/PM, subtask `bapm-epic007-accept`). Owner word, verbatim
+> (`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`,
+> a transcription, not a stamp): *"accept the revised ADR-0044 and EPIC-007"*. The DoR item "owner acceptance" (item
+> 10) is met, and the score is now 10 of 10. Readings below are unchanged from the cut.
+
 > **Cut 2026-10-18 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-engine-revise`) as a **proposal**. It stays in
 > `Backlog` until the owner accepts the revised `ADR-0044` and `EPIC-007`. Design: `ADR-0044` D3 (`setoption`), D10
 > (book) and D11 (levels). Owner word: Q4 *"On in v1"* and Q5 *"strength control also implemented"* (`…a41c7e02`).
@@ -97,7 +102,7 @@ Every row drives `handleLine` on a ticking virtual clock, with `random = seededR
 ## Dependencies
 
 - **`ABC-167`** (the session). **Blocks `ABC-168`**, which binds `readBookFile` and `Math.random` into this shape.
-- **Gate:** the owner accepts the revised `ADR-0044` and `EPIC-007`.
+- **Gate: met.** The owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`).
 
 ## Security / NFR triggers
 
@@ -125,7 +130,8 @@ written.
 
 ## Definition of Ready
 
-BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 9 of 10. Stays in `Backlog`.**
+BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 10 of 10.** Re-scored 2026-10-18 at `main` `50e081fc` (subtask
+`bapm-epic007-accept`). It was 9 of 10 at the cut, with item 10 open until the owner accepted.
 
 | # | item | verdict |
 |---|---|---|
@@ -138,7 +144,7 @@ BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 9 of 10. Stays in `Backlog`.*
 | 7 | test notes present | **✅** three |
 | 8 | size assigned | **✅** `S` |
 | 9 | priority assigned | **✅** `P1` |
-| 10 | no major unresolved blocker | **❌** the owner has not accepted the revised `ADR-0044` |
+| 10 | no major unresolved blocker (owner acceptance) | **✅** the owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`) |
 
-**Recommended: stay in `Backlog` until the owner accepts. Then → `Ready` after `ABC-167`.** Column moves are the
+**Recommended: → `Ready` after `ABC-167`, as far as Ready's WIP limit (8) allows.** Column moves are the
 Orchestrator's.

@@ -11,6 +11,12 @@ feature: —
 
 # ABC-172 — `cli-chess` becomes `skytalix` inside the repo. ZERO production lines
 
+> **Accepted 2026-10-18 by the owner** (BA/PM, subtask `bapm-epic007-accept`). Owner word, verbatim
+> (`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`,
+> a transcription, not a stamp): *"accept the revised ADR-0044 and EPIC-007"*. The DoR item "owner acceptance" (item
+> 10) is met, and the score is now 10 of 10. Q14 is answered *"keep it"*: `npm run chess` keeps its name, so Scope 3
+> does not apply and the size stays `XS`. Readings below are unchanged from the cut.
+
 > **Cut 2026-10-18 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-engine-revise`) as a **proposal**, on the owner's
 > word, verbatim: *"Q13: rename yes."* (`.grugops/context/wave-2026-09-25/notes/20261018T103000Z-orchestrator-decision-owner-word-engine-q12-agpl-q13-rename-6b2d90f1.md`,
 > a transcription, not a stamp). The Orchestrator's reading: the package, the repo and the terminal game are renamed;
@@ -44,9 +50,10 @@ that depends on this repo lists it under one name and runs it under another.
 
 1. `package.json` `"name": "skytalix"`.
 2. `package-lock.json`: the two `name` fields, regenerated with `npm install --package-lock-only`, not hand-edited.
-3. **Only if the owner overrides Q14's recommendation:** `npm run chess` → `npm run skytalix`, with `src/cli.ts:93`'s
-   usage line, its `src/cli.test.ts` pins, `AGENTS.md`'s Dev / run slot and `ADR-0018`'s channel sentence. That makes the
-   ticket `S`, with production lines, and it is re-scored. **The recommendation is to keep `npm run chess`.**
+3. **Does not apply: Q14 is answered *"keep it"* (2026-10-18, `…c3e81a57`).** It would have applied only if the
+   owner had overridden Q14's recommendation: `npm run chess` → `npm run skytalix`, with `src/cli.ts:93`'s usage
+   line, its `src/cli.test.ts` pins, `AGENTS.md`'s Dev / run slot and `ADR-0018`'s channel sentence. That would have
+   made the ticket `S`, with production lines.
 
 ## Out of scope — the owner's steps, listed for him
 
@@ -73,15 +80,15 @@ user-visible string.
   prints nothing. The excluded paths are dated history, planning records, or the Architect's records.
 - **`A4` (the gates).** The four mandatory gates (lint, typecheck, unit, build) are green, unchanged in count from
   `<base>`. `npm run chess` still starts the terminal game.
-- **`A5` (fences).** `git diff --name-only <base> <tip>` lists exactly `package.json` and `package-lock.json` (the Q14
-  default). The production-`src/` grep is empty.
+- **`A5` (fences).** `git diff --name-only <base> <tip>` lists exactly `package.json` and `package-lock.json` (Q14:
+  keep). The production-`src/` grep is empty.
 
 ## Dependencies
 
 - **None among open tickets.** It shares `package.json` with `ABC-168` and `ABC-169` (different keys). Whichever merges
   later rebases.
-- **Q14** fixes whether the script is renamed. The default (keep it) needs no further word.
-- **Gate:** the owner accepts `EPIC-007`.
+- **Q14: answered 2026-10-18, *"keep it"*.** `npm run chess` keeps its name (`…c3e81a57`).
+- **Gate: met.** The owner accepted `EPIC-007` on 2026-10-18 (`…c3e81a57`).
 
 ## Security / NFR triggers
 
@@ -97,14 +104,15 @@ user-visible string.
 
 ## Size and priority
 
-**`XS`:** two manifest files and a grep. **Not `S`:** unless Q14 is overridden (Scope 3).
+**`XS`:** two manifest files and a grep. **Not `S`:** Q14 is answered *"keep it"*, so Scope 3 does not apply.
 
 **`P2`.** It is the owner's wish, but nothing in v1 breaks without it: the engine's name and `bin` are already
 `skytalix`. **Not `P1`:** it carries no measure that M1–M10 need. It is M11.
 
 ## Definition of Ready
 
-BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 9 of 10. Stays in `Backlog`.**
+BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 10 of 10.** Re-scored 2026-10-18 at `main` `50e081fc` (subtask
+`bapm-epic007-accept`). It was 9 of 10 at the cut, with item 10 open until the owner accepted.
 
 | # | item | verdict |
 |---|---|---|
@@ -112,11 +120,12 @@ BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 9 of 10. Stays in `Backlog`.*
 | 2 | scope and out-of-scope clear | **✅** two files; owner steps listed; history left |
 | 3 | INVEST-shaped | **✅** independent; testable by `npm pkg get` and a grep |
 | 4 | acceptance testable and measurable | **✅** exact name, two-line lock diff, empty grep, `npm ci` 0 |
-| 5 | dependencies known | **✅** none open; `package.json` shared; Q14 |
+| 5 | dependencies known | **✅** none open; `package.json` shared; Q14 answered (keep `npm run chess`) |
 | 6 | security/NFR triggers with a measurable target | **✅** clause (a) fires; no NFR |
 | 7 | test notes present | **✅** two |
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P2` |
-| 10 | no major unresolved blocker | **❌** the owner has not accepted `EPIC-007` |
+| 10 | no major unresolved blocker (owner acceptance) | **✅** the owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`) |
 
-**Recommended: stay in `Backlog` until the owner accepts. Then → `Ready`.** Column moves are the Orchestrator's.
+**Recommended: → `Ready`, as far as Ready's WIP limit (8) allows. It is `P2`, so it yields a slot to the `P1` tickets.**
+Column moves are the Orchestrator's.
