@@ -11,6 +11,12 @@ feature: —
 
 # ABC-172 — `cli-chess` becomes `skytalix` inside the repo. ZERO production lines
 
+> **Read 2026-10-18 by BA/PM** (subtask `bapm-ABC-169-rescope`, at `main` `692770d6`), before any build, for the
+> blocker that stopped `ABC-169`: a test that pins `package.json` (`.grugops/queue/done/ticket-to-pr-ABC-169.md`).
+> **It does not reach this ticket.** `ABC-042` `A10` pins `package.json`'s keys, not the `name` value, and no tracked
+> test pins the string `cli-chess` (test note 3). So no test edit is needed. `A4` and `A5` (exactly `package.json` and
+> `package-lock.json`) stand unchanged. The reasoning is in `.grugops/context/bapm-ABC-169-rescope/notes/`.
+
 > **Accepted 2026-10-18 by the owner** (BA/PM, subtask `bapm-epic007-accept`). Owner word, verbatim
 > (`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`,
 > a transcription, not a stamp): *"accept the revised ADR-0044 and EPIC-007"*. The DoR item "owner acceptance" (item
@@ -101,6 +107,18 @@ user-visible string.
 1. **`A3` is the real check.** A rename that leaves one live `cli-chess` is how two names keep living.
 2. **Regenerating the lock with `--package-lock-only`** keeps `A2`'s diff at two lines. A full `npm install` could move
    resolved versions, and `A2` catches that.
+3. **The test pins, read 2026-10-18 at `main` `692770d6`.** None needs an edit:
+   - `git grep -n cli-chess -- '*.test.ts' ':!.grugops'` prints nothing. No test pins the old name or the new one.
+   - `src/cli.test.ts:1759` (`ABC-042` `A10`): pins the top-level key list (`AT_HEAD`, `:1766-1775`), the script values
+     and the reserved keys. A rename changes the value of `name`, which is already in `AT_HEAD`, so the pin holds. If
+     `npm run chess` were renamed (Scope 3, which does not apply), `SCRIPTS_AT_HEAD` and the added list `["chess"]`
+     (`:1799`) would go red.
+   - `src/cli.test.ts:1111` (`ABC-042` `A1`) and `:2386` (`ABC-059`): `scripts.chess` and `AGENTS.md`'s
+     `npm run chess`. Neither changes (Q14: keep it).
+   - `src/cli.real-engine.test.ts:84`: the opt-in lane copies `package.json` byte for byte, and the copy is compared
+     with the file as it is. Holds.
+   - `package-lock.json` is read by no tracked test.
+   - The live hits for `A3` are the same as at `a10e09c2`: `package.json:2`, and `package-lock.json:2` and `:8`.
 
 ## Size and priority
 
@@ -122,7 +140,7 @@ BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 10 of 10.** Re-scored 2026-10
 | 4 | acceptance testable and measurable | **✅** exact name, two-line lock diff, empty grep, `npm ci` 0 |
 | 5 | dependencies known | **✅** none open; `package.json` shared; Q14 answered (keep `npm run chess`) |
 | 6 | security/NFR triggers with a measurable target | **✅** clause (a) fires; no NFR |
-| 7 | test notes present | **✅** two |
+| 7 | test notes present | **✅** three, one of them the test-pin reading (added 2026-10-18) |
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P2` |
 | 10 | no major unresolved blocker (owner acceptance) | **✅** the owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`) |
