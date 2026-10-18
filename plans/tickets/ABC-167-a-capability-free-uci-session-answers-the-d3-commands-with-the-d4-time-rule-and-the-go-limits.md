@@ -11,6 +11,14 @@ feature: —
 
 # ABC-167 — the UCI protocol as a pure module: lines in, lines out, a virtual clock, no process
 
+> **Clock steps ruled 2026-10-18 by BA/PM** (subtask `bapm-amend2-ABC-167`, from `main` `4a181e91`), because
+> `ticket-to-pr-ABC-167-fix` stopped at `grugops/ABC-167` @ `20a9fc5d`: on step 1, `A5-b1` and `A7-f3`'s bare-`go`
+> half pass the vitest 5 s per-test timeout (the engine reads the clock every 1 024 nodes). **Records only.** Each
+> amended `A5`/`A6`/`A7` row now runs on the **coarsest step in {1, 10, 100}** whose window **G ≤ `time` ≤ G + 2·step**
+> still keeps out every wrong build the row names. The table is under `A5`. The bound is kept, and **the timeout
+> is not raised**. DoR and size are unchanged. The figures were read on `20a9fc5d`'s `src/` in a scratch copy, on
+> `virtualClock` only.
+
 > **Amended 2026-10-18 by BA/PM** (subtask `bapm-amend-ABC-167`, from `main` `86e8be75`) for the gaps `qe-ABC-167`
 > found (`…e100c23c`: PASS_WITH_GAPS, QE-167-a..h), and for the SE's five choices (`…297da9e5` on `grugops/ABC-167` @
 > `4dbbfbd8`). **Records only.** The new rows are under each criterion, marked *Amended 2026-10-18*, and named
@@ -117,6 +125,33 @@ Every row drives `handleLine` with strings, collects `write`'s lines, and inject
     `time` is between 1 and 3, and the move is legal. The overhead pin moves to `A5-c1`. M09 and M10 (the floor
     lowered or removed) are **accepted as observationally equivalent**: the engine plays depth 1 on any budget of
     0 ms or less, so there is no row a correct build passes that they fail.
+  - *Amended 2026-10-18 (`bapm-amend2-ABC-167`). This replaces "each runs on step 1" above, and the "on step 1"
+    in `A7-f1`, `A7-f3` and `A7-h1`.* A step of 1 costs about G × 1 024 nodes, so G 600 is about 600k nodes and
+    G 3 000 is about 3M. Those rows go past the 5 s per-test timeout. **The rule:** each row takes the coarsest
+    step s in {1, 10, 100} for which every wrong build it names falls outside **G ≤ `time` ≤ G + 2·s**. A wrong
+    build with budget W reads between W and W + 2·s, so the rule holds when |W − G| > 2·s. The bound and the
+    timeout stay as they are. The six unamended `A5` rows keep their steps.
+
+    | row | step | window (ms) | the wrong builds it rejects (their G, ms) | read at the tip (`time`; nodes; nodes on step 1) |
+    |---|---|---|---|---|
+    | `A5-b1` | **100** | 600–800 | 100 (M03, M06); 1 100 (M04) | 700; 2 069; 606 229 |
+    | `A5-b2` | **100** | 100–300 | 600 (M06) | 200; 31; 96 287 |
+    | `A5-b3` | **10** | 200–220 | 50 (M05). Step 100 would admit it, because 200 − 50 = 150 ≤ 2·100 | 210; 15 381; 197 653 |
+    | `A5-b4` | **100** | 300–500 | 50 (M11, or min(movetime, clock G)) | 400; 655; 300 053 |
+    | `A5-b5` | **100** | 300–500 | 3 000 (the clock wins, or max(movetime, clock G)) | 400; 655; 300 053 |
+    | `A5-c1` | **10** | 50–70 | 100 (M02); 5 (no increment). Step 100 would admit both | 60; 2 050; 45 077 |
+    | `A6-d1` | **100** (as written) | 3 000–3 200 | none by time: every budget is capped at 3 000 ms. M12 fails on the line counts | 3 100; 25 621; 3 062 805 |
+    | `A6-e1`–`e5` | **100** (as written) | none (no `time` is asserted) | M15 and the release builds, by line counts | — |
+    | `A7-f1` | **100** | 100–300 | 3 000 (`movetime` taken as `depth`'s value, then a bare `go`) | 200; 21; 96 277 |
+    | `A7-f2` | **100** (as written) | 3 000–3 200 | any G below 2 800. No wrong value is named | 3 100; 25 621; 3 062 805 |
+    | `A7-f3`, `go movetime 1e2` | **100** | 3 000–3 200 | 100 (`1e2` read as a number) | 3 100; 25 621; 3 062 805 |
+    | `A7-f3`, `movestogo 0` | **100** | 50–250 | 950 (`movestogo 0` accepted: 1000/0, capped by 950) | 200; 21; 45 077 |
+    | `A7-h1` | **100** | 100–300 | 3 000 (M23: `searchmoves` takes the rest of the line) | 200; 21; 96 277 |
+
+    Every wrong build was stood in for by `go movetime W` (or a bare `go`) on the same step, and each one fell
+    outside its row's window (`.grugops/context/bapm-amend2-ABC-167/probe/steps.out`). At these steps, no amended
+    row searches more than 25 621 nodes. Step 1 stays only in the unamended `A5` rows (`movetime 100`, the white
+    clock and the 1 ms row).
 - **`A6` (`infinite` waits for `stop`).** **Given** `go infinite`, **then** no `bestmove` is written. **When** `stop`
   arrives, exactly one `bestmove` is written. A second `stop` writes nothing. `ponderhit` behaves as `stop`.
   - *Amended 2026-10-18 (QE-167-d, D4.3):* **`A6-d1`.** **Given** `position startpos`, **when** `go ponder`
@@ -174,6 +209,8 @@ Every row drives `handleLine` with strings, collects `write`'s lines, and inject
       `go` keyword (the session's keyword set). When the next token is a keyword, or there is none, the keyword is
       valueless: it writes one `info string`, and parsing goes on at the next token, so that token is read as a
       keyword. This is the same boundary choice 4 uses for `searchmoves`.
+    - *Amended 2026-10-18 (`bapm-amend2-ABC-167`):* `A7-f1`, `A7-f3` and `A7-h1` now run on the steps in the table
+      under `A5`, not on step 1. Each window is G to G + 2·step.
     - **`A7-f1`.** **Given** `position startpos`, on step 1, **when** `go depth movetime 100` arrives, **then**
       exactly one `info string` is written (it names `depth`), the `info` line's `time` is between 100 and 102,
       and one `bestmove` follows. **The tip fails this row**: it reads `movetime` as `depth`'s value, then searches

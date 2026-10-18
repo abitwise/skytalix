@@ -1,0 +1,17 @@
+A5-b1 step 100 win 600..800 time 700 OK nodes 2069 | step1 nodes 606229 | 100->200 REJECT, 1100->1200 REJECT
+A5-b2 step 100 win 100..300 time 200 OK nodes 31 | step1 nodes 96287 | 600->700 REJECT
+A5-b3 step 10 win 200..220 time 210 OK nodes 15381 | step1 nodes 197653 | 50->60 REJECT
+A5-b4 step 100 win 300..500 time 400 OK nodes 655 | step1 nodes 300053 | 50->200 REJECT
+A5-b5 step 100 win 300..500 time 400 OK nodes 655 | step1 nodes 300053 | 3000->3100 REJECT
+A5-c1 step 10 win 50..70 time 60 OK nodes 2050 | step1 nodes 45077 | 100->110 REJECT, 5->20 REJECT
+A6-d1 step 100 win 3000..3200 time 3100 OK nodes 25621 | step1 nodes 3062805 | 5000->3100 PASSES!
+A7-f1 step 100 win 100..300 time 200 OK nodes 21 | step1 nodes 96277 | 3000->3100 REJECT
+A7-f2 step 100 win 3000..3200 time 3100 OK nodes 25621 | step1 nodes 3062805 | 1->200 REJECT
+A7-f3a step 100 win 3000..3200 time 3100 OK nodes 25621 | step1 nodes 3062805 | 100->200 REJECT
+A7-f3b step 100 win 50..250 time 200 OK nodes 21 | step1 nodes 45077 | 950->1100 REJECT
+A7-h1 step 100 win 100..300 time 200 OK nodes 21 | step1 nodes 96277 | 3000->3100 REJECT
+# Read on 20a9fc5d's src/ (git archive to the scratchpad), virtualClock only, no wall-clock reading.
+# A wrong build of budget W is stood in by `go movetime W` (or a bare `go` for 3000) on the same step.
+# The A6-d1 "5000" stand-in is NOT a reachable wrong build: the session caps every budget at level 3's
+# 3 000 ms, so it reads the same as the correct build. A6-d1's targeted wrong build (M12, ponder not held)
+# is caught by its line counts, not by time. A7-f2 names no wrong value; "1" is an illustrative low G.
