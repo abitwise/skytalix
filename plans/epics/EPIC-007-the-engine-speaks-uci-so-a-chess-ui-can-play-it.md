@@ -1,7 +1,8 @@
 ---
 id: EPIC-007
 title: The engine speaks UCI as `skytalix`, so a chess UI can play against it
-status: proposed
+status: accepted
+accepted: 2026-10-18, owner (note `…c3e81a57`)
 column: Backlog
 priority: P1
 size: M
@@ -9,6 +10,22 @@ owner: BA/PM
 ---
 
 # EPIC-007 — The engine speaks UCI as `skytalix`, so a chess UI can play against it
+
+> **ACCEPTED, 2026-10-18, by the owner.** Owner word, verbatim
+> (`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`,
+> a transcription, not a stamp): *"License: let's keep private for now ; Q14: keep it ; Q15: picked private ; accept
+> the revised ADR-0044 and EPIC-007 ; ABC-166 - not yet, it is not evening yet."*
+>
+> - **The licence is private, all rights reserved** (`"private": true`, `"license": "UNLICENSED"`). The repo gets no
+>   open-source `LICENSE`. This supersedes the AGPL-3.0 reading below (Q12) and the GPL-3.0 reading before it (Q8).
+> - **`ABC-169` is re-scoped** to "Declare the engine private". **M10** is rewritten to match.
+> - **Q12–Q15 are answered** (§ Owner questions).
+> - The DoR item "owner acceptance" is met on `ABC-167`…`ABC-172`. Each is now 10 of 10. They enter `Ready` only as far
+>   as Ready's WIP limit (8) allows. Column moves are the Orchestrator's.
+>
+> _Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-epic007-accept`), at `main` `50e081fc`. Where
+> the text below still says AGPL-3.0, `LICENSE` or "pending `arch-licence-eval`", this box and the rows marked
+> **(2026-10-18, private)** win._
 
 _Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-engine-revise`). **Revised against the owner's
 answers to Q1–Q11, and then to Q12 and Q13 (owner word `…6b2d90f1`, which arrived during this hop).** Still PROPOSED:
@@ -45,6 +62,7 @@ _Created: 2026-10-18 by BA/PM (subtask `bapm-engine-plan`, `4a98860c`), conditio
 | Q8: GNU GPL v3, then **Q12: AGPL-3.0 "if possible"** | `ABC-169` (licence) moves into v1 and now declares **AGPL-3.0**, pending `arch-licence-eval`. New measure **M10** |
 | Q9: name `skytalix` | `id name skytalix`, `id author Olger Oeselg`, `bin skytalix` |
 | **Q13: rename yes** | New ticket **`ABC-172`** renames the package and every in-repo name to `skytalix`. Renaming the directory and any remote is an owner step. New measure **M11** |
+| **(2026-10-18, private) "keep private for now"; Q14 "keep it"; Q15 "picked private"; accept** | `ABC-169` re-scoped: `"license": "UNLICENSED"` next to the existing `"private": true`, plus the Michniewski credit comment in `src/evaluate.ts`. No `LICENSE` or `NOTICE`. M10 rewritten. `npm run chess` keeps its name. EPIC-007 ACCEPTED |
 | Q10: the owner installs both tools | M1 and M2 no longer wait on an open question |
 | Q11: v1 is done without the web UI | v1 is done when M1–M11 pass on the owner's Mac |
 
@@ -81,9 +99,12 @@ _Created: 2026-10-18 by BA/PM (subtask `bapm-engine-plan`, `4a98860c`), conditio
   the engine is today's engine node for node.
 - **The artifact:** `tsconfig.build.json`, `npm run build` → `dist/uci.js`, `"bin": { "skytalix": "dist/uci.js" }`, and
   `npm run uci` for development (D8). The book is read from the clone's `data/`.
-- **The licence:** `LICENSE` (**AGPL-3.0**, pending `arch-licence-eval`) and the `package.json` `license` field (D13 as
-  amended by Q12). The kit's `tools/grugops/` files stay MIT, and one sentence in
-  `LICENSE` excludes them (no kit file carries an MIT notice today, read at `a10e09c2`).
+- **The licence (2026-10-18, private):** the engine is private, all rights reserved. `package.json` gets
+  `"license": "UNLICENSED"` next to its existing `"private": true`, and the `src/evaluate.ts` header credits Tomasz
+  Michniewski's tables in a comment (`ABC-169`). No `LICENSE` or `NOTICE` file is added. The four kit files in
+  `tools/grugops/` stay MIT and are not edited (none carries an in-file MIT notice, read at `50e081fc`).
+  - *Superseded:* `LICENSE` (**AGPL-3.0**, pending `arch-licence-eval`) and the `package.json` `license` field (D13 as
+    amended by Q12), with one sentence in `LICENSE` excluding the kit files.
 - **The rename:** the npm package and every in-repo name become `skytalix` (Q13, `ABC-172`).
 - One final `info` line and one `bestmove` per `go`. Diagnostics are `info string` lines. Nothing else goes to stdout.
 - An `AGENTS.md` command line for `npm run uci` and the new meaning of `npm run build`. This is the Scribe's job, at
@@ -119,25 +140,25 @@ in a clone after `npm ci && npm run build`, or `skytalix` after `npm link` in th
 | M7 | **A `Skill Level` change is observable** | `uci` lists `option name Skill Level type spin default 3 min 1 max 5`. On the same virtual clock and position, the same `go wtime 60000 btime 60000 winc 1000 binc 1000` (G = 3 500 ms) is searched under a **100 ms** budget at level 1, **3 000 ms** at level 3 and **3 500 ms** at level 5, which is `min(G, level)`. `setoption name Skill Level value 9` keeps the old level and writes one `info string` | The session tests (`ABC-171`), read from the `info` line's `time` on the injected clock, so the numbers are exact and host-independent |
 | M8 | **`go depth`, `nodes` and `mate` are honoured** | (a) A `cutechess-cli` run of 2 games from startpos against the artifact, colours swapped, `depth=4`: both games end by a chess result or adjudication, with 0 illegal moves and 0 stalls, and every searched move's final `info` line reports `depth` ≤ 4. (b) `go depth 3` reports `depth 3`. `go nodes 20000` reports `nodes` ≤ 20 000 + 1 024, unless depth 1 alone took more. `go mate 2` on `5r1k/6pp/7N/3Q4/8/8/8/6K1 w - - 0 1` (the corpus's smothered mate, `src/puzzle-corpus.ts:128`) answers `bestmove d5g8` with `score mate 2` | (a) `cutechess-cli`'s `-debug` log, kept raw under `ABC-168`'s context. Whether `depth=4` with `tc=inf` is the right spelling is `UNKNOWN - verify`, pinned on the first run. (b) The engine rows (`ABC-170`) and the session tests (`ABC-167`), on the virtual clock |
 | M9 | **The artifact builds and runs from a clone** | In a fresh clone, `npm ci && npm run build` exits `0` and creates `dist/uci.js`. `dist/` holds no `*.test.js`, no `cli.js` and no `turn-loop.js`. `printf 'uci\nquit\n' \| node dist/uci.js` prints `id name skytalix` … `uciok` and exits `0`. After `npm link`, `printf 'uci\nquit\n' \| skytalix` prints the same | `ABC-168`'s acceptance, run by the agent and repeated once by the owner at UAT |
-| M10 | **The licence is declared** | `LICENSE` holds the AGPL-3.0 text. `npm pkg get license` prints the SPDX id `arch-licence-eval` and the owner settle at Q12(c) (`"AGPL-3.0-or-later"` by default). The evaluation tables carry what Q12(a) settles. `LICENSE`'s notice says `tools/grugops/` is MIT and not covered (Q12(b)) | `ABC-169`'s acceptance |
+| M10 | **The engine is declared private (2026-10-18, private)** | `npm pkg get private license` prints `true` and `"UNLICENSED"` (as one JSON object: `"private": true`, `"license": "UNLICENSED"`). The first comment block of `src/evaluate.ts` credits Tomasz Michniewski's "Simplified Evaluation Function", with its chessprogramming.org URL and `CC BY-SA 3.0`, and the change is comment-only. No `LICENSE`, `NOTICE` or `COPYING` file is tracked. *Superseded target: an AGPL-3.0 `LICENSE` and SPDX id* | `ABC-169`'s acceptance (`A1`–`A4`) |
 | M11 | **The in-repo name is `skytalix`** | `npm pkg get name` prints `"skytalix"`. Both `name` fields in `package-lock.json` read `skytalix`, and `npm ci` exits `0`. Outside dated history, no live file names the package `cli-chess` | `ABC-172`'s acceptance |
 
 M1 and M8(a) measure time and protocol safety (candidate row (ii)). They are **not** strength claims. No Elo is claimed
 at any `Skill Level` (`EPIC-004` § Test notes; `src/levels.ts`).
 
-## Tickets (pages cut; status `Backlog`, proposal; none enters Ready before the owner accepts)
+## Tickets (pages cut; status `Backlog`; accepted 2026-10-18, each DoR 10 of 10; they enter Ready as WIP allows)
 
 There are six tickets, each `XS` or `S`, and each is one INVEST slice. The first four run as one chain, because each
 one reads the one before it. `ABC-169` and `ABC-172` stand alone. The pages are under `plans/tickets/`.
 
 | order | id | title | size | depends on | gated by | Security/NFR hop |
 |---|---|---|---|---|---|---|
-| 1 | `ABC-170` | `src/engine.ts` takes two optional limits, `maxDepth` and `maxNodes`. Absent, it is today's engine node for node | **XS** | none | the owner accepts `ADR-0044` (D12) | **No** `ADR-0036` limb. `NFR-005` is re-read on its existing deep-lane protocol at the build hop |
-| 2 | `ABC-167` | `src/uci-session.ts`: a capability-free UCI session for the D3 commands, the D4 time rule and the D12 `go` limits | **S** | `ABC-170` | acceptance | **No.** (b1) and (b2) do not fire, because there is no limb in it or in what it imports. QE confirms this as a review check |
-| 3 | `ABC-171` | The session offers `OwnBook` and `Skill Level` (D10, D11) | **S** | `ABC-167` | acceptance | **No.** `book.ts` is imported as a type only, and `levels.ts` holds no limb token |
-| 4 | `ABC-168` | `skytalix`: the entry point `src/uci.ts`, the built `dist/uci.js` with its `bin`, the opt-in real-child lane, and M1, M2 and M8(a) at UAT | **S** | `ABC-171` | acceptance. Before its UAT, the owner has installed `cutechess-cli` and En Croissant (Q10) | **Yes.** `ADR-0036` (b1) fires on `process.`, on `node:readline` and on the import of the capability holder `book-file.ts`. `ABC-041` clause (a) fires on `package.json`. Security/NFR places candidate rows (i)–(iii) |
-| 5 | `ABC-169` | Declare the AGPL-3.0 licence: `LICENSE` and the `package.json` `license` field | **XS** | none | **`arch-licence-eval`** settles Q12(a) and (c) | **Yes, a short one.** It touches `package.json`, so `ABC-041` clause (a) fires ("touched at all"). This corrects the first version's "No". It has 0 production lines, so (b) does not fire, and the UAT waiver applies by measurement |
-| 6 | `ABC-172` | Rename the package and every in-repo name to `skytalix` | **XS** | none (any order with `ABC-168`/`ABC-169`; all three edit `package.json`, so whichever merges later rebases) | acceptance; **Q14** (keep `npm run chess`?) | **Yes, a short one.** It touches `package.json` and `package-lock.json`, so clause (a) fires. 0 production lines |
+| 1 | `ABC-170` | `src/engine.ts` takes two optional limits, `maxDepth` and `maxNodes`. Absent, it is today's engine node for node | **XS** | none | met: the owner accepted `ADR-0044` (D12), 2026-10-18 | **No** `ADR-0036` limb. `NFR-005` is re-read on its existing deep-lane protocol at the build hop |
+| 2 | `ABC-167` | `src/uci-session.ts`: a capability-free UCI session for the D3 commands, the D4 time rule and the D12 `go` limits | **S** | `ABC-170` | met (accepted 2026-10-18) | **No.** (b1) and (b2) do not fire, because there is no limb in it or in what it imports. QE confirms this as a review check |
+| 3 | `ABC-171` | The session offers `OwnBook` and `Skill Level` (D10, D11) | **S** | `ABC-167` | met (accepted 2026-10-18) | **No.** `book.ts` is imported as a type only, and `levels.ts` holds no limb token |
+| 4 | `ABC-168` | `skytalix`: the entry point `src/uci.ts`, the built `dist/uci.js` with its `bin`, the opt-in real-child lane, and M1, M2 and M8(a) at UAT | **S** | `ABC-171` | met (accepted 2026-10-18). Before its UAT, the owner has installed `cutechess-cli` and En Croissant (Q10) | **Yes.** `ADR-0036` (b1) fires on `process.`, on `node:readline` and on the import of the capability holder `book-file.ts`. `ABC-041` clause (a) fires on `package.json`. Security/NFR places candidate rows (i)–(iii) |
+| 5 | `ABC-169` | **(2026-10-18, private)** Declare the engine private: `"license": "UNLICENSED"` next to `"private": true`, and the Michniewski credit comment in the `src/evaluate.ts` header | **XS** | none | met (accepted 2026-10-18; private chosen) | **Yes, a short one.** It touches `package.json`, so `ABC-041` clause (a) fires ("touched at all"). The `src/evaluate.ts` edit is comment-only, so `ADR-0036` (b1) and (b2) do not fire. **UAT: expected WAIVED** by the owner's Q4 comment-only measurement (`…5c8e2a17`) at the exit; if that fails, the owner's UAT applies |
+| 6 | `ABC-172` | Rename the package and every in-repo name to `skytalix` | **XS** | none (any order with `ABC-168`/`ABC-169`; all three edit `package.json`, so whichever merges later rebases) | met (accepted 2026-10-18); **Q14 answered: keep `npm run chess`** | **Yes, a short one.** It touches `package.json` and `package-lock.json`, so clause (a) fires. 0 production lines |
 
 **Why six and not fewer.**
 - `ABC-170` is its own ticket because it edits a pinned core module, amends `ABC-078` `A4` and reruns the `A3` identity
@@ -148,7 +169,8 @@ one reads the one before it. `ABC-169` and `ABC-172` stand alone. The pages are 
   owner's Q4 plus Q5 and nothing else.
 - `ABC-168` is the only ticket that touches `process` or a capability holder, so the Security/NFR hop covers one small
   file plus config. The build line and `bin` belong with it, because they emit exactly that file.
-- `ABC-169` touches no code and waits only on `arch-licence-eval`, so it can merge at any time.
+- `ABC-169` touches no executable code (one manifest line and one header comment) and waits on nothing, so it can
+  merge at any time. *(2026-10-18, private; it waited on `arch-licence-eval` before.)*
 - `ABC-172` is its own ticket on the owner's word (Q13). It touches no code: no string under `src/` names the product
   (read at `a10e09c2`).
 
@@ -187,7 +209,26 @@ evaluation tables and reference them and still use AGPL v3 for the built softwar
 | Q12(c) | `-or-later` or `-only`? | **pending.** Not stated by the owner. The default reading is `AGPL-3.0-or-later`; `arch-licence-eval` and the owner settle it | `ABC-169` `A2` |
 | Q13 | Rename the npm package, the repo and the terminal game to `skytalix`? | **yes** | `ABC-172`, M11. The directory and any remote are owner steps |
 
-### Open (raised by this revision; it has a recommended answer)
+### Answered on 2026-10-18 (the Orchestrator's note `…c3e81a57`): Q12–Q15 closed, EPIC-007 accepted
+
+The owner's words, verbatim: *"License: let's keep private for now ; Q14: keep it ; Q15: picked private ; accept the
+revised ADR-0044 and EPIC-007"*. **No owner question on this epic is open.**
+
+| # | question | answer | where it landed |
+|---|---|---|---|
+| Q12 | The licence and its scope | **Private, all rights reserved** (*"keep private for now"*). It supersedes AGPL-3.0 | `ABC-169` re-scoped; M10 |
+| Q12(a) | The Michniewski tables: credit or replace? | **Credit, as they are.** The owner said nothing about them; this is the Orchestrator's default reading (`…c3e81a57`), and he may correct it. A private engine that is not distributed does not share the CC BY-SA material | `ABC-169` `A2` (a comment in `src/evaluate.ts`) |
+| Q12(b) | The kit's MIT files | **They stay MIT** and are not edited | `ABC-169` Scope 3, `A5` |
+| Q12(c) | `-or-later` or `-only`? | **Moot.** No open-source licence is declared | — |
+| Q14 | Keep `npm run chess`? | **Keep it** (*"keep it"*) | `ABC-172` Scope 3 does not apply; stays `XS` |
+| Q15 | The licence findings (credit, MIT notice, `-or-later`) | **Moot** (*"picked private"*) | — |
+| — | Accept the revised `ADR-0044` and `EPIC-007`? | **Yes** | this page's status; DoR item 10 on `ABC-167`…`ABC-172` |
+
+**Recorded precondition, not a ticket.** Before the engine is ever distributed to third parties (for example a browser
+bundle or a published binary), the evaluation values are re-derived as our own. A ticket for it is cut only on the
+owner's word (`…c3e81a57`).
+
+### Raised by the revision (answered above, 2026-10-18; kept for the record)
 
 | # | question | recommended answer | why |
 |---|---|---|---|
@@ -208,8 +249,8 @@ ticket.
   - the game record: moves, PGN, take-back and results (in UCI the GUI holds the game);
   - the clocks and the time control, sent as `go wtime/btime/winc/binc`, `go movetime`, or `go depth` / `nodes`;
   - any difficulty UI, which it maps onto `setoption name Skill Level value 1..5`;
-  - its bundler, hosting, accounts, accessibility, and its own licence. It runs an AGPL-3.0 program as a separate
-    process. What AGPL-3.0's network clause asks of that backend is part of `arch-licence-eval`, not of this page.
+  - its bundler, hosting, accounts, accessibility, and its own licence. It runs a private, all rights reserved program
+    (the same owner's) as a separate process. *(2026-10-18, private: the AGPL-3.0 network-clause question is moot.)*
 - **It does NOT get from this repo:** an HTTP or WebSocket server, a router, a bundle, a Web Worker build, a WASM build,
   a native binary, an npm package, UI-specific commands, or any option beyond `OwnBook` and `Skill Level`.
 - **It can rely on this repo for:** `npm ci && npm run build` producing `dist/uci.js` (M9); legal `bestmove` output,
@@ -221,8 +262,12 @@ ticket.
 - `EPIC-004`: the engine (`chooseMove`) and the levels (`ABC-087`). Delivered. `ABC-170` edits `src/engine.ts` once.
 - `EPIC-005`: the opening book (`createBookProbe`, `readBookFile`, `data/opening-book/book.json`). Delivered.
 - `EPIC-001`: FEN, coordinate moves and `makeMove`. Delivered.
-- The owner **accepts the revised `ADR-0044` and this revision** before any ticket here can enter `Ready`.
-- **`ADR-0044` is one owner answer behind.** At `a10e09c2` its D8 and D13 still say `GPL-3.0-or-later` and that the
+- The owner **accepts the revised `ADR-0044` and this revision** before any ticket here can enter `Ready`. **Met,
+  2026-10-18** (`…c3e81a57`).
+- **(2026-10-18, private)** `ADR-0044` D13 is rewritten to private by the Architect's `arch-adr0044-accept` hop, in
+  parallel with this one. This page does not edit the ADR. `ABC-169`'s credit wording reads from D13, and its `A2` holds
+  either way.
+- *As read at `a10e09c2`, before the licence evaluation:* **`ADR-0044` is one owner answer behind.** At `a10e09c2` its D8 and D13 still say `GPL-3.0-or-later` and that the
   package "stays `cli-chess`". Q12 and Q13 move both. The licence line is `arch-licence-eval`'s, and the rename line is
   the Architect's at acceptance. This page does not edit the ADR (`memory-bank/50-decisions` is fenced at this hop).
 
@@ -243,9 +288,16 @@ ticket.
   amendment, so the size stays `XS`. A dated line in `ADR-0044` is the Architect's, at acceptance.
 - `RISK-EPIC007-05`: the first `isready` loads and validates a 356 526-byte book, and its cost on this host is not
   measured. M3's 1 000 ms stays a proposal until `ABC-168`'s lane reads it.
-- `RISK-EPIC007-06`: Q12(a) is a legal question that no agent can settle. `arch-licence-eval` evaluates it, and the
+- `RISK-EPIC007-06` **(closed 2026-10-18, private):** the owner chose private, so neither AGPL compatibility nor
+  replacing the tables is in play for v1. What remains is `RISK-EPIC007-07`. *The original text:* Q12(a) is a legal
+  question that no agent can settle. `arch-licence-eval` evaluates it, and the
   owner decides. If the outcome is "replace the tables", `ABC-169` stays `XS`, but a new ticket that changes strength
   appears outside this epic. If AGPL-3.0 is "not possible", `ABC-169`'s licence line changes and its size does not.
+- `RISK-EPIC007-07` **(new 2026-10-18, private):** the Michniewski tables stay as they are under a credit comment. That
+  rests on the engine not being distributed: it runs on the owner's own backend over stdio. The day it is distributed to
+  third parties (a browser bundle, a published binary), the values must first be re-derived as our own, which re-tunes
+  the engine and moves the evaluation, puzzle, ladder and level pins. No ticket exists for it, and one is cut only on
+  the owner's word (`…c3e81a57`). The tables-credit reading is the Orchestrator's default, and the owner may correct it.
 
 ## NFR triggers
 

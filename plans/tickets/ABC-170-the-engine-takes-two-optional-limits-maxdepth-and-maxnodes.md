@@ -11,6 +11,11 @@ feature: —
 
 # ABC-170 — two optional `EngineOptions` fields that can only shorten a search, so UCI `go depth` / `nodes` / `mate` can be honoured
 
+> **Accepted 2026-10-18 by the owner** (BA/PM, subtask `bapm-epic007-accept`). Owner word, verbatim
+> (`.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`,
+> a transcription, not a stamp): *"accept the revised ADR-0044 and EPIC-007"*. The DoR item "owner acceptance" (item
+> 10) is met, and the score is now 10 of 10. Readings below are unchanged from the cut.
+
 > **Cut 2026-10-18 by BA/PM** (task `wave-2026-09-25`, subtask `bapm-engine-revise`) as a **proposal**. It stays in
 > `Backlog` until the owner accepts the revised `ADR-0044` (D12) and `EPIC-007`. Design: `ADR-0044` D12. Owner word:
 > Q6, *"don't ignore, implement if it has not been implemented in our engine"* (`…a41c7e02`). Architect's suggestion
@@ -94,7 +99,8 @@ and is the same on every host.
 - **None among open tickets.** `src/engine.ts` and `src/engine.test.ts` are not in any open ticket's file list at
   `a10e09c2`. `UNKNOWN - verify` at pull time against the board's `In Development` column.
 - **Blocks `ABC-167`**, which maps `go depth` / `nodes` / `mate` onto these fields.
-- **Gate:** the owner accepts the revised `ADR-0044`. D12 amends `ABC-078` `A4` and `ADR-0027` decision 3 on his word.
+- **Gate: met.** The owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`). D12 amends
+  `ABC-078` `A4` and `ADR-0027` decision 3 on that word.
 
 ## Security / NFR triggers
 
@@ -124,7 +130,8 @@ and is the same on every host.
 
 ## Definition of Ready
 
-BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 9 of 10. Stays in `Backlog`.**
+BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 10 of 10.** Re-scored 2026-10-18 at `main` `50e081fc` (subtask
+`bapm-epic007-accept`). It was 9 of 10 at the cut, with item 10 open until the owner accepted.
 
 | # | item | verdict |
 |---|---|---|
@@ -137,6 +144,7 @@ BA/PM, 2026-10-18, at `main` `a10e09c2`. **Result: 9 of 10. Stays in `Backlog`.*
 | 7 | test notes present | **✅** four |
 | 8 | size assigned | **✅** `XS` |
 | 9 | priority assigned | **✅** `P1` |
-| 10 | no major unresolved blocker | **❌** the owner has not accepted the revised `ADR-0044` (D12 amends `A4` and `ADR-0027` d3 on his word) |
+| 10 | no major unresolved blocker (owner acceptance) | **✅** the owner accepted the revised `ADR-0044` and `EPIC-007` on 2026-10-18 (`…c3e81a57`) |
 
-**Recommended: stay in `Backlog` until the owner accepts. Then → `Ready`.** Column moves are the Orchestrator's.
+**Recommended: → `Ready` now, as far as Ready's WIP limit (8) allows. It heads the chain and has no open dependency.**
+Column moves are the Orchestrator's.
