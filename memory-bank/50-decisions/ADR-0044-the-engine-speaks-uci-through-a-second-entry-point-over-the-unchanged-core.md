@@ -9,6 +9,10 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 **Revised 2026-10-18** by Architect/Design (subtask `arch-engine-revise`) against the owner's answers to
 Q1–Q11. It is still **proposed**. **The owner must accept the revision.** Nothing is built because of this
 ADR, and no ticket may enter `Ready` on it until he accepts it.
+**Revised again 2026-10-18** by Architect/Design (subtask `arch-licence-eval`) against the owner's answers to
+Q12 and Q13 (note `.grugops/context/wave-2026-09-25/notes/20261018T103000Z-orchestrator-decision-owner-word-engine-q12-agpl-q13-rename-6b2d90f1.md`).
+D13 now holds the licence evaluation (AGPL-3.0-or-later). D8 and D13 take the rename, and D12 names the
+second `A4` check. It is still **proposed**. § Revision — licence lists the changes.
 
 - **The ask.** The owner's word of 2026-10-18 (note
   `.grugops/context/wave-2026-09-25/notes/20261018T073030Z-orchestrator-decision-owner-word-chess-engine-conversion-research-only-5b37b0bc.md`):
@@ -26,7 +30,8 @@ ADR, and no ticket may enter `Ready` on it until he accepts it.
   - standards research with primary-source URLs — `.grugops/context/arch-engine-research/notes/20261018T074200Z-architect-design-observation-chess-engine-standards-read-on-the-primary-sources-3f1a9c20.md`;
   - repo-fit map (what we have, what is missing) — `…/20261018T074300Z-architect-design-observation-repo-fit-map-what-uci-needs-against-what-src-has-7b2e4d18.md`;
   - the first hop's decision — `…/20261018T074400Z-architect-design-decision-adr-0044-proposed-uci-v1-shape-and-the-owner-questions-c5d07e91.md`;
-  - this revision's decision and repo-fit facts — `.grugops/context/arch-engine-revise/notes/20261018T095000Z-architect-design-decision-adr-0044-revised-book-levels-go-limits-skytalix-artifact-gpl-e4a7c912.md`.
+  - this revision's decision and repo-fit facts — `.grugops/context/arch-engine-revise/notes/20261018T095000Z-architect-design-decision-adr-0044-revised-book-levels-go-limits-skytalix-artifact-gpl-e4a7c912.md`;
+  - the licence evaluation, with primary sources — `.grugops/context/arch-licence-eval/notes/20261018T101627Z-architect-design-decision-agpl-3-0-or-later-tables-credited-kit-files-stay-mit-15c4fd4e.md`.
 
 ## Revision — 2026-10-18 (the owner's answers to Q1–Q11)
 
@@ -41,6 +46,15 @@ ADR, and no ticket may enter `Ready` on it until he accepts it.
 | R7 | Q8: **GPL v3** | New **D13**. `GPL-3.0-or-later` (the Orchestrator's reading). Everything bundled was checked. One item needs the owner's call: the evaluation tables' provenance (new **Q12**) |
 | R8 | Q9: **name `skytalix`** | D3 and D13: `id name skytalix`, `id author Olger Oeselg`, and `bin` `skytalix`. The package, the repo and the terminal game are **not** renamed (new **Q13**) |
 | R9 | Q10, Q11 | The owner installs `cutechess-cli` and En Croissant. v1 is done without the web UI. D9's acceptance relies on both |
+
+## Revision — licence, 2026-10-18 (the owner's answers to Q12 and Q13; subtask `arch-licence-eval`)
+
+| # | owner's answer or finding | what changed in this ADR |
+|---|---|---|
+| L1 | Q12: **"AGPL v3 if possible"**; kit is MIT | **D13 rewritten.** `AGPL-3.0-or-later` for the repository, except the four kit files, which stay MIT. It supersedes R7's GPL-3.0-or-later. The tables are credited, not re-derived. This is not legal advice, and the open points are marked `UNKNOWN - verify` |
+| L2 | Q13: **"rename yes"** | D8 and D13: the package, the repository and the terminal game become `skytalix`, delivered by `ABC-172`. The directory and remote rename is the owner's step. It supersedes R8's "not renamed". New **Q14** (`npm run chess`) |
+| L3 | BA/PM's finding, relayed by the Orchestrator | D12: the `A4` amendment touches **two** checks, not one. The second pins the deepening-loop header word for word |
+| L4 | consequence of L1 | New **Q15**: the owner confirms the licence findings and supplies the kit's MIT notice. It blocks `ABC-169` only |
 
 ## Context
 
@@ -239,7 +253,8 @@ that backend can run.
     checks the whole tree. `AGENTS.md`'s Build line is the Scribe's to update. `dist/` is already in
     `.gitignore`.
   - **`package.json`** gets `"bin": { "skytalix": "dist/uci.js" }` and `"uci": "node src/uci.ts"`. The
-    package stays `"private": true`, and its name stays `cli-chess` (D13, Q13).
+    package stays `"private": true`. *Revised 2026-10-18 (L2):* its name becomes `skytalix`, delivered
+    by `ABC-172`, not by the engine tickets (D13, Q13).
 - **How it is run.** In a clone: `npm ci && npm run build`. Then the backend spawns
   `node <clone>/dist/uci.js`, or `skytalix` on the `PATH` after `npm link` in that clone. A desktop GUI or
   `cutechess-cli` is pointed at the same command. `node <clone>/src/uci.ts` still works for development.
@@ -364,6 +379,12 @@ that backend can run.
       `maxDepth` would trip it. The ticket amends that one check: still no depth default and no depth
       constant, plus a pin that `maxDepth` is optional and has no default value. The export and arity
       pins are unchanged. RISK-002 still holds: the budget is still time, and a depth can only cut it short.
+    - *Added 2026-10-18 (L3): `A4` changes in **two** checks, not one.* Both sit in
+      `describe("A4 — no fixed depth anywhere in the delivered engine")` in `src/engine.test.ts`. One is
+      the `max_?depth` ban (line 517 at `930a812c`). The other pins the deepening-loop header word for word,
+      `for (let iteration = 2; now() < budget.deadline; iteration++)` (line 523; the header is
+      `src/engine.ts:483`). D12 adds conditions to that header, so the second check changes too. It
+      still bans an `iteration <= <constant>` clause. `ABC-170` `A4` names both checks.
     - **`ADR-0027` decision 3** ("no `EngineOptions` field … no node budget") is amended for these two
       fields only, on the owner's word.
     - **`ADR-0024` decision 7** is met: the owner requested this.
@@ -382,31 +403,148 @@ that backend can run.
   - A value that is not a positive integer drops that token, with one `info string`.
   - `searchmoves` is ignored, with one `info string` (D6).
 
-### D13. Licence and name (Q8, Q9)
+### D13. Licence and name (Q8, Q9, Q12, Q13; revised 2026-10-18 by `arch-licence-eval`)
 
-- **Name.** `id name skytalix`, `id author Olger Oeselg`. The `bin` is `skytalix`. **Not renamed:** the
-  npm package (`cli-chess`), the repository, `npm run chess` and the terminal game's text. Renaming
-  them is the owner's open item (Q13).
-- **Licence.** `GPL-3.0-or-later`. The Orchestrator read the owner's "GNU GPL v3" that way, and he may
-  say `-only` instead (Q12). `ABC-169` adds the `LICENSE` text and `"license": "GPL-3.0-or-later"` to
-  `package.json`.
-- **What would be bundled, checked on 2026-10-18:**
+*This is a licence evaluation by an engineering role. It is not legal advice. The owner makes the final
+call, and any conclusion marked `UNKNOWN - verify` needs a lawyer or the rights holder to settle it.*
+The evidence, with primary sources, is in the note
+`.grugops/context/arch-licence-eval/notes/20261018T101627Z-architect-design-decision-agpl-3-0-or-later-tables-credited-kit-files-stay-mit-15c4fd4e.md`.
 
-| item | where from | licence | GPL-3.0 |
+- **Name (Q9, Q13).** `id name skytalix`, `id author Olger Oeselg`, and the `bin` is `skytalix`. The
+  owner answered Q13 *"rename yes"* (note `…6b2d90f1`). The npm package, the repository and the
+  terminal game's text become `skytalix`, delivered by ticket `ABC-172`. Renaming the repository
+  directory or a git remote is the owner's own step, because humans hold the repository. Whether
+  `npm run chess` keeps its script name is open as **Q14**. The default is to keep it.
+- **Licence (Q8 superseded by Q12).** **`AGPL-3.0-or-later`** for the whole repository. The only
+  exceptions are the grugops kit's files, which stay MIT (item 2 below). The owner's words: *"AGPL v3
+  if possible"*. The evaluation finds it possible. `ABC-169` adds the `LICENSE` text,
+  `"license": "AGPL-3.0-or-later"` in `package.json`, and the `NOTICE` file below. No `LICENSE` file
+  is added by this ADR.
+
+**1. The evaluation tables (`PIECE_VALUE` and the six piece-square tables in `src/evaluate.ts`).**
+
+| question | finding | confidence |
+|---|---|---|
+| Where did they come from? | Tomasz Michniewski posted them to the Polish chess-programming list *progszach*, for a "Unified Evaluation" test tournament. Pawel_Koziol created the wiki page on chessprogramming.wikispaces.com on 31 May 2008, and Gerd Isenberg edited it from 2008 to 2014. The page later moved to chessprogramming.org. Our file uses the values unchanged, recast as TypeScript arrays. It takes the king middle-game table only, and it sets the king to 0, not 20000 | high (archived page history); the date of the original list post is `UNKNOWN - verify` (before 31 May 2008; "2007/2008" is not confirmed) |
+| What licence is the wiki page under? | CC BY-SA 3.0 Unported. The current footer reads *"licensed CC BY-SA 3.0 by its contributors"*. The 2009 wikispaces footer reads *"Contributions … are licensed under a Creative Commons Attribution Share-Alike 3.0 License"* | high |
+| Did the wiki licence come from Michniewski? | Not shown. The licence was granted by the wiki contributors, and the page creator was not Michniewski. A contributor can license only what he holds. Whether Michniewski ever licensed his values is not known | `UNKNOWN - verify` |
+| Are the numbers protected at all? (EU, the owner's jurisdiction: Estonia) | Probably not. EU originality means the author's own intellectual creation, shown by free and creative choices (`Infopaq` C-5/08; `Brompton` C-833/18 ¶23–26). Effort spent creating data does not count (`Football Dataco` C-604/10 ¶46). Function is not expression (`SAS` C-406/10 ¶39). Estonia's Copyright Act § 5 excludes facts and data. The sui generis database right does not cover investment in creating data (`BHB v William Hill` C-203/02 ¶31) | medium; `UNKNOWN - verify` |
+| Are they protected at all? (US) | Unsettled. Facts are not original (`Feist`, 499 U.S. 340), and 17 U.S.C. § 102(b) excludes systems and methods of operation. But the Ninth Circuit held that judgment-based price estimates were copyrightable (`CDN v. Kapes`, 197 F.3d 1256). A court could treat hand-chosen weights the same way | low; `UNKNOWN - verify` |
+| If they are protected, can BY-SA 3.0 reach GPLv3? | Only through a two-step chain that Creative Commons does not state in one place. BY-SA 3.0 § 4(b)(ii) lets an **Adaptation** be distributed under a later BY-SA version (4.0). On 8 October 2015 Creative Commons declared GPLv3 a BY-SA-Compatible License for **4.0 only**, one-way. Creative Commons says *"no non-CC licenses have been designated as compatible with BY-SA 3.0"*. The chain also needs our tables to count as an Adaptation. BY-SA 3.0 § 4(a) allows a verbatim copy only under 3.0 itself | `UNKNOWN - verify` |
+| Does GPLv3 compatibility reach AGPLv3? | Yes, for the combination. GPLv3 § 13 and AGPLv3 § 13 each permit combining a GPLv3 work with an AGPLv3 work. Each part keeps its own licence, and AGPL § 13's network clause applies to the combination as such. Creative Commons' page names GPLv3 only, and its wiki says *"you must specify version 3 of the GPL"*. So the tables' part would be GPL-3.0, inside an AGPL-3.0-or-later program | high (licence texts) |
+
+- **Recommendation: credit them as they are. Do not re-derive.** The likely position is that 64-number
+  weight tables are unprotected data, and a credit costs nothing. Re-deriving re-tunes the engine and
+  moves the evaluation, puzzle and level pins, which buys nothing if the numbers are unprotected.
+  Re-deriving stays the rollback if the rights holder ever objects. The owner may also email
+  Michniewski for written permission. That would close the open questions above at the cost of one email.
+- **Credit wording, `src/evaluate.ts` header** (added by `ABC-169`, next to the tables):
+
+  > `PIECE_VALUE` and the six piece-square tables are the values of Tomasz Michniewski's "Simplified
+  > Evaluation Function", first posted to the Polish chess-programming list progszach and published at
+  > <https://www.chessprogramming.org/Simplified_Evaluation_Function> under CC BY-SA 3.0
+  > (<https://creativecommons.org/licenses/by-sa/3.0/>). The values are unchanged. The layout, the king
+  > value of 0 and all code are ours. See `NOTICE`.
+
+- **Credit wording, `NOTICE` at the repository root** (added by `ABC-169`):
+
+  > Evaluation tables. `src/evaluate.ts` uses the piece values and piece-square tables of Tomasz
+  > Michniewski's "Simplified Evaluation Function", from the Chess Programming Wiki,
+  > <https://www.chessprogramming.org/Simplified_Evaluation_Function>, licensed CC BY-SA 3.0 by its
+  > contributors. We treat these values as facts. To the extent they are protected, our adaptation is
+  > offered under CC BY-SA 4.0 and GPL-3.0, under Creative Commons' BY-SA 4.0 compatibility with GPLv3.
+  > It is combined with this AGPL-3.0-or-later program under GPLv3 § 13. No endorsement by the author
+  > is implied.
+
+  The credit names the author, the title, the URI and the licence, and says what changed. Those are
+  the items BY-SA 3.0 § 4(c) and BY-SA 4.0 § 3(a) ask for. AGPL § 7(b) permits keeping such an
+  attribution as a legal notice.
+
+**2. The grugops kit's files.** MIT is compatible with the GNU licences (the FSF's licence list, Expat
+and X11 entries), so MIT files may sit in an AGPL repository.
+
+- **Which files are kit files.** Four of the eleven files in `tools/grugops/` came from kit installs:
+  `reference-check.js` and `test-skip-integrity.js` (`49edb4f7`), `uat-spec-integrity.js` (`355b2078`)
+  and `host-protection.js` (`1674f745`). The other seven were written in this repository under tickets
+  `ABC-105`, `ABC-118`, `ABC-122`, `ABC-123` and `ABC-142`/`ABC-143`/`ABC-152`. Those seven are this
+  project's own work and fall under AGPL like `src/`. (`result-file-reporter.js` imports vitest's
+  `JsonReporter`. It copies no vitest code.) The installer also writes files outside `tools/` (for
+  example `.claude/settings.json`, `.gemini/settings.json`, `.pi/prompts/grugops.md` and
+  `.claude/skills/grugops-*`). The full list is `UNKNOWN - verify`, and `ABC-169` takes the inventory.
+- **What MIT requires.** *"The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software."* None of the four kit files carries an MIT
+  notice today, and the installed kit ships no licence file. So the exact notice and its copyright line
+  are `UNKNOWN - verify`, and the owner must supply them. `ABC-169` then adds the notice beside the
+  kit files and names them as MIT in `NOTICE`.
+- **Not part of the built software.** `dist/` is `tsc` output of `src/uci.ts` and its imports only
+  (D8). The kit files are development tools and are not needed to build or run `dist/`. So they are
+  outside the engine's Corresponding Source (AGPL § 1). In the repository they are separate works
+  beside the AGPL code (AGPL § 5, "aggregate"). Either reading leaves them MIT.
+
+**3. CC0 and public-domain parts.** None of them needs anything under AGPL. Public-domain material and
+CC0 are compatible with the GNU GPL (the FSF's licence list).
+
+| item | its terms | what we do |
+|---|---|---|
+| `data/opening-book/book.json` (`lichess-org/chess-openings`) | CC0-1.0, with the fallback licence of CC0 § 3 | nothing required. `data/opening-book/ATTRIBUTION.md` already records provenance. `NOTICE` names it as a courtesy |
+| `seededRandom` in `src/levels.ts` (mulberry32, Tommy Ettinger, 2017) | a dedication *"to the public domain worldwide"* that points to CC0 | nothing required. `NOTICE` names it as a courtesy |
+| `splitmix64` in `src/zobrist.ts` (Sebastiano Vigna, 2015) | a public-domain dedication plus a fallback permission, *"Permission to use, copy, modify, and/or distribute this software for any purpose … is hereby granted"* | nothing required. Our code is a re-implementation of the algorithm with its constants. `NOTICE` names it as a courtesy |
+
+A public-domain dedication without a fallback can fail where moral rights cannot be waived, as in
+Estonia. All three items have a fallback (CC0 § 3, or Vigna's permission sentence), so this does not bite.
+
+**4. The AGPL § 13 network clause and the owner's web project.**
+
+- **What § 13 says.** *"If you modify the Program, your modified version must prominently offer all
+  users interacting with it remotely through a computer network … an opportunity to receive the
+  Corresponding Source."*
+- **Is the engine "interacted with remotely"?** Probably not by itself. The FSF's FAQ says a program
+  *"not expressly designed to interact with a user through a network"* does not fall under § 13
+  merely because it *"happens to"* run so. `skytalix` speaks UCI over stdio to one parent process.
+  But the FAQ's broader test is whether *"a person will be interacting with the program remotely"*,
+  and a web player's moves do reach it. `UNKNOWN - verify`.
+- **The owner himself.** The FSF's FAQ says the developer *"is not bound by"* his own GPL, and the owner
+  holds the copyright in the AGPL code. The kit files are MIT and add no duty. One path remains. If
+  the tables are protected and reach us as GPL-3.0, GPLv3 § 13 says AGPL § 13 *"will apply to the
+  combination as such"*. That would bind him as a licensee of the tables. It needs three open points at
+  once: protected tables, a modified engine, and remote interaction. `UNKNOWN - verify`.
+- **Other people.** Anyone who modifies `skytalix` and runs it behind a web UI should assume § 13
+  applies, and offer the source of their version.
+- **The web project.** It stays outside the AGPL as long as it only spawns `skytalix` and talks UCI over
+  stdio. The FSF's FAQ: *"pipes, sockets and command-line arguments are communication mechanisms
+  normally used between two separate programs"*. It is reached only if the two are combined into one
+  program. A JavaScript import of the engine, or a Worker bundle built from `src/`, would do that.
+- **Plain-language consequence for the owner.** Your web project can use any licence, as long as it
+  only spawns the engine. For your own engine code you owe nothing under § 13. The only possible duty
+  comes through the tables, and only under the unlikely reading above. Close it with one habit: put a
+  "Source" link on the web UI's about page. It points to a public copy of the exact `skytalix` version
+  the backend runs. That link meets § 13 under every reading, and it is what a fork must do anyway.
+
+**5. `-only` or `-or-later`: `AGPL-3.0-or-later`** (SPDX identifier; recommended, and the owner-word
+default). The FSF recommends "or any later version". Users can always keep using the code under
+version 3, so a stricter later version binds nobody. One small edge is `UNKNOWN - verify`. GPLv3 § 13
+names AGPL *version 3* only, so the GPL-3.0 tables' part might not combine with a future AGPL v4.
+That matters only if someone chooses v4, and the owner, as copyright holder, can relicense his own code.
+`AGPL-3.0-only` is the alternative if he prefers it. Nothing else in this ADR changes with the choice.
+
+**What would be bundled, checked on 2026-10-18 (updated for AGPL):**
+
+| item | where from | licence | AGPL-3.0-or-later |
 |---|---|---|---|
-| `data/opening-book/book.json` (the moves and opening names) | `lichess-org/chess-openings` at `a6189a30`, compiled by `tools/opening-book/compile.ts` (`ADR-0023`, `data/opening-book/ATTRIBUTION.md`) | CC0-1.0 | compatible |
-| `seededRandom` in `src/levels.ts` (mulberry32) | Tommy Ettinger's `mulberry32.c` gist | CC0 dedication (*"dedicated all copyright … to the public domain worldwide"*) | compatible |
-| `splitmix64` in `src/zobrist.ts` (its constants) | Sebastiano Vigna's `splitmix64.c` | public-domain dedication | compatible |
-| **`PIECE_VALUE` and the six piece-square tables in `src/evaluate.ts`** | **They match Tomasz Michniewski's "Simplified Evaluation Function", value for value.** P/N/B/R/Q = 100/320/330/500/900, and all six tables (pawn, knight, bishop, rook, queen, king middle game) were checked row by row against <https://www.chessprogramming.org/Simplified_Evaluation_Function> on 2026-10-18. The file calls them "hand-written" | the wiki's footer says *"licensed CC BY-SA 3.0 by its contributors"*. Creative Commons says *"no non-CC licenses have been designated as compatible with BY-SA 3.0"*. Whether 64-number tables are copyrightable at all, and whether the wiki's licence binds numbers first posted to a mailing list, is a legal question: `UNKNOWN - verify` | **the one possible blocker (Q12)** |
-| perft counts, Kiwipete and other test FENs | the Chess Programming Wiki | facts, used in tests only, not in `dist/` | no issue |
-| the puzzle corpus (`src/puzzle-corpus.ts`) | hand-built (its header) | own work, not imported by `uci.ts` | no issue |
-| devDependencies: `@biomejs/biome` (MIT OR Apache-2.0), `typescript` (Apache-2.0), `vitest`, `vite`, `@vitest/coverage-v8`, `@types/node` (MIT) | npm | permissive | not shipped in `dist/`. `package-lock.json` holds **0** non-dev packages, so nothing ships at run time |
-| `tools/grugops/*.js` | the grugops kit's tools. Four headers (`host-protection.js`, `reference-check.js`, `test-skip-integrity.js`, `uat-spec-integrity.js`) name kit phases or call themselves kit-shipped | `UNKNOWN - verify` | not in `dist/`. A repo-wide `LICENSE` would cover them, so their owner must agree (Q12) |
+| `data/opening-book/book.json` | `lichess-org/chess-openings` at `a6189a30` (`ADR-0023`) | CC0-1.0 | compatible, nothing owed |
+| `seededRandom` (mulberry32) in `src/levels.ts` | Tommy Ettinger's gist | CC0 dedication | compatible, nothing owed |
+| `splitmix64` in `src/zobrist.ts` | Sebastiano Vigna's `splitmix64.c` | public domain plus permission | compatible, nothing owed |
+| `PIECE_VALUE` and six piece-square tables in `src/evaluate.ts` | Michniewski, Chess Programming Wiki | CC BY-SA 3.0 on the wiki; probably unprotected data | **credit as above**; residual risk `UNKNOWN - verify` |
+| perft counts, Kiwipete and other test FENs | the Chess Programming Wiki | facts, tests only, not in `dist/` | no issue |
+| the puzzle corpus (`src/puzzle-corpus.ts`) | hand-built (its header) | own work | no issue |
+| devDependencies | npm | MIT, Apache-2.0, MIT OR Apache-2.0 | not shipped; 0 runtime packages |
+| four kit files in `tools/grugops/` | the grugops kit | MIT (owner's word), notice text `UNKNOWN - verify` | stay MIT, not in `dist/` |
+| seven project files in `tools/grugops/` | this repository | own work | AGPL, not in `dist/` |
 | the Node.js runtime | not bundled | — | — |
 
-- **Interop.** A GUI or backend talks to `skytalix` over stdio, as a separate process. GPL for this repo
-  also suits a later Worker bundle beside GPL-3.0 `chessground` / Stockfish.js. That is the web project's
-  concern.
+- **Interop.** A GUI or backend talks to `skytalix` over stdio, as a separate process (item 4). An AGPL
+  engine can also sit beside a later Worker bundle of GPL-3.0 `chessground` or Stockfish.js, through
+  the § 13 combination permissions. That bundle is the web project's concern.
 
 ## Alternatives
 
@@ -442,8 +580,8 @@ that backend can run.
     `R3` does not fire.
   - **`src/engine.ts` is edited** (D12): two optional fields. **The "core unchanged" claim of the first
     version is withdrawn** for this file only.
-  - Config: `tsconfig.build.json` (new); `package.json` `build`, `uci` and `bin`; `LICENSE` and
-    `"license"` (`ABC-169`).
+  - Config: `tsconfig.build.json` (new); `package.json` `build`, `uci` and `bin`; `LICENSE`, `NOTICE`,
+    `"license": "AGPL-3.0-or-later"`, the kit's MIT notice and the `src/evaluate.ts` credit (`ABC-169`).
 - **Gates.**
   - The ticket that builds `src/uci.ts` fires `ADR-0036` (b1) (`process.`, `node:readline`, and the
     import of the capability holder `book-file.ts`) and routes through `In Security/NFR`.
@@ -453,7 +591,8 @@ that backend can run.
   - The `build` gate now emits `dist/` (D8).
 - **For BA/PM's plan (a suggestion, not a ticket cut):** the engine edit fits its own XS ticket ahead of
   the session ticket, because it is a core module with its own pins. The build line and `bin` fit with
-  the entry-point ticket (`ABC-168`). `ABC-169` (licence) enters v1, gated by Q12.
+  the entry-point ticket (`ABC-168`). `ABC-169` (licence) enters v1, gated by Q15. The rename is
+  `ABC-172`.
 - **NFRs** (the catalog is **not** edited by this proposal; Security/NFR places rows at acceptance):
   - `NFR-004` binds the UCI entry point unchanged, held by the existing clamp. D12 only shortens.
   - `NFR-005` (depth in budget at the default level): the edit adds one comparison per 1024 nodes and
@@ -513,7 +652,14 @@ that backend can run.
 | Q10 | Who installs `cutechess-cli` and En Croissant? | he does | D9 |
 | Q11 | Is v1 done without a web UI? | yes | D9 |
 
-### New, raised by this revision (kept to two)
+### Answered on 2026-10-18 (the Orchestrator's note `…6b2d90f1`)
+
+| # | question | answer | where it landed |
+|---|---|---|---|
+| Q12 | The licence's scope | **AGPL v3 "if possible"**; the kit is MIT; evaluate the tables | D13 (evaluated: possible) |
+| Q13 | Rename to `skytalix`? | **yes** | D8, D13, `ABC-172` |
+
+### Raised by the first revision (now answered above; kept for the record)
 
 - **Q12. The licence's scope** (it blocks `ABC-169`, not the engine work).
   - **(a)** `src/evaluate.ts`'s value and piece-square tables match Michniewski's Simplified Evaluation
@@ -528,3 +674,14 @@ that backend can run.
   `skytalix`, or keep `skytalix` as the engine's UCI name and `bin` only? **Recommended: keep the rest
   as is for v1.** A rename touches `AGENTS.md`, `ADR-0018`'s clone instructions and every `npm run chess`
   reference, and buys the engine nothing.
+
+### New, raised by the licence revision (kept to two)
+
+- **Q14. `npm run chess`.** Does the script keep its name after the rename? **Default: keep it.** It is a
+  command, not a brand, and renaming it touches `AGENTS.md` and the `cli.test.ts` script pins.
+- **Q15. The licence findings** (it blocks `ABC-169` only).
+  - **(a)** Credit the Michniewski tables as they are (recommended), or have them re-derived. You may
+    also email Michniewski for written permission, which settles D13's open points.
+  - **(b)** Supply grugops's MIT notice: the copyright line and the licence text, for the four kit files.
+  - **(c)** Confirm `AGPL-3.0-or-later` (recommended), or say `AGPL-3.0-only`.
+  - This is not legal advice. The open points are marked `UNKNOWN - verify` in D13.
