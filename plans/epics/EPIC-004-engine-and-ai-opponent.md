@@ -10,6 +10,8 @@ owner: BA/PM
 
 # EPIC-004 — Engine and AI opponent
 
+_Updated: 2026-10-18 by BA/PM (task `wave-2026-09-25`, subtask `bapm-engine-revise`) — **the UCI half of the second `Out of scope` bullet is LIFTED on the owner's Q1 word** ("Q1, Q2, Q3: recommended answer", Orchestrator note `.grugops/context/wave-2026-09-25/notes/20261018T093000Z-orchestrator-decision-owner-word-engine-q1-q11-answered-a41c7e02.md`, a transcription, not a stamp). UCI now lives in `EPIC-007` (PROPOSED). The "driving an external engine" half stays a permanent non-goal. The old sentence is kept below as dated history. Nothing else in this epic changed.)_
+
 _Updated: 2026-07-30 by BA/PM (NFR-005 trigger restated to the depth-in-budget target ratified 2026-07-30; RISK-002's spike re-pointed at the measurement that target names. This is the FIRST `_Updated:` line on this file — no epic in `plans/epics/` carried one, so it was added in the style of `plans/board.md` and `plans/nfr-catalog.md` rather than updated. Nothing else in this epic changed.)_
 
 > **`NFR-005`'s `≥ 500,000 nodes/sec` target was RETIRED on 2026-07-30. Kept here as dated
@@ -60,8 +62,13 @@ Target: club level, roughly 1400-1700, with weaker difficulty levels selectable 
 ## Out of scope
 
 - Neural network evaluation, NNUE, or any learned component — permanent non-goal.
-- UCI protocol support or driving an external engine such as Stockfish — permanent
-  non-goal; this is a self-contained engine.
+- Driving an external engine such as Stockfish — permanent non-goal; this is a
+  self-contained engine.
+  - **2026-10-18: the UCI half of this bullet is lifted** on the owner's Q1 word (note `…a41c7e02`,
+    path in the `_Updated:` line above). Until that date the bullet read: *"UCI protocol support or
+    driving an external engine such as Stockfish — permanent non-goal; this is a self-contained
+    engine."* The engine being **drivable** over UCI is `EPIC-007`'s scope (PROPOSED). This engine
+    still never drives another one.
 - Endgame tablebases — permanent non-goal.
 - Strength above ~1700 — the requester's "not too complex" constraint binds here.
 
