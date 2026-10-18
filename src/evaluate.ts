@@ -13,11 +13,11 @@
  * piece outweighs the whole positional term; a centralised knight beats a knight at home),
  * never totals — the one exception being the start position, which is exactly 0 by symmetry.
  *
- * `PIECE_VALUE` and the six piece-square tables are the values of Tomasz Michniewski's "Simplified
- * Evaluation Function", first posted to the Polish chess-programming list progszach and published at
- * <https://www.chessprogramming.org/Simplified_Evaluation_Function> under CC BY-SA 3.0
- * (<https://creativecommons.org/licenses/by-sa/3.0/>). The values are unchanged. The layout, the king
- * value of 0 and all code are ours.
+ * `PIECE_VALUE` and the six piece-square tables are the values of Tomasz Michniewski's
+ * "Simplified Evaluation Function", first posted to the Polish chess-programming list progszach
+ * and published at <https://www.chessprogramming.org/Simplified_Evaluation_Function> under
+ * CC BY-SA 3.0 (<https://creativecommons.org/licenses/by-sa/3.0/>). The values are unchanged.
+ * The layout, the king value of 0 and all code are ours.
  */
 
 import {
