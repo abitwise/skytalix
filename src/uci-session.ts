@@ -147,6 +147,12 @@ function parseGo(
   let mate: number | undefined;
   let hold = false;
 
+  /** QE-167-f: a keyword is never a value. A keyword with no value leaves the next token unread. */
+  const valueAfter = (index: number): string | undefined => {
+    const next = tokens[index + 1];
+    return next === undefined || GO_KEYWORDS.has(next) ? undefined : next;
+  };
+
   for (let index = 1; index < tokens.length; index++) {
     const keyword = tokens[index] as string;
     if (keyword === "infinite" || keyword === "ponder") {
@@ -155,7 +161,8 @@ function parseGo(
       while (index + 1 < tokens.length && !GO_KEYWORDS.has(tokens[index + 1] as string)) index++;
       warn("searchmoves is not supported; searching all moves");
     } else if (keyword === "depth" || keyword === "nodes" || keyword === "mate") {
-      const text = tokens[++index];
+      const text = valueAfter(index);
+      if (text !== undefined) index++;
       const value = positiveInteger(text);
       if (value === undefined) {
         warn(`go ${keyword} needs an integer >= 1, got ${text ?? "nothing"}; ignored`);
@@ -169,13 +176,15 @@ function parseGo(
       keyword === "winc" ||
       keyword === "binc"
     ) {
-      const text = tokens[++index];
+      const text = valueAfter(index);
+      if (text !== undefined) index++;
       const value = milliseconds(text);
       if (value === undefined)
         warn(`go ${keyword} needs a number, got ${text ?? "nothing"}; ignored`);
       else clock[keyword] = value;
     } else if (keyword === "movestogo") {
-      const text = tokens[++index];
+      const text = valueAfter(index);
+      if (text !== undefined) index++;
       const value = positiveInteger(text);
       if (value === undefined) {
         warn(`go movestogo needs an integer >= 1, got ${text ?? "nothing"}; ignored`);
@@ -214,7 +223,10 @@ export function createUciSession(options: UciSessionOptions): UciSession {
   const info = (message: string): void => write(`info string ${printableOf(message)}`);
 
   let position: Position | null = parseFen(START_FEN);
-  /** The `bestmove` line `go infinite` / `go ponder` holds until `stop` or `ponderhit`. */
+  /**
+   * The `bestmove` line `go infinite` / `go ponder` holds. It is never dropped (QE-167-e): `stop`,
+   * `ponderhit`, `go`, `position`, `ucinewgame` and `quit` write it first; other lines leave it held.
+   */
   let held: string | null = null;
 
   const release = (): void => {
@@ -263,9 +275,11 @@ export function createUciSession(options: UciSessionOptions): UciSession {
           write("readyok");
           break;
         case "ucinewgame":
+          release();
           position = parseFen(START_FEN);
           break;
         case "position": {
+          release();
           const parsed = parsePosition(tokens);
           if (typeof parsed === "string") {
             position = null;
@@ -281,6 +295,7 @@ export function createUciSession(options: UciSessionOptions): UciSession {
           release();
           break;
         case "quit":
+          release();
           return "quit";
         default:
         // `setoption`, `debug`, `register`, an empty line and anything unknown: ignored (D3).

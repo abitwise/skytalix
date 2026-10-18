@@ -26,14 +26,22 @@ const INFO_LINE =
 interface Dialogue {
   readonly out: string[];
   readonly results: string[];
+  /** The lines each input line wrote, by index. */
+  readonly perLine: string[][];
 }
 
 /** Test note 1: lines in, lines out. One session per script, on its own ticking clock. */
 function dialogue(lines: readonly string[], stepMs = 10): Dialogue {
   const out: string[] = [];
   const session = createUciSession({ write: (line) => out.push(line), now: virtualClock(stepMs) });
-  const results = lines.map((line) => session.handleLine(line));
-  return { out, results };
+  const perLine: string[][] = [];
+  const results = lines.map((line) => {
+    const before = out.length;
+    const result = session.handleLine(line);
+    perLine.push(out.slice(before));
+    return result;
+  });
+  return { out, results, perLine };
 }
 
 /** Every line written by every dialogue in this file, for `A11`'s M4 sweep. */
@@ -57,6 +65,7 @@ function parseInfo(line: string | undefined) {
     score: m[2] as string,
     nodes: Number(m[3]),
     time: Number(m[4]),
+    nps: Number(m[5]),
     move: m[6] as string,
   };
 }
@@ -70,6 +79,14 @@ function coordinateOf(move: Move): string {
 
 function legalFrom(fen: string): string[] {
   return legalMoves(parseFen(fen)).map(coordinateOf);
+}
+
+/** "Printable" (QE-167-a): no code point below U+0020 and no U+007F. */
+function expectPrintable(line: string | undefined): void {
+  for (const character of line ?? "") {
+    const code = character.codePointAt(0) as number;
+    expect(code >= 0x20 && code !== 0x7f).toBe(true);
+  }
 }
 
 describe("ABC-167 A1-A2 — handshake and ready", () => {
@@ -90,6 +107,13 @@ describe("ABC-167 A3 — a move from a position", () => {
     expect(out[1]).toBe(`bestmove ${info.move}`);
     const position = parseFen("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2");
     expect(legalMoves(position).map(coordinateOf)).toContain(info.move);
+  });
+
+  it("A3-h1: nps = round(N x 1000 / max(1, T))", () => {
+    const { out } = talk(["position startpos moves e2e4 e7e5", "go movetime 100"]);
+    const info = parseInfo(out[0]);
+    expect(info.nps).toBe(Math.round((info.nodes * 1000) / Math.max(1, info.time)));
+    expect(info.nps).not.toBe(info.nodes);
   });
 });
 
@@ -112,6 +136,27 @@ describe("ABC-167 A4 — bad input holds no position", () => {
     const { out } = talk(["position fen 8/8/8\x1b[31m w - - 0 1"]);
     expect(out).toHaveLength(1);
     expect(out[0]).not.toContain("\u001b");
+  });
+
+  it("A4-a1: an echoed control character is dropped from the info string", () => {
+    const { perLine } = talk(["position startpos moves e2e4\x1b[31m", "go movetime 100"]);
+    expect(perLine[0]).toHaveLength(1);
+    expect(perLine[0]?.[0]).toMatch(/^info string /);
+    expectPrintable(perLine[0]?.[0]);
+    expect(perLine[0]?.[0]).toContain("e2e4[31m");
+    expect(perLine[1]).toEqual(["bestmove 0000"]);
+  });
+
+  it("A4-a2: an echoed control character in a go value is dropped from the info string", () => {
+    const { perLine } = talk(["position startpos", "go depth \x1b[31m"]);
+    const lines = perLine[1] as string[];
+    expect(lines).toHaveLength(3);
+    expect(lines[0]).toMatch(/^info string /);
+    expectPrintable(lines[0]);
+    expect(lines[0]).toContain("[31m");
+    const info = parseInfo(lines[1]);
+    expect(lines[2]).toBe(`bestmove ${info.move}`);
+    expect(legalFrom(START_FEN)).toContain(info.move);
   });
 
   it("a held stalemate answers go with bestmove 0000", () => {
@@ -155,6 +200,25 @@ describe("ABC-167 A5 — the D4 time rule, read from the info line's time", () =
       expect(time).toBeLessThanOrEqual(budget + 2 * step);
     });
   }
+
+  /** QE-167-b/c: G below the 3 000 ms cap, step 1, bound G <= time <= G + 2. */
+  const pinned: ReadonlyArray<readonly [string, string, string, number]> = [
+    ["A5-b1", "position startpos", "go wtime 2000 btime 2000 winc 1000 binc 0", 600],
+    ["A5-b2", "position startpos moves e2e4", "go wtime 2000 btime 2000 winc 1000 binc 0", 100],
+    ["A5-b3", "position startpos", "go wtime 1000 btime 1000 movestogo 5", 200],
+    ["A5-b4", "position startpos", "go wtime 1000 btime 1000 movetime 300", 300],
+    ["A5-b5", "position startpos", "go movetime 300 wtime 60000 btime 60000", 300],
+    ["A5-c1", "position startpos", "go wtime 100 btime 100 winc 1000 binc 1000", 50],
+  ];
+  for (const [row, position, go, budget] of pinned) {
+    it(`${row}: ${position}, ${go} -> ${budget} ms (within 2 x 1 ms)`, () => {
+      const { out } = talk([position, go], 1);
+      expect(out).toHaveLength(2);
+      const { time } = parseInfo(out[0]);
+      expect(time).toBeGreaterThanOrEqual(budget);
+      expect(time).toBeLessThanOrEqual(budget + 2);
+    });
+  }
 });
 
 describe("ABC-167 A6 — infinite waits for stop", () => {
@@ -173,6 +237,75 @@ describe("ABC-167 A6 — infinite waits for stop", () => {
 
   it("a stop with nothing held writes nothing", () => {
     expect(talk(["stop", "ponderhit"]).out).toEqual([]);
+  });
+
+  it("A6-d1: go ponder holds at the capped ceiling; ponderhit releases once", () => {
+    const { perLine } = talk(["position startpos", "go ponder", "ponderhit", "ponderhit"], 100);
+    expect(perLine[1]).toHaveLength(1);
+    const info = parseInfo(perLine[1]?.[0]);
+    expect(info.time).toBeGreaterThanOrEqual(3_000);
+    expect(info.time).toBeLessThanOrEqual(3_000 + 2 * 100);
+    expect(perLine[2]).toEqual([`bestmove ${info.move}`]);
+    expect(perLine[3]).toEqual([]);
+  });
+
+  it("A6-e1: a new go writes the held bestmove first; two bestmoves in all", () => {
+    const { out, perLine } = talk(
+      ["position startpos", "go infinite", "go movetime 100", "stop"],
+      100,
+    );
+    const lines = perLine[2] as string[];
+    expect(lines).toHaveLength(3);
+    expect(lines[0]).toMatch(/^bestmove /);
+    const info = parseInfo(lines[1]);
+    expect(lines[2]).toBe(`bestmove ${info.move}`);
+    expect(perLine[3]).toEqual([]);
+    expect(out.filter((line) => line.startsWith("bestmove"))).toHaveLength(2);
+  });
+
+  for (const [row, command] of [
+    ["A6-e2", "position startpos"],
+    ["A6-e3", "ucinewgame"],
+  ] as const) {
+    it(`${row}: ${command} writes the held bestmove first, in the position it searched`, () => {
+      expect(legalFrom(MATED_NEXT)).toEqual(["h8g8"]);
+      const { perLine } = talk(
+        [`position fen ${MATED_NEXT}`, "go infinite", command, "stop", "go movetime 100"],
+        100,
+      );
+      expect(perLine[2]).toEqual(["bestmove h8g8"]);
+      expect(perLine[3]).toEqual([]);
+      const last = perLine[4] as string[];
+      expect(last).toHaveLength(2);
+      const move = (last[1] as string).replace(/^bestmove /, "");
+      expect(legalFrom(START_FEN)).toContain(move);
+    });
+  }
+
+  it("A6-e4: quit writes the held bestmove and returns quit", () => {
+    const { perLine, results } = talk(["position startpos", "go infinite", "quit"], 100);
+    expect(results[2]).toBe("quit");
+    expect(perLine[2]).toHaveLength(1);
+    expect(perLine[2]?.[0]).toMatch(/^bestmove [a-h][1-8][a-h][1-8]$/);
+  });
+
+  it("A6-e5: isready, an unknown line and setoption leave the bestmove held", () => {
+    const { perLine } = talk(
+      [
+        "position startpos",
+        "go infinite",
+        "isready",
+        "foo",
+        "setoption name Hash value 64",
+        "stop",
+      ],
+      100,
+    );
+    expect(perLine[2]).toEqual(["readyok"]);
+    expect(perLine[3]).toEqual([]);
+    expect(perLine[4]).toEqual([]);
+    expect(perLine[5]).toHaveLength(1);
+    expect(perLine[5]?.[0]).toMatch(/^bestmove /);
   });
 });
 
@@ -246,6 +379,39 @@ describe("ABC-167 A7 — the D12 limits", () => {
     const free = parseInfo(talk(["position startpos", "go movetime 1000"], 50).out[0]);
     expect(info.move).toBe(free.move);
   });
+
+  /** One info string, then one info line with `time` in [low, high], then its bestmove. */
+  function expectWarnedSearch(lines: string[] | undefined, low: number, high: number): string {
+    const written = lines ?? [];
+    expect(written).toHaveLength(3);
+    expect(written[0]).toMatch(/^info string /);
+    const info = parseInfo(written[1]);
+    expect(info.time).toBeGreaterThanOrEqual(low);
+    expect(info.time).toBeLessThanOrEqual(high);
+    expect(written[2]).toBe(`bestmove ${info.move}`);
+    return written[0] as string;
+  }
+
+  it("A7-f1: a keyword is never a value (go depth movetime 100)", () => {
+    const { perLine } = talk(["position startpos", "go depth movetime 100"], 1);
+    expect(expectWarnedSearch(perLine[1], 100, 102)).toContain("depth");
+  });
+
+  it("A7-f2: go movetime with no value searches as a bare go", () => {
+    const { perLine } = talk(["position startpos", "go movetime"], 100);
+    expectWarnedSearch(perLine[1], 3_000, 3_000 + 2 * 100);
+  });
+
+  it("A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string", () => {
+    expectWarnedSearch(talk(["position startpos", "go movetime 1e2"], 1).perLine[1], 3_000, 3_002);
+    const { perLine } = talk(["position startpos", "go wtime 1000 btime 1000 movestogo 0"], 1);
+    expectWarnedSearch(perLine[1], 50, 52);
+  });
+
+  it("A7-h1: searchmoves stops at the next go keyword, so movetime is honoured", () => {
+    const { perLine } = talk(["position startpos", "go searchmoves e2e4 d2d4 movetime 100"], 1);
+    expectWarnedSearch(perLine[1], 100, 102);
+  });
 });
 
 describe("ABC-167 A8 — mate scores", () => {
@@ -273,6 +439,14 @@ describe("ABC-167 A9 — ignored and reset", () => {
     expect(out).toHaveLength(2);
     const move = (out[1] as string).replace(/^bestmove /, "");
     expect(legalFrom(START_FEN)).toContain(move);
+  });
+
+  it("A9-h1: a new session with no position line starts at the start position", () => {
+    const { out } = talk(["go movetime 100"]);
+    expect(out).toHaveLength(2);
+    const info = parseInfo(out[0]);
+    expect(out[1]).toBe(`bestmove ${info.move}`);
+    expect(legalFrom(START_FEN)).toContain(info.move);
   });
 });
 
@@ -303,8 +477,12 @@ describe("ABC-167 A11 — capability-free, and M4", () => {
     });
   }
 
-  it("imports none of the fenced modules", () => {
-    const imports = [...source.matchAll(/from "(\.\/[^"]+)"/g)].map((m) => m[1]);
+  it("A11-g1: imports none of the fenced modules, in any import form or quote", () => {
+    // `from "<m>"`, the side-effect `import "<m>"` and `import("<m>")`, with either quote.
+    const imports = [...source.matchAll(/\b(?:from|import)\s*\(?\s*["'](\.\/[^"']+)["']/g)].map(
+      (m) => m[1],
+    );
+    expect(imports.length).toBeGreaterThan(0);
     for (const fenced of [
       "history.ts",
       "turn-loop.ts",
