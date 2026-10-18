@@ -1,0 +1,44 @@
+import { createUciSession } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-167/src/uci-session.ts";
+import { virtualClock } from "/Users/olgeroeselg/Projects/hacks/grugops-examples/wt-qe-ABC-167/src/virtual-clock.ts";
+function run(name: string, lines: string[], step = 10) {
+  const out: string[] = []; const res: string[] = [];
+  const s = createUciSession({ write: (l) => out.push(l), now: virtualClock(step) });
+  try { for (const l of lines) res.push(s.handleLine(l)); } catch (e) { out.push("THROW " + (e as Error).message); }
+  console.log("## " + name + "\n  in: " + JSON.stringify(lines) + "\n  out: " + JSON.stringify(out) + (res.includes("quit") ? " res:" + res.join(",") : ""));
+}
+run("fresh go (choice 1)", ["go movetime 100"]);
+run("movetime -5", ["position startpos", "go movetime -5"]);
+run("movetime 0", ["position startpos", "go movetime 0"]);
+run("movetime 100.5", ["position startpos", "go movetime 100.5"], 1);
+run("wtime -1000", ["position startpos", "go wtime -1000 btime 5000"], 1);
+run("wtime 2000 winc 1000 (inc unpinned)", ["position startpos", "go wtime 2000 btime 2000 winc 1000 binc 1000"], 1);
+run("black binc", ["position startpos moves e2e4", "go wtime 2000 btime 2000 winc 0 binc 1000"], 1);
+run("movestogo 5", ["position startpos", "go wtime 1000 btime 1000 movestogo 5"], 1);
+run("movestogo 0", ["position startpos", "go wtime 1000 btime 1000 movestogo 0"], 1);
+run("movetime+wtime", ["position startpos", "go wtime 1000 btime 1000 movetime 300"], 1);
+run("1e5 time", ["position startpos", "go movetime 1e5"], 100);
+run("depth followed by keyword", ["position startpos", "go depth movetime 100"], 1);
+run("searchmoves then depth", ["position startpos", "go searchmoves e2e4 d2d4 depth 2"], 10);
+run("ponder holds", ["position startpos", "go ponder", "ponderhit"], 100);
+run("infinite then go", ["position startpos", "go infinite", "go depth 1"], 100);
+run("infinite, ucinewgame, position, stop (stale)", ["position fen 7k/8/6K1/8/8/8/8/R7 b - - 1 1", "go infinite", "ucinewgame", "position startpos", "stop"], 100);
+run("infinite then quit", ["position startpos", "go infinite", "quit"], 100);
+run("infinite no position", ["position fen bad", "go infinite", "stop"], 100);
+run("two go same pos", ["position startpos moves e2e4", "go depth 3", "go depth 3"], 10);
+run("checkmated position", ["position fen 7k/6Q1/6K1/8/8/8/8/8 b - - 0 1", "go movetime 100"]);
+run("promotion out", ["position fen 8/P6k/8/8/8/8/8/K7 w - - 0 1", "go depth 3"]);
+run("promo input upper", ["position fen 8/P6k/8/8/8/8/8/K7 w - - 0 1 moves a7a8Q", "go depth 1"]);
+run("position no args", ["position"]);
+run("position startpos junk", ["position startpos junk"]);
+run("position fen extra fields", ["position fen 7k/8/6K1/8/8/8/8/R7 b - - 1 1 extra", "go depth 1"]);
+run("position fen 4 fields", ["position fen 7k/8/6K1/8/8/8/8/R7 b -", "go depth 1"]);
+run("tabs & spaces", ["  isready\t", "\tuci  "]);
+run("UCI uppercase", ["UCI", "Quit"]);
+run("ctrl in go", ["position startpos", "go depth \u0001\u001b[31m"], 100);
+run("unicode spaces", ["position startpos", "go depth 1"]);
+run("huge depth", ["position startpos", "go depth 99999999999999999999"], 100);
+run("mate big", ["position startpos", "go mate 1000000"], 100);
+run("nodes 1 kiwipete", ["position fen r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1", "go nodes 1"]);
+run("quit with args", ["quit now"]);
+run("position refused keeps old? then go", ["position startpos", "position fen x", "go depth 1"]);
+run("moves with e1g1 castle", ["position fen r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1 moves e1g1 e8c8", "go depth 1"]);
