@@ -1,0 +1,26 @@
+inc white time 601 ["info depth 8 score cp 28 nodes 606229 time 601 nps 1008700 pv g1f3","bestmove g1f3"]
+inc black time 101 ["info depth 6 score cp 0 nodes 96287 time 101 nps 953337 pv e7e5","bestmove e7e5"]
+mtg time 201 ["info depth 7 score cp 50 nodes 197653 time 201 nps 983348 pv d2d4","bestmove d2d4"]
+mt beats short time 301 ["info depth 7 score cp 50 nodes 300053 time 301 nps 996854 pv d2d4","bestmove d2d4"]
+mt beats long time 301 ["info depth 7 score cp 50 nodes 300053 time 301 nps 996854 pv d2d4","bestmove d2d4"]
+overhead time 51 ["info depth 6 score cp 52 nodes 45077 time 51 nps 883863 pv d2d4","bestmove d2d4"]
+short 40 time 2 ["info depth 1 score cp 69 nodes 21 time 2 nps 10500 pv e2e4","bestmove e2e4"]
+["info string position refused: illegal move e2e4[31m"] ESC false
+["info string go depth needs an integer >= 1, got [31m; ignored","info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3"] ESC false
+ponder ["info depth 4 score cp 0 nodes 6165 time 110 nps 56045 pv e2e4"]
+ponder+hit ["info depth 4 score cp 0 nodes 6165 time 110 nps 56045 pv e2e4","bestmove e2e4"]
+held+go ["info depth 4 score cp 0 nodes 6165 time 110 nps 56045 pv e2e4","bestmove e2e4","info depth 4 score cp 0 nodes 6165 time 110 nps 56045 pv e2e4","bestmove e2e4"]
+held+position+stop ["info depth 7 score mate -1 nodes 3073 time 110 nps 27936 pv h8g8","bestmove h8g8"]
+held+ucinewgame+stop ["info depth 7 score mate -1 nodes 3073 time 110 nps 27936 pv h8g8","bestmove h8g8"]
+held+quit {"out":["info depth 4 score cp 0 nodes 6165 time 110 nps 56045 pv e2e4"],"r":["continue","continue","quit"]}
+valueless ["info string go depth needs an integer >= 1, got movetime; ignored","info depth 7 score cp 50 nodes 300053 time 3010 nps 99685 pv d2d4","bestmove d2d4"]
+valueless end ["info string go movetime needs a number, got nothing; ignored","info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3"]
+mtg 0 / 2.5 ["info string go movestogo needs an integer >= 1, got 0; ignored","info depth 6 score cp 52 nodes 45077 time 51 nps 883863 pv d2d4","bestmove d2d4"]
+movetime 2.5 ["info depth 3 score cp 66 nodes 655 time 4 nps 163750 pv e2e4","bestmove e2e4"]
+movetime 1e2 ["info string go movetime needs a number, got 1e2; ignored","info depth 7 score cp 50 nodes 300053 time 3010 nps 99685 pv d2d4","bestmove d2d4"]
+searchmoves {"out":["info string searchmoves is not supported; searching all moves","info depth 6 score cp 52 nodes 96277 time 101 nps 953238 pv d2d4","bestmove d2d4"],"r":["continue","continue"]}
+new session {"out":["info depth 4 score cp 0 nodes 6165 time 110 nps 56045 pv e2e4","bestmove e2e4"],"r":["continue"]}
+A3 {"out":["info depth 4 score cp 3 nodes 6173 time 110 nps 56118 pv b1c3","bestmove b1c3"],"r":["continue","continue"]}
+ponder bare {"out":["info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","bestmove g1f3"],"r":["continue","continue","continue","continue"]}
+isready held {"out":["info depth 5 score cp 55 nodes 25621 time 3100 nps 8265 pv g1f3","readyok","bestmove g1f3"],"r":["continue","continue","continue","continue","continue","continue","continue"]}
+movestogo 2.5 {"out":["info string go movestogo needs an integer >= 1, got 2.5; ignored","info depth 6 score cp 52 nodes 45077 time 51 nps 883863 pv d2d4","bestmove d2d4"],"r":["continue","continue"]}
