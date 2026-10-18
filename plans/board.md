@@ -1,4 +1,5 @@
 # Board
+_Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — owner word "accept" (`…3b8d51e6`) → `ABC-170` merged (`abfc1acb`, UAT pack `850046e1`; gates green 58/1844, CLI_DEEP 10/10, PERFT_DEEP 32/32; qe-hop-integrity covered) → Done. A6 OWNER-RULED, NOT MEASURED (`…7f3a9c14`). ABC-167 unblocked (waits on the owner's pull). In flight: none._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `ABC-169` merged (`60227f06`, gates green 58/1830, CLI_DEEP 10/10, PERFT_DEEP 32/32; UAT WAIVED by measurement) → Done. Open for BA/PM on the owner's word: QE-169-a (license value unpinned), QE-169-b ("hand-tuned" comments contradict the credit), R-169-1 (lock drift on ABC-172 A2 / ABC-168). In flight: `qe-ABC-170`._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `ABC-170` delivered (`64b07741`, 1839/1839; A6 NFR-005 owed in a quiet window; owner UAT applies) → In Review. Briefs for `qe-ABC-169`/`secnfr-ABC-169` rewritten (empty in `a56fb986`, shell error); dispatched them with `qe-ABC-170` (width 3)._
 _Updated: 2026-10-18 by the Orchestrator (task `wave-2026-09-25`) — `ABC-169` delivered (`344a4128`, 1830/1830, UAT WAIVED by A3 comment-only measurement) → In Review; dispatched `qe-ABC-169` and `secnfr-ABC-169` (clause (a)). In flight: those two and `ticket-to-pr-ABC-170`._
@@ -862,8 +863,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 1/3)
-- [ABC-170] `src/engine.ts` takes optional `maxDepth`/`maxNodes`; absent = today's engine  (owner: BA/PM, size: XS, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; cut in `bapm-engine-revise`.)
+## In Review (WIP 0/3)
 
 
 
@@ -923,6 +923,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-170] `src/engine.ts` takes optional `maxDepth`/`maxNodes`; absent = today's engine  (owner: BA/PM, size: XS, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; cut in `bapm-engine-revise`.) **2026-10-18: UAT ACCEPTED by the owner (`…3b8d51e6`); A6 OWNER-RULED, NOT MEASURED; merged `abfc1acb` (+ UAT pack `850046e1`), gates green 58/1844, CLI_DEEP 10/10, PERFT_DEEP 32/32. ABC-167 unblocked.**
 - [ABC-169] Declare the engine private: `"license": "UNLICENSED"` next to `"private": true` in `package.json`, and the Michniewski credit comment in the `src/evaluate.ts` header  (owner: BA/PM, size: XS, priority: P1, epic: EPIC-007, since: 2026-10-18, DoR 10/10; clause (a) Security/NFR hop; UAT expected WAIVED by comment-only measurement (A3), else owner's.) **Done 2026-10-18:** merged `60227f06`; QE PASS_WITH_GAPS (QE-169-a/b LOW), Security/NFR PASS_WITH_RISKS (R-169-1 LOW); UAT WAIVED by comment-only measurement (waiver grep names only `src/evaluate.ts`; comment-stripped transpile sha256 `629c825d…` identical, Orchestrator re-read) — waived is not accepted.
 - [ABC-157] The castling right test can be weakened to read ANY right: a build that castles on the other wing's or the opponent's right passes the whole default lane  (BA/PM, XS, P2, epic: EPIC-001, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-024-a.) **2026-10-17: pulled on owner word → In Development; SE `ticket-to-pr-ABC-157` dispatched from `aa37f9cb`.** **2026-10-17: delivered (`968a5843`, tip `2202b8eb`; +90/−0 in one test file, `src/moves.ts` md5 unchanged; `X-any-right` now dies on the six rows; 58/1830) → In Review; QE `qe-ABC-157` dispatched.** **2026-10-17: QE `qe-ABC-157` PASS_WITH_GAPS (`003f0bbd`; QE-157-a LOW: the mixed-rights variant `W-mixed` passes every lane, witness `w Qk`; QE-157-b INFO) → merged `2079ddb1`, UAT WAIVED (0 production `src/` lines, measured; `src/moves.ts` md5 unchanged); gates green 58/1830, CLI_DEEP 10/10, PERFT_DEEP 32/32 → Done.**
 - [ABC-158] `AR-1`'s recorded checks miss four ways code reaches the runtime path, and pin neither "no loader flag" nor "no non-dev dependency\  (BA/PM, XS, P3, epic: —, since: 2026-10-17, **DoR 10/10**; cut in `bapm-cut-followups` (merged `4487ad31`) from QE-056-a/b.) **2026-10-17: pulled on owner word → In Development; Release Manager `rm-ABC-158` dispatched from `aa37f9cb` (records only).** **2026-10-17: delivered (tip `cdf4255b`; records only, AR-1 re-stated in `…901f43b6`, A2 6/6, A3 6/6) → In Review; QE `qe-ABC-158` dispatched.** **2026-10-17: QE `qe-ABC-158` PASS_WITH_GAPS (`a6b1577e`; QE-158-a..d LOW, -e/-f INFO: 8 forms load `nanoid` with checks 1–7 as recorded; a `src/` symlink and `.npmrc` `node-options` are caught by no instrumented route) → merged `fd56f3cf`, UAT WAIVED (0 production `src/` lines, measured); gates green 58/1824, CLI_DEEP 10/10 → Done.**
