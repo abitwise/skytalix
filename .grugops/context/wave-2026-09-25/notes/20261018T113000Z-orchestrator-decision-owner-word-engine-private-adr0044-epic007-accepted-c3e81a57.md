@@ -30,3 +30,12 @@ The owner's reply, verbatim:
 - **Acceptance.** **ADR-0044 is ACCEPTED** as revised, with D13 rewritten to private. **EPIC-007 is ACCEPTED** as revised. The DoR item
   "owner acceptance" is met on ABC-167..172. The tickets enter Ready only as far as Ready's WIP limit allows.
 - **ABC-166.** Not yet: the owner will say "take it" in the evening.
+
+## Addendum 2026-10-18: the owner confirms the tables reading
+
+The owner's words, verbatim: *"keep the tables as they are for now, later we can make our own tables."*
+
+This confirms the default reading above:
+
+- The Michniewski tables stay unchanged, with the attribution comment.
+- Re-deriving our own tables is deferred to a later date. No ticket is cut until the owner asks for one.
